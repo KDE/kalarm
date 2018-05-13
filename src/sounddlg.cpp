@@ -1,7 +1,7 @@
 /*
  *  sounddlg.cpp  -  sound file selection and configuration dialog and widget
  *  Program:  kalarm
- *  Copyright © 2005-2012 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2005-2018 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -30,13 +30,11 @@
 #include "soundpicker.h"
 #include "spinbox.h"
 
-#include <QIcon>
-#include <KGlobal>
 #include <KLocalizedString>
-#include <kstandarddirs.h>
 #include <phonon/mediaobject.h>
 #include <phonon/audiooutput.h>
 
+#include <QIcon>
 #include <QLabel>
 #include <QDir>
 #include <QGroupBox>
@@ -47,6 +45,7 @@
 #include <QResizeEvent>
 #include <QDialogButtonBox>
 #include <QStyle>
+#include <QStandardPaths>
 #include "kalarm_debug.h"
 
 
@@ -432,7 +431,7 @@ void SoundWidget::showEvent(QShowEvent* se)
 */
 void SoundWidget::slotPickFile()
 {
-    QString url = SoundPicker::browseFile(mDefaultDir, mFileEdit->text());
+    const QString url = SoundPicker::browseFile(mDefaultDir, mFileEdit->text());
     if (!url.isEmpty())
         mFileEdit->setText(KAlarm::pathOrUrl(url));
 }
@@ -502,7 +501,7 @@ bool SoundWidget::validate(bool showErrorMessage) const
         {
             // It's a relative path.
             // Find the first sound resource that contains files.
-            QStringList soundDirs = KGlobal::dirs()->resourceDirs("sound");
+            const QStringList soundDirs = QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, QStringLiteral("sounds"));
             if (!soundDirs.isEmpty())
             {
                 QDir dir;

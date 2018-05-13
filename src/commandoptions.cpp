@@ -1,7 +1,7 @@
 /*
  *  commandoptions.cpp  -  extract command line options
  *  Program:  kalarm
- *  Copyright © 2001-2017 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2018 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -284,7 +284,7 @@ void CommandOptions::process()
     if (mParser->isSet(*mOptions[TEST_SET_TIME]))
     {
         const QString time = mParser->value(*mOptions[TEST_SET_TIME]);
-        if (!AlarmTime::convertTimeString(time.toLatin1(), mSimulationTime, KDateTime::realCurrentLocalDateTime(), true))
+        if (!AlarmTime::convertTimeString(time.toLatin1(), mSimulationTime, KADateTime::realCurrentLocalDateTime(), true))
             setErrorParameter(TEST_SET_TIME);
     }
 #endif
@@ -472,7 +472,7 @@ void CommandOptions::process()
                     setErrorParameter(TIME);
             }
             else
-                mAlarmTime = KDateTime::currentLocalDateTime();
+                mAlarmTime = KADateTime::currentLocalDateTime();
 
             bool haveRecurrence = mParser->isSet(*mOptions[RECURRENCE]);
             if (haveRecurrence)
@@ -489,7 +489,7 @@ void CommandOptions::process()
             {
                 // Repeat count is specified
                 int count = 0;
-                KDateTime endTime;
+                KADateTime endTime;
                 if (mParser->isSet(*mOptions[LOGIN]))
                     setErrorIncompatible(LOGIN, INTERVAL);
                 bool ok;

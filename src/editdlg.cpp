@@ -1,7 +1,7 @@
 /*
  *  editdlg.cpp  -  dialog to create or modify an alarm or alarm template
  *  Program:  kalarm
- *  Copyright © 2001-2016 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2018 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -48,16 +48,12 @@
 #include "timeedit.h"
 #include "timespinbox.h"
 
-#include <KAlarmCal/Utils>
-
 #include <Libkdepim/MaillistDrag>
 
-#include <kglobal.h>
 #include <KLocalizedString>
 #include <kconfig.h>
 #include <KSharedConfig>
 #include <kwindowsystem.h>
-#include <KTimeZone>
 
 #include <QLabel>
 #include <QGroupBox>
@@ -559,7 +555,7 @@ void EditAlarmDlg::initValues(const KAEvent* event)
             if (event->isTemplate())
             {
                 // Initialising from an alarm template: use current date
-                KDateTime now = KDateTime::currentDateTime(Preferences::timeZone());
+                const KADateTime now = KADateTime::currentDateTime(Preferences::timeSpec());
                 int afterTime = event->templateAfterTime();
                 if (afterTime >= 0)
                 {
@@ -568,8 +564,8 @@ void EditAlarmDlg::initValues(const KAEvent* event)
                 }
                 else
                 {
-                    KDateTime dt = event->startDateTime().kDateTime();
-                    dt.setTimeSpec(Preferences::timeZone());
+                    KADateTime dt = event->startDateTime().kDateTime();
+                    dt.setTimeSpec(Preferences::timeSpec());
                     QDate d = now.date();
                     if (!dt.isDateOnly()  &&  now.time() >= dt.time())
                         d = d.addDays(1);     // alarm time has already passed, so use tomorrow
@@ -604,7 +600,7 @@ void EditAlarmDlg::initValues(const KAEvent* event)
     else
     {
         // Set the values to their defaults
-        KDateTime defaultTime = KDateTime::currentUtcDateTime().addSecs(60).toTimeSpec(Preferences::timeZone());
+        const KADateTime defaultTime = KADateTime::currentUtcDateTime().addSecs(60).toTimeSpec(Preferences::timeSpec());
         if (mTemplate)
         {
             mTemplateDefaultTime->setChecked(true);
@@ -732,7 +728,7 @@ bool EditAlarmDlg::stateChanged() const
     }
     else
     {
-        KDateTime dt = mTimeWidget->getDateTime(nullptr, false, false);
+        const KADateTime dt = mTimeWidget->getDateTime(nullptr, false, false);
         if (mSavedDateTime.timeSpec() != dt.timeSpec()  ||  mSavedDateTime != dt)
             return true;
     }
@@ -800,13 +796,13 @@ bool EditAlarmDlg::getEvent(KAEvent& event, Akonadi::Collection& collection)
 */
 void EditAlarmDlg::setEvent(KAEvent& event, const QString& text, bool trial)
 {
-    KDateTime dt;
+    KADateTime dt;
     if (!trial)
     {
         if (!mTemplate)
             dt = mAlarmDateTime.effectiveKDateTime();
         else if (mTemplateUseTime->isChecked())
-            dt = KDateTime(QDate(2000,1,1), mTemplateTime->time());
+            dt = KADateTime(QDate(2000,1,1), mTemplateTime->time());
     }
 
     int lateCancel = (trial || !mLateCancel->isEnabled()) ? 0 : mLateCancel->minutes();
@@ -817,7 +813,7 @@ void EditAlarmDlg::setEvent(KAEvent& event, const QString& text, bool trial)
         if (mRecurrenceEdit->repeatType() != RecurrenceEdit::NO_RECUR)
         {
             mRecurrenceEdit->updateEvent(event, !mTemplate);
-            KDateTime now = KDateTime::currentDateTime(mAlarmDateTime.timeSpec());
+            const KADateTime now = KADateTime::currentDateTime(mAlarmDateTime.timeSpec());
             bool dateOnly = mAlarmDateTime.isDateOnly();
             if ((dateOnly  &&  mAlarmDateTime.date() < now.date())
             ||  (!dateOnly  &&  mAlarmDateTime.kDateTime() < now))
@@ -837,7 +833,7 @@ void EditAlarmDlg::setEvent(KAEvent& event, const QString& text, bool trial)
                     DateTime remindTime = mAlarmDateTime.addMins(-reminder);
                     if (mDeferDateTime >= remindTime)
                     {
-                        if (remindTime > KDateTime::currentUtcDateTime())
+                        if (remindTime > KADateTime::currentUtcDateTime())
                             deferral = false;    // ignore deferral if it's after next reminder
                         else if (mDeferDateTime > remindTime)
                             deferReminder = true;    // it's the reminder which is being deferred
@@ -1064,7 +1060,7 @@ bool EditAlarmDlg::validate()
             KAEvent event;
             setEvent(event, mAlarmMessage, false);
             mAlarmDateTime = dt;   // restore
-            KDateTime pre = dt.effectiveKDateTime();
+            KADateTime pre = dt.effectiveKDateTime();
             bool dateOnly = dt.isDateOnly();
             if (dateOnly)
                 pre = pre.addDays(-1);
@@ -1092,7 +1088,7 @@ bool EditAlarmDlg::validate()
             KAEvent event;
             Akonadi::Collection c;
             getEvent(event, c);     // this may adjust mAlarmDateTime
-            KDateTime now = KDateTime::currentDateTime(mAlarmDateTime.timeSpec());
+            const KADateTime now = KADateTime::currentDateTime(mAlarmDateTime.timeSpec());
             bool dateOnly = mAlarmDateTime.isDateOnly();
             if ((dateOnly  &&  mAlarmDateTime.date() < now.date())
             ||  (!dateOnly  &&  mAlarmDateTime.kDateTime() < now))
@@ -1292,7 +1288,7 @@ void EditAlarmDlg::slotEditDeferral()
     if (!mTimeWidget)
         return;
     bool limit = true;
-    Repetition repetition = mRecurrenceEdit->subRepetition();
+    const Repetition repetition = mRecurrenceEdit->subRepetition();
     DateTime start = mSavedEvent->recurs() ? (mExpiredRecurrence ? DateTime() : mSavedEvent->mainDateTime())
                    : mTimeWidget->getDateTime(nullptr, !repetition, !mExpiredRecurrence);
     if (!start.isValid())
@@ -1301,7 +1297,7 @@ void EditAlarmDlg::slotEditDeferral()
             return;
         limit = false;
     }
-    KDateTime now = KDateTime::currentUtcDateTime();
+    const KADateTime now = KADateTime::currentUtcDateTime();
     if (limit)
     {
         if (repetition  &&  start < now)
@@ -1315,7 +1311,7 @@ void EditAlarmDlg::slotEditDeferral()
                 mTimeWidget->getDateTime();    // output the appropriate error message
                 return;
             }
-            start = q2k(repetition.duration(repeatNum).end(k2q(start.kDateTime())));
+            start = KADateTime(repetition.duration(repeatNum).end(start.qDateTime()));
         }
     }
 
@@ -1333,7 +1329,7 @@ void EditAlarmDlg::slotEditDeferral()
         if (reminder)
         {
             DateTime remindTime = start.addMins(-reminder);
-            if (KDateTime::currentUtcDateTime() < remindTime)
+            if (KADateTime::currentUtcDateTime() < remindTime)
                 start = remindTime;
         }
         deferDlg->setLimit(start.addSecs(-60));
@@ -1387,7 +1383,7 @@ void EditAlarmDlg::slotShowRecurrenceEdit()
     if (!mReadOnly  &&  !mTemplate)
     {
         mAlarmDateTime = mTimeWidget->getDateTime(nullptr, false, false);
-        KDateTime now = KDateTime::currentDateTime(mAlarmDateTime.timeSpec());
+        const KADateTime now = KADateTime::currentDateTime(mAlarmDateTime.timeSpec());
         bool expired = (mAlarmDateTime.effectiveKDateTime() < now);
         if (mRecurSetDefaultEndDate)
         {

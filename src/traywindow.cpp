@@ -1,7 +1,7 @@
 /*
  *  traywindow.cpp  -  the KDE system tray applet
  *  Program:  kalarm
- *  Copyright © 2002-2017 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2002-2018 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -91,7 +91,7 @@ TrayWindow::TrayWindow(MainWindow* parent)
     addAction(QStringLiteral("tNew"), mActionNew);
     contextMenu()->addAction(mActionNew);
     connect(mActionNew, &NewAlarmAction::selected, this, &TrayWindow::slotNewAlarm);
-    connect(mActionNew->fromTemplateAlarmAction(), &TemplateMenuAction::selected, this, &TrayWindow::slotNewFromTemplate);
+    connect(mActionNew->fromTemplateAlarmAction(QString()), &TemplateMenuAction::selected, this, &TrayWindow::slotNewFromTemplate);
     contextMenu()->addSeparator();
 
     QAction* a = KAlarm::createStopPlayAction(this);
@@ -289,8 +289,8 @@ void TrayWindow::updateStatus()
             active = static_cast<bool>(event);
             if (event  &&  period > 0)
             {
-                KDateTime dt = event->nextTrigger(KAEvent::ALL_TRIGGER).effectiveKDateTime();
-                qint64 delay = KDateTime::currentLocalDateTime().secsTo(dt);
+                const KADateTime dt = event->nextTrigger(KAEvent::ALL_TRIGGER).effectiveKDateTime();
+                qint64 delay = KADateTime::currentLocalDateTime().secsTo(dt);
                 delay -= static_cast<qint64>(period) * 60;   // delay until icon to be shown
                 active = (delay <= 0);
                 if (!active)
@@ -352,8 +352,8 @@ QString TrayWindow::tooltipAlarmText() const
     KAEvent event;
     const QString& prefix = Preferences::tooltipTimeToPrefix();
     int maxCount = Preferences::tooltipAlarmCount();
-    KDateTime now = KDateTime::currentLocalDateTime();
-    KDateTime tomorrow = now.addDays(1);
+    const KADateTime now = KADateTime::currentLocalDateTime();
+    const KADateTime tomorrow = now.addDays(1);
 
     // Get today's and tomorrow's alarms, sorted in time order
     int i, iend;
@@ -365,8 +365,8 @@ QString TrayWindow::tooltipAlarmText() const
         if (event->actionSubType() == KAEvent::MESSAGE)
         {
             TipItem item;
-            QDateTime dateTime = event->nextTrigger(KAEvent::DISPLAY_TRIGGER).effectiveKDateTime().toLocalZone().dateTime();
-            if (dateTime > tomorrow.dateTime())
+            QDateTime dateTime = event->nextTrigger(KAEvent::DISPLAY_TRIGGER).effectiveKDateTime().toLocalZone().qDateTime();
+            if (dateTime > tomorrow.qDateTime())
                 break;   // ignore alarms after tomorrow at the current clock time
             item.dateTime = dateTime;
 
@@ -378,7 +378,7 @@ QString TrayWindow::tooltipAlarmText() const
             }
             if (Preferences::showTooltipTimeToAlarm())
             {
-                int mins = (now.dateTime().secsTo(item.dateTime) + 59) / 60;
+                int mins = (now.qDateTime().secsTo(item.dateTime) + 59) / 60;
                 if (mins < 0)
                     mins = 0;
                 char minutes[3] = "00";

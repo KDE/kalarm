@@ -1,7 +1,7 @@
 /*
  *  preferences.h  -  program preference settings
  *  Program:  kalarm
- *  Copyright © 2001-2017 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2018 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -24,12 +24,15 @@
 #include "kalarm.h"
 
 #include "kalarmconfig.h"
+#include <kalarmcal/kadatetime.h>
 
 #include <QObject>
 #include <QDateTime>
 #include <QTimeZone>
 
-class KTimeZone;
+using namespace KAlarmCal;
+
+class QTimeZone;
 namespace KHolidays { class HolidayRegion; }
 
 
@@ -53,9 +56,9 @@ class Preferences : public PreferencesBase
         static void             setAskAutoStart(bool yes);
         static bool             noAutoStart()                    { return self()->base_NoAutoStart(); }
         static void             setNoAutoStart(bool yes);
-        static KTimeZone        timeZone(bool reload = false);
-        static QTimeZone        qTimeZone(bool reload = false);
-        static void             setTimeZone(const KTimeZone&);
+        static KADateTime::Spec timeSpec();
+        static QTimeZone        timeSpecAsZone();
+        static void             setTimeSpec(const KADateTime::Spec&);
         static const KHolidays::HolidayRegion& holidays();
         static void             setHolidayRegion(const QString& regionCode);
         static QTime            startOfDay()                     { return self()->mBase_StartOfDay.time(); }
@@ -95,7 +98,7 @@ class Preferences : public PreferencesBase
         bool                    useDefaults(bool def) override   { mUsingDefaults = def;  return PreferencesBase::useDefaults(def); }
 
     Q_SIGNALS:
-        void                    timeZoneChanged(const KTimeZone& newTz);
+        void                    timeZoneChanged(const KADateTime::Spec& newTz);
         void                    holidaysChanged(const KHolidays::HolidayRegion& newHolidays);
         void                    startOfDayChanged(const QTime& newStartOfDay);
         void                    workTimeChanged(const QTime& startTime, const QTime& endTime, const QBitArray& workDays);
@@ -114,7 +117,6 @@ class Preferences : public PreferencesBase
 
         static Preferences*     mInstance;
         static bool             mUsingDefaults;
-        static KTimeZone        mSystemTimeZone;
         static KHolidays::HolidayRegion* mHolidays;
         static QString          mPreviousVersion;  // last KAlarm version which wrote the config file
         static Backend          mPreviousBackend;  // backend used by last used version of KAlarm

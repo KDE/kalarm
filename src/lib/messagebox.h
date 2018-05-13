@@ -21,7 +21,6 @@
 #ifndef MESSAGEBOX_H
 #define MESSAGEBOX_H
 
-#include <kdeversion.h>
 #include <kstandardguiitem.h>
 #include <kmessagebox.h>
 

@@ -13,6 +13,10 @@ ecm_add_app_icon(kalarmautostart_SRCS ICONS ${ICONS_SRCS})
 
 add_executable(kalarmautostart ${kalarmautostart_SRCS})
 
-target_link_libraries(kalarmautostart  KF5::I18n KF5::CoreAddons Qt5::Widgets KF5::KDELibs4Support)
+target_link_libraries(kalarmautostart
+    KF5::I18n
+    KF5::CoreAddons
+    Qt5::Widgets
+    Qt5::DBus)
 
 install(TARGETS kalarmautostart  ${KDE_INSTALL_TARGETS_DEFAULT_ARGS} )

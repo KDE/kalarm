@@ -1,7 +1,7 @@
 /*
  *  birthdaydlg.cpp  -  dialog to pick birthdays from address book
  *  Program:  kalarm
- *  Copyright © 2002-2012 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2002-2012,2018 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -264,24 +264,24 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
 QVector<KAEvent> BirthdayDlg::events() const
 {
     QVector<KAEvent> list;
-    QModelIndexList indexes = mListView->selectionModel()->selectedRows();
+    const QModelIndexList indexes = mListView->selectionModel()->selectedRows();
     int count = indexes.count();
     if (!count)
         return list;
-    QDate today = KDateTime::currentLocalDate();
-    KDateTime todayStart(today, KDateTime::Spec(KDateTime::ClockTime));
+    const QDate today = KADateTime::currentLocalDate();
+    const KADateTime todayStart(today, KADateTime::LocalZone);
     int thisYear = today.year();
     int reminder = mReminder->minutes();
     for (int i = 0;  i < count;  ++i)
     {
-        const QModelIndex nameIndex = indexes.at(i).model()->index(indexes.at(i).row(), 0);
-        const QModelIndex birthdayIndex = indexes.at(i).model()->index(indexes.at(i).row(), 1);
+        const QModelIndex nameIndex = indexes[i].model()->index(indexes[i].row(), 0);
+        const QModelIndex birthdayIndex = indexes[i].model()->index(indexes[i].row(), 1);
         const QString name = nameIndex.data(Qt::DisplayRole).toString();
         QDate date = birthdayIndex.data(BirthdayModel::DateRole).toDate();
-        date.setYMD(thisYear, date.month(), date.day());
+        date.setDate(thisYear, date.month(), date.day());
         if (date <= today)
-            date.setYMD(thisYear + 1, date.month(), date.day());
-        KAEvent event(KDateTime(date, KDateTime::Spec(KDateTime::ClockTime)),
+            date.setDate(thisYear + 1, date.month(), date.day());
+        KAEvent event(KADateTime(date, KADateTime::LocalZone),
                       mPrefix->text() + name + mSuffix->text(),
                       mFontColourButton->bgColour(), mFontColourButton->fgColour(),
                       mFontColourButton->font(), KAEvent::MESSAGE, mLateCancel->minutes(),
@@ -291,7 +291,7 @@ QVector<KAEvent> BirthdayDlg::events() const
         float volume = mSoundPicker->volume(fadeVolume, fadeSecs);
         int   repeatPause = mSoundPicker->repeatPause();
         event.setAudioFile(mSoundPicker->file().toDisplayString(), volume, fadeVolume, fadeSecs, repeatPause);
-        QVector<int> months(1, date.month());
+        const QVector<int> months(1, date.month());
         event.setRecurAnnualByDate(1, months, 0, KARecurrence::defaultFeb29Type(), -1, QDate());
         event.setRepetition(mSubRepetition->repetition());
         event.setNextOccurrence(todayStart);

@@ -1,7 +1,7 @@
 /*
  *  alarmcalendar.cpp  -  KAlarm calendar file access
  *  Program:  kalarm
- *  Copyright © 2001-2017 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2018 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -32,12 +32,13 @@
 #include <KCalCore/MemoryCalendar>
 #include <KCalCore/ICalFormat>
 
-#include <KTimeZone>
 #include <KLocalizedString>
+#include <KIO/StatJob>
 #include <KIO/StoredTransferJob>
 #include <KJobWidgets>
 #include <kfileitem.h>
 #include <KSharedConfig>
+
 #include <QTemporaryFile>
 #include <QStandardPaths>
 #include <QTimeZone>
@@ -195,7 +196,7 @@ bool AlarmCalendar::open()
         qCDebug(KALARM_LOG) << mUrl.toDisplayString();
         if (!mCalendarStorage)
         {
-            MemoryCalendar::Ptr calendar(new MemoryCalendar(Preferences::qTimeZone(true)));
+            MemoryCalendar::Ptr calendar(new MemoryCalendar(Preferences::timeSpecAsZone()));
             mCalendarStorage = FileStorage::Ptr(new FileStorage(calendar));
         }
 
@@ -265,7 +266,7 @@ int AlarmCalendar::load()
         } else {
             filename = mUrl.toLocalFile();
         }
-        mCalendarStorage->calendar()->setTimeZone(Preferences::qTimeZone(true));
+        mCalendarStorage->calendar()->setTimeZone(Preferences::timeSpecAsZone());
         mCalendarStorage->setFileName(filename);
         if (!mCalendarStorage->load())
         {
@@ -640,7 +641,7 @@ bool AlarmCalendar::importAlarms(QWidget* parent, Collection* collection)
     }
 
     // Read the calendar and add its alarms to the current calendars
-    MemoryCalendar::Ptr cal(new MemoryCalendar(Preferences::qTimeZone(true)));
+    MemoryCalendar::Ptr cal(new MemoryCalendar(Preferences::timeSpecAsZone()));
     FileStorage::Ptr calStorage(new FileStorage(cal, filename));
     success = calStorage->load();
     if (!success)
@@ -739,7 +740,7 @@ bool AlarmCalendar::exportAlarms(const KAEvent::List& events, QWidget* parent)
     }
     qCDebug(KALARM_LOG) << url.toDisplayString();
 
-    MemoryCalendar::Ptr calendar(new MemoryCalendar(Preferences::qTimeZone(true)));
+    MemoryCalendar::Ptr calendar(new MemoryCalendar(Preferences::timeSpecAsZone()));
     FileStorage::Ptr calStorage(new FileStorage(calendar, file));
     if (append  &&  !calStorage->load())
     {
@@ -1010,7 +1011,7 @@ void AlarmCalendar::addNewEvent(const Collection& collection, KAEvent* event, bo
             findEarliestAlarm(key);
         else
         {
-            KDateTime dt = event->nextTrigger(KAEvent::ALL_TRIGGER).effectiveKDateTime();
+            const KADateTime dt = event->nextTrigger(KAEvent::ALL_TRIGGER).effectiveKDateTime();
             if (dt.isValid()
             &&  (!earliest  ||  dt < earliest->nextTrigger(KAEvent::ALL_TRIGGER)))
             {
@@ -1505,14 +1506,14 @@ void AlarmCalendar::findEarliestAlarm(Collection::Id key)
         return;
     const KAEvent::List& events = rit.value();
     KAEvent* earliest = nullptr;
-    KDateTime earliestTime;
+    KADateTime earliestTime;
     for (int i = 0, end = events.count();  i < end;  ++i)
     {
         KAEvent* event = events[i];
         if (event->category() != CalEvent::ACTIVE
         ||  mPendingAlarms.contains(event->id()))
             continue;
-        KDateTime dt = event->nextTrigger(KAEvent::ALL_TRIGGER).effectiveKDateTime();
+        const KADateTime dt = event->nextTrigger(KAEvent::ALL_TRIGGER).effectiveKDateTime();
         if (dt.isValid()  &&  (!earliest || dt < earliestTime))
         {
             earliestTime = dt;
@@ -1530,13 +1531,13 @@ void AlarmCalendar::findEarliestAlarm(Collection::Id key)
 KAEvent* AlarmCalendar::earliestAlarm() const
 {
     KAEvent* earliest = nullptr;
-    KDateTime earliestTime;
+    KADateTime earliestTime;
     for (EarliestMap::ConstIterator eit = mEarliestAlarm.constBegin();  eit != mEarliestAlarm.constEnd();  ++eit)
     {
         KAEvent* event = eit.value();
         if (!event)
             continue;
-        KDateTime dt = event->nextTrigger(KAEvent::ALL_TRIGGER).effectiveKDateTime();
+        const KADateTime dt = event->nextTrigger(KAEvent::ALL_TRIGGER).effectiveKDateTime();
         if (dt.isValid()  &&  (!earliest || dt < earliestTime))
         {
             earliestTime = dt;

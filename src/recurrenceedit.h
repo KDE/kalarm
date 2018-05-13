@@ -25,8 +25,7 @@
 #define RECURRENCEEDIT_H
 
 #include <kalarmcal/repetition.h>
-
-#include <kdatetime.h>
+#include <kalarmcal/kadatetime.h>
 
 #include <QFrame>
 
@@ -67,22 +66,22 @@ class RecurrenceEdit : public QFrame
         virtual ~RecurrenceEdit()  { }
 
         /** Set widgets to default values */
-        void          setDefaults(const KDateTime& from);
+        void          setDefaults(const KADateTime& from);
         /** Initialise according to a specified event */
         void          set(const KAEvent&);
         /** Initialise with repeat-at-login selected, instead of calling set(). */
         void          setRepeatAtLogin();
         /** Write recurrence settings into an event */
         void          updateEvent(KAEvent&, bool adjustStart);
-        QWidget*      checkData(const KDateTime& startDateTime, QString& errorMessage) const;
+        QWidget*      checkData(const KADateTime& startDateTime, QString& errorMessage) const;
         RepeatType    repeatType() const                    { return mRuleButtonType; }
         bool          isTimedRepeatType() const             { return mRuleButtonType >= SUBDAILY; }
         Repetition    subRepetition() const;
         void          setSubRepetition(int reminderMinutes, bool dateOnly);
         void          setStartDate(const QDate&, const QDate& today);
         void          setDefaultEndDate(const QDate&);
-        void          setEndDateTime(const KDateTime&);
-        KDateTime     endDateTime() const;
+        void          setEndDateTime(const KADateTime&);
+        KADateTime    endDateTime() const;
         bool          stateChanged() const;
         void          activateSubRepetition();
         void          showMoreOptions(bool);
@@ -96,7 +95,7 @@ class RecurrenceEdit : public QFrame
         static QString i18n_combo_Yearly();            // text of 'Yearly' selection
 
     public Q_SLOTS:
-        void          setDateTime(const KDateTime& start)   { mCurrStartDateTime = start; }
+        void          setDateTime(const KADateTime& start)   { mCurrStartDateTime = start; }
 
     Q_SIGNALS:
         void          shown();
@@ -169,7 +168,7 @@ class RecurrenceEdit : public QFrame
         QList<QDate>      mExceptionDates;
 
         // Current start date and time
-        KDateTime         mCurrStartDateTime;
+        KADateTime        mCurrStartDateTime;
         RepetitionButton* mSubRepetition;
         bool              mNoEmitTypeChanged;        // suppress typeChanged() signal
         bool              mReadOnly;
@@ -178,7 +177,7 @@ class RecurrenceEdit : public QFrame
         QAbstractButton*  mSavedRuleButton;          // which rule button was selected
         QAbstractButton*  mSavedRangeButton;         // which range button was selected
         int               mSavedRecurCount;          // recurrence repeat count
-        KDateTime         mSavedEndDateTime;         // end date/time
+        KADateTime        mSavedEndDateTime;         // end date/time
         QList<QDate>      mSavedExceptionDates;      // exception dates
         Repetition        mSavedRepetition;          // sub-repetition interval & count (via mSubRepetition button)
         bool              mSavedExclHolidays;        // exclude holidays

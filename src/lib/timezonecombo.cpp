@@ -1,7 +1,7 @@
 /*
  *  timezonecombo.cpp  -  time zone selection combo box
  *  Program:  kalarm
- *  Copyright © 2006,2008,2009,2011 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2006,2008,2009,2011,2018 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -19,36 +19,37 @@
  */
 
 #include "timezonecombo.h"
-#include <ksystemtimezone.h>
 #include <KLocalizedString>
+#include <QTimeZone>
 
 
 TimeZoneCombo::TimeZoneCombo(QWidget* parent)
     : ComboBox(parent)
 {
-    QString utc = KTimeZone::utc().name();
-    addItem(utc);   // put UTC at start of list
+    addItem(i18n("System time zone"));   // put System at start of list
+    mZoneNames << "System";
+    const QByteArray utc = QTimeZone::utc().id();
+    addItem(QString::fromLatin1(utc));            // put UTC second in list
     mZoneNames << utc;
-    const KTimeZones::ZoneMap zones = KSystemTimeZones::zones();
-    KTimeZones::ZoneMap::ConstIterator end = zones.constEnd();
-    for (KTimeZones::ZoneMap::ConstIterator it = zones.constBegin();  it != end;  ++it)
-        if (it.key() != utc)
+    const QList<QByteArray> zones = QTimeZone::availableTimeZoneIds();
+    for (const QByteArray& zone : zones)
+        if (zone != utc)
         {
-            mZoneNames << it.key();
-            addItem(i18n(it.key().toUtf8()).replace(QLatin1Char('_'), QLatin1Char(' ')));
+            mZoneNames << zone;
+            addItem(i18n(zone).replace(QLatin1Char('_'), QLatin1Char(' ')));
         }
 }
 
-KTimeZone TimeZoneCombo::timeZone() const
+QTimeZone TimeZoneCombo::timeZone() const
 {
-    return KSystemTimeZones::zone(mZoneNames[currentIndex()]);
+    if (!currentIndex())
+        return QTimeZone();
+    return QTimeZone(mZoneNames[currentIndex()]);
 }
 
-void TimeZoneCombo::setTimeZone(const KTimeZone& tz)
+void TimeZoneCombo::setTimeZone(const QTimeZone& tz)
 {
-    if (!tz.isValid())
-        return;
-    int index = mZoneNames.indexOf(tz.name());
+    int index = tz.isValid() ? mZoneNames.indexOf(tz.id()) : 0;
     if (index >= 0)
         setCurrentIndex(index);
 }

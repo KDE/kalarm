@@ -27,6 +27,8 @@
 #include <kalarmcal/alarmtext.h>
 #include <kalarmcal/kaevent.h>
 
+using namespace KAlarmCal;
+
 class QAbstractButton;
 class QGroupBox;
 class QComboBox;
@@ -45,7 +47,6 @@ class TextEdit;
 class SoundWidget;
 class MessageWin;
 class PickLogFileRadio;
-
 
 class EditDisplayAlarmDlg : public EditAlarmDlg
 {
@@ -79,7 +80,7 @@ class EditDisplayAlarmDlg : public EditAlarmDlg
         void            setReadOnly(bool readOnly) override;
         void            saveState(const KAEvent*) override;
         bool            type_stateChanged() const override;
-        void            type_setEvent(KAEvent&, const KDateTime&, const QString& text, int lateCancel, bool trial) override;
+        void            type_setEvent(KAEvent&, const KADateTime&, const QString& text, int lateCancel, bool trial) override;
         KAEvent::Flags  getAlarmFlags() const override;
         bool            type_validate(bool trial) override { Q_UNUSED(trial); return true; }
         CheckBox*       type_createConfirmAckCheckbox(QWidget* parent) override  { mConfirmAck = createConfirmAckCheckbox(parent); return mConfirmAck; }
@@ -162,7 +163,7 @@ class EditCommandAlarmDlg : public EditAlarmDlg
         void            setReadOnly(bool readOnly) override;
         void            saveState(const KAEvent*) override;
         bool            type_stateChanged() const override;
-        void            type_setEvent(KAEvent&, const KDateTime&, const QString& text, int lateCancel, bool trial) override;
+        void            type_setEvent(KAEvent&, const KADateTime&, const QString& text, int lateCancel, bool trial) override;
         KAEvent::Flags  getAlarmFlags() const override;
         bool            type_validate(bool trial) override;
         void            type_executedTry(const QString& text, void* obj) override;
@@ -215,7 +216,7 @@ class EditEmailAlarmDlg : public EditAlarmDlg
         void            setReadOnly(bool readOnly) override;
         void            saveState(const KAEvent*) override;
         bool            type_stateChanged() const override;
-        void            type_setEvent(KAEvent&, const KDateTime&, const QString& text, int lateCancel, bool trial) override;
+        void            type_setEvent(KAEvent&, const KADateTime&, const QString& text, int lateCancel, bool trial) override;
         KAEvent::Flags  getAlarmFlags() const override;
         bool            type_validate(bool trial) override;
         void            type_aboutToTry() override;
@@ -277,7 +278,7 @@ class EditAudioAlarmDlg : public EditAlarmDlg
         void            setReadOnly(bool readOnly) override;
         void            saveState(const KAEvent*) override;
         bool            type_stateChanged() const override;
-        void            type_setEvent(KAEvent&, const KDateTime&, const QString& text, int lateCancel, bool trial) override;
+        void            type_setEvent(KAEvent&, const KADateTime&, const QString& text, int lateCancel, bool trial) override;
         KAEvent::Flags  getAlarmFlags() const override;
         bool            type_validate(bool trial) override { Q_UNUSED(trial); return true; }
         void            type_executedTry(const QString& text, void* obj) override;

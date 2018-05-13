@@ -27,7 +27,7 @@
 #include <kalarmcal/kaevent.h>
 #include <kalarmcal/karecurrence.h>
 
-#include <kdatetime.h>
+#include <kalarmcal/kadatetime.h>
 #include <QColor>
 #include <QStringList>
 class QCommandLineParser;
@@ -64,7 +64,7 @@ class CommandOptions
         EditAlarmDlg::Type  editType() const          { return mEditType; }
         KAEvent::SubAction  editAction() const        { return mEditAction; }
         QString             text() const              { return mText; }
-        KDateTime           alarmTime() const         { return mAlarmTime; }
+        KADateTime          alarmTime() const         { return mAlarmTime; }
         KARecurrence*       recurrence() const        { return mRecurrence; }
         int                 subRepeatCount() const    { return mRepeatCount; }
         KCalCore::Duration  subRepeatInterval() const { return mRepeatInterval; }
@@ -82,7 +82,7 @@ class CommandOptions
         bool                disableAll() const        { return mDisableAll; }
         QString             outputText() const        { return mError; }
 #ifndef NDEBUG
-        KDateTime           simulationTime() const    { return mSimulationTime; }
+        KADateTime          simulationTime() const    { return mSimulationTime; }
 #endif
         static void         printError(const QString& errmsg);
 
@@ -160,7 +160,7 @@ class CommandOptions
         KAEvent::SubAction  mEditAction;     // NEW: alarm edit sub-type
         bool                mEditActionSet;  // NEW: mEditAction is valid
         QString             mText;           // NEW: alarm text
-        KDateTime           mAlarmTime;      // NEW: alarm time
+        KADateTime          mAlarmTime;      // NEW: alarm time
         KARecurrence*       mRecurrence;     // NEW: recurrence
         int                 mRepeatCount;    // NEW: sub-repetition count
         KCalCore::Duration  mRepeatInterval; // NEW: sub-repetition interval
@@ -177,7 +177,7 @@ class CommandOptions
         KAEvent::Flags      mFlags;          // NEW: event flags
         bool                mDisableAll;     // disable all alarm monitoring
 #ifndef NDEBUG
-        KDateTime           mSimulationTime; // system time to be simulated, or invalid if none
+        KADateTime          mSimulationTime; // system time to be simulated, or invalid if none
 #endif
 };
 

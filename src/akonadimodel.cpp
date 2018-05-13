@@ -340,7 +340,7 @@ QVariant AkonadiModel::data(const QModelIndex& index, int role) const
                                 due = event.startDateTime();
                             else
                                 due = event.nextTrigger(KAEvent::DISPLAY_TRIGGER);
-                            return due.isValid() ? due.effectiveKDateTime().toUtc().dateTime()
+                            return due.isValid() ? due.effectiveKDateTime().toUtc().qDateTime()
                                                  : QDateTime(QDate(9999,12,31), QTime(0,0,0));
                         }
                         default:
@@ -362,7 +362,7 @@ QVariant AkonadiModel::data(const QModelIndex& index, int role) const
                             if (event.expired())
                                 return -1;
                             const DateTime due = event.nextTrigger(KAEvent::DISPLAY_TRIGGER);
-                            const KDateTime now = KDateTime::currentUtcDateTime();
+                            const KADateTime now = KADateTime::currentUtcDateTime();
                             if (due.isDateOnly())
                                 return now.date().daysTo(due.date()) * 1440;
                             return (now.secsTo(due.effectiveKDateTime()) + 59) / 60;

@@ -1,7 +1,7 @@
 /*
  *  kamail.cpp  -  email functions
  *  Program:  kalarm
- *  Copyright © 2002-2017 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2002-2018 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -44,6 +44,7 @@
 #include <KLocalizedString>
 #include <kfileitem.h>
 #include <KIO/StatJob>
+#include <KIO/StoredTransferJob>
 #include <KJobWidgets>
 #include <kemailsettings.h>
 #include <kcodecs.h>
@@ -320,8 +321,7 @@ void KAMail::slotEmailSent(KJob* job)
 void initHeaders(KMime::Message& message, KAMail::JobData& data)
 {
     KMime::Headers::Date* date = new KMime::Headers::Date;
-//QT5 port it
-    date->setDateTime(QDateTime::currentDateTime(/*Preferences::timeZone()*/));
+    date->setDateTime(KADateTime::currentDateTime(Preferences::timeSpec()).qDateTime());
     message.setHeader(date);
 
     KMime::Headers::From* from = new KMime::Headers::From;
@@ -658,7 +658,7 @@ QStringList KAMail::errors(const QString& err, ErrType prefix)
     QString error1;
     switch (prefix)
     {
-        case SEND_FAIL:  error1 = i18nc("@info", "Failed to send email");  break;
+        case SEND_FAIL:   error1 = i18nc("@info", "Failed to send email");  break;
         case SEND_ERROR:  error1 = i18nc("@info", "Error sending email");  break;
 #ifdef KMAIL_SUPPORTED
         case COPY_ERROR:  error1 = i18nc("@info", "Error copying sent email to <application>KMail</application> <resource>%1</resource> folder", i18n_sent_mail());  break;

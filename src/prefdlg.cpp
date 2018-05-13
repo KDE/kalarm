@@ -1,7 +1,7 @@
 /*
  *  prefdlg.cpp  -  program preferences dialog
  *  Program:  kalarm
- *  Copyright © 2001-2017 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2018 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -29,7 +29,6 @@
 #include "editdlgtypes.h"
 #include "fontcolour.h"
 #include "functions.h"
-#include "itembox.h"
 #include "kalarmapp.h"
 #include "kalocale.h"
 #include "kamail.h"
@@ -60,13 +59,11 @@ using namespace KHolidays;
 
 #include <kpimtextedit/texttospeech.h>
 
-#include <kglobal.h>
 #include <KLocalizedString>
 #include <kshell.h>
 #include <klineedit.h>
 #include <KAboutData>
 #include <kstandardguiitem.h>
-#include <ksystemtimezone.h>
 #include <qicon.h>
 #if KDEPIM_HAVE_X11
 #include <kwindowinfo.h>
@@ -349,7 +346,7 @@ PrefsTabBase::PrefsTabBase(StackedScrollGroup* scrollGroup)
     : StackedScrollWidget(scrollGroup),
       mLabelsAligned(false)
 {
-    QFrame *topWidget = new QFrame(this);
+    QFrame* topWidget = new QFrame(this);
     setWidget(topWidget);
     mTopLayout = new QVBoxLayout(topWidget);
     mTopLayout->setMargin(0);
@@ -426,18 +423,20 @@ MiscPrefTab::MiscPrefTab(StackedScrollGroup* scrollGroup)
     vlayout->addWidget(mQuitWarn, 0, Qt::AlignLeft);
 
     // Confirm alarm deletion?
-    group = new QGroupBox(i18nc("@title:group", "Deletion"));
-    topLayout()->addWidget(group);   // this is to allow left adjustment
-    QVBoxLayout *box = new QVBoxLayout(group);
+    QWidget* widget = new QWidget;  // this is for consistent left alignment
+    topLayout()->addWidget(widget);
+    QHBoxLayout* hbox = new QHBoxLayout(widget);
+    hbox->setSpacing(style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     mConfirmAlarmDeletion = new QCheckBox(i18nc("@option:check", "Confirm alarm deletions"));
     mConfirmAlarmDeletion->setMinimumSize(mConfirmAlarmDeletion->sizeHint());
     mConfirmAlarmDeletion->setWhatsThis(i18nc("@info:whatsthis", "Check to be prompted for confirmation each time you delete an alarm."));
-    box->addWidget(mConfirmAlarmDeletion);
+    hbox->addWidget(mConfirmAlarmDeletion);
+    hbox->addStretch();    // left adjust the controls
 
     // Default alarm deferral time
-    QWidget *widget = new QWidget;
-    box->addWidget(widget);
-    QHBoxLayout *hbox = new QHBoxLayout(widget);
+    widget = new QWidget;   // this is to control the QWhatsThis text display area
+    topLayout()->addWidget(widget);
+    hbox = new QHBoxLayout(widget);
     hbox->setSpacing(style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     QLabel* label = new QLabel(i18nc("@label:spinbox", "Default defer time interval:"));
     hbox->addWidget(label);
@@ -447,7 +446,7 @@ MiscPrefTab::MiscPrefTab(StackedScrollGroup* scrollGroup)
     widget->setWhatsThis(i18nc("@info:whatsthis",
             "Enter the default time interval (hours & minutes) to defer alarms, used by the Defer Alarm dialog."));
     label->setBuddy(mDefaultDeferTime);
-    hbox->addStretch(1);    // left adjust the controls
+    hbox->addStretch();    // left adjust the controls
 
     // Terminal window to use for command alarms
     group = new QGroupBox(i18nc("@title:group", "Terminal for Command Alarms"));
@@ -606,37 +605,29 @@ TimePrefTab::TimePrefTab(StackedScrollGroup* scrollGroup)
     : PrefsTabBase(scrollGroup)
 {
     // Default time zone
-    ItemBox* itemBox = new ItemBox();
+    QHBoxLayout* itemBox = new QHBoxLayout();
     itemBox->setMargin(0);
     qobject_cast<QBoxLayout*>(topLayout())->addLayout(itemBox);
 
-    QWidget *widget = new QWidget; // this is to control the QWhatsThis text display area
+    QWidget* widget = new QWidget; // this is to control the QWhatsThis text display area
     itemBox->addWidget(widget);
-    QHBoxLayout *box =  new QHBoxLayout(widget);
+    QHBoxLayout* box =  new QHBoxLayout(widget);
     box->setMargin(0);
     box->setSpacing(style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     QLabel* label = new QLabel(i18nc("@label:listbox", "Time zone:"));
     box->addWidget(label);
     addAlignedLabel(label);
-#if 1
     mTimeZone = new TimeZoneCombo(widget);
     mTimeZone->setMaxVisibleItems(15);
     box->addWidget(mTimeZone);
-#else
-    mTimeZone = new KComboBox(box);
-    mTimeZone->setMaxVisibleItems(15);
-    const KTimeZones::ZoneMap zones = KSystemTimeZones::zones();
-    for (KTimeZones::ZoneMap::ConstIterator it = zones.constBegin();  it != zones.constEnd();  ++it)
-        mTimeZone->addItem(it.key());
-#endif
     widget->setWhatsThis(xi18nc("@info:whatsthis",
                                 "Select the time zone which <application>KAlarm</application> should use "
                                 "as its default for displaying and entering dates and times."));
     label->setBuddy(mTimeZone);
-    itemBox->leftAlign();
+    itemBox->addStretch();
 
     // Holiday region
-    itemBox = new ItemBox();
+    itemBox = new QHBoxLayout();
     itemBox->setMargin(0);
     qobject_cast<QBoxLayout*>(topLayout())->addLayout(itemBox);
 
@@ -651,18 +642,18 @@ TimePrefTab::TimePrefTab(StackedScrollGroup* scrollGroup)
     mHolidays = new QComboBox();
     mHolidays->setSizeAdjustPolicy(QComboBox::AdjustToContentsOnFirstShow);
     box->addWidget(mHolidays);
-    itemBox->leftAlign();
+    itemBox->addStretch();
     label->setBuddy(mHolidays);
     widget->setWhatsThis(i18nc("@info:whatsthis",
                                "Select which holiday region to use"));
 
-    QStringList regions = HolidayRegion::regionCodes();
+    const QStringList regions = HolidayRegion::regionCodes();
     QMap<QString, QString> regionsMap;
     foreach (const QString& regionCode, regions)
     {
-        QString name = HolidayRegion::name(regionCode);
-        QString languageName = KLocale::global()->languageCodeToName(HolidayRegion::languageCode(regionCode));
-        QString label = languageName.isEmpty() ? name : i18nc("Holiday region, region language", "%1 (%2)", name, languageName);
+        const QString name = HolidayRegion::name(regionCode);
+        const QString languageName = QLocale::languageToString(QLocale(HolidayRegion::languageCode(regionCode)).language());
+        const QString label = languageName.isEmpty() ? name : i18nc("Holiday region, region language", "%1 (%2)", name, languageName);
         regionsMap.insert(label, regionCode);
     }
 
@@ -674,7 +665,7 @@ TimePrefTab::TimePrefTab(StackedScrollGroup* scrollGroup)
     }
 
     // Start-of-day time
-    itemBox = new ItemBox();
+    itemBox = new QHBoxLayout();
     itemBox->setMargin(0);
     qobject_cast<QBoxLayout*>(topLayout())->addLayout(itemBox);
 
@@ -692,7 +683,7 @@ TimePrefTab::TimePrefTab(StackedScrollGroup* scrollGroup)
     widget->setWhatsThis(xi18nc("@info:whatsthis",
           "<para>The earliest time of day at which a date-only alarm will be triggered.</para>"
           "<para>%1</para>", TimeSpinBox::shiftWhatsThis()));
-    itemBox->leftAlign();
+    itemBox->addStretch();
 
     // Working hours
     QGroupBox* group = new QGroupBox(i18nc("@title:group", "Working Hours"));
@@ -714,7 +705,7 @@ TimePrefTab::TimePrefTab(StackedScrollGroup* scrollGroup)
     }
     daybox->setWhatsThis(i18nc("@info:whatsthis", "Check the days in the week which are work days"));
 
-    itemBox = new ItemBox(group);
+    itemBox = new QHBoxLayout();
     itemBox->setMargin(0);
     layout->addLayout(itemBox);
 
@@ -732,9 +723,9 @@ TimePrefTab::TimePrefTab(StackedScrollGroup* scrollGroup)
     widget->setWhatsThis(xi18nc("@info:whatsthis",
             "<para>Enter the start time of the working day.</para>"
             "<para>%1</para>", TimeSpinBox::shiftWhatsThis()));
-    itemBox->leftAlign();
+    itemBox->addStretch();
 
-    itemBox = new ItemBox(group);
+    itemBox = new QHBoxLayout();
     itemBox->setMargin(0);
     layout->addLayout(itemBox);
 
@@ -752,7 +743,7 @@ TimePrefTab::TimePrefTab(StackedScrollGroup* scrollGroup)
     widget->setWhatsThis(xi18nc("@info:whatsthis",
           "<para>Enter the end time of the working day.</para>"
           "<para>%1</para>", TimeSpinBox::shiftWhatsThis()));
-    itemBox->leftAlign();
+    itemBox->addStretch();
 
     // KOrganizer event duration
     group = new QGroupBox(i18nc("@title:group", "KOrganizer"));
@@ -776,29 +767,15 @@ TimePrefTab::TimePrefTab(StackedScrollGroup* scrollGroup)
             "<para>Enter the event duration in hours and minutes, for alarms which are copied to KOrganizer.</para>"
             "<para>%1</para>", TimeSpinBox::shiftWhatsThis()));
     label->setBuddy(mKOrgEventDuration);
-    box->addStretch(1);    // left adjust the controls
+    box->addStretch();    // left adjust the controls
 
     topLayout()->addStretch();    // top adjust the widgets
 }
 
 void TimePrefTab::restore(bool, bool)
 {
-#if 1
-    mTimeZone->setTimeZone(Preferences::timeZone());
-#else
-    int tzindex = 0;
-    KTimeZone tz = Preferences::timeZone();
-    if (tz.isValid())
-    {
-        QString zone = tz.name();
-        int count = mTimeZone->count();
-        while (tzindex < count  &&  mTimeZone->itemText(tzindex) != zone)
-            ++tzindex;
-        if (tzindex >= count)
-            tzindex = 0;
-    }
-    mTimeZone->setCurrentIndex(tzindex);
-#endif
+    KADateTime::Spec timeSpec = Preferences::timeSpec();
+    mTimeZone->setTimeZone(timeSpec.type() == KADateTime::TimeZone ? timeSpec.timeZone() : QTimeZone());
     int i = Preferences::holidays().isValid() ? mHolidays->findData(Preferences::holidays().regionCode()) : 0;
     mHolidays->setCurrentIndex(i);
     mStartOfDay->setValue(Preferences::startOfDay());
@@ -815,15 +792,7 @@ void TimePrefTab::restore(bool, bool)
 
 void TimePrefTab::apply(bool syncToDisc)
 {
-#if 1
-    KTimeZone tz = mTimeZone->timeZone();
-    if (tz.isValid())
-        Preferences::setTimeZone(tz);
-#else
-    KTimeZone tz = KSystemTimeZones::zone(mTimeZone->currentText());
-    if (tz.isValid()  &&  tz != Preferences::timeZone())
-        Preferences::setTimeZone(tz);
-#endif
+    Preferences::setTimeSpec(mTimeZone->timeZone());
     QString hol = mHolidays->itemData(mHolidays->currentIndex()).toString();
     if (hol != Preferences::holidays().regionCode())
         Preferences::setHolidayRegion(hol);
@@ -889,8 +858,8 @@ StorePrefTab::StorePrefTab(StackedScrollGroup* scrollGroup)
           i18nc("@info:whatsthis", "Check to archive alarms after expiry or deletion (except deleted alarms which were never triggered)."));
     grid->addWidget(mKeepArchived, 0, 0, 1, 2, Qt::AlignLeft);
 
-    QWidget *widget = new QWidget;
-    QHBoxLayout *box = new QHBoxLayout(widget);
+    QWidget* widget = new QWidget;
+    QHBoxLayout* box = new QHBoxLayout(widget);
     box->setMargin(0);
     box->setSpacing(style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     mPurgeArchived = new QCheckBox(i18nc("@option:check", "Discard archived alarms after:"));
@@ -993,11 +962,11 @@ EmailPrefTab::EmailPrefTab(StackedScrollGroup* scrollGroup)
       mAddressChanged(false),
       mBccAddressChanged(false)
 {
-    QWidget *widget = new QWidget;
+    QWidget* widget = new QWidget;
     topLayout()->addWidget(widget);
-    QHBoxLayout *box = new QHBoxLayout(widget);
+    QHBoxLayout* box = new QHBoxLayout(widget);
     box->setSpacing(2 * style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
-    QLabel *label = new QLabel(i18nc("@label", "Email client:"));
+    QLabel* label = new QLabel(i18nc("@label", "Email client:"));
     box->addWidget(label);
     mEmailClient = new ButtonGroup(widget);
     QString kmailOption = i18nc("@option:radio", "KMail");
@@ -1228,15 +1197,15 @@ EditPrefTab::EditPrefTab(StackedScrollGroup* scrollGroup)
     StackedGroupT<QWidget>* tabgroup = new StackedGroupT<QWidget>(mTabs);
 
     StackedWidgetT<QWidget>* topGeneral = new StackedWidgetT<QWidget>(tabgroup);
-    QVBoxLayout *tgLayout = new QVBoxLayout(topGeneral);
+    QVBoxLayout* tgLayout = new QVBoxLayout(topGeneral);
     mTabGeneral = mTabs->addTab(topGeneral, i18nc("@title:tab", "General"));
 
     StackedWidgetT<QWidget>* topTypes = new StackedWidgetT<QWidget>(tabgroup);
-    QVBoxLayout *ttLayout = new QVBoxLayout(topTypes);
+    QVBoxLayout* ttLayout = new QVBoxLayout(topTypes);
     mTabTypes = mTabs->addTab(topTypes, i18nc("@title:tab", "Alarm Types"));
 
     StackedWidgetT<QWidget>* topFontColour = new StackedWidgetT<QWidget>(tabgroup);
-    QVBoxLayout *tfLayout = new QVBoxLayout(topFontColour);
+    QVBoxLayout* tfLayout = new QVBoxLayout(topFontColour);
     mTabFontColour = mTabs->addTab(topFontColour, i18nc("@title:tab", "Font && Color"));
 
     // MISCELLANEOUS
@@ -1247,9 +1216,9 @@ EditPrefTab::EditPrefTab(StackedScrollGroup* scrollGroup)
     tgLayout->addWidget(mCopyToKOrganizer);
 
     // Late cancellation
-    QWidget *widget = new QWidget;
+    QWidget* widget = new QWidget;
     tgLayout->addWidget(widget);
-    QHBoxLayout *box = new QHBoxLayout(widget);
+    QHBoxLayout* box = new QHBoxLayout(widget);
     box->setMargin(0);
     box->setSpacing(0);
     mLateCancel = new QCheckBox(LateCancelSelector::i18n_chk_CancelIfLate());
@@ -1279,9 +1248,9 @@ EditPrefTab::EditPrefTab(StackedScrollGroup* scrollGroup)
     widget->setWhatsThis(i18nc("@info:whatsthis", "The default setting for the recurrence rule in the alarm edit dialog."));
 
     // How to handle February 29th in yearly recurrences
-    QWidget *febBox = new QWidget;  // this is to control the QWhatsThis text display area
+    QWidget* febBox = new QWidget;  // this is to control the QWhatsThis text display area
     tgLayout->addWidget(febBox);
-    QVBoxLayout *vbox = new QVBoxLayout(febBox);
+    QVBoxLayout* vbox = new QVBoxLayout(febBox);
     vbox->setMargin(0);
     vbox->setSpacing(style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     label = new QLabel(i18nc("@label", "In non-leap years, repeat yearly February 29th alarms on:"));
@@ -1344,7 +1313,7 @@ EditPrefTab::EditPrefTab(StackedScrollGroup* scrollGroup)
     box->addWidget(mReminderUnits);
     label->setBuddy(mReminderUnits);
     widget->setWhatsThis(i18nc("@info:whatsthis", "The default units for the reminder in the alarm edit dialog, for alarms due soon."));
-    box->addStretch(1);    // left adjust the control
+    box->addStretch();    // left adjust the control
     mSpecialActionsButton = new SpecialActionsButton(true);
     box->addWidget(mSpecialActionsButton);
 
@@ -1355,7 +1324,7 @@ EditPrefTab::EditPrefTab(StackedScrollGroup* scrollGroup)
     vlayout->setMargin(style()->pixelMetric(QStyle::PM_DefaultChildMargin));
     vlayout->setSpacing(style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
-    QHBoxLayout *hlayout = new QHBoxLayout;
+    QHBoxLayout* hlayout = new QHBoxLayout;
     hlayout->setMargin(0);
     vlayout->addLayout(hlayout);
     mSound = new QComboBox();
@@ -1630,14 +1599,14 @@ ViewPrefTab::ViewPrefTab(StackedScrollGroup* scrollGroup)
     mTabs = new QTabWidget();
     topLayout()->addWidget(mTabs);
 
-    QWidget *widget = new QWidget;
-    QVBoxLayout *topGeneral = new QVBoxLayout(widget);
+    QWidget* widget = new QWidget;
+    QVBoxLayout* topGeneral = new QVBoxLayout(widget);
     topGeneral->setMargin(style()->pixelMetric(QStyle::PM_DefaultChildMargin) / 2);
     topGeneral->setSpacing(style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     mTabGeneral = mTabs->addTab(widget, i18nc("@title:tab", "General"));
 
     widget =  new QWidget;
-    QVBoxLayout *topWindows = new QVBoxLayout(widget);
+    QVBoxLayout* topWindows = new QVBoxLayout(widget);
     topWindows->setMargin(style()->pixelMetric(QStyle::PM_DefaultChildMargin) / 2);
     topWindows->setSpacing(style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     mTabWindows = mTabs->addTab(widget, i18nc("@title:tab", "Alarm Windows"));
@@ -1726,7 +1695,7 @@ ViewPrefTab::ViewPrefTab(StackedScrollGroup* scrollGroup)
     grid->addWidget(mTooltipShowAlarms, 0, 0, 1, 3, Qt::AlignLeft);
 
     widget = new QWidget;
-    QHBoxLayout *box = new QHBoxLayout(widget);
+    QHBoxLayout* box = new QHBoxLayout(widget);
     box->setMargin(0);
     box->setSpacing(style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     mTooltipMaxAlarms = new QCheckBox(i18nc("@option:check", "Maximum number of alarms to show:"));

@@ -1,7 +1,7 @@
 /*
  *  kalocale.h  -  miscellaneous locale functions
  *  Program:  kalarm
- *  Copyright © 2004-2009 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2004-2018 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -24,23 +24,26 @@
 namespace KAlarm
 {
 
-/** Return the first day of the week for the user's locale.
-*   Reply = 1 (Mon) .. 7 (Sun).
+/**
+* Given a standard KDE day number, return the day number in the week for the
+* user's locale.
+* @param weekDay  Locale day number in week = 0 .. 6
+* @return  Standard day number = 1 (Mon) .. 7 (Sun)
 */
-int        localeFirstDayOfWeek();
+int weekDay_to_localeDayInWeek(int weekDay);
 
-/* Given a standard KDE day number, return the day number in the week for the user's locale.
- * Standard day number = 1 (Mon) .. 7 (Sun)
- * Locale day number in week = 0 .. 6
- */
-inline int weekDay_to_localeDayInWeek(int weekDay)  { return (weekDay + 7 - localeFirstDayOfWeek()) % 7; }
+/**
+* Given a day number in the week for the user's locale, return the standard KDE
+* day number.
+* @param index  0 .. 6
+* @return  Standard day number = 1 (Mon) .. 7 (Sun)
+*/
+int localeDayInWeek_to_weekDay(int index);
 
-/* Given a day number in the week for the user's locale, return the standard KDE day number.
- * 'index' = 0 .. 6
- * Standard day number = 1 (Mon) .. 7 (Sun)
- */
-inline int localeDayInWeek_to_weekDay(int index)  { return (index + localeFirstDayOfWeek() - 1) % 7 + 1; }
-
+/**
+* Return the default work days in the week, as a bit mask.
+* @return  Bit 1 set for Monday ... bit 0x40 for Sunday.
+*/
 unsigned defaultWorkDays();
 
 } // namespace KAlarm

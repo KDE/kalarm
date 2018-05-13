@@ -23,7 +23,7 @@
 
 #include <QFrame>
 
-class KDateTime;
+namespace KAlarmCal { class KADateTime; }
 class TimeSelector;
 class CheckBox;
 class ComboBox;
@@ -51,7 +51,7 @@ class Reminder : public QFrame
         static QString i18n_chk_FirstRecurrenceOnly();    // text of 'Reminder for first recurrence only' checkbox
 
     public Q_SLOTS:
-        void           setDefaultUnits(const KDateTime&);
+        void           setDefaultUnits(const KADateTime&);
 
     Q_SIGNALS:
         void           changed();

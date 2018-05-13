@@ -1,7 +1,7 @@
 /*
  *  kalarmapp.cpp  -  the KAlarm application object
  *  Program:  kalarm
- *  Copyright © 2001-2017 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2018 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -55,7 +55,6 @@
 #include <kservicetypetrader.h>
 #include <netwm.h>
 #include <kshell.h>
-#include <ksystemtimezone.h>
 
 #include <QObject>
 #include <QTimer>
@@ -307,9 +306,6 @@ bool KAlarmApp::restoreSession()
     --mActiveCount;
     if (quitIf(0))           // quit if no windows are open
         return false;    // quitIf() can sometimes return, despite calling exit()
-
-    // Check whether the KDE time zone daemon is running (but don't hold up initialisation)
-    QTimer::singleShot(0, this, &KAlarmApp::checkKtimezoned);
 
     startProcessQueue();      // start processing the execution queue
     return true;
@@ -639,26 +635,7 @@ int KAlarmApp::activateInstance(const QStringList& args, const QString& workingD
     // run if no windows were created.
     quitIf(exitCode >= 0 ? exitCode : 0);
 
-    // Check whether the KDE time zone daemon is running (but don't hold up initialisation)
-    QTimer::singleShot(0, this, &KAlarmApp::checkKtimezoned);
-
     return -1;   // continue executing the application instance
-}
-
-void KAlarmApp::checkKtimezoned()
-{
-    // Check that the KDE time zone daemon is running
-    static bool done = false;
-    if (done)
-        return;
-    done = true;
-    if (!KSystemTimeZones::isTimeZoneDaemonAvailable())
-    {
-        qCDebug(KALARM_LOG) << "ktimezoned not running: using UTC only";
-        KAMessageBox::information(MainWindow::mainMainWindow(),
-                                  xi18nc("@info", "Time zones are not accessible:<nl/>KAlarm will use the UTC time zone.<nl/><nl/>(The KDE time zone service is not available:<nl/>check that <application>ktimezoned</application> is installed.)"),
-                     QString(), QStringLiteral("tzunavailable"));
-    }
 }
 
 /******************************************************************************
@@ -827,11 +804,11 @@ void KAlarmApp::checkNextDueAlarm()
     if (!mAlarmsEnabled)
         return;
     // Find the first alarm due
-    KAEvent* nextEvent = AlarmCalendar::resources()->earliestAlarm();
+    const KAEvent* nextEvent = AlarmCalendar::resources()->earliestAlarm();
     if (!nextEvent)
         return;   // there are no alarms pending
-    KDateTime nextDt = nextEvent->nextTrigger(KAEvent::ALL_TRIGGER).effectiveKDateTime();
-    KDateTime now = KDateTime::currentDateTime(Preferences::timeZone());
+    const KADateTime nextDt = nextEvent->nextTrigger(KAEvent::ALL_TRIGGER).effectiveKDateTime();
+    const KADateTime now = KADateTime::currentDateTime(Preferences::timeSpec());
     qint64 interval = now.secsTo(nextDt);
     qCDebug(KALARM_LOG) << "now:" << qPrintable(now.toString(QStringLiteral("%Y-%m-%d %H:%M %:Z"))) << ", next:" << qPrintable(nextDt.toString(QStringLiteral("%Y-%m-%d %H:%M %:Z"))) << ", due:" << interval;
     if (interval <= 0)
@@ -1295,8 +1272,8 @@ QStringList KAlarmApp::scheduledAlarmList()
     QStringList alarms;
     for (int i = 0, count = events.count();  i < count;  ++i)
     {
-        KAEvent* event = &events[i];
-        KDateTime dateTime = event->nextTrigger(KAEvent::DISPLAY_TRIGGER).effectiveKDateTime().toLocalZone();
+        const KAEvent* event = &events[i];
+        const KADateTime dateTime = event->nextTrigger(KAEvent::DISPLAY_TRIGGER).effectiveKDateTime().toLocalZone();
         Akonadi::Collection c(event->collectionId());
         AkonadiModel::instance()->refresh(c);
         QString text(c.resource() + QLatin1String(":"));
@@ -1368,7 +1345,7 @@ bool KAlarmApp::needWindowFocusFix() const
 * to command line options.
 * Reply = true unless there was a parameter error or an error opening calendar file.
 */
-bool KAlarmApp::scheduleEvent(KAEvent::SubAction action, const QString& text, const KDateTime& dateTime,
+bool KAlarmApp::scheduleEvent(KAEvent::SubAction action, const QString& text, const KADateTime& dateTime,
                               int lateCancel, KAEvent::Flags flags, const QColor& bg, const QColor& fg,
                               const QFont& font, const QString& audioFile, float audioVolume, int reminderMinutes,
                               const KARecurrence& recurrence, KCalCore::Duration repeatInterval, int repeatCount,
@@ -1378,10 +1355,10 @@ bool KAlarmApp::scheduleEvent(KAEvent::SubAction action, const QString& text, co
     qCDebug(KALARM_LOG) << text;
     if (!dateTime.isValid())
         return false;
-    KDateTime now = KDateTime::currentUtcDateTime();
+    const KADateTime now = KADateTime::currentUtcDateTime();
     if (lateCancel  &&  dateTime < now.addSecs(-maxLateness(lateCancel)))
         return true;               // alarm time was already archived too long ago
-    KDateTime alarmTime = dateTime;
+    KADateTime alarmTime = dateTime;
     // Round down to the nearest minute to avoid scheduling being messed up
     if (!dateTime.isDateOnly())
         alarmTime.setTime(QTime(alarmTime.time().hour(), alarmTime.time().minute(), 0));
@@ -1480,8 +1457,8 @@ bool KAlarmApp::handleEvent(const EventId& id, EventFunc function, bool checkDup
         case EVENT_TRIGGER:    // handle it if it's due, else execute it regardless
         case EVENT_HANDLE:     // handle it if it's due
         {
-            KDateTime now = KDateTime::currentUtcDateTime();
-            qCDebug(KALARM_LOG) << eventID << "," << (function==EVENT_TRIGGER?"TRIGGER:":"HANDLE:") << qPrintable(now.dateTime().toString(QStringLiteral("yyyy-MM-dd hh:mm"))) << "UTC";
+            const KADateTime now = KADateTime::currentUtcDateTime();
+            qCDebug(KALARM_LOG) << eventID << "," << (function==EVENT_TRIGGER?"TRIGGER:":"HANDLE:") << qPrintable(now.qDateTime().toString(QStringLiteral("yyyy-MM-dd hh:mm"))) << "UTC";
             bool updateCalAndDisplay = false;
             bool alarmToExecuteValid = false;
             KAAlarm alarmToExecute;
@@ -1493,18 +1470,18 @@ bool KAlarmApp::handleEvent(const EventId& id, EventFunc function, bool checkDup
                  alarm = (restart ? event->firstAlarm() : event->nextAlarm(alarm)), restart = false)
             {
                 // Check if the alarm is due yet.
-                KDateTime nextDT = alarm.dateTime(true).effectiveKDateTime();
+                const KADateTime nextDT = alarm.dateTime(true).effectiveKDateTime();
                 int secs = nextDT.secsTo(now);
                 if (secs < 0)
                 {
                     // The alarm appears to be in the future.
-                    // Check if it's an invalid local clock time during a daylight
+                    // Check if it's an invalid local time during a daylight
                     // saving time shift, which has actually passed.
-                    if (alarm.dateTime().timeSpec() != KDateTime::ClockTime
-                    ||  nextDT > now.toTimeSpec(KDateTime::ClockTime))
+                    if (alarm.dateTime().timeSpec() != KADateTime::LocalZone
+                    ||  nextDT > now.toTimeSpec(KADateTime::LocalZone))
                     {
                         // This alarm is definitely not due yet
-                        qCDebug(KALARM_LOG) << "Alarm" << alarm.type() << "at" << nextDT.dateTime() << ": not due";
+                        qCDebug(KALARM_LOG) << "Alarm" << alarm.type() << "at" << nextDT.qDateTime() << ": not due";
                         continue;
                     }
                 }
@@ -1517,7 +1494,7 @@ bool KAlarmApp::handleEvent(const EventId& id, EventFunc function, bool checkDup
                     // time it triggers, since working hours could change.
                     if (alarm.dateTime().isDateOnly())
                     {
-                        KDateTime dt(nextDT);
+                        KADateTime dt(nextDT);
                         dt.setDateOnly(true);
                         reschedule = !event->isWorkingTime(dt);
                     }
@@ -1525,7 +1502,7 @@ bool KAlarmApp::handleEvent(const EventId& id, EventFunc function, bool checkDup
                         reschedule = !event->isWorkingTime(nextDT);
                     rescheduleWork = reschedule;
                     if (reschedule)
-                        qCDebug(KALARM_LOG) << "Alarm" << alarm.type() << "at" << nextDT.dateTime() << ": not during working hours";
+                        qCDebug(KALARM_LOG) << "Alarm" << alarm.type() << "at" << nextDT.qDateTime() << ": not during working hours";
                 }
                 if (!reschedule  &&  alarm.repeatAtLogin())
                 {
@@ -1548,7 +1525,7 @@ bool KAlarmApp::handleEvent(const EventId& id, EventFunc function, bool checkDup
                     {
                         // The alarm has no time, so cancel it if its date is too far past
                         int maxlate = event->lateCancel() / 1440;    // maximum lateness in days
-                        KDateTime limit(DateTime(nextDT.addDays(maxlate + 1)).effectiveKDateTime());
+                        KADateTime limit(DateTime(nextDT.addDays(maxlate + 1)).effectiveKDateTime());
                         if (now >= limit)
                         {
                             // It's too late to display the scheduled occurrence.
@@ -1624,7 +1601,7 @@ bool KAlarmApp::handleEvent(const EventId& id, EventFunc function, bool checkDup
                 if (reschedule)
                 {
                     // The latest repetition was too long ago, so schedule the next one
-                    switch (rescheduleAlarm(*event, alarm, false, (rescheduleWork ? nextDT : KDateTime())))
+                    switch (rescheduleAlarm(*event, alarm, false, (rescheduleWork ? nextDT : KADateTime())))
                     {
                         case 1:
                             // A working-time-only alarm has been rescheduled and the
@@ -1702,7 +1679,7 @@ void KAlarmApp::alarmCompleted(const KAEvent& event)
 *       = -1 if the event has been deleted
 *       = 0 otherwise.
 */
-int KAlarmApp::rescheduleAlarm(KAEvent& event, const KAAlarm& alarm, bool updateCalAndDisplay, const KDateTime& nextDt)
+int KAlarmApp::rescheduleAlarm(KAEvent& event, const KAAlarm& alarm, bool updateCalAndDisplay, const KADateTime& nextDt)
 {
     qCDebug(KALARM_LOG) << "Alarm type:" << alarm.type();
     int reply = 0;
@@ -1715,7 +1692,7 @@ int KAlarmApp::rescheduleAlarm(KAEvent& event, const KAAlarm& alarm, bool update
         {
             // Executing an at-login alarm: first schedule the reminder
             // which occurs AFTER the main alarm.
-            event.activateReminderAfter(KDateTime::currentUtcDateTime());
+            event.activateReminderAfter(KADateTime::currentUtcDateTime());
             update = true;
         }
     }
@@ -1733,8 +1710,8 @@ int KAlarmApp::rescheduleAlarm(KAEvent& event, const KAAlarm& alarm, bool update
         if (last != event.mainDateTime(true))
             last = DateTime();                       // but ignore sub-repetition triggers
         bool next = nextDt.isValid();
-        KDateTime next_dt = nextDt;
-        KDateTime now = KDateTime::currentUtcDateTime();
+        KADateTime next_dt = nextDt;
+        const KADateTime now = KADateTime::currentUtcDateTime();
         do
         {
             KAEvent::OccurType type = event.setNextOccurrence(next ? next_dt : now);
@@ -1784,7 +1761,7 @@ int KAlarmApp::rescheduleAlarm(KAEvent& event, const KAAlarm& alarm, bool update
                 next_dt = event.mainDateTime(true).effectiveKDateTime();
                 if (event.mainDateTime(false).isDateOnly())
                 {
-                    KDateTime dt(next_dt);
+                    KADateTime dt(next_dt);
                     dt.setDateOnly(true);
                     next = !event.isWorkingTime(dt);
                 }

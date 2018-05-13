@@ -1,7 +1,7 @@
 /*
  *  mainwindow.cpp  -  main application window
  *  Program:  kalarm
- *  Copyright © 2001-2016 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2018 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -44,7 +44,6 @@
 
 #include <kalarmcal/alarmtext.h>
 #include <kalarmcal/kaevent.h>
-#include <kalarmcal/utils.h>
 
 #include <Libkdepim/MaillistDrag>
 #include <kmime/kmime_content.h>
@@ -53,10 +52,10 @@
 #include <KCalUtils/kcalutils/icaldrag.h>
 using namespace KCalCore;
 using namespace KCalUtils;
-#include <KLocale>
 #include <KAboutData>
 #include <ktoolbar.h>
-#include <kactioncollection.h>
+#include <KActionCollection>
+#include <KGlobalAccel>
 #include <kstandardaction.h>
 #include <KLocalizedString>
 #include <KSharedConfig>
@@ -66,9 +65,9 @@ using namespace KCalUtils;
 #include <kxmlguifactory.h>
 #include <ktoggleaction.h>
 #include <ktoolbarpopupaction.h>
-#include <KTimeZone>
 
 #include <QAction>
+#include <QLocale>
 #include <QSplitter>
 #include <QByteArray>
 #include <QDragEnterEvent>
@@ -81,7 +80,6 @@ using namespace KCalUtils;
 #include <qinputdialog.h>
 #include <QUrl>
 #include <QSystemTrayIcon>
-#include <QTimeZone>
 
 using namespace KAlarmCal;
 
@@ -422,42 +420,28 @@ void MainWindow::hideEvent(QHideEvent* he)
 */
 void MainWindow::initActions()
 {
-    //KShortcut dummy;
     KActionCollection* actions = actionCollection();
 
     mActionTemplates = new QAction(i18nc("@action", "&Templates..."), this);
     actions->addAction(QStringLiteral("templates"), mActionTemplates);
     connect(mActionTemplates, &QAction::triggered, this, &MainWindow::slotTemplates);
 
-    mActionNew = new NewAlarmAction(false, i18nc("@action", "&New"), this);
+    mActionNew = new NewAlarmAction(false, i18nc("@action", "&New"), this, actions);
     actions->addAction(QStringLiteral("new"), mActionNew);
 
-    QAction* action = mActionNew->displayAlarmAction();
-    actions->addAction(QStringLiteral("newDisplay"), action);
-#pragma message("port QT5")
-    //QT5 action->setGlobalShortcut(dummy);   // actions->addAction() must be called first!
+    QAction* action = mActionNew->displayAlarmAction(QStringLiteral("newDisplay"));
     connect(action, &QAction::triggered, this, &MainWindow::slotNewDisplay);
 
-    action = mActionNew->commandAlarmAction();
-    actions->addAction(QStringLiteral("newCommand"), action);
-#pragma message("port QT5")
-    //QT5 action->setGlobalShortcut(dummy);   // actions->addAction() must be called first!
+    action = mActionNew->commandAlarmAction(QStringLiteral("newCommand"));
     connect(action, &QAction::triggered, this, &MainWindow::slotNewCommand);
 
-    action = mActionNew->emailAlarmAction();
-    actions->addAction(QStringLiteral("newEmail"), action);
-#pragma message("port QT5")
-    //QT5 action->setGlobalShortcut(dummy);   // actions->addAction() must be called first!
+    action = mActionNew->emailAlarmAction(QStringLiteral("newEmail"));
     connect(action, &QAction::triggered, this, &MainWindow::slotNewEmail);
 
-    action = mActionNew->audioAlarmAction();
-    actions->addAction(QStringLiteral("newAudio"), action);
-#pragma message("port QT5")
-    //QT5 action->setGlobalShortcut(dummy);   // actions->addAction() must be called first!
+    action = mActionNew->audioAlarmAction(QStringLiteral("newAudio"));
     connect(action, &QAction::triggered, this, &MainWindow::slotNewAudio);
 
-    TemplateMenuAction* templateMenuAction = mActionNew->fromTemplateAlarmAction();
-    actions->addAction(QStringLiteral("newFromTemplate"), templateMenuAction);
+    TemplateMenuAction* templateMenuAction = mActionNew->fromTemplateAlarmAction(QStringLiteral("newFromTemplate"));
     connect(templateMenuAction, &TemplateMenuAction::selected, this, &MainWindow::slotNewFromTemplate);
 
     mActionCreateTemplate = new QAction(i18nc("@action", "Create Tem&plate..."), this);
@@ -501,7 +485,7 @@ void MainWindow::initActions()
 
     action = KAlarm::createStopPlayAction(this);
     actions->addAction(QStringLiteral("stopAudio"), action);
-    //QT5 action->setGlobalShortcut(dummy);   // actions->addAction() must be called first!
+    KGlobalAccel::setGlobalShortcut(action, QList<QKeySequence>());  // allow user to set a global shortcut
 
     mActionShowTime = new KToggleAction(i18n_a_ShowAlarmTimes(), this);
     actions->addAction(QStringLiteral("showAlarmTimes"), mActionShowTime);
@@ -527,9 +511,7 @@ void MainWindow::initActions()
 
     mActionSpreadWindows = KAlarm::createSpreadWindowsAction(this);
     actions->addAction(QStringLiteral("spread"), mActionSpreadWindows);
-#pragma message("port QT5")
-
-    //QT5 mActionSpreadWindows->setGlobalShortcut(dummy);   // actions->addAction() must be called first!
+    KGlobalAccel::setGlobalShortcut(mActionSpreadWindows, QList<QKeySequence>());  // allow user to set a global shortcut
 
     mActionImportAlarms = new QAction(i18nc("@action", "Import &Alarms..."), this);
     actions->addAction(QStringLiteral("importAlarms"), mActionImportAlarms);
@@ -569,12 +551,12 @@ void MainWindow::initActions()
     }
     mActionUndo = new KToolBarPopupAction(QIcon::fromTheme(QStringLiteral("edit-undo")), undoText, this);
     actions->addAction(QStringLiteral("edit_undo"), mActionUndo);
-    mActionUndo->setShortcuts(undoShortcut);
+    actions->setDefaultShortcuts(mActionUndo, undoShortcut);
     connect(mActionUndo, &KToolBarPopupAction::triggered, this, &MainWindow::slotUndo);
 
     mActionRedo = new KToolBarPopupAction(QIcon::fromTheme(QStringLiteral("edit-redo")), redoText, this);
     actions->addAction(QStringLiteral("edit_redo"), mActionRedo);
-    mActionRedo->setShortcuts(redoShortcut);
+    actions->setDefaultShortcuts(mActionRedo, redoShortcut);
     connect(mActionRedo, &KToolBarPopupAction::triggered, this, &MainWindow::slotRedo);
 
     KStandardAction::find(mListView, SLOT(slotFind()), actions);
@@ -1273,7 +1255,7 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
     AlarmText          alarmText;
     KPIM::MailList     mailList;
     QList<QUrl>        files;
-    MemoryCalendar::Ptr calendar(new MemoryCalendar(Preferences::qTimeZone(true)));
+    MemoryCalendar::Ptr calendar(new MemoryCalendar(Preferences::timeSpecAsZone()));
 #ifndef NDEBUG
     QString fmts = data->formats().join(QStringLiteral(", "));
     qCDebug(KALARM_LOG) << fmts;
@@ -1321,7 +1303,7 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
         dt.setTime_t(summary.date());
         QString body = KAMail::getMailBody(summary.serialNumber());
         alarmText.setEmail(summary.to(), summary.from(), QString(),
-                           KLocale::global()->formatDateTime(dt), summary.subject(),
+                           QLocale().toString(dt), summary.subject(),
                            body, summary.serialNumber());
     }
     else if (ICalDrag::fromMimeData(data, calendar))
@@ -1341,9 +1323,11 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
             return;
         Todo::Ptr todo = todos[0];
         alarmText.setTodo(todo);
-        KDateTime start = q2k(todo->dtStart(true), todo->allDay());
+        KADateTime start(todo->dtStart(true));
         if (!start.isValid()  &&  todo->hasDueDate())
-            start = q2k(todo->dtDue(true), todo->allDay());
+            start = KADateTime(todo->dtDue(true));
+        if (todo->allDay())
+            start.setDateOnly(true);
         KAEvent::Flags flags = KAEvent::DEFAULT_FONT;
         if (start.isDateOnly())
             flags |= KAEvent::ANY_TIME;
@@ -1352,7 +1336,7 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
         if (todo->recurs())
         {
             ev.setRecurrence(*todo->recurrence());
-            ev.setNextOccurrence(KDateTime::currentUtcDateTime());
+            ev.setNextOccurrence(KADateTime::currentUtcDateTime());
         }
         ev.endChanges();
         KAlarm::editNewAlarm(&ev, win);
@@ -1448,10 +1432,10 @@ void MainWindow::slotSelection()
     bool enableEnable = false;
     bool enableDisable = false;
     AlarmCalendar* resources = AlarmCalendar::resources();
-    KDateTime now = KDateTime::currentUtcDateTime();
+    const KADateTime now = KADateTime::currentUtcDateTime();
     for (int i = 0;  i < count;  ++i)
     {
-        KAEvent* ev = resources->event(EventId(events[i]));   // get up-to-date status
+        KAEvent* ev = resources->event(EventId(events.at(i)));   // get up-to-date status
         KAEvent* event = ev ? ev : &events[i];
         bool expired = event->expired();
         if (!expired)

@@ -23,7 +23,6 @@
 
 #include "find.h"
 
-#include <kglobalsettings.h>
 #include <KLocalizedString>
 
 #include <QMouseEvent>

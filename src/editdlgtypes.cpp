@@ -1,7 +1,7 @@
 /*
  *  editdlgtypes.cpp  -  dialogs to create or edit alarm or alarm template types
  *  Program:  kalarm
- *  Copyright © 2001-2017 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2018 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -85,7 +85,7 @@ class PickLogFileRadio : public PickFileRadio
     QString pickFile() override    // called when browse button is pressed to select a log file
     {
         return KAlarm::browseFile(i18nc("@title:window", "Choose Log File"), mDefaultDir, fileEdit()->text(), QString(),
-                                  KFile::LocalOnly, parentWidget());
+                                  false, parentWidget());
     }
     private:
     QString mDefaultDir;   // default directory for log file browse button
@@ -551,7 +551,7 @@ bool EditDisplayAlarmDlg::type_stateChanged() const
 * Extract the data in the dialog specific to the alarm type and set up a
 * KAEvent from it.
 */
-void EditDisplayAlarmDlg::type_setEvent(KAEvent& event, const KDateTime& dt, const QString& text, int lateCancel, bool trial)
+void EditDisplayAlarmDlg::type_setEvent(KAEvent& event, const KADateTime& dt, const QString& text, int lateCancel, bool trial)
 {
     KAEvent::SubAction type;
     switch (mTypeCombo->currentIndex())
@@ -647,7 +647,7 @@ void EditDisplayAlarmDlg::slotPickFile()
 {
     static QString defaultDir;   // default directory for file browse button
     QString file = KAlarm::browseFile(i18nc("@title:window", "Choose Text or Image File to Display"),
-                                      defaultDir, mFileMessageEdit->text(), QString(), KFile::ExistingOnly, this);
+                                      defaultDir, mFileMessageEdit->text(), QString(), true, this);
     if (!file.isEmpty())
     {
         mFileMessageEdit->setText(KAlarm::pathOrUrl(file));
@@ -929,7 +929,7 @@ bool EditCommandAlarmDlg::type_stateChanged() const
 * Extract the data in the dialog specific to the alarm type and set up a
 * KAEvent from it.
 */
-void EditCommandAlarmDlg::type_setEvent(KAEvent& event, const KDateTime& dt, const QString& text, int lateCancel, bool trial)
+void EditCommandAlarmDlg::type_setEvent(KAEvent& event, const KADateTime& dt, const QString& text, int lateCancel, bool trial)
 {
     Q_UNUSED(trial);
     event.set(dt, text, QColor(), QColor(), QFont(), KAEvent::COMMAND, lateCancel, getAlarmFlags());
@@ -1317,7 +1317,7 @@ bool EditEmailAlarmDlg::type_stateChanged() const
 * Extract the data in the dialog specific to the alarm type and set up a
 * KAEvent from it.
 */
-void EditEmailAlarmDlg::type_setEvent(KAEvent& event, const KDateTime& dt, const QString& text, int lateCancel, bool trial)
+void EditEmailAlarmDlg::type_setEvent(KAEvent& event, const KADateTime& dt, const QString& text, int lateCancel, bool trial)
 {
     Q_UNUSED(trial);
     event.set(dt, text, QColor(), QColor(), QFont(), KAEvent::EMAIL, lateCancel, getAlarmFlags());
@@ -1441,7 +1441,7 @@ void EditEmailAlarmDlg::openAddressBook()
 void EditEmailAlarmDlg::slotAddAttachment()
 {
     QString url = KAlarm::browseFile(i18nc("@title:window", "Choose File to Attach"), mAttachDefaultDir, QString(),
-                                     QString(), KFile::ExistingOnly, this);
+                                     QString(), true, this);
     if (!url.isEmpty())
     {
         mEmailAttachList->addItem(url);
@@ -1626,7 +1626,7 @@ bool EditAudioAlarmDlg::type_stateChanged() const
 * Extract the data in the dialog specific to the alarm type and set up a
 * KAEvent from it.
 */
-void EditAudioAlarmDlg::type_setEvent(KAEvent& event, const KDateTime& dt, const QString& text, int lateCancel, bool trial)
+void EditAudioAlarmDlg::type_setEvent(KAEvent& event, const KADateTime& dt, const QString& text, int lateCancel, bool trial)
 {
     Q_UNUSED(text);
     Q_UNUSED(trial);

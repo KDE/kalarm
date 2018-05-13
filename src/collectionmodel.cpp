@@ -1,7 +1,7 @@
 /*
  *  collectionmodel.cpp  -  Akonadi collection models
  *  Program:  kalarm
- *  Copyright © 2007-2014 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2007-2018 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -718,7 +718,7 @@ void CollectionControlModel::findEnabledCollections(const EntityMimeTypeFilterMo
 
 bool CollectionControlModel::isEnabled(const Collection& collection, CalEvent::Type type)
 {
-    if (!collection.isValid()  ||  !instance()->collections().contains(collection))
+    if (!collection.isValid()  ||  !instance()->collectionIds().contains(collection.id()))
         return false;
     if (!AgentManager::self()->instance(collection.resource()).isValid())
     {
@@ -740,7 +740,7 @@ bool CollectionControlModel::isEnabled(const Collection& collection, CalEvent::T
 CalEvent::Types CollectionControlModel::setEnabled(const Collection& collection, CalEvent::Types types, bool enabled)
 {
     qCDebug(KALARM_LOG) << "id:" << collection.id() << ", alarm types" << types << "->" << enabled;
-    if (!collection.isValid()  ||  (!enabled && !instance()->collections().contains(collection)))
+    if (!collection.isValid()  ||  (!enabled && !instance()->collectionIds().contains(collection.id())))
         return CalEvent::EMPTY;
     Collection col = collection;
     AkonadiModel::instance()->refresh(col);    // update with latest data
@@ -773,17 +773,8 @@ CalEvent::Types CollectionControlModel::setEnabledStatus(const Collection& colle
     // Update the list of enabled collections
     if (canEnable)
     {
-        bool inList = false;
-        const Collection::List cols = collections();
-        foreach (const Collection& c, cols)
-        {
-            if (c.id() == collection.id())
-            {
-                inList = true;
-                break;
-            }
-        }
-        if (!inList)
+        const QList<Collection::Id> colIds = collectionIds();
+        if (!colIds.contains(collection.id()))
         {
             // It's a new collection.
             // Prevent duplicate standard collections being created for any alarm type.
@@ -792,9 +783,9 @@ CalEvent::Types CollectionControlModel::setEnabledStatus(const Collection& colle
                                 : CalEvent::EMPTY;
             if (stdTypes)
             {
-                foreach (const Collection& col, cols)
+                foreach (const Collection::Id& id, colIds)
                 {
-                    Collection c(col);
+                    Collection c(id);
                     AkonadiModel::instance()->refresh(c);    // update with latest data
                     if (c.isValid())
                     {
@@ -982,7 +973,7 @@ int CollectionControlModel::isWritableEnabled(const Akonadi::Collection& collect
         return -1;
 
     // Check the collection's enabled status
-    if (!instance()->collections().contains(collection)
+    if (!instance()->collectionIds().contains(collection.id())
     ||  !collection.hasAttribute<CollectionAttribute>())
         return -1;
     if (!collection.attribute<CollectionAttribute>()->isEnabled(type))
@@ -999,17 +990,20 @@ Collection CollectionControlModel::getStandard(CalEvent::Type type, bool useDefa
 {
     const QString mimeType = CalEvent::mimeType(type);
     int defalt = -1;
-    Collection::List cols = instance()->collections();
-    for (int i = 0, count = cols.count();  i < count;  ++i)
+    const QList<Collection::Id> colIds = instance()->collectionIds();
+    Collection::List cols;
+    for (int i = 0, count = colIds.count();  i < count;  ++i)
     {
-        AkonadiModel::instance()->refresh(cols[i]);    // update with latest data
-        if (cols[i].isValid()
-        &&  cols[i].contentMimeTypes().contains(mimeType))
+        cols.append(Collection(colIds[i]));
+        Collection& col = cols.last();
+        AkonadiModel::instance()->refresh(col);    // update with latest data
+        if (col.isValid()
+        &&  col.contentMimeTypes().contains(mimeType))
         {
-            if (cols[i].hasAttribute<CollectionAttribute>()
-            &&  (cols[i].attribute<CollectionAttribute>()->standard() & type)
-            &&  AkonadiModel::isCompatible(cols[i]))
-                return cols[i];
+            if (col.hasAttribute<CollectionAttribute>()
+            &&  (col.attribute<CollectionAttribute>()->standard() & type)
+            &&  AkonadiModel::isCompatible(col))
+                return col;
             defalt = (defalt == -1) ? i : -2;
         }
     }
@@ -1022,7 +1016,7 @@ Collection CollectionControlModel::getStandard(CalEvent::Type type, bool useDefa
 */
 bool CollectionControlModel::isStandard(Akonadi::Collection& collection, CalEvent::Type type)
 {
-    if (!instance()->collections().contains(collection))
+    if (!instance()->collectionIds().contains(collection.id()))
         return false;
     AkonadiModel::instance()->refresh(collection);    // update with latest data
     if (!collection.hasAttribute<CollectionAttribute>()
@@ -1036,7 +1030,7 @@ bool CollectionControlModel::isStandard(Akonadi::Collection& collection, CalEven
 */
 CalEvent::Types CollectionControlModel::standardTypes(const Collection& collection, bool useDefault)
 {
-    if (!instance()->collections().contains(collection))
+    if (!instance()->collectionIds().contains(collection.id()))
         return CalEvent::EMPTY;
     Collection col = collection;
     AkonadiModel::instance()->refresh(col);    // update with latest data
@@ -1049,14 +1043,15 @@ CalEvent::Types CollectionControlModel::standardTypes(const Collection& collecti
     {
         // Also return alarm types for which this is the only collection.
         CalEvent::Types wantedTypes = AkonadiModel::types(collection) & ~stdTypes;
-        Collection::List cols = instance()->collections();
-        for (int i = 0, count = cols.count();  wantedTypes && i < count;  ++i)
+        const QList<Collection::Id> colIds = instance()->collectionIds();
+        for (int i = 0, count = colIds.count();  wantedTypes && i < count;  ++i)
         {
-            if (cols[i] == col)
+            if (colIds[i] == col.id())
                 continue;
-            AkonadiModel::instance()->refresh(cols[i]);    // update with latest data
-            if (cols[i].isValid())
-                wantedTypes &= ~AkonadiModel::types(cols[i]);
+            Collection c(colIds[i]);
+            AkonadiModel::instance()->refresh(c);    // update with latest data
+            if (c.isValid())
+                wantedTypes &= ~AkonadiModel::types(c);
         }
         stdTypes |= wantedTypes;
     }
@@ -1078,31 +1073,32 @@ void CollectionControlModel::setStandard(Akonadi::Collection& collection, CalEve
     {
         // The collection is being set as standard.
         // Clear the 'standard' status for all other collections.
-        Collection::List cols = instance()->collections();
-        if (!cols.contains(collection))
+        const QList<Collection::Id> colIds = instance()->collectionIds();
+        if (!colIds.contains(collection.id()))
             return;
         const CalEvent::Types ctypes = collection.hasAttribute<CollectionAttribute>()
                                        ? collection.attribute<CollectionAttribute>()->standard() : CalEvent::EMPTY;
         if (ctypes & type)
             return;    // it's already the standard collection for this type
-        for (int i = 0, count = cols.count();  i < count;  ++i)
+        for (int i = 0, count = colIds.count();  i < count;  ++i)
         {
             CalEvent::Types types;
-            if (cols[i] == collection)
+            Collection c(colIds[i]);
+            if (colIds[i] == collection.id())
             {
-                cols[i] = collection;    // update with latest data
+                c = collection;    // update with latest data
                 types = ctypes | type;
             }
             else
             {
-                model->refresh(cols[i]);    // update with latest data
-                types = cols[i].hasAttribute<CollectionAttribute>()
-                      ? cols[i].attribute<CollectionAttribute>()->standard() : CalEvent::EMPTY;
+                model->refresh(c);    // update with latest data
+                types = c.hasAttribute<CollectionAttribute>()
+                      ? c.attribute<CollectionAttribute>()->standard() : CalEvent::EMPTY;
                 if (!(types & type))
                     continue;
                 types &= ~type;
             }
-            const QModelIndex index = model->collectionIndex(cols[i]);
+            const QModelIndex index = model->collectionIndex(c);
             model->setData(index, static_cast<int>(types), AkonadiModel::IsStandardRole);
         }
     }
@@ -1136,31 +1132,32 @@ void CollectionControlModel::setStandard(Akonadi::Collection& collection, CalEve
     {
         // The collection is being set as standard for at least one mime type.
         // Clear the 'standard' status for all other collections.
-        Collection::List cols = instance()->collections();
-        if (!cols.contains(collection))
+        const QList<Collection::Id> colIds = instance()->collectionIds();
+        if (!colIds.contains(collection.id()))
             return;
         const CalEvent::Types t = collection.hasAttribute<CollectionAttribute>()
                                   ? collection.attribute<CollectionAttribute>()->standard() : CalEvent::EMPTY;
         if (t == types)
             return;    // there's no change to the collection's status
-        for (int i = 0, count = cols.count();  i < count;  ++i)
+        for (int i = 0, count = colIds.count();  i < count;  ++i)
         {
             CalEvent::Types t;
-            if (cols[i] == collection)
+            Collection c(colIds[i]);
+            if (colIds[i] == collection.id())
             {
-                cols[i] = collection;    // update with latest data
+                c = collection;    // update with latest data
                 t = types;
             }
             else
             {
-                model->refresh(cols[i]);    // update with latest data
-                t = cols[i].hasAttribute<CollectionAttribute>()
-                  ? cols[i].attribute<CollectionAttribute>()->standard() : CalEvent::EMPTY;
+                model->refresh(c);    // update with latest data
+                t = c.hasAttribute<CollectionAttribute>()
+                  ? c.attribute<CollectionAttribute>()->standard() : CalEvent::EMPTY;
                 if (!(t & types))
                     continue;
                 t &= ~types;
             }
-            const QModelIndex index = model->collectionIndex(cols[i]);
+            const QModelIndex index = model->collectionIndex(c);
             model->setData(index, static_cast<int>(t), AkonadiModel::IsStandardRole);
         }
     }
@@ -1234,14 +1231,15 @@ Collection CollectionControlModel::destination(CalEvent::Type type, QWidget* pro
 Collection::List CollectionControlModel::enabledCollections(CalEvent::Type type, bool writable)
 {
     const QString mimeType = CalEvent::mimeType(type);
-    Collection::List cols = instance()->collections();
+    const QList<Collection::Id> colIds = instance()->collectionIds();
     Collection::List result;
-    for (int i = 0, count = cols.count();  i < count;  ++i)
+    for (int i = 0, count = colIds.count();  i < count;  ++i)
     {
-        AkonadiModel::instance()->refresh(cols[i]);    // update with latest data
-        if (cols[i].contentMimeTypes().contains(mimeType)
-        &&  (!writable || ((cols[i].rights() & writableRights) == writableRights)))
-            result += cols[i];
+        Collection c(colIds[i]);
+        AkonadiModel::instance()->refresh(c);    // update with latest data
+        if (c.contentMimeTypes().contains(mimeType)
+        &&  (!writable || ((c.rights() & writableRights) == writableRights)))
+            result += c;
     }
     return result;
 }
@@ -1266,15 +1264,16 @@ Collection CollectionControlModel::collectionForResource(const QString& resource
 bool CollectionControlModel::isPopulated(Collection::Id colId)
 {
     AkonadiModel* model = AkonadiModel::instance();
-    Collection::List cols = instance()->collections();
-    for (int i = 0, count = cols.count();  i < count;  ++i)
+    const QList<Collection::Id> colIds = instance()->collectionIds();
+    for (int i = 0, count = colIds.count();  i < count;  ++i)
     {
-        if ((colId == -1  ||  colId == cols[i].id())
-        &&  !model->data(model->collectionIndex(cols[i].id()), AkonadiModel::IsPopulatedRole).toBool())
+        if ((colId == -1  ||  colId == colIds[i])
+        &&  !model->data(model->collectionIndex(colIds[i]), AkonadiModel::IsPopulatedRole).toBool())
         {
-            model->refresh(cols[i]);    // update with latest data
-            if (!cols[i].hasAttribute<CollectionAttribute>()
-            ||  cols[i].attribute<CollectionAttribute>()->enabled() == CalEvent::EMPTY)
+            Collection c(colIds[i]);
+            model->refresh(c);    // update with latest data
+            if (!c.hasAttribute<CollectionAttribute>()
+            ||  c.attribute<CollectionAttribute>()->enabled() == CalEvent::EMPTY)
                 return false;
         }
     }

@@ -20,11 +20,11 @@
 
 #include "shellprocess.h"
 
-#include <kde_file.h>
 #include <KLocalizedString>
 #include "kalarm_debug.h"
 #include <kauthorized.h>
 #include <qglobal.h>
+#include <qplatformdefs.h>
 
 #include <stdlib.h>
 
@@ -186,8 +186,8 @@ const QByteArray& ShellProcess::shellPath()
         QByteArray envshell = qgetenv("SHELL").trimmed();
         if (!envshell.isEmpty())
         {
-            KDE_struct_stat fileinfo;
-            if (KDE_stat(envshell.data(), &fileinfo) != -1  // ensure file exists
+            QT_STATBUF fileinfo;
+            if (QT_STAT(envshell.data(), &fileinfo) != -1  // ensure file exists
             &&  !S_ISDIR(fileinfo.st_mode)              // and it's not a directory
             &&  !S_ISCHR(fileinfo.st_mode)              // and it's not a character device
             &&  !S_ISBLK(fileinfo.st_mode)              // and it's not a block device

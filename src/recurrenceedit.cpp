@@ -1,7 +1,7 @@
 /*
  *  recurrenceedit.cpp  -  widget to edit the event's recurrence definition
  *  Program:  kalarm
- *  Copyright © 2002-2016 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2002-2018 by David Jarvie <djarvie@kde.org>
  *
  *  Based originally on KOrganizer module koeditorrecurrence.cpp,
  *  Copyright (c) 2000,2001 Cornelius Schumacher <schumacher@kde.org>
@@ -337,7 +337,7 @@ RecurrenceEdit::RecurrenceEdit(bool readOnly, QWidget* parent)
         hlayout->addLayout(vlayout);
         mExceptionDateEdit = new KDateComboBox(mExceptionGroup);
         mExceptionDateEdit->setOptions(mReadOnly ? KDateComboBox::Options(0) : KDateComboBox::EditDate | KDateComboBox::SelectDate | KDateComboBox::DatePicker);
-        mExceptionDateEdit->setDate(KDateTime::currentLocalDate());
+        mExceptionDateEdit->setDate(KADateTime::currentLocalDate());
         mExceptionDateEdit->setWhatsThis(i18nc("@info:whatsthis",
               "Enter a date to insert in the exceptions list. "
               "Use in conjunction with the Add or Change button below."));
@@ -401,7 +401,7 @@ void RecurrenceEdit::showMoreOptions(bool more)
 * Verify the consistency of the entered data.
 * Reply = widget to receive focus on error, or 0 if no error.
 */
-QWidget* RecurrenceEdit::checkData(const KDateTime& startDateTime, QString& errorMessage) const
+QWidget* RecurrenceEdit::checkData(const KADateTime& startDateTime, QString& errorMessage) const
 {
     if (mAtLoginButton->isChecked())
         return nullptr;
@@ -414,7 +414,7 @@ QWidget* RecurrenceEdit::checkData(const KDateTime& startDateTime, QString& erro
         QDate endDate = mEndDateEdit->date();
         if (endDate < startDateTime.date())
             errWidget = mEndDateEdit;
-        else if (!noTime  &&  QDateTime(endDate, mEndTimeEdit->time()) < startDateTime.dateTime())
+        else if (!noTime  &&  KADateTime(endDate, mEndTimeEdit->time(), startDateTime.timeSpec()) < startDateTime)
             errWidget = mEndTimeEdit;
         if (errWidget)
         {
@@ -707,26 +707,26 @@ void RecurrenceEdit::setDefaultEndDate(const QDate& end)
         mEndDateEdit->setDate(end);
 }
 
-void RecurrenceEdit::setEndDateTime(const KDateTime& end)
+void RecurrenceEdit::setEndDateTime(const KADateTime& end)
 {
-    KDateTime edt = end.toTimeSpec(mCurrStartDateTime.timeSpec());
+    const KADateTime edt = end.toTimeSpec(mCurrStartDateTime.timeSpec());
     mEndDateEdit->setDate(edt.date());
     mEndTimeEdit->setValue(edt.time());
     mEndTimeEdit->setEnabled(!end.isDateOnly());
     mEndAnyTimeCheckBox->setChecked(end.isDateOnly());
 }
 
-KDateTime RecurrenceEdit::endDateTime() const
+KADateTime RecurrenceEdit::endDateTime() const
 {
     if (mRuleButtonGroup->checkedButton() == mAtLoginButton  &&  mEndAnyTimeCheckBox->isChecked())
-        return KDateTime(mEndDateEdit->date(), mCurrStartDateTime.timeSpec());
-    return KDateTime(mEndDateEdit->date(), mEndTimeEdit->time(), mCurrStartDateTime.timeSpec());
+        return KADateTime(mEndDateEdit->date(), mCurrStartDateTime.timeSpec());
+    return KADateTime(mEndDateEdit->date(), mEndTimeEdit->time(), mCurrStartDateTime.timeSpec());
 }
 
 /******************************************************************************
 * Set all controls to their default values.
 */
-void RecurrenceEdit::setDefaults(const KDateTime& from)
+void RecurrenceEdit::setDefaults(const KADateTime& from)
 {
     mCurrStartDateTime = from;
     QDate fromDate = from.date();
@@ -895,7 +895,7 @@ void RecurrenceEdit::set(const KAEvent& event)
     mRule->setFrequency(recurrence->frequency());
 
     // Get range information
-    KDateTime endtime = mCurrStartDateTime;
+    KADateTime endtime = mCurrStartDateTime;
     int duration = recurrence->duration();
     if (duration == -1)
         mNoEndDateButton->setChecked(true);
@@ -959,7 +959,7 @@ void RecurrenceEdit::updateEvent(KAEvent& event, bool adjustStart)
     int frequency = mRule ? mRule->frequency() : 0;
     if (button == mSubDailyButton)
     {
-        KDateTime endDateTime(endDate, endTime, mCurrStartDateTime.timeSpec());
+        const KADateTime endDateTime(endDate, endTime, mCurrStartDateTime.timeSpec());
         event.setRecurMinutely(frequency, repeatCount, endDateTime);
     }
     else if (button == mDailyButton)
@@ -1049,7 +1049,7 @@ void RecurrenceEdit::saveState()
         mSavedRecurCount = mRepeatCountEntry->value();
     else if (mSavedRangeButton == mEndDateButton)
     {
-        mSavedEndDateTime = KDateTime(QDateTime(mEndDateEdit->date(), mEndTimeEdit->time()), mCurrStartDateTime.timeSpec());
+        mSavedEndDateTime = KADateTime(mEndDateEdit->date(), mEndTimeEdit->time(), mCurrStartDateTime.timeSpec());
         mSavedEndDateTime.setDateOnly(mEndAnyTimeCheckBox->isChecked());
     }
     mSavedExceptionDates = mExceptionDates;
@@ -1072,7 +1072,7 @@ bool RecurrenceEdit::stateChanged() const
         return true;
     if (mSavedRangeButton == mEndDateButton)
     {
-        KDateTime edt(QDateTime(mEndDateEdit->date(), mEndTimeEdit->time()), mCurrStartDateTime.timeSpec());
+        KADateTime edt(mEndDateEdit->date(), mEndTimeEdit->time(), mCurrStartDateTime.timeSpec());
         edt.setDateOnly(mEndAnyTimeCheckBox->isChecked());
         if (mSavedEndDateTime != edt)
             return true;
@@ -1561,7 +1561,7 @@ YearlyRule::YearlyRule(bool readOnly, QWidget* parent)
     grid->setMargin(0);
     grid->setSpacing(style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     const KCalendarSystem* calendar = KLocale::global()->calendar();
-    int year = KDateTime::currentLocalDate().year();
+    int year = KADateTime::currentLocalDate().year();
     for (int i = 0;  i < 12;  ++i)
     {
         mMonthBox[i] = new CheckBox(calendar->monthName(i + 1, year, KCalendarSystem::ShortName), w);

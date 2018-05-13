@@ -133,7 +133,7 @@ void WakeFromSuspendDlg::showWakeClicked()
 {
     if (checkPendingAlarm())
     {
-        QStringList params = KAlarm::checkRtcWakeConfig();
+        const QStringList params = KAlarm::checkRtcWakeConfig();
         if (!params.isEmpty())
         {
             KAEvent* event = AlarmCalendar::resources()->event(EventId(params[0].toLongLong(), params[1]));
@@ -156,7 +156,7 @@ void WakeFromSuspendDlg::useWakeClicked()
     KAEvent event = mMainWindow->selectedEvent();
     if (!event.isValid())
         return;
-    KDateTime dt = event.mainDateTime().kDateTime();
+    const KADateTime dt = event.mainDateTime().kDateTime();
     if (dt.isDateOnly())
     {
         KAMessageBox::sorry(this, i18nc("@info", "Cannot schedule wakeup time for a date-only alarm"));

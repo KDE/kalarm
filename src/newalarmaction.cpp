@@ -1,7 +1,7 @@
 /*
  *  newalarmaction.cpp  -  menu action to select a new alarm type
  *  Program:  kalarm
- *  Copyright © 2007-2009,2011 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2007-2009,2011,2018 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -28,9 +28,12 @@
 #include "shellprocess.h"
 #include "templatemenuaction.h"
 
-#include <kactionmenu.h>
+#include <KActionMenu>
+#include <KActionCollection>
+#include <KGlobalAccel>
 #include <KLocalizedString>
-#include <kstandardshortcut.h>
+#include <KStandardShortcut>
+
 #include <QMenu>
 #include "kalarm_debug.h"
 
@@ -47,9 +50,14 @@ using namespace KAlarmCal;
 #define AUDIO_KEY     QKeySequence(Qt::CTRL + Qt::Key_U)
 
 
-NewAlarmAction::NewAlarmAction(bool templates, const QString& label, QObject* parent)
+/******************************************************************************
+* Create New Alarm actions as a menu containing each alarm type, and add to
+* the KActionCollection.
+*/
+NewAlarmAction::NewAlarmAction(bool templates, const QString& label, QObject* parent, KActionCollection* collection)
     : KActionMenu(QIcon::fromTheme(QStringLiteral("document-new")), label, parent),
-      mTemplateAction(nullptr)
+      mTemplateAction(nullptr),
+      mActionCollection(collection)
 {
     mDisplayAction = new QAction(QIcon::fromTheme(DISP_ICON), (templates ? i18nc("@item:inmenu", "&Display Alarm Template") : i18nc("@action", "New Display Alarm")), parent);
     menu()->addAction(mDisplayAction);
@@ -65,10 +73,13 @@ NewAlarmAction::NewAlarmAction(bool templates, const QString& label, QObject* pa
     mTypes[mAudioAction] = EditAlarmDlg::AUDIO;
     if (!templates)
     {
-        mDisplayAction->setShortcut(DISP_KEY);
-        mCommandAction->setShortcut(CMD_KEY);
-        mEmailAction->setShortcut(MAIL_KEY);
-        mAudioAction->setShortcut(AUDIO_KEY);
+        if (!mActionCollection)
+        {
+            mDisplayAction->setShortcut(DISP_KEY);
+            mCommandAction->setShortcut(CMD_KEY);
+            mEmailAction->setShortcut(MAIL_KEY);
+            mAudioAction->setShortcut(AUDIO_KEY);
+        }
 
         // Include New From Template only in non-template menu
         mTemplateAction = new TemplateMenuAction(QIcon::fromTheme(TEMPLATE_ICON), i18nc("@action", "New Alarm From &Template"), parent);
@@ -80,6 +91,59 @@ NewAlarmAction::NewAlarmAction(bool templates, const QString& label, QObject* pa
     setDelayed(false);
     connect(menu(), &QMenu::aboutToShow, this, &NewAlarmAction::slotInitMenu);
     connect(menu(), &QMenu::triggered, this, &NewAlarmAction::slotSelected);
+}
+
+/******************************************************************************
+*/
+QAction* NewAlarmAction::displayAlarmAction(const QString& name)
+{
+    if (mActionCollection)
+    {
+        mActionCollection->addAction(name, mDisplayAction);
+        mActionCollection->setDefaultShortcut(mDisplayAction, DISP_KEY);
+        KGlobalAccel::setGlobalShortcut(mDisplayAction, QList<QKeySequence>());  // allow user to set a global shortcut
+    }
+    return mDisplayAction;
+}
+
+QAction* NewAlarmAction::commandAlarmAction(const QString& name)
+{
+    if (mActionCollection)
+    {
+        mActionCollection->addAction(name, mCommandAction);
+        mActionCollection->setDefaultShortcut(mCommandAction, CMD_KEY);
+        KGlobalAccel::setGlobalShortcut(mCommandAction, QList<QKeySequence>());  // allow user to set a global shortcut
+    }
+    return mCommandAction;
+}
+
+QAction* NewAlarmAction::emailAlarmAction(const QString& name)
+{
+    if (mActionCollection)
+    {
+        mActionCollection->addAction(name, mEmailAction);
+        mActionCollection->setDefaultShortcut(mEmailAction, MAIL_KEY);
+        KGlobalAccel::setGlobalShortcut(mEmailAction, QList<QKeySequence>());  // allow user to set a global shortcut
+    }
+    return mEmailAction;
+}
+
+QAction* NewAlarmAction::audioAlarmAction(const QString& name)
+{
+    if (mActionCollection)
+    {
+        mActionCollection->addAction(name, mAudioAction);
+        mActionCollection->setDefaultShortcut(mAudioAction, AUDIO_KEY);
+        KGlobalAccel::setGlobalShortcut(mAudioAction, QList<QKeySequence>());  // allow user to set a global shortcut
+    }
+    return mAudioAction;
+}
+
+TemplateMenuAction* NewAlarmAction::fromTemplateAlarmAction(const QString& name)
+{
+    if (mActionCollection)
+        mActionCollection->addAction(name, mTemplateAction);
+    return mTemplateAction;
 }
 
 /******************************************************************************

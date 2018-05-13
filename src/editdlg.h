@@ -104,7 +104,7 @@ class EditAlarmDlg : public QDialog
         virtual void    setReadOnly(bool readOnly) = 0;
         virtual void    saveState(const KAEvent*) = 0;
         virtual bool    type_stateChanged() const = 0;
-        virtual void    type_setEvent(KAEvent&, const KDateTime&, const QString& text, int lateCancel, bool trial) = 0;
+        virtual void    type_setEvent(KAEvent&, const KADateTime&, const QString& text, int lateCancel, bool trial) = 0;
         virtual KAEvent::Flags getAlarmFlags() const;
         virtual bool    type_validate(bool trial) = 0;
         virtual void    type_aboutToTry() {}
@@ -214,8 +214,8 @@ class EditAlarmDlg : public QDialog
         QTime               mSavedTemplateTime;     // mTemplateTime value
         int                 mSavedTemplateAfterTime;// mTemplateAfterTime value
         QString             mSavedTextFileCommandMessage;  // mTextMessageEdit/mFileMessageEdit/mCmdCommandEdit/mEmailMessageEdit value
-        KDateTime           mSavedDateTime;         // mTimeWidget value
-        KDateTime           mSavedDeferTime;        // mDeferDateTime value
+        KADateTime          mSavedDateTime;         // mTimeWidget value
+        KADateTime          mSavedDeferTime;        // mDeferDateTime value
         int                 mSavedRecurrenceType;   // RecurrenceEdit::RepeatType value
         int                 mSavedLateCancel;       // mLateCancel value
         bool                mSavedShowInKorganizer; // mShowInKorganizer status

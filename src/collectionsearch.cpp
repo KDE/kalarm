@@ -18,8 +18,6 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include <kdeversion.h>
-
 #include "collectionsearch.h"
 
 #include <AkonadiCore/agentinstance.h>

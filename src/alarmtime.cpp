@@ -1,7 +1,7 @@
 /*
  *  alarmtime.cpp  -  conversion functions for alarm times
  *  Program:  kalarm
- *  Copyright © 2007-2016 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2007-2016,2018 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -23,7 +23,6 @@
 
 #include <kalarmcal/datetime.h>
 
-#include <ksystemtimezone.h>
 #include <KLocalizedString>
 #include <QLocale>
 #include <QApplication>
@@ -41,10 +40,9 @@ QString AlarmTime::alarmTimeText(const DateTime& dateTime)
     if (!dateTime.isValid())
         return i18nc("@info Alarm never occurs", "Never");
     QLocale locale;
-    const KDateTime kdt = dateTime.effectiveKDateTime().toTimeSpec(Preferences::timeZone());
+    const KADateTime kdt = dateTime.effectiveKDateTime().toTimeSpec(Preferences::timeSpec());
     QString dateTimeText = locale.toString(kdt.date(), QLocale::ShortFormat);
-    if (!dateTime.isDateOnly()
-    ||  (!dateTime.isClockTime()  &&  kdt.utcOffset() != dateTime.utcOffset()))
+    if (!dateTime.isDateOnly()  ||  kdt.utcOffset() != dateTime.utcOffset())
     {
         // Display the time of day if it's a date/time value, or if it's
         // a date-only value but it's in a different time zone
@@ -80,7 +78,7 @@ QString AlarmTime::timeToAlarmText(const DateTime& dateTime)
 {
     if (!dateTime.isValid())
         return i18nc("@info Alarm never occurs", "Never");
-    KDateTime now = KDateTime::currentUtcDateTime();
+    KADateTime now = KADateTime::currentUtcDateTime();
     if (dateTime.isDateOnly())
     {
         int days = now.date().daysTo(dateTime.date());
@@ -110,7 +108,7 @@ QString AlarmTime::timeToAlarmText(const DateTime& dateTime)
 *   allowTZ   = whether to allow a time zone specifier in timeString.
 * Reply = true if successful.
 */
-bool AlarmTime::convertTimeString(const QByteArray& timeString, KDateTime& dateTime, const KDateTime& defaultDt, bool allowTZ)
+bool AlarmTime::convertTimeString(const QByteArray& timeString, KADateTime& dateTime, const KADateTime& defaultDt, bool allowTZ)
 {
 #define MAX_DT_LEN 19
     int i = timeString.indexOf(' ');
@@ -210,7 +208,7 @@ bool AlarmTime::convertTimeString(const QByteArray& timeString, KDateTime& dateT
         {
             // Some or all of the date was omitted.
             // Use the current date in the specified time zone as default.
-            KDateTime now = KDateTime::currentDateTime(dateTime.timeSpec());
+            const KADateTime now = KADateTime::currentDateTime(dateTime.timeSpec());
             date = dateTime.date();
             date.setYMD(now.date().year(),
                         (dt[1] < 0 ? now.date().month() : dt[1]),
@@ -227,26 +225,23 @@ bool AlarmTime::convertTimeString(const QByteArray& timeString, KDateTime& dateT
 
 /******************************************************************************
 * Convert a time zone specifier string and apply it to a given date and/or time.
-* The time zone specifier is a system time zone name, e.g. "Europe/London",
-* "UTC" or "Clock". If no time zone is specified, it defaults to the local time
-* zone.
+* The time zone specifier is a system time zone name, e.g. "Europe/London" or
+* "UTC". If no time zone is specified, it defaults to the local time zone.
 * If 'defaultDt' is valid, it supplies the time spec and default date.
 */
-KDateTime AlarmTime::applyTimeZone(const QString& tzstring, const QDate& date, const QTime& time,
-                                   bool haveTime, const KDateTime& defaultDt)
+KADateTime AlarmTime::applyTimeZone(const QString& tzstring, const QDate& date, const QTime& time,
+                                   bool haveTime, const KADateTime& defaultDt)
 {
     bool error = false;
-    KDateTime::Spec spec = KDateTime::LocalZone;
+    KADateTime::Spec spec = KADateTime::LocalZone;
     const QString zone = tzstring.trimmed();
     if (!zone.isEmpty())
     {
-        if (zone == QStringLiteral("Clock"))
-            spec = KDateTime::ClockTime;
-        else if (zone == QStringLiteral("UTC"))
-            spec = KDateTime::UTC;
+        if (zone == QStringLiteral("UTC"))
+            spec = KADateTime::UTC;
         else
         {
-            KTimeZone tz = KSystemTimeZones::zone(zone);
+            const QTimeZone tz(zone.toLatin1());
             error = !tz.isValid();
             if (!error)
                 spec = tz;
@@ -255,26 +250,26 @@ KDateTime AlarmTime::applyTimeZone(const QString& tzstring, const QDate& date, c
     else if (defaultDt.isValid())
         spec = defaultDt.timeSpec();
 
-    KDateTime result;
+    KADateTime result;
     if (!error)
     {
         if (!date.isValid())
         {
             // It's a time without a date
             if (defaultDt.isValid())
-                   result = KDateTime(defaultDt.date(), time, spec);
-            else if (spec == KDateTime::LocalZone  ||  spec == KDateTime::ClockTime)
-                result = KDateTime(KDateTime::currentLocalDate(), time, spec);
+                   result = KADateTime(defaultDt.date(), time, spec);
+            else if (spec == KADateTime::LocalZone)
+                result = KADateTime(KADateTime::currentLocalDate(), time, spec);
         }
         else if (haveTime)
         {
             // It's a date and time
-            result = KDateTime(date, time, spec);
+            result = KADateTime(date, time, spec);
         }
         else
         {
             // It's a date without a time
-            result = KDateTime(date, spec);
+            result = KADateTime(date, spec);
         }
     }
     return result;

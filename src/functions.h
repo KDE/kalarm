@@ -116,7 +116,7 @@ bool                showFileErrMessage(const QString& filename, FileErr, FileErr
 QString             pathOrUrl(const QString& url);
 
 QString             browseFile(const QString& caption, QString& defaultDir, const QString& initialFile = QString(),
-                               const QString& filter = QString(), KFile::Modes mode = 0, QWidget* parent = nullptr);
+                               const QString& filter = QString(), bool existing = false, QWidget* parent = nullptr);
 bool                editNewAlarm(const QString& templateName, QWidget* parent = nullptr);
 void                editNewAlarm(EditAlarmDlg::Type, QWidget* parent = nullptr);
 void                editNewAlarm(KAEvent::SubAction, QWidget* parent = nullptr, const AlarmText* = nullptr);
@@ -191,7 +191,7 @@ Akonadi::Collection invalidCollection();  // for use as a non-const default para
 
 #ifndef NDEBUG
 void                setTestModeConditions();
-void                setSimulatedSystemTime(const KDateTime&);
+void                setSimulatedSystemTime(const KADateTime&);
 #endif
 
 } // namespace KAlarm

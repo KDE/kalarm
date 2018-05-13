@@ -26,11 +26,12 @@
 #include "timeselector.h"
 #include "reminder.h"
 
+#include <kalarmcal/kadatetime.h>
+using namespace KAlarmCal;
 #include <KCalCore/Duration>
 using namespace KCalCore;
 
 #include <KLocalizedString>
-#include <kdatetime.h>
 
 #include <QVBoxLayout>
 #include <QHBoxLayout>
@@ -204,13 +205,13 @@ void Reminder::slotReminderToggled(bool on)
 * Sets the default reminder time units appropriately, if no reminder time is
 * currently set.
 */
-void Reminder::setDefaultUnits(const KDateTime& dt)
+void Reminder::setDefaultUnits(const KADateTime& dt)
 {
     if (mTime->isChecked())
         return;   // don't change units if reminder is already set
     TimePeriod::Units units;
     TimePeriod::Units currentUnits = mTime->units();
-    if (KDateTime::currentDateTime(dt.timeSpec()).daysTo(dt) < 7)
+    if (KADateTime::currentDateTime(dt.timeSpec()).daysTo(dt) < 7)
     {
         if (currentUnits == TimePeriod::Minutes  ||  currentUnits == TimePeriod::HoursMinutes)
             return;

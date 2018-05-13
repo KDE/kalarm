@@ -1,7 +1,7 @@
 /*
  *  alarmtimewidget.cpp  -  alarm date/time entry widget
  *  Program:  kalarm
- *  Copyright © 2001-2011 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2011,2018 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -33,10 +33,10 @@
 #include "alarmtimewidget.h"
 
 #include <kalarmcal/datetime.h>
-#include <KTimeZone>
 #include <kdatecombobox.h>
 #include <KLocalizedString>
 
+#include <QTimeZone>
 #include <QGroupBox>
 #include <QGridLayout>
 #include <QLabel>
@@ -222,13 +222,9 @@ void AlarmTimeWidget::init(Mode mode, const QString& title)
         layout->addWidget(mTimeZoneBox);
 
         // Time zone checkbox
-        mNoTimeZone = new CheckBox(i18nc("@option:check", "Ignore time zone"), topWidget);
+        mNoTimeZone = new CheckBox(i18nc("@option:check", "Use local time zone"), topWidget);
         connect(mNoTimeZone, &CheckBox::toggled, this, &AlarmTimeWidget::slotTimeZoneToggled);
-        mNoTimeZone->setWhatsThis(xi18nc("@info:whatsthis",
-                                        "<para>Check to use the local computer time, ignoring time zones.</para>"
-                                        "<para>You are recommended not to use this option if the alarm has a "
-                                        "recurrence specified in hours/minutes. If you do, the alarm may "
-                                        "occur at unexpected times after daylight saving time shifts.</para>"));
+        mNoTimeZone->setWhatsThis(xi18nc("@info:whatsthis", "Check to use the computer's default time zone."));
         layout->addWidget(mNoTimeZone);
         layout->addStretch();
 
@@ -283,13 +279,13 @@ void AlarmTimeWidget::selectTimeFromNow(int minutes)
 * 'errorWidget' if non-null, is set to point to the widget containing the error.
 * Reply = invalid date/time if error.
 */
-KDateTime AlarmTimeWidget::getDateTime(int* minsFromNow, bool checkExpired, bool showErrorMessage, QWidget** errorWidget) const
+KADateTime AlarmTimeWidget::getDateTime(int* minsFromNow, bool checkExpired, bool showErrorMessage, QWidget** errorWidget) const
 {
     if (minsFromNow)
         *minsFromNow = 0;
     if (errorWidget)
         *errorWidget = nullptr;
-    KDateTime now = KDateTime::currentUtcDateTime();
+    KADateTime now = KADateTime::currentUtcDateTime();
     now.setTime(QTime(now.time().hour(), now.time().minute(), 0));
     if (!mAtTimeRadio->isChecked())
     {
@@ -299,7 +295,7 @@ KDateTime AlarmTimeWidget::getDateTime(int* minsFromNow, bool checkExpired, bool
                 KAMessageBox::sorry(const_cast<AlarmTimeWidget*>(this), i18nc("@info", "Invalid time"));
             if (errorWidget)
                 *errorWidget = mDelayTimeEdit;
-            return KDateTime();
+            return KADateTime();
         }
         int delayMins = mDelayTimeEdit->value();
         if (minsFromNow)
@@ -326,32 +322,32 @@ KDateTime AlarmTimeWidget::getDateTime(int* minsFromNow, bool checkExpired, bool
                 if (errorWidget)
                     *errorWidget = mTimeEdit;
             }
-            return KDateTime();
+            return KADateTime();
         }
 
-        KDateTime result;
+        KADateTime result;
         if (dateOnly)
         {
-            result = KDateTime(mDateEdit->date(), mTimeSpec);
+            result = KADateTime(mDateEdit->date(), mTimeSpec);
             if (checkExpired  &&  result.date() < now.date())
             {
                 if (showErrorMessage)
                     KAMessageBox::sorry(const_cast<AlarmTimeWidget*>(this), i18nc("@info", "Alarm date has already expired"));
                 if (errorWidget)
                     *errorWidget = mDateEdit;
-                return KDateTime();
+                return KADateTime();
             }
         }
         else
         {
-            result = KDateTime(mDateEdit->date(), mTimeEdit->time(), mTimeSpec);
+            result = KADateTime(mDateEdit->date(), mTimeEdit->time(), mTimeSpec);
             if (checkExpired  &&  result <= now.addSecs(1))
             {
                 if (showErrorMessage)
                     KAMessageBox::sorry(const_cast<AlarmTimeWidget*>(this), i18nc("@info", "Alarm time has already expired"));
                 if (errorWidget)
                     *errorWidget = mTimeEdit;
-                return KDateTime();
+                return KADateTime();
             }
         }
         return result;
@@ -365,12 +361,12 @@ void AlarmTimeWidget::setDateTime(const DateTime& dt)
 {
     // Set the time zone first so that the call to dateTimeChanged() works correctly.
     if (mDeferring)
-        mTimeSpec = dt.timeSpec().isValid() ? dt.timeSpec() : KDateTime::LocalZone;
+        mTimeSpec = dt.timeSpec().isValid() ? dt.timeSpec() : KADateTime::LocalZone;
     else
     {
-        KTimeZone tz = dt.timeZone();
+        const QTimeZone tz = dt.timeZone();
         mNoTimeZone->setChecked(!tz.isValid());
-        mTimeZone->setTimeZone(tz.isValid() ? tz : Preferences::timeZone());
+        mTimeZone->setTimeZone(tz);
         slotTimeZoneChanged();
     }
 
@@ -402,8 +398,8 @@ void AlarmTimeWidget::setDateTime(const DateTime& dt)
 void AlarmTimeWidget::setMinDateTimeIsCurrent()
 {
     mMinDateTimeIsNow = true;
-    mMinDateTime = KDateTime();
-    KDateTime now = KDateTime::currentDateTime(mTimeSpec);
+    mMinDateTime = KADateTime();
+    const KADateTime now = KADateTime::currentDateTime(mTimeSpec);
     mDateEdit->setMinimumDate(now.date());
     setMaxMinTimeIf(now);
 }
@@ -412,12 +408,12 @@ void AlarmTimeWidget::setMinDateTimeIsCurrent()
 * Set the minimum date/time, adjusting the entered date/time if necessary.
 * If 'dt' is invalid, any current minimum date/time is cleared.
 */
-void AlarmTimeWidget::setMinDateTime(const KDateTime& dt)
+void AlarmTimeWidget::setMinDateTime(const KADateTime& dt)
 {
     mMinDateTimeIsNow = false;
     mMinDateTime = dt.toTimeSpec(mTimeSpec);
     mDateEdit->setMinimumDate(mMinDateTime.date());
-    setMaxMinTimeIf(KDateTime::currentDateTime(mTimeSpec));
+    setMaxMinTimeIf(KADateTime::currentDateTime(mTimeSpec));
 }
 
 /******************************************************************************
@@ -432,7 +428,7 @@ void AlarmTimeWidget::setMaxDateTime(const DateTime& dt)
     else
         mMaxDateTime = dt.kDateTime().toTimeSpec(mTimeSpec);
     mDateEdit->setMaximumDate(mMaxDateTime.date());
-    KDateTime now = KDateTime::currentDateTime(mTimeSpec);
+    const KADateTime now = KADateTime::currentDateTime(mTimeSpec);
     setMaxMinTimeIf(now);
     setMaxDelayTime(now);
 }
@@ -441,7 +437,7 @@ void AlarmTimeWidget::setMaxDateTime(const DateTime& dt)
 * If the minimum and maximum date/times fall on the same date, set the minimum
 * and maximum times in the time edit box.
 */
-void AlarmTimeWidget::setMaxMinTimeIf(const KDateTime& now)
+void AlarmTimeWidget::setMaxMinTimeIf(const KADateTime& now)
 {
     int   mint = 0;
     QTime maxt = time_23_59;
@@ -449,7 +445,7 @@ void AlarmTimeWidget::setMaxMinTimeIf(const KDateTime& now)
     if (mMaxDateTime.isValid())
     {
         bool set = true;
-        KDateTime minDT;
+        KADateTime minDT;
         if (mMinDateTimeIsNow)
             minDT = now.addSecs(60);
         else if (mMinDateTime.isValid())
@@ -474,14 +470,14 @@ void AlarmTimeWidget::setMaxMinTimeIf(const KDateTime& now)
 * Set the maximum value for the delay time edit box, depending on the maximum
 * value for the date/time.
 */
-void AlarmTimeWidget::setMaxDelayTime(const KDateTime& now)
+void AlarmTimeWidget::setMaxDelayTime(const KADateTime& now)
 {
     int maxVal = maxDelayTime;
     if (mMaxDateTime.isValid())
     {
         if (now.date().daysTo(mMaxDateTime.date()) < 100)    // avoid possible 32-bit overflow on secsTo()
         {
-            KDateTime dt(now);
+            KADateTime dt(now);
             dt.setTime(QTime(now.time().hour(), now.time().minute(), 0));   // round down to nearest minute
             maxVal = dt.secsTo(mMaxDateTime) / 60;
             if (maxVal > maxDelayTime)
@@ -524,17 +520,17 @@ void AlarmTimeWidget::enableAnyTime(bool enable)
 */
 void AlarmTimeWidget::updateTimes()
 {
-    KDateTime now;
+    KADateTime now;
     if (mMinDateTimeIsNow)
     {
         // Make sure that the minimum date is updated when the day changes
-        now = KDateTime::currentDateTime(mTimeSpec);
+        now = KADateTime::currentDateTime(mTimeSpec);
         mDateEdit->setMinimumDate(now.date());
     }
     if (mMaxDateTime.isValid())
     {
         if (!now.isValid())
-            now = KDateTime::currentDateTime(mTimeSpec);
+            now = KADateTime::currentDateTime(mTimeSpec);
         if (!mPastMax)
         {
             // Check whether the maximum date/time has now been reached
@@ -577,8 +573,8 @@ void AlarmTimeWidget::slotButtonSet(QAbstractButton*)
     if (mAnyTimeCheckBox)
         mAnyTimeCheckBox->setEnabled(at && mAnyTimeAllowed);
     // Ensure that the value of the delay edit box is > 0.
-    KDateTime att(mDateEdit->date(), mTimeEdit->time(), mTimeSpec);
-    int minutes = (KDateTime::currentUtcDateTime().secsTo(att) + 59) / 60;
+    const KADateTime att(mDateEdit->date(), mTimeEdit->time(), mTimeSpec);
+    int minutes = (KADateTime::currentUtcDateTime().secsTo(att) + 59) / 60;
     if (minutes <= 0)
         mDelayTimeEdit->setValid(true);
     mDelayTimeEdit->setEnabled(!at);
@@ -594,9 +590,9 @@ void AlarmTimeWidget::slotAnyTimeToggled(bool on)
     mTimeEdit->setEnabled(!on && mAtTimeRadio->isChecked());
     setAnyTime();
     if (on)
-        Q_EMIT changed(KDateTime(mDateEdit->date(), mTimeSpec));
+        Q_EMIT changed(KADateTime(mDateEdit->date(), mTimeSpec));
     else
-        Q_EMIT changed(KDateTime(mDateEdit->date(), mTimeEdit->time(), mTimeSpec));
+        Q_EMIT changed(KADateTime(mDateEdit->date(), mTimeEdit->time(), mTimeSpec));
 }
 
 /******************************************************************************
@@ -606,13 +602,13 @@ void AlarmTimeWidget::slotAnyTimeToggled(bool on)
 void AlarmTimeWidget::slotTimeZoneChanged()
 {
     if (mNoTimeZone->isChecked())
-        mTimeSpec = KDateTime::ClockTime;
+        mTimeSpec = KADateTime::LocalZone;
     else
     {
-        KTimeZone tz = mTimeZone->timeZone();
-        mTimeSpec = tz.isValid() ? KDateTime::Spec(tz) : KDateTime::LocalZone;
+        QTimeZone tz = mTimeZone->timeZone();
+        mTimeSpec = tz.isValid() ? KADateTime::Spec(tz) : KADateTime::LocalZone;
     }
-    if (!mTimeZoneBox->isVisible()  &&  mTimeSpec != Preferences::timeZone())
+    if (!mTimeZoneBox->isVisible()  &&  mTimeSpec != Preferences::timeSpec())
     {
         // The current time zone is not the default one, so
         // show the time zone selection controls
@@ -663,8 +659,8 @@ void AlarmTimeWidget::showMoreOptions(bool more)
 */
 void AlarmTimeWidget::dateTimeChanged()
 {
-    KDateTime dt(mDateEdit->date(), mTimeEdit->time(), mTimeSpec);
-    int minutes = (KDateTime::currentUtcDateTime().secsTo(dt) + 59) / 60;
+    const KADateTime dt(mDateEdit->date(), mTimeEdit->time(), mTimeSpec);
+    int minutes = (KADateTime::currentUtcDateTime().secsTo(dt) + 59) / 60;
     bool blocked = mDelayTimeEdit->signalsBlocked();
     mDelayTimeEdit->blockSignals(true);     // prevent infinite recursion between here and delayTimeChanged()
     if (minutes <= 0  ||  minutes > mDelayTimeEdit->maximum())
@@ -673,7 +669,7 @@ void AlarmTimeWidget::dateTimeChanged()
         mDelayTimeEdit->setValue(minutes);
     mDelayTimeEdit->blockSignals(blocked);
     if (mAnyTimeAllowed && mAnyTimeCheckBox && mAnyTimeCheckBox->isChecked())
-        Q_EMIT changed(KDateTime(dt.date(), mTimeSpec));
+        Q_EMIT changed(KADateTime(dt.date(), mTimeSpec));
     else
         Q_EMIT changed(dt);
 }
@@ -686,7 +682,7 @@ void AlarmTimeWidget::delayTimeChanged(int minutes)
 {
     if (mDelayTimeEdit->isValid())
     {
-        QDateTime dt = KDateTime::currentUtcDateTime().addSecs(minutes * 60).toTimeSpec(mTimeSpec).dateTime();
+        QDateTime dt = KADateTime::currentUtcDateTime().addSecs(minutes * 60).toTimeSpec(mTimeSpec).qDateTime();
         bool blockedT = mTimeEdit->signalsBlocked();
         bool blockedD = mDateEdit->signalsBlocked();
         mTimeEdit->blockSignals(true);     // prevent infinite recursion between here and dateTimeChanged()
@@ -695,7 +691,7 @@ void AlarmTimeWidget::delayTimeChanged(int minutes)
         mDateEdit->setDate(dt.date());
         mTimeEdit->blockSignals(blockedT);
         mDateEdit->blockSignals(blockedD);
-        Q_EMIT changed(KDateTime(dt.date(), dt.time(), mTimeSpec));
+        Q_EMIT changed(KADateTime(dt.date(), dt.time(), mTimeSpec));
     }
 }
 

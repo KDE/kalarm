@@ -1,7 +1,7 @@
 /*
  *  prefdlg_p.h  -  private classes for program preferences dialog
  *  Program:  kalarm
- *  Copyright © 2001-2017 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2018 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -32,7 +32,7 @@ class QRadioButton;
 class QPushButton;
 class QLabel;
 class QSpinBox;
-class KTimeZone;
+class QTimeZone;
 class QLineEdit;
 class QComboBox;
 class FontColourChooser;
@@ -87,7 +87,7 @@ class MiscPrefTab : public PrefsTabBase
         void         slotOtherTerminalToggled(bool);
 
     private:
-        void         setTimeZone(const KTimeZone&);
+        void         setTimeZone(const QTimeZone&);
 
         QCheckBox*    mAutoStart;
         QCheckBox*    mQuitWarn;

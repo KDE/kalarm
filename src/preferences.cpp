@@ -1,7 +1,7 @@
 /*
  *  preferences.cpp  -  program preference settings
  *  Program:  kalarm
- *  Copyright © 2001-2017 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2018 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -34,7 +34,6 @@
 #include <KSharedConfig>
 #include <kconfiggroup.h>
 #include <kmessagebox.h>
-#include <ksystemtimezone.h>
 #include "kalarm_debug.h"
 
 #include <QStandardPaths>
@@ -71,7 +70,6 @@ static QString translateXTermPath(const QString& cmdline, bool write);
 
 Preferences*   Preferences::mInstance = nullptr;
 bool           Preferences::mUsingDefaults = false;
-KTimeZone      Preferences::mSystemTimeZone;
 HolidayRegion* Preferences::mHolidays = nullptr;   // always non-null after Preferences initialisation
 QString        Preferences::mPreviousVersion;
 Preferences::Backend Preferences::mPreviousBackend;
@@ -250,40 +248,29 @@ void Preferences::setNoAutoStart(bool yes)
 
 /******************************************************************************
 * Get the user's time zone, or if none has been chosen, the system time zone.
-* The system time zone is cached, and the cached value will be returned unless
-* 'reload' is true, in which case the value is re-read from the system.
+* Reply = time zone, or invalid to use the local time zone.
 */
-KTimeZone Preferences::timeZone(bool reload)
+KADateTime::Spec Preferences::timeSpec()
 {
-    if (reload)
-        mSystemTimeZone = KTimeZone();
-    QString timeZone = self()->mBase_TimeZone;
-    KTimeZone tz;
-    if (!timeZone.isEmpty())
-        tz = KSystemTimeZones::zone(timeZone);
-    if (!tz.isValid())
-    {
-        if (!mSystemTimeZone.isValid())
-            mSystemTimeZone = KSystemTimeZones::local();
-        tz = mSystemTimeZone;
-    }
-    return tz;
+    const QByteArray zoneId = self()->mBase_TimeZone.toLatin1();
+    return zoneId.isEmpty() ? KADateTime::LocalZone : KADateTime::Spec(QTimeZone(zoneId));
 }
 
-QTimeZone Preferences::qTimeZone(bool reload)
+QTimeZone Preferences::timeSpecAsZone()
 {
-    return QTimeZone(timeZone(reload).name().toUtf8());
+    const QByteArray zoneId = self()->mBase_TimeZone.toLatin1();
+    return zoneId.isEmpty() ? QTimeZone::systemTimeZone() : QTimeZone(zoneId);
 }
 
-void Preferences::setTimeZone(const KTimeZone& tz)
+void Preferences::setTimeSpec(const KADateTime::Spec& spec)
 {
-    self()->setBase_TimeZone(tz.isValid() ? tz.name() : QString());
+    self()->setBase_TimeZone(spec.type() == KADateTime::TimeZone ? QString::fromLatin1(spec.timeZone().id()) : QString());
 }
 
 void Preferences::timeZoneChange(const QString& zone)
 {
     Q_UNUSED(zone);
-    Q_EMIT mInstance->timeZoneChanged(timeZone(false));
+    Q_EMIT mInstance->timeZoneChanged(timeSpec());
 }
 
 const HolidayRegion& Preferences::holidays()

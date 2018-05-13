@@ -87,27 +87,27 @@ class DBusHandler : public QObject, public KAlarmIface
         Q_SCRIPTABLE bool editNew(const QString& templateName);
 
     private:
-        static bool scheduleMessage(const QString& message, const KDateTime& start, int lateCancel, unsigned flags,
+        static bool scheduleMessage(const QString& message, const KADateTime& start, int lateCancel, unsigned flags,
                                     const QString& bgColor, const QString& fgColor, const QString& fontStr,
                                     const QUrl& audioFile, int reminderMins, const KARecurrence&,
                                     const KCalCore::Duration& subRepeatDuration = KCalCore::Duration(0), int subRepeatCount = 0);
-        static bool scheduleFile(const QUrl& file, const KDateTime& start, int lateCancel, unsigned flags, const QString& bgColor,
+        static bool scheduleFile(const QUrl& file, const KADateTime& start, int lateCancel, unsigned flags, const QString& bgColor,
                                  const QUrl& audioFile, int reminderMins, const KARecurrence&,
                                  const KCalCore::Duration& subRepeatDuration = KCalCore::Duration(0), int subRepeatCount = 0);
-        static bool scheduleCommand(const QString& commandLine, const KDateTime& start, int lateCancel, unsigned flags,
+        static bool scheduleCommand(const QString& commandLine, const KADateTime& start, int lateCancel, unsigned flags,
                                     const KARecurrence&, const KCalCore::Duration& subRepeatDuration = KCalCore::Duration(0), int subRepeatCount = 0);
         static bool scheduleEmail(const QString& fromID, const QString& addresses, const QString& subject, const QString& message,
-                                  const QString& attachments, const KDateTime& start, int lateCancel, unsigned flags,
+                                  const QString& attachments, const KADateTime& start, int lateCancel, unsigned flags,
                                   const KARecurrence&, const KCalCore::Duration& subRepeatDuration = KCalCore::Duration(0), int subRepeatCount = 0);
-        static bool scheduleAudio(const QString& audioUrl, int volumePercent, const KDateTime& start, int lateCancel, unsigned flags,
+        static bool scheduleAudio(const QString& audioUrl, int volumePercent, const KADateTime& start, int lateCancel, unsigned flags,
                                   const KARecurrence&, const KCalCore::Duration& subRepeatDuration = KCalCore::Duration(0), int subRepeatCount = 0);
-        static KDateTime convertDateTime(const QString& dateTime, const KDateTime& = KDateTime());
-        static KAEvent::Flags convertStartFlags(const KDateTime& start, unsigned flags);
+        static KADateTime convertDateTime(const QString& dateTime, const KADateTime& = KADateTime());
+        static KAEvent::Flags convertStartFlags(const KADateTime& start, unsigned flags);
         static QColor    convertBgColour(const QString& bgColor);
-        static bool      convertRecurrence(KDateTime& start, KARecurrence&, const QString& startDateTime, const QString& icalRecurrence, int subRepeatInterval, KCalCore::Duration& subRepeatDuration);
-        static bool      convertRecurrence(KDateTime& start, KARecurrence&, const QString& startDateTime, int recurType, int recurInterval, int recurCount);
-        static bool      convertRecurrence(KDateTime& start, KARecurrence&, const QString& startDateTime, int recurType, int recurInterval, const QString& endDateTime);
-        static bool      convertRecurrence(KARecurrence&, const KDateTime& start, int recurType, int recurInterval, int recurCount, const KDateTime& end);
+        static bool      convertRecurrence(KADateTime& start, KARecurrence&, const QString& startDateTime, const QString& icalRecurrence, int subRepeatInterval, KCalCore::Duration& subRepeatDuration);
+        static bool      convertRecurrence(KADateTime& start, KARecurrence&, const QString& startDateTime, int recurType, int recurInterval, int recurCount);
+        static bool      convertRecurrence(KADateTime& start, KARecurrence&, const QString& startDateTime, int recurType, int recurInterval, const QString& endDateTime);
+        static bool      convertRecurrence(KARecurrence&, const KADateTime& start, int recurType, int recurInterval, int recurCount, const KADateTime& end);
 };
 
 #endif // DBUSHANDLER_H

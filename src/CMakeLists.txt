@@ -28,7 +28,6 @@ set(libkalarm_SRCS
     lib/desktop.cpp
     lib/filedialog.cpp
     lib/groupbox.cpp
-    lib/itembox.cpp
     lib/kalocale.cpp
     lib/label.cpp
     lib/messagebox.cpp
@@ -134,25 +133,35 @@ add_executable(kalarm_bin ${kalarm_bin_SRCS})
 set_target_properties(kalarm_bin PROPERTIES OUTPUT_NAME kalarm)
 
 target_link_libraries(kalarm_bin
+    KF5::Auth
+    KF5::Codecs
+    KF5::ConfigCore
+    KF5::Completion
+    KF5::DBusAddons
+    KF5::GlobalAccel
+    KF5::GuiAddons
+    KF5::Holidays
+    KF5::IconThemes
+    KF5::KIOWidgets
+    KF5::Notifications
+    KF5::TextWidgets
+    KF5::WindowSystem
+    KF5::XmlGui
+    KF5::KDELibs4Support
+    Phonon::phonon4qt5
+    KF5::AkonadiCore
+    KF5::AkonadiMime
+    KF5::AkonadiContact
+    KF5::AkonadiWidgets
     KF5::AlarmCalendar
     KF5::CalendarCore
     KF5::CalendarUtils
     KF5::Contacts
-    KF5::Mime
     KF5::IdentityManagement
-    KF5::MailTransportAkonadi
-    KF5::AkonadiCore
-    KF5::AkonadiMime
-    KF5::AkonadiContact
-    KF5::Holidays
-    KF5::Codecs
-    KF5::ConfigCore
     KF5::Libkdepim
-    Phonon::phonon4qt5
-    KF5::Auth
-    KF5::DBusAddons
+    KF5::MailTransportAkonadi
+    KF5::Mime
     KF5::PimCommon
-    KF5::AkonadiWidgets
 )
 
 if (Qt5X11Extras_FOUND)

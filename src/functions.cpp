@@ -60,10 +60,8 @@ using namespace KCalCore;
 #include <kdbusservicestarter.h>
 #include <KLocalizedString>
 #include <kauth.h>
-#include <ksystemtimezone.h>
 #include <kstandardguiitem.h>
 #include <kstandardshortcut.h>
-#include <kfiledialog.h>
 #include <KIO/StatJob>
 #include <KJobWidgets>
 #include <kfileitem.h>
@@ -80,6 +78,7 @@ using namespace KCalCore;
 #include <QAction>
 #include <QDir>
 #include <QRegExp>
+#include <QFileDialog>
 #include <QDesktopWidget>
 #include <QtDBus/QtDBus>
 #include <QTimer>
@@ -332,7 +331,7 @@ bool addArchivedEvent(KAEvent& event, Collection* collection)
     if (archiving)
     {
         newev->setCategory(CalEvent::ARCHIVED);    // this changes the event ID
-        newev->setCreatedDateTime(KDateTime::currentUtcDateTime());   // time stamp to control purging
+        newev->setCreatedDateTime(KADateTime::currentUtcDateTime());   // time stamp to control purging
     }
     // Note that archived resources are automatically saved after changes are made
     if (!cal->addEvent(newevent, nullptr, false, collection))
@@ -620,7 +619,7 @@ UpdateResult reactivateEvents(QVector<KAEvent>& events, QVector<EventId>& inelig
     {
         int count = 0;
         AlarmCalendar* cal = AlarmCalendar::resources();
-        KDateTime now = KDateTime::currentUtcDateTime();
+        const KADateTime now = KADateTime::currentUtcDateTime();
         for (int i = 0, end = events.count();  i < end;  ++i)
         {
             // Delete the event from the archived resource
@@ -738,14 +737,14 @@ void purgeArchive(int purgeDays)
     if (purgeDays < 0)
         return;
     qCDebug(KALARM_LOG) << purgeDays;
-    QDate cutoff = KDateTime::currentLocalDate().addDays(-purgeDays);
+    const QDate cutoff = KADateTime::currentLocalDate().addDays(-purgeDays);
     Collection collection = CollectionControlModel::getStandard(CalEvent::ARCHIVED);
     if (!collection.isValid())
         return;
     KAEvent::List events = AlarmCalendar::resources()->events(collection);
     for (int i = 0;  i < events.count();  )
     {
-        if (purgeDays  &&  events[i]->createdDateTime().date() >= cutoff)
+        if (purgeDays  &&  events.at(i)->createdDateTime().date() >= cutoff)
             events.remove(i);
         else
             ++i;
@@ -1010,8 +1009,8 @@ Desktop currentDesktopIdentity()
 QStringList checkRtcWakeConfig(bool checkEventExists)
 {
     KConfigGroup config(KSharedConfig::openConfig(), "General");
-    QStringList params = config.readEntry("RtcWake", QStringList());
-    if (params.count() == 3  &&  params[2].toUInt() > KDateTime::currentUtcDateTime().toTime_t())
+    const QStringList params = config.readEntry("RtcWake", QStringList());
+    if (params.count() == 3  &&  params[2].toUInt() > KADateTime::currentUtcDateTime().toTime_t())
     {
         if (checkEventExists  &&  !AlarmCalendar::getEvent(EventId(params[0].toLongLong(), params[1])))
             return QStringList();
@@ -1040,7 +1039,7 @@ void deleteRtcWakeConfig()
 */
 void cancelRtcWake(QWidget* msgParent, const QString& eventId)
 {
-    QStringList wakeup = checkRtcWakeConfig();
+    const QStringList wakeup = checkRtcWakeConfig();
     if (!wakeup.isEmpty()  &&  (eventId.isEmpty() || wakeup[0] == eventId))
     {
         Private::instance()->mMsgParent = msgParent ? msgParent : MainWindow::mainMainWindow();
@@ -1417,6 +1416,7 @@ QString runKMail(bool minimise)
 */
 bool Private::startKMailMinimised()
 {
+#pragma message("port QT5")
 #if 0 //PORT QT5
 #if KDEPIM_HAVE_X11
     NETRootInfo i(QX11Info::display(), NET::Supported);
@@ -1468,6 +1468,7 @@ bool Private::startKMailMinimised()
 */
 void Private::windowAdded(WId w)
 {
+#pragma message("port QT5")
 #if 0 //Port QT5
 #if KDEPIM_HAVE_X11
     static const int SUPPORTED_TYPES = NET::NormalMask | NET::DesktopMask | NET::DockMask
@@ -1730,14 +1731,14 @@ QString pathOrUrl(const QString& url)
 * @param defaultDir The directory to start in if @p initialFile is empty. If empty,
 *                   the user's home directory will be used. Updated to the
 *                   directory containing the selected file, if a file is chosen.
-* @param mode OR of KFile::Mode values, e.g. ExistingOnly, LocalOnly.
+* @param existing true to return only existing files, false to allow new ones.
 * Reply = URL selected.
 *       = empty, non-null string if no file was selected.
 *       = null string if dialogue was deleted while visible (indicating that
 *         the parent widget was probably also deleted).
 */
 QString browseFile(const QString& caption, QString& defaultDir, const QString& initialFile,
-                   const QString& filter, KFile::Modes mode, QWidget* parent)
+                   const QString& filter, bool existing, QWidget* parent)
 {
     QString initialDir = !initialFile.isEmpty() ? QString(initialFile).remove(QRegExp(QLatin1String("/[^/]*$")))
                        : !defaultDir.isEmpty()  ? defaultDir
@@ -1745,19 +1746,20 @@ QString browseFile(const QString& caption, QString& defaultDir, const QString& i
     // Use AutoQPointer to guard against crash on application exit while
     // the dialogue is still open. It prevents double deletion (both on
     // deletion of parent, and on return from this function).
-    AutoQPointer<KFileDialog> fileDlg = new KFileDialog(QUrl::fromLocalFile(initialDir), filter, parent);
-    fileDlg->setOperationMode(mode & KFile::ExistingOnly ? KFileDialog::Opening : KFileDialog::Saving);
-    fileDlg->setMode(KFile::File | mode);
-    fileDlg->setWindowTitle(caption);
+    AutoQPointer<QFileDialog> fileDlg = new QFileDialog(parent, caption, initialDir, filter);
+    fileDlg->setAcceptMode(existing ? QFileDialog::AcceptOpen : QFileDialog::AcceptSave);
+    fileDlg->setFileMode(existing ? QFileDialog::ExistingFile : QFileDialog::AnyFile);
     if (!initialFile.isEmpty())
-        fileDlg->setSelection(initialFile);
+        fileDlg->selectFile(initialFile);
     if (fileDlg->exec() != QDialog::Accepted)
         return fileDlg ? QStringLiteral("") : QString();  // return null only if dialog was deleted
-    QUrl url = fileDlg->selectedUrl();
-    if (url.isEmpty())
+    const QList<QUrl> urls = fileDlg->selectedUrls();
+    if (urls.isEmpty())
         return QStringLiteral("");   // return empty, non-null string
+    const QUrl& url = urls[0];
     defaultDir = url.isLocalFile() ? KIO::upUrl(url).toLocalFile() : url.adjusted(QUrl::RemoveFilename).path();
-    return (mode & KFile::LocalOnly) ? url.toDisplayString(QUrl::PreferLocalFile) : url.toDisplayString();
+    bool localOnly = true;
+    return localOnly ? url.toDisplayString(QUrl::PreferLocalFile) : url.toDisplayString();
 }
 
 /******************************************************************************
@@ -1794,8 +1796,8 @@ void setTestModeConditions()
     const QByteArray newTime = qgetenv("KALARM_TIME");
     if (!newTime.isEmpty())
     {
-        KDateTime dt;
-        if (AlarmTime::convertTimeString(newTime, dt, KDateTime::realCurrentLocalDateTime(), true))
+        KADateTime dt;
+        if (AlarmTime::convertTimeString(newTime, dt, KADateTime::realCurrentLocalDateTime(), true))
             setSimulatedSystemTime(dt);
     }
 }
@@ -1803,10 +1805,10 @@ void setTestModeConditions()
 /******************************************************************************
 * Set the simulated system time.
 */
-void setSimulatedSystemTime(const KDateTime& dt)
+void setSimulatedSystemTime(const KADateTime& dt)
 {
-    KDateTime::setSimulatedSystemTime(dt);
-    qCDebug(KALARM_LOG) << "New time =" << qPrintable(KDateTime::currentLocalDateTime().toString(QStringLiteral("%Y-%m-%d %H:%M %:Z")));
+    KADateTime::setSimulatedSystemTime(dt);
+    qCDebug(KALARM_LOG) << "New time =" << qPrintable(KADateTime::currentLocalDateTime().toString(QStringLiteral("%Y-%m-%d %H:%M %:Z")));
 }
 #endif
 
@@ -1893,7 +1895,7 @@ KAlarm::UpdateResult sendToKOrganizer(const KAEvent& event)
 
     // Translate the event into string format
     ICalFormat format;
-    format.setTimeZone(Preferences::qTimeZone(true));
+    format.setTimeZone(Preferences::timeSpecAsZone());
     QString iCal = format.toICalString(kcalEvent);
 
     // Send the event to KOrganizer

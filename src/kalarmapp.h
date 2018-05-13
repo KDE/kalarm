@@ -1,7 +1,7 @@
 /*
  *  kalarmapp.h  -  the KAlarm application object
  *  Program:  kalarm
- *  Copyright © 2001-2017 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2018 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -34,7 +34,6 @@
 #include <QQueue>
 #include <QList>
 
-class KDateTime;
 namespace KCal { class Event; }
 namespace Akonadi { class Collection; }
 class DBusHandler;
@@ -81,7 +80,7 @@ class KAlarmApp : public QApplication
         bool               windowFocusBroken() const;
         bool               needWindowFocusFix() const;
         // Methods called indirectly by the DCOP interface
-        bool               scheduleEvent(KAEvent::SubAction, const QString& text, const KDateTime&,
+        bool               scheduleEvent(KAEvent::SubAction, const QString& text, const KADateTime&,
                                          int lateCancel, KAEvent::Flags flags, const QColor& bg, const QColor& fg,
                                          const QFont&, const QString& audioFile, float audioVolume,
                                          int reminderMinutes, const KARecurrence& recurrence,
@@ -117,7 +116,6 @@ class KAlarmApp : public QApplication
     private Q_SLOTS:
         void               quitFatal();
         void               checkNextDueAlarm();
-        void               checkKtimezoned();
         void               slotShowInSystemTrayChanged();
         void               changeStartOfDay();
         void               slotWorkTimeChanged(const QTime& start, const QTime& end, const QBitArray& days);
@@ -179,7 +177,7 @@ class KAlarmApp : public QApplication
         bool               dbusHandleEvent(const EventId&, EventFunc);
         bool               handleEvent(const EventId&, EventFunc, bool checkDuplicates = false);
         int                rescheduleAlarm(KAEvent&, const KAAlarm&, bool updateCalAndDisplay,
-                                           const KDateTime& nextDt = KDateTime());
+                                           const KADateTime& nextDt = KADateTime());
         bool               cancelAlarm(KAEvent&, KAAlarm::Type, bool updateCalAndDisplay);
         bool               cancelReminderAndDeferral(KAEvent&);
         ShellProcess*      doShellCommand(const QString& command, const KAEvent&, const KAAlarm*,

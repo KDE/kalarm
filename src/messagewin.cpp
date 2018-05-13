@@ -1,7 +1,7 @@
 /*
  *  messagewin.cpp  -  displays an alarm message
  *  Program:  kalarm
- *  Copyright © 2001-2016 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2018 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -39,18 +39,18 @@
 #include "synchtimer.h"
 
 #include <kpimtextedit/texttospeech.h>
+#pragma message("port QT5")
 //QT5 reactivate after porting (activated by config-kalarm.h include in texttospeech.h)
 #define KDEPIM_HAVE_X11 0
 
 #include <KAboutData>
-#include <KLocale>
 #include <kstandardguiitem.h>
 #include <KLocalizedString>
 #include <kconfig.h>
 #include <kiconloader.h>
-#include <ksystemtimezone.h>
 #include <ktextedit.h>
 #include <kwindowsystem.h>
+#include <KIO/StatJob>
 #include <KIO/StoredTransferJob>
 #include <KJobWidgets>
 #include <knotification.h>
@@ -66,6 +66,7 @@
 #include <qtextbrowser.h>
 #include <QPushButton>
 #include <QScrollBar>
+#include <QLocale>
 #include <QtDBus/QtDBus>
 #include <QFile>
 #include <QCheckBox>
@@ -245,7 +246,7 @@ MessageWin::MessageWin(const KAEvent* event, const KAAlarm& alarm, int flags)
     setAutoSaveSettings(QStringLiteral("MessageWin"), false);
     mWindowList.append(this);
     if (event->autoClose())
-        mCloseTime = alarm.dateTime().effectiveKDateTime().toUtc().dateTime().addSecs(event->lateCancel() * 60);
+        mCloseTime = alarm.dateTime().effectiveKDateTime().toUtc().qDateTime().addSecs(event->lateCancel() * 60);
     if (mAlwaysHide)
     {
         hide();
@@ -455,10 +456,12 @@ void MessageWin::initView()
                 const bool isDir = statJob->statResult().isDir();
 
                 bool opened = false;
-                if (exists && !isDir) {
+                if (exists && !isDir)
+                {
                     auto job = KIO::storedGet(url);
                     KJobWidgets::setWindow(job, MainWindow::mainMainWindow());
-                    if (job->exec()) {
+                    if (job->exec())
+                    {
                         opened = true;
                         const QByteArray data = job->data();
                         QTemporaryFile tmpFile;
@@ -504,7 +507,8 @@ void MessageWin::initView()
                     }
                 }
 
-                if (!exists || isDir || !opened) {
+                if (!exists || isDir || !opened)
+                {
                     mErrorMsgs += isDir ? i18nc("@info", "File is a folder") : exists ? i18nc("@info", "Failed to open file") : i18nc("@info", "File not found");
                 }
                 break;
@@ -569,7 +573,7 @@ void MessageWin::initView()
             mRemainingText->setMargin(leading);
             mRemainingText->setPalette(labelPalette);
             mRemainingText->setAutoFillBackground(true);
-            if (mDateTime.isDateOnly()  ||  KDateTime::currentLocalDate().daysTo(mDateTime.date()) > 0)
+            if (mDateTime.isDateOnly()  ||  KADateTime::currentLocalDate().daysTo(mDateTime.date()) > 0)
             {
                 setRemainingTextDay();
                 MidnightTimer::connect(this, SLOT(setRemainingTextDay()));    // update every day
@@ -760,9 +764,11 @@ void MessageWin::initView()
     setMinimumSize(QSize(grid->sizeHint().width() + 2 * style()->pixelMetric(QStyle::PM_DefaultChildMargin),
                          sizeHint().height()));
     const bool modal = !(windowFlags() & Qt::X11BypassWindowManagerHint);
-    const unsigned long wstate = (modal ? NET::Modal : 0) | NET::Sticky | NET::StaysOnTop;
+    NET::States wstate = NET::Sticky | NET::StaysOnTop;
+    if (modal)
+        wstate |= NET::Modal;
     WId winid = winId();
-    //QT5 KWindowSystem::setState(winid, wstate);
+    KWindowSystem::setState(winid, wstate);
     KWindowSystem::setOnAllDesktops(winid, true);
 
     mInitialised = true;   // the window's widgets have been created
@@ -815,7 +821,7 @@ void MessageWin::cancelReminder(const KAEvent& event, const KAAlarm& alarm)
     mNoPostAction = false;
     mAlarmType = alarm.type();
     if (event.autoClose())
-        mCloseTime = alarm.dateTime().effectiveKDateTime().toUtc().dateTime().addSecs(event.lateCancel() * 60);
+        mCloseTime = alarm.dateTime().effectiveKDateTime().toUtc().qDateTime().addSecs(event.lateCancel() * 60);
     setCaption(i18nc("@title:window", "Message"));
     mTimeLabel->setText(dateTimeToDisplay());
     if (mRemainingText)
@@ -857,19 +863,20 @@ QString MessageWin::dateTimeToDisplay()
         else
         {
             bool showZone = false;
-            if (mDateTime.timeType() == KDateTime::UTC
-            ||  (mDateTime.timeType() == KDateTime::TimeZone && !mDateTime.isLocalZone()))
+            if (mDateTime.timeType() == KADateTime::UTC
+            ||  (mDateTime.timeType() == KADateTime::TimeZone && !mDateTime.isLocalZone()))
             {
                 // Display time zone abbreviation if it's different from the local
                 // zone. Note that the iCalendar time zone might represent the local
                 // time zone in a slightly different way from the system time zone,
                 // so the zone comparison above might not produce the desired result.
                 const QString tz = mDateTime.kDateTime().toString(QStringLiteral("%Z"));
-                KDateTime local = mDateTime.kDateTime();
-                local.setTimeSpec(KDateTime::Spec::LocalZone());
+                KADateTime local = mDateTime.kDateTime();
+                local.setTimeSpec(KADateTime::Spec::LocalZone());
                 showZone = (local.toString(QStringLiteral("%Z")) != tz);
             }
-            tm = KLocale::global()->formatDateTime(mDateTime.kDateTime(), KLocale::ShortDate, KLocale::DateTimeFormatOptions(showZone ? KLocale::TimeZone : 0));
+#pragma message("port QT5")
+            tm = QLocale().toString(mDateTime.qDateTime(), QLocale::ShortFormat); // KLocale::DateTimeFormatOptions(showZone ? KLocale::TimeZone : 0));
         }
     }
     return tm;
@@ -882,7 +889,7 @@ QString MessageWin::dateTimeToDisplay()
 void MessageWin::setRemainingTextDay()
 {
     QString text;
-    const int days = KDateTime::currentLocalDate().daysTo(mDateTime.date());
+    const int days = KADateTime::currentLocalDate().daysTo(mDateTime.date());
     if (days <= 0  &&  !mDateTime.isDateOnly())
     {
         // The alarm is due today, so start refreshing every minute
@@ -909,7 +916,7 @@ void MessageWin::setRemainingTextDay()
 void MessageWin::setRemainingTextMinute()
 {
     QString text;
-    const int mins = (KDateTime::currentUtcDateTime().secsTo(mDateTime.effectiveKDateTime()) + 59) / 60;
+    const int mins = (KADateTime::currentUtcDateTime().secsTo(mDateTime.effectiveKDateTime()) + 59) / 60;
     if (mins < 60)
         text = i18ncp("@info", "in 1 minute's time", "in %1 minutes' time", (mins > 0 ? mins : 0));
     else if (mins % 60 == 0)
@@ -963,17 +970,17 @@ void MessageWin::saveProperties(KConfigGroup& config)
         config.writeEntry("ConfirmAck", mConfirmAck);
         if (mDateTime.isValid())
         {
-//TODO: Write KDateTime when it becomes possible
+//TODO: Write KADateTime when it becomes possible
             config.writeEntry("Time", mDateTime.effectiveDateTime());
             config.writeEntry("DateOnly", mDateTime.isDateOnly());
-            QString zone;
+            QByteArray zone;
             if (mDateTime.isUtc())
-                zone = QStringLiteral("UTC");
-            else
+                zone = "UTC";
+            else if (mDateTime.timeType() == KADateTime::TimeZone)
             {
-                const KTimeZone tz = mDateTime.timeZone();
+                const QTimeZone tz = mDateTime.timeZone();
                 if (tz.isValid())
-                    zone = tz.name();
+                    zone = tz.id();
             }
             config.writeEntry("TimeZone", zone);
         }
@@ -1023,19 +1030,15 @@ void MessageWin::readProperties(const KConfigGroup& config)
     mConfirmAck          = config.readEntry("ConfirmAck", false);
     QDateTime invalidDateTime;
     QDateTime dt         = config.readEntry("Time", invalidDateTime);
-    const QString zone   = config.readEntry("TimeZone");
-    if (zone.isEmpty())
-        mDateTime = KDateTime(dt, KDateTime::ClockTime);
-    else if (zone == QStringLiteral("UTC"))
-    {
-        dt.setTimeSpec(Qt::UTC);
-        mDateTime = KDateTime(dt, KDateTime::UTC);
-    }
+    const QByteArray zoneId = config.readEntry("TimeZone").toLatin1();
+    KADateTime::Spec timeSpec;
+    if (zoneId.isEmpty())
+        timeSpec = KADateTime::LocalZone;
+    else if (zoneId == "UTC")
+        timeSpec = KADateTime::UTC;
     else
-    {
-        KTimeZone tz = KSystemTimeZones::zone(zone);
-        mDateTime = KDateTime(dt, (tz.isValid() ? tz : KSystemTimeZones::local()));
-    }
+        timeSpec = QTimeZone(zoneId);
+    mDateTime = KADateTime(dt.date(), dt.time(), timeSpec);
     const bool dateOnly  = config.readEntry("DateOnly", false);
     if (dateOnly)
         mDateTime.setDateOnly(true);
@@ -1374,7 +1377,8 @@ void MessageWin::playAudio()
 void MessageWin::slotSpeak()
 {
     KPIMTextEdit::TextToSpeech *tts = KPIMTextEdit::TextToSpeech::self();
-    if (!tts->isReady()) {
+    if (!tts->isReady())
+    {
         KAMessageBox::detailedError(MainWindow::mainMainWindow(), i18nc("@info", "Unable to speak message"), i18nc("@info", "Text-to-speech subsystem is not available"));
         clearErrorMessage(ErrMsg_Speak);
         return;
@@ -1720,7 +1724,7 @@ void MessageWin::show()
     if (mCloseTime.isValid())
     {
         // Set a timer to auto-close the window
-        int delay = KDateTime::currentUtcDateTime().dateTime().secsTo(mCloseTime);
+        int delay = QDateTime::currentDateTimeUtc().secsTo(mCloseTime);
         if (delay < 0)
             delay = 0;
         QTimer::singleShot(delay * 1000, this, &QWidget::close);
@@ -2092,7 +2096,7 @@ void MessageWin::setButtonsReadOnly(bool ro)
 */
 void MessageWin::setDeferralLimit(const KAEvent& event)
 {
-    mDeferLimit = event.deferralLimit().effectiveKDateTime().toUtc().dateTime();
+    mDeferLimit = event.deferralLimit().effectiveKDateTime().toUtc().qDateTime();
     MidnightTimer::connect(this, SLOT(checkDeferralLimit()));   // check every day
     mDisableDeferral = false;
     checkDeferralLimit();
@@ -2111,14 +2115,14 @@ void MessageWin::checkDeferralLimit()
 {
     if (!mDeferButton->isEnabled()  ||  !mDeferLimit.isValid())
         return;
-    int n = KDateTime::currentLocalDate().daysTo(KDateTime(mDeferLimit, KDateTime::LocalZone).date());
+    int n = KADateTime::currentLocalDate().daysTo(KADateTime(mDeferLimit, KADateTime::LocalZone).date());
     if (n > 0)
         return;
     MidnightTimer::disconnect(this, SLOT(checkDeferralLimit()));
     if (n == 0)
     {
         // The deferral limit will be reached today
-        n = KDateTime::currentUtcDateTime().dateTime().secsTo(mDeferLimit);
+        n = QDateTime::currentDateTimeUtc().secsTo(mDeferLimit);
         if (n > 0)
         {
             QTimer::singleShot(n * 1000, this, &MessageWin::checkDeferralLimit);
@@ -2135,7 +2139,7 @@ void MessageWin::checkDeferralLimit()
 */
 void MessageWin::slotDefer()
 {
-    mDeferDlg = new DeferAlarmDlg(KDateTime::currentDateTime(Preferences::timeZone()).addSecs(60), mDateTime.isDateOnly(), false, this);
+    mDeferDlg = new DeferAlarmDlg(KADateTime::currentDateTime(Preferences::timeSpec()).addSecs(60), mDateTime.isDateOnly(), false, this);
     mDeferDlg->setObjectName(QStringLiteral("DeferDlg"));    // used by LikeBack
     mDeferDlg->setDeferMinutes(mDefaultDeferMinutes > 0 ? mDefaultDeferMinutes : Preferences::defaultDeferTime());
     mDeferDlg->setLimit(mEvent);

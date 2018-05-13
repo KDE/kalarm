@@ -1,7 +1,7 @@
 /*
  *  soundpicker.cpp  -  widget to select a sound file or a beep
  *  Program:  kalarm
- *  Copyright © 2002-2013 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2002-2018 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -326,13 +326,13 @@ QString SoundPicker::browseFile(QString& defaultDir, const QString& initialFile)
     {
         if (kdeSoundDir.isNull())
         {
-            kdeSoundDir = QStandardPaths::locate(QStandardPaths::GenericDataLocation, QStringLiteral("sound/KDE-Sys-Warning.ogg"));
-            kdeSoundDir = QFileInfo(kdeSoundDir).absolutePath();
+            kdeSoundDir = QStandardPaths::locate(QStandardPaths::GenericDataLocation, QStringLiteral("sounds"), QStandardPaths::LocateDirectory);
+            kdeSoundDir = QFileInfo(kdeSoundDir).absoluteFilePath();
         }
         defaultDir = kdeSoundDir;
     }
-    QString filter = Phonon::BackendCapabilities::availableMimeTypes().join(QStringLiteral(" "));
-    return KAlarm::browseFile(i18nc("@title:window", "Choose Sound File"), defaultDir, initialFile, filter, KFile::ExistingOnly, nullptr);
+    const QString filter = Phonon::BackendCapabilities::availableMimeTypes().join(QStringLiteral(" "));
+    return KAlarm::browseFile(i18nc("@title:window", "Choose Sound File"), defaultDir, initialFile, filter, true, nullptr);
 }
 
 
