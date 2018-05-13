@@ -573,6 +573,13 @@ Event::Ptr createKcalEvent(const QDateTime& start, const QDateTime& created, Ala
     return createKcalEvent(start, created, kcalalarm, type);
 }
 
+Alarm::Ptr copyKcalAlarm(Event::Ptr& kcalevent, Alarm::Ptr& kcalalarm)
+{
+    Alarm::Ptr newAlarm = kcalevent->newAlarm();
+    *newAlarm.data() = *kcalalarm.data();
+    return newAlarm;
+}
+
 }
 
 void KAEventTest::kcalevent()
@@ -606,9 +613,10 @@ void KAEventTest::kcalevent()
         Akonadi::Collection::Id collectionId = -1;
         Alarm::Ptr kcalalarm;
         Event::Ptr kcalevent = createKcalEvent(dt.qDateTime(), createdDt, kcalalarm);
-        kcalevent->setCustomProperty("KALARM", "TYPE", QStringLiteral("DISPLAYING"));
+        Alarm::Ptr kcalalarmDisp = copyKcalAlarm(kcalevent, kcalalarm);
         {
-            kcalalarm->setCustomProperty("KALARM", "TYPE", QStringLiteral("DISPLAYING"));
+            kcalevent->setCustomProperty("KALARM", "TYPE", QStringLiteral("DISPLAYING"));
+            kcalalarmDisp->setCustomProperty("KALARM", "TYPE", QStringLiteral("DISPLAYING"));
             KAEvent event(kcalevent);
             QCOMPARE(event.category(), CalEvent::DISPLAYING);
             KAEvent event2;
@@ -618,6 +626,48 @@ void KAEventTest::kcalevent()
             QCOMPARE(collectionId, -1);
             QVERIFY(!showEdit);
             QVERIFY(!showDefer);
+        }
+        {
+            kcalevent->setCustomProperty("KALARM", "TYPE", QStringLiteral("DISPLAYING;7;EDIT"));
+            KAEvent event(kcalevent);
+            QCOMPARE(event.category(), CalEvent::DISPLAYING);
+            KAEvent event2;
+            event2.reinstateFromDisplaying(kcalevent, collectionId, showEdit, showDefer);
+            QCOMPARE(event2.category(), CalEvent::ACTIVE);
+            QVERIFY(!event2.deferred());
+            QCOMPARE(collectionId, 7);
+            QVERIFY(showEdit);
+            QVERIFY(!showDefer);
+        }
+        {
+            kcalevent->setCustomProperty("KALARM", "TYPE", QStringLiteral("DISPLAYING;-1;DEFER"));
+            kcalalarm->setCustomProperty("KALARM", "TYPE", QStringLiteral("DEFERRAL"));
+            kcalalarmDisp->setCustomProperty("KALARM", "TYPE", QStringLiteral("DISPLAYING,DEFERRAL"));
+            KAEvent event(kcalevent);
+            QCOMPARE(event.category(), CalEvent::DISPLAYING);
+            KAEvent event2;
+            event2.reinstateFromDisplaying(kcalevent, collectionId, showEdit, showDefer);
+            QCOMPARE(event2.category(), CalEvent::ACTIVE);
+            QVERIFY(event2.deferred());
+            QVERIFY(!event2.deferDateTime().isDateOnly());
+            QCOMPARE(collectionId, -1);
+            QVERIFY(!showEdit);
+            QVERIFY(showDefer);
+        }
+        {
+            kcalevent->setCustomProperty("KALARM", "TYPE", QStringLiteral("DISPLAYING;634;DEFER;EDIT"));
+            kcalalarm->setCustomProperty("KALARM", "TYPE", QStringLiteral("DATE_DEFERRAL"));
+            kcalalarmDisp->setCustomProperty("KALARM", "TYPE", QStringLiteral("DISPLAYING,DATE_DEFERRAL"));
+            KAEvent event(kcalevent);
+            QCOMPARE(event.category(), CalEvent::DISPLAYING);
+            KAEvent event2;
+            event2.reinstateFromDisplaying(kcalevent, collectionId, showEdit, showDefer);
+            QCOMPARE(event2.category(), CalEvent::ACTIVE);
+            QVERIFY(event2.deferred());
+            QVERIFY(event2.deferDateTime().isDateOnly());
+            QCOMPARE(collectionId, 634);
+            QVERIFY(showEdit);
+            QVERIFY(showDefer);
         }
     }
     {
@@ -723,8 +773,13 @@ void KAEventTest::kcalevent()
         QVERIFY(event.deferDefaultDateOnly());
     }
     {
-        Event::Ptr kcalevent = createKcalEvent(dt.qDateTime(), createdDt);
+        // Reminder after the event, first recurrence only
+        Alarm::Ptr kcalalarm;
+        Event::Ptr kcalevent = createKcalEvent(dt.qDateTime(), createdDt, kcalalarm);
         kcalevent->setCustomProperty("KALARM", "FLAGS", QStringLiteral("REMINDER;ONCE;27M"));
+        kcalalarm = copyKcalAlarm(kcalevent, kcalalarm);
+        kcalalarm->setCustomProperty("KALARM", "TYPE", QStringLiteral("REMINDER"));
+        kcalalarm->setStartOffset(-27*60);
         KAEvent event(kcalevent);
         QCOMPARE(event.deferDefaultMinutes(), 0);
         QVERIFY(!event.deferDefaultDateOnly());
@@ -732,18 +787,44 @@ void KAEventTest::kcalevent()
         QCOMPARE(event.reminderMinutes(), -27);
     }
     {
-        Event::Ptr kcalevent = createKcalEvent(dt.qDateTime(), createdDt);
+        // Reminder before the event
+        Alarm::Ptr kcalalarm;
+        Event::Ptr kcalevent = createKcalEvent(dt.qDateTime(), createdDt, kcalalarm);
         kcalevent->setCustomProperty("KALARM", "FLAGS", QStringLiteral("REMINDER;-27H"));
+        kcalalarm = copyKcalAlarm(kcalevent, kcalalarm);
+        kcalalarm->setCustomProperty("KALARM", "TYPE", QStringLiteral("REMINDER"));
+        kcalalarm->setStartOffset(-27*3600);
         KAEvent event(kcalevent);
+        QVERIFY(event.reminderActive());
         QVERIFY(!event.reminderOnceOnly());
         QCOMPARE(event.reminderMinutes(), 27*60);
     }
     {
-        Event::Ptr kcalevent = createKcalEvent(dt.qDateTime(), createdDt);
+        // Reminder after the event
+        Alarm::Ptr kcalalarm;
+        Event::Ptr kcalevent = createKcalEvent(dt.qDateTime(), createdDt, kcalalarm);
         kcalevent->setCustomProperty("KALARM", "FLAGS", QStringLiteral("REMINDER;27D"));
+        kcalalarm = copyKcalAlarm(kcalevent, kcalalarm);
+        kcalalarm->setCustomProperty("KALARM", "TYPE", QStringLiteral("REMINDER"));
+        kcalalarm->setStartOffset(Duration(27, Duration::Days));
         KAEvent event(kcalevent);
+        QVERIFY(event.reminderActive());
         QVERIFY(!event.reminderOnceOnly());
         QCOMPARE(event.reminderMinutes(), -27*60*24);
+    }
+    {
+        // Reminder before the event
+        Alarm::Ptr kcalalarm;
+        Event::Ptr kcalevent = createKcalEvent(dt.qDateTime(), createdDt, kcalalarm);
+        kcalevent->setCustomProperty("KALARM", "FLAGS", QStringLiteral("REMINDER;10M"));
+        kcalalarm = copyKcalAlarm(kcalevent, kcalalarm);
+        kcalalarm->setCustomProperty("KALARM", "TYPE", QStringLiteral("REMINDER"));
+        kcalalarm->setCustomProperty("KALARM", "FLAGS", QStringLiteral("HIDE"));
+        kcalalarm->setStartOffset(10*60);
+        KAEvent event(kcalevent);
+        QVERIFY(!event.reminderActive());
+        QVERIFY(!event.reminderOnceOnly());
+        QCOMPARE(event.reminderMinutes(), -10);
     }
     {
         Event::Ptr kcalevent = createKcalEvent(dt.qDateTime(), createdDt);
@@ -752,7 +833,6 @@ void KAEventTest::kcalevent()
         QVERIFY(!event.reminderOnceOnly());
         QCOMPARE(event.reminderMinutes(), 0);
         QVERIFY(event.emailBcc());
-        QCOMPARE(event.templateAfterTime(), -1);
     }
     {
         Event::Ptr kcalevent = createKcalEvent(dt.qDateTime(), createdDt);
@@ -760,8 +840,25 @@ void KAEventTest::kcalevent()
         KAEvent event(kcalevent);
         QVERIFY(!event.emailBcc());
         QCOMPARE(event.templateAfterTime(), 31);
+        QCOMPARE(event.kmailSerialNumber(), 0);
     }
-    //TODO: "FLAGS", "KMAIL"
+    {
+        // KMail serial number, with alarm message in email format
+        Alarm::Ptr kcalalarm;
+        Event::Ptr kcalevent = createKcalEvent(dt.qDateTime(), createdDt, kcalalarm);
+        kcalevent->setCustomProperty("KALARM", "FLAGS", QStringLiteral("KMAIL;759231"));
+        kcalalarm->setText(QStringLiteral("From: a@b.c\nTo: d@e.f\nDate: Sun, 01 Apr 2018 17:36:06 +0100\nSubject: About this"));
+        KAEvent event(kcalevent);
+        QCOMPARE(event.templateAfterTime(), -1);
+        QCOMPARE(event.kmailSerialNumber(), 759231);
+    }
+    {
+        // KMail serial number, with alarm message in wrong format
+        Event::Ptr kcalevent = createKcalEvent(dt.qDateTime(), createdDt);
+        kcalevent->setCustomProperty("KALARM", "FLAGS", QStringLiteral("KMAIL;759231"));
+        KAEvent event(kcalevent);
+        QCOMPARE(event.kmailSerialNumber(), 0);
+    }
 
     // Alarm custom properties
     {
@@ -918,14 +1015,30 @@ void KAEventTest::kcalevent()
         }
     }
     {
-#warning REPEAT is only for main alarm expired
-        // Test date/time event with sub-repetition but no recurrence
-        Event::Ptr kcalevent = createKcalEvent(dt.qDateTime(), createdDt);
+        // Test deferred event whose main alarm has expired, with sub-repetition
+        Alarm::Ptr kcalalarm;
+        Event::Ptr kcalevent = createKcalEvent(dt.qDateTime(), createdDt, kcalalarm);
+        kcalalarm->setCustomProperty("KALARM", "TYPE", QStringLiteral("DEFERRAL"));
         kcalevent->setCustomProperty("KALARM", "REPEAT", QStringLiteral("17:5"));
+        Recurrence* recurrence = kcalevent->recurrence();
+        recurrence->setStartDateTime(QDateTime(QDate(2010,5,13), QTime(5,17,0), QTimeZone("Europe/London")), false);
+        recurrence->setHourly(3);
         KAEvent event(kcalevent);
         QCOMPARE(event.recurType(), KARecurrence::MINUTELY);
-        QCOMPARE(event.recurInterval(), 17);
-        QCOMPARE(event.recurrence()->duration(), 6);
+        QCOMPARE(event.recurInterval(), 3*60);
+        QCOMPARE(event.repetition().interval().asSeconds(), 17*60);
+        QCOMPARE(event.repetition().count(), 5);
+    }
+    {
+        // Test deferred event whose main alarm has not expired, with sub-repetition
+        Event::Ptr kcalevent = createKcalEvent(dt.qDateTime(), createdDt);
+        kcalevent->setCustomProperty("KALARM", "REPEAT", QStringLiteral("17:5"));
+        Recurrence* recurrence = kcalevent->recurrence();
+        recurrence->setStartDateTime(QDateTime(QDate(2010,5,13), QTime(5,17,0), QTimeZone("Europe/London")), false);
+        recurrence->setHourly(3);
+        KAEvent event(kcalevent);
+        QCOMPARE(event.recurType(), KARecurrence::MINUTELY);
+        QCOMPARE(event.recurInterval(), 3*60);
         QCOMPARE(event.repetition().interval().asSeconds(), 0);
         QCOMPARE(event.repetition().count(), 0);
     }
@@ -1079,7 +1192,6 @@ void KAEventTest::kcalevent()
         QVERIFY(event.repeatAtLogin(false));
     }
 }
-// HIDDEN_REMINDER flag
     const KADateTime dt(QDate(2010,5,13), QTime(3, 45, 0), QTimeZone("Europe/London"));
 
 // vim: et sw=4:

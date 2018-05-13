@@ -838,7 +838,8 @@ void KAEventPrivate::set(const Event::Ptr &event)
     }
     prop = event->customProperty(KACalendar::APPNAME, REPEAT_PROPERTY);
     if (!prop.isEmpty()) {
-        // This property is used when the main alarm has expired
+        // This property is used only when the main alarm has expired.
+        // If a main alarm is found, this property is ignored (see below).
         const QStringList list = prop.split(QLatin1Char(':'));
         if (list.count() >= 2) {
             const int interval = static_cast<int>(list[0].toUInt());
@@ -906,6 +907,7 @@ void KAEventPrivate::set(const Event::Ptr &event)
             mMainExpired = false;
             alTime = dateTime;
             alTime.setDateOnly(mStartDateTime.isDateOnly());
+            mRepetition.set(0, 0);   // ignore X-KDE-KALARM-REPEAT if main alarm exists
             if (data.alarm->repeatCount()  &&  !data.alarm->snoozeTime().isNull()) {
                 mRepetition.set(data.alarm->snoozeTime(), data.alarm->repeatCount());   // values may be adjusted in setRecurrence()
                 mNextRepeat = data.nextRepeat;
@@ -4118,13 +4120,13 @@ void KAEventPrivate::readAlarm(const Alarm::Ptr &alarm, AlarmData &data, bool au
         if (data.type == MAIN_ALARM) {
             data.type = deferral ? DEFERRED_REMINDER_ALARM : REMINDER_ALARM;
             data.timedDeferral = (deferral && !dateDeferral);
+            if (data.type == REMINDER_ALARM
+            &&  flags.contains(KAEventPrivate::HIDDEN_REMINDER_FLAG)) {
+                data.hiddenReminder = true;
+            }
         } else if (data.type == DISPLAYING_ALARM)
             data.displayingFlags = dateDeferral ? REMINDER | DATE_DEFERRAL
                                    : deferral ? REMINDER | TIME_DEFERRAL : REMINDER;
-        else if (data.type == REMINDER_ALARM
-                 &&  flags.contains(KAEventPrivate::HIDDEN_REMINDER_FLAG)) {
-            data.hiddenReminder = true;
-        }
     } else if (deferral) {
         if (data.type == MAIN_ALARM) {
             data.type = DEFERRED_ALARM;
