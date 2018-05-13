@@ -31,6 +31,7 @@ using namespace KCalCore;
 #include <AkonadiCore/collection.h>
 
 #include <KHolidays/HolidayRegion>
+using namespace KHolidays;
 #include <kconfiggroup.h>
 
 #include <QtTest>
@@ -398,8 +399,8 @@ void KAEventTest::flags()
         QVERIFY(!event.emailBcc());
     }
     {
-        const KAEvent::Flags flags(KAEvent::CONFIRM_ACK | KAEvent::SPEAK);
-        KAEvent event(dt, text, bgColour, fgColour, font, KAEvent::MESSAGE, 3, flags | KAEvent::EXCL_HOLIDAYS);
+        const KAEvent::Flags flags(KAEvent::CONFIRM_ACK | KAEvent::SPEAK | KAEvent::EXCL_HOLIDAYS);
+        KAEvent event(dt, text, bgColour, fgColour, font, KAEvent::MESSAGE, 3, flags);
         QVERIFY(!event.startDateTime().isDateOnly());
         QCOMPARE(event.flags(), flags);
         QVERIFY(!event.repeatAtLogin());
@@ -409,7 +410,7 @@ void KAEventTest::flags()
         QVERIFY(event.confirmAck());
         QVERIFY(event.speak());
         QVERIFY(!event.autoClose());
-        QVERIFY(!event.holidaysExcluded());
+        QVERIFY(event.holidaysExcluded());
         QVERIFY(!event.repeatSound());
         QVERIFY(!event.copyToKOrganizer());
         QVERIFY(!event.workTimeOnly());

@@ -427,15 +427,15 @@ QString AlarmText::fromCalendarText(const QString &text, bool &email)
     const QStringList lines = text.split(QLatin1Char('\n'), QString::SkipEmptyParts);
     const int maxn = lines.count();
     if (maxn >= MAIL_MIN_LINES
-            &&  lines[MAIL_FROM_LINE].startsWith(Private::mFromPrefixEn)
-            &&  lines[MAIL_TO_LINE].startsWith(Private::mToPrefixEn)) {
+    &&  lines[MAIL_FROM_LINE].startsWith(Private::mFromPrefixEn)
+    &&  lines[MAIL_TO_LINE].startsWith(Private::mToPrefixEn)) {
         int n = MAIL_CC_LINE;
         if (lines[MAIL_CC_LINE].startsWith(Private::mCcPrefixEn)) {
             ++n;
         }
         if (maxn > n + 1
-                &&  lines[n].startsWith(Private::mDatePrefixEn)
-                &&  lines[n + 1].startsWith(Private::mSubjectPrefixEn)) {
+        &&  lines[n].startsWith(Private::mDatePrefixEn)
+        &&  lines[n + 1].startsWith(Private::mSubjectPrefixEn)) {
             Private::setUpTranslations();
             QString dispText;
             dispText = Private::mFromPrefix + lines[MAIL_FROM_LINE].mid(Private::mFromPrefixEn.length()) + QLatin1Char('\n');
@@ -468,15 +468,15 @@ QString AlarmText::toCalendarText(const QString &text)
     const QStringList lines = text.split(QLatin1Char('\n'), QString::SkipEmptyParts);
     const int maxn = lines.count();
     if (maxn >= MAIL_MIN_LINES
-            &&  lines[MAIL_FROM_LINE].startsWith(Private::mFromPrefix)
-            &&  lines[MAIL_TO_LINE].startsWith(Private::mToPrefix)) {
+    &&  lines[MAIL_FROM_LINE].startsWith(Private::mFromPrefix)
+    &&  lines[MAIL_TO_LINE].startsWith(Private::mToPrefix)) {
         int n = MAIL_CC_LINE;
         if (lines[MAIL_CC_LINE].startsWith(Private::mCcPrefix)) {
             ++n;
         }
         if (maxn > n + 1
-                &&  lines[n].startsWith(Private::mDatePrefix)
-                &&  lines[n + 1].startsWith(Private::mSubjectPrefix)) {
+        &&  lines[n].startsWith(Private::mDatePrefix)
+        &&  lines[n + 1].startsWith(Private::mSubjectPrefix)) {
             // Format the email into a text alarm
             QString calText;
             calText = Private::mFromPrefixEn + lines[MAIL_FROM_LINE].mid(Private::mFromPrefix.length()) + QLatin1Char('\n');
@@ -537,15 +537,15 @@ int AlarmText::Private::emailHeaderCount(const QStringList &lines)
     setUpTranslations();
     const int maxn = lines.count();
     if (maxn >= MAIL_MIN_LINES
-            &&  lines[MAIL_FROM_LINE].startsWith(mFromPrefix)
-            &&  lines[MAIL_TO_LINE].startsWith(mToPrefix)) {
+    &&  lines[MAIL_FROM_LINE].startsWith(mFromPrefix)
+    &&  lines[MAIL_TO_LINE].startsWith(mToPrefix)) {
         int n = MAIL_CC_LINE;
         if (lines[MAIL_CC_LINE].startsWith(mCcPrefix)) {
             ++n;
         }
         if (maxn > n + 1
-                &&  lines[n].startsWith(mDatePrefix)
-                &&  lines[n + 1].startsWith(mSubjectPrefix)) {
+        &&  lines[n].startsWith(mDatePrefix)
+        &&  lines[n + 1].startsWith(mSubjectPrefix)) {
             return n + 2;
         }
     }

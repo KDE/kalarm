@@ -222,6 +222,7 @@ public:
     static DateTime    readDateTime(const KCalCore::Event::Ptr &, bool localZone, bool dateOnly, DateTime &start);
     static void        readAlarms(const KCalCore::Event::Ptr &, AlarmMap *, bool cmdDisplay = false);
     static void        readAlarm(const KCalCore::Alarm::Ptr &, AlarmData &, bool audioMain, bool cmdDisplay = false);
+    static QSharedPointer<const HolidayRegion> holidays();
 private:
     void               copy(const KAEventPrivate &);
     bool               mayOccurDailyDuringWork(const KADateTime &) const;
@@ -238,7 +239,7 @@ private:
 
 public:
     static QFont       mDefaultFont;       // default alarm message font
-    static const KHolidays::HolidayRegion *mHolidays;  // holiday region to use
+    static QSharedPointer<const HolidayRegion> mHolidays;  // holiday region to use
     static QBitArray   mWorkDays;          // working days of the week
     static QTime       mWorkDayStart;      // start time of the working day
     static QTime       mWorkDayEnd;        // end time of the working day
@@ -260,9 +261,9 @@ public:
     QString            mPreAction;         // command to execute before alarm is displayed
     QString            mPostAction;        // command to execute after alarm window is closed
     DateTime           mStartDateTime;     // DTSTART and DTEND: start and end time for event
-    KADateTime          mCreatedDateTime;   // CREATED: date event was created, or saved in archive calendar
+    KADateTime         mCreatedDateTime;   // CREATED: date event was created, or saved in archive calendar
     DateTime           mNextMainDateTime;  // next time to display the alarm, excluding repetitions
-    KADateTime          mAtLoginDateTime;   // repeat-at-login end time
+    KADateTime         mAtLoginDateTime;   // repeat-at-login end time
     DateTime           mDeferralTime;      // extra time to trigger alarm (if alarm or reminder deferred)
     DateTime           mDisplayingTime;    // date/time shown in the alarm currently being displayed
     int                mDisplayingFlags;   // type of alarm which is currently being displayed (for display alarm)
@@ -294,8 +295,8 @@ public:
     int                mFadeSeconds;       // fade time (seconds) for sound file, or 0 if none
     int                mRepeatSoundPause;  // seconds to pause between sound file repetitions, or -1 if no repetition
     int                mLateCancel;        // how many minutes late will cancel the alarm, or 0 for no cancellation
-    mutable const KHolidays::HolidayRegion *
-    mExcludeHolidays;   // non-null to not trigger alarms on holidays (= mHolidays when trigger calculated)
+    bool               mExcludeHolidays;   // don't trigger alarms on holidays
+    mutable QSharedPointer<const HolidayRegion> mExcludeHolidayRegion; // holiday region used to exclude alarms on holidays (= mHolidays when trigger calculated)
     mutable int        mWorkTimeOnly;      // non-zero to trigger alarm only during working hours (= mWorkTimeIndex when trigger calculated)
     KAEvent::SubAction mActionSubType;     // sub-action type for the event's main alarm
     CalEvent::Type     mCategory;      // event category (active, archived, template, ...)
@@ -416,31 +417,31 @@ const QString    KAEventPrivate::displayURL = QStringLiteral("display:");
 
 // - General alarm properties
 const QByteArray KAEventPrivate::TYPE_PROPERTY("TYPE");                // X-KDE-KALARM-TYPE property
-const QString    KAEventPrivate::FILE_TYPE                  = QStringLiteral("FILE");
-const QString    KAEventPrivate::AT_LOGIN_TYPE              = QStringLiteral("LOGIN");
-const QString    KAEventPrivate::REMINDER_TYPE              = QStringLiteral("REMINDER");
-const QString    KAEventPrivate::TIME_DEFERRAL_TYPE         = QStringLiteral("DEFERRAL");
-const QString    KAEventPrivate::DATE_DEFERRAL_TYPE         = QStringLiteral("DATE_DEFERRAL");
-const QString    KAEventPrivate::DISPLAYING_TYPE            = QStringLiteral("DISPLAYING");   // used only in displaying calendar
-const QString    KAEventPrivate::PRE_ACTION_TYPE            = QStringLiteral("PRE");
-const QString    KAEventPrivate::POST_ACTION_TYPE           = QStringLiteral("POST");
-const QString    KAEventPrivate::SOUND_REPEAT_TYPE          = QStringLiteral("SOUNDREPEAT");
+const QString    KAEventPrivate::FILE_TYPE             = QStringLiteral("FILE");
+const QString    KAEventPrivate::AT_LOGIN_TYPE         = QStringLiteral("LOGIN");
+const QString    KAEventPrivate::REMINDER_TYPE         = QStringLiteral("REMINDER");
+const QString    KAEventPrivate::TIME_DEFERRAL_TYPE    = QStringLiteral("DEFERRAL");
+const QString    KAEventPrivate::DATE_DEFERRAL_TYPE    = QStringLiteral("DATE_DEFERRAL");
+const QString    KAEventPrivate::DISPLAYING_TYPE       = QStringLiteral("DISPLAYING");   // used only in displaying calendar
+const QString    KAEventPrivate::PRE_ACTION_TYPE       = QStringLiteral("PRE");
+const QString    KAEventPrivate::POST_ACTION_TYPE      = QStringLiteral("POST");
+const QString    KAEventPrivate::SOUND_REPEAT_TYPE     = QStringLiteral("SOUNDREPEAT");
 const QByteArray KAEventPrivate::NEXT_REPEAT_PROPERTY("NEXTREPEAT");   // X-KDE-KALARM-NEXTREPEAT property
-const QString    KAEventPrivate::HIDDEN_REMINDER_FLAG = QStringLiteral("HIDE");
+const QString    KAEventPrivate::HIDDEN_REMINDER_FLAG  = QStringLiteral("HIDE");
 // - Display alarm properties
 const QByteArray KAEventPrivate::FONT_COLOUR_PROPERTY("FONTCOLOR");    // X-KDE-KALARM-FONTCOLOR property
 // - Email alarm properties
-const QString    KAEventPrivate::EMAIL_ID_FLAG        = QStringLiteral("EMAILID");
+const QString    KAEventPrivate::EMAIL_ID_FLAG         = QStringLiteral("EMAILID");
 // - Audio alarm properties
 const QByteArray KAEventPrivate::VOLUME_PROPERTY("VOLUME");            // X-KDE-KALARM-VOLUME property
-const QString    KAEventPrivate::SPEAK_FLAG           = QStringLiteral("SPEAK");
+const QString    KAEventPrivate::SPEAK_FLAG            = QStringLiteral("SPEAK");
 // - Command alarm properties
 const QString    KAEventPrivate::EXEC_ON_DEFERRAL_FLAG = QStringLiteral("EXECDEFER");
 const QString    KAEventPrivate::CANCEL_ON_ERROR_FLAG  = QStringLiteral("ERRCANCEL");
 const QString    KAEventPrivate::DONT_SHOW_ERROR_FLAG  = QStringLiteral("ERRNOSHOW");
 
 // Event status strings
-const QString    KAEventPrivate::DISABLED_STATUS            = QStringLiteral("DISABLED");
+const QString    KAEventPrivate::DISABLED_STATUS       = QStringLiteral("DISABLED");
 
 // Displaying event ID identifier
 const QString    KAEventPrivate::DISP_DEFER = QStringLiteral("DEFER");
@@ -453,12 +454,12 @@ const QString    KAEventPrivate::CMD_ERROR_POST_VALUE = QStringLiteral("POST");
 
 const QString    KAEventPrivate::SC = QStringLiteral(";");
 
-QFont                           KAEventPrivate::mDefaultFont;
-const KHolidays::HolidayRegion *KAEventPrivate::mHolidays = nullptr;
-QBitArray                       KAEventPrivate::mWorkDays(7);
-QTime                           KAEventPrivate::mWorkDayStart(9, 0, 0);
-QTime                           KAEventPrivate::mWorkDayEnd(17, 0, 0);
-int                             KAEventPrivate::mWorkTimeIndex = 1;
+QFont                               KAEventPrivate::mDefaultFont;
+QSharedPointer<const HolidayRegion> KAEventPrivate::mHolidays;
+QBitArray                           KAEventPrivate::mWorkDays(7);
+QTime                               KAEventPrivate::mWorkDayStart(9, 0, 0);
+QTime                               KAEventPrivate::mWorkDayEnd(17, 0, 0);
+int                                 KAEventPrivate::mWorkTimeIndex = 1;
 
 static void setProcedureAlarm(const Alarm::Ptr &, const QString &commandLine);
 static QString reminderToString(int minutes);
@@ -467,20 +468,6 @@ static QString reminderToString(int minutes);
 = Class KAEvent
 = Corresponds to a KCal::Event instance.
 =============================================================================*/
-
-inline void KAEventPrivate::set_deferral(DeferType type)
-{
-    if (type) {
-        if (mDeferral == NO_DEFERRAL) {
-            ++mAlarmCount;
-        }
-    } else {
-        if (mDeferral != NO_DEFERRAL) {
-            --mAlarmCount;
-        }
-    }
-    mDeferral = type;
-}
 
 inline void KAEventPrivate::activate_reminder(bool activate)
 {
@@ -518,7 +505,6 @@ KAEventPrivate::KAEventPrivate()
     mChangeCount(0),
     mTriggerChanged(false),
     mLateCancel(0),
-    mExcludeHolidays(nullptr),
     mWorkTimeOnly(0),
     mCategory(CalEvent::EMPTY),
     mCompatibility(KACalendar::Current),
@@ -630,6 +616,7 @@ void KAEventPrivate::copy(const KAEventPrivate &event)
     mRepeatSoundPause        = event.mRepeatSoundPause;
     mLateCancel              = event.mLateCancel;
     mExcludeHolidays         = event.mExcludeHolidays;
+    mExcludeHolidayRegion    = event.mExcludeHolidayRegion;
     mWorkTimeOnly            = event.mWorkTimeOnly;
     mActionSubType           = event.mActionSubType;
     mCategory                = event.mCategory;
@@ -671,7 +658,7 @@ void KAEvent::set(const Event::Ptr &e)
 }
 
 /******************************************************************************
-* Initialise the KAEventPrivate from a KCal::Event.
+* Initialise the KAEventPrivate from a KCalCore::Event.
 */
 void KAEventPrivate::set(const Event::Ptr &event)
 {
@@ -704,7 +691,7 @@ void KAEventPrivate::set(const Event::Ptr &event)
     mDeferDefaultMinutes    = 0;
     mLateCancel             = 0;
     mKMailSerialNumber      = 0;
-    mExcludeHolidays        = nullptr;
+    mExcludeHolidays        = false;
     mWorkTimeOnly           = 0;
     mChangeCount            = 0;
     mBgColour               = QColor(255, 255, 255);    // missing/invalid colour - return white background
@@ -764,7 +751,8 @@ void KAEventPrivate::set(const Event::Ptr &event)
         } else if (flag == KORGANIZER_FLAG) {
             mCopyToKOrganizer = true;
         } else if (flag == EXCLUDE_HOLIDAYS_FLAG) {
-            mExcludeHolidays = mHolidays;
+            mExcludeHolidays      = true;
+            mExcludeHolidayRegion = holidays();
         } else if (flag == WORK_TIME_ONLY_FLAG) {
             mWorkTimeOnly = 1;
         } else if (flag == KMAIL_SERNUM_FLAG) {
@@ -1148,7 +1136,7 @@ void KAEventPrivate::set(const KADateTime &dateTime, const QString &text, const 
     mPreAction.clear();
     mPostAction.clear();
     mText                   = (mActionSubType == KAEvent::COMMAND) ? text.trimmed()
-                              : (mActionSubType == KAEvent::AUDIO)   ? QString() : text;
+                            : (mActionSubType == KAEvent::AUDIO)   ? QString() : text;
     mCategory               = CalEvent::ACTIVE;
     mAudioFile              = (mActionSubType == KAEvent::AUDIO) ? text : QString();
     mSoundVolume            = -1;
@@ -1170,7 +1158,8 @@ void KAEventPrivate::set(const KADateTime &dateTime, const QString &text, const 
     mCommandXterm           = flags & KAEvent::EXEC_IN_XTERM;
     mCommandDisplay         = flags & KAEvent::DISPLAY_COMMAND;
     mCopyToKOrganizer       = flags & KAEvent::COPY_KORGANIZER;
-    mExcludeHolidays        = (flags & KAEvent::EXCL_HOLIDAYS) ? mHolidays : nullptr;
+    mExcludeHolidays        = flags & KAEvent::EXCL_HOLIDAYS;
+    mExcludeHolidayRegion   = holidays();
     mWorkTimeOnly           = flags & KAEvent::WORK_TIME_ONLY;
     mEmailBcc               = flags & KAEvent::EMAIL_BCC;
     mEnabled                = !(flags & KAEvent::DISABLED);
@@ -1180,7 +1169,7 @@ void KAEventPrivate::set(const KADateTime &dateTime, const QString &text, const 
     mRepeatSoundPause       = (flags & KAEvent::REPEAT_SOUND) ? 0 : -1;
     mSpeak                  = (flags & KAEvent::SPEAK) && action != KAEvent::AUDIO;
     mBeep                   = (flags & KAEvent::BEEP) && action != KAEvent::AUDIO && !mSpeak;
-    if (mRepeatAtLogin) {                     // do this after setting other flags
+    if (mRepeatAtLogin) {              // do this after setting other flags
         ++mAlarmCount;
         setRepeatAtLoginTrue(false);
     }
@@ -1223,8 +1212,8 @@ bool KAEventPrivate::updateKCalEvent(const Event::Ptr &ev, KAEvent::UidAction ui
     const bool archived = (mCategory == CalEvent::ARCHIVED);
 
     if (!ev
-            || (uidact == KAEvent::UID_CHECK  &&  !mEventID.isEmpty()  &&  mEventID != ev->uid())
-            || (!mAlarmCount  && (!archived || !mMainExpired))) {
+    ||  (uidact == KAEvent::UID_CHECK  &&  !mEventID.isEmpty()  &&  mEventID != ev->uid())
+    ||  (!mAlarmCount  && (!archived || !mMainExpired))) {
         return false;
     }
 
@@ -1563,7 +1552,7 @@ Alarm::Ptr KAEventPrivate::initKCalAlarm(const Event::Ptr &event, int startOffse
     case REMINDER_ALARM:
     case INVALID_ALARM: {
         if (types == QStringList(REMINDER_TYPE)
-                &&  mReminderMinutes < 0  &&  mReminderActive == HIDDEN_REMINDER) {
+        &&  mReminderMinutes < 0  &&  mReminderActive == HIDDEN_REMINDER) {
             // It's a reminder AFTER the alarm which is currently disabled
             // due to the main alarm being deferred past it.
             flags << HIDDEN_REMINDER_FLAG;
@@ -2143,7 +2132,7 @@ bool KAEvent::speak() const
 {
     return (d->mActionSubType == MESSAGE
             || (d->mActionSubType == COMMAND && d->mCommandDisplay))
-           &&  d->mSpeak;
+       &&  d->mSpeak;
 }
 
 /******************************************************************************
@@ -2248,7 +2237,7 @@ void KAEventPrivate::activateReminderAfter(const DateTime &mainAlarmTime)
         //???? For some unknown reason, addSecs(-1) returns the recurrence after the next,
         //???? so addSecs(-60) is used instead.
         if (nextRecurrence(mainAlarmTime.addSecs(-60).effectiveKDateTime(), next) == KAEvent::NO_OCCURRENCE
-                ||  mainAlarmTime != next) {
+        ||  mainAlarmTime != next) {
             return;
         }
     } else if (!mRepeatAtLogin) {
@@ -2261,7 +2250,7 @@ void KAEventPrivate::activateReminderAfter(const DateTime &mainAlarmTime)
     const DateTime reminderTime = mainAlarmTime.addMins(-mReminderMinutes);
     DateTime next;
     if (nextOccurrence(mainAlarmTime.effectiveKDateTime(), next, KAEvent::RETURN_REPETITION) != KAEvent::NO_OCCURRENCE
-            &&  reminderTime >= next) {
+    &&  reminderTime >= next) {
         return;    // the reminder time is after the next occurrence of the main alarm
     }
 
@@ -2466,7 +2455,7 @@ DateTime KAEventPrivate::deferralLimit(KAEvent::DeferLimitType *limitType) const
         } else if (type == KAEvent::NO_OCCURRENCE) {
             ltype = KAEvent::LIMIT_NONE;
         } else if (mReminderActive == ACTIVE_REMINDER  &&  mReminderMinutes > 0
-                   && (now < (reminderTime = endTime.addMins(-mReminderMinutes)))) {
+               &&  (now < (reminderTime = endTime.addMins(-mReminderMinutes)))) {
             endTime = reminderTime;
             ltype = KAEvent::LIMIT_REMINDER;
         } else {
@@ -2480,7 +2469,7 @@ DateTime KAEventPrivate::deferralLimit(KAEvent::DeferLimitType *limitType) const
             ltype = KAEvent::LIMIT_MAIN;
         }
     } else if (mReminderMinutes > 0
-               &&  KADateTime::currentUtcDateTime() < mNextMainDateTime.effectiveKDateTime()) {
+           &&  KADateTime::currentUtcDateTime() < mNextMainDateTime.effectiveKDateTime()) {
         // It's a reminder BEFORE the main alarm.
         // Don't allow it to be deferred past its main alarm time.
         endTime = mNextMainDateTime;
@@ -2626,7 +2615,8 @@ bool KAEvent::repeatAtLogin(bool includeArchived) const
 
 void KAEvent::setExcludeHolidays(bool ex)
 {
-    d->mExcludeHolidays = ex ? KAEventPrivate::mHolidays : nullptr;
+    d->mExcludeHolidays      = ex;
+    d->mExcludeHolidayRegion = KAEventPrivate::holidays();
     // Option only affects recurring alarms
     d->mTriggerChanged = (d->checkRecur() != KARecurrence::NO_RECUR);
 }
@@ -2645,7 +2635,7 @@ bool KAEvent::holidaysExcluded() const
 */
 void KAEvent::setHolidays(const HolidayRegion &h)
 {
-    KAEventPrivate::mHolidays = &h;
+    KAEventPrivate::mHolidays.reset(new HolidayRegion(h.regionCode()));
 }
 
 void KAEvent::setWorkTimeOnly(bool wto)
@@ -2672,14 +2662,14 @@ bool KAEvent::isWorkingTime(const KADateTime &dt) const
 bool KAEventPrivate::isWorkingTime(const KADateTime &dt) const
 {
     if ((mWorkTimeOnly  &&  !mWorkDays.testBit(dt.date().dayOfWeek() - 1))
-            || (mExcludeHolidays  &&  mHolidays  &&  mHolidays->isHoliday(dt.date()))) {
+    ||  (mExcludeHolidays  &&  holidays()->isHoliday(dt.date()))) {
         return false;
     }
     if (!mWorkTimeOnly) {
         return true;
     }
     return dt.isDateOnly()
-           || (dt.time() >= mWorkDayStart  &&  dt.time() < mWorkDayEnd);
+        || (dt.time() >= mWorkDayStart  &&  dt.time() < mWorkDayEnd);
 }
 
 /******************************************************************************
@@ -3407,11 +3397,11 @@ bool KAEventPrivate::setDisplaying(const KAEventPrivate &event, KAAlarm::Type al
                                    const KADateTime &repeatAtLoginTime, bool showEdit, bool showDefer)
 {
     if (!mDisplaying
-            && (alarmType == KAAlarm::MAIN_ALARM
-                || alarmType == KAAlarm::REMINDER_ALARM
-                || alarmType == KAAlarm::DEFERRED_REMINDER_ALARM
-                || alarmType == KAAlarm::DEFERRED_ALARM
-                || alarmType == KAAlarm::AT_LOGIN_ALARM)) {
+    &&  (alarmType == KAAlarm::MAIN_ALARM
+         || alarmType == KAAlarm::REMINDER_ALARM
+         || alarmType == KAAlarm::DEFERRED_REMINDER_ALARM
+         || alarmType == KAAlarm::DEFERRED_ALARM
+         || alarmType == KAAlarm::AT_LOGIN_ALARM)) {
 //qCDebug(KALARMCAL_LOG)<<event.id()<<","<<(alarmType==KAAlarm::MAIN_ALARM?"MAIN":alarmType==KAAlarm::REMINDER_ALARM?"REMINDER":alarmType==KAAlarm::DEFERRED_REMINDER_ALARM?"REMINDER_DEFERRAL":alarmType==KAAlarm::DEFERRED_ALARM?"DEFERRAL":"LOGIN")<<"): time="<<repeatAtLoginTime.toString();
         KAAlarm al = event.alarm(alarmType);
         if (al.isValid()) {
@@ -3818,7 +3808,7 @@ void KAEventPrivate::dumpDebug() const
     }
     qCDebug(KALARMCAL_LOG) << "-- mKMailSerialNumber:" << mKMailSerialNumber;
     qCDebug(KALARMCAL_LOG) << "-- mCopyToKOrganizer:" << mCopyToKOrganizer;
-    qCDebug(KALARMCAL_LOG) << "-- mExcludeHolidays:" << (bool)mExcludeHolidays;
+    qCDebug(KALARMCAL_LOG) << "-- mExcludeHolidays:" << mExcludeHolidays;
     qCDebug(KALARMCAL_LOG) << "-- mWorkTimeOnly:" << mWorkTimeOnly;
     qCDebug(KALARMCAL_LOG) << "-- mStartDateTime:" << mStartDateTime.toString();
 //     qCDebug(KALARMCAL_LOG) << "-- mCreatedDateTime:" << mCreatedDateTime;
@@ -4086,11 +4076,11 @@ void KAEventPrivate::readAlarm(const Alarm::Ptr &alarm, AlarmData &data, bool au
         return;
     }
 
-    bool atLogin          = false;
-    bool reminder         = false;
-    bool deferral         = false;
-    bool dateDeferral     = false;
-    bool repeatSound      = false;
+    bool atLogin      = false;
+    bool reminder     = false;
+    bool deferral     = false;
+    bool dateDeferral = false;
+    bool repeatSound  = false;
     data.type = MAIN_ALARM;
     property = alarm->customProperty(KACalendar::APPNAME, KAEventPrivate::TYPE_PROPERTY);
     const QStringList types = property.split(QLatin1Char(','), QString::SkipEmptyParts);
@@ -4159,6 +4149,27 @@ void KAEventPrivate::readAlarm(const Alarm::Ptr &alarm, AlarmData &data, bool au
 //qCDebug(KALARMCAL_LOG)<<"text="<<alarm->text()<<", time="<<alarm->time().toString()<<", valid time="<<alarm->time().isValid();
 }
 
+QSharedPointer<const HolidayRegion> KAEventPrivate::holidays()
+{
+    if (!mHolidays)
+        mHolidays.reset(new HolidayRegion());
+    return mHolidays;
+}
+
+inline void KAEventPrivate::set_deferral(DeferType type)
+{
+    if (type) {
+        if (mDeferral == NO_DEFERRAL) {
+            ++mAlarmCount;
+        }
+    } else {
+        if (mDeferral != NO_DEFERRAL) {
+            --mAlarmCount;
+        }
+    }
+    mDeferral = type;
+}
+
 /******************************************************************************
 * Calculate the next trigger times of the alarm.
 * This should only be called when changes have actually occurred which might
@@ -4178,9 +4189,10 @@ void KAEventPrivate::calcTriggerTimes() const
 #ifdef __GNUC__
 #warning May need to set date-only alarms to after start-of-day time in working-time checks
 #endif
+    holidays();   // initialise mHolidays if necessary
     bool recurs = (checkRecur() != KARecurrence::NO_RECUR);
     if ((recurs  &&  mWorkTimeOnly  &&  mWorkTimeOnly != mWorkTimeIndex)
-            || (recurs  &&  mExcludeHolidays  &&  mExcludeHolidays != mHolidays)) {
+    ||  (recurs  &&  mExcludeHolidays  &&  mExcludeHolidayRegion->regionCode() != mHolidays->regionCode())) {
         // It's a work time alarm, and work days/times have changed, or
         // it excludes holidays, and the holidays definition has changed.
         mTriggerChanged = true;
@@ -4192,8 +4204,9 @@ void KAEventPrivate::calcTriggerTimes() const
         mWorkTimeOnly = mWorkTimeIndex;    // note which work time definition was used in calculation
     }
     if (recurs  &&  mExcludeHolidays) {
-        mExcludeHolidays = mHolidays;    // note which holiday definition was used in calculation
+        mExcludeHolidayRegion = mHolidays;    // note which holiday definition was used in calculation
     }
+    bool excludeHolidays = mExcludeHolidays && mExcludeHolidayRegion->isValid();
 
     if (mCategory == CalEvent::ARCHIVED  ||  mCategory == CalEvent::TEMPLATE) {
         // It's a template or archived
@@ -4210,22 +4223,22 @@ void KAEventPrivate::calcTriggerTimes() const
         // It's not deferred.
         // If only-during-working-time is set and it recurs, it won't actually trigger
         // unless it falls during working hours.
-        if ((!mWorkTimeOnly && !mExcludeHolidays)
-                ||  !recurs
-                ||  isWorkingTime(mMainTrigger.kDateTime())) {
+        if ((!mWorkTimeOnly && !excludeHolidays)
+        ||  !recurs
+        ||  isWorkingTime(mMainTrigger.kDateTime())) {
             // It only occurs once, or it complies with any working hours/holiday
             // restrictions.
             mMainWorkTrigger = mMainTrigger;
-            mAllWorkTrigger = mAllTrigger;
+            mAllWorkTrigger  = mAllTrigger;
         } else if (mWorkTimeOnly) {
             // The alarm is restricted to working hours.
             // Finding the next occurrence during working hours can sometimes take a long time,
             // so mark the next actual trigger as invalid until the calculation completes.
             // Note that reminders are only triggered if the main alarm is during working time.
-            if (!mExcludeHolidays) {
+            if (!excludeHolidays) {
                 // There are no holiday restrictions.
                 calcNextWorkingTime(mMainTrigger);
-            } else if (mHolidays) {
+            } else if (mHolidays->isValid()) {
                 // Holidays are excluded.
                 DateTime nextTrigger = mMainTrigger;
                 KADateTime kdt;
@@ -4249,7 +4262,7 @@ void KAEventPrivate::calcTriggerTimes() const
                 }
                 mMainWorkTrigger = mAllWorkTrigger = DateTime();
             }
-        } else if (mExcludeHolidays  &&  mHolidays) {
+        } else if (excludeHolidays  &&  mHolidays->isValid()) {
             // Holidays are excluded.
             DateTime nextTrigger = mMainTrigger;
             KADateTime kdt;
@@ -4326,7 +4339,7 @@ void KAEventPrivate::calcNextWorkingTime(const DateTime &nextTrigger) const
         const bool weeklyRepeat = mRepetition && !(repeatFreq % 7);
         const Duration interval = mRecurrence->regularInterval();
         if ((!interval.isNull()  &&  !(interval.asDays() % 7))
-                ||  nDayPos == 1) {
+        ||  nDayPos == 1) {
             // It recurs on the same day each week
             if (!mRepetition || weeklyRepeat) {
                 return;    // any repetitions are also weekly
@@ -4777,7 +4790,7 @@ int KAEventPrivate::nextWorkRepetition(const KADateTime &pre) const
 bool KAEventPrivate::mayOccurDailyDuringWork(const KADateTime &kdt) const
 {
     if (!kdt.isDateOnly()
-            && (kdt.time() < mWorkDayStart || kdt.time() >= mWorkDayEnd)) {
+    &&  (kdt.time() < mWorkDayStart || kdt.time() >= mWorkDayEnd)) {
         return false;    // its time is outside working hours
     }
     // Check if it always occurs on the same day of the week
@@ -5265,7 +5278,7 @@ bool KAEvent::convertKCalEvents(const Calendar::Ptr &calendar, int calendarVersi
         event->setCategories(cats);
 
         if ((pre_1_4_14  || (pre_1_9_7 && !pre_1_9_0))
-                &&  event->recurrence()  &&  event->recurrence()->recurs()) {
+        &&  event->recurrence()  &&  event->recurrence()->recurs()) {
             /*
              * It's a KAlarm pre-1.4.14 or KAlarm 1.9 series pre-1.9.7 calendar file.
              * For recurring events, convert the main alarm offset to an absolute
@@ -5300,10 +5313,10 @@ bool KAEvent::convertKCalEvents(const Calendar::Ptr &calendar, int calendarVersi
                 for (int t = 0;  t < types.count();  ++t) {
                     QString type = types[t];
                     if (type == KAEventPrivate::AT_LOGIN_TYPE
-                            ||  type == KAEventPrivate::TIME_DEFERRAL_TYPE
-                            ||  type == KAEventPrivate::DATE_DEFERRAL_TYPE
-                            ||  type == KAEventPrivate::REMINDER_TYPE
-                            ||  type == REMINDER_ONCE_TYPE) {
+                    ||  type == KAEventPrivate::TIME_DEFERRAL_TYPE
+                    ||  type == KAEventPrivate::DATE_DEFERRAL_TYPE
+                    ||  type == KAEventPrivate::REMINDER_TYPE
+                    ||  type == REMINDER_ONCE_TYPE) {
                         mainAlarm = false;
                         break;
                     }
@@ -5349,7 +5362,7 @@ bool KAEvent::convertKCalEvents(const Calendar::Ptr &calendar, int calendarVersi
                     for (int t = 0;  t < types.count();  ++t) {
                         const QString type = types[t];
                         if (type == KAEventPrivate::TIME_DEFERRAL_TYPE
-                                ||  type == KAEventPrivate::DATE_DEFERRAL_TYPE) {
+                        ||  type == KAEventPrivate::DATE_DEFERRAL_TYPE) {
                             alarm->setStartOffset(alarm->startOffset().asSeconds() - adjustment);
                             converted = true;
                             break;
@@ -5536,7 +5549,7 @@ bool KAEventPrivate::convertStartOfDay(const Event::Ptr &event)
                     deferralOffset = data.alarm->startOffset().asSeconds();
                     const_cast<Alarm *>(data.alarm.data())->setStartOffset(deferralOffset - adjustment);
                 } else if (data.type == AUDIO_ALARM
-                           &&  data.alarm->startOffset().asSeconds() == deferralOffset) {
+                       &&  data.alarm->startOffset().asSeconds() == deferralOffset) {
                     // Audio alarm is set for the same time as the above deferral alarm
                     const_cast<Alarm *>(data.alarm.data())->setStartOffset(deferralOffset - adjustment);
                 }
@@ -5567,8 +5580,8 @@ bool KAEventPrivate::convertStartOfDay(const Event::Ptr &event)
                 foundDeferral = true;
                 changed = true;
             } else if (foundDeferral
-                       &&  data.type == AUDIO_ALARM
-                       &&  data.alarm->startOffset().asSeconds() == deferralOffset) {
+                   &&  data.type == AUDIO_ALARM
+                   &&  data.alarm->startOffset().asSeconds() == deferralOffset) {
                 // Audio alarm is set for the same time as the above deferral alarm
                 const_cast<Alarm *>(data.alarm.data())->setStartOffset(newDeferralOffset);
                 changed = true;

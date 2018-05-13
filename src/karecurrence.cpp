@@ -136,7 +136,7 @@ KARecurrence &KARecurrence::operator=(const KARecurrence &r)
 bool KARecurrence::operator==(const KARecurrence &r) const
 {
     return d->mRecurrence == r.d->mRecurrence
-           &&  d->mFeb29Type == r.d->mFeb29Type;
+       &&  d->mFeb29Type == r.d->mFeb29Type;
 }
 
 KARecurrence::Feb29Type KARecurrence::feb29Type() const
@@ -258,10 +258,10 @@ bool KARecurrence::Private::init(RecurrenceRule::PeriodType recurType, int freq,
     }
     KADateTime startdt = start;
     if (recurType == RecurrenceRule::rYearly
-            && (feb29Type == Feb29_Feb28  ||  feb29Type == Feb29_Mar1)) {
+    && (feb29Type == Feb29_Feb28  ||  feb29Type == Feb29_Mar1)) {
         int year = startdt.date().year();
         if (!QDate::isLeapYear(year)
-                &&  startdt.date().dayOfYear() == (feb29Type == Feb29_Mar1 ? 60 : 59)) {
+        &&  startdt.date().dayOfYear() == (feb29Type == Feb29_Mar1 ? 60 : 59)) {
             /* The event start date is February 28th or March 1st, but it
              * is a recurrence on February 29th (recurring on February 28th
              * or March 1st in non-leap years). Adjust the start date to
@@ -361,8 +361,8 @@ void KARecurrence::Private::fix()
                 // This is the second rule.
                 // Ensure that it can be combined with the first one.
                 if (days[0] != 29
-                        ||  rrule->frequency() != rrules[0]->frequency()
-                        ||  rrule->startDt()   != rrules[0]->startDt()) {
+                ||  rrule->frequency() != rrules[0]->frequency()
+                ||  rrule->startDt()   != rrules[0]->startDt()) {
                     break;
                 }
             }
@@ -383,8 +383,8 @@ void KARecurrence::Private::fix()
                     // This is the second rule.
                     // Ensure that it can be combined with the first one.
                     if (day == days[0]  || (day == -1 && days[0] == 60)
-                            ||  rrule->frequency() != rrules[0]->frequency()
-                            ||  rrule->startDt()   != rrules[0]->startDt()) {
+                    ||  rrule->frequency() != rrules[0]->frequency()
+                    ||  rrule->startDt()   != rrules[0]->startDt()) {
                         break;
                     }
                 }
@@ -960,7 +960,7 @@ int KARecurrence::Private::combineDurations(const RecurrenceRule *rrule1, const 
     const RecurrenceRule *rr1;    // earlier end date
     const RecurrenceRule *rr2;    // later end date
     if (end2.isValid()
-            && (!end1.isValid()  ||  end1.date() > end2.date())) {
+    &&  (!end1.isValid()  ||  end1.date() > end2.date())) {
         // Swap the two rules to make rr1 have the earlier end date
         rr1 = rrule2;
         rr2 = rrule1;
@@ -1298,14 +1298,14 @@ KARecurrence::Type KARecurrence::type(const RecurrenceRule *rrule)
 bool KARecurrence::dailyType(const RecurrenceRule *rrule)
 {
     if (rrule->recurrenceType() != RecurrenceRule::rDaily
-            ||  !rrule->bySeconds().isEmpty()
-            ||  !rrule->byMinutes().isEmpty()
-            ||  !rrule->byHours().isEmpty()
-            ||  !rrule->byWeekNumbers().isEmpty()
-            ||  !rrule->byMonthDays().isEmpty()
-            ||  !rrule->byMonths().isEmpty()
-            ||  !rrule->bySetPos().isEmpty()
-            ||  !rrule->byYearDays().isEmpty()) {
+    ||  !rrule->bySeconds().isEmpty()
+    ||  !rrule->byMinutes().isEmpty()
+    ||  !rrule->byHours().isEmpty()
+    ||  !rrule->byWeekNumbers().isEmpty()
+    ||  !rrule->byMonthDays().isEmpty()
+    ||  !rrule->byMonths().isEmpty()
+    ||  !rrule->bySetPos().isEmpty()
+    ||  !rrule->byYearDays().isEmpty()) {
         return false;
     }
     const QList<RecurrenceRule::WDayPos> days = rrule->byDays();

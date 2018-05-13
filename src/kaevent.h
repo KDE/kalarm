@@ -216,7 +216,8 @@ public:
         EXEC_IN_XTERM   = 0x800,   //!< execute the command in a terminal window
         SPEAK           = 0x1000,  //!< speak the message when the alarm is displayed
         COPY_KORGANIZER = 0x2000,  //!< KOrganizer should hold a copy of the event
-        EXCL_HOLIDAYS   = 0x4000,  //!< don't trigger the alarm on holidays
+        EXCL_HOLIDAYS   = 0x4000,  //!< don't trigger the alarm on holidays. Only valid
+                                   //!< if a holiday region has been set by setHolidays().
         WORK_TIME_ONLY  = 0x8000,  //!< trigger the alarm only during working hours
         DISPLAY_COMMAND = 0x10000, //!< display command output in the alarm window
         REMINDER_ONCE   = 0x20000  //!< only trigger the reminder on the first recurrence

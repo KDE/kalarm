@@ -1670,6 +1670,8 @@ QString KADateTime::toString(const QString &format) const
                         case LocalZone:
                             tz = QTimeZone::systemTimeZone();
                             break;
+                        default:
+                            break;
                     }
                     // fall through to OffsetFromUTC
                 case OffsetFromUTC: {

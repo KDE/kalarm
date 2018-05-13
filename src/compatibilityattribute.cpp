@@ -124,7 +124,7 @@ void CompatibilityAttribute::deserialize(const QByteArray &data)
         // 0: calendar format compatibility
         const int c = items[index++].toInt(&ok);
         const KACalendar::Compat AllCompat(KACalendar::Current | KACalendar::Converted | KACalendar::Convertible | KACalendar::Incompatible | KACalendar::Unknown);
-        if (!ok  || (c & AllCompat) != c) {
+        if (!ok  || (c & static_cast<int>(AllCompat)) != c) {
             qCritical() << "Invalid compatibility:" << c;
             return;
         }
