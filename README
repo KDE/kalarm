@@ -53,6 +53,11 @@ PARTICULAR PURPOSE.
 See the COPYING file for more details.
 
 
+DESIGN
+
+See DESIGN.html in kalarmcal for details of the alarm storage format.
+
+
 BUGS:
 
 Bugs can be reported to the KDE bug tracking system (http://bugs.kde.org).
