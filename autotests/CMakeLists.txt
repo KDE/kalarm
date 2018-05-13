@@ -3,11 +3,19 @@ include(ECMMarkAsTest)
 find_package(Qt5DBus CONFIG REQUIRED)
 find_package(Qt5Test CONFIG REQUIRED)
 
-########### next target ###############
+macro(macro_unit_tests)
+  foreach(_testname ${ARGN})
+    add_executable(${_testname} ${_testname}.cpp)
+    add_test(NAME ${_testname} COMMAND ${_testname})
+    ecm_mark_as_test(${_testname})
+    target_link_libraries(${_testname}
+        KF5AlarmCalendar
+        Qt5::DBus
+        Qt5::Test)
+  endforeach()
+endmacro()
 
-set(kadatetimetest_SRCS kadatetimetest.cpp)
-
-add_executable(kadatetimetest ${kadatetimetest_SRCS})
-add_test(kadatetimetest kadatetimetest)
-ecm_mark_as_test(kadatetimetest)
-target_link_libraries(kadatetimetest KF5::AlarmCalendar Qt5::DBus Qt5::Test)
+macro_unit_tests(
+    kadatetimetest
+    kaeventtest
+)
