@@ -219,7 +219,7 @@ public:
 #endif
     static bool        convertRepetition(const KCalCore::Event::Ptr &);
     static bool        convertStartOfDay(const KCalCore::Event::Ptr &);
-    static DateTime    readDateTime(const KCalCore::Event::Ptr &, bool dateOnly, DateTime &start);
+    static DateTime    readDateTime(const KCalCore::Event::Ptr &, bool localZone, bool dateOnly, DateTime &start);
     static void        readAlarms(const KCalCore::Event::Ptr &, AlarmMap *, bool cmdDisplay = false);
     static void        readAlarm(const KCalCore::Alarm::Ptr &, AlarmData &, bool audioMain, bool cmdDisplay = false);
 private:
@@ -325,6 +325,7 @@ public:
 public:
     static const QByteArray FLAGS_PROPERTY;
     static const QString DATE_ONLY_FLAG;
+    static const QString LOCAL_ZONE_FLAG;
     static const QString EMAIL_BCC_FLAG;
     static const QString CONFIRM_ACK_FLAG;
     static const QString KORGANIZER_FLAG;
@@ -393,6 +394,7 @@ int        KAEvent::currentCalendarVersion()
 // Event properties
 const QByteArray KAEventPrivate::FLAGS_PROPERTY("FLAGS");              // X-KDE-KALARM-FLAGS property
 const QString    KAEventPrivate::DATE_ONLY_FLAG        = QStringLiteral("DATE");
+const QString    KAEventPrivate::LOCAL_ZONE_FLAG       = QStringLiteral("LOCAL");
 const QString    KAEventPrivate::EMAIL_BCC_FLAG        = QStringLiteral("BCC");
 const QString    KAEventPrivate::CONFIRM_ACK_FLAG      = QStringLiteral("ACKCONF");
 const QString    KAEventPrivate::KORGANIZER_FLAG       = QStringLiteral("KORG");
@@ -746,12 +748,15 @@ void KAEventPrivate::set(const Event::Ptr &event)
     }
 
     bool dateOnly = false;
+    bool localZone = false;
     QStringList flags = event->customProperty(KACalendar::APPNAME, FLAGS_PROPERTY).split(SC, QString::SkipEmptyParts);
     flags << QString() << QString();    // to avoid having to check for end of list
     for (int i = 0, end = flags.count() - 1;  i < end;  ++i) {
         QString flag = flags.at(i);
         if (flag == DATE_ONLY_FLAG) {
             dateOnly = true;
+        } else if (flag == LOCAL_ZONE_FLAG) {
+            localZone = true;
         } else if (flag == CONFIRM_ACK_FLAG) {
             mConfirmAck = true;
         } else if (flag == EMAIL_BCC_FLAG) {
@@ -853,7 +858,7 @@ void KAEventPrivate::set(const Event::Ptr &event)
             }
         }
     }
-    mNextMainDateTime = readDateTime(event, dateOnly, mStartDateTime);
+    mNextMainDateTime = readDateTime(event, localZone, dateOnly, mStartDateTime);
     mCreatedDateTime = KADateTime(event->created());
     if (dateOnly  &&  !mRepetition.isDaily()) {
         mRepetition.set(Duration(mRepetition.intervalDays(), Duration::Days));
@@ -1257,6 +1262,9 @@ bool KAEventPrivate::updateKCalEvent(const Event::Ptr &ev, KAEvent::UidAction ui
     QStringList flags;
     if (mStartDateTime.isDateOnly()) {
         flags += DATE_ONLY_FLAG;
+    }
+    if (mStartDateTime.timeType() == KADateTime::LocalZone) {
+        flags += LOCAL_ZONE_FLAG;
     }
     if (mConfirmAck) {
         flags += CONFIRM_ACK_FLAG;
@@ -1828,10 +1836,10 @@ bool KAEvent::setItemPayload(Akonadi::Item &item, const QStringList &collectionM
 {
     QString mimetype;
     switch (d->mCategory) {
-    case CalEvent::ACTIVE:      mimetype = MIME_ACTIVE;    break;
-    case CalEvent::ARCHIVED:    mimetype = MIME_ARCHIVED;  break;
-    case CalEvent::TEMPLATE:    mimetype = MIME_TEMPLATE;  break;
-    default:                            Q_ASSERT(0);  return false;
+    case CalEvent::ACTIVE:    mimetype = MIME_ACTIVE;    break;
+    case CalEvent::ARCHIVED:  mimetype = MIME_ARCHIVED;  break;
+    case CalEvent::TEMPLATE:  mimetype = MIME_TEMPLATE;  break;
+    default:                  Q_ASSERT(0);  return false;
     }
     if (!collectionMimeTypes.contains(mimetype)) {
         return false;
@@ -3863,13 +3871,19 @@ void KAEventPrivate::dumpDebug() const
 * Fetch the start and next date/time for a KCal::Event.
 * Reply = next main date/time.
 */
-DateTime KAEventPrivate::readDateTime(const Event::Ptr &event, bool dateOnly, DateTime &start)
+DateTime KAEventPrivate::readDateTime(const Event::Ptr &event, bool localZone, bool dateOnly, DateTime &start)
 {
     start = DateTime(event->dtStart());
     if (dateOnly) {
         // A date-only event is indicated by the X-KDE-KALARM-FLAGS:DATE property, not
         // by a date-only start date/time (for the reasons given in updateKCalEvent()).
         start.setDateOnly(true);
+    }
+    if (localZone) {
+        // The local system time zone is indicated by the X-KDE-KALARM-FLAGS:LOCAL
+        // property, because QDateTime values with time spec Qt::LocalTime are not
+        // stored correctly in the calendar file.
+        start.setTimeSpec(KADateTime::LocalZone);
     }
     DateTime next = start;
     const int SZ_YEAR  = 4;                           // number of digits in year value
@@ -5476,7 +5490,7 @@ bool KAEvent::convertKCalEvents(const Calendar::Ptr &calendar, int calendarVersi
                 if (!flagsValid) {
                     flags = event->customProperty(KACalendar::APPNAME, KAEventPrivate::FLAGS_PROPERTY).split(KAEventPrivate::SC, QString::SkipEmptyParts);
                 }
-                if (flags.indexOf(KAEventPrivate::REMINDER_TYPE) < 0) {
+                if (!flags.contains(KAEventPrivate::REMINDER_TYPE)) {
                     flags += KAEventPrivate::REMINDER_TYPE;
                     if (reminderOnce) {
                         flags += KAEventPrivate::REMINDER_ONCE_FLAG;
@@ -5503,7 +5517,7 @@ bool KAEventPrivate::convertStartOfDay(const Event::Ptr &event)
     bool changed = false;
     const QTime midnight(0, 0);
     const QStringList flags = event->customProperty(KACalendar::APPNAME, KAEventPrivate::FLAGS_PROPERTY).split(KAEventPrivate::SC, QString::SkipEmptyParts);
-    if (flags.indexOf(KAEventPrivate::DATE_ONLY_FLAG) >= 0) {
+    if (flags.contains(KAEventPrivate::DATE_ONLY_FLAG)) {
         // It's an untimed event, so fix it
         const QDateTime oldDt = event->dtStart();
         const int adjustment = oldDt.time().secsTo(midnight);
@@ -5535,7 +5549,7 @@ bool KAEventPrivate::convertStartOfDay(const Event::Ptr &event)
         int deferralOffset = 0;
         int newDeferralOffset = 0;
         DateTime start;
-        const KADateTime nextMainDateTime = readDateTime(event, false, start).kDateTime();
+        const KADateTime nextMainDateTime = readDateTime(event, false, false, start).kDateTime();
         AlarmMap alarmMap;
         readAlarms(event, &alarmMap);
         for (AlarmMap::ConstIterator it = alarmMap.constBegin();  it != alarmMap.constEnd();  ++it) {

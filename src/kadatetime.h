@@ -825,8 +825,8 @@ public:
      * Changes the time specification of the instance.
      *
      * Any previous time zone is forgotten. The stored date/time component of
-     * the instance is left unchanged (except that its UTC/local time setting
-     * is set to correspond with @p spec). Usually this method will change the
+     * the instance is left unchanged (except that its Qt::TimeSpec setting is
+     * set to correspond with @p spec). Usually this method will change the
      * absolute time which this instance represents.
      *
      * @param spec new time specification

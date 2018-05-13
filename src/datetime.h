@@ -139,7 +139,9 @@ public:
     /** Returns the time specification of the value. */
     KADateTime::Spec timeSpec() const;
 
-    /** Changes the time specification of the value. */
+    /** Changes the time specification of the value.
+     *  This will usually change the absolute time which this instance represents.
+     */
     void setTimeSpec(const KADateTime::Spec &spec);
 
     /** Returns the time specification type of the date/time, i.e. whether it is

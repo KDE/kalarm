@@ -54,7 +54,7 @@ KAlarm uses the iCalendar format defined in RFC2445.
 <tr><td>At-login alarm</td><td><em>any</em></td><td>If the event is configured to trigger each time KAlarm starts up (normally at each login), this alarm has a trigger time in the past, which ensures that it always triggers at startup.</td></tr>
 <tr><td>Reminder alarm</td><td><tt>DISPLAY</tt></td><td>If a reminder is configured, and it is due before the next or only recurrence of the main alarm, this alarm triggers the reminder.</td></tr>
 <tr><td>Deferral alarm</td><td><tt>DISPLAY</tt></td><td>If the user has deferred an alarm (either the main alarm or a reminder), this alarm triggers at the deferral time.</td></tr>
-<tr><td>Audio alarm</td><td><tt>AUDIO</tt></td><td>If it is a display event, and any type of sound is configured (beep, speaking or audio file), this alarm is set to trigger at the same time as the next due alarm (main, at-login, reminder, or deferral).</td></tr>
+<tr><td>Audio alarm</td><td><tt>AUDIO</tt></td><td>If it is a display event, and any type of sound is configured (beep, speaking or audio file), this alarm is set to trigger at the same time as the next due alarm (main, at-login, reminder, or deferral).<br>Special values of <tt>REPEAT</tt> may be used to specify that an audio file should be played repeatedly in a loop until the user clicks 'stop': see <a href="#audioloop">Audio file loop</a> below.
 <tr><td>Pre-alarm action alarm</td><td><tt>PROCEDURE</tt></td><td>If a pre-alarm action is configured, this alarm is set to trigger at the same time as the next due alarm.</td></tr>
 <tr><td>Post&#8209;alarm&nbsp;action&nbsp;alarm</td><td><tt>PROCEDURE</tt></td><td>If a post-alarm action is configured, this alarm is set to trigger at the same time as the next due alarm.</td></tr>
 <tr><td>Displaying alarm</td><td><tt>DISPLAY</tt></td><td>If an alarm is currently being displayed, this alarm held in the displaying calendar contains a copy of the main alarm, plus other information necessary to redisplay the alarm window after a logout or crash.</td></tr>
@@ -75,7 +75,7 @@ Compliant with the iCalendar specification, KAlarm defines a number of custom fi
 
     <tr><th align=left>Property&nbsp;&nbsp;&nbsp;&nbsp;</th><th>Parameter</th><th align=left>Description</th></tr>
     <tr><td colspan=2><tt>X-KDE-KALARM-VERSION</tt></td><td>Mandatory. The single parameter contains the KAlarm calendar format version used to write this calendar. Note that this version may be older than the actual KAlarm application version; the calendar format version is only updated when the calendar format changes.</td></tr>
-    <tr><td></td><td><em>version</em><tt></td><td>KAlarm calendar format version, in the format <em>n</em><tt>.</tt><em>n</em><tt>.</tt><em>n</em> . E.g. <tt class=eg>2.3.10</tt></td></tr>
+    <tr><td></td><td><tt><em>version</em></td><td>KAlarm calendar format version, in the format <tt><em>n</em>.<em>n</em>.<em>n</em></tt> . E.g. <tt class=eg>2.3.10</tt></td></tr>
 
 <tr><td colspan=3 class=titlerow>Event-level custom properties</td></tr>
 <tr><td colspan=3>The following custom properties are used within a <tt>VEVENT</tt> element.</td></tr>
@@ -90,6 +90,7 @@ Compliant with the iCalendar specification, KAlarm defines a number of custom fi
         <tr><td class=cont><tt>EDIT</tt></td><td class=cont>For an event in the displaying calendar, indicates that the Edit button should be shown in the alarm window. Optional.</td></tr>
 	</table></td></tr>
     <tr><td colspan=2><tt>X-KDE-KALARM-FLAGS</tt></td><td>Multiple parameters specify various properties of the event</td></tr>
+    <tr><td></td><td><tt>LOCAL</tt></td><td>The event time is specified using the local system time zone, and any <tt>TZID</tt> specifier in <tt>DTSTART</tt> is to be ignored. Note that this is used because the PIM libraries set the current local time zone as the <tt>TZID</tt> value when storing local times in the calendar.</td></tr>
     <tr><td></td><td><tt>DATE</tt></td><td>The event time is date-only, i.e. its time is ignored and it triggers at the first opportunity on the specified date (after the start-of-day time configured by the user). Note that this is used instead of specifying a start date (<tt>DTSTART</tt>) without a time.</td></tr>
     <tr><td class=cont></td><td class=cont><tt>ACKCONF</tt></td><td class=cont>For a display alarm, when the user acknowledges the alarm (i.e. closes the alarm window), a confirmation prompt will be output</td></tr>
     <tr><td class=cont></td><td class=cont><tt>KORG</tt></td><td class=cont>The event was copied as an alarm to KOrganizer</td></tr>
@@ -101,7 +102,7 @@ Compliant with the iCalendar specification, KAlarm defines a number of custom fi
     <tr><td class=cont></td><td class=cont><tt>TMPLAFTTIME;<em>interval</em></tt></td><td class=cont>For a template alarm, holds the value (in minutes) of the "After time" option</td></tr>
     <tr><td class=cont></td><td class=cont><tt>KMAIL;<em>sernum</em></tt></td><td class=cont>The KMail serial number of the email whose text forms the alarm message. The alarm message must be in the form <tt>From: ...\nTo: ...\n<em>[</em>Cc: ...\n<em>]</em>Date: ...\nSubject: ...</tt></td></tr>
     <tr><td class=cont></td><td class=cont><tt>BCC</tt></td><td class=cont>For an email alarm, the email will be blind copied to the user</td></tr>
-    <tr><td class=cont></td><td class=cont><tt>REMINDER;<em>[</em><tt>ONCE;</tt><em>]interval</em></td><td class=cont>The reminder interval for the alarm: &lt; 0 for a reminder before the main alarm, &gt; 0 for a reminder after the main alarm. A suffix indicates the time units:  <tt>M</tt> = minutes, <tt>H</tt> = hours, <tt>D</tt> = days. E.g. <tt class=eg>-12M</tt>. If <tt>ONCE</tt> is specified, this indicates that the reminder should be shown only for the first recurrence.</td></tr>
+    <tr><td class=cont></td><td class=cont><tt>REMINDER;<em>[</em>ONCE;<em>]interval</em></tt></td><td class=cont>The reminder interval for the alarm: &lt; 0 for a reminder before the main alarm, &gt; 0 for a reminder after the main alarm. A suffix indicates the time units:  <tt>M</tt> = minutes, <tt>H</tt> = hours, <tt>D</tt> = days. E.g. <tt class=eg>-12M</tt>. If <tt>ONCE</tt> is specified, this indicates that the reminder should be shown only for the first recurrence.</td></tr>
     <tr><td class=cont></td><td class=cont><tt>LOGIN</tt></td><td class=cont>For an active alarm, when its main alarm has expired, records that the original alarm was triggered each time KAlarm started up (normally at each login)</td></tr>
     <tr><td class=cont></td><td class=cont><tt>ARCHIVE</tt></td><td class=cont>For an active alarm, indicates that the alarm has triggered at least once and should be archived when it expires or is deleted</td></tr>
 
@@ -112,7 +113,7 @@ Compliant with the iCalendar specification, KAlarm defines a number of custom fi
     <tr><td colspan=2><tt>X-KDE-KALARM-LOG</tt></td><td>The single parameter specifies where command alarm output should go; default = discard</td></tr>
     <tr><td></td><td><tt>xterm:</tt></td><td>Display command output in a terminal window</td></tr>
     <tr><td class=cont></td><td class=cont><tt>display:</tt></td><td class=cont>Display command output in an alarm window</td></tr>
-    <tr><td class=cont></td><td class=cont><em>filename</em></td><td class=cont>Store command output in the specified file</td></tr>
+    <tr><td class=cont></td><td class=cont><tt><em>filename</em></tt></td><td class=cont>Store command output in the specified file</td></tr>
 
 <tr><td colspan=3 class=titlerow>Alarm-level custom properties</td></tr>
 <tr><td colspan=3>The following custom properties are used within a <tt>VALARM</tt> element.</td></tr>
@@ -126,7 +127,7 @@ Compliant with the iCalendar specification, KAlarm defines a number of custom fi
     <tr><td class=cont></td><td class=cont><tt>DATE_DEFERRAL</tt></td><td class=cont>The alarm is a subsidiary date-only deferral alarm</td></tr>
     <tr><td class=cont></td><td class=cont><tt>PRE</tt></td><td class=cont>The alarm is a subsidiary pre-alarm action command, which is executed immediately before the main alarm</td></tr>
     <tr><td class=cont></td><td class=cont><tt>POST</tt></td><td class=cont>The alarm is a subsidiary post-alarm action command, which is executed immediately after the user acknowledges the main display alarm</td></tr>
-    <tr><td class=cont></td><td class=cont><tt>SOUNDREPEAT<em>[,pause]</em></tt></td><td class=cont>For an audio alarm, indicates that the sound file should be repeated indefinitely. The argument, which is present only in the "main" alarm, is the pause in seconds between repetitions.</td></tr>
+    <tr><td class=cont></td><td class=cont><tt>SOUNDREPEAT<em>,pause</em></tt></td><td class=cont>For an audio alarm, indicates that the sound file should be played repeatedly in a loop until the user clicks 'stop', each time it triggers. The argument is the pause in seconds between repetitions. This is used only for "main" alarms: see <a href="#audioloop">Audio file loop</a> below.</td></tr>
     <tr><td class=cont></td><td class=cont><tt>DISPLAYING</tt></td><td class=cont>The alarm is currently being displayed, i.e. in the displaying calendar</td></tr>
     <tr><td colspan=2><tt>X-KDE-KALARM-FLAGS</tt></td><td>Multiple parameters specify various properties of the alarm</td></tr>
     <tr><td></td><td><tt>HIDE</tt></td><td>For an alarm of type REMINDER, indicates that it is suppressed by a deferral alarm whose trigger time is later than this alarm. Allows the reminder alarm to be reinstated if the deferral is subsequently cancelled.</td></tr>
@@ -134,13 +135,13 @@ Compliant with the iCalendar specification, KAlarm defines a number of custom fi
     <tr><td class=cont></td><td class=cont><tt>EXECDEFER</tt></td><td class=cont>For a command alarm containing a pre-alarm action, indicates that the pre-alarm action should be executed when a deferred alarm triggers. Normally, it is executed only when the alarm proper triggers.</td></tr>
     <tr><td class=cont></td><td class=cont><tt>ERRCANCEL</tt></td><td class=cont>For a command alarm containing a pre-alarm action, indicates that the alarm should be cancelled if the pre-alarm action fails</td></tr>
     <tr><td class=cont></td><td class=cont><tt>ERRNOSHOW</tt></td><td class=cont>For a command alarm containing a pre-alarm action, indicates that there should be no error notification if the pre-alarm action fails</td></tr>
-    <tr><td class=cont></td><td class=cont><tt>EMAILID;</tt><em>uoid</em></td><td class=cont>For an email alarm, holds the email ID (the KDE email UOID) to use in the 'From' field.</td></tr>
+    <tr><td class=cont></td><td class=cont><tt>EMAILID;<em>uoid</em></tt></td><td class=cont>For an email alarm, holds the email ID (the KDE email UOID) to use in the 'From' field.</td></tr>
     <tr><td colspan=2><tt>X-KDE-KALARM-NEXTREPEAT</tt></td><td>The single parameter holds the repetition count of the next due sub-repetition: 0 = the main recurrence, 1 = the first sub-repetition, etc.</td></tr>
-    <tr><td></td><td><em>count</em></td><td>Repetition number</td></tr>
+    <tr><td></td><td><tt><em>count</em></tt></td><td>Repetition number</td></tr>
     <tr><td colspan=2><tt>X-KDE-KALARM-FONTCOLOR</tt></td><td>For a display alarm, holds the colours to use in the alarm message window</td></tr>
-    <tr><td></td><td><em>[background][</em><tt>;</tt><em>foreground]</em></td><td>The optional background colour (default = white) and optional foreground colour (default = black)</td></tr>
+    <tr><td></td><td><tt><em>[background][</em>;<em>foreground]</em></tt></td><td>The optional background colour (default = white) and optional foreground colour (default = black)</td></tr>
     <tr><td colspan=2><tt>X-KDE-KALARM-VOLUME</tt></td><td>Holds volume settings for an audio alarm</td></tr>
-    <tr><td></td><td><em>[volume][</em><tt>;</tt><em>fadevolume</em><tt>;</tt><em>fadeinterval]</em></td><td>Contains the optional volume (floating point, range 0 - 1), and optionally the fade volume (floating point, range 0 - 1) and fade interval in seconds. E.g. <tt class=eg>0.75</tt> to set volume with no fade, <tt class=eg>;0.3;10</tt> for default volume with fade, <tt class=eg>0.75;0.3;10</tt> to specify volume and fade</td></tr>
+    <tr><td></td><td><tt><em>[volume][</em>;<em>fadevolume</em>;<em>fadeinterval]</em></tt></td><td>Contains the optional volume (floating point, range 0 - 1), and optionally the fade volume (floating point, range 0 - 1) and fade interval in seconds. E.g. <tt class=eg>0.75</tt> to set volume with no fade, <tt class=eg>;0.3;10</tt> for default volume with fade, <tt class=eg>0.75;0.3;10</tt> to specify volume and fade</td></tr>
 </table>
 
 <h3>Custom status field values</h3>
@@ -154,7 +155,7 @@ The following custom parameter value is used in the <tt>STATUS</tt> property in 
 An audio alarm (<tt>ACTION:AUDIO</tt>) can specify that each time the alarm triggers, the audio file should be played repeatedly in a loop until the user presses 'stop'. This is independent of the overall event recurrence or sub-repetition, and is indicated as follows.
 <ul><li>In the "main" alarm, <tt>X-KDE-KALARM-TYPE:SOUNDREPEAT</tt> is used to specify sound file repetition, because the <tt>REPEAT</tt> and <tt>DURATION</tt> properties apply to the overall event.
         <ul>No pause between repetitions: <tt>X-KDE-KALARM-TYPE:SOUNDREPEAT</tt>
-        <br>Pause between repetitions: <tt>X-KDE-KALARM-TYPE:SOUNDREPEAT,<em>pause</em></tt></ul>
+        <br>Pause (in seconds) between repetitions: <tt>X-KDE-KALARM-TYPE:SOUNDREPEAT,<em>pause</em></tt></ul>
     <li>In subsidiary alarms, the following scheme is used. The reason for this scheme is that KCalCore::Alarm cannot set a snooze time of zero.
         <ul>No pause between repetitions: <tt>REPEAT:-1</tt> (<tt>DURATION</tt> is ignored)
         <br>Pause between repetitions: <tt>REPEAT:-2</tt> with <tt>DURATION</tt> containing the pause interval.</ul>

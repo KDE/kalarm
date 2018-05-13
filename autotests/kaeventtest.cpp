@@ -582,18 +582,36 @@ Alarm::Ptr copyKcalAlarm(Event::Ptr& kcalevent, Alarm::Ptr& kcalalarm)
 
 }
 
-void KAEventTest::kcalevent()
+void KAEventTest::fromKCalEvent()
 {
     // Check KCalCore::Event custom properties.
     const KADateTime dt(QDate(2010,5,13), QTime(3, 45, 0), QTimeZone("Europe/London"));
     const QDateTime createdDt(QDate(2009,4,13), QTime(11,14,0), QTimeZone("UTC"));
 
-    // Event category
+    // Event category, UID, revision, start time, created time
     {
+        const QString uid = QStringLiteral("fa74ec931");
         Event::Ptr kcalevent = createKcalEvent(dt.qDateTime(), createdDt);
         kcalevent->setCustomProperty("KALARM", "TYPE", QStringLiteral("ACTIVE"));
+        kcalevent->setUid(uid);
+        kcalevent->setRevision(273);
         KAEvent event(kcalevent);
         QCOMPARE(event.category(), CalEvent::ACTIVE);
+        QCOMPARE(event.startDateTime(), dt);
+        QCOMPARE(event.createdDateTime().qDateTime(), createdDt);
+        QCOMPARE(event.id(), uid);
+        QCOMPARE(event.revision(), 273);
+    }
+    {
+        // Start time using LocalZone
+        const KADateTime dtLocal(dt.date(), dt.time(), KADateTime::LocalZone);
+        Event::Ptr kcalevent = createKcalEvent(dt.qDateTime(), createdDt);
+        kcalevent->setCustomProperty("KALARM", "TYPE", QStringLiteral("ACTIVE"));
+        kcalevent->setCustomProperty("KALARM", "FLAGS", QStringLiteral("LOCAL"));
+        KAEvent event(kcalevent);
+        QCOMPARE(event.category(), CalEvent::ACTIVE);
+        QCOMPARE(event.startDateTime(), dtLocal);
+        QCOMPARE(event.createdDateTime().qDateTime(), createdDt);
     }
     {
         Event::Ptr kcalevent = createKcalEvent(dt.qDateTime(), createdDt);
@@ -1192,6 +1210,67 @@ void KAEventTest::kcalevent()
         QVERIFY(event.repeatAtLogin(false));
     }
 }
+
+void KAEventTest::toKCalEvent()
+{
+    // Check KCalCore::Event custom properties.
     const KADateTime dt(QDate(2010,5,13), QTime(3, 45, 0), QTimeZone("Europe/London"));
+    const KADateTime createdDt(QDate(2009,4,13), QTime(11,14,0), QTimeZone("UTC"));
+    const QString text = QStringLiteral("message");
+    const QColor fgColour(0x82, 0x6e, 0xf0);
+    const QColor bgColour(0x14, 0x46, 0x8c);
+    const QFont  font(QStringLiteral("Helvetica"), 10, QFont::Bold, true);
+    const QString uid = QStringLiteral("fa74ec931");
+
+    {
+        // Event category, UID, revision, start time using time zone, created time
+        KAEvent event;
+        event.set(dt, text, bgColour, fgColour, font, KAEvent::MESSAGE, 3, KAEvent::CONFIRM_ACK);
+        event.setEventId(uid);
+        event.incrementRevision();
+        event.incrementRevision();
+        event.setCategory(CalEvent::ACTIVE);
+        event.setCreatedDateTime(createdDt);
+        Event::Ptr kcalevent(new Event);
+        QVERIFY(event.updateKCalEvent(kcalevent, KAEvent::UID_SET, true));
+        QCOMPARE(kcalevent->uid(), uid);
+        QCOMPARE(kcalevent->revision(), 2);
+        QCOMPARE(kcalevent->customProperty("KALARM", "TYPE"), QStringLiteral("ACTIVE"));
+        QStringList flags = kcalevent->customProperty("KALARM", "FLAGS").split(SC);
+        QCOMPARE(flags.size(), 3);   // must contain LATECANCEL;3 and ACKCONF
+        QCOMPARE(flags.removeAll(QStringLiteral("ACKCONF")), 1);
+        QCOMPARE(flags.at(0), QStringLiteral("LATECANCEL"));
+        QCOMPARE(flags.at(1), QStringLiteral("3"));
+        QCOMPARE(kcalevent->dtStart(), dt.qDateTime());
+        QCOMPARE(kcalevent->created(), createdDt.qDateTime());
+        const Alarm::List kcalalarms = kcalevent->alarms();
+        QCOMPARE(kcalalarms.size(), 1);
+        Alarm::Ptr kcalalarm(kcalalarms[0]);
+        QCOMPARE(kcalalarm->type(), Alarm::Display);
+        QCOMPARE(kcalalarm->text(), text);
+        QCOMPARE(kcalalarm->customProperty("KALARM", "FONTCOLOR").toUpper(), (QStringLiteral("#14468C;#826EF0;") + font.toString()).toUpper());
+    }
+    {
+        // Start time using LocalZone
+        const KADateTime dt(QDate(2010,5,13), QTime(3, 45, 0), KADateTime::LocalZone);
+        KAEvent event;
+        event.set(dt, text, bgColour, fgColour, font, KAEvent::MESSAGE, 3, KAEvent::CONFIRM_ACK);
+        event.setEventId(uid);
+        event.incrementRevision();
+        event.setCategory(CalEvent::ACTIVE);
+        event.setCreatedDateTime(createdDt);
+        Event::Ptr kcalevent(new Event);
+        QVERIFY(event.updateKCalEvent(kcalevent, KAEvent::UID_SET, true));
+        QCOMPARE(kcalevent->uid(), uid);
+        QCOMPARE(kcalevent->revision(), 1);
+        QCOMPARE(kcalevent->customProperty("KALARM", "TYPE"), QStringLiteral("ACTIVE"));
+        QStringList flags = kcalevent->customProperty("KALARM", "FLAGS").split(SC);
+        QCOMPARE(flags.size(), 4);   // must contain LOCAL, LATECANCEL;3 and ACKCONF
+        QVERIFY(flags.contains(QStringLiteral("LOCAL")));
+        const QDateTime dtCurrentTz(dt.date(), dt.time(), QTimeZone::systemTimeZone());
+        QCOMPARE(kcalevent->dtStart(), dtCurrentTz);
+        QCOMPARE(kcalevent->created(), createdDt.qDateTime());
+    }
+}
 
 // vim: et sw=4:

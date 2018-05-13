@@ -31,7 +31,8 @@ class KAEventTest : public QObject
 private Q_SLOTS:
     void constructors();
     void flags();
-    void kcalevent();
+    void fromKCalEvent();
+    void toKCalEvent();
 };
 
 #endif
