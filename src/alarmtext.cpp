@@ -589,3 +589,5 @@ QString AlarmText::Private::todoTitle(const QString &text)
 }
 
 } // namespace KAlarmCal
+
+// vim: et sw=4:

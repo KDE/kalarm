@@ -2,7 +2,7 @@
  *  datetime.h  -  date/time with start-of-day time for date-only values
  *  This file is part of kalarmcal library, which provides access to KAlarm
  *  calendar data.
- *  Copyright © 2003,2005-2007,2009,2011 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2003,2005-2007,2009,2011,2018 by David Jarvie <djarvie@kde.org>
  *
  *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Library General Public License as published
@@ -24,17 +24,17 @@
 
 #include "kalarmcal_export.h"
 
-#include <kdatetime.h>
+#include "kadatetime.h"
 
 namespace KAlarmCal
 {
 
 /**
- *  @short As KDateTime, but with a configurable start-of-day time for date-only values.
+ *  @short As KADateTime, but with a configurable start-of-day time for date-only values.
  *
  *  The DateTime class holds a date, with or without a time.
  *
- *  DateTime is very similar to the KDateTime class. The time assumed for date-only values
+ *  DateTime is very similar to the KADateTime class. The time assumed for date-only values
  *  is the start-of-day time set by setStartOfDay().
  *
  *  @author David Jarvie <djarvie@kde.org>
@@ -48,16 +48,19 @@ public:
     DateTime();
 
     /** Constructor for a date-only value. */
-    DateTime(const QDate &d, const KDateTime::Spec &spec);
+    DateTime(const QDate &d, const KADateTime::Spec &spec);
 
     /** Constructor for a date-time value. */
-    DateTime(const QDate &d, const QTime &t, const KDateTime::Spec &spec);
+    DateTime(const QDate &d, const QTime &t, const KADateTime::Spec &spec);
 
     /** Constructor for a date-time value. */
-    DateTime(const QDateTime &dt, const KDateTime::Spec &spec);
+    DateTime(const QDateTime &dt, const KADateTime::Spec &spec);
 
     /** Constructor for a date-time value. */
-    DateTime(const KDateTime &dt);
+    explicit DateTime(const QDateTime &dt);
+
+    /** Constructor for a date-time value. */
+    DateTime(const KADateTime &dt);
 
     /** Copy constructor. */
     DateTime(const DateTime &dt);
@@ -70,7 +73,7 @@ public:
     /** Assignment operator.
      *  Sets the value to a specified date-time.
      */
-    DateTime &operator=(const KDateTime &dt);
+    DateTime &operator=(const KADateTime &dt);
 
     /** Returns true if the date is null and, if it is a date-time value, the time is also null. */
     bool isNull() const;
@@ -94,10 +97,10 @@ public:
 
     /** Returns the date and time of the value.
      *  If the value is date-only, the time part returned is 00:00:00. */
-    QDateTime rawDateTime() const;
+    QDateTime qDateTime() const;
 
-    /** Returns the date and time of the value as a KDateTime. */
-    KDateTime kDateTime() const;
+    /** Returns the date and time of the value as a KADateTime. */
+    KADateTime kDateTime() const;
 
     /** Returns the time part of the value.
      *  If the value is date-only, the time returned is the start-of-day time set by setStartOfDay().
@@ -114,38 +117,37 @@ public:
      */
     QDateTime effectiveDateTime() const;
 
-    /** Sets the date/time component of the value. */
-    void setDateTime(const QDateTime &dt);
-
     /** Returns the date and time of the value.
      *  If the value is date-only, the time part returned is equal to the start-of-day time set
      *  by setStartOfDay().
      */
-    KDateTime effectiveKDateTime() const;
+    KADateTime effectiveKDateTime() const;
 
     /** Returns the date and time of the value as written in the calendar.
      *  If the value is date-only, the time part returned is 00:00.
      */
-    KDateTime calendarKDateTime() const;
+    QDateTime calendarDateTime() const;
+
+    /** Returns the date and time of the value as written in the calendar.
+     *  If the value is date-only, the time part returned is 00:00.
+     */
+    KADateTime calendarKDateTime() const;
 
     /** Returns the time zone of the value. */
-    KTimeZone timeZone() const;
+    QTimeZone timeZone() const;
 
     /** Returns the time specification of the value. */
-    KDateTime::Spec timeSpec() const;
+    KADateTime::Spec timeSpec() const;
 
     /** Changes the time specification of the value. */
-    void setTimeSpec(const KDateTime::Spec &spec);
+    void setTimeSpec(const KADateTime::Spec &spec);
 
     /** Returns the time specification type of the date/time, i.e. whether it is
      * UTC, has a time zone, etc. */
-    KDateTime::SpecType timeType() const;
+    KADateTime::SpecType timeType() const;
 
     /** Returns whether the time zone for the date/time is the current local system time zone. */
     bool isLocalZone() const;
-
-    /** Returns whether the date/time is a local clock time. */
-    bool isClockTime() const;
 
     /** Returns whether the date/time is a UTC time. */
     bool isUtc() const;
@@ -175,14 +177,11 @@ public:
     /** Returns the time converted to the current local system time zone. */
     DateTime toLocalZone() const;
 
-    /** Returns the time converted to the local clock time. */
-    DateTime toClockTime() const;
-
     /** Returns the time converted to a specified time zone. */
-    DateTime toZone(const KTimeZone &zone) const;
+    DateTime toZone(const QTimeZone &zone) const;
 
     /** Returns the time converted to a new time specification. */
-    DateTime toTimeSpec(const KDateTime::Spec &spec) const;
+    DateTime toTimeSpec(const KADateTime::Spec &spec) const;
 
     /** Converts the time to a UTC time, measured in seconds since 00:00:00 UTC
      * 1st January 1970 (as returned by time(2)). */
@@ -229,7 +228,7 @@ public:
      *  If it is a date-time, both time and date are included in the output.
      *  If it is date-only, only the date is included in the output.
      */
-    QString toString(Qt::DateFormat f = Qt::TextDate) const;
+    QString toString(KADateTime::TimeFormat f = KADateTime::QtTextDate) const;
 
     /** Returns the value as a string.
      *  If it is a date-time, both time and date are included in the output.
@@ -252,12 +251,12 @@ public:
     static QTime startOfDay();
 
     /** Compare this value with another. */
-    KDateTime::Comparison compare(const DateTime &other) const;
+    KADateTime::Comparison compare(const DateTime &other) const;
 
     KALARMCAL_EXPORT friend bool operator==(const KAlarmCal::DateTime &dt1, const KAlarmCal::DateTime &dt2);
-    KALARMCAL_EXPORT friend bool operator==(const KDateTime &dt1, const KAlarmCal::DateTime &dt2);
+    KALARMCAL_EXPORT friend bool operator==(const KADateTime &dt1, const KAlarmCal::DateTime &dt2);
     KALARMCAL_EXPORT friend bool operator<(const KAlarmCal::DateTime &dt1, const KAlarmCal::DateTime &dt2);
-    friend bool operator<(const KDateTime &dt1, const KAlarmCal::DateTime &dt2);
+    friend bool operator<(const KADateTime &dt1, const KAlarmCal::DateTime &dt2);
 
 private:
     //@cond PRIVATE
@@ -268,14 +267,14 @@ private:
 
 /** Returns true if the two values are equal. */
 KALARMCAL_EXPORT bool operator==(const DateTime &dt1, const DateTime &dt2);
-KALARMCAL_EXPORT bool operator==(const KDateTime &dt1, const DateTime &dt2);
+KALARMCAL_EXPORT bool operator==(const KADateTime &dt1, const DateTime &dt2);
 
 /** Returns true if the two values are not equal. */
 inline bool operator!=(const DateTime &dt1, const DateTime &dt2)
 {
     return !operator==(dt1, dt2);
 }
-inline bool operator!=(const KDateTime &dt1, const DateTime &dt2)
+inline bool operator!=(const KADateTime &dt1, const DateTime &dt2)
 {
     return !operator==(dt1, dt2);
 }
@@ -286,7 +285,7 @@ inline bool operator!=(const KDateTime &dt1, const DateTime &dt2)
  *  start-of-day time set in the KAlarm Preferences dialog.
  */
 KALARMCAL_EXPORT bool operator<(const DateTime &dt1, const DateTime &dt2);
-inline bool operator<(const KDateTime &dt1, const DateTime &dt2)
+inline bool operator<(const KADateTime &dt1, const DateTime &dt2)
 {
     return operator<(DateTime(dt1), dt2);
 }
@@ -300,7 +299,7 @@ inline bool operator>(const DateTime &dt1, const DateTime &dt2)
 {
     return operator<(dt2, dt1);
 }
-inline bool operator>(const KDateTime &dt1, const DateTime &dt2)
+inline bool operator>(const KADateTime &dt1, const DateTime &dt2)
 {
     return operator<(dt2, DateTime(dt1));
 }
@@ -314,7 +313,7 @@ inline bool operator>=(const DateTime &dt1, const DateTime &dt2)
 {
     return !operator<(dt1, dt2);
 }
-inline bool operator>=(const KDateTime &dt1, const DateTime &dt2)
+inline bool operator>=(const KADateTime &dt1, const DateTime &dt2)
 {
     return !operator<(DateTime(dt1), dt2);
 }
@@ -328,7 +327,7 @@ inline bool operator<=(const DateTime &dt1, const DateTime &dt2)
 {
     return !operator<(dt2, dt1);
 }
-inline bool operator<=(const KDateTime &dt1, const DateTime &dt2)
+inline bool operator<=(const KADateTime &dt1, const DateTime &dt2)
 {
     return !operator<(dt2, DateTime(dt1));
 }
@@ -337,3 +336,4 @@ inline bool operator<=(const KDateTime &dt1, const DateTime &dt2)
 
 #endif // KALARM_DATETIME_H
 
+// vim: et sw=4:

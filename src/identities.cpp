@@ -72,3 +72,5 @@ uint identityUoid(const QString &identityUoidOrName)
 } // namespace Identities
 
 } // namespace KAlarmCal
+
+// vim: et sw=4:

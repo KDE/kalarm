@@ -1,6 +1,6 @@
 /*
  *  akonadi_serializer_kalarm.cpp  -  Akonadi resource serializer for KAlarm
- *  Copyright © 2009-2012 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2009-2012,2018 by David Jarvie <djarvie@kde.org>
  *
  *  This library is free software; you can redistribute it and/or modify it
  *  under the terms of the GNU Library General Public License as published by
@@ -30,8 +30,9 @@
 #include <AkonadiCore/abstractdifferencesreporter.h>
 #include <AkonadiCore/attributefactory.h>
 
-#include <klocale.h>
+#include <klocalizedstring.h>
 
+#include <QLocale>
 #include <qplugin.h>
 
 using namespace Akonadi;
@@ -296,10 +297,9 @@ void SerializerPluginKAlarm::compare(AbstractDifferencesReporter *reporter, cons
         reportDifference(reporter, KAEventFormatter::EmailAttachments);
     }
 
-    KLocale *locale = KLocale::global();
+    QLocale locale;
     reporter->addProperty(AbstractDifferencesReporter::ConflictMode, i18nc("@label", "Item revision"),
-                          locale->convertDigits(QString::number(left.revision()), locale->digitSet()),
-                          locale->convertDigits(QString::number(right.revision()), locale->digitSet()));
+                          locale.toString(left.revision()), locale.toString(right.revision()));
 }
 
 void SerializerPluginKAlarm::reportDifference(AbstractDifferencesReporter *reporter, KAEventFormatter::Parameter id)

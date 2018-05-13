@@ -2,7 +2,7 @@
  *  repetition.h  -  represents a sub-repetition: interval and count
  *  This file is part of kalarmcal library, which provides access to KAlarm
  *  calendar data.
- *  Copyright © 2009-2012 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2009-2012,2018 by David Jarvie <djarvie@kde.org>
  *
  *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Library General Public License as published
@@ -26,10 +26,10 @@
 #include "kalarmcal_export.h"
 #include <kcalcore/duration.h>
 
-class KDateTime;
-
 namespace KAlarmCal
 {
+
+class KADateTime;
 
 /**
  * @short Represents a sub-repetition, defined by interval and repeat count.
@@ -120,13 +120,13 @@ public:
      *  @param from         repetition start time, which should not be a date-only value
      *  @param preDateTime  time after which the desired repetition occurs
      */
-    int nextRepeatCount(const KDateTime &from, const KDateTime &preDateTime) const;
+    int nextRepeatCount(const KADateTime &from, const KADateTime &preDateTime) const;
 
     /** Find the repetition count for the last repetition before a specified time.
      *  @param from           repetition start time, which should not be a date-only value
      *  @param afterDateTime  time after which the desired repetition occurs
      */
-    int previousRepeatCount(const KDateTime &from, const KDateTime &afterDateTime) const;
+    int previousRepeatCount(const KADateTime &from, const KADateTime &afterDateTime) const;
 
 private:
     //@cond PRIVATE
@@ -139,3 +139,4 @@ private:
 
 #endif // KALARM_REPETITION_H
 
+// vim: et sw=4:

@@ -57,3 +57,4 @@ KALARMCAL_EXPORT uint identityUoid(const QString &identityUoidOrName);
 
 #endif // KALARM_IDENTITIES_H
 
+// vim: et sw=4:

@@ -42,3 +42,4 @@ KALARMCAL_EXPORT QString getVersionString(int version);
 
 #endif // KALARM_VERSION_H
 
+// vim: et sw=4:

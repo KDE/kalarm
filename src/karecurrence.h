@@ -24,7 +24,8 @@
 #define KALARM_KARECURRENCE_H
 
 #include "kalarmcal_export.h"
-#include <KDateTime>
+#include "kadatetime.h"
+
 #include <kcalcore/recurrencerule.h>
 #include <kcalcore/duration.h>
 #include <kcalcore/incidencebase.h>
@@ -121,14 +122,14 @@ public:
      *  weekly, monthly, yearly or none.
      *  @return true if successful.
      */
-    bool set(Type t, int freq, int count, const KDateTime &start, const KDateTime &end);
+    bool set(Type t, int freq, int count, const KADateTime &start, const KADateTime &end);
 
     /** Set up a KARecurrence from recurrence parameters, using the start date to
      *  determine the recurrence day/month as appropriate, and specifying how
      *  annual 29th February recurrences in non-leap years should be handled.
      *  @return true if successful.
      */
-    bool set(Type t, int freq, int count, const KDateTime &start, const KDateTime &end, Feb29Type f29);
+    bool set(Type t, int freq, int count, const KADateTime &start, const KADateTime &end, Feb29Type f29);
 
     /** Set up a KARecurrence from recurrence parameters.
      *  Annual 29th February recurrences in non-leap years will be handled
@@ -137,7 +138,7 @@ public:
      *  weekly, monthly, yearly or none.
      *  @return true if successful.
      */
-    bool init(KCalCore::RecurrenceRule::PeriodType t, int freq, int count, const KDateTime &start, const KDateTime &end);
+    bool init(KCalCore::RecurrenceRule::PeriodType t, int freq, int count, const KADateTime &start, const KADateTime &end);
 
     /** Set up a KARecurrence from recurrence parameters, specifying how
      *  annual 29th February recurrences in non-leap years should be handled.
@@ -145,7 +146,7 @@ public:
      *  weekly, monthly, yearly or none.
      *  @return true if successful.
      */
-    bool init(KCalCore::RecurrenceRule::PeriodType t, int freq, int count, const KDateTime &start, const KDateTime &end, Feb29Type f29);
+    bool init(KCalCore::RecurrenceRule::PeriodType t, int freq, int count, const KADateTime &start, const KADateTime &end, Feb29Type f29);
 
     /** Removes all recurrence and exception rules and dates. */
     void clear();
@@ -168,7 +169,7 @@ public:
     /** Return the start date/time of the recurrence (Time for all-day recurrences will be 0:00).
      * @return the current start/time of the recurrence.
      */
-    KDateTime startDateTime() const;
+    KADateTime startDateTime() const;
 
     /** Return the start date/time of the recurrence */
     QDate startDate() const;
@@ -177,10 +178,10 @@ public:
      *  @param dt        start date/time.
      *  @param dateOnly  if true, sets the recurrence to all-day.
      */
-    void        setStartDateTime(const KDateTime &dt, bool dateOnly);
+    void        setStartDateTime(const KADateTime &dt, bool dateOnly);
 
     /** Return the date/time of the last recurrence. */
-    KDateTime   endDateTime() const;
+    KADateTime   endDateTime() const;
 
     /** Return the date of the last recurrence. */
     QDate       endDate() const;
@@ -194,7 +195,7 @@ public:
     /** Sets the date and time of the last recurrence.
      * @param endDateTime the ending date/time after which to stop recurring.
      */
-    void setEndDateTime(const KDateTime &endDateTime);
+    void setEndDateTime(const KADateTime &endDateTime);
 
     /** Set whether the recurrence has no time, just a date.
      * All-day means -- according to rfc2445 -- that the event has no time
@@ -325,14 +326,14 @@ public:
     void addMonthlyDate(short day);
 
     /** Get the next time the recurrence occurs, strictly after a specified time. */
-    KDateTime   getNextDateTime(const KDateTime &preDateTime) const;
+    KADateTime   getNextDateTime(const KADateTime &preDateTime) const;
 
     /** Get the previous time the recurrence occurred, strictly before a specified time. */
-    KDateTime   getPreviousDateTime(const KDateTime &afterDateTime) const;
+    KADateTime   getPreviousDateTime(const KADateTime &afterDateTime) const;
 
     /** Return whether the event will recur on the specified date.
      *  The start date only returns true if it matches the recurrence rules. */
-    bool        recursOn(const QDate &, const KDateTime::Spec &) const;
+    bool        recursOn(const QDate &, const KADateTime::Spec &) const;
 
     /**
      * Returns true if the date/time specified is one at which the event will
@@ -340,7 +341,7 @@ public:
      *
      * @param dt is the date/time to check.
      */
-    bool recursAt(const KDateTime &dt) const;
+    bool recursAt(const KADateTime &dt) const;
 
     /** Returns a list of the times on the specified date at which the
      * recurrence will occur. The returned times should be interpreted in the
@@ -348,21 +349,21 @@ public:
      * @param date the date for which to find the recurrence times
      * @param timeSpec time specification for @p date
      */
-    KCalCore::TimeList recurTimesOn(const QDate &date, const KDateTime::Spec &timeSpec) const;
+    KCalCore::TimeList recurTimesOn(const QDate &date, const KADateTime::Spec &timeSpec) const;
 
     /** Returns a list of all the times at which the recurrence will occur
      * between two specified times.
      *
      * There is a (large) maximum limit to the number of times returned. If due to
      * this limit the list is incomplete, this is indicated by the last entry being
-     * set to an invalid KDateTime value. If you need further values, call the
+     * set to an invalid KADateTime value. If you need further values, call the
      * method again with a start time set to just after the last valid time returned.
      *
      * @param start inclusive start of interval
      * @param end inclusive end of interval
      * @return list of date/time values
      */
-    KCalCore::DateTimeList timesInInterval(const KDateTime &start, const KDateTime &end) const;
+    KCalCore::DateTimeList timesInInterval(const KADateTime &start, const KADateTime &end) const;
 
     /** Returns frequency of recurrence, in terms of the recurrence time period type. */
     int frequency() const;
@@ -384,7 +385,7 @@ public:
     /** Returns the number of recurrences up to and including the date/time specified.
      *  @warning This function can be very time consuming - use it sparingly!
      */
-    int durationTo(const KDateTime &dt) const;
+    int durationTo(const KADateTime &dt) const;
 
     /** Returns the number of recurrences up to and including the date specified.
      *  @warning This function can be very time consuming - use it sparingly!
@@ -405,7 +406,7 @@ public:
     KCalCore::DateList exDates() const;
     void setExDateTimes(const KCalCore::DateTimeList &exdates);
     void setExDates(const KCalCore::DateList &exdates);
-    void addExDateTime(const KDateTime &exdate);
+    void addExDateTime(const KADateTime &exdate);
     void addExDate(const QDate &exdate);
 
     /**
@@ -460,3 +461,4 @@ private:
 
 #endif // KALARM_KARECURRENCE_H
 
+// vim: et sw=4:

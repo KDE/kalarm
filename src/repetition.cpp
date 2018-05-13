@@ -2,7 +2,7 @@
  *  repetition.cpp  -  represents a sub-repetition: interval and count
  *  This file is part of kalarmcal library, which provides access to KAlarm
  *  calendar data.
- *  Copyright © 2009-2012 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2009-2012,2018 by David Jarvie <djarvie@kde.org>
  *
  *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Library General Public License as published
@@ -21,7 +21,7 @@
  */
 
 #include "repetition.h"
-#include <kdatetime.h>
+#include "kadatetime.h"
 
 using namespace KCalCore;
 namespace KAlarmCal
@@ -143,14 +143,14 @@ int Repetition::intervalSeconds() const
     return d->mInterval.asSeconds();
 }
 
-int Repetition::nextRepeatCount(const KDateTime &from, const KDateTime &preDateTime) const
+int Repetition::nextRepeatCount(const KADateTime &from, const KADateTime &preDateTime) const
 {
     return d->mInterval.isDaily()
            ? from.daysTo(preDateTime) / d->mInterval.asDays() + 1
            : static_cast<int>(from.secsTo(preDateTime) / d->mInterval.asSeconds()) + 1;
 }
 
-int Repetition::previousRepeatCount(const KDateTime &from, const KDateTime &afterDateTime) const
+int Repetition::previousRepeatCount(const KADateTime &from, const KADateTime &afterDateTime) const
 {
     return d->mInterval.isDaily()
            ? from.daysTo(afterDateTime.addSecs(-1)) / d->mInterval.asDays()
@@ -159,3 +159,4 @@ int Repetition::previousRepeatCount(const KDateTime &from, const KDateTime &afte
 
 } // namespace KAlarmCal
 
+// vim: et sw=4:

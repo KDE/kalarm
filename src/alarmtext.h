@@ -20,8 +20,8 @@
  *  MA 02110-1301, USA.
  */
 
-#ifndef ALARMTEXT_H
-#define ALARMTEXT_H
+#ifndef KALARM_ALARMTEXT_H
+#define KALARM_ALARMTEXT_H
 
 #include "kalarmcal_export.h"
 
@@ -207,5 +207,6 @@ private:
 
 } // namespace KAlarmCal
 
-#endif // ALARMTEXT_H
+#endif // KALARM_ALARMTEXT_H
 
+// vim: et sw=4:

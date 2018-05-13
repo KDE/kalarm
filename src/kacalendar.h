@@ -28,6 +28,7 @@
 #include <kcalcore/calendar.h>
 #include <kcalcore/event.h>
 #include <collection.h>
+
 #include <QByteArray>
 #include <QStringList>
 
@@ -146,3 +147,4 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(CalEvent::Types)
 
 #endif // KALARM_KACALENDAR_H
 
+// vim: et sw=4:

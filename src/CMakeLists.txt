@@ -9,13 +9,13 @@ set(kalarmcal_LIB_SRCS
     alarmtext.cpp
     identities.cpp
     kaevent.cpp
+    kadatetime.cpp
     datetime.cpp
     repetition.cpp
     version.cpp
     collectionattribute.cpp
     compatibilityattribute.cpp
     eventattribute.cpp
-    utils.cpp
 )
 
 ecm_qt_declare_logging_category(kalarmcal_LIB_SRCS HEADER kalarmcal_debug.h IDENTIFIER KALARMCAL_LOG CATEGORY_NAME org.kde.pim.kalarmcal)
@@ -28,12 +28,13 @@ add_library(KF5::AlarmCalendar ALIAS KF5AlarmCalendar)
 
 target_link_libraries(KF5AlarmCalendar
 PUBLIC
+                      KF5::ConfigCore
+                      KF5::I18n
                       KF5::Holidays
                       KF5::IdentityManagement
                       KF5::CoreAddons
                       KF5::CalendarCore
                       KF5::AkonadiCore
-                      KF5::KDELibs4Support
 PRIVATE
 )
 
@@ -57,11 +58,11 @@ ecm_generate_headers(KAlarmCal_CamelCase_HEADERS
   CollectionAttribute
   CompatibilityAttribute
   DateTime
+  KADateTime
   EventAttribute
   KAEvent
   KARecurrence
   Repetition
-  Utils
   PREFIX KAlarmCal
   REQUIRED_HEADERS KAlarmCal_HEADERS
 )

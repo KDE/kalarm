@@ -257,3 +257,5 @@ void CollectionAttribute::deserialize(const QByteArray &data)
 }
 
 } // namespace KAlarmCal
+
+// vim: et sw=4:

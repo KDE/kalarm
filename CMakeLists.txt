@@ -36,7 +36,8 @@ ecm_setup_version(PROJECT VARIABLE_PREFIX KALARMCAL
 )
 
 ########### Find packages ###########
-find_package(KF5KDELibs4Support ${KF5_VERSION} CONFIG REQUIRED)
+find_package(KF5Config ${KF5_VERSION} CONFIG REQUIRED)
+find_package(KF5I18n ${KF5_VERSION} CONFIG REQUIRED)
 find_package(KF5Holidays ${KF5_VERSION} CONFIG REQUIRED)
 
 
@@ -52,6 +53,10 @@ add_definitions(-DQT_NO_NARROWING_CONVERSIONS_IN_CONNECT)
 
 add_subdirectory(src)
 add_subdirectory(serializers)
+
+if(BUILD_TESTING)
+    add_subdirectory(autotests)
+endif()
 
 ########### CMake Config Files ###########
 set(CMAKECONFIG_INSTALL_DIR "${KDE_INSTALL_CMAKEPACKAGEDIR}/KF5AlarmCalendar")

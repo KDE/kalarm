@@ -156,3 +156,4 @@ private:
 
 #endif // KALARM_COLLECTION_ATTRIBUTE_H
 
+// vim: et sw=4:

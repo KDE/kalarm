@@ -97,3 +97,4 @@ private:
 
 #endif // KALARM_COMPATIBILITY_ATTRIBUTE_H
 
+// vim: et sw=4:

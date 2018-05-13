@@ -83,3 +83,4 @@ private:
 
 #endif // KALARM_EVENT_ATTRIBUTE_H
 
+// vim: et sw=4:

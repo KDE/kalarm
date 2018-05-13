@@ -31,8 +31,6 @@
 #include <kcalcore/alarm.h>
 #include <kcalcore/memorycalendar.h>
 
-#include <kmessagebox.h>
-
 #include <klocalizedstring.h>
 #include "kalarmcal_debug.h"
 
@@ -455,3 +453,5 @@ QStringList mimeTypes(Types types)
 } // namespace CalEvent
 
 } // namespace KAlarmCal
+
+// vim: et sw=4:

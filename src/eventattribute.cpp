@@ -22,6 +22,7 @@
 
 #include "eventattribute.h"
 #include "kalarmcal_debug.h"
+
 #include <QList>
 #include <QByteArray>
 
@@ -114,3 +115,5 @@ void EventAttribute::deserialize(const QByteArray &data)
 }
 
 } // namespace KAlarmCal
+
+// vim: et sw=4:

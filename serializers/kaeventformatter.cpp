@@ -1,6 +1,6 @@
 /*
  *  kaeventformatter.cpp  -  converts KAlarmCal::KAEvent properties to text
- *  Copyright © 2010,2011 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2010,2011,2018 by David Jarvie <djarvie@kde.org>
  *
  *  This library is free software; you can redistribute it and/or modify it
  *  under the terms of the GNU Library General Public License as published by
@@ -26,15 +26,14 @@
 
 #include <kcalutils/incidenceformatter.h>
 
-#include <kglobal.h>
-#include <kdatetime.h>
-#include <KLocale>
+#include <klocalizedstring.h>
+
+#include <QLocale>
 
 static QString trueFalse(bool value);
-static QString number(unsigned long n);
 static QString minutes(int n);
 static QString minutesHoursDays(int minutes);
-static QString dateTime(const KDateTime &);
+static QString dateTime(const KAlarmCal::KADateTime &);
 
 KAEventFormatter::KAEventFormatter(const KAEvent &e, bool falseForUnspecified)
     : mEvent(e)
@@ -287,7 +286,7 @@ QString KAEventFormatter::value(Parameter param) const
     case StartTime:
         return dateTime(mEvent.startDateTime().kDateTime());
     case TemplateAfterTime:
-        return (mEvent.templateAfterTime() >= 0) ? number(mEvent.templateAfterTime()) : trueFalse(false);
+        return (mEvent.templateAfterTime() >= 0) ? QLocale().toString(mEvent.templateAfterTime()) : trueFalse(false);
     case Recurs:
         return trueFalse(mEvent.recurs());
     case Recurrence:
@@ -306,9 +305,9 @@ QString KAEventFormatter::value(Parameter param) const
     case RepeatInterval:
         return mEvent.repetitionText(true);
     case RepeatCount:
-        return mEvent.repetition() ? number(mEvent.repetition().count()) : QString();
+        return mEvent.repetition() ? QLocale().toString(mEvent.repetition().count()) : QString();
     case NextRepetition:
-        return mEvent.repetition() ? number(mEvent.nextRepetition()) : QString();
+        return mEvent.repetition() ? QLocale().toString(mEvent.nextRepetition()) : QString();
     case WorkTimeOnly:
         return trueFalse(mEvent.workTimeOnly());
     case HolidaysExcluded:
@@ -326,7 +325,7 @@ QString KAEventFormatter::value(Parameter param) const
     case Archive:
         return trueFalse(mEvent.toBeArchived());
     case Revision:
-        return number(mEvent.revision());
+        return QLocale().toString(mEvent.revision());
     case CustomProperties:
     {
         if (mEvent.customProperties().isEmpty()) {
@@ -373,7 +372,7 @@ QString KAEventFormatter::value(Parameter param) const
     case ConfirmAck:
         return trueFalse(mEvent.confirmAck());
     case KMailSerial:
-        return mEvent.kmailSerialNumber() ? number(mEvent.kmailSerialNumber()) : trueFalse(false);
+        return mEvent.kmailSerialNumber() ? QLocale().toString(qulonglong(mEvent.kmailSerialNumber())) : trueFalse(false);
     case Sound:
         return !mEvent.audioFile().isEmpty() ? mEvent.audioFile()
                : mEvent.speak() ? i18nc("@info", "Speak")
@@ -403,7 +402,7 @@ QString KAEventFormatter::value(Parameter param) const
     case EmailSubject:
         return mEvent.emailSubject();
     case EmailFromId:
-        return (mEvent.actionSubType() == KAEvent::EMAIL) ? number(mEvent.emailFromId()) : QString();
+        return (mEvent.actionSubType() == KAEvent::EMAIL) ? QLocale().toString(mEvent.emailFromId()) : QString();
     case EmailTo:
         return mEvent.emailAddresses(QStringLiteral(", "));
     case EmailBcc:
@@ -422,20 +421,12 @@ QString trueFalse(bool value)
            : i18nc("@info General purpose status indication: yes or no", "No");
 }
 
-// Convert an integer to digits for the locale.
-// Do not use for date/time or monetary numbers (which have their own digit sets).
-QString number(unsigned long n)
-{
-    KLocale *locale = KLocale::global();
-    return locale->convertDigits(QString::number(n), locale->digitSet());
-}
-
 QString minutes(int n)
 {
     return i18ncp("@info", "1 Minute", "%1 Minutes", n);
 }
 
-QString dateTime(const KDateTime &dt)
+QString dateTime(const KAlarmCal::KADateTime &dt)
 {
     if (dt.isDateOnly()) {
         return dt.toString(QStringLiteral("%Y-%m-%d %:Z"));

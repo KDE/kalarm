@@ -82,3 +82,4 @@ QString getVersionString(int version)
 
 } // namespace KAlarmCal
 
+// vim: et sw=4:

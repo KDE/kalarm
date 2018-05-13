@@ -20,8 +20,8 @@
  *  MA 02110-1301, USA.
  */
 
-#ifndef KAEVENT_H
-#define KAEVENT_H
+#ifndef KALARM_KAEVENT_H
+#define KALARM_KAEVENT_H
 
 #include "kalarmcal_export.h"
 
@@ -141,7 +141,7 @@ public:
     void setTime(const DateTime &dt);
 
     /** Set the alarm's trigger time. */
-    void setTime(const KDateTime &dt);
+    void setTime(const KADateTime &dt);
 
     /** Return whether this is a repeat-at-login alarm. */
     bool repeatAtLogin() const;
@@ -335,8 +335,9 @@ public:
      *                        to the instance; call endChanges() when changes
      *                        are complete.
      */
-    KAEvent(const KDateTime &dt, const QString &text, const QColor &bg, const QColor &fg,
+    KAEvent(const KADateTime &dt, const QString &text, const QColor &bg, const QColor &fg,
             const QFont &font, SubAction action, int lateCancel, Flags flags, bool changesPending = false);
+
     /** Construct an event and initialise it from a KCalCore::Event.
      *
      *  The initialisation is identical to that performed by set().
@@ -382,7 +383,7 @@ public:
      *                        further changes have been applied to the instance;
      *                        call endChanges() when changes are complete.
      */
-    void set(const KDateTime &dt, const QString &text, const QColor &bg,
+    void set(const KADateTime &dt, const QString &text, const QColor &bg,
              const QColor &fg, const QFont &font, SubAction action, int lateCancel,
              Flags flags, bool changesPending = false);
 
@@ -862,7 +863,7 @@ public:
      *  Note that for a recurring event, this should match one of the
      *  recurrence times.
      */
-    void setTime(const KDateTime &dt);
+    void setTime(const KADateTime &dt);
 
     /** Return the next time the main alarm will trigger.
      *  @param withRepeats  true to include sub-repetitions, false to exclude them.
@@ -903,12 +904,12 @@ public:
     /** Set the date/time the event was created, or saved in the archive calendar.
      *  @see createdDateTime()
      */
-    void setCreatedDateTime(const KDateTime &dt);
+    void setCreatedDateTime(const KADateTime &dt);
 
     /** Return the date/time the event was created, or saved in the archive calendar.
      *  @see setCreatedDateTime()
      */
-    KDateTime createdDateTime() const;
+    KADateTime createdDateTime() const;
 
     /** Enable or disable repeat-at-login.
      *  If @p repeat is true, any existing pre-alarm reminder, late-cancel and
@@ -964,7 +965,7 @@ public:
 
     /** Check whether a date/time is during working hours and/or holidays, depending
      *  on the flags set for the specified event. */
-    bool isWorkingTime(const KDateTime &dt) const;
+    bool isWorkingTime(const KADateTime &dt) const;
 
     /** Set working days and times, to be used by all KAEvent instances.
      *  @param days   bits set to 1 for each working day. Array element 0 = Monday ... 6 = Sunday.
@@ -993,7 +994,7 @@ public:
      *  @param end   = end date/time (set invalid to use @p count instead).
      *  @return @c false if no recurrence was set up.
      */
-    bool setRecurMinutely(int freq, int count, const KDateTime &end);
+    bool setRecurMinutely(int freq, int count, const KADateTime &end);
 
     /** Set the recurrence to recur daily.
      *  @param freq   how many days between recurrences.
@@ -1141,7 +1142,7 @@ public:
      *                            occur after @p preDateTime.
      *  @see nextOccurrence()
      */
-    bool occursAfter(const KDateTime &preDateTime, bool includeRepetitions) const;
+    bool occursAfter(const KADateTime &preDateTime, bool includeRepetitions) const;
 
     /** Set the date/time of the event to the next scheduled occurrence after a
      *  specified date/time, provided that this is later than its current date/time.
@@ -1151,7 +1152,7 @@ public:
      *  set as the next occurrence.
      *  @see nextOccurrence()
      */
-    OccurType setNextOccurrence(const KDateTime &preDateTime);
+    OccurType setNextOccurrence(const KADateTime &preDateTime);
 
     /** Get the date/time of the next occurrence of the event, after the specified
      *  date/time.
@@ -1159,7 +1160,7 @@ public:
      *  @param option  how/whether to make allowance for sub-repetitions.
      *  @see nextRepetition(), setNextOccurrence(), previousOccurrence(), occursAfter()
      */
-    OccurType nextOccurrence(const KDateTime &preDateTime, DateTime &result, OccurOption option = IGNORE_REPETITION) const;
+    OccurType nextOccurrence(const KADateTime &preDateTime, DateTime &result, OccurOption option = IGNORE_REPETITION) const;
 
     /** Get the date/time of the last previous occurrence of the event, before the
      *  specified date/time.
@@ -1170,7 +1171,7 @@ public:
      *                             appropriate.
      *  @see nextOccurrence()
      */
-    OccurType previousOccurrence(const KDateTime &afterDateTime, DateTime &result, bool includeRepetitions = false) const;
+    OccurType previousOccurrence(const KADateTime &afterDateTime, DateTime &result, bool includeRepetitions = false) const;
 
     /** Set the event to be a copy of the specified event, making the specified
      *  alarm the 'displaying' alarm.
@@ -1186,7 +1187,7 @@ public:
      *  @param showDefer  whether the Defer button was displayed
      *  @return @c true if successful, @c false if alarm was not copied.
      */
-    bool setDisplaying(const KAEvent &event, KAAlarm::Type type, Akonadi::Collection::Id colId, const KDateTime &repeatAtLoginTime, bool showEdit, bool showDefer);
+    bool setDisplaying(const KAEvent &event, KAAlarm::Type type, Akonadi::Collection::Id colId, const KADateTime &repeatAtLoginTime, bool showEdit, bool showDefer);
 
     /** Reinstate the original event from the 'displaying' event.
      *  This instance is initialised from the supplied displaying @p event,
@@ -1304,5 +1305,6 @@ private:
 Q_DECLARE_OPERATORS_FOR_FLAGS(KAlarmCal::KAEvent::Flags)
 Q_DECLARE_METATYPE(KAlarmCal::KAEvent)
 
-#endif // KAEVENT_H
+#endif // KALARM_KAEVENT_H
 
+// vim: et sw=4:
