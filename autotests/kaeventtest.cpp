@@ -1200,7 +1200,7 @@ void KAEventTest::fromKCalEvent()
         Event::Ptr kcalevent = createKcalEvent(dt.qDateTime(), createdDt, kcalalarm, Alarm::Email);
         kcalalarm->setCustomProperty("KALARM", "FLAGS", QStringLiteral("EMAILID;2589"));
         KAEvent event(kcalevent);
-        QCOMPARE(event.emailFromId(), static_cast<unsigned long>(2589));
+        QCOMPARE(event.emailFromId(), static_cast<unsigned int>(2589));
     }
     {
         // Archived repeat-at-login
