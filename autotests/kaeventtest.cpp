@@ -598,7 +598,7 @@ void KAEventTest::fromKCalEvent()
         kcalevent->setRevision(273);
         KAEvent event(kcalevent);
         QCOMPARE(event.category(), CalEvent::ACTIVE);
-        QCOMPARE(event.startDateTime(), dt);
+        QCOMPARE(event.startDateTime(), KAlarmCal::DateTime(dt));
         QCOMPARE(event.createdDateTime().qDateTime(), createdDt);
         QCOMPARE(event.id(), uid);
         QCOMPARE(event.revision(), 273);
@@ -611,7 +611,7 @@ void KAEventTest::fromKCalEvent()
         kcalevent->setCustomProperty("KALARM", "FLAGS", QStringLiteral("LOCAL"));
         KAEvent event(kcalevent);
         QCOMPARE(event.category(), CalEvent::ACTIVE);
-        QCOMPARE(event.startDateTime(), dtLocal);
+        QCOMPARE(event.startDateTime(), KAlarmCal::DateTime(dtLocal));
         QCOMPARE(event.createdDateTime().qDateTime(), createdDt);
     }
     {
@@ -859,7 +859,7 @@ void KAEventTest::fromKCalEvent()
         KAEvent event(kcalevent);
         QVERIFY(!event.emailBcc());
         QCOMPARE(event.templateAfterTime(), 31);
-        QCOMPARE(event.kmailSerialNumber(), 0);
+        QCOMPARE(event.kmailSerialNumber(), static_cast<unsigned long>(0));
     }
     {
         // KMail serial number, with alarm message in email format
@@ -869,14 +869,14 @@ void KAEventTest::fromKCalEvent()
         kcalalarm->setText(QStringLiteral("From: a@b.c\nTo: d@e.f\nDate: Sun, 01 Apr 2018 17:36:06 +0100\nSubject: About this"));
         KAEvent event(kcalevent);
         QCOMPARE(event.templateAfterTime(), -1);
-        QCOMPARE(event.kmailSerialNumber(), 759231);
+        QCOMPARE(event.kmailSerialNumber(), static_cast<unsigned long>(759231));
     }
     {
         // KMail serial number, with alarm message in wrong format
         Event::Ptr kcalevent = createKcalEvent(dt.qDateTime(), createdDt);
         kcalevent->setCustomProperty("KALARM", "FLAGS", QStringLiteral("KMAIL;759231"));
         KAEvent event(kcalevent);
-        QCOMPARE(event.kmailSerialNumber(), 0);
+        QCOMPARE(event.kmailSerialNumber(), static_cast<unsigned long>(0));
     }
 
     // Alarm custom properties
@@ -1200,7 +1200,7 @@ void KAEventTest::fromKCalEvent()
         Event::Ptr kcalevent = createKcalEvent(dt.qDateTime(), createdDt, kcalalarm, Alarm::Email);
         kcalalarm->setCustomProperty("KALARM", "FLAGS", QStringLiteral("EMAILID;2589"));
         KAEvent event(kcalevent);
-        QCOMPARE(event.emailFromId(), 2589);
+        QCOMPARE(event.emailFromId(), static_cast<unsigned long>(2589));
     }
     {
         // Archived repeat-at-login

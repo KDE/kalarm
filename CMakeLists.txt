@@ -54,9 +54,9 @@ add_definitions(-DQT_NO_NARROWING_CONVERSIONS_IN_CONNECT)
 add_subdirectory(src)
 add_subdirectory(serializers)
 
-#if(BUILD_TESTING)
-#    add_subdirectory(autotests)
-#endif()
+if(BUILD_TESTING)
+   add_subdirectory(autotests)
+endif()
 
 ########### CMake Config Files ###########
 set(CMAKECONFIG_INSTALL_DIR "${KDE_INSTALL_CMAKEPACKAGEDIR}/KF5AlarmCalendar")
