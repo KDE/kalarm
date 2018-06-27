@@ -86,7 +86,7 @@ class AkonadiModel : public Akonadi::EntityTreeModel
 
         static AkonadiModel* instance();
 
-        ~AkonadiModel();
+        ~AkonadiModel() override;
 
         /** Return the display name for a collection. */
         QString displayName(Akonadi::Collection&) const;

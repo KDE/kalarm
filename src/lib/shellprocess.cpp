@@ -165,6 +165,7 @@ QString ShellProcess::errorMessage() const
             if (mExitCode)
                 return i18nc("@info", "Command exit code: %1", mExitCode);
             // Fall through to INACTIVE
+            Q_FALLTHROUGH();
         case INACTIVE:
         case RUNNING:
         default:

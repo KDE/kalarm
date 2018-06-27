@@ -39,7 +39,7 @@ class PackedLayout : public QLayout
          */
         PackedLayout(QWidget* parent, Qt::Alignment alignment);
         explicit PackedLayout(Qt::Alignment alignment);
-        ~PackedLayout();
+        ~PackedLayout() override;
         // Override QLayout methods
         bool             hasHeightForWidth() const override  { return true; }
         int              heightForWidth(int w) const override;

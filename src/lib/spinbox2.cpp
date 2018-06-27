@@ -717,6 +717,7 @@ bool SpinMirror::event(QEvent* e)
             if (mMainSpinbox->rect().contains(mMainSpinbox->mapFromGlobal(QCursor::pos())))
                 break;
             // fall through to QEvent::Enter
+            Q_FALLTHROUGH();
         case QEvent::Enter:
             QApplication::postEvent(mMainSpinbox, new QEvent(e->type()));
             break;
@@ -725,6 +726,7 @@ bool SpinMirror::event(QEvent* e)
             if (mMainSpinbox->rect().contains(mMainSpinbox->mapFromGlobal(QCursor::pos())))
                 break;
             // fall through to QEvent::HoverEnter
+            Q_FALLTHROUGH();
         case QEvent::HoverEnter:
             he = (QHoverEvent*)e;
             QApplication::postEvent(mMainSpinbox, new QHoverEvent(e->type(), he->pos(), he->oldPos()));

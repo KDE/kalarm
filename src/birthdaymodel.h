@@ -48,7 +48,7 @@ class BirthdayModel : public Akonadi::ContactsTreeModel
         /**
          * Destroys the global contact model.
          */
-        ~BirthdayModel();
+        ~BirthdayModel() override;
 
         /**
          * Returns the global contact model instance.
