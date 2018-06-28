@@ -74,7 +74,7 @@ void SpinBox::init()
 
 void SpinBox::setReadOnly(bool ro)
 {
-    if ((int)ro != (int)mReadOnly)
+    if (ro != mReadOnly)
     {
         mReadOnly = ro;
         lineEdit()->setReadOnly(ro);

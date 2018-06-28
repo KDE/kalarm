@@ -63,7 +63,7 @@ class RecurrenceEdit : public QFrame
         enum RepeatType { INVALID_RECUR = -1, NO_RECUR, AT_LOGIN, SUBDAILY, DAILY, WEEKLY, MONTHLY, ANNUAL };
 
         explicit RecurrenceEdit(bool readOnly, QWidget* parent = nullptr);
-        virtual ~RecurrenceEdit()  { }
+        ~RecurrenceEdit() override { }
 
         /** Set widgets to default values */
         void          setDefaults(const KADateTime& from);

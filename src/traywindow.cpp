@@ -214,7 +214,7 @@ void TrayWindow::slotQuitAfter()
 */
 void TrayWindow::setEnabledStatus(bool status)
 {
-    qCDebug(KALARM_LOG) << (int)status;
+    qCDebug(KALARM_LOG) << status;
     updateIcon();
     updateStatus();
     updateToolTip();

@@ -101,7 +101,7 @@ void Reminder::setAfterOnly(bool afterOnly)
 */
 void Reminder::setReadOnly(bool ro)
 {
-    if ((int)ro != (int)mReadOnly)
+    if (ro != mReadOnly)
     {
         mReadOnly = ro;
         mTime->setReadOnly(mReadOnly);

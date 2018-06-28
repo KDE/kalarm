@@ -31,7 +31,7 @@ ComboBox::ComboBox(QWidget* parent)
 
 void ComboBox::setReadOnly(bool ro)
 {
-    if ((int)ro != (int)mReadOnly)
+    if (ro != mReadOnly)
     {
         mReadOnly = ro;
         if (lineEdit())

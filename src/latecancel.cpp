@@ -100,7 +100,7 @@ LateCancelSelector::LateCancelSelector(bool allowHourMinute, QWidget* parent)
 */
 void LateCancelSelector::setReadOnly(bool ro)
 {
-    if ((int)ro != (int)mReadOnly)
+    if (ro != mReadOnly)
     {
         mReadOnly = ro;
         mCheckbox->setReadOnly(mReadOnly);

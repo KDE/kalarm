@@ -79,7 +79,7 @@ ComboBox* TimeSelector::createSignCombo()
 */
 void TimeSelector::setReadOnly(bool ro)
 {
-    if ((int)ro != (int)mReadOnly)
+    if (ro != mReadOnly)
     {
         mReadOnly = ro;
         mSelect->setReadOnly(mReadOnly);

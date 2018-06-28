@@ -43,7 +43,7 @@ CheckBox::CheckBox(const QString& text, QWidget* parent)
 */
 void CheckBox::setReadOnly(bool ro)
 {
-    if ((int)ro != (int)mReadOnly)
+    if (ro != mReadOnly)
     {
         mReadOnly = ro;
         setFocusPolicy(ro ? Qt::NoFocus : mFocusPolicy);

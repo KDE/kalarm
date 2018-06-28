@@ -35,7 +35,7 @@ class TemplateDlg : public QDialog
         Q_OBJECT
     public:
         static TemplateDlg*  create(QWidget* parent = nullptr);
-        ~TemplateDlg();
+        ~TemplateDlg() override;
 
     Q_SIGNALS:
         void          emptyToggled(bool notEmpty);

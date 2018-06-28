@@ -58,7 +58,7 @@ PushButton::PushButton(const QIcon& icon, const QString& text, QWidget* parent)
 void PushButton::setReadOnly(bool ro, bool noHighlight)
 {
     mNoHighlight = noHighlight;
-    if ((int)ro != (int)mReadOnly)
+    if (ro != mReadOnly)
     {
         mReadOnly = ro;
         setFocusPolicy(ro ? Qt::NoFocus : mFocusPolicy);

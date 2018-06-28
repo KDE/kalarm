@@ -68,7 +68,7 @@ class MessageWin : public MainWindowBase
 
         MessageWin();     // for session management restoration only
         MessageWin(const KAEvent*, const KAAlarm&, int flags);
-        ~MessageWin();
+        ~MessageWin() override;
         void                repeat(const KAAlarm&);
         void                setRecreating()        { mRecreating = true; }
         const DateTime&     dateTime()         { return mDateTime; }

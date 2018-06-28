@@ -44,7 +44,7 @@ class SoundWidget : public QWidget
         Q_OBJECT
     public:
         SoundWidget(bool showPlay, bool showRepeat, QWidget* parent);
-        ~SoundWidget();
+        ~SoundWidget() override;
         void           set(const QString& file, float volume, float fadeVolume = -1, int fadeSeconds = 0, int repeatPause = -1);
         void           setReadOnly(bool);
         bool           isReadOnly() const    { return mReadOnly; }

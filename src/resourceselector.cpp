@@ -582,7 +582,6 @@ void ResourceSelector::showInfo()
         if (altypes & CalEvent::TEMPLATE)
             alarmTypes << i18nc("@info", "Alarm templates");
         QString alarmTypeString = alarmTypes.join(i18nc("@info List separator", ", "));
-        KACalendar::Compat compat;
         QString perms = AkonadiModel::readOnlyTooltip(collection);
         if (perms.isEmpty())
             perms = i18nc("@info", "Read-write");
@@ -604,7 +603,7 @@ void ResourceSelector::showInfo()
                              name, id, calType, alarmTypeString, storage, location, perms, enabled, std);
         // Display the collection information. Because the user requested
         // the information, don't raise a KNotify event.
-        KAMessageBox::information(this, text, QString(), QString(), 0);
+        KAMessageBox::information(this, text, QString(), QString(), nullptr);
     }
 }
 

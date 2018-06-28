@@ -59,7 +59,7 @@ class MainWindow : public MainWindowBase, public KCalCore::Calendar::CalendarObs
 
     public:
         static MainWindow* create(bool restored = false);
-        ~MainWindow();
+        ~MainWindow() override;
         bool               isTrayParent() const;
         bool               isHiddenTrayParent() const   { return mHiddenTrayParent; }
         bool               showingArchived() const      { return mShowArchived; }

@@ -21,8 +21,6 @@
 #ifndef KALARM_H
 #define KALARM_H
 
-#undef QT3_SUPPORT
-
 #define VERSION_SUFFIX "-5"
 #define KALARM_VERSION "2.12.0" VERSION_SUFFIX
 
