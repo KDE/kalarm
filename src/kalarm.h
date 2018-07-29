@@ -21,7 +21,7 @@
 #ifndef KALARM_H
 #define KALARM_H
 
-#define VERSION_SUFFIX "-5"
+#define VERSION_SUFFIX ""
 #define KALARM_VERSION "2.12.0" VERSION_SUFFIX
 
 #define KALARM_NAME "KAlarm"
