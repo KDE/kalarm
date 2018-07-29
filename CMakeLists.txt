@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.1)
 set(KDEPIM_VERSION_NUMBER "5.9.40")
 set(PIM_VERSION ${KDEPIM_VERSION_NUMBER})
 
-project(kalarm VERSION "2.11.16")
+project(kalarm VERSION "2.12.0")
 
 set(KF5_VERSION "5.48.0")
 
