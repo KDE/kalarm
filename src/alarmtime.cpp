@@ -30,43 +30,75 @@
 
 using namespace KAlarmCal;
 
-int AlarmTime::mTimeHourPos = -2;
+// Whether the date and time contain leading zeroes.
+QString AlarmTime::mDateFormat;      // date format for current locale
+QString AlarmTime::mTimeFormat;      // time format for current locale
+QString AlarmTime::mTimeFullFormat;  // time format with leading zero, if different from mTimeFormat
+int     AlarmTime::mHourOffset = 0;  // offset within time string to the hour
+bool    AlarmTime::mLeadingZeroesChecked = false;
 
 /******************************************************************************
 * Return the alarm time text in the form "date time".
+* Parameters:
+*   dateTime    = the date/time to format.
+*   leadingZero = the character to represent a leading zero, or '\0' for no leading zeroes.
 */
-QString AlarmTime::alarmTimeText(const DateTime& dateTime)
+QString AlarmTime::alarmTimeText(const DateTime& dateTime, char leadingZero)
 {
     if (!dateTime.isValid())
         return i18nc("@info Alarm never occurs", "Never");
-    QLocale locale;
+    if (!mLeadingZeroesChecked  &&  QApplication::isLeftToRight())    // don't try to align right-to-left languages
+    {
+        // Check whether the day number and/or hour have no leading zeroes, if
+        // they are at the start of the date/time. If no leading zeroes, they
+        // will need to be padded when displayed, so that displayed dates/times
+        // can be aligned with each other.
+        // Note that if leading zeroes are not included in other components, no
+        // alignment will be attempted.
+        QLocale locale;
+        {
+            // Check the date format. 'dd' provides leading zeroes; single 'd'
+            // provides no leading zeroes.
+            mDateFormat = locale.dateFormat(QLocale::ShortFormat);
+        }
+        {
+            // Check the time format. 'HH' and 'hh' provide leading zeroes; single
+            // 'H' or 'h' provide no leading zeroes.
+            mTimeFormat = locale.timeFormat(QLocale::ShortFormat);
+            int i = mTimeFormat.indexOf(QRegExp(QLatin1String("[hH]")));
+            int first = mTimeFormat.indexOf(QRegExp(QLatin1String("[hHmszaA]")));
+            if (i >= 0  &&  i == first  &&  (i == mTimeFormat.size() - 1  ||  mTimeFormat.at(i) != mTimeFormat.at(i + 1)))
+            {
+                mTimeFullFormat = mTimeFormat;
+                mTimeFullFormat.insert(i, mTimeFormat.at(i));
+                // Find index to hour in formatted times
+                const QTime t(1,30,30);
+                const QString nozero = t.toString(mTimeFormat);
+                const QString zero   = t.toString(mTimeFullFormat);
+                for (int i = 0; i < nozero.size(); ++i)
+                    if (nozero[i] != zero[i])
+                    {
+                        mHourOffset = i;
+                        break;
+                    }
+            }
+        }
+    }
+    mLeadingZeroesChecked = true;
+
     const KADateTime kdt = dateTime.effectiveKDateTime().toTimeSpec(Preferences::timeSpec());
-    QString dateTimeText = locale.toString(kdt.date(), QLocale::ShortFormat);
+    QString dateTimeText = kdt.date().toString(mDateFormat);
+
     if (!dateTime.isDateOnly()  ||  kdt.utcOffset() != dateTime.utcOffset())
     {
         // Display the time of day if it's a date/time value, or if it's
         // a date-only value but it's in a different time zone
         dateTimeText += QLatin1Char(' ');
-        const QString time = locale.toString(kdt.time(), QLocale::ShortFormat);
-        if (mTimeHourPos == -2)
-        {
-            // Initialise the position of the hour within the time string, if leading
-            // zeroes are omitted, so that displayed times can be aligned with each other.
-            mTimeHourPos = -1;     // default = alignment isn't possible/sensible
-            if (QApplication::isLeftToRight())    // don't try to align right-to-left languages
-            {
-                // Check if leading zeroes are omitted, and whether the hour is first
-                const QString fmt = locale.timeFormat(QLocale::ShortFormat);
-                int i = fmt.indexOf(QRegExp(QLatin1String("[hH]")));
-                int first = fmt.indexOf(QRegExp(QLatin1String("[hHmszaA]")));
-                if (i >= 0  &&  i == first  &&  (i == fmt.size() - 1  ||  fmt[i] != fmt[i + 1]))
-                    mTimeHourPos = i;             // yes, so need to align
-            }
-        }
-        if (mTimeHourPos >= 0  &&  (int)time.length() > mTimeHourPos + 1
-        &&  time[mTimeHourPos].isDigit()  &&  !time[mTimeHourPos + 1].isDigit())
-            dateTimeText += QLatin1Char('~');     // improve alignment of times with no leading zeroes
-        dateTimeText += time;
+        bool useFullFormat = leadingZero && !mTimeFullFormat.isEmpty();
+        QString timeText = kdt.time().toString(useFullFormat ? mTimeFullFormat : mTimeFormat);
+        if (useFullFormat  &&  leadingZero != '0'  &&  timeText.at(mHourOffset) == QLatin1Char('0'))
+            timeText[mHourOffset] = leadingZero;
+        dateTimeText += timeText;
     }
     return dateTimeText + QLatin1Char(' ');
 }

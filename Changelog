@@ -1,8 +1,9 @@
 KAlarm Change Log
 
-=== Version 2.12.0 (KDE Applications 18.08) --- 18 April 2018 ===
-+ Use KADateTime instead of deprecated KDateTime.
+=== Version 2.12.0 (KDE Applications 18.08) --- 29 Jul 2018 ===
++ Use KAlarmCal::KADateTime instead of deprecated KDateTime.
 + Remove 'clock time' option, in favour of local system time zone.
++ Fix times being truncated and showing ellipsis in main window [KDE Bug 365257]
 + Fix evaluation of work days.
 + Fix reminder-once alarms not being correctly loaded from calendar file.
 + Fix some regressions introduced in version 2.11.0, including:

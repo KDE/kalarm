@@ -27,7 +27,7 @@ using namespace KAlarmCal;
 class AlarmTime
 {
   public:
-    static QString alarmTimeText(const DateTime& dateTime);
+    static QString alarmTimeText(const DateTime& dateTime, char leadingZero = '\0');
     static QString timeToAlarmText(const DateTime& dateTime);
     static bool convertTimeString(const QByteArray& timeString, KADateTime& dateTime,
                                   const KADateTime& defaultDt = KADateTime(), bool allowTZ = true);
@@ -35,7 +35,11 @@ class AlarmTime
                                    bool haveTime, const KADateTime& defaultDt = KADateTime());
 
   private:
-    static int mTimeHourPos;
+    static QString mDateFormat;
+    static QString mTimeFormat;
+    static QString mTimeFullFormat;
+    static int     mHourOffset;
+    static bool    mLeadingZeroesChecked;
 };
 
 // vim: et sw=4:

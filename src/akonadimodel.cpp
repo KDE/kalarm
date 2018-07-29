@@ -1,7 +1,7 @@
 /*
  *  akonadimodel.cpp  -  KAlarm calendar file access using Akonadi
  *  Program:  kalarm
- *  Copyright © 2007-2014 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2007-2014,2018 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -226,6 +226,7 @@ QVariant AkonadiModel::data(const QModelIndex& index, int role) const
         case Qt::ToolTipRole:
         case Qt::CheckStateRole:
         case SortRole:
+        case TimeDisplayRole:
         case ValueRole:
         case StatusRole:
         case AlarmActionsRole:
@@ -331,8 +332,14 @@ QVariant AkonadiModel::data(const QModelIndex& index, int role) const
                             break;
                         case Qt::DisplayRole:
                             if (event.expired())
-                                return AlarmTime::alarmTimeText(event.startDateTime());
-                            return AlarmTime::alarmTimeText(event.nextTrigger(KAEvent::DISPLAY_TRIGGER));
+                                return AlarmTime::alarmTimeText(event.startDateTime(), '0');
+                            return AlarmTime::alarmTimeText(event.nextTrigger(KAEvent::DISPLAY_TRIGGER), '0');
+                        case TimeDisplayRole:
+                            if (event.expired())
+                                return AlarmTime::alarmTimeText(event.startDateTime(), '~');
+                            return AlarmTime::alarmTimeText(event.nextTrigger(KAEvent::DISPLAY_TRIGGER), '~');
+                        case Qt::TextAlignmentRole:
+                            return Qt::AlignRight;
                         case SortRole:
                         {
                             DateTime due;

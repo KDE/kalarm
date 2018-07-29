@@ -1,7 +1,7 @@
 /*
  *  akonadimodel.h  -  KAlarm calendar file access using Akonadi
  *  Program:  kalarm
- *  Copyright © 2010-2014 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2010-2014,2018 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -70,6 +70,7 @@ class AkonadiModel : public Akonadi::EntityTreeModel
             AlarmSubActionRole,        // KAEvent::Action
             ValueRole,                 // numeric value
             SortRole,                  // the value to use for sorting
+            TimeDisplayRole,           // time column value with '~' representing omitted leading zeroes
             CommandErrorRole           // last command execution error for alarm (per user)
         };
 
