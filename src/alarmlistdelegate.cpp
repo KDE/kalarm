@@ -1,7 +1,7 @@
 /*
  *  alarmlistdelegate.cpp  -  handles editing and display of alarm list
  *  Program:  kalarm
- *  Copyright © 2007-2011 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2007-2011,2018 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -29,6 +29,7 @@
 #include <kcolorscheme.h>
 
 #include <QApplication>
+#include <QPainter>
 #include "kalarm_debug.h"
 
 
@@ -48,22 +49,37 @@ void AlarmListDelegate::paint(QPainter* painter, const QStyleOptionViewItem& opt
         {
             case AlarmListModel::TimeColumn:
             {
-                QString str = index.data(Qt::DisplayRole).toString();
+                const QString str = index.data(AkonadiModel::TimeDisplayRole).toString();
                 // Need to pad out spacing to align times without leading zeroes
-                int i = str.indexOf(QStringLiteral(" ~"));    // look for indicator that leading zeroes are omitted
+                int i = str.indexOf(QLatin1Char('~'));    // look for indicator of a leading zero to be omitted
                 if (i >= 0)
                 {
-                    QVariant value;
-                    value = index.data(Qt::ForegroundRole);
+                    painter->save();
+                    opt.displayAlignment = Qt::AlignRight;
+                    const QVariant value = index.data(Qt::ForegroundRole);
                     if (value.isValid())
                         opt.palette.setColor(QPalette::Text, value.value<QColor>());
-                    int digitWidth = opt.fontMetrics.width(QLatin1Char('0'));
-                    QString date = str.left(i + 1);
-                    int w = opt.fontMetrics.width(date) + digitWidth;
-                    drawDisplay(painter, opt, opt.rect, date);
-                    QRect rect(opt.rect);
-                    rect.setLeft(rect.left() + w);
-                    drawDisplay(painter, opt, rect, str.mid(i + 2));
+                    QRect displayRect;
+                    {
+                        QString str0 = str;
+                        str0[i] = QLatin1Char('0');
+                        QRect r = opt.rect;
+                        r.setWidth(INT_MAX/256);
+                        displayRect = textRectangle(painter, r, opt.font, str0);
+                        displayRect = QStyle::alignedRect(opt.direction, opt.displayAlignment,
+                                                          displayRect.size().boundedTo(opt.rect.size()),
+                                                          opt.rect);
+                    }
+                    const QString date = str.left(i);
+                    const QString time = str.mid(i + 1);
+                    if (i > 0)
+                    {
+                        opt.displayAlignment = Qt::AlignLeft;
+                        drawDisplay(painter, opt, displayRect, date);
+                        opt.displayAlignment = Qt::AlignRight;
+                    }
+                    drawDisplay(painter, opt, displayRect, time);
+                    painter->restore();
                     return;
                 }
                 break;
@@ -92,24 +108,6 @@ QSize AlarmListDelegate::sizeHint(const QStyleOptionViewItem& option, const QMod
     {
         switch (index.column())
         {
-            case AlarmListModel::TimeColumn:
-            {
-                int h = option.fontMetrics.lineSpacing();
-                const int textMargin = QApplication::style()->pixelMetric(QStyle::PM_FocusFrameHMargin) + 1;
-                int w = 2 * textMargin;
-                QString str = index.data(Qt::DisplayRole).toString();
-                // Need to pad out spacing to align times without leading zeroes
-                int i = str.indexOf(QStringLiteral(" ~"));    // look for indicator that leading zeroes are omitted
-                if (i >= 0)
-                {
-                    int digitWidth = option.fontMetrics.width(QLatin1Char('0'));
-                    QString date = str.left(i + 1);
-                    w += option.fontMetrics.width(date) + digitWidth + option.fontMetrics.width(str.mid(i + 2));;
-                }
-                else
-                    w += option.fontMetrics.width(str);
-                return QSize(w, h);
-            }
             case AlarmListModel::ColourColumn:
             {
                 int h = option.fontMetrics.lineSpacing();
