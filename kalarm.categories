@@ -1,2 +1,2 @@
-org.kde.pim.kalarm kalarm (kalarm)
-org.kde.pim.autostart_kalarm kalarm (autostart_kalarm)
+org.kde.pim.kalarm kalarm (kalarm) IDENTIFIER [KALARM_LOG]
+org.kde.pim.autostart_kalarm kalarm (autostart_kalarm) IDENTIFIER [KALARMAUTOSTART_LOG]
