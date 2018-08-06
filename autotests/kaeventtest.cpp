@@ -36,7 +36,7 @@ using namespace KHolidays;
 
 #include <QtTest>
 
-QTEST_MAIN(KAEventTest)
+QTEST_GUILESS_MAIN(KAEventTest)
 
 namespace
 {

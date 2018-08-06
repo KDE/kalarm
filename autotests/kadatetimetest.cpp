@@ -37,7 +37,7 @@ using KAlarmCal::KADateTime;
 
 //TODO: test new methods
 
-QTEST_MAIN(KADateTimeTest)
+QTEST_GUILESS_MAIN(KADateTimeTest)
 
 
 namespace KAlarmCal
