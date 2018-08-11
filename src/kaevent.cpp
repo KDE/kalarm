@@ -26,9 +26,9 @@
 #include "identities.h"
 #include "version.h"
 
-#include <kholidays/holidayregion.h>
 #include <kcalcore/memorycalendar.h>
-#include <kholidays/holiday.h>
+#include <KHolidays/Holiday>
+#include <KHolidays/HolidayRegion>
 
 #include <klocalizedstring.h>
 
