@@ -364,6 +364,8 @@ QVariant AkonadiModel::data(const QModelIndex& index, int role) const
                             if (event.expired())
                                 return QString();
                             return AlarmTime::timeToAlarmText(event.nextTrigger(KAEvent::DISPLAY_TRIGGER));
+                        case Qt::TextAlignmentRole:
+                            return Qt::AlignRight;
                         case SortRole:
                         {
                             if (event.expired())
