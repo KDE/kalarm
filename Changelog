@@ -1,7 +1,8 @@
 KAlarm Change Log
 
-=== Version 2.12.1 (KDE Applications 18.08.01) --- 17 Aug 2018 ===
+=== Version 2.12.1 (KDE Applications 18.08.01) --- 18 Aug 2018 ===
 + Align and right adjust 'Time to' column values in main window [KDE Bug 397130]
++ Remove seconds values from Time column (erroneously added in 2.12.0).
 
 === Version 2.12.0 (KDE Applications 18.08) --- 29 Jul 2018 ===
 + Use KAlarmCal::KADateTime instead of deprecated KDateTime.
