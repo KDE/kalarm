@@ -62,11 +62,50 @@ QString AlarmTime::alarmTimeText(const DateTime& dateTime, char leadingZero)
             mDateFormat = locale.dateFormat(QLocale::ShortFormat);
         }
         {
-            // Check the time format. 'HH' and 'hh' provide leading zeroes; single
-            // 'H' or 'h' provide no leading zeroes.
+            // Check the time format.
+            // Remove all but hours, minutes and AM/PM, since alarms are on minute
+            // boundaries. Preceding separators are also removed.
             mTimeFormat = locale.timeFormat(QLocale::ShortFormat);
+            for (int del = 0, predel = 0, c = 0;  c < mTimeFormat.size();  ++c)
+            {
+                char ch = mTimeFormat.at(c).toLatin1();
+                switch (ch)
+                {
+                    case 'H':
+                    case 'h':
+                    case 'm':
+                    case 'a':
+                    case 'A':
+                        if (predel == 1)
+                        {
+                            mTimeFormat.remove(del, c - del);
+                            c = del;
+                        }
+                        del = c + 1;   // start deleting from the next character
+                        if ((ch == 'A'  &&  del < mTimeFormat.size()  &&  mTimeFormat.at(del).toLatin1() == 'P')
+                        ||  (ch == 'a'  &&  del < mTimeFormat.size()  &&  mTimeFormat.at(del).toLatin1() == 'p'))
+                            ++c, ++del;
+                        predel = -1;
+                        break;
+
+                    case 's':
+                    case 'z':
+                    case 't':
+                        mTimeFormat.remove(del, c + 1 - del);
+                        c = del - 1;
+                        if (!predel)
+                            predel = 1;
+                        break;
+
+                    default:
+                        break;
+                }
+            }
+
+            // 'HH' and 'hh' provide leading zeroes; single 'H' or 'h' provide no
+            // leading zeroes.
             int i = mTimeFormat.indexOf(QRegExp(QLatin1String("[hH]")));
-            int first = mTimeFormat.indexOf(QRegExp(QLatin1String("[hHmszaA]")));
+            int first = mTimeFormat.indexOf(QRegExp(QLatin1String("[hHmaA]")));
             if (i >= 0  &&  i == first  &&  (i == mTimeFormat.size() - 1  ||  mTimeFormat.at(i) != mTimeFormat.at(i + 1)))
             {
                 mTimeFullFormat = mTimeFormat;
