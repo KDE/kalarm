@@ -125,9 +125,13 @@ QString AlarmTime::timeToAlarmText(const DateTime& dateTime)
     minutes[1] = (mins%60) % 10 + '0';
     if (mins < 24*60)
         return i18nc("@info hours:minutes", "%1:%2", mins/60, QLatin1String(minutes));
-    int days = mins / (24*60);
-    mins = mins % (24*60);
-    return i18nc("@info days hours:minutes", "%1d %2:%3", days, mins/60, QLatin1String(minutes));
+    // If we render a day count, then we zero-pad the hours, to make the days line up and be more scanable.
+    int hrs = mins / 60;
+    char hours[3] = "00";
+    hours[0] = (hrs%24) / 10 + '0';
+    hours[1] = (hrs%24) % 10 + '0';
+    int days = hrs / 24;
+    return i18nc("@info days hours:minutes", "%1d %2:%3", days, QLatin1String(hours), QLatin1String(minutes));
 }
 
 /******************************************************************************
