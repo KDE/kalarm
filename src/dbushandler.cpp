@@ -36,7 +36,7 @@
 #include <KCalCore/Duration>
 using namespace KCalCore;
 
-#include <QtDBus/QtDBus>
+#include <QtDBus>
 #include "kalarm_debug.h"
 
 #include <stdlib.h>

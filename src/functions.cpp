@@ -80,7 +80,7 @@ using namespace KCalCore;
 #include <QRegExp>
 #include <QFileDialog>
 #include <QDesktopWidget>
-#include <QtDBus/QtDBus>
+#include <QtDBus>
 #include <QTimer>
 #include <qglobal.h>
 #include <QStandardPaths>

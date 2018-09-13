@@ -34,7 +34,7 @@ namespace Akonadi
  * @short Provides the global model for all contacts
  *
  * This model provides the EntityTreeModel for all contacts.
- * The model is accessable via the static instance() method.
+ * The model is accessible via the static instance() method.
  */
 class BirthdayModel : public Akonadi::ContactsTreeModel
 {

@@ -67,7 +67,7 @@
 #include <QPushButton>
 #include <QScrollBar>
 #include <QLocale>
-#include <QtDBus/QtDBus>
+#include <QtDBus>
 #include <QFile>
 #include <QCheckBox>
 #include <QLabel>

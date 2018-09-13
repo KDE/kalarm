@@ -58,7 +58,7 @@
 #include <QByteArray>
 #include <QTextCodec>
 #include <QStandardPaths>
-#include <QtDBus/QtDBus>
+#include <QtDBus>
 #include "kalarm_debug.h"
 
 #include <pwd.h>
