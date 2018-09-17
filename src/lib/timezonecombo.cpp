@@ -36,7 +36,7 @@ TimeZoneCombo::TimeZoneCombo(QWidget* parent)
         if (zone != utc)
         {
             mZoneNames << zone;
-            addItem(i18n(zone).replace(QLatin1Char('_'), QLatin1Char(' ')));
+            addItem(i18n(zone.constData()).replace(QLatin1Char('_'), QLatin1Char(' ')));
         }
 }
 

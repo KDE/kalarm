@@ -191,7 +191,7 @@ bool AlarmTime::convertTimeString(const QByteArray& timeString, KADateTime& date
         return false;
     QString zone = (i >= 0) ? QString::fromLatin1(timeString.mid(i)) : QString();
     char timeStr[MAX_DT_LEN+1];
-    strcpy(timeStr, timeString.left(i >= 0 ? i : MAX_DT_LEN));
+    strcpy(timeStr, timeString.left(i >= 0 ? i : MAX_DT_LEN).constData());
     int dt[5] = { -1, -1, -1, -1, -1 };
     char* s;
     char* end;

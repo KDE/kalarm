@@ -201,7 +201,7 @@ int KAMail::send(JobData& jobdata, QStringList& errmsgs)
         }
 
         // Execute the send command
-        FILE* fd = ::popen(command.toLocal8Bit(), "w");
+        FILE* fd = ::popen(command.toLocal8Bit().constData(), "w");
         if (!fd)
         {
             qCCritical(KALARM_LOG) << "Unable to open a pipe to " << command;
@@ -210,7 +210,7 @@ int KAMail::send(JobData& jobdata, QStringList& errmsgs)
         }
         message->assemble();
         QByteArray encoded = message->encodedContent();
-        fwrite(encoded, encoded.length(), 1, fd);
+        fwrite(encoded.constData(), encoded.length(), 1, fd);
         pclose(fd);
 
 #ifdef KMAIL_SUPPORTED
@@ -485,7 +485,7 @@ void KAMail::notifyQueued(const KAEvent& event)
     for (int i = 0, end = addresses.count();  i < end;  ++i)
     {
         QByteArray email = addresses[i]->email().toLocal8Bit();
-        const char* em = email;
+        const char* em = email.constData();
         if (!email.isEmpty()
         &&  HeaderParsing::parseAddress(em, em + email.length(), addr))
         {
@@ -913,7 +913,7 @@ bool parseUserName( const char* & scursor, const char * const send,
       scursor--; // re-set scursor to point to ch again
       tmp.clear();
       if ( parseAtom( scursor, send, result, false /* no 8bit */ ) ) {
-        if (getpwnam(result.toLocal8Bit()))
+        if (getpwnam(result.toLocal8Bit().constData()))
           return true;
       }
       return false; // parseAtom can only fail if the first char is non-atext.
