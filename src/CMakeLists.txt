@@ -1,7 +1,4 @@
 
-add_definitions( -DQT_NO_CAST_FROM_ASCII )
-add_definitions( -DQT_NO_CAST_TO_ASCII )
-
 ########### next target ###############
 set(kalarmcal_LIB_SRCS
     kacalendar.cpp
