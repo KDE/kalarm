@@ -1,6 +1,9 @@
 KAlarm Change Log
 
-=== Version 2.12.1 (KDE Applications 18.08.01) --- 18 Aug 2018 ===
+=== Version 2.12.2 (KDE Applications 18.08.2) --- 27 Sep 2018 ===
++ Fix Defer button being disabled for recurring alarms [KDE Bug 398658]
+
+=== Version 2.12.1 (KDE Applications 18.08.1) --- 18 Aug 2018 ===
 + Align and right adjust 'Time to' column values in main window [KDE Bug 397130]
 + Remove seconds values from Time column (erroneously added in 2.12.0).
 
