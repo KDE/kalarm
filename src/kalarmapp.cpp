@@ -809,7 +809,7 @@ void KAlarmApp::checkNextDueAlarm()
         return;   // there are no alarms pending
     const KADateTime nextDt = nextEvent->nextTrigger(KAEvent::ALL_TRIGGER).effectiveKDateTime();
     const KADateTime now = KADateTime::currentDateTime(Preferences::timeSpec());
-    qint64 interval = now.secsTo(nextDt);
+    qint64 interval = now.msecsTo(nextDt);
     qCDebug(KALARM_LOG) << "now:" << qPrintable(now.toString(QStringLiteral("%Y-%m-%d %H:%M %:Z"))) << ", next:" << qPrintable(nextDt.toString(QStringLiteral("%Y-%m-%d %H:%M %:Z"))) << ", due:" << interval;
     if (interval <= 0)
     {
@@ -831,10 +831,10 @@ void KAlarmApp::checkNextDueAlarm()
          * run, they would trigger late by the length of time the system
          * was asleep.
          */
-        if (interval > 60)    // 1 minute
-            interval = 60;
+        if (interval > 60000)    // 1 minute
+            interval = 60000;
 #endif
-        interval *= 1000;
+        ++interval;    // ensure we don't trigger just before the minute boundary
         if (interval > INT_MAX)
             interval = INT_MAX;
         qCDebug(KALARM_LOG) << nextEvent->id() << "wait" << interval/1000 << "seconds";
