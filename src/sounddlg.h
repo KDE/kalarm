@@ -100,24 +100,24 @@ class SoundDlg : public QDialog
     public:
         SoundDlg(const QString& file, float volume, float fadeVolume, int fadeSeconds, int repeatPause,
                  const QString& caption, QWidget* parent);
-        void           setReadOnly(bool);
-        bool           isReadOnly() const    { return mReadOnly; }
-        QUrl           getFile() const;
-        void           getVolume(float& volume, float& fadeVolume, int& fadeSeconds) const
-                                             { mSoundWidget->getVolume(volume, fadeVolume, fadeSeconds); }
-        int            repeatPause() const   { return mSoundWidget->repeatPause(); }
-        QString        defaultDir() const    { return mSoundWidget->defaultDir(); }
+        void    setReadOnly(bool);
+        bool    isReadOnly() const    { return mReadOnly; }
+        QUrl    getFile() const;
+        void    getVolume(float& volume, float& fadeVolume, int& fadeSeconds) const
+                                      { mSoundWidget->getVolume(volume, fadeVolume, fadeSeconds); }
+        int     repeatPause() const   { return mSoundWidget->repeatPause(); }
+        QString defaultDir() const    { return mSoundWidget->defaultDir(); }
 
     protected:
-        void           resizeEvent(QResizeEvent*) override;
+        void    resizeEvent(QResizeEvent*) override;
 
     protected Q_SLOTS:
-        void           slotButtonClicked(QAbstractButton *button);
+        void    slotButtonClicked(QAbstractButton*);
 
     private:
-        SoundWidget*   mSoundWidget;
-        QDialogButtonBox *mButtonBox;
-        bool           mReadOnly;
+        SoundWidget*      mSoundWidget;
+        QDialogButtonBox* mButtonBox;
+        bool              mReadOnly;
 };
 
 #endif

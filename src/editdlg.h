@@ -126,7 +126,7 @@ class EditAlarmDlg : public QDialog
         virtual void    slotTry();
         virtual void    slotHelp();      // Load Template
         virtual void    slotDefault();   // More/Less Options
-        void            slotButtonClicked(QAbstractButton *button);
+        void            slotButtonClicked(QAbstractButton*);
         void            contentsChanged();
 
     private Q_SLOTS:

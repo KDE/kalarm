@@ -250,7 +250,7 @@ void EditAlarmDlg::init(const KAEvent* event)
     QVBoxLayout* mainLayout = new QVBoxLayout(this);
     if (mTemplate)
     {
-        QFrame *frame = new QFrame;
+        QFrame* frame = new QFrame;
         QHBoxLayout* box = new QHBoxLayout();
         frame->setLayout(box);
         box->setMargin(0);
@@ -285,7 +285,7 @@ void EditAlarmDlg::init(const KAEvent* event)
     StackedScrollWidget* recurScroll = new StackedScrollWidget(mTabScrollGroup);
     mTabs->addTab(recurScroll, QString());
     mRecurPageIndex = 1;
-    QFrame *recurTab = new QFrame;
+    QFrame* recurTab = new QFrame;
     QVBoxLayout* recurTabLayout = new QVBoxLayout();
     recurTabLayout->setMargin(style()->pixelMetric(QStyle::PM_DefaultChildMargin));
     recurTab->setLayout(recurTabLayout);
@@ -353,7 +353,7 @@ void EditAlarmDlg::init(const KAEvent* event)
         mTemplateTimeGroup->addButton(mTemplateDefaultTime);
         grid->addWidget(mTemplateDefaultTime, 0, 0, Qt::AlignLeft);
 
-        QWidget *box = new QWidget(templateTimeBox);
+        QWidget* box = new QWidget(templateTimeBox);
         QHBoxLayout* layout = new QHBoxLayout(box);
         layout->setMargin(0);
         layout->setSpacing(style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
@@ -980,7 +980,7 @@ void EditAlarmDlg::resizeEvent(QResizeEvent* re)
 /******************************************************************************
 * Called when any button is clicked.
 */
-void EditAlarmDlg::slotButtonClicked(QAbstractButton *button)
+void EditAlarmDlg::slotButtonClicked(QAbstractButton* button)
 {
     if (button == mTryButton)
         slotTry();

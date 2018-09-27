@@ -203,7 +203,7 @@ RepetitionDlg::RepetitionDlg(const QString& caption, bool readOnly, QWidget* par
     mDurationButton->setFocusWidget(mDuration);
     layout->addStretch();
 
-    QDialogButtonBox *buttonBox = new QDialogButtonBox(this);
+    QDialogButtonBox* buttonBox = new QDialogButtonBox(this);
     buttonBox->addButton(QDialogButtonBox::Ok);
     buttonBox->addButton(QDialogButtonBox::Cancel);
     connect(buttonBox, &QDialogButtonBox::accepted,

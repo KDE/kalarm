@@ -58,18 +58,18 @@ DeferAlarmDlg::DeferAlarmDlg(const DateTime& initialDT, bool anyTimeOption, bool
 
     mButtonBox = new QDialogButtonBox(this);
     layout->addWidget(mButtonBox);
-    QPushButton *okButton = mButtonBox->addButton(QDialogButtonBox::Ok);
+    QPushButton* okButton = mButtonBox->addButton(QDialogButtonBox::Ok);
     okButton->setWhatsThis(i18nc("@info:whatsthis", "Defer the alarm until the specified time."));
     if (cancelButton)
         mButtonBox->addButton(QDialogButtonBox::Cancel);
-    QPushButton *deferButton =mButtonBox->addButton(i18nc("@action:button", "Cancel Deferral"), QDialogButtonBox::ActionRole);
+    QPushButton* deferButton = mButtonBox->addButton(i18nc("@action:button", "Cancel Deferral"), QDialogButtonBox::ActionRole);
     deferButton->setWhatsThis(i18nc("@info:whatsthis", "Cancel the deferred alarm. This does not affect future recurrences."));
     connect(mButtonBox, &QDialogButtonBox::accepted,
             this, &DeferAlarmDlg::slotOk);
     connect(mButtonBox, &QDialogButtonBox::rejected,
             this, &QDialog::reject);
     connect(mButtonBox, &QDialogButtonBox::clicked,
-            [this, deferButton](QAbstractButton *btn)
+            [this, deferButton](QAbstractButton* btn)
             {
                 if (btn == deferButton)
                     slotCancelDeferral();

@@ -107,7 +107,7 @@ TemplateDlg::TemplateDlg(QWidget* parent)
 
     topLayout->addWidget(new KSeparator(Qt::Horizontal, this));
 
-    QDialogButtonBox *buttonBox = new QDialogButtonBox(this);
+    QDialogButtonBox* buttonBox = new QDialogButtonBox(this);
     buttonBox->addButton(QDialogButtonBox::Close);
     connect(buttonBox, &QDialogButtonBox::rejected,
             this, &QDialog::close);

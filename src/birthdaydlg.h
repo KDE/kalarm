@@ -69,7 +69,7 @@ class BirthdayDlg : public QDialog
         LateCancelSelector*   mLateCancel;
         SpecialActionsButton* mSpecialActionsButton;
         RepetitionButton*     mSubRepetition;
-        QDialogButtonBox *    mButtonBox;
+        QDialogButtonBox*     mButtonBox;
         QString               mPrefixText;   // last entered value of prefix text
         QString               mSuffixText;   // last entered value of suffix text
         KAEvent::Flags        mFlags;        // event flag bits

@@ -61,7 +61,7 @@ SoundDlg::SoundDlg(const QString& file, float volume, float fadeVolume, int fade
     : QDialog(parent),
       mReadOnly(false)
 {
-    QVBoxLayout *layout = new QVBoxLayout(this);
+    QVBoxLayout* layout = new QVBoxLayout(this);
     mSoundWidget = new SoundWidget(true, true, this);
     layout->addWidget(mSoundWidget);
 
@@ -127,7 +127,7 @@ void SoundDlg::resizeEvent(QResizeEvent* re)
 /******************************************************************************
 * Called when the OK or Cancel button is clicked.
 */
-void SoundDlg::slotButtonClicked(QAbstractButton *button)
+void SoundDlg::slotButtonClicked(QAbstractButton* button)
 {
     if (button == mButtonBox->button(QDialogButtonBox::Ok))
     {
