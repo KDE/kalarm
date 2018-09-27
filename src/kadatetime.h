@@ -922,6 +922,27 @@ public:
     KADateTime addYears(int years) const;
 
     /**
+     * Returns the number of milliseconds from this date/time to the @p other date/time.
+     *
+     * Before performing the comparison, the two date/times are converted to UTC
+     * to ensure that the result is correct if one of the two date/times has
+     * daylight saving time (DST) and the other doesn't.
+     *
+     * If one instance is date-only and the other is date-time, the date-time
+     * value is first converted to the same time specification as the date-only
+     * value, and the result is the difference in days between the resultant
+     * date and the date-only date.
+     *
+     * If both instances are date-only, the result is the difference in days
+     * between the two dates, ignoring time zones.
+     *
+     * @param other other date/time
+     * @return number of milliseconds difference
+     * @see addSecs(), daysTo()
+     */
+    qint64 msecsTo(const KADateTime &other) const;
+
+    /**
      * Returns the number of seconds from this date/time to the @p other date/time.
      *
      * Before performing the comparison, the two date/times are converted to UTC
