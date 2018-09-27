@@ -1240,6 +1240,20 @@ KADateTime KADateTime::addYears(int years) const
     return result;
 }
 
+qint64 KADateTime::msecsTo(const KADateTime &t2) const
+{
+    if (!isValid() || !t2.isValid())
+        return 0;
+    if (d->dateOnly()) {
+        const QDate dat = t2.d->dateOnly() ? t2.d->date() : t2.toTimeSpec(d->spec()).d->date();
+        return d->date().daysTo(dat) * 86400*1000;
+    }
+    if (t2.d->dateOnly())
+        return toTimeSpec(t2.d->spec()).d->date().daysTo(t2.d->date()) * 86400*1000;
+    QTimeZone local;
+    return d->toUtc(local).msecsTo(t2.d->toUtc(local));
+}
+
 qint64 KADateTime::secsTo(const KADateTime &t2) const
 {
     if (!isValid() || !t2.isValid())
