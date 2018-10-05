@@ -10,13 +10,13 @@ find_package(ECM ${KF5_VERSION} CONFIG REQUIRED)
 set(CMAKE_MODULE_PATH ${kalarm_SOURCE_DIR}/cmake/modules ${ECM_MODULE_PATH})
 include(ECMInstallIcons)
 
-include(ECMOptionalAddSubdirectory)
+
 include(ECMSetupVersion)
 include(ECMAddTests)
-include(ECMMarkNonGuiExecutable)
+
 include(GenerateExportHeader)
 include(ECMGenerateHeaders)
-include(CMakePackageConfigHelpers)
+
 include(FeatureSummary)
 include(CheckFunctionExists)
 include(ECMGeneratePriFile)
