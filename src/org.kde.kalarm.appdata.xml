@@ -80,7 +80,7 @@
   <summary xml:lang="zh-CN">个人提醒和计划任务</summary>
   <summary xml:lang="zh-TW">個人鬧鐘排程程式</summary>
   <description>
-    <p>KAlarm is a personal alarm message, command and email scheduler</p>
+    <p>KAlarm is a personal alarm message, command and email scheduler application by KDE</p>
     <p xml:lang="ar">«منبّهك» هو مجدوِل رسائل وأوامر وبُرد إلكترونيّة شخصيّ.</p>
     <p xml:lang="ca">El KAlarm és un planificador personal per a alarmes de missatge, ordres i correu electrònic.</p>
     <p xml:lang="ca-valencia">El KAlarm és un planificador personal per a alarmes de missatge, ordres i correu electrònic.</p>
@@ -320,11 +320,12 @@
       <li xml:lang="zh-TW">支援多重鬧鐘行事曆，例如可以讓您在筆記型電腦與桌上型電腦間分享鬧鐘。</li>
     </ul>
   </description>
-  <url type="homepage">http://www.astrojar.org.uk/kalarm/index.html</url>
+  <url type="homepage">http://www.astrojar.org.uk/kalarm/</url>
   <url type="bugtracker">https://bugs.kde.org/enter_bug.cgi?format=guided&amp;product=kalarm</url>
   <url type="help">http://docs.kde.org/stable/en/kdepim/kalarm/index.html</url>
   <screenshots>
     <screenshot type="default">
+      <caption>KAlarm configuration window with a testing message alarm</caption>
       <image>http://kde.org/images/screenshots/kalarm.png</image>
     </screenshot>
   </screenshots>
