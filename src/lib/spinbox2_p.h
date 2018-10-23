@@ -91,7 +91,7 @@ class SpinMirror : public QGraphicsView
 
         ExtraSpinBox*        mSpinbox;    // spinbox whose spin buttons are being mirrored
         SpinBox*             mMainSpinbox;
-        QGraphicsPixmapItem* mButtons;    // image of spin butttons
+        QGraphicsPixmapItem* mButtons;    // image of spin buttons
         bool                 mReadOnly;   // value cannot be changed
         bool                 mMirrored;   // mirror left-to-right
 };

@@ -75,7 +75,7 @@ class ButtonGroup : public QButtonGroup
          */
         void         setButton(int id);
     Q_SIGNALS:
-        /** Signal emitted whenever whenever any button in the group changes state,
+        /** Signal emitted whenever any button in the group changes state,
          *  for whatever reason.
          *  @param button The button which is now selected
          */
