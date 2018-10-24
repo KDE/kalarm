@@ -81,38 +81,6 @@
   <summary xml:lang="zh-TW">個人鬧鐘排程程式</summary>
   <description>
     <p>KAlarm is a personal alarm message, command and email scheduler application by KDE</p>
-    <p xml:lang="ar">«منبّهك» هو مجدوِل رسائل وأوامر وبُرد إلكترونيّة شخصيّ.</p>
-    <p xml:lang="ca">El KAlarm és un planificador personal per a alarmes de missatge, ordres i correu electrònic.</p>
-    <p xml:lang="ca-valencia">El KAlarm és un planificador personal per a alarmes de missatge, ordres i correu electrònic.</p>
-    <p xml:lang="de">KAlarm ist ein Planer für Erinnerungsnachrichten sowie für termingesteuerten E-Mail-Versand und Befehlsausführungen</p>
-    <p xml:lang="en-GB">KAlarm is a personal alarm message, command and email scheduler</p>
-    <p xml:lang="es">KAlarm es un mensaje personal de alarmas, órdenes y planificador de correo</p>
-    <p xml:lang="et">KAlarm on personaalsete häirete ja meeldetuletuste ajastaja</p>
-    <p xml:lang="fi">KAlarm on henkilökohtainen hälytysten, komentojen ja sähköpostin ajastin</p>
-    <p xml:lang="fr">KAlarm est un programmateur personnel de message d'alarme, de commande et de courrier électronique</p>
-    <p xml:lang="gl">KAlarm é un programador de mensaxes persoais de alarma, ordes e mensaxes de correo electrónico.</p>
-    <p xml:lang="hu">A KAlarm egy személyi emlékeztető üzenet, parancs és e-mail ütemező</p>
-    <p xml:lang="it">KAlarm è un pianificatore personale di messaggi di avviso, di posta elettronica e per l'esecuzione di comandi</p>
-    <p xml:lang="ko">KAlarm은 개인 알람, 명령, 이메일 스케줄러입니다</p>
-    <p xml:lang="nb">Kalarm er en personlig varslingsstyring for melding, kommandoer og e-post</p>
-    <p xml:lang="nds">KAlarm is en persöönlich Planer för Anstootnarichten, Befehlen un Nettbreven.</p>
-    <p xml:lang="nl">Kalarm is een persoonlijke planner voor herinneringen, commando's en e-mailberichten</p>
-    <p xml:lang="pl">KAlarm jest osobistym programem do planowania wiadomości alarmowych, poleceń i wiadomości pocztowych</p>
-    <p xml:lang="pt">O KAlarm é um sistema para agendar alarmes com mensagens, comandos e e-mails</p>
-    <p xml:lang="pt-BR">KAlarm é um agendador pessoal de mensagens de alarme, comandos e e-mails</p>
-    <p xml:lang="ru">KAlarm — программа для установки напоминаний, а также для планирования запуска команд и отправки электронных писем</p>
-    <p xml:lang="sk">KAlarm je osobný plánovač správ budíkov, príkazov a e-mailov</p>
-    <p xml:lang="sl">Kalarm je osebni razporejevalnik alarmov, ukazov in e-pošte</p>
-    <p xml:lang="sr">К‑аларм је лични распоређивач алармних порука, наредаба и е‑поште.</p>
-    <p xml:lang="sr-Latn">K‑alarm je lični raspoređivač alarmnih poruka, naredaba i e‑pošte.</p>
-    <p xml:lang="sr-ijekavian">К‑аларм је лични распоређивач алармних порука, наредаба и е‑поште.</p>
-    <p xml:lang="sr-ijekavianlatin">K‑alarm je lični raspoređivač alarmnih poruka, naredaba i e‑pošte.</p>
-    <p xml:lang="sv">Kalarm schemalägger personliga alarmmeddelanden, kommandon och e-post</p>
-    <p xml:lang="tr">KAlarm kişisel alarm iletisi, komut ve e-posta zamanlayıcısıdır</p>
-    <p xml:lang="uk">KAlarm — інструмент для складання розкладу повідомлень, команд і поштових повідомлень для нагадування.</p>
-    <p xml:lang="x-test">xxKAlarm is a personal alarm message, command and email schedulerxx</p>
-    <p xml:lang="zh-CN">KAlarm 是个人提醒和计划任务工具，按照既定时间提示消息，执行命令和发送邮件。</p>
-    <p xml:lang="zh-TW">KAlarm 是個人化的鬧鐘，可以使用訊息、指令或排程發送電子郵件</p>
     <p>Features:</p>
     <p xml:lang="ar">الميزات:</p>
     <p xml:lang="bs">Svojstva:</p>
