@@ -28,7 +28,7 @@
  *  When the window is closed, it only allows the application to quit if there is no
  *  system tray icon displayed.
  *
- *  @author David Jarvie <software@astrojar.org.uk>
+ *  @author David Jarvie <djarvie@kde.org>
  */
 class MainWindowBase : public KXmlGuiWindow
 {
