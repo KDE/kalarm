@@ -39,7 +39,7 @@ class StackedWidgetT : public T
     public:
         /** Constructor.
          *  @param parent The parent object of this widget.
-         *  @param name The name of this widget.
+         *  @param group The group of this widget.
          */
         explicit StackedWidgetT(StackedGroupT<T>* group, QWidget* parent = nullptr)
               : T(parent),
