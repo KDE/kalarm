@@ -317,7 +317,7 @@ public:
     KAEvent();
 
     /** Construct an event and initialise with the specified parameters.
-     *  @param dt    start date/time. If @dt is date-only, or if #ANY_TIME flag
+     *  @param dt    start date/time. If @p dt is date-only, or if #ANY_TIME flag
      *               is specified, the event will be date-only.
      *  @param text  alarm message (@p action = #MESSAGE);
      *               file to display (@p action = #FILE);
@@ -954,7 +954,7 @@ public:
 
     /** Enable or disable the alarm on non-working days and outside working hours.
      *  Note that this option only has any effect for recurring alarms.
-     *  @param exclude  true to restrict to working time, false to enable any time
+     *  @param wto  true to restrict to working time, false to enable any time
      *  @see workTimeOnly(), setWorkTime()
      */
     void setWorkTimeOnly(bool wto);
@@ -1041,7 +1041,7 @@ public:
     /** Set the recurrence to recur monthly, on the specified weekdays in the
      *  specified weeks of the month.
      *  @param freq   how many months between recurrences.
-     *  @param days   which days of the week/weeks of the month alarms should occur on.
+     *  @param pos    which days of the week/weeks of the month alarms should occur on.
      *  @param count  number of occurrences, including first and last;
      *                = -1 to recur indefinitely;
      *                = 0 to use @p end instead.
@@ -1068,7 +1068,7 @@ public:
     /** Set the recurrence to recur annually, on the specified weekdays in the
      *  specified weeks of the specified months.
      *  @param freq   how many years between recurrences.
-     *  @param days   which days of the week/weeks of the month alarms should occur on.
+     *  @param pos    which days of the week/weeks of the month alarms should occur on.
      *  @param months which months of the year alarms should occur on.
      *  @param count  number of occurrences, including first and last;
      *                = -1 to recur indefinitely;
