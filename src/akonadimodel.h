@@ -226,23 +226,23 @@ class AkonadiModel : public Akonadi::EntityTreeModel
         void eventChanged(const AkonadiModel::Event&);
 
         /** Signal emitted when Akonadi has completed a collection modification.
-         *  @param Id      Akonadi ID for the collection
+         *  @param id      Akonadi ID for the collection
          *  @param status  true if successful, false if error
          */
-        void collectionModified(Akonadi::Collection::Id, bool status = true);
+        void collectionModified(Akonadi::Collection::Id id, bool status = true);
 
         /** Signal emitted when Akonadi has completed a collection deletion.
-         *  @param Id      Akonadi ID for the collection
+         *  @param id      Akonadi ID for the collection
          *  @param status  true if successful, false if error
          */
-        void collectionDeleted(Akonadi::Collection::Id, bool status = true);
+        void collectionDeleted(Akonadi::Collection::Id id, bool status = true);
 
         /** Signal emitted when Akonadi has completed an item creation, update
          *  or deletion.
-         *  @param Id      Akonadi ID for the item
+         *  @param id      Akonadi ID for the item
          *  @param status  true if successful, false if error
          */
-        void itemDone(Akonadi::Item::Id, bool status = true);
+        void itemDone(Akonadi::Item::Id id, bool status = true);
 
         /** Signal emitted when calendar migration/creation has completed. */
         void migrationCompleted();

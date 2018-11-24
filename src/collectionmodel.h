@@ -72,7 +72,7 @@ class CollectionListModel : public KDescendantsProxyModel
 = checked status is equivalent to whether it is selected or not.
 = An alarm type is specified, whereby Collections which are enabled for that
 = alarm type are checked; Collections which do not contain that alarm type, or
-= which are disabled for that alarm type, are unchedked.
+= which are disabled for that alarm type, are unchecked.
 =============================================================================*/
 class CollectionCheckListModel : public KCheckableProxyModel
 {
