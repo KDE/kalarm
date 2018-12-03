@@ -865,7 +865,7 @@ void KAEventPrivate::set(const Event::Ptr &event)
     mRepeatAtLogin      = false;
     mDisplaying         = false;
     mCommandScript      = false;
-    mExtraActionOptions = 0;
+    mExtraActionOptions = nullptr;
     mDeferral           = NO_DEFERRAL;
     mSoundVolume        = -1;
     mFadeVolume         = -1;
@@ -1186,7 +1186,7 @@ void KAEventPrivate::set(const KADateTime &dateTime, const QString &text, const 
     mDisplayingEdit         = false;
     mArchive                = false;
     mReminderAfterTime      = DateTime();
-    mExtraActionOptions     = 0;
+    mExtraActionOptions     = nullptr;
     mCompatibility          = KACalendar::Current;
     mReadOnly               = false;
     mCommandError           = KAEvent::CMD_NO_ERROR;
@@ -1689,7 +1689,7 @@ KAEvent::Flags KAEvent::flags() const
 
 KAEvent::Flags KAEventPrivate::flags() const
 {
-    KAEvent::Flags result(0);
+    KAEvent::Flags result(nullptr);
     if (mBeep) {
         result |= KAEvent::BEEP;
     }
@@ -3983,7 +3983,7 @@ void KAEventPrivate::readAlarm(const Alarm::Ptr &alarm, AlarmData &data, bool au
             }
             data.cleanText += alarm->programArguments();
         }
-        data.extraActionOptions = 0;
+        data.extraActionOptions = nullptr;
         if (flags.contains(KAEventPrivate::EXEC_ON_DEFERRAL_FLAG)) {
             data.extraActionOptions |= KAEvent::ExecPreActOnDeferral;
         }

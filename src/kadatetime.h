@@ -1153,7 +1153,7 @@ public:
      * @return KADateTime value, or an invalid KADateTime if either parameter is invalid
      * @see setFromStringDefault(), toString(), QString::fromString()
      */
-    static KADateTime fromString(const QString &string, TimeFormat format = ISODate, bool *negZero = 0);
+    static KADateTime fromString(const QString &string, TimeFormat format = ISODate, bool *negZero = nullptr);
 
     /**
      * Returns the KADateTime represented by @p string, using the @p format
@@ -1288,7 +1288,7 @@ public:
      * @see setFromStringDefault(), toString()
      */
     static KADateTime fromString(const QString &string, const QString &format,
-                                const QList<QTimeZone>* zones = 0, bool offsetIfAmbiguous = true);
+                                const QList<QTimeZone>* zones = nullptr, bool offsetIfAmbiguous = true);
 
     /**
      * Sets the default time specification for use by fromString() when no time

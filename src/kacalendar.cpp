@@ -415,7 +415,7 @@ Type type(const QString &mimeType)
 
 Types types(const QStringList &mimeTypes)
 {
-    Types types = 0;
+    Types types = nullptr;
     for (const QString &type : mimeTypes) {
         if (type == MIME_ACTIVE) {
             types |= ACTIVE;
