@@ -90,6 +90,7 @@
     <p xml:lang="gl">KAlarm é un aplicativo de KDE para programar mensaxes persoais de alarma, ordes e mensaxes de correo electrónico.</p>
     <p xml:lang="it">KAlarm è un pianificatore personale di messaggi di avviso, di posta elettronica e per l'esecuzione di comandi sviluppato da KDE</p>
     <p xml:lang="nl">Kalarm is een persoonlijke planner voor herinneringen, opdrachten en plannen van e-mailberichten door KDE</p>
+    <p xml:lang="pl">KAlarm jest osobistym programem KDE do planowania wiadomości alarmowych, poleceń i wiadomości pocztowych</p>
     <p xml:lang="pt">O KAlarm é um sistema para agendar alarmes com mensagens, comandos e e-mails do KDE</p>
     <p xml:lang="sv">Kalarm är ett schemaläggningsprogram av personliga alarmmeddelanden, kommandon och e-post av KDE</p>
     <p xml:lang="uk">KAlarm — інструмент від KDE для складання розкладу повідомлень, команд і поштових повідомлень для нагадування.</p>
@@ -316,6 +317,7 @@
       <caption xml:lang="gl">Xanela de configuración de KAlarm cunha alarma de mensaxe de proba</caption>
       <caption xml:lang="it">Finestra di configurazione di KAlarm con un messaggio di avviso di prova</caption>
       <caption xml:lang="nl">KAlarm configuratievenster met een testbericht voor een herinnering</caption>
+      <caption xml:lang="pl">Okno ustawień KAlarm z próbną wiadomością alarmową</caption>
       <caption xml:lang="pt">Janela de configuração do KAlarm com um alarme de teste com mensagem</caption>
       <caption xml:lang="sv">Inställningsfönstret i Kalarm med test av ett meddelandealarm</caption>
       <caption xml:lang="uk">Вікно налаштовування KAlarm із тестовим нагадуванням у форматі повідомлення</caption>
