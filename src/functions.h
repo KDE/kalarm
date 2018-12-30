@@ -182,6 +182,8 @@ bool                setRtcWakeTime(unsigned triggerTime, QWidget* parent);
 
 /** Return a prompt string to ask the user whether to convert the calendar to the
  *  current format.
+ *  @param calendarName The calendar name.
+ *  @param calendarVersion The calendar version.
  *  @param whole if true, the whole calendar needs to be converted; else only some
  *               alarms may need to be converted.
  */

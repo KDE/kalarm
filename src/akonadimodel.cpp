@@ -1270,7 +1270,7 @@ void AkonadiModel::getChildEvents(const QModelIndex& parent, CalEvent::Type type
 }
 #endif
 
-KAEvent AkonadiModel::event(Item::Id itemId) const
+KAEvent AkonadiModel::event(Akonadi::Item::Id itemId) const
 {
     const QModelIndex ix = itemIndex(itemId);
     if (!ix.isValid())
@@ -1283,7 +1283,7 @@ KAEvent AkonadiModel::event(const QModelIndex& index) const
     return event(index.data(ItemRole).value<Item>(), index, nullptr);
 }
 
-KAEvent AkonadiModel::event(const Item& item, const QModelIndex& index, Collection* collection) const
+KAEvent AkonadiModel::event(const Akonadi::Item& item, const QModelIndex& index, Akonadi::Collection* collection) const
 {
     if (!item.isValid()  ||  !item.hasPayload<KAEvent>())
         return KAEvent();
@@ -1841,7 +1841,7 @@ bool AkonadiModel::refresh(Akonadi::Item& item) const
 /******************************************************************************
 * Find the QModelIndex of a collection.
 */
-QModelIndex AkonadiModel::collectionIndex(const Collection& collection) const
+QModelIndex AkonadiModel::collectionIndex(const Akonadi::Collection& collection) const
 {
     const QModelIndex ix = modelIndexForCollection(this, collection);
     if (!ix.isValid())
@@ -1863,7 +1863,7 @@ Collection AkonadiModel::collectionById(Collection::Id id) const
 /******************************************************************************
 * Find the QModelIndex of an item.
 */
-QModelIndex AkonadiModel::itemIndex(const Item& item) const
+QModelIndex AkonadiModel::itemIndex(const Akonadi::Item& item) const
 {
     const QModelIndexList ixs = modelIndexesForItem(this, item);
     if (ixs.isEmpty()  ||  !ixs[0].isValid())

@@ -1162,7 +1162,7 @@ CalEvent::Type AlarmCalendar::deleteEventInternal(const KAEvent& event, bool del
     return deleteEventInternal(event.id(), event, collection, deleteFromAkonadi);
 }
 
-CalEvent::Type AlarmCalendar::deleteEventInternal(const KAEvent& event, const Collection& collection, bool deleteFromAkonadi)
+CalEvent::Type AlarmCalendar::deleteEventInternal(const KAEvent& event, const Akonadi::Collection& collection, bool deleteFromAkonadi)
 {
     if (!collection.isValid())
         return CalEvent::EMPTY;
@@ -1174,7 +1174,7 @@ CalEvent::Type AlarmCalendar::deleteEventInternal(const KAEvent& event, const Co
     return deleteEventInternal(event.id(), event, collection, deleteFromAkonadi);
 }
 
-CalEvent::Type AlarmCalendar::deleteEventInternal(const QString& eventID, const KAEvent& event, const Collection& collection, bool deleteFromAkonadi)
+CalEvent::Type AlarmCalendar::deleteEventInternal(const QString& eventID, const KAEvent& event, const Akonadi::Collection& collection, bool deleteFromAkonadi)
 {
     // Make a copy of the KAEvent and the ID QString, since the supplied
     // references might be destructed when the event is deleted below.
@@ -1309,7 +1309,7 @@ KAEvent::List AlarmCalendar::events(const QString& uniqueId) const
 * Return all events in the calendar which contain alarms.
 * Optionally the event type can be filtered, using an OR of event types.
 */
-KAEvent::List AlarmCalendar::events(const Collection& collection, CalEvent::Types type) const
+KAEvent::List AlarmCalendar::events(const Akonadi::Collection& collection, CalEvent::Types type) const
 {
     KAEvent::List list;
     if (mCalType != RESOURCES  &&  (!mCalendarStorage || collection.isValid()))
@@ -1483,7 +1483,7 @@ KAEvent::List AlarmCalendar::atLoginAlarms() const
 /******************************************************************************
 * Find and note the active alarm with the earliest trigger time for a calendar.
 */
-void AlarmCalendar::findEarliestAlarm(const Collection& collection)
+void AlarmCalendar::findEarliestAlarm(const Akonadi::Collection& collection)
 {
     if (mCalType != RESOURCES)
         return;
@@ -1493,7 +1493,7 @@ void AlarmCalendar::findEarliestAlarm(const Collection& collection)
     findEarliestAlarm(collection.id());
 }
 
-void AlarmCalendar::findEarliestAlarm(Collection::Id key)
+void AlarmCalendar::findEarliestAlarm(Akonadi::Collection::Id key)
 {
     EarliestMap::Iterator eit = mEarliestAlarm.find(key);
     if (eit != mEarliestAlarm.end())

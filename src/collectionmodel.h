@@ -196,6 +196,8 @@ class CollectionControlModel : public Akonadi::FavoriteCollectionsModel
          *  with the current KAlarm calendar format.
          *  Optionally, the enabled status can be ignored.
          *
+         *  @param collection The collection.
+         *  @param type    The alarm type.
          *  @param format  If the reply is false, and the calendar is not read-only
          *                 but its backend calendar storage format is not the
          *                 current KAlarm format, @p format is set to the calendar
@@ -211,6 +213,7 @@ class CollectionControlModel : public Akonadi::FavoriteCollectionsModel
         static int isWritableEnabled(const Akonadi::Collection&, CalEvent::Type, KACalendar::Compat& format);
 
         /** Return the standard collection for a specified mime type.
+         *  @param type       The MIME type.
          *  @param useDefault false to return the defined standard collection, if any;
          *                    true to return the standard or only collection for the type.
          *  Reply = invalid collection if there is no standard collection.
@@ -248,6 +251,8 @@ class CollectionControlModel : public Akonadi::FavoriteCollectionsModel
         /** Find the collection to be used to store an event of a given type.
          *  This will be the standard collection for the type, but if this is not valid,
          *  the user will be prompted to select a collection.
+         *  @param type      The given type.
+         *  @param promptparent The parent widget for the prompt.
          *  @param noPrompt  don't prompt the user even if the standard collection is not valid
          *  @param cancelled If non-null: set to true if the user cancelled
          *             the prompt dialogue; set to false if any other error.

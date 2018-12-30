@@ -292,7 +292,7 @@ bool DBusHandler::editNew(const QString& templateName)
 bool DBusHandler::scheduleMessage(const QString& message, const KADateTime& start, int lateCancel, unsigned flags,
                                   const QString& bgColor, const QString& fgColor, const QString& fontStr,
                                   const QUrl& audioFile, int reminderMins, const KARecurrence& recurrence,
-                                  const Duration& subRepeatDuration, int subRepeatCount)
+                                  const KCalCore::Duration& subRepeatDuration, int subRepeatCount)
 {
     KAEvent::Flags kaEventFlags = convertStartFlags(start, flags);
     KAEvent::SubAction action = (kaEventFlags & KAEvent::DISPLAY_COMMAND) ? KAEvent::COMMAND : KAEvent::MESSAGE;
@@ -332,7 +332,7 @@ bool DBusHandler::scheduleMessage(const QString& message, const KADateTime& star
 bool DBusHandler::scheduleFile(const QUrl& file,
                                const KADateTime& start, int lateCancel, unsigned flags, const QString& bgColor,
                                const QUrl& audioFile, int reminderMins, const KARecurrence& recurrence,
-                               const Duration& subRepeatDuration, int subRepeatCount)
+                               const KCalCore::Duration& subRepeatDuration, int subRepeatCount)
 {
     KAEvent::Flags kaEventFlags = convertStartFlags(start, flags);
     QColor bg = convertBgColour(bgColor);
@@ -347,7 +347,7 @@ bool DBusHandler::scheduleFile(const QUrl& file,
 */
 bool DBusHandler::scheduleCommand(const QString& commandLine,
                                   const KADateTime& start, int lateCancel, unsigned flags,
-                                  const KARecurrence& recurrence, const Duration& subRepeatDuration, int subRepeatCount)
+                                  const KARecurrence& recurrence, const KCalCore::Duration& subRepeatDuration, int subRepeatCount)
 {
     KAEvent::Flags kaEventFlags = convertStartFlags(start, flags);
     return theApp()->scheduleEvent(KAEvent::COMMAND, commandLine, start, lateCancel, kaEventFlags, Qt::black, Qt::black, QFont(),
@@ -360,7 +360,7 @@ bool DBusHandler::scheduleCommand(const QString& commandLine,
 bool DBusHandler::scheduleEmail(const QString& fromID, const QString& addresses, const QString& subject,
                                 const QString& message, const QString& attachments,
                                 const KADateTime& start, int lateCancel, unsigned flags,
-                                const KARecurrence& recurrence, const Duration& subRepeatDuration, int subRepeatCount)
+                                const KARecurrence& recurrence, const KCalCore::Duration& subRepeatDuration, int subRepeatCount)
 {
     KAEvent::Flags kaEventFlags = convertStartFlags(start, flags);
     uint senderId = 0;
@@ -401,7 +401,7 @@ bool DBusHandler::scheduleEmail(const QString& fromID, const QString& addresses,
 */
 bool DBusHandler::scheduleAudio(const QString& audioUrl, int volumePercent,
                                 const KADateTime& start, int lateCancel, unsigned flags,
-                                const KARecurrence& recurrence, const Duration& subRepeatDuration, int subRepeatCount)
+                                const KARecurrence& recurrence, const KCalCore::Duration& subRepeatDuration, int subRepeatCount)
 {
     KAEvent::Flags kaEventFlags = convertStartFlags(start, flags);
     float volume = (volumePercent >= 0) ? volumePercent / 100.0f : -1;
@@ -509,7 +509,7 @@ QColor DBusHandler::convertBgColour(const QString& bgColor)
 
 bool DBusHandler::convertRecurrence(KADateTime& start, KARecurrence& recurrence, 
                                     const QString& startDateTime, const QString& icalRecurrence,
-                    int subRepeatInterval, Duration& subRepeatDuration)
+                    int subRepeatInterval, KCalCore::Duration& subRepeatDuration)
 {
     start = convertDateTime(startDateTime);
     if (!start.isValid())

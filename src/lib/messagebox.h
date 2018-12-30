@@ -150,6 +150,7 @@ class KAMessageBox
          * @param buttonCancel     The text for the second button (default = "Cancel")
          * @param dontAskAgainName If specified, the message box will only be suppressed
          *                         if the user chose Continue last time.
+         * @param options          Other options.
          */
         static int warningCancelContinue(QWidget* parent, const QString& text, const QString& caption = QString(),
                                          const KGuiItem& buttonContinue = KStandardGuiItem::cont(),

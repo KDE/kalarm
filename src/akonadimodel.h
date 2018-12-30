@@ -191,6 +191,7 @@ class AkonadiModel : public Akonadi::EntityTreeModel
          *  create/delete/change rights and compatible with the current KAlarm
          *  calendar format.
          *
+         *  @param collection The collection to be inspected.
          *  @param format  Updated to contain the backend calendar storage format.
          *                 If read-only, = KACalendar::Current;
          *                 if unknown format, = KACalendar::Incompatible;
@@ -211,6 +212,7 @@ class AkonadiModel : public Akonadi::EntityTreeModel
         void collectionAdded(const Akonadi::Collection&);
 
         /** Signal emitted when a collection's enabled or read-only status has changed.
+         *  @param newValue  The value that has veen changed.
          *  @param inserted  true if the reason for the change is that the collection
          *                   has been inserted into the model
          */

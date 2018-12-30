@@ -56,12 +56,14 @@ class PickFileRadio : public RadioButton
          *  @param button Push button to invoke the file picker dialog.
          *  @param edit File name edit widget, or null if there is none.
          *  @param text Radio button's text.
+         *  @param group The button group.
          *  @param parent Button group which is to be the parent object for the radio button.
          */
         PickFileRadio(QPushButton* button, LineEdit* edit, const QString& text, ButtonGroup* group, QWidget* parent);
         /** Constructor.
          *  The init() method must be called before the widget can be used.
          *  @param text Radio button's text.
+         *  @param group The button group.
          *  @param parent Button group which is to be the parent object for the radio button.
          */
         PickFileRadio(const QString& text, ButtonGroup* group, QWidget* parent);
