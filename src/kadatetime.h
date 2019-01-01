@@ -336,9 +336,9 @@ public:
          * conditions apply:
          * - both instances are type @c OffsetFromUTC and their offsets from UTC are equal.
          * - both instances are type @c TimeZone and their time zones are equal.
-	 * - one instance is type @c TimeZone, with the time zone set to the system time
-	 *   zone, and the other instance is type @c LocalZone.
-	 * - both instances are type @c LocalZone.
+         * - one instance is type @c TimeZone, with the time zone set to the system time
+         *   zone, and the other instance is type @c LocalZone.
+         * - both instances are type @c LocalZone.
          * - both instances are UTC. An instance is considered to be UTC if it is
          *   either type @c UTC, or is type @c OffsetFromUTC with a zero UTC offset.
          *
