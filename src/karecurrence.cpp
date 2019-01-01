@@ -110,7 +110,7 @@ KARecurrence::KARecurrence()
     : d(new Private)
 { }
 
-KARecurrence::KARecurrence(const Recurrence &r)
+KARecurrence::KARecurrence(const KCalCore::Recurrence &r)
     : d(new Private(r))
 {
     fix();
@@ -211,7 +211,7 @@ bool KARecurrence::Private::set(Type recurType, int freq, int count, int f29, co
 * Initialise a KARecurrence from recurrence parameters.
 * Reply = true if successful.
 */
-bool KARecurrence::init(RecurrenceRule::PeriodType t, int freq, int count,
+bool KARecurrence::init(KCalCore::RecurrenceRule::PeriodType t, int freq, int count,
                         const KADateTime &start, const KADateTime &end)
 {
     return d->init(t, freq, count, -1, start, end);
@@ -480,7 +480,7 @@ void KARecurrence::Private::fix()
 * Initialise a KCal::Recurrence to be the same as this instance.
 * Additional recurrence rules are created as necessary if it recurs on Feb 29th.
 */
-void KARecurrence::writeRecurrence(Recurrence &recur) const
+void KARecurrence::writeRecurrence(KCalCore::Recurrence &recur) const
 {
     d->writeRecurrence(this, recur);
 }
@@ -1274,7 +1274,7 @@ KARecurrence::Type KARecurrence::type() const
 /******************************************************************************
 * Return the recurrence rule type.
 */
-KARecurrence::Type KARecurrence::type(const RecurrenceRule *rrule)
+KARecurrence::Type KARecurrence::type(const KCalCore::RecurrenceRule *rrule)
 {
     switch (Recurrence::recurrenceType(rrule)) {
     case Recurrence::rMinutely:     return MINUTELY;

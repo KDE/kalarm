@@ -636,6 +636,7 @@ public:
     QString emailAddresses(const QString &sep) const;
 
     /** Concatenate a list of email addresses into a string.
+     *  @param addresses the addresses.
      *  @param sep  separator string to insert between addresses.
      */
     static QString joinEmailAddresses(const KCalCore::Person::List &addresses, const QString &sep);
@@ -1138,6 +1139,7 @@ public:
     QString repetitionText(bool brief = false) const;
 
     /** Determine whether the event will occur after the specified date/time.
+     *  @param preDateTime        the specified date/time.
      *  @param includeRepetitions if true and the alarm has a sub-repetition, the
      *                            method will return true if any sub-repetitions
      *                            occur after @p preDateTime.
@@ -1157,6 +1159,7 @@ public:
 
     /** Get the date/time of the next occurrence of the event, after the specified
      *  date/time.
+     *  @param preDateTime the specified date/time.
      *  @param result  date/time of next occurrence, or invalid date/time if none.
      *  @param option  how/whether to make allowance for sub-repetitions.
      *  @see nextRepetition(), setNextOccurrence(), previousOccurrence(), occursAfter()
@@ -1165,6 +1168,7 @@ public:
 
     /** Get the date/time of the last previous occurrence of the event, before the
      *  specified date/time.
+     *  @param afterDateTime       the specified date/time.
      *  @param result              date/time of previous occurrence, or invalid
      *                             date/time if none.
      *  @param includeRepetitions  if true and the alarm has a sub-repetition, the

@@ -531,12 +531,12 @@ KAEventPrivate::KAEventPrivate(const KADateTime &dt, const QString &message, con
     set(dt, message, bg, fg, f, action, lateCancel, flags, changesPending);
 }
 
-KAEvent::KAEvent(const Event::Ptr &e)
+KAEvent::KAEvent(const KCalCore::Event::Ptr &e)
     : d(new KAEventPrivate(e))
 {
 }
 
-KAEventPrivate::KAEventPrivate(const Event::Ptr &e)
+KAEventPrivate::KAEventPrivate(const KCalCore::Event::Ptr &e)
     : mRecurrence(nullptr)
 {
     set(e);
@@ -652,7 +652,7 @@ void KAEventPrivate::copy(const KAEventPrivate &event)
     }
 }
 
-void KAEvent::set(const Event::Ptr &e)
+void KAEvent::set(const KCalCore::Event::Ptr &e)
 {
     d->set(e);
 }
@@ -660,7 +660,7 @@ void KAEvent::set(const Event::Ptr &e)
 /******************************************************************************
 * Initialise the KAEventPrivate from a KCalCore::Event.
 */
-void KAEventPrivate::set(const Event::Ptr &event)
+void KAEventPrivate::set(const KCalCore::Event::Ptr &event)
 {
     startChanges();
     // Extract status from the event
@@ -1495,14 +1495,14 @@ bool KAEventPrivate::updateKCalEvent(const Event::Ptr &ev, KAEvent::UidAction ui
 * NOTE: The variant taking a DateTime calculates the offset from mStartDateTime,
 *       which is not suitable for an alarm in a recurring event.
 */
-Alarm::Ptr KAEventPrivate::initKCalAlarm(const Event::Ptr &event, const DateTime &dt, const QStringList &types, AlarmType type) const
+Alarm::Ptr KAEventPrivate::initKCalAlarm(const KCalCore::Event::Ptr &event, const DateTime &dt, const QStringList &types, AlarmType type) const
 {
     const int startOffset = dt.isDateOnly() ? mStartDateTime.secsTo(dt)
                             : mStartDateTime.calendarKDateTime().secsTo(dt.calendarKDateTime());
     return initKCalAlarm(event, startOffset, types, type);
 }
 
-Alarm::Ptr KAEventPrivate::initKCalAlarm(const Event::Ptr &event, int startOffsetSecs, const QStringList &types, AlarmType type) const
+Alarm::Ptr KAEventPrivate::initKCalAlarm(const KCalCore::Event::Ptr &event, int startOffsetSecs, const QStringList &types, AlarmType type) const
 {
     QStringList alltypes;
     QStringList flags;
@@ -2918,13 +2918,13 @@ bool KAEvent::setRecurAnnualByPos(int freq, const QVector<MonthPos> &posns, cons
 *    end   = end date/time (invalid to use 'count' instead).
 * Reply = false if no recurrence was set up.
 */
-bool KAEventPrivate::setRecur(RecurrenceRule::PeriodType recurType, int freq, int count, const QDate &end, KARecurrence::Feb29Type feb29)
+bool KAEventPrivate::setRecur(KCalCore::RecurrenceRule::PeriodType recurType, int freq, int count, const QDate &end, KARecurrence::Feb29Type feb29)
 {
     KADateTime edt = mNextMainDateTime.kDateTime();
     edt.setDate(end);
     return setRecur(recurType, freq, count, edt, feb29);
 }
-bool KAEventPrivate::setRecur(RecurrenceRule::PeriodType recurType, int freq, int count, const KADateTime &end, KARecurrence::Feb29Type feb29)
+bool KAEventPrivate::setRecur(KCalCore::RecurrenceRule::PeriodType recurType, int freq, int count, const KADateTime &end, KARecurrence::Feb29Type feb29)
 {
     if (count >= -1  && (count || end.date().isValid())) {
         if (!mRecurrence) {
