@@ -40,8 +40,8 @@ class ItemListModel : public Akonadi::EntityMimeTypeFilterModel
         Q_OBJECT
     public:
         /** Constructor.
-         *  @param allowed the alarm types (active/archived/template) included in this model
-         *  @param parent The parent widget.
+         *  @param allowed The alarm types (active/archived/template) included in this model
+         *  @param parent  The parent object
          */
         explicit ItemListModel(CalEvent::Types allowed, QObject* parent = nullptr);
 

@@ -53,34 +53,34 @@ class PickFileRadio : public RadioButton
         Q_OBJECT
     public:
         /** Constructor.
-         *  @param button Push button to invoke the file picker dialog.
-         *  @param edit File name edit widget, or null if there is none.
-         *  @param text Radio button's text.
-         *  @param group The button group.
-         *  @param parent Button group which is to be the parent object for the radio button.
+         *  @param button Push button to invoke the file picker dialog
+         *  @param edit   File name edit widget, or null if there is none
+         *  @param text   Radio button's text
+         *  @param group  The button group which the radio button will be part of
+         *  @param parent Button group which is to be the parent object for the radio button
          */
         PickFileRadio(QPushButton* button, LineEdit* edit, const QString& text, ButtonGroup* group, QWidget* parent);
         /** Constructor.
          *  The init() method must be called before the widget can be used.
-         *  @param text Radio button's text.
-         *  @param group The button group.
-         *  @param parent Button group which is to be the parent object for the radio button.
+         *  @param text   Radio button's text
+         *  @param group  The button group which the radio button will be part of
+         *  @param parent Button group which is to be the parent object for the radio button
          */
         PickFileRadio(const QString& text, ButtonGroup* group, QWidget* parent);
         /** Initialises the widget.
-         *  @param button Push button to invoke the file picker dialog.
-         *  @param edit File name edit widget, or null if there is none.
+         *  @param button Push button to invoke the file picker dialog
+         *  @param edit   File name edit widget, or null if there is none
          */
         void            init(QPushButton* button, LineEdit* edit = nullptr);
         /** Sets whether the radio button and associated widgets are read-only for the user.
          *  If read-only, their states cannot be changed by the user.
-         *  @param readOnly True to set the widgets read-only, false to set them read-write.
+         *  @param readOnly true to set the widgets read-only, false to set them read-write
          */
         void            setReadOnly(bool readOnly) override;
         /** Chooses a file, for example by displaying a file selection dialog.
          *  This method is called when the push button is clicked - the client
          *  should not activate a file selection dialog directly.
-         *  @return Selected file name, or QString() if no selection made.
+         *  @return Selected file name, or QString() if no selection made
          */
         virtual QString pickFile() = 0;
         /** Notifies the widget of the currently selected file name.

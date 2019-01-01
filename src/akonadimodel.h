@@ -191,7 +191,7 @@ class AkonadiModel : public Akonadi::EntityTreeModel
          *  create/delete/change rights and compatible with the current KAlarm
          *  calendar format.
          *
-         *  @param collection The collection to be inspected.
+         *  @param collection The collection to be inspected
          *  @param format  Updated to contain the backend calendar storage format.
          *                 If read-only, = KACalendar::Current;
          *                 if unknown format, = KACalendar::Incompatible;
@@ -201,7 +201,7 @@ class AkonadiModel : public Akonadi::EntityTreeModel
          *         -1 = read-only (if @p compat == KACalendar::Current), or
          *              incompatible format otherwise.
          */
-        static int isWritable(const Akonadi::Collection&, KACalendar::Compat& format);
+        static int isWritable(const Akonadi::Collection& collection, KACalendar::Compat& format);
 
         static CalEvent::Types types(const Akonadi::Collection&);
 
@@ -211,12 +211,14 @@ class AkonadiModel : public Akonadi::EntityTreeModel
         /** Signal emitted when a collection has been added to the model. */
         void collectionAdded(const Akonadi::Collection&);
 
-        /** Signal emitted when a collection's enabled or read-only status has changed.
-         *  @param newValue  The value that has veen changed.
+        /** Signal emitted when a collection's enabled, read-only or alarm types
+         *  status has changed.
+         *  @param change    The type of status which has changed
+         *  @param newValue  The new value of the status that has changed
          *  @param inserted  true if the reason for the change is that the collection
          *                   has been inserted into the model
          */
-        void collectionStatusChanged(const Akonadi::Collection&, AkonadiModel::Change, const QVariant& newValue, bool inserted);
+        void collectionStatusChanged(const Akonadi::Collection&, AkonadiModel::Change change, const QVariant& newValue, bool inserted);
 
         /** Signal emitted when events have been added to the model. */
         void eventsAdded(const AkonadiModel::EventList&);
