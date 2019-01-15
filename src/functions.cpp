@@ -112,7 +112,7 @@ struct UpdateStatusData
             warnErr = errorCount;
     }
     // Update the error status with a KOrganizer related status
-    void korgUpdate(const KAlarm::UpdateResult &result)
+    void korgUpdate(const KAlarm::UpdateResult& result)
     {
         if (result.status != KAlarm::UPDATE_OK)
         {
@@ -781,7 +781,7 @@ QVector<KAEvent> getSortedActiveEvents(QObject* parent, AlarmListModel** model)
 /******************************************************************************
 * Display an error message corresponding to a specified alarm update error code.
 */
-void displayKOrgUpdateError(QWidget* parent, UpdateError code, const UpdateResult &korgError, int nAlarms)
+void displayKOrgUpdateError(QWidget* parent, UpdateError code, const UpdateResult& korgError, int nAlarms)
 {
     QString errmsg;
     switch (code)

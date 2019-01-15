@@ -172,7 +172,7 @@ UpdateResult        reactivateEvents(QVector<KAEvent>&, QVector<EventId>& inelig
 UpdateResult        enableEvents(QVector<KAEvent>&, bool enable, QWidget* msgParent = nullptr);
 QVector<KAEvent>    getSortedActiveEvents(QObject* parent, AlarmListModel** model = nullptr);
 void                purgeArchive(int purgeDays);    // must only be called from KAlarmApp::processQueue()
-void                displayKOrgUpdateError(QWidget* parent, UpdateError, const UpdateResult &korgError, int nAlarms = 0);
+void                displayKOrgUpdateError(QWidget* parent, UpdateError, const UpdateResult& korgError, int nAlarms = 0);
 Desktop             currentDesktopIdentity();
 QString             currentDesktopIdentityName();
 QStringList         checkRtcWakeConfig(bool checkEventExists = false);
