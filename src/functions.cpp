@@ -112,7 +112,7 @@ struct UpdateStatusData
             warnErr = errorCount;
     }
     // Update the error status with a KOrganizer related status
-    void korgUpdate(KAlarm::UpdateResult result)
+    void korgUpdate(const KAlarm::UpdateResult &result)
     {
         if (result.status != KAlarm::UPDATE_OK)
         {
@@ -781,7 +781,7 @@ QVector<KAEvent> getSortedActiveEvents(QObject* parent, AlarmListModel** model)
 /******************************************************************************
 * Display an error message corresponding to a specified alarm update error code.
 */
-void displayKOrgUpdateError(QWidget* parent, UpdateError code, UpdateResult korgError, int nAlarms)
+void displayKOrgUpdateError(QWidget* parent, UpdateError code, const UpdateResult &korgError, int nAlarms)
 {
     QString errmsg;
     switch (code)
@@ -1065,7 +1065,7 @@ void Private::cancelRtcWake()
 bool setRtcWakeTime(unsigned triggerTime, QWidget* parent)
 {
     QVariantMap args;
-    args[QLatin1String("time")] = triggerTime;
+    args[QStringLiteral("time")] = triggerTime;
     KAuth::Action action(QStringLiteral("org.kde.kalarm.rtcwake.settimer"));
     action.setHelperId(QStringLiteral("org.kde.kalarm.rtcwake"));
     action.setParentWidget(parent);

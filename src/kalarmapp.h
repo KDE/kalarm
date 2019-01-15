@@ -84,7 +84,7 @@ class KAlarmApp : public QApplication
                                          int lateCancel, KAEvent::Flags flags, const QColor& bg, const QColor& fg,
                                          const QFont&, const QString& audioFile, float audioVolume,
                                          int reminderMinutes, const KARecurrence& recurrence,
-                                         KCalCore::Duration repeatInterval, int repeatCount,
+                                         const KCalCore::Duration &repeatInterval, int repeatCount,
                                          uint mailFromID = 0, const KCalCore::Person::List& mailAddresses = KCalCore::Person::List(),
                                          const QString& mailSubject = QString(),
                                          const QStringList& mailAttachments = QStringList());
