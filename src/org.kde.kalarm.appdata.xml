@@ -68,7 +68,7 @@
   <summary xml:lang="pt">Calendarização de Alarmes Pessoais</summary>
   <summary xml:lang="pt-BR">Agendador de alarme pessoal</summary>
   <summary xml:lang="ro">Planificator personal de alarme</summary>
-  <summary xml:lang="ru">Личный напоминания</summary>
+  <summary xml:lang="ru">Личные напоминания</summary>
   <summary xml:lang="sk">Osobný plánovač alarmov</summary>
   <summary xml:lang="sl">Osebni razporejevalnik alarmov</summary>
   <summary xml:lang="sr">Лични распоређивач аларма</summary>
@@ -95,6 +95,7 @@
     <p xml:lang="nl">Kalarm is een persoonlijke planner voor herinneringen, opdrachten en plannen van e-mailberichten door KDE</p>
     <p xml:lang="pl">KAlarm jest osobistym programem KDE do planowania wiadomości alarmowych, poleceń i wiadomości pocztowych</p>
     <p xml:lang="pt">O KAlarm é um sistema para agendar alarmes com mensagens, comandos e e-mails do KDE</p>
+    <p xml:lang="ru">KAlarm — разработанная KDE программа для установки напоминаний, а также для планирования запуска команд и отправки электронных писем</p>
     <p xml:lang="sv">Kalarm är ett schemaläggningsprogram av personliga alarmmeddelanden, kommandon och e-post av KDE</p>
     <p xml:lang="uk">KAlarm — інструмент від KDE для складання розкладу повідомлень, команд і поштових повідомлень для нагадування.</p>
     <p xml:lang="x-test">xxKAlarm is a personal alarm message, command and email scheduler application by KDExx</p>
@@ -194,7 +195,7 @@
       <li xml:lang="pl">Alarmy dźwiękowe używające pliku dźwiękowego</li>
       <li xml:lang="pt">Alarme audível com um ficheiro de som</li>
       <li xml:lang="pt-BR">Alarme sonoro usando um arquivo de som</li>
-      <li xml:lang="ru">Возможность воспроизведения звука из выбранного файла в назначенный момент;</li>
+      <li xml:lang="ru">Воспроизведения звука из выбранного файла в назначенный момент;</li>
       <li xml:lang="sk">Zvukový budík pomocou zvukového súboru</li>
       <li xml:lang="sl">Zvočni alarm z uporabo zvočne datoteke.</li>
       <li xml:lang="sr">Чујни аларм путем звучног фајла.</li>
@@ -329,6 +330,7 @@
       <caption xml:lang="nl">KAlarm configuratievenster met een testbericht voor een herinnering</caption>
       <caption xml:lang="pl">Okno ustawień KAlarm z próbną wiadomością alarmową</caption>
       <caption xml:lang="pt">Janela de configuração do KAlarm com um alarme de teste com mensagem</caption>
+      <caption xml:lang="ru">Окно настроек KAlarm с напоминанием</caption>
       <caption xml:lang="sv">Inställningsfönstret i Kalarm med test av ett meddelandealarm</caption>
       <caption xml:lang="uk">Вікно налаштовування KAlarm із тестовим нагадуванням у форматі повідомлення</caption>
       <caption xml:lang="x-test">xxKAlarm configuration window with a testing message alarmxx</caption>
