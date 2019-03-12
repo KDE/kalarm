@@ -475,7 +475,7 @@ KADateTime DBusHandler::convertDateTime(const QString& dateTime, const KADateTim
 */
 KAEvent::Flags DBusHandler::convertStartFlags(const KADateTime& start, unsigned flags)
 {
-    KAEvent::Flags kaEventFlags = 0;
+    KAEvent::Flags kaEventFlags = nullptr;
     if (flags & REPEAT_AT_LOGIN) kaEventFlags |= KAEvent::REPEAT_AT_LOGIN;
     if (flags & BEEP)            kaEventFlags |= KAEvent::BEEP;
     if (flags & SPEAK)           kaEventFlags |= KAEvent::SPEAK;

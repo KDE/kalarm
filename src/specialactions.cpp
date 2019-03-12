@@ -246,7 +246,7 @@ QString SpecialActions::postAction() const
 
 KAEvent::ExtraActionOptions SpecialActions::options() const
 {
-    KAEvent::ExtraActionOptions opts = 0;
+    KAEvent::ExtraActionOptions opts = nullptr;
     if (mExecOnDeferral->isChecked())  opts |= KAEvent::ExecPreActOnDeferral;
     if (mCancelOnError->isChecked())   opts |= KAEvent::CancelOnPreActError;
     if (mDontShowError->isChecked())   opts |= KAEvent::DontShowPreActError;

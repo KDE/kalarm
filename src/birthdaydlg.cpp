@@ -137,8 +137,8 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
     mListView->setSelectionMode(QAbstractItemView::ExtendedSelection);
     mListView->setSelectionBehavior(QAbstractItemView::SelectRows);
     mListView->setTextElideMode(Qt::ElideRight);
-    mListView->header()->setResizeMode(BirthdayModel::NameColumn, QHeaderView::Stretch);
-    mListView->header()->setResizeMode(BirthdayModel::DateColumn, QHeaderView::ResizeToContents);
+    mListView->header()->setSectionResizeMode(BirthdayModel::NameColumn, QHeaderView::Stretch);
+    mListView->header()->setSectionResizeMode(BirthdayModel::DateColumn, QHeaderView::ResizeToContents);
     connect(mListView->selectionModel(), &QItemSelectionModel::selectionChanged, this, &BirthdayDlg::slotSelectionChanged);
     mListView->setWhatsThis(xi18nc("@info:whatsthis",
           "<para>Select birthdays to set alarms for.<nl/>"

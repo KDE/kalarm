@@ -43,14 +43,14 @@ void AlarmListView::setModel(QAbstractItemModel* model)
     QByteArray settings = config.readEntry("ListHead", QByteArray());
     if (!settings.isEmpty())
         header()->restoreState(settings);
-    header()->setMovable(true);
+    header()->setSectionsMovable(true);
     header()->setStretchLastSection(false);
-    header()->setResizeMode(AlarmListModel::TimeColumn, QHeaderView::ResizeToContents);
-    header()->setResizeMode(AlarmListModel::TimeToColumn, QHeaderView::ResizeToContents);
-    header()->setResizeMode(AlarmListModel::RepeatColumn, QHeaderView::ResizeToContents);
-    header()->setResizeMode(AlarmListModel::ColourColumn, QHeaderView::Fixed);
-    header()->setResizeMode(AlarmListModel::TypeColumn, QHeaderView::Fixed);
-    header()->setResizeMode(AlarmListModel::TextColumn, QHeaderView::Stretch);
+    header()->setSectionResizeMode(AlarmListModel::TimeColumn, QHeaderView::ResizeToContents);
+    header()->setSectionResizeMode(AlarmListModel::TimeToColumn, QHeaderView::ResizeToContents);
+    header()->setSectionResizeMode(AlarmListModel::RepeatColumn, QHeaderView::ResizeToContents);
+    header()->setSectionResizeMode(AlarmListModel::ColourColumn, QHeaderView::Fixed);
+    header()->setSectionResizeMode(AlarmListModel::TypeColumn, QHeaderView::Fixed);
+    header()->setSectionResizeMode(AlarmListModel::TextColumn, QHeaderView::Stretch);
     header()->setStretchLastSection(true);   // necessary to ensure ResizeToContents columns do resize to contents!
     const int margin = QApplication::style()->pixelMetric(QStyle::PM_FocusFrameHMargin);
     header()->resizeSection(AlarmListModel::ColourColumn, viewOptions().fontMetrics.lineSpacing() * 3 / 4);

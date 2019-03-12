@@ -40,9 +40,9 @@ TemplateListView::TemplateListView(QWidget* parent)
 void TemplateListView::setModel(QAbstractItemModel* model)
 {
     EventListView::setModel(model);
-    header()->setMovable(false);
+    header()->setSectionsMovable(false);
     header()->setStretchLastSection(true);
-    header()->setResizeMode(TEMPLATE_LIST_MODEL::TypeColumn, QHeaderView::Fixed);
+    header()->setSectionResizeMode(TEMPLATE_LIST_MODEL::TypeColumn, QHeaderView::Fixed);
     const int margin = QApplication::style()->pixelMetric(QStyle::PM_FocusFrameHMargin);
     header()->resizeSection(TEMPLATE_LIST_MODEL::TypeColumn, ItemListModel::iconWidth() + 2*margin + 2);
 }
