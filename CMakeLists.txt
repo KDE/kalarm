@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.5)
-set(KDEPIM_VERSION_NUMBER "5.10.40")
+set(KDEPIM_VERSION_NUMBER "5.10.80")
 set(PIM_VERSION ${KDEPIM_VERSION_NUMBER})
 
 project(kalarm VERSION "2.12.2")
@@ -28,7 +28,7 @@ include(ECMAddAppIcon)
 include(ECMQtDeclareLoggingCategory)
 
 # Do NOT add quote
-set(KDEPIM_DEV_VERSION alpha)
+set(KDEPIM_DEV_VERSION beta1)
 
 # add an extra space
 if(DEFINED KDEPIM_DEV_VERSION)
