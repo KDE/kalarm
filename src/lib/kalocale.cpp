@@ -47,7 +47,7 @@ int localeFirstDayOfWeek()
         for (int i = 0; i < weekDays.size(); ++i)
             workDays |= 1 << (weekDays.at(i) - 1);
 
-        qSort(weekDays);
+        std::sort(weekDays.begin(), weekDays.end());
         int day = 0;
         for (int i = 0; i < weekDays.size(); ++i)
             if (++day < weekDays.at(i))

@@ -289,7 +289,7 @@ void TemplateListModel::setAlarmActionFilter(KAEvent::Actions types)
     if (this != mAllInstance  &&  types != mActionsFilter)
     {
         mActionsFilter = types;
-        filterChanged();
+        invalidateFilter();
     }
 }
 
@@ -299,7 +299,7 @@ void TemplateListModel::setAlarmActionsEnabled(KAEvent::Actions types)
     if (this != mAllInstance  &&  types != mActionsEnabled)
     {
         mActionsEnabled = types;
-        filterChanged();
+        invalidateFilter();
     }
 }
 

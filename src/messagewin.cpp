@@ -1840,7 +1840,7 @@ void MessageWin::showEvent(QShowEvent* se)
 
             // Find the enclosing rectangle for the new button positions
             // and check if the cursor is too near
-            QRect buttons = mOkButton->geometry().unite(mKAlarmButton->geometry());
+            QRect buttons = mOkButton->geometry().united(mKAlarmButton->geometry());
             buttons.translate(rect.left() + x - frame.left(), rect.top() + y - frame.top());
             const int minDistance = proximityMultiple * mOkButton->height();
             if ((abs(cursor.x() - buttons.left()) < minDistance

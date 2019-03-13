@@ -914,7 +914,7 @@ void RecurrenceEdit::set(const KAEvent& event)
 
     // Get exception information
     mExceptionDates = event.recurrence()->exDates();
-    qSort(mExceptionDates);
+    std::sort(mExceptionDates.begin(), mExceptionDates.end());
     mExceptionDateList->clear();
     for (int i = 0, iend = mExceptionDates.count();  i < iend;  ++i)
         new QListWidgetItem(QLocale().toString(mExceptionDates[i], QLocale::LongFormat), mExceptionDateList);
