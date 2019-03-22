@@ -1548,6 +1548,7 @@ Alarm::Ptr KAEventPrivate::initKCalAlarm(const KCalCore::Event::Ptr &event, int 
         if (mRepetition)
             alarm->setCustomProperty(KACalendar::APPNAME, NEXT_REPEAT_PROPERTY,
                                      QString::number(mNextRepeat));
+        // fall through to INVALID_ALARM
         Q_FALLTHROUGH();
     case REMINDER_ALARM:
     case INVALID_ALARM: {

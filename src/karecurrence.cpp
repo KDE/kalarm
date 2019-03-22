@@ -335,8 +335,8 @@ void KARecurrence::Private::fix()
             // Convert an hourly recurrence to a minutely one
             rrule->setRecurrenceType(RecurrenceRule::rMinutely);
             rrule->setFrequency(rrule->frequency() * 60);
+            // fall through to rMinutely
             Q_FALLTHROUGH();
-        // fall through to rMinutely
         case Recurrence::rMinutely:
         case Recurrence::rDaily:
         case Recurrence::rWeekly:

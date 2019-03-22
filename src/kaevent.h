@@ -636,8 +636,8 @@ public:
     QString emailAddresses(const QString &sep) const;
 
     /** Concatenate a list of email addresses into a string.
-     *  @param addresses the addresses.
-     *  @param sep  separator string to insert between addresses.
+     *  @param addresses list of email addresses
+     *  @param sep       separator string to insert between addresses
      */
     static QString joinEmailAddresses(const KCalCore::Person::List &addresses, const QString &sep);
     /** Return the list of email addressees, excluding names, for an email alarm. */
@@ -1160,8 +1160,8 @@ public:
     /** Get the date/time of the next occurrence of the event, after the specified
      *  date/time.
      *  @param preDateTime the specified date/time.
-     *  @param result  date/time of next occurrence, or invalid date/time if none.
-     *  @param option  how/whether to make allowance for sub-repetitions.
+     *  @param result      date/time of next occurrence, or invalid date/time if none.
+     *  @param option      how/whether to make allowance for sub-repetitions.
      *  @see nextRepetition(), setNextOccurrence(), previousOccurrence(), occursAfter()
      */
     OccurType nextOccurrence(const KADateTime &preDateTime, DateTime &result, OccurOption option = IGNORE_REPETITION) const;
