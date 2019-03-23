@@ -339,6 +339,7 @@
       <caption xml:lang="sv">Inställningsfönstret i Kalarm med test av ett meddelandealarm</caption>
       <caption xml:lang="uk">Вікно налаштовування KAlarm із тестовим нагадуванням у форматі повідомлення</caption>
       <caption xml:lang="x-test">xxKAlarm configuration window with a testing message alarmxx</caption>
+      <caption xml:lang="zh-TW">包含測試訊息通知的 KAlarm 設定視窗</caption>
       <image>http://kde.org/images/screenshots/kalarm.png</image>
     </screenshot>
   </screenshots>
