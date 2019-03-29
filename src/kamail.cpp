@@ -701,7 +701,7 @@ QStringList extractEmailsAndNormalize(const QString& emailAddresses)
 {
     const QStringList splitEmails(KEmailAddress::splitAddressList(emailAddresses));
     QStringList normalizedEmail;
-    Q_FOREACH(const QString& email, splitEmails)
+    for (const QString& email : splitEmails)
     {
         normalizedEmail << KEmailAddress::extractEmailAddress(KEmailAddress::normalizeAddressesAndEncodeIdn(email));
     }

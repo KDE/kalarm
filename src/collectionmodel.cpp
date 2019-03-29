@@ -415,14 +415,14 @@ void CollectionCheckListModel::slotRowsInserted(const QModelIndex& parent, int s
 void CollectionCheckListModel::selectionChanged(const QItemSelection& selected, const QItemSelection& deselected)
 {
     const QModelIndexList sel = selected.indexes();
-    foreach (const QModelIndex& ix, sel)
+    for (const QModelIndex& ix : sel)
     {
         // Try to enable the collection, but untick it if not possible
         if (!CollectionControlModel::setEnabled(mModel->collection(ix), mAlarmType, true))
             mSelectionModel->select(ix, QItemSelectionModel::Deselect);
     }
     const QModelIndexList desel = deselected.indexes();
-    foreach (const QModelIndex& ix, desel)
+    for (const QModelIndex& ix : desel)
         CollectionControlModel::setEnabled(mModel->collection(ix), mAlarmType, false);
 }
 
@@ -783,7 +783,7 @@ CalEvent::Types CollectionControlModel::setEnabledStatus(const Collection& colle
                                 : CalEvent::EMPTY;
             if (stdTypes)
             {
-                foreach (const Collection::Id& id, colIds)
+                for (const Collection::Id& id : colIds)
                 {
                     Collection c(id);
                     AkonadiModel::instance()->refresh(c);    // update with latest data
@@ -915,7 +915,7 @@ CalEvent::Types CollectionControlModel::checkTypesToEnable(const Collection& col
     {
         // At least on alarm type is to be enabled
         const QUrl location = QUrl::fromUserInput(collection.remoteId(), QString(), QUrl::AssumeLocalFile);
-        foreach (const Collection& c, collections)
+        for (const Collection& c : collections)
         {
             const QUrl cLocation = QUrl::fromUserInput(c.remoteId(), QString(), QUrl::AssumeLocalFile);
             if (c.id() != collection.id()  &&  cLocation == location)

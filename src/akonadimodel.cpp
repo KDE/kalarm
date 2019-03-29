@@ -1163,7 +1163,7 @@ void AkonadiModel::reload()
 {
     qCDebug(KALARM_LOG);
     const Collection::List collections = mMonitor->collectionsMonitored();
-    foreach (const Collection& collection, collections)
+    for (const Collection& collection : collections)
     {
         mMonitor->setCollectionMonitored(collection, false);
         mMonitor->setCollectionMonitored(collection, true);
@@ -1213,7 +1213,7 @@ Item::Id AkonadiModel::findItemId(const KAEvent& event)
     Qt::MatchFlags flags = (colId < 0) ? Qt::MatchExactly | Qt::MatchRecursive | Qt::MatchCaseSensitive | Qt::MatchWrap
                                        : Qt::MatchExactly | Qt::MatchRecursive | Qt::MatchCaseSensitive;
     const QModelIndexList indexes = match(start, RemoteIdRole, event.id(), -1, flags);
-    foreach (const QModelIndex& ix, indexes)
+    for (const QModelIndex& ix : indexes)
     {
         if (ix.isValid())
         {
@@ -1643,7 +1643,7 @@ void AkonadiModel::slotRowsAboutToBeRemoved(const QModelIndex& parent, int start
     const EventList events = eventList(parent, start, end);
     if (!events.isEmpty())
     {
-        foreach (const Event& event, events)
+        for (const Event& event : events)
             qCDebug(KALARM_LOG) << "Collection:" << event.collection.id() << ", Event ID:" << event.event.id();
         Q_EMIT eventsToBeRemoved(events);
     }
@@ -1785,7 +1785,7 @@ void AkonadiModel::slotMonitoredItemChanged(const Akonadi::Item& item, const QSe
     if (!evnt.isValid())
         return;
     const QModelIndexList indexes = modelIndexesForItem(this, item);
-    foreach (const QModelIndex& index, indexes)
+    for (const QModelIndex& index : indexes)
     {
         if (index.isValid())
         {

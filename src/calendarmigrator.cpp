@@ -189,7 +189,7 @@ void CalendarMigrator::migrateOrCreate()
     // First, check whether any Akonadi resources already exist, and if
     // so, find their alarm types.
     const AgentInstance::List agents = AgentManager::self()->instances();
-    foreach (const AgentInstance& agent, agents)
+    for (const AgentInstance& agent : agents)
     {
         const QString type = agent.type().identifier();
         if (type == KALARM_RESOURCE  ||  type == KALARM_DIR_RESOURCE)
@@ -218,7 +218,7 @@ void CalendarMigrator::migrateOrCreate()
 
         // Create an Akonadi resource for each KResource id
         CalendarCreator* creator;
-        foreach (const QString& id, keys)
+        for (const QString& id : keys)
         {
             const KConfigGroup configGroup = config.group(QStringLiteral("Resource_") + id);
             const QString resourceType = configGroup.readEntry("ResourceType", QString());

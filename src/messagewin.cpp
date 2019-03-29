@@ -782,7 +782,7 @@ int MessageWin::instanceCount(bool excludeAlwaysHidden)
     int count = mWindowList.count();
     if (excludeAlwaysHidden)
     {
-        foreach (MessageWin* win, mWindowList)
+        for (MessageWin* win : qAsConst(mWindowList))
         {
             if (win->mAlwaysHide)
                 --count;

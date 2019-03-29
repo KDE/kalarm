@@ -649,7 +649,7 @@ TimePrefTab::TimePrefTab(StackedScrollGroup* scrollGroup)
 
     const QStringList regions = HolidayRegion::regionCodes();
     QMap<QString, QString> regionsMap;
-    foreach (const QString& regionCode, regions)
+    for (const QString& regionCode : regions)
     {
         const QString name = HolidayRegion::name(regionCode);
         const QString languageName = QLocale::languageToString(QLocale(HolidayRegion::languageCode(regionCode)).language());

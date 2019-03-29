@@ -115,6 +115,10 @@ configure_file(src/config-kalarm.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-kala
 include_directories(${kalarm_SOURCE_DIR} ${kalarm_BINARY_DIR})
 
 add_definitions(-DQT_MESSAGELOGCONTEXT)
+#if (${KF5Config_VERSION} STRGREATER "5.56.0")
+#        add_definitions(-DQT_NO_FOREACH)
+#        MESSAGE(STATUS "compile without foreach")
+#endif()
 
 
 add_subdirectory(src)

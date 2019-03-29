@@ -49,7 +49,7 @@ CollectionSearch::CollectionSearch(const QString& mimeType, const QString& gid, 
       mDelete(remove && !mGid.isEmpty())
 {
     const AgentInstance::List agents = AgentManager::self()->instances();
-    foreach (const AgentInstance& agent, agents)
+    for (const AgentInstance& agent : agents)
     {
         if (agent.type().mimeTypes().contains(mimeType))
         {
@@ -81,7 +81,7 @@ void CollectionSearch::collectionFetchResult(KJob* j)
     else
     {
         const Collection::List collections = job->collections();
-        foreach (const Collection& c, collections)
+        for (const Collection& c : collections)
         {
             if (c.contentMimeTypes().contains(mMimeType))
             {
@@ -122,8 +122,8 @@ void CollectionSearch::itemFetchResult(KJob* j)
     {
         if (mDelete)
         {
-            Item::List items = job->items();
-            foreach (const Item& item, items)
+            const Item::List items = job->items();
+            for (const Item& item : items)
             {
                 ItemDeleteJob* djob = new ItemDeleteJob(item, this);
                 mItemDeleteJobs[djob] = mItemFetchJobs[job];

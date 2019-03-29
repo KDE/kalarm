@@ -488,7 +488,7 @@ void EditAlarmDlg::init(const KAEvent* event)
     if (theApp()->windowFocusBroken())
     {
         const QList<QWidget*> children = findChildren<QWidget*>();
-        foreach (QWidget* w, children)
+        for (QWidget* w : children)
             w->installEventFilter(this);
     }
 }

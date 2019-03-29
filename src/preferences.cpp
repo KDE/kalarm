@@ -153,7 +153,7 @@ void Preferences::setNoAutoStart(bool yes)
     bool existingRO = true;   // whether the existing file is read-only
     QString autostartFile;
     const QStringList autostartDirs = QStandardPaths::standardLocations(QStandardPaths::GenericConfigLocation);
-    Q_FOREACH(const QString& dir, autostartDirs)
+    for (const QString& dir : autostartDirs)
     {
         const QString file = dir + QStringLiteral("/autostart/") + AUTOSTART_FILE;
         if (QFile::exists(file))

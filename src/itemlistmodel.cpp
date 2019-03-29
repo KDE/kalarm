@@ -47,8 +47,8 @@ ItemListModel::ItemListModel(CalEvent::Types allowed, QObject* parent)
     setHeaderGroup(EntityTreeModel::ItemListHeaders);
     if (allowed)
     {
-        QStringList mimeTypes = CalEvent::mimeTypes(allowed);
-        foreach (const QString& mime, mimeTypes)
+        const QStringList mimeTypes = CalEvent::mimeTypes(allowed);
+        for (const QString& mime : mimeTypes)
             addMimeTypeInclusionFilter(mime);
     }
     setHeaderGroup(EntityTreeModel::ItemListHeaders);
