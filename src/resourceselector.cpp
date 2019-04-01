@@ -49,7 +49,7 @@
 #include <QTimer>
 #include <QResizeEvent>
 #include <QApplication>
-#include <qinputdialog.h>
+#include <QInputDialog>
 #include <QColorDialog>
 #include <QComboBox>
 #include <QMenu>

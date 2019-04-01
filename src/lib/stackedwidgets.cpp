@@ -21,7 +21,7 @@
 #include "stackedwidgets.h"
 #include "desktop.h"
 
-#include <qdialog.h>
+#include <QDialog>
 #include <QStyle>
 #include "kalarm_debug.h"
 
