@@ -64,7 +64,7 @@ using namespace KHolidays;
 #include <klineedit.h>
 #include <KAboutData>
 #include <kstandardguiitem.h>
-#include <qicon.h>
+#include <QIcon>
 #if KDEPIM_HAVE_X11
 #include <kwindowinfo.h>
 #include <kwindowsystem.h>

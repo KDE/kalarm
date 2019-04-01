@@ -77,7 +77,7 @@ using namespace KCalUtils;
 #include <QDesktopWidget>
 #include <QMenu>
 #include <QMimeDatabase>
-#include <qinputdialog.h>
+#include <QInputDialog>
 #include <QUrl>
 #include <QSystemTrayIcon>
 

@@ -63,7 +63,7 @@
 #include <qx11info_x11.h>
 #endif
 
-#include <qtextbrowser.h>
+#include <QTextBrowser>
 #include <QPushButton>
 #include <QScrollBar>
 #include <QLocale>
