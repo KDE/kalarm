@@ -1211,13 +1211,7 @@ Duration KARecurrence::regularInterval() const
 
 DateTimeList KARecurrence::exDateTimes() const
 {
-    const auto l = d->mRecurrence.exDateTimes();
-    DateTimeList rv;
-    rv.reserve(l.size());
-    for (const auto &qdt : l) {
-        rv << qdt;
-    }
-    return rv;
+    return d->mRecurrence.exDateTimes();
 }
 
 DateList KARecurrence::exDates() const
@@ -1227,12 +1221,7 @@ DateList KARecurrence::exDates() const
 
 void KARecurrence::setExDateTimes(const DateTimeList &exdates)
 {
-    SortableList<QDateTime> l;
-    l.reserve(exdates.size());
-    for (const auto &kdt : exdates) {
-        l << kdt;
-    }
-    d->mRecurrence.setExDateTimes(l);
+    d->mRecurrence.setExDateTimes(exdates);
 }
 
 void KARecurrence::setExDates(const DateList &exdates)
