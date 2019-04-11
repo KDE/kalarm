@@ -2355,7 +2355,7 @@ KADateTime KADateTime::fromString(const QString &string, const QString &format,
             // abbreviation applies at the specified date/time.
             bool useUtcOffset = false;
             const QList<QByteArray> zoneIds = QTimeZone::availableTimeZoneIds();
-            Q_FOREACH(const QByteArray& zoneId, zoneIds) {
+            for (const QByteArray& zoneId : zoneIds) {
                 const QTimeZone z(zoneId);
                 qdt.setTimeZone(z);
                 if (z.abbreviation(qdt) == zoneAbbrev) {
@@ -2393,7 +2393,7 @@ KADateTime KADateTime::fromString(const QString &string, const QString &format,
             dtUTC.setTimeSpec(Qt::UTC);
             dtUTC = dtUTC.addSecs(-utcOffset);
             const QList<QByteArray> zoneIds = QTimeZone::availableTimeZoneIds();
-            Q_FOREACH(const QByteArray& zoneId, zoneIds) {
+            for (const QByteArray& zoneId : zoneIds) {
                 const QTimeZone z(zoneId);
                 if (z.offsetFromUtc(dtUTC) == utcOffset) {
                     // Found a time zone which uses this offset at the specified time
