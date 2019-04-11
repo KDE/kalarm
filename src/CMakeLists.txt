@@ -1,4 +1,4 @@
-
+add_definitions(-DTRANSLATION_DOMAIN=\"libkalarmcal5\")
 ########### next target ###############
 set(kalarmcal_LIB_SRCS
     kacalendar.cpp
