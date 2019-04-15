@@ -4,7 +4,7 @@ set(PIM_VERSION ${KDEPIM_VERSION_NUMBER})
 
 project(kalarm VERSION "2.12.2")
 
-set(KF5_MIN_VERSION "5.56.0")
+set(KF5_MIN_VERSION "5.57.0")
 
 find_package(ECM ${KF5_MIN_VERSION} CONFIG REQUIRED)
 set(CMAKE_MODULE_PATH ${kalarm_SOURCE_DIR}/cmake/modules ${ECM_MODULE_PATH})
@@ -115,10 +115,7 @@ configure_file(src/config-kalarm.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-kala
 include_directories(${kalarm_SOURCE_DIR} ${kalarm_BINARY_DIR})
 
 add_definitions(-DQT_MESSAGELOGCONTEXT)
-#if (${KF5Config_VERSION} STRGREATER "5.56.0")
-#        add_definitions(-DQT_NO_FOREACH)
-#        MESSAGE(STATUS "compile without foreach")
-#endif()
+#add_definitions(-DQT_NO_FOREACH)
 
 
 add_subdirectory(src)
