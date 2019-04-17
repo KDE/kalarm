@@ -11,4 +11,4 @@ libraries:
  - qmake: KAlarmCal 
    cmake: "KF5::AlarmCalendar"
 cmakename: KF5AlarmCalendar
-
+group: kdepim
