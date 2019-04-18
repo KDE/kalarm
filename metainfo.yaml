@@ -12,3 +12,4 @@ libraries:
    cmake: "KF5::AlarmCalendar"
 cmakename: KF5AlarmCalendar
 group: kdepim
+public_lib: true
