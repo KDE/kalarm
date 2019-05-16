@@ -170,7 +170,7 @@ RepetitionDlg::RepetitionDlg(const QString& caption, bool readOnly, QWidget* par
 
     QVBoxLayout* vlayout = new QVBoxLayout(mButtonBox);
     QHBoxLayout* layout = new QHBoxLayout();
-    layout->setMargin(0);
+    layout->setContentsMargins(0, 0, 0, 0);
     vlayout->addLayout(layout);
     mCountButton = new RadioButton(i18nc("@option:radio", "Number of repetitions:"), mButtonBox);
     mCountButton->setFixedSize(mCountButton->sizeHint());
@@ -188,7 +188,7 @@ RepetitionDlg::RepetitionDlg(const QString& caption, bool readOnly, QWidget* par
     layout->addStretch();
 
     layout = new QHBoxLayout();
-    layout->setMargin(0);
+    layout->setContentsMargins(0, 0, 0, 0);
     vlayout->addLayout(layout);
     mDurationButton = new RadioButton(i18nc("@option:radio", "Duration:"), mButtonBox);
     mDurationButton->setFixedSize(mDurationButton->sizeHint());

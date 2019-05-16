@@ -146,7 +146,7 @@ void EditDisplayAlarmDlg::type_init(QWidget* parent, QVBoxLayout* frameLayout)
     QWidget* box = new QWidget(parent);    // to group widgets for QWhatsThis text
 
     QHBoxLayout* boxHLayout = new QHBoxLayout(box);
-    boxHLayout->setMargin(0);
+    boxHLayout->setContentsMargins(0, 0, 0, 0);
     QLabel* label = new QLabel(i18nc("@label:listbox", "Display type:"), box);
     boxHLayout->addWidget(label);
     label->setFixedSize(label->sizeHint());
@@ -194,7 +194,7 @@ void EditDisplayAlarmDlg::type_init(QWidget* parent, QVBoxLayout* frameLayout)
     mFileBox = new QWidget(parent);
     frameLayout->addWidget(mFileBox);
     QHBoxLayout* fileBoxHLayout = new QHBoxLayout(mFileBox);
-    fileBoxHLayout->setMargin(0);
+    fileBoxHLayout->setContentsMargins(0, 0, 0, 0);
     fileBoxHLayout->setSpacing(0);
     mFileMessageEdit = new LineEdit(LineEdit::Url, mFileBox);
     fileBoxHLayout->addWidget(mFileMessageEdit);
@@ -220,7 +220,7 @@ void EditDisplayAlarmDlg::type_init(QWidget* parent, QVBoxLayout* frameLayout)
 
     // Sound checkbox and file selector
     QHBoxLayout* hlayout = new QHBoxLayout();
-    hlayout->setMargin(0);
+    hlayout->setContentsMargins(0, 0, 0, 0);
     frameLayout->addLayout(hlayout);
     mSoundPicker = new SoundPicker(parent);
     mSoundPicker->setFixedSize(mSoundPicker->sizeHint());
@@ -248,7 +248,7 @@ void EditDisplayAlarmDlg::type_init(QWidget* parent, QVBoxLayout* frameLayout)
     // Top-adjust the controls
     mFilePadding = new QWidget(parent);
     hlayout = new QHBoxLayout(mFilePadding);
-    hlayout->setMargin(0);
+    hlayout->setContentsMargins(0, 0, 0, 0);
     hlayout->setSpacing(0);
     frameLayout->addWidget(mFilePadding);
     frameLayout->setStretchFactor(mFilePadding, 1);
@@ -775,7 +775,7 @@ void EditCommandAlarmDlg::type_init(QWidget* parent, QVBoxLayout* frameLayout)
     mCmdOutputBox = new QGroupBox(i18nc("@title:group", "Command Output"), parent);
     frameLayout->addWidget(mCmdOutputBox);
     QVBoxLayout* vlayout = new QVBoxLayout(mCmdOutputBox);
-    vlayout->setMargin(style()->pixelMetric(QStyle::PM_DefaultChildMargin));
+    vlayout->setContentsMargins(style()->pixelMetric(QStyle::PM_DefaultChildMargin), style()->pixelMetric(QStyle::PM_DefaultChildMargin), style()->pixelMetric(QStyle::PM_DefaultChildMargin), style()->pixelMetric(QStyle::PM_DefaultChildMargin));
     vlayout->setSpacing(style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     mCmdOutputGroup = new ButtonGroup(mCmdOutputBox);
     connect(mCmdOutputGroup, &ButtonGroup::buttonSet, this, &EditCommandAlarmDlg::contentsChanged);
@@ -790,7 +790,7 @@ void EditCommandAlarmDlg::type_init(QWidget* parent, QVBoxLayout* frameLayout)
     // Log file name edit box
     QWidget* box = new QWidget(mCmdOutputBox);
     QHBoxLayout* boxHLayout = new QHBoxLayout(box);
-    boxHLayout->setMargin(0);
+    boxHLayout->setContentsMargins(0, 0, 0, 0);
     boxHLayout->setSpacing(0);
     (new QWidget(box))->setFixedWidth(mCmdExecInTerm->style()->pixelMetric(QStyle::PM_ExclusiveIndicatorWidth));   // indent the edit box
     mCmdLogFileEdit = new LineEdit(LineEdit::Url, box);
@@ -828,7 +828,7 @@ void EditCommandAlarmDlg::type_init(QWidget* parent, QVBoxLayout* frameLayout)
     // Top-adjust the controls
     mCmdPadding = new QWidget(parent);
     QHBoxLayout* hlayout = new QHBoxLayout(mCmdPadding);
-    hlayout->setMargin(0);
+    hlayout->setContentsMargins(0, 0, 0, 0);
     hlayout->setSpacing(0);
     frameLayout->addWidget(mCmdPadding);
     frameLayout->setStretchFactor(mCmdPadding, 1);
@@ -1082,7 +1082,7 @@ void EditEmailAlarmDlg::type_init(QWidget* parent, QVBoxLayout* frameLayout)
     mTryButton->setWhatsThis(i18nc("@info:whatsthis", "Send the email to the specified addressees now"));
 
     QGridLayout* grid = new QGridLayout();
-    grid->setMargin(0);
+    grid->setContentsMargins(0, 0, 0, 0);
     grid->setColumnStretch(1, 1);
     frameLayout->addLayout(grid);
 
@@ -1143,7 +1143,7 @@ void EditEmailAlarmDlg::type_init(QWidget* parent, QVBoxLayout* frameLayout)
 
     // Email attachments
     grid = new QGridLayout();
-    grid->setMargin(0);
+    grid->setContentsMargins(0, 0, 0, 0);
     frameLayout->addLayout(grid);
     label = new QLabel(i18nc("@label:listbox", "Attachments:"), parent);
     label->setFixedSize(label->sizeHint());
@@ -1536,7 +1536,7 @@ void EditAudioAlarmDlg::type_init(QWidget* parent, QVBoxLayout* frameLayout)
     // Top-adjust the controls
     mPadding = new QWidget(parent);
     QHBoxLayout* hlayout = new QHBoxLayout(mPadding);
-    hlayout->setMargin(0);
+    hlayout->setContentsMargins(0, 0, 0, 0);
     hlayout->setSpacing(0);
     frameLayout->addWidget(mPadding);
     frameLayout->setStretchFactor(mPadding, 1);
@@ -1733,7 +1733,7 @@ CommandEdit::CommandEdit(QWidget* parent)
     : QWidget(parent)
 {
     QVBoxLayout* vlayout = new QVBoxLayout(this);
-    vlayout->setMargin(0);
+    vlayout->setContentsMargins(0, 0, 0, 0);
     vlayout->setSpacing(style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     mTypeScript = new CheckBox(EditCommandAlarmDlg::i18n_chk_EnterScript(), this);
     mTypeScript->setFixedSize(mTypeScript->sizeHint());

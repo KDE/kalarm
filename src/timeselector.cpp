@@ -37,7 +37,7 @@ TimeSelector::TimeSelector(const QString& selectText, const QString& selectWhats
       mReadOnly(false)
 {
     QHBoxLayout* layout = new QHBoxLayout(this);
-    layout->setMargin(0);
+    layout->setContentsMargins(0, 0, 0, 0);
     mSelect = new CheckBox(selectText, this);
     mSelect->setFixedSize(mSelect->sizeHint());
     connect(mSelect, &CheckBox::toggled, this, &TimeSelector::selectToggled);
@@ -47,7 +47,7 @@ TimeSelector::TimeSelector(const QString& selectText, const QString& selectWhats
     QWidget* box = new QWidget(this);    // to group widgets for QWhatsThis text
     layout->addWidget(box);
     QHBoxLayout* boxLayout = new QHBoxLayout(box);
-    boxLayout->setMargin(0);
+    boxLayout->setContentsMargins(0, 0, 0, 0);
     mPeriod = new TimePeriod(allowHourMinute, box);
     boxLayout->addWidget(mPeriod);
     mPeriod->setFixedSize(mPeriod->sizeHint());

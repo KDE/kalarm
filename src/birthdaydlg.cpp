@@ -78,7 +78,7 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
     QGroupBox* textGroup = new QGroupBox(i18nc("@title:group", "Alarm Text"), this);
     topLayout->addWidget(textGroup);
     QGridLayout* grid = new QGridLayout(textGroup);
-    grid->setMargin(style()->pixelMetric(QStyle::PM_DefaultChildMargin));
+    grid->setContentsMargins(style()->pixelMetric(QStyle::PM_DefaultChildMargin), style()->pixelMetric(QStyle::PM_DefaultChildMargin), style()->pixelMetric(QStyle::PM_DefaultChildMargin), style()->pixelMetric(QStyle::PM_DefaultChildMargin));
     grid->setSpacing(style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     QLabel* label = new QLabel(i18nc("@label:textbox", "Prefix:"), textGroup);
     label->setFixedSize(label->sizeHint());
@@ -107,7 +107,7 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
     QGroupBox* group = new QGroupBox(i18nc("@title:group", "Select Birthdays"), this);
     topLayout->addWidget(group);
     QVBoxLayout* layout = new QVBoxLayout(group);
-    layout->setMargin(0);
+    layout->setContentsMargins(0, 0, 0, 0);
 
     // Start Akonadi server as we need it for the birthday model to access contacts information
     Akonadi::ControlGui::start();
@@ -150,12 +150,12 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
     group = new QGroupBox(i18nc("@title:group", "Alarm Configuration"), this);
     topLayout->addWidget(group);
     QVBoxLayout* groupLayout = new QVBoxLayout(group);
-    groupLayout->setMargin(style()->pixelMetric(QStyle::PM_DefaultChildMargin));
+    groupLayout->setContentsMargins(style()->pixelMetric(QStyle::PM_DefaultChildMargin), style()->pixelMetric(QStyle::PM_DefaultChildMargin), style()->pixelMetric(QStyle::PM_DefaultChildMargin), style()->pixelMetric(QStyle::PM_DefaultChildMargin));
     groupLayout->setSpacing(style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     // Sound checkbox and file selector
     QHBoxLayout* hlayout = new QHBoxLayout();
-    hlayout->setMargin(0);
+    hlayout->setContentsMargins(0, 0, 0, 0);
     groupLayout->addLayout(hlayout);
     mSoundPicker = new SoundPicker(group);
     mSoundPicker->setFixedSize(mSoundPicker->sizeHint());
@@ -182,7 +182,7 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
 
     // Acknowledgement confirmation required - default = no confirmation
     hlayout = new QHBoxLayout();
-    hlayout->setMargin(0);
+    hlayout->setContentsMargins(0, 0, 0, 0);
     hlayout->setSpacing(2 * style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     groupLayout->addLayout(hlayout);
     mConfirmAck = EditDisplayAlarmDlg::createConfirmAckCheckbox(group);
@@ -201,7 +201,7 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
 
     // Late display checkbox - default = allow late display
     hlayout = new QHBoxLayout();
-    hlayout->setMargin(0);
+    hlayout->setContentsMargins(0, 0, 0, 0);
     hlayout->setSpacing(2 * style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     groupLayout->addLayout(hlayout);
     mLateCancel = new LateCancelSelector(false, group);

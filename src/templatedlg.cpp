@@ -64,7 +64,7 @@ TemplateDlg::TemplateDlg(QWidget* parent)
     topLayout->addLayout(hlayout);
 
     QBoxLayout* layout = new QVBoxLayout();
-    layout->setMargin(0);
+    layout->setContentsMargins(0, 0, 0, 0);
     hlayout->addLayout(layout);
     mListFilterModel = new TemplateListModel(this);
     if (!ShellProcess::authorised())
@@ -79,7 +79,7 @@ TemplateDlg::TemplateDlg(QWidget* parent)
     layout->addWidget(mListView);
 
     layout = new QVBoxLayout();
-    layout->setMargin(0);
+    layout->setContentsMargins(0, 0, 0, 0);
     hlayout->addLayout(layout);
     QPushButton* button = new QPushButton(i18nc("@action:button", "New"));
     mNewAction = new NewAlarmAction(true, i18nc("@action", "New"), this);

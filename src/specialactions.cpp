@@ -111,7 +111,7 @@ SpecialActionsDlg::SpecialActionsDlg(const QString& preAction, const QString& po
     QWidget* page = new QWidget(this);
     mainLayout->addWidget(page);
     QVBoxLayout* layout = new QVBoxLayout(page);
-    layout->setMargin(0);
+    layout->setContentsMargins(0, 0, 0, 0);
 
     mActions = new SpecialActions(enableCheckboxes, page);
     layout->addWidget(mActions);
@@ -163,7 +163,7 @@ SpecialActions::SpecialActions(bool enableCheckboxes, QWidget* parent)
       mReadOnly(false)
 {
     QVBoxLayout* topLayout = new QVBoxLayout(this);
-    topLayout->setMargin(0);
+    topLayout->setContentsMargins(0, 0, 0, 0);
 
     // Pre-alarm action
     QGroupBox* group = new QGroupBox(i18nc("@title:group", "Pre-Alarm Action"), this);
@@ -173,7 +173,7 @@ SpecialActions::SpecialActions(bool enableCheckboxes, QWidget* parent)
     QWidget* box = new QWidget(group);   // this is to control the QWhatsThis text display area
     vlayout->addWidget(box);
     QHBoxLayout* boxLayout = new QHBoxLayout(box);
-    boxLayout->setMargin(0);
+    boxLayout->setContentsMargins(0, 0, 0, 0);
     QLabel* label = new QLabel(i18nc("@label:textbox", "Command:"), box);
     boxLayout->addWidget(label);
     mPreAction = new QLineEdit(box);
@@ -208,7 +208,7 @@ SpecialActions::SpecialActions(bool enableCheckboxes, QWidget* parent)
     box = new QWidget(group);   // this is to control the QWhatsThis text display area
     vlayout->addWidget(box);
     boxLayout = new QHBoxLayout(box);
-    boxLayout->setMargin(0);
+    boxLayout->setContentsMargins(0, 0, 0, 0);
     label = new QLabel(i18nc("@label:textbox", "Command:"), box);
     boxLayout->addWidget(label);
     mPostAction = new QLineEdit(box);

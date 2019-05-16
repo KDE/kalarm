@@ -52,7 +52,7 @@ TemplatePickDlg::TemplatePickDlg(KAEvent::Actions type, QWidget* parent)
     connect(buttonBox, &QDialogButtonBox::accepted, this, &TemplatePickDlg::accept);
     connect(buttonBox, &QDialogButtonBox::rejected, this, &TemplatePickDlg::reject);
     QVBoxLayout* topLayout = new QVBoxLayout(topWidget);
-    topLayout->setMargin(0);
+    topLayout->setContentsMargins(0, 0, 0, 0);
 
     // Display the list of templates, but exclude command alarms if in kiosk mode.
     KAEvent::Actions shown = KAEvent::ACT_ALL;

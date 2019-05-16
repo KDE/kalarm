@@ -113,12 +113,12 @@ void Find::display()
 
         // Alarm types
         QVBoxLayout* layout = new QVBoxLayout(kalarmWidgets);
-        layout->setMargin(0);
+        layout->setContentsMargins(0, 0, 0, 0);
         layout->setSpacing(qApp->style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
         QGroupBox* group = new QGroupBox(i18nc("@title:group", "Alarm Type"), kalarmWidgets);
         layout->addWidget(group);
         QGridLayout* grid = new QGridLayout(group);
-        grid->setMargin(qApp->style()->pixelMetric(QStyle::PM_DefaultChildMargin));
+        grid->setContentsMargins(qApp->style()->pixelMetric(QStyle::PM_DefaultChildMargin), qApp->style()->pixelMetric(QStyle::PM_DefaultChildMargin), qApp->style()->pixelMetric(QStyle::PM_DefaultChildMargin), qApp->style()->pixelMetric(QStyle::PM_DefaultChildMargin));
         grid->setSpacing(qApp->style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
         grid->setColumnStretch(1, 1);
 

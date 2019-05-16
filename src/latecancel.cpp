@@ -55,7 +55,7 @@ LateCancelSelector::LateCancelSelector(bool allowHourMinute, QWidget* parent)
                              "its scheduled time, regardless of how late it is.</para>");
 
     QVBoxLayout* topLayout = new QVBoxLayout(this);
-    topLayout->setMargin(0);
+    topLayout->setContentsMargins(0, 0, 0, 0);
     topLayout->setSpacing(style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     mStack = new QStackedWidget(this);
@@ -63,7 +63,7 @@ LateCancelSelector::LateCancelSelector(bool allowHourMinute, QWidget* parent)
     mCheckboxFrame = new QFrame();
     mStack->addWidget(mCheckboxFrame);
     QHBoxLayout* hlayout = new QHBoxLayout(mCheckboxFrame);
-    hlayout->setMargin(0);
+    hlayout->setContentsMargins(0, 0, 0, 0);
     mCheckbox = new CheckBox(i18n_chk_CancelIfLate(), mCheckboxFrame);
     connect(mCheckbox, &CheckBox::toggled, this, &LateCancelSelector::slotToggled);
     connect(mCheckbox, &CheckBox::toggled, this, &LateCancelSelector::changed);
@@ -73,7 +73,7 @@ LateCancelSelector::LateCancelSelector(bool allowHourMinute, QWidget* parent)
     mTimeSelectorFrame = new QFrame();
     mStack->addWidget(mTimeSelectorFrame);
     hlayout = new QHBoxLayout(mTimeSelectorFrame);
-    hlayout->setMargin(0);
+    hlayout->setContentsMargins(0, 0, 0, 0);
     mTimeSelector = new TimeSelector(i18nc("@option:check Cancel if late by 10 minutes", "Cancel if late by"),
                                      whatsThis, i18nc("@info:whatsthis", "Enter how late will cause the alarm to be canceled"),
                                      allowHourMinute, mTimeSelectorFrame);
@@ -82,7 +82,7 @@ LateCancelSelector::LateCancelSelector(bool allowHourMinute, QWidget* parent)
     hlayout->addWidget(mTimeSelector, 0, Qt::AlignLeft);
 
     hlayout = new QHBoxLayout();
-    hlayout->setMargin(0);
+    hlayout->setContentsMargins(0, 0, 0, 0);
     hlayout->addSpacing(3 * style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     topLayout->addLayout(hlayout);
     mAutoClose = new CheckBox(i18n_chk_AutoCloseWin(), this);

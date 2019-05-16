@@ -53,7 +53,7 @@ Reminder::Reminder(const QString& reminderWhatsThis, const QString& valueWhatsTh
       mOnceOnlyEnabled(showOnceOnly)
 {
     QVBoxLayout* topLayout = new QVBoxLayout(this);
-    topLayout->setMargin(0);
+    topLayout->setContentsMargins(0, 0, 0, 0);
 
     mTime = new TimeSelector(i18nc("@option:check", "Reminder:"), reminderWhatsThis,
                              valueWhatsThis, allowHourMinute, this);
@@ -71,7 +71,7 @@ Reminder::Reminder(const QString& reminderWhatsThis, const QString& valueWhatsTh
     if (showOnceOnly)
     {
         QHBoxLayout* layout = new QHBoxLayout();
-        layout->setMargin(0);
+        layout->setContentsMargins(0, 0, 0, 0);
         layout->addSpacing(3 * style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
         topLayout->addLayout(layout);
         mOnceOnly = new CheckBox(i18n_chk_FirstRecurrenceOnly(), this);

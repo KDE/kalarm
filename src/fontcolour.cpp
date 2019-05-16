@@ -48,21 +48,21 @@ FontColourChooser::FontColourChooser(QWidget* parent, const QStringList& fontLis
         page = new QGroupBox(frameLabel, this);
         topLayout->addWidget(page);
         topLayout = new QVBoxLayout(page);
-        topLayout->setMargin(style()->pixelMetric(QStyle::PM_DefaultChildMargin));
+        topLayout->setContentsMargins(style()->pixelMetric(QStyle::PM_DefaultChildMargin), style()->pixelMetric(QStyle::PM_DefaultChildMargin), style()->pixelMetric(QStyle::PM_DefaultChildMargin), style()->pixelMetric(QStyle::PM_DefaultChildMargin));
         topLayout->setSpacing(style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     }
     QHBoxLayout* hlayout = new QHBoxLayout();
-    hlayout->setMargin(0);
+    hlayout->setContentsMargins(0, 0, 0, 0);
     topLayout->addLayout(hlayout);
     QVBoxLayout* colourLayout = new QVBoxLayout();
-    colourLayout->setMargin(0);
+    colourLayout->setContentsMargins(0, 0, 0, 0);
     hlayout->addLayout(colourLayout);
     if (fg)
     {
         QWidget* box = new QWidget(page);    // to group widgets for QWhatsThis text
         colourLayout->addWidget(box);
         QHBoxLayout* boxHLayout = new QHBoxLayout(box);
-        boxHLayout->setMargin(0);
+        boxHLayout->setContentsMargins(0, 0, 0, 0);
         boxHLayout->setSpacing(style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing) / 2);
 
         QLabel* label = new QLabel(i18nc("@label:listbox", "Foreground color:"), box);
@@ -78,7 +78,7 @@ FontColourChooser::FontColourChooser(QWidget* parent, const QStringList& fontLis
     QWidget* box = new QWidget(page);    // to group widgets for QWhatsThis text
     colourLayout->addWidget(box);
     QHBoxLayout* boxHLayout = new QHBoxLayout(box);
-    boxHLayout->setMargin(0);
+    boxHLayout->setContentsMargins(0, 0, 0, 0);
     boxHLayout->setSpacing(style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing) / 2);
 
     QLabel* label = new QLabel(i18nc("@label:listbox", "Background color:"), box);
@@ -94,7 +94,7 @@ FontColourChooser::FontColourChooser(QWidget* parent, const QStringList& fontLis
     if (defaultFont)
     {
         QHBoxLayout* layout = new QHBoxLayout();
-        layout->setMargin(0);
+        layout->setContentsMargins(0, 0, 0, 0);
         topLayout->addLayout(layout);
         mDefaultFont = new CheckBox(i18nc("@option:check", "Use default font"), page);
         mDefaultFont->setMinimumSize(mDefaultFont->sizeHint());

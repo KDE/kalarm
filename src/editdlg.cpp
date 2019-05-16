@@ -253,7 +253,7 @@ void EditAlarmDlg::init(const KAEvent* event)
         QFrame* frame = new QFrame;
         QHBoxLayout* box = new QHBoxLayout();
         frame->setLayout(box);
-        box->setMargin(0);
+        box->setContentsMargins(0, 0, 0, 0);
         box->setSpacing(style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
         QLabel* label = new QLabel(i18nc("@label:textbox", "Template name:"));
         label->setFixedSize(label->sizeHint());
@@ -278,7 +278,7 @@ void EditAlarmDlg::init(const KAEvent* event)
     mainScroll->setWidget(mainPage);   // mainPage becomes the child of mainScroll
     connect(mainPage, &PageFrame::shown, this, &EditAlarmDlg::slotShowMainPage);
     QVBoxLayout* topLayout = new QVBoxLayout(mainPage);
-    topLayout->setMargin(style()->pixelMetric(QStyle::PM_DefaultChildMargin));
+    topLayout->setContentsMargins(style()->pixelMetric(QStyle::PM_DefaultChildMargin), style()->pixelMetric(QStyle::PM_DefaultChildMargin), style()->pixelMetric(QStyle::PM_DefaultChildMargin), style()->pixelMetric(QStyle::PM_DefaultChildMargin));
     topLayout->setSpacing(style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     // Recurrence tab
@@ -287,7 +287,7 @@ void EditAlarmDlg::init(const KAEvent* event)
     mRecurPageIndex = 1;
     QFrame* recurTab = new QFrame;
     QVBoxLayout* recurTabLayout = new QVBoxLayout();
-    recurTabLayout->setMargin(style()->pixelMetric(QStyle::PM_DefaultChildMargin));
+    recurTabLayout->setContentsMargins(style()->pixelMetric(QStyle::PM_DefaultChildMargin), style()->pixelMetric(QStyle::PM_DefaultChildMargin), style()->pixelMetric(QStyle::PM_DefaultChildMargin), style()->pixelMetric(QStyle::PM_DefaultChildMargin));
     recurTab->setLayout(recurTabLayout);
     recurScroll->setWidget(recurTab);   // recurTab becomes the child of recurScroll
     mRecurrenceEdit = new RecurrenceEdit(mReadOnly);
@@ -302,7 +302,7 @@ void EditAlarmDlg::init(const KAEvent* event)
     QGroupBox* actionBox = new QGroupBox(i18nc("@title:group", "Action"), mainPage);
     topLayout->addWidget(actionBox, 1);
     QVBoxLayout* layout = new QVBoxLayout(actionBox);
-    layout->setMargin(style()->pixelMetric(QStyle::PM_DefaultChildMargin));
+    layout->setContentsMargins(style()->pixelMetric(QStyle::PM_DefaultChildMargin), style()->pixelMetric(QStyle::PM_DefaultChildMargin), style()->pixelMetric(QStyle::PM_DefaultChildMargin), style()->pixelMetric(QStyle::PM_DefaultChildMargin));
     layout->setSpacing(style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     type_init(actionBox, layout);
@@ -313,7 +313,7 @@ void EditAlarmDlg::init(const KAEvent* event)
         mDeferGroup = new QGroupBox(i18nc("@title:group", "Deferred Alarm"), mainPage);
         topLayout->addWidget(mDeferGroup);
         QHBoxLayout* hlayout = new QHBoxLayout(mDeferGroup);
-        hlayout->setMargin(style()->pixelMetric(QStyle::PM_DefaultChildMargin));
+        hlayout->setContentsMargins(style()->pixelMetric(QStyle::PM_DefaultChildMargin), style()->pixelMetric(QStyle::PM_DefaultChildMargin), style()->pixelMetric(QStyle::PM_DefaultChildMargin), style()->pixelMetric(QStyle::PM_DefaultChildMargin));
         hlayout->setSpacing(style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
         QLabel* label = new QLabel(i18nc("@label", "Deferred to:"), mDeferGroup);
         label->setFixedSize(label->sizeHint());
@@ -330,7 +330,7 @@ void EditAlarmDlg::init(const KAEvent* event)
     }
 
     QHBoxLayout* hlayout = new QHBoxLayout();
-    hlayout->setMargin(0);
+    hlayout->setContentsMargins(0, 0, 0, 0);
     topLayout->addLayout(hlayout);
 
     // Date and time entry
@@ -339,7 +339,7 @@ void EditAlarmDlg::init(const KAEvent* event)
         QGroupBox* templateTimeBox = new QGroupBox(i18nc("@title:group", "Time"), mainPage);
         topLayout->addWidget(templateTimeBox);
         QGridLayout* grid = new QGridLayout(templateTimeBox);
-        grid->setMargin(style()->pixelMetric(QStyle::PM_DefaultChildMargin));
+        grid->setContentsMargins(style()->pixelMetric(QStyle::PM_DefaultChildMargin), style()->pixelMetric(QStyle::PM_DefaultChildMargin), style()->pixelMetric(QStyle::PM_DefaultChildMargin), style()->pixelMetric(QStyle::PM_DefaultChildMargin));
         grid->setSpacing(style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
         mTemplateTimeGroup = new ButtonGroup(templateTimeBox);
         connect(mTemplateTimeGroup, &ButtonGroup::buttonSet, this, &EditAlarmDlg::slotTemplateTimeType);
@@ -355,7 +355,7 @@ void EditAlarmDlg::init(const KAEvent* event)
 
         QWidget* box = new QWidget(templateTimeBox);
         QHBoxLayout* layout = new QHBoxLayout(box);
-        layout->setMargin(0);
+        layout->setContentsMargins(0, 0, 0, 0);
         layout->setSpacing(style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
         mTemplateUseTime = new RadioButton(i18nc("@option:radio", "Time:"), box);
         mTemplateUseTime->setFixedSize(mTemplateUseTime->sizeHint());
@@ -383,7 +383,7 @@ void EditAlarmDlg::init(const KAEvent* event)
 
         box = new QWidget(templateTimeBox);
         layout = new QHBoxLayout(box);
-        layout->setMargin(0);
+        layout->setContentsMargins(0, 0, 0, 0);
         layout->setSpacing(style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
         mTemplateUseTimeAfter = new RadioButton(i18nc("@option:radio", "Time from now:"), box);
         mTemplateUseTimeAfter->setFixedSize(mTemplateUseTimeAfter->sizeHint());
@@ -419,7 +419,7 @@ void EditAlarmDlg::init(const KAEvent* event)
     mMoreOptions->setFrameStyle(QFrame::NoFrame);
     topLayout->addWidget(mMoreOptions);
     QVBoxLayout* moreLayout = new QVBoxLayout(mMoreOptions);
-    moreLayout->setMargin(0);
+    moreLayout->setContentsMargins(0, 0, 0, 0);
     moreLayout->setSpacing(style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     // Reminder

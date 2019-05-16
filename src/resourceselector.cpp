@@ -98,7 +98,7 @@ ResourceSelector::ResourceSelector(QWidget* parent)
     topLayout->addWidget(mListView, 1);
 
     PackedLayout* blayout = new PackedLayout(Qt::AlignHCenter);
-    blayout->setMargin(0);
+    blayout->setContentsMargins(0, 0, 0, 0);
     topLayout->addLayout(blayout);
 
     mAddButton    = new QPushButton(i18nc("@action:button", "Add..."), this);

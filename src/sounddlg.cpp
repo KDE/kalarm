@@ -169,7 +169,7 @@ SoundWidget::SoundWidget(bool showPlay, bool showRepeat, QWidget* parent)
     QWidget* box = new QWidget(this);
     layout->addWidget(box);
     QHBoxLayout* boxHLayout = new QHBoxLayout(box);
-    boxHLayout->setMargin(0);
+    boxHLayout->setContentsMargins(0, 0, 0, 0);
     boxHLayout->setSpacing(0);
 
     if (showPlay)
@@ -223,7 +223,7 @@ SoundWidget::SoundWidget(bool showPlay, bool showRepeat, QWidget* parent)
         QWidget* box = new QWidget(mRepeatGroupBox);
         glayout->addWidget(box);
         boxHLayout = new QHBoxLayout(box);
-        boxHLayout->setMargin(0);
+        boxHLayout->setContentsMargins(0, 0, 0, 0);
         label = new QLabel(i18nc("@label:spinbox Length of time to pause between repetitions", "Pause between repetitions:"), box);
         boxHLayout->addWidget(label);
         label->setFixedSize(label->sizeHint());
@@ -243,7 +243,7 @@ SoundWidget::SoundWidget(bool showPlay, bool showRepeat, QWidget* parent)
     QGroupBox* group = new QGroupBox(i18nc("@title:group Sound volume", "Volume"), this);
     layout->addWidget(group);
     QGridLayout* grid = new QGridLayout(group);
-    grid->setMargin(style()->pixelMetric(QStyle::PM_DefaultChildMargin));
+    grid->setContentsMargins(style()->pixelMetric(QStyle::PM_DefaultChildMargin), style()->pixelMetric(QStyle::PM_DefaultChildMargin), style()->pixelMetric(QStyle::PM_DefaultChildMargin), style()->pixelMetric(QStyle::PM_DefaultChildMargin));
     grid->setSpacing(style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     grid->setColumnStretch(2, 1);
     int indentWidth = 3 * style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
@@ -254,7 +254,7 @@ SoundWidget::SoundWidget(bool showPlay, bool showRepeat, QWidget* parent)
     box = new QWidget(group);
     grid->addWidget(box, 1, 0, 1, 3);
     boxHLayout = new QHBoxLayout(box);
-    boxHLayout->setMargin(0);
+    boxHLayout->setContentsMargins(0, 0, 0, 0);
     mVolumeCheckbox = new CheckBox(i18nc("@option:check", "Set volume"), box);
     boxHLayout->addWidget(mVolumeCheckbox);
     mVolumeCheckbox->setFixedSize(mVolumeCheckbox->sizeHint());
@@ -282,7 +282,7 @@ SoundWidget::SoundWidget(bool showPlay, bool showRepeat, QWidget* parent)
     mFadeBox = new QWidget(group);
     grid->addWidget(mFadeBox, 3, 2, Qt::AlignLeft);
     boxHLayout = new QHBoxLayout(mFadeBox);
-    boxHLayout->setMargin(0);
+    boxHLayout->setContentsMargins(0, 0, 0, 0);
     label = new QLabel(i18nc("@label:spinbox Time period over which to fade the sound", "Fade time:"), mFadeBox);
     boxHLayout->addWidget(label);
     label->setFixedSize(label->sizeHint());
@@ -301,7 +301,7 @@ SoundWidget::SoundWidget(bool showPlay, bool showRepeat, QWidget* parent)
     mFadeVolumeBox = new QWidget(group);
     grid->addWidget(mFadeVolumeBox, 4, 2);
     boxHLayout = new QHBoxLayout(mFadeVolumeBox);
-    boxHLayout->setMargin(0);
+    boxHLayout->setContentsMargins(0, 0, 0, 0);
     label = new QLabel(i18nc("@label:slider", "Initial volume:"), mFadeVolumeBox);
     boxHLayout->addWidget(label);
     label->setFixedSize(label->sizeHint());

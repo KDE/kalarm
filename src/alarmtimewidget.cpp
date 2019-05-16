@@ -92,7 +92,7 @@ void AlarmTimeWidget::init(Mode mode, const QString& title)
     else
     {
         QBoxLayout* layout = new QVBoxLayout(this);
-        layout->setMargin(0);
+        layout->setContentsMargins(0, 0, 0, 0);
         layout->setSpacing(0);
         topWidget = new QGroupBox(title, this);
         layout->addWidget(topWidget);
@@ -102,7 +102,7 @@ void AlarmTimeWidget::init(Mode mode, const QString& title)
     connect(mButtonGroup, &ButtonGroup::buttonSet, this, &AlarmTimeWidget::slotButtonSet);
     QVBoxLayout* topLayout = new QVBoxLayout(topWidget);
     topLayout->setSpacing(style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
-    topLayout->setMargin(title.isEmpty() ? 0 : style()->pixelMetric(QStyle::PM_DefaultChildMargin));
+    topLayout->setContentsMargins(title.isEmpty() ? 0 : style()->pixelMetric(QStyle::PM_DefaultChildMargin), title.isEmpty() ? 0 : style()->pixelMetric(QStyle::PM_DefaultChildMargin), title.isEmpty() ? 0 : style()->pixelMetric(QStyle::PM_DefaultChildMargin), title.isEmpty() ? 0 : style()->pixelMetric(QStyle::PM_DefaultChildMargin));
 
     // At time radio button/label
     mAtTimeRadio = new RadioButton((mDeferring ? i18nc("@option:radio", "Defer to date/time:") : i18nc("@option:radio", "At date/time:")), topWidget);
@@ -123,7 +123,7 @@ void AlarmTimeWidget::init(Mode mode, const QString& title)
     // Time edit box and Any time checkbox
     QWidget* timeBox = new QWidget(topWidget);
     QHBoxLayout* timeBoxHLayout = new QHBoxLayout(timeBox);
-    timeBoxHLayout->setMargin(0);
+    timeBoxHLayout->setContentsMargins(0, 0, 0, 0);
     timeBoxHLayout->setSpacing(2 * style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     mTimeEdit = new TimeEdit(timeBox);
     timeBoxHLayout->addWidget(mTimeEdit);
@@ -169,7 +169,7 @@ void AlarmTimeWidget::init(Mode mode, const QString& title)
 
     // Set up the layout, either narrow or wide
     QGridLayout* grid = new QGridLayout();
-    grid->setMargin(0);
+    grid->setContentsMargins(0, 0, 0, 0);
     topLayout->addLayout(grid);
     if (mDeferring)
     {
@@ -210,7 +210,7 @@ void AlarmTimeWidget::init(Mode mode, const QString& title)
         // Time zone selector
         mTimeZoneBox = new QWidget(topWidget);   // this is to control the QWhatsThis text display area
         QHBoxLayout* hlayout = new QHBoxLayout(mTimeZoneBox);
-        hlayout->setMargin(0);
+        hlayout->setContentsMargins(0, 0, 0, 0);
         QLabel* label = new QLabel(i18nc("@label:listbox", "Time zone:"), mTimeZoneBox);
         hlayout->addWidget(label);
         mTimeZone = new TimeZoneCombo(mTimeZoneBox);

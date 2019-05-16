@@ -397,7 +397,7 @@ void MessageWin::initView()
     QWidget* topWidget = new QWidget(this);
     setCentralWidget(topWidget);
     QVBoxLayout* topLayout = new QVBoxLayout(topWidget);
-    topLayout->setMargin(style()->pixelMetric(QStyle::PM_DefaultChildMargin));
+    topLayout->setContentsMargins(style()->pixelMetric(QStyle::PM_DefaultChildMargin), style()->pixelMetric(QStyle::PM_DefaultChildMargin), style()->pixelMetric(QStyle::PM_DefaultChildMargin), style()->pixelMetric(QStyle::PM_DefaultChildMargin));
     topLayout->setSpacing(style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     QPalette labelPalette = palette();
@@ -570,7 +570,7 @@ void MessageWin::initView()
             // Advance reminder: show remaining time until the actual alarm
             mRemainingText = new QLabel(topWidget);
             mRemainingText->setFrameStyle(QFrame::Box | QFrame::Raised);
-            mRemainingText->setMargin(leading);
+            mRemainingText->setContentsMargins(leading, leading, leading, leading);
             mRemainingText->setPalette(labelPalette);
             mRemainingText->setAutoFillBackground(true);
             if (mDateTime.isDateOnly()  ||  KADateTime::currentLocalDate().daysTo(mDateTime.date()) > 0)
@@ -601,7 +601,7 @@ void MessageWin::initView()
                 frame->setWhatsThis(i18nc("@info:whatsthis", "The email to send"));
                 topLayout->addWidget(frame, 0, Qt::AlignHCenter);
                 QGridLayout* grid = new QGridLayout(frame);
-                grid->setMargin(style()->pixelMetric(QStyle::PM_DefaultChildMargin));
+                grid->setContentsMargins(style()->pixelMetric(QStyle::PM_DefaultChildMargin), style()->pixelMetric(QStyle::PM_DefaultChildMargin), style()->pixelMetric(QStyle::PM_DefaultChildMargin), style()->pixelMetric(QStyle::PM_DefaultChildMargin));
                 grid->setSpacing(style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
                 QLabel* label = new QLabel(i18nc("@info Email addressee", "To:"), frame);
@@ -639,7 +639,7 @@ void MessageWin::initView()
     {
         setCaption(i18nc("@title:window", "Error"));
         QHBoxLayout* layout = new QHBoxLayout();
-        layout->setMargin(2 * style()->pixelMetric(QStyle::PM_DefaultChildMargin));
+        layout->setContentsMargins(2 * style()->pixelMetric(QStyle::PM_DefaultChildMargin), 2 * style()->pixelMetric(QStyle::PM_DefaultChildMargin), 2 * style()->pixelMetric(QStyle::PM_DefaultChildMargin), 2 * style()->pixelMetric(QStyle::PM_DefaultChildMargin));
         layout->addStretch();
         topLayout->addLayout(layout);
         QLabel* label = new QLabel(topWidget);

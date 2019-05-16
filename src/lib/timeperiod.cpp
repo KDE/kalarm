@@ -53,7 +53,7 @@ TimePeriod::TimePeriod(bool allowHourMinute, QWidget* parent)
 {
     QHBoxLayout* layout = new QHBoxLayout;
     setLayout(layout);
-    layout->setMargin(0);
+    layout->setContentsMargins(0, 0, 0, 0);
 
     mSpinStack = new QStackedWidget(this);
     mSpinBox = new SpinBox(mSpinStack);
