@@ -407,7 +407,8 @@ MiscPrefTab::MiscPrefTab(StackedScrollGroup* scrollGroup)
     QGroupBox* group = new QGroupBox(i18nc("@title:group", "Run Mode"));
     topLayout()->addWidget(group);
     QVBoxLayout* vlayout = new QVBoxLayout(group);
-    vlayout->setContentsMargins(style()->pixelMetric(QStyle::PM_DefaultChildMargin), style()->pixelMetric(QStyle::PM_DefaultChildMargin), style()->pixelMetric(QStyle::PM_DefaultChildMargin), style()->pixelMetric(QStyle::PM_DefaultChildMargin));
+    int dcm = style()->pixelMetric(QStyle::PM_DefaultChildMargin);
+    vlayout->setContentsMargins(dcm, dcm, dcm, dcm);
     vlayout->setSpacing(style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     // Start at login
@@ -453,7 +454,7 @@ MiscPrefTab::MiscPrefTab(StackedScrollGroup* scrollGroup)
     group->setWhatsThis(i18nc("@info:whatsthis", "Choose which application to use when a command alarm is executed in a terminal window"));
     topLayout()->addWidget(group);
     QGridLayout* grid = new QGridLayout(group);
-    grid->setContentsMargins(style()->pixelMetric(QStyle::PM_DefaultChildMargin), style()->pixelMetric(QStyle::PM_DefaultChildMargin), style()->pixelMetric(QStyle::PM_DefaultChildMargin), style()->pixelMetric(QStyle::PM_DefaultChildMargin));
+    grid->setContentsMargins(dcm, dcm, dcm, dcm);
     grid->setSpacing(style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     int row = 0;
 
@@ -689,7 +690,8 @@ TimePrefTab::TimePrefTab(StackedScrollGroup* scrollGroup)
     QGroupBox* group = new QGroupBox(i18nc("@title:group", "Working Hours"));
     topLayout()->addWidget(group);
     QBoxLayout* layout = new QVBoxLayout(group);
-    layout->setContentsMargins(style()->pixelMetric(QStyle::PM_DefaultChildMargin), style()->pixelMetric(QStyle::PM_DefaultChildMargin), style()->pixelMetric(QStyle::PM_DefaultChildMargin), style()->pixelMetric(QStyle::PM_DefaultChildMargin));
+    int dcm = style()->pixelMetric(QStyle::PM_DefaultChildMargin);
+    layout->setContentsMargins(dcm, dcm, dcm, dcm);
     layout->setSpacing(style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     QWidget* daybox = new QWidget(group);   // this is to control the QWhatsThis text display area
@@ -749,7 +751,7 @@ TimePrefTab::TimePrefTab(StackedScrollGroup* scrollGroup)
     group = new QGroupBox(i18nc("@title:group", "KOrganizer"));
     topLayout()->addWidget(group);
     layout = new QVBoxLayout(group);
-    layout->setContentsMargins(style()->pixelMetric(QStyle::PM_DefaultChildMargin), style()->pixelMetric(QStyle::PM_DefaultChildMargin), style()->pixelMetric(QStyle::PM_DefaultChildMargin), style()->pixelMetric(QStyle::PM_DefaultChildMargin));
+    layout->setContentsMargins(dcm, dcm, dcm, dcm);
     layout->setSpacing(style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     widget = new QWidget;   // this is to control the QWhatsThis text display area
@@ -830,7 +832,8 @@ StorePrefTab::StorePrefTab(StackedScrollGroup* scrollGroup)
     topLayout()->addWidget(group);
     QButtonGroup* bgroup = new QButtonGroup(group);
     QBoxLayout* layout = new QVBoxLayout(group);
-    layout->setContentsMargins(style()->pixelMetric(QStyle::PM_DefaultChildMargin), style()->pixelMetric(QStyle::PM_DefaultChildMargin), style()->pixelMetric(QStyle::PM_DefaultChildMargin), style()->pixelMetric(QStyle::PM_DefaultChildMargin));
+    int dcm = style()->pixelMetric(QStyle::PM_DefaultChildMargin);
+    layout->setContentsMargins(dcm, dcm, dcm, dcm);
     layout->setSpacing(style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     mDefaultResource = new QRadioButton(i18nc("@option:radio", "Store in default calendar"), group);
@@ -848,7 +851,7 @@ StorePrefTab::StorePrefTab(StackedScrollGroup* scrollGroup)
     group = new QGroupBox(i18nc("@title:group", "Archived Alarms"));
     topLayout()->addWidget(group);
     QGridLayout* grid = new QGridLayout(group);
-    grid->setContentsMargins(style()->pixelMetric(QStyle::PM_DefaultChildMargin), style()->pixelMetric(QStyle::PM_DefaultChildMargin), style()->pixelMetric(QStyle::PM_DefaultChildMargin), style()->pixelMetric(QStyle::PM_DefaultChildMargin));
+    grid->setContentsMargins(dcm, dcm, dcm, dcm);
     grid->setSpacing(style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     grid->setColumnStretch(1, 1);
     grid->setColumnMinimumWidth(0, indentWidth());
@@ -1009,7 +1012,8 @@ EmailPrefTab::EmailPrefTab(StackedScrollGroup* scrollGroup)
     QGroupBox* group = new QGroupBox(i18nc("@title:group", "Your Email Address"));
     topLayout()->addWidget(group);
     QGridLayout* grid = new QGridLayout(group);
-    grid->setContentsMargins(style()->pixelMetric(QStyle::PM_DefaultChildMargin), style()->pixelMetric(QStyle::PM_DefaultChildMargin), style()->pixelMetric(QStyle::PM_DefaultChildMargin), style()->pixelMetric(QStyle::PM_DefaultChildMargin));
+    int dcm = style()->pixelMetric(QStyle::PM_DefaultChildMargin);
+    grid->setContentsMargins(dcm, dcm, dcm, dcm);
     grid->setSpacing(style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     grid->setColumnStretch(2, 1);
 
@@ -1287,7 +1291,8 @@ EditPrefTab::EditPrefTab(StackedScrollGroup* scrollGroup)
     QGroupBox* group = new QGroupBox(i18nc("@title:group", "Display Alarms"));
     ttLayout->addWidget(group);
     QVBoxLayout* vlayout = new QVBoxLayout(group);
-    vlayout->setContentsMargins(style()->pixelMetric(QStyle::PM_DefaultChildMargin), style()->pixelMetric(QStyle::PM_DefaultChildMargin), style()->pixelMetric(QStyle::PM_DefaultChildMargin), style()->pixelMetric(QStyle::PM_DefaultChildMargin));
+    int dcm = style()->pixelMetric(QStyle::PM_DefaultChildMargin);
+    vlayout->setContentsMargins(dcm, dcm, dcm, dcm);
     vlayout->setSpacing(style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     mConfirmAck = new QCheckBox(EditDisplayAlarmDlg::i18n_chk_ConfirmAck());
@@ -1321,7 +1326,7 @@ EditPrefTab::EditPrefTab(StackedScrollGroup* scrollGroup)
     QGroupBox* bbox = new QGroupBox(i18nc("@title:group Audio options group", "Sound"));
     ttLayout->addWidget(bbox);
     vlayout = new QVBoxLayout(bbox);
-    vlayout->setContentsMargins(style()->pixelMetric(QStyle::PM_DefaultChildMargin), style()->pixelMetric(QStyle::PM_DefaultChildMargin), style()->pixelMetric(QStyle::PM_DefaultChildMargin), style()->pixelMetric(QStyle::PM_DefaultChildMargin));
+    vlayout->setContentsMargins(dcm, dcm, dcm, dcm);
     vlayout->setSpacing(style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     QHBoxLayout* hlayout = new QHBoxLayout;
@@ -1364,7 +1369,7 @@ EditPrefTab::EditPrefTab(StackedScrollGroup* scrollGroup)
     group = new QGroupBox(i18nc("@title:group", "Command Alarms"));
     ttLayout->addWidget(group);
     vlayout = new QVBoxLayout(group);
-    vlayout->setContentsMargins(style()->pixelMetric(QStyle::PM_DefaultChildMargin), style()->pixelMetric(QStyle::PM_DefaultChildMargin), style()->pixelMetric(QStyle::PM_DefaultChildMargin), style()->pixelMetric(QStyle::PM_DefaultChildMargin));
+    vlayout->setContentsMargins(dcm, dcm, dcm, dcm);
     vlayout->setSpacing(style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     hlayout = new QHBoxLayout();
     hlayout->setContentsMargins(0, 0, 0, 0);
@@ -1385,7 +1390,7 @@ EditPrefTab::EditPrefTab(StackedScrollGroup* scrollGroup)
     group = new QGroupBox(i18nc("@title:group", "Email Alarms"));
     ttLayout->addWidget(group);
     vlayout = new QVBoxLayout(group);
-    vlayout->setContentsMargins(style()->pixelMetric(QStyle::PM_DefaultChildMargin), style()->pixelMetric(QStyle::PM_DefaultChildMargin), style()->pixelMetric(QStyle::PM_DefaultChildMargin), style()->pixelMetric(QStyle::PM_DefaultChildMargin));
+    vlayout->setContentsMargins(dcm, dcm, dcm, dcm);
     vlayout->setSpacing(style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     // BCC email to sender
@@ -1601,13 +1606,15 @@ ViewPrefTab::ViewPrefTab(StackedScrollGroup* scrollGroup)
 
     QWidget* widget = new QWidget;
     QVBoxLayout* topGeneral = new QVBoxLayout(widget);
-    topGeneral->setContentsMargins(style()->pixelMetric(QStyle::PM_DefaultChildMargin) / 2, style()->pixelMetric(QStyle::PM_DefaultChildMargin) / 2, style()->pixelMetric(QStyle::PM_DefaultChildMargin) / 2, style()->pixelMetric(QStyle::PM_DefaultChildMargin) / 2);
+    int dcm = style()->pixelMetric(QStyle::PM_DefaultChildMargin);
+    int m = dcm / 2;
+    topGeneral->setContentsMargins(m, m, m, m);
     topGeneral->setSpacing(style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     mTabGeneral = mTabs->addTab(widget, i18nc("@title:tab", "General"));
 
     widget =  new QWidget;
     QVBoxLayout* topWindows = new QVBoxLayout(widget);
-    topWindows->setContentsMargins(style()->pixelMetric(QStyle::PM_DefaultChildMargin) / 2, style()->pixelMetric(QStyle::PM_DefaultChildMargin) / 2, style()->pixelMetric(QStyle::PM_DefaultChildMargin) / 2, style()->pixelMetric(QStyle::PM_DefaultChildMargin) / 2);
+    topWindows->setContentsMargins(m, m, m, m);
     topWindows->setSpacing(style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     mTabWindows = mTabs->addTab(widget, i18nc("@title:tab", "Alarm Windows"));
 
@@ -1637,7 +1644,7 @@ ViewPrefTab::ViewPrefTab(StackedScrollGroup* scrollGroup)
         mShowInSystemTrayGroup->setWhatsThis(showInSysTrayWhatsThis);
         topGeneral->addWidget(mShowInSystemTrayGroup);
         QGridLayout* grid = new QGridLayout(mShowInSystemTrayGroup);
-        grid->setContentsMargins(style()->pixelMetric(QStyle::PM_DefaultChildMargin), style()->pixelMetric(QStyle::PM_DefaultChildMargin), style()->pixelMetric(QStyle::PM_DefaultChildMargin), style()->pixelMetric(QStyle::PM_DefaultChildMargin));
+        grid->setContentsMargins(dcm, dcm, dcm, dcm);
         grid->setSpacing(style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
         grid->setColumnStretch(1, 1);
         grid->setColumnMinimumWidth(0, indentWidth());
@@ -1681,7 +1688,7 @@ ViewPrefTab::ViewPrefTab(StackedScrollGroup* scrollGroup)
     QGroupBox* group = new QGroupBox(i18nc("@title:group", "System Tray Tooltip"));
     topGeneral->addWidget(group);
     QGridLayout* grid = new QGridLayout(group);
-    grid->setContentsMargins(style()->pixelMetric(QStyle::PM_DefaultChildMargin), style()->pixelMetric(QStyle::PM_DefaultChildMargin), style()->pixelMetric(QStyle::PM_DefaultChildMargin), style()->pixelMetric(QStyle::PM_DefaultChildMargin));
+    grid->setContentsMargins(dcm, dcm, dcm, dcm);
     grid->setSpacing(style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     grid->setColumnStretch(2, 1);
     grid->setColumnMinimumWidth(0, indentWidth());
@@ -1739,7 +1746,7 @@ ViewPrefTab::ViewPrefTab(StackedScrollGroup* scrollGroup)
     group = new QGroupBox(i18nc("@title:group", "Alarm List"));
     topGeneral->addWidget(group);
     QHBoxLayout* hlayout = new QHBoxLayout(group);
-    hlayout->setContentsMargins(style()->pixelMetric(QStyle::PM_DefaultChildMargin), style()->pixelMetric(QStyle::PM_DefaultChildMargin), style()->pixelMetric(QStyle::PM_DefaultChildMargin), style()->pixelMetric(QStyle::PM_DefaultChildMargin));
+    hlayout->setContentsMargins(dcm, dcm, dcm, dcm);
     QVBoxLayout* colourLayout = new QVBoxLayout();
     colourLayout->setContentsMargins(0, 0, 0, 0);
     hlayout->addLayout(colourLayout);
@@ -1778,7 +1785,7 @@ ViewPrefTab::ViewPrefTab(StackedScrollGroup* scrollGroup)
     group = new QGroupBox(i18nc("@title:group", "Alarm Message Windows"));
     topWindows->addWidget(group);
     grid = new QGridLayout(group);
-    grid->setContentsMargins(style()->pixelMetric(QStyle::PM_DefaultChildMargin), style()->pixelMetric(QStyle::PM_DefaultChildMargin), style()->pixelMetric(QStyle::PM_DefaultChildMargin), style()->pixelMetric(QStyle::PM_DefaultChildMargin));
+    grid->setContentsMargins(dcm, dcm, dcm, dcm);
     grid->setSpacing(style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     grid->setColumnStretch(1, 1);
     grid->setColumnMinimumWidth(0, indentWidth());

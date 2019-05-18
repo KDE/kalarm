@@ -243,7 +243,8 @@ SoundWidget::SoundWidget(bool showPlay, bool showRepeat, QWidget* parent)
     QGroupBox* group = new QGroupBox(i18nc("@title:group Sound volume", "Volume"), this);
     layout->addWidget(group);
     QGridLayout* grid = new QGridLayout(group);
-    grid->setContentsMargins(style()->pixelMetric(QStyle::PM_DefaultChildMargin), style()->pixelMetric(QStyle::PM_DefaultChildMargin), style()->pixelMetric(QStyle::PM_DefaultChildMargin), style()->pixelMetric(QStyle::PM_DefaultChildMargin));
+    int dcm = style()->pixelMetric(QStyle::PM_DefaultChildMargin);
+    grid->setContentsMargins(dcm, dcm, dcm, dcm);
     grid->setSpacing(style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     grid->setColumnStretch(2, 1);
     int indentWidth = 3 * style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);

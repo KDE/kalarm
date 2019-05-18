@@ -107,7 +107,8 @@ RecurrenceEdit::RecurrenceEdit(bool readOnly, QWidget* parent)
     QGroupBox* recurGroup = new QGroupBox(i18nc("@title:group", "Recurrence Rule"), this);
     topLayout->addWidget(recurGroup);
     QHBoxLayout* hlayout = new QHBoxLayout(recurGroup);
-    hlayout->setContentsMargins(style()->pixelMetric(QStyle::PM_DefaultChildMargin), style()->pixelMetric(QStyle::PM_DefaultChildMargin), style()->pixelMetric(QStyle::PM_DefaultChildMargin), style()->pixelMetric(QStyle::PM_DefaultChildMargin));
+    int dcm = style()->pixelMetric(QStyle::PM_DefaultChildMargin);
+    hlayout->setContentsMargins(dcm, dcm, dcm, dcm);
     hlayout->setSpacing(style()->pixelMetric(QStyle::PM_DefaultChildMargin));   // use margin spacing due to vertical divider line
 
     // Recurrence period radio buttons
@@ -231,7 +232,7 @@ RecurrenceEdit::RecurrenceEdit(bool readOnly, QWidget* parent)
     connect(mRangeButtonGroup, &ButtonGroup::buttonSet, this, &RecurrenceEdit::contentsChanged);
 
     vlayout = new QVBoxLayout(mRangeButtonBox);
-    vlayout->setContentsMargins(style()->pixelMetric(QStyle::PM_DefaultChildMargin), style()->pixelMetric(QStyle::PM_DefaultChildMargin), style()->pixelMetric(QStyle::PM_DefaultChildMargin), style()->pixelMetric(QStyle::PM_DefaultChildMargin));
+    vlayout->setContentsMargins(dcm, dcm, dcm, dcm);
     vlayout->setSpacing(style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     mNoEndDateButton = new RadioButton(i18nc("@option:radio", "No end"), mRangeButtonBox);
     mNoEndDateButton->setFixedSize(mNoEndDateButton->sizeHint());
@@ -313,7 +314,7 @@ RecurrenceEdit::RecurrenceEdit(bool readOnly, QWidget* parent)
     topLayout->addWidget(mExceptionGroup);
     topLayout->setStretchFactor(mExceptionGroup, 2);
     hlayout = new QHBoxLayout(mExceptionGroup);
-    hlayout->setContentsMargins(style()->pixelMetric(QStyle::PM_DefaultChildMargin), style()->pixelMetric(QStyle::PM_DefaultChildMargin), style()->pixelMetric(QStyle::PM_DefaultChildMargin), style()->pixelMetric(QStyle::PM_DefaultChildMargin));
+    hlayout->setContentsMargins(dcm, dcm, dcm, dcm);
     hlayout->setSpacing(style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     vlayout = new QVBoxLayout();
     vlayout->setContentsMargins(0, 0, 0, 0);

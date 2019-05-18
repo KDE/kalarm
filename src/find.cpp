@@ -118,7 +118,8 @@ void Find::display()
         QGroupBox* group = new QGroupBox(i18nc("@title:group", "Alarm Type"), kalarmWidgets);
         layout->addWidget(group);
         QGridLayout* grid = new QGridLayout(group);
-        grid->setContentsMargins(qApp->style()->pixelMetric(QStyle::PM_DefaultChildMargin), qApp->style()->pixelMetric(QStyle::PM_DefaultChildMargin), qApp->style()->pixelMetric(QStyle::PM_DefaultChildMargin), qApp->style()->pixelMetric(QStyle::PM_DefaultChildMargin));
+        int dcm = qApp->style()->pixelMetric(QStyle::PM_DefaultChildMargin);
+        grid->setContentsMargins(dcm, dcm, dcm, dcm);
         grid->setSpacing(qApp->style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
         grid->setColumnStretch(1, 1);
 

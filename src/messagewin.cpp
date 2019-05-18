@@ -397,7 +397,8 @@ void MessageWin::initView()
     QWidget* topWidget = new QWidget(this);
     setCentralWidget(topWidget);
     QVBoxLayout* topLayout = new QVBoxLayout(topWidget);
-    topLayout->setContentsMargins(style()->pixelMetric(QStyle::PM_DefaultChildMargin), style()->pixelMetric(QStyle::PM_DefaultChildMargin), style()->pixelMetric(QStyle::PM_DefaultChildMargin), style()->pixelMetric(QStyle::PM_DefaultChildMargin));
+    int dcm = style()->pixelMetric(QStyle::PM_DefaultChildMargin);
+    topLayout->setContentsMargins(dcm, dcm, dcm, dcm);
     topLayout->setSpacing(style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     QPalette labelPalette = palette();
@@ -601,7 +602,7 @@ void MessageWin::initView()
                 frame->setWhatsThis(i18nc("@info:whatsthis", "The email to send"));
                 topLayout->addWidget(frame, 0, Qt::AlignHCenter);
                 QGridLayout* grid = new QGridLayout(frame);
-                grid->setContentsMargins(style()->pixelMetric(QStyle::PM_DefaultChildMargin), style()->pixelMetric(QStyle::PM_DefaultChildMargin), style()->pixelMetric(QStyle::PM_DefaultChildMargin), style()->pixelMetric(QStyle::PM_DefaultChildMargin));
+                grid->setContentsMargins(dcm, dcm, dcm, dcm);
                 grid->setSpacing(style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
                 QLabel* label = new QLabel(i18nc("@info Email addressee", "To:"), frame);
@@ -639,7 +640,8 @@ void MessageWin::initView()
     {
         setCaption(i18nc("@title:window", "Error"));
         QHBoxLayout* layout = new QHBoxLayout();
-        layout->setContentsMargins(2 * style()->pixelMetric(QStyle::PM_DefaultChildMargin), 2 * style()->pixelMetric(QStyle::PM_DefaultChildMargin), 2 * style()->pixelMetric(QStyle::PM_DefaultChildMargin), 2 * style()->pixelMetric(QStyle::PM_DefaultChildMargin));
+        int m = 2 * dcm;
+        layout->setContentsMargins(m, m, m, m);
         layout->addStretch();
         topLayout->addLayout(layout);
         QLabel* label = new QLabel(topWidget);

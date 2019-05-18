@@ -102,7 +102,8 @@ void AlarmTimeWidget::init(Mode mode, const QString& title)
     connect(mButtonGroup, &ButtonGroup::buttonSet, this, &AlarmTimeWidget::slotButtonSet);
     QVBoxLayout* topLayout = new QVBoxLayout(topWidget);
     topLayout->setSpacing(style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
-    topLayout->setContentsMargins(title.isEmpty() ? 0 : style()->pixelMetric(QStyle::PM_DefaultChildMargin), title.isEmpty() ? 0 : style()->pixelMetric(QStyle::PM_DefaultChildMargin), title.isEmpty() ? 0 : style()->pixelMetric(QStyle::PM_DefaultChildMargin), title.isEmpty() ? 0 : style()->pixelMetric(QStyle::PM_DefaultChildMargin));
+    int dcm = title.isEmpty() ? 0 : style()->pixelMetric(QStyle::PM_DefaultChildMargin);
+    topLayout->setContentsMargins(dcm, dcm, dcm, dcm);
 
     // At time radio button/label
     mAtTimeRadio = new RadioButton((mDeferring ? i18nc("@option:radio", "Defer to date/time:") : i18nc("@option:radio", "At date/time:")), topWidget);

@@ -775,7 +775,8 @@ void EditCommandAlarmDlg::type_init(QWidget* parent, QVBoxLayout* frameLayout)
     mCmdOutputBox = new QGroupBox(i18nc("@title:group", "Command Output"), parent);
     frameLayout->addWidget(mCmdOutputBox);
     QVBoxLayout* vlayout = new QVBoxLayout(mCmdOutputBox);
-    vlayout->setContentsMargins(style()->pixelMetric(QStyle::PM_DefaultChildMargin), style()->pixelMetric(QStyle::PM_DefaultChildMargin), style()->pixelMetric(QStyle::PM_DefaultChildMargin), style()->pixelMetric(QStyle::PM_DefaultChildMargin));
+    int dcm = style()->pixelMetric(QStyle::PM_DefaultChildMargin);
+    vlayout->setContentsMargins(dcm, dcm, dcm, dcm);
     vlayout->setSpacing(style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     mCmdOutputGroup = new ButtonGroup(mCmdOutputBox);
     connect(mCmdOutputGroup, &ButtonGroup::buttonSet, this, &EditCommandAlarmDlg::contentsChanged);
