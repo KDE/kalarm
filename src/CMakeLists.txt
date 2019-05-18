@@ -1,6 +1,3 @@
-
-
-
 include_directories(
     ${CMAKE_CURRENT_BINARY_DIR}
     ${CMAKE_CURRENT_SOURCE_DIR}/
@@ -131,6 +128,8 @@ ecm_add_app_icon(kalarm_bin_SRCS ICONS ${ICONS_SRCS})
 add_executable(kalarm_bin ${kalarm_bin_SRCS})
 
 set_target_properties(kalarm_bin PROPERTIES OUTPUT_NAME kalarm)
+target_compile_definitions(kalarm_bin PRIVATE -DVERSION="${KALARM_VERSION}")
+
 
 target_link_libraries(kalarm_bin
     KF5::Auth
