@@ -46,7 +46,7 @@
 
 SpecialActionsButton::SpecialActionsButton(bool enableCheckboxes, QWidget* parent)
     : QPushButton(i18nc("@action:button", "Special Actions..."), parent),
-      mOptions(0),
+      mOptions{},
       mEnableCheckboxes(enableCheckboxes),
       mReadOnly(false)
 {

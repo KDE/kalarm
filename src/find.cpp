@@ -378,6 +378,7 @@ void Find::findNext(bool forward, bool checkEnd, bool fromCurrent)
                     break;
                 }
                 // fall through to ACT_DISPLAY_COMMAND
+                Q_FALLTHROUGH();
             case KAEvent::ACT_DISPLAY_COMMAND:
                 if (!(mOptions & FIND_MESSAGE))
                     break;
