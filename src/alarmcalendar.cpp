@@ -906,6 +906,7 @@ bool AlarmCalendar::addEvent(KAEvent& evnt, QWidget* promptParent, bool useEvent
                 if (mEventType == CalEvent::EMPTY)
                     break;
                 // fall through to default
+                Q_FALLTHROUGH();
             default:
                 return false;
         }

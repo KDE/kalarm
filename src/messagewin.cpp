@@ -1762,6 +1762,7 @@ QSize MessageWin::sizeHint() const
                 break;
             }
             // fall through to default
+            Q_FALLTHROUGH();
         default:
             return MainWindowBase::sizeHint();
     }

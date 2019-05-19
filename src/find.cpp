@@ -219,6 +219,7 @@ void Find::display()
                     break;
                 }
                 // fall through to ACT_DISPLAY_COMMAND
+                Q_FALLTHROUGH();
             case KAEvent::ACT_DISPLAY_COMMAND:
             default:
                 text = true;

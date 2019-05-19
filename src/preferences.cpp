@@ -475,6 +475,7 @@ QString translateXTermPath(const QString& cmdline, bool write)
                 if (cmd[i] != quote)
                     continue;
                 // fall through to ' '
+                Q_FALLTHROUGH();
             case ' ':
                 params = cmd.mid(i);
                 cmd = cmd.left(i);

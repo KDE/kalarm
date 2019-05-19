@@ -194,6 +194,7 @@ void EditAlarmDlg::init(const KAEvent* event, GetResourceType getResource)
                 break;
             }
             // fall through to RES_PROMPT
+            Q_FALLTHROUGH();
         case RES_PROMPT:
             mCollectionItemId = -1;
             break;

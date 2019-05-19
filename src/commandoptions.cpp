@@ -441,6 +441,7 @@ void CommandOptions::process()
             if (mParser->isSet(*mOptions[DISABLE]))
                 setErrorIncompatible(DISABLE, mCommandOpt);
             // Fall through to NEW
+            Q_FALLTHROUGH();
         case NEW:
         {
             // Display a message or file, execute a command, or send an email
@@ -855,6 +856,7 @@ bool convInterval(const QString& timeParam, KARecurrence::Type& recurType, int& 
             case KARecurrence::WEEKLY:
                 interval *= 7;
                 // fall through to DAILY
+                Q_FALLTHROUGH();
             case KARecurrence::DAILY:
                 interval *= 24*60;
                 recurType = KARecurrence::MINUTELY;

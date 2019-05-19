@@ -1053,6 +1053,7 @@ QPixmap* AkonadiModel::eventIcon(const KAEvent& event) const
             if (event.actionSubType() == KAEvent::FILE)
                 return mFileIcon;
             // fall through to ACT_DISPLAY_COMMAND
+            Q_FALLTHROUGH();
         case KAEvent::ACT_DISPLAY_COMMAND:
         default:
             return mTextIcon;
