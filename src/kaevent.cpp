@@ -1690,7 +1690,7 @@ KAEvent::Flags KAEvent::flags() const
 
 KAEvent::Flags KAEventPrivate::flags() const
 {
-    KAEvent::Flags result({});
+    KAEvent::Flags result{};
     if (mBeep) {
         result |= KAEvent::BEEP;
     }

@@ -2153,19 +2153,23 @@ void KADateTimeTest::addMSecs()
     QVERIFY(utc2.isUtc());
     QCOMPARE(utc2.date(), QDate(2005, 7, 6));
     QCOMPARE(utc2.time(), QTime(23, 59, 59, 999));
+    QCOMPARE(utc1.msecsTo(utc2), 59899);
     utc2 = utc1.addMSecs(59900);
     QVERIFY(utc2.isUtc());
     QCOMPARE(utc2.date(), QDate(2005, 7, 7));
     QCOMPARE(utc2.time(), QTime(0, 0, 0, 0));
+    QCOMPARE(utc1.msecsTo(utc2), 59900);
     KADateTime utc1a(QDate(2005, 7, 6), QTime(0, 0, 5, 100), KADateTime::UTC);
     utc2 = utc1a.addMSecs(-5100);
     QVERIFY(utc2.isUtc());
     QCOMPARE(utc2.date(), QDate(2005, 7, 6));
     QCOMPARE(utc2.time(), QTime(0, 0, 0, 0));
+    QCOMPARE(utc1a.msecsTo(utc2), -5100);
     utc2 = utc1a.addMSecs(-5101);
     QVERIFY(utc2.isUtc());
     QCOMPARE(utc2.date(), QDate(2005, 7, 5));
     QCOMPARE(utc2.time(), QTime(23, 59, 59, 999));
+    QCOMPARE(utc1a.msecsTo(utc2), -5101);
 
     // UTC offset
     KADateTime offset1(QDate(2005, 7, 6), QTime(3, 40, 0, 100), KADateTime::Spec::OffsetFromUTC(-5400)); // -0130
