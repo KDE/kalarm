@@ -749,14 +749,14 @@ void RecurrenceEdit::setDefaults(const KADateTime& from)
     RadioButton* button;
     switch (Preferences::defaultRecurPeriod())
     {
-        case AT_LOGIN: button = mAtLoginButton;  break;
-        case ANNUAL:   button = mYearlyButton;   break;
-        case MONTHLY:  button = mMonthlyButton;  break;
-        case WEEKLY:   button = mWeeklyButton;   break;
-        case DAILY:    button = mDailyButton;    break;
-        case SUBDAILY: button = mSubDailyButton; break;
-        case NO_RECUR:
-        default:       button = mNoneButton;     break;
+        case Preferences::Recur_Login:    button = mAtLoginButton;  break;
+        case Preferences::Recur_Yearly:   button = mYearlyButton;   break;
+        case Preferences::Recur_Monthly:  button = mMonthlyButton;  break;
+        case Preferences::Recur_Weekly:   button = mWeeklyButton;   break;
+        case Preferences::Recur_Daily:    button = mDailyButton;    break;
+        case Preferences::Recur_SubDaily: button = mSubDailyButton; break;
+        case Preferences::Recur_None:
+        default:                          button = mNoneButton;     break;
     }
     button->setChecked(true);
     mNoEmitTypeChanged = false;
