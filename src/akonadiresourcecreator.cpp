@@ -1,7 +1,7 @@
 /*
  *  akonadiresourcecreator.cpp  -  interactively create an Akonadi resource
  *  Program:  kalarm
- *  Copyright © 2011 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2011,2019 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -29,6 +29,7 @@
 #include <AkonadiCore/agentmanager.h>
 #include <kdbusconnectionpool.h>
 #include <AkonadiWidgets/agenttypedialog.h>
+#include <AkonadiWidgets/AgentConfigurationDialog>
 
 #include <kmessagebox.h>
 #include <KLocalizedString>
@@ -135,7 +136,10 @@ void AkonadiResourceCreator::agentInstanceCreated(KJob* j)
             connect(agentControlIface, &org::freedesktop::Akonadi::Agent::Control::configurationDialogAccepted, this, &AkonadiResourceCreator::configurationDialogAccepted);
             connect(agentControlIface, &org::freedesktop::Akonadi::Agent::Control::configurationDialogRejected, this, &AkonadiResourceCreator::exitWithError);
         }
-        mAgentInstance.configure(mParent);
+
+        QPointer<AgentConfigurationDialog> dlg = new AgentConfigurationDialog(mAgentInstance, mParent);
+        dlg->exec();
+        delete dlg;
 
         if (!controlOk)
             Q_EMIT finished(this, true);  // don't actually know the result in this case

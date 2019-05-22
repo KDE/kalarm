@@ -1,7 +1,7 @@
 /*
  *  resourceselector.cpp  -  calendar resource selection widget
  *  Program:  kalarm
- *  Copyright © 2006-2013 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2006-2019 by David Jarvie <djarvie@kde.org>
  *  Based on KOrganizer's ResourceView class and KAddressBook's ResourceSelection class,
  *  Copyright (C) 2003,2004 Cornelius Schumacher <schumacher@kde.org>
  *  Copyright (C) 2003-2004 Reinhold Kainhofer <reinhold@kainhofer.com>
@@ -38,6 +38,7 @@
 #include <AkonadiCore/agenttype.h>
 #include <AkonadiCore/entitydisplayattribute.h>
 #include <AkonadiWidgets/collectionpropertiesdialog.h>
+#include <AkonadiWidgets/AgentConfigurationDialog>
 
 #include <KLocalizedString>
 #include <kactioncollection.h>
@@ -257,7 +258,11 @@ void ResourceSelector::editResource()
     {
         AgentInstance instance = AgentManager::self()->instance(collection.resource());
         if (instance.isValid())
-            instance.configure(this);
+        {
+            QPointer<AgentConfigurationDialog> dlg = new AgentConfigurationDialog(instance, this);
+            dlg->exec();
+            delete dlg;
+        }
     }
 }
 
