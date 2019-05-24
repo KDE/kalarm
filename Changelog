@@ -1,7 +1,8 @@
 KAlarm Change Log
 
-=== Version 2.12.3 (KDE Applications 19.04.2) --- 22 May 2019 ===
+=== Version 2.12.3 (KDE Applications 19.04.2) --- 23 May 2019 ===
 + Fix calendar configuration dialogue not appearing.
++ Fix errors creating calendar resources on first run of KAlarm [KDE Bug 407544]
 
 === Version 2.12.2 (KDE Applications 18.08.2) --- 27 Sep 2018 ===
 + Fix Defer button being disabled for recurring alarms [KDE Bug 398658]
