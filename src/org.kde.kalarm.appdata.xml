@@ -317,7 +317,7 @@
   </description>
   <url type="homepage">http://www.astrojar.org.uk/kalarm/</url>
   <url type="bugtracker">https://bugs.kde.org/enter_bug.cgi?format=guided&amp;product=kalarm</url>
-  <url type="help">http://docs.kde.org/stable/en/kdepim/kalarm/index.html</url>
+  <url type="help">https://docs.kde.org/stable5/en/pim/kalarm/index.html</url>
   <screenshots>
     <screenshot type="default">
       <caption>KAlarm configuration window with a testing message alarm</caption>
@@ -341,7 +341,7 @@
       <caption xml:lang="uk">Вікно налаштовування KAlarm із тестовим нагадуванням у форматі повідомлення</caption>
       <caption xml:lang="x-test">xxKAlarm configuration window with a testing message alarmxx</caption>
       <caption xml:lang="zh-TW">包含測試訊息通知的 KAlarm 設定視窗</caption>
-      <image>http://kde.org/images/screenshots/kalarm.png</image>
+      <image>https://kde.org/images/screenshots/kalarm.png</image>
     </screenshot>
   </screenshots>
   <project_group>KDE</project_group>
