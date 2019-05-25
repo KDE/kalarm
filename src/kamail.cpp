@@ -331,7 +331,7 @@ void initHeaders(KMime::Message& message, KAMail::JobData& data)
     KMime::Headers::To* to = new KMime::Headers::To;
     KCalCore::Person::List toList = data.event.emailAddressees();
     for (int i = 0, count = toList.count();  i < count;  ++i)
-        to->addAddress(toList[i]->email().toLatin1(), toList[i]->name());
+        to->addAddress(toList[i].email().toLatin1(), toList[i].name());
     message.setHeader(to);
 
     if (!data.bcc.isEmpty())
@@ -484,7 +484,7 @@ void KAMail::notifyQueued(const KAEvent& event)
     KCalCore::Person::List addresses = event.emailAddressees();
     for (int i = 0, end = addresses.count();  i < end;  ++i)
     {
-        QByteArray email = addresses[i]->email().toLocal8Bit();
+        QByteArray email = addresses[i].email().toLocal8Bit();
         const char* em = email.constData();
         if (!email.isEmpty()
         &&  HeaderParsing::parseAddress(em, em + email.length(), addr))
@@ -522,7 +522,7 @@ QString KAMail::convertAddresses(const QString& items, KCalCore::Person::List& l
         return invalidItem;
     for (int i = 0, count = mailboxes.count();  i < count;  ++i)
     {
-        KCalCore::Person::Ptr person(new KCalCore::Person(mailboxes[i].name(), mailboxes[i].addrSpec().asString()));
+        KCalCore::Person person(mailboxes[i].name(), mailboxes[i].addrSpec().asString());
         list += person;
     }
     return QString();

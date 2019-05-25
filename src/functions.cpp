@@ -1887,7 +1887,7 @@ KAlarm::UpdateResult sendToKOrganizer(const KAEvent& event)
         default:
             break;
     }
-    Person::Ptr person(new Person(QString(), userEmail));
+    Person person(QString(), userEmail);
     kcalEvent->setOrganizer(person);
     kcalEvent->setDuration(Duration(Preferences::kOrgEventDuration() * 60, Duration::Seconds));
 

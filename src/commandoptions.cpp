@@ -400,7 +400,7 @@ void CommandOptions::process()
             QString addr = params[i];
             if (!KAMail::checkAddress(addr))
                 setError(xi18nc("@info:shell", "<icode>%1</icode>: invalid email address", optionName(MAIL)));
-            KCalCore::Person::Ptr person(new KCalCore::Person(QString(), addr));
+            KCalCore::Person person(QString(), addr);
             mAddressees += person;
         }
         params = mParser->values(*mOptions[ATTACH]);
