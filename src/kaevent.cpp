@@ -5770,7 +5770,7 @@ EmailAddressList &EmailAddressList::operator=(const Person::List &addresses)
 {
     clear();
     for (int p = 0, end = addresses.count();  p < end;  ++p) {
-        if (!addresses[p]->email().isEmpty()) {
+        if (!addresses[p].email().isEmpty()) {
             append(addresses[p]);
         }
     }
@@ -5818,8 +5818,8 @@ QString EmailAddressList::address(int index) const
     }
     QString result;
     bool quote = false;
-    const Person::Ptr person = (*this)[index];
-    const QString name = person->name();
+    const Person &person = (*this)[index];
+    const QString name = person.name();
     if (!name.isEmpty()) {
         // Need to enclose the name in quotes if it has any special characters
         for (int i = 0, len = name.length();  i < len;  ++i) {
@@ -5830,12 +5830,12 @@ QString EmailAddressList::address(int index) const
                 break;
             }
         }
-        result += (*this)[index]->name();
+        result += (*this)[index].name();
         result += (quote ? QLatin1String("\" <") : QLatin1String(" <"));
         quote = true;    // need angle brackets round email address
     }
 
-    result += person->email();
+    result += person.email();
     if (quote) {
         result += QLatin1Char('>');
     }
@@ -5849,7 +5849,7 @@ QStringList EmailAddressList::pureAddresses() const
 {
     QStringList list;
     for (int p = 0, end = count();  p < end;  ++p) {
-        list += at(p)->email();
+        list += at(p).email();
     }
     return list;
 }
@@ -5867,7 +5867,7 @@ QString EmailAddressList::pureAddresses(const QString &separator) const
         } else {
             result += separator;
         }
-        result += at(p)->email();
+        result += at(p).email();
     }
     return result;
 }

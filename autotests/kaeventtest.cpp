@@ -241,7 +241,7 @@ void KAEventTest::constructors()
     {
         // Email alarm
         const QString subject(QStringLiteral("Subject 1"));
-        const Person::Ptr addressee(new Person{QStringLiteral("Fred"), QStringLiteral("fred@freddy.com")});
+        const Person addressee{QStringLiteral("Fred"), QStringLiteral("fred@freddy.com")};
         const Person::List addressees{addressee};
         const QStringList attachments{QStringLiteral("/tmp/xyz"), QStringLiteral("/home/fred/attch.p")};
         Event::Ptr kcalevent(new Event);
@@ -552,7 +552,7 @@ Event::Ptr createKcalEvent(const QDateTime& start, const QDateTime& created, Ala
             kcalalarm->setProgramArguments(QStringLiteral("-a PERM"));
             break;
         case Alarm::Email: {
-            Person::Ptr addr(new Person(QStringLiteral("Cliff Edge"), QStringLiteral("cliff@edge.com")));
+            Person addr(QStringLiteral("Cliff Edge"), QStringLiteral("cliff@edge.com"));
             kcalalarm->setMailSubject(QStringLiteral("Subject"));
             kcalalarm->setMailText(QStringLiteral("message"));
             kcalalarm->setMailAddress(addr);
