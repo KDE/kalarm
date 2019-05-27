@@ -164,7 +164,7 @@ target_link_libraries(kalarm_bin
 )
 
 if (Qt5X11Extras_FOUND)
-  target_link_libraries(kalarm_bin Qt5::X11Extras)
+    target_link_libraries(kalarm_bin Qt5::X11Extras ${X11_X11_LIB})
 endif()
 
 

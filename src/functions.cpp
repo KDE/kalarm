@@ -1,7 +1,7 @@
 /*
  *  functions.cpp  -  miscellaneous functions
  *  Program:  kalarm
- *  Copyright © 2001-2018 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2019 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -69,6 +69,7 @@ using namespace KCalCore;
 
 #if KDEPIM_HAVE_X11
 #include <kwindowsystem.h>
+#include <kwindowinfo.h>
 #include <kxmessages.h>
 #include <kstartupinfo.h>
 #include <netwm.h>
@@ -86,6 +87,11 @@ using namespace KCalCore;
 #include <QStandardPaths>
 #include <QTimeZone>
 #include "kalarm_debug.h"
+
+#if KDEPIM_HAVE_X11
+#include <X11/Xlib.h>
+#include <X11/Xutil.h>
+#endif
 
 using namespace Akonadi;
 
@@ -1415,10 +1421,8 @@ QString runKMail(bool minimise)
 */
 bool Private::startKMailMinimised()
 {
-#pragma message("port QT5")
-#if 0 //PORT QT5
 #if KDEPIM_HAVE_X11
-    NETRootInfo i(QX11Info::display(), NET::Supported);
+    NETRootInfo i(QX11Info::connection(), NET::Supported, NET::Properties2());
     if (i.isSupported(NET::WM2KDETemporaryRules))
     {
         qCDebug(KALARM_LOG) << "using rules";
@@ -1434,7 +1438,7 @@ bool Private::startKMailMinimised()
     {
         // Connect to window add to get the NEW windows
         qCDebug(KALARM_LOG) << "connecting to window add";
-        connect(KWindowSystem::self(), SIGNAL(windowAdded(WId)), instance(), SLOT(windowAdded(WId)));
+        connect(KWindowSystem::self(), &KWindowSystem::windowAdded, instance(), &Private::windowAdded);
     }
     // Propagate the app startup notification info to the started app.
     // We are not using KApplication, so the env remained set.
@@ -1456,9 +1460,6 @@ bool Private::startKMailMinimised()
 #else
     return false;
 #endif
-#else
-    return false;
-#endif
 }
 
 /******************************************************************************
@@ -1467,38 +1468,36 @@ bool Private::startKMailMinimised()
 */
 void Private::windowAdded(WId w)
 {
-#pragma message("port QT5")
-#if 0 //Port QT5
 #if KDEPIM_HAVE_X11
-    static const int SUPPORTED_TYPES = NET::NormalMask | NET::DesktopMask | NET::DockMask
-                                     | NET::ToolbarMask | NET::MenuMask | NET::DialogMask
-                                     | NET::OverrideMask | NET::TopMenuMask | NET::UtilityMask | NET::SplashMask;
-    KWindowInfo kwinfo = KWindowSystem::windowInfo(w, NET::WMWindowType | NET::WMName);
+    static const NET::WindowTypes SUPPORTED_TYPES =
+                             NET::NormalMask | NET::DesktopMask | NET::DockMask
+                           | NET::ToolbarMask | NET::MenuMask | NET::DialogMask
+                           | NET::OverrideMask | NET::TopMenuMask | NET::UtilityMask | NET::SplashMask;
+    KWindowInfo kwinfo(w, NET::WMWindowType | NET::WMName);
     if (kwinfo.windowType(SUPPORTED_TYPES) == NET::TopMenu
     ||  kwinfo.windowType(SUPPORTED_TYPES) == NET::Toolbar
     ||  kwinfo.windowType(SUPPORTED_TYPES) == NET::Desktop)
         return;   // always ignore these window types
 
-    QX11Info qxinfo;
-    XWithdrawWindow(QX11Info::display(), w, qxinfo.screen());
+    Display* display = QX11Info::display();
+    XWithdrawWindow(display, w, QX11Info::appScreen());
     QApplication::flush();
 
-    NETWinInfo info(QX11Info::display(), w, QX11Info::appRootWindow(), NET::WMState);
-    XWMHints* hints = XGetWMHints(QX11Info::display(), w);
+    NETWinInfo info(QX11Info::connection(), w, QX11Info::appRootWindow(), NET::WMState, NET::Properties2());
+    XWMHints* hints = XGetWMHints(display, w);
     if (hints)
     {
         hints->flags |= StateHint;
         hints->initial_state = IconicState;
-        XSetWMHints(QX11Info::display(), w, hints);
+        XSetWMHints(display, w, hints);
         XFree(hints);
     }
     info.setWindowType(NET::Normal);
 
-    XSync(QX11Info::display(), False);
-    XMapWindow(QX11Info::display(), w);
-    XSync(QX11Info::display(), False);
+    XSync(display, False);
+    XMapWindow(display, w);
+    XSync(display, False);
     QApplication::flush();
-#endif
 #endif
 }
 

@@ -1,7 +1,7 @@
 /*
  *  find.cpp  -  search facility
  *  Program:  kalarm
- *  Copyright © 2005-2013 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2005-2019 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -25,7 +25,6 @@
 #include "eventlistview.h"
 #include "messagebox.h"
 #include "preferences.h"
-#include "config-kalarm.h"
 
 #include <kalarmcal/kaevent.h>
 
@@ -72,7 +71,7 @@ Find::Find(EventListView* parent)
 
 Find::~Find()
 {
-    delete mDialog;    // automatically set to 0
+    delete mDialog;    // automatically set to null
     delete mFind;
     mFind = nullptr;
 }
@@ -89,8 +88,10 @@ void Find::slotSelectionChanged()
 void Find::display()
 {
     if (!mOptions)
+    {
         // Set defaults the first time the Find dialog is activated
         mOptions = FIND_LIVE | FIND_ARCHIVED | FIND_MESSAGE | FIND_FILE | FIND_COMMAND | FIND_EMAIL | FIND_AUDIO;
+    }
     bool noArchived = !Preferences::archivedKeepDays();
     bool showArchived = qobject_cast<AlarmListView*>(mListView)
                         && (static_cast<AlarmListModel*>(mListView->model())->eventTypeFilter() & CalEvent::ARCHIVED);
@@ -98,11 +99,7 @@ void Find::display()
         mOptions &= ~FIND_ARCHIVED;
 
     if (mDialog)
-    {
-#if KDEPIM_HAVE_X11
         KWindowSystem::activateWindow(mDialog->winId());
-#endif
-    }
     else
     {
         mDialog = new KFindDialog(mListView, mOptions, mHistory, (mListView->selectionModel()->selectedRows().count() > 1));
