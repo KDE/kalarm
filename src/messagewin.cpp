@@ -1,7 +1,7 @@
 /*
  *  messagewin.cpp  -  displays an alarm message
  *  Program:  kalarm
- *  Copyright © 2001-2018 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2019 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -39,9 +39,6 @@
 #include "synchtimer.h"
 
 #include <kpimtextedit/texttospeech.h>
-#pragma message("port QT5")
-//QT5 reactivate after porting (activated by config-kalarm.h include in texttospeech.h)
-#define KDEPIM_HAVE_X11 0
 
 #include <KAboutData>
 #include <kstandardguiitem.h>
@@ -59,6 +56,7 @@
 #include <phonon/audiooutput.h>
 #include <phonon/volumefadereffect.h>
 #if KDEPIM_HAVE_X11
+#include <kwindowinfo.h>
 #include <netwm.h>
 #include <qx11info_x11.h>
 #endif
@@ -2354,18 +2352,18 @@ qCDebug(KALARM_LOG)<<"full="<<full<<", screen="<<mScreenNumber;
 FullScreenType haveFullScreenWindow(int screen)
 {
     FullScreenType type = NoFullScreen;
-    Display* display = QX11Info::display();
-    const NETRootInfo rootInfo(display, NET::ClientList | NET::ActiveWindow, screen);
-    const Window rootWindow   = rootInfo.rootWindow();
-    const Window activeWindow = rootInfo.activeWindow();
-    const Window* windows     = rootInfo.clientList();
-    const int windowCount     = rootInfo.clientListCount();
+    xcb_connection_t* connection = QX11Info::connection();
+    const NETRootInfo rootInfo(connection, NET::ClientList | NET::ActiveWindow, NET::Properties2(), screen);
+    const xcb_window_t rootWindow   = rootInfo.rootWindow();
+    const xcb_window_t activeWindow = rootInfo.activeWindow();
+    const xcb_window_t* windows     = rootInfo.clientList();
+    const int windowCount           = rootInfo.clientListCount();
 qCDebug(KALARM_LOG)<<"Screen"<<screen<<": Window count="<<windowCount<<", active="<<activeWindow<<", geom="<<qApp->desktop()->screenGeometry(screen);
 NETRect geom;
 NETRect frame;
     for (int w = 0;  w < windowCount;  ++w)
     {
-        NETWinInfo winInfo(display, windows[w], rootWindow, NET::WMState|NET::WMGeometry);
+        NETWinInfo winInfo(connection, windows[w], rootWindow, NET::WMState|NET::WMGeometry, NET::Properties2());
 winInfo.kdeGeometry(frame, geom);
 const QRect fr(frame.pos.x, frame.pos.y, frame.size.width, frame.size.height);
 const QRect gm(geom.pos.x, geom.pos.y, geom.size.width, geom.size.height);
@@ -2389,18 +2387,18 @@ FullScreenType findFullScreenWindows(const QVector<QRect>& screenRects, QVector<
 {
     FullScreenType result = NoFullScreen;
     screenTypes.fill(NoFullScreen);
-    Display* display = QX11Info::display();
-    const NETRootInfo rootInfo(display, NET::ClientList | NET::ActiveWindow, 0);
-    const Window rootWindow   = rootInfo.rootWindow();
-    const Window activeWindow = rootInfo.activeWindow();
-    const Window* windows     = rootInfo.clientList();
-    const int windowCount     = rootInfo.clientListCount();
+    xcb_connection_t* connection = QX11Info::connection();
+    const NETRootInfo rootInfo(connection, NET::ClientList | NET::ActiveWindow, NET::Properties2());
+    const xcb_window_t rootWindow   = rootInfo.rootWindow();
+    const xcb_window_t activeWindow = rootInfo.activeWindow();
+    const xcb_window_t* windows     = rootInfo.clientList();
+    const int windowCount           = rootInfo.clientListCount();
 qCDebug(KALARM_LOG)<<"Virtual desktops: Window count="<<windowCount<<", active="<<activeWindow<<", geom="<<qApp->desktop()->screenGeometry(0);
     NETRect netgeom;
     NETRect netframe;
     for (int w = 0;  w < windowCount;  ++w)
     {
-        NETWinInfo winInfo(display, windows[w], rootWindow, NET::WMState | NET::WMGeometry);
+        NETWinInfo winInfo(connection, windows[w], rootWindow, NET::WMState | NET::WMGeometry, NET::Properties2());
         if (winInfo.state() & NET::FullScreen)
         {
             // Found a full screen window - find which screen it's on

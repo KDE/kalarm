@@ -1,55 +1,56 @@
 KAlarm Change Log
 
 === Version 2.12.3 (KDE Applications 19.04.2) --- 23 May 2019 ===
-+ Fix calendar configuration dialogue not appearing.
-+ Fix errors creating calendar resources on first run of KAlarm [KDE Bug 407544]
+* Fix calendar configuration dialogue not appearing.
+* Fix errors creating calendar resources on first run of KAlarm [KDE Bug 407544]
+* Display alarm message windows within current screen in multi-head systems.
 
 === Version 2.12.2 (KDE Applications 18.08.2) --- 27 Sep 2018 ===
-+ Fix Defer button being disabled for recurring alarms [KDE Bug 398658]
+* Fix Defer button being disabled for recurring alarms [KDE Bug 398658]
 
 === Version 2.12.1 (KDE Applications 18.08.1) --- 18 Aug 2018 ===
-+ Align and right adjust 'Time to' column values in main window [KDE Bug 397130]
-+ Remove seconds values from Time column (erroneously added in 2.12.0).
+* Align and right adjust 'Time to' column values in main window [KDE Bug 397130]
+* Remove seconds values from Time column (erroneously added in 2.12.0).
 
 === Version 2.12.0 (KDE Applications 18.08) --- 29 Jul 2018 ===
-+ Use KAlarmCal::KADateTime instead of deprecated KDateTime.
-+ Remove 'clock time' option, in favour of local system time zone.
-+ Fix times being truncated and showing ellipsis in main window [KDE Bug 365257]
-+ Fix evaluation of work days.
-+ Fix reminder-once alarms not being correctly loaded from calendar file.
-+ Fix some regressions introduced in version 2.11.0, including:
+* Use KAlarmCal::KADateTime instead of deprecated KDateTime.
+* Remove 'clock time' option, in favour of local system time zone.
+* Fix times being truncated and showing ellipsis in main window [KDE Bug 365257]
+* Fix evaluation of work days.
+* Fix reminder-once alarms not being correctly loaded from calendar file.
+* Fix some regressions introduced in version 2.11.0, including:
     Make global shortcuts available.
     Default sound file selection dialogue to the system sound files directory.
 
 === Version 2.11.16 (KDE Applications 17.04.1) --- 15 April 2017 ===
-+ Fix option text for using default email address from KMail/System Settings [KDE Bug 378722]
+* Fix option text for using default email address from KMail/System Settings [KDE Bug 378722]
 
 === Version 2.11.15 (KDE Applications 17.04) --- 15 January 2017 ===
-+ Report if terminal for command alarms is not configured.
-+ Don't allow 'auto-hide in system tray' on Unity desktop [KDE Bug 373848]
+* Report if terminal for command alarms is not configured.
+* Don't allow 'auto-hide in system tray' on Unity desktop [KDE Bug 373848]
 
 === Version 2.11.14 --- 19 February 2017 ===
-+ Fix not showing main window if activated again while already running with --tray [KDE Bug 374520]
-+ Fix --help, --version and option errors not being reported if KAlarm is already running.
-+ Make command options --edit-new-* work [KDE Bug 376209]
+* Fix not showing main window if activated again while already running with --tray [KDE Bug 374520]
+* Fix --help, --version and option errors not being reported if KAlarm is already running.
+* Make command options --edit-new-* work [KDE Bug 376209]
 
 === Version 2.11.13 (KDE Applications 16.12.2) --- 29 January 2017 ===
-+ Fix system tray icon used for "some alarms disabled"
-+ Improved system tray icons (requires Plasma 5.9) [KDE Bug 362631]
-+ Don't show misleading "Failed to update alarm" if command alarm fails [KDE Bug 375615]
+* Fix system tray icon used for "some alarms disabled"
+* Improved system tray icons (requires Plasma 5.9) [KDE Bug 362631]
+* Don't show misleading "Failed to update alarm" if command alarm fails [KDE Bug 375615]
 
 === Version 2.11.12 (KDE Applications 16.12.1) --- 1 January 2017 ===
-+ Fix Export Alarms file save error [KDE Bug 374337]
-+ Fix arrow/page up/down keys not working in date edit control
+* Fix Export Alarms file save error [KDE Bug 374337]
+* Fix arrow/page up/down keys not working in date edit control
   (needs KDE Frameworks 5.30) [KDE Bug 373886]
 
 === Version 2.11.11 (KDE Applications 16.12.0) --- 16 November 2016 ===
-+ Fix crash on exit [KDE Bug 372223]
+* Fix crash on exit [KDE Bug 372223]
 
 === Version 2.11.10 (KDE Applications 16.08.3) --- 31 October 2016 ===
-+ Fix default calendar files not being created on first run [KDE Bug 362962]
-+ Fix crash when a second instance of KAlarm is started [KDE Bug 371628]
-+ Don't output error messages about temporary files in directory calendar [KDE Bug 370627]
+* Fix default calendar files not being created on first run [KDE Bug 362962]
+* Fix crash when a second instance of KAlarm is started [KDE Bug 371628]
+* Don't output error messages about temporary files in directory calendar [KDE Bug 370627]
 
 === Version 2.11.9 (KDE Applications 16.08.1) --- 18 August 2016 ===
 * Prevent KAlarm autostarting on non-KDE desktops if it has never been run [KDE Bug 366562]
