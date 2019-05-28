@@ -1270,12 +1270,16 @@ public:
     void endChanges();
 
     /** Return the current KAlarm calendar storage format version.
+     *  This is the KAlarm version which first used the current calendar/event
+     *  format. It is NOT the KAlarmCal library .so version!
      *  @return version in the format returned by KAlarmCal::Version().
      *  @see currentCalendarVersionString()
      */
     static int currentCalendarVersion();
 
     /** Return the current KAlarm calendar storage format version.
+     *  This is the KAlarm version which first used the current calendar/event
+     *  format. It is NOT the KAlarmCal library .so version!
      *  @return version as a string in the format "1.2.3".
      *  @see currentCalendarVersion()
      */

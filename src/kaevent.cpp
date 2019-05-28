@@ -379,14 +379,13 @@ public:
 // If this changes, KAEvent::convertKCalEvents() must be changed correspondingly.
 // The string version is the KAlarm version string used in the calendar file.
 
-//QT5 Fix library version
 QByteArray KAEvent::currentCalendarVersionString()
 {
-    return QByteArray("2.7.0");
+    return QByteArray("2.7.0");   // This is NOT the KAlarmCal library .so version!
 }
 int        KAEvent::currentCalendarVersion()
 {
-    return Version(2, 7, 0);
+    return Version(2, 7, 0);   // This is NOT the KAlarmCal library .so version!
 }
 
 // Custom calendar properties.
