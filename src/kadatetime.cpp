@@ -39,7 +39,6 @@ namespace
 
 const int InvalidOffset = 0x80000000;   // invalid UTC offset
 const int NO_NUMBER = std::numeric_limits<int>::min();   // indicates that no number is present in string conversion functions
-const QChar zero = QLatin1Char('0');
 
 QList<QString> shortDayNames;
 QList<QString> longDayNames;
