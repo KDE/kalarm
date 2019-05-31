@@ -1,5 +1,6 @@
 /*
   Copyright (c) 2015-2019 Laurent Montel <montel@kde.org>
+  Copyright © 2019 David Jarvie <djarvie@kde.org>
 
   based on code from Sune Vuorela <sune@vuorela.dk> (Rawatar source code)
 
@@ -18,6 +19,8 @@
 */
 
 #include "kalarmmigrateapplication.h"
+#include "kalarm_debug.h"
+
 #include <Kdelibs4ConfigMigrator>
 
 KAlarmMigrateApplication::KAlarmMigrateApplication()
@@ -29,13 +32,16 @@ void KAlarmMigrateApplication::migrate()
 {
     // Migrate to xdg.
     Kdelibs4ConfigMigrator migrate(QStringLiteral("kalarm"));
-    migrate.setConfigFiles(QStringList() << QStringLiteral("kalarmrc"));
-    migrate.setUiFiles(QStringList() << QStringLiteral("kalarmui.rc"));
+    migrate.setConfigFiles({QStringLiteral("kalarmrc")});
+    migrate.setUiFiles({QStringLiteral("kalarmui.rc")});
     migrate.migrate();
 
     // Migrate folders and files.
     if (mMigrator.checkIfNecessary())
-        mMigrator.start();
+    {
+        if (!mMigrator.start())
+            qCCritical(KALARM_LOG) << "Error migrating config files";
+    }
 }
 
 void KAlarmMigrateApplication::initializeMigrator()
@@ -53,7 +59,8 @@ void KAlarmMigrateApplication::initializeMigrator()
     migrateInfoIcs.setType(QStringLiteral("data"));
     migrateInfoIcs.setPath(QStringLiteral("kalarm/"));
     migrateInfoIcs.setVersion(initialVersion);
-    migrateInfoIcs.setFilePatterns(QStringList() << QStringLiteral("*.ics"));
+    migrateInfoIcs.setFilePatterns({QStringLiteral("*.ics")});
     mMigrator.insertMigrateInfo(migrateInfoIcs);
 }
 
+// vim: et sw=4:

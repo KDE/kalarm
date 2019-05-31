@@ -1,7 +1,7 @@
 /*
  *  commandoptions.cpp  -  extract command line options
  *  Program:  kalarm
- *  Copyright © 2001-2018 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2019 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -71,10 +71,10 @@ QStringList CommandOptions::setOptions(QCommandLineParser* parser, const QString
     mParser = parser;
 
     mOptions[ACK_CONFIRM]
-              = new QCommandLineOption(QStringList() << QStringLiteral("a") << QStringLiteral("ack-confirm"),
+              = new QCommandLineOption(QStringList{QStringLiteral("a"), QStringLiteral("ack-confirm")},
                                        i18n("Prompt for confirmation when alarm is acknowledged"));
     mOptions[ATTACH]
-              = new QCommandLineOption(QStringList() << QStringLiteral("A") << QStringLiteral("attach"),
+              = new QCommandLineOption(QStringList{QStringLiteral("A"), QStringLiteral("attach")},
                                        i18n("Attach file to email (repeat as needed)"),
                                        QStringLiteral("url"));
     mOptions[AUTO_CLOSE]
@@ -84,14 +84,14 @@ QStringList CommandOptions::setOptions(QCommandLineParser* parser, const QString
               = new QCommandLineOption(QStringLiteral("bcc"),
                                        i18n("Blind copy email to self"));
     mOptions[BEEP]
-              = new QCommandLineOption(QStringList() << QStringLiteral("b") << QStringLiteral("beep"),
+              = new QCommandLineOption(QStringList{QStringLiteral("b"), QStringLiteral("beep")},
                                        i18n("Beep when message is displayed"));
     mOptions[COLOUR]
-              = new QCommandLineOption(QStringList() << QStringLiteral("c") << QStringLiteral("colour") << QStringLiteral("color"),
+              = new QCommandLineOption(QStringList{QStringLiteral("c"), QStringLiteral("colour"), QStringLiteral("color")},
                                        i18n("Message background color (name or hex 0xRRGGBB)"),
                                        QStringLiteral("color"));
     mOptions[COLOURFG]
-              = new QCommandLineOption(QStringList() << QStringLiteral("C") << QStringLiteral("colourfg") << QStringLiteral("colorfg"),
+              = new QCommandLineOption(QStringList{QStringLiteral("C"), QStringLiteral("colourfg"), QStringLiteral("colorfg")},
                                        i18n("Message foreground color (name or hex 0xRRGGBB)"),
                                        QStringLiteral("color"));
     mOptions[OptCANCEL_EVENT]
@@ -99,17 +99,17 @@ QStringList CommandOptions::setOptions(QCommandLineParser* parser, const QString
                                        i18n("Cancel alarm with the specified event ID"),
                                        QStringLiteral("eventID"));
     mOptions[DISABLE]
-              = new QCommandLineOption(QStringList() << QStringLiteral("d") << QStringLiteral("disable"),
+              = new QCommandLineOption(QStringList{QStringLiteral("d"), QStringLiteral("disable")},
                                        i18n("Disable the alarm"));
     mOptions[DISABLE_ALL]
               = new QCommandLineOption(QStringLiteral("disable-all"),
                                        i18n("Disable monitoring of all alarms"));
     mOptions[EXEC]
-              = new QCommandLineOption(QStringList() << QStringLiteral("e") << QStringLiteral("exec"),
+              = new QCommandLineOption(QStringList{QStringLiteral("e"), QStringLiteral("exec")},
                                        i18n("Execute a shell command line"),
                                        QStringLiteral("commandLine"));
     mOptions[EXEC_DISPLAY]
-              = new QCommandLineOption(QStringList() << QStringLiteral("E") << QStringLiteral("exec-display"),
+              = new QCommandLineOption(QStringList{QStringLiteral("E"), QStringLiteral("exec-display")},
                                        i18n("Command line to generate alarm message text"),
                                        QStringLiteral("commandLine"));
     mOptions[OptEDIT]
@@ -133,22 +133,22 @@ QStringList CommandOptions::setOptions(QCommandLineParser* parser, const QString
                                        i18n("Display the alarm edit dialog, preset with a template"),
                                        QStringLiteral("templateName"));
     mOptions[FILE]
-              = new QCommandLineOption(QStringList() << QStringLiteral("f") << QStringLiteral("file"),
+              = new QCommandLineOption(QStringList{QStringLiteral("f"), QStringLiteral("file")},
                                        i18n("File to display"),
                                        QStringLiteral("url"));
     mOptions[FROM_ID]
-              = new QCommandLineOption(QStringList() << QStringLiteral("F") << QStringLiteral("from-id"),
+              = new QCommandLineOption(QStringList{QStringLiteral("F"), QStringLiteral("from-id")},
                                        i18n("KMail identity to use as sender of email"),
                                        QStringLiteral("ID"));
     mOptions[INTERVAL]
-              = new QCommandLineOption(QStringList() << QStringLiteral("i") << QStringLiteral("interval"),
+              = new QCommandLineOption(QStringList{QStringLiteral("i"), QStringLiteral("interval")},
                                        i18n("Interval between alarm repetitions"),
                                        QStringLiteral("period"));
     mOptions[KORGANIZER]
-              = new QCommandLineOption(QStringList() << QStringLiteral("k") << QStringLiteral("korganizer"),
+              = new QCommandLineOption(QStringList{QStringLiteral("k"), QStringLiteral("korganizer")},
                                        i18n("Show alarm as an event in KOrganizer"));
     mOptions[LATE_CANCEL]
-              = new QCommandLineOption(QStringList() << QStringLiteral("l") << QStringLiteral("late-cancel"),
+              = new QCommandLineOption(QStringList{QStringLiteral("l"), QStringLiteral("late-cancel")},
                                        i18n("Cancel alarm if more than 'period' late when triggered"),
                                        QStringLiteral("period"),
                                        QStringLiteral("1"));
@@ -156,18 +156,18 @@ QStringList CommandOptions::setOptions(QCommandLineParser* parser, const QString
               = new QCommandLineOption(QStringLiteral("list"),
                                        i18n("Output list of scheduled alarms to stdout"));
     mOptions[LOGIN]
-              = new QCommandLineOption(QStringList() << QStringLiteral("L") << QStringLiteral("login"),
+              = new QCommandLineOption(QStringList{QStringLiteral("L"), QStringLiteral("login")},
                                        i18n("Repeat alarm at every login"));
     mOptions[MAIL]
-              = new QCommandLineOption(QStringList() << QStringLiteral("m") << QStringLiteral("mail"),
+              = new QCommandLineOption(QStringList{QStringLiteral("m"), QStringLiteral("mail")},
                                        i18n("Send an email to the given address (repeat as needed)"),
                                        QStringLiteral("address"));
     mOptions[PLAY]
-              = new QCommandLineOption(QStringList() << QStringLiteral("p") << QStringLiteral("play"),
+              = new QCommandLineOption(QStringList{QStringLiteral("p"), QStringLiteral("play")},
                                        i18n("Audio file to play once"),
                                        QStringLiteral("url"));
     mOptions[PLAY_REPEAT]
-              = new QCommandLineOption(QStringList() << QStringLiteral("P") << QStringLiteral("play-repeat"),
+              = new QCommandLineOption(QStringList{QStringLiteral("P"), QStringLiteral("play-repeat")},
                                        i18n("Audio file to play repeatedly"),
                                        QStringLiteral("url"));
     mOptions[RECURRENCE]
@@ -175,7 +175,7 @@ QStringList CommandOptions::setOptions(QCommandLineParser* parser, const QString
                                        i18n("Specify alarm recurrence using iCalendar syntax"),
                                        QStringLiteral("spec"));
     mOptions[REMINDER]
-              = new QCommandLineOption(QStringList() << QStringLiteral("R") << QStringLiteral("reminder"),
+              = new QCommandLineOption(QStringList{QStringLiteral("R"), QStringLiteral("reminder")},
                                        i18n("Display reminder before or after alarm"),
                                        QStringLiteral("period"));
     mOptions[REMINDER_ONCE]
@@ -183,14 +183,14 @@ QStringList CommandOptions::setOptions(QCommandLineParser* parser, const QString
                                        i18n("Display reminder once, before or after first alarm recurrence"),
                                        QStringLiteral("period"));
     mOptions[REPEAT]
-              = new QCommandLineOption(QStringList() << QStringLiteral("r") << QStringLiteral("repeat"),
+              = new QCommandLineOption(QStringList{QStringLiteral("r"), QStringLiteral("repeat")},
                                        i18n("Number of times to repeat alarm (including initial occasion)"),
                                        QStringLiteral("count"));
     mOptions[SPEAK]
-              = new QCommandLineOption(QStringList() << QStringLiteral("s") << QStringLiteral("speak"),
+              = new QCommandLineOption(QStringList{QStringLiteral("s"), QStringLiteral("speak")},
                                        i18n("Speak the message when it is displayed"));
     mOptions[SUBJECT]
-              = new QCommandLineOption(QStringList() << QStringLiteral("S") << QStringLiteral("subject"),
+              = new QCommandLineOption(QStringList{QStringLiteral("S"), QStringLiteral("subject")},
                                        i18n("Email subject line"),
                                        QStringLiteral("text"));
 #ifndef NDEBUG
@@ -200,7 +200,7 @@ QStringList CommandOptions::setOptions(QCommandLineParser* parser, const QString
                                        QStringLiteral("time"));
 #endif
     mOptions[TIME]
-              = new QCommandLineOption(QStringList() << QStringLiteral("t") << QStringLiteral("time"),
+              = new QCommandLineOption(QStringList{QStringLiteral("t"), QStringLiteral("time")},
                                        i18n("Trigger alarm at time [[[yyyy-]mm-]dd-]hh:mm [TZ], or date yyyy-mm-dd [TZ]"),
                                        QStringLiteral("time"));
     mOptions[OptTRAY]
@@ -211,11 +211,11 @@ QStringList CommandOptions::setOptions(QCommandLineParser* parser, const QString
                                        i18n("Trigger alarm with the specified event ID"),
                                        QStringLiteral("eventID"));
     mOptions[UNTIL]
-              = new QCommandLineOption(QStringList() << QStringLiteral("u") << QStringLiteral("until"),
+              = new QCommandLineOption(QStringList{QStringLiteral("u"), QStringLiteral("until")},
                                        i18n("Repeat until time [[[yyyy-]mm-]dd-]hh:mm [TZ], or date yyyy-mm-dd [TZ]"),
                                        QStringLiteral("time"));
     mOptions[VOLUME]
-              = new QCommandLineOption(QStringList() << QStringLiteral("V") << QStringLiteral("volume"),
+              = new QCommandLineOption(QStringList{QStringLiteral("V"), QStringLiteral("volume")},
                                        i18n("Volume to play audio file"),
                                        QStringLiteral("percent"));
 

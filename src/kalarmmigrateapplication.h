@@ -27,9 +27,13 @@ class KAlarmMigrateApplication
 public:
     KAlarmMigrateApplication();
     void migrate();
+
 private:
     void initializeMigrator();
+
     PimCommon::MigrateApplicationFiles mMigrator;
 };
 
 #endif // KALARMMIGRATEAPPLICATION_H
+
+// vim: et sw=4:
