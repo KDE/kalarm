@@ -131,7 +131,7 @@ QSize StackedScrollGroup::adjustSize(bool force)
     {
         mHeightReduction = y;
         mMinHeight = maxTabHeight - y;
-        qCDebug(KALARM_LOG) << "Scrolling: max tab height=" << maxTabHeight << ", reduction=" << mHeightReduction << "-> min tab height=" << mMinHeight;
+        qCDebug(KALARM_LOG) << "StackedScrollGroup::adjustSize: Scrolling: max tab height=" << maxTabHeight << ", reduction=" << mHeightReduction << "-> min tab height=" << mMinHeight;
         if (mMinHeight > 0)
         {
             for (int i = 0, count = mWidgets.count();  i < count;  ++i)

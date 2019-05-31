@@ -208,7 +208,7 @@ void KAlarmPrefDlg::slotHelp()
 // Apply the preferences that are currently selected
 void KAlarmPrefDlg::slotApply()
 {
-    qCDebug(KALARM_LOG);
+    qCDebug(KALARM_LOG) << "KAlarmPrefDlg::slotApply";
     QString errmsg = mEmailPage->validate();
     if (!errmsg.isEmpty())
     {
@@ -240,7 +240,7 @@ void KAlarmPrefDlg::slotApply()
 // Apply the preferences that are currently selected
 void KAlarmPrefDlg::slotOk()
 {
-    qCDebug(KALARM_LOG);
+    qCDebug(KALARM_LOG) << "KAlarmPrefDlg::slotOk";
     mValid = true;
     slotApply();
     if (mValid)
@@ -250,7 +250,7 @@ void KAlarmPrefDlg::slotOk()
 // Discard the current preferences and close the dialog
 void KAlarmPrefDlg::slotCancel()
 {
-    qCDebug(KALARM_LOG);
+    qCDebug(KALARM_LOG) << "KAlarmPrefDlg::slotCancel";
     restore(false);
     KPageDialog::reject();
 }
@@ -279,7 +279,7 @@ void KAlarmPrefDlg::slotDefault()
 // Discard the current preferences and use the present ones
 void KAlarmPrefDlg::restore(bool defaults)
 {
-    qCDebug(KALARM_LOG) << (defaults ? "defaults" : "");
+    qCDebug(KALARM_LOG) << "KAlarmPrefDlg::restore:" << (defaults ? "defaults" : "");
     if (defaults)
         Preferences::self()->useDefaults(true);
     mEmailPage->restore(defaults, true);

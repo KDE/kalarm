@@ -115,7 +115,7 @@ MinuteTimer* MinuteTimer::instance()
 */
 void MinuteTimer::slotTimer()
 {
-    qCDebug(KALARM_LOG);
+    qCDebug(KALARM_LOG) << "MinuteTimer::slotTimer";
     int interval = 62 - QTime::currentTime().second();
     mTimer->start(interval * 1000);     // execute a single shot
 }
@@ -219,7 +219,7 @@ void DailyTimer::start()
         next = QDateTime(now.date().addDays(1), mTime);
     uint interval = next.toTime_t() - now.toTime_t();
     mTimer->start(interval * 1000);    // execute a single shot
-    qCDebug(KALARM_LOG) << "at" << mTime.hour() << ":" << mTime.minute() << ": interval =" << interval/3600 << ":" << (interval/60)%60 << ":" << interval%60;
+    qCDebug(KALARM_LOG) << "DailyTimer::start: at" << mTime.hour() << ":" << mTime.minute() << ": interval =" << interval/3600 << ":" << (interval/60)%60 << ":" << interval%60;
 }
 
 /******************************************************************************
@@ -236,7 +236,7 @@ void DailyTimer::slotTimer()
     QDateTime next = QDateTime(mLastDate.addDays(1), mTime);
     uint interval = next.toTime_t() - now.toTime_t();
     mTimer->start(interval * 1000);    // execute a single shot
-    qCDebug(KALARM_LOG) << "at" << mTime.hour() << ":" << mTime.minute() << ": interval =" << interval/3600 << ":" << (interval/60)%60 << ":" << interval%60;
+    qCDebug(KALARM_LOG) << "DailyTimer::slotTimer: at" << mTime.hour() << ":" << mTime.minute() << ": interval =" << interval/3600 << ":" << (interval/60)%60 << ":" << interval%60;
 }
 
 // vim: et sw=4:

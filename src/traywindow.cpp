@@ -75,7 +75,7 @@ TrayWindow::TrayWindow(MainWindow* parent)
       mStatusUpdateTimer(new QTimer(this)),
       mHaveDisabledAlarms(false)
 {
-    qCDebug(KALARM_LOG);
+    qCDebug(KALARM_LOG) << "TrayWindow:";
     setToolTipIconByName(QStringLiteral("kalarm"));
     setToolTipTitle(KAboutData::applicationData().displayName());
     setIconByName(QStringLiteral("kalarm"));
@@ -160,7 +160,7 @@ TrayWindow::TrayWindow(MainWindow* parent)
 
 TrayWindow::~TrayWindow()
 {
-    qCDebug(KALARM_LOG);
+    qCDebug(KALARM_LOG) << "~TrayWindow";
     theApp()->removeWindow(this);
     Q_EMIT deleted();
 }
@@ -214,7 +214,7 @@ void TrayWindow::slotQuitAfter()
 */
 void TrayWindow::setEnabledStatus(bool status)
 {
-    qCDebug(KALARM_LOG) << status;
+    qCDebug(KALARM_LOG) << "TrayWindow::setEnabledStatus:" << status;
     updateIcon();
     updateStatus();
     updateToolTip();
@@ -226,7 +226,7 @@ void TrayWindow::setEnabledStatus(bool status)
 */
 void TrayWindow::slotHaveDisabledAlarms(bool haveDisabled)
 {
-    qCDebug(KALARM_LOG) << haveDisabled;
+    qCDebug(KALARM_LOG) << "TrayWindow::slotHaveDisabledAlarms:" << haveDisabled;
     mHaveDisabledAlarms = haveDisabled;
     updateIcon();
     updateToolTip();
@@ -402,12 +402,12 @@ QString TrayWindow::tooltipAlarmText() const
             items.insert(it, item);
         }
     }
-    qCDebug(KALARM_LOG);
+    qCDebug(KALARM_LOG) << "TrayWindow::tooltipAlarmText";
     QString text;
     int count = 0;
     for (i = 0, iend = items.count();  i < iend;  ++i)
     {
-        qCDebug(KALARM_LOG) << "--" << (count+1) << ")" << items[i].text;
+        qCDebug(KALARM_LOG) << "TrayWindow::tooltipAlarmText: --" << (count+1) << ")" << items[i].text;
         if (i > 0)
             text += QLatin1String("<br />");
         text += items[i].text;

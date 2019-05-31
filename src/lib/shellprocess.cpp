@@ -76,13 +76,13 @@ bool ShellProcess::start(OpenMode openMode)
 */
 void ShellProcess::slotExited(int exitCode, QProcess::ExitStatus exitStatus)
 {
-    qCDebug(KALARM_LOG) << exitCode << "," << exitStatus;
+    qCDebug(KALARM_LOG) << "ShellProcess::slotExited:" << exitCode << "," << exitStatus;
     mStdinQueue.clear();
     mStatus = SUCCESS;
     mExitCode = exitCode;
     if (exitStatus != NormalExit)
     {
-        qCWarning(KALARM_LOG) << mCommand << ":" << mShellName << ": crashed/killed";
+        qCWarning(KALARM_LOG) << "ShellProcess::slotExited:" << mCommand << ":" << mShellName << ": crashed/killed";
         mStatus = DIED;
     }
     else
@@ -91,7 +91,7 @@ void ShellProcess::slotExited(int exitCode, QProcess::ExitStatus exitStatus)
         if ((mShellName == "bash"  &&  (exitCode == 126 || exitCode == 127))
         ||  (mShellName == "ksh"  &&  exitCode == 127))
         {
-            qCWarning(KALARM_LOG) << mCommand << ":" << mShellName << ": not found or not executable";
+            qCWarning(KALARM_LOG) << "ShellProcess::slotExited:" << mCommand << ":" << mShellName << ": not found or not executable";
             mStatus = NOT_FOUND;
         }
     }

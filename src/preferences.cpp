@@ -175,7 +175,7 @@ void Preferences::setNoAutoStart(bool yes)
         autostartFileRW = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation) + QStringLiteral("/autostart/") + AUTOSTART_FILE;
         if (autostartFileRW.isEmpty())
         {
-            qCWarning(KALARM_LOG) << "No writable autostart file path";
+            qCWarning(KALARM_LOG) << "Preferences::setNoAutoStart: No writable autostart file path";
             return;
         }
         if (QFile::exists(autostartFileRW))
@@ -183,7 +183,7 @@ void Preferences::setNoAutoStart(bool yes)
             QFileInfo info(autostartFileRW);
             if (!info.isReadable() || !info.isWritable())
             {
-                qCWarning(KALARM_LOG) << "Autostart file is not read/write:" << autostartFileRW;
+                qCWarning(KALARM_LOG) << "Preferences::setNoAutoStart: Autostart file is not read/write:" << autostartFileRW;
                 return;
             }
         }
@@ -196,7 +196,7 @@ void Preferences::setNoAutoStart(bool yes)
         QFile file(autostartFile);
         if (!file.open(QIODevice::ReadOnly))
         {
-            qCWarning(KALARM_LOG) << "Error reading autostart file:" << autostartFile;
+            qCWarning(KALARM_LOG) << "Preferences::setNoAutoStart: Error reading autostart file:" << autostartFile;
             return;
         }
         QTextStream stream(&file);
@@ -234,13 +234,13 @@ void Preferences::setNoAutoStart(bool yes)
         QFile file(autostartFileRW);
         if (!file.open(QIODevice::WriteOnly))
         {
-            qCWarning(KALARM_LOG) << "Error writing autostart file:" << autostartFileRW;
+            qCWarning(KALARM_LOG) << "Preferences::setNoAutoStart: Error writing autostart file:" << autostartFileRW;
             return;
         }
         QTextStream stream(&file);
         stream.setCodec("UTF-8");
         stream << lines.join(QLatin1Char('\n')) << "\n";
-        qCDebug(KALARM_LOG) << "Written" << autostartFileRW;
+        qCDebug(KALARM_LOG) << "Preferences::setNoAutoStart: Written" << autostartFileRW;
     }
 
     self()->setBase_NoAutoStart(yes);

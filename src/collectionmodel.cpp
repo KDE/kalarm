@@ -1,7 +1,7 @@
 /*
  *  collectionmodel.cpp  -  Akonadi collection models
  *  Program:  kalarm
- *  Copyright © 2007-2018 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2007-2019 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -438,10 +438,10 @@ void CollectionCheckListModel::collectionStatusChanged(const Collection& collect
     switch (change)
     {
         case AkonadiModel::Enabled:
-            qCDebug(KALARM_LOG) << "Enabled" << collection.id();
+            qCDebug(KALARM_LOG) << "CollectionCheckListModel::collectionStatusChanged: Enabled" << collection.id();
             break;
         case AkonadiModel::AlarmTypes:
-            qCDebug(KALARM_LOG) << "AlarmTypes" << collection.id();
+            qCDebug(KALARM_LOG) << "CollectionCheckListModel::collectionStatusChanged: AlarmTypes" << collection.id();
             break;
         default:
             return;
@@ -739,7 +739,7 @@ bool CollectionControlModel::isEnabled(const Collection& collection, CalEvent::T
 */
 CalEvent::Types CollectionControlModel::setEnabled(const Collection& collection, CalEvent::Types types, bool enabled)
 {
-    qCDebug(KALARM_LOG) << "id:" << collection.id() << ", alarm types" << types << "->" << enabled;
+    qCDebug(KALARM_LOG) << "CollectionControlModel::setEnabled:" << collection.id() << ", alarm types" << types << "->" << enabled;
     if (!collection.isValid()  ||  (!enabled && !instance()->collectionIds().contains(collection.id())))
         return CalEvent::EMPTY;
     Collection col = collection;
@@ -761,7 +761,7 @@ CalEvent::Types CollectionControlModel::setEnabled(const Collection& collection,
 */
 CalEvent::Types CollectionControlModel::setEnabledStatus(const Collection& collection, CalEvent::Types types, bool inserted)
 {
-    qCDebug(KALARM_LOG) << "id:" << collection.id() << ", types=" << types;
+    qCDebug(KALARM_LOG) << "CollectionControlModel::setEnabledStatus:" << collection.id() << ", types=" << types;
     CalEvent::Types disallowedStdTypes(0);
     CalEvent::Types stdTypes(0);
 
@@ -840,14 +840,14 @@ void CollectionControlModel::statusChanged(const Collection& collection, Akonadi
         case AkonadiModel::Enabled:
         {
             const CalEvent::Types enabled = static_cast<CalEvent::Types>(value.toInt());
-            qCDebug(KALARM_LOG) << "id:" << collection.id() << ", enabled=" << enabled << ", inserted=" << inserted;
+            qCDebug(KALARM_LOG) << "CollectionControlModel::statusChanged:" << collection.id() << ", enabled=" << enabled << ", inserted=" << inserted;
             setEnabledStatus(collection, enabled, inserted);
             break;
         }
         case AkonadiModel::ReadOnly:
         {
             bool readOnly = value.toBool();
-            qCDebug(KALARM_LOG) << "id:" << collection.id() << ", readOnly=" << readOnly;
+            qCDebug(KALARM_LOG) << "CollectionControlModel::statusChanged:" << collection.id() << ", readOnly=" << readOnly;
             if (readOnly)
             {
                 // A read-only collection can't be the default for any alarm type
@@ -913,7 +913,7 @@ CalEvent::Types CollectionControlModel::checkTypesToEnable(const Collection& col
     types &= (CalEvent::ACTIVE | CalEvent::ARCHIVED | CalEvent::TEMPLATE);
     if (types)
     {
-        // At least on alarm type is to be enabled
+        // At least one alarm type is to be enabled
         const QUrl location = QUrl::fromUserInput(collection.remoteId(), QString(), QUrl::AssumeLocalFile);
         foreach (const Collection& c, collections)
         {
@@ -923,7 +923,7 @@ CalEvent::Types CollectionControlModel::checkTypesToEnable(const Collection& col
                 // The collection duplicates the backend storage
                 // used by another enabled collection.
                 // N.B. don't refresh this collection - assume no change.
-                qCDebug(KALARM_LOG) << "Collection" << c.id() << "duplicates backend for" << collection.id();
+                qCDebug(KALARM_LOG) << "CollectionControlModel::checkTypesToEnable:" << c.id() << "duplicates backend for" << collection.id();
                 if (c.hasAttribute<CollectionAttribute>())
                 {
                     types &= ~c.attribute<CollectionAttribute>()->enabled();
@@ -1286,7 +1286,7 @@ bool CollectionControlModel::isPopulated(Collection::Id colId)
 */
 bool CollectionControlModel::waitUntilPopulated(Collection::Id colId, int timeout)
 {
-    qCDebug(KALARM_LOG);
+    qCDebug(KALARM_LOG) << "CollectionControlModel::waitUntilPopulated";
     int result = 1;
     AkonadiModel* model = AkonadiModel::instance();
     while (!model->isCollectionTreeFetched()

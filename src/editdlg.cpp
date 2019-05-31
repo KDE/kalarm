@@ -97,7 +97,7 @@ QString EditAlarmDlg::i18n_chk_ShowInKOrganizer()   { return i18nc("@option:chec
 
 EditAlarmDlg* EditAlarmDlg::create(bool Template, Type type, QWidget* parent, GetResourceType getResource)
 {
-    qCDebug(KALARM_LOG);
+    qCDebug(KALARM_LOG) << "EditAlarmDlg::create";
     switch (type)
     {
         case DISPLAY:  return new EditDisplayAlarmDlg(Template, parent, getResource);
@@ -1261,7 +1261,7 @@ void EditAlarmDlg::slotDefault()
 */
 void EditAlarmDlg::showOptions(bool more)
 {
-    qCDebug(KALARM_LOG) << (more ? "More" : "Less");
+    qCDebug(KALARM_LOG) << "EditAlarmDlg::showOptions:" << (more ? "More" : "Less");
     if (more)
     {
         mMoreOptions->show();

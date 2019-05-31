@@ -100,7 +100,7 @@ AlarmCalendar* AlarmCalendar::displayCalendarOpen()
 {
     if (mDisplayCalendar->open())
         return mDisplayCalendar;
-    qCCritical(KALARM_LOG) << "Open error";
+    qCCritical(KALARM_LOG) << "AlarmCalendar::displayCalendarOpen: Open error";
     return nullptr;
 }
 
@@ -193,7 +193,7 @@ bool AlarmCalendar::open()
         if (!mUrl.isValid())
             return false;
 
-        qCDebug(KALARM_LOG) << mUrl.toDisplayString();
+        qCDebug(KALARM_LOG) << "AlarmCalendar::open:" << mUrl.toDisplayString();
         if (!mCalendarStorage)
         {
             MemoryCalendar::Ptr calendar(new MemoryCalendar(Preferences::timeSpecAsZone()));
@@ -247,13 +247,13 @@ int AlarmCalendar::load()
             return -2;
 
         QString filename;
-        qCDebug(KALARM_LOG) << mUrl.toDisplayString();
+        qCDebug(KALARM_LOG) << "AlarmCalendar::load:" << mUrl.toDisplayString();
         if (!mUrl.isLocalFile()) {
             auto getJob = KIO::storedGet(mUrl);
             KJobWidgets::setWindow(getJob, MainWindow::mainMainWindow());
             if (!getJob->exec())
             {
-                qCCritical(KALARM_LOG) << "Download failure";
+                qCCritical(KALARM_LOG) << "AlarmCalendar::load: Download failure";
                 KAMessageBox::error(MainWindow::mainMainWindow(),
                                     xi18nc("@info", "Cannot download calendar: <filename>%1</filename>", mUrl.toDisplayString()));
                 return -1;
@@ -280,7 +280,7 @@ int AlarmCalendar::load()
                     return 0;     // file is zero length
             }
 
-            qCCritical(KALARM_LOG) << "Error loading calendar file '" << filename <<"'";
+            qCCritical(KALARM_LOG) << "AlarmCalendar::load: Error loading calendar file '" << filename <<"'";
             KAMessageBox::error(MainWindow::mainMainWindow(),
                                 xi18nc("@info", "<para>Error loading calendar:</para><para><filename>%1</filename></para><para>Please fix or delete the file.</para>", mUrl.toDisplayString()));
             // load() could have partially populated the calendar, so clear it out
@@ -312,7 +312,7 @@ bool AlarmCalendar::reload()
     if (!mCalendarStorage)
         return false;
     {
-        qCDebug(KALARM_LOG) << mUrl.toDisplayString();
+        qCDebug(KALARM_LOG) << "AlarmCalendar::reload:" << mUrl.toDisplayString();
         close();
         return open();
     }
@@ -332,7 +332,7 @@ bool AlarmCalendar::saveCal(const QString& newFile)
         if (!mOpen && newFile.isNull())
             return false;
 
-        qCDebug(KALARM_LOG) << "\"" << newFile << "\"," << mEventType;
+        qCDebug(KALARM_LOG) << "AlarmCalendar::saveCal:" << "\"" << newFile << "\"," << mEventType;
         QString saveFilename = newFile.isNull() ? mLocalFile : newFile;
         if (mCalType == LOCAL_VCAL  &&  newFile.isNull()  &&  mUrl.isLocalFile())
             saveFilename = mICalUrl.toLocalFile();
@@ -340,7 +340,7 @@ bool AlarmCalendar::saveCal(const QString& newFile)
         mCalendarStorage->setSaveFormat(new ICalFormat);
         if (!mCalendarStorage->save())
         {
-            qCCritical(KALARM_LOG) << "Saving" << saveFilename << "failed.";
+            qCCritical(KALARM_LOG) << "AlarmCalendar::saveCal: Saving" << saveFilename << "failed.";
             KAMessageBox::error(MainWindow::mainMainWindow(),
                                 xi18nc("@info", "Failed to save calendar to <filename>%1</filename>", mICalUrl.toDisplayString()));
             return false;
@@ -354,7 +354,7 @@ bool AlarmCalendar::saveCal(const QString& newFile)
             KJobWidgets::setWindow(putJob, MainWindow::mainMainWindow());
             if (!putJob->exec())
             {
-                qCCritical(KALARM_LOG) << saveFilename << "upload failed.";
+                qCCritical(KALARM_LOG) << "AlarmCalendar::saveCal:" << saveFilename << "upload failed.";
                 KAMessageBox::error(MainWindow::mainMainWindow(),
                                     xi18nc("@info", "Cannot upload calendar to <filename>%1</filename>", mICalUrl.toDisplayString()));
                 return false;
@@ -417,7 +417,7 @@ void AlarmCalendar::updateDisplayKAEvents()
 {
     if (mCalType == RESOURCES)
         return;
-    qCDebug(KALARM_LOG);
+    qCDebug(KALARM_LOG) << "AlarmCalendar::updateDisplayKAEvents";
     const Collection::Id key = DISPLAY_COL_ID;
     KAEvent::List& events = mResourceMap[key];
     int i, end;
@@ -443,7 +443,7 @@ void AlarmCalendar::updateDisplayKAEvents()
         KAEvent* event = new KAEvent(kcalevent);
         if (!event->isValid())
         {
-            qCWarning(KALARM_LOG) << "Ignoring unusable event" << kcalevent->uid();
+            qCWarning(KALARM_LOG) << "AlarmCalendar::updateDisplayKAEvents: Ignoring unusable event" << kcalevent->uid();
             delete event;
             continue;    // ignore events without usable alarms
         }
@@ -475,7 +475,7 @@ void AlarmCalendar::removeKAEvents(Collection::Id key, bool closing, CalEvent::T
             if (remove)
             {
                 if (key != DISPLAY_COL_ID)
-                    qCCritical(KALARM_LOG) << "Event" << event->id() << ", collection" << event->collectionId() << "Indexed under collection" << key;
+                    qCCritical(KALARM_LOG) << "AlarmCalendar::removeKAEvents: Event" << event->id() << ", collection" << event->collectionId() << "Indexed under collection" << key;
             }
             else
                 remove = event->category() & types;
@@ -538,7 +538,7 @@ void AlarmCalendar::slotEventChanged(const AkonadiModel::Event& event)
 {
     if (!event.isConsistent())
     {
-        qCCritical(KALARM_LOG) << "Inconsistent AkonadiModel::Event: event:" << event.event.collectionId() << ", collection" << event.collection.id();
+        qCCritical(KALARM_LOG) << "AlarmCalendar::slotEventChanged: Inconsistent AkonadiModel::Event: event:" << event.event.collectionId() << ", collection" << event.collection.id();
         return;
     }
 
@@ -579,7 +579,7 @@ void AlarmCalendar::slotEventsToBeRemoved(const AkonadiModel::EventList& events)
     for (int i = 0, count = events.count();  i < count;  ++i)
     {
         if (!events[i].isConsistent())
-            qCCritical(KALARM_LOG) << "Inconsistent AkonadiModel::Event: event:" << events[i].event.collectionId() << ", collection" << events[i].collection.id();
+            qCCritical(KALARM_LOG) << "AlarmCalendar::slotEventsToBeRemoved: Inconsistent AkonadiModel::Event: event:" << events[i].event.collectionId() << ", collection" << events[i].collection.id();
         else if (mEventMap.contains(events[i].eventId()))
             deleteEventInternal(events[i].event, events[i].collection, false);
     }
@@ -594,20 +594,20 @@ void AlarmCalendar::slotEventsToBeRemoved(const AkonadiModel::EventList& events)
 */
 bool AlarmCalendar::importAlarms(QWidget* parent, Collection* collection)
 {
-    qCDebug(KALARM_LOG);
+    qCDebug(KALARM_LOG) << "AlarmCalendar::importAlarms";
     QUrl url = KFileDialog::getOpenUrl(QUrl(QStringLiteral("filedialog:///importalarms")),
                                        QStringLiteral("*.vcs *.ics|%1").arg(i18nc("@info", "Calendar Files")), parent);
     if (url.isEmpty())
     {
-        qCCritical(KALARM_LOG) << "Empty URL";
+        qCCritical(KALARM_LOG) << "AlarmCalendar::importAlarms: Empty URL";
         return false;
     }
     if (!url.isValid())
     {
-        qCDebug(KALARM_LOG) << "Invalid URL";
+        qCDebug(KALARM_LOG) << "AlarmCalendar::importAlarms: Invalid URL";
         return false;
     }
-    qCDebug(KALARM_LOG) << url.toDisplayString();
+    qCDebug(KALARM_LOG) << "AlarmCalendar::importAlarms:" << url.toDisplayString();
 
     bool success = true;
     QString filename;
@@ -617,7 +617,7 @@ bool AlarmCalendar::importAlarms(QWidget* parent, Collection* collection)
         filename = url.toLocalFile();
         if (!QFile::exists(filename))
         {
-            qCDebug(KALARM_LOG) << "File '" << url.toDisplayString() <<"' not found";
+            qCDebug(KALARM_LOG) << "AlarmCalendar::importAlarms: File '" << url.toDisplayString() <<"' not found";
             KAMessageBox::error(parent, xi18nc("@info", "Could not load calendar <filename>%1</filename>.", url.toDisplayString()));
             return false;
         }
@@ -628,7 +628,7 @@ bool AlarmCalendar::importAlarms(QWidget* parent, Collection* collection)
         KJobWidgets::setWindow(getJob, MainWindow::mainMainWindow());
         if (!getJob->exec())
         {
-            qCCritical(KALARM_LOG) << "Download failure";
+            qCCritical(KALARM_LOG) << "AlarmCalendar::importAlarms: Download failure";
             KAMessageBox::error(parent, xi18nc("@info", "Cannot download calendar: <filename>%1</filename>", url.toDisplayString()));
             return false;
         }
@@ -646,7 +646,7 @@ bool AlarmCalendar::importAlarms(QWidget* parent, Collection* collection)
     success = calStorage->load();
     if (!success)
     {
-        qCDebug(KALARM_LOG) << "Error loading calendar '" << filename <<"'";
+        qCDebug(KALARM_LOG) << "AlarmCalendar::importAlarms: Error loading calendar '" << filename <<"'";
         KAMessageBox::error(parent, xi18nc("@info", "Could not load calendar <filename>%1</filename>.", url.toDisplayString()));
     }
     else
@@ -735,10 +735,10 @@ bool AlarmCalendar::exportAlarms(const KAEvent::List& events, QWidget* parent)
     QUrl url = QUrl::fromLocalFile(file);
     if (!url.isValid())
     {
-        qCDebug(KALARM_LOG) << "Invalid URL" << url;
+        qCDebug(KALARM_LOG) << "AlarmCalendar::exportAlarms: Invalid URL" << url;
         return false;
     }
-    qCDebug(KALARM_LOG) << url.toDisplayString();
+    qCDebug(KALARM_LOG) << "AlarmCalendar::exportAlarms:" << url.toDisplayString();
 
     MemoryCalendar::Ptr calendar(new MemoryCalendar(Preferences::timeSpecAsZone()));
     FileStorage::Ptr calStorage(new FileStorage(calendar, file));
@@ -751,7 +751,7 @@ bool AlarmCalendar::exportAlarms(const KAEvent::List& events, QWidget* parent)
         KFileItem fi(statJob->statResult(), url);
         if (fi.size())
         {
-            qCCritical(KALARM_LOG) << "Error loading calendar file" << file << "for append";
+            qCCritical(KALARM_LOG) << "AlarmCalendar::exportAlarms: Error loading calendar file" << file << "for append";
             KAMessageBox::error(MainWindow::mainMainWindow(),
                                 xi18nc("@info", "Error loading calendar to append to:<nl/><filename>%1</filename>", url.toDisplayString()));
             return false;
@@ -791,7 +791,7 @@ bool AlarmCalendar::exportAlarms(const KAEvent::List& events, QWidget* parent)
         calStorage->setSaveFormat(new ICalFormat);
         if (!calStorage->save())
         {
-            qCCritical(KALARM_LOG) << file << ": failed";
+            qCCritical(KALARM_LOG) << "AlarmCalendar::exportAlarms:" << file << ": failed";
             KAMessageBox::error(MainWindow::mainMainWindow(),
                                 xi18nc("@info", "Failed to save new calendar to:<nl/><filename>%1</filename>", url.toDisplayString()));
             success = false;
@@ -804,7 +804,7 @@ bool AlarmCalendar::exportAlarms(const KAEvent::List& events, QWidget* parent)
             KJobWidgets::setWindow(uploadJob, parent);
             if (!uploadJob->exec())
             {
-                qCCritical(KALARM_LOG) << file << ": upload failed";
+                qCCritical(KALARM_LOG) << "AlarmCalendar::exportAlarms:" << file << ": upload failed";
                 KAMessageBox::error(MainWindow::mainMainWindow(),
                                     xi18nc("@info", "Cannot upload new calendar to:<nl/><filename>%1</filename>", url.toDisplayString()));
                 success = false;
@@ -894,7 +894,7 @@ bool AlarmCalendar::addEvent(KAEvent& evnt, QWidget* promptParent, bool useEvent
     if (!mOpen)
         return false;
     // Check that the event type is valid for the calendar
-    qCDebug(KALARM_LOG) << evnt.id();
+    qCDebug(KALARM_LOG) << "AlarmCalendar::addEvent:" << evnt.id();
     CalEvent::Type type = evnt.category();
     if (type != mEventType)
     {
@@ -1034,11 +1034,11 @@ void AlarmCalendar::addNewEvent(const Collection& collection, KAEvent* event, bo
 bool AlarmCalendar::modifyEvent(const EventId& oldEventId, KAEvent& newEvent)
 {
     EventId newId(oldEventId.collectionId(), newEvent.id());
-    qCDebug(KALARM_LOG) << oldEventId << "->" << newId;
+    qCDebug(KALARM_LOG) << "AlarmCalendar::modifyEvent:" << oldEventId << "->" << newId;
     bool noNewId = newId.isEmpty();
     if (!noNewId  &&  oldEventId == newId)
     {
-        qCCritical(KALARM_LOG) << "Same IDs";
+        qCCritical(KALARM_LOG) << "AlarmCalendar::modifyEvent: Same IDs";
         return false;
     }
     if (!mOpen)
@@ -1050,7 +1050,7 @@ bool AlarmCalendar::modifyEvent(const EventId& oldEventId, KAEvent& newEvent)
         KAEvent* storedEvent = event(oldEventId);
         if (!storedEvent)
         {
-            qCCritical(KALARM_LOG) << "Old event not found";
+            qCCritical(KALARM_LOG) << "AlarmCalendar::modifyEvent: Old event not found";
             return false;
         }
         if (noNewId)
@@ -1101,7 +1101,7 @@ KAEvent* AlarmCalendar::updateEvent(const KAEvent* evnt)
             return kaevnt;
         }
     }
-    qCDebug(KALARM_LOG) << "error";
+    qCDebug(KALARM_LOG) << "AlarmCalendar::updateEvent: error";
     return nullptr;
 }
 
@@ -1168,7 +1168,7 @@ CalEvent::Type AlarmCalendar::deleteEventInternal(const KAEvent& event, const Ak
         return CalEvent::EMPTY;
     if (event.collectionId() != collection.id())
     {
-        qCCritical(KALARM_LOG) << "Event" << event.id() << ": collection" << event.collectionId() << "differs from 'collection'" << collection.id();
+        qCCritical(KALARM_LOG) << "AlarmCalendar::deleteEventInternal: Event" << event.id() << ": collection" << event.collectionId() << "differs from 'collection'" << collection.id();
         return CalEvent::EMPTY;
     }
     return deleteEventInternal(event.id(), event, collection, deleteFromAkonadi);
@@ -1244,7 +1244,7 @@ KAEvent* AlarmCalendar::event(const EventId& uniqueID, bool checkDuplicates)
         KAEvent::List list = events(eventId);
         if (list.count() > 1)
         {
-            qCWarning(KALARM_LOG) << "Multiple events found with ID" << eventId;
+            qCWarning(KALARM_LOG) << "AlarmCalendar::event: Multiple events found with ID" << eventId;
             return nullptr;
         }
         if (list.isEmpty())
@@ -1555,7 +1555,7 @@ void AlarmCalendar::setAlarmPending(KAEvent* event, bool pending)
 {
     QString id = event->id();
     bool wasPending = mPendingAlarms.contains(id);
-    qCDebug(KALARM_LOG) << id << "," << pending << "(was" << wasPending << ")";
+    qCDebug(KALARM_LOG) << "AlarmCalendar::setAlarmPending:" << id << "," << pending << "(was" << wasPending << ")";
     if (pending)
     {
         if (wasPending)
