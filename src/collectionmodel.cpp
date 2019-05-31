@@ -671,9 +671,12 @@ CollectionControlModel::CollectionControlModel(QObject* parent)
     EntityMimeTypeFilterModel* filter = new EntityMimeTypeFilterModel(this);
     filter->addMimeTypeInclusionFilter(Collection::mimeType());
     filter->setSourceModel(AkonadiModel::instance());
-    Collection::List collections;
-    findEnabledCollections(filter, QModelIndex(), collections);
-    setCollections(collections);
+
+    QList<Collection::Id> collectionIds;
+    findEnabledCollections(filter, QModelIndex(), collectionIds);
+    setCollections(Collection::List());
+    for (Collection::Id id : qAsConst(collectionIds))
+        addCollection(Collection(id));
 
     connect(AkonadiModel::instance(), &AkonadiModel::collectionStatusChanged,
                                       this, &CollectionControlModel::statusChanged);
@@ -690,7 +693,7 @@ CollectionControlModel::CollectionControlModel(QObject* parent)
 * Collections which duplicate the same backend storage are filtered out, to
 * avoid crashes due to duplicate events in different resources.
 */
-void CollectionControlModel::findEnabledCollections(const EntityMimeTypeFilterModel* filter, const QModelIndex& parent, Collection::List& collections) const
+void CollectionControlModel::findEnabledCollections(const EntityMimeTypeFilterModel* filter, const QModelIndex& parent, QList<Collection::Id>& collectionIds) const
 {
     AkonadiModel* model = AkonadiModel::instance();
     for (int row = 0, count = filter->rowCount(parent);  row < count;  ++row)
@@ -701,7 +704,7 @@ void CollectionControlModel::findEnabledCollections(const EntityMimeTypeFilterMo
             continue;    // the collection doesn't belong to a resource, so omit it
         const CalEvent::Types enabled = !collection.hasAttribute<CollectionAttribute>() ? CalEvent::EMPTY
                                            : collection.attribute<CollectionAttribute>()->enabled();
-        const CalEvent::Types canEnable = checkTypesToEnable(collection, collections, enabled);
+        const CalEvent::Types canEnable = checkTypesToEnable(collection, collectionIds, enabled);
         if (canEnable != enabled)
         {
             // There is another collection which uses the same backend
@@ -710,9 +713,9 @@ void CollectionControlModel::findEnabledCollections(const EntityMimeTypeFilterMo
                 model->setData(model->collectionIndex(collection), static_cast<int>(canEnable), AkonadiModel::EnabledTypesRole);
         }
         if (canEnable)
-            collections += collection;
+            collectionIds += collection.id();
         if (filter->rowCount(ix) > 0)
-            findEnabledCollections(filter, ix, collections);
+            findEnabledCollections(filter, ix, collectionIds);
     }
 }
 
@@ -767,13 +770,12 @@ CalEvent::Types CollectionControlModel::setEnabledStatus(const Collection& colle
 
     // Prevent the enabling of duplicate alarm types if another collection
     // uses the same backend storage.
-    const Collection::List cols = collections();
-    const CalEvent::Types canEnable = checkTypesToEnable(collection, cols, types);
+    const QList<Collection::Id> colIds = collectionIds();
+    const CalEvent::Types canEnable = checkTypesToEnable(collection, colIds, types);
 
     // Update the list of enabled collections
     if (canEnable)
     {
-        const QList<Collection::Id> colIds = collectionIds();
         if (!colIds.contains(collection.id()))
         {
             // It's a new collection.
@@ -903,27 +905,28 @@ void CollectionControlModel::statusChanged(const Collection& collection, Akonadi
 * collection. This is to avoid duplicating events between different resources,
 * which causes user confusion and annoyance, and causes crashes.
 * Parameters:
-*   collection  - must be up to date (using AkonadiModel::refresh() etc.)
-*   collections = list of collections to search for duplicates.
-*   types       = alarm types to be enabled for the collection.
+*   collection    - must be up to date (using AkonadiModel::refresh() etc.)
+*   collectionIds = list of collection IDs to search for duplicates.
+*   types         = alarm types to be enabled for the collection.
 * Reply = alarm types which can be enabled without duplicating other collections.
 */
-CalEvent::Types CollectionControlModel::checkTypesToEnable(const Collection& collection, const Collection::List& collections, CalEvent::Types types)
+CalEvent::Types CollectionControlModel::checkTypesToEnable(const Collection& collection, const QList<Collection::Id>& collectionIds, CalEvent::Types types)
 {
     types &= (CalEvent::ACTIVE | CalEvent::ARCHIVED | CalEvent::TEMPLATE);
     if (types)
     {
         // At least one alarm type is to be enabled
         const QUrl location = QUrl::fromUserInput(collection.remoteId(), QString(), QUrl::AssumeLocalFile);
-        for (const Collection& c : collections)
+        for (const Collection::Id& id : collectionIds)
         {
+            const Collection c(id);
             const QUrl cLocation = QUrl::fromUserInput(c.remoteId(), QString(), QUrl::AssumeLocalFile);
-            if (c.id() != collection.id()  &&  cLocation == location)
+            if (id != collection.id()  &&  cLocation == location)
             {
                 // The collection duplicates the backend storage
                 // used by another enabled collection.
                 // N.B. don't refresh this collection - assume no change.
-                qCDebug(KALARM_LOG) << "CollectionControlModel::checkTypesToEnable:" << c.id() << "duplicates backend for" << collection.id();
+                qCDebug(KALARM_LOG) << "CollectionControlModel::checkTypesToEnable:" << id << "duplicates backend for" << collection.id();
                 if (c.hasAttribute<CollectionAttribute>())
                 {
                     types &= ~c.attribute<CollectionAttribute>()->enabled();
@@ -1249,11 +1252,12 @@ Collection::List CollectionControlModel::enabledCollections(CalEvent::Type type,
 */
 Collection CollectionControlModel::collectionForResource(const QString& resourceId)
 {
-    const Collection::List cols = instance()->collections();
-    for (int i = 0, count = cols.count();  i < count;  ++i)
+    const QList<Collection::Id> colIds = instance()->collectionIds();
+    for (Collection::Id id : colIds)
     {
-        if (cols[i].resource() == resourceId)
-            return cols[i];
+        Collection c(id);
+        if (c.resource() == resourceId)
+            return c;
     }
     return Collection();
 }

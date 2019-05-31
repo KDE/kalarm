@@ -1,7 +1,7 @@
 /*
  *  collectionmodel.h  -  Akonadi collection models
  *  Program:  kalarm
- *  Copyright © 2010-2014 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2010-2019 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -294,9 +294,9 @@ class CollectionControlModel : public Akonadi::FavoriteCollectionsModel
 
     private:
         explicit CollectionControlModel(QObject* parent = nullptr);
-        void findEnabledCollections(const Akonadi::EntityMimeTypeFilterModel*, const QModelIndex& parent, Akonadi::Collection::List&) const;
+        void findEnabledCollections(const Akonadi::EntityMimeTypeFilterModel*, const QModelIndex& parent, QList<Akonadi::Collection::Id>&) const;
         CalEvent::Types setEnabledStatus(const Akonadi::Collection&, CalEvent::Types, bool inserted);
-        static CalEvent::Types checkTypesToEnable(const Akonadi::Collection&, const Akonadi::Collection::List&, CalEvent::Types);
+        static CalEvent::Types checkTypesToEnable(const Akonadi::Collection&, const QList<Akonadi::Collection::Id>&, CalEvent::Types);
 
         static CollectionControlModel* mInstance;
         static bool mAskDestination;
