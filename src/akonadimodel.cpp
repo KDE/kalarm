@@ -783,7 +783,7 @@ static bool checkItem_isArchived(const Item& item)
 
 void AkonadiModel::slotUpdateArchivedColour(const QColor&)
 {
-    qCDebug(KALARM_LOG);
+    qCDebug(KALARM_LOG) << "AkonadiModel::slotUpdateArchivedColour";
     signalDataChanged(&checkItem_isArchived, 0, ColumnCount - 1, QModelIndex());
 }
 
@@ -803,7 +803,7 @@ static bool checkItem_isDisabled(const Item& item)
 
 void AkonadiModel::slotUpdateDisabledColour(const QColor&)
 {
-    qCDebug(KALARM_LOG);
+    qCDebug(KALARM_LOG) << "AkonadiModel::slotUpdateDisabledColour";
     signalDataChanged(&checkItem_isDisabled, 0, ColumnCount - 1, QModelIndex());
 }
 
@@ -823,7 +823,7 @@ static bool checkItem_excludesHolidays(const Item& item)
 
 void AkonadiModel::slotUpdateHolidays()
 {
-    qCDebug(KALARM_LOG);
+    qCDebug(KALARM_LOG) << "AkonadiModel::slotUpdateHolidays";
     Q_ASSERT(TimeToColumn == TimeColumn + 1);  // signal should be emitted only for TimeTo and Time columns
     signalDataChanged(&checkItem_excludesHolidays, TimeColumn, TimeToColumn, QModelIndex());
 }
@@ -844,7 +844,7 @@ static bool checkItem_workTimeOnly(const Item& item)
 
 void AkonadiModel::slotUpdateWorkingHours()
 {
-    qCDebug(KALARM_LOG);
+    qCDebug(KALARM_LOG) << "AkonadiModel::slotUpdateWorkingHours";
     Q_ASSERT(TimeToColumn == TimeColumn + 1);  // signal should be emitted only for TimeTo and Time columns
     signalDataChanged(&checkItem_workTimeOnly, TimeColumn, TimeToColumn, QModelIndex());
 }
@@ -1093,7 +1093,7 @@ bool AkonadiModel::removeCollection(const Akonadi::Collection& collection)
 {
     if (!collection.isValid())
         return false;
-    qCDebug(KALARM_LOG) << collection.id();
+    qCDebug(KALARM_LOG) << "AkonadiModel::removeCollection:" << collection.id();
     Collection col = collection;
     mCollectionsDeleting << collection.id();
     // Note: CollectionDeleteJob deletes the backend storage also.
@@ -1151,7 +1151,7 @@ bool AkonadiModel::reloadCollection(const Akonadi::Collection& collection)
 {
     if (!collection.isValid())
         return false;
-    qCDebug(KALARM_LOG) << collection.id();
+    qCDebug(KALARM_LOG) << "AkonadiModel::reloadCollection:" << collection.id();
     mMonitor->setCollectionMonitored(collection, false);
     mMonitor->setCollectionMonitored(collection, true);
     return true;
@@ -1162,7 +1162,7 @@ bool AkonadiModel::reloadCollection(const Akonadi::Collection& collection)
 */
 void AkonadiModel::reload()
 {
-    qCDebug(KALARM_LOG);
+    qCDebug(KALARM_LOG) << "AkonadiModel::reload";
     const Collection::List collections = mMonitor->collectionsMonitored();
     for (const Collection& collection : collections)
     {
@@ -1310,7 +1310,7 @@ KAEvent AkonadiModel::event(const Akonadi::Item& item, const QModelIndex& index,
 */
 AkonadiModel::Result AkonadiModel::addEvent(KAEvent* event, CalEvent::Type type, QWidget* promptParent, bool noPrompt)
 {
-    qCDebug(KALARM_LOG) << event->id();
+    qCDebug(KALARM_LOG) << "AkonadiModel::addEvent:" << event->id();
 
     // Determine parent collection - prompt or use default
     bool cancelled;
@@ -1361,7 +1361,7 @@ bool AkonadiModel::addEvents(const KAEvent::List& events, Collection& collection
 */
 bool AkonadiModel::addEvent(KAEvent& event, Collection& collection)
 {
-    qCDebug(KALARM_LOG) << "ID:" << event.id();
+    qCDebug(KALARM_LOG) << "AkonadiModel::addEvent: ID:" << event.id();
     Item item;
     if (!event.setItemPayload(item, collection.contentMimeTypes()))
     {
@@ -1388,7 +1388,7 @@ qCDebug(KALARM_LOG)<<"...exiting";
 */
 bool AkonadiModel::updateEvent(KAEvent& event)
 {
-    qCDebug(KALARM_LOG) << "ID:" << event.id();
+    qCDebug(KALARM_LOG) << "AkonadiModel::updateEvent: ID:" << event.id();
     return updateEvent(event.itemId(), event);
 }
 bool AkonadiModel::updateEvent(Akonadi::Item::Id itemId, KAEvent& newEvent)
@@ -1419,7 +1419,7 @@ bool AkonadiModel::deleteEvent(const KAEvent& event)
 }
 bool AkonadiModel::deleteEvent(Akonadi::Item::Id itemId)
 {
-    qCDebug(KALARM_LOG) << itemId;
+    qCDebug(KALARM_LOG) << "AkonadiModel::deleteEvent:" << itemId;
     const QModelIndex ix = itemIndex(itemId);
     if (!ix.isValid())
         return false;
@@ -1446,7 +1446,7 @@ bool AkonadiModel::deleteEvent(Akonadi::Item::Id itemId)
 */
 void AkonadiModel::queueItemModifyJob(const Item& item)
 {
-    qCDebug(KALARM_LOG) << item.id();
+    qCDebug(KALARM_LOG) << "AkonadiModel::queueItemModifyJob:" << item.id();
     QMap<Item::Id, Item>::Iterator it = mItemModifyJobQueue.find(item.id());
     if (it != mItemModifyJobQueue.end())
     {
@@ -1496,7 +1496,7 @@ void AkonadiModel::itemJobDone(KJob* j)
         mPendingItemJobs.erase(it);
     }
     const QByteArray jobClass = j->metaObject()->className();
-    qCDebug(KALARM_LOG) << jobClass;
+    qCDebug(KALARM_LOG) << "AkonadiModel::itemJobDone:" << jobClass;
     if (j->error())
     {
         QString errMsg;
@@ -1593,7 +1593,7 @@ qCDebug(KALARM_LOG)<<"No more jobs queued";
 */
 void AkonadiModel::slotRowsInserted(const QModelIndex& parent, int start, int end)
 {
-    qCDebug(KALARM_LOG) << start << "-" << end << "(parent =" << parent << ")";
+    qCDebug(KALARM_LOG) << "AkonadiModel::slotRowsInserted:" << start << "-" << end << "(parent =" << parent << ")";
     for (int row = start;  row <= end;  ++row)
     {
         const QModelIndex ix = index(row, 0, parent);
@@ -1640,7 +1640,7 @@ void AkonadiModel::slotRowsInserted(const QModelIndex& parent, int start, int en
 */
 void AkonadiModel::slotRowsAboutToBeRemoved(const QModelIndex& parent, int start, int end)
 {
-    qCDebug(KALARM_LOG) << start << "-" << end << "(parent =" << parent << ")";
+    qCDebug(KALARM_LOG) << "AkonadiModel::slotRowsAboutToBeRemoved:" << start << "-" << end << "(parent =" << parent << ")";
     const EventList events = eventList(parent, start, end);
     if (!events.isEmpty())
     {
@@ -1678,7 +1678,7 @@ void AkonadiModel::setCollectionChanged(const Collection& collection, const QSet
     const Collection::Rights newRights = collection.rights() & writableRights;
     if (newRights != oldRights)
     {
-        qCDebug(KALARM_LOG) << "Collection" << collection.id() << ": rights ->" << newRights;
+        qCDebug(KALARM_LOG) << "AkonadiModel::setCollectionChanged:" << collection.id() << ": rights ->" << newRights;
         mCollectionRights[collection.id()] = newRights;
         Q_EMIT collectionStatusChanged(collection, ReadOnly, (newRights != writableRights), rowInserted);
     }
@@ -1689,7 +1689,7 @@ void AkonadiModel::setCollectionChanged(const Collection& collection, const QSet
     const CalEvent::Types newAlarmTypes = CalEvent::types(collection.contentMimeTypes());
     if (newAlarmTypes != oldAlarmTypes)
     {
-        qCDebug(KALARM_LOG) << "Collection" << collection.id() << ": alarm types ->" << newAlarmTypes;
+        qCDebug(KALARM_LOG) << "AkonadiModel::setCollectionChanged:" << collection.id() << ": alarm types ->" << newAlarmTypes;
         mCollectionAlarmTypes[collection.id()] = newAlarmTypes;
         Q_EMIT collectionStatusChanged(collection, AlarmTypes, static_cast<int>(newAlarmTypes), rowInserted);
     }
@@ -1702,7 +1702,7 @@ void AkonadiModel::setCollectionChanged(const Collection& collection, const QSet
         const CalEvent::Types newEnabled = collection.hasAttribute<CollectionAttribute>() ? collection.attribute<CollectionAttribute>()->enabled() : CalEvent::EMPTY;
         if (firstEnabled  ||  newEnabled != oldEnabled)
         {
-            qCDebug(KALARM_LOG) << "Collection" << collection.id() << ": enabled ->" << newEnabled;
+            qCDebug(KALARM_LOG) << "AkonadiModel::setCollectionChanged:" << collection.id() << ": enabled ->" << newEnabled;
             firstEnabled = false;
             mCollectionEnabled[collection.id()] = newEnabled;
             Q_EMIT collectionStatusChanged(collection, Enabled, static_cast<int>(newEnabled), rowInserted);
@@ -1713,7 +1713,7 @@ void AkonadiModel::setCollectionChanged(const Collection& collection, const QSet
     if (attributeNames.contains(CompatibilityAttribute::name()))
     {
         // Update to current KAlarm format if necessary, and if the user agrees
-        qCDebug(KALARM_LOG) << "CompatibilityAttribute";
+        qCDebug(KALARM_LOG) << "AkonadiModel::setCollectionChanged: CompatibilityAttribute";
         Collection col(collection);
         refresh(col);
         CalendarMigrator::updateToCurrentFormat(col, false, MainWindow::mainMainWindow());
@@ -1725,7 +1725,7 @@ void AkonadiModel::setCollectionChanged(const Collection& collection, const QSet
         if (mCollectionsBeingCreated.isEmpty() && mCollectionIdsBeingCreated.isEmpty()
         &&  CalendarMigrator::completed())
         {
-            qCDebug(KALARM_LOG) << "Migration completed";
+            qCDebug(KALARM_LOG) << "AkonadiModel::setCollectionChanged: Migration completed";
             mMigrating = false;
             Q_EMIT migrationCompleted();
         }
@@ -1738,7 +1738,7 @@ void AkonadiModel::setCollectionChanged(const Collection& collection, const QSet
 void AkonadiModel::slotCollectionRemoved(const Collection& collection)
 {
     const Collection::Id id = collection.id();
-    qCDebug(KALARM_LOG) << id;
+    qCDebug(KALARM_LOG) << "AkonadiModel::slotCollectionRemoved:" << id;
     mCollectionRights.remove(id);
     mCollectionsDeleting.removeAll(id);
     while (mCollectionsDeleted.count() > 20)   // don't let list grow indefinitely
@@ -1778,7 +1778,7 @@ void AkonadiModel::slotMigrationCompleted()
 */
 void AkonadiModel::slotMonitoredItemChanged(const Akonadi::Item& item, const QSet<QByteArray>&)
 {
-    qCDebug(KALARM_LOG) << "item id=" << item.id() << ", revision=" << item.revision();
+    qCDebug(KALARM_LOG) << "AkonadiModel::slotMonitoredItemChanged: item id=" << item.id() << ", revision=" << item.revision();
     mItemsBeingCreated.removeAll(item.id());   // the new item has now been initialised
     checkQueuedItemModifyJob(item);    // execute the next job queued for the item
 

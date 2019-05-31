@@ -215,7 +215,7 @@ MessageWin::MessageWin(const KAEvent* event, const KAAlarm& alarm, int flags)
       mNoCloseConfirm(false),
       mDisableDeferral(false)
 {
-    qCDebug(KALARM_LOG) << (void*)this << "event" << mEventId;
+    qCDebug(KALARM_LOG) << "MessageWin:" << (void*)this << "event" << mEventId;
     setAttribute(static_cast<Qt::WidgetAttribute>(WidgetFlags));
     setWindowModality(Qt::WindowModal);
     setObjectName(QStringLiteral("MessageWin"));    // used by LikeBack
@@ -322,7 +322,7 @@ MessageWin::MessageWin(const KAEvent* event, const DateTime& alarmDateTime,
       mNoCloseConfirm(false),
       mDisableDeferral(false)
 {
-    qCDebug(KALARM_LOG) << "errmsg";
+    qCDebug(KALARM_LOG) << "MessageWin: errmsg";
     setAttribute(static_cast<Qt::WidgetAttribute>(WidgetFlags));
     setWindowModality(Qt::WindowModal);
     setObjectName(QStringLiteral("ErrorWin"));    // used by LikeBack
@@ -357,7 +357,7 @@ MessageWin::MessageWin()
       mNoCloseConfirm(false),
       mDisableDeferral(false)
 {
-    qCDebug(KALARM_LOG) << (void*)this << "restore";
+    qCDebug(KALARM_LOG) << "MessageWin:" << (void*)this << "restore";
     setAttribute(WidgetFlags);
     setWindowModality(Qt::WindowModal);
     setObjectName(QStringLiteral("RestoredMsgWin"));    // used by LikeBack
@@ -370,7 +370,7 @@ MessageWin::MessageWin()
 */
 MessageWin::~MessageWin()
 {
-    qCDebug(KALARM_LOG) << (void*)this << mEventId;
+    qCDebug(KALARM_LOG) << "~MessageWin" << (void*)this << mEventId;
     if (AudioThread::mAudioOwner == this  &&  !mAudioThread.isNull())
         mAudioThread->quit();
     mErrorMessages.remove(mEventId);
@@ -961,7 +961,7 @@ void MessageWin::saveProperties(KConfigGroup& config)
         config.writeEntry("EventItemID", mEventItemId);
         config.writeEntry("AlarmType", static_cast<int>(mAlarmType));
         if (mAlarmType == KAAlarm::INVALID_ALARM)
-            qCCritical(KALARM_LOG) << "Invalid alarm: id=" << mEventId << ", alarm count=" << mEvent.alarmCount();
+            qCCritical(KALARM_LOG) << "MessageWin::saveProperties: Invalid alarm: id=" << mEventId << ", alarm count=" << mEvent.alarmCount();
         config.writeEntry("Message", mMessage);
         config.writeEntry("Type", static_cast<int>(mAction));
         config.writeEntry("Font", mFont);
@@ -1020,7 +1020,7 @@ void MessageWin::readProperties(const KConfigGroup& config)
     if (mAlarmType == KAAlarm::INVALID_ALARM)
     {
         mInvalid = true;
-        qCCritical(KALARM_LOG) << "Invalid alarm: id=" << eventId;
+        qCCritical(KALARM_LOG) << "MessageWin::readProperties: Invalid alarm: id=" << eventId;
     }
     mMessage             = config.readEntry("Message");
     mAction              = static_cast<KAEvent::SubAction>(config.readEntry("Type", 0));
@@ -1063,7 +1063,7 @@ void MessageWin::readProperties(const KConfigGroup& config)
     // Temporarily initialise mCollection and mEventId - they will be set by redisplayAlarm()
     mCollection          = Akonadi::Collection();
     mEventId             = EventId(mCollection.id(), eventId);
-    qCDebug(KALARM_LOG) << eventId;
+    qCDebug(KALARM_LOG) << "MessageWin::readProperties:" << eventId;
     if (mAlarmType != KAAlarm::INVALID_ALARM)
     {
         // Recreate the event from the calendar file (if possible)
@@ -1088,7 +1088,7 @@ void MessageWin::readProperties(const KConfigGroup& config)
 */
 void MessageWin::showRestoredAlarm()
 {
-    qCDebug(KALARM_LOG) << mEventId;
+    qCDebug(KALARM_LOG) << "MessageWin::showRestoredAlarm:" << mEventId;
     redisplayAlarm();
     show();
 }
@@ -1100,11 +1100,11 @@ void MessageWin::redisplayAlarm()
 {
     mCollection = AkonadiModel::instance()->collectionForItem(mEventItemId);
     mEventId.setCollectionId(mCollection.id());
-    qCDebug(KALARM_LOG) << mEventId;
+    qCDebug(KALARM_LOG) << "MessageWin::redisplayAlarm:" << mEventId;
     // Delete any already existing window for the same event
     MessageWin* duplicate = findEvent(mEventId, this);
     if (duplicate)
-        qCDebug(KALARM_LOG) << "Deleting duplicate window:" << mEventId;
+        qCDebug(KALARM_LOG) << "MessageWin::redisplayAlarm: Deleting duplicate window:" << mEventId;
     delete duplicate;
 
     KAEvent* event = AlarmCalendar::resources()->event(mEventId);
@@ -1132,7 +1132,7 @@ void MessageWin::redisplayAlarms()
 {
     if (mRedisplayed)
         return;
-    qCDebug(KALARM_LOG);
+    qCDebug(KALARM_LOG) << "MessageWin::redisplayAlarms";
     mRedisplayed = true;
     AlarmCalendar* cal = AlarmCalendar::displayCalendar();
     if (cal  &&  cal->isOpen())
@@ -1149,17 +1149,17 @@ void MessageWin::redisplayAlarms()
                 event.setItemId(id);
             const EventId eventId(event);
             if (findEvent(eventId))
-                qCDebug(KALARM_LOG) << "Message window already exists:" << eventId;
+                qCDebug(KALARM_LOG) << "MessageWin::redisplayAlarms: Message window already exists:" << eventId;
             else
             {
                 // This event should be displayed, but currently isn't being
                 const KAAlarm alarm = event.convertDisplayingAlarm();
                 if (alarm.type() == KAAlarm::INVALID_ALARM)
                 {
-                    qCCritical(KALARM_LOG) << "Invalid alarm: id=" << eventId;
+                    qCCritical(KALARM_LOG) << "MessageWin::redisplayAlarms: Invalid alarm: id=" << eventId;
                     continue;
                 }
-                qCDebug(KALARM_LOG) << eventId;
+                qCDebug(KALARM_LOG) << "MessageWin::redisplayAlarms:" << eventId;
                 const bool login = alarm.repeatAtLogin();
                 const int flags = NO_RESCHEDULE | (login ? NO_DEFER : 0) | NO_INIT_VIEW;
                 MessageWin* win = new MessageWin(&event, alarm, flags);
@@ -1195,12 +1195,12 @@ bool MessageWin::retrieveEvent(KAEvent& event, Akonadi::Collection& resource, bo
         event.setArchive();     // ensure that it gets re-archived if it's saved
         event.setCategory(CalEvent::ACTIVE);
         if (mEventId.eventId() != event.id())
-            qCCritical(KALARM_LOG) << "Wrong event ID";
+            qCCritical(KALARM_LOG) << "MessageWin::retrieveEvent: Wrong event ID";
         event.setEventId(mEventId.eventId());
         resource  = Akonadi::Collection();
         showEdit  = true;
         showDefer = true;
-        qCDebug(KALARM_LOG) << event.id() << ": success";
+        qCDebug(KALARM_LOG) << "MessageWin::retrieveEvent:" << event.id() << ": success";
     }
     return true;
 }
@@ -1217,7 +1217,7 @@ bool MessageWin::reinstateFromDisplaying(const Event::Ptr& kcalEvent, KAEvent& e
     event.reinstateFromDisplaying(kcalEvent, collectionId, showEdit, showDefer);
     event.setCollectionId(collectionId);
     collection = AkonadiModel::instance()->collectionById(collectionId);
-    qCDebug(KALARM_LOG) << EventId(event) << ": success";
+    qCDebug(KALARM_LOG) << "MessageWin::reinstateFromDisplaying:" << EventId(event) << ": success";
     return true;
 }
 
@@ -1228,11 +1228,11 @@ bool MessageWin::reinstateFromDisplaying(const Event::Ptr& kcalEvent, KAEvent& e
 */
 void MessageWin::alarmShowing(KAEvent& event)
 {
-    qCDebug(KALARM_LOG) << event.id() << "," << KAAlarm::debugType(mAlarmType);
+    qCDebug(KALARM_LOG) << "MessageWin::alarmShowing:" << event.id() << "," << KAAlarm::debugType(mAlarmType);
     const KAAlarm alarm = event.alarm(mAlarmType);
     if (!alarm.isValid())
     {
-        qCCritical(KALARM_LOG) << "Alarm type not found:" << event.id() << ":" << mAlarmType;
+        qCCritical(KALARM_LOG) << "MessageWin::alarmShowing: Alarm type not found:" << event.id() << ":" << mAlarmType;
         return;
     }
     if (!mAlwaysHide)
@@ -1403,7 +1403,7 @@ void MessageWin::startAudio()
     }
     else
     {
-        qCDebug(KALARM_LOG) << QThread::currentThread();
+        qCDebug(KALARM_LOG) << "MessageWin::startAudio:" << QThread::currentThread();
         mAudioThread = new AudioThread(this, mAudioFile, mVolume, mFadeVolume, mFadeSeconds, mAudioRepeatPause);
         connect(mAudioThread.data(), &AudioThread::readyToPlay, this, &MessageWin::playReady);
         connect(mAudioThread.data(), &QThread::finished, this, &MessageWin::playFinished);
@@ -1429,7 +1429,7 @@ bool MessageWin::isAudioPlaying()
 */
 void MessageWin::stopAudio(bool wait)
 {
-    qCDebug(KALARM_LOG);
+    qCDebug(KALARM_LOG) << "MessageWin::stopAudio";
     if (mAudioThread)
         mAudioThread->stop(wait);
 }
@@ -1486,7 +1486,7 @@ AudioThread::AudioThread(MessageWin* parent, const QString& audioFile, float vol
       mAudioObject(nullptr)
 {
     if (mAudioOwner)
-        qCCritical(KALARM_LOG) << "mAudioOwner already set";
+        qCCritical(KALARM_LOG) << "MessageWin::AudioThread: mAudioOwner already set";
     mAudioOwner = parent;
 }
 
@@ -1496,7 +1496,7 @@ AudioThread::AudioThread(MessageWin* parent, const QString& audioFile, float vol
 */
 AudioThread::~AudioThread()
 {
-    qCDebug(KALARM_LOG);
+    qCDebug(KALARM_LOG) << "~MessageWin::AudioThread";
     stop(true);   // stop playing and tidy up (timeout 3 seconds)
     delete mAudioObject;
     mAudioObject = nullptr;
@@ -1512,7 +1512,7 @@ AudioThread::~AudioThread()
 */
 void AudioThread::stop(bool waiT)
 {
-    qCDebug(KALARM_LOG);
+    qCDebug(KALARM_LOG) << "MessageWin::AudioThread::stop";
     quit();       // stop playing and tidy up
     wait(3000);   // wait for run() to exit (timeout 3 seconds)
     if (!isFinished())
@@ -1535,7 +1535,7 @@ void AudioThread::run()
         mMutex.unlock();
         return;
     }
-    qCDebug(KALARM_LOG) << QThread::currentThread() << mFile;
+    qCDebug(KALARM_LOG) << "MessageWin::AudioThread::run:" << QThread::currentThread() << mFile;
     const QString audioFile = mFile;
     const QUrl url = QUrl::fromUserInput(mFile);
     mFile = url.isLocalFile() ? url.toLocalFile() : url.toString();
@@ -1544,7 +1544,7 @@ void AudioThread::run()
     {
         mError = xi18nc("@info", "Cannot open audio file: <filename>%1</filename>", audioFile);
         mMutex.unlock();
-        qCCritical(KALARM_LOG) << "Open failure:" << audioFile;
+        qCCritical(KALARM_LOG) << "MessageWin::AudioThread::run: Open failure:" << audioFile;
         return;
     }
     mAudioObject = new Phonon::MediaObject();
@@ -1622,7 +1622,7 @@ void AudioThread::checkAudioPlay()
     }
 
     // Start playing the file, either for the first time or again
-    qCDebug(KALARM_LOG) << "start";
+    qCDebug(KALARM_LOG) << "MessageWin::AudioThread::checkAudioPlay: start";
     mAudioObject->play();
     mMutex.unlock();
 }
@@ -1639,7 +1639,7 @@ void AudioThread::playStateChanged(Phonon::State newState)
         const QString err = mAudioObject->errorString();
         if (!err.isEmpty())
         {
-            qCCritical(KALARM_LOG) << "Play failure:" << mFile << ":" << err;
+            qCCritical(KALARM_LOG) << "MessageWin::AudioThread::playStateChanged: Play failure:" << mFile << ":" << err;
             mError = xi18nc("@info", "<para>Error playing audio file: <filename>%1</filename></para><para>%2</para>", mFile, err);
             exit(1);
         }
@@ -2003,7 +2003,7 @@ void MessageWin::slotOk()
 */
 void MessageWin::slotShowKMailMessage()
 {
-    qCDebug(KALARM_LOG);
+    qCDebug(KALARM_LOG) << "MessageWin::slotShowKMailMessage";
     if (!mKMailSerialNumber)
         return;
     const QString err = KAlarm::runKMail(false);
@@ -2032,7 +2032,7 @@ void MessageWin::slotShowKMailMessage()
 */
 void MessageWin::slotEdit()
 {
-    qCDebug(KALARM_LOG);
+    qCDebug(KALARM_LOG) << "MessageWin::slotEdit";
     MainWindow* mainWin = MainWindow::mainMainWindow();
     mEditDlg = EditAlarmDlg::create(false, &mOriginalEvent, false, mainWin, EditAlarmDlg::RES_IGNORE);
     KWindowSystem::setMainWindow(mEditDlg, winId());
@@ -2156,7 +2156,7 @@ void MessageWin::slotDefer()
         if (event)
         {
             // The event still exists in the active calendar
-            qCDebug(KALARM_LOG) << "Deferring event" << mEventId;
+            qCDebug(KALARM_LOG) << "MessageWin::slotDefer: Deferring event" << mEventId;
             KAEvent newev(*event);
             newev.defer(dateTime, (mAlarmType & KAAlarm::REMINDER_ALARM), true);
             newev.setDeferDefaultMinutes(delayMins);
@@ -2182,7 +2182,7 @@ void MessageWin::slotDefer()
                 mEditButton->setEnabled(false);
                 return;
             }
-            qCDebug(KALARM_LOG) << "Deferring retrieved event" << mEventId;
+            qCDebug(KALARM_LOG) << "MessageWin::slotDefer: Deferring retrieved event" << mEventId;
             event.defer(dateTime, (mAlarmType & KAAlarm::REMINDER_ALARM), true);
             event.setDeferDefaultMinutes(delayMins);
             event.setCommandError(mCommandError);

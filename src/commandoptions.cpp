@@ -222,7 +222,7 @@ QStringList CommandOptions::setOptions(QCommandLineParser* parser, const QString
     for (int i = 0; i < mOptions.size(); ++i)
     {
         if (!mOptions[i])
-            qCCritical(KALARM_LOG) << "Command option" << i << "not initialised";
+            qCCritical(KALARM_LOG) << "CommandOptions::setOptions: Command option" << i << "not initialised";
         else
             mParser->addOption(*(mOptions[i]));
     }
@@ -379,7 +379,7 @@ void CommandOptions::process()
         }
         else
         {
-            qCDebug(KALARM_LOG) << "Message";
+            qCDebug(KALARM_LOG) << "CommandOptions::process: Message";
             mCommand       = NEW;
             mCommandOpt    = Opt_Message;
             mEditType      = EditAlarmDlg::DISPLAY;
@@ -650,7 +650,7 @@ void CommandOptions::process()
             // No arguments - run interactively & display the main window
             if (!mError.isEmpty())
                 break;
-            qCDebug(KALARM_LOG) << "Interactive";
+            qCDebug(KALARM_LOG) << "CommandOptions::process: Interactive";
             QStringList errors;
             if (mParser->isSet(*mOptions[ACK_CONFIRM]))
                 errors << optionName(ACK_CONFIRM);
@@ -706,7 +706,7 @@ void CommandOptions::process()
 
 void CommandOptions::setError(const QString& errmsg)
 {
-    qCWarning(KALARM_LOG) << errmsg;
+    qCWarning(KALARM_LOG) << "CommandOptions::setError:" << errmsg;
     mCommand = CMD_ERROR;
     if (mError.isEmpty())
         mError = errmsg + i18nc("@info:shell", "\nUse --help to get a list of available command line options.\n");
@@ -736,7 +736,7 @@ bool CommandOptions::checkCommand(Option command, Command code, EditAlarmDlg::Ty
     &&  (allowedEditType == EditAlarmDlg::NO_TYPE
       || (allowedEditType != EditAlarmDlg::NO_TYPE  &&  (mCommand != NEW || mEditType != allowedEditType))))
         setErrorIncompatible(mCommandOpt, command);
-    qCDebug(KALARM_LOG).nospace() << optionName(command);
+    qCDebug(KALARM_LOG).nospace() << "CommandOptions::checkCommand: " << optionName(command);
     mCommand = code;
     mCommandOpt = command;
     return true;

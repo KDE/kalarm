@@ -53,7 +53,7 @@ const QString REQUEST_DBUS_OBJECT(QStringLiteral("/kalarm"));   // D-Bus object 
 =============================================================================*/
 DBusHandler::DBusHandler()
 {
-    qCDebug(KALARM_LOG);
+    qCDebug(KALARM_LOG) << "DBusHandler:";
     new KalarmAdaptor(this);
     QDBusConnection::sessionBus().registerObject(REQUEST_DBUS_OBJECT, this);
 }

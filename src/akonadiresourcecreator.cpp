@@ -58,7 +58,7 @@ void AkonadiResourceCreator::createResource()
 
 void AkonadiResourceCreator::getAgentType()
 {
-    qCDebug(KALARM_LOG) << "Type:" << mDefaultType;
+    qCDebug(KALARM_LOG) << "AkonadiResourceCreator::getAgentType: Type:" << mDefaultType;
     // Use AutoQPointer to guard against crash on application exit while
     // the dialogue is still open. It prevents double deletion (both on
     // deletion of parent, and on return from this function).
@@ -106,7 +106,7 @@ void AkonadiResourceCreator::agentInstanceCreated(KJob* j)
     AgentInstanceCreateJob* job = static_cast<AgentInstanceCreateJob*>(j);
     if (j->error())
     {
-        qCCritical(KALARM_LOG) << "Failed to create new calendar resource:" << j->errorString();
+        qCCritical(KALARM_LOG) << "AkonadiResourceCreator::agentInstanceCreated: Failed to create new calendar resource:" << j->errorString();
         KMessageBox::error(nullptr, xi18nc("@info", "%1<nl/>(%2)", i18nc("@info", "Failed to create new calendar resource"), j->errorString()));
         exitWithError();
     }
@@ -129,7 +129,7 @@ void AkonadiResourceCreator::agentInstanceCreated(KJob* j)
         if (!controlOk)
         {
             delete agentControlIface;
-            qCWarning(KALARM_LOG) << "Unable to access D-Bus interface of created agent.";
+            qCWarning(KALARM_LOG) << "AkonadiResourceCreator::agentInstanceCreated: Unable to access D-Bus interface of created agent.";
         }
         else
         {
@@ -155,7 +155,7 @@ void AkonadiResourceCreator::setResourceAlarmType()
     Settings iface(QStringLiteral("org.freedesktop.Akonadi.Resource.") + mAgentInstance.identifier(),
                    QStringLiteral("/Settings"), QDBusConnection::sessionBus(), this);
     if (!iface.isValid())
-        qCCritical(KALARM_LOG) << "Error creating D-Bus interface for" << mAgentInstance.identifier() << "resource configuration.";
+        qCCritical(KALARM_LOG) << "AkonadiResourceCreator::setResourceAlarmType: Error creating D-Bus interface for" << mAgentInstance.identifier() << "resource configuration.";
     else
     {
         iface.setAlarmTypes(CalEvent::mimeTypes(mDefaultType));

@@ -136,7 +136,7 @@ MainWindow::MainWindow(bool restored)
       mShown(false),
       mResizing(false)
 {
-    qCDebug(KALARM_LOG);
+    qCDebug(KALARM_LOG) << "MainWindow:";
     setAttribute(Qt::WA_DeleteOnClose);
     setWindowModality(Qt::WindowModal);
     setObjectName(QStringLiteral("MainWin"));    // used by LikeBack
@@ -198,7 +198,7 @@ MainWindow::MainWindow(bool restored)
 
 MainWindow::~MainWindow()
 {
-    qCDebug(KALARM_LOG);
+    qCDebug(KALARM_LOG) << "~MainWindow";
     bool trayParent = isTrayParent();   // must call before removing from window list
     mWindowList.removeAt(mWindowList.indexOf(this));
 
@@ -633,7 +633,7 @@ void MainWindow::enableTemplateMenuItem(bool enable)
 */
 void MainWindow::refresh()
 {
-    qCDebug(KALARM_LOG);
+    qCDebug(KALARM_LOG) << "MainWindow::refresh";
     AkonadiModel::instance()->reload();
 }
 
@@ -643,7 +643,7 @@ void MainWindow::refresh()
 */
 void MainWindow::updateKeepArchived(int days)
 {
-    qCDebug(KALARM_LOG) << (bool)days;
+    qCDebug(KALARM_LOG) << "MainWindow::updateKeepArchived:" << (bool)days;
     if (mShowArchived  &&  !days)
         slotShowArchived();   // toggle Show Archived option setting
     mActionShowArchived->setEnabled(days);
@@ -762,7 +762,7 @@ void MainWindow::slotDelete(bool force)
     }
 
     if (events.isEmpty())
-        qCDebug(KALARM_LOG) << "No alarms left to delete";
+        qCDebug(KALARM_LOG) << "MainWindow::slotDelete: No alarms left to delete";
     else
     {
         // Delete the events from the calendar and displays
@@ -1248,7 +1248,7 @@ static QString getMailHeader(const char* header, KMime::Content& content)
 */
 void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
 {
-    qCDebug(KALARM_LOG) << "Formats:" << e->mimeData()->formats();
+    qCDebug(KALARM_LOG) << "MainWindow::executeDropEvent: Formats:" << e->mimeData()->formats();
     const QMimeData* data = e->mimeData();
     KAEvent::SubAction action = KAEvent::MESSAGE;
     QByteArray         bytes;
@@ -1258,7 +1258,7 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
     MemoryCalendar::Ptr calendar(new MemoryCalendar(Preferences::timeSpecAsZone()));
 #ifndef NDEBUG
     QString fmts = data->formats().join(QStringLiteral(", "));
-    qCDebug(KALARM_LOG) << fmts;
+    qCDebug(KALARM_LOG) << "MainWindow::executeDropEvent:" << fmts;
 #endif
 
     /* The order of the tests below matters, since some dropped objects
@@ -1268,7 +1268,7 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
     if (!(bytes = data->data(QStringLiteral("message/rfc822"))).isEmpty())
     {
         // Email message(s). Ignore all but the first.
-        qCDebug(KALARM_LOG) << "email";
+        qCDebug(KALARM_LOG) << "MainWindow::executeDropEvent: email";
         KMime::Content content;
         content.setContent(bytes);
         content.parse();
@@ -1295,7 +1295,7 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
     {
         mailList = KPIM::MailList::fromMimeData(data);
         // KMail message(s). Ignore all but the first.
-        qCDebug(KALARM_LOG) << "KMail_list";
+        qCDebug(KALARM_LOG) << "MainWindow::executeDropEvent: KMail_list";
         if (mailList.isEmpty())
             return;
         KPIM::MailSummary& summary = mailList[0];
@@ -1309,7 +1309,7 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
     else if (ICalDrag::fromMimeData(data, calendar))
     {
         // iCalendar - If events are included, use the first event
-        qCDebug(KALARM_LOG) << "iCalendar";
+        qCDebug(KALARM_LOG) << "MainWindow::executeDropEvent: iCalendar";
         Event::List events = calendar->rawEvents();
         if (!events.isEmpty())
         {
@@ -1344,7 +1344,7 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
     }
     else if (!(files = data->urls()).isEmpty())
     {
-        qCDebug(KALARM_LOG) << "URL";
+        qCDebug(KALARM_LOG) << "MainWindow::executeDropEvent: URL";
         // Try to find the mime type of the file, without downloading a remote file
         QMimeDatabase mimeDb;
         const QString mimeTypeName = mimeDb.mimeTypeForUrl(files[0]).name();
@@ -1354,7 +1354,7 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
     else if (data->hasText())
     {
         QString text = data->text();
-        qCDebug(KALARM_LOG) << "text";
+        qCDebug(KALARM_LOG) << "MainWindow::executeDropEvent: text";
         alarmText.setText(text);
     }
     else
@@ -1459,7 +1459,7 @@ void MainWindow::slotSelection()
         }
     }
 
-    qCDebug(KALARM_LOG) << "true";
+    qCDebug(KALARM_LOG) << "MainWindow::slotSelection: true";
     mActionCreateTemplate->setEnabled((count == 1) && !CollectionControlModel::enabledCollections(CalEvent::TEMPLATE, true).isEmpty());
     mActionExportAlarms->setEnabled(true);
     mActionExport->setEnabled(true);
@@ -1480,7 +1480,7 @@ void MainWindow::slotSelection()
 */
 void MainWindow::slotContextMenuRequested(const QPoint& globalPos)
 {
-    qCDebug(KALARM_LOG);
+    qCDebug(KALARM_LOG) << "MainWindow::slotContextMenuRequested";
     if (mContextMenu)
         mContextMenu->popup(globalPos);
 }

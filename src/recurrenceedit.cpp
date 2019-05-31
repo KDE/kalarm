@@ -92,7 +92,7 @@ RecurrenceEdit::RecurrenceEdit(bool readOnly, QWidget* parent)
       mNoEmitTypeChanged(true),
       mReadOnly(readOnly)
 {
-    qCDebug(KALARM_LOG);
+    qCDebug(KALARM_LOG) << "RecurrenceEdit:";
     QVBoxLayout* topLayout = new QVBoxLayout(this);
     topLayout->setContentsMargins(0, 0, 0, 0);
     topLayout->setSpacing(style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));

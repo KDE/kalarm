@@ -113,7 +113,7 @@ EditDisplayAlarmDlg::EditDisplayAlarmDlg(bool Template, QWidget* parent, GetReso
       mReminderDeferral(false),
       mReminderArchived(false)
 {
-    qCDebug(KALARM_LOG) << "New";
+    qCDebug(KALARM_LOG) << "EditDisplayAlarmDlg: New";
     init(nullptr);
 }
 
@@ -124,7 +124,7 @@ EditDisplayAlarmDlg::EditDisplayAlarmDlg(bool Template, const KAEvent* event, bo
       mReminderDeferral(false),
       mReminderArchived(false)
 {
-    qCDebug(KALARM_LOG) << "Event.id()";
+    qCDebug(KALARM_LOG) << "EditDisplayAlarmDlg: Event.id()";
     init(event);
 }
 
@@ -737,7 +737,7 @@ QString EditCommandAlarmDlg::i18n_chk_ExecInTermWindow()   { return i18nc("@opti
 EditCommandAlarmDlg::EditCommandAlarmDlg(bool Template, QWidget* parent, GetResourceType getResource)
     : EditAlarmDlg(Template, KAEvent::COMMAND, parent, getResource)
 {
-    qCDebug(KALARM_LOG) << "New";
+    qCDebug(KALARM_LOG) << "EditCommandAlarmDlg: New";
     init(nullptr);
 }
 
@@ -745,7 +745,7 @@ EditCommandAlarmDlg::EditCommandAlarmDlg(bool Template, const KAEvent* event, bo
                                          GetResourceType getResource, bool readOnly)
     : EditAlarmDlg(Template, event, newAlarm, parent, getResource, readOnly)
 {
-    qCDebug(KALARM_LOG) << "Event.id()";
+    qCDebug(KALARM_LOG) << "EditCommandAlarmDlg: Event.id()";
     init(event);
 }
 
@@ -1053,7 +1053,7 @@ EditEmailAlarmDlg::EditEmailAlarmDlg(bool Template, QWidget* parent, GetResource
     : EditAlarmDlg(Template, KAEvent::EMAIL, parent, getResource),
       mEmailRemoveButton(nullptr)
 {
-    qCDebug(KALARM_LOG) << "New";
+    qCDebug(KALARM_LOG) << "EditEmailAlarmDlg: New";
     init(nullptr);
 }
 
@@ -1062,7 +1062,7 @@ EditEmailAlarmDlg::EditEmailAlarmDlg(bool Template, const KAEvent* event, bool n
     : EditAlarmDlg(Template, event, newAlarm, parent, getResource, readOnly),
       mEmailRemoveButton(nullptr)
 {
-    qCDebug(KALARM_LOG) << "Event.id()";
+    qCDebug(KALARM_LOG) << "EditEmailAlarmDlg: Event.id()";
     init(event);
 }
 
@@ -1498,7 +1498,7 @@ EditAudioAlarmDlg::EditAudioAlarmDlg(bool Template, QWidget* parent, GetResource
     : EditAlarmDlg(Template, KAEvent::AUDIO, parent, getResource),
       mMessageWin(nullptr)
 {
-    qCDebug(KALARM_LOG) << "New";
+    qCDebug(KALARM_LOG) << "EditAudioAlarmDlg: New";
     init(nullptr);
 }
 
@@ -1507,7 +1507,7 @@ EditAudioAlarmDlg::EditAudioAlarmDlg(bool Template, const KAEvent* event, bool n
     : EditAlarmDlg(Template, event, newAlarm, parent, getResource, readOnly),
       mMessageWin(nullptr)
 {
-    qCDebug(KALARM_LOG) << "Event.id()";
+    qCDebug(KALARM_LOG) << "EditAudioAlarmDlg: Event.id()";
     init(event);
     mTryButton->setEnabled(!MessageWin::isAudioPlaying());
     connect(theApp(), &KAlarmApp::audioPlaying, this, &EditAudioAlarmDlg::slotAudioPlaying);

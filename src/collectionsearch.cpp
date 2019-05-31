@@ -77,7 +77,7 @@ void CollectionSearch::collectionFetchResult(KJob* j)
 {
     CollectionFetchJob* job = static_cast<CollectionFetchJob*>(j);
     if (j->error())
-        qCCritical(KALARM_LOG) << "CollectionFetchJob" << job->fetchScope().resource() << "error: " << j->errorString();
+        qCCritical(KALARM_LOG) << "CollectionSearch::collectionFetchResult: CollectionFetchJob" << job->fetchScope().resource() << "error: " << j->errorString();
     else
     {
         const Collection::List collections = job->collections();
@@ -117,7 +117,7 @@ void CollectionSearch::itemFetchResult(KJob* j)
 {
     ItemFetchJob* job = static_cast<ItemFetchJob*>(j);
     if (j->error())
-        qCDebug(KALARM_LOG) << "ItemFetchJob: collection" << mItemFetchJobs[job] << "GID" << mGid << "error: " << j->errorString();
+        qCDebug(KALARM_LOG) << "CollectionSearch::itemFetchResult: ItemFetchJob: collection" << mItemFetchJobs[job] << "GID" << mGid << "error: " << j->errorString();
     else
     {
         if (mDelete)
@@ -146,7 +146,7 @@ void CollectionSearch::itemDeleteResult(KJob* j)
 {
     ItemDeleteJob* job = static_cast<ItemDeleteJob*>(j);
     if (j->error())
-        qCDebug(KALARM_LOG) << "ItemDeleteJob: resource" << mItemDeleteJobs[job] << "GID" << mGid << "error: " << j->errorString();
+        qCDebug(KALARM_LOG) << "CollectionSearch::itemDeleteResult: ItemDeleteJob: resource" << mItemDeleteJobs[job] << "GID" << mGid << "error: " << j->errorString();
     else
         ++mDeleteCount;
     mItemDeleteJobs.remove(job);
