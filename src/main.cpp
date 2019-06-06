@@ -39,13 +39,13 @@
 
 int main(int argc, char* argv[])
 {
+    QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     // Use QScopedPointer to ensure the QCoreApplication instance is deleted
     // before libraries unload, to avoid crashes during clean-up.
     QScopedPointer<KAlarmApp> app(KAlarmApp::create(argc, argv));
 
     const QStringList args = app->arguments();
     app->setAttribute(Qt::AA_UseHighDpiPixmaps, true);
-    app->setAttribute(Qt::AA_EnableHighDpiScaling);
     KCrash::initialize();
 
 
