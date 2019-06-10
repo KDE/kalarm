@@ -269,12 +269,12 @@ bool AlarmTime::convertTimeString(const QByteArray& timeString, KADateTime& date
             if (defaultDt.isValid())
             {
                 dt[0] = defaultDt.date().year();
-                date.setYMD(dt[0],
+                date.setDate(dt[0],
                             (dt[1] < 0 ? defaultDt.date().month() : dt[1]),
                             (dt[2] < 0 ? defaultDt.date().day() : dt[2]));
             }
             else
-                date.setYMD(2000, 1, 1);  // temporary substitute for date
+                date.setDate(2000, 1, 1);  // temporary substitute for date
         }
         dateTime = applyTimeZone(zone, date, time, true, defaultDt);
         if (!dateTime.isValid())
@@ -285,7 +285,7 @@ bool AlarmTime::convertTimeString(const QByteArray& timeString, KADateTime& date
             // Use the current date in the specified time zone as default.
             const KADateTime now = KADateTime::currentDateTime(dateTime.timeSpec());
             date = dateTime.date();
-            date.setYMD(now.date().year(),
+            date.setDate(now.date().year(),
                         (dt[1] < 0 ? now.date().month() : dt[1]),
                         (dt[2] < 0 ? now.date().day() : dt[2]));
             if (!date.isValid())

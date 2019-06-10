@@ -133,7 +133,7 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
     mListView->setModel(mBirthdaySortModel);
     mListView->setRootIsDecorated(false);    // don't show expander icons
     mListView->setSortingEnabled(true);
-    mListView->sortByColumn(BirthdayModel::NameColumn);
+    mListView->sortByColumn(BirthdayModel::NameColumn, mListView->header()->sortIndicatorOrder());
     mListView->setAllColumnsShowFocus(true);
     mListView->setSelectionMode(QAbstractItemView::ExtendedSelection);
     mListView->setSelectionBehavior(QAbstractItemView::SelectRows);

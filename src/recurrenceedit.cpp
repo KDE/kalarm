@@ -627,7 +627,7 @@ void RecurrenceEdit::changeException()
     if (!mExceptionDateEdit  ||  !mExceptionDateEdit->date().isValid())
         return;
     QListWidgetItem* item = mExceptionDateList->currentItem();
-    if (item  &&  mExceptionDateList->isItemSelected(item))
+    if (item  &&  item->isSelected())
     {
         int index = mExceptionDateList->row(item);
         QDate olddate = mExceptionDates[index];
@@ -648,7 +648,7 @@ void RecurrenceEdit::changeException()
 void RecurrenceEdit::deleteException()
 {
     QListWidgetItem* item = mExceptionDateList->currentItem();
-    if (item  &&  mExceptionDateList->isItemSelected(item))
+    if (item  &&  item->isSelected())
     {
         int index = mExceptionDateList->row(item);
         mExceptionDates.removeAt(index);

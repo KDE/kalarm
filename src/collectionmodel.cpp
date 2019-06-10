@@ -602,7 +602,7 @@ bool CollectionView::viewportEvent(QEvent* e)
         const QHelpEvent* he = static_cast<QHelpEvent*>(e);
         const QModelIndex index = indexAt(he->pos());
         QVariant value = static_cast<CollectionFilterCheckListModel*>(model())->data(index, Qt::ToolTipRole);
-        if (qVariantCanConvert<QString>(value))
+        if (value.canConvert<QString>())
         {
             QString toolTip = value.toString();
             int i = toolTip.indexOf(QLatin1Char('@'));
