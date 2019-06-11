@@ -1,7 +1,7 @@
 /*
  *  alarmcalendar.h  -  KAlarm calendar file access
  *  Program:  kalarm
- *  Copyright © 2001-2012 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2019 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -129,6 +129,7 @@ class AlarmCalendar : public QObject
 
         static AlarmCalendar* mResourcesCalendar;  // the calendar resources
         static AlarmCalendar* mDisplayCalendar;    // the display calendar
+        static QUrl           mLastImportUrl;      // last URL for Import Alarms file dialogue
 
         KCalCore::FileStorage::Ptr mCalendarStorage; // null pointer for Akonadi
         ResourceMap           mResourceMap;

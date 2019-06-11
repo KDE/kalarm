@@ -1,7 +1,7 @@
 /*
  *  alarmcalendar.cpp  -  KAlarm calendar file access
  *  Program:  kalarm
- *  Copyright © 2001-2018 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2019 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -42,6 +42,7 @@
 #include <QTemporaryFile>
 #include <QStandardPaths>
 #include <QTimeZone>
+#include <QFileDialog>
 #include "kalarm_debug.h"
 
 using namespace Akonadi;
@@ -55,6 +56,7 @@ static const Collection::Id DISPLAY_COL_ID = -1;   // collection ID used for dis
 
 AlarmCalendar* AlarmCalendar::mResourcesCalendar = nullptr;
 AlarmCalendar* AlarmCalendar::mDisplayCalendar = nullptr;
+QUrl           AlarmCalendar::mLastImportUrl;
 
 
 /******************************************************************************
@@ -595,8 +597,8 @@ void AlarmCalendar::slotEventsToBeRemoved(const AkonadiModel::EventList& events)
 bool AlarmCalendar::importAlarms(QWidget* parent, Collection* collection)
 {
     qCDebug(KALARM_LOG) << "AlarmCalendar::importAlarms";
-    QUrl url = KFileDialog::getOpenUrl(QUrl(QStringLiteral("filedialog:///importalarms")),
-                                       QStringLiteral("*.vcs *.ics|%1").arg(i18nc("@info", "Calendar Files")), parent);
+    const QUrl url = QFileDialog::getOpenFileUrl(parent, QString(), mLastImportUrl,
+                                                 QStringLiteral("%1 (*.vcs *.ics)").arg(i18nc("@info", "Calendar Files")));
     if (url.isEmpty())
     {
         qCCritical(KALARM_LOG) << "AlarmCalendar::importAlarms: Empty URL";
@@ -607,6 +609,7 @@ bool AlarmCalendar::importAlarms(QWidget* parent, Collection* collection)
         qCDebug(KALARM_LOG) << "AlarmCalendar::importAlarms: Invalid URL";
         return false;
     }
+    mLastImportUrl = url.adjusted(QUrl::RemoveFilename);
     qCDebug(KALARM_LOG) << "AlarmCalendar::importAlarms:" << url.toDisplayString();
 
     bool success = true;
