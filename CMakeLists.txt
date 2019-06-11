@@ -121,7 +121,11 @@ add_definitions(-DQT_MESSAGELOGCONTEXT)
 
 add_subdirectory(src)
 
-install( FILES kalarm.renamecategories kalarm.categories DESTINATION ${KDE_INSTALL_CONFDIR} )
+if (${ECM_VERSION} STRGREATER "5.58.0")
+    install(FILES kalarm.renamecategories kalarm.categories  DESTINATION  ${KDE_INSTALL_LOGGINGCATEGORIESDIR})
+else()
+    install(FILES kalarm.renamecategories kalarm.categories  DESTINATION ${KDE_INSTALL_CONFDIR})
+endif()
 
 add_subdirectory(doc)
 feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)
