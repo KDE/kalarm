@@ -199,7 +199,7 @@ void ResourceSelector::resourceAdded(AkonadiResourceCreator* creator, bool succe
     if (success)
     {
         AgentInstance agent = creator->agentInstance();
-	qCDebug(KALARM_LOG) << "ResourceSelector::resourceAdded:" << agent.isValid();
+        qCDebug(KALARM_LOG) << "ResourceSelector::resourceAdded:" << agent.isValid();
         if (agent.isValid())
         {
             // Note that we're expecting the agent's Collection to be added

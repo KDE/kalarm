@@ -26,7 +26,6 @@
 #include <AkonadiCore/agentfilterproxymodel.h>
 #include <AkonadiCore/agentinstancecreatejob.h>
 #include <AkonadiCore/agentmanager.h>
-#include <AkonadiCore/resourcesynchronizationjob.h>
 #include <kdbusconnectionpool.h>
 #include <AkonadiWidgets/agenttypedialog.h>
 #include <AkonadiWidgets/AgentConfigurationDialog>
