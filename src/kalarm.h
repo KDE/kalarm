@@ -22,7 +22,7 @@
 #define KALARM_H
 
 #define VERSION_SUFFIX ""
-#define KALARM_VERSION "2.12.3" VERSION_SUFFIX
+#define KALARM_VERSION "2.12.4" VERSION_SUFFIX
 
 #define KALARM_NAME "KAlarm"
 #define KALARM_DBUS_SERVICE  "org.kde.kalarm"  // D-Bus service name of KAlarm application
