@@ -1,7 +1,7 @@
 /*
  *  akonadiresourcecreator.cpp  -  interactively create an Akonadi resource
  *  Program:  kalarm
- *  Copyright © 2011,2019 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2011,2019 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -22,7 +22,6 @@
 #include "autoqpointer.h"
 #include "kalarmsettings.h"
 #include "kalarmdirsettings.h"
-#include "controlinterface.h"
 
 #include <AkonadiCore/agentfilterproxymodel.h>
 #include <AkonadiCore/agentinstancecreatejob.h>
@@ -108,42 +107,29 @@ void AkonadiResourceCreator::agentInstanceCreated(KJob* j)
     {
         qCCritical(KALARM_LOG) << "AkonadiResourceCreator::agentInstanceCreated: Failed to create new calendar resource:" << j->errorString();
         KMessageBox::error(nullptr, xi18nc("@info", "%1<nl/>(%2)", i18nc("@info", "Failed to create new calendar resource"), j->errorString()));
-        exitWithError();
+        Q_EMIT finished(this, false);
+        return;
     }
-    else
+
+    // Set the default alarm type for the resource config dialog
+    mAgentInstance = job->instance();
+    QString type = mAgentInstance.type().identifier();
+    qCDebug(KALARM_LOG) << "AkonadiResourceCreator::agentInstanceCreated:" << type;
+    if (type == QLatin1String("akonadi_kalarm_dir_resource"))
+        setResourceAlarmType<OrgKdeAkonadiKAlarmDirSettingsInterface>();
+    else if (type == QLatin1String("akonadi_kalarm_resource"))
+        setResourceAlarmType<OrgKdeAkonadiKAlarmSettingsInterface>();
+
+    QPointer<AgentConfigurationDialog> dlg = new AgentConfigurationDialog(mAgentInstance, mParent);
+    bool result = (dlg->exec() == QDialog::Accepted);
+    delete dlg;
+    if (!result)
     {
-        // Set the default alarm type for a directory resource config dialog
-        mAgentInstance = job->instance();
-        QString type = mAgentInstance.type().identifier();
-        if (type == QLatin1String("akonadi_kalarm_dir_resource"))
-            setResourceAlarmType<OrgKdeAkonadiKAlarmDirSettingsInterface>();
-        else if (type == QLatin1String("akonadi_kalarm_resource"))
-            setResourceAlarmType<OrgKdeAkonadiKAlarmSettingsInterface>();
-
-        // Display the resource config dialog, but first ensure we get
-        // notified of the user cancelling the operation.
-        org::freedesktop::Akonadi::Agent::Control* agentControlIface =
-                    new org::freedesktop::Akonadi::Agent::Control(QStringLiteral("org.freedesktop.Akonadi.Agent.") + mAgentInstance.identifier(),
-                                                                  QStringLiteral("/"), KDBusConnectionPool::threadConnection(), this);
-        bool controlOk = agentControlIface && agentControlIface->isValid();
-        if (!controlOk)
-        {
-            delete agentControlIface;
-            qCWarning(KALARM_LOG) << "AkonadiResourceCreator::agentInstanceCreated: Unable to access D-Bus interface of created agent.";
-        }
-        else
-        {
-            connect(agentControlIface, &org::freedesktop::Akonadi::Agent::Control::configurationDialogAccepted, this, &AkonadiResourceCreator::configurationDialogAccepted);
-            connect(agentControlIface, &org::freedesktop::Akonadi::Agent::Control::configurationDialogRejected, this, &AkonadiResourceCreator::exitWithError);
-        }
-
-        QPointer<AgentConfigurationDialog> dlg = new AgentConfigurationDialog(mAgentInstance, mParent);
-        dlg->exec();
-        delete dlg;
-
-        if (!controlOk)
-            Q_EMIT finished(this, true);  // don't actually know the result in this case
+        // User has clicked cancel in the resource configuration dialog,
+        // so remove the newly created agent instance.
+        AgentManager::self()->removeInstance(mAgentInstance);
     }
+    Q_EMIT finished(this, result);
 }
 
 /******************************************************************************
@@ -162,24 +148,6 @@ void AkonadiResourceCreator::setResourceAlarmType()
         iface.save();
         mAgentInstance.reconfigure();   // notify the agent that its configuration has changed
     }
-}
-
-/******************************************************************************
-* Called when the user has clicked OK in the resource configuration dialog.
-*/
-void AkonadiResourceCreator::configurationDialogAccepted()
-{
-    Q_EMIT finished(this, true);
-}
-
-/******************************************************************************
-* Called when the user has clicked cancel in the resource configuration dialog.
-* Remove the newly created agent instance.
-*/
-void AkonadiResourceCreator::exitWithError()
-{
-    AgentManager::self()->removeInstance(mAgentInstance);
-    Q_EMIT finished(this, false);
 }
 
 // vim: et sw=4:

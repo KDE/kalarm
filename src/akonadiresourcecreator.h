@@ -1,7 +1,7 @@
 /*
  *  akonadiresourcecreator.h  -  interactively create an Akonadi resource
  *  Program:  kalarm
- *  Copyright © 2011 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2011,2019 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -48,8 +48,6 @@ class AkonadiResourceCreator : public QObject
     private Q_SLOTS:
         void getAgentType();
         void agentInstanceCreated(KJob*);
-        void configurationDialogAccepted();
-        void exitWithError();
 
     private:
         template <class Settings> void setResourceAlarmType();

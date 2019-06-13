@@ -1,18 +1,21 @@
 KAlarm Change Log
 
+=== Version 2.12.4 (KDE Applications 19.04.3) --- 13 June 2019 ===
++ Fix calendar resource dialogue not configuring resource correctly [KDE Bug 407882]
+
 === Version 2.12.3 (KDE Applications 19.04.2) --- 23 May 2019 ===
 * Fix calendar configuration dialogue not appearing.
 * Fix errors creating calendar resources on first run of KAlarm [KDE Bug 407544]
 * Display alarm message windows within current screen in multi-head systems.
 
-=== Version 2.12.2 (KDE Applications 18.08.2) --- 27 Sep 2018 ===
+=== Version 2.12.2 (KDE Applications 18.08.2) --- 27 September 2018 ===
 * Fix Defer button being disabled for recurring alarms [KDE Bug 398658]
 
-=== Version 2.12.1 (KDE Applications 18.08.1) --- 18 Aug 2018 ===
+=== Version 2.12.1 (KDE Applications 18.08.1) --- 18 August 2018 ===
 * Align and right adjust 'Time to' column values in main window [KDE Bug 397130]
 * Remove seconds values from Time column (erroneously added in 2.12.0).
 
-=== Version 2.12.0 (KDE Applications 18.08) --- 29 Jul 2018 ===
+=== Version 2.12.0 (KDE Applications 18.08) --- 29 July 2018 ===
 * Use KAlarmCal::KADateTime instead of deprecated KDateTime.
 * Remove 'clock time' option, in favour of local system time zone.
 * Fix times being truncated and showing ellipsis in main window [KDE Bug 365257]
