@@ -1,7 +1,7 @@
 /*
  *  resourceselector.cpp  -  calendar resource selection widget
  *  Program:  kalarm
- *  Copyright © 2006-2019 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2006-2019 David Jarvie <djarvie@kde.org>
  *  Based on KOrganizer's ResourceView class and KAddressBook's ResourceSelection class,
  *  Copyright (C) 2003,2004 Cornelius Schumacher <schumacher@kde.org>
  *  Copyright (C) 2003-2004 Reinhold Kainhofer <reinhold@kainhofer.com>
@@ -118,7 +118,9 @@ ResourceSelector::ResourceSelector(QWidget* parent)
     connect(mDeleteButton, &QPushButton::clicked, this, &ResourceSelector::removeResource);
 
     connect(AkonadiModel::instance(), &AkonadiModel::collectionAdded,
-                                      this, &ResourceSelector::slotCollectionAdded);
+                                this, &ResourceSelector::slotCollectionAdded);
+    connect(AkonadiModel::instance(), &AkonadiModel::collectionDeleted,
+                                this, &ResourceSelector::selectionChanged);
 
     connect(mAlarmType, static_cast<void (QComboBox::*)(int)>(&QComboBox::activated), this, &ResourceSelector::alarmTypeSelected);
     QTimer::singleShot(0, this, SLOT(alarmTypeSelected()));

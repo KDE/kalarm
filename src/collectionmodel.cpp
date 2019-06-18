@@ -1,7 +1,7 @@
 /*
  *  collectionmodel.cpp  -  Akonadi collection models
  *  Program:  kalarm
- *  Copyright © 2007-2019 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2007-2019 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -438,10 +438,10 @@ void CollectionCheckListModel::collectionStatusChanged(const Collection& collect
     switch (change)
     {
         case AkonadiModel::Enabled:
-            qCDebug(KALARM_LOG) << "CollectionCheckListModel::collectionStatusChanged: Enabled" << collection.id();
+            qCDebug(KALARM_LOG) << debugType("collectionStatusChanged").constData() << "Enabled" << collection.id();
             break;
         case AkonadiModel::AlarmTypes:
-            qCDebug(KALARM_LOG) << "CollectionCheckListModel::collectionStatusChanged: AlarmTypes" << collection.id();
+            qCDebug(KALARM_LOG) << debugType("collectionStatusChanged").constData() << "AlarmTypes" << collection.id();
             break;
         default:
             return;
@@ -462,6 +462,22 @@ void CollectionCheckListModel::setSelectionStatus(const Collection& collection, 
                                                      &&  collection.attribute<CollectionAttribute>()->isEnabled(mAlarmType))
                                                   ? QItemSelectionModel::Select : QItemSelectionModel::Deselect;
     mSelectionModel->select(sourceIndex, sel);
+}
+
+/******************************************************************************
+* Return the instance's alarm type, as a string.
+*/
+QByteArray CollectionCheckListModel::debugType(const char* func) const
+{
+    const char* type;
+    switch (mAlarmType)
+    {
+        case CalEvent::ACTIVE:    type = "CollectionCheckListModel[Act]::";  break;
+        case CalEvent::ARCHIVED:  type = "CollectionCheckListModel[Arch]::";  break;
+        case CalEvent::TEMPLATE:  type = "CollectionCheckListModel[Tmpl]::";  break;
+        default:                  type = "CollectionCheckListModel::";  break;
+    }
+    return QByteArray(type) + func + ":";
 }
 
 

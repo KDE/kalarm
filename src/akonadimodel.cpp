@@ -1,7 +1,7 @@
 /*
  *  akonadimodel.cpp  -  KAlarm calendar file access using Akonadi
  *  Program:  kalarm
- *  Copyright © 2007-2014,2018 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2007-2019 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -30,7 +30,6 @@
 #include "kalarmdirsettings.h"
 
 #include <kalarmcal/alarmtext.h>
-#include <kalarmcal/collectionattribute.h>
 #include <kalarmcal/compatibilityattribute.h>
 #include <kalarmcal/eventattribute.h>
 
@@ -167,14 +166,14 @@ void AkonadiModel::checkResources(ServerManager::State state)
         case ServerManager::Running:
             if (!mResourcesChecked)
             {
-                qCDebug(KALARM_LOG) << "Server running";
+                qCDebug(KALARM_LOG) << "AkonadiModel::checkResources: Server running";
                 mResourcesChecked = true;
                 mMigrating = true;
                 CalendarMigrator::execute();
             }
             break;
         case ServerManager::NotRunning:
-            qCDebug(KALARM_LOG) << "Server stopped";
+            qCDebug(KALARM_LOG) << "AkonadiModel::checkResources: Server stopped";
             mResourcesChecked = false;
             mMigrating = false;
             mCollectionAlarmTypes.clear();
@@ -251,9 +250,11 @@ QVariant AkonadiModel::data(const QModelIndex& index, int role) const
             case Qt::DisplayRole:
                 return collection.displayName();
             case EnabledTypesRole:
-                if (!collection.hasAttribute<CollectionAttribute>())
-                    return 0;
-                return static_cast<int>(collection.attribute<CollectionAttribute>()->enabled());
+                if (mCollectionAttributes.contains(collection.id()))
+                    return static_cast<int>(mCollectionAttributes.value(collection.id()).enabled());
+                if (collection.hasAttribute<CollectionAttribute>())
+                    return static_cast<int>(collection.attribute<CollectionAttribute>()->enabled());
+                return 0;
             case BaseColourRole:
                 role = Qt::BackgroundRole;
                 break;
@@ -271,14 +272,20 @@ QVariant AkonadiModel::data(const QModelIndex& index, int role) const
             case AlarmTypeRole:
                 return static_cast<int>(types(collection));
             case IsStandardRole:
-                if (!collection.hasAttribute<CollectionAttribute>()
-                ||  !isCompatible(collection))
-                    return 0;
-                return static_cast<int>(collection.attribute<CollectionAttribute>()->standard());
+                if (isCompatible(collection))
+                {
+                    if (mCollectionAttributes.contains(collection.id()))
+                        return static_cast<int>(mCollectionAttributes.value(collection.id()).standard());
+                    if (collection.hasAttribute<CollectionAttribute>())
+                        return static_cast<int>(collection.attribute<CollectionAttribute>()->standard());
+                }
+                return 0;
             case KeepFormatRole:
-                if (!collection.hasAttribute<CollectionAttribute>())
-                    return false;
-                return collection.attribute<CollectionAttribute>()->keepFormat();
+                if (mCollectionAttributes.contains(collection.id()))
+                    return mCollectionAttributes.value(collection.id()).keepFormat();
+                if (collection.hasAttribute<CollectionAttribute>())
+                    return collection.attribute<CollectionAttribute>()->keepFormat();
+                return false;
             default:
                 break;
         }
@@ -548,29 +555,36 @@ bool AkonadiModel::setData(const QModelIndex& index, const QVariant& value, int 
     if (collection.isValid())
     {
         // This is a Collection row
-        bool updateCollection = false;
-        CollectionAttribute* attr = nullptr;
+        bool updateCollectionAttr = false;
+        CollectionAttribute attr;
         switch (role)
         {
             case Qt::BackgroundRole:
             {
                 const QColor colour = value.value<QColor>();
-                attr = collection.attribute<CollectionAttribute>(Collection::AddIfMissing);
-                if (attr->backgroundColor() == colour)
+                attr = mCollectionAttributes.value(collection.id());
+                if (attr.backgroundColor() == colour)
                     return true;   // no change
-                attr->setBackgroundColor(colour);
-                updateCollection = true;
+                attr.setBackgroundColor(colour);
+                updateCollectionAttr = true;
                 break;
             }
             case EnabledTypesRole:
             {
                 const CalEvent::Types types = static_cast<CalEvent::Types>(value.toInt());
-                attr = collection.attribute<CollectionAttribute>(Collection::AddIfMissing);
-                if (attr->enabled() == types)
+                bool newAttr = !collection.hasAttribute<CollectionAttribute>();
+                attr = mCollectionAttributes.value(collection.id());
+                if (attr.enabled() == types)
                     return true;   // no change
-                qCDebug(KALARM_LOG) << "Set enabled:" << types << ", was=" << attr->enabled();
-                attr->setEnabled(types);
-                updateCollection = true;
+                qCDebug(KALARM_LOG) << "AkonadiModel:" << collection.id() << "Set enabled:" << types << " was=" << attr.enabled();
+                attr.setEnabled(types);
+                updateCollectionAttr = true;
+                if (newAttr)
+                {
+                    // Akonadi often doesn't notify changes to the enabled status
+                    // (surely a bug?), so ensure that the change is noticed.
+                    mNewCollectionEnabled[collection.id()] = types;
+                }
                 break;
             }
             case IsStandardRole:
@@ -578,37 +592,38 @@ bool AkonadiModel::setData(const QModelIndex& index, const QVariant& value, int 
                 &&  isCompatible(collection))
                 {
                     const CalEvent::Types types = static_cast<CalEvent::Types>(value.toInt());
-                    attr = collection.attribute<CollectionAttribute>(Collection::AddIfMissing);
-                    qCDebug(KALARM_LOG)<<"Set standard:"<<types<<", was="<<attr->standard();
-                    attr->setStandard(types);
-                    updateCollection = true;
+                    attr = mCollectionAttributes.value(collection.id());
+                    qCDebug(KALARM_LOG) << "AkonadiModel:" << collection.id() << "Set standard:" << types << " was=" << attr.standard();
+                    attr.setStandard(types);
+                    updateCollectionAttr = true;
                 }
                 break;
             case KeepFormatRole:
             {
                 const bool keepFormat = value.toBool();
-                attr = collection.attribute<CollectionAttribute>(Collection::AddIfMissing);
-                if (attr->keepFormat() == keepFormat)
+                attr = mCollectionAttributes.value(collection.id());
+                if (attr.keepFormat() == keepFormat)
                     return true;   // no change
-                attr->setKeepFormat(keepFormat);
-                updateCollection = true;
+                attr.setKeepFormat(keepFormat);
+                updateCollectionAttr = true;
                 break;
             }
             default:
                 break;
         }
-        if (updateCollection)
+        if (updateCollectionAttr)
         {
             // Update the CollectionAttribute value.
             // Note that we can't supply 'collection' to CollectionModifyJob since
             // that also contains the CompatibilityAttribute value, which is read-only
             // for applications. So create a new Collection instance and only set a
             // value for CollectionAttribute.
+            mCollectionAttributes[collection.id()] = attr;
             Collection c(collection.id());
             CollectionAttribute* att = c.attribute<CollectionAttribute>(Collection::AddIfMissing);
-            *att = *attr;
+            *att = attr;
             CollectionModifyJob* job = new CollectionModifyJob(c, this);
-            connect(job, &CollectionModifyJob::result, this, &AkonadiModel::modifyCollectionJobDone);
+            connect(job, &CollectionModifyJob::result, this, &AkonadiModel::modifyCollectionAttrJobDone);
             return true;
         }
     }
@@ -905,9 +920,14 @@ QColor AkonadiModel::backgroundColor(Akonadi::Collection& collection) const
 */
 QColor AkonadiModel::backgroundColor_p(const Akonadi::Collection& collection) const
 {
-    if (!collection.isValid()  ||  !collection.hasAttribute<CollectionAttribute>())
-        return QColor();
-    return collection.attribute<CollectionAttribute>()->backgroundColor();
+    if (collection.isValid())
+    {
+        if (mCollectionAttributes.contains(collection.id()))
+            return mCollectionAttributes.value(collection.id()).backgroundColor();
+        if (collection.hasAttribute<CollectionAttribute>())
+            return collection.attribute<CollectionAttribute>()->backgroundColor();
+    }
+    return QColor();
 }
 
 /******************************************************************************
@@ -1125,7 +1145,7 @@ bool AkonadiModel::isCollectionBeingDeleted(Collection::Id id) const
 */
 void AkonadiModel::deleteCollectionJobDone(KJob* j)
 {
-    QMap<KJob*, CollJobData>::iterator it = mPendingCollectionJobs.find(j);
+    QHash<KJob*, CollJobData>::iterator it = mPendingCollectionJobs.find(j);
     CollJobData jobData;
     if (it != mPendingCollectionJobs.end())
     {
@@ -1136,7 +1156,7 @@ void AkonadiModel::deleteCollectionJobDone(KJob* j)
     {
         Q_EMIT collectionDeleted(jobData.id, false);
         const QString errMsg = xi18nc("@info", "Failed to remove calendar <resource>%1</resource>.", jobData.displayName);
-        qCCritical(KALARM_LOG) << errMsg << ":" << j->errorString();
+        qCCritical(KALARM_LOG) << "AkonadiModel::deleteCollectionJobDone:" << errMsg << ":" << j->errorString();
         KAMessageBox::error(MainWindow::mainMainWindow(), xi18nc("@info", "%1<nl/>(%2)", errMsg, j->errorString()));
     }
     else
@@ -1172,27 +1192,32 @@ void AkonadiModel::reload()
 }
 
 /******************************************************************************
-* Called when a collection modification job has completed.
+* Called when a CollectionAttribute modification job has completed.
 * Checks for any error.
 */
-void AkonadiModel::modifyCollectionJobDone(KJob* j)
+void AkonadiModel::modifyCollectionAttrJobDone(KJob* j)
 {
     Collection collection = static_cast<CollectionModifyJob*>(j)->collection();
     const Collection::Id id = collection.id();
+    bool newEnable  = mNewCollectionEnabled.contains(id);
+    bool newEnabled = mNewCollectionEnabled.value(id, false);
+    mNewCollectionEnabled.remove(id);
     if (j->error())
     {
-        Q_EMIT collectionModified(id, false);
         if (mCollectionsDeleted.contains(id))
             mCollectionsDeleted.removeAll(id);
         else
         {
             const QString errMsg = i18nc("@info", "Failed to update calendar \"%1\".", displayName(collection));
-            qCCritical(KALARM_LOG) << "Id:" << collection.id() << errMsg << ":" << j->errorString();
+            qCCritical(KALARM_LOG) << "AkonadiModel::modifyCollectionAttrJobDone:" << collection.id() << errMsg << ":" << j->errorString();
             KAMessageBox::error(MainWindow::mainMainWindow(), i18nc("@info", "%1\n(%2)", errMsg, j->errorString()));
         }
     }
     else
-        Q_EMIT collectionModified(id, true);
+    {
+        if (newEnable)
+            Q_EMIT collectionStatusChanged(collection, Enabled, newEnabled, false);
+    }
 }
 
 /******************************************************************************
@@ -1447,7 +1472,7 @@ bool AkonadiModel::deleteEvent(Akonadi::Item::Id itemId)
 void AkonadiModel::queueItemModifyJob(const Item& item)
 {
     qCDebug(KALARM_LOG) << "AkonadiModel::queueItemModifyJob:" << item.id();
-    QMap<Item::Id, Item>::Iterator it = mItemModifyJobQueue.find(item.id());
+    QHash<Item::Id, Item>::Iterator it = mItemModifyJobQueue.find(item.id());
     if (it != mItemModifyJobQueue.end())
     {
         // A job is already queued for this item. Replace the queued item value with the new one.
@@ -1488,7 +1513,7 @@ void AkonadiModel::queueItemModifyJob(const Item& item)
 */
 void AkonadiModel::itemJobDone(KJob* j)
 {
-    const QMap<KJob*, Item::Id>::iterator it = mPendingItemJobs.find(j);
+    const QHash<KJob*, Item::Id>::iterator it = mPendingItemJobs.find(j);
     Item::Id itemId = -1;
     if (it != mPendingItemJobs.end())
     {
@@ -1508,7 +1533,7 @@ void AkonadiModel::itemJobDone(KJob* j)
             errMsg = i18nc("@info", "Failed to delete alarm.");
         else
             Q_ASSERT(0);
-        qCCritical(KALARM_LOG) << errMsg << itemId << ":" << j->errorString();
+        qCCritical(KALARM_LOG) << "AkonadiModel::itemJobDone:" << errMsg << itemId << ":" << j->errorString();
         Q_EMIT itemDone(itemId, false);
 
         if (itemId >= 0  &&  jobClass == "Akonadi::ItemModifyJob")
@@ -1536,7 +1561,7 @@ void AkonadiModel::itemJobDone(KJob* j)
 
 /*    if (itemId >= 0  &&  jobClass == "Akonadi::ItemModifyJob")
     {
-        const QMap<Item::Id, Item>::iterator it = mItemModifyJobQueue.find(itemId);
+        const QHash<Item::Id, Item>::iterator it = mItemModifyJobQueue.find(itemId);
         if (it != mItemModifyJobQueue.end())
         {
             if (!it.value().isValid())
@@ -1562,7 +1587,7 @@ void AkonadiModel::checkQueuedItemModifyJob(const Item& item)
 {qCDebug(KALARM_LOG)<<"Still being created";
         return;    // the item hasn't been fully initialised yet
 }
-    const QMap<Item::Id, Item>::iterator it = mItemModifyJobQueue.find(item.id());
+    const QHash<Item::Id, Item>::iterator it = mItemModifyJobQueue.find(item.id());
     if (it == mItemModifyJobQueue.end())
 {qCDebug(KALARM_LOG)<<"No jobs queued";
         return;    // there are no jobs queued for the item
@@ -1607,6 +1632,8 @@ void AkonadiModel::slotRowsInserted(const QModelIndex& parent, int start, int en
             {
                 QSet<QByteArray> attrs;
                 attrs += CollectionAttribute::name();
+                if (collection.hasAttribute<CollectionAttribute>())
+                    mCollectionAttributes[collection.id()] = *collection.attribute<CollectionAttribute>();
                 setCollectionChanged(collection, attrs, true);
                 Q_EMIT collectionAdded(collection);
 
@@ -1668,6 +1695,15 @@ AkonadiModel::EventList AkonadiModel::eventList(const QModelIndex& parent, int s
 }
 
 /******************************************************************************
+* Called when a monitored collection has changed.
+*/
+void AkonadiModel::slotCollectionChanged(const Akonadi::Collection& c, const QSet<QByteArray>& attrNames)
+{
+    qCDebug(KALARM_LOG) << "AkonadiModel::slotCollectionChanged:" << c.id() << attrNames;
+    setCollectionChanged(c, attrNames, false);
+}
+
+/******************************************************************************
 * Called when a monitored collection's properties or content have changed.
 * Optionally emits a signal if properties of interest have changed.
 */
@@ -1695,11 +1731,13 @@ void AkonadiModel::setCollectionChanged(const Collection& collection, const QSet
     }
 
     // Check for the collection being enabled/disabled
-    if (attributeNames.contains(CollectionAttribute::name()))
+    if (attributeNames.contains(CollectionAttribute::name())  &&  collection.hasAttribute<CollectionAttribute>())
     {
+        // Enabled/disabled can only be set by KAlarm (not the resource), so if the
+        // attibute doesn't exist, it is ignored.
         static bool firstEnabled = true;
         const CalEvent::Types oldEnabled = mCollectionEnabled.value(collection.id(), CalEvent::EMPTY);
-        const CalEvent::Types newEnabled = collection.hasAttribute<CollectionAttribute>() ? collection.attribute<CollectionAttribute>()->enabled() : CalEvent::EMPTY;
+        const CalEvent::Types newEnabled = collection.attribute<CollectionAttribute>()->enabled();
         if (firstEnabled  ||  newEnabled != oldEnabled)
         {
             qCDebug(KALARM_LOG) << "AkonadiModel::setCollectionChanged:" << collection.id() << ": enabled ->" << newEnabled;
@@ -1744,6 +1782,7 @@ void AkonadiModel::slotCollectionRemoved(const Collection& collection)
     while (mCollectionsDeleted.count() > 20)   // don't let list grow indefinitely
         mCollectionsDeleted.removeFirst();
     mCollectionsDeleted << id;
+    Q_EMIT collectionDeleted(id);
 }
 
 /******************************************************************************
@@ -1767,7 +1806,7 @@ void AkonadiModel::slotMigrationCompleted()
 {
     if (mCollectionsBeingCreated.isEmpty() && mCollectionIdsBeingCreated.isEmpty())
     {
-        qCDebug(KALARM_LOG) << "Migration completed";
+        qCDebug(KALARM_LOG) << "AkonadiModel: Migration completed";
         mMigrating = false;
         Q_EMIT migrationCompleted();
     }

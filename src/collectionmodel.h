@@ -1,7 +1,7 @@
 /*
  *  collectionmodel.h  -  Akonadi collection models
  *  Program:  kalarm
- *  Copyright © 2010-2019 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2010-2019 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -95,6 +95,7 @@ class CollectionCheckListModel : public KCheckableProxyModel
 
     private:
         void setSelectionStatus(const Akonadi::Collection&, const QModelIndex&);
+        QByteArray debugType(const char* func) const;
 
         static CollectionListModel* mModel;
         static int             mInstanceCount;
