@@ -1,7 +1,7 @@
 /*
  *  akonadimodel.h  -  KAlarm calendar file access using Akonadi
  *  Program:  kalarm
- *  Copyright © 2010-2014,2018 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2010-2019 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -25,6 +25,7 @@
 
 #include <kalarmcal/kacalendar.h>
 #include <kalarmcal/kaevent.h>
+#include <kalarmcal/collectionattribute.h>
 
 #include <AkonadiCore/entitytreemodel.h>
 #include <AkonadiCore/servermanager.h>
@@ -229,12 +230,6 @@ class AkonadiModel : public Akonadi::EntityTreeModel
         /** Signal emitted when an event in the model has changed. */
         void eventChanged(const AkonadiModel::Event&);
 
-        /** Signal emitted when Akonadi has completed a collection modification.
-         *  @param id      Akonadi ID for the collection
-         *  @param status  true if successful, false if error
-         */
-        void collectionModified(Akonadi::Collection::Id id, bool status = true);
-
         /** Signal emitted when Akonadi has completed a collection deletion.
          *  @param id      Akonadi ID for the collection
          *  @param status  true if successful, false if error
@@ -261,8 +256,7 @@ class AkonadiModel : public Akonadi::EntityTreeModel
     private Q_SLOTS:
         void checkResources(Akonadi::ServerManager::State);
         void slotMigrationCompleted();
-        void slotCollectionChanged(const Akonadi::Collection& c, const QSet<QByteArray>& attrNames)
-                       { setCollectionChanged(c, attrNames, false); }
+        void slotCollectionChanged(const Akonadi::Collection& c, const QSet<QByteArray>& attrNames);
         void slotCollectionRemoved(const Akonadi::Collection&);
         void slotCollectionBeingCreated(const QString& path, Akonadi::Collection::Id, bool finished);
         void slotUpdateTimeTo();
@@ -274,7 +268,7 @@ class AkonadiModel : public Akonadi::EntityTreeModel
         void slotRowsAboutToBeRemoved(const QModelIndex& parent, int start, int end);
         void slotMonitoredItemChanged(const Akonadi::Item&, const QSet<QByteArray>&);
         void slotEmitEventChanged();
-        void modifyCollectionJobDone(KJob*);
+        void modifyCollectionAttrJobDone(KJob*);
         void itemJobDone(KJob*);
 
     private:
@@ -330,6 +324,8 @@ class AkonadiModel : public Akonadi::EntityTreeModel
         QMap<Akonadi::Collection::Id, CalEvent::Types> mCollectionAlarmTypes;  // last content mime types of each collection
         QMap<Akonadi::Collection::Id, Akonadi::Collection::Rights> mCollectionRights;  // last writable status of each collection
         QMap<Akonadi::Collection::Id, CalEvent::Types> mCollectionEnabled;  // last enabled mime types of each collection
+        QMap<Akonadi::Collection::Id, CollectionAttribute> mCollectionAttributes;  // current set value of CollectionAttribute of each collection
+        QMap<Akonadi::Collection::Id, bool> mNewCollectionEnabled;  // enabled statuses of new collections
         QMap<KJob*, CollJobData> mPendingCollectionJobs;  // pending collection creation/deletion jobs, with collection ID & name
         QMap<KJob*, CollTypeData> mPendingColCreateJobs;  // default alarm type for pending collection creation jobs
         QMap<KJob*, Akonadi::Item::Id> mPendingItemJobs;  // pending item creation/deletion jobs, with event ID

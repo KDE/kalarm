@@ -438,10 +438,10 @@ void CollectionCheckListModel::collectionStatusChanged(const Collection& collect
     switch (change)
     {
         case AkonadiModel::Enabled:
-            qCDebug(KALARM_LOG) << "CollectionCheckListModel::collectionStatusChanged: Enabled" << collection.id();
+            qCDebug(KALARM_LOG) << (void*)this << "CollectionCheckListModel::collectionStatusChanged: Enabled" << collection.id();
             break;
         case AkonadiModel::AlarmTypes:
-            qCDebug(KALARM_LOG) << "CollectionCheckListModel::collectionStatusChanged: AlarmTypes" << collection.id();
+            qCDebug(KALARM_LOG) << (void*)this << "CollectionCheckListModel::collectionStatusChanged: AlarmTypes" << collection.id();
             break;
         default:
             return;
