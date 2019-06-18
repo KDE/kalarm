@@ -1781,6 +1781,7 @@ void AkonadiModel::slotCollectionRemoved(const Collection& collection)
     while (mCollectionsDeleted.count() > 20)   // don't let list grow indefinitely
         mCollectionsDeleted.removeFirst();
     mCollectionsDeleted << id;
+    Q_EMIT collectionDeleted(id);
 }
 
 /******************************************************************************

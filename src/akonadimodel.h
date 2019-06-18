@@ -232,9 +232,8 @@ class AkonadiModel : public Akonadi::EntityTreeModel
 
         /** Signal emitted when Akonadi has completed a collection deletion.
          *  @param id      Akonadi ID for the collection
-         *  @param status  true if successful, false if error
          */
-        void collectionDeleted(Akonadi::Collection::Id id, bool status = true);
+        void collectionDeleted(Akonadi::Collection::Id id);
 
         /** Signal emitted when Akonadi has completed an item creation, update
          *  or deletion.
