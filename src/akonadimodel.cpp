@@ -1144,7 +1144,7 @@ bool AkonadiModel::isCollectionBeingDeleted(Collection::Id id) const
 */
 void AkonadiModel::deleteCollectionJobDone(KJob* j)
 {
-    QMap<KJob*, CollJobData>::iterator it = mPendingCollectionJobs.find(j);
+    QHash<KJob*, CollJobData>::iterator it = mPendingCollectionJobs.find(j);
     CollJobData jobData;
     if (it != mPendingCollectionJobs.end())
     {
@@ -1471,7 +1471,7 @@ bool AkonadiModel::deleteEvent(Akonadi::Item::Id itemId)
 void AkonadiModel::queueItemModifyJob(const Item& item)
 {
     qCDebug(KALARM_LOG) << "AkonadiModel::queueItemModifyJob:" << item.id();
-    QMap<Item::Id, Item>::Iterator it = mItemModifyJobQueue.find(item.id());
+    QHash<Item::Id, Item>::Iterator it = mItemModifyJobQueue.find(item.id());
     if (it != mItemModifyJobQueue.end())
     {
         // A job is already queued for this item. Replace the queued item value with the new one.
@@ -1512,7 +1512,7 @@ void AkonadiModel::queueItemModifyJob(const Item& item)
 */
 void AkonadiModel::itemJobDone(KJob* j)
 {
-    const QMap<KJob*, Item::Id>::iterator it = mPendingItemJobs.find(j);
+    const QHash<KJob*, Item::Id>::iterator it = mPendingItemJobs.find(j);
     Item::Id itemId = -1;
     if (it != mPendingItemJobs.end())
     {
@@ -1560,7 +1560,7 @@ void AkonadiModel::itemJobDone(KJob* j)
 
 /*    if (itemId >= 0  &&  jobClass == "Akonadi::ItemModifyJob")
     {
-        const QMap<Item::Id, Item>::iterator it = mItemModifyJobQueue.find(itemId);
+        const QHash<Item::Id, Item>::iterator it = mItemModifyJobQueue.find(itemId);
         if (it != mItemModifyJobQueue.end())
         {
             if (!it.value().isValid())
@@ -1586,7 +1586,7 @@ void AkonadiModel::checkQueuedItemModifyJob(const Item& item)
 {qCDebug(KALARM_LOG)<<"Still being created";
         return;    // the item hasn't been fully initialised yet
 }
-    const QMap<Item::Id, Item>::iterator it = mItemModifyJobQueue.find(item.id());
+    const QHash<Item::Id, Item>::iterator it = mItemModifyJobQueue.find(item.id());
     if (it == mItemModifyJobQueue.end())
 {qCDebug(KALARM_LOG)<<"No jobs queued";
         return;    // there are no jobs queued for the item

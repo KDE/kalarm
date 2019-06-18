@@ -32,7 +32,7 @@
 
 #include <QSize>
 #include <QColor>
-#include <QMap>
+#include <QHash>
 #include <QQueue>
 
 namespace Akonadi
@@ -321,15 +321,15 @@ class AkonadiModel : public Akonadi::EntityTreeModel
         static int      mTimeHourPos;   // position of hour within time string, or -1 if leading zeroes included
 
         Akonadi::ChangeRecorder* mMonitor;
-        QMap<Akonadi::Collection::Id, CalEvent::Types> mCollectionAlarmTypes;  // last content mime types of each collection
-        QMap<Akonadi::Collection::Id, Akonadi::Collection::Rights> mCollectionRights;  // last writable status of each collection
-        QMap<Akonadi::Collection::Id, CalEvent::Types> mCollectionEnabled;  // last enabled mime types of each collection
-        QMap<Akonadi::Collection::Id, CollectionAttribute> mCollectionAttributes;  // current set value of CollectionAttribute of each collection
-        QMap<Akonadi::Collection::Id, bool> mNewCollectionEnabled;  // enabled statuses of new collections
-        QMap<KJob*, CollJobData> mPendingCollectionJobs;  // pending collection creation/deletion jobs, with collection ID & name
-        QMap<KJob*, CollTypeData> mPendingColCreateJobs;  // default alarm type for pending collection creation jobs
-        QMap<KJob*, Akonadi::Item::Id> mPendingItemJobs;  // pending item creation/deletion jobs, with event ID
-        QMap<Akonadi::Item::Id, Akonadi::Item> mItemModifyJobQueue;  // pending item modification jobs, invalid item = queue empty but job active
+        QHash<Akonadi::Collection::Id, CalEvent::Types> mCollectionAlarmTypes;  // last content mime types of each collection
+        QHash<Akonadi::Collection::Id, Akonadi::Collection::Rights> mCollectionRights;  // last writable status of each collection
+        QHash<Akonadi::Collection::Id, CalEvent::Types> mCollectionEnabled;  // last enabled mime types of each collection
+        QHash<Akonadi::Collection::Id, CollectionAttribute> mCollectionAttributes;  // current set value of CollectionAttribute of each collection
+        QHash<Akonadi::Collection::Id, bool> mNewCollectionEnabled;  // enabled statuses of new collections
+        QHash<KJob*, CollJobData> mPendingCollectionJobs;  // pending collection creation/deletion jobs, with collection ID & name
+        QHash<KJob*, CollTypeData> mPendingColCreateJobs;  // default alarm type for pending collection creation jobs
+        QHash<KJob*, Akonadi::Item::Id> mPendingItemJobs;  // pending item creation/deletion jobs, with event ID
+        QHash<Akonadi::Item::Id, Akonadi::Item> mItemModifyJobQueue;  // pending item modification jobs, invalid item = queue empty but job active
         QList<QString>     mCollectionsBeingCreated;  // path names of new collections being created by migrator
         QList<Akonadi::Collection::Id> mCollectionIdsBeingCreated;  // ids of new collections being created by migrator
         QList<Akonadi::Item::Id> mItemsBeingCreated;  // new items not fully initialised yet
