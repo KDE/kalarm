@@ -61,7 +61,6 @@
 #include <QFile>
 #include <QTextStream>
 #include <QTemporaryFile>
-#include <QtDBus>
 #include <QStandardPaths>
 #include <QSystemTrayIcon>
 #include <QCommandLineParser>

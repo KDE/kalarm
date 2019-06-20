@@ -50,7 +50,6 @@
 #include <QTimer>
 #include <QResizeEvent>
 #include <QApplication>
-#include <QInputDialog>
 #include <QColorDialog>
 #include <QComboBox>
 #include <QMenu>

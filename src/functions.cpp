@@ -85,7 +85,6 @@ using namespace KCalCore;
 #include <QTimer>
 #include <qglobal.h>
 #include <QStandardPaths>
-#include <QTimeZone>
 #include "kalarm_debug.h"
 
 #if KDEPIM_HAVE_X11

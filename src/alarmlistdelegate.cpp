@@ -28,7 +28,6 @@
 
 #include <kcolorscheme.h>
 
-#include <QApplication>
 #include <QPainter>
 #include "kalarm_debug.h"
 

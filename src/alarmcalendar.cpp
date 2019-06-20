@@ -41,7 +41,6 @@
 
 #include <QTemporaryFile>
 #include <QStandardPaths>
-#include <QTimeZone>
 #include <QFileDialog>
 #include "kalarm_debug.h"
 
