@@ -5,7 +5,7 @@ set(KALARM_VERSION "2.12.4")
 
 project(kalarm VERSION ${KALARM_VERSION})
 
-set(KF5_MIN_VERSION "5.58.0")
+set(KF5_MIN_VERSION "5.59.0")
 
 find_package(ECM ${KF5_MIN_VERSION} CONFIG REQUIRED)
 set(CMAKE_MODULE_PATH ${kalarm_SOURCE_DIR}/cmake/modules ${ECM_MODULE_PATH})
@@ -121,11 +121,7 @@ add_definitions(-DQT_MESSAGELOGCONTEXT)
 
 add_subdirectory(src)
 
-if (${ECM_VERSION} STRGREATER "5.58.0")
-    install(FILES kalarm.renamecategories kalarm.categories  DESTINATION  ${KDE_INSTALL_LOGGINGCATEGORIESDIR})
-else()
-    install(FILES kalarm.renamecategories kalarm.categories  DESTINATION ${KDE_INSTALL_CONFDIR})
-endif()
+install(FILES kalarm.renamecategories kalarm.categories  DESTINATION  ${KDE_INSTALL_LOGGINGCATEGORIESDIR})
 
 add_subdirectory(doc)
 feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)
