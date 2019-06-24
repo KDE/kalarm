@@ -44,9 +44,6 @@
   </Menu>
   <Menu name="view" >
    <text>&amp;View</text>
-   <Action name="showAlarmTimes" />
-   <Action name="showTimeToAlarms" />
-   <Separator/>
    <Action name="showArchivedAlarms" />
    <Action name="showInSystemTray" />
    <Action name="showResources" />
