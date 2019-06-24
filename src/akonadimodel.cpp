@@ -711,7 +711,7 @@ QVariant AkonadiModel::entityHeaderData(int section, Qt::Orientation orientation
             case ItemListHeaders:
                 if (section < 0  ||  section >= ColumnCount)
                     return QVariant();
-                if (role == Qt::DisplayRole)
+                if (role == Qt::DisplayRole  ||  role == ColumnTitleRole)
                 {
                     switch (section)
                     {
@@ -722,9 +722,9 @@ QVariant AkonadiModel::entityHeaderData(int section, Qt::Orientation orientation
                         case RepeatColumn:
                             return i18nc("@title:column", "Repeat");
                         case ColourColumn:
-                            return QString();
+                            return (role == Qt::DisplayRole) ? QString() : i18nc("@title:column", "Color");
                         case TypeColumn:
-                            return QString();
+                            return (role == Qt::DisplayRole) ? QString() : i18nc("@title:column", "Type");
                         case TextColumn:
                             return i18nc("@title:column", "Message, File or Command");
                         case TemplateNameColumn:

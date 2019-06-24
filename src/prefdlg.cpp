@@ -1,7 +1,7 @@
 /*
  *  prefdlg.cpp  -  program preferences dialog
  *  Program:  kalarm
- *  Copyright © 2001-2018 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2019 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -1718,13 +1718,13 @@ ViewPrefTab::ViewPrefTab(StackedScrollGroup* scrollGroup)
                "Check to enter an upper limit on the number to be displayed."));
     grid->addWidget(widget, 1, 1, 1, 2, Qt::AlignLeft);
 
-    mTooltipShowTime = new QCheckBox(MainWindow::i18n_chk_ShowAlarmTime(), group);
+    mTooltipShowTime = new QCheckBox(i18nc("@option:check", "Show alarm time"), group);
     mTooltipShowTime->setMinimumSize(mTooltipShowTime->sizeHint());
     connect(mTooltipShowTime, &QAbstractButton::toggled, this, &ViewPrefTab::slotTooltipTimeToggled);
     mTooltipShowTime->setWhatsThis(i18nc("@info:whatsthis", "Specify whether to show in the system tray tooltip, the time at which each alarm is due."));
     grid->addWidget(mTooltipShowTime, 2, 1, 1, 2, Qt::AlignLeft);
 
-    mTooltipShowTimeTo = new QCheckBox(MainWindow::i18n_chk_ShowTimeToAlarm(), group);
+    mTooltipShowTimeTo = new QCheckBox(i18nc("@option:check", "Show time until alarm"), group);
     mTooltipShowTimeTo->setMinimumSize(mTooltipShowTimeTo->sizeHint());
     connect(mTooltipShowTimeTo, &QAbstractButton::toggled, this, &ViewPrefTab::slotTooltipTimeToToggled);
     mTooltipShowTimeTo->setWhatsThis(i18nc("@info:whatsthis", "Specify whether to show in the system tray tooltip, how long until each alarm is due."));

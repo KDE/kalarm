@@ -1,7 +1,7 @@
 /*
  *  alarmlistview.cpp  -  widget showing list of alarms
  *  Program:  kalarm
- *  Copyright © 2007,2008,2010 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2007,2008,2010,2019 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -25,6 +25,8 @@
 #include <kconfiggroup.h>
 
 #include <QHeaderView>
+#include <QMenu>
+#include <QAction>
 #include <QApplication>
 
 
@@ -55,6 +57,31 @@ void AlarmListView::setModel(QAbstractItemModel* model)
     const int margin = QApplication::style()->pixelMetric(QStyle::PM_FocusFrameHMargin);
     header()->resizeSection(AlarmListModel::ColourColumn, viewOptions().fontMetrics.lineSpacing() * 3 / 4);
     header()->resizeSection(AlarmListModel::TypeColumn, AlarmListModel::iconWidth() + 2*margin + 2);
+    header()->setContextMenuPolicy(Qt::CustomContextMenu);
+    connect(header(), &QWidget::customContextMenuRequested, this, &AlarmListView::headerContextMenuRequested);
+}
+
+QList<bool> AlarmListView::columnsVisible() const
+{
+    if (!model())
+        return {};
+    return { !header()->isSectionHidden(AlarmListModel::TimeColumn),
+             !header()->isSectionHidden(AlarmListModel::TimeToColumn),
+             !header()->isSectionHidden(AlarmListModel::RepeatColumn),
+             !header()->isSectionHidden(AlarmListModel::ColourColumn),
+             !header()->isSectionHidden(AlarmListModel::TypeColumn) };
+}
+
+void AlarmListView::setColumnsVisible(const QList<bool>& show)
+{
+    if (!model()  ||  show.size() < 5)
+        return;
+    header()->setSectionHidden(AlarmListModel::TimeColumn,   !show[0]);
+    header()->setSectionHidden(AlarmListModel::TimeToColumn, !show[1]);
+    header()->setSectionHidden(AlarmListModel::RepeatColumn, !show[2]);
+    header()->setSectionHidden(AlarmListModel::ColourColumn, !show[3]);
+    header()->setSectionHidden(AlarmListModel::TypeColumn,   !show[4]);
+    sortByColumn(show[0] ? AlarmListModel::TimeColumn : AlarmListModel::TimeToColumn, Qt::AscendingOrder);
 }
 
 /******************************************************************************
@@ -69,55 +96,82 @@ void AlarmListView::sectionMoved()
 }
 
 /******************************************************************************
-* Set which time columns are to be displayed.
+* Called when a context menu is requested for the header.
+* Allow the user to choose which columns to display.
 */
-void AlarmListView::selectTimeColumns(bool time, bool timeTo)
+void AlarmListView::headerContextMenuRequested(const QPoint& pt)
 {
-    if (!time  &&  !timeTo)
-        return;       // always show at least one time column
-//    bool changed = false;
-    bool hidden = header()->isSectionHidden(AlarmListModel::TimeColumn);
-    if (time  &&  hidden)
+    QAbstractItemModel* almodel = model();
+    int count = header()->count();
+    QMenu menu;
+    for (int col = 0;  col < count;  ++col)
     {
-        // Unhide the time column
-        header()->setSectionHidden(AlarmListModel::TimeColumn, false);
-//        changed = true;
+        const QString title = almodel->headerData(col, Qt::Horizontal, AkonadiModel::ColumnTitleRole).toString();
+        if (!title.isEmpty())
+        {
+            QAction* act = menu.addAction(title);
+            act->setData(col);
+            act->setCheckable(true);
+            act->setChecked(!header()->isSectionHidden(col));
+            if (col == AlarmListModel::TextColumn)
+                act->setEnabled(false);    // don't allow text column to be hidden
+            else
+                QObject::connect(act, &QAction::triggered,
+                                 this, [this, &menu, act] { showHideColumn(menu, act); });
+        }
     }
-    else if (!time  &&  !hidden)
-    {
-        // Hide the time column
-        header()->setSectionHidden(AlarmListModel::TimeColumn, true);
-//        changed = true;
-    }
-    hidden = header()->isSectionHidden(AlarmListModel::TimeToColumn);
-    if (timeTo  &&  hidden)
-    {
-        // Unhide the time-to-alarm column
-        header()->setSectionHidden(AlarmListModel::TimeToColumn, false);
-//        changed = true;
-    }
-    else if (!timeTo  &&  !hidden)
-    {
-        // Hide the time-to-alarm column
-        header()->setSectionHidden(AlarmListModel::TimeToColumn, true);
-//        changed = true;
-    }
-//    if (changed)
-//    {
-//        resizeLastColumn();
-//        triggerUpdate();   // ensure scroll bar appears if needed
-//    }
+    enableTimeColumns(&menu);
+    menu.exec(header()->mapToGlobal(pt));
 }
 
-/*
-void AlarmListView::dataChanged(const QModelIndex& topLeft, const QModelIndex& bottomRight)
+/******************************************************************************
+* Show or hide a column according to the header context menu.
+*/
+void AlarmListView::showHideColumn(QMenu& menu, QAction* act)
 {
-    for (int col = topLeft.column();  col < bottomRight.column();  ++col)
+    int col = act->data().toInt();
+    if (col < 0  ||  col >= header()->count())
+        return;
+    bool show = act->isChecked();
+    header()->setSectionHidden(col, !show);
+    if (col == AlarmListModel::TimeColumn  ||  col == AlarmListModel::TimeToColumn)
+        enableTimeColumns(&menu);
+    Q_EMIT columnsVisibleChanged();
+}
+
+/******************************************************************************
+* Disable Time or Time To in the context menu if the other one is not
+* selected to be displayed, to ensure that at least one is always shown.
+*/
+void AlarmListView::enableTimeColumns(QMenu* menu)
+{
+    bool timeShown   = !header()->isSectionHidden(AlarmListModel::TimeColumn);
+    bool timeToShown = !header()->isSectionHidden(AlarmListModel::TimeToColumn);
+    QList<QAction*> actions = menu->actions();
+    if (!timeToShown)
     {
-        if (col != header()->resizeMode(col) == QHeaderView::ResizeToContents)
-            resizeColumnToContents(col);
+        header()->setSectionHidden(AlarmListModel::TimeColumn, false);
+        for (QAction* act : qAsConst(actions))
+        {
+            if (act->data().toInt() == AlarmListModel::TimeColumn)
+            {
+                act->setEnabled(false);
+                break;
+            }
+        }
+    }
+    else if (!timeShown)
+    {
+        header()->setSectionHidden(AlarmListModel::TimeToColumn, false);
+        for (QAction* act : qAsConst(actions))
+        {
+            if (act->data().toInt() == AlarmListModel::TimeToColumn)
+            {
+                act->setEnabled(false);
+                break;
+            }
+        }
     }
 }
-*/
 
 // vim: et sw=4:

@@ -1,7 +1,7 @@
 /*
  *  mainwindow.cpp  -  main application window
  *  Program:  kalarm
- *  Copyright © 2001-2018 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2019 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -89,8 +89,7 @@ const QString UI_FILE(QStringLiteral("kalarmui.rc"));
 const char*   WINDOW_NAME = "MainWindow";
 
 const char*   VIEW_GROUP         = "View";
-const char*   SHOW_TIME_KEY      = "ShowAlarmTime";
-const char*   SHOW_TIME_TO_KEY   = "ShowTimeToAlarm";
+const char*   SHOW_COLUMNS       = "ShowColumns";
 const char*   SHOW_ARCHIVED_KEY  = "ShowArchivedAlarms";
 const char*   SHOW_RESOURCES_KEY = "ShowResources";
 
@@ -109,13 +108,6 @@ QList<QKeySequence> redoShortcut;
 
 MainWindow::WindowList   MainWindow::mWindowList;
 TemplateDlg*             MainWindow::mTemplateDlg = nullptr;
-
-// Collect these widget labels together to ensure consistent wording and
-// translations across different modules.
-QString MainWindow::i18n_a_ShowAlarmTimes()        { return i18nc("@action", "Show &Alarm Times"); }
-QString MainWindow::i18n_chk_ShowAlarmTime()       { return i18nc("@option:check", "Show alarm time"); }
-QString MainWindow::i18n_o_ShowTimeToAlarms()      { return i18nc("@action", "Show Time t&o Alarms"); }
-QString MainWindow::i18n_chk_ShowTimeToAlarm()     { return i18nc("@option:check", "Show time until alarm"); }
 
 
 /******************************************************************************
@@ -144,8 +136,7 @@ MainWindow::MainWindow(bool restored)
     KConfigGroup config(KSharedConfig::openConfig(), VIEW_GROUP);
     mShowResources = config.readEntry(SHOW_RESOURCES_KEY, false);
     mShowArchived  = config.readEntry(SHOW_ARCHIVED_KEY, false);
-    mShowTime      = config.readEntry(SHOW_TIME_KEY, true);
-    mShowTimeTo    = config.readEntry(SHOW_TIME_TO_KEY, false);
+    const QList<bool> showColumns = config.readEntry(SHOW_COLUMNS, QList<bool>());
     if (!restored)
     {
         KConfigGroup wconfig(KSharedConfig::openConfig(), WINDOW_NAME);
@@ -153,8 +144,6 @@ MainWindow::MainWindow(bool restored)
     }
 
     setAcceptDrops(true);         // allow drag-and-drop onto this window
-    if (!mShowTimeTo)
-        mShowTime = true;     // ensure at least one time column is visible
 
     mSplitter = new QSplitter(Qt::Horizontal, this);
     mSplitter->setChildrenCollapsible(false);
@@ -172,11 +161,11 @@ MainWindow::MainWindow(bool restored)
     mListFilterModel->setEventTypeFilter(mShowArchived ? CalEvent::ACTIVE | CalEvent::ARCHIVED : CalEvent::ACTIVE);
     mListView = new AlarmListView(WINDOW_NAME, mSplitter);
     mListView->setModel(mListFilterModel);
-    mListView->selectTimeColumns(mShowTime, mShowTimeTo);
-    mListView->sortByColumn(mShowTime ? AlarmListModel::TimeColumn : AlarmListModel::TimeToColumn, Qt::AscendingOrder);
+    mListView->setColumnsVisible(showColumns);
     mListView->setItemDelegate(new AlarmListDelegate(mListView));
     connect(mListView->selectionModel(), &QItemSelectionModel::selectionChanged, this, &MainWindow::slotSelection);
     connect(mListView, &AlarmListView::contextMenuRequested, this, &MainWindow::slotContextMenuRequested);
+    connect(mListView, &AlarmListView::columnsVisibleChanged, this, &MainWindow::slotAlarmListColumnsChanged);
     connect(AkonadiModel::instance(), &AkonadiModel::collectionStatusChanged,
                        this, &MainWindow::slotCalendarStatusChanged);
     connect(mResourceSelector, &ResourceSelector::resized, this, &MainWindow::resourcesResized);
@@ -228,8 +217,7 @@ void MainWindow::saveProperties(KConfigGroup& config)
 {
     config.writeEntry("HiddenTrayParent", isTrayParent() && isHidden());
     config.writeEntry("ShowArchived", mShowArchived);
-    config.writeEntry("ShowTime", mShowTime);
-    config.writeEntry("ShowTimeTo", mShowTimeTo);
+    config.writeEntry("ShowColumns", mListView->columnsVisible());
     config.writeEntry("ResourcesWidth", mResourceSelector->isHidden() ? 0 : mResourceSelector->width());
 }
 
@@ -242,10 +230,9 @@ void MainWindow::readProperties(const KConfigGroup& config)
 {
     mHiddenTrayParent = config.readEntry("HiddenTrayParent", true);
     mShowArchived     = config.readEntry("ShowArchived", false);
-    mShowTime         = config.readEntry("ShowTime", true);
-    mShowTimeTo       = config.readEntry("ShowTimeTo", false);
     mResourcesWidth   = config.readEntry("ResourcesWidth", (int)0);
     mShowResources    = (mResourcesWidth > 0);
+    mListView->setColumnsVisible(config.readEntry("ShowColumns", QList<bool>()));
 }
 
 /******************************************************************************
@@ -369,6 +356,7 @@ void MainWindow::resourcesResized()
         {
             KConfigGroup config(KSharedConfig::openConfig(), WINDOW_NAME);
             config.writeEntry(QStringLiteral("Splitter %1").arg(qApp->desktop()->width()), mResourcesWidth);
+            config.sync();
         }
     }
 }
@@ -487,15 +475,6 @@ void MainWindow::initActions()
     actions->addAction(QStringLiteral("stopAudio"), action);
     KGlobalAccel::setGlobalShortcut(action, QList<QKeySequence>());  // allow user to set a global shortcut
 
-    mActionShowTime = new KToggleAction(i18n_a_ShowAlarmTimes(), this);
-    actions->addAction(QStringLiteral("showAlarmTimes"), mActionShowTime);
-    connect(mActionShowTime, &KToggleAction::triggered, this, &MainWindow::slotShowTime);
-
-    mActionShowTimeTo = new KToggleAction(i18n_o_ShowTimeToAlarms(), this);
-    actions->addAction(QStringLiteral("showTimeToAlarms"), mActionShowTimeTo);
-    actions->setDefaultShortcut(mActionShowTimeTo, QKeySequence(Qt::CTRL + Qt::Key_I));
-    connect(mActionShowTimeTo, &KToggleAction::triggered, this, &MainWindow::slotShowTimeTo);
-
     mActionShowArchived = new KToggleAction(i18nc("@action", "Show Archi&ved Alarms"), this);
     actions->addAction(QStringLiteral("showArchivedAlarms"), mActionShowArchived);
     actions->setDefaultShortcut(mActionShowArchived, QKeySequence(Qt::CTRL + Qt::Key_P));
@@ -594,8 +573,6 @@ void MainWindow::initActions()
 
     // Set menu item states
     setEnableText(true);
-    mActionShowTime->setChecked(mShowTime);
-    mActionShowTimeTo->setChecked(mShowTimeTo);
     mActionShowArchived->setChecked(mShowArchived);
     if (!Preferences::archivedKeepDays())
         mActionShowArchived->setEnabled(false);
@@ -813,39 +790,13 @@ void MainWindow::slotEnable()
 }
 
 /******************************************************************************
-* Called when the Show Alarm Times menu item is selected or deselected.
+* Called when the columns visible in the alarm list view have changed.
 */
-void MainWindow::slotShowTime()
+void MainWindow::slotAlarmListColumnsChanged()
 {
-    mShowTime = !mShowTime;
-    mActionShowTime->setChecked(mShowTime);
-    if (!mShowTime  &&  !mShowTimeTo)
-        slotShowTimeTo();    // at least one time column must be displayed
-    else
-    {
-        mListView->selectTimeColumns(mShowTime, mShowTimeTo);
-        KConfigGroup config(KSharedConfig::openConfig(), VIEW_GROUP);
-        config.writeEntry(SHOW_TIME_KEY, mShowTime);
-        config.writeEntry(SHOW_TIME_TO_KEY, mShowTimeTo);
-    }
-}
-
-/******************************************************************************
-* Called when the Show Time To Alarms menu item is selected or deselected.
-*/
-void MainWindow::slotShowTimeTo()
-{
-    mShowTimeTo = !mShowTimeTo;
-    mActionShowTimeTo->setChecked(mShowTimeTo);
-    if (!mShowTimeTo  &&  !mShowTime)
-        slotShowTime();    // at least one time column must be displayed
-    else
-    {
-        mListView->selectTimeColumns(mShowTime, mShowTimeTo);
-        KConfigGroup config(KSharedConfig::openConfig(), VIEW_GROUP);
-        config.writeEntry(SHOW_TIME_KEY, mShowTime);
-        config.writeEntry(SHOW_TIME_TO_KEY, mShowTimeTo);
-    }
+    KConfigGroup config(KSharedConfig::openConfig(), VIEW_GROUP);
+    config.writeEntry(SHOW_COLUMNS, mListView->columnsVisible());
+    config.sync();
 }
 
 /******************************************************************************
@@ -861,6 +812,7 @@ void MainWindow::slotShowArchived()
     mListView->reset();
     KConfigGroup config(KSharedConfig::openConfig(), VIEW_GROUP);
     config.writeEntry(SHOW_ARCHIVED_KEY, mShowArchived);
+    config.sync();
 }
 
 /******************************************************************************
@@ -1002,6 +954,7 @@ void MainWindow::slotToggleResourceSelector()
 
     KConfigGroup config(KSharedConfig::openConfig(), VIEW_GROUP);
     config.writeEntry(SHOW_RESOURCES_KEY, mShowResources);
+    config.sync();
 }
 
 /******************************************************************************

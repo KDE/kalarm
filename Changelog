@@ -1,5 +1,8 @@
 KAlarm Change Log
 
+=== Version 2.12.5 --- 25 June 2019 ===
++ Enable alarm list columns to be hidden using context menu on list header [KDE Bug 397093]
+
 === Version 2.12.4 (KDE Applications 19.04.3) --- 18 June 2019 ===
 + Fix calendar resource dialogue not configuring resource correctly [KDE Bug 407882]
 + Fix calendar resource dialogue creating new resources unusable until restart [KDE Bug 407882]

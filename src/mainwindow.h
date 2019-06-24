@@ -1,7 +1,7 @@
 /*
  *  mainwindow.h  -  main application window
  *  Program:  kalarm
- *  Copyright © 2001-2011 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2019 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -78,11 +78,6 @@ class MainWindow : public MainWindowBase, public KCalCore::Calendar::CalendarObs
         static MainWindow* firstWindow()      { return mWindowList.isEmpty() ? nullptr : mWindowList[0]; }
         static int         count()            { return mWindowList.count(); }
 
-        static QString i18n_a_ShowAlarmTimes();       // text of 'Show Alarm Times' action, with 'A' shortcut
-        static QString i18n_chk_ShowAlarmTime();      // text of 'Show alarm time' checkbox
-        static QString i18n_o_ShowTimeToAlarms();     // text of 'Show Time to Alarms' action, with 'O' shortcut
-        static QString i18n_chk_ShowTimeToAlarm();    // text of 'Show time until alarm' checkbox
-
     public Q_SLOTS:
         virtual void   show();
 
@@ -127,8 +122,6 @@ class MainWindow : public MainWindowBase, public KCalCore::Calendar::CalendarObs
         void           slotQuit();
         void           slotSelection();
         void           slotContextMenuRequested(const QPoint& globalPos);
-        void           slotShowTime();
-        void           slotShowTimeTo();
         void           slotShowArchived();
         void           slotSpreadWindowsShortcut();
         void           slotWakeFromSuspend();
@@ -144,6 +137,7 @@ class MainWindow : public MainWindowBase, public KCalCore::Calendar::CalendarObs
         void           updateTrayIconAction();
         void           slotToggleResourceSelector();
         void           slotCalendarStatusChanged();
+        void           slotAlarmListColumnsChanged();
         void           resourcesResized();
         void           showErrorMessage(const QString&);
         void           editAlarmOk();
@@ -191,8 +185,6 @@ class MainWindow : public MainWindowBase, public KCalCore::Calendar::CalendarObs
         KToolBarPopupAction* mActionUndo;
         KToolBarPopupAction* mActionRedo;
         KToggleAction*       mActionToggleTrayIcon;
-        KToggleAction*       mActionShowTime;
-        KToggleAction*       mActionShowTimeTo;
         KToggleAction*       mActionShowArchived;
         KToggleAction*       mActionSpreadWindows;
         QMenu*               mActionsMenu;
@@ -202,8 +194,6 @@ class MainWindow : public MainWindowBase, public KCalCore::Calendar::CalendarObs
         bool                 mHiddenTrayParent;    // on session restoration, hide this window
         bool                 mShowResources;       // show resource selector
         bool                 mShowArchived;        // include archived alarms in the displayed list
-        bool                 mShowTime;            // show alarm times
-        bool                 mShowTimeTo;          // show time-to-alarms
         bool                 mShown;               // true once the window has been displayed
         bool                 mActionEnableEnable;  // Enable/Disable action is set to "Enable"
         bool                 mMenuError;           // error occurred creating menus: need to show error message

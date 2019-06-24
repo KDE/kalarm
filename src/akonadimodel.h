@@ -72,6 +72,7 @@ class AkonadiModel : public Akonadi::EntityTreeModel
             ValueRole,                 // numeric value
             SortRole,                  // the value to use for sorting
             TimeDisplayRole,           // time column value with '~' representing omitted leading zeroes
+            ColumnTitleRole,           // column titles (whether displayed or not)
             CommandErrorRole           // last command execution error for alarm (per user)
         };
 
