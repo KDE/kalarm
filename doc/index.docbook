@@ -31,7 +31,7 @@
 </authorgroup>
 
 <copyright>
-<year>2001</year><year>2002</year><year>2003</year><year>2004</year><year>2005</year><year>2006</year><year>2007</year><year>2008</year><year>2009</year><year>2010</year><year>2011</year><year>2012</year><year>2013</year><year>2016</year><year>2018</year>
+<year>2001</year><year>2002</year><year>2003</year><year>2004</year><year>2005</year><year>2006</year><year>2007</year><year>2008</year><year>2009</year><year>2010</year><year>2011</year><year>2012</year><year>2013</year><year>2016</year><year>2018</year><year>2019</year>
 <holder>&David.Jarvie;</holder>
 </copyright>
 
@@ -39,8 +39,8 @@
 
 <!-- Don't change format of date and version of the documentation -->
 
-<date>2018-04-16</date>
-<releaseinfo>2.12.0 (Applications 18.08)</releaseinfo>
+<date>2019-06-25</date>
+<releaseinfo>2.12.5 (Applications 19.08)</releaseinfo>
 
 <abstract>
 <para>&kalarm; is a personal alarm message, command and email scheduler by &kde;.</para>
@@ -223,14 +223,14 @@ type or text by clicking on the titlebar for the appropriate column.
 To reverse the sort order, click the column titlebar again.</para>
 
 <para>You can optionally show the remaining time until each alarm is
-due, together with, or instead of, the alarm's scheduled time.
-To show or hide the alarm time column, select
-<menuchoice><guimenu>View</guimenu><guimenuitem>Show Alarm
-Times</guimenuitem></menuchoice>.
-To show or hide the time-to-alarm column, select
-<menuchoice><guimenu>View</guimenu><guimenuitem>Show Time To
-Alarms</guimenuitem></menuchoice>. At least one of these columns is
-always shown.</para>
+due, together with, or instead of, the alarm's scheduled time.</para>
+
+<para>You can select which columns to display or hide by
+<mousebutton>Right</mousebutton> clicking on the column headings and
+using the context menu to set the columns to show. But note that the
+<guilabel>Message, File or Command</guilabel> column, and at least one
+of the <guilabel>Time</guilabel> or <guilabel>Time To</guilabel>
+columns, are always shown.</para>
 
 <para>If you use multiple alarm calendars, you can color code alarms
 according to which calendar they belong to, by selecting a different

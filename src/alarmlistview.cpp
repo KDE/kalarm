@@ -61,6 +61,10 @@ void AlarmListView::setModel(QAbstractItemModel* model)
     connect(header(), &QWidget::customContextMenuRequested, this, &AlarmListView::headerContextMenuRequested);
 }
 
+/******************************************************************************
+* Return which of the optional columns are currently shown.
+* Note that the column order must be the same as in setColumnsVisible().
+*/
 QList<bool> AlarmListView::columnsVisible() const
 {
     if (!model())
@@ -72,16 +76,21 @@ QList<bool> AlarmListView::columnsVisible() const
              !header()->isSectionHidden(AlarmListModel::TypeColumn) };
 }
 
+/******************************************************************************
+* Set which of the optional columns are to be shown.
+* Note that the column order must be the same as in columnsVisible().
+*/
 void AlarmListView::setColumnsVisible(const QList<bool>& show)
 {
-    if (!model()  ||  show.size() < 5)
+    if (!model())
         return;
-    header()->setSectionHidden(AlarmListModel::TimeColumn,   !show[0]);
-    header()->setSectionHidden(AlarmListModel::TimeToColumn, !show[1]);
-    header()->setSectionHidden(AlarmListModel::RepeatColumn, !show[2]);
-    header()->setSectionHidden(AlarmListModel::ColourColumn, !show[3]);
-    header()->setSectionHidden(AlarmListModel::TypeColumn,   !show[4]);
-    sortByColumn(show[0] ? AlarmListModel::TimeColumn : AlarmListModel::TimeToColumn, Qt::AscendingOrder);
+    const QList<bool> vis = (show.size() < 5) ? QList<bool>{true, false, true, true, true} : show;
+    header()->setSectionHidden(AlarmListModel::TimeColumn,   !vis[0]);
+    header()->setSectionHidden(AlarmListModel::TimeToColumn, !vis[1]);
+    header()->setSectionHidden(AlarmListModel::RepeatColumn, !vis[2]);
+    header()->setSectionHidden(AlarmListModel::ColourColumn, !vis[3]);
+    header()->setSectionHidden(AlarmListModel::TypeColumn,   !vis[4]);
+    sortByColumn(vis[0] ? AlarmListModel::TimeColumn : AlarmListModel::TimeToColumn, Qt::AscendingOrder);
 }
 
 /******************************************************************************
