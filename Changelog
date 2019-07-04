@@ -1,9 +1,10 @@
 KAlarm Change Log
 
-=== Version 2.12.4 (KDE Applications 19.04.3) --- 18 June 2019 ===
+=== Version 2.12.4 (KDE Applications 19.04.3) --- 4 July 2019 ===
 + Fix calendar resource dialogue not configuring resource correctly [KDE Bug 407882]
 + Fix calendar resource dialogue creating new resources unusable until restart [KDE Bug 407882]
 + Enable resource after creating with the calendar resource dialogue [KDE Bug 407882]
++ Fix colour and alarm type columns being too wide in alarm list.
 
 === Version 2.12.3 (KDE Applications 19.04.2) --- 23 May 2019 ===
 * Fix calendar configuration dialogue not appearing.
