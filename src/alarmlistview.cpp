@@ -42,7 +42,7 @@ void AlarmListView::setModel(QAbstractItemModel* model)
 {
     EventListView::setModel(model);
     KConfigGroup config(KSharedConfig::openConfig(), mConfigGroup.constData());
-    QByteArray settings = config.readEntry("ListHead", QByteArray());
+    const QByteArray settings = config.readEntry("ListHead", QByteArray());
     if (!settings.isEmpty())
         header()->restoreState(settings);
     header()->setSectionsMovable(true);
@@ -54,8 +54,10 @@ void AlarmListView::setModel(QAbstractItemModel* model)
     header()->setSectionResizeMode(AlarmListModel::TypeColumn, QHeaderView::Fixed);
     header()->setSectionResizeMode(AlarmListModel::TextColumn, QHeaderView::Stretch);
     header()->setStretchLastSection(true);   // necessary to ensure ResizeToContents columns do resize to contents!
+    const int minWidth = viewOptions().fontMetrics.lineSpacing() * 3 / 4;
+    header()->setMinimumSectionSize(minWidth);
     const int margin = QApplication::style()->pixelMetric(QStyle::PM_FocusFrameHMargin);
-    header()->resizeSection(AlarmListModel::ColourColumn, viewOptions().fontMetrics.lineSpacing() * 3 / 4);
+    header()->resizeSection(AlarmListModel::ColourColumn, minWidth);
     header()->resizeSection(AlarmListModel::TypeColumn, AlarmListModel::iconWidth() + 2*margin + 2);
     header()->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(header(), &QWidget::customContextMenuRequested, this, &AlarmListView::headerContextMenuRequested);
