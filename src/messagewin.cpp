@@ -1,7 +1,7 @@
 /*
  *  messagewin.cpp  -  displays an alarm message
  *  Program:  kalarm
- *  Copyright © 2001-2019 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2019 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -873,8 +873,10 @@ QString MessageWin::dateTimeToDisplay()
                 local.setTimeSpec(KADateTime::Spec::LocalZone());
                 showZone = (local.toString(QStringLiteral("%Z")) != tz);
             }
-#pragma message("port QT5")
-            tm = QLocale().toString(mDateTime.qDateTime(), QLocale::ShortFormat); // KLocale::DateTimeFormatOptions(showZone ? KLocale::TimeZone : 0));
+            const QDateTime dt = mDateTime.qDateTime();
+            tm = QLocale().toString(dt, QLocale::ShortFormat);
+            if (showZone)
+                tm += QLatin1Char(' ') + mDateTime.timeZone().displayName(dt, QTimeZone::ShortName, QLocale());
         }
     }
     return tm;
