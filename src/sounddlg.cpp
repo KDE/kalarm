@@ -1,7 +1,7 @@
 /*
  *  sounddlg.cpp  -  sound file selection and configuration dialog and widget
  *  Program:  kalarm
- *  Copyright © 2005-2018 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2005-2019 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -509,7 +509,7 @@ bool SoundWidget::validate(bool showErrorMessage) const
                 dir.setFilter(QDir::Files | QDir::Readable);
                 for (int i = 0, end = soundDirs.count();  i < end;  ++i)
                 {
-                    dir = soundDirs[i];
+                    dir.setPath(soundDirs[i]);
                     if (dir.isReadable() && dir.count() > 2)
                     {
                         QString f = soundDirs[i] + QDir::separator() + file;

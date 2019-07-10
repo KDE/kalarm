@@ -1,7 +1,7 @@
 /*
  *  timespinbox.cpp  -  time spinbox widget
  *  Program:  kalarm
- *  Copyright © 2001-2008 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2008 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -247,14 +247,22 @@ QSize TimeSpinBox::sizeHint() const
 {
     QSize sz = SpinBox2::sizeHint();
     QFontMetrics fm(font());
+#if QT_VERSION >= QT_VERSION_CHECK(5, 11, 0)
+    return QSize(sz.width() + fm.horizontalAdvance(QLatin1Char(':')), sz.height());
+#else
     return QSize(sz.width() + fm.width(QLatin1Char(':')), sz.height());
+#endif
 }
 
 QSize TimeSpinBox::minimumSizeHint() const
 {
     QSize sz = SpinBox2::minimumSizeHint();
     QFontMetrics fm(font());
+#if QT_VERSION >= QT_VERSION_CHECK(5, 11, 0)
+    return QSize(sz.width() + fm.horizontalAdvance(QLatin1Char(':')), sz.height());
+#else
     return QSize(sz.width() + fm.width(QLatin1Char(':')), sz.height());
+#endif
 }
 
 /******************************************************************************

@@ -1,7 +1,7 @@
 /*
- *  spinbox2.cpp  -  spin box with extra pair of spin buttons (for Qt 3)
+ *  spinbox2.cpp  -  spin box with extra pair of spin buttons
  *  Program:  kalarm
- *  Copyright © 2001-2009,2011 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2009,2011 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -665,7 +665,7 @@ void SpinMirror::mouseEvent(QMouseEvent* e)
     if (mReadOnly)
         return;
     QPoint pt = e->pos();
-    QGraphicsItem* item = scene()->itemAt(pt);
+    QGraphicsItem* item = scene()->itemAt(pt, QTransform());
     if (item == mButtons)
         pt = spinboxPoint(pt);
     else
@@ -682,7 +682,7 @@ void SpinMirror::wheelEvent(QWheelEvent* e)
     if (mReadOnly)
         return;
     QPoint pt = e->pos();
-    QGraphicsItem* item = scene()->itemAt(pt);
+    QGraphicsItem* item = scene()->itemAt(pt, QTransform());
     if (item == mButtons)
     {
         pt = spinboxPoint(pt);
