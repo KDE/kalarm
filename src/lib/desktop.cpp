@@ -1,7 +1,7 @@
 /*
  *  desktop.cpp  -  desktop functions
  *  Program:  kalarm
- *  Copyright © 2008,2009 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2008,2009,2019 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -20,11 +20,12 @@
 
 #include "desktop.h"
 #include "config-kalarm.h"
+
 #if KDEPIM_HAVE_X11
 #include <kwindowsystem.h>
 #endif
-#include <QApplication>
-#include <QDesktopWidget>
+#include <QGuiApplication>
+#include <QScreen>
 
 namespace KAlarm {
 
@@ -38,7 +39,10 @@ QRect desktopWorkArea(int screen)
     if (screen < 0)
         return KWindowSystem::workArea();
 #endif
-    return qApp->desktop()->availableGeometry(screen);
+    const QList<QScreen*> screens = QGuiApplication::screens();
+    if (screen < 0  ||  screen >= screens.count())
+        return QRect();
+    return screens[screen]->availableGeometry();
 }
 
 } // namespace KAlarm

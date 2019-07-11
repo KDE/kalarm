@@ -59,6 +59,7 @@
 #include <kwindowinfo.h>
 #include <netwm.h>
 #include <qx11info_x11.h>
+#include <QScreen>
 #endif
 
 #include <QTextBrowser>
@@ -2261,22 +2262,22 @@ bool MessageWin::getWorkAreaAndModal()
     mScreenNumber = -1;
     const bool modal = Preferences::modalMessages();
 #if KDEPIM_HAVE_X11
-    const QDesktopWidget* desktop = qApp->desktop();
-    const int numScreens = desktop->numScreens();
+    const QList<QScreen*> screens = QGuiApplication::screens();
+    const int numScreens = screens.count();
     if (numScreens > 1)
     {
         // There are multiple screens.
         // Check for any full screen windows, even if they are not the active
         // window, and try not to show the alarm message their screens.
-        mScreenNumber = desktop->screenNumber(MainWindow::mainMainWindow());  // default = KAlarm's screen
-        if (desktop->isVirtualDesktop())
+        mScreenNumber = QApplication::desktop()->screenNumber(MainWindow::mainMainWindow());  // default = KAlarm's screen
+        if (QGuiApplication::primaryScreen()->virtualSiblings().size() > 1)
         {
             // The screens form a single virtual desktop.
             // Xinerama, for example, uses this scheme.
             QVector<FullScreenType> screenTypes(numScreens);
             QVector<QRect> screenRects(numScreens);
             for (int s = 0;  s < numScreens;  ++s)
-                screenRects[s] = desktop->screenGeometry(s);
+                screenRects[s] = screens[s]->geometry();
             const FullScreenType full = findFullScreenWindows(screenRects, screenTypes);
             if (full == NoFullScreen  ||  screenTypes[mScreenNumber] == NoFullScreen)
                 return modal;
@@ -2306,7 +2307,7 @@ bool MessageWin::getWorkAreaAndModal()
             // The screens are completely separate from each other.
             int inactiveScreen = -1;
             FullScreenType full = haveFullScreenWindow(mScreenNumber);
-qCDebug(KALARM_LOG)<<"full="<<full<<", screen="<<mScreenNumber;
+//qCDebug(KALARM_LOG)<<"full="<<full<<", screen="<<mScreenNumber;
             if (full == NoFullScreen)
                 return modal;   // KAlarm's screen doesn't contain a full screen window
             if (full == FullScreen)
@@ -2361,23 +2362,16 @@ FullScreenType haveFullScreenWindow(int screen)
     const xcb_window_t activeWindow = rootInfo.activeWindow();
     const xcb_window_t* windows     = rootInfo.clientList();
     const int windowCount           = rootInfo.clientListCount();
-qCDebug(KALARM_LOG)<<"Screen"<<screen<<": Window count="<<windowCount<<", active="<<activeWindow<<", geom="<<qApp->desktop()->screenGeometry(screen);
-NETRect geom;
-NETRect frame;
     for (int w = 0;  w < windowCount;  ++w)
     {
         NETWinInfo winInfo(connection, windows[w], rootWindow, NET::WMState|NET::WMGeometry, NET::Properties2());
-winInfo.kdeGeometry(frame, geom);
-const QRect fr(frame.pos.x, frame.pos.y, frame.size.width, frame.size.height);
-const QRect gm(geom.pos.x, geom.pos.y, geom.size.width, geom.size.height);
         if (winInfo.state() & NET::FullScreen)
         {
-qCDebug(KALARM_LOG)<<"Found FULL SCREEN: "<<windows[w]<<", geom="<<gm<<", frame="<<fr;
+//qCDebug(KALARM_LOG)<<"Found FULL SCREEN: " << windows[w];
             type = FullScreen;
             if (windows[w] == activeWindow)
                 return FullScreenActive;
         }
-//else { qCDebug(KALARM_LOG)<<"Found normal: "<<windows[w]<<", geom="<<gm<<", frame="<<fr; }
     }
     return type;
 }
@@ -2396,7 +2390,7 @@ FullScreenType findFullScreenWindows(const QVector<QRect>& screenRects, QVector<
     const xcb_window_t activeWindow = rootInfo.activeWindow();
     const xcb_window_t* windows     = rootInfo.clientList();
     const int windowCount           = rootInfo.clientListCount();
-qCDebug(KALARM_LOG)<<"Virtual desktops: Window count="<<windowCount<<", active="<<activeWindow<<", geom="<<qApp->desktop()->screenGeometry(0);
+//qCDebug(KALARM_LOG)<<"Virtual desktops: Window count="<<windowCount<<", active="<<activeWindow<<", geom="<<QApplication::desktop()->screenGeometry(0);
     NETRect netgeom;
     NETRect netframe;
     for (int w = 0;  w < windowCount;  ++w)
@@ -2408,12 +2402,12 @@ qCDebug(KALARM_LOG)<<"Virtual desktops: Window count="<<windowCount<<", active="
             const bool active = (windows[w] == activeWindow);
             winInfo.kdeGeometry(netframe, netgeom);
             const QRect winRect(netgeom.pos.x, netgeom.pos.y, netgeom.size.width, netgeom.size.height);
-qCDebug(KALARM_LOG)<<"Found FULL SCREEN: "<<windows[w]<<", geom="<<winRect;
+//qCDebug(KALARM_LOG)<<"Found FULL SCREEN: "<<windows[w]<<", geom="<<winRect;
             for (int s = 0, count = screenRects.count();  s < count;  ++s)
             {
                 if (screenRects[s].contains(winRect))
                 {
-qCDebug(KALARM_LOG)<<"FULL SCREEN on screen"<<s<<", active="<<active;
+//qCDebug(KALARM_LOG)<<"FULL SCREEN on screen"<<s<<", active="<<active;
                     if (active)
                         screenTypes[s] = result = FullScreenActive;
                     else

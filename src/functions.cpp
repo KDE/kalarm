@@ -1,7 +1,7 @@
 /*
  *  functions.cpp  -  miscellaneous functions
  *  Program:  kalarm
- *  Copyright © 2001-2019 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2019 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -1431,7 +1431,7 @@ bool Private::startKMailMinimised()
                           "minimize=true\nminimizerule=3\n"
                           "type=") + QString().setNum(NET::Normal) + QLatin1String("\ntyperule=2");
         msg.broadcastMessage("_KDE_NET_WM_TEMPORARY_RULES", message, -1);
-        qApp->flush();
+        QCoreApplication::processEvents();
     }
     else
     {
@@ -1480,7 +1480,7 @@ void Private::windowAdded(WId w)
 
     Display* display = QX11Info::display();
     XWithdrawWindow(display, w, QX11Info::appScreen());
-    QApplication::flush();
+    QCoreApplication::processEvents();
 
     NETWinInfo info(QX11Info::connection(), w, QX11Info::appRootWindow(), NET::WMState, NET::Properties2());
     XWMHints* hints = XGetWMHints(display, w);
@@ -1496,7 +1496,7 @@ void Private::windowAdded(WId w)
     XSync(display, False);
     XMapWindow(display, w);
     XSync(display, False);
-    QApplication::flush();
+    QCoreApplication::processEvents();
 #endif
 }
 
@@ -1579,9 +1579,9 @@ void setDontShowErrors(const EventId& eventId, const QString& tag)
 bool readConfigWindowSize(const char* window, QSize& result, int* splitterWidth)
 {
     KConfigGroup config(KSharedConfig::openConfig(), window);
-    QWidget* desktop = qApp->desktop();
-    QSize s = QSize(config.readEntry(QStringLiteral("Width %1").arg(desktop->width()), (int)0),
-                    config.readEntry(QStringLiteral("Height %1").arg(desktop->height()), (int)0));
+    const QWidget* desktop = QApplication::desktop();
+    const QSize s = QSize(config.readEntry(QStringLiteral("Width %1").arg(desktop->width()), (int)0),
+                          config.readEntry(QStringLiteral("Height %1").arg(desktop->height()), (int)0));
     if (s.isEmpty())
         return false;
     result = s;
@@ -1597,7 +1597,7 @@ bool readConfigWindowSize(const char* window, QSize& result, int* splitterWidth)
 void writeConfigWindowSize(const char* window, const QSize& size, int splitterWidth)
 {
     KConfigGroup config(KSharedConfig::openConfig(), window);
-    QWidget* desktop = qApp->desktop();
+    const QWidget* desktop = QApplication::desktop();
     config.writeEntry(QStringLiteral("Width %1").arg(desktop->width()), size.width());
     config.writeEntry(QStringLiteral("Height %1").arg(desktop->height()), size.height());
     if (splitterWidth >= 0)

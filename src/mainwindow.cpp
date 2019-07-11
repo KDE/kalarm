@@ -140,7 +140,7 @@ MainWindow::MainWindow(bool restored)
     if (!restored)
     {
         KConfigGroup wconfig(KSharedConfig::openConfig(), WINDOW_NAME);
-        mResourcesWidth = wconfig.readEntry(QStringLiteral("Splitter %1").arg(qApp->desktop()->width()), (int)0);
+        mResourcesWidth = wconfig.readEntry(QStringLiteral("Splitter %1").arg(QApplication::desktop()->width()), (int)0);
     }
 
     setAcceptDrops(true);         // allow drag-and-drop onto this window
@@ -340,6 +340,10 @@ void MainWindow::resizeEvent(QResizeEvent* re)
     }
 }
 
+/******************************************************************************
+* Called when the resources panel has been resized.
+* Records the new size in the config file.
+*/
 void MainWindow::resourcesResized()
 {
     if (!mShown  ||  mResizing)
@@ -355,7 +359,7 @@ void MainWindow::resourcesResized()
         else if (mainMainWindow() == this)
         {
             KConfigGroup config(KSharedConfig::openConfig(), WINDOW_NAME);
-            config.writeEntry(QStringLiteral("Splitter %1").arg(qApp->desktop()->width()), mResourcesWidth);
+            config.writeEntry(QStringLiteral("Splitter %1").arg(QApplication::desktop()->width()), mResourcesWidth);
             config.sync();
         }
     }
