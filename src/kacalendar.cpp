@@ -2,7 +2,7 @@
  *  kacalendar.cpp  -  KAlarm kcal library calendar and event functions
  *  This file is part of kalarmcal library, which provides access to KAlarm
  *  calendar data.
- *  Copyright © 2001-2013 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2019 David Jarvie <djarvie@kde.org>
  *
  *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Library General Public License as published
@@ -244,9 +244,10 @@ struct StaticStrings {
           TEMPLATE_STATUS(QStringLiteral("TEMPLATE")),
           ARCHIVED_STATUS(QStringLiteral("ARCHIVED")),
           DISPLAYING_STATUS(QStringLiteral("DISPLAYING")),
-          ARCHIVED_UID(QStringLiteral("-exp-")),
-          DISPLAYING_UID(QStringLiteral("-disp-")),
-          TEMPLATE_UID(QStringLiteral("-tmpl-"))
+          ARCHIVED_UID(QStringLiteral("exp-")),
+          DISPLAYING_UID(QStringLiteral("disp-")),
+          OLD_ARCHIVED_UID(QStringLiteral("-exp-")),
+          OLD_TEMPLATE_UID(QStringLiteral("-tmpl-"))
     {}
     // Event custom properties.
     // Note that all custom property names are prefixed with X-KDE-KALARM- in the calendar file.
@@ -261,36 +262,36 @@ struct StaticStrings {
     const QString DISPLAYING_UID;
 
     // Old KAlarm format identifiers
-    const QString TEMPLATE_UID;
+    const QString OLD_ARCHIVED_UID;
+    const QString OLD_TEMPLATE_UID;
 };
 Q_GLOBAL_STATIC(StaticStrings, staticStrings)
 
 /******************************************************************************
 * Convert a unique ID to indicate that the event is in a specified calendar file.
+* This is done by prefixing archived or displaying alarms with "exp-" or "disp-",
+* while active alarms have no prefix.
+* Note that previously, "-exp-" was inserted in the middle of the UID.
 */
 QString uid(const QString &id, Type status)
 {
     QString result = id;
     Type oldType;
     int i, len;
-    if ((i = result.indexOf(staticStrings->ARCHIVED_UID)) > 0) {
+    if (result.startsWith(staticStrings->ARCHIVED_UID)) {
         oldType = ARCHIVED;
         len = staticStrings->ARCHIVED_UID.length();
-    } else if ((i = result.indexOf(staticStrings->DISPLAYING_UID)) > 0) {
+    } else if (result.startsWith(staticStrings->DISPLAYING_UID)) {
         oldType = DISPLAYING;
         len = staticStrings->DISPLAYING_UID.length();
     } else {
-        oldType = ACTIVE;
-        i = result.lastIndexOf(QLatin1Char('-'));
-        len = 1;
-        if (i < 0) {
-            i = result.length();
-            len = 0;
-        } else {
-            len = 1;
+        if ((i = result.indexOf(staticStrings->OLD_ARCHIVED_UID)) > 0) {
+            result.remove(i, staticStrings->OLD_ARCHIVED_UID.length());
         }
+        oldType = ACTIVE;
+        len = 0;
     }
-    if (status != oldType  &&  i > 0) {
+    if (status != oldType) {
         QString part;
         switch (status) {
         case ARCHIVED:    part = staticStrings->ARCHIVED_UID;  break;
@@ -298,9 +299,10 @@ QString uid(const QString &id, Type status)
         case ACTIVE:
         case TEMPLATE:
         case EMPTY:
-        default:          part = QStringLiteral("-");  break;
+        default:
+            return result;
         }
-        result.replace(i, len, part);
+        result.replace(0, len, part);
     }
     return result;
 }
@@ -360,12 +362,13 @@ Type status(const Event::Ptr &event, QString *param)
     }
 
     // The event either wasn't written by KAlarm, or was written by a pre-2.0 version.
-    // Check first for an old KAlarm format, which indicated the event type in its UID.
+    // Check first for an old KAlarm format, which indicated the event type in the
+    // middle of its UID.
     const QString uid = event->uid();
-    if (uid.indexOf(staticStrings->ARCHIVED_UID) > 0) {
+    if (uid.indexOf(staticStrings->OLD_ARCHIVED_UID) > 0) {
         return ARCHIVED;
     }
-    if (uid.indexOf(staticStrings->TEMPLATE_UID) > 0) {
+    if (uid.indexOf(staticStrings->OLD_TEMPLATE_UID) > 0) {
         return TEMPLATE;
     }
 
