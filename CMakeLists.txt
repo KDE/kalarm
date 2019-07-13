@@ -5,7 +5,7 @@ set(KALARM_VERSION "2.12.5")
 
 project(kalarm VERSION ${KALARM_VERSION})
 
-set(KF5_MIN_VERSION "5.59.0")
+set(KF5_MIN_VERSION "5.60.0")
 
 find_package(ECM ${KF5_MIN_VERSION} CONFIG REQUIRED)
 set(CMAKE_MODULE_PATH ${kalarm_SOURCE_DIR}/cmake/modules ${ECM_MODULE_PATH})
