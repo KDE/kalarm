@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.5)
-set(KDEPIM_VERSION_NUMBER "5.11.80")
+set(KDEPIM_VERSION_NUMBER "5.12.40")
 set(PIM_VERSION ${KDEPIM_VERSION_NUMBER})
 set(KALARM_VERSION "2.12.5")
 
@@ -29,7 +29,7 @@ include(ECMAddAppIcon)
 include(ECMQtDeclareLoggingCategory)
 
 # Do NOT add quote
-set(KDEPIM_DEV_VERSION beta)
+set(KDEPIM_DEV_VERSION alpha)
 
 # add an extra space
 if(DEFINED KDEPIM_DEV_VERSION)
