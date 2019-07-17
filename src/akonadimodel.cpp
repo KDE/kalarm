@@ -1390,7 +1390,7 @@ bool AkonadiModel::addEvent(KAEvent& event, Collection& collection)
     Item item;
     if (!event.setItemPayload(item, collection.contentMimeTypes()))
     {
-        qCWarning(KALARM_LOG) << "Invalid mime type for collection";
+        qCWarning(KALARM_LOG) << "AkonadiModel::addEvent: Invalid mime type for collection";
         return false;
     }
     event.setItemId(item.id());
@@ -1427,7 +1427,7 @@ qCDebug(KALARM_LOG)<<"item id="<<itemId;
 qCDebug(KALARM_LOG)<<"item id="<<item.id()<<", revision="<<item.revision();
     if (!newEvent.setItemPayload(item, collection.contentMimeTypes()))
     {
-        qCWarning(KALARM_LOG) << "Invalid mime type for collection";
+        qCWarning(KALARM_LOG) << "AkonadiModel::updateEvent: Invalid mime type for collection";
         return false;
     }
 //    setData(ix, QVariant::fromValue(item), ItemRole);

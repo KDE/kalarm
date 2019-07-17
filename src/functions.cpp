@@ -1693,7 +1693,7 @@ bool showFileErrMessage(const QString& filename, FileErr err, FileErr blankError
                 else if (blankError == FileErr_BlankPlay)
                     errmsg = i18nc("@info", "Please select a file to play");
                 else
-                    qFatal("Program error");
+                    qFatal("showFileErrMessage: Program error");
                 KAMessageBox::sorry(errmsgParent, errmsg);
                 return false;
             case FileErr_Directory:
