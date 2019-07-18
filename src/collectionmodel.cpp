@@ -735,6 +735,9 @@ void CollectionControlModel::findEnabledCollections(const EntityMimeTypeFilterMo
     }
 }
 
+/******************************************************************************
+* Return whether a collection is enabled for a given alarm type.
+*/
 bool CollectionControlModel::isEnabled(const Collection& collection, CalEvent::Type type)
 {
     if (!collection.isValid()  ||  !instance()->collectionIds().contains(collection.id()))
@@ -1255,6 +1258,28 @@ Collection CollectionControlModel::destination(CalEvent::Type type, QWidget* pro
         }
     }
     return col;
+}
+
+/******************************************************************************
+* Return all collections which belong to a resource and which optionally
+* contain a specified mime type.
+*/
+Collection::List CollectionControlModel::allCollections(CalEvent::Type type)
+{
+    const bool allTypes = (type == CalEvent::EMPTY);
+    const QString mimeType = CalEvent::mimeType(type);
+    AgentManager* agentManager = AgentManager::self();
+    Collection::List result;
+    const QList<Collection::Id> colIds = instance()->collectionIds();
+    for (Collection::Id id : colIds)
+    {
+        Collection c(id);
+        AkonadiModel::instance()->refresh(c);    // update with latest data
+        if ((allTypes  ||  c.contentMimeTypes().contains(mimeType))
+        &&  agentManager->instance(c.resource()).isValid())
+            result += c;
+    }
+    return result;
 }
 
 /******************************************************************************

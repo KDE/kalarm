@@ -20,6 +20,7 @@
 
 #include "akonadiresourcecreator.h"
 #include "autoqpointer.h"
+#include "collectionmodel.h"
 #include "kalarmsettings.h"
 #include "kalarmdirsettings.h"
 
@@ -113,20 +114,50 @@ void AkonadiResourceCreator::agentInstanceCreated(KJob* j)
 
     // Set the default alarm type for the resource config dialog
     mAgentInstance = job->instance();
-    QString type = mAgentInstance.type().identifier();
+    const QString type = mAgentInstance.type().identifier();
     qCDebug(KALARM_LOG) << "AkonadiResourceCreator::agentInstanceCreated:" << type;
-    if (type == QLatin1String("akonadi_kalarm_dir_resource"))
+    bool result = true;
+    bool dirResource = (type == QLatin1String("akonadi_kalarm_dir_resource"));
+    if (dirResource)
         setResourceAlarmType<OrgKdeAkonadiKAlarmDirSettingsInterface>();
     else if (type == QLatin1String("akonadi_kalarm_resource"))
         setResourceAlarmType<OrgKdeAkonadiKAlarmSettingsInterface>();
+    else
+        result = false;
 
-    QPointer<AgentConfigurationDialog> dlg = new AgentConfigurationDialog(mAgentInstance, mParent);
-    bool result = (dlg->exec() == QDialog::Accepted);
-    delete dlg;
+    if (result)
+    {
+        const Collection::List cols = CollectionControlModel::allCollections();
+        QPointer<AgentConfigurationDialog> dlg = new AgentConfigurationDialog(mAgentInstance, mParent);
+        result = (dlg->exec() == QDialog::Accepted);
+        delete dlg;
+        if (result)
+        {
+            // Ensure that the new resource doesn't use the same file or directory
+            // as an existing resource. This would result in duplicate resource
+            // executables eating up processing time for no purpose.
+            QString path = dirResource ? getResourcePath<OrgKdeAkonadiKAlarmDirSettingsInterface>()
+                                       : getResourcePath<OrgKdeAkonadiKAlarmSettingsInterface>();
+            for (const Collection& c : cols)
+            {
+                if (c.remoteId() == path)
+                {
+                    qCWarning(KALARM_LOG) << "AkonadiResourceCreator::agentInstanceCreated: Duplicate path for new resource:" << path;
+                    AgentManager::self()->removeInstance(mAgentInstance);
+                    const QUrl url = QUrl::fromUserInput(path, QString(), QUrl::AssumeLocalFile);
+                    if (url.isLocalFile())
+                        path = url.path();
+                    KMessageBox::sorry(nullptr, xi18nc("@info", "<para>The file or directory is already used by an existing resource:</para><para><filename>%1</filename></para>", path));
+                    Q_EMIT finished(this, false);
+                    return;
+                }
+            }
+        }
+    }
     if (!result)
     {
-        // User has clicked cancel in the resource configuration dialog,
-        // so remove the newly created agent instance.
+        // User has clicked cancel in the resource configuration dialog, or
+        // other error, so remove the newly created agent instance.
         AgentManager::self()->removeInstance(mAgentInstance);
     }
     Q_EMIT finished(this, result);
@@ -148,6 +179,22 @@ void AkonadiResourceCreator::setResourceAlarmType()
         iface.save();
         mAgentInstance.reconfigure();   // notify the agent that its configuration has changed
     }
+}
+
+/******************************************************************************
+* Get the path for an Akonadi resource.
+*/
+template <class Settings>
+QString AkonadiResourceCreator::getResourcePath()
+{
+    Settings iface(QStringLiteral("org.freedesktop.Akonadi.Resource.") + mAgentInstance.identifier(),
+                   QStringLiteral("/Settings"), QDBusConnection::sessionBus(), this);
+    if (!iface.isValid())
+    {
+        qCCritical(KALARM_LOG) << "AkonadiResourceCreator::getResourcePath: Error creating D-Bus interface for" << mAgentInstance.identifier() << "resource configuration.";
+        return QString();
+    }
+    return iface.path();
 }
 
 // vim: et sw=4:

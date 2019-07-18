@@ -51,6 +51,7 @@ class AkonadiResourceCreator : public QObject
 
     private:
         template <class Settings> void setResourceAlarmType();
+        template <class Settings> QString getResourcePath();
 
         QWidget*               mParent;
         CalEvent::Type         mDefaultType;
