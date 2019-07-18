@@ -260,6 +260,12 @@ class CollectionControlModel : public Akonadi::FavoriteCollectionsModel
          */
         static Akonadi::Collection destination(CalEvent::Type type, QWidget* promptParent = nullptr, bool noPrompt = false, bool* cancelled = nullptr);
 
+        /** Return a list of all collections, both enabled and disabled.
+         *  Collections which don't belong to a resource are omitted.
+         *  @param type  Return only collections for this event type, or EMPTY for all.
+         */
+        static Akonadi::Collection::List allCollections(CalEvent::Type type = CalEvent::EMPTY);
+
         /** Return the enabled collections which contain a specified mime type.
          *  If 'writable' is true, only writable collections are included.
          */

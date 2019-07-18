@@ -224,7 +224,7 @@ void ResourceSelector::slotCollectionAdded(const Collection& collection)
             if (i >= 0)
             {
                 // The collection belongs to an agent created by addResource()
-                CalEvent::Types types = CalEvent::types(collection.contentMimeTypes());
+                const CalEvent::Types types = CalEvent::types(collection.contentMimeTypes());
                 CollectionControlModel::setEnabled(collection, types, true);
                 if (!(types & mCurrentAlarmType))
                 {
@@ -255,7 +255,7 @@ void ResourceSelector::slotCollectionAdded(const Collection& collection)
 */
 void ResourceSelector::editResource()
 {
-    Collection collection = currentResource();
+    const Collection collection = currentResource();
     if (collection.isValid())
     {
         AgentInstance instance = AgentManager::self()->instance(collection.resource());
@@ -289,14 +289,14 @@ void ResourceSelector::removeResource()
     Collection collection = currentResource();
     if (!collection.isValid())
         return;
-    QString name = collection.name();
+    const QString name = collection.name();
     // Check if it's the standard or only resource for at least one type.
-    CalEvent::Types allTypes      = AkonadiModel::types(collection);
-    CalEvent::Types standardTypes = CollectionControlModel::standardTypes(collection, true);
-    CalEvent::Type  currentType   = currentResourceType();
-    CalEvent::Type stdType = (standardTypes & CalEvent::ACTIVE)   ? CalEvent::ACTIVE
-                                   : (standardTypes & CalEvent::ARCHIVED) ? CalEvent::ARCHIVED
-                                   : CalEvent::EMPTY;
+    const CalEvent::Types allTypes      = AkonadiModel::types(collection);
+    const CalEvent::Types standardTypes = CollectionControlModel::standardTypes(collection, true);
+    const CalEvent::Type  currentType   = currentResourceType();
+    const CalEvent::Type  stdType = (standardTypes & CalEvent::ACTIVE)   ? CalEvent::ACTIVE
+                                  : (standardTypes & CalEvent::ARCHIVED) ? CalEvent::ARCHIVED
+                                  : CalEvent::EMPTY;
     if (stdType == CalEvent::ACTIVE)
     {
         KAMessageBox::sorry(this, i18nc("@info", "You cannot remove your default active alarm calendar."));
@@ -317,9 +317,9 @@ void ResourceSelector::removeResource()
         if (allTypes != currentType)
         {
             // It also contains alarm types other than the currently displayed type
-            QString stdTypes = CollectionControlModel::typeListForDisplay(standardTypes);
+            const QString stdTypes = CollectionControlModel::typeListForDisplay(standardTypes);
             QString otherTypes;
-            CalEvent::Types nonStandardTypes(allTypes & ~standardTypes);
+            const CalEvent::Types nonStandardTypes(allTypes & ~standardTypes);
             if (nonStandardTypes != currentType)
                 otherTypes = xi18nc("@info", "<para>It also contains:%1</para>", CollectionControlModel::typeListForDisplay(nonStandardTypes));
             text = xi18nc("@info", "<para><resource>%1</resource> is the default calendar for:%2</para>%3"
@@ -408,7 +408,7 @@ void ResourceSelector::contextMenuRequested(const QPoint& viewportPos)
     Collection collection;
     if (mListView->selectionModel()->hasSelection())
     {
-        QModelIndex index = mListView->indexAt(viewportPos);
+        const QModelIndex index = mListView->indexAt(viewportPos);
         if (index.isValid())
             collection = mListView->collectionModel()->collection(index);
         else
@@ -460,7 +460,7 @@ void ResourceSelector::contextMenuRequested(const QPoint& viewportPos)
 */
 void ResourceSelector::reloadResource()
 {
-    Collection collection = currentResource();
+    const Collection collection = currentResource();
     if (collection.isValid())
         AkonadiModel::instance()->reloadCollection(collection);
 }
@@ -524,7 +524,7 @@ void ResourceSelector::importCalendar()
 */
 void ResourceSelector::exportCalendar()
 {
-    Collection calendar = currentResource();
+    const Collection calendar = currentResource();
     if (calendar.isValid())
         AlarmCalendar::exportAlarms(AlarmCalendar::resources()->events(calendar), this);
 }
@@ -566,15 +566,15 @@ void ResourceSelector::showInfo()
     if (collection.isValid())
     {
         const QString name = collection.displayName();
-        QString id = collection.resource();   // resource name
-        CalEvent::Type alarmType = currentResourceType();
-        QString calType = AgentManager::self()->instance(id).type().name();
-        QString storage = AkonadiModel::instance()->storageType(collection);
+        const QString id = collection.resource();   // resource name
+        const CalEvent::Type alarmType = currentResourceType();
+        const QString calType = AgentManager::self()->instance(id).type().name();
+        const QString storage = AkonadiModel::instance()->storageType(collection);
         QString location = collection.remoteId();
-        QUrl url = QUrl::fromUserInput(location, QString(), QUrl::AssumeLocalFile);
+        const QUrl url = QUrl::fromUserInput(location, QString(), QUrl::AssumeLocalFile);
         if (url.isLocalFile())
             location = url.path();
-        CalEvent::Types altypes = AkonadiModel::instance()->types(collection);
+        const CalEvent::Types altypes = AkonadiModel::instance()->types(collection);
         QStringList alarmTypes;
         if (altypes & CalEvent::ACTIVE)
             alarmTypes << i18nc("@info", "Active alarms");
@@ -582,26 +582,26 @@ void ResourceSelector::showInfo()
             alarmTypes << i18nc("@info", "Archived alarms");
         if (altypes & CalEvent::TEMPLATE)
             alarmTypes << i18nc("@info", "Alarm templates");
-        QString alarmTypeString = alarmTypes.join(i18nc("@info List separator", ", "));
+        const QString alarmTypeString = alarmTypes.join(i18nc("@info List separator", ", "));
         QString perms = AkonadiModel::readOnlyTooltip(collection);
         if (perms.isEmpty())
             perms = i18nc("@info", "Read-write");
-        QString enabled = CollectionControlModel::isEnabled(collection, alarmType)
-                    ? i18nc("@info", "Enabled")
-                    : i18nc("@info", "Disabled");
-        QString std = CollectionControlModel::isStandard(collection, alarmType)
-                    ? i18nc("@info Parameter in 'Default calendar: Yes/No'", "Yes")
-                    : i18nc("@info Parameter in 'Default calendar: Yes/No'", "No");
-        QString text = xi18nc("@info",
-                             "<title>%1</title>"
-                             "<para>ID: %2<nl/>"
-                             "Calendar type: %3<nl/>"
-                             "Contents: %4<nl/>"
-                             "%5: <filename>%6</filename><nl/>"
-                             "Permissions: %7<nl/>"
-                             "Status: %8<nl/>"
-                             "Default calendar: %9</para>",
-                             name, id, calType, alarmTypeString, storage, location, perms, enabled, std);
+        const QString enabled = CollectionControlModel::isEnabled(collection, alarmType)
+                           ? i18nc("@info", "Enabled")
+                           : i18nc("@info", "Disabled");
+        const QString std = CollectionControlModel::isStandard(collection, alarmType)
+                           ? i18nc("@info Parameter in 'Default calendar: Yes/No'", "Yes")
+                           : i18nc("@info Parameter in 'Default calendar: Yes/No'", "No");
+        const QString text = xi18nc("@info",
+                                    "<title>%1</title>"
+                                    "<para>ID: %2<nl/>"
+                                    "Calendar type: %3<nl/>"
+                                    "Contents: %4<nl/>"
+                                    "%5: <filename>%6</filename><nl/>"
+                                    "Permissions: %7<nl/>"
+                                    "Status: %8<nl/>"
+                                    "Default calendar: %9</para>",
+                                    name, id, calType, alarmTypeString, storage, location, perms, enabled, std);
         // Display the collection information. Because the user requested
         // the information, don't raise a KNotify event.
         KAMessageBox::information(this, text, QString(), QString(), KMessageBox::Options());
