@@ -475,22 +475,16 @@ void ResourceSelector::saveResource()
 
 /******************************************************************************
 * Called when the length of time archived alarms are to be stored changes.
-* If expired alarms are now to be stored, set any single archived alarm
-* resource to be the default.
+* If expired alarms are now to be stored, this also sets any single archived
+* alarm resource to be the default.
 */
 void ResourceSelector::archiveDaysChanged(int days)
 {
     if (days)
     {
-        if (!CollectionControlModel::getStandard(CalEvent::ARCHIVED).isValid())
-        {
-            Collection::List cols = CollectionControlModel::enabledCollections(CalEvent::ARCHIVED, true);
-            if (cols.count() == 1)
-            {
-                CollectionControlModel::setStandard(cols[0], CalEvent::ARCHIVED);
-                theApp()->purgeNewArchivedDefault(cols[0]);
-            }
-        }
+        const Collection col = CollectionControlModel::getStandard(CalEvent::ARCHIVED);
+        if (col.isValid())
+            theApp()->purgeNewArchivedDefault(col);
     }
 }
 
