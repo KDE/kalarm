@@ -214,12 +214,12 @@ class CollectionControlModel : public Akonadi::FavoriteCollectionsModel
         static int isWritableEnabled(const Akonadi::Collection& collection, CalEvent::Type type, KACalendar::Compat& format);
 
         /** Return the standard collection for a specified mime type.
-         *  @param type       The mime type
-         *  @param useDefault false to return the defined standard collection, if any;
-         *                    true to return the standard or only collection for the type.
+         *  If the mime type is 'archived' and there is no standard collection, the
+         *  only writable archived collection is set to be the standard.
+         *  @param type  The mime type
          *  Reply = invalid collection if there is no standard collection.
          */
-        static Akonadi::Collection getStandard(CalEvent::Type type, bool useDefault = false);
+        static Akonadi::Collection getStandard(CalEvent::Type type);
 
         /** Return whether a collection is the standard collection for a specified
          *  mime type. */

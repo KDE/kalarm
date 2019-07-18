@@ -1,9 +1,10 @@
 KAlarm Change Log
 
-=== Version 2.12.5 --- 9 July 2019 ===
+=== Version 2.12.5 (KDE Applications 19.08) --- 18 July 2019 ===
 + Enable alarm list columns to be hidden using context menu on list header [KDE Bug 397093]
 + Fix regression introduced in version 2.12.0:
     Show time zone abbreviation in message window if alarm time has non-local time zone.
++ If only one writable archived alarm calendar exists, automatically set it as the default.
 
 === Version 2.12.4 (KDE Applications 19.04.3) --- 4 July 2019 ===
 + Fix calendar resource dialogue not configuring resource correctly [KDE Bug 407882]

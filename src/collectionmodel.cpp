@@ -1002,13 +1002,13 @@ int CollectionControlModel::isWritableEnabled(const Akonadi::Collection& collect
 
 /******************************************************************************
 * Return the standard collection for a specified mime type.
-* If 'useDefault' is true and there is no standard collection, the only
-* collection for the mime type will be returned as a default.
+* If the mime type is 'archived' and there is no standard collection, the only
+* writable archived collection is set to be the standard.
 */
-Collection CollectionControlModel::getStandard(CalEvent::Type type, bool useDefault)
+Collection CollectionControlModel::getStandard(CalEvent::Type type)
 {
     const QString mimeType = CalEvent::mimeType(type);
-    int defalt = -1;
+    int defaultArch = -1;
     const QList<Collection::Id> colIds = instance()->collectionIds();
     Collection::List cols;
     for (int i = 0, count = colIds.count();  i < count;  ++i)
@@ -1023,10 +1023,20 @@ Collection CollectionControlModel::getStandard(CalEvent::Type type, bool useDefa
             &&  (col.attribute<CollectionAttribute>()->standard() & type)
             &&  AkonadiModel::isCompatible(col))
                 return col;
-            defalt = (defalt == -1) ? i : -2;
+            if (type == CalEvent::ARCHIVED  &&  ((col.rights() & writableRights) == writableRights))
+                defaultArch = (defaultArch == -1) ? i : -2;
         }
     }
-    return (useDefault && defalt >= 0) ? cols[defalt] : Collection();
+
+    if (defaultArch >= 0)
+    {
+        // There is no standard collection for archived alarms, but there is
+        // only one writable collection for the type. Set the collection to be
+        // the standard.
+        setStandard(cols[defaultArch], type, true);
+        return cols[defaultArch];
+    }
+    return Collection();
 }
 
 /******************************************************************************
@@ -1035,6 +1045,10 @@ Collection CollectionControlModel::getStandard(CalEvent::Type type, bool useDefa
 */
 bool CollectionControlModel::isStandard(Akonadi::Collection& collection, CalEvent::Type type)
 {
+    // If it's for archived alarms, set the standard collection if necessary.
+    if (type == CalEvent::ARCHIVED)
+        return getStandard(type) == collection;
+
     if (!instance()->collectionIds().contains(collection.id()))
         return false;
     AkonadiModel::instance()->refresh(collection);    // update with latest data
