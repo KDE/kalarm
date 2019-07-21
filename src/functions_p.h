@@ -36,7 +36,6 @@ class Private : public QObject
         Q_OBJECT
     public:
         explicit Private(QObject* parent = nullptr) : QObject(parent), mMsgParent(nullptr) {}
-        static bool startKMailMinimised();
         static Private* instance()
         {
             if (!mInstance)
@@ -47,7 +46,6 @@ class Private : public QObject
         QWidget* mMsgParent;
 
     public Q_SLOTS:
-        void windowAdded(WId);
         void cancelRtcWake();
 
     private:
