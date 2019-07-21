@@ -416,7 +416,7 @@ void EditAlarmDlg::init(const KAEvent* event)
         topLayout->addWidget(mTimeWidget);
     }
 
-    // Optional controls depending on More/Less Options button
+    // Optional controls depending on More/Fewer Options button
     mMoreOptions = new QFrame(mainPage);
     mMoreOptions->setFrameStyle(QFrame::NoFrame);
     topLayout->addWidget(mMoreOptions);
@@ -1247,7 +1247,7 @@ void EditAlarmDlg::slotHelp()
 }
 
 /******************************************************************************
-* Called when the More Options or Less Options buttons are clicked.
+* Called when the More Options or Fewer Options buttons are clicked.
 * Show/hide the optional options and swap the More/Less buttons, and save the
 * new setting as the default from now on.
 */
@@ -1267,7 +1267,7 @@ void EditAlarmDlg::showOptions(bool more)
     if (more)
     {
         mMoreOptions->show();
-        mMoreLessButton->setText(i18nc("@action:Button", "Less Options <<"));
+        mMoreLessButton->setText(i18nc("@action:Button", "Fewer Options <<"));
     }
     else
     {
