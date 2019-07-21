@@ -65,16 +65,6 @@ using namespace KCalCore;
 #include <KIO/StatJob>
 #include <KJobWidgets>
 #include <kfileitem.h>
-#include <ktoolinvocation.h>
-
-#if KDEPIM_HAVE_X11
-#include <kwindowsystem.h>
-#include <kwindowinfo.h>
-#include <kxmessages.h>
-#include <kstartupinfo.h>
-#include <netwm.h>
-#include <QX11Info>
-#endif
 
 #include <QAction>
 #include <QDir>
@@ -86,11 +76,6 @@ using namespace KCalCore;
 #include <qglobal.h>
 #include <QStandardPaths>
 #include "kalarm_debug.h"
-
-#if KDEPIM_HAVE_X11
-#include <X11/Xlib.h>
-#include <X11/Xutil.h>
-#endif
 
 using namespace Akonadi;
 
@@ -1393,111 +1378,25 @@ void refreshAlarmsIfQueued()
 
 /******************************************************************************
 * Start KMail if it isn't already running, optionally minimised.
-* Reply = reason for failure to run KMail (which may be the empty string)
+* Reply = reason for failure to run KMail
 *       = null string if success.
 */
-QString runKMail(bool minimise)
+QString runKMail()
 {
     QDBusReply<bool> reply = QDBusConnection::sessionBus().interface()->isServiceRegistered(KMAIL_DBUS_SERVICE);
     if (!reply.isValid()  ||  !reply.value())
     {
         // Program is not already running, so start it
         QString errmsg;
-        if (minimise  &&  Private::startKMailMinimised())
-            return QString();
-        if (KToolInvocation::startServiceByDesktopName(QStringLiteral("org.kde.kmail2"), QString(), &errmsg))
+        QDBusReply<void> startReply = QDBusConnection::sessionBus().interface()->startService(KMAIL_DBUS_SERVICE);
+        if (!startReply.isValid())
         {
+            QString errmsg = startReply.error().message();
             qCCritical(KALARM_LOG) << "Couldn't start KMail (" << errmsg << ")";
             return xi18nc("@info", "Unable to start <application>KMail</application><nl/>(<message>%1</message>)", errmsg);
         }
     }
     return QString();
-}
-
-/******************************************************************************
-* Start KMail, minimised.
-* This code is taken from kstart in kdebase.
-*/
-bool Private::startKMailMinimised()
-{
-#if KDEPIM_HAVE_X11
-    NETRootInfo i(QX11Info::connection(), NET::Supported, NET::Properties2());
-    if (i.isSupported(NET::WM2KDETemporaryRules))
-    {
-        qCDebug(KALARM_LOG) << "startKMailMinimised: using rules";
-        KXMessages msg;
-        QString message = QLatin1String("wmclass=kmail\nwmclassmatch=1\n"  // 1 = exact match
-                          "wmclasscomplete=false\n"
-                          "minimize=true\nminimizerule=3\n"
-                          "type=") + QString().setNum(NET::Normal) + QLatin1String("\ntyperule=2");
-        msg.broadcastMessage("_KDE_NET_WM_TEMPORARY_RULES", message, -1);
-        QCoreApplication::processEvents();
-    }
-    else
-    {
-        // Connect to window add to get the NEW windows
-        qCDebug(KALARM_LOG) << "startKMailMinimised: connecting to window add";
-        connect(KWindowSystem::self(), &KWindowSystem::windowAdded, instance(), &Private::windowAdded);
-    }
-    // Propagate the app startup notification info to the started app.
-    // We are not using KApplication, so the env remained set.
-    KStartupInfoId id = KStartupInfo::currentStartupIdEnv();
-    KProcess* proc = new KProcess;
-    (*proc) << QStringLiteral("kmail");
-    int pid = proc->startDetached();
-    if (!pid)
-    {
-        KStartupInfo::sendFinish(id); // failed to start
-        return false;
-    }
-    KStartupInfoData data;
-    data.addPid(pid);
-    data.setName(QLatin1String("kmail"));
-    data.setBin(QLatin1String("kmail"));
-    KStartupInfo::sendChange(id, data);
-    return true;
-#else
-    return false;
-#endif
-}
-
-/******************************************************************************
-* Called when a window is created, to minimise it.
-* This code is taken from kstart in kdebase.
-*/
-void Private::windowAdded(WId w)
-{
-#if KDEPIM_HAVE_X11
-    static const NET::WindowTypes SUPPORTED_TYPES =
-                             NET::NormalMask | NET::DesktopMask | NET::DockMask
-                           | NET::ToolbarMask | NET::MenuMask | NET::DialogMask
-                           | NET::OverrideMask | NET::TopMenuMask | NET::UtilityMask | NET::SplashMask;
-    KWindowInfo kwinfo(w, NET::WMWindowType | NET::WMName);
-    if (kwinfo.windowType(SUPPORTED_TYPES) == NET::TopMenu
-    ||  kwinfo.windowType(SUPPORTED_TYPES) == NET::Toolbar
-    ||  kwinfo.windowType(SUPPORTED_TYPES) == NET::Desktop)
-        return;   // always ignore these window types
-
-    Display* display = QX11Info::display();
-    XWithdrawWindow(display, w, QX11Info::appScreen());
-    QCoreApplication::processEvents();
-
-    NETWinInfo info(QX11Info::connection(), w, QX11Info::appRootWindow(), NET::WMState, NET::Properties2());
-    XWMHints* hints = XGetWMHints(display, w);
-    if (hints)
-    {
-        hints->flags |= StateHint;
-        hints->initial_state = IconicState;
-        XSetWMHints(display, w, hints);
-        XFree(hints);
-    }
-    info.setWindowType(NET::Normal);
-
-    XSync(display, False);
-    XMapWindow(display, w);
-    XSync(display, False);
-    QCoreApplication::processEvents();
-#endif
 }
 
 /******************************************************************************

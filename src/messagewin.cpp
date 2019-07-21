@@ -2007,7 +2007,7 @@ void MessageWin::slotShowKMailMessage()
     qCDebug(KALARM_LOG) << "MessageWin::slotShowKMailMessage";
     if (!mKMailSerialNumber)
         return;
-    const QString err = KAlarm::runKMail(false);
+    const QString err = KAlarm::runKMail();
     if (!err.isNull())
     {
         KAMessageBox::sorry(this, err);

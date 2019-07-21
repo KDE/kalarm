@@ -140,7 +140,7 @@ KAEvent::List       templateList();
 void                outputAlarmWarnings(QWidget* parent, const KAEvent* = nullptr);
 void                refreshAlarms();
 void                refreshAlarmsIfQueued();    // must only be called from KAlarmApp::processQueue()
-QString             runKMail(bool minimise);
+QString             runKMail();
 
 QStringList         dontShowErrors(const EventId&);
 bool                dontShowErrors(const EventId&, const QString& tag);
