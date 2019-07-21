@@ -65,7 +65,6 @@ using namespace KCalCore;
 #include <KIO/StatJob>
 #include <KJobWidgets>
 #include <kfileitem.h>
-#include <ktoolinvocation.h>
 
 #include <QAction>
 #include <QDir>
@@ -1379,7 +1378,7 @@ void refreshAlarmsIfQueued()
 
 /******************************************************************************
 * Start KMail if it isn't already running, optionally minimised.
-* Reply = reason for failure to run KMail (which may be the empty string)
+* Reply = reason for failure to run KMail
 *       = null string if success.
 */
 QString runKMail()
@@ -1389,8 +1388,10 @@ QString runKMail()
     {
         // Program is not already running, so start it
         QString errmsg;
-        if (KToolInvocation::startServiceByDesktopName(QStringLiteral("org.kde.kmail2"), QString(), &errmsg))
+        QDBusReply<void> startReply = QDBusConnection::sessionBus().interface()->startService(KMAIL_DBUS_SERVICE);
+        if (!startReply.isValid())
         {
+            QString errmsg = startReply.error().message();
             qCCritical(KALARM_LOG) << "Couldn't start KMail (" << errmsg << ")";
             return xi18nc("@info", "Unable to start <application>KMail</application><nl/>(<message>%1</message>)", errmsg);
         }
