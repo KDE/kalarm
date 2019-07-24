@@ -1,6 +1,6 @@
 /*
  *  kaeventformatter.cpp  -  converts KAlarmCal::KAEvent properties to text
- *  Copyright © 2010,2011,2018 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2010-2019 David Jarvie <djarvie@kde.org>
  *
  *  This library is free software; you can redistribute it and/or modify it
  *  under the terms of the GNU Library General Public License as published by
@@ -115,8 +115,8 @@ QString KAEventFormatter::label(Parameter param)
         return i18nc("@label Shell command to execute after alarm", "Post-alarm action");
     case ConfirmAck:
         return i18nc("@label", "Confirm acknowledgement");
-    case KMailSerial:
-        return i18nc("@label", "KMail serial number");
+    case AkonadiItem:
+        return i18nc("@label", "Akonadi Item ID");
     case Sound:
         return i18nc("@label Audio method", "Sound");
     case SoundRepeat:
@@ -206,7 +206,7 @@ bool KAEventFormatter::isApplicable(Parameter param) const
     case PreAction:
     case PostAction:
     case ConfirmAck:
-    case KMailSerial:
+    case AkonadiItem:
     case Reminder:
     case DeferralType:
     case DeferDefault:
@@ -371,8 +371,8 @@ QString KAEventFormatter::value(Parameter param) const
         return trueFalse(mEvent.deferDefaultDateOnly());
     case ConfirmAck:
         return trueFalse(mEvent.confirmAck());
-    case KMailSerial:
-        return mEvent.kmailSerialNumber() ? QLocale().toString(qulonglong(mEvent.kmailSerialNumber())) : trueFalse(false);
+    case AkonadiItem:
+        return (mEvent.akonadiItemId() >= 0) ? QLocale().toString(mEvent.akonadiItemId()) : trueFalse(false);
     case Sound:
         return !mEvent.audioFile().isEmpty() ? mEvent.audioFile()
                : mEvent.speak() ? i18nc("@info", "Speak")

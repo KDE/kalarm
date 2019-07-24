@@ -2,7 +2,7 @@
  *  kaevent.cpp  -  represents calendar events
  *  This file is part of kalarmcal library, which provides access to KAlarm
  *  calendar data.
- *  Copyright © 2001-2016 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2019 David Jarvie <djarvie@kde.org>
  *
  *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Library General Public License as published
@@ -278,7 +278,7 @@ public:
     int                mNextRepeat;        // repetition count of next due sub-repetition
     int                mAlarmCount;        // number of alarms: count of !mMainExpired, mRepeatAtLogin, mDeferral, mReminderActive, mDisplaying
     DeferType          mDeferral;          // whether the alarm is an extra deferred/deferred-reminder alarm
-    unsigned long      mKMailSerialNumber; // if email text, message's KMail serial number
+    Akonadi::Item::Id  mAkonadiItemId;     // if email text, message's Akonadi item ID
     int                mTemplateAfterTime; // time not specified: use n minutes after default time, or -1 (applies to templates only)
     QColor             mBgColour;          // background colour of alarm message
     QColor             mFgColour;          // foreground colour of alarm message, or invalid for default
@@ -337,7 +337,7 @@ public:
     static const QString LATE_CANCEL_FLAG;
     static const QString AUTO_CLOSE_FLAG;
     static const QString TEMPL_AFTER_TIME_FLAG;
-    static const QString KMAIL_SERNUM_FLAG;
+    static const QString KMAIL_ITEM_FLAG;
     static const QString ARCHIVE_FLAG;
     static const QByteArray NEXT_RECUR_PROPERTY;
     static const QByteArray REPEAT_PROPERTY;
@@ -405,7 +405,7 @@ const QString    KAEventPrivate::DEFER_FLAG            = QStringLiteral("DEFER")
 const QString    KAEventPrivate::LATE_CANCEL_FLAG      = QStringLiteral("LATECANCEL");
 const QString    KAEventPrivate::AUTO_CLOSE_FLAG       = QStringLiteral("LATECLOSE");
 const QString    KAEventPrivate::TEMPL_AFTER_TIME_FLAG = QStringLiteral("TMPLAFTTIME");
-const QString    KAEventPrivate::KMAIL_SERNUM_FLAG     = QStringLiteral("KMAIL");
+const QString    KAEventPrivate::KMAIL_ITEM_FLAG       = QStringLiteral("KMAIL");
 const QString    KAEventPrivate::ARCHIVE_FLAG          = QStringLiteral("ARCHIVE");
 
 const QByteArray KAEventPrivate::NEXT_RECUR_PROPERTY("NEXTRECUR");     // X-KDE-KALARM-NEXTRECUR property
@@ -599,7 +599,7 @@ void KAEventPrivate::copy(const KAEventPrivate &event)
     mNextRepeat              = event.mNextRepeat;
     mAlarmCount              = event.mAlarmCount;
     mDeferral                = event.mDeferral;
-    mKMailSerialNumber       = event.mKMailSerialNumber;
+    mAkonadiItemId           = event.mAkonadiItemId;
     mTemplateAfterTime       = event.mTemplateAfterTime;
     mBgColour                = event.mBgColour;
     mFgColour                = event.mFgColour;
@@ -689,7 +689,7 @@ void KAEventPrivate::set(const KCalCore::Event::Ptr &event)
     mReminderMinutes        = 0;
     mDeferDefaultMinutes    = 0;
     mLateCancel             = 0;
-    mKMailSerialNumber      = 0;
+    mAkonadiItemId          = -1;
     mExcludeHolidays        = false;
     mWorkTimeOnly           = 0;
     mChangeCount            = 0;
@@ -754,12 +754,12 @@ void KAEventPrivate::set(const KCalCore::Event::Ptr &event)
             mExcludeHolidayRegion = holidays();
         } else if (flag == WORK_TIME_ONLY_FLAG) {
             mWorkTimeOnly = 1;
-        } else if (flag == KMAIL_SERNUM_FLAG) {
-            const unsigned long n = flags.at(i + 1).toULong(&ok);
+        } else if (flag == KMAIL_ITEM_FLAG) {
+            const Akonadi::Item::Id id = flags.at(i + 1).toLongLong(&ok);
             if (!ok) {
                 continue;
             }
-            mKMailSerialNumber = n;
+            mAkonadiItemId = id;
             ++i;
         } else if (flag == KAEventPrivate::ARCHIVE_FLAG) {
             mArchive = true;
@@ -1047,7 +1047,7 @@ void KAEventPrivate::set(const KCalCore::Event::Ptr &event)
         }
     }
     if (!isEmailText) {
-        mKMailSerialNumber = 0;
+        mAkonadiItemId = -1;
     }
 
     Recurrence *recur = event->recurrence();
@@ -1173,7 +1173,7 @@ void KAEventPrivate::set(const KADateTime &dateTime, const QString &text, const 
         setRepeatAtLoginTrue(false);
     }
 
-    mKMailSerialNumber      = 0;
+    mAkonadiItemId          = -1;
     mReminderMinutes        = 0;
     mDeferDefaultMinutes    = 0;
     mDeferDefaultDateOnly   = false;
@@ -1289,8 +1289,8 @@ bool KAEventPrivate::updateKCalEvent(const Event::Ptr &ev, KAEvent::UidAction ui
     if (!mTemplateName.isEmpty()  &&  mTemplateAfterTime >= 0) {
         (flags += TEMPL_AFTER_TIME_FLAG) += QString::number(mTemplateAfterTime);
     }
-    if (mKMailSerialNumber) {
-        (flags += KMAIL_SERNUM_FLAG) += QString::number(mKMailSerialNumber);
+    if (mAkonadiItemId) {
+        (flags += KMAIL_ITEM_FLAG) += QString::number(mAkonadiItemId);
     }
     if (mArchive  &&  !archived) {
         flags += ARCHIVE_FLAG;
@@ -1896,14 +1896,14 @@ bool KAEvent::autoClose() const
     return d->mAutoClose;
 }
 
-void KAEvent::setKMailSerialNumber(unsigned long n)
+void KAEvent::setAkonadiItemId(Akonadi::Item::Id id)
 {
-    d->mKMailSerialNumber = n;
+    d->mAkonadiItemId = id;
 }
 
-unsigned long KAEvent::kmailSerialNumber() const
+Akonadi::Item::Id KAEvent::akonadiItemId() const
 {
-    return d->mKMailSerialNumber;
+    return d->mAkonadiItemId;
 }
 
 QString KAEvent::cleanText() const
@@ -3806,7 +3806,7 @@ void KAEventPrivate::dumpDebug() const
         }
         qCDebug(KALARMCAL_LOG) << "-- mRepeatSoundPause:" << mRepeatSoundPause;
     }
-    qCDebug(KALARMCAL_LOG) << "-- mKMailSerialNumber:" << mKMailSerialNumber;
+    qCDebug(KALARMCAL_LOG) << "-- mAkonadiItemId:" << mAkonadiItemId;
     qCDebug(KALARMCAL_LOG) << "-- mCopyToKOrganizer:" << mCopyToKOrganizer;
     qCDebug(KALARMCAL_LOG) << "-- mExcludeHolidays:" << mExcludeHolidays;
     qCDebug(KALARMCAL_LOG) << "-- mWorkTimeOnly:" << mWorkTimeOnly;
@@ -5245,7 +5245,7 @@ bool KAEvent::convertKCalEvents(const Calendar::Ptr &calendar, int calendarVersi
                 } else if (cat.startsWith(AUTO_CLOSE_CATEGORY)) {
                     (flags += KAEventPrivate::AUTO_CLOSE_FLAG) += cat.mid(AUTO_CLOSE_CATEGORY.length());
                 } else if (cat.startsWith(KMAIL_SERNUM_CATEGORY)) {
-                    (flags += KAEventPrivate::KMAIL_SERNUM_FLAG) += cat.mid(KMAIL_SERNUM_CATEGORY.length());
+                    (flags += KAEventPrivate::KMAIL_ITEM_FLAG) += cat.mid(KMAIL_SERNUM_CATEGORY.length());
                 } else if (cat == ARCHIVE_CATEGORY) {
                     event->setCustomProperty(KACalendar::APPNAME, ARCHIVE_PROPERTY, QStringLiteral("0"));
                 } else if (cat.startsWith(ARCHIVE_CATEGORIES)) {

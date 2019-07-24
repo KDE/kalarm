@@ -2,7 +2,7 @@
  *  kaevent.h  -  represents calendar events
  *  This file is part of kalarmcal library, which provides access to KAlarm
  *  calendar data.
- *  Copyright © 2001-2013 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2019 David Jarvie <djarvie@kde.org>
  *
  *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Library General Public License as published
@@ -34,6 +34,7 @@
 #include <item.h>
 #include <kcalcore/person.h>
 #include <kcalcore/calendar.h>
+#include <AkonadiCore/item.h>
 
 #include <QBitArray>
 #include <QColor>
@@ -539,8 +540,13 @@ public:
      */
     bool autoClose() const;
 
-    void               setKMailSerialNumber(unsigned long n);
-    unsigned long      kmailSerialNumber() const;
+    /** Set the Akonadi item ID of the email which the alarm is related to.
+     */
+    void setAkonadiItemId(Akonadi::Item::Id id);
+
+    /** Return the Akonadi item ID of the email which the alarm is related to.
+     */
+    Akonadi::Item::Id akonadiItemId() const;
 
     /** Return the alarm's text. Its significance depends on the type of alarm;
      *  alternatively, use message(), displayMessage(), fileName() or command(),
