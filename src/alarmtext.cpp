@@ -303,11 +303,6 @@ bool AlarmText::isTodo() const
     return d->mType == Private::Todo;
 }
 
-unsigned long AlarmText::kmailSerialNumber() const
-{
-    return static_cast<unsigned long>(akonadiItemId());
-}
-
 Akonadi::Item::Id AlarmText::akonadiItemId() const
 {
     return d->mAkonadiItemId;

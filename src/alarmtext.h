@@ -158,14 +158,8 @@ public:
     /** Return whether the instance contains the text of a todo. */
     bool isTodo() const;
 
-    /** Return the kmail serial number of an email.
-     *  @return serial number, or 0 if none.
-     *  @deprecated Use akonadiItemId() instead
-     */
-    KALARMCAL_DEPRECATED unsigned long kmailSerialNumber() const;
-
     /** Return the Akonadi item ID of an email.
-     *  @return serial number, or 0 if none.
+     *  @return Item ID, or -1 if none.
      */
     Akonadi::Item::Id akonadiItemId() const;
 
