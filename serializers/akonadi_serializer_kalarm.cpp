@@ -1,6 +1,6 @@
 /*
  *  akonadi_serializer_kalarm.cpp  -  Akonadi resource serializer for KAlarm
- *  Copyright © 2009-2012,2018 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2009-2019 David Jarvie <djarvie@kde.org>
  *
  *  This library is free software; you can redistribute it and/or modify it
  *  under the terms of the GNU Library General Public License as published by
@@ -231,8 +231,8 @@ void SerializerPluginKAlarm::compare(AbstractDifferencesReporter *reporter, cons
     if (eventL.confirmAck() != eventR.confirmAck()) {
         reportDifference(reporter, KAEventFormatter::ConfirmAck);
     }
-    if (eventL.kmailSerialNumber() != eventR.kmailSerialNumber()) {
-        reportDifference(reporter, KAEventFormatter::KMailSerial);
+    if (eventL.akonadiItemId() != eventR.akonadiItemId()) {
+        reportDifference(reporter, KAEventFormatter::AkonadiItem);
     }
     if (eventL.beep() != eventR.beep()
         || eventL.speak() != eventR.speak()

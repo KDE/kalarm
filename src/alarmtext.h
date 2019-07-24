@@ -2,7 +2,7 @@
  *  alarmtext.h  -  text/email alarm text conversion
  *  This file is part of kalarmcal library, which provides access to KAlarm
  *  calendar data.
- *  Copyright © 2004,2005,2008-2012 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2004-2019 David Jarvie <djarvie@kde.org>
  *
  *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Library General Public License as published
@@ -26,6 +26,7 @@
 #include "kalarmcal_export.h"
 
 #include <kcalcore/todo.h>
+#include <AkonadiCore/item.h>
 #include <QString>
 
 namespace KAlarmCal
@@ -72,15 +73,16 @@ public:
     void setScript(const QString &text);
 
     /** Set the instance contents to be an email.
-     *  @param to      'To' header parameter
-     *  @param from    'From' header parameter
-     *  @param cc      'Cc' header parameter
-     *  @param time    'Date' header parameter
-     *  @param subject 'Subject' header parameter
-     *  @param body    email body text
+     *  @param to       'To' header parameter
+     *  @param from     'From' header parameter
+     *  @param cc       'Cc' header parameter
+     *  @param time     'Date' header parameter
+     *  @param subject  'Subject' header parameter
+     *  @param body     email body text
+     *  @param itemId   Akonadi item ID of the email.
      */
     void setEmail(const QString &to, const QString &from, const QString &cc, const QString &time,
-                  const QString &subject, const QString &body, unsigned long kmailSerialNumber = 0);
+                  const QString &subject, const QString &body, Akonadi::Item::Id itemId = -1);
 
     /** Set the instance contents to be a todo.
      *  @param todo Todo instance to set as the text
@@ -144,7 +146,7 @@ public:
      */
     QString description() const;
 
-    /** Return whether there is any text. */
+    /** Return whether the instance has any contents. */
     bool isEmpty() const;
 
     /** Return whether the instance contains the text of an email. */
@@ -156,10 +158,10 @@ public:
     /** Return whether the instance contains the text of a todo. */
     bool isTodo() const;
 
-    /** Return the kmail serial number of an email.
-     *  @return serial number, or 0 if none.
+    /** Return the Akonadi item ID of an email.
+     *  @return Item ID, or -1 if none.
      */
-    unsigned long kmailSerialNumber() const;
+    Akonadi::Item::Id akonadiItemId() const;
 
     /** Return the alarm summary text for either single line or tooltip display.
      *  @param event      event whose summary text is to be returned

@@ -2,7 +2,7 @@
  *  alarmtext.cpp  -  text/email alarm text conversion
  *  This file is part of kalarmcal library, which provides access to KAlarm
  *  calendar data.
- *  Copyright © 2004,2005,2007-2016 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2004-2019 David Jarvie <djarvie@kde.org>
  *
  *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Library General Public License as published
@@ -67,10 +67,10 @@ public:
     static QString mSubjectPrefixEn;
     static bool    mInitialised;
 
-    QString        mBody, mFrom, mTo, mCc, mTime, mSubject;
-    unsigned long  mKMailSerialNum;   // if email, message's KMail serial number, else 0
-    Type           mType;
-    bool           mIsEmail;
+    QString           mBody, mFrom, mTo, mCc, mTime, mSubject;
+    Akonadi::Item::Id mAkonadiItemId;   // if email, message's Akonadi item ID, else -1
+    Type              mType;
+    bool              mIsEmail;
 };
 
 QString AlarmText::Private::mFromPrefix;
@@ -141,17 +141,17 @@ void AlarmText::setScript(const QString &text)
 }
 
 void AlarmText::setEmail(const QString &to, const QString &from, const QString &cc, const QString &time,
-                         const QString &subject, const QString &body, unsigned long kmailSerialNumber)
+                         const QString &subject, const QString &body, Akonadi::Item::Id itemId)
 {
     d->clear();
-    d->mType           = Private::Email;
-    d->mTo             = to;
-    d->mFrom           = from;
-    d->mCc             = cc;
-    d->mTime           = time;
-    d->mSubject        = subject;
-    d->mBody           = body;
-    d->mKMailSerialNum = kmailSerialNumber;
+    d->mType          = Private::Email;
+    d->mTo            = to;
+    d->mFrom          = from;
+    d->mCc            = cc;
+    d->mTime          = time;
+    d->mSubject       = subject;
+    d->mBody          = body;
+    d->mAkonadiItemId = itemId;
 }
 
 void AlarmText::setTodo(const KCalCore::Todo::Ptr &todo)
@@ -303,9 +303,9 @@ bool AlarmText::isTodo() const
     return d->mType == Private::Todo;
 }
 
-unsigned long AlarmText::kmailSerialNumber() const
+Akonadi::Item::Id AlarmText::akonadiItemId() const
 {
-    return d->mKMailSerialNum;
+    return d->mAkonadiItemId;
 }
 
 /******************************************************************************
@@ -506,7 +506,7 @@ void AlarmText::Private::clear()
     mCc.clear();
     mTime.clear();
     mSubject.clear();
-    mKMailSerialNum = 0;
+    mAkonadiItemId = -1;
 }
 
 /******************************************************************************

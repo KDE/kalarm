@@ -2,7 +2,7 @@
    This file is part of kalarmcal library, which provides access to KAlarm
    calendar data.
 
-   Copyright (c) 2018 David Jarvie <djarvie@kde.org>
+   Copyright © 2018,2019 David Jarvie <djarvie@kde.org>
 
    This library is free software; you can redistribute it and/or modify it
    under the terms of the GNU Library General Public License as published by
@@ -859,24 +859,24 @@ void KAEventTest::fromKCalEvent()
         KAEvent event(kcalevent);
         QVERIFY(!event.emailBcc());
         QCOMPARE(event.templateAfterTime(), 31);
-        QCOMPARE(event.kmailSerialNumber(), 0UL);
+        QCOMPARE(event.akonadiItemId(), Akonadi::Item::Id(-1));
     }
     {
-        // KMail serial number, with alarm message in email format
+        // Akonadi item ID, with alarm message in email format
         Alarm::Ptr kcalalarm;
         Event::Ptr kcalevent = createKcalEvent(dt.qDateTime(), createdDt, kcalalarm);
         kcalevent->setCustomProperty("KALARM", "FLAGS", QStringLiteral("KMAIL;759231"));
         kcalalarm->setText(QStringLiteral("From: a@b.c\nTo: d@e.f\nDate: Sun, 01 Apr 2018 17:36:06 +0100\nSubject: About this"));
         KAEvent event(kcalevent);
         QCOMPARE(event.templateAfterTime(), -1);
-        QCOMPARE(event.kmailSerialNumber(), 759231UL);
+        QCOMPARE(event.akonadiItemId(), Akonadi::Item::Id(759231));
     }
     {
-        // KMail serial number, with alarm message in wrong format
+        // Akonadi item ID, with alarm message in wrong format
         Event::Ptr kcalevent = createKcalEvent(dt.qDateTime(), createdDt);
         kcalevent->setCustomProperty("KALARM", "FLAGS", QStringLiteral("KMAIL;759231"));
         KAEvent event(kcalevent);
-        QCOMPARE(event.kmailSerialNumber(), 0UL);
+        QCOMPARE(event.akonadiItemId(), Akonadi::Item::Id(-1));
     }
 
     // Alarm custom properties
