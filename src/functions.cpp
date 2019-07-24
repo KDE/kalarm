@@ -123,7 +123,7 @@ const QLatin1String KORG_DBUS_IFACE("org.kde.korganizer.Korganizer");
 #define       KORG_DBUS_LOAD_PATH       "/korganizer_PimApplication"
 //const QLatin1String KORG_DBUS_WINDOW_PATH("/korganizer/MainWindow_1");
 const QLatin1String KORG_MIME_TYPE("application/x-vnd.akonadi.calendar.event");
-const QLatin1String KORGANIZER_UID("-korg");
+const QLatin1String KORGANIZER_UID("korg-");
 
 const QLatin1String ALARM_OPTS_FILE("alarmopts");
 const char*         DONT_SHOW_ERRORS_GROUP = "DontShowErrors";
@@ -1756,7 +1756,7 @@ KAlarm::UpdateResult sendToKOrganizer(const KAEvent& event)
     Event::Ptr kcalEvent(new KCalCore::Event);
     event.updateKCalEvent(kcalEvent, KAEvent::UID_IGNORE);
     // Change the event ID to avoid duplicating the same unique ID as the original event
-    QString uid = uidKOrganizer(event.id());
+    const QString uid = uidKOrganizer(event.id());
     kcalEvent->setUid(uid);
     kcalEvent->clearAlarms();
     QString userEmail;
@@ -1785,21 +1785,20 @@ KAlarm::UpdateResult sendToKOrganizer(const KAEvent& event)
         default:
             break;
     }
-    Person person(QString(), userEmail);
+    const Person person(QString(), userEmail);
     kcalEvent->setOrganizer(person);
     kcalEvent->setDuration(Duration(Preferences::kOrgEventDuration() * 60, Duration::Seconds));
 
     // Translate the event into string format
     ICalFormat format;
     format.setTimeZone(Preferences::timeSpecAsZone());
-    QString iCal = format.toICalString(kcalEvent);
+    const QString iCal = format.toICalString(kcalEvent);
 
     // Send the event to KOrganizer
     KAlarm::UpdateResult status = runKOrganizer();   // start KOrganizer if it isn't already running, and create its D-Bus interface
     if (status != KAlarm::UPDATE_OK)
         return status;
-    QList<QVariant> args;
-    args << iCal;
+    const QList<QVariant> args{iCal};
     QDBusReply<bool> reply = korgInterface->callWithArgumentList(QDBus::Block, QStringLiteral("addIncidence"), args);
     if (!reply.isValid())
     {
@@ -1830,7 +1829,7 @@ KAlarm::UpdateResult sendToKOrganizer(const KAEvent& event)
 KAlarm::UpdateResult deleteFromKOrganizer(const QString& eventID)
 {
     const QString newID = uidKOrganizer(eventID);
-    new CollectionSearch(KORG_MIME_TYPE, newID, true);  // this auto-deletes when complete
+    new CollectionSearch(KORG_MIME_TYPE, QString(), newID, true);  // this auto-deletes when complete
     // Ignore errors
     return KAlarm::UpdateResult(KAlarm::UPDATE_OK);
 }
@@ -1890,11 +1889,10 @@ KAlarm::UpdateResult runKOrganizer()
 */
 QString uidKOrganizer(const QString& id)
 {
+    if (id.startsWith(KORGANIZER_UID))
+        return id;
     QString result = id;
-    int i = result.lastIndexOf(QLatin1Char('-'));
-    if (i < 0)
-        i = result.length();
-    return result.insert(i, KORGANIZER_UID);
+    return result.insert(0, KORGANIZER_UID);
 }
 
 } // namespace

@@ -1,7 +1,7 @@
 /*
  *  messagewin.h  -  displays an alarm message
  *  Program:  kalarm
- *  Copyright © 2001-2013 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2019 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -158,7 +158,7 @@ class MessageWin : public MainWindowBase
         int                 mDefaultDeferMinutes;
         KAAlarm::Type       mAlarmType;
         KAEvent::SubAction  mAction;
-        unsigned long       mKMailSerialNumber; // if email text, message's KMail serial number, else 0
+        Akonadi::Item::Id   mAkonadiItemId;   // if email text, message's Akonadi Item ID, else -1
         KAEvent::CmdErrType mCommandError;
         QStringList         mErrorMsgs;
         QString             mDontShowAgain;   // non-null for don't-show-again option with error message

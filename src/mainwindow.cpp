@@ -46,10 +46,14 @@
 #include <kalarmcal/kaevent.h>
 
 #include <Libkdepim/MaillistDrag>
-#include <kmime/kmime_content.h>
+#include <kmime/kmime_message.h>
+#include <AkonadiCore/item.h>
+#include <AkonadiCore/itemfetchjob.h>
+#include <AkonadiCore/itemfetchscope.h>
 #include <AkonadiWidgets/controlgui.h>
 #include <KCalCore/MemoryCalendar>
 #include <KCalUtils/kcalutils/icaldrag.h>
+using namespace Akonadi;
 using namespace KCalCore;
 using namespace KCalUtils;
 #include <KAboutData>
@@ -1211,7 +1215,7 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
     QByteArray         bytes;
     AlarmText          alarmText;
     KPIM::MailList     mailList;
-    QList<QUrl>        files;
+    QList<QUrl>        urls;
     MemoryCalendar::Ptr calendar(new MemoryCalendar(Preferences::timeSpecAsZone()));
 #ifndef NDEBUG
     QString fmts = data->formats().join(QStringLiteral(", "));
@@ -1239,7 +1243,7 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
             // to be called up from the alarm message window.
             mailList = KPIM::MailList::fromMimeData(data);
             if (!mailList.isEmpty())
-                sernum = mailList[0].serialNumber();
+                sernum = mailList.at(0).serialNumber();
         }
         alarmText.setEmail(getMailHeader("To", content),
                            getMailHeader("From", content),
@@ -1255,19 +1259,19 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
         qCDebug(KALARM_LOG) << "MainWindow::executeDropEvent: KMail_list";
         if (mailList.isEmpty())
             return;
-        KPIM::MailSummary& summary = mailList[0];
+        const KPIM::MailSummary& summary = mailList.at(0);
         QDateTime dt;
         dt.setTime_t(summary.date());
-        QString body = KAMail::getMailBody(summary.serialNumber());
+        const QString body = KAMail::getMailBody(summary.serialNumber());
         alarmText.setEmail(summary.to(), summary.from(), QString(),
                            QLocale().toString(dt), summary.subject(),
-                           body, summary.serialNumber());
+                           body, static_cast<unsigned long>(summary.serialNumber()));
     }
     else if (ICalDrag::fromMimeData(data, calendar))
     {
         // iCalendar - If events are included, use the first event
         qCDebug(KALARM_LOG) << "MainWindow::executeDropEvent: iCalendar";
-        Event::List events = calendar->rawEvents();
+        const Event::List events = calendar->rawEvents();
         if (!events.isEmpty())
         {
             KAEvent ev(events[0]);
@@ -1275,7 +1279,7 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
             return;
         }
         // If todos are included, use the first todo
-        Todo::List todos = calendar->rawTodos();
+        const Todo::List todos = calendar->rawTodos();
         if (todos.isEmpty())
             return;
         Todo::Ptr todo = todos[0];
@@ -1299,23 +1303,67 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
         KAlarm::editNewAlarm(&ev, win);
         return;
     }
-    else if (!(files = data->urls()).isEmpty())
+    else if (!(urls = data->urls()).isEmpty())
     {
-        qCDebug(KALARM_LOG) << "MainWindow::executeDropEvent: URL";
-        // Try to find the mime type of the file, without downloading a remote file
-        QMimeDatabase mimeDb;
-        const QString mimeTypeName = mimeDb.mimeTypeForUrl(files[0]).name();
-        action = mimeTypeName.startsWith(QStringLiteral("audio/")) ? KAEvent::AUDIO : KAEvent::FILE;
-        alarmText.setText(files[0].toDisplayString());
+        const QUrl& url(urls.at(0));
+        const Item item = Item::fromUrl(url);
+        if (item.isValid())
+        {
+            // It's an Akonadi item
+            qCDebug(KALARM_LOG) << "MainWindow::executeDropEvent: Akonadi item" << item.id();
+            if (QUrlQuery(url).queryItemValue(QStringLiteral("type")) == QStringLiteral("message/rfc822"))
+            {
+                // It's an email held in Akonadi
+                qCDebug(KALARM_LOG) << "MainWindow::executeDropEvent: Akonadi email";
+                ItemFetchJob* job = new ItemFetchJob(item);
+                job->fetchScope().fetchFullPayload();
+                Item::List items;
+                if (job->exec())
+                    items = job->items();
+                if (items.isEmpty())
+                {
+                    qCWarning(KALARM_LOG) << "MainWindow::executeDropEvent: Akonadi item" << item.id() << "not found";
+                    return;
+                }
+                const Item& it = items.at(0);
+                if (!it.isValid()  ||  !it.hasPayload<KMime::Message::Ptr>())
+                {
+                    qCWarning(KALARM_LOG) << "MainWindow::executeDropEvent: invalid email";
+                    return;
+                }
+                KMime::Message::Ptr message = it.payload<KMime::Message::Ptr>();
+                QString body;
+                if (message->textContent())
+                    body = message->textContent()->decodedText(true, true);    // strip trailing newlines & spaces
+                alarmText.setEmail(getMailHeader("To", *message),
+                                   getMailHeader("From", *message),
+                                   getMailHeader("Cc", *message),
+                                   getMailHeader("Date", *message),
+                                   getMailHeader("Subject", *message),
+                           body, it.id());
+            }
+        }
+        else
+        {
+            qCDebug(KALARM_LOG) << "MainWindow::executeDropEvent: URL";
+            // Try to find the mime type of the file, without downloading a remote file
+            QMimeDatabase mimeDb;
+            const QString mimeTypeName = mimeDb.mimeTypeForUrl(url).name();
+            action = mimeTypeName.startsWith(QStringLiteral("audio/")) ? KAEvent::AUDIO : KAEvent::FILE;
+            alarmText.setText(url.toDisplayString());
+        }
     }
-    else if (data->hasText())
+    if (alarmText.isEmpty())
     {
-        QString text = data->text();
-        qCDebug(KALARM_LOG) << "MainWindow::executeDropEvent: text";
-        alarmText.setText(text);
+        if (data->hasText())
+        {
+            const QString text = data->text();
+            qCDebug(KALARM_LOG) << "MainWindow::executeDropEvent: text";
+            alarmText.setText(text);
+        }
+        else
+            return;
     }
-    else
-        return;
 
     if (!alarmText.isEmpty())
     {

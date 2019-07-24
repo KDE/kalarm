@@ -1,7 +1,7 @@
 /*
  *  collectionsearch.cpp  -  Search Akonadi Collections
  *  Program:  kalarm
- *  Copyright © 2014 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2014,2019 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -25,7 +25,10 @@
 #include <AkonadiCore/collectionfetchjob.h>
 #include <AkonadiCore/collectionfetchscope.h>
 #include <AkonadiCore/itemfetchjob.h>
+#include <AkonadiCore/itemfetchscope.h>
 #include <AkonadiCore/itemdeletejob.h>
+#include <KCalCore/Event>
+using namespace KCalCore;
 
 #include <QTimer>
 #include "kalarm_debug.h"
@@ -42,11 +45,12 @@ using namespace Akonadi;
 *   notify all Items with that GID.
 * - Otherwise, it will Q_EMIT the signal collections() to notify all Collections.
 */
-CollectionSearch::CollectionSearch(const QString& mimeType, const QString& gid, bool remove)
+CollectionSearch::CollectionSearch(const QString& mimeType, const QString& gid, const QString& uid, bool remove)
     : mMimeType(mimeType),
       mGid(gid),
+      mUid(uid),
       mDeleteCount(0),
-      mDelete(remove && !mGid.isEmpty())
+      mDelete(remove && (!mGid.isEmpty() || !mUid.isEmpty()))
 {
     const AgentInstance::List agents = AgentManager::self()->instances();
     for (const AgentInstance& agent : agents)
@@ -54,7 +58,7 @@ CollectionSearch::CollectionSearch(const QString& mimeType, const QString& gid, 
         if (agent.type().mimeTypes().contains(mimeType))
         {
             {
-                CollectionFetchJob* job = new CollectionFetchJob(Collection::root(), CollectionFetchJob::FirstLevel);
+                CollectionFetchJob* job = new CollectionFetchJob(Collection::root(), CollectionFetchJob::Recursive);
                 job->fetchScope().setResource(agent.identifier());
                 mCollectionJobs << job;
                 connect(job, &CollectionFetchJob::result, this, &CollectionSearch::collectionFetchResult);
@@ -75,9 +79,9 @@ CollectionSearch::CollectionSearch(const QString& mimeType, const QString& gid, 
 */
 void CollectionSearch::collectionFetchResult(KJob* j)
 {
-    CollectionFetchJob* job = static_cast<CollectionFetchJob*>(j);
+    CollectionFetchJob* job = qobject_cast<CollectionFetchJob*>(j);
     if (j->error())
-        qCCritical(KALARM_LOG) << "CollectionSearch::collectionFetchResult: CollectionFetchJob" << job->fetchScope().resource() << "error: " << j->errorString();
+        qCCritical(KALARM_LOG) << "CollectionSearch::collectionFetchResult: CollectionFetchJob" << job->fetchScope().resource()<< "error: " << j->errorString();
     else
     {
         const Collection::List collections = job->collections();
@@ -85,18 +89,28 @@ void CollectionSearch::collectionFetchResult(KJob* j)
         {
             if (c.contentMimeTypes().contains(mMimeType))
             {
-                if (mGid.isEmpty())
-                    mCollections << c;
-                else
+                ItemFetchJob* ijob;
+                if (!mGid.isEmpty())
                 {
                     // Search for all Items with the specified GID
                     Item item;
                     item.setGid(mGid);
-                    ItemFetchJob* ijob = new ItemFetchJob(item, this);
+                    ijob = new ItemFetchJob(item, this);
                     ijob->setCollection(c);
-                    mItemFetchJobs[ijob] = c.id();
-                    connect(ijob, &ItemFetchJob::result, this, &CollectionSearch::itemFetchResult);
                 }
+                else if (!mUid.isEmpty())
+                {
+                    // Search for all Events with the specified UID
+                    ijob = new ItemFetchJob(c, this);
+                    ijob->fetchScope().fetchFullPayload(true);
+                }
+                else
+                {
+                    mCollections << c;
+                    continue;
+                }
+                mItemFetchJobs[ijob] = c.id();
+                connect(ijob, &ItemFetchJob::result, this, &CollectionSearch::itemFetchResult);
             }
         }
     }
@@ -105,7 +119,7 @@ void CollectionSearch::collectionFetchResult(KJob* j)
     if (mCollectionJobs.isEmpty())
     {
         // All collections have now been fetched
-        if (mGid.isEmpty())
+        if (mGid.isEmpty() && mUid.isEmpty())
             finish();
     }
 }
@@ -115,9 +129,14 @@ void CollectionSearch::collectionFetchResult(KJob* j)
 */
 void CollectionSearch::itemFetchResult(KJob* j)
 {
-    ItemFetchJob* job = static_cast<ItemFetchJob*>(j);
+    ItemFetchJob* job = qobject_cast<ItemFetchJob*>(j);
     if (j->error())
-        qCDebug(KALARM_LOG) << "CollectionSearch::itemFetchResult: ItemFetchJob: collection" << mItemFetchJobs[job] << "GID" << mGid << "error: " << j->errorString();
+    {
+        if (!mUid.isEmpty())
+            qCDebug(KALARM_LOG) << "CollectionSearch::itemFetchResult: ItemFetchJob: collection" << mItemFetchJobs[job] << "UID" << mUid << "error: " << j->errorString();
+        else
+            qCDebug(KALARM_LOG) << "CollectionSearch::itemFetchResult: ItemFetchJob: collection" << mItemFetchJobs[job] << "GID" << mGid << "error: " << j->errorString();
+    }
     else
     {
         if (mDelete)
@@ -125,6 +144,17 @@ void CollectionSearch::itemFetchResult(KJob* j)
             const Item::List items = job->items();
             for (const Item& item : items)
             {
+                if (!mUid.isEmpty())
+                {
+                    if (item.mimeType() == mMimeType  &&  item.hasPayload<Event::Ptr>())
+                    {
+                        const Event::Ptr kcalEvent = item.payload<Event::Ptr>();
+                        if (kcalEvent->uid() != mUid)
+                            continue;
+                    }
+                }
+                else if (mGid.isEmpty())
+                    continue;
                 ItemDeleteJob* djob = new ItemDeleteJob(item, this);
                 mItemDeleteJobs[djob] = mItemFetchJobs[job];
                 connect(djob, &ItemDeleteJob::result, this, &CollectionSearch::itemDeleteResult);
@@ -146,7 +176,12 @@ void CollectionSearch::itemDeleteResult(KJob* j)
 {
     ItemDeleteJob* job = static_cast<ItemDeleteJob*>(j);
     if (j->error())
-        qCDebug(KALARM_LOG) << "CollectionSearch::itemDeleteResult: ItemDeleteJob: resource" << mItemDeleteJobs[job] << "GID" << mGid << "error: " << j->errorString();
+    {
+        if (!mUid.isEmpty())
+            qCDebug(KALARM_LOG) << "CollectionSearch::itemDeleteResult: ItemDeleteJob: resource" << mItemDeleteJobs[job] << "UID" << mUid << "error: " << j->errorString();
+        else
+            qCDebug(KALARM_LOG) << "CollectionSearch::itemDeleteResult: ItemDeleteJob: resource" << mItemDeleteJobs[job] << "GID" << mGid << "error: " << j->errorString();
+    }
     else
         ++mDeleteCount;
     mItemDeleteJobs.remove(job);
@@ -162,7 +197,7 @@ void CollectionSearch::finish()
 {
     if (mDelete)
         Q_EMIT deleted(mDeleteCount);
-    else if (mGid.isEmpty())
+    else if (mGid.isEmpty() && mUid.isEmpty())
         Q_EMIT collections(mCollections);
     else
         Q_EMIT items(mItems);
