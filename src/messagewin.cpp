@@ -39,6 +39,8 @@
 #include "synchtimer.h"
 
 #include <kpimtextedit/texttospeech.h>
+#include <AkonadiCore/itemfetchjob.h>
+#include <AkonadiCore/itemfetchscope.h>
 
 #include <KAboutData>
 #include <kstandardguiitem.h>
@@ -90,6 +92,7 @@
 
 using namespace KCalCore;
 using namespace KAlarmCal;
+using namespace Akonadi;
 
 #if KDEPIM_HAVE_X11
 enum FullScreenType { NoFullScreen = 0, FullScreen = 1, FullScreenActive = 2 };
@@ -181,7 +184,7 @@ MessageWin::MessageWin(const KAEvent* event, const KAAlarm& alarm, int flags)
       mDefaultDeferMinutes(event->deferDefaultMinutes()),
       mAlarmType(alarm.type()),
       mAction(event->actionSubType()),
-      mKMailSerialNumber(event->kmailSerialNumber()),
+      mAkonadiItemId(event->akonadiItemId()),
       mCommandError(event->commandError()),
       mRestoreHeight(0),
       mAudioRepeatPause(event->repeatSoundPause()),
@@ -289,7 +292,7 @@ MessageWin::MessageWin(const KAEvent* event, const DateTime& alarmDateTime,
       mEventId(*event),
       mAlarmType(KAAlarm::MAIN_ALARM),
       mAction(event->actionSubType()),
-      mKMailSerialNumber(0),
+      mAkonadiItemId(-1),
       mCommandError(KAEvent::CMD_NO_ERROR),
       mErrorMsgs(errmsgs),
       mDontShowAgain(dontShowAgain),
@@ -716,7 +719,7 @@ void MessageWin::initView()
     }
 
     KIconLoader iconLoader;
-    if (mKMailSerialNumber)
+    if (mAkonadiItemId >= 0)
     {
         // KMail button
         const QPixmap pixmap = iconLoader.loadIcon(QStringLiteral("internet-mail"), KIconLoader::MainToolbar);
@@ -999,7 +1002,7 @@ void MessageWin::saveProperties(KConfigGroup& config)
         config.writeEntry("DeferMins", mDefaultDeferMinutes);
         config.writeEntry("NoDefer", mNoDefer);
         config.writeEntry("NoPostAction", mNoPostAction);
-        config.writeEntry("KMailSerial", static_cast<qulonglong>(mKMailSerialNumber));
+        config.writeEntry("AkonadiItemId", mAkonadiItemId);
         config.writeEntry("CmdErr", static_cast<int>(mCommandError));
         config.writeEntry("DontShowAgain", mDontShowAgain);
     }
@@ -1057,7 +1060,7 @@ void MessageWin::readProperties(const KConfigGroup& config)
     mDefaultDeferMinutes = config.readEntry("DeferMins", 0);
     mNoDefer             = config.readEntry("NoDefer", false);
     mNoPostAction        = config.readEntry("NoPostAction", true);
-    mKMailSerialNumber   = static_cast<unsigned long>(config.readEntry("KMailSerial", QVariant(QVariant::ULongLong)).toULongLong());
+    mAkonadiItemId       = config.readEntry("AkonadiItemId", QVariant(QVariant::LongLong)).toLongLong();
     mCommandError        = KAEvent::CmdErrType(config.readEntry("CmdErr", static_cast<int>(KAEvent::CMD_NO_ERROR)));
     mDontShowAgain       = config.readEntry("DontShowAgain", QString());
     mShowEdit            = false;
@@ -2005,7 +2008,7 @@ void MessageWin::slotOk()
 void MessageWin::slotShowKMailMessage()
 {
     qCDebug(KALARM_LOG) << "MessageWin::slotShowKMailMessage";
-    if (!mKMailSerialNumber)
+    if (mAkonadiItemId < 0)
         return;
     const QString err = KAlarm::runKMail();
     if (!err.isNull())
@@ -2014,10 +2017,35 @@ void MessageWin::slotShowKMailMessage()
         return;
     }
     org::kde::kmail::kmail kmail(KMAIL_DBUS_SERVICE, KMAIL_DBUS_PATH, QDBusConnection::sessionBus());
-    QDBusReply<bool> reply = kmail.showMail((qint64)mKMailSerialNumber);
+    // Display the message contents
+    QDBusReply<bool> reply = kmail.showMail(mAkonadiItemId);
+    bool failed1 = true;
+    bool failed2 = true;
     if (!reply.isValid())
-        qCCritical(KALARM_LOG) << "kmail D-Bus call failed:" << reply.error().message();
-    else if (!reply.value())
+        qCCritical(KALARM_LOG) << "kmail 'showMail' D-Bus call failed:" << reply.error().message();
+    else if (reply.value())
+        failed1 = false;
+
+    // Select the mail folder containing the message
+    ItemFetchJob* job = new ItemFetchJob(Item(mAkonadiItemId));
+    job->fetchScope().setAncestorRetrieval(ItemFetchScope::Parent);
+    Item::List items;
+    if (job->exec())
+        items = job->items();
+    if (items.isEmpty()  ||  !items.at(0).isValid())
+        qCWarning(KALARM_LOG) << "MessageWin::slotShowKMailMessage: No parent found for item" << mAkonadiItemId;
+    else
+    {
+        const Item& it = items.at(0);
+        const Collection::Id colId = it.parentCollection().id();
+        reply = kmail.selectFolder(QString::number(colId));
+        if (!reply.isValid())
+            qCCritical(KALARM_LOG) << "kmail 'selectFolder' D-Bus call failed:" << reply.error().message();
+        else if (reply.value())
+            failed2 = false;
+    }
+
+    if (failed1 || failed2)
         KAMessageBox::sorry(this, xi18nc("@info", "Unable to locate this email in <application>KMail</application>"));
 }
 

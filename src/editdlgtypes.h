@@ -1,7 +1,7 @@
 /*
  *  editdlgtypes.h  -  dialogues to create or edit alarm or alarm template types
  *  Program:  kalarm
- *  Copyright © 2001-2012 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2019 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -26,6 +26,7 @@
 
 #include <kalarmcal/alarmtext.h>
 #include <kalarmcal/kaevent.h>
+#include <AkonadiCore/item.h>
 
 using namespace KAlarmCal;
 
@@ -103,7 +104,7 @@ class EditDisplayAlarmDlg : public EditAlarmDlg
         CheckBox*           mConfirmAck;
         FontColourButton*   mFontColourButton;
         SpecialActionsButton* mSpecialActionsButton;
-        unsigned long       mKMailSerialNumber;  // if email text, message's KMail serial number, else 0
+        Akonadi::Item::Id   mAkonadiItemId;      // if email text, message's Akonadi item ID, else -1
         bool                mReminderDeferral;
         bool                mReminderArchived;
         // Text message alarm widgets

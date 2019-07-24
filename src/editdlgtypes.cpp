@@ -1,7 +1,7 @@
 /*
  *  editdlgtypes.cpp  -  dialogs to create or edit alarm or alarm template types
  *  Program:  kalarm
- *  Copyright © 2001-2018 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2019 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -280,13 +280,13 @@ CheckBox* EditDisplayAlarmDlg::createConfirmAckCheckbox(QWidget* parent)
 */
 void EditDisplayAlarmDlg::type_initValues(const KAEvent* event)
 {
-    mKMailSerialNumber = 0;
+    mAkonadiItemId = -1;
     lateCancel()->showAutoClose(true);
     if (event)
     {
-        if (mAlarmType == KAEvent::MESSAGE  &&  event->kmailSerialNumber()
+        if (mAlarmType == KAEvent::MESSAGE  &&  event->akonadiItemId()
         &&  AlarmText::checkIfEmail(event->cleanText()))
-            mKMailSerialNumber = event->kmailSerialNumber();
+            mAkonadiItemId = event->akonadiItemId();
         lateCancel()->setAutoClose(event->autoClose());
         if (event->useDefaultFont())
             mFontColourButton->setDefaultFont();
@@ -406,7 +406,7 @@ void EditDisplayAlarmDlg::setAction(KAEvent::SubAction action, const AlarmText& 
         case KAEvent::MESSAGE:
             mTypeCombo->setCurrentIndex(tTEXT);
             mTextMessageEdit->setPlainText(text);
-            mKMailSerialNumber = alarmText.isEmail() ? alarmText.kmailSerialNumber() : 0;
+            mAkonadiItemId = alarmText.isEmail() ? alarmText.akonadiItemId() : -1;
             break;
         case KAEvent::FILE:
             mTypeCombo->setCurrentIndex(tFILE);
@@ -566,7 +566,7 @@ void EditDisplayAlarmDlg::type_setEvent(KAEvent& event, const KADateTime& dt, co
     if (type == KAEvent::MESSAGE)
     {
         if (AlarmText::checkIfEmail(text))
-            event.setKMailSerialNumber(mKMailSerialNumber);
+            event.setAkonadiItemId(mAkonadiItemId);
     }
     float fadeVolume;
     int   fadeSecs;
