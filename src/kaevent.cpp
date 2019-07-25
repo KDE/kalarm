@@ -1289,7 +1289,7 @@ bool KAEventPrivate::updateKCalEvent(const Event::Ptr &ev, KAEvent::UidAction ui
     if (!mTemplateName.isEmpty()  &&  mTemplateAfterTime >= 0) {
         (flags += TEMPL_AFTER_TIME_FLAG) += QString::number(mTemplateAfterTime);
     }
-    if (mAkonadiItemId) {
+    if (mAkonadiItemId >= 0) {
         (flags += KMAIL_ITEM_FLAG) += QString::number(mAkonadiItemId);
     }
     if (mArchive  &&  !archived) {
