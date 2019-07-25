@@ -163,7 +163,7 @@ void AlarmText::setTodo(const KCalCore::Todo::Ptr &todo)
     d->mTo      = todo->location();
     if (todo->hasDueDate()) {
         QDateTime due = todo->dtDue(false);   // fetch the next due date
-        if (todo->hasStartDate()  &&  todo->dtStart() != due) {
+        if (todo->hasStartDate()  &&  todo->dtStart(true) != due) {
             d->mTime = todo->allDay() ? QLocale().toString(due.date(), QLocale::ShortFormat)
                                       : QLocale().toString(due, QLocale::ShortFormat);
         }
