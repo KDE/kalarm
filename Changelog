@@ -1,12 +1,13 @@
 KAlarm Change Log
 
-=== Version 2.12.5 (KDE Applications 19.08) --- 24 July 2019 ===
+=== Version 2.12.5 (KDE Applications 19.08) --- 25 July 2019 ===
 + Enable alarm list columns to be hidden using context menu on list header [KDE Bug 397093]
 + Fix regression introduced in version 2.12.0:
     Show time zone abbreviation in message window if alarm time has non-local time zone.
 + If only one writable archived alarm calendar exists, automatically set it as the default.
 + Don't allow user to create a new resource using same calendar file as an existing resource.
-+ Fix drag and drop of email from KMail, and KMail button in message window.
++ Fix drag and drop of emails from KMail, and KMail button in message window.
++ Improve drag and drop of events and todos from KOrganizer.
 
 === Version 2.12.4 (KDE Applications 19.04.3) --- 4 July 2019 ===
 + Fix calendar resource dialogue not configuring resource correctly [KDE Bug 407882]
