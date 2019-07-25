@@ -1265,7 +1265,7 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
         const QString body = KAMail::getMailBody(summary.serialNumber());
         alarmText.setEmail(summary.to(), summary.from(), QString(),
                            QLocale().toString(dt), summary.subject(),
-                           body, static_cast<unsigned long>(summary.serialNumber()));
+                           body, summary.serialNumber());
     }
     else if (ICalDrag::fromMimeData(data, calendar))
     {
@@ -1274,33 +1274,70 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
         const Event::List events = calendar->rawEvents();
         if (!events.isEmpty())
         {
-            KAEvent ev(events[0]);
+            Event::Ptr event = events[0];
+            if (event->alarms().isEmpty())
+            {
+                Alarm::Ptr alarm = event->newAlarm();
+                alarm->setEnabled(true);
+                alarm->setTime(event->dtStart());
+                alarm->setDisplayAlarm(event->summary().isEmpty() ? event->description() : event->summary());
+                event->addAlarm(alarm);
+            }
+            KAEvent ev(event);
             KAlarm::editNewAlarm(&ev, win);
             return;
         }
         // If todos are included, use the first todo
         const Todo::List todos = calendar->rawTodos();
-        if (todos.isEmpty())
-            return;
-        Todo::Ptr todo = todos[0];
-        alarmText.setTodo(todo);
-        KADateTime start(todo->dtStart(true));
-        if (!start.isValid()  &&  todo->hasDueDate())
-            start = KADateTime(todo->dtDue(true));
-        if (todo->allDay())
-            start.setDateOnly(true);
-        KAEvent::Flags flags = KAEvent::DEFAULT_FONT;
-        if (start.isDateOnly())
-            flags |= KAEvent::ANY_TIME;
-        KAEvent ev(start, alarmText.displayText(), Preferences::defaultBgColour(), Preferences::defaultFgColour(),
-                   QFont(), KAEvent::MESSAGE, 0, flags, true);
-        if (todo->recurs())
+        if (!todos.isEmpty())
         {
-            ev.setRecurrence(*todo->recurrence());
-            ev.setNextOccurrence(KADateTime::currentUtcDateTime());
+            Todo::Ptr todo = todos[0];
+            alarmText.setTodo(todo);
+            KADateTime start(todo->dtStart(true));
+            KADateTime due(todo->dtDue(true));
+            bool haveBothTimes = false;
+            if (todo->hasDueDate())
+            {
+                if (start.isValid())
+                    haveBothTimes = true;
+                else
+                    start = due;
+            }
+            if (todo->allDay())
+                start.setDateOnly(true);
+            KAEvent::Flags flags = KAEvent::DEFAULT_FONT;
+            if (start.isDateOnly())
+                flags |= KAEvent::ANY_TIME;
+            KAEvent ev(start, alarmText.displayText(), Preferences::defaultBgColour(), Preferences::defaultFgColour(),
+                       QFont(), KAEvent::MESSAGE, 0, flags, true);
+            ev.startChanges();
+            if (todo->recurs())
+            {
+                ev.setRecurrence(*todo->recurrence());
+                ev.setNextOccurrence(KADateTime::currentUtcDateTime());
+            }
+            const Alarm::List alarms = todo->alarms();
+            if (!alarms.isEmpty()  &&  alarms[0]->type() == Alarm::Display)
+            {
+                // A display alarm represents a reminder
+                int offset = 0;
+                if (alarms[0]->hasStartOffset())
+                    offset = alarms[0]->startOffset().asSeconds();
+                else if (alarms[0]->hasEndOffset())
+                {
+                    offset = alarms[0]->endOffset().asSeconds();
+                    if (haveBothTimes)
+                    {
+                        // Get offset relative to start time instead of due time
+                        offset += start.secsTo(due);
+                    }
+                }
+                if (offset / 60)
+                    ev.setReminder(-offset / 60, false);
+            }
+            ev.endChanges();
+            KAlarm::editNewAlarm(&ev, win);
         }
-        ev.endChanges();
-        KAlarm::editNewAlarm(&ev, win);
         return;
     }
     else if (!(urls = data->urls()).isEmpty())
