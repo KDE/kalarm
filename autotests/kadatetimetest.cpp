@@ -2,7 +2,7 @@
    This file is part of kalarmcal library, which provides access to KAlarm
    calendar data.
 
-   Copyright (c) 2005,2006,2010,2011,2018 David Jarvie <djarvie@kde.org>
+   Copyright © 2005-2019 David Jarvie <djarvie@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
