@@ -57,12 +57,10 @@ CollectionSearch::CollectionSearch(const QString& mimeType, const QString& gid, 
     {
         if (agent.type().mimeTypes().contains(mimeType))
         {
-            {
-                CollectionFetchJob* job = new CollectionFetchJob(Collection::root(), CollectionFetchJob::Recursive);
-                job->fetchScope().setResource(agent.identifier());
-                mCollectionJobs << job;
-                connect(job, &CollectionFetchJob::result, this, &CollectionSearch::collectionFetchResult);
-            }
+            CollectionFetchJob* job = new CollectionFetchJob(Collection::root(), CollectionFetchJob::Recursive);
+            job->fetchScope().setResource(agent.identifier());
+            mCollectionJobs << job;
+            connect(job, &CollectionFetchJob::result, this, &CollectionSearch::collectionFetchResult);
         }
     }
 

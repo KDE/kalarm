@@ -1178,6 +1178,11 @@ void KAlarmApp::checkWritableCalendar()
         return;
     done = true;
     qCDebug(KALARM_LOG) << "KAlarmApp::checkWritableCalendar";
+
+    // Check for, and remove, any duplicate Akonadi resources, i.e. those which
+    // use the same calendar file/directory.
+    CollectionControlModel::removeDuplicateResources();
+
     // Find whether there are any writable active alarm calendars
     bool active = !CollectionControlModel::enabledCollections(CalEvent::ACTIVE, true).isEmpty();
     if (!active)

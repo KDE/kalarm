@@ -289,6 +289,11 @@ class CollectionControlModel : public Akonadi::FavoriteCollectionsModel
          */
         bool waitUntilPopulated(Akonadi::Collection::Id colId = -1, int timeout = 0);
 
+        /** Check for, and remove, Akonadi resources which duplicate use of
+         *  calendar files/directories.
+         */
+        static void removeDuplicateResources();
+
         QVariant data(const QModelIndex&, int role = Qt::DisplayRole) const override;
 
         /** Return a bulleted list of alarm types for inclusion in an i18n message. */
@@ -298,6 +303,7 @@ class CollectionControlModel : public Akonadi::FavoriteCollectionsModel
         void reset();
         void statusChanged(const Akonadi::Collection&, AkonadiModel::Change, const QVariant& value, bool inserted);
         void collectionPopulated();
+        void collectionFetchResult(KJob*);
 
     private:
         explicit CollectionControlModel(QObject* parent = nullptr);
@@ -306,6 +312,15 @@ class CollectionControlModel : public Akonadi::FavoriteCollectionsModel
         static CalEvent::Types checkTypesToEnable(const Akonadi::Collection&, const QList<Akonadi::Collection::Id>&, CalEvent::Types);
 
         static CollectionControlModel* mInstance;
+        struct ResourceCol
+        {
+            QString                 resourceId;
+            Akonadi::Collection::Id collectionId;
+            ResourceCol() {}
+            ResourceCol(const QString& r, Akonadi::Collection::Id c)
+                : resourceId(r), collectionId(c) {}
+        };
+        static QHash<QString, ResourceCol> mAgentPaths;   // path, (resource identifier, collection ID) pairs
         static bool mAskDestination;
         QEventLoop* mPopulatedCheckLoop;
 };
