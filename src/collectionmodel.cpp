@@ -28,6 +28,7 @@
 
 #include <AkonadiCore/agentmanager.h>
 #include <AkonadiCore/collectiondeletejob.h>
+#include <AkonadiCore/collectionfetchjob.h>
 #include <AkonadiCore/collectionmodifyjob.h>
 #include <AkonadiCore/entitymimetypefiltermodel.h>
 #include <AkonadiWidgets/collectiondialog.h>
@@ -671,6 +672,10 @@ bool CollectionView::viewportEvent(QEvent* e)
 
 CollectionControlModel* CollectionControlModel::mInstance = nullptr;
 bool                    CollectionControlModel::mAskDestination = false;
+QHash<QString, CollectionControlModel::ResourceCol> CollectionControlModel::mAgentPaths;
+
+static QRegularExpression matchMimeType(QStringLiteral("^application/x-vnd\\.kde\\.alarm.*"),
+                                        QRegularExpression::DotMatchesEverythingOption);
 
 CollectionControlModel* CollectionControlModel::instance()
 {
@@ -1360,6 +1365,63 @@ bool CollectionControlModel::waitUntilPopulated(Collection::Id colId, int timeou
     delete mPopulatedCheckLoop;
     mPopulatedCheckLoop = nullptr;
     return result;
+}
+
+/******************************************************************************
+* Check for, and remove, any Akonadi resources which duplicate use of calendar
+* files/directories.
+*/
+void CollectionControlModel::removeDuplicateResources()
+{
+    mAgentPaths.clear();
+    const AgentInstance::List agents = AgentManager::self()->instances();
+    for (const AgentInstance& agent : agents)
+    {
+        if (agent.type().mimeTypes().indexOf(matchMimeType) >= 0)
+        {
+            CollectionFetchJob* job = new CollectionFetchJob(Collection::root(), CollectionFetchJob::Recursive);
+            job->fetchScope().setResource(agent.identifier());
+            connect(job, &CollectionFetchJob::result, instance(), &CollectionControlModel::collectionFetchResult);
+        }
+    }
+}
+
+/******************************************************************************
+* Called when a CollectionFetchJob has completed.
+*/
+void CollectionControlModel::collectionFetchResult(KJob* j)
+{
+    CollectionFetchJob* job = qobject_cast<CollectionFetchJob*>(j);
+    if (j->error())
+        qCCritical(KALARM_LOG) << "CollectionControlModel::collectionFetchResult: CollectionFetchJob" << job->fetchScope().resource()<< "error: " << j->errorString();
+    else
+    {
+        AgentManager* agentManager = AgentManager::self();
+        const Collection::List collections = job->collections();
+        for (const Collection& c : collections)
+        {
+            if (c.contentMimeTypes().indexOf(matchMimeType) >= 0)
+            {
+                ResourceCol thisRes(job->fetchScope().resource(), c.id());
+                auto it = mAgentPaths.constFind(c.remoteId());
+                if (it != mAgentPaths.constEnd())
+                {
+                    // Remove the resource containing the higher numbered Collection
+                    // ID, which is likely to be the more recently created.
+                    ResourceCol prevRes = it.value();
+                    if (thisRes.collectionId > prevRes.collectionId)
+                    {
+                        qCWarning(KALARM_LOG) << "CollectionControlModel::collectionFetchResult: Removing duplicate resource" << thisRes.resourceId;
+                        agentManager->removeInstance(agentManager->instance(thisRes.resourceId));
+                        continue;
+                    }
+                    qCWarning(KALARM_LOG) << "CollectionControlModel::collectionFetchResult: Removing duplicate resource" << prevRes.resourceId;
+                    agentManager->removeInstance(agentManager->instance(prevRes.resourceId));
+                }
+                mAgentPaths[c.remoteId()] = thisRes;
+            }
+        }
+    }
 }
 
 /******************************************************************************
