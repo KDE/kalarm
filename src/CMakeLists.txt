@@ -129,7 +129,6 @@ target_compile_definitions(kalarm_bin PRIVATE -DVERSION="${KALARM_VERSION}")
 
 
 target_link_libraries(kalarm_bin
-    KF5::Auth
     KF5::Codecs
     KF5::ConfigCore
     KF5::Completion
