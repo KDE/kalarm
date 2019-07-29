@@ -5,9 +5,6 @@
     </method>
     <method name="openReader">
     </method>
-    <method name="setSystrayIconNotificationsEnabled">
-      <arg name="enabled" type="b" direction="in"/>
-    </method>
     <method name="pauseBackgroundJobs">
     </method>
     <method name="resumeBackgroundJobs">
@@ -36,7 +33,20 @@
       <arg name="workingDir" type="s" direction="in"/>
     </method>
     <method name="openComposer">
-      <arg type="i" direction="out"/>
+      <arg name="to" type="s" direction="in"/>
+      <arg name="cc" type="s" direction="in"/>
+      <arg name="bcc" type="s" direction="in"/>
+      <arg name="subject" type="s" direction="in"/>
+      <arg name="body" type="s" direction="in"/>
+      <arg name="hidden" type="b" direction="in"/>
+      <arg name="messageFile" type="s" direction="in"/>
+      <arg name="attachmentPaths" type="as" direction="in"/>
+      <arg name="customHeaders" type="as" direction="in"/>
+      <arg name="replyTo" type="s" direction="in"/>
+      <arg name="inReplyTo" type="s" direction="in"/>
+      <arg name="identity" type="s" direction="in"/>
+    </method>
+    <method name="openComposer">
       <arg name="to" type="s" direction="in"/>
       <arg name="cc" type="s" direction="in"/>
       <arg name="bcc" type="s" direction="in"/>
@@ -50,7 +60,6 @@
       <arg name="inReplyTo" type="s" direction="in"/>
     </method>
     <method name="openComposer">
-      <arg type="i" direction="out"/>
       <arg name="to" type="s" direction="in"/>
       <arg name="cc" type="s" direction="in"/>
       <arg name="bcc" type="s" direction="in"/>
@@ -63,7 +72,6 @@
       <arg name="replyTo" type="s" direction="in"/>
     </method>
     <method name="openComposer">
-      <arg type="i" direction="out"/>
       <arg name="to" type="s" direction="in"/>
       <arg name="cc" type="s" direction="in"/>
       <arg name="bcc" type="s" direction="in"/>
@@ -75,7 +83,6 @@
       <arg name="customHeaders" type="as" direction="in"/>
     </method>
     <method name="openComposer">
-      <arg type="i" direction="out"/>
       <arg name="to" type="s" direction="in"/>
       <arg name="cc" type="s" direction="in"/>
       <arg name="bcc" type="s" direction="in"/>
@@ -94,7 +101,6 @@
       <arg name="identity" type="u" direction="in"/>
     </method>
     <method name="openComposer">
-      <arg type="i" direction="out"/>
       <arg name="to" type="s" direction="in"/>
       <arg name="cc" type="s" direction="in"/>
       <arg name="bcc" type="s" direction="in"/>
@@ -112,7 +118,6 @@
       <arg name="identity" type="u" direction="in"/>
     </method>
     <method name="openComposer">
-      <arg type="o" direction="out"/>
       <arg name="to" type="s" direction="in"/>
       <arg name="cc" type="s" direction="in"/>
       <arg name="bcc" type="s" direction="in"/>
@@ -121,7 +126,6 @@
       <arg name="hidden" type="b" direction="in"/>
     </method>
     <method name="newMessage">
-      <arg type="o" direction="out"/>
       <arg name="to" type="s" direction="in"/>
       <arg name="cc" type="s" direction="in"/>
       <arg name="bcc" type="s" direction="in"/>
