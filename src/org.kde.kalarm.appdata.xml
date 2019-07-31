@@ -156,7 +156,7 @@
       <li xml:lang="fr">Affiche des alarmes avec votre propre texte de message, un texte généré par une commande, ou un fichier texte ou image.</li>
       <li xml:lang="gl">Mostre alarmas coas súas propias mensaxes de texto, texto xerado cunha orde, ou un ficheiro de texto ou imaxe.</li>
       <li xml:lang="hu">Emlékeztetők megjelenítése saját szöveges üzenet, egy parancs által generált szöveg, vagy egy szöveg- vagy képfájl használatával.</li>
-      <li xml:lang="id">Displai alarm menggunakan perpesanan teks milikmu, teks yang dihasilkan oleh perintah atau teks atau file image.</li>
+      <li xml:lang="id">Displai alarm menggunakan perpesanan teks milikmu, teks yang dihasilkan oleh perintah atau teks atau file citra.</li>
       <li xml:lang="it">Mostra gli avvisi usando un tuo messaggio di testo, il testo generato da un comando, o un file di testo o immagine.</li>
       <li xml:lang="ko">텍스트 메시지, 명령에 의해서 생성된 텍스트, 텍스트나 그림 파일로 알람 표시</li>
       <li xml:lang="nb">Viser varslinger med dine egne tekstmeldinger, tekst laget av en kommando, eller en tekst- eller bildefil.</li>
@@ -224,7 +224,7 @@
       <li xml:lang="fr">Alarme récurrente sur une période en minutes, heures, jours, semaines, mois ou années, ou positionnée pour se déclencher à chaque fois que vous vous identifiez.</li>
       <li xml:lang="gl">Alarma con repetición cada certo número de horas e minutos, diariamente, semanalmente, mensualmente, anualmente, ou disparada automaticamente cada vez que accede.</li>
       <li xml:lang="hu">Ismétlődő emlékeztetők óránkénti/percenkénti, napi, heti, havi vagy évenkénti gyakorisággal, vagy minden bejelentkezéskor.</li>
-      <li xml:lang="id">Pengulangan alarm berdasarkan pada jam/menitan, harian, pekanan, bulanan atau tahunan atau menyetelnya untuk memicu setiap waktu kamu login.</li>
+      <li xml:lang="id">Pengulangan alarm berdasarkan pada jam/menitan, harian, pekanan, bulanan atau tahunan atau mengesetnya untuk memicu setiap waktu kamu login.</li>
       <li xml:lang="it">Avvisi ricorrenti secondi intervalli di ore/minuti, giornalieri, settimanali, mensili o annuali, o impostati per attivarsi quando accedi al sistema.</li>
       <li xml:lang="ko">시/분, 일간, 주간, 월간, 년간 및 로그인 할 때마다 반복되는 알람</li>
       <li xml:lang="nb">Gjentatt varsling basert på time/minutt, daglig, ukentlig, månedlig eller årlig, eller la den utløses hver gang du logger inn.</li>
