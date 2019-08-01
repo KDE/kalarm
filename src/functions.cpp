@@ -57,7 +57,6 @@ using namespace KCalendarCore;
 #include <KSharedConfig>
 #include <ktoggleaction.h>
 #include <kactioncollection.h>
-#include <kdbusservicestarter.h>
 #include <KLocalizedString>
 #include <kauth.h>
 #include <kstandardguiitem.h>
@@ -83,7 +82,6 @@ using namespace Akonadi;
 namespace
 {
 bool            refreshAlarmsQueued = false;
-QDBusInterface* korgInterface = nullptr;
 
 struct UpdateStatusData
 {
@@ -1798,8 +1796,9 @@ KAlarm::UpdateResult sendToKOrganizer(const KAEvent& event)
     KAlarm::UpdateResult status = runKOrganizer();   // start KOrganizer if it isn't already running, and create its D-Bus interface
     if (status != KAlarm::UPDATE_OK)
         return status;
+    QDBusInterface korgInterface(KORG_DBUS_SERVICE, QStringLiteral(KORG_DBUS_PATH), KORG_DBUS_IFACE);
     const QList<QVariant> args{iCal};
-    QDBusReply<bool> reply = korgInterface->callWithArgumentList(QDBus::Block, QStringLiteral("addIncidence"), args);
+    QDBusReply<bool> reply = korgInterface.callWithArgumentList(QDBus::Block, QStringLiteral("addIncidence"), args);
     if (!reply.isValid())
     {
         if (reply.error().type() == QDBusError::UnknownObject)
@@ -1840,47 +1839,19 @@ KAlarm::UpdateResult deleteFromKOrganizer(const QString& eventID)
 KAlarm::UpdateResult runKOrganizer()
 {
     KAlarm::UpdateResult status;
-    QString error, dbusService;
-    int result = KDBusServiceStarter::self()->findServiceFor(QStringLiteral("DBUS/Organizer"), QString(), &error, &dbusService);
-    if (result)
-    {
-        status.set(KAlarm::UPDATE_KORG_ERRINIT, error);
-        qCWarning(KALARM_LOG) << "runKOrganizer: Unable to start DBUS/Organizer:" << status.message;
-        return status;
-    }
+
     // If Kontact is running, there is a load() method which needs to be called to
     // load KOrganizer into Kontact. But if KOrganizer is running independently,
-    // the load() method doesn't exist.
+    // the load() method doesn't exist. This call starts korganizer if needed, too.
     QDBusInterface iface(KORG_DBUS_SERVICE, QStringLiteral(KORG_DBUS_LOAD_PATH), QStringLiteral("org.kde.PIMUniqueApplication"));
-    if (!iface.isValid())
-    {
-        status.set(KAlarm::UPDATE_KORG_ERR, iface.lastError().message());
-        qCWarning(KALARM_LOG) << "runKOrganizer: Unable to access " KORG_DBUS_LOAD_PATH " D-Bus interface:" << status.message;
-        return status;
-    }
     QDBusReply<bool> reply = iface.call(QStringLiteral("load"));
-    if ((!reply.isValid() || !reply.value())
-    &&  iface.lastError().type() != QDBusError::UnknownMethod)
+    if ((!reply.isValid() || !reply.value()) && iface.lastError().type() != QDBusError::UnknownMethod)
     {
         status.set(KAlarm::UPDATE_KORG_ERR, iface.lastError().message());
         qCWarning(KALARM_LOG) << "Loading KOrganizer failed:" << status.message;
         return status;
     }
 
-    // KOrganizer has been started, but it may not have the necessary
-    // D-Bus interface available yet.
-    if (!korgInterface  ||  !korgInterface->isValid())
-    {
-        delete korgInterface;
-        korgInterface = new QDBusInterface(KORG_DBUS_SERVICE, QStringLiteral(KORG_DBUS_PATH), KORG_DBUS_IFACE);
-        if (!korgInterface->isValid())
-        {
-            status.set(KAlarm::UPDATE_KORG_ERRSTART, korgInterface->lastError().message());
-            qCWarning(KALARM_LOG) << "runKOrganizer: Unable to access " KORG_DBUS_PATH " D-Bus interface:" << status.message;
-            delete korgInterface;
-            korgInterface = nullptr;
-        }
-    }
     return status;
 }
 
