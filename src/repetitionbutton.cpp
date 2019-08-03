@@ -34,7 +34,7 @@
 #include <QHBoxLayout>
 #include <QDialogButtonBox>
 
-using namespace KCalCore;
+using namespace KCalendarCore;
 
 
 /*=============================================================================

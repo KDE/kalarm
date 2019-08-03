@@ -28,7 +28,7 @@
 #include <AkonadiCore/itemfetchscope.h>
 #include <AkonadiCore/itemdeletejob.h>
 #include <KCalendarCore/Event>
-using namespace KCalCore;
+using namespace KCalendarCore;
 
 #include <QTimer>
 #include "kalarm_debug.h"

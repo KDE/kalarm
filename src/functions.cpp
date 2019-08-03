@@ -48,7 +48,7 @@
 #include <KCalendarCore/ICalFormat>
 #include <KCalendarCore/Person>
 #include <KCalendarCore/Duration>
-using namespace KCalCore;
+using namespace KCalendarCore;
 #include <KIdentityManagement/kidentitymanagement/identitymanager.h>
 #include <KIdentityManagement/kidentitymanagement/identity.h>
 #include <KHolidays/HolidayRegion>

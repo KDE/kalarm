@@ -29,7 +29,7 @@
 #include <QHBoxLayout>
 #include <QStackedWidget>
 
-using namespace KCalCore;
+using namespace KCalendarCore;
 
 // Collect these widget labels together to ensure consistent wording and
 // translations across different modules.

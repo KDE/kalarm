@@ -45,7 +45,7 @@
 #include "kalarm_debug.h"
 
 using namespace Akonadi;
-using namespace KCalCore;
+using namespace KCalendarCore;
 using namespace KAlarmCal;
 
 static KACalendar::Compat fix(const KCalendarCore::FileStorage::Ptr&);
