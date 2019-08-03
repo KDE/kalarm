@@ -51,7 +51,7 @@
 #include <AkonadiCore/itemfetchjob.h>
 #include <AkonadiCore/itemfetchscope.h>
 #include <AkonadiWidgets/controlgui.h>
-#include <KCalCore/MemoryCalendar>
+#include <KCalendarCore/MemoryCalendar>
 #include <KCalUtils/kcalutils/icaldrag.h>
 using namespace Akonadi;
 using namespace KCalCore;

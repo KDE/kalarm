@@ -44,10 +44,10 @@
 #include <kalarmcal/identities.h>
 #include <kalarmcal/kaevent.h>
 
-#include <KCalCore/Event>
-#include <KCalCore/ICalFormat>
-#include <KCalCore/Person>
-#include <KCalCore/Duration>
+#include <KCalendarCore/Event>
+#include <KCalendarCore/ICalFormat>
+#include <KCalendarCore/Person>
+#include <KCalendarCore/Duration>
 using namespace KCalCore;
 #include <KIdentityManagement/kidentitymanagement/identitymanager.h>
 #include <KIdentityManagement/kidentitymanagement/identity.h>
@@ -1753,7 +1753,7 @@ void displayUpdateError(QWidget* parent, KAlarm::UpdateError code, const UpdateS
 */
 KAlarm::UpdateResult sendToKOrganizer(const KAEvent& event)
 {
-    Event::Ptr kcalEvent(new KCalCore::Event);
+    Event::Ptr kcalEvent(new KCalendarCore::Event);
     event.updateKCalEvent(kcalEvent, KAEvent::UID_IGNORE);
     // Change the event ID to avoid duplicating the same unique ID as the original event
     const QString uid = uidKOrganizer(event.id());

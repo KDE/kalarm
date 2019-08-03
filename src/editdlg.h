@@ -76,7 +76,7 @@ class EditAlarmDlg : public QDialog
         // N.B. setTime() must be called first to set the date-only characteristic,
         //      followed by setRecurrence() if applicable.
         void            setTime(const DateTime&);    // must be called first to set date-only value
-        void            setRecurrence(const KARecurrence&, const KCalCore::Duration& subRepeatInterval, int subRepeatCount);
+        void            setRecurrence(const KARecurrence&, const KCalendarCore::Duration& subRepeatInterval, int subRepeatCount);
         void            setRepeatAtLogin();
         virtual void    setAction(KAEvent::SubAction, const AlarmText& = AlarmText()) = 0;
         void            setLateCancel(int minutes);

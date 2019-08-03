@@ -33,7 +33,7 @@
 #include <mailtransport/transportmanager.h>
 #include <mailtransport/transport.h>
 #include <mailtransportakonadi/messagequeuejob.h>
-#include <KCalCore/Person>
+#include <KCalendarCore/Person>
 #include <kmime/kmime_header_parsing.h>
 #include <kmime/kmime_headers.h>
 #include <kmime/kmime_message.h>
@@ -329,7 +329,7 @@ void initHeaders(KMime::Message& message, KAMail::JobData& data)
     message.setHeader(from);
 
     KMime::Headers::To* to = new KMime::Headers::To;
-    KCalCore::Person::List toList = data.event.emailAddressees();
+    KCalendarCore::Person::List toList = data.event.emailAddressees();
     for (int i = 0, count = toList.count();  i < count;  ++i)
         to->addAddress(toList[i].email().toLatin1(), toList[i].name());
     message.setHeader(to);
@@ -481,7 +481,7 @@ void KAMail::notifyQueued(const KAEvent& event)
     KMime::Types::Address addr;
     const QString localhost = QStringLiteral("localhost");
     const QString hostname  = QHostInfo::localHostName();
-    KCalCore::Person::List addresses = event.emailAddressees();
+    KCalendarCore::Person::List addresses = event.emailAddressees();
     for (int i = 0, end = addresses.count();  i < end;  ++i)
     {
         QByteArray email = addresses[i].email().toLocal8Bit();
@@ -513,7 +513,7 @@ QString KAMail::controlCentreAddress()
 * entered by the user.
 * Reply = the invalid item if error, else empty string.
 */
-QString KAMail::convertAddresses(const QString& items, KCalCore::Person::List& list)
+QString KAMail::convertAddresses(const QString& items, KCalendarCore::Person::List& list)
 {
     list.clear();
     QString invalidItem;
@@ -522,7 +522,7 @@ QString KAMail::convertAddresses(const QString& items, KCalCore::Person::List& l
         return invalidItem;
     for (int i = 0, count = mailboxes.count();  i < count;  ++i)
     {
-        KCalCore::Person person(mailboxes[i].name(), mailboxes[i].addrSpec().asString());
+        KCalendarCore::Person person(mailboxes[i].name(), mailboxes[i].addrSpec().asString());
         list += person;
     }
     return QString();

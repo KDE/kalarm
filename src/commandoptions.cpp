@@ -400,7 +400,7 @@ void CommandOptions::process()
             QString addr = params[i];
             if (!KAMail::checkAddress(addr))
                 setError(xi18nc("@info:shell", "<icode>%1</icode>: invalid email address", optionName(MAIL)));
-            KCalCore::Person person(QString(), addr);
+            KCalendarCore::Person person(QString(), addr);
             mAddressees += person;
         }
         params = mParser->values(*mOptions[ATTACH]);
@@ -537,8 +537,8 @@ void CommandOptions::process()
                     {
                         // There is a also a recurrence specified, so set up a sub-repetition.
                         // In this case, 'intervalOfType' is in minutes.
-                        mRepeatInterval = KCalCore::Duration(intervalOfType * 60);
-                        KCalCore::Duration longestInterval = mRecurrence->longestInterval();
+                        mRepeatInterval = KCalendarCore::Duration(intervalOfType * 60);
+                        KCalendarCore::Duration longestInterval = mRecurrence->longestInterval();
                         if (mRepeatInterval * count > longestInterval)
                             setError(xi18nc("@info:shell", "Invalid <icode>%1</icode> and <icode>%2</icode> parameters: repetition is longer than <icode>%3</icode> interval",
                                            optionName(INTERVAL), optionName(REPEAT), optionName(RECURRENCE)));

@@ -67,14 +67,14 @@ class CommandOptions
         KADateTime          alarmTime() const         { return mAlarmTime; }
         KARecurrence*       recurrence() const        { return mRecurrence; }
         int                 subRepeatCount() const    { return mRepeatCount; }
-        KCalCore::Duration  subRepeatInterval() const { return mRepeatInterval; }
+        KCalendarCore::Duration  subRepeatInterval() const { return mRepeatInterval; }
         int                 lateCancel() const        { return mLateCancel; }
         QColor              bgColour() const          { return mBgColour; }
         QColor              fgColour() const          { return mFgColour; }
         int                 reminderMinutes() const   { return mReminderMinutes; }
         QString             audioFile() const         { return mAudioFile; }
         float               audioVolume() const       { return mAudioVolume; }
-        KCalCore::Person::List addressees() const     { return mAddressees; }
+        KCalendarCore::Person::List addressees() const     { return mAddressees; }
         QStringList         attachments() const       { return mAttachments; }
         QString             subject() const           { return mSubject; }
         uint                fromID() const            { return mFromID; }
@@ -163,14 +163,14 @@ class CommandOptions
         KADateTime          mAlarmTime;      // NEW: alarm time
         KARecurrence*       mRecurrence;     // NEW: recurrence
         int                 mRepeatCount;    // NEW: sub-repetition count
-        KCalCore::Duration  mRepeatInterval; // NEW: sub-repetition interval
+        KCalendarCore::Duration  mRepeatInterval; // NEW: sub-repetition interval
         int                 mLateCancel;     // NEW: late-cancellation interval
         QColor              mBgColour;       // NEW: background colour
         QColor              mFgColour;       // NEW: foreground colour
         int                 mReminderMinutes;// NEW: reminder period
         QString             mAudioFile;      // NEW: audio file path
         float               mAudioVolume;    // NEW: audio file volume
-        KCalCore::Person::List mAddressees;  // NEW: email addressees
+        KCalendarCore::Person::List mAddressees;  // NEW: email addressees
         QStringList         mAttachments;    // NEW: email attachment file names
         QString             mSubject;        // NEW: email subject
         uint                mFromID;         // NEW: email sender ID

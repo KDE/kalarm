@@ -21,7 +21,7 @@
 #ifndef TIMEPERIOD_H
 #define TIMEPERIOD_H
 
-#include <KCalCore/Duration>
+#include <KCalendarCore/Duration>
 #include <QWidget>
 #include <QString>
 
@@ -82,14 +82,14 @@ class TimePeriod : public QWidget
          */
         void          setUnits(Units units);
         /** Gets the entered time period. */
-        KCalCore::Duration period() const;
+        KCalendarCore::Duration period() const;
         /** Initialises the time period value.
          *  @param period The value of the time period to set. If zero, the time period
          *                is left unchanged.
          *  @param dateOnly True to restrict the units available in the combo box to days or weeks.
          *  @param defaultUnits The units to display initially in the combo box.
          */
-        void          setPeriod(const KCalCore::Duration& period, bool dateOnly, Units defaultUnits);
+        void          setPeriod(const KCalendarCore::Duration& period, bool dateOnly, Units defaultUnits);
         /** Returns true if minutes and hours/minutes units are disabled. */
         bool          isDateOnly() const             { return mDateOnlyOffset; }
         /** Enables or disables minutes and hours/minutes units in the combo box. To
@@ -118,7 +118,7 @@ class TimePeriod : public QWidget
         /** This signal is emitted whenever the value held in the widget changes.
          *  @param period The current value of the time period.
          */
-        void            valueChanged(const KCalCore::Duration& period);
+        void            valueChanged(const KCalendarCore::Duration& period);
 
     private Q_SLOTS:
         void            slotUnitsSelected(int index);
@@ -126,7 +126,7 @@ class TimePeriod : public QWidget
         void            slotTimeChanged(int minutes);
 
     private:
-        Units           setDateOnly(const KCalCore::Duration&, bool dateOnly, bool signal);
+        Units           setDateOnly(const KCalendarCore::Duration&, bool dateOnly, bool signal);
         void            setUnitRange();
         void            showHourMin(bool hourMin);
         void            adjustDayWeekShown();

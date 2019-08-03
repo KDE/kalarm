@@ -29,8 +29,8 @@
 #include "messagebox.h"
 #include "preferences.h"
 
-#include <KCalCore/MemoryCalendar>
-#include <KCalCore/ICalFormat>
+#include <KCalendarCore/MemoryCalendar>
+#include <KCalendarCore/ICalFormat>
 
 #include <KLocalizedString>
 #include <KIO/StatJob>
@@ -48,7 +48,7 @@ using namespace Akonadi;
 using namespace KCalCore;
 using namespace KAlarmCal;
 
-static KACalendar::Compat fix(const KCalCore::FileStorage::Ptr&);
+static KACalendar::Compat fix(const KCalendarCore::FileStorage::Ptr&);
 
 static const QString displayCalendarName = QStringLiteral("displaying.ics");
 static const Collection::Id DISPLAY_COL_ID = -1;   // collection ID used for displaying calendar

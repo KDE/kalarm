@@ -203,7 +203,7 @@ class EditEmailAlarmDlg : public EditAlarmDlg
         // N.B. setTime() must be called first to set the date-only characteristic,
         //      followed by setRecurrence().
         void            setAction(KAEvent::SubAction, const AlarmText& = AlarmText()) override;
-        void            setEmailFields(uint fromID, const KCalCore::Person::List&, const QString& subject,
+        void            setEmailFields(uint fromID, const KCalendarCore::Person::List&, const QString& subject,
                                        const QStringList& attachments);
         void            setBcc(bool);
 
@@ -244,7 +244,7 @@ class EditEmailAlarmDlg : public EditAlarmDlg
         CheckBox*       mEmailBcc;
         QString         mAttachDefaultDir;
 
-        KCalCore::Person::List mEmailAddresses;  // list of addresses to send email to
+        KCalendarCore::Person::List mEmailAddresses;  // list of addresses to send email to
 
         QStringList     mEmailAttachments;   // list of email attachment file names
 

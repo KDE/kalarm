@@ -83,8 +83,8 @@ class RepetitionDlg : public QDialog
     private Q_SLOTS:
         void       typeClicked();
         void       countChanged(int);
-        void       intervalChanged(const KCalCore::Duration&);
-        void       durationChanged(const KCalCore::Duration&);
+        void       intervalChanged(const KCalendarCore::Duration&);
+        void       durationChanged(const KCalendarCore::Duration&);
         void       repetitionToggled(bool);
 
     private:

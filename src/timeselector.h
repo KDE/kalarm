@@ -37,8 +37,8 @@ class TimeSelector : public QFrame
         ComboBox*    createSignCombo();
         bool         isChecked() const;
         void         setChecked(bool on);
-        KCalCore::Duration period() const;
-        void         setPeriod(const KCalCore::Duration&, bool dateOnly, TimePeriod::Units defaultUnits);
+        KCalendarCore::Duration period() const;
+        void         setPeriod(const KCalendarCore::Duration&, bool dateOnly, TimePeriod::Units defaultUnits);
         TimePeriod::Units units() const   { return mPeriod->units(); }
         void         setUnits(TimePeriod::Units units)  { mPeriod->setUnits(units); }
         void         setReadOnly(bool);
@@ -49,11 +49,11 @@ class TimeSelector : public QFrame
 
     Q_SIGNALS:
         void         toggled(bool);             // selection checkbox has been toggled
-        void         valueChanged(const KCalCore::Duration&); // value has changed
+        void         valueChanged(const KCalendarCore::Duration&); // value has changed
 
     protected Q_SLOTS:
         void         selectToggled(bool);
-        void         periodChanged(const KCalCore::Duration&);
+        void         periodChanged(const KCalendarCore::Duration&);
 
     private:
         CheckBox*    mSelect;
