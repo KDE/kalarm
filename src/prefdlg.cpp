@@ -89,7 +89,7 @@ using namespace KHolidays;
 #include <QLocale>
 #include "kalarm_debug.h"
 
-using namespace KCalCore;
+using namespace KCalendarCore;
 using namespace KAlarmCal;
 
 static const char PREF_DIALOG_NAME[] = "PrefDialog";

@@ -36,7 +36,7 @@ class TimeSelector;
 class TimePeriod;
 class RepetitionDlg;
 
-namespace KCalCore { class Duration; }
+namespace KCalendarCore { class Duration; }
 
 class RepetitionButton : public QPushButton
 {

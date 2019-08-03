@@ -54,7 +54,7 @@
 #include <KCalendarCore/MemoryCalendar>
 #include <KCalUtils/kcalutils/icaldrag.h>
 using namespace Akonadi;
-using namespace KCalCore;
+using namespace KCalendarCore;
 using namespace KCalUtils;
 #include <KAboutData>
 #include <ktoolbar.h>

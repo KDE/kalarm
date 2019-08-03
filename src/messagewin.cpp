@@ -90,7 +90,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-using namespace KCalCore;
+using namespace KCalendarCore;
 using namespace KAlarmCal;
 using namespace Akonadi;
 

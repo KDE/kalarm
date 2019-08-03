@@ -55,7 +55,7 @@
 #include <QMenu>
 #include "kalarm_debug.h"
 
-using namespace KCalCore;
+using namespace KCalendarCore;
 using namespace Akonadi;
 
 

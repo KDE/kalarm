@@ -34,7 +34,7 @@
 #include <kalarmcal/karecurrence.h>
 
 #include <KCalendarCore/Duration>
-using namespace KCalCore;
+using namespace KCalendarCore;
 
 #include "kalarm_debug.h"
 

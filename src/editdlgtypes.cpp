@@ -52,7 +52,7 @@
 #include <Akonadi/Contact/EmailAddressSelectionDialog>
 #include <KCalendarCore/Person>
 #include <KCalUtils/kcalutils/icaldrag.h>
-using namespace KCalCore;
+using namespace KCalendarCore;
 
 #include <KLocalizedString>
 #include <kfileitem.h>

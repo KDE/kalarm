@@ -27,7 +27,7 @@
 #include <QHBoxLayout>
 #include "kalarm_debug.h"
 
-using namespace KCalCore;
+using namespace KCalendarCore;
 
 
 TimeSelector::TimeSelector(const QString& selectText, const QString& selectWhatsThis,
