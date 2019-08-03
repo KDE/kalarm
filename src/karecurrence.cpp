@@ -22,8 +22,8 @@
 
 #include "karecurrence.h"
 
-#include <kcalcore/recurrence.h>
-#include <kcalcore/icalformat.h>
+#include <kcalendarcore/recurrence.h>
+#include <kcalendarcore/icalformat.h>
 
 #include "kalarmcal_debug.h"
 
@@ -31,7 +31,7 @@
 #include <QDate>
 #include <QLocale>
 
-using namespace KCalCore;
+using namespace KCalendarCore;
 namespace KAlarmCal
 {
 

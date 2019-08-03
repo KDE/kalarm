@@ -32,8 +32,8 @@
 
 #include <collection.h>
 #include <item.h>
-#include <kcalcore/person.h>
-#include <kcalcore/calendar.h>
+#include <kcalendarcore/person.h>
+#include <kcalendarcore/calendar.h>
 #include <AkonadiCore/item.h>
 
 #include <QBitArray>

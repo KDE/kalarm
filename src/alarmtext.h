@@ -25,7 +25,7 @@
 
 #include "kalarmcal_export.h"
 
-#include <kcalcore/todo.h>
+#include <kcalendarcore/todo.h>
 #include <AkonadiCore/item.h>
 #include <QString>
 
