@@ -294,7 +294,7 @@ QString KAEventFormatter::value(Parameter param) const
         if (mEvent.repeatAtLogin(true)) {
             return i18nc("@info Repeat at login", "At login until %1", dateTime(mEvent.mainDateTime().kDateTime()));
         }
-        KCalCore::Event::Ptr eptr(new KCalCore::Event);
+        KCalendarCore::Event::Ptr eptr(new KCalendarCore::Event);
         mEvent.updateKCalEvent(eptr, KAEvent::UID_SET);
         return KCalUtils::IncidenceFormatter::recurrenceString(eptr);
     }

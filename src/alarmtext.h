@@ -87,7 +87,7 @@ public:
     /** Set the instance contents to be a todo.
      *  @param todo Todo instance to set as the text
      */
-    void setTodo(const KCalCore::Todo::Ptr &todo);
+    void setTodo(const KCalendarCore::Todo::Ptr &todo);
 
     /** Return the text for a text message alarm, in display format.
      *  - An email is returned as a sequence of headers followed by the message body.

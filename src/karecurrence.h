@@ -82,7 +82,7 @@ public:
     };
 
     KARecurrence();
-    KARecurrence(const KCalCore::Recurrence &r);
+    KARecurrence(const KCalendarCore::Recurrence &r);
     KARecurrence(const KARecurrence &r);
     ~KARecurrence();
 
@@ -138,7 +138,7 @@ public:
      *  weekly, monthly, yearly or none.
      *  @return true if successful.
      */
-    bool init(KCalCore::RecurrenceRule::PeriodType t, int freq, int count, const KADateTime &start, const KADateTime &end);
+    bool init(KCalendarCore::RecurrenceRule::PeriodType t, int freq, int count, const KADateTime &start, const KADateTime &end);
 
     /** Set up a KARecurrence from recurrence parameters, specifying how
      *  annual 29th February recurrences in non-leap years should be handled.
@@ -146,18 +146,18 @@ public:
      *  weekly, monthly, yearly or none.
      *  @return true if successful.
      */
-    bool init(KCalCore::RecurrenceRule::PeriodType t, int freq, int count, const KADateTime &start, const KADateTime &end, Feb29Type f29);
+    bool init(KCalendarCore::RecurrenceRule::PeriodType t, int freq, int count, const KADateTime &start, const KADateTime &end, Feb29Type f29);
 
     /** Removes all recurrence and exception rules and dates. */
     void clear();
 
-    /** Initialise a KCalCore::Recurrence to be the same as this instance.
+    /** Initialise a KCalendarCore::Recurrence to be the same as this instance.
      *  Additional recurrence rules are created as necessary if it recurs on Feb 29th.
      */
-    void writeRecurrence(KCalCore::Recurrence &) const;
+    void writeRecurrence(KCalendarCore::Recurrence &) const;
 
     /** Convert the recurrence to KARecurrence types.
-     *  Must be called after presetting with a KCalCore::Recurrence.
+     *  Must be called after presetting with a KCalendarCore::Recurrence.
      *  - Convert hourly recurrences to minutely.
      *  - Remove all but the first day in yearly date recurrences.
      *  - Check for yearly recurrences falling on February 29th and adjust them as
@@ -219,7 +219,7 @@ public:
     QBitArray days() const; // Emulate the old behavior
 
     /** Returns list of day positions in months. */
-    QList<KCalCore::RecurrenceRule::WDayPos> monthPositions() const;
+    QList<KCalendarCore::RecurrenceRule::WDayPos> monthPositions() const;
 
     /** Returns list of day numbers of a  month. */
     // Emulate old behavior
@@ -259,7 +259,7 @@ public:
      *         Friday in the given months, otherwise as third Friday of the
      *         year.
      */
-    QList<KCalCore::RecurrenceRule::WDayPos> yearPositions() const;
+    QList<KCalendarCore::RecurrenceRule::WDayPos> yearPositions() const;
 
     /** Adds days to the weekly day recurrence list.
      * @param days a 7 bit array indicating which days on which to recur (bit 0 = Monday).
@@ -349,7 +349,7 @@ public:
      * @param date the date for which to find the recurrence times
      * @param timeSpec time specification for @p date
      */
-    KCalCore::TimeList recurTimesOn(const QDate &date, const KADateTime::Spec &timeSpec) const;
+    KCalendarCore::TimeList recurTimesOn(const QDate &date, const KADateTime::Spec &timeSpec) const;
 
     /** Returns a list of all the times at which the recurrence will occur
      * between two specified times.
@@ -363,7 +363,7 @@ public:
      * @param end inclusive end of interval
      * @return list of date/time values
      */
-    KCalCore::DateTimeList timesInInterval(const KADateTime &start, const KADateTime &end) const;
+    KCalendarCore::DateTimeList timesInInterval(const KADateTime &start, const KADateTime &end) const;
 
     /** Returns frequency of recurrence, in terms of the recurrence time period type. */
     int frequency() const;
@@ -395,17 +395,17 @@ public:
     /** Return the longest interval between recurrences.
      *  @return  0 if it never recurs.
      */
-    KCalCore::Duration longestInterval() const;
+    KCalendarCore::Duration longestInterval() const;
 
     /** Return the interval between recurrences, if the interval between
      *  successive occurrences does not vary.
      *  @return  0 if recurrence does not occur at fixed intervals.
      */
-    KCalCore::Duration regularInterval() const;
-    KCalCore::DateTimeList exDateTimes() const;
-    KCalCore::DateList exDates() const;
-    void setExDateTimes(const KCalCore::DateTimeList &exdates);
-    void setExDates(const KCalCore::DateList &exdates);
+    KCalendarCore::Duration regularInterval() const;
+    KCalendarCore::DateTimeList exDateTimes() const;
+    KCalendarCore::DateList exDates() const;
+    void setExDateTimes(const KCalendarCore::DateTimeList &exdates);
+    void setExDates(const KCalendarCore::DateList &exdates);
     void addExDateTime(const KADateTime &exdate);
     void addExDate(const QDate &exdate);
 
@@ -425,15 +425,15 @@ public:
      */
     void shiftTimes(const QTimeZone &oldSpec, const QTimeZone &newSpec);
 
-    KCalCore::RecurrenceRule *defaultRRuleConst() const;
+    KCalendarCore::RecurrenceRule *defaultRRuleConst() const;
     /** Return the recurrence's period type. */
     Type type() const;
 
     /** Return the type of a recurrence rule. */
-    static Type type(const KCalCore::RecurrenceRule *);
+    static Type type(const KCalendarCore::RecurrenceRule *);
 
     /** Check if the recurrence rule is a daily rule with or without BYDAYS specified. */
-    static bool dailyType(const KCalCore::RecurrenceRule *);
+    static bool dailyType(const KCalendarCore::RecurrenceRule *);
 
     /** Return when 29th February annual recurrences should occur in non-leap years. */
     Feb29Type feb29Type() const;

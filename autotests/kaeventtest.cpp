@@ -147,7 +147,7 @@ void KAEventTest::constructors()
         QVERIFY(!event.isReadOnly());
     }
 
-    // This tests the basic KCalCore::Event properties.
+    // This tests the basic KCalendarCore::Event properties.
     // Custom properties are tested later.
     const QDateTime createdDt(QDate(2009,4,13), QTime(11,14,0), QTimeZone("UTC"));
     const QString uid(QStringLiteral("fd45-77398a2"));
@@ -585,7 +585,7 @@ Alarm::Ptr copyKcalAlarm(Event::Ptr& kcalevent, Alarm::Ptr& kcalalarm)
 
 void KAEventTest::fromKCalEvent()
 {
-    // Check KCalCore::Event custom properties.
+    // Check KCalendarCore::Event custom properties.
     const KADateTime dt(QDate(2010,5,13), QTime(3, 45, 0), QTimeZone("Europe/London"));
     const QDateTime createdDt(QDate(2009,4,13), QTime(11,14,0), QTimeZone("UTC"));
 
@@ -1214,7 +1214,7 @@ void KAEventTest::fromKCalEvent()
 
 void KAEventTest::toKCalEvent()
 {
-    // Check KCalCore::Event custom properties.
+    // Check KCalendarCore::Event custom properties.
     const KADateTime dt(QDate(2010,5,13), QTime(3, 45, 0), QTimeZone("Europe/London"));
     const KADateTime createdDt(QDate(2009,4,13), QTime(11,14,0), QTimeZone("UTC"));
     const QString text = QStringLiteral("message");

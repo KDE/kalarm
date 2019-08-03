@@ -154,7 +154,7 @@ void AlarmText::setEmail(const QString &to, const QString &from, const QString &
     d->mAkonadiItemId = itemId;
 }
 
-void AlarmText::setTodo(const KCalCore::Todo::Ptr &todo)
+void AlarmText::setTodo(const KCalendarCore::Todo::Ptr &todo)
 {
     d->clear();
     d->mType    = Private::Todo;

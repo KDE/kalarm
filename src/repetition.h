@@ -51,7 +51,7 @@ public:
     /** Constructor.
      *  Initialises with the specified @p interval and @p count.
      */
-    Repetition(const KCalCore::Duration &interval, int count);
+    Repetition(const KCalendarCore::Duration &interval, int count);
 
     Repetition(const Repetition &other);
 
@@ -60,12 +60,12 @@ public:
     Repetition &operator=(const Repetition &other);
 
     /** Initialises the instance with the specified @p interval and @p count. */
-    void set(const KCalCore::Duration &interval, int count);
+    void set(const KCalendarCore::Duration &interval, int count);
     /** Sets the @p interval. The repetition count is unchanged unless
      *  The repetition count is set to zero if @p interval is zero; otherwise
      *  the repetition count is unchanged.
      */
-    void set(const KCalCore::Duration &interval);
+    void set(const KCalendarCore::Duration &interval);
 
     /** Returns whether a repetition is defined.
      *  @return true if a repetition is defined, false if not.
@@ -90,15 +90,15 @@ public:
     int count() const;
 
     /** Return the interval between repetitions. */
-    KCalCore::Duration interval() const;
+    KCalendarCore::Duration interval() const;
 
     /** Return the overall duration of the repetition. */
-    KCalCore::Duration duration() const;
+    KCalendarCore::Duration duration() const;
 
     /** Return the overall duration of a specified number of repetitions.
      *  @param count the number of repetitions to find the duration of.
      */
-    KCalCore::Duration duration(int count) const;
+    KCalendarCore::Duration duration(int count) const;
 
     /** Check whether the repetition interval is in terms of days (as opposed to minutes). */
     bool isDaily() const;

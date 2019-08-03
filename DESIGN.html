@@ -156,7 +156,7 @@ An audio alarm (<tt>ACTION:AUDIO</tt>) can specify that each time the alarm trig
 <ul><li>In the "main" alarm, <tt>X-KDE-KALARM-TYPE:SOUNDREPEAT</tt> is used to specify sound file repetition, because the <tt>REPEAT</tt> and <tt>DURATION</tt> properties apply to the overall event.
         <ul>No pause between repetitions: <tt>X-KDE-KALARM-TYPE:SOUNDREPEAT</tt>
         <br>Pause (in seconds) between repetitions: <tt>X-KDE-KALARM-TYPE:SOUNDREPEAT,<em>pause</em></tt></ul>
-    <li>In subsidiary alarms, the following scheme is used. The reason for this scheme is that KCalCore::Alarm cannot set a snooze time of zero.
+    <li>In subsidiary alarms, the following scheme is used. The reason for this scheme is that KCalendarCore::Alarm cannot set a snooze time of zero.
         <ul>No pause between repetitions: <tt>REPEAT:-1</tt> (<tt>DURATION</tt> is ignored)
         <br>Pause between repetitions: <tt>REPEAT:-2</tt> with <tt>DURATION</tt> containing the pause interval.</ul>
 </ul>
