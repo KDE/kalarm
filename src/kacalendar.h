@@ -24,15 +24,15 @@
 #define KALARM_KACALENDAR_H
 
 #include "kalarmcal_export.h"
-#include <kcalcore/filestorage.h>
-#include <kcalcore/calendar.h>
-#include <kcalcore/event.h>
+#include <kcalendarcore/filestorage.h>
+#include <kcalendarcore/calendar.h>
+#include <kcalendarcore/event.h>
 #include <collection.h>
 
 #include <QByteArray>
 #include <QStringList>
 
-namespace KCalCore
+namespace KCalendarCore
 {
 class Alarm;
 }

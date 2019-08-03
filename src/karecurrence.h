@@ -26,10 +26,10 @@
 #include "kalarmcal_export.h"
 #include "kadatetime.h"
 
-#include <kcalcore/recurrencerule.h>
-#include <kcalcore/duration.h>
-#include <kcalcore/incidencebase.h>
-namespace KCalCore
+#include <kcalendarcore/recurrencerule.h>
+#include <kcalendarcore/duration.h>
+#include <kcalendarcore/incidencebase.h>
+namespace KCalendarCore
 {
 class Recurrence;
 }
@@ -43,7 +43,7 @@ namespace KAlarmCal
  * @short Represents recurrences for KAlarm.
  *
  * This class represents the restricted range of recurrence types which are
- * handled by KAlarm, and translates between these and the libkcalcore
+ * handled by KAlarm, and translates between these and the libkcalendarcore
  * Recurrence class. In particular, it handles yearly recurrences on 29th
  * February in non-leap years specially:
  *
@@ -51,7 +51,7 @@ namespace KAlarmCal
  * February or 1st March, or not at all, in non-leap years. It allows such
  * 29th February recurrences to be combined with the 29th of other months in
  * a simple way, represented simply as the 29th of multiple months including
- * February. For storage in the libkcalcore calendar, the 29th day of the month
+ * February. For storage in the libkcalendarcore calendar, the 29th day of the month
  * recurrence for other months is combined with a last-day-of-February or a
  * 60th-day-of-the-year recurrence rule, thereby conforming to RFC2445.
  *
@@ -61,7 +61,7 @@ class KALARMCAL_EXPORT KARecurrence
 {
 public:
     /** The recurrence's period type.
-     *  This is a subset of the possible KCalCore recurrence types.
+     *  This is a subset of the possible KCalendarCore recurrence types.
      */
     enum Type {
         NO_RECUR,      //!< does not recur

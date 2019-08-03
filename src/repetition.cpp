@@ -23,7 +23,7 @@
 #include "repetition.h"
 #include "kadatetime.h"
 
-using namespace KCalCore;
+using namespace KCalendarCore;
 namespace KAlarmCal
 {
 

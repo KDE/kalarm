@@ -32,4 +32,4 @@
  */
 
 // DOXYGEN_PROJECTNAME=KAlarm Library
-// DOXYGEN_REFERENCES=kdecore kcalcore kholidays kpimidentities akonadi
+// DOXYGEN_REFERENCES=kdecore kcalendarcore kholidays kpimidentities akonadi

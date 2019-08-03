@@ -26,7 +26,7 @@
 #include "identities.h"
 #include "version.h"
 
-#include <kcalcore/memorycalendar.h>
+#include <kcalendarcore/memorycalendar.h>
 #include <KHolidays/Holiday>
 #include <KHolidays/HolidayRegion>
 
@@ -34,7 +34,7 @@
 
 #include "kalarmcal_debug.h"
 
-using namespace KCalCore;
+using namespace KCalendarCore;
 using namespace KHolidays;
 
 namespace KAlarmCal
