@@ -26,7 +26,7 @@
 #include <AkonadiCore/itemserializerplugin.h>
 #include <AkonadiCore/differencesalgorithminterface.h>
 #include <AkonadiCore/gidextractorinterface.h>
-#include <KCalCore/ICalFormat>
+#include <KCalendarCore/ICalFormat>
 
 #include <QObject>
 
@@ -51,7 +51,7 @@ public:
 private:
     void reportDifference(Akonadi::AbstractDifferencesReporter *, KAEventFormatter::Parameter);
 
-    KCalCore::ICalFormat mFormat;
+    KCalendarCore::ICalFormat mFormat;
     KAEventFormatter mValueL;
     KAEventFormatter mValueR;
     QString mRegistered;

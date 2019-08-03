@@ -49,7 +49,7 @@ Repetition::Repetition()
 {
 }
 
-Repetition::Repetition(const KCalCore::Duration &interval, int count)
+Repetition::Repetition(const KCalendarCore::Duration &interval, int count)
     : d(new Private(interval, count))
 {
 }
@@ -72,7 +72,7 @@ Repetition &Repetition::operator=(const Repetition &other)
     return *this;
 }
 
-void Repetition::set(const KCalCore::Duration &interval, int count)
+void Repetition::set(const KCalendarCore::Duration &interval, int count)
 {
     if (!count || interval.isNull()) {
         d->mCount = 0;
@@ -83,7 +83,7 @@ void Repetition::set(const KCalCore::Duration &interval, int count)
     }
 }
 
-void Repetition::set(const KCalCore::Duration &interval)
+void Repetition::set(const KCalendarCore::Duration &interval)
 {
     if (d->mCount) {
         d->mInterval = interval;

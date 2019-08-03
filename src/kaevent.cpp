@@ -42,16 +42,16 @@ namespace KAlarmCal
 
 //=============================================================================
 
-typedef KCalCore::Person  EmailAddress;
-class EmailAddressList : public KCalCore::Person::List
+typedef KCalendarCore::Person  EmailAddress;
+class EmailAddressList : public KCalendarCore::Person::List
 {
 public:
-    EmailAddressList() : KCalCore::Person::List() { }
-    EmailAddressList(const KCalCore::Person::List &list)
+    EmailAddressList() : KCalendarCore::Person::List() { }
+    EmailAddressList(const KCalendarCore::Person::List &list)
     {
         operator=(list);
     }
-    EmailAddressList &operator=(const KCalCore::Person::List &);
+    EmailAddressList &operator=(const KCalendarCore::Person::List &);
     operator QStringList() const;
     QString     join(const QString &separator) const;
     QStringList pureAddresses() const;
@@ -152,7 +152,7 @@ public:
     KAEventPrivate(const KADateTime &, const QString &message, const QColor &bg, const QColor &fg,
                    const QFont &f, KAEvent::SubAction, int lateCancel, KAEvent::Flags flags,
                    bool changesPending = false);
-    explicit KAEventPrivate(const KCalCore::Event::Ptr &);
+    explicit KAEventPrivate(const KCalendarCore::Event::Ptr &);
     KAEventPrivate(const KAEventPrivate &);
     ~KAEventPrivate()
     {
@@ -164,7 +164,7 @@ public:
             copy(e);
         }  return *this;
     }
-    void               set(const KCalCore::Event::Ptr &);
+    void               set(const KCalendarCore::Event::Ptr &);
     void               set(const KADateTime &, const QString &message, const QColor &bg, const QColor &fg,
                            const QFont &, KAEvent::SubAction, int lateCancel, KAEvent::Flags flags,
                            bool changesPending = false);
@@ -179,7 +179,7 @@ public:
     void               defer(const DateTime &, bool reminder, bool adjustRecurrence = false);
     void               cancelDefer();
     bool               setDisplaying(const KAEventPrivate &, KAAlarm::Type, Akonadi::Collection::Id, const KADateTime &dt, bool showEdit, bool showDefer);
-    void               reinstateFromDisplaying(const KCalCore::Event::Ptr &, Akonadi::Collection::Id &, bool &showEdit, bool &showDefer);
+    void               reinstateFromDisplaying(const KCalendarCore::Event::Ptr &, Akonadi::Collection::Id &, bool &showEdit, bool &showDefer);
     void               startChanges()
     {
         ++mChangeCount;
@@ -189,7 +189,7 @@ public:
     KAAlarm            alarm(KAAlarm::Type) const;
     KAAlarm            firstAlarm() const;
     KAAlarm            nextAlarm(KAAlarm::Type) const;
-    bool               updateKCalEvent(const KCalCore::Event::Ptr &, KAEvent::UidAction, bool setCustomProperties = true) const;
+    bool               updateKCalEvent(const KCalendarCore::Event::Ptr &, KAEvent::UidAction, bool setCustomProperties = true) const;
     DateTime           mainDateTime(bool withRepeats = false) const
     {
         return (withRepeats && mNextRepeat && mRepetition)
@@ -207,8 +207,8 @@ public:
     KAEvent::OccurType nextOccurrence(const KADateTime &preDateTime, DateTime &result, KAEvent::OccurOption = KAEvent::IGNORE_REPETITION) const;
     KAEvent::OccurType previousOccurrence(const KADateTime &afterDateTime, DateTime &result, bool includeRepetitions = false) const;
     void               setRecurrence(const KARecurrence &);
-    bool               setRecur(KCalCore::RecurrenceRule::PeriodType, int freq, int count, const QDate &end, KARecurrence::Feb29Type = KARecurrence::Feb29_None);
-    bool               setRecur(KCalCore::RecurrenceRule::PeriodType, int freq, int count, const KADateTime &end, KARecurrence::Feb29Type = KARecurrence::Feb29_None);
+    bool               setRecur(KCalendarCore::RecurrenceRule::PeriodType, int freq, int count, const QDate &end, KARecurrence::Feb29Type = KARecurrence::Feb29_None);
+    bool               setRecur(KCalendarCore::RecurrenceRule::PeriodType, int freq, int count, const KADateTime &end, KARecurrence::Feb29Type = KARecurrence::Feb29_None);
     KARecurrence::Type checkRecur() const;
     void               clearRecur();
     void               calcTriggerTimes() const;
@@ -217,11 +217,11 @@ public:
 #else
     void               dumpDebug() const;
 #endif
-    static bool        convertRepetition(const KCalCore::Event::Ptr &);
-    static bool        convertStartOfDay(const KCalCore::Event::Ptr &);
-    static DateTime    readDateTime(const KCalCore::Event::Ptr &, bool localZone, bool dateOnly, DateTime &start);
-    static void        readAlarms(const KCalCore::Event::Ptr &, AlarmMap *, bool cmdDisplay = false);
-    static void        readAlarm(const KCalCore::Alarm::Ptr &, AlarmData &, bool audioMain, bool cmdDisplay = false);
+    static bool        convertRepetition(const KCalendarCore::Event::Ptr &);
+    static bool        convertStartOfDay(const KCalendarCore::Event::Ptr &);
+    static DateTime    readDateTime(const KCalendarCore::Event::Ptr &, bool localZone, bool dateOnly, DateTime &start);
+    static void        readAlarms(const KCalendarCore::Event::Ptr &, AlarmMap *, bool cmdDisplay = false);
+    static void        readAlarm(const KCalendarCore::Alarm::Ptr &, AlarmData &, bool audioMain, bool cmdDisplay = false);
     static QSharedPointer<const HolidayRegion> holidays();
 private:
     void               copy(const KAEventPrivate &);
@@ -230,9 +230,9 @@ private:
     void               calcNextWorkingTime(const DateTime &nextTrigger) const;
     DateTime           nextWorkingTime() const;
     KAEvent::OccurType nextRecurrence(const KADateTime &preDateTime, DateTime &result) const;
-    void               setAudioAlarm(const KCalCore::Alarm::Ptr &) const;
-    KCalCore::Alarm::Ptr initKCalAlarm(const KCalCore::Event::Ptr &, const DateTime &, const QStringList &types, AlarmType = INVALID_ALARM) const;
-    KCalCore::Alarm::Ptr initKCalAlarm(const KCalCore::Event::Ptr &, int startOffsetSecs, const QStringList &types, AlarmType = INVALID_ALARM) const;
+    void               setAudioAlarm(const KCalendarCore::Alarm::Ptr &) const;
+    KCalendarCore::Alarm::Ptr initKCalAlarm(const KCalendarCore::Event::Ptr &, const DateTime &, const QStringList &types, AlarmType = INVALID_ALARM) const;
+    KCalendarCore::Alarm::Ptr initKCalAlarm(const KCalendarCore::Event::Ptr &, int startOffsetSecs, const QStringList &types, AlarmType = INVALID_ALARM) const;
     inline void        set_deferral(DeferType);
     inline void        activate_reminder(bool activate);
     static int         transitionIndex(const QDateTime &utc, const QTimeZone::OffsetDataList& transitions);
@@ -530,12 +530,12 @@ KAEventPrivate::KAEventPrivate(const KADateTime &dt, const QString &message, con
     set(dt, message, bg, fg, f, action, lateCancel, flags, changesPending);
 }
 
-KAEvent::KAEvent(const KCalCore::Event::Ptr &e)
+KAEvent::KAEvent(const KCalendarCore::Event::Ptr &e)
     : d(new KAEventPrivate(e))
 {
 }
 
-KAEventPrivate::KAEventPrivate(const KCalCore::Event::Ptr &e)
+KAEventPrivate::KAEventPrivate(const KCalendarCore::Event::Ptr &e)
     : mRecurrence(nullptr)
 {
     set(e);
@@ -651,15 +651,15 @@ void KAEventPrivate::copy(const KAEventPrivate &event)
     }
 }
 
-void KAEvent::set(const KCalCore::Event::Ptr &e)
+void KAEvent::set(const KCalendarCore::Event::Ptr &e)
 {
     d->set(e);
 }
 
 /******************************************************************************
-* Initialise the KAEventPrivate from a KCalCore::Event.
+* Initialise the KAEventPrivate from a KCalendarCore::Event.
 */
-void KAEventPrivate::set(const KCalCore::Event::Ptr &event)
+void KAEventPrivate::set(const KCalendarCore::Event::Ptr &event)
 {
     startChanges();
     // Extract status from the event
@@ -1199,7 +1199,7 @@ void KAEventPrivate::set(const KADateTime &dateTime, const QString &text, const 
 * properties are cleared and replaced with the KAEvent's custom properties. If
 * false, the KCal::Event's non-KAlarm custom properties are left untouched.
 */
-bool KAEvent::updateKCalEvent(const KCalCore::Event::Ptr &e, UidAction u, bool setCustomProperties) const
+bool KAEvent::updateKCalEvent(const KCalendarCore::Event::Ptr &e, UidAction u, bool setCustomProperties) const
 {
     return d->updateKCalEvent(e, u, setCustomProperties);
 }
@@ -1494,14 +1494,14 @@ bool KAEventPrivate::updateKCalEvent(const Event::Ptr &ev, KAEvent::UidAction ui
 * NOTE: The variant taking a DateTime calculates the offset from mStartDateTime,
 *       which is not suitable for an alarm in a recurring event.
 */
-Alarm::Ptr KAEventPrivate::initKCalAlarm(const KCalCore::Event::Ptr &event, const DateTime &dt, const QStringList &types, AlarmType type) const
+Alarm::Ptr KAEventPrivate::initKCalAlarm(const KCalendarCore::Event::Ptr &event, const DateTime &dt, const QStringList &types, AlarmType type) const
 {
     const int startOffset = dt.isDateOnly() ? mStartDateTime.secsTo(dt)
                             : mStartDateTime.calendarKDateTime().secsTo(dt.calendarKDateTime());
     return initKCalAlarm(event, startOffset, types, type);
 }
 
-Alarm::Ptr KAEventPrivate::initKCalAlarm(const KCalCore::Event::Ptr &event, int startOffsetSecs, const QStringList &types, AlarmType type) const
+Alarm::Ptr KAEventPrivate::initKCalAlarm(const KCalendarCore::Event::Ptr &event, int startOffsetSecs, const QStringList &types, AlarmType type) const
 {
     QStringList alltypes;
     QStringList flags;
@@ -2005,7 +2005,7 @@ bool KAEvent::copyToKOrganizer() const
     return d->mCopyToKOrganizer;
 }
 
-void KAEvent::setEmail(uint from, const KCalCore::Person::List &addresses, const QString &subject,
+void KAEvent::setEmail(uint from, const KCalendarCore::Person::List &addresses, const QString &subject,
                        const QStringList &attachments)
 {
     d->mEmailFromIdentity = from;
@@ -2024,7 +2024,7 @@ uint KAEvent::emailFromId() const
     return d->mEmailFromIdentity;
 }
 
-KCalCore::Person::List KAEvent::emailAddressees() const
+KCalendarCore::Person::List KAEvent::emailAddressees() const
 {
     return d->mEmailAddresses;
 }
@@ -2039,7 +2039,7 @@ QString KAEvent::emailAddresses(const QString &sep) const
     return d->mEmailAddresses.join(sep);
 }
 
-QString KAEvent::joinEmailAddresses(const KCalCore::Person::List &addresses, const QString &separator)
+QString KAEvent::joinEmailAddresses(const KCalendarCore::Person::List &addresses, const QString &separator)
 {
     return EmailAddressList(addresses).join(separator);
 }
@@ -2918,13 +2918,13 @@ bool KAEvent::setRecurAnnualByPos(int freq, const QVector<MonthPos> &posns, cons
 *    end   = end date/time (invalid to use 'count' instead).
 * Reply = false if no recurrence was set up.
 */
-bool KAEventPrivate::setRecur(KCalCore::RecurrenceRule::PeriodType recurType, int freq, int count, const QDate &end, KARecurrence::Feb29Type feb29)
+bool KAEventPrivate::setRecur(KCalendarCore::RecurrenceRule::PeriodType recurType, int freq, int count, const QDate &end, KARecurrence::Feb29Type feb29)
 {
     KADateTime edt = mNextMainDateTime.kDateTime();
     edt.setDate(end);
     return setRecur(recurType, freq, count, edt, feb29);
 }
-bool KAEventPrivate::setRecur(KCalCore::RecurrenceRule::PeriodType recurType, int freq, int count, const KADateTime &end, KARecurrence::Feb29Type feb29)
+bool KAEventPrivate::setRecur(KCalendarCore::RecurrenceRule::PeriodType recurType, int freq, int count, const KADateTime &end, KARecurrence::Feb29Type feb29)
 {
     if (count >= -1  && (count || end.date().isValid())) {
         if (!mRecurrence) {
@@ -3431,7 +3431,7 @@ bool KAEventPrivate::setDisplaying(const KAEventPrivate &event, KAAlarm::Type al
 /******************************************************************************
 * Reinstate the original event from the 'displaying' event.
 */
-void KAEvent::reinstateFromDisplaying(const KCalCore::Event::Ptr &e, Akonadi::Collection::Id &id, bool &showEdit, bool &showDefer)
+void KAEvent::reinstateFromDisplaying(const KCalendarCore::Event::Ptr &e, Akonadi::Collection::Id &id, bool &showEdit, bool &showDefer)
 {
     d->reinstateFromDisplaying(e, id, showEdit, showDefer);
 }

@@ -340,15 +340,15 @@ public:
     KAEvent(const KADateTime &dt, const QString &text, const QColor &bg, const QColor &fg,
             const QFont &font, SubAction action, int lateCancel, Flags flags, bool changesPending = false);
 
-    /** Construct an event and initialise it from a KCalCore::Event.
+    /** Construct an event and initialise it from a KCalendarCore::Event.
      *
      *  The initialisation is identical to that performed by set().
      */
-    explicit KAEvent(const KCalCore::Event::Ptr &);
+    explicit KAEvent(const KCalendarCore::Event::Ptr &);
 
-    /** Initialise the instance from a KCalCore::Event.
+    /** Initialise the instance from a KCalendarCore::Event.
      *
-     *  It uses the following properties from KCalCore::Event:
+     *  It uses the following properties from KCalendarCore::Event:
      *  - Unique ID.
      *  - Summary.
      *  - Creation date/time.
@@ -361,7 +361,7 @@ public:
      *  - Custom status if equal to "DISABLED".
      *  - Revision number.
      */
-    void set(const KCalCore::Event::Ptr &);
+    void set(const KCalendarCore::Event::Ptr &);
 
     KAEvent(const KAEvent &other);
     ~KAEvent();
@@ -389,7 +389,7 @@ public:
              const QColor &fg, const QFont &font, SubAction action, int lateCancel,
              Flags flags, bool changesPending = false);
 
-    /** Update an existing KCalCore::Event with the KAEvent data.
+    /** Update an existing KCalendarCore::Event with the KAEvent data.
      *  @param event  Event to update.
      *  @param u      how to deal with the Event's UID.
      *  @param setCustomProperties if true, all the Event's existing custom
@@ -398,7 +398,7 @@ public:
      *                             KCal::Event's non-KAlarm custom properties
      *                             are left untouched.
      */
-    bool updateKCalEvent(const KCalCore::Event::Ptr &event, UidAction u, bool setCustomProperties = true) const;
+    bool updateKCalEvent(const KCalendarCore::Event::Ptr &event, UidAction u, bool setCustomProperties = true) const;
 
     /** Return whether the instance represents a valid event. */
     bool isValid() const;
@@ -491,7 +491,7 @@ public:
     /** Return the event's storage format compatibility compared to the current KAlarm calendar format. */
     KACalendar::Compat compatibility() const;
 
-    /** Return the original KCalCore::Event's custom properties in the source calendar. */
+    /** Return the original KCalendarCore::Event's custom properties in the source calendar. */
     QMap<QByteArray, QString> customProperties() const;
 
     /** Return the action sub-type of the event's main alarm. For display alarms,
@@ -617,7 +617,7 @@ public:
     bool copyToKOrganizer() const;
 
     /** Set the email related data for the event. */
-    void setEmail(uint from, const KCalCore::Person::List &, const QString &subject,
+    void setEmail(uint from, const KCalendarCore::Person::List &, const QString &subject,
                   const QStringList &attachments);
 
     /** Return the email message body, for an email alarm.
@@ -631,7 +631,7 @@ public:
     uint emailFromId() const;
 
     /** Return the list of email addressees, including names, for an email alarm. */
-    KCalCore::Person::List emailAddressees() const;
+    KCalendarCore::Person::List emailAddressees() const;
 
     /** Return a list of the email addresses, including names, for an email alarm. */
     QStringList emailAddresses() const;
@@ -645,7 +645,7 @@ public:
      *  @param addresses list of email addresses
      *  @param sep       separator string to insert between addresses
      */
-    static QString joinEmailAddresses(const KCalCore::Person::List &addresses, const QString &sep);
+    static QString joinEmailAddresses(const KCalendarCore::Person::List &addresses, const QString &sep);
     /** Return the list of email addressees, excluding names, for an email alarm. */
     QStringList emailPureAddresses() const;
 
@@ -1111,7 +1111,7 @@ public:
     /** Return the longest interval which can occur between consecutive recurrences.
      *  @see recurInterval()
      */
-    KCalCore::Duration longestRecurrenceInterval() const;
+    KCalendarCore::Duration longestRecurrenceInterval() const;
 
     /** Adjust the event date/time to the first recurrence of the event, on or after
      *  the event start date/time. The event start date may not be a recurrence date,
@@ -1209,7 +1209,7 @@ public:
      *  @param showEdit   updated to true if Edit button was displayed, else false
      *  @param showDefer  updated to true if Defer button was displayed, else false
      */
-    void reinstateFromDisplaying(const KCalCore::Event::Ptr &event, Akonadi::Collection::Id &colId, bool &showEdit, bool &showDefer);
+    void reinstateFromDisplaying(const KCalendarCore::Event::Ptr &event, Akonadi::Collection::Id &colId, bool &showEdit, bool &showDefer);
 
     /** Return the original alarm which the displaying alarm refers to.
      *  Note that the caller is responsible for ensuring that the event was
@@ -1303,7 +1303,7 @@ public:
      *                          which does not require the adjustment.
      *  @return @c true if any conversions were done.
      */
-    static bool convertKCalEvents(const KCalCore::Calendar::Ptr &, int calendarVersion);
+    static bool convertKCalEvents(const KCalendarCore::Calendar::Ptr &, int calendarVersion);
 
     /** Return a list of pointers to a list of KAEvent objects. */
     static List ptrList(QVector<KAEvent> &events);

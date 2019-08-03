@@ -87,10 +87,10 @@ enum {
                                unknown KAlarm format;
  *          >0 the older KAlarm version which wrote the calendar
  */
-KALARMCAL_EXPORT int updateVersion(const KCalCore::FileStorage::Ptr &, QString &versionString);
+KALARMCAL_EXPORT int updateVersion(const KCalendarCore::FileStorage::Ptr &, QString &versionString);
 
 /** Set the KAlarm version custom property for a calendar. */
-KALARMCAL_EXPORT void setKAlarmVersion(const KCalCore::Calendar::Ptr &);
+KALARMCAL_EXPORT void setKAlarmVersion(const KCalendarCore::Calendar::Ptr &);
 
 /** Set the program name and version for use in calendars. */
 KALARMCAL_EXPORT void setProductId(const QByteArray &progName, const QByteArray &progVersion);
@@ -127,8 +127,8 @@ enum Type {
 Q_DECLARE_FLAGS(Types, Type)
 
 KALARMCAL_EXPORT QString uid(const QString &id, Type);
-KALARMCAL_EXPORT Type    status(const KCalCore::Event::Ptr &, QString *param = nullptr);
-KALARMCAL_EXPORT void    setStatus(const KCalCore::Event::Ptr &, Type, const QString &param = QString());
+KALARMCAL_EXPORT Type    status(const KCalendarCore::Event::Ptr &, QString *param = nullptr);
+KALARMCAL_EXPORT void    setStatus(const KCalendarCore::Event::Ptr &, Type, const QString &param = QString());
 
 /** Return the alarm Type for a mime type string. */
 KALARMCAL_EXPORT Type    type(const QString &mimeType);

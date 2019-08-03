@@ -47,19 +47,19 @@ bool SerializerPluginKAlarm::deserialize(Item &item, const QByteArray &label, QI
         return false;
     }
 
-    KCalCore::Incidence::Ptr i = mFormat.fromString(QString::fromUtf8(data.readAll()));
+    KCalendarCore::Incidence::Ptr i = mFormat.fromString(QString::fromUtf8(data.readAll()));
     if (!i) {
         qCWarning(AKONADI_SERIALIZER_KALARM_LOG) << "Failed to parse incidence!";
         data.seek(0);
         qCWarning(AKONADI_SERIALIZER_KALARM_LOG) << QString::fromUtf8(data.readAll());
         return false;
     }
-    if (i->type() != KCalCore::Incidence::TypeEvent) {
+    if (i->type() != KCalendarCore::Incidence::TypeEvent) {
         qCWarning(AKONADI_SERIALIZER_KALARM_LOG) << "Incidence with uid" << i->uid() << "is not an Event!";
         data.seek(0);
         return false;
     }
-    KAEvent event(i.staticCast<KCalCore::Event>());
+    KAEvent event(i.staticCast<KCalendarCore::Event>());
     const QString mime = CalEvent::mimeType(event.category());
     if (mime.isEmpty() || !event.isValid()) {
         qCWarning(AKONADI_SERIALIZER_KALARM_LOG) << "Event with uid" << event.id() << "contains no usable alarms!";
@@ -107,7 +107,7 @@ void SerializerPluginKAlarm::serialize(const Item &item, const QByteArray &label
         return;
     }
     const KAEvent e = item.payload<KAEvent>();
-    KCalCore::Event::Ptr kcalEvent(new KCalCore::Event);
+    KCalendarCore::Event::Ptr kcalEvent(new KCalendarCore::Event);
     e.updateKCalEvent(kcalEvent, KAEvent::UID_SET);
     QByteArray head = "BEGIN:VCALENDAR\nPRODID:";
     head += KACalendar::icalProductId();
@@ -115,7 +115,7 @@ void SerializerPluginKAlarm::serialize(const Item &item, const QByteArray &label
     head += KAEvent::currentCalendarVersionString();
     head += '\n';
     data.write(head);
-    data.write(mFormat.toString(kcalEvent.staticCast<KCalCore::Incidence>()).toUtf8());
+    data.write(mFormat.toString(kcalEvent.staticCast<KCalendarCore::Incidence>()).toUtf8());
     data.write("\nEND:VCALENDAR");
 }
 
