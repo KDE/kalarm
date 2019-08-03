@@ -27,8 +27,8 @@
 #include <kalarmcal/kaevent.h>
 
 #include <AkonadiCore/collection.h>
-#include <KCalCore/FileStorage>
-#include <KCalCore/Event>
+#include <KCalendarCore/FileStorage>
+#include <KCalendarCore/Event>
 
 #include <QHash>
 #include <QObject>
@@ -61,13 +61,13 @@ class AlarmCalendar : public QObject
         bool                  haveDisabledAlarms() const   { return mHaveDisabledAlarms; }
         void                  disabledChanged(const KAEvent*);
         KAEvent::List         atLoginAlarms() const;
-        KCalCore::Event::Ptr  kcalEvent(const QString& uniqueID);   // if Akonadi, display calendar only
+        KCalendarCore::Event::Ptr  kcalEvent(const QString& uniqueID);   // if Akonadi, display calendar only
         KAEvent*              event(const EventId& uniqueId, bool checkDuplicates = false);
         KAEvent*              templateEvent(const QString& templateName);
         KAEvent::List         events(const QString& uniqueId) const;
         KAEvent::List         events(CalEvent::Types s = CalEvent::EMPTY) const  { return events(Akonadi::Collection(), s); }
         KAEvent::List         events(const Akonadi::Collection&, CalEvent::Types = CalEvent::EMPTY) const;
-        KCalCore::Event::List kcalEvents(CalEvent::Type s = CalEvent::EMPTY);   // display calendar only
+        KCalendarCore::Event::List kcalEvents(CalEvent::Type s = CalEvent::EMPTY);   // display calendar only
         bool                  eventReadOnly(Akonadi::Item::Id) const;
         Akonadi::Collection   collectionForEvent(Akonadi::Item::Id) const;
         bool                  addEvent(KAEvent&, QWidget* promptparent = nullptr, bool useEventID = false, Akonadi::Collection* = nullptr, bool noPrompt = false, bool* cancelled = nullptr);
@@ -131,7 +131,7 @@ class AlarmCalendar : public QObject
         static AlarmCalendar* mDisplayCalendar;    // the display calendar
         static QUrl           mLastImportUrl;      // last URL for Import Alarms file dialogue
 
-        KCalCore::FileStorage::Ptr mCalendarStorage; // null pointer for Akonadi
+        KCalendarCore::FileStorage::Ptr mCalendarStorage; // null pointer for Akonadi
         ResourceMap           mResourceMap;
         KAEventMap            mEventMap;           // lookup of all events by UID
         EarliestMap           mEarliestAlarm;      // alarm with earliest trigger time, by resource

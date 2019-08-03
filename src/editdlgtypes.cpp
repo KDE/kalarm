@@ -50,7 +50,7 @@
 #include <kalarmcal/identities.h>
 
 #include <Akonadi/Contact/EmailAddressSelectionDialog>
-#include <KCalCore/Person>
+#include <KCalendarCore/Person>
 #include <KCalUtils/kcalutils/icaldrag.h>
 using namespace KCalCore;
 
@@ -1232,7 +1232,7 @@ void EditEmailAlarmDlg::setAction(KAEvent::SubAction action, const AlarmText& al
 /******************************************************************************
 * Initialise various values in the New Alarm dialogue.
 */
-void EditEmailAlarmDlg::setEmailFields(uint fromID, const KCalCore::Person::List& addresses,
+void EditEmailAlarmDlg::setEmailFields(uint fromID, const KCalendarCore::Person::List& addresses,
                                        const QString& subject, const QStringList& attachments)
 {
     if (fromID && mEmailFromList)

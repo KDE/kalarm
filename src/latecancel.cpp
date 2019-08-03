@@ -23,7 +23,7 @@
 
 #include "checkbox.h"
 
-#include <KCalCore/Duration>
+#include <KCalendarCore/Duration>
 using namespace KCalCore;
 
 #include <KLocalizedString>

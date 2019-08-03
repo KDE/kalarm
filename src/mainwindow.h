@@ -30,7 +30,7 @@
 #include <kalarmcal/kaevent.h>
 
 #include <AkonadiCore/item.h>
-#include <KCalCore/Calendar>
+#include <KCalendarCore/Calendar>
 
 #include <QList>
 #include <QMap>
@@ -53,7 +53,7 @@ class TemplateDlg;
 class ResourceSelector;
 
 
-class MainWindow : public MainWindowBase, public KCalCore::Calendar::CalendarObserver
+class MainWindow : public MainWindowBase, public KCalendarCore::Calendar::CalendarObserver
 {
         Q_OBJECT
 

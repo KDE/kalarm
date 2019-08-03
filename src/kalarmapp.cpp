@@ -1354,8 +1354,8 @@ bool KAlarmApp::needWindowFocusFix() const
 bool KAlarmApp::scheduleEvent(KAEvent::SubAction action, const QString& text, const KADateTime& dateTime,
                               int lateCancel, KAEvent::Flags flags, const QColor& bg, const QColor& fg,
                               const QFont& font, const QString& audioFile, float audioVolume, int reminderMinutes,
-                              const KARecurrence& recurrence, const KCalCore::Duration& repeatInterval, int repeatCount,
-                              uint mailFromID, const KCalCore::Person::List& mailAddresses,
+                              const KARecurrence& recurrence, const KCalendarCore::Duration& repeatInterval, int repeatCount,
+                              uint mailFromID, const KCalendarCore::Person::List& mailAddresses,
                               const QString& mailSubject, const QStringList& mailAttachments)
 {
     qCDebug(KALARM_LOG) << "KAlarmApp::scheduleEvent:" << text;

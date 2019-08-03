@@ -41,7 +41,7 @@
 #include <kalarmcal/kaevent.h>
 #include <kalarmcal/karecurrence.h>
 
-#include <KCalCore/Event>
+#include <KCalendarCore/Event>
 using namespace KCalCore;
 
 #include <KLocalizedString>

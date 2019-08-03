@@ -28,7 +28,7 @@
 
 #include <kalarmcal/kadatetime.h>
 using namespace KAlarmCal;
-#include <KCalCore/Duration>
+#include <KCalendarCore/Duration>
 using namespace KCalCore;
 
 #include <KLocalizedString>

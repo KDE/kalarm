@@ -135,7 +135,7 @@ class MessageWin : public MainWindowBase
         bool                haveErrorMessage(unsigned msg) const;
         void                clearErrorMessage(unsigned msg) const;
         void                redisplayAlarm();
-        static bool         reinstateFromDisplaying(const KCalCore::Event::Ptr&, KAEvent&, Akonadi::Collection&, bool& showEdit, bool& showDefer);
+        static bool         reinstateFromDisplaying(const KCalendarCore::Event::Ptr&, KAEvent&, Akonadi::Collection&, bool& showEdit, bool& showDefer);
         static bool         isSpread(const QPoint& topLeft);
 
         static QList<MessageWin*>      mWindowList;    // list of existing message windows

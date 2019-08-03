@@ -27,7 +27,7 @@
 #include <AkonadiCore/itemfetchjob.h>
 #include <AkonadiCore/itemfetchscope.h>
 #include <AkonadiCore/itemdeletejob.h>
-#include <KCalCore/Event>
+#include <KCalendarCore/Event>
 using namespace KCalCore;
 
 #include <QTimer>
