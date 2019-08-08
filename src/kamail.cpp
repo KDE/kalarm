@@ -1,7 +1,7 @@
 /*
  *  kamail.cpp  -  email functions
  *  Program:  kalarm
- *  Copyright © 2002-2018 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2002-2019 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -40,7 +40,6 @@
 
 #include <KEmailAddress>
 #include <KAboutData>
-#include <KLocale>
 #include <KLocalizedString>
 #include <kfileitem.h>
 #include <KIO/StatJob>
@@ -329,7 +328,7 @@ void initHeaders(KMime::Message& message, KAMail::JobData& data)
     message.setHeader(from);
 
     KMime::Headers::To* to = new KMime::Headers::To;
-    KCalendarCore::Person::List toList = data.event.emailAddressees();
+    const KCalendarCore::Person::List toList = data.event.emailAddressees();
     for (int i = 0, count = toList.count();  i < count;  ++i)
         to->addAddress(toList[i].email().toLatin1(), toList[i].name());
     message.setHeader(to);
@@ -342,7 +341,7 @@ void initHeaders(KMime::Message& message, KAMail::JobData& data)
     }
 
     KMime::Headers::Subject* subject = new KMime::Headers::Subject;
-    QString str = data.event.emailSubject();
+    const QString str = data.event.emailSubject();
     subject->fromUnicodeString(str, autoDetectCharset(str));
     message.setHeader(subject);
 
@@ -712,18 +711,10 @@ QStringList extractEmailsAndNormalize(const QString& emailAddresses)
 // Based on KMail KMMsgBase::autoDetectCharset().
 QByteArray autoDetectCharset(const QString& text)
 {
-    static QList<QByteArray> charsets;
-    if (charsets.isEmpty())
-        charsets << "us-ascii" << "iso-8859-1" << "locale" << "utf-8";
-
-    for (int i = 0, count = charsets.count();  i < count;  ++i)
+    for (QByteArray encoding : {"us-ascii", "iso-8859-1", "locale", "utf-8"})
     {
-        QByteArray encoding = charsets[i];
         if (encoding == "locale")
-        {
-            encoding = QTextCodec::codecForName(KLocale::global()->encoding())->name();
-            encoding = encoding.toLower();
-        }
+            encoding = QTextCodec::codecForLocale()->name().toLower();
         if (text.isEmpty())
             return encoding;
         if (encoding == "us-ascii")
@@ -733,7 +724,7 @@ QByteArray autoDetectCharset(const QString& text)
         }
         else
         {
-            const QTextCodec *codec = codecForName(encoding);
+            const QTextCodec* codec = codecForName(encoding);
             if (!codec)
                 qCDebug(KALARM_LOG) << "KAMail::autoDetectCharset: Something is wrong and I cannot get a codec. [" << encoding <<"]";
             else
