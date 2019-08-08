@@ -564,11 +564,13 @@ void AlarmCalendar::slotEventChanged(const AkonadiModel::Event& event)
     if (!updated)
         addNewEvent(event.collection, new KAEvent(event.event));
 
-    bool enabled = event.event.enabled();
-    checkForDisabledAlarms(!enabled, enabled);
-    if (added  &&  enabled  &&  event.event.category() == CalEvent::ACTIVE
-    &&  event.event.repeatAtLogin())
-        Q_EMIT atLoginEventAdded(event.event);
+    if (event.event.category() == CalEvent::ACTIVE)
+    {
+        bool enabled = event.event.enabled();
+        checkForDisabledAlarms(!enabled, enabled);
+        if (added  &&  enabled  &&  event.event.repeatAtLogin())
+            Q_EMIT atLoginEventAdded(event.event);
+    }
 }
 
 /******************************************************************************
