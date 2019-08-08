@@ -21,17 +21,16 @@
 #ifndef FILEDIALOG_H
 #define FILEDIALOG_H
 
-#include <KFileDialog>
-
+#include <KFileCustomDialog>
+#include <QUrl>
 class QCheckBox;
 
-class FileDialog : public KFileDialog
+class FileDialog : public KFileCustomDialog
 {
         Q_OBJECT
     public:
-        FileDialog(const QUrl& startDir, const QString& filter,
-                   QWidget* parent, QWidget* widget = nullptr)
-              : KFileDialog(startDir, filter, parent, widget) {}
+        explicit FileDialog(const QUrl& startDir, const QString& filter,
+                   QWidget* parent = nullptr);
         static QString getSaveFileName(const QUrl& dir = QUrl(), const QString& filter = QString(),
                                        QWidget* parent = nullptr, const QString& caption = QString(), bool* append = nullptr);
 

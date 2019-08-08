@@ -33,6 +33,14 @@
 QCheckBox* FileDialog::mAppendCheck = nullptr;
 
 
+FileDialog::FileDialog(const QUrl &startDir, const QString &filter, QWidget *parent)
+    : KFileCustomDialog(parent)
+{
+    fileWidget()->setFilter(filter);
+    fileWidget()->setParent(parent);
+    fileWidget()->setStartDir(startDir);
+}
+
 QString FileDialog::getSaveFileName(const QUrl& dir, const QString& filter, QWidget* parent, const QString& caption, bool* append)
 {
     bool defaultDir = dir.isEmpty();
@@ -45,11 +53,11 @@ QString FileDialog::getSaveFileName(const QUrl& dir, const QString& filter, QWid
     {
         if (!dir.isLocalFile())
             qCWarning(KALARM_LOG) << "FileDialog::getSaveFileName called with non-local start dir " << dir;
-        dlg->setSelection(dir.isLocalFile() ? dir.toLocalFile() : dir.path());  // may also be a filename
+        dlg->fileWidget()->setSelection(dir.isLocalFile() ? dir.toLocalFile() : dir.path());  // may also be a filename
     }
-    dlg->setOperationMode(Saving);
-    dlg->setMode(KFile::File | KFile::LocalOnly);
-    dlg->setConfirmOverwrite(true);
+    dlg->setOperationMode(KFileWidget::Saving);
+    dlg->fileWidget()->setMode(KFile::File | KFile::LocalOnly);
+    dlg->fileWidget()->setConfirmOverwrite(true);
     if (!caption.isEmpty())
         dlg->setWindowTitle(caption);
     mAppendCheck = nullptr;
@@ -59,7 +67,7 @@ QString FileDialog::getSaveFileName(const QUrl& dir, const QString& filter, QWid
         // Note that the dialogue will take ownership of the QCheckBox.
         mAppendCheck = new QCheckBox(i18nc("@option:check", "Append to existing file"), nullptr);
         connect(mAppendCheck, &QCheckBox::toggled, dlg.data(), &FileDialog::appendToggled);
-        dlg->fileWidget()->setCustomWidget(mAppendCheck);
+        dlg->setCustomWidget(mAppendCheck);
         *append = false;
     }
     dlg->setWindowModality(Qt::WindowModal);
@@ -67,7 +75,7 @@ QString FileDialog::getSaveFileName(const QUrl& dir, const QString& filter, QWid
     if (!dlg)
         return QString();   // dialogue was deleted
 
-    QString filename = dlg->selectedFile();
+    QString filename = dlg->fileWidget()->selectedFile();
     if (!filename.isEmpty())
     {
         if (append)
@@ -79,7 +87,7 @@ QString FileDialog::getSaveFileName(const QUrl& dir, const QString& filter, QWid
 
 void FileDialog::appendToggled(bool ticked)
 {
-    setConfirmOverwrite(!ticked);
+    fileWidget()->setConfirmOverwrite(!ticked);
 }
 
 // vim: et sw=4:

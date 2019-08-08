@@ -142,7 +142,9 @@ target_link_libraries(kalarm_bin
     KF5::TextWidgets
     KF5::WindowSystem
     KF5::XmlGui
-    KF5::KDELibs4Support
+    KF5::KIOFileWidgets
+    KF5::Crash
+    KF5::KDELibs4Support #calendarsytem/Klocale
     Phonon::phonon4qt5
     KF5::AkonadiCore
     KF5::AkonadiMime
