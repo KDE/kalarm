@@ -1,7 +1,7 @@
 /*
  *  recurrenceedit.cpp  -  widget to edit the event's recurrence definition
  *  Program:  kalarm
- *  Copyright © 2002-2018 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2002-2019 David Jarvie <djarvie@kde.org>
  *
  *  Based originally on KOrganizer module koeditorrecurrence.cpp,
  *  Copyright (c) 2000,2001 Cornelius Schumacher <schumacher@kde.org>
@@ -45,7 +45,6 @@
 using namespace KCalendarCore;
 
 #include <KLocalizedString>
-#include <kcalendarsystem.h>
 #include <kmessagebox.h>
 #include <kdatecombobox.h>
 
@@ -1210,11 +1209,11 @@ DayWeekRule::DayWeekRule(const QString& freqText, const QString& freqWhatsThis, 
     QGridLayout* dgrid = new QGridLayout(box);
     dgrid->setContentsMargins(0, 0, 0, 0);
     dgrid->setSpacing(style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
-    const KCalendarSystem* calendar = KLocale::global()->calendar();
+    QLocale locale;
     for (int i = 0;  i < 7;  ++i)
     {
         int day = KAlarm::localeDayInWeek_to_weekDay(i);
-        mDayBox[i] = new CheckBox(calendar->weekDayName(day), box);
+        mDayBox[i] = new CheckBox(locale.dayName(day), box);
         mDayBox[i]->setFixedSize(mDayBox[i]->sizeHint());
         mDayBox[i]->setReadOnly(readOnly);
         connect(mDayBox[i], &QAbstractButton::toggled, this, &Rule::changed);
@@ -1402,11 +1401,11 @@ MonthYearRule::MonthYearRule(const QString& freqText, const QString& freqWhatsTh
 
     mDayOfWeekCombo = new ComboBox(this);
     mDayOfWeekCombo->setEditable(false);
-    const KCalendarSystem* calendar = KLocale::global()->calendar();
+    QLocale locale;
     for (int i = 0;  i < 7;  ++i)
     {
         int day = KAlarm::localeDayInWeek_to_weekDay(i);
-        mDayOfWeekCombo->addItem(calendar->weekDayName(day));
+        mDayOfWeekCombo->addItem(locale.dayName(day));
     }
     mDayOfWeekCombo->setReadOnly(readOnly);
     mDayOfWeekCombo->setWhatsThis(i18nc("@info:whatsthis", "Select the day of the week on which to repeat the alarm"));
@@ -1561,11 +1560,10 @@ YearlyRule::YearlyRule(bool readOnly, QWidget* parent)
     QGridLayout* grid = new QGridLayout(w);
     grid->setContentsMargins(0, 0, 0, 0);
     grid->setSpacing(style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
-    const KCalendarSystem* calendar = KLocale::global()->calendar();
-    int year = KADateTime::currentLocalDate().year();
+    QLocale locale;
     for (int i = 0;  i < 12;  ++i)
     {
-        mMonthBox[i] = new CheckBox(calendar->monthName(i + 1, year, KCalendarSystem::ShortName), w);
+        mMonthBox[i] = new CheckBox(locale.monthName(i + 1, QLocale::ShortFormat), w);
         mMonthBox[i]->setFixedSize(mMonthBox[i]->sizeHint());
         mMonthBox[i]->setReadOnly(readOnly);
         connect(mMonthBox[i], &QAbstractButton::toggled, this, &Rule::changed);
