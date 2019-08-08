@@ -83,6 +83,7 @@ using namespace KCalUtils;
 #include <QMimeDatabase>
 #include <QInputDialog>
 #include <QUrl>
+#include <QUrlQuery>
 #include <QSystemTrayIcon>
 
 using namespace KAlarmCal;
