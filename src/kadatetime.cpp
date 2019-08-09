@@ -1146,7 +1146,7 @@ uint KADateTime::toTime_t() const
     const QDateTime qdt = d->toUtc(local);
     if (!qdt.isValid())
         return uint(-1);
-    return qdt.toTime_t();
+    return qdt.toSecsSinceEpoch();
 }
 
 void KADateTime::setTime_t(qint64 seconds)

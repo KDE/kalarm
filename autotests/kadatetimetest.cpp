@@ -1655,7 +1655,7 @@ void KADateTimeTest::set()
     // time_t
     utcd = KADateTime(QDate(2005, 6, 6), QTime(12, 15, 20), KADateTime::UTC);
     QDateTime qtt = utcd.qDateTime();
-    uint secs = qtt.toTime_t();
+    uint secs = qtt.toSecsSinceEpoch();
     KADateTime tt;
     tt.setTime_t(static_cast<qint64>(secs));
     QVERIFY(tt.isUtc());
