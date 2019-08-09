@@ -2,7 +2,7 @@
  *  datetime.cpp  -  date/time with start-of-day time for date-only values
  *  This file is part of kalarmcal library, which provides access to KAlarm
  *  calendar data.
- *  Copyright © 2003,2005-2007,2009-2011,2016,2018 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2003-2019 David Jarvie <djarvie@kde.org>
  *
  *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Library General Public License as published
@@ -267,9 +267,19 @@ DateTime DateTime::toTimeSpec(const KADateTime::Spec &spec) const
     return DateTime(d->mDateTime.toTimeSpec(spec));
 }
 
+qint64 DateTime::toSecsSinceEpoch() const
+{
+    return d->mDateTime.toSecsSinceEpoch();
+}
+
 uint DateTime::toTime_t() const
 {
     return d->mDateTime.toTime_t();
+}
+
+void DateTime::setSecsSinceEpoch(qint64 secs)
+{
+    d->mDateTime.setSecsSinceEpoch(secs);
 }
 
 void DateTime::setTime_t(uint secs)

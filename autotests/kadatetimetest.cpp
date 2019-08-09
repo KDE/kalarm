@@ -1655,13 +1655,13 @@ void KADateTimeTest::set()
     // time_t
     utcd = KADateTime(QDate(2005, 6, 6), QTime(12, 15, 20), KADateTime::UTC);
     QDateTime qtt = utcd.qDateTime();
-    uint secs = qtt.toSecsSinceEpoch();
+    qint64 secs = qtt.toSecsSinceEpoch();
     KADateTime tt;
-    tt.setTime_t(static_cast<qint64>(secs));
+    tt.setSecsSinceEpoch(secs);
     QVERIFY(tt.isUtc());
     QCOMPARE(tt.date(), utcd.date());
     QCOMPARE(tt.time(), utcd.time());
-    QCOMPARE(tt.toTime_t(), secs);
+    QCOMPARE(tt.toSecsSinceEpoch(), secs);
 
     // Restore the original local time zone
     if (originalZone.isEmpty()) {

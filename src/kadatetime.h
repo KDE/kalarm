@@ -2,7 +2,7 @@
     This file is part of kalarmcal library, which provides access to KAlarm
     calendar data. Qt5 version of KDE 4 kdelibs/kdecore/date/kdatetime.h.
 
-    Copyright (c) 2005-2011,2018 David Jarvie <djarvie@kde.org>
+    Copyright © 2005-2019 David Jarvie <djarvie@kde.org>
 
     This library is free software; you can redistribute it and/or modify it
     under the terms of the GNU Library General Public License as published by
@@ -100,9 +100,10 @@ class KADateTimeSpecPrivate;
  * A KADateTime object can be converted to a different time specification by
  * using toUtc() or toLocalZone(). It can be converted to a specific time zone
  * by toZone(). To return the time as an elapsed time since 1 January 1970 (as
- * used by time(2)), use toTime_t(). The results of time zone conversions are
- * cached to minimize the need for recalculation. Each KADateTime object caches
- * its UTC equivalent and the last time zone conversion performed.
+ * used by time(2)), use toSecsSinceEpoch(). The results of time zone
+ * conversions are cached to minimize the need for recalculation. Each
+ * KADateTime object caches its UTC equivalent and the last time zone
+ * conversion performed.
  *
  * The date and time can be set either in the constructor, or afterwards by
  * calling setDate() or setTime(). To return the date and/or time components of
@@ -701,7 +702,7 @@ public:
      * with the date unchanged.
      *
      * @return converted time
-     * @see toOffsetFromUtc(), toLocalZone(), toZone(), toTimeSpec(), toTime_t(), QTimeZone::convert()
+     * @see toOffsetFromUtc(), toLocalZone(), toZone(), toTimeSpec(), toSecsSinceEpoch(), QTimeZone::convert()
      */
     KADateTime toUtc() const;
 
@@ -716,7 +717,7 @@ public:
      * start of the day.
      *
      * @return converted time
-     * @see toUtc(), toOffsetFromUtc(int), toLocalZone(), toZone(), toTimeSpec(), toTime_t(), QTimeZone::convert()
+     * @see toUtc(), toOffsetFromUtc(int), toLocalZone(), toZone(), toTimeSpec(), toSecsSinceEpoch(), QTimeZone::convert()
      */
     KADateTime toOffsetFromUtc() const;
 
@@ -728,7 +729,7 @@ public:
      *
      * @param utcOffset number of seconds to add to UTC to get the local time.
      * @return converted time
-     * @see toUtc(), toOffsetFromUtc(), toLocalZone(), toZone(), toTimeSpec(), toTime_t(), QTimeZone::convert()
+     * @see toUtc(), toOffsetFromUtc(), toLocalZone(), toZone(), toTimeSpec(), toSecsSinceEpoch(), QTimeZone::convert()
      */
     KADateTime toOffsetFromUtc(int utcOffset) const;
 
@@ -779,10 +780,29 @@ public:
      * Converts the time to a UTC time, measured in seconds since 00:00:00 UTC
      * 1st January 1970 (as returned by time(2)).
      *
+     * @return converted time, or @c LLONG_MIN if the date is out of range or invalid
+     * @see setSecsSinceEpoch()
+     */
+    qint64 toSecsSinceEpoch() const;
+
+    /**
+     * Converts the time to a UTC time, measured in seconds since 00:00:00 UTC
+     * 1st January 1970 (as returned by time(2)).
+     *
      * @return converted time, or @c uint(-1) if the date is out of range or invalid
      * @see setTime_t()
+     * @deprecated Use toSecsSinceEpoch()
      */
-    uint toTime_t() const;
+    KALARMCAL_DEPRECATED uint toTime_t() const;
+
+    /**
+     * Sets the time to a UTC time, specified as seconds since 00:00:00 UTC
+     * 1st January 1970 (as returned by time(2)).
+     *
+     * @param seconds number of seconds since 00:00:00 UTC 1st January 1970
+     * @see toSecsSinceEpoch()
+     */
+    void setSecsSinceEpoch(qint64 seconds);
 
     /**
      * Sets the time to a UTC time, specified as seconds since 00:00:00 UTC
@@ -790,8 +810,9 @@ public:
      *
      * @param seconds number of seconds since 00:00:00 UTC 1st January 1970
      * @see toTime_t()
+     * @deprecated Use setSecsSinceEpoch()
      */
-    void setTime_t(qint64 seconds);
+    KALARMCAL_DEPRECATED void setTime_t(qint64 seconds);
 
     /**
      * Sets the instance either to being a date and time value, or a date-only
@@ -808,7 +829,7 @@ public:
      * Sets the date part of the date/time.
      *
      * @param date new date value
-     * @see date(), setTime(), setTimeSpec(), setTime_t(), setDateOnly()
+     * @see date(), setTime(), setTimeSpec(), setSecsSinceEpoch(), setDateOnly()
      */
     void setDate(const QDate &date);
 
@@ -817,7 +838,7 @@ public:
      * is changed to being a date and time value.
      *
      * @param time new time value
-     * @see time(), setDate(), setTimeSpec(), setTime_t()
+     * @see time(), setDate(), setTimeSpec(), setSecsSinceEpoch()
      */
     void setTime(const QTime &time);
 

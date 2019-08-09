@@ -2526,9 +2526,7 @@ DateTime KAEvent::mainEndRepeatTime() const
 void KAEvent::setStartOfDay(const QTime &startOfDay)
 {
     DateTime::setStartOfDay(startOfDay);
-#ifdef __GNUC__
-#warning Does this need all trigger times for date-only alarms to be recalculated?
-#endif
+#pragma message("Does this need all trigger times for date-only alarms to be recalculated?")
 }
 
 /******************************************************************************
@@ -4186,9 +4184,7 @@ void KAEventPrivate::calcTriggerTimes() const
     if (mChangeCount) {
         return;
     }
-#ifdef __GNUC__
-#warning May need to set date-only alarms to after start-of-day time in working-time checks
-#endif
+#pragma message("May need to set date-only alarms to after start-of-day time in working-time checks")
     holidays();   // initialise mHolidays if necessary
     bool recurs = (checkRecur() != KARecurrence::NO_RECUR);
     if ((recurs  &&  mWorkTimeOnly  &&  mWorkTimeOnly != mWorkTimeIndex)
@@ -5097,7 +5093,8 @@ bool KAEvent::convertKCalEvents(const Calendar::Ptr &calendar, int calendarVersi
                     // The calendar file was written by the KDE 3.0.0 version of KAlarm 0.5.7.
                     // Summer time was ignored when converting to UTC.
                     KADateTime dt(alarm->time());
-                    const time_t t = dt.toTime_t();
+                    const qint64 t64 = dt.toSecsSinceEpoch();
+                    const time_t t = (static_cast<quint64>(t64) >= uint(-1)) ? uint(-1) : static_cast<uint>(t64);
                     const struct tm *dtm = localtime(&t);
                     if (dtm->tm_isdst) {
                         dt = dt.addSecs(-3600);

@@ -2,7 +2,7 @@
  *  datetime.h  -  date/time with start-of-day time for date-only values
  *  This file is part of kalarmcal library, which provides access to KAlarm
  *  calendar data.
- *  Copyright © 2003,2005-2007,2009,2011,2018 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2003-2019 David Jarvie <djarvie@kde.org>
  *
  *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Library General Public License as published
@@ -187,13 +187,23 @@ public:
 
     /** Converts the time to a UTC time, measured in seconds since 00:00:00 UTC
      * 1st January 1970 (as returned by time(2)). */
-    uint toTime_t() const;
+    qint64 toSecsSinceEpoch() const;
+
+    /** Converts the time to a UTC time, measured in seconds since 00:00:00 UTC
+     * 1st January 1970 (as returned by time(2)). */
+    KALARMCAL_DEPRECATED uint toTime_t() const;
+
+    /** Sets the value to a specified date-time value.
+     *  @param secs The date-time value expressed as the number of seconds elapsed
+     *              since 1970-01-01 00:00:00 UTC.
+     */
+    void setSecsSinceEpoch(qint64 secs);
 
     /** Sets the value to a specified date-time value.
      *  @param secs The time_t date-time value, expressed as the number of seconds elapsed
      *              since 1970-01-01 00:00:00 UTC.
      */
-    void setTime_t(uint secs);
+    KALARMCAL_DEPRECATED void setTime_t(uint secs);
 
     /** Returns a DateTime value @p secs seconds later than the value of this object. */
     DateTime addSecs(qint64 n) const;

@@ -3,7 +3,7 @@
     This file is part of kalarmcal library, which provides access to KAlarm
     calendar data. Qt5 version of KDE 4 kdelibs/kdecore/date/kdatetime.cpp.
 
-    Copyright (c) 2005-2011,2018 David Jarvie <djarvie@kde.org>
+    Copyright © 2005-2019 David Jarvie <djarvie@kde.org>
 
     This library is free software; you can redistribute it and/or modify it
     under the terms of the GNU Library General Public License as published by
@@ -1140,16 +1140,24 @@ KADateTime KADateTime::toTimeSpec(const Spec &spec) const
     return KADateTime(d->toUtc(local), spec);
 }
 
-uint KADateTime::toTime_t() const
+qint64 KADateTime::toSecsSinceEpoch() const
 {
     QTimeZone local;
     const QDateTime qdt = d->toUtc(local);
     if (!qdt.isValid())
-        return uint(-1);
+        return LLONG_MIN;
     return qdt.toSecsSinceEpoch();
 }
 
-void KADateTime::setTime_t(qint64 seconds)
+uint KADateTime::toTime_t() const
+{
+    qint64 t = toSecsSinceEpoch();
+    if (static_cast<quint64>(t) >= uint(-1))
+        return uint(-1);
+    return static_cast<uint>(t);
+}
+
+void KADateTime::setSecsSinceEpoch(qint64 seconds)
 {
     QDateTime dt;
     dt.setTimeSpec(Qt::UTC);   // prevent QDateTime::setMSecsSinceEpoch() converting to local time
@@ -1157,6 +1165,11 @@ void KADateTime::setTime_t(qint64 seconds)
     d->specType = UTC;
     d->setDateOnly(false);
     d->setDtWithSpec(dt);
+}
+
+void KADateTime::setTime_t(qint64 seconds)
+{
+    setSecsSinceEpoch(seconds);
 }
 
 void KADateTime::setDateOnly(bool dateOnly)
