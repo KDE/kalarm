@@ -990,14 +990,14 @@ Desktop currentDesktopIdentity()
 * event exists.
 * Reply = config entry: [0] = event's collection ID (Akonadi only),
 *                       [1] = event ID,
-*                       [2] = trigger time (time_t).
+*                       [2] = trigger time (int64 seconds since epoch).
 *       = empty list if none or expired.
 */
 QStringList checkRtcWakeConfig(bool checkEventExists)
 {
     KConfigGroup config(KSharedConfig::openConfig(), "General");
     const QStringList params = config.readEntry("RtcWake", QStringList());
-    if (params.count() == 3  &&  params[2].toUInt() > KADateTime::currentUtcDateTime().toTime_t())
+    if (params.count() == 3  &&  params[2].toLongLong() > KADateTime::currentUtcDateTime().toSecsSinceEpoch())
     {
         if (checkEventExists  &&  !AlarmCalendar::getEvent(EventId(params[0].toLongLong(), params[1])))
             return QStringList();

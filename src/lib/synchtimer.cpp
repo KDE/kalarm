@@ -203,7 +203,7 @@ void DailyTimer::changeTime(const QTime& newTimeOfDay, bool triggerMissed)
 void DailyTimer::start()
 {
     // TIMEZONE = local time
-    QDateTime now = QDateTime::currentDateTime();
+    const QDateTime now = QDateTime::currentDateTime();
     // Find out whether to trigger today or tomorrow.
     // In preference, use the last trigger date to determine this, since
     // that will avoid possible errors due to daylight savings time changes.
@@ -231,9 +231,9 @@ void DailyTimer::start()
 void DailyTimer::slotTimer()
 {
     // TIMEZONE = local time
-    QDateTime now = QDateTime::currentDateTime();
+    const QDateTime now = QDateTime::currentDateTime();
     mLastDate = now.date();
-    QDateTime next = QDateTime(mLastDate.addDays(1), mTime);
+    const QDateTime next = QDateTime(mLastDate.addDays(1), mTime);
     const qint64 interval = next.toSecsSinceEpoch() - now.toSecsSinceEpoch();
     mTimer->start(interval * 1000);    // execute a single shot
     qCDebug(KALARM_LOG) << "DailyTimer::slotTimer: at" << mTime.hour() << ":" << mTime.minute() << ": interval =" << interval/3600 << ":" << (interval/60)%60 << ":" << interval%60;

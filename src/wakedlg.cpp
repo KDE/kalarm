@@ -1,7 +1,7 @@
 /*
  *  wakedlg.cpp  -  dialog to configure wake-from-suspend alarms
  *  Program:  kalarm
- *  Copyright © 2011-2012 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2011-2012 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -172,11 +172,10 @@ void WakeFromSuspendDlg::useWakeClicked()
             != KMessageBox::Continue)
         return;
     int advance = mUi->advanceWakeTime->value();
-    unsigned triggerTime = dt.addSecs(-advance * 60).toTime_t();
+    qint64 triggerTime = dt.addSecs(-advance * 60).toSecsSinceEpoch();
     if (KAlarm::setRtcWakeTime(triggerTime, this))
     {
-        QStringList param;
-        param << QString::number(event.collectionId()) << event.id() << QString::number(triggerTime);
+        const QStringList param{QString::number(event.collectionId()), event.id(), QString::number(triggerTime)};
         KConfigGroup config(KSharedConfig::openConfig(), "General");
         config.writeEntry("RtcWake", param);
         config.sync();

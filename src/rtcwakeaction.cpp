@@ -1,7 +1,7 @@
 /*
  *  rtcwakeaction.cpp  -  KAuth helper application to execute rtcwake commands
  *  Program:  kalarm
- *  Copyright © 2011,2018 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2011-2019 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -36,7 +36,7 @@ RtcWakeAction::RtcWakeAction()
 
 ActionReply RtcWakeAction::settimer(const QVariantMap& args)
 {
-    unsigned t = args[QStringLiteral("time")].toUInt();
+    qint64 t = args[QStringLiteral("time")].toLongLong();
     qCDebug(KALARM_LOG) << "RtcWakeAction::settimer(" << t << ")";
 
     // Find the rtcwake executable
