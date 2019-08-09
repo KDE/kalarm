@@ -1262,7 +1262,7 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
             return;
         const KPIM::MailSummary& summary = mailList.at(0);
         QDateTime dt;
-        dt.setTime_t(summary.date());
+        dt.setSecsSinceEpoch(summary.date());
         const QString body = KAMail::getMailBody(summary.serialNumber());
         alarmText.setEmail(summary.to(), summary.from(), QString(),
                            QLocale().toString(dt), summary.subject(),

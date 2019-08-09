@@ -635,7 +635,7 @@ bool CollectionView::viewportEvent(QEvent* e)
                 QStyleOptionButton opt;
                 opt.QStyleOption::operator=(viewOptions());
                 opt.rect = rectForIndex(index);
-                int checkWidth = QApplication::style()->subElementRect(QStyle::SE_ViewItemCheckIndicator, &opt).width();
+                int checkWidth = QApplication::style()->subElementRect(QStyle::SE_ItemViewItemCheckIndicator, &opt).width();
                 int left = spacing() + 3*margin + checkWidth + viewOptions().decorationSize.width();   // left offset of text
                 int right = left + textWidth;
                 if (left >= horizontalOffset() + spacing()

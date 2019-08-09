@@ -217,7 +217,7 @@ void DailyTimer::start()
         next = QDateTime(now.date(), mTime);
     else
         next = QDateTime(now.date().addDays(1), mTime);
-    uint interval = next.toTime_t() - now.toTime_t();
+    const qint64 interval = next.toSecsSinceEpoch() - now.toSecsSinceEpoch();
     mTimer->start(interval * 1000);    // execute a single shot
     qCDebug(KALARM_LOG) << "DailyTimer::start: at" << mTime.hour() << ":" << mTime.minute() << ": interval =" << interval/3600 << ":" << (interval/60)%60 << ":" << interval%60;
 }
@@ -234,7 +234,7 @@ void DailyTimer::slotTimer()
     QDateTime now = QDateTime::currentDateTime();
     mLastDate = now.date();
     QDateTime next = QDateTime(mLastDate.addDays(1), mTime);
-    uint interval = next.toTime_t() - now.toTime_t();
+    const qint64 interval = next.toSecsSinceEpoch() - now.toSecsSinceEpoch();
     mTimer->start(interval * 1000);    // execute a single shot
     qCDebug(KALARM_LOG) << "DailyTimer::slotTimer: at" << mTime.hour() << ":" << mTime.minute() << ": interval =" << interval/3600 << ":" << (interval/60)%60 << ":" << interval%60;
 }

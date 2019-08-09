@@ -76,7 +76,7 @@ ActionReply RtcWakeAction::settimer(const QVariantMap& args)
 
         // If 't' is zero, the current wakeup is cancelled by setting a new wakeup
         // time 2 seconds from now, which will then expire.
-        unsigned now = QDateTime::currentDateTimeUtc().toTime_t();
+        qint64 now = QDateTime::currentDateTimeUtc().toSecsSinceEpoch();
         proc.setProgram(exe);
         proc.setArguments({ QStringLiteral("-m"), QStringLiteral("no"), QStringLiteral("-s"), QString::number(t ? t - now : 2) });
         proc.start();

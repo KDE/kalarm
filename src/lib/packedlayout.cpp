@@ -84,7 +84,14 @@ QSize PackedLayout::minimumSize() const
     QSize size;
     for (int i = 0, end = mItems.count();  i < end;  ++i)
         size = size.expandedTo(mItems[i]->minimumSize());
-    int m = margin() * 2;
+
+    int marginValue = -1;
+    int left, top, right, bottom;
+    getContentsMargins(&left, &top, &right, &bottom);
+    if (left == top && top == right && right == bottom) {
+        marginValue = left;
+    }
+    int m = marginValue * 2;
     return QSize(size.width() + m, size.height() + m);
 }
 
