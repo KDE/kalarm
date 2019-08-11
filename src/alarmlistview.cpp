@@ -31,8 +31,8 @@
 
 
 AlarmListView::AlarmListView(const QByteArray& configGroup, QWidget* parent)
-    : EventListView(parent),
-      mConfigGroup(configGroup)
+    : EventListView(parent)
+    , mConfigGroup(configGroup)
 {
     setEditOnSingleClick(true);
     connect(header(), &QHeaderView::sectionMoved, this, &AlarmListView::sectionMoved);
@@ -158,11 +158,11 @@ void AlarmListView::enableTimeColumns(QMenu* menu)
 {
     bool timeShown   = !header()->isSectionHidden(AlarmListModel::TimeColumn);
     bool timeToShown = !header()->isSectionHidden(AlarmListModel::TimeToColumn);
-    QList<QAction*> actions = menu->actions();
+    const QList<QAction*> actions = menu->actions();
     if (!timeToShown)
     {
         header()->setSectionHidden(AlarmListModel::TimeColumn, false);
-        for (QAction* act : qAsConst(actions))
+        for (QAction* act : actions)
         {
             if (act->data().toInt() == AlarmListModel::TimeColumn)
             {
@@ -174,7 +174,7 @@ void AlarmListView::enableTimeColumns(QMenu* menu)
     else if (!timeShown)
     {
         header()->setSectionHidden(AlarmListModel::TimeToColumn, false);
-        for (QAction* act : qAsConst(actions))
+        for (QAction* act : actions)
         {
             if (act->data().toInt() == AlarmListModel::TimeToColumn)
             {

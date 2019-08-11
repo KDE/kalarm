@@ -59,12 +59,12 @@ static long FIND_KALARM_OPTIONS = FIND_LIVE | FIND_ARCHIVED | FIND_MESSAGE | FIN
 
 
 Find::Find(EventListView* parent)
-    : QObject(parent),
-      mListView(parent),
-      mDialog(nullptr),
-      mFind(nullptr),
-      mOptions(0),
-      mFound(false)
+    : QObject(parent)
+    , mListView(parent)
+    , mDialog(nullptr)
+    , mFind(nullptr)
+    , mOptions(0)
+    , mFound(false)
 {
     connect(mListView->selectionModel(), &QItemSelectionModel::currentChanged, this, &Find::slotSelectionChanged);
 }
@@ -195,10 +195,10 @@ void Find::display()
     bool command  = false;
     bool email    = false;
     bool audio    = false;
-    int rowCount = mListView->model()->rowCount();
+    const int rowCount = mListView->model()->rowCount();
     for (int row = 0;  row < rowCount;  ++row)
     {
-        KAEvent viewEvent = mListView->event(row);
+        const KAEvent viewEvent = mListView->event(row);
         const KAEvent* event = &viewEvent;
         if (event->expired())
             archived = true;
@@ -261,9 +261,9 @@ void Find::slotFind()
     }
 
     // Supply KFind with only those options which relate to the text within alarms
-    long options = mOptions & (KFind::WholeWordsOnly | KFind::CaseSensitive | KFind::RegularExpression);
-    bool newFind = !mFind;
-    bool newPattern = (mDialog->pattern() != mLastPattern);
+    const long options = mOptions & (KFind::WholeWordsOnly | KFind::CaseSensitive | KFind::RegularExpression);
+    const bool newFind = !mFind;
+    const bool newPattern = (mDialog->pattern() != mLastPattern);
     mLastPattern = mDialog->pattern();
     if (mFind)
     {
@@ -287,7 +287,7 @@ void Find::slotFind()
         mFound = false;
         if (mOptions & KFind::FromCursor)
         {
-            QModelIndex index = mListView->selectionModel()->currentIndex();
+            const QModelIndex index = mListView->selectionModel()->currentIndex();
             if (index.isValid())
             {
                 mStartID       = mListView->event(index).id();
@@ -321,12 +321,12 @@ void Find::findNext(bool forward, bool checkEnd, bool fromCurrent)
     bool last = false;
     for ( ;  index.isValid() && !last;  index = nextItem(index, forward))
     {
-        KAEvent viewEvent = mListView->event(index);
+        const KAEvent viewEvent = mListView->event(index);
         const KAEvent* event = &viewEvent;
         if (!fromCurrent  &&  !mStartID.isNull()  &&  mStartID == event->id())
             last = true;    // we've wrapped round and reached the starting alarm again
         fromCurrent = false;
-        bool live = !event->expired();
+        const bool live = !event->expired();
         if ((live  &&  !(mOptions & FIND_LIVE))
         ||  (!live  &&  !(mOptions & FIND_ARCHIVED)))
             continue;     // we're not searching this type of alarm
@@ -405,8 +405,8 @@ void Find::findNext(bool forward, bool checkEnd, bool fromCurrent)
         // No match was found
         if (mFound  ||  checkEnd)
         {
-            QString msg = forward ? xi18nc("@info", "<para>End of alarm list reached.</para><para>Continue from the beginning?</para>")
-                                  : xi18nc("@info", "<para>Beginning of alarm list reached.</para><para>Continue from the end?</para>");
+            const QString msg = forward ? xi18nc("@info", "<para>End of alarm list reached.</para><para>Continue from the beginning?</para>")
+                                        : xi18nc("@info", "<para>Beginning of alarm list reached.</para><para>Continue from the end?</para>");
             if (KAMessageBox::questionYesNo(mListView, msg, QString(), KStandardGuiItem::cont(), KStandardGuiItem::cancel()) == KMessageBox::Yes)
             {
                 mNoCurrentItem = true;

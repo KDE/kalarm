@@ -92,10 +92,10 @@ AkonadiModel* AkonadiModel::instance()
 * Constructor.
 */
 AkonadiModel::AkonadiModel(ChangeRecorder* monitor, QObject* parent)
-    : EntityTreeModel(monitor, parent),
-      mMonitor(monitor),
-      mResourcesChecked(false),
-      mMigrating(false)
+    : EntityTreeModel(monitor, parent)
+    , mMonitor(monitor)
+    , mResourcesChecked(false)
+    , mMigrating(false)
 {
     // Set lazy population to enable the contents of unselected collections to be ignored
     setItemPopulationStrategy(LazyPopulation);
@@ -124,9 +124,7 @@ AkonadiModel::AkonadiModel(ChangeRecorder* monitor, QObject* parent)
         mIconSize = mTextIcon->size().expandedTo(mFileIcon->size()).expandedTo(mCommandIcon->size()).expandedTo(mEmailIcon->size()).expandedTo(mAudioIcon->size());
     }
 
-#ifdef __GNUC__
-#warning Only want to monitor collection properties, not content, when this becomes possible
-#endif
+#pragma message("Only want to monitor collection properties, not content, when this becomes possible")
     connect(monitor, SIGNAL(collectionChanged(Akonadi::Collection,QSet<QByteArray>)), SLOT(slotCollectionChanged(Akonadi::Collection,QSet<QByteArray>)));
     connect(monitor, &Monitor::collectionRemoved, this, &AkonadiModel::slotCollectionRemoved);
     initCalendarMigrator();
@@ -458,9 +456,7 @@ QVariant AkonadiModel::data(const QModelIndex& index, int role) const
                         case Qt::SizeHintRole:
                             return mIconSize;
                         case Qt::AccessibleTextRole:
-#ifdef __GNUC__
-#warning Implement accessibility
-#endif
+#pragma message("Implement accessibility")
                             return QString();
                         case ValueRole:
                             return static_cast<int>(event.actionSubType());
@@ -551,7 +547,7 @@ bool AkonadiModel::setData(const QModelIndex& index, const QVariant& value, int 
     if (!index.isValid())
         return false;
     // NOTE: need to Q_EMIT dataChanged() whenever something is updated (except via a job).
-    Collection collection = index.data(CollectionRole).value<Collection>();
+    const Collection collection = index.data(CollectionRole).value<Collection>();
     if (collection.isValid())
     {
         // This is a Collection row
@@ -572,7 +568,7 @@ bool AkonadiModel::setData(const QModelIndex& index, const QVariant& value, int 
             case EnabledTypesRole:
             {
                 const CalEvent::Types types = static_cast<CalEvent::Types>(value.toInt());
-                bool newAttr = !collection.hasAttribute<CollectionAttribute>();
+                const bool newAttr = !collection.hasAttribute<CollectionAttribute>();
                 attr = mCollectionAttributes.value(collection.id());
                 if (attr.enabled() == types)
                     return true;   // no change
@@ -948,9 +944,9 @@ QString AkonadiModel::displayName(Akonadi::Collection& collection) const
 QString AkonadiModel::storageType(const Akonadi::Collection& collection) const
 {
     const QUrl url = QUrl::fromUserInput(collection.remoteId(), QString(), QUrl::AssumeLocalFile);
-    return !url.isLocalFile()                     ? i18nc("@info", "URL")
-           : QFileInfo(url.toLocalFile()).isDir() ? i18nc("@info Directory in filesystem", "Directory")
-           :                                        i18nc("@info", "File");
+    return !url.isLocalFile()                   ? i18nc("@info", "URL")
+         : QFileInfo(url.toLocalFile()).isDir() ? i18nc("@info Directory in filesystem", "Directory")
+         :                                        i18nc("@info", "File");
 }
 
 /******************************************************************************
@@ -1011,10 +1007,8 @@ QString AkonadiModel::readOnlyTooltip(const Collection& collection)
 */
 QString AkonadiModel::repeatText(const KAEvent& event) const
 {
-    QString repeatText = event.recurrenceText(true);
-    if (repeatText.isEmpty())
-        repeatText = event.repetitionText(true);
-    return repeatText;
+    const QString repeatText = event.recurrenceText(true);
+    return repeatText.isEmpty() ? event.repetitionText(true) : repeatText;
 }
 
 /******************************************************************************
@@ -1121,12 +1115,6 @@ bool AkonadiModel::removeCollection(const Akonadi::Collection& collection)
     const AgentInstance instance = agentManager->instance(collection.resource());
     if (instance.isValid())
         agentManager->removeInstance(instance);
-#if 0
-    CollectionDeleteJob* job = new CollectionDeleteJob(col);
-    connect(job, &CollectionDeleteJob::result, this, &AkonadiModel::deleteCollectionJobDone);
-    mPendingCollectionJobs[job] = CollJobData(col.id(), displayName(col));
-    job->start();
-#endif
     return true;
 }
 
@@ -1137,32 +1125,6 @@ bool AkonadiModel::isCollectionBeingDeleted(Collection::Id id) const
 {
     return mCollectionsDeleting.contains(id);
 }
-
-#if 0
-/******************************************************************************
-* Called when a collection deletion job has completed.
-* Checks for any error.
-*/
-void AkonadiModel::deleteCollectionJobDone(KJob* j)
-{
-    QHash<KJob*, CollJobData>::iterator it = mPendingCollectionJobs.find(j);
-    CollJobData jobData;
-    if (it != mPendingCollectionJobs.end())
-    {
-        jobData = it.value();
-        mPendingCollectionJobs.erase(it);
-    }
-    if (j->error())
-    {
-        Q_EMIT collectionDeleted(jobData.id, false);
-        const QString errMsg = xi18nc("@info", "Failed to remove calendar <resource>%1</resource>.", jobData.displayName);
-        qCCritical(KALARM_LOG) << "AkonadiModel::deleteCollectionJobDone:" << errMsg << ":" << j->errorString();
-        KAMessageBox::error(MainWindow::mainMainWindow(), xi18nc("@info", "%1<nl/>(%2)", errMsg, j->errorString()));
-    }
-    else
-        Q_EMIT collectionDeleted(jobData.id, true);
-}
-#endif
 
 /******************************************************************************
 * Reload a collection from Akonadi storage. The backend data is not reloaded.
@@ -1199,8 +1161,8 @@ void AkonadiModel::modifyCollectionAttrJobDone(KJob* j)
 {
     Collection collection = static_cast<CollectionModifyJob*>(j)->collection();
     const Collection::Id id = collection.id();
-    bool newEnable  = mNewCollectionEnabled.contains(id);
-    bool newEnabled = mNewCollectionEnabled.value(id, false);
+    const bool newEnable  = mNewCollectionEnabled.contains(id);
+    const bool newEnabled = mNewCollectionEnabled.value(id, false);
     mNewCollectionEnabled.remove(id);
     if (j->error())
     {
@@ -1234,16 +1196,16 @@ QModelIndex AkonadiModel::eventIndex(const KAEvent& event)
 */
 Item::Id AkonadiModel::findItemId(const KAEvent& event)
 {
-    Collection::Id colId = event.collectionId();
-    QModelIndex start = (colId < 0) ? index(0, 0) : collectionIndex(Collection(colId));
-    Qt::MatchFlags flags = (colId < 0) ? Qt::MatchExactly | Qt::MatchRecursive | Qt::MatchCaseSensitive | Qt::MatchWrap
-                                       : Qt::MatchExactly | Qt::MatchRecursive | Qt::MatchCaseSensitive;
+    const Collection::Id colId = event.collectionId();
+    const QModelIndex start = (colId < 0) ? index(0, 0) : collectionIndex(Collection(colId));
+    const Qt::MatchFlags flags = (colId < 0) ? Qt::MatchExactly | Qt::MatchRecursive | Qt::MatchCaseSensitive | Qt::MatchWrap
+                                             : Qt::MatchExactly | Qt::MatchRecursive | Qt::MatchCaseSensitive;
     const QModelIndexList indexes = match(start, RemoteIdRole, event.id(), -1, flags);
     for (const QModelIndex& ix : indexes)
     {
         if (ix.isValid())
         {
-            Item::Id id = ix.data(ItemIdRole).toLongLong();
+            const Item::Id id = ix.data(ItemIdRole).toLongLong();
             if (id >= 0)
             {
                 if (colId < 0
@@ -1370,8 +1332,8 @@ AkonadiModel::Result AkonadiModel::addEvent(KAEvent* event, CalEvent::Type type,
 bool AkonadiModel::addEvents(const KAEvent::List& events, Collection& collection)
 {
     bool ok = true;
-    for (int i = 0, count = events.count();  i < count;  ++i)
-        ok = ok && addEvent(*events[i], collection);
+    for (KAEvent* event : events)
+        ok = ok && addEvent(*event, collection);
     return ok;
 }
 
@@ -1630,8 +1592,7 @@ void AkonadiModel::slotRowsInserted(const QModelIndex& parent, int start, int en
             qCDebug(KALARM_LOG) << "Collection" << collection.id() << collection.name();
             if (AgentManager::self()->instance(collection.resource()).isValid())
             {
-                QSet<QByteArray> attrs;
-                attrs += CollectionAttribute::name();
+                const QSet<QByteArray> attrs{ CollectionAttribute::name() };
                 if (collection.hasAttribute<CollectionAttribute>())
                     mCollectionAttributes[collection.id()] = *collection.attribute<CollectionAttribute>();
                 setCollectionChanged(collection, attrs, true);

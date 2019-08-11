@@ -148,7 +148,7 @@ int KAMail::send(JobData& jobdata, QStringList& errmsgs)
     }
     jobdata.bcc  = (jobdata.event.emailBcc() ? Preferences::emailBccAddress() : QString());
     qCDebug(KALARM_LOG) << "KAMail::send: To:" << jobdata.event.emailAddresses(QStringLiteral(","))
-                  << endl << "Subject:" << jobdata.event.emailSubject();
+                        << endl << "Subject:" << jobdata.event.emailSubject();
 
     KMime::Message::Ptr message = KMime::Message::Ptr(new KMime::Message);
 
@@ -157,8 +157,7 @@ int KAMail::send(JobData& jobdata, QStringList& errmsgs)
     if (Preferences::emailClient() == Preferences::sendmail)
     {
         qCDebug(KALARM_LOG) << "KAMail::send: Sending via sendmail";
-        QStringList paths;
-        paths << QStringLiteral("/sbin") << QStringLiteral("/usr/sbin") << QStringLiteral("/usr/lib");
+        const QStringList paths{QStringLiteral("/sbin"), QStringLiteral("/usr/sbin"), QStringLiteral("/usr/lib")};
         QString command = QStandardPaths::findExecutable(QStringLiteral("sendmail"), paths);
         if (!command.isNull())
         {
@@ -329,8 +328,8 @@ void initHeaders(KMime::Message& message, KAMail::JobData& data)
 
     KMime::Headers::To* to = new KMime::Headers::To;
     const KCalendarCore::Person::List toList = data.event.emailAddressees();
-    for (int i = 0, count = toList.count();  i < count;  ++i)
-        to->addAddress(toList[i].email().toLatin1(), toList[i].name());
+    for (const KCalendarCore::Person& who : toList)
+        to->addAddress(who.email().toLatin1(), who.name());
     message.setHeader(to);
 
     if (!data.bcc.isEmpty())
@@ -361,7 +360,7 @@ void initHeaders(KMime::Message& message, KAMail::JobData& data)
 */
 QString KAMail::appendBodyAttachments(KMime::Message& message, JobData& data)
 {
-    QStringList attachments = data.event.emailAttachments();
+    const QStringList attachments = data.event.emailAttachments();
     if (!attachments.count())
     {
         // There are no attachments, so simply append the message body
@@ -370,7 +369,7 @@ QString KAMail::appendBodyAttachments(KMime::Message& message, JobData& data)
         message.fromUnicodeString(data.event.message());
         auto encodings = KMime::encodingsForData(message.body());
         encodings.removeAll(KMime::Headers::CE8Bit);  // not handled by KMime
-        message.contentTransferEncoding()->setEncoding(encodings[0]);
+        message.contentTransferEncoding()->setEncoding(encodings.at(0));
         message.assemble();
     }
     else
@@ -388,17 +387,17 @@ QString KAMail::appendBodyAttachments(KMime::Message& message, JobData& data)
             content->fromUnicodeString(data.event.message());
             auto encodings = KMime::encodingsForData(content->body());
             encodings.removeAll(KMime::Headers::CE8Bit);  // not handled by KMime
-            content->contentTransferEncoding()->setEncoding(encodings[0]);
+            content->contentTransferEncoding()->setEncoding(encodings.at(0));
             content->assemble();
             message.addContent(content);
         }
 
         // Append each attachment in turn
-        for (QStringList::Iterator at = attachments.begin();  at != attachments.end();  ++at)
+        for (const QString& att : attachments)
         {
-            QString attachment = QString::fromLatin1((*at).toLocal8Bit());
-            QUrl url = QUrl::fromUserInput(attachment, QString(), QUrl::AssumeLocalFile);
-            QString attachError = xi18nc("@info", "Error attaching file: <filename>%1</filename>", attachment);
+            const QString attachment = QString::fromLatin1(att.toLocal8Bit());
+            const QUrl url = QUrl::fromUserInput(attachment, QString(), QUrl::AssumeLocalFile);
+            const QString attachError = xi18nc("@info", "Error attaching file: <filename>%1</filename>", attachment);
             QByteArray contents;
             bool atterror = false;
             if (!url.isLocalFile())
@@ -480,15 +479,15 @@ void KAMail::notifyQueued(const KAEvent& event)
     KMime::Types::Address addr;
     const QString localhost = QStringLiteral("localhost");
     const QString hostname  = QHostInfo::localHostName();
-    KCalendarCore::Person::List addresses = event.emailAddressees();
-    for (int i = 0, end = addresses.count();  i < end;  ++i)
+    const KCalendarCore::Person::List addresses = event.emailAddressees();
+    for (const KCalendarCore::Person& address : addresses)
     {
-        QByteArray email = addresses[i].email().toLocal8Bit();
+        const QByteArray email = address.email().toLocal8Bit();
         const char* em = email.constData();
         if (!email.isEmpty()
         &&  HeaderParsing::parseAddress(em, em + email.length(), addr))
         {
-            QString domain = addr.mailboxList.at(0).addrSpec().domain;
+            const QString domain = addr.mailboxList.at(0).addrSpec().domain;
             if (!domain.isEmpty()  &&  domain != localhost  &&  domain != hostname)
             {
                 KAMessageBox::information(MainWindow::mainMainWindow(), i18nc("@info", "An email has been queued to be sent"), QString(), Preferences::EMAIL_QUEUED_NOTIFY);
@@ -519,9 +518,9 @@ QString KAMail::convertAddresses(const QString& items, KCalendarCore::Person::Li
     const KMime::Types::Mailbox::List mailboxes = parseAddresses(items, invalidItem);
     if (!invalidItem.isEmpty())
         return invalidItem;
-    for (int i = 0, count = mailboxes.count();  i < count;  ++i)
+    for (const KMime::Types::Mailbox& mailbox : mailboxes)
     {
-        KCalendarCore::Person person(mailboxes[i].name(), mailboxes[i].addrSpec().asString());
+        const KCalendarCore::Person person(mailbox.name(), mailbox.addrSpec().asString());
         list += person;
     }
     return QString();
@@ -539,12 +538,12 @@ int KAMail::checkAddress(QString& address)
     // Check that there are no list separator characters present
     if (address.indexOf(QLatin1Char(',')) >= 0  ||  address.indexOf(QLatin1Char(';')) >= 0)
         return -1;
-    int n = address.length();
+    const int n = address.length();
     if (!n)
         return 0;
     int start = 0;
     int end   = n - 1;
-    if (address[end] == QLatin1Char('>'))
+    if (address.at(end) == QLatin1Char('>'))
     {
         // The email address is in <...>
         if ((start = address.indexOf(QLatin1Char('<'))) < 0)
@@ -552,7 +551,7 @@ int KAMail::checkAddress(QString& address)
         ++start;
         --end;
     }
-    int i = address.indexOf(QLatin1Char('@'), start);
+    const int i = address.indexOf(QLatin1Char('@'), start);
     if (i >= 0)
     {
         if (i == start  ||  i == end)          // check @ isn't the first or last character
@@ -567,7 +566,7 @@ int KAMail::checkAddress(QString& address)
     }
     for (int i = start;  i <= end;  ++i)
     {
-        char ch = address[i].toLatin1();
+        char ch = address.at(i).toLatin1();
         if (ch == '.'  ||  ch == '@'  ||  ch == '-'  ||  ch == '_'
         ||  (ch >= 'A' && ch <= 'Z')  ||  (ch >= 'a' && ch <= 'z')
         ||  (ch >= '0' && ch <= '9'))
@@ -665,9 +664,7 @@ QStringList KAMail::errors(const QString& err, ErrType prefix)
     }
     if (err.isEmpty())
         return QStringList(error1);
-    QStringList errs(QStringLiteral("%1:").arg(error1));
-    errs += err;
-    return errs;
+    return QStringList{QStringLiteral("%1:").arg(error1), err};
 }
 
 /******************************************************************************
@@ -676,10 +673,9 @@ QStringList KAMail::errors(const QString& err, ErrType prefix)
 QString KAMail::getMailBody(quint32 serialNumber)
 {
 //TODO: Need to use Akonadi instead
-    QList<QVariant> args;
-    args << serialNumber << (int)0;
+    const QList<QVariant> args{serialNumber, (int)0};
     QDBusInterface iface(KMAIL_DBUS_SERVICE, QString(), QStringLiteral("KMailIface"));
-    QDBusReply<QString> reply = iface.callWithArgumentList(QDBus::Block, QStringLiteral("getDecodedBodyPart"), args);
+    const QDBusReply<QString> reply = iface.callWithArgumentList(QDBus::Block, QStringLiteral("getDecodedBodyPart"), args);
     if (!reply.isValid())
     {
         qCCritical(KALARM_LOG) << "KAMail::getMailBody: D-Bus call failed:" << reply.error().message();
@@ -769,7 +765,7 @@ KMime::Types::Mailbox::List parseAddresses(const QString& text, QString& invalid
             ended = true;
         else
         {
-            char ch = text[i].toLatin1();
+            const char ch = text[i].toLatin1();
             switch (state)
             {
                 case 0:   // looking for start of item
@@ -839,7 +835,7 @@ KMime::Types::Mailbox::List parseAddresses(const QString& text, QString& invalid
                 endAddr   = endName;
                 endName   = 0;
             }
-            QString addr = text.mid(startAddr, endAddr - startAddr);
+            const QString addr = text.mid(startAddr, endAddr - startAddr);
             KMime::Types::Mailbox mbox;
             mbox.fromUnicodeString(addr);
             if (mbox.address().isEmpty())
@@ -851,7 +847,7 @@ KMime::Types::Mailbox::List parseAddresses(const QString& text, QString& invalid
             {
                 int len = endName - start;
                 QString name = text.mid(start, endName - start);
-                if (name[0] == QLatin1Char('"')  &&  name[len - 1] == QLatin1Char('"'))
+                if (name.at(0) == QLatin1Char('"')  &&  name.at(len - 1) == QLatin1Char('"'))
                     name = name.mid(1, len - 2);
                 mbox.setName(name);
             }

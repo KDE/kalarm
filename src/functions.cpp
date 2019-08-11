@@ -279,14 +279,15 @@ UpdateResult addEvents(QVector<KAEvent>& events, QWidget* msgParent, bool allowK
         for (int i = 0, end = events.count();  i < end;  ++i)
         {
             // Save the event details in the calendar file, and get the new event ID
-            if (!cal->addEvent(events[i], msgParent, false, &collection))
+            KAEvent& event = events[i];
+            if (!cal->addEvent(event, msgParent, false, &collection))
             {
                 status.setError(UPDATE_ERROR);
                 continue;
             }
-            if (allowKOrgUpdate  &&  events[i].copyToKOrganizer())
+            if (allowKOrgUpdate  &&  event.copyToKOrganizer())
             {
-                UpdateResult st = sendToKOrganizer(events[i]);    // tell KOrganizer to show the event
+                UpdateResult st = sendToKOrganizer(event);    // tell KOrganizer to show the event
                 status.korgUpdate(st);
             }
 
@@ -450,7 +451,7 @@ UpdateResult updateEvent(KAEvent& event, QWidget* msgParent, bool archiveOnDelet
 UpdateResult updateTemplate(KAEvent& event, QWidget* msgParent)
 {
     AlarmCalendar* cal = AlarmCalendar::resources();
-    KAEvent* newEvent = cal->updateEvent(event);
+    const KAEvent* newEvent = cal->updateEvent(event);
     UpdateStatus status = UPDATE_OK;
     if (!newEvent)
         status = UPDATE_FAILED;
@@ -484,12 +485,12 @@ UpdateResult deleteEvents(QVector<KAEvent>& events, bool archive, QWidget* msgPa
     UpdateStatusData status;
     AlarmCalendar* cal = AlarmCalendar::resources();
     bool deleteWakeFromSuspendAlarm = false;
-    QString wakeFromSuspendId = checkRtcWakeConfig().value(0);
+    const QString wakeFromSuspendId = checkRtcWakeConfig().value(0);
     for (int i = 0, end = events.count();  i < end;  ++i)
     {
         // Save the event details in the calendar file, and get the new event ID
         KAEvent* event = &events[i];
-        QString id = event->id();
+        const QString id = event->id();
 
 
         // Delete the event from the calendar file
@@ -544,12 +545,12 @@ UpdateResult deleteTemplates(const KAEvent::List& events, QWidget* msgParent)
         return UpdateResult(UPDATE_OK);
     UpdateStatusData status;
     AlarmCalendar* cal = AlarmCalendar::resources();
-    for (int i = 0, end = count;  i < end;  ++i)
+    for (KAEvent* event : events)
     {
         // Update the window lists
         // Delete the template from the calendar file
         AlarmCalendar* cal = AlarmCalendar::resources();
-        if (!cal->deleteEvent(*events[i], false))   // don't save calendar after deleting
+        if (!cal->deleteEvent(*event, false))   // don't save calendar after deleting
             status.setError(UPDATE_ERROR);
     }
 
@@ -669,7 +670,7 @@ UpdateResult enableEvents(QVector<KAEvent>& events, bool enable, QWidget* msgPar
     UpdateStatusData status;
     AlarmCalendar* cal = AlarmCalendar::resources();
     bool deleteWakeFromSuspendAlarm = false;
-    QString wakeFromSuspendId = checkRtcWakeConfig().value(0);
+    const QString wakeFromSuspendId = checkRtcWakeConfig().value(0);
     for (int i = 0, end = events.count();  i < end;  ++i)
     {
         KAEvent* event = &events[i];
@@ -682,7 +683,7 @@ UpdateResult enableEvents(QVector<KAEvent>& events, bool enable, QWidget* msgPar
                 deleteWakeFromSuspendAlarm = true;
 
             // Update the event in the calendar file
-            KAEvent* newev = cal->updateEvent(event);
+            const KAEvent* newev = cal->updateEvent(event);
             if (!newev)
                 qCCritical(KALARM_LOG) << "enableEvents: Error updating event in calendar:" << event->id();
             else
@@ -1134,7 +1135,7 @@ void editAlarm(KAEvent* event, QWidget* parent)
         viewAlarm(event, parent);
         return;
     }
-    EventId id(*event);
+    const EventId id(*event);
     // Use AutoQPointer to guard against crash on application exit while
     // the dialogue is still open. It prevents double deletion (both on
     // deletion of parent, and on return from this function).
@@ -1153,7 +1154,7 @@ void editAlarm(KAEvent* event, QWidget* parent)
         bool changeDeferral = !editDlg->getEvent(newEvent, calendar);
 
         // Update the event in the displays and in the calendar file
-        Undo::Event undo(*event, calendar);
+        const Undo::Event undo(*event, calendar);
         if (changeDeferral)
         {
             // The only change has been to an existing deferral
@@ -1162,7 +1163,7 @@ void editAlarm(KAEvent* event, QWidget* parent)
         }
         else
         {
-            UpdateResult status = modifyEvent(*event, newEvent, editDlg);
+            const UpdateResult status = modifyEvent(*event, newEvent, editDlg);
             if (status.status != UPDATE_OK  &&  status.status <= UPDATE_KORG_ERR)
                 displayKOrgUpdateError(editDlg, ERR_MODIFY, status);
         }
@@ -1232,13 +1233,13 @@ void editTemplate(KAEvent* event, QWidget* parent)
         KAEvent newEvent;
         Akonadi::Collection calendar;
         editDlg->getEvent(newEvent, calendar);
-        QString id = event->id();
+        const QString id = event->id();
         newEvent.setEventId(id);
         newEvent.setCollectionId(event->collectionId());
         newEvent.setItemId(event->itemId());
 
         // Update the event in the displays and in the calendar file
-        Undo::Event undo(*event, calendar);
+        const Undo::Event undo(*event, calendar);
         updateTemplate(newEvent, editDlg);
         Undo::saveEdit(undo, newEvent);
     }
@@ -1273,7 +1274,7 @@ void updateEditedAlarm(EditAlarmDlg* editDlg, KAEvent& event, Collection& calend
     if (AlarmCalendar::resources()->event(EventId(event)))
     {
         // The old alarm hasn't expired yet, so replace it
-        Undo::Event undo(event, calendar);
+        const Undo::Event undo(event, calendar);
         status = modifyEvent(event, newEvent, editDlg);
         Undo::saveEdit(undo, newEvent);
     }
@@ -1298,11 +1299,10 @@ void updateEditedAlarm(EditAlarmDlg* editDlg, KAEvent& event, Collection& calend
 KAEvent::List templateList()
 {
     KAEvent::List templates;
-    bool includeCmdAlarms = ShellProcess::authorised();
-    KAEvent::List events = AlarmCalendar::resources()->events(CalEvent::TEMPLATE);
-    for (int i = 0, end = events.count();  i < end;  ++i)
+    const bool includeCmdAlarms = ShellProcess::authorised();
+    const KAEvent::List events = AlarmCalendar::resources()->events(CalEvent::TEMPLATE);
+    for (KAEvent* event : events)
     {
-        KAEvent* event = events[i];
         if (includeCmdAlarms  ||  !(event->actionTypes() & KAEvent::ACT_COMMAND))
             templates.append(event);
     }
@@ -1358,10 +1358,9 @@ void refreshAlarmsIfQueued()
         AlarmCalendar::resources()->reload();
 
         // Close any message windows for alarms which are now disabled
-        KAEvent::List events = AlarmCalendar::resources()->events(CalEvent::ACTIVE);
-        for (int i = 0, end = events.count();  i < end;  ++i)
+        const KAEvent::List events = AlarmCalendar::resources()->events(CalEvent::ACTIVE);
+        for (KAEvent* event : events)
         {
-            KAEvent* event = events[i];
             if (!event->enabled()  &&  (event->actionTypes() & KAEvent::ACT_DISPLAY))
             {
                 MessageWin* win = MessageWin::findEvent(EventId(*event));
@@ -1385,11 +1384,10 @@ QString runKMail()
     if (!reply.isValid()  ||  !reply.value())
     {
         // Program is not already running, so start it
-        QString errmsg;
         QDBusReply<void> startReply = QDBusConnection::sessionBus().interface()->startService(KMAIL_DBUS_SERVICE);
         if (!startReply.isValid())
         {
-            QString errmsg = startReply.error().message();
+            const QString errmsg = startReply.error().message();
             qCCritical(KALARM_LOG) << "Couldn't start KMail (" << errmsg << ")";
             return xi18nc("@info", "Unable to start <application>KMail</application><nl/>(<message>%1</message>)", errmsg);
         }
@@ -1425,7 +1423,7 @@ bool dontShowErrors(const EventId& eventId, const QString& tag)
 {
     if (tag.isEmpty())
         return false;
-    QStringList tags = dontShowErrors(eventId);
+    const QStringList tags = dontShowErrors(eventId);
     return tags.indexOf(tag) >= 0;
 }
 
@@ -1577,7 +1575,7 @@ bool showFileErrMessage(const QString& filename, FileErr err, FileErr blankError
     {
         // If file is a local file, remove "file://" from name
         QString file = filename;
-        QRegExp f(QStringLiteral("^file:/+"));
+        const QRegExp f(QStringLiteral("^file:/+"));
         if (f.indexIn(file) >= 0)
             file = file.mid(f.matchedLength() - 1);
 
@@ -1634,9 +1632,9 @@ QString pathOrUrl(const QString& url)
 QString browseFile(const QString& caption, QString& defaultDir, const QString& initialFile,
                    const QString& filter, bool existing, QWidget* parent)
 {
-    QString initialDir = !initialFile.isEmpty() ? QString(initialFile).remove(QRegExp(QLatin1String("/[^/]*$")))
-                       : !defaultDir.isEmpty()  ? defaultDir
-                       :                          QDir::homePath();
+    const QString initialDir = !initialFile.isEmpty() ? QString(initialFile).remove(QRegExp(QLatin1String("/[^/]*$")))
+                             : !defaultDir.isEmpty()  ? defaultDir
+                             :                          QDir::homePath();
     // Use AutoQPointer to guard against crash on application exit while
     // the dialogue is still open. It prevents double deletion (both on
     // deletion of parent, and on return from this function).
@@ -1667,7 +1665,7 @@ QString browseFile(const QString& caption, QString& defaultDir, const QString& i
 */
 QString conversionPrompt(const QString& calendarName, const QString& calendarVersion, bool whole)
 {
-    QString msg = whole
+    const QString msg = whole
                 ? xi18nc("@info", "Calendar <resource>%1</resource> is in an old format (<application>KAlarm</application> version %2), "
                        "and will be read-only unless you choose to update it to the current format.",
                        calendarName, calendarVersion)
@@ -1768,9 +1766,9 @@ KAlarm::UpdateResult sendToKOrganizer(const KAEvent& event)
             break;
         case KAEvent::ACT_EMAIL:
         {
-            QString from = event.emailFromId()
-                         ? Identities::identityManager()->identityForUoid(event.emailFromId()).fullEmailAddr()
-                         : Preferences::emailAddress();
+            const QString from = event.emailFromId()
+                               ? Identities::identityManager()->identityForUoid(event.emailFromId()).fullEmailAddr()
+                               : Preferences::emailAddress();
             AlarmText atext;
             atext.setEmail(event.emailAddresses(QStringLiteral(", ")), from, QString(), QString(), event.emailSubject(), QString());
             kcalEvent->setSummary(atext.displayText());
@@ -1845,7 +1843,8 @@ KAlarm::UpdateResult runKOrganizer()
     // the load() method doesn't exist. This call starts korganizer if needed, too.
     QDBusInterface iface(KORG_DBUS_SERVICE, QStringLiteral(KORG_DBUS_LOAD_PATH), QStringLiteral("org.kde.PIMUniqueApplication"));
     QDBusReply<bool> reply = iface.call(QStringLiteral("load"));
-    if ((!reply.isValid() || !reply.value()) && iface.lastError().type() != QDBusError::UnknownMethod)
+    if ((!reply.isValid() || !reply.value())
+    &&  iface.lastError().type() != QDBusError::UnknownMethod)
     {
         status.set(KAlarm::UPDATE_KORG_ERR, iface.lastError().message());
         qCWarning(KALARM_LOG) << "Loading KOrganizer failed:" << status.message;

@@ -81,15 +81,15 @@ QString RecurrenceEdit::i18n_combo_Yearly()         { return i18nc("@item:inlist
 
 
 RecurrenceEdit::RecurrenceEdit(bool readOnly, QWidget* parent)
-    : QFrame(parent),
-      mRule(nullptr),
-      mRuleButtonType(INVALID_RECUR),
-      mDailyShown(false),
-      mWeeklyShown(false),
-      mMonthlyShown(false),
-      mYearlyShown(false),
-      mNoEmitTypeChanged(true),
-      mReadOnly(readOnly)
+    : QFrame(parent)
+    , mRule(nullptr)
+    , mRuleButtonType(INVALID_RECUR)
+    , mDailyShown(false)
+    , mWeeklyShown(false)
+    , mMonthlyShown(false)
+    , mYearlyShown(false)
+    , mNoEmitTypeChanged(true)
+    , mReadOnly(readOnly)
 {
     qCDebug(KALARM_LOG) << "RecurrenceEdit:";
     QVBoxLayout* topLayout = new QVBoxLayout(this);
@@ -434,10 +434,10 @@ QWidget* RecurrenceEdit::checkData(const KADateTime& startDateTime, QString& err
 */
 void RecurrenceEdit::periodClicked(QAbstractButton* button)
 {
-    RepeatType oldType = mRuleButtonType;
-    bool none     = (button == mNoneButton);
-    bool atLogin  = (button == mAtLoginButton);
-    bool subdaily = (button == mSubDailyButton);
+    const RepeatType oldType = mRuleButtonType;
+    const bool none     = (button == mNoneButton);
+    const bool atLogin  = (button == mAtLoginButton);
+    const bool subdaily = (button == mSubDailyButton);
     if (none)
     {
         mRule = nullptr;
@@ -512,12 +512,12 @@ void RecurrenceEdit::slotAnyTimeToggled(bool on)
 */
 void RecurrenceEdit::rangeTypeClicked()
 {
-    bool endDate = mEndDateButton->isChecked();
+    const bool endDate = mEndDateButton->isChecked();
     mEndDateEdit->setEnabled(endDate);
     mEndTimeEdit->setEnabled(endDate
                              &&  ((mAtLoginButton->isChecked() && !mEndAnyTimeCheckBox->isChecked())
                                   ||  mSubDailyButton->isChecked()));
-    bool repeatCount = mRepeatCountButton->isChecked();
+    const bool repeatCount = mRepeatCountButton->isChecked();
     mRepeatCountEntry->setEnabled(repeatCount);
     mRepeatCountLabel->setEnabled(repeatCount);
 }
@@ -595,7 +595,7 @@ void RecurrenceEdit::addException()
 {
     if (!mExceptionDateEdit  ||  !mExceptionDateEdit->date().isValid())
         return;
-    QDate date = mExceptionDateEdit->date();
+    const QDate date = mExceptionDateEdit->date();
     DateList::Iterator it;
     int index = 0;
     bool insert = true;
@@ -628,9 +628,9 @@ void RecurrenceEdit::changeException()
     QListWidgetItem* item = mExceptionDateList->currentItem();
     if (item  &&  item->isSelected())
     {
-        int index = mExceptionDateList->row(item);
-        QDate olddate = mExceptionDates[index];
-        QDate newdate = mExceptionDateEdit->date();
+        const int index = mExceptionDateList->row(item);
+        const QDate olddate = mExceptionDates.at(index);
+        const QDate newdate = mExceptionDateEdit->date();
         if (newdate != olddate)
         {
             mExceptionDates.removeAt(index);
@@ -649,7 +649,7 @@ void RecurrenceEdit::deleteException()
     QListWidgetItem* item = mExceptionDateList->currentItem();
     if (item  &&  item->isSelected())
     {
-        int index = mExceptionDateList->row(item);
+        const int index = mExceptionDateList->row(item);
         mExceptionDates.removeAt(index);
         mExceptionDateList->takeItem(index);
         Q_EMIT contentsChanged();
@@ -664,7 +664,7 @@ void RecurrenceEdit::deleteException()
 void RecurrenceEdit::enableExceptionButtons()
 {
     QListWidgetItem* item = mExceptionDateList->currentItem();
-    bool enable = item;
+    const bool enable = item;
     if (mDeleteExceptionButton)
         mDeleteExceptionButton->setEnabled(enable);
     if (mChangeExceptionButton)
@@ -729,7 +729,7 @@ KADateTime RecurrenceEdit::endDateTime() const
 void RecurrenceEdit::setDefaults(const KADateTime& from)
 {
     mCurrStartDateTime = from;
-    QDate fromDate = from.date();
+    const QDate fromDate = from.date();
     mNoEndDateButton->setChecked(true);
 
     mSubDailyRule->setFrequency(1);
@@ -771,9 +771,9 @@ void RecurrenceEdit::setDefaults(const KADateTime& from)
 */
 void RecurrenceEdit::setRuleDefaults(const QDate& fromDate)
 {
-    int day       = fromDate.day();
-    int dayOfWeek = fromDate.dayOfWeek();
-    int month     = fromDate.month();
+    const int day       = fromDate.day();
+    const int dayOfWeek = fromDate.dayOfWeek();
+    const int month     = fromDate.month();
     if (!mDailyShown)
         mDailyRule->setDays(true);
     if (!mWeeklyShown)
@@ -810,7 +810,7 @@ void RecurrenceEdit::set(const KAEvent& event)
     KARecurrence* recurrence = event.recurrence();
     if (!recurrence)
         return;
-    KARecurrence::Type rtype = recurrence->type();
+    const KARecurrence::Type rtype = recurrence->type();
     switch (rtype)
     {
         case KARecurrence::MINUTELY:
@@ -820,11 +820,8 @@ void RecurrenceEdit::set(const KAEvent& event)
         case KARecurrence::DAILY:
         {
             mDailyButton->setChecked(true);
-            QBitArray rDays = recurrence->days();
-            bool set = false;
-            for (int i = 0;  i < 7 && !set;  ++i)
-                set = rDays.testBit(i);
-            if (set)
+            const QBitArray rDays = recurrence->days();
+            if (rDays.count(true))
                 mDailyRule->setDays(rDays);
             else
                 mDailyRule->setDays(true);
@@ -833,13 +830,13 @@ void RecurrenceEdit::set(const KAEvent& event)
         case KARecurrence::WEEKLY:
         {
             mWeeklyButton->setChecked(true);
-            QBitArray rDays = recurrence->days();
+            const QBitArray rDays = recurrence->days();
             mWeeklyRule->setDays(rDays);
             break;
         }
         case KARecurrence::MONTHLY_POS:    // on nth (Tuesday) of the month
         {
-            QList<RecurrenceRule::WDayPos> posns = recurrence->monthPositions();
+            const QList<RecurrenceRule::WDayPos> posns = recurrence->monthPositions();
             int i = posns.first().pos();
             if (!i)
             {
@@ -848,10 +845,10 @@ void RecurrenceEdit::set(const KAEvent& event)
                 mWeeklyButton->setChecked(true);
                 mWeeklyRule->setFrequency(recurrence->frequency());
                 QBitArray rDays(7);
-                for (int i = 0, end = posns.count();  i < end;  ++i)
+                for (const RecurrenceRule::WDayPos& posn : posns)
                 {
-                    if (!posns[i].pos())
-                        rDays.setBit(posns[i].day() - 1, 1);
+                    if (!posn.pos())
+                        rDays.setBit(posn.day() - 1, 1);
                 }
                 mWeeklyRule->setDays(rDays);
                 break;
@@ -863,8 +860,8 @@ void RecurrenceEdit::set(const KAEvent& event)
         case KARecurrence::MONTHLY_DAY:     // on nth day of the month
         {
             mMonthlyButton->setChecked(true);
-            QList<int> rmd = recurrence->monthDays();
-            int day = (rmd.isEmpty()) ? event.mainDateTime().date().day() : rmd.first();
+            const QList<int> rmd = recurrence->monthDays();
+            const int day = (rmd.isEmpty()) ? event.mainDateTime().date().day() : rmd.first();
             mMonthlyRule->setDate(day);
             break;
         }
@@ -875,14 +872,14 @@ void RecurrenceEdit::set(const KAEvent& event)
             {
                 mYearlyButton->setChecked(true);
                 const QList<int> rmd = recurrence->monthDays();
-                int day = (rmd.isEmpty()) ? event.mainDateTime().date().day() : rmd.first();
+                const int day = (rmd.isEmpty()) ? event.mainDateTime().date().day() : rmd.first();
                 mYearlyRule->setDate(day);
                 mYearlyRule->setFeb29Type(recurrence->feb29Type());
             }
             else if (rtype == KARecurrence::ANNUAL_POS)
             {
                 mYearlyButton->setChecked(true);
-                QList<RecurrenceRule::WDayPos> posns = recurrence->yearPositions();
+                const QList<RecurrenceRule::WDayPos> posns = recurrence->yearPositions();
                 mYearlyRule->setPosition(posns.first().pos(), posns.first().day());
             }
             mYearlyRule->setMonths(recurrence->yearMonths());
@@ -896,7 +893,7 @@ void RecurrenceEdit::set(const KAEvent& event)
 
     // Get range information
     KADateTime endtime = mCurrStartDateTime;
-    int duration = recurrence->duration();
+    const int duration = recurrence->duration();
     if (duration == -1)
         mNoEndDateButton->setChecked(true);
     else if (duration)
@@ -916,8 +913,8 @@ void RecurrenceEdit::set(const KAEvent& event)
     mExceptionDates = event.recurrence()->exDates();
     std::sort(mExceptionDates.begin(), mExceptionDates.end());
     mExceptionDateList->clear();
-    for (int i = 0, iend = mExceptionDates.count();  i < iend;  ++i)
-        new QListWidgetItem(QLocale().toString(mExceptionDates[i], QLocale::LongFormat), mExceptionDateList);
+    for (const QDate& exceptionDate : mExceptionDates)
+        new QListWidgetItem(QLocale().toString(exceptionDate, QLocale::LongFormat), mExceptionDateList);
     enableExceptionButtons();
     mExcludeHolidays->setChecked(event.holidaysExcluded());
     mWorkTimeOnly->setChecked(event.workTimeOnly());
@@ -956,7 +953,7 @@ void RecurrenceEdit::updateEvent(KAEvent& event, bool adjustStart)
     event.startChanges();
     QAbstractButton* button = mRuleButtonGroup->checkedButton();
     event.setRepeatAtLogin(button == mAtLoginButton);
-    int frequency = mRule ? mRule->frequency() : 0;
+    const int frequency = mRule ? mRule->frequency() : 0;
     if (button == mSubDailyButton)
     {
         const KADateTime endDateTime(endDate, endTime, mCurrStartDateTime.timeSpec());
@@ -985,14 +982,14 @@ void RecurrenceEdit::updateEvent(KAEvent& event, bool adjustStart)
         else
         {
             // It's by day
-            int daynum = mMonthlyRule->date();
+            const int daynum = mMonthlyRule->date();
             QVector<int> daynums(1, daynum);
             event.setRecurMonthlyByDate(frequency, daynums, repeatCount, endDate);
         }
     }
     else if (button == mYearlyButton)
     {
-        QVector<int> months = mYearlyRule->months();
+        const QVector<int> months = mYearlyRule->months();
         if (mYearlyRule->type() == YearlyRule::POS)
         {
             // It's by position
@@ -1190,8 +1187,8 @@ SubDailyRule::SubDailyRule(bool readOnly, QWidget* parent)
 
 DayWeekRule::DayWeekRule(const QString& freqText, const QString& freqWhatsThis, const QString& daysWhatsThis,
                          bool readOnly, QWidget* parent)
-    : Rule(freqText, freqWhatsThis, false, readOnly, parent),
-      mSavedDays(7)
+    : Rule(freqText, freqWhatsThis, false, readOnly, parent)
+    , mSavedDays(7)
 {
     QGridLayout* grid = new QGridLayout();
     grid->setContentsMargins(0, 0, 0, 0);
@@ -1212,7 +1209,7 @@ DayWeekRule::DayWeekRule(const QString& freqText, const QString& freqWhatsThis, 
     QLocale locale;
     for (int i = 0;  i < 7;  ++i)
     {
-        int day = KAlarm::localeDayInWeek_to_weekDay(i);
+        const int day = KAlarm::localeDayInWeek_to_weekDay(i);
         mDayBox[i] = new CheckBox(locale.dayName(day), box);
         mDayBox[i]->setFixedSize(mDayBox[i]->sizeHint());
         mDayBox[i]->setReadOnly(readOnly);
@@ -1253,6 +1250,11 @@ void DayWeekRule::setDays(bool tick)
 */
 void DayWeekRule::setDays(const QBitArray& days)
 {
+    if (days.size() != 7)
+    {
+        qCWarning(KALARM_LOG) << "DayWeekRule::setDays: Error! 'days' parameter must have 7 elements: actual size" << days.size();
+        return;
+    }
     for (int i = 0;  i < 7;  ++i)
     {
         bool x = days.testBit(KAlarm::localeDayInWeek_to_weekDay(i) - 1);
@@ -1335,8 +1337,8 @@ WeeklyRule::WeeklyRule(bool readOnly, QWidget* parent)
 
 MonthYearRule::MonthYearRule(const QString& freqText, const QString& freqWhatsThis, bool allowEveryWeek,
                              bool readOnly, QWidget* parent)
-    : Rule(freqText, freqWhatsThis, false, readOnly, parent),
-      mEveryWeek(allowEveryWeek)
+    : Rule(freqText, freqWhatsThis, false, readOnly, parent)
+    , mEveryWeek(allowEveryWeek)
 {
     mButtonGroup = new ButtonGroup(this);
 
@@ -1439,7 +1441,7 @@ void MonthYearRule::setDefaultValues(int dayOfMonth, int dayOfWeek)
 
 int MonthYearRule::date() const
 {
-    int daynum  = mDayCombo->currentIndex() + 1;
+    const int daynum  = mDayCombo->currentIndex() + 1;
     return (daynum <= 31) ? daynum : 31 - daynum;
 }
 
@@ -1469,7 +1471,7 @@ void MonthYearRule::setPosition(int week, int dayOfWeek)
 
 void MonthYearRule::enableSelection(DayPosType type)
 {
-    bool date = (type == DATE);
+    const bool date = (type == DATE);
     mDayCombo->setEnabled(date);
     mWeekCombo->setEnabled(!date);
     mDayOfWeekCombo->setEnabled(!date);
@@ -1698,7 +1700,7 @@ void YearlyRule::clicked(QAbstractButton* button)
 void YearlyRule::daySelected(int day)
 {
     mMonthBox[1]->setEnabled(day <= 29);  // February
-    bool enable = (day != 31);
+    const bool enable = (day != 31);
     mMonthBox[3]->setEnabled(enable);     // April
     mMonthBox[5]->setEnabled(enable);     // June
     mMonthBox[8]->setEnabled(enable);     // September
@@ -1712,7 +1714,7 @@ void YearlyRule::daySelected(int day)
 */
 void YearlyRule::enableFeb29()
 {
-    bool enable = (type() == DATE  &&  date() == 29  &&  mMonthBox[1]->isChecked()  &&  mMonthBox[1]->isEnabled());
+    const bool enable = (type() == DATE  &&  date() == 29  &&  mMonthBox[1]->isChecked()  &&  mMonthBox[1]->isEnabled());
     mFeb29Label->setEnabled(enable);
     mFeb29Combo->setEnabled(enable);
 }

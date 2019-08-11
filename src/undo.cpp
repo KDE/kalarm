@@ -1,7 +1,7 @@
 /*
  *  undo.cpp  -  undo/redo facility
  *  Program:  kalarm
- *  Copyright © 2005-2014 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2005-2019 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -311,8 +311,8 @@ void Undo::saveDeletes(const Undo::EventList& events, const QString& name)
     else if (count > 1)
     {
         new UndoDeletes(UNDO, events, name);
-        for (int i = 0, end = events.count();  i < end;  ++i)
-            removeRedos(events[i].event.id());    // remove any redos which are made invalid by these deletions
+        for (const Undo::Event& event : events)
+            removeRedos(event.event.id());    // remove any redos which are made invalid by these deletions
         emitChanged();
     }
 }
@@ -344,7 +344,6 @@ void Undo::removeRedos(const QString& eventID)
     for (int i = 0;  i < mRedoList.count();  )
     {
         UndoItem* item = mRedoList[i];
-//qCDebug(KALARM_LOG)<<item->eventID()<<" (looking for"<<id<<")";
         if (item->operation() == UndoItem::MULTI)
         {
             if (item->deleteID(id))
@@ -370,9 +369,9 @@ void Undo::removeRedos(const QString& eventID)
 */
 bool Undo::undo(int i, Undo::Type type, QWidget* parent, const QString& action)
 {
-    UndoItem::mRestoreError   = UndoItem::ERR_NONE;
-    UndoItem::mRestoreWarning = UndoItem::WARN_NONE;
-    UndoItem::mRestoreWarningKorg = KAlarm::UPDATE_OK;
+    UndoItem::mRestoreError        = UndoItem::ERR_NONE;
+    UndoItem::mRestoreWarning      = UndoItem::WARN_NONE;
+    UndoItem::mRestoreWarningKorg  = KAlarm::UPDATE_OK;
     UndoItem::mRestoreWarningCount = 0;
     List& list = (type == UNDO) ? mUndoList : mRedoList;
     if (i < list.count()  &&  list[i]->type() == type)
@@ -419,8 +418,8 @@ void Undo::add(UndoItem* item, bool undo)
     if (item)
     {
         // Limit the number of items stored
-        int undoCount = mUndoList.count();
-        int redoCount = mRedoList.count();
+        const int undoCount = mUndoList.count();
+        const int redoCount = mRedoList.count();
         if (undoCount + redoCount >= maxCount - 1)
         {
             if (undoCount)
@@ -430,7 +429,7 @@ void Undo::add(UndoItem* item, bool undo)
         }
 
         // Append the new item
-        List* list = undo ? &mUndoList : &mRedoList;
+        List* const list = undo ? &mUndoList : &mRedoList;
         list->prepend(item);
     }
 }
@@ -440,7 +439,7 @@ void Undo::add(UndoItem* item, bool undo)
 */
 void Undo::remove(UndoItem* item, bool undo)
 {
-    List* list = undo ? &mUndoList : &mRedoList;
+    List* const list = undo ? &mUndoList : &mRedoList;
     if (!list->isEmpty())
         list->removeAt(list->indexOf(item));
 }
@@ -450,11 +449,11 @@ void Undo::remove(UndoItem* item, bool undo)
 */
 void Undo::replace(UndoItem* old, UndoItem* New)
 {
-    Type type = old->type();
-    List* list = (type == UNDO) ? &mUndoList : (type == REDO) ? &mRedoList : nullptr;
+    const Type type = old->type();
+    List* const list = (type == UNDO) ? &mUndoList : (type == REDO) ? &mRedoList : nullptr;
     if (!list)
         return;
-    int i = list->indexOf(old);
+    const int i = list->indexOf(old);
     if (i >= 0)
     {
         New->setType(type);    // ensure the item points to the correct list
@@ -468,7 +467,7 @@ void Undo::replace(UndoItem* old, UndoItem* New)
 */
 QString Undo::actionText(Undo::Type type)
 {
-    List* list = (type == UNDO) ? &mUndoList : (type == REDO) ? &mRedoList : nullptr;
+    const List* const list = (type == UNDO) ? &mUndoList : (type == REDO) ? &mRedoList : nullptr;
     return (list && !list->isEmpty()) ? (*list)[0]->actionText() : QString();
 }
 
@@ -477,7 +476,7 @@ QString Undo::actionText(Undo::Type type)
 */
 QString Undo::actionText(Undo::Type type, int id)
 {
-    UndoItem* undo = getItem(id, type);
+    const UndoItem* undo = getItem(id, type);
     return undo ? undo->actionText() : QString();
 }
 
@@ -486,7 +485,7 @@ QString Undo::actionText(Undo::Type type, int id)
 */
 QString Undo::description(Undo::Type type, int id)
 {
-    UndoItem* undo = getItem(id, type);
+    const UndoItem* undo = getItem(id, type);
     return undo ? undo->description() : QString();
 }
 
@@ -501,23 +500,22 @@ QList<int> Undo::ids(Undo::Type type)
     QList<int> ids;
     QStringList ignoreIDs;
 //int n=0;
-    List* list = (type == UNDO) ? &mUndoList : (type == REDO) ? &mRedoList : nullptr;
+    const List* const list = (type == UNDO) ? &mUndoList : (type == REDO) ? &mRedoList : nullptr;
     if (!list)
         return ids;
-    for (int i = 0, end = list->count();  i < end;  ++i)
+    for (const UndoItem* item : *list)
     {
         // Check whether this item should be ignored because it is a
         // dependent undo. If not, add this item's ID to the ignore list.
-        UndoItem* item = (*list)[i];
         bool omit = false;
         if (item->operation() == UndoItem::MULTI)
         {
             // If any item in a multi-undo is disqualified, omit the whole multi-undo
             QStringList newIDs;
             const Undo::List* undos = ((UndoMultiBase*)item)->undos();
-            for (int u = 0, uend = undos->count();  u  < uend;  ++u)
+            for (const UndoItem* undo : *undos)
             {
-                QString evid = (*undos)[u]->eventID();
+                const QString evid = undo->eventID();
                 if (ignoreIDs.contains(evid))
                     omit = true;
                 else if (omit)
@@ -527,8 +525,8 @@ QList<int> Undo::ids(Undo::Type type)
             }
             if (omit)
             {
-                for (int i = 0, iend = newIDs.count();  i < iend;  ++i)
-                    ignoreIDs.append(newIDs[i]);
+                for (const QString& newID : qAsConst(newIDs))
+                    ignoreIDs.append(newID);
             }
         }
         else
@@ -561,13 +559,14 @@ void Undo::emitChanged()
 */
 UndoItem* Undo::getItem(int id, Undo::Type type)
 {
-    List* list = (type == UNDO) ? &mUndoList : (type == REDO) ? &mRedoList : nullptr;
+    List* const list = (type == UNDO) ? &mUndoList : (type == REDO) ? &mRedoList : nullptr;
     if (list)
     {
         for (int i = 0, end = list->count();  i < end;  ++i)
         {
-            if ((*list)[i]->id() == id)
-                return (*list)[i];
+            UndoItem* item = (*list)[i];
+            if (item->id() == id)
+                return item;
         }
     }
     return nullptr;
@@ -578,11 +577,11 @@ UndoItem* Undo::getItem(int id, Undo::Type type)
 */
 int Undo::findItem(int id, Undo::Type type)
 {
-    List& list = (type == UNDO) ? mUndoList : mRedoList;
+    const List& list = (type == UNDO) ? mUndoList : mRedoList;
     int i = 0;
-    for (int end = list.count();  i < end;  ++i)
+    for (const UndoItem* item : list)
     {
-        if (list[i]->id() == id)
+        if (item->id() == id)
             break;
     }
     return i;
@@ -604,10 +603,10 @@ int                  UndoItem::mRestoreWarningCount;
 * Optionally appends the undo to the list of undos.
 */
 UndoItem::UndoItem(Undo::Type type, const QString& name)
-    : mName(name),
-      mId(0),
-      mType(type),
-      mCalendar(CalEvent::EMPTY)
+    : mName(name)
+    , mId(0)
+    , mType(type)
+    , mCalendar(CalEvent::EMPTY)
 {
     if (type != Undo::NONE)
     {
@@ -671,8 +670,8 @@ template <class T>
 UndoMulti<T>::UndoMulti(Undo::Type type, const Undo::EventList& events, const QString& name)
     : UndoMultiBase(type, name)    // UNDO only
 {
-    for (int i = 0, end = events.count();  i < end;  ++i)
-        mUndos->append(new T(Undo::NONE, events[i]));
+    for (const Undo::Event& event : events)
+        mUndos->append(new T(Undo::NONE, event));
 }
 
 /******************************************************************************
@@ -742,27 +741,27 @@ bool UndoMulti<T>::deleteID(const QString& id)
 =============================================================================*/
 
 UndoAdd::UndoAdd(Undo::Type type, const Undo::Event& undo, const QString& name)
-    : UndoItem(type, name),
-      mResource(undo.EVENT_RESOURCE),
-      mEventId(undo.event.id())
+    : UndoItem(type, name)
+    , mResource(undo.EVENT_RESOURCE)
+    , mEventId(undo.event.id())
 {
     setCalendar(undo.event.category());
     mDescription = UndoItem::description(undo.event);    // calendar must be set before calling this
 }
 
 UndoAdd::UndoAdd(Undo::Type type, const KAEvent& event, RESOURCE_PARAM_TYPE resource, const QString& name)
-    : UndoItem(type, name),
-      mResource(resource),
-      mEventId(event.id())
+    : UndoItem(type, name)
+    , mResource(resource)
+    , mEventId(event.id())
 {
     setCalendar(event.category());
     mDescription = UndoItem::description(event);    // calendar must be set before calling this
 }
 
 UndoAdd::UndoAdd(Undo::Type type, const KAEvent& event, RESOURCE_PARAM_TYPE resource, const QString& name, CalEvent::Type cal)
-    : UndoItem(type, name),
-      mResource(resource),
-      mEventId(CalEvent::uid(event.id(), cal))    // convert if old-style event ID
+    : UndoItem(type, name)
+    , mResource(resource)
+    , mEventId(CalEvent::uid(event.id(), cal))    // convert if old-style event ID
 {
     setCalendar(cal);
     mDescription = UndoItem::description(event);    // calendar must be set before calling this
@@ -838,7 +837,7 @@ UndoItem* UndoAdd::doRestore(bool setArchive)
 */
 UndoItem* UndoAdd::createRedo(const KAEvent& event, RESOURCE_PARAM_TYPE resource)
 {
-    Undo::Type t = (type() == Undo::UNDO) ? Undo::REDO : (type() == Undo::REDO) ? Undo::UNDO : Undo::NONE;
+    const Undo::Type t = (type() == Undo::UNDO) ? Undo::REDO : (type() == Undo::REDO) ? Undo::UNDO : Undo::NONE;
     return new UndoDelete(t, event, resource, QStringList(), mName);
 }
 
@@ -861,7 +860,7 @@ QString UndoAdd::defaultActionText() const
 */
 UndoItem* UndoAdds::createRedo(Undo::List* undos)
 {
-    Undo::Type t = (type() == Undo::UNDO) ? Undo::REDO : (type() == Undo::REDO) ? Undo::UNDO : Undo::NONE;
+    const Undo::Type t = (type() == Undo::UNDO) ? Undo::REDO : (type() == Undo::REDO) ? Undo::UNDO : Undo::NONE;
     return new UndoAdds(t, undos, mName);
 }
 
@@ -881,12 +880,12 @@ QString UndoAdds::defaultActionText() const
 
 UndoEdit::UndoEdit(Undo::Type type, const KAEvent& oldEvent, const QString& newEventID,
                    RESOURCE_PARAM_TYPE resource, const QStringList& dontShowErrors, const QString& description)
-    : UndoItem(type),
-      mResource(resource),
-      mOldEvent(new KAEvent(oldEvent)),
-      mNewEventId(newEventID),
-      mDescription(description),
-      mDontShowErrors(dontShowErrors)
+    : UndoItem(type)
+    , mResource(resource)
+    , mOldEvent(new KAEvent(oldEvent))
+    , mNewEventId(newEventID)
+    , mDescription(description)
+    , mDontShowErrors(dontShowErrors)
 {
     setCalendar(oldEvent.category());
 }
@@ -914,7 +913,7 @@ UndoItem* UndoEdit::restore()
     KAEvent newEvent(*event); 
 
     // Create a redo item to restore the edit
-    Undo::Type t = (type() == Undo::UNDO) ? Undo::REDO : (type() == Undo::REDO) ? Undo::UNDO : Undo::NONE;
+    const Undo::Type t = (type() == Undo::UNDO) ? Undo::REDO : (type() == Undo::REDO) ? Undo::UNDO : Undo::NONE;
     UndoItem* undo = new UndoEdit(t, newEvent, mOldEvent->id(), mResource, KAlarm::dontShowErrors(EventId(newEvent)), mDescription);
 
     switch (calendar())
@@ -982,19 +981,19 @@ QString UndoEdit::defaultActionText() const
 =============================================================================*/
 
 UndoDelete::UndoDelete(Undo::Type type, const Undo::Event& undo, const QString& name)
-    : UndoItem(type, name),
-      mResource(undo.EVENT_RESOURCE),
-      mEvent(new KAEvent(undo.event)),
-      mDontShowErrors(undo.dontShowErrors)
+    : UndoItem(type, name)
+    , mResource(undo.EVENT_RESOURCE)
+    , mEvent(new KAEvent(undo.event))
+    , mDontShowErrors(undo.dontShowErrors)
 {
     setCalendar(mEvent->category());
 }
 
 UndoDelete::UndoDelete(Undo::Type type, const KAEvent& event, RESOURCE_PARAM_TYPE resource, const QStringList& dontShowErrors, const QString& name)
-    : UndoItem(type, name),
-      mResource(resource),
-      mEvent(new KAEvent(event)),
-      mDontShowErrors(dontShowErrors)
+    : UndoItem(type, name)
+    , mResource(resource)
+    , mEvent(new KAEvent(event))
+    , mDontShowErrors(dontShowErrors)
 {
     setCalendar(mEvent->category());
 }
@@ -1020,7 +1019,7 @@ UndoItem* UndoDelete::restore()
             {
                 // It was archived when it was deleted
                 mEvent->setCategory(CalEvent::ARCHIVED);
-                KAlarm::UpdateResult status = KAlarm::reactivateEvent(*mEvent, &mResource);
+                const KAlarm::UpdateResult status = KAlarm::reactivateEvent(*mEvent, &mResource);
                 switch (status.status)
                 {
                     case KAlarm::UPDATE_KORG_FUNCERR:
@@ -1043,7 +1042,7 @@ UndoItem* UndoDelete::restore()
             }
             else
             {
-                KAlarm::UpdateResult status = KAlarm::addEvent(*mEvent, &mResource, nullptr, true);
+                const KAlarm::UpdateResult status = KAlarm::addEvent(*mEvent, &mResource, nullptr, true);
                 switch (status.status)
                 {
                     case KAlarm::UPDATE_KORG_FUNCERR:
@@ -1094,7 +1093,7 @@ UndoItem* UndoDelete::restore()
 */
 UndoItem* UndoDelete::createRedo(const KAEvent& event, RESOURCE_PARAM_TYPE resource)
 {
-    Undo::Type t = (type() == Undo::UNDO) ? Undo::REDO : (type() == Undo::REDO) ? Undo::UNDO : Undo::NONE;
+    const Undo::Type t = (type() == Undo::UNDO) ? Undo::REDO : (type() == Undo::REDO) ? Undo::UNDO : Undo::NONE;
     return new UndoAdd(t, event, resource, mName);
 }
 
@@ -1117,7 +1116,7 @@ QString UndoDelete::defaultActionText() const
 */
 UndoItem* UndoDeletes::createRedo(Undo::List* undos)
 {
-    Undo::Type t = (type() == Undo::UNDO) ? Undo::REDO : (type() == Undo::REDO) ? Undo::UNDO : Undo::NONE;
+    const Undo::Type t = (type() == Undo::UNDO) ? Undo::REDO : (type() == Undo::REDO) ? Undo::UNDO : Undo::NONE;
     return new UndoDeletes(t, undos, mName);
 }
 
@@ -1128,9 +1127,9 @@ QString UndoDeletes::defaultActionText() const
 {
     if (mUndos->isEmpty())
         return QString();
-    for (int i = 0, end = mUndos->count();  i < end;  ++i)
+    for (const UndoItem* item : *mUndos)
     {
-        switch ((*mUndos)[i]->calendar())
+        switch (item->calendar())
         {
             case CalEvent::ACTIVE:
                 return i18nc("@info", "Delete multiple alarms");
@@ -1176,7 +1175,7 @@ UndoItem* UndoReactivate::restore()
 */
 UndoItem* UndoReactivate::createRedo(const KAEvent& event, RESOURCE_PARAM_TYPE resource)
 {
-    Undo::Type t = (type() == Undo::UNDO) ? Undo::REDO : (type() == Undo::REDO) ? Undo::UNDO : Undo::NONE;
+    const Undo::Type t = (type() == Undo::UNDO) ? Undo::REDO : (type() == Undo::REDO) ? Undo::UNDO : Undo::NONE;
     return new UndoDeactivate(t, event, resource, mName);
 }
 
@@ -1220,7 +1219,7 @@ UndoItem* UndoDeactivate::restore()
 */
 UndoItem* UndoDeactivate::createRedo(const KAEvent& event, RESOURCE_PARAM_TYPE resource)
 {
-    Undo::Type t = (type() == Undo::UNDO) ? Undo::REDO : (type() == Undo::REDO) ? Undo::UNDO : Undo::NONE;
+    const Undo::Type t = (type() == Undo::UNDO) ? Undo::REDO : (type() == Undo::REDO) ? Undo::UNDO : Undo::NONE;
     return new UndoReactivate(t, event, resource, mName);
 }
 
@@ -1243,7 +1242,7 @@ QString UndoDeactivate::defaultActionText() const
 */
 UndoItem* UndoReactivates::createRedo(Undo::List* undos)
 {
-    Undo::Type t = (type() == Undo::UNDO) ? Undo::REDO : (type() == Undo::REDO) ? Undo::UNDO : Undo::NONE;
+    const Undo::Type t = (type() == Undo::UNDO) ? Undo::REDO : (type() == Undo::REDO) ? Undo::UNDO : Undo::NONE;
     return new UndoReactivates(t, undos, mName);
 }
 
@@ -1261,8 +1260,8 @@ QString UndoReactivates::defaultActionText() const
 =  Event details for external calls.
 =============================================================================*/
 Undo::Event::Event(const KAEvent& e, RESOURCE_PARAM_TYPE r)
-    : event(e),
-      EVENT_RESOURCE(r)
+    : event(e)
+    , EVENT_RESOURCE(r)
 {
     if (e.category() == CalEvent::ACTIVE)
         dontShowErrors = KAlarm::dontShowErrors(EventId(e));

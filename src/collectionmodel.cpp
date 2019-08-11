@@ -79,10 +79,10 @@ class CollectionMimeTypeFilterModel : public Akonadi::EntityMimeTypeFilterModel
 };
 
 CollectionMimeTypeFilterModel::CollectionMimeTypeFilterModel(QObject* parent)
-    : EntityMimeTypeFilterModel(parent),
-      mAlarmType(CalEvent::EMPTY),
-      mWritableOnly(false),
-      mEnabledOnly(false)
+    : EntityMimeTypeFilterModel(parent)
+    , mAlarmType(CalEvent::EMPTY)
+    , mWritableOnly(false)
+    , mEnabledOnly(false)
 {
     addMimeTypeInclusionFilter(Collection::mimeType());   // select collections, not items
     setHeaderGroup(EntityTreeModel::CollectionTreeHeaders);
@@ -172,8 +172,8 @@ QModelIndex CollectionMimeTypeFilterModel::collectionIndex(const Collection& col
 =============================================================================*/
 
 CollectionListModel::CollectionListModel(QObject* parent)
-    : KDescendantsProxyModel(parent),
-      mUseCollectionColour(true)
+    : KDescendantsProxyModel(parent)
+    , mUseCollectionColour(true)
 {
     setSourceModel(new CollectionMimeTypeFilterModel(this));
     setDisplayAncestorData(false);
@@ -249,8 +249,8 @@ CollectionListModel* CollectionCheckListModel::mModel = nullptr;
 int                  CollectionCheckListModel::mInstanceCount = 0;
 
 CollectionCheckListModel::CollectionCheckListModel(CalEvent::Type type, QObject* parent)
-    : KCheckableProxyModel(parent),
-      mAlarmType(type)
+    : KCheckableProxyModel(parent)
+    , mAlarmType(type)
 {
     ++mInstanceCount;
     if (!mModel)
@@ -259,16 +259,17 @@ CollectionCheckListModel::CollectionCheckListModel(CalEvent::Type type, QObject*
     mSelectionModel = new QItemSelectionModel(mModel);
     setSelectionModel(mSelectionModel);
     connect(mSelectionModel, &QItemSelectionModel::selectionChanged,
-                             this, &CollectionCheckListModel::selectionChanged);
+                       this, &CollectionCheckListModel::selectionChanged);
     connect(mModel, SIGNAL(rowsAboutToBeInserted(QModelIndex,int,int)), SIGNAL(layoutAboutToBeChanged()));
-    connect(mModel, &QAbstractItemModel::rowsInserted, this, &CollectionCheckListModel::slotRowsInserted);
+    connect(mModel, &QAbstractItemModel::rowsInserted,
+              this, &CollectionCheckListModel::slotRowsInserted);
     // This is probably needed to make CollectionFilterCheckListModel update
     // (similarly to when rows are inserted).
     connect(mModel, SIGNAL(rowsAboutToBeRemoved(QModelIndex,int,int)), SIGNAL(layoutAboutToBeChanged()));
     connect(mModel, SIGNAL(rowsRemoved(QModelIndex,int,int)), SIGNAL(layoutChanged()));
 
     connect(AkonadiModel::instance(), &AkonadiModel::collectionStatusChanged,
-                                      this, &CollectionCheckListModel::collectionStatusChanged);
+                                this, &CollectionCheckListModel::collectionStatusChanged);
 
     // Initialise checked status for all collections.
     // Note that this is only necessary if the model is recreated after
@@ -489,16 +490,19 @@ QByteArray CollectionCheckListModel::debugType(const char* func) const
 = type may be changed as desired.
 =============================================================================*/
 CollectionFilterCheckListModel::CollectionFilterCheckListModel(QObject* parent)
-    : QSortFilterProxyModel(parent),
-      mActiveModel(new CollectionCheckListModel(CalEvent::ACTIVE, this)),
-      mArchivedModel(new CollectionCheckListModel(CalEvent::ARCHIVED, this)),
-      mTemplateModel(new CollectionCheckListModel(CalEvent::TEMPLATE, this)),
-      mAlarmType(CalEvent::EMPTY)
+    : QSortFilterProxyModel(parent)
+    , mActiveModel(new CollectionCheckListModel(CalEvent::ACTIVE, this))
+    , mArchivedModel(new CollectionCheckListModel(CalEvent::ARCHIVED, this))
+    , mTemplateModel(new CollectionCheckListModel(CalEvent::TEMPLATE, this))
+    , mAlarmType(CalEvent::EMPTY)
 {
     setDynamicSortFilter(true);
-    connect(mActiveModel, &CollectionCheckListModel::collectionTypeChange, this, &CollectionFilterCheckListModel::collectionTypeChanged);
-    connect(mArchivedModel, &CollectionCheckListModel::collectionTypeChange, this, &CollectionFilterCheckListModel::collectionTypeChanged);
-    connect(mTemplateModel, &CollectionCheckListModel::collectionTypeChange, this, &CollectionFilterCheckListModel::collectionTypeChanged);
+    connect(mActiveModel, &CollectionCheckListModel::collectionTypeChange,
+                    this, &CollectionFilterCheckListModel::collectionTypeChanged);
+    connect(mArchivedModel, &CollectionCheckListModel::collectionTypeChange,
+                      this, &CollectionFilterCheckListModel::collectionTypeChanged);
+    connect(mTemplateModel, &CollectionCheckListModel::collectionTypeChange,
+                      this, &CollectionFilterCheckListModel::collectionTypeChanged);
 }
 
 void CollectionFilterCheckListModel::setEventTypeFilter(CalEvent::Type type)
@@ -625,8 +629,8 @@ bool CollectionView::viewportEvent(QEvent* e)
             int i = toolTip.indexOf(QLatin1Char('@'));
             if (i > 0)
             {
-                int j = toolTip.indexOf(QRegExp(QLatin1String("<(nl|br)"), Qt::CaseInsensitive), i + 1);
-                int k = toolTip.indexOf(QLatin1Char('@'), j);
+                const int j = toolTip.indexOf(QRegExp(QLatin1String("<(nl|br)"), Qt::CaseInsensitive), i + 1);
+                const int k = toolTip.indexOf(QLatin1Char('@'), j);
                 const QString name = toolTip.mid(i + 1, j - i - 1);
                 value = model()->data(index, Qt::FontRole);
                 const QFontMetrics fm(qvariant_cast<QFont>(value).resolve(viewOptions().font));
@@ -635,9 +639,9 @@ bool CollectionView::viewportEvent(QEvent* e)
                 QStyleOptionButton opt;
                 opt.QStyleOption::operator=(viewOptions());
                 opt.rect = rectForIndex(index);
-                int checkWidth = QApplication::style()->subElementRect(QStyle::SE_ItemViewItemCheckIndicator, &opt).width();
-                int left = spacing() + 3*margin + checkWidth + viewOptions().decorationSize.width();   // left offset of text
-                int right = left + textWidth;
+                const int checkWidth = QApplication::style()->subElementRect(QStyle::SE_ItemViewItemCheckIndicator, &opt).width();
+                const int left = spacing() + 3*margin + checkWidth + viewOptions().decorationSize.width();   // left offset of text
+                const int right = left + textWidth;
                 if (left >= horizontalOffset() + spacing()
                 &&  right <= horizontalOffset() + width() - spacing() - 2*frameWidth())
                 {
@@ -685,8 +689,8 @@ CollectionControlModel* CollectionControlModel::instance()
 }
 
 CollectionControlModel::CollectionControlModel(QObject* parent)
-    : FavoriteCollectionsModel(AkonadiModel::instance(), KConfigGroup(KSharedConfig::openConfig(), "Collections"), parent),
-      mPopulatedCheckLoop(nullptr)
+    : FavoriteCollectionsModel(AkonadiModel::instance(), KConfigGroup(KSharedConfig::openConfig(), "Collections"), parent)
+    , mPopulatedCheckLoop(nullptr)
 {
     // Initialise the list of enabled collections
     EntityMimeTypeFilterModel* filter = new EntityMimeTypeFilterModel(this);
@@ -700,12 +704,13 @@ CollectionControlModel::CollectionControlModel(QObject* parent)
         addCollection(Collection(id));
 
     connect(AkonadiModel::instance(), &AkonadiModel::collectionStatusChanged,
-                                      this, &CollectionControlModel::statusChanged);
+                                this, &CollectionControlModel::statusChanged);
     connect(AkonadiModel::instance(), &EntityTreeModel::collectionTreeFetched,
-                                      this, &CollectionControlModel::collectionPopulated);
+                                this, &CollectionControlModel::collectionPopulated);
     connect(AkonadiModel::instance(), &EntityTreeModel::collectionPopulated,
-                                      this, &CollectionControlModel::collectionPopulated);
-    connect(AkonadiModel::instance(), SIGNAL(serverStopped()), SLOT(reset()));
+                                this, &CollectionControlModel::collectionPopulated);
+    connect(AkonadiModel::instance(), &AkonadiModel::serverStopped,
+                                this, &CollectionControlModel::reset);
 }
 
 /******************************************************************************
@@ -995,7 +1000,7 @@ int CollectionControlModel::isWritableEnabled(const Akonadi::Collection& collect
 }
 int CollectionControlModel::isWritableEnabled(const Akonadi::Collection& collection, CalEvent::Type type, KACalendar::Compat& format)
 {
-    int writable = AkonadiModel::isWritable(collection, format);
+    const int writable = AkonadiModel::isWritable(collection, format);
     if (writable == -1)
         return -1;
 
@@ -1121,11 +1126,11 @@ void CollectionControlModel::setStandard(Akonadi::Collection& collection, CalEve
                                        ? collection.attribute<CollectionAttribute>()->standard() : CalEvent::EMPTY;
         if (ctypes & type)
             return;    // it's already the standard collection for this type
-        for (int i = 0, count = colIds.count();  i < count;  ++i)
+        for (Collection::Id colId : colIds)
         {
             CalEvent::Types types;
-            Collection c(colIds[i]);
-            if (colIds[i] == collection.id())
+            Collection c(colId);
+            if (colId == collection.id())
             {
                 c = collection;    // update with latest data
                 types = ctypes | type;
@@ -1180,11 +1185,11 @@ void CollectionControlModel::setStandard(Akonadi::Collection& collection, CalEve
                                   ? collection.attribute<CollectionAttribute>()->standard() : CalEvent::EMPTY;
         if (t == types)
             return;    // there's no change to the collection's status
-        for (int i = 0, count = colIds.count();  i < count;  ++i)
+        for (Collection::Id colId : colIds)
         {
             CalEvent::Types t;
-            Collection c(colIds[i]);
-            if (colIds[i] == collection.id())
+            Collection c(colId);
+            if (colId == collection.id())
             {
                 c = collection;    // update with latest data
                 t = types;
@@ -1276,9 +1281,9 @@ Collection::List CollectionControlModel::allCollections(CalEvent::Type type)
     AgentManager* agentManager = AgentManager::self();
     Collection::List result;
     const QList<Collection::Id> colIds = instance()->collectionIds();
-    for (Collection::Id id : colIds)
+    for (Collection::Id colId : colIds)
     {
-        Collection c(id);
+        Collection c(colId);
         AkonadiModel::instance()->refresh(c);    // update with latest data
         if ((allTypes  ||  c.contentMimeTypes().contains(mimeType))
         &&  agentManager->instance(c.resource()).isValid())
@@ -1296,9 +1301,9 @@ Collection::List CollectionControlModel::enabledCollections(CalEvent::Type type,
     const QString mimeType = CalEvent::mimeType(type);
     const QList<Collection::Id> colIds = instance()->collectionIds();
     Collection::List result;
-    for (int i = 0, count = colIds.count();  i < count;  ++i)
+    for (Collection::Id colId : colIds)
     {
-        Collection c(colIds[i]);
+        Collection c(colId);
         AkonadiModel::instance()->refresh(c);    // update with latest data
         if (c.contentMimeTypes().contains(mimeType)
         &&  (!writable || ((c.rights() & writableRights) == writableRights)))
@@ -1313,9 +1318,9 @@ Collection::List CollectionControlModel::enabledCollections(CalEvent::Type type,
 Collection CollectionControlModel::collectionForResource(const QString& resourceId)
 {
     const QList<Collection::Id> colIds = instance()->collectionIds();
-    for (Collection::Id id : colIds)
+    for (Collection::Id colId : colIds)
     {
-        Collection c(id);
+        const Collection c(colId);
         if (c.resource() == resourceId)
             return c;
     }
@@ -1325,16 +1330,16 @@ Collection CollectionControlModel::collectionForResource(const QString& resource
 /******************************************************************************
 * Return whether all enabled collections have been populated.
 */
-bool CollectionControlModel::isPopulated(Collection::Id colId)
+bool CollectionControlModel::isPopulated(Collection::Id collectionId)
 {
     AkonadiModel* model = AkonadiModel::instance();
     const QList<Collection::Id> colIds = instance()->collectionIds();
-    for (int i = 0, count = colIds.count();  i < count;  ++i)
+    for (Collection::Id colId : colIds)
     {
-        if ((colId == -1  ||  colId == colIds[i])
-        &&  !model->data(model->collectionIndex(colIds[i]), AkonadiModel::IsPopulatedRole).toBool())
+        if ((collectionId == -1  ||  collectionId == colId)
+        &&  !model->data(model->collectionIndex(colId), AkonadiModel::IsPopulatedRole).toBool())
         {
-            Collection c(colIds[i]);
+            Collection c(colId);
             model->refresh(c);    // update with latest data
             if (!c.hasAttribute<CollectionAttribute>()
             ||  c.attribute<CollectionAttribute>()->enabled() == CalEvent::EMPTY)
@@ -1408,7 +1413,7 @@ void CollectionControlModel::collectionFetchResult(KJob* j)
                 {
                     // Remove the resource containing the higher numbered Collection
                     // ID, which is likely to be the more recently created.
-                    ResourceCol prevRes = it.value();
+                    const ResourceCol prevRes = it.value();
                     if (thisRes.collectionId > prevRes.collectionId)
                     {
                         qCWarning(KALARM_LOG) << "CollectionControlModel::collectionFetchResult: Removing duplicate resource" << thisRes.resourceId;

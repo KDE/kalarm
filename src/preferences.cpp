@@ -1,7 +1,7 @@
 /*
  *  preferences.cpp  -  program preference settings
  *  Program:  kalarm
- *  Copyright © 2001-2018 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2019 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -205,7 +205,7 @@ void Preferences::setNoAutoStart(bool yes)
         lines = stream.readAll().split(QLatin1Char('\n'));
         for (int i = 0; i < lines.size(); ++i)
         {
-            const QString line = lines[i].trimmed();
+            const QString line = lines.at(i).trimmed();
             if (line.isEmpty())
             {
                 lines.removeAt(i);
@@ -321,6 +321,11 @@ QBitArray Preferences::workDays()
 
 void Preferences::setWorkDays(const QBitArray& dayBits)
 {
+    if (dayBits.size() != 7)
+    {
+        qCWarning(KALARM_LOG) << "Preferences::setWorkDays: Error! 'dayBits' parameter must have 7 elements: actual size" << dayBits.size();
+        return;
+    }
     unsigned days = 0;
     for (int i = 0;  i < 7;  ++i)
         if (dayBits.testBit(i))
@@ -339,7 +344,7 @@ void Preferences::workTimeChange(const QDateTime& start, const QDateTime& end, i
 
 Preferences::MailFrom Preferences::emailFrom()
 {
-    QString from = self()->mBase_EmailFrom;
+    const QString from = self()->mBase_EmailFrom;
     if (from == FROM_KMAIL)
         return MAIL_FROM_KMAIL;
     if (from == FROM_SYS_SETTINGS)
@@ -352,7 +357,7 @@ Preferences::MailFrom Preferences::emailFrom()
 */
 QString Preferences::emailAddress()
 {
-    QString from = self()->mBase_EmailFrom;
+    const QString from = self()->mBase_EmailFrom;
     if (from == FROM_KMAIL)
         return Identities::identityManager()->defaultIdentity().fullEmailAddr();
     if (from == FROM_SYS_SETTINGS)
@@ -375,7 +380,7 @@ void Preferences::setEmailAddress(Preferences::MailFrom from, const QString& add
 
 Preferences::MailFrom Preferences::emailBccFrom()
 {
-    QString from = self()->mBase_EmailBccAddress;
+    const QString from = self()->mBase_EmailBccAddress;
     if (from == FROM_SYS_SETTINGS)
         return MAIL_FROM_SYS_SETTINGS;
     return MAIL_FROM_ADDR;
@@ -383,7 +388,7 @@ Preferences::MailFrom Preferences::emailBccFrom()
 
 QString Preferences::emailBccAddress()
 {
-    QString from = self()->mBase_EmailBccAddress;
+    const QString from = self()->mBase_EmailBccAddress;
     if (from == FROM_SYS_SETTINGS)
         return KAMail::controlCentreAddress();
     return from;
@@ -457,22 +462,22 @@ QString translateXTermPath(const QString& cmdline, bool write)
     if (cmdline.isEmpty())
         return cmdline;
     // Strip any leading quote
-    QChar quote = cmdline[0];
-    char q = quote.toLatin1();
-    bool quoted = (q == '"' || q == '\'');
+    const QChar quote = cmdline[0];
+    const char q = quote.toLatin1();
+    const bool quoted = (q == '"' || q == '\'');
     if (quoted)
         cmd = cmdline.mid(1);
     // Split the command at the first non-escaped space
     for (int i = 0, count = cmd.length();  i < count;  ++i)
     {
-        switch (cmd[i].toLatin1())
+        switch (cmd.at(i).toLatin1())
         {
             case '\\':
                 ++i;
                 continue;
             case '"':
             case '\'':
-                if (cmd[i] != quote)
+                if (cmd.at(i) != quote)
                     continue;
                 // fall through to ' '
                 Q_FALLTHROUGH();

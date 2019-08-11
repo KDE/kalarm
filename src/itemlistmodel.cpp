@@ -1,7 +1,7 @@
 /*
  *  itemlistmodel.cpp  -  Akonadi item models
  *  Program:  kalarm
- *  Copyright © 2007-2012 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2007-2019 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -34,9 +34,9 @@ using namespace Akonadi;
 = types in enabled collections.
 =============================================================================*/
 ItemListModel::ItemListModel(CalEvent::Types allowed, QObject* parent)
-    : EntityMimeTypeFilterModel(parent),
-      mAllowedTypes(allowed),
-      mHaveEvents(false)
+    : EntityMimeTypeFilterModel(parent)
+    , mAllowedTypes(allowed)
+    , mHaveEvents(false)
 {
     KSelectionProxyModel* selectionModel = new KSelectionProxyModel(CollectionControlModel::instance()->selectionModel(), this);
     selectionModel->setSourceModel(AkonadiModel::instance());
@@ -112,32 +112,11 @@ bool ItemListModel::filterAcceptsRow(int sourceRow, const QModelIndex& sourcePar
     if (!EntityMimeTypeFilterModel::filterAcceptsRow(sourceRow, sourceParent))
         return false;
     // Get the alarm type of the item
-    QModelIndex sourceIndex = sourceModel()->index(sourceRow, 0, sourceParent);
-    CalEvent::Type type = static_cast<CalEvent::Type>(sourceModel()->data(sourceIndex, AkonadiModel::StatusRole).toInt());
-    Collection parent = sourceIndex.data(AkonadiModel::ParentCollectionRole).value<Collection>();
+    const QModelIndex sourceIndex = sourceModel()->index(sourceRow, 0, sourceParent);
+    const CalEvent::Type type = static_cast<CalEvent::Type>(sourceModel()->data(sourceIndex, AkonadiModel::StatusRole).toInt());
+    const Collection parent = sourceIndex.data(AkonadiModel::ParentCollectionRole).value<Collection>();
     return CollectionControlModel::isEnabled(parent, type);
 }
-
-#if 0
-QModelIndex ItemListModel::index(int row, int column, const QModelIndex& parent) const
-{
-    if (parent.isValid())
-        return QModelIndex();
-    return createIndex(row, column, mEvents[row]);
-}
-
-bool ItemListModel::setData(const QModelIndex& ix, const QVariant&, int role)
-{
-    if (ix.isValid()  &&  role == Qt::EditRole)
-    {
-//??? update event
-        int row = ix.row();
-        Q_EMIT dataChanged(index(row, 0), index(row, AkonadiModel::ColumnCount - 1));
-        return true;
-    }
-    return false;
-}
-#endif
 
 Qt::ItemFlags ItemListModel::flags(const QModelIndex& index) const
 {
@@ -151,7 +130,7 @@ Qt::ItemFlags ItemListModel::flags(const QModelIndex& index) const
 */
 QModelIndex ItemListModel::eventIndex(Item::Id itemId) const
 {
-    QModelIndexList list = match(QModelIndex(), AkonadiModel::ItemIdRole, itemId, 1, Qt::MatchExactly | Qt::MatchRecursive);
+    const QModelIndexList list = match(QModelIndex(), AkonadiModel::ItemIdRole, itemId, 1, Qt::MatchExactly | Qt::MatchRecursive);
     if (list.isEmpty())
         return QModelIndex();
     return index(list[0].row(), 0, list[0].parent());
@@ -191,8 +170,8 @@ Equivalent to AlarmListFilterModel
 AlarmListModel* AlarmListModel::mAllInstance = nullptr;
 
 AlarmListModel::AlarmListModel(QObject* parent)
-    : ItemListModel(CalEvent::ACTIVE | CalEvent::ARCHIVED, parent),
-      mFilterTypes(CalEvent::ACTIVE | CalEvent::ARCHIVED)
+    : ItemListModel(CalEvent::ACTIVE | CalEvent::ARCHIVED, parent)
+    , mFilterTypes(CalEvent::ACTIVE | CalEvent::ARCHIVED)
 {
 }
 
@@ -232,7 +211,7 @@ bool AlarmListModel::filterAcceptsRow(int sourceRow, const QModelIndex& sourcePa
         return false;
     if (mFilterTypes == CalEvent::EMPTY)
         return false;
-    int type = sourceModel()->data(sourceModel()->index(sourceRow, 0, sourceParent), AkonadiModel::StatusRole).toInt();
+    const int type = sourceModel()->data(sourceModel()->index(sourceRow, 0, sourceParent), AkonadiModel::StatusRole).toInt();
     return static_cast<CalEvent::Type>(type) & mFilterTypes;
 }
 
@@ -261,9 +240,9 @@ Equivalent to TemplateListFilterModel
 TemplateListModel* TemplateListModel::mAllInstance = nullptr;
 
 TemplateListModel::TemplateListModel(QObject* parent)
-    : ItemListModel(CalEvent::TEMPLATE, parent),
-      mActionsEnabled(KAEvent::ACT_ALL),
-      mActionsFilter(KAEvent::ACT_ALL)
+    : ItemListModel(CalEvent::TEMPLATE, parent)
+    , mActionsEnabled(KAEvent::ACT_ALL)
+    , mActionsFilter(KAEvent::ACT_ALL)
 {
 }
 
@@ -309,8 +288,8 @@ bool TemplateListModel::filterAcceptsRow(int sourceRow, const QModelIndex& sourc
         return false;
     if (mActionsFilter == KAEvent::ACT_ALL)
         return true;
-    QModelIndex sourceIndex = sourceModel()->index(sourceRow, 0, sourceParent);
-    KAEvent::Actions actions = static_cast<KAEvent::Actions>(sourceModel()->data(sourceIndex, AkonadiModel::AlarmActionsRole).toInt());
+    const QModelIndex sourceIndex = sourceModel()->index(sourceRow, 0, sourceParent);
+    const KAEvent::Actions actions = static_cast<KAEvent::Actions>(sourceModel()->data(sourceIndex, AkonadiModel::AlarmActionsRole).toInt());
     return actions & mActionsFilter;
 }
 
@@ -344,7 +323,7 @@ Qt::ItemFlags TemplateListModel::flags(const QModelIndex& index) const
     Qt::ItemFlags f = sourceModel()->flags(mapToSource(index));
     if (mActionsEnabled == KAEvent::ACT_ALL)
         return f;
-    KAEvent::Actions actions = static_cast<KAEvent::Actions>(ItemListModel::data(index, AkonadiModel::AlarmActionsRole).toInt());
+    const KAEvent::Actions actions = static_cast<KAEvent::Actions>(ItemListModel::data(index, AkonadiModel::AlarmActionsRole).toInt());
     if (!(actions & mActionsEnabled))
         f = static_cast<Qt::ItemFlags>(f & ~(Qt::ItemIsEnabled | Qt::ItemIsSelectable));
     return f;

@@ -1,7 +1,7 @@
 /*
  *  commandoptions.cpp  -  extract command line options
  *  Program:  kalarm
- *  Copyright © 2001-2019 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2019 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -41,21 +41,21 @@ bool convInterval(const QString& timeParam, KARecurrence::Type&, int& timeInterv
 CommandOptions* CommandOptions::mFirstInstance = nullptr;
 
 CommandOptions::CommandOptions()
-  : mParser(nullptr),
-    mOptions(Num_Options, nullptr),
-    mCommand(NONE),
-    mEditActionSet(false),
-    mRecurrence(nullptr),
-    mRepeatCount(0),
-    mRepeatInterval(0),
-    mLateCancel(0),
-    mBgColour(Preferences::defaultBgColour()),
-    mFgColour(Preferences::defaultFgColour()),
-    mReminderMinutes(0),
-    mAudioVolume(-1),
-    mFromID(0),
-    mFlags(KAEvent::DEFAULT_FONT),
-    mDisableAll(false)
+    : mParser(nullptr)
+    , mOptions(Num_Options, nullptr)
+    , mCommand(NONE)
+    , mEditActionSet(false)
+    , mRecurrence(nullptr)
+    , mRepeatCount(0)
+    , mRepeatInterval(0)
+    , mLateCancel(0)
+    , mBgColour(Preferences::defaultBgColour())
+    , mFgColour(Preferences::defaultFgColour())
+    , mReminderMinutes(0)
+    , mAudioVolume(-1)
+    , mFromID(0)
+    , mFlags(KAEvent::DEFAULT_FONT)
+    , mDisableAll(false)
 {
     if (!mFirstInstance)
         mFirstInstance = this;
@@ -221,10 +221,10 @@ QStringList CommandOptions::setOptions(QCommandLineParser* parser, const QString
 
     for (int i = 0; i < mOptions.size(); ++i)
     {
-        if (!mOptions[i])
+        if (!mOptions.at(i))
             qCCritical(KALARM_LOG) << "CommandOptions::setOptions: Command option" << i << "not initialised";
         else
-            mParser->addOption(*(mOptions[i]));
+            mParser->addOption(*(mOptions.at(i)));
     }
     mParser->addVersionOption();
     mParser->addHelpOption();
@@ -281,9 +281,9 @@ void CommandOptions::process()
         return;
 
 #ifndef NDEBUG
-    if (mParser->isSet(*mOptions[TEST_SET_TIME]))
+    if (mParser->isSet(*mOptions.at(TEST_SET_TIME)))
     {
-        const QString time = mParser->value(*mOptions[TEST_SET_TIME]);
+        const QString time = mParser->value(*mOptions.at(TEST_SET_TIME));
         if (!AlarmTime::convertTimeString(time.toLatin1(), mSimulationTime, KADateTime::realCurrentLocalDateTime(), true))
             setErrorParameter(TEST_SET_TIME);
     }
@@ -302,18 +302,18 @@ void CommandOptions::process()
     {
         // Fetch the event ID. This can optionally include a prefix of the
         // resource ID followed by a colon delimiter.
-        mEventId = EventId(mParser->value(*mOptions[mCommandOpt]));
+        mEventId = EventId(mParser->value(*mOptions.at(mCommandOpt)));
     }
     if (checkCommand(OptEDIT_NEW_PRESET, EDIT_NEW_PRESET))
     {
-        mTemplateName = mParser->value(*mOptions[mCommandOpt]);
+        mTemplateName = mParser->value(*mOptions.at(mCommandOpt));
     }
     if (checkCommand(FILE, NEW))
     {
         mEditType      = EditAlarmDlg::DISPLAY;
         mEditAction    = KAEvent::FILE;
         mEditActionSet = true;
-        mText          = mParser->value(*mOptions[mCommandOpt]);
+        mText          = mParser->value(*mOptions.at(mCommandOpt));
     }
     if (checkCommand(EXEC_DISPLAY, NEW))
     {
@@ -321,14 +321,14 @@ void CommandOptions::process()
         mEditAction    = KAEvent::COMMAND;
         mEditActionSet = true;
         mFlags        |= KAEvent::DISPLAY_COMMAND;
-        mText          = mParser->value(*mOptions[mCommandOpt]) + QStringLiteral(" ") + mExecArguments.join(QLatin1Char(' '));
+        mText          = mParser->value(*mOptions.at(mCommandOpt)) + QStringLiteral(" ") + mExecArguments.join(QLatin1Char(' '));
     }
     if (checkCommand(EXEC, NEW))
     {
         mEditType      = EditAlarmDlg::COMMAND;
         mEditAction    = KAEvent::COMMAND;
         mEditActionSet = true;
-        mText          = mParser->value(*mOptions[mCommandOpt]) + QStringLiteral(" ") + mExecArguments.join(QLatin1Char(' '));
+        mText          = mParser->value(*mOptions.at(mCommandOpt)) + QStringLiteral(" ") + mExecArguments.join(QLatin1Char(' '));
     }
     if (checkCommand(MAIL, NEW))
     {
@@ -390,27 +390,27 @@ void CommandOptions::process()
     }
     if (mEditActionSet  &&  mEditAction == KAEvent::EMAIL)
     {
-        if (mParser->isSet(*mOptions[SUBJECT]))
-            mSubject = mParser->value(*mOptions[SUBJECT]);
-        if (mParser->isSet(*mOptions[FROM_ID]))
-            mFromID = Identities::identityUoid(mParser->value(*mOptions[FROM_ID]));
-        QStringList params = mParser->values(*mOptions[MAIL]);
-        for (int i = 0, count = params.count();  i < count;  ++i)
+        if (mParser->isSet(*mOptions.at(SUBJECT)))
+            mSubject = mParser->value(*mOptions.at(SUBJECT));
+        if (mParser->isSet(*mOptions.at(FROM_ID)))
+            mFromID = Identities::identityUoid(mParser->value(*mOptions.at(FROM_ID)));
+        const QStringList mailParams = mParser->values(*mOptions.at(MAIL));
+        for (const QString& addr : mailParams)
         {
-            QString addr = params[i];
-            if (!KAMail::checkAddress(addr))
+            QString a(addr);
+            if (!KAMail::checkAddress(a))
                 setError(xi18nc("@info:shell", "<icode>%1</icode>: invalid email address", optionName(MAIL)));
             KCalendarCore::Person person(QString(), addr);
             mAddressees += person;
         }
-        params = mParser->values(*mOptions[ATTACH]);
-        for (int i = 0, count = params.count();  i < count;  ++i)
-            mAttachments += params[i];
+        const QStringList attParams = mParser->values(*mOptions.at(ATTACH));
+        for (const QString& att : attParams)
+            mAttachments += att;
         const QStringList args = mParser->positionalArguments();
         if (!args.empty())
             mText = args[0];
     }
-    if (mParser->isSet(*mOptions[DISABLE_ALL]))
+    if (mParser->isSet(*mOptions.at(DISABLE_ALL)))
     {
         if (mCommand == TRIGGER_EVENT  ||  mCommand == LIST)
             setErrorIncompatible(DISABLE_ALL, mCommandOpt);
@@ -438,76 +438,78 @@ void CommandOptions::process()
     switch (mCommand)
     {
         case EDIT_NEW:
-            if (mParser->isSet(*mOptions[DISABLE]))
+            if (mParser->isSet(*mOptions.at(DISABLE)))
                 setErrorIncompatible(DISABLE, mCommandOpt);
             // Fall through to NEW
             Q_FALLTHROUGH();
         case NEW:
         {
             // Display a message or file, execute a command, or send an email
-            if (mParser->isSet(*mOptions[COLOUR]))
+            if (mParser->isSet(*mOptions.at(COLOUR)))
             {
                 // Background colour is specified
-                QString colourText = mParser->value(*mOptions[COLOUR]);
-                if (colourText[0] == QLatin1Char('0') && colourText[1].toLower() == QLatin1Char('x'))
+                QString colourText = mParser->value(*mOptions.at(COLOUR));
+                if (colourText.at(0) == QLatin1Char('0')
+                &&  colourText.at(1).toLower() == QLatin1Char('x'))
                     colourText.replace(0, 2, QStringLiteral("#"));
                 mBgColour.setNamedColor(colourText);
                 if (!mBgColour.isValid())
                     setErrorParameter(COLOUR);
             }
-            if (mParser->isSet(*mOptions[COLOURFG]))
+            if (mParser->isSet(*mOptions.at(COLOURFG)))
             {
                 // Foreground colour is specified
-                QString colourText = mParser->value(*mOptions[COLOURFG]);
-                if (colourText[0] == QLatin1Char('0') && colourText[1].toLower() == QLatin1Char('x'))
+                QString colourText = mParser->value(*mOptions.at(COLOURFG));
+                if (colourText.at(0) == QLatin1Char('0')
+                &&  colourText.at(1).toLower() == QLatin1Char('x'))
                     colourText.replace(0, 2, QStringLiteral("#"));
                 mFgColour.setNamedColor(colourText);
                 if (!mFgColour.isValid())
                     setErrorParameter(COLOURFG);
             }
 
-            if (mParser->isSet(*mOptions[TIME]))
+            if (mParser->isSet(*mOptions.at(TIME)))
             {
-                QByteArray dateTime = mParser->value(*mOptions[TIME]).toLocal8Bit();
+                const QByteArray dateTime = mParser->value(*mOptions.at(TIME)).toLocal8Bit();
                 if (!AlarmTime::convertTimeString(dateTime, mAlarmTime))
                     setErrorParameter(TIME);
             }
             else
                 mAlarmTime = KADateTime::currentLocalDateTime();
 
-            bool haveRecurrence = mParser->isSet(*mOptions[RECURRENCE]);
+            const bool haveRecurrence = mParser->isSet(*mOptions.at(RECURRENCE));
             if (haveRecurrence)
             {
-                if (mParser->isSet(*mOptions[LOGIN]))
+                if (mParser->isSet(*mOptions.at(LOGIN)))
                     setErrorIncompatible(LOGIN, RECURRENCE);
-                else if (mParser->isSet(*mOptions[UNTIL]))
+                else if (mParser->isSet(*mOptions.at(UNTIL)))
                     setErrorIncompatible(UNTIL, RECURRENCE);
-                QString rule = mParser->value(*mOptions[RECURRENCE]);
+                const QString rule = mParser->value(*mOptions.at(RECURRENCE));
                 mRecurrence = new KARecurrence;
                 mRecurrence->set(rule);
             }
-            if (mParser->isSet(*mOptions[INTERVAL]))
+            if (mParser->isSet(*mOptions.at(INTERVAL)))
             {
                 // Repeat count is specified
                 int count = 0;
                 KADateTime endTime;
-                if (mParser->isSet(*mOptions[LOGIN]))
+                if (mParser->isSet(*mOptions.at(LOGIN)))
                     setErrorIncompatible(LOGIN, INTERVAL);
                 bool ok;
-                if (mParser->isSet(*mOptions[REPEAT]))
+                if (mParser->isSet(*mOptions.at(REPEAT)))
                 {
-                    count = mParser->value(*mOptions[REPEAT]).toInt(&ok);
+                    count = mParser->value(*mOptions.at(REPEAT)).toInt(&ok);
                     if (!ok || !count || count < -1 || (count < 0 && haveRecurrence))
                         setErrorParameter(REPEAT);
                 }
                 else if (haveRecurrence)
                     setErrorRequires(INTERVAL, REPEAT);
-                else if (mParser->isSet(*mOptions[UNTIL]))
+                else if (mParser->isSet(*mOptions.at(UNTIL)))
                 {
                     count = 0;
-                    QByteArray dateTime = mParser->value(*mOptions[UNTIL]).toLocal8Bit();
+                    const QByteArray dateTime = mParser->value(*mOptions.at(UNTIL)).toLocal8Bit();
                     bool ok;
-                    if (mParser->isSet(*mOptions[TIME]))
+                    if (mParser->isSet(*mOptions.at(TIME)))
                         ok = AlarmTime::convertTimeString(dateTime, endTime, mAlarmTime);
                     else
                         ok = AlarmTime::convertTimeString(dateTime, endTime);
@@ -526,7 +528,7 @@ void CommandOptions::process()
                 // Get the recurrence interval
                 int intervalOfType;
                 KARecurrence::Type recurType;
-                if (!convInterval(mParser->value(*mOptions[INTERVAL]), recurType, intervalOfType, !haveRecurrence))
+                if (!convInterval(mParser->value(*mOptions.at(INTERVAL)), recurType, intervalOfType, !haveRecurrence))
                     setErrorParameter(INTERVAL);
                 else if (mAlarmTime.isDateOnly()  &&  recurType == KARecurrence::MINUTELY)
                     setError(xi18nc("@info:shell", "Invalid <icode>%1</icode> parameter for date-only alarm", optionName(INTERVAL)));
@@ -538,7 +540,7 @@ void CommandOptions::process()
                         // There is a also a recurrence specified, so set up a sub-repetition.
                         // In this case, 'intervalOfType' is in minutes.
                         mRepeatInterval = KCalendarCore::Duration(intervalOfType * 60);
-                        KCalendarCore::Duration longestInterval = mRecurrence->longestInterval();
+                        const KCalendarCore::Duration longestInterval = mRecurrence->longestInterval();
                         if (mRepeatInterval * count > longestInterval)
                             setError(xi18nc("@info:shell", "Invalid <icode>%1</icode> and <icode>%2</icode> parameters: repetition is longer than <icode>%3</icode> interval",
                                            optionName(INTERVAL), optionName(REPEAT), optionName(RECURRENCE)));
@@ -555,52 +557,52 @@ void CommandOptions::process()
             }
             else
             {
-                if (mParser->isSet(*mOptions[REPEAT]))
+                if (mParser->isSet(*mOptions.at(REPEAT)))
                     setErrorRequires(REPEAT, INTERVAL);
-                else if (mParser->isSet(*mOptions[UNTIL]))
+                else if (mParser->isSet(*mOptions.at(UNTIL)))
                     setErrorRequires(UNTIL, INTERVAL);
             }
 
-            bool audioRepeat = mParser->isSet(*mOptions[PLAY_REPEAT]);
-            if (audioRepeat  ||  mParser->isSet(*mOptions[PLAY]))
+            const bool audioRepeat = mParser->isSet(*mOptions.at(PLAY_REPEAT));
+            if (audioRepeat  ||  mParser->isSet(*mOptions.at(PLAY)))
             {
                 // Play a sound with the alarm
-                Option opt = audioRepeat ? PLAY_REPEAT : PLAY;
-                if (audioRepeat  &&  mParser->isSet(*mOptions[PLAY]))
+                const Option opt = audioRepeat ? PLAY_REPEAT : PLAY;
+                if (audioRepeat  &&  mParser->isSet(*mOptions.at(PLAY)))
                     setErrorIncompatible(PLAY, PLAY_REPEAT);
-                if (mParser->isSet(*mOptions[BEEP]))
+                if (mParser->isSet(*mOptions.at(BEEP)))
                     setErrorIncompatible(BEEP, opt);
-                else if (mParser->isSet(*mOptions[SPEAK]))
+                else if (mParser->isSet(*mOptions.at(SPEAK)))
                     setErrorIncompatible(SPEAK, opt);
-                mAudioFile = mParser->value(*mOptions[audioRepeat ? PLAY_REPEAT : PLAY]);
-                if (mParser->isSet(*mOptions[VOLUME]))
+                mAudioFile = mParser->value(*mOptions.at(audioRepeat ? PLAY_REPEAT : PLAY));
+                if (mParser->isSet(*mOptions.at(VOLUME)))
                 {
                     bool ok;
-                    int volumepc = mParser->value(*mOptions[VOLUME]).toInt(&ok);
+                    const int volumepc = mParser->value(*mOptions.at(VOLUME)).toInt(&ok);
                     if (!ok  ||  volumepc < 0  ||  volumepc > 100)
                         setErrorParameter(VOLUME);
                     mAudioVolume = static_cast<float>(volumepc) / 100;
                 }
             }
-            else if (mParser->isSet(*mOptions[VOLUME]))
+            else if (mParser->isSet(*mOptions.at(VOLUME)))
                 setErrorRequires(VOLUME, PLAY, PLAY_REPEAT);
-            if (mParser->isSet(*mOptions[SPEAK]))
+            if (mParser->isSet(*mOptions.at(SPEAK)))
             {
-                if (mParser->isSet(*mOptions[BEEP]))
+                if (mParser->isSet(*mOptions.at(BEEP)))
                     setErrorIncompatible(BEEP, SPEAK);
                 else if (!KPIMTextEdit::TextToSpeech::self()->isReady())
                     setError(xi18nc("@info:shell", "<icode>%1</icode> requires KAlarm to be compiled with QTextToSpeech support", optionName(SPEAK)));
             }
-            bool onceOnly = mParser->isSet(*mOptions[REMINDER_ONCE]);
-            if (mParser->isSet(*mOptions[REMINDER])  ||  onceOnly)
+            const bool onceOnly = mParser->isSet(*mOptions.at(REMINDER_ONCE));
+            if (mParser->isSet(*mOptions.at(REMINDER))  ||  onceOnly)
             {
                 // Issue a reminder alarm in advance of or after the main alarm
-                if (onceOnly  &&  mParser->isSet(*mOptions[REMINDER]))
+                if (onceOnly  &&  mParser->isSet(*mOptions.at(REMINDER)))
                     setErrorIncompatible(REMINDER, REMINDER_ONCE);
-                Option opt = onceOnly ? REMINDER_ONCE : REMINDER;
+                const Option opt = onceOnly ? REMINDER_ONCE : REMINDER;
                 KARecurrence::Type recurType;
-                QString optval = mParser->value(*mOptions[onceOnly ? REMINDER_ONCE : REMINDER]);
-                bool after = (optval[0] == QLatin1Char('+'));
+                QString optval = mParser->value(*mOptions.at(onceOnly ? REMINDER_ONCE : REMINDER));
+                const bool after = (optval.at(0) == QLatin1Char('+'));
                 if (after)
                     optval.remove(0, 1);   // it's a reminder after the main alarm
                 if (!convInterval(optval, recurType, mReminderMinutes))
@@ -613,33 +615,33 @@ void CommandOptions::process()
                     mFlags |= KAEvent::REMINDER_ONCE;
             }
 
-            if (mParser->isSet(*mOptions[LATE_CANCEL]))
+            if (mParser->isSet(*mOptions.at(LATE_CANCEL)))
             {
                 KARecurrence::Type recurType;
-                bool ok = convInterval(mParser->value(*mOptions[LATE_CANCEL]), recurType, mLateCancel);
+                const bool ok = convInterval(mParser->value(*mOptions.at(LATE_CANCEL)), recurType, mLateCancel);
                 if (!ok)
                     setErrorParameter(LATE_CANCEL);
             }
-            else if (mParser->isSet(*mOptions[AUTO_CLOSE]))
+            else if (mParser->isSet(*mOptions.at(AUTO_CLOSE)))
                 setErrorRequires(AUTO_CLOSE, LATE_CANCEL);
 
-            if (mParser->isSet(*mOptions[ACK_CONFIRM]))
+            if (mParser->isSet(*mOptions.at(ACK_CONFIRM)))
                 mFlags |= KAEvent::CONFIRM_ACK;
-            if (mParser->isSet(*mOptions[AUTO_CLOSE]))
+            if (mParser->isSet(*mOptions.at(AUTO_CLOSE)))
                 mFlags |= KAEvent::AUTO_CLOSE;
-            if (mParser->isSet(*mOptions[BEEP]))
+            if (mParser->isSet(*mOptions.at(BEEP)))
                 mFlags |= KAEvent::BEEP;
-            if (mParser->isSet(*mOptions[SPEAK]))
+            if (mParser->isSet(*mOptions.at(SPEAK)))
                 mFlags |= KAEvent::SPEAK;
-            if (mParser->isSet(*mOptions[KORGANIZER]))
+            if (mParser->isSet(*mOptions.at(KORGANIZER)))
                 mFlags |= KAEvent::COPY_KORGANIZER;
-            if (mParser->isSet(*mOptions[DISABLE]))
+            if (mParser->isSet(*mOptions.at(DISABLE)))
                 mFlags |= KAEvent::DISABLED;
             if (audioRepeat)
                 mFlags |= KAEvent::REPEAT_SOUND;
-            if (mParser->isSet(*mOptions[LOGIN]))
+            if (mParser->isSet(*mOptions.at(LOGIN)))
                 mFlags |= KAEvent::REPEAT_AT_LOGIN;
-            if (mParser->isSet(*mOptions[BCC]))
+            if (mParser->isSet(*mOptions.at(BCC)))
                 mFlags |= KAEvent::EMAIL_BCC;
             if (mAlarmTime.isDateOnly())
                 mFlags |= KAEvent::ANY_TIME;
@@ -652,45 +654,45 @@ void CommandOptions::process()
                 break;
             qCDebug(KALARM_LOG) << "CommandOptions::process: Interactive";
             QStringList errors;
-            if (mParser->isSet(*mOptions[ACK_CONFIRM]))
+            if (mParser->isSet(*mOptions.at(ACK_CONFIRM)))
                 errors << optionName(ACK_CONFIRM);
-            if (mParser->isSet(*mOptions[ATTACH]))
+            if (mParser->isSet(*mOptions.at(ATTACH)))
                 errors << optionName(ATTACH);
-            if (mParser->isSet(*mOptions[AUTO_CLOSE]))
+            if (mParser->isSet(*mOptions.at(AUTO_CLOSE)))
                 errors << optionName(AUTO_CLOSE);
-            if (mParser->isSet(*mOptions[BCC]))
+            if (mParser->isSet(*mOptions.at(BCC)))
                 errors << optionName(BCC);
-            if (mParser->isSet(*mOptions[BEEP]))
+            if (mParser->isSet(*mOptions.at(BEEP)))
                 errors << optionName(BEEP);
-            if (mParser->isSet(*mOptions[COLOUR]))
+            if (mParser->isSet(*mOptions.at(COLOUR)))
                 errors << optionName(COLOUR);
-            if (mParser->isSet(*mOptions[COLOURFG]))
+            if (mParser->isSet(*mOptions.at(COLOURFG)))
                 errors << optionName(COLOURFG);
-            if (mParser->isSet(*mOptions[DISABLE]))
+            if (mParser->isSet(*mOptions.at(DISABLE)))
                 errors << optionName(DISABLE);
-            if (mParser->isSet(*mOptions[FROM_ID]))
+            if (mParser->isSet(*mOptions.at(FROM_ID)))
                 errors << optionName(FROM_ID);
-            if (mParser->isSet(*mOptions[KORGANIZER]))
+            if (mParser->isSet(*mOptions.at(KORGANIZER)))
                 errors << optionName(KORGANIZER);
-            if (mParser->isSet(*mOptions[LATE_CANCEL]))
+            if (mParser->isSet(*mOptions.at(LATE_CANCEL)))
                 errors << optionName(LATE_CANCEL);
-            if (mParser->isSet(*mOptions[LOGIN]))
+            if (mParser->isSet(*mOptions.at(LOGIN)))
                 errors << optionName(LOGIN);
-            if (mParser->isSet(*mOptions[PLAY]))
+            if (mParser->isSet(*mOptions.at(PLAY)))
                 errors << optionName(PLAY);
-            if (mParser->isSet(*mOptions[PLAY_REPEAT]))
+            if (mParser->isSet(*mOptions.at(PLAY_REPEAT)))
                 errors << optionName(PLAY_REPEAT);
-            if (mParser->isSet(*mOptions[REMINDER]))
+            if (mParser->isSet(*mOptions.at(REMINDER)))
                 errors << optionName(REMINDER);
-            if (mParser->isSet(*mOptions[REMINDER_ONCE]))
+            if (mParser->isSet(*mOptions.at(REMINDER_ONCE)))
                 errors << optionName(REMINDER_ONCE);
-            if (mParser->isSet(*mOptions[SPEAK]))
+            if (mParser->isSet(*mOptions.at(SPEAK)))
                 errors << optionName(SPEAK);
-            if (mParser->isSet(*mOptions[SUBJECT]))
+            if (mParser->isSet(*mOptions.at(SUBJECT)))
                 errors << optionName(SUBJECT);
-            if (mParser->isSet(*mOptions[TIME]))
+            if (mParser->isSet(*mOptions.at(TIME)))
                 errors << optionName(TIME);
-            if (mParser->isSet(*mOptions[VOLUME]))
+            if (mParser->isSet(*mOptions.at(VOLUME)))
                 errors << optionName(VOLUME);
             if (!errors.isEmpty())
                 mError = errors.join(QLatin1Char(' ')) + i18nc("@info:shell", ": option(s) only valid with an appropriate action option or message");
@@ -717,7 +719,7 @@ void CommandOptions::printError(const QString& errmsg)
     // Note: we can't use mArgs->usage() since that also quits any other
     // running 'instances' of the program.
     std::cerr << errmsg.toLocal8Bit().data()
-          << i18nc("@info:shell", "\nUse --help to get a list of available command line options.\n").toLocal8Bit().data();
+              << i18nc("@info:shell", "\nUse --help to get a list of available command line options.\n").toLocal8Bit().data();
 }
 
 /******************************************************************************
@@ -730,7 +732,7 @@ void CommandOptions::printError(const QString& errmsg)
 bool CommandOptions::checkCommand(Option command, Command code, EditAlarmDlg::Type allowedEditType)
 {
     if (!mError.isEmpty()
-    ||  !mParser->isSet(*mOptions[command]))
+    ||  !mParser->isSet(*mOptions.at(command)))
         return false;
     if (mCommand != NONE
     &&  (allowedEditType == EditAlarmDlg::NO_TYPE
@@ -763,7 +765,7 @@ void CommandOptions::setErrorIncompatible(Option opt1, Option opt2)
 
 void CommandOptions::checkEditType(EditAlarmDlg::Type type1, EditAlarmDlg::Type type2, Option opt)
 {
-    if (mParser->isSet(*mOptions[opt])  &&  mCommand != NONE
+    if (mParser->isSet(*mOptions.at(opt))  &&  mCommand != NONE
     &&  ((mCommand != NEW && mCommand != EDIT_NEW)  ||  (mEditType != type1 && (type2 == EditAlarmDlg::NO_TYPE || mEditType != type2))))
         setErrorIncompatible(opt, mCommandOpt);
 }
@@ -779,15 +781,15 @@ QString CommandOptions::optionName(Option opt, bool shortName) const
 {
     if (opt == Opt_Message)
         return QStringLiteral("message");
-    const QStringList names = mOptions[opt]->names();
+    const QStringList names = mOptions.at(opt)->names();
     if (names.empty())
         return QString();
-    for (int i = 0;  i < names.size();  ++i)
+    for (const QString& name : names)
     {
-        if (shortName  &&  names[i].size() == 1)
-            return QStringLiteral("-") + names[i];
-        else if (!shortName  &&  names[i].size() > 1)
-            return QStringLiteral("--") + names[i];
+        if (shortName  &&  name.size() == 1)
+            return QStringLiteral("-") + name;
+        else if (!shortName  &&  name.size() > 1)
+            return QStringLiteral("--") + name;
     }
     return QStringLiteral("-") + names[0];
 }
@@ -808,7 +810,7 @@ bool convInterval(const QString& timeParam, KARecurrence::Type& recurType, int& 
     bool ok = true;
     uint interval = 0;
     uint length = timeString.length();
-    switch (timeString[length - 1])
+    switch (timeString.at(length - 1))
     {
         case 'Y':
             if (!allowMonthYear)

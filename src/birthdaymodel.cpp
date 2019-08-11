@@ -2,7 +2,7 @@
  *  birthdaymodel.cpp  -  model class for birthdays from address book
  *  Program:  kalarm
  *  Copyright © 2009 by Tobias Koenig <tokoe@kde.org>
- *  Copyright © 2007-2011 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2007-2019 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -40,7 +40,7 @@ BirthdayModel* BirthdayModel::mInstance = nullptr;
 BirthdayModel::BirthdayModel(Akonadi::ChangeRecorder* recorder)
     : Akonadi::ContactsTreeModel(recorder)
 {
-    setColumns(Columns() << FullName << Birthday);
+    setColumns({FullName, Birthday});
 }
 
 BirthdayModel::~BirthdayModel()
@@ -76,13 +76,14 @@ QVariant BirthdayModel::entityData(const Akonadi::Item& item, int column, int ro
 {
     if (columns().at(column) == Birthday  &&  role == Qt::DisplayRole)
     {
-        QDate date = Akonadi::ContactsTreeModel::entityData(item, column, DateRole).toDate();
+        const QDate date = Akonadi::ContactsTreeModel::entityData(item, column, DateRole).toDate();
         if (date.isValid())
             return QLocale().toString(date, QLocale::ShortFormat);
     }
     return Akonadi::ContactsTreeModel::entityData(item, column, role);
 }
 
+/*============================================================================*/
 
 BirthdaySortModel::BirthdaySortModel(QObject* parent)
     : QSortFilterProxyModel(parent)
@@ -97,9 +98,8 @@ void BirthdaySortModel::setPrefixSuffix(const QString& prefix, const QString& su
 
     KAEvent event;
     const KAEvent::List events = AlarmCalendar::resources()->events(CalEvent::ACTIVE);
-    for (int i = 0, end = events.count();  i < end;  ++i)
+    for (KAEvent* event : events)
     {
-        KAEvent* event = events[i];
         if (event->actionSubType() == KAEvent::MESSAGE
         &&  event->recurType() == KARecurrence::ANNUAL_DATE
         &&  (prefix.isEmpty()  ||  event->message().startsWith(prefix)))

@@ -1,7 +1,7 @@
 /*
  *  eventlistview.cpp  -  base class for widget showing list of alarms
  *  Program:  kalarm
- *  Copyright © 2007-2013 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2007-2019 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -32,9 +32,9 @@
 
 
 EventListView::EventListView(QWidget* parent)
-    : QTreeView(parent),
-      mFind(nullptr),
-      mEditOnSingleClick(false)
+    : QTreeView(parent)
+    , mFind(nullptr)
+    , mEditOnSingleClick(false)
 {
     setRootIsDecorated(false);    // don't show expander icons for child-less items
     setSortingEnabled(true);
@@ -85,7 +85,7 @@ void EventListView::clearSelection()
 */
 QModelIndex EventListView::selectedIndex() const
 {
-    QModelIndexList list = selectionModel()->selectedRows();
+    const QModelIndexList list = selectionModel()->selectedRows();
     if (list.count() != 1)
         return QModelIndex();
     return list[0];
@@ -97,10 +97,9 @@ QModelIndex EventListView::selectedIndex() const
 */
 KAEvent EventListView::selectedEvent() const
 {
-    QModelIndexList list = selectionModel()->selectedRows();
+    const QModelIndexList list = selectionModel()->selectedRows();
     if (list.count() != 1)
         return KAEvent();
-qCDebug(KALARM_LOG)<<"SelectedEvent() count="<<list.count();
     const ItemListModel* model = static_cast<const ItemListModel*>(list[0].model());
     return model->event(list[0]);
 }
@@ -111,7 +110,7 @@ qCDebug(KALARM_LOG)<<"SelectedEvent() count="<<list.count();
 QVector<KAEvent> EventListView::selectedEvents() const
 {
     QVector<KAEvent> elist;
-    QModelIndexList ixlist = selectionModel()->selectedRows();
+    const QModelIndexList ixlist = selectionModel()->selectedRows();
     int count = ixlist.count();
     if (count)
     {
@@ -154,7 +153,7 @@ bool EventListView::viewportEvent(QEvent* e)
     if (e->type() == QEvent::ToolTip  &&  isActiveWindow())
     {
         QHelpEvent* he = static_cast<QHelpEvent*>(e);
-        QModelIndex index = indexAt(he->pos());
+        const QModelIndex index = indexAt(he->pos());
         QVariant value = model()->data(index, Qt::ToolTipRole);
         if (value.canConvert<QString>())
         {
@@ -168,11 +167,11 @@ bool EventListView::viewportEvent(QEvent* e)
                     // Single line tooltip. Only display it if the text column
                     // is truncated in the view display.
                     value = model()->data(index, Qt::FontRole);
-                    QFontMetrics fm(qvariant_cast<QFont>(value).resolve(viewOptions().font));
-                    int textWidth = fm.boundingRect(toolTip).width() + 1;
+                    const QFontMetrics fm(qvariant_cast<QFont>(value).resolve(viewOptions().font));
+                    const int textWidth = fm.boundingRect(toolTip).width() + 1;
                     const int margin = QApplication::style()->pixelMetric(QStyle::PM_FocusFrameHMargin) + 1;
-                    int left = columnViewportPosition(index.column()) + margin;
-                    int right = left + textWidth;
+                    const int left = columnViewportPosition(index.column()) + margin;
+                    const int right = left + textWidth;
                     if (left >= 0  &&  right <= width() - 2*frameWidth())
                         toolTip.clear();    // prevent any tooltip showing
                 }

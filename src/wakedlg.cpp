@@ -98,7 +98,7 @@ void WakeFromSuspendDlg::enableDisableUseButton()
     bool enable = theApp()->alarmsEnabled();
     if (enable)
     {
-        QString wakeFromSuspendId = KAlarm::checkRtcWakeConfig().value(0);
+        const QString wakeFromSuspendId = KAlarm::checkRtcWakeConfig().value(0);
         const KAEvent event = mMainWindow->selectedEvent();
         enable = event.isValid()
               && event.category() == CalEvent::ACTIVE
@@ -136,7 +136,7 @@ void WakeFromSuspendDlg::showWakeClicked()
         const QStringList params = KAlarm::checkRtcWakeConfig();
         if (!params.isEmpty())
         {
-            KAEvent* event = AlarmCalendar::resources()->event(EventId(params[0].toLongLong(), params[1]));
+            const KAEvent* event = AlarmCalendar::resources()->event(EventId(params[0].toLongLong(), params[1]));
             if (event)
             {
                 mMainWindow->selectEvent(event->itemId());
@@ -153,7 +153,7 @@ void WakeFromSuspendDlg::showWakeClicked()
 */
 void WakeFromSuspendDlg::useWakeClicked()
 {
-    KAEvent event = mMainWindow->selectedEvent();
+    const KAEvent event = mMainWindow->selectedEvent();
     if (!event.isValid())
         return;
     const KADateTime dt = event.mainDateTime().kDateTime();
@@ -171,8 +171,8 @@ void WakeFromSuspendDlg::useWakeClicked()
                 QString(), KStandardGuiItem::cont(), KStandardGuiItem::cancel(), QStringLiteral("wakeupWarning"))
             != KMessageBox::Continue)
         return;
-    int advance = mUi->advanceWakeTime->value();
-    qint64 triggerTime = dt.addSecs(-advance * 60).toSecsSinceEpoch();
+    const int advance = mUi->advanceWakeTime->value();
+    const qint64 triggerTime = dt.addSecs(-advance * 60).toSecsSinceEpoch();
     if (KAlarm::setRtcWakeTime(triggerTime, this))
     {
         const QStringList param{QString::number(event.collectionId()), event.id(), QString::number(triggerTime)};
