@@ -1,7 +1,7 @@
 /*
  *  packedlayout.cpp  -  layout to pack items into rows
  *  Program:  kalarm
- *  Copyright © 2007 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2007,2019 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -22,16 +22,16 @@
 
 
 PackedLayout::PackedLayout(QWidget* parent, Qt::Alignment alignment)
-    : QLayout(parent),
-      mAlignment(alignment),
-      mWidthCached(0)
+    : QLayout(parent)
+    , mAlignment(alignment)
+    , mWidthCached(0)
 {
 }
 
 PackedLayout::PackedLayout(Qt::Alignment alignment)
-    : QLayout(),
-      mAlignment(alignment),
-      mWidthCached(0)
+    : QLayout()
+    , mAlignment(alignment)
+    , mWidthCached(0)
 {
 }
 
@@ -84,15 +84,9 @@ QSize PackedLayout::minimumSize() const
     QSize size;
     for (int i = 0, end = mItems.count();  i < end;  ++i)
         size = size.expandedTo(mItems[i]->minimumSize());
-
-    int marginValue = -1;
     int left, top, right, bottom;
     getContentsMargins(&left, &top, &right, &bottom);
-    if (left == top && top == right && right == bottom) {
-        marginValue = left;
-    }
-    int m = marginValue * 2;
-    return QSize(size.width() + m, size.height() + m);
+    return QSize(size.width() + left + right, size.height() + top + bottom);
 }
 
 // Arranges widgets and returns height required.
@@ -102,14 +96,12 @@ int PackedLayout::arrange(const QRect& rect, bool set) const
     int y = rect.y();
     int yrow = 0;
     QList<QRect> posn;
-    int end = mItems.count();
     QList<QLayoutItem*> items;
-    for (int i = 0;  i < end;  ++i)
+    for (QLayoutItem* item : qAsConst(mItems))
     {
-        QLayoutItem* item = mItems[i];
         if (item->isEmpty())
             continue;
-        QSize size = item->sizeHint();
+        const QSize size = item->sizeHint();
         int right = x + size.width();
         if (right > rect.right()  &&  x > rect.x())
         {
@@ -126,7 +118,7 @@ int PackedLayout::arrange(const QRect& rect, bool set) const
     }
     if (set)
     {
-        int count = items.count();
+        const int count = items.count();
         if (mAlignment == Qt::AlignLeft)
         {
             // Left aligned: no position adjustment needed
@@ -143,7 +135,7 @@ int PackedLayout::arrange(const QRect& rect, bool set) const
                 y = posn[i].y();
                 int last;   // after last item in this row
                 for (last = i + 1;  last < count && posn[last].y() == y;  ++last) ;
-                int n = last - i;   // number of items in this row
+                const int n = last - i;   // number of items in this row
                 int free = rect.right() - posn[last - 1].right();
                 switch (mAlignment)
                 {
