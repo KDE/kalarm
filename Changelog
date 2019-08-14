@@ -9,6 +9,7 @@ KAlarm Change Log
 + Remove duplicate resources (i.e. which use the same calendar file) at startup [KDE Bug 403124]
 + Fix drag and drop of emails from KMail, and KMail button in message window.
 + Improve drag and drop of events and todos from KOrganizer.
++ Fix crash sometimes when a resource is enabled [KDE Bug 410596]
 
 === Version 2.12.4 (KDE Applications 19.04.3) --- 4 July 2019 ===
 + Fix calendar resource dialogue not configuring resource correctly [KDE Bug 407882]
