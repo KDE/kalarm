@@ -2289,9 +2289,9 @@ KADateTime KADateTime::fromString(const QString &string, const QString &format,
             // A time zone name has been found.
             // Use the time zone with that name.
             const QByteArray name = zoneName.toLatin1();
-            for (int i = 0, iMax = zoneList.size(); i < iMax; ++i) {
-                if (zoneList[i].id() == name) {
-                    zone = zoneList[i];
+            for (const QTimeZone& tz : zoneList) {
+                if (tz.id() == name) {
+                    zone = tz;
                     zname = true;
                     break;
                 }
@@ -2301,13 +2301,13 @@ KADateTime KADateTime::fromString(const QString &string, const QString &format,
             // Use the time zone which contains it, if any, provided that the
             // abbreviation applies at the specified date/time.
             bool useUtcOffset = false;
-            for (int i = 0, iMax = zoneList.size(); i < iMax; ++i) {
-                qdt.setTimeZone(zoneList[i]);
+            for (const QTimeZone& tz : zoneList) {
+                qdt.setTimeZone(tz);
                 // TODO: This may not find abbreviations for second occurrence of
                 // the time zone time, after a daylight savings time shift.
-                if (zoneList[i].abbreviation(qdt) == zoneAbbrev) {
+                if (tz.abbreviation(qdt) == zoneAbbrev) {
                     int offset2;
-                    int offset = offsetAtZoneTime(zoneList[i], qdt, &offset2);
+                    int offset = offsetAtZoneTime(tz, qdt, &offset2);
                     if (offset == InvalidOffset)
                         return KADateTime();
                     // Found a time zone which uses this abbreviation at the specified date/time
@@ -2317,7 +2317,7 @@ KADateTime KADateTime::fromString(const QString &string, const QString &format,
                             return KADateTime();
                         useUtcOffset = true;
                     } else {
-                        zone = zoneList[i];
+                        zone = tz;
                         utcOffset = offset;
                     }
                 }
@@ -2337,8 +2337,8 @@ KADateTime KADateTime::fromString(const QString &string, const QString &format,
             QDateTime dtUTC = qdt;
             dtUTC.setTimeSpec(Qt::UTC);
             dtUTC = dtUTC.addSecs(-utcOffset);
-            for (int i = 0, iMax = zoneList.size(); i < iMax; ++i) {
-                if (zoneList[i].offsetFromUtc(dtUTC) == utcOffset) {
+            for (const QTimeZone& tz : zoneList) {
+                if (tz.offsetFromUtc(dtUTC) == utcOffset) {
                     // Found a time zone which uses this offset at the specified time
                     if (zone.isValid()  ||  !utcOffset) {
                         // UTC offset is used by more than one time zone
@@ -2348,7 +2348,7 @@ KADateTime KADateTime::fromString(const QString &string, const QString &format,
                             return KADateTime(qdt.date(), Spec(OffsetFromUTC, utcOffset));
                         return KADateTime(qdt.date(), qdt.time(), Spec(OffsetFromUTC, utcOffset));
                     }
-                    zone = zoneList[i];
+                    zone = tz;
                 }
             }
         }
@@ -2710,7 +2710,7 @@ QDateTime fromStr(const QString &string, const QString &format, int &utcOffset,
                         return QDateTime();
                     QString val = str.mid(s);
                     int i = 0;
-                    for (int end = val.length();  i < end && val[i].isDigit();  ++i);
+                    for (int end = val.length();  i < end && val.at(i).isDigit();  ++i);
                     if (!i)
                         return QDateTime();
                     val.truncate(i);
@@ -3136,7 +3136,7 @@ const QString &shortDay(int day)   // Mon = 1, ...
 {
     static QString error;
     initDayMonthNames();
-    return (day >= 1 && day <= 7) ? shortDayNames[day - 1] : error;
+    return (day >= 1 && day <= 7) ? shortDayNames.at(day - 1) : error;
 }
 
 // Long day name, in English
@@ -3144,7 +3144,7 @@ const QString &longDay(int day)   // Mon = 1, ...
 {
     static QString error;
     initDayMonthNames();
-    return (day >= 1 && day <= 7) ? longDayNames[day - 1] : error;
+    return (day >= 1 && day <= 7) ? longDayNames.at(day - 1) : error;
 }
 
 // Short month name, in English
@@ -3152,7 +3152,7 @@ const QString &shortMonth(int month)   // Jan = 1, ...
 {
     static QString error;
     initDayMonthNames();
-    return (month >= 1 && month <= 12) ? shortMonthNames[month - 1] : error;
+    return (month >= 1 && month <= 12) ? shortMonthNames.at(month - 1) : error;
 }
 
 // Long month name, in English
@@ -3160,7 +3160,7 @@ const QString &longMonth(int month)   // Jan = 1, ...
 {
     static QString error;
     initDayMonthNames();
-    return (month >= 1 && month <= 12) ? longMonthNames[month - 1] : error;
+    return (month >= 1 && month <= 12) ? longMonthNames.at(month - 1) : error;
 }
 
 } // namespace

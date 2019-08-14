@@ -864,13 +864,13 @@ bool KARecurrence::recursOn(const QDate &dt, const KADateTime::Spec &timeSpec) c
         return true;
     }
     const RecurrenceRule::List rulelist = d->mRecurrence.rRules();
-    for (int rri = 0, rrend = rulelist.count();  rri < rrend;  ++rri)
-        if (rulelist[rri]->recursOn(dt, Private::toTimeZone(timeSpec))) {
+    for (const RecurrenceRule *rule : rulelist)
+        if (rule->recursOn(dt, Private::toTimeZone(timeSpec))) {
             return true;
         }
     const auto dtlist = d->mRecurrence.rDateTimes();
-    for (int dti = 0, dtend = dtlist.count();  dti < dtend;  ++dti)
-        if (dtlist[dti].date() == dt) {
+    for (const QDateTime &dtime : dtlist)
+        if (dtime.date() == dt) {
             return true;
         }
     return false;
@@ -1022,9 +1022,9 @@ Duration KARecurrence::longestInterval() const
         // further restrict when the recurrence occurs.
         // So the maximum interval may be greater than the frequency.
         bool ds[7] = { false, false, false, false, false, false, false };
-        for (int i = 0, end = days.count();  i < end;  ++i)
-            if (days[i].pos() == 0) {
-                ds[days[i].day() - 1] = true;
+        for (const RecurrenceRule::WDayPos &day : days)
+            if (day.pos() == 0) {
+                ds[day.day() - 1] = true;
             }
         if (freq % 7) {
             // It will recur on every day of the week in some week or other
@@ -1067,7 +1067,7 @@ Duration KARecurrence::longestInterval() const
         // day of the week specified by the user's locale.
         const int weekStart = QLocale().firstDayOfWeek() - 1;  // zero-based
         for (int i = 0;  i < 7;  ++i) {
-            // Get the standard KDE day-of-week number (zero-based)
+            // Get the standard Qt day-of-week number (zero-based)
             // for the day-of-week number in the user's locale.
             if (ds.testBit((i + weekStart) % 7)) {
                 if (first < 0) {
@@ -1108,16 +1108,16 @@ Duration KARecurrence::longestInterval() const
         int first = -1;
         int last  = -1;
         int maxgap = 0;
-        for (int i = 0, end = months.count();  i < end;  ++i) {
+        for (const int month : months) {
             if (first < 0) {
-                first = months[i];
+                first = month;
             } else {
-                const int span = QDate(2001, last, 1).daysTo(QDate(2001, months[i], 1));
+                const int span = QDate(2001, last, 1).daysTo(QDate(2001, month, 1));
                 if (span > maxgap) {
                     maxgap = span;
                 }
             }
-            last = months[i];
+            last = month;
         }
         const int span = QDate(2001, first, 1).daysTo(QDate(2001, last, 1));
         if (freq > 1) {
@@ -1154,9 +1154,9 @@ Duration KARecurrence::regularInterval() const
         // further restrict when the recurrence occurs.
         // Find which days occur, and count the number of days which occur.
         bool ds[7] = { false, false, false, false, false, false, false };
-        for (int i = 0, end = days.count();  i < end;  ++i)
-            if (days[i].pos() == 0) {
-                ds[days[i].day() - 1] = true;
+        for (const RecurrenceRule::WDayPos &day : days)
+            if (day.pos() == 0) {
+                ds[day.day() - 1] = true;
             }
         if (!(freq % 7)) {
             // It will recur on the same day of the week every time.
@@ -1188,9 +1188,9 @@ Duration KARecurrence::regularInterval() const
         // recurrence occurs.
         // Find which days occur, and count the number of days which occur.
         bool ds[7] = { false, false, false, false, false, false, false };
-        for (int i = 0, end = days.count();  i < end;  ++i)
-            if (days[i].pos() == 0) {
-                ds[days[i].day() - 1] = true;
+        for (const RecurrenceRule::WDayPos &day : days)
+            if (day.pos() == 0) {
+                ds[day.day() - 1] = true;
             }
         int n = 0;   // number of days which occur
         for (int i = 0;  i < 7;  ++i)
@@ -1308,8 +1308,8 @@ bool KARecurrence::dailyType(const RecurrenceRule *rrule)
     }
     // Check that all the positions are zero (i.e. every time)
     bool found = false;
-    for (int i = 0, end = days.count();  i < end;  ++i) {
-        if (days[i].pos() != 0) {
+    for (const RecurrenceRule::WDayPos &day : days) {
+        if (day.pos() != 0) {
             return false;
         }
         found = true;
