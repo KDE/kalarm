@@ -464,7 +464,7 @@ void AlarmCalendar::removeKAEvents(Collection::Id key, bool closing, CalEvent::T
     ResourceMap::Iterator rit = mResourceMap.find(key);
     if (rit != mResourceMap.end())
     {
-        bool empty = true;
+        KAEvent::List retained;
         KAEvent::List& events = rit.value();
         for (int i = 0, end = events.count();  i < end;  ++i)
         {
@@ -484,10 +484,12 @@ void AlarmCalendar::removeKAEvents(Collection::Id key, bool closing, CalEvent::T
                 removed = true;
             }
             else
-                empty = false;
+                retained.push_back(event);
         }
-        if (empty)
+        if (retained.empty())
             mResourceMap.erase(rit);
+        else
+            events.swap(retained);
     }
     if (removed)
     {
