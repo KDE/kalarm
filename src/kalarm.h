@@ -27,8 +27,6 @@
 #define KALARM_NAME "KAlarm"
 #define KALARM_DBUS_SERVICE  "org.kde.kalarm"  // D-Bus service name of KAlarm application
 
-//#include <kdeversion.h>
-
 namespace KAlarm
 {
 /** Return current KAlarm version number as an integer. */
