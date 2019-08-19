@@ -1,5 +1,8 @@
 KAlarm Change Log
 
+=== Version 2.12.6 (KDE Applications 19.08.1) --- 15 August 2019 ===
++ Fix crash sometimes when a resource is enabled [KDE Bug 410596]
+
 === Version 2.12.5 (KDE Applications 19.08) --- 26 July 2019 ===
 + Enable alarm list columns to be hidden using context menu on list header [KDE Bug 397093]
 + Fix regression introduced in version 2.12.0:
