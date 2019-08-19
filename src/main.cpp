@@ -19,11 +19,11 @@
  */
 
 #include "kalarm.h"
-
+#include <kalarmcal/version.h>
+#include "kalarm-version-string.h"
 #include "kalarmapp.h"
 #include "kalarm_debug.h"
 
-#include <kalarmcal/version.h>
 
 #include <KAboutData>
 #include <KLocalizedString>
@@ -51,7 +51,7 @@ int main(int argc, char* argv[])
 
     KLocalizedString::setApplicationDomain("kalarm");
     KAboutData aboutData(QStringLiteral(PROGRAM_NAME), i18n("KAlarm"),
-                         QStringLiteral(KALARM_VERSION),
+                         QStringLiteral(KALARM_VERSION_STRING),
                          i18n("Personal alarm message, command and email scheduler by KDE"),
                          KAboutLicense::GPL,
                          ki18n("Copyright 2001-%1, David Jarvie").subs(2019).toString(), QString(),

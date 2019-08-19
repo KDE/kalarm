@@ -1,10 +1,11 @@
 cmake_minimum_required(VERSION 3.5)
 set(KDEPIM_VERSION_NUMBER "5.12.40")
 set(PIM_VERSION ${KDEPIM_VERSION_NUMBER})
-set(KDE_APPLICATIONS_VERSION "19.11.70")
 set(KALARM_VERSION "2.12.5")
 
+set(KDE_APPLICATIONS_VERSION "19.11.70")
 project(kalarm VERSION ${KALARM_VERSION})
+set(KALARM_VERSION_STRING "2.12.5 (${KDE_APPLICATIONS_VERSION})")
 
 set(KF5_MIN_VERSION "5.60.0")
 
@@ -103,7 +104,7 @@ find_package(KF5MailTransportAkonadi ${KMAILTRANSPORT_LIB_VERSION} CONFIG REQUIR
 find_package(KF5Mime ${KMIME_LIB_VERSION} CONFIG REQUIRED)
 find_package(KF5PimCommon ${PIMCOMMON_LIB_VERSION_LIB} CONFIG REQUIRED)
 find_package(KF5PimTextEdit ${KPIMTEXTEDIT_LIB_VERSION} CONFIG REQUIRED)
-
+configure_file(kalarm-version-string.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/kalarm-version-string.h @ONLY)
 
 if (NOT APPLE)
     find_package(X11)
