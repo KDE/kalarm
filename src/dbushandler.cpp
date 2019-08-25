@@ -419,8 +419,13 @@ bool DBusHandler::scheduleAudio(const QString& audioUrl, int volumePercent,
 KADateTime DBusHandler::convertDateTime(const QString& dateTime, const KADateTime& defaultDt)
 {
     int i = dateTime.indexOf(QLatin1Char(' '));
-    QString dtString = dateTime.left(i);
-    QString zone = dateTime.mid(i);
+    QString dtString = dateTime;
+    QString zone;
+    if (i >= 0)
+    {
+        dtString = dateTime.left(i);
+        zone     = dateTime.mid(i);
+    }
     QDate date;
     QTime time;
     bool haveTime = true;

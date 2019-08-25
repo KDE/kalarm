@@ -3181,8 +3181,8 @@ time.</para>
   <replaceable>date/time</replaceable></option></entry>
   <entry>Trigger alarm on the date or at the date/time specified.
   Specify a date without a time in the format
-  <replaceable>yyyy-mm-dd [TZ]</replaceable>; specify a date and time
-  by <replaceable>[[[yyyy-]mm-]dd-]hh:mm [TZ]</replaceable> (where
+  <replaceable>yyyy-mm-dd[ TZ]</replaceable>; specify a date and time
+  by <replaceable>[[[yyyy-]mm-]dd-]hh:mm[ TZ]</replaceable> (where
   omitted, date fields default to the values for today).
   If no time zone is specified, the local system time zone is
   assumed. If a time zone specifier <replaceable>TZ</replaceable> is
@@ -3490,10 +3490,10 @@ line to execute to generate the message text.</para>
 <listitem>
 <para>Specifies the scheduled date, or date and time, at which the
 message should be displayed. For a date-only alarm, the string should
-be in the format <replaceable>YYYY-MM-DD [TZ]</replaceable> (as
+be in the format <replaceable>YYYY-MM-DD[ TZ]</replaceable> (as
 returned by <methodname>QDate::toString(Qt::ISODate)</methodname>). For
 an alarm with a date and time, the string should be in the format
-<replaceable>YYYY-MM-DDTHH:MM[:SS] [TZ]</replaceable> (as returned by
+<replaceable>YYYY-MM-DDTHH:MM[:SS][ TZ]</replaceable> (as returned by
 <methodname>QDateTime::toString(Qt::ISODate)</methodname>) or
 <replaceable>HH:MM[:SS]</replaceable> (as returned by
 <methodname>QTime::toString(Qt::ISODate)</methodname>). If no date is
@@ -3742,10 +3742,10 @@ displayed in the message to be scheduled.</para>
 <listitem>
 <para>Specifies the scheduled date, or date and time, at which the
 message should be displayed. For a date-only alarm, the string should
-be in the format <replaceable>YYYY-MM-DD [TZ]</replaceable> (as
+be in the format <replaceable>YYYY-MM-DD[ TZ]</replaceable> (as
 returned by <methodname>QDate::toString(Qt::ISODate)</methodname>). For
 an alarm with a date and time, the string should be in the format
-<replaceable>YYYY-MM-DDTHH:MM[:SS] [TZ]</replaceable> (as returned by
+<replaceable>YYYY-MM-DDTHH:MM[:SS][ TZ]</replaceable> (as returned by
 <methodname>QDateTime::toString(Qt::ISODate)</methodname>) or
 <replaceable>HH:MM[:SS]</replaceable> (as returned by
 <methodname>QTime::toString(Qt::ISODate)</methodname>). If no date is
@@ -3958,10 +3958,10 @@ parameter contains a shell command line or a command script.</para>
 <listitem>
 <para>Specifies the scheduled date, or date and time, at which the
 message should be displayed. For a date-only alarm, the string should
-be in the format <replaceable>YYYY-MM-DD [TZ]</replaceable> (as
+be in the format <replaceable>YYYY-MM-DD[ TZ]</replaceable> (as
 returned by <methodname>QDate::toString(Qt::ISODate)</methodname>). For
 an alarm with a date and time, the string should be in the format
-<replaceable>YYYY-MM-DDTHH:MM[:SS] [TZ]</replaceable> (as returned by
+<replaceable>YYYY-MM-DDTHH:MM[:SS][ TZ]</replaceable> (as returned by
 <methodname>QDateTime::toString(Qt::ISODate)</methodname>) or
 <replaceable>HH:MM[:SS]</replaceable> (as returned by
 <methodname>QTime::toString(Qt::ISODate)</methodname>). If no date is
@@ -4182,10 +4182,10 @@ email attachments.</para>
 <listitem>
 <para>Specifies the scheduled date, or date and time, at which the
 message should be displayed. For a date-only alarm, the string should
-be in the format <replaceable>YYYY-MM-DD [TZ]</replaceable> (as
+be in the format <replaceable>YYYY-MM-DD[ TZ]</replaceable> (as
 returned by <methodname>QDate::toString(Qt::ISODate)</methodname>). For
 an alarm with a date and time, the string should be in the format
-<replaceable>YYYY-MM-DDTHH:MM[:SS] [TZ]</replaceable> (as returned by
+<replaceable>YYYY-MM-DDTHH:MM[:SS][ TZ]</replaceable> (as returned by
 <methodname>QDateTime::toString(Qt::ISODate)</methodname>) or
 <replaceable>HH:MM[:SS]</replaceable> (as returned by
 <methodname>QTime::toString(Qt::ISODate)</methodname>). If no date is
@@ -4374,10 +4374,10 @@ volume. Specify -1 to use the default volume.</para>
 <listitem>
 <para>Specifies the scheduled date, or date and time, at which the
 message should be displayed. For a date-only alarm, the string should
-be in the format <replaceable>YYYY-MM-DD [TZ]</replaceable> (as
+be in the format <replaceable>YYYY-MM-DD[ TZ]</replaceable> (as
 returned by <methodname>QDate::toString(Qt::ISODate)</methodname>). For
 an alarm with a date and time, the string should be in the format
-<replaceable>YYYY-MM-DDTHH:MM[:SS] [TZ]</replaceable> (as returned by
+<replaceable>YYYY-MM-DDTHH:MM[:SS][ TZ]</replaceable> (as returned by
 <methodname>QDateTime::toString(Qt::ISODate)</methodname>) or
 <replaceable>HH:MM[:SS]</replaceable> (as returned by
 <methodname>QTime::toString(Qt::ISODate)</methodname>). If no date is
