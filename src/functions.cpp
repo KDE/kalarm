@@ -215,7 +215,7 @@ KToggleAction* createSpreadWindowsAction(QObject* parent)
 */
 UpdateResult addEvent(KAEvent& event, Collection* calendar, QWidget* msgParent, int options, bool showKOrgErr)
 {
-    qCDebug(KALARM_LOG) << "addEvent:" << event.id();
+    qCDebug(KALARM_LOG) << "KAlarm::addEvent:" << event.id();
     bool cancelled = false;
     UpdateStatusData status;
     if (!theApp()->checkCalendar())    // ensure calendar is open
@@ -257,7 +257,7 @@ UpdateResult addEvent(KAEvent& event, Collection* calendar, QWidget* msgParent, 
 */
 UpdateResult addEvents(QVector<KAEvent>& events, QWidget* msgParent, bool allowKOrgUpdate, bool showKOrgErr)
 {
-    qCDebug(KALARM_LOG) << "addEvents:" << events.count();
+    qCDebug(KALARM_LOG) << "KAlarm::addEvents:" << events.count();
     if (events.isEmpty())
         return UpdateResult(UPDATE_OK);
     UpdateStatusData status;
@@ -269,7 +269,7 @@ UpdateResult addEvents(QVector<KAEvent>& events, QWidget* msgParent, bool allowK
         collection = CollectionControlModel::instance()->destination(CalEvent::ACTIVE, msgParent);
         if (!collection.isValid())
         {
-            qCDebug(KALARM_LOG) << "addEvents: No calendar";
+            qCDebug(KALARM_LOG) << "KAlarm::addEvents: No calendar";
             status.status = UPDATE_FAILED;
         }
     }
@@ -308,7 +308,7 @@ UpdateResult addEvents(QVector<KAEvent>& events, QWidget* msgParent, bool allowK
 */
 bool addArchivedEvent(KAEvent& event, Collection* collection)
 {
-    qCDebug(KALARM_LOG) << "addArchivedEvent:" << event.id();
+    qCDebug(KALARM_LOG) << "KAlarm::addArchivedEvent:" << event.id();
     bool archiving = (event.category() == CalEvent::ACTIVE);
     if (archiving  &&  !Preferences::archivedKeepDays())
         return false;   // expired alarms aren't being kept
@@ -337,7 +337,7 @@ bool addArchivedEvent(KAEvent& event, Collection* collection)
 */
 UpdateResult addTemplate(KAEvent& event, Collection* collection, QWidget* msgParent)
 {
-    qCDebug(KALARM_LOG) << "addTemplate:" << event.id();
+    qCDebug(KALARM_LOG) << "KAlarm::addTemplate:" << event.id();
     UpdateStatusData status;
 
     // Add the template to the calendar file
@@ -368,7 +368,7 @@ UpdateResult addTemplate(KAEvent& event, Collection* collection, QWidget* msgPar
 */
 UpdateResult modifyEvent(KAEvent& oldEvent, KAEvent& newEvent, QWidget* msgParent, bool showKOrgErr)
 {
-    qCDebug(KALARM_LOG) << "modifyEvent:" << oldEvent.id();
+    qCDebug(KALARM_LOG) << "KAlarm::modifyEvent:" << oldEvent.id();
 
     UpdateStatusData status;
     if (!newEvent.isValid())
@@ -422,7 +422,7 @@ UpdateResult modifyEvent(KAEvent& oldEvent, KAEvent& newEvent, QWidget* msgParen
 */
 UpdateResult updateEvent(KAEvent& event, QWidget* msgParent, bool archiveOnDelete)
 {
-    qCDebug(KALARM_LOG) << "updateEvent:" << event.id();
+    qCDebug(KALARM_LOG) << "KAlarm::updateEvent:" << event.id();
 
     if (!event.isValid())
         deleteEvent(event, archiveOnDelete);
@@ -478,7 +478,7 @@ UpdateResult deleteEvent(KAEvent& event, bool archive, QWidget* msgParent, bool 
 
 UpdateResult deleteEvents(QVector<KAEvent>& events, bool archive, QWidget* msgParent, bool showKOrgErr)
 {
-    qCDebug(KALARM_LOG) << "deleteEvents:" << events.count();
+    qCDebug(KALARM_LOG) << "KAlarm::deleteEvents:" << events.count();
     if (events.isEmpty())
         return UpdateResult(UPDATE_OK);
     UpdateStatusData status;
@@ -539,7 +539,7 @@ UpdateResult deleteEvents(QVector<KAEvent>& events, bool archive, QWidget* msgPa
 UpdateResult deleteTemplates(const KAEvent::List& events, QWidget* msgParent)
 {
     int count = events.count();
-    qCDebug(KALARM_LOG) << "deleteTemplates:" << count;
+    qCDebug(KALARM_LOG) << "KAlarm::deleteTemplates:" << count;
     if (!count)
         return UpdateResult(UPDATE_OK);
     UpdateStatusData status;
@@ -567,7 +567,7 @@ UpdateResult deleteTemplates(const KAEvent::List& events, QWidget* msgParent)
 */
 void deleteDisplayEvent(const QString& eventID)
 {
-    qCDebug(KALARM_LOG) << "deleteDisplayEvent:" << eventID;
+    qCDebug(KALARM_LOG) << "KAlarm::deleteDisplayEvent:" << eventID;
     AlarmCalendar* cal = AlarmCalendar::displayCalendarOpen();
     if (cal)
         cal->deleteDisplayEvent(eventID, true);   // save calendar after deleting
@@ -587,7 +587,7 @@ UpdateResult reactivateEvent(KAEvent& event, Collection* calendar, QWidget* msgP
 
 UpdateResult reactivateEvents(QVector<KAEvent>& events, QVector<EventId>& ineligibleIDs, Collection* col, QWidget* msgParent, bool showKOrgErr)
 {
-    qCDebug(KALARM_LOG) << "reactivateEvents:" << events.count();
+    qCDebug(KALARM_LOG) << "KAlarm::reactivateEvents:" << events.count();
     ineligibleIDs.clear();
     if (events.isEmpty())
         return UpdateResult(UPDATE_OK);
@@ -599,7 +599,7 @@ UpdateResult reactivateEvents(QVector<KAEvent>& events, QVector<EventId>& inelig
         collection = CollectionControlModel::instance()->destination(CalEvent::ACTIVE, msgParent);
     if (!collection.isValid())
     {
-        qCDebug(KALARM_LOG) << "reactivateEvents: No calendar";
+        qCDebug(KALARM_LOG) << "KAlarm::reactivateEvents: No calendar";
         status.setError(UPDATE_FAILED, events.count());
     }
     else
@@ -663,7 +663,7 @@ UpdateResult reactivateEvents(QVector<KAEvent>& events, QVector<EventId>& inelig
 */
 UpdateResult enableEvents(QVector<KAEvent>& events, bool enable, QWidget* msgParent)
 {
-    qCDebug(KALARM_LOG) << "enableEvents:" << events.count();
+    qCDebug(KALARM_LOG) << "KAlarm::enableEvents:" << events.count();
     if (events.isEmpty())
         return UpdateResult(UPDATE_OK);
     UpdateStatusData status;
@@ -684,7 +684,7 @@ UpdateResult enableEvents(QVector<KAEvent>& events, bool enable, QWidget* msgPar
             // Update the event in the calendar file
             KAEvent* newev = cal->updateEvent(event);
             if (!newev)
-                qCCritical(KALARM_LOG) << "enableEvents: Error updating event in calendar:" << event->id();
+                qCCritical(KALARM_LOG) << "KAlarm::enableEvents: Error updating event in calendar:" << event->id();
             else
             {
                 cal->disabledChanged(newev);
@@ -723,7 +723,7 @@ void purgeArchive(int purgeDays)
 {
     if (purgeDays < 0)
         return;
-    qCDebug(KALARM_LOG) << "purgeArchive:" << purgeDays;
+    qCDebug(KALARM_LOG) << "KAlarm::purgeArchive:" << purgeDays;
     const QDate cutoff = KADateTime::currentLocalDate().addDays(-purgeDays);
     Collection collection = CollectionControlModel::getStandard(CalEvent::ARCHIVED);
     if (!collection.isValid())
@@ -943,7 +943,7 @@ bool editNewAlarm(const QString& templateName, QWidget* parent)
             editNewAlarm(templateEvent, parent);
             return true;
         }
-        qCWarning(KALARM_LOG) << "editNewAlarm:" << templateName << ": template not found";
+        qCWarning(KALARM_LOG) << "KAlarm::editNewAlarm:" << templateName << ": template not found";
     }
     return false;
 }
@@ -1062,7 +1062,7 @@ bool setRtcWakeTime(unsigned triggerTime, QWidget* parent)
     if (!job->exec())
     {
         QString errmsg = job->errorString();
-        qCDebug(KALARM_LOG) << "setRtcWakeTime: Error code=" << job->error() << errmsg;
+        qCDebug(KALARM_LOG) << "KAlarm::setRtcWakeTime: Error code=" << job->error() << errmsg;
         if (errmsg.isEmpty())
         {
             int errcode = job->error();
@@ -1070,7 +1070,7 @@ bool setRtcWakeTime(unsigned triggerTime, QWidget* parent)
             {
                 case KAuth::ActionReply::AuthorizationDeniedError:
                 case KAuth::ActionReply::UserCancelledError:
-                    qCDebug(KALARM_LOG) << "setRtcWakeTime: Authorization error:" << errcode;
+                    qCDebug(KALARM_LOG) << "KAlarm::setRtcWakeTime: Authorization error:" << errcode;
                     return false;   // the user should already know about this
                 default:
                     break;
@@ -1184,14 +1184,14 @@ bool editAlarmById(const EventId& id, QWidget* parent)
     if (!event)
     {
         if (id.collectionId() != -1)    
-            qCWarning(KALARM_LOG) << "editAlarmById: Event ID not found, or duplicated:" << eventID;
+            qCWarning(KALARM_LOG) << "KAlarm::editAlarmById: Event ID not found, or duplicated:" << eventID;
         else
-            qCWarning(KALARM_LOG) << "editAlarmById: Event ID not found:" << eventID;
+            qCWarning(KALARM_LOG) << "KAlarm::editAlarmById: Event ID not found:" << eventID;
         return false;
     }
     if (AlarmCalendar::resources()->eventReadOnly(event->itemId()))
     {
-        qCCritical(KALARM_LOG) << "editAlarmById:" << eventID << ": read-only";
+        qCCritical(KALARM_LOG) << "KAlarm::editAlarmById:" << eventID << ": read-only";
         return false;
     }
     switch (event->category())
@@ -1200,7 +1200,7 @@ bool editAlarmById(const EventId& id, QWidget* parent)
         case CalEvent::TEMPLATE:
             break;
         default:
-            qCCritical(KALARM_LOG) << "editAlarmById:" << eventID << ": event not active or template";
+            qCCritical(KALARM_LOG) << "KAlarm::editAlarmById:" << eventID << ": event not active or template";
             return false;
     }
     editAlarm(event, parent);
@@ -1263,7 +1263,7 @@ void viewAlarm(const KAEvent* event, QWidget* parent)
 */
 void updateEditedAlarm(EditAlarmDlg* editDlg, KAEvent& event, Collection& calendar)
 {
-    qCDebug(KALARM_LOG) << "updateEditedAlarm";
+    qCDebug(KALARM_LOG) << "KAlarm::updateEditedAlarm";
     KAEvent newEvent;
     Akonadi::Collection cal;
     editDlg->getEvent(newEvent, cal);
@@ -1336,7 +1336,7 @@ void outputAlarmWarnings(QWidget* parent, const KAEvent* event)
 */
 void refreshAlarms()
 {
-    qCDebug(KALARM_LOG) << "refreshAlarms";
+    qCDebug(KALARM_LOG) << "KAlarm::refreshAlarms";
     if (!refreshAlarmsQueued)
     {
         refreshAlarmsQueued = true;
@@ -1354,7 +1354,7 @@ void refreshAlarmsIfQueued()
 {
     if (refreshAlarmsQueued)
     {
-        qCDebug(KALARM_LOG) << "refreshAlarmsIfQueued";
+        qCDebug(KALARM_LOG) << "KAlarm::refreshAlarmsIfQueued";
         AlarmCalendar::resources()->reload();
 
         // Close any message windows for alarms which are now disabled
@@ -1723,19 +1723,19 @@ void displayUpdateError(QWidget* parent, KAlarm::UpdateError code, const UpdateS
             case KAlarm::ERR_ADD:
             case KAlarm::ERR_MODIFY:
                 errmsg = (status.warnErr > 1) ? i18nc("@info", "Error saving alarms")
-                                       : i18nc("@info", "Error saving alarm");
+                                              : i18nc("@info", "Error saving alarm");
                 break;
             case KAlarm::ERR_DELETE:
                 errmsg = (status.warnErr > 1) ? i18nc("@info", "Error deleting alarms")
-                                       : i18nc("@info", "Error deleting alarm");
+                                              : i18nc("@info", "Error deleting alarm");
                 break;
             case KAlarm::ERR_REACTIVATE:
                 errmsg = (status.warnErr > 1) ? i18nc("@info", "Error saving reactivated alarms")
-                                       : i18nc("@info", "Error saving reactivated alarm");
+                                              : i18nc("@info", "Error saving reactivated alarm");
                 break;
             case KAlarm::ERR_TEMPLATE:
                 errmsg = (status.warnErr > 1) ? i18nc("@info", "Error saving alarm templates")
-                                       : i18nc("@info", "Error saving alarm template");
+                                              : i18nc("@info", "Error saving alarm template");
                 break;
         }
         KAMessageBox::error(parent, errmsg);
@@ -1804,21 +1804,21 @@ KAlarm::UpdateResult sendToKOrganizer(const KAEvent& event)
         if (reply.error().type() == QDBusError::UnknownObject)
         {
             status =  KAlarm::UPDATE_KORG_ERRSTART;
-            qCCritical(KALARM_LOG) << "sendToKOrganizer: addIncidence() D-Bus error: still starting";
+            qCCritical(KALARM_LOG) << "KAlarm::sendToKOrganizer: addIncidence() D-Bus error: still starting";
         }
         else
         {
             status.set(KAlarm::UPDATE_KORG_ERR, reply.error().message());
-            qCCritical(KALARM_LOG) << "sendToKOrganizer: addIncidence(" << uid << ") D-Bus call failed:" << status.message;
+            qCCritical(KALARM_LOG) << "KAlarm::sendToKOrganizer: addIncidence(" << uid << ") D-Bus call failed:" << status.message;
         }
     }
     else if (!reply.value())
     {
         status = KAlarm::UPDATE_KORG_FUNCERR;
-        qCDebug(KALARM_LOG) << "sendToKOrganizer: addIncidence(" << uid << ") D-Bus call returned false";
+        qCDebug(KALARM_LOG) << "KAlarm::sendToKOrganizer: addIncidence(" << uid << ") D-Bus call returned false";
     }
     else
-        qCDebug(KALARM_LOG) << "sendToKOrganizer:" << uid << ": success";
+        qCDebug(KALARM_LOG) << "KAlarm::sendToKOrganizer:" << uid << ": success";
     return status;
 }
 
