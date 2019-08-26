@@ -1,7 +1,10 @@
 KAlarm Change Log
 
-=== Version 2.12.6 (KDE Applications 19.08.1) --- 15 August 2019 ===
+=== Version 2.12.6 (KDE Applications 19.08.1) --- 26 August 2019 ===
 + Fix crash sometimes when a resource is enabled [KDE Bug 410596]
++ Fix D-Bus alarm creation failing if time zone is omitted from start time [KDE Bug 411296]
++ Fix command line options which don't work if KAlarm not already running:
+    --edit, --list, --triggerEvent, --cancelEvent.
 
 === Version 2.12.5 (KDE Applications 19.08) --- 26 July 2019 ===
 + Enable alarm list columns to be hidden using context menu on list header [KDE Bug 397093]
