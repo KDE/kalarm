@@ -211,8 +211,8 @@ void Preferences::setNoAutoStart(bool yes)
                 lines.removeAt(i);
                 --i;
             }
-            else if (line.startsWith(QStringLiteral("Hidden="))
-                 ||  line.startsWith(QStringLiteral("OnlyShowIn=")))
+            else if (line.startsWith(QLatin1String("Hidden="))
+                 ||  line.startsWith(QLatin1String("OnlyShowIn=")))
             {
                 lines.removeAt(i);
                 update = true;

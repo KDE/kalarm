@@ -92,7 +92,7 @@ ActionReply RtcWakeAction::settimer(const QVariantMap& args)
             errmsg = xi18nc("@text/plain", "Could not run <command>%1</command> to set wake from suspend", QStringLiteral("rtcwake"));
             break;
         default:
-            errmsg = xi18nc("@text/plain", "Error setting wake from suspend.<nl/>Command was: <command>%1 %2</command><nl/>Error code: %3.", proc.program(), proc.arguments().join(QStringLiteral(" ")), result);
+            errmsg = xi18nc("@text/plain", "Error setting wake from suspend.<nl/>Command was: <command>%1 %2</command><nl/>Error code: %3.", proc.program(), proc.arguments().join(QLatin1String(" ")), result);
             break;
     }
     ActionReply reply = ActionReply::HelperErrorReply(result);

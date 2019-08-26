@@ -1424,7 +1424,7 @@ bool KAlarmApp::dbusHandleEvent(const EventId& eventID, EventFunc function)
 QString KAlarmApp::dbusList()
 {
     qCDebug(KALARM_LOG) << "KAlarmApp::dbusList";
-    return scheduledAlarmList().join(QStringLiteral("\n")) + QLatin1Char('\n');
+    return scheduledAlarmList().join(QLatin1String("\n")) + QLatin1Char('\n');
 }
 
 /******************************************************************************

@@ -343,7 +343,7 @@ void Find::findNext(bool forward, bool checkEnd, bool fromCurrent)
                 found = (mFind->find() == KFind::Match);
                 if (found)
                     break;
-                mFind->setData(event->emailAttachments().join(QStringLiteral(", ")));
+                mFind->setData(event->emailAttachments().join(QLatin1String(", ")));
                 found = (mFind->find() == KFind::Match);
                 if (found)
                     break;

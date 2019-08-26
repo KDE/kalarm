@@ -1219,7 +1219,7 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
     QList<QUrl>        urls;
     MemoryCalendar::Ptr calendar(new MemoryCalendar(Preferences::timeSpecAsZone()));
 #ifndef NDEBUG
-    QString fmts = data->formats().join(QStringLiteral(", "));
+    QString fmts = data->formats().join(QLatin1String(", "));
     qCDebug(KALARM_LOG) << "MainWindow::executeDropEvent:" << fmts;
 #endif
 
@@ -1387,7 +1387,7 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
             // Try to find the mime type of the file, without downloading a remote file
             QMimeDatabase mimeDb;
             const QString mimeTypeName = mimeDb.mimeTypeForUrl(url).name();
-            action = mimeTypeName.startsWith(QStringLiteral("audio/")) ? KAEvent::AUDIO : KAEvent::FILE;
+            action = mimeTypeName.startsWith(QLatin1String("audio/")) ? KAEvent::AUDIO : KAEvent::FILE;
             alarmText.setText(url.toDisplayString());
         }
     }
