@@ -1337,7 +1337,7 @@ bool CollectionControlModel::isPopulated(Collection::Id colId)
             Collection c(colIds[i]);
             model->refresh(c);    // update with latest data
             if (!c.hasAttribute<CollectionAttribute>()
-            ||  c.attribute<CollectionAttribute>()->enabled() == CalEvent::EMPTY)
+            ||  c.attribute<CollectionAttribute>()->enabled() != CalEvent::EMPTY)
                 return false;
         }
     }
