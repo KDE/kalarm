@@ -1603,7 +1603,7 @@ Alarm::Ptr KAEventPrivate::initKCalAlarm(const KCalendarCore::Event::Ptr &event,
     }
     alltypes += types;
     if (!alltypes.isEmpty()) {
-        alarm->setCustomProperty(KACalendar::APPNAME, TYPE_PROPERTY, alltypes.join(QStringLiteral(",")));
+        alarm->setCustomProperty(KACalendar::APPNAME, TYPE_PROPERTY, alltypes.join(QLatin1String(",")));
     }
     if (!flags.isEmpty()) {
         alarm->setCustomProperty(KACalendar::APPNAME, FLAGS_PROPERTY, flags.join(SC));
@@ -3779,9 +3779,9 @@ void KAEventPrivate::dumpDebug() const
         qCDebug(KALARMCAL_LOG) << "-- mLogFile:" << mLogFile;
     } else if (mActionSubType == KAEvent::EMAIL) {
         qCDebug(KALARMCAL_LOG) << "-- mEmail: FromKMail:" << mEmailFromIdentity;
-        qCDebug(KALARMCAL_LOG) << "--         Addresses:" << mEmailAddresses.join(QStringLiteral(","));
+        qCDebug(KALARMCAL_LOG) << "--         Addresses:" << mEmailAddresses.join(QLatin1String(","));
         qCDebug(KALARMCAL_LOG) << "--         Subject:" << mEmailSubject;
-        qCDebug(KALARMCAL_LOG) << "--         Attachments:" << mEmailAttachments.join(QStringLiteral(","));
+        qCDebug(KALARMCAL_LOG) << "--         Attachments:" << mEmailAttachments.join(QLatin1String(","));
         qCDebug(KALARMCAL_LOG) << "--         Bcc:" << mEmailBcc;
     } else if (mActionSubType == KAEvent::AUDIO) {
         qCDebug(KALARMCAL_LOG) << "-- mAudioFile:" << mAudioFile;
@@ -5068,7 +5068,7 @@ bool KAEvent::convertKCalEvents(const Calendar::Ptr &calendar, int calendarVersi
                     addLateCancel = true;
                 }
                 if (types.count() > 0) {
-                    alarm->setCustomProperty(KACalendar::APPNAME, KAEventPrivate::TYPE_PROPERTY, types.join(QStringLiteral(",")));
+                    alarm->setCustomProperty(KACalendar::APPNAME, KAEventPrivate::TYPE_PROPERTY, types.join(QLatin1String(",")));
                 }
 
                 if (pre_0_7  &&  alarm->repeatCount() > 0  &&  alarm->snoozeTime().value() > 0) {
