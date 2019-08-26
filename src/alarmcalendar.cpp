@@ -948,7 +948,14 @@ bool AlarmCalendar::addEvent(KAEvent& evnt, QWidget* promptParent, bool useEvent
         if (collection  &&  CollectionControlModel::isEnabled(*collection, type))
             col = *collection;
         else
+        {
             col = CollectionControlModel::destination(type, promptParent, noPrompt, cancelled);
+            if (!col.isValid())
+            {
+                const char* typeStr = (type == CalEvent::ACTIVE) ? "Active alarm" : (type == CalEvent::ARCHIVED) ? "Archived alarm" : "alarm Template";
+                qCWarning(KALARM_LOG) << "AlarmCalendar::addEvent: Error! Cannot create" << typeStr << "(No default calendar is defined)";
+            }
+        }
         if (col.isValid())
         {
             // Don't add event to mEventMap yet - its Akonadi item id is not yet known.
