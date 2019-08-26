@@ -545,7 +545,7 @@ UpdateResult deleteTemplates(const KAEvent::List& events, QWidget* msgParent)
         return UpdateResult(UPDATE_OK);
     UpdateStatusData status;
     AlarmCalendar* cal = AlarmCalendar::resources();
-    for (KAEvent* event : events)
+    for (const KAEvent* event : events)
     {
         // Update the window lists
         // Delete the template from the calendar file
@@ -760,7 +760,7 @@ QVector<KAEvent> getSortedActiveEvents(QObject* parent, AlarmListModel** model)
     QVector<KAEvent> result;
     for (int i = 0, count = (*model)->rowCount();  i < count;  ++i)
     {
-        KAEvent event = (*model)->event(i);
+        const KAEvent event = (*model)->event(i);
         if (event.enabled()  &&  !event.expired())
             result += event;
     }
@@ -902,7 +902,7 @@ void PrivateNewAlarmDlg::accept(EditAlarmDlg* editDlg)
     editDlg->getEvent(event, calendar);
 
     // Add the alarm to the displayed lists and to the calendar file
-    UpdateResult status = addEvent(event, &calendar, editDlg);
+    const UpdateResult status = addEvent(event, &calendar, editDlg);
     switch (status.status)
     {
         case UPDATE_FAILED:
@@ -1380,11 +1380,11 @@ void refreshAlarmsIfQueued()
 */
 QString runKMail()
 {
-    QDBusReply<bool> reply = QDBusConnection::sessionBus().interface()->isServiceRegistered(KMAIL_DBUS_SERVICE);
+    const QDBusReply<bool> reply = QDBusConnection::sessionBus().interface()->isServiceRegistered(KMAIL_DBUS_SERVICE);
     if (!reply.isValid()  ||  !reply.value())
     {
         // Program is not already running, so start it
-        QDBusReply<void> startReply = QDBusConnection::sessionBus().interface()->startService(KMAIL_DBUS_SERVICE);
+        const QDBusReply<void> startReply = QDBusConnection::sessionBus().interface()->startService(KMAIL_DBUS_SERVICE);
         if (!startReply.isValid())
         {
             const QString errmsg = startReply.error().message();

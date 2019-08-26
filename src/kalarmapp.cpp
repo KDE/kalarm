@@ -145,11 +145,11 @@ KAlarmApp::KAlarmApp(int& argc, char** argv)
     if (initialise())   // initialise calendars and alarm timer
     {
         connect(AkonadiModel::instance(), &AkonadiModel::collectionAdded,
-                                          this, &KAlarmApp::purgeNewArchivedDefault);
+                                    this, &KAlarmApp::purgeNewArchivedDefault);
         connect(AkonadiModel::instance(), &Akonadi::EntityTreeModel::collectionTreeFetched,
-                                          this, &KAlarmApp::checkWritableCalendar);
+                                    this, &KAlarmApp::checkWritableCalendar);
         connect(AkonadiModel::instance(), &AkonadiModel::migrationCompleted,
-                                          this, &KAlarmApp::checkWritableCalendar);
+                                    this, &KAlarmApp::checkWritableCalendar);
 
         KConfigGroup config(KSharedConfig::openConfig(), "General");
         mNoSystemTray        = config.readEntry("NoSystemTray", false);
@@ -360,7 +360,7 @@ int KAlarmApp::activateInstance(const QStringList& args, const QString& workingD
     static bool firstInstance = true;
     bool dontRedisplay = false;
     CommandOptions::Command command = CommandOptions::NONE;
-    bool processOptions = (!firstInstance || !isSessionRestored());
+    const bool processOptions = (!firstInstance || !isSessionRestored());
     if (processOptions)
     {
         options->process();
@@ -415,7 +415,7 @@ int KAlarmApp::activateInstance(const QStringList& args, const QString& workingD
             case CommandOptions::CANCEL_EVENT:
             {
                 // Display or delete the event with the specified event ID
-                EventFunc function = (command == CommandOptions::TRIGGER_EVENT) ? EVENT_TRIGGER : EVENT_CANCEL;
+                const EventFunc function = (command == CommandOptions::TRIGGER_EVENT) ? EVENT_TRIGGER : EVENT_CANCEL;
                 // Open the calendar, don't start processing execution queue yet,
                 // and wait for the Akonadi collection to be populated.
                 if (!initCheck(true, true, options->eventId().collectionId()))
@@ -491,10 +491,10 @@ int KAlarmApp::activateInstance(const QStringList& args, const QString& workingD
                             if (!options->audioFile().isEmpty()
                             ||  options->flags() & (KAEvent::BEEP | KAEvent::SPEAK))
                             {
-                                KAEvent::Flags flags = options->flags();
-                                Preferences::SoundType type = (flags & KAEvent::BEEP) ? Preferences::Sound_Beep
-                                                            : (flags & KAEvent::SPEAK) ? Preferences::Sound_Speak
-                                                            : Preferences::Sound_File;
+                                const KAEvent::Flags flags = options->flags();
+                                const Preferences::SoundType type = (flags & KAEvent::BEEP) ? Preferences::Sound_Beep
+                                                                  : (flags & KAEvent::SPEAK) ? Preferences::Sound_Speak
+                                                                  : Preferences::Sound_File;
                                 dlg->setAudio(type, options->audioFile(), options->audioVolume(), (flags & KAEvent::REPEAT_SOUND ? 0 : -1));
                             }
                             if (options->reminderMinutes())
@@ -662,7 +662,7 @@ bool KAlarmApp::quitIf(int exitCode, bool force)
         mPendingQuit = false;
         if (mActiveCount > 0  ||  MessageWin::instanceCount(true))  // ignore always-hidden windows (e.g. audio alarms)
             return false;
-        int mwcount = MainWindow::count();
+        const int mwcount = MainWindow::count();
         MainWindow* mw = mwcount ? MainWindow::firstWindow() : nullptr;
         if (mwcount > 1  ||  (mwcount && (!mw->isHidden() || !mw->isTrayParent())))
             return false;
@@ -851,7 +851,7 @@ void KAlarmApp::checkNextDueAlarm()
 */
 void KAlarmApp::queueAlarmId(const KAEvent& event)
 {
-    EventId id(event);
+    const EventId id(event);
     for (const ActionQEntry& entry : qAsConst(mActionQueue))
     {
         if (entry.function == EVENT_HANDLE  &&  entry.eventId == id)
@@ -900,12 +900,13 @@ void KAlarmApp::processQueue()
             // First, cancel any scheduled reminders or deferrals for them,
             // since these will be superseded by the new at-login trigger.
             const KAEvent::List events = AlarmCalendar::resources()->atLoginAlarms();
-            for (KAEvent* const event : events)
+            for (const KAEvent* const event : events)
             {
-                if (!cancelReminderAndDeferral(*event))
+                KAEvent ev = *event;
+                if (!cancelReminderAndDeferral(ev))
                 {
                     if (mAlarmsEnabled)
-                        queueAlarmId(*event);
+                        queueAlarmId(ev);
                 }
             }
             mLoginAlarmsDone = true;
@@ -920,14 +921,14 @@ void KAlarmApp::processQueue()
                 // It's a new alarm
                 switch (entry.function)
                 {
-                case EVENT_TRIGGER:
-                    execAlarm(entry.event, entry.event.firstAlarm(), false);
-                    break;
-                case EVENT_HANDLE:
-                    KAlarm::addEvent(entry.event, nullptr, nullptr, KAlarm::ALLOW_KORG_UPDATE | KAlarm::NO_RESOURCE_PROMPT);
-                    break;
-                case EVENT_CANCEL:
-                    break;
+                    case EVENT_TRIGGER:
+                        execAlarm(entry.event, entry.event.firstAlarm(), false);
+                        break;
+                    case EVENT_HANDLE:
+                        KAlarm::addEvent(entry.event, nullptr, nullptr, KAlarm::ALLOW_KORG_UPDATE | KAlarm::NO_RESOURCE_PROMPT);
+                        break;
+                    case EVENT_CANCEL:
+                        break;
                 }
             }
             else
@@ -1060,7 +1061,7 @@ MainWindow* KAlarmApp::trayMainWindow() const
 */
 void KAlarmApp::slotShowInSystemTrayChanged()
 {
-    bool newShowInSysTray = wantShowInSystemTray();
+    const bool newShowInSysTray = wantShowInSystemTray();
     if (newShowInSysTray != mOldShowInSystemTray)
     {
         // The system tray run mode has changed
@@ -1164,7 +1165,7 @@ void KAlarmApp::checkWritableCalendar()
 {
     if (mReadOnly)
         return;    // don't need write access to calendars
-    bool treeFetched = AkonadiModel::instance()->isCollectionTreeFetched();
+    const bool treeFetched = AkonadiModel::instance()->isCollectionTreeFetched();
     if (treeFetched && mRedisplayAlarms)
     {
         mRedisplayAlarms = false;
@@ -1184,7 +1185,7 @@ void KAlarmApp::checkWritableCalendar()
     CollectionControlModel::removeDuplicateResources();
 
     // Find whether there are any writable active alarm calendars
-    bool active = !CollectionControlModel::enabledCollections(CalEvent::ACTIVE, true).isEmpty();
+    const bool active = !CollectionControlModel::enabledCollections(CalEvent::ACTIVE, true).isEmpty();
     if (!active)
     {
         qCWarning(KALARM_LOG) << "KAlarmApp::checkWritableCalendar: No writable active calendar";
@@ -1233,10 +1234,10 @@ void KAlarmApp::purgeAfterDelay()
 */
 void KAlarmApp::setArchivePurgeDays()
 {
-    int newDays = Preferences::archivedKeepDays();
+    const int newDays = Preferences::archivedKeepDays();
     if (newDays != mArchivedPurgeDays)
     {
-        int oldDays = mArchivedPurgeDays;
+        const int oldDays = mArchivedPurgeDays;
         mArchivedPurgeDays = newDays;
         if (mArchivedPurgeDays <= 0)
             StartOfDayTimer::disconnect(this);
@@ -1371,7 +1372,7 @@ bool KAlarmApp::scheduleEvent(KAEvent::SubAction action, const QString& text, co
     KAEvent event(alarmTime, text, bg, fg, font, action, lateCancel, flags, true);
     if (reminderMinutes)
     {
-        bool onceOnly = flags & KAEvent::REMINDER_ONCE;
+        const bool onceOnly = flags & KAEvent::REMINDER_ONCE;
         event.setReminder(reminderMinutes, onceOnly);
     }
     if (!audioFile.isEmpty())
@@ -1476,7 +1477,7 @@ bool KAlarmApp::handleEvent(const EventId& id, EventFunc function, bool checkDup
             {
                 // Check if the alarm is due yet.
                 const KADateTime nextDT = alarm.dateTime(true).effectiveKDateTime();
-                int secs = nextDT.secsTo(now);
+                const int secs = nextDT.secsTo(now);
                 if (secs < 0)
                 {
                     // The alarm appears to be in the future.
@@ -1529,14 +1530,14 @@ bool KAlarmApp::handleEvent(const EventId& id, EventFunc function, bool checkDup
                     if (alarm.dateTime().isDateOnly())
                     {
                         // The alarm has no time, so cancel it if its date is too far past
-                        int maxlate = event->lateCancel() / 1440;    // maximum lateness in days
+                        const int maxlate = event->lateCancel() / 1440;    // maximum lateness in days
                         KADateTime limit(DateTime(nextDT.addDays(maxlate + 1)).effectiveKDateTime());
                         if (now >= limit)
                         {
                             // It's too late to display the scheduled occurrence.
                             // Find the last previous occurrence of the alarm.
                             DateTime next;
-                            KAEvent::OccurType type = event->previousOccurrence(now, next, true);
+                            const KAEvent::OccurType type = event->previousOccurrence(now, next, true);
                             switch (type & ~KAEvent::OCCURRENCE_REPEAT)
                             {
                                 case KAEvent::FIRST_OR_ONLY_OCCURRENCE:
@@ -1563,7 +1564,7 @@ bool KAlarmApp::handleEvent(const EventId& id, EventFunc function, bool checkDup
                     else
                     {
                         // The alarm is timed. Allow it to be the permitted amount late before cancelling it.
-                        int maxlate = maxLateness(event->lateCancel());
+                        const int maxlate = maxLateness(event->lateCancel());
                         if (secs > maxlate)
                         {
                             // It's over the maximum interval late.
@@ -1879,8 +1880,8 @@ void* KAlarmApp::execAlarm(KAEvent& event, const KAAlarm& alarm, bool reschedule
             // isn't already being displayed
             MessageWin* win = MessageWin::findEvent(EventId(event));
             // Find if we're changing a reminder message to the real message
-            bool reminder = (alarm.type() & KAAlarm::REMINDER_ALARM);
-            bool replaceReminder = !reminder && win && (win->alarmType() & KAAlarm::REMINDER_ALARM);
+            const bool reminder = (alarm.type() & KAAlarm::REMINDER_ALARM);
+            const bool replaceReminder = !reminder && win && (win->alarmType() & KAAlarm::REMINDER_ALARM);
             if (!reminder
             &&  (!event.deferred() || (event.extraActionOptions() & KAEvent::ExecPreActOnDeferral))
             &&  (replaceReminder || !win)  &&  !noPreAction
@@ -2471,12 +2472,12 @@ KAlarmApp::ProcData* KAlarmApp::findCommandProcess(const QString& eventId) const
 
 
 KAlarmApp::ProcData::ProcData(ShellProcess* p, KAEvent* e, KAAlarm* a, int f)
-    : process(p),
-      event(e),
-      alarm(a),
-      messageBoxParent(nullptr),
-      flags(f),
-      eventDeleted(false)
+    : process(p)
+    , event(e)
+    , alarm(a)
+    , messageBoxParent(nullptr)
+    , flags(f)
+    , eventDeleted(false)
 { }
 
 KAlarmApp::ProcData::~ProcData()

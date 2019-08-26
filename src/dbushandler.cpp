@@ -1,7 +1,7 @@
 /*
  *  dbushandler.cpp  -  handler for D-Bus calls by other applications
  *  Program:  kalarm
- *  Copyright © 2002-2012,2018 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2002-2019 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -294,8 +294,8 @@ bool DBusHandler::scheduleMessage(const QString& message, const KADateTime& star
                                   const KCalendarCore::Duration& subRepeatDuration, int subRepeatCount)
 {
     KAEvent::Flags kaEventFlags = convertStartFlags(start, flags);
-    KAEvent::SubAction action = (kaEventFlags & KAEvent::DISPLAY_COMMAND) ? KAEvent::COMMAND : KAEvent::MESSAGE;
-    QColor bg = convertBgColour(bgColor);
+    const KAEvent::SubAction action = (kaEventFlags & KAEvent::DISPLAY_COMMAND) ? KAEvent::COMMAND : KAEvent::MESSAGE;
+    const QColor bg = convertBgColour(bgColor);
     if (!bg.isValid())
         return false;
     QColor fg;
@@ -333,8 +333,8 @@ bool DBusHandler::scheduleFile(const QUrl& file,
                                const QUrl& audioFile, int reminderMins, const KARecurrence& recurrence,
                                const KCalendarCore::Duration& subRepeatDuration, int subRepeatCount)
 {
-    KAEvent::Flags kaEventFlags = convertStartFlags(start, flags);
-    QColor bg = convertBgColour(bgColor);
+    const KAEvent::Flags kaEventFlags = convertStartFlags(start, flags);
+    const QColor bg = convertBgColour(bgColor);
     if (!bg.isValid())
         return false;
     return theApp()->scheduleEvent(KAEvent::FILE, file.toString(), start, lateCancel, kaEventFlags, bg, Qt::black, QFont(),
@@ -348,7 +348,7 @@ bool DBusHandler::scheduleCommand(const QString& commandLine,
                                   const KADateTime& start, int lateCancel, unsigned flags,
                                   const KARecurrence& recurrence, const KCalendarCore::Duration& subRepeatDuration, int subRepeatCount)
 {
-    KAEvent::Flags kaEventFlags = convertStartFlags(start, flags);
+    const KAEvent::Flags kaEventFlags = convertStartFlags(start, flags);
     return theApp()->scheduleEvent(KAEvent::COMMAND, commandLine, start, lateCancel, kaEventFlags, Qt::black, Qt::black, QFont(),
                                    QString(), -1, 0, recurrence, subRepeatDuration, subRepeatCount);
 }
@@ -361,7 +361,7 @@ bool DBusHandler::scheduleEmail(const QString& fromID, const QString& addresses,
                                 const KADateTime& start, int lateCancel, unsigned flags,
                                 const KARecurrence& recurrence, const KCalendarCore::Duration& subRepeatDuration, int subRepeatCount)
 {
-    KAEvent::Flags kaEventFlags = convertStartFlags(start, flags);
+    const KAEvent::Flags kaEventFlags = convertStartFlags(start, flags);
     uint senderId = 0;
     if (!fromID.isEmpty())
     {
@@ -402,8 +402,8 @@ bool DBusHandler::scheduleAudio(const QString& audioUrl, int volumePercent,
                                 const KADateTime& start, int lateCancel, unsigned flags,
                                 const KARecurrence& recurrence, const KCalendarCore::Duration& subRepeatDuration, int subRepeatCount)
 {
-    KAEvent::Flags kaEventFlags = convertStartFlags(start, flags);
-    float volume = (volumePercent >= 0) ? volumePercent / 100.0f : -1;
+    const KAEvent::Flags kaEventFlags = convertStartFlags(start, flags);
+    const float volume = (volumePercent >= 0) ? volumePercent / 100.0f : -1;
     return theApp()->scheduleEvent(KAEvent::AUDIO, QString(), start, lateCancel, kaEventFlags, Qt::black, Qt::black, QFont(),
                                    audioUrl, volume, 0, recurrence, subRepeatDuration, subRepeatCount);
 }
@@ -433,7 +433,7 @@ KADateTime DBusHandler::convertDateTime(const QString& dateTime, const KADateTim
     if (dtString.length() > 10)
     {
         // Both a date and a time are specified
-        QDateTime dt = QDateTime::fromString(dtString, Qt::ISODate);
+        const QDateTime dt = QDateTime::fromString(dtString, Qt::ISODate);
         error = !dt.isValid();
         date = dt.date();
         time = dt.time();
@@ -505,9 +505,9 @@ QColor DBusHandler::convertBgColour(const QString& bgColor)
 {
     if (bgColor.isEmpty())
         return Preferences::defaultBgColour();
-    QColor bg(bgColor);
+    const QColor bg(bgColor);
     if (!bg.isValid())
-            qCCritical(KALARM_LOG) << "D-Bus call: invalid background color:" << bgColor;
+        qCCritical(KALARM_LOG) << "D-Bus call: invalid background color:" << bgColor;
     return bg;
 }
 
@@ -547,7 +547,7 @@ bool DBusHandler::convertRecurrence(KADateTime& start, KARecurrence& recurrence,
     start = convertDateTime(startDateTime);
     if (!start.isValid())
         return false;
-    KADateTime end = convertDateTime(endDateTime, start);
+    const KADateTime end = convertDateTime(endDateTime, start);
     if (end.isDateOnly()  &&  !start.isDateOnly())
     {
         qCCritical(KALARM_LOG) << "D-Bus call: alarm is date-only, but recurrence end is date/time";
