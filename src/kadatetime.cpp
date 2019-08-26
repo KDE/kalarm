@@ -1593,16 +1593,16 @@ QString KADateTime::toString(const QString &format) const
                 case 'P': {   // am/pm
                     bool am = (d->time().hour() < 12);
                     QString text = am ? locale.amText() : locale.pmText();
-                    if      (text == QStringLiteral("a.m."))  text = QStringLiteral("am");
-                    else if (text == QStringLiteral("p.m."))  text = QStringLiteral("pm");
+                    if      (text == QLatin1String("a.m."))  text = QStringLiteral("am");
+                    else if (text == QLatin1String("p.m."))  text = QStringLiteral("pm");
                     result += text.toLower();
                     break;
                 }
                 case 'p': {   // AM/PM
                     bool am = (d->time().hour() < 12);
                     QString text = am ? locale.amText() : locale.pmText();
-                    if      (text == QStringLiteral("a.m."))  text = QStringLiteral("am");
-                    else if (text == QStringLiteral("p.m."))  text = QStringLiteral("pm");
+                    if      (text == QLatin1String("a.m."))  text = QStringLiteral("am");
+                    else if (text == QLatin1String("p.m."))  text = QStringLiteral("pm");
                     result += text.toUpper();
                     break;
                 }
