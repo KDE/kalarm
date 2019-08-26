@@ -1349,7 +1349,7 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
         {
             // It's an Akonadi item
             qCDebug(KALARM_LOG) << "MainWindow::executeDropEvent: Akonadi item" << item.id();
-            if (QUrlQuery(url).queryItemValue(QStringLiteral("type")) == QStringLiteral("message/rfc822"))
+            if (QUrlQuery(url).queryItemValue(QStringLiteral("type")) == QLatin1String("message/rfc822"))
             {
                 // It's an email held in Akonadi
                 qCDebug(KALARM_LOG) << "MainWindow::executeDropEvent: Akonadi email";

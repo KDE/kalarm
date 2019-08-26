@@ -237,7 +237,7 @@ QStringList CommandOptions::setOptions(QCommandLineParser* parser, const QString
     for (int i = 0;  i < args.size();  ++i)
     {
         const QString arg = args[i];
-        if (arg == QStringLiteral("--nofork"))
+        if (arg == QLatin1String("--nofork"))
             continue;     // Ignore debugging option
         mNonExecArguments << arg;
         if (arg == optionName(EXEC)  ||  arg == optionName(EXEC, true)

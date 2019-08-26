@@ -264,7 +264,7 @@ bool KAlarmApp::restoreSession()
     for (int i = 1;  KMainWindow::canBeRestored(i);  ++i)
     {
         const QString type = KMainWindow::classNameOfToplevel(i);
-        if (type == QStringLiteral("MainWindow"))
+        if (type == QLatin1String("MainWindow"))
         {
             MainWindow* win = MainWindow::create(true);
             win->restore(i, false);
@@ -273,7 +273,7 @@ bool KAlarmApp::restoreSession()
             else
                 win->show();
         }
-        else if (type == QStringLiteral("MessageWin"))
+        else if (type == QLatin1String("MessageWin"))
         {
             MessageWin* win = new MessageWin;
             win->restore(i, false);

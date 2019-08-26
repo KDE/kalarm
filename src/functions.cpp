@@ -979,8 +979,8 @@ QString currentDesktopIdentityName()
 Desktop currentDesktopIdentity()
 {
     const QString desktop = currentDesktopIdentityName();
-    if (desktop == QStringLiteral("KDE"))    return Desktop::Kde;
-    if (desktop == QStringLiteral("Unity"))  return Desktop::Unity;
+    if (desktop == QLatin1String("KDE"))    return Desktop::Kde;
+    if (desktop == QLatin1String("Unity"))  return Desktop::Unity;
     return Desktop::Other;
 }
 

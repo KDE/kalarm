@@ -223,11 +223,11 @@ void CalendarMigrator::migrateOrCreate()
             const KConfigGroup configGroup = config.group(QStringLiteral("Resource_") + id);
             const QString resourceType = configGroup.readEntry("ResourceType", QString());
             QString agentType;
-            if (resourceType == QStringLiteral("file"))
+            if (resourceType == QLatin1String("file"))
                 agentType = KALARM_RESOURCE;
-            else if (resourceType == QStringLiteral("dir"))
+            else if (resourceType == QLatin1String("dir"))
                 agentType = KALARM_DIR_RESOURCE;
-            else if (resourceType == QStringLiteral("remote"))
+            else if (resourceType == QLatin1String("remote"))
                 agentType = KALARM_RESOURCE;
             else
                 continue;   // unknown resource type - can't convert
@@ -545,17 +545,17 @@ CalendarCreator::CalendarCreator(const QString& resourceType, const KConfigGroup
 {
     // Read the resource configuration parameters from the config
     const char* pathKey = nullptr;
-    if (resourceType == QStringLiteral("file"))
+    if (resourceType == QLatin1String("file"))
     {
         mResourceType = LocalFile;
         pathKey = "CalendarURL";
     }
-    else if (resourceType == QStringLiteral("dir"))
+    else if (resourceType == QLatin1String("dir"))
     {
         mResourceType = LocalDir;
         pathKey = "CalendarURL";
     }
-    else if (resourceType == QStringLiteral("remote"))
+    else if (resourceType == QLatin1String("remote"))
     {
         mResourceType = RemoteFile;
         pathKey = "DownloadUrl";

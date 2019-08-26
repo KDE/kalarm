@@ -112,7 +112,7 @@ void AutostartApp::setCommandLine(const QString& exe, const QStringList& args)
 void AutostartApp::slotAutostart()
 {
     const QString prog = mArgs[0];
-    if (prog == QStringLiteral("kalarm"))
+    if (prog == QLatin1String("kalarm"))
     {
         QDBusReply<bool> reply = QDBusConnection::sessionBus().interface()->isServiceRegistered(QStringLiteral(KALARM_DBUS_SERVICE));
         if (reply.isValid()  &&  reply.value())

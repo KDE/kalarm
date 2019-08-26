@@ -312,7 +312,7 @@ KADateTime AlarmTime::applyTimeZone(const QString& tzstring, const QDate& date, 
     const QString zone = tzstring.trimmed();
     if (!zone.isEmpty())
     {
-        if (zone == QStringLiteral("UTC"))
+        if (zone == QLatin1String("UTC"))
             spec = KADateTime::UTC;
         else
         {
