@@ -783,7 +783,7 @@ void KAEventPrivate::set(const KCalendarCore::Event::Ptr &event)
             QString mins = flags.at(i + 1);
             if (mins.endsWith(QLatin1Char('D'))) {
                 mDeferDefaultDateOnly = true;
-                mins.truncate(mins.length() - 1);
+                mins.chop(1);
             }
             const int n = static_cast<int>(mins.toUInt(&ok));
             if (!ok) {
