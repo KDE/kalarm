@@ -1,7 +1,7 @@
 /*
  *  pickfileradio.cpp  -  radio button with an associated file picker
  *  Program:  kalarm
- *  Copyright © 2005,2009 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2005,2009,2019 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -30,23 +30,23 @@
 
 
 PickFileRadio::PickFileRadio(QPushButton* button, LineEdit* edit, const QString& text, ButtonGroup* group, QWidget* parent)
-    : RadioButton(text, parent),
-      mGroup(group),
-      mEdit(nullptr),
-      mLastButton(nullptr),
-      mRevertButton(false)
+    : RadioButton(text, parent)
+    , mGroup(group)
+    , mEdit(nullptr)
+    , mLastButton(nullptr)
+    , mRevertButton(false)
 {
     Q_ASSERT(parent);
     init(button, edit);
 }
 
 PickFileRadio::PickFileRadio(const QString& text, ButtonGroup* group, QWidget* parent)
-    : RadioButton(text, parent),
-      mGroup(group),
-      mEdit(nullptr),
-      mButton(nullptr),
-      mLastButton(nullptr),
-      mRevertButton(false)
+    : RadioButton(text, parent)
+    , mGroup(group)
+    , mEdit(nullptr)
+    , mButton(nullptr)
+    , mLastButton(nullptr)
+    , mRevertButton(false)
 {
     Q_ASSERT(parent);
 }
@@ -145,21 +145,37 @@ bool PickFileRadio::pickFileIfNone()
         mFile = mEdit->text();
     if (!mFile.isEmpty())
         return true;
-    return !slotPickFile().isEmpty();
+    QString file;
+    if (!doPickFile(file))
+       return false;
+    return !mFile.isEmpty(); 
 }
 
 /******************************************************************************
 * Called when the file picker button is clicked.
-* Reply = mFile, or null string if dialogue, and 'this', was deleted.
 */
-QString PickFileRadio::slotPickFile()
+void PickFileRadio::slotPickFile()
+{
+    QString file;
+    doPickFile(file);
+}
+
+/******************************************************************************
+* Called when the file picker button is clicked.
+* @param file  Updated with the file which was selected, or empty if no file
+*              was selected.
+* Reply = true if 'file' value can be used.
+*       = false if the dialogue was deleted while visible (indicating that
+*         the parent widget was probably also deleted).
+*/
+bool PickFileRadio::doPickFile(QString& file)
 {
     // To avoid crashes on application quit, we need to check whether the
     // dialogue, and hence this PickFileRadio, was deleted while active,
     // before accessing class members.
-    QString file = pickFile();
-    if (file.isNull())
-        return file;   // 'this' is probably invalid now
+    file.clear();
+    if (!pickFile(file))
+        return false;   // 'this' is probably invalid now
     if (!file.isEmpty())
     {
         mFile = file;
@@ -173,7 +189,8 @@ QString PickFileRadio::slotPickFile()
         mRevertButton = true;   // prevent picker dialog popping up twice
         QTimer::singleShot(0, this, &PickFileRadio::setLastButton);
     }
-    return mFile;
+    file = mFile;
+    return true;
 }
 
 /******************************************************************************
@@ -182,7 +199,7 @@ QString PickFileRadio::slotPickFile()
 void PickFileRadio::setLastButton()
 {
     if (!mLastButton)
-        setChecked(false);    // we don't know the previous selection, so just turn this button off
+        setChecked(false);   // we don't know the previous selection, so just turn this button off
     else
         mLastButton->setChecked(true);
     mRevertButton = false;

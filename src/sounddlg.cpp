@@ -432,9 +432,12 @@ void SoundWidget::showEvent(QShowEvent* se)
 */
 void SoundWidget::slotPickFile()
 {
-    const QString url = SoundPicker::browseFile(mDefaultDir, mFileEdit->text());
-    if (!url.isEmpty())
-        mFileEdit->setText(KAlarm::pathOrUrl(url));
+    QString file;
+    if (SoundPicker::browseFile(file, mDefaultDir, mFileEdit->text()))
+    {
+        if (!file.isEmpty())
+            mFileEdit->setText(KAlarm::pathOrUrl(file));
+    }
 }
 
 /******************************************************************************

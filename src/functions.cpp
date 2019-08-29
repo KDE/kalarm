@@ -1619,19 +1619,21 @@ QString pathOrUrl(const QString& url)
 /******************************************************************************
 * Display a modal dialog to choose an existing file, initially highlighting
 * any specified file.
+* @param file        Updated with the file which was selected, or empty if no file
+*                    was selected.
 * @param initialFile The file to initially highlight - must be a full path name or URL.
 * @param defaultDir The directory to start in if @p initialFile is empty. If empty,
 *                   the user's home directory will be used. Updated to the
 *                   directory containing the selected file, if a file is chosen.
 * @param existing true to return only existing files, false to allow new ones.
-* Reply = URL selected.
-*       = empty, non-null string if no file was selected.
-*       = null string if dialogue was deleted while visible (indicating that
+* Reply = true if 'file' value can be used.
+*       = false if the dialogue was deleted while visible (indicating that
 *         the parent widget was probably also deleted).
 */
-QString browseFile(const QString& caption, QString& defaultDir, const QString& initialFile,
-                   const QString& filter, bool existing, QWidget* parent)
+bool browseFile(QString& file, const QString& caption, QString& defaultDir,
+                const QString& initialFile, const QString& filter, bool existing, QWidget* parent)
 {
+    file.clear();
     const QString initialDir = !initialFile.isEmpty() ? QString(initialFile).remove(QRegExp(QLatin1String("/[^/]*$")))
                              : !defaultDir.isEmpty()  ? defaultDir
                              :                          QDir::homePath();
@@ -1644,14 +1646,15 @@ QString browseFile(const QString& caption, QString& defaultDir, const QString& i
     if (!initialFile.isEmpty())
         fileDlg->selectFile(initialFile);
     if (fileDlg->exec() != QDialog::Accepted)
-        return fileDlg ? QStringLiteral("") : QString();  // return null only if dialog was deleted
+        return static_cast<bool>(fileDlg);   // return false if dialog was deleted
     const QList<QUrl> urls = fileDlg->selectedUrls();
     if (urls.isEmpty())
-        return QStringLiteral("");   // return empty, non-null string
+        return true;
     const QUrl& url = urls[0];
     defaultDir = url.isLocalFile() ? KIO::upUrl(url).toLocalFile() : url.adjusted(QUrl::RemoveFilename).path();
     bool localOnly = true;
-    return localOnly ? url.toDisplayString(QUrl::PreferLocalFile) : url.toDisplayString();
+    file = localOnly ? url.toDisplayString(QUrl::PreferLocalFile) : url.toDisplayString();
+    return true;
 }
 
 /******************************************************************************

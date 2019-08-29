@@ -1,7 +1,7 @@
 /*
  *  pickfileradio.h  -  radio button with an associated file picker
  *  Program:  kalarm
- *  Copyright © 2005,2009 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2005,2009,2019 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -80,9 +80,12 @@ class PickFileRadio : public RadioButton
         /** Chooses a file, for example by displaying a file selection dialog.
          *  This method is called when the push button is clicked - the client
          *  should not activate a file selection dialog directly.
-         *  @return Selected file name, or QString() if no selection made
+         *  @param file  Updated with the selected file name, or empty if no
+         *               selection was made.
+         *  @return true if @p file value can be used,
+         *          false if the dialog was deleted while visible.
          */
-        virtual QString pickFile() = 0;
+        virtual bool pickFile(QString& file) = 0;
         /** Notifies the widget of the currently selected file name.
          *  This should only be used when no file name edit box is used.
          *  It should be called to initialise the widget's data, and also any time the file
@@ -107,10 +110,11 @@ class PickFileRadio : public RadioButton
 
     private Q_SLOTS:
         void          slotSelectionChanged(QAbstractButton*);
-        QString       slotPickFile();
+        void          slotPickFile();
         void          setLastButton();
 
     private:
+        bool          doPickFile(QString& file);
         bool          pickFileIfNone();
 
         ButtonGroup*     mGroup;         // button group which radio button is in

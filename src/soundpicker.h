@@ -1,7 +1,7 @@
 /*
  *  soundpicker.h  -  widget to select a sound file or a beep
  *  Program:  kalarm
- *  Copyright © 2002,2004-2012 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2002-2019 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -113,15 +113,17 @@ class SoundPicker : public QFrame
 
         /** Display a dialog to choose a sound file, initially highlighting
          *  @p initialFile if non-null.
+         *  @param file        Updated to URL selected, in human readable format,
+         *                     or empty if none selected.
          *  @param initialDir  Initial directory to display if @p initialFile
          *                     is null. If a file is chosen, this is updated to
          *                     the directory containing the chosen file.
          *  @param initialFile Full path name or URL of file to be highlighted
          *                     initially.  If null, no file will be highlighted.
-         *  @return            URL selected, in human readable format. If none
-         *                     is selected, URL.isEmpty() is true.
+         *  @return            true if @p file value can be used,
+         *                     false if the dialog was deleted while visible.
          */
-        static QString browseFile(QString& initialDir, const QString& initialFile = QString());
+        static bool    browseFile(QString& file, QString& initialDir, const QString& initialFile = QString());
 
         static QString i18n_label_Sound();  // text of Sound label
         static QString i18n_combo_None();   // text of None combo box item

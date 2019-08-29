@@ -1,7 +1,7 @@
 /*
  *  functions.h  -  miscellaneous functions
  *  Program:  kalarm
- *  Copyright © 2007-2017 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2007-2019 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -115,7 +115,8 @@ bool                showFileErrMessage(const QString& filename, FileErr, FileErr
 /** If a url string is a local file, strip off the 'file:/' prefix. */
 QString             pathOrUrl(const QString& url);
 
-QString             browseFile(const QString& caption, QString& defaultDir, const QString& initialFile = QString(),
+bool                browseFile(QString& file, const QString& caption, QString& defaultDir,
+                               const QString& initialFile = QString(),
                                const QString& filter = QString(), bool existing = false, QWidget* parent = nullptr);
 bool                editNewAlarm(const QString& templateName, QWidget* parent = nullptr);
 void                editNewAlarm(EditAlarmDlg::Type, QWidget* parent = nullptr);

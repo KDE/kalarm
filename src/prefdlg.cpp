@@ -1562,9 +1562,12 @@ void EditPrefTab::apply(bool syncToDisc)
 void EditPrefTab::slotBrowseSoundFile()
 {
     QString defaultDir;
-    QString url = SoundPicker::browseFile(defaultDir, mSoundFile->text());
-    if (!url.isEmpty())
-        mSoundFile->setText(url);
+    QString file;
+    if (SoundPicker::browseFile(file, defaultDir, mSoundFile->text()))
+    {
+        if (!file.isEmpty())
+            mSoundFile->setText(file);
+    }
 }
 
 int EditPrefTab::soundIndex(Preferences::SoundType type)

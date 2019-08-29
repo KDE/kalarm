@@ -1,7 +1,7 @@
 /*
  *  soundpicker.cpp  -  widget to select a sound file or a beep
  *  Program:  kalarm
- *  Copyright © 2002-2018 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2002-2019 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -73,10 +73,10 @@ SoundPicker::SoundPicker(QWidget* parent)
     // The order of combo box entries must correspond with the 'Type' enum.
     if (indexes.isEmpty())
     {
-        indexes[Preferences::Sound_None]     = 0;
-        indexes[Preferences::Sound_Beep]     = 1;
-        indexes[Preferences::Sound_File] = 2;
-        indexes[Preferences::Sound_Speak]    = 3;
+        indexes[Preferences::Sound_None]  = 0;
+        indexes[Preferences::Sound_Beep]  = 1;
+        indexes[Preferences::Sound_File]  = 2;
+        indexes[Preferences::Sound_Speak] = 3;
     }
 
     mTypeCombo = new ComboBox(mTypeBox);
@@ -317,9 +317,11 @@ void SoundPicker::setLastType()
 * Display a dialog to choose a sound file, initially highlighting any
 * specified file. 'initialFile' must be a full path name or URL.
 * 'defaultDir' is updated to the directory containing the chosen file.
-* Reply = URL selected. If none is selected, URL.isEmpty() is true.
+* @param file  Updated to URL selected, or empty if none is selected.
+* Reply = true if @p file value can be used,
+*       = false if the dialog was deleted while visible.
 */
-QString SoundPicker::browseFile(QString& defaultDir, const QString& initialFile)
+bool SoundPicker::browseFile(QString& file, QString& defaultDir, const QString& initialFile)
 {
     static QString kdeSoundDir;     // directory containing KDE sound files
     if (defaultDir.isEmpty())
@@ -332,9 +334,8 @@ QString SoundPicker::browseFile(QString& defaultDir, const QString& initialFile)
         defaultDir = kdeSoundDir;
     }
     const QString filter = Phonon::BackendCapabilities::availableMimeTypes().join(QLatin1String(" "));
-    return KAlarm::browseFile(i18nc("@title:window", "Choose Sound File"), defaultDir, initialFile, filter, true, nullptr);
+    return KAlarm::browseFile(file, i18nc("@title:window", "Choose Sound File"),
+                              defaultDir, initialFile, filter, true, nullptr);
 }
-
-
 
 // vim: et sw=4:

@@ -79,15 +79,15 @@ enum { tTEXT, tFILE, tCOMMAND };  // order of mTypeCombo items
 =============================================================================*/
 class PickLogFileRadio : public PickFileRadio
 {
-    public:
+public:
     PickLogFileRadio(QPushButton* b, LineEdit* e, const QString& text, ButtonGroup* group, QWidget* parent)
         : PickFileRadio(b, e, text, group, parent) { }
-    QString pickFile() override    // called when browse button is pressed to select a log file
+    bool pickFile(QString& file) override    // called when browse button is pressed to select a log file
     {
-        return KAlarm::browseFile(i18nc("@title:window", "Choose Log File"), mDefaultDir, fileEdit()->text(), QString(),
+        return KAlarm::browseFile(file, i18nc("@title:window", "Choose Log File"), mDefaultDir, fileEdit()->text(), QString(),
                                   false, parentWidget());
     }
-    private:
+private:
     QString mDefaultDir;   // default directory for log file browse button
 };
 
@@ -646,12 +646,15 @@ void EditDisplayAlarmDlg::slotAlarmTypeChanged(int index)
 void EditDisplayAlarmDlg::slotPickFile()
 {
     static QString defaultDir;   // default directory for file browse button
-    QString file = KAlarm::browseFile(i18nc("@title:window", "Choose Text or Image File to Display"),
-                                      defaultDir, mFileMessageEdit->text(), QString(), true, this);
-    if (!file.isEmpty())
+    QString file;
+    if (KAlarm::browseFile(file, i18nc("@title:window", "Choose Text or Image File to Display"),
+                                      defaultDir, mFileMessageEdit->text(), QString(), true, this))
     {
-        mFileMessageEdit->setText(KAlarm::pathOrUrl(file));
-        contentsChanged();
+        if (!file.isEmpty())
+        {
+            mFileMessageEdit->setText(KAlarm::pathOrUrl(file));
+            contentsChanged();
+        }
     }
 }
 
@@ -1441,15 +1444,18 @@ void EditEmailAlarmDlg::openAddressBook()
 */
 void EditEmailAlarmDlg::slotAddAttachment()
 {
-    QString url = KAlarm::browseFile(i18nc("@title:window", "Choose File to Attach"), mAttachDefaultDir, QString(),
-                                     QString(), true, this);
-    if (!url.isEmpty())
+    QString file;
+    if (KAlarm::browseFile(file, i18nc("@title:window", "Choose File to Attach"),
+                           mAttachDefaultDir, QString(), QString(), true, this))
     {
-        mEmailAttachList->addItem(url);
-        mEmailAttachList->setCurrentIndex(mEmailAttachList->count() - 1);   // select the new item
-        mEmailRemoveButton->setEnabled(true);
-        mEmailAttachList->setEnabled(true);
-        contentsChanged();
+        if (!file.isEmpty())
+        {
+            mEmailAttachList->addItem(file);
+            mEmailAttachList->setCurrentIndex(mEmailAttachList->count() - 1);   // select the new item
+            mEmailRemoveButton->setEnabled(true);
+            mEmailAttachList->setEnabled(true);
+            contentsChanged();
+        }
     }
 }
 
