@@ -79,16 +79,16 @@ enum { tTEXT, tFILE, tCOMMAND };  // order of mTypeCombo items
 =============================================================================*/
 class PickLogFileRadio : public PickFileRadio
 {
-public:
-    PickLogFileRadio(QPushButton* b, LineEdit* e, const QString& text, ButtonGroup* group, QWidget* parent)
-        : PickFileRadio(b, e, text, group, parent) { }
-    bool pickFile(QString& file) override    // called when browse button is pressed to select a log file
-    {
-        return KAlarm::browseFile(file, i18nc("@title:window", "Choose Log File"), mDefaultDir, fileEdit()->text(), QString(),
-                                  false, parentWidget());
-    }
-private:
-    QString mDefaultDir;   // default directory for log file browse button
+    public:
+        PickLogFileRadio(QPushButton* b, LineEdit* e, const QString& text, ButtonGroup* group, QWidget* parent)
+            : PickFileRadio(b, e, text, group, parent) { }
+        bool pickFile(QString& file) override    // called when browse button is pressed to select a log file
+        {
+            return KAlarm::browseFile(file, i18nc("@title:window", "Choose Log File"), mDefaultDir, fileEdit()->text(), QString(),
+                                      false, parentWidget());
+        }
+    private:
+        QString mDefaultDir;   // default directory for log file browse button
 };
 
 
@@ -108,10 +108,7 @@ QString EditDisplayAlarmDlg::i18n_chk_ConfirmAck()    { return i18nc("@option:ch
 *   event   != to initialise the dialog to show the specified event's data.
 */
 EditDisplayAlarmDlg::EditDisplayAlarmDlg(bool Template, QWidget* parent, GetResourceType getResource)
-    : EditAlarmDlg(Template, KAEvent::MESSAGE, parent, getResource),
-      mSpecialActionsButton(nullptr),
-      mReminderDeferral(false),
-      mReminderArchived(false)
+    : EditAlarmDlg(Template, KAEvent::MESSAGE, parent, getResource)
 {
     qCDebug(KALARM_LOG) << "EditDisplayAlarmDlg: New";
     init(nullptr);
@@ -119,10 +116,7 @@ EditDisplayAlarmDlg::EditDisplayAlarmDlg(bool Template, QWidget* parent, GetReso
 
 EditDisplayAlarmDlg::EditDisplayAlarmDlg(bool Template, const KAEvent* event, bool newAlarm, QWidget* parent,
                                          GetResourceType getResource, bool readOnly)
-    : EditAlarmDlg(Template, event, newAlarm, parent, getResource, readOnly),
-      mSpecialActionsButton(nullptr),
-      mReminderDeferral(false),
-      mReminderArchived(false)
+    : EditAlarmDlg(Template, event, newAlarm, parent, getResource, readOnly)
 {
     qCDebug(KALARM_LOG) << "EditDisplayAlarmDlg: Event.id()";
     init(event);
@@ -1053,8 +1047,7 @@ QString EditEmailAlarmDlg::i18n_chk_CopyEmailToSelf()    { return i18nc("@option
 *   event   != to initialise the dialog to show the specified event's data.
 */
 EditEmailAlarmDlg::EditEmailAlarmDlg(bool Template, QWidget* parent, GetResourceType getResource)
-    : EditAlarmDlg(Template, KAEvent::EMAIL, parent, getResource),
-      mEmailRemoveButton(nullptr)
+    : EditAlarmDlg(Template, KAEvent::EMAIL, parent, getResource)
 {
     qCDebug(KALARM_LOG) << "EditEmailAlarmDlg: New";
     init(nullptr);
@@ -1062,8 +1055,7 @@ EditEmailAlarmDlg::EditEmailAlarmDlg(bool Template, QWidget* parent, GetResource
 
 EditEmailAlarmDlg::EditEmailAlarmDlg(bool Template, const KAEvent* event, bool newAlarm, QWidget* parent,
                                      GetResourceType getResource, bool readOnly)
-    : EditAlarmDlg(Template, event, newAlarm, parent, getResource, readOnly),
-      mEmailRemoveButton(nullptr)
+    : EditAlarmDlg(Template, event, newAlarm, parent, getResource, readOnly)
 {
     qCDebug(KALARM_LOG) << "EditEmailAlarmDlg: Event.id()";
     init(event);
@@ -1501,8 +1493,7 @@ bool EditEmailAlarmDlg::checkText(QString& result, bool showErrorMessage) const
 *   event   != to initialise the dialog to show the specified event's data.
 */
 EditAudioAlarmDlg::EditAudioAlarmDlg(bool Template, QWidget* parent, GetResourceType getResource)
-    : EditAlarmDlg(Template, KAEvent::AUDIO, parent, getResource),
-      mMessageWin(nullptr)
+    : EditAlarmDlg(Template, KAEvent::AUDIO, parent, getResource)
 {
     qCDebug(KALARM_LOG) << "EditAudioAlarmDlg: New";
     init(nullptr);
@@ -1510,8 +1501,7 @@ EditAudioAlarmDlg::EditAudioAlarmDlg(bool Template, QWidget* parent, GetResource
 
 EditAudioAlarmDlg::EditAudioAlarmDlg(bool Template, const KAEvent* event, bool newAlarm, QWidget* parent,
                                      GetResourceType getResource, bool readOnly)
-    : EditAlarmDlg(Template, event, newAlarm, parent, getResource, readOnly),
-      mMessageWin(nullptr)
+    : EditAlarmDlg(Template, event, newAlarm, parent, getResource, readOnly)
 {
     qCDebug(KALARM_LOG) << "EditAudioAlarmDlg: Event.id()";
     init(event);

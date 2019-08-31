@@ -1,7 +1,7 @@
 /*
  *  pickfileradio.h  -  radio button with an associated file picker
  *  Program:  kalarm
- *  Copyright © 2005,2009,2019 David Jarvie <djarvie@kde.org>
+ *  Copyright © 2005-2019 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -117,12 +117,12 @@ class PickFileRadio : public RadioButton
         bool          doPickFile(QString& file);
         bool          pickFileIfNone();
 
-        ButtonGroup*     mGroup;         // button group which radio button is in
-        LineEdit*        mEdit;          // file name edit box, or null if none
-        QPushButton*     mButton;        // push button to pick a file
-        QString          mFile;          // saved file name (if mEdit is null)
-        QAbstractButton* mLastButton;    // previous radio button selected
-        bool             mRevertButton;  // true to revert to the previous radio button selection
+        ButtonGroup*     mGroup;               // button group which radio button is in
+        LineEdit*        mEdit{nullptr};       // file name edit box, or null if none
+        QPushButton*     mButton;              // push button to pick a file
+        QString          mFile;                // saved file name (if mEdit is null)
+        QAbstractButton* mLastButton{nullptr}; // previous radio button selected
+        bool             mRevertButton{false}; // true to revert to the previous radio button selection
 };
 
 #endif // PICKFILERADIO_H

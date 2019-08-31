@@ -1,7 +1,7 @@
 /*
  *  slider.h  -  slider control with read-only option
  *  Program:  kalarm
- *  Copyright © 2004-2006 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2004-2019 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -74,7 +74,7 @@ class Slider : public QSlider
         void         keyReleaseEvent(QKeyEvent*) override;
 
     private:
-        bool    mReadOnly;      // value cannot be changed by the user
+        bool    mReadOnly{false};    // value cannot be changed by the user
 };
 
 #endif // SLIDER_H

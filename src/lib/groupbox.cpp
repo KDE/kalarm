@@ -1,7 +1,7 @@
 /*
  *  groupbox.cpp  -  checkable group box with read-only option
  *  Program:  kalarm
- *  Copyright © 2011 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2011,2019 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -25,13 +25,11 @@
 
 
 GroupBox::GroupBox(QWidget* parent)
-    : QGroupBox(parent),
-      mReadOnly(false)
+    : QGroupBox(parent)
 { }
 
 GroupBox::GroupBox(const QString& title, QWidget* parent)
-    : QGroupBox(title, parent),
-      mReadOnly(false)
+    : QGroupBox(title, parent)
 { }
 
 void GroupBox::setReadOnly(bool ro)

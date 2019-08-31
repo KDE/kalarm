@@ -1,7 +1,7 @@
 /*
  *  spinbox2.h  -  spin box with extra pair of spin buttons
  *  Program:  kalarm
- *  Copyright © 2001-2008 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2019 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -305,7 +305,7 @@ class SpinBox2 : public QFrame
         int              mSingleShiftStep;    // right button increment with shift pressed
         int              mPageStep;           // left button increment
         int              mPageShiftStep;      // left button increment with shift pressed
-        bool             mReverseWithLayout;  // reverse button positions if reverse layout (default = true)
+        bool             mReverseWithLayout{true};  // reverse button positions if reverse layout (default = true)
 
     friend class MainSpinBox;
 };

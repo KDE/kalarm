@@ -1,7 +1,7 @@
 /*
  *  label.cpp  -  label with radiobutton buddy option
  *  Program:  kalarm
- *  Copyright © 2004,2005 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2004-2019 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -24,21 +24,15 @@
 
 
 Label::Label(QWidget* parent, Qt::WindowFlags f)
-    : QLabel(parent, f),
-      mRadioButton(nullptr),
-      mFocusWidget(nullptr)
+    : QLabel(parent, f)
 { }
 
 Label::Label(const QString& text, QWidget* parent, Qt::WindowFlags f)
-    : QLabel(text, parent, f),
-      mRadioButton(nullptr),
-      mFocusWidget(nullptr)
+    : QLabel(text, parent, f)
 { }
 
 Label::Label(QWidget* buddy, const QString& text, QWidget* parent, Qt::WindowFlags f)
-    : QLabel(text, parent, f),
-      mRadioButton(nullptr),
-      mFocusWidget(nullptr)
+    : QLabel(text, parent, f)
 {
     setBuddy(buddy);
 }

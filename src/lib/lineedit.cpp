@@ -1,7 +1,7 @@
 /*
  *  lineedit.cpp  -  Line edit widget with extra drag and drop options
  *  Program:  kalarm
- *  Copyright © 2003-2005,2009-2010 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2003-2019 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -43,19 +43,15 @@
 = focus.
 =============================================================================*/
 LineEdit::LineEdit(Type type, QWidget* parent)
-    : KLineEdit(parent),
-      mType(type),
-      mNoSelect(false),
-      mSetCursorAtEnd(false)
+    : KLineEdit(parent)
+    , mType(type)
 {
     init();
 }
 
 LineEdit::LineEdit(QWidget* parent)
-    : KLineEdit(parent),
-      mType(Text),
-      mNoSelect(false),
-      mSetCursorAtEnd(false)
+    : KLineEdit(parent)
+    , mType(Text)
 {
     init();
 }

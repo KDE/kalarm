@@ -1,7 +1,7 @@
 /*
  *  pushbutton.cpp  -  push button with read-only option
  *  Program:  kalarm
- *  Copyright © 2002,2005,2009 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2002-2019 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -26,33 +26,25 @@
 #include <QKeyEvent>
 
 PushButton::PushButton(QWidget* parent)
-    : QPushButton(parent),
-      mFocusPolicy(focusPolicy()),
-      mReadOnly(false),
-      mNoHighlight(false)
+    : QPushButton(parent)
+    , mFocusPolicy(focusPolicy())
 { }
 
 PushButton::PushButton(const KGuiItem& gui, QWidget* parent)
-    : QPushButton(parent),
-      mFocusPolicy(focusPolicy()),
-      mReadOnly(false),
-      mNoHighlight(false)
+    : QPushButton(parent)
+    , mFocusPolicy(focusPolicy())
 {
      KGuiItem::assign(this, gui);
 }
 
 PushButton::PushButton(const QString& text, QWidget* parent)
-    : QPushButton(text, parent),
-      mFocusPolicy(focusPolicy()),
-      mReadOnly(false),
-      mNoHighlight(false)
+    : QPushButton(text, parent)
+    , mFocusPolicy(focusPolicy())
 { }
 
 PushButton::PushButton(const QIcon& icon, const QString& text, QWidget* parent)
-    : QPushButton(icon, text, parent),
-      mFocusPolicy(focusPolicy()),
-      mReadOnly(false),
-      mNoHighlight(false)
+    : QPushButton(icon, text, parent)
+    , mFocusPolicy(focusPolicy())
 { }
 
 void PushButton::setReadOnly(bool ro, bool noHighlight)

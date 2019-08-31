@@ -170,52 +170,35 @@ MessageWin*           AudioThread::mAudioOwner = nullptr;
 * displayed.
 */
 MessageWin::MessageWin(const KAEvent* event, const KAAlarm& alarm, int flags)
-    : MainWindowBase(nullptr, static_cast<Qt::WindowFlags>(WFLAGS | WFLAGS2 | ((flags & ALWAYS_HIDE) || getWorkAreaAndModal() ? Qt::WindowType(0) : Qt::X11BypassWindowManagerHint))),
-      mMessage(event->cleanText()),
-      mFont(event->font()),
-      mBgColour(event->bgColour()),
-      mFgColour(event->fgColour()),
-      mEventItemId(event->itemId()),
-      mEventId(*event),
-      mAudioFile(event->audioFile()),
-      mVolume(event->soundVolume()),
-      mFadeVolume(event->fadeVolume()),
-      mFadeSeconds(qMin(event->fadeSeconds(), 86400)),
-      mDefaultDeferMinutes(event->deferDefaultMinutes()),
-      mAlarmType(alarm.type()),
-      mAction(event->actionSubType()),
-      mAkonadiItemId(event->akonadiItemId()),
-      mCommandError(event->commandError()),
-      mRestoreHeight(0),
-      mAudioRepeatPause(event->repeatSoundPause()),
-      mConfirmAck(event->confirmAck()),
-      mNoDefer(true),
-      mInvalid(false),
-      mEvent(*event),
-      mOriginalEvent(*event),
-      mCollection(AlarmCalendar::resources()->collectionForEvent(mEventItemId)),
-      mTimeLabel(nullptr),
-      mRemainingText(nullptr),
-      mEditButton(nullptr),
-      mDeferButton(nullptr),
-      mSilenceButton(nullptr),
-      mKMailButton(nullptr),
-      mCommandText(nullptr),
-      mDontShowAgainCheck(nullptr),
-      mEditDlg(nullptr),
-      mDeferDlg(nullptr),
-      mAlwaysHide(flags & ALWAYS_HIDE),
-      mErrorWindow(false),
-      mInitialised(false),
-      mNoPostAction(alarm.type() & KAAlarm::REMINDER_ALARM),
-      mRecreating(false),
-      mBeep(event->beep()),
-      mSpeak(event->speak()),
-      mRescheduleEvent(!(flags & NO_RESCHEDULE)),
-      mShown(false),
-      mPositioning(false),
-      mNoCloseConfirm(false),
-      mDisableDeferral(false)
+    : MainWindowBase(nullptr, static_cast<Qt::WindowFlags>(WFLAGS | WFLAGS2 | ((flags & ALWAYS_HIDE) || getWorkAreaAndModal() ? Qt::WindowType(0) : Qt::X11BypassWindowManagerHint)))
+    , mMessage(event->cleanText())
+    , mFont(event->font())
+    , mBgColour(event->bgColour())
+    , mFgColour(event->fgColour())
+    , mEventItemId(event->itemId())
+    , mEventId(*event)
+    , mAudioFile(event->audioFile())
+    , mVolume(event->soundVolume())
+    , mFadeVolume(event->fadeVolume())
+    , mFadeSeconds(qMin(event->fadeSeconds(), 86400))
+    , mDefaultDeferMinutes(event->deferDefaultMinutes())
+    , mAlarmType(alarm.type())
+    , mAction(event->actionSubType())
+    , mAkonadiItemId(event->akonadiItemId())
+    , mCommandError(event->commandError())
+    , mRestoreHeight(0)
+    , mAudioRepeatPause(event->repeatSoundPause())
+    , mConfirmAck(event->confirmAck())
+    , mNoDefer(true)
+    , mInvalid(false)
+    , mEvent(*event)
+    , mOriginalEvent(*event)
+    , mCollection(AlarmCalendar::resources()->collectionForEvent(mEventItemId))
+    , mAlwaysHide(flags & ALWAYS_HIDE)
+    , mNoPostAction(alarm.type() & KAAlarm::REMINDER_ALARM)
+    , mBeep(event->beep())
+    , mSpeak(event->speak())
+    , mRescheduleEvent(!(flags & NO_RESCHEDULE))
 {
     qCDebug(KALARM_LOG) << "MessageWin:" << (void*)this << "event" << mEventId;
     setAttribute(static_cast<Qt::WidgetAttribute>(WidgetFlags));
@@ -285,44 +268,26 @@ void MessageWin::showError(const KAEvent& event, const DateTime& alarmDateTime,
 */
 MessageWin::MessageWin(const KAEvent* event, const DateTime& alarmDateTime,
                        const QStringList& errmsgs, const QString& dontShowAgain)
-    : MainWindowBase(nullptr, WFLAGS | WFLAGS2),
-      mMessage(event->cleanText()),
-      mDateTime(alarmDateTime),
-      mEventItemId(event->itemId()),
-      mEventId(*event),
-      mAlarmType(KAAlarm::MAIN_ALARM),
-      mAction(event->actionSubType()),
-      mAkonadiItemId(-1),
-      mCommandError(KAEvent::CMD_NO_ERROR),
-      mErrorMsgs(errmsgs),
-      mDontShowAgain(dontShowAgain),
-      mRestoreHeight(0),
-      mConfirmAck(false),
-      mShowEdit(false),
-      mNoDefer(true),
-      mInvalid(false),
-      mEvent(*event),
-      mOriginalEvent(*event),
-      mTimeLabel(nullptr),
-      mRemainingText(nullptr),
-      mEditButton(nullptr),
-      mDeferButton(nullptr),
-      mSilenceButton(nullptr),
-      mKMailButton(nullptr),
-      mCommandText(nullptr),
-      mDontShowAgainCheck(nullptr),
-      mEditDlg(nullptr),
-      mDeferDlg(nullptr),
-      mAlwaysHide(false),
-      mErrorWindow(true),
-      mInitialised(false),
-      mNoPostAction(true),
-      mRecreating(false),
-      mRescheduleEvent(false),
-      mShown(false),
-      mPositioning(false),
-      mNoCloseConfirm(false),
-      mDisableDeferral(false)
+    : MainWindowBase(nullptr, WFLAGS | WFLAGS2)
+    , mMessage(event->cleanText())
+    , mDateTime(alarmDateTime)
+    , mEventItemId(event->itemId())
+    , mEventId(*event)
+    , mAlarmType(KAAlarm::MAIN_ALARM)
+    , mAction(event->actionSubType())
+    , mAkonadiItemId(-1)
+    , mCommandError(KAEvent::CMD_NO_ERROR)
+    , mErrorMsgs(errmsgs)
+    , mDontShowAgain(dontShowAgain)
+    , mRestoreHeight(0)
+    , mConfirmAck(false)
+    , mShowEdit(false)
+    , mNoDefer(true)
+    , mInvalid(false)
+    , mEvent(*event)
+    , mOriginalEvent(*event)
+    , mErrorWindow(true)
+    , mNoPostAction(true)
 {
     qCDebug(KALARM_LOG) << "MessageWin: errmsg";
     setAttribute(static_cast<Qt::WidgetAttribute>(WidgetFlags));
@@ -338,26 +303,7 @@ MessageWin::MessageWin(const KAEvent* event, const DateTime& alarmDateTime,
 * The window is initialised by readProperties().
 */
 MessageWin::MessageWin()
-    : MainWindowBase(nullptr, WFLAGS),
-      mTimeLabel(nullptr),
-      mRemainingText(nullptr),
-      mEditButton(nullptr),
-      mDeferButton(nullptr),
-      mSilenceButton(nullptr),
-      mKMailButton(nullptr),
-      mCommandText(nullptr),
-      mDontShowAgainCheck(nullptr),
-      mEditDlg(nullptr),
-      mDeferDlg(nullptr),
-      mAlwaysHide(false),
-      mErrorWindow(false),
-      mInitialised(false),
-      mRecreating(false),
-      mRescheduleEvent(false),
-      mShown(false),
-      mPositioning(false),
-      mNoCloseConfirm(false),
-      mDisableDeferral(false)
+    : MainWindowBase(nullptr, WFLAGS)
 {
     qCDebug(KALARM_LOG) << "MessageWin:" << (void*)this << "restore";
     setAttribute(WidgetFlags);
@@ -2064,7 +2010,12 @@ void MessageWin::slotEdit()
     qCDebug(KALARM_LOG) << "MessageWin::slotEdit";
     MainWindow* mainWin = MainWindow::mainMainWindow();
     mEditDlg = EditAlarmDlg::create(false, &mOriginalEvent, false, mainWin, EditAlarmDlg::RES_IGNORE);
+#if 0    // Frameworks version >= 5.62
+    mEditDlg->setAttribute(Qt::WA_NativeWindow, true);
+    KWindowSystem::setMainWindow(mEditDlg->windowHandle(), winId());
+#else
     KWindowSystem::setMainWindow(mEditDlg, winId());
+#endif
     KWindowSystem::setOnAllDesktops(mEditDlg->winId(), false);
     setButtonsReadOnly(true);
     connect(mEditDlg, &QDialog::accepted, this, &MessageWin::editCloseOk);

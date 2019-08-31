@@ -122,10 +122,6 @@ KAEvent* AlarmCalendar::getEvent(const EventId& eventId)
 AlarmCalendar::AlarmCalendar()
     : mCalType(RESOURCES)
     , mEventType(CalEvent::EMPTY)
-    , mOpen(false)
-    , mUpdateCount(0)
-    , mUpdateSave(false)
-    , mHaveDisabledAlarms(false)
 {
     AkonadiModel* model = AkonadiModel::instance();
     connect(model, &AkonadiModel::eventsAdded, this, &AlarmCalendar::slotEventsAdded);
@@ -140,10 +136,6 @@ AlarmCalendar::AlarmCalendar()
 */
 AlarmCalendar::AlarmCalendar(const QString& path, CalEvent::Type type)
     : mEventType(type)
-    , mOpen(false)
-    , mUpdateCount(0)
-    , mUpdateSave(false)
-    , mHaveDisabledAlarms(false)
 {
     switch (type)
     {

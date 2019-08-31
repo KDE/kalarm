@@ -1,7 +1,7 @@
 /*
  *  editdlg.cpp  -  dialog to create or modify an alarm or alarm template
  *  Program:  kalarm
- *  Copyright © 2001-2018 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2019 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -134,24 +134,12 @@ EditAlarmDlg* EditAlarmDlg::create(bool Template, const KAEvent* event, bool new
 *   event   != to initialise the dialog to show the specified event's data.
 */
 EditAlarmDlg::EditAlarmDlg(bool Template, KAEvent::SubAction action, QWidget* parent, GetResourceType getResource)
-    : QDialog(parent),
-      mAlarmType(action),
-      mLoadTemplateButton(nullptr),
-      mMainPageShown(false),
-      mRecurPageShown(false),
-      mRecurSetDefaultEndDate(true),
-      mTemplateName(nullptr),
-      mDeferGroup(nullptr),
-      mDeferChangeButton(nullptr),
-      mTimeWidget(nullptr),
-      mShowInKorganizer(nullptr),
-      mDeferGroupHeight(0),
-      mTemplate(Template),
-      mNewAlarm(true),
-      mDesiredReadOnly(false),
-      mReadOnly(false),
-      mShowingMore(true),
-      mSavedEvent(nullptr)
+    : QDialog(parent)
+    , mAlarmType(action)
+    , mTemplate(Template)
+    , mNewAlarm(true)
+    , mDesiredReadOnly(false)
+    , mReadOnly(false)
 {
     init(nullptr, getResource);
     mWindowList.append(this);
@@ -159,25 +147,13 @@ EditAlarmDlg::EditAlarmDlg(bool Template, KAEvent::SubAction action, QWidget* pa
 
 EditAlarmDlg::EditAlarmDlg(bool Template, const KAEvent* event, bool newAlarm, QWidget* parent,
                            GetResourceType getResource, bool readOnly)
-    : QDialog(parent),
-      mAlarmType(event->actionSubType()),
-      mLoadTemplateButton(nullptr),
-      mMainPageShown(false),
-      mRecurPageShown(false),
-      mRecurSetDefaultEndDate(true),
-      mTemplateName(nullptr),
-      mDeferGroup(nullptr),
-      mDeferChangeButton(nullptr),
-      mTimeWidget(nullptr),
-      mShowInKorganizer(nullptr),
-      mDeferGroupHeight(0),
-      mEventId(newAlarm ? QString() : event->id()),
-      mTemplate(Template),
-      mNewAlarm(newAlarm),
-      mDesiredReadOnly(readOnly),
-      mReadOnly(readOnly),
-      mShowingMore(true),
-      mSavedEvent(nullptr)
+    : QDialog(parent)
+    , mAlarmType(event->actionSubType())
+    , mEventId(newAlarm ? QString() : event->id())
+    , mTemplate(Template)
+    , mNewAlarm(newAlarm)
+    , mDesiredReadOnly(readOnly)
+    , mReadOnly(readOnly)
 {
     init(event, getResource);
     mWindowList.append(this);

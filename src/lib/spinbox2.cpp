@@ -1,7 +1,7 @@
 /*
  *  spinbox2.cpp  -  spin box with extra pair of spin buttons
  *  Program:  kalarm
- *  Copyright © 2001-2009,2011 David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2019 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -60,8 +60,7 @@ static inline QPixmap grabWidget(QWidget* w, QRect r = QRect())
 int SpinBox2::mRightToLeft = -1;
 
 SpinBox2::SpinBox2(QWidget* parent)
-    : QFrame(parent),
-      mReverseWithLayout(true)
+    : QFrame(parent)
 {
     mSpinboxFrame = new QFrame(this);
     mUpdown2 = new ExtraSpinBox(this);
@@ -71,8 +70,7 @@ SpinBox2::SpinBox2(QWidget* parent)
 }
 
 SpinBox2::SpinBox2(int minValue, int maxValue, int pageStep, QWidget* parent)
-    : QFrame(parent),
-      mReverseWithLayout(true)
+    : QFrame(parent)
 {
     mSpinboxFrame = new QFrame(this);
     mUpdown2 = new ExtraSpinBox(minValue, maxValue, this);

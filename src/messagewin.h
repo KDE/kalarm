@@ -140,15 +140,15 @@ class MessageWin : public MainWindowBase
 
         static QList<MessageWin*>      mWindowList;    // list of existing message windows
         static QMap<EventId, unsigned> mErrorMessages; // error messages currently displayed, by event ID
-        static bool         mRedisplayed;     // redisplayAlarms() was called
+        static bool         mRedisplayed;            // redisplayAlarms() was called
         // Sound file playing
         static QPointer<AudioThread> mAudioThread;   // thread to play audio file
         // Properties needed by readProperties()
         QString             mMessage;
         QFont               mFont;
         QColor              mBgColour, mFgColour;
-        DateTime            mDateTime;        // date/time displayed in the message window
-        QDateTime           mCloseTime;       // UTC time at which window should be auto-closed
+        DateTime            mDateTime;               // date/time displayed in the message window
+        QDateTime           mCloseTime;              // UTC time at which window should be auto-closed
         Akonadi::Item::Id   mEventItemId;
         EventId             mEventId;
         QString             mAudioFile;
@@ -158,47 +158,47 @@ class MessageWin : public MainWindowBase
         int                 mDefaultDeferMinutes;
         KAAlarm::Type       mAlarmType;
         KAEvent::SubAction  mAction;
-        Akonadi::Item::Id   mAkonadiItemId;   // if email text, message's Akonadi Item ID, else -1
+        Akonadi::Item::Id   mAkonadiItemId;          // if email text, message's Akonadi Item ID, else -1
         KAEvent::CmdErrType mCommandError;
         QStringList         mErrorMsgs;
-        QString             mDontShowAgain;   // non-null for don't-show-again option with error message
+        QString             mDontShowAgain;          // non-null for don't-show-again option with error message
         int                 mRestoreHeight;
         int                 mAudioRepeatPause;
         bool                mConfirmAck;
-        bool                mShowEdit;        // display the Edit button
-        bool                mNoDefer;         // don't display a Defer option
-        bool                mInvalid;         // restored window is invalid
+        bool                mShowEdit;               // display the Edit button
+        bool                mNoDefer;                // don't display a Defer option
+        bool                mInvalid;                // restored window is invalid
         // Miscellaneous
-        KAEvent             mEvent;           // the whole event, for updating the calendar file
-        KAEvent             mOriginalEvent;   // the original event supplied to the constructor
-        Akonadi::Collection mCollection;      // collection which the event comes/came from
-        QLabel*             mTimeLabel;       // trigger time label
-        QLabel*             mRemainingText;   // the remaining time (for a reminder window)
+        KAEvent             mEvent;                  // the whole event, for updating the calendar file
+        KAEvent             mOriginalEvent;          // the original event supplied to the constructor
+        Akonadi::Collection mCollection;             // collection which the event comes/came from
+        QLabel*             mTimeLabel{nullptr};     // trigger time label
+        QLabel*             mRemainingText{nullptr}; // the remaining time (for a reminder window)
         PushButton*         mOkButton;
-        PushButton*         mEditButton;
-        PushButton*         mDeferButton;
-        PushButton*         mSilenceButton;
+        PushButton*         mEditButton{nullptr};
+        PushButton*         mDeferButton{nullptr};
+        PushButton*         mSilenceButton{nullptr};
         PushButton*         mKAlarmButton;
-        PushButton*         mKMailButton;
-        MessageText*        mCommandText;     // shows output from command
-        QCheckBox*          mDontShowAgainCheck;
-        EditAlarmDlg*       mEditDlg;         // alarm edit dialog invoked by Edit button
-        DeferAlarmDlg*      mDeferDlg;
-        QDateTime           mDeferLimit;      // last UTC time to which the message can currently be deferred
-        int                 mButtonDelay;     // delay (ms) after window is shown before buttons are enabled
-        int                 mScreenNumber;    // screen to display on, or -1 for default
-        bool                mAlwaysHide;      // the window should never be displayed
-        bool                mErrorWindow;     // the window is simply an error message
-        bool                mInitialised;     // initView() has been called to create the window's widgets
-        bool                mNoPostAction;    // don't execute any post-alarm action
-        bool                mRecreating;      // window is about to be deleted and immediately recreated
+        PushButton*         mKMailButton{nullptr};
+        MessageText*        mCommandText{nullptr};   // shows output from command
+        QCheckBox*          mDontShowAgainCheck{nullptr};
+        EditAlarmDlg*       mEditDlg{nullptr};       // alarm edit dialog invoked by Edit button
+        DeferAlarmDlg*      mDeferDlg{nullptr};
+        QDateTime           mDeferLimit;             // last UTC time to which the message can currently be deferred
+        int                 mButtonDelay;            // delay (ms) after window is shown before buttons are enabled
+        int                 mScreenNumber;           // screen to display on, or -1 for default
+        bool                mAlwaysHide{false};      // the window should never be displayed
+        bool                mErrorWindow{false};     // the window is simply an error message
+        bool                mInitialised{false};     // initView() has been called to create the window's widgets
+        bool                mNoPostAction;           // don't execute any post-alarm action
+        bool                mRecreating{false};      // window is about to be deleted and immediately recreated
         bool                mBeep;
-        bool                mSpeak;           // the message should be spoken via kttsd
-        bool                mRescheduleEvent; // true to delete event after message has been displayed
-        bool                mShown;           // true once the window has been displayed
-        bool                mPositioning;     // true when the window is being positioned initially
-        bool                mNoCloseConfirm;  // the Defer or Edit button is closing the dialog
-        bool                mDisableDeferral; // true if past deferral limit, so don't enable Defer button
+        bool                mSpeak;                  // the message should be spoken via kttsd
+        bool                mRescheduleEvent{false}; // true to delete event after message has been displayed
+        bool                mShown{false};           // true once the window has been displayed
+        bool                mPositioning{false};     // true when the window is being positioned initially
+        bool                mNoCloseConfirm{false};  // the Defer or Edit button is closing the dialog
+        bool                mDisableDeferral{false}; // true if past deferral limit, so don't enable Defer button
 };
 
 #endif // MESSAGEWIN_H

@@ -1,7 +1,7 @@
 /*
  *  slider.cpp  -  slider control with read-only option
  *  Program:  kalarm
- *  Copyright © 2004-2006 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2004-2019 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -23,18 +23,15 @@
 
 
 Slider::Slider(QWidget* parent)
-    : QSlider(parent),
-      mReadOnly(false)
+    : QSlider(parent)
 { }
 
 Slider::Slider(Qt::Orientation o, QWidget* parent)
-    : QSlider(o, parent),
-      mReadOnly(false)
+    : QSlider(o, parent)
 { }
 
 Slider::Slider(int minval, int maxval, int pageStep, Qt::Orientation o, QWidget* parent)
-    : QSlider(o, parent),
-      mReadOnly(false)
+    : QSlider(o, parent)
 { 
     setRange(minval, maxval);
     setPageStep(pageStep);

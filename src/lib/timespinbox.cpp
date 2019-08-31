@@ -1,7 +1,7 @@
 /*
  *  timespinbox.cpp  -  time spinbox widget
  *  Program:  kalarm
- *  Copyright © 2001-2008 David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2019 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -40,12 +40,10 @@
  * Construct a wrapping 00:00 - 23:59, or 12:00 - 11:59 time spin box.
  */
 TimeSpinBox::TimeSpinBox(bool use24hour, QWidget* parent)
-    : SpinBox2(0, 1439, 60, parent),
-      mMinimumValue(0),
-      m12Hour(!use24hour),
-      mPm(false),
-      mInvalid(false),
-      mEnteredSetValue(false)
+    : SpinBox2(0, 1439, 60, parent)
+    , mMinimumValue(0)
+    , m12Hour(!use24hour)
+    , mPm(false)
 {
     setWrapping(true);
     setReverseWithLayout(false);   // keep buttons the same way round even if right-to-left language
@@ -59,11 +57,9 @@ TimeSpinBox::TimeSpinBox(bool use24hour, QWidget* parent)
  * Construct a non-wrapping time spin box.
  */
 TimeSpinBox::TimeSpinBox(int minMinute, int maxMinute, QWidget* parent)
-    : SpinBox2(minMinute, maxMinute, 60, parent),
-      mMinimumValue(minMinute),
-      m12Hour(false),
-      mInvalid(false),
-      mEnteredSetValue(false)
+    : SpinBox2(minMinute, maxMinute, 60, parent)
+    , mMinimumValue(minMinute)
+    , m12Hour(false)
 {
     setReverseWithLayout(false);   // keep buttons the same way round even if right-to-left language
     setShiftSteps(5, 300);    // shift-left button increments 5 min / 5 hours

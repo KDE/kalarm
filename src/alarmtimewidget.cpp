@@ -1,7 +1,7 @@
 /*
  *  alarmtimewidget.cpp  -  alarm date/time entry widget
  *  Program:  kalarm
- *  Copyright © 2001-2011,2018 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2019 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -58,10 +58,7 @@ QString AlarmTimeWidget::i18n_TimeAfterPeriod()
 * Construct a widget with a group box and title.
 */
 AlarmTimeWidget::AlarmTimeWidget(const QString& groupBoxTitle, Mode mode, QWidget* parent)
-    : QFrame(parent),
-      mMinDateTimeIsNow(false),
-      mPastMax(false),
-      mMinMaxTimeSet(false)
+    : QFrame(parent)
 {
     init(mode, groupBoxTitle);
 }
@@ -70,10 +67,7 @@ AlarmTimeWidget::AlarmTimeWidget(const QString& groupBoxTitle, Mode mode, QWidge
 * Construct a widget without a group box or title.
 */
 AlarmTimeWidget::AlarmTimeWidget(Mode mode, QWidget* parent)
-    : QFrame(parent),
-      mMinDateTimeIsNow(false),
-      mPastMax(false),
-      mMinMaxTimeSet(false)
+    : QFrame(parent)
 {
     init(mode);
 }

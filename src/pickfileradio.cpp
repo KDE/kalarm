@@ -1,7 +1,7 @@
 /*
  *  pickfileradio.cpp  -  radio button with an associated file picker
  *  Program:  kalarm
- *  Copyright © 2005,2009,2019 David Jarvie <djarvie@kde.org>
+ *  Copyright © 2005-2019 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -32,9 +32,6 @@
 PickFileRadio::PickFileRadio(QPushButton* button, LineEdit* edit, const QString& text, ButtonGroup* group, QWidget* parent)
     : RadioButton(text, parent)
     , mGroup(group)
-    , mEdit(nullptr)
-    , mLastButton(nullptr)
-    , mRevertButton(false)
 {
     Q_ASSERT(parent);
     init(button, edit);
@@ -43,10 +40,7 @@ PickFileRadio::PickFileRadio(QPushButton* button, LineEdit* edit, const QString&
 PickFileRadio::PickFileRadio(const QString& text, ButtonGroup* group, QWidget* parent)
     : RadioButton(text, parent)
     , mGroup(group)
-    , mEdit(nullptr)
     , mButton(nullptr)
-    , mLastButton(nullptr)
-    , mRevertButton(false)
 {
     Q_ASSERT(parent);
 }

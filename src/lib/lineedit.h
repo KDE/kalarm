@@ -1,7 +1,7 @@
 /*
  *  lineedit.h  -  line edit widget with extra drag and drop options
  *  Program:  kalarm
- *  Copyright © 2003-2005,2009 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2003-2019 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -92,8 +92,8 @@ class LineEdit : public KLineEdit
         void         init();
 
         Type  mType;
-        bool  mNoSelect;
-        bool  mSetCursorAtEnd;   // setText() should position cursor at end
+        bool  mNoSelect{false};
+        bool  mSetCursorAtEnd{false};  // setText() should position cursor at end
 };
 
 #endif // LINEEDIT_H

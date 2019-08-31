@@ -1,7 +1,7 @@
 /*
  *  editdlg.h  -  dialog to create or modify an alarm or alarm template
  *  Program:  kalarm
- *  Copyright © 2001-2015 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2019 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -155,7 +155,7 @@ class EditAlarmDlg : public QDialog
 
         QDialogButtonBox*   mButtonBox;
         QAbstractButton*    mTryButton;
-        QAbstractButton*    mLoadTemplateButton;
+        QAbstractButton*    mLoadTemplateButton{nullptr};
         QAbstractButton*    mMoreLessButton;
 
     private:
@@ -164,12 +164,12 @@ class EditAlarmDlg : public QDialog
         StackedScrollGroup* mTabScrollGroup;
         int                 mMainPageIndex;
         int                 mRecurPageIndex;
-        bool                mMainPageShown;            // true once the main tab has been displayed
-        bool                mRecurPageShown;           // true once the recurrence tab has been displayed
-        bool                mRecurSetDefaultEndDate;   // adjust default end date/time when recurrence tab is displayed
+        bool                mMainPageShown{false};            // true once the main tab has been displayed
+        bool                mRecurPageShown{false};           // true once the recurrence tab has been displayed
+        bool                mRecurSetDefaultEndDate{true};   // adjust default end date/time when recurrence tab is displayed
 
         // Templates
-        QLineEdit*          mTemplateName;
+        QLineEdit*          mTemplateName{nullptr};
         ButtonGroup*        mTemplateTimeGroup;
         RadioButton*        mTemplateDefaultTime; // no alarm time is specified
         RadioButton*        mTemplateUseTimeAfter;// alarm time is specified as an offset from current
@@ -177,14 +177,14 @@ class EditAlarmDlg : public QDialog
         RadioButton*        mTemplateUseTime;     // an alarm time is specified
         TimeSpinBox*        mTemplateTimeAfter;   // the specified offset from the current time
         TimeEdit*           mTemplateTime;        // the alarm time which is specified 
-        QGroupBox*          mDeferGroup;
+        QGroupBox*          mDeferGroup{nullptr};
         QLabel*             mDeferTimeLabel;
-        QPushButton*        mDeferChangeButton;
+        QPushButton*        mDeferChangeButton{nullptr};
 
-        AlarmTimeWidget*    mTimeWidget;
+        AlarmTimeWidget*    mTimeWidget{nullptr};
         LateCancelSelector* mLateCancel;
         Reminder*           mReminder;           // null except for display alarms
-        CheckBox*           mShowInKorganizer;
+        CheckBox*           mShowInKorganizer{nullptr};
 
         QFrame*             mMoreOptions;        // contains options hidden by default
 
@@ -195,7 +195,7 @@ class EditAlarmDlg : public QDialog
         DateTime            mDeferDateTime;
         Akonadi::Item::Id   mCollectionItemId;   // if >=0, save alarm in collection containing this item ID
         Akonadi::Collection mCollection;         // collection to save event into, or null
-        int                 mDeferGroupHeight;   // height added by deferred time widget
+        int                 mDeferGroupHeight{0};   // height added by deferred time widget
         int                 mDesktop;            // desktop to display the dialog in
         QString             mEventId;            // UID of event being edited, or blank for new event
         bool                mTemplate;           // editing an alarm template
@@ -205,10 +205,10 @@ class EditAlarmDlg : public QDialog
         mutable bool        mOnlyDeferred;       // the only change made in the dialog was to the existing deferral
         bool                mDesiredReadOnly;    // the specified read-only status of the dialog
         bool                mReadOnly;           // the actual read-only status of the dialog
-        bool                mShowingMore;        // the More Options button has been clicked
+        bool                mShowingMore{true};        // the More Options button has been clicked
 
         // Initial state of all controls
-        KAEvent*            mSavedEvent;
+        KAEvent*            mSavedEvent{nullptr};
         QString             mSavedTemplateName;     // mTemplateName value
         QAbstractButton*    mSavedTemplateTimeType; // selected button in mTemplateTimeGroup
         QTime               mSavedTemplateTime;     // mTemplateTime value

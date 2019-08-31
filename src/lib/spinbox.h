@@ -1,7 +1,7 @@
 /*
  *  spinbox.h  -  spin box with shift-click step value and read-only option
  *  Program:  kalarm
- *  Copyright © 2002-2008 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2002-2019 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -157,17 +157,17 @@ class SpinBox : public QSpinBox
 
         int          mMinValue;
         int          mMaxValue;
-        int          mLineStep;         // step when spin arrows are pressed
-        int          mLineShiftStep;    // step when spin arrows are pressed with shift key
-        int          mCurrentButton;    // current spin widget button
-        bool         mShiftMouse;       // true while left button is being held down with shift key
-        bool         mShiftMinBound;    // true if a temporary minimum bound has been set during shift stepping
-        bool         mShiftMaxBound;    // true if a temporary maximum bound has been set during shift stepping
-        bool         mSelectOnStep;     // select the editor text whenever spin buttons are clicked (default)
-        bool         mUpDownOnly;       // true if edit field isn't displayed
-        bool         mReadOnly;         // value cannot be changed
-        bool         mSuppressSignals;
-        bool         mEdited;           // text field has been edited
+        int          mLineStep;                 // step when spin arrows are pressed
+        int          mLineShiftStep;            // step when spin arrows are pressed with shift key
+        int          mCurrentButton{NO_BUTTON}; // current spin widget button
+        bool         mShiftMouse{false};        // true while left button is being held down with shift key
+        bool         mShiftMinBound{false};     // true if a temporary minimum bound has been set during shift stepping
+        bool         mShiftMaxBound{false};     // true if a temporary maximum bound has been set during shift stepping
+        bool         mSelectOnStep{true};       // select the editor text whenever spin buttons are clicked (default)
+        bool         mUpDownOnly{false};        // true if edit field isn't displayed
+        bool         mReadOnly{false};          // value cannot be changed
+        bool         mSuppressSignals{false};
+        bool         mEdited{false};            // text field has been edited
 };
 
 #endif // SPINBOX_H

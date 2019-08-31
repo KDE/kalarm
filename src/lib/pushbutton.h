@@ -1,7 +1,7 @@
 /*
  *  pushbutton.h  -  push button with read-only option
  *  Program:  kalarm
- *  Copyright © 2002,2003,2005,2006,2009 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2002-2019 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -78,9 +78,9 @@ class PushButton : public QPushButton
         void         keyReleaseEvent(QKeyEvent*) override;
         bool         event(QEvent*) override;
     private:
-        Qt::FocusPolicy mFocusPolicy;   // default focus policy for the PushButton
-        bool            mReadOnly;      // value cannot be changed
-        bool            mNoHighlight;   // don't highlight on mouse hover, if read-only
+        Qt::FocusPolicy mFocusPolicy;         // default focus policy for the PushButton
+        bool            mReadOnly{false};     // value cannot be changed
+        bool            mNoHighlight{false};  // don't highlight on mouse hover, if read-only
 };
 
 #endif // PUSHBUTTON_H

@@ -1,7 +1,7 @@
 /*
  *  radiobutton.cpp  -  radio button with read-only option
  *  Program:  kalarm
- *  Copyright © 2002,2003,2005 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2002-2019 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -24,17 +24,13 @@
 
 
 RadioButton::RadioButton(QWidget* parent)
-    : QRadioButton(parent),
-      mFocusPolicy(focusPolicy()),
-      mFocusWidget(nullptr),
-      mReadOnly(false)
+    : QRadioButton(parent)
+    , mFocusPolicy(focusPolicy())
 { }
 
 RadioButton::RadioButton(const QString& text, QWidget* parent)
-    : QRadioButton(text, parent),
-      mFocusPolicy(focusPolicy()),
-      mFocusWidget(nullptr),
-      mReadOnly(false)
+    : QRadioButton(text, parent)
+    , mFocusPolicy(focusPolicy())
 { }
 
 /******************************************************************************

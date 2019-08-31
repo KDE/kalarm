@@ -1,7 +1,7 @@
 /*
  *  alarmtimewidget.h  -  alarm date/time entry widget
  *  Program:  kalarm
- *  Copyright © 2001-2011,2018 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2019 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -93,18 +93,18 @@ class AlarmTimeWidget : public QFrame
         TimeEdit*         mTimeEdit;
         TimeSpinBox*      mDelayTimeEdit;
         PushButton*       mTimeZoneButton;
-        QWidget*          mTimeZoneBox;      // contains label and time zone combo box
+        QWidget*          mTimeZoneBox;          // contains label and time zone combo box
         TimeZoneCombo*    mTimeZone;
-        KADateTime        mMinDateTime;      // earliest allowed date/time
-        KADateTime        mMaxDateTime;      // latest allowed date/time
-        KADateTime::Spec  mTimeSpec;         // time spec used
-        int               mAnyTime;          // 0 = date/time is specified, 1 = only a date, -1 = uninitialised
-        bool              mAnyTimeAllowed;   // 'mAnyTimeCheckBox' is enabled
-        bool              mDeferring;        // being used to enter a deferral time
-        bool              mMinDateTimeIsNow; // earliest allowed date/time is the current time
-        bool              mPastMax;          // current time is past the maximum date/time
-        bool              mMinMaxTimeSet;    // limits have been set for the time edit control
-        bool              mTimerSyncing;     // mTimer is not yet synchronized to the minute boundary
+        KADateTime        mMinDateTime;          // earliest allowed date/time
+        KADateTime        mMaxDateTime;          // latest allowed date/time
+        KADateTime::Spec  mTimeSpec;             // time spec used
+        int               mAnyTime;              // 0 = date/time is specified, 1 = only a date, -1 = uninitialised
+        bool              mAnyTimeAllowed;       // 'mAnyTimeCheckBox' is enabled
+        bool              mDeferring;            // being used to enter a deferral time
+        bool              mMinDateTimeIsNow{false}; // earliest allowed date/time is the current time
+        bool              mPastMax{false};       // current time is past the maximum date/time
+        bool              mMinMaxTimeSet{false}; // limits have been set for the time edit control
+        bool              mTimerSyncing;         // mTimer is not yet synchronized to the minute boundary
 };
 
 #endif // ALARMTIMEWIDGET_H

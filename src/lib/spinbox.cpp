@@ -1,7 +1,7 @@
 /*
  *  spinbox.cpp  -  spin box with read-only option and shift-click step value
  *  Program:  kalarm
- *  Copyright © 2002,2004-2008 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2002-2019 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -33,18 +33,18 @@
 
 
 SpinBox::SpinBox(QWidget* parent)
-    : QSpinBox(parent),
-      mMinValue(QSpinBox::minimum()),
-      mMaxValue(QSpinBox::maximum())
+    : QSpinBox(parent)
+    , mMinValue(QSpinBox::minimum())
+    , mMaxValue(QSpinBox::maximum())
 {
     setRange(0, 99999);
     init();
 }
 
 SpinBox::SpinBox(int minValue, int maxValue, QWidget* parent)
-    : QSpinBox(parent),
-      mMinValue(minValue),
-      mMaxValue(maxValue)
+    : QSpinBox(parent)
+    , mMinValue(minValue)
+    , mMaxValue(maxValue)
 {
     setRange(minValue, maxValue);
     init();
@@ -56,14 +56,6 @@ void SpinBox::init()
     mLineStep        = step;
     mLineShiftStep   = step;
     mCurrentButton   = NO_BUTTON;
-    mShiftMouse      = false;
-    mShiftMinBound   = false;
-    mShiftMaxBound   = false;
-    mSelectOnStep    = true;
-    mUpDownOnly      = false;
-    mReadOnly        = false;
-    mSuppressSignals = false;
-    mEdited          = false;
 
     lineEdit()->installEventFilter(this);   // handle shift-up/down arrow presses
 
