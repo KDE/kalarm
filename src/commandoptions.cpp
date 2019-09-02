@@ -270,7 +270,7 @@ void CommandOptions::parse()
     if (mParser->isSet(QStringLiteral("version")))
     {
         mCommand = EXIT;
-        mError = QCoreApplication::applicationName() + QStringLiteral(" ") + QCoreApplication::applicationVersion();
+        mError = QCoreApplication::applicationName() + QLatin1String(" ") + QCoreApplication::applicationVersion();
         return;
     }
 }
@@ -321,14 +321,14 @@ void CommandOptions::process()
         mEditAction    = KAEvent::COMMAND;
         mEditActionSet = true;
         mFlags        |= KAEvent::DISPLAY_COMMAND;
-        mText          = mParser->value(*mOptions.at(mCommandOpt)) + QStringLiteral(" ") + mExecArguments.join(QLatin1Char(' '));
+        mText          = mParser->value(*mOptions.at(mCommandOpt)) + QLatin1String(" ") + mExecArguments.join(QLatin1Char(' '));
     }
     if (checkCommand(EXEC, NEW))
     {
         mEditType      = EditAlarmDlg::COMMAND;
         mEditAction    = KAEvent::COMMAND;
         mEditActionSet = true;
-        mText          = mParser->value(*mOptions.at(mCommandOpt)) + QStringLiteral(" ") + mExecArguments.join(QLatin1Char(' '));
+        mText          = mParser->value(*mOptions.at(mCommandOpt)) + QLatin1String(" ") + mExecArguments.join(QLatin1Char(' '));
     }
     if (checkCommand(MAIL, NEW))
     {

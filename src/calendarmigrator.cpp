@@ -220,7 +220,7 @@ void CalendarMigrator::migrateOrCreate()
         CalendarCreator* creator;
         for (const QString& id : keys)
         {
-            const KConfigGroup configGroup = config.group(QStringLiteral("Resource_") + id);
+            const KConfigGroup configGroup = config.group(QLatin1String("Resource_") + id);
             const QString resourceType = configGroup.readEntry("ResourceType", QString());
             QString agentType;
             if (resourceType == QLatin1String("file"))
@@ -522,7 +522,7 @@ template <class Interface> bool CalendarMigrator::updateStorageFormat(const Agen
 */
 template <class Interface> Interface* CalendarMigrator::getAgentInterface(const AgentInstance& agent, QString& errorMessage, QObject* parent)
 {
-    Interface* iface = new Interface(QStringLiteral("org.freedesktop.Akonadi.Resource.") + agent.identifier(),
+    Interface* iface = new Interface(QLatin1String("org.freedesktop.Akonadi.Resource.") + agent.identifier(),
               QStringLiteral("/Settings"), QDBusConnection::sessionBus(), parent);
     if (!iface->isValid())
     {

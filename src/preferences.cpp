@@ -155,7 +155,7 @@ void Preferences::setNoAutoStart(bool yes)
     const QStringList autostartDirs = QStandardPaths::standardLocations(QStandardPaths::GenericConfigLocation);
     for (const QString& dir : autostartDirs)
     {
-        const QString file = dir + QStringLiteral("/autostart/") + AUTOSTART_FILE;
+        const QString file = dir + QLatin1String("/autostart/") + AUTOSTART_FILE;
         if (QFile::exists(file))
         {
             QFileInfo info(file);
@@ -172,7 +172,7 @@ void Preferences::setNoAutoStart(bool yes)
     QString autostartFileRW = autostartFile;
     if (existingRO)
     {
-        autostartFileRW = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation) + QStringLiteral("/autostart/") + AUTOSTART_FILE;
+        autostartFileRW = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation) + QLatin1String("/autostart/") + AUTOSTART_FILE;
         if (autostartFileRW.isEmpty())
         {
             qCWarning(KALARM_LOG) << "Preferences::setNoAutoStart: No writable autostart file path";
@@ -483,7 +483,7 @@ QString translateXTermPath(const QString& cmdline, bool write)
                 Q_FALLTHROUGH();
             case ' ':
                 params = cmd.mid(i);
-                cmd = cmd.left(i);
+                cmd.truncate(i);
                 break;
             default:
                 continue;

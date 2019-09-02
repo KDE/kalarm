@@ -981,7 +981,7 @@ QString CollectionControlModel::typeListForDisplay(CalEvent::Types alarmTypes)
     if (alarmTypes & CalEvent::TEMPLATE)
         list += QLatin1String("<item>") + i18nc("@info", "Alarm Templates") + QLatin1String("</item>");
     if (!list.isEmpty())
-        list = QStringLiteral("<list>") + list + QStringLiteral("</list>");
+        list = QLatin1String("<list>") + list + QLatin1String("</list>");
     return list;
 }
 
