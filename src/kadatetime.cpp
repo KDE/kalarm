@@ -2049,7 +2049,7 @@ KADateTime KADateTime::fromString(const QString &string, TimeFormat format, bool
             if (!t.isValid())
                 break;
             int offset = 0;
-            SpecType spec = (parts[8].toUpper() == QLatin1String("Z")) ? UTC : OffsetFromUTC;
+            SpecType spec = (parts[8].toUpper() == QLatin1Char('Z')) ? UTC : OffsetFromUTC;
             if (spec == OffsetFromUTC) {
                 offset = parts[10].toInt(&ok) * 3600;
                 offset += parts[11].toInt(&ok1) * 60;
@@ -2188,7 +2188,7 @@ KADateTime KADateTime::fromString(const QString &string, TimeFormat format, bool
                 return KADateTime(d, t, KADateTimePrivate::fromStringDefault());
             }
             int offset = 0;
-            SpecType spec = (parts[8] == QLatin1String("Z")) ? UTC : OffsetFromUTC;
+            SpecType spec = (parts[8] == QLatin1Char('Z')) ? UTC : OffsetFromUTC;
             if (spec == OffsetFromUTC) {
                 offset = parts[10].toInt(&ok) * 3600;
                 if (!ok)

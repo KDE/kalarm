@@ -1603,7 +1603,7 @@ Alarm::Ptr KAEventPrivate::initKCalAlarm(const KCalendarCore::Event::Ptr &event,
     }
     alltypes += types;
     if (!alltypes.isEmpty()) {
-        alarm->setCustomProperty(KACalendar::APPNAME, TYPE_PROPERTY, alltypes.join(QLatin1String(",")));
+        alarm->setCustomProperty(KACalendar::APPNAME, TYPE_PROPERTY, alltypes.join(QLatin1Char(',')));
     }
     if (!flags.isEmpty()) {
         alarm->setCustomProperty(KACalendar::APPNAME, FLAGS_PROPERTY, flags.join(SC));
@@ -3781,7 +3781,7 @@ void KAEventPrivate::dumpDebug() const
         qCDebug(KALARMCAL_LOG) << "-- mEmail: FromKMail:" << mEmailFromIdentity;
         qCDebug(KALARMCAL_LOG) << "--         Addresses:" << mEmailAddresses.join(QLatin1String(","));
         qCDebug(KALARMCAL_LOG) << "--         Subject:" << mEmailSubject;
-        qCDebug(KALARMCAL_LOG) << "--         Attachments:" << mEmailAttachments.join(QLatin1String(","));
+        qCDebug(KALARMCAL_LOG) << "--         Attachments:" << mEmailAttachments.join(QLatin1Char(','));
         qCDebug(KALARMCAL_LOG) << "--         Bcc:" << mEmailBcc;
     } else if (mActionSubType == KAEvent::AUDIO) {
         qCDebug(KALARMCAL_LOG) << "-- mAudioFile:" << mAudioFile;
@@ -5068,7 +5068,7 @@ bool KAEvent::convertKCalEvents(const Calendar::Ptr &calendar, int calendarVersi
                     addLateCancel = true;
                 }
                 if (types.count() > 0) {
-                    alarm->setCustomProperty(KACalendar::APPNAME, KAEventPrivate::TYPE_PROPERTY, types.join(QLatin1String(",")));
+                    alarm->setCustomProperty(KACalendar::APPNAME, KAEventPrivate::TYPE_PROPERTY, types.join(QLatin1Char(',')));
                 }
 
                 if (pre_0_7  &&  alarm->repeatCount() > 0  &&  alarm->snoozeTime().value() > 0) {
@@ -5192,7 +5192,7 @@ bool KAEvent::convertKCalEvents(const Calendar::Ptr &calendar, int calendarVersi
             int i;
             while ((i = cats.indexOf(TEMPL_DEF_TIME_CAT)) >= 0) {
                 cats.removeAt(i);
-                (flags += KAEventPrivate::TEMPL_AFTER_TIME_FLAG) += QStringLiteral("0");
+                (flags += KAEventPrivate::TEMPL_AFTER_TIME_FLAG) += QLatin1String("0");
             }
         }
 
@@ -5259,7 +5259,7 @@ bool KAEvent::convertKCalEvents(const Calendar::Ptr &calendar, int calendarVersi
         }
 
         if (addLateCancel) {
-            (flags += KAEventPrivate::LATE_CANCEL_FLAG) += QStringLiteral("1");
+            (flags += KAEventPrivate::LATE_CANCEL_FLAG) += QLatin1String("1");
         }
         if (!flags.isEmpty()) {
             event->setCustomProperty(KACalendar::APPNAME, KAEventPrivate::FLAGS_PROPERTY, flags.join(KAEventPrivate::SC));
