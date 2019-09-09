@@ -50,9 +50,6 @@ class CalendarDataModel
         };
         enum {   // additional data roles
             // Calendar roles
-#ifndef AKONADI
-UserRole = Qt::UserRole + 500,
-#endif
             EnabledTypesRole = UserRole, // alarm types which are enabled for the collection
             BaseColourRole,            // background colour ignoring collection colour
             AlarmTypeRole,             // OR of event types which collection contains
