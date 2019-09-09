@@ -61,6 +61,11 @@
 using namespace Akonadi;
 using namespace KAlarmCal;
 
+// Ensure CalendarDataModel::UserRole is valid. CalendarDataModel does not
+// include Akonadi headers, so here we check that it has been set to be
+// compatible with EntityTreeModel::UserRole.
+static_assert((int)CalendarDataModel::UserRole>=(int)Akonadi::EntityTreeModel::UserRole, "CalendarDataModel::UserRole wrong value");
+
 static const Collection::Rights writableRights = Collection::CanChangeItem | Collection::CanCreateItem | Collection::CanDeleteItem;
 
 //static bool checkItem_true(const Item&) { return true; }
