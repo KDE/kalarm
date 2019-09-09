@@ -48,6 +48,7 @@ set(kalarm_bin_SRCS ${libkalarm_SRCS}
     ${libkalarm_common_SRCS}
     birthdaydlg.cpp
     birthdaymodel.cpp
+    calendardatamodel.cpp
     main.cpp
     editdlg.cpp
     editdlgtypes.cpp

@@ -21,16 +21,15 @@
 #ifndef AKONADIMODEL_H
 #define AKONADIMODEL_H
 
+#include "calendardatamodel.h"
 #include "eventid.h"
 
-#include <kalarmcal/kacalendar.h>
 #include <kalarmcal/kaevent.h>
 #include <kalarmcal/collectionattribute.h>
 
 #include <AkonadiCore/entitytreemodel.h>
 #include <AkonadiCore/servermanager.h>
 
-#include <QSize>
 #include <QColor>
 #include <QHash>
 #include <QQueue>
@@ -46,35 +45,11 @@ class KJob;
 using namespace KAlarmCal;
 
 
-class AkonadiModel : public Akonadi::EntityTreeModel
+class AkonadiModel : public Akonadi::EntityTreeModel, public CalendarDataModel
 {
         Q_OBJECT
     public:
         enum Change { Added, Deleted, Invalidated, Enabled, ReadOnly, AlarmTypes, WrongType, Location, Colour };
-        enum {   // data columns
-            // Item columns
-            TimeColumn = 0, TimeToColumn, RepeatColumn, ColourColumn, TypeColumn, TextColumn,
-            TemplateNameColumn,
-            ColumnCount
-        };
-        enum {   // additional data roles
-            // Collection roles
-            EnabledTypesRole = UserRole, // alarm types which are enabled for the collection
-            BaseColourRole,            // background colour ignoring collection colour
-            AlarmTypeRole,             // OR of event types which collection contains
-            IsStandardRole,            // OR of event types which collection is standard for
-            KeepFormatRole,            // user has chosen not to update collection's calendar storage format
-            // Item roles
-            EnabledRole,               // true for enabled alarm, false for disabled
-            StatusRole,                // KAEvent::ACTIVE/ARCHIVED/TEMPLATE
-            AlarmActionsRole,          // KAEvent::Actions
-            AlarmSubActionRole,        // KAEvent::Action
-            ValueRole,                 // numeric value
-            SortRole,                  // the value to use for sorting
-            TimeDisplayRole,           // time column value with '~' representing omitted leading zeroes
-            ColumnTitleRole,           // column titles (whether displayed or not)
-            CommandErrorRole           // last command execution error for alarm (per user)
-        };
 
         /** Struct containing a KAEvent and its parent Collection. */
         struct Event
@@ -93,17 +68,23 @@ class AkonadiModel : public Akonadi::EntityTreeModel
 
         /** Return the display name for a collection. */
         QString displayName(Akonadi::Collection&) const;
+
         /** Return the storage type (file/directory/URL etc.) for a collection. */
         QString storageType(const Akonadi::Collection&) const;
+
         /** Get the foreground color for a collection, based on specified mime types. */
         static QColor foregroundColor(const Akonadi::Collection&, const QStringList& mimeTypes);
+
         /** Set the background color for a collection and its alarms. */
         void setBackgroundColor(Akonadi::Collection&, const QColor&);
+
         /** Get the background color for a collection and its alarms. */
         QColor backgroundColor(Akonadi::Collection&) const;
+
         /** Get the tooltip for a collection. The collection's enabled status is
          *  evaluated for specified alarm types. */
         QString tooltip(const Akonadi::Collection&, CalEvent::Types) const;
+
         /** Return the read-only status tooltip for a collection.
           * A null string is returned if the collection is fully writable. */
         static QString readOnlyTooltip(const Akonadi::Collection&);
@@ -207,8 +188,6 @@ class AkonadiModel : public Akonadi::EntityTreeModel
 
         static CalEvent::Types types(const Akonadi::Collection&);
 
-        static QSize iconSize()  { return mIconSize; }
-
     Q_SIGNALS:
         /** Signal emitted when a collection has been added to the model. */
         void collectionAdded(const Akonadi::Collection&);
@@ -305,20 +284,10 @@ class AkonadiModel : public Akonadi::EntityTreeModel
         void     getChildEvents(const QModelIndex& parent, CalEvent::Type, KAEvent::List&) const;
 #endif
         QColor    backgroundColor_p(const Akonadi::Collection&) const;
-        QString   repeatText(const KAEvent&) const;
-        QString   repeatOrder(const KAEvent&) const;
-        QPixmap*  eventIcon(const KAEvent&) const;
-        QString   whatsThisText(int column) const;
         EventList eventList(const QModelIndex& parent, int start, int end);
 
         static AkonadiModel*  mInstance;
-        static QPixmap* mTextIcon;
-        static QPixmap* mFileIcon;
-        static QPixmap* mCommandIcon;
-        static QPixmap* mEmailIcon;
-        static QPixmap* mAudioIcon;
-        static QSize    mIconSize;
-        static int      mTimeHourPos;   // position of hour within time string, or -1 if leading zeroes included
+        static int            mTimeHourPos;   // position of hour within time string, or -1 if leading zeroes included
 
         Akonadi::ChangeRecorder* mMonitor;
         QHash<Akonadi::Collection::Id, CalEvent::Types> mCollectionAlarmTypes;  // last content mime types of each collection

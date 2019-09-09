@@ -70,12 +70,6 @@ static const Collection::Rights writableRights = Collection::CanChangeItem | Col
 =============================================================================*/
 
 AkonadiModel* AkonadiModel::mInstance = nullptr;
-QPixmap*      AkonadiModel::mTextIcon = nullptr;
-QPixmap*      AkonadiModel::mFileIcon = nullptr;
-QPixmap*      AkonadiModel::mCommandIcon = nullptr;
-QPixmap*      AkonadiModel::mEmailIcon = nullptr;
-QPixmap*      AkonadiModel::mAudioIcon = nullptr;
-QSize         AkonadiModel::mIconSize;
 int           AkonadiModel::mTimeHourPos = -2;
 
 /******************************************************************************
@@ -93,6 +87,7 @@ AkonadiModel* AkonadiModel::instance()
 */
 AkonadiModel::AkonadiModel(ChangeRecorder* monitor, QObject* parent)
     : EntityTreeModel(monitor, parent)
+    , CalendarDataModel()
     , mMonitor(monitor)
     , mResourcesChecked(false)
     , mMigrating(false)
@@ -114,16 +109,6 @@ AkonadiModel::AkonadiModel(ChangeRecorder* monitor, QObject* parent)
     AttributeFactory::registerAttribute<CompatibilityAttribute>();
     AttributeFactory::registerAttribute<EventAttribute>();
 
-    if (!mTextIcon)
-    {
-        mTextIcon    = new QPixmap(QIcon::fromTheme(QStringLiteral("dialog-information")).pixmap(16, 16));
-        mFileIcon    = new QPixmap(QIcon::fromTheme(QStringLiteral("document-open")).pixmap(16, 16));
-        mCommandIcon = new QPixmap(QIcon::fromTheme(QStringLiteral("system-run")).pixmap(16, 16));
-        mEmailIcon   = new QPixmap(QIcon::fromTheme(QStringLiteral("mail-unread")).pixmap(16, 16));
-        mAudioIcon   = new QPixmap(QIcon::fromTheme(QStringLiteral("audio-x-generic")).pixmap(16, 16));
-        mIconSize = mTextIcon->size().expandedTo(mFileIcon->size()).expandedTo(mCommandIcon->size()).expandedTo(mEmailIcon->size()).expandedTo(mAudioIcon->size());
-    }
-
 #pragma message("Only want to monitor collection properties, not content, when this becomes possible")
     connect(monitor, SIGNAL(collectionChanged(Akonadi::Collection,QSet<QByteArray>)), SLOT(slotCollectionChanged(Akonadi::Collection,QSet<QByteArray>)));
     connect(monitor, &Monitor::collectionRemoved, this, &AkonadiModel::slotCollectionRemoved);
@@ -142,6 +127,10 @@ AkonadiModel::AkonadiModel(ChangeRecorder* monitor, QObject* parent)
     checkResources(ServerManager::state());
 }
 
+
+/******************************************************************************
+* Destructor.
+*/
 AkonadiModel::~AkonadiModel()
 {
     if (mInstance == this)
@@ -316,222 +305,21 @@ QVariant AkonadiModel::data(const QModelIndex& index, int role) const
                 default:
                     break;
             }
-            const int column = index.column();
-            if (role == Qt::WhatsThisRole)
-                return whatsThisText(column);
             const KAEvent event(this->event(item));
-            if (!event.isValid())
-                return QVariant();
-            if (role == AlarmActionsRole)
-                return event.actionTypes();
-            if (role == AlarmSubActionRole)
-                return event.actionSubType();
-            bool calendarColour = false;
-            switch (column)
-            {
-                case TimeColumn:
-                    switch (role)
-                    {
-                        case Qt::BackgroundRole:
-                            calendarColour = true;
-                            break;
-                        case Qt::DisplayRole:
-                            if (event.expired())
-                                return AlarmTime::alarmTimeText(event.startDateTime(), '0');
-                            return AlarmTime::alarmTimeText(event.nextTrigger(KAEvent::DISPLAY_TRIGGER), '0');
-                        case TimeDisplayRole:
-                            if (event.expired())
-                                return AlarmTime::alarmTimeText(event.startDateTime(), '~');
-                            return AlarmTime::alarmTimeText(event.nextTrigger(KAEvent::DISPLAY_TRIGGER), '~');
-                        case Qt::TextAlignmentRole:
-                            return Qt::AlignRight;
-                        case SortRole:
-                        {
-                            DateTime due;
-                            if (event.expired())
-                                due = event.startDateTime();
-                            else
-                                due = event.nextTrigger(KAEvent::DISPLAY_TRIGGER);
-                            return due.isValid() ? due.effectiveKDateTime().toUtc().qDateTime()
-                                                 : QDateTime(QDate(9999,12,31), QTime(0,0,0));
-                        }
-                        default:
-                            break;
-                    }
-                    break;
-                case TimeToColumn:
-                    switch (role)
-                    {
-                        case Qt::BackgroundRole:
-                            calendarColour = true;
-                            break;
-                        case Qt::DisplayRole:
-                            if (event.expired())
-                                return QString();
-                            return AlarmTime::timeToAlarmText(event.nextTrigger(KAEvent::DISPLAY_TRIGGER));
-                        case Qt::TextAlignmentRole:
-                            return Qt::AlignRight;
-                        case SortRole:
-                        {
-                            if (event.expired())
-                                return -1;
-                            const DateTime due = event.nextTrigger(KAEvent::DISPLAY_TRIGGER);
-                            const KADateTime now = KADateTime::currentUtcDateTime();
-                            if (due.isDateOnly())
-                                return now.date().daysTo(due.date()) * 1440;
-                            return (now.secsTo(due.effectiveKDateTime()) + 59) / 60;
-                        }
-                    }
-                    break;
-                case RepeatColumn:
-                    switch (role)
-                    {
-                        case Qt::BackgroundRole:
-                            calendarColour = true;
-                            break;
-                        case Qt::DisplayRole:
-                            return repeatText(event);
-                        case Qt::TextAlignmentRole:
-                            return Qt::AlignHCenter;
-                        case SortRole:
-                            return repeatOrder(event);
-                    }
-                    break;
-                case ColourColumn:
-                    switch (role)
-                    {
-                        case Qt::BackgroundRole:
-                        {
-                            const KAEvent::Actions type = event.actionTypes();
-                            if (type & KAEvent::ACT_DISPLAY)
-                                return event.bgColour();
-                            if (type == KAEvent::ACT_COMMAND)
-                            {
-                                if (event.commandError() != KAEvent::CMD_NO_ERROR)
-                                    return QColor(Qt::red);
-                            }
-                            break;
-                        }
-                        case Qt::ForegroundRole:
-                            if (event.commandError() != KAEvent::CMD_NO_ERROR)
-                            {
-                                if (event.actionTypes() == KAEvent::ACT_COMMAND)
-                                    return QColor(Qt::white);
-                                QColor colour = Qt::red;
-                                int r, g, b;
-                                event.bgColour().getRgb(&r, &g, &b);
-                                if (r > 128  &&  g <= 128  &&  b <= 128)
-                                    colour = QColor(Qt::white);
-                                return colour;
-                            }
-                            break;
-                        case Qt::DisplayRole:
-                            if (event.commandError() != KAEvent::CMD_NO_ERROR)
-                                return QLatin1String("!");
-                            break;
-                        case SortRole:
-                        {
-                            const unsigned i = (event.actionTypes() == KAEvent::ACT_DISPLAY)
-                                               ? event.bgColour().rgb() : 0;
-                            return QStringLiteral("%1").arg(i, 6, 10, QLatin1Char('0'));
-                        }
-                        default:
-                            break;
-                    }
-                    break;
-                case TypeColumn:
-                    switch (role)
-                    {
-                        case Qt::BackgroundRole:
-                            calendarColour = true;
-                            break;
-                        case Qt::DecorationRole:
-                        {
-                            QVariant v;
-                            v.setValue(*eventIcon(event));
-                            return v;
-                        }
-                        case Qt::TextAlignmentRole:
-                            return Qt::AlignHCenter;
-                        case Qt::SizeHintRole:
-                            return mIconSize;
-                        case Qt::AccessibleTextRole:
-#pragma message("Implement accessibility")
-                            return QString();
-                        case ValueRole:
-                            return static_cast<int>(event.actionSubType());
-                        case SortRole:
-                            return QStringLiteral("%1").arg(event.actionSubType(), 2, 10, QLatin1Char('0'));
-                    }
-                    break;
-                case TextColumn:
-                    switch (role)
-                    {
-                        case Qt::BackgroundRole:
-                            calendarColour = true;
-                            break;
-                        case Qt::DisplayRole:
-                        case SortRole:
-                            return AlarmText::summary(event, 1);
-                        case Qt::ToolTipRole:
-                            return AlarmText::summary(event, 10);
-                        default:
-                            break;
-                    }
-                    break;
-                case TemplateNameColumn:
-                    switch (role)
-                    {
-                        case Qt::BackgroundRole:
-                            calendarColour = true;
-                            break;
-                        case Qt::DisplayRole:
-                            return event.templateName();
-                        case SortRole:
-                            return event.templateName().toUpper();
-                    }
-                    break;
-                default:
-                    break;
-            }
 
-            switch (role)
+            bool calendarColour;
+            bool handled;
+            const QVariant value = eventData(index, role, event, calendarColour, handled);
+            if (handled)
             {
-                case Qt::ForegroundRole:
-                    if (!event.enabled())
-                           return Preferences::disabledColour();
-                    if (event.expired())
-                           return Preferences::archivedColour();
-                    break;   // use the default for normal active alarms
-                case Qt::ToolTipRole:
-                    // Show the last command execution error message
-                    switch (event.commandError())
-                    {
-                        case KAEvent::CMD_ERROR:
-                            return i18nc("@info:tooltip", "Command execution failed");
-                        case KAEvent::CMD_ERROR_PRE:
-                            return i18nc("@info:tooltip", "Pre-alarm action execution failed");
-                        case KAEvent::CMD_ERROR_POST:
-                            return i18nc("@info:tooltip", "Post-alarm action execution failed");
-                        case KAEvent::CMD_ERROR_PRE_POST:
-                            return i18nc("@info:tooltip", "Pre- and post-alarm action execution failed");
-                        default:
-                        case KAEvent::CMD_NO_ERROR:
-                            break;
-                    }
-                    break;
-                case EnabledRole:
-                    return event.enabled();
-                default:
-                    break;
-            }
-
-            if (calendarColour)
-            {
-                Collection parent = item.parentCollection();
-                const QColor colour = backgroundColor(parent);
-                if (colour.isValid())
-                    return colour;
+                if (calendarColour)
+                {
+                    Collection parent = item.parentCollection();
+                    const QColor colour = backgroundColor(parent);
+                    if (colour.isValid())
+                        return colour;
+                }
+                return value;
             }
         }
     }
@@ -693,47 +481,22 @@ int AkonadiModel::entityColumnCount(HeaderGroup group) const
 */
 QVariant AkonadiModel::entityHeaderData(int section, Qt::Orientation orientation, int role, HeaderGroup group) const
 {
-    if (orientation == Qt::Horizontal)
+    bool eventHeaders = false;
+    switch (group)
     {
-        switch (group)
+        case ItemListHeaders:
+            eventHeaders = true;
+            Q_FALLTHROUGH();    // fall through to CollectionTreeHeaders
+        case CollectionTreeHeaders:
         {
-            case CollectionTreeHeaders:
-                if (section != 0)
-                    return QVariant();
-                if (role == Qt::DisplayRole)
-                    return i18nc("@title:column", "Calendars");
-                break;
-
-            case ItemListHeaders:
-                if (section < 0  ||  section >= ColumnCount)
-                    return QVariant();
-                if (role == Qt::DisplayRole  ||  role == ColumnTitleRole)
-                {
-                    switch (section)
-                    {
-                        case TimeColumn:
-                            return i18nc("@title:column", "Time");
-                        case TimeToColumn:
-                            return i18nc("@title:column", "Time To");
-                        case RepeatColumn:
-                            return i18nc("@title:column", "Repeat");
-                        case ColourColumn:
-                            return (role == Qt::DisplayRole) ? QString() : i18nc("@title:column", "Color");
-                        case TypeColumn:
-                            return (role == Qt::DisplayRole) ? QString() : i18nc("@title:column", "Type");
-                        case TextColumn:
-                            return i18nc("@title:column", "Message, File or Command");
-                        case TemplateNameColumn:
-                            return i18nc("@title:column Template name", "Name");
-                    }
-                }
-                else if (role == Qt::WhatsThisRole)
-                    return whatsThisText(section);
-                break;
-
-            default:
-                break;
+            bool handled;
+            const QVariant value = CalendarDataModel::headerData(section, orientation, role, eventHeaders, handled);
+            if (handled)
+                return value;
+            break;
         }
+        default:
+            break; 
     }
     return EntityTreeModel::entityHeaderData(section, orientation, role, group);
 }
@@ -877,16 +640,16 @@ void AkonadiModel::updateCommandError(const KAEvent& event)
 */
 QColor AkonadiModel::foregroundColor(const Akonadi::Collection& collection, const QStringList& mimeTypes)
 {
-    QColor colour;
+    CalEvent::Type type;
     if (mimeTypes.contains(KAlarmCal::MIME_ACTIVE))
-        colour = KColorScheme(QPalette::Active).foreground(KColorScheme::NormalText).color();
+        type = CalEvent::ACTIVE;
     else if (mimeTypes.contains(KAlarmCal::MIME_ARCHIVED))
-        colour = Preferences::archivedColour();
+        type = CalEvent::ARCHIVED;
     else if (mimeTypes.contains(KAlarmCal::MIME_TEMPLATE))
-        colour = KColorScheme(QPalette::Active).foreground(KColorScheme::LinkText).color();
-    if (colour.isValid()  &&  isWritable(collection) <= 0)
-        return KColorUtils::lighten(colour, 0.2);
-    return colour;
+        type = CalEvent::TEMPLATE;
+    else
+        type = CalEvent::EMPTY;
+    return CalendarDataModel::foregroundColor(type, (isWritable(collection) <= 0));
 }
 
 /******************************************************************************
@@ -943,10 +706,7 @@ QString AkonadiModel::displayName(Akonadi::Collection& collection) const
 */
 QString AkonadiModel::storageType(const Akonadi::Collection& collection) const
 {
-    const QUrl url = QUrl::fromUserInput(collection.remoteId(), QString(), QUrl::AssumeLocalFile);
-    return !url.isLocalFile()                   ? i18nc("@info", "URL")
-         : QFileInfo(url.toLocalFile()).isDir() ? i18nc("@info Directory in filesystem", "Directory")
-         :                                        i18nc("@info", "File");
+    return storageTypeForLocation(collection.remoteId());
 }
 
 /******************************************************************************
@@ -964,22 +724,7 @@ QString AkonadiModel::tooltip(const Collection& collection, CalEvent::Types type
     const QString disabled = i18nc("@info", "Disabled");
     const QString readonly = readOnlyTooltip(collection);
     const bool writable = readonly.isEmpty();
-    if (inactive  &&  !writable)
-        return xi18nc("@info:tooltip",
-                     "%1"
-                     "<nl/>%2: <filename>%3</filename>"
-                     "<nl/>%4, %5",
-                     name, type, locn, disabled, readonly);
-    if (inactive  ||  !writable)
-        return xi18nc("@info:tooltip",
-                     "%1"
-                     "<nl/>%2: <filename>%3</filename>"
-                     "<nl/>%4",
-                     name, type, locn, (inactive ? disabled : readonly));
-    return xi18nc("@info:tooltip",
-                 "%1"
-                 "<nl/>%2: <filename>%3</filename>",
-                 name, type, locn);
+    return CalendarDataModel::tooltip(writable, inactive, name, type, locn, disabled, readonly);
 }
 
 /******************************************************************************
@@ -989,115 +734,8 @@ QString AkonadiModel::tooltip(const Collection& collection, CalEvent::Types type
 QString AkonadiModel::readOnlyTooltip(const Collection& collection)
 {
     KACalendar::Compat compat;
-    switch (AkonadiModel::isWritable(collection, compat))
-    {
-        case 1:
-            return QString();
-        case 0:
-            return i18nc("@info", "Read-only (old format)");
-        default:
-            if (compat == KACalendar::Current)
-                return i18nc("@info", "Read-only");
-            return i18nc("@info", "Read-only (other format)");
-    }
-}
-
-/******************************************************************************
-* Return the repetition text.
-*/
-QString AkonadiModel::repeatText(const KAEvent& event) const
-{
-    const QString repeatText = event.recurrenceText(true);
-    return repeatText.isEmpty() ? event.repetitionText(true) : repeatText;
-}
-
-/******************************************************************************
-* Return a string for sorting the repetition column.
-*/
-QString AkonadiModel::repeatOrder(const KAEvent& event) const
-{
-    int repeatOrder = 0;
-    int repeatInterval = 0;
-    if (event.repeatAtLogin())
-        repeatOrder = 1;
-    else
-    {
-        repeatInterval = event.recurInterval();
-        switch (event.recurType())
-        {
-            case KARecurrence::MINUTELY:
-                repeatOrder = 2;
-                break;
-            case KARecurrence::DAILY:
-                repeatOrder = 3;
-                break;
-            case KARecurrence::WEEKLY:
-                repeatOrder = 4;
-                break;
-            case KARecurrence::MONTHLY_DAY:
-            case KARecurrence::MONTHLY_POS:
-                repeatOrder = 5;
-                break;
-            case KARecurrence::ANNUAL_DATE:
-            case KARecurrence::ANNUAL_POS:
-                repeatOrder = 6;
-                break;
-            case KARecurrence::NO_RECUR:
-            default:
-                break;
-        }
-    }
-    return QStringLiteral("%1%2").arg(static_cast<char>('0' + repeatOrder)).arg(repeatInterval, 8, 10, QLatin1Char('0'));
-}
-
-/******************************************************************************
-* Return the icon associated with the event's action.
-*/
-QPixmap* AkonadiModel::eventIcon(const KAEvent& event) const
-{
-    switch (event.actionTypes())
-    {
-        case KAEvent::ACT_EMAIL:
-            return mEmailIcon;
-        case KAEvent::ACT_AUDIO:
-            return mAudioIcon;
-        case KAEvent::ACT_COMMAND:
-            return mCommandIcon;
-        case KAEvent::ACT_DISPLAY:
-            if (event.actionSubType() == KAEvent::FILE)
-                return mFileIcon;
-            // fall through to ACT_DISPLAY_COMMAND
-            Q_FALLTHROUGH();
-        case KAEvent::ACT_DISPLAY_COMMAND:
-        default:
-            return mTextIcon;
-    }
-}
-
-/******************************************************************************
-* Returns the QWhatsThis text for a specified column.
-*/
-QString AkonadiModel::whatsThisText(int column) const
-{
-    switch (column)
-    {
-        case TimeColumn:
-            return i18nc("@info:whatsthis", "Next scheduled date and time of the alarm");
-        case TimeToColumn:
-            return i18nc("@info:whatsthis", "How long until the next scheduled trigger of the alarm");
-        case RepeatColumn:
-            return i18nc("@info:whatsthis", "How often the alarm recurs");
-        case ColourColumn:
-            return i18nc("@info:whatsthis", "Background color of alarm message");
-        case TypeColumn:
-            return i18nc("@info:whatsthis", "Alarm type (message, file, command or email)");
-        case TextColumn:
-            return i18nc("@info:whatsthis", "Alarm message text, URL of text file to display, command to execute, or email subject line");
-        case TemplateNameColumn:
-            return i18nc("@info:whatsthis", "Name of the alarm template");
-        default:
-            return QString();
-    }
+    int writable = AkonadiModel::isWritable(collection, compat);
+    return CalendarDataModel::readOnlyTooltip(compat, writable);
 }
 
 /******************************************************************************
