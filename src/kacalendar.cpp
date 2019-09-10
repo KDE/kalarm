@@ -178,7 +178,7 @@ int Private::readKAlarmVersion(const FileStorage::Ptr &fileStorage, QString &sub
         if (i <= 0) {
             return KACalendar::IncompatibleFormat;    // missing version string
         }
-        versionString = versionString.left(i);   // 'versionString' now contains the KAlarm version string
+        versionString.truncate(i);   // 'versionString' now contains the KAlarm version string
     }
     if (versionString == QLatin1String(KAEvent::currentCalendarVersionString())) {
         return KACalendar::CurrentFormat;    // the calendar is in the current KAlarm format

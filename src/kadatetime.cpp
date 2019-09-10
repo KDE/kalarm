@@ -1767,7 +1767,7 @@ QString KADateTime::toString(TimeFormat format) const
         case RFCDate: {
             QString seconds;
             if (d->time().second())
-                seconds = QStringLiteral(":") + numString(d->time().second(), 2);
+                seconds = QLatin1String(":") + numString(d->time().second(), 2);
             result += QStringLiteral("%1 %2 ").arg(numString(d->date().day(),   2))
                                               .arg(shortMonth(d->date().month()));
             int year = d->date().year();
