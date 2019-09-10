@@ -501,7 +501,7 @@ bool SoundWidget::validate(bool showErrorMessage) const
         return true;
     if (err == KAlarm::FileErr_Nonexistent)
     {
-        if (mUrl.isLocalFile()  &&  !file.startsWith(QLatin1String("/")))
+        if (mUrl.isLocalFile()  &&  !file.startsWith(QLatin1Char('/')))
         {
             // It's a relative path.
             // Find the first sound resource that contains files.
