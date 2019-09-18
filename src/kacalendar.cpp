@@ -121,8 +121,10 @@ int updateVersion(const FileStorage::Ptr &fileStorage, QString &versionString)
         qCDebug(KALARMCAL_LOG) << "KAlarm version" << version;
     }
 
-    // Convert events to current KAlarm format for when/if the calendar is saved
+    // Convert events to current KAlarm format for when/if the calendar is saved.
     KAEvent::convertKCalEvents(fileStorage->calendar(), ver);
+    // Set the new calendar version.
+    setKAlarmVersion(fileStorage->calendar());
     return version;
 }
 
