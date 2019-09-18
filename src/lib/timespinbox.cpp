@@ -86,8 +86,7 @@ QString TimeSpinBox::textFromValue(int v) const
         else if (v >= 780)
             v -= 720;      // convert 13 - 23 hours to 1 - 11
     }
-    QString s;
-    s.sprintf((wrapping() ? "%02d:%02d" : "%d:%02d"), v/60, v%60);
+    const QString s = QString::asprintf((wrapping() ? "%02d:%02d" : "%d:%02d"), v/60, v%60);
     return s;
 }
 

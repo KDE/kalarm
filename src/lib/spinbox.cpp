@@ -198,7 +198,7 @@ bool SpinBox::eventFilter(QObject* obj, QEvent* e)
             case QEvent::Wheel:
             {
                 QWheelEvent* we = (QWheelEvent*)e;
-                step = (we->delta() > 0) ? 1 : -1;
+                step = (we->angleDelta().y() > 0) ? 1 : -1;
                 break;
             }
             default:
@@ -277,7 +277,7 @@ void SpinBox::wheelEvent(QWheelEvent* e)
     if (mReadOnly)
         return;   // discard the event
     bool shift = (e->modifiers() & (Qt::ShiftModifier | Qt::AltModifier)) == Qt::ShiftModifier;
-    if (setShiftStepping(shift, (e->delta() > 0 ? UP : DOWN)))
+    if (setShiftStepping(shift, (e->angleDelta().y() > 0 ? UP : DOWN)))
     {
         e->accept();
         return;     // hide the event from the spin widget
