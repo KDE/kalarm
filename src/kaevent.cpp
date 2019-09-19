@@ -3040,8 +3040,7 @@ QString KAEvent::recurrenceText(bool brief) const
             } else if (frequency % 60 == 0) {
                 return i18ncp("@info", "1 Hour", "%1 Hours", frequency / 60);
             } else {
-                QString mins;
-                return i18nc("@info Hours and minutes", "%1h %2m", frequency / 60, mins.sprintf("%02d", frequency % 60));
+                return i18nc("@info Hours and minutes", "%1h %2m", frequency / 60, QString::asprintf("%02d", frequency % 60));
             }
         case RecurrenceRule::rDaily:
             return i18ncp("@info", "1 Day", "%1 Days", frequency);
@@ -3122,8 +3121,7 @@ QString KAEvent::repetitionText(bool brief) const
             if (minutes % 60 == 0) {
                 return i18ncp("@info", "1 Hour", "%1 Hours", minutes / 60);
             }
-            QString mins;
-            return i18nc("@info Hours and minutes", "%1h %2m", minutes / 60, mins.sprintf("%02d", minutes % 60));
+            return i18nc("@info Hours and minutes", "%1h %2m", minutes / 60, QString::asprintf("%02d", minutes % 60));
         }
         const int days = d->mRepetition.intervalDays();
         if (days % 7) {
