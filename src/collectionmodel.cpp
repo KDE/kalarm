@@ -911,7 +911,7 @@ void CollectionControlModel::statusChanged(const Collection& collection, Akonadi
                             msg = xi18nc("@info", "<para>The calendar <resource>%1</resource> has been made read-only. "
                                                  "This was the default calendar for:%2</para>"
                                                  "<para>Please select new default calendars.</para>",
-                                        collection.name(), typeListForDisplay(std));
+                                        collection.name(), CalendarDataModel::typeListForDisplay(std));
                             singleType = false;
                             break;
                     }

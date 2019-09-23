@@ -73,6 +73,9 @@ class CalendarDataModel
     public:
         static QSize   iconSize()       { return mIconSize; }
 
+        /** Return a bulleted list of alarm types for inclusion in an i18n message. */
+        static QString typeListForDisplay(CalEvent::Types);
+
     protected:
         CalendarDataModel();
 
@@ -93,9 +96,6 @@ class CalendarDataModel
         /** Return the read-only status tooltip for a resource.
          * A null string is returned if the resource is fully writable. */
         static QString readOnlyTooltip(KACalendar::Compat compat, int writable);
-
-        /** Return a bulleted list of alarm types for inclusion in an i18n message. */
-        static QString typeListForDisplay(CalEvent::Types);
 
         static QString  repeatText(const KAEvent&);
         static QString  repeatOrder(const KAEvent&);

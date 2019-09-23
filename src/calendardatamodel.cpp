@@ -66,6 +66,23 @@ CalendarDataModel::~CalendarDataModel()
 }
 
 /******************************************************************************
+* Create a bulleted list of alarm types for insertion into <para>...</para>.
+*/
+QString CalendarDataModel::typeListForDisplay(CalEvent::Types alarmTypes)
+{
+    QString list;
+    if (alarmTypes & CalEvent::ACTIVE)
+        list += QLatin1String("<item>") + i18nc("@info", "Active Alarms") + QLatin1String("</item>");
+    if (alarmTypes & CalEvent::ARCHIVED)
+        list += QLatin1String("<item>") + i18nc("@info", "Archived Alarms") + QLatin1String("</item>");
+    if (alarmTypes & CalEvent::TEMPLATE)
+        list += QLatin1String("<item>") + i18nc("@info", "Alarm Templates") + QLatin1String("</item>");
+    if (!list.isEmpty())
+        list = QLatin1String("<list>") + list + QLatin1String("</list>");
+    return list;
+}
+
+/******************************************************************************
 * Return data for a column heading.
 */
 QVariant CalendarDataModel::headerData(int section, Qt::Orientation orientation, int role, bool eventHeaders, bool& handled)
@@ -418,23 +435,6 @@ QString CalendarDataModel::readOnlyTooltip(KACalendar::Compat compat, int writab
                 return i18nc("@info", "Read-only");
             return i18nc("@info", "Read-only (other format)");
     }
-}
-
-/******************************************************************************
-* Create a bulleted list of alarm types for insertion into <para>...</para>.
-*/
-QString CalendarDataModel::typeListForDisplay(CalEvent::Types alarmTypes)
-{
-    QString list;
-    if (alarmTypes & CalEvent::ACTIVE)
-        list += QLatin1String("<item>") + i18nc("@info", "Active Alarms") + QLatin1String("</item>");
-    if (alarmTypes & CalEvent::ARCHIVED)
-        list += QLatin1String("<item>") + i18nc("@info", "Archived Alarms") + QLatin1String("</item>");
-    if (alarmTypes & CalEvent::TEMPLATE)
-        list += QLatin1String("<item>") + i18nc("@info", "Alarm Templates") + QLatin1String("</item>");
-    if (!list.isEmpty())
-        list = QLatin1String("<list>") + list + QLatin1String("</list>");
-    return list;
 }
 
 /******************************************************************************
