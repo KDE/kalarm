@@ -651,10 +651,11 @@ void MessageWin::initView()
     else
         setDeferralLimit(mEvent);    // ensure that button is disabled when alarm can't be deferred any more
 
+    KIconLoader iconLoader;
     if (!mAudioFile.isEmpty()  &&  (mVolume || mFadeVolume > 0))
     {
         // Silence button to stop sound repetition
-        const QPixmap pixmap = MainBarIcon(QStringLiteral("media-playback-stop"));
+        const QPixmap pixmap = iconLoader.loadIcon(QStringLiteral("media-playback-stop"), KIconLoader::MainToolbar);
         mSilenceButton = new PushButton(topWidget);
         mSilenceButton->setIcon(pixmap);
         grid->addWidget(mSilenceButton, 0, gridIndex++, Qt::AlignHCenter);
@@ -664,7 +665,6 @@ void MessageWin::initView()
         mSilenceButton->setEnabled(false);
     }
 
-    KIconLoader iconLoader;
     if (mAkonadiItemId >= 0)
     {
         // KMail button
