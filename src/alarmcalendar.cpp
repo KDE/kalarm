@@ -405,7 +405,11 @@ void AlarmCalendar::setAskResource(bool ask)
     CollectionControlModel::setAskDestinationPolicy(ask);
 }
 
-
+/******************************************************************************
+* Create a KAEvent instance corresponding to each KCalendarCore::Event in the
+* display calendar, and store them in the event map in place of the old set.
+* Called after the display calendar has completed loading.
+*/
 void AlarmCalendar::updateDisplayKAEvents()
 {
     if (mCalType == RESOURCES)

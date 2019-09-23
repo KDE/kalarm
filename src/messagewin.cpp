@@ -2010,12 +2010,8 @@ void MessageWin::slotEdit()
     qCDebug(KALARM_LOG) << "MessageWin::slotEdit";
     MainWindow* mainWin = MainWindow::mainMainWindow();
     mEditDlg = EditAlarmDlg::create(false, &mOriginalEvent, false, mainWin, EditAlarmDlg::RES_IGNORE);
-#if 0    // Frameworks version >= 5.62
     mEditDlg->setAttribute(Qt::WA_NativeWindow, true);
     KWindowSystem::setMainWindow(mEditDlg->windowHandle(), winId());
-#else
-    KWindowSystem::setMainWindow(mEditDlg, winId());
-#endif
     KWindowSystem::setOnAllDesktops(mEditDlg->winId(), false);
     setButtonsReadOnly(true);
     connect(mEditDlg, &QDialog::accepted, this, &MessageWin::editCloseOk);
