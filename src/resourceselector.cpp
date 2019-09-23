@@ -33,6 +33,7 @@
 #include "messagebox.h"
 #include "packedlayout.h"
 #include "preferences.h"
+
 #include <AkonadiCore/agentmanager.h>
 #include <AkonadiCore/agentinstancecreatejob.h>
 #include <AkonadiCore/agenttype.h>
@@ -317,11 +318,11 @@ void ResourceSelector::removeResource()
         if (allTypes != currentType)
         {
             // It also contains alarm types other than the currently displayed type
-            const QString stdTypes = CollectionControlModel::typeListForDisplay(standardTypes);
+            const QString stdTypes = CalendarDataModel::typeListForDisplay(standardTypes);
             QString otherTypes;
             const CalEvent::Types nonStandardTypes(allTypes & ~standardTypes);
             if (nonStandardTypes != currentType)
-                otherTypes = xi18nc("@info", "<para>It also contains:%1</para>", CollectionControlModel::typeListForDisplay(nonStandardTypes));
+                otherTypes = xi18nc("@info", "<para>It also contains:%1</para>", CalendarDataModel::typeListForDisplay(nonStandardTypes));
             text = xi18nc("@info", "<para><resource>%1</resource> is the default calendar for:%2</para>%3"
                                   "<para>Do you really want to remove it from all calendar lists?</para>", name, stdTypes, otherTypes);
         }
@@ -330,7 +331,7 @@ void ResourceSelector::removeResource()
     }
     else if (allTypes != currentType)
         text = xi18nc("@info", "<para><resource>%1</resource> contains:%2</para><para>Do you really want to remove it from all calendar lists?</para>",
-                     name, CollectionControlModel::typeListForDisplay(allTypes));
+                     name, CalendarDataModel::typeListForDisplay(allTypes));
     else
         text = xi18nc("@info", "Do you really want to remove the calendar <resource>%1</resource> from the list?", name);
     if (KAMessageBox::warningContinueCancel(this, text, QString(), KStandardGuiItem::remove()) == KMessageBox::Cancel)

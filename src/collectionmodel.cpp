@@ -969,23 +969,6 @@ CalEvent::Types CollectionControlModel::checkTypesToEnable(const Collection& col
 }
 
 /******************************************************************************
-* Create a bulleted list of alarm types for insertion into <para>...</para>.
-*/
-QString CollectionControlModel::typeListForDisplay(CalEvent::Types alarmTypes)
-{
-    QString list;
-    if (alarmTypes & CalEvent::ACTIVE)
-        list += QLatin1String("<item>") + i18nc("@info", "Active Alarms") + QLatin1String("</item>");
-    if (alarmTypes & CalEvent::ARCHIVED)
-        list += QLatin1String("<item>") + i18nc("@info", "Archived Alarms") + QLatin1String("</item>");
-    if (alarmTypes & CalEvent::TEMPLATE)
-        list += QLatin1String("<item>") + i18nc("@info", "Alarm Templates") + QLatin1String("</item>");
-    if (!list.isEmpty())
-        list = QLatin1String("<list>") + list + QLatin1String("</list>");
-    return list;
-}
-
-/******************************************************************************
 * Return whether a collection is both enabled and fully writable for a given
 * alarm type.
 * Optionally, the enabled status can be ignored.

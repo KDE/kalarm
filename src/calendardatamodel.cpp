@@ -421,6 +421,23 @@ QString CalendarDataModel::readOnlyTooltip(KACalendar::Compat compat, int writab
 }
 
 /******************************************************************************
+* Create a bulleted list of alarm types for insertion into <para>...</para>.
+*/
+QString CalendarDataModel::typeListForDisplay(CalEvent::Types alarmTypes)
+{
+    QString list;
+    if (alarmTypes & CalEvent::ACTIVE)
+        list += QLatin1String("<item>") + i18nc("@info", "Active Alarms") + QLatin1String("</item>");
+    if (alarmTypes & CalEvent::ARCHIVED)
+        list += QLatin1String("<item>") + i18nc("@info", "Archived Alarms") + QLatin1String("</item>");
+    if (alarmTypes & CalEvent::TEMPLATE)
+        list += QLatin1String("<item>") + i18nc("@info", "Alarm Templates") + QLatin1String("</item>");
+    if (!list.isEmpty())
+        list = QLatin1String("<list>") + list + QLatin1String("</list>");
+    return list;
+}
+
+/******************************************************************************
 * Return the repetition text.
 */
 QString CalendarDataModel::repeatText(const KAEvent& event)

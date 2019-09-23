@@ -296,9 +296,6 @@ class CollectionControlModel : public Akonadi::FavoriteCollectionsModel
 
         QVariant data(const QModelIndex&, int role = Qt::DisplayRole) const override;
 
-        /** Return a bulleted list of alarm types for inclusion in an i18n message. */
-        static QString typeListForDisplay(CalEvent::Types);
-
     private Q_SLOTS:
         void reset();
         void statusChanged(const Akonadi::Collection&, AkonadiModel::Change, const QVariant& value, bool inserted);
