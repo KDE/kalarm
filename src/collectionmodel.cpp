@@ -1296,12 +1296,11 @@ Collection::List CollectionControlModel::enabledCollections(CalEvent::Type type,
     const QString mimeType = CalEvent::mimeType(type);
     const QList<Collection::Id> colIds = instance()->collectionIds();
     Collection::List result;
-    for (int i = 0, count = colIds.count();  i < count;  ++i)
+    for (Collection::Id colId : colIds)
     {
-        Collection c(colIds[i]);
-        AkonadiModel::instance()->refresh(c);    // update with latest data
+        Collection c(colId);
         if (c.contentMimeTypes().contains(mimeType)
-        &&  (!writable || ((c.rights() & writableRights) == writableRights)))
+        &&  (!writable  ||  AkonadiModel::isWritable(c)))
             result += c;
     }
     return result;
