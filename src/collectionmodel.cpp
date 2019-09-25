@@ -1287,9 +1287,8 @@ Collection::List CollectionControlModel::enabledCollections(CalEvent::Type type,
     for (Collection::Id colId : colIds)
     {
         Collection c(colId);
-        AkonadiModel::instance()->refresh(c);    // update with latest data
         if (c.contentMimeTypes().contains(mimeType)
-        &&  (!writable || ((c.rights() & writableRights) == writableRights)))
+        &&  (!writable  ||  AkonadiModel::isWritable(c)))
             result += c;
     }
     return result;
