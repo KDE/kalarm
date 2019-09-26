@@ -211,13 +211,13 @@ bool AlarmListModel::filterAcceptsRow(int sourceRow, const QModelIndex& sourcePa
         return false;
     if (mFilterTypes == CalEvent::EMPTY)
         return false;
-    const int type = sourceModel()->data(sourceModel()->index(sourceRow, 0, sourceParent), AkonadiModel::StatusRole).toInt();
+    const int type = sourceModel()->data(sourceModel()->index(sourceRow, 0, sourceParent), CalendarDataModel::StatusRole).toInt();
     return static_cast<CalEvent::Type>(type) & mFilterTypes;
 }
 
 bool AlarmListModel::filterAcceptsColumn(int sourceCol, const QModelIndex&) const
 {
-    return (sourceCol != AkonadiModel::TemplateNameColumn);
+    return (sourceCol != CalendarDataModel::TemplateNameColumn);
 }
 
 QVariant AlarmListModel::headerData(int section, Qt::Orientation orientation, int role) const
@@ -289,14 +289,14 @@ bool TemplateListModel::filterAcceptsRow(int sourceRow, const QModelIndex& sourc
     if (mActionsFilter == KAEvent::ACT_ALL)
         return true;
     const QModelIndex sourceIndex = sourceModel()->index(sourceRow, 0, sourceParent);
-    const KAEvent::Actions actions = static_cast<KAEvent::Actions>(sourceModel()->data(sourceIndex, AkonadiModel::AlarmActionsRole).toInt());
+    const KAEvent::Actions actions = static_cast<KAEvent::Actions>(sourceModel()->data(sourceIndex, CalendarDataModel::AlarmActionsRole).toInt());
     return actions & mActionsFilter;
 }
 
 bool TemplateListModel::filterAcceptsColumn(int sourceCol, const QModelIndex&) const
 {
-    return sourceCol == AkonadiModel::TemplateNameColumn
-       ||  sourceCol == AkonadiModel::TypeColumn;
+    return sourceCol == CalendarDataModel::TemplateNameColumn
+       ||  sourceCol == CalendarDataModel::TypeColumn;
 }
 
 QVariant TemplateListModel::headerData(int section, Qt::Orientation orientation, int role) const
@@ -306,10 +306,10 @@ QVariant TemplateListModel::headerData(int section, Qt::Orientation orientation,
         switch (section)
         {
             case TypeColumn:
-                section = AkonadiModel::TypeColumn;
+                section = CalendarDataModel::TypeColumn;
                 break;
             case TemplateNameColumn:
-                section = AkonadiModel::TemplateNameColumn;
+                section = CalendarDataModel::TemplateNameColumn;
                 break;
             default:
                 return QVariant();
@@ -323,7 +323,7 @@ Qt::ItemFlags TemplateListModel::flags(const QModelIndex& index) const
     Qt::ItemFlags f = sourceModel()->flags(mapToSource(index));
     if (mActionsEnabled == KAEvent::ACT_ALL)
         return f;
-    const KAEvent::Actions actions = static_cast<KAEvent::Actions>(ItemListModel::data(index, AkonadiModel::AlarmActionsRole).toInt());
+    const KAEvent::Actions actions = static_cast<KAEvent::Actions>(ItemListModel::data(index, CalendarDataModel::AlarmActionsRole).toInt());
     if (!(actions & mActionsEnabled))
         f = static_cast<Qt::ItemFlags>(f & ~(Qt::ItemIsEnabled | Qt::ItemIsSelectable));
     return f;
