@@ -29,6 +29,7 @@
 #include "kalarmsettings.h"
 #include "kalarmdirsettings.h"
 
+#include <kalarmcal/akonadi.h>
 #include <kalarmcal/alarmtext.h>
 #include <kalarmcal/compatibilityattribute.h>
 #include <kalarmcal/eventattribute.h>
