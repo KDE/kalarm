@@ -44,7 +44,7 @@ class KAEvent;
  *  @return @c true if successful; @c false if the event's category does not match the
  *          collection's mime types.
  */
-bool setItemPayload(Akonadi::Item &item, const KAEvent &event, const QStringList &collectionMimeTypes);
+KALARMCAL_EXPORT bool setItemPayload(Akonadi::Item &item, const KAEvent &event, const QStringList &collectionMimeTypes);
 
 }
 
