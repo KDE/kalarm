@@ -993,7 +993,7 @@ bool AkonadiModel::addEvent(KAEvent& event, Collection& collection)
 {
     qCDebug(KALARM_LOG) << "AkonadiModel::addEvent: ID:" << event.id();
     Item item;
-    if (!event.setItemPayload(item, collection.contentMimeTypes()))
+    if (!KAlarmCal::setItemPayload(item, event, collection.contentMimeTypes()))
     {
         qCWarning(KALARM_LOG) << "AkonadiModel::addEvent: Invalid mime type for collection";
         return false;
@@ -1030,7 +1030,7 @@ qCDebug(KALARM_LOG)<<"item id="<<itemId;
     const Collection collection = ix.data(ParentCollectionRole).value<Collection>();
     Item item = ix.data(ItemRole).value<Item>();
 qCDebug(KALARM_LOG)<<"item id="<<item.id()<<", revision="<<item.revision();
-    if (!newEvent.setItemPayload(item, collection.contentMimeTypes()))
+    if (!KAlarmCal::setItemPayload(item, newEvent, collection.contentMimeTypes()))
     {
         qCWarning(KALARM_LOG) << "AkonadiModel::updateEvent: Invalid mime type for collection";
         return false;
