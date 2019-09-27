@@ -62,11 +62,6 @@ KAEvent EventListView::event(int row) const
 /******************************************************************************
 * Select one event and make it the current item.
 */
-void EventListView::select(Akonadi::Item::Id eventId)
-{
-    select(itemModel()->eventIndex(eventId));
-}
-
 void EventListView::select(const QModelIndex& index, bool scrollToIndex)
 {
     selectionModel()->select(index, QItemSelectionModel::SelectCurrent | QItemSelectionModel::Rows);

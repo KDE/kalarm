@@ -38,7 +38,6 @@ class EventListView : public QTreeView
         ItemListModel*    itemModel() const    { return static_cast<ItemListModel*>(model()); }
         KAEvent           event(int row) const;
         KAEvent           event(const QModelIndex&) const;
-        void              select(Akonadi::Item::Id);
         void              select(const QModelIndex&, bool scrollToIndex = false);
         void              clearSelection();
         QModelIndex       selectedIndex() const;
