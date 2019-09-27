@@ -458,9 +458,9 @@ public:
     int revision() const;
 
     /** Set the ID of the Akonadi Collection which contains the event.
-     *  @deprecated Use setResourceId() instead.
+     *  @see setResourceId() is the generic form of this method.
      */
-    KALARMCAL_DEPRECATED void setCollectionId(Akonadi::Collection::Id id);
+    void setCollectionId(Akonadi::Collection::Id id);
 
     /** Set the ID of the calendar resource which contains the event. */
     void setResourceId(ResourceId id);
@@ -471,9 +471,9 @@ public:
      *           updated. It is designed to be used when a KAEvent is
      *           being created from an Akonadi Item, to avoid unnecessary
      *           copying. Use with caution!
-     *  @deprecated Use setResourceId_const() instead.
+     *  @see setResourceId_const() is the generic form of this method.
      */
-    KALARMCAL_DEPRECATED void setCollectionId_const(Akonadi::Collection::Id id) const;
+    void setCollectionId_const(Akonadi::Collection::Id id) const;
 
     /** Set the ID of the Akonadi Collection which contains the event.
      *  @warning This is a const method, which means that any other instance
@@ -485,9 +485,9 @@ public:
     void setResourceId_const(ResourceId id) const;
 
     /** Return the ID of the Akonadi Collection which contains the event.
-     *  @deprecated Use resourceId() instead.
+     *  @see resourceId() is the generic form of this method.
      */
-    KALARMCAL_DEPRECATED Akonadi::Collection::Id  collectionId() const;
+    Akonadi::Collection::Id  collectionId() const;
 
     /** Return the ID of the calendar resource which contains the event. */
     ResourceId  resourceId() const;
