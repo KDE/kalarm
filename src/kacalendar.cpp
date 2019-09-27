@@ -25,8 +25,6 @@
 #include "kaevent.h"
 #include "version.h"
 
-#include "collectionattribute.h"
-
 #include <kcalendarcore/event.h>
 #include <kcalendarcore/alarm.h>
 #include <kcalendarcore/memorycalendar.h>
@@ -40,7 +38,6 @@
 #include <QTextStream>
 
 using namespace KCalendarCore;
-using Akonadi::Collection;
 
 namespace KAlarmCal
 {

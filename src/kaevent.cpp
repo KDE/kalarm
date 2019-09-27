@@ -22,6 +22,7 @@
 
 #include "kaevent.h"
 
+#include "akonadi.h"   // for deprecated setItemPayload() only
 #include "alarmtext.h"
 #include "identities.h"
 #include "version.h"
@@ -178,8 +179,8 @@ public:
     void               activateReminderAfter(const DateTime &mainAlarmTime);
     void               defer(const DateTime &, bool reminder, bool adjustRecurrence = false);
     void               cancelDefer();
-    bool               setDisplaying(const KAEventPrivate &, KAAlarm::Type, Akonadi::Collection::Id, const KADateTime &dt, bool showEdit, bool showDefer);
-    void               reinstateFromDisplaying(const KCalendarCore::Event::Ptr &, Akonadi::Collection::Id &, bool &showEdit, bool &showDefer);
+    bool               setDisplaying(const KAEventPrivate &, KAAlarm::Type, ResourceId, const KADateTime &dt, bool showEdit, bool showDefer);
+    void               reinstateFromDisplaying(const KCalendarCore::Event::Ptr &, ResourceId &, bool &showEdit, bool &showDefer);
     void               startChanges()
     {
         ++mChangeCount;
@@ -254,7 +255,7 @@ public:
     QString            mTemplateName;      // alarm template's name, or null if normal event
     QMap<QByteArray, QString> mCustomProperties;  // KCal::Event's non-KAlarm custom properties
     Akonadi::Item::Id  mItemId;            // Akonadi::Item ID for this event
-    mutable Akonadi::Collection::Id mCollectionId; // ID of collection containing the event, or for a displaying event,
+    mutable ResourceId mResourceId;        // ID of collection containing the event, or for a displaying event,
     // saved collection ID (not the collection the event is in)
     QString            mText;              // message text, file URL, command, email body [or audio file for KAAlarm]
     QString            mAudioFile;         // ATTACH: audio file to play
@@ -493,7 +494,7 @@ KAEventPrivate::KAEventPrivate()
     :
     mCommandError(KAEvent::CMD_NO_ERROR),
     mItemId(-1),
-    mCollectionId(-1),
+    mResourceId(-1),
     mReminderMinutes(0),
     mReminderActive(NO_REMINDER),
     mRevision(0),
@@ -577,7 +578,7 @@ void KAEventPrivate::copy(const KAEventPrivate &event)
     mTemplateName            = event.mTemplateName;
     mCustomProperties        = event.mCustomProperties;
     mItemId                  = event.mItemId;
-    mCollectionId            = event.mCollectionId;
+    mResourceId              = event.mResourceId;
     mText                    = event.mText;
     mAudioFile               = event.mAudioFile;
     mPreAction               = event.mPreAction;
@@ -669,7 +670,7 @@ void KAEventPrivate::set(const KCalendarCore::Event::Ptr &event)
     mTemplateName.clear();
     mLogFile.clear();
     mItemId                 = -1;
-    mCollectionId           = -1;
+    mResourceId             = -1;
     mTemplateAfterTime      = -1;
     mBeep                   = false;
     mSpeak                  = false;
@@ -710,7 +711,7 @@ void KAEventPrivate::set(const KCalendarCore::Event::Ptr &event)
         if (n) {
             const qlonglong id = params[0].toLongLong(&ok);
             if (ok) {
-                mCollectionId = id;    // original collection ID which contained the event
+                mResourceId = id;    // original collection ID which contained the event
             }
             for (int i = 1;  i < n;  ++i) {
                 if (params[i] == DISP_DEFER) {
@@ -1131,7 +1132,7 @@ void KAEventPrivate::set(const KADateTime &dateTime, const QString &text, const 
     mEventID.clear();
     mTemplateName.clear();
     mItemId                 = -1;
-    mCollectionId           = -1;
+    mResourceId             = -1;
     mPreAction.clear();
     mPostAction.clear();
     mText                   = (mActionSubType == KAEvent::COMMAND) ? text.trimmed()
@@ -1238,7 +1239,7 @@ bool KAEventPrivate::updateKCalEvent(const Event::Ptr &ev, KAEvent::UidAction ui
 
     QString param;
     if (mCategory == CalEvent::DISPLAYING) {
-        param = QString::number(mCollectionId);   // original collection ID which contained the event
+        param = QString::number(mResourceId);   // original collection ID which contained the event
         if (mDisplayingDefer) {
             param += SC + DISP_DEFER;
         }
@@ -1789,20 +1790,36 @@ int KAEvent::revision() const
     return d->mRevision;
 }
 
+void KAEvent::setResourceId(ResourceId id)
+{
+    d->mResourceId = id;
+}
+
+void KAEvent::setResourceId_const(ResourceId id) const
+{
+    d->mResourceId = id;
+}
+
+ResourceId KAEvent::resourceId() const
+{
+    // A displaying alarm contains the event's original collection ID
+    return d->mDisplaying ? -1 : d->mResourceId;
+}
+
 void KAEvent::setCollectionId(Akonadi::Collection::Id id)
 {
-    d->mCollectionId = id;
+    setResourceId(id);
 }
 
 void KAEvent::setCollectionId_const(Akonadi::Collection::Id id) const
 {
-    d->mCollectionId = id;
+    setResourceId_const(id);
 }
 
 Akonadi::Collection::Id KAEvent::collectionId() const
 {
     // A displaying alarm contains the event's original collection ID
-    return d->mDisplaying ? -1 : d->mCollectionId;
+    return d->mDisplaying ? -1 : d->mResourceId;
 }
 
 void KAEvent::setItemId(Akonadi::Item::Id id)
@@ -1823,19 +1840,7 @@ Akonadi::Item::Id KAEvent::itemId() const
 */
 bool KAEvent::setItemPayload(Akonadi::Item &item, const QStringList &collectionMimeTypes) const
 {
-    QString mimetype;
-    switch (d->mCategory) {
-    case CalEvent::ACTIVE:    mimetype = MIME_ACTIVE;    break;
-    case CalEvent::ARCHIVED:  mimetype = MIME_ARCHIVED;  break;
-    case CalEvent::TEMPLATE:  mimetype = MIME_TEMPLATE;  break;
-    default:                  Q_ASSERT(0);  return false;
-    }
-    if (!collectionMimeTypes.contains(mimetype)) {
-        return false;
-    }
-    item.setMimeType(mimetype);
-    item.setPayload<KAEvent>(*this);
-    return true;
+    return KAlarmCal::setItemPayload(item, *this, collectionMimeTypes);
 }
 
 void KAEvent::setCompatibility(KACalendar::Compat c)
@@ -3381,12 +3386,12 @@ KAEvent::OccurType KAEventPrivate::previousOccurrence(const KADateTime &afterDat
 * saved in case their end time expires before the next login.
 * Reply = true if successful, false if alarm was not copied.
 */
-bool KAEvent::setDisplaying(const KAEvent &e, KAAlarm::Type t, Akonadi::Collection::Id id, const KADateTime &dt, bool showEdit, bool showDefer)
+bool KAEvent::setDisplaying(const KAEvent &e, KAAlarm::Type t, ResourceId id, const KADateTime &dt, bool showEdit, bool showDefer)
 {
     return d->setDisplaying(*e.d, t, id, dt, showEdit, showDefer);
 }
 
-bool KAEventPrivate::setDisplaying(const KAEventPrivate &event, KAAlarm::Type alarmType, Akonadi::Collection::Id collectionId,
+bool KAEventPrivate::setDisplaying(const KAEventPrivate &event, KAAlarm::Type alarmType, ResourceId resourceId,
                                    const KADateTime &repeatAtLoginTime, bool showEdit, bool showDefer)
 {
     if (!mDisplaying
@@ -3402,7 +3407,7 @@ bool KAEventPrivate::setDisplaying(const KAEventPrivate &event, KAAlarm::Type al
             // Change the event ID to avoid duplicating the same unique ID as the original event
             setCategory(CalEvent::DISPLAYING);
             mItemId             = -1;    // the display event doesn't have an associated Item
-            mCollectionId       = collectionId;  // original collection ID which contained the event
+            mResourceId         = resourceId;  // original collection ID which contained the event
             mDisplayingDefer    = showDefer;
             mDisplayingEdit     = showEdit;
             mDisplaying         = true;
@@ -3424,19 +3429,19 @@ bool KAEventPrivate::setDisplaying(const KAEventPrivate &event, KAAlarm::Type al
 /******************************************************************************
 * Reinstate the original event from the 'displaying' event.
 */
-void KAEvent::reinstateFromDisplaying(const KCalendarCore::Event::Ptr &e, Akonadi::Collection::Id &id, bool &showEdit, bool &showDefer)
+void KAEvent::reinstateFromDisplaying(const KCalendarCore::Event::Ptr &e, ResourceId &id, bool &showEdit, bool &showDefer)
 {
     d->reinstateFromDisplaying(e, id, showEdit, showDefer);
 }
 
-void KAEventPrivate::reinstateFromDisplaying(const Event::Ptr &kcalEvent, Akonadi::Collection::Id &collectionId, bool &showEdit, bool &showDefer)
+void KAEventPrivate::reinstateFromDisplaying(const Event::Ptr &kcalEvent, ResourceId &resourceId, bool &showEdit, bool &showDefer)
 {
     set(kcalEvent);
     if (mDisplaying) {
         // Retrieve the original event's unique ID
         setCategory(CalEvent::ACTIVE);
-        collectionId = mCollectionId;
-        mCollectionId = -1;
+        resourceId   = mResourceId;
+        mResourceId  = -1;
         showDefer    = mDisplayingDefer;
         showEdit     = mDisplayingEdit;
         mDisplaying  = false;
@@ -3812,7 +3817,7 @@ void KAEventPrivate::dumpDebug() const
     qCDebug(KALARMCAL_LOG) << "-- mConfirmAck:" << mConfirmAck;
     qCDebug(KALARMCAL_LOG) << "-- mEnabled:" << mEnabled;
     qCDebug(KALARMCAL_LOG) << "-- mItemId:" << mItemId;
-    qCDebug(KALARMCAL_LOG) << "-- mCollectionId:" << mCollectionId;
+    qCDebug(KALARMCAL_LOG) << "-- mResourceId:" << mResourceId;
     qCDebug(KALARMCAL_LOG) << "-- mCompatibility:" << mCompatibility;
     qCDebug(KALARMCAL_LOG) << "-- mReadOnly:" << mReadOnly;
     if (mReminderMinutes) {

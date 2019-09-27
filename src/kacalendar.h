@@ -2,7 +2,7 @@
  *  kacalendar.h  -  KAlarm kcal library calendar and event categorisation
  *  This file is part of kalarmcal library, which provides access to KAlarm
  *  calendar data.
- *  Copyright © 2005-2012 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2005-2019 David Jarvie <djarvie@kde.org>
  *
  *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Library General Public License as published
@@ -24,10 +24,12 @@
 #define KALARM_KACALENDAR_H
 
 #include "kalarmcal_export.h"
+
 #include <kcalendarcore/filestorage.h>
 #include <kcalendarcore/calendar.h>
 #include <kcalendarcore/event.h>
-#include <collection.h>
+
+#include <AkonadiCore/Collection>
 
 #include <QByteArray>
 #include <QStringList>
@@ -44,6 +46,9 @@ extern const QLatin1String KALARMCAL_EXPORT MIME_BASE;      //!< The base mime t
 extern const QLatin1String KALARMCAL_EXPORT MIME_ACTIVE;    //!< The mime type for KAlarm active alarms
 extern const QLatin1String KALARMCAL_EXPORT MIME_ARCHIVED;  //!< The mime type for KAlarm archived alarms
 extern const QLatin1String KALARMCAL_EXPORT MIME_TEMPLATE;  //!< The mime type for KAlarm alarm templates
+
+/** Declaration type for a calendar resource ID. */
+typedef Akonadi::Collection::Id  ResourceId;
 
 /**
  * @short Class representing attributes of a KAlarm calendar.

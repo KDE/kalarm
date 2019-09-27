@@ -3,6 +3,7 @@ add_definitions(-DTRANSLATION_DOMAIN=\"libkalarmcal5\")
 set(kalarmcal_LIB_SRCS
     kacalendar.cpp
     karecurrence.cpp
+    akonadi.cpp
     alarmtext.cpp
     identities.cpp
     kaevent.cpp

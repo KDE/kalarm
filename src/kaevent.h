@@ -457,8 +457,23 @@ public:
     /** Return the revision number of the event (SEQUENCE property in iCalendar). */
     int revision() const;
 
-    /** Set the ID of the Akonadi Collection which contains the event. */
-    void setCollectionId(Akonadi::Collection::Id id);
+    /** Set the ID of the Akonadi Collection which contains the event.
+     *  @deprecated Use setResourceId() instead.
+     */
+    KALARMCAL_DEPRECATED void setCollectionId(Akonadi::Collection::Id id);
+
+    /** Set the ID of the calendar resource which contains the event. */
+    void setResourceId(ResourceId id);
+
+    /** Set the ID of the Akonadi Collection which contains the event.
+     *  @warning This is a const method, which means that any other instance
+     *           which references the same shared data will also be
+     *           updated. It is designed to be used when a KAEvent is
+     *           being created from an Akonadi Item, to avoid unnecessary
+     *           copying. Use with caution!
+     *  @deprecated Use setResourceId_const() instead.
+     */
+    KALARMCAL_DEPRECATED void setCollectionId_const(Akonadi::Collection::Id id) const;
 
     /** Set the ID of the Akonadi Collection which contains the event.
      *  @warning This is a const method, which means that any other instance
@@ -467,10 +482,15 @@ public:
      *           being created from an Akonadi Item, to avoid unnecessary
      *           copying. Use with caution!
      */
-    void setCollectionId_const(Akonadi::Collection::Id id) const;
+    void setResourceId_const(ResourceId id) const;
 
-    /** Return the ID of the Akonadi Collection which contains the event. */
-    Akonadi::Collection::Id  collectionId() const;
+    /** Return the ID of the Akonadi Collection which contains the event.
+     *  @deprecated Use resourceId() instead.
+     */
+    KALARMCAL_DEPRECATED Akonadi::Collection::Id  collectionId() const;
+
+    /** Return the ID of the calendar resource which contains the event. */
+    ResourceId  resourceId() const;
 
     /** Set the ID of the Akonadi Item which contains the event. */
     void setItemId(Akonadi::Item::Id id);
@@ -482,8 +502,9 @@ public:
      *  Note that the event is not updated with the Item ID.
      *  @return @c true if successful; @c false if the event's category does not match the
      *          collection's mime types.
+     *  @deprecated Use KAlarmCal::setItemPayload() instead.
      */
-    bool setItemPayload(Akonadi::Item &, const QStringList &collectionMimeTypes) const;
+    KALARMCAL_DEPRECATED bool setItemPayload(Akonadi::Item &, const QStringList &collectionMimeTypes) const;
 
     /** Note the event's storage format compatibility compared to the current KAlarm calendar format. */
     void setCompatibility(KACalendar::Compat c);
@@ -1192,24 +1213,25 @@ public:
      *  saved in case their end time expires before the next login.
      *  @param event      the event to copy
      *  @param type       the alarm type (main, reminder, deferred etc.)
-     *  @param colId      the ID of the collection which originally contained the event
+     *  @param colId      the ID of the calendar resource which originally contained the event
      *  @param repeatAtLoginTime repeat-at-login time if @p type == AT_LOGIN_ALARM, else ignored
      *  @param showEdit   whether the Edit button was displayed
      *  @param showDefer  whether the Defer button was displayed
      *  @return @c true if successful, @c false if alarm was not copied.
      */
-    bool setDisplaying(const KAEvent &event, KAAlarm::Type type, Akonadi::Collection::Id colId, const KADateTime &repeatAtLoginTime, bool showEdit, bool showDefer);
+    bool setDisplaying(const KAEvent &event, KAAlarm::Type type, ResourceId colId, const KADateTime &repeatAtLoginTime, bool showEdit, bool showDefer);
 
     /** Reinstate the original event from the 'displaying' event.
      *  This instance is initialised from the supplied displaying @p event,
      *  and appropriate adjustments are made to convert it back to the
      *  original pre-displaying state.
      *  @param event      the displaying event
-     *  @param colId      updated to the ID of the collection which originally contained the event
+     *  @param colId      updated to the ID of the calendar resource which
+     *                    originally contained the event
      *  @param showEdit   updated to true if Edit button was displayed, else false
      *  @param showDefer  updated to true if Defer button was displayed, else false
      */
-    void reinstateFromDisplaying(const KCalendarCore::Event::Ptr &event, Akonadi::Collection::Id &colId, bool &showEdit, bool &showDefer);
+    void reinstateFromDisplaying(const KCalendarCore::Event::Ptr &event, ResourceId &colId, bool &showEdit, bool &showDefer);
 
     /** Return the original alarm which the displaying alarm refers to.
      *  Note that the caller is responsible for ensuring that the event was
