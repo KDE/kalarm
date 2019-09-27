@@ -52,6 +52,7 @@ install(TARGETS KF5AlarmCalendar EXPORT KF5AlarmCalendarTargets ${KF5_INSTALL_TA
 
 ecm_generate_headers(KAlarmCal_CamelCase_HEADERS
   HEADER_NAMES
+  Akonadi
   AlarmText
   CollectionAttribute
   CompatibilityAttribute
