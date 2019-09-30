@@ -90,7 +90,7 @@ public:
      * Assignment operator.
      * @param r the recurrence which will be assigned to this.
      */
-    KARecurrence &operator=(const KARecurrence &r);
+    KARecurrence &operator=(const KARecurrence &r) = delete;
 
     /**
      * Comparison operator for equality.

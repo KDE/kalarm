@@ -42,11 +42,7 @@ public:
     Recurrence_p() : Recurrence() {}
     Recurrence_p(const Recurrence &r) : Recurrence(r) {}
     Recurrence_p(const Recurrence_p &r) : Recurrence(r) {}
-    Recurrence_p& operator=(const Recurrence_p &r)
-    {
-        Recurrence::operator=(r);
-        return *this;
-    }
+    Recurrence_p& operator=(const Recurrence_p &r) = delete;
 };
 
 class Q_DECL_HIDDEN KARecurrence::Private
@@ -128,14 +124,6 @@ KARecurrence::KARecurrence(const KARecurrence &r)
 KARecurrence::~KARecurrence()
 {
     delete d;
-}
-
-KARecurrence &KARecurrence::operator=(const KARecurrence &r)
-{
-    if (&r != this) {
-        *d = *r.d;
-    }
-    return *this;
 }
 
 bool KARecurrence::operator==(const KARecurrence &r) const
