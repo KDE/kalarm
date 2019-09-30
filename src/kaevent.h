@@ -1284,6 +1284,25 @@ public:
      */
     void removeExpiredAlarm(KAAlarm::Type type);
 
+    /** Data categories for compare(). */
+    enum class Compare {
+        Id           = 0x01,   //!< the event ID
+        ICalendar    = 0x02,   //!< iCalendar data stored in VEVENT in the calendar file
+        UserSettable = 0x04,   //!< user settable data, e.g. resource ID
+        CurrentState = 0x08    //!< changeable data which records the current state of the event
+    };
+    Q_DECLARE_FLAGS(Comparison, Compare)
+
+    /** Compare this instance with another.
+     *  All data which defines the characteristics of this event will be
+     *  compared, plus optional data categories as specified.
+     *  @param comparison  the optional data categories to compare, in addition
+     *                     to the basic data. Other optional categories will be
+     *                     ignored in the comparison.
+     *  @return true if the instances match, false otherwise.
+     */
+    bool compare(const KAEvent& other, Comparison comparison) const;
+
     /** Call before making a group of changes to the event, to avoid unnecessary
      *  calculation intensive recalculations of trigger times from being
      *  performed until all the changes have been applied. When the changes

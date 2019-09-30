@@ -187,6 +187,7 @@ public:
     }
     void               endChanges();
     void               removeExpiredAlarm(KAAlarm::Type);
+    bool               compare(const KAEventPrivate&, KAEvent::Comparison) const;
     KAAlarm            alarm(KAAlarm::Type) const;
     KAAlarm            firstAlarm() const;
     KAAlarm            nextAlarm(KAAlarm::Type) const;
@@ -3697,6 +3698,181 @@ void KAEventPrivate::removeExpiredAlarm(KAAlarm::Type type)
     if (mAlarmCount != count) {
         mTriggerChanged = true;
     }
+}
+
+/******************************************************************************
+* Compare this instance with another.
+*/
+bool KAEvent::compare(const KAEvent& other, Comparison comparison) const
+{
+    return d->compare(*other.d, comparison);
+}
+bool KAEventPrivate::compare(const KAEventPrivate& other, KAEvent::Comparison comparison) const
+{
+    if (comparison & KAEvent::Compare::Id) {
+        if (mEventID != other.mEventID) {
+            return false;
+        }
+    }
+    if (mCategory         != other.mCategory
+    ||  mActionSubType    != other.mActionSubType
+    ||  mDisplaying       != other.mDisplaying
+    ||  mText             != other.mText
+    ||  mStartDateTime    != other.mStartDateTime
+    ||  mLateCancel       != other.mLateCancel
+    ||  mCopyToKOrganizer != other.mCopyToKOrganizer
+    ||  mCompatibility    != other.mCompatibility
+    ||  mEnabled          != other.mEnabled
+    ||  mReadOnly         != other.mReadOnly
+    ||  mRevision         != other.mRevision) {
+        return false;
+    }
+    if (mRecurrence) {
+        if (!other.mRecurrence
+        ||  *mRecurrence     != *other.mRecurrence
+        ||  mExcludeHolidays != other.mExcludeHolidays
+        ||  mWorkTimeOnly    != other.mWorkTimeOnly
+        ||  mRepetition      != mRepetition) {
+            return false;
+        }
+    } else {
+        if (other.mRecurrence
+        ||  mRepeatAtLogin        != other.mRepeatAtLogin
+        ||  mArchiveRepeatAtLogin != other.mArchiveRepeatAtLogin
+        ||  (mRepeatAtLogin  &&  mAtLoginDateTime != other.mAtLoginDateTime)) {
+            return false;
+        }
+    }
+    if (mDisplaying) {
+        if (mDisplayingTime  !=  other.mDisplayingTime
+        ||  mDisplayingFlags !=  other.mDisplayingFlags
+        ||  mDisplayingDefer !=  other.mDisplayingDefer
+        ||  mDisplayingEdit  !=  other.mDisplayingEdit) {
+            return false;
+        }
+    }
+    if (comparison & KAEvent::Compare::ICalendar) {
+        if (mCreatedDateTime  != other.mCreatedDateTime
+        ||  mCustomProperties != other.mCustomProperties) {
+            return false;
+        }
+    }
+    if (comparison & KAEvent::Compare::UserSettable)
+    {
+        if (mItemId     != other.mItemId
+        ||  mResourceId != other.mResourceId) {
+            return false;
+        }
+    }
+    if (comparison & KAEvent::Compare::CurrentState) {
+        if (mNextMainDateTime != other.mNextMainDateTime
+        ||  mNextRepeat       != other.mNextRepeat
+        ||  mMainExpired      != other.mMainExpired) {
+            return false;
+        }
+    }
+    switch (mCategory) {
+        case CalEvent::ACTIVE:
+            if (mArchive != other.mArchive) {
+                return false;
+            }
+            break;
+        case CalEvent::TEMPLATE:
+            if (mTemplateName      != other.mTemplateName
+            ||  mTemplateAfterTime != other.mTemplateAfterTime) {
+                return false;
+            }
+            break;
+        default:
+            break;
+    }
+
+    switch (mActionSubType) {
+        case KAEvent::COMMAND:
+            if (mCommandScript  != other.mCommandScript
+            ||  mCommandXterm   != other.mCommandXterm
+            ||  mCommandDisplay != other.mCommandDisplay
+            ||  mCommandError   != other.mCommandError
+            ||  mLogFile        != other.mLogFile)
+                return false;
+            if (!mCommandDisplay) {
+                break;
+            }
+            Q_FALLTHROUGH(); // fall through to MESSAGE
+        case KAEvent::FILE:
+        case KAEvent::MESSAGE:
+            if (mReminderMinutes      != other.mReminderMinutes
+            ||  mBgColour             != other.mBgColour
+            ||  mFgColour             != other.mFgColour
+            ||  mUseDefaultFont       != other.mUseDefaultFont
+            ||  (!mUseDefaultFont  &&  mFont != other.mFont)
+            ||  mLateCancel           != other.mLateCancel
+            ||  (mLateCancel  &&  mAutoClose != other.mAutoClose)
+            ||  mDeferDefaultMinutes  != other.mDeferDefaultMinutes
+            ||  (mDeferDefaultMinutes  &&  mDeferDefaultDateOnly != other.mDeferDefaultDateOnly)
+            ||  mPreAction            != other.mPreAction
+            ||  mPostAction           != other.mPostAction
+            ||  mExtraActionOptions   != other.mExtraActionOptions
+            ||  mCommandError         != other.mCommandError
+            ||  mConfirmAck           != other.mConfirmAck
+            ||  mAkonadiItemId        != other.mAkonadiItemId
+            ||  mBeep                 != other.mBeep
+            ||  mSpeak                != other.mSpeak
+            ||  mAudioFile            != other.mAudioFile) {
+                return false;
+            }
+            if (mReminderMinutes) {
+                if (mReminderOnceOnly != other.mReminderOnceOnly) {
+                    return false;
+                }
+                if (comparison & KAEvent::Compare::CurrentState) {
+                    if (mReminderActive != other.mReminderActive
+                    ||  (mReminderActive  &&  mReminderAfterTime != other.mReminderAfterTime)) {
+                        return false;
+                    }
+                }
+            }
+            if (comparison & KAEvent::Compare::CurrentState) {
+                if (mDeferral != other.mDeferral
+                ||  (mDeferral != NO_DEFERRAL  &&  mDeferralTime != other.mDeferralTime)) {
+                    return false;
+                }
+            }
+            if (mAudioFile.isEmpty()) {
+                break;
+            }
+            Q_FALLTHROUGH(); // fall through to AUDIO
+        case KAEvent::AUDIO:
+            if (mRepeatSoundPause != other.mRepeatSoundPause) {
+                return false;
+            }
+            if (mSoundVolume >= 0) {
+                if (mSoundVolume != other.mSoundVolume) {
+                    return false;
+                }
+                if (mFadeVolume >= 0) {
+                    if (mFadeVolume  != other.mFadeVolume
+                    ||  mFadeSeconds != other.mFadeSeconds) {
+                        return false;
+                    }
+                } else if (other.mFadeVolume >= 0) {
+                    return false;
+                }
+            } else if (other.mSoundVolume >= 0) {
+                return false;
+            }
+            break;
+        case KAEvent::EMAIL:
+            if (mEmailFromIdentity != other.mEmailFromIdentity
+            ||  mEmailAddresses    != other.mEmailAddresses
+            ||  mEmailSubject      != other.mEmailSubject
+            ||  mEmailAttachments  != other.mEmailAttachments
+            ||  mEmailBcc          != other.mEmailBcc) {
+                return false;
+            }
+            break;
+    }
+    return true;
 }
 
 void KAEvent::startChanges()
