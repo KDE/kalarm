@@ -3936,7 +3936,12 @@ void KAEventPrivate::dumpDebug() const
         qCDebug(KALARMCAL_LOG) << "-- mTemplateAfterTime:" << mTemplateAfterTime;
     }
     qCDebug(KALARMCAL_LOG) << "-- mText:" << mText;
-    if (mActionSubType == KAEvent::MESSAGE  ||  mActionSubType == KAEvent::FILE) {
+    if (mActionSubType == KAEvent::MESSAGE
+    ||  mActionSubType == KAEvent::FILE
+    ||  (mActionSubType == KAEvent::COMMAND && mCommandDisplay)) {
+        if (mCommandDisplay) {
+            qCDebug(KALARMCAL_LOG) << "-- mCommandScript:" << mCommandScript;
+        }
         qCDebug(KALARMCAL_LOG) << "-- mBgColour:" << mBgColour.name();
         qCDebug(KALARMCAL_LOG) << "-- mFgColour:" << mFgColour.name();
         qCDebug(KALARMCAL_LOG) << "-- mUseDefaultFont:" << mUseDefaultFont;
@@ -4001,7 +4006,8 @@ void KAEventPrivate::dumpDebug() const
         qCDebug(KALARMCAL_LOG) << "-- mReminderMinutes:" << mReminderMinutes;
         qCDebug(KALARMCAL_LOG) << "-- mReminderActive:" << (mReminderActive == ACTIVE_REMINDER ? "active" : mReminderActive == HIDDEN_REMINDER ? "hidden" : "no");
         qCDebug(KALARMCAL_LOG) << "-- mReminderOnceOnly:" << mReminderOnceOnly;
-    } else if (mDeferral > 0) {
+    }
+    if (mDeferral != NO_DEFERRAL) {
         qCDebug(KALARMCAL_LOG) << "-- mDeferral:" << (mDeferral == NORMAL_DEFERRAL ? "normal" : "reminder");
         qCDebug(KALARMCAL_LOG) << "-- mDeferralTime:" << mDeferralTime.toString();
     }
