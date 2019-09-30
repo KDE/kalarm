@@ -252,9 +252,9 @@ public:
     mutable DateTime   mMainWorkTrigger;   // next trigger time, ignoring reminders but taking account of working hours
     mutable KAEvent::CmdErrType mCommandError; // command execution error last time the alarm triggered
 
-    QString            mEventID;           // UID: KCal::Event unique ID
+    QString            mEventID;           // UID: KCalendarCore::Event unique ID
     QString            mTemplateName;      // alarm template's name, or null if normal event
-    QMap<QByteArray, QString> mCustomProperties;  // KCal::Event's non-KAlarm custom properties
+    QMap<QByteArray, QString> mCustomProperties;  // KCalendarCore::Event's non-KAlarm custom properties
     Akonadi::Item::Id  mItemId;            // Akonadi::Item ID for this event
     mutable ResourceId mResourceId;        // ID of collection containing the event, or for a displaying event,
     // saved collection ID (not the collection the event is in)
@@ -467,7 +467,7 @@ static QString reminderToString(int minutes);
 
 /*=============================================================================
 = Class KAEvent
-= Corresponds to a KCal::Event instance.
+= Corresponds to a KCalendarCore::Event instance.
 =============================================================================*/
 
 inline void KAEventPrivate::activate_reminder(bool activate)
@@ -1196,10 +1196,11 @@ void KAEventPrivate::set(const KADateTime &dateTime, const QString &text, const 
 }
 
 /******************************************************************************
-* Update an existing KCal::Event with the KAEventPrivate data.
-* If 'setCustomProperties' is true, all the KCal::Event's existing custom
-* properties are cleared and replaced with the KAEvent's custom properties. If
-* false, the KCal::Event's non-KAlarm custom properties are left untouched.
+* Update an existing KCalendarCore::Event with the KAEventPrivate data.
+* If 'setCustomProperties' is true, all the KCalendarCore::Event's existing
+* custom properties are cleared and replaced with the KAEvent's custom
+* properties. If false, the KCalendarCore::Event's non-KAlarm custom properties
+* are left untouched.
 */
 bool KAEvent::updateKCalEvent(const KCalendarCore::Event::Ptr &e, UidAction u, bool setCustomProperties) const
 {
@@ -2429,7 +2430,7 @@ void KAEvent::setDeferDefaultMinutes(int minutes, bool dateOnly)
 
 bool KAEvent::deferred() const
 {
-    return d->mDeferral > 0;
+    return d->mDeferral != KAEventPrivate::NO_DEFERRAL;
 }
 
 DateTime KAEvent::deferDateTime() const
@@ -2713,7 +2714,7 @@ void KAEventPrivate::clearRecur()
 }
 
 /******************************************************************************
-* Initialise the event's recurrence from a KCal::Recurrence.
+* Initialise the event's recurrence from a KCalendarCore::Recurrence.
 * The event's start date/time is not changed.
 */
 void KAEvent::setRecurrence(const KARecurrence &recurrence)
@@ -4032,7 +4033,7 @@ void KAEventPrivate::dumpDebug() const
 #endif
 
 /******************************************************************************
-* Fetch the start and next date/time for a KCal::Event.
+* Fetch the start and next date/time for a KCalendarCore::Event.
 * Reply = next main date/time.
 */
 DateTime KAEventPrivate::readDateTime(const Event::Ptr &event, bool localZone, bool dateOnly, DateTime &start)
@@ -4086,7 +4087,7 @@ DateTime KAEventPrivate::readDateTime(const Event::Ptr &event, bool localZone, b
 }
 
 /******************************************************************************
-* Parse the alarms for a KCal::Event.
+* Parse the alarms for a KCalendarCore::Event.
 * Reply = map of alarm data, indexed by KAAlarm::Type
 */
 void KAEventPrivate::readAlarms(const Event::Ptr &event, AlarmMap *alarmMap, bool cmdDisplay)
@@ -4125,7 +4126,7 @@ void KAEventPrivate::readAlarms(const Event::Ptr &event, AlarmMap *alarmMap, boo
 }
 
 /******************************************************************************
-* Parse a KCal::Alarm.
+* Parse a KCalendarCore::Alarm.
 * If 'audioMain' is true, the event contains an audio alarm but no display alarm.
 * Reply = alarm ID (sequence number)
 */
@@ -5803,7 +5804,7 @@ bool KAEventPrivate::convertRepetition(const Event::Ptr &event)
 
 /*=============================================================================
 = Class KAAlarm
-= Corresponds to a single KCal::Alarm instance.
+= Corresponds to a single KCalendarCore::Alarm instance.
 =============================================================================*/
 
 KAAlarm::KAAlarm()
