@@ -68,15 +68,15 @@ class Q_DECL_HIDDEN KAAlarm::Private
 public:
     Private();
 
-    Action      mActionType;       // alarm action type
-    Type        mType;             // alarm type
-    DateTime    mNextMainDateTime; // next time to display the alarm, excluding repetitions
-    Repetition  mRepetition;       // sub-repetition count and interval
-    int         mNextRepeat;       // repetition count of next due sub-repetition
-    bool        mRepeatAtLogin;    // whether to repeat the alarm at every login
-    bool        mRecurs;           // there is a recurrence rule for the alarm
-    bool        mDeferred;         // whether the alarm is an extra deferred/deferred-reminder alarm
-    bool        mTimedDeferral;    // if mDeferred = true: true if the deferral is timed, false if date-only
+    Action      mActionType;           // alarm action type
+    Type        mType{INVALID_ALARM};  // alarm type
+    DateTime    mNextMainDateTime;     // next time to display the alarm, excluding repetitions
+    Repetition  mRepetition;           // sub-repetition count and interval
+    int         mNextRepeat{0};        // repetition count of next due sub-repetition
+    bool        mRepeatAtLogin{false}; // whether to repeat the alarm at every login
+    bool        mRecurs;               // there is a recurrence rule for the alarm
+    bool        mDeferred{false};      // whether the alarm is an extra deferred/deferred-reminder alarm
+    bool        mTimedDeferral;        // if mDeferred = true: true if the deferral is timed, false if date-only
 };
 
 //=============================================================================
@@ -159,16 +159,13 @@ public:
     {
         delete mRecurrence;
     }
-    KAEventPrivate    &operator=(const KAEventPrivate &e)
+    KAEventPrivate &operator=(const KAEventPrivate &e)
     {
         if (&e != this) {
             copy(e);
-        }  return *this;
+        }
+        return *this;
     }
-    void               set(const KCalendarCore::Event::Ptr &);
-    void               set(const KADateTime &, const QString &message, const QColor &bg, const QColor &fg,
-                           const QFont &, KAEvent::SubAction, int lateCancel, KAEvent::Flags flags,
-                           bool changesPending = false);
     void               setAudioFile(const QString &filename, float volume, float fadeVolume, int fadeSeconds, int repeatPause, bool allowEmptyFile);
     KAEvent::OccurType setNextOccurrence(const KADateTime &preDateTime);
     void               setFirstRecurrence();
@@ -250,13 +247,13 @@ public:
     mutable DateTime   mMainTrigger;       // next trigger time, ignoring reminders and working hours
     mutable DateTime   mAllWorkTrigger;    // next trigger time, taking account of reminders and working hours
     mutable DateTime   mMainWorkTrigger;   // next trigger time, ignoring reminders but taking account of working hours
-    mutable KAEvent::CmdErrType mCommandError; // command execution error last time the alarm triggered
+    mutable KAEvent::CmdErrType mCommandError{KAEvent::CMD_NO_ERROR}; // command execution error last time the alarm triggered
 
     QString            mEventID;           // UID: KCalendarCore::Event unique ID
     QString            mTemplateName;      // alarm template's name, or null if normal event
-    QMap<QByteArray, QString> mCustomProperties;  // KCalendarCore::Event's non-KAlarm custom properties
-    Akonadi::Item::Id  mItemId;            // Akonadi::Item ID for this event
-    mutable ResourceId mResourceId;        // ID of collection containing the event, or for a displaying event,
+    QMap<QByteArray, QString> mCustomProperties; // KCalendarCore::Event's non-KAlarm custom properties
+    Akonadi::Item::Id  mItemId{-1};        // Akonadi::Item ID for this event
+    mutable ResourceId mResourceId{-1};    // ID of collection containing the event, or for a displaying event,
     // saved collection ID (not the collection the event is in)
     QString            mText;              // message text, file URL, command, email body [or audio file for KAAlarm]
     QString            mAudioFile;         // ATTACH: audio file to play
@@ -269,61 +266,61 @@ public:
     DateTime           mDeferralTime;      // extra time to trigger alarm (if alarm or reminder deferred)
     DateTime           mDisplayingTime;    // date/time shown in the alarm currently being displayed
     int                mDisplayingFlags;   // type of alarm which is currently being displayed (for display alarm)
-    int                mReminderMinutes;   // how long in advance reminder is to be, or 0 if none (<0 for reminder AFTER the alarm)
+    int                mReminderMinutes{0};// how long in advance reminder is to be, or 0 if none (<0 for reminder AFTER the alarm)
     DateTime           mReminderAfterTime; // if mReminderActive true, time to trigger reminder AFTER the main alarm, or invalid if not pending
-    ReminderType       mReminderActive;    // whether a reminder is due (before next, or after last, main alarm/recurrence)
-    int                mDeferDefaultMinutes; // default number of minutes for deferral dialog, or 0 to select time control
-    bool               mDeferDefaultDateOnly;// select date-only by default in deferral dialog
-    int                mRevision;          // SEQUENCE: revision number of the original alarm, or 0
-    KARecurrence      *mRecurrence;        // RECUR: recurrence specification, or 0 if none
-    Repetition         mRepetition;        // sub-repetition count and interval
-    int                mNextRepeat;        // repetition count of next due sub-repetition
-    int                mAlarmCount;        // number of alarms: count of !mMainExpired, mRepeatAtLogin, mDeferral, mReminderActive, mDisplaying
-    DeferType          mDeferral;          // whether the alarm is an extra deferred/deferred-reminder alarm
-    Akonadi::Item::Id  mAkonadiItemId;     // if email text, message's Akonadi item ID
-    int                mTemplateAfterTime; // time not specified: use n minutes after default time, or -1 (applies to templates only)
-    QColor             mBgColour;          // background colour of alarm message
-    QColor             mFgColour;          // foreground colour of alarm message, or invalid for default
-    QFont              mFont;              // font of alarm message (ignored if mUseDefaultFont true)
-    uint               mEmailFromIdentity; // standard email identity uoid for 'From' field, or empty
-    EmailAddressList   mEmailAddresses;    // ATTENDEE: addresses to send email to
-    QString            mEmailSubject;      // SUMMARY: subject line of email
-    QStringList        mEmailAttachments;  // ATTACH: email attachment file names
-    mutable int        mChangeCount;       // >0 = inhibit calling calcTriggerTimes()
-    mutable bool       mTriggerChanged;    // true if need to recalculate trigger times
-    QString            mLogFile;           // alarm output is to be logged to this URL
-    float              mSoundVolume;       // volume for sound file (range 0 - 1), or < 0 for unspecified
-    float              mFadeVolume;        // initial volume for sound file (range 0 - 1), or < 0 for no fade
-    int                mFadeSeconds;       // fade time (seconds) for sound file, or 0 if none
-    int                mRepeatSoundPause;  // seconds to pause between sound file repetitions, or -1 if no repetition
-    int                mLateCancel;        // how many minutes late will cancel the alarm, or 0 for no cancellation
-    bool               mExcludeHolidays;   // don't trigger alarms on holidays
+    ReminderType       mReminderActive{NO_REMINDER}; // whether a reminder is due (before next, or after last, main alarm/recurrence)
+    int                mDeferDefaultMinutes{0}; // default number of minutes for deferral dialog, or 0 to select time control
+    bool               mDeferDefaultDateOnly{false}; // select date-only by default in deferral dialog
+    int                mRevision{0};           // SEQUENCE: revision number of the original alarm, or 0
+    KARecurrence      *mRecurrence{nullptr};   // RECUR: recurrence specification, or 0 if none
+    Repetition         mRepetition;            // sub-repetition count and interval
+    int                mNextRepeat{0};         // repetition count of next due sub-repetition
+    int                mAlarmCount{0};         // number of alarms: count of !mMainExpired, mRepeatAtLogin, mDeferral, mReminderActive, mDisplaying
+    DeferType          mDeferral{NO_DEFERRAL}; // whether the alarm is an extra deferred/deferred-reminder alarm
+    Akonadi::Item::Id  mAkonadiItemId{-1};     // if email text, message's Akonadi item ID
+    int                mTemplateAfterTime{-1}; // time not specified: use n minutes after default time, or -1 (applies to templates only)
+    QColor             mBgColour;              // background colour of alarm message
+    QColor             mFgColour;              // foreground colour of alarm message, or invalid for default
+    QFont              mFont;                  // font of alarm message (ignored if mUseDefaultFont true)
+    uint               mEmailFromIdentity{0};  // standard email identity uoid for 'From' field, or empty
+    EmailAddressList   mEmailAddresses;        // ATTENDEE: addresses to send email to
+    QString            mEmailSubject;          // SUMMARY: subject line of email
+    QStringList        mEmailAttachments;      // ATTACH: email attachment file names
+    mutable int        mChangeCount{0};        // >0 = inhibit calling calcTriggerTimes()
+    mutable bool       mTriggerChanged{false}; // true if need to recalculate trigger times
+    QString            mLogFile;               // alarm output is to be logged to this URL
+    float              mSoundVolume{-1.0f};    // volume for sound file (range 0 - 1), or < 0 for unspecified
+    float              mFadeVolume{-1.0f};     // initial volume for sound file (range 0 - 1), or < 0 for no fade
+    int                mFadeSeconds{0};        // fade time (seconds) for sound file, or 0 if none
+    int                mRepeatSoundPause{-1};  // seconds to pause between sound file repetitions, or -1 if no repetition
+    int                mLateCancel{0};         // how many minutes late will cancel the alarm, or 0 for no cancellation
+    bool               mExcludeHolidays{false}; // don't trigger alarms on holidays
     mutable QSharedPointer<const HolidayRegion> mExcludeHolidayRegion; // holiday region used to exclude alarms on holidays (= mHolidays when trigger calculated)
-    mutable int        mWorkTimeOnly;      // non-zero to trigger alarm only during working hours (= mWorkTimeIndex when trigger calculated)
-    KAEvent::SubAction mActionSubType;     // sub-action type for the event's main alarm
-    CalEvent::Type     mCategory;      // event category (active, archived, template, ...)
-    KAEvent::ExtraActionOptions mExtraActionOptions;// options for pre- or post-alarm actions
-    KACalendar::Compat mCompatibility; // event's storage format compatibility
-    bool               mReadOnly;          // event is read-only in its original calendar file
-    bool               mConfirmAck;        // alarm acknowledgement requires confirmation by user
-    bool               mUseDefaultFont;    // use default message font, not mFont
-    bool               mCommandScript;     // the command text is a script, not a shell command line
-    bool               mCommandXterm;      // command alarm is to be executed in a terminal window
-    bool               mCommandDisplay;    // command output is to be displayed in an alarm window
-    bool               mEmailBcc;          // blind copy the email to the user
-    bool               mBeep;              // whether to beep when the alarm is displayed
-    bool               mSpeak;             // whether to speak the message when the alarm is displayed
-    bool               mCopyToKOrganizer;  // KOrganizer should hold a copy of the event
-    bool               mReminderOnceOnly;  // the reminder is output only for the first recurrence
-    bool               mAutoClose;         // whether to close the alarm window after the late-cancel period
-    bool               mMainExpired;       // main alarm has expired (in which case a deferral alarm will exist)
-    bool               mRepeatAtLogin;     // whether to repeat the alarm at every login
-    bool               mArchiveRepeatAtLogin; // if now archived, original event was repeat-at-login
-    bool               mArchive;           // event has triggered in the past, so archive it when closed
-    bool               mDisplaying;        // whether the alarm is currently being displayed (i.e. in displaying calendar)
-    bool               mDisplayingDefer;   // show Defer button (applies to displaying calendar only)
-    bool               mDisplayingEdit;    // show Edit button (applies to displaying calendar only)
-    bool               mEnabled;           // false if event is disabled
+    mutable int        mWorkTimeOnly{0};         // non-zero to trigger alarm only during working hours (= mWorkTimeIndex when trigger calculated)
+    KAEvent::SubAction mActionSubType;           // sub-action type for the event's main alarm
+    CalEvent::Type     mCategory{CalEvent::EMPTY};   // event category (active, archived, template, ...)
+    KAEvent::ExtraActionOptions mExtraActionOptions; // options for pre- or post-alarm actions
+    KACalendar::Compat mCompatibility{KACalendar::Current}; // event's storage format compatibility
+    bool               mReadOnly{false};         // event is read-only in its original calendar file
+    bool               mConfirmAck{false};       // alarm acknowledgement requires confirmation by user
+    bool               mUseDefaultFont;          // use default message font, not mFont
+    bool               mCommandScript{false};    // the command text is a script, not a shell command line
+    bool               mCommandXterm{false};     // command alarm is to be executed in a terminal window
+    bool               mCommandDisplay{false};   // command output is to be displayed in an alarm window
+    bool               mEmailBcc{false};         // blind copy the email to the user
+    bool               mBeep{false};             // whether to beep when the alarm is displayed
+    bool               mSpeak{false};            // whether to speak the message when the alarm is displayed
+    bool               mCopyToKOrganizer{false}; // KOrganizer should hold a copy of the event
+    bool               mReminderOnceOnly{false}; // the reminder is output only for the first recurrence
+    bool               mAutoClose{false};        // whether to close the alarm window after the late-cancel period
+    bool               mMainExpired;             // main alarm has expired (in which case a deferral alarm will exist)
+    bool               mRepeatAtLogin{false};    // whether to repeat the alarm at every login
+    bool               mArchiveRepeatAtLogin{false}; // if now archived, original event was repeat-at-login
+    bool               mArchive{false};          // event has triggered in the past, so archive it when closed
+    bool               mDisplaying{false};       // whether the alarm is currently being displayed (i.e. in displaying calendar)
+    bool               mDisplayingDefer{false};  // show Defer button (applies to displaying calendar only)
+    bool               mDisplayingEdit{false};   // show Edit button (applies to displaying calendar only)
+    bool               mEnabled;                 // false if event is disabled
 
 public:
     static const QByteArray FLAGS_PROPERTY;
@@ -492,216 +489,94 @@ KAEvent::KAEvent()
 { }
 
 KAEventPrivate::KAEventPrivate()
-    :
-    mCommandError(KAEvent::CMD_NO_ERROR),
-    mItemId(-1),
-    mResourceId(-1),
-    mReminderMinutes(0),
-    mReminderActive(NO_REMINDER),
-    mRevision(0),
-    mRecurrence(nullptr),
-    mNextRepeat(0),
-    mAlarmCount(0),
-    mDeferral(NO_DEFERRAL),
-    mChangeCount(0),
-    mTriggerChanged(false),
-    mLateCancel(0),
-    mWorkTimeOnly(0),
-    mCategory(CalEvent::EMPTY),
-    mCompatibility(KACalendar::Current),
-    mReadOnly(false),
-    mConfirmAck(false),
-    mEmailBcc(false),
-    mBeep(false),
-    mAutoClose(false),
-    mRepeatAtLogin(false),
-    mDisplaying(false)
 { }
 
+/******************************************************************************
+* Initialise the instance with the specified parameters.
+*/
 KAEvent::KAEvent(const KADateTime &dt, const QString &message, const QColor &bg, const QColor &fg, const QFont &f,
                  SubAction action, int lateCancel, Flags flags, bool changesPending)
     : d(new KAEventPrivate(dt, message, bg, fg, f, action, lateCancel, flags, changesPending))
 {
 }
 
-KAEventPrivate::KAEventPrivate(const KADateTime &dt, const QString &message, const QColor &bg, const QColor &fg, const QFont &f,
-                               KAEvent::SubAction action, int lateCancel, KAEvent::Flags flags, bool changesPending)
-    : mRevision(0),
-      mRecurrence(nullptr)
+KAEventPrivate::KAEventPrivate(const KADateTime &dateTime, const QString &text, const QColor &bg, const QColor &fg,
+                               const QFont &font, KAEvent::SubAction action, int lateCancel, KAEvent::Flags flags,
+                               bool changesPending)
+    : mAlarmCount(1)
+    , mBgColour(bg)
+    , mFgColour(fg)
+    , mFont(font)
+    , mLateCancel(lateCancel)     // do this before setting flags
+    , mCategory(CalEvent::ACTIVE)
 {
-    set(dt, message, bg, fg, f, action, lateCancel, flags, changesPending);
-}
-
-KAEvent::KAEvent(const KCalendarCore::Event::Ptr &e)
-    : d(new KAEventPrivate(e))
-{
-}
-
-KAEventPrivate::KAEventPrivate(const KCalendarCore::Event::Ptr &e)
-    : mRecurrence(nullptr)
-{
-    set(e);
-}
-
-KAEventPrivate::KAEventPrivate(const KAEventPrivate &e)
-    : QSharedData(e),
-      mRecurrence(nullptr)
-{
-    copy(e);
-}
-
-KAEvent::KAEvent(const KAEvent &other)
-    : d(other.d)
-{ }
-
-KAEvent::~KAEvent()
-{ }
-
-KAEvent &KAEvent::operator=(const KAEvent &other)
-{
-    if (&other != this) {
-        d = other.d;
+    mStartDateTime = dateTime;
+    if (flags & KAEvent::ANY_TIME)
+        mStartDateTime.setDateOnly(true);
+    mNextMainDateTime = mStartDateTime;
+    switch (action) {
+    case KAEvent::MESSAGE:
+    case KAEvent::FILE:
+    case KAEvent::COMMAND:
+    case KAEvent::EMAIL:
+    case KAEvent::AUDIO:
+        mActionSubType = static_cast<KAEvent::SubAction>(action);
+        break;
+    default:
+        mActionSubType = KAEvent::MESSAGE;
+        break;
     }
-    return *this;
+    mText                   = (mActionSubType == KAEvent::COMMAND) ? text.trimmed()
+                            : (mActionSubType == KAEvent::AUDIO)   ? QString() : text;
+    mAudioFile              = (mActionSubType == KAEvent::AUDIO) ? text : QString();
+    set_deferral((flags & DEFERRAL) ? NORMAL_DEFERRAL : NO_DEFERRAL);
+    mRepeatAtLogin          = flags & KAEvent::REPEAT_AT_LOGIN;
+    mConfirmAck             = flags & KAEvent::CONFIRM_ACK;
+    mUseDefaultFont         = flags & KAEvent::DEFAULT_FONT;
+    mCommandScript          = flags & KAEvent::SCRIPT;
+    mCommandXterm           = flags & KAEvent::EXEC_IN_XTERM;
+    mCommandDisplay         = flags & KAEvent::DISPLAY_COMMAND;
+    mCopyToKOrganizer       = flags & KAEvent::COPY_KORGANIZER;
+    mExcludeHolidays        = flags & KAEvent::EXCL_HOLIDAYS;
+    mExcludeHolidayRegion   = holidays();
+    mWorkTimeOnly           = flags & KAEvent::WORK_TIME_ONLY;
+    mEmailBcc               = flags & KAEvent::EMAIL_BCC;
+    mEnabled                = !(flags & KAEvent::DISABLED);
+    mDisplaying             = flags & DISPLAYING_;
+    mReminderOnceOnly       = flags & KAEvent::REMINDER_ONCE;
+    mAutoClose              = (flags & KAEvent::AUTO_CLOSE) && mLateCancel;
+    mRepeatSoundPause       = (flags & KAEvent::REPEAT_SOUND) ? 0 : -1;
+    mSpeak                  = (flags & KAEvent::SPEAK) && action != KAEvent::AUDIO;
+    mBeep                   = (flags & KAEvent::BEEP) && action != KAEvent::AUDIO && !mSpeak;
+    if (mRepeatAtLogin) {              // do this after setting other flags
+        ++mAlarmCount;
+        setRepeatAtLoginTrue(false);
+    }
+
+    mMainExpired            = false;
+    mChangeCount            = changesPending ? 1 : 0;
+    mTriggerChanged         = true;
 }
 
 /******************************************************************************
-* Copies the data from another instance.
+* Initialise the KAEvent from a KCalendarCore::Event.
 */
-void KAEventPrivate::copy(const KAEventPrivate &event)
+KAEvent::KAEvent(const KCalendarCore::Event::Ptr &event)
+    : d(new KAEventPrivate(event))
 {
-    mAllTrigger              = event.mAllTrigger;
-    mMainTrigger             = event.mMainTrigger;
-    mAllWorkTrigger          = event.mAllWorkTrigger;
-    mMainWorkTrigger         = event.mMainWorkTrigger;
-    mCommandError            = event.mCommandError;
-    mEventID                 = event.mEventID;
-    mTemplateName            = event.mTemplateName;
-    mCustomProperties        = event.mCustomProperties;
-    mItemId                  = event.mItemId;
-    mResourceId              = event.mResourceId;
-    mText                    = event.mText;
-    mAudioFile               = event.mAudioFile;
-    mPreAction               = event.mPreAction;
-    mPostAction              = event.mPostAction;
-    mStartDateTime           = event.mStartDateTime;
-    mCreatedDateTime         = event.mCreatedDateTime;
-    mNextMainDateTime        = event.mNextMainDateTime;
-    mAtLoginDateTime         = event.mAtLoginDateTime;
-    mDeferralTime            = event.mDeferralTime;
-    mDisplayingTime          = event.mDisplayingTime;
-    mDisplayingFlags         = event.mDisplayingFlags;
-    mReminderMinutes         = event.mReminderMinutes;
-    mReminderAfterTime       = event.mReminderAfterTime;
-    mReminderActive          = event.mReminderActive;
-    mDeferDefaultMinutes     = event.mDeferDefaultMinutes;
-    mDeferDefaultDateOnly    = event.mDeferDefaultDateOnly;
-    mRevision                = event.mRevision;
-    mRepetition              = event.mRepetition;
-    mNextRepeat              = event.mNextRepeat;
-    mAlarmCount              = event.mAlarmCount;
-    mDeferral                = event.mDeferral;
-    mAkonadiItemId           = event.mAkonadiItemId;
-    mTemplateAfterTime       = event.mTemplateAfterTime;
-    mBgColour                = event.mBgColour;
-    mFgColour                = event.mFgColour;
-    mFont                    = event.mFont;
-    mEmailFromIdentity       = event.mEmailFromIdentity;
-    mEmailAddresses          = event.mEmailAddresses;
-    mEmailSubject            = event.mEmailSubject;
-    mEmailAttachments        = event.mEmailAttachments;
-    mLogFile                 = event.mLogFile;
-    mSoundVolume             = event.mSoundVolume;
-    mFadeVolume              = event.mFadeVolume;
-    mFadeSeconds             = event.mFadeSeconds;
-    mRepeatSoundPause        = event.mRepeatSoundPause;
-    mLateCancel              = event.mLateCancel;
-    mExcludeHolidays         = event.mExcludeHolidays;
-    mExcludeHolidayRegion    = event.mExcludeHolidayRegion;
-    mWorkTimeOnly            = event.mWorkTimeOnly;
-    mActionSubType           = event.mActionSubType;
-    mCategory                = event.mCategory;
-    mExtraActionOptions      = event.mExtraActionOptions;
-    mCompatibility           = event.mCompatibility;
-    mReadOnly                = event.mReadOnly;
-    mConfirmAck              = event.mConfirmAck;
-    mUseDefaultFont          = event.mUseDefaultFont;
-    mCommandScript           = event.mCommandScript;
-    mCommandXterm            = event.mCommandXterm;
-    mCommandDisplay          = event.mCommandDisplay;
-    mEmailBcc                = event.mEmailBcc;
-    mBeep                    = event.mBeep;
-    mSpeak                   = event.mSpeak;
-    mCopyToKOrganizer        = event.mCopyToKOrganizer;
-    mReminderOnceOnly        = event.mReminderOnceOnly;
-    mAutoClose               = event.mAutoClose;
-    mMainExpired             = event.mMainExpired;
-    mRepeatAtLogin           = event.mRepeatAtLogin;
-    mArchiveRepeatAtLogin    = event.mArchiveRepeatAtLogin;
-    mArchive                 = event.mArchive;
-    mDisplaying              = event.mDisplaying;
-    mDisplayingDefer         = event.mDisplayingDefer;
-    mDisplayingEdit          = event.mDisplayingEdit;
-    mEnabled                 = event.mEnabled;
-    mChangeCount             = 0;
-    mTriggerChanged          = event.mTriggerChanged;
-    delete mRecurrence;
-    if (event.mRecurrence) {
-        mRecurrence = new KARecurrence(*event.mRecurrence);
-    } else {
-        mRecurrence = nullptr;
-    }
 }
 
-void KAEvent::set(const KCalendarCore::Event::Ptr &e)
-{
-    d->set(e);
-}
-
-/******************************************************************************
-* Initialise the KAEventPrivate from a KCalendarCore::Event.
-*/
-void KAEventPrivate::set(const KCalendarCore::Event::Ptr &event)
+KAEventPrivate::KAEventPrivate(const KCalendarCore::Event::Ptr &event)
 {
     startChanges();
     // Extract status from the event
-    mCommandError           = KAEvent::CMD_NO_ERROR;
-    mEventID                = event->uid();
-    mRevision               = event->revision();
-    mTemplateName.clear();
-    mLogFile.clear();
-    mItemId                 = -1;
-    mResourceId             = -1;
-    mTemplateAfterTime      = -1;
-    mBeep                   = false;
-    mSpeak                  = false;
-    mEmailBcc               = false;
-    mCommandXterm           = false;
-    mCommandDisplay         = false;
-    mCopyToKOrganizer       = false;
-    mConfirmAck             = false;
-    mArchive                = false;
-    mReminderOnceOnly       = false;
-    mAutoClose              = false;
-    mArchiveRepeatAtLogin   = false;
-    mDisplayingDefer        = false;
-    mDisplayingEdit         = false;
-    mDeferDefaultDateOnly   = false;
-    mReminderActive         = NO_REMINDER;
-    mReminderMinutes        = 0;
-    mDeferDefaultMinutes    = 0;
-    mLateCancel             = 0;
-    mAkonadiItemId          = -1;
-    mExcludeHolidays        = false;
-    mWorkTimeOnly           = 0;
-    mChangeCount            = 0;
-    mBgColour               = QColor(255, 255, 255);    // missing/invalid colour - return white background
-    mFgColour               = QColor(0, 0, 0);          // and black foreground
-    mCompatibility          = KACalendar::Current;
-    mReadOnly               = event->isReadOnly();
-    mUseDefaultFont         = true;
-    mEnabled                = true;
-    clearRecur();
+    mEventID        = event->uid();
+    mRevision       = event->revision();
+    mBgColour       = QColor(255, 255, 255);    // missing/invalid colour - return white background
+    mFgColour       = QColor(0, 0, 0);          // and black foreground
+    mReadOnly       = event->isReadOnly();
+    mUseDefaultFont = true;
+    mEnabled        = true;
     QString param;
     bool ok;
     mCategory               = CalEvent::status(event, &param);
@@ -861,26 +736,8 @@ void KAEventPrivate::set(const KCalendarCore::Event::Ptr &event)
 
     // Extract status from the event's alarms.
     // First set up defaults.
-    mActionSubType      = KAEvent::MESSAGE;
-    mMainExpired        = true;
-    mRepeatAtLogin      = false;
-    mDisplaying         = false;
-    mCommandScript      = false;
-    mExtraActionOptions = {};
-    mDeferral           = NO_DEFERRAL;
-    mSoundVolume        = -1;
-    mFadeVolume         = -1;
-    mRepeatSoundPause   = -1;
-    mFadeSeconds        = 0;
-    mEmailFromIdentity  = 0;
-    mReminderAfterTime  = DateTime();
-    mText.clear();
-    mAudioFile.clear();
-    mPreAction.clear();
-    mPostAction.clear();
-    mEmailSubject.clear();
-    mEmailAddresses.clear();
-    mEmailAttachments.clear();
+    mActionSubType = KAEvent::MESSAGE;
+    mMainExpired   = true;
 
     // Extract data from all the event's alarms and index the alarms by sequence number
     AlarmMap alarmMap;
@@ -1100,99 +957,127 @@ void KAEventPrivate::set(const KCalendarCore::Event::Ptr &event)
     endChanges();
 }
 
-void KAEvent::set(const KADateTime &dt, const QString &message, const QColor &bg, const QColor &fg,
-                  const QFont &f, SubAction act, int lateCancel, Flags flags, bool changesPending)
+KAEventPrivate::KAEventPrivate(const KAEventPrivate &other)
+    : QSharedData(other)
+    , mRecurrence(nullptr)
 {
-    d->set(dt, message, bg, fg, f, act, lateCancel, flags, changesPending);
+    copy(other);
+}
+
+KAEvent::KAEvent(const KAEvent &other)
+    : d(other.d)
+{ }
+
+KAEvent::~KAEvent()
+{ }
+
+KAEvent &KAEvent::operator=(const KAEvent &other)
+{
+    if (&other != this) {
+        d = other.d;
+    }
+    return *this;
 }
 
 /******************************************************************************
-* Initialise the instance with the specified parameters.
+* Copies the data from another instance.
 */
-void KAEventPrivate::set(const KADateTime &dateTime, const QString &text, const QColor &bg, const QColor &fg,
-                         const QFont &font, KAEvent::SubAction action, int lateCancel, KAEvent::Flags flags,
-                         bool changesPending)
+void KAEventPrivate::copy(const KAEventPrivate &event)
 {
-    clearRecur();
-    mStartDateTime = dateTime;
-    if (flags & KAEvent::ANY_TIME)
-        mStartDateTime.setDateOnly(true);
-    mNextMainDateTime = mStartDateTime;
-    switch (action) {
-    case KAEvent::MESSAGE:
-    case KAEvent::FILE:
-    case KAEvent::COMMAND:
-    case KAEvent::EMAIL:
-    case KAEvent::AUDIO:
-        mActionSubType = static_cast<KAEvent::SubAction>(action);
-        break;
-    default:
-        mActionSubType = KAEvent::MESSAGE;
-        break;
+    mAllTrigger              = event.mAllTrigger;
+    mMainTrigger             = event.mMainTrigger;
+    mAllWorkTrigger          = event.mAllWorkTrigger;
+    mMainWorkTrigger         = event.mMainWorkTrigger;
+    mCommandError            = event.mCommandError;
+    mEventID                 = event.mEventID;
+    mTemplateName            = event.mTemplateName;
+    mCustomProperties        = event.mCustomProperties;
+    mItemId                  = event.mItemId;
+    mResourceId              = event.mResourceId;
+    mText                    = event.mText;
+    mAudioFile               = event.mAudioFile;
+    mPreAction               = event.mPreAction;
+    mPostAction              = event.mPostAction;
+    mStartDateTime           = event.mStartDateTime;
+    mCreatedDateTime         = event.mCreatedDateTime;
+    mNextMainDateTime        = event.mNextMainDateTime;
+    mAtLoginDateTime         = event.mAtLoginDateTime;
+    mDeferralTime            = event.mDeferralTime;
+    mDisplayingTime          = event.mDisplayingTime;
+    mDisplayingFlags         = event.mDisplayingFlags;
+    mReminderMinutes         = event.mReminderMinutes;
+    mReminderAfterTime       = event.mReminderAfterTime;
+    mReminderActive          = event.mReminderActive;
+    mDeferDefaultMinutes     = event.mDeferDefaultMinutes;
+    mDeferDefaultDateOnly    = event.mDeferDefaultDateOnly;
+    mRevision                = event.mRevision;
+    mRepetition              = event.mRepetition;
+    mNextRepeat              = event.mNextRepeat;
+    mAlarmCount              = event.mAlarmCount;
+    mDeferral                = event.mDeferral;
+    mAkonadiItemId           = event.mAkonadiItemId;
+    mTemplateAfterTime       = event.mTemplateAfterTime;
+    mBgColour                = event.mBgColour;
+    mFgColour                = event.mFgColour;
+    mFont                    = event.mFont;
+    mEmailFromIdentity       = event.mEmailFromIdentity;
+    mEmailAddresses          = event.mEmailAddresses;
+    mEmailSubject            = event.mEmailSubject;
+    mEmailAttachments        = event.mEmailAttachments;
+    mLogFile                 = event.mLogFile;
+    mSoundVolume             = event.mSoundVolume;
+    mFadeVolume              = event.mFadeVolume;
+    mFadeSeconds             = event.mFadeSeconds;
+    mRepeatSoundPause        = event.mRepeatSoundPause;
+    mLateCancel              = event.mLateCancel;
+    mExcludeHolidays         = event.mExcludeHolidays;
+    mExcludeHolidayRegion    = event.mExcludeHolidayRegion;
+    mWorkTimeOnly            = event.mWorkTimeOnly;
+    mActionSubType           = event.mActionSubType;
+    mCategory                = event.mCategory;
+    mExtraActionOptions      = event.mExtraActionOptions;
+    mCompatibility           = event.mCompatibility;
+    mReadOnly                = event.mReadOnly;
+    mConfirmAck              = event.mConfirmAck;
+    mUseDefaultFont          = event.mUseDefaultFont;
+    mCommandScript           = event.mCommandScript;
+    mCommandXterm            = event.mCommandXterm;
+    mCommandDisplay          = event.mCommandDisplay;
+    mEmailBcc                = event.mEmailBcc;
+    mBeep                    = event.mBeep;
+    mSpeak                   = event.mSpeak;
+    mCopyToKOrganizer        = event.mCopyToKOrganizer;
+    mReminderOnceOnly        = event.mReminderOnceOnly;
+    mAutoClose               = event.mAutoClose;
+    mMainExpired             = event.mMainExpired;
+    mRepeatAtLogin           = event.mRepeatAtLogin;
+    mArchiveRepeatAtLogin    = event.mArchiveRepeatAtLogin;
+    mArchive                 = event.mArchive;
+    mDisplaying              = event.mDisplaying;
+    mDisplayingDefer         = event.mDisplayingDefer;
+    mDisplayingEdit          = event.mDisplayingEdit;
+    mEnabled                 = event.mEnabled;
+    mChangeCount             = 0;
+    mTriggerChanged          = event.mTriggerChanged;
+    delete mRecurrence;
+    if (event.mRecurrence) {
+        mRecurrence = new KARecurrence(*event.mRecurrence);
+    } else {
+        mRecurrence = nullptr;
     }
-    mEventID.clear();
-    mTemplateName.clear();
-    mItemId                 = -1;
-    mResourceId             = -1;
-    mPreAction.clear();
-    mPostAction.clear();
-    mText                   = (mActionSubType == KAEvent::COMMAND) ? text.trimmed()
-                            : (mActionSubType == KAEvent::AUDIO)   ? QString() : text;
-    mCategory               = CalEvent::ACTIVE;
-    mAudioFile              = (mActionSubType == KAEvent::AUDIO) ? text : QString();
-    mSoundVolume            = -1;
-    mFadeVolume             = -1;
-    mTemplateAfterTime      = -1;
-    mFadeSeconds            = 0;
-    mBgColour               = bg;
-    mFgColour               = fg;
-    mFont                   = font;
-    mAlarmCount             = 1;
-    mLateCancel             = lateCancel;     // do this before setting flags
-    mDeferral               = NO_DEFERRAL;    // do this before setting flags
+}
 
-    set_deferral((flags & DEFERRAL) ? NORMAL_DEFERRAL : NO_DEFERRAL);
-    mRepeatAtLogin          = flags & KAEvent::REPEAT_AT_LOGIN;
-    mConfirmAck             = flags & KAEvent::CONFIRM_ACK;
-    mUseDefaultFont         = flags & KAEvent::DEFAULT_FONT;
-    mCommandScript          = flags & KAEvent::SCRIPT;
-    mCommandXterm           = flags & KAEvent::EXEC_IN_XTERM;
-    mCommandDisplay         = flags & KAEvent::DISPLAY_COMMAND;
-    mCopyToKOrganizer       = flags & KAEvent::COPY_KORGANIZER;
-    mExcludeHolidays        = flags & KAEvent::EXCL_HOLIDAYS;
-    mExcludeHolidayRegion   = holidays();
-    mWorkTimeOnly           = flags & KAEvent::WORK_TIME_ONLY;
-    mEmailBcc               = flags & KAEvent::EMAIL_BCC;
-    mEnabled                = !(flags & KAEvent::DISABLED);
-    mDisplaying             = flags & DISPLAYING_;
-    mReminderOnceOnly       = flags & KAEvent::REMINDER_ONCE;
-    mAutoClose              = (flags & KAEvent::AUTO_CLOSE) && mLateCancel;
-    mRepeatSoundPause       = (flags & KAEvent::REPEAT_SOUND) ? 0 : -1;
-    mSpeak                  = (flags & KAEvent::SPEAK) && action != KAEvent::AUDIO;
-    mBeep                   = (flags & KAEvent::BEEP) && action != KAEvent::AUDIO && !mSpeak;
-    if (mRepeatAtLogin) {              // do this after setting other flags
-        ++mAlarmCount;
-        setRepeatAtLoginTrue(false);
-    }
+// Deprecated
+void KAEvent::set(const KCalendarCore::Event::Ptr &e)
+{
+    *this = KAEvent(e);
+}
 
-    mAkonadiItemId          = -1;
-    mReminderMinutes        = 0;
-    mDeferDefaultMinutes    = 0;
-    mDeferDefaultDateOnly   = false;
-    mArchiveRepeatAtLogin   = false;
-    mReminderActive         = NO_REMINDER;
-    mDisplaying             = false;
-    mMainExpired            = false;
-    mDisplayingDefer        = false;
-    mDisplayingEdit         = false;
-    mArchive                = false;
-    mReminderAfterTime      = DateTime();
-    mExtraActionOptions     = {};
-    mCompatibility          = KACalendar::Current;
-    mReadOnly               = false;
-    mCommandError           = KAEvent::CMD_NO_ERROR;
-    mChangeCount            = changesPending ? 1 : 0;
-    mTriggerChanged         = true;
+// Deprecated
+void KAEvent::set(const KADateTime &dt, const QString &message, const QColor &bg, const QColor &fg,
+                  const QFont &f, SubAction act, int lateCancel, Flags flags, bool changesPending)
+{
+    *this = KAEvent(dt, message, bg, fg, f, act, lateCancel, flags, changesPending);
 }
 
 /******************************************************************************
@@ -3438,7 +3323,7 @@ void KAEvent::reinstateFromDisplaying(const KCalendarCore::Event::Ptr &e, Resour
 
 void KAEventPrivate::reinstateFromDisplaying(const Event::Ptr &kcalEvent, ResourceId &resourceId, bool &showEdit, bool &showDefer)
 {
-    set(kcalEvent);
+    *this = KAEventPrivate(kcalEvent);
     if (mDisplaying) {
         // Retrieve the original event's unique ID
         setCategory(CalEvent::ACTIVE);
@@ -5819,10 +5704,6 @@ KAAlarm::KAAlarm()
 }
 
 KAAlarm::Private::Private()
-    : mType(INVALID_ALARM),
-      mNextRepeat(0),
-      mRepeatAtLogin(false),
-      mDeferred(false)
 {
 }
 

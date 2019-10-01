@@ -1225,8 +1225,7 @@ void KAEventTest::toKCalEvent()
 
     {
         // Event category, UID, revision, start time using time zone, created time
-        KAEvent event;
-        event.set(dt, text, bgColour, fgColour, font, KAEvent::MESSAGE, 3, KAEvent::CONFIRM_ACK);
+        KAEvent event(dt, text, bgColour, fgColour, font, KAEvent::MESSAGE, 3, KAEvent::CONFIRM_ACK);
         event.setEventId(uid);
         event.incrementRevision();
         event.incrementRevision();
@@ -1254,8 +1253,7 @@ void KAEventTest::toKCalEvent()
     {
         // Start time using LocalZone
         const KADateTime dt(QDate(2010,5,13), QTime(3, 45, 0), KADateTime::LocalZone);
-        KAEvent event;
-        event.set(dt, text, bgColour, fgColour, font, KAEvent::MESSAGE, 3, KAEvent::CONFIRM_ACK);
+        KAEvent event(dt, text, bgColour, fgColour, font, KAEvent::MESSAGE, 3, KAEvent::CONFIRM_ACK);
         event.setEventId(uid);
         event.incrementRevision();
         event.setCategory(CalEvent::ACTIVE);

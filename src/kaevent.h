@@ -360,8 +360,9 @@ public:
      *    set numerous KAEvent properties; non-KAlarm properties are simply stored.
      *  - Custom status if equal to "DISABLED".
      *  - Revision number.
+     *  @deprecated Use constructor and operator=() instead.
      */
-    void set(const KCalendarCore::Event::Ptr &);
+    KALARMCAL_DEPRECATED void set(const KCalendarCore::Event::Ptr &);
 
     KAEvent(const KAEvent &other);
     ~KAEvent();
@@ -384,8 +385,9 @@ public:
      *  @param changesPending true to inhibit automatic data updates until
      *                        further changes have been applied to the instance;
      *                        call endChanges() when changes are complete.
+     *  @deprecated Use constructor and operator=() instead.
      */
-    void set(const KADateTime &dt, const QString &text, const QColor &bg,
+    KALARMCAL_DEPRECATED void set(const KADateTime &dt, const QString &text, const QColor &bg,
              const QColor &fg, const QFont &font, SubAction action, int lateCancel,
              Flags flags, bool changesPending = false);
 
