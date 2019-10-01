@@ -555,8 +555,8 @@ void EditDisplayAlarmDlg::type_setEvent(KAEvent& event, const KADateTime& dt, co
         default:
         case tTEXT:     type = KAEvent::MESSAGE; break;
     }
-    event.set(dt, text, mFontColourButton->bgColour(), mFontColourButton->fgColour(), mFontColourButton->font(),
-              type, lateCancel, getAlarmFlags());
+    event = KAEvent(dt, text, mFontColourButton->bgColour(), mFontColourButton->fgColour(),
+                    mFontColourButton->font(), type, lateCancel, getAlarmFlags());
     if (type == KAEvent::MESSAGE)
     {
         if (AlarmText::checkIfEmail(text))
@@ -930,7 +930,7 @@ bool EditCommandAlarmDlg::type_stateChanged() const
 void EditCommandAlarmDlg::type_setEvent(KAEvent& event, const KADateTime& dt, const QString& text, int lateCancel, bool trial)
 {
     Q_UNUSED(trial);
-    event.set(dt, text, QColor(), QColor(), QFont(), KAEvent::COMMAND, lateCancel, getAlarmFlags());
+    event = KAEvent(dt, text, QColor(), QColor(), QFont(), KAEvent::COMMAND, lateCancel, getAlarmFlags());
     if (mCmdOutputGroup->checkedButton() == mCmdLogToFile)
         event.setLogFile(mCmdLogFileEdit->text());
 }
@@ -1316,7 +1316,7 @@ bool EditEmailAlarmDlg::type_stateChanged() const
 void EditEmailAlarmDlg::type_setEvent(KAEvent& event, const KADateTime& dt, const QString& text, int lateCancel, bool trial)
 {
     Q_UNUSED(trial);
-    event.set(dt, text, QColor(), QColor(), QFont(), KAEvent::EMAIL, lateCancel, getAlarmFlags());
+    event = KAEvent(dt, text, QColor(), QColor(), QFont(), KAEvent::EMAIL, lateCancel, getAlarmFlags());
     uint from = mEmailFromList ? mEmailFromList->currentIdentity() : 0;
     event.setEmail(from, mEmailAddresses, mEmailSubjectEdit->text(), mEmailAttachments);
 }
@@ -1627,7 +1627,7 @@ void EditAudioAlarmDlg::type_setEvent(KAEvent& event, const KADateTime& dt, cons
 {
     Q_UNUSED(text);
     Q_UNUSED(trial);
-    event.set(dt, QString(), QColor(), QColor(), QFont(), KAEvent::AUDIO, lateCancel, getAlarmFlags());
+    event = KAEvent(dt, QString(), QColor(), QColor(), QFont(), KAEvent::AUDIO, lateCancel, getAlarmFlags());
     float volume, fadeVolume;
     int   fadeSecs;
     mSoundConfig->getVolume(volume, fadeVolume, fadeSecs);
