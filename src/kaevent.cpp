@@ -3638,8 +3638,12 @@ bool KAEventPrivate::compare(const KAEventPrivate& other, KAEvent::Comparison co
         }
     }
     if (comparison & KAEvent::Compare::ICalendar) {
-        if (mCreatedDateTime  != other.mCreatedDateTime
-        ||  mCustomProperties != other.mCustomProperties) {
+        if (mCustomProperties != other.mCustomProperties) {
+            return false;
+        }
+    }
+    if (comparison & KAEvent::Compare::Created) {
+        if (mCreatedDateTime != other.mCreatedDateTime) {
             return false;
         }
     }
