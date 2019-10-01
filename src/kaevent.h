@@ -1361,6 +1361,7 @@ private:
 } // namespace KAlarmCal
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(KAlarmCal::KAEvent::Flags)
+Q_DECLARE_OPERATORS_FOR_FLAGS(KAlarmCal::KAEvent::Comparison)
 Q_DECLARE_METATYPE(KAlarmCal::KAEvent)
 
 #endif // KALARM_KAEVENT_H
