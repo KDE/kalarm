@@ -3609,8 +3609,7 @@ bool KAEventPrivate::compare(const KAEventPrivate& other, KAEvent::Comparison co
     ||  mCopyToKOrganizer != other.mCopyToKOrganizer
     ||  mCompatibility    != other.mCompatibility
     ||  mEnabled          != other.mEnabled
-    ||  mReadOnly         != other.mReadOnly
-    ||  mRevision         != other.mRevision) {
+    ||  mReadOnly         != other.mReadOnly) {
         return false;
     }
     if (mRecurrence) {
@@ -3638,12 +3637,9 @@ bool KAEventPrivate::compare(const KAEventPrivate& other, KAEvent::Comparison co
         }
     }
     if (comparison & KAEvent::Compare::ICalendar) {
-        if (mCustomProperties != other.mCustomProperties) {
-            return false;
-        }
-    }
-    if (comparison & KAEvent::Compare::Created) {
-        if (mCreatedDateTime != other.mCreatedDateTime) {
+        if (mCreatedDateTime  != other.mCreatedDateTime
+        ||  mCustomProperties != other.mCustomProperties
+        ||  mRevision         != other.mRevision) {
             return false;
         }
     }
@@ -3656,8 +3652,8 @@ bool KAEventPrivate::compare(const KAEventPrivate& other, KAEvent::Comparison co
     }
     if (comparison & KAEvent::Compare::CurrentState) {
         if (mNextMainDateTime != other.mNextMainDateTime
-        ||  mNextRepeat       != other.mNextRepeat
-        ||  mMainExpired      != other.mMainExpired) {
+        ||  mMainExpired      != other.mMainExpired
+        ||  (mRepetition  &&  mNextRepeat != other.mNextRepeat)) {
             return false;
         }
     }

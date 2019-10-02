@@ -1289,10 +1289,9 @@ public:
     /** Data categories for compare(). */
     enum class Compare {
         Id           = 0x01,   //!< the event ID
-        ICalendar    = 0x02,   //!< extra custom properties for the event in the iCalendar file
-        Created      = 0x04,   //!< the event creation timestamp
-        UserSettable = 0x08,   //!< user settable data: resource ID, item ID
-        CurrentState = 0x10    //!< changeable data which records the current state of the event
+        ICalendar    = 0x02,   //!< extra event properties in the iCalendar file: custom properties, revision, creation timestamp
+        UserSettable = 0x04,   //!< user settable data: resource ID, item ID
+        CurrentState = 0x08    //!< changeable data which records the event's current state: next trigger time etc.
     };
     Q_DECLARE_FLAGS(Comparison, Compare)
 
