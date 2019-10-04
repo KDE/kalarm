@@ -1019,11 +1019,8 @@ qCDebug(KALARM_LOG)<<"...exiting";
 */
 bool AkonadiModel::updateEvent(KAEvent& event)
 {
-    qCDebug(KALARM_LOG) << "AkonadiModel::updateEvent: ID:" << event.id();
-    return updateEvent(event.itemId(), event);
-}
-bool AkonadiModel::updateEvent(Akonadi::Item::Id itemId, KAEvent& newEvent)
-{
+    qCDebug(KALARM_LOG) << "AkonadiModel::updateEvent:" << event.id();
+    const Item::Id itemId = event.itemId();
 qCDebug(KALARM_LOG)<<"item id="<<itemId;
     const QModelIndex ix = itemIndex(itemId);
     if (!ix.isValid())
@@ -1031,7 +1028,7 @@ qCDebug(KALARM_LOG)<<"item id="<<itemId;
     const Collection collection = ix.data(ParentCollectionRole).value<Collection>();
     Item item = ix.data(ItemRole).value<Item>();
 qCDebug(KALARM_LOG)<<"item id="<<item.id()<<", revision="<<item.revision();
-    if (!KAlarmCal::setItemPayload(item, newEvent, collection.contentMimeTypes()))
+    if (!KAlarmCal::setItemPayload(item, event, collection.contentMimeTypes()))
     {
         qCWarning(KALARM_LOG) << "AkonadiModel::updateEvent: Invalid mime type for collection";
         return false;
@@ -1046,11 +1043,8 @@ qCDebug(KALARM_LOG)<<"item id="<<item.id()<<", revision="<<item.revision();
 */
 bool AkonadiModel::deleteEvent(const KAEvent& event)
 {
-    return deleteEvent(event.itemId());
-}
-bool AkonadiModel::deleteEvent(Akonadi::Item::Id itemId)
-{
-    qCDebug(KALARM_LOG) << "AkonadiModel::deleteEvent:" << itemId;
+    qCDebug(KALARM_LOG) << "AkonadiModel::deleteEvent:" << event.id();
+    const Item::Id itemId = event.itemId();
     const QModelIndex ix = itemIndex(itemId);
     if (!ix.isValid())
         return false;

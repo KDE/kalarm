@@ -153,9 +153,7 @@ class AkonadiModel : public Akonadi::EntityTreeModel, public CalendarDataModel
         bool  addEvent(KAEvent&, Akonadi::Collection&);
         bool  addEvents(const KAEvent::List&, Akonadi::Collection&);
         bool  updateEvent(KAEvent& event);
-        bool  updateEvent(Akonadi::Item::Id oldId, KAEvent& newEvent);
         bool  deleteEvent(const KAEvent& event);
-        bool  deleteEvent(Akonadi::Item::Id itemId);
 
         /** Check whether a collection is stored in the current KAlarm calendar format. */
         static bool isCompatible(const Akonadi::Collection&);
