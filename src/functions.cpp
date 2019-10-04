@@ -41,6 +41,7 @@
 
 #include "config-kalarm.h"
 
+#include <kalarmcal_version.h>
 #include <kalarmcal/identities.h>
 #include <kalarmcal/kaevent.h>
 
@@ -998,7 +999,11 @@ QStringList checkRtcWakeConfig(bool checkEventExists)
 {
     KConfigGroup config(KSharedConfig::openConfig(), "General");
     const QStringList params = config.readEntry("RtcWake", QStringList());
+#if KALARMCAL_VERSION >= QT_VERSION_CHECK(5,12,40)
     if (params.count() == 3  &&  params[2].toLongLong() > KADateTime::currentUtcDateTime().toSecsSinceEpoch())
+#else
+    if (params.count() == 3  &&  params[2].toUInt() > KADateTime::currentUtcDateTime().toTime_t())
+#endif
     {
         if (checkEventExists  &&  !AlarmCalendar::getEvent(EventId(params[0].toLongLong(), params[1])))
             return QStringList();
