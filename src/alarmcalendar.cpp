@@ -1387,7 +1387,7 @@ bool AlarmCalendar::eventReadOnly(Item::Id id) const
     AkonadiModel* model = AkonadiModel::instance();
     const Collection collection = model->collectionForItem(id);
     const KAEvent event = model->event(id);
-    if (!CollectionControlModel::isWritableEnabled(collection, event.category()))
+    if (CollectionControlModel::isWritableEnabled(collection, event.category()) <= 0)
         return true;
     return !event.isValid()  ||  event.isReadOnly();
     //   ||  compatibility(event) != KACalendar::Current;
