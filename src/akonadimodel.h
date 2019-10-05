@@ -183,17 +183,20 @@ class AkonadiModel : public Akonadi::EntityTreeModel
          *  create/delete/change rights and compatible with the current KAlarm
          *  calendar format.
          *
+         *  @param collection The collection to be inspected. This will be updated by
+         *                    calling refresh().
          *  @return 1 = fully writable,
          *          0 = writable except that backend calendar is in an old KAlarm format,
          *         -1 = read-only or incompatible format.
          */
-        static int isWritable(const Akonadi::Collection&);
+        static int isWritable(Akonadi::Collection&);
 
         /** Return whether a collection is fully writable, i.e. with
          *  create/delete/change rights and compatible with the current KAlarm
          *  calendar format.
          *
-         *  @param collection The collection to be inspected
+         *  @param collection The collection to be inspected. This will be updated by
+         *                    calling refresh().
          *  @param format  Updated to contain the backend calendar storage format.
          *                 If read-only, = KACalendar::Current;
          *                 if unknown format, = KACalendar::Incompatible;
@@ -203,7 +206,7 @@ class AkonadiModel : public Akonadi::EntityTreeModel
          *         -1 = read-only (if @p compat == KACalendar::Current), or
          *              incompatible format otherwise.
          */
-        static int isWritable(const Akonadi::Collection& collection, KACalendar::Compat& format);
+        static int isWritable(Akonadi::Collection& collection, KACalendar::Compat& format);
 
         static CalEvent::Types types(const Akonadi::Collection&);
 

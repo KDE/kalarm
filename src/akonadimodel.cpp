@@ -888,7 +888,8 @@ QColor AkonadiModel::foregroundColor(const Akonadi::Collection& collection, cons
         colour = Preferences::archivedColour();
     else if (mimeTypes.contains(KAlarmCal::MIME_TEMPLATE))
         colour = KColorScheme(QPalette::Active).foreground(KColorScheme::LinkText).color();
-    if (colour.isValid()  &&  isWritable(collection) <= 0)
+    Collection col(collection);
+    if (colour.isValid()  &&  isWritable(col) <= 0)
         return KColorUtils::lighten(colour, 0.2);
     return colour;
 }
@@ -993,7 +994,8 @@ QString AkonadiModel::tooltip(const Collection& collection, CalEvent::Types type
 QString AkonadiModel::readOnlyTooltip(const Collection& collection)
 {
     KACalendar::Compat compat;
-    switch (AkonadiModel::isWritable(collection, compat))
+    Collection col(collection);
+    switch (AkonadiModel::isWritable(col, compat))
     {
         case 1:
             return QString();
@@ -1942,27 +1944,26 @@ bool AkonadiModel::isCompatible(const Collection& collection)
 /******************************************************************************
 * Return whether a collection is fully writable.
 */
-int AkonadiModel::isWritable(const Akonadi::Collection& collection)
+int AkonadiModel::isWritable(Akonadi::Collection& collection)
 {
     KACalendar::Compat format;
     return isWritable(collection, format);
 }
 
-int AkonadiModel::isWritable(const Akonadi::Collection& collection, KACalendar::Compat& format)
+int AkonadiModel::isWritable(Akonadi::Collection& collection, KACalendar::Compat& format)
 {
     format = KACalendar::Incompatible;
     if (!collection.isValid())
         return -1;
-    Collection col = collection;
-    instance()->refresh(col);    // update with latest data
-    if ((col.rights() & writableRights) != writableRights)
+    instance()->refresh(collection);    // update with latest data
+    if ((collection.rights() & writableRights) != writableRights)
     {
         format = KACalendar::Current;
         return -1;
     }
-    if (!col.hasAttribute<CompatibilityAttribute>())
+    if (!collection.hasAttribute<CompatibilityAttribute>())
         return -1;
-    format = col.attribute<CompatibilityAttribute>()->compatibility();
+    format = collection.attribute<CompatibilityAttribute>()->compatibility();
     switch (format)
     {
         case KACalendar::Current:

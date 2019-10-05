@@ -995,15 +995,16 @@ int CollectionControlModel::isWritableEnabled(const Akonadi::Collection& collect
 }
 int CollectionControlModel::isWritableEnabled(const Akonadi::Collection& collection, CalEvent::Type type, KACalendar::Compat& format)
 {
-    int writable = AkonadiModel::isWritable(collection, format);
+    Collection col(collection);
+    int writable = AkonadiModel::isWritable(col, format);
     if (writable == -1)
         return -1;
 
     // Check the collection's enabled status
-    if (!instance()->collectionIds().contains(collection.id())
-    ||  !collection.hasAttribute<CollectionAttribute>())
+    if (!instance()->collectionIds().contains(col.id())
+    ||  !col.hasAttribute<CollectionAttribute>())
         return -1;
-    if (!collection.attribute<CollectionAttribute>()->isEnabled(type))
+    if (!col.attribute<CollectionAttribute>()->isEnabled(type))
         return -1;
     return writable;
 }
@@ -1299,8 +1300,8 @@ Collection::List CollectionControlModel::enabledCollections(CalEvent::Type type,
     for (Collection::Id colId : colIds)
     {
         Collection c(colId);
-        if (c.contentMimeTypes().contains(mimeType)
-        &&  (!writable  ||  AkonadiModel::isWritable(c)))
+        if ((!writable  ||  AkonadiModel::isWritable(c) == 1)   // this refreshes 'c'
+        &&  c.contentMimeTypes().contains(mimeType))            // do this after refreshing 'c'
             result += c;
     }
     return result;
