@@ -297,6 +297,7 @@ QString uid(const QString &id, Type status)
         case ARCHIVED:    part = staticStrings->ARCHIVED_UID;  break;
         case DISPLAYING:  part = staticStrings->DISPLAYING_UID;  break;
         case ACTIVE:
+            break;
         case TEMPLATE:
         case EMPTY:
         default:
