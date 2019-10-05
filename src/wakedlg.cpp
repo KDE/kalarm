@@ -173,7 +173,7 @@ void WakeFromSuspendDlg::useWakeClicked()
             != KMessageBox::Continue)
         return;
     const int advance = mUi->advanceWakeTime->value();
-#if KALARMCAL_VERSION >= QT_VERSION_CHECK(5,12,40)
+#if KALARMCAL_VERSION >= QT_VERSION_CHECK(5,12,1)
     const qint64 triggerTime = dt.addSecs(-advance * 60).toSecsSinceEpoch();
 #else
     unsigned triggerTime = dt.addSecs(-advance * 60).toTime_t();
