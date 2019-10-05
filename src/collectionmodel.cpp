@@ -1300,8 +1300,11 @@ Collection::List CollectionControlModel::enabledCollections(CalEvent::Type type,
     for (Collection::Id colId : colIds)
     {
         Collection c(colId);
-        if ((!writable  ||  AkonadiModel::isWritable(c) == 1)   // this refreshes 'c'
-        &&  c.contentMimeTypes().contains(mimeType))            // do this after refreshing 'c'
+        if (!writable)
+            AkonadiModel::instance()->refresh(c);    // update with latest data
+        else if (AkonadiModel::isWritable(c) != 1)   // this refreshes 'c' (needed for mime type check)
+            continue;
+        if (c.contentMimeTypes().contains(mimeType))
             result += c;
     }
     return result;
