@@ -752,15 +752,15 @@ bool CollectionControlModel::isEnabled(const Collection& collection, CalEvent::T
 {
     if (!collection.isValid()  ||  !instance()->collectionIds().contains(collection.id()))
         return false;
-    if (!AgentManager::self()->instance(collection.resource()).isValid())
+    Collection col = collection;
+    AkonadiModel::instance()->refresh(col);    // update with latest data
+    if (!AgentManager::self()->instance(col.resource()).isValid())
     {
         // The collection doesn't belong to a resource, so it can't be used.
         // Remove it from the list of collections.
         instance()->removeCollection(collection);
         return false;
     }
-    Collection col = collection;
-    AkonadiModel::instance()->refresh(col);    // update with latest data
     return col.hasAttribute<CollectionAttribute>()
        &&  col.attribute<CollectionAttribute>()->isEnabled(type);
 }
@@ -1306,7 +1306,8 @@ Collection CollectionControlModel::collectionForResource(const QString& resource
     const QList<Collection::Id> colIds = instance()->collectionIds();
     for (Collection::Id colId : colIds)
     {
-        const Collection c(colId);
+        Collection c(colId);
+        AkonadiModel::instance()->refresh(c);    // update with latest data
         if (c.resource() == resourceId)
             return c;
     }
