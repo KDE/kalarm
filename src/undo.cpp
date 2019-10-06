@@ -1020,6 +1020,9 @@ UndoItem* UndoDelete::restore()
             {
                 // It was archived when it was deleted
                 mEvent->setCategory(CalEvent::ARCHIVED);
+                mEvent->setCollectionId(-1);
+                const Item::Id itemId = AkonadiModel::instance()->findItemId(*mEvent);
+                mEvent->setCollectionId(AkonadiModel::instance()->collectionForItem(itemId).id());
                 KAlarm::UpdateResult status = KAlarm::reactivateEvent(*mEvent, &mResource);
                 switch (status.status)
                 {
