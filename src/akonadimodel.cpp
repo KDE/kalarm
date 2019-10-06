@@ -1389,6 +1389,7 @@ bool AkonadiModel::addEvents(const KAEvent::List& events, Collection& collection
 bool AkonadiModel::addEvent(KAEvent& event, Collection& collection)
 {
     qCDebug(KALARM_LOG) << "AkonadiModel::addEvent: ID:" << event.id();
+    refresh(collection);
     Item item;
     if (!event.setItemPayload(item, collection.contentMimeTypes()))
     {
@@ -1978,7 +1979,9 @@ int AkonadiModel::isWritable(Akonadi::Collection& collection, KACalendar::Compat
 
 CalEvent::Types AkonadiModel::types(const Collection& collection)
 {
-    return CalEvent::types(collection.contentMimeTypes());
+    Collection col(collection);
+    instance()->refresh(col);
+    return CalEvent::types(col.contentMimeTypes());
 }
 
 // vim: et sw=4:
