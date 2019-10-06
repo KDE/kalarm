@@ -65,6 +65,7 @@ class UndoItem
         virtual void       setCalendar(CalEvent::Type s) { mCalendar = s; }
         virtual UndoItem*  restore() = 0;
         virtual bool       deleteID(const QString& /*id*/)  { return false; }
+        virtual void       dumpDebug() const;
 
         enum Error   { ERR_NONE, ERR_PROG, ERR_NOT_FOUND, ERR_CREATE, ERR_TEMPLATE, ERR_ARCHIVED };
         enum Warning { WARN_NONE, WARN_KORG_ADD, WARN_KORG_MODIFY, WARN_KORG_DELETE };
@@ -79,6 +80,7 @@ class UndoItem
         static QString     addDeleteActionText(CalEvent::Type, bool add);
         QString            description(const KAEvent&) const;
         void               replaceWith(UndoItem* item)   { Undo::replace(this, item); }
+        virtual void       dumpDebugTitle(const char* typeName) const;
 
         QString            mName;      // specified action name (overrides default)
         int                mId;        // unique identifier (only for mType = UNDO, REDO)
@@ -96,6 +98,8 @@ class UndoMultiBase : public UndoItem
         ~UndoMultiBase()  { delete mUndos; }
         const Undo::List* undos() const         { return mUndos; }
     protected:
+        void               dumpDebugTitle(const char* typeName) const override;
+
         Undo::List* mUndos;    // this list must always have >= 2 entries
 };
 
@@ -123,9 +127,11 @@ class UndoAdd : public UndoItem
         QString            eventID() const override       { return mEventId; }
         QString            newEventID() const override    { return mEventId; }
         UndoItem*          restore() override             { return doRestore(); }
+        void               dumpDebug() const override;
     protected:
         UndoItem*          doRestore(bool setArchive = false);
         virtual UndoItem*  createRedo(const KAEvent&, RESOURCE_PARAM_TYPE);
+        void               dumpDebugTitle(const char* typeName) const override;
     private:
         Collection     mResource;  // collection containing the event
         QString        mEventId;
@@ -146,6 +152,9 @@ class UndoEdit : public UndoItem
         QString            oldEventID() const override    { return mOldEvent->id(); }
         QString            newEventID() const override    { return mNewEventId; }
         UndoItem*          restore() override;
+        void               dumpDebug() const override;
+    protected:
+        void               dumpDebugTitle(const char* typeName) const override;
     private:
         Collection     mResource;  // collection containing the event
         KAEvent*       mOldEvent;
@@ -168,8 +177,10 @@ class UndoDelete : public UndoItem
         QString            oldEventID() const override    { return mEvent->id(); }
         UndoItem*          restore() override;
         KAEvent*           event() const                         { return mEvent; }
+        void               dumpDebug() const override;
     protected:
         virtual UndoItem*  createRedo(const KAEvent&, RESOURCE_PARAM_TYPE);
+        void               dumpDebugTitle(const char* typeName) const override;
     private:
         Collection     mResource;  // collection containing the event
         KAEvent*       mEvent;
@@ -183,11 +194,12 @@ class UndoReactivate : public UndoAdd
                  : UndoAdd(t, e.event, e.EVENT_RESOURCE, name, CalEvent::ACTIVE) {}
         UndoReactivate(Undo::Type t, const KAEvent& e, RESOURCE_PARAM_TYPE r, const QString& name = QString())
                  : UndoAdd(t, e, r, name, CalEvent::ACTIVE) {}
-        Operation         operation() const override     { return REACTIVATE; }
-        QString           defaultActionText() const override;
-        UndoItem*         restore() override;
+        Operation          operation() const override     { return REACTIVATE; }
+        QString            defaultActionText() const override;
+        UndoItem*          restore() override;
+        void               dumpDebug() const override;
     protected:
-        UndoItem*         createRedo(const KAEvent&, RESOURCE_PARAM_TYPE) override;
+        UndoItem*          createRedo(const KAEvent&, RESOURCE_PARAM_TYPE) override;
 };
 
 class UndoDeactivate : public UndoDelete
@@ -195,44 +207,48 @@ class UndoDeactivate : public UndoDelete
     public:
         UndoDeactivate(Undo::Type t, const KAEvent& e, RESOURCE_PARAM_TYPE r, const QString& name = QString())
                  : UndoDelete(t, e, r, QStringList(), name) {}
-        Operation         operation() const override     { return DEACTIVATE; }
-        QString           defaultActionText() const override;
-        UndoItem*         restore() override;
+        Operation          operation() const override     { return DEACTIVATE; }
+        QString            defaultActionText() const override;
+        UndoItem*          restore() override;
+        void               dumpDebug() const override;
     protected:
-        UndoItem*         createRedo(const KAEvent&, RESOURCE_PARAM_TYPE) override;
+        UndoItem*          createRedo(const KAEvent&, RESOURCE_PARAM_TYPE) override;
 };
 
 class UndoAdds : public UndoMulti<UndoAdd>
 {
     public:
         UndoAdds(Undo::Type t, const Undo::EventList& events, const QString& name = QString())
-                          : UndoMulti<UndoAdd>(t, events, name) {}   // UNDO only
+                 : UndoMulti<UndoAdd>(t, events, name) {}   // UNDO only
         UndoAdds(Undo::Type t, Undo::List* undos, const QString& name)
-                          : UndoMulti<UndoAdd>(t, undos, name) {}
-        QString           defaultActionText() const override;
-        UndoItem*         createRedo(Undo::List*) override;
+                 : UndoMulti<UndoAdd>(t, undos, name) {}
+        QString            defaultActionText() const override;
+        UndoItem*          createRedo(Undo::List*) override;
+        void               dumpDebug() const override;
 };
 
 class UndoDeletes : public UndoMulti<UndoDelete>
 {
     public:
         UndoDeletes(Undo::Type t, const Undo::EventList& events, const QString& name = QString())
-                          : UndoMulti<UndoDelete>(t, events, name) {}   // UNDO only
+                 : UndoMulti<UndoDelete>(t, events, name) {}   // UNDO only
         UndoDeletes(Undo::Type t, Undo::List* undos, const QString& name)
-                          : UndoMulti<UndoDelete>(t, undos, name) {}
-        QString           defaultActionText() const override;
-        UndoItem*         createRedo(Undo::List*) override;
+                 : UndoMulti<UndoDelete>(t, undos, name) {}
+        QString            defaultActionText() const override;
+        UndoItem*          createRedo(Undo::List*) override;
+        void               dumpDebug() const override;
 };
 
 class UndoReactivates : public UndoMulti<UndoReactivate>
 {
     public:
         UndoReactivates(Undo::Type t, const Undo::EventList& events, const QString& name = QString())
-                          : UndoMulti<UndoReactivate>(t, events, name) {}   // UNDO only
+                 : UndoMulti<UndoReactivate>(t, events, name) {}   // UNDO only
         UndoReactivates(Undo::Type t, Undo::List* undos, const QString& name)
-                          : UndoMulti<UndoReactivate>(t, undos, name) {}
-        QString           defaultActionText() const override;
-        UndoItem*         createRedo(Undo::List*) override;
+                 : UndoMulti<UndoReactivate>(t, undos, name) {}
+        QString            defaultActionText() const override;
+        UndoItem*          createRedo(Undo::List*) override;
+        void               dumpDebug() const override;
 };
 
 Undo*       Undo::mInstance = nullptr;
@@ -587,6 +603,20 @@ int Undo::findItem(int id, Undo::Type type)
     return i;
 }
 
+/******************************************************************************
+* Dump the last 'count' undos or redos to debug, starting with the most recent.
+*/
+void Undo::dumpDebug(Undo::Type type, int count)
+{
+#ifndef KDE_NO_DEBUG_OUTPUT
+    const List& list = (type == UNDO) ? mUndoList : mRedoList;
+    if (count > list.count())
+        count = list.count();
+    qCDebug(KALARM_LOG) << "Undo::dumpDebug():" << count;
+    for (int i = 0;  i < count;  ++i)
+        list[i]->dumpDebug();
+#endif
+}
 
 /*=============================================================================
 =  Class: UndoItem
@@ -660,9 +690,44 @@ QString UndoItem::addDeleteActionText(CalEvent::Type calendar, bool add)
     return QString();
 }
 
+/******************************************************************************
+* Dump the instance's contents to debug.
+*/
+void UndoItem::dumpDebug() const
+{
+#ifndef KDE_NO_DEBUG_OUTPUT
+    dumpDebugTitle("UndoItem");
+#endif
+}
+void UndoItem::dumpDebugTitle(const char* typeName) const
+{
+#ifndef KDE_NO_DEBUG_OUTPUT
+    qCDebug(KALARM_LOG) << typeName << "begin:";
+    qCDebug(KALARM_LOG) << "-- mName:       " << mName;
+    qCDebug(KALARM_LOG) << "-- mId:         " << mId;
+    qCDebug(KALARM_LOG) << "-- mType:       " << (mType == Undo::UNDO ? "Undo" : mType == Undo::REDO ? "Redo" : "None");
+    qCDebug(KALARM_LOG) << "-- mCalendar:   " << mCalendar;
+#endif
+}
 
 /*=============================================================================
 =  Class: UndoMultiBase
+=  Undo item for multiple alarms.
+=============================================================================*/
+
+/******************************************************************************
+* Dump the instance's contents to debug.
+*/
+void UndoMultiBase::dumpDebugTitle(const char* typeName) const
+{
+#ifndef KDE_NO_DEBUG_OUTPUT
+    UndoItem::dumpDebugTitle(typeName);
+    qCDebug(KALARM_LOG) << "-- mUndos count:" << mUndos->count();
+#endif
+}
+
+/*=============================================================================
+=  Class: UndoMulti
 =  Undo item for multiple alarms.
 =============================================================================*/
 
@@ -849,6 +914,25 @@ QString UndoAdd::defaultActionText() const
     return addDeleteActionText(calendar(), (type() == Undo::UNDO));
 }
 
+/******************************************************************************
+* Dump the instance's contents to debug.
+*/
+void UndoAdd::dumpDebug() const
+{
+#ifndef KDE_NO_DEBUG_OUTPUT
+    dumpDebugTitle("UndoAdd");
+#endif
+}
+void UndoAdd::dumpDebugTitle(const char* typeName) const
+{
+#ifndef KDE_NO_DEBUG_OUTPUT
+    UndoItem::dumpDebugTitle(typeName);
+    qCDebug(KALARM_LOG) << "-- mResource:   " << mResource.id();
+    qCDebug(KALARM_LOG) << "-- mEventId:    " << mEventId;
+    qCDebug(KALARM_LOG) << "-- mDescript:   " << mDescription;
+#endif
+}
+
 
 /*=============================================================================
 =  Class: UndoAdds
@@ -870,6 +954,16 @@ UndoItem* UndoAdds::createRedo(Undo::List* undos)
 QString UndoAdds::defaultActionText() const
 {
     return i18nc("@info", "Create multiple alarms");
+}
+
+/******************************************************************************
+* Dump the instance's contents to debug.
+*/
+void UndoAdds::dumpDebug() const
+{
+#ifndef KDE_NO_DEBUG_OUTPUT
+    dumpDebugTitle("UndoAdds");
+#endif
 }
 
 
@@ -972,6 +1066,27 @@ QString UndoEdit::defaultActionText() const
             break;
     }
     return QString();
+}
+
+/******************************************************************************
+* Dump the instance's contents to debug.
+*/
+void UndoEdit::dumpDebug() const
+{
+#ifndef KDE_NO_DEBUG_OUTPUT
+    dumpDebugTitle("UndoEdit");
+#endif
+}
+void UndoEdit::dumpDebugTitle(const char* typeName) const
+{
+#ifndef KDE_NO_DEBUG_OUTPUT
+    UndoItem::dumpDebugTitle(typeName);
+    qCDebug(KALARM_LOG) << "-- mResource:   " << mResource.id();
+    qCDebug(KALARM_LOG) << "-- mOldEvent:   " << mOldEvent->id();
+    qCDebug(KALARM_LOG) << "-- mNewEventId: " << mNewEventId;
+    qCDebug(KALARM_LOG) << "-- mDescription:" << mDescription;
+    qCDebug(KALARM_LOG) << "-- mDontShowErr:" << mDontShowErrors;
+#endif
 }
 
 
@@ -1108,6 +1223,25 @@ QString UndoDelete::defaultActionText() const
     return addDeleteActionText(calendar(), (type() == Undo::REDO));
 }
 
+/******************************************************************************
+* Dump the instance's contents to debug.
+*/
+void UndoDelete::dumpDebug() const
+{
+#ifndef KDE_NO_DEBUG_OUTPUT
+    dumpDebugTitle("UndoDelete");
+#endif
+}
+void UndoDelete::dumpDebugTitle(const char* typeName) const
+{
+#ifndef KDE_NO_DEBUG_OUTPUT
+    UndoItem::dumpDebugTitle(typeName);
+    qCDebug(KALARM_LOG) << "-- mResource:   " << mResource.id();
+    qCDebug(KALARM_LOG) << "-- mEvent:      " << mEvent->id();
+    qCDebug(KALARM_LOG) << "-- mDontShowErr:" << mDontShowErrors;
+#endif
+}
+
 
 /*=============================================================================
 =  Class: UndoDeletes
@@ -1145,6 +1279,16 @@ QString UndoDeletes::defaultActionText() const
         }
     }
     return i18nc("@info", "Delete multiple archived alarms");
+}
+
+/******************************************************************************
+* Dump the instance's contents to debug.
+*/
+void UndoDeletes::dumpDebug() const
+{
+#ifndef KDE_NO_DEBUG_OUTPUT
+    dumpDebugTitle("UndoDeletes");
+#endif
 }
 
 
@@ -1188,6 +1332,16 @@ UndoItem* UndoReactivate::createRedo(const KAEvent& event, RESOURCE_PARAM_TYPE r
 QString UndoReactivate::defaultActionText() const
 {
     return i18nc("@info", "Reactivate alarm");
+}
+
+/******************************************************************************
+* Dump the instance's contents to debug.
+*/
+void UndoReactivate::dumpDebug() const
+{
+#ifndef KDE_NO_DEBUG_OUTPUT
+    dumpDebugTitle("UndoReactivate");
+#endif
 }
 
 
@@ -1234,6 +1388,16 @@ QString UndoDeactivate::defaultActionText() const
     return i18nc("@info", "Reactivate alarm");
 }
 
+/******************************************************************************
+* Dump the instance's contents to debug.
+*/
+void UndoDeactivate::dumpDebug() const
+{
+#ifndef KDE_NO_DEBUG_OUTPUT
+    dumpDebugTitle("UndoDeactivate");
+#endif
+}
+
 
 /*=============================================================================
 =  Class: UndoReactivates
@@ -1255,6 +1419,16 @@ UndoItem* UndoReactivates::createRedo(Undo::List* undos)
 QString UndoReactivates::defaultActionText() const
 {
     return i18nc("@info", "Reactivate multiple alarms");
+}
+
+/******************************************************************************
+* Dump the instance's contents to debug.
+*/
+void UndoReactivates::dumpDebug() const
+{
+#ifndef KDE_NO_DEBUG_OUTPUT
+    dumpDebugTitle("UndoReactivates");
+#endif
 }
 
 

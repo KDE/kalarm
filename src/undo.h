@@ -1,7 +1,7 @@
 /*
  *  undo.h  -  undo/redo facility
  *  Program:  kalarm
- *  Copyright © 2005-2011 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2005-2019 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -81,6 +81,7 @@ class Undo : public QObject
         static QString     description(Type, int id);
         static QList<int>  ids(Type);
         static void        emitChanged();
+        static void        dumpDebug(Type, int count);
 
         // Types for use by UndoItem class and its descendants
         typedef AutoDeleteList<UndoItem> List;
