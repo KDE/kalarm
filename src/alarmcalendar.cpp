@@ -891,7 +891,7 @@ bool AlarmCalendar::addEvent(KAEvent& evnt, QWidget* promptParent, bool useEvent
     if (!mOpen)
         return false;
     // Check that the event type is valid for the calendar
-    qCDebug(KALARM_LOG) << "AlarmCalendar::addEvent:" << evnt.id();
+    qCDebug(KALARM_LOG) << "AlarmCalendar::addEvent:" << evnt.id() << ", collection" << (collection ? collection->id() : -1);
     const CalEvent::Type type = evnt.category();
     if (type != mEventType)
     {
@@ -1099,7 +1099,6 @@ KAEvent* AlarmCalendar::updateEvent(const KAEvent* evnt)
     if (kaevnt)
     {
         KAEvent newEvnt(*evnt);
-        newEvnt.setItemId(evnt->itemId());
         if (AkonadiModel::instance()->updateEvent(newEvnt))
         {
             *kaevnt = newEvnt;
@@ -1380,13 +1379,13 @@ Event::List AlarmCalendar::kcalEvents(CalEvent::Type type)
 * Return whether an event is read-only.
 * Display calendar events are always returned as read-only.
 */
-bool AlarmCalendar::eventReadOnly(Item::Id id) const
+bool AlarmCalendar::eventReadOnly(const QString& eventId) const
 {
     if (mCalType != RESOURCES)
         return true;
     AkonadiModel* model = AkonadiModel::instance();
-    const Collection collection = model->collectionForItem(id);
-    const KAEvent event = model->event(id);
+    const Collection collection(model->collectionForEvent(eventId));
+    const KAEvent event = model->event(eventId);
     if (CollectionControlModel::isWritableEnabled(collection, event.category()) <= 0)
         return true;
     return !event.isValid()  ||  event.isReadOnly();
@@ -1396,11 +1395,11 @@ bool AlarmCalendar::eventReadOnly(Item::Id id) const
 /******************************************************************************
 * Return the collection containing a specified event.
 */
-Collection AlarmCalendar::collectionForEvent(Item::Id itemId) const
+Collection AlarmCalendar::collectionForEvent(const QString& eventId) const
 {
     if (mCalType != RESOURCES)
         return Collection();
-    return AkonadiModel::instance()->collectionForItem(itemId);
+    return Collection(AkonadiModel::instance()->collectionForEvent(eventId));
 }
 
 /******************************************************************************

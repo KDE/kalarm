@@ -26,7 +26,6 @@
 
 #include <kalarmcal/alarmtext.h>
 #include <kalarmcal/kaevent.h>
-#include <AkonadiCore/item.h>
 
 using namespace KAlarmCal;
 

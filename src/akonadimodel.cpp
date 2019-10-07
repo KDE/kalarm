@@ -502,7 +502,7 @@ QVariant AkonadiModel::entityHeaderData(int section, Qt::Orientation orientation
             break;
         }
         default:
-            break; 
+            break;
     }
     return EntityTreeModel::entityHeaderData(section, orientation, role, group);
 }
@@ -635,7 +635,7 @@ void AkonadiModel::slotUpdateWorkingHours()
 */
 void AkonadiModel::updateCommandError(const KAEvent& event)
 {
-    const QModelIndex ix = itemIndex(event.itemId());
+    const QModelIndex ix = itemIndex(mEventIds.value(event.id()).itemId);
     if (ix.isValid())
         setData(ix, QVariant(static_cast<int>(event.commandError())), CommandErrorRole);
 }
@@ -831,36 +831,17 @@ void AkonadiModel::modifyCollectionAttrJobDone(KJob* j)
 /******************************************************************************
 * Returns the index to a specified event.
 */
-QModelIndex AkonadiModel::eventIndex(const KAEvent& event)
+QModelIndex AkonadiModel::eventIndex(const KAEvent& event) const
 {
-    return itemIndex(event.itemId());
+    return itemIndex(mEventIds.value(event.id()).itemId);
 }
 
 /******************************************************************************
-* Search for an event's item ID. This method ignores any itemId() value
-* contained in the KAEvent. The collectionId() is used if available.
+* Returns the index to a specified event.
 */
-Item::Id AkonadiModel::findItemId(const KAEvent& event)
+QModelIndex AkonadiModel::eventIndex(const QString& eventId) const
 {
-    const Collection::Id colId = event.collectionId();
-    const QModelIndex start = (colId < 0) ? index(0, 0) : collectionIndex(Collection(colId));
-    const Qt::MatchFlags flags = (colId < 0) ? Qt::MatchExactly | Qt::MatchRecursive | Qt::MatchCaseSensitive | Qt::MatchWrap
-                                             : Qt::MatchExactly | Qt::MatchRecursive | Qt::MatchCaseSensitive;
-    const QModelIndexList indexes = match(start, RemoteIdRole, event.id(), -1, flags);
-    for (const QModelIndex& ix : indexes)
-    {
-        if (ix.isValid())
-        {
-            const Item::Id id = ix.data(ItemIdRole).toLongLong();
-            if (id >= 0)
-            {
-                if (colId < 0
-                ||  ix.data(ParentCollectionRole).value<Collection>().id() == colId)
-                    return id;
-            }
-        }
-    }
-    return -1;
+    return itemIndex(mEventIds.value(eventId).itemId);
 }
 
 #if 0
@@ -904,9 +885,9 @@ void AkonadiModel::getChildEvents(const QModelIndex& parent, CalEvent::Type type
 }
 #endif
 
-KAEvent AkonadiModel::event(Akonadi::Item::Id itemId) const
+KAEvent AkonadiModel::event(const QString& eventId) const
 {
-    const QModelIndex ix = itemIndex(itemId);
+    const QModelIndex ix = eventIndex(eventId);
     if (!ix.isValid())
         return KAEvent();
     return event(ix.data(ItemRole).value<Item>(), ix, nullptr);
@@ -1002,13 +983,14 @@ bool AkonadiModel::addEvent(KAEvent& event, Collection& collection)
         qCWarning(KALARM_LOG) << "AkonadiModel::addEvent: Invalid mime type for collection";
         return false;
     }
-    event.setItemId(item.id());
+    // Note that the item ID will be inserted in mEventIds after the Akonadi
+    // Item has been created by ItemCreateJob, when slotRowsInserted() is called.
+    mEventIds[event.id()] = EventIds(collection.id());
 qCDebug(KALARM_LOG)<<"-> item id="<<item.id();
     ItemCreateJob* job = new ItemCreateJob(item, collection);
     connect(job, &ItemCreateJob::result, this, &AkonadiModel::itemJobDone);
-    mPendingItemJobs[job] = item.id();
+    mPendingItemJobs[job] = -1;   // the Item doesn't have an ID yet
     job->start();
-qCDebug(KALARM_LOG)<<"...exiting";
     return true;
 }
 
@@ -1023,7 +1005,11 @@ qCDebug(KALARM_LOG)<<"...exiting";
 bool AkonadiModel::updateEvent(KAEvent& event)
 {
     qCDebug(KALARM_LOG) << "AkonadiModel::updateEvent:" << event.id();
-    const Item::Id itemId = event.itemId();
+    auto it = mEventIds.constFind(event.id());
+    if (it == mEventIds.constEnd())
+        return false;
+    const Item::Id       itemId       = it.value().itemId;
+    const Collection::Id collectionId = it.value().collectionId;
 qCDebug(KALARM_LOG)<<"item id="<<itemId;
     const QModelIndex ix = itemIndex(itemId);
     if (!ix.isValid())
@@ -1047,11 +1033,15 @@ qCDebug(KALARM_LOG)<<"item id="<<item.id()<<", revision="<<item.revision();
 bool AkonadiModel::deleteEvent(const KAEvent& event)
 {
     qCDebug(KALARM_LOG) << "AkonadiModel::deleteEvent:" << event.id();
-    const Item::Id itemId = event.itemId();
+    auto it = mEventIds.constFind(event.id());
+    if (it == mEventIds.constEnd())
+        return false;
+    const Item::Id       itemId       = it.value().itemId;
+    const Collection::Id collectionId = it.value().collectionId;
     const QModelIndex ix = itemIndex(itemId);
     if (!ix.isValid())
         return false;
-    if (mCollectionsDeleting.contains(ix.data(ParentCollectionRole).value<Collection>().id()))
+    if (mCollectionsDeleting.contains(collectionId))
     {
         qCDebug(KALARM_LOG) << "Collection being deleted";
         return true;    // the event's collection is being deleted
@@ -1137,7 +1127,6 @@ void AkonadiModel::itemJobDone(KJob* j)
         else
             Q_ASSERT(0);
         qCCritical(KALARM_LOG) << "AkonadiModel::itemJobDone:" << errMsg << itemId << ":" << j->errorString();
-        Q_EMIT itemDone(itemId, false);
 
         if (itemId >= 0  &&  jobClass == "Akonadi::ItemModifyJob")
         {
@@ -1156,10 +1145,10 @@ void AkonadiModel::itemJobDone(KJob* j)
             // Prevent modification of the item until it is fully initialised.
             // Either slotMonitoredItemChanged() or slotRowsInserted(), or both,
             // will be called when the item is done.
-            qCDebug(KALARM_LOG) << "item id=" << static_cast<ItemCreateJob*>(j)->item().id();
-            mItemsBeingCreated << static_cast<ItemCreateJob*>(j)->item().id();
+            itemId = static_cast<ItemCreateJob*>(j)->item().id();
+            qCDebug(KALARM_LOG) << "AkonadiModel::itemJobDone(ItemCreateJob): item id=" << itemId;
+            mItemsBeingCreated << itemId;
         }
-        Q_EMIT itemDone(itemId);
     }
 
 /*    if (itemId >= 0  &&  jobClass == "Akonadi::ItemModifyJob")
@@ -1259,7 +1248,7 @@ void AkonadiModel::slotRowsInserted(const QModelIndex& parent, int start, int en
             }
         }
     }
-    const EventList events = eventList(parent, start, end);
+    const EventList events = eventList(parent, start, end, true);
     if (!events.isEmpty())
         Q_EMIT eventsAdded(events);
 }
@@ -1270,7 +1259,7 @@ void AkonadiModel::slotRowsInserted(const QModelIndex& parent, int start, int en
 void AkonadiModel::slotRowsAboutToBeRemoved(const QModelIndex& parent, int start, int end)
 {
     qCDebug(KALARM_LOG) << "AkonadiModel::slotRowsAboutToBeRemoved:" << start << "-" << end << "(parent =" << parent << ")";
-    const EventList events = eventList(parent, start, end);
+    const EventList events = eventList(parent, start, end, false);
     if (!events.isEmpty())
     {
         for (const Event& event : events)
@@ -1281,17 +1270,26 @@ void AkonadiModel::slotRowsAboutToBeRemoved(const QModelIndex& parent, int start
 
 /******************************************************************************
 * Return a list of KAEvent/Collection pairs for a given range of rows.
+* If 'inserted' is true, the events will be added to mEventIds; if false,
+* the events will be removed from mEventIds.
 */
-AkonadiModel::EventList AkonadiModel::eventList(const QModelIndex& parent, int start, int end)
+AkonadiModel::EventList AkonadiModel::eventList(const QModelIndex& parent, int start, int end, bool inserted)
 {
     EventList events;
     for (int row = start;  row <= end;  ++row)
     {
         Collection c;
         const QModelIndex ix = index(row, 0, parent);
-        const KAEvent evnt = event(ix.data(ItemRole).value<Item>(), ix, &c);
+        const Item item = ix.data(ItemRole).value<Item>();
+        const KAEvent evnt = event(item, ix, &c);
         if (evnt.isValid())
+        {
             events += Event(evnt, c);
+            if (inserted)
+                mEventIds[evnt.id()] = EventIds(c.id(), item.id());
+            else
+                mEventIds.remove(evnt.id());
+        }
     }
     return events;
 }
@@ -1467,6 +1465,7 @@ bool AkonadiModel::refresh(Akonadi::Collection& collection) const
     return true;
 }
 
+#if 0
 /******************************************************************************
 * Refresh the specified Item with up to date data.
 * Return: true if successful, false if item not found.
@@ -1479,6 +1478,7 @@ bool AkonadiModel::refresh(Akonadi::Item& item) const
     item = ixs[0].data(ItemRole).value<Item>();
     return true;
 }
+#endif
 
 /******************************************************************************
 * Find the QModelIndex of a collection.
@@ -1525,6 +1525,14 @@ Item AkonadiModel::itemById(Item::Id id) const
 }
 
 /******************************************************************************
+* Find the collection containing the specified event.
+*/
+Collection::Id AkonadiModel::collectionForEvent(const QString& eventId) const
+{
+    return mEventIds.value(eventId).collectionId;
+}
+
+/******************************************************************************
 * Find the collection containing the specified Akonadi item ID.
 */
 Collection AkonadiModel::collectionForItem(Item::Id id) const
@@ -1533,6 +1541,16 @@ Collection AkonadiModel::collectionForItem(Item::Id id) const
     if (!ix.isValid())
         return Collection();
     return ix.data(ParentCollectionRole).value<Collection>();
+}
+
+/******************************************************************************
+* Find the collection containing the specified event.
+*/
+Collection AkonadiModel::collection(const KAEvent& event) const
+{
+    Collection collection(mEventIds.value(event.id()).collectionId);
+    refresh(collection);
+    return collection;
 }
 
 bool AkonadiModel::isCompatible(const Collection& collection)

@@ -29,7 +29,6 @@
 
 #include <kalarmcal/kaevent.h>
 
-#include <AkonadiCore/item.h>
 #include <KCalendarCore/Calendar>
 
 #include <QList>
@@ -63,7 +62,7 @@ class MainWindow : public MainWindowBase, public KCalendarCore::Calendar::Calend
         bool               isTrayParent() const;
         bool               isHiddenTrayParent() const   { return mHiddenTrayParent; }
         bool               showingArchived() const      { return mShowArchived; }
-        void               selectEvent(Akonadi::Item::Id);
+        void               selectEvent(const QString& eventId);
         KAEvent            selectedEvent() const;
         void               editAlarm(EditAlarmDlg*, const KAEvent&);
         void               clearSelection();

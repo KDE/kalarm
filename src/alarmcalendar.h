@@ -68,8 +68,8 @@ class AlarmCalendar : public QObject
         KAEvent::List         events(CalEvent::Types s = CalEvent::EMPTY) const  { return events(Akonadi::Collection(), s); }
         KAEvent::List         events(const Akonadi::Collection&, CalEvent::Types = CalEvent::EMPTY) const;
         KCalendarCore::Event::List kcalEvents(CalEvent::Type s = CalEvent::EMPTY);   // display calendar only
-        bool                  eventReadOnly(Akonadi::Item::Id) const;
-        Akonadi::Collection   collectionForEvent(Akonadi::Item::Id) const;
+        bool                  eventReadOnly(const QString& eventId) const;
+        Akonadi::Collection   collectionForEvent(const QString& eventId) const;
         bool                  addEvent(KAEvent&, QWidget* promptparent = nullptr, bool useEventID = false, Akonadi::Collection* = nullptr, bool noPrompt = false, bool* cancelled = nullptr);
         bool                  modifyEvent(const EventId& oldEventId, KAEvent& newEvent);
         KAEvent*              updateEvent(const KAEvent&);

@@ -176,7 +176,7 @@ class EditAlarmDlg : public QDialog
         RadioButton*        mTemplateAnyTime;     // alarms have date only, no time
         RadioButton*        mTemplateUseTime;     // an alarm time is specified
         TimeSpinBox*        mTemplateTimeAfter;   // the specified offset from the current time
-        TimeEdit*           mTemplateTime;        // the alarm time which is specified 
+        TimeEdit*           mTemplateTime;        // the alarm time which is specified
         QGroupBox*          mDeferGroup{nullptr};
         QLabel*             mDeferTimeLabel;
         QPushButton*        mDeferChangeButton{nullptr};
@@ -193,7 +193,8 @@ class EditAlarmDlg : public QDialog
         QString             mAlarmMessage;       // message text/file name/command/email message
         DateTime            mAlarmDateTime;
         DateTime            mDeferDateTime;
-        Akonadi::Item::Id   mCollectionItemId;   // if >=0, save alarm in collection containing this item ID
+        bool                mUseCollectionEventId; // whether to use mCollectionEventId
+        QString             mCollectionEventId;  // if non-null, save alarm in collection containing this event ID
         Akonadi::Collection mCollection;         // collection to save event into, or null
         int                 mDeferGroupHeight{0};   // height added by deferred time widget
         int                 mDesktop;            // desktop to display the dialog in

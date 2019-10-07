@@ -104,7 +104,7 @@ static FullScreenType findFullScreenWindows(const QVector<QRect>& screenRects, Q
 #include "kmailinterface.h"
 static const QLatin1String KMAIL_DBUS_SERVICE("org.kde.kmail");
 static const QLatin1String KMAIL_DBUS_PATH("/KMail");
- 
+
 // The delay for enabling message window buttons if a zero delay is
 // configured, i.e. the windows are placed far from the cursor.
 static const int proximityButtonDelay = 1000;    // (milliseconds)
@@ -176,7 +176,6 @@ MessageWin::MessageWin(const KAEvent* event, const KAAlarm& alarm, int flags)
     , mFont(event->font())
     , mBgColour(event->bgColour())
     , mFgColour(event->fgColour())
-    , mEventItemId(event->itemId())
     , mEventId(*event)
     , mAudioFile(event->audioFile())
     , mVolume(event->soundVolume())
@@ -194,7 +193,7 @@ MessageWin::MessageWin(const KAEvent* event, const KAAlarm& alarm, int flags)
     , mInvalid(false)
     , mEvent(*event)
     , mOriginalEvent(*event)
-    , mCollection(AlarmCalendar::resources()->collectionForEvent(mEventItemId))
+    , mCollection(AlarmCalendar::resources()->collectionForEvent(mEventId.eventId()))
     , mAlwaysHide(flags & ALWAYS_HIDE)
     , mNoPostAction(alarm.type() & KAAlarm::REMINDER_ALARM)
     , mBeep(event->beep())
@@ -220,7 +219,7 @@ MessageWin::MessageWin(const KAEvent* event, const KAAlarm& alarm, int flags)
         mDateTime = alarm.dateTime(true);
     if (!(flags & (NO_INIT_VIEW | ALWAYS_HIDE)))
     {
-        const bool readonly = AlarmCalendar::resources()->eventReadOnly(mEventItemId);
+        const bool readonly = AlarmCalendar::resources()->eventReadOnly(mEventId.eventId());
         mShowEdit = !mEventId.isEmpty()  &&  !readonly;
         mNoDefer  = readonly || (flags & NO_DEFER) || alarm.repeatAtLogin();
         initView();
@@ -272,7 +271,6 @@ MessageWin::MessageWin(const KAEvent* event, const DateTime& alarmDateTime,
     : MainWindowBase(nullptr, WFLAGS | WFLAGS2)
     , mMessage(event->cleanText())
     , mDateTime(alarmDateTime)
-    , mEventItemId(event->itemId())
     , mEventId(*event)
     , mAlarmType(KAAlarm::MAIN_ALARM)
     , mAction(event->actionSubType())
@@ -909,7 +907,7 @@ void MessageWin::saveProperties(KConfigGroup& config)
     if (mShown  &&  !mErrorWindow  &&  !mAlwaysHide)
     {
         config.writeEntry("EventID", mEventId.eventId());
-        config.writeEntry("EventItemID", mEventItemId);
+        config.writeEntry("CollectionID", mCollection.id());
         config.writeEntry("AlarmType", static_cast<int>(mAlarmType));
         if (mAlarmType == KAAlarm::INVALID_ALARM)
             qCCritical(KALARM_LOG) << "MessageWin::saveProperties: Invalid alarm: id=" << mEventId << ", alarm count=" << mEvent.alarmCount();
@@ -965,8 +963,8 @@ void MessageWin::saveProperties(KConfigGroup& config)
 void MessageWin::readProperties(const KConfigGroup& config)
 {
     mInvalid             = config.readEntry("Invalid", false);
-    QString eventId      = config.readEntry("EventID");
-    mEventItemId         = config.readEntry("EventItemID", Akonadi::Item::Id(-1));
+    const QString eventId             = config.readEntry("EventID");
+    const Collection::Id collectionId = config.readEntry("CollectionID", Akonadi::Item::Id(-1));
     mAlarmType           = static_cast<KAAlarm::Type>(config.readEntry("AlarmType", 0));
     if (mAlarmType == KAAlarm::INVALID_ALARM)
     {
@@ -1012,8 +1010,8 @@ void MessageWin::readProperties(const KConfigGroup& config)
     mDontShowAgain       = config.readEntry("DontShowAgain", QString());
     mShowEdit            = false;
     // Temporarily initialise mCollection and mEventId - they will be set by redisplayAlarm()
-    mCollection          = Akonadi::Collection();
-    mEventId             = EventId(mCollection.id(), eventId);
+    mCollection          = Akonadi::Collection(collectionId);
+    mEventId             = EventId(collectionId, eventId);
     qCDebug(KALARM_LOG) << "MessageWin::readProperties:" << eventId;
     if (mAlarmType != KAAlarm::INVALID_ALARM)
     {
@@ -1049,7 +1047,7 @@ void MessageWin::showRestoredAlarm()
 */
 void MessageWin::redisplayAlarm()
 {
-    mCollection = AkonadiModel::instance()->collectionForItem(mEventItemId);
+    mCollection = Collection(AkonadiModel::instance()->collectionForEvent(mEventId.eventId()));
     mEventId.setCollectionId(mCollection.id());
     qCDebug(KALARM_LOG) << "MessageWin::redisplayAlarm:" << mEventId;
     // Delete any already existing window for the same event
@@ -1095,9 +1093,6 @@ void MessageWin::redisplayAlarms()
         {
             bool showDefer, showEdit;
             reinstateFromDisplaying(events[i], event, collection, showEdit, showDefer);
-            Akonadi::Item::Id id = AkonadiModel::instance()->findItemId(event);
-            if (id >= 0)
-                event.setItemId(id);
             const EventId eventId(event);
             if (findEvent(eventId))
                 qCDebug(KALARM_LOG) << "MessageWin::redisplayAlarms: Message window already exists:" << eventId;
@@ -1190,7 +1185,7 @@ void MessageWin::alarmShowing(KAEvent& event)
     {
         // Copy the alarm to the displaying calendar in case of a crash, etc.
         KAEvent dispEvent;
-        const Akonadi::Collection collection = AkonadiModel::instance()->collectionForItem(event.itemId());
+        const Akonadi::Collection collection = AkonadiModel::instance()->collection(event);
         dispEvent.setDisplaying(event, mAlarmType, collection.id(),
                                 mDateTime.effectiveKDateTime(), mShowEdit, !mNoDefer);
         AlarmCalendar* cal = AlarmCalendar::displayCalendarOpen();
@@ -2198,7 +2193,7 @@ void MessageWin::slotDefer()
 */
 void MessageWin::displayMainWindow()
 {
-    KAlarm::displayMainWindowSelected(mEventItemId);
+    KAlarm::displayMainWindowSelected(mEventId.eventId());
 }
 
 /******************************************************************************

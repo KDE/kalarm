@@ -166,17 +166,19 @@ void EditAlarmDlg::init(const KAEvent* event, GetResourceType getResource)
         case RES_USE_EVENT_ID:
             if (event)
             {
-                mCollectionItemId = event->itemId();
+                mCollectionEventId = event->id();
+                mUseCollectionEventId = true;
                 break;
             }
-            // fall through to RES_PROMPT
-            Q_FALLTHROUGH();
+            Q_FALLTHROUGH();   // fall through to RES_PROMPT
         case RES_PROMPT:
-            mCollectionItemId = -1;
+            mCollectionEventId.clear();
+            mUseCollectionEventId = true;
             break;
         case RES_IGNORE:
         default:
-            mCollectionItemId = -2;
+            mCollectionEventId.clear();
+            mUseCollectionEventId = false;
             break;
     }
 }
@@ -1141,13 +1143,13 @@ bool EditAlarmDlg::validate()
         return false;
 
     mCollection = Akonadi::Collection();
-    // An item ID = -2 indicates that the caller already
-    // knows which collection to use.
-    if (mCollectionItemId >= -1)
+    // mUseCollectionEventId = false indicates that the caller already knows
+    // which collection to use.
+    if (mUseCollectionEventId)
     {
-        if (mCollectionItemId >= 0)
+        if (!mCollectionEventId.isEmpty())
         {
-            mCollection = AlarmCalendar::resources()->collectionForEvent(mCollectionItemId);
+            mCollection = AlarmCalendar::resources()->collectionForEvent(mCollectionEventId);
             if (mCollection.isValid())
             {
                 CalEvent::Type type = mTemplate ? CalEvent::TEMPLATE : CalEvent::ACTIVE;

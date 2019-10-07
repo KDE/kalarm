@@ -638,7 +638,7 @@ void MainWindow::updateKeepArchived(int days)
 /******************************************************************************
 * Select an alarm in the displayed list.
 */
-void MainWindow::selectEvent(Akonadi::Item::Id eventId)
+void MainWindow::selectEvent(const QString& eventId)
 {
     mListView->clearSelection();
     QModelIndex index = mListFilterModel->eventIndex(eventId);
@@ -740,7 +740,7 @@ void MainWindow::slotDelete(bool force)
     AlarmCalendar* resources = AlarmCalendar::resources();
     for (int i = 0;  i < events.count();  )
     {
-        Akonadi::Collection c = resources->collectionForEvent(events[i].itemId());
+        Akonadi::Collection c = resources->collectionForEvent(events[i].id());
         if (!c.isValid())
             events.remove(i);
         else
@@ -777,7 +777,7 @@ void MainWindow::slotReactivate()
     {
         if (!ineligibleIDs.contains(EventId(events[i])))
         {
-            undos.append(events[i], resources->collectionForEvent(events[i].itemId()));
+            undos.append(events[i], resources->collectionForEvent(events[i].id()));
         }
     }
     Undo::saveReactivates(undos);
@@ -887,7 +887,7 @@ void MainWindow::slotBirthdays()
             AlarmCalendar* resources = AlarmCalendar::resources();
             for (int i = 0, end = events.count();  i < end;  ++i)
             {
-                Akonadi::Collection c = resources->collectionForEvent(events[i].itemId());
+                Akonadi::Collection c = resources->collectionForEvent(events[i].id());
                 undos.append(events[i], c);
             }
             Undo::saveAdds(undos, i18nc("@info", "Import birthdays"));
@@ -1483,7 +1483,7 @@ void MainWindow::slotSelection()
         bool expired = event->expired();
         if (!expired)
             allArchived = false;
-        if (resources->eventReadOnly(event->itemId()))
+        if (resources->eventReadOnly(event->id()))
             readOnly = true;
         if (enableReactivate
         &&  (!expired  ||  !event->occursAfter(now, true)))

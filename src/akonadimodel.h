@@ -99,15 +99,13 @@ class AkonadiModel : public Akonadi::EntityTreeModel, public CalendarDataModel
 
         /** Refresh the specified collection instance with up to date data. */
         bool refresh(Akonadi::Collection&) const;
-        /** Refresh the specified item instance with up to date data. */
-        bool refresh(Akonadi::Item&) const;
 
         QModelIndex         collectionIndex(Akonadi::Collection::Id id) const
                                         { return collectionIndex(Akonadi::Collection(id)); }
         QModelIndex         collectionIndex(const Akonadi::Collection&) const;
         Akonadi::Collection collectionById(Akonadi::Collection::Id) const;
-        Akonadi::Collection collectionForItem(Akonadi::Item::Id) const;
-        Akonadi::Collection collection(const KAEvent& e) const   { return collectionForItem(e.itemId()); }
+        Akonadi::Collection::Id collectionForEvent(const QString& eventId) const;
+        Akonadi::Collection collection(const KAEvent& e) const;
 
         /** Remove a collection from Akonadi. The calendar file is not removed.
          *  @return true if a removal job has been scheduled.
@@ -124,26 +122,13 @@ class AkonadiModel : public Akonadi::EntityTreeModel, public CalendarDataModel
         bool isMigrationCompleted() const;
 
         bool isCollectionBeingDeleted(Akonadi::Collection::Id) const;
-
-        QModelIndex         itemIndex(Akonadi::Item::Id id) const
-                                        { return itemIndex(Akonadi::Item(id)); }
-        QModelIndex         itemIndex(const Akonadi::Item&) const;
-        Akonadi::Item       itemById(Akonadi::Item::Id) const;
-
-        /** Return the alarm with the specified unique identifier.
-         *  @return the event, or invalid event if no such event exists.
-         */
-        KAEvent event(const Akonadi::Item& item) const  { return event(item, QModelIndex(), nullptr); }
-        KAEvent event(Akonadi::Item::Id) const;
+        KAEvent event(const QString& eventId) const;
         KAEvent event(const QModelIndex&) const;
         using QObject::event;   // prevent warning about hidden virtual method
 
         /** Return an event's model index, based on its itemId() value. */
-        QModelIndex eventIndex(const KAEvent&);
-        /** Search for an event's item ID. This method ignores any itemId() value
-         *  contained in the KAEvent. The collectionId() is used if available.
-         */
-        Akonadi::Item::Id findItemId(const KAEvent&);
+        QModelIndex eventIndex(const KAEvent&) const;
+        QModelIndex eventIndex(const QString& eventId) const;
 
 #if 0
         /** Return all events in a collection, optionally of a specified type. */
@@ -216,13 +201,6 @@ class AkonadiModel : public Akonadi::EntityTreeModel, public CalendarDataModel
          */
         void collectionDeleted(Akonadi::Collection::Id id);
 
-        /** Signal emitted when Akonadi has completed an item creation, update
-         *  or deletion.
-         *  @param id      Akonadi ID for the item
-         *  @param status  true if successful, false if error
-         */
-        void itemDone(Akonadi::Item::Id id, bool status = true);
-
         /** Signal emitted when calendar migration/creation has completed. */
         void migrationCompleted();
 
@@ -275,17 +253,27 @@ class AkonadiModel : public Akonadi::EntityTreeModel, public CalendarDataModel
         };
 
         AkonadiModel(Akonadi::ChangeRecorder*, QObject* parent);
-        void      initCalendarMigrator();
-        KAEvent   event(const Akonadi::Item&, const QModelIndex&, Akonadi::Collection*) const;
-        void      signalDataChanged(bool (*checkFunc)(const Akonadi::Item&), int startColumn, int endColumn, const QModelIndex& parent);
-        void      setCollectionChanged(const Akonadi::Collection&, const QSet<QByteArray>&, bool rowInserted);
-        void      queueItemModifyJob(const Akonadi::Item&);
-        void      checkQueuedItemModifyJob(const Akonadi::Item&);
+        void          initCalendarMigrator();
+        Akonadi::Collection collectionForItem(Akonadi::Item::Id) const;
+
+        /** Return the alarm with the specified unique identifier.
+         *  @return the event, or invalid event if no such event exists.
+         */
+        KAEvent       event(const Akonadi::Item& item) const  { return event(item, QModelIndex(), nullptr); }
+        KAEvent       event(const Akonadi::Item&, const QModelIndex&, Akonadi::Collection*) const;
+        QModelIndex   itemIndex(Akonadi::Item::Id id) const
+                                        { return itemIndex(Akonadi::Item(id)); }
+        QModelIndex   itemIndex(const Akonadi::Item&) const;
+        Akonadi::Item itemById(Akonadi::Item::Id) const;
+        void          signalDataChanged(bool (*checkFunc)(const Akonadi::Item&), int startColumn, int endColumn, const QModelIndex& parent);
+        void          setCollectionChanged(const Akonadi::Collection&, const QSet<QByteArray>&, bool rowInserted);
+        void          queueItemModifyJob(const Akonadi::Item&);
+        void          checkQueuedItemModifyJob(const Akonadi::Item&);
 #if 0
         void     getChildEvents(const QModelIndex& parent, CalEvent::Type, KAEvent::List&) const;
 #endif
-        QColor    backgroundColor_p(const Akonadi::Collection&) const;
-        EventList eventList(const QModelIndex& parent, int start, int end);
+        QColor        backgroundColor_p(const Akonadi::Collection&) const;
+        EventList     eventList(const QModelIndex& parent, int start, int end, bool inserted);
 
         static AkonadiModel*  mInstance;
         static int            mTimeHourPos;   // position of hour within time string, or -1 if leading zeroes included
@@ -302,6 +290,13 @@ class AkonadiModel : public Akonadi::EntityTreeModel, public CalendarDataModel
         QHash<Akonadi::Item::Id, Akonadi::Item> mItemModifyJobQueue;  // pending item modification jobs, invalid item = queue empty but job active
         QList<QString>     mCollectionsBeingCreated;  // path names of new collections being created by migrator
         QList<Akonadi::Collection::Id> mCollectionIdsBeingCreated;  // ids of new collections being created by migrator
+        struct EventIds
+        {
+            Akonadi::Collection::Id  collectionId{-1};
+            Akonadi::Item::Id        itemId{-1};
+            explicit EventIds(Akonadi::Collection::Id c = -1, Akonadi::Item::Id i = -1) : collectionId(c), itemId(i) {}
+        };
+        QHash<QString, EventIds> mEventIds;     // collection and item ID for each event ID
         QList<Akonadi::Item::Id> mItemsBeingCreated;  // new items not fully initialised yet
         QList<Akonadi::Collection::Id> mCollectionsDeleting;  // collections currently being removed
         QList<Akonadi::Collection::Id> mCollectionsDeleted;   // collections recently removed

@@ -1,7 +1,7 @@
 /*
  *  templatedlg.cpp  -  dialog to create, edit and delete alarm templates
  *  Program:  kalarm
- *  Copyright © 2004-2011 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2004-2019 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -196,7 +196,7 @@ void TemplateDlg::slotDelete()
     {
         KAEvent* event = &events[i];
         delEvents.append(event);
-        Akonadi::Collection c = resources->collectionForEvent(event->itemId());
+        Akonadi::Collection c = resources->collectionForEvent(event->id());
         undos.append(*event, c);
     }
     KAlarm::deleteTemplates(delEvents, this);
@@ -217,7 +217,7 @@ void TemplateDlg::slotSelectionChanged()
     for (int i = 0;  i < count;  ++i)
     {
         const KAEvent* event = &events[i];
-        if (resources->eventReadOnly(event->itemId()))
+        if (resources->eventReadOnly(event->id()))
         {
             readOnly = true;
             break;

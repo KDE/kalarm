@@ -144,7 +144,7 @@ Private* Private::mInstance = nullptr;
 /******************************************************************************
 * Display a main window with the specified event selected.
 */
-MainWindow* displayMainWindowSelected(Akonadi::Item::Id eventId)
+MainWindow* displayMainWindowSelected(const QString& eventId)
 {
     MainWindow* win = MainWindow::firstWindow();
     if (!win)
@@ -158,13 +158,14 @@ MainWindow* displayMainWindowSelected(Akonadi::Item::Id eventId)
     else
     {
         // There is already a main window, so make it the active window
+#pragma message("Don't hide unless necessary, since it moves the window")
         win->hide();        // in case it's on a different desktop
         win->setWindowState(win->windowState() & ~Qt::WindowMinimized);
         win->show();
         win->raise();
         win->activateWindow();
     }
-    if (win  &&  eventId >= 0)
+    if (win)
         win->selectEvent(eventId);
     return win;
 }
@@ -316,7 +317,6 @@ bool addArchivedEvent(KAEvent& event, Collection* collection)
         return false;   // expired alarms aren't being kept
     AlarmCalendar* cal = AlarmCalendar::resources();
     KAEvent newevent(event);
-    newevent.setItemId(-1);    // invalidate the Akonadi item ID since it's a new item
     KAEvent* const newev = &newevent;
     if (archiving)
     {
@@ -578,7 +578,10 @@ void deleteDisplayEvent(const QString& eventID)
 /******************************************************************************
 * Undelete archived alarms, and update every main window instance.
 * The archive bit is set to ensure that they get re-archived if deleted again.
-* 'ineligibleIDs' is filled in with the IDs of any ineligible events.
+* Parameters:
+*   calendar - the active alarms calendar to restore the alarms into, or null
+*              to use the default way of determining the active alarm calendar.
+*   ineligibleIDs - will be filled in with the IDs of any ineligible events.
 */
 UpdateResult reactivateEvent(KAEvent& event, Collection* calendar, QWidget* msgParent, bool showKOrgErr)
 {
@@ -640,7 +643,6 @@ UpdateResult reactivateEvents(QVector<KAEvent>& events, QVector<EventId>& inelig
                 UpdateResult st = sendToKOrganizer(*newev);    // tell KOrganizer to show the event
                 status.korgUpdate(st);
             }
-
 
             if (cal->event(EventId(*event))  // no error if event doesn't exist in archived resource
             &&  !cal->deleteEvent(*event, false))   // don't save calendar after deleting
@@ -1135,7 +1137,7 @@ namespace KAlarm
 */
 void editAlarm(KAEvent* event, QWidget* parent)
 {
-    if (event->expired()  ||  AlarmCalendar::resources()->eventReadOnly(event->itemId()))
+    if (event->expired()  ||  AlarmCalendar::resources()->eventReadOnly(event->id()))
     {
         viewAlarm(event, parent);
         return;
@@ -1189,13 +1191,13 @@ bool editAlarmById(const EventId& id, QWidget* parent)
     KAEvent* event = AlarmCalendar::resources()->event(id, true);
     if (!event)
     {
-        if (id.collectionId() != -1)    
+        if (id.collectionId() != -1)
             qCWarning(KALARM_LOG) << "KAlarm::editAlarmById: Event ID not found, or duplicated:" << eventID;
         else
             qCWarning(KALARM_LOG) << "KAlarm::editAlarmById: Event ID not found:" << eventID;
         return false;
     }
-    if (AlarmCalendar::resources()->eventReadOnly(event->itemId()))
+    if (AlarmCalendar::resources()->eventReadOnly(event->id()))
     {
         qCCritical(KALARM_LOG) << "KAlarm::editAlarmById:" << eventID << ": read-only";
         return false;
@@ -1219,7 +1221,7 @@ bool editAlarmById(const EventId& id, QWidget* parent)
 */
 void editTemplate(KAEvent* event, QWidget* parent)
 {
-    if (AlarmCalendar::resources()->eventReadOnly(event->itemId()))
+    if (AlarmCalendar::resources()->eventReadOnly(event->id()))
     {
         // The template is read-only, so make the dialogue read-only.
         // Use AutoQPointer to guard against crash on application exit while
@@ -1241,7 +1243,6 @@ void editTemplate(KAEvent* event, QWidget* parent)
         const QString id = event->id();
         newEvent.setEventId(id);
         newEvent.setCollectionId(event->collectionId());
-        newEvent.setItemId(event->itemId());
 
         // Update the event in the displays and in the calendar file
         const Undo::Event undo(*event, calendar);

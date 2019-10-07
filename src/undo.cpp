@@ -847,7 +847,7 @@ UndoItem* UndoAdd::doRestore(bool setArchive)
         mRestoreError = ERR_NOT_FOUND;    // alarm is no longer in calendar
         return nullptr;
     }
-    KAEvent event(*ev); 
+    KAEvent event(*ev);
 
     // Create a redo item to recreate the alarm.
     // Do it now, since 'event' gets modified by KAlarm::deleteEvent()
@@ -1004,7 +1004,7 @@ UndoItem* UndoEdit::restore()
         mRestoreError = ERR_NOT_FOUND;    // alarm is no longer in calendar
         return nullptr;
     }
-    KAEvent newEvent(*event); 
+    KAEvent newEvent(*event);
 
     // Create a redo item to restore the edit
     const Undo::Type t = (type() == Undo::UNDO) ? Undo::REDO : (type() == Undo::REDO) ? Undo::UNDO : Undo::NONE;
@@ -1134,9 +1134,7 @@ UndoItem* UndoDelete::restore()
             {
                 // It was archived when it was deleted
                 mEvent->setCategory(CalEvent::ARCHIVED);
-                mEvent->setCollectionId(-1);
-                const Item::Id itemId = AkonadiModel::instance()->findItemId(*mEvent);
-                mEvent->setCollectionId(AkonadiModel::instance()->collectionForItem(itemId).id());
+                mEvent->setCollectionId(AkonadiModel::instance()->collectionForEvent(mEvent->id()));
                 const KAlarm::UpdateResult status = KAlarm::reactivateEvent(*mEvent, &mResource);
                 switch (status.status)
                 {

@@ -1,7 +1,7 @@
 /*
  *  wakedlg.cpp  -  dialog to configure wake-from-suspend alarms
  *  Program:  kalarm
- *  Copyright © 2011-2012 David Jarvie <djarvie@kde.org>
+ *  Copyright © 2011-2019 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -140,7 +140,7 @@ void WakeFromSuspendDlg::showWakeClicked()
             const KAEvent* event = AlarmCalendar::resources()->event(EventId(params[0].toLongLong(), params[1]));
             if (event)
             {
-                mMainWindow->selectEvent(event->itemId());
+                mMainWindow->selectEvent(event->id());
                 return;
             }
         }

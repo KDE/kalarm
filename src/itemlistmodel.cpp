@@ -128,12 +128,10 @@ Qt::ItemFlags ItemListModel::flags(const QModelIndex& index) const
 /******************************************************************************
 * Return the index to a specified event.
 */
-QModelIndex ItemListModel::eventIndex(Item::Id itemId) const
+QModelIndex ItemListModel::eventIndex(const QString& eventId) const
 {
-    const QModelIndexList list = match(QModelIndex(), AkonadiModel::ItemIdRole, itemId, 1, Qt::MatchExactly | Qt::MatchRecursive);
-    if (list.isEmpty())
-        return QModelIndex();
-    return index(list[0].row(), 0, list[0].parent());
+    const QModelIndex ix = AkonadiModel::instance()->eventIndex(eventId);
+    return mapFromSource(static_cast<KSelectionProxyModel*>(sourceModel())->mapFromSource(ix));
 }
 
 /******************************************************************************

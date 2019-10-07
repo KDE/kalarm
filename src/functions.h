@@ -28,7 +28,6 @@
 
 #include <kalarmcal/kaevent.h>
 #include <AkonadiCore/collection.h>
-#include <AkonadiCore/item.h>
 #include <kfile.h>
 
 #include <QSize>
@@ -92,7 +91,7 @@ enum class Desktop
 };
 
 /** Display a main window with the specified event selected */
-MainWindow*         displayMainWindowSelected(Akonadi::Item::Id = -1);
+MainWindow*         displayMainWindowSelected(const QString& eventId);
 bool                readConfigWindowSize(const char* window, QSize&, int* splitterWidth = nullptr);
 void                writeConfigWindowSize(const char* window, const QSize&, int splitterWidth = -1);
 /** Check from its mime type whether a file appears to be a text or image file.

@@ -30,7 +30,6 @@
 #include <kalarmcal/kaevent.h>
 
 #include <AkonadiCore/collection.h>
-#include <AkonadiCore/item.h>
 
 #include <QList>
 #include <QMap>
@@ -149,7 +148,6 @@ class MessageWin : public MainWindowBase
         QColor              mBgColour, mFgColour;
         DateTime            mDateTime;               // date/time displayed in the message window
         QDateTime           mCloseTime;              // UTC time at which window should be auto-closed
-        Akonadi::Item::Id   mEventItemId;
         EventId             mEventId;
         QString             mAudioFile;
         float               mVolume;

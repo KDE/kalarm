@@ -1,7 +1,7 @@
 /*
  *  itemlistmodel.h  -  Akonadi item models
  *  Program:  kalarm
- *  Copyright © 2010,2011 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2010-2019 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -49,7 +49,7 @@ class ItemListModel : public Akonadi::EntityMimeTypeFilterModel
         KAEvent      event(int row) const;
         KAEvent      event(const QModelIndex&) const;
         using QObject::event;   // prevent warning about hidden virtual method
-        QModelIndex  eventIndex(Akonadi::Item::Id) const;
+        QModelIndex  eventIndex(const QString& eventId) const;
 
         /** Determine whether the model contains any items. */
         bool         haveEvents() const;
