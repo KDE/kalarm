@@ -1008,8 +1008,7 @@ bool AkonadiModel::updateEvent(KAEvent& event)
     auto it = mEventIds.constFind(event.id());
     if (it == mEventIds.constEnd())
         return false;
-    const Item::Id       itemId       = it.value().itemId;
-    const Collection::Id collectionId = it.value().collectionId;
+    const Item::Id itemId = it.value().itemId;
 qCDebug(KALARM_LOG)<<"item id="<<itemId;
     const QModelIndex ix = itemIndex(itemId);
     if (!ix.isValid())
@@ -1492,11 +1491,10 @@ QModelIndex AkonadiModel::collectionIndex(const Akonadi::Collection& collection)
 }
 
 /******************************************************************************
-* Return the up to date collection with the specified Akonadi ID.
+* Return the Collection at a specified index, with up to date data.
 */
-Collection AkonadiModel::collectionById(Collection::Id id) const
+Collection AkonadiModel::collection(const QModelIndex& ix)
 {
-    const QModelIndex ix = modelIndexForCollection(this, Collection(id));
     if (!ix.isValid())
         return Collection();
     return ix.data(CollectionRole).value<Collection>();

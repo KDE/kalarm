@@ -1323,14 +1323,16 @@ bool CollectionControlModel::isPopulated(Collection::Id collectionId)
     const QList<Collection::Id> colIds = instance()->collectionIds();
     for (Collection::Id colId : colIds)
     {
-        if ((collectionId == -1  ||  collectionId == colId)
-        &&  !model->data(model->collectionIndex(colId), AkonadiModel::IsPopulatedRole).toBool())
+        if (collectionId == -1  ||  collectionId == colId)
         {
-            Collection c(colId);
-            model->refresh(c);    // update with latest data
-            if (!c.hasAttribute<CollectionAttribute>()
-            ||  c.attribute<CollectionAttribute>()->enabled() != CalEvent::EMPTY)
-                return false;
+            const QModelIndex ix = model->collectionIndex(Collection(colId));
+            if (!model->data(ix, AkonadiModel::IsPopulatedRole).toBool())
+            {
+                const Collection c = AkonadiModel::collection(ix);
+                if (!c.hasAttribute<CollectionAttribute>()
+                ||  c.attribute<CollectionAttribute>()->enabled() != CalEvent::EMPTY)
+                    return false;
+            }
         }
     }
     return true;

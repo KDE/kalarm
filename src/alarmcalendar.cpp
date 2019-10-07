@@ -1060,7 +1060,8 @@ bool AlarmCalendar::modifyEvent(const EventId& oldEventId, KAEvent& newEvent)
         }
         if (noNewId)
             newEvent.setEventId(CalFormat::createUniqueId());
-        Collection c = AkonadiModel::instance()->collectionById(oldEventId.collectionId());
+        Collection c(oldEventId.collectionId());
+        AkonadiModel::instance()->refresh(c);
         if (!c.isValid())
             return false;
         // Don't add new event to mEventMap yet - its Akonadi item id is not yet known
@@ -1160,7 +1161,8 @@ bool AlarmCalendar::deleteDisplayEvent(const QString& eventID, bool saveit)
 */
 CalEvent::Type AlarmCalendar::deleteEventInternal(const KAEvent& event, bool deleteFromAkonadi)
 {
-    const Collection collection = AkonadiModel::instance()->collectionById(event.collectionId());
+    Collection collection(event.collectionId());
+    AkonadiModel::instance()->refresh(collection);
     if (!collection.isValid())
         return CalEvent::EMPTY;
     return deleteEventInternal(event.id(), event, collection, deleteFromAkonadi);
@@ -1471,7 +1473,7 @@ KAEvent::List AlarmCalendar::atLoginAlarms() const
     {
         const Collection::Id id = rit.key();
         if (id < 0
-        ||  !(AkonadiModel::types(model->collectionById(id)) & CalEvent::ACTIVE))
+        ||  !(AkonadiModel::types(Collection(id)) & CalEvent::ACTIVE))
             continue;
         const KAEvent::List& events = rit.value();
         for (KAEvent* event : events)

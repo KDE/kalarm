@@ -100,12 +100,10 @@ class AkonadiModel : public Akonadi::EntityTreeModel, public CalendarDataModel
         /** Refresh the specified collection instance with up to date data. */
         bool refresh(Akonadi::Collection&) const;
 
-        QModelIndex         collectionIndex(Akonadi::Collection::Id id) const
-                                        { return collectionIndex(Akonadi::Collection(id)); }
-        QModelIndex         collectionIndex(const Akonadi::Collection&) const;
-        Akonadi::Collection collectionById(Akonadi::Collection::Id) const;
-        Akonadi::Collection::Id collectionForEvent(const QString& eventId) const;
-        Akonadi::Collection collection(const KAEvent& e) const;
+        QModelIndex                collectionIndex(const Akonadi::Collection&) const;
+        Akonadi::Collection::Id    collectionForEvent(const QString& eventId) const;
+        static Akonadi::Collection collection(const QModelIndex&);
+        Akonadi::Collection        collection(const KAEvent& e) const;
 
         /** Remove a collection from Akonadi. The calendar file is not removed.
          *  @return true if a removal job has been scheduled.
@@ -126,7 +124,7 @@ class AkonadiModel : public Akonadi::EntityTreeModel, public CalendarDataModel
         KAEvent event(const QModelIndex&) const;
         using QObject::event;   // prevent warning about hidden virtual method
 
-        /** Return an event's model index, based on its itemId() value. */
+        /** Return an event's model index, based on its ID. */
         QModelIndex eventIndex(const KAEvent&) const;
         QModelIndex eventIndex(const QString& eventId) const;
 
@@ -172,6 +170,9 @@ class AkonadiModel : public Akonadi::EntityTreeModel, public CalendarDataModel
          */
         static int isWritable(Akonadi::Collection& collection, KACalendar::Compat& format);
 
+        /** Return the alarm types which a collection can contain.
+         *  This uses up-to-date collection data.
+         */
         static CalEvent::Types types(const Akonadi::Collection&);
 
     Q_SIGNALS:

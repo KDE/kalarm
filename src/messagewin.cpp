@@ -1162,7 +1162,8 @@ bool MessageWin::reinstateFromDisplaying(const Event::Ptr& kcalEvent, KAEvent& e
     Akonadi::Collection::Id collectionId;
     event.reinstateFromDisplaying(kcalEvent, collectionId, showEdit, showDefer);
     event.setCollectionId(collectionId);
-    collection = AkonadiModel::instance()->collectionById(collectionId);
+    collection.setId(collectionId);
+    AkonadiModel::instance()->refresh(collection);
     qCDebug(KALARM_LOG) << "MessageWin::reinstateFromDisplaying:" << EventId(event) << ": success";
     return true;
 }
