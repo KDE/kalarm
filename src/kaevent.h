@@ -494,11 +494,15 @@ public:
     /** Return the ID of the calendar resource which contains the event. */
     ResourceId  resourceId() const;
 
-    /** Set the ID of the Akonadi Item which contains the event. */
-    void setItemId(Akonadi::Item::Id id);
+    /** Set the ID of the Akonadi Item which contains the event.
+     *  @deprecated KAlarmCal will no longer provide this functionality.
+     */
+    KALARMCAL_DEPRECATED void setItemId(Akonadi::Item::Id id);
 
-    /** Return the ID of the Akonadi Item which contains the event. */
-    Akonadi::Item::Id  itemId() const;
+    /** Return the ID of the Akonadi Item which contains the event.
+     *  @deprecated KAlarmCal will no longer provide this functionality.
+     */
+    KALARMCAL_DEPRECATED Akonadi::Item::Id  itemId() const;
 
     /** Initialise an Akonadi::Item with the event's data.
      *  Note that the event is not updated with the Item ID.
