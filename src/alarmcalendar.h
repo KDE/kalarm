@@ -60,7 +60,6 @@ class AlarmCalendar : public QObject
         void                  setAlarmPending(KAEvent*, bool pending = true);
         bool                  haveDisabledAlarms() const   { return mHaveDisabledAlarms; }
         void                  disabledChanged(const KAEvent*);
-        KAEvent::List         atLoginAlarms() const;
         KCalendarCore::Event::Ptr  kcalEvent(const QString& uniqueID);   // if Akonadi, display calendar only
         KAEvent*              event(const EventId& uniqueId, bool checkDuplicates = false);
         KAEvent*              templateEvent(const QString& templateName);
@@ -88,7 +87,7 @@ class AlarmCalendar : public QObject
         static AlarmCalendar* displayCalendar()      { return mDisplayCalendar; }
         static AlarmCalendar* displayCalendarOpen();
         static KAEvent*       getEvent(const EventId&);
-        static bool           importAlarms(QWidget*, Akonadi::Collection* = nullptr);
+        bool                  importAlarms(QWidget*, Akonadi::Collection* = nullptr);
         static bool           exportAlarms(const KAEvent::List&, QWidget* parent);
 
     Q_SIGNALS:
@@ -135,7 +134,8 @@ class AlarmCalendar : public QObject
         ResourceMap           mResourceMap;
         KAEventMap            mEventMap;           // lookup of all events by UID
         EarliestMap           mEarliestAlarm;      // alarm with earliest trigger time, by resource
-        QList<QString>        mPendingAlarms;      // IDs of alarms which are currently being processed after triggering
+        QSet<QString>         mPendingAlarms;      // IDs of alarms which are currently being processed after triggering
+        QSet<QString>         mIgnoreAtLogin;      // IDs of repeat-at-login alarms added by user
         QUrl                  mUrl;                // URL of current calendar file
         QUrl                  mICalUrl;            // URL of iCalendar file
         QString               mLocalFile;          // calendar file, or local copy if it's a remote file
