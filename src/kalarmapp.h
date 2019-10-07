@@ -1,7 +1,7 @@
 /*
  *  kalarmapp.h  -  the KAlarm application object
  *  Program:  kalarm
- *  Copyright © 2001-2018 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2019 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -200,7 +200,6 @@ class KAlarmApp : public QApplication
         bool               mRedisplayAlarms;     // need to redisplay alarms when collection tree fetched
         bool               mQuitting;            // a forced quit is in progress
         bool               mReadOnly;            // only read-only access to calendars is needed
-        bool               mLoginAlarmsDone;     // alarms repeated at login have been processed
         QString            mActivateArg0;        // activate()'s first arg the first time it was called
         DBusHandler*       mDBusHandler;         // the parent of the main DCOP receiver object
         TrayWindow*        mTrayWindow;          // active system tray icon

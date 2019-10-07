@@ -515,7 +515,7 @@ void ResourceSelector::setStandard()
 void ResourceSelector::importCalendar()
 {
     Collection collection = currentResource();
-    AlarmCalendar::importAlarms(this, (collection.isValid() ? &collection : nullptr));
+    AlarmCalendar::resources()->importAlarms(this, (collection.isValid() ? &collection : nullptr));
 }
 
 /******************************************************************************

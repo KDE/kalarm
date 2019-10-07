@@ -846,7 +846,7 @@ void MainWindow::slotWakeFromSuspend()
 */
 void MainWindow::slotImportAlarms()
 {
-    AlarmCalendar::importAlarms(this);
+    AlarmCalendar::resources()->importAlarms(this);
 }
 
 /******************************************************************************

@@ -100,7 +100,6 @@ KAlarmApp::KAlarmApp(int& argc, char** argv)
       mRedisplayAlarms(false),
       mQuitting(false),
       mReadOnly(false),
-      mLoginAlarmsDone(false),
       mDBusHandler(new DBusHandler()),
       mTrayWindow(nullptr),
       mAlarmTimer(nullptr),
@@ -892,24 +891,6 @@ void KAlarmApp::processQueue()
 
         // Refresh alarms if that's been queued
         KAlarm::refreshAlarmsIfQueued();
-
-        if (!mLoginAlarmsDone)
-        {
-            // Queue all at-login alarms once only, at program start-up.
-            // First, cancel any scheduled reminders or deferrals for them,
-            // since these will be superseded by the new at-login trigger.
-            KAEvent::List events = AlarmCalendar::resources()->atLoginAlarms();
-            for (int i = 0, end = events.count();  i < end;  ++i)
-            {
-                KAEvent event = *events[i];
-                if (!cancelReminderAndDeferral(event))
-                {
-                    if (mAlarmsEnabled)
-                        queueAlarmId(event);
-                }
-            }
-            mLoginAlarmsDone = true;
-        }
 
         // Process queued events
         while (!mActionQueue.isEmpty())

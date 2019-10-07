@@ -571,7 +571,10 @@ void AlarmCalendar::slotEventChanged(const AkonadiModel::Event& event)
         bool enabled = event.event.enabled();
         checkForDisabledAlarms(!enabled, enabled);
         if (added  &&  enabled  &&  event.event.repeatAtLogin())
-            Q_EMIT atLoginEventAdded(event.event);
+        {
+            if (!mIgnoreAtLogin.remove(event.event.id()))   // don't trigger events added by user
+                Q_EMIT atLoginEventAdded(event.event);
+        }
     }
 }
 
@@ -599,6 +602,8 @@ void AlarmCalendar::slotEventsToBeRemoved(const AkonadiModel::EventList& events)
 */
 bool AlarmCalendar::importAlarms(QWidget* parent, Collection* collection)
 {
+    if (mCalType != RESOURCES)
+        return false;
     qCDebug(KALARM_LOG) << "AlarmCalendar::importAlarms";
     const QUrl url = QFileDialog::getOpenFileUrl(parent, QString(), mLastImportUrl,
                                                  QStringLiteral("%1 (*.vcs *.ics)").arg(i18nc("@info", "Calendar Files")));
@@ -712,6 +717,8 @@ bool AlarmCalendar::importAlarms(QWidget* parent, Collection* collection)
             // Give the event a new ID and add it to the calendars
             newev->setUid(CalEvent::uid(CalFormat::createUniqueId(), type));
             KAEvent* newEvent = new KAEvent(newev);
+            if (newEvent->repeatAtLogin())
+                mIgnoreAtLogin += newEvent->id();   // don't trigger the alarm now
             if (!AkonadiModel::instance()->addEvent(*newEvent, *coll))
                 success = false;
         }
@@ -958,6 +965,9 @@ bool AlarmCalendar::addEvent(KAEvent& evnt, QWidget* promptParent, bool useEvent
         }
         if (col.isValid())
         {
+            if (event->repeatAtLogin())
+                mIgnoreAtLogin += event->id();   // don't trigger the alarm now
+
             // Don't add event to mEventMap yet - its Akonadi item id is not yet known.
             // It will be added once it is inserted into AkonadiModel.
             ok = AkonadiModel::instance()->addEvent(*event, col);
@@ -1072,6 +1082,8 @@ bool AlarmCalendar::modifyEvent(const EventId& oldEventId, KAEvent& newEvent)
         Collection c = AkonadiModel::instance()->collectionById(oldEventId.collectionId());
         if (!c.isValid())
             return false;
+        if (newEvent.repeatAtLogin())
+            mIgnoreAtLogin += newEvent.id();   // don't trigger the alarm now
         // Don't add new event to mEventMap yet - its Akonadi item id is not yet known
         if (!AkonadiModel::instance()->addEvent(newEvent, c))
             return false;
@@ -1467,34 +1479,6 @@ void AlarmCalendar::checkForDisabledAlarms()
 }
 
 /******************************************************************************
-* Return a list of all active at-login alarms.
-*/
-KAEvent::List AlarmCalendar::atLoginAlarms() const
-{
-    KAEvent::List atlogins;
-    if (mCalType != RESOURCES)
-        return atlogins;
-    AkonadiModel* model = AkonadiModel::instance();
-    if (!mCalendarStorage  ||  mCalType != RESOURCES)
-        return atlogins;
-    for (ResourceMap::ConstIterator rit = mResourceMap.constBegin();  rit != mResourceMap.constEnd();  ++rit)
-    {
-        const Collection::Id id = rit.key();
-        if (id < 0
-        ||  !(AkonadiModel::types(model->collectionById(id)) & CalEvent::ACTIVE))
-            continue;
-        const KAEvent::List& events = rit.value();
-        for (int i = 0, end = events.count();  i < end;  ++i)
-        {
-            KAEvent* event = events[i];
-            if (event->category() == CalEvent::ACTIVE  &&  event->repeatAtLogin())
-                atlogins += event;
-        }
-    }
-    return atlogins;
-}
-
-/******************************************************************************
 * Find and note the active alarm with the earliest trigger time for a calendar.
 */
 void AlarmCalendar::findEarliestAlarm(const Akonadi::Collection& collection)
@@ -1574,13 +1558,13 @@ void AlarmCalendar::setAlarmPending(KAEvent* event, bool pending)
     {
         if (wasPending)
             return;
-        mPendingAlarms.append(id);
+        mPendingAlarms += id;
     }
     else
     {
         if (!wasPending)
             return;
-        mPendingAlarms.removeAll(id);
+        mPendingAlarms.remove(id);
     }
     // Now update the earliest alarm to trigger for its calendar
     findEarliestAlarm(AkonadiModel::instance()->collection(*event));
