@@ -1680,8 +1680,10 @@ int KAlarmApp::rescheduleAlarm(KAEvent& event, const KAAlarm& alarm, bool update
             // Executing an at-login alarm: first schedule the reminder
             // which occurs AFTER the main alarm.
             event.activateReminderAfter(KADateTime::currentUtcDateTime());
-            update = true;
         }
+        // Repeat-at-login alarms are usually unchanged after triggering.
+        // Ensure that the archive flag (which was set in execAlarm()) is saved.
+        update = true;
     }
     else if (alarm.isReminder()  ||  alarm.deferred())
     {

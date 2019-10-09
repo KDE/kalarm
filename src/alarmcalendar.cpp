@@ -128,6 +128,7 @@ AlarmCalendar::AlarmCalendar()
     connect(model, &AkonadiModel::eventsToBeRemoved, this, &AlarmCalendar::slotEventsToBeRemoved);
     connect(model, &AkonadiModel::eventChanged, this, &AlarmCalendar::slotEventChanged);
     connect(model, &AkonadiModel::collectionStatusChanged, this, &AlarmCalendar::slotCollectionStatusChanged);
+    connect(model, &AkonadiModel::collectionsPopulated, this, &AlarmCalendar::slotCollectionsPopulated);
     Preferences::connect(SIGNAL(askResourceChanged(bool)), this, SLOT(setAskResource(bool)));
 }
 
@@ -517,6 +518,17 @@ void AlarmCalendar::slotCollectionStatusChanged(const Collection& collection, Ak
 }
 
 /******************************************************************************
+* Called when all collections have been populated for the first time.
+*/
+void AlarmCalendar::slotCollectionsPopulated()
+{
+    // Now that all calendars have been processed, all repeat-at-login alarms
+    // will have been triggered. Prevent any new or updated repeat-at-login
+    // alarms (e.g. when they are edited by the user) triggering from now on.
+    mIgnoreAtLogin = true;
+}
+
+/******************************************************************************
 * Called when events have been added to AkonadiModel.
 * Add corresponding KAEvent instances to those held by AlarmCalendar.
 */
@@ -563,11 +575,8 @@ void AlarmCalendar::slotEventChanged(const AkonadiModel::Event& event)
     {
         bool enabled = event.event.enabled();
         checkForDisabledAlarms(!enabled, enabled);
-        if (added  &&  enabled  &&  event.event.repeatAtLogin())
-        {
-            if (!mIgnoreAtLogin.remove(event.event.id()))   // don't trigger events added by user
-                Q_EMIT atLoginEventAdded(event.event);
-        }
+        if (!mIgnoreAtLogin  &&  added  &&  enabled  &&  event.event.repeatAtLogin())
+            Q_EMIT atLoginEventAdded(event.event);
     }
 }
 
@@ -708,8 +717,6 @@ bool AlarmCalendar::importAlarms(QWidget* parent, Collection* collection)
             // Give the event a new ID and add it to the calendars
             newev->setUid(CalEvent::uid(CalFormat::createUniqueId(), type));
             KAEvent* newEvent = new KAEvent(newev);
-            if (newEvent->repeatAtLogin())
-                mIgnoreAtLogin += newEvent->id();   // don't trigger the alarm now
             if (!AkonadiModel::instance()->addEvent(*newEvent, *coll))
                 success = false;
         }
@@ -956,9 +963,6 @@ bool AlarmCalendar::addEvent(KAEvent& evnt, QWidget* promptParent, bool useEvent
         }
         if (col.isValid())
         {
-            if (event->repeatAtLogin())
-                mIgnoreAtLogin += event->id();   // don't trigger the alarm now
-
             // Don't add event to mEventMap yet - its Akonadi item id is not yet known.
             // It will be added once it is inserted into AkonadiModel.
             ok = AkonadiModel::instance()->addEvent(*event, col);
@@ -1074,8 +1078,6 @@ bool AlarmCalendar::modifyEvent(const EventId& oldEventId, KAEvent& newEvent)
         AkonadiModel::instance()->refresh(c);
         if (!c.isValid())
             return false;
-        if (newEvent.repeatAtLogin())
-            mIgnoreAtLogin += newEvent.id();   // don't trigger the alarm now
         // Don't add new event to mEventMap yet - its Akonadi item id is not yet known
         if (!AkonadiModel::instance()->addEvent(newEvent, c))
             return false;
