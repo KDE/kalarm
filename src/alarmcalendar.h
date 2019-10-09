@@ -100,6 +100,7 @@ class AlarmCalendar : public QObject
         void                  setAskResource(bool ask);
         void                  slotCollectionStatusChanged(const Akonadi::Collection&, AkonadiModel::Change,
                                                           const QVariant& value, bool inserted);
+        void                  slotCollectionsPopulated();
         void                  slotEventsAdded(const AkonadiModel::EventList&);
         void                  slotEventsToBeRemoved(const AkonadiModel::EventList&);
         void                  slotEventChanged(const AkonadiModel::Event&);
@@ -135,13 +136,13 @@ class AlarmCalendar : public QObject
         KAEventMap            mEventMap;           // lookup of all events by UID
         EarliestMap           mEarliestAlarm;      // alarm with earliest trigger time, by resource
         QSet<QString>         mPendingAlarms;      // IDs of alarms which are currently being processed after triggering
-        QSet<QString>         mIgnoreAtLogin;      // IDs of repeat-at-login alarms added by user
         QUrl                  mUrl;                // URL of current calendar file
         QUrl                  mICalUrl;            // URL of iCalendar file
         QString               mLocalFile;          // calendar file, or local copy if it's a remote file
         CalType               mCalType;            // what type of calendar mCalendar is (resources/ical/vcal)
         CalEvent::Type        mEventType;         // what type of events the calendar file is for
         bool                  mOpen;               // true if the calendar file is open
+        bool                  mIgnoreAtLogin{false}; // ignore new/updated repeat-at-login alarms
         int                   mUpdateCount;        // nesting level of group of calendar update calls
         bool                  mUpdateSave;         // save() was called while mUpdateCount > 0
         bool                  mHaveDisabledAlarms; // there is at least one individually disabled alarm

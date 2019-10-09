@@ -246,6 +246,9 @@ class AkonadiModel : public Akonadi::EntityTreeModel
          */
         void itemDone(Akonadi::Item::Id id, bool status = true);
 
+        /** Signal emitted when all collections have been populated. */
+        void collectionsPopulated();
+
         /** Signal emitted when calendar migration/creation has completed. */
         void migrationCompleted();
 
@@ -262,6 +265,7 @@ class AkonadiModel : public Akonadi::EntityTreeModel
         void slotCollectionChanged(const Akonadi::Collection& c, const QSet<QByteArray>& attrNames);
         void slotCollectionRemoved(const Akonadi::Collection&);
         void slotCollectionBeingCreated(const QString& path, Akonadi::Collection::Id, bool finished);
+        void slotCollectionPopulated(Akonadi::Collection::Id);
         void slotUpdateTimeTo();
         void slotUpdateArchivedColour(const QColor&);
         void slotUpdateDisabledColour(const QColor&);

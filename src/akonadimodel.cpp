@@ -138,6 +138,7 @@ AkonadiModel::AkonadiModel(ChangeRecorder* monitor, QObject* parent)
 
     connect(this, &AkonadiModel::rowsInserted, this, &AkonadiModel::slotRowsInserted);
     connect(this, &AkonadiModel::rowsAboutToBeRemoved, this, &AkonadiModel::slotRowsAboutToBeRemoved);
+    connect(this, &Akonadi::EntityTreeModel::collectionPopulated, this, &AkonadiModel::slotCollectionPopulated);
     connect(monitor, &Monitor::itemChanged, this, &AkonadiModel::slotMonitoredItemChanged);
 
     connect(ServerManager::self(), &ServerManager::stateChanged, this, &AkonadiModel::checkResources);
@@ -1800,6 +1801,20 @@ void AkonadiModel::slotCollectionBeingCreated(const QString& path, Akonadi::Coll
     }
     else
         mCollectionsBeingCreated << path;
+}
+
+/******************************************************************************
+* Called when a collection has been populated.
+*/
+void AkonadiModel::slotCollectionPopulated(Akonadi::Collection::Id)
+{
+    if (isFullyPopulated())
+    {
+        // All collections have now been populated.
+        Q_EMIT collectionsPopulated();
+        // Prevent the signal being emitted more than once.
+        disconnect(this, &Akonadi::EntityTreeModel::collectionPopulated, this, &AkonadiModel::slotCollectionPopulated);
+    }
 }
 
 /******************************************************************************
