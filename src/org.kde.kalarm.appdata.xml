@@ -103,6 +103,7 @@
     <p xml:lang="sv">Kalarm är ett schemaläggningsprogram av personliga alarmmeddelanden, kommandon och e-post av KDE</p>
     <p xml:lang="uk">KAlarm — інструмент від KDE для складання розкладу повідомлень, команд і поштових повідомлень для нагадування.</p>
     <p xml:lang="x-test">xxKAlarm is a personal alarm message, command and email scheduler application by KDExx</p>
+    <p xml:lang="zh-CN">KAlarm 是一个 KDE 出品的个人定时消息、命令及邮件调度程序</p>
     <p xml:lang="zh-TW">KAlarm 是款由 KDE 出品的應用程式，可以設定個人化的鬧鐘訊息、指令或排程發送電子郵件</p>
     <p>Features:</p>
     <p xml:lang="ar">الميزات:</p>
@@ -343,6 +344,7 @@
       <caption xml:lang="sv">Inställningsfönstret i Kalarm med test av ett meddelandealarm</caption>
       <caption xml:lang="uk">Вікно налаштовування KAlarm із тестовим нагадуванням у форматі повідомлення</caption>
       <caption xml:lang="x-test">xxKAlarm configuration window with a testing message alarmxx</caption>
+      <caption xml:lang="zh-CN">KAlarm 配置窗口，带有一个测试用的定时消息</caption>
       <caption xml:lang="zh-TW">包含測試訊息通知的 KAlarm 設定視窗</caption>
       <image>https://kde.org/images/screenshots/kalarm.png</image>
     </screenshot>
