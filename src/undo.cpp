@@ -1089,6 +1089,7 @@ UndoItem* UndoDelete::restore()
     }
 
     // Create a redo item to delete the alarm again
+    mEvent->setCategory(CalEvent::ACTIVE);
     return createRedo(*mEvent, mResource);
 }
 
