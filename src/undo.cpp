@@ -1013,6 +1013,7 @@ UndoItem* UndoDelete::restore()
 {
     qCDebug(KALARM_LOG) << "UndoDelete::restore:" << mEvent->id();
     // Restore the original event
+    CalEvent::Type saveType = calendar();
     switch (calendar())
     {
         case CalEvent::ACTIVE:
@@ -1089,7 +1090,7 @@ UndoItem* UndoDelete::restore()
     }
 
     // Create a redo item to delete the alarm again
-    mEvent->setCategory(CalEvent::ACTIVE);
+    mEvent->setCategory(saveType);
     return createRedo(*mEvent, mResource);
 }
 
