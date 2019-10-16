@@ -1,9 +1,10 @@
 KAlarm Change Log
 
-=== Version 2.12.8 (KDE Applications 19.08.3) --- 15 October 2019 ===
+=== Version 2.12.8 (KDE Applications 19.08.3) --- 16 October 2019 ===
 + Fix error on redo of an active alarm deletion.
 + Archive repeat-at-login alarms if previously triggered, when they are deleted.
 + Fix layout of defer alarm dialogue.
++ Make user settings changes take effect immediately (fixes regression introduced in 2.10.11).
 
 === Version 2.12.7 (KDE Applications 19.08.2) --- 7 October 2019 ===
 + Show correct read-only status of an alarm in its context menu.

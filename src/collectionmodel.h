@@ -242,13 +242,6 @@ class CollectionControlModel : public Akonadi::FavoriteCollectionsModel
          */
         static void setStandard(Akonadi::Collection&, CalEvent::Types);
 
-        /** Set whether the user should be prompted for the destination collection
-         *  to add alarms to.
-         *  @param ask true = prompt for which collection to add to;
-         *             false = add to standard collection.
-         */
-        static void setAskDestinationPolicy(bool ask)  { mAskDestination = ask; }
-
         /** Find the collection to be used to store an event of a given type.
          *  This will be the standard collection for the type, but if this is not valid,
          *  the user will be prompted to select a collection.
@@ -321,7 +314,6 @@ class CollectionControlModel : public Akonadi::FavoriteCollectionsModel
                 : resourceId(r), collectionId(c) {}
         };
         static QHash<QString, ResourceCol> mAgentPaths;   // path, (resource identifier, collection ID) pairs
-        static bool mAskDestination;
         QEventLoop* mPopulatedCheckLoop;
 };
 
