@@ -675,7 +675,6 @@ bool CollectionView::viewportEvent(QEvent* e)
 =============================================================================*/
 
 CollectionControlModel* CollectionControlModel::mInstance = nullptr;
-bool                    CollectionControlModel::mAskDestination = false;
 QHash<QString, CollectionControlModel::ResourceCol> CollectionControlModel::mAgentPaths;
 
 static QRegularExpression matchMimeType(QStringLiteral("^application/x-vnd\\.kde\\.alarm.*"),
@@ -1219,7 +1218,8 @@ Collection CollectionControlModel::destination(CalEvent::Type type, QWidget* pro
     standard = getStandard(type);
     // Archived alarms are always saved in the default resource,
     // else only prompt if necessary.
-    if (type == CalEvent::ARCHIVED  ||  noPrompt  ||  (!mAskDestination  &&  standard.isValid()))
+    if (type == CalEvent::ARCHIVED  ||  noPrompt
+    ||  (!Preferences::askResource()  &&  standard.isValid()))
         return standard;
 
     // Prompt for which collection to use

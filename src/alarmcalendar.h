@@ -97,7 +97,6 @@ class AlarmCalendar : public QObject
         void                  calendarSaved(AlarmCalendar*);
 
     private Q_SLOTS:
-        void                  setAskResource(bool ask);
         void                  slotCollectionStatusChanged(const Akonadi::Collection&, AkonadiModel::Change,
                                                           const QVariant& value, bool inserted);
         void                  slotCollectionsPopulated();

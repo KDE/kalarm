@@ -73,7 +73,6 @@ bool AlarmCalendar::initialiseCalendars()
     dir.mkpath(QStandardPaths::writableLocation(QStandardPaths::DataLocation));
     QString displayCal = QStandardPaths::writableLocation(QStandardPaths::DataLocation) + QLatin1Char('/') + displayCalendarName;
     AkonadiModel::instance();
-    CollectionControlModel::setAskDestinationPolicy(Preferences::askResource());
     Preferences::setBackend(Preferences::Akonadi);
     Preferences::self()->save();
     mResourcesCalendar = new AlarmCalendar();
@@ -129,7 +128,6 @@ AlarmCalendar::AlarmCalendar()
     connect(model, &AkonadiModel::eventChanged, this, &AlarmCalendar::slotEventChanged);
     connect(model, &AkonadiModel::collectionStatusChanged, this, &AlarmCalendar::slotCollectionStatusChanged);
     connect(model, &AkonadiModel::collectionsPopulated, this, &AlarmCalendar::slotCollectionsPopulated);
-    Preferences::connect(SIGNAL(askResourceChanged(bool)), this, SLOT(setAskResource(bool)));
 }
 
 /******************************************************************************
@@ -395,15 +393,6 @@ void AlarmCalendar::close()
     // Resource map should be empty, but just in case...
     while (!mResourceMap.isEmpty())
         removeKAEvents(mResourceMap.begin().key(), true, CalEvent::ACTIVE | CalEvent::ARCHIVED | CalEvent::TEMPLATE | CalEvent::DISPLAYING);
-}
-
-
-/******************************************************************************
-* Update whether to prompt for the resource to store new alarms in.
-*/
-void AlarmCalendar::setAskResource(bool ask)
-{
-    CollectionControlModel::setAskDestinationPolicy(ask);
 }
 
 /******************************************************************************
