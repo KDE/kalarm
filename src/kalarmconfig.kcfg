@@ -94,7 +94,7 @@
       <label context="@label">Show in system tray</label>
       <whatsthis context="@info:whatsthis">&lt;p>Check to show KAlarm's icon in the system tray. Showing it in the system tray provides easy access and a status indication.&lt;/p></whatsthis>
       <default>true</default>
-      <emit signal="showInSystemTrayChanged"/>-->
+      <emit signal="showInSystemTrayChanged"/>
     </entry>
     <entry name="Base_AutoHideSystemTray" key="AutoHideSystemTray" type="Int">
       <label context="@label">Auto-hide in system tray if no alarms due within period</label>
