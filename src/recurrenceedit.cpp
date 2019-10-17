@@ -55,7 +55,6 @@ using namespace KCalendarCore;
 #include <QListWidget>
 #include <QGroupBox>
 #include <QGridLayout>
-#include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QtAlgorithms>
 #include <QLocale>

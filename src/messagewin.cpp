@@ -85,7 +85,6 @@
 #include <QMutexLocker>
 #include <QMimeDatabase>
 #include <QUrl>
-#include <QLocale>
 #include "kalarm_debug.h"
 
 #include <stdlib.h>
