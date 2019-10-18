@@ -24,10 +24,10 @@
 /**  @file undo.h - undo/redo facility */
 
 #include "autodeletelist.h"
+#include "resources/resource.h"
 
 #include <kalarmcal/kaevent.h>
 
-#include <AkonadiCore/collection.h>
 #include <QList>
 #include <QStringList>
 
@@ -46,24 +46,24 @@ class Undo : public QObject
         struct Event
         {
             Event() {}
-            Event(const KAEvent&, const Akonadi::Collection&);
-            KAEvent        event;
-            mutable Akonadi::Collection collection;
-            QStringList    dontShowErrors;
+            Event(const KAEvent&, const Resource&);
+            KAEvent          event;
+            mutable Resource resource;
+            QStringList      dontShowErrors;
         };
         class EventList : public QList<Event>
         {
         public:
-            void append(const KAEvent& e, const Akonadi::Collection& c)  { QList<Event>::append(Event(e, c)); }
+            void append(const KAEvent& e, const Resource& res)  { QList<Event>::append(Event(e, res)); }
         };
 
         static Undo*       instance();
-        static void        saveAdd(const KAEvent&, const Akonadi::Collection&, const QString& name = QString());
+        static void        saveAdd(const KAEvent&, const Resource&, const QString& name = QString());
         static void        saveAdds(const EventList&, const QString& name = QString());
         static void        saveEdit(const Event& oldEvent, const KAEvent& newEvent);
         static void        saveDelete(const Event&, const QString& name = QString());
         static void        saveDeletes(const EventList&, const QString& name = QString());
-        static void        saveReactivate(const KAEvent&, const Akonadi::Collection&, const QString& name = QString());
+        static void        saveReactivate(const KAEvent&, const Resource&, const QString& name = QString());
         static void        saveReactivates(const EventList&, const QString& name = QString());
         static bool        undo(QWidget* parent, const QString& action)
                                               { return undo(0, UNDO, parent, action); }

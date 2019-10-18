@@ -21,11 +21,11 @@
 #ifndef EDITDLG_H
 #define EDITDLG_H
 
+#include <resources/resource.h>
+
 #include <kalarmcal/alarmtext.h>
 #include <kalarmcal/datetime.h>
 #include <kalarmcal/kaevent.h>
-
-#include <AkonadiCore/collection.h>
 
 #include <QDialog>
 #include <QTime>
@@ -70,7 +70,7 @@ class EditAlarmDlg : public QDialog
         static EditAlarmDlg* create(bool Template, const KAEvent*, bool newAlarm, QWidget* parent = nullptr,
                                     GetResourceType = RES_PROMPT, bool readOnly = false);
         ~EditAlarmDlg() override;
-        bool            getEvent(KAEvent&, Akonadi::Collection&);
+        bool            getEvent(KAEvent&, Resource&);
 
         // Methods to initialise values in the New Alarm dialogue.
         // N.B. setTime() must be called first to set the date-only characteristic,
@@ -164,8 +164,8 @@ class EditAlarmDlg : public QDialog
         StackedScrollGroup* mTabScrollGroup;
         int                 mMainPageIndex;
         int                 mRecurPageIndex;
-        bool                mMainPageShown{false};            // true once the main tab has been displayed
-        bool                mRecurPageShown{false};           // true once the recurrence tab has been displayed
+        bool                mMainPageShown{false};           // true once the main tab has been displayed
+        bool                mRecurPageShown{false};          // true once the recurrence tab has been displayed
         bool                mRecurSetDefaultEndDate{true};   // adjust default end date/time when recurrence tab is displayed
 
         // Templates
@@ -183,30 +183,30 @@ class EditAlarmDlg : public QDialog
 
         AlarmTimeWidget*    mTimeWidget{nullptr};
         LateCancelSelector* mLateCancel;
-        Reminder*           mReminder;           // null except for display alarms
+        Reminder*           mReminder;             // null except for display alarms
         CheckBox*           mShowInKorganizer{nullptr};
 
-        QFrame*             mMoreOptions;        // contains options hidden by default
+        QFrame*             mMoreOptions;          // contains options hidden by default
 
         RecurrenceEdit*     mRecurrenceEdit;
 
-        QString             mAlarmMessage;       // message text/file name/command/email message
+        QString             mAlarmMessage;         // message text/file name/command/email message
         DateTime            mAlarmDateTime;
         DateTime            mDeferDateTime;
-        bool                mUseCollectionEventId; // whether to use mCollectionEventId
-        QString             mCollectionEventId;  // if non-null, save alarm in collection containing this event ID
-        Akonadi::Collection mCollection;         // collection to save event into, or null
-        int                 mDeferGroupHeight{0};   // height added by deferred time widget
-        int                 mDesktop;            // desktop to display the dialog in
-        QString             mEventId;            // UID of event being edited, or blank for new event
-        bool                mTemplate;           // editing an alarm template
-        bool                mNewAlarm;           // editing a new alarm
-        bool                mExpiredRecurrence;  // initially a recurrence which has expired
-        mutable bool        mChanged;            // controls other than deferral have changed since dialog was displayed
-        mutable bool        mOnlyDeferred;       // the only change made in the dialog was to the existing deferral
-        bool                mDesiredReadOnly;    // the specified read-only status of the dialog
-        bool                mReadOnly;           // the actual read-only status of the dialog
-        bool                mShowingMore{true};        // the More Options button has been clicked
+        bool                mUseResourceEventId;   // whether to use mResourceEventId
+        QString             mResourceEventId;      // if non-null, save alarm in resource containing this event ID
+        Resource            mResource;             // resource to save event into, or invalid
+        int                 mDeferGroupHeight{0};  // height added by deferred time widget
+        int                 mDesktop;              // desktop to display the dialog in
+        QString             mEventId;              // UID of event being edited, or blank for new event
+        bool                mTemplate;             // editing an alarm template
+        bool                mNewAlarm;             // editing a new alarm
+        bool                mExpiredRecurrence;    // initially a recurrence which has expired
+        mutable bool        mChanged;              // controls other than deferral have changed since dialog was displayed
+        mutable bool        mOnlyDeferred;         // the only change made in the dialog was to the existing deferral
+        bool                mDesiredReadOnly;      // the specified read-only status of the dialog
+        bool                mReadOnly;             // the actual read-only status of the dialog
+        bool                mShowingMore{true};    // the More Options button has been clicked
 
         // Initial state of all controls
         KAEvent*            mSavedEvent{nullptr};

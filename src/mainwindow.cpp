@@ -18,7 +18,6 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kalarm.h"
 #include "mainwindow.h"
 
 #include "alarmcalendar.h"
@@ -171,8 +170,8 @@ MainWindow::MainWindow(bool restored)
     connect(mListView->selectionModel(), &QItemSelectionModel::selectionChanged, this, &MainWindow::slotSelection);
     connect(mListView, &AlarmListView::contextMenuRequested, this, &MainWindow::slotContextMenuRequested);
     connect(mListView, &AlarmListView::columnsVisibleChanged, this, &MainWindow::slotAlarmListColumnsChanged);
-    connect(AkonadiModel::instance(), &AkonadiModel::collectionStatusChanged,
-                       this, &MainWindow::slotCalendarStatusChanged);
+    connect(AkonadiModel::instance(), &AkonadiModel::resourceStatusChanged,
+                                this, &MainWindow::slotCalendarStatusChanged);
     connect(mResourceSelector, &ResourceSelector::resized, this, &MainWindow::resourcesResized);
     mListView->installEventFilter(this);
     initActions();
@@ -740,11 +739,11 @@ void MainWindow::slotDelete(bool force)
     AlarmCalendar* resources = AlarmCalendar::resources();
     for (int i = 0;  i < events.count();  )
     {
-        Akonadi::Collection c = resources->collectionForEvent(events[i].id());
-        if (!c.isValid())
+        Resource res = resources->resourceForEvent(events[i].id());
+        if (!res.isValid())
             events.remove(i);
         else
-            undos.append(events[i++], c);
+            undos.append(events[i++], res);
     }
 
     if (events.isEmpty())
@@ -776,9 +775,7 @@ void MainWindow::slotReactivate()
     for (int i = 0, end = events.count();  i < end;  ++i)
     {
         if (!ineligibleIDs.contains(EventId(events[i])))
-        {
-            undos.append(events[i], resources->collectionForEvent(events[i].id()));
-        }
+            undos.append(events[i], resources->resourceForEvent(events[i].id()));
     }
     Undo::saveReactivates(undos);
 }
@@ -886,10 +883,7 @@ void MainWindow::slotBirthdays()
             Undo::EventList undos;
             AlarmCalendar* resources = AlarmCalendar::resources();
             for (int i = 0, end = events.count();  i < end;  ++i)
-            {
-                Akonadi::Collection c = resources->collectionForEvent(events[i].id());
-                undos.append(events[i], c);
-            }
+                undos.append(events[i], resources->resourceForEvent(events[i].id()));
             Undo::saveAdds(undos, i18nc("@info", "Import birthdays"));
 
             if (status != KAlarm::UPDATE_FAILED)
@@ -1617,8 +1611,8 @@ void MainWindow::editAlarmOk()
         return;
     if (dlg->result() != QDialog::Accepted)
         return;
-    Akonadi::Collection c = AkonadiModel::instance()->collection(event);
-    KAlarm::updateEditedAlarm(dlg, event, c);
+    Resource res = AkonadiModel::instance()->resource(event);
+    KAlarm::updateEditedAlarm(dlg, event, res);
 }
 
 /******************************************************************************

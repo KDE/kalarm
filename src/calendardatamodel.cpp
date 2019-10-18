@@ -21,6 +21,7 @@
 #include "calendardatamodel.h"
 #include "alarmtime.h"
 #include "preferences.h"
+#include "resources/resource.h"
 
 #include <kalarmcal/alarmtext.h>
 #include <kalarmcal/kaevent.h>
@@ -80,6 +81,26 @@ QString CalendarDataModel::typeListForDisplay(CalEvent::Types alarmTypes)
     if (!list.isEmpty())
         list = QLatin1String("<list>") + list + QLatin1String("</list>");
     return list;
+}
+
+/******************************************************************************
+* Return the read-only status tooltip for a collection, determined by the
+* read-write permissions and the KAlarm calendar format compatibility.
+* A null string is returned if the collection is read-write and compatible.
+*/
+QString CalendarDataModel::readOnlyTooltip(const Resource& resource)
+{
+    switch (resource.compatibility())
+    {
+        case KACalendar::Current:
+            return resource.readOnly() ? i18nc("@info", "Read-only") : QString();
+        case KACalendar::Converted:
+        case KACalendar::Convertible:
+            return i18nc("@info", "Read-only (old format)");
+        case KACalendar::Incompatible:
+        default:
+            return i18nc("@info", "Read-only (other format)");
+    }
 }
 
 /******************************************************************************
@@ -357,49 +378,13 @@ QVariant CalendarDataModel::eventData(const QModelIndex& ix, int role, const KAE
 }
 
 /******************************************************************************
-* Return the foreground color for displaying a collection, based on the
-* supplied mime types which it contains, and on whether it is fully writable.
-*/
-QColor CalendarDataModel::foregroundColor(CalEvent::Type alarmType, bool readOnly)
-{
-    QColor colour;
-    switch (alarmType)
-    {
-        case CalEvent::ACTIVE:
-            colour = KColorScheme(QPalette::Active).foreground(KColorScheme::NormalText).color();
-            break;
-        case CalEvent::ARCHIVED:
-            colour = Preferences::archivedColour();
-            break;
-        case CalEvent::TEMPLATE:
-            colour = KColorScheme(QPalette::Active).foreground(KColorScheme::LinkText).color();
-            break;
-        default:
-            break;
-    }
-    if (colour.isValid()  &&  readOnly)
-        return KColorUtils::lighten(colour, 0.2);
-    return colour;
-}
-
-/******************************************************************************
-* Return the storage type (file, directory, etc.) for the collection.
-*/
-QString CalendarDataModel::storageTypeForLocation(const QString& location) const
-{
-    const QUrl url = QUrl::fromUserInput(location, QString(), QUrl::AssumeLocalFile);
-    return !url.isLocalFile()                     ? i18nc("@info", "URL")
-           : QFileInfo(url.toLocalFile()).isDir() ? i18nc("@info Directory in filesystem", "Directory")
-           :                                        i18nc("@info", "File");
-}
-
-/******************************************************************************
 * Return a collection's tooltip text. The collection's enabled status is
 * evaluated for specified alarm types.
 */
 QString CalendarDataModel::tooltip(bool writable, bool inactive, const QString& name, const QString& type,
-                                   const QString& locn, const QString& disabled, const QString& readonly)
+                                   const QString& locn, const QString& readonly)
 {
+    const QString disabled = i18nc("@info", "Disabled");
     if (inactive  &&  !writable)
         return xi18nc("@info:tooltip",
                      "%1"
@@ -416,25 +401,6 @@ QString CalendarDataModel::tooltip(bool writable, bool inactive, const QString& 
                  "%1"
                  "<nl/>%2: <filename>%3</filename>",
                  name, type, locn);
-}
-
-/******************************************************************************
-* Return the read-only status tooltip for a collection.
-* A null string is returned if the collection is fully writable.
-*/
-QString CalendarDataModel::readOnlyTooltip(KACalendar::Compat compat, int writable)
-{
-    switch (writable)
-    {
-        case 1:
-            return QString();
-        case 0:
-            return i18nc("@info", "Read-only (old format)");
-        default:
-            if (compat == KACalendar::Current)
-                return i18nc("@info", "Read-only");
-            return i18nc("@info", "Read-only (other format)");
-    }
 }
 
 /******************************************************************************

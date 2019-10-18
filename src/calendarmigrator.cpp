@@ -1,7 +1,7 @@
 /*
  *  calendarmigrator.cpp  -  migrates or creates KAlarm Akonadi resources
  *  Program:  kalarm
- *  Copyright © 2011-2016 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2011-2019 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -25,6 +25,7 @@
 #include "kalarmdirsettings.h"
 #include "mainwindow.h"
 #include "messagebox.h"
+#include "resources/akonadiresource.h"
 
 #include <kalarmcal/collectionattribute.h>
 #include <kalarmcal/compatibilityattribute.h>
@@ -377,12 +378,12 @@ void CalendarMigrator::calendarCreated(CalendarCreator* creator)
 * Note: the collection should be up to date: use AkonadiModel::refresh() before
 *       calling this function.
 */
-void CalendarMigrator::updateToCurrentFormat(const Collection& collection, bool ignoreKeepFormat, QWidget* parent)
+void CalendarMigrator::updateToCurrentFormat(const Resource& resource, bool ignoreKeepFormat, QWidget* parent)
 {
-    qCDebug(KALARM_LOG) << "CalendarMigrator::updateToCurrentFormat:" << collection.id();
-    if (CalendarUpdater::containsCollection(collection.id()))
+    qCDebug(KALARM_LOG) << "CalendarMigrator::updateToCurrentFormat:" << resource.id();
+    if (CalendarUpdater::containsCollection(resource.id()))
         return;   // prevent multiple simultaneous user prompts
-    const AgentInstance agent = AgentManager::self()->instance(collection.resource());
+    const AgentInstance agent = AgentManager::self()->instance(resource.configName());
     const QString id = agent.type().identifier();
     bool dirResource;
     if (id == KALARM_RESOURCE)
@@ -394,6 +395,7 @@ void CalendarMigrator::updateToCurrentFormat(const Collection& collection, bool 
         qCCritical(KALARM_LOG) << "CalendarMigrator::updateToCurrentFormat: Invalid agent type" << id;
         return;
     }
+    const Collection& collection = AkonadiResource::collection(resource);
     CalendarUpdater* updater = new CalendarUpdater(collection, dirResource, ignoreKeepFormat, false, parent);
     QTimer::singleShot(0, updater, &CalendarUpdater::update);
 }
@@ -484,8 +486,8 @@ bool CalendarUpdater::update()
                 if (!mNewCollection)
                 {
                     // Record the user's choice of whether to update the calendar
-                    const QModelIndex ix = AkonadiModel::instance()->collectionIndex(mCollection);
-                    AkonadiModel::instance()->setData(ix, !result, AkonadiModel::KeepFormatRole);
+                    Resource resource = AkonadiModel::instance()->resource(mCollection.id());
+                    resource.setKeepFormat(!result);
                 }
             }
         }

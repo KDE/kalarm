@@ -64,12 +64,12 @@ class AlarmCalendar : public QObject
         KAEvent*              event(const EventId& uniqueId, bool checkDuplicates = false);
         KAEvent*              templateEvent(const QString& templateName);
         KAEvent::List         events(const QString& uniqueId) const;
-        KAEvent::List         events(CalEvent::Types s = CalEvent::EMPTY) const  { return events(Akonadi::Collection(), s); }
-        KAEvent::List         events(const Akonadi::Collection&, CalEvent::Types = CalEvent::EMPTY) const;
+        KAEvent::List         events(CalEvent::Types s = CalEvent::EMPTY) const  { return events(Resource(), s); }
+        KAEvent::List         events(const Resource&, CalEvent::Types = CalEvent::EMPTY) const;
         KCalendarCore::Event::List kcalEvents(CalEvent::Type s = CalEvent::EMPTY);   // display calendar only
         bool                  eventReadOnly(const QString& eventId) const;
-        Akonadi::Collection   collectionForEvent(const QString& eventId) const;
-        bool                  addEvent(KAEvent&, QWidget* promptparent = nullptr, bool useEventID = false, Akonadi::Collection* = nullptr, bool noPrompt = false, bool* cancelled = nullptr);
+        Resource              resourceForEvent(const QString& eventId) const;
+        bool                  addEvent(KAEvent&, QWidget* promptparent = nullptr, bool useEventID = false, Resource* = nullptr, bool noPrompt = false, bool* cancelled = nullptr);
         bool                  modifyEvent(const EventId& oldEventId, KAEvent& newEvent);
         KAEvent*              updateEvent(const KAEvent&);
         KAEvent*              updateEvent(const KAEvent*);
@@ -87,7 +87,7 @@ class AlarmCalendar : public QObject
         static AlarmCalendar* displayCalendar()      { return mDisplayCalendar; }
         static AlarmCalendar* displayCalendarOpen();
         static KAEvent*       getEvent(const EventId&);
-        bool                  importAlarms(QWidget*, Akonadi::Collection* = nullptr);
+        bool                  importAlarms(QWidget*, Resource* = nullptr);
         static bool           exportAlarms(const KAEvent::List&, QWidget* parent);
 
     Q_SIGNALS:
@@ -97,8 +97,8 @@ class AlarmCalendar : public QObject
         void                  calendarSaved(AlarmCalendar*);
 
     private Q_SLOTS:
-        void                  slotCollectionStatusChanged(const Akonadi::Collection&, AkonadiModel::Change,
-                                                          const QVariant& value, bool inserted);
+        void                  slotResourceStatusChanged(const Resource&, AkonadiModel::Change,
+                                                        const QVariant& value, bool inserted);
         void                  slotCollectionsPopulated();
         void                  slotEventsAdded(const AkonadiModel::EventList&);
         void                  slotEventsToBeRemoved(const AkonadiModel::EventList&);
@@ -107,21 +107,20 @@ class AlarmCalendar : public QObject
         enum CalType { RESOURCES, LOCAL_ICAL, LOCAL_VCAL };
         typedef QMap<Akonadi::Collection::Id, KAEvent::List> ResourceMap;  // id = invalid for display calendar
         typedef QMap<Akonadi::Collection::Id, KAEvent*> EarliestMap;
-        typedef QHash<EventId, KAEvent*> KAEventMap;  // indexed by collection and event UID
+        typedef QHash<EventId, KAEvent*> KAEventMap;  // indexed by resource and event UID
 
         AlarmCalendar();
         AlarmCalendar(const QString& file, CalEvent::Type);
         bool                  saveCal(const QString& newFile = QString());
         bool                  isValid() const   { return mCalType == RESOURCES || mCalendarStorage; }
-        void                  addNewEvent(const Akonadi::Collection&, KAEvent*, bool replace = false);
+        void                  addNewEvent(const Resource&, KAEvent*, bool replace = false);
         CalEvent::Type        deleteEventInternal(const KAEvent&, bool deleteFromAkonadi = true);
-        CalEvent::Type        deleteEventInternal(const KAEvent&, const Akonadi::Collection&,
-                                                   bool deleteFromAkonadi = true);
+        CalEvent::Type        deleteEventInternal(const KAEvent&, const Resource&, bool deleteFromAkonadi = true);
         CalEvent::Type        deleteEventInternal(const QString& eventID, const KAEvent& = KAEvent(),
-                                                   const Akonadi::Collection& = Akonadi::Collection(), bool deleteFromAkonadi = true);
+                                                  const Resource& = Resource(), bool deleteFromAkonadi = true);
         void                  updateDisplayKAEvents();
         void                  removeKAEvents(Akonadi::Collection::Id, bool closing = false, CalEvent::Types = CalEvent::ACTIVE | CalEvent::ARCHIVED | CalEvent::TEMPLATE);
-        void                  findEarliestAlarm(const Akonadi::Collection&);
+        void                  findEarliestAlarm(const Resource&);
         void                  findEarliestAlarm(Akonadi::Collection::Id);  //deprecated
         void                  checkForDisabledAlarms();
         void                  checkForDisabledAlarms(bool oldEnabled, bool newEnabled);

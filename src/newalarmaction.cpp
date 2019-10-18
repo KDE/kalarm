@@ -1,7 +1,7 @@
 /*
  *  newalarmaction.cpp  -  menu action to select a new alarm type
  *  Program:  kalarm
- *  Copyright © 2007-2009,2011,2018 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2007-2019 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -18,8 +18,8 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kalarm.h"
 #include "newalarmaction.h"
+#include "kalarm_debug.h"
 
 #include "akonadimodel.h"
 #include "collectionmodel.h"
@@ -35,7 +35,6 @@
 #include <KStandardShortcut>
 
 #include <QMenu>
-#include "kalarm_debug.h"
 
 using namespace KAlarmCal;
 
@@ -84,7 +83,7 @@ NewAlarmAction::NewAlarmAction(bool templates, const QString& label, QObject* pa
         // Include New From Template only in non-template menu
         mTemplateAction = new TemplateMenuAction(QIcon::fromTheme(TEMPLATE_ICON), i18nc("@action", "New Alarm From &Template"), parent);
         menu()->addAction(mTemplateAction);
-        connect(AkonadiModel::instance(), &AkonadiModel::collectionStatusChanged, this, &NewAlarmAction::slotCalendarStatusChanged);
+        connect(AkonadiModel::instance(), &AkonadiModel::resourceStatusChanged, this, &NewAlarmAction::slotCalendarStatusChanged);
         connect(TemplateListModel::all(), &ItemListModel::haveEventsStatus, this, &NewAlarmAction::slotCalendarStatusChanged);
         slotCalendarStatusChanged();   // initialise action states
     }

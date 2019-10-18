@@ -24,7 +24,6 @@
 
 #include "resourceselector.h"
 
-#include "kalarm.h"
 #include "alarmcalendar.h"
 #include "autoqpointer.h"
 #include "akonadiresourcecreator.h"
@@ -33,12 +32,9 @@
 #include "messagebox.h"
 #include "packedlayout.h"
 #include "preferences.h"
+#include "kalarm_debug.h"
 
 #include <AkonadiCore/agentmanager.h>
-#include <AkonadiCore/agentinstancecreatejob.h>
-#include <AkonadiCore/agenttype.h>
-#include <AkonadiCore/entitydisplayattribute.h>
-#include <AkonadiWidgets/collectionpropertiesdialog.h>
 #include <AkonadiWidgets/AgentConfigurationDialog>
 
 #include <KLocalizedString>
@@ -54,7 +50,6 @@
 #include <QColorDialog>
 #include <QComboBox>
 #include <QMenu>
-#include "kalarm_debug.h"
 
 using namespace KCalendarCore;
 using namespace Akonadi;
@@ -117,8 +112,8 @@ ResourceSelector::ResourceSelector(QWidget* parent)
     connect(mEditButton, &QPushButton::clicked, this, &ResourceSelector::editResource);
     connect(mDeleteButton, &QPushButton::clicked, this, &ResourceSelector::removeResource);
 
-    connect(AkonadiModel::instance(), &AkonadiModel::collectionAdded,
-                                this, &ResourceSelector::slotCollectionAdded);
+    connect(AkonadiModel::instance(), &AkonadiModel::resourceAdded,
+                                this, &ResourceSelector::slotResourceAdded);
     connect(AkonadiModel::instance(), &AkonadiModel::collectionDeleted,
                                 this, &ResourceSelector::selectionChanged);
 
@@ -214,19 +209,19 @@ void ResourceSelector::resourceAdded(AkonadiResourceCreator* creator, bool succe
 /******************************************************************************
 * Called when a collection is added to the AkonadiModel.
 */
-void ResourceSelector::slotCollectionAdded(const Collection& collection)
+void ResourceSelector::slotResourceAdded(Resource& resource)
 {
-    if (collection.isValid())
+    if (resource.isValid())
     {
-        AgentInstance agent = AgentManager::self()->instance(collection.resource());
+        AgentInstance agent = AgentManager::self()->instance(resource.configName());
         if (agent.isValid())
         {
             int i = mAddAgents.indexOf(agent);
             if (i >= 0)
             {
                 // The collection belongs to an agent created by addResource()
-                const CalEvent::Types types = CalEvent::types(collection.contentMimeTypes());
-                CollectionControlModel::setEnabled(collection, types, true);
+                const CalEvent::Types types = resource.alarmTypes();
+                resource.setEnabled(types);
                 if (!(types & mCurrentAlarmType))
                 {
                     // The user has selected alarm types for the resource
@@ -256,10 +251,10 @@ void ResourceSelector::slotCollectionAdded(const Collection& collection)
 */
 void ResourceSelector::editResource()
 {
-    const Collection collection = currentResource();
-    if (collection.isValid())
+    const Resource resource = currentResource();
+    if (resource.isValid())
     {
-        AgentInstance instance = AgentManager::self()->instance(collection.resource());
+        AgentInstance instance = AgentManager::self()->instance(resource.configName());
         if (instance.isValid())
         {
             QPointer<AgentConfigurationDialog> dlg = new AgentConfigurationDialog(instance, this);
@@ -275,11 +270,10 @@ void ResourceSelector::editResource()
 */
 void ResourceSelector::updateResource()
 {
-    Collection collection = currentResource();
-    if (!collection.isValid())
+    const Resource resource = currentResource();
+    if (!resource.isValid())
         return;
-    AkonadiModel::instance()->refresh(collection);  // update with latest data
-    CalendarMigrator::updateToCurrentFormat(collection, true, this);
+    CalendarMigrator::updateToCurrentFormat(resource, true, this);
 }
 
 /******************************************************************************
@@ -287,13 +281,13 @@ void ResourceSelector::updateResource()
 */
 void ResourceSelector::removeResource()
 {
-    Collection collection = currentResource();
-    if (!collection.isValid())
+    const Resource resource = currentResource();
+    if (!resource.isValid())
         return;
-    const QString name = collection.name();
+    const QString name = resource.configName();
     // Check if it's the standard or only resource for at least one type.
-    const CalEvent::Types allTypes      = AkonadiModel::types(collection);
-    const CalEvent::Types standardTypes = CollectionControlModel::standardTypes(collection, true);
+    const CalEvent::Types allTypes      = resource.alarmTypes();
+    const CalEvent::Types standardTypes = CollectionControlModel::standardTypes(resource, true);
     const CalEvent::Type  currentType   = currentResourceType();
     const CalEvent::Type  stdType = (standardTypes & CalEvent::ACTIVE)   ? CalEvent::ACTIVE
                                   : (standardTypes & CalEvent::ARCHIVED) ? CalEvent::ARCHIVED
@@ -337,7 +331,7 @@ void ResourceSelector::removeResource()
     if (KAMessageBox::warningContinueCancel(this, text, QString(), KStandardGuiItem::remove()) == KMessageBox::Cancel)
         return;
 
-    AkonadiModel::instance()->removeCollection(collection);
+    AkonadiModel::instance()->removeCollection(resource.id());
 }
 
 /******************************************************************************
@@ -406,36 +400,35 @@ void ResourceSelector::contextMenuRequested(const QPoint& viewportPos)
     bool active    = false;
     bool writable  = false;
     bool updatable = false;
-    Collection collection;
+    Resource resource;
     if (mListView->selectionModel()->hasSelection())
     {
         const QModelIndex index = mListView->indexAt(viewportPos);
         if (index.isValid())
-            collection = mListView->collectionModel()->collection(index);
+            resource = mListView->collectionModel()->resource(index);
         else
             mListView->clearSelection();
     }
     CalEvent::Type type = currentResourceType();
-    bool haveCalendar = collection.isValid();
+    bool haveCalendar = resource.isValid();
     if (haveCalendar)
     {
-        // Note: the CollectionControlModel functions call AkonadiModel::refresh(collection)
-        active   = CollectionControlModel::isEnabled(collection, type);
-        KACalendar::Compat compatibility;
-        int rw = CollectionControlModel::isWritableEnabled(collection, type, compatibility);
+        active = resource.isEnabled(type);
+        const int rw = resource.writableStatus(type);
         writable = (rw > 0);
+        const KACalendar::Compat compatibility = resource.compatibility();
         if (!rw
         &&  (compatibility & ~KACalendar::Converted)
         &&  !(compatibility & ~(KACalendar::Convertible | KACalendar::Converted)))
             updatable = true; // the calendar format is convertible to the current KAlarm format
-        if (!(AkonadiModel::instance()->types(collection) & type))
+        if (!(resource.alarmTypes() & type))
             type = CalEvent::EMPTY;
     }
     mActionReload->setEnabled(active);
     mActionShowDetails->setEnabled(haveCalendar);
     mActionSetColour->setEnabled(haveCalendar);
     mActionClearColour->setEnabled(haveCalendar);
-    mActionClearColour->setVisible(AkonadiModel::instance()->backgroundColor(collection).isValid());
+    mActionClearColour->setVisible(resource.backgroundColour().isValid());
     mActionEdit->setEnabled(haveCalendar);
     mActionUpdate->setEnabled(updatable);
     mActionRemove->setEnabled(haveCalendar);
@@ -450,7 +443,7 @@ void ResourceSelector::contextMenuRequested(const QPoint& viewportPos)
         default:  break;
     }
     mActionSetDefault->setText(text);
-    bool standard = CollectionControlModel::isStandard(collection, type);
+    bool standard = CollectionControlModel::isStandard(resource, type);
     mActionSetDefault->setChecked(active && writable && standard);
     mActionSetDefault->setEnabled(active && writable);
     mContextMenu->popup(mListView->viewport()->mapToGlobal(viewportPos));
@@ -461,9 +454,9 @@ void ResourceSelector::contextMenuRequested(const QPoint& viewportPos)
 */
 void ResourceSelector::reloadResource()
 {
-    const Collection collection = currentResource();
-    if (collection.isValid())
-        AkonadiModel::instance()->reloadCollection(collection);
+    const Resource resource = currentResource();
+    if (resource.isValid())
+        AkonadiModel::instance()->reloadResource(resource);
 }
 
 /******************************************************************************
@@ -483,9 +476,9 @@ void ResourceSelector::archiveDaysChanged(int days)
 {
     if (days)
     {
-        const Collection col = CollectionControlModel::getStandard(CalEvent::ARCHIVED);
-        if (col.isValid())
-            theApp()->purgeNewArchivedDefault(col);
+        const Resource resource = CollectionControlModel::getStandard(CalEvent::ARCHIVED);
+        if (resource.isValid())
+            theApp()->purgeNewArchivedDefault(resource);
     }
 }
 
@@ -495,16 +488,16 @@ void ResourceSelector::archiveDaysChanged(int days)
 */
 void ResourceSelector::setStandard()
 {
-    Collection collection = currentResource();
-    if (collection.isValid())
+    Resource resource = currentResource();
+    if (resource.isValid())
     {
         CalEvent::Type alarmType = currentResourceType();
         bool standard = mActionSetDefault->isChecked();
         if (standard)
-            CollectionControlModel::setEnabled(collection, alarmType, true);
-        CollectionControlModel::setStandard(collection, alarmType, standard);
+            resource.setEnabled(alarmType, true);
+        CollectionControlModel::setStandard(resource, alarmType, standard);
         if (alarmType == CalEvent::ARCHIVED)
-            theApp()->purgeNewArchivedDefault(collection);
+            theApp()->purgeNewArchivedDefault(resource);
     }
 }
 
@@ -515,8 +508,8 @@ void ResourceSelector::setStandard()
 */
 void ResourceSelector::importCalendar()
 {
-    Collection collection = currentResource();
-    AlarmCalendar::resources()->importAlarms(this, (collection.isValid() ? &collection : nullptr));
+    Resource resource = currentResource();
+    AlarmCalendar::resources()->importAlarms(this, &resource);
 }
 
 /******************************************************************************
@@ -525,9 +518,9 @@ void ResourceSelector::importCalendar()
 */
 void ResourceSelector::exportCalendar()
 {
-    const Collection calendar = currentResource();
-    if (calendar.isValid())
-        AlarmCalendar::exportAlarms(AlarmCalendar::resources()->events(calendar), this);
+    const Resource resource = currentResource();
+    if (resource.isValid())
+        AlarmCalendar::exportAlarms(AlarmCalendar::resources()->events(resource), this);
 }
 
 /******************************************************************************
@@ -535,15 +528,15 @@ void ResourceSelector::exportCalendar()
 */
 void ResourceSelector::setColour()
 {
-    Collection collection = currentResource();
-    if (collection.isValid())
+    Resource resource = currentResource();
+    if (resource.isValid())
     {
-        QColor colour = AkonadiModel::instance()->backgroundColor(collection);
+        QColor colour = resource.backgroundColour();
         if (!colour.isValid())
             colour = QApplication::palette().color(QPalette::Base);
         colour = QColorDialog::getColor(colour, this);
         if (colour.isValid())
-            AkonadiModel::instance()->setBackgroundColor(collection, colour);
+            resource.setBackgroundColour(colour);
     }
 }
 
@@ -553,9 +546,9 @@ void ResourceSelector::setColour()
 */
 void ResourceSelector::clearColour()
 {
-    Collection collection = currentResource();
-    if (collection.isValid())
-        AkonadiModel::instance()->setBackgroundColor(collection, QColor());
+    Resource resource = currentResource();
+    if (resource.isValid())
+        resource.setBackgroundColour(QColor());
 }
 
 /******************************************************************************
@@ -563,19 +556,16 @@ void ResourceSelector::clearColour()
 */
 void ResourceSelector::showInfo()
 {
-    Collection collection = currentResource();
-    if (collection.isValid())
+    const Resource resource = currentResource();
+    if (resource.isValid())
     {
-        const QString name = collection.displayName();
-        const QString id = collection.resource();   // resource name
+        const QString name             = resource.displayName();
+        const QString id               = resource.configName();   // resource name
+        const QString calType          = resource.storageType(true);
         const CalEvent::Type alarmType = currentResourceType();
-        const QString calType = AgentManager::self()->instance(id).type().name();
-        const QString storage = AkonadiModel::instance()->storageType(collection);
-        QString location = collection.remoteId();
-        const QUrl url = QUrl::fromUserInput(location, QString(), QUrl::AssumeLocalFile);
-        if (url.isLocalFile())
-            location = url.path();
-        const CalEvent::Types altypes = AkonadiModel::instance()->types(collection);
+        const QString storage          = resource.storageType(false);
+        const QString location         = resource.displayLocation();
+        const CalEvent::Types altypes  = resource.alarmTypes();
         QStringList alarmTypes;
         if (altypes & CalEvent::ACTIVE)
             alarmTypes << i18nc("@info", "Active alarms");
@@ -584,13 +574,13 @@ void ResourceSelector::showInfo()
         if (altypes & CalEvent::TEMPLATE)
             alarmTypes << i18nc("@info", "Alarm templates");
         const QString alarmTypeString = alarmTypes.join(i18nc("@info List separator", ", "));
-        QString perms = AkonadiModel::readOnlyTooltip(collection);
+        QString perms = AkonadiModel::readOnlyTooltip(resource);
         if (perms.isEmpty())
             perms = i18nc("@info", "Read-write");
-        const QString enabled = CollectionControlModel::isEnabled(collection, alarmType)
+        const QString enabled = resource.isEnabled(alarmType)
                            ? i18nc("@info", "Enabled")
                            : i18nc("@info", "Disabled");
-        const QString std = CollectionControlModel::isStandard(collection, alarmType)
+        const QString std = CollectionControlModel::isStandard(resource, alarmType)
                            ? i18nc("@info Parameter in 'Default calendar: Yes/No'", "Yes")
                            : i18nc("@info Parameter in 'Default calendar: Yes/No'", "No");
         const QString text = xi18nc("@info",
@@ -603,7 +593,7 @@ void ResourceSelector::showInfo()
                                     "Status: %8<nl/>"
                                     "Default calendar: %9</para>",
                                     name, id, calType, alarmTypeString, storage, location, perms, enabled, std);
-        // Display the collection information. Because the user requested
+        // Display the resource information. Because the user requested
         // the information, don't raise a KNotify event.
         KAMessageBox::information(this, text, QString(), QString(), KMessageBox::Options());
     }
@@ -612,9 +602,9 @@ void ResourceSelector::showInfo()
 /******************************************************************************
 * Return the currently selected resource in the list.
 */
-Collection ResourceSelector::currentResource() const
+Resource ResourceSelector::currentResource() const
 {
-    return mListView->collection(mListView->selectionModel()->currentIndex());
+    return mListView->resource(mListView->selectionModel()->currentIndex());
 }
 
 /******************************************************************************

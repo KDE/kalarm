@@ -18,7 +18,6 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kalarm.h"
 #include "editdlg.h"
 #include "editdlg_p.h"
 #include "editdlgtypes.h"
@@ -47,13 +46,14 @@
 #include "templatepickdlg.h"
 #include "timeedit.h"
 #include "timespinbox.h"
+#include "kalarm_debug.h"
 
 #include <Libkdepim/MaillistDrag>
 
 #include <KLocalizedString>
 #include <kconfig.h>
 #include <KSharedConfig>
-#include <kwindowsystem.h>
+#include <KWindowSystem>
 
 #include <QLabel>
 #include <QGroupBox>
@@ -67,7 +67,6 @@
 #include <QTimer>
 #include <QDialogButtonBox>
 #include <QLocale>
-#include "kalarm_debug.h"
 
 using namespace KCal;
 using namespace KAlarmCal;
@@ -166,19 +165,19 @@ void EditAlarmDlg::init(const KAEvent* event, GetResourceType getResource)
         case RES_USE_EVENT_ID:
             if (event)
             {
-                mCollectionEventId = event->id();
-                mUseCollectionEventId = true;
+                mResourceEventId = event->id();
+                mUseResourceEventId = true;
                 break;
             }
             Q_FALLTHROUGH();   // fall through to RES_PROMPT
         case RES_PROMPT:
-            mCollectionEventId.clear();
-            mUseCollectionEventId = true;
+            mResourceEventId.clear();
+            mUseResourceEventId = true;
             break;
         case RES_IGNORE:
         default:
-            mCollectionEventId.clear();
-            mUseCollectionEventId = false;
+            mResourceEventId.clear();
+            mUseResourceEventId = false;
             break;
     }
 }
@@ -745,9 +744,9 @@ void EditAlarmDlg::contentsChanged()
 * The data is returned in the supplied KAEvent instance.
 * Reply = false if the only change has been to an existing deferral.
 */
-bool EditAlarmDlg::getEvent(KAEvent& event, Akonadi::Collection& collection)
+bool EditAlarmDlg::getEvent(KAEvent& event, Resource& resource)
 {
-    collection = mCollection;
+    resource = mResource;
     if (mChanged)
     {
         // It's a new event, or the edit controls have changed
@@ -1066,8 +1065,8 @@ bool EditAlarmDlg::validate()
         if (timedRecurrence)
         {
             KAEvent event;
-            Akonadi::Collection c;
-            getEvent(event, c);     // this may adjust mAlarmDateTime
+            Resource res;
+            getEvent(event, res);     // this may adjust mAlarmDateTime
             const KADateTime now = KADateTime::currentDateTime(mAlarmDateTime.timeSpec());
             bool dateOnly = mAlarmDateTime.isDateOnly();
             if ((dateOnly  &&  mAlarmDateTime.date() < now.date())
@@ -1142,26 +1141,26 @@ bool EditAlarmDlg::validate()
     if (!checkText(mAlarmMessage))
         return false;
 
-    mCollection = Akonadi::Collection();
-    // mUseCollectionEventId = false indicates that the caller already knows
-    // which collection to use.
-    if (mUseCollectionEventId)
+    mResource = Resource();
+    // mUseResourceEventId = false indicates that the caller already knows
+    // which resource to use.
+    if (mUseResourceEventId)
     {
-        if (!mCollectionEventId.isEmpty())
+        if (!mResourceEventId.isEmpty())
         {
-            mCollection = AlarmCalendar::resources()->collectionForEvent(mCollectionEventId);
-            if (mCollection.isValid())
+            mResource = AlarmCalendar::resources()->resourceForEvent(mResourceEventId);
+            if (mResource.isValid())
             {
                 CalEvent::Type type = mTemplate ? CalEvent::TEMPLATE : CalEvent::ACTIVE;
-                if (!(AkonadiModel::instance()->types(mCollection) & type))
-                    mCollection = Akonadi::Collection();   // event may have expired while dialog was open
+                if (!(mResource.alarmTypes() & type))
+                    mResource = Resource();   // event may have expired while dialog was open
             }
         }
         bool cancelled = false;
         CalEvent::Type type = mTemplate ? CalEvent::TEMPLATE : CalEvent::ACTIVE;
-        if (CollectionControlModel::isWritableEnabled(mCollection, type) <= 0)
-            mCollection = CollectionControlModel::destination(type, this, false, &cancelled);
-        if (!mCollection.isValid())
+        if (!mResource.isWritable(type))
+            mResource = CollectionControlModel::destination(type, this, false, &cancelled);
+        if (!mResource.isValid())
         {
             if (!cancelled)
                 KAMessageBox::sorry(this, i18nc("@info", "You must select a calendar to save the alarm in"));

@@ -1,7 +1,7 @@
 /*
  *  resourceselector.h  -  alarm calendar resource selection widget
  *  Program:  kalarm
- *  Copyright © 2006-2011 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2006-2019 David Jarvie <djarvie@kde.org>
  *  Based on KOrganizer's ResourceView class and KAddressBook's ResourceSelection class,
  *  Copyright (C) 2003,2004 Cornelius Schumacher <schumacher@kde.org>
  *  Copyright (C) 2003-2004 Reinhold Kainhofer <reinhold@kainhofer.com>
@@ -25,8 +25,8 @@
 #ifndef RESOURCESELECTOR_H
 #define RESOURCESELECTOR_H
 
-#include "akonadimodel.h"
 #include "collectionmodel.h"
+#include "resources/resource.h"
 
 #include <AkonadiCore/agentinstance.h>
 
@@ -45,9 +45,6 @@ class QComboBox;
 class QMenu;
 class ResourceView;
 class AkonadiResourceCreator;
-namespace Akonadi {
-    class Collection;
-}
 
 
 /**
@@ -85,12 +82,12 @@ class ResourceSelector : public QFrame
         void  showInfo();
         void  archiveDaysChanged(int days);
         void  resourceAdded(AkonadiResourceCreator*, bool success);
-        void  slotCollectionAdded(const Akonadi::Collection&);
+        void  slotResourceAdded(Resource&);
         void  reinstateAlarmTypeScrollBars();
 
     private:
         CalEvent::Type currentResourceType() const;
-        Akonadi::Collection currentResource() const;
+        Resource currentResource() const;
 
         CollectionView* mListView;
         QList<Akonadi::AgentInstance> mAddAgents;   // agent added by addResource()

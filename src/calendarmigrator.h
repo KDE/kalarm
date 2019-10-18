@@ -1,7 +1,7 @@
 /*
  *  calendarmigrator.h  -  migrates or creates KAlarm Akonadi resources
  *  Program:  kalarm
- *  Copyright © 2011-2014 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2011-2019 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -32,6 +32,7 @@ namespace Akonadi { class CollectionFetchJob; }
 
 class CalendarCreator;
 class CalendarUpdater;
+class Resource;
 
 using namespace KAlarmCal;
 
@@ -47,7 +48,7 @@ class CalendarMigrator : public QObject
         static CalendarMigrator* instance();
         static void reset();
         static void execute();
-        static void updateToCurrentFormat(const Akonadi::Collection&, bool ignoreKeepFormat, QWidget* parent);
+        static void updateToCurrentFormat(const Resource&, bool ignoreKeepFormat, QWidget* parent);
         static bool completed()    { return mCompleted; }
         template <class Interface> static Interface* getAgentInterface(const Akonadi::AgentInstance&, QString& errorMessage, QObject* parent);
 

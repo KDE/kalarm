@@ -22,19 +22,14 @@
 #include "autoqpointer.h"
 #include "messagebox.h"
 #include "preferences.h"
-
-#include <kalarmcal/collectionattribute.h>
-#include <kalarmcal/compatibilityattribute.h>
+#include "kalarm_debug.h"
 
 #include <AkonadiCore/agentmanager.h>
-#include <AkonadiCore/collectiondeletejob.h>
 #include <AkonadiCore/collectionfetchjob.h>
-#include <AkonadiCore/collectionmodifyjob.h>
 #include <AkonadiCore/entitymimetypefiltermodel.h>
 #include <AkonadiWidgets/collectiondialog.h>
 
 #include <KLocalizedString>
-#include <KSharedConfig>
 
 #include <QUrl>
 #include <QApplication>
@@ -43,7 +38,6 @@
 #include <QToolTip>
 #include <QTimer>
 #include <QObject>
-#include "kalarm_debug.h"
 
 using namespace Akonadi;
 using namespace KAlarmCal;
@@ -67,7 +61,7 @@ class CollectionMimeTypeFilterModel : public Akonadi::EntityMimeTypeFilterModel
         void setFilterEnabled(bool enabled);
         Akonadi::Collection collection(int row) const;
         Akonadi::Collection collection(const QModelIndex&) const;
-        QModelIndex collectionIndex(const Akonadi::Collection&) const;
+        QModelIndex resourceIndex(const Resource&) const;
 
     protected:
         bool filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const override;
@@ -125,22 +119,20 @@ bool CollectionMimeTypeFilterModel::filterAcceptsRow(int sourceRow, const QModel
     AkonadiModel* model = AkonadiModel::instance();
     const QModelIndex ix = model->index(sourceRow, 0, sourceParent);
     const Collection collection = model->data(ix, AkonadiModel::CollectionRole).value<Collection>();
+    const Resource resource = model->resource(collection.id());
     if (collection.remoteId().isEmpty())
         return false;   // invalidly configured resource
     if (!AgentManager::self()->instance(collection.resource()).isValid())
         return false;
     if (!mWritableOnly  &&  mAlarmType == CalEvent::EMPTY)
         return true;
-    if (mWritableOnly  &&  (collection.rights() & writableRights) != writableRights)
+    if (mWritableOnly  &&  !resource.isWritable())
         return false;
-    if (mAlarmType != CalEvent::EMPTY  &&  !collection.contentMimeTypes().contains(CalEvent::mimeType(mAlarmType)))
+    if (mAlarmType != CalEvent::EMPTY  &&  !(resource.alarmTypes() & mAlarmType))
         return false;
-    if ((mWritableOnly || mEnabledOnly)  &&  !collection.hasAttribute<CollectionAttribute>())
+    if (mWritableOnly  &&  !resource.isCompatible())
         return false;
-    if (mWritableOnly  &&  (!collection.hasAttribute<CompatibilityAttribute>()
-                         || collection.attribute<CompatibilityAttribute>()->compatibility() != KACalendar::Current))
-        return false;
-    if (mEnabledOnly  &&  !collection.attribute<CollectionAttribute>()->isEnabled(mAlarmType))
+    if (mEnabledOnly  &&  !resource.isEnabled(mAlarmType))
         return false;
     return true;
 }
@@ -158,9 +150,9 @@ Collection CollectionMimeTypeFilterModel::collection(const QModelIndex& index) c
     return static_cast<AkonadiModel*>(sourceModel())->data(mapToSource(index), EntityTreeModel::CollectionRole).value<Collection>();
 }
 
-QModelIndex CollectionMimeTypeFilterModel::collectionIndex(const Collection& collection) const
+QModelIndex CollectionMimeTypeFilterModel::resourceIndex(const Resource& resource) const
 {
-    return mapFromSource(static_cast<AkonadiModel*>(sourceModel())->collectionIndex(collection));
+    return mapFromSource(static_cast<AkonadiModel*>(sourceModel())->resourceIndex(resource));
 }
 
 
@@ -192,9 +184,24 @@ Collection CollectionListModel::collection(const QModelIndex& index) const
     return data(index, EntityTreeModel::CollectionRole).value<Collection>();
 }
 
-QModelIndex CollectionListModel::collectionIndex(const Collection& collection) const
+/******************************************************************************
+* Return the resource for a given row.
+*/
+Resource CollectionListModel::resource(int row) const
 {
-    return mapFromSource(static_cast<CollectionMimeTypeFilterModel*>(sourceModel())->collectionIndex(collection));
+    const Collection::Id id = data(index(row, 0), EntityTreeModel::CollectionIdRole).toLongLong();
+    return AkonadiModel::instance()->resource(id);
+}
+
+Resource CollectionListModel::resource(const QModelIndex& index) const
+{
+    const Collection::Id id = data(index, EntityTreeModel::CollectionIdRole).toLongLong();
+    return AkonadiModel::instance()->resource(id);
+}
+
+QModelIndex CollectionListModel::resourceIndex(const Resource& resource) const
+{
+    return mapFromSource(static_cast<CollectionMimeTypeFilterModel*>(sourceModel())->resourceIndex(resource));
 }
 
 void CollectionListModel::setEventTypeFilter(CalEvent::Type type)
@@ -268,14 +275,14 @@ CollectionCheckListModel::CollectionCheckListModel(CalEvent::Type type, QObject*
     connect(mModel, SIGNAL(rowsAboutToBeRemoved(QModelIndex,int,int)), SIGNAL(layoutAboutToBeChanged()));
     connect(mModel, SIGNAL(rowsRemoved(QModelIndex,int,int)), SIGNAL(layoutChanged()));
 
-    connect(AkonadiModel::instance(), &AkonadiModel::collectionStatusChanged,
-                                this, &CollectionCheckListModel::collectionStatusChanged);
+    connect(AkonadiModel::instance(), &AkonadiModel::resourceStatusChanged,
+                                this, &CollectionCheckListModel::resourceStatusChanged);
 
     // Initialise checked status for all collections.
     // Note that this is only necessary if the model is recreated after
     // being deleted.
     for (int row = 0, count = mModel->rowCount();  row < count;  ++row)
-        setSelectionStatus(mModel->collection(row), mModel->index(row, 0));
+        setSelectionStatus(mModel->resource(row), mModel->index(row, 0));
 }
 
 CollectionCheckListModel::~CollectionCheckListModel()
@@ -302,33 +309,36 @@ Collection CollectionCheckListModel::collection(const QModelIndex& index) const
 }
 
 /******************************************************************************
+* Return the resource for a given row.
+*/
+Resource CollectionCheckListModel::resource(int row) const
+{
+    return mModel->resource(mapToSource(index(row, 0)));
+}
+
+Resource CollectionCheckListModel::resource(const QModelIndex& index) const
+{
+    return mModel->resource(mapToSource(index));
+}
+
+/******************************************************************************
 * Return model data for one index.
 */
 QVariant CollectionCheckListModel::data(const QModelIndex& index, int role) const
 {
-    const Collection collection = mModel->collection(index);
-    if (collection.isValid())
+    const Resource resource = mModel->resource(index);
+    if (resource.isValid())
     {
         // This is a Collection row
         switch (role)
         {
             case Qt::ForegroundRole:
-            {
-                const QString mimeType = CalEvent::mimeType(mAlarmType);
-                if (collection.contentMimeTypes().contains(mimeType))
-                    return AkonadiModel::foregroundColor(collection, QStringList(mimeType));
-                break;
-            }
+                return resource.foregroundColour(mAlarmType);
             case Qt::FontRole:
-            {
-                if (!collection.hasAttribute<CollectionAttribute>()
-                ||  !AkonadiModel::isCompatible(collection))
+                if (!resource.isCompatible()
+                ||  resource.enabledTypes() == CalEvent::EMPTY)
                     break;
-                const CollectionAttribute* attr = collection.attribute<CollectionAttribute>();
-                if (!attr->enabled())
-                    break;
-                const QStringList mimeTypes = collection.contentMimeTypes();
-                if (attr->isStandard(mAlarmType)  &&  mimeTypes.contains(CalEvent::mimeType(mAlarmType)))
+                if (resource.configIsStandard(mAlarmType)  &&  (resource.alarmTypes() & mAlarmType))
                 {
                     // It's the standard collection for a mime type
                     QFont font = qvariant_cast<QFont>(KCheckableProxyModel::data(index, role));
@@ -336,7 +346,6 @@ QVariant CollectionCheckListModel::data(const QModelIndex& index, int role) cons
                     return font;
                 }
                 break;
-            }
             default:
                 break;
         }
@@ -354,39 +363,34 @@ bool CollectionCheckListModel::setData(const QModelIndex& index, const QVariant&
     if (role == Qt::CheckStateRole  &&  static_cast<Qt::CheckState>(value.toInt()) != Qt::Checked)
     {
         // A collection is to be disabled.
-        const Collection collection = mModel->collection(index);
-        if (collection.isValid()  &&  collection.hasAttribute<CollectionAttribute>())
+        const Resource resource = mModel->resource(index);
+        if (resource.isValid()  &&  resource.isEnabled(mAlarmType))
         {
-            const CollectionAttribute* attr = collection.attribute<CollectionAttribute>();
-            if (attr->isEnabled(mAlarmType))
+            QString errmsg;
+            QWidget* messageParent = qobject_cast<QWidget*>(QObject::parent());
+            if (resource.isCompatible()  &&  resource.configIsStandard(mAlarmType))
             {
-                QString errmsg;
-                QWidget* messageParent = qobject_cast<QWidget*>(QObject::parent());
-                if (attr->isStandard(mAlarmType)
-                &&  AkonadiModel::isCompatible(collection))
+                // It's the standard collection for some alarm type.
+                if (mAlarmType == CalEvent::ACTIVE)
                 {
-                    // It's the standard collection for some alarm type.
-                    if (mAlarmType == CalEvent::ACTIVE)
-                    {
-                        errmsg = i18nc("@info", "You cannot disable your default active alarm calendar.");
-                    }
-                    else if (mAlarmType == CalEvent::ARCHIVED  &&  Preferences::archivedKeepDays())
-                    {
-                        // Only allow the archived alarms standard collection to be disabled if
-                        // we're not saving expired alarms.
-                        errmsg = i18nc("@info", "You cannot disable your default archived alarm calendar "
-                                                "while expired alarms are configured to be kept.");
-                    }
-                    else if (KAMessageBox::warningContinueCancel(messageParent,
-                                                           i18nc("@info", "Do you really want to disable your default calendar?"))
-                               == KMessageBox::Cancel)
-                        return false;
+                    errmsg = i18nc("@info", "You cannot disable your default active alarm calendar.");
                 }
-                if (!errmsg.isEmpty())
+                else if (mAlarmType == CalEvent::ARCHIVED  &&  Preferences::archivedKeepDays())
                 {
-                    KAMessageBox::sorry(messageParent, errmsg);
+                    // Only allow the archived alarms standard collection to be disabled if
+                    // we're not saving expired alarms.
+                    errmsg = i18nc("@info", "You cannot disable your default archived alarm calendar "
+                                            "while expired alarms are configured to be kept.");
+                }
+                else if (KAMessageBox::warningContinueCancel(messageParent,
+                                                       i18nc("@info", "Do you really want to disable your default calendar?"))
+                           == KMessageBox::Cancel)
                     return false;
-                }
+            }
+            if (!errmsg.isEmpty())
+            {
+                KAMessageBox::sorry(messageParent, errmsg);
+                return false;
             }
         }
     }
@@ -403,9 +407,9 @@ void CollectionCheckListModel::slotRowsInserted(const QModelIndex& parent, int s
     for (int row = start;  row <= end;  ++row)
     {
         const QModelIndex ix = mapToSource(index(row, 0, parent));
-        const Collection collection = mModel->collection(ix);
-        if (collection.isValid())
-            setSelectionStatus(collection, ix);
+        const Resource resource = mModel->resource(ix);
+        if (resource.isValid())
+            setSelectionStatus(resource, ix);
     }
     Q_EMIT layoutChanged();   // this is needed to make CollectionFilterCheckListModel update
 }
@@ -420,12 +424,11 @@ void CollectionCheckListModel::selectionChanged(const QItemSelection& selected, 
     for (const QModelIndex& ix : sel)
     {
         // Try to enable the collection, but untick it if not possible
-        if (!CollectionControlModel::setEnabled(mModel->collection(ix), mAlarmType, true))
-            mSelectionModel->select(ix, QItemSelectionModel::Deselect);
+        mModel->resource(ix).setEnabled(mAlarmType, true);
     }
     const QModelIndexList desel = deselected.indexes();
     for (const QModelIndex& ix : desel)
-        CollectionControlModel::setEnabled(mModel->collection(ix), mAlarmType, false);
+        mModel->resource(ix).setEnabled(mAlarmType, false);
 }
 
 /******************************************************************************
@@ -433,24 +436,24 @@ void CollectionCheckListModel::selectionChanged(const QItemSelection& selected, 
 * If the collection's alarm types have been reconfigured, ensure that the
 * model views are updated to reflect this.
 */
-void CollectionCheckListModel::collectionStatusChanged(const Collection& collection, AkonadiModel::Change change, const QVariant&, bool inserted)
+void CollectionCheckListModel::resourceStatusChanged(const Resource& resource, AkonadiModel::Change change, const QVariant&, bool inserted)
 {
-    if (inserted  ||  !collection.isValid())
+    if (inserted  ||  !resource.isValid())
         return;
     switch (change)
     {
         case AkonadiModel::Enabled:
-            qCDebug(KALARM_LOG) << debugType("collectionStatusChanged").constData() << "Enabled" << collection.id();
+            qCDebug(KALARM_LOG) << debugType("resourceStatusChanged").constData() << "Enabled" << resource.id();
             break;
         case AkonadiModel::AlarmTypes:
-            qCDebug(KALARM_LOG) << debugType("collectionStatusChanged").constData() << "AlarmTypes" << collection.id();
+            qCDebug(KALARM_LOG) << debugType("resourceStatusChanged").constData() << "AlarmTypes" << resource.id();
             break;
         default:
             return;
     }
-    const QModelIndex ix = mModel->collectionIndex(collection);
+    const QModelIndex ix = mModel->resourceIndex(resource);
     if (ix.isValid())
-        setSelectionStatus(collection, ix);
+        setSelectionStatus(resource, ix);
     if (change == AkonadiModel::AlarmTypes)
         Q_EMIT collectionTypeChange(this);
 }
@@ -458,10 +461,9 @@ void CollectionCheckListModel::collectionStatusChanged(const Collection& collect
 /******************************************************************************
 * Select or deselect an index according to its enabled status.
 */
-void CollectionCheckListModel::setSelectionStatus(const Collection& collection, const QModelIndex& sourceIndex)
+void CollectionCheckListModel::setSelectionStatus(const Resource& resource, const QModelIndex& sourceIndex)
 {
-    const QItemSelectionModel::SelectionFlags sel = (collection.hasAttribute<CollectionAttribute>()
-                                                     &&  collection.attribute<CollectionAttribute>()->isEnabled(mAlarmType))
+    const QItemSelectionModel::SelectionFlags sel = resource.isEnabled(mAlarmType)
                                                   ? QItemSelectionModel::Select : QItemSelectionModel::Deselect;
     mSelectionModel->select(sourceIndex, sel);
 }
@@ -537,6 +539,19 @@ Collection CollectionFilterCheckListModel::collection(const QModelIndex& index) 
     return static_cast<CollectionCheckListModel*>(sourceModel())->collection(mapToSource(index));
 }
 
+/******************************************************************************
+* Return the resource for a given row.
+*/
+Resource CollectionFilterCheckListModel::resource(int row) const
+{
+    return static_cast<CollectionCheckListModel*>(sourceModel())->resource(mapToSource(index(row, 0)));
+}
+
+Resource CollectionFilterCheckListModel::resource(const QModelIndex& index) const
+{
+    return static_cast<CollectionCheckListModel*>(sourceModel())->resource(mapToSource(index));
+}
+
 QVariant CollectionFilterCheckListModel::data(const QModelIndex& index, int role) const
 {
     switch (role)
@@ -600,6 +615,19 @@ Collection CollectionView::collection(int row) const
 Collection CollectionView::collection(const QModelIndex& index) const
 {
     return static_cast<CollectionFilterCheckListModel*>(model())->collection(index);
+}
+
+/******************************************************************************
+* Return the resource for a given row.
+*/
+Resource CollectionView::resource(int row) const
+{
+    return static_cast<CollectionFilterCheckListModel*>(model())->resource(row);
+}
+
+Resource CollectionView::resource(const QModelIndex& index) const
+{
+    return static_cast<CollectionFilterCheckListModel*>(model())->resource(index);
 }
 
 /******************************************************************************
@@ -702,8 +730,8 @@ CollectionControlModel::CollectionControlModel(QObject* parent)
     for (Collection::Id id : qAsConst(collectionIds))
         addCollection(Collection(id));
 
-    connect(AkonadiModel::instance(), &AkonadiModel::collectionStatusChanged,
-                                this, &CollectionControlModel::statusChanged);
+    connect(AkonadiModel::instance(), &AkonadiModel::resourceStatusChanged,
+                                this, &CollectionControlModel::resourceStatusChanged);
     connect(AkonadiModel::instance(), &EntityTreeModel::collectionTreeFetched,
                                 this, &CollectionControlModel::collectionPopulated);
     connect(AkonadiModel::instance(), &EntityTreeModel::collectionPopulated,
@@ -727,15 +755,15 @@ void CollectionControlModel::findEnabledCollections(const EntityMimeTypeFilterMo
         const Collection collection = model->data(filter->mapToSource(ix), AkonadiModel::CollectionRole).value<Collection>();
         if (!AgentManager::self()->instance(collection.resource()).isValid())
             continue;    // the collection doesn't belong to a resource, so omit it
-        const CalEvent::Types enabled = !collection.hasAttribute<CollectionAttribute>() ? CalEvent::EMPTY
-                                           : collection.attribute<CollectionAttribute>()->enabled();
-        const CalEvent::Types canEnable = checkTypesToEnable(collection, collectionIds, enabled);
+        Resource resource = AkonadiModel::instance()->resource(collection.id());
+        const CalEvent::Types enabled = resource.enabledTypes();
+        const CalEvent::Types canEnable = checkTypesToEnable(resource, collectionIds, enabled);
         if (canEnable != enabled)
         {
             // There is another collection which uses the same backend
             // storage. Disable alarm types enabled in the other collection.
             if (!model->isCollectionBeingDeleted(collection.id()))
-                model->setData(model->collectionIndex(collection), static_cast<int>(canEnable), AkonadiModel::EnabledTypesRole);
+                resource.setEnabled(canEnable);
         }
         if (canEnable)
             collectionIds += collection.id();
@@ -744,6 +772,7 @@ void CollectionControlModel::findEnabledCollections(const EntityMimeTypeFilterMo
     }
 }
 
+#if 0
 /******************************************************************************
 * Return whether a collection is enabled for a given alarm type.
 */
@@ -757,11 +786,11 @@ bool CollectionControlModel::isEnabled(const Collection& collection, CalEvent::T
     {
         // The collection doesn't belong to a resource, so it can't be used.
         // Remove it from the list of collections.
-        instance()->removeCollection(collection);
+        instance()->removeCollection(collection.id());
         return false;
     }
-    return col.hasAttribute<CollectionAttribute>()
-       &&  col.attribute<CollectionAttribute>()->isEnabled(type);
+    const Resource resource = AkonadiModel::instance()->resource(collection.id());
+    return resource.isEnabled(type);
 }
 
 /******************************************************************************
@@ -773,83 +802,74 @@ CalEvent::Types CollectionControlModel::setEnabled(const Collection& collection,
     qCDebug(KALARM_LOG) << "CollectionControlModel::setEnabled:" << collection.id() << ", alarm types" << types << "->" << enabled;
     if (!collection.isValid()  ||  (!enabled && !instance()->collectionIds().contains(collection.id())))
         return CalEvent::EMPTY;
-    Collection col = collection;
-    AkonadiModel::instance()->refresh(col);    // update with latest data
-    CalEvent::Types alarmTypes = !col.hasAttribute<CollectionAttribute>() ? CalEvent::EMPTY
-                                         : col.attribute<CollectionAttribute>()->enabled();
+    const Resource resource = AkonadiModel::instance()->resource(collection.id());
+    CalEvent::Types alarmTypes = resource.enabledTypes();
     if (enabled)
         alarmTypes |= static_cast<CalEvent::Types>(types & (CalEvent::ACTIVE | CalEvent::ARCHIVED | CalEvent::TEMPLATE));
     else
         alarmTypes &= ~types;
 
-    return instance()->setEnabledStatus(collection, alarmTypes, false);
+    return instance()->setEnabledStatus(resource, alarmTypes, false);
 }
+#endif
 
 /******************************************************************************
 * Change the collection's enabled status.
 * Add or remove the collection to/from the enabled list.
 * Reply = alarm types which can be enabled
 */
-CalEvent::Types CollectionControlModel::setEnabledStatus(const Collection& collection, CalEvent::Types types, bool inserted)
+CalEvent::Types CollectionControlModel::setEnabledStatus(Resource& resource, CalEvent::Types types, bool inserted)
 {
-    qCDebug(KALARM_LOG) << "CollectionControlModel::setEnabledStatus:" << collection.id() << ", types=" << types;
+    qCDebug(KALARM_LOG) << "CollectionControlModel::setEnabledStatus:" << resource.id() << ", types=" << types;
     CalEvent::Types disallowedStdTypes{};
     CalEvent::Types stdTypes{};
 
     // Prevent the enabling of duplicate alarm types if another collection
     // uses the same backend storage.
     const QList<Collection::Id> colIds = collectionIds();
-    const CalEvent::Types canEnable = checkTypesToEnable(collection, colIds, types);
+    const CalEvent::Types canEnable = checkTypesToEnable(resource, colIds, types);
 
     // Update the list of enabled collections
     if (canEnable)
     {
-        if (!colIds.contains(collection.id()))
+        if (!colIds.contains(resource.id()))
         {
             // It's a new collection.
             // Prevent duplicate standard collections being created for any alarm type.
-            stdTypes = collection.hasAttribute<CollectionAttribute>()
-                                ? collection.attribute<CollectionAttribute>()->standard()
-                                : CalEvent::EMPTY;
+            stdTypes = resource.configStandardTypes();
             if (stdTypes)
             {
                 for (const Collection::Id& id : colIds)
                 {
-                    Collection c(id);
-                    AkonadiModel::instance()->refresh(c);    // update with latest data
-                    if (c.isValid())
+                    const Resource res = AkonadiModel::instance()->resource(id);
+                    if (res.isValid())
                     {
-                        const CalEvent::Types t = stdTypes & CalEvent::types(c.contentMimeTypes());
-                        if (t)
+                        const CalEvent::Types t = stdTypes & res.alarmTypes();
+                        if (t  &&  resource.isCompatible())
                         {
-                            if (c.hasAttribute<CollectionAttribute>()
-                            &&  AkonadiModel::isCompatible(c))
-                            {
-                                disallowedStdTypes |= c.attribute<CollectionAttribute>()->standard() & t;
-                                if (disallowedStdTypes == stdTypes)
-                                    break;
-                            }
+                            disallowedStdTypes |= res.configStandardTypes() & t;
+                            if (disallowedStdTypes == stdTypes)
+                                break;
                         }
                     }
                 }
             }
-            addCollection(collection);
+            addCollection(Collection(resource.id()));
         }
     }
     else
-        removeCollection(collection);
+        removeCollection(Collection(resource.id()));
 
     if (disallowedStdTypes  ||  !inserted  ||  canEnable != types)
     {
         // Update the collection's status
         AkonadiModel* model = static_cast<AkonadiModel*>(sourceModel());
-        if (!model->isCollectionBeingDeleted(collection.id()))
+        if (!model->isCollectionBeingDeleted(resource.id()))
         {
-            const QModelIndex ix = model->collectionIndex(collection);
             if (!inserted  ||  canEnable != types)
-                model->setData(ix, static_cast<int>(canEnable), AkonadiModel::EnabledTypesRole);
+                resource.setEnabled(canEnable);
             if (disallowedStdTypes)
-                model->setData(ix, static_cast<int>(stdTypes & ~disallowedStdTypes), AkonadiModel::IsStandardRole);
+                resource.configSetStandard(stdTypes & ~disallowedStdTypes);
         }
     }
     return canEnable;
@@ -860,9 +880,9 @@ CalEvent::Types CollectionControlModel::setEnabledStatus(const Collection& colle
 * If it's the enabled status, add or remove the collection to/from the enabled
 * list.
 */
-void CollectionControlModel::statusChanged(const Collection& collection, AkonadiModel::Change change, const QVariant& value, bool inserted)
+void CollectionControlModel::resourceStatusChanged(Resource& resource, AkonadiModel::Change change, const QVariant& value, bool inserted)
 {
-    if (!collection.isValid())
+    if (!resource.isValid())
         return;
 
     switch (change)
@@ -870,22 +890,22 @@ void CollectionControlModel::statusChanged(const Collection& collection, Akonadi
         case AkonadiModel::Enabled:
         {
             const CalEvent::Types enabled = static_cast<CalEvent::Types>(value.toInt());
-            qCDebug(KALARM_LOG) << "CollectionControlModel::statusChanged:" << collection.id() << ", enabled=" << enabled << ", inserted=" << inserted;
-            setEnabledStatus(collection, enabled, inserted);
+            qCDebug(KALARM_LOG) << "CollectionControlModel::resourceStatusChanged:" << resource.id() << ", enabled=" << enabled << ", inserted=" << inserted;
+            setEnabledStatus(resource, enabled, inserted);
             break;
         }
         case AkonadiModel::ReadOnly:
         {
             bool readOnly = value.toBool();
-            qCDebug(KALARM_LOG) << "CollectionControlModel::statusChanged:" << collection.id() << ", readOnly=" << readOnly;
+            qCDebug(KALARM_LOG) << "CollectionControlModel::resourceStatusChanged:" << resource.id() << ", readOnly=" << readOnly;
             if (readOnly)
             {
-                // A read-only collection can't be the default for any alarm type
-                const CalEvent::Types std = standardTypes(collection, false);
+                // A read-only resource can't be the default for any alarm type
+                const CalEvent::Types std = standardTypes(resource, false);
                 if (std != CalEvent::EMPTY)
                 {
-                    Collection c(collection);
-                    setStandard(c, CalEvent::Types(CalEvent::EMPTY));
+                    Resource res = AkonadiModel::instance()->resource(resource.id());
+                    setStandard(res, CalEvent::Types(CalEvent::EMPTY));
                     QWidget* messageParent = qobject_cast<QWidget*>(QObject::parent());
                     bool singleType = true;
                     QString msg;
@@ -894,23 +914,23 @@ void CollectionControlModel::statusChanged(const Collection& collection, Akonadi
                         case CalEvent::ACTIVE:
                             msg = xi18nc("@info", "The calendar <resource>%1</resource> has been made read-only. "
                                                  "This was the default calendar for active alarms.",
-                                        collection.name());
+                                        resource.displayName());
                             break;
                         case CalEvent::ARCHIVED:
                             msg = xi18nc("@info", "The calendar <resource>%1</resource> has been made read-only. "
                                                  "This was the default calendar for archived alarms.",
-                                        collection.name());
+                                        resource.displayName());
                             break;
                         case CalEvent::TEMPLATE:
                             msg = xi18nc("@info", "The calendar <resource>%1</resource> has been made read-only. "
                                                  "This was the default calendar for alarm templates.",
-                                        collection.name());
+                                        resource.displayName());
                             break;
                         default:
                             msg = xi18nc("@info", "<para>The calendar <resource>%1</resource> has been made read-only. "
                                                  "This was the default calendar for:%2</para>"
                                                  "<para>Please select new default calendars.</para>",
-                                        collection.name(), CalendarDataModel::typeListForDisplay(std));
+                                        resource.displayName(), CalendarDataModel::typeListForDisplay(std));
                             singleType = false;
                             break;
                     }
@@ -933,34 +953,30 @@ void CollectionControlModel::statusChanged(const Collection& collection, Akonadi
 * collection. This is to avoid duplicating events between different resources,
 * which causes user confusion and annoyance, and causes crashes.
 * Parameters:
-*   collection    - must be up to date (using AkonadiModel::refresh() etc.)
 *   collectionIds = list of collection IDs to search for duplicates.
 *   types         = alarm types to be enabled for the collection.
 * Reply = alarm types which can be enabled without duplicating other collections.
 */
-CalEvent::Types CollectionControlModel::checkTypesToEnable(const Collection& collection, const QList<Collection::Id>& collectionIds, CalEvent::Types types)
+CalEvent::Types CollectionControlModel::checkTypesToEnable(const Resource& resource, const QList<Collection::Id>& collectionIds, CalEvent::Types types)
 {
     types &= (CalEvent::ACTIVE | CalEvent::ARCHIVED | CalEvent::TEMPLATE);
     if (types)
     {
         // At least one alarm type is to be enabled
-        const QUrl location = QUrl::fromUserInput(collection.remoteId(), QString(), QUrl::AssumeLocalFile);
+        const QUrl location = resource.location();
         for (const Collection::Id& id : collectionIds)
         {
-            const Collection c(id);
-            const QUrl cLocation = QUrl::fromUserInput(c.remoteId(), QString(), QUrl::AssumeLocalFile);
-            if (id != collection.id()  &&  cLocation == location)
+            const Resource res = AkonadiModel::instance()->resource(id);
+            const QUrl cLocation = res.location();
+            if (id != resource.id()  &&  cLocation == location)
             {
                 // The collection duplicates the backend storage
                 // used by another enabled collection.
                 // N.B. don't refresh this collection - assume no change.
-                qCDebug(KALARM_LOG) << "CollectionControlModel::checkTypesToEnable:" << c.id() << "duplicates backend for" << collection.id();
-                if (c.hasAttribute<CollectionAttribute>())
-                {
-                    types &= ~c.attribute<CollectionAttribute>()->enabled();
-                    if (!types)
-                        break;
-                }
+                qCDebug(KALARM_LOG) << "CollectionControlModel::checkTypesToEnable:" << id << "duplicates backend for" << resource.id();
+                types &= ~res.enabledTypes();
+                if (!types)
+                    break;
             }
         }
     }
@@ -968,58 +984,26 @@ CalEvent::Types CollectionControlModel::checkTypesToEnable(const Collection& col
 }
 
 /******************************************************************************
-* Return whether a collection is both enabled and fully writable for a given
-* alarm type.
-* Optionally, the enabled status can be ignored.
-* Reply: 1 = fully enabled and writable,
-*        0 = enabled and writable except that backend calendar is in an old KAlarm format,
-*       -1 = not enabled, read-only, or incompatible format.
-*/
-int CollectionControlModel::isWritableEnabled(const Akonadi::Collection& collection, CalEvent::Type type)
-{
-    KACalendar::Compat format;
-    return isWritableEnabled(collection, type, format);
-}
-int CollectionControlModel::isWritableEnabled(const Akonadi::Collection& collection, CalEvent::Type type, KACalendar::Compat& format)
-{
-    Collection col(collection);
-    const int writable = AkonadiModel::isWritable(col, format);
-    if (writable == -1)
-        return -1;
-
-    // Check the collection's enabled status
-    if (!instance()->collectionIds().contains(col.id())
-    ||  !col.hasAttribute<CollectionAttribute>())
-        return -1;
-    if (!col.attribute<CollectionAttribute>()->isEnabled(type))
-        return -1;
-    return writable;
-}
-
-/******************************************************************************
 * Return the standard collection for a specified mime type.
 * If the mime type is 'archived' and there is no standard collection, the only
 * writable archived collection is set to be the standard.
 */
-Collection CollectionControlModel::getStandard(CalEvent::Type type)
+Resource CollectionControlModel::getStandard(CalEvent::Type type)
 {
-    const QString mimeType = CalEvent::mimeType(type);
+    AkonadiModel* model = AkonadiModel::instance();
     int defaultArch = -1;
     const QList<Collection::Id> colIds = instance()->collectionIds();
-    Collection::List cols;
+    QList<Resource> resources;
     for (int i = 0, count = colIds.count();  i < count;  ++i)
     {
-        cols.append(Collection(colIds[i]));
-        Collection& col = cols.last();
-        AkonadiModel::instance()->refresh(col);    // update with latest data
-        if (col.isValid()
-        &&  col.contentMimeTypes().contains(mimeType))
+        resources.append(model->resource(colIds[i]));
+        Resource& res = resources.last();
+        if (res.alarmTypes() & type)
         {
-            if (col.hasAttribute<CollectionAttribute>()
-            &&  (col.attribute<CollectionAttribute>()->standard() & type)
-            &&  AkonadiModel::isCompatible(col))
-                return col;
-            if (type == CalEvent::ARCHIVED  &&  ((col.rights() & writableRights) == writableRights))
+            if ((res.configStandardTypes() & type)
+            &&  res.isCompatible())
+                return res;
+            if (type == CalEvent::ARCHIVED  &&  res.isWritable(type))
                 defaultArch = (defaultArch == -1) ? i : -2;
         }
     }
@@ -1029,58 +1013,49 @@ Collection CollectionControlModel::getStandard(CalEvent::Type type)
         // There is no standard collection for archived alarms, but there is
         // only one writable collection for the type. Set the collection to be
         // the standard.
-        setStandard(cols[defaultArch], type, true);
-        return cols[defaultArch];
+        setStandard(resources[defaultArch], type, true);
+        return resources[defaultArch];
     }
-    return Collection();
+    return Resource();
 }
 
 /******************************************************************************
 * Return whether a collection is the standard collection for a specified
 * mime type.
 */
-bool CollectionControlModel::isStandard(Akonadi::Collection& collection, CalEvent::Type type)
+bool CollectionControlModel::isStandard(const Resource& resource, CalEvent::Type type)
 {
-    // If it's for archived alarms, set the standard collection if necessary.
+    // If it's for archived alarms, set the standard resource if necessary.
     if (type == CalEvent::ARCHIVED)
-        return getStandard(type) == collection;
+        return getStandard(type) == resource;
 
-    if (!instance()->collectionIds().contains(collection.id()))
+    if (!instance()->collectionIds().contains(resource.id())
+    ||  !resource.isCompatible())
         return false;
-    AkonadiModel::instance()->refresh(collection);    // update with latest data
-    if (!collection.hasAttribute<CollectionAttribute>()
-    ||  !AkonadiModel::isCompatible(collection))
-        return false;
-    return collection.attribute<CollectionAttribute>()->isStandard(type);
+    return resource.configIsStandard(type);
 }
 
 /******************************************************************************
 * Return the alarm type(s) for which a collection is the standard collection.
 */
-CalEvent::Types CollectionControlModel::standardTypes(const Collection& collection, bool useDefault)
+CalEvent::Types CollectionControlModel::standardTypes(const Resource& resource, bool useDefault)
 {
-    if (!instance()->collectionIds().contains(collection.id()))
+    if (!instance()->collectionIds().contains(resource.id())
+    ||  !resource.isCompatible())
         return CalEvent::EMPTY;
-    Collection col = collection;
-    AkonadiModel::instance()->refresh(col);    // update with latest data
-    if (!AkonadiModel::isCompatible(col))
-        return CalEvent::EMPTY;
-    CalEvent::Types stdTypes = col.hasAttribute<CollectionAttribute>()
-                                     ? col.attribute<CollectionAttribute>()->standard()
-                                     : CalEvent::EMPTY;
+    CalEvent::Types stdTypes = resource.configStandardTypes();
     if (useDefault)
     {
         // Also return alarm types for which this is the only collection.
-        CalEvent::Types wantedTypes = AkonadiModel::types(collection) & ~stdTypes;
+        CalEvent::Types wantedTypes = resource.alarmTypes() & ~stdTypes;
         const QList<Collection::Id> colIds = instance()->collectionIds();
         for (int i = 0, count = colIds.count();  wantedTypes && i < count;  ++i)
         {
-            if (colIds[i] == col.id())
+            if (colIds[i] == resource.id())
                 continue;
-            Collection c(colIds[i]);
-            AkonadiModel::instance()->refresh(c);    // update with latest data
-            if (c.isValid())
-                wantedTypes &= ~AkonadiModel::types(c);
+            Resource res = AkonadiModel::instance()->resource(colIds[i]);
+            if (res.isValid())
+                wantedTypes &= ~res.alarmTypes();
         }
         stdTypes |= wantedTypes;
     }
@@ -1092,57 +1067,44 @@ CalEvent::Types CollectionControlModel::standardTypes(const Collection& collecti
 * type. If it is being set as standard, the standard status for the mime type
 * is cleared for all other collections.
 */
-void CollectionControlModel::setStandard(Akonadi::Collection& collection, CalEvent::Type type, bool standard)
+void CollectionControlModel::setStandard(Resource& resource, CalEvent::Type type, bool standard)
 {
     AkonadiModel* model = AkonadiModel::instance();
-    model->refresh(collection);    // update with latest data
-    if (!AkonadiModel::isCompatible(collection))
+    if (!resource.isCompatible())
         standard = false;   // the collection isn't writable
     if (standard)
     {
         // The collection is being set as standard.
         // Clear the 'standard' status for all other collections.
         const QList<Collection::Id> colIds = instance()->collectionIds();
-        if (!colIds.contains(collection.id()))
+        if (!colIds.contains(resource.id()))
             return;
-        const CalEvent::Types ctypes = collection.hasAttribute<CollectionAttribute>()
-                                       ? collection.attribute<CollectionAttribute>()->standard() : CalEvent::EMPTY;
+        const CalEvent::Types ctypes = resource.configStandardTypes();
         if (ctypes & type)
             return;    // it's already the standard collection for this type
         for (Collection::Id colId : colIds)
         {
             CalEvent::Types types;
-            Collection c(colId);
-            if (colId == collection.id())
-            {
-                c = collection;    // update with latest data
+            Resource res = model->resource(colId);
+            if (colId == resource.id())
                 types = ctypes | type;
-            }
             else
             {
-                model->refresh(c);    // update with latest data
-                types = c.hasAttribute<CollectionAttribute>()
-                      ? c.attribute<CollectionAttribute>()->standard() : CalEvent::EMPTY;
+                types = res.configStandardTypes();
                 if (!(types & type))
                     continue;
                 types &= ~type;
             }
-            const QModelIndex index = model->collectionIndex(c);
-            model->setData(index, static_cast<int>(types), AkonadiModel::IsStandardRole);
+            res.configSetStandard(types);
         }
     }
     else
     {
         // The 'standard' status is being cleared for the collection.
         // The collection doesn't have to be in this model's list of collections.
-        CalEvent::Types types = collection.hasAttribute<CollectionAttribute>()
-                                ? collection.attribute<CollectionAttribute>()->standard() : CalEvent::EMPTY;
+        const CalEvent::Types types = resource.configStandardTypes();
         if (types & type)
-        {
-            types &= ~type;
-            const QModelIndex index = model->collectionIndex(collection);
-            model->setData(index, static_cast<int>(types), AkonadiModel::IsStandardRole);
-        }
+            resource.configSetStandard(types & ~type);
     }
 }
 
@@ -1151,55 +1113,44 @@ void CollectionControlModel::setStandard(Akonadi::Collection& collection, CalEve
 * If it is being set as standard for any mime types, the standard status for
 * those mime types is cleared for all other collections.
 */
-void CollectionControlModel::setStandard(Akonadi::Collection& collection, CalEvent::Types types)
+void CollectionControlModel::setStandard(Resource& resource, CalEvent::Types types)
 {
     AkonadiModel* model = AkonadiModel::instance();
-    model->refresh(collection);    // update with latest data
-    if (!AkonadiModel::isCompatible(collection))
+    if (!resource.isCompatible())
         types = CalEvent::EMPTY;   // the collection isn't writable
     if (types)
     {
         // The collection is being set as standard for at least one mime type.
         // Clear the 'standard' status for all other collections.
         const QList<Collection::Id> colIds = instance()->collectionIds();
-        if (!colIds.contains(collection.id()))
+        if (!colIds.contains(resource.id()))
             return;
-        const CalEvent::Types t = collection.hasAttribute<CollectionAttribute>()
-                                  ? collection.attribute<CollectionAttribute>()->standard() : CalEvent::EMPTY;
+        const CalEvent::Types t = resource.configStandardTypes();
         if (t == types)
             return;    // there's no change to the collection's status
         for (Collection::Id colId : colIds)
         {
             CalEvent::Types t;
             Collection c(colId);
-            if (colId == collection.id())
-            {
-                c = collection;    // update with latest data
+            Resource res = model->resource(colId);
+            if (colId == resource.id())
                 t = types;
-            }
             else
             {
-                model->refresh(c);    // update with latest data
-                t = c.hasAttribute<CollectionAttribute>()
-                  ? c.attribute<CollectionAttribute>()->standard() : CalEvent::EMPTY;
+                t = res.configStandardTypes();
                 if (!(t & types))
                     continue;
                 t &= ~types;
             }
-            const QModelIndex index = model->collectionIndex(c);
-            model->setData(index, static_cast<int>(t), AkonadiModel::IsStandardRole);
+            res.configSetStandard(t);
         }
     }
     else
     {
         // The 'standard' status is being cleared for the collection.
         // The collection doesn't have to be in this model's list of collections.
-        if (collection.hasAttribute<CollectionAttribute>()
-        &&  collection.attribute<CollectionAttribute>()->standard())
-        {
-            const QModelIndex index = model->collectionIndex(collection);
-            model->setData(index, static_cast<int>(types), AkonadiModel::IsStandardRole);
-        }
+        if (resource.configStandardTypes())
+            resource.configSetStandard(types);
     }
 }
 
@@ -1208,11 +1159,11 @@ void CollectionControlModel::setStandard(Akonadi::Collection& collection, CalEve
 * Optionally, the standard collection for the alarm type is returned. If more
 * than one collection is a candidate, the user is prompted.
 */
-Collection CollectionControlModel::destination(CalEvent::Type type, QWidget* promptParent, bool noPrompt, bool* cancelled)
+Resource CollectionControlModel::destination(CalEvent::Type type, QWidget* promptParent, bool noPrompt, bool* cancelled)
 {
     if (cancelled)
         *cancelled = false;
-    Collection standard;
+    Resource standard;
     if (type == CalEvent::EMPTY)
         return standard;
     standard = getStandard(type);
@@ -1243,7 +1194,7 @@ Collection CollectionControlModel::destination(CalEvent::Type type, QWidget* pro
             // deletion of 'promptParent', and on return from this function).
             AutoQPointer<CollectionDialog> dlg = new CollectionDialog(model, promptParent);
             dlg->setWindowTitle(i18nc("@title:window", "Choose Calendar"));
-            dlg->setDefaultCollection(standard);
+            dlg->setDefaultCollection(Collection(standard.id()));
             dlg->setMimeTypeFilter(QStringList(CalEvent::mimeType(type)));
             if (dlg->exec())
                 col = dlg->selectedCollection();
@@ -1251,7 +1202,7 @@ Collection CollectionControlModel::destination(CalEvent::Type type, QWidget* pro
                 *cancelled = true;
         }
     }
-    return col;
+    return AkonadiModel::instance()->resource(col.id());
 }
 
 /******************************************************************************
@@ -1282,17 +1233,15 @@ Collection::List CollectionControlModel::allCollections(CalEvent::Type type)
 */
 Collection::List CollectionControlModel::enabledCollections(CalEvent::Type type, bool writable)
 {
-    const QString mimeType = CalEvent::mimeType(type);
     const QList<Collection::Id> colIds = instance()->collectionIds();
     Collection::List result;
     for (Collection::Id colId : colIds)
     {
         Collection c(colId);
-        if (!writable)
-            AkonadiModel::instance()->refresh(c);    // update with latest data
-        else if (AkonadiModel::isWritable(c) != 1)   // this refreshes 'c' (needed for mime type check)
+        const Resource resource = AkonadiModel::instance()->resource(colId);
+        if (writable  &&  !resource.isWritable())
             continue;
-        if (c.contentMimeTypes().contains(mimeType))
+        if (resource.alarmTypes() & type)
             result += c;
     }
     return result;
@@ -1325,12 +1274,11 @@ bool CollectionControlModel::isPopulated(Collection::Id collectionId)
     {
         if (collectionId == -1  ||  collectionId == colId)
         {
-            const QModelIndex ix = model->collectionIndex(Collection(colId));
+            const QModelIndex ix = model->resourceIndex(colId);
             if (!model->data(ix, AkonadiModel::IsPopulatedRole).toBool())
             {
-                const Collection c = AkonadiModel::collection(ix);
-                if (!c.hasAttribute<CollectionAttribute>()
-                ||  c.attribute<CollectionAttribute>()->enabled() != CalEvent::EMPTY)
+                const Resource res = model->resource(ix);
+                if (res.enabledTypes() != CalEvent::EMPTY)
                     return false;
             }
         }

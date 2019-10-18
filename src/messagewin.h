@@ -26,10 +26,9 @@
 #include "autoqpointer.h"
 #include "eventid.h"
 #include "mainwindowbase.h"
+#include "resources/resource.h"
 
 #include <kalarmcal/kaevent.h>
-
-#include <AkonadiCore/collection.h>
 
 #include <QList>
 #include <QMap>
@@ -130,11 +129,11 @@ class MessageWin : public MainWindowBase
         void                playAudio();
         void                setDeferralLimit(const KAEvent&);
         void                alarmShowing(KAEvent&);
-        bool                retrieveEvent(KAEvent&, Akonadi::Collection&, bool& showEdit, bool& showDefer);
+        bool                retrieveEvent(KAEvent&, Resource&, bool& showEdit, bool& showDefer);
         bool                haveErrorMessage(unsigned msg) const;
         void                clearErrorMessage(unsigned msg) const;
         void                redisplayAlarm();
-        static bool         reinstateFromDisplaying(const KCalendarCore::Event::Ptr&, KAEvent&, Akonadi::Collection&, bool& showEdit, bool& showDefer);
+        static bool         reinstateFromDisplaying(const KCalendarCore::Event::Ptr&, KAEvent&, Resource&, bool& showEdit, bool& showDefer);
         static bool         isSpread(const QPoint& topLeft);
 
         static QList<MessageWin*>      mWindowList;    // list of existing message windows
@@ -169,7 +168,7 @@ class MessageWin : public MainWindowBase
         // Miscellaneous
         KAEvent             mEvent;                  // the whole event, for updating the calendar file
         KAEvent             mOriginalEvent;          // the original event supplied to the constructor
-        Akonadi::Collection mCollection;             // collection which the event comes/came from
+        Resource            mResource;               // resource which the event comes/came from
         QLabel*             mTimeLabel{nullptr};     // trigger time label
         QLabel*             mRemainingText{nullptr}; // the remaining time (for a reminder window)
         PushButton*         mOkButton;

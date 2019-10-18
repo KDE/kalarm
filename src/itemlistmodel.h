@@ -71,7 +71,7 @@ class ItemListModel : public Akonadi::EntityMimeTypeFilterModel
     private Q_SLOTS:
         void         slotRowsInserted();
         void         slotRowsRemoved();
-        void         collectionStatusChanged(const Akonadi::Collection& collection, AkonadiModel::Change change, const QVariant&, bool inserted);
+        void         resourceStatusChanged(const Resource& resource, AkonadiModel::Change change, const QVariant&, bool inserted);
 
     private:
         CalEvent::Types mAllowedTypes; // types of events allowed in this model

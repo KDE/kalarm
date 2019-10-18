@@ -143,7 +143,7 @@ KAlarmApp::KAlarmApp(int& argc, char** argv)
     KAEvent::setDefaultFont(Preferences::messageFont());
     if (initialise())   // initialise calendars and alarm timer
     {
-        connect(AkonadiModel::instance(), &AkonadiModel::collectionAdded,
+        connect(AkonadiModel::instance(), &AkonadiModel::resourceAdded,
                                     this, &KAlarmApp::purgeNewArchivedDefault);
         connect(AkonadiModel::instance(), &Akonadi::EntityTreeModel::collectionTreeFetched,
                                     this, &KAlarmApp::checkWritableCalendar);
@@ -416,7 +416,7 @@ int KAlarmApp::activateInstance(const QStringList& args, const QString& workingD
                 // Display or delete the event with the specified event ID
                 const EventFunc function = (command == CommandOptions::TRIGGER_EVENT) ? EVENT_TRIGGER : EVENT_CANCEL;
                 // Open the calendar, don't start processing execution queue yet,
-                // and wait for the Akonadi collection to be populated.
+                // and wait for the calendar resources to be populated.
                 if (!initCheck(true, true, options->eventId().collectionId()))
                     exitCode = 1;
                 else
@@ -434,7 +434,7 @@ int KAlarmApp::activateInstance(const QStringList& args, const QString& workingD
             case CommandOptions::LIST:
                 // Output a list of scheduled alarms to stdout.
                 // Open the calendar, don't start processing execution queue yet,
-                // and wait for all Akonadi collections to be populated.
+                // and wait for all calendar resources to be populated.
                 mReadOnly = true;   // don't need write access to calendars
                 if (!initCheck(true, true))
                     exitCode = 1;
@@ -448,7 +448,7 @@ int KAlarmApp::activateInstance(const QStringList& args, const QString& workingD
                 break;
             case CommandOptions::EDIT:
                 // Edit a specified existing alarm.
-                // Open the calendar and wait for the Akonadi collection to be populated.
+                // Open the calendar and wait for the calendar resources to be populated.
                 if (!initCheck(false, true, options->eventId().collectionId()))
                     exitCode = 1;
                 else if (!KAlarm::editAlarmById(options->eventId()))
@@ -1178,18 +1178,17 @@ void KAlarmApp::checkWritableCalendar()
 }
 
 /******************************************************************************
-* Called when a new collection has been added, or when a collection has been
-* set as the standard collection for its type.
+* Called when a new resource has been added, or when a resource has been set as
+* the standard resource for its type.
 * If it is the default archived calendar, purge its old alarms if necessary.
 */
-void KAlarmApp::purgeNewArchivedDefault(const Akonadi::Collection& collection)
+void KAlarmApp::purgeNewArchivedDefault(const Resource& resource)
 {
-    Akonadi::Collection col(collection);
-    if (CollectionControlModel::isStandard(col, CalEvent::ARCHIVED))
+    if (CollectionControlModel::isStandard(resource, CalEvent::ARCHIVED))
     {
         // Allow time (1 minute) for AkonadiModel to be populated with the
-        // collection's events before purging it.
-        qCDebug(KALARM_LOG) << "KAlarmApp::purgeNewArchivedDefault:" << collection.id() << ": standard archived...";
+        // resource's events before purging it.
+        qCDebug(KALARM_LOG) << "KAlarmApp::purgeNewArchivedDefault:" << resource.id() << ": standard archived...";
         QTimer::singleShot(60000, this, &KAlarmApp::purgeAfterDelay);
     }
 }
@@ -1261,9 +1260,8 @@ QStringList KAlarmApp::scheduledAlarmList()
     for (const KAEvent& event : events)
     {
         const KADateTime dateTime = event.nextTrigger(KAEvent::DISPLAY_TRIGGER).effectiveKDateTime().toLocalZone();
-        Akonadi::Collection c(event.collectionId());
-        AkonadiModel::instance()->refresh(c);
-        QString text(c.resource() + QLatin1String(":"));
+        const Resource resource = AkonadiModel::instance()->resource(event.resourceId());
+        QString text(resource.configName() + QLatin1String(":"));
         text += event.id() + QLatin1Char(' ')
              +  dateTime.toString(QStringLiteral("%Y%m%dT%H%M "))
              +  AlarmText::summary(event, 1);
@@ -2379,7 +2377,7 @@ bool KAlarmApp::initCheck(bool calendarOnly, bool waitForCollection, Akonadi::Co
 
     if (waitForCollection)
     {
-        // Wait for one or all Akonadi collections to be populated
+        // Wait for one or all calendar resources to be populated
         if (!CollectionControlModel::instance()->waitUntilPopulated(collectionId, AKONADI_TIMEOUT))
             return false;
     }

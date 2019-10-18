@@ -56,8 +56,8 @@ ItemListModel::ItemListModel(CalEvent::Types allowed, QObject* parent)
     setDynamicSortFilter(true);
     connect(this, &ItemListModel::rowsInserted, this, &ItemListModel::slotRowsInserted);
     connect(this, &ItemListModel::rowsRemoved, this, &ItemListModel::slotRowsRemoved);
-    connect(AkonadiModel::instance(), &AkonadiModel::collectionStatusChanged,
-                                      this, &ItemListModel::collectionStatusChanged);
+    connect(AkonadiModel::instance(), &AkonadiModel::resourceStatusChanged,
+                                this, &ItemListModel::resourceStatusChanged);
 }
 
 int ItemListModel::columnCount(const QModelIndex& /*parent*/) const
@@ -90,18 +90,18 @@ void ItemListModel::slotRowsRemoved()
 }
 
 /******************************************************************************
-* Called when a collection parameter or status has changed.
-* If the collection's enabled status has changed, re-filter the list to add or
+* Called when a resource parameter or status has changed.
+* If the resource's enabled status has changed, re-filter the list to add or
 * remove its alarms.
 */
-void ItemListModel::collectionStatusChanged(const Collection& collection, AkonadiModel::Change change, const QVariant&, bool inserted)
+void ItemListModel::resourceStatusChanged(const Resource& resource, AkonadiModel::Change change, const QVariant&, bool inserted)
 {
     Q_UNUSED(inserted);
-    if (!collection.isValid())
+    if (!resource.isValid())
         return;
     if (change == AkonadiModel::Enabled)
     {
-        // Ensure that items for a newly enabled collection are always ordered
+        // Ensure that items for a newly enabled resource are always ordered
         // correctly. Note that invalidateFilter() is not adequate for this.
         invalidate();
     }
@@ -115,7 +115,8 @@ bool ItemListModel::filterAcceptsRow(int sourceRow, const QModelIndex& sourcePar
     const QModelIndex sourceIndex = sourceModel()->index(sourceRow, 0, sourceParent);
     const CalEvent::Type type = static_cast<CalEvent::Type>(sourceModel()->data(sourceIndex, AkonadiModel::StatusRole).toInt());
     const Collection parent = sourceIndex.data(AkonadiModel::ParentCollectionRole).value<Collection>();
-    return CollectionControlModel::isEnabled(parent, type);
+    const Resource parentResource = AkonadiModel::instance()->resource(parent.id());
+    return parentResource.isEnabled(type);
 }
 
 Qt::ItemFlags ItemListModel::flags(const QModelIndex& index) const

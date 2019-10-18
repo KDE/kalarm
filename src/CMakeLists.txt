@@ -48,7 +48,6 @@ set(kalarm_bin_SRCS ${libkalarm_SRCS}
     ${libkalarm_common_SRCS}
     birthdaydlg.cpp
     birthdaymodel.cpp
-    calendardatamodel.cpp
     main.cpp
     editdlg.cpp
     editdlgtypes.cpp
@@ -94,9 +93,13 @@ set(kalarm_bin_SRCS ${libkalarm_SRCS}
     wakedlg.cpp
 )
 set(kalarm_bin_SRCS ${kalarm_bin_SRCS}
+    resources/resourcebase.cpp
+    resources/resource.cpp
+    resources/akonadiresource.cpp
     kalarmmigrateapplication.cpp
     akonadimodel.cpp
     akonadiresourcecreator.cpp
+    calendardatamodel.cpp
     collectionmodel.cpp
     collectionsearch.cpp
     itemlistmodel.cpp

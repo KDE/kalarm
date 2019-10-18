@@ -57,7 +57,9 @@ class CollectionListModel : public KDescendantsProxyModel
         void useCollectionColour(bool use)   { mUseCollectionColour = use; }
         Akonadi::Collection collection(int row) const;
         Akonadi::Collection collection(const QModelIndex&) const;
-        QModelIndex collectionIndex(const Akonadi::Collection&) const;
+        Resource    resource(int row) const;
+        Resource    resource(const QModelIndex&) const;
+        QModelIndex resourceIndex(const Resource&) const;
         virtual bool isDescendantOf(const QModelIndex& ancestor, const QModelIndex& descendant) const;
         QVariant data(const QModelIndex&, int role = Qt::DisplayRole) const override;
 
@@ -82,6 +84,8 @@ class CollectionCheckListModel : public KCheckableProxyModel
         ~CollectionCheckListModel();
         Akonadi::Collection collection(int row) const;
         Akonadi::Collection collection(const QModelIndex&) const;
+        Resource  resource(int row) const;
+        Resource  resource(const QModelIndex&) const;
         QVariant data(const QModelIndex&, int role = Qt::DisplayRole) const override;
         bool setData(const QModelIndex&, const QVariant& value, int role) override;
 
@@ -91,10 +95,10 @@ class CollectionCheckListModel : public KCheckableProxyModel
     private Q_SLOTS:
         void selectionChanged(const QItemSelection& selected, const QItemSelection& deselected);
         void slotRowsInserted(const QModelIndex& parent, int start, int end);
-        void collectionStatusChanged(const Akonadi::Collection&, AkonadiModel::Change, const QVariant& value, bool inserted);
+        void resourceStatusChanged(const Resource&, AkonadiModel::Change, const QVariant& value, bool inserted);
 
     private:
-        void setSelectionStatus(const Akonadi::Collection&, const QModelIndex&);
+        void setSelectionStatus(const Resource&, const QModelIndex&);
         QByteArray debugType(const char* func) const;
 
         static CollectionListModel* mModel;
@@ -118,6 +122,8 @@ class CollectionFilterCheckListModel : public QSortFilterProxyModel
         void setEventTypeFilter(CalEvent::Type);
         Akonadi::Collection collection(int row) const;
         Akonadi::Collection collection(const QModelIndex&) const;
+        Resource  resource(int row) const;
+        Resource  resource(const QModelIndex&) const;
         QVariant data(const QModelIndex&, int role = Qt::DisplayRole) const override;
 
     protected:
@@ -146,6 +152,8 @@ class CollectionView : public QListView
         CollectionFilterCheckListModel* collectionModel() const  { return static_cast<CollectionFilterCheckListModel*>(model()); }
         Akonadi::Collection  collection(int row) const;
         Akonadi::Collection  collection(const QModelIndex&) const;
+        Resource  resource(int row) const;
+        Resource  resource(const QModelIndex&) const;
 
     protected:
         void setModel(QAbstractItemModel*) override;
@@ -171,6 +179,7 @@ class CollectionControlModel : public Akonadi::FavoriteCollectionsModel
     public:
         static CollectionControlModel* instance();
 
+#if 0
         /** Return whether a collection is enabled (and valid). */
         static bool isEnabled(const Akonadi::Collection&, CalEvent::Type);
 
@@ -179,39 +188,7 @@ class CollectionControlModel : public Akonadi::FavoriteCollectionsModel
          *  @return alarm types which can be enabled
          */
         static CalEvent::Types setEnabled(const Akonadi::Collection&, CalEvent::Types, bool enabled);
-
-        /** Return whether a collection is both enabled and fully writable for a
-         *  given alarm type, i.e. with create/delete/change rights and compatible
-         *  with the current KAlarm calendar format.
-         *  Optionally, the enabled status can be ignored.
-         *
-         *  @return 1 = fully enabled and writable,
-         *          0 = enabled and writable except that backend calendar is in an
-         *              old KAlarm format,
-         *         -1 = read-only, disabled or incompatible format.
-         */
-        static int isWritableEnabled(const Akonadi::Collection&, CalEvent::Type);
-
-        /** Return whether a collection is both enabled and fully writable for a
-         *  given alarm type, i.e. with create/delete/change rights and compatible
-         *  with the current KAlarm calendar format.
-         *  Optionally, the enabled status can be ignored.
-         *
-         *  @param collection The collection
-         *  @param type    The alarm type
-         *  @param format  If the reply is false, and the calendar is not read-only
-         *                 but its backend calendar storage format is not the
-         *                 current KAlarm format, @p format is set to the calendar
-         *                 format used by the backend. If the calendar is
-         *                 non-writable for any other reason, @p format is set
-         *                 to KACalendar::Current.
-         *  @return 1 = fully enabled and writable,
-         *          0 = enabled and writable except that backend calendar is in an
-         *              old KAlarm format,
-         *         -1 = read-only (if @p format == KACalendar::Current), or
-         *              disabled or incompatible format.
-         */
-        static int isWritableEnabled(const Akonadi::Collection& collection, CalEvent::Type type, KACalendar::Compat& format);
+#endif
 
         /** Return the standard collection for a specified mime type.
          *  If the mime type is 'archived' and there is no standard collection, the
@@ -219,28 +196,28 @@ class CollectionControlModel : public Akonadi::FavoriteCollectionsModel
          *  @param type  The mime type
          *  Reply = invalid collection if there is no standard collection.
          */
-        static Akonadi::Collection getStandard(CalEvent::Type type);
+        static Resource getStandard(CalEvent::Type type);
 
         /** Return whether a collection is the standard collection for a specified
          *  mime type. */
-        static bool isStandard(Akonadi::Collection&, CalEvent::Type);
+        static bool isStandard(const Resource&, CalEvent::Type);
 
         /** Return the alarm type(s) for which a collection is the standard collection.
          *  @param useDefault false to return the defined standard types, if any;
          *                    true to return the types for which it is the standard or
          *                    only collection.
          */
-        static CalEvent::Types standardTypes(const Akonadi::Collection&, bool useDefault = false);
+        static CalEvent::Types standardTypes(const Resource&, bool useDefault = false);
 
         /** Set or clear a collection as the standard collection for a specified
          *  mime type. This does not affect its status for other mime types.
          */
-        static void setStandard(Akonadi::Collection&, CalEvent::Type, bool standard);
+        static void setStandard(Resource&, CalEvent::Type, bool standard);
 
         /** Set which mime types a collection is the standard collection for.
          *  Its standard status is cleared for other mime types.
          */
-        static void setStandard(Akonadi::Collection&, CalEvent::Types);
+        static void setStandard(Resource&, CalEvent::Types);
 
         /** Find the collection to be used to store an event of a given type.
          *  This will be the standard collection for the type, but if this is not valid,
@@ -251,7 +228,7 @@ class CollectionControlModel : public Akonadi::FavoriteCollectionsModel
          *  @param cancelled    If non-null: set to true if the user cancelled the
          *                      prompt dialogue; set to false if any other error
          */
-        static Akonadi::Collection destination(CalEvent::Type type, QWidget* promptParent = nullptr, bool noPrompt = false, bool* cancelled = nullptr);
+        static Resource destination(CalEvent::Type type, QWidget* promptParent = nullptr, bool noPrompt = false, bool* cancelled = nullptr);
 
         /** Return a list of all collections, both enabled and disabled.
          *  Collections which don't belong to a resource are omitted.
@@ -291,15 +268,15 @@ class CollectionControlModel : public Akonadi::FavoriteCollectionsModel
 
     private Q_SLOTS:
         void reset();
-        void statusChanged(const Akonadi::Collection&, AkonadiModel::Change, const QVariant& value, bool inserted);
+        void resourceStatusChanged(Resource&, AkonadiModel::Change, const QVariant& value, bool inserted);
         void collectionPopulated();
         void collectionFetchResult(KJob*);
 
     private:
         explicit CollectionControlModel(QObject* parent = nullptr);
         void findEnabledCollections(const Akonadi::EntityMimeTypeFilterModel*, const QModelIndex& parent, QList<Akonadi::Collection::Id>&) const;
-        CalEvent::Types setEnabledStatus(const Akonadi::Collection&, CalEvent::Types, bool inserted);
-        static CalEvent::Types checkTypesToEnable(const Akonadi::Collection&, const QList<Akonadi::Collection::Id>&, CalEvent::Types);
+        CalEvent::Types setEnabledStatus(Resource&, CalEvent::Types, bool inserted);
+        static CalEvent::Types checkTypesToEnable(const Resource&, const QList<Akonadi::Collection::Id>&, CalEvent::Types);
 
         static CollectionControlModel* mInstance;
         struct ResourceCol

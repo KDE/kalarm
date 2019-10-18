@@ -21,12 +21,11 @@
 #ifndef CALENDARDATAMODEL_H
 #define CALENDARDATAMODEL_H
 
-#include "kalarm.h"
-
 #include <kalarmcal/kacalendar.h>
 
 #include <QSize>
 
+class Resource;
 class QModelIndex;
 class QPixmap;
 
@@ -42,21 +41,25 @@ using namespace KAlarmCal;
 class CalendarDataModel
 {
     public:
-        enum {   // data columns
+        /** Data column numbers. */
+        enum
+        {
             // Item columns
             TimeColumn = 0, TimeToColumn, RepeatColumn, ColourColumn, TypeColumn, TextColumn,
             TemplateNameColumn,
             ColumnCount
         };
-        enum {   // additional data roles
-            // Calendar roles
+        /** Additional model data roles. */
+        enum
+        {
             UserRole = Qt::UserRole + 500,   // copied from Akonadi::EntityTreeModel
-            EnabledTypesRole = UserRole, // alarm types which are enabled for the collection
+            ItemTypeRole = UserRole,   // item's type: calendar or event
+            // Calendar roles
+            ResourceIdRole,            // the resource ID
             BaseColourRole,            // background colour ignoring collection colour
-            AlarmTypeRole,             // OR of event types which collection contains
-            IsStandardRole,            // OR of event types which collection is standard for
-            KeepFormatRole,            // user has chosen not to update collection's calendar storage format
             // Event roles
+            EventIdRole,               // the event ID
+            ParentResourceIdRole,      // the parent resource ID of the event
             EnabledRole,               // true for enabled alarm, false for disabled
             StatusRole,                // KAEvent::ACTIVE/ARCHIVED/TEMPLATE
             AlarmActionsRole,          // KAEvent::Actions
@@ -76,6 +79,10 @@ class CalendarDataModel
         /** Return a bulleted list of alarm types for inclusion in an i18n message. */
         static QString typeListForDisplay(CalEvent::Types);
 
+        /** Return the read-only status tooltip for a resource.
+         * A null string is returned if the resource is fully writable. */
+        static QString readOnlyTooltip(const Resource&);
+
     protected:
         CalendarDataModel();
 
@@ -83,19 +90,9 @@ class CalendarDataModel
 
         QVariant eventData(const QModelIndex& index, int role, const KAEvent& event, bool& calendarColour, bool& handled) const;
 
-        /** Get the foreground color for a resource, based on specified mime types. */
-        static QColor foregroundColor(CalEvent::Type alarmType, bool readOnly);
-
-        /** Return the storage type (file/directory/URL etc.) for a resource. */
-        QString storageTypeForLocation(const QString& location) const;
-
         /** Get the tooltip for a resource. The resource's enabled status is
          *  evaluated for specified alarm types. */
-        static QString tooltip(bool writable, bool inactive, const QString& name, const QString& type, const QString& locn, const QString& disabled, const QString& readonly);
-
-        /** Return the read-only status tooltip for a resource.
-         * A null string is returned if the resource is fully writable. */
-        static QString readOnlyTooltip(KACalendar::Compat compat, int writable);
+        static QString tooltip(bool writable, bool inactive, const QString& name, const QString& type, const QString& locn, const QString& readonly);
 
         static QString  repeatText(const KAEvent&);
         static QString  repeatOrder(const KAEvent&);

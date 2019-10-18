@@ -35,7 +35,7 @@
 #include <QList>
 
 namespace KCal { class Event; }
-namespace Akonadi { class Collection; }
+class Resource;
 class DBusHandler;
 class MainWindow;
 class TrayWindow;
@@ -96,7 +96,7 @@ class KAlarmApp : public QApplication
         void               activateByDBus(const QStringList& args, const QString& workingDirectory);
         void               processQueue();
         void               setAlarmsEnabled(bool);
-        void               purgeNewArchivedDefault(const Akonadi::Collection&);
+        void               purgeNewArchivedDefault(const Resource&);
         void               atLoginEventAdded(const KAEvent&);
         void               notifyAudioStopped()  { notifyAudioPlaying(false); }
         void               stopAudio();

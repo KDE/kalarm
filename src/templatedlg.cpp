@@ -196,8 +196,7 @@ void TemplateDlg::slotDelete()
     {
         KAEvent* event = &events[i];
         delEvents.append(event);
-        Akonadi::Collection c = resources->collectionForEvent(event->id());
-        undos.append(*event, c);
+        undos.append(*event, resources->resourceForEvent(event->id()));
     }
     KAlarm::deleteTemplates(delEvents, this);
     Undo::saveDeletes(undos);

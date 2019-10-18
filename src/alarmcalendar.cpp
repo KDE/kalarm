@@ -18,7 +18,6 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kalarm.h"
 #include "alarmcalendar.h"
 
 #include "collectionmodel.h"
@@ -51,7 +50,7 @@ using namespace KAlarmCal;
 static KACalendar::Compat fix(const KCalendarCore::FileStorage::Ptr&);
 
 static const QString displayCalendarName = QStringLiteral("displaying.ics");
-static const Collection::Id DISPLAY_COL_ID = -1;   // collection ID used for displaying calendar
+static const Collection::Id DISPLAY_COL_ID = -1;   // resource ID used for displaying calendar
 
 AlarmCalendar* AlarmCalendar::mResourcesCalendar = nullptr;
 AlarmCalendar* AlarmCalendar::mDisplayCalendar = nullptr;
@@ -126,7 +125,7 @@ AlarmCalendar::AlarmCalendar()
     connect(model, &AkonadiModel::eventsAdded, this, &AlarmCalendar::slotEventsAdded);
     connect(model, &AkonadiModel::eventsToBeRemoved, this, &AlarmCalendar::slotEventsToBeRemoved);
     connect(model, &AkonadiModel::eventChanged, this, &AlarmCalendar::slotEventChanged);
-    connect(model, &AkonadiModel::collectionStatusChanged, this, &AlarmCalendar::slotCollectionStatusChanged);
+    connect(model, &AkonadiModel::resourceStatusChanged, this, &AlarmCalendar::slotResourceStatusChanged);
     connect(model, &AkonadiModel::collectionsPopulated, this, &AlarmCalendar::slotCollectionsPopulated);
 }
 
@@ -459,7 +458,7 @@ void AlarmCalendar::removeKAEvents(Collection::Id key, bool closing, CalEvent::T
             if (remove)
             {
                 if (key != DISPLAY_COL_ID)
-                    qCCritical(KALARM_LOG) << "AlarmCalendar::removeKAEvents: Event" << event->id() << ", collection" << event->collectionId() << "Indexed under collection" << key;
+                    qCCritical(KALARM_LOG) << "AlarmCalendar::removeKAEvents: Event" << event->id() << ", resource" << event->collectionId() << "Indexed under resource" << key;
             }
             else
                 remove = event->category() & types;
@@ -491,10 +490,10 @@ void AlarmCalendar::removeKAEvents(Collection::Id key, bool closing, CalEvent::T
 }
 
 /******************************************************************************
-* Called when the enabled or read-only status of a collection has changed.
-* If the collection is now disabled, remove its events from the calendar.
+* Called when the enabled or read-only status of a resource has changed.
+* If the resource is now disabled, remove its events from the calendar.
 */
-void AlarmCalendar::slotCollectionStatusChanged(const Collection& collection, AkonadiModel::Change change, const QVariant& value, bool inserted)
+void AlarmCalendar::slotResourceStatusChanged(const Resource& resource, AkonadiModel::Change change, const QVariant& value, bool inserted)
 {
     if (!inserted  &&  change == AkonadiModel::Enabled)
     {
@@ -502,12 +501,12 @@ void AlarmCalendar::slotCollectionStatusChanged(const Collection& collection, Ak
         // events from the map, but not from AkonadiModel.
         CalEvent::Types enabled = static_cast<CalEvent::Types>(value.toInt());
         CalEvent::Types disabled = ~enabled & (CalEvent::ACTIVE | CalEvent::ARCHIVED | CalEvent::TEMPLATE);
-        removeKAEvents(collection.id(), false, disabled);
+        removeKAEvents(resource.id(), false, disabled);
     }
 }
 
 /******************************************************************************
-* Called when all collections have been populated for the first time.
+* Called when all resources have been populated for the first time.
 */
 void AlarmCalendar::slotCollectionsPopulated()
 {
@@ -533,6 +532,7 @@ void AlarmCalendar::slotEventsAdded(const AkonadiModel::EventList& events)
 */
 void AlarmCalendar::slotEventChanged(const AkonadiModel::Event& event)
 {
+    Resource resource = AkonadiModel::instance()->resource(event.collection.id());
     if (!event.isConsistent())
     {
         qCCritical(KALARM_LOG) << "AlarmCalendar::slotEventChanged: Inconsistent AkonadiModel::Event: event:" << event.event.collectionId() << ", collection" << event.collection.id();
@@ -550,7 +550,7 @@ void AlarmCalendar::slotEventChanged(const AkonadiModel::Event& event)
         {
             // The existing event is the same type - update it in place
             *storedEvent = event.event;
-            addNewEvent(event.collection, storedEvent, true);
+            addNewEvent(resource, storedEvent, true);
             updated = true;
         }
         else
@@ -558,7 +558,7 @@ void AlarmCalendar::slotEventChanged(const AkonadiModel::Event& event)
         added = false;
     }
     if (!updated)
-        addNewEvent(event.collection, new KAEvent(event.event));
+        addNewEvent(resource, new KAEvent(event.event));
 
     if (event.event.category() == CalEvent::ACTIVE)
     {
@@ -580,7 +580,10 @@ void AlarmCalendar::slotEventsToBeRemoved(const AkonadiModel::EventList& events)
         if (!event.isConsistent())
             qCCritical(KALARM_LOG) << "AlarmCalendar::slotEventsToBeRemoved: Inconsistent AkonadiModel::Event: event:" << event.event.collectionId() << ", collection" << event.collection.id();
         else if (mEventMap.contains(event.eventId()))
-            deleteEventInternal(event.event, event.collection, false);
+        {
+            Resource resource = AkonadiModel::instance()->resource(event.collection.id());
+            deleteEventInternal(event.event, resource, false);
+        }
     }
 }
 
@@ -591,10 +594,12 @@ void AlarmCalendar::slotEventsToBeRemoved(const AkonadiModel::EventList& events)
 * Reply = true if all alarms in the calendar were successfully imported
 *       = false if any alarms failed to be imported.
 */
-bool AlarmCalendar::importAlarms(QWidget* parent, Collection* collection)
+bool AlarmCalendar::importAlarms(QWidget* parent, Resource* resourceptr)
 {
     if (mCalType != RESOURCES)
         return false;
+    Resource nullresource;
+    Resource& resource(resourceptr ? *resourceptr : nullresource);
     qCDebug(KALARM_LOG) << "AlarmCalendar::importAlarms";
     const QUrl url = QFileDialog::getOpenFileUrl(parent, QString(), mLastImportUrl,
                                                  QStringLiteral("%1 (*.vcs *.ics)").arg(i18nc("@info", "Calendar Files")));
@@ -654,8 +659,7 @@ bool AlarmCalendar::importAlarms(QWidget* parent, Collection* collection)
     else
     {
         const KACalendar::Compat caltype = fix(calStorage);
-        const CalEvent::Types wantedTypes = collection && collection->isValid() ? CalEvent::types(collection->contentMimeTypes()) : CalEvent::EMPTY;
-        Collection activeColl, archiveColl, templateColl;
+        const CalEvent::Types wantedTypes = resource.alarmTypes();
         const Event::List events = cal->rawEvents();
         for (Event::Ptr event : events)
         {
@@ -668,24 +672,25 @@ bool AlarmCalendar::importAlarms(QWidget* parent, Collection* collection)
                 if (caltype == KACalendar::Incompatible)
                     type = CalEvent::ACTIVE;
             }
-            Collection* coll;
-            if (collection  &&  collection->isValid())
+            Resource res;
+            if (resource.isValid())
             {
                 if (!(type & wantedTypes))
                     continue;
-                coll = collection;
+                res = resource;
             }
             else
             {
                 switch (type)
                 {
-                    case CalEvent::ACTIVE:    coll = &activeColl;  break;
-                    case CalEvent::ARCHIVED:  coll = &archiveColl;  break;
-                    case CalEvent::TEMPLATE:  coll = &templateColl;  break;
-                    default:  continue;
+                    case CalEvent::ACTIVE:
+                    case CalEvent::ARCHIVED:
+                    case CalEvent::TEMPLATE:
+                        break;
+                    default:
+                        continue;
                 }
-                if (!coll->isValid())
-                    *coll = CollectionControlModel::destination(type);
+                res = CollectionControlModel::destination(type);
             }
 
             Event::Ptr newev(new Event(*event));
@@ -706,7 +711,7 @@ bool AlarmCalendar::importAlarms(QWidget* parent, Collection* collection)
             // Give the event a new ID and add it to the calendars
             newev->setUid(CalEvent::uid(CalFormat::createUniqueId(), type));
             KAEvent* newEvent = new KAEvent(newev);
-            if (!AkonadiModel::instance()->addEvent(*newEvent, *coll))
+            if (!AkonadiModel::instance()->addEvent(*newEvent, res))
                 success = false;
         }
 
@@ -887,14 +892,16 @@ void AlarmCalendar::purgeEvents(const KAEvent::List& events)
 *              is updated.
 *       = false if an error occurred, in which case 'event' is unchanged.
 */
-bool AlarmCalendar::addEvent(KAEvent& evnt, QWidget* promptParent, bool useEventID, Collection* collection, bool noPrompt, bool* cancelled)
+bool AlarmCalendar::addEvent(KAEvent& evnt, QWidget* promptParent, bool useEventID, Resource* resourceptr, bool noPrompt, bool* cancelled)
 {
     if (cancelled)
         *cancelled = false;
     if (!mOpen)
         return false;
     // Check that the event type is valid for the calendar
-    qCDebug(KALARM_LOG) << "AlarmCalendar::addEvent:" << evnt.id() << ", collection" << (collection ? collection->id() : -1);
+    Resource nullresource;
+    Resource& resource(resourceptr ? *resourceptr : nullresource);
+    qCDebug(KALARM_LOG) << "AlarmCalendar::addEvent:" << evnt.id() << ", resource" << resource.id();
     const CalEvent::Type type = evnt.category();
     if (type != mEventType)
     {
@@ -912,7 +919,7 @@ bool AlarmCalendar::addEvent(KAEvent& evnt, QWidget* promptParent, bool useEvent
         }
     }
 
-    Collection::Id key = (collection && collection->isValid()) ? collection->id() : -1;
+    Collection::Id key = resource.id();
     Event::Ptr kcalEvent((mCalType == RESOURCES) ? (Event*)nullptr : new Event);
     KAEvent* event = new KAEvent(evnt);
     QString id = event->id();
@@ -938,23 +945,23 @@ bool AlarmCalendar::addEvent(KAEvent& evnt, QWidget* promptParent, bool useEvent
     bool remove = false;
     if (mCalType == RESOURCES)
     {
-        Collection col;
-        if (collection  &&  CollectionControlModel::isEnabled(*collection, type))
-            col = *collection;
+        Resource res;
+        if (resource.isEnabled(type))
+            res = resource;
         else
         {
-            col = CollectionControlModel::destination(type, promptParent, noPrompt, cancelled);
-            if (!col.isValid())
+            res = CollectionControlModel::destination(type, promptParent, noPrompt, cancelled);
+            if (!res.isValid())
             {
                 const char* typeStr = (type == CalEvent::ACTIVE) ? "Active alarm" : (type == CalEvent::ARCHIVED) ? "Archived alarm" : "alarm Template";
                 qCWarning(KALARM_LOG) << "AlarmCalendar::addEvent: Error! Cannot create" << typeStr << "(No default calendar is defined)";
             }
         }
-        if (col.isValid())
+        if (res.isValid())
         {
             // Don't add event to mEventMap yet - its Akonadi item id is not yet known.
             // It will be added once it is inserted into AkonadiModel.
-            ok = AkonadiModel::instance()->addEvent(*event, col);
+            ok = AkonadiModel::instance()->addEvent(*event, res);
             remove = ok;   // if success, delete the local event instance on exit
             if (ok  &&  type == CalEvent::ACTIVE  &&  !event->enabled())
                 checkForDisabledAlarms(true, false);
@@ -967,7 +974,7 @@ bool AlarmCalendar::addEvent(KAEvent& evnt, QWidget* promptParent, bool useEvent
         key = DISPLAY_COL_ID;
         if (!mEventMap.contains(EventId(key, event->id())))
         {
-            addNewEvent(Collection(), event);
+            addNewEvent(Resource(), event);
             ok = mCalendarStorage->calendar()->addEvent(kcalEvent);
             remove = !ok;
         }
@@ -1001,16 +1008,16 @@ bool AlarmCalendar::addEvent(KAEvent& evnt, QWidget* promptParent, bool useEvent
 * If 'replace' is true, an existing event is being updated (NOTE: its category()
 * must remain the same).
 */
-void AlarmCalendar::addNewEvent(const Collection& collection, KAEvent* event, bool replace)
+void AlarmCalendar::addNewEvent(const Resource& resource, KAEvent* event, bool replace)
 {
-    const Collection::Id key = collection.isValid() ? collection.id() : -1;
+    const Collection::Id key = resource.id();
     event->setCollectionId(key);
     if (!replace)
     {
         mResourceMap[key] += event;
         mEventMap[EventId(key, event->id())] = event;
     }
-    if (collection.isValid()  &&  (AkonadiModel::types(collection) & CalEvent::ACTIVE)
+    if ((resource.alarmTypes() & CalEvent::ACTIVE)
     &&  event->category() == CalEvent::ACTIVE)
     {
         // Update the earliest alarm to trigger
@@ -1063,16 +1070,15 @@ bool AlarmCalendar::modifyEvent(const EventId& oldEventId, KAEvent& newEvent)
         }
         if (noNewId)
             newEvent.setEventId(CalFormat::createUniqueId());
-        Collection c(oldEventId.collectionId());
-        AkonadiModel::instance()->refresh(c);
-        if (!c.isValid())
+        Resource resource = AkonadiModel::instance()->resource(oldEventId.collectionId());
+        if (!resource.isValid())
             return false;
         // Don't add new event to mEventMap yet - its Akonadi item id is not yet known
-        if (!AkonadiModel::instance()->addEvent(newEvent, c))
+        if (!AkonadiModel::instance()->addEvent(newEvent, resource))
             return false;
         // Note: deleteEventInternal() will delete storedEvent before using the
         // event parameter, so need to pass a copy as the parameter.
-        deleteEventInternal(KAEvent(*storedEvent), c);
+        deleteEventInternal(KAEvent(*storedEvent), resource);
         if (mHaveDisabledAlarms)
             checkForDisabledAlarms();
     }
@@ -1158,32 +1164,31 @@ bool AlarmCalendar::deleteDisplayEvent(const QString& eventID, bool saveit)
 
 /******************************************************************************
 * Internal method to delete the specified event from the calendar and lists.
-* Reply = event status, if it was found in the resource calendar/collection or
-*         local calendar
+* Reply = event status, if it was found in the resource calendar/calendar
+*         resource or local calendar
 *       = CalEvent::EMPTY otherwise.
 */
 CalEvent::Type AlarmCalendar::deleteEventInternal(const KAEvent& event, bool deleteFromAkonadi)
 {
-    Collection collection(event.collectionId());
-    AkonadiModel::instance()->refresh(collection);
-    if (!collection.isValid())
+    Resource resource = AkonadiModel::instance()->resource(event.collectionId());
+    if (!resource.isValid())
         return CalEvent::EMPTY;
-    return deleteEventInternal(event.id(), event, collection, deleteFromAkonadi);
+    return deleteEventInternal(event.id(), event, resource, deleteFromAkonadi);
 }
 
-CalEvent::Type AlarmCalendar::deleteEventInternal(const KAEvent& event, const Akonadi::Collection& collection, bool deleteFromAkonadi)
+CalEvent::Type AlarmCalendar::deleteEventInternal(const KAEvent& event, const Resource& resource, bool deleteFromAkonadi)
 {
-    if (!collection.isValid())
+    if (!resource.isValid())
         return CalEvent::EMPTY;
-    if (event.collectionId() != collection.id())
+    if (event.collectionId() != resource.id())
     {
-        qCCritical(KALARM_LOG) << "AlarmCalendar::deleteEventInternal: Event" << event.id() << ": collection" << event.collectionId() << "differs from 'collection'" << collection.id();
+        qCCritical(KALARM_LOG) << "AlarmCalendar::deleteEventInternal: Event" << event.id() << ": resource" << event.collectionId() << "differs from 'resource'" << resource.id();
         return CalEvent::EMPTY;
     }
-    return deleteEventInternal(event.id(), event, collection, deleteFromAkonadi);
+    return deleteEventInternal(event.id(), event, resource, deleteFromAkonadi);
 }
 
-CalEvent::Type AlarmCalendar::deleteEventInternal(const QString& eventID, const KAEvent& event, const Akonadi::Collection& collection, bool deleteFromAkonadi)
+CalEvent::Type AlarmCalendar::deleteEventInternal(const QString& eventID, const KAEvent& event, const Resource& resource, bool deleteFromAkonadi)
 {
     // Make a copy of the KAEvent and the ID QString, since the supplied
     // references might be destructed when the event is deleted below.
@@ -1193,7 +1198,7 @@ CalEvent::Type AlarmCalendar::deleteEventInternal(const QString& eventID, const 
     Event::Ptr kcalEvent;
     if (mCalendarStorage)
         kcalEvent = mCalendarStorage->calendar()->event(id);
-    const Collection::Id key = collection.isValid() ? collection.id() : -1;
+    const Collection::Id key = resource.id();
     KAEventMap::Iterator it = mEventMap.find(EventId(key, id));
     if (it != mEventMap.end())
     {
@@ -1205,7 +1210,7 @@ CalEvent::Type AlarmCalendar::deleteEventInternal(const QString& eventID, const 
             events.remove(i);
         delete ev;
         if (mEarliestAlarm[key] == ev)
-            findEarliestAlarm(collection);
+            findEarliestAlarm(resource);
     }
     else
     {
@@ -1238,7 +1243,7 @@ CalEvent::Type AlarmCalendar::deleteEventInternal(const QString& eventID, const 
 
 /******************************************************************************
 * Return the event with the specified ID.
-* If 'checkDuplicates' is true, and the collection ID is invalid, if there is
+* If 'checkDuplicates' is true, and the resource ID is invalid, if there is
 * a unique event with the given ID, it will be returned.
 */
 KAEvent* AlarmCalendar::event(const EventId& uniqueID, bool checkDuplicates)
@@ -1248,8 +1253,8 @@ KAEvent* AlarmCalendar::event(const EventId& uniqueID, bool checkDuplicates)
     const QString eventId = uniqueID.eventId();
     if (uniqueID.collectionId() == -1  &&  checkDuplicates)
     {
-        // The collection isn't known, but use the event ID if it is
-        // unique among all collections.
+        // The resource isn't known, but use the event ID if it is unique among
+        // all resources.
         const KAEvent::List list = events(eventId);
         if (list.count() > 1)
         {
@@ -1318,14 +1323,14 @@ KAEvent::List AlarmCalendar::events(const QString& uniqueId) const
 * Return all events in the calendar which contain alarms.
 * Optionally the event type can be filtered, using an OR of event types.
 */
-KAEvent::List AlarmCalendar::events(const Akonadi::Collection& collection, CalEvent::Types type) const
+KAEvent::List AlarmCalendar::events(const Resource& resource, CalEvent::Types type) const
 {
     KAEvent::List list;
-    if (mCalType != RESOURCES  &&  (!mCalendarStorage || collection.isValid()))
+    if (mCalType != RESOURCES  &&  (!mCalendarStorage || resource.isValid()))
         return list;
-    if (collection.isValid())
+    if (resource.isValid())
     {
-        const Collection::Id key = collection.isValid() ? collection.id() : -1;
+        const Collection::Id key = resource.id();
         ResourceMap::ConstIterator rit = mResourceMap.constFind(key);
         if (rit == mResourceMap.constEnd())
             return list;
@@ -1389,22 +1394,22 @@ bool AlarmCalendar::eventReadOnly(const QString& eventId) const
     if (mCalType != RESOURCES)
         return true;
     AkonadiModel* model = AkonadiModel::instance();
-    const Collection collection(model->collectionForEvent(eventId));
+    const Resource resource = model->resourceForEvent(eventId);
     const KAEvent event = model->event(eventId);
-    if (CollectionControlModel::isWritableEnabled(collection, event.category()) <= 0)
+    if (!resource.isWritable(event.category()))
         return true;
     return !event.isValid()  ||  event.isReadOnly();
     //   ||  compatibility(event) != KACalendar::Current;
 }
 
 /******************************************************************************
-* Return the collection containing a specified event.
+* Return the resource containing a specified event.
 */
-Collection AlarmCalendar::collectionForEvent(const QString& eventId) const
+Resource AlarmCalendar::resourceForEvent(const QString& eventId) const
 {
     if (mCalType != RESOURCES)
-        return Collection();
-    return Collection(AkonadiModel::instance()->collectionForEvent(eventId));
+        return Resource();
+    return AkonadiModel::instance()->resourceForEvent(eventId);
 }
 
 /******************************************************************************
@@ -1464,14 +1469,13 @@ void AlarmCalendar::checkForDisabledAlarms()
 /******************************************************************************
 * Find and note the active alarm with the earliest trigger time for a calendar.
 */
-void AlarmCalendar::findEarliestAlarm(const Akonadi::Collection& collection)
+void AlarmCalendar::findEarliestAlarm(const Resource& resource)
 {
     if (mCalType != RESOURCES)
         return;
-    if (!collection.isValid()
-    ||  !(AkonadiModel::types(collection) & CalEvent::ACTIVE))
+    if (!(resource.alarmTypes() & CalEvent::ACTIVE))
         return;
-    findEarliestAlarm(collection.id());
+    findEarliestAlarm(resource.id());
 }
 
 void AlarmCalendar::findEarliestAlarm(Akonadi::Collection::Id key)
@@ -1549,7 +1553,7 @@ void AlarmCalendar::setAlarmPending(KAEvent* event, bool pending)
         mPendingAlarms.remove(id);
     }
     // Now update the earliest alarm to trigger for its calendar
-    findEarliestAlarm(AkonadiModel::instance()->collection(*event));
+    findEarliestAlarm(AkonadiModel::instance()->resource(*event));
 }
 
 /******************************************************************************
