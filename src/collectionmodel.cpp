@@ -42,8 +42,6 @@
 using namespace Akonadi;
 using namespace KAlarmCal;
 
-static Collection::Rights writableRights = Collection::CanChangeItem | Collection::CanCreateItem | Collection::CanDeleteItem;
-
 
 /*=============================================================================
 = Class: CollectionMimeTypeFilterModel
@@ -771,47 +769,6 @@ void CollectionControlModel::findEnabledCollections(const EntityMimeTypeFilterMo
             findEnabledCollections(filter, ix, collectionIds);
     }
 }
-
-#if 0
-/******************************************************************************
-* Return whether a collection is enabled for a given alarm type.
-*/
-bool CollectionControlModel::isEnabled(const Collection& collection, CalEvent::Type type)
-{
-    if (!collection.isValid()  ||  !instance()->collectionIds().contains(collection.id()))
-        return false;
-    Collection col = collection;
-    AkonadiModel::instance()->refresh(col);    // update with latest data
-    if (!AgentManager::self()->instance(col.resource()).isValid())
-    {
-        // The collection doesn't belong to a resource, so it can't be used.
-        // Remove it from the list of collections.
-        instance()->removeCollection(collection.id());
-        return false;
-    }
-    const Resource resource = AkonadiModel::instance()->resource(collection.id());
-    return resource.isEnabled(type);
-}
-
-/******************************************************************************
-* Enable or disable the specified alarm types for a collection.
-* Reply = alarm types which can be enabled
-*/
-CalEvent::Types CollectionControlModel::setEnabled(const Collection& collection, CalEvent::Types types, bool enabled)
-{
-    qCDebug(KALARM_LOG) << "CollectionControlModel::setEnabled:" << collection.id() << ", alarm types" << types << "->" << enabled;
-    if (!collection.isValid()  ||  (!enabled && !instance()->collectionIds().contains(collection.id())))
-        return CalEvent::EMPTY;
-    const Resource resource = AkonadiModel::instance()->resource(collection.id());
-    CalEvent::Types alarmTypes = resource.enabledTypes();
-    if (enabled)
-        alarmTypes |= static_cast<CalEvent::Types>(types & (CalEvent::ACTIVE | CalEvent::ARCHIVED | CalEvent::TEMPLATE));
-    else
-        alarmTypes &= ~types;
-
-    return instance()->setEnabledStatus(resource, alarmTypes, false);
-}
-#endif
 
 /******************************************************************************
 * Change the collection's enabled status.

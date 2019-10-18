@@ -318,19 +318,6 @@ void AkonadiResource::handleCommandErrorChange(const KAEvent& event)
     AkonadiModel::instance()->updateCommandError(event);
 }
 
-#ifndef NDEBUG
-QByteArray AkonadiResource::typeName() const
-{
-    switch (mType)
-    {
-        case CalEvent::ACTIVE:    return "Active";
-        case CalEvent::ARCHIVED:  return "Archived";
-        case CalEvent::TEMPLATE:  return "Template";
-        default:                  return "Empty";
-    }
-}
-#endif
-
 /******************************************************************************
 * Update the stored CollectionAttribute value from the Akonadi database.
 */

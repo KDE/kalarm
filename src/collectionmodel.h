@@ -179,17 +179,6 @@ class CollectionControlModel : public Akonadi::FavoriteCollectionsModel
     public:
         static CollectionControlModel* instance();
 
-#if 0
-        /** Return whether a collection is enabled (and valid). */
-        static bool isEnabled(const Akonadi::Collection&, CalEvent::Type);
-
-        /** Enable or disable a collection (if it is valid) for specified alarm types.
-         *  Note that this only changes the status for the specified alarm types.
-         *  @return alarm types which can be enabled
-         */
-        static CalEvent::Types setEnabled(const Akonadi::Collection&, CalEvent::Types, bool enabled);
-#endif
-
         /** Return the standard collection for a specified mime type.
          *  If the mime type is 'archived' and there is no standard collection, the
          *  only writable archived collection is set to be the standard.
