@@ -25,14 +25,10 @@
 #ifndef RESOURCESELECTOR_H
 #define RESOURCESELECTOR_H
 
-#include "collectionmodel.h"
 #include "resources/resource.h"
-
-#include <AkonadiCore/agentinstance.h>
 
 #include <QFrame>
 #include <QSize>
-#include <QList>
 
 using namespace KAlarmCal;
 
@@ -44,6 +40,7 @@ class KToggleAction;
 class QComboBox;
 class QMenu;
 class ResourceView;
+class CollectionView;
 class AkonadiResourceCreator;
 
 
@@ -81,8 +78,8 @@ class ResourceSelector : public QFrame
         void  exportCalendar();
         void  showInfo();
         void  archiveDaysChanged(int days);
-        void  resourceAdded(AkonadiResourceCreator*, bool success);
-        void  slotResourceAdded(Resource&);
+        void  addResourceFailed(AkonadiResourceCreator*);
+        void  slotResourceAdded(AkonadiResourceCreator*, Resource&, CalEvent::Type);
         void  reinstateAlarmTypeScrollBars();
 
     private:
@@ -90,7 +87,6 @@ class ResourceSelector : public QFrame
         Resource currentResource() const;
 
         CollectionView* mListView;
-        QList<Akonadi::AgentInstance> mAddAgents;   // agent added by addResource()
         QComboBox*      mAlarmType;
         QPushButton*    mAddButton;
         QPushButton*    mDeleteButton;

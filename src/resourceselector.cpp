@@ -28,6 +28,7 @@
 #include "autoqpointer.h"
 #include "akonadiresourcecreator.h"
 #include "calendarmigrator.h"
+#include "collectionmodel.h"
 #include "kalarmapp.h"
 #include "messagebox.h"
 #include "packedlayout.h"
@@ -112,8 +113,6 @@ ResourceSelector::ResourceSelector(QWidget* parent)
     connect(mEditButton, &QPushButton::clicked, this, &ResourceSelector::editResource);
     connect(mDeleteButton, &QPushButton::clicked, this, &ResourceSelector::removeResource);
 
-    connect(AkonadiModel::instance(), &AkonadiModel::resourceAdded,
-                                this, &ResourceSelector::slotResourceAdded);
     connect(AkonadiModel::instance(), &AkonadiModel::collectionDeleted,
                                 this, &ResourceSelector::selectionChanged);
 
@@ -184,66 +183,46 @@ void ResourceSelector::reinstateAlarmTypeScrollBars()
 void ResourceSelector::addResource()
 {
     AkonadiResourceCreator* creator = new AkonadiResourceCreator(mCurrentAlarmType, this);
-    connect(creator, &AkonadiResourceCreator::finished, this, &ResourceSelector::resourceAdded);
+    connect(creator, &AkonadiResourceCreator::failed, this, &ResourceSelector::addResourceFailed);
+    connect(creator, &AkonadiResourceCreator::resourceAdded, this, &ResourceSelector::slotResourceAdded);
     creator->createResource();
 }
 
 /******************************************************************************
-* Called when the job started by AkonadiModel::addCollection() has completed.
+* Called when the job started by addResource() has failed.
 */
-void ResourceSelector::resourceAdded(AkonadiResourceCreator* creator, bool success)
+void ResourceSelector::addResourceFailed(AkonadiResourceCreator* creator)
 {
-    if (success)
-    {
-        AgentInstance agent = creator->agentInstance();
-        qCDebug(KALARM_LOG) << "ResourceSelector::resourceAdded:" << agent.isValid();
-        if (agent.isValid())
-        {
-            // Note that we're expecting the agent's Collection to be added
-            mAddAgents += agent;
-        }
-    }
     delete creator;
 }
 
 /******************************************************************************
-* Called when a collection is added to the AkonadiModel.
+* Called when a collection is added to the AkonadiModel, after being created
+* by addResource().
 */
-void ResourceSelector::slotResourceAdded(Resource& resource)
+void ResourceSelector::slotResourceAdded(AkonadiResourceCreator* creator, Resource& resource, CalEvent::Type alarmType)
 {
-    if (resource.isValid())
+    const CalEvent::Types types = resource.alarmTypes();
+    resource.setEnabled(types);
+    if (!(types & alarmType))
     {
-        AgentInstance agent = AgentManager::self()->instance(resource.configName());
-        if (agent.isValid())
+        // The user has selected alarm types for the resource
+        // which don't include the currently displayed type.
+        // Show a collection list which includes a selected type.
+        int index = -1;
+        if (types & CalEvent::ACTIVE)
+            index = 0;
+        else if (types & CalEvent::ARCHIVED)
+            index = 1;
+        else if (types & CalEvent::TEMPLATE)
+            index = 2;
+        if (index >= 0)
         {
-            int i = mAddAgents.indexOf(agent);
-            if (i >= 0)
-            {
-                // The collection belongs to an agent created by addResource()
-                const CalEvent::Types types = resource.alarmTypes();
-                resource.setEnabled(types);
-                if (!(types & mCurrentAlarmType))
-                {
-                    // The user has selected alarm types for the resource
-                    // which don't include the currently displayed type.
-                    // Show a collection list which includes a selected type.
-                    int index = -1;
-                    if (types & CalEvent::ACTIVE)
-                        index = 0;
-                    else if (types & CalEvent::ARCHIVED)
-                        index = 1;
-                    else if (types & CalEvent::TEMPLATE)
-                        index = 2;
-                    if (index >= 0)
-                    {
-                        mAlarmType->setCurrentIndex(index);
-                        alarmTypeSelected();
-                    }
-                }
-                mAddAgents.removeAt(i);
-            }
+            mAlarmType->setCurrentIndex(index);
+            alarmTypeSelected();
         }
     }
+    delete creator;
 }
 
 /******************************************************************************

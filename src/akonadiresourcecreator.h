@@ -33,6 +33,7 @@ using namespace KAlarmCal;
 
 class QWidget;
 class KJob;
+class Resource;
 
 class AkonadiResourceCreator : public QObject
 {
@@ -43,11 +44,13 @@ class AkonadiResourceCreator : public QObject
         Akonadi::AgentInstance agentInstance() const   { return mAgentInstance; }
 
     Q_SIGNALS:
-        void finished(AkonadiResourceCreator*, bool success);
+        void failed(AkonadiResourceCreator*);
+        void resourceAdded(AkonadiResourceCreator*, Resource&, CalEvent::Type);
 
     private Q_SLOTS:
         void getAgentType();
         void agentInstanceCreated(KJob*);
+        void slotResourceAdded(Resource&);
 
     private:
         template <class Settings> void setResourceAlarmType();
