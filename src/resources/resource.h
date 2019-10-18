@@ -281,6 +281,11 @@ public:
     /** Called to notify the resource that an event's command error has changed. */
     void handleCommandErrorChange(const KAEvent&);
 
+    /** Called to notify the resource that it is being deleted.
+     *  This is to prevent expected errors being displayed to the user.
+     */
+    void notifyDeletion();
+
 private:
     ResourceBase::Ptr mResource;
 

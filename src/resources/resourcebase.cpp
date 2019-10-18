@@ -87,6 +87,16 @@ QColor ResourceBase::foregroundColour(CalEvent::Types types) const
     return colour;
 }
 
+void ResourceBase::notifyDeletion()
+{
+    mBeingDeleted = true;
+}
+
+bool ResourceBase::isBeingDeleted() const
+{
+    return mBeingDeleted;
+}
+
 QString ResourceBase::storageTypeString(bool description, bool file, bool local) const
 {
     if (description)

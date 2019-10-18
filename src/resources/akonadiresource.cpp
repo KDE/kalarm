@@ -365,10 +365,12 @@ void AkonadiResource::modifyCollectionAttrJobDone(KJob* j)
     mNewEnabled = false;
     if (j->error())
     {
-        if (AkonadiModel::instance()->resource(id).isValid()   // if collection has been deleted, ignore error
+        // If the collection is being/has been deleted, ignore the error.
+        if (!isBeingDeleted()
+        &&  AkonadiModel::instance()->resource(id).isValid()
         &&  id == mCollection.id())
         {
-            qCCritical(KALARM_LOG) << "AkonadiModel::modifyCollectionAttrJobDone:" << collection.id() << "Failed to update calendar" << displayName() << ":" << j->errorString();
+            qCCritical(KALARM_LOG) << "AkonadiResource::modifyCollectionAttrJobDone:" << collection.id() << "Failed to update calendar" << displayName() << ":" << j->errorString();
             AkonadiModel::notifyResourceError(this, i18nc("@info", "Failed to update calendar \"%1\".", displayName()), j->errorString());
         }
     }

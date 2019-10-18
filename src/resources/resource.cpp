@@ -223,4 +223,10 @@ void Resource::handleCommandErrorChange(const KAEvent& event)
         mResource->handleCommandErrorChange(event);
 }
 
+void Resource::notifyDeletion()
+{
+    if (!mResource.isNull())
+        mResource->notifyDeletion();
+}
+
 // vim: et sw=4:

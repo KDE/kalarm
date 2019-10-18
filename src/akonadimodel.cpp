@@ -565,6 +565,7 @@ bool AkonadiModel::removeCollection(Akonadi::Collection::Id collectionId)
         return false;
     qCDebug(KALARM_LOG) << "AkonadiModel::removeCollection:" << collectionId;
     mCollectionsDeleting << collectionId;
+    resource.notifyDeletion();
     // Note: CollectionDeleteJob deletes the backend storage also.
     AgentManager* agentManager = AgentManager::self();
     const AgentInstance instance = agentManager->instance(resource.configName());

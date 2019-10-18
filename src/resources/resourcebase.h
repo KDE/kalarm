@@ -274,8 +274,17 @@ public:
     /** Called to notify the resource that an event's command error has changed. */
     virtual void handleCommandErrorChange(const KAEvent&) = 0;
 
+    /** Called to notify the resource that it is being deleted.
+     *  This is to prevent expected errors being displayed to the user.
+     */
+    void notifyDeletion();
+
 protected:
+    bool isBeingDeleted() const;
     QString storageTypeString(bool description, bool file, bool local) const;
+
+private:
+    bool mBeingDeleted{false};   // the resource is currently being deleted
 };
 
 #endif // RESOURCEBASE_H
