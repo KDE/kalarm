@@ -37,7 +37,6 @@ FileDialog::FileDialog(const QUrl &startDir, const QString &filter, QWidget *par
     : KFileCustomDialog(parent)
 {
     fileWidget()->setFilter(filter);
-    fileWidget()->setParent(parent);
     fileWidget()->setStartDir(startDir);
 }
 
