@@ -49,7 +49,7 @@ public:
     /** Return whether the resource has a valid configuration. */
     bool isValid() const;
 
-    /** Return the shared pointer to the alarm calendar resource for this resoure. */
+    /** Return the shared pointer to the alarm calendar resource for this resource. */
     ResourceBase::Ptr resource() const;
 
     /** Return the resource's unique ID. */
