@@ -1302,6 +1302,7 @@ public:
     /** Compare this instance with another.
      *  All data which defines the characteristics of this event will be
      *  compared, plus optional data categories as specified.
+     *  @param other       the other event to be compared.
      *  @param comparison  the optional data categories to compare, in addition
      *                     to the basic data. Other optional categories will be
      *                     ignored in the comparison.

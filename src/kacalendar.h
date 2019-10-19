@@ -85,7 +85,7 @@ enum {
  *  file is not updated. The compatibility of the calendar format is
  *  indicated by the return value.
  *
- *  @param calendar       calendar stored in @p localFile
+ *  @param fileStorage    calendar stored in local file
  *  @param versionString  receives calendar's KAlarm version as a string
  *  @return CurrentFormat if the calendar is in the current KAlarm format;
  *          IncompatibleFormat calendar is not a KAlarm format or is an
