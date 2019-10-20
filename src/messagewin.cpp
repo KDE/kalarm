@@ -91,7 +91,6 @@
 
 using namespace KCalendarCore;
 using namespace KAlarmCal;
-using namespace Akonadi;
 
 #if KDEPIM_HAVE_X11
 enum FullScreenType { NoFullScreen = 0, FullScreen = 1, FullScreenActive = 2 };
@@ -961,8 +960,8 @@ void MessageWin::saveProperties(KConfigGroup& config)
 void MessageWin::readProperties(const KConfigGroup& config)
 {
     mInvalid             = config.readEntry("Invalid", false);
-    const QString eventId             = config.readEntry("EventID");
-    const Collection::Id collectionId = config.readEntry("CollectionID", Akonadi::Item::Id(-1));
+    const QString eventId         = config.readEntry("EventID");
+    const ResourceId collectionId = config.readEntry("CollectionID", ResourceId(-1));
     mAlarmType           = static_cast<KAAlarm::Type>(config.readEntry("AlarmType", 0));
     if (mAlarmType == KAAlarm::INVALID_ALARM)
     {
@@ -1183,7 +1182,7 @@ void MessageWin::alarmShowing(KAEvent& event)
     {
         // Copy the alarm to the displaying calendar in case of a crash, etc.
         KAEvent dispEvent;
-        const Akonadi::Collection::Id id = AkonadiModel::instance()->resourceIdForEvent(event.id());
+        const ResourceId id = AkonadiModel::instance()->resourceIdForEvent(event.id());
         dispEvent.setDisplaying(event, mAlarmType, id,
                                 mDateTime.effectiveKDateTime(), mShowEdit, !mNoDefer);
         AlarmCalendar* cal = AlarmCalendar::displayCalendarOpen();
@@ -1967,17 +1966,17 @@ void MessageWin::slotShowKMailMessage()
         failed1 = false;
 
     // Select the mail folder containing the message
-    ItemFetchJob* job = new ItemFetchJob(Item(mAkonadiItemId));
-    job->fetchScope().setAncestorRetrieval(ItemFetchScope::Parent);
-    Item::List items;
+    Akonadi::ItemFetchJob* job = new Akonadi::ItemFetchJob(Akonadi::Item(mAkonadiItemId));
+    job->fetchScope().setAncestorRetrieval(Akonadi::ItemFetchScope::Parent);
+    Akonadi::Item::List items;
     if (job->exec())
         items = job->items();
     if (items.isEmpty()  ||  !items.at(0).isValid())
         qCWarning(KALARM_LOG) << "MessageWin::slotShowKMailMessage: No parent found for item" << mAkonadiItemId;
     else
     {
-        const Item& it = items.at(0);
-        const Collection::Id colId = it.parentCollection().id();
+        const Akonadi::Item& it = items.at(0);
+        const Akonadi::Collection::Id colId = it.parentCollection().id();
         reply = kmail.selectFolder(QString::number(colId));
         if (!reply.isValid())
             qCCritical(KALARM_LOG) << "kmail 'selectFolder' D-Bus call failed:" << reply.error().message();

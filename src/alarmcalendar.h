@@ -26,7 +26,6 @@
 
 #include <kalarmcal/kaevent.h>
 
-#include <AkonadiCore/collection.h>
 #include <KCalendarCore/FileStorage>
 #include <KCalendarCore/Event>
 
@@ -105,8 +104,8 @@ class AlarmCalendar : public QObject
         void                  slotEventChanged(const AkonadiModel::Event&);
     private:
         enum CalType { RESOURCES, LOCAL_ICAL, LOCAL_VCAL };
-        typedef QMap<Akonadi::Collection::Id, KAEvent::List> ResourceMap;  // id = invalid for display calendar
-        typedef QMap<Akonadi::Collection::Id, KAEvent*> EarliestMap;
+        typedef QMap<ResourceId, KAEvent::List> ResourceMap;  // id = invalid for display calendar
+        typedef QMap<ResourceId, KAEvent*> EarliestMap;
         typedef QHash<EventId, KAEvent*> KAEventMap;  // indexed by resource and event UID
 
         AlarmCalendar();
@@ -119,9 +118,9 @@ class AlarmCalendar : public QObject
         CalEvent::Type        deleteEventInternal(const QString& eventID, const KAEvent& = KAEvent(),
                                                   const Resource& = Resource(), bool deleteFromAkonadi = true);
         void                  updateDisplayKAEvents();
-        void                  removeKAEvents(Akonadi::Collection::Id, bool closing = false, CalEvent::Types = CalEvent::ACTIVE | CalEvent::ARCHIVED | CalEvent::TEMPLATE);
+        void                  removeKAEvents(ResourceId, bool closing = false, CalEvent::Types = CalEvent::ACTIVE | CalEvent::ARCHIVED | CalEvent::TEMPLATE);
         void                  findEarliestAlarm(const Resource&);
-        void                  findEarliestAlarm(Akonadi::Collection::Id);  //deprecated
+        void                  findEarliestAlarm(ResourceId);  //deprecated
         void                  checkForDisabledAlarms();
         void                  checkForDisabledAlarms(bool oldEnabled, bool newEnabled);
 

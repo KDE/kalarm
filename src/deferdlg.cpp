@@ -178,4 +178,5 @@ void DeferAlarmDlg::slotCancelDeferral()
     mAlarmDateTime = DateTime();
     accept();
 }
+
 // vim: et sw=4:
