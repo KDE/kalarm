@@ -39,8 +39,8 @@
 
 <!-- Don't change format of date and version of the documentation -->
 
-<date>2019-06-25</date>
-<releaseinfo>2.12.5 (Applications 19.08)</releaseinfo>
+<date>2019-10-20</date>
+<releaseinfo>2.12.8 (Applications 19.08.3)</releaseinfo>
 
 <abstract>
 <para>&kalarm; is a personal alarm message, command and email scheduler by &kde;.</para>
@@ -3191,11 +3191,6 @@ time.</para>
   representing the UTC time zone.</entry>
 </row>
 <row>
-  <entry><option>--triggerEvent
-  <replaceable>eventID</replaceable></option></entry>
-  <entry>Trigger alarm with the specified event ID.</entry>
-</row>
-<row>
   <entry><option>-v</option>, <option>--volume
   <replaceable>percentage</replaceable></option></entry>
   <entry>Set the audio volume for playing the audio file. This option
@@ -3258,7 +3253,9 @@ including displaying the
 <row>
   <entry><option>--edit <replaceable>eventID</replaceable></option></entry>
   <entry>Display the Alarm Edit dialog to edit the alarm with the
-  specified event ID.</entry>
+  specified event ID. The event ID is the unique ID of the event, optionally
+  prefixed by the ID of the resource containing the event, in the format
+  <replaceable>[resourceID:]eventUID</replaceable>.</entry>
 </row>
 <row>
   <entry><option>--edit-new-audio</option></entry>
@@ -3360,7 +3357,9 @@ void cancelEvent(const QString&amp; <replaceable>eventID</replaceable>)
 <varlistentry>
 <term><parameter>eventID</parameter></term>
 <listitem>
-<para>Specifies the unique ID of the event to be canceled.</para>
+<para>Specifies the unique ID of the event to be canceled, optionally
+prefixed by the ID of the resource containing the event, in the format
+<replaceable>[resourceID:]eventUID</replaceable>.</para>
 </listitem>
 </varlistentry>
 </variablelist>
@@ -3396,7 +3395,9 @@ void triggerEvent(const QString&amp; <replaceable>eventID</replaceable>)
 <varlistentry>
 <term><parameter>eventID</parameter></term>
 <listitem>
-<para>Specifies the unique ID of the event to be triggered.</para>
+<para>Specifies the unique ID of the event to be triggered, optionally
+prefixed by the ID of the resource containing the event, in the format
+<replaceable>[resourceID:]eventUID</replaceable>.</para>
 </listitem>
 </varlistentry>
 </variablelist>
@@ -4520,7 +4521,9 @@ bool edit(const QString&amp; <replaceable>eventID</replaceable>)
 <varlistentry>
 <term><parameter>eventID</parameter></term>
 <listitem>
-<para>Specifies the unique ID of the event to be edited.</para>
+<para>Specifies the unique ID of the event to be edited, optionally
+prefixed by the ID of the resource containing the event, in the format
+<replaceable>[resourceID:]eventUID</replaceable>.</para>
 </listitem>
 </varlistentry>
 </variablelist>
@@ -4673,14 +4676,22 @@ information).</para></note>
 <tbody>
 <row>
   <entry><option>--cancelEvent <replaceable>eventID</replaceable></option></entry>
-  <entry>Cancel the alarm with the specified event ID.
+  <entry>Cancel the alarm with the specified event ID. The event ID is
+  the unique ID of the event, optionally prefixed by the ID of the
+  resource containing the event, in the format
+  <replaceable>[resourceID:]eventUID</replaceable>.
+  The action taken is the same as for the
+  <link linkend="cancelEvent">cancelEvent()</link> &DBus; call.
   <option>--triggerEvent</option> cannot be specified with this
   option.</entry>
 </row>
 <row>
   <entry><option>--triggerEvent <replaceable>eventID</replaceable></option></entry>
-  <entry>Trigger the alarm with the specified event ID. The action
-  taken is the same as for the
+  <entry>Trigger the alarm with the specified event ID. The event ID is
+  the unique ID of the event, optionally prefixed by the ID of the
+  resource containing the event, in the format
+  <replaceable>[resourceID:]eventUID</replaceable>.
+  The action taken is the same as for the
   <link linkend="triggerEvent">triggerEvent()</link> &DBus; call.
   <option>--cancelEvent</option> cannot be specified with this
   option.</entry>
