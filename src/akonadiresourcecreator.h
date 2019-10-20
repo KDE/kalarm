@@ -44,8 +44,7 @@ class AkonadiResourceCreator : public QObject
         Akonadi::AgentInstance agentInstance() const   { return mAgentInstance; }
 
     Q_SIGNALS:
-        void failed(AkonadiResourceCreator*);
-        void resourceAdded(AkonadiResourceCreator*, Resource&, CalEvent::Type);
+        void resourceAdded(Resource&, CalEvent::Type);
 
     private Q_SLOTS:
         void getAgentType();

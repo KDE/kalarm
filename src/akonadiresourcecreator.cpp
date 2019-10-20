@@ -76,29 +76,26 @@ void AkonadiResourceCreator::getAgentType()
             mimeType = KAlarmCal::MIME_TEMPLATE;
             break;
         default:
-            Q_EMIT failed(this);
+            deleteLater();   // error result
             return;
     }
     dlg->agentFilterProxyModel()->addMimeTypeFilter(mimeType);
     dlg->agentFilterProxyModel()->addCapabilityFilter(QStringLiteral("Resource"));
-    if (dlg->exec() != QDialog::Accepted)
+    if (dlg->exec() == QDialog::Accepted)
     {
-        Q_EMIT failed(this);
-        return;
-    }
-    mAgentType = dlg->agentType();
-    if (!mAgentType.isValid())
-    {
-        Q_EMIT failed(this);
-        return;
-    }
+        mAgentType = dlg->agentType();
+        if (mAgentType.isValid())
+        {
+            connect(AkonadiModel::instance(), &AkonadiModel::resourceAdded,
+                                        this, &AkonadiResourceCreator::slotResourceAdded);
 
-    connect(AkonadiModel::instance(), &AkonadiModel::resourceAdded,
-                                this, &AkonadiResourceCreator::slotResourceAdded);
-
-    AgentInstanceCreateJob* job = new AgentInstanceCreateJob(mAgentType, mParent);
-    connect(job, &AgentInstanceCreateJob::result, this, &AkonadiResourceCreator::agentInstanceCreated);
-    job->start();
+            AgentInstanceCreateJob* job = new AgentInstanceCreateJob(mAgentType, mParent);
+            connect(job, &AgentInstanceCreateJob::result, this, &AkonadiResourceCreator::agentInstanceCreated);
+            job->start();
+            return;
+        }
+    }
+    deleteLater();   // error result
 }
 
 /******************************************************************************
@@ -112,7 +109,7 @@ void AkonadiResourceCreator::agentInstanceCreated(KJob* j)
     {
         qCCritical(KALARM_LOG) << "AkonadiResourceCreator::agentInstanceCreated: Failed to create new calendar resource:" << j->errorString();
         KMessageBox::error(nullptr, xi18nc("@info", "%1<nl/>(%2)", i18nc("@info", "Failed to create new calendar resource"), j->errorString()));
-        Q_EMIT failed(this);
+        deleteLater();   // error result
         return;
     }
 
@@ -152,7 +149,7 @@ void AkonadiResourceCreator::agentInstanceCreated(KJob* j)
                     if (url.isLocalFile())
                         path = url.path();
                     KMessageBox::sorry(nullptr, xi18nc("@info", "<para>The file or directory is already used by an existing resource:</para><para><filename>%1</filename></para>", path));
-                    Q_EMIT failed(this);
+                    deleteLater();   // error result
                     return;
                 }
             }
@@ -163,7 +160,7 @@ void AkonadiResourceCreator::agentInstanceCreated(KJob* j)
         // User has clicked cancel in the resource configuration dialog, or
         // other error, so remove the newly created agent instance.
         AgentManager::self()->removeInstance(mAgentInstance);
-        Q_EMIT failed(this);
+        deleteLater();   // error result
         return;
     }
 
@@ -181,8 +178,11 @@ void AkonadiResourceCreator::slotResourceAdded(Resource& resource)
     {
         AgentInstance agent = AgentManager::self()->instance(resource.configName());
         if (agent == mAgentInstance)
-            Q_EMIT resourceAdded(this, resource, mDefaultType);
+            Q_EMIT resourceAdded(resource, mDefaultType);
     }
+
+    // This object has done its job, so delete it.
+    deleteLater();
 }
 
 /******************************************************************************

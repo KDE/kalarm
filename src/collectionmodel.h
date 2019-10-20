@@ -219,6 +219,9 @@ class CollectionControlModel : public Akonadi::FavoriteCollectionsModel
          */
         static Resource destination(CalEvent::Type type, QWidget* promptParent = nullptr, bool noPrompt = false, bool* cancelled = nullptr);
 
+        /** Edit a resource's configuration. */
+        static void editResource(const Resource&, QWidget* parent);
+
         /** Return a list of all collections, both enabled and disabled.
          *  Collections which don't belong to a resource are omitted.
          *  @param type  Return only collections for this event type, or EMPTY for all.

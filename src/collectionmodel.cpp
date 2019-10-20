@@ -27,6 +27,7 @@
 #include <AkonadiCore/agentmanager.h>
 #include <AkonadiCore/collectionfetchjob.h>
 #include <AkonadiCore/entitymimetypefiltermodel.h>
+#include <AkonadiWidgets/AgentConfigurationDialog>
 #include <AkonadiWidgets/collectiondialog.h>
 
 #include <KLocalizedString>
@@ -1160,6 +1161,23 @@ Resource CollectionControlModel::destination(CalEvent::Type type, QWidget* promp
         }
     }
     return AkonadiModel::instance()->resource(col.id());
+}
+
+/******************************************************************************
+* Edit a resource's configuration.
+*/
+void CollectionControlModel::editResource(const Resource& resource, QWidget* parent)
+{
+    if (resource.isValid())
+    {
+        AgentInstance instance = AgentManager::self()->instance(resource.configName());
+        if (instance.isValid())
+        {
+            QPointer<AgentConfigurationDialog> dlg = new AgentConfigurationDialog(instance, parent);
+            dlg->exec();
+            delete dlg;
+        }
+    }
 }
 
 /******************************************************************************

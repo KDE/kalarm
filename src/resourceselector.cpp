@@ -35,9 +35,6 @@
 #include "preferences.h"
 #include "kalarm_debug.h"
 
-#include <AkonadiCore/agentmanager.h>
-#include <AkonadiWidgets/AgentConfigurationDialog>
-
 #include <KLocalizedString>
 #include <kactioncollection.h>
 #include <ktoggleaction.h>
@@ -53,22 +50,10 @@
 #include <QMenu>
 
 using namespace KCalendarCore;
-using namespace Akonadi;
 
 
 ResourceSelector::ResourceSelector(QWidget* parent)
-    : QFrame(parent),
-      mContextMenu(nullptr),
-      mActionReload(nullptr),
-      mActionShowDetails(nullptr),
-      mActionSetColour(nullptr),
-      mActionClearColour(nullptr),
-      mActionEdit(nullptr),
-      mActionUpdate(nullptr),
-      mActionRemove(nullptr),
-      mActionImport(nullptr),
-      mActionExport(nullptr),
-      mActionSetDefault(nullptr)
+    : QFrame(parent)
 {
     QBoxLayout* topLayout = new QVBoxLayout(this);
 
@@ -183,24 +168,15 @@ void ResourceSelector::reinstateAlarmTypeScrollBars()
 void ResourceSelector::addResource()
 {
     AkonadiResourceCreator* creator = new AkonadiResourceCreator(mCurrentAlarmType, this);
-    connect(creator, &AkonadiResourceCreator::failed, this, &ResourceSelector::addResourceFailed);
     connect(creator, &AkonadiResourceCreator::resourceAdded, this, &ResourceSelector::slotResourceAdded);
     creator->createResource();
-}
-
-/******************************************************************************
-* Called when the job started by addResource() has failed.
-*/
-void ResourceSelector::addResourceFailed(AkonadiResourceCreator* creator)
-{
-    delete creator;
 }
 
 /******************************************************************************
 * Called when a collection is added to the AkonadiModel, after being created
 * by addResource().
 */
-void ResourceSelector::slotResourceAdded(AkonadiResourceCreator* creator, Resource& resource, CalEvent::Type alarmType)
+void ResourceSelector::slotResourceAdded(Resource& resource, CalEvent::Type alarmType)
 {
     const CalEvent::Types types = resource.alarmTypes();
     resource.setEnabled(types);
@@ -222,7 +198,6 @@ void ResourceSelector::slotResourceAdded(AkonadiResourceCreator* creator, Resour
             alarmTypeSelected();
         }
     }
-    delete creator;
 }
 
 /******************************************************************************
@@ -230,17 +205,7 @@ void ResourceSelector::slotResourceAdded(AkonadiResourceCreator* creator, Resour
 */
 void ResourceSelector::editResource()
 {
-    const Resource resource = currentResource();
-    if (resource.isValid())
-    {
-        AgentInstance instance = AgentManager::self()->instance(resource.configName());
-        if (instance.isValid())
-        {
-            QPointer<AgentConfigurationDialog> dlg = new AgentConfigurationDialog(instance, this);
-            dlg->exec();
-            delete dlg;
-        }
-    }
+    CollectionControlModel::editResource(currentResource(), this);
 }
 
 /******************************************************************************

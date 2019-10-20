@@ -78,8 +78,7 @@ class ResourceSelector : public QFrame
         void  exportCalendar();
         void  showInfo();
         void  archiveDaysChanged(int days);
-        void  addResourceFailed(AkonadiResourceCreator*);
-        void  slotResourceAdded(AkonadiResourceCreator*, Resource&, CalEvent::Type);
+        void  slotResourceAdded(Resource&, CalEvent::Type);
         void  reinstateAlarmTypeScrollBars();
 
     private:
@@ -92,17 +91,17 @@ class ResourceSelector : public QFrame
         QPushButton*    mDeleteButton;
         QPushButton*    mEditButton;
         CalEvent::Type  mCurrentAlarmType;
-        QMenu*          mContextMenu;
-        QAction*        mActionReload;
-        QAction*        mActionShowDetails;
-        QAction*        mActionSetColour;
-        QAction*        mActionClearColour;
-        QAction*        mActionEdit;
-        QAction*        mActionUpdate;
-        QAction*        mActionRemove;
-        QAction*        mActionImport;
-        QAction*        mActionExport;
-        KToggleAction*  mActionSetDefault;
+        QMenu*          mContextMenu{nullptr};
+        QAction*        mActionReload{nullptr};
+        QAction*        mActionShowDetails{nullptr};
+        QAction*        mActionSetColour{nullptr};
+        QAction*        mActionClearColour{nullptr};
+        QAction*        mActionEdit{nullptr};
+        QAction*        mActionUpdate{nullptr};
+        QAction*        mActionRemove{nullptr};
+        QAction*        mActionImport{nullptr};
+        QAction*        mActionExport{nullptr};
+        KToggleAction*  mActionSetDefault{nullptr};
 };
 
 #endif

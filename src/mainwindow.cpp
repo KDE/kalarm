@@ -53,7 +53,6 @@
 #include <AkonadiWidgets/controlgui.h>
 #include <KCalendarCore/MemoryCalendar>
 #include <KCalUtils/kcalutils/icaldrag.h>
-using namespace Akonadi;
 using namespace KCalendarCore;
 using namespace KCalUtils;
 #include <KAboutData>
@@ -1339,7 +1338,7 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
     else if (!(urls = data->urls()).isEmpty())
     {
         const QUrl& url(urls.at(0));
-        const Item item = Item::fromUrl(url);
+        const Akonadi::Item item = Akonadi::Item::fromUrl(url);
         if (item.isValid())
         {
             // It's an Akonadi item
@@ -1348,9 +1347,9 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
             {
                 // It's an email held in Akonadi
                 qCDebug(KALARM_LOG) << "MainWindow::executeDropEvent: Akonadi email";
-                ItemFetchJob* job = new ItemFetchJob(item);
+                Akonadi::ItemFetchJob* job = new Akonadi::ItemFetchJob(item);
                 job->fetchScope().fetchFullPayload();
-                Item::List items;
+                Akonadi::Item::List items;
                 if (job->exec())
                     items = job->items();
                 if (items.isEmpty())
@@ -1358,7 +1357,7 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
                     qCWarning(KALARM_LOG) << "MainWindow::executeDropEvent: Akonadi item" << item.id() << "not found";
                     return;
                 }
-                const Item& it = items.at(0);
+                const Akonadi::Item& it = items.at(0);
                 if (!it.isValid()  ||  !it.hasPayload<KMime::Message::Ptr>())
                 {
                     qCWarning(KALARM_LOG) << "MainWindow::executeDropEvent: invalid email";
