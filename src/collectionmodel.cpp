@@ -1223,19 +1223,18 @@ Collection::List CollectionControlModel::enabledCollections(CalEvent::Type type,
 }
 
 /******************************************************************************
-* Return the collection ID for a given resource ID.
+* Return the collection ID for a given Akonadi resource ID.
 */
-Collection CollectionControlModel::collectionForResource(const QString& resourceId)
+Collection::Id CollectionControlModel::collectionForResourceName(const QString& resourceName)
 {
     const QList<Collection::Id> colIds = instance()->collectionIds();
     for (Collection::Id colId : colIds)
     {
-        Collection c(colId);
-        AkonadiModel::instance()->refresh(c);    // update with latest data
-        if (c.resource() == resourceId)
-            return c;
+        Resource res = AkonadiModel::instance()->resource(colId);
+        if (res.configName() == resourceName)
+            return res.id();
     }
-    return Collection();
+    return -1;
 }
 
 /******************************************************************************

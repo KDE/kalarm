@@ -26,7 +26,7 @@
 #include <QRegExp>
 #include "kalarm_debug.h"
 
-/** Set by event ID and optional resource ID, in the format "[rid:]eid". */
+/** Set by event ID prefixed by optional resource ID, in the format "[rid:]eid". */
 EventId::EventId(const QString& resourceEventId)
 {
     bool resourceOk = false;
@@ -35,9 +35,9 @@ EventId::EventId(const QString& resourceEventId)
     {
         // A resource ID has been supplied, so use it
         int n = rx.matchedLength();
-        Akonadi::Collection c = CollectionControlModel::collectionForResource(resourceEventId.left(n - 1));
+        Akonadi::Collection::Id id = CollectionControlModel::collectionForResourceName(resourceEventId.left(n - 1));
         {
-            first  = c.id();
+            first  = id;
             second = resourceEventId.mid(n);
             resourceOk = true;
         }

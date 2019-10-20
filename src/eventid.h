@@ -42,7 +42,7 @@ struct EventId : public QPair<Akonadi::Collection::Id, QString>
         : QPair<Akonadi::Collection::Id, QString>(c, e) {}
     explicit EventId(const KAEvent& event)
         : QPair<Akonadi::Collection::Id, QString>(event.collectionId(), event.id()) {}
-    /** Set by event ID and optional resource ID, in the format "[rid:]eid". */
+    /** Set by event ID prefixed by optional resource ID, in the format "[rid:]eid". */
     explicit EventId(const QString& resourceEventId);
     void clear()          { first = -1; second.clear(); }
     /** Return whether the instance contains any data. */
