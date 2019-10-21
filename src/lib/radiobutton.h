@@ -49,35 +49,43 @@ class RadioButton : public QRadioButton
          *  @param parent The parent object of this widget.
          */
         explicit RadioButton(QWidget* parent = nullptr);
+
         /** Constructor.
          *  @param text Text to display.
          *  @param parent The parent object of this widget.
          */
-        RadioButton(const QString& text, QWidget* parent = nullptr);
+        explicit RadioButton(const QString& text, QWidget* parent = nullptr);
+
         /** Returns true if the widget is read only. */
-        bool     isReadOnly() const          { return mReadOnly; }
+        bool isReadOnly() const          { return mReadOnly; }
+
         /** Sets whether the radio button is read-only for the user. If read-only,
          *  its state cannot be changed by the user.
          *  @param readOnly True to set the widget read-only, false to set it read-write.
          */
         virtual void setReadOnly(bool readOnly);
+
         /** Returns the widget which receives focus when the button is clicked. */
         QWidget* focusWidget() const         { return mFocusWidget; }
+
         /** Specifies a widget to receive focus when the button is clicked.
          *  @param widget Widget to receive focus.
          *  @param enable If true, @p widget will be enabled before receiving focus. If
          *                false, the enabled state of @p widget will be left unchanged when
          *                the radio button is clicked.
          */
-        void     setFocusWidget(QWidget* widget, bool enable = true);
+        void setFocusWidget(QWidget* widget, bool enable = true);
+
     protected:
         void     mousePressEvent(QMouseEvent*) override;
         void     mouseReleaseEvent(QMouseEvent*) override;
         void     mouseMoveEvent(QMouseEvent*) override;
         void     keyPressEvent(QKeyEvent*) override;
         void     keyReleaseEvent(QKeyEvent*) override;
+
     protected Q_SLOTS:
         void     slotClicked();
+
     private:
         Qt::FocusPolicy mFocusPolicy;           // default focus policy for the QRadioButton
         QWidget*        mFocusWidget{nullptr};  // widget to receive focus when button is clicked on

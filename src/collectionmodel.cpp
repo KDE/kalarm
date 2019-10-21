@@ -480,7 +480,7 @@ QByteArray CollectionCheckListModel::debugType(const char* func) const
         case CalEvent::TEMPLATE:  type = "CollectionCheckListModel[Tmpl]::";  break;
         default:                  type = "CollectionCheckListModel::";  break;
     }
-    return QByteArray(type) + func + ":";
+    return QByteArray(type) + func + ':';
 }
 
 
