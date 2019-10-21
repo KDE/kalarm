@@ -1670,10 +1670,10 @@ bool browseFile(QString& file, const QString& caption, QString& defaultDir,
 QString conversionPrompt(const QString& calendarName, const QString& calendarVersion, bool whole)
 {
     const QString msg = whole
-                ? xi18nc("@info", "Calendar <resource>%1</resource> is in an old format (<application>KAlarm</application> version %2), "
+                ? xi18n("Calendar <resource>%1</resource> is in an old format (<application>KAlarm</application> version %2), "
                        "and will be read-only unless you choose to update it to the current format.",
                        calendarName, calendarVersion)
-                : xi18nc("@info", "Some or all of the alarms in calendar <resource>%1</resource> are in an old <application>KAlarm</application> format, "
+                : xi18n("Some or all of the alarms in calendar <resource>%1</resource> are in an old <application>KAlarm</application> format, "
                        "and will be read-only unless you choose to update them to the current format.",
                        calendarName);
     return xi18nc("@info", "<para>%1</para><para>"
