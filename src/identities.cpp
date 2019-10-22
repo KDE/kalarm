@@ -2,7 +2,7 @@
  *  identities.cpp  -  email identity functions
  *  This file is part of kalarmcal library, which provides access to KAlarm
  *  calendar data.
- *  Copyright © 2004-2011 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2004-2019 David Jarvie <djarvie@kde.org>
  *
  *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Library General Public License as published
@@ -25,8 +25,6 @@
 #include <identitymanager.h>
 #include <identity.h>
 
-static KIdentityManagement::IdentityManager *mIdentityManager = nullptr;
-
 namespace KAlarmCal
 {
 namespace Identities
@@ -34,10 +32,12 @@ namespace Identities
 
 KIdentityManagement::IdentityManager *identityManager()
 {
-    if (!mIdentityManager) {
-        mIdentityManager = new KIdentityManagement::IdentityManager(true);    // create a read-only kmail identity manager
+    static KIdentityManagement::IdentityManager *manager = nullptr;
+
+    if (!manager) {
+        manager = new KIdentityManagement::IdentityManager(true);   // create a read-only kmail identity manager
     }
-    return mIdentityManager;
+    return manager;
 }
 
 /******************************************************************************
@@ -45,8 +45,8 @@ KIdentityManagement::IdentityManager *identityManager()
 */
 bool identitiesExist()
 {
-    identityManager();    // create identity manager if not already done
-    return mIdentityManager->begin() != mIdentityManager->end();
+    KIdentityManagement::IdentityManager *manager = identityManager();   // create identity manager if not already done
+    return manager->begin() != manager->end();
 }
 
 /******************************************************************************
@@ -57,9 +57,9 @@ uint identityUoid(const QString &identityUoidOrName)
     bool ok;
     uint id = identityUoidOrName.toUInt(&ok);
     if (!ok  ||  identityManager()->identityForUoid(id).isNull()) {
-        identityManager();   // fetch it if not already done
-        for (KIdentityManagement::IdentityManager::ConstIterator it = mIdentityManager->begin();
-                it != mIdentityManager->end();  ++it) {
+        KIdentityManagement::IdentityManager *manager = identityManager();  // fetch it if not already done
+        for (KIdentityManagement::IdentityManager::ConstIterator it = manager->begin();
+                it != manager->end();  ++it) {
             if ((*it).identityName() == identityUoidOrName) {
                 id = (*it).uoid();
                 break;
