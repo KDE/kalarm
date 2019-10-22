@@ -89,6 +89,7 @@ class AkonadiModel : public Akonadi::EntityTreeModel, public CalendarDataModel
         QModelIndex                resourceIndex(Akonadi::Collection::Id) const;
         Resource                   resourceForEvent(const QString& eventId) const;
         Akonadi::Collection::Id    resourceIdForEvent(const QString& eventId) const;
+        Akonadi::Collection*       collection(Akonadi::Collection::Id id) const;
         Akonadi::Collection*       collection(const Resource&) const;
 
         /** Remove a collection from Akonadi. The calendar file is not removed.
@@ -175,6 +176,7 @@ class AkonadiModel : public Akonadi::EntityTreeModel, public CalendarDataModel
     private Q_SLOTS:
         void checkResources(Akonadi::ServerManager::State);
         void slotMigrationCompleted();
+        void collectionFetchResult(KJob*);
         void slotCollectionChanged(const Akonadi::Collection& c, const QSet<QByteArray>& attrNames);
         void slotCollectionRemoved(const Akonadi::Collection&);
         void slotCollectionBeingCreated(const QString& path, Akonadi::Collection::Id, bool finished);

@@ -41,6 +41,7 @@
 #include <AkonadiCore/attributefactory.h>
 #include <AkonadiCore/changerecorder.h>
 #include <AkonadiCore/collectiondeletejob.h>
+#include <AkonadiCore/collectionfetchjob.h>
 #include <AkonadiCore/collectionmodifyjob.h>
 #include <AkonadiCore/entitydisplayattribute.h>
 #include <AkonadiCore/item.h>
@@ -188,8 +189,9 @@ void AkonadiModel::initCalendarMigrator()
 {
     CalendarMigrator::reset();
     connect(CalendarMigrator::instance(), &CalendarMigrator::creating,
-                                          this, &AkonadiModel::slotCollectionBeingCreated);
-    connect(CalendarMigrator::instance(), &QObject::destroyed, this, &AkonadiModel::slotMigrationCompleted);
+                                    this, &AkonadiModel::slotCollectionBeingCreated);
+    connect(CalendarMigrator::instance(), &QObject::destroyed,
+                                    this, &AkonadiModel::slotMigrationCompleted);
 }
 
 /******************************************************************************
@@ -342,7 +344,6 @@ bool AkonadiModel::setData(const QModelIndex& index, const QVariant& value, int 
                             return true;   // no change
                         attr->setCommandError(err);
                         updateItem = true;
-qCDebug(KALARM_LOG)<<"Item:"<<item.id()<<"  CommandErrorRole ->"<<err;
                         break;
                     }
                     default:
@@ -351,7 +352,6 @@ qCDebug(KALARM_LOG)<<"Item:"<<item.id()<<"  CommandErrorRole ->"<<err;
                 break;
             }
             default:
-qCDebug(KALARM_LOG)<<"Item: passing to EntityTreeModel::setData("<<role<<")";
                 break;
         }
         if (updateItem)
@@ -957,19 +957,14 @@ void AkonadiModel::itemJobDone(KJob* j)
 void AkonadiModel::checkQueuedItemModifyJob(const Item& item)
 {
     if (mItemsBeingCreated.contains(item.id()))
-{qCDebug(KALARM_LOG)<<"Still being created";
         return;    // the item hasn't been fully initialised yet
-}
     const QHash<Item::Id, Item>::iterator it = mItemModifyJobQueue.find(item.id());
     if (it == mItemModifyJobQueue.end())
-{qCDebug(KALARM_LOG)<<"No jobs queued";
         return;    // there are no jobs queued for the item
-}
     Item qitem = it.value();
     if (!qitem.isValid())
     {
         // There is no further job queued for the item, so remove the item from the list
-qCDebug(KALARM_LOG)<<"No more jobs queued";
         mItemModifyJobQueue.erase(it);
     }
     else
@@ -1014,6 +1009,17 @@ void AkonadiModel::slotRowsInserted(const QModelIndex& parent, int start, int en
                     // Update to current KAlarm format if necessary, and if the user agrees
                     CalendarMigrator::updateToCurrentFormat(resource, false, MainWindow::mainMainWindow());
                 }
+
+                if (!collection.hasAttribute<CompatibilityAttribute>())
+                {
+                    // If the compatibility attribute is missing at this point,
+                    // it doesn't always get notified later, so fetch the
+                    // collection to ensure that we see it.
+                    AgentInstance agent = AgentManager::self()->instance(collection.resource());
+                    CollectionFetchJob* job = new CollectionFetchJob(Collection::root(), CollectionFetchJob::Recursive);
+                    job->fetchScope().setResource(agent.identifier());
+                    connect(job, &CollectionFetchJob::result, instance(), &AkonadiModel::collectionFetchResult);
+                }
             }
         }
         else
@@ -1031,6 +1037,49 @@ void AkonadiModel::slotRowsInserted(const QModelIndex& parent, int start, int en
     const EventList events = eventList(parent, start, end, true);
     if (!events.isEmpty())
         Q_EMIT eventsAdded(events);
+}
+
+/******************************************************************************
+* Called when a CollectionFetchJob has completed.
+* Check for and process changes in attribute values.
+*/
+void AkonadiModel::collectionFetchResult(KJob* j)
+{
+    CollectionFetchJob* job = qobject_cast<CollectionFetchJob*>(j);
+    if (j->error())
+        qCWarning(KALARM_LOG) << "AkonadiModel::collectionFetchResult: CollectionFetchJob" << job->fetchScope().resource()<< "error: " << j->errorString();
+    else
+    {
+        const Collection::List collections = job->collections();
+        for (const Collection& c : collections)
+        {
+            qCDebug(KALARM_LOG) << "AkonadiModel::collectionFetchResult:" << c.id();
+            auto it = mResources.find(c.id());
+            if (it == mResources.end())
+                continue;
+            Resource& resource = it.value();
+            Collection& resourceCol = AkonadiResource::collection(resource);
+            QSet<QByteArray> attrNames;
+            if (c.hasAttribute<CollectionAttribute>())
+            {
+                if (!resourceCol.hasAttribute<CollectionAttribute>()
+                ||  *c.attribute<CollectionAttribute>() != *resourceCol.attribute<CollectionAttribute>())
+                    attrNames.insert(CollectionAttribute::name());
+            }
+            if (c.hasAttribute<CompatibilityAttribute>())
+            {
+                if (!resourceCol.hasAttribute<CompatibilityAttribute>()
+                ||  *c.attribute<CompatibilityAttribute>() != *resourceCol.attribute<CompatibilityAttribute>())
+                    attrNames.insert(CompatibilityAttribute::name());
+            }
+            resourceCol = c;   // update our copy of the collection
+            if (!attrNames.isEmpty())
+            {
+                // Process the changed attribute values.
+                setCollectionChanged(resource, c, attrNames, false);
+            }
+        }
+    }
 }
 
 /******************************************************************************
@@ -1079,11 +1128,26 @@ AkonadiModel::EventList AkonadiModel::eventList(const QModelIndex& parent, int s
 * Updates the collection held by the collection's resource, and notifies
 * changes of interest.
 */
-void AkonadiModel::slotCollectionChanged(const Akonadi::Collection& c, const QSet<QByteArray>& attrNames)
+void AkonadiModel::slotCollectionChanged(const Akonadi::Collection& c, const QSet<QByteArray>& attributeNames)
 {
-    qCDebug(KALARM_LOG) << "AkonadiModel::slotCollectionChanged:" << c.id() << attrNames;
-    Resource& resource = updateResource(c);
-    setCollectionChanged(resource, c, attrNames, false);
+    qCDebug(KALARM_LOG) << "AkonadiModel::slotCollectionChanged:" << c.id() << attributeNames;
+    auto it = mResources.find(c.id());
+    if (it != mResources.end())
+    {
+        // The Monitor::collectionChanged() signal is not always emitted when
+        // attributes are created!  So check whether any attributes not
+        // included in 'attributeNames' have been created.
+        Resource& resource = it.value();
+        Collection& resourceCol = AkonadiResource::collection(resource);
+        QSet<QByteArray> attrNames = attributeNames;
+        if (!resourceCol.hasAttribute<CollectionAttribute>()  &&  c.hasAttribute<CollectionAttribute>())
+            attrNames.insert(CollectionAttribute::name());
+        if (!resourceCol.hasAttribute<CompatibilityAttribute>()  &&  c.hasAttribute<CompatibilityAttribute>())
+            attrNames.insert(CompatibilityAttribute::name());
+        if (&c != &resourceCol)
+            resourceCol = c;
+        setCollectionChanged(resource, c, attrNames, false);
+    }
 }
 
 /******************************************************************************
@@ -1152,7 +1216,7 @@ void AkonadiModel::notifySettingsChanged(AkonadiResource* res, Change change)
     auto it = model->mResources.find(res->id());
     if (it != model->mResources.end())
     {
-        Resource resource = it.value();
+        Resource& resource = it.value();
         if (change == Enabled)
         {
             const CalEvent::Types newEnabled = resource.enabledTypes();
@@ -1372,9 +1436,9 @@ Collection::Id AkonadiModel::resourceIdForEvent(const QString& eventId) const
 * definitive copy of the collection used by this model.
 * Return: the collection held by the model, or null if not found.
 */
-Collection* AkonadiModel::collection(const Resource& resource) const
+Collection* AkonadiModel::collection(Collection::Id id) const
 {
-    auto it = mResources.find(resource.id());
+    auto it = mResources.find(id);
     if (it != mResources.end())
     {
         Collection& c = AkonadiResource::collection(it.value());
@@ -1382,6 +1446,16 @@ Collection* AkonadiModel::collection(const Resource& resource) const
             return &c;
     }
     return nullptr;
+}
+
+/******************************************************************************
+* Return a reference to the collection held in a Resource. This is the
+* definitive copy of the collection used by this model.
+* Return: the collection held by the model, or null if not found.
+*/
+Collection* AkonadiModel::collection(const Resource& resource) const
+{
+    return collection(resource.id());
 }
 
 /******************************************************************************
