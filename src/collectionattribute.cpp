@@ -2,7 +2,7 @@
  *  collectionattribute.cpp  -  Akonadi attribute holding Collection characteristics
  *  This file is part of kalarmcal library, which provides access to KAlarm
  *  calendar data.
- *  Copyright © 2010-2011 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2010-2019 David Jarvie <djarvie@kde.org>
  *
  *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Library General Public License as published
@@ -30,15 +30,19 @@ namespace KAlarmCal
 class Q_DECL_HIDDEN CollectionAttribute::Private
 {
 public:
-    Private()
-        : mEnabled(CalEvent::EMPTY),
-          mStandard(CalEvent::EMPTY),
-          mKeepFormat(false)  {}
+    Private()  {}
+    bool operator==(const Private& other) const
+    {
+        return mBackgroundColour == other.mBackgroundColour
+           &&  mEnabled          == other.mEnabled
+           &&  mStandard         == other.mStandard
+           &&  mKeepFormat       == other.mKeepFormat;
+    }
 
-    QColor           mBackgroundColour; // background color for collection and its alarms
-    CalEvent::Types  mEnabled;          // which alarm types the collection is enabled for
-    CalEvent::Types  mStandard;         // whether the collection is a standard collection
-    bool             mKeepFormat;       // whether user has chosen to keep old calendar storage format
+    QColor           mBackgroundColour;          // background color for collection and its alarms
+    CalEvent::Types  mEnabled{CalEvent::EMPTY};  // which alarm types the collection is enabled for
+    CalEvent::Types  mStandard{CalEvent::EMPTY}; // whether the collection is a standard collection
+    bool             mKeepFormat{false};         // whether user has chosen to keep old calendar storage format
 };
 
 CollectionAttribute::CollectionAttribute()
@@ -64,6 +68,11 @@ CollectionAttribute &CollectionAttribute::operator=(const CollectionAttribute &o
         *d = *other.d;
     }
     return *this;
+}
+
+bool CollectionAttribute::operator==(const CollectionAttribute &other) const
+{
+    return *d == *other.d;
 }
 
 CollectionAttribute *CollectionAttribute::clone() const

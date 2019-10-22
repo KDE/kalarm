@@ -2,7 +2,7 @@
  *  collectionattribute.h  -  Akonadi attribute holding Collection characteristics
  *  This file is part of kalarmcal library, which provides access to KAlarm
  *  calendar data.
- *  Copyright © 2010-2011 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2010-2019 David Jarvie <djarvie@kde.org>
  *
  *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Library General Public License as published
@@ -60,6 +60,10 @@ public:
     CollectionAttribute &operator=(const CollectionAttribute &other);
 
     ~CollectionAttribute() override;
+
+    /** Comparison operator. */
+    bool operator==(const CollectionAttribute &other) const;
+    bool operator!=(const CollectionAttribute &other) const  { return !operator==(other); }
 
     /** Return whether the collection is enabled for a specified alarm type
      *  (active, archived, template or displaying).

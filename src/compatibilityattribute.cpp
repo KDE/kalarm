@@ -2,7 +2,7 @@
  *  compatibilityattribute.cpp  -  Akonadi attribute holding Collection compatibility
  *  This file is part of kalarmcal library, which provides access to KAlarm
  *  calendar data.
- *  Copyright © 2011 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2011-2019 David Jarvie <djarvie@kde.org>
  *
  *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Library General Public License as published
@@ -30,13 +30,15 @@ namespace KAlarmCal
 class Q_DECL_HIDDEN CompatibilityAttribute::Private
 {
 public:
-    Private()
-        : mCompatibility(KACalendar::Incompatible),
-          mVersion(KACalendar::IncompatibleFormat)
-    {}
+    Private()  {}
+    bool operator==(const Private& other) const
+    {
+        return mCompatibility == other.mCompatibility
+           &&  mVersion       == other.mVersion;
+    }
 
-    KACalendar::Compat mCompatibility;    // calendar compatibility with current KAlarm format
-    int                mVersion;          // KAlarm calendar format version
+    KACalendar::Compat mCompatibility{KACalendar::Incompatible};  // calendar compatibility with current KAlarm format
+    int                mVersion{KACalendar::IncompatibleFormat};  // KAlarm calendar format version
 };
 
 CompatibilityAttribute::CompatibilityAttribute()
@@ -62,6 +64,11 @@ CompatibilityAttribute &CompatibilityAttribute::operator=(const CompatibilityAtt
         *d = *other.d;
     }
     return *this;
+}
+
+bool CompatibilityAttribute::operator==(const CompatibilityAttribute &other) const
+{
+    return *d == *other.d;
 }
 
 CompatibilityAttribute *CompatibilityAttribute::clone() const
