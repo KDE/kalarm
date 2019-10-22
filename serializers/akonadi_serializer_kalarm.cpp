@@ -66,7 +66,6 @@ bool SerializerPluginKAlarm::deserialize(Item &item, const QByteArray &label, QI
         data.seek(0);
         return false;
     }
-    event.setItemId(item.id());
 
     // Set additional event data contained in attributes
     if (mRegistered.isEmpty()) {
