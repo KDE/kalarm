@@ -1,7 +1,7 @@
 /*
  *  alarmtime.h  -  conversion functions for alarm times
  *  Program:  kalarm
- *  Copyright © 2012,2018 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2012,2018 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -17,6 +17,9 @@
  *  with this program; if not, write to the Free Software Foundation, Inc.,
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+
+#ifndef ALARMTIME_H
+#define ALARMTIME_H
 
 #include <kalarmcal/kadatetime.h>
 
@@ -41,5 +44,7 @@ class AlarmTime
     static int     mHourOffset;
     static bool    mLeadingZeroesChecked;
 };
+
+#endif // ALARMTIME_H
 
 // vim: et sw=4:
