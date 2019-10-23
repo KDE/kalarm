@@ -67,30 +67,27 @@ class AkonadiModel : public Akonadi::EntityTreeModel, public CalendarDataModel
 
         ~AkonadiModel() override;
 
-        /** Get the tooltip for a collection. The collection's enabled status is
+        /** Get the tooltip for a resource. The resource's enabled status is
          *  evaluated for specified alarm types. */
-        QString tooltip(const Akonadi::Collection&, CalEvent::Types) const;
+        QString tooltip(const Resource&, CalEvent::Types) const;
 
         /** To be called when the command error status of an alarm has changed,
          *  to set in the Akonadi database and update the visual command error indications.
          */
         void updateCommandError(const KAEvent&);
 
-        QVariant data(const QModelIndex&, int role = Qt::DisplayRole) const override;
-        bool setData(const QModelIndex&, const QVariant& value, int role) override;
-
         /** Refresh the specified collection instance with up to date data. */
         bool refresh(Akonadi::Collection&) const;
 
-        Resource                   resource(Akonadi::Collection::Id) const;
-        Resource                   resource(const KAEvent&) const;
-        Resource                   resource(const QModelIndex&) const;
-        QModelIndex                resourceIndex(const Resource&) const;
-        QModelIndex                resourceIndex(Akonadi::Collection::Id) const;
-        Resource                   resourceForEvent(const QString& eventId) const;
-        Akonadi::Collection::Id    resourceIdForEvent(const QString& eventId) const;
-        Akonadi::Collection*       collection(Akonadi::Collection::Id id) const;
-        Akonadi::Collection*       collection(const Resource&) const;
+        Resource                 resource(Akonadi::Collection::Id) const;
+        Resource                 resource(const KAEvent&) const;
+        Resource                 resource(const QModelIndex&) const;
+        QModelIndex              resourceIndex(const Resource&) const;
+        QModelIndex              resourceIndex(Akonadi::Collection::Id) const;
+        Resource                 resourceForEvent(const QString& eventId) const;
+        Akonadi::Collection::Id  resourceIdForEvent(const QString& eventId) const;
+        Akonadi::Collection*     collection(Akonadi::Collection::Id id) const;
+        Akonadi::Collection*     collection(const Resource&) const;
 
         /** Remove a collection from Akonadi. The calendar file is not removed.
          *  @return true if a removal job has been scheduled.
@@ -106,7 +103,6 @@ class AkonadiModel : public Akonadi::EntityTreeModel, public CalendarDataModel
         /** Return whether calendar migration/creation at initialisation has completed. */
         bool isMigrationCompleted() const;
 
-        bool isCollectionBeingDeleted(Akonadi::Collection::Id) const;
         KAEvent event(const QString& eventId) const;
         KAEvent event(const QModelIndex&) const;
         using QObject::event;   // prevent warning about hidden virtual method
@@ -132,6 +128,9 @@ class AkonadiModel : public Akonadi::EntityTreeModel, public CalendarDataModel
 
         /** Called by a resource to notify that a setting has changed. */
         static void notifySettingsChanged(AkonadiResource*, Change);
+
+        QVariant data(const QModelIndex&, int role = Qt::DisplayRole) const override;
+        bool setData(const QModelIndex&, const QVariant& value, int role) override;
 
     Q_SIGNALS:
         /** Signal emitted when a collection has been added to the model. */
@@ -260,7 +259,6 @@ class AkonadiModel : public Akonadi::EntityTreeModel, public CalendarDataModel
         };
         QHash<QString, EventIds> mEventIds;     // collection and item ID for each event ID
         QList<Akonadi::Item::Id> mItemsBeingCreated;  // new items not fully initialised yet
-        QList<Akonadi::Collection::Id> mCollectionsDeleting;  // collections currently being removed
         mutable QHash<Akonadi::Collection::Id, Resource> mResources;
         QQueue<Event>   mPendingEventChanges;   // changed events with changedEvent() signal pending
         bool            mMigrationChecked;      // whether calendar migration has been checked at startup

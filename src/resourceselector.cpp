@@ -505,9 +505,9 @@ void ResourceSelector::showInfo()
     {
         const QString name             = resource.displayName();
         const QString id               = resource.configName();   // resource name
-        const QString calType          = resource.storageType(true);
+        const QString calType          = resource.storageTypeString(true);
         const CalEvent::Type alarmType = currentResourceType();
-        const QString storage          = resource.storageType(false);
+        const QString storage          = resource.storageTypeString(false);
         const QString location         = resource.displayLocation();
         const CalEvent::Types altypes  = resource.alarmTypes();
         QStringList alarmTypes;

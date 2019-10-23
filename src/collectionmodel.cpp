@@ -58,8 +58,8 @@ class CollectionMimeTypeFilterModel : public Akonadi::EntityMimeTypeFilterModel
         void setEventTypeFilter(CalEvent::Type);
         void setFilterWritable(bool writable);
         void setFilterEnabled(bool enabled);
-        Akonadi::Collection collection(int row) const;
-        Akonadi::Collection collection(const QModelIndex&) const;
+        Collection collection(int row) const;
+        Collection collection(const QModelIndex&) const;
         QModelIndex resourceIndex(const Resource&) const;
 
     protected:
@@ -557,9 +557,9 @@ QVariant CollectionFilterCheckListModel::data(const QModelIndex& index, int role
     {
         case Qt::ToolTipRole:
         {
-            const Collection col = collection(index);
-            if (col.isValid())
-                return AkonadiModel::instance()->tooltip(col, mAlarmType);
+            const Resource res = resource(index);
+            if (res.isValid())
+                return AkonadiModel::instance()->tooltip(res, mAlarmType);
             break;
         }
         default:
@@ -761,7 +761,7 @@ void CollectionControlModel::findEnabledCollections(const EntityMimeTypeFilterMo
         {
             // There is another collection which uses the same backend
             // storage. Disable alarm types enabled in the other collection.
-            if (!model->isCollectionBeingDeleted(collection.id()))
+            if (!resource.isBeingDeleted())
                 resource.setEnabled(canEnable);
         }
         if (canEnable)
@@ -822,7 +822,7 @@ CalEvent::Types CollectionControlModel::setEnabledStatus(Resource& resource, Cal
     {
         // Update the collection's status
         AkonadiModel* model = static_cast<AkonadiModel*>(sourceModel());
-        if (!model->isCollectionBeingDeleted(resource.id()))
+        if (!resource.isBeingDeleted())
         {
             if (!inserted  ||  canEnable != types)
                 resource.setEnabled(canEnable);
@@ -1188,16 +1188,18 @@ Collection::List CollectionControlModel::allCollections(CalEvent::Type type)
 {
     const bool allTypes = (type == CalEvent::EMPTY);
     const QString mimeType = CalEvent::mimeType(type);
-    AgentManager* agentManager = AgentManager::self();
+    AkonadiModel* model = AkonadiModel::instance();
     Collection::List result;
     const QList<Collection::Id> colIds = instance()->collectionIds();
     for (Collection::Id colId : colIds)
     {
-        Collection c(colId);
-        AkonadiModel::instance()->refresh(c);    // update with latest data
-        if ((allTypes  ||  c.contentMimeTypes().contains(mimeType))
-        &&  agentManager->instance(c.resource()).isValid())
-            result += c;
+        Resource res = model->resource(colId);
+        if (res.isValid()  &&  (allTypes  ||  res.alarmTypes() & type))
+        {
+            Collection* c = model->collection(colId);
+            if (c)
+                result += *c;
+        }
     }
     return result;
 }
@@ -1238,29 +1240,6 @@ Collection::Id CollectionControlModel::collectionForResourceName(const QString& 
 }
 
 /******************************************************************************
-* Return whether all enabled collections have been populated.
-*/
-bool CollectionControlModel::isPopulated(Collection::Id collectionId)
-{
-    AkonadiModel* model = AkonadiModel::instance();
-    const QList<Collection::Id> colIds = instance()->collectionIds();
-    for (Collection::Id colId : colIds)
-    {
-        if (collectionId == -1  ||  collectionId == colId)
-        {
-            const QModelIndex ix = model->resourceIndex(colId);
-            if (!model->data(ix, AkonadiModel::IsPopulatedRole).toBool())
-            {
-                const Resource res = model->resource(ix);
-                if (res.enabledTypes() != CalEvent::EMPTY)
-                    return false;
-            }
-        }
-    }
-    return true;
-}
-
-/******************************************************************************
 * Wait for one or all enabled collections to be populated.
 * Reply = true if successful.
 */
@@ -1281,6 +1260,26 @@ bool CollectionControlModel::waitUntilPopulated(Collection::Id colId, int timeou
     delete mPopulatedCheckLoop;
     mPopulatedCheckLoop = nullptr;
     return result;
+}
+
+/******************************************************************************
+* Return whether one or all enabled collections have been populated.
+*/
+bool CollectionControlModel::isPopulated(Collection::Id collectionId)
+{
+    AkonadiModel* model = AkonadiModel::instance();
+    const QList<Collection::Id> colIds = instance()->collectionIds();
+    for (Collection::Id colId : colIds)
+    {
+        if (collectionId == -1  ||  collectionId == colId)
+        {
+            const Resource res = model->resource(colId);
+            if (!res.isLoaded()
+            &&  res.enabledTypes() != CalEvent::EMPTY)
+                return false;
+        }
+    }
+    return true;
 }
 
 /******************************************************************************

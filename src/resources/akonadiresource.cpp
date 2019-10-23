@@ -34,6 +34,9 @@ using namespace Akonadi;
 
 namespace
 {
+const QString KALARM_RESOURCE(QStringLiteral("akonadi_kalarm_resource"));
+const QString KALARM_DIR_RESOURCE(QStringLiteral("akonadi_kalarm_dir_resource"));
+
 Collection::Rights WritableRights = Collection::CanChangeItem | Collection::CanCreateItem | Collection::CanDeleteItem;
 }
 
@@ -76,14 +79,30 @@ Akonadi::Collection AkonadiResource::collection() const
     return mCollection;
 }
 
-QString AkonadiResource::storageType(bool description) const
+ResourceBase::StorageType AkonadiResource::storageType() const
 {
+    const QString id = AgentManager::self()->instance(mCollection.resource()).type().identifier();
+    if (id == KALARM_RESOURCE)
+        return File;
+    if (id == KALARM_DIR_RESOURCE)
+        return Directory;
+    return NoStorage;
+}
+
+QString AkonadiResource::storageTypeString(bool description) const
+{
+    const AgentType agentType = AgentManager::self()->instance(mCollection.resource()).type();
+    if (!agentType.isValid())
+        return QString();
     if (description)
-        return AgentManager::self()->instance(mCollection.resource()).type().name();
-    const QUrl url = location();
-    bool local = url.isLocalFile();
-    bool dir   = local && QFileInfo(url.toLocalFile()).isDir();
-    return storageTypeString(false, !dir, local);
+        return agentType.name();
+    bool local = true;
+    bool dir = false;
+    if (agentType.identifier() == KALARM_DIR_RESOURCE)
+        dir = true;
+    else
+        local = location().isLocalFile();
+    return storageTypeStr(false, !dir, local);
 }
 
 QUrl AkonadiResource::location() const
@@ -271,7 +290,14 @@ bool AkonadiResource::load(bool readThroughCache)
 
 bool AkonadiResource::isLoaded() const
 {
-    return AkonadiModel::instance()->isCollectionPopulated(mCollection.id());
+    if (!ResourceBase::isLoaded())
+    {
+        const QModelIndex ix = AkonadiModel::instance()->resourceIndex(mCollection.id());
+        if (!ix.data(AkonadiModel::IsPopulatedRole).toBool())
+            return false;
+        setLoaded(true);
+    }
+    return true;
 }
 
 bool AkonadiResource::save(bool writeThroughCache)

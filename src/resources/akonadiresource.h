@@ -58,12 +58,15 @@ public:
     /** Return the resource's collection. */
     Akonadi::Collection collection() const;
 
+    /** Return the type of storage used by the resource. */
+    StorageType storageType() const override;
+
     /** Return the type of the resource (file, remote file, etc.)
      *  for display purposes.
      *  @param description  true for description (e.g. "Remote file"),
      *                      false for brief label (e.g. "URL").
      */
-    QString storageType(bool description) const override;
+    QString storageTypeString(bool description) const override;
 
     /** Return the location(s) of the resource (URL, file path, etc.) */
     QUrl location() const override;

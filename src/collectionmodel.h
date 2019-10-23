@@ -238,11 +238,6 @@ class CollectionControlModel : public Akonadi::FavoriteCollectionsModel
          */
         static Akonadi::Collection::Id collectionForResourceName(const QString& resourceName);
 
-        /** Return whether one or all enabled collections have been populated,
-         *  i.e. whether their items have been fetched.
-         */
-        static bool isPopulated(Akonadi::Collection::Id);
-
         /** Wait until one or all enabled collections have been populated,
          *  i.e. whether their items have been fetched.
          *  @param   colId    collection ID, or -1 for all collections
@@ -269,6 +264,7 @@ class CollectionControlModel : public Akonadi::FavoriteCollectionsModel
         void findEnabledCollections(const Akonadi::EntityMimeTypeFilterModel*, const QModelIndex& parent, QList<Akonadi::Collection::Id>&) const;
         CalEvent::Types setEnabledStatus(Resource&, CalEvent::Types, bool inserted);
         static CalEvent::Types checkTypesToEnable(const Resource&, const QList<Akonadi::Collection::Id>&, CalEvent::Types);
+        static bool isPopulated(Akonadi::Collection::Id);
 
         static CollectionControlModel* mInstance;
         struct ResourceCol

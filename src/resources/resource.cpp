@@ -66,9 +66,14 @@ ResourceId Resource::id() const
     return mResource.isNull() ? -1 : mResource->id();
 }
 
-QString Resource::storageType(bool description) const
+Resource::StorageType Resource::storageType() const
 {
-    return mResource.isNull() ? QString() : mResource->storageType(description);
+    return mResource.isNull() ? NoStorage : static_cast<StorageType>(mResource->storageType());
+}
+
+QString Resource::storageTypeString(bool description) const
+{
+    return mResource.isNull() ? QString() : mResource->storageTypeString(description);
 }
 
 QUrl Resource::location() const
@@ -227,6 +232,11 @@ void Resource::notifyDeletion()
 {
     if (!mResource.isNull())
         mResource->notifyDeletion();
+}
+
+bool Resource::isBeingDeleted() const
+{
+    return mResource.isNull() ? false : mResource->isBeingDeleted();
 }
 
 // vim: et sw=4:

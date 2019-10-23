@@ -256,7 +256,7 @@ QVariant AkonadiModel::data(const QModelIndex& index, int role) const
             case Qt::ForegroundRole:
                 return resource.foregroundColour();
             case Qt::ToolTipRole:
-                return tooltip(collection, CalEvent::ACTIVE | CalEvent::ARCHIVED | CalEvent::TEMPLATE);
+                return tooltip(resource, CalEvent::ACTIVE | CalEvent::ARCHIVED | CalEvent::TEMPLATE);
             default:
                 break;
         }
@@ -539,15 +539,14 @@ void AkonadiModel::updateCommandError(const KAEvent& event)
 }
 
 /******************************************************************************
-* Return a collection's tooltip text. The collection's enabled status is
+* Return a resource's tooltip text. The resource's enabled status is
 * evaluated for specified alarm types.
 */
-QString AkonadiModel::tooltip(const Collection& collection, CalEvent::Types types) const
+QString AkonadiModel::tooltip(const Resource& resource, CalEvent::Types types) const
 {
-    const Resource resource = mResources.value(collection.id());
     const QString name = QLatin1Char('@') + resource.displayName();   // insert markers for stripping out name
     const QUrl url = resource.location();
-    const QString type = QLatin1Char('@') + resource.storageType(false);   // file/directory/URL etc.
+    const QString type = QLatin1Char('@') + resource.storageTypeString(false);   // file/directory/URL etc.
     const QString locn = resource.displayLocation();
     const bool inactive = !(resource.enabledTypes() & types);
     const QString readonly = readOnlyTooltip(resource);
@@ -564,7 +563,6 @@ bool AkonadiModel::removeCollection(Akonadi::Collection::Id collectionId)
     if (!resource.isValid())
         return false;
     qCDebug(KALARM_LOG) << "AkonadiModel::removeCollection:" << collectionId;
-    mCollectionsDeleting << collectionId;
     resource.notifyDeletion();
     // Note: CollectionDeleteJob deletes the backend storage also.
     AgentManager* agentManager = AgentManager::self();
@@ -572,14 +570,6 @@ bool AkonadiModel::removeCollection(Akonadi::Collection::Id collectionId)
     if (instance.isValid())
         agentManager->removeInstance(instance);
     return true;
-}
-
-/******************************************************************************
-* Return whether a collection is currently being deleted.
-*/
-bool AkonadiModel::isCollectionBeingDeleted(Collection::Id id) const
-{
-    return mCollectionsDeleting.contains(id);
 }
 
 /******************************************************************************
@@ -822,7 +812,8 @@ bool AkonadiModel::deleteEvent(const KAEvent& event)
     const QModelIndex ix = itemIndex(itemId);
     if (!ix.isValid())
         return false;
-    if (mCollectionsDeleting.contains(collectionId))
+    Resource res = resource(collectionId);
+    if (res.isBeingDeleted())
     {
         qCDebug(KALARM_LOG) << "Collection being deleted";
         return true;    // the event's collection is being deleted
@@ -1250,7 +1241,6 @@ void AkonadiModel::slotCollectionRemoved(const Collection& collection)
     qCDebug(KALARM_LOG) << "AkonadiModel::slotCollectionRemoved:" << id;
     mResources.remove(collection.id());
     mCollectionRights.remove(id);
-    mCollectionsDeleting.removeAll(id);
     Q_EMIT collectionDeleted(id);
 }
 
@@ -1379,8 +1369,7 @@ Resource AkonadiModel::resource(Collection::Id id) const
 */
 Resource AkonadiModel::resource(const KAEvent& event) const
 {
-    const Collection::Id id = mEventIds.value(event.id()).collectionId;
-    return mResources.value(id, AkonadiResource::nullResource());
+    return resourceForEvent(event.id());
 }
 
 /******************************************************************************

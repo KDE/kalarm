@@ -97,7 +97,12 @@ bool ResourceBase::isBeingDeleted() const
     return mBeingDeleted;
 }
 
-QString ResourceBase::storageTypeString(bool description, bool file, bool local) const
+void ResourceBase::setLoaded(bool loaded) const
+{
+    mLoaded = loaded;
+}
+
+QString ResourceBase::storageTypeStr(bool description, bool file, bool local) const
 {
     if (description)
         return file ? i18nc("@info", "KAlarm Calendar File") : i18nc("@info", "KAlarm Calendar Directory");

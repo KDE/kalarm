@@ -33,6 +33,14 @@ using namespace KAlarmCal;
 class Resource
 {
 public:
+    /** The type of storage used by a resource. */
+    enum StorageType
+    {
+        NoStorage  = ResourceBase::NoStorage,
+        File       = ResourceBase::File,
+        Directory  = ResourceBase::Directory
+    };
+
     Resource();
     explicit Resource(ResourceBase*);
     Resource(const Resource&) = default;
@@ -55,12 +63,15 @@ public:
     /** Return the resource's unique ID. */
     ResourceId id() const;
 
+    /** Return the type of storage used by the resource. */
+    StorageType storageType() const;
+
     /** Return the type of the resource (file, remote file, etc.)
      *  for display purposes.
      *  @param description  true for description (e.g. "Remote file"),
      *                      false for brief label (e.g. "URL").
      */
-    QString storageType(bool description) const;
+    QString storageTypeString(bool description) const;
 
     /** Return the location(s) of the resource (URL, file path, etc.) */
     QUrl location() const;
@@ -281,10 +292,16 @@ public:
     /** Called to notify the resource that an event's command error has changed. */
     void handleCommandErrorChange(const KAEvent&);
 
-    /** Called to notify the resource that it is being deleted.
+    /** Must be called to notify the resource that it is being deleted.
      *  This is to prevent expected errors being displayed to the user.
+     *  @see isBeingDeleted
      */
     void notifyDeletion();
+
+    /** Return whether the resource has been notified that it is being deleted.
+     *  @see notifyDeletion
+     */
+    bool isBeingDeleted() const;
 
 private:
     ResourceBase::Ptr mResource;

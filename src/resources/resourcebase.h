@@ -36,6 +36,9 @@ class ResourceBase : public QObject
 {
     Q_OBJECT
 public:
+    /** The type of storage used by a resource. */
+    enum StorageType  { NoStorage, File, Directory };
+
     /** A shared pointer to an Resource object. */
     typedef QSharedPointer<ResourceBase> Ptr;
 
@@ -48,12 +51,15 @@ public:
     /** Return the resource's unique ID. */
     virtual ResourceId id() const = 0;
 
+    /** Return the type of storage used by the resource. */
+    virtual StorageType storageType() const = 0;
+
     /** Return the type of the resource (file, remote file, etc.)
      *  for display purposes.
      *  @param description  true for description (e.g. "Remote file"),
      *                      false for brief label (e.g. "URL").
      */
-    virtual QString storageType(bool description) const = 0;
+    virtual QString storageTypeString(bool description) const = 0;
 
     /** Return the location(s) of the resource (URL, file path, etc.) */
     virtual QUrl location() const = 0;
@@ -231,7 +237,7 @@ public:
 #endif
 
     /** Return whether the resource has fully loaded. */
-    virtual bool isLoaded() const = 0;
+    virtual bool isLoaded() const   { return mLoaded; }
 
     /** Save the resource.
      *  If saving is initiated, the ResourceManager will emit the resourceSaved()
@@ -274,17 +280,24 @@ public:
     /** Called to notify the resource that an event's command error has changed. */
     virtual void handleCommandErrorChange(const KAEvent&) = 0;
 
-    /** Called to notify the resource that it is being deleted.
+    /** Must be called to notify the resource that it is being deleted.
      *  This is to prevent expected errors being displayed to the user.
+     *  @see isBeingDeleted
      */
     void notifyDeletion();
 
-protected:
+    /** Return whether the resource has been notified that it is being deleted.
+     *  @see notifyDeletion
+     */
     bool isBeingDeleted() const;
-    QString storageTypeString(bool description, bool file, bool local) const;
+
+protected:
+    void setLoaded(bool loaded) const;
+    QString storageTypeStr(bool description, bool file, bool local) const;
 
 private:
-    bool mBeingDeleted{false};   // the resource is currently being deleted
+    mutable bool mLoaded{false};  // the resource has finished loading
+    bool mBeingDeleted{false};    // the resource is currently being deleted
 };
 
 #endif // RESOURCEBASE_H
