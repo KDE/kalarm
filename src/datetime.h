@@ -60,7 +60,7 @@ public:
     explicit DateTime(const QDateTime &dt);
 
     /** Constructor for a date-time value. */
-    DateTime(const KADateTime &dt);
+    DateTime(const KADateTime &dt);      //krazy:exclude=explicit  Allow implicit conversion
 
     /** Copy constructor. */
     DateTime(const DateTime &dt);
