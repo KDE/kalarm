@@ -1,7 +1,7 @@
 /*
  *  mainwindowbase.cpp  -  base class for main application windows
  *  Program:  kalarm
- *  Copyright © 2002,2003,2007,2015 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2002,2003,2007,2015 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -18,10 +18,9 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kalarm.h"
-#include "kalarmapp.h"
 #include "mainwindowbase.h"
 
+#include "kalarmapp.h"
 
 
 MainWindowBase::MainWindowBase(QWidget* parent, Qt::WindowFlags f)

@@ -18,8 +18,8 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kalarm.h"      //krazy:exclude=includes (kalarm.h must be first)
 #include "commandoptions.h"
+
 #include "alarmtime.h"
 #include "kalarmapp.h"
 #include "kamail.h"
@@ -41,21 +41,10 @@ bool convInterval(const QString& timeParam, KARecurrence::Type&, int& timeInterv
 CommandOptions* CommandOptions::mFirstInstance = nullptr;
 
 CommandOptions::CommandOptions()
-    : mParser(nullptr)
-    , mOptions(Num_Options, nullptr)
-    , mCommand(NONE)
-    , mEditActionSet(false)
-    , mRecurrence(nullptr)
-    , mRepeatCount(0)
-    , mRepeatInterval(0)
-    , mLateCancel(0)
+    : mOptions(Num_Options, nullptr)
     , mBgColour(Preferences::defaultBgColour())
     , mFgColour(Preferences::defaultFgColour())
-    , mReminderMinutes(0)
-    , mAudioVolume(-1)
-    , mFromID(0)
     , mFlags(KAEvent::DEFAULT_FONT)
-    , mDisableAll(false)
 {
     if (!mFirstInstance)
         mFirstInstance = this;

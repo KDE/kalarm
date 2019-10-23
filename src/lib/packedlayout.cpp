@@ -17,21 +17,19 @@
  *  with this program; if not, write to the Free Software Foundation, Inc.,
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#include "kalarm.h"   //krazy:exclude=includes (kalarm.h must be first)
+
 #include "packedlayout.h"
 
 
 PackedLayout::PackedLayout(QWidget* parent, Qt::Alignment alignment)
     : QLayout(parent)
     , mAlignment(alignment)
-    , mWidthCached(0)
 {
 }
 
 PackedLayout::PackedLayout(Qt::Alignment alignment)
     : QLayout()
     , mAlignment(alignment)
-    , mWidthCached(0)
 {
 }
 

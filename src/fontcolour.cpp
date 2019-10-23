@@ -1,7 +1,7 @@
 /*
  *  fontcolour.cpp  -  font and colour chooser widget
  *  Program:  kalarm
- *  Copyright © 2001-2009 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2019 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -18,11 +18,12 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "fontcolour.h"
+
 #include "kalarmapp.h"
 #include "preferences.h"
 #include "colourbutton.h"
 #include "checkbox.h"
-#include "fontcolour.h"
 
 #include <kfontchooser.h>
 
@@ -36,9 +37,7 @@
 
 FontColourChooser::FontColourChooser(QWidget* parent, const QStringList& fontList,
            const QString& frameLabel, bool fg, bool defaultFont, int visibleListSize)
-    : QWidget(parent),
-      mFgColourButton(nullptr),
-      mReadOnly(false)
+    : QWidget(parent)
 {
     QVBoxLayout* topLayout = new QVBoxLayout(this);
     topLayout->setSpacing(style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
@@ -104,8 +103,6 @@ FontColourChooser::FontColourChooser(QWidget* parent, const QStringList& fontLis
         layout->addWidget(mDefaultFont);
         layout->addWidget(new QWidget(page));    // left adjust the widget
     }
-    else
-        mDefaultFont = nullptr;
 
     mFontChooser = new KFontChooser(page, KFontChooser::DisplayFrame, fontList, visibleListSize);
     mFontChooser->installEventFilter(this);   // for read-only mode
@@ -226,6 +223,5 @@ void FontColourChooser::slotDefaultFontToggled(bool on)
 {
     mFontChooser->setEnabled(!on);
 }
-
 
 // vim: et sw=4:

@@ -1,7 +1,7 @@
 /*
  *  templatemenuaction.h  -  menu action to select a template
  *  Program:  kalarm
- *  Copyright © 2005,2006,2008,2011 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2005,2006,2008,2011 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -34,7 +34,7 @@ class TemplateMenuAction : public KActionMenu
         TemplateMenuAction(const QIcon& icon, const QString& label, QObject* parent);
         virtual ~TemplateMenuAction() {}
     Q_SIGNALS:
-        void   selected(const KAEvent*);
+        void   selected(const KAlarmCal::KAEvent*);
 
     private Q_SLOTS:
         void   slotInitMenu();

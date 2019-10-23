@@ -19,6 +19,7 @@
  */
 
 #include "akonadiresource.h"
+
 #include "akonadimodel.h"
 #include "kalarm_debug.h"
 

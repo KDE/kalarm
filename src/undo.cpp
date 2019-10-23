@@ -77,7 +77,7 @@ class UndoItem
         virtual void       dumpDebugTitle(const char* typeName) const;
 
         QString            mName;      // specified action name (overrides default)
-        int                mId;        // unique identifier (only for mType = UNDO, REDO)
+        int                mId{0};     // unique identifier (only for mType = UNDO, REDO)
         Undo::Type         mType;      // which list (if any) the object is in
         CalEvent::Type     mCalendar;
 };
@@ -628,7 +628,6 @@ int                  UndoItem::mRestoreWarningCount;
 */
 UndoItem::UndoItem(Undo::Type type, const QString& name)
     : mName(name)
-    , mId(0)
     , mType(type)
     , mCalendar(CalEvent::EMPTY)
 {

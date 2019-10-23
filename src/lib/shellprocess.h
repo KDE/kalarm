@@ -1,7 +1,7 @@
 /*
  *  shellprocess.h  -  execute a process through the shell
  *  Program:  kalarm
- *  Copyright © 2004-2008 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2004-2019 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -132,16 +132,16 @@ class ShellProcess : public KProcess
         ShellProcess&  operator<<(const QString&);
         ShellProcess&  operator<<(const QStringList&);
 
-        static QByteArray  mShellName;    // name of shell to be used
-        static QByteArray  mShellPath;    // path of shell to be used
-        static bool        mInitialised;  // true once static data has been initialised
-        static bool        mAuthorised;   // true if shell commands are authorised
-        QString            mCommand;      // copy of command to be executed
-        QQueue<QByteArray> mStdinQueue;   // queued strings to send to STDIN
-        qint64             mStdinBytes;   // bytes still to be written from first queued string
-        int                mExitCode;     // shell exit value (if mStatus == SUCCESS or NOT_FOUND)
-        Status             mStatus;       // current execution status
-        bool               mStdinExit;    // exit once STDIN queue has been written
+        static QByteArray  mShellName;        // name of shell to be used
+        static QByteArray  mShellPath;        // path of shell to be used
+        static bool        mInitialised;      // true once static data has been initialised
+        static bool        mAuthorised;       // true if shell commands are authorised
+        QString            mCommand;          // copy of command to be executed
+        QQueue<QByteArray> mStdinQueue;       // queued strings to send to STDIN
+        qint64             mStdinBytes{0};    // bytes still to be written from first queued string
+        int                mExitCode;         // shell exit value (if mStatus == SUCCESS or NOT_FOUND)
+        Status             mStatus{INACTIVE}; // current execution status
+        bool               mStdinExit{false}; // exit once STDIN queue has been written
 };
 
 #endif // SHELLPROCESS_H

@@ -1,7 +1,7 @@
 /*
  *  reminder.cpp  -  reminder setting widget
  *  Program:  kalarm
- *  Copyright © 2003-2005,2007-2011 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2003-2005,2007-2011 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -18,13 +18,13 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kalarm.h"
+#include "reminder.h"
 
 #include "preferences.h"
 #include "checkbox.h"
 #include "combobox.h"
 #include "timeselector.h"
-#include "reminder.h"
+#include "kalarm_debug.h"
 
 #include <kalarmcal/kadatetime.h>
 using namespace KAlarmCal;
@@ -35,7 +35,6 @@ using namespace KCalendarCore;
 
 #include <QVBoxLayout>
 #include <QHBoxLayout>
-#include "kalarm_debug.h"
 
 
 // Collect these widget labels together to ensure consistent wording and
@@ -48,9 +47,8 @@ QString Reminder::i18n_chk_FirstRecurrenceOnly()   { return i18nc("@option:check
 Reminder::Reminder(const QString& reminderWhatsThis, const QString& valueWhatsThis,
                    const QString& beforeAfterWhatsThis, bool allowHourMinute,
                    bool showOnceOnly, QWidget* parent)
-    : QFrame(parent),
-      mReadOnly(false),
-      mOnceOnlyEnabled(showOnceOnly)
+    : QFrame(parent)
+    , mOnceOnlyEnabled(showOnceOnly)
 {
     QVBoxLayout* topLayout = new QVBoxLayout(this);
     topLayout->setContentsMargins(0, 0, 0, 0);

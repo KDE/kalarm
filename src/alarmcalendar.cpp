@@ -20,6 +20,7 @@
 
 #include "alarmcalendar.h"
 
+#include "kalarm.h"
 #include "collectionmodel.h"
 #include "filedialog.h"
 #include "functions.h"
@@ -27,6 +28,7 @@
 #include "mainwindow.h"
 #include "messagebox.h"
 #include "preferences.h"
+#include "kalarm_debug.h"
 
 #include <KCalendarCore/MemoryCalendar>
 #include <KCalendarCore/ICalFormat>
@@ -41,7 +43,6 @@
 #include <QTemporaryFile>
 #include <QStandardPaths>
 #include <QFileDialog>
-#include "kalarm_debug.h"
 
 using namespace Akonadi;
 using namespace KCalendarCore;
@@ -1580,6 +1581,5 @@ KACalendar::Compat fix(const FileStorage::Ptr& fileStorage)
         return KACalendar::Incompatible;  // calendar was created by another program, or an unknown version of KAlarm
     return KACalendar::Current;
 }
-
 
 // vim: et sw=4:

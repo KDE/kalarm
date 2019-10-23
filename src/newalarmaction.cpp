@@ -19,7 +19,6 @@
  */
 
 #include "newalarmaction.h"
-#include "kalarm_debug.h"
 
 #include "akonadimodel.h"
 #include "collectionmodel.h"
@@ -27,6 +26,7 @@
 #include "functions.h"
 #include "shellprocess.h"
 #include "templatemenuaction.h"
+#include "kalarm_debug.h"
 
 #include <KActionMenu>
 #include <KActionCollection>
@@ -54,9 +54,8 @@ using namespace KAlarmCal;
 * the KActionCollection.
 */
 NewAlarmAction::NewAlarmAction(bool templates, const QString& label, QObject* parent, KActionCollection* collection)
-    : KActionMenu(QIcon::fromTheme(QStringLiteral("document-new")), label, parent),
-      mTemplateAction(nullptr),
-      mActionCollection(collection)
+    : KActionMenu(QIcon::fromTheme(QStringLiteral("document-new")), label, parent)
+    , mActionCollection(collection)
 {
     mDisplayAction = new QAction(QIcon::fromTheme(DISP_ICON), (templates ? i18nc("@item:inmenu", "&Display Alarm Template") : i18nc("@action", "New Display Alarm")), parent);
     menu()->addAction(mDisplayAction);

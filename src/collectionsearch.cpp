@@ -20,6 +20,8 @@
 
 #include "collectionsearch.h"
 
+#include "kalarm_debug.h"
+
 #include <AkonadiCore/agentinstance.h>
 #include <AkonadiCore/agentmanager.h>
 #include <AkonadiCore/collectionfetchjob.h>
@@ -31,7 +33,6 @@
 using namespace KCalendarCore;
 
 #include <QTimer>
-#include "kalarm_debug.h"
 
 using namespace Akonadi;
 
@@ -46,11 +47,10 @@ using namespace Akonadi;
 * - Otherwise, it will Q_EMIT the signal collections() to notify all Collections.
 */
 CollectionSearch::CollectionSearch(const QString& mimeType, const QString& gid, const QString& uid, bool remove)
-    : mMimeType(mimeType),
-      mGid(gid),
-      mUid(uid),
-      mDeleteCount(0),
-      mDelete(remove && (!mGid.isEmpty() || !mUid.isEmpty()))
+    : mMimeType(mimeType)
+    , mGid(gid)
+    , mUid(uid)
+    , mDelete(remove && (!mGid.isEmpty() || !mUid.isEmpty()))
 {
     const AgentInstance::List agents = AgentManager::self()->instances();
     for (const AgentInstance& agent : agents)
@@ -201,7 +201,5 @@ void CollectionSearch::finish()
         Q_EMIT items(mItems);
     deleteLater();
 }
-
-
 
 // vim: et sw=4:

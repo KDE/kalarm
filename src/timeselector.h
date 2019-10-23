@@ -1,7 +1,7 @@
 /*
  *  timeselector.h  -  widget to optionally set a time period
  *  Program:  kalarm
- *  Copyright © 2004,2005,2007,2008,2010,2011 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2004-2019 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -58,8 +58,8 @@ class TimeSelector : public QFrame
     private:
         CheckBox*    mSelect;
         TimePeriod*  mPeriod;
-        ComboBox*    mSignWidget;
-        bool         mReadOnly;           // the widget is read only
+        ComboBox*    mSignWidget{nullptr};
+        bool         mReadOnly{false};          // the widget is read only
 };
 
 #endif // TIMESELECTOR_H

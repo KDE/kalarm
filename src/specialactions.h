@@ -1,7 +1,7 @@
 /*
  *  specialactions.h  -  widget to specify special alarm actions
  *  Program:  kalarm
- *  Copyright © 2004-2010,2012 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2004-2019 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -57,7 +57,7 @@ class SpecialActionsButton : public QPushButton
         QString  mPostAction;
         KAEvent::ExtraActionOptions mOptions;
         bool     mEnableCheckboxes;
-        bool     mReadOnly;
+        bool     mReadOnly{false};
 };
 
 
@@ -84,7 +84,7 @@ class SpecialActions : public QWidget
         CheckBox*    mDontShowError;
         CheckBox*    mExecOnDeferral;
         bool         mEnableCheckboxes;   // enable checkboxes even if mPreAction is blank
-        bool         mReadOnly;
+        bool         mReadOnly{false};
 };
 
 

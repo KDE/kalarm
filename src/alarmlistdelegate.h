@@ -1,7 +1,7 @@
 /*
  *  alarmlistdelegate.h  -  handles editing and display of alarm list
  *  Program:  kalarm
- *  Copyright © 2007,2008 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2007,2008 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -20,8 +20,6 @@
 
 #ifndef ALARMLISTDELEGATE_H
 #define ALARMLISTDELEGATE_H
-
-#include "kalarm.h"
 
 #include "alarmlistview.h"
 

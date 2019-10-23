@@ -18,18 +18,17 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kalarm.h"
 #include "alarmlistdelegate.h"
 
 #include "akonadimodel.h"
 #include "functions.h"
+#include "kalarm_debug.h"
 
 #include <kalarmcal/kacalendar.h>
 
 #include <kcolorscheme.h>
 
 #include <QPainter>
-#include "kalarm_debug.h"
 
 
 void AlarmListDelegate::paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const
@@ -121,6 +120,5 @@ void AlarmListDelegate::edit(KAEvent* event, EventListView* view)
 {
     KAlarm::editAlarm(event, static_cast<AlarmListView*>(view));   // edit alarm (view-only mode if archived or read-only)
 }    
-
 
 // vim: et sw=4:

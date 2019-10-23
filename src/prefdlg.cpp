@@ -18,7 +18,8 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kalarm.h"
+#include "prefdlg.h"
+#include "prefdlg_p.h"
 
 #include "alarmcalendar.h"
 #include "collectionmodel.h"
@@ -47,10 +48,8 @@
 #include "timespinbox.h"
 #include "timezonecombo.h"
 #include "traywindow.h"
-#include "prefdlg_p.h"
-#include "prefdlg.h"
-
 #include "config-kalarm.h"
+#include "kalarm_debug.h"
 
 #include <kalarmcal/identities.h>
 
@@ -87,7 +86,6 @@ using namespace KHolidays;
 #include <QStandardPaths>
 #include <QComboBox>
 #include <QLocale>
-#include "kalarm_debug.h"
 
 using namespace KCalendarCore;
 using namespace KAlarmCal;
@@ -140,8 +138,7 @@ void KAlarmPrefDlg::display()
 }
 
 KAlarmPrefDlg::KAlarmPrefDlg()
-    : KPageDialog(),
-      mShown(false)
+    : KPageDialog()
 {
     setAttribute(Qt::WA_DeleteOnClose);
     setObjectName(QStringLiteral("PrefDlg"));    // used by LikeBack
@@ -343,8 +340,7 @@ void KAlarmPrefDlg::resizeEvent(QResizeEvent* re)
 int PrefsTabBase::mIndentWidth = 0;
 
 PrefsTabBase::PrefsTabBase(StackedScrollGroup* scrollGroup)
-    : StackedScrollWidget(scrollGroup),
-      mLabelsAligned(false)
+    : StackedScrollWidget(scrollGroup)
 {
     QFrame* topWidget = new QFrame(this);
     setWidget(topWidget);
@@ -824,8 +820,7 @@ void TimePrefTab::apply(bool syncToDisc)
 =============================================================================*/
 
 StorePrefTab::StorePrefTab(StackedScrollGroup* scrollGroup)
-    : PrefsTabBase(scrollGroup),
-      mCheckKeepChanges(false)
+    : PrefsTabBase(scrollGroup)
 {
     // Which resource to save to
     QGroupBox* group = new QGroupBox(i18nc("@title:group", "New Alarms && Templates"));
@@ -961,9 +956,7 @@ void StorePrefTab::slotClearArchived()
 =============================================================================*/
 
 EmailPrefTab::EmailPrefTab(StackedScrollGroup* scrollGroup)
-    : PrefsTabBase(scrollGroup),
-      mAddressChanged(false),
-      mBccAddressChanged(false)
+    : PrefsTabBase(scrollGroup)
 {
     QWidget* widget = new QWidget;
     topLayout()->addWidget(widget);
@@ -1598,11 +1591,7 @@ QString EditPrefTab::validate()
 =============================================================================*/
 
 ViewPrefTab::ViewPrefTab(StackedScrollGroup* scrollGroup)
-    : PrefsTabBase(scrollGroup),
-      mShowInSystemTrayCheck(nullptr),
-      mShowInSystemTrayGroup(nullptr),
-      mAutoHideSystemTray(nullptr),
-      mAutoHideSystemTrayPeriod(nullptr)
+    : PrefsTabBase(scrollGroup)
 {
     mTabs = new QTabWidget();
     topLayout()->addWidget(mTabs);

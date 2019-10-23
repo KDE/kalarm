@@ -18,14 +18,17 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kalarm.h"   //krazy:exclude=includes (kalarm.h must be first)
 #include "kamail.h"
 
+#include "kalarm.h"
 #include "functions.h"
 #include "kalarmapp.h"
 #include "mainwindow.h"
 #include "messagebox.h"
 #include "preferences.h"
+#include "kalarm_debug.h"
+
+#include "kmailinterface.h"
 
 #include <kalarmcal/identities.h>
 #include <KIdentityManagement/kidentitymanagement/identitymanager.h>
@@ -58,11 +61,8 @@
 #include <QTextCodec>
 #include <QStandardPaths>
 #include <QtDBus>
-#include "kalarm_debug.h"
 
 #include <pwd.h>
-
-#include "kmailinterface.h"
 
 static const QLatin1String KMAIL_DBUS_SERVICE("org.kde.kmail");
 //static const QLatin1String KMAIL_DBUS_PATH("/KMail");
@@ -86,7 +86,7 @@ QString KAMail::i18n_NeedFromEmailAddress()
 QString KAMail::i18n_sent_mail()
 { return i18nc("@info KMail folder name: this should be translated the same as in kmail", "sent-mail"); }
 
-KAMail*                              KAMail::mInstance = nullptr;   // used only to enable signals/slots to work
+KAMail*                                 KAMail::mInstance = nullptr;   // used only to enable signals/slots to work
 QQueue<MailTransport::MessageQueueJob*> KAMail::mJobs;
 QQueue<KAMail::JobData>                 KAMail::mJobData;
 

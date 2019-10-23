@@ -18,7 +18,6 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kalarm.h"
 #include "deferdlg.h"
 
 #include "alarmcalendar.h"
@@ -26,6 +25,7 @@
 #include "functions.h"
 #include "kalarmapp.h"
 #include "messagebox.h"
+#include "kalarm_debug.h"
 
 #include <kalarmcal/datetime.h>
 #include <kalarmcal/kaevent.h>
@@ -36,7 +36,6 @@
 #include <QStyle>
 #include <QDialogButtonBox>
 #include <QPushButton>
-#include "kalarm_debug.h"
 
 
 DeferAlarmDlg::DeferAlarmDlg(const DateTime& initialDT, bool anyTimeOption, bool cancelButton, QWidget* parent)

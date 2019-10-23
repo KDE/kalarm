@@ -1,7 +1,7 @@
 /*
  *  startdaytimer.cpp  -  timer triggered at the user-defined start-of-day time
  *  Program:  kalarm
- *  Copyright © 2004,2005,2009 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2004,2005,2009 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -18,10 +18,9 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kalarm.h"
+#include "startdaytimer.h"
 
 #include "preferences.h"
-#include "startdaytimer.h"
 
 
 StartOfDayTimer* StartOfDayTimer::mInstance = nullptr;
@@ -47,6 +46,5 @@ void StartOfDayTimer::startOfDayChanged()
 {
     changeTime(Preferences::startOfDay(), true);
 }
-
 
 // vim: et sw=4:

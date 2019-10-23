@@ -1,7 +1,7 @@
 /*
  *  fontcolour.h  -  font and colour chooser widget
  *  Program:  kalarm
- *  Copyright © 2001,2003,2008,2009 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001,2003,2008,2009 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -58,11 +58,11 @@ class FontColourChooser : public QWidget
         void              slotDefaultFontToggled(bool);
 
     private:
-        ColourButton*    mFgColourButton;       // or null
+        ColourButton*    mFgColourButton{nullptr};
         ColourButton*    mBgColourButton;
         KFontChooser*    mFontChooser;
-        CheckBox*        mDefaultFont;          // or null
-        bool             mReadOnly;
+        CheckBox*        mDefaultFont{nullptr};
+        bool             mReadOnly{false};
 };
 
 #endif

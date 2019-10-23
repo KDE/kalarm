@@ -1,7 +1,7 @@
 /*
  *  repetitionbutton.h  -  pushbutton and dialog to specify alarm repetition
  *  Program:  kalarm
- *  Copyright © 2004-2007,2009-2011 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2004-2019 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -62,12 +62,12 @@ class RepetitionButton : public QPushButton
         void           activate(bool waitForInitialisation);
         void           displayDialog();
 
-        RepetitionDlg* mDialog;
-        Repetition     mRepetition;   // repetition interval and count
-        int            mMaxDuration;  // maximum allowed duration in minutes, or -1 for infinite
-        bool           mDateOnly;     // hours/minutes cannot be displayed
-        bool           mWaitForInit;  // Q_EMIT needsInitialisation() when button pressed, display when initialise() called
-        bool           mReadOnly;
+        RepetitionDlg* mDialog{nullptr};
+        Repetition     mRepetition;       // repetition interval and count
+        int            mMaxDuration{-1};  // maximum allowed duration in minutes, or -1 for infinite
+        bool           mDateOnly{false};  // hours/minutes cannot be displayed
+        bool           mWaitForInit;      // Q_EMIT needsInitialisation() when button pressed, display when initialise() called
+        bool           mReadOnly{false};
 };
 
 

@@ -1,7 +1,7 @@
 /*
  *  prefdlg_p.h  -  private classes for program preferences dialog
  *  Program:  kalarm
- *  Copyright © 2001-2018 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2019 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -35,6 +35,8 @@ class QSpinBox;
 class QTimeZone;
 class QLineEdit;
 class QComboBox;
+class QVBoxLayout;
+class QTabWidget;
 class FontColourChooser;
 class ColourButton;
 class ButtonGroup;
@@ -65,10 +67,10 @@ class PrefsTabBase : public StackedScrollWidget
         void showEvent(QShowEvent*) override;
 
     private:
-        static int   mIndentWidth;       // indent width for checkboxes etc.
-        QVBoxLayout* mTopLayout;
-        QList<QLabel*> mLabels;          // labels to right-align
-        bool           mLabelsAligned;   // labels have been aligned
+        static int     mIndentWidth;           // indent width for checkboxes etc.
+        QVBoxLayout*   mTopLayout;
+        QList<QLabel*> mLabels;                // labels to right-align
+        bool           mLabelsAligned{false};  // labels have been aligned
 };
 
 
@@ -149,7 +151,7 @@ class StorePrefTab : public PrefsTabBase
         QLabel*       mPurgeAfterLabel;
         QPushButton*  mClearArchived;
         bool          mOldKeepArchived;    // previous setting of keep-archived
-        bool          mCheckKeepChanges;
+        bool          mCheckKeepChanges{false};
 };
 
 
@@ -189,8 +191,8 @@ class EmailPrefTab : public PrefsTabBase
         QLineEdit*   mEmailBccAddress;
         QCheckBox*   mEmailQueuedNotify;
         QCheckBox*   mEmailCopyToKMail;
-        bool         mAddressChanged;
-        bool         mBccAddressChanged;
+        bool         mAddressChanged{false};
+        bool         mBccAddressChanged{false};
 };
 
 
@@ -259,10 +261,10 @@ class ViewPrefTab : public PrefsTabBase
         QTabWidget*   mTabs;
         ColourButton* mDisabledColour;
         ColourButton* mArchivedColour;
-        QCheckBox*    mShowInSystemTrayCheck;
-        QGroupBox*    mShowInSystemTrayGroup;
-        ButtonGroup*  mAutoHideSystemTray;
-        TimePeriod*   mAutoHideSystemTrayPeriod;
+        QCheckBox*    mShowInSystemTrayCheck{nullptr};
+        QGroupBox*    mShowInSystemTrayGroup{nullptr};
+        ButtonGroup*  mAutoHideSystemTray{nullptr};
+        TimePeriod*   mAutoHideSystemTrayPeriod{nullptr};
         QCheckBox*    mTooltipShowAlarms;
         QCheckBox*    mTooltipMaxAlarms;
         SpinBox*      mTooltipMaxAlarmCount;

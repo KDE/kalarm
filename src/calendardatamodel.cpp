@@ -19,9 +19,11 @@
  */
 
 #include "calendardatamodel.h"
+
 #include "alarmtime.h"
 #include "preferences.h"
 #include "resources/resource.h"
+#include "kalarm_debug.h"
 
 #include <kalarmcal/alarmtext.h>
 #include <kalarmcal/kaevent.h>
@@ -33,7 +35,6 @@
 #include <QUrl>
 #include <QFileInfo>
 #include <QIcon>
-#include "kalarm_debug.h"
 
 /*=============================================================================
 = Class: CalendarDataModel

@@ -18,12 +18,13 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kalarm.h"
+#include "preferences.h"
 
+#include "kalarm.h"
 #include "functions.h"
 #include "kamail.h"
 #include "messagebox.h"
-#include "preferences.h"
+#include "kalarm_debug.h"
 
 #include <kalarmcal/identities.h>
 
@@ -34,7 +35,6 @@
 #include <KSharedConfig>
 #include <kconfiggroup.h>
 #include <kmessagebox.h>
-#include "kalarm_debug.h"
 
 #include <QStandardPaths>
 

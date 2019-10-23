@@ -19,6 +19,7 @@
  */
 
 #include "desktop.h"
+
 #include "config-kalarm.h"
 
 #if KDEPIM_HAVE_X11

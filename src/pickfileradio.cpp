@@ -18,15 +18,14 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kalarm.h"
 #include "pickfileradio.h"
 
 #include "buttongroup.h"
 #include "lineedit.h"
+#include "kalarm_debug.h"
 
 #include <QPushButton>
 #include <QTimer>
-#include "kalarm_debug.h"
 
 
 PickFileRadio::PickFileRadio(QPushButton* button, LineEdit* edit, const QString& text, ButtonGroup* group, QWidget* parent)

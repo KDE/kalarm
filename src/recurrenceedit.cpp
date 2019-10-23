@@ -21,7 +21,6 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kalarm.h"
 #include "recurrenceedit.h"
 #include "recurrenceedit_p.h"
 
@@ -37,6 +36,7 @@
 #include "timeedit.h"
 #include "timespinbox.h"
 #include "buttongroup.h"
+#include "kalarm_debug.h"
 
 #include <kalarmcal/kaevent.h>
 #include <kalarmcal/karecurrence.h>
@@ -58,7 +58,6 @@ using namespace KCalendarCore;
 #include <QVBoxLayout>
 #include <QtAlgorithms>
 #include <QLocale>
-#include "kalarm_debug.h"
 
 
 class ListWidget : public QListWidget
@@ -81,13 +80,6 @@ QString RecurrenceEdit::i18n_combo_Yearly()         { return i18nc("@item:inlist
 
 RecurrenceEdit::RecurrenceEdit(bool readOnly, QWidget* parent)
     : QFrame(parent)
-    , mRule(nullptr)
-    , mRuleButtonType(INVALID_RECUR)
-    , mDailyShown(false)
-    , mWeeklyShown(false)
-    , mMonthlyShown(false)
-    , mYearlyShown(false)
-    , mNoEmitTypeChanged(true)
     , mReadOnly(readOnly)
 {
     qCDebug(KALARM_LOG) << "RecurrenceEdit:";
@@ -1737,7 +1729,5 @@ bool YearlyRule::stateChanged() const
         ||  mSavedMonths    != months()
         ||  mSavedFeb29Type != feb29Type());
 }
-
-
 
 // vim: et sw=4:

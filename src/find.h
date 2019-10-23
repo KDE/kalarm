@@ -1,7 +1,7 @@
 /*
  *  find.h  -  search facility
  *  Program:  kalarm
- *  Copyright © 2005-2009 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2005-2019 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -64,13 +64,13 @@ class Find : public QObject
         QCheckBox*         mCommandType;
         QCheckBox*         mEmailType;
         QCheckBox*         mAudioType;
-        KFind*             mFind;
+        KFind*             mFind{nullptr};
         QStringList        mHistory;         // list of history items for Find dialog
         QString            mLastPattern;     // pattern used in last search
         QString            mStartID;         // ID of first alarm searched if 'from cursor' was selected
-        long               mOptions;         // OR of find dialog options
+        long               mOptions{0};      // OR of find dialog options
         bool               mNoCurrentItem;   // there is no current item for the purposes of searching
-        bool               mFound;           // true if any matches have been found
+        bool               mFound{false};    // true if any matches have been found
 };
 
 #endif // FIND_H

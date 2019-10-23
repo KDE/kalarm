@@ -19,6 +19,7 @@
  */
 
 #include "itemlistmodel.h"
+
 #include "collectionmodel.h"
 
 #include <kalarmcal/kaevent.h>
@@ -36,7 +37,6 @@ using namespace Akonadi;
 ItemListModel::ItemListModel(CalEvent::Types allowed, QObject* parent)
     : EntityMimeTypeFilterModel(parent)
     , mAllowedTypes(allowed)
-    , mHaveEvents(false)
 {
     KSelectionProxyModel* selectionModel = new KSelectionProxyModel(CollectionControlModel::instance()->selectionModel(), this);
     selectionModel->setSourceModel(AkonadiModel::instance());

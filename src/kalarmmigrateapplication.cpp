@@ -19,6 +19,7 @@
 */
 
 #include "kalarmmigrateapplication.h"
+
 #include "kalarm_debug.h"
 
 #include <Kdelibs4ConfigMigrator>

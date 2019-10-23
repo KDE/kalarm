@@ -74,8 +74,8 @@ class ItemListModel : public Akonadi::EntityMimeTypeFilterModel
         void         resourceStatusChanged(const Resource& resource, AkonadiModel::Change change, const QVariant&, bool inserted);
 
     private:
-        CalEvent::Types mAllowedTypes; // types of events allowed in this model
-        bool            mHaveEvents;   // there are events in this model
+        CalEvent::Types mAllowedTypes;       // types of events allowed in this model
+        bool            mHaveEvents{false};  // there are events in this model
 };
 
 

@@ -19,6 +19,7 @@
  */
 
 #include "resourcebase.h"
+
 #include "preferences.h"
 #include "kalarm_debug.h"
 

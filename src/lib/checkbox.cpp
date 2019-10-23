@@ -1,7 +1,7 @@
 /*
  *  checkbox.cpp  -  check box with read-only option
  *  Program:  kalarm
- *  Copyright © 2002,2003,2005 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2002,2003,2005 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -19,22 +19,19 @@
  */
 
 #include "checkbox.h"
+
 #include <QMouseEvent>
 #include <QKeyEvent>
 
 
 CheckBox::CheckBox(QWidget* parent)
-    : QCheckBox(parent),
-      mFocusPolicy(focusPolicy()),
-      mFocusWidget(nullptr),
-      mReadOnly(false)
+    : QCheckBox(parent)
+    , mFocusPolicy(focusPolicy())
 { }
 
 CheckBox::CheckBox(const QString& text, QWidget* parent)
-    : QCheckBox(text, parent),
-      mFocusPolicy(focusPolicy()),
-      mFocusWidget(nullptr),
-      mReadOnly(false)
+    : QCheckBox(text, parent)
+    , mFocusPolicy(focusPolicy())
 { }
 
 /******************************************************************************

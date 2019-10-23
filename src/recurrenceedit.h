@@ -1,7 +1,7 @@
 /*
  *  recurrenceedit.h  -  widget to edit the event's recurrence definition
  *  Program:  kalarm
- *  Copyright © 2002-2011 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2002-2019 David Jarvie <djarvie@kde.org>
  *
  *  Based originally on KOrganizer module koeditorrecurrence.h,
  *  Copyright (c) 2000,2001 Cornelius Schumacher <schumacher@kde.org>
@@ -123,7 +123,7 @@ class RecurrenceEdit : public QFrame
 
         // Main rule box and choices
         QStackedWidget*   mRuleStack;
-        Rule*             mRule;         // current rule widget, or 0 if NoRule
+        Rule*             mRule{nullptr};       // current rule widget, or 0 if NoRule
         NoRule*           mNoRule;
         SubDailyRule*     mSubDailyRule;
         DailyRule*        mDailyRule;
@@ -139,11 +139,11 @@ class RecurrenceEdit : public QFrame
         RadioButton*      mWeeklyButton;
         RadioButton*      mMonthlyButton;
         RadioButton*      mYearlyButton;
-        RepeatType        mRuleButtonType;
-        bool              mDailyShown;       // daily rule has been displayed at some time or other
-        bool              mWeeklyShown;      // weekly rule has been displayed at some time or other
-        bool              mMonthlyShown;     // monthly rule has been displayed at some time or other
-        bool              mYearlyShown;      // yearly rule has been displayed at some time or other
+        RepeatType        mRuleButtonType{INVALID_RECUR};
+        bool              mDailyShown{false};   // daily rule has been displayed at some time or other
+        bool              mWeeklyShown{false};  // weekly rule has been displayed at some time or other
+        bool              mMonthlyShown{false}; // monthly rule has been displayed at some time or other
+        bool              mYearlyShown{false};  // yearly rule has been displayed at some time or other
 
         // Range
         QGroupBox*        mRangeButtonBox;
@@ -170,7 +170,7 @@ class RecurrenceEdit : public QFrame
         // Current start date and time
         KADateTime        mCurrStartDateTime;
         RepetitionButton* mSubRepetition;
-        bool              mNoEmitTypeChanged;        // suppress typeChanged() signal
+        bool              mNoEmitTypeChanged{true};  // suppress typeChanged() signal
         bool              mReadOnly;
 
         // Initial state of non-rule controls

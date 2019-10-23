@@ -18,7 +18,7 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kalarm.h"
+#include "alarmtimewidget.h"
 
 #include "buttongroup.h"
 #include "checkbox.h"
@@ -30,7 +30,6 @@
 #include "timeedit.h"
 #include "timespinbox.h"
 #include "timezonecombo.h"
-#include "alarmtimewidget.h"
 
 #include <kalarmcal/datetime.h>
 #include <kdatecombobox.h>

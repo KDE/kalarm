@@ -1,7 +1,7 @@
 /*
  *  buttongroup.cpp  -  QButtonGroup with an extra signal
  *  Program:  kalarm
- *  Copyright © 2002,2004,2005,2008 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2002,2004,2005,2008 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -17,9 +17,9 @@
  *  with this program; if not, write to the Free Software Foundation, Inc.,
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#include "kalarm.h"
 
 #include "buttongroup.h"
+
 #include <QAbstractButton>
 
 

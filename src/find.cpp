@@ -18,13 +18,13 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kalarm.h"
 #include "find.h"
 
 #include "alarmlistview.h"
 #include "eventlistview.h"
 #include "messagebox.h"
 #include "preferences.h"
+#include "kalarm_debug.h"
 
 #include <kalarmcal/kaevent.h>
 
@@ -41,7 +41,6 @@
 #include <QRegExp>
 #include <QStyle>
 #include <QApplication>
-#include "kalarm_debug.h"
 
 using namespace KAlarmCal;
 
@@ -62,9 +61,6 @@ Find::Find(EventListView* parent)
     : QObject(parent)
     , mListView(parent)
     , mDialog(nullptr)
-    , mFind(nullptr)
-    , mOptions(0)
-    , mFound(false)
 {
     connect(mListView->selectionModel(), &QItemSelectionModel::currentChanged, this, &Find::slotSelectionChanged);
 }
@@ -440,4 +436,5 @@ QModelIndex Find::nextItem(const QModelIndex& index, bool forward) const
     else
         return mListView->indexAbove(index);
 }
+
 // vim: et sw=4:

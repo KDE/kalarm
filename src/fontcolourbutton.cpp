@@ -1,7 +1,7 @@
 /*
  *  fontcolourbutton.cpp  -  pushbutton widget to select a font and colour
  *  Program:  kalarm
- *  Copyright © 2003-2013 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2003-2013 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -18,20 +18,19 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kalarm.h"
 #include "fontcolourbutton.h"
 
 #include "autoqpointer.h"
 #include "fontcolour.h"
 #include "preferences.h"
 #include "pushbutton.h"
+#include "kalarm_debug.h"
 
 #include <KLocalizedString>
 
 #include <QVBoxLayout>
 #include <QStyle>
 #include <QDialogButtonBox>
-#include "kalarm_debug.h"
 
 
 /*=============================================================================
@@ -40,9 +39,7 @@
 =============================================================================*/
 
 FontColourButton::FontColourButton(QWidget* parent)
-    : PushButton(i18nc("@action:button", "Font && Color..."), parent),
-      mDefaultFont(true),
-      mReadOnly(false)
+    : PushButton(i18nc("@action:button", "Font && Color..."), parent)
 {
     connect(this, &FontColourButton::clicked, this, &FontColourButton::slotButtonPressed);
     setWhatsThis(i18nc("@info:whatsthis", "Choose the font, and foreground and background color, for the alarm message."));
@@ -89,8 +86,7 @@ void FontColourButton::slotButtonPressed()
 
 FontColourDlg::FontColourDlg(const QColor& bgColour, const QColor& fgColour, const QFont& font,
                              bool defaultFont, const QString& caption, QWidget* parent)
-    : QDialog(parent),
-      mReadOnly(false)
+    : QDialog(parent)
 {
     setWindowTitle(caption);
 

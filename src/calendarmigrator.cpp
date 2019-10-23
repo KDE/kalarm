@@ -1,7 +1,7 @@
 /*
  *  calendarmigrator.cpp  -  migrates or creates KAlarm Akonadi resources
  *  Program:  kalarm
- *  Copyright © 2011-2019 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2011-2019 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -19,6 +19,7 @@
  */
 
 #include "calendarmigrator.h"
+
 #include "akonadimodel.h"
 #include "functions.h"
 #include "kalarmsettings.h"
@@ -26,6 +27,7 @@
 #include "mainwindow.h"
 #include "messagebox.h"
 #include "resources/akonadiresource.h"
+#include "kalarm_debug.h"
 
 #include <kalarmcal/collectionattribute.h>
 #include <kalarmcal/compatibilityattribute.h>
@@ -45,7 +47,6 @@
 
 #include <QTimer>
 #include <QStandardPaths>
-#include "kalarm_debug.h"
 
 using namespace Akonadi;
 using namespace KAlarmCal;

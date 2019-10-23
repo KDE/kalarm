@@ -19,6 +19,7 @@
  */
 
 #include "slider.h"
+
 #include <QMouseEvent>
 
 

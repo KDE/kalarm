@@ -1,7 +1,7 @@
 /*
  *  timeedit.cpp  -  time-of-day edit widget, with AM/PM shown depending on locale
  *  Program:  kalarm
- *  Copyright © 2001-2006,2016 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2019 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -18,11 +18,10 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kalarm.h"
+#include "timeedit.h"
 
 #include "combobox.h"
 #include "timespinbox.h"
-#include "timeedit.h"
 
 #include <KLocalizedString>
 
@@ -35,11 +34,7 @@ bool use12HourClock();
 }
 
 TimeEdit::TimeEdit(QWidget* parent)
-    : QWidget(parent),
-      mAmPm(nullptr),
-      mAmIndex(-1),
-      mPmIndex(-1),
-      mReadOnly(false)
+    : QWidget(parent)
 {
     QHBoxLayout* layout = new QHBoxLayout;
     layout->setContentsMargins(0, 0, 0, 0);

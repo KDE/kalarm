@@ -76,7 +76,7 @@ class CollectionSearch : public QObject
         QMap<Akonadi::ItemDeleteJob*, Akonadi::Collection::Id> mItemDeleteJobs;
         Akonadi::Collection::List              mCollections;
         Akonadi::Item::List                    mItems;
-        int                                    mDeleteCount;
+        int                                    mDeleteCount{0};
         bool                                   mDelete;
 };
 

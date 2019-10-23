@@ -18,9 +18,9 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "config-kalarm.h"
-#include "messagewin_p.h"
 #include "messagewin.h"
+#include "messagewin_p.h"
+#include "config-kalarm.h"
 
 #include "alarmcalendar.h"
 #include "autoqpointer.h"

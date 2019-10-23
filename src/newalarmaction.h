@@ -1,7 +1,7 @@
 /*
  *  newalarmaction.h  -  menu action to select a new alarm type
  *  Program:  kalarm
- *  Copyright © 2007-2009,2011,2018 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2007-2009,2011,2018 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -53,7 +53,7 @@ class NewAlarmAction : public KActionMenu
         QAction*            mCommandAction;
         QAction*            mEmailAction;
         QAction*            mAudioAction;
-        TemplateMenuAction* mTemplateAction;   // New From Template action, for non-template menu only
+        TemplateMenuAction* mTemplateAction{nullptr};  // New From Template action, for non-template menu only
         KActionCollection*  mActionCollection;
         QMap<QAction*, EditAlarmDlg::Type> mTypes;
 };

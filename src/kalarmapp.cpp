@@ -18,7 +18,6 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kalarm.h"
 #include "kalarmapp.h"
 
 #include "alarmcalendar.h"
@@ -96,19 +95,7 @@ QString     KAlarmApp::mFatalMessage;
 */
 KAlarmApp::KAlarmApp(int& argc, char** argv)
     : QApplication(argc, argv)
-    , mInitialised(false)
-    , mRedisplayAlarms(false)
-    , mQuitting(false)
-    , mReadOnly(false)
     , mDBusHandler(new DBusHandler())
-    , mTrayWindow(nullptr)
-    , mAlarmTimer(nullptr)
-    , mArchivedPurgeDays(-1)      // default to not purging
-    , mPurgeDaysQueued(-1)
-    , mPendingQuit(false)
-    , mCancelRtcWake(false)
-    , mProcessingQueue(false)
-    , mAlarmsEnabled(true)
 {
     qCDebug(KALARM_LOG) << "KAlarmApp:";
     KAlarmMigrateApplication migrate;

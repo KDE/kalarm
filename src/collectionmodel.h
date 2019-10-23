@@ -64,7 +64,7 @@ class CollectionListModel : public KDescendantsProxyModel
         QVariant data(const QModelIndex&, int role = Qt::DisplayRole) const override;
 
     private:
-        bool mUseCollectionColour;
+        bool mUseCollectionColour{true};
 };
 
 
@@ -102,9 +102,9 @@ class CollectionCheckListModel : public KCheckableProxyModel
         QByteArray debugType(const char* func) const;
 
         static CollectionListModel* mModel;
-        static int             mInstanceCount;
-        CalEvent::Type mAlarmType;     // alarm type contained in this model
-        QItemSelectionModel*   mSelectionModel;
+        static int            mInstanceCount;
+        CalEvent::Type        mAlarmType;     // alarm type contained in this model
+        QItemSelectionModel*  mSelectionModel;
 };
 
 
@@ -136,7 +136,7 @@ class CollectionFilterCheckListModel : public QSortFilterProxyModel
         CollectionCheckListModel* mActiveModel;
         CollectionCheckListModel* mArchivedModel;
         CollectionCheckListModel* mTemplateModel;
-        CalEvent::Type    mAlarmType;     // alarm type contained in this model
+        CalEvent::Type    mAlarmType{CalEvent::EMPTY};   // alarm type contained in this model
 };
 
 
@@ -276,7 +276,7 @@ class CollectionControlModel : public Akonadi::FavoriteCollectionsModel
                 : resourceId(r), collectionId(c) {}
         };
         static QHash<QString, ResourceCol> mAgentPaths;   // path, (resource identifier, collection ID) pairs
-        QEventLoop* mPopulatedCheckLoop;
+        QEventLoop* mPopulatedCheckLoop{nullptr};
 };
 
 #endif // COLLECTIONMODEL_H

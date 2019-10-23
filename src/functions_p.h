@@ -1,7 +1,7 @@
 /*
  *  functions_p.h  -  private declarations for miscellaneous functions
  *  Program:  kalarm
- *  Copyright © 2009,2011 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2009,2011 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -21,7 +21,6 @@
 #ifndef FUNCTIONS_P_H
 #define FUNCTIONS_P_H
 
-#include "kalarm.h"   //krazy:exclude=includes (kalarm.h must be first)
 #include <kwindowsystem.h>
 #include <QObject>
 

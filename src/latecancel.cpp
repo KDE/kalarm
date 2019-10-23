@@ -1,7 +1,7 @@
 /*
  *  latecancel.cpp  -  widget to specify cancellation if late
  *  Program:  kalarm
- *  Copyright © 2004,2005,2007-2011 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2004-2019 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -18,7 +18,6 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kalarm.h"
 #include "latecancel.h"
 
 #include "checkbox.h"
@@ -42,10 +41,7 @@ QString LateCancelSelector::i18n_chk_AutoCloseWinLC()  { return i18nc("@option:c
 
 
 LateCancelSelector::LateCancelSelector(bool allowHourMinute, QWidget* parent)
-    : QFrame(parent),
-      mDateOnly(false),
-      mReadOnly(false),
-      mAutoCloseShown(false)
+    : QFrame(parent)
 {
     QString whatsThis = xi18nc("@info:whatsthis",
                               "<para>If checked, the alarm will be canceled if it cannot be triggered within the "

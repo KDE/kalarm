@@ -1,7 +1,7 @@
 /*
  *  colourbutton.cpp  -  colour selection button
  *  Program:  kalarm
- *  Copyright © 2008 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2008 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -18,7 +18,6 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kalarm.h"
 #include "colourbutton.h"
 
 #include <QMouseEvent>
@@ -26,8 +25,7 @@
 
 
 ColourButton::ColourButton(QWidget* parent)
-    : KColorButton(parent),
-      mReadOnly(false)
+    : KColorButton(parent)
 {
 }
 

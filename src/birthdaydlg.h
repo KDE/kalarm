@@ -1,7 +1,7 @@
 /*
  *  birthdaydlg.h  -  dialog to pick birthdays from address book
  *  Program:  kalarm
- *  Copyright © 2002-2005,2007-2011 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2002-2005,2007-2011 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -67,7 +67,7 @@ class BirthdayDlg : public QDialog
         FontColourButton*     mFontColourButton;
         CheckBox*             mConfirmAck;
         LateCancelSelector*   mLateCancel;
-        SpecialActionsButton* mSpecialActionsButton;
+        SpecialActionsButton* mSpecialActionsButton{nullptr};
         RepetitionButton*     mSubRepetition;
         QDialogButtonBox*     mButtonBox;
         QString               mPrefixText;   // last entered value of prefix text

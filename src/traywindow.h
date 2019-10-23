@@ -1,7 +1,7 @@
 /*
  *  traywindow.h  -  the KDE system tray applet
  *  Program:  kalarm
- *  Copyright © 2002-2017 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2002-2019 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -69,10 +69,10 @@ class TrayWindow : public KStatusNotifierItem
         MainWindow*     mAssocMainWindow;     // main window associated with this, or null
         KToggleAction*  mActionEnabled;
         NewAlarmAction* mActionNew;
-        mutable AlarmListModel* mAlarmsModel; // active alarms sorted in time order
+        mutable AlarmListModel* mAlarmsModel{nullptr}; // active alarms sorted in time order
         QTimer*         mStatusUpdateTimer;
         QTimer*         mToolTipUpdateTimer;
-        bool            mHaveDisabledAlarms;  // some individually disabled alarms exist
+        bool            mHaveDisabledAlarms{false};  // some individually disabled alarms exist
 };
 
 #endif // TRAYWINDOW_H

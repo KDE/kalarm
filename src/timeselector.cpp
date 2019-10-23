@@ -1,7 +1,7 @@
 /*
  *  timeselector.cpp  -  widget to optionally set a time period
  *  Program:  kalarm
- *  Copyright © 2004-2016 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2004-2016 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -18,23 +18,20 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kalarm.h"
+#include "timeselector.h"
 
 #include "checkbox.h"
 #include "combobox.h"
-#include "timeselector.h"
+#include "kalarm_debug.h"
 
 #include <QHBoxLayout>
-#include "kalarm_debug.h"
 
 using namespace KCalendarCore;
 
 
 TimeSelector::TimeSelector(const QString& selectText, const QString& selectWhatsThis,
                            const QString& valueWhatsThis, bool allowHourMinute, QWidget* parent)
-    : QFrame(parent),
-      mSignWidget(nullptr),
-      mReadOnly(false)
+    : QFrame(parent)
 {
     QHBoxLayout* layout = new QHBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);

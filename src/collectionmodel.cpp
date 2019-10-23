@@ -19,6 +19,7 @@
  */
 
 #include "collectionmodel.h"
+
 #include "autoqpointer.h"
 #include "messagebox.h"
 #include "preferences.h"
@@ -66,16 +67,13 @@ class CollectionMimeTypeFilterModel : public Akonadi::EntityMimeTypeFilterModel
         bool filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const override;
 
     private:
-        CalEvent::Type mAlarmType;  // collection content type contained in this model
-        bool    mWritableOnly; // only include writable collections in this model
-        bool    mEnabledOnly;  // only include enabled collections in this model
+        CalEvent::Type mAlarmType{CalEvent::EMPTY};  // collection content type contained in this model
+        bool    mWritableOnly{false}; // only include writable collections in this model
+        bool    mEnabledOnly{false};  // only include enabled collections in this model
 };
 
 CollectionMimeTypeFilterModel::CollectionMimeTypeFilterModel(QObject* parent)
     : EntityMimeTypeFilterModel(parent)
-    , mAlarmType(CalEvent::EMPTY)
-    , mWritableOnly(false)
-    , mEnabledOnly(false)
 {
     addMimeTypeInclusionFilter(Collection::mimeType());   // select collections, not items
     setHeaderGroup(EntityTreeModel::CollectionTreeHeaders);
@@ -164,7 +162,6 @@ QModelIndex CollectionMimeTypeFilterModel::resourceIndex(const Resource& resourc
 
 CollectionListModel::CollectionListModel(QObject* parent)
     : KDescendantsProxyModel(parent)
-    , mUseCollectionColour(true)
 {
     setSourceModel(new CollectionMimeTypeFilterModel(this));
     setDisplayAncestorData(false);
@@ -495,7 +492,6 @@ CollectionFilterCheckListModel::CollectionFilterCheckListModel(QObject* parent)
     , mActiveModel(new CollectionCheckListModel(CalEvent::ACTIVE, this))
     , mArchivedModel(new CollectionCheckListModel(CalEvent::ARCHIVED, this))
     , mTemplateModel(new CollectionCheckListModel(CalEvent::TEMPLATE, this))
-    , mAlarmType(CalEvent::EMPTY)
 {
     setDynamicSortFilter(true);
     connect(mActiveModel, &CollectionCheckListModel::collectionTypeChange,
@@ -716,7 +712,6 @@ CollectionControlModel* CollectionControlModel::instance()
 
 CollectionControlModel::CollectionControlModel(QObject* parent)
     : FavoriteCollectionsModel(AkonadiModel::instance(), KConfigGroup(KSharedConfig::openConfig(), "Collections"), parent)
-    , mPopulatedCheckLoop(nullptr)
 {
     // Initialise the list of enabled collections
     EntityMimeTypeFilterModel* filter = new EntityMimeTypeFilterModel(this);
@@ -821,7 +816,6 @@ CalEvent::Types CollectionControlModel::setEnabledStatus(Resource& resource, Cal
     if (disallowedStdTypes  ||  !inserted  ||  canEnable != types)
     {
         // Update the collection's status
-        AkonadiModel* model = static_cast<AkonadiModel*>(sourceModel());
         if (!resource.isBeingDeleted())
         {
             if (!inserted  ||  canEnable != types)

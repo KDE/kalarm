@@ -18,7 +18,7 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kalarm.h"
+#include "dbushandler.h"
 
 #include "alarmcalendar.h"
 #include "alarmtime.h"
@@ -27,16 +27,14 @@
 #include "kamail.h"
 #include "mainwindow.h"
 #include "preferences.h"
-#include "dbushandler.h"
 #include <kalarmadaptor.h>
+#include "kalarm_debug.h"
 
 #include <kalarmcal/identities.h>
 #include <kalarmcal/karecurrence.h>
 
 #include <KCalendarCore/Duration>
 using namespace KCalendarCore;
-
-#include "kalarm_debug.h"
 
 #include <stdlib.h>
 

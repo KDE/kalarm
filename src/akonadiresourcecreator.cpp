@@ -19,10 +19,12 @@
  */
 
 #include "akonadiresourcecreator.h"
+
 #include "autoqpointer.h"
 #include "collectionmodel.h"
 #include "kalarmsettings.h"
 #include "kalarmdirsettings.h"
+#include "kalarm_debug.h"
 
 #include <AkonadiCore/agentfilterproxymodel.h>
 #include <AkonadiCore/agentinstancecreatejob.h>
@@ -35,7 +37,6 @@
 #include <KLocalizedString>
 
 #include <QTimer>
-#include "kalarm_debug.h"
 
 using namespace Akonadi;
 using namespace KAlarmCal;

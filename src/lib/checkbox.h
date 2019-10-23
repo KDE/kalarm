@@ -1,7 +1,7 @@
 /*
  *  checkbox.h  -  check box with focus widget and read-only options
  *  Program:  kalarm
- *  Copyright © 2002,2003,2005,2006 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2002,2003,2005,2006 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -79,10 +79,10 @@ class CheckBox : public QCheckBox
     protected Q_SLOTS:
         void         slotClicked();
     private:
-        Qt::FocusPolicy mFocusPolicy;       // default focus policy for the QCheckBox
-        QWidget*        mFocusWidget;       // widget to receive focus when button is clicked on
-        bool            mFocusWidgetEnable; // enable focus widget before setting focus
-        bool            mReadOnly;          // value cannot be changed
+        Qt::FocusPolicy mFocusPolicy;          // default focus policy for the QCheckBox
+        QWidget*        mFocusWidget{nullptr}; // widget to receive focus when button is clicked on
+        bool            mFocusWidgetEnable;    // enable focus widget before setting focus
+        bool            mReadOnly{false};      // value cannot be changed
 };
 
 #endif // CHECKBOX_H

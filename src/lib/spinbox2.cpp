@@ -18,10 +18,10 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kalarm.h"
-
 #include "spinbox2.h"
 #include "spinbox2_p.h"
+
+#include "kalarm_debug.h"
 
 #include <QMouseEvent>
 #include <QStyleOptionSpinBox>
@@ -35,7 +35,6 @@
 #include <QApplication>
 #include <QPixmap>
 #include <QMatrix>
-#include "kalarm_debug.h"
 
 #include <stdlib.h>
 

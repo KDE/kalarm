@@ -1,7 +1,7 @@
 /*
  *  timeperiod.cpp  -  time period data entry widget
  *  Program:  kalarm
- *  Copyright © 2003-2005,2007,2008,2010 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2003-2019 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -140,11 +140,11 @@ class TimePeriod : public QWidget
         SpinBox*        mSpinBox;            // the minutes/days/weeks value spinbox
         TimeSpinBox*    mTimeSpinBox;        // the hours:minutes value spinbox
         ComboBox*       mUnitsCombo;
-        int             mMaxDays;            // maximum day count
+        int             mMaxDays{9999};      // maximum day count
         int             mDateOnlyOffset;     // for mUnitsCombo: 2 if minutes & hours/minutes is disabled, else 0
         Units           mMaxUnitShown;       // for mUnitsCombo: maximum units shown
         bool            mNoHourMinute;       // hours/minutes cannot be displayed, ever
-        bool            mReadOnly;           // the widget is read only
+        bool            mReadOnly{false};    // the widget is read only
         bool            mHourMinuteRaised;   // hours:minutes spinbox is currently displayed
 };
 

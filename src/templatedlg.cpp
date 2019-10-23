@@ -18,7 +18,6 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kalarm.h"
 #include "templatedlg.h"
 
 #include "editdlg.h"
@@ -29,6 +28,7 @@
 #include "shellprocess.h"
 #include "templatelistview.h"
 #include "undo.h"
+#include "kalarm_debug.h"
 
 #include <KLocalizedString>
 #include <kguiitem.h>
@@ -42,7 +42,6 @@
 #include <QHBoxLayout>
 #include <QBoxLayout>
 #include <QResizeEvent>
-#include "kalarm_debug.h"
 
 using namespace KCal;
 

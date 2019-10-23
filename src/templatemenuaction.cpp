@@ -1,7 +1,7 @@
 /*
  *  templatemenuaction.cpp  -  menu action to select a template
  *  Program:  kalarm
- *  Copyright © 2005,2006,2008,2011 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2005,2006,2008,2011 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -18,17 +18,16 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kalarm.h"
+#include "templatemenuaction.h"
 
 #include "alarmcalendar.h"
 #include "functions.h"
-#include "templatemenuaction.h"
+#include "kalarm_debug.h"
 
 #include <kalarmcal/kaevent.h>
 
 #include <kactionmenu.h>
 #include <QMenu>
-#include "kalarm_debug.h"
 
 
 TemplateMenuAction::TemplateMenuAction(const QIcon& icon, const QString& label, QObject* parent)
@@ -82,6 +81,5 @@ void TemplateMenuAction::slotSelected(QAction* action)
     KAEvent* templ = AlarmCalendar::resources()->templateEvent(it.value());
     Q_EMIT selected(templ);
 }
-
 
 // vim: et sw=4:

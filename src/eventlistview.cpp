@@ -18,23 +18,20 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kalarm.h"
 #include "eventlistview.h"
 
 #include "find.h"
+#include "kalarm_debug.h"
 
 #include <KLocalizedString>
 
 #include <QMouseEvent>
 #include <QToolTip>
 #include <QApplication>
-#include "kalarm_debug.h"
 
 
 EventListView::EventListView(QWidget* parent)
     : QTreeView(parent)
-    , mFind(nullptr)
-    , mEditOnSingleClick(false)
 {
     setRootIsDecorated(false);    // don't show expander icons for child-less items
     setSortingEnabled(true);

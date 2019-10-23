@@ -18,7 +18,6 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kalarm.h"
 #include "sounddlg.h"
 
 #include "checkbox.h"
@@ -29,6 +28,7 @@
 #include "slider.h"
 #include "soundpicker.h"
 #include "spinbox.h"
+#include "kalarm_debug.h"
 
 #include <KLocalizedString>
 #include <phonon/mediaobject.h>
@@ -46,7 +46,6 @@
 #include <QDialogButtonBox>
 #include <QStyle>
 #include <QStandardPaths>
-#include "kalarm_debug.h"
 
 
 // Collect these widget labels together to ensure consistent wording and
@@ -58,8 +57,7 @@ static const char SOUND_DIALOG_NAME[] = "SoundDialog";
 
 SoundDlg::SoundDlg(const QString& file, float volume, float fadeVolume, int fadeSeconds, int repeatPause,
                    const QString& caption, QWidget* parent)
-    : QDialog(parent),
-      mReadOnly(false)
+    : QDialog(parent)
 {
     QVBoxLayout* layout = new QVBoxLayout(this);
     mSoundWidget = new SoundWidget(true, true, this);
@@ -149,13 +147,7 @@ void SoundDlg::slotButtonClicked(QAbstractButton* button)
 QString SoundWidget::mDefaultDir;
 
 SoundWidget::SoundWidget(bool showPlay, bool showRepeat, QWidget* parent)
-    : QWidget(parent),
-      mFilePlay(nullptr),
-      mRepeatGroupBox(nullptr),
-      mRepeatPause(nullptr),
-      mPlayer(nullptr),
-      mReadOnly(false),
-      mEmptyFileAllowed(false)
+    : QWidget(parent)
 {
     QVBoxLayout* layout = new QVBoxLayout(this);
 

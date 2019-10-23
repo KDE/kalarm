@@ -1,7 +1,7 @@
 /*
  *  stackedwidgets.cpp  -  group of stacked widgets
  *  Program:  kalarm
- *  Copyright © 2008 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2008 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -19,11 +19,12 @@
  */
 
 #include "stackedwidgets.h"
+
 #include "desktop.h"
+#include "kalarm_debug.h"
 
 #include <QDialog>
 #include <QStyle>
-#include "kalarm_debug.h"
 
 
 StackedScrollWidget::StackedScrollWidget(StackedScrollGroup* group, QWidget* parent)

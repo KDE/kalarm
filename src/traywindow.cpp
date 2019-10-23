@@ -1,7 +1,7 @@
 /*
  *  traywindow.cpp  -  the KDE system tray applet
  *  Program:  kalarm
- *  Copyright © 2002-2018 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2002-2019 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -18,7 +18,6 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kalarm.h"   //krazy:exclude=includes (kalarm.h must be first)
 #include "traywindow.h"
 
 #include "alarmcalendar.h"
@@ -32,6 +31,7 @@
 #include "preferences.h"
 #include "synchtimer.h"
 #include "templatemenuaction.h"
+#include "kalarm_debug.h"
 
 #include <kalarmcal/alarmtext.h>
 
@@ -49,7 +49,6 @@
 #include <QList>
 #include <QTimer>
 #include <QLocale>
-#include "kalarm_debug.h"
 
 #include <stdlib.h>
 #include <limits.h>
@@ -69,11 +68,9 @@ struct TipItem
 =============================================================================*/
 
 TrayWindow::TrayWindow(MainWindow* parent)
-    : KStatusNotifierItem(parent),
-      mAssocMainWindow(parent),
-      mAlarmsModel(nullptr),
-      mStatusUpdateTimer(new QTimer(this)),
-      mHaveDisabledAlarms(false)
+    : KStatusNotifierItem(parent)
+    , mAssocMainWindow(parent)
+    , mStatusUpdateTimer(new QTimer(this))
 {
     qCDebug(KALARM_LOG) << "TrayWindow:";
     setToolTipIconByName(QStringLiteral("kalarm"));

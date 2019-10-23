@@ -1,7 +1,7 @@
 /*
  *  fontcolourbutton.h  -  pushbutton widget to select a font and colour
  *  Program:  kalarm
- *  Copyright © 2003-2009 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2003-2009 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -56,8 +56,8 @@ class FontColourButton : public PushButton
     private:
         QColor      mBgColour, mFgColour;
         QFont       mFont;
-        bool        mDefaultFont;
-        bool        mReadOnly;
+        bool        mDefaultFont{true};
+        bool        mReadOnly{false};
 };
 
 
@@ -83,7 +83,7 @@ class FontColourDlg : public QDialog
         QColor             mBgColour, mFgColour;
         QFont              mFont;
         bool               mDefaultFont;
-        bool               mReadOnly;
+        bool               mReadOnly{false};
 };
 
 #endif // FONTCOLOURBUTTON_H

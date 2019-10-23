@@ -1,7 +1,7 @@
 /*
  *  birthdaydlg.cpp  -  dialog to pick birthdays from address book
  *  Program:  kalarm
- *  Copyright © 2002-2012,2018 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2002-2012,2018 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -20,7 +20,6 @@
 
 #include "birthdaydlg.h"
 
-#include "kalarm.h"
 #include "alarmcalendar.h"
 #include "birthdaymodel.h"
 #include "checkbox.h"
@@ -34,6 +33,7 @@
 #include "shellprocess.h"
 #include "soundpicker.h"
 #include "specialactions.h"
+#include "kalarm_debug.h"
 
 #include <AkonadiWidgets/controlgui.h>
 #include <AkonadiCore/entitymimetypefiltermodel.h>
@@ -54,14 +54,12 @@
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QDialogButtonBox>
-#include "kalarm_debug.h"
 
 using namespace KCal;
 
 
 BirthdayDlg::BirthdayDlg(QWidget* parent)
-    : QDialog(parent),
-      mSpecialActionsButton(nullptr)
+    : QDialog(parent)
 {
     setObjectName(QStringLiteral("BirthdayDlg"));    // used by LikeBack
     setWindowTitle(i18nc("@title:window", "Import Birthdays From KAddressBook"));

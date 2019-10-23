@@ -20,6 +20,7 @@
  */
 
 #include "birthdaymodel.h"
+
 #include "alarmcalendar.h"
 
 #include <kalarmcal/kaevent.h>

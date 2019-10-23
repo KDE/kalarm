@@ -21,8 +21,6 @@
 #ifndef ALARMLISTVIEW_H
 #define ALARMLISTVIEW_H
 
-#include "kalarm.h"
-
 #include "eventlistview.h"
 
 #include <QByteArray>

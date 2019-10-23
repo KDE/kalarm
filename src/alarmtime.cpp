@@ -1,7 +1,7 @@
 /*
  *  alarmtime.cpp  -  conversion functions for alarm times
  *  Program:  kalarm
- *  Copyright © 2007-2016,2018 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2007-2016,2018 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -19,14 +19,15 @@
  */
 
 #include "alarmtime.h"
+
 #include "preferences.h"
+#include "kalarm_debug.h"
 
 #include <kalarmcal/datetime.h>
 
 #include <KLocalizedString>
 #include <QLocale>
 #include <QApplication>
-#include "kalarm_debug.h"
 
 using namespace KAlarmCal;
 

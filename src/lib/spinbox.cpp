@@ -20,6 +20,8 @@
 
 #include "spinbox.h"
 
+#include "kalarm_debug.h"
+
 #include <QLineEdit>
 #include <QObject>
 #include <QApplication>
@@ -29,7 +31,6 @@
 #include <QMouseEvent>
 #include <QKeyEvent>
 #include <QEvent>
-#include "kalarm_debug.h"
 
 
 SpinBox::SpinBox(QWidget* parent)

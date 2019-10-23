@@ -1,7 +1,7 @@
 /*
  *  timeperiod.h  -  time period data entry widget
  *  Program:  kalarm
- *  Copyright © 2003-2005,2007,2008,2010 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2003-2005,2007,2008,2010 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -18,8 +18,8 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kalarm.h"
 #include "timeperiod.h"
+
 #include "combobox.h"
 #include "spinbox.h"
 #include "timespinbox.h"
@@ -46,10 +46,8 @@ static const int maxMinutes = 1000*60-1;   // absolute maximum value for hours:m
 =============================================================================*/
 
 TimePeriod::TimePeriod(bool allowHourMinute, QWidget* parent)
-    : QWidget(parent),
-      mMaxDays(9999),
-      mNoHourMinute(!allowHourMinute),
-      mReadOnly(false)
+    : QWidget(parent)
+    , mNoHourMinute(!allowHourMinute)
 {
     QHBoxLayout* layout = new QHBoxLayout;
     setLayout(layout);

@@ -1,7 +1,7 @@
 /*
  *  preferences.h  -  program preference settings
  *  Program:  kalarm
- *  Copyright © 2001-2018 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2018 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -20,8 +20,6 @@
 
 #ifndef PREFERENCES_H
 #define PREFERENCES_H
-
-#include "kalarm.h"
 
 #include "kalarmconfig.h"
 #include <kalarmcal/kadatetime.h>

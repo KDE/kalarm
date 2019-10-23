@@ -18,7 +18,6 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kalarm.h"
 #include "editdlgtypes.h"
 #include "editdlg_p.h"
 
@@ -46,6 +45,7 @@
 #include "specialactions.h"
 #include "templatepickdlg.h"
 #include "timespinbox.h"
+#include "kalarm_debug.h"
 
 #include <kalarmcal/identities.h>
 
@@ -67,7 +67,6 @@ using namespace KCalendarCore;
 #include <QVBoxLayout>
 #include <QDragEnterEvent>
 #include <QStandardItemModel>
-#include "kalarm_debug.h"
 
 using namespace KAlarmCal;
 

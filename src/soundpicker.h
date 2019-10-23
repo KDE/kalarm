@@ -148,10 +148,10 @@ class SoundPicker : public QFrame
         float          mFadeVolume;   // initial volume for file, or < 0 for no fading
         int            mFadeSeconds;  // fade interval in seconds
         int            mRepeatPause;  // seconds to pause between repetitions of the sound file, or -1 if no repeat
-        Preferences::SoundType mLastType;     // last selected sound option
-        bool           mSpeakShowing; // Speak option is shown in combo box
-        bool           mRevertType;   // reverting to last selected sound option
-        bool           mReadOnly;
+        Preferences::SoundType mLastType;   // last selected sound option
+        bool           mSpeakShowing;       // Speak option is shown in combo box
+        bool           mRevertType{false};  // reverting to last selected sound option
+        bool           mReadOnly{false};
 };
 
 #endif // SOUNDPICKER_H

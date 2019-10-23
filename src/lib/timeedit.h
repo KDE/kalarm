@@ -1,7 +1,7 @@
 /*
  *  timeedit.h  -  time-of-day edit widget, with AM/PM shown depending on locale
  *  Program:  kalarm
- *  Copyright © 2004-2006 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2004-2019 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -21,6 +21,7 @@
 #ifndef TIMEEDIT_H
 #define TIMEEDIT_H
 
+#include <QWidget>
 #include <QTime>
 class ComboBox;
 class TimeSpinBox;
@@ -112,11 +113,11 @@ class TimeEdit : public QWidget
     private:
         void          setAmPmCombo(int am, int pm);
 
-        TimeSpinBox*  mSpinBox;       // always holds the 24-hour time
-        ComboBox*     mAmPm;
-        int           mAmIndex;       // mAmPm index to "am", or -1 if none
-        int           mPmIndex;       // mAmPm index to "pm", or -1 if none
-        bool          mReadOnly;      // the widget is read only
+        TimeSpinBox*  mSpinBox;          // always holds the 24-hour time
+        ComboBox*     mAmPm{nullptr};
+        int           mAmIndex{-1};      // mAmPm index to "am", or -1 if none
+        int           mPmIndex{-1};      // mAmPm index to "pm", or -1 if none
+        bool          mReadOnly{false};  // the widget is read only
 };
 
 #endif // TIMEEDIT_H

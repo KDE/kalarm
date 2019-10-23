@@ -18,7 +18,6 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kalarm.h"
 #include "wakedlg.h"
 #include "ui_wakedlg.h"
 
@@ -28,6 +27,7 @@
 #include "mainwindow.h"
 #include "messagebox.h"
 #include "preferences.h"
+#include "kalarm_debug.h"
 
 #include <kalarmcal_version.h>
 #include <kalarmcal/kaevent.h>
@@ -37,7 +37,6 @@
 #include <kconfiggroup.h>
 
 #include <QTimer>
-#include "kalarm_debug.h"
 
 using namespace KAlarmCal;
 

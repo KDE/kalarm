@@ -126,11 +126,7 @@ MainWindow* MainWindow::create(bool restored)
 }
 
 MainWindow::MainWindow(bool restored)
-    : MainWindowBase(nullptr, Qt::WindowContextHelpButtonHint),
-      mResourcesWidth(-1),
-      mHiddenTrayParent(false),
-      mShown(false),
-      mResizing(false)
+    : MainWindowBase(nullptr, Qt::WindowContextHelpButtonHint)
 {
     qCDebug(KALARM_LOG) << "MainWindow:";
     setAttribute(Qt::WA_DeleteOnClose);

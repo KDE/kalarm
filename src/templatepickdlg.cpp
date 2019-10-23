@@ -1,7 +1,7 @@
 /*
  *  templatepickdlg.cpp  -  dialog to choose an alarm template
  *  Program:  kalarm
- *  Copyright © 2004,2006-2010 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2004,2006-2010 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -18,12 +18,12 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kalarm.h"
 #include "templatepickdlg.h"
 
 #include "functions.h"
 #include "shellprocess.h"
 #include "templatelistview.h"
+#include "kalarm_debug.h"
 
 #include <KLocalizedString>
 
@@ -31,7 +31,6 @@
 #include <QResizeEvent>
 #include <QDialogButtonBox>
 #include <QPushButton>
-#include "kalarm_debug.h"
 
 static const char TMPL_PICK_DIALOG_NAME[] = "TemplatePickDialog";
 
@@ -112,6 +111,5 @@ void TemplatePickDlg::resizeEvent(QResizeEvent* re)
         KAlarm::writeConfigWindowSize(TMPL_PICK_DIALOG_NAME, re->size());
     QDialog::resizeEvent(re);
 }
-
 
 // vim: et sw=4:

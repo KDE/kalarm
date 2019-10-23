@@ -18,7 +18,7 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kalarm.h"
+#include "soundpicker.h"
 
 #include "autoqpointer.h"
 #include "combobox.h"
@@ -26,7 +26,7 @@
 #include "kalarmapp.h"
 #include "pushbutton.h"
 #include "sounddlg.h"
-#include "soundpicker.h"
+#include "kalarm_debug.h"
 
 #include <kpimtextedit/texttospeech.h>
 
@@ -38,7 +38,6 @@
 #include <QLabel>
 #include <QHBoxLayout>
 #include <QStandardPaths>
-#include "kalarm_debug.h"
 
 
 static QMap<Preferences::SoundType, int> indexes;    // mapping from sound type to combo index
@@ -54,9 +53,7 @@ QString SoundPicker::i18n_combo_File()    { return i18nc("@item:inlistbox", "Sou
 
 
 SoundPicker::SoundPicker(QWidget* parent)
-    : QFrame(parent),
-      mRevertType(false),
-      mReadOnly(false)
+    : QFrame(parent)
 {
     QHBoxLayout* soundLayout = new QHBoxLayout(this);
     soundLayout->setContentsMargins(0, 0, 0, 0);

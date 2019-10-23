@@ -1,7 +1,7 @@
 /*
  *  reminder.h  -  reminder setting widget
  *  Program:  kalarm
- *  Copyright © 2003-2005,2007-2009,2011 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2003-2019 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -51,7 +51,7 @@ class Reminder : public QFrame
         static QString i18n_chk_FirstRecurrenceOnly();    // text of 'Reminder for first recurrence only' checkbox
 
     public Q_SLOTS:
-        void           setDefaultUnits(const KADateTime&);
+        void           setDefaultUnits(const KAlarmCal::KADateTime&);
 
     Q_SIGNALS:
         void           changed();
@@ -63,7 +63,7 @@ class Reminder : public QFrame
         TimeSelector*  mTime;
         CheckBox*      mOnceOnly;
         ComboBox*      mTimeSignCombo;
-        bool           mReadOnly;           // the widget is read only
+        bool           mReadOnly{false};    // the widget is read only
         bool           mOnceOnlyEnabled;    // 'mOnceOnly' checkbox is allowed to be enabled
 };
 
