@@ -708,7 +708,7 @@ void MessageWin::initView()
     setMinimumSize(QSize(grid->sizeHint().width() + 2 * style()->pixelMetric(QStyle::PM_DefaultChildMargin),
                          sizeHint().height()));
     const bool modal = !(windowFlags() & Qt::X11BypassWindowManagerHint);
-    NET::States wstate = NET::Sticky | NET::StaysOnTop;
+    NET::States wstate = NET::Sticky | NET::KeepAbove;
     if (modal)
         wstate |= NET::Modal;
     WId winid = winId();
