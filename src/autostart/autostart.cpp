@@ -1,7 +1,7 @@
 /*
  *  autostart.cpp - autostart KAlarm when session restoration is complete
  *  Program:  kalarmautostart
- *  Copyright © 2001,2008,2018 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001,2008,2018 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify it
  *  under the terms of the GNU General Public License as published by the Free
@@ -18,8 +18,8 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kalarm.h"
 #include "autostart.h"
+#include "kalarm.h"
 #include "kalarm_autostart_debug.h"
 
 #include <KAboutData>
@@ -27,7 +27,8 @@
 
 #include <QProcess>
 #include <QTimer>
-#include <QtDBus>
+#include <QDBusConnectionInterface>
+#include <QCommandLineParser>
 #include <QStandardPaths>
 
 // Number of seconds to wait before autostarting KAlarm.

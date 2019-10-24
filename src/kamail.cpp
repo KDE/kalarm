@@ -60,7 +60,7 @@
 #include <QByteArray>
 #include <QTextCodec>
 #include <QStandardPaths>
-#include <QtDBus>
+#include <QDBusInterface>
 
 #include <pwd.h>
 

@@ -70,7 +70,8 @@ using namespace KCalendarCore;
 #include <QRegExp>
 #include <QFileDialog>
 #include <QDesktopWidget>
-#include <QtDBus>
+#include <QDBusConnectionInterface>
+#include <QDBusInterface>
 #include <QTimer>
 #include <qglobal.h>
 #include <QStandardPaths>
