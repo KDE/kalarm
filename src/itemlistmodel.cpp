@@ -148,7 +148,8 @@ KAEvent ItemListModel::event(int row) const
 */
 KAEvent ItemListModel::event(const QModelIndex& index) const
 {
-    return static_cast<AkonadiModel*>(sourceModel())->event(mapToSource(index));
+    const QModelIndex ix = static_cast<KSelectionProxyModel*>(sourceModel())->mapToSource(mapToSource(index));
+    return AkonadiModel::instance()->event(ix);
 }
 
 /******************************************************************************
