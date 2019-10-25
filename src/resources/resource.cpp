@@ -56,10 +56,12 @@ bool Resource::isValid() const
     return mResource.isNull() ? false : mResource->isValid();
 }
 
+#if 0
 ResourceBase::Ptr Resource::resource() const
 {
     return mResource;
 }
+#endif
 
 ResourceId Resource::id() const
 {
@@ -220,6 +222,21 @@ bool Resource::isCompatible() const
 QList<KAEvent> Resource::events() const
 {
     return mResource.isNull() ? QList<KAEvent>() : mResource->events();
+}
+
+bool Resource::addEvent(const KAEvent& event)
+{
+    return mResource.isNull() ? false : mResource->addEvent(event);
+}
+
+bool Resource::updateEvent(const KAEvent& event)
+{
+    return mResource.isNull() ? false : mResource->updateEvent(event);
+}
+
+bool Resource::deleteEvent(const KAEvent& event)
+{
+    return mResource.isNull() ? false : mResource->deleteEvent(event);
 }
 
 void Resource::handleCommandErrorChange(const KAEvent& event)

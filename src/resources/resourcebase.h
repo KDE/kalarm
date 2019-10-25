@@ -277,6 +277,15 @@ public:
      */
     virtual QList<KAEvent> events() const   { return {}; }
 
+    /** Add an event to the resource. */
+    virtual bool addEvent(const KAEvent&) = 0;
+
+    /** Update an event in the resource. Its UID must be unchanged. */
+    virtual bool updateEvent(const KAEvent&) = 0;
+
+    /** Delete an event from the resource. */
+    virtual bool deleteEvent(const KAEvent&) = 0;
+
     /** Called to notify the resource that an event's command error has changed. */
     virtual void handleCommandErrorChange(const KAEvent&) = 0;
 

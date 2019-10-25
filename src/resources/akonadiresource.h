@@ -26,6 +26,7 @@
 #include <kalarmcal/collectionattribute.h>
 
 #include <AkonadiCore/Collection>
+#include <AkonadiCore/Item>
 
 #include <QObject>
 
@@ -238,26 +239,50 @@ public:
      */
     KACalendar::Compat compatibility() const override;
 
+    /** Add an event to the resource. */
+    bool addEvent(const KAEvent&) override;
+
+    /** Update an event in the resource. Its UID must be unchanged. */
+    bool updateEvent(const KAEvent&) override;
+
+    /** Delete an event from the resource. */
+    bool deleteEvent(const KAEvent&) override;
+
     /** Called to notify the resource that an event's command error has changed. */
     void handleCommandErrorChange(const KAEvent&) override;
 
     /******************************************************************************
-    * Return a reference to the Collection held by a resource.
+    * Return a reference to the Collection held by an Akonadi resource.
     * @reply Reference to the Collection, which belongs to AkonadiModel and whose
     *        ID must not be changed.
     */
     static Akonadi::Collection& collection(Resource&);
     static const Akonadi::Collection& collection(const Resource&);
 
+    /** Return the event for an Akonadi Item belonging to this resource. */
+    KAEvent event(const Akonadi::Item&) const;
+    using QObject::event;   // prevent warning about hidden virtual method
+
+    /** Called to notify this resource that an Akonadi Item belonging it has
+     *  changed or been created.
+     */
+    void notifyItemChanged(const Akonadi::Item& item, bool created);
+
 private Q_SLOTS:
+    void itemJobDone(KJob*);
     void modifyCollectionAttrJobDone(KJob*);
 
 private:
+    void queueItemModifyJob(const Akonadi::Item&);
+    void checkQueuedItemModifyJob(const Akonadi::Item&);
     void fetchCollectionAttribute(bool refresh) const;
     void modifyCollectionAttribute();
 
     mutable Akonadi::Collection mCollection;           // the Akonadi Collection represented by this resource
     mutable CollectionAttribute mCollectionAttribute;  // current set value of CollectionAttribute
+    QHash<KJob*, Akonadi::Item::Id> mPendingItemJobs;  // pending item creation/deletion jobs, with event ID
+    QHash<Akonadi::Item::Id, Akonadi::Item> mItemModifyJobQueue; // pending item modification jobs, invalid item = queue empty but job active
+    QList<Akonadi::Item::Id>    mItemsBeingCreated;    // new items not fully initialised yet
     bool                        mValid;                // whether the collection is valid and belongs to an Akonadi resource
     mutable bool                mHaveCollectionAttribute{false};  // whether the collection has a CollectionAttribute
     mutable bool                mNewEnabled{false};

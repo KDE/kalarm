@@ -58,7 +58,7 @@ public:
     bool isValid() const;
 
     /** Return the shared pointer to the alarm calendar resource for this resource. */
-    ResourceBase::Ptr resource() const;
+    template <class T> T* resource() const;
 
     /** Return the resource's unique ID. */
     ResourceId id() const;
@@ -289,6 +289,15 @@ public:
      */
     QList<KAEvent> events() const;
 
+    /** Add an event to the resource. */
+    bool addEvent(const KAEvent&);
+
+    /** Update an event in the resource. Its UID must be unchanged. */
+    bool updateEvent(const KAEvent&);
+
+    /** Delete an event from the resource. */
+    bool deleteEvent(const KAEvent&);
+
     /** Called to notify the resource that an event's command error has changed. */
     void handleCommandErrorChange(const KAEvent&);
 
@@ -317,6 +326,13 @@ inline bool operator!=(const ResourceBase* a, const Resource& b)  { return !(b =
 inline uint qHash(const Resource& resource, uint seed)
 {
     return qHash(resource.mResource.data(), seed);
+}
+
+/*****************************************************************************/
+
+template <class T> T* Resource::resource() const
+{
+    return qobject_cast<T*>(mResource.data());
 }
 
 #endif // RESOURCE_H

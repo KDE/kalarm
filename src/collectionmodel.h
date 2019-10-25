@@ -222,6 +222,11 @@ class CollectionControlModel : public Akonadi::FavoriteCollectionsModel
         /** Edit a resource's configuration. */
         static void editResource(const Resource&, QWidget* parent);
 
+        /** Remove a resource from Akonadi. The calendar file is not removed.
+         *  @return true if a removal job has been scheduled.
+         */
+        static bool removeResource(Akonadi::Collection::Id);
+
         /** Return a list of all collections, both enabled and disabled.
          *  Collections which don't belong to a resource are omitted.
          *  @param type  Return only collections for this event type, or EMPTY for all.

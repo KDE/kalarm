@@ -170,10 +170,17 @@ QVariant CalendarDataModel::eventData(const QModelIndex& ix, int role, const KAE
         return whatsThisText(column);
     if (!event.isValid())
         return QVariant();
-    if (role == AlarmActionsRole)
-        return event.actionTypes();
-    if (role == AlarmSubActionRole)
-        return event.actionSubType();
+    switch (role)
+    {
+        case AlarmActionsRole:
+            return event.actionTypes();
+        case AlarmSubActionRole:
+            return event.actionSubType();
+        case CommandErrorRole:
+            return event.commandError();
+        default:
+            break;
+    }
     switch (column)
     {
         case TimeColumn:

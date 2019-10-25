@@ -23,10 +23,15 @@
 #include "akonadimodel.h"
 #include "kalarm_debug.h"
 
+#include <kalarmcal/akonadi.h>
 #include <kalarmcal/compatibilityattribute.h>
+#include <kalarmcal/eventattribute.h>
 
 #include <AkonadiCore/agentmanager.h>
 #include <AkonadiCore/collectionmodifyjob.h>
+#include <AkonadiCore/ItemCreateJob>
+#include <AkonadiCore/ItemDeleteJob>
+#include <AkonadiCore/ItemModifyJob>
 using namespace Akonadi;
 
 #include <KLocalizedString>
@@ -338,11 +343,284 @@ KACalendar::Compat AkonadiResource::compatibility() const
 }
 
 /******************************************************************************
+* Add an event to the resource.
+*/
+bool AkonadiResource::addEvent(const KAEvent& event)
+{
+    qCDebug(KALARM_LOG) << "AkonadiResource::addEvent: ID:" << event.id();
+    Item item;
+    if (!KAlarmCal::setItemPayload(item, event, mCollection.contentMimeTypes()))
+    {
+        qCWarning(KALARM_LOG) << "AkonadiResource::addEvent: Invalid mime type for collection";
+        return false;
+    }
+qCDebug(KALARM_LOG)<<"-> item id="<<item.id();
+    ItemCreateJob* job = new ItemCreateJob(item, mCollection);
+    connect(job, &ItemCreateJob::result, this, &AkonadiResource::itemJobDone);
+    mPendingItemJobs[job] = -1;   // the Item doesn't have an ID yet
+    job->start();
+    return true;
+}
+
+/******************************************************************************
+* Update an event in the resource. Its UID must be unchanged.
+*/
+bool AkonadiResource::updateEvent(const KAEvent& event)
+{
+    qCDebug(KALARM_LOG) << "AkonadiResource::updateEvent:" << event.id();
+    Item item = AkonadiModel::instance()->itemForEvent(event.id());
+    if (!item.isValid())
+        return false;
+qCDebug(KALARM_LOG)<<"item id="<<item.id()<<", revision="<<item.revision();
+    if (!KAlarmCal::setItemPayload(item, event, mCollection.contentMimeTypes()))
+    {
+        qCWarning(KALARM_LOG) << "AkonadiResource::updateEvent: Invalid mime type for collection";
+        return false;
+    }
+    queueItemModifyJob(item);
+    return true;
+}
+
+/******************************************************************************
+* Delete an event from the resource.
+*/
+bool AkonadiResource::deleteEvent(const KAEvent& event)
+{
+    qCDebug(KALARM_LOG) << "AkonadiResource::deleteEvent:" << event.id();
+    if (isBeingDeleted())
+    {
+        qCDebug(KALARM_LOG) << "AkonadiResource::deleteEvent: Collection being deleted";
+        return true;    // the event's collection is being deleted
+    }
+    const Item item = AkonadiModel::instance()->itemForEvent(event.id());
+    if (!item.isValid())
+        return false;
+    ItemDeleteJob* job = new ItemDeleteJob(item);
+    connect(job, &ItemDeleteJob::result, this, &AkonadiResource::itemJobDone);
+    mPendingItemJobs[job] = item.id();
+    job->start();
+    return true;
+}
+
+/******************************************************************************
 * Save a command error change to Akonadi.
 */
 void AkonadiResource::handleCommandErrorChange(const KAEvent& event)
 {
-    AkonadiModel::instance()->updateCommandError(event);
+    Item item = AkonadiModel::instance()->itemForEvent(event.id());
+    if (item.isValid())
+    {
+        const KAEvent::CmdErrType err = event.commandError();
+        switch (err)
+        {
+            case KAEvent::CMD_NO_ERROR:
+                if (!item.hasAttribute<EventAttribute>())
+                    return;   // no change
+                Q_FALLTHROUGH();
+            case KAEvent::CMD_ERROR:
+            case KAEvent::CMD_ERROR_PRE:
+            case KAEvent::CMD_ERROR_POST:
+            case KAEvent::CMD_ERROR_PRE_POST:
+            {
+                EventAttribute* attr = item.attribute<EventAttribute>(Item::AddIfMissing);
+                if (attr->commandError() == err)
+                    return;   // no change
+                attr->setCommandError(err);
+                queueItemModifyJob(item);
+                return;
+            }
+            default:
+                break;
+        }
+    }
+}
+
+/******************************************************************************
+* Return a reference to the Collection held by a resource.
+*/
+Collection& AkonadiResource::collection(Resource& resource)
+{
+    static Collection nullCollection;
+    AkonadiResource* akres = resource.resource<AkonadiResource>();
+    return akres ? akres->mCollection : nullCollection;
+}
+const Collection& AkonadiResource::collection(const Resource& resource)
+{
+    static const Collection nullCollection;
+    AkonadiResource* akres = resource.resource<AkonadiResource>();
+    return akres ? akres->mCollection : nullCollection;
+}
+
+/******************************************************************************
+* Return the event for an Akonadi Item.
+*/
+KAEvent AkonadiResource::event(const Akonadi::Item& item) const
+{
+    if (!item.isValid()  ||  !item.hasPayload<KAEvent>())
+        return KAEvent();
+    KAEvent ev = item.payload<KAEvent>();
+    if (ev.isValid())
+    {
+        if (item.hasAttribute<EventAttribute>())
+            ev.setCommandError(item.attribute<EventAttribute>()->commandError());
+        // Set collection ID using a const method, to avoid unnecessary copying of KAEvent
+        ev.setCollectionId_const(mCollection.id());
+    }
+    return ev;
+}
+
+/******************************************************************************
+* Called when an Item has been changed or created in AkonadiModel.
+*/
+void AkonadiResource::notifyItemChanged(const Akonadi::Item& item, bool created)
+{
+    int i = mItemsBeingCreated.removeAll(item.id());
+    if (!created  ||  i)
+        checkQueuedItemModifyJob(item);    // execute the next job queued for the item
+}
+
+/******************************************************************************
+* Queue an ItemModifyJob for execution. Ensure that only one job is
+* simultaneously active for any one Item.
+*
+* This is necessary because we can't call two ItemModifyJobs for the same Item
+* at the same time; otherwise Akonadi will detect a conflict and require manual
+* intervention to resolve it.
+*/
+void AkonadiResource::queueItemModifyJob(const Item& item)
+{
+    qCDebug(KALARM_LOG) << "AkonadiResource::queueItemModifyJob:" << item.id();
+    QHash<Item::Id, Item>::Iterator it = mItemModifyJobQueue.find(item.id());
+    if (it != mItemModifyJobQueue.end())
+    {
+        // A job is already queued for this item. Replace the queued item value with the new one.
+        qCDebug(KALARM_LOG) << "AkonadiResource::queueItemModifyJob: Replacing previously queued job";
+        it.value() = item;
+    }
+    else
+    {
+        // There is no job already queued for this item
+        if (mItemsBeingCreated.contains(item.id()))
+        {
+            qCDebug(KALARM_LOG) << "AkonadiResource::queueItemModifyJob: Waiting for item initialisation";
+            mItemModifyJobQueue[item.id()] = item;   // wait for item initialisation to complete
+        }
+        else
+        {
+            Item newItem = item;
+            Item current = item;
+            if (AkonadiModel::instance()->refresh(current))  // fetch the up-to-date item
+                newItem.setRevision(current.revision());
+            mItemModifyJobQueue[item.id()] = Item();   // mark the queued item as now executing
+            ItemModifyJob* job = new ItemModifyJob(newItem);
+            job->disableRevisionCheck();
+            connect(job, &ItemModifyJob::result, this, &AkonadiResource::itemJobDone);
+            mPendingItemJobs[job] = item.id();
+            qCDebug(KALARM_LOG) << "AkonadiResource::queueItemModifyJob: Executing Modify job for item" << item.id() << ", revision=" << newItem.revision();
+        }
+    }
+}
+
+/******************************************************************************
+* Called when an item job has completed.
+* Checks for any error.
+* Note that for an ItemModifyJob, the item revision number may not be updated
+* to the post-modification value. The next queued ItemModifyJob is therefore
+* not kicked off from here, but instead from the slot attached to the
+* itemChanged() signal, which has the revision updated.
+*/
+void AkonadiResource::itemJobDone(KJob* j)
+{
+    const QHash<KJob*, Item::Id>::iterator it = mPendingItemJobs.find(j);
+    Item::Id itemId = -1;
+    if (it != mPendingItemJobs.end())
+    {
+        itemId = it.value();
+        mPendingItemJobs.erase(it);
+    }
+    const QByteArray jobClass = j->metaObject()->className();
+    qCDebug(KALARM_LOG) << "AkonadiResource::itemJobDone:" << jobClass;
+    if (j->error())
+    {
+        QString errMsg;
+        if (jobClass == "Akonadi::ItemCreateJob")
+            errMsg = i18nc("@info", "Failed to create alarm.");
+        else if (jobClass == "Akonadi::ItemModifyJob")
+            errMsg = i18nc("@info", "Failed to update alarm.");
+        else if (jobClass == "Akonadi::ItemDeleteJob")
+            errMsg = i18nc("@info", "Failed to delete alarm.");
+        else
+            Q_ASSERT(0);
+        qCCritical(KALARM_LOG) << "AkonadiResource::itemJobDone:" << errMsg << itemId << ":" << j->errorString();
+
+        if (itemId >= 0  &&  jobClass == "Akonadi::ItemModifyJob")
+        {
+            // Execute the next queued job for this item
+            const Item current = AkonadiModel::instance()->itemById(itemId);  // fetch the up-to-date item
+            checkQueuedItemModifyJob(current);
+        }
+        AkonadiModel::notifyResourceError(this, errMsg, j->errorString());
+    }
+    else
+    {
+        if (jobClass == "Akonadi::ItemCreateJob")
+        {
+            // Prevent modification of the item until it is fully initialised.
+            // Either slotMonitoredItemChanged() or slotRowsInserted(), or both,
+            // will be called when the item is done.
+            itemId = static_cast<ItemCreateJob*>(j)->item().id();
+            qCDebug(KALARM_LOG) << "AkonadiResource::itemJobDone(ItemCreateJob): item id=" << itemId;
+            mItemsBeingCreated << itemId;
+        }
+    }
+
+/*    if (itemId >= 0  &&  jobClass == "Akonadi::ItemModifyJob")
+    {
+        const QHash<Item::Id, Item>::iterator it = mItemModifyJobQueue.find(itemId);
+        if (it != mItemModifyJobQueue.end())
+        {
+            if (!it.value().isValid())
+                mItemModifyJobQueue.erase(it);   // there are no more jobs queued for the item
+        }
+    }*/
+}
+
+/******************************************************************************
+* Check whether there are any ItemModifyJobs waiting for a specified item, and
+* if so execute the first one provided its creation has completed. This
+* prevents clashes in Akonadi conflicts between simultaneous ItemModifyJobs for
+* the same item.
+*
+* Note that when an item is newly created (e.g. via addEvent()), the KAlarm
+* resource itemAdded() function creates an ItemModifyJob to give it a remote
+* ID. Until that job is complete, any other ItemModifyJob for the item will
+* cause a conflict.
+*/
+void AkonadiResource::checkQueuedItemModifyJob(const Item& item)
+{
+    if (mItemsBeingCreated.contains(item.id()))
+        return;    // the item hasn't been fully initialised yet
+    const QHash<Item::Id, Item>::iterator it = mItemModifyJobQueue.find(item.id());
+    if (it == mItemModifyJobQueue.end())
+        return;    // there are no jobs queued for the item
+    Item qitem = it.value();
+    if (!qitem.isValid())
+    {
+        // There is no further job queued for the item, so remove the item from the list
+        mItemModifyJobQueue.erase(it);
+    }
+    else
+    {
+        // Queue the next job for the Item, after updating the Item's
+        // revision number to match that set by the job just completed.
+        qitem.setRevision(item.revision());
+        mItemModifyJobQueue[item.id()] = Item();   // mark the queued item as now executing
+        ItemModifyJob* job = new ItemModifyJob(qitem);
+        job->disableRevisionCheck();
+        connect(job, &ItemModifyJob::result, this, &AkonadiResource::itemJobDone);
+        mPendingItemJobs[job] = qitem.id();
+        qCDebug(KALARM_LOG) << "Executing queued Modify job for item" << qitem.id() << ", revision=" << qitem.revision();
+    }
 }
 
 /******************************************************************************
@@ -407,22 +685,6 @@ void AkonadiResource::modifyCollectionAttrJobDone(KJob* j)
         if (newEnabled)
             AkonadiModel::notifySettingsChanged(this, AkonadiModel::Enabled);
     }
-}
-
-/******************************************************************************
-* Return a reference to the Collection held by a resource.
-*/
-Collection& AkonadiResource::collection(Resource& resource)
-{
-    static Collection nullCollection;
-    AkonadiResource* akres = qobject_cast<AkonadiResource*>(resource.resource().data());
-    return akres ? akres->mCollection : nullCollection;
-}
-const Collection& AkonadiResource::collection(const Resource& resource)
-{
-    static const Collection nullCollection;
-    AkonadiResource* akres = qobject_cast<AkonadiResource*>(resource.resource().data());
-    return akres ? akres->mCollection : nullCollection;
 }
 
 // vim: et sw=4:

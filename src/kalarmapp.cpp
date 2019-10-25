@@ -2402,7 +2402,8 @@ void KAlarmApp::setEventCommandError(const KAEvent& event, KAEvent::CmdErrType e
     KAEvent* ev = AlarmCalendar::resources()->event(EventId(event));
     if (ev  &&  ev->commandError() != err)
         ev->setCommandError(err);
-    AkonadiModel::instance()->updateCommandError(event);
+    Resource resource = AkonadiModel::instance()->resource(event);
+    resource.handleCommandErrorChange(event);
 }
 
 /******************************************************************************
@@ -2422,7 +2423,8 @@ void KAlarmApp::clearEventCommandError(const KAEvent& event, KAEvent::CmdErrType
         newerr = static_cast<KAEvent::CmdErrType>(ev->commandError() & ~err);
         ev->setCommandError(newerr);
     }
-    AkonadiModel::instance()->updateCommandError(event);
+    Resource resource = AkonadiModel::instance()->resource(event);
+    resource.handleCommandErrorChange(event);
 }
 
 /******************************************************************************
