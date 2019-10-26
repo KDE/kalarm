@@ -200,99 +200,36 @@ bool AkonadiModel::isMigrationCompleted() const
 */
 QVariant AkonadiModel::data(const QModelIndex& index, int role) const
 {
-    // First check that it's a role we're interested in - if not, use the base method
-    switch (role)
+    if (roleHandled(role))
     {
-        case Qt::BackgroundRole:
-        case Qt::ForegroundRole:
-        case Qt::DisplayRole:
-        case Qt::TextAlignmentRole:
-        case Qt::DecorationRole:
-        case Qt::SizeHintRole:
-        case Qt::AccessibleTextRole:
-        case Qt::ToolTipRole:
-        case Qt::CheckStateRole:
-        case SortRole:
-        case TimeDisplayRole:
-        case ValueRole:
-        case StatusRole:
-        case AlarmActionsRole:
-        case AlarmSubActionRole:
-        case EnabledRole:
-        case CommandErrorRole:
-        case BaseColourRole:
-            break;
-        default:
-            return EntityTreeModel::data(index, role);
-    }
-
-    const Collection collection = index.data(CollectionRole).value<Collection>();
-    if (collection.isValid())
-    {
-        // This is a Collection row
-        // Update the collection's resource with the current collection value.
-        Resource& resource = updateResource(collection);
-        switch (role)
+        const Collection collection = EntityTreeModel::data(index, CollectionRole).value<Collection>();
+        if (collection.isValid())
         {
-            case Qt::DisplayRole:
-                return resource.displayName();
-            case BaseColourRole:
-                role = Qt::BackgroundRole;   // get value from EntityTreeModel
-                break;
-            case Qt::BackgroundRole:
-            {
-                const QColor colour = resource.backgroundColour();
-                if (colour.isValid())
-                    return colour;
-                break;
-            }
-            case Qt::ForegroundRole:
-                return resource.foregroundColour();
-            case Qt::ToolTipRole:
-                return tooltip(resource, CalEvent::ACTIVE | CalEvent::ARCHIVED | CalEvent::TEMPLATE);
-            default:
-                break;
-        }
-    }
-    else
-    {
-        Item item = index.data(ItemRole).value<Item>();
-        if (item.isValid())
-        {
-            // This is an Item row
-            const QString mime = item.mimeType();
-            if ((mime != KAlarmCal::MIME_ACTIVE  &&  mime != KAlarmCal::MIME_ARCHIVED  &&  mime != KAlarmCal::MIME_TEMPLATE)
-            ||  !item.hasPayload<KAEvent>())
-                return QVariant();
-            switch (role)
-            {
-                case StatusRole:
-                    // Mime type has a one-to-one relationship to event's category()
-                    if (mime == KAlarmCal::MIME_ACTIVE)
-                        return CalEvent::ACTIVE;
-                    if (mime == KAlarmCal::MIME_ARCHIVED)
-                        return CalEvent::ARCHIVED;
-                    if (mime == KAlarmCal::MIME_TEMPLATE)
-                        return CalEvent::TEMPLATE;
-                    return QVariant();
-                default:
-                    break;
-            }
-            const KAEvent ev(event(item, index));   // this sets item.parentCollection()
-
-            bool calendarColour;
+            // This is a Collection row
+            // Update the collection's resource with the current collection value.
+            const Resource& res = updateResource(collection);
             bool handled;
-            const QVariant value = eventData(index, role, ev, calendarColour, handled);
+            const QVariant value = resourceData(role, res, handled);
             if (handled)
-            {
-                if (calendarColour)
-                {
-                    const Resource parentResource = resource(item.parentCollection().id());
-                    const QColor colour = parentResource.backgroundColour();
-                    if (colour.isValid())
-                        return colour;
-                }
                 return value;
+        }
+        else
+        {
+            Item item = EntityTreeModel::data(index, ItemRole).value<Item>();
+            if (item.isValid())
+            {
+                // This is an Item row
+                const QString mime = item.mimeType();
+                if ((mime != KAlarmCal::MIME_ACTIVE  &&  mime != KAlarmCal::MIME_ARCHIVED  &&  mime != KAlarmCal::MIME_TEMPLATE)
+                ||  !item.hasPayload<KAEvent>())
+                    return QVariant();
+                const KAEvent ev(event(item, index));   // this sets item.parentCollection()
+
+                const Resource res = resource(item.parentCollection().id());
+                bool handled;
+                const QVariant value = eventData(role, index.column(), ev, res, handled);
+                if (handled)
+                    return value;
             }
         }
     }
@@ -463,22 +400,6 @@ void AkonadiModel::slotUpdateWorkingHours()
 }
 
 /******************************************************************************
-* Return a resource's tooltip text. The resource's enabled status is
-* evaluated for specified alarm types.
-*/
-QString AkonadiModel::tooltip(const Resource& resource, CalEvent::Types types) const
-{
-    const QString name = QLatin1Char('@') + resource.displayName();   // insert markers for stripping out name
-    const QUrl url = resource.location();
-    const QString type = QLatin1Char('@') + resource.storageTypeString(false);   // file/directory/URL etc.
-    const QString locn = resource.displayLocation();
-    const bool inactive = !(resource.enabledTypes() & types);
-    const QString readonly = readOnlyTooltip(resource);
-    const bool writable = readonly.isEmpty();
-    return CalendarDataModel::tooltip(writable, inactive, name, type, locn, readonly);
-}
-
-/******************************************************************************
 * Reload a collection from Akonadi storage. The backend data is not reloaded.
 */
 bool AkonadiModel::reloadResource(const Resource& resource)
@@ -622,31 +543,12 @@ Item AkonadiModel::itemForEvent(const QString& eventId) const
     return ix.data(ItemRole).value<Item>();
 }
 
-/******************************************************************************
-* Add events to a specified Collection.
-* Events which are scheduled to be added to the collection are updated with
-* their Akonadi item ID.
-* The caller must connect to the itemDone() signal to check whether events
-* have been added successfully. Note that the first signal may be emitted
-* before this function returns.
-* Reply = true if item creation has been scheduled for all events,
-*       = false if at least one item creation failed to be scheduled.
-*/
-bool AkonadiModel::addEvents(const KAEvent::List& events, Resource& resource)
-{
-    bool ok = true;
-    for (KAEvent* event : events)
-        ok = ok && addEvent(*event, resource);
-    return ok;
-}
-
+#if 0
 /******************************************************************************
 * Add an event to a specified Collection.
 * If the event is scheduled to be added to the collection, it is updated with
 * its Akonadi item ID.
 * The event's 'updated' flag is cleared.
-* The caller must connect to the itemDone() signal to check whether events
-* have been added successfully.
 * Reply = true if item creation has been scheduled.
 */
 bool AkonadiModel::addEvent(KAEvent& event, Resource& resource)
@@ -659,37 +561,7 @@ bool AkonadiModel::addEvent(KAEvent& event, Resource& resource)
     mEventIds[event.id()] = EventIds(resource.id());
     return true;
 }
-
-/******************************************************************************
-* Update an event in its collection.
-* The event retains its existing Akonadi item ID.
-* The event's 'updated' flag is cleared.
-* The caller must connect to the itemDone() signal to check whether the event
-* has been updated successfully.
-* Reply = true if item update has been scheduled.
-*/
-bool AkonadiModel::updateEvent(KAEvent& event)
-{
-    qCDebug(KALARM_LOG) << "AkonadiModel::updateEvent:" << event.id();
-    auto it = mEventIds.constFind(event.id());
-    if (it == mEventIds.constEnd())
-        return false;
-    Resource res = resource(it.value().collectionId);
-    return res.updateEvent(event);
-}
-
-/******************************************************************************
-* Delete an event from its collection.
-*/
-bool AkonadiModel::deleteEvent(const KAEvent& event)
-{
-    qCDebug(KALARM_LOG) << "AkonadiModel::deleteEvent:" << event.id();
-    auto it = mEventIds.constFind(event.id());
-    if (it == mEventIds.constEnd())
-        return false;
-    Resource res = resource(it.value().collectionId);
-    return res.deleteEvent(event);
-}
+#endif
 
 /******************************************************************************
 * Called when rows have been inserted into the model.
@@ -1071,14 +943,6 @@ bool AkonadiModel::refresh(Akonadi::Item& item) const
 Resource AkonadiModel::resource(Collection::Id id) const
 {
     return mResources.value(id, AkonadiResource::nullResource());
-}
-
-/******************************************************************************
-* Find the collection containing the specified event.
-*/
-Resource AkonadiModel::resource(const KAEvent& event) const
-{
-    return resourceForEvent(event.id());
 }
 
 /******************************************************************************

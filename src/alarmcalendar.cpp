@@ -711,8 +711,7 @@ bool AlarmCalendar::importAlarms(QWidget* parent, Resource* resourceptr)
 
             // Give the event a new ID and add it to the calendars
             newev->setUid(CalEvent::uid(CalFormat::createUniqueId(), type));
-            KAEvent* newEvent = new KAEvent(newev);
-            if (!AkonadiModel::instance()->addEvent(*newEvent, res))
+            if (!res.addEvent(KAEvent(newev)))
                 success = false;
         }
 
@@ -962,7 +961,7 @@ bool AlarmCalendar::addEvent(KAEvent& evnt, QWidget* promptParent, bool useEvent
         {
             // Don't add event to mEventMap yet - its Akonadi item id is not yet known.
             // It will be added once it is inserted into AkonadiModel.
-            ok = AkonadiModel::instance()->addEvent(*event, res);
+            ok = res.addEvent(*event);
             remove = ok;   // if success, delete the local event instance on exit
             if (ok  &&  type == CalEvent::ACTIVE  &&  !event->enabled())
                 checkForDisabledAlarms(true, false);
@@ -1075,7 +1074,7 @@ bool AlarmCalendar::modifyEvent(const EventId& oldEventId, KAEvent& newEvent)
         if (!resource.isValid())
             return false;
         // Don't add new event to mEventMap yet - its Akonadi item id is not yet known
-        if (!AkonadiModel::instance()->addEvent(newEvent, resource))
+        if (!resource.addEvent(newEvent))
             return false;
         // Note: deleteEventInternal() will delete storedEvent before using the
         // event parameter, so need to pass a copy as the parameter.
@@ -1109,10 +1108,10 @@ KAEvent* AlarmCalendar::updateEvent(const KAEvent* evnt)
     KAEvent* kaevnt = event(EventId(*evnt));
     if (kaevnt)
     {
-        KAEvent newEvnt(*evnt);
-        if (AkonadiModel::instance()->updateEvent(newEvnt))
+        Resource resource = AkonadiModel::instance()->resourceForEvent(evnt->id());
+        if (resource.updateEvent(*evnt))
         {
-            *kaevnt = newEvnt;
+            *kaevnt = *evnt;
             return kaevnt;
         }
     }
@@ -1150,7 +1149,8 @@ bool AlarmCalendar::deleteDisplayEvent(const QString& eventID, bool saveit)
 {
     if (mOpen  &&  mCalType != RESOURCES)
     {
-        const CalEvent::Type status = deleteEventInternal(eventID);
+        Resource resource;
+        const CalEvent::Type status = deleteEventInternal(eventID, KAEvent(), resource, false);
         if (mHaveDisabledAlarms)
             checkForDisabledAlarms();
         if (status != CalEvent::EMPTY)
@@ -1177,7 +1177,7 @@ CalEvent::Type AlarmCalendar::deleteEventInternal(const KAEvent& event, bool del
     return deleteEventInternal(event.id(), event, resource, deleteFromAkonadi);
 }
 
-CalEvent::Type AlarmCalendar::deleteEventInternal(const KAEvent& event, const Resource& resource, bool deleteFromAkonadi)
+CalEvent::Type AlarmCalendar::deleteEventInternal(const KAEvent& event, Resource& resource, bool deleteFromAkonadi)
 {
     if (!resource.isValid())
         return CalEvent::EMPTY;
@@ -1189,7 +1189,7 @@ CalEvent::Type AlarmCalendar::deleteEventInternal(const KAEvent& event, const Re
     return deleteEventInternal(event.id(), event, resource, deleteFromAkonadi);
 }
 
-CalEvent::Type AlarmCalendar::deleteEventInternal(const QString& eventID, const KAEvent& event, const Resource& resource, bool deleteFromAkonadi)
+CalEvent::Type AlarmCalendar::deleteEventInternal(const QString& eventID, const KAEvent& event, Resource& resource, bool deleteFromAkonadi)
 {
     // Make a copy of the KAEvent and the ID QString, since the supplied
     // references might be destructed when the event is deleted below.
@@ -1235,7 +1235,7 @@ CalEvent::Type AlarmCalendar::deleteEventInternal(const QString& eventID, const 
     {
         // It's an Akonadi event
         CalEvent::Type s = paramEvent.category();
-        if (AkonadiModel::instance()->deleteEvent(paramEvent))
+        if (resource.deleteEvent(paramEvent))
             status = s;
     }
     return status;
@@ -1554,7 +1554,7 @@ void AlarmCalendar::setAlarmPending(KAEvent* event, bool pending)
         mPendingAlarms.remove(id);
     }
     // Now update the earliest alarm to trigger for its calendar
-    findEarliestAlarm(AkonadiModel::instance()->resource(*event));
+    findEarliestAlarm(AkonadiModel::instance()->resourceForEvent(event->id()));
 }
 
 /******************************************************************************

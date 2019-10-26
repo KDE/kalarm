@@ -154,244 +154,321 @@ QVariant CalendarDataModel::headerData(int section, Qt::Orientation orientation,
     return QVariant();
 }
 
-/******************************************************************************
-* Return the data for a given role, for a specified event.
-* @param calendarColour  updated to true if the calendar's background colour
-*                        should be returned by the caller, else set to false.
-* @param handled         updated to true if the reply is valid, else set to false.
-*/
-QVariant CalendarDataModel::eventData(const QModelIndex& ix, int role, const KAEvent& event, bool& calendarColour, bool& handled) const
+bool CalendarDataModel::roleHandled(int role) const
 {
-    handled = true;
-    calendarColour = false;
-
-    const int column = ix.column();
-    if (role == Qt::WhatsThisRole)
-        return whatsThisText(column);
-    if (!event.isValid())
-        return QVariant();
     switch (role)
     {
-        case AlarmActionsRole:
-            return event.actionTypes();
-        case AlarmSubActionRole:
-            return event.actionSubType();
-        case CommandErrorRole:
-            return event.commandError();
-        default:
-            break;
-    }
-    switch (column)
-    {
-        case TimeColumn:
-            switch (role)
-            {
-                case Qt::BackgroundRole:
-                    calendarColour = true;
-                    break;
-                case Qt::DisplayRole:
-                    if (event.expired())
-                        return AlarmTime::alarmTimeText(event.startDateTime(), '0');
-                    return AlarmTime::alarmTimeText(event.nextTrigger(KAEvent::DISPLAY_TRIGGER), '0');
-                case TimeDisplayRole:
-                    if (event.expired())
-                        return AlarmTime::alarmTimeText(event.startDateTime(), '~');
-                    return AlarmTime::alarmTimeText(event.nextTrigger(KAEvent::DISPLAY_TRIGGER), '~');
-                case Qt::TextAlignmentRole:
-                    return Qt::AlignRight;
-                case SortRole:
-                {
-                    DateTime due;
-                    if (event.expired())
-                        due = event.startDateTime();
-                    else
-                        due = event.nextTrigger(KAEvent::DISPLAY_TRIGGER);
-                    return due.isValid() ? due.effectiveKDateTime().toUtc().qDateTime()
-                                         : QDateTime(QDate(9999,12,31), QTime(0,0,0));
-                }
-                default:
-                    break;
-            }
-            break;
-        case TimeToColumn:
-            switch (role)
-            {
-                case Qt::BackgroundRole:
-                    calendarColour = true;
-                    break;
-                case Qt::DisplayRole:
-                    if (event.expired())
-                        return QString();
-                    return AlarmTime::timeToAlarmText(event.nextTrigger(KAEvent::DISPLAY_TRIGGER));
-                case Qt::TextAlignmentRole:
-                    return Qt::AlignRight;
-                case SortRole:
-                {
-                    if (event.expired())
-                        return -1;
-                    const DateTime due = event.nextTrigger(KAEvent::DISPLAY_TRIGGER);
-                    const KADateTime now = KADateTime::currentUtcDateTime();
-                    if (due.isDateOnly())
-                        return now.date().daysTo(due.date()) * 1440;
-                    return (now.secsTo(due.effectiveKDateTime()) + 59) / 60;
-                }
-            }
-            break;
-        case RepeatColumn:
-            switch (role)
-            {
-                case Qt::BackgroundRole:
-                    calendarColour = true;
-                    break;
-                case Qt::DisplayRole:
-                    return repeatText(event);
-                case Qt::TextAlignmentRole:
-                    return Qt::AlignHCenter;
-                case SortRole:
-                    return repeatOrder(event);
-            }
-            break;
-        case ColourColumn:
-            switch (role)
-            {
-                case Qt::BackgroundRole:
-                {
-                    const KAEvent::Actions type = event.actionTypes();
-                    if (type & KAEvent::ACT_DISPLAY)
-                        return event.bgColour();
-                    if (type == KAEvent::ACT_COMMAND)
-                    {
-                        if (event.commandError() != KAEvent::CMD_NO_ERROR)
-                            return QColor(Qt::red);
-                    }
-                    break;
-                }
-                case Qt::ForegroundRole:
-                    if (event.commandError() != KAEvent::CMD_NO_ERROR)
-                    {
-                        if (event.actionTypes() == KAEvent::ACT_COMMAND)
-                            return QColor(Qt::white);
-                        QColor colour = Qt::red;
-                        int r, g, b;
-                        event.bgColour().getRgb(&r, &g, &b);
-                        if (r > 128  &&  g <= 128  &&  b <= 128)
-                            colour = QColor(Qt::white);
-                        return colour;
-                    }
-                    break;
-                case Qt::DisplayRole:
-                    if (event.commandError() != KAEvent::CMD_NO_ERROR)
-                        return QLatin1String("!");
-                    break;
-                case SortRole:
-                {
-                    const unsigned i = (event.actionTypes() == KAEvent::ACT_DISPLAY)
-                                       ? event.bgColour().rgb() : 0;
-                    return QStringLiteral("%1").arg(i, 6, 10, QLatin1Char('0'));
-                }
-                default:
-                    break;
-            }
-            break;
-        case TypeColumn:
-            switch (role)
-            {
-                case Qt::BackgroundRole:
-                    calendarColour = true;
-                    break;
-                case Qt::DecorationRole:
-                {
-                    QVariant v;
-                    v.setValue(*eventIcon(event));
-                    return v;
-                }
-                case Qt::TextAlignmentRole:
-                    return Qt::AlignHCenter;
-                case Qt::SizeHintRole:
-                    return mIconSize;
-                case Qt::AccessibleTextRole:
-//TODO: Implement accessibility
-                    return QString();
-                case ValueRole:
-                    return static_cast<int>(event.actionSubType());
-                case SortRole:
-                    return QStringLiteral("%1").arg(event.actionSubType(), 2, 10, QLatin1Char('0'));
-            }
-            break;
-        case TextColumn:
-            switch (role)
-            {
-                case Qt::BackgroundRole:
-                    calendarColour = true;
-                    break;
-                case Qt::DisplayRole:
-                case SortRole:
-                    return AlarmText::summary(event, 1);
-                case Qt::ToolTipRole:
-                    return AlarmText::summary(event, 10);
-                default:
-                    break;
-            }
-            break;
-        case TemplateNameColumn:
-            switch (role)
-            {
-                case Qt::BackgroundRole:
-                    calendarColour = true;
-                    break;
-                case Qt::DisplayRole:
-                    return event.templateName();
-                case SortRole:
-                    return event.templateName().toUpper();
-            }
-            break;
-        default:
-            break;
-    }
-
-    switch (role)
-    {
+        case Qt::WhatsThisRole:
         case Qt::ForegroundRole:
-            if (!event.enabled())
-               return Preferences::disabledColour();
-            if (event.expired())
-               return Preferences::archivedColour();
-            break;   // use the default for normal active alarms
+        case Qt::BackgroundRole:
+        case Qt::DisplayRole:
+        case Qt::TextAlignmentRole:
+        case Qt::DecorationRole:
+        case Qt::SizeHintRole:
+        case Qt::AccessibleTextRole:
         case Qt::ToolTipRole:
-            // Show the last command execution error message
-            switch (event.commandError())
-            {
-                case KAEvent::CMD_ERROR:
-                    return i18nc("@info:tooltip", "Command execution failed");
-                case KAEvent::CMD_ERROR_PRE:
-                    return i18nc("@info:tooltip", "Pre-alarm action execution failed");
-                case KAEvent::CMD_ERROR_POST:
-                    return i18nc("@info:tooltip", "Post-alarm action execution failed");
-                case KAEvent::CMD_ERROR_PRE_POST:
-                    return i18nc("@info:tooltip", "Pre- and post-alarm action execution failed");
-                default:
-                case KAEvent::CMD_NO_ERROR:
-                    break;
-            }
-            break;
+        case BaseColourRole:
+        case TimeDisplayRole:
+        case SortRole:
+        case StatusRole:
+        case ValueRole:
         case EnabledRole:
-            return event.enabled();
+        case AlarmActionsRole:
+        case AlarmSubActionRole:
+        case CommandErrorRole:
+            return true;
         default:
-            break;
+            return false;
+    }
+}
+
+/******************************************************************************
+* Return the data for a given role, for a specified resource.
+*/
+QVariant CalendarDataModel::resourceData(int& role, const Resource& resource, bool& handled) const
+{
+    if (roleHandled(role))   // Ensure that resourceDataHandles() is coded correctly
+    {
+        handled = true;
+        switch (role)
+        {
+            case Qt::DisplayRole:
+                return resource.displayName();
+            case BaseColourRole:
+                role = Qt::BackgroundRole;   // use base model background colour
+                break;
+            case Qt::BackgroundRole:
+            {
+                const QColor colour = resource.backgroundColour();
+                if (colour.isValid())
+                    return colour;
+                break;
+            }
+            case Qt::ForegroundRole:
+                return resource.foregroundColour();
+            case Qt::ToolTipRole:
+                return tooltip(resource, CalEvent::ACTIVE | CalEvent::ARCHIVED | CalEvent::TEMPLATE);
+            default:
+                break;
+        }
     }
 
-    // Use the base class's data value, unless calendar colour is to be used.
-    handled = calendarColour;
+    handled = false;
     return QVariant();
 }
 
 /******************************************************************************
-* Return a collection's tooltip text. The collection's enabled status is
+* Return the data for a given role, for a specified event.
+*/
+QVariant CalendarDataModel::eventData(int role, int column, const KAEvent& event,
+                                      const Resource& resource, bool& handled) const
+{
+    if (roleHandled(role))   // Ensure that eventDataHandles() is coded correctly
+    {
+        handled = true;
+        bool calendarColour = false;
+
+        if (role == Qt::WhatsThisRole)
+            return whatsThisText(column);
+        if (!event.isValid())
+            return QVariant();
+        switch (role)
+        {
+            case StatusRole:
+                return event.category();
+            case AlarmActionsRole:
+                return event.actionTypes();
+            case AlarmSubActionRole:
+                return event.actionSubType();
+            case CommandErrorRole:
+                return event.commandError();
+            default:
+                break;
+        }
+        switch (column)
+        {
+            case TimeColumn:
+                switch (role)
+                {
+                    case Qt::BackgroundRole:
+                        calendarColour = true;
+                        break;
+                    case Qt::DisplayRole:
+                        if (event.expired())
+                            return AlarmTime::alarmTimeText(event.startDateTime(), '0');
+                        return AlarmTime::alarmTimeText(event.nextTrigger(KAEvent::DISPLAY_TRIGGER), '0');
+                    case TimeDisplayRole:
+                        if (event.expired())
+                            return AlarmTime::alarmTimeText(event.startDateTime(), '~');
+                        return AlarmTime::alarmTimeText(event.nextTrigger(KAEvent::DISPLAY_TRIGGER), '~');
+                    case Qt::TextAlignmentRole:
+                        return Qt::AlignRight;
+                    case SortRole:
+                    {
+                        DateTime due;
+                        if (event.expired())
+                            due = event.startDateTime();
+                        else
+                            due = event.nextTrigger(KAEvent::DISPLAY_TRIGGER);
+                        return due.isValid() ? due.effectiveKDateTime().toUtc().qDateTime()
+                                             : QDateTime(QDate(9999,12,31), QTime(0,0,0));
+                    }
+                    default:
+                        break;
+                }
+                break;
+            case TimeToColumn:
+                switch (role)
+                {
+                    case Qt::BackgroundRole:
+                        calendarColour = true;
+                        break;
+                    case Qt::DisplayRole:
+                        if (event.expired())
+                            return QString();
+                        return AlarmTime::timeToAlarmText(event.nextTrigger(KAEvent::DISPLAY_TRIGGER));
+                    case Qt::TextAlignmentRole:
+                        return Qt::AlignRight;
+                    case SortRole:
+                    {
+                        if (event.expired())
+                            return -1;
+                        const DateTime due = event.nextTrigger(KAEvent::DISPLAY_TRIGGER);
+                        const KADateTime now = KADateTime::currentUtcDateTime();
+                        if (due.isDateOnly())
+                            return now.date().daysTo(due.date()) * 1440;
+                        return (now.secsTo(due.effectiveKDateTime()) + 59) / 60;
+                    }
+                }
+                break;
+            case RepeatColumn:
+                switch (role)
+                {
+                    case Qt::BackgroundRole:
+                        calendarColour = true;
+                        break;
+                    case Qt::DisplayRole:
+                        return repeatText(event);
+                    case Qt::TextAlignmentRole:
+                        return Qt::AlignHCenter;
+                    case SortRole:
+                        return repeatOrder(event);
+                }
+                break;
+            case ColourColumn:
+                switch (role)
+                {
+                    case Qt::BackgroundRole:
+                    {
+                        const KAEvent::Actions type = event.actionTypes();
+                        if (type & KAEvent::ACT_DISPLAY)
+                            return event.bgColour();
+                        if (type == KAEvent::ACT_COMMAND)
+                        {
+                            if (event.commandError() != KAEvent::CMD_NO_ERROR)
+                                return QColor(Qt::red);
+                        }
+                        break;
+                    }
+                    case Qt::ForegroundRole:
+                        if (event.commandError() != KAEvent::CMD_NO_ERROR)
+                        {
+                            if (event.actionTypes() == KAEvent::ACT_COMMAND)
+                                return QColor(Qt::white);
+                            QColor colour = Qt::red;
+                            int r, g, b;
+                            event.bgColour().getRgb(&r, &g, &b);
+                            if (r > 128  &&  g <= 128  &&  b <= 128)
+                                colour = QColor(Qt::white);
+                            return colour;
+                        }
+                        break;
+                    case Qt::DisplayRole:
+                        if (event.commandError() != KAEvent::CMD_NO_ERROR)
+                            return QLatin1String("!");
+                        break;
+                    case SortRole:
+                    {
+                        const unsigned i = (event.actionTypes() == KAEvent::ACT_DISPLAY)
+                                           ? event.bgColour().rgb() : 0;
+                        return QStringLiteral("%1").arg(i, 6, 10, QLatin1Char('0'));
+                    }
+                    default:
+                        break;
+                }
+                break;
+            case TypeColumn:
+                switch (role)
+                {
+                    case Qt::BackgroundRole:
+                        calendarColour = true;
+                        break;
+                    case Qt::DecorationRole:
+                    {
+                        QVariant v;
+                        v.setValue(*eventIcon(event));
+                        return v;
+                    }
+                    case Qt::TextAlignmentRole:
+                        return Qt::AlignHCenter;
+                    case Qt::SizeHintRole:
+                        return mIconSize;
+                    case Qt::AccessibleTextRole:
+//TODO: Implement accessibility
+                        return QString();
+                    case ValueRole:
+                        return static_cast<int>(event.actionSubType());
+                    case SortRole:
+                        return QStringLiteral("%1").arg(event.actionSubType(), 2, 10, QLatin1Char('0'));
+                }
+                break;
+            case TextColumn:
+                switch (role)
+                {
+                    case Qt::BackgroundRole:
+                        calendarColour = true;
+                        break;
+                    case Qt::DisplayRole:
+                    case SortRole:
+                        return AlarmText::summary(event, 1);
+                    case Qt::ToolTipRole:
+                        return AlarmText::summary(event, 10);
+                    default:
+                        break;
+                }
+                break;
+            case TemplateNameColumn:
+                switch (role)
+                {
+                    case Qt::BackgroundRole:
+                        calendarColour = true;
+                        break;
+                    case Qt::DisplayRole:
+                        return event.templateName();
+                    case SortRole:
+                        return event.templateName().toUpper();
+                }
+                break;
+            default:
+                break;
+        }
+
+        if (calendarColour)
+        {
+            const QColor colour = resource.backgroundColour();
+            if (colour.isValid())
+                return colour;
+        }
+
+        switch (role)
+        {
+            case Qt::ForegroundRole:
+                if (!event.enabled())
+                   return Preferences::disabledColour();
+                if (event.expired())
+                   return Preferences::archivedColour();
+                break;   // use the default for normal active alarms
+            case Qt::ToolTipRole:
+                // Show the last command execution error message
+                switch (event.commandError())
+                {
+                    case KAEvent::CMD_ERROR:
+                        return i18nc("@info:tooltip", "Command execution failed");
+                    case KAEvent::CMD_ERROR_PRE:
+                        return i18nc("@info:tooltip", "Pre-alarm action execution failed");
+                    case KAEvent::CMD_ERROR_POST:
+                        return i18nc("@info:tooltip", "Post-alarm action execution failed");
+                    case KAEvent::CMD_ERROR_PRE_POST:
+                        return i18nc("@info:tooltip", "Pre- and post-alarm action execution failed");
+                    default:
+                    case KAEvent::CMD_NO_ERROR:
+                        break;
+                }
+                break;
+            case EnabledRole:
+                return event.enabled();
+            default:
+                break;
+        }
+    }
+
+    handled = false;
+    return QVariant();
+}
+
+/******************************************************************************
+* Return a resource's tooltip text. The resource's enabled status is
 * evaluated for specified alarm types.
 */
-QString CalendarDataModel::tooltip(bool writable, bool inactive, const QString& name, const QString& type,
-                                   const QString& locn, const QString& readonly)
+QString CalendarDataModel::tooltip(const Resource& resource, CalEvent::Types types) const
 {
+    const QString name     = QLatin1Char('@') + resource.displayName();   // insert markers for stripping out name
+    const QString type     = QLatin1Char('@') + resource.storageTypeString(false);   // file/directory/URL etc.
+    const QString locn     = resource.displayLocation();
+    const bool    inactive = !(resource.enabledTypes() & types);
+    const QString readonly = readOnlyTooltip(resource);
+    const bool    writable = readonly.isEmpty();
+//TODO: should the above line be   = resource.isWritable() ?
     const QString disabled = i18nc("@info", "Disabled");
     if (inactive  &&  !writable)
         return xi18nc("@info:tooltip",

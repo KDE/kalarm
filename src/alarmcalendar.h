@@ -114,9 +114,9 @@ class AlarmCalendar : public QObject
         bool                  isValid() const   { return mCalType == RESOURCES || mCalendarStorage; }
         void                  addNewEvent(const Resource&, KAEvent*, bool replace = false);
         CalEvent::Type        deleteEventInternal(const KAEvent&, bool deleteFromAkonadi = true);
-        CalEvent::Type        deleteEventInternal(const KAEvent&, const Resource&, bool deleteFromAkonadi = true);
-        CalEvent::Type        deleteEventInternal(const QString& eventID, const KAEvent& = KAEvent(),
-                                                  const Resource& = Resource(), bool deleteFromAkonadi = true);
+        CalEvent::Type        deleteEventInternal(const KAEvent&, Resource&, bool deleteFromAkonadi = true);
+        CalEvent::Type        deleteEventInternal(const QString& eventID, const KAEvent&, Resource&,
+                                                  bool deleteFromAkonadi = true);
         void                  updateDisplayKAEvents();
         void                  removeKAEvents(ResourceId, bool closing = false, CalEvent::Types = CalEvent::ACTIVE | CalEvent::ARCHIVED | CalEvent::TEMPLATE);
         void                  findEarliestAlarm(const Resource&);

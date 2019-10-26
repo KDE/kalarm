@@ -67,10 +67,6 @@ class AkonadiModel : public Akonadi::EntityTreeModel, public CalendarDataModel
 
         ~AkonadiModel() override;
 
-        /** Get the tooltip for a resource. The resource's enabled status is
-         *  evaluated for specified alarm types. */
-        QString tooltip(const Resource&, CalEvent::Types) const;
-
         /** Refresh the specified collection instance with up to date data. */
         bool refresh(Akonadi::Collection&) const;
 
@@ -78,7 +74,6 @@ class AkonadiModel : public Akonadi::EntityTreeModel, public CalendarDataModel
         bool refresh(Akonadi::Item&) const;
 
         Resource                 resource(Akonadi::Collection::Id) const;
-        Resource                 resource(const KAEvent&) const;
         Resource                 resource(const QModelIndex&) const;
         QModelIndex              resourceIndex(const Resource&) const;
         QModelIndex              resourceIndex(Akonadi::Collection::Id) const;
@@ -117,11 +112,6 @@ class AkonadiModel : public Akonadi::EntityTreeModel, public CalendarDataModel
         /** Return all events in a collection, optionally of a specified type. */
         KAEvent::List events(Akonadi::Collection&, CalEvent::Type = CalEvent::EMPTY) const;
 #endif
-
-        bool  addEvent(KAEvent&, Resource&);
-        bool  addEvents(const KAEvent::List&, Resource&);
-        bool  updateEvent(KAEvent& event);
-        bool  deleteEvent(const KAEvent& event);
 
         /** Called by a resource to notify an error message to display to the user.
          *  @param message  Must contain a '%1' to allow the resource's name to be substituted.

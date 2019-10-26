@@ -1607,7 +1607,7 @@ void MainWindow::editAlarmOk()
         return;
     if (dlg->result() != QDialog::Accepted)
         return;
-    Resource res = AkonadiModel::instance()->resource(event);
+    Resource res = AkonadiModel::instance()->resourceForEvent(event.id());
     KAlarm::updateEditedAlarm(dlg, event, res);
 }
 

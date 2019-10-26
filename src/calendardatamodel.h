@@ -79,6 +79,10 @@ class CalendarDataModel
         /** Return a bulleted list of alarm types for inclusion in an i18n message. */
         static QString typeListForDisplay(CalEvent::Types);
 
+        /** Get the tooltip for a resource. The resource's enabled status is
+         *  evaluated for specified alarm types. */
+        QString tooltip(const Resource&, CalEvent::Types) const;
+
         /** Return the read-only status tooltip for a resource.
          * A null string is returned if the resource is fully writable. */
         static QString readOnlyTooltip(const Resource&);
@@ -88,11 +92,19 @@ class CalendarDataModel
 
         static QVariant headerData(int section, Qt::Orientation, int role, bool eventHeaders, bool& handled);
 
-        QVariant eventData(const QModelIndex& index, int role, const KAEvent& event, bool& calendarColour, bool& handled) const;
+        /** Return whether resourceData() and/or eventData() handle a role. */
+        bool roleHandled(int role) const;
 
-        /** Get the tooltip for a resource. The resource's enabled status is
-         *  evaluated for specified alarm types. */
-        static QString tooltip(bool writable, bool inactive, const QString& name, const QString& type, const QString& locn, const QString& readonly);
+        /** Return the model data for a resource.
+         *  @param role     may be updated for calling the base model.
+         *  @param handled  updated to true if the reply is valid, else set to false.
+         */
+        QVariant resourceData(int& role, const Resource&, bool& handled) const;
+
+        /** Return the model data for an event.
+         *  @param handled  updated to true if the reply is valid, else set to false.
+         */
+        QVariant eventData(int role, int column, const KAEvent& event, const Resource&, bool& handled) const;
 
         static QString  repeatText(const KAEvent&);
         static QString  repeatOrder(const KAEvent&);
