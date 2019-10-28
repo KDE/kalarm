@@ -864,25 +864,25 @@ void CollectionControlModel::resourceStatusChanged(Resource& resource, AkonadiMo
                     switch (std)
                     {
                         case CalEvent::ACTIVE:
-                            msg = xi18nc("@info", "The calendar <resource>%1</resource> has been made read-only. "
-                                                 "This was the default calendar for active alarms.",
+                            msg = xi18n("The calendar <resource>%1</resource> has been made read-only. "
+                                        "This was the default calendar for active alarms.",
                                         resource.displayName());
                             break;
                         case CalEvent::ARCHIVED:
-                            msg = xi18nc("@info", "The calendar <resource>%1</resource> has been made read-only. "
-                                                 "This was the default calendar for archived alarms.",
+                            msg = xi18n("The calendar <resource>%1</resource> has been made read-only. "
+                                        "This was the default calendar for archived alarms.",
                                         resource.displayName());
                             break;
                         case CalEvent::TEMPLATE:
-                            msg = xi18nc("@info", "The calendar <resource>%1</resource> has been made read-only. "
-                                                 "This was the default calendar for alarm templates.",
+                            msg = xi18n("The calendar <resource>%1</resource> has been made read-only. "
+                                        "This was the default calendar for alarm templates.",
                                         resource.displayName());
                             break;
                         default:
                             msg = xi18nc("@info", "<para>The calendar <resource>%1</resource> has been made read-only. "
-                                                 "This was the default calendar for:%2</para>"
-                                                 "<para>Please select new default calendars.</para>",
-                                        resource.displayName(), CalendarDataModel::typeListForDisplay(std));
+                                                  "This was the default calendar for:%2</para>"
+                                                  "<para>Please select new default calendars.</para>",
+                                         resource.displayName(), CalendarDataModel::typeListForDisplay(std));
                             singleType = false;
                             break;
                     }
