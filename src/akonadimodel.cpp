@@ -23,7 +23,6 @@
 #include "autoqpointer.h"
 #include "calendarmigrator.h"
 #include "mainwindow.h"
-#include "messagebox.h"
 #include "preferences.h"
 #include "synchtimer.h"
 #include "kalarmsettings.h"
@@ -786,17 +785,16 @@ void AkonadiModel::setCollectionChanged(Resource& resource, const Collection& co
 /******************************************************************************
 * Called by a resource to notify that its status has changed.
 */
-void AkonadiModel::notifySettingsChanged(AkonadiResource* res, Change change)
+void AkonadiModel::slotResourceSettingsChanged(ResourceId id, ResourceBase::Changes change)
 {
-    AkonadiModel* model = AkonadiModel::instance();
-    auto it = model->mResources.find(res->id());
-    if (it != model->mResources.end())
+    auto it = mResources.find(id);
+    if (it != mResources.end())
     {
         Resource& resource = it.value();
-        if (change == Enabled)
+        if (change | ResourceBase::Enabled)
         {
             const CalEvent::Types newEnabled = resource.enabledTypes();
-            instance()->handleEnabledChange(resource, newEnabled, false);
+            handleEnabledChange(resource, newEnabled, false);
         }
     }
 }
@@ -1052,14 +1050,20 @@ Resource& AkonadiModel::updateResource(const Collection& collection) const
     else
     {
         // Create a new resource for the collection.
-        it = mResources.insert(collection.id(), Resource(new AkonadiResource(collection)));
+        AkonadiResource* akres = new AkonadiResource(collection);
+        connect(akres, &ResourceBase::settingsChanged, this, &AkonadiModel::slotResourceSettingsChanged);
+        connect(akres, &ResourceBase::resourceMessage, this, &AkonadiModel::slotResourceMessage, Qt::QueuedConnection);
+        it = mResources.insert(collection.id(), Resource(akres));
     }
     return it.value();
 }
 
-void AkonadiModel::notifyResourceError(AkonadiResource*, const QString& message, const QString& details)
+/******************************************************************************
+* Display a message to the user.
+*/
+void AkonadiModel::slotResourceMessage(ResourceId id, ResourceBase::MessageType type, const QString& message, const QString& details)
 {
-    KAMessageBox::detailedError(MainWindow::mainMainWindow(), message, details);
+    handleResourceMessage(id, type, message, details);
 }
 
 // vim: et sw=4:

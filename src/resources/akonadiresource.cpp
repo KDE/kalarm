@@ -559,7 +559,7 @@ void AkonadiResource::itemJobDone(KJob* j)
             const Item current = AkonadiModel::instance()->itemById(itemId);  // fetch the up-to-date item
             checkQueuedItemModifyJob(current);
         }
-        AkonadiModel::notifyResourceError(this, errMsg, j->errorString());
+        Q_EMIT resourceMessage(id(), MessageType::Error, errMsg, j->errorString());
     }
     else
     {
@@ -676,14 +676,14 @@ void AkonadiResource::modifyCollectionAttrJobDone(KJob* j)
         &&  id == mCollection.id())
         {
             qCCritical(KALARM_LOG) << "AkonadiResource::modifyCollectionAttrJobDone:" << collection.id() << "Failed to update calendar" << displayName() << ":" << j->errorString();
-            AkonadiModel::notifyResourceError(this, i18nc("@info", "Failed to update calendar \"%1\".", displayName()), j->errorString());
+            Q_EMIT resourceMessage(id, MessageType::Error, i18nc("@info", "Failed to update calendar \"%1\".", displayName()), j->errorString());
         }
     }
     else
     {
         AkonadiModel::instance()->refresh(mCollection);   // pick up the modified attribute
         if (newEnabled)
-            AkonadiModel::notifySettingsChanged(this, AkonadiModel::Enabled);
+            Q_EMIT settingsChanged(id, Enabled);
     }
 }
 

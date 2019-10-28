@@ -21,6 +21,8 @@
 #ifndef CALENDARDATAMODEL_H
 #define CALENDARDATAMODEL_H
 
+#include "resources/resourcebase.h"
+
 #include <kalarmcal/kacalendar.h>
 
 #include <QSize>
@@ -105,6 +107,9 @@ class CalendarDataModel
          *  @param handled  updated to true if the reply is valid, else set to false.
          */
         QVariant eventData(int role, int column, const KAEvent& event, const Resource&, bool& handled) const;
+
+        /** Called when a resource notifies a message to display to the user. */
+        void handleResourceMessage(ResourceId, ResourceBase::MessageType, const QString& message, const QString& details);
 
         static QString  repeatText(const KAEvent&);
         static QString  repeatOrder(const KAEvent&);

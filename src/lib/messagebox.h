@@ -1,7 +1,7 @@
 /*
  *  messagebox.h  -  enhanced KMessageBox class
  *  Program:  kalarm
- *  Copyright © 2004,2007,2011,2014 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2004-2019 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -101,6 +101,14 @@ class KAMessageBox
                                   const QString& caption = QString(),
                                   KMessageBox::Options options = KMessageBox::Options(KMessageBox::Notify|KMessageBox::WindowModal))
         { KMessageBox::detailedSorry(parent, text, details, caption, options); }
+
+        /** Same as KMessageBox::informationList() except that it defaults to window-modal,
+         *  not application-modal. */
+        static void informationList(QWidget* parent, const QString& text, const QStringList& details,
+                                  const QString& caption = QString(),
+                                  const QString& dontShowAgainName = QString(),
+                                  KMessageBox::Options options = KMessageBox::Options(KMessageBox::Notify|KMessageBox::WindowModal))
+        { KMessageBox::informationList(parent, text, details, caption, dontShowAgainName, options); }
 
         /** Same as KMessageBox::error() except that it defaults to window-modal,
          *  not application-modal. */

@@ -21,6 +21,8 @@
 #include "calendardatamodel.h"
 
 #include "alarmtime.h"
+#include "mainwindow.h"
+#include "messagebox.h"
 #include "preferences.h"
 #include "resources/resource.h"
 #include "kalarm_debug.h"
@@ -583,6 +585,17 @@ QPixmap* CalendarDataModel::eventIcon(const KAEvent& event)
         default:
             return mTextIcon;
     }
+}
+
+/******************************************************************************
+* Display a message to the user.
+*/
+void CalendarDataModel::handleResourceMessage(ResourceId, ResourceBase::MessageType type, const QString& message, const QString& details)
+{
+    if (type == ResourceBase::MessageType::Error)
+        KAMessageBox::detailedError(MainWindow::mainMainWindow(), message, details);
+    else if (type == ResourceBase::MessageType::Info)
+        KAMessageBox::informationList(MainWindow::mainMainWindow(), message, {details});
 }
 
 // vim: et sw=4:

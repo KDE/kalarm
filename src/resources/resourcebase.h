@@ -39,6 +39,24 @@ public:
     /** The type of storage used by a resource. */
     enum StorageType  { NoStorage, File, Directory };
 
+    /** Settings change types. */
+    enum Change
+    {
+        NoChange         = 0,
+        Name             = 0x01,
+        AlarmTypes       = 0x02,
+        Enabled          = 0x04,
+        Standard         = 0x08,
+        ReadOnly         = 0x10,
+        KeepFormat       = 0x20,
+        UpdateFormat     = 0x40,
+        BackgroundColour = 0x80
+    };
+    Q_DECLARE_FLAGS(Changes, Change)
+
+    /** Resource message types. */
+    enum class MessageType { Info, Error };
+
     /** A shared pointer to an Resource object. */
     typedef QSharedPointer<ResourceBase> Ptr;
 
@@ -299,6 +317,16 @@ public:
      *  @see notifyDeletion
      */
     bool isBeingDeleted() const;
+
+Q_SIGNALS:
+    /** Emitted when the resource's settings have changed. */
+    void settingsChanged(ResourceId, Changes);
+
+    /** Emitted when a resource message should be displayed to the user.
+     *  @note  Connections to this signal should use Qt::QueuedConnection type.
+     *  @param message  Derived classes must include the resource's display name.
+     */
+    void resourceMessage(ResourceId, MessageType, const QString& message, const QString& details);
 
 protected:
     void setLoaded(bool loaded) const;

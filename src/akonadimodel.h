@@ -113,15 +113,14 @@ class AkonadiModel : public Akonadi::EntityTreeModel, public CalendarDataModel
         KAEvent::List events(Akonadi::Collection&, CalEvent::Type = CalEvent::EMPTY) const;
 #endif
 
-        /** Called by a resource to notify an error message to display to the user.
-         *  @param message  Must contain a '%1' to allow the resource's name to be substituted.
-         */
-        static void notifyResourceError(AkonadiResource*, const QString& message, const QString& details);
-
-        /** Called by a resource to notify that a setting has changed. */
-        static void notifySettingsChanged(AkonadiResource*, Change);
-
         QVariant data(const QModelIndex&, int role = Qt::DisplayRole) const override;
+
+    private Q_SLOTS:
+        /** Called when a resource's settings have changed. */
+        void slotResourceSettingsChanged(ResourceId, ResourceBase::Changes);
+
+        /** Called when a resource notifies a message to display to the user. */
+        void slotResourceMessage(ResourceId, ResourceBase::MessageType, const QString& message, const QString& details);
 
     Q_SIGNALS:
         /** Signal emitted when a collection has been added to the model. */
