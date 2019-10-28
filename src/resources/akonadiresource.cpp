@@ -85,7 +85,7 @@ Akonadi::Collection AkonadiResource::collection() const
     return mCollection;
 }
 
-ResourceBase::StorageType AkonadiResource::storageType() const
+ResourceType::StorageType AkonadiResource::storageType() const
 {
     const QString id = AgentManager::self()->instance(mCollection.resource()).type().identifier();
     if (id == KALARM_RESOURCE)
@@ -296,7 +296,7 @@ bool AkonadiResource::load(bool readThroughCache)
 
 bool AkonadiResource::isLoaded() const
 {
-    if (!ResourceBase::isLoaded())
+    if (!ResourceType::isLoaded())
     {
         const QModelIndex ix = AkonadiModel::instance()->resourceIndex(mCollection.id());
         if (!ix.data(AkonadiModel::IsPopulatedRole).toBool())

@@ -1,5 +1,5 @@
 /*
- *  resourcebase.h  -  base class for an alarm calendar resource
+ *  resourcetype.h  -  base class for an alarm calendar resource type
  *  Program:  kalarm
  *  Copyright © 2019 David Jarvie <djarvie@kde.org>
  *
@@ -18,8 +18,8 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef RESOURCEBASE_H
-#define RESOURCEBASE_H
+#ifndef RESOURCETYPE_H
+#define RESOURCETYPE_H
 
 #include <kalarmcal/kacalendar.h>
 #include <kalarmcal/kaevent.h>
@@ -31,8 +31,8 @@
 
 using namespace KAlarmCal;
 
-/** Abstract base class for an alarm calendar resource. */
-class ResourceBase : public QObject
+/** Abstract base class for an alarm calendar resource type. */
+class ResourceType : public QObject
 {
     Q_OBJECT
 public:
@@ -58,10 +58,10 @@ public:
     enum class MessageType { Info, Error };
 
     /** A shared pointer to an Resource object. */
-    typedef QSharedPointer<ResourceBase> Ptr;
+    typedef QSharedPointer<ResourceType> Ptr;
 
-    ResourceBase()  {}
-    virtual ~ResourceBase() = 0;
+    ResourceType()  {}
+    virtual ~ResourceType() = 0;
 
     /** Return whether the resource has a valid configuration. */
     virtual bool isValid() const = 0;
@@ -337,6 +337,6 @@ private:
     bool mBeingDeleted{false};    // the resource is currently being deleted
 };
 
-#endif // RESOURCEBASE_H
+#endif // RESOURCETYPE_H
 
 // vim: et sw=4:

@@ -117,10 +117,10 @@ class AkonadiModel : public Akonadi::EntityTreeModel, public CalendarDataModel
 
     private Q_SLOTS:
         /** Called when a resource's settings have changed. */
-        void slotResourceSettingsChanged(ResourceId, ResourceBase::Changes);
+        void slotResourceSettingsChanged(ResourceId, ResourceType::Changes);
 
         /** Called when a resource notifies a message to display to the user. */
-        void slotResourceMessage(ResourceId, ResourceBase::MessageType, const QString& message, const QString& details);
+        void slotResourceMessage(ResourceId, ResourceType::MessageType, const QString& message, const QString& details);
 
     Q_SIGNALS:
         /** Signal emitted when a collection has been added to the model. */

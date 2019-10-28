@@ -1,5 +1,5 @@
 /*
- *  resourcebase.cpp  -  base class for an alarm calendar resource
+ *  resourcetype.cpp  -  base class for an alarm calendar resource type
  *  Program:  kalarm
  *  Copyright © 2019 David Jarvie <djarvie@kde.org>
  *
@@ -18,7 +18,7 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "resourcebase.h"
+#include "resourcetype.h"
 
 #include "preferences.h"
 #include "kalarm_debug.h"
@@ -27,21 +27,21 @@
 #include <KColorUtils>
 #include <KLocalizedString>
 
-ResourceBase::~ResourceBase()
+ResourceType::~ResourceType()
 {
 }
 
-bool ResourceBase::isEnabled(CalEvent::Type type) const
+bool ResourceType::isEnabled(CalEvent::Type type) const
 {
     return (type == CalEvent::EMPTY) ? enabledTypes() : enabledTypes() & type;
 }
 
-bool ResourceBase::isWritable(CalEvent::Type type) const
+bool ResourceType::isWritable(CalEvent::Type type) const
 {
     return writableStatus(type) == 1;
 }
 
-bool ResourceBase::isCompatible() const
+bool ResourceType::isCompatible() const
 {
     return compatibility() == KACalendar::Current;
 }
@@ -50,7 +50,7 @@ bool ResourceBase::isCompatible() const
 * Return the foreground colour for displaying a resource, based on the alarm
 * types which it contains, and on whether it is fully writable.
 */
-QColor ResourceBase::foregroundColour(CalEvent::Types types) const
+QColor ResourceType::foregroundColour(CalEvent::Types types) const
 {
     if (types == CalEvent::EMPTY)
         types = alarmTypes();
@@ -88,22 +88,22 @@ QColor ResourceBase::foregroundColour(CalEvent::Types types) const
     return colour;
 }
 
-void ResourceBase::notifyDeletion()
+void ResourceType::notifyDeletion()
 {
     mBeingDeleted = true;
 }
 
-bool ResourceBase::isBeingDeleted() const
+bool ResourceType::isBeingDeleted() const
 {
     return mBeingDeleted;
 }
 
-void ResourceBase::setLoaded(bool loaded) const
+void ResourceType::setLoaded(bool loaded) const
 {
     mLoaded = loaded;
 }
 
-QString ResourceBase::storageTypeStr(bool description, bool file, bool local) const
+QString ResourceType::storageTypeStr(bool description, bool file, bool local) const
 {
     if (description)
         return file ? i18nc("@info", "KAlarm Calendar File") : i18nc("@info", "KAlarm Calendar Directory");

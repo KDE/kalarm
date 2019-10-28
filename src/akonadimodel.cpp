@@ -785,13 +785,13 @@ void AkonadiModel::setCollectionChanged(Resource& resource, const Collection& co
 /******************************************************************************
 * Called by a resource to notify that its status has changed.
 */
-void AkonadiModel::slotResourceSettingsChanged(ResourceId id, ResourceBase::Changes change)
+void AkonadiModel::slotResourceSettingsChanged(ResourceId id, ResourceType::Changes change)
 {
     auto it = mResources.find(id);
     if (it != mResources.end())
     {
         Resource& resource = it.value();
-        if (change | ResourceBase::Enabled)
+        if (change | ResourceType::Enabled)
         {
             const CalEvent::Types newEnabled = resource.enabledTypes();
             handleEnabledChange(resource, newEnabled, false);
@@ -1051,8 +1051,8 @@ Resource& AkonadiModel::updateResource(const Collection& collection) const
     {
         // Create a new resource for the collection.
         AkonadiResource* akres = new AkonadiResource(collection);
-        connect(akres, &ResourceBase::settingsChanged, this, &AkonadiModel::slotResourceSettingsChanged);
-        connect(akres, &ResourceBase::resourceMessage, this, &AkonadiModel::slotResourceMessage, Qt::QueuedConnection);
+        connect(akres, &ResourceType::settingsChanged, this, &AkonadiModel::slotResourceSettingsChanged);
+        connect(akres, &ResourceType::resourceMessage, this, &AkonadiModel::slotResourceMessage, Qt::QueuedConnection);
         it = mResources.insert(collection.id(), Resource(akres));
     }
     return it.value();
@@ -1061,7 +1061,7 @@ Resource& AkonadiModel::updateResource(const Collection& collection) const
 /******************************************************************************
 * Display a message to the user.
 */
-void AkonadiModel::slotResourceMessage(ResourceId id, ResourceBase::MessageType type, const QString& message, const QString& details)
+void AkonadiModel::slotResourceMessage(ResourceId id, ResourceType::MessageType type, const QString& message, const QString& details)
 {
     handleResourceMessage(id, type, message, details);
 }

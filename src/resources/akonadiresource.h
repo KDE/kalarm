@@ -37,7 +37,7 @@ using namespace KAlarmCal;
 /** Class for an alarm calendar resource accessed through Akonadi.
  *  Public access to this class is normally via the Resource class.
  */
-class AkonadiResource : public ResourceBase
+class AkonadiResource : public ResourceType
 {
     Q_OBJECT
 public:
@@ -126,7 +126,7 @@ public:
      */
     int writableStatus(CalEvent::Type type = CalEvent::EMPTY) const override;
 
-    using ResourceBase::isWritable;
+    using ResourceType::isWritable;
 
     /** Return whether the user has chosen not to update the resource's
      *  calendar storage formst. */

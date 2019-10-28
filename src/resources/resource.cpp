@@ -25,7 +25,7 @@ Resource::Resource()
 {
 }
 
-Resource::Resource(ResourceBase* r)
+Resource::Resource(ResourceType* r)
     : mResource(r)
 {
 }
@@ -35,7 +35,7 @@ bool Resource::operator==(const Resource& other) const
     return mResource == other.mResource;
 }
 
-bool Resource::operator==(const ResourceBase* other) const
+bool Resource::operator==(const ResourceType* other) const
 {
     return mResource.data() == other;
 }
@@ -57,7 +57,7 @@ bool Resource::isValid() const
 }
 
 #if 0
-ResourceBase::Ptr Resource::resource() const
+ResourceType::Ptr Resource::resource() const
 {
     return mResource;
 }

@@ -21,12 +21,13 @@
 #ifndef RESOURCE_H
 #define RESOURCE_H
 
-#include "resourcebase.h"
+#include "resourcetype.h"
 
 using namespace KAlarmCal;
 
 /** Class for an alarm calendar resource.
- *  It contains a shared pointer to an alarm calendar resource.
+ *  It contains a shared pointer to an alarm calendar resource inherited from
+ *  ResourceType.
  *  This class is designed to be safe to call even if the pointer to the resource
  *  is null.
  */
@@ -36,17 +37,17 @@ public:
     /** The type of storage used by a resource. */
     enum StorageType
     {
-        NoStorage  = ResourceBase::NoStorage,
-        File       = ResourceBase::File,
-        Directory  = ResourceBase::Directory
+        NoStorage  = ResourceType::NoStorage,
+        File       = ResourceType::File,
+        Directory  = ResourceType::Directory
     };
 
     Resource();
-    explicit Resource(ResourceBase*);
+    explicit Resource(ResourceType*);
     Resource(const Resource&) = default;
 
     bool operator==(const Resource&) const;
-    bool operator==(const ResourceBase*) const;
+    bool operator==(const ResourceType*) const;
 
     /** Return a null resource. */
     static Resource null();
@@ -313,15 +314,15 @@ public:
     bool isBeingDeleted() const;
 
 private:
-    ResourceBase::Ptr mResource;
+    ResourceType::Ptr mResource;
 
 friend uint qHash(const Resource& resource, uint seed);
 };
 
-inline bool operator==(const ResourceBase* a, const Resource& b)  { return b == a; }
+inline bool operator==(const ResourceType* a, const Resource& b)  { return b == a; }
 inline bool operator!=(const Resource& a, const Resource& b)      { return !(a == b); }
-inline bool operator!=(const Resource& a, const ResourceBase* b)  { return !(a == b); }
-inline bool operator!=(const ResourceBase* a, const Resource& b)  { return !(b == a); }
+inline bool operator!=(const Resource& a, const ResourceType* b)  { return !(a == b); }
+inline bool operator!=(const ResourceType* a, const Resource& b)  { return !(b == a); }
 
 inline uint qHash(const Resource& resource, uint seed)
 {

@@ -590,11 +590,11 @@ QPixmap* CalendarDataModel::eventIcon(const KAEvent& event)
 /******************************************************************************
 * Display a message to the user.
 */
-void CalendarDataModel::handleResourceMessage(ResourceId, ResourceBase::MessageType type, const QString& message, const QString& details)
+void CalendarDataModel::handleResourceMessage(ResourceId, ResourceType::MessageType type, const QString& message, const QString& details)
 {
-    if (type == ResourceBase::MessageType::Error)
+    if (type == ResourceType::MessageType::Error)
         KAMessageBox::detailedError(MainWindow::mainMainWindow(), message, details);
-    else if (type == ResourceBase::MessageType::Info)
+    else if (type == ResourceType::MessageType::Info)
         KAMessageBox::informationList(MainWindow::mainMainWindow(), message, {details});
 }
 
