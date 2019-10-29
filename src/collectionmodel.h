@@ -266,7 +266,7 @@ class CollectionControlModel : public Akonadi::FavoriteCollectionsModel
 
     private:
         explicit CollectionControlModel(QObject* parent = nullptr);
-        void findEnabledCollections(const Akonadi::EntityMimeTypeFilterModel*, const QModelIndex& parent, QList<Akonadi::Collection::Id>&) const;
+        void findEnabledCollections(const QModelIndex& parent, QList<Akonadi::Collection::Id>&) const;
         CalEvent::Types setEnabledStatus(Resource&, CalEvent::Types, bool inserted);
         static CalEvent::Types checkTypesToEnable(const Resource&, const QList<Akonadi::Collection::Id>&, CalEvent::Types);
         static bool isPopulated(Akonadi::Collection::Id);
@@ -281,6 +281,7 @@ class CollectionControlModel : public Akonadi::FavoriteCollectionsModel
                 : resourceId(r), collectionId(c) {}
         };
         static QHash<QString, ResourceCol> mAgentPaths;   // path, (resource identifier, collection ID) pairs
+        static Akonadi::EntityMimeTypeFilterModel* mFilterModel;
         QEventLoop* mPopulatedCheckLoop{nullptr};
 };
 

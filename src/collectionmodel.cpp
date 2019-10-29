@@ -697,8 +697,9 @@ bool CollectionView::viewportEvent(QEvent* e)
 = collection models.
 =============================================================================*/
 
-CollectionControlModel* CollectionControlModel::mInstance = nullptr;
+CollectionControlModel*                             CollectionControlModel::mInstance = nullptr;
 QHash<QString, CollectionControlModel::ResourceCol> CollectionControlModel::mAgentPaths;
+EntityMimeTypeFilterModel*                          CollectionControlModel::mFilterModel;
 
 static QRegularExpression matchMimeType(QStringLiteral("^application/x-vnd\\.kde\\.alarm.*"),
                                         QRegularExpression::DotMatchesEverythingOption);
@@ -714,12 +715,12 @@ CollectionControlModel::CollectionControlModel(QObject* parent)
     : FavoriteCollectionsModel(AkonadiModel::instance(), KConfigGroup(KSharedConfig::openConfig(), "Collections"), parent)
 {
     // Initialise the list of enabled collections
-    EntityMimeTypeFilterModel* filter = new EntityMimeTypeFilterModel(this);
-    filter->addMimeTypeInclusionFilter(Collection::mimeType());
-    filter->setSourceModel(AkonadiModel::instance());
+    mFilterModel = new EntityMimeTypeFilterModel(this);
+    mFilterModel->addMimeTypeInclusionFilter(Collection::mimeType());
+    mFilterModel->setSourceModel(AkonadiModel::instance());
 
     QList<Collection::Id> collectionIds;
-    findEnabledCollections(filter, QModelIndex(), collectionIds);
+    findEnabledCollections(QModelIndex(), collectionIds);
     setCollections(Collection::List());
     for (Collection::Id id : qAsConst(collectionIds))
         addCollection(Collection(id));
@@ -740,16 +741,16 @@ CollectionControlModel::CollectionControlModel(QObject* parent)
 * Collections which duplicate the same backend storage are filtered out, to
 * avoid crashes due to duplicate events in different resources.
 */
-void CollectionControlModel::findEnabledCollections(const EntityMimeTypeFilterModel* filter, const QModelIndex& parent, QList<Collection::Id>& collectionIds) const
+void CollectionControlModel::findEnabledCollections(const QModelIndex& parent, QList<Collection::Id>& collectionIds) const
 {
     AkonadiModel* model = AkonadiModel::instance();
-    for (int row = 0, count = filter->rowCount(parent);  row < count;  ++row)
+    for (int row = 0, count = mFilterModel->rowCount(parent);  row < count;  ++row)
     {
-        const QModelIndex ix = filter->index(row, 0, parent);
-        const Collection collection = model->data(filter->mapToSource(ix), AkonadiModel::CollectionRole).value<Collection>();
-        if (!AgentManager::self()->instance(collection.resource()).isValid())
-            continue;    // the collection doesn't belong to a resource, so omit it
-        Resource resource = AkonadiModel::instance()->resource(collection.id());
+        const QModelIndex ix   = mFilterModel->index(row, 0, parent);
+        const QModelIndex AMix = mFilterModel->mapToSource(ix);
+        Resource resource = model->resource(AMix);
+        if (!resource.isValid())
+            continue;
         const CalEvent::Types enabled = resource.enabledTypes();
         const CalEvent::Types canEnable = checkTypesToEnable(resource, collectionIds, enabled);
         if (canEnable != enabled)
@@ -760,9 +761,9 @@ void CollectionControlModel::findEnabledCollections(const EntityMimeTypeFilterMo
                 resource.setEnabled(canEnable);
         }
         if (canEnable)
-            collectionIds += collection.id();
-        if (filter->rowCount(ix) > 0)
-            findEnabledCollections(filter, ix, collectionIds);
+            collectionIds += resource.id();
+        if (mFilterModel->rowCount(ix) > 0)
+            findEnabledCollections(ix, collectionIds);
     }
 }
 
