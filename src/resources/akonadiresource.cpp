@@ -20,7 +20,9 @@
 
 #include "akonadiresource.h"
 
+#include "resources.h"
 #include "akonadimodel.h"
+#include "calendarmigrator.h"
 #include "kalarm_debug.h"
 
 #include <kalarmcal/akonadi.h>
@@ -47,7 +49,8 @@ Collection::Rights WritableRights = Collection::CanChangeItem | Collection::CanC
 }
 
 AkonadiResource::AkonadiResource(const Collection& collection)
-    : mCollection(collection)
+    : ResourceType(collection.id())
+    , mCollection(collection)
     , mValid(collection.id() >= 0)
 {
     if (mValid)
@@ -72,12 +75,8 @@ Resource AkonadiResource::nullResource()
 
 bool AkonadiResource::isValid() const
 {
-    return mValid;
-}
-
-ResourceId AkonadiResource::id() const
-{
-    return mCollection.id();
+    // The collection ID must not have changed since construction.
+    return mValid  &&  mCollection.id() == id();
 }
 
 Akonadi::Collection AkonadiResource::collection() const
@@ -141,8 +140,7 @@ CalEvent::Types AkonadiResource::alarmTypes() const
 
 CalEvent::Types AkonadiResource::enabledTypes() const
 {
-//TODO: see CollectionControlModel::isEnabled()
-    if (!mValid)  // ||  !instance()->collectionIds().contains(mCollection.id()))
+    if (!mValid)
         return CalEvent::EMPTY;
     if (!mHaveCollectionAttribute)
         fetchCollectionAttribute(true);
@@ -184,7 +182,6 @@ bool AkonadiResource::readOnly() const
 
 int AkonadiResource::writableStatus(CalEvent::Type type) const
 {
-//TODO: don't call multiple methods which contain refresh()
     if (!mValid)
         return -1;
     AkonadiModel::instance()->refresh(mCollection);    // update with latest data
@@ -470,6 +467,63 @@ KAEvent AkonadiResource::event(const Akonadi::Item& item) const
 }
 
 /******************************************************************************
+* Called when the collection's properties or content have changed.
+* Updates this resource's copy of the collection, and emits a signal if
+* properties of interest have changed.
+*/
+void AkonadiResource::notifyCollectionChanged(Resource& resource, const Collection& collection, bool checkCompatibility)
+{
+    if (collection.id() != mCollection.id())
+        return;
+
+    Changes change = NoChange;
+
+    // Check for a read/write permission change
+    const Collection::Rights oldRights = mCollection.rights() & WritableRights;
+    const Collection::Rights newRights = collection.rights() & WritableRights;
+    if (newRights != oldRights)
+    {
+        qCDebug(KALARM_LOG) << "AkonadiResource::setCollectionChanged:" << collection.id() << ": rights ->" << newRights;
+        change |= ReadOnly;
+    }
+
+    // Check for a change in content mime types
+    // (e.g. when a collection is first created at startup).
+    if (collection.contentMimeTypes() != mCollection.contentMimeTypes())
+    {
+        qCDebug(KALARM_LOG) << "AkonadiResource::setCollectionChanged:" << collection.id() << ": alarm types ->" << collection.contentMimeTypes();
+        change |= AlarmTypes;
+    }
+
+    // Check for the collection being enabled/disabled.
+    // Enabled/disabled can only be set by KAlarm (not the resource), so if the
+    // attribute doesn't exist, it is ignored.
+    const CalEvent::Types oldEnabled = mCollection.hasAttribute<CollectionAttribute>()
+                                     ? mCollection.attribute<CollectionAttribute>()->enabled() : CalEvent::EMPTY;
+    const CalEvent::Types newEnabled = collection.hasAttribute<CollectionAttribute>()
+                                     ? collection.attribute<CollectionAttribute>()->enabled() : CalEvent::EMPTY;
+    if (!mCollectionAttrChecked  ||  newEnabled != oldEnabled)
+    {
+        qCDebug(KALARM_LOG) << "AkonadiResource::setCollectionChanged:" << collection.id() << ": enabled ->" << newEnabled;
+        mCollectionAttrChecked = true;
+        change |= Enabled;
+    }
+
+    mCollection = collection;
+    if (change != NoChange)
+        Resources::notifySettingsChanged(this, change);
+
+    // Check for the backend calendar format changing.
+    // The attribute must exist in order to know the calendar format.
+    if (checkCompatibility  &&  collection.hasAttribute<CompatibilityAttribute>())
+    {
+        // Update to current KAlarm format if necessary, and if the user agrees
+        qCDebug(KALARM_LOG) << "AkonadiResource::setCollectionChanged:" << collection.id() << ": compatibility ->" << collection.attribute<CompatibilityAttribute>()->compatibility();
+        CalendarMigrator::updateToCurrentFormat(resource, false);
+    }
+}
+
+/******************************************************************************
 * Called when an Item has been changed or created in AkonadiModel.
 */
 void AkonadiResource::notifyItemChanged(const Akonadi::Item& item, bool created)
@@ -559,7 +613,7 @@ void AkonadiResource::itemJobDone(KJob* j)
             const Item current = AkonadiModel::instance()->itemById(itemId);  // fetch the up-to-date item
             checkQueuedItemModifyJob(current);
         }
-        Q_EMIT resourceMessage(id(), MessageType::Error, errMsg, j->errorString());
+        Resources::notifyResourceMessage(this, MessageType::Error, errMsg, j->errorString());
     }
     else
     {
@@ -676,14 +730,14 @@ void AkonadiResource::modifyCollectionAttrJobDone(KJob* j)
         &&  id == mCollection.id())
         {
             qCCritical(KALARM_LOG) << "AkonadiResource::modifyCollectionAttrJobDone:" << collection.id() << "Failed to update calendar" << displayName() << ":" << j->errorString();
-            Q_EMIT resourceMessage(id, MessageType::Error, i18nc("@info", "Failed to update calendar \"%1\".", displayName()), j->errorString());
+            Resources::notifyResourceMessage(this, MessageType::Error, i18nc("@info", "Failed to update calendar \"%1\".", displayName()), j->errorString());
         }
     }
     else
     {
         AkonadiModel::instance()->refresh(mCollection);   // pick up the modified attribute
         if (newEnabled)
-            Q_EMIT settingsChanged(id, Enabled);
+            Resources::notifySettingsChanged(this, Enabled);
     }
 }
 

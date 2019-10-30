@@ -23,6 +23,7 @@
 #include "autoqpointer.h"
 #include "messagebox.h"
 #include "preferences.h"
+#include "resources/resources.h"
 #include "kalarm_debug.h"
 
 #include <AkonadiCore/agentmanager.h>
@@ -271,8 +272,8 @@ CollectionCheckListModel::CollectionCheckListModel(CalEvent::Type type, QObject*
     connect(mModel, SIGNAL(rowsAboutToBeRemoved(QModelIndex,int,int)), SIGNAL(layoutAboutToBeChanged()));
     connect(mModel, SIGNAL(rowsRemoved(QModelIndex,int,int)), SIGNAL(layoutChanged()));
 
-    connect(AkonadiModel::instance(), &AkonadiModel::resourceStatusChanged,
-                                this, &CollectionCheckListModel::resourceStatusChanged);
+    connect(Resources::instance(), &Resources::settingsChanged,
+                             this, &CollectionCheckListModel::resourceStatusChanged);
 
     // Initialise checked status for all collections.
     // Note that this is only necessary if the model is recreated after
@@ -432,25 +433,23 @@ void CollectionCheckListModel::selectionChanged(const QItemSelection& selected, 
 * If the collection's alarm types have been reconfigured, ensure that the
 * model views are updated to reflect this.
 */
-void CollectionCheckListModel::resourceStatusChanged(const Resource& resource, AkonadiModel::Change change, const QVariant&, bool inserted)
+void CollectionCheckListModel::resourceStatusChanged(ResourceId id, ResourceType::Changes change)
 {
-    if (inserted  ||  !resource.isValid())
+    Resource resource = AkonadiModel::instance()->resource(id);
+    if (!resource.isValid()  ||  !(resource.alarmTypes() & mAlarmType))
+        return;     // resource invalid, or its alarm type is not the one for this model
+    if (!(change & (ResourceType::Enabled | ResourceType::AlarmTypes)))
         return;
-    switch (change)
-    {
-        case AkonadiModel::Enabled:
-            qCDebug(KALARM_LOG) << debugType("resourceStatusChanged").constData() << "Enabled" << resource.id();
-            break;
-        case AkonadiModel::AlarmTypes:
-            qCDebug(KALARM_LOG) << debugType("resourceStatusChanged").constData() << "AlarmTypes" << resource.id();
-            break;
-        default:
-            return;
-    }
+
+    if (change & ResourceType::Enabled)
+        qCDebug(KALARM_LOG) << debugType("resourceStatusChanged").constData() << "Enabled" << id;
+    if (change & ResourceType::AlarmTypes)
+        qCDebug(KALARM_LOG) << debugType("resourceStatusChanged").constData() << "AlarmTypes" << id;
+
     const QModelIndex ix = mModel->resourceIndex(resource);
     if (ix.isValid())
         setSelectionStatus(resource, ix);
-    if (change == AkonadiModel::AlarmTypes)
+    if (change & ResourceType::AlarmTypes)
         Q_EMIT collectionTypeChange(this);
 }
 
@@ -725,14 +724,17 @@ CollectionControlModel::CollectionControlModel(QObject* parent)
     for (Collection::Id id : qAsConst(collectionIds))
         addCollection(Collection(id));
 
-    connect(AkonadiModel::instance(), &AkonadiModel::resourceStatusChanged,
-                                this, &CollectionControlModel::resourceStatusChanged);
+    connect(this, &QAbstractItemModel::rowsInserted,
+            this, &CollectionControlModel::slotRowsInserted);
+
     connect(AkonadiModel::instance(), &EntityTreeModel::collectionTreeFetched,
                                 this, &CollectionControlModel::collectionPopulated);
     connect(AkonadiModel::instance(), &EntityTreeModel::collectionPopulated,
                                 this, &CollectionControlModel::collectionPopulated);
     connect(AkonadiModel::instance(), &AkonadiModel::serverStopped,
                                 this, &CollectionControlModel::reset);
+    connect(Resources::instance(), &Resources::settingsChanged,
+                             this, &CollectionControlModel::resourceStatusChanged);
 }
 
 /******************************************************************************
@@ -755,8 +757,8 @@ void CollectionControlModel::findEnabledCollections(const QModelIndex& parent, Q
         const CalEvent::Types canEnable = checkTypesToEnable(resource, collectionIds, enabled);
         if (canEnable != enabled)
         {
-            // There is another collection which uses the same backend
-            // storage. Disable alarm types enabled in the other collection.
+            // There is another resource which uses the same backend
+            // storage. Disable alarm types enabled in the other resource.
             if (!resource.isBeingDeleted())
                 resource.setEnabled(canEnable);
         }
@@ -764,6 +766,86 @@ void CollectionControlModel::findEnabledCollections(const QModelIndex& parent, Q
             collectionIds += resource.id();
         if (mFilterModel->rowCount(ix) > 0)
             findEnabledCollections(ix, collectionIds);
+    }
+}
+
+/******************************************************************************
+* Called when rows have been inserted into the model.
+* Connect to signals from the inserted resources.
+*/
+void CollectionControlModel::slotRowsInserted(const QModelIndex& parent, int start, int end)
+{
+    AkonadiModel* model = AkonadiModel::instance();
+    for (int row = start;  row <= end;  ++row)
+    {
+        const QModelIndex ix   = mFilterModel->index(row, 0, parent);
+        const QModelIndex AMix = mFilterModel->mapToSource(ix);
+        Resource resource = model->resource(AMix);
+        setEnabledStatus(resource, resource.enabledTypes(), true);
+    }
+}
+
+/******************************************************************************
+* Called when a collection parameter or status has changed.
+* If it's the enabled status, add or remove the collection to/from the enabled
+* list.
+*/
+void CollectionControlModel::resourceStatusChanged(ResourceId id, ResourceType::Changes change)
+{
+    Resource resource = AkonadiModel::instance()->resource(id);
+    if (!resource.isValid())
+        return;
+
+    if (change & ResourceType::Enabled)
+    {
+        const CalEvent::Types enabled = resource.enabledTypes();
+        qCDebug(KALARM_LOG) << "CollectionControlModel::resourceStatusChanged:" << resource.id() << ", enabled=" << enabled;
+        setEnabledStatus(resource, enabled, false);
+    }
+    if (change & ResourceType::ReadOnly)
+    {
+        bool readOnly = resource.readOnly();
+        qCDebug(KALARM_LOG) << "CollectionControlModel::resourceStatusChanged:" << resource.id() << ", readOnly=" << readOnly;
+        if (readOnly)
+        {
+            // A read-only resource can't be the default for any alarm type
+            const CalEvent::Types std = standardTypes(resource, false);
+            if (std != CalEvent::EMPTY)
+            {
+                setStandard(resource, CalEvent::Types(CalEvent::EMPTY));
+                QWidget* messageParent = qobject_cast<QWidget*>(QObject::parent());
+                bool singleType = true;
+                QString msg;
+                switch (std)
+                {
+                    case CalEvent::ACTIVE:
+                        msg = xi18n("The calendar <resource>%1</resource> has been made read-only. "
+                                    "This was the default calendar for active alarms.",
+                                    resource.displayName());
+                        break;
+                    case CalEvent::ARCHIVED:
+                        msg = xi18n("The calendar <resource>%1</resource> has been made read-only. "
+                                    "This was the default calendar for archived alarms.",
+                                    resource.displayName());
+                        break;
+                    case CalEvent::TEMPLATE:
+                        msg = xi18n("The calendar <resource>%1</resource> has been made read-only. "
+                                    "This was the default calendar for alarm templates.",
+                                    resource.displayName());
+                        break;
+                    default:
+                        msg = xi18nc("@info", "<para>The calendar <resource>%1</resource> has been made read-only. "
+                                              "This was the default calendar for:%2</para>"
+                                              "<para>Please select new default calendars.</para>",
+                                     resource.displayName(), CalendarDataModel::typeListForDisplay(std));
+                        singleType = false;
+                        break;
+                }
+                if (singleType)
+                    msg = xi18nc("@info", "<para>%1</para><para>Please select a new default calendar.</para>", msg);
+                KAMessageBox::information(messageParent, msg);
+            }
+        }
     }
 }
 
@@ -826,77 +908,6 @@ CalEvent::Types CollectionControlModel::setEnabledStatus(Resource& resource, Cal
         }
     }
     return canEnable;
-}
-
-/******************************************************************************
-* Called when a collection parameter or status has changed.
-* If it's the enabled status, add or remove the collection to/from the enabled
-* list.
-*/
-void CollectionControlModel::resourceStatusChanged(Resource& resource, AkonadiModel::Change change, const QVariant& value, bool inserted)
-{
-    if (!resource.isValid())
-        return;
-
-    switch (change)
-    {
-        case AkonadiModel::Enabled:
-        {
-            const CalEvent::Types enabled = static_cast<CalEvent::Types>(value.toInt());
-            qCDebug(KALARM_LOG) << "CollectionControlModel::resourceStatusChanged:" << resource.id() << ", enabled=" << enabled << ", inserted=" << inserted;
-            setEnabledStatus(resource, enabled, inserted);
-            break;
-        }
-        case AkonadiModel::ReadOnly:
-        {
-            bool readOnly = value.toBool();
-            qCDebug(KALARM_LOG) << "CollectionControlModel::resourceStatusChanged:" << resource.id() << ", readOnly=" << readOnly;
-            if (readOnly)
-            {
-                // A read-only resource can't be the default for any alarm type
-                const CalEvent::Types std = standardTypes(resource, false);
-                if (std != CalEvent::EMPTY)
-                {
-                    Resource res = AkonadiModel::instance()->resource(resource.id());
-                    setStandard(res, CalEvent::Types(CalEvent::EMPTY));
-                    QWidget* messageParent = qobject_cast<QWidget*>(QObject::parent());
-                    bool singleType = true;
-                    QString msg;
-                    switch (std)
-                    {
-                        case CalEvent::ACTIVE:
-                            msg = xi18n("The calendar <resource>%1</resource> has been made read-only. "
-                                        "This was the default calendar for active alarms.",
-                                        resource.displayName());
-                            break;
-                        case CalEvent::ARCHIVED:
-                            msg = xi18n("The calendar <resource>%1</resource> has been made read-only. "
-                                        "This was the default calendar for archived alarms.",
-                                        resource.displayName());
-                            break;
-                        case CalEvent::TEMPLATE:
-                            msg = xi18n("The calendar <resource>%1</resource> has been made read-only. "
-                                        "This was the default calendar for alarm templates.",
-                                        resource.displayName());
-                            break;
-                        default:
-                            msg = xi18nc("@info", "<para>The calendar <resource>%1</resource> has been made read-only. "
-                                                  "This was the default calendar for:%2</para>"
-                                                  "<para>Please select new default calendars.</para>",
-                                         resource.displayName(), CalendarDataModel::typeListForDisplay(std));
-                            singleType = false;
-                            break;
-                    }
-                    if (singleType)
-                        msg = xi18nc("@info", "<para>%1</para><para>Please select a new default calendar.</para>", msg);
-                    KAMessageBox::information(messageParent, msg);
-                }
-            }
-            break;
-        }
-        default:
-            break;
-    }
 }
 
 /******************************************************************************

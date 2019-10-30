@@ -95,7 +95,7 @@ class CollectionCheckListModel : public KCheckableProxyModel
     private Q_SLOTS:
         void selectionChanged(const QItemSelection& selected, const QItemSelection& deselected);
         void slotRowsInserted(const QModelIndex& parent, int start, int end);
-        void resourceStatusChanged(const Resource&, AkonadiModel::Change, const QVariant& value, bool inserted);
+        void resourceStatusChanged(ResourceId, ResourceType::Changes);
 
     private:
         void setSelectionStatus(const Resource&, const QModelIndex&);
@@ -260,7 +260,8 @@ class CollectionControlModel : public Akonadi::FavoriteCollectionsModel
 
     private Q_SLOTS:
         void reset();
-        void resourceStatusChanged(Resource&, AkonadiModel::Change, const QVariant& value, bool inserted);
+        void slotRowsInserted(const QModelIndex& parent, int start, int end);
+        void resourceStatusChanged(ResourceId, ResourceType::Changes);
         void collectionPopulated();
         void collectionFetchResult(KJob*);
 

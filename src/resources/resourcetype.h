@@ -61,13 +61,14 @@ public:
     typedef QSharedPointer<ResourceType> Ptr;
 
     ResourceType()  {}
+    explicit ResourceType(ResourceId);
     virtual ~ResourceType() = 0;
 
     /** Return whether the resource has a valid configuration. */
     virtual bool isValid() const = 0;
 
     /** Return the resource's unique ID. */
-    virtual ResourceId id() const = 0;
+    ResourceId id() const    { return mId; }
 
     /** Return the type of storage used by the resource. */
     virtual StorageType storageType() const = 0;
@@ -319,10 +320,10 @@ public:
     bool isBeingDeleted() const;
 
 Q_SIGNALS:
-    /** Emitted when the resource's settings have changed. */
+    /** Emitted by the all() instance, when the resource's settings have changed. */
     void settingsChanged(ResourceId, Changes);
 
-    /** Emitted when a resource message should be displayed to the user.
+    /** Emitted by the all() instance, when a resource message should be displayed to the user.
      *  @note  Connections to this signal should use Qt::QueuedConnection type.
      *  @param message  Derived classes must include the resource's display name.
      */
@@ -333,8 +334,13 @@ protected:
     QString storageTypeStr(bool description, bool file, bool local) const;
 
 private:
-    mutable bool mLoaded{false};  // the resource has finished loading
-    bool mBeingDeleted{false};    // the resource is currently being deleted
+    static QHash<ResourceId, ResourceType*> mInstances;   // contains all ResourceType instances with an ID
+
+    ResourceId   mId{-1};               // resource's ID, which can't be changed
+    mutable bool mLoaded{false};        // the resource has finished loading
+    bool         mBeingDeleted{false};  // the resource is currently being deleted
+
+    friend class Resources;
 };
 
 #endif // RESOURCETYPE_H

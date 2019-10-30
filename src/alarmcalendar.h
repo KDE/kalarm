@@ -96,8 +96,7 @@ class AlarmCalendar : public QObject
         void                  calendarSaved(AlarmCalendar*);
 
     private Q_SLOTS:
-        void                  slotResourceStatusChanged(const Resource&, AkonadiModel::Change,
-                                                        const QVariant& value, bool inserted);
+        void                  slotResourceStatusChanged(ResourceId, ResourceType::Changes);
         void                  slotCollectionsPopulated();
         void                  slotEventsAdded(const AkonadiModel::EventList&);
         void                  slotEventsToBeRemoved(const AkonadiModel::EventList&);

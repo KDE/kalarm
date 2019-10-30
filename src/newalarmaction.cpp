@@ -26,6 +26,7 @@
 #include "functions.h"
 #include "shellprocess.h"
 #include "templatemenuaction.h"
+#include "resources/resources.h"
 #include "kalarm_debug.h"
 
 #include <KActionMenu>
@@ -82,7 +83,7 @@ NewAlarmAction::NewAlarmAction(bool templates, const QString& label, QObject* pa
         // Include New From Template only in non-template menu
         mTemplateAction = new TemplateMenuAction(QIcon::fromTheme(TEMPLATE_ICON), i18nc("@action", "New Alarm From &Template"), parent);
         menu()->addAction(mTemplateAction);
-        connect(AkonadiModel::instance(), &AkonadiModel::resourceStatusChanged, this, &NewAlarmAction::slotCalendarStatusChanged);
+        connect(Resources::instance(), &Resources::settingsChanged, this, &NewAlarmAction::slotCalendarStatusChanged);
         connect(TemplateListModel::all(), &ItemListModel::haveEventsStatus, this, &NewAlarmAction::slotCalendarStatusChanged);
         slotCalendarStatusChanged();   // initialise action states
     }

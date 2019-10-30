@@ -116,24 +116,12 @@ class AkonadiModel : public Akonadi::EntityTreeModel, public CalendarDataModel
         QVariant data(const QModelIndex&, int role = Qt::DisplayRole) const override;
 
     private Q_SLOTS:
-        /** Called when a resource's settings have changed. */
-        void slotResourceSettingsChanged(ResourceId, ResourceType::Changes);
-
         /** Called when a resource notifies a message to display to the user. */
         void slotResourceMessage(ResourceId, ResourceType::MessageType, const QString& message, const QString& details);
 
     Q_SIGNALS:
         /** Signal emitted when a collection has been added to the model. */
         void resourceAdded(Resource&);
-
-        /** Signal emitted when a collection's enabled, read-only or alarm types
-         *  status has changed.
-         *  @param change    The type of status which has changed
-         *  @param newValue  The new value of the status that has changed
-         *  @param inserted  true if the reason for the change is that the collection
-         *                   has been inserted into the model
-         */
-        void resourceStatusChanged(Resource&, AkonadiModel::Change change, const QVariant& newValue, bool inserted);
 
         /** Signal emitted when events have been added to the model. */
         void eventsAdded(const AkonadiModel::EventList&);
@@ -214,8 +202,7 @@ class AkonadiModel : public Akonadi::EntityTreeModel, public CalendarDataModel
         KAEvent       event(Akonadi::Item&, const QModelIndex&, AkonadiResource** = nullptr) const;
         QModelIndex   itemIndex(const Akonadi::Item&) const;
         void          signalDataChanged(bool (*checkFunc)(const Akonadi::Item&), int startColumn, int endColumn, const QModelIndex& parent);
-        void          setCollectionChanged(Resource&, const Akonadi::Collection&, const QSet<QByteArray>&, bool rowInserted);
-        void          handleEnabledChange(Resource&, CalEvent::Types newEnabled, bool rowInserted);
+        void          setCollectionChanged(Resource&, const Akonadi::Collection&, bool checkCompat);
 #if 0
         void     getChildEvents(const QModelIndex& parent, CalEvent::Type, KAEvent::List&) const;
 #endif
@@ -224,9 +211,6 @@ class AkonadiModel : public Akonadi::EntityTreeModel, public CalendarDataModel
         static int            mTimeHourPos;   // position of hour within time string, or -1 if leading zeroes included
 
         Akonadi::ChangeRecorder* mMonitor;
-        QHash<Akonadi::Collection::Id, CalEvent::Types> mCollectionAlarmTypes;  // last content mime types of each collection
-        QHash<Akonadi::Collection::Id, Akonadi::Collection::Rights> mCollectionRights;  // last writable status of each collection
-        QHash<Akonadi::Collection::Id, CalEvent::Types> mCollectionEnabled;  // last enabled mime types of each collection
         QHash<KJob*, CollJobData> mPendingCollectionJobs;  // pending collection creation/deletion jobs, with collection ID & name
         QHash<KJob*, CollTypeData> mPendingColCreateJobs;  // default alarm type for pending collection creation jobs
         QList<QString>     mCollectionsBeingCreated;  // path names of new collections being created by migrator

@@ -40,6 +40,7 @@
 #include "templatepickdlg.h"
 #include "traywindow.h"
 #include "wakedlg.h"
+#include "resources/resources.h"
 #include "kalarm_debug.h"
 
 #include <kalarmcal/alarmtext.h>
@@ -166,8 +167,8 @@ MainWindow::MainWindow(bool restored)
     connect(mListView->selectionModel(), &QItemSelectionModel::selectionChanged, this, &MainWindow::slotSelection);
     connect(mListView, &AlarmListView::contextMenuRequested, this, &MainWindow::slotContextMenuRequested);
     connect(mListView, &AlarmListView::columnsVisibleChanged, this, &MainWindow::slotAlarmListColumnsChanged);
-    connect(AkonadiModel::instance(), &AkonadiModel::resourceStatusChanged,
-                                this, &MainWindow::slotCalendarStatusChanged);
+    connect(Resources::instance(), &Resources::settingsChanged,
+                             this, &MainWindow::slotCalendarStatusChanged);
     connect(mResourceSelector, &ResourceSelector::resized, this, &MainWindow::resourcesResized);
     mListView->installEventFilter(this);
     initActions();

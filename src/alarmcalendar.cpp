@@ -28,6 +28,7 @@
 #include "mainwindow.h"
 #include "messagebox.h"
 #include "preferences.h"
+#include "resources/resources.h"
 #include "kalarm_debug.h"
 
 #include <KCalendarCore/MemoryCalendar>
@@ -126,8 +127,8 @@ AlarmCalendar::AlarmCalendar()
     connect(model, &AkonadiModel::eventsAdded, this, &AlarmCalendar::slotEventsAdded);
     connect(model, &AkonadiModel::eventsToBeRemoved, this, &AlarmCalendar::slotEventsToBeRemoved);
     connect(model, &AkonadiModel::eventChanged, this, &AlarmCalendar::slotEventChanged);
-    connect(model, &AkonadiModel::resourceStatusChanged, this, &AlarmCalendar::slotResourceStatusChanged);
     connect(model, &AkonadiModel::collectionsPopulated, this, &AlarmCalendar::slotCollectionsPopulated);
+    connect(Resources::instance(), &Resources::settingsChanged, this, &AlarmCalendar::slotResourceStatusChanged);
 }
 
 /******************************************************************************
@@ -494,15 +495,19 @@ void AlarmCalendar::removeKAEvents(Collection::Id key, bool closing, CalEvent::T
 * Called when the enabled or read-only status of a resource has changed.
 * If the resource is now disabled, remove its events from the calendar.
 */
-void AlarmCalendar::slotResourceStatusChanged(const Resource& resource, AkonadiModel::Change change, const QVariant& value, bool inserted)
+void AlarmCalendar::slotResourceStatusChanged(ResourceId id, ResourceType::Changes change)
 {
-    if (!inserted  &&  change == AkonadiModel::Enabled)
+    if (change & ResourceType::Enabled)
     {
         // For each alarm type which has been disabled, remove the collection's
         // events from the map, but not from AkonadiModel.
-        CalEvent::Types enabled = static_cast<CalEvent::Types>(value.toInt());
-        CalEvent::Types disabled = ~enabled & (CalEvent::ACTIVE | CalEvent::ARCHIVED | CalEvent::TEMPLATE);
-        removeKAEvents(resource.id(), false, disabled);
+        ResourceType* resource = Resources::resource(id);
+        if (resource)
+        {
+            const CalEvent::Types enabled = resource->enabledTypes();
+            const CalEvent::Types disabled = ~enabled & (CalEvent::ACTIVE | CalEvent::ARCHIVED | CalEvent::TEMPLATE);
+            removeKAEvents(id, false, disabled);
+        }
     }
 }
 

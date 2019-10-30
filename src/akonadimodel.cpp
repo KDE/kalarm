@@ -19,12 +19,14 @@
  */
 
 #include "akonadimodel.h"
+
 #include "alarmtime.h"
 #include "autoqpointer.h"
 #include "calendarmigrator.h"
 #include "mainwindow.h"
 #include "preferences.h"
 #include "synchtimer.h"
+#include "resources/resources.h"
 #include "kalarmsettings.h"
 #include "kalarmdirsettings.h"
 
@@ -117,6 +119,8 @@ AkonadiModel::AkonadiModel(ChangeRecorder* monitor, QObject* parent)
     Preferences::connect(SIGNAL(holidaysChanged(KHolidays::HolidayRegion)), this, SLOT(slotUpdateHolidays()));
     Preferences::connect(SIGNAL(workTimeChanged(QTime,QTime,QBitArray)), this, SLOT(slotUpdateWorkingHours()));
 
+    connect(Resources::instance(), &Resources::resourceMessage, this, &AkonadiModel::slotResourceMessage, Qt::QueuedConnection);
+
     connect(this, &AkonadiModel::rowsInserted, this, &AkonadiModel::slotRowsInserted);
     connect(this, &AkonadiModel::rowsAboutToBeRemoved, this, &AkonadiModel::slotRowsAboutToBeRemoved);
     connect(this, &Akonadi::EntityTreeModel::collectionPopulated, this, &AkonadiModel::slotCollectionPopulated);
@@ -162,9 +166,6 @@ void AkonadiModel::checkResources(ServerManager::State state)
             qCDebug(KALARM_LOG) << "AkonadiModel::checkResources: Server stopped";
             mMigrationChecked = false;
             mMigrating = false;
-            mCollectionAlarmTypes.clear();
-            mCollectionRights.clear();
-            mCollectionEnabled.clear();
             initCalendarMigrator();
             Q_EMIT serverStopped();
             break;
@@ -581,8 +582,7 @@ void AkonadiModel::slotRowsInserted(const QModelIndex& parent, int start, int en
             // Ignore it if it isn't owned by a valid Akonadi resource.
             if (resource.isValid())
             {
-                const QSet<QByteArray> attrs{ CollectionAttribute::name() };
-                setCollectionChanged(resource, collection, attrs, true);
+                setCollectionChanged(resource, collection, false);
                 Q_EMIT resourceAdded(resource);
 
                 if (!mCollectionsBeingCreated.contains(collection.remoteId())
@@ -650,26 +650,18 @@ void AkonadiModel::collectionFetchResult(KJob* j)
             if (it == mResources.end())
                 continue;
             Resource& resource = it.value();
-            Collection& resourceCol = AkonadiResource::collection(resource);
-            QSet<QByteArray> attrNames;
-            if (c.hasAttribute<CollectionAttribute>())
-            {
-                if (!resourceCol.hasAttribute<CollectionAttribute>()
-                ||  *c.attribute<CollectionAttribute>() != *resourceCol.attribute<CollectionAttribute>())
-                    attrNames.insert(CollectionAttribute::name());
-            }
+            AkonadiResource* akres = resource.resource<AkonadiResource>();
+            if (!akres)
+                continue;
+            const Collection& resourceCol = akres->collection();
+            bool checkCompat = false;
             if (c.hasAttribute<CompatibilityAttribute>())
             {
                 if (!resourceCol.hasAttribute<CompatibilityAttribute>()
                 ||  *c.attribute<CompatibilityAttribute>() != *resourceCol.attribute<CompatibilityAttribute>())
-                    attrNames.insert(CompatibilityAttribute::name());
+                    checkCompat = true;
             }
-            resourceCol = c;   // update our copy of the collection
-            if (!attrNames.isEmpty())
-            {
-                // Process the changed attribute values.
-                setCollectionChanged(resource, c, attrNames, false);
-            }
+            setCollectionChanged(resource, c, checkCompat);
         }
     }
 }
@@ -713,15 +705,14 @@ void AkonadiModel::slotCollectionChanged(const Akonadi::Collection& c, const QSe
         // attributes are created!  So check whether any attributes not
         // included in 'attributeNames' have been created.
         Resource& resource = it.value();
-        Collection& resourceCol = AkonadiResource::collection(resource);
-        QSet<QByteArray> attrNames = attributeNames;
-        if (!resourceCol.hasAttribute<CollectionAttribute>()  &&  c.hasAttribute<CollectionAttribute>())
-            attrNames.insert(CollectionAttribute::name());
-        if (!resourceCol.hasAttribute<CompatibilityAttribute>()  &&  c.hasAttribute<CompatibilityAttribute>())
-            attrNames.insert(CompatibilityAttribute::name());
-        if (&c != &resourceCol)
-            resourceCol = c;
-        setCollectionChanged(resource, c, attrNames, false);
+        AkonadiResource* akres = resource.resource<AkonadiResource>();
+        if (akres)
+        {
+            const Collection& resourceCol = akres->collection();
+            bool checkCompat = attributeNames.contains(CompatibilityAttribute::name())
+                               || (!resourceCol.hasAttribute<CompatibilityAttribute>()  &&  c.hasAttribute<CompatibilityAttribute>());
+            setCollectionChanged(resource, c, checkCompat);
+        }
     }
 }
 
@@ -729,46 +720,11 @@ void AkonadiModel::slotCollectionChanged(const Akonadi::Collection& c, const QSe
 * Called when a monitored collection's properties or content have changed.
 * Optionally emits a signal if properties of interest have changed.
 */
-void AkonadiModel::setCollectionChanged(Resource& resource, const Collection& collection, const QSet<QByteArray>& attributeNames, bool rowInserted)
+void AkonadiModel::setCollectionChanged(Resource& resource, const Collection& collection, bool checkCompat)
 {
-    // Check for a read/write permission change
-    const Collection::Rights oldRights = mCollectionRights.value(collection.id(), Collection::AllRights);
-    const Collection::Rights newRights = collection.rights() & writableRights;
-    if (newRights != oldRights)
-    {
-        qCDebug(KALARM_LOG) << "AkonadiModel::setCollectionChanged:" << collection.id() << ": rights ->" << newRights;
-        mCollectionRights[collection.id()] = newRights;
-        Q_EMIT resourceStatusChanged(resource, ReadOnly, (newRights != writableRights), rowInserted);
-    }
-
-    // Check for a change in content mime types
-    // (e.g. when a collection is first created at startup).
-    const CalEvent::Types oldAlarmTypes = mCollectionAlarmTypes.value(collection.id(), CalEvent::EMPTY);
-    const CalEvent::Types newAlarmTypes = resource.alarmTypes();
-    if (newAlarmTypes != oldAlarmTypes)
-    {
-        qCDebug(KALARM_LOG) << "AkonadiModel::setCollectionChanged:" << collection.id() << ": alarm types ->" << newAlarmTypes;
-        mCollectionAlarmTypes[collection.id()] = newAlarmTypes;
-        Q_EMIT resourceStatusChanged(resource, AlarmTypes, static_cast<int>(newAlarmTypes), rowInserted);
-    }
-
-    // Check for the collection being enabled/disabled
-    if (attributeNames.contains(CollectionAttribute::name())  &&  collection.hasAttribute<CollectionAttribute>())
-    {
-        // Enabled/disabled can only be set by KAlarm (not the resource), so if the
-        // attibute doesn't exist, it is ignored.
-        const CalEvent::Types newEnabled = collection.attribute<CollectionAttribute>()->enabled();
-        handleEnabledChange(resource, newEnabled, rowInserted);
-    }
-
-    // Check for the backend calendar format changing
-    if (attributeNames.contains(CompatibilityAttribute::name()))
-    {
-        // Update to current KAlarm format if necessary, and if the user agrees
-        qCDebug(KALARM_LOG) << "AkonadiModel::setCollectionChanged: CompatibilityAttribute";
-        CalendarMigrator::updateToCurrentFormat(resource, false, MainWindow::mainMainWindow());
-    }
-
+    AkonadiResource* akres = resource.resource<AkonadiResource>();
+    if (akres)
+        akres->notifyCollectionChanged(resource, collection, checkCompat);
     if (mMigrating)
     {
         mCollectionIdsBeingCreated.removeAll(collection.id());
@@ -783,39 +739,6 @@ void AkonadiModel::setCollectionChanged(Resource& resource, const Collection& co
 }
 
 /******************************************************************************
-* Called by a resource to notify that its status has changed.
-*/
-void AkonadiModel::slotResourceSettingsChanged(ResourceId id, ResourceType::Changes change)
-{
-    auto it = mResources.find(id);
-    if (it != mResources.end())
-    {
-        Resource& resource = it.value();
-        if (change | ResourceType::Enabled)
-        {
-            const CalEvent::Types newEnabled = resource.enabledTypes();
-            handleEnabledChange(resource, newEnabled, false);
-        }
-    }
-}
-
-/******************************************************************************
-* Emit a signal if a resource's enabled state has changed.
-*/
-void AkonadiModel::handleEnabledChange(Resource& resource, CalEvent::Types newEnabled, bool rowInserted)
-{
-    static bool firstEnabled = true;
-    const CalEvent::Types oldEnabled = mCollectionEnabled.value(resource.id(), CalEvent::EMPTY);
-    if (firstEnabled  ||  newEnabled != oldEnabled)
-    {
-        qCDebug(KALARM_LOG) << "AkonadiModel::handleEnabledChange:" << resource.id() << ": enabled ->" << newEnabled;
-        firstEnabled = false;
-        mCollectionEnabled[resource.id()] = newEnabled;
-        Q_EMIT resourceStatusChanged(resource, Enabled, static_cast<int>(newEnabled), rowInserted);
-    }
-}
-
-/******************************************************************************
 * Called when a monitored collection is removed.
 */
 void AkonadiModel::slotCollectionRemoved(const Collection& collection)
@@ -823,7 +746,6 @@ void AkonadiModel::slotCollectionRemoved(const Collection& collection)
     const Collection::Id id = collection.id();
     qCDebug(KALARM_LOG) << "AkonadiModel::slotCollectionRemoved:" << id;
     mResources.remove(collection.id());
-    mCollectionRights.remove(id);
     Q_EMIT collectionDeleted(id);
 }
 
@@ -1050,10 +972,7 @@ Resource& AkonadiModel::updateResource(const Collection& collection) const
     else
     {
         // Create a new resource for the collection.
-        AkonadiResource* akres = new AkonadiResource(collection);
-        connect(akres, &ResourceType::settingsChanged, this, &AkonadiModel::slotResourceSettingsChanged);
-        connect(akres, &ResourceType::resourceMessage, this, &AkonadiModel::slotResourceMessage, Qt::QueuedConnection);
-        it = mResources.insert(collection.id(), Resource(akres));
+        it = mResources.insert(collection.id(), Resource(new AkonadiResource(collection)));
     }
     return it.value();
 }

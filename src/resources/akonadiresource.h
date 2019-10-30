@@ -53,9 +53,6 @@ public:
     /** Return whether the resource has a valid configuration. */
     bool isValid() const override;
 
-    /** Return the resource's unique ID. */
-    ResourceId id() const override;
-
     /** Return the resource's collection. */
     Akonadi::Collection collection() const;
 
@@ -258,10 +255,14 @@ public:
     */
     static Akonadi::Collection& collection(Resource&);
     static const Akonadi::Collection& collection(const Resource&);
+    Akonadi::Collection& collection()   { return mCollection; }
 
     /** Return the event for an Akonadi Item belonging to this resource. */
     KAEvent event(const Akonadi::Item&) const;
     using QObject::event;   // prevent warning about hidden virtual method
+
+    /** Called to notify this resource that its Collection has changed. */
+    void notifyCollectionChanged(Resource& resource, const Akonadi::Collection& collection, bool checkCompatibility);
 
     /** Called to notify this resource that an Akonadi Item belonging it has
      *  changed or been created.
@@ -286,6 +287,7 @@ private:
     bool                        mValid;                // whether the collection is valid and belongs to an Akonadi resource
     mutable bool                mHaveCollectionAttribute{false};  // whether the collection has a CollectionAttribute
     mutable bool                mNewEnabled{false};
+    bool                        mCollectionAttrChecked{false};  // CollectionAttribute has been processed first time
 };
 
 #endif // AKONADIRESOURCE_H

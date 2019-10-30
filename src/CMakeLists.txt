@@ -95,6 +95,7 @@ set(kalarm_bin_SRCS ${libkalarm_SRCS}
 set(kalarm_bin_SRCS ${kalarm_bin_SRCS}
     resources/resourcetype.cpp
     resources/resource.cpp
+    resources/resources.cpp
     resources/akonadiresource.cpp
     kalarmmigrateapplication.cpp
     akonadimodel.cpp

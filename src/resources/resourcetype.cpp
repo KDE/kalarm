@@ -27,8 +27,17 @@
 #include <KColorUtils>
 #include <KLocalizedString>
 
+QHash<ResourceId, ResourceType*> ResourceType::mInstances;
+
+ResourceType::ResourceType(ResourceId id)
+    : mId(id)
+{
+    mInstances[mId] = this;
+}
+
 ResourceType::~ResourceType()
 {
+    mInstances.remove(mId);
 }
 
 bool ResourceType::isEnabled(CalEvent::Type type) const

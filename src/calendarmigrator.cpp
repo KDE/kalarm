@@ -397,6 +397,8 @@ void CalendarMigrator::updateToCurrentFormat(const Resource& resource, bool igno
         return;
     }
     const Collection& collection = AkonadiResource::collection(resource);
+    if (!parent)
+        parent = MainWindow::mainMainWindow();
     CalendarUpdater* updater = new CalendarUpdater(collection, dirResource, ignoreKeepFormat, false, parent);
     QTimer::singleShot(0, updater, &CalendarUpdater::update);
 }
