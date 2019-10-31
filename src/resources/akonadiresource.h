@@ -43,8 +43,11 @@ class AkonadiResource : public ResourceType
 public:
     /** Constructor.
      *  The supplied collection must be up to date.
+     *  @param temporary  If false, the new instance will be added to the list
+     *                    of ResourceType instances for lookup;
+     *                    If true, it's a temporary instance not added to the list.
      */
-    explicit AkonadiResource(const Akonadi::Collection&);
+    explicit AkonadiResource(const Akonadi::Collection&, bool temporary = false);
 
     ~AkonadiResource() override;
 
@@ -197,6 +200,13 @@ public:
      */
     void configSetStandard(CalEvent::Types types) override;
 
+    /** Return whether the resource is in a different format from the
+     *  current KAlarm format, in which case it cannot be written to.
+     *  Note that isWritable() takes account of incompatible format
+     *  as well as read-only and enabled statuses.
+     */
+    KACalendar::Compat compatibility() const override;
+
     /** Load the resource from storage, and fetch all events.
      *  Not applicable to AkonadiResource, since the Akonadi resource handles
      *  loading automatically.
@@ -228,13 +238,6 @@ public:
      *  @return true if closed, false if waiting for a save to complete.
      */
     bool close() override;
-
-    /** Return whether the resource is in a different format from the
-     *  current KAlarm format, in which case it cannot be written to.
-     *  Note that isWritable() takes account of incompatible format
-     *  as well as read-only and enabled statuses.
-     */
-    KACalendar::Compat compatibility() const override;
 
     /** Add an event to the resource. */
     bool addEvent(const KAEvent&) override;
@@ -286,6 +289,7 @@ private:
     QList<Akonadi::Item::Id>    mItemsBeingCreated;    // new items not fully initialised yet
     bool                        mValid;                // whether the collection is valid and belongs to an Akonadi resource
     mutable bool                mHaveCollectionAttribute{false};  // whether the collection has a CollectionAttribute
+    bool                        mHaveCompatibilityAttribute{false};  // whether the collection has a CompatibilityAttribute
     mutable bool                mNewEnabled{false};
     bool                        mCollectionAttrChecked{false};  // CollectionAttribute has been processed first time
 };

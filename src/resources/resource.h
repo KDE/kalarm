@@ -229,6 +229,16 @@ public:
      */
     void configSetStandard(CalEvent::Types types);
 
+    /** Return whether the resource is in a different format from the
+     *  current KAlarm format, in which case it cannot be written to.
+     *  Note that isWritable() takes account of incompatible format
+     *  as well as read-only and enabled statuses.
+     */
+    KACalendar::Compat compatibility() const;
+
+    /** Return whether the resource is in the current KAlarm format. */
+    bool isCompatible() const;
+
     /** Load the resource from the file, and fetch all events.
      *  If loading is initiated, the ResourceManager will emit the resourceLoaded()
      *  signal on completion.
@@ -274,16 +284,6 @@ public:
      *  @return true if closed, false if waiting for a save to complete.
      */
     bool close();
-
-    /** Return whether the resource is in a different format from the
-     *  current KAlarm format, in which case it cannot be written to.
-     *  Note that isWritable() takes account of incompatible format
-     *  as well as read-only and enabled statuses.
-     */
-    KACalendar::Compat compatibility() const;
-
-    /** Return whether the resource is in the current KAlarm format. */
-    bool isCompatible() const;
 
     /** Return all events belonging to this resource.
      *  Derived classes are not guaranteed to implement this.

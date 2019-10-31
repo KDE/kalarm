@@ -189,6 +189,16 @@ void Resource::configSetStandard(CalEvent::Types types)
         mResource->configSetStandard(types);
 }
 
+KACalendar::Compat Resource::compatibility() const
+{
+    return mResource.isNull() ? KACalendar::Incompatible : mResource->compatibility();
+}
+
+bool Resource::isCompatible() const
+{
+    return mResource.isNull() ? false : mResource->isCompatible();
+}
+
 bool Resource::load(bool readThroughCache)
 {
     return mResource.isNull() ? false : mResource->load(readThroughCache);
@@ -207,16 +217,6 @@ bool Resource::save(bool writeThroughCache)
 bool Resource::close()
 {
     return mResource.isNull() ? false : mResource->close();
-}
-
-KACalendar::Compat Resource::compatibility() const
-{
-    return mResource.isNull() ? KACalendar::Incompatible : mResource->compatibility();
-}
-
-bool Resource::isCompatible() const
-{
-    return mResource.isNull() ? false : mResource->isCompatible();
 }
 
 QList<KAEvent> Resource::events() const

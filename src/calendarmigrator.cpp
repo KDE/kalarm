@@ -110,7 +110,7 @@ class CalendarCreator : public QObject
         bool             mEnabled;
         bool             mStandard;
         const bool       mNew;     // true if creating default, false if converting
-        bool             mFinished;
+        bool             mFinished{false};
 };
 
 // Updates the backend calendar format of a single alarm calendar
@@ -397,6 +397,7 @@ void CalendarMigrator::updateToCurrentFormat(const Resource& resource, bool igno
         return;
     }
     const Collection& collection = AkonadiResource::collection(resource);
+qDebug()<<"CalendarMigrator::updateToCurrentFormat: has attr?"<<collection.hasAttribute<CompatibilityAttribute>();
     if (!parent)
         parent = MainWindow::mainMainWindow();
     CalendarUpdater* updater = new CalendarUpdater(collection, dirResource, ignoreKeepFormat, false, parent);
@@ -408,26 +409,27 @@ QList<CalendarUpdater*> CalendarUpdater::mInstances;
 
 CalendarUpdater::CalendarUpdater(const Collection& collection, bool dirResource,
                                  bool ignoreKeepFormat, bool newCollection, QObject* parent)
-    : mCollection(collection),
-      mParent(parent),
-      mDirResource(dirResource),
-      mIgnoreKeepFormat(ignoreKeepFormat),
-      mNewCollection(newCollection),
-      mDuplicate(containsCollection(collection.id()))
+    : mCollection(collection)
+    , mParent(parent)
+    , mDirResource(dirResource)
+    , mIgnoreKeepFormat(ignoreKeepFormat)
+    , mNewCollection(newCollection)
+    , mDuplicate(containsCollection(collection.id()))
 {
     mInstances.append(this);
 }
 
 CalendarUpdater::~CalendarUpdater()
 {
+qDebug()<<"~CalendarUpdater:"<<mCollection.id();
     mInstances.removeAll(this);
 }
 
 bool CalendarUpdater::containsCollection(Collection::Id id)
 {
-    for (int i = 0, count = mInstances.count();  i < count;  ++i)
+    for (CalendarUpdater* instance : mInstances)
     {
-        if (mInstances[i]->mCollection.id() == id)
+        if (instance->mCollection.id() == id)
             return true;
     }
     return false;
@@ -437,11 +439,13 @@ bool CalendarUpdater::update()
 {
     qCDebug(KALARM_LOG) << "CalendarUpdater::update:" << mCollection.id() << (mDirResource ? "directory" : "file");
     bool result = true;
-    if (!mDuplicate     // prevent concurrent updates
-    &&  mCollection.hasAttribute<CompatibilityAttribute>())   // must know format to update
+    if (mDuplicate)
+        qCDebug(KALARM_LOG) << "CalendarUpdater::update: Not updating (concurrent update in progress)";
+    else if (mCollection.hasAttribute<CompatibilityAttribute>())   // must know format to update
     {
         const CompatibilityAttribute* compatAttr = mCollection.attribute<CompatibilityAttribute>();
         const KACalendar::Compat compatibility = compatAttr->compatibility();
+        qCDebug(KALARM_LOG) << "CalendarUpdater::update: current format:" << compatibility;
         if ((compatibility & ~KACalendar::Converted)
         // The calendar isn't in the current KAlarm format
         &&  !(compatibility & ~(KACalendar::Convertible | KACalendar::Converted)))
@@ -544,9 +548,8 @@ template <class Interface> Interface* CalendarMigrator::getAgentInterface(const 
 * Constructor to migrate a KResources calendar, using its parameters.
 */
 CalendarCreator::CalendarCreator(const QString& resourceType, const KConfigGroup& config)
-    : mAlarmType(CalEvent::EMPTY),
-      mNew(false),
-      mFinished(false)
+    : mAlarmType(CalEvent::EMPTY)
+    , mNew(false)
 {
     // Read the resource configuration parameters from the config
     const char* pathKey = nullptr;
@@ -594,15 +597,14 @@ CalendarCreator::CalendarCreator(const QString& resourceType, const KConfigGroup
 * This is created as enabled, read-write, and standard for its alarm type.
 */
 CalendarCreator::CalendarCreator(CalEvent::Type alarmType, const QString& file, const QString& name)
-    : mAlarmType(alarmType),
-      mResourceType(LocalFile),
-      mName(name),
-      mColour(),
-      mReadOnly(false),
-      mEnabled(true),
-      mStandard(true),
-      mNew(true),
-      mFinished(false)
+    : mAlarmType(alarmType)
+    , mResourceType(LocalFile)
+    , mName(name)
+    , mColour()
+    , mReadOnly(false)
+    , mEnabled(true)
+    , mStandard(true)
+    , mNew(true)
 {
     const QString path = QStandardPaths::writableLocation(QStandardPaths::DataLocation) + QLatin1Char('/') + file;
     mUrlString = QUrl::fromLocalFile(path).toString();

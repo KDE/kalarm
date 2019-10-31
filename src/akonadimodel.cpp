@@ -582,15 +582,16 @@ void AkonadiModel::slotRowsInserted(const QModelIndex& parent, int start, int en
             // Ignore it if it isn't owned by a valid Akonadi resource.
             if (resource.isValid())
             {
-                setCollectionChanged(resource, collection, false);
+                setCollectionChanged(resource, collection, true);
                 Q_EMIT resourceAdded(resource);
-
+#if 0
                 if (!mCollectionsBeingCreated.contains(collection.remoteId())
                 &&  (collection.rights() & writableRights) == writableRights)
                 {
                     // Update to current KAlarm format if necessary, and if the user agrees
                     CalendarMigrator::updateToCurrentFormat(resource, false, MainWindow::mainMainWindow());
                 }
+#endif
 
                 if (!collection.hasAttribute<CompatibilityAttribute>())
                 {
@@ -650,18 +651,7 @@ void AkonadiModel::collectionFetchResult(KJob* j)
             if (it == mResources.end())
                 continue;
             Resource& resource = it.value();
-            AkonadiResource* akres = resource.resource<AkonadiResource>();
-            if (!akres)
-                continue;
-            const Collection& resourceCol = akres->collection();
-            bool checkCompat = false;
-            if (c.hasAttribute<CompatibilityAttribute>())
-            {
-                if (!resourceCol.hasAttribute<CompatibilityAttribute>()
-                ||  *c.attribute<CompatibilityAttribute>() != *resourceCol.attribute<CompatibilityAttribute>())
-                    checkCompat = true;
-            }
-            setCollectionChanged(resource, c, checkCompat);
+            setCollectionChanged(resource, c, false);
         }
     }
 }
@@ -705,14 +695,7 @@ void AkonadiModel::slotCollectionChanged(const Akonadi::Collection& c, const QSe
         // attributes are created!  So check whether any attributes not
         // included in 'attributeNames' have been created.
         Resource& resource = it.value();
-        AkonadiResource* akres = resource.resource<AkonadiResource>();
-        if (akres)
-        {
-            const Collection& resourceCol = akres->collection();
-            bool checkCompat = attributeNames.contains(CompatibilityAttribute::name())
-                               || (!resourceCol.hasAttribute<CompatibilityAttribute>()  &&  c.hasAttribute<CompatibilityAttribute>());
-            setCollectionChanged(resource, c, checkCompat);
-        }
+        setCollectionChanged(resource, c, attributeNames.contains(CompatibilityAttribute::name()));
     }
 }
 

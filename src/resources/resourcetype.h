@@ -61,7 +61,13 @@ public:
     typedef QSharedPointer<ResourceType> Ptr;
 
     ResourceType()  {}
-    explicit ResourceType(ResourceId);
+    /** Constructor.
+     *  @param temporary  If false, the new instance will be added to the list
+     *                    of instances for lookup;
+     *                    If true, it's a temporary instance not added to the list.
+     */
+    explicit ResourceType(ResourceId, bool temporary = false);
+
     virtual ~ResourceType() = 0;
 
     /** Return whether the resource has a valid configuration. */
@@ -235,6 +241,16 @@ public:
      */
     virtual void configSetStandard(CalEvent::Types types) = 0;
 
+    /** Return whether the resource is in a different format from the
+     *  current KAlarm format, in which case it cannot be written to.
+     *  Note that isWritable() takes account of incompatible format
+     *  as well as read-only and enabled statuses.
+     */
+    virtual KACalendar::Compat compatibility() const = 0;
+
+    /** Return whether the resource is in the current KAlarm format. */
+    bool isCompatible() const;
+
     /** Load the resource from the file, and fetch all events.
      *  If loading is initiated, the ResourceManager will emit the resourceLoaded()
      *  signal on completion.
@@ -280,16 +296,6 @@ public:
      *  @return true if closed, false if waiting for a save to complete.
      */
     virtual bool close() = 0;
-
-    /** Return whether the resource is in a different format from the
-     *  current KAlarm format, in which case it cannot be written to.
-     *  Note that isWritable() takes account of incompatible format
-     *  as well as read-only and enabled statuses.
-     */
-    virtual KACalendar::Compat compatibility() const = 0;
-
-    /** Return whether the resource is in the current KAlarm format. */
-    bool isCompatible() const;
 
     /** Return all events belonging to this resource.
      *  Derived classes are not guaranteed to implement this.
@@ -337,6 +343,7 @@ private:
     static QHash<ResourceId, ResourceType*> mInstances;   // contains all ResourceType instances with an ID
 
     ResourceId   mId{-1};               // resource's ID, which can't be changed
+    bool         mTemporary{false};     // the resource is not contained in mInstances
     mutable bool mLoaded{false};        // the resource has finished loading
     bool         mBeingDeleted{false};  // the resource is currently being deleted
 

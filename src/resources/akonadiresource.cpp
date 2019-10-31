@@ -48,8 +48,8 @@ const QString KALARM_DIR_RESOURCE(QStringLiteral("akonadi_kalarm_dir_resource"))
 Collection::Rights WritableRights = Collection::CanChangeItem | Collection::CanCreateItem | Collection::CanDeleteItem;
 }
 
-AkonadiResource::AkonadiResource(const Collection& collection)
-    : ResourceType(collection.id())
+AkonadiResource::AkonadiResource(const Collection& collection, bool temporary)
+    : ResourceType(collection.id(), temporary)
     , mCollection(collection)
     , mValid(collection.id() >= 0)
 {
@@ -284,6 +284,16 @@ void AkonadiResource::configSetStandard(CalEvent::Types types)
     modifyCollectionAttribute();
 }
 
+KACalendar::Compat AkonadiResource::compatibility() const
+{
+    if (!mValid)
+        return KACalendar::Incompatible;
+    AkonadiModel::instance()->refresh(mCollection);    // update with latest data
+    if (!mCollection.hasAttribute<CompatibilityAttribute>())
+        return KACalendar::Incompatible;
+    return mCollection.attribute<CompatibilityAttribute>()->compatibility();
+}
+
 bool AkonadiResource::load(bool readThroughCache)
 {
     Q_UNUSED(readThroughCache);
@@ -327,16 +337,6 @@ bool AkonadiResource::close()
     mHaveCollectionAttribute = false;
     mNewEnabled              = false;
     return true;
-}
-
-KACalendar::Compat AkonadiResource::compatibility() const
-{
-    if (!mValid)
-        return KACalendar::Incompatible;
-    AkonadiModel::instance()->refresh(mCollection);    // update with latest data
-    if (!mCollection.hasAttribute<CompatibilityAttribute>())
-        return KACalendar::Incompatible;
-    return mCollection.attribute<CompatibilityAttribute>()->compatibility();
 }
 
 /******************************************************************************
@@ -514,12 +514,24 @@ void AkonadiResource::notifyCollectionChanged(Resource& resource, const Collecti
         Resources::notifySettingsChanged(this, change);
 
     // Check for the backend calendar format changing.
-    // The attribute must exist in order to know the calendar format.
-    if (checkCompatibility  &&  collection.hasAttribute<CompatibilityAttribute>())
+    bool hadCompat = mHaveCompatibilityAttribute;
+    mHaveCompatibilityAttribute = collection.hasAttribute<CompatibilityAttribute>();
+    if (mHaveCompatibilityAttribute)
     {
-        // Update to current KAlarm format if necessary, and if the user agrees
-        qCDebug(KALARM_LOG) << "AkonadiResource::setCollectionChanged:" << collection.id() << ": compatibility ->" << collection.attribute<CompatibilityAttribute>()->compatibility();
-        CalendarMigrator::updateToCurrentFormat(resource, false);
+        // The attribute must exist in order to know the calendar format.
+        if (checkCompatibility
+        ||  !hadCompat
+        ||  *collection.attribute<CompatibilityAttribute>() != *mCollection.attribute<CompatibilityAttribute>())
+        {
+            // Update to current KAlarm format if necessary, and if the user agrees.
+            // Create a new temporary 'Resource' object, because the one passed
+            // to this method can get overwritten with an old version of its
+            // CompatibilityAttribute before CalendarMigration finishes, due to
+            // AkonadiModel still containing an out of date value.
+            qCDebug(KALARM_LOG) << "AkonadiResource::setCollectionChanged:" << collection.id() << ": compatibility ->" << collection.attribute<CompatibilityAttribute>()->compatibility();
+            Resource res(new AkonadiResource(collection, true));
+            CalendarMigrator::updateToCurrentFormat(res, false);
+        }
     }
 }
 

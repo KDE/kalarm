@@ -29,15 +29,18 @@
 
 QHash<ResourceId, ResourceType*> ResourceType::mInstances;
 
-ResourceType::ResourceType(ResourceId id)
+ResourceType::ResourceType(ResourceId id, bool temporary)
     : mId(id)
+    , mTemporary(temporary)
 {
-    mInstances[mId] = this;
+    if (!temporary)
+        mInstances[mId] = this;
 }
 
 ResourceType::~ResourceType()
 {
-    mInstances.remove(mId);
+    if (!mTemporary)
+        mInstances.remove(mId);
 }
 
 bool ResourceType::isEnabled(CalEvent::Type type) const
@@ -48,11 +51,6 @@ bool ResourceType::isEnabled(CalEvent::Type type) const
 bool ResourceType::isWritable(CalEvent::Type type) const
 {
     return writableStatus(type) == 1;
-}
-
-bool ResourceType::isCompatible() const
-{
-    return compatibility() == KACalendar::Current;
 }
 
 /******************************************************************************
@@ -95,6 +93,11 @@ QColor ResourceType::foregroundColour(CalEvent::Types types) const
     if (colour.isValid()  &&  !isWritable(type))
         return KColorUtils::lighten(colour, 0.2);
     return colour;
+}
+
+bool ResourceType::isCompatible() const
+{
+    return compatibility() == KACalendar::Current;
 }
 
 void ResourceType::notifyDeletion()
