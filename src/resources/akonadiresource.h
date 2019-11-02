@@ -41,14 +41,18 @@ class AkonadiResource : public ResourceType
 {
     Q_OBJECT
 public:
+    /** Construct a new AkonadiResource.
+     *  The supplied collection must be up to date.
+     */
+    static Resource create(const Akonadi::Collection&);
+
+protected:
     /** Constructor.
      *  The supplied collection must be up to date.
-     *  @param temporary  If false, the new instance will be added to the list
-     *                    of ResourceType instances for lookup;
-     *                    If true, it's a temporary instance not added to the list.
      */
-    explicit AkonadiResource(const Akonadi::Collection&, bool temporary = false);
+    explicit AkonadiResource(const Akonadi::Collection&);
 
+public:
     ~AkonadiResource() override;
 
     static Resource nullResource();
@@ -251,6 +255,11 @@ public:
     /** Called to notify the resource that an event's command error has changed. */
     void handleCommandErrorChange(const KAEvent&) override;
 
+    /*-----------------------------------------------------------------------------
+    * The methods below are all particular to the AkonadiResource class, and in
+    * order to be accessible to clients are defined as 'static'.
+    *----------------------------------------------------------------------------*/
+
     /******************************************************************************
     * Return a reference to the Collection held by an Akonadi resource.
     * @reply Reference to the Collection, which belongs to AkonadiModel and whose
@@ -258,19 +267,19 @@ public:
     */
     static Akonadi::Collection& collection(Resource&);
     static const Akonadi::Collection& collection(const Resource&);
-    Akonadi::Collection& collection()   { return mCollection; }
+//    Akonadi::Collection& collection()   { return mCollection; }
 
     /** Return the event for an Akonadi Item belonging to this resource. */
-    KAEvent event(const Akonadi::Item&) const;
+    static KAEvent event(Resource&, const Akonadi::Item&);
     using QObject::event;   // prevent warning about hidden virtual method
 
     /** Called to notify this resource that its Collection has changed. */
-    void notifyCollectionChanged(Resource& resource, const Akonadi::Collection& collection, bool checkCompatibility);
+    static void notifyCollectionChanged(Resource&, const Akonadi::Collection&, bool checkCompatibility);
 
     /** Called to notify this resource that an Akonadi Item belonging it has
      *  changed or been created.
      */
-    void notifyItemChanged(const Akonadi::Item& item, bool created);
+    static void notifyItemChanged(Resource&, const Akonadi::Item&, bool created);
 
 private Q_SLOTS:
     void itemJobDone(KJob*);

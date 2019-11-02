@@ -45,6 +45,7 @@ public:
     Resource();
     explicit Resource(ResourceType*);
     Resource(const Resource&) = default;
+    ~Resource();
 
     bool operator==(const Resource&) const;
     bool operator==(const ResourceType*) const;
@@ -57,9 +58,6 @@ public:
 
     /** Return whether the resource has a valid configuration. */
     bool isValid() const;
-
-    /** Return the shared pointer to the alarm calendar resource for this resource. */
-    template <class T> T* resource() const;
 
     /** Return the resource's unique ID. */
     ResourceId id() const;
@@ -314,9 +312,17 @@ public:
     bool isBeingDeleted() const;
 
 private:
+    /** Return the shared pointer to the alarm calendar resource for this resource.
+     *  @warning  The instance referred to by the pointer will be deleted when all
+     *            Resource instances containing it go out of scope or are deleted,
+     *            so do not pass the pointer to another function.
+     */
+    template <class T> T* resource() const;
+
     ResourceType::Ptr mResource;
 
-friend uint qHash(const Resource& resource, uint seed);
+    friend class ResourceType;   // needs access to resource()
+    friend uint qHash(const Resource& resource, uint seed);
 };
 
 inline bool operator==(const ResourceType* a, const Resource& b)  { return b == a; }

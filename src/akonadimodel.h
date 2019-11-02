@@ -117,7 +117,7 @@ class AkonadiModel : public Akonadi::EntityTreeModel, public CalendarDataModel
 
     private Q_SLOTS:
         /** Called when a resource notifies a message to display to the user. */
-        void slotResourceMessage(ResourceId, ResourceType::MessageType, const QString& message, const QString& details);
+        void slotResourceMessage(Resource&, ResourceType::MessageType, const QString& message, const QString& details);
 
     Q_SIGNALS:
         /** Signal emitted when a collection has been added to the model. */
@@ -197,9 +197,10 @@ class AkonadiModel : public Akonadi::EntityTreeModel, public CalendarDataModel
 
         /** Return the alarm for the specified Akonadi Item.
          *  The item's parentCollection() is set.
+         *  @param res  Set the resource for the item's parent collection.
          *  @return the event, or invalid event if no such event exists.
          */
-        KAEvent       event(Akonadi::Item&, const QModelIndex&, AkonadiResource** = nullptr) const;
+        KAEvent       event(Akonadi::Item&, const QModelIndex&, Resource& res) const;
         QModelIndex   itemIndex(const Akonadi::Item&) const;
         void          signalDataChanged(bool (*checkFunc)(const Akonadi::Item&), int startColumn, int endColumn, const QModelIndex& parent);
         void          setCollectionChanged(Resource&, const Akonadi::Collection&, bool checkCompat);

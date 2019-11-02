@@ -58,7 +58,7 @@ ItemListModel::ItemListModel(CalEvent::Types allowed, QObject* parent)
     connect(this, &ItemListModel::rowsInserted, this, &ItemListModel::slotRowsInserted);
     connect(this, &ItemListModel::rowsRemoved, this, &ItemListModel::slotRowsRemoved);
     connect(Resources::instance(), &Resources::settingsChanged,
-                             this, &ItemListModel::resourceStatusChanged);
+                             this, &ItemListModel::resourceSettingsChanged);
 }
 
 int ItemListModel::columnCount(const QModelIndex& /*parent*/) const
@@ -95,9 +95,8 @@ void ItemListModel::slotRowsRemoved()
 * If the resource's enabled status has changed, re-filter the list to add or
 * remove its alarms.
 */
-void ItemListModel::resourceStatusChanged(ResourceId id, ResourceType::Changes change)
+void ItemListModel::resourceSettingsChanged(Resource& resource, ResourceType::Changes change)
 {
-    const Resource resource = AkonadiModel::instance()->resource(id);
     if (!resource.isValid())
         return;
     if (change == AkonadiModel::Enabled)

@@ -128,7 +128,7 @@ AlarmCalendar::AlarmCalendar()
     connect(model, &AkonadiModel::eventsToBeRemoved, this, &AlarmCalendar::slotEventsToBeRemoved);
     connect(model, &AkonadiModel::eventChanged, this, &AlarmCalendar::slotEventChanged);
     connect(model, &AkonadiModel::collectionsPopulated, this, &AlarmCalendar::slotCollectionsPopulated);
-    connect(Resources::instance(), &Resources::settingsChanged, this, &AlarmCalendar::slotResourceStatusChanged);
+    connect(Resources::instance(), &Resources::settingsChanged, this, &AlarmCalendar::slotResourceSettingsChanged);
 }
 
 /******************************************************************************
@@ -495,18 +495,17 @@ void AlarmCalendar::removeKAEvents(Collection::Id key, bool closing, CalEvent::T
 * Called when the enabled or read-only status of a resource has changed.
 * If the resource is now disabled, remove its events from the calendar.
 */
-void AlarmCalendar::slotResourceStatusChanged(ResourceId id, ResourceType::Changes change)
+void AlarmCalendar::slotResourceSettingsChanged(Resource& resource, ResourceType::Changes change)
 {
     if (change & ResourceType::Enabled)
     {
         // For each alarm type which has been disabled, remove the collection's
         // events from the map, but not from AkonadiModel.
-        ResourceType* resource = Resources::resource(id);
-        if (resource)
+        if (resource.isValid())
         {
-            const CalEvent::Types enabled = resource->enabledTypes();
+            const CalEvent::Types enabled = resource.enabledTypes();
             const CalEvent::Types disabled = ~enabled & (CalEvent::ACTIVE | CalEvent::ARCHIVED | CalEvent::TEMPLATE);
-            removeKAEvents(id, false, disabled);
+            removeKAEvents(resource.id(), false, disabled);
         }
     }
 }

@@ -29,6 +29,8 @@
 #include <QUrl>
 #include <QColor>
 
+class Resource;
+
 using namespace KAlarmCal;
 
 /** Abstract base class for an alarm calendar resource type. */
@@ -61,12 +63,13 @@ public:
     typedef QSharedPointer<ResourceType> Ptr;
 
     ResourceType()  {}
+
     /** Constructor.
      *  @param temporary  If false, the new instance will be added to the list
      *                    of instances for lookup;
      *                    If true, it's a temporary instance not added to the list.
      */
-    explicit ResourceType(ResourceId, bool temporary = false);
+    explicit ResourceType(ResourceId);
 
     virtual ~ResourceType() = 0;
 
@@ -336,19 +339,41 @@ Q_SIGNALS:
     void resourceMessage(ResourceId, MessageType, const QString& message, const QString& details);
 
 protected:
+    /** Add a new ResourceType instance, with a Resource owner.
+     *  @param type      Newly constructed ResourceType instance, which will belong to
+     *                   'resource' if successful. On error, it will be deleted.
+     *  @param resource  If type is invalid, updated to an invalid resource;
+     *                   If type ID already exists, updated to the existing resource with that ID;
+     *                   If type ID doesn't exist, updated to the new resource containing res.
+     *  @return true if a new resource has been created, false if invalid or already exists.
+     */
+    static bool addResource(ResourceType* type, Resource& resource);
+
     void setLoaded(bool loaded) const;
     QString storageTypeStr(bool description, bool file, bool local) const;
+    template <class T> static T* resource(Resource&);
+    template <class T> static const T* resource(const Resource&);
 
 private:
-    static QHash<ResourceId, ResourceType*> mInstances;   // contains all ResourceType instances with an ID
+    static ResourceType* data(Resource&);
+    static const ResourceType* data(const Resource&);
 
     ResourceId   mId{-1};               // resource's ID, which can't be changed
-    bool         mTemporary{false};     // the resource is not contained in mInstances
     mutable bool mLoaded{false};        // the resource has finished loading
     bool         mBeingDeleted{false};  // the resource is currently being deleted
-
-    friend class Resources;
 };
+
+/*****************************************************************************/
+
+template <class T> T* ResourceType::resource(Resource& res)
+{
+    return qobject_cast<T*>(data(res));
+}
+
+template <class T> const T* ResourceType::resource(const Resource& res)
+{
+    return qobject_cast<const T*>(data(res));
+}
 
 #endif // RESOURCETYPE_H
 

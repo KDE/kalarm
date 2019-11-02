@@ -21,7 +21,7 @@
 #ifndef RESOURCES_H
 #define RESOURCES_H
 
-#include "resourcetype.h"
+#include "resource.h"
 
 #include <QObject>
 
@@ -41,25 +41,61 @@ public:
     Resources(const Resources&) = delete;
     Resources& operator=(const Resources&) const = delete;
 
-    static ResourceType* resource(ResourceId);
+    /** Return a copy of the resource with a given ID.
+     *  @return  The resource, or invalid if the ID doesn't already exist or is invalid.
+     */
+    static Resource resource(ResourceId);
 
+    /** Remove the resource with a given ID.
+     *  @note  The ResourceType instance will only be deleted once all Resource
+     *         instances which refer to this ID go out of scope.
+     */
+    static void removeResource(ResourceId);
+
+    /** Called by a resource to notify that its settings have changed.
+     *  This will cause the settingsChanged() signal to be emitted.
+     */
     static void notifySettingsChanged(ResourceType*, ResourceType::Changes);
+
+    /** Called by a resource when a user message should be displayed.
+     *  This will cause the resourceMessage() signal to be emitted.
+     *  @param message  Must include the resource's display name in order to
+     *                  identify the resource to the user.
+     */
     static void notifyResourceMessage(ResourceType*, ResourceType::MessageType, const QString& message, const QString& details);
 
+    /** Called when a user message should be displayed for a resource.
+     *  This will cause the resourceMessage() signal to be emitted.
+     *  @param message  Must include the resource's display name in order to
+     *                  identify the resource to the user.
+     */
+    static void notifyResourceMessage(ResourceId, ResourceType::MessageType, const QString& message, const QString& details);
+
 Q_SIGNALS:
-    /** Emitted when the resource's settings have changed. */
-    void settingsChanged(ResourceId, ResourceType::Changes);
+    /** Emitted when a resource's settings have changed. */
+    void settingsChanged(Resource&, ResourceType::Changes);
 
     /** Emitted when a resource message should be displayed to the user.
-     *  @note  Connections to this signal should use Qt::QueuedConnection type.
-     *  @param message  Derived classes must include the resource's display name.
+     *  @note  Connections to this signal should use Qt::QueuedConnection type
+     *         to allow processing to continue while the user message is displayed.
      */
-    void resourceMessage(ResourceId, ResourceType::MessageType, const QString& message, const QString& details);
+    void resourceMessage(Resource&, ResourceType::MessageType, const QString& message, const QString& details);
 
 private:
     Resources();
 
-    static Resources* mInstance;
+    /** Add a new ResourceType instance, with a Resource owner.
+     *  @param type      Newly constructed ResourceType instance, which will belong to
+     *                   'resource' if successful. On error, it will be deleted.
+     *  @param resource  If type is invalid, updated to an invalid resource;
+     *                   If type ID already exists, updated to the existing resource with that ID;
+     *                   If type ID doesn't exist, updated to the new resource containing res.
+     *  @return true if a new resource has been created, false if invalid or already exists.
+     */
+    static bool addResource(ResourceType* type, Resource& resource);
+
+    static Resources*                  mInstance;    // the unique instance
+    static QHash<ResourceId, Resource> mResources;   // contains all ResourceType instances with an ID
 
     friend class ResourceType;
 };

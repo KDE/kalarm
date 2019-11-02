@@ -20,6 +20,7 @@
 
 #include "resource.h"
 
+
 Resource::Resource()
     : mResource()
 {
@@ -27,6 +28,10 @@ Resource::Resource()
 
 Resource::Resource(ResourceType* r)
     : mResource(r)
+{
+}
+
+Resource::~Resource()
 {
 }
 
@@ -40,7 +45,7 @@ bool Resource::operator==(const ResourceType* other) const
     return mResource.data() == other;
 }
 
-Resource null()
+Resource Resource::null()
 {
     static Resource nullResource(nullptr);
     return nullResource;

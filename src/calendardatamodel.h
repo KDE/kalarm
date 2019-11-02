@@ -109,7 +109,7 @@ class CalendarDataModel
         QVariant eventData(int role, int column, const KAEvent& event, const Resource&, bool& handled) const;
 
         /** Called when a resource notifies a message to display to the user. */
-        void handleResourceMessage(ResourceId, ResourceType::MessageType, const QString& message, const QString& details);
+        void handleResourceMessage(ResourceType::MessageType, const QString& message, const QString& details);
 
         static QString  repeatText(const KAEvent&);
         static QString  repeatOrder(const KAEvent&);

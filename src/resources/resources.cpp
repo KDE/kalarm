@@ -24,6 +24,10 @@
 
 Resources* Resources::mInstance = nullptr;
 
+// Copy of all ResourceType instances with valid ID, wrapped in the Resource
+// container which manages the instance.
+QHash<ResourceId, Resource> Resources::mResources;
+
 Resources* Resources::instance()
 {
     if (!mInstance)
@@ -35,21 +39,60 @@ Resources::Resources()
 {
 }
 
-ResourceType* Resources::resource(ResourceId id)
+Resource Resources::resource(ResourceId id)
 {
-    return ResourceType::mInstances.value(id, nullptr);
+    return mResources.value(id, Resource::null());
 }
 
-void Resources::notifySettingsChanged(ResourceType* resource, ResourceType::Changes change)
+void Resources::removeResource(ResourceId id)
 {
-    if (resource)
-        Q_EMIT instance()->settingsChanged(resource->id(), change);
+    mResources.remove(id);
 }
 
-void Resources::notifyResourceMessage(ResourceType* resource, ResourceType::MessageType type, const QString& message, const QString& details)
+void Resources::notifySettingsChanged(ResourceType* res, ResourceType::Changes change)
 {
-    if (resource)
-        Q_EMIT instance()->resourceMessage(resource->id(), type, message, details);
+    if (res)
+    {
+        Resource r = resource(res->id());
+        if (r.isValid())
+            Q_EMIT instance()->settingsChanged(r, change);
+    }
+}
+
+void Resources::notifyResourceMessage(ResourceType* res, ResourceType::MessageType type, const QString& message, const QString& details)
+{
+    if (res)
+        notifyResourceMessage(res->id(), type, message, details);
+}
+
+void Resources::notifyResourceMessage(ResourceId id, ResourceType::MessageType type, const QString& message, const QString& details)
+{
+    Resource r = resource(id);
+    if (r.isValid())
+        Q_EMIT instance()->resourceMessage(r, type, message, details);
+}
+
+bool Resources::addResource(ResourceType* instance, Resource& resource)
+{
+    if (!instance  ||  instance->id() < 0)
+    {
+        // Instance is invalid - return an invalid resource.
+        delete instance;
+        resource = Resource::null();
+        return false;
+    }
+    auto it = mResources.constFind(instance->id());
+    if (it != mResources.constEnd())
+    {
+        // Instance ID already exists - return the existing resource.
+        delete instance;
+        resource = it.value();
+        return false;
+    }
+    // Add a new resource.
+    resource = Resource(instance);
+    mResources[instance->id()] = resource;
+    return true;
 }
 
 // vim: et sw=4:

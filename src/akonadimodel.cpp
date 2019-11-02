@@ -223,9 +223,9 @@ QVariant AkonadiModel::data(const QModelIndex& index, int role) const
                 if ((mime != KAlarmCal::MIME_ACTIVE  &&  mime != KAlarmCal::MIME_ARCHIVED  &&  mime != KAlarmCal::MIME_TEMPLATE)
                 ||  !item.hasPayload<KAEvent>())
                     return QVariant();
-                const KAEvent ev(event(item, index));   // this sets item.parentCollection()
+                Resource res;
+                const KAEvent ev(event(item, index, res));   // this sets item.parentCollection()
 
-                const Resource res = resource(item.parentCollection().id());
                 bool handled;
                 const QVariant value = eventData(role, index.column(), ev, res, handled);
                 if (handled)
@@ -494,30 +494,26 @@ KAEvent AkonadiModel::event(const QModelIndex& ix) const
     if (!ix.isValid())
         return KAEvent();
     Item item = ix.data(ItemRole).value<Item>();
-    return event(item, ix);
+    Resource r;
+    return event(item, ix, r);
 }
 
 /******************************************************************************
 * Return the event for an Item at a specified model index.
 * The item's parent collection is set, as is the event's collection ID.
 */
-KAEvent AkonadiModel::event(Akonadi::Item& item, const QModelIndex& ix, AkonadiResource** res) const
+KAEvent AkonadiModel::event(Akonadi::Item& item, const QModelIndex& ix, Resource& res) const
 {
 //TODO: Tune performance: This function is called very frequently with the same parameters
     if (ix.isValid())
     {
         const Collection pc = ix.data(ParentCollectionRole).value<Collection>();
         item.setParentCollection(pc);
-        AkonadiResource* akres = resource(pc.id()).resource<AkonadiResource>();
-        if (akres)
-        {
-            if (res)
-                *res = akres;
-            return akres->event(item);
-        }
+        res = resource(pc.id());
+        if (res.isValid())
+            return AkonadiResource::event(res, item);
     }
-    if (res)
-        *res = nullptr;
+    res = Resource::null();
     return KAEvent();
 }
 
@@ -584,14 +580,6 @@ void AkonadiModel::slotRowsInserted(const QModelIndex& parent, int start, int en
             {
                 setCollectionChanged(resource, collection, true);
                 Q_EMIT resourceAdded(resource);
-#if 0
-                if (!mCollectionsBeingCreated.contains(collection.remoteId())
-                &&  (collection.rights() & writableRights) == writableRights)
-                {
-                    // Update to current KAlarm format if necessary, and if the user agrees
-                    CalendarMigrator::updateToCurrentFormat(resource, false, MainWindow::mainMainWindow());
-                }
-#endif
 
                 if (!collection.hasAttribute<CompatibilityAttribute>())
                 {
@@ -612,8 +600,8 @@ void AkonadiModel::slotRowsInserted(const QModelIndex& parent, int start, int en
             if (item.isValid())
             {
                 qCDebug(KALARM_LOG) << "item id=" << item.id() << ", revision=" << item.revision();
-                AkonadiResource* akResource;
-                const KAEvent evnt = event(item, ix, &akResource);   // this sets item.parentCollection()
+                Resource res;
+                const KAEvent evnt = event(item, ix, res);   // this sets item.parentCollection()
                 if (evnt.isValid())
                 {
                     qCDebug(KALARM_LOG) << "AkonadiModel::slotRowsInserted: Event" << evnt.id();
@@ -622,8 +610,8 @@ void AkonadiModel::slotRowsInserted(const QModelIndex& parent, int start, int en
                 }
 
                 // Notify the resource containing the item.
-                if (akResource)
-                    akResource->notifyItemChanged(item, true);
+                if (res.isValid())
+                    AkonadiResource::notifyItemChanged(res, item, true);
             }
         }
     }
@@ -667,7 +655,8 @@ void AkonadiModel::slotRowsAboutToBeRemoved(const QModelIndex& parent, int start
     {
         const QModelIndex ix = index(row, 0, parent);
         Item item = ix.data(ItemRole).value<Item>();
-        const KAEvent evnt = event(item, ix);   // this sets item.parentCollection()
+        Resource r;
+        const KAEvent evnt = event(item, ix, r);   // this sets item.parentCollection()
         if (evnt.isValid())
         {
             qCDebug(KALARM_LOG) << "AkonadiModel::slotRowsAboutToBeRemoved: Collection:" << item.parentCollection().id() << ", Event ID:" << evnt.id();
@@ -705,9 +694,7 @@ void AkonadiModel::slotCollectionChanged(const Akonadi::Collection& c, const QSe
 */
 void AkonadiModel::setCollectionChanged(Resource& resource, const Collection& collection, bool checkCompat)
 {
-    AkonadiResource* akres = resource.resource<AkonadiResource>();
-    if (akres)
-        akres->notifyCollectionChanged(resource, collection, checkCompat);
+    AkonadiResource::notifyCollectionChanged(resource, collection, checkCompat);
     if (mMigrating)
     {
         mCollectionIdsBeingCreated.removeAll(collection.id());
@@ -729,6 +716,7 @@ void AkonadiModel::slotCollectionRemoved(const Collection& collection)
     const Collection::Id id = collection.id();
     qCDebug(KALARM_LOG) << "AkonadiModel::slotCollectionRemoved:" << id;
     mResources.remove(collection.id());
+    Resources::removeResource(collection.id());
     Q_EMIT collectionDeleted(id);
 }
 
@@ -782,14 +770,14 @@ void AkonadiModel::slotMonitoredItemChanged(const Akonadi::Item& item, const QSe
     const QModelIndex ix = itemIndex(item);
     if (ix.isValid())
     {
-        AkonadiResource* akResource;
+        Resource res;
         Item itm = item;
-        KAEvent evnt = event(itm, ix, &akResource);   // this sets item.parentCollection()
+        KAEvent evnt = event(itm, ix, res);   // this sets item.parentCollection()
         if (evnt.isValid())
         {
             // Notify the resource containing the item.
-            if (akResource)
-                akResource->notifyItemChanged(itm, false);
+            if (res.isValid())
+                AkonadiResource::notifyItemChanged(res, itm, false);
 
             // Wait to ensure that the base EntityTreeModel has processed the
             // itemChanged() signal first, before we Q_EMIT eventChanged().
@@ -955,7 +943,7 @@ Resource& AkonadiModel::updateResource(const Collection& collection) const
     else
     {
         // Create a new resource for the collection.
-        it = mResources.insert(collection.id(), Resource(new AkonadiResource(collection)));
+        it = mResources.insert(collection.id(), AkonadiResource::create(collection));
     }
     return it.value();
 }
@@ -963,9 +951,9 @@ Resource& AkonadiModel::updateResource(const Collection& collection) const
 /******************************************************************************
 * Display a message to the user.
 */
-void AkonadiModel::slotResourceMessage(ResourceId id, ResourceType::MessageType type, const QString& message, const QString& details)
+void AkonadiModel::slotResourceMessage(Resource&, ResourceType::MessageType type, const QString& message, const QString& details)
 {
-    handleResourceMessage(id, type, message, details);
+    handleResourceMessage(type, message, details);
 }
 
 // vim: et sw=4:

@@ -48,8 +48,21 @@ const QString KALARM_DIR_RESOURCE(QStringLiteral("akonadi_kalarm_dir_resource"))
 Collection::Rights WritableRights = Collection::CanChangeItem | Collection::CanCreateItem | Collection::CanDeleteItem;
 }
 
-AkonadiResource::AkonadiResource(const Collection& collection, bool temporary)
-    : ResourceType(collection.id(), temporary)
+Resource AkonadiResource::create(const Akonadi::Collection& collection)
+{
+    if (collection.id() < 0)
+        return Resource::null();    // return invalid Resource
+    Resource resource = Resources::resource(collection.id());
+    if (!resource.isValid())
+    {
+        // A resource with this ID doesn't exist, so create a new resource.
+        addResource(new AkonadiResource(collection), resource);
+    }
+    return resource;
+}
+
+AkonadiResource::AkonadiResource(const Collection& collection)
+    : ResourceType(collection.id())
     , mCollection(collection)
     , mValid(collection.id() >= 0)
 {
@@ -435,23 +448,23 @@ void AkonadiResource::handleCommandErrorChange(const KAEvent& event)
 /******************************************************************************
 * Return a reference to the Collection held by a resource.
 */
-Collection& AkonadiResource::collection(Resource& resource)
+Collection& AkonadiResource::collection(Resource& res)
 {
     static Collection nullCollection;
-    AkonadiResource* akres = resource.resource<AkonadiResource>();
+    AkonadiResource* akres = resource<AkonadiResource>(res);
     return akres ? akres->mCollection : nullCollection;
 }
-const Collection& AkonadiResource::collection(const Resource& resource)
+const Collection& AkonadiResource::collection(const Resource& res)
 {
     static const Collection nullCollection;
-    AkonadiResource* akres = resource.resource<AkonadiResource>();
+    const AkonadiResource* akres = resource<AkonadiResource>(res);
     return akres ? akres->mCollection : nullCollection;
 }
 
 /******************************************************************************
 * Return the event for an Akonadi Item.
 */
-KAEvent AkonadiResource::event(const Akonadi::Item& item) const
+KAEvent AkonadiResource::event(Resource& resource, const Akonadi::Item& item)
 {
     if (!item.isValid()  ||  !item.hasPayload<KAEvent>())
         return KAEvent();
@@ -461,7 +474,7 @@ KAEvent AkonadiResource::event(const Akonadi::Item& item) const
         if (item.hasAttribute<EventAttribute>())
             ev.setCommandError(item.attribute<EventAttribute>()->commandError());
         // Set collection ID using a const method, to avoid unnecessary copying of KAEvent
-        ev.setCollectionId_const(mCollection.id());
+        ev.setCollectionId_const(resource.id());
     }
     return ev;
 }
@@ -471,15 +484,18 @@ KAEvent AkonadiResource::event(const Akonadi::Item& item) const
 * Updates this resource's copy of the collection, and emits a signal if
 * properties of interest have changed.
 */
-void AkonadiResource::notifyCollectionChanged(Resource& resource, const Collection& collection, bool checkCompatibility)
+void AkonadiResource::notifyCollectionChanged(Resource& res, const Collection& collection, bool checkCompatibility)
 {
-    if (collection.id() != mCollection.id())
+    if (collection.id() != res.id())
+        return;
+    AkonadiResource* akres = resource<AkonadiResource>(res);
+    if (!akres)
         return;
 
     Changes change = NoChange;
 
     // Check for a read/write permission change
-    const Collection::Rights oldRights = mCollection.rights() & WritableRights;
+    const Collection::Rights oldRights = akres->mCollection.rights() & WritableRights;
     const Collection::Rights newRights = collection.rights() & WritableRights;
     if (newRights != oldRights)
     {
@@ -489,7 +505,7 @@ void AkonadiResource::notifyCollectionChanged(Resource& resource, const Collecti
 
     // Check for a change in content mime types
     // (e.g. when a collection is first created at startup).
-    if (collection.contentMimeTypes() != mCollection.contentMimeTypes())
+    if (collection.contentMimeTypes() != akres->mCollection.contentMimeTypes())
     {
         qCDebug(KALARM_LOG) << "AkonadiResource::setCollectionChanged:" << collection.id() << ": alarm types ->" << collection.contentMimeTypes();
         change |= AlarmTypes;
@@ -498,30 +514,33 @@ void AkonadiResource::notifyCollectionChanged(Resource& resource, const Collecti
     // Check for the collection being enabled/disabled.
     // Enabled/disabled can only be set by KAlarm (not the resource), so if the
     // attribute doesn't exist, it is ignored.
-    const CalEvent::Types oldEnabled = mCollection.hasAttribute<CollectionAttribute>()
-                                     ? mCollection.attribute<CollectionAttribute>()->enabled() : CalEvent::EMPTY;
+    const CalEvent::Types oldEnabled = akres->mCollection.hasAttribute<CollectionAttribute>()
+                                     ? akres->mCollection.attribute<CollectionAttribute>()->enabled() : CalEvent::EMPTY;
     const CalEvent::Types newEnabled = collection.hasAttribute<CollectionAttribute>()
                                      ? collection.attribute<CollectionAttribute>()->enabled() : CalEvent::EMPTY;
-    if (!mCollectionAttrChecked  ||  newEnabled != oldEnabled)
+    if (!akres->mCollectionAttrChecked  ||  newEnabled != oldEnabled)
     {
         qCDebug(KALARM_LOG) << "AkonadiResource::setCollectionChanged:" << collection.id() << ": enabled ->" << newEnabled;
-        mCollectionAttrChecked = true;
+        akres->mCollectionAttrChecked = true;
         change |= Enabled;
     }
 
-    mCollection = collection;
+    akres->mCollection = collection;
     if (change != NoChange)
-        Resources::notifySettingsChanged(this, change);
+        Resources::notifySettingsChanged(akres, change);
+
+    if (!resource<AkonadiResource>(res))
+        return;   // this resource has been deleted
 
     // Check for the backend calendar format changing.
-    bool hadCompat = mHaveCompatibilityAttribute;
-    mHaveCompatibilityAttribute = collection.hasAttribute<CompatibilityAttribute>();
-    if (mHaveCompatibilityAttribute)
+    bool hadCompat = akres->mHaveCompatibilityAttribute;
+    akres->mHaveCompatibilityAttribute = collection.hasAttribute<CompatibilityAttribute>();
+    if (akres->mHaveCompatibilityAttribute)
     {
         // The attribute must exist in order to know the calendar format.
         if (checkCompatibility
         ||  !hadCompat
-        ||  *collection.attribute<CompatibilityAttribute>() != *mCollection.attribute<CompatibilityAttribute>())
+        ||  *collection.attribute<CompatibilityAttribute>() != *akres->mCollection.attribute<CompatibilityAttribute>())
         {
             // Update to current KAlarm format if necessary, and if the user agrees.
             // Create a new temporary 'Resource' object, because the one passed
@@ -529,7 +548,8 @@ void AkonadiResource::notifyCollectionChanged(Resource& resource, const Collecti
             // CompatibilityAttribute before CalendarMigration finishes, due to
             // AkonadiModel still containing an out of date value.
             qCDebug(KALARM_LOG) << "AkonadiResource::setCollectionChanged:" << collection.id() << ": compatibility ->" << collection.attribute<CompatibilityAttribute>()->compatibility();
-            Resource res(new AkonadiResource(collection, true));
+            // Note that the AkonadiResource will be deleted once no more
+            // QSharedPointers reference it.
             CalendarMigrator::updateToCurrentFormat(res, false);
         }
     }
@@ -538,11 +558,12 @@ void AkonadiResource::notifyCollectionChanged(Resource& resource, const Collecti
 /******************************************************************************
 * Called when an Item has been changed or created in AkonadiModel.
 */
-void AkonadiResource::notifyItemChanged(const Akonadi::Item& item, bool created)
+void AkonadiResource::notifyItemChanged(Resource& res, const Akonadi::Item& item, bool created)
 {
-    int i = mItemsBeingCreated.removeAll(item.id());
+    AkonadiResource* akres = resource<AkonadiResource>(res);
+    int i = akres->mItemsBeingCreated.removeAll(item.id());
     if (!created  ||  i)
-        checkQueuedItemModifyJob(item);    // execute the next job queued for the item
+        akres->checkQueuedItemModifyJob(item);    // execute the next job queued for the item
 }
 
 /******************************************************************************

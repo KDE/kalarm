@@ -20,6 +20,7 @@
 
 #include "resourcetype.h"
 
+#include "resources.h"
 #include "preferences.h"
 #include "kalarm_debug.h"
 
@@ -27,20 +28,13 @@
 #include <KColorUtils>
 #include <KLocalizedString>
 
-QHash<ResourceId, ResourceType*> ResourceType::mInstances;
-
-ResourceType::ResourceType(ResourceId id, bool temporary)
+ResourceType::ResourceType(ResourceId id)
     : mId(id)
-    , mTemporary(temporary)
 {
-    if (!temporary)
-        mInstances[mId] = this;
 }
 
 ResourceType::~ResourceType()
 {
-    if (!mTemporary)
-        mInstances.remove(mId);
 }
 
 bool ResourceType::isEnabled(CalEvent::Type type) const
@@ -110,6 +104,11 @@ bool ResourceType::isBeingDeleted() const
     return mBeingDeleted;
 }
 
+bool ResourceType::addResource(ResourceType* type, Resource& resource)
+{
+    return Resources::addResource(type, resource);
+}
+
 void ResourceType::setLoaded(bool loaded) const
 {
     mLoaded = loaded;
@@ -123,6 +122,16 @@ QString ResourceType::storageTypeStr(bool description, bool file, bool local) co
          : (file && !local) ? i18nc("@info", "URL")
          : (!file && local) ? i18nc("@info Directory in filesystem", "Directory")
          : QString();
+}
+
+ResourceType* ResourceType::data(Resource& resource)
+{
+    return resource.mResource.data();
+}
+
+const ResourceType* ResourceType::data(const Resource& resource)
+{
+    return resource.mResource.data();
 }
 
 // vim: et sw=4:
