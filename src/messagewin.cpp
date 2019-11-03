@@ -36,6 +36,7 @@
 #include "pushbutton.h"
 #include "shellprocess.h"
 #include "synchtimer.h"
+#include "resources/resources.h"
 #include "kalarm_debug.h"
 
 #include <kpimtextedit/texttospeech.h>
@@ -1007,7 +1008,7 @@ void MessageWin::readProperties(const KConfigGroup& config)
     mDontShowAgain       = config.readEntry("DontShowAgain", QString());
     mShowEdit            = false;
     // Temporarily initialise mResource and mEventId - they will be set by redisplayAlarm()
-    mResource            = AkonadiModel::instance()->resource(collectionId);
+    mResource            = Resources::resource(collectionId);
     mEventId             = EventId(collectionId, eventId);
     qCDebug(KALARM_LOG) << "MessageWin::readProperties:" << eventId;
     if (mAlarmType != KAAlarm::INVALID_ALARM)
@@ -1129,7 +1130,7 @@ bool MessageWin::retrieveEvent(KAEvent& event, Resource& resource, bool& showEdi
         // The event isn't in the displaying calendar.
         // Try to retrieve it from the archive calendar.
         KAEvent* ev = nullptr;
-        Resource archiveRes = CollectionControlModel::getStandard(CalEvent::ARCHIVED);
+        Resource archiveRes = Resources::getStandard(CalEvent::ARCHIVED);
         if (archiveRes.isValid())
             ev = AlarmCalendar::resources()->event(EventId(archiveRes.id(), CalEvent::uid(mEventId.eventId(), CalEvent::ARCHIVED)));
         if (!ev)
@@ -1159,7 +1160,7 @@ bool MessageWin::reinstateFromDisplaying(const Event::Ptr& kcalEvent, KAEvent& e
     Akonadi::Collection::Id collectionId;
     event.reinstateFromDisplaying(kcalEvent, collectionId, showEdit, showDefer);
     event.setCollectionId(collectionId);
-    resource = AkonadiModel::instance()->resource(collectionId);
+    resource = Resources::resource(collectionId);
     qCDebug(KALARM_LOG) << "MessageWin::reinstateFromDisplaying:" << EventId(event) << ": success";
     return true;
 }

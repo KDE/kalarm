@@ -24,6 +24,7 @@
 #include "resource.h"
 
 #include <QObject>
+class QEventLoop;
 
 using namespace KAlarmCal;
 
@@ -52,6 +53,71 @@ public:
      */
     static void removeResource(ResourceId);
 
+    /** Return the enabled resources which contain a specified alarm type.
+     *  If 'writable' is true, only writable resources are included.
+     */
+    static QVector<Resource> enabledResources(CalEvent::Type, bool writable);
+
+    /** Return the standard resource for an alarm type. This is the resource
+     *  which can be set as the default to add new alarms to.
+     *  Only enabled and writable resources can be standard.
+     *  In the case of archived alarm resources, if no resource is specified
+     *  as standard and there is exactly one writable archived alarm resource,
+     *  that resource will be automatically set as standard.
+     *
+     *  @param type  alarm type
+     *  @return standard resource, or null if none.
+     */
+    static Resource getStandard(CalEvent::Type type);
+
+    /** Return whether a resource is the standard resource for a specified alarm
+     *  type. Only enabled and writable resources can be standard.
+     *  In the case of archived alarms, if no resource is specified as standard
+     *  and the resource is the only writable archived alarm resource, it will
+     *  be automatically set as standard.
+     */
+    static bool isStandard(const Resource& resource, CalEvent::Type);
+
+    /** Return the alarm type(s) for which a resource is the standard resource.
+     *  Only enabled and writable resources can be standard.
+     *  @param useDefault false to return the defined standard types, if any;
+     *                    true to return the types for which it is the standard
+     *                    or only resource.
+     */
+    static CalEvent::Types standardTypes(const Resource& resource, bool useDefault = false);
+
+    /** Set or clear a resource as the standard resource for a specified alarm
+     *  type. This does not affect its status for other alarm types.
+     *  The resource must be writable and enabled for the type, to set
+     *  standard = true.
+     *  If the resource is being set as standard, the standard status for the
+     *  alarm type is cleared for any other resources.
+     */
+    static void setStandard(Resource& resource, CalEvent::Type, bool standard);
+
+    /** Set which alarm types a resource is the standard resource for.
+     *  Its standard status is cleared for other alarm types.
+     *  The resource must be writable and enabled for the type, to set
+     *  standard = true.
+     *  If the resource is being set as standard for any alarm types, the
+     *  standard status is cleared for those alarm types for any other resources.
+     */
+    static void setStandard(Resource& resource, CalEvent::Types);
+
+    /** Wait until one or all enabled resources have been populated,
+     *  i.e. whether their events have been fetched.
+     *  @param   resId    resource ID, or -1 for all resources
+     *  @param   timeout  timeout in seconds, or 0 for no timeout
+     *  @return  true if successful.
+     */
+    static bool waitUntilPopulated(ResourceId resId = -1, int timeout = 0);
+
+    /** Called to notify that all configured resources have now been created. */
+    static void notifyResourcesCreated();
+
+    /** Called by a resource to notify that loading has successfully completed. */
+    static void notifyResourceLoaded(const ResourceType*);
+
     /** Called by a resource to notify that its settings have changed.
      *  This will cause the settingsChanged() signal to be emitted.
      */
@@ -75,6 +141,15 @@ Q_SIGNALS:
     /** Emitted when a resource's settings have changed. */
     void settingsChanged(Resource&, ResourceType::Changes);
 
+    /** Emitted when a resource's events have been successfully loaded. */
+    void resourceLoaded(Resource&);
+
+    /** Emitted when all resources have been loaded for the first time. */
+    void resourcesPopulated();
+
+    /** Emitted when a resource's config and settings have been removed. */
+    void resourceRemoved(ResourceId);
+
     /** Emitted when a resource message should be displayed to the user.
      *  @note  Connections to this signal should use Qt::QueuedConnection type
      *         to allow processing to continue while the user message is displayed.
@@ -93,9 +168,14 @@ private:
      *  @return true if a new resource has been created, false if invalid or already exists.
      */
     static bool addResource(ResourceType* type, Resource& resource);
+    static void checkResourcesPopulated();
+    static bool isLoaded(ResourceId);
 
     static Resources*                  mInstance;    // the unique instance
     static QHash<ResourceId, Resource> mResources;   // contains all ResourceType instances with an ID
+    static QEventLoop*                 mPopulatedCheckLoop;
+    static bool                        mCreated;     // all resources have been created
+    static bool                        mPopulated;   // all resources have been loaded once
 
     friend class ResourceType;
 };

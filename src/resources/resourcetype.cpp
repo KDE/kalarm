@@ -112,6 +112,7 @@ bool ResourceType::addResource(ResourceType* type, Resource& resource)
 void ResourceType::setLoaded(bool loaded) const
 {
     mLoaded = loaded;
+    Resources::notifyResourceLoaded(this);
 }
 
 QString ResourceType::storageTypeStr(bool description, bool file, bool local) const

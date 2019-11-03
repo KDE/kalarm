@@ -38,6 +38,7 @@
 #include "shellprocess.h"
 #include "startdaytimer.h"
 #include "traywindow.h"
+#include "resources/resources.h"
 #include "kalarm_debug.h"
 
 #include <kalarmcal/datetime.h>
@@ -1153,7 +1154,7 @@ void KAlarmApp::checkWritableCalendar()
     CollectionControlModel::removeDuplicateResources();
 
     // Find whether there are any writable active alarm calendars
-    const bool active = !CollectionControlModel::enabledCollections(CalEvent::ACTIVE, true).isEmpty();
+    const bool active = !Resources::enabledResources(CalEvent::ACTIVE, true).isEmpty();
     if (!active)
     {
         qCWarning(KALARM_LOG) << "KAlarmApp::checkWritableCalendar: No writable active calendar";
@@ -1171,7 +1172,7 @@ void KAlarmApp::checkWritableCalendar()
 */
 void KAlarmApp::purgeNewArchivedDefault(const Resource& resource)
 {
-    if (CollectionControlModel::isStandard(resource, CalEvent::ARCHIVED))
+    if (Resources::isStandard(resource, CalEvent::ARCHIVED))
     {
         // Allow time (1 minute) for AkonadiModel to be populated with the
         // resource's events before purging it.
@@ -1247,7 +1248,7 @@ QStringList KAlarmApp::scheduledAlarmList()
     for (const KAEvent& event : events)
     {
         const KADateTime dateTime = event.nextTrigger(KAEvent::DISPLAY_TRIGGER).effectiveKDateTime().toLocalZone();
-        const Resource resource = AkonadiModel::instance()->resource(event.resourceId());
+        const Resource resource = Resources::resource(event.resourceId());
         QString text(resource.configName() + QLatin1String(":"));
         text += event.id() + QLatin1Char(' ')
              +  dateTime.toString(QStringLiteral("%Y%m%dT%H%M "))
@@ -2365,7 +2366,7 @@ bool KAlarmApp::initCheck(bool calendarOnly, bool waitForCollection, Akonadi::Co
     if (waitForCollection)
     {
         // Wait for one or all calendar resources to be populated
-        if (!CollectionControlModel::instance()->waitUntilPopulated(collectionId, AKONADI_TIMEOUT))
+        if (!Resources::waitUntilPopulated(collectionId, AKONADI_TIMEOUT))
             return false;
     }
     return true;

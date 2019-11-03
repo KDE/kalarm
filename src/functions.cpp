@@ -37,6 +37,7 @@
 #include "shellprocess.h"
 #include "templatelistview.h"
 #include "templatemenuaction.h"
+#include "resources/resources.h"
 #include "config-kalarm.h"
 #include "kalarm_debug.h"
 
@@ -725,7 +726,7 @@ void purgeArchive(int purgeDays)
         return;
     qCDebug(KALARM_LOG) << "KAlarm::purgeArchive:" << purgeDays;
     const QDate cutoff = KADateTime::currentLocalDate().addDays(-purgeDays);
-    const Resource resource = CollectionControlModel::getStandard(CalEvent::ARCHIVED);
+    const Resource resource = Resources::getStandard(CalEvent::ARCHIVED);
     if (!resource.isValid())
         return;
     KAEvent::List events = AlarmCalendar::resources()->events(resource);
@@ -1098,7 +1099,7 @@ namespace
 */
 void editNewTemplate(EditAlarmDlg::Type type, const KAEvent* preset, QWidget* parent)
 {
-    if (CollectionControlModel::enabledCollections(CalEvent::TEMPLATE, true).isEmpty())
+    if (Resources::enabledResources(CalEvent::TEMPLATE, true).isEmpty())
     {
         KAMessageBox::sorry(parent, i18nc("@info", "You must enable a template calendar to save the template in"));
         return;

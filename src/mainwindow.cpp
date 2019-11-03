@@ -1427,8 +1427,8 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
 void MainWindow::slotCalendarStatusChanged()
 {
     // Find whether there are any writable calendars
-    bool active  = !CollectionControlModel::enabledCollections(CalEvent::ACTIVE, true).isEmpty();
-    bool templat = !CollectionControlModel::enabledCollections(CalEvent::TEMPLATE, true).isEmpty();
+    bool active  = !Resources::enabledResources(CalEvent::ACTIVE, true).isEmpty();
+    bool templat = !Resources::enabledResources(CalEvent::TEMPLATE, true).isEmpty();
     for (int i = 0, end = mWindowList.count();  i < end;  ++i)
     {
         MainWindow* w = mWindowList[i];
@@ -1494,7 +1494,7 @@ void MainWindow::slotSelection()
     }
 
     qCDebug(KALARM_LOG) << "MainWindow::slotSelection: true";
-    mActionCreateTemplate->setEnabled((count == 1) && !CollectionControlModel::enabledCollections(CalEvent::TEMPLATE, true).isEmpty());
+    mActionCreateTemplate->setEnabled((count == 1) && !Resources::enabledResources(CalEvent::TEMPLATE, true).isEmpty());
     mActionExportAlarms->setEnabled(true);
     mActionExport->setEnabled(true);
     mActionCopy->setEnabled(active && count == 1);

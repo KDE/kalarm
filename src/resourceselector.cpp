@@ -33,6 +33,7 @@
 #include "messagebox.h"
 #include "packedlayout.h"
 #include "preferences.h"
+#include "resources/resources.h"
 #include "kalarm_debug.h"
 
 #include <KLocalizedString>
@@ -98,8 +99,8 @@ ResourceSelector::ResourceSelector(QWidget* parent)
     connect(mEditButton, &QPushButton::clicked, this, &ResourceSelector::editResource);
     connect(mDeleteButton, &QPushButton::clicked, this, &ResourceSelector::removeResource);
 
-    connect(AkonadiModel::instance(), &AkonadiModel::collectionDeleted,
-                                this, &ResourceSelector::selectionChanged);
+    connect(Resources::instance(), &Resources::resourceRemoved,
+                             this, &ResourceSelector::selectionChanged);
 
     connect(mAlarmType, static_cast<void (QComboBox::*)(int)>(&QComboBox::activated), this, &ResourceSelector::alarmTypeSelected);
     QTimer::singleShot(0, this, SLOT(alarmTypeSelected()));
@@ -134,7 +135,7 @@ void ResourceSelector::alarmTypeSelected()
     // in reinstateAlarmTypeScrollBars() description).
     mListView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     mListView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    mListView->collectionModel()->setEventTypeFilter(mCurrentAlarmType);
+    mListView->resourceModel()->setEventTypeFilter(mCurrentAlarmType);
     mAddButton->setWhatsThis(addTip);
     mAddButton->setToolTip(addTip);
     // WORKAROUND: Switch scroll bars back on after allowing geometry to update ...
@@ -231,7 +232,7 @@ void ResourceSelector::removeResource()
     const QString name = resource.configName();
     // Check if it's the standard or only resource for at least one type.
     const CalEvent::Types allTypes      = resource.alarmTypes();
-    const CalEvent::Types standardTypes = CollectionControlModel::standardTypes(resource, true);
+    const CalEvent::Types standardTypes = Resources::standardTypes(resource, true);
     const CalEvent::Type  currentType   = currentResourceType();
     const CalEvent::Type  stdType = (standardTypes & CalEvent::ACTIVE)   ? CalEvent::ACTIVE
                                   : (standardTypes & CalEvent::ARCHIVED) ? CalEvent::ARCHIVED
@@ -349,7 +350,7 @@ void ResourceSelector::contextMenuRequested(const QPoint& viewportPos)
     {
         const QModelIndex index = mListView->indexAt(viewportPos);
         if (index.isValid())
-            resource = mListView->collectionModel()->resource(index);
+            resource = mListView->resourceModel()->resource(index);
         else
             mListView->clearSelection();
     }
@@ -387,7 +388,7 @@ void ResourceSelector::contextMenuRequested(const QPoint& viewportPos)
         default:  break;
     }
     mActionSetDefault->setText(text);
-    bool standard = CollectionControlModel::isStandard(resource, type);
+    bool standard = Resources::isStandard(resource, type);
     mActionSetDefault->setChecked(active && writable && standard);
     mActionSetDefault->setEnabled(active && writable);
     mContextMenu->popup(mListView->viewport()->mapToGlobal(viewportPos));
@@ -420,7 +421,7 @@ void ResourceSelector::archiveDaysChanged(int days)
 {
     if (days)
     {
-        const Resource resource = CollectionControlModel::getStandard(CalEvent::ARCHIVED);
+        const Resource resource = Resources::getStandard(CalEvent::ARCHIVED);
         if (resource.isValid())
             theApp()->purgeNewArchivedDefault(resource);
     }
@@ -439,7 +440,7 @@ void ResourceSelector::setStandard()
         bool standard = mActionSetDefault->isChecked();
         if (standard)
             resource.setEnabled(alarmType, true);
-        CollectionControlModel::setStandard(resource, alarmType, standard);
+        Resources::setStandard(resource, alarmType, standard);
         if (alarmType == CalEvent::ARCHIVED)
             theApp()->purgeNewArchivedDefault(resource);
     }
@@ -524,7 +525,7 @@ void ResourceSelector::showInfo()
         const QString enabled = resource.isEnabled(alarmType)
                            ? i18nc("@info", "Enabled")
                            : i18nc("@info", "Disabled");
-        const QString std = CollectionControlModel::isStandard(resource, alarmType)
+        const QString std = Resources::isStandard(resource, alarmType)
                            ? i18nc("@info Parameter in 'Default calendar: Yes/No'", "Yes")
                            : i18nc("@info Parameter in 'Default calendar: Yes/No'", "No");
         const QString text = xi18nc("@info",

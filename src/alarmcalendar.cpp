@@ -127,7 +127,7 @@ AlarmCalendar::AlarmCalendar()
     connect(model, &AkonadiModel::eventsAdded, this, &AlarmCalendar::slotEventsAdded);
     connect(model, &AkonadiModel::eventsToBeRemoved, this, &AlarmCalendar::slotEventsToBeRemoved);
     connect(model, &AkonadiModel::eventChanged, this, &AlarmCalendar::slotEventChanged);
-    connect(model, &AkonadiModel::collectionsPopulated, this, &AlarmCalendar::slotCollectionsPopulated);
+    connect(Resources::instance(), &Resources::resourcesPopulated, this, &AlarmCalendar::slotResourcesPopulated);
     connect(Resources::instance(), &Resources::settingsChanged, this, &AlarmCalendar::slotResourceSettingsChanged);
 }
 
@@ -513,7 +513,7 @@ void AlarmCalendar::slotResourceSettingsChanged(Resource& resource, ResourceType
 /******************************************************************************
 * Called when all resources have been populated for the first time.
 */
-void AlarmCalendar::slotCollectionsPopulated()
+void AlarmCalendar::slotResourcesPopulated()
 {
     // Now that all calendars have been processed, all repeat-at-login alarms
     // will have been triggered. Prevent any new or updated repeat-at-login
@@ -537,7 +537,7 @@ void AlarmCalendar::slotEventsAdded(const AkonadiModel::EventList& events)
 */
 void AlarmCalendar::slotEventChanged(const AkonadiModel::Event& event)
 {
-    Resource resource = AkonadiModel::instance()->resource(event.collection.id());
+    Resource resource = Resources::resource(event.collection.id());
     if (!event.isConsistent())
     {
         qCCritical(KALARM_LOG) << "AlarmCalendar::slotEventChanged: Inconsistent AkonadiModel::Event: event:" << event.event.collectionId() << ", collection" << event.collection.id();
@@ -586,7 +586,7 @@ void AlarmCalendar::slotEventsToBeRemoved(const AkonadiModel::EventList& events)
             qCCritical(KALARM_LOG) << "AlarmCalendar::slotEventsToBeRemoved: Inconsistent AkonadiModel::Event: event:" << event.event.collectionId() << ", collection" << event.collection.id();
         else if (mEventMap.contains(event.eventId()))
         {
-            Resource resource = AkonadiModel::instance()->resource(event.collection.id());
+            Resource resource = Resources::resource(event.collection.id());
             deleteEventInternal(event.event, resource, false);
         }
     }
@@ -1074,7 +1074,7 @@ bool AlarmCalendar::modifyEvent(const EventId& oldEventId, KAEvent& newEvent)
         }
         if (noNewId)
             newEvent.setEventId(CalFormat::createUniqueId());
-        Resource resource = AkonadiModel::instance()->resource(oldEventId.collectionId());
+        Resource resource = Resources::resource(oldEventId.collectionId());
         if (!resource.isValid())
             return false;
         // Don't add new event to mEventMap yet - its Akonadi item id is not yet known
@@ -1175,7 +1175,7 @@ bool AlarmCalendar::deleteDisplayEvent(const QString& eventID, bool saveit)
 */
 CalEvent::Type AlarmCalendar::deleteEventInternal(const KAEvent& event, bool deleteFromAkonadi)
 {
-    Resource resource = AkonadiModel::instance()->resource(event.collectionId());
+    Resource resource = Resources::resource(event.collectionId());
     if (!resource.isValid())
         return CalEvent::EMPTY;
     return deleteEventInternal(event.id(), event, resource, deleteFromAkonadi);

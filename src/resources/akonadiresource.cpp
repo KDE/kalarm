@@ -480,6 +480,21 @@ KAEvent AkonadiResource::event(Resource& resource, const Akonadi::Item& item)
 }
 
 /******************************************************************************
+* Called when a collection has been populated.
+* Emits a signal if all collections have been populated.
+*/
+void AkonadiResource::notifyCollectionLoaded(ResourceId id)
+{
+    if (id >= 0)
+    {
+        Resource res = Resources::resource(id);
+        AkonadiResource* akres = resource<AkonadiResource>(res);
+        if (akres)
+            akres->setLoaded(true);
+    }
+}
+
+/******************************************************************************
 * Called when the collection's properties or content have changed.
 * Updates this resource's copy of the collection, and emits a signal if
 * properties of interest have changed.

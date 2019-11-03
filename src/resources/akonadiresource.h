@@ -269,14 +269,17 @@ public:
     static const Akonadi::Collection& collection(const Resource&);
 //    Akonadi::Collection& collection()   { return mCollection; }
 
-    /** Return the event for an Akonadi Item belonging to this resource. */
+    /** Return the event for an Akonadi Item belonging to a resource. */
     static KAEvent event(Resource&, const Akonadi::Item&);
     using QObject::event;   // prevent warning about hidden virtual method
 
-    /** Called to notify this resource that its Collection has changed. */
+    /** Called to notify that a resource's Collection has been populated. */
+    static void notifyCollectionLoaded(ResourceId);
+
+    /** Called to notify that a resource's Collection has changed. */
     static void notifyCollectionChanged(Resource&, const Akonadi::Collection&, bool checkCompatibility);
 
-    /** Called to notify this resource that an Akonadi Item belonging it has
+    /** Called to notify that an Akonadi Item belonging to a resource has
      *  changed or been created.
      */
     static void notifyItemChanged(Resource&, const Akonadi::Item&, bool created);

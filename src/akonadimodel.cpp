@@ -64,8 +64,6 @@ using namespace KAlarmCal;
 // compatible with EntityTreeModel::UserRole.
 static_assert((int)CalendarDataModel::UserRole>=(int)Akonadi::EntityTreeModel::UserRole, "CalendarDataModel::UserRole wrong value");
 
-static const Collection::Rights writableRights = Collection::CanChangeItem | Collection::CanCreateItem | Collection::CanDeleteItem;
-
 /*=============================================================================
 = Class: AkonadiModel
 =============================================================================*/
@@ -123,6 +121,7 @@ AkonadiModel::AkonadiModel(ChangeRecorder* monitor, QObject* parent)
 
     connect(this, &AkonadiModel::rowsInserted, this, &AkonadiModel::slotRowsInserted);
     connect(this, &AkonadiModel::rowsAboutToBeRemoved, this, &AkonadiModel::slotRowsAboutToBeRemoved);
+    connect(this, &Akonadi::EntityTreeModel::collectionTreeFetched, this, &AkonadiModel::slotCollectionTreeFetched);
     connect(this, &Akonadi::EntityTreeModel::collectionPopulated, this, &AkonadiModel::slotCollectionPopulated);
     connect(monitor, &Monitor::itemChanged, this, &AkonadiModel::slotMonitoredItemChanged);
 
@@ -717,7 +716,6 @@ void AkonadiModel::slotCollectionRemoved(const Collection& collection)
     qCDebug(KALARM_LOG) << "AkonadiModel::slotCollectionRemoved:" << id;
     mResources.remove(collection.id());
     Resources::removeResource(collection.id());
-    Q_EMIT collectionDeleted(id);
 }
 
 /******************************************************************************
@@ -735,14 +733,22 @@ void AkonadiModel::slotCollectionBeingCreated(const QString& path, Akonadi::Coll
 }
 
 /******************************************************************************
+* Called when the collection tree has been fetched for the first time.
+*/
+void AkonadiModel::slotCollectionTreeFetched()
+{
+    Resources::notifyResourcesCreated();
+}
+
+/******************************************************************************
 * Called when a collection has been populated.
 */
-void AkonadiModel::slotCollectionPopulated(Akonadi::Collection::Id)
+void AkonadiModel::slotCollectionPopulated(Akonadi::Collection::Id id)
 {
+    AkonadiResource::notifyCollectionLoaded(id);
     if (isFullyPopulated())
     {
         // All collections have now been populated.
-        Q_EMIT collectionsPopulated();
         // Prevent the signal being emitted more than once.
         disconnect(this, &Akonadi::EntityTreeModel::collectionPopulated, this, &AkonadiModel::slotCollectionPopulated);
     }

@@ -99,7 +99,7 @@ void ItemListModel::resourceSettingsChanged(Resource& resource, ResourceType::Ch
 {
     if (!resource.isValid())
         return;
-    if (change == AkonadiModel::Enabled)
+    if (change == ResourceType::Enabled)
     {
         // Ensure that items for a newly enabled resource are always ordered
         // correctly. Note that invalidateFilter() is not adequate for this.
@@ -107,6 +107,10 @@ void ItemListModel::resourceSettingsChanged(Resource& resource, ResourceType::Ch
     }
 }
 
+/******************************************************************************
+* Returns whether the item in the given source row and parent should be
+* included in the filtered model.
+*/
 bool ItemListModel::filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const
 {
     if (!EntityMimeTypeFilterModel::filterAcceptsRow(sourceRow, sourceParent))
@@ -115,7 +119,7 @@ bool ItemListModel::filterAcceptsRow(int sourceRow, const QModelIndex& sourcePar
     const QModelIndex sourceIndex = sourceModel()->index(sourceRow, 0, sourceParent);
     const CalEvent::Type type = static_cast<CalEvent::Type>(sourceModel()->data(sourceIndex, AkonadiModel::StatusRole).toInt());
     const Collection parent = sourceIndex.data(AkonadiModel::ParentCollectionRole).value<Collection>();
-    const Resource parentResource = AkonadiModel::instance()->resource(parent.id());
+    const Resource parentResource = Resources::resource(parent.id());
     return parentResource.isEnabled(type);
 }
 

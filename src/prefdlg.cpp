@@ -48,6 +48,7 @@
 #include "timespinbox.h"
 #include "timezonecombo.h"
 #include "traywindow.h"
+#include "resources/resources.h"
 #include "config-kalarm.h"
 #include "kalarm_debug.h"
 
@@ -878,7 +879,7 @@ StorePrefTab::StorePrefTab(StackedScrollGroup* scrollGroup)
 
     mClearArchived = new QPushButton(i18nc("@action:button", "Clear Archived Alarms"), group);
     connect(mClearArchived, &QAbstractButton::clicked, this, &StorePrefTab::slotClearArchived);
-    mClearArchived->setWhatsThis((CollectionControlModel::enabledCollections(CalEvent::ARCHIVED, false).count() <= 1)
+    mClearArchived->setWhatsThis((Resources::enabledResources(CalEvent::ARCHIVED, false).count() <= 1)
             ? i18nc("@info:whatsthis", "Delete all existing archived alarms.")
             : i18nc("@info:whatsthis", "Delete all existing archived alarms (from the default archived alarm calendar only)."));
     grid->addWidget(mClearArchived, 2, 1, Qt::AlignLeft);
@@ -923,7 +924,7 @@ void StorePrefTab::slotArchivedToggled(bool)
 {
     bool keep = mKeepArchived->isChecked();
     if (keep  &&  !mOldKeepArchived  &&  mCheckKeepChanges
-    &&  !CollectionControlModel::getStandard(CalEvent::ARCHIVED).isValid())
+    &&  !Resources::getStandard(CalEvent::ARCHIVED).isValid())
     {
         KAMessageBox::sorry(topLayout()->parentWidget(),
              xi18nc("@info", "<para>A default calendar is required in order to archive alarms, but none is currently enabled.</para>"
@@ -941,7 +942,7 @@ void StorePrefTab::slotArchivedToggled(bool)
 
 void StorePrefTab::slotClearArchived()
 {
-    bool single = CollectionControlModel::enabledCollections(CalEvent::ARCHIVED, false).count() <= 1;
+    bool single = Resources::enabledResources(CalEvent::ARCHIVED, false).count() <= 1;
     if (KAMessageBox::warningContinueCancel(topLayout()->parentWidget(),
                                             single ? i18nc("@info", "Do you really want to delete all archived alarms?")
                                                    : i18nc("@info", "Do you really want to delete all alarms in the default archived alarm calendar?"))

@@ -171,7 +171,7 @@ void NewAlarmAction::slotSelected(QAction* action)
 void NewAlarmAction::slotCalendarStatusChanged()
 {
     // Find whether there are any writable active alarm calendars
-    bool active = !CollectionControlModel::enabledCollections(CalEvent::ACTIVE, true).isEmpty();
+    bool active = !Resources::enabledResources(CalEvent::ACTIVE, true).isEmpty();
     bool haveEvents = TemplateListModel::all()->haveEvents();
     mTemplateAction->setEnabled(active && haveEvents);
     setEnabled(active);

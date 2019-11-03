@@ -34,7 +34,6 @@
 
 using namespace KAlarmCal;
 
-class QEventLoop;
 namespace Akonadi
 {
     class EntityMimeTypeFilterModel;
@@ -54,9 +53,7 @@ class CollectionListModel : public KDescendantsProxyModel
         void setEventTypeFilter(CalEvent::Type);
         void setFilterWritable(bool writable);
         void setFilterEnabled(bool enabled);
-        void useCollectionColour(bool use)   { mUseCollectionColour = use; }
-        Akonadi::Collection collection(int row) const;
-        Akonadi::Collection collection(const QModelIndex&) const;
+        void useResourceColour(bool use)   { mUseResourceColour = use; }
         Resource    resource(int row) const;
         Resource    resource(const QModelIndex&) const;
         QModelIndex resourceIndex(const Resource&) const;
@@ -64,7 +61,7 @@ class CollectionListModel : public KDescendantsProxyModel
         QVariant data(const QModelIndex&, int role = Qt::DisplayRole) const override;
 
     private:
-        bool mUseCollectionColour{true};
+        bool mUseResourceColour{true};
 };
 
 
@@ -82,8 +79,6 @@ class CollectionCheckListModel : public KCheckableProxyModel
     public:
         explicit CollectionCheckListModel(CalEvent::Type, QObject* parent = nullptr);
         ~CollectionCheckListModel();
-        Akonadi::Collection collection(int row) const;
-        Akonadi::Collection collection(const QModelIndex&) const;
         Resource  resource(int row) const;
         Resource  resource(const QModelIndex&) const;
         QVariant data(const QModelIndex&, int role = Qt::DisplayRole) const override;
@@ -120,8 +115,6 @@ class CollectionFilterCheckListModel : public QSortFilterProxyModel
     public:
         explicit CollectionFilterCheckListModel(QObject* parent = nullptr);
         void setEventTypeFilter(CalEvent::Type);
-        Akonadi::Collection collection(int row) const;
-        Akonadi::Collection collection(const QModelIndex&) const;
         Resource  resource(int row) const;
         Resource  resource(const QModelIndex&) const;
         QVariant data(const QModelIndex&, int role = Qt::DisplayRole) const override;
@@ -149,9 +142,7 @@ class CollectionView : public QListView
         Q_OBJECT
     public:
         explicit CollectionView(CollectionFilterCheckListModel*, QWidget* parent = nullptr);
-        CollectionFilterCheckListModel* collectionModel() const  { return static_cast<CollectionFilterCheckListModel*>(model()); }
-        Akonadi::Collection  collection(int row) const;
-        Akonadi::Collection  collection(const QModelIndex&) const;
+        CollectionFilterCheckListModel* resourceModel() const  { return static_cast<CollectionFilterCheckListModel*>(model()); }
         Resource  resource(int row) const;
         Resource  resource(const QModelIndex&) const;
 
@@ -179,35 +170,6 @@ class CollectionControlModel : public Akonadi::FavoriteCollectionsModel
     public:
         static CollectionControlModel* instance();
 
-        /** Return the standard collection for a specified mime type.
-         *  If the mime type is 'archived' and there is no standard collection, the
-         *  only writable archived collection is set to be the standard.
-         *  @param type  The mime type
-         *  Reply = invalid collection if there is no standard collection.
-         */
-        static Resource getStandard(CalEvent::Type type);
-
-        /** Return whether a collection is the standard collection for a specified
-         *  mime type. */
-        static bool isStandard(const Resource&, CalEvent::Type);
-
-        /** Return the alarm type(s) for which a collection is the standard collection.
-         *  @param useDefault false to return the defined standard types, if any;
-         *                    true to return the types for which it is the standard or
-         *                    only collection.
-         */
-        static CalEvent::Types standardTypes(const Resource&, bool useDefault = false);
-
-        /** Set or clear a collection as the standard collection for a specified
-         *  mime type. This does not affect its status for other mime types.
-         */
-        static void setStandard(Resource&, CalEvent::Type, bool standard);
-
-        /** Set which mime types a collection is the standard collection for.
-         *  Its standard status is cleared for other mime types.
-         */
-        static void setStandard(Resource&, CalEvent::Types);
-
         /** Find the collection to be used to store an event of a given type.
          *  This will be the standard collection for the type, but if this is not valid,
          *  the user will be prompted to select a collection.
@@ -233,11 +195,6 @@ class CollectionControlModel : public Akonadi::FavoriteCollectionsModel
          */
         static Akonadi::Collection::List allCollections(CalEvent::Type type = CalEvent::EMPTY);
 
-        /** Return the enabled collections which contain a specified mime type.
-         *  If 'writable' is true, only writable collections are included.
-         */
-        static Akonadi::Collection::List enabledCollections(CalEvent::Type, bool writable);
-
         /** Return the collection ID for a given Akonadi resource ID.
          *  @return  collection ID, or -1 if the resource is not in KAlarm's list.
          */
@@ -262,7 +219,6 @@ class CollectionControlModel : public Akonadi::FavoriteCollectionsModel
         void reset();
         void slotRowsInserted(const QModelIndex& parent, int start, int end);
         void resourceStatusChanged(Resource&, ResourceType::Changes);
-        void collectionPopulated();
         void collectionFetchResult(KJob*);
 
     private:
@@ -270,7 +226,6 @@ class CollectionControlModel : public Akonadi::FavoriteCollectionsModel
         void findEnabledCollections(const QModelIndex& parent, QList<Akonadi::Collection::Id>&) const;
         CalEvent::Types setEnabledStatus(Resource&, CalEvent::Types, bool inserted);
         static CalEvent::Types checkTypesToEnable(const Resource&, const QList<Akonadi::Collection::Id>&, CalEvent::Types);
-        static bool isPopulated(Akonadi::Collection::Id);
 
         static CollectionControlModel* mInstance;
         struct ResourceCol
@@ -283,7 +238,6 @@ class CollectionControlModel : public Akonadi::FavoriteCollectionsModel
         };
         static QHash<QString, ResourceCol> mAgentPaths;   // path, (resource identifier, collection ID) pairs
         static Akonadi::EntityMimeTypeFilterModel* mFilterModel;
-        QEventLoop* mPopulatedCheckLoop{nullptr};
 };
 
 #endif // COLLECTIONMODEL_H

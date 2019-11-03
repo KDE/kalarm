@@ -132,14 +132,6 @@ class AkonadiModel : public Akonadi::EntityTreeModel, public CalendarDataModel
         /** Signal emitted when an event in the model has changed. */
         void eventChanged(const AkonadiModel::Event&);
 
-        /** Signal emitted when Akonadi has completed a collection deletion.
-         *  @param id      Akonadi ID for the collection
-         */
-        void collectionDeleted(Akonadi::Collection::Id id);
-
-        /** Signal emitted when all collections have been populated. */
-        void collectionsPopulated();
-
         /** Signal emitted when calendar migration/creation has completed. */
         void migrationCompleted();
 
@@ -157,6 +149,7 @@ class AkonadiModel : public Akonadi::EntityTreeModel, public CalendarDataModel
         void slotCollectionChanged(const Akonadi::Collection& c, const QSet<QByteArray>& attrNames);
         void slotCollectionRemoved(const Akonadi::Collection&);
         void slotCollectionBeingCreated(const QString& path, Akonadi::Collection::Id, bool finished);
+        void slotCollectionTreeFetched();
         void slotCollectionPopulated(Akonadi::Collection::Id);
         void slotUpdateTimeTo();
         void slotUpdateArchivedColour(const QColor&);
