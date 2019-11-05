@@ -111,10 +111,16 @@ bool CollectionMimeTypeFilterModel::filterAcceptsRow(int sourceRow, const QModel
 {
     if (!EntityMimeTypeFilterModel::filterAcceptsRow(sourceRow, sourceParent))
         return false;
+#if 0
     AkonadiModel* model = AkonadiModel::instance();
     const QModelIndex ix = model->index(sourceRow, 0, sourceParent);
     const Collection collection = model->data(ix, AkonadiModel::CollectionRole).value<Collection>();
     const Resource resource = model->resource(collection.id());
+#else
+    const QModelIndex ix = sourceModel()->index(sourceRow, 0, sourceParent);
+    const Collection collection = sourceModel()->data(ix, AkonadiModel::CollectionRole).value<Collection>();
+    const Resource resource = Resources::resource(collection.id());
+#endif
     if (collection.remoteId().isEmpty())
         return false;   // invalidly configured resource
     if (!AgentManager::self()->instance(collection.resource()).isValid())
@@ -945,12 +951,11 @@ void CollectionControlModel::editResource(const Resource& resource, QWidget* par
 /******************************************************************************
 * Remove a collection from Akonadi. The calendar file is not removed.
 */
-bool CollectionControlModel::removeResource(Akonadi::Collection::Id id)
+bool CollectionControlModel::removeResource(Resource& resource)
 {
-    Resource resource = AkonadiModel::instance()->resource(id);
     if (!resource.isValid())
         return false;
-    qCDebug(KALARM_LOG) << "CollectionControlModel::removeResource:" << id;
+    qCDebug(KALARM_LOG) << "CollectionControlModel::removeResource:" << resource.id();
     resource.notifyDeletion();
     // Note: Don't use CollectionDeleteJob, since that also deletes the backend storage.
     AgentManager* agentManager = AgentManager::self();

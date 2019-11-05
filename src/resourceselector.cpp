@@ -226,7 +226,7 @@ void ResourceSelector::updateResource()
 */
 void ResourceSelector::removeResource()
 {
-    const Resource resource = currentResource();
+    Resource resource = currentResource();
     if (!resource.isValid())
         return;
     const QString name = resource.configName();
@@ -276,7 +276,7 @@ void ResourceSelector::removeResource()
     if (KAMessageBox::warningContinueCancel(this, text, QString(), KStandardGuiItem::remove()) == KMessageBox::Cancel)
         return;
 
-    CollectionControlModel::removeResource(resource.id());
+    CollectionControlModel::removeResource(resource);
 }
 
 /******************************************************************************

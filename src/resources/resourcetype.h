@@ -300,10 +300,8 @@ public:
      */
     virtual bool close() = 0;
 
-    /** Return all events belonging to this resource.
-     *  Derived classes are not guaranteed to implement this.
-     */
-    virtual QList<KAEvent> events() const   { return {}; }
+    /** Return all events belonging to this resource, for enabled alarm types. */
+    QList<KAEvent> events() const;
 
     /** Add an event to the resource. */
     virtual bool addEvent(const KAEvent&) = 0;
@@ -349,6 +347,20 @@ protected:
      */
     static bool addResource(ResourceType* type, Resource& resource);
 
+    /** To be called when the resource has loaded, to update the list of loaded
+     *  events for the resource. This should include both enabled and disabled
+     *  alarm types.
+     */
+    void setLoadedEvents(QHash<QString, KAEvent>& newEvents);
+
+    /** To be called when events have been created or updated, to amend them in
+     * the resource's list.
+     */
+    void setUpdatedEvents(const QList<KAEvent>& events);
+
+    /** To be called when events have been deleted, to delete them from the resource's list. */
+    void setDeletedEvents(const QList<KAEvent>& events);
+
     void setLoaded(bool loaded) const;
     QString storageTypeStr(bool description, bool file, bool local) const;
     template <class T> static T* resource(Resource&);
@@ -358,6 +370,7 @@ private:
     static ResourceType* data(Resource&);
     static const ResourceType* data(const Resource&);
 
+    QHash<QString, KAEvent> mEvents;    // all events in the resource, indexed by ID
     ResourceId   mId{-1};               // resource's ID, which can't be changed
     mutable bool mLoaded{false};        // the resource has finished loading
     bool         mBeingDeleted{false};  // the resource is currently being deleted

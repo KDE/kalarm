@@ -98,9 +98,9 @@ class AlarmCalendar : public QObject
     private Q_SLOTS:
         void                  slotResourceSettingsChanged(Resource&, ResourceType::Changes);
         void                  slotResourcesPopulated();
-        void                  slotEventsAdded(const AkonadiModel::EventList&);
-        void                  slotEventsToBeRemoved(const AkonadiModel::EventList&);
-        void                  slotEventChanged(const AkonadiModel::Event&);
+        void                  slotEventsAdded(Resource&, const QList<KAEvent>&);
+        void                  slotEventsToBeRemoved(Resource&, const QList<KAEvent>&);
+        void                  slotEventUpdated(Resource&, const KAEvent&);
     private:
         enum CalType { RESOURCES, LOCAL_ICAL, LOCAL_VCAL };
         typedef QMap<ResourceId, KAEvent::List> ResourceMap;  // id = invalid for display calendar

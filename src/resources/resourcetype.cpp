@@ -94,6 +94,24 @@ bool ResourceType::isCompatible() const
     return compatibility() == KACalendar::Current;
 }
 
+/******************************************************************************
+* Return all events belonging to this resource, for enabled alarm types.
+*/
+QList<KAEvent> ResourceType::events() const
+{
+    // Remove any events with disabled alarm types.
+qDebug()<<"ResourceType::events(): total"<<mEvents.count();
+    const CalEvent::Types types = enabledTypes();
+    QList<KAEvent> events;
+    for (auto it = mEvents.begin();  it != mEvents.end();  ++it)
+    {
+        if (it.value().category() & types)
+            events += it.value();
+    }
+qDebug()<<"ResourceType::events(): enabled"<<events.count();
+    return events;
+}
+
 void ResourceType::notifyDeletion()
 {
     mBeingDeleted = true;
@@ -107,6 +125,106 @@ bool ResourceType::isBeingDeleted() const
 bool ResourceType::addResource(ResourceType* type, Resource& resource)
 {
     return Resources::addResource(type, resource);
+}
+
+/******************************************************************************
+* To be called when the resource has loaded, to update the list of loaded
+* events for the resource.
+*/
+void ResourceType::setLoadedEvents(QHash<QString, KAEvent>& newEvents)
+{
+    // Replace existing events with the new ones, and find events which no
+    // longer exist.
+    QList<KAEvent> eventsToDelete;
+    QVector<decltype(mEvents)::iterator> iteratorsToDelete;
+    for (auto it = mEvents.begin();  it != mEvents.end();  ++it)
+    {
+        const QString& id = it.key();
+        auto newit = newEvents.find(id);
+        if (newit == newEvents.end())
+        {
+            eventsToDelete << it.value();   // this event no longer exists
+            iteratorsToDelete << it;
+        }
+        else
+        {
+            KAEvent& event = it.value();
+            bool changed = !event.compare(newit.value(), KAEvent::Compare::Id | KAEvent::Compare::CurrentState);
+            event = newit.value();   // update existing event
+            newEvents.erase(newit);
+            if (changed)
+                Resources::notifyEventUpdated(this, event);
+        }
+    }
+
+    // Delete events which no longer exist.
+    Resources::notifyEventsToBeRemoved(this, eventsToDelete);
+    for (auto it : qAsConst(iteratorsToDelete))
+        mEvents.erase(it);
+
+    // Add new events.
+    for (auto newit = newEvents.constBegin();  newit != newEvents.constEnd();  ++newit)
+        mEvents[newit.key()] = newit.value();
+qDebug()<<"ResourceType::setLoadedEvents:"<<id()<<" count:"<<mEvents.count()<<"(newEvents:"<<newEvents.count()<<")";
+    Resources::notifyEventsAdded(this, newEvents.values());
+
+    newEvents.clear();
+    setLoaded(true);
+    Resources::notifyResourceLoaded(this);
+}
+
+/******************************************************************************
+* To be called when events have been created or updated, to amend them in the
+* resource's list.
+*/
+void ResourceType::setUpdatedEvents(const QList<KAEvent>& events)
+{
+    const CalEvent::Types types = enabledTypes();
+    QList<KAEvent> eventsAdded;
+    for (const KAEvent& event : events)
+    {
+        auto it = mEvents.find(event.id());
+        if (it == mEvents.end())
+        {
+            mEvents[event.id()] = event;
+            if (event.category() & types)
+                eventsAdded += event;
+        }
+        else
+        {
+            KAEvent& ev = it.value();
+            bool changed = !ev.compare(event, KAEvent::Compare::Id | KAEvent::Compare::CurrentState);
+            ev = event;   // update existing event
+            if (changed  &&  (event.category() & types))
+                Resources::notifyEventUpdated(this, event);
+        }
+    }
+    if (!eventsAdded.isEmpty())
+        Resources::notifyEventsAdded(this, eventsAdded);
+}
+
+/******************************************************************************
+* To be called when events have been deleted, to delete them from the
+* resource's list.
+*/
+void ResourceType::setDeletedEvents(const QList<KAEvent>& events)
+{
+    const CalEvent::Types types = enabledTypes();
+    QStringList eventsToDelete;
+    QList<KAEvent> eventsToNotify;
+    for (const KAEvent& event : events)
+    {
+        QHash<QString, KAEvent>::iterator it = mEvents.find(event.id());
+        if (it != mEvents.end())
+        {
+            eventsToDelete += event.id();
+            if (event.category() & types)
+                eventsToNotify += event;
+        }
+    }
+    Resources::notifyEventsToBeRemoved(this, eventsToNotify);
+    for (const QString& id : eventsToDelete)
+        mEvents.remove(id);
 }
 
 void ResourceType::setLoaded(bool loaded) const

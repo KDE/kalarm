@@ -50,7 +50,7 @@ Collection::Rights WritableRights = Collection::CanChangeItem | Collection::CanC
 
 Resource AkonadiResource::create(const Akonadi::Collection& collection)
 {
-    if (collection.id() < 0)
+    if (collection.id() < 0  ||  collection.remoteId().isEmpty())
         return Resource::null();    // return invalid Resource
     Resource resource = Resources::resource(collection.id());
     if (!resource.isValid())
@@ -64,7 +64,7 @@ Resource AkonadiResource::create(const Akonadi::Collection& collection)
 AkonadiResource::AkonadiResource(const Collection& collection)
     : ResourceType(collection.id())
     , mCollection(collection)
-    , mValid(collection.id() >= 0)
+    , mValid(collection.id() >= 0  &&  !collection.remoteId().isEmpty())
 {
     if (mValid)
     {
@@ -353,7 +353,7 @@ bool AkonadiResource::close()
 }
 
 /******************************************************************************
-* Add an event to the resource.
+* Add an event to the resource, and add it to Akonadi.
 */
 bool AkonadiResource::addEvent(const KAEvent& event)
 {
@@ -373,7 +373,8 @@ qCDebug(KALARM_LOG)<<"-> item id="<<item.id();
 }
 
 /******************************************************************************
-* Update an event in the resource. Its UID must be unchanged.
+* Update an event in the resource, and update it in Akonadi.
+* Its UID must be unchanged.
 */
 bool AkonadiResource::updateEvent(const KAEvent& event)
 {
@@ -392,7 +393,7 @@ qCDebug(KALARM_LOG)<<"item id="<<item.id()<<", revision="<<item.revision();
 }
 
 /******************************************************************************
-* Delete an event from the resource.
+* Delete an event from the resource, and from Akonadi.
 */
 bool AkonadiResource::deleteEvent(const KAEvent& event)
 {
@@ -483,14 +484,21 @@ KAEvent AkonadiResource::event(Resource& resource, const Akonadi::Item& item)
 * Called when a collection has been populated.
 * Emits a signal if all collections have been populated.
 */
-void AkonadiResource::notifyCollectionLoaded(ResourceId id)
+void AkonadiResource::notifyCollectionLoaded(ResourceId id, const QList<KAEvent>& events)
 {
     if (id >= 0)
     {
         Resource res = Resources::resource(id);
         AkonadiResource* akres = resource<AkonadiResource>(res);
         if (akres)
-            akres->setLoaded(true);
+        {
+            const CalEvent::Types types = akres->enabledTypes();
+            QHash<QString, KAEvent> eventHash;
+            for (const KAEvent& event : events)
+                if (event.category() & types)
+                    eventHash[event.id()] = event;
+            akres->setLoadedEvents(eventHash);
+        }
     }
 }
 
@@ -571,14 +579,37 @@ void AkonadiResource::notifyCollectionChanged(Resource& res, const Collection& c
 }
 
 /******************************************************************************
-* Called when an Item has been changed or created in AkonadiModel.
+* Called to notify that an event has been added or updated in Akonadi.
+*/
+void AkonadiResource::notifyEventsChanged(Resource& res, const QList<KAEvent>& events)
+{
+    AkonadiResource* akres = resource<AkonadiResource>(res);
+    if (akres)
+        akres->setUpdatedEvents(events);
+}
+
+/******************************************************************************
+* Called when an Item has been changed or created in Akonadi.
 */
 void AkonadiResource::notifyItemChanged(Resource& res, const Akonadi::Item& item, bool created)
 {
     AkonadiResource* akres = resource<AkonadiResource>(res);
-    int i = akres->mItemsBeingCreated.removeAll(item.id());
-    if (!created  ||  i)
-        akres->checkQueuedItemModifyJob(item);    // execute the next job queued for the item
+    if (akres)
+    {
+        int i = akres->mItemsBeingCreated.removeAll(item.id());   // the new item has now been initialised
+        if (!created  ||  i)
+            akres->checkQueuedItemModifyJob(item);    // execute the next job queued for the item
+    }
+}
+
+/******************************************************************************
+* Called to notify that an event is about to be deleted from Akonadi.
+*/
+void AkonadiResource::notifyEventsToBeDeleted(Resource& res, const QList<KAEvent>& events)
+{
+    AkonadiResource* akres = resource<AkonadiResource>(res);
+    if (akres)
+        akres->setDeletedEvents(events);
 }
 
 /******************************************************************************

@@ -307,6 +307,36 @@ void Resources::notifyResourceMessage(ResourceId id, ResourceType::MessageType t
         Q_EMIT instance()->resourceMessage(r, type, message, details);
 }
 
+void Resources::notifyEventsAdded(ResourceType* res, const QList<KAEvent>& events)
+{
+    if (res)
+    {
+        Resource r = resource(res->id());
+        if (r.isValid())
+            Q_EMIT instance()->eventsAdded(r, events);
+    }
+}
+
+void Resources::notifyEventUpdated(ResourceType* res, const KAEvent& event)
+{
+    if (res)
+    {
+        Resource r = resource(res->id());
+        if (r.isValid())
+            Q_EMIT instance()->eventUpdated(r, event);
+    }
+}
+
+void Resources::notifyEventsToBeRemoved(ResourceType* res, const QList<KAEvent>& events)
+{
+    if (res)
+    {
+        Resource r = resource(res->id());
+        if (r.isValid())
+            Q_EMIT instance()->eventsToBeRemoved(r, events);
+    }
+}
+
 bool Resources::addResource(ResourceType* instance, Resource& resource)
 {
     if (!instance  ||  instance->id() < 0)

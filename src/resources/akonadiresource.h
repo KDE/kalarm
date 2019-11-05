@@ -243,13 +243,15 @@ public:
      */
     bool close() override;
 
-    /** Add an event to the resource. */
+    /** Add an event to the resource, and add it to Akonadi. */
     bool addEvent(const KAEvent&) override;
 
-    /** Update an event in the resource. Its UID must be unchanged. */
+    /** Update an event in the resource, and update it in Akonadi.
+     *  Its UID must be unchanged.
+     */
     bool updateEvent(const KAEvent&) override;
 
-    /** Delete an event from the resource. */
+    /** Delete an event from the resource, and from Akonadi. */
     bool deleteEvent(const KAEvent&) override;
 
     /** Called to notify the resource that an event's command error has changed. */
@@ -273,14 +275,25 @@ public:
     static KAEvent event(Resource&, const Akonadi::Item&);
     using QObject::event;   // prevent warning about hidden virtual method
 
-    /** Called to notify that a resource's Collection has been populated. */
-    static void notifyCollectionLoaded(ResourceId);
+    /** Called to notify that a resource's Collection has been populated.
+     *  @param events  The full list of events in the Collection.
+     */
+    static void notifyCollectionLoaded(ResourceId, const QList<KAEvent>& events);
 
     /** Called to notify that a resource's Collection has changed. */
     static void notifyCollectionChanged(Resource&, const Akonadi::Collection&, bool checkCompatibility);
 
+    /** Called to notify that events have been added or updated in Akonadi. */
+    static void notifyEventsChanged(Resource&, const QList<KAEvent>&);
+
+    /** Called to notify that events are to be deleted from Akonadi. */
+    static void notifyEventsToBeDeleted(Resource&, const QList<KAEvent>&);
+
     /** Called to notify that an Akonadi Item belonging to a resource has
      *  changed or been created.
+     *  @note  notifyEventChanged() should also be called to signal the
+     *         new or changed event to interested parties.
+     *  @param created  true if the item has been created; false if changed.
      */
     static void notifyItemChanged(Resource&, const Akonadi::Item&, bool created);
 

@@ -207,6 +207,8 @@ QVariant AkonadiModel::data(const QModelIndex& index, int role) const
             // This is a Collection row
             // Update the collection's resource with the current collection value.
             const Resource& res = updateResource(collection);
+            if (role == ResourceIdRole)
+                role = CollectionIdRole;
             bool handled;
             const QVariant value = resourceData(role, res, handled);
             if (handled)
@@ -442,23 +444,26 @@ QModelIndex AkonadiModel::eventIndex(const QString& eventId) const
     return itemIndex(Item(mEventIds.value(eventId).itemId));
 }
 
-#if 0
 /******************************************************************************
 * Return all events of a given type belonging to a collection.
 */
-KAEvent::List AkonadiModel::events(Akonadi::Collection& collection, CalEvent::Type type) const
+QList<KAEvent> AkonadiModel::events(ResourceId id, CalEvent::Types types) const
 {
-    KAEvent::List list;
-    const QModelIndex ix = modelIndexForCollection(this, collection);
+    if (types == CalEvent::EMPTY)
+        types = CalEvent::ACTIVE | CalEvent::ARCHIVED | CalEvent::TEMPLATE;
+    QList<KAEvent> list;
+    const QModelIndex ix = modelIndexForCollection(this, Collection(id));
     if (ix.isValid())
-        getChildEvents(ix, type, list);
+        getChildEvents(ix, types, list);
+    for (KAEvent& ev : list)
+        ev.setResourceId(id);
     return list;
 }
 
 /******************************************************************************
 * Recursive function to append all child Events with a given mime type.
 */
-void AkonadiModel::getChildEvents(const QModelIndex& parent, CalEvent::Type type, KAEvent::List& events) const
+void AkonadiModel::getChildEvents(const QModelIndex& parent, CalEvent::Types types, QList<KAEvent>& events) const
 {
     for (int row = 0, count = rowCount(parent);  row < count;  ++row)
     {
@@ -469,7 +474,7 @@ void AkonadiModel::getChildEvents(const QModelIndex& parent, CalEvent::Type type
             if (item.hasPayload<KAEvent>())
             {
                 KAEvent event = item.payload<KAEvent>();
-                if (event.isValid()  &&  event.category() == type)
+                if (event.isValid()  &&  event.category() & types)
                     events += event;
             }
         }
@@ -477,11 +482,10 @@ void AkonadiModel::getChildEvents(const QModelIndex& parent, CalEvent::Type type
         {
             const Collection c = ix.data(CollectionRole).value<Collection>();
             if (c.isValid())
-                getChildEvents(ix, type, events);
+                getChildEvents(ix, types, events);
         }
     }
 }
-#endif
 
 KAEvent AkonadiModel::event(const QString& eventId) const
 {
@@ -510,7 +514,10 @@ KAEvent AkonadiModel::event(Akonadi::Item& item, const QModelIndex& ix, Resource
         item.setParentCollection(pc);
         res = resource(pc.id());
         if (res.isValid())
+        {
+            // Fetch the KAEvent defined by the Item, including commandError.
             return AkonadiResource::event(res, item);
+        }
     }
     res = Resource::null();
     return KAEvent();
@@ -564,7 +571,7 @@ bool AkonadiModel::addEvent(KAEvent& event, Resource& resource)
 void AkonadiModel::slotRowsInserted(const QModelIndex& parent, int start, int end)
 {
     qCDebug(KALARM_LOG) << "AkonadiModel::slotRowsInserted:" << start << "-" << end << "(parent =" << parent << ")";
-    EventList events;
+    QHash<Resource, QList<KAEvent>> events;
     for (int row = start;  row <= end;  ++row)
     {
         const QModelIndex ix = index(row, 0, parent);
@@ -604,19 +611,25 @@ void AkonadiModel::slotRowsInserted(const QModelIndex& parent, int start, int en
                 if (evnt.isValid())
                 {
                     qCDebug(KALARM_LOG) << "AkonadiModel::slotRowsInserted: Event" << evnt.id();
-                    events += Event(evnt, item.parentCollection());
+                    // Only notify new events if the collection is already populated.
+                    // If not populated, all events will be notified when it is
+                    // eventually populated.
+                    if (res.isLoaded())
+                        events[res] += evnt;
                     mEventIds[evnt.id()] = EventIds(item.parentCollection().id(), item.id());
                 }
 
                 // Notify the resource containing the item.
-                if (res.isValid())
-                    AkonadiResource::notifyItemChanged(res, item, true);
+                AkonadiResource::notifyItemChanged(res, item, true);
             }
         }
     }
 
-    if (!events.isEmpty())
-        Q_EMIT eventsAdded(events);
+    for (auto it = events.constBegin();  it != events.constEnd();  ++it)
+    {
+        Resource res = it.key();
+        AkonadiResource::notifyEventsChanged(res, it.value());
+    }
 }
 
 /******************************************************************************
@@ -649,23 +662,26 @@ void AkonadiModel::collectionFetchResult(KJob* j)
 void AkonadiModel::slotRowsAboutToBeRemoved(const QModelIndex& parent, int start, int end)
 {
     qCDebug(KALARM_LOG) << "AkonadiModel::slotRowsAboutToBeRemoved:" << start << "-" << end << "(parent =" << parent << ")";
-    EventList events;
+    QHash<Resource, QList<KAEvent>> events;
     for (int row = start;  row <= end;  ++row)
     {
         const QModelIndex ix = index(row, 0, parent);
         Item item = ix.data(ItemRole).value<Item>();
-        Resource r;
-        const KAEvent evnt = event(item, ix, r);   // this sets item.parentCollection()
+        Resource res;
+        const KAEvent evnt = event(item, ix, res);   // this sets item.parentCollection()
         if (evnt.isValid())
         {
             qCDebug(KALARM_LOG) << "AkonadiModel::slotRowsAboutToBeRemoved: Collection:" << item.parentCollection().id() << ", Event ID:" << evnt.id();
-            events += Event(evnt, item.parentCollection());
+            events[res] += evnt;
             mEventIds.remove(evnt.id());
         }
     }
 
-    if (!events.isEmpty())
-        Q_EMIT eventsToBeRemoved(events);
+    for (auto it = events.constBegin();  it != events.constEnd();  ++it)
+    {
+        Resource res = it.key();
+        AkonadiResource::notifyEventsToBeDeleted(res, it.value());
+    }
 }
 
 /******************************************************************************
@@ -745,13 +761,8 @@ void AkonadiModel::slotCollectionTreeFetched()
 */
 void AkonadiModel::slotCollectionPopulated(Akonadi::Collection::Id id)
 {
-    AkonadiResource::notifyCollectionLoaded(id);
-    if (isFullyPopulated())
-    {
-        // All collections have now been populated.
-        // Prevent the signal being emitted more than once.
-        disconnect(this, &Akonadi::EntityTreeModel::collectionPopulated, this, &AkonadiModel::slotCollectionPopulated);
-    }
+    qCDebug(KALARM_LOG) << "AkonadiModel::slotCollectionPopulated:" << id;
+    AkonadiResource::notifyCollectionLoaded(id, events(id));
 }
 
 /******************************************************************************
@@ -786,9 +797,9 @@ void AkonadiModel::slotMonitoredItemChanged(const Akonadi::Item& item, const QSe
                 AkonadiResource::notifyItemChanged(res, itm, false);
 
             // Wait to ensure that the base EntityTreeModel has processed the
-            // itemChanged() signal first, before we Q_EMIT eventChanged().
-            mPendingEventChanges.enqueue(Event(evnt, itm.parentCollection()));
-            QTimer::singleShot(0, this, &AkonadiModel::slotEmitEventChanged);
+            // itemChanged() signal first, before we Q_EMIT eventUpdated().
+            mPendingEventChanges.enqueue(evnt);
+            QTimer::singleShot(0, this, &AkonadiModel::slotEmitEventUpdated);
         }
     }
 }
@@ -797,11 +808,13 @@ void AkonadiModel::slotMonitoredItemChanged(const Akonadi::Item& item, const QSe
 * Called to Q_EMIT a signal when an event in the monitored collections has
 * changed.
 */
-void AkonadiModel::slotEmitEventChanged()
+void AkonadiModel::slotEmitEventUpdated()
 {
     while (!mPendingEventChanges.isEmpty())
     {
-        Q_EMIT eventChanged(mPendingEventChanges.dequeue());
+        const KAEvent event = mPendingEventChanges.dequeue();
+        Resource res = Resources::resource(event.resourceId());
+        AkonadiResource::notifyEventsChanged(res, {event});
     }
 }
 

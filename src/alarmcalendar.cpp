@@ -123,12 +123,12 @@ AlarmCalendar::AlarmCalendar()
     : mCalType(RESOURCES)
     , mEventType(CalEvent::EMPTY)
 {
-    AkonadiModel* model = AkonadiModel::instance();
-    connect(model, &AkonadiModel::eventsAdded, this, &AlarmCalendar::slotEventsAdded);
-    connect(model, &AkonadiModel::eventsToBeRemoved, this, &AlarmCalendar::slotEventsToBeRemoved);
-    connect(model, &AkonadiModel::eventChanged, this, &AlarmCalendar::slotEventChanged);
-    connect(Resources::instance(), &Resources::resourcesPopulated, this, &AlarmCalendar::slotResourcesPopulated);
-    connect(Resources::instance(), &Resources::settingsChanged, this, &AlarmCalendar::slotResourceSettingsChanged);
+    Resources* resources = Resources::instance();
+    connect(resources, &Resources::eventsAdded, this, &AlarmCalendar::slotEventsAdded);
+    connect(resources, &Resources::eventsToBeRemoved, this, &AlarmCalendar::slotEventsToBeRemoved);
+    connect(resources, &Resources::eventUpdated, this, &AlarmCalendar::slotEventUpdated);
+    connect(resources, &Resources::resourcesPopulated, this, &AlarmCalendar::slotResourcesPopulated);
+    connect(resources, &Resources::settingsChanged, this, &AlarmCalendar::slotResourceSettingsChanged);
 }
 
 /******************************************************************************
@@ -499,13 +499,18 @@ void AlarmCalendar::slotResourceSettingsChanged(Resource& resource, ResourceType
 {
     if (change & ResourceType::Enabled)
     {
-        // For each alarm type which has been disabled, remove the collection's
-        // events from the map, but not from AkonadiModel.
         if (resource.isValid())
         {
+            // For each alarm type which has been disabled, remove the
+            // collection's events from the map, but not from AkonadiModel.
             const CalEvent::Types enabled = resource.enabledTypes();
             const CalEvent::Types disabled = ~enabled & (CalEvent::ACTIVE | CalEvent::ARCHIVED | CalEvent::TEMPLATE);
             removeKAEvents(resource.id(), false, disabled);
+
+            // For each alarm type which has been enabled, add the collection's
+            // events to the map.
+            if (enabled != CalEvent::EMPTY)
+                slotEventsAdded(resource, resource.events());
         }
     }
 }
@@ -524,37 +529,32 @@ void AlarmCalendar::slotResourcesPopulated()
 /******************************************************************************
 * Called when events have been added to AkonadiModel.
 * Add corresponding KAEvent instances to those held by AlarmCalendar.
+* All events must have their resource ID set.
 */
-void AlarmCalendar::slotEventsAdded(const AkonadiModel::EventList& events)
+void AlarmCalendar::slotEventsAdded(Resource& resource, const QList<KAEvent>& events)
 {
-    for (const AkonadiModel::Event& event : events)
-        slotEventChanged(event);
+    for (const KAEvent& event : events)
+        slotEventUpdated(resource, event);
 }
 
 /******************************************************************************
 * Called when an event has been changed in AkonadiModel.
 * Change the corresponding KAEvent instance held by AlarmCalendar.
+* The event must have its resource ID set.
 */
-void AlarmCalendar::slotEventChanged(const AkonadiModel::Event& event)
+void AlarmCalendar::slotEventUpdated(Resource& resource, const KAEvent& event)
 {
-    Resource resource = Resources::resource(event.collection.id());
-    if (!event.isConsistent())
-    {
-        qCCritical(KALARM_LOG) << "AlarmCalendar::slotEventChanged: Inconsistent AkonadiModel::Event: event:" << event.event.collectionId() << ", collection" << event.collection.id();
-        return;
-    }
-
     bool added = true;
     bool updated = false;
-    KAEventMap::Iterator it = mEventMap.find(event.eventId());
+    KAEventMap::Iterator it = mEventMap.find(EventId(event));
     if (it != mEventMap.end())
     {
         // The event ID already exists - remove the existing event first
         KAEvent* storedEvent = it.value();
-        if (event.event.category() == storedEvent->category())
+        if (event.category() == storedEvent->category())
         {
             // The existing event is the same type - update it in place
-            *storedEvent = event.event;
+            *storedEvent = event;
             addNewEvent(resource, storedEvent, true);
             updated = true;
         }
@@ -563,14 +563,14 @@ void AlarmCalendar::slotEventChanged(const AkonadiModel::Event& event)
         added = false;
     }
     if (!updated)
-        addNewEvent(resource, new KAEvent(event.event));
+        addNewEvent(resource, new KAEvent(event));
 
-    if (event.event.category() == CalEvent::ACTIVE)
+    if (event.category() == CalEvent::ACTIVE)
     {
-        bool enabled = event.event.enabled();
+        bool enabled = event.enabled();
         checkForDisabledAlarms(!enabled, enabled);
-        if (!mIgnoreAtLogin  &&  added  &&  enabled  &&  event.event.repeatAtLogin())
-            Q_EMIT atLoginEventAdded(event.event);
+        if (!mIgnoreAtLogin  &&  added  &&  enabled  &&  event.repeatAtLogin())
+            Q_EMIT atLoginEventAdded(event);
     }
 }
 
@@ -578,17 +578,12 @@ void AlarmCalendar::slotEventChanged(const AkonadiModel::Event& event)
 * Called when events are about to be removed from AkonadiModel.
 * Remove the corresponding KAEvent instances held by AlarmCalendar.
 */
-void AlarmCalendar::slotEventsToBeRemoved(const AkonadiModel::EventList& events)
+void AlarmCalendar::slotEventsToBeRemoved(Resource& resource, const QList<KAEvent>& events)
 {
-    for (const AkonadiModel::Event& event : events)
+    for (const KAEvent& event : events)
     {
-        if (!event.isConsistent())
-            qCCritical(KALARM_LOG) << "AlarmCalendar::slotEventsToBeRemoved: Inconsistent AkonadiModel::Event: event:" << event.event.collectionId() << ", collection" << event.collection.id();
-        else if (mEventMap.contains(event.eventId()))
-        {
-            Resource resource = Resources::resource(event.collection.id());
-            deleteEventInternal(event.event, resource, false);
-        }
+        if (mEventMap.contains(EventId(event)))
+            deleteEventInternal(event, resource, false);
     }
 }
 

@@ -283,9 +283,7 @@ public:
      */
     bool close();
 
-    /** Return all events belonging to this resource.
-     *  Derived classes are not guaranteed to implement this.
-     */
+    /** Return all events belonging to this resource. */
     QList<KAEvent> events() const;
 
     /** Add an event to the resource. */

@@ -52,17 +52,6 @@ class AkonadiModel : public Akonadi::EntityTreeModel, public CalendarDataModel
     public:
         enum Change { Enabled, ReadOnly, AlarmTypes };
 
-        /** Struct containing a KAEvent and its parent Collection. */
-        struct Event
-        {
-            Event(const KAEvent& e, const Akonadi::Collection& c) : event(e), collection(c) {}
-            EventId eventId() const       { return EventId(collection.id(), event.id()); }
-            bool    isConsistent() const  { return event.collectionId() == collection.id(); }
-            KAEvent             event;
-            Akonadi::Collection collection;
-        };
-        typedef QList<Event> EventList;
-
         static AkonadiModel* instance();
 
         ~AkonadiModel() override;
@@ -108,10 +97,8 @@ class AkonadiModel : public Akonadi::EntityTreeModel, public CalendarDataModel
         /** Return the Item for a given event. */
         Akonadi::Item itemForEvent(const QString& eventId) const;
 
-#if 0
         /** Return all events in a collection, optionally of a specified type. */
-        KAEvent::List events(Akonadi::Collection&, CalEvent::Type = CalEvent::EMPTY) const;
-#endif
+        QList<KAEvent> events(ResourceId, CalEvent::Types = CalEvent::EMPTY) const;
 
         QVariant data(const QModelIndex&, int role = Qt::DisplayRole) const override;
 
@@ -124,13 +111,13 @@ class AkonadiModel : public Akonadi::EntityTreeModel, public CalendarDataModel
         void resourceAdded(Resource&);
 
         /** Signal emitted when events have been added to the model. */
-        void eventsAdded(const AkonadiModel::EventList&);
+        void eventsAdded(const QList<KAEvent>&);
 
         /** Signal emitted when events are about to be removed from the model. */
-        void eventsToBeRemoved(const AkonadiModel::EventList&);
+        void eventsToBeRemoved(const QList<KAEvent>&);
 
         /** Signal emitted when an event in the model has changed. */
-        void eventChanged(const AkonadiModel::Event&);
+        void eventUpdated(const KAEvent&);
 
         /** Signal emitted when calendar migration/creation has completed. */
         void migrationCompleted();
@@ -159,7 +146,7 @@ class AkonadiModel : public Akonadi::EntityTreeModel, public CalendarDataModel
         void slotRowsInserted(const QModelIndex& parent, int start, int end);
         void slotRowsAboutToBeRemoved(const QModelIndex& parent, int start, int end);
         void slotMonitoredItemChanged(const Akonadi::Item&, const QSet<QByteArray>&);
-        void slotEmitEventChanged();
+        void slotEmitEventUpdated();
 
     private:
         struct CalData   // data per collection
@@ -197,9 +184,7 @@ class AkonadiModel : public Akonadi::EntityTreeModel, public CalendarDataModel
         QModelIndex   itemIndex(const Akonadi::Item&) const;
         void          signalDataChanged(bool (*checkFunc)(const Akonadi::Item&), int startColumn, int endColumn, const QModelIndex& parent);
         void          setCollectionChanged(Resource&, const Akonadi::Collection&, bool checkCompat);
-#if 0
-        void     getChildEvents(const QModelIndex& parent, CalEvent::Type, KAEvent::List&) const;
-#endif
+        void          getChildEvents(const QModelIndex& parent, CalEvent::Types, QList<KAEvent>&) const;
 
         static AkonadiModel*  mInstance;
         static int            mTimeHourPos;   // position of hour within time string, or -1 if leading zeroes included
@@ -217,7 +202,7 @@ class AkonadiModel : public Akonadi::EntityTreeModel, public CalendarDataModel
         };
         QHash<QString, EventIds> mEventIds;     // collection and item ID for each event ID
         mutable QHash<Akonadi::Collection::Id, Resource> mResources;
-        QQueue<Event>   mPendingEventChanges;   // changed events with changedEvent() signal pending
+        QQueue<KAEvent> mPendingEventChanges;   // changed events with changedEvent() signal pending
         bool            mMigrationChecked;      // whether calendar migration has been checked at startup
         bool            mMigrating;             // currently migrating calendars
 };

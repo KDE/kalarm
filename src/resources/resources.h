@@ -137,6 +137,15 @@ public:
      */
     static void notifyResourceMessage(ResourceId, ResourceType::MessageType, const QString& message, const QString& details);
 
+    /** Called by a resource to notify that it has added events. */
+    static void notifyEventsAdded(ResourceType*, const QList<KAEvent>&);
+
+    /** Called by a resource to notify that it has changed an event. */
+    static void notifyEventUpdated(ResourceType*, const KAEvent& event);
+
+    /** Called by a resource to notify that it is about to delete events. */
+    static void notifyEventsToBeRemoved(ResourceType*, const QList<KAEvent>&);
+
 Q_SIGNALS:
     /** Emitted when a resource's settings have changed. */
     void settingsChanged(Resource&, ResourceType::Changes);
@@ -155,6 +164,21 @@ Q_SIGNALS:
      *         to allow processing to continue while the user message is displayed.
      */
     void resourceMessage(Resource&, ResourceType::MessageType, const QString& message, const QString& details);
+
+    /** Emitted when events have been added to a resource.
+     *  Events are only notified whose alarm type is enabled.
+     */
+    void eventsAdded(Resource&, const QList<KAEvent>&);
+
+    /** Emitted when an event has been updated in a resource.
+     *  Events are only notified whose alarm type is enabled.
+     */
+    void eventUpdated(Resource&, const KAEvent&);
+
+    /** Emitted when events are about to be deleted from a resource.
+     *  Events are only notified whose alarm type is enabled.
+     */
+    void eventsToBeRemoved(Resource&, const QList<KAEvent>&);
 
 private:
     Resources();
