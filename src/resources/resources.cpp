@@ -21,6 +21,7 @@
 #include "resources.h"
 
 #include "resource.h"
+#include "itemlistmodel.h"   // temporary, until better parent for QEventLoop is found
 #include "kalarm_debug.h"
 
 #include <QEventLoop>
@@ -263,12 +264,17 @@ bool Resources::allPopulated()
 bool Resources::waitUntilPopulated(ResourceId id, int timeout)
 {
     qCDebug(KALARM_LOG) << "Resources::waitUntilPopulated" << id;
-    Resources* manager = instance();
     int result = 1;
-    while (!manager->mCreated  ||  !isLoaded(id))
+    while (!mCreated  ||  !isLoaded(id))
     {
         if (!mPopulatedCheckLoop)
-            mPopulatedCheckLoop = new QEventLoop(instance());
+//TODO: The choice of parent object for QEventLoop can prevent EntityTreeModel signals
+//      from activating connected slots in AkonadiModel, which prevents resources from
+//      being informed that collections have loaded. Need to find a better parent
+//      object - Qt item models seem to work, but what else?
+//      These don't work: Resources::instance(), qApp(), theApp(), MainWindow::mainMainWindow().
+//      These do work: CollectionControlModel::instance().
+            mPopulatedCheckLoop = new QEventLoop(AlarmListModel::all());
         if (timeout > 0)
             QTimer::singleShot(timeout * 1000, mPopulatedCheckLoop, &QEventLoop::quit);
         result = mPopulatedCheckLoop->exec();
