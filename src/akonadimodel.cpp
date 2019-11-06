@@ -445,16 +445,14 @@ QModelIndex AkonadiModel::eventIndex(const QString& eventId) const
 }
 
 /******************************************************************************
-* Return all events of a given type belonging to a collection.
+* Return all events belonging to a collection.
 */
-QList<KAEvent> AkonadiModel::events(ResourceId id, CalEvent::Types types) const
+QList<KAEvent> AkonadiModel::events(ResourceId id) const
 {
-    if (types == CalEvent::EMPTY)
-        types = CalEvent::ACTIVE | CalEvent::ARCHIVED | CalEvent::TEMPLATE;
     QList<KAEvent> list;
     const QModelIndex ix = modelIndexForCollection(this, Collection(id));
     if (ix.isValid())
-        getChildEvents(ix, types, list);
+        getChildEvents(ix, list);
     for (KAEvent& ev : list)
         ev.setResourceId(id);
     return list;
@@ -463,7 +461,7 @@ QList<KAEvent> AkonadiModel::events(ResourceId id, CalEvent::Types types) const
 /******************************************************************************
 * Recursive function to append all child Events with a given mime type.
 */
-void AkonadiModel::getChildEvents(const QModelIndex& parent, CalEvent::Types types, QList<KAEvent>& events) const
+void AkonadiModel::getChildEvents(const QModelIndex& parent, QList<KAEvent>& events) const
 {
     for (int row = 0, count = rowCount(parent);  row < count;  ++row)
     {
@@ -474,7 +472,7 @@ void AkonadiModel::getChildEvents(const QModelIndex& parent, CalEvent::Types typ
             if (item.hasPayload<KAEvent>())
             {
                 KAEvent event = item.payload<KAEvent>();
-                if (event.isValid()  &&  event.category() & types)
+                if (event.isValid())
                     events += event;
             }
         }
@@ -482,7 +480,7 @@ void AkonadiModel::getChildEvents(const QModelIndex& parent, CalEvent::Types typ
         {
             const Collection c = ix.data(CollectionRole).value<Collection>();
             if (c.isValid())
-                getChildEvents(ix, types, events);
+                getChildEvents(ix, events);
         }
     }
 }
@@ -797,7 +795,8 @@ void AkonadiModel::slotMonitoredItemChanged(const Akonadi::Item& item, const QSe
                 AkonadiResource::notifyItemChanged(res, itm, false);
 
             // Wait to ensure that the base EntityTreeModel has processed the
-            // itemChanged() signal first, before we Q_EMIT eventUpdated().
+            // itemChanged() signal first, before we notify AkonadiResource
+            // that the event has changed.
             mPendingEventChanges.enqueue(evnt);
             QTimer::singleShot(0, this, &AkonadiModel::slotEmitEventUpdated);
         }
@@ -856,15 +855,6 @@ Resource AkonadiModel::resource(Collection::Id id) const
 }
 
 /******************************************************************************
-* Find the collection containing the specified event.
-*/
-Resource AkonadiModel::resourceForEvent(const QString& eventId) const
-{
-    const Collection::Id id = mEventIds.value(eventId).collectionId;
-    return mResources.value(id, AkonadiResource::nullResource());
-}
-
-/******************************************************************************
 * Return the resource at a specified index, with up to date data.
 */
 Resource AkonadiModel::resource(const QModelIndex& ix) const
@@ -893,14 +883,6 @@ QModelIndex AkonadiModel::resourceIndex(Akonadi::Collection::Id id) const
     if (!ix.isValid())
         return QModelIndex();
     return ix;
-}
-
-/******************************************************************************
-* Find the ID of the collection containing the specified event.
-*/
-Collection::Id AkonadiModel::resourceIdForEvent(const QString& eventId) const
-{
-    return mEventIds.value(eventId).collectionId;
 }
 
 /******************************************************************************

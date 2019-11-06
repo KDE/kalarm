@@ -23,6 +23,7 @@
 #include "alarmcalendar.h"
 #include "functions.h"
 #include "messagebox.h"
+#include "resources/resources.h"
 #include "kalarm_debug.h"
 
 #include <kalarmcal/alarmtext.h>
@@ -1128,7 +1129,7 @@ UndoItem* UndoDelete::restore()
             {
                 // It was archived when it was deleted
                 mEvent->setCategory(CalEvent::ARCHIVED);
-                mEvent->setResourceId(AkonadiModel::instance()->resourceIdForEvent(mEvent->id()));
+                mEvent->setResourceId(Resources::resourceForEvent(mEvent->id()).id());
                 const KAlarm::UpdateResult status = KAlarm::reactivateEvent(*mEvent, &mResource);
                 switch (status.status)
                 {

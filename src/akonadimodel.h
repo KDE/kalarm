@@ -62,15 +62,13 @@ class AkonadiModel : public Akonadi::EntityTreeModel, public CalendarDataModel
         /** Refresh the specified item instance with up to date data. */
         bool refresh(Akonadi::Item&) const;
 
-        Resource                 resource(Akonadi::Collection::Id) const;
-        Resource                 resource(const QModelIndex&) const;
-        QModelIndex              resourceIndex(const Resource&) const;
-        QModelIndex              resourceIndex(Akonadi::Collection::Id) const;
-        Resource                 resourceForEvent(const QString& eventId) const;
-        Akonadi::Collection::Id  resourceIdForEvent(const QString& eventId) const;
+        Resource             resource(Akonadi::Collection::Id) const;
+        Resource             resource(const QModelIndex&) const;
+        QModelIndex          resourceIndex(const Resource&) const;
+        QModelIndex          resourceIndex(Akonadi::Collection::Id) const;
 
-        Akonadi::Collection*     collection(Akonadi::Collection::Id id) const;
-        Akonadi::Collection*     collection(const Resource&) const;
+        Akonadi::Collection* collection(Akonadi::Collection::Id id) const;
+        Akonadi::Collection* collection(const Resource&) const;
 
         /** Reload a collection's data from Akonadi storage (not from the backend). */
         bool reloadResource(const Resource&);
@@ -97,9 +95,6 @@ class AkonadiModel : public Akonadi::EntityTreeModel, public CalendarDataModel
         /** Return the Item for a given event. */
         Akonadi::Item itemForEvent(const QString& eventId) const;
 
-        /** Return all events in a collection, optionally of a specified type. */
-        QList<KAEvent> events(ResourceId, CalEvent::Types = CalEvent::EMPTY) const;
-
         QVariant data(const QModelIndex&, int role = Qt::DisplayRole) const override;
 
     private Q_SLOTS:
@@ -109,15 +104,6 @@ class AkonadiModel : public Akonadi::EntityTreeModel, public CalendarDataModel
     Q_SIGNALS:
         /** Signal emitted when a collection has been added to the model. */
         void resourceAdded(Resource&);
-
-        /** Signal emitted when events have been added to the model. */
-        void eventsAdded(const QList<KAEvent>&);
-
-        /** Signal emitted when events are about to be removed from the model. */
-        void eventsToBeRemoved(const QList<KAEvent>&);
-
-        /** Signal emitted when an event in the model has changed. */
-        void eventUpdated(const KAEvent&);
 
         /** Signal emitted when calendar migration/creation has completed. */
         void migrationCompleted();
@@ -184,7 +170,8 @@ class AkonadiModel : public Akonadi::EntityTreeModel, public CalendarDataModel
         QModelIndex   itemIndex(const Akonadi::Item&) const;
         void          signalDataChanged(bool (*checkFunc)(const Akonadi::Item&), int startColumn, int endColumn, const QModelIndex& parent);
         void          setCollectionChanged(Resource&, const Akonadi::Collection&, bool checkCompat);
-        void          getChildEvents(const QModelIndex& parent, CalEvent::Types, QList<KAEvent>&) const;
+        QList<KAEvent> events(ResourceId) const;
+        void          getChildEvents(const QModelIndex& parent, QList<KAEvent>&) const;
 
         static AkonadiModel*  mInstance;
         static int            mTimeHourPos;   // position of hour within time string, or -1 if leading zeroes included

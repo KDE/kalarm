@@ -46,6 +46,7 @@
 #include "templatepickdlg.h"
 #include "timeedit.h"
 #include "timespinbox.h"
+#include "resources/resources.h"
 #include "kalarm_debug.h"
 
 #include <Libkdepim/MaillistDrag>
@@ -1148,7 +1149,7 @@ bool EditAlarmDlg::validate()
     {
         if (!mResourceEventId.isEmpty())
         {
-            mResource = AlarmCalendar::resources()->resourceForEvent(mResourceEventId);
+            mResource = Resources::resourceForEvent(mResourceEventId);
             if (mResource.isValid())
             {
                 CalEvent::Type type = mTemplate ? CalEvent::TEMPLATE : CalEvent::ACTIVE;

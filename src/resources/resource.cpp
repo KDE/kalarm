@@ -229,6 +229,16 @@ QList<KAEvent> Resource::events() const
     return mResource.isNull() ? QList<KAEvent>() : mResource->events();
 }
 
+KAEvent Resource::event(const QString& eventId) const
+{
+    return mResource.isNull() ? KAEvent() : mResource->event(eventId);
+}
+
+bool Resource::containsEvent(const QString& eventId) const
+{
+    return mResource.isNull() ? false : mResource->containsEvent(eventId);
+}
+
 bool Resource::addEvent(const KAEvent& event)
 {
     return mResource.isNull() ? false : mResource->addEvent(event);

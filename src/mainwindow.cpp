@@ -733,10 +733,9 @@ void MainWindow::slotDelete(bool force)
 
     // Remove any events which have just triggered, from the list to delete.
     Undo::EventList undos;
-    AlarmCalendar* resources = AlarmCalendar::resources();
     for (int i = 0;  i < events.count();  )
     {
-        Resource res = resources->resourceForEvent(events[i].id());
+        Resource res = Resources::resourceForEvent(events[i].id());
         if (!res.isValid())
             events.remove(i);
         else
@@ -768,11 +767,10 @@ void MainWindow::slotReactivate()
     KAlarm::reactivateEvents(events, ineligibleIDs, nullptr, this);
 
     // Create the undo list, excluding ineligible events
-    AlarmCalendar* resources = AlarmCalendar::resources();
     for (int i = 0, end = events.count();  i < end;  ++i)
     {
         if (!ineligibleIDs.contains(EventId(events[i])))
-            undos.append(events[i], resources->resourceForEvent(events[i].id()));
+            undos.append(events[i], Resources::resourceForEvent(events[i].id()));
     }
     Undo::saveReactivates(undos);
 }
@@ -878,9 +876,8 @@ void MainWindow::slotBirthdays()
             KAlarm::UpdateResult status = KAlarm::addEvents(events, dlg, true, true);
 
             Undo::EventList undos;
-            AlarmCalendar* resources = AlarmCalendar::resources();
             for (int i = 0, end = events.count();  i < end;  ++i)
-                undos.append(events[i], resources->resourceForEvent(events[i].id()));
+                undos.append(events[i], Resources::resourceForEvent(events[i].id()));
             Undo::saveAdds(undos, i18nc("@info", "Import birthdays"));
 
             if (status != KAlarm::UPDATE_FAILED)
@@ -1608,7 +1605,7 @@ void MainWindow::editAlarmOk()
         return;
     if (dlg->result() != QDialog::Accepted)
         return;
-    Resource res = AkonadiModel::instance()->resourceForEvent(event.id());
+    Resource res = Resources::resourceForEvent(event.id());
     KAlarm::updateEditedAlarm(dlg, event, res);
 }
 

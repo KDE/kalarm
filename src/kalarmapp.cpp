@@ -133,8 +133,8 @@ KAlarmApp::KAlarmApp(int& argc, char** argv)
     {
         connect(AkonadiModel::instance(), &AkonadiModel::resourceAdded,
                                     this, &KAlarmApp::purgeNewArchivedDefault);
-        connect(AkonadiModel::instance(), &Akonadi::EntityTreeModel::collectionTreeFetched,
-                                    this, &KAlarmApp::checkWritableCalendar);
+        connect(Resources::instance(), &Resources::resourcesCreated,
+                                 this, &KAlarmApp::checkWritableCalendar);
         connect(AkonadiModel::instance(), &AkonadiModel::migrationCompleted,
                                     this, &KAlarmApp::checkWritableCalendar);
 
@@ -266,7 +266,7 @@ bool KAlarmApp::restoreSession()
             win->restore(i, false);
             if (win->isValid())
             {
-                if (AkonadiModel::instance()->isCollectionTreeFetched())
+                if (Resources::allCreated())
                     win->show();
             }
             else
@@ -604,7 +604,7 @@ int KAlarmApp::activateInstance(const QStringList& args, const QString& workingD
          */
         if (AlarmCalendar::resources())
         {
-            if (AkonadiModel::instance()->isCollectionTreeFetched())
+            if (Resources::allCreated())
             {
                 mRedisplayAlarms = false;
                 MessageWin::redisplayAlarms();
@@ -1134,7 +1134,7 @@ void KAlarmApp::checkWritableCalendar()
 {
     if (mReadOnly)
         return;    // don't need write access to calendars
-    const bool treeFetched = AkonadiModel::instance()->isCollectionTreeFetched();
+    const bool treeFetched = Resources::allCreated();
     if (treeFetched && mRedisplayAlarms)
     {
         mRedisplayAlarms = false;
@@ -2403,7 +2403,7 @@ void KAlarmApp::setEventCommandError(const KAEvent& event, KAEvent::CmdErrType e
     KAEvent* ev = AlarmCalendar::resources()->event(EventId(event));
     if (ev  &&  ev->commandError() != err)
         ev->setCommandError(err);
-    Resource resource = AkonadiModel::instance()->resourceForEvent(event.id());
+    Resource resource = Resources::resourceForEvent(event.id());
     resource.handleCommandErrorChange(event);
 }
 
@@ -2424,7 +2424,7 @@ void KAlarmApp::clearEventCommandError(const KAEvent& event, KAEvent::CmdErrType
         newerr = static_cast<KAEvent::CmdErrType>(ev->commandError() & ~err);
         ev->setCommandError(newerr);
     }
-    Resource resource = AkonadiModel::instance()->resourceForEvent(event.id());
+    Resource resource = Resources::resourceForEvent(event.id());
     resource.handleCommandErrorChange(event);
 }
 

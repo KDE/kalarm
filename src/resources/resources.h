@@ -54,9 +54,10 @@ public:
     static void removeResource(ResourceId);
 
     /** Return the enabled resources which contain a specified alarm type.
-     *  If 'writable' is true, only writable resources are included.
+     *  @param type      Alarm type to check for, or CalEvent::EMPTY for any type.
+     *  @param writable  If true, only writable resources are included.
      */
-    static QVector<Resource> enabledResources(CalEvent::Type, bool writable);
+    static QVector<Resource> enabledResources(CalEvent::Type type = CalEvent::EMPTY, bool writable = false);
 
     /** Return the standard resource for an alarm type. This is the resource
      *  which can be set as the default to add new alarms to.
@@ -104,6 +105,12 @@ public:
      */
     static void setStandard(Resource& resource, CalEvent::Types);
 
+    /** Return whether all configured resources have been created. */
+    static bool allCreated();
+
+    /** Return whether all configured resources have been loaded at least once. */
+    static bool allPopulated();
+
     /** Wait until one or all enabled resources have been populated,
      *  i.e. whether their events have been fetched.
      *  @param   resId    resource ID, or -1 for all resources
@@ -111,6 +118,14 @@ public:
      *  @return  true if successful.
      */
     static bool waitUntilPopulated(ResourceId resId = -1, int timeout = 0);
+
+    /** Return the resource which an event belongs to, provided that the event's
+     *  alarm type is enabled. */
+    static Resource resourceForEvent(const QString& eventId);
+
+    /** Return the resource which an event belongs to, and the event, provided
+     *  that the event's alarm type is enabled. */
+    static Resource resourceForEvent(const QString& eventId, KAEvent& event);
 
     /** Called to notify that all configured resources have now been created. */
     static void notifyResourcesCreated();
@@ -150,11 +165,15 @@ Q_SIGNALS:
     /** Emitted when a resource's settings have changed. */
     void settingsChanged(Resource&, ResourceType::Changes);
 
+    /** Emitted when all configured resource have been created (but not
+     *  necessarily populated). */
+    void resourcesCreated();
+
+    /** Emitted when all configured resources have been loaded for the first time. */
+    void resourcesPopulated();
+
     /** Emitted when a resource's events have been successfully loaded. */
     void resourceLoaded(Resource&);
-
-    /** Emitted when all resources have been loaded for the first time. */
-    void resourcesPopulated();
 
     /** Emitted when a resource's config and settings have been removed. */
     void resourceRemoved(ResourceId);

@@ -28,6 +28,7 @@
 #include "shellprocess.h"
 #include "templatelistview.h"
 #include "undo.h"
+#include "resources/resources.h"
 #include "kalarm_debug.h"
 
 #include <KLocalizedString>
@@ -190,12 +191,11 @@ void TemplateDlg::slotDelete()
 
     KAEvent::List delEvents;
     Undo::EventList undos;
-    AlarmCalendar* resources = AlarmCalendar::resources();
     for (int i = 0;  i < n;  ++i)
     {
         KAEvent* event = &events[i];
         delEvents.append(event);
-        undos.append(*event, resources->resourceForEvent(event->id()));
+        undos.append(*event, Resources::resourceForEvent(event->id()));
     }
     KAlarm::deleteTemplates(delEvents, this);
     Undo::saveDeletes(undos);

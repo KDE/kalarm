@@ -191,7 +191,7 @@ MessageWin::MessageWin(const KAEvent* event, const KAAlarm& alarm, int flags)
     , mInvalid(false)
     , mEvent(*event)
     , mOriginalEvent(*event)
-    , mResource(AlarmCalendar::resources()->resourceForEvent(mEventId.eventId()))
+    , mResource(Resources::resourceForEvent(mEventId.eventId()))
     , mAlwaysHide(flags & ALWAYS_HIDE)
     , mNoPostAction(alarm.type() & KAAlarm::REMINDER_ALARM)
     , mBeep(event->beep())
@@ -1019,10 +1019,10 @@ void MessageWin::readProperties(const KConfigGroup& config)
         else
         {
             // Close any other window for this alarm which has already been restored by redisplayAlarms()
-            if (!AkonadiModel::instance()->isCollectionTreeFetched())
+            if (!Resources::allCreated())
             {
-                connect(AkonadiModel::instance(), &Akonadi::EntityTreeModel::collectionTreeFetched,
-                                                  this, &MessageWin::showRestoredAlarm);
+                connect(Resources::instance(), &Resources::resourcesCreated,
+                                         this, &MessageWin::showRestoredAlarm);
                 return;
             }
             redisplayAlarm();
@@ -1045,7 +1045,7 @@ void MessageWin::showRestoredAlarm()
 */
 void MessageWin::redisplayAlarm()
 {
-    mResource = AkonadiModel::instance()->resourceForEvent(mEventId.eventId());
+    mResource = Resources::resourceForEvent(mEventId.eventId());
     mEventId.setCollectionId(mResource.id());
     qCDebug(KALARM_LOG) << "MessageWin::redisplayAlarm:" << mEventId;
     // Delete any already existing window for the same event
@@ -1183,7 +1183,7 @@ void MessageWin::alarmShowing(KAEvent& event)
     {
         // Copy the alarm to the displaying calendar in case of a crash, etc.
         KAEvent dispEvent;
-        const ResourceId id = AkonadiModel::instance()->resourceIdForEvent(event.id());
+        const ResourceId id = Resources::resourceForEvent(event.id()).id();
         dispEvent.setDisplaying(event, mAlarmType, id,
                                 mDateTime.effectiveKDateTime(), mShowEdit, !mNoDefer);
         AlarmCalendar* cal = AlarmCalendar::displayCalendarOpen();

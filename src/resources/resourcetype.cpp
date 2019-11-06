@@ -100,7 +100,6 @@ bool ResourceType::isCompatible() const
 QList<KAEvent> ResourceType::events() const
 {
     // Remove any events with disabled alarm types.
-qDebug()<<"ResourceType::events(): total"<<mEvents.count();
     const CalEvent::Types types = enabledTypes();
     QList<KAEvent> events;
     for (auto it = mEvents.begin();  it != mEvents.end();  ++it)
@@ -108,8 +107,31 @@ qDebug()<<"ResourceType::events(): total"<<mEvents.count();
         if (it.value().category() & types)
             events += it.value();
     }
-qDebug()<<"ResourceType::events(): enabled"<<events.count();
     return events;
+}
+
+/******************************************************************************
+* Return the event with the given ID, provided its alarm type is enabled for
+* the resource.
+*/
+KAEvent ResourceType::event(const QString& eventId) const
+{
+    auto it = mEvents.constFind(eventId);
+    if (it != mEvents.constEnd()
+    &&  (it.value().category() & enabledTypes()))
+        return it.value();
+    return KAEvent();
+}
+
+/******************************************************************************
+* Return whether the resource contains the event whose ID is given, and if the
+* event's alarm type is enabled for the resource.
+*/
+bool ResourceType::containsEvent(const QString& eventId) const
+{
+    auto it = mEvents.constFind(eventId);
+    return it != mEvents.constEnd()
+       &&  (it.value().category() & enabledTypes());
 }
 
 void ResourceType::notifyDeletion()

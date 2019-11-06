@@ -502,7 +502,7 @@ void AlarmCalendar::slotResourceSettingsChanged(Resource& resource, ResourceType
         if (resource.isValid())
         {
             // For each alarm type which has been disabled, remove the
-            // collection's events from the map, but not from AkonadiModel.
+            // collection's events from the map, but not from the resource.
             const CalEvent::Types enabled = resource.enabledTypes();
             const CalEvent::Types disabled = ~enabled & (CalEvent::ACTIVE | CalEvent::ARCHIVED | CalEvent::TEMPLATE);
             removeKAEvents(resource.id(), false, disabled);
@@ -527,7 +527,7 @@ void AlarmCalendar::slotResourcesPopulated()
 }
 
 /******************************************************************************
-* Called when events have been added to AkonadiModel.
+* Called when events have been added to a resource.
 * Add corresponding KAEvent instances to those held by AlarmCalendar.
 * All events must have their resource ID set.
 */
@@ -538,7 +538,7 @@ void AlarmCalendar::slotEventsAdded(Resource& resource, const QList<KAEvent>& ev
 }
 
 /******************************************************************************
-* Called when an event has been changed in AkonadiModel.
+* Called when an event has been changed in a resource.
 * Change the corresponding KAEvent instance held by AlarmCalendar.
 * The event must have its resource ID set.
 */
@@ -575,7 +575,7 @@ void AlarmCalendar::slotEventUpdated(Resource& resource, const KAEvent& event)
 }
 
 /******************************************************************************
-* Called when events are about to be removed from AkonadiModel.
+* Called when events are about to be removed from a resource.
 * Remove the corresponding KAEvent instances held by AlarmCalendar.
 */
 void AlarmCalendar::slotEventsToBeRemoved(Resource& resource, const QList<KAEvent>& events)
@@ -1107,7 +1107,7 @@ KAEvent* AlarmCalendar::updateEvent(const KAEvent* evnt)
     KAEvent* kaevnt = event(EventId(*evnt));
     if (kaevnt)
     {
-        Resource resource = AkonadiModel::instance()->resourceForEvent(evnt->id());
+        Resource resource = Resources::resourceForEvent(evnt->id());
         if (resource.updateEvent(*evnt))
         {
             *kaevnt = *evnt;
@@ -1393,23 +1393,11 @@ bool AlarmCalendar::eventReadOnly(const QString& eventId) const
 {
     if (mCalType != RESOURCES)
         return true;
-    AkonadiModel* model = AkonadiModel::instance();
-    const Resource resource = model->resourceForEvent(eventId);
-    const KAEvent event = model->event(eventId);
-    if (!resource.isWritable(event.category()))
-        return true;
-    return !event.isValid()  ||  event.isReadOnly();
-    //   ||  compatibility(event) != KACalendar::Current;
-}
-
-/******************************************************************************
-* Return the resource containing a specified event.
-*/
-Resource AlarmCalendar::resourceForEvent(const QString& eventId) const
-{
-    if (mCalType != RESOURCES)
-        return Resource();
-    return AkonadiModel::instance()->resourceForEvent(eventId);
+    KAEvent event;
+    const Resource resource = Resources::resourceForEvent(eventId, event);
+    return !event.isValid()  ||  event.isReadOnly()
+       ||  !resource.isWritable(event.category());
+//TODO   ||  compatibility(event) != KACalendar::Current;
 }
 
 /******************************************************************************
@@ -1553,7 +1541,7 @@ void AlarmCalendar::setAlarmPending(KAEvent* event, bool pending)
         mPendingAlarms.remove(id);
     }
     // Now update the earliest alarm to trigger for its calendar
-    findEarliestAlarm(AkonadiModel::instance()->resourceForEvent(event->id()));
+    findEarliestAlarm(Resources::resourceForEvent(event->id()));
 }
 
 /******************************************************************************

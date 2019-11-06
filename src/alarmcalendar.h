@@ -67,7 +67,6 @@ class AlarmCalendar : public QObject
         KAEvent::List         events(const Resource&, CalEvent::Types = CalEvent::EMPTY) const;
         KCalendarCore::Event::List kcalEvents(CalEvent::Type s = CalEvent::EMPTY);   // display calendar only
         bool                  eventReadOnly(const QString& eventId) const;
-        Resource              resourceForEvent(const QString& eventId) const;
         bool                  addEvent(KAEvent&, QWidget* promptparent = nullptr, bool useEventID = false, Resource* = nullptr, bool noPrompt = false, bool* cancelled = nullptr);
         bool                  modifyEvent(const EventId& oldEventId, KAEvent& newEvent);
         KAEvent*              updateEvent(const KAEvent&);

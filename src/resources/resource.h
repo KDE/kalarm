@@ -286,6 +286,17 @@ public:
     /** Return all events belonging to this resource. */
     QList<KAEvent> events() const;
 
+    /** Return the event with the given ID, provided its alarm type is enabled for
+     *  the resource.
+     *  @return  The event, or invalid event if not found or alarm type is disabled.
+     */
+    KAEvent event(const QString& eventId) const;
+
+    /** Return whether the resource contains the event whose ID is given, provided
+     *  the event's alarm type is enabled for the resource.
+     */
+    bool containsEvent(const QString& eventId) const;
+
     /** Add an event to the resource. */
     bool addEvent(const KAEvent&);
 

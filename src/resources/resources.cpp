@@ -60,18 +60,22 @@ void Resources::removeResource(ResourceId id)
 }
 
 /******************************************************************************
-* Return the enabled resources which contain a specified alarm type.
+* Return the resources which are enabled for a specified alarm type.
 * If 'writable' is true, only writable resources are included.
 */
 QVector<Resource> Resources::enabledResources(CalEvent::Type type, bool writable)
 {
+    const CalEvent::Types types = (type == CalEvent::EMPTY)
+                                ? CalEvent::ACTIVE | CalEvent::ARCHIVED | CalEvent::TEMPLATE
+                                : type;
+
     QVector<Resource> result;
     for (auto it = mResources.constBegin();  it != mResources.constEnd();  ++it)
     {
         const Resource& res = it.value();
         if (writable  &&  !res.isWritable())
             continue;
-        if (res.alarmTypes() & type)
+        if (res.enabledTypes() & types)
             result += res;
     }
     return result;
@@ -237,6 +241,22 @@ void Resources::setStandard(Resource& resource, CalEvent::Types types)
 }
 
 /******************************************************************************
+* Return whether all configured resources have been created.
+*/
+bool Resources::allCreated()
+{
+    return instance()->mCreated;
+}
+
+/******************************************************************************
+* Return whether all configured resources have been loaded at least once.
+*/
+bool Resources::allPopulated()
+{
+    return instance()->mPopulated;
+}
+
+/******************************************************************************
 * Wait for one or all enabled resources to be populated.
 * Reply = true if successful.
 */
@@ -259,11 +279,45 @@ bool Resources::waitUntilPopulated(ResourceId id, int timeout)
 }
 
 /******************************************************************************
+* Return the resource which an event belongs to, provided its alarm type is
+* enabled.
+*/
+Resource Resources::resourceForEvent(const QString& eventId)
+{
+    for (auto it = mResources.constBegin();  it != mResources.constEnd();  ++it)
+    {
+        const Resource& res = it.value();
+        if (res.containsEvent(eventId))
+            return res;
+    }
+    return Resource::null();
+}
+
+/******************************************************************************
+* Return the resource which an event belongs to, and the event, provided its
+* alarm type is enabled.
+*/
+Resource Resources::resourceForEvent(const QString& eventId, KAEvent& event)
+{
+    for (auto it = mResources.constBegin();  it != mResources.constEnd();  ++it)
+    {
+        const Resource& res = it.value();
+        event = res.event(eventId);
+        if (event.isValid())
+            return res;
+    }
+    if (mResources.isEmpty())   // otherwise, 'event' was set invalid in the loop
+        event = KAEvent();
+    return Resource::null();
+}
+
+/******************************************************************************
 * Called when all configured resources have been created for the first time.
 */
 void Resources::notifyResourcesCreated()
 {
     mCreated = true;
+    Q_EMIT instance()->resourcesCreated();
     checkResourcesPopulated();
 }
 
