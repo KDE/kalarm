@@ -509,7 +509,7 @@ QColor DBusHandler::convertBgColour(const QString& bgColor)
     return bg;
 }
 
-bool DBusHandler::convertRecurrence(KADateTime& start, KARecurrence& recurrence, 
+bool DBusHandler::convertRecurrence(KADateTime& start, KARecurrence& recurrence,
                                     const QString& startDateTime, const QString& icalRecurrence,
                     int subRepeatInterval, KCalendarCore::Duration& subRepeatDuration)
 {

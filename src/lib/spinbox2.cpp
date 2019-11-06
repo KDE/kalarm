@@ -216,8 +216,8 @@ void SpinBox2::setMaximum(int val)
 
 void SpinBox2::valueChange()
 {
-    int val = mSpinbox->value();
-    bool blocked = mUpdown2->signalsBlocked();
+    const int val = mSpinbox->value();
+    const bool blocked = mUpdown2->signalsBlocked();
     mUpdown2->blockSignals(true);
     mUpdown2->setValue(val);
     mUpdown2->blockSignals(blocked);
@@ -281,7 +281,7 @@ void SpinBox2::updateMirrorFrame()
 
 void SpinBox2::spinboxResized(QResizeEvent* e)
 {
-    int h = e->size().height();
+    const int h = e->size().height();
     if (h != mUpdown2->height())
     {
         mUpdown2->setFixedSize(mUpdown2->width(), e->size().height());
@@ -299,7 +299,7 @@ void SpinBox2::setUpdown2Size()
 }
 
 /******************************************************************************
-* Called when the extra pair of spin buttons has repainted after a style change. 
+* Called when the extra pair of spin buttons has repainted after a style change.
 * Updates the mirror image of the spin buttons.
 */
 void SpinBox2::updateMirror()
@@ -368,13 +368,13 @@ bool SpinBox2::eventFilter(QObject* obj, QEvent* e)
 }
 
 /******************************************************************************
-* Set the positions and sizes of all the child widgets. 
+* Set the positions and sizes of all the child widgets.
 */
 void SpinBox2::arrange()
 {
     getMetrics();
     mUpdown2->move(-mUpdown2->width(), 0);   // keep completely hidden
-    QRect arrowRect = style()->visualRect((mRightToLeft ? Qt::RightToLeft : Qt::LeftToRight), rect(), QRect(0, 0, wUpdown2, height()));
+    const QRect arrowRect = style()->visualRect((mRightToLeft ? Qt::RightToLeft : Qt::LeftToRight), rect(), QRect(0, 0, wUpdown2, height()));
     QRect r(wUpdown2, 0, width() - wUpdown2, height());
     if (mRightToLeft)
         r.moveLeft(0);
@@ -390,7 +390,7 @@ void SpinBox2::arrange()
 
 /******************************************************************************
 * Calculate the width and position of the extra pair of spin buttons.
-* Style-specific adjustments are made for a better appearance. 
+* Style-specific adjustments are made for a better appearance.
 */
 void SpinBox2::getMetrics() const
 {
@@ -403,7 +403,7 @@ void SpinBox2::getMetrics() const
         butRect.setLeft(butRect.left() - 1);    // Plastik excludes left border from spin widget rectangle
     QRect r = spinBoxEditFieldRect(mSpinbox, option);
     wSpinboxHide = mRightToLeft ? mSpinbox->style()->subControlRect(QStyle::CC_SpinBox, &option, QStyle::SC_SpinBoxFrame).right() - r.right() : r.left();
-    QRect edRect = spinBoxEditFieldRect(mUpdown2, option);
+    const QRect edRect = spinBoxEditFieldRect(mUpdown2, option);
     int butx;
     if (isMirrorStyle(udStyle))
     {
@@ -526,11 +526,11 @@ void ExtraSpinBox::paintEvent(QPaintEvent* e)
 =============================================================================*/
 
 SpinMirror::SpinMirror(ExtraSpinBox* spinbox, SpinBox* mainspin, QWidget* parent)
-    : QGraphicsView(parent),
-      mSpinbox(spinbox),
-      mMainSpinbox(mainspin),
-      mReadOnly(false),
-      mMirrored(false)
+    : QGraphicsView(parent)
+    , mSpinbox(spinbox)
+    , mMainSpinbox(mainspin)
+    , mReadOnly(false)
+    , mMirrored(false)
 {
     setScene(new QGraphicsScene(this));
     setAttribute(Qt::WA_Hover);
@@ -564,26 +564,26 @@ void SpinMirror::setFrame()
     QGraphicsScene* c = scene();
     QStyleOptionSpinBox option;
     option.initFrom(mMainSpinbox);
-    QRect r = spinBoxEditFieldRect(mMainSpinbox, option);
-    bool rtl = QApplication::isRightToLeft();
+    const QRect r = spinBoxEditFieldRect(mMainSpinbox, option);
+    const bool rtl = QApplication::isRightToLeft();
     QPixmap p;
     if (mMirrored)
     {
-        int x = rtl ? 0 : mMainSpinbox->width() - width();
+        const int x = rtl ? 0 : mMainSpinbox->width() - width();
         p = grabWidget(mMainSpinbox, QRect(x, 0, width(), height()));
     }
     else
     {
         // Grab a single pixel wide vertical slice through the main spinbox, between the
         // frame and edit field.
-        bool oxygen  = mMainSpinbox->style()->inherits("Oxygen::Style"); // KDE >= 4.4 Oxygen style
-        bool oxygen1 = mMainSpinbox->style()->inherits("OxygenStyle");   // KDE <= 4.3 Oxygen style
-        int editOffsetY = oxygen ? 5 : oxygen1 ? 6 : 2;   // offset to edit field
-        int editOffsetX = (oxygen || oxygen1) ? 4 : 2;   // offset to edit field
+        const bool oxygen  = mMainSpinbox->style()->inherits("Oxygen::Style"); // KDE >= 4.4 Oxygen style
+        const bool oxygen1 = mMainSpinbox->style()->inherits("OxygenStyle");   // KDE <= 4.3 Oxygen style
+        const int editOffsetY = oxygen ? 5 : oxygen1 ? 6 : 2;   // offset to edit field
+        const int editOffsetX = (oxygen || oxygen1) ? 4 : 2;   // offset to edit field
         int x = rtl ? r.right() - editOffsetX : r.left() + editOffsetX;
         p = grabWidget(mMainSpinbox, QRect(x, 0, 1, height()));
         // Blot out edit field stuff from the middle of the slice
-        QPixmap dot = grabWidget(mMainSpinbox, QRect(x, editOffsetY, 1, 1));
+        const QPixmap dot = grabWidget(mMainSpinbox, QRect(x, editOffsetY, 1, 1));
         QPainter painter(&p);
         painter.drawTiledPixmap(0, editOffsetY, 1, height() - 2*editOffsetY, dot, 0, 0);
         painter.end();
@@ -593,7 +593,7 @@ void SpinMirror::setFrame()
         QRect endr = rect();
         if (rtl)
         {
-            int mr = mMainSpinbox->width() - 1;
+            const int mr = mMainSpinbox->width() - 1;
             endr.setWidth(mr - r.right() + editOffsetX);
             endr.moveRight(mr);
         }
@@ -615,7 +615,7 @@ void SpinMirror::setButtons()
             | st->subControlRect(QStyle::CC_SpinBox, &option, QStyle::SC_SpinBoxDown);
     if (isOxygenStyle(mSpinbox))
     {
-        // They don't use all their height, so shorten them to 
+        // They don't use all their height, so shorten them to
         // allow frame highlighting to work properly.
         r.setTop(r.top() + 1);
         r.setHeight(r.height() - 2);
@@ -628,7 +628,7 @@ void SpinMirror::setButtons()
 void SpinMirror::setButtonPos(const QPoint& pos)
 {
     //qCDebug(KALARM_LOG)<<pos;
-    int x = pos.x();
+    const int x = pos.x();
     int y = pos.y();
     if (isOxygenStyle(this))
     {
@@ -642,7 +642,7 @@ void SpinMirror::setButtonPos(const QPoint& pos)
 
 void SpinMirror::resizeEvent(QResizeEvent* e)
 {
-    QSize sz = e->size();
+    const QSize sz = e->size();
     scene()->setSceneRect(0, 0, sz.width(), sz.height());
     setMirroredState();
 }
@@ -692,8 +692,8 @@ void SpinMirror::wheelEvent(QWheelEvent* e)
 */
 QPoint SpinMirror::spinboxPoint(const QPoint& param) const
 {
-    QRect r = mSpinbox->upRect();
-    QPointF ptf = mButtons->mapFromScene(param.x(), param.y());
+    const QRect r = mSpinbox->upRect();
+    const QPointF ptf = mButtons->mapFromScene(param.x(), param.y());
     QPoint pt(ptf.x(), ptf.y());
     pt.setX(ptf.x() + r.left());
     pt.setY(ptf.y() + r.top());
@@ -707,7 +707,7 @@ QPoint SpinMirror::spinboxPoint(const QPoint& param) const
 bool SpinMirror::event(QEvent* e)
 {
 //qCDebug(KALARM_LOG)<<e->type();
-    QHoverEvent *he = nullptr;
+    QHoverEvent* he = nullptr;
     switch (e->type())
     {
         case QEvent::Leave:

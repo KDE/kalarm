@@ -66,7 +66,7 @@ void LineEdit::init()
         setCompletionObject(comp);
         setAutoDeleteCompletionObject(true);
     }
-    else 
+    else
         setCompletionMode(KCompletion::CompletionNone);
 }
 
@@ -134,12 +134,12 @@ void LineEdit::dropEvent(QDropEvent* e)
     }
     // This must come before QUrl
     else if (mType == Emails
-    &&  KContacts::VCardDrag::canDecode(data)  &&  KContacts::VCardDrag::fromMimeData(data, addrList))
+         &&  KContacts::VCardDrag::canDecode(data)  &&  KContacts::VCardDrag::fromMimeData(data, addrList))
     {
         // KAddressBook entries
         for (KContacts::Addressee::List::Iterator it = addrList.begin();  it != addrList.end();  ++it)
         {
-            QString em((*it).fullEmail());
+            const QString em((*it).fullEmail());
             if (!em.isEmpty())
                 newEmails.append(em);
         }
@@ -156,11 +156,11 @@ void LineEdit::dropEvent(QDropEvent* e)
             case Emails:
             {
                 // Email entry field - ignore all but mailto: URLs
-                QString mailto = QStringLiteral("mailto");
-                for (QList<QUrl>::Iterator it = files.begin();  it != files.end();  ++it)
+                const QString mailto = QStringLiteral("mailto");
+                for (const QUrl& file : qAsConst(files))
                 {
-                    if ((*it).scheme() == mailto)
-                        newEmails.append((*it).path());
+                    if (file.scheme() == mailto)
+                        newEmails.append(file.path());
                 }
                 break;
             }
@@ -172,24 +172,24 @@ void LineEdit::dropEvent(QDropEvent* e)
     else if (data->hasText())
     {
         // Plain text
-        QString txt = data->text();
+        const QString txt = data->text();
         if (mType == Emails)
         {
             // Remove newlines from a list of email addresses, and allow an eventual mailto: scheme
-            QString mailto = QStringLiteral("mailto:");
+            const QString mailto = QStringLiteral("mailto:");
             newEmails = txt.split(QRegExp(QLatin1String("[\r\n]+")), QString::SkipEmptyParts);
             for (QStringList::Iterator it = newEmails.begin();  it != newEmails.end();  ++it)
             {
                 if ((*it).startsWith(mailto))
                 {
-                    QUrl url = QUrl::fromUserInput(*it);
+                    const QUrl url = QUrl::fromUserInput(*it);
                     *it = url.path();
                 }
             }
         }
         else
         {
-            int newline = txt.indexOf(QLatin1Char('\n'));
+            const int newline = txt.indexOf(QLatin1Char('\n'));
             newText = (newline >= 0) ? txt.left(newline) : txt;
         }
     }
@@ -197,7 +197,7 @@ void LineEdit::dropEvent(QDropEvent* e)
     if (newEmails.count())
     {
         newText = newEmails.join(QLatin1Char(','));
-        int c = cursorPosition();
+        const int c = cursorPosition();
         if (c > 0)
             newText.prepend(QLatin1Char(','));
         if (c < static_cast<int>(text().length()))

@@ -141,7 +141,7 @@ bool PickFileRadio::pickFileIfNone()
     QString file;
     if (!doPickFile(file))
        return false;
-    return !mFile.isEmpty(); 
+    return !mFile.isEmpty();
 }
 
 /******************************************************************************

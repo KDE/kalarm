@@ -36,7 +36,7 @@ class QDropEvent;
  *  The widget will always accept drag and drop of text, except text/calendar mime type,
  *  and of URLs. It will accept additional mime types depending on its configuration:
  *  Text type accepts email address lists.
- *  Email type accepts email address lists and VCard data (e.g. from KAddressBook). 
+ *  Email type accepts email address lists and VCard data (e.g. from KAddressBook).
  *
  *  The class also provides an option to prevent its contents being selected when the
  *  widget receives focus.
@@ -59,7 +59,6 @@ class LineEdit : public KLineEdit
          *               mailto: URLs, emails from KMail (the From address is used)
          *               or vcard data (e.g. from KAddressBook). If multiple emails
          *               are dropped, only the first is used; the rest are ignored.
-         *               
          */
         enum Type { Text, Url, Emails };
         /** Constructor.

@@ -33,7 +33,7 @@ Slider::Slider(Qt::Orientation o, QWidget* parent)
 
 Slider::Slider(int minval, int maxval, int pageStep, Qt::Orientation o, QWidget* parent)
     : QSlider(o, parent)
-{ 
+{
     setRange(minval, maxval);
     setPageStep(pageStep);
 }

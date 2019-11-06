@@ -145,7 +145,7 @@ KAlarmPrefDlg::KAlarmPrefDlg()
     setObjectName(QStringLiteral("PrefDlg"));    // used by LikeBack
     setWindowTitle(i18nc("@title:window", "Configure"));
     setStandardButtons(QDialogButtonBox::Ok | QDialogButtonBox::Cancel | QDialogButtonBox::Help | QDialogButtonBox::RestoreDefaults | QDialogButtonBox::Apply);
-    button(QDialogButtonBox::Ok)->setDefault(true); 
+    button(QDialogButtonBox::Ok)->setDefault(true);
     setFaceType(List);
     mTabScrollGroup = new StackedScrollGroup(this, this);
 
@@ -256,9 +256,10 @@ void KAlarmPrefDlg::slotCancel()
 // Reset all controls to the application defaults
 void KAlarmPrefDlg::slotDefault()
 {
-    switch (KAMessageBox::questionYesNoCancel(this, i18nc("@info", "Reset all tabs to their default values, or only reset the current tab?"),
-                                              QString(),
-                                            KGuiItem(i18nc("@action:button Reset ALL tabs", "&All")),
+    switch (KAMessageBox::questionYesNoCancel(this,
+                         i18nc("@info", "Reset all tabs to their default values, or only reset the current tab?"),
+                         QString(),
+                         KGuiItem(i18nc("@action:button Reset ALL tabs", "&All")),
                          KGuiItem(i18nc("@action:button Reset the CURRENT tab", "C&urrent"))))
     {
         case KMessageBox::Yes:
@@ -374,13 +375,13 @@ void PrefsTabBase::showEvent(QShowEvent*)
     {
         int wid = 0;
         int i;
-        int end = mLabels.count();
+        const int end = mLabels.count();
         QList<int> xpos;
         for (i = 0;  i < end;  ++i)
         {
-            int x = mLabels[i]->mapTo(this, QPoint(0, 0)).x();
+            const int x = mLabels[i]->mapTo(this, QPoint(0, 0)).x();
             xpos += x;
-            int w = x + mLabels[i]->sizeHint().width();
+            const int w = x + mLabels[i]->sizeHint().width();
             if (w > wid)
                 wid = w;
         }
@@ -404,7 +405,7 @@ MiscPrefTab::MiscPrefTab(StackedScrollGroup* scrollGroup)
     QGroupBox* group = new QGroupBox(i18nc("@title:group", "Run Mode"));
     topLayout()->addWidget(group);
     QVBoxLayout* vlayout = new QVBoxLayout(group);
-    int dcm = style()->pixelMetric(QStyle::PM_DefaultChildMargin);
+    const int dcm = style()->pixelMetric(QStyle::PM_DefaultChildMargin);
     vlayout->setContentsMargins(dcm, dcm, dcm, dcm);
     vlayout->setSpacing(style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
@@ -461,7 +462,7 @@ MiscPrefTab::MiscPrefTab(StackedScrollGroup* scrollGroup)
     for (mXtermCount = 0;  !xtermCommands[mXtermCount].isNull();  ++mXtermCount)
     {
         QString cmd = xtermCommands[mXtermCount];
-        QStringList args = KShell::splitArgs(cmd);
+        const QStringList args = KShell::splitArgs(cmd);
         if (args.isEmpty()  ||  QStandardPaths::findExecutable(args[0]).isEmpty())
             continue;
         QRadioButton* radio = new QRadioButton(args[0], group);
@@ -493,7 +494,7 @@ MiscPrefTab::MiscPrefTab(StackedScrollGroup* scrollGroup)
     mXtermCommand = new QLineEdit(group);
     mXtermCommand->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Minimum);
     hlayout->addWidget(mXtermCommand);
-    QString wt = 
+    const QString wt =
           xi18nc("@info:whatsthis", "Enter the full command line needed to execute a command in your chosen terminal window. "
                "By default the alarm's command string will be appended to what you enter here. "
                "See the <application>KAlarm</application> Handbook for details of special codes to tailor the command line.");
@@ -535,7 +536,7 @@ void MiscPrefTab::apply(bool syncToDisc)
             xtermID = -1;       // 'Other' is only acceptable if it's non-blank
         else
         {
-            QStringList args = KShell::splitArgs(cmd);
+            const QStringList args = KShell::splitArgs(cmd);
             cmd = args.isEmpty() ? QString() : args[0];
             if (QStandardPaths::findExecutable(cmd).isEmpty())
             {
@@ -554,7 +555,7 @@ void MiscPrefTab::apply(bool syncToDisc)
 
     if (mQuitWarn->isEnabled())
     {
-        bool b = mQuitWarn->isChecked();
+        const bool b = mQuitWarn->isChecked();
         if (b != Preferences::quitWarn())
             Preferences::setQuitWarn(b);
     }
@@ -687,7 +688,7 @@ TimePrefTab::TimePrefTab(StackedScrollGroup* scrollGroup)
     QGroupBox* group = new QGroupBox(i18nc("@title:group", "Working Hours"));
     topLayout()->addWidget(group);
     QBoxLayout* layout = new QVBoxLayout(group);
-    int dcm = style()->pixelMetric(QStyle::PM_DefaultChildMargin);
+    const int dcm = style()->pixelMetric(QStyle::PM_DefaultChildMargin);
     layout->setContentsMargins(dcm, dcm, dcm, dcm);
     layout->setSpacing(style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
@@ -775,7 +776,7 @@ void TimePrefTab::restore(bool, bool)
 {
     KADateTime::Spec timeSpec = Preferences::timeSpec();
     mTimeZone->setTimeZone(timeSpec.type() == KADateTime::TimeZone ? timeSpec.timeZone() : QTimeZone());
-    int i = Preferences::holidays().isValid() ? mHolidays->findData(Preferences::holidays().regionCode()) : 0;
+    const int i = Preferences::holidays().isValid() ? mHolidays->findData(Preferences::holidays().regionCode()) : 0;
     mHolidays->setCurrentIndex(i);
     mStartOfDay->setValue(Preferences::startOfDay());
     mWorkStart->setValue(Preferences::workDayStart());
@@ -783,7 +784,7 @@ void TimePrefTab::restore(bool, bool)
     QBitArray days = Preferences::workDays();
     for (int i = 0;  i < 7;  ++i)
     {
-        bool x = days.testBit(KAlarm::localeDayInWeek_to_weekDay(i) - 1);
+        const bool x = days.testBit(KAlarm::localeDayInWeek_to_weekDay(i) - 1);
         mWorkDays[i]->setChecked(x);
     }
     mKOrgEventDuration->setValue(Preferences::kOrgEventDuration());
@@ -792,11 +793,11 @@ void TimePrefTab::restore(bool, bool)
 void TimePrefTab::apply(bool syncToDisc)
 {
     Preferences::setTimeSpec(mTimeZone->timeZone());
-    QString hol = mHolidays->itemData(mHolidays->currentIndex()).toString();
+    const QString hol = mHolidays->itemData(mHolidays->currentIndex()).toString();
     if (hol != Preferences::holidays().regionCode())
         Preferences::setHolidayRegion(hol);
     int t = mStartOfDay->value();
-    QTime sodt(t/60, t%60, 0);
+    const QTime sodt(t/60, t%60, 0);
     if (sodt != Preferences::startOfDay())
         Preferences::setStartOfDay(sodt);
     t = mWorkStart->value();
@@ -828,7 +829,7 @@ StorePrefTab::StorePrefTab(StackedScrollGroup* scrollGroup)
     topLayout()->addWidget(group);
     QButtonGroup* bgroup = new QButtonGroup(group);
     QBoxLayout* layout = new QVBoxLayout(group);
-    int dcm = style()->pixelMetric(QStyle::PM_DefaultChildMargin);
+    const int dcm = style()->pixelMetric(QStyle::PM_DefaultChildMargin);
     layout->setContentsMargins(dcm, dcm, dcm, dcm);
     layout->setSpacing(style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
@@ -894,7 +895,7 @@ void StorePrefTab::restore(bool defaults, bool)
         mAskResource->setChecked(true);
     else
         mDefaultResource->setChecked(true);
-    int keepDays = Preferences::archivedKeepDays();
+    const int keepDays = Preferences::archivedKeepDays();
     if (!defaults)
         mOldKeepArchived = keepDays;
     setArchivedControls(keepDays);
@@ -903,10 +904,10 @@ void StorePrefTab::restore(bool defaults, bool)
 
 void StorePrefTab::apply(bool syncToDisc)
 {
-    bool b = mAskResource->isChecked();
+    const bool b = mAskResource->isChecked();
     if (b != Preferences::askResource())
         Preferences::setAskResource(mAskResource->isChecked());
-    int days = !mKeepArchived->isChecked() ? 0 : mPurgeArchived->isChecked() ? mPurgeAfter->value() : -1;
+    const int days = !mKeepArchived->isChecked() ? 0 : mPurgeArchived->isChecked() ? mPurgeAfter->value() : -1;
     if (days != Preferences::archivedKeepDays())
         Preferences::setArchivedKeepDays(days);
     PrefsTabBase::apply(syncToDisc);
@@ -922,7 +923,7 @@ void StorePrefTab::setArchivedControls(int purgeDays)
 
 void StorePrefTab::slotArchivedToggled(bool)
 {
-    bool keep = mKeepArchived->isChecked();
+    const bool keep = mKeepArchived->isChecked();
     if (keep  &&  !mOldKeepArchived  &&  mCheckKeepChanges
     &&  !Resources::getStandard(CalEvent::ARCHIVED).isValid())
     {
@@ -942,7 +943,7 @@ void StorePrefTab::slotArchivedToggled(bool)
 
 void StorePrefTab::slotClearArchived()
 {
-    bool single = Resources::enabledResources(CalEvent::ARCHIVED, false).count() <= 1;
+    const bool single = Resources::enabledResources(CalEvent::ARCHIVED, false).count() <= 1;
     if (KAMessageBox::warningContinueCancel(topLayout()->parentWidget(),
                                             single ? i18nc("@info", "Do you really want to delete all archived alarms?")
                                                    : i18nc("@info", "Do you really want to delete all alarms in the default archived alarm calendar?"))
@@ -966,8 +967,8 @@ EmailPrefTab::EmailPrefTab(StackedScrollGroup* scrollGroup)
     QLabel* label = new QLabel(i18nc("@label", "Email client:"));
     box->addWidget(label);
     mEmailClient = new ButtonGroup(widget);
-    QString kmailOption = i18nc("@option:radio", "KMail");
-    QString sendmailOption = i18nc("@option:radio", "Sendmail");
+    const QString kmailOption = i18nc("@option:radio", "KMail");
+    const QString sendmailOption = i18nc("@option:radio", "Sendmail");
     mKMailButton = new RadioButton(kmailOption);
     mKMailButton->setMinimumSize(mKMailButton->sizeHint());
     box->addWidget(mKMailButton);
@@ -1006,7 +1007,7 @@ EmailPrefTab::EmailPrefTab(StackedScrollGroup* scrollGroup)
     QGroupBox* group = new QGroupBox(i18nc("@title:group", "Your Email Address"));
     topLayout()->addWidget(group);
     QGridLayout* grid = new QGridLayout(group);
-    int dcm = style()->pixelMetric(QStyle::PM_DefaultChildMargin);
+    const int dcm = style()->pixelMetric(QStyle::PM_DefaultChildMargin);
     grid->setContentsMargins(dcm, dcm, dcm, dcm);
     grid->setSpacing(style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     grid->setColumnStretch(2, 1);
@@ -1089,7 +1090,7 @@ void EmailPrefTab::restore(bool defaults, bool)
 
 void EmailPrefTab::apply(bool syncToDisc)
 {
-    int client = mEmailClient->selectedId();
+    const int client = mEmailClient->selectedId();
     if (client >= 0  &&  static_cast<Preferences::MailClient>(client) != Preferences::emailClient())
         Preferences::setEmailClient(static_cast<Preferences::MailClient>(client));
     bool b = mEmailCopyToKMail->isChecked();
@@ -1285,7 +1286,7 @@ EditPrefTab::EditPrefTab(StackedScrollGroup* scrollGroup)
     QGroupBox* group = new QGroupBox(i18nc("@title:group", "Display Alarms"));
     ttLayout->addWidget(group);
     QVBoxLayout* vlayout = new QVBoxLayout(group);
-    int dcm = style()->pixelMetric(QStyle::PM_DefaultChildMargin);
+    const int dcm = style()->pixelMetric(QStyle::PM_DefaultChildMargin);
     vlayout->setContentsMargins(dcm, dcm, dcm, dcm);
     vlayout->setSpacing(style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
@@ -1521,7 +1522,7 @@ void EditPrefTab::apply(bool syncToDisc)
     b = mCopyToKOrganizer->isChecked();
     if (b != Preferences::defaultCopyToKOrganizer())
         Preferences::setDefaultCopyToKOrganizer(b);
-    int i = mLateCancel->isChecked() ? 1 : 0;
+    const int i = mLateCancel->isChecked() ? 1 : 0;
     if (i != Preferences::defaultLateCancel())
         Preferences::setDefaultLateCancel(i);
     Preferences::RecurType period;
@@ -1538,7 +1539,7 @@ void EditPrefTab::apply(bool syncToDisc)
     }
     if (period != Preferences::defaultRecurPeriod())
         Preferences::setDefaultRecurPeriod(period);
-    int feb29 = mFeb29->selectedId();
+    const int feb29 = mFeb29->selectedId();
     if (feb29 >= 0  &&  static_cast<Preferences::Feb29Type>(feb29) != Preferences::defaultFeb29Type())
         Preferences::setDefaultFeb29Type(static_cast<Preferences::Feb29Type>(feb29));
     QColor colour = mFontChooser->fgColour();
@@ -1547,7 +1548,7 @@ void EditPrefTab::apply(bool syncToDisc)
     colour = mFontChooser->bgColour();
     if (colour != Preferences::defaultBgColour())
         Preferences::setDefaultBgColour(colour);
-    QFont font = mFontChooser->font();
+    const QFont font = mFontChooser->font();
     if (font != Preferences::messageFont())
         Preferences::setMessageFont(font);
     PrefsTabBase::apply(syncToDisc);
@@ -1599,8 +1600,8 @@ ViewPrefTab::ViewPrefTab(StackedScrollGroup* scrollGroup)
 
     QWidget* widget = new QWidget;
     QVBoxLayout* topGeneral = new QVBoxLayout(widget);
-    int dcm = style()->pixelMetric(QStyle::PM_DefaultChildMargin);
-    int m = dcm / 2;
+    const int dcm = style()->pixelMetric(QStyle::PM_DefaultChildMargin);
+    const int m = dcm / 2;
     topGeneral->setContentsMargins(m, m, m, m);
     topGeneral->setSpacing(style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     mTabGeneral = mTabs->addTab(widget, i18nc("@title:tab", "General"));
@@ -1785,7 +1786,7 @@ ViewPrefTab::ViewPrefTab(StackedScrollGroup* scrollGroup)
     mWindowPosition = new ButtonGroup(group);
     connect(mWindowPosition, &ButtonGroup::buttonSet, this, &ViewPrefTab::slotWindowPosChanged);
 
-    QString whatsthis = xi18nc("@info:whatsthis",
+    const QString whatsthis = xi18nc("@info:whatsthis",
           "<para>Choose how to reduce the chance of alarm messages being accidentally acknowledged:"
           "<list><item>Position alarm message windows as far as possible from the current mouse cursor location, or</item>"
           "<item>Position alarm message windows in the center of the screen, but disable buttons for a short time after the window is displayed.</item></list></para>");
@@ -1837,7 +1838,7 @@ void ViewPrefTab::restore(bool, bool allTabs)
         else
             mShowInSystemTrayCheck->setChecked(Preferences::showInSystemTray());
         int id;
-        int mins = Preferences::autoHideSystemTray();
+        const int mins = Preferences::autoHideSystemTray();
         switch (mins)
         {
             case -1:  id = 1;  break;    // hide if no active alarms
@@ -1851,9 +1852,9 @@ void ViewPrefTab::restore(bool, bool allTabs)
                     secs = mins * 60;
                 else
                     days = mins / 1440;
-                TimePeriod::Units units = secs ? TimePeriod::HoursMinutes
-                                        : (days % 7) ? TimePeriod::Days : TimePeriod::Weeks;
-                Duration duration((secs ? secs : days), (secs ? Duration::Seconds : Duration::Days));
+                const TimePeriod::Units units = secs ? TimePeriod::HoursMinutes
+                                              : (days % 7) ? TimePeriod::Days : TimePeriod::Weeks;
+                const Duration duration((secs ? secs : days), (secs ? Duration::Seconds : Duration::Days));
                 mAutoHideSystemTrayPeriod->setPeriod(duration, false, units);
                 break;
             }
@@ -1990,7 +1991,7 @@ void ViewPrefTab::slotAutoHideSysTrayChanged(QAbstractButton* button)
 
 void ViewPrefTab::slotWindowPosChanged(QAbstractButton* button)
 {
-    bool enable = mWindowPosition->id(button);
+    const bool enable = mWindowPosition->id(button);
     mWindowButtonDelay->setEnabled(enable);
     mWindowButtonDelayLabel->setEnabled(enable);
 }

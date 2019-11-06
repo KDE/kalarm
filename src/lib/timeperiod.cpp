@@ -127,7 +127,7 @@ void TimePeriod::setFocusOnCount()
 */
 void TimePeriod::setMaximum(int hourmin, int days)
 {
-    Duration oldmins = period();
+    const Duration oldmins = period();
     if (hourmin > 0)
     {
         if (hourmin > maxMinutes)
@@ -137,7 +137,7 @@ void TimePeriod::setMaximum(int hourmin, int days)
     mMaxDays = (days >= 0) ? days : 0;
     adjustDayWeekShown();
     setUnitRange();
-    Duration mins = period();
+    const Duration mins = period();
     if (mins != oldmins)
         Q_EMIT valueChanged(mins);
 }
@@ -172,7 +172,7 @@ Duration TimePeriod::period() const
 */
 void TimePeriod::setPeriod(const Duration& perod, bool dateOnly, TimePeriod::Units defaultUnits)
 {
-    Duration oldinterval = period();
+    const Duration oldinterval = period();
     if (!dateOnly  &&  mNoHourMinute)
         dateOnly = true;
     int item;
@@ -219,7 +219,7 @@ void TimePeriod::setPeriod(const Duration& perod, bool dateOnly, TimePeriod::Uni
     setUnitRange();
     showHourMin(item == HoursMinutes  &&  !mNoHourMinute);
 
-    Duration newinterval = period();
+    const Duration newinterval = period();
     if (newinterval != oldinterval)
         Q_EMIT valueChanged(newinterval);
 }
@@ -271,7 +271,7 @@ TimePeriod::Units TimePeriod::setDateOnly(const Duration& perod, bool dateOnly, 
 
     if (signal)
     {
-        Duration newinterval = period();
+        const Duration newinterval = period();
         if (newinterval != oldinterval)
             Q_EMIT valueChanged(newinterval);
     }
@@ -283,7 +283,7 @@ TimePeriod::Units TimePeriod::setDateOnly(const Duration& perod, bool dateOnly, 
 */
 void TimePeriod::adjustDayWeekShown()
 {
-    Units newMaxUnitShown = (mMaxDays >= 7) ? Weeks : (mMaxDays || mDateOnlyOffset) ? Days : HoursMinutes;
+    const Units newMaxUnitShown = (mMaxDays >= 7) ? Weeks : (mMaxDays || mDateOnlyOffset) ? Days : HoursMinutes;
     if (newMaxUnitShown > mMaxUnitShown)
     {
         if (mMaxUnitShown < Days)
@@ -335,7 +335,7 @@ void TimePeriod::setUnitRange()
 */
 void TimePeriod::setUnits(Units units)
 {
-    Units oldUnits = static_cast<Units>(mUnitsCombo->currentIndex() + mDateOnlyOffset);
+    const Units oldUnits = static_cast<Units>(mUnitsCombo->currentIndex() + mDateOnlyOffset);
     if (units == oldUnits)
         return;
     if (oldUnits == HoursMinutes  &&  units == Minutes)
@@ -348,7 +348,7 @@ void TimePeriod::setUnits(Units units)
         mTimeSpinBox->setValue(mSpinBox->value());
     if (units >= mDateOnlyOffset  &&  units <= mMaxUnitShown)
     {
-        int item = units - mDateOnlyOffset;
+        const int item = units - mDateOnlyOffset;
         mUnitsCombo->setCurrentIndex(item);
         slotUnitsSelected(item);
     }
@@ -361,7 +361,7 @@ TimePeriod::Units TimePeriod::units() const
 {
     return static_cast<Units>(mUnitsCombo->currentIndex() + mDateOnlyOffset);
 }
-    
+
 /******************************************************************************
 *  Called when a new item is made current in the time units combo box.
 */
