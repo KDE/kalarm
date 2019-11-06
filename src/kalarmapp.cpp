@@ -305,7 +305,7 @@ bool KAlarmApp::restoreSession()
 */
 void KAlarmApp::activateByDBus(const QStringList& args, const QString& workingDirectory)
 {
-  activateInstance(args, workingDirectory, nullptr);
+    activateInstance(args, workingDirectory, nullptr);
 }
 
 /******************************************************************************
@@ -424,6 +424,7 @@ int KAlarmApp::activateInstance(const QStringList& args, const QString& workingD
                 // Open the calendar, don't start processing execution queue yet,
                 // and wait for all calendar resources to be populated.
                 mReadOnly = true;   // don't need write access to calendars
+                mAlarmsEnabled = false;   // prevent alarms being processed
                 if (!initCheck(true, true))
                     exitCode = 1;
                 else
@@ -562,8 +563,7 @@ int KAlarmApp::activateInstance(const QStringList& args, const QString& workingD
                         exitCode = 1;
                     break;
                 }
-                // fall through to NONE
-                Q_FALLTHROUGH();
+                Q_FALLTHROUGH();   // fall through to NONE
             case CommandOptions::NONE:
                 // No arguments - run interactively & display the main window
 #ifndef NDEBUG
@@ -620,7 +620,8 @@ int KAlarmApp::activateInstance(const QStringList& args, const QString& workingD
     // Quit the application if this was the last/only running "instance" of the program.
     // Executing 'return' doesn't work very well since the program continues to
     // run if no windows were created.
-    quitIf(exitCode >= 0 ? exitCode : 0);
+    if (quitIf(exitCode >= 0 ? exitCode : 0))
+        return exitCode;    // exit this application instance
 
     return -1;   // continue executing the application instance
 }
@@ -772,8 +773,7 @@ void KAlarmApp::quitFatal()
             mFatalError = 2;
             KMessageBox::error(nullptr, mFatalMessage);   // this is an application modal window
             mFatalError = 3;
-            // fall through to '3'
-            Q_FALLTHROUGH();
+            Q_FALLTHROUGH();   // fall through to '3'
         case 3:
             if (mInstance)
                 mInstance->quitIf(1, true);
@@ -1840,8 +1840,7 @@ void* KAlarmApp::execAlarm(KAEvent& event, const KAAlarm& alarm, bool reschedule
                     rescheduleAlarm(event, alarm, true);
                 break;
             }
-            // fall through to MESSAGE
-            Q_FALLTHROUGH();
+            Q_FALLTHROUGH();   // fall through to MESSAGE
         case KAAlarm::MESSAGE:
         case KAAlarm::FILE:
         {
