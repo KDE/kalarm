@@ -102,9 +102,6 @@ class AkonadiModel : public Akonadi::EntityTreeModel, public CalendarDataModel
         void slotResourceMessage(Resource&, ResourceType::MessageType, const QString& message, const QString& details);
 
     Q_SIGNALS:
-        /** Signal emitted when a collection has been added to the model. */
-        void resourceAdded(Resource&);
-
         /** Signal emitted when calendar migration/creation has completed. */
         void migrationCompleted();
 

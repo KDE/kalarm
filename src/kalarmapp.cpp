@@ -131,8 +131,12 @@ KAlarmApp::KAlarmApp(int& argc, char** argv)
     KAEvent::setDefaultFont(Preferences::messageFont());
     if (initialise())   // initialise calendars and alarm timer
     {
-        connect(AkonadiModel::instance(), &AkonadiModel::resourceAdded,
-                                    this, &KAlarmApp::purgeNewArchivedDefault);
+        connect(Resources::instance(), &Resources::resourceAdded,
+                                 this, &KAlarmApp::slotResourceAdded);
+        connect(Resources::instance(), &Resources::resourcePopulated,
+                                 this, &KAlarmApp::slotResourcePopulated);
+        connect(Resources::instance(), &Resources::resourcePopulated,
+                                 this, &KAlarmApp::purgeNewArchivedDefault);
         connect(Resources::instance(), &Resources::resourcesCreated,
                                  this, &KAlarmApp::checkWritableCalendar);
         connect(AkonadiModel::instance(), &AkonadiModel::migrationCompleted,
@@ -1166,32 +1170,40 @@ void KAlarmApp::checkWritableCalendar()
 }
 
 /******************************************************************************
-* Called when a new resource has been added, or when a resource has been set as
-* the standard resource for its type.
+* Called when a new resource has been added, to note the possible need to purge
+* its old alarms if it is the default archived calendar.
+*/
+void KAlarmApp::slotResourceAdded(const Resource& resource)
+{
+    if (resource.alarmTypes() & CalEvent::ARCHIVED)
+        mPendingPurges += resource.id();
+}
+
+/******************************************************************************
+* Called when a resource has been populated, to purge its old alarms if it is
+* the default archived calendar.
+*/
+void KAlarmApp::slotResourcePopulated(const Resource& resource)
+{
+    if (mPendingPurges.removeAll(resource.id()) > 0)
+        purgeNewArchivedDefault(resource);
+}
+
+/******************************************************************************
+* Called when a new resource has been populated, or when a resource has been
+* set as the standard resource for its type.
 * If it is the default archived calendar, purge its old alarms if necessary.
 */
 void KAlarmApp::purgeNewArchivedDefault(const Resource& resource)
 {
     if (Resources::isStandard(resource, CalEvent::ARCHIVED))
     {
-        // Allow time (1 minute) for AkonadiModel to be populated with the
-        // resource's events before purging it.
         qCDebug(KALARM_LOG) << "KAlarmApp::purgeNewArchivedDefault:" << resource.id() << ": standard archived...";
-        QTimer::singleShot(60000, this, &KAlarmApp::purgeAfterDelay);
+        if (mArchivedPurgeDays >= 0)
+            purge(mArchivedPurgeDays);
+        else
+            setArchivePurgeDays();
     }
-}
-
-/******************************************************************************
-* Called after a delay, after the default archived calendar has been added to
-* AkonadiModel.
-* Purge old alarms from it if necessary.
-*/
-void KAlarmApp::purgeAfterDelay()
-{
-    if (mArchivedPurgeDays >= 0)
-        purge(mArchivedPurgeDays);
-    else
-        setArchivePurgeDays();
 }
 
 /******************************************************************************

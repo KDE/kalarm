@@ -238,8 +238,8 @@ public:
     bool isCompatible() const;
 
     /** Load the resource from the file, and fetch all events.
-     *  If loading is initiated, the ResourceManager will emit the resourceLoaded()
-     *  signal on completion.
+     *  If loading is initiated, Resources::resourcePopulated() will be emitted
+     *  on completion.
      *  Loading is not performed if the resource is disabled.
      *  If the resource is cached, it will be loaded from the cache file (which
      *  if @p readThroughCache is true, will first be downloaded from the resource file).
@@ -261,8 +261,6 @@ public:
     bool isLoaded() const;
 
     /** Save the resource.
-     *  If saving is initiated, the ResourceManager will emit the resourceSaved()
-     *  signal on completion.
      *  Saving is not performed if the resource is disabled.
      *  If the resource is cached, it will be saved to the cache file (which
      *  if @p writeThroughCache is true, will then be uploaded from the resource file).
@@ -320,6 +318,11 @@ public:
      */
     bool isBeingDeleted() const;
 
+    /** Check whether the resource is of a specified type.
+     *  @tparam Type  The resource type to check.
+     */
+    template <class Type> bool is() const;
+
 private:
     /** Return the shared pointer to the alarm calendar resource for this resource.
      *  @warning  The instance referred to by the pointer will be deleted when all
@@ -345,6 +348,11 @@ inline uint qHash(const Resource& resource, uint seed)
 }
 
 /*****************************************************************************/
+
+template <class Type> bool Resource::is() const
+{
+    return static_cast<bool>(qobject_cast<Type*>(mResource.data()));
+}
 
 template <class T> T* Resource::resource() const
 {

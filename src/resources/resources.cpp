@@ -318,6 +318,16 @@ Resource Resources::resourceForEvent(const QString& eventId, KAEvent& event)
 }
 
 /******************************************************************************
+* Called after a new resource has been created, when it has completed its
+* initialisation.
+*/
+void Resources::notifyNewResourceInitialised(Resource& res)
+{
+    if (res.isValid())
+        Q_EMIT instance()->resourceAdded(res);
+}
+
+/******************************************************************************
 * Called when all configured resources have been created for the first time.
 */
 void Resources::notifyResourcesCreated()
@@ -328,16 +338,16 @@ void Resources::notifyResourcesCreated()
 }
 
 /******************************************************************************
-* Called when a collection has been populated.
+* Called when a resource's events have been loaded.
 * Emits a signal if all collections have been populated.
 */
-void Resources::notifyResourceLoaded(const ResourceType* res)
+void Resources::notifyResourcePopulated(const ResourceType* res)
 {
     if (res)
     {
         Resource r = resource(res->id());
         if (r.isValid())
-            Q_EMIT instance()->resourceLoaded(r);
+            Q_EMIT instance()->resourcePopulated(r);
     }
 
     // Check whether all resources have now loaded at least once.

@@ -1,8 +1,9 @@
 KAlarm Change Log
 
-=== Version 2.12.9 (KDE applications 19.12) --- 6 November 2019 ===
+=== Version 2.13.0 (KDE applications 19.12) --- 6 November 2019 ===
 + Fix user not always being prompted to update new resource if in old format.
 + Terminate application after executing 'kalarm --list'.
++ Refactor to use generic resource classes.
 
 === Version 2.12.8 (KDE Applications 19.08.3) --- 16 October 2019 ===
 + Fix error on redo of an active alarm deletion.

@@ -583,7 +583,7 @@ void AkonadiModel::slotRowsInserted(const QModelIndex& parent, int start, int en
             if (resource.isValid())
             {
                 setCollectionChanged(resource, collection, true);
-                Q_EMIT resourceAdded(resource);
+                Resources::notifyNewResourceInitialised(resource);
 
                 if (!collection.hasAttribute<CompatibilityAttribute>())
                 {

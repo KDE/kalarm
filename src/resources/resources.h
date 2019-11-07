@@ -127,11 +127,15 @@ public:
      *  that the event's alarm type is enabled. */
     static Resource resourceForEvent(const QString& eventId, KAEvent& event);
 
+    /** Called to notify that a new resource has completed its initialisation,
+     *  in order to emit the resourceAdded() signal. */
+    static void notifyNewResourceInitialised(Resource&);
+
     /** Called to notify that all configured resources have now been created. */
     static void notifyResourcesCreated();
 
-    /** Called by a resource to notify that loading has successfully completed. */
-    static void notifyResourceLoaded(const ResourceType*);
+    /** Called by a resource to notify that loading of events has successfully completed. */
+    static void notifyResourcePopulated(const ResourceType*);
 
     /** Called by a resource to notify that its settings have changed.
      *  This will cause the settingsChanged() signal to be emitted.
@@ -172,8 +176,11 @@ Q_SIGNALS:
     /** Emitted when all configured resources have been loaded for the first time. */
     void resourcesPopulated();
 
+    /** Emitted when a new resource has been created. */
+    void resourceAdded(Resource&);
+
     /** Emitted when a resource's events have been successfully loaded. */
-    void resourceLoaded(Resource&);
+    void resourcePopulated(Resource&);
 
     /** Emitted when a resource's config and settings have been removed. */
     void resourceRemoved(ResourceId);
@@ -203,6 +210,9 @@ private:
     Resources();
 
     /** Add a new ResourceType instance, with a Resource owner.
+     *  Once the resource has completed its initialisation, call
+     *  notifyNewResourceInitialised() to emit the resourceAdded() signal.
+     *  is require
      *  @param type      Newly constructed ResourceType instance, which will belong to
      *                   'resource' if successful. On error, it will be deleted.
      *  @param resource  If type is invalid, updated to an invalid resource;

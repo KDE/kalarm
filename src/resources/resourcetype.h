@@ -255,8 +255,8 @@ public:
     bool isCompatible() const;
 
     /** Load the resource from the file, and fetch all events.
-     *  If loading is initiated, the ResourceManager will emit the resourceLoaded()
-     *  signal on completion.
+     *  If loading is initiated, Resources::resourcePopulated() will be emitted
+     *  on completion.
      *  Loading is not performed if the resource is disabled.
      *  If the resource is cached, it will be loaded from the cache file (which
      *  if @p readThroughCache is true, will first be downloaded from the resource file).
@@ -278,8 +278,6 @@ public:
     virtual bool isLoaded() const   { return mLoaded; }
 
     /** Save the resource.
-     *  If saving is initiated, the ResourceManager will emit the resourceSaved()
-     *  signal on completion.
      *  Saving is not performed if the resource is disabled.
      *  If the resource is cached, it will be saved to the cache file (which
      *  if @p writeThroughCache is true, will then be uploaded from the resource file).

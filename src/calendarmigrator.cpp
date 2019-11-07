@@ -144,8 +144,8 @@ CalendarMigrator* CalendarMigrator::mInstance = nullptr;
 bool              CalendarMigrator::mCompleted = false;
 
 CalendarMigrator::CalendarMigrator(QObject* parent)
-    : QObject(parent),
-      mExistingAlarmTypes{}
+    : QObject(parent)
+    , mExistingAlarmTypes{}
 {
 }
 
@@ -397,13 +397,13 @@ void CalendarMigrator::updateToCurrentFormat(const Resource& resource, bool igno
         return;
     }
     const Collection& collection = AkonadiResource::collection(resource);
-qDebug()<<"CalendarMigrator::updateToCurrentFormat: has attr?"<<collection.hasAttribute<CompatibilityAttribute>();
     if (!parent)
         parent = MainWindow::mainMainWindow();
     CalendarUpdater* updater = new CalendarUpdater(collection, dirResource, ignoreKeepFormat, false, parent);
     QTimer::singleShot(0, updater, &CalendarUpdater::update);
 }
 
+/*===========================================================================*/
 
 QList<CalendarUpdater*> CalendarUpdater::mInstances;
 
@@ -421,7 +421,6 @@ CalendarUpdater::CalendarUpdater(const Collection& collection, bool dirResource,
 
 CalendarUpdater::~CalendarUpdater()
 {
-qDebug()<<"~CalendarUpdater:"<<mCollection.id();
     mInstances.removeAll(this);
 }
 

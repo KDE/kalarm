@@ -192,7 +192,8 @@ qDebug()<<"ResourceType::setLoadedEvents:"<<id()<<" count:"<<mEvents.count()<<"(
 
     newEvents.clear();
     setLoaded(true);
-    Resources::notifyResourceLoaded(this);
+qDebug()<<"KALARMAPP: ResourceType::setLoadedEvents:"<<id()<<" count:"<<mEvents.count();
+    Resources::notifyResourcePopulated(this);
 }
 
 /******************************************************************************
@@ -252,7 +253,7 @@ void ResourceType::setDeletedEvents(const QList<KAEvent>& events)
 void ResourceType::setLoaded(bool loaded) const
 {
     mLoaded = loaded;
-    Resources::notifyResourceLoaded(this);
+    Resources::notifyResourcePopulated(this);
 }
 
 QString ResourceType::storageTypeStr(bool description, bool file, bool local) const

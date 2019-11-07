@@ -22,6 +22,7 @@
 
 #include "autoqpointer.h"
 #include "collectionmodel.h"
+#include "resources/resources.h"
 #include "kalarmsettings.h"
 #include "kalarmdirsettings.h"
 #include "kalarm_debug.h"
@@ -29,11 +30,11 @@
 #include <AkonadiCore/agentfilterproxymodel.h>
 #include <AkonadiCore/agentinstancecreatejob.h>
 #include <AkonadiCore/agentmanager.h>
-#include <kdbusconnectionpool.h>
 #include <AkonadiWidgets/agenttypedialog.h>
 #include <AkonadiWidgets/AgentConfigurationDialog>
 
-#include <kmessagebox.h>
+#include <KDBusConnectionPool>
+#include <KMessageBox>
 #include <KLocalizedString>
 
 #include <QTimer>
@@ -43,9 +44,9 @@ using namespace KAlarmCal;
 
 
 AkonadiResourceCreator::AkonadiResourceCreator(CalEvent::Type defaultType, QWidget* parent)
-    : QObject(),
-      mParent(parent),
-      mDefaultType(defaultType)
+    : QObject()
+    , mParent(parent)
+    , mDefaultType(defaultType)
 {
 }
 
@@ -87,8 +88,8 @@ void AkonadiResourceCreator::getAgentType()
         mAgentType = dlg->agentType();
         if (mAgentType.isValid())
         {
-            connect(AkonadiModel::instance(), &AkonadiModel::resourceAdded,
-                                        this, &AkonadiResourceCreator::slotResourceAdded);
+            connect(Resources::instance(), &Resources::resourceAdded,
+                                     this, &AkonadiResourceCreator::slotResourceAdded);
 
             AgentInstanceCreateJob* job = new AgentInstanceCreateJob(mAgentType, mParent);
             connect(job, &AgentInstanceCreateJob::result, this, &AkonadiResourceCreator::agentInstanceCreated);
@@ -175,7 +176,7 @@ void AkonadiResourceCreator::agentInstanceCreated(KJob* j)
 */
 void AkonadiResourceCreator::slotResourceAdded(Resource& resource)
 {
-    if (resource.isValid())
+    if (resource.isValid()  &&  resource.is<AkonadiResource>())
     {
         AgentInstance agent = AgentManager::self()->instance(resource.configName());
         if (agent == mAgentInstance)

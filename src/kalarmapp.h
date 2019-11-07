@@ -124,8 +124,9 @@ class KAlarmApp : public QApplication
         void               checkWritableCalendar();
         void               slotMessageFontChanged(const QFont&);
         void               setArchivePurgeDays();
+        void               slotResourceAdded(const Resource&);
+        void               slotResourcePopulated(const Resource&);
         void               slotPurge()                     { purge(mArchivedPurgeDays); }
-        void               purgeAfterDelay();
         void               slotCommandExited(ShellProcess*);
 
     private:
@@ -207,6 +208,7 @@ class KAlarmApp : public QApplication
         QColor             mPrefsArchivedColour;   // archived alarms text colour
         int                mArchivedPurgeDays{-1}; // how long to keep archived alarms, 0 = don't keep, -1 = keep indefinitely
         int                mPurgeDaysQueued{-1};   // >= 0 to purge the archive calendar from KAlarmApp::processLoop()
+        QVector<ResourceId> mPendingPurges;        // new resources which may need to be purged when populated
         QList<ProcData*>   mCommandProcesses;      // currently active command alarm processes
         QQueue<ActionQEntry> mActionQueue;         // queued commands and actions
         int                mPendingQuitCode;       // exit code for a pending quit
