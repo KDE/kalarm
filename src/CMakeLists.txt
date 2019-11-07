@@ -59,6 +59,7 @@ ecm_generate_headers(KAlarmCal_CamelCase_HEADERS
   DateTime
   KADateTime
   EventAttribute
+  KACalendar
   KAEvent
   KARecurrence
   Repetition
