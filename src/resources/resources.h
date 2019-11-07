@@ -111,14 +111,6 @@ public:
     /** Return whether all configured resources have been loaded at least once. */
     static bool allPopulated();
 
-    /** Wait until one or all enabled resources have been populated,
-     *  i.e. whether their events have been fetched.
-     *  @param   resId    resource ID, or -1 for all resources
-     *  @param   timeout  timeout in seconds, or 0 for no timeout
-     *  @return  true if successful.
-     */
-    static bool waitUntilPopulated(ResourceId resId = -1, int timeout = 0);
-
     /** Return the resource which an event belongs to, provided that the event's
      *  alarm type is enabled. */
     static Resource resourceForEvent(const QString& eventId);
@@ -226,7 +218,6 @@ private:
 
     static Resources*                  mInstance;    // the unique instance
     static QHash<ResourceId, Resource> mResources;   // contains all ResourceType instances with an ID
-    static QEventLoop*                 mPopulatedCheckLoop;
     static bool                        mCreated;     // all resources have been created
     static bool                        mPopulated;   // all resources have been loaded once
 

@@ -2377,10 +2377,40 @@ bool KAlarmApp::initCheck(bool calendarOnly, bool waitForCollection, Akonadi::Co
     if (waitForCollection)
     {
         // Wait for one or all calendar resources to be populated
-        if (!Resources::waitUntilPopulated(collectionId, AKONADI_TIMEOUT))
+        if (!waitUntilPopulated(collectionId, AKONADI_TIMEOUT))
             return false;
     }
     return true;
+}
+
+/******************************************************************************
+* Wait for one or all enabled resources to be populated.
+* Reply = true if successful.
+*/
+bool KAlarmApp::waitUntilPopulated(ResourceId id, int timeout)
+{
+    qCDebug(KALARM_LOG) << "KAlarmApp::waitUntilPopulated" << id;
+    const Resource res = Resources::resource(id);
+    if ((id <  0 && !Resources::allPopulated())
+    ||  (id >= 0 && !res.isLoaded()))
+    {
+        QEventLoop loop(AlarmListModel::all());
+//TODO: The choice of parent object for QEventLoop can prevent EntityTreeModel signals
+//      from activating connected slots in AkonadiModel, which prevents resources from
+//      being informed that collections have loaded. Need to find a better parent
+//      object - Qt item models seem to work, but what else?
+//      These don't work: Resources::instance(), qApp(), theApp(), MainWindow::mainMainWindow(), AlarmCalendar::resources(), QStandardItemModel.
+//      These do work: CollectionControlModel::instance(), AlarmListModel::all().
+        if (id < 0)
+            connect(Resources::instance(), &Resources::resourcesPopulated, &loop, &QEventLoop::quit);
+        else
+            connect(Resources::instance(), &Resources::resourcePopulated, [&loop, &id](Resource& r) {
+                    if (r.id() == id) loop.quit(); });
+        if (timeout > 0)
+            QTimer::singleShot(timeout * 1000, &loop, &QEventLoop::quit);
+        loop.exec();
+    }
+    return (id <  0) ? Resources::allPopulated() : res.isLoaded();
 }
 
 /******************************************************************************

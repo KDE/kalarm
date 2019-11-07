@@ -187,13 +187,10 @@ void ResourceType::setLoadedEvents(QHash<QString, KAEvent>& newEvents)
     // Add new events.
     for (auto newit = newEvents.constBegin();  newit != newEvents.constEnd();  ++newit)
         mEvents[newit.key()] = newit.value();
-qDebug()<<"ResourceType::setLoadedEvents:"<<id()<<" count:"<<mEvents.count()<<"(newEvents:"<<newEvents.count()<<")";
     Resources::notifyEventsAdded(this, newEvents.values());
 
     newEvents.clear();
     setLoaded(true);
-qDebug()<<"KALARMAPP: ResourceType::setLoadedEvents:"<<id()<<" count:"<<mEvents.count();
-    Resources::notifyResourcePopulated(this);
 }
 
 /******************************************************************************
@@ -253,7 +250,8 @@ void ResourceType::setDeletedEvents(const QList<KAEvent>& events)
 void ResourceType::setLoaded(bool loaded) const
 {
     mLoaded = loaded;
-    Resources::notifyResourcePopulated(this);
+    if (loaded)
+        Resources::notifyResourcePopulated(this);
 }
 
 QString ResourceType::storageTypeStr(bool description, bool file, bool local) const

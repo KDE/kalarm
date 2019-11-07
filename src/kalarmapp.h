@@ -171,6 +171,7 @@ class KAlarmApp : public QApplication
         bool               initialise();
         int                activateInstance(const QStringList& args, const QString& workingDirectory, QString* outputText);
         bool               initCheck(bool calendarOnly = false, bool waitForCollection = false, Akonadi::Collection::Id = -1);
+        bool               waitUntilPopulated(ResourceId, int timeout);
         bool               quitIf(int exitCode, bool force = false);
         bool               checkSystemTray();
         void               startProcessQueue();

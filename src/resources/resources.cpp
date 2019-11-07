@@ -21,7 +21,6 @@
 #include "resources.h"
 
 #include "resource.h"
-#include "itemlistmodel.h"   // temporary, until better parent for QEventLoop is found
 #include "kalarm_debug.h"
 
 #include <QEventLoop>
@@ -33,9 +32,8 @@ Resources* Resources::mInstance{nullptr};
 // container which manages the instance.
 QHash<ResourceId, Resource> Resources::mResources;
 
-QEventLoop*                 Resources::mPopulatedCheckLoop{nullptr};
-bool                        Resources::mCreated{false};
-bool                        Resources::mPopulated{false};
+bool Resources::mCreated{false};
+bool Resources::mPopulated{false};
 
 
 Resources* Resources::instance()
@@ -258,33 +256,6 @@ bool Resources::allPopulated()
 }
 
 /******************************************************************************
-* Wait for one or all enabled resources to be populated.
-* Reply = true if successful.
-*/
-bool Resources::waitUntilPopulated(ResourceId id, int timeout)
-{
-    qCDebug(KALARM_LOG) << "Resources::waitUntilPopulated" << id;
-    int result = 1;
-    while (!mCreated  ||  !isLoaded(id))
-    {
-        if (!mPopulatedCheckLoop)
-//TODO: The choice of parent object for QEventLoop can prevent EntityTreeModel signals
-//      from activating connected slots in AkonadiModel, which prevents resources from
-//      being informed that collections have loaded. Need to find a better parent
-//      object - Qt item models seem to work, but what else?
-//      These don't work: Resources::instance(), qApp(), theApp(), MainWindow::mainMainWindow().
-//      These do work: CollectionControlModel::instance().
-            mPopulatedCheckLoop = new QEventLoop(AlarmListModel::all());
-        if (timeout > 0)
-            QTimer::singleShot(timeout * 1000, mPopulatedCheckLoop, &QEventLoop::quit);
-        result = mPopulatedCheckLoop->exec();
-    }
-    delete mPopulatedCheckLoop;
-    mPopulatedCheckLoop = nullptr;
-    return result;
-}
-
-/******************************************************************************
 * Return the resource which an event belongs to, provided its alarm type is
 * enabled.
 */
@@ -436,10 +407,6 @@ bool Resources::addResource(ResourceType* instance, Resource& resource)
 */
 void Resources::checkResourcesPopulated()
 {
-    // Exit from the populated event loop to allow waitUntilPopulated() to complete.
-    if (mPopulatedCheckLoop)
-        mPopulatedCheckLoop->exit(1);
-
     if (!mPopulated  &&  mCreated)
     {
         // Check whether all resources have now loaded at least once.

@@ -200,14 +200,6 @@ class CollectionControlModel : public Akonadi::FavoriteCollectionsModel
          */
         static Akonadi::Collection::Id collectionForResourceName(const QString& resourceName);
 
-        /** Wait until one or all enabled collections have been populated,
-         *  i.e. whether their items have been fetched.
-         *  @param   colId    collection ID, or -1 for all collections
-         *  @param   timeout  timeout in seconds, or 0 for no timeout
-         *  @return  true if successful.
-         */
-        bool waitUntilPopulated(Akonadi::Collection::Id colId = -1, int timeout = 0);
-
         /** Check for, and remove, Akonadi resources which duplicate use of
          *  calendar files/directories.
          */
