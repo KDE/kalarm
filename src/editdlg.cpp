@@ -68,6 +68,7 @@
 #include <QTimer>
 #include <QDialogButtonBox>
 #include <QLocale>
+#include <QStyle>
 
 using namespace KCal;
 using namespace KAlarmCal;

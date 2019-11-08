@@ -40,7 +40,6 @@ class KToggleAction;
 class QComboBox;
 class QMenu;
 class ResourceView;
-class CollectionView;
 class AkonadiResourceCreator;
 
 
@@ -85,7 +84,7 @@ class ResourceSelector : public QFrame
         CalEvent::Type currentResourceType() const;
         Resource currentResource() const;
 
-        CollectionView* mListView;
+        ResourceView*   mListView;
         QComboBox*      mAlarmType;
         QPushButton*    mAddButton;
         QPushButton*    mDeleteButton;

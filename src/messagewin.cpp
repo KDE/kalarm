@@ -86,6 +86,7 @@
 #include <QMutexLocker>
 #include <QMimeDatabase>
 #include <QUrl>
+#include <QStyle>
 
 #include <stdlib.h>
 #include <string.h>

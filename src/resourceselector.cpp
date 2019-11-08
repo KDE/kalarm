@@ -34,6 +34,7 @@
 #include "packedlayout.h"
 #include "preferences.h"
 #include "resources/resources.h"
+#include "resources/resourcemodel.h"
 #include "kalarm_debug.h"
 
 #include <KLocalizedString>
@@ -70,11 +71,11 @@ ResourceSelector::ResourceSelector(QWidget* parent)
     topLayout->addWidget(mAlarmType);
     // No spacing between combo box and listview.
 
-    CollectionFilterCheckListModel* model = new CollectionFilterCheckListModel(this);
-    mListView = new CollectionView(model, this);
+    ResourceFilterCheckListModel* model = ResourceFilterCheckListModel::create<AkonadiModel>(this);
+    mListView = new ResourceView(model, this);
     connect(mListView->selectionModel(), &QItemSelectionModel::selectionChanged, this, &ResourceSelector::selectionChanged);
     mListView->setContextMenuPolicy(Qt::CustomContextMenu);
-    connect(mListView, &CollectionView::customContextMenuRequested, this, &ResourceSelector::contextMenuRequested);
+    connect(mListView, &ResourceView::customContextMenuRequested, this, &ResourceSelector::contextMenuRequested);
     mListView->setWhatsThis(i18nc("@info:whatsthis",
                                   "List of available calendars of the selected type. The checked state shows whether a calendar "
                                  "is enabled (checked) or disabled (unchecked). The default calendar is shown in bold."));

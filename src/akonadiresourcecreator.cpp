@@ -23,6 +23,7 @@
 #include "autoqpointer.h"
 #include "collectionmodel.h"
 #include "resources/resources.h"
+#include "resources/akonadiresource.h"
 #include "kalarmsettings.h"
 #include "kalarmdirsettings.h"
 #include "kalarm_debug.h"

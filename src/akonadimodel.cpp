@@ -199,6 +199,8 @@ bool AkonadiModel::isMigrationCompleted() const
 */
 QVariant AkonadiModel::data(const QModelIndex& index, int role) const
 {
+    if (role == ResourceIdRole)
+        role = CollectionIdRole;
     if (roleHandled(role))
     {
         const Collection collection = EntityTreeModel::data(index, CollectionRole).value<Collection>();
@@ -207,8 +209,6 @@ QVariant AkonadiModel::data(const QModelIndex& index, int role) const
             // This is a Collection row
             // Update the collection's resource with the current collection value.
             const Resource& res = updateResource(collection);
-            if (role == ResourceIdRole)
-                role = CollectionIdRole;
             bool handled;
             const QVariant value = resourceData(role, res, handled);
             if (handled)
