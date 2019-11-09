@@ -69,6 +69,17 @@ void ResourceFilterModel::setFilterEnabled(bool enabled)
     }
 }
 
+void ResourceFilterModel::setFilterText(const QString& text)
+{
+    if (text != mFilterText)
+    {
+        Q_EMIT layoutAboutToBeChanged();
+        mFilterText = text;
+        invalidateFilter();
+        Q_EMIT layoutChanged();
+    }
+}
+
 QModelIndex ResourceFilterModel::resourceIndex(const Resource& resource) const
 {
     if (!mResourceIndexFunction)
@@ -128,6 +139,8 @@ bool ResourceFilterModel::filterAcceptsRow(int sourceRow, const QModelIndex& sou
         return false;
     if (mEnabledOnly  &&  !resource.isEnabled(mAlarmType))
         return false;
+    if (!mFilterText.isEmpty()  &&  !resource.displayName().contains(mFilterText, Qt::CaseInsensitive))
+        return false;
     return true;
 }
 
@@ -180,6 +193,11 @@ void ResourceListModel::setFilterWritable(bool writable)
 void ResourceListModel::setFilterEnabled(bool enabled)
 {
     static_cast<ResourceFilterModel*>(sourceModel())->setFilterEnabled(enabled);
+}
+
+void ResourceListModel::setFilterText(const QString& text)
+{
+    static_cast<ResourceFilterModel*>(sourceModel())->setFilterText(text);
 }
 
 bool ResourceListModel::isDescendantOf(const QModelIndex& ancestor, const QModelIndex& descendant) const

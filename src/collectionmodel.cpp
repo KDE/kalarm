@@ -26,13 +26,13 @@
 #include "preferences.h"
 #include "resources/resources.h"
 #include "resources/resourcemodel.h"
+#include "resources/resourceselectdialog.h"
 #include "kalarm_debug.h"
 
 #include <AkonadiCore/agentmanager.h>
 #include <AkonadiCore/collectionfetchjob.h>
 #include <AkonadiCore/entitymimetypefiltermodel.h>
 #include <AkonadiWidgets/AgentConfigurationDialog>
-#include <AkonadiWidgets/collectiondialog.h>
 
 #include <KLocalizedString>
 
@@ -336,16 +336,13 @@ Resource CollectionControlModel::destination(CalEvent::Type type, QWidget* promp
             // Use AutoQPointer to guard against crash on application exit while
             // the dialogue is still open. It prevents double deletion (both on
             // deletion of 'promptParent', and on return from this function).
-            AutoQPointer<CollectionDialog> dlg = new CollectionDialog(model, promptParent);
+            AutoQPointer<ResourceSelectDialog> dlg = new ResourceSelectDialog(model, promptParent);
             dlg->setWindowTitle(i18nc("@title:window", "Choose Calendar"));
-            dlg->setDefaultCollection(Collection(standard.id()));
-            dlg->setMimeTypeFilter(QStringList(CalEvent::mimeType(type)));
-            Collection col;
+            dlg->setDefaultResource(standard);
             if (dlg->exec())
-                col = dlg->selectedCollection();
-            if (!col.isValid()  &&  cancelled)
+                res = dlg->selectedResource();
+            if (!res.isValid()  &&  cancelled)
                 *cancelled = true;
-            res = Resources::resource(col.id());
         }
     }
     return res;

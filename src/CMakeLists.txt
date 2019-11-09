@@ -98,6 +98,7 @@ set(kalarm_bin_SRCS ${kalarm_bin_SRCS}
     resources/resources.cpp
     resources/akonadiresource.cpp
     resources/resourcemodel.cpp
+    resources/resourceselectdialog.cpp
     kalarmmigrateapplication.cpp
     akonadimodel.cpp
     akonadiresourcecreator.cpp

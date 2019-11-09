@@ -35,8 +35,8 @@ using namespace KAlarmCal;
 
 /*=============================================================================
 = Class: ResourceFilterModel
-= Proxy model to filter a resource model to restrict its contents to resources,
-= not events, containing specified alarm types.
+= Proxy model to filter a resource data model to restrict its contents to
+= resources, not events, containing specified alarm types.
 = It can optionally be restricted to writable and/or enabled resources.
 =============================================================================*/
 class ResourceFilterModel : public QSortFilterProxyModel
@@ -51,9 +51,27 @@ public:
     template <class Model>
     static ResourceFilterModel* create(QObject* parent = nullptr);
 
+    /** Set the alarm type to include in the model.
+     *  @param type  If EMPTY, include all alarm types;
+     *               otherwise, include only resources with the specified alarm type.
+     */
     void setEventTypeFilter(CalEvent::Type);
+
+    /** Filter on resources' writable status.
+     *  @param enabled  If true, only include writable resources;
+     *                  if false, ignore writable status.
+     */
     void setFilterWritable(bool writable);
+
+    /** Filter on resources' enabled status.
+     *  @param enabled  If true, only include enabled resources;
+     *                  if false, ignore enabled status.
+     */
     void setFilterEnabled(bool enabled);
+
+    /** Filter on resources' display names, using a simple text search. */
+    void setFilterText(const QString& text);
+
     QModelIndex resourceIndex(const Resource&) const;
 
     bool hasChildren(const QModelIndex &parent = QModelIndex()) const override;
@@ -69,9 +87,10 @@ private:
     explicit ResourceFilterModel(QObject* parent);
 
     QModelIndex  (*mResourceIndexFunction)(const Resource&) {nullptr};  // function to fetch resource index from data model
-    CalEvent::Type mAlarmType{CalEvent::EMPTY};  // collection content type contained in this model
-    bool           mWritableOnly{false}; // only include writable collections in this model
-    bool           mEnabledOnly{false};  // only include enabled collections in this model
+    QString        mFilterText;          // only include resources whose display names include this
+    CalEvent::Type mAlarmType{CalEvent::EMPTY};  // only include resources with this alarm type
+    bool           mWritableOnly{false}; // only include writable resources
+    bool           mEnabledOnly{false};  // only include enabled resources
 };
 
 /*=============================================================================
@@ -96,6 +115,7 @@ public:
     void         setEventTypeFilter(CalEvent::Type);
     void         setFilterWritable(bool writable);
     void         setFilterEnabled(bool enabled);
+    void         setFilterText(const QString& text);
     void         useResourceColour(bool use)   { mUseResourceColour = use; }
     Resource     resource(int row) const;
     Resource     resource(const QModelIndex&) const;
