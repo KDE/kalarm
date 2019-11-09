@@ -450,7 +450,7 @@ QByteArray ResourceCheckListModel::debugType(const char* func) const
         case CalEvent::TEMPLATE:  type = "ResourceCheckListModel[Tmpl]::";  break;
         default:                  type = "ResourceCheckListModel::";  break;
     }
-    return QByteArray(type) + func + ":";
+    return QByteArray(type) + func + ':';
 }
 
 

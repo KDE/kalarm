@@ -2394,7 +2394,10 @@ bool KAlarmApp::waitUntilPopulated(ResourceId id, int timeout)
     if ((id <  0 && !Resources::allPopulated())
     ||  (id >= 0 && !res.isLoaded()))
     {
-        QEventLoop loop(AlarmListModel::all());
+        // Use AutoQPointer to guard against crash on application exit while
+        // the event loop is still running. It prevents double deletion (both
+        // on deletion of parent, and on return from this function).
+        AutoQPointer<QEventLoop> loop = new QEventLoop(AlarmListModel::all());
 //TODO: The choice of parent object for QEventLoop can prevent EntityTreeModel signals
 //      from activating connected slots in AkonadiModel, which prevents resources from
 //      being informed that collections have loaded. Need to find a better parent
@@ -2402,13 +2405,13 @@ bool KAlarmApp::waitUntilPopulated(ResourceId id, int timeout)
 //      These don't work: Resources::instance(), qApp(), theApp(), MainWindow::mainMainWindow(), AlarmCalendar::resources(), QStandardItemModel.
 //      These do work: CollectionControlModel::instance(), AlarmListModel::all().
         if (id < 0)
-            connect(Resources::instance(), &Resources::resourcesPopulated, &loop, &QEventLoop::quit);
+            connect(Resources::instance(), &Resources::resourcesPopulated, loop, &QEventLoop::quit);
         else
-            connect(Resources::instance(), &Resources::resourcePopulated, [&loop, &id](Resource& r) {
-                    if (r.id() == id) loop.quit(); });
+            connect(Resources::instance(), &Resources::resourcePopulated, [loop, &id](Resource& r) {
+                    if (r.id() == id) loop->quit(); });
         if (timeout > 0)
-            QTimer::singleShot(timeout * 1000, &loop, &QEventLoop::quit);
-        loop.exec();
+            QTimer::singleShot(timeout * 1000, loop, &QEventLoop::quit);
+        loop->exec();
     }
     return (id <  0) ? Resources::allPopulated() : res.isLoaded();
 }
