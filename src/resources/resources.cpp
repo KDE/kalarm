@@ -21,10 +21,13 @@
 #include "resources.h"
 
 #include "resource.h"
+#include "resourcemodel.h"
+#include "resourceselectdialog.h"
+#include "preferences.h"
+#include "lib/autoqpointer.h"
 #include "kalarm_debug.h"
 
-#include <QEventLoop>
-#include <QTimer>
+#include <KLocalizedString>
 
 Resources* Resources::mInstance{nullptr};
 
@@ -237,6 +240,55 @@ void Resources::setStandard(Resource& resource, CalEvent::Types types)
         }
         resource.configSetStandard(types);
     }
+}
+
+/******************************************************************************
+* Get the collection to use for storing an alarm.
+* Optionally, the standard collection for the alarm type is returned. If more
+* than one collection is a candidate, the user is prompted.
+*/
+Resource Resources::destination(ResourceListModel* model, CalEvent::Type type, QWidget* promptParent, bool noPrompt, bool* cancelled)
+{
+    if (cancelled)
+        *cancelled = false;
+    Resource standard;
+    if (type == CalEvent::EMPTY)
+        return standard;
+    standard = getStandard(type);
+    // Archived alarms are always saved in the default resource,
+    // else only prompt if necessary.
+    if (type == CalEvent::ARCHIVED  ||  noPrompt
+    ||  (!Preferences::askResource()  &&  standard.isValid()))
+        return standard;
+
+    // Prompt for which collection to use
+    model->setFilterWritable(true);
+    model->setFilterEnabled(true);
+    model->setEventTypeFilter(type);
+    model->useResourceColour(false);
+    Resource res;
+    switch (model->rowCount())
+    {
+        case 0:
+            break;
+        case 1:
+            res = model->resource(0);
+            break;
+        default:
+        {
+            // Use AutoQPointer to guard against crash on application exit while
+            // the dialogue is still open. It prevents double deletion (both on
+            // deletion of 'promptParent', and on return from this function).
+            AutoQPointer<ResourceSelectDialog> dlg = new ResourceSelectDialog(model, promptParent);
+            dlg->setWindowTitle(i18nc("@title:window", "Choose Calendar"));
+            dlg->setDefaultResource(standard);
+            if (dlg->exec())
+                res = dlg->selectedResource();
+            if (!res.isValid()  &&  cancelled)
+                *cancelled = true;
+        }
+    }
+    return res;
 }
 
 /******************************************************************************

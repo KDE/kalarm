@@ -21,12 +21,8 @@
 #include "collectionmodel.h"
 
 #include "akonadimodel.h"
-#include "autoqpointer.h"
 #include "messagebox.h"
-#include "preferences.h"
 #include "resources/resources.h"
-#include "resources/resourcemodel.h"
-#include "resources/resourceselectdialog.h"
 #include "kalarm_debug.h"
 
 #include <AkonadiCore/agentmanager.h>
@@ -35,7 +31,11 @@
 #include <AkonadiWidgets/AgentConfigurationDialog>
 
 #include <KLocalizedString>
+#include <KSharedConfig>
+#include <KConfigGroup>
 
+#include <QApplication>
+#include <QPointer>
 #include <QUrl>
 
 using namespace Akonadi;
@@ -305,47 +305,7 @@ CalEvent::Types CollectionControlModel::checkTypesToEnable(const Resource& resou
 */
 Resource CollectionControlModel::destination(CalEvent::Type type, QWidget* promptParent, bool noPrompt, bool* cancelled)
 {
-    if (cancelled)
-        *cancelled = false;
-    Resource standard;
-    if (type == CalEvent::EMPTY)
-        return standard;
-    standard = Resources::getStandard(type);
-    // Archived alarms are always saved in the default resource,
-    // else only prompt if necessary.
-    if (type == CalEvent::ARCHIVED  ||  noPrompt
-    ||  (!Preferences::askResource()  &&  standard.isValid()))
-        return standard;
-
-    // Prompt for which collection to use
-    ResourceListModel* model = ResourceListModel::create<AkonadiModel>(promptParent);
-    model->setFilterWritable(true);
-    model->setFilterEnabled(true);
-    model->setEventTypeFilter(type);
-    model->useResourceColour(false);
-    Resource res;
-    switch (model->rowCount())
-    {
-        case 0:
-            break;
-        case 1:
-            res = model->resource(0);
-            break;
-        default:
-        {
-            // Use AutoQPointer to guard against crash on application exit while
-            // the dialogue is still open. It prevents double deletion (both on
-            // deletion of 'promptParent', and on return from this function).
-            AutoQPointer<ResourceSelectDialog> dlg = new ResourceSelectDialog(model, promptParent);
-            dlg->setWindowTitle(i18nc("@title:window", "Choose Calendar"));
-            dlg->setDefaultResource(standard);
-            if (dlg->exec())
-                res = dlg->selectedResource();
-            if (!res.isValid()  &&  cancelled)
-                *cancelled = true;
-        }
-    }
-    return res;
+    return Resources::destination<AkonadiModel>(type, promptParent, noPrompt, cancelled);
 }
 
 /******************************************************************************

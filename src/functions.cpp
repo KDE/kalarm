@@ -265,7 +265,7 @@ UpdateResult addEvents(QVector<KAEvent>& events, QWidget* msgParent, bool allowK
         status.status = UPDATE_FAILED;
     else
     {
-        Resource resource = CollectionControlModel::instance()->destination(CalEvent::ACTIVE, msgParent);
+        Resource resource = CollectionControlModel::destination(CalEvent::ACTIVE, msgParent);
         if (!resource.isValid())
         {
             qCDebug(KALARM_LOG) << "KAlarm::addEvents: No calendar";
@@ -598,7 +598,7 @@ UpdateResult reactivateEvents(QVector<KAEvent>& events, QVector<EventId>& inelig
     if (resourceptr)
         resource = *resourceptr;
     if (!resource.isValid())
-        resource = CollectionControlModel::instance()->destination(CalEvent::ACTIVE, msgParent);
+        resource = CollectionControlModel::destination(CalEvent::ACTIVE, msgParent);
     if (!resource.isValid())
     {
         qCDebug(KALARM_LOG) << "KAlarm::reactivateEvents: No calendar";

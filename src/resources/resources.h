@@ -22,6 +22,7 @@
 #define RESOURCES_H
 
 #include "resource.h"
+#include "resourcemodel.h"
 
 #include <QObject>
 class QEventLoop;
@@ -104,6 +105,18 @@ public:
      *  standard status is cleared for those alarm types for any other resources.
      */
     static void setStandard(Resource& resource, CalEvent::Types);
+
+    /** Find the resource to be used to store an event of a given type.
+     *  This will be the standard resource for the type, but if this is not valid,
+     *  the user will be prompted to select a resource.
+     *  @param type         The event type
+     *  @param promptParent The parent widget for the prompt
+     *  @param noPrompt     Don't prompt the user even if the standard resource is not valid
+     *  @param cancelled    If non-null: set to true if the user cancelled the
+     *                      prompt dialogue; set to false if any other error
+     */
+    template <class DataModel>
+    static Resource destination(CalEvent::Type type, QWidget* promptParent = nullptr, bool noPrompt = false, bool* cancelled = nullptr);
 
     /** Return whether all configured resources have been created. */
     static bool allCreated();
@@ -200,6 +213,7 @@ Q_SIGNALS:
 
 private:
     Resources();
+    static Resource destination(ResourceListModel* model, CalEvent::Type type, QWidget* promptParent, bool noPrompt, bool* cancelled);
 
     /** Add a new ResourceType instance, with a Resource owner.
      *  Once the resource has completed its initialisation, call
@@ -223,6 +237,16 @@ private:
 
     friend class ResourceType;
 };
+
+
+/*===========================================================================*/
+
+template <class DataModel>
+Resource Resources::destination(CalEvent::Type type, QWidget* promptParent, bool noPrompt, bool* cancelled)
+{
+    ResourceListModel* model = ResourceListModel::create<DataModel>(promptParent);
+    return destination(model, type, promptParent, noPrompt, cancelled);
+}
 
 #endif // RESOURCES_H
 
