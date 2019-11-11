@@ -364,7 +364,6 @@ bool AkonadiResource::addEvent(const KAEvent& event)
         qCWarning(KALARM_LOG) << "AkonadiResource::addEvent: Invalid mime type for collection";
         return false;
     }
-qCDebug(KALARM_LOG)<<"-> item id="<<item.id();
     ItemCreateJob* job = new ItemCreateJob(item, mCollection);
     connect(job, &ItemCreateJob::result, this, &AkonadiResource::itemJobDone);
     mPendingItemJobs[job] = -1;   // the Item doesn't have an ID yet
@@ -382,7 +381,6 @@ bool AkonadiResource::updateEvent(const KAEvent& event)
     Item item = AkonadiModel::instance()->itemForEvent(event.id());
     if (!item.isValid())
         return false;
-qCDebug(KALARM_LOG)<<"item id="<<item.id()<<", revision="<<item.revision();
     if (!KAlarmCal::setItemPayload(item, event, mCollection.contentMimeTypes()))
     {
         qCWarning(KALARM_LOG) << "AkonadiResource::updateEvent: Invalid mime type for collection";
@@ -537,16 +535,17 @@ void AkonadiResource::notifyCollectionChanged(Resource& res, const Collection& c
     // Check for the collection being enabled/disabled.
     // Enabled/disabled can only be set by KAlarm (not the resource), so if the
     // attribute doesn't exist, it is ignored.
-    const CalEvent::Types oldEnabled = akres->mCollection.hasAttribute<CollectionAttribute>()
-                                     ? akres->mCollection.attribute<CollectionAttribute>()->enabled() : CalEvent::EMPTY;
+//    const CalEvent::Types oldEnabled = akres->mCollection.hasAttribute<CollectionAttribute>()
+//                                     ? akres->mCollection.attribute<CollectionAttribute>()->enabled() : CalEvent::EMPTY;
     const CalEvent::Types newEnabled = collection.hasAttribute<CollectionAttribute>()
                                      ? collection.attribute<CollectionAttribute>()->enabled() : CalEvent::EMPTY;
-    if (!akres->mCollectionAttrChecked  ||  newEnabled != oldEnabled)
+    if (!akres->mCollectionAttrChecked  ||  newEnabled != akres->mLastEnabled)
     {
         qCDebug(KALARM_LOG) << "AkonadiResource::setCollectionChanged:" << collection.id() << ": enabled ->" << newEnabled;
         akres->mCollectionAttrChecked = true;
         change |= Enabled;
     }
+    akres->mLastEnabled = newEnabled;
 
     akres->mCollection = collection;
     if (change != NoChange)
@@ -816,7 +815,11 @@ void AkonadiResource::modifyCollectionAttrJobDone(KJob* j)
     {
         AkonadiModel::instance()->refresh(mCollection);   // pick up the modified attribute
         if (newEnabled)
+        {
+            mLastEnabled = collection.hasAttribute<CollectionAttribute>()
+                         ? collection.attribute<CollectionAttribute>()->enabled() : CalEvent::EMPTY;
             Resources::notifySettingsChanged(this, Enabled);
+        }
     }
 }
 
