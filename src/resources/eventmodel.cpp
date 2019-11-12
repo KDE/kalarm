@@ -65,7 +65,6 @@ KAEvent EventListModel::event(const QModelIndex& index) const
 {
     KDescendantsProxyModel* proxyModel = static_cast<KDescendantsProxyModel*>(sourceModel());
     const QModelIndex dataIndex = proxyModel->mapToSource(mapToSource(index));
-qDebug()<<"EventListModel::event:"<<dataIndex<<((*mEventFunction)(dataIndex)).id();
     return (*mEventFunction)(dataIndex);
 }
 
@@ -75,8 +74,6 @@ qDebug()<<"EventListModel::event:"<<dataIndex<<((*mEventFunction)(dataIndex)).id
 QModelIndex EventListModel::eventIndex(const QString& eventId) const
 {
     KDescendantsProxyModel* proxyModel = static_cast<KDescendantsProxyModel*>(sourceModel());
-qDebug()<<"EventListModel::eventIndex:"<<(*mEventIndexFunction)(eventId)<<" (should be AkonadiModel)";
-qDebug()<<"EventListModel::eventIndex:"<<mapFromSource(proxyModel->mapFromSource((*mEventIndexFunction)(eventId)))<<" (should be EventListModel)";
     return mapFromSource(proxyModel->mapFromSource(((*mEventIndexFunction)(eventId))));
 }
 
@@ -143,7 +140,6 @@ bool EventListModel::filterAcceptsRow(int sourceRow, const QModelIndex& sourcePa
     if (id < 0)
         return false;   // the parent item isn't a resource
     const Resource resource = Resources::resource(id);
-qDebug()<<"EventListModel::filterAcceptsRow 1:"<<(void*)this<<" resource ID:"<<id<<resource.displayName();
     if (!resource.isValid())
         return false;   // invalidly configured resource
 
@@ -151,12 +147,10 @@ qDebug()<<"EventListModel::filterAcceptsRow 1:"<<(void*)this<<" resource ID:"<<i
     const KAEvent event = resource.event(eventId);
     if (!event.isValid())
         return false;
-qDebug()<<"EventListModel::filterAcceptsRow 2:"<<(void*)this<<" resource ID:"<<id<<"enabled:"<<resource.enabledTypes()<<", event:"<<event.category();
     if (!(event.category() & mAlarmTypes))
         return false;   // the event has the wrong alarm type
     if (!resource.isEnabled(event.category()))
         return false;   // the resource is disabled for this alarm type
-qDebug()<<"EventListModel::filterAcceptsRow YES:"<<(void*)this<<" event ID"<<eventId<<sourceModel();
     return true;
 }
 
