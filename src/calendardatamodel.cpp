@@ -174,6 +174,8 @@ bool CalendarDataModel::roleHandled(int role) const
         case SortRole:
         case StatusRole:
         case ValueRole:
+        case EventIdRole:
+        case ParentResourceIdRole:
         case EnabledRole:
         case AlarmActionsRole:
         case AlarmSubActionRole:
@@ -236,6 +238,8 @@ QVariant CalendarDataModel::eventData(int role, int column, const KAEvent& event
             return QVariant();
         switch (role)
         {
+            case EventIdRole:
+                return event.id();
             case StatusRole:
                 return event.category();
             case AlarmActionsRole:

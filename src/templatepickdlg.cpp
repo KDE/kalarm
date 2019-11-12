@@ -1,7 +1,7 @@
 /*
  *  templatepickdlg.cpp  -  dialog to choose an alarm template
  *  Program:  kalarm
- *  Copyright © 2004,2006-2010 David Jarvie <djarvie@kde.org>
+ *  Copyright © 2004-2019 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -20,9 +20,11 @@
 
 #include "templatepickdlg.h"
 
+#include "akonadimodel.h"
 #include "functions.h"
 #include "shellprocess.h"
 #include "templatelistview.h"
+#include "resources/eventmodel.h"
 #include "kalarm_debug.h"
 
 #include <KLocalizedString>
@@ -60,7 +62,7 @@ TemplatePickDlg::TemplatePickDlg(KAEvent::Actions type, QWidget* parent)
         type = static_cast<KAEvent::Actions>(type & ~KAEvent::ACT_COMMAND);
         shown = static_cast<KAEvent::Actions>(shown & ~KAEvent::ACT_COMMAND);
     }
-    mListFilterModel = new TemplateListModel(this);
+    mListFilterModel = TemplateListModel::create<AkonadiModel>(this);
     mListFilterModel->setAlarmActionsEnabled(type);
     mListFilterModel->setAlarmActionFilter(shown);
     mListView = new TemplateListView(topWidget);

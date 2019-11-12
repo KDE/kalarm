@@ -97,6 +97,8 @@ class AkonadiModel : public Akonadi::EntityTreeModel, public CalendarDataModel
 
         QVariant data(const QModelIndex&, int role = Qt::DisplayRole) const override;
 
+        int headerDataEventRoleOffset() const override;
+
     private Q_SLOTS:
         /** Called when a resource notifies a message to display to the user. */
         void slotResourceMessage(Resource&, ResourceType::MessageType, const QString& message, const QString& details);

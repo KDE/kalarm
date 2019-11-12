@@ -535,8 +535,6 @@ void AkonadiResource::notifyCollectionChanged(Resource& res, const Collection& c
     // Check for the collection being enabled/disabled.
     // Enabled/disabled can only be set by KAlarm (not the resource), so if the
     // attribute doesn't exist, it is ignored.
-//    const CalEvent::Types oldEnabled = akres->mCollection.hasAttribute<CollectionAttribute>()
-//                                     ? akres->mCollection.attribute<CollectionAttribute>()->enabled() : CalEvent::EMPTY;
     const CalEvent::Types newEnabled = collection.hasAttribute<CollectionAttribute>()
                                      ? collection.attribute<CollectionAttribute>()->enabled() : CalEvent::EMPTY;
     if (!akres->mCollectionAttrChecked  ||  newEnabled != akres->mLastEnabled)

@@ -26,7 +26,6 @@
 #include "alarmcalendar.h"
 #include "alarmtime.h"
 #include "autoqpointer.h"
-#include "alarmlistview.h"
 #include "editdlg.h"
 #include "kalarmapp.h"
 #include "kamail.h"
@@ -38,6 +37,7 @@
 #include "templatelistview.h"
 #include "templatemenuaction.h"
 #include "resources/resources.h"
+#include "resources/eventmodel.h"
 #include "config-kalarm.h"
 #include "kalarm_debug.h"
 
@@ -753,7 +753,7 @@ QVector<KAEvent> getSortedActiveEvents(QObject* parent, AlarmListModel** model)
         model = &mdl;
     if (!*model)
     {
-        *model = new AlarmListModel(parent);
+        *model = AlarmListModel::create<AkonadiModel>(parent);
         (*model)->setEventTypeFilter(CalEvent::ACTIVE);
         (*model)->sort(AlarmListModel::TimeColumn);
     }

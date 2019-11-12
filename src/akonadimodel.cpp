@@ -226,6 +226,8 @@ QVariant AkonadiModel::data(const QModelIndex& index, int role) const
                     return QVariant();
                 Resource res;
                 const KAEvent ev(event(item, index, res));   // this sets item.parentCollection()
+                if (role == ParentResourceIdRole)
+                    return item.parentCollection().id();
 
                 bool handled;
                 const QVariant value = eventData(role, index.column(), ev, res, handled);
@@ -251,6 +253,14 @@ int AkonadiModel::entityColumnCount(HeaderGroup group) const
         default:
             return EntityTreeModel::entityColumnCount(group);
     }
+}
+
+/******************************************************************************
+* Return offset to add to headerData() role, for item models.
+*/
+int AkonadiModel::headerDataEventRoleOffset() const
+{
+    return TerminalUserRole * ItemListHeaders;
 }
 
 /******************************************************************************

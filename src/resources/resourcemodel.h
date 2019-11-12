@@ -41,14 +41,15 @@ using namespace KAlarmCal;
 =============================================================================*/
 class ResourceFilterModel : public QSortFilterProxyModel
 {
+    Q_OBJECT
 public:
     /** Constructs a new instance.
-     *  @tparam Model  The data model class to use as the source model. It must
-     *                 have the following methods:
-     *                   static Model* instance(); - returns the unique instance.
-     *                   QModelIndex resourceIndex(const Resource&) const;
+     *  @tparam DataModel  The data model class to use as the source model. It must
+     *                     have the following methods:
+     *                       static Model* instance(); - returns the unique instance.
+     *                       QModelIndex resourceIndex(const Resource&) const;
      */
-    template <class Model>
+    template <class DataModel>
     static ResourceFilterModel* create(QObject* parent = nullptr);
 
     /** Set the alarm type to include in the model.
@@ -105,9 +106,9 @@ class ResourceListModel : public KDescendantsProxyModel
 public:
     /** Constructs a new instance.
      *  @tparam DataModel  The data model class to use as the source model. It must
-     *              have the following methods:
-     *                static DataModel* instance(); - returns the unique instance.
-     *                QModelIndex resourceIndex(const Resource&) const;
+     *                  have the following methods:
+     *                    static DataModel* instance(); - returns the unique instance.
+     *                    QModelIndex resourceIndex(const Resource&) const;
      */
     template <class DataModel>
     static ResourceListModel* create(QObject* parent = nullptr);
@@ -144,9 +145,9 @@ class ResourceCheckListModel : public KCheckableProxyModel
 public:
     /** Constructs a new instance.
      *  @tparam DataModel  The data model class to use as the source model. It must
-     *              have the following methods:
-     *                static DataModel* instance(); - returns the unique instance.
-     *                QModelIndex resourceIndex(const Resource&) const;
+     *                  have the following methods:
+     *                    static DataModel* instance(); - returns the unique instance.
+     *                    QModelIndex resourceIndex(const Resource&) const;
      */
     template <class DataModel>
     static ResourceCheckListModel* create(CalEvent::Type, QObject* parent = nullptr);
@@ -190,10 +191,10 @@ class ResourceFilterCheckListModel : public QSortFilterProxyModel
 public:
     /** Constructs a new instance.
      *  @tparam DataModel  The data model class to use as the source model. It must
-     *              have the following methods:
-     *                static DataModel* instance(); - returns the unique instance.
-     *                QModelIndex resourceIndex(const Resource&) const;
-     *                QString tooltip(const Resource&, CalEvent::Types) const;
+     *                  have the following methods:
+     *                    static DataModel* instance(); - returns the unique instance.
+     *                    QModelIndex resourceIndex(const Resource&) const;
+     *                    QString tooltip(const Resource&, CalEvent::Types) const;
      */
     template <class DataModel>
     static ResourceFilterCheckListModel* create(QObject* parent = nullptr);
@@ -241,7 +242,9 @@ protected:
 };
 
 
-/*===========================================================================*/
+/*=============================================================================
+* Template definitions.
+*============================================================================*/
 
 template <class DataModel>
 ResourceFilterModel* ResourceFilterModel::create(QObject* parent)

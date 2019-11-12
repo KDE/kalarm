@@ -21,20 +21,22 @@
 #ifndef EVENTLISTVIEW_H
 #define EVENTLISTVIEW_H
 
-#include "itemlistmodel.h"
+#include <KAlarmCal/KAEvent>
 
 #include <QTreeView>
 #include <QItemDelegate>
 
+class EventListModel;
 class Find;
 
+using namespace KAlarmCal;
 
 class EventListView : public QTreeView
 {
         Q_OBJECT
     public:
         explicit EventListView(QWidget* parent = nullptr);
-        ItemListModel*    itemModel() const    { return static_cast<ItemListModel*>(model()); }
+        EventListModel*   itemModel() const;
         KAEvent           event(int row) const;
         KAEvent           event(const QModelIndex&) const;
         void              select(const QModelIndex&, bool scrollToIndex = false);

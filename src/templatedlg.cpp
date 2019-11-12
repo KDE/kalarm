@@ -29,6 +29,7 @@
 #include "templatelistview.h"
 #include "undo.h"
 #include "resources/resources.h"
+#include "resources/eventmodel.h"
 #include "kalarm_debug.h"
 
 #include <KLocalizedString>
@@ -66,7 +67,7 @@ TemplateDlg::TemplateDlg(QWidget* parent)
     QBoxLayout* layout = new QVBoxLayout();
     layout->setContentsMargins(0, 0, 0, 0);
     hlayout->addLayout(layout);
-    mListFilterModel = new TemplateListModel(this);
+    mListFilterModel = TemplateListModel::create<AkonadiModel>(this);
     if (!ShellProcess::authorised())
         mListFilterModel->setAlarmActionFilter(static_cast<KAEvent::Actions>(KAEvent::ACT_ALL & ~KAEvent::ACT_COMMAND));
     mListView = new TemplateListView(this);

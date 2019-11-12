@@ -20,6 +20,9 @@
 
 #include "alarmlistview.h"
 
+#include "calendardatamodel.h"
+#include "resources/eventmodel.h"
+
 #include <ksharedconfig.h>
 #include <kconfiggroup.h>
 

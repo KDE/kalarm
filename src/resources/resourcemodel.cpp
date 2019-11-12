@@ -416,9 +416,9 @@ void ResourceCheckListModel::resourceSettingsChanged(Resource& res, ResourceType
         return;
 
     if (change & ResourceType::Enabled)
-        qCDebug(KALARM_LOG) << debugType("resourceSettingsChanged").constData() << "Enabled" << res.id();
+        qCDebug(KALARM_LOG) << debugType("resourceSettingsChanged").constData() << res.id() << "Enabled" << res.enabledTypes();
     if (change & ResourceType::AlarmTypes)
-        qCDebug(KALARM_LOG) << debugType("resourceSettingsChanged").constData() << "AlarmTypes" << res.id();
+        qCDebug(KALARM_LOG) << debugType("resourceSettingsChanged").constData() << res.id() << "AlarmTypes" << res.alarmTypes();
 
     const QModelIndex ix = mModel->resourceIndex(res);
     if (ix.isValid())

@@ -73,7 +73,7 @@ class CalendarDataModel
             CommandErrorRole           // last command execution error for alarm (per user)
         };
 
-        ~CalendarDataModel();
+        virtual ~CalendarDataModel();
 
     public:
         static QSize   iconSize()       { return mIconSize; }
@@ -88,6 +88,9 @@ class CalendarDataModel
         /** Return the read-only status tooltip for a resource.
          * A null string is returned if the resource is fully writable. */
         static QString readOnlyTooltip(const Resource&);
+
+        /** Return offset to add to headerData() role, for item models. */
+        virtual int headerDataEventRoleOffset() const  { return 0; }
 
     protected:
         CalendarDataModel();

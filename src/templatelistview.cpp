@@ -21,7 +21,7 @@
 #include "templatelistview.h"
 
 #include "functions.h"
-#define TEMPLATE_LIST_MODEL TemplateListModel
+#include "resources/eventmodel.h"
 
 #include <KLocalizedString>
 
@@ -41,11 +41,11 @@ void TemplateListView::setModel(QAbstractItemModel* model)
     EventListView::setModel(model);
     header()->setSectionsMovable(false);
     header()->setStretchLastSection(true);
-    header()->setSectionResizeMode(TEMPLATE_LIST_MODEL::TypeColumn, QHeaderView::Fixed);
+    header()->setSectionResizeMode(TemplateListModel::TypeColumn, QHeaderView::Fixed);
     const int minWidth = viewOptions().fontMetrics.lineSpacing() * 3 / 4;
     header()->setMinimumSectionSize(minWidth);
     const int margin = QApplication::style()->pixelMetric(QStyle::PM_FocusFrameHMargin);
-    header()->resizeSection(TEMPLATE_LIST_MODEL::TypeColumn, ItemListModel::iconWidth() + 2*margin + 2);
+    header()->resizeSection(TemplateListModel::TypeColumn, EventListModel::iconWidth() + 2*margin + 2);
 }
 
 void TemplateListDelegate::edit(KAEvent* event, EventListView* view)

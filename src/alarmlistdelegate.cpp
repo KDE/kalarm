@@ -22,6 +22,7 @@
 
 #include "akonadimodel.h"
 #include "functions.h"
+#include "resources/eventmodel.h"
 #include "kalarm_debug.h"
 
 #include <kalarmcal/kacalendar.h>
@@ -84,7 +85,7 @@ void AlarmListDelegate::paint(QPainter* painter, const QStyleOptionViewItem& opt
             }
             case AlarmListModel::ColourColumn:
             {
-                const KAEvent event = static_cast<const ItemListModel*>(index.model())->event(index);
+                const KAEvent event = static_cast<const EventListModel*>(index.model())->event(index);
                 if (event.isValid()  &&  event.commandError() != KAEvent::CMD_NO_ERROR)
                 {
                     opt.font.setBold(true);
