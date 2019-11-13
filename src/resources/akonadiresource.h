@@ -211,6 +211,9 @@ public:
      */
     KACalendar::Compat compatibility() const override;
 
+    /** Edit the resource's configuration. */
+    void editResource(QWidget* dialogParent) override;
+
     /** Load the resource from storage, and fetch all events.
      *  Not applicable to AkonadiResource, since the Akonadi resource handles
      *  loading automatically.

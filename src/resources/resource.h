@@ -237,6 +237,9 @@ public:
     /** Return whether the resource is in the current KAlarm format. */
     bool isCompatible() const;
 
+    /** Edit the resource's configuration. */
+    void editResource(QWidget* dialogParent);
+
     /** Load the resource from the file, and fetch all events.
      *  If loading is initiated, Resources::resourcePopulated() will be emitted
      *  on completion.

@@ -43,8 +43,6 @@ namespace Akonadi
 = Note that this model is not used directly for displaying - its purpose is to
 = allow collections to be disabled, which will remove them from the other
 = collection models.
-= This model also controls which collections are standard for their type,
-= ensuring that there is only one standard collection for any given type.
 =============================================================================*/
 class CollectionControlModel : public Akonadi::FavoriteCollectionsModel
 {
@@ -62,9 +60,6 @@ class CollectionControlModel : public Akonadi::FavoriteCollectionsModel
          *                      prompt dialogue; set to false if any other error
          */
         static Resource destination(CalEvent::Type type, QWidget* promptParent = nullptr, bool noPrompt = false, bool* cancelled = nullptr);
-
-        /** Edit a resource's configuration. */
-        static void editResource(const Resource&, QWidget* parent);
 
         /** Remove a resource from Akonadi. The calendar file is not removed.
          *  @return true if a removal job has been scheduled.

@@ -28,14 +28,12 @@
 #include <AkonadiCore/agentmanager.h>
 #include <AkonadiCore/collectionfetchjob.h>
 #include <AkonadiCore/entitymimetypefiltermodel.h>
-#include <AkonadiWidgets/AgentConfigurationDialog>
 
 #include <KLocalizedString>
 #include <KSharedConfig>
 #include <KConfigGroup>
 
 #include <QApplication>
-#include <QPointer>
 #include <QUrl>
 
 using namespace Akonadi;
@@ -306,23 +304,6 @@ CalEvent::Types CollectionControlModel::checkTypesToEnable(const Resource& resou
 Resource CollectionControlModel::destination(CalEvent::Type type, QWidget* promptParent, bool noPrompt, bool* cancelled)
 {
     return Resources::destination<AkonadiModel>(type, promptParent, noPrompt, cancelled);
-}
-
-/******************************************************************************
-* Edit a resource's configuration.
-*/
-void CollectionControlModel::editResource(const Resource& resource, QWidget* parent)
-{
-    if (resource.isValid())
-    {
-        AgentInstance instance = AgentManager::self()->instance(resource.configName());
-        if (instance.isValid())
-        {
-            QPointer<AgentConfigurationDialog> dlg = new AgentConfigurationDialog(instance, parent);
-            dlg->exec();
-            delete dlg;
-        }
-    }
 }
 
 /******************************************************************************

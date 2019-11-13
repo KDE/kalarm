@@ -207,7 +207,7 @@ void ResourceSelector::slotResourceAdded(Resource& resource, CalEvent::Type alar
 */
 void ResourceSelector::editResource()
 {
-    CollectionControlModel::editResource(currentResource(), this);
+    currentResource().editResource(this);
 }
 
 /******************************************************************************

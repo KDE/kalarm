@@ -22,6 +22,7 @@
 
 #include "resources.h"
 #include "akonadimodel.h"
+#include "autoqpointer.h"
 #include "calendarmigrator.h"
 #include "kalarm_debug.h"
 
@@ -34,6 +35,7 @@
 #include <AkonadiCore/ItemCreateJob>
 #include <AkonadiCore/ItemDeleteJob>
 #include <AkonadiCore/ItemModifyJob>
+#include <AkonadiWidgets/AgentConfigurationDialog>
 using namespace Akonadi;
 
 #include <KLocalizedString>
@@ -89,7 +91,7 @@ Resource AkonadiResource::nullResource()
 bool AkonadiResource::isValid() const
 {
     // The collection ID must not have changed since construction.
-    return mValid  &&  mCollection.id() == id();
+    return mValid  &&  id() >= 0  &&  mCollection.id() == id();
 }
 
 Akonadi::Collection AkonadiResource::collection() const
@@ -305,6 +307,25 @@ KACalendar::Compat AkonadiResource::compatibility() const
     if (!mCollection.hasAttribute<CompatibilityAttribute>())
         return KACalendar::Incompatible;
     return mCollection.attribute<CompatibilityAttribute>()->compatibility();
+}
+
+/******************************************************************************
+* Edit the resource's configuration.
+*/
+void AkonadiResource::editResource(QWidget* dialogParent)
+{
+    if (isValid())
+    {
+        AgentInstance instance = AgentManager::self()->instance(configName());
+        if (instance.isValid())
+        {
+            // Use AutoQPointer to guard against crash on application exit while
+            // the event loop is still running. It prevents double deletion (both
+            // on deletion of parent, and on return from this function).
+            AutoQPointer<AgentConfigurationDialog> dlg = new AgentConfigurationDialog(instance, dialogParent);
+            dlg->exec();
+        }
+    }
 }
 
 bool AkonadiResource::load(bool readThroughCache)
