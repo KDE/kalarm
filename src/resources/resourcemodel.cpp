@@ -243,6 +243,9 @@ ResourceCheckListModel::ResourceCheckListModel(CalEvent::Type type, QObject* par
     ++mInstanceCount;
 }
 
+/******************************************************************************
+* Complete construction, after setting up models dependent on template type.
+*/
 void ResourceCheckListModel::init()
 {
     setSourceModel(mModel);    // the source model is NOT filtered by alarm type
@@ -252,7 +255,9 @@ void ResourceCheckListModel::init()
                        this, &ResourceCheckListModel::selectionChanged);
     connect(mModel, SIGNAL(rowsAboutToBeInserted(QModelIndex,int,int)), SIGNAL(layoutAboutToBeChanged()));
     connect(mModel, &QAbstractItemModel::rowsInserted,
-              this, &ResourceCheckListModel::slotRowsInserted);
+              this, &ResourceCheckListModel::slotRowsInsertedRemoved);
+    connect(mModel, &QAbstractItemModel::rowsRemoved,
+              this, &ResourceCheckListModel::slotRowsInsertedRemoved);
     // This is probably needed to make ResourceFilterCheckListModel update
     // (similarly to when rows are inserted).
     connect(mModel, SIGNAL(rowsAboutToBeRemoved(QModelIndex,int,int)), SIGNAL(layoutAboutToBeChanged()));
@@ -296,7 +301,7 @@ Resource ResourceCheckListModel::resource(const QModelIndex& index) const
 */
 QVariant ResourceCheckListModel::data(const QModelIndex& index, int role) const
 {
-    const Resource resource = mModel->resource(index);
+    const Resource resource = mModel->resource(mapToSource(index));
     if (resource.isValid())
     {
         // This is a Resource row
@@ -332,7 +337,7 @@ bool ResourceCheckListModel::setData(const QModelIndex& index, const QVariant& v
     if (role == Qt::CheckStateRole  &&  static_cast<Qt::CheckState>(value.toInt()) != Qt::Checked)
     {
         // A resource is to be disabled.
-        const Resource resource = mModel->resource(index);
+        const Resource resource = mModel->resource(mapToSource(index));
         if (resource.isEnabled(mAlarmType))
         {
             QString errmsg;
@@ -367,19 +372,24 @@ bool ResourceCheckListModel::setData(const QModelIndex& index, const QVariant& v
 }
 
 /******************************************************************************
-* Called when rows have been inserted into the model.
-* Select or deselect them according to their enabled status.
+* Called when rows have been inserted into or removed from the model.
+* Re-evaluate the selection state of all model rows, since the selection model
+* doesn't track renumbering of rows in its source model.
 */
-void ResourceCheckListModel::slotRowsInserted(const QModelIndex& parent, int start, int end)
+void ResourceCheckListModel::slotRowsInsertedRemoved()
 {
     Q_EMIT layoutAboutToBeChanged();
-    for (int row = start;  row <= end;  ++row)
+    mResetting = true;    // prevent changes in selection status being processed as user input
+    mSelectionModel->clearSelection();
+    const int count = mModel->rowCount();
+    for (int row = 0;  row <= count;  ++row)
     {
-        const QModelIndex ix = mapToSource(index(row, 0, parent));
+        const QModelIndex ix = mModel->index(row, 0);
         const Resource resource = mModel->resource(ix);
-        if (resource.isValid())
-            setSelectionStatus(resource, ix);
+        if (resource.isEnabled(mAlarmType))
+            mSelectionModel->select(ix, QItemSelectionModel::Select);
     }
+    mResetting = false;
     Q_EMIT layoutChanged();   // this is needed to make ResourceFilterCheckListModel update
 }
 
@@ -389,6 +399,8 @@ void ResourceCheckListModel::slotRowsInserted(const QModelIndex& parent, int sta
 */
 void ResourceCheckListModel::selectionChanged(const QItemSelection& selected, const QItemSelection& deselected)
 {
+    if (mResetting)
+        return;
     const QModelIndexList sel = selected.indexes();
     for (const QModelIndex& ix : sel)
     {

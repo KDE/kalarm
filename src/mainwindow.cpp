@@ -638,7 +638,7 @@ void MainWindow::updateKeepArchived(int days)
 void MainWindow::selectEvent(const QString& eventId)
 {
     mListView->clearSelection();
-    QModelIndex index = mListFilterModel->eventIndex(eventId);
+    const QModelIndex index = mListFilterModel->eventIndex(eventId);
     if (index.isValid())
     {
         mListView->select(index);

@@ -163,7 +163,7 @@ Q_SIGNALS:
 
 private Q_SLOTS:
     void selectionChanged(const QItemSelection& selected, const QItemSelection& deselected);
-    void slotRowsInserted(const QModelIndex& parent, int start, int end);
+    void slotRowsInsertedRemoved();
     void resourceSettingsChanged(Resource&, ResourceType::Changes);
 
 private:
@@ -176,6 +176,7 @@ private:
     static int                mInstanceCount;
     CalEvent::Type            mAlarmType;     // alarm type contained in this model
     QItemSelectionModel*      mSelectionModel;
+    bool                      mResetting{false};   // currently handling rows inserted/removed
 };
 
 
