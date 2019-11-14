@@ -493,7 +493,9 @@ void ResourceFilterCheckListModel::setEventTypeFilter(CalEvent::Type type)
 {
     if (type != mAlarmType)
     {
+        disconnect(sourceModel(), &QAbstractItemModel::rowsAboutToBeInserted, this, nullptr);
         disconnect(sourceModel(), &QAbstractItemModel::rowsAboutToBeRemoved, this, nullptr);
+        disconnect(sourceModel(), &QAbstractItemModel::rowsInserted, this, nullptr);
         disconnect(sourceModel(), &QAbstractItemModel::rowsRemoved, this, nullptr);
 
         ResourceCheckListModel* newModel;
@@ -507,8 +509,12 @@ void ResourceFilterCheckListModel::setEventTypeFilter(CalEvent::Type type)
         }
         mAlarmType = type;
         setSourceModel(newModel);
+        connect(newModel, &QAbstractItemModel::rowsAboutToBeInserted,
+                    this, &ResourceFilterCheckListModel::slotRowsAboutToBeInserted);
         connect(newModel, &QAbstractItemModel::rowsAboutToBeRemoved,
                     this, &ResourceFilterCheckListModel::slotRowsAboutToBeRemoved);
+        connect(newModel, &QAbstractItemModel::rowsInserted,
+                    this, &ResourceFilterCheckListModel::slotRowsInserted);
         connect(newModel, &QAbstractItemModel::rowsRemoved,
                     this, &ResourceFilterCheckListModel::slotRowsRemoved);
         invalidate();
@@ -568,10 +574,34 @@ void ResourceFilterCheckListModel::resourceTypeChanged(ResourceCheckListModel* m
 }
 
 /******************************************************************************
+* Called when resources are about to be inserted into the current source model.
+*/
+void ResourceFilterCheckListModel::slotRowsAboutToBeInserted(const QModelIndex& parent, int start, int end)
+{
+    Q_UNUSED(parent);
+    Q_EMIT layoutAboutToBeChanged();
+    beginInsertRows(QModelIndex(), start, end);
+}
+
+/******************************************************************************
+* Called when resources have been inserted into the current source model.
+*/
+void ResourceFilterCheckListModel::slotRowsInserted(const QModelIndex& parent, int start, int end)
+{
+    Q_UNUSED(parent);
+    Q_UNUSED(start);
+    Q_UNUSED(end);
+
+    endInsertRows();
+    Q_EMIT layoutChanged();
+}
+
+/******************************************************************************
 * Called when resources are about to be removed from the current source model.
 */
 void ResourceFilterCheckListModel::slotRowsAboutToBeRemoved(const QModelIndex& parent, int start, int end)
 {
+    Q_UNUSED(parent);
     layoutAboutToBeChanged();
     beginRemoveRows(QModelIndex(), start, end);
 }
