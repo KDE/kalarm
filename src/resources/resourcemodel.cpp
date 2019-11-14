@@ -253,15 +253,10 @@ void ResourceCheckListModel::init()
     setSelectionModel(mSelectionModel);
     connect(mSelectionModel, &QItemSelectionModel::selectionChanged,
                        this, &ResourceCheckListModel::selectionChanged);
-    connect(mModel, SIGNAL(rowsAboutToBeInserted(QModelIndex,int,int)), SIGNAL(layoutAboutToBeChanged()));
     connect(mModel, &QAbstractItemModel::rowsInserted,
               this, &ResourceCheckListModel::slotRowsInsertedRemoved);
     connect(mModel, &QAbstractItemModel::rowsRemoved,
               this, &ResourceCheckListModel::slotRowsInsertedRemoved);
-    // This is probably needed to make ResourceFilterCheckListModel update
-    // (similarly to when rows are inserted).
-    connect(mModel, SIGNAL(rowsAboutToBeRemoved(QModelIndex,int,int)), SIGNAL(layoutAboutToBeChanged()));
-    connect(mModel, SIGNAL(rowsRemoved(QModelIndex,int,int)), SIGNAL(layoutChanged()));
 
     connect(Resources::instance(), &Resources::settingsChanged,
                              this, &ResourceCheckListModel::resourceSettingsChanged);
@@ -378,7 +373,6 @@ bool ResourceCheckListModel::setData(const QModelIndex& index, const QVariant& v
 */
 void ResourceCheckListModel::slotRowsInsertedRemoved()
 {
-    Q_EMIT layoutAboutToBeChanged();
     mResetting = true;    // prevent changes in selection status being processed as user input
     mSelectionModel->clearSelection();
     const int count = mModel->rowCount();
@@ -390,7 +384,6 @@ void ResourceCheckListModel::slotRowsInsertedRemoved()
             mSelectionModel->select(ix, QItemSelectionModel::Select);
     }
     mResetting = false;
-    Q_EMIT layoutChanged();   // this is needed to make ResourceFilterCheckListModel update
 }
 
 /******************************************************************************
@@ -579,21 +572,15 @@ void ResourceFilterCheckListModel::resourceTypeChanged(ResourceCheckListModel* m
 void ResourceFilterCheckListModel::slotRowsAboutToBeInserted(const QModelIndex& parent, int start, int end)
 {
     Q_UNUSED(parent);
-    Q_EMIT layoutAboutToBeChanged();
     beginInsertRows(QModelIndex(), start, end);
 }
 
 /******************************************************************************
 * Called when resources have been inserted into the current source model.
 */
-void ResourceFilterCheckListModel::slotRowsInserted(const QModelIndex& parent, int start, int end)
+void ResourceFilterCheckListModel::slotRowsInserted()
 {
-    Q_UNUSED(parent);
-    Q_UNUSED(start);
-    Q_UNUSED(end);
-
     endInsertRows();
-    Q_EMIT layoutChanged();
 }
 
 /******************************************************************************
@@ -602,21 +589,15 @@ void ResourceFilterCheckListModel::slotRowsInserted(const QModelIndex& parent, i
 void ResourceFilterCheckListModel::slotRowsAboutToBeRemoved(const QModelIndex& parent, int start, int end)
 {
     Q_UNUSED(parent);
-    layoutAboutToBeChanged();
     beginRemoveRows(QModelIndex(), start, end);
 }
 
 /******************************************************************************
 * Called when resources have been removed from the current source model.
 */
-void ResourceFilterCheckListModel::slotRowsRemoved(const QModelIndex& parent, int start, int end)
+void ResourceFilterCheckListModel::slotRowsRemoved()
 {
-    Q_UNUSED(parent);
-    Q_UNUSED(start);
-    Q_UNUSED(end);
-
     endRemoveRows();
-    layoutChanged();
 }
 
 

@@ -212,8 +212,8 @@ private Q_SLOTS:
     void resourceTypeChanged(ResourceCheckListModel*);
     void slotRowsAboutToBeInserted(const QModelIndex& parent, int start, int end);
     void slotRowsAboutToBeRemoved(const QModelIndex& parent, int start, int end);
-    void slotRowsInserted(const QModelIndex& parent, int start, int end);
-    void slotRowsRemoved(const QModelIndex& parent, int start, int end);
+    void slotRowsInserted();
+    void slotRowsRemoved();
 
 private:
     explicit ResourceFilterCheckListModel(QObject* parent);
