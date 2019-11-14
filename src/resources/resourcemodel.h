@@ -210,6 +210,8 @@ protected:
 
 private Q_SLOTS:
     void resourceTypeChanged(ResourceCheckListModel*);
+    void slotRowsAboutToBeRemoved(const QModelIndex& parent, int start, int end);
+    void slotRowsRemoved(const QModelIndex& parent, int start, int end);
 
 private:
     explicit ResourceFilterCheckListModel(QObject* parent);
