@@ -210,6 +210,11 @@ void Resource::editResource(QWidget* dialogParent)
         mResource->editResource(dialogParent);
 }
 
+bool Resource::removeResource()
+{
+    return mResource.isNull() ? false : mResource->removeResource();
+}
+
 bool Resource::load(bool readThroughCache)
 {
     return mResource.isNull() ? false : mResource->load(readThroughCache);

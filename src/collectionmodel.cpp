@@ -307,23 +307,6 @@ Resource CollectionControlModel::destination(CalEvent::Type type, QWidget* promp
 }
 
 /******************************************************************************
-* Remove a collection from Akonadi. The calendar file is not removed.
-*/
-bool CollectionControlModel::removeResource(Resource& resource)
-{
-    if (!resource.isValid())
-        return false;
-    qCDebug(KALARM_LOG) << "CollectionControlModel::removeResource:" << resource.id();
-    resource.notifyDeletion();
-    // Note: Don't use CollectionDeleteJob, since that also deletes the backend storage.
-    AgentManager* agentManager = AgentManager::self();
-    const AgentInstance instance = agentManager->instance(resource.configName());
-    if (instance.isValid())
-        agentManager->removeInstance(instance);
-    return true;
-}
-
-/******************************************************************************
 * Return all collections which belong to a resource and which optionally
 * contain a specified mime type.
 */

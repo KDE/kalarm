@@ -257,6 +257,15 @@ public:
     /** Edit the resource's configuration. */
     virtual void editResource(QWidget* dialogParent) = 0;
 
+    /** Remove the resource. The calendar file is not removed.
+     *  Derived classes must call removeResource(ResourceId) once they have removed
+     *  the resource, in order to invalidate this instance and remove it from the
+     *  list held by Resources.
+     *  @note The instance will be invalid once it has been removed.
+     *  @return true if the resource has been removed or a removal job has been scheduled.
+     */
+    virtual bool removeResource() = 0;
+
     /** Load the resource from the file, and fetch all events.
      *  If loading is initiated, Resources::resourcePopulated() will be emitted
      *  on completion.
@@ -359,6 +368,12 @@ protected:
      *  @return true if a new resource has been created, false if invalid or already exists.
      */
     static bool addResource(ResourceType* type, Resource& resource);
+
+    /** Remove the resource with a given ID.
+     *  @note  The ResourceType instance will only be deleted once all Resource
+     *         instances which refer to this ID go out of scope.
+     */
+    static void removeResource(ResourceId);
 
     /** To be called when the resource has loaded, to update the list of loaded
      *  events for the resource. This should include both enabled and disabled

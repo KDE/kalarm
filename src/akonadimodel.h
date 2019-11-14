@@ -56,6 +56,8 @@ class AkonadiModel : public Akonadi::EntityTreeModel, public CalendarDataModel
 
         ~AkonadiModel() override;
 
+        static Akonadi::ChangeRecorder* monitor();
+
         /** Refresh the specified collection instance with up to date data. */
         bool refresh(Akonadi::Collection&) const;
 

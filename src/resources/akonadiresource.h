@@ -214,6 +214,12 @@ public:
     /** Edit the resource's configuration. */
     void editResource(QWidget* dialogParent) override;
 
+    /** Remove the resource. The calendar file is not removed.
+     *  @note The instance will be invalid once it has been removed.
+     *  @return true if the resource has been removed or a removal job has been scheduled.
+     */
+    bool removeResource() override;
+
     /** Load the resource from storage, and fetch all events.
      *  Not applicable to AkonadiResource, since the Akonadi resource handles
      *  loading automatically.
@@ -301,6 +307,7 @@ public:
     static void notifyItemChanged(Resource&, const Akonadi::Item&, bool created);
 
 private Q_SLOTS:
+    void slotCollectionRemoved(const Akonadi::Collection&);
     void itemJobDone(KJob*);
     void modifyCollectionAttrJobDone(KJob*);
 

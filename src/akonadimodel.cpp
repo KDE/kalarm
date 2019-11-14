@@ -194,6 +194,11 @@ bool AkonadiModel::isMigrationCompleted() const
     return mMigrationChecked && !mMigrating;
 }
 
+ChangeRecorder* AkonadiModel::monitor()
+{
+    return instance()->mMonitor;
+}
+
 /******************************************************************************
 * Return the data for a given role, for a specified item.
 */
@@ -739,7 +744,7 @@ void AkonadiModel::slotCollectionRemoved(const Collection& collection)
     const Collection::Id id = collection.id();
     qCDebug(KALARM_LOG) << "AkonadiModel::slotCollectionRemoved:" << id;
     mResources.remove(collection.id());
-    Resources::removeResource(collection.id());
+    // AkonadiResource will remove the resource from Resources.
 }
 
 /******************************************************************************

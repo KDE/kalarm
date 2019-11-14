@@ -240,6 +240,12 @@ public:
     /** Edit the resource's configuration. */
     void editResource(QWidget* dialogParent);
 
+    /** Remove the resource. The calendar file is not removed.
+     *  @return true if the resource has been removed or a removal job has been scheduled.
+     *  @note The instance will be invalid once it has been removed.
+     */
+    bool removeResource();
+
     /** Load the resource from the file, and fetch all events.
      *  If loading is initiated, Resources::resourcePopulated() will be emitted
      *  on completion.

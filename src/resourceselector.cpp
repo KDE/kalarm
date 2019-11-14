@@ -277,7 +277,7 @@ void ResourceSelector::removeResource()
     if (KAMessageBox::warningContinueCancel(this, text, QString(), KStandardGuiItem::remove()) == KMessageBox::Cancel)
         return;
 
-    CollectionControlModel::removeResource(resource);
+    resource.removeResource();
 }
 
 /******************************************************************************

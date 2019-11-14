@@ -48,11 +48,10 @@ public:
      */
     static Resource resource(ResourceId);
 
-    /** Remove the resource with a given ID.
-     *  @note  The ResourceType instance will only be deleted once all Resource
-     *         instances which refer to this ID go out of scope.
+    /** Remove a resource. The calendar file is not removed.
+     *  @return true if the resource has been removed or a removal job has been scheduled.
      */
-    static void removeResource(ResourceId);
+    static bool removeResource(Resource&);
 
     /** Return the enabled resources which contain a specified alarm type.
      *  @param type      Alarm type to check for, or CalEvent::EMPTY for any type.
@@ -227,6 +226,13 @@ private:
      *  @return true if a new resource has been created, false if invalid or already exists.
      */
     static bool addResource(ResourceType* type, Resource& resource);
+
+    /** Remove the resource with a given ID.
+     *  @note  The ResourceType instance will only be deleted once all Resource
+     *         instances which refer to this ID go out of scope.
+     */
+    static void removeResource(ResourceId);
+
     static void checkResourcesPopulated();
     static bool isLoaded(ResourceId);
 

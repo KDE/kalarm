@@ -31,6 +31,7 @@
 #include <kalarmcal/eventattribute.h>
 
 #include <AkonadiCore/agentmanager.h>
+#include <AkonadiCore/ChangeRecorder>
 #include <AkonadiCore/collectionmodifyjob.h>
 #include <AkonadiCore/ItemCreateJob>
 #include <AkonadiCore/ItemDeleteJob>
@@ -75,6 +76,8 @@ AkonadiResource::AkonadiResource(const Collection& collection)
         fetchCollectionAttribute(false);
         // If the collection doesn't belong to a resource, it can't be used.
         mValid = AgentManager::self()->instance(mCollection.resource()).isValid();
+
+        connect(AkonadiModel::monitor(), &Monitor::collectionRemoved, this, &AkonadiResource::slotCollectionRemoved);
     }
 }
 
@@ -325,6 +328,40 @@ void AkonadiResource::editResource(QWidget* dialogParent)
             AutoQPointer<AgentConfigurationDialog> dlg = new AgentConfigurationDialog(instance, dialogParent);
             dlg->exec();
         }
+    }
+}
+
+/******************************************************************************
+* Remove the resource. The calendar file is not removed.
+*  @return true if the resource has been removed or a removal job has been scheduled.
+*  @note The instance will be invalid once it has been removed.
+*/
+bool AkonadiResource::removeResource()
+{
+    if (!isValid())
+        return false;
+    qCDebug(KALARM_LOG) << "AkonadiResource::removeResource:" << id();
+    notifyDeletion();
+    // Note: Don't use CollectionDeleteJob, since that also deletes the backend storage.
+    AgentManager* agentManager = AgentManager::self();
+    const AgentInstance instance = agentManager->instance(configName());
+    if (instance.isValid())
+        agentManager->removeInstance(instance);
+        // The instance will be removed from Resources by slotCollectionRemoved().
+    return true;
+}
+
+/******************************************************************************
+* Called when a monitored collection is removed.
+* If it's this resource, invalidate the resource and remove it from Resources.
+*/
+void AkonadiResource::slotCollectionRemoved(const Collection& collection)
+{
+    if (collection.id() == id())
+    {
+        qCDebug(KALARM_LOG) << "AkonadiResource::slotCollectionRemoved:" << id();
+        disconnect(AkonadiModel::monitor(), nullptr, this, nullptr);
+        ResourceType::removeResource(collection.id());
     }
 }
 

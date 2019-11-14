@@ -55,12 +55,6 @@ Resource Resources::resource(ResourceId id)
     return mResources.value(id, Resource::null());
 }
 
-void Resources::removeResource(ResourceId id)
-{
-    if (mResources.remove(id) > 0)
-        Q_EMIT instance()->resourceRemoved(id);
-}
-
 /******************************************************************************
 * Return the resources which are enabled for a specified alarm type.
 * If 'writable' is true, only writable resources are included.
@@ -451,6 +445,12 @@ bool Resources::addResource(ResourceType* instance, Resource& resource)
     resource = Resource(instance);
     mResources[instance->id()] = resource;
     return true;
+}
+
+void Resources::removeResource(ResourceId id)
+{
+    if (mResources.remove(id) > 0)
+        Q_EMIT instance()->resourceRemoved(id);
 }
 
 /******************************************************************************
