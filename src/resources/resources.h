@@ -53,6 +53,11 @@ public:
      */
     static bool removeResource(Resource&);
 
+    /** Return all resources which contain a specified alarm type.
+     *  @param type  Alarm type to check for, or CalEvent::EMPTY for any type.
+     */
+    static QVector<Resource> allResources(CalEvent::Type type = CalEvent::EMPTY);
+
     /** Return the enabled resources which contain a specified alarm type.
      *  @param type      Alarm type to check for, or CalEvent::EMPTY for any type.
      *  @param writable  If true, only writable resources are included.
@@ -130,6 +135,9 @@ public:
     /** Return the resource which an event belongs to, and the event, provided
      *  that the event's alarm type is enabled. */
     static Resource resourceForEvent(const QString& eventId, KAEvent& event);
+
+    /** Return the resource which has a given configuration identifier. */
+    static Resource resourceForConfigName(const QString& configName);
 
     /** Called to notify that a new resource has completed its initialisation,
      *  in order to emit the resourceAdded() signal. */

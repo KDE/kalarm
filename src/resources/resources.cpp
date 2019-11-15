@@ -23,8 +23,9 @@
 #include "resource.h"
 #include "resourcemodel.h"
 #include "resourceselectdialog.h"
+#include "autoqpointer.h"
+#include "calendardatamodel.h"
 #include "preferences.h"
-#include "lib/autoqpointer.h"
 #include "kalarm_debug.h"
 
 #include <KLocalizedString>
@@ -53,6 +54,25 @@ Resources::Resources()
 Resource Resources::resource(ResourceId id)
 {
     return mResources.value(id, Resource::null());
+}
+
+/******************************************************************************
+* Return all resources which contain a specified alarm type.
+*/
+QVector<Resource> Resources::allResources(CalEvent::Type type)
+{
+    const CalEvent::Types types = (type == CalEvent::EMPTY)
+                                ? CalEvent::ACTIVE | CalEvent::ARCHIVED | CalEvent::TEMPLATE
+                                : type;
+
+    QVector<Resource> result;
+    for (auto it = mResources.constBegin();  it != mResources.constEnd();  ++it)
+    {
+        const Resource& res = it.value();
+        if (res.alarmTypes() & types)
+            result += res;
+    }
+    return result;
 }
 
 /******************************************************************************
@@ -335,6 +355,20 @@ Resource Resources::resourceForEvent(const QString& eventId, KAEvent& event)
 }
 
 /******************************************************************************
+* Return the resource which has a given configuration identifier.
+*/
+Resource Resources::resourceForConfigName(const QString& configName)
+{
+    for (auto it = mResources.constBegin();  it != mResources.constEnd();  ++it)
+    {
+        const Resource& res = it.value();
+        if (res.configName() == configName)
+            return res;
+    }
+    return Resource::null();
+}
+
+/******************************************************************************
 * Called after a new resource has been created, when it has completed its
 * initialisation.
 */
@@ -377,7 +411,50 @@ void Resources::notifySettingsChanged(ResourceType* res, ResourceType::Changes c
     {
         Resource r = resource(res->id());
         if (r.isValid())
+        {
             Q_EMIT instance()->settingsChanged(r, change);
+
+            if ((change & ResourceType::ReadOnly)  &&  res->readOnly())
+            {
+                qCDebug(KALARM_LOG) << "Resources::notifySettingsChanged:" << res->id() << "ReadOnly";
+                // A read-only resource can't be the default for any alarm type
+                const CalEvent::Types std = standardTypes(r, false);
+                if (std != CalEvent::EMPTY)
+                {
+                    setStandard(r, CalEvent::Types(CalEvent::EMPTY));
+                    bool singleType = true;
+                    QString msg;
+                    switch (std)
+                    {
+                        case CalEvent::ACTIVE:
+                            msg = xi18n("The calendar <resource>%1</resource> has been made read-only. "
+                                    "This was the default calendar for active alarms.",
+                                    res->displayName());
+                            break;
+                        case CalEvent::ARCHIVED:
+                            msg = xi18n("The calendar <resource>%1</resource> has been made read-only. "
+                                    "This was the default calendar for archived alarms.",
+                                    res->displayName());
+                            break;
+                        case CalEvent::TEMPLATE:
+                            msg = xi18n("The calendar <resource>%1</resource> has been made read-only. "
+                                    "This was the default calendar for alarm templates.",
+                                    res->displayName());
+                            break;
+                        default:
+                            msg = xi18nc("@info", "<para>The calendar <resource>%1</resource> has been made read-only. "
+                                    "This was the default calendar for:%2</para>"
+                                    "<para>Please select new default calendars.</para>",
+                                    res->displayName(), CalendarDataModel::typeListForDisplay(std));
+                            singleType = false;
+                            break;
+                    }
+                    if (singleType)
+                        msg = xi18nc("@info", "<para>%1</para><para>Please select a new default calendar.</para>", msg);
+                    notifyResourceMessage(res->id(), ResourceType::MessageType::Info, msg, QString());
+                }
+            }
+        }
     }
 }
 

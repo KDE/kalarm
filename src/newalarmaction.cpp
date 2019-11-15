@@ -21,7 +21,6 @@
 #include "newalarmaction.h"
 
 #include "akonadimodel.h"
-#include "collectionmodel.h"
 #include "functions.h"
 #include "shellprocess.h"
 #include "templatemenuaction.h"

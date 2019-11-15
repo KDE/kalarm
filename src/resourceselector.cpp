@@ -28,7 +28,6 @@
 #include "autoqpointer.h"
 #include "akonadiresourcecreator.h"
 #include "calendarmigrator.h"
-#include "collectionmodel.h"
 #include "kalarmapp.h"
 #include "messagebox.h"
 #include "packedlayout.h"

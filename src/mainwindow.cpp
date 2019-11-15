@@ -25,7 +25,6 @@
 #include "autoqpointer.h"
 #include "alarmlistview.h"
 #include "birthdaydlg.h"
-#include "collectionmodel.h"
 #include "functions.h"
 #include "kalarmapp.h"
 #include "kamail.h"

@@ -31,6 +31,7 @@
 #include <QObject>
 
 class KJob;
+class DuplicateResourceObject;
 
 using namespace KAlarmCal;
 
@@ -156,7 +157,7 @@ public:
      *  writable, or is the only resource set as standard.
      *
      *  @note To determine whether the resource is actually the standard
-     *        resource, call CollectionControlModel::isStandard().
+     *        resource, call Resources::isStandard().
      *
      *  @param type  alarm type
      */
@@ -169,7 +170,7 @@ public:
      *  is the only resource set as standard.
      *
      *  @note To determine what alarm types the resource is actually the standard
-     *        resource for, call CollectionControlModel::standardTypes().
+     *        resource for, call Resources::standardTypes().
      *
      *  @return alarm types.
      */
@@ -183,7 +184,7 @@ public:
      *
      *  @note To set the resource's standard status and ensure that it is
      *        eligible and the only standard resource for the type, call
-     *        CollectionControlModel::setStandard().
+     *        Resources::setStandard().
      *
      *  @param type      alarm type
      *  @param standard  true to set as standard, false to clear standard status.
@@ -198,7 +199,7 @@ public:
      *
      *  @note To set the resource's standard status and ensure that it is
      *        eligible and the only standard resource for the types, call
-     *        CollectionControlModel::setStandard().
+     *        Resources::setStandard().
      *
      *  @param types  alarm types.to set as standard
      */
@@ -284,6 +285,22 @@ public:
     static KAEvent event(Resource&, const Akonadi::Item&);
     using QObject::event;   // prevent warning about hidden virtual method
 
+    /** Find the collection to be used to store an event of a given type.
+     *  This will be the standard collection for the type, but if this is not valid,
+     *  the user will be prompted to select a collection.
+     *  @param type         The event type
+     *  @param promptParent The parent widget for the prompt
+     *  @param noPrompt     Don't prompt the user even if the standard collection is not valid
+     *  @param cancelled    If non-null: set to true if the user cancelled the
+     *                      prompt dialogue; set to false if any other error
+     */
+    static Resource destination(CalEvent::Type type, QWidget* promptParent = nullptr, bool noPrompt = false, bool* cancelled = nullptr);
+
+    /** Check for, and remove, Akonadi resources which duplicate use of
+     *  calendar files/directories.
+     */
+    static void removeDuplicateResources();
+
     /** Called to notify that a resource's Collection has been populated.
      *  @param events  The full list of events in the Collection.
      */
@@ -317,6 +334,7 @@ private:
     void fetchCollectionAttribute(bool refresh) const;
     void modifyCollectionAttribute();
 
+    static DuplicateResourceObject* mDuplicateResourceObject;  // QObject used by removeDuplicateResources()
     mutable Akonadi::Collection mCollection;           // the Akonadi Collection represented by this resource
     mutable CollectionAttribute mCollectionAttribute;  // current set value of CollectionAttribute
     QHash<KJob*, Akonadi::Item::Id> mPendingItemJobs;  // pending item creation/deletion jobs, with event ID

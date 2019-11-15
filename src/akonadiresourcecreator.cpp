@@ -21,7 +21,6 @@
 #include "akonadiresourcecreator.h"
 
 #include "autoqpointer.h"
-#include "collectionmodel.h"
 #include "resources/resources.h"
 #include "resources/akonadiresource.h"
 #include "kalarmsettings.h"
@@ -131,7 +130,7 @@ void AkonadiResourceCreator::agentInstanceCreated(KJob* j)
 
     if (result)
     {
-        const Collection::List cols = CollectionControlModel::allCollections();
+        const QVector<Resource> resources = Resources::allResources();
         QPointer<AgentConfigurationDialog> dlg = new AgentConfigurationDialog(mAgentInstance, mParent);
         result = (dlg->exec() == QDialog::Accepted);
         delete dlg;
@@ -142,15 +141,15 @@ void AkonadiResourceCreator::agentInstanceCreated(KJob* j)
             // executables eating up processing time for no purpose.
             QString path = dirResource ? getResourcePath<OrgKdeAkonadiKAlarmDirSettingsInterface>()
                                        : getResourcePath<OrgKdeAkonadiKAlarmSettingsInterface>();
-            for (const Collection& c : cols)
+            const QUrl url = QUrl::fromUserInput(path, QString(), QUrl::AssumeLocalFile);
+            if (url.isLocalFile())
+                path = url.path();
+            for (const Resource& res : resources)
             {
-                if (c.remoteId() == path)
+                if (res.location() == url)
                 {
                     qCWarning(KALARM_LOG) << "AkonadiResourceCreator::agentInstanceCreated: Duplicate path for new resource:" << path;
                     AgentManager::self()->removeInstance(mAgentInstance);
-                    const QUrl url = QUrl::fromUserInput(path, QString(), QUrl::AssumeLocalFile);
-                    if (url.isLocalFile())
-                        path = url.path();
                     KMessageBox::sorry(nullptr, xi18nc("@info", "<para>The file or directory is already used by an existing resource:</para><para><filename>%1</filename></para>", path));
                     deleteLater();   // error result
                     return;

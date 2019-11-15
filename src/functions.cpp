@@ -21,7 +21,6 @@
 #include "functions.h"
 #include "functions_p.h"
 
-#include "collectionmodel.h"
 #include "collectionsearch.h"
 #include "alarmcalendar.h"
 #include "alarmtime.h"
@@ -265,7 +264,7 @@ UpdateResult addEvents(QVector<KAEvent>& events, QWidget* msgParent, bool allowK
         status.status = UPDATE_FAILED;
     else
     {
-        Resource resource = CollectionControlModel::destination(CalEvent::ACTIVE, msgParent);
+        Resource resource = Resources::destination<AkonadiModel>(CalEvent::ACTIVE, msgParent);
         if (!resource.isValid())
         {
             qCDebug(KALARM_LOG) << "KAlarm::addEvents: No calendar";
@@ -598,7 +597,7 @@ UpdateResult reactivateEvents(QVector<KAEvent>& events, QVector<EventId>& inelig
     if (resourceptr)
         resource = *resourceptr;
     if (!resource.isValid())
-        resource = CollectionControlModel::destination(CalEvent::ACTIVE, msgParent);
+        resource = Resources::destination<AkonadiModel>(CalEvent::ACTIVE, msgParent);
     if (!resource.isValid())
     {
         qCDebug(KALARM_LOG) << "KAlarm::reactivateEvents: No calendar";

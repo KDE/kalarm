@@ -21,7 +21,6 @@
 #include "alarmcalendar.h"
 
 #include "kalarm.h"
-#include "collectionmodel.h"
 #include "filedialog.h"
 #include "functions.h"
 #include "kalarmapp.h"
@@ -690,7 +689,7 @@ bool AlarmCalendar::importAlarms(QWidget* parent, Resource* resourceptr)
                     default:
                         continue;
                 }
-                res = CollectionControlModel::destination(type);
+                res = Resources::destination<AkonadiModel>(type);
             }
 
             Event::Ptr newev(new Event(*event));
@@ -949,7 +948,7 @@ bool AlarmCalendar::addEvent(KAEvent& evnt, QWidget* promptParent, bool useEvent
             res = resource;
         else
         {
-            res = CollectionControlModel::destination(type, promptParent, noPrompt, cancelled);
+            res = Resources::destination<AkonadiModel>(type, promptParent, noPrompt, cancelled);
             if (!res.isValid())
             {
                 const char* typeStr = (type == CalEvent::ACTIVE) ? "Active alarm" : (type == CalEvent::ARCHIVED) ? "Archived alarm" : "alarm Template";

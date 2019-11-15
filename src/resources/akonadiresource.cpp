@@ -30,9 +30,10 @@
 #include <kalarmcal/compatibilityattribute.h>
 #include <kalarmcal/eventattribute.h>
 
-#include <AkonadiCore/agentmanager.h>
+#include <AkonadiCore/AgentManager>
 #include <AkonadiCore/ChangeRecorder>
-#include <AkonadiCore/collectionmodifyjob.h>
+#include <AkonadiCore/CollectionFetchJob>
+#include <AkonadiCore/CollectionModifyJob>
 #include <AkonadiCore/ItemCreateJob>
 #include <AkonadiCore/ItemDeleteJob>
 #include <AkonadiCore/ItemModifyJob>
@@ -48,8 +49,34 @@ namespace
 const QString KALARM_RESOURCE(QStringLiteral("akonadi_kalarm_resource"));
 const QString KALARM_DIR_RESOURCE(QStringLiteral("akonadi_kalarm_dir_resource"));
 
-Collection::Rights WritableRights = Collection::CanChangeItem | Collection::CanCreateItem | Collection::CanDeleteItem;
+const Collection::Rights WritableRights = Collection::CanChangeItem | Collection::CanCreateItem | Collection::CanDeleteItem;
+
+const QRegularExpression MatchMimeType(QStringLiteral("^application/x-vnd\\.kde\\.alarm.*"),
+                                       QRegularExpression::DotMatchesEverythingOption);
 }
+
+// Class to provide an object for removeDuplicateResources() signals to be received.
+class DuplicateResourceObject : public QObject
+{
+    Q_OBJECT
+public:
+    DuplicateResourceObject(QObject* parent = nullptr) : QObject(parent) {}
+    void reset()  { mAgentPaths.clear(); }
+public Q_SLOTS:
+    void collectionFetchResult(KJob*);
+private:
+    struct ResourceCol
+    {
+        QString    resourceId;    // Akonadi resource identifier
+        ResourceId collectionId;  // Akonadi collection ID
+        ResourceCol() {}
+        ResourceCol(const QString& r, ResourceId c)
+            : resourceId(r), collectionId(c) {}
+    };
+    QHash<QString, ResourceCol> mAgentPaths;   // path, (resource identifier, collection ID) pairs
+};
+DuplicateResourceObject* AkonadiResource::mDuplicateResourceObject{nullptr};
+
 
 Resource AkonadiResource::create(const Akonadi::Collection& collection)
 {
@@ -537,7 +564,77 @@ KAEvent AkonadiResource::event(Resource& resource, const Akonadi::Item& item)
 }
 
 /******************************************************************************
+* Get the collection to use for storing an alarm.
+* Optionally, the standard collection for the alarm type is returned. If more
+* than one collection is a candidate, the user is prompted.
+*/
+Resource AkonadiResource::destination(CalEvent::Type type, QWidget* promptParent, bool noPrompt, bool* cancelled)
+{
+    return Resources::destination<AkonadiModel>(type, promptParent, noPrompt, cancelled);
+}
+
+/******************************************************************************
+* Check for, and remove, any Akonadi resources which duplicate use of calendar
+* files/directories.
+*/
+void AkonadiResource::removeDuplicateResources()
+{
+    if (!mDuplicateResourceObject)
+        mDuplicateResourceObject = new DuplicateResourceObject(Resources::instance());
+    mDuplicateResourceObject->reset();
+    const AgentInstance::List agents = AgentManager::self()->instances();
+    for (const AgentInstance& agent : agents)
+    {
+        if (agent.type().mimeTypes().indexOf(MatchMimeType) >= 0)
+        {
+            CollectionFetchJob* job = new CollectionFetchJob(Collection::root(), CollectionFetchJob::Recursive);
+            job->fetchScope().setResource(agent.identifier());
+            connect(job, &CollectionFetchJob::result, mDuplicateResourceObject, &DuplicateResourceObject::collectionFetchResult);
+        }
+    }
+}
+
+/******************************************************************************
+* Called when a removeDuplicateResources() CollectionFetchJob has completed.
+*/
+void DuplicateResourceObject::collectionFetchResult(KJob* j)
+{
+    CollectionFetchJob* job = qobject_cast<CollectionFetchJob*>(j);
+    if (j->error())
+        qCCritical(KALARM_LOG) << "AkonadiResource::collectionFetchResult: CollectionFetchJob" << job->fetchScope().resource()<< "error: " << j->errorString();
+    else
+    {
+        AgentManager* agentManager = AgentManager::self();
+        const Collection::List collections = job->collections();
+        for (const Collection& c : collections)
+        {
+            if (c.contentMimeTypes().indexOf(MatchMimeType) >= 0)
+            {
+                ResourceCol thisRes(job->fetchScope().resource(), c.id());
+                auto it = mAgentPaths.constFind(c.remoteId());
+                if (it != mAgentPaths.constEnd())
+                {
+                    // Remove the resource containing the higher numbered Collection
+                    // ID, which is likely to be the more recently created.
+                    const ResourceCol prevRes = it.value();
+                    if (thisRes.collectionId > prevRes.collectionId)
+                    {
+                        qCWarning(KALARM_LOG) << "AkonadiResource::collectionFetchResult: Removing duplicate resource" << thisRes.resourceId;
+                        agentManager->removeInstance(agentManager->instance(thisRes.resourceId));
+                        continue;
+                    }
+                    qCWarning(KALARM_LOG) << "AkonadiResource::collectionFetchResult: Removing duplicate resource" << prevRes.resourceId;
+                    agentManager->removeInstance(agentManager->instance(prevRes.resourceId));
+                }
+                mAgentPaths[c.remoteId()] = thisRes;
+            }
+        }
+    }
+}
+
+/******************************************************************************
 * Called when a collection has been populated.
+* Stores all its events, even if their alarm types are currently disabled.
 * Emits a signal if all collections have been populated.
 */
 void AkonadiResource::notifyCollectionLoaded(ResourceId id, const QList<KAEvent>& events)
@@ -548,7 +645,7 @@ void AkonadiResource::notifyCollectionLoaded(ResourceId id, const QList<KAEvent>
         AkonadiResource* akres = resource<AkonadiResource>(res);
         if (akres)
         {
-            const CalEvent::Types types = akres->enabledTypes();
+            const CalEvent::Types types = akres->alarmTypes();
             QHash<QString, KAEvent> eventHash;
             for (const KAEvent& event : events)
                 if (event.category() & types)
@@ -878,5 +975,7 @@ void AkonadiResource::modifyCollectionAttrJobDone(KJob* j)
         }
     }
 }
+
+#include "akonadiresource.moc"
 
 // vim: et sw=4:
