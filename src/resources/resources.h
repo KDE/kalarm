@@ -48,11 +48,15 @@ public:
      */
     static Resource resource(ResourceId);
 
-    /** Remove the resource with a given ID.
-     *  @note  The ResourceType instance will only be deleted once all Resource
-     *         instances which refer to this ID go out of scope.
+    /** Remove a resource. The calendar file is not removed.
+     *  @return true if the resource has been removed or a removal job has been scheduled.
      */
-    static void removeResource(ResourceId);
+    static bool removeResource(Resource&);
+
+    /** Return all resources which contain a specified alarm type.
+     *  @param type  Alarm type to check for, or CalEvent::EMPTY for any type.
+     */
+    static QVector<Resource> allResources(CalEvent::Type type = CalEvent::EMPTY);
 
     /** Return the enabled resources which contain a specified alarm type.
      *  @param type      Alarm type to check for, or CalEvent::EMPTY for any type.
@@ -132,6 +136,9 @@ public:
      *  that the event's alarm type is enabled. */
     static Resource resourceForEvent(const QString& eventId, KAEvent& event);
 
+    /** Return the resource which has a given configuration identifier. */
+    static Resource resourceForConfigName(const QString& configName);
+
     /** Called to notify that a new resource has completed its initialisation,
      *  in order to emit the resourceAdded() signal. */
     static void notifyNewResourceInitialised(Resource&);
@@ -145,7 +152,7 @@ public:
     /** Called by a resource to notify that its settings have changed.
      *  This will cause the settingsChanged() signal to be emitted.
      */
-    static void notifySettingsChanged(ResourceType*, ResourceType::Changes);
+    static void notifySettingsChanged(ResourceType*, ResourceType::Changes, CalEvent::Types oldEnabled);
 
     /** Called by a resource when a user message should be displayed.
      *  This will cause the resourceMessage() signal to be emitted.
@@ -227,6 +234,13 @@ private:
      *  @return true if a new resource has been created, false if invalid or already exists.
      */
     static bool addResource(ResourceType* type, Resource& resource);
+
+    /** Remove the resource with a given ID.
+     *  @note  The ResourceType instance will only be deleted once all Resource
+     *         instances which refer to this ID go out of scope.
+     */
+    static void removeResource(ResourceId);
+
     static void checkResourcesPopulated();
     static bool isLoaded(ResourceId);
 

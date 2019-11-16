@@ -22,7 +22,6 @@
 #include "prefdlg_p.h"
 
 #include "alarmcalendar.h"
-#include "collectionmodel.h"
 #include "alarmtimewidget.h"
 #include "buttongroup.h"
 #include "colourbutton.h"

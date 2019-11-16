@@ -41,14 +41,15 @@ using namespace KAlarmCal;
 =============================================================================*/
 class ResourceFilterModel : public QSortFilterProxyModel
 {
+    Q_OBJECT
 public:
     /** Constructs a new instance.
-     *  @tparam Model  The data model class to use as the source model. It must
-     *                 have the following methods:
-     *                   static Model* instance(); - returns the unique instance.
-     *                   QModelIndex resourceIndex(const Resource&) const;
+     *  @tparam DataModel  The data model class to use as the source model. It must
+     *                     have the following methods:
+     *                       static Model* instance(); - returns the unique instance.
+     *                       QModelIndex resourceIndex(const Resource&) const;
      */
-    template <class Model>
+    template <class DataModel>
     static ResourceFilterModel* create(QObject* parent = nullptr);
 
     /** Set the alarm type to include in the model.
@@ -105,9 +106,9 @@ class ResourceListModel : public KDescendantsProxyModel
 public:
     /** Constructs a new instance.
      *  @tparam DataModel  The data model class to use as the source model. It must
-     *              have the following methods:
-     *                static DataModel* instance(); - returns the unique instance.
-     *                QModelIndex resourceIndex(const Resource&) const;
+     *                  have the following methods:
+     *                    static DataModel* instance(); - returns the unique instance.
+     *                    QModelIndex resourceIndex(const Resource&) const;
      */
     template <class DataModel>
     static ResourceListModel* create(QObject* parent = nullptr);
@@ -144,9 +145,9 @@ class ResourceCheckListModel : public KCheckableProxyModel
 public:
     /** Constructs a new instance.
      *  @tparam DataModel  The data model class to use as the source model. It must
-     *              have the following methods:
-     *                static DataModel* instance(); - returns the unique instance.
-     *                QModelIndex resourceIndex(const Resource&) const;
+     *                  have the following methods:
+     *                    static DataModel* instance(); - returns the unique instance.
+     *                    QModelIndex resourceIndex(const Resource&) const;
      */
     template <class DataModel>
     static ResourceCheckListModel* create(CalEvent::Type, QObject* parent = nullptr);
@@ -162,7 +163,7 @@ Q_SIGNALS:
 
 private Q_SLOTS:
     void selectionChanged(const QItemSelection& selected, const QItemSelection& deselected);
-    void slotRowsInserted(const QModelIndex& parent, int start, int end);
+    void slotRowsInsertedRemoved();
     void resourceSettingsChanged(Resource&, ResourceType::Changes);
 
 private:
@@ -175,6 +176,7 @@ private:
     static int                mInstanceCount;
     CalEvent::Type            mAlarmType;     // alarm type contained in this model
     QItemSelectionModel*      mSelectionModel;
+    bool                      mResetting{false};   // currently handling rows inserted/removed
 };
 
 
@@ -190,10 +192,10 @@ class ResourceFilterCheckListModel : public QSortFilterProxyModel
 public:
     /** Constructs a new instance.
      *  @tparam DataModel  The data model class to use as the source model. It must
-     *              have the following methods:
-     *                static DataModel* instance(); - returns the unique instance.
-     *                QModelIndex resourceIndex(const Resource&) const;
-     *                QString tooltip(const Resource&, CalEvent::Types) const;
+     *                  have the following methods:
+     *                    static DataModel* instance(); - returns the unique instance.
+     *                    QModelIndex resourceIndex(const Resource&) const;
+     *                    QString tooltip(const Resource&, CalEvent::Types) const;
      */
     template <class DataModel>
     static ResourceFilterCheckListModel* create(QObject* parent = nullptr);
@@ -208,6 +210,10 @@ protected:
 
 private Q_SLOTS:
     void resourceTypeChanged(ResourceCheckListModel*);
+    void slotRowsAboutToBeInserted(const QModelIndex& parent, int start, int end);
+    void slotRowsAboutToBeRemoved(const QModelIndex& parent, int start, int end);
+    void slotRowsInserted();
+    void slotRowsRemoved();
 
 private:
     explicit ResourceFilterCheckListModel(QObject* parent);
@@ -241,7 +247,9 @@ protected:
 };
 
 
-/*===========================================================================*/
+/*=============================================================================
+* Template definitions.
+*============================================================================*/
 
 template <class DataModel>
 ResourceFilterModel* ResourceFilterModel::create(QObject* parent)

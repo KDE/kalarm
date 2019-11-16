@@ -149,15 +149,30 @@ bool ResourceType::addResource(ResourceType* type, Resource& resource)
     return Resources::addResource(type, resource);
 }
 
+void ResourceType::removeResource(ResourceId id)
+{
+    // Set the resource instance invalid, to ensure that any other references
+    // to it now see an invalid resource.
+    Resource res = Resources::resource(id);
+    ResourceType* tres = res.resource<ResourceType>();
+    if (tres)
+        tres->mId = -1;   // set the resource instance invalid
+    Resources::removeResource(id);
+}
+
 /******************************************************************************
 * To be called when the resource has loaded, to update the list of loaded
 * events for the resource.
+* Added, updated and deleted events are notified, only for enabled alarm types.
 */
 void ResourceType::setLoadedEvents(QHash<QString, KAEvent>& newEvents)
 {
+    const CalEvent::Types types = enabledTypes();
+
     // Replace existing events with the new ones, and find events which no
     // longer exist.
-    QList<KAEvent> eventsToDelete;
+    QStringList    eventsToDelete;
+    QList<KAEvent> eventsToNotifyDelete;
     QVector<decltype(mEvents)::iterator> iteratorsToDelete;
     for (auto it = mEvents.begin();  it != mEvents.end();  ++it)
     {
@@ -165,8 +180,9 @@ void ResourceType::setLoadedEvents(QHash<QString, KAEvent>& newEvents)
         auto newit = newEvents.find(id);
         if (newit == newEvents.end())
         {
-            eventsToDelete << it.value();   // this event no longer exists
-            iteratorsToDelete << it;
+            eventsToDelete << id;
+            if (it.value().category() & types)
+                eventsToNotifyDelete << it.value();   // this event no longer exists
         }
         else
         {
@@ -174,19 +190,25 @@ void ResourceType::setLoadedEvents(QHash<QString, KAEvent>& newEvents)
             bool changed = !event.compare(newit.value(), KAEvent::Compare::Id | KAEvent::Compare::CurrentState);
             event = newit.value();   // update existing event
             newEvents.erase(newit);
-            if (changed)
+            if (changed  &&  (event.category() & types))
                 Resources::notifyEventUpdated(this, event);
         }
     }
 
     // Delete events which no longer exist.
-    Resources::notifyEventsToBeRemoved(this, eventsToDelete);
-    for (auto it : qAsConst(iteratorsToDelete))
-        mEvents.erase(it);
+    Resources::notifyEventsToBeRemoved(this, eventsToNotifyDelete);
+    for (const QString& id : qAsConst(eventsToDelete))
+        mEvents.remove(id);
 
     // Add new events.
-    for (auto newit = newEvents.constBegin();  newit != newEvents.constEnd();  ++newit)
+    for (auto newit = newEvents.begin();  newit != newEvents.end(); )
+    {
         mEvents[newit.key()] = newit.value();
+        if (newit.value().category() & types)
+            ++newit;
+        else
+            newit = newEvents.erase(newit);   // remove disabled event from notification list
+    }
     Resources::notifyEventsAdded(this, newEvents.values());
 
     newEvents.clear();

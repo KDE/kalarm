@@ -59,10 +59,10 @@
 using namespace Akonadi;
 using namespace KAlarmCal;
 
-// Ensure CalendarDataModel::UserRole is valid. CalendarDataModel does not
-// include Akonadi headers, so here we check that it has been set to be
+// Ensure ResourceDataModelBase::UserRole is valid. ResourceDataModelBase does
+// not include Akonadi headers, so here we check that it has been set to be
 // compatible with EntityTreeModel::UserRole.
-static_assert((int)CalendarDataModel::UserRole>=(int)Akonadi::EntityTreeModel::UserRole, "CalendarDataModel::UserRole wrong value");
+static_assert((int)ResourceDataModelBase::UserRole>=(int)Akonadi::EntityTreeModel::UserRole, "ResourceDataModelBase::UserRole wrong value");
 
 /*=============================================================================
 = Class: AkonadiModel
@@ -86,13 +86,13 @@ AkonadiModel* AkonadiModel::instance()
 */
 AkonadiModel::AkonadiModel(ChangeRecorder* monitor, QObject* parent)
     : EntityTreeModel(monitor, parent)
-    , CalendarDataModel()
+    , ResourceDataModelBase()
     , mMonitor(monitor)
     , mMigrationChecked(false)
     , mMigrating(false)
 {
-    // Set lazy population to enable the contents of unselected collections to be ignored
-    setItemPopulationStrategy(LazyPopulation);
+    // Populate all collections, selected/enabled or unselected/disabled.
+    setItemPopulationStrategy(ImmediatePopulation);
 
     // Restrict monitoring to collections containing the KAlarm mime types
     monitor->setCollectionMonitored(Collection::root());
@@ -194,6 +194,11 @@ bool AkonadiModel::isMigrationCompleted() const
     return mMigrationChecked && !mMigrating;
 }
 
+ChangeRecorder* AkonadiModel::monitor()
+{
+    return instance()->mMonitor;
+}
+
 /******************************************************************************
 * Return the data for a given role, for a specified item.
 */
@@ -226,6 +231,8 @@ QVariant AkonadiModel::data(const QModelIndex& index, int role) const
                     return QVariant();
                 Resource res;
                 const KAEvent ev(event(item, index, res));   // this sets item.parentCollection()
+                if (role == ParentResourceIdRole)
+                    return item.parentCollection().id();
 
                 bool handled;
                 const QVariant value = eventData(role, index.column(), ev, res, handled);
@@ -254,6 +261,14 @@ int AkonadiModel::entityColumnCount(HeaderGroup group) const
 }
 
 /******************************************************************************
+* Return offset to add to headerData() role, for item models.
+*/
+int AkonadiModel::headerDataEventRoleOffset() const
+{
+    return TerminalUserRole * ItemListHeaders;
+}
+
+/******************************************************************************
 * Return data for a column heading.
 */
 QVariant AkonadiModel::entityHeaderData(int section, Qt::Orientation orientation, int role, HeaderGroup group) const
@@ -267,7 +282,7 @@ QVariant AkonadiModel::entityHeaderData(int section, Qt::Orientation orientation
         case CollectionTreeHeaders:
         {
             bool handled;
-            const QVariant value = CalendarDataModel::headerData(section, orientation, role, eventHeaders, handled);
+            const QVariant value = ResourceDataModelBase::headerData(section, orientation, role, eventHeaders, handled);
             if (handled)
                 return value;
             break;
@@ -729,7 +744,7 @@ void AkonadiModel::slotCollectionRemoved(const Collection& collection)
     const Collection::Id id = collection.id();
     qCDebug(KALARM_LOG) << "AkonadiModel::slotCollectionRemoved:" << id;
     mResources.remove(collection.id());
-    Resources::removeResource(collection.id());
+    // AkonadiResource will remove the resource from Resources.
 }
 
 /******************************************************************************

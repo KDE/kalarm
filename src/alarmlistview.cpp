@@ -20,6 +20,9 @@
 
 #include "alarmlistview.h"
 
+#include "resources/resourcedatamodelbase.h"
+#include "resources/eventmodel.h"
+
 #include <ksharedconfig.h>
 #include <kconfiggroup.h>
 
@@ -116,7 +119,7 @@ void AlarmListView::headerContextMenuRequested(const QPoint& pt)
     QMenu menu;
     for (int col = 0;  col < count;  ++col)
     {
-        const QString title = almodel->headerData(col, Qt::Horizontal, CalendarDataModel::ColumnTitleRole).toString();
+        const QString title = almodel->headerData(col, Qt::Horizontal, ResourceDataModelBase::ColumnTitleRole).toString();
         if (!title.isEmpty())
         {
             QAction* act = menu.addAction(title);

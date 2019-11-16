@@ -21,12 +21,10 @@
 #include "functions.h"
 #include "functions_p.h"
 
-#include "collectionmodel.h"
 #include "collectionsearch.h"
 #include "alarmcalendar.h"
 #include "alarmtime.h"
 #include "autoqpointer.h"
-#include "alarmlistview.h"
 #include "editdlg.h"
 #include "kalarmapp.h"
 #include "kamail.h"
@@ -38,6 +36,7 @@
 #include "templatelistview.h"
 #include "templatemenuaction.h"
 #include "resources/resources.h"
+#include "resources/eventmodel.h"
 #include "config-kalarm.h"
 #include "kalarm_debug.h"
 
@@ -265,7 +264,7 @@ UpdateResult addEvents(QVector<KAEvent>& events, QWidget* msgParent, bool allowK
         status.status = UPDATE_FAILED;
     else
     {
-        Resource resource = CollectionControlModel::destination(CalEvent::ACTIVE, msgParent);
+        Resource resource = Resources::destination<AkonadiModel>(CalEvent::ACTIVE, msgParent);
         if (!resource.isValid())
         {
             qCDebug(KALARM_LOG) << "KAlarm::addEvents: No calendar";
@@ -598,7 +597,7 @@ UpdateResult reactivateEvents(QVector<KAEvent>& events, QVector<EventId>& inelig
     if (resourceptr)
         resource = *resourceptr;
     if (!resource.isValid())
-        resource = CollectionControlModel::destination(CalEvent::ACTIVE, msgParent);
+        resource = Resources::destination<AkonadiModel>(CalEvent::ACTIVE, msgParent);
     if (!resource.isValid())
     {
         qCDebug(KALARM_LOG) << "KAlarm::reactivateEvents: No calendar";
@@ -753,7 +752,7 @@ QVector<KAEvent> getSortedActiveEvents(QObject* parent, AlarmListModel** model)
         model = &mdl;
     if (!*model)
     {
-        *model = new AlarmListModel(parent);
+        *model = AlarmListModel::create<AkonadiModel>(parent);
         (*model)->setEventTypeFilter(CalEvent::ACTIVE);
         (*model)->sort(AlarmListModel::TimeColumn);
     }

@@ -21,12 +21,10 @@
 #include "kalarmapp.h"
 
 #include "alarmcalendar.h"
-#include "alarmlistview.h"
 #include "alarmtime.h"
 #include "commandoptions.h"
 #include "dbushandler.h"
 #include "editdlgtypes.h"
-#include "collectionmodel.h"
 #include "functions.h"
 #include "kamail.h"
 #include "mainwindow.h"
@@ -39,6 +37,7 @@
 #include "startdaytimer.h"
 #include "traywindow.h"
 #include "resources/resources.h"
+#include "resources/eventmodel.h"
 #include "kalarm_debug.h"
 
 #include <kalarmcal/datetime.h>
@@ -1155,7 +1154,7 @@ void KAlarmApp::checkWritableCalendar()
 
     // Check for, and remove, any duplicate Akonadi resources, i.e. those which
     // use the same calendar file/directory.
-    CollectionControlModel::removeDuplicateResources();
+    AkonadiResource::removeDuplicateResources();
 
     // Find whether there are any writable active alarm calendars
     const bool active = !Resources::enabledResources(CalEvent::ACTIVE, true).isEmpty();
@@ -2397,7 +2396,7 @@ bool KAlarmApp::waitUntilPopulated(ResourceId id, int timeout)
         // Use AutoQPointer to guard against crash on application exit while
         // the event loop is still running. It prevents double deletion (both
         // on deletion of parent, and on return from this function).
-        AutoQPointer<QEventLoop> loop = new QEventLoop(AlarmListModel::all());
+        AutoQPointer<QEventLoop> loop = new QEventLoop(AlarmListModel::all<AkonadiModel>());
 //TODO: The choice of parent object for QEventLoop can prevent EntityTreeModel signals
 //      from activating connected slots in AkonadiModel, which prevents resources from
 //      being informed that collections have loaded. Need to find a better parent

@@ -23,7 +23,6 @@
 #include "editdlgtypes.h"
 
 #include "alarmcalendar.h"
-#include "collectionmodel.h"
 #include "alarmtimewidget.h"
 #include "autoqpointer.h"
 #include "buttongroup.h"
@@ -1161,7 +1160,7 @@ bool EditAlarmDlg::validate()
         bool cancelled = false;
         CalEvent::Type type = mTemplate ? CalEvent::TEMPLATE : CalEvent::ACTIVE;
         if (!mResource.isWritable(type))
-            mResource = CollectionControlModel::destination(type, this, false, &cancelled);
+            mResource = Resources::destination<AkonadiModel>(type, this, false, &cancelled);
         if (!mResource.isValid())
         {
             if (!cancelled)

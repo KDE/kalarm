@@ -21,12 +21,11 @@
 #include "newalarmaction.h"
 
 #include "akonadimodel.h"
-#include "collectionmodel.h"
-#include "itemlistmodel.h"
 #include "functions.h"
 #include "shellprocess.h"
 #include "templatemenuaction.h"
 #include "resources/resources.h"
+#include "resources/eventmodel.h"
 #include "kalarm_debug.h"
 
 #include <KActionMenu>
@@ -84,7 +83,7 @@ NewAlarmAction::NewAlarmAction(bool templates, const QString& label, QObject* pa
         mTemplateAction = new TemplateMenuAction(QIcon::fromTheme(TEMPLATE_ICON), i18nc("@action", "New Alarm From &Template"), parent);
         menu()->addAction(mTemplateAction);
         connect(Resources::instance(), &Resources::settingsChanged, this, &NewAlarmAction::slotCalendarStatusChanged);
-        connect(TemplateListModel::all(), &ItemListModel::haveEventsStatus, this, &NewAlarmAction::slotCalendarStatusChanged);
+        connect(TemplateListModel::all<AkonadiModel>(), &EventListModel::haveEventsStatus, this, &NewAlarmAction::slotCalendarStatusChanged);
         slotCalendarStatusChanged();   // initialise action states
     }
     setDelayed(false);
@@ -172,7 +171,7 @@ void NewAlarmAction::slotCalendarStatusChanged()
 {
     // Find whether there are any writable active alarm calendars
     bool active = !Resources::enabledResources(CalEvent::ACTIVE, true).isEmpty();
-    bool haveEvents = TemplateListModel::all()->haveEvents();
+    bool haveEvents = TemplateListModel::all<AkonadiModel>()->haveEvents();
     mTemplateAction->setEnabled(active && haveEvents);
     setEnabled(active);
 }

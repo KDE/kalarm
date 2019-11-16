@@ -22,6 +22,7 @@
 
 #include "resources.h"
 #include "akonadimodel.h"
+#include "autoqpointer.h"
 #include "calendarmigrator.h"
 #include "kalarm_debug.h"
 
@@ -29,11 +30,14 @@
 #include <kalarmcal/compatibilityattribute.h>
 #include <kalarmcal/eventattribute.h>
 
-#include <AkonadiCore/agentmanager.h>
-#include <AkonadiCore/collectionmodifyjob.h>
+#include <AkonadiCore/AgentManager>
+#include <AkonadiCore/ChangeRecorder>
+#include <AkonadiCore/CollectionFetchJob>
+#include <AkonadiCore/CollectionModifyJob>
 #include <AkonadiCore/ItemCreateJob>
 #include <AkonadiCore/ItemDeleteJob>
 #include <AkonadiCore/ItemModifyJob>
+#include <AkonadiWidgets/AgentConfigurationDialog>
 using namespace Akonadi;
 
 #include <KLocalizedString>
@@ -45,8 +49,34 @@ namespace
 const QString KALARM_RESOURCE(QStringLiteral("akonadi_kalarm_resource"));
 const QString KALARM_DIR_RESOURCE(QStringLiteral("akonadi_kalarm_dir_resource"));
 
-Collection::Rights WritableRights = Collection::CanChangeItem | Collection::CanCreateItem | Collection::CanDeleteItem;
+const Collection::Rights WritableRights = Collection::CanChangeItem | Collection::CanCreateItem | Collection::CanDeleteItem;
+
+const QRegularExpression MatchMimeType(QStringLiteral("^application/x-vnd\\.kde\\.alarm.*"),
+                                       QRegularExpression::DotMatchesEverythingOption);
 }
+
+// Class to provide an object for removeDuplicateResources() signals to be received.
+class DuplicateResourceObject : public QObject
+{
+    Q_OBJECT
+public:
+    DuplicateResourceObject(QObject* parent = nullptr) : QObject(parent) {}
+    void reset()  { mAgentPaths.clear(); }
+public Q_SLOTS:
+    void collectionFetchResult(KJob*);
+private:
+    struct ResourceCol
+    {
+        QString    resourceId;    // Akonadi resource identifier
+        ResourceId collectionId;  // Akonadi collection ID
+        ResourceCol() {}
+        ResourceCol(const QString& r, ResourceId c)
+            : resourceId(r), collectionId(c) {}
+    };
+    QHash<QString, ResourceCol> mAgentPaths;   // path, (resource identifier, collection ID) pairs
+};
+DuplicateResourceObject* AkonadiResource::mDuplicateResourceObject{nullptr};
+
 
 Resource AkonadiResource::create(const Akonadi::Collection& collection)
 {
@@ -73,6 +103,8 @@ AkonadiResource::AkonadiResource(const Collection& collection)
         fetchCollectionAttribute(false);
         // If the collection doesn't belong to a resource, it can't be used.
         mValid = AgentManager::self()->instance(mCollection.resource()).isValid();
+
+        connect(AkonadiModel::monitor(), &Monitor::collectionRemoved, this, &AkonadiResource::slotCollectionRemoved);
     }
 }
 
@@ -89,7 +121,7 @@ Resource AkonadiResource::nullResource()
 bool AkonadiResource::isValid() const
 {
     // The collection ID must not have changed since construction.
-    return mValid  &&  mCollection.id() == id();
+    return mValid  &&  id() >= 0  &&  mCollection.id() == id();
 }
 
 Akonadi::Collection AkonadiResource::collection() const
@@ -307,6 +339,59 @@ KACalendar::Compat AkonadiResource::compatibility() const
     return mCollection.attribute<CompatibilityAttribute>()->compatibility();
 }
 
+/******************************************************************************
+* Edit the resource's configuration.
+*/
+void AkonadiResource::editResource(QWidget* dialogParent)
+{
+    if (isValid())
+    {
+        AgentInstance instance = AgentManager::self()->instance(configName());
+        if (instance.isValid())
+        {
+            // Use AutoQPointer to guard against crash on application exit while
+            // the event loop is still running. It prevents double deletion (both
+            // on deletion of parent, and on return from this function).
+            AutoQPointer<AgentConfigurationDialog> dlg = new AgentConfigurationDialog(instance, dialogParent);
+            dlg->exec();
+        }
+    }
+}
+
+/******************************************************************************
+* Remove the resource. The calendar file is not removed.
+*  @return true if the resource has been removed or a removal job has been scheduled.
+*  @note The instance will be invalid once it has been removed.
+*/
+bool AkonadiResource::removeResource()
+{
+    if (!isValid())
+        return false;
+    qCDebug(KALARM_LOG) << "AkonadiResource::removeResource:" << id();
+    notifyDeletion();
+    // Note: Don't use CollectionDeleteJob, since that also deletes the backend storage.
+    AgentManager* agentManager = AgentManager::self();
+    const AgentInstance instance = agentManager->instance(configName());
+    if (instance.isValid())
+        agentManager->removeInstance(instance);
+        // The instance will be removed from Resources by slotCollectionRemoved().
+    return true;
+}
+
+/******************************************************************************
+* Called when a monitored collection is removed.
+* If it's this resource, invalidate the resource and remove it from Resources.
+*/
+void AkonadiResource::slotCollectionRemoved(const Collection& collection)
+{
+    if (collection.id() == id())
+    {
+        qCDebug(KALARM_LOG) << "AkonadiResource::slotCollectionRemoved:" << id();
+        disconnect(AkonadiModel::monitor(), nullptr, this, nullptr);
+        ResourceType::removeResource(collection.id());
+    }
+}
+
 bool AkonadiResource::load(bool readThroughCache)
 {
     Q_UNUSED(readThroughCache);
@@ -364,7 +449,6 @@ bool AkonadiResource::addEvent(const KAEvent& event)
         qCWarning(KALARM_LOG) << "AkonadiResource::addEvent: Invalid mime type for collection";
         return false;
     }
-qCDebug(KALARM_LOG)<<"-> item id="<<item.id();
     ItemCreateJob* job = new ItemCreateJob(item, mCollection);
     connect(job, &ItemCreateJob::result, this, &AkonadiResource::itemJobDone);
     mPendingItemJobs[job] = -1;   // the Item doesn't have an ID yet
@@ -382,7 +466,6 @@ bool AkonadiResource::updateEvent(const KAEvent& event)
     Item item = AkonadiModel::instance()->itemForEvent(event.id());
     if (!item.isValid())
         return false;
-qCDebug(KALARM_LOG)<<"item id="<<item.id()<<", revision="<<item.revision();
     if (!KAlarmCal::setItemPayload(item, event, mCollection.contentMimeTypes()))
     {
         qCWarning(KALARM_LOG) << "AkonadiResource::updateEvent: Invalid mime type for collection";
@@ -481,7 +564,77 @@ KAEvent AkonadiResource::event(Resource& resource, const Akonadi::Item& item)
 }
 
 /******************************************************************************
+* Get the collection to use for storing an alarm.
+* Optionally, the standard collection for the alarm type is returned. If more
+* than one collection is a candidate, the user is prompted.
+*/
+Resource AkonadiResource::destination(CalEvent::Type type, QWidget* promptParent, bool noPrompt, bool* cancelled)
+{
+    return Resources::destination<AkonadiModel>(type, promptParent, noPrompt, cancelled);
+}
+
+/******************************************************************************
+* Check for, and remove, any Akonadi resources which duplicate use of calendar
+* files/directories.
+*/
+void AkonadiResource::removeDuplicateResources()
+{
+    if (!mDuplicateResourceObject)
+        mDuplicateResourceObject = new DuplicateResourceObject(Resources::instance());
+    mDuplicateResourceObject->reset();
+    const AgentInstance::List agents = AgentManager::self()->instances();
+    for (const AgentInstance& agent : agents)
+    {
+        if (agent.type().mimeTypes().indexOf(MatchMimeType) >= 0)
+        {
+            CollectionFetchJob* job = new CollectionFetchJob(Collection::root(), CollectionFetchJob::Recursive);
+            job->fetchScope().setResource(agent.identifier());
+            connect(job, &CollectionFetchJob::result, mDuplicateResourceObject, &DuplicateResourceObject::collectionFetchResult);
+        }
+    }
+}
+
+/******************************************************************************
+* Called when a removeDuplicateResources() CollectionFetchJob has completed.
+*/
+void DuplicateResourceObject::collectionFetchResult(KJob* j)
+{
+    CollectionFetchJob* job = qobject_cast<CollectionFetchJob*>(j);
+    if (j->error())
+        qCCritical(KALARM_LOG) << "AkonadiResource::collectionFetchResult: CollectionFetchJob" << job->fetchScope().resource()<< "error: " << j->errorString();
+    else
+    {
+        AgentManager* agentManager = AgentManager::self();
+        const Collection::List collections = job->collections();
+        for (const Collection& c : collections)
+        {
+            if (c.contentMimeTypes().indexOf(MatchMimeType) >= 0)
+            {
+                ResourceCol thisRes(job->fetchScope().resource(), c.id());
+                auto it = mAgentPaths.constFind(c.remoteId());
+                if (it != mAgentPaths.constEnd())
+                {
+                    // Remove the resource containing the higher numbered Collection
+                    // ID, which is likely to be the more recently created.
+                    const ResourceCol prevRes = it.value();
+                    if (thisRes.collectionId > prevRes.collectionId)
+                    {
+                        qCWarning(KALARM_LOG) << "AkonadiResource::collectionFetchResult: Removing duplicate resource" << thisRes.resourceId;
+                        agentManager->removeInstance(agentManager->instance(thisRes.resourceId));
+                        continue;
+                    }
+                    qCWarning(KALARM_LOG) << "AkonadiResource::collectionFetchResult: Removing duplicate resource" << prevRes.resourceId;
+                    agentManager->removeInstance(agentManager->instance(prevRes.resourceId));
+                }
+                mAgentPaths[c.remoteId()] = thisRes;
+            }
+        }
+    }
+}
+
+/******************************************************************************
 * Called when a collection has been populated.
+* Stores all its events, even if their alarm types are currently disabled.
 * Emits a signal if all collections have been populated.
 */
 void AkonadiResource::notifyCollectionLoaded(ResourceId id, const QList<KAEvent>& events)
@@ -492,7 +645,7 @@ void AkonadiResource::notifyCollectionLoaded(ResourceId id, const QList<KAEvent>
         AkonadiResource* akres = resource<AkonadiResource>(res);
         if (akres)
         {
-            const CalEvent::Types types = akres->enabledTypes();
+            const CalEvent::Types types = akres->alarmTypes();
             QHash<QString, KAEvent> eventHash;
             for (const KAEvent& event : events)
                 if (event.category() & types)
@@ -537,8 +690,7 @@ void AkonadiResource::notifyCollectionChanged(Resource& res, const Collection& c
     // Check for the collection being enabled/disabled.
     // Enabled/disabled can only be set by KAlarm (not the resource), so if the
     // attribute doesn't exist, it is ignored.
-    const CalEvent::Types oldEnabled = akres->mCollection.hasAttribute<CollectionAttribute>()
-                                     ? akres->mCollection.attribute<CollectionAttribute>()->enabled() : CalEvent::EMPTY;
+    const CalEvent::Types oldEnabled = akres->mLastEnabled;
     const CalEvent::Types newEnabled = collection.hasAttribute<CollectionAttribute>()
                                      ? collection.attribute<CollectionAttribute>()->enabled() : CalEvent::EMPTY;
     if (!akres->mCollectionAttrChecked  ||  newEnabled != oldEnabled)
@@ -547,10 +699,11 @@ void AkonadiResource::notifyCollectionChanged(Resource& res, const Collection& c
         akres->mCollectionAttrChecked = true;
         change |= Enabled;
     }
+    akres->mLastEnabled = newEnabled;
 
     akres->mCollection = collection;
     if (change != NoChange)
-        Resources::notifySettingsChanged(akres, change);
+        Resources::notifySettingsChanged(akres, change, oldEnabled);
 
     if (!resource<AkonadiResource>(res))
         return;   // this resource has been deleted
@@ -816,8 +969,15 @@ void AkonadiResource::modifyCollectionAttrJobDone(KJob* j)
     {
         AkonadiModel::instance()->refresh(mCollection);   // pick up the modified attribute
         if (newEnabled)
-            Resources::notifySettingsChanged(this, Enabled);
+        {
+            const CalEvent::Types oldEnabled = mLastEnabled;
+            mLastEnabled = collection.hasAttribute<CollectionAttribute>()
+                         ? collection.attribute<CollectionAttribute>()->enabled() : CalEvent::EMPTY;
+            Resources::notifySettingsChanged(this, Enabled, oldEnabled);
+        }
     }
 }
+
+#include "akonadiresource.moc"
 
 // vim: et sw=4:

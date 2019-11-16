@@ -24,7 +24,6 @@
 
 #include "alarmcalendar.h"
 #include "autoqpointer.h"
-#include "collectionmodel.h"
 #include "deferdlg.h"
 #include "desktop.h"
 #include "editdlg.h"

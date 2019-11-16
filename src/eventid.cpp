@@ -1,7 +1,7 @@
 /*
  *  eventid.cpp  -  KAlarm unique event identifier for Akonadi
  *  Program:  kalarm
- *  Copyright © 2012 David Jarvie <djarvie@kde.org>
+ *  Copyright © 2012,2019 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -21,10 +21,9 @@
 
 #include "eventid.h"
 
-#include "collectionmodel.h"
+#include "resources/resources.h"
 #include "kalarm_debug.h"
 
-#include <QString>
 #include <QRegExp>
 
 /** Set by event ID prefixed by optional resource ID, in the format "[rid:]eid". */
@@ -36,12 +35,10 @@ EventId::EventId(const QString& resourceEventId)
     {
         // A resource ID has been supplied, so use it
         int n = rx.matchedLength();
-        Akonadi::Collection::Id id = CollectionControlModel::collectionForResourceName(resourceEventId.left(n - 1));
-        {
-            first  = id;
-            second = resourceEventId.mid(n);
-            resourceOk = true;
-        }
+        Resource res = Resources::resourceForConfigName(resourceEventId.left(n - 1));
+        first  = res.id();
+        second = resourceEventId.mid(n);
+        resourceOk = true;
     }
     if (!resourceOk)
     {

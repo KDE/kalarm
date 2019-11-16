@@ -204,6 +204,17 @@ bool Resource::isCompatible() const
     return mResource.isNull() ? false : mResource->isCompatible();
 }
 
+void Resource::editResource(QWidget* dialogParent)
+{
+    if (!mResource.isNull())
+        mResource->editResource(dialogParent);
+}
+
+bool Resource::removeResource()
+{
+    return mResource.isNull() ? false : mResource->removeResource();
+}
+
 bool Resource::load(bool readThroughCache)
 {
     return mResource.isNull() ? false : mResource->load(readThroughCache);

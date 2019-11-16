@@ -20,9 +20,10 @@
 
 #include "rtcwakeaction.h"
 
-#include <KLocalizedString>
-#include <kauthactionreply.h>
 #include "kalarm_debug.h"
+
+#include <KLocalizedString>
+#include <KAuthActionReply>
 
 #include <QProcess>
 #include <QDateTime>
@@ -45,21 +46,24 @@ ActionReply RtcWakeAction::settimer(const QVariantMap& args)
     if (wh)
     {
         char buff[512] = { '\0' };
-        fgets(buff, sizeof(buff), wh);
+        bool ok = fgets(buff, sizeof(buff), wh);
         pclose(wh);
-        // The string should be in the form "rtcwake: /path/rtcwake"
-        char* start = strchr(buff, ':');
-        if (start)
+        if (ok)
         {
-            if (*++start == ' ')
-                ++start;
-            char* end = strpbrk(start, " \r\n");
-            if (end)
-                *end = 0;
-            if (*start)
+            // The string should be in the form "rtcwake: /path/rtcwake"
+            char* start = strchr(buff, ':');
+            if (start)
             {
-                exe = QString::fromLocal8Bit(start);
-                qCDebug(KALARM_LOG) << "RtcWakeAction::settimer:" << exe;
+                if (*++start == ' ')
+                    ++start;
+                char* end = strpbrk(start, " \r\n");
+                if (end)
+                    *end = 0;
+                if (*start)
+                {
+                    exe = QString::fromLocal8Bit(start);
+                    qCDebug(KALARM_LOG) << "RtcWakeAction::settimer:" << exe;
+                }
             }
         }
     }

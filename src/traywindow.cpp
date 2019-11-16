@@ -21,7 +21,7 @@
 #include "traywindow.h"
 
 #include "alarmcalendar.h"
-#include "alarmlistview.h"
+//#include "alarmlistview.h"
 #include "functions.h"
 #include "kalarmapp.h"
 #include "mainwindow.h"
@@ -31,6 +31,7 @@
 #include "preferences.h"
 #include "synchtimer.h"
 #include "templatemenuaction.h"
+#include "resources/eventmodel.h"
 #include "kalarm_debug.h"
 
 #include <kalarmcal/alarmtext.h>
@@ -133,15 +134,16 @@ TrayWindow::TrayWindow(MainWindow* parent)
     MinuteTimer::connect(mToolTipUpdateTimer, SLOT(start()));
 
     // Update when alarms are modified
-    connect(AlarmListModel::all(), SIGNAL(dataChanged(QModelIndex,QModelIndex)),
+    AlarmListModel* all = AlarmListModel::all<AkonadiModel>();
+    connect(all, SIGNAL(dataChanged(QModelIndex,QModelIndex)),
             mToolTipUpdateTimer, SLOT(start()));
-    connect(AlarmListModel::all(), SIGNAL(rowsInserted(QModelIndex,int,int)),
+    connect(all, SIGNAL(rowsInserted(QModelIndex,int,int)),
             mToolTipUpdateTimer, SLOT(start()));
-    connect(AlarmListModel::all(), SIGNAL(rowsMoved(QModelIndex,int,int,QModelIndex,int)),
+    connect(all, SIGNAL(rowsMoved(QModelIndex,int,int,QModelIndex,int)),
             mToolTipUpdateTimer, SLOT(start()));
-    connect(AlarmListModel::all(), SIGNAL(rowsRemoved(QModelIndex,int,int)),
+    connect(all, SIGNAL(rowsRemoved(QModelIndex,int,int)),
             mToolTipUpdateTimer, SLOT(start()));
-    connect(AlarmListModel::all(), SIGNAL(modelReset()),
+    connect(all, SIGNAL(modelReset()),
             mToolTipUpdateTimer, SLOT(start()));
 
     // Set auto-hide status when next alarm or preferences change

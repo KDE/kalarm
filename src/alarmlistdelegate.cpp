@@ -1,7 +1,7 @@
 /*
  *  alarmlistdelegate.cpp  -  handles editing and display of alarm list
  *  Program:  kalarm
- *  Copyright © 2007-2011,2018 David Jarvie <djarvie@kde.org>
+ *  Copyright © 2007-2019 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -22,6 +22,7 @@
 
 #include "akonadimodel.h"
 #include "functions.h"
+#include "resources/eventmodel.h"
 #include "kalarm_debug.h"
 
 #include <kalarmcal/kacalendar.h>
@@ -37,7 +38,7 @@ void AlarmListDelegate::paint(QPainter* painter, const QStyleOptionViewItem& opt
     if (index.isValid())
     {
         if (opt.state & QStyle::State_Selected
-        &&  !index.data(CalendarDataModel::EnabledRole).toBool())
+        &&  !index.data(ResourceDataModelBase::EnabledRole).toBool())
         {
             // Make the text colour for selected disabled alarms
             // distinguishable from enabled alarms.
@@ -47,7 +48,7 @@ void AlarmListDelegate::paint(QPainter* painter, const QStyleOptionViewItem& opt
         {
             case AlarmListModel::TimeColumn:
             {
-                const QString str = index.data(CalendarDataModel::TimeDisplayRole).toString();
+                const QString str = index.data(ResourceDataModelBase::TimeDisplayRole).toString();
                 // Need to pad out spacing to align times without leading zeroes
                 int i = str.indexOf(QLatin1Char('~'));    // look for indicator of a leading zero to be omitted
                 if (i >= 0)
@@ -84,7 +85,7 @@ void AlarmListDelegate::paint(QPainter* painter, const QStyleOptionViewItem& opt
             }
             case AlarmListModel::ColourColumn:
             {
-                const KAEvent event = static_cast<const ItemListModel*>(index.model())->event(index);
+                const KAEvent event = static_cast<const EventListModel*>(index.model())->event(index);
                 if (event.isValid()  &&  event.commandError() != KAEvent::CMD_NO_ERROR)
                 {
                     opt.font.setBold(true);

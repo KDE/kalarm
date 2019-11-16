@@ -21,9 +21,9 @@
 #ifndef AKONADIMODEL_H
 #define AKONADIMODEL_H
 
-#include "calendardatamodel.h"
-#include "eventid.h"
+#include "resources/resourcedatamodelbase.h"
 #include "resources/akonadiresource.h"
+#include "eventid.h"
 
 #include <kalarmcal/kaevent.h>
 #include <kalarmcal/collectionattribute.h>
@@ -46,7 +46,7 @@ class KJob;
 using namespace KAlarmCal;
 
 
-class AkonadiModel : public Akonadi::EntityTreeModel, public CalendarDataModel
+class AkonadiModel : public Akonadi::EntityTreeModel, public ResourceDataModelBase
 {
         Q_OBJECT
     public:
@@ -55,6 +55,8 @@ class AkonadiModel : public Akonadi::EntityTreeModel, public CalendarDataModel
         static AkonadiModel* instance();
 
         ~AkonadiModel() override;
+
+        static Akonadi::ChangeRecorder* monitor();
 
         /** Refresh the specified collection instance with up to date data. */
         bool refresh(Akonadi::Collection&) const;
@@ -96,6 +98,8 @@ class AkonadiModel : public Akonadi::EntityTreeModel, public CalendarDataModel
         Akonadi::Item itemForEvent(const QString& eventId) const;
 
         QVariant data(const QModelIndex&, int role = Qt::DisplayRole) const override;
+
+        int headerDataEventRoleOffset() const override;
 
     private Q_SLOTS:
         /** Called when a resource notifies a message to display to the user. */

@@ -1,5 +1,5 @@
 /*
- *  calendardatamodel.h  -  base for models containing calendars and events
+ *  resourcedatamodelbase.h  -  base for models containing calendars and events
  *  Program:  kalarm
  *  Copyright © 2007-2019 David Jarvie <djarvie@kde.org>
  *
@@ -18,8 +18,8 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef CALENDARDATAMODEL_H
-#define CALENDARDATAMODEL_H
+#ifndef RESOURCEDATAMODELBASE_H
+#define RESOURCEDATAMODELBASE_H
 
 #include "resources/resourcetype.h"
 
@@ -37,10 +37,10 @@ using namespace KAlarmCal;
 
 
 /*=============================================================================
-= Class: CalendarDataModel
+= Class: ResourceDataModelBase
 = Base class for models containing all calendars and events.
 =============================================================================*/
-class CalendarDataModel
+class ResourceDataModelBase
 {
     public:
         /** Data column numbers. */
@@ -73,7 +73,7 @@ class CalendarDataModel
             CommandErrorRole           // last command execution error for alarm (per user)
         };
 
-        ~CalendarDataModel();
+        virtual ~ResourceDataModelBase();
 
     public:
         static QSize   iconSize()       { return mIconSize; }
@@ -89,8 +89,11 @@ class CalendarDataModel
          * A null string is returned if the resource is fully writable. */
         static QString readOnlyTooltip(const Resource&);
 
+        /** Return offset to add to headerData() role, for item models. */
+        virtual int headerDataEventRoleOffset() const  { return 0; }
+
     protected:
-        CalendarDataModel();
+        ResourceDataModelBase();
 
         static QVariant headerData(int section, Qt::Orientation, int role, bool eventHeaders, bool& handled);
 
@@ -125,6 +128,6 @@ class CalendarDataModel
         static QSize    mIconSize;      // maximum size of any icon
 };
 
-#endif // CALENDARDATAMODEL_H
+#endif // RESOURCEDATAMODELBASE_H
 
 // vim: et sw=4:

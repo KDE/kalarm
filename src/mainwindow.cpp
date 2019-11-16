@@ -25,7 +25,6 @@
 #include "autoqpointer.h"
 #include "alarmlistview.h"
 #include "birthdaydlg.h"
-#include "collectionmodel.h"
 #include "functions.h"
 #include "kalarmapp.h"
 #include "kamail.h"
@@ -41,6 +40,7 @@
 #include "traywindow.h"
 #include "wakedlg.h"
 #include "resources/resources.h"
+#include "resources/eventmodel.h"
 #include "kalarm_debug.h"
 
 #include <kalarmcal/alarmtext.h>
@@ -158,7 +158,7 @@ MainWindow::MainWindow(bool restored)
     mSplitter->setStretchFactor(1, 1);
 
     // Create the alarm list widget
-    mListFilterModel = new AlarmListModel(this);
+    mListFilterModel = AlarmListModel::create<AkonadiModel>(this);
     mListFilterModel->setEventTypeFilter(mShowArchived ? CalEvent::ACTIVE | CalEvent::ARCHIVED : CalEvent::ACTIVE);
     mListView = new AlarmListView(WINDOW_NAME, mSplitter);
     mListView->setModel(mListFilterModel);
@@ -637,7 +637,7 @@ void MainWindow::updateKeepArchived(int days)
 void MainWindow::selectEvent(const QString& eventId)
 {
     mListView->clearSelection();
-    QModelIndex index = mListFilterModel->eventIndex(eventId);
+    const QModelIndex index = mListFilterModel->eventIndex(eventId);
     if (index.isValid())
     {
         mListView->select(index);

@@ -1,5 +1,5 @@
 /*
- *  calendardatamodel.cpp  -  base for models containing calendars and events
+ *  resourcedatamodelbase.cpp  -  base for models containing calendars and events
  *  Program:  kalarm
  *  Copyright © 2007-2019 David Jarvie <djarvie@kde.org>
  *
@@ -18,7 +18,7 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "calendardatamodel.h"
+#include "resourcedatamodelbase.h"
 
 #include "alarmtime.h"
 #include "mainwindow.h"
@@ -39,20 +39,20 @@
 #include <QIcon>
 
 /*=============================================================================
-= Class: CalendarDataModel
+= Class: ResourceDataModelBase
 =============================================================================*/
 
-QPixmap* CalendarDataModel::mTextIcon    = nullptr;
-QPixmap* CalendarDataModel::mFileIcon    = nullptr;
-QPixmap* CalendarDataModel::mCommandIcon = nullptr;
-QPixmap* CalendarDataModel::mEmailIcon   = nullptr;
-QPixmap* CalendarDataModel::mAudioIcon   = nullptr;
-QSize    CalendarDataModel::mIconSize;
+QPixmap* ResourceDataModelBase::mTextIcon    = nullptr;
+QPixmap* ResourceDataModelBase::mFileIcon    = nullptr;
+QPixmap* ResourceDataModelBase::mCommandIcon = nullptr;
+QPixmap* ResourceDataModelBase::mEmailIcon   = nullptr;
+QPixmap* ResourceDataModelBase::mAudioIcon   = nullptr;
+QSize    ResourceDataModelBase::mIconSize;
 
 /******************************************************************************
 * Constructor.
 */
-CalendarDataModel::CalendarDataModel()
+ResourceDataModelBase::ResourceDataModelBase()
 {
     if (!mTextIcon)
     {
@@ -65,14 +65,14 @@ CalendarDataModel::CalendarDataModel()
     }
 }
 
-CalendarDataModel::~CalendarDataModel()
+ResourceDataModelBase::~ResourceDataModelBase()
 {
 }
 
 /******************************************************************************
 * Create a bulleted list of alarm types for insertion into <para>...</para>.
 */
-QString CalendarDataModel::typeListForDisplay(CalEvent::Types alarmTypes)
+QString ResourceDataModelBase::typeListForDisplay(CalEvent::Types alarmTypes)
 {
     QString list;
     if (alarmTypes & CalEvent::ACTIVE)
@@ -91,7 +91,7 @@ QString CalendarDataModel::typeListForDisplay(CalEvent::Types alarmTypes)
 * read-write permissions and the KAlarm calendar format compatibility.
 * A null string is returned if the collection is read-write and compatible.
 */
-QString CalendarDataModel::readOnlyTooltip(const Resource& resource)
+QString ResourceDataModelBase::readOnlyTooltip(const Resource& resource)
 {
     switch (resource.compatibility())
     {
@@ -109,7 +109,7 @@ QString CalendarDataModel::readOnlyTooltip(const Resource& resource)
 /******************************************************************************
 * Return data for a column heading.
 */
-QVariant CalendarDataModel::headerData(int section, Qt::Orientation orientation, int role, bool eventHeaders, bool& handled)
+QVariant ResourceDataModelBase::headerData(int section, Qt::Orientation orientation, int role, bool eventHeaders, bool& handled)
 {
     if (orientation == Qt::Horizontal)
     {
@@ -156,7 +156,7 @@ QVariant CalendarDataModel::headerData(int section, Qt::Orientation orientation,
     return QVariant();
 }
 
-bool CalendarDataModel::roleHandled(int role) const
+bool ResourceDataModelBase::roleHandled(int role) const
 {
     switch (role)
     {
@@ -174,6 +174,8 @@ bool CalendarDataModel::roleHandled(int role) const
         case SortRole:
         case StatusRole:
         case ValueRole:
+        case EventIdRole:
+        case ParentResourceIdRole:
         case EnabledRole:
         case AlarmActionsRole:
         case AlarmSubActionRole:
@@ -187,7 +189,7 @@ bool CalendarDataModel::roleHandled(int role) const
 /******************************************************************************
 * Return the data for a given role, for a specified resource.
 */
-QVariant CalendarDataModel::resourceData(int& role, const Resource& resource, bool& handled) const
+QVariant ResourceDataModelBase::resourceData(int& role, const Resource& resource, bool& handled) const
 {
     if (roleHandled(role))   // Ensure that resourceDataHandles() is coded correctly
     {
@@ -222,8 +224,8 @@ QVariant CalendarDataModel::resourceData(int& role, const Resource& resource, bo
 /******************************************************************************
 * Return the data for a given role, for a specified event.
 */
-QVariant CalendarDataModel::eventData(int role, int column, const KAEvent& event,
-                                      const Resource& resource, bool& handled) const
+QVariant ResourceDataModelBase::eventData(int role, int column, const KAEvent& event,
+                                          const Resource& resource, bool& handled) const
 {
     if (roleHandled(role))   // Ensure that eventDataHandles() is coded correctly
     {
@@ -236,6 +238,8 @@ QVariant CalendarDataModel::eventData(int role, int column, const KAEvent& event
             return QVariant();
         switch (role)
         {
+            case EventIdRole:
+                return event.id();
             case StatusRole:
                 return event.category();
             case AlarmActionsRole:
@@ -462,7 +466,7 @@ QVariant CalendarDataModel::eventData(int role, int column, const KAEvent& event
 * Return a resource's tooltip text. The resource's enabled status is
 * evaluated for specified alarm types.
 */
-QString CalendarDataModel::tooltip(const Resource& resource, CalEvent::Types types) const
+QString ResourceDataModelBase::tooltip(const Resource& resource, CalEvent::Types types) const
 {
     const QString name     = QLatin1Char('@') + resource.displayName();   // insert markers for stripping out name
     const QString type     = QLatin1Char('@') + resource.storageTypeString(false);   // file/directory/URL etc.
@@ -493,7 +497,7 @@ QString CalendarDataModel::tooltip(const Resource& resource, CalEvent::Types typ
 /******************************************************************************
 * Return the repetition text.
 */
-QString CalendarDataModel::repeatText(const KAEvent& event)
+QString ResourceDataModelBase::repeatText(const KAEvent& event)
 {
     const QString repText = event.recurrenceText(true);
     return repText.isEmpty() ? event.repetitionText(true) : repText;
@@ -502,7 +506,7 @@ QString CalendarDataModel::repeatText(const KAEvent& event)
 /******************************************************************************
 * Return a string for sorting the repetition column.
 */
-QString CalendarDataModel::repeatOrder(const KAEvent& event)
+QString ResourceDataModelBase::repeatOrder(const KAEvent& event)
 {
     int repOrder = 0;
     int repInterval = 0;
@@ -541,7 +545,7 @@ QString CalendarDataModel::repeatOrder(const KAEvent& event)
 /******************************************************************************
 * Returns the QWhatsThis text for a specified column.
 */
-QString CalendarDataModel::whatsThisText(int column)
+QString ResourceDataModelBase::whatsThisText(int column)
 {
     switch (column)
     {
@@ -567,7 +571,7 @@ QString CalendarDataModel::whatsThisText(int column)
 /******************************************************************************
 * Return the icon associated with an event's action.
 */
-QPixmap* CalendarDataModel::eventIcon(const KAEvent& event)
+QPixmap* ResourceDataModelBase::eventIcon(const KAEvent& event)
 {
     switch (event.actionTypes())
     {
@@ -590,7 +594,7 @@ QPixmap* CalendarDataModel::eventIcon(const KAEvent& event)
 /******************************************************************************
 * Display a message to the user.
 */
-void CalendarDataModel::handleResourceMessage(ResourceType::MessageType type, const QString& message, const QString& details)
+void ResourceDataModelBase::handleResourceMessage(ResourceType::MessageType type, const QString& message, const QString& details)
 {
     if (type == ResourceType::MessageType::Error)
         KAMessageBox::detailedError(MainWindow::mainMainWindow(), message, details);

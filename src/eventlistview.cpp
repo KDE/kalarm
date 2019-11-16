@@ -21,6 +21,7 @@
 #include "eventlistview.h"
 
 #include "find.h"
+#include "resources/eventmodel.h"
 #include "kalarm_debug.h"
 
 #include <KLocalizedString>
@@ -41,6 +42,14 @@ EventListView::EventListView(QWidget* parent)
     setTextElideMode(Qt::ElideRight);
     // Set default WhatsThis text to be displayed when no actual item is clicked on
     setWhatsThis(i18nc("@info:whatsthis", "List of scheduled alarms"));
+}
+
+/******************************************************************************
+* Return the source data model.
+*/
+EventListModel* EventListView::itemModel() const
+{
+    return static_cast<EventListModel*>(model());
 }
 
 /******************************************************************************
@@ -92,7 +101,7 @@ KAEvent EventListView::selectedEvent() const
     const QModelIndexList list = selectionModel()->selectedRows();
     if (list.count() != 1)
         return KAEvent();
-    const ItemListModel* model = static_cast<const ItemListModel*>(list[0].model());
+    const EventListModel* model = static_cast<const EventListModel*>(list[0].model());
     return model->event(list[0]);
 }
 
@@ -106,7 +115,7 @@ QVector<KAEvent> EventListView::selectedEvents() const
     int count = ixlist.count();
     if (count)
     {
-        const ItemListModel* model = static_cast<const ItemListModel*>(ixlist[0].model());
+        const EventListModel* model = static_cast<const EventListModel*>(ixlist[0].model());
         elist.reserve(count);
         for (int i = 0;  i < count;  ++i)
             elist += model->event(ixlist[i]);
@@ -153,7 +162,7 @@ bool EventListView::viewportEvent(QEvent* e)
             int i = toolTip.indexOf(QLatin1Char('\n'));
             if (i < 0)
             {
-                ItemListModel* m = qobject_cast<ItemListModel*>(model());
+                EventListModel* m = qobject_cast<EventListModel*>(model());
                 if (!m  ||  m->event(index).commandError() == KAEvent::CMD_NO_ERROR)
                 {
                     // Single line tooltip. Only display it if the text column
@@ -214,9 +223,9 @@ bool EventListDelegate::editorEvent(QEvent* e, QAbstractItemModel* model, const 
     if (index.isValid())
     {
         qCDebug(KALARM_LOG) << "EventListDelegate::editorEvent";
-        ItemListModel* itemModel = qobject_cast<ItemListModel*>(model);
+        EventListModel* itemModel = qobject_cast<EventListModel*>(model);
         if (!itemModel)
-            qCCritical(KALARM_LOG) << "EventListDelegate::editorEvent: Invalid cast to ItemListModel*";
+            qCCritical(KALARM_LOG) << "EventListDelegate::editorEvent: Invalid cast to EventListModel*";
         else
         {
             KAEvent event = itemModel->event(index);
