@@ -25,7 +25,6 @@
 #include "commandoptions.h"
 #include "dbushandler.h"
 #include "editdlgtypes.h"
-#include "collectionmodel.h"
 #include "functions.h"
 #include "kamail.h"
 #include "mainwindow.h"
@@ -1153,7 +1152,6 @@ void KAlarmApp::checkWritableCalendar()
     done = true;
     qCDebug(KALARM_LOG) << "KAlarmApp::checkWritableCalendar";
 
-    CollectionControlModel::instance();
     // Check for, and remove, any duplicate Akonadi resources, i.e. those which
     // use the same calendar file/directory.
     AkonadiResource::removeDuplicateResources();

@@ -91,8 +91,8 @@ AkonadiModel::AkonadiModel(ChangeRecorder* monitor, QObject* parent)
     , mMigrationChecked(false)
     , mMigrating(false)
 {
-    // Set lazy population to enable the contents of unselected collections to be ignored
-    setItemPopulationStrategy(LazyPopulation);
+    // Populate all collections, selected/enabled or unselected/disabled.
+    setItemPopulationStrategy(ImmediatePopulation);
 
     // Restrict monitoring to collections containing the KAlarm mime types
     monitor->setCollectionMonitored(Collection::root());
