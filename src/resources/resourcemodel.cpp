@@ -20,10 +20,10 @@
 
 #include "resourcemodel.h"
 
-#include "calendardatamodel.h"
+#include "resourcedatamodelbase.h"
+#include "resources.h"
 #include "messagebox.h"
 #include "preferences.h"
-#include "resources/resources.h"
 #include "kalarm_debug.h"
 
 #include <KLocalizedString>
@@ -123,7 +123,7 @@ int ResourceFilterModel::columnCount(const QModelIndex& parent) const
 bool ResourceFilterModel::filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const
 {
     const QModelIndex ix = sourceModel()->index(sourceRow, 0, sourceParent);
-    const ResourceId id = sourceModel()->data(ix, CalendarDataModel::ResourceIdRole).toLongLong();
+    const ResourceId id = sourceModel()->data(ix, ResourceDataModelBase::ResourceIdRole).toLongLong();
     if (id < 0)
         return false;   // this row doesn't contain a resource
     const Resource resource = Resources::resource(id);
@@ -165,13 +165,13 @@ ResourceListModel::ResourceListModel(QObject* parent)
 */
 Resource ResourceListModel::resource(int row) const
 {
-    const ResourceId id = data(index(row, 0), CalendarDataModel::ResourceIdRole).toLongLong();
+    const ResourceId id = data(index(row, 0), ResourceDataModelBase::ResourceIdRole).toLongLong();
     return Resources::resource(id);
 }
 
 Resource ResourceListModel::resource(const QModelIndex& index) const
 {
-    const ResourceId id = data(index, CalendarDataModel::ResourceIdRole).toLongLong();
+    const ResourceId id = data(index, ResourceDataModelBase::ResourceIdRole).toLongLong();
     return Resources::resource(id);
 }
 
@@ -215,7 +215,7 @@ QVariant ResourceListModel::data(const QModelIndex& index, int role) const
     {
         case Qt::BackgroundRole:
             if (!mUseResourceColour)
-                role = CalendarDataModel::BaseColourRole;
+                role = ResourceDataModelBase::BaseColourRole;
             break;
         default:
             break;

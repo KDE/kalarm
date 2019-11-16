@@ -21,9 +21,9 @@
 #ifndef AKONADIMODEL_H
 #define AKONADIMODEL_H
 
-#include "calendardatamodel.h"
-#include "eventid.h"
+#include "resources/resourcedatamodelbase.h"
 #include "resources/akonadiresource.h"
+#include "eventid.h"
 
 #include <kalarmcal/kaevent.h>
 #include <kalarmcal/collectionattribute.h>
@@ -46,7 +46,7 @@ class KJob;
 using namespace KAlarmCal;
 
 
-class AkonadiModel : public Akonadi::EntityTreeModel, public CalendarDataModel
+class AkonadiModel : public Akonadi::EntityTreeModel, public ResourceDataModelBase
 {
         Q_OBJECT
     public:

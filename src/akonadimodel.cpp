@@ -59,10 +59,10 @@
 using namespace Akonadi;
 using namespace KAlarmCal;
 
-// Ensure CalendarDataModel::UserRole is valid. CalendarDataModel does not
-// include Akonadi headers, so here we check that it has been set to be
+// Ensure ResourceDataModelBase::UserRole is valid. ResourceDataModelBase does
+// not include Akonadi headers, so here we check that it has been set to be
 // compatible with EntityTreeModel::UserRole.
-static_assert((int)CalendarDataModel::UserRole>=(int)Akonadi::EntityTreeModel::UserRole, "CalendarDataModel::UserRole wrong value");
+static_assert((int)ResourceDataModelBase::UserRole>=(int)Akonadi::EntityTreeModel::UserRole, "ResourceDataModelBase::UserRole wrong value");
 
 /*=============================================================================
 = Class: AkonadiModel
@@ -86,7 +86,7 @@ AkonadiModel* AkonadiModel::instance()
 */
 AkonadiModel::AkonadiModel(ChangeRecorder* monitor, QObject* parent)
     : EntityTreeModel(monitor, parent)
-    , CalendarDataModel()
+    , ResourceDataModelBase()
     , mMonitor(monitor)
     , mMigrationChecked(false)
     , mMigrating(false)
@@ -282,7 +282,7 @@ QVariant AkonadiModel::entityHeaderData(int section, Qt::Orientation orientation
         case CollectionTreeHeaders:
         {
             bool handled;
-            const QVariant value = CalendarDataModel::headerData(section, orientation, role, eventHeaders, handled);
+            const QVariant value = ResourceDataModelBase::headerData(section, orientation, role, eventHeaders, handled);
             if (handled)
                 return value;
             break;

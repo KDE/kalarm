@@ -21,10 +21,10 @@
 #include "resources.h"
 
 #include "resource.h"
+#include "resourcedatamodelbase.h"
 #include "resourcemodel.h"
 #include "resourceselectdialog.h"
 #include "autoqpointer.h"
-#include "calendardatamodel.h"
 #include "preferences.h"
 #include "kalarm_debug.h"
 
@@ -445,7 +445,7 @@ void Resources::notifySettingsChanged(ResourceType* res, ResourceType::Changes c
                             msg = xi18nc("@info", "<para>The calendar <resource>%1</resource> has been made read-only. "
                                     "This was the default calendar for:%2</para>"
                                     "<para>Please select new default calendars.</para>",
-                                    res->displayName(), CalendarDataModel::typeListForDisplay(std));
+                                    res->displayName(), ResourceDataModelBase::typeListForDisplay(std));
                             singleType = false;
                             break;
                     }

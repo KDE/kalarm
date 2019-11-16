@@ -20,10 +20,10 @@
 
 #include "eventmodel.h"
 
-#include "calendardatamodel.h"
+#include "resourcedatamodelbase.h"
+#include "resources.h"
 #include "messagebox.h"
 #include "preferences.h"
-#include "resources/resources.h"
 #include "kalarm_debug.h"
 
 #include <KLocalizedString>
@@ -40,7 +40,7 @@ EventListModel::EventListModel(CalEvent::Types types, QObject* parent)
     , mAlarmTypes(types == CalEvent::EMPTY ? CalEvent::ACTIVE | CalEvent::ARCHIVED | CalEvent::TEMPLATE : types)
 {
     setSourceModel(new KDescendantsProxyModel(this));
-    setSortRole(CalendarDataModel::SortRole);
+    setSortRole(ResourceDataModelBase::SortRole);
     setDynamicSortFilter(true);
     connect(this, &QAbstractItemModel::rowsInserted, this, &EventListModel::slotRowsInserted);
     connect(this, &QAbstractItemModel::rowsRemoved, this, &EventListModel::slotRowsRemoved);
@@ -87,7 +87,7 @@ bool EventListModel::haveEvents() const
 
 int EventListModel::iconWidth()
 {
-    return CalendarDataModel::iconSize().width();
+    return ResourceDataModelBase::iconSize().width();
 }
 
 bool EventListModel::hasChildren(const QModelIndex& parent) const
@@ -120,7 +120,7 @@ QModelIndexList EventListModel::match(const QModelIndex& start, int role, const 
 int EventListModel::columnCount(const QModelIndex& parent) const
 {
     Q_UNUSED(parent);
-    return CalendarDataModel::ColumnCount;
+    return ResourceDataModelBase::ColumnCount;
 }
 
 QVariant EventListModel::headerData(int section, Qt::Orientation orientation, int role) const
@@ -133,10 +133,10 @@ bool EventListModel::filterAcceptsRow(int sourceRow, const QModelIndex& sourcePa
     // Get the resource which contains this event.
     KDescendantsProxyModel* proxyModel = static_cast<KDescendantsProxyModel*>(sourceModel());
     const QModelIndex dataIndex = proxyModel->mapToSource(proxyModel->index(sourceRow, 0, sourceParent));
-    const QString eventId = dataIndex.data(CalendarDataModel::EventIdRole).toString();
+    const QString eventId = dataIndex.data(ResourceDataModelBase::EventIdRole).toString();
     if (eventId.isEmpty())
         return false;   // this row doesn't contain an event
-    const ResourceId id = dataIndex.data(CalendarDataModel::ParentResourceIdRole).toLongLong();
+    const ResourceId id = dataIndex.data(ResourceDataModelBase::ParentResourceIdRole).toLongLong();
     if (id < 0)
         return false;   // the parent item isn't a resource
     const Resource resource = Resources::resource(id);
@@ -156,7 +156,7 @@ bool EventListModel::filterAcceptsRow(int sourceRow, const QModelIndex& sourcePa
 
 bool EventListModel::filterAcceptsColumn(int sourceColumn, const QModelIndex& sourceParent) const
 {
-    if (sourceColumn >= CalendarDataModel::ColumnCount)
+    if (sourceColumn >= ResourceDataModelBase::ColumnCount)
         return false;
     return QSortFilterProxyModel::filterAcceptsColumn(sourceColumn, sourceParent);
 }
@@ -242,7 +242,7 @@ bool AlarmListModel::filterAcceptsRow(int sourceRow, const QModelIndex& sourcePa
         return false;
     if (mFilterTypes == CalEvent::EMPTY)
         return false;
-    const int type = sourceModel()->data(sourceModel()->index(sourceRow, 0, sourceParent), CalendarDataModel::StatusRole).toInt();
+    const int type = sourceModel()->data(sourceModel()->index(sourceRow, 0, sourceParent), ResourceDataModelBase::StatusRole).toInt();
     return static_cast<CalEvent::Type>(type) & mFilterTypes;
 }
 
@@ -250,7 +250,7 @@ bool AlarmListModel::filterAcceptsColumn(int sourceCol, const QModelIndex& ix) c
 {
     if (!EventListModel::filterAcceptsColumn(sourceCol, ix))
         return false;
-    return (sourceCol != CalendarDataModel::TemplateNameColumn);
+    return (sourceCol != ResourceDataModelBase::TemplateNameColumn);
 }
 
 QVariant AlarmListModel::headerData(int section, Qt::Orientation orientation, int role) const
@@ -311,14 +311,14 @@ bool TemplateListModel::filterAcceptsRow(int sourceRow, const QModelIndex& sourc
     if (mActionsFilter == KAEvent::ACT_ALL)
         return true;
     const QModelIndex sourceIndex = sourceModel()->index(sourceRow, 0, sourceParent);
-    const KAEvent::Actions actions = static_cast<KAEvent::Actions>(sourceModel()->data(sourceIndex, CalendarDataModel::AlarmActionsRole).toInt());
+    const KAEvent::Actions actions = static_cast<KAEvent::Actions>(sourceModel()->data(sourceIndex, ResourceDataModelBase::AlarmActionsRole).toInt());
     return actions & mActionsFilter;
 }
 
 bool TemplateListModel::filterAcceptsColumn(int sourceCol, const QModelIndex&) const
 {
-    return sourceCol == CalendarDataModel::TemplateNameColumn
-       ||  sourceCol == CalendarDataModel::TypeColumn;
+    return sourceCol == ResourceDataModelBase::TemplateNameColumn
+       ||  sourceCol == ResourceDataModelBase::TypeColumn;
 }
 
 QVariant TemplateListModel::headerData(int section, Qt::Orientation orientation, int role) const
@@ -328,10 +328,10 @@ QVariant TemplateListModel::headerData(int section, Qt::Orientation orientation,
         switch (section)
         {
             case TypeColumn:
-                section = CalendarDataModel::TypeColumn;
+                section = ResourceDataModelBase::TypeColumn;
                 break;
             case TemplateNameColumn:
-                section = CalendarDataModel::TemplateNameColumn;
+                section = ResourceDataModelBase::TemplateNameColumn;
                 break;
             default:
                 return QVariant();
@@ -345,7 +345,7 @@ Qt::ItemFlags TemplateListModel::flags(const QModelIndex& index) const
     Qt::ItemFlags f = sourceModel()->flags(mapToSource(index));
     if (mActionsEnabled == KAEvent::ACT_ALL)
         return f;
-    const KAEvent::Actions actions = static_cast<KAEvent::Actions>(EventListModel::data(index, CalendarDataModel::AlarmActionsRole).toInt());
+    const KAEvent::Actions actions = static_cast<KAEvent::Actions>(EventListModel::data(index, ResourceDataModelBase::AlarmActionsRole).toInt());
     if (!(actions & mActionsEnabled))
         f = static_cast<Qt::ItemFlags>(f & ~(Qt::ItemIsEnabled | Qt::ItemIsSelectable));
     return f;
