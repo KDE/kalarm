@@ -690,9 +690,10 @@ void AkonadiResource::notifyCollectionChanged(Resource& res, const Collection& c
     // Check for the collection being enabled/disabled.
     // Enabled/disabled can only be set by KAlarm (not the resource), so if the
     // attribute doesn't exist, it is ignored.
+    const CalEvent::Types oldEnabled = akres->mLastEnabled;
     const CalEvent::Types newEnabled = collection.hasAttribute<CollectionAttribute>()
                                      ? collection.attribute<CollectionAttribute>()->enabled() : CalEvent::EMPTY;
-    if (!akres->mCollectionAttrChecked  ||  newEnabled != akres->mLastEnabled)
+    if (!akres->mCollectionAttrChecked  ||  newEnabled != oldEnabled)
     {
         qCDebug(KALARM_LOG) << "AkonadiResource::setCollectionChanged:" << collection.id() << ": enabled ->" << newEnabled;
         akres->mCollectionAttrChecked = true;
@@ -702,7 +703,7 @@ void AkonadiResource::notifyCollectionChanged(Resource& res, const Collection& c
 
     akres->mCollection = collection;
     if (change != NoChange)
-        Resources::notifySettingsChanged(akres, change);
+        Resources::notifySettingsChanged(akres, change, oldEnabled);
 
     if (!resource<AkonadiResource>(res))
         return;   // this resource has been deleted
@@ -969,9 +970,10 @@ void AkonadiResource::modifyCollectionAttrJobDone(KJob* j)
         AkonadiModel::instance()->refresh(mCollection);   // pick up the modified attribute
         if (newEnabled)
         {
+            const CalEvent::Types oldEnabled = mLastEnabled;
             mLastEnabled = collection.hasAttribute<CollectionAttribute>()
                          ? collection.attribute<CollectionAttribute>()->enabled() : CalEvent::EMPTY;
-            Resources::notifySettingsChanged(this, Enabled);
+            Resources::notifySettingsChanged(this, Enabled, oldEnabled);
         }
     }
 }

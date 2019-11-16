@@ -405,55 +405,97 @@ void Resources::notifyResourcePopulated(const ResourceType* res)
     checkResourcesPopulated();
 }
 
-void Resources::notifySettingsChanged(ResourceType* res, ResourceType::Changes change)
+/******************************************************************************
+* Called by a resource to notify that its settings have changed.
+* Emits the settingsChanged() signal.
+* If the resource is now read-only and was standard, clear its standard status.
+* If the resource has newly enabled alarm types, ensure that it doesn't
+* duplicate any existing standard setting.
+*/
+void Resources::notifySettingsChanged(ResourceType* res, ResourceType::Changes change, CalEvent::Types oldEnabled)
 {
-    if (res)
-    {
-        Resource r = resource(res->id());
-        if (r.isValid())
-        {
-            Q_EMIT instance()->settingsChanged(r, change);
+    if (!res)
+        return;
+    Resource r = resource(res->id());
+    if (!r.isValid())
+        return;
 
-            if ((change & ResourceType::ReadOnly)  &&  res->readOnly())
+    Resources* manager = instance();
+
+    if (change & ResourceType::Enabled)
+    {
+        ResourceType::Changes change = ResourceType::Enabled;
+
+        // Find which alarm types (if any) have been newly enabled.
+        const CalEvent::Types extra    = res->enabledTypes() & ~oldEnabled;
+        CalEvent::Types       std      = res->configStandardTypes();
+        const CalEvent::Types extraStd = std & extra;
+        if (extraStd  &&  res->isWritable())
+        {
+            // Alarm type(s) have been newly enabled, and are set as standard.
+            // Don't allow the resource to be set as standard for those types if
+            // another resource is already the standard.
+            CalEvent::Types disallowedStdTypes{};
+            for (auto it = manager->mResources.constBegin();  it != manager->mResources.constEnd();  ++it)
             {
-                qCDebug(KALARM_LOG) << "Resources::notifySettingsChanged:" << res->id() << "ReadOnly";
-                // A read-only resource can't be the default for any alarm type
-                const CalEvent::Types std = standardTypes(r, false);
-                if (std != CalEvent::EMPTY)
+                const Resource& resit = it.value();
+                if (resit.id() != res->id()  &&  resit.isWritable())
                 {
-                    setStandard(r, CalEvent::Types(CalEvent::EMPTY));
-                    bool singleType = true;
-                    QString msg;
-                    switch (std)
-                    {
-                        case CalEvent::ACTIVE:
-                            msg = xi18n("The calendar <resource>%1</resource> has been made read-only. "
-                                    "This was the default calendar for active alarms.",
-                                    res->displayName());
-                            break;
-                        case CalEvent::ARCHIVED:
-                            msg = xi18n("The calendar <resource>%1</resource> has been made read-only. "
-                                    "This was the default calendar for archived alarms.",
-                                    res->displayName());
-                            break;
-                        case CalEvent::TEMPLATE:
-                            msg = xi18n("The calendar <resource>%1</resource> has been made read-only. "
-                                    "This was the default calendar for alarm templates.",
-                                    res->displayName());
-                            break;
-                        default:
-                            msg = xi18nc("@info", "<para>The calendar <resource>%1</resource> has been made read-only. "
-                                    "This was the default calendar for:%2</para>"
-                                    "<para>Please select new default calendars.</para>",
-                                    res->displayName(), ResourceDataModelBase::typeListForDisplay(std));
-                            singleType = false;
-                            break;
-                    }
-                    if (singleType)
-                        msg = xi18nc("@info", "<para>%1</para><para>Please select a new default calendar.</para>", msg);
-                    notifyResourceMessage(res->id(), ResourceType::MessageType::Info, msg, QString());
+                    disallowedStdTypes |= extraStd & resit.configStandardTypes() & resit.enabledTypes();
+                    if (extraStd == disallowedStdTypes)
+                        break;   // all the resource's newly enabled standard types are disallowed
                 }
             }
+            if (disallowedStdTypes)
+            {
+                std &= ~disallowedStdTypes;
+                res->configSetStandard(std);
+            }
+        }
+        if (std)
+            change |= ResourceType::Standard;
+    }
+
+    Q_EMIT manager->settingsChanged(r, change);
+
+    if ((change & ResourceType::ReadOnly)  &&  res->readOnly())
+    {
+        qCDebug(KALARM_LOG) << "Resources::notifySettingsChanged:" << res->id() << "ReadOnly";
+        // A read-only resource can't be the default for any alarm type
+        const CalEvent::Types std = standardTypes(r, false);
+        if (std != CalEvent::EMPTY)
+        {
+            setStandard(r, CalEvent::EMPTY);
+            bool singleType = true;
+            QString msg;
+            switch (std)
+            {
+                case CalEvent::ACTIVE:
+                    msg = xi18n("The calendar <resource>%1</resource> has been made read-only. "
+                            "This was the default calendar for active alarms.",
+                            res->displayName());
+                    break;
+                case CalEvent::ARCHIVED:
+                    msg = xi18n("The calendar <resource>%1</resource> has been made read-only. "
+                            "This was the default calendar for archived alarms.",
+                            res->displayName());
+                    break;
+                case CalEvent::TEMPLATE:
+                    msg = xi18n("The calendar <resource>%1</resource> has been made read-only. "
+                            "This was the default calendar for alarm templates.",
+                            res->displayName());
+                    break;
+                default:
+                    msg = xi18nc("@info", "<para>The calendar <resource>%1</resource> has been made read-only. "
+                            "This was the default calendar for:%2</para>"
+                            "<para>Please select new default calendars.</para>",
+                            res->displayName(), ResourceDataModelBase::typeListForDisplay(std));
+                    singleType = false;
+                    break;
+            }
+            if (singleType)
+                msg = xi18nc("@info", "<para>%1</para><para>Please select a new default calendar.</para>", msg);
+            notifyResourceMessage(res->id(), ResourceType::MessageType::Info, msg, QString());
         }
     }
 }

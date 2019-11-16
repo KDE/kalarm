@@ -152,7 +152,7 @@ public:
     /** Called by a resource to notify that its settings have changed.
      *  This will cause the settingsChanged() signal to be emitted.
      */
-    static void notifySettingsChanged(ResourceType*, ResourceType::Changes);
+    static void notifySettingsChanged(ResourceType*, ResourceType::Changes, CalEvent::Types oldEnabled);
 
     /** Called by a resource when a user message should be displayed.
      *  This will cause the resourceMessage() signal to be emitted.
