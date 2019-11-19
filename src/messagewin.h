@@ -43,6 +43,7 @@ class PushButton;
 class MessageText;
 class QCheckBox;
 class QLabel;
+class QTemporaryFile;
 class DeferAlarmDlg;
 class EditAlarmDlg;
 class ShellProcess;
@@ -169,6 +170,7 @@ class MessageWin : public MainWindowBase
         KAEvent             mEvent;                  // the whole event, for updating the calendar file
         KAEvent             mOriginalEvent;          // the original event supplied to the constructor
         Resource            mResource;               // resource which the event comes/came from
+        QTemporaryFile*     mTempFile{nullptr};      // temporary file used to display image/HTML
         QLabel*             mTimeLabel{nullptr};     // trigger time label
         QLabel*             mRemainingText{nullptr}; // the remaining time (for a reminder window)
         PushButton*         mOkButton;

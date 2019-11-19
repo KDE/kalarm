@@ -1,9 +1,10 @@
 KAlarm Change Log
 
-=== Version 2.13.0 (KDE applications 19.12) --- 16 November 2019 ===
+=== Version 2.13.0 (KDE Applications 19.12) --- 19 November 2019 ===
 + Fix user not always being prompted to update new resource if in old format.
 + Terminate application after executing 'kalarm --list'.
 + Fix alarm type column being too wide in alarm template list.
++ Fix failure to display image when alarm is configured to display an image file.
 + Refactor to use generic resource classes.
 
 === Version 2.12.8 (KDE Applications 19.08.3) --- 16 October 2019 ===

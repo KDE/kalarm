@@ -320,6 +320,7 @@ MessageWin::~MessageWin()
         mAudioThread->quit();
     mErrorMessages.remove(mEventId);
     mWindowList.removeAll(this);
+    delete mTempFile;
     if (!mRecreating)
     {
         if (!mNoPostAction  &&  !mEvent.postAction().isEmpty())
@@ -408,9 +409,24 @@ void MessageWin::initView()
                     {
                         opened = true;
                         const QByteArray data = job->data();
-                        QTemporaryFile tmpFile;
-                        tmpFile.write(data);
-                        tmpFile.seek(0);
+
+                        QMimeDatabase db;
+                        QMimeType mime = db.mimeTypeForUrl(url);
+                        if (mime.name() == QLatin1String("application/octet-stream"))
+                            mime = db.mimeTypeForData(mTempFile);
+                        const KAlarm::FileType fileType = KAlarm::fileType(mime);
+                        switch (fileType)
+                        {
+                            case KAlarm::Image:
+                            case KAlarm::TextFormatted:
+                                delete mTempFile;
+                                mTempFile = new QTemporaryFile;
+                                mTempFile->open();
+                                mTempFile->write(data);
+                                break;
+                            default:
+                                break;
+                        }
 
                         QTextBrowser* view = new QTextBrowser(topWidget);
                         view->setFrameStyle(QFrame::NoFrame);
@@ -420,17 +436,17 @@ void MessageWin::initView()
                         view->viewport()->setPalette(pal);
                         view->setTextColor(mFgColour);
                         view->setCurrentFont(mFont);
-                        QMimeDatabase db;
-                        QMimeType mime = db.mimeTypeForUrl(url);
-                        if (mime.name() == QLatin1String("application/octet-stream"))
-                            mime = db.mimeTypeForData(&tmpFile);
-                        switch (KAlarm::fileType(mime))
+
+                        switch (fileType)
                         {
                             case KAlarm::Image:
-                                view->setHtml(QLatin1String("<img source=\"") + tmpFile.fileName() + QLatin1String("\">"));
+                                view->setHtml(QLatin1String("<div align=\"center\"><img src=\"") + mTempFile->fileName() + QLatin1String("\"></div>"));
+                                mTempFile->close();   // keep the file available to be displayed
                                 break;
                             case KAlarm::TextFormatted:
-                                view->QTextBrowser::setSource(QUrl::fromLocalFile(tmpFile.fileName()));   //krazy:exclude=qclasses
+                                view->QTextBrowser::setSource(QUrl::fromLocalFile(mTempFile->fileName()));   //krazy:exclude=qclasses
+                                delete mTempFile;
+                                mTempFile = nullptr;
                                 break;
                             default:
                             {
@@ -1848,6 +1864,8 @@ void MessageWin::frameDrawn()
 */
 void MessageWin::displayComplete()
 {
+    delete mTempFile;
+    mTempFile = nullptr;
     playAudio();
     if (mRescheduleEvent)
         alarmShowing(mEvent);
