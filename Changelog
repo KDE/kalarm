@@ -5,6 +5,7 @@ KAlarm Change Log
 + Terminate application after executing 'kalarm --list'.
 + Fix alarm type column being too wide in alarm template list.
 + Fix failure to display image when alarm is configured to display an image file.
++ Fix failure to set no-autostart for non-KDE desktops, if no autostart directory exists.
 + Refactor to use generic resource classes.
 
 === Version 2.12.8 (KDE Applications 19.08.3) --- 16 October 2019 ===

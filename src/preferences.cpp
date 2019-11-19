@@ -170,10 +170,12 @@ void Preferences::setNoAutoStart(bool yes)
 
     // If the existing file isn't writable, find the path to create a writable copy
     QString autostartFileRW = autostartFile;
+    QString configDirRW;
     if (existingRO)
     {
-        autostartFileRW = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation) + QLatin1String("/autostart/") + AUTOSTART_FILE;
-        if (autostartFileRW.isEmpty())
+        configDirRW = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation);
+        autostartFileRW = configDirRW + QLatin1String("/autostart/") + AUTOSTART_FILE;
+        if (configDirRW.isEmpty())
         {
             qCWarning(KALARM_LOG) << "Preferences::setNoAutoStart: No writable autostart file path";
             return;
@@ -231,6 +233,16 @@ void Preferences::setNoAutoStart(bool yes)
     if (update)
     {
         // Write the updated file
+        QFileInfo info(configDirRW + QLatin1String("/autostart"));
+        if (!info.exists())
+        {
+            // First, create the directory for it.
+            if (!QDir(configDirRW).mkdir(QStringLiteral("autostart")))
+            {
+                qCWarning(KALARM_LOG) << "Preferences::setNoAutoStart: Error creating autostart file directory:" << info.filePath();
+                return;
+            }
+        }
         QFile file(autostartFileRW);
         if (!file.open(QIODevice::WriteOnly))
         {
