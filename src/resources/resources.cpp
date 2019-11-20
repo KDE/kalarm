@@ -57,25 +57,6 @@ Resource Resources::resource(ResourceId id)
 }
 
 /******************************************************************************
-* Return all resources which contain a specified alarm type.
-*/
-QVector<Resource> Resources::allResources(CalEvent::Type type)
-{
-    const CalEvent::Types types = (type == CalEvent::EMPTY)
-                                ? CalEvent::ACTIVE | CalEvent::ARCHIVED | CalEvent::TEMPLATE
-                                : type;
-
-    QVector<Resource> result;
-    for (auto it = mResources.constBegin();  it != mResources.constEnd();  ++it)
-    {
-        const Resource& res = it.value();
-        if (res.alarmTypes() & types)
-            result += res;
-    }
-    return result;
-}
-
-/******************************************************************************
 * Return the resources which are enabled for a specified alarm type.
 * If 'writable' is true, only writable resources are included.
 */

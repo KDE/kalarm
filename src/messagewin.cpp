@@ -449,10 +449,8 @@ void MessageWin::initView()
                                 mTempFile = nullptr;
                                 break;
                             default:
-                            {
                                 view->setPlainText(QString::fromUtf8(data));
                                 break;
-                            }
                         }
                         view->setMinimumSize(view->sizeHint());
                         topLayout->addWidget(view);

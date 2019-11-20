@@ -130,7 +130,7 @@ void AkonadiResourceCreator::agentInstanceCreated(KJob* j)
 
     if (result)
     {
-        const QVector<Resource> resources = Resources::allResources();
+        const QVector<Resource> resources = Resources::allResources<AkonadiResource>();
         QPointer<AgentConfigurationDialog> dlg = new AgentConfigurationDialog(mAgentInstance, mParent);
         result = (dlg->exec() == QDialog::Accepted);
         delete dlg;

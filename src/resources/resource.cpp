@@ -230,9 +230,9 @@ bool Resource::save(bool writeThroughCache)
     return mResource.isNull() ? false : mResource->save(writeThroughCache);
 }
 
-bool Resource::close()
+bool Resource::isSaving() const
 {
-    return mResource.isNull() ? false : mResource->close();
+    return mResource.isNull() ? false : mResource->isSaving();
 }
 
 QList<KAEvent> Resource::events() const

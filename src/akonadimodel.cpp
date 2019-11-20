@@ -430,7 +430,7 @@ bool AkonadiModel::reloadResource(const Resource& resource)
 }
 
 /******************************************************************************
-* Reload a collection from Akonadi storage. The backend data is not reloaded.
+* Reload all collections from Akonadi storage. The backend data is not reloaded.
 */
 void AkonadiModel::reload()
 {

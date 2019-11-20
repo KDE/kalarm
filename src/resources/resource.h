@@ -280,15 +280,8 @@ public:
      */
     bool save(bool writeThroughCache = true);
 
-    /** Close the resource, without saving it.
-     *  If the resource is currently being saved, it will be closed automatically
-     *  once the save has completed.
-     *
-     *  Derived classes must implement closing in doClose().
-     *
-     *  @return true if closed, false if waiting for a save to complete.
-     */
-    bool close();
+    /** Return whether the resource is waiting for a save() to complete. */
+    bool isSaving() const;
 
     /** Return all events belonging to this resource. */
     QList<KAEvent> events() const;
@@ -356,7 +349,10 @@ inline uint qHash(const Resource& resource, uint seed)
     return qHash(resource.mResource.data(), seed);
 }
 
-/*****************************************************************************/
+
+/*=============================================================================
+* Template definitions.
+*============================================================================*/
 
 template <class Type> bool Resource::is() const
 {

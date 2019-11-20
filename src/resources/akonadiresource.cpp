@@ -424,20 +424,6 @@ bool AkonadiResource::save(bool writeThroughCache)
 #endif
 
 /******************************************************************************
-* Close the resource.
-*/
-bool AkonadiResource::close()
-{
-    qCDebug(KALARM_LOG) << "AkonadiResource::close:" << displayName();
-    mCollection.setId(-1);
-    mCollectionAttribute     = CollectionAttribute();
-    mValid                   = false;
-    mHaveCollectionAttribute = false;
-    mNewEnabled              = false;
-    return true;
-}
-
-/******************************************************************************
 * Add an event to the resource, and add it to Akonadi.
 */
 bool AkonadiResource::addEvent(const KAEvent& event)

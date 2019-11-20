@@ -300,15 +300,8 @@ public:
      */
     virtual bool save(bool writeThroughCache = true) = 0;
 
-    /** Close the resource, without saving it.
-     *  If the resource is currently being saved, it will be closed automatically
-     *  once the save has completed.
-     *
-     *  Derived classes must implement closing in doClose().
-     *
-     *  @return true if closed, false if waiting for a save to complete.
-     */
-    virtual bool close() = 0;
+    /** Return whether the resource is waiting for a save() to complete. */
+    virtual bool isSaving() const   { return false; }
 
     /** Return all events belonging to this resource, for enabled alarm types. */
     QList<KAEvent> events() const;
@@ -390,6 +383,7 @@ protected:
     void setDeletedEvents(const QList<KAEvent>& events);
 
     void setLoaded(bool loaded) const;
+
     QString storageTypeStr(bool description, bool file, bool local) const;
     template <class T> static T* resource(Resource&);
     template <class T> static const T* resource(const Resource&);
@@ -398,13 +392,16 @@ private:
     static ResourceType* data(Resource&);
     static const ResourceType* data(const Resource&);
 
-    QHash<QString, KAEvent> mEvents;    // all events in the resource, indexed by ID
+    QHash<QString, KAEvent> mEvents;    // all events (of ALL types) in the resource, indexed by ID
     ResourceId   mId{-1};               // resource's ID, which can't be changed
     mutable bool mLoaded{false};        // the resource has finished loading
     bool         mBeingDeleted{false};  // the resource is currently being deleted
 };
 
-/*****************************************************************************/
+
+/*=============================================================================
+* Template definitions.
+*============================================================================*/
 
 template <class T> T* ResourceType::resource(Resource& res)
 {
