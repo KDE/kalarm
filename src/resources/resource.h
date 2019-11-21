@@ -267,7 +267,7 @@ public:
 #endif
 
     /** Return whether the resource has fully loaded. */
-    bool isLoaded() const;
+    bool isPopulated() const;
 
     /** Save the resource.
      *  Saving is not performed if the resource is disabled.

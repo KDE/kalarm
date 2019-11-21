@@ -244,7 +244,6 @@ private:
     static void removeResource(ResourceId);
 
     static void checkResourcesPopulated();
-    static bool isLoaded(ResourceId);
 
     static Resources*                  mInstance;    // the unique instance
     static QHash<ResourceId, Resource> mResources;   // contains all ResourceType instances with an ID

@@ -162,7 +162,7 @@ QUrl AkonadiResource::location() const
 
 QString AkonadiResource::displayLocation() const
 {
-    // Don't simply use remoteId() since that may contain "file://" prefix.
+    // Don't simply use remoteId() since that may contain "file://" prefix, and percent encoding.
     return location().toDisplayString(QUrl::PrettyDecoded | QUrl::PreferLocalFile);
 }
 
@@ -399,9 +399,9 @@ bool AkonadiResource::load(bool readThroughCache)
     return true;
 }
 
-bool AkonadiResource::isLoaded() const
+bool AkonadiResource::isPopulated() const
 {
-    if (!ResourceType::isLoaded())
+    if (!ResourceType::isPopulated())
     {
         const QModelIndex ix = AkonadiModel::instance()->resourceIndex(mCollection.id());
         if (!ix.data(AkonadiModel::IsPopulatedRole).toBool())

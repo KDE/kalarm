@@ -234,7 +234,7 @@ public:
 #endif
 
     /** Return whether the resource has fully loaded. */
-    bool isLoaded() const override;
+    bool isPopulated() const override;
 
     /** Save the resource.
      *  Not applicable to AkonadiResource, since AkonadiModel handles saving

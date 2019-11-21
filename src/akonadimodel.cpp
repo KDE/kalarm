@@ -627,7 +627,7 @@ void AkonadiModel::slotRowsInserted(const QModelIndex& parent, int start, int en
                     // Only notify new events if the collection is already populated.
                     // If not populated, all events will be notified when it is
                     // eventually populated.
-                    if (res.isLoaded())
+                    if (res.isPopulated())
                         events[res] += evnt;
                     mEventIds[evnt.id()] = EventIds(item.parentCollection().id(), item.id());
                 }

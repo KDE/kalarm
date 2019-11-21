@@ -2391,7 +2391,7 @@ bool KAlarmApp::waitUntilPopulated(ResourceId id, int timeout)
     qCDebug(KALARM_LOG) << "KAlarmApp::waitUntilPopulated" << id;
     const Resource res = Resources::resource(id);
     if ((id <  0 && !Resources::allPopulated())
-    ||  (id >= 0 && !res.isLoaded()))
+    ||  (id >= 0 && !res.isPopulated()))
     {
         // Use AutoQPointer to guard against crash on application exit while
         // the event loop is still running. It prevents double deletion (both
@@ -2412,7 +2412,7 @@ bool KAlarmApp::waitUntilPopulated(ResourceId id, int timeout)
             QTimer::singleShot(timeout * 1000, loop, &QEventLoop::quit);
         loop->exec();
     }
-    return (id <  0) ? Resources::allPopulated() : res.isLoaded();
+    return (id <  0) ? Resources::allPopulated() : res.isPopulated();
 }
 
 /******************************************************************************

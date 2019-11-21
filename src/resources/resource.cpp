@@ -220,9 +220,9 @@ bool Resource::load(bool readThroughCache)
     return mResource.isNull() ? false : mResource->load(readThroughCache);
 }
 
-bool Resource::isLoaded() const
+bool Resource::isPopulated() const
 {
-    return mResource.isNull() ? false : mResource->isLoaded();
+    return mResource.isNull() ? false : mResource->isPopulated();
 }
 
 bool Resource::save(bool writeThroughCache)
