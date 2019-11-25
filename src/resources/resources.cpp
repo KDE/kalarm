@@ -57,25 +57,6 @@ Resource Resources::resource(ResourceId id)
 }
 
 /******************************************************************************
-* Return all resources which contain a specified alarm type.
-*/
-QVector<Resource> Resources::allResources(CalEvent::Type type)
-{
-    const CalEvent::Types types = (type == CalEvent::EMPTY)
-                                ? CalEvent::ACTIVE | CalEvent::ARCHIVED | CalEvent::TEMPLATE
-                                : type;
-
-    QVector<Resource> result;
-    for (auto it = mResources.constBegin();  it != mResources.constEnd();  ++it)
-    {
-        const Resource& res = it.value();
-        if (res.alarmTypes() & types)
-            result += res;
-    }
-    return result;
-}
-
-/******************************************************************************
 * Return the resources which are enabled for a specified alarm type.
 * If 'writable' is true, only writable resources are included.
 */
@@ -583,7 +564,7 @@ void Resources::checkResourcesPopulated()
         // Check whether all resources have now loaded at least once.
         for (auto it = mResources.constBegin();  it != mResources.constEnd();  ++it)
         {
-            if (!it.value().isLoaded())
+            if (!it.value().isPopulated())
                 return;
         }
         mPopulated = true;
@@ -591,26 +572,28 @@ void Resources::checkResourcesPopulated()
     }
 }
 
+#if 0
 /******************************************************************************
 * Return whether one or all enabled collections have been loaded.
 */
-bool Resources::isLoaded(ResourceId id)
+bool Resources::isPopulated(ResourceId id)
 {
     if (id >= 0)
     {
         const Resource res = resource(id);
-        return res.isLoaded()
+        return res.isPopulated()
            ||  res.enabledTypes() == CalEvent::EMPTY;
     }
 
     for (auto it = mResources.constBegin();  it != mResources.constEnd();  ++it)
     {
         const Resource& res = it.value();
-        if (!res.isLoaded()
+        if (!res.isPopulated()
         &&  res.enabledTypes() != CalEvent::EMPTY)
             return false;
     }
     return true;
 }
+#endif
 
 // vim: et sw=4:

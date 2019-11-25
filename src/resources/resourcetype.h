@@ -41,18 +41,24 @@ public:
     /** The type of storage used by a resource. */
     enum StorageType  { NoStorage, File, Directory };
 
-    /** Settings change types. */
+    /** Settings change types. These may be combined.
+     *  @note  A resource's location is not allowed to change, except by
+     *         deleting the resource and creating another resource with the new
+     *         location. (Note that Akonadi resources do actually allow
+     *         location change, but this is handled internally by Akonadi and
+     *         has no impact on clients.)
+     */
     enum Change
     {
         NoChange         = 0,
-        Name             = 0x01,
-        AlarmTypes       = 0x02,
-        Enabled          = 0x04,
-        Standard         = 0x08,
-        ReadOnly         = 0x10,
-        KeepFormat       = 0x20,
-        UpdateFormat     = 0x40,
-        BackgroundColour = 0x80
+        Name             = 0x01,   //!< The resource's display name.
+        AlarmTypes       = 0x02,   //!< Alarm types contained in the resource.
+        Enabled          = 0x04,   //!< Alarm types which are enabled.
+        Standard         = 0x08,   //!< Alarm types which the resource is standard for.
+        ReadOnly         = 0x10,   //!< The resource's read-only setting.
+        KeepFormat       = 0x20,   //!< Whether the user has chosen not to convert to the current KAlarm format.
+        UpdateFormat     = 0x40,   //!< The resource should now be converted to the current KAlarm format.
+        BackgroundColour = 0x80    //!< The background colour to display the resource.
     };
     Q_DECLARE_FLAGS(Changes, Change)
 
@@ -286,8 +292,11 @@ public:
     virtual bool reload() = 0;
 #endif
 
-    /** Return whether the resource has fully loaded. */
-    virtual bool isLoaded() const   { return mLoaded; }
+    /** Return whether the resource has fully loaded.
+     *  Once loading completes after the resource has initialised, this should
+     *  always return true.
+     */
+    virtual bool isPopulated() const   { return mLoaded; }
 
     /** Save the resource.
      *  Saving is not performed if the resource is disabled.
@@ -300,15 +309,8 @@ public:
      */
     virtual bool save(bool writeThroughCache = true) = 0;
 
-    /** Close the resource, without saving it.
-     *  If the resource is currently being saved, it will be closed automatically
-     *  once the save has completed.
-     *
-     *  Derived classes must implement closing in doClose().
-     *
-     *  @return true if closed, false if waiting for a save to complete.
-     */
-    virtual bool close() = 0;
+    /** Return whether the resource is waiting for a save() to complete. */
+    virtual bool isSaving() const   { return false; }
 
     /** Return all events belonging to this resource, for enabled alarm types. */
     QList<KAEvent> events() const;
@@ -389,7 +391,9 @@ protected:
     /** To be called when events have been deleted, to delete them from the resource's list. */
     void setDeletedEvents(const QList<KAEvent>& events);
 
+    /** To be called when the loaded status of the resource has changed. */
     void setLoaded(bool loaded) const;
+
     QString storageTypeStr(bool description, bool file, bool local) const;
     template <class T> static T* resource(Resource&);
     template <class T> static const T* resource(const Resource&);
@@ -398,13 +402,16 @@ private:
     static ResourceType* data(Resource&);
     static const ResourceType* data(const Resource&);
 
-    QHash<QString, KAEvent> mEvents;    // all events in the resource, indexed by ID
+    QHash<QString, KAEvent> mEvents;    // all events (of ALL types) in the resource, indexed by ID
     ResourceId   mId{-1};               // resource's ID, which can't be changed
     mutable bool mLoaded{false};        // the resource has finished loading
     bool         mBeingDeleted{false};  // the resource is currently being deleted
 };
 
-/*****************************************************************************/
+
+/*=============================================================================
+* Template definitions.
+*============================================================================*/
 
 template <class T> T* ResourceType::resource(Resource& res)
 {

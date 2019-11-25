@@ -53,10 +53,12 @@ public:
      */
     static bool removeResource(Resource&);
 
-    /** Return all resources which contain a specified alarm type.
-     *  @param type  Alarm type to check for, or CalEvent::EMPTY for any type.
+    /** Return all resources of a kind which contain a specified alarm type.
+     *  @tparam Type       Resource type to fetch, default = all types.
+     *  @param  alarmType  Alarm type to check for, or CalEvent::EMPTY for any type.
      */
-    static QVector<Resource> allResources(CalEvent::Type type = CalEvent::EMPTY);
+    template <class Type = ResourceType>
+    static QVector<Resource> allResources(CalEvent::Type alarmType = CalEvent::EMPTY);
 
     /** Return the enabled resources which contain a specified alarm type.
      *  @param type      Alarm type to check for, or CalEvent::EMPTY for any type.
@@ -242,7 +244,6 @@ private:
     static void removeResource(ResourceId);
 
     static void checkResourcesPopulated();
-    static bool isLoaded(ResourceId);
 
     static Resources*                  mInstance;    // the unique instance
     static QHash<ResourceId, Resource> mResources;   // contains all ResourceType instances with an ID
@@ -253,7 +254,26 @@ private:
 };
 
 
-/*===========================================================================*/
+/*=============================================================================
+* Template definitions.
+*============================================================================*/
+
+template <class Type>
+QVector<Resource> Resources::allResources(CalEvent::Type type)
+{
+    const CalEvent::Types types = (type == CalEvent::EMPTY)
+                                ? CalEvent::ACTIVE | CalEvent::ARCHIVED | CalEvent::TEMPLATE
+                                : type;
+
+    QVector<Resource> result;
+    for (auto it = mResources.constBegin();  it != mResources.constEnd();  ++it)
+    {
+        const Resource& res = it.value();
+        if (res.is<Type>()  &&  (res.alarmTypes() & types))
+            result += res;
+    }
+    return result;
+}
 
 template <class DataModel>
 Resource Resources::destination(CalEvent::Type type, QWidget* promptParent, bool noPrompt, bool* cancelled)

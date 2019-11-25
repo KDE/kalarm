@@ -271,9 +271,12 @@ void ResourceType::setDeletedEvents(const QList<KAEvent>& events)
 
 void ResourceType::setLoaded(bool loaded) const
 {
-    mLoaded = loaded;
-    if (loaded)
-        Resources::notifyResourcePopulated(this);
+    if (loaded != mLoaded)
+    {
+        mLoaded = loaded;
+        if (loaded)
+            Resources::notifyResourcePopulated(this);
+    }
 }
 
 QString ResourceType::storageTypeStr(bool description, bool file, bool local) const

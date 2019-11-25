@@ -519,7 +519,7 @@ void ResourceSelector::showInfo()
         if (altypes & CalEvent::TEMPLATE)
             alarmTypes << i18nc("@info", "Alarm templates");
         const QString alarmTypeString = alarmTypes.join(i18nc("@info List separator", ", "));
-        QString perms = AkonadiModel::readOnlyTooltip(resource);
+        QString perms = ResourceDataModelBase::readOnlyTooltip(resource);
         if (perms.isEmpty())
             perms = i18nc("@info", "Read-write");
         const QString enabled = resource.isEnabled(alarmType)

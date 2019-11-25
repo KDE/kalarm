@@ -162,7 +162,7 @@ QUrl AkonadiResource::location() const
 
 QString AkonadiResource::displayLocation() const
 {
-    // Don't simply use remoteId() since that may contain "file://" prefix.
+    // Don't simply use remoteId() since that may contain "file://" prefix, and percent encoding.
     return location().toDisplayString(QUrl::PrettyDecoded | QUrl::PreferLocalFile);
 }
 
@@ -399,9 +399,9 @@ bool AkonadiResource::load(bool readThroughCache)
     return true;
 }
 
-bool AkonadiResource::isLoaded() const
+bool AkonadiResource::isPopulated() const
 {
-    if (!ResourceType::isLoaded())
+    if (!ResourceType::isPopulated())
     {
         const QModelIndex ix = AkonadiModel::instance()->resourceIndex(mCollection.id());
         if (!ix.data(AkonadiModel::IsPopulatedRole).toBool())
@@ -422,20 +422,6 @@ bool AkonadiResource::save(bool writeThroughCache)
         /** Reload the resource. Any cached data is first discarded. */
         bool reload() override;
 #endif
-
-/******************************************************************************
-* Close the resource.
-*/
-bool AkonadiResource::close()
-{
-    qCDebug(KALARM_LOG) << "AkonadiResource::close:" << displayName();
-    mCollection.setId(-1);
-    mCollectionAttribute     = CollectionAttribute();
-    mValid                   = false;
-    mHaveCollectionAttribute = false;
-    mNewEnabled              = false;
-    return true;
-}
 
 /******************************************************************************
 * Add an event to the resource, and add it to Akonadi.

@@ -234,7 +234,7 @@ public:
 #endif
 
     /** Return whether the resource has fully loaded. */
-    bool isLoaded() const override;
+    bool isPopulated() const override;
 
     /** Save the resource.
      *  Not applicable to AkonadiResource, since AkonadiModel handles saving
@@ -242,16 +242,6 @@ public:
      *  @return true.
      */
     bool save(bool writeThroughCache = true) override;
-
-    /** Close the resource, without saving it.
-     *  If the resource is currently being saved, it will be closed automatically
-     *  once the save has completed.
-     *
-     *  Derived classes must implement closing in doClose().
-     *
-     *  @return true if closed, false if waiting for a save to complete.
-     */
-    bool close() override;
 
     /** Add an event to the resource, and add it to Akonadi. */
     bool addEvent(const KAEvent&) override;
