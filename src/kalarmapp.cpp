@@ -2089,7 +2089,7 @@ ShellProcess* KAlarmApp::doShellCommand(const QString& command, const KAEvent& e
             if (alarm  &&  alarm->dateTime().isValid())
             {
                 const QString dateTime = alarm->dateTime().formatLocale();
-                heading.sprintf("\n******* KAlarm %s *******\n", dateTime.toLatin1().data());
+                heading = QStringLiteral("\n******* KAlarm %1 *******\n").arg(dateTime);
             }
             else
                 heading = QStringLiteral("\n******* KAlarm *******\n");
