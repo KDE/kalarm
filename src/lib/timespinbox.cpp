@@ -240,22 +240,14 @@ QSize TimeSpinBox::sizeHint() const
 {
     QSize sz = SpinBox2::sizeHint();
     QFontMetrics fm(font());
-#if QT_VERSION >= QT_VERSION_CHECK(5, 11, 0)
     return QSize(sz.width() + fm.horizontalAdvance(QLatin1Char(':')), sz.height());
-#else
-    return QSize(sz.width() + fm.width(QLatin1Char(':')), sz.height());
-#endif
 }
 
 QSize TimeSpinBox::minimumSizeHint() const
 {
     QSize sz = SpinBox2::minimumSizeHint();
     QFontMetrics fm(font());
-#if QT_VERSION >= QT_VERSION_CHECK(5, 11, 0)
     return QSize(sz.width() + fm.horizontalAdvance(QLatin1Char(':')), sz.height());
-#else
-    return QSize(sz.width() + fm.width(QLatin1Char(':')), sz.height());
-#endif
 }
 
 /******************************************************************************

@@ -42,7 +42,6 @@
 #include <AkonadiCore/itemfetchjob.h>
 #include <AkonadiCore/itemfetchscope.h>
 
-#include <kwindowsystem_version.h>
 #include <KAboutData>
 #include <kstandardguiitem.h>
 #include <KLocalizedString>
@@ -2020,12 +2019,8 @@ void MessageWin::slotEdit()
     qCDebug(KALARM_LOG) << "MessageWin::slotEdit";
     MainWindow* mainWin = MainWindow::mainMainWindow();
     mEditDlg = EditAlarmDlg::create(false, &mOriginalEvent, false, mainWin, EditAlarmDlg::RES_IGNORE);
-#if KWINDOWSYSTEM_VERSION >= QT_VERSION_CHECK(5,62,0)
     mEditDlg->setAttribute(Qt::WA_NativeWindow, true);
     KWindowSystem::setMainWindow(mEditDlg->windowHandle(), winId());
-#else
-    KWindowSystem::setMainWindow(mEditDlg, winId());
-#endif
     KWindowSystem::setOnAllDesktops(mEditDlg->winId(), false);
     setButtonsReadOnly(true);
     connect(mEditDlg, &QDialog::accepted, this, &MessageWin::editCloseOk);
