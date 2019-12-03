@@ -1170,10 +1170,10 @@ bool MessageWin::reinstateFromDisplaying(const Event::Ptr& kcalEvent, KAEvent& e
 {
     if (!kcalEvent)
         return false;
-    Akonadi::Collection::Id collectionId;
-    event.reinstateFromDisplaying(kcalEvent, collectionId, showEdit, showDefer);
-    event.setCollectionId(collectionId);
-    resource = Resources::resource(collectionId);
+    ResourceId resourceId;
+    event.reinstateFromDisplaying(kcalEvent, resourceId, showEdit, showDefer);
+    event.setCollectionId(resourceId);
+    resource = Resources::resource(resourceId);
     qCDebug(KALARM_LOG) << "MessageWin::reinstateFromDisplaying:" << EventId(event) << ": success";
     return true;
 }

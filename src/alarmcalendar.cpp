@@ -44,14 +44,13 @@
 #include <QStandardPaths>
 #include <QFileDialog>
 
-using namespace Akonadi;
 using namespace KCalendarCore;
 using namespace KAlarmCal;
 
 static KACalendar::Compat fix(const KCalendarCore::FileStorage::Ptr&);
 
 static const QString displayCalendarName = QStringLiteral("displaying.ics");
-static const Collection::Id DISPLAY_COL_ID = -1;   // resource ID used for displaying calendar
+static const ResourceId DISPLAY_COL_ID = -1;   // resource ID used for displaying calendar
 
 AlarmCalendar* AlarmCalendar::mResourcesCalendar = nullptr;
 AlarmCalendar* AlarmCalendar::mDisplayCalendar = nullptr;
@@ -405,7 +404,7 @@ void AlarmCalendar::updateDisplayKAEvents()
     if (mCalType == RESOURCES)
         return;
     qCDebug(KALARM_LOG) << "AlarmCalendar::updateDisplayKAEvents";
-    const Collection::Id key = DISPLAY_COL_ID;
+    const ResourceId key = DISPLAY_COL_ID;
     KAEvent::List& events = mResourceMap[key];
     for (KAEvent* event : events)
     {
@@ -444,7 +443,7 @@ void AlarmCalendar::updateDisplayKAEvents()
 * Called after the calendar is deleted or alarm types have been disabled, or
 * the AlarmCalendar is closed.
 */
-void AlarmCalendar::removeKAEvents(Collection::Id key, bool closing, CalEvent::Types types)
+void AlarmCalendar::removeKAEvents(ResourceId key, bool closing, CalEvent::Types types)
 {
     bool removed = false;
     ResourceMap::Iterator rit = mResourceMap.find(key);
@@ -917,7 +916,7 @@ bool AlarmCalendar::addEvent(KAEvent& evnt, QWidget* promptParent, bool useEvent
         }
     }
 
-    Collection::Id key = resource.id();
+    ResourceId key = resource.id();
     Event::Ptr kcalEvent((mCalType == RESOURCES) ? (Event*)nullptr : new Event);
     KAEvent* event = new KAEvent(evnt);
     QString id = event->id();
@@ -1008,7 +1007,7 @@ bool AlarmCalendar::addEvent(KAEvent& evnt, QWidget* promptParent, bool useEvent
 */
 void AlarmCalendar::addNewEvent(const Resource& resource, KAEvent* event, bool replace)
 {
-    const Collection::Id key = resource.id();
+    const ResourceId key = resource.id();
     event->setCollectionId(key);
     if (!replace)
     {
@@ -1197,7 +1196,7 @@ CalEvent::Type AlarmCalendar::deleteEventInternal(const QString& eventID, const 
     Event::Ptr kcalEvent;
     if (mCalendarStorage)
         kcalEvent = mCalendarStorage->calendar()->event(id);
-    const Collection::Id key = resource.id();
+    const ResourceId key = resource.id();
     KAEventMap::Iterator it = mEventMap.find(EventId(key, id));
     if (it != mEventMap.end())
     {
@@ -1309,7 +1308,7 @@ KAEvent::List AlarmCalendar::events(const QString& uniqueId) const
     {
         for (ResourceMap::ConstIterator rit = mResourceMap.constBegin();  rit != mResourceMap.constEnd();  ++rit)
         {
-            const Collection::Id id = rit.key();
+            const ResourceId id = rit.key();
             KAEventMap::ConstIterator it = mEventMap.constFind(EventId(id, uniqueId));
             if (it != mEventMap.constEnd())
                 list += it.value();
@@ -1329,7 +1328,7 @@ KAEvent::List AlarmCalendar::events(const Resource& resource, CalEvent::Types ty
         return list;
     if (resource.isValid())
     {
-        const Collection::Id key = resource.id();
+        const ResourceId key = resource.id();
         ResourceMap::ConstIterator rit = mResourceMap.constFind(key);
         if (rit == mResourceMap.constEnd())
             return list;
@@ -1465,7 +1464,7 @@ void AlarmCalendar::findEarliestAlarm(const Resource& resource)
     findEarliestAlarm(resource.id());
 }
 
-void AlarmCalendar::findEarliestAlarm(Akonadi::Collection::Id key)
+void AlarmCalendar::findEarliestAlarm(ResourceId key)
 {
     EarliestMap::Iterator eit = mEarliestAlarm.find(key);
     if (eit != mEarliestAlarm.end())

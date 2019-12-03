@@ -2342,7 +2342,7 @@ void KAlarmApp::commandMessage(ShellProcess* proc, QWidget* parent)
 * If this is the first time through, open the calendar file, and start
 * processing the execution queue.
 */
-bool KAlarmApp::initCheck(bool calendarOnly, bool waitForCollection, Akonadi::Collection::Id collectionId)
+bool KAlarmApp::initCheck(bool calendarOnly, bool waitForCollection, ResourceId resourceId)
 {
     static bool firstTime = true;
     if (firstTime)
@@ -2376,7 +2376,7 @@ bool KAlarmApp::initCheck(bool calendarOnly, bool waitForCollection, Akonadi::Co
     if (waitForCollection)
     {
         // Wait for one or all calendar resources to be populated
-        if (!waitUntilPopulated(collectionId, AKONADI_TIMEOUT))
+        if (!waitUntilPopulated(resourceId, AKONADI_TIMEOUT))
             return false;
     }
     return true;
