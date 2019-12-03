@@ -61,6 +61,11 @@ bool Resource::isValid() const
     return mResource.isNull() ? false : mResource->isValid();
 }
 
+bool Resource::failed() const
+{
+    return mResource.isNull() ? true : mResource->failed();
+}
+
 #if 0
 ResourceType::Ptr Resource::resource() const
 {
@@ -194,14 +199,29 @@ void Resource::configSetStandard(CalEvent::Types types)
         mResource->configSetStandard(types);
 }
 
+bool Resource::isCompatible() const
+{
+    return mResource.isNull() ? false : mResource->isCompatible();
+}
+
 KACalendar::Compat Resource::compatibility() const
 {
     return mResource.isNull() ? KACalendar::Incompatible : mResource->compatibility();
 }
 
-bool Resource::isCompatible() const
+KACalendar::Compat Resource::compatibilityVersion(QString& versionString) const
 {
-    return mResource.isNull() ? false : mResource->isCompatible();
+    if (mResource.isNull())
+    {
+        versionString.clear();
+        return KACalendar::Incompatible;
+    }
+    return mResource->compatibilityVersion(versionString);
+}
+
+bool Resource::updateStorageFormat()
+{
+    return mResource.isNull() ? false : mResource->updateStorageFormat();
 }
 
 void Resource::editResource(QWidget* dialogParent)

@@ -134,11 +134,11 @@ public:
     using ResourceType::isWritable;
 
     /** Return whether the user has chosen not to update the resource's
-     *  calendar storage formst. */
+     *  calendar storage format. */
     bool keepFormat() const override;
 
     /** Set or clear whether the user has chosen not to update the resource's
-     *  calendar storage formst. */
+     *  calendar storage format. */
     void setKeepFormat(bool keep) override;
 
     /** Return the background colour used to display alarms belonging to
@@ -209,8 +209,12 @@ public:
      *  current KAlarm format, in which case it cannot be written to.
      *  Note that isWritable() takes account of incompatible format
      *  as well as read-only and enabled statuses.
+     *  @param versionString  Receives calendar's KAlarm version as a string.
      */
-    KACalendar::Compat compatibility() const override;
+    KACalendar::Compat compatibilityVersion(QString& versionString) const override;
+
+    /** Update the resource to the current KAlarm storage format. */
+    bool updateStorageFormat() override;
 
     /** Edit the resource's configuration. */
     void editResource(QWidget* dialogParent) override;

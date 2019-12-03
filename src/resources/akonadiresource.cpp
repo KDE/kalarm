@@ -29,6 +29,7 @@
 #include <kalarmcal/akonadi.h>
 #include <kalarmcal/compatibilityattribute.h>
 #include <kalarmcal/eventattribute.h>
+#include <kalarmcal/version.h>
 
 #include <AkonadiCore/AgentManager>
 #include <AkonadiCore/ChangeRecorder>
@@ -329,14 +330,26 @@ void AkonadiResource::configSetStandard(CalEvent::Types types)
     modifyCollectionAttribute();
 }
 
-KACalendar::Compat AkonadiResource::compatibility() const
+KACalendar::Compat AkonadiResource::compatibilityVersion(QString& versionString) const
 {
+    versionString.clear();
     if (!mValid)
         return KACalendar::Incompatible;
     AkonadiModel::instance()->refresh(mCollection);    // update with latest data
     if (!mCollection.hasAttribute<CompatibilityAttribute>())
         return KACalendar::Incompatible;
-    return mCollection.attribute<CompatibilityAttribute>()->compatibility();
+    const CompatibilityAttribute* attr = mCollection.attribute<CompatibilityAttribute>();
+    versionString = KAlarmCal::getVersionString(attr->version());
+    return attr->compatibility();
+}
+
+/******************************************************************************
+* Update the resource to the current KAlarm storage format.
+*/
+bool AkonadiResource::updateStorageFormat()
+{
+//TODO: implement updateStorageFormat(): see CalendarMigrator::updateStorageFormat()
+    return false;
 }
 
 /******************************************************************************

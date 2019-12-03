@@ -79,8 +79,19 @@ public:
 
     virtual ~ResourceType() = 0;
 
-    /** Return whether the resource has a valid configuration. */
+    /** Return whether the resource has a valid configuration.
+     *  Note that the resource may be unusable even if it has a valid
+     *  configuration: see failed().
+     */
     virtual bool isValid() const = 0;
+
+    /** Return whether the resource has a fatal error.
+     *  Note that failed() will return true if the configuration is invalid
+     *  (i.e. isValid() returns false). It will also return true if some other
+     *  error prevents the resource being used, e.g. if the calendar file
+     *  cannot be created.
+     */
+    bool failed() const;
 
     /** Return the resource's unique ID. */
     ResourceId id() const    { return mId; }
@@ -172,11 +183,11 @@ public:
 #endif
 
     /** Return whether the user has chosen not to update the resource's
-     *  calendar storage formst. */
+     *  calendar storage format. */
     virtual bool keepFormat() const = 0;
 
     /** Set or clear whether the user has chosen not to update the resource's
-     *  calendar storage formst. */
+     *  calendar storage format. */
     virtual void setKeepFormat(bool keep) = 0;
 
     /** Return the background colour used to display alarms belonging to
@@ -250,15 +261,28 @@ public:
      */
     virtual void configSetStandard(CalEvent::Types types) = 0;
 
+    /** Return whether the resource is in the current KAlarm format.
+     *  @see compatibility(), compatibilityVersion()
+     */
+    bool isCompatible() const;
+
     /** Return whether the resource is in a different format from the
      *  current KAlarm format, in which case it cannot be written to.
      *  Note that isWritable() takes account of incompatible format
      *  as well as read-only and enabled statuses.
      */
-    virtual KACalendar::Compat compatibility() const = 0;
+    KACalendar::Compat compatibility() const;
 
-    /** Return whether the resource is in the current KAlarm format. */
-    bool isCompatible() const;
+    /** Return whether the resource is in a different format from the
+     *  current KAlarm format, in which case it cannot be written to.
+     *  Note that isWritable() takes account of incompatible format
+     *  as well as read-only and enabled statuses.
+     *  @param versionString  Receives calendar's KAlarm version as a string.
+     */
+    virtual KACalendar::Compat compatibilityVersion(QString& versionString) const = 0;
+
+    /** Update the resource to the current KAlarm storage format. */
+    virtual bool updateStorageFormat() = 0;
 
     /** Edit the resource's configuration. */
     virtual void editResource(QWidget* dialogParent) = 0;
@@ -394,6 +418,11 @@ protected:
     /** To be called when the loaded status of the resource has changed. */
     void setLoaded(bool loaded) const;
 
+    /** To be called if the resource has encountered a fatal error.
+     *  A fatal error is one that can never be recovered from.
+     */
+    void setFailed();
+
     QString storageTypeStr(bool description, bool file, bool local) const;
     template <class T> static T* resource(Resource&);
     template <class T> static const T* resource(const Resource&);
@@ -404,6 +433,7 @@ private:
 
     QHash<QString, KAEvent> mEvents;    // all events (of ALL types) in the resource, indexed by ID
     ResourceId   mId{-1};               // resource's ID, which can't be changed
+    bool         mFailed{false};        // the resource has a fatal error
     mutable bool mLoaded{false};        // the resource has finished loading
     bool         mBeingDeleted{false};  // the resource is currently being deleted
 };

@@ -37,6 +37,11 @@ ResourceType::~ResourceType()
 {
 }
 
+bool ResourceType::failed() const
+{
+    return mFailed  ||  !isValid();
+}
+
 bool ResourceType::isEnabled(CalEvent::Type type) const
 {
     return (type == CalEvent::EMPTY) ? enabledTypes() : enabledTypes() & type;
@@ -92,6 +97,12 @@ QColor ResourceType::foregroundColour(CalEvent::Types types) const
 bool ResourceType::isCompatible() const
 {
     return compatibility() == KACalendar::Current;
+}
+
+KACalendar::Compat ResourceType::compatibility() const
+{
+    QString versionString;
+    return compatibilityVersion(versionString);
 }
 
 /******************************************************************************
@@ -277,6 +288,11 @@ void ResourceType::setLoaded(bool loaded) const
         if (loaded)
             Resources::notifyResourcePopulated(this);
     }
+}
+
+void ResourceType::setFailed()
+{
+    mFailed = true;
 }
 
 QString ResourceType::storageTypeStr(bool description, bool file, bool local) const
