@@ -25,7 +25,7 @@
 #include "kadatetime.h"
 using KAlarmCal::KADateTime;
 
-#include <kconfiggroup.h>
+#include <KConfigGroup>
 
 #include <QtTest>
 #include <QTimeZone>

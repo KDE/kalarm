@@ -32,7 +32,7 @@ using namespace KCalendarCore;
 
 #include <KHolidays/HolidayRegion>
 using namespace KHolidays;
-#include <kconfiggroup.h>
+#include <KConfigGroup>
 
 #include <QtTest>
 
