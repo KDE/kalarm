@@ -29,9 +29,9 @@
 
 #include <kalarmcal/kaevent.h>
 
-#include <kfinddialog.h>
-#include <kfind.h>
-#include <kseparator.h>
+#include <KFindDialog>
+#include <KFind>
+#include <KSeparator>
 #include <kwindowsystem.h>
 #include <KLocalizedString>
 

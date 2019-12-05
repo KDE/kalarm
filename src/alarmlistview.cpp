@@ -23,8 +23,8 @@
 #include "resources/resourcedatamodelbase.h"
 #include "resources/eventmodel.h"
 
-#include <ksharedconfig.h>
-#include <kconfiggroup.h>
+#include <KSharedConfig>
+#include <KConfigGroup>
 
 #include <QHeaderView>
 #include <QMenu>

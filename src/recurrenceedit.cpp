@@ -45,8 +45,8 @@
 using namespace KCalendarCore;
 
 #include <KLocalizedString>
-#include <kmessagebox.h>
-#include <kdatecombobox.h>
+#include <KMessageBox>
+#include <KDateComboBox>
 
 #include <QHBoxLayout>
 #include <QPushButton>

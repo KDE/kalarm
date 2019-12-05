@@ -20,8 +20,8 @@
 
 #include "messagebox.h"
 
-#include <kconfiggroup.h>
-#include <ksharedconfig.h>
+#include <KConfigGroup>
+#include <KSharedConfig>
 
 
 QMap<QString, KMessageBox::ButtonCode> KAMessageBox::mContinueDefaults;

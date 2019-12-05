@@ -37,8 +37,8 @@
 #include "kalarm_debug.h"
 
 #include <KLocalizedString>
-#include <kactioncollection.h>
-#include <ktoggleaction.h>
+#include <KActionCollection>
+#include <KToggleAction>
 
 #include <QAction>
 #include <QLabel>

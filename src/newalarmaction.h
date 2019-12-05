@@ -22,7 +22,7 @@
 #define NEWALARMACTION_H
 
 #include "editdlg.h"
-#include <kactionmenu.h>
+#include <KActionMenu>
 #include <QMap>
 #include <QAction>
 class KActionCollection;

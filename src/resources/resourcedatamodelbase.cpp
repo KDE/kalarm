@@ -31,7 +31,7 @@
 #include <kalarmcal/kaevent.h>
 
 #include <KLocalizedString>
-#include <kcolorutils.h>
+#include <KColorUtils>
 
 #include <QModelIndex>
 #include <QUrl>

@@ -37,7 +37,7 @@
 #include <KIO/StatJob>
 #include <KIO/StoredTransferJob>
 #include <KJobWidgets>
-#include <kfileitem.h>
+#include <KFileItem>
 #include <KSharedConfig>
 
 #include <QTemporaryFile>

@@ -21,7 +21,7 @@
 #ifndef COLOURBUTTON_H
 #define COLOURBUTTON_H
 
-#include <kcolorbutton.h>
+#include <KColorButton>
 
 
 /**

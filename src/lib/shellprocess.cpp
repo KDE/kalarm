@@ -23,7 +23,7 @@
 #include "kalarm_debug.h"
 
 #include <KLocalizedString>
-#include <kauthorized.h>
+#include <KAuthorized>
 
 #include <qglobal.h>
 #include <qplatformdefs.h>

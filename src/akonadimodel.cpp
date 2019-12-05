@@ -48,7 +48,7 @@
 #include <AkonadiWidgets/agenttypedialog.h>
 
 #include <KLocalizedString>
-#include <kcolorutils.h>
+#include <KColorUtils>
 
 #include <QUrl>
 #include <QApplication>

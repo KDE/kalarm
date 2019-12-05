@@ -27,7 +27,7 @@
 
 #include <kalarmcal/kacalendar.h>
 
-#include <kcolorscheme.h>
+#include <KColorScheme>
 
 #include <QPainter>
 

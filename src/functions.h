@@ -27,7 +27,7 @@
 #include "eventid.h"
 
 #include <kalarmcal/kaevent.h>
-#include <kfile.h>
+#include <KFile>
 
 #include <QSize>
 #include <QString>

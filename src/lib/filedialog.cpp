@@ -25,7 +25,7 @@
 
 #include <KFileWidget>
 #include <KLocalizedString>
-#include <krecentdocument.h>
+#include <KRecentDocument>
 
 #include <QCheckBox>
 

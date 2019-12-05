@@ -25,7 +25,7 @@
 #include "colourbutton.h"
 #include "checkbox.h"
 
-#include <kfontchooser.h>
+#include <KFontChooser>
 
 #include <QGroupBox>
 #include <QPushButton>

@@ -24,8 +24,8 @@
 #include <kcontacts/vcarddrag.h>
 #include <KCalUtils/kcalutils/icaldrag.h>
 
-#include <kurlcompletion.h>
-#include <kshell.h>
+#include <KUrlCompletion>
+#include <KShell>
 
 #include <QUrl>
 #include <QRegExp>

@@ -23,7 +23,7 @@
 
 /** @file shellprocess.h - execute a process through the shell */
 
-#include <kprocess.h>
+#include <KProcess>
 #include <QQueue>
 #include <QByteArray>
 

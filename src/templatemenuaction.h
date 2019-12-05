@@ -21,7 +21,7 @@
 #ifndef TEMPLATEMENUACTION_H
 #define TEMPLATEMENUACTION_H
 
-#include <kactionmenu.h>
+#include <KActionMenu>
 #include <QIcon>
 #include <QMap>
 class QAction;

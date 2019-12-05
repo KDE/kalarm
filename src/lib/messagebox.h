@@ -21,8 +21,8 @@
 #ifndef MESSAGEBOX_H
 #define MESSAGEBOX_H
 
-#include <kstandardguiitem.h>
-#include <kmessagebox.h>
+#include <KStandardGuiItem>
+#include <KMessageBox>
 
 /**
  *  @short Enhanced KMessageBox.

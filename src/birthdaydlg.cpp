@@ -39,11 +39,11 @@
 #include <AkonadiCore/entitymimetypefiltermodel.h>
 
 #include <KLocalizedString>
-#include <kconfiggroup.h>
-#include <kmessagebox.h>
-#include <kstandardaction.h>
-#include <kactioncollection.h>
-#include <kdescendantsproxymodel.h>
+#include <KConfigGroup>
+#include <KMessageBox>
+#include <KStandardAction>
+#include <KActionCollection>
+#include <KDescendantsProxyModel>
 #include <KSharedConfig>
 
 #include <QAction>

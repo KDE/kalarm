@@ -53,17 +53,17 @@ using namespace KCalendarCore;
 #include <KIdentityManagement/kidentitymanagement/identity.h>
 #include <KHolidays/HolidayRegion>
 
-#include <kconfiggroup.h>
+#include <KConfigGroup>
 #include <KSharedConfig>
-#include <ktoggleaction.h>
-#include <kactioncollection.h>
+#include <KToggleAction>
+#include <KActionCollection>
 #include <KLocalizedString>
 #include <kauth.h>
-#include <kstandardguiitem.h>
-#include <kstandardshortcut.h>
+#include <KStandardGuiItem>
+#include <KStandardShortcut>
 #include <KIO/StatJob>
 #include <KJobWidgets>
-#include <kfileitem.h>
+#include <KFileItem>
 
 #include <QAction>
 #include <QDir>

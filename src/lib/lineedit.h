@@ -21,7 +21,7 @@
 #ifndef LINEEDIT_H
 #define LINEEDIT_H
 
-#include <klineedit.h>
+#include <KLineEdit>
 class QDragEnterEvent;
 class QFocusEvent;
 class QDropEvent;

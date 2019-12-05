@@ -57,18 +57,18 @@
 using namespace KCalendarCore;
 using namespace KCalUtils;
 #include <KAboutData>
-#include <ktoolbar.h>
+#include <KToolBar>
 #include <KActionCollection>
 #include <KGlobalAccel>
-#include <kstandardaction.h>
+#include <KStandardAction>
 #include <KLocalizedString>
 #include <KSharedConfig>
-#include <kconfiggroup.h>
-#include <kshortcutsdialog.h>
-#include <kedittoolbar.h>
-#include <kxmlguifactory.h>
-#include <ktoggleaction.h>
-#include <ktoolbarpopupaction.h>
+#include <KConfigGroup>
+#include <KShortcutsDialog>
+#include <KEditToolBar>
+#include <KXMLGUIFactory>
+#include <KToggleAction>
+#include <KToolBarPopupAction>
 
 #include <QAction>
 #include <QLocale>

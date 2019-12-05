@@ -36,14 +36,14 @@
 
 #include <kalarmcal/alarmtext.h>
 
-#include <kactioncollection.h>
-#include <ktoggleaction.h>
+#include <KActionCollection>
+#include <KToggleAction>
 #include <KLocalizedString>
-#include <kmessagebox.h>
-#include <kstandardaction.h>
-#include <kstandardguiitem.h>
-#include <kiconeffect.h>
-#include <kconfig.h>
+#include <KMessageBox>
+#include <KStandardAction>
+#include <KStandardGuiItem>
+#include <KIconEffect>
+#include <KConfig>
 #include <KAboutData>
 
 #include <QMenu>

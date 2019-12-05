@@ -33,8 +33,8 @@
 #include <KHolidays/HolidayRegion>
 
 #include <KSharedConfig>
-#include <kconfiggroup.h>
-#include <kmessagebox.h>
+#include <KConfigGroup>
+#include <KMessageBox>
 
 #include <QStandardPaths>
 

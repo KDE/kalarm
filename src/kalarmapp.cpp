@@ -45,15 +45,15 @@
 
 #include <KDBusService>
 #include <KLocalizedString>
-#include <kconfig.h>
+#include <KConfig>
 #include <KConfigGui>
 #include <KAboutData>
 #include <KSharedConfig>
-#include <kfileitem.h>
-#include <kstandardguiitem.h>
-#include <kservicetypetrader.h>
+#include <KFileItem>
+#include <KStandardGuiItem>
+#include <KServiceTypeTrader>
 #include <netwm.h>
-#include <kshell.h>
+#include <KShell>
 
 #include <QObject>
 #include <QTimer>

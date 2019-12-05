@@ -44,14 +44,14 @@
 #include <KEmailAddress>
 #include <KAboutData>
 #include <KLocalizedString>
-#include <kfileitem.h>
+#include <KFileItem>
 #include <KIO/StatJob>
 #include <KIO/StoredTransferJob>
 #include <KJobWidgets>
-#include <kemailsettings.h>
+#include <KEMailSettings>
 #include <kcodecs.h>
-#include <kcharsets.h>
-#include <kshell.h>
+#include <KCharsets>
+#include <KShell>
 
 #include <QUrl>
 #include <QFile>

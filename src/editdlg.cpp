@@ -51,7 +51,7 @@
 #include <Libkdepim/MaillistDrag>
 
 #include <KLocalizedString>
-#include <kconfig.h>
+#include <KConfig>
 #include <KSharedConfig>
 #include <KWindowSystem>
 

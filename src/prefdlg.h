@@ -21,7 +21,7 @@
 #ifndef PREFDLG_H
 #define PREFDLG_H
 
-#include <kpagedialog.h>
+#include <KPageDialog>
 
 class EditPrefTab;
 class EmailPrefTab;

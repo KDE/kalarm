@@ -32,7 +32,7 @@
 #include "timezonecombo.h"
 
 #include <kalarmcal/datetime.h>
-#include <kdatecombobox.h>
+#include <KDateComboBox>
 #include <KLocalizedString>
 
 #include <QTimeZone>

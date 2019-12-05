@@ -55,7 +55,7 @@
 using namespace KCalendarCore;
 
 #include <KLocalizedString>
-#include <kfileitem.h>
+#include <KFileItem>
 
 #include <QComboBox>
 #include <QLabel>

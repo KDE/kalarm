@@ -59,16 +59,16 @@ using namespace KHolidays;
 #include <kpimtextedit/texttospeech.h>
 
 #include <KLocalizedString>
-#include <kshell.h>
-#include <klineedit.h>
+#include <KShell>
+#include <KLineEdit>
 #include <KAboutData>
-#include <kstandardguiitem.h>
+#include <KStandardGuiItem>
 #include <QIcon>
 #if KDEPIM_HAVE_X11
-#include <kwindowinfo.h>
+#include <KWindowInfo>
 #include <kwindowsystem.h>
 #endif
-#include <ktoolinvocation.h>
+#include <KToolInvocation>
 #include <KHelpClient>
 
 #include <QLabel>

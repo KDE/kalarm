@@ -34,7 +34,7 @@
 
 #include <KLocalizedString>
 #include <KSharedConfig>
-#include <kconfiggroup.h>
+#include <KConfigGroup>
 
 #include <QTimer>
 

@@ -33,9 +33,9 @@
 #include "kalarm_debug.h"
 
 #include <KLocalizedString>
-#include <kguiitem.h>
-#include <kstandardaction.h>
-#include <kactioncollection.h>
+#include <KGuiItem>
+#include <KStandardAction>
+#include <KActionCollection>
 #include <KSeparator>
 
 #include <QAction>
