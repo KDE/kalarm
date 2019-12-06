@@ -22,13 +22,13 @@
 
 #include "calendarmigrator.h"
 #include "preferences.h"
-#include "synchtimer.h"
 #include "resources/resources.h"
+#include "lib/synchtimer.h"
 #include "kalarm_debug.h"
 
-#include <kalarmcal/alarmtext.h>
-#include <kalarmcal/compatibilityattribute.h>
-#include <kalarmcal/eventattribute.h>
+#include <KAlarmCal/AlarmText>
+#include <KAlarmCal/CompatibilityAttribute>
+#include <KAlarmCal/EventAttribute>
 
 #include <AkonadiCore/AgentFilterProxyModel>
 #include <AkonadiCore/AgentInstanceCreateJob>

@@ -21,7 +21,8 @@
 #ifndef TIMEZONECOMBO_H
 #define TIMEZONECOMBO_H
 
-#include <combobox.h>
+#include "lib/combobox.h"
+
 #include <QByteArray>
 
 class QTimeZone;

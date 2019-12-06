@@ -20,6 +20,7 @@
 
 #include "kalarmapp.h"
 
+#include "akonadimodel.h"
 #include "alarmcalendar.h"
 #include "alarmtime.h"
 #include "commandoptions.h"
@@ -28,20 +29,20 @@
 #include "functions.h"
 #include "kamail.h"
 #include "mainwindow.h"
-#include "messagebox.h"
 #include "messagewin.h"
 #include "kalarmmigrateapplication.h"
 #include "preferences.h"
 #include "prefdlg.h"
-#include "shellprocess.h"
 #include "startdaytimer.h"
 #include "traywindow.h"
 #include "resources/resources.h"
 #include "resources/eventmodel.h"
+#include "lib/messagebox.h"
+#include "lib/shellprocess.h"
 #include "kalarm_debug.h"
 
-#include <kalarmcal/datetime.h>
-#include <kalarmcal/karecurrence.h>
+#include <KAlarmCal/DateTime>
+#include <KAlarmCal/KARecurrence>
 
 #include <KDBusService>
 #include <KLocalizedString>

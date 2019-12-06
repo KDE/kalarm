@@ -20,15 +20,15 @@
 
 #include "soundpicker.h"
 
-#include "autoqpointer.h"
-#include "combobox.h"
 #include "functions.h"
 #include "kalarmapp.h"
-#include "pushbutton.h"
 #include "sounddlg.h"
+#include "lib/autoqpointer.h"
+#include "lib/combobox.h"
+#include "lib/pushbutton.h"
 #include "kalarm_debug.h"
 
-#include <kpimtextedit/texttospeech.h>
+#include <KPIMTextEdit/TextToSpeech>
 
 #include <QIcon>
 #include <KLocalizedString>

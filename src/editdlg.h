@@ -21,11 +21,11 @@
 #ifndef EDITDLG_H
 #define EDITDLG_H
 
-#include <resources/resource.h>
+#include "resources/resource.h"
 
-#include <kalarmcal/alarmtext.h>
-#include <kalarmcal/datetime.h>
-#include <kalarmcal/kaevent.h>
+#include <KAlarmCal/AlarmText>
+#include <KAlarmCal/DateTime>
+#include <KAlarmCal/KAEvent>
 
 #include <QDialog>
 #include <QTime>

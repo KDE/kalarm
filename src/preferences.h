@@ -22,7 +22,8 @@
 #define PREFERENCES_H
 
 #include "kalarmconfig.h"
-#include <kalarmcal/kadatetime.h>
+
+#include <KAlarmCal/KADateTime>
 
 #include <QObject>
 #include <QDateTime>
@@ -30,7 +31,6 @@
 
 using namespace KAlarmCal;
 
-class QTimeZone;
 namespace KHolidays { class HolidayRegion; }
 
 

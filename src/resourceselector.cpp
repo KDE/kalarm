@@ -24,16 +24,17 @@
 
 #include "resourceselector.h"
 
+#include "akonadimodel.h"
 #include "alarmcalendar.h"
-#include "autoqpointer.h"
 #include "akonadiresourcecreator.h"
 #include "calendarmigrator.h"
 #include "kalarmapp.h"
-#include "messagebox.h"
-#include "packedlayout.h"
 #include "preferences.h"
 #include "resources/resources.h"
 #include "resources/resourcemodel.h"
+#include "lib/autoqpointer.h"
+#include "lib/messagebox.h"
+#include "lib/packedlayout.h"
 #include "kalarm_debug.h"
 
 #include <KLocalizedString>

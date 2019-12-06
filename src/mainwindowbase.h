@@ -21,7 +21,7 @@
 #ifndef MAINWINDOWBASE_H
 #define MAINWINDOWBASE_H
 
-#include <kxmlguiwindow.h>
+#include <KXmlGuiWindow>
 
 /**
  *  The MainWindowBase class is a base class for KAlarm's main window and message window.

@@ -21,7 +21,7 @@
 #ifndef KAMAIL_H
 #define KAMAIL_H
 
-#include <kalarmcal/kaevent.h>
+#include <KAlarmCal/KAEvent>
 
 #include <KCalendarCore/Person>
 

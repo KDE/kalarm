@@ -22,13 +22,13 @@
 
 #include "kalarm_debug.h"
 
-#include <AkonadiCore/agentinstance.h>
-#include <AkonadiCore/agentmanager.h>
-#include <AkonadiCore/collectionfetchjob.h>
-#include <AkonadiCore/collectionfetchscope.h>
-#include <AkonadiCore/itemfetchjob.h>
-#include <AkonadiCore/itemfetchscope.h>
-#include <AkonadiCore/itemdeletejob.h>
+#include <AkonadiCore/AgentInstance>
+#include <AkonadiCore/AgentManager>
+#include <AkonadiCore/CollectionFetchJob>
+#include <AkonadiCore/CollectionFetchScope>
+#include <AkonadiCore/ItemFetchJob>
+#include <AkonadiCore/ItemFetchScope>
+#include <AkonadiCore/ItemDeleteJob>
 #include <KCalendarCore/Event>
 using namespace KCalendarCore;
 

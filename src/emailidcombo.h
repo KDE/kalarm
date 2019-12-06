@@ -21,8 +21,9 @@
 #ifndef EMAILIDCOMBO_H
 #define EMAILIDCOMBO_H
 
-#include "combobox.h"
-#include <KIdentityManagement/kidentitymanagement/identitycombo.h>
+#include "lib/combobox.h"
+
+#include <KIdentityManagement/IdentityCombo>
 
 class QMouseEvent;
 class QKeyEvent;

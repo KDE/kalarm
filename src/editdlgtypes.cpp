@@ -21,37 +21,37 @@
 #include "editdlgtypes.h"
 #include "editdlg_p.h"
 
-#include "autoqpointer.h"
-#include "buttongroup.h"
-#include "checkbox.h"
-#include "colourbutton.h"
 #include "emailidcombo.h"
 #include "fontcolourbutton.h"
 #include "functions.h"
 #include "kalarmapp.h"
 #include "kamail.h"
 #include "latecancel.h"
-#include "lineedit.h"
 #include "mainwindow.h"
-#include "messagebox.h"
 #include "messagewin.h"
 #include "pickfileradio.h"
 #include "preferences.h"
-#include "radiobutton.h"
 #include "reminder.h"
-#include "shellprocess.h"
 #include "soundpicker.h"
 #include "sounddlg.h"
 #include "specialactions.h"
 #include "templatepickdlg.h"
-#include "timespinbox.h"
+#include "lib/autoqpointer.h"
+#include "lib/buttongroup.h"
+#include "lib/checkbox.h"
+#include "lib/colourbutton.h"
+#include "lib/lineedit.h"
+#include "lib/messagebox.h"
+#include "lib/radiobutton.h"
+#include "lib/shellprocess.h"
+#include "lib/timespinbox.h"
 #include "kalarm_debug.h"
 
-#include <kalarmcal/identities.h>
+#include <KAlarmCal/Identities>
 
 #include <Akonadi/Contact/EmailAddressSelectionDialog>
 #include <KCalendarCore/Person>
-#include <KCalUtils/kcalutils/icaldrag.h>
+#include <KCalUtils/ICalDrag>
 using namespace KCalendarCore;
 
 #include <KLocalizedString>

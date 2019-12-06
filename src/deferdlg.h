@@ -23,7 +23,8 @@
 
 #include "eventid.h"
 
-#include <kalarmcal/datetime.h>
+#include <KAlarmCal/DateTime>
+
 #include <QDialog>
 
 class AlarmTimeWidget;

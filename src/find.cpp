@@ -22,12 +22,12 @@
 
 #include "alarmlistview.h"
 #include "eventlistview.h"
-#include "messagebox.h"
 #include "preferences.h"
 #include "resources/eventmodel.h"
+#include "lib/messagebox.h"
 #include "kalarm_debug.h"
 
-#include <kalarmcal/kaevent.h>
+#include <KAlarmCal/KAEvent>
 
 #include <KFindDialog>
 #include <KFind>

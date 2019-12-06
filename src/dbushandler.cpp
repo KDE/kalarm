@@ -30,8 +30,8 @@
 #include <kalarmadaptor.h>
 #include "kalarm_debug.h"
 
-#include <kalarmcal/identities.h>
-#include <kalarmcal/karecurrence.h>
+#include <KAlarmCal/Identities>
+#include <KAlarmCal/KARecurrence>
 
 #include <KCalendarCore/Duration>
 using namespace KCalendarCore;

@@ -23,13 +23,13 @@
 
 #include "alarmcalendar.h"
 
-#include <kalarmcal/kaevent.h>
+#include <KAlarmCal/KAEvent>
 
-#include <AkonadiCore/changerecorder.h>
-#include <AkonadiCore/entitydisplayattribute.h>
-#include <AkonadiCore/itemfetchscope.h>
-#include <AkonadiCore/session.h>
-#include <kcontacts/addressee.h>
+#include <AkonadiCore/ChangeRecorder>
+#include <AkonadiCore/EntityDisplayAttribute>
+#include <AkonadiCore/ItemFetchScope>
+#include <AkonadiCore/Session>
+#include <KContacts/Addressee>
 
 #include <QLocale>
 

@@ -22,12 +22,12 @@
 
 #include "alarmcalendar.h"
 #include "functions.h"
-#include "messagebox.h"
 #include "resources/resources.h"
+#include "lib/messagebox.h"
 #include "kalarm_debug.h"
 
-#include <kalarmcal/alarmtext.h>
-#include <kalarmcal/kaevent.h>
+#include <KAlarmCal/AlarmText>
+#include <KAlarmCal/KAEvent>
 
 #include <KLocalizedString>
 

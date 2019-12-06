@@ -23,13 +23,13 @@
 #include "kalarm.h"
 #include "functions.h"
 #include "kamail.h"
-#include "messagebox.h"
+#include "lib/messagebox.h"
 #include "kalarm_debug.h"
 
-#include <kalarmcal/identities.h>
+#include <KAlarmCal/Identities>
 
-#include <KIdentityManagement/kidentitymanagement/identity.h>
-#include <KIdentityManagement/kidentitymanagement/identitymanager.h>
+#include <KIdentityManagement/Identity>
+#include <KIdentityManagement/IdentityManager>
 #include <KHolidays/HolidayRegion>
 
 #include <KSharedConfig>

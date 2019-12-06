@@ -20,10 +20,10 @@
 
 #include "fontcolourbutton.h"
 
-#include "autoqpointer.h"
 #include "fontcolour.h"
 #include "preferences.h"
-#include "pushbutton.h"
+#include "lib/autoqpointer.h"
+#include "lib/pushbutton.h"
 #include "kalarm_debug.h"
 
 #include <KLocalizedString>

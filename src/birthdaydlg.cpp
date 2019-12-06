@@ -22,7 +22,6 @@
 
 #include "alarmcalendar.h"
 #include "birthdaymodel.h"
-#include "checkbox.h"
 #include "editdlgtypes.h"
 #include "fontcolourbutton.h"
 #include "kalarmapp.h"
@@ -30,13 +29,14 @@
 #include "preferences.h"
 #include "reminder.h"
 #include "repetitionbutton.h"
-#include "shellprocess.h"
 #include "soundpicker.h"
 #include "specialactions.h"
+#include "lib/checkbox.h"
+#include "lib/shellprocess.h"
 #include "kalarm_debug.h"
 
-#include <AkonadiWidgets/controlgui.h>
-#include <AkonadiCore/entitymimetypefiltermodel.h>
+#include <AkonadiWidgets/ControlGui>
+#include <AkonadiCore/EntityMimeTypeFilterModel>
 
 #include <KLocalizedString>
 #include <KConfigGroup>

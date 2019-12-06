@@ -24,22 +24,23 @@
 #include "functions.h"
 #include "kalarmapp.h"
 #include "mainwindow.h"
-#include "messagebox.h"
 #include "preferences.h"
+#include "lib/messagebox.h"
 #include "kalarm_debug.h"
 
 #include "kmailinterface.h"
 
-#include <kalarmcal/identities.h>
-#include <KIdentityManagement/kidentitymanagement/identitymanager.h>
-#include <KIdentityManagement/kidentitymanagement/identity.h>
-#include <mailtransport/transportmanager.h>
-#include <mailtransport/transport.h>
-#include <mailtransportakonadi/messagequeuejob.h>
+#include <KAlarmCal/Identities>
+
+#include <KIdentityManagement/IdentityManager>
+#include <KIdentityManagement/Identity>
+#include <MailTransport/TransportManager>
+#include <MailTransport/Transport>
+#include <MailTransportAkonadi/MessageQueueJob>
 #include <KCalendarCore/Person>
-#include <kmime/kmime_header_parsing.h>
-#include <kmime/kmime_headers.h>
-#include <kmime/kmime_message.h>
+#include <KMime/HeaderParsing>
+#include <KMime/Headers>
+#include <KMime/Message>
 
 #include <KEmailAddress>
 #include <KAboutData>
@@ -49,7 +50,7 @@
 #include <KIO/StoredTransferJob>
 #include <KJobWidgets>
 #include <KEMailSettings>
-#include <kcodecs.h>
+#include <KCodecs>
 #include <KCharsets>
 #include <KShell>
 

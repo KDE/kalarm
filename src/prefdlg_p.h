@@ -23,7 +23,7 @@
 
 #include "preferences.h"
 #include "prefdlg.h"
-#include "stackedwidgets.h"
+#include "lib/stackedwidgets.h"
 
 class QCheckBox;
 class QGroupBox;

@@ -20,8 +20,8 @@
 
 #include "timeselector.h"
 
-#include "checkbox.h"
-#include "combobox.h"
+#include "lib/checkbox.h"
+#include "lib/combobox.h"
 #include "kalarm_debug.h"
 
 #include <QHBoxLayout>

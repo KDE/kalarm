@@ -22,8 +22,8 @@
 
 #include "resources.h"
 #include "akonadimodel.h"
-#include "autoqpointer.h"
 #include "calendarmigrator.h"
+#include "lib/autoqpointer.h"
 #include "kalarm_debug.h"
 
 #include <KAlarmCal/Akonadi>

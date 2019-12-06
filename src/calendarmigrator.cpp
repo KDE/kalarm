@@ -25,8 +25,8 @@
 #include "kalarmsettings.h"
 #include "kalarmdirsettings.h"
 #include "mainwindow.h"
-#include "messagebox.h"
 #include "resources/akonadiresource.h"
+#include "lib/messagebox.h"
 #include "kalarm_debug.h"
 
 #include <KAlarmCal/CollectionAttribute>

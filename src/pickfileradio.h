@@ -23,7 +23,7 @@
 
 /** @file pickfileradio.h - radio button with an associated file picker */
 
-#include "radiobutton.h"
+#include "lib/radiobutton.h"
 
 class QPushButton;
 class ButtonGroup;

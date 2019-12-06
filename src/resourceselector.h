@@ -40,7 +40,6 @@ class KToggleAction;
 class QComboBox;
 class QMenu;
 class ResourceView;
-class AkonadiResourceCreator;
 
 
 /**

@@ -21,7 +21,7 @@
 #ifndef REPETITIONBUTTON_H
 #define REPETITIONBUTTON_H
 
-#include <kalarmcal/repetition.h>
+#include <KAlarmCal/Repetition>
 
 #include <QDialog>
 #include <QPushButton>

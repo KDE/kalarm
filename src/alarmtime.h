@@ -21,7 +21,7 @@
 #ifndef ALARMTIME_H
 #define ALARMTIME_H
 
-#include <kalarmcal/kadatetime.h>
+#include <KAlarmCal/KADateTime>
 
 namespace KAlarmCal { class DateTime; }
 

@@ -27,7 +27,7 @@
 #include "kamail.h"
 #include "preferences.h"
 
-#include <kalarmcal/kaevent.h>
+#include <KAlarmCal/KAEvent>
 
 #include <QApplication>
 #include <QPointer>

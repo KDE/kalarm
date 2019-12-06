@@ -21,8 +21,8 @@
 #ifndef LATECANCEL_H
 #define LATECANCEL_H
 
-#include "timeperiod.h"
 #include "timeselector.h"
+#include "lib/timeperiod.h"
 
 #include <QFrame>
 

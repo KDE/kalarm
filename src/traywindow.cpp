@@ -20,8 +20,8 @@
 
 #include "traywindow.h"
 
+#include "akonadimodel.h"
 #include "alarmcalendar.h"
-//#include "alarmlistview.h"
 #include "functions.h"
 #include "kalarmapp.h"
 #include "mainwindow.h"
@@ -29,12 +29,12 @@
 #include "newalarmaction.h"
 #include "prefdlg.h"
 #include "preferences.h"
-#include "synchtimer.h"
 #include "templatemenuaction.h"
 #include "resources/eventmodel.h"
+#include "lib/synchtimer.h"
 #include "kalarm_debug.h"
 
-#include <kalarmcal/alarmtext.h>
+#include <KAlarmCal/AlarmText>
 
 #include <KActionCollection>
 #include <KToggleAction>

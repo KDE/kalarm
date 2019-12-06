@@ -22,8 +22,8 @@
 
 #include "kalarmapp.h"
 #include "preferences.h"
-#include "colourbutton.h"
-#include "checkbox.h"
+#include "lib/colourbutton.h"
+#include "lib/checkbox.h"
 
 #include <KFontChooser>
 

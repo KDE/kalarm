@@ -20,7 +20,7 @@
 #ifndef BIRTHDAYDLG_H
 #define BIRTHDAYDLG_H
 
-#include <kalarmcal/kaevent.h>
+#include <KAlarmCal/KAEvent>
 
 #include <QDialog>
 #include <QVector>

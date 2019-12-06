@@ -20,11 +20,11 @@
 
 #include "repetitionbutton.h"
 
-#include "buttongroup.h"
-#include "radiobutton.h"
-#include "spinbox.h"
-#include "timeperiod.h"
 #include "timeselector.h"
+#include "lib/buttongroup.h"
+#include "lib/radiobutton.h"
+#include "lib/spinbox.h"
+#include "lib/timeperiod.h"
 
 #include <KLocalizedString>
 

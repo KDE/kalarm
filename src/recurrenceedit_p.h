@@ -21,9 +21,9 @@
 #ifndef RECURRENCEEDIT_P_H
 #define RECURRENCEEDIT_P_H
 
-#include "radiobutton.h"
+#include "lib/radiobutton.h"
 
-#include <kalarmcal/karecurrence.h>
+#include <KAlarmCal/KARecurrence>
 
 #include <QList>
 #include <QVector>

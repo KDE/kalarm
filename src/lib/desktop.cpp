@@ -23,12 +23,13 @@
 #include "config-kalarm.h"
 
 #if KDEPIM_HAVE_X11
-#include <kwindowsystem.h>
+#include <KWindowSystem>
 #endif
 #include <QGuiApplication>
 #include <QScreen>
 
-namespace KAlarm {
+namespace KAlarm
+{
 
 /******************************************************************************
 * Return the size of the usable area of the desktop, optionally for a specific

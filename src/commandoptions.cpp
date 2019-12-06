@@ -25,8 +25,8 @@
 #include "kamail.h"
 #include "kalarm_debug.h"
 
-#include <kalarmcal/identities.h>
-#include <kpimtextedit/texttospeech.h>
+#include <KAlarmCal/Identities>
+#include <KPIMTextEdit/TextToSpeech>
 #include <KLocalizedString>
 
 #include <QCommandLineParser>

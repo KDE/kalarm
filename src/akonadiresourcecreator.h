@@ -24,10 +24,10 @@
 #include "kalarmsettings.h"
 #include "kalarmdirsettings.h"
 
-#include <kalarmcal/kacalendar.h>
+#include <KAlarmCal/KACalendar>
 
-#include <AkonadiCore/agentinstance.h>
-#include <AkonadiCore/agenttype.h>
+#include <AkonadiCore/AgentInstance>
+#include <AkonadiCore/AgentType>
 
 using namespace KAlarmCal;
 

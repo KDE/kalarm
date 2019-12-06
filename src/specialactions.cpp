@@ -20,10 +20,10 @@
 
 #include "specialactions.h"
 
-#include "autoqpointer.h"
-#include "checkbox.h"
 #include "functions.h"
-#include "shellprocess.h"
+#include "lib/autoqpointer.h"
+#include "lib/checkbox.h"
+#include "lib/shellprocess.h"
 #include "kalarm_debug.h"
 
 #include <KLocalizedString>

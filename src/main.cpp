@@ -19,11 +19,11 @@
  */
 
 #include "kalarm.h"
-#include <kalarmcal/version.h>
 #include "kalarm-version-string.h"
 #include "kalarmapp.h"
 #include "kalarm_debug.h"
 
+#include <KAlarmCal/Version>
 
 #include <KAboutData>
 #include <KLocalizedString>

@@ -24,8 +24,8 @@
 #include "editdlg.h"
 #include "preferences.h"
 
-#include <kalarmcal/alarmtext.h>
-#include <kalarmcal/kaevent.h>
+#include <KAlarmCal/AlarmText>
+#include <KAlarmCal/KAEvent>
 
 using namespace KAlarmCal;
 

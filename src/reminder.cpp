@@ -21,12 +21,12 @@
 #include "reminder.h"
 
 #include "preferences.h"
-#include "checkbox.h"
-#include "combobox.h"
 #include "timeselector.h"
+#include "lib/checkbox.h"
+#include "lib/combobox.h"
 #include "kalarm_debug.h"
 
-#include <kalarmcal/kadatetime.h>
+#include <KAlarmCal/KADateTime>
 using namespace KAlarmCal;
 #include <KCalendarCore/Duration>
 using namespace KCalendarCore;

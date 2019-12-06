@@ -26,7 +26,7 @@
 #include "editdlg.h"
 #include "eventid.h"
 
-#include <kalarmcal/kaevent.h>
+#include <KAlarmCal/KAEvent>
 #include <KFile>
 
 #include <QSize>

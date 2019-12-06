@@ -24,8 +24,8 @@
 
 #include "alarmtime.h"
 #include "mainwindow.h"
-#include "messagebox.h"
 #include "preferences.h"
+#include "lib/messagebox.h"
 #include "kalarm_debug.h"
 
 #include <KAlarmCal/AlarmText>

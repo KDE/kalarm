@@ -23,24 +23,24 @@
 #include "config-kalarm.h"
 
 #include "alarmcalendar.h"
-#include "autoqpointer.h"
 #include "deferdlg.h"
-#include "desktop.h"
 #include "editdlg.h"
 #include "functions.h"
 #include "kalarmapp.h"
 #include "mainwindow.h"
-#include "messagebox.h"
 #include "preferences.h"
-#include "pushbutton.h"
-#include "shellprocess.h"
-#include "synchtimer.h"
 #include "resources/resources.h"
+#include "lib/autoqpointer.h"
+#include "lib/desktop.h"
+#include "lib/messagebox.h"
+#include "lib/pushbutton.h"
+#include "lib/shellprocess.h"
+#include "lib/synchtimer.h"
 #include "kalarm_debug.h"
 
-#include <kpimtextedit/texttospeech.h>
-#include <AkonadiCore/itemfetchjob.h>
-#include <AkonadiCore/itemfetchscope.h>
+#include <KPIMTextEdit/TextToSpeech>
+#include <AkonadiCore/ItemFetchJob>
+#include <AkonadiCore/ItemFetchScope>
 
 #include <KAboutData>
 #include <KStandardGuiItem>
@@ -48,7 +48,7 @@
 #include <KConfig>
 #include <KIconLoader>
 #include <KTextEdit>
-#include <kwindowsystem.h>
+#include <KWindowSystem>
 #include <KIO/StatJob>
 #include <KIO/StoredTransferJob>
 #include <KJobWidgets>

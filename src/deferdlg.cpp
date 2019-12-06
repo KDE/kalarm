@@ -24,11 +24,11 @@
 #include "alarmtimewidget.h"
 #include "functions.h"
 #include "kalarmapp.h"
-#include "messagebox.h"
+#include "lib/messagebox.h"
 #include "kalarm_debug.h"
 
-#include <kalarmcal/datetime.h>
-#include <kalarmcal/kaevent.h>
+#include <KAlarmCal/DateTime>
+#include <KAlarmCal/KAEvent>
 
 #include <KLocalizedString>
 

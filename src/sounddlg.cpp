@@ -20,14 +20,14 @@
 
 #include "sounddlg.h"
 
-#include "checkbox.h"
 #include "functions.h"
-#include "groupbox.h"
-#include "lineedit.h"
-#include "pushbutton.h"
-#include "slider.h"
 #include "soundpicker.h"
-#include "spinbox.h"
+#include "lib/checkbox.h"
+#include "lib/groupbox.h"
+#include "lib/lineedit.h"
+#include "lib/pushbutton.h"
+#include "lib/slider.h"
+#include "lib/spinbox.h"
 #include "kalarm_debug.h"
 
 #include <KLocalizedString>

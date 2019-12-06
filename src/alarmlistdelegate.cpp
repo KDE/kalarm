@@ -25,7 +25,7 @@
 #include "resources/eventmodel.h"
 #include "kalarm_debug.h"
 
-#include <kalarmcal/kacalendar.h>
+#include <KAlarmCal/KACalendar>
 
 #include <KColorScheme>
 

@@ -21,7 +21,7 @@
 #ifndef RTCWAKEACTION_H
 #define RTCWAKEACTION_H
 
-#include <kauth.h>
+#include <KAuth>
 
 using namespace KAuth;
 

@@ -25,21 +25,21 @@
 #include "recurrenceedit_p.h"
 
 #include "alarmtimewidget.h"
-#include "checkbox.h"
-#include "combobox.h"
 #include "kalarmapp.h"
-#include "kalocale.h"
 #include "preferences.h"
-#include "radiobutton.h"
 #include "repetitionbutton.h"
-#include "spinbox.h"
-#include "timeedit.h"
-#include "timespinbox.h"
-#include "buttongroup.h"
+#include "lib/checkbox.h"
+#include "lib/combobox.h"
+#include "lib/kalocale.h"
+#include "lib/radiobutton.h"
+#include "lib/spinbox.h"
+#include "lib/timeedit.h"
+#include "lib/timespinbox.h"
+#include "lib/buttongroup.h"
 #include "kalarm_debug.h"
 
-#include <kalarmcal/kaevent.h>
-#include <kalarmcal/karecurrence.h>
+#include <KAlarmCal/KAEvent>
+#include <KAlarmCal/KARecurrence>
 
 #include <KCalendarCore/Event>
 using namespace KCalendarCore;

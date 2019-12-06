@@ -21,8 +21,8 @@
 #include "lineedit.h"
 
 #include <Libkdepim/MaillistDrag>
-#include <kcontacts/vcarddrag.h>
-#include <KCalUtils/kcalutils/icaldrag.h>
+#include <KContacts/VCardDrag>
+#include <KCalUtils/ICalDrag>
 
 #include <KUrlCompletion>
 #include <KShell>

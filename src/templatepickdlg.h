@@ -20,12 +20,11 @@
 #ifndef TEMPLATEPICKDLG_H
 #define TEMPLATEPICKDLG_H
 
-#include <kalarmcal/kaevent.h>
+#include <KAlarmCal/KAEvent>
 
 #include <QDialog>
 class QPushButton;
 class QResizeEvent;
-namespace KCal { class Event; }
 class TemplateListModel;
 class TemplateListView;
 

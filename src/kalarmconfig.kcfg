@@ -5,8 +5,8 @@
       xsi:schemaLocation="http://www.kde.org/standards/kcfg/1.0
       http://www.kde.org/standards/kcfg/1.0/kcfg.xsd" >
 
-  <include>"timeperiod.h"</include>
-  <include>"kalocale.h"</include>
+  <include>"lib/timeperiod.h"</include>
+  <include>"lib/kalocale.h"</include>
   <include>QFontDatabase</include>
   <include>KColorScheme</include>
   <include>QFont</include>

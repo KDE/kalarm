@@ -20,17 +20,17 @@
 
 #include "akonadiresourcecreator.h"
 
-#include "autoqpointer.h"
 #include "resources/resources.h"
 #include "resources/akonadiresource.h"
+#include "lib/autoqpointer.h"
 #include "kalarmsettings.h"
 #include "kalarmdirsettings.h"
 #include "kalarm_debug.h"
 
-#include <AkonadiCore/agentfilterproxymodel.h>
-#include <AkonadiCore/agentinstancecreatejob.h>
-#include <AkonadiCore/agentmanager.h>
-#include <AkonadiWidgets/agenttypedialog.h>
+#include <AkonadiCore/AgentFilterProxyModel>
+#include <AkonadiCore/AgentInstanceCreateJob>
+#include <AkonadiCore/AgentManager>
+#include <AkonadiWidgets/AgentTypeDialog>
 #include <AkonadiWidgets/AgentConfigurationDialog>
 
 #include <KDBusConnectionPool>

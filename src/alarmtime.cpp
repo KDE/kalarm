@@ -23,7 +23,7 @@
 #include "preferences.h"
 #include "kalarm_debug.h"
 
-#include <kalarmcal/datetime.h>
+#include <KAlarmCal/DateTime>
 
 #include <KLocalizedString>
 #include <QLocale>

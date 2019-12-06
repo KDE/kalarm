@@ -25,12 +25,12 @@
 #include "functions.h"
 #include "kalarmapp.h"
 #include "mainwindow.h"
-#include "messagebox.h"
 #include "preferences.h"
+#include "lib/messagebox.h"
 #include "kalarm_debug.h"
 
 #include <kalarmcal_version.h>
-#include <kalarmcal/kaevent.h>
+#include <KAlarmCal/KAEvent>
 
 #include <KLocalizedString>
 #include <KSharedConfig>

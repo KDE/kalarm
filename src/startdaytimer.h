@@ -23,7 +23,7 @@
 
 /* @file startdaytimer.h - timer triggered at the user-defined start-of-day time */
 
-#include "synchtimer.h"
+#include "lib/synchtimer.h"
 
 
 /** StartOfDayTimer is an application-wide timer synchronized to the user-defined

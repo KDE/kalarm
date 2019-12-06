@@ -23,12 +23,12 @@
 
 /** @file messagewin.h - displays an alarm message */
 
-#include "autoqpointer.h"
 #include "eventid.h"
 #include "mainwindowbase.h"
 #include "resources/resource.h"
+#include "lib/autoqpointer.h"
 
-#include <kalarmcal/kaevent.h>
+#include <KAlarmCal/KAEvent>
 
 #include <QList>
 #include <QMap>

@@ -20,7 +20,7 @@
 
 #include "latecancel.h"
 
-#include "checkbox.h"
+#include "lib/checkbox.h"
 
 #include <KCalendarCore/Duration>
 using namespace KCalendarCore;

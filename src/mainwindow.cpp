@@ -20,20 +20,18 @@
 
 #include "mainwindow.h"
 
+#include "akonadimodel.h"
 #include "alarmcalendar.h"
 #include "alarmlistdelegate.h"
-#include "autoqpointer.h"
 #include "alarmlistview.h"
 #include "birthdaydlg.h"
 #include "functions.h"
 #include "kalarmapp.h"
 #include "kamail.h"
-#include "messagebox.h"
 #include "newalarmaction.h"
 #include "prefdlg.h"
 #include "preferences.h"
 #include "resourceselector.h"
-#include "synchtimer.h"
 #include "templatedlg.h"
 #include "templatemenuaction.h"
 #include "templatepickdlg.h"
@@ -41,21 +39,25 @@
 #include "wakedlg.h"
 #include "resources/resources.h"
 #include "resources/eventmodel.h"
+#include "lib/autoqpointer.h"
+#include "lib/messagebox.h"
+#include "lib/synchtimer.h"
 #include "kalarm_debug.h"
 
-#include <kalarmcal/alarmtext.h>
-#include <kalarmcal/kaevent.h>
+#include <KAlarmCal/AlarmText>
+#include <KAlarmCal/KAEvent>
 
 #include <Libkdepim/MaillistDrag>
-#include <kmime/kmime_message.h>
-#include <AkonadiCore/item.h>
-#include <AkonadiCore/itemfetchjob.h>
-#include <AkonadiCore/itemfetchscope.h>
-#include <AkonadiWidgets/controlgui.h>
+#include <KMime/Message>
+#include <AkonadiCore/Item>
+#include <AkonadiCore/ItemFetchJob>
+#include <AkonadiCore/ItemFetchScope>
+#include <AkonadiWidgets/ControlGui>
 #include <KCalendarCore/MemoryCalendar>
-#include <KCalUtils/kcalutils/icaldrag.h>
+#include <KCalUtils/ICalDrag>
 using namespace KCalendarCore;
 using namespace KCalUtils;
+
 #include <KAboutData>
 #include <KToolBar>
 #include <KActionCollection>

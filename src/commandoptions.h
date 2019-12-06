@@ -24,10 +24,10 @@
 #include "editdlg.h"
 #include "eventid.h"
 
-#include <kalarmcal/kaevent.h>
-#include <kalarmcal/karecurrence.h>
+#include <KAlarmCal/KAEvent>
+#include <KAlarmCal/KARecurrence>
+#include <KAlarmCal/KADateTime>
 
-#include <kalarmcal/kadatetime.h>
 #include <QColor>
 #include <QStringList>
 class QCommandLineParser;

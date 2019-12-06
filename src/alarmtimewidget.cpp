@@ -20,18 +20,19 @@
 
 #include "alarmtimewidget.h"
 
-#include "buttongroup.h"
-#include "checkbox.h"
-#include "messagebox.h"
 #include "preferences.h"
-#include "pushbutton.h"
-#include "radiobutton.h"
-#include "synchtimer.h"
-#include "timeedit.h"
-#include "timespinbox.h"
-#include "timezonecombo.h"
+#include "lib/buttongroup.h"
+#include "lib/checkbox.h"
+#include "lib/messagebox.h"
+#include "lib/pushbutton.h"
+#include "lib/radiobutton.h"
+#include "lib/synchtimer.h"
+#include "lib/timeedit.h"
+#include "lib/timespinbox.h"
+#include "lib/timezonecombo.h"
 
-#include <kalarmcal/datetime.h>
+#include <KAlarmCal/DateTime>
+
 #include <KDateComboBox>
 #include <KLocalizedString>
 

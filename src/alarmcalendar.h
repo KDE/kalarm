@@ -21,10 +21,10 @@
 #ifndef ALARMCALENDAR_H
 #define ALARMCALENDAR_H
 
-#include "akonadimodel.h"
 #include "eventid.h"
+#include "resources/resource.h"
 
-#include <kalarmcal/kaevent.h>
+#include <KAlarmCal/KAEvent>
 
 #include <KCalendarCore/FileStorage>
 #include <KCalendarCore/Event>
@@ -32,7 +32,6 @@
 #include <QHash>
 #include <QObject>
 #include <QUrl>
-
 
 using namespace KAlarmCal;
 

@@ -23,12 +23,11 @@
 
 /**  @file undo.h - undo/redo facility */
 
-#include "autodeletelist.h"
 #include "resources/resource.h"
+#include "lib/autodeletelist.h"
 
-#include <kalarmcal/kaevent.h>
+#include <KAlarmCal/KAEvent>
 
-#include <QList>
 #include <QStringList>
 
 class UndoItem;

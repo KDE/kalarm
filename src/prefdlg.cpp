@@ -23,40 +23,40 @@
 
 #include "alarmcalendar.h"
 #include "alarmtimewidget.h"
-#include "buttongroup.h"
-#include "colourbutton.h"
 #include "editdlg.h"
 #include "editdlgtypes.h"
 #include "fontcolour.h"
 #include "functions.h"
 #include "kalarmapp.h"
-#include "kalocale.h"
 #include "kamail.h"
-#include "label.h"
 #include "latecancel.h"
 #include "mainwindow.h"
-#include "messagebox.h"
 #include "preferences.h"
-#include "radiobutton.h"
 #include "recurrenceedit.h"
 #include "sounddlg.h"
 #include "soundpicker.h"
 #include "specialactions.h"
-#include "stackedwidgets.h"
-#include "timeedit.h"
-#include "timespinbox.h"
-#include "timezonecombo.h"
+#include "lib/stackedwidgets.h"
 #include "traywindow.h"
 #include "resources/resources.h"
+#include "lib/buttongroup.h"
+#include "lib/colourbutton.h"
+#include "lib/kalocale.h"
+#include "lib/label.h"
+#include "lib/messagebox.h"
+#include "lib/radiobutton.h"
+#include "lib/timeedit.h"
+#include "lib/timespinbox.h"
+#include "lib/timezonecombo.h"
 #include "config-kalarm.h"
 #include "kalarm_debug.h"
 
-#include <kalarmcal/identities.h>
+#include <KAlarmCal/Identities>
 
 #include <KHolidays/HolidayRegion>
 using namespace KHolidays;
 
-#include <kpimtextedit/texttospeech.h>
+#include <KPIMTextEdit/TextToSpeech>
 
 #include <KLocalizedString>
 #include <KShell>
@@ -66,7 +66,7 @@ using namespace KHolidays;
 #include <QIcon>
 #if KDEPIM_HAVE_X11
 #include <KWindowInfo>
-#include <kwindowsystem.h>
+#include <KWindowSystem>
 #endif
 #include <KToolInvocation>
 #include <KHelpClient>

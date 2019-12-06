@@ -20,8 +20,8 @@
 
 #include "pickfileradio.h"
 
-#include "buttongroup.h"
-#include "lineedit.h"
+#include "lib/buttongroup.h"
+#include "lib/lineedit.h"
 #include "kalarm_debug.h"
 
 #include <QPushButton>

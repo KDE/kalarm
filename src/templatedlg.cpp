@@ -20,16 +20,17 @@
 
 #include "templatedlg.h"
 
-#include "editdlg.h"
+#include "akonadimodel.h"
 #include "alarmcalendar.h"
+#include "editdlg.h"
 #include "functions.h"
-#include "messagebox.h"
 #include "newalarmaction.h"
-#include "shellprocess.h"
 #include "templatelistview.h"
 #include "undo.h"
 #include "resources/resources.h"
 #include "resources/eventmodel.h"
+#include "lib/messagebox.h"
+#include "lib/shellprocess.h"
 #include "kalarm_debug.h"
 
 #include <KLocalizedString>

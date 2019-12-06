@@ -22,8 +22,8 @@
 
 #include "resourcedatamodelbase.h"
 #include "resources.h"
-#include "messagebox.h"
 #include "preferences.h"
+#include "lib/messagebox.h"
 #include "kalarm_debug.h"
 
 #include <KLocalizedString>

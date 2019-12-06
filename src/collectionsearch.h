@@ -22,8 +22,8 @@
 #define COLLECTIONSEARCH_H
 
 
-#include <AkonadiCore/collection.h>
-#include <AkonadiCore/item.h>
+#include <AkonadiCore/Collection>
+#include <AkonadiCore/Item>
 
 #include <QObject>
 #include <QMap>

@@ -21,7 +21,8 @@
 #ifndef TIMESELECTOR_H
 #define TIMESELECTOR_H
 
-#include "timeperiod.h"
+#include "lib/timeperiod.h"
+
 #include <QFrame>
 
 class CheckBox;

@@ -24,7 +24,7 @@
 #include "functions.h"
 #include "kalarm_debug.h"
 
-#include <kalarmcal/kaevent.h>
+#include <KAlarmCal/KAEvent>
 
 #include <KActionMenu>
 #include <QMenu>

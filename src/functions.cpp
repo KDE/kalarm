@@ -21,36 +21,37 @@
 #include "functions.h"
 #include "functions_p.h"
 
-#include "collectionsearch.h"
+#include "akonadimodel.h"
 #include "alarmcalendar.h"
 #include "alarmtime.h"
-#include "autoqpointer.h"
+#include "collectionsearch.h"
 #include "editdlg.h"
 #include "kalarmapp.h"
 #include "kamail.h"
 #include "mainwindow.h"
-#include "messagebox.h"
 #include "messagewin.h"
 #include "preferences.h"
-#include "shellprocess.h"
 #include "templatelistview.h"
 #include "templatemenuaction.h"
 #include "resources/resources.h"
 #include "resources/eventmodel.h"
+#include "lib/autoqpointer.h"
+#include "lib/messagebox.h"
+#include "lib/shellprocess.h"
 #include "config-kalarm.h"
 #include "kalarm_debug.h"
 
 #include <kalarmcal_version.h>
-#include <kalarmcal/identities.h>
-#include <kalarmcal/kaevent.h>
+#include <KAlarmCal/Identities>
+#include <KAlarmCal/KAEvent>
 
 #include <KCalendarCore/Event>
 #include <KCalendarCore/ICalFormat>
 #include <KCalendarCore/Person>
 #include <KCalendarCore/Duration>
 using namespace KCalendarCore;
-#include <KIdentityManagement/kidentitymanagement/identitymanager.h>
-#include <KIdentityManagement/kidentitymanagement/identity.h>
+#include <KIdentityManagement/IdentityManager>
+#include <KIdentityManagement/Identity>
 #include <KHolidays/HolidayRegion>
 
 #include <KConfigGroup>
@@ -58,7 +59,7 @@ using namespace KCalendarCore;
 #include <KToggleAction>
 #include <KActionCollection>
 #include <KLocalizedString>
-#include <kauth.h>
+#include <KAuth>
 #include <KStandardGuiItem>
 #include <KStandardShortcut>
 #include <KIO/StatJob>

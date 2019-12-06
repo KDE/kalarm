@@ -20,14 +20,15 @@
 
 #include "alarmcalendar.h"
 
+#include "akonadimodel.h"
 #include "kalarm.h"
-#include "filedialog.h"
 #include "functions.h"
 #include "kalarmapp.h"
 #include "mainwindow.h"
-#include "messagebox.h"
 #include "preferences.h"
 #include "resources/resources.h"
+#include "lib/filedialog.h"
+#include "lib/messagebox.h"
 #include "kalarm_debug.h"
 
 #include <KCalendarCore/MemoryCalendar>

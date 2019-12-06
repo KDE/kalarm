@@ -22,9 +22,9 @@
 
 #include "akonadimodel.h"
 #include "functions.h"
-#include "shellprocess.h"
 #include "templatelistview.h"
 #include "resources/eventmodel.h"
+#include "lib/shellprocess.h"
 #include "kalarm_debug.h"
 
 #include <KLocalizedString>
