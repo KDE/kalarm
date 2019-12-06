@@ -21,8 +21,8 @@
 #ifndef RESOURCETYPE_H
 #define RESOURCETYPE_H
 
-#include <kalarmcal/kacalendar.h>
-#include <kalarmcal/kaevent.h>
+#include <KAlarmCal/KACalendar>
+#include <KAlarmCal/KAEvent>
 
 #include <QObject>
 #include <QSharedPointer>

@@ -20,32 +20,28 @@
 
 #include "akonadimodel.h"
 
-#include "alarmtime.h"
-#include "autoqpointer.h"
 #include "calendarmigrator.h"
-#include "mainwindow.h"
 #include "preferences.h"
 #include "synchtimer.h"
 #include "resources/resources.h"
-#include "kalarmsettings.h"
-#include "kalarmdirsettings.h"
+#include "kalarm_debug.h"
 
 #include <kalarmcal/alarmtext.h>
 #include <kalarmcal/compatibilityattribute.h>
 #include <kalarmcal/eventattribute.h>
 
-#include <AkonadiCore/agentfilterproxymodel.h>
-#include <AkonadiCore/agentinstancecreatejob.h>
-#include <AkonadiCore/agentmanager.h>
-#include <AkonadiCore/agenttype.h>
-#include <AkonadiCore/attributefactory.h>
-#include <AkonadiCore/changerecorder.h>
-#include <AkonadiCore/collectiondeletejob.h>
-#include <AkonadiCore/collectionfetchjob.h>
-#include <AkonadiCore/entitydisplayattribute.h>
-#include <AkonadiCore/item.h>
-#include <AkonadiCore/itemfetchscope.h>
-#include <AkonadiWidgets/agenttypedialog.h>
+#include <AkonadiCore/AgentFilterProxyModel>
+#include <AkonadiCore/AgentInstanceCreateJob>
+#include <AkonadiCore/AgentManager>
+#include <AkonadiCore/AgentType>
+#include <AkonadiCore/AttributeFactory>
+#include <AkonadiCore/ChangeRecorder>
+#include <AkonadiCore/CollectionDeleteJob>
+#include <AkonadiCore/CollectionFetchJob>
+#include <AkonadiCore/EntityDisplayAttribute>
+#include <AkonadiCore/Item>
+#include <AkonadiCore/ItemFetchScope>
+#include <AkonadiWidgets/AgentTypeDialog>
 
 #include <KLocalizedString>
 #include <KColorUtils>
@@ -54,7 +50,6 @@
 #include <QApplication>
 #include <QFileInfo>
 #include <QTimer>
-#include "kalarm_debug.h"
 
 using namespace Akonadi;
 using namespace KAlarmCal;
@@ -88,8 +83,6 @@ AkonadiModel::AkonadiModel(ChangeRecorder* monitor, QObject* parent)
     : EntityTreeModel(monitor, parent)
     , ResourceDataModelBase()
     , mMonitor(monitor)
-    , mMigrationChecked(false)
-    , mMigrating(false)
 {
     // Populate all collections, selected/enabled or unselected/disabled.
     setItemPopulationStrategy(ImmediatePopulation);
@@ -153,18 +146,16 @@ void AkonadiModel::checkResources(ServerManager::State state)
     switch (state)
     {
         case ServerManager::Running:
-            if (!mMigrationChecked)
+            if (!isMigrating()  &&  !isMigrationComplete())
             {
                 qCDebug(KALARM_LOG) << "AkonadiModel::checkResources: Server running";
-                mMigrationChecked = true;
-                mMigrating = true;
+                setMigrationInitiated();
                 CalendarMigrator::execute();
             }
             break;
         case ServerManager::NotRunning:
             qCDebug(KALARM_LOG) << "AkonadiModel::checkResources: Server stopped";
-            mMigrationChecked = false;
-            mMigrating = false;
+            setMigrationInitiated(false);
             initCalendarMigrator();
             Q_EMIT serverStopped();
             break;
@@ -184,14 +175,6 @@ void AkonadiModel::initCalendarMigrator()
                                     this, &AkonadiModel::slotCollectionBeingCreated);
     connect(CalendarMigrator::instance(), &QObject::destroyed,
                                     this, &AkonadiModel::slotMigrationCompleted);
-}
-
-/******************************************************************************
-* Return whether calendar migration has completed.
-*/
-bool AkonadiModel::isMigrationCompleted() const
-{
-    return mMigrationChecked && !mMigrating;
 }
 
 ChangeRecorder* AkonadiModel::monitor()
@@ -723,14 +706,14 @@ void AkonadiModel::slotCollectionChanged(const Akonadi::Collection& c, const QSe
 void AkonadiModel::setCollectionChanged(Resource& resource, const Collection& collection, bool checkCompat)
 {
     AkonadiResource::notifyCollectionChanged(resource, collection, checkCompat);
-    if (mMigrating)
+    if (isMigrating())
     {
         mCollectionIdsBeingCreated.removeAll(collection.id());
         if (mCollectionsBeingCreated.isEmpty() && mCollectionIdsBeingCreated.isEmpty()
         &&  CalendarMigrator::completed())
         {
             qCDebug(KALARM_LOG) << "AkonadiModel::setCollectionChanged: Migration completed";
-            mMigrating = false;
+            setMigrationComplete();
             Q_EMIT migrationCompleted();
         }
     }
@@ -786,7 +769,7 @@ void AkonadiModel::slotMigrationCompleted()
     if (mCollectionsBeingCreated.isEmpty() && mCollectionIdsBeingCreated.isEmpty())
     {
         qCDebug(KALARM_LOG) << "AkonadiModel: Migration completed";
-        mMigrating = false;
+        setMigrationComplete();
         Q_EMIT migrationCompleted();
     }
 }

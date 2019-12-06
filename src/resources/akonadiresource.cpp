@@ -26,10 +26,10 @@
 #include "calendarmigrator.h"
 #include "kalarm_debug.h"
 
-#include <kalarmcal/akonadi.h>
-#include <kalarmcal/compatibilityattribute.h>
-#include <kalarmcal/eventattribute.h>
-#include <kalarmcal/version.h>
+#include <KAlarmCal/Akonadi>
+#include <KAlarmCal/CompatibilityAttribute>
+#include <KAlarmCal/EventAttribute>
+#include <KAlarmCal/Version>
 
 #include <AkonadiCore/AgentManager>
 #include <AkonadiCore/ChangeRecorder>

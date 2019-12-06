@@ -23,7 +23,7 @@
 
 #include "resource.h"
 
-#include <kalarmcal/kacalendar.h>
+#include <KAlarmCal/KACalendar>
 
 #include <KDescendantsProxyModel>
 #include <KCheckableProxyModel>

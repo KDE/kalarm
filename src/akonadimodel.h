@@ -23,13 +23,11 @@
 
 #include "resources/resourcedatamodelbase.h"
 #include "resources/akonadiresource.h"
-#include "eventid.h"
 
-#include <kalarmcal/kaevent.h>
-#include <kalarmcal/collectionattribute.h>
+#include <KAlarmCal/KAEvent>
 
-#include <AkonadiCore/entitytreemodel.h>
-#include <AkonadiCore/servermanager.h>
+#include <AkonadiCore/EntityTreeModel>
+#include <AkonadiCore/ServerManager>
 
 #include <QColor>
 #include <QHash>
@@ -40,7 +38,6 @@ namespace Akonadi
 class ChangeRecorder;
 }
 
-class QPixmap;
 class KJob;
 
 using namespace KAlarmCal;
@@ -77,9 +74,6 @@ class AkonadiModel : public Akonadi::EntityTreeModel, public ResourceDataModelBa
 
         /** Reload all collections' data from Akonadi storage (not from the backend). */
         void reload();
-
-        /** Return whether calendar migration/creation at initialisation has completed. */
-        bool isMigrationCompleted() const;
 
         KAEvent event(const QString& eventId) const;
         KAEvent event(const QModelIndex&) const;
@@ -191,8 +185,6 @@ class AkonadiModel : public Akonadi::EntityTreeModel, public ResourceDataModelBa
         QHash<QString, EventIds> mEventIds;     // collection and item ID for each event ID
         mutable QHash<Akonadi::Collection::Id, Resource> mResources;
         QQueue<KAEvent> mPendingEventChanges;   // changed events with changedEvent() signal pending
-        bool            mMigrationChecked;      // whether calendar migration has been checked at startup
-        bool            mMigrating;             // currently migrating calendars
 };
 
 #endif // AKONADIMODEL_H

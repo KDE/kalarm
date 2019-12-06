@@ -23,7 +23,7 @@
 
 #include "resource.h"
 
-#include <kalarmcal/collectionattribute.h>
+#include <KAlarmCal/CollectionAttribute>
 
 #include <AkonadiCore/Collection>
 #include <AkonadiCore/Item>

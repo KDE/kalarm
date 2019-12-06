@@ -1144,7 +1144,7 @@ void KAlarmApp::checkWritableCalendar()
         MessageWin::redisplayAlarms();
     }
     if (!treeFetched
-    ||  !AkonadiModel::instance()->isMigrationCompleted())
+    ||  !AkonadiModel::instance()->isMigrationComplete())
         return;
     static bool done = false;
     if (done)

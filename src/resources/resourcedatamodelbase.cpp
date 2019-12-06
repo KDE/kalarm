@@ -20,15 +20,16 @@
 
 #include "resourcedatamodelbase.h"
 
+#include "resource.h"
+
 #include "alarmtime.h"
 #include "mainwindow.h"
 #include "messagebox.h"
 #include "preferences.h"
-#include "resources/resource.h"
 #include "kalarm_debug.h"
 
-#include <kalarmcal/alarmtext.h>
-#include <kalarmcal/kaevent.h>
+#include <KAlarmCal/AlarmText>
+#include <KAlarmCal/KAEvent>
 
 #include <KLocalizedString>
 #include <KColorUtils>
@@ -600,6 +601,26 @@ void ResourceDataModelBase::handleResourceMessage(ResourceType::MessageType type
         KAMessageBox::detailedError(MainWindow::mainMainWindow(), message, details);
     else if (type == ResourceType::MessageType::Info)
         KAMessageBox::informationList(MainWindow::mainMainWindow(), message, {details});
+}
+
+bool ResourceDataModelBase::isMigrationComplete() const
+{
+    return mMigrationStatus == 1;
+}
+
+bool ResourceDataModelBase::isMigrating() const
+{
+    return mMigrationStatus == 0;
+}
+
+void ResourceDataModelBase::setMigrationInitiated(bool started)
+{
+    mMigrationStatus = (started ? 0 : -1);
+}
+
+void ResourceDataModelBase::setMigrationComplete()
+{
+    mMigrationStatus = 1;
 }
 
 // vim: et sw=4:

@@ -29,17 +29,17 @@
 #include "resources/akonadiresource.h"
 #include "kalarm_debug.h"
 
-#include <kalarmcal/collectionattribute.h>
-#include <kalarmcal/compatibilityattribute.h>
-#include <kalarmcal/version.h>
+#include <KAlarmCal/CollectionAttribute>
+#include <KAlarmCal/CompatibilityAttribute>
+#include <KAlarmCal/Version>
 
-#include <AkonadiCore/agentinstancecreatejob.h>
-#include <AkonadiCore/agentmanager.h>
-#include <AkonadiCore/collectionfetchjob.h>
-#include <AkonadiCore/collectionfetchscope.h>
-#include <AkonadiCore/collectionmodifyjob.h>
-#include <AkonadiCore/entitydisplayattribute.h>
-#include <AkonadiCore/resourcesynchronizationjob.h>
+#include <AkonadiCore/AgentInstanceCreateJob>
+#include <AkonadiCore/AgentManager>
+#include <AkonadiCore/CollectionFetchJob>
+#include <AkonadiCore/CollectionFetchScope>
+#include <AkonadiCore/CollectionModifyJob>
+#include <AkonadiCore/EntityDisplayAttribute>
+#include <AkonadiCore/ResourceSynchronizationJob>
 
 #include <KLocalizedString>
 #include <KConfig>

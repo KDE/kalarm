@@ -21,13 +21,12 @@
 #ifndef CALENDARMIGRATOR_H
 #define CALENDARMIGRATOR_H
 
-#include <kalarmcal/kacalendar.h>
+#include <KAlarmCal/KACalendar>
 
-#include <AkonadiCore/agentinstance.h>
-#include <AkonadiCore/collection.h>
+#include <AkonadiCore/AgentInstance>
+#include <AkonadiCore/Collection>
 
 class KJob;
-namespace KRES { class Resource; }
 namespace Akonadi { class CollectionFetchJob; }
 
 class CalendarCreator;

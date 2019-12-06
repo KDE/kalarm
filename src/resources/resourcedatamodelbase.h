@@ -21,9 +21,9 @@
 #ifndef RESOURCEDATAMODELBASE_H
 #define RESOURCEDATAMODELBASE_H
 
-#include "resources/resourcetype.h"
+#include "resourcetype.h"
 
-#include <kalarmcal/kacalendar.h>
+#include <KAlarmCal/KACalendar>
 
 #include <QSize>
 
@@ -92,6 +92,9 @@ class ResourceDataModelBase
         /** Return offset to add to headerData() role, for item models. */
         virtual int headerDataEventRoleOffset() const  { return 0; }
 
+        /** Return whether calendar migration/creation at initialisation has completed. */
+        bool isMigrationComplete() const;
+
     protected:
         ResourceDataModelBase();
 
@@ -114,6 +117,15 @@ class ResourceDataModelBase
         /** Called when a resource notifies a message to display to the user. */
         void handleResourceMessage(ResourceType::MessageType, const QString& message, const QString& details);
 
+        /** Return whether calendar migration is currently in progress. */
+        bool isMigrating() const;
+
+        /** To be called when calendar migration has been initiated (or reset). */
+        void setMigrationInitiated(bool started = true);
+
+        /** To be called when calendar migration has been initiated (or reset). */
+        void setMigrationComplete();
+
         static QString  repeatText(const KAEvent&);
         static QString  repeatOrder(const KAEvent&);
         static QString  whatsThisText(int column);
@@ -126,6 +138,8 @@ class ResourceDataModelBase
         static QPixmap* mEmailIcon;
         static QPixmap* mAudioIcon;
         static QSize    mIconSize;      // maximum size of any icon
+
+        int  mMigrationStatus{-1};      // migration status, -1 = no, 0 = initiated, 1 = complete
 };
 
 #endif // RESOURCEDATAMODELBASE_H
