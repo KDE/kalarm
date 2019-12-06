@@ -57,12 +57,14 @@ ecm_generate_headers(KAlarmCal_CamelCase_HEADERS
   CollectionAttribute
   CompatibilityAttribute
   DateTime
-  KADateTime
   EventAttribute
+  Identities
   KACalendar
+  KADateTime
   KAEvent
   KARecurrence
   Repetition
+  Version
   PREFIX KAlarmCal
   REQUIRED_HEADERS KAlarmCal_HEADERS
 )
@@ -86,5 +88,3 @@ install(FILES
 
 ecm_generate_pri_file(BASE_NAME KAlarmCal LIB_NAME KF5AlarmCal DEPS "Holidays IdentityManagement CoreAddons CalendarCore AkonadiCore" FILENAME_VAR PRI_FILENAME INCLUDE_INSTALL_DIR ${KDE_INSTALL_INCLUDEDIR_KF5}/KAlarmCal/)
 install(FILES ${PRI_FILENAME} DESTINATION ${ECM_MKSPECS_INSTALL_DIR})
-
-
