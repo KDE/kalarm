@@ -1,5 +1,5 @@
 /*
- *  kalocale.cpp  -  miscellaneous locale functions
+ *  locale.cpp  -  miscellaneous locale functions
  *  Program:  kalarm
  *  Copyright © 2003-2019 David Jarvie <djarvie@kde.org>
  *
@@ -18,7 +18,7 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kalocale.h"
+#include "locale.h"
 
 #include "kalarm_debug.h"
 
@@ -62,7 +62,7 @@ int localeFirstDayOfWeek()
 
 }
 
-namespace KAlarm
+namespace Locale
 {
 
 /*****************************************************************************/
@@ -87,6 +87,6 @@ uint defaultWorkDays()
     return workDays;
 }
 
-} // namespace KAlarm
+} // namespace Locale
 
 // vim: et sw=4:

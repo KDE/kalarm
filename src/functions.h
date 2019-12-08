@@ -27,19 +27,15 @@
 #include "eventid.h"
 
 #include <KAlarmCal/KAEvent>
-#include <KFile>
 
 #include <QSize>
 #include <QString>
 #include <QVector>
-#include <QMimeType>
-#include <QUrl>
 
 using namespace KAlarmCal;
 
 namespace KCal { class Event; }
 class QWidget;
-class QAction;
 class QAction;
 class KToggleAction;
 class Resource;
@@ -49,8 +45,6 @@ class AlarmListModel;
 namespace KAlarm
 {
 
-/** Return codes from fileType() */
-enum FileType { Unknown, TextPlain, TextFormatted, TextApplication, Image };
 /** Return codes from calendar update functions.
  *  The codes are ordered by severity, so...
  *  DO NOT CHANGE THE ORDER OF THESE VALUES!
@@ -82,41 +76,9 @@ struct UpdateResult
     void set(UpdateStatus s, const QString& m) { status = s; message = m; }
 };
 
-/** Desktop identity, obtained from XDG_CURRENT_DESKTOP. */
-enum class Desktop
-{
-    Kde,      //!< KDE (KDE 4 and Plasma both identify as "KDE")
-    Unity,    //!< Unity
-    Other
-};
-
 /** Display a main window with the specified event selected */
 MainWindow*         displayMainWindowSelected(const QString& eventId);
-bool                readConfigWindowSize(const char* window, QSize&, int* splitterWidth = nullptr);
-void                writeConfigWindowSize(const char* window, const QSize&, int splitterWidth = -1);
-/** Check from its mime type whether a file appears to be a text or image file.
- *  If a text file, its type is distinguished.
- */
-FileType            fileType(const QMimeType& mimetype);
-/** Check that a file exists and is a plain readable file, optionally a text/image file.
- *  Display a Continue/Cancel error message if 'errmsgParent' non-null.
- */
-enum FileErr {
-    FileErr_None = 0,
-    FileErr_Blank,           // generic blank error
-    FileErr_Nonexistent, FileErr_Directory, FileErr_Unreadable, FileErr_NotTextImage,
-    FileErr_BlankDisplay,    // blank error to use for file to display
-    FileErr_BlankPlay        // blank error to use for file to play
-};
-FileErr             checkFileExists(QString& filename, QUrl&);
-bool                showFileErrMessage(const QString& filename, FileErr, FileErr blankError, QWidget* errmsgParent);
 
-/** If a url string is a local file, strip off the 'file:/' prefix. */
-QString             pathOrUrl(const QString& url);
-
-bool                browseFile(QString& file, const QString& caption, QString& defaultDir,
-                               const QString& initialFile = QString(),
-                               const QString& filter = QString(), bool existing = false, QWidget* parent = nullptr);
 bool                editNewAlarm(const QString& templateName, QWidget* parent = nullptr);
 void                editNewAlarm(EditAlarmDlg::Type, QWidget* parent = nullptr);
 void                editNewAlarm(KAEvent::SubAction, QWidget* parent = nullptr, const AlarmText* = nullptr);
@@ -173,21 +135,10 @@ UpdateResult        enableEvents(QVector<KAEvent>&, bool enable, QWidget* msgPar
 QVector<KAEvent>    getSortedActiveEvents(QObject* parent, AlarmListModel** model = nullptr);
 void                purgeArchive(int purgeDays);    // must only be called from KAlarmApp::processQueue()
 void                displayKOrgUpdateError(QWidget* parent, UpdateError, const UpdateResult& korgError, int nAlarms = 0);
-Desktop             currentDesktopIdentity();
-QString             currentDesktopIdentityName();
 QStringList         checkRtcWakeConfig(bool checkEventExists = false);
 void                deleteRtcWakeConfig();
 void                cancelRtcWake(QWidget* msgParent, const QString& eventId = QString());
 bool                setRtcWakeTime(unsigned triggerTime, QWidget* parent);
-
-/** Return a prompt string to ask the user whether to convert the calendar to the
- *  current format.
- *  @param calendarName    The calendar name
- *  @param calendarVersion The calendar version
- *  @param whole           If true, the whole calendar needs to be converted; else
- *                         only some alarms may need to be converted.
- */
-QString             conversionPrompt(const QString& calendarName, const QString& calendarVersion, bool whole);
 
 #ifndef NDEBUG
 void                setTestModeConditions();

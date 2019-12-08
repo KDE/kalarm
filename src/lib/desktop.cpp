@@ -1,7 +1,7 @@
 /*
  *  desktop.cpp  -  desktop functions
  *  Program:  kalarm
- *  Copyright © 2008,2009,2019 David Jarvie <djarvie@kde.org>
+ *  Copyright © 2008-2019 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -27,15 +27,35 @@
 #endif
 #include <QGuiApplication>
 #include <QScreen>
+#include <QProcessEnvironment>
 
-namespace KAlarm
+namespace Desktop
 {
+
+/******************************************************************************
+* Find the identity of the desktop we are running on.
+*/
+QString currentIdentityName()
+{
+    return QProcessEnvironment::systemEnvironment().value(QStringLiteral("XDG_CURRENT_DESKTOP"));
+}
+
+/******************************************************************************
+* Find the identity of the desktop we are running on.
+*/
+Type currentIdentity()
+{
+    const QString desktop = currentIdentityName();
+    if (desktop == QLatin1String("KDE"))    return Kde;
+    if (desktop == QLatin1String("Unity"))  return Unity;
+    return Other;
+}
 
 /******************************************************************************
 * Return the size of the usable area of the desktop, optionally for a specific
 * screen in a multi-head setup.
 */
-QRect desktopWorkArea(int screen)
+QRect workArea(int screen)
 {
 #if KDEPIM_HAVE_X11
     if (screen < 0)
@@ -47,6 +67,6 @@ QRect desktopWorkArea(int screen)
     return screens[screen]->availableGeometry();
 }
 
-} // namespace KAlarm
+} // namespace Desktop
 
 // vim: et sw=4:

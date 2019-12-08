@@ -21,11 +21,13 @@ set(libkalarm_SRCS
     lib/checkbox.cpp
     lib/colourbutton.cpp
     lib/combobox.cpp
+    lib/config.cpp
     lib/desktop.cpp
+    lib/file.cpp
     lib/filedialog.cpp
     lib/groupbox.cpp
-    lib/kalocale.cpp
     lib/label.cpp
+    lib/locale.cpp
     lib/messagebox.cpp
     lib/packedlayout.cpp
     lib/pushbutton.cpp

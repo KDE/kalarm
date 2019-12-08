@@ -37,6 +37,7 @@
 #include "traywindow.h"
 #include "resources/resources.h"
 #include "resources/eventmodel.h"
+#include "lib/desktop.h"
 #include "lib/messagebox.h"
 #include "lib/shellprocess.h"
 #include "kalarm_debug.h"
@@ -154,7 +155,7 @@ KAlarmApp::KAlarmApp(int& argc, char** argv)
     mKOrganizerEnabled = !QStandardPaths::findExecutable(korg).isEmpty();
     if (!mKOrganizerEnabled) { qCDebug(KALARM_LOG) << "KAlarmApp: KOrganizer options disabled (KOrganizer not found)"; }
     // Check if the window manager can't handle keyboard focus transfer between windows
-    mWindowFocusBroken = (KAlarm::currentDesktopIdentity() == KAlarm::Desktop::Unity);
+    mWindowFocusBroken = (Desktop::currentIdentity() == Desktop::Unity);
     if (mWindowFocusBroken) { qCDebug(KALARM_LOG) << "KAlarmApp: Window keyboard focus broken"; }
 }
 

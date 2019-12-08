@@ -21,8 +21,8 @@
 #include "preferences.h"
 
 #include "kalarm.h"
-#include "functions.h"
 #include "kamail.h"
+#include "lib/desktop.h"
 #include "lib/messagebox.h"
 #include "kalarm_debug.h"
 
@@ -36,6 +36,8 @@
 #include <KConfigGroup>
 #include <KMessageBox>
 
+#include <QFile>
+#include <QDir>
 #include <QStandardPaths>
 
 #include <time.h>
@@ -115,7 +117,7 @@ Preferences::Preferences()
 */
 int Preferences::autoHideSystemTray()
 {
-    if(noAutoHideSystemTrayDesktops().contains(KAlarm::currentDesktopIdentityName()))
+    if (noAutoHideSystemTrayDesktops().contains(Desktop::currentIdentityName()))
         return 0;   // never hide
     return self()->mBase_AutoHideSystemTray;
 }
@@ -127,7 +129,7 @@ int Preferences::autoHideSystemTray()
 */
 void Preferences::setAutoHideSystemTray(int timeout)
 {
-    if(noAutoHideSystemTrayDesktops().contains(KAlarm::currentDesktopIdentityName()))
+    if (noAutoHideSystemTrayDesktops().contains(Desktop::currentIdentityName()))
         return;
     self()->setBase_AutoHideSystemTray(timeout);
 }

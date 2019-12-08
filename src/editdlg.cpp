@@ -37,6 +37,7 @@
 #include "lib/autoqpointer.h"
 #include "lib/buttongroup.h"
 #include "lib/checkbox.h"
+#include "lib/config.h"
 #include "lib/lineedit.h"
 #include "lib/messagebox.h"
 #include "lib/packedlayout.h"
@@ -861,7 +862,7 @@ void EditAlarmDlg::showEvent(QShowEvent* se)
         if (mDeferGroup)
             mDeferGroupHeight = mDeferGroup->height() + style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
         QSize s;
-        if (KAlarm::readConfigWindowSize(mTemplate ? TEMPLATE_DIALOG_NAME : EDIT_DIALOG_NAME, s))
+        if (Config::readWindowSize(mTemplate ? TEMPLATE_DIALOG_NAME : EDIT_DIALOG_NAME, s))
         {
             bool defer = mDeferGroup && !mDeferGroup->isHidden();
             s.setHeight(s.height() + (defer ? mDeferGroupHeight : 0));
@@ -953,7 +954,7 @@ void EditAlarmDlg::resizeEvent(QResizeEvent* re)
     {
         QSize s = re->size();
         s.setHeight(s.height() - (!mDeferGroup || mDeferGroup->isHidden() ? 0 : mDeferGroupHeight));
-        KAlarm::writeConfigWindowSize(mTemplate ? TEMPLATE_DIALOG_NAME : EDIT_DIALOG_NAME, s);
+        Config::writeWindowSize(mTemplate ? TEMPLATE_DIALOG_NAME : EDIT_DIALOG_NAME, s);
     }
     QDialog::resizeEvent(re);
 }

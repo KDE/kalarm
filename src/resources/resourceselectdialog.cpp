@@ -21,6 +21,7 @@
 #include "resourceselectdialog.h"
 
 #include "resourcemodel.h"
+#include "lib/config.h"
 
 #include <KLocalizedString>
 
@@ -62,13 +63,13 @@ ResourceSelectDialog::ResourceSelectDialog(ResourceListModel* model, QWidget* pa
     connect(mResourceList, &QAbstractItemView::doubleClicked, this, &ResourceSelectDialog::slotDoubleClicked);
 
     QSize s;
-    if (KAlarm::readConfigWindowSize(DialogName, s))
+    if (Config::readWindowSize(DialogName, s))
         resize(s);
 }
 
 ResourceSelectDialog::~ResourceSelectDialog()
 {
-    KAlarm::writeConfigWindowSize(DialogName, size());
+    Config::writeWindowSize(DialogName, size());
 }
 
 void ResourceSelectDialog::setDefaultResource(const Resource& resource)

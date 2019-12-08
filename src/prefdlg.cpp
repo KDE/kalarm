@@ -36,15 +36,17 @@
 #include "sounddlg.h"
 #include "soundpicker.h"
 #include "specialactions.h"
-#include "lib/stackedwidgets.h"
 #include "traywindow.h"
 #include "resources/resources.h"
 #include "lib/buttongroup.h"
 #include "lib/colourbutton.h"
-#include "lib/kalocale.h"
+#include "lib/config.h"
+#include "lib/desktop.h"
 #include "lib/label.h"
+#include "lib/locale.h"
 #include "lib/messagebox.h"
 #include "lib/radiobutton.h"
+#include "lib/stackedwidgets.h"
 #include "lib/timeedit.h"
 #include "lib/timespinbox.h"
 #include "lib/timezonecombo.h"
@@ -121,7 +123,7 @@ void KAlarmPrefDlg::display()
     {
         mInstance = new KAlarmPrefDlg;
         QSize s;
-        if (KAlarm::readConfigWindowSize(PREF_DIALOG_NAME, s))
+        if (Config::readWindowSize(PREF_DIALOG_NAME, s))
             mInstance->resize(s);
         mInstance->show();
     }
@@ -330,7 +332,7 @@ void KAlarmPrefDlg::showEvent(QShowEvent* e)
 void KAlarmPrefDlg::resizeEvent(QResizeEvent* re)
 {
     if (isVisible())
-        KAlarm::writeConfigWindowSize(PREF_DIALOG_NAME, re->size());
+        Config::writeWindowSize(PREF_DIALOG_NAME, re->size());
     KPageDialog::resizeEvent(re);
 }
 
@@ -698,7 +700,7 @@ TimePrefTab::TimePrefTab(StackedScrollGroup* scrollGroup)
     const QLocale locale;
     for (int i = 0;  i < 7;  ++i)
     {
-        int day = KAlarm::localeDayInWeek_to_weekDay(i);
+        int day = Locale::localeDayInWeek_to_weekDay(i);
         mWorkDays[i] = new QCheckBox(locale.dayName(day), daybox);
         wgrid->addWidget(mWorkDays[i], i/3, i%3, Qt::AlignLeft);
     }
@@ -783,7 +785,7 @@ void TimePrefTab::restore(bool, bool)
     QBitArray days = Preferences::workDays();
     for (int i = 0;  i < 7;  ++i)
     {
-        const bool x = days.testBit(KAlarm::localeDayInWeek_to_weekDay(i) - 1);
+        const bool x = days.testBit(Locale::localeDayInWeek_to_weekDay(i) - 1);
         mWorkDays[i]->setChecked(x);
     }
     mKOrgEventDuration->setValue(Preferences::kOrgEventDuration());
@@ -806,7 +808,7 @@ void TimePrefTab::apply(bool syncToDisc)
     QBitArray workDays(7);
     for (int i = 0;  i < 7;  ++i)
         if (mWorkDays[i]->isChecked())
-            workDays.setBit(KAlarm::localeDayInWeek_to_weekDay(i) - 1, 1);
+            workDays.setBit(Locale::localeDayInWeek_to_weekDay(i) - 1, 1);
     Preferences::setWorkDays(workDays);
     Preferences::setKOrgEventDuration(mKOrgEventDuration->value());
     t = mKOrgEventDuration->value();
@@ -1616,7 +1618,7 @@ ViewPrefTab::ViewPrefTab(StackedScrollGroup* scrollGroup)
     static const QString showInSysTrayWhatsThis = xi18nc("@info:whatsthis",
             "<para>Check to show <application>KAlarm</application>'s icon in the system tray."
             " Showing it in the system tray provides easy access and a status indication.</para>");
-    if(Preferences::noAutoHideSystemTrayDesktops().contains(KAlarm::currentDesktopIdentityName()))
+    if (Preferences::noAutoHideSystemTrayDesktops().contains(Desktop::currentIdentityName()))
     {
         // Run-in-system-tray check box.
         // This desktop type doesn't provide GUI controls to view hidden system tray

@@ -20,9 +20,11 @@
 
 #include "sounddlg.h"
 
-#include "functions.h"
+#include "mainwindow.h"
 #include "soundpicker.h"
 #include "lib/checkbox.h"
+#include "lib/config.h"
+#include "lib/file.h"
 #include "lib/groupbox.h"
 #include "lib/lineedit.h"
 #include "lib/pushbutton.h"
@@ -74,7 +76,7 @@ SoundDlg::SoundDlg(const QString& file, float volume, float fadeVolume, int fade
 
     // Restore the dialog size from last time
     QSize s;
-    if (KAlarm::readConfigWindowSize(SOUND_DIALOG_NAME, s))
+    if (Config::readWindowSize(SOUND_DIALOG_NAME, s))
         resize(s);
 
     // Initialise the control values
@@ -118,7 +120,7 @@ QUrl SoundDlg::getFile() const
 void SoundDlg::resizeEvent(QResizeEvent* re)
 {
     if (isVisible())
-        KAlarm::writeConfigWindowSize(SOUND_DIALOG_NAME, re->size());
+        Config::writeWindowSize(SOUND_DIALOG_NAME, re->size());
     QDialog::resizeEvent(re);
 }
 
@@ -322,7 +324,7 @@ SoundWidget::~SoundWidget()
 void SoundWidget::set(const QString& file, float volume, float fadeVolume, int fadeSeconds, int repeatPause)
 {
     // Initialise the control values
-    mFileEdit->setText(KAlarm::pathOrUrl(file));
+    mFileEdit->setText(File::pathOrUrl(file));
     if (mRepeatGroupBox)
     {
         mRepeatGroupBox->setChecked(repeatPause >= 0);
@@ -428,7 +430,7 @@ void SoundWidget::slotPickFile()
     if (SoundPicker::browseFile(file, mDefaultDir, mFileEdit->text()))
     {
         if (!file.isEmpty())
-            mFileEdit->setText(KAlarm::pathOrUrl(file));
+            mFileEdit->setText(File::pathOrUrl(file));
     }
 }
 
@@ -488,10 +490,10 @@ bool SoundWidget::validate(bool showErrorMessage) const
         mUrl.clear();
         return true;
     }
-    KAlarm::FileErr err = KAlarm::checkFileExists(file, mUrl);
-    if (err == KAlarm::FileErr_None)
+    File::FileErr err = File::checkFileExists(file, mUrl, MainWindow::mainMainWindow());
+    if (err == File::FileErr::None)
         return true;
-    if (err == KAlarm::FileErr_Nonexistent)
+    if (err == File::FileErr::Nonexistent)
     {
         if (mUrl.isLocalFile()  &&  !file.startsWith(QLatin1Char('/')))
         {
@@ -508,10 +510,10 @@ bool SoundWidget::validate(bool showErrorMessage) const
                     if (dir.isReadable() && dir.count() > 2)
                     {
                         QString f = soundDirs[i] + QDir::separator() + file;
-                        err = KAlarm::checkFileExists(f, mUrl);
-                        if (err == KAlarm::FileErr_None)
+                        err = File::checkFileExists(f, mUrl, MainWindow::mainMainWindow());
+                        if (err == File::FileErr::None)
                             return true;
-                        if (err != KAlarm::FileErr_Nonexistent)
+                        if (err != File::FileErr::Nonexistent)
                         {
                             file = f;   // for inclusion in error message
                             break;
@@ -519,20 +521,20 @@ bool SoundWidget::validate(bool showErrorMessage) const
                     }
                 }
             }
-            if (err == KAlarm::FileErr_Nonexistent)
+            if (err == File::FileErr::Nonexistent)
             {
                 QString f = QDir::homePath() + QDir::separator() + file;
-                err = KAlarm::checkFileExists(f, mUrl);
-                if (err == KAlarm::FileErr_None)
+                err = File::checkFileExists(f, mUrl, MainWindow::mainMainWindow());
+                if (err == File::FileErr::None)
                     return true;
-                if (err != KAlarm::FileErr_Nonexistent)
+                if (err != File::FileErr::Nonexistent)
                     file = f;   // for inclusion in error message
             }
         }
     }
     mFileEdit->setFocus();
     if (showErrorMessage
-    &&  KAlarm::showFileErrMessage(file, err, KAlarm::FileErr_BlankPlay, const_cast<SoundWidget*>(this)))
+    &&  File::showFileErrMessage(file, err, File::FileErr::BlankPlay, const_cast<SoundWidget*>(this)))
         return true;
     mValidatedFile.clear();
     mUrl.clear();

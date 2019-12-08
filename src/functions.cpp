@@ -62,15 +62,8 @@ using namespace KCalendarCore;
 #include <KAuth>
 #include <KStandardGuiItem>
 #include <KStandardShortcut>
-#include <KIO/StatJob>
-#include <KJobWidgets>
-#include <KFileItem>
 
 #include <QAction>
-#include <QDir>
-#include <QRegExp>
-#include <QFileDialog>
-#include <QDesktopWidget>
 #include <QDBusConnectionInterface>
 #include <QDBusInterface>
 #include <QTimer>
@@ -80,7 +73,7 @@ using namespace KCalendarCore;
 
 namespace
 {
-bool            refreshAlarmsQueued = false;
+bool refreshAlarmsQueued = false;
 
 struct UpdateStatusData
 {
@@ -966,25 +959,6 @@ void editNewTemplate(const KAEvent* preset, QWidget* parent)
 }
 
 /******************************************************************************
-* Find the identity of the desktop we are running on.
-*/
-QString currentDesktopIdentityName()
-{
-    return QProcessEnvironment::systemEnvironment().value(QStringLiteral("XDG_CURRENT_DESKTOP"));
-}
-
-/******************************************************************************
-* Find the identity of the desktop we are running on.
-*/
-Desktop currentDesktopIdentity()
-{
-    const QString desktop = currentDesktopIdentityName();
-    if (desktop == QLatin1String("KDE"))    return Desktop::Kde;
-    if (desktop == QLatin1String("Unity"))  return Desktop::Unity;
-    return Desktop::Other;
-}
-
-/******************************************************************************
 * Check the config as to whether there is a wake-on-suspend alarm pending, and
 * if so, delete it from the config if it has expired.
 * If 'checkExists' is true, the config entry will only be returned if the
@@ -1466,222 +1440,6 @@ void setDontShowErrors(const EventId& eventId, const QString& tag)
         group.writeEntry(id, tags);
         group.sync();
     }
-}
-
-/******************************************************************************
-* Read the size for the specified window from the config file, for the
-* current screen resolution.
-* Reply = true if size set in the config file, in which case 'result' is set
-*       = false if no size is set, in which case 'result' is unchanged.
-*/
-bool readConfigWindowSize(const char* window, QSize& result, int* splitterWidth)
-{
-    KConfigGroup config(KSharedConfig::openConfig(), window);
-    const QWidget* desktop = QApplication::desktop();
-    const QSize s = QSize(config.readEntry(QStringLiteral("Width %1").arg(desktop->width()), (int)0),
-                          config.readEntry(QStringLiteral("Height %1").arg(desktop->height()), (int)0));
-    if (s.isEmpty())
-        return false;
-    result = s;
-    if (splitterWidth)
-        *splitterWidth = config.readEntry(QStringLiteral("Splitter %1").arg(desktop->width()), -1);
-    return true;
-}
-
-/******************************************************************************
-* Write the size for the specified window to the config file, for the
-* current screen resolution.
-*/
-void writeConfigWindowSize(const char* window, const QSize& size, int splitterWidth)
-{
-    KConfigGroup config(KSharedConfig::openConfig(), window);
-    const QWidget* desktop = QApplication::desktop();
-    config.writeEntry(QStringLiteral("Width %1").arg(desktop->width()), size.width());
-    config.writeEntry(QStringLiteral("Height %1").arg(desktop->height()), size.height());
-    if (splitterWidth >= 0)
-        config.writeEntry(QStringLiteral("Splitter %1").arg(desktop->width()), splitterWidth);
-    config.sync();
-}
-
-/******************************************************************************
-* Check from its mime type whether a file appears to be a text or image file.
-* If a text file, its type is distinguished.
-* Reply = file type.
-*/
-FileType fileType(const QMimeType& mimetype)
-{
-    if (mimetype.inherits(QStringLiteral("text/html")))
-        return TextFormatted;
-    if (mimetype.inherits(QStringLiteral("application/x-executable")))
-        return TextApplication;
-    if (mimetype.inherits(QStringLiteral("text/plain")))
-        return TextPlain;
-    if (mimetype.name().startsWith(QLatin1String("image/")))
-        return Image;
-    return Unknown;
-}
-
-/******************************************************************************
-* Check that a file exists and is a plain readable file.
-* Updates 'filename' and 'url' even if an error occurs, since 'filename' may
-* be needed subsequently by showFileErrMessage().
-* 'filename' is in user input format and may be a local file path or URL.
-*/
-FileErr checkFileExists(QString& filename, QUrl& url)
-{
-    // Convert any relative file path to absolute
-    // (using home directory as the default).
-    // This also supports absolute paths and absolute urls.
-    FileErr err = FileErr_None;
-    url = QUrl::fromUserInput(filename, QDir::homePath(), QUrl::AssumeLocalFile);
-    if (filename.isEmpty())
-    {
-        url = QUrl();
-        err = FileErr_Blank;    // blank file name
-    }
-    else if (!url.isValid())
-        err = FileErr_Nonexistent;
-    else if (url.isLocalFile())
-    {
-        // It's a local file
-        filename = url.toLocalFile();
-        QFileInfo info(filename);
-        if      (info.isDir())        err = FileErr_Directory;
-        else if (!info.exists())      err = FileErr_Nonexistent;
-        else if (!info.isReadable())  err = FileErr_Unreadable;
-    }
-    else
-    {
-        filename = url.toDisplayString();
-        auto statJob = KIO::stat(url, KIO::StatJob::SourceSide, 2);
-        KJobWidgets::setWindow(statJob, MainWindow::mainMainWindow());
-        if (!statJob->exec())
-            err = FileErr_Nonexistent;
-        else
-        {
-            KFileItem fi(statJob->statResult(), url);
-            if (fi.isDir())             err = FileErr_Directory;
-            else if (!fi.isReadable())  err = FileErr_Unreadable;
-        }
-    }
-    return err;
-}
-
-/******************************************************************************
-* Display an error message appropriate to 'err'.
-* Display a Continue/Cancel error message if 'errmsgParent' non-null.
-* Reply = true to continue, false to cancel.
-*/
-bool showFileErrMessage(const QString& filename, FileErr err, FileErr blankError, QWidget* errmsgParent)
-{
-    if (err != FileErr_None)
-    {
-        // If file is a local file, remove "file://" from name
-        QString file = filename;
-        const QRegExp f(QStringLiteral("^file:/+"));
-        if (f.indexIn(file) >= 0)
-            file = file.mid(f.matchedLength() - 1);
-
-        QString errmsg;
-        switch (err)
-        {
-            case FileErr_Blank:
-                if (blankError == FileErr_BlankDisplay)
-                    errmsg = i18nc("@info", "Please select a file to display");
-                else if (blankError == FileErr_BlankPlay)
-                    errmsg = i18nc("@info", "Please select a file to play");
-                else
-                    qFatal("showFileErrMessage: Program error");
-                KAMessageBox::sorry(errmsgParent, errmsg);
-                return false;
-            case FileErr_Directory:
-                KAMessageBox::sorry(errmsgParent, xi18nc("@info", "<filename>%1</filename> is a folder", file));
-                return false;
-            case FileErr_Nonexistent:   errmsg = xi18nc("@info", "<filename>%1</filename> not found", file);  break;
-            case FileErr_Unreadable:    errmsg = xi18nc("@info", "<filename>%1</filename> is not readable", file);  break;
-            case FileErr_NotTextImage:  errmsg = xi18nc("@info", "<filename>%1</filename> appears not to be a text or image file", file);  break;
-            default:
-                break;
-        }
-        if (KAMessageBox::warningContinueCancel(errmsgParent, errmsg)
-            == KMessageBox::Cancel)
-            return false;
-    }
-    return true;
-}
-
-/******************************************************************************
-* If a url string is a local file, strip off the 'file:/' prefix.
-*/
-QString pathOrUrl(const QString& url)
-{
-    static const QRegExp localfile(QStringLiteral("^file:/+"));
-    return (localfile.indexIn(url) >= 0) ? url.mid(localfile.matchedLength() - 1) : url;
-}
-
-/******************************************************************************
-* Display a modal dialog to choose an existing file, initially highlighting
-* any specified file.
-* @param file        Updated with the file which was selected, or empty if no file
-*                    was selected.
-* @param initialFile The file to initially highlight - must be a full path name or URL.
-* @param defaultDir The directory to start in if @p initialFile is empty. If empty,
-*                   the user's home directory will be used. Updated to the
-*                   directory containing the selected file, if a file is chosen.
-* @param existing true to return only existing files, false to allow new ones.
-* Reply = true if 'file' value can be used.
-*       = false if the dialogue was deleted while visible (indicating that
-*         the parent widget was probably also deleted).
-*/
-bool browseFile(QString& file, const QString& caption, QString& defaultDir,
-                const QString& initialFile, const QString& filter, bool existing, QWidget* parent)
-{
-    file.clear();
-    const QString initialDir = !initialFile.isEmpty() ? QString(initialFile).remove(QRegExp(QLatin1String("/[^/]*$")))
-                             : !defaultDir.isEmpty()  ? defaultDir
-                             :                          QDir::homePath();
-    // Use AutoQPointer to guard against crash on application exit while
-    // the dialogue is still open. It prevents double deletion (both on
-    // deletion of parent, and on return from this function).
-    AutoQPointer<QFileDialog> fileDlg = new QFileDialog(parent, caption, initialDir, filter);
-    fileDlg->setAcceptMode(existing ? QFileDialog::AcceptOpen : QFileDialog::AcceptSave);
-    fileDlg->setFileMode(existing ? QFileDialog::ExistingFile : QFileDialog::AnyFile);
-    if (!initialFile.isEmpty())
-        fileDlg->selectFile(initialFile);
-    if (fileDlg->exec() != QDialog::Accepted)
-        return static_cast<bool>(fileDlg);   // return false if dialog was deleted
-    const QList<QUrl> urls = fileDlg->selectedUrls();
-    if (urls.isEmpty())
-        return true;
-    const QUrl& url = urls[0];
-    defaultDir = url.isLocalFile() ? KIO::upUrl(url).toLocalFile() : url.adjusted(QUrl::RemoveFilename).path();
-    bool localOnly = true;
-    file = localOnly ? url.toDisplayString(QUrl::PreferLocalFile) : url.toDisplayString();
-    return true;
-}
-
-/******************************************************************************
-* Return a prompt string to ask the user whether to convert the calendar to the
-* current format.
-* If 'whole' is true, the whole calendar needs to be converted; else only some
-* alarms may need to be converted.
-*
-* Note: This method is defined here to avoid duplicating the i18n string
-*       definition between the Akonadi and KResources code.
-*/
-QString conversionPrompt(const QString& calendarName, const QString& calendarVersion, bool whole)
-{
-    const QString msg = whole
-                ? xi18n("Calendar <resource>%1</resource> is in an old format (<application>KAlarm</application> version %2), "
-                       "and will be read-only unless you choose to update it to the current format.",
-                       calendarName, calendarVersion)
-                : xi18n("Some or all of the alarms in calendar <resource>%1</resource> are in an old <application>KAlarm</application> format, "
-                       "and will be read-only unless you choose to update them to the current format.",
-                       calendarName);
-    return xi18nc("@info", "<para>%1</para><para>"
-                 "<warning>Do not update the calendar if it is also used with an older version of <application>KAlarm</application> "
-                 "(e.g. on another computer). If you do so, the calendar may become unusable there.</warning></para>"
-                 "<para>Do you wish to update the calendar?</para>", msg);
 }
 
 #ifndef NDEBUG

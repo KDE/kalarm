@@ -23,7 +23,6 @@
 
 #include "emailidcombo.h"
 #include "fontcolourbutton.h"
-#include "functions.h"
 #include "kalarmapp.h"
 #include "kamail.h"
 #include "latecancel.h"
@@ -40,6 +39,7 @@
 #include "lib/buttongroup.h"
 #include "lib/checkbox.h"
 #include "lib/colourbutton.h"
+#include "lib/file.h"
 #include "lib/lineedit.h"
 #include "lib/messagebox.h"
 #include "lib/radiobutton.h"
@@ -83,8 +83,8 @@ class PickLogFileRadio : public PickFileRadio
             : PickFileRadio(b, e, text, group, parent) { }
         bool pickFile(QString& file) override    // called when browse button is pressed to select a log file
         {
-            return KAlarm::browseFile(file, i18nc("@title:window", "Choose Log File"), mDefaultDir, fileEdit()->text(), QString(),
-                                      false, parentWidget());
+            return File::browseFile(file, i18nc("@title:window", "Choose Log File"), mDefaultDir, fileEdit()->text(), QString(),
+                                    false, parentWidget());
         }
     private:
         QString mDefaultDir;   // default directory for log file browse button
@@ -640,12 +640,12 @@ void EditDisplayAlarmDlg::slotPickFile()
 {
     static QString defaultDir;   // default directory for file browse button
     QString file;
-    if (KAlarm::browseFile(file, i18nc("@title:window", "Choose Text or Image File to Display"),
-                                      defaultDir, mFileMessageEdit->text(), QString(), true, this))
+    if (File::browseFile(file, i18nc("@title:window", "Choose Text or Image File to Display"),
+                         defaultDir, mFileMessageEdit->text(), QString(), true, this))
     {
         if (!file.isEmpty())
         {
-            mFileMessageEdit->setText(KAlarm::pathOrUrl(file));
+            mFileMessageEdit->setText(File::pathOrUrl(file));
             contentsChanged();
         }
     }
@@ -676,31 +676,31 @@ bool EditDisplayAlarmDlg::checkText(QString& result, bool showErrorMessage) cons
 
         case tFILE:
         {
-            QString alarmtext = mFileMessageEdit->text().trimmed();
+            QString fileName = mFileMessageEdit->text().trimmed();
             QUrl url;
-            KAlarm::FileErr err = KAlarm::checkFileExists(alarmtext, url);
-            if (err == KAlarm::FileErr_None)
+            File::FileErr err = File::checkFileExists(fileName, url, MainWindow::mainMainWindow());
+            if (err == File::FileErr::None)
             {
                 KFileItem fi(url);
-                switch (KAlarm::fileType(fi.currentMimeType()))
+                switch (File::fileType(fi.currentMimeType()))
                 {
-                    case KAlarm::TextFormatted:
-                    case KAlarm::TextPlain:
-                    case KAlarm::TextApplication:
-                    case KAlarm::Image:
+                    case File::TextFormatted:
+                    case File::TextPlain:
+                    case File::TextApplication:
+                    case File::Image:
                         break;
                     default:
-                        err = KAlarm::FileErr_NotTextImage;
+                        err = File::FileErr::NotTextImage;
                         break;
                 }
             }
-            if (err != KAlarm::FileErr_None  &&  showErrorMessage)
+            if (err != File::FileErr::None  &&  showErrorMessage)
             {
                 mFileMessageEdit->setFocus();
-                if (!KAlarm::showFileErrMessage(alarmtext, err, KAlarm::FileErr_BlankDisplay, const_cast<EditDisplayAlarmDlg*>(this)))
+                if (!File::showFileErrMessage(fileName, err, File::FileErr::BlankDisplay, const_cast<EditDisplayAlarmDlg*>(this)))
                     return false;
             }
-            result = alarmtext;
+            result = fileName;
             break;
         }
         case tCOMMAND:
@@ -1436,8 +1436,8 @@ void EditEmailAlarmDlg::openAddressBook()
 void EditEmailAlarmDlg::slotAddAttachment()
 {
     QString file;
-    if (KAlarm::browseFile(file, i18nc("@title:window", "Choose File to Attach"),
-                           mAttachDefaultDir, QString(), QString(), true, this))
+    if (File::browseFile(file, i18nc("@title:window", "Choose File to Attach"),
+                         mAttachDefaultDir, QString(), QString(), true, this))
     {
         if (!file.isEmpty())
         {
@@ -1769,13 +1769,13 @@ bool CommandEdit::isScript() const
 */
 void CommandEdit::setText(const AlarmText& alarmText)
 {
-    QString text = alarmText.displayText();
-    bool script = alarmText.isScript();
+    const QString text = alarmText.displayText();
+    const bool script = alarmText.isScript();
     mTypeScript->setChecked(script);
     if (script)
         mScriptEdit->setPlainText(text);
     else
-        mCommandEdit->setText(KAlarm::pathOrUrl(text));
+        mCommandEdit->setText(File::pathOrUrl(text));
 }
 
 /******************************************************************************

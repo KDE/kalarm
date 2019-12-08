@@ -6,7 +6,7 @@
       http://www.kde.org/standards/kcfg/1.0/kcfg.xsd" >
 
   <include>"lib/timeperiod.h"</include>
-  <include>"lib/kalocale.h"</include>
+  <include>"lib/locale.h"</include>
   <include>QFontDatabase</include>
   <include>KColorScheme</include>
   <include>QFont</include>
@@ -220,7 +220,7 @@
     <entry name="Base_WorkDays" key="WorkDays" type="UInt">
       <label context="@label">Working days</label>
       <whatsthis context="@info:whatsthis">OR'ed bits indicating which days of the week are work days, 1 = Monday ... 64 = Sunday.</whatsthis>
-      <default code="true">KAlarm::defaultWorkDays()</default>
+      <default code="true">Locale::defaultWorkDays()</default>
       <emit signal="base_WorkTimeChanged"/>
     </entry>
     <entry name="DisabledColour" type="Color">

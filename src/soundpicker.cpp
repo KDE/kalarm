@@ -20,20 +20,21 @@
 
 #include "soundpicker.h"
 
-#include "functions.h"
 #include "kalarmapp.h"
 #include "sounddlg.h"
 #include "lib/autoqpointer.h"
 #include "lib/combobox.h"
+#include "lib/file.h"
 #include "lib/pushbutton.h"
 #include "kalarm_debug.h"
 
 #include <KPIMTextEdit/TextToSpeech>
 
-#include <QIcon>
 #include <KLocalizedString>
 #include <phonon/backendcapabilities.h>
 
+#include <QIcon>
+#include <QFileInfo>
 #include <QTimer>
 #include <QLabel>
 #include <QHBoxLayout>
@@ -331,8 +332,8 @@ bool SoundPicker::browseFile(QString& file, QString& defaultDir, const QString& 
         defaultDir = kdeSoundDir;
     }
     const QString filter = Phonon::BackendCapabilities::availableMimeTypes().join(QLatin1Char(' '));
-    return KAlarm::browseFile(file, i18nc("@title:window", "Choose Sound File"),
-                              defaultDir, initialFile, filter, true, nullptr);
+    return File::browseFile(file, i18nc("@title:window", "Choose Sound File"),
+                            defaultDir, initialFile, filter, true, nullptr);
 }
 
 // vim: et sw=4:

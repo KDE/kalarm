@@ -122,7 +122,7 @@ QSize StackedScrollGroup::adjustSize(bool force)
         // available, so use a guess of 25 pixels.
         decoration = 25;
     }
-    int desk = KAlarm::desktopWorkArea().height();
+    int desk = Desktop::workArea().height();
     // There is no stored size, or the deferral group is visible.
     // Allow the tab contents to be scrolled vertically if that is necessary
     // to avoid the dialog exceeding the screen height.

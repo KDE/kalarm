@@ -31,7 +31,9 @@
 #include "preferences.h"
 #include "resources/resources.h"
 #include "lib/autoqpointer.h"
+#include "lib/config.h"
 #include "lib/desktop.h"
+#include "lib/file.h"
 #include "lib/messagebox.h"
 #include "lib/pushbutton.h"
 #include "lib/shellprocess.h"
@@ -413,11 +415,11 @@ void MessageWin::initView()
                         QMimeType mime = db.mimeTypeForUrl(url);
                         if (mime.name() == QLatin1String("application/octet-stream"))
                             mime = db.mimeTypeForData(mTempFile);
-                        const KAlarm::FileType fileType = KAlarm::fileType(mime);
+                        const File::FileType fileType = File::fileType(mime);
                         switch (fileType)
                         {
-                            case KAlarm::Image:
-                            case KAlarm::TextFormatted:
+                            case File::Image:
+                            case File::TextFormatted:
                                 delete mTempFile;
                                 mTempFile = new QTemporaryFile;
                                 mTempFile->open();
@@ -438,11 +440,11 @@ void MessageWin::initView()
 
                         switch (fileType)
                         {
-                            case KAlarm::Image:
+                            case File::Image:
                                 view->setHtml(QLatin1String("<div align=\"center\"><img src=\"") + mTempFile->fileName() + QLatin1String("\"></div>"));
                                 mTempFile->close();   // keep the file available to be displayed
                                 break;
-                            case KAlarm::TextFormatted:
+                            case File::TextFormatted:
                                 view->QTextBrowser::setSource(QUrl::fromLocalFile(mTempFile->fileName()));   //krazy:exclude=qclasses
                                 delete mTempFile;
                                 mTempFile = nullptr;
@@ -492,7 +494,7 @@ void MessageWin::initView()
                 topLayout->addSpacing(vspace);
                 topLayout->addStretch();
                 // Don't include any horizontal margins if message is 2/3 screen width
-                if (text->sizeHint().width() >= KAlarm::desktopWorkArea(mScreenNumber).width()*2/3)
+                if (text->sizeHint().width() >= Desktop::workArea(mScreenNumber).width()*2/3)
                     topLayout->addWidget(text, 1, Qt::AlignHCenter);
                 else
                 {
@@ -1220,7 +1222,7 @@ bool MessageWin::spread(bool scatter)
     if (instanceCount(true) <= 1)    // ignore always-hidden windows
         return false;
 
-    const QRect desk = KAlarm::desktopWorkArea();   // get the usable area of the desktop
+    const QRect desk = Desktop::workArea();   // get the usable area of the desktop
     if (scatter == isSpread(desk.topLeft()))
         return scatter;
 
@@ -1723,7 +1725,7 @@ QSize MessageWin::sizeHint() const
     }
 
     // Limit the size to fit inside the working area of the desktop
-    const QSize desktop = KAlarm::desktopWorkArea(mScreenNumber).size();
+    const QSize desktop = Desktop::workArea(mScreenNumber).size();
     const QSize frameThickness = frameGeometry().size() - geometry().size();  // title bar & window frame
     return desired.boundedTo(desktop - frameThickness);
 }
@@ -1754,10 +1756,10 @@ void MessageWin::showEvent(QShowEvent* se)
         bool execComplete = true;
         QSize s = sizeHint();     // fit the window round the message
         if (mAction == KAEvent::FILE  &&  !mErrorMsgs.count())
-            KAlarm::readConfigWindowSize("FileMessage", s);
+            Config::readWindowSize("FileMessage", s);
         resize(s);
 
-        const QRect desk = KAlarm::desktopWorkArea(mScreenNumber);
+        const QRect desk = Desktop::workArea(mScreenNumber);
         const QRect frame = frameGeometry();
 
         mButtonDelay = Preferences::messageButtonDelay() * 1000;
@@ -1830,7 +1832,7 @@ void MessageWin::showEvent(QShowEvent* se)
 void MessageWin::moveEvent(QMoveEvent* e)
 {
     MainWindowBase::moveEvent(e);
-    theApp()->setSpreadWindowsState(isSpread(KAlarm::desktopWorkArea(mScreenNumber).topLeft()));
+    theApp()->setSpreadWindowsState(isSpread(Desktop::workArea(mScreenNumber).topLeft()));
     if (mPositioning)
     {
         // The window has just been initially positioned
@@ -1852,7 +1854,7 @@ void MessageWin::frameDrawn()
         if (width() > s.width()  ||  height() > s.height())
             resize(s);
     }
-    theApp()->setSpreadWindowsState(isSpread(KAlarm::desktopWorkArea(mScreenNumber).topLeft()));
+    theApp()->setSpreadWindowsState(isSpread(Desktop::workArea(mScreenNumber).topLeft()));
 }
 
 /******************************************************************************
@@ -1912,7 +1914,7 @@ void MessageWin::resizeEvent(QResizeEvent* re)
     else
     {
         if (mShown  &&  mAction == KAEvent::FILE  &&  !mErrorMsgs.count())
-            KAlarm::writeConfigWindowSize("FileMessage", re->size());
+            Config::writeWindowSize("FileMessage", re->size());
         MainWindowBase::resizeEvent(re);
     }
 }

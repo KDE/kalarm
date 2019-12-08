@@ -24,6 +24,7 @@
 #include "functions.h"
 #include "templatelistview.h"
 #include "resources/eventmodel.h"
+#include "lib/config.h"
 #include "lib/shellprocess.h"
 #include "kalarm_debug.h"
 
@@ -79,7 +80,7 @@ TemplatePickDlg::TemplatePickDlg(KAEvent::Actions type, QWidget* parent)
     slotSelectionChanged();        // enable or disable the OK button
 
     QSize s;
-    if (KAlarm::readConfigWindowSize(TMPL_PICK_DIALOG_NAME, s))
+    if (Config::readWindowSize(TMPL_PICK_DIALOG_NAME, s))
         resize(s);
 }
 
@@ -110,7 +111,7 @@ void TemplatePickDlg::slotSelectionChanged()
 void TemplatePickDlg::resizeEvent(QResizeEvent* re)
 {
     if (isVisible())
-        KAlarm::writeConfigWindowSize(TMPL_PICK_DIALOG_NAME, re->size());
+        Config::writeWindowSize(TMPL_PICK_DIALOG_NAME, re->size());
     QDialog::resizeEvent(re);
 }
 

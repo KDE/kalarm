@@ -23,8 +23,6 @@
 
 #include "resource.h"
 
-#include "functions.h"
-
 #include <QDialog>
 
 class ResourceListModel;

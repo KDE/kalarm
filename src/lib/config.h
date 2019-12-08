@@ -1,7 +1,7 @@
 /*
- *  desktop.h  -  desktop functions
+ *  config.h  -  config functions
  *  Program:  kalarm
- *  Copyright © 2008-2019 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2006-2019 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -18,29 +18,19 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef DESKTOP_H
-#define DESKTOP_H
+#ifndef LIB_CONFIG_H
+#define LIB_CONFIG_H
 
-#include <QRect>
+class QSize;
 
-namespace Desktop
+namespace Config
 {
 
-/** Desktop identity, obtained from XDG_CURRENT_DESKTOP. */
-enum Type
-{
-    Kde,      //!< KDE (KDE 4 and Plasma both identify as "KDE")
-    Unity,    //!< Unity
-    Other
-};
+bool readWindowSize(const char* window, QSize&, int* splitterWidth = nullptr);
+void writeWindowSize(const char* window, const QSize&, int splitterWidth = -1);
 
-Type currentIdentity();
-QString currentIdentityName();
+} // namespace Config
 
-QRect workArea(int screen = -1);
-
-} // namespace Desktop
-
-#endif // DESKTOP_H
+#endif // LIB_CONFIG_H
 
 // vim: et sw=4:

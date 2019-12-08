@@ -23,6 +23,7 @@
 #include "functions.h"
 #include "lib/autoqpointer.h"
 #include "lib/checkbox.h"
+#include "lib/config.h"
 #include "lib/shellprocess.h"
 #include "kalarm_debug.h"
 
@@ -124,7 +125,7 @@ SpecialActionsDlg::SpecialActionsDlg(const QString& preAction, const QString& po
     connect(okButton, &QPushButton::clicked, this, &SpecialActionsDlg::slotOk);
 
     QSize s;
-    if (KAlarm::readConfigWindowSize(SPEC_ACT_DIALOG_NAME, s))
+    if (Config::readWindowSize(SPEC_ACT_DIALOG_NAME, s))
         resize(s);
 }
 
@@ -145,7 +146,7 @@ void SpecialActionsDlg::slotOk()
 void SpecialActionsDlg::resizeEvent(QResizeEvent* re)
 {
     if (isVisible())
-        KAlarm::writeConfigWindowSize(SPEC_ACT_DIALOG_NAME, re->size());
+        Config::writeWindowSize(SPEC_ACT_DIALOG_NAME, re->size());
     QDialog::resizeEvent(re);
 }
 

@@ -28,14 +28,14 @@
 #include "kalarmapp.h"
 #include "preferences.h"
 #include "repetitionbutton.h"
+#include "lib/buttongroup.h"
 #include "lib/checkbox.h"
 #include "lib/combobox.h"
-#include "lib/kalocale.h"
+#include "lib/locale.h"
 #include "lib/radiobutton.h"
 #include "lib/spinbox.h"
 #include "lib/timeedit.h"
 #include "lib/timespinbox.h"
-#include "lib/buttongroup.h"
 #include "kalarm_debug.h"
 
 #include <KAlarmCal/KAEvent>
@@ -1200,7 +1200,7 @@ DayWeekRule::DayWeekRule(const QString& freqText, const QString& freqWhatsThis, 
     QLocale locale;
     for (int i = 0;  i < 7;  ++i)
     {
-        const int day = KAlarm::localeDayInWeek_to_weekDay(i);
+        const int day = Locale::localeDayInWeek_to_weekDay(i);
         mDayBox[i] = new CheckBox(locale.dayName(day), box);
         mDayBox[i]->setFixedSize(mDayBox[i]->sizeHint());
         mDayBox[i]->setReadOnly(readOnly);
@@ -1223,7 +1223,7 @@ QBitArray DayWeekRule::days() const
     ds.fill(false);
     for (int i = 0;  i < 7;  ++i)
         if (mDayBox[i]->isChecked())
-            ds.setBit(KAlarm::localeDayInWeek_to_weekDay(i) - 1, 1);
+            ds.setBit(Locale::localeDayInWeek_to_weekDay(i) - 1, 1);
     return ds;
 }
 
@@ -1248,7 +1248,7 @@ void DayWeekRule::setDays(const QBitArray& days)
     }
     for (int i = 0;  i < 7;  ++i)
     {
-        bool x = days.testBit(KAlarm::localeDayInWeek_to_weekDay(i) - 1);
+        bool x = days.testBit(Locale::localeDayInWeek_to_weekDay(i) - 1);
         mDayBox[i]->setChecked(x);
     }
 }
@@ -1261,7 +1261,7 @@ void DayWeekRule::setDay(int dayOfWeek)
     for (int i = 0;  i < 7;  ++i)
         mDayBox[i]->setChecked(false);
     if (dayOfWeek > 0  &&  dayOfWeek <= 7)
-        mDayBox[KAlarm::weekDay_to_localeDayInWeek(dayOfWeek)]->setChecked(true);
+        mDayBox[Locale::weekDay_to_localeDayInWeek(dayOfWeek)]->setChecked(true);
 }
 
 /******************************************************************************
@@ -1397,7 +1397,7 @@ MonthYearRule::MonthYearRule(const QString& freqText, const QString& freqWhatsTh
     QLocale locale;
     for (int i = 0;  i < 7;  ++i)
     {
-        int day = KAlarm::localeDayInWeek_to_weekDay(i);
+        int day = Locale::localeDayInWeek_to_weekDay(i);
         mDayOfWeekCombo->addItem(locale.dayName(day));
     }
     mDayOfWeekCombo->setReadOnly(readOnly);
@@ -1427,7 +1427,7 @@ void MonthYearRule::setDefaultValues(int dayOfMonth, int dayOfWeek)
     --dayOfMonth;
     mDayCombo->setCurrentIndex(dayOfMonth);
     mWeekCombo->setCurrentIndex(dayOfMonth / 7);
-    mDayOfWeekCombo->setCurrentIndex(KAlarm::weekDay_to_localeDayInWeek(dayOfWeek));
+    mDayOfWeekCombo->setCurrentIndex(Locale::weekDay_to_localeDayInWeek(dayOfWeek));
 }
 
 int MonthYearRule::date() const
@@ -1444,7 +1444,7 @@ int MonthYearRule::week() const
 
 int MonthYearRule::dayOfWeek() const
 {
-    return KAlarm::localeDayInWeek_to_weekDay(mDayOfWeekCombo->currentIndex());
+    return Locale::localeDayInWeek_to_weekDay(mDayOfWeekCombo->currentIndex());
 }
 
 void MonthYearRule::setDate(int dayOfMonth)
@@ -1457,7 +1457,7 @@ void MonthYearRule::setPosition(int week, int dayOfWeek)
 {
     mPosButton->setChecked(true);
     mWeekCombo->setCurrentIndex((week > 0) ? week - 1 : (week < 0) ? 4 - week : mEveryWeek ? 10 : 0);
-    mDayOfWeekCombo->setCurrentIndex(KAlarm::weekDay_to_localeDayInWeek(dayOfWeek));
+    mDayOfWeekCombo->setCurrentIndex(Locale::weekDay_to_localeDayInWeek(dayOfWeek));
 }
 
 void MonthYearRule::enableSelection(DayPosType type)

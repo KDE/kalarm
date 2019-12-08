@@ -29,6 +29,7 @@
 #include "undo.h"
 #include "resources/resources.h"
 #include "resources/eventmodel.h"
+#include "lib/config.h"
 #include "lib/messagebox.h"
 #include "lib/shellprocess.h"
 #include "kalarm_debug.h"
@@ -123,7 +124,7 @@ TemplateDlg::TemplateDlg(QWidget* parent)
     slotSelectionChanged();          // enable/disable buttons as appropriate
 
     QSize s;
-    if (KAlarm::readConfigWindowSize(TMPL_DIALOG_NAME, s))
+    if (Config::readWindowSize(TMPL_DIALOG_NAME, s))
         resize(s);
 }
 
@@ -235,7 +236,7 @@ void TemplateDlg::slotSelectionChanged()
 void TemplateDlg::resizeEvent(QResizeEvent* re)
 {
     if (isVisible())
-        KAlarm::writeConfigWindowSize(TMPL_DIALOG_NAME, re->size());
+        Config::writeWindowSize(TMPL_DIALOG_NAME, re->size());
     QDialog::resizeEvent(re);
 }
 
