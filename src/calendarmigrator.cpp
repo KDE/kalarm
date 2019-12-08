@@ -21,7 +21,6 @@
 #include "calendarmigrator.h"
 
 #include "akonadimodel.h"
-#include "functions.h"
 #include "kalarmsettings.h"
 #include "kalarmdirsettings.h"
 #include "mainwindow.h"
@@ -56,7 +55,7 @@ namespace
 const QString KALARM_RESOURCE(QStringLiteral("akonadi_kalarm_resource"));
 const QString KALARM_DIR_RESOURCE(QStringLiteral("akonadi_kalarm_dir_resource"));
 
-QString conversionPrompt(const QString& calendarName, const QString& calendarVersion);
+QString conversionPrompt(const QString& calendarName, const QString& calendarVersion, bool whole);
 }
 
 // Creates, or migrates from KResources, a single alarm calendar
@@ -460,7 +459,7 @@ bool CalendarUpdater::update()
             {
                 // The user hasn't previously said not to convert it
                 const QString versionString = KAlarmCal::getVersionString(compatAttr->version());
-                const QString msg = conversionPrompt(mCollection.name(), versionString);
+                const QString msg = conversionPrompt(mCollection.name(), versionString, false);
                 qCDebug(KALARM_LOG) << "CalendarUpdater::update: Version" << versionString;
                 if (KAMessageBox::warningYesNo(qobject_cast<QWidget*>(mParent), msg) != KMessageBox::Yes)
                     result = false;   // the user chose not to update the calendar
@@ -881,11 +880,15 @@ namespace
 * Return a prompt string to ask the user whether to convert the calendar to the
 * current format.
 */
-QString conversionPrompt(const QString& calendarName, const QString& calendarVersion)
+QString conversionPrompt(const QString& calendarName, const QString& calendarVersion, bool whole)
 {
-    const QString msg = xi18n("Some or all of the alarms in calendar <resource>%1</resource> are in an old <application>KAlarm</application> format, "
-                              "and will be read-only unless you choose to update them to the current format.",
-                              calendarName);
+    const QString msg = whole
+                ? xi18n("Calendar <resource>%1</resource> is in an old format (<application>KAlarm</application> version %2), "
+                        "and will be read-only unless you choose to update it to the current format.",
+                        calendarName, calendarVersion)
+                : xi18n("Some or all of the alarms in calendar <resource>%1</resource> are in an old <application>KAlarm</application> format, "
+                        "and will be read-only unless you choose to update them to the current format.",
+                        calendarName);
     return xi18nc("@info", "<para>%1</para><para>"
                  "<warning>Do not update the calendar if it is also used with an older version of <application>KAlarm</application> "
                  "(e.g. on another computer). If you do so, the calendar may become unusable there.</warning></para>"
