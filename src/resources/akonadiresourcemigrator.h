@@ -1,5 +1,5 @@
 /*
- *  calendarmigrator.h  -  migrates or creates KAlarm Akonadi resources
+ *  akonadiresourcemigrator.h  -  migrates or creates KAlarm Akonadi resources
  *  Program:  kalarm
  *  Copyright © 2011-2019 David Jarvie <djarvie@kde.org>
  *
@@ -18,8 +18,8 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef CALENDARMIGRATOR_H
-#define CALENDARMIGRATOR_H
+#ifndef AKONADIRESOURCEMIGRATOR_H
+#define AKONADIRESOURCEMIGRATOR_H
 
 #include <KAlarmCal/KACalendar>
 
@@ -39,12 +39,12 @@ using namespace KAlarmCal;
  * Class to migrate KResources alarm calendars from pre-Akonadi versions of
  * KAlarm, and to create default calendar resources if none exist.
  */
-class CalendarMigrator : public QObject
+class AkonadiResourceMigrator : public QObject
 {
         Q_OBJECT
     public:
-        ~CalendarMigrator();
-        static CalendarMigrator* instance();
+        ~AkonadiResourceMigrator();
+        static AkonadiResourceMigrator* instance();
         static void reset();
         static void execute();
         static void updateToCurrentFormat(const Resource&, bool ignoreKeepFormat, QObject* parent);
@@ -66,12 +66,12 @@ class CalendarMigrator : public QObject
         void calendarCreated(CalendarCreator*);
 
     private:
-        CalendarMigrator(QObject* parent = nullptr);
+        AkonadiResourceMigrator(QObject* parent = nullptr);
         void migrateOrCreate();
         void createDefaultResources();
         template <class Interface> static bool updateStorageFormat(const Akonadi::AgentInstance&, QString& errorMessage, QObject* parent);
 
-        static CalendarMigrator* mInstance;
+        static AkonadiResourceMigrator* mInstance;
         QList<CalendarCreator*> mCalendarsPending;  // pending calendar migration or creation jobs
         QList<Akonadi::CollectionFetchJob*> mFetchesPending;  // pending collection fetch jobs for existing resources
         CalEvent::Types mExistingAlarmTypes;   // alarm types provided by existing Akonadi resources
@@ -80,6 +80,6 @@ class CalendarMigrator : public QObject
         friend class CalendarUpdater;
 };
 
-#endif // CALENDARMIGRATOR_H
+#endif // AKONADIRESOURCEMIGRATOR_H
 
 // vim: et sw=4:

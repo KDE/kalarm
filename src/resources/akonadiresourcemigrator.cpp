@@ -1,5 +1,5 @@
 /*
- *  calendarmigrator.cpp  -  migrates or creates KAlarm Akonadi resources
+ *  akonadiresourcemigrator.cpp  -  migrates or creates KAlarm Akonadi resources
  *  Program:  kalarm
  *  Copyright © 2011-2019 David Jarvie <djarvie@kde.org>
  *
@@ -18,7 +18,7 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "calendarmigrator.h"
+#include "akonadiresourcemigrator.h"
 
 #include "akonadimodel.h"
 #include "kalarmsettings.h"
@@ -143,43 +143,43 @@ class CalendarUpdater : public QObject
 };
 
 
-CalendarMigrator* CalendarMigrator::mInstance = nullptr;
-bool              CalendarMigrator::mCompleted = false;
+AkonadiResourceMigrator* AkonadiResourceMigrator::mInstance = nullptr;
+bool              AkonadiResourceMigrator::mCompleted = false;
 
-CalendarMigrator::CalendarMigrator(QObject* parent)
+AkonadiResourceMigrator::AkonadiResourceMigrator(QObject* parent)
     : QObject(parent)
     , mExistingAlarmTypes{}
 {
 }
 
-CalendarMigrator::~CalendarMigrator()
+AkonadiResourceMigrator::~AkonadiResourceMigrator()
 {
-    qCDebug(KALARM_LOG) << "~CalendarMigrator";
+    qCDebug(KALARM_LOG) << "~AkonadiResourceMigrator";
     mInstance = nullptr;
 }
 
 /******************************************************************************
 * Reset to allow migration to be run again.
 */
-void CalendarMigrator::reset()
+void AkonadiResourceMigrator::reset()
 {
     mCompleted = false;
 }
 
 /******************************************************************************
-* Create and return the unique CalendarMigrator instance.
+* Create and return the unique AkonadiResourceMigrator instance.
 */
-CalendarMigrator* CalendarMigrator::instance()
+AkonadiResourceMigrator* AkonadiResourceMigrator::instance()
 {
     if (!mInstance && !mCompleted)
-        mInstance = new CalendarMigrator;
+        mInstance = new AkonadiResourceMigrator;
     return mInstance;
 }
 
 /******************************************************************************
 * Migrate old KResource calendars, or if none, create default Akonadi resources.
 */
-void CalendarMigrator::execute()
+void AkonadiResourceMigrator::execute()
 {
     instance()->migrateOrCreate();
 }
@@ -187,9 +187,9 @@ void CalendarMigrator::execute()
 /******************************************************************************
 * Migrate old KResource calendars, and create default Akonadi resources.
 */
-void CalendarMigrator::migrateOrCreate()
+void AkonadiResourceMigrator::migrateOrCreate()
 {
-    qCDebug(KALARM_LOG) << "CalendarMigrator::migrateOrCreate";
+    qCDebug(KALARM_LOG) << "AkonadiResourceMigrator::migrateOrCreate";
 
     // First, check whether any Akonadi resources already exist, and if
     // so, find their alarm types.
@@ -203,7 +203,7 @@ void CalendarMigrator::migrateOrCreate()
             CollectionFetchJob* job = new CollectionFetchJob(Collection::root(), CollectionFetchJob::FirstLevel);
             job->fetchScope().setResource(agent.identifier());
             mFetchesPending << job;
-            connect(job, &KJob::result, this, &CalendarMigrator::collectionFetchResult);
+            connect(job, &KJob::result, this, &AkonadiResourceMigrator::collectionFetchResult);
             // Note: Once all collections have been fetched, any missing
             //       default resources will be created.
         }
@@ -242,8 +242,8 @@ void CalendarMigrator::migrateOrCreate()
                 delete creator;
             else
             {
-                connect(creator, &CalendarCreator::finished, this, &CalendarMigrator::calendarCreated);
-                connect(creator, &CalendarCreator::creating, this, &CalendarMigrator::creatingCalendar);
+                connect(creator, &CalendarCreator::finished, this, &AkonadiResourceMigrator::calendarCreated);
+                connect(creator, &CalendarCreator::creating, this, &AkonadiResourceMigrator::creatingCalendar);
                 mExistingAlarmTypes |= creator->alarmType();
                 mCalendarsPending << creator;
                 creator->createAgent(agentType, this);
@@ -260,17 +260,17 @@ void CalendarMigrator::migrateOrCreate()
 * Called when a collection fetch job has completed.
 * Finds which mime types are handled by the existing collection.
 */
-void CalendarMigrator::collectionFetchResult(KJob* j)
+void AkonadiResourceMigrator::collectionFetchResult(KJob* j)
 {
     CollectionFetchJob* job = static_cast<CollectionFetchJob*>(j);
     const QString id = job->fetchScope().resource();
     if (j->error())
-        qCCritical(KALARM_LOG) << "CalendarMigrator::collectionFetchResult: CollectionFetchJob" << id << "error: " << j->errorString();
+        qCCritical(KALARM_LOG) << "AkonadiResourceMigrator::collectionFetchResult: CollectionFetchJob" << id << "error: " << j->errorString();
     else
     {
         const Collection::List collections = job->collections();
         if (collections.isEmpty())
-            qCCritical(KALARM_LOG) << "CalendarMigrator::collectionFetchResult: No collections found for resource" << id;
+            qCCritical(KALARM_LOG) << "AkonadiResourceMigrator::collectionFetchResult: No collections found for resource" << id;
         else
             mExistingAlarmTypes |= CalEvent::types(collections[0].contentMimeTypes());
     }
@@ -291,31 +291,31 @@ void CalendarMigrator::collectionFetchResult(KJob* j)
 * If the default calendar files already exist, they will be used; otherwise
 * they will be created.
 */
-void CalendarMigrator::createDefaultResources()
+void AkonadiResourceMigrator::createDefaultResources()
 {
-    qCDebug(KALARM_LOG) << "CalendarMigrator::createDefaultResources";
+    qCDebug(KALARM_LOG) << "AkonadiResourceMigrator::createDefaultResources";
     CalendarCreator* creator;
     if (!(mExistingAlarmTypes & CalEvent::ACTIVE))
     {
         creator = new CalendarCreator(CalEvent::ACTIVE, QStringLiteral("calendar.ics"), i18nc("@info", "Active Alarms"));
-        connect(creator, &CalendarCreator::finished, this, &CalendarMigrator::calendarCreated);
-        connect(creator, &CalendarCreator::creating, this, &CalendarMigrator::creatingCalendar);
+        connect(creator, &CalendarCreator::finished, this, &AkonadiResourceMigrator::calendarCreated);
+        connect(creator, &CalendarCreator::creating, this, &AkonadiResourceMigrator::creatingCalendar);
         mCalendarsPending << creator;
         creator->createAgent(KALARM_RESOURCE, this);
     }
     if (!(mExistingAlarmTypes & CalEvent::ARCHIVED))
     {
         creator = new CalendarCreator(CalEvent::ARCHIVED, QStringLiteral("expired.ics"), i18nc("@info", "Archived Alarms"));
-        connect(creator, &CalendarCreator::finished, this, &CalendarMigrator::calendarCreated);
-        connect(creator, &CalendarCreator::creating, this, &CalendarMigrator::creatingCalendar);
+        connect(creator, &CalendarCreator::finished, this, &AkonadiResourceMigrator::calendarCreated);
+        connect(creator, &CalendarCreator::creating, this, &AkonadiResourceMigrator::creatingCalendar);
         mCalendarsPending << creator;
         creator->createAgent(KALARM_RESOURCE, this);
     }
     if (!(mExistingAlarmTypes & CalEvent::TEMPLATE))
     {
         creator = new CalendarCreator(CalEvent::TEMPLATE, QStringLiteral("template.ics"), i18nc("@info", "Alarm Templates"));
-        connect(creator, &CalendarCreator::finished, this, &CalendarMigrator::calendarCreated);
-        connect(creator, &CalendarCreator::creating, this, &CalendarMigrator::creatingCalendar);
+        connect(creator, &CalendarCreator::finished, this, &AkonadiResourceMigrator::calendarCreated);
+        connect(creator, &CalendarCreator::creating, this, &AkonadiResourceMigrator::creatingCalendar);
         mCalendarsPending << creator;
         creator->createAgent(KALARM_RESOURCE, this);
     }
@@ -331,7 +331,7 @@ void CalendarMigrator::createDefaultResources()
 * Called when a calendar resource is about to be created.
 * Emits the 'creating' signal.
 */
-void CalendarMigrator::creatingCalendar(const QString& path)
+void AkonadiResourceMigrator::creatingCalendar(const QString& path)
 {
     Q_EMIT creating(path, -1, false);
 }
@@ -340,7 +340,7 @@ void CalendarMigrator::creatingCalendar(const QString& path)
 * Called when creation of a migrated or new default calendar resource has
 * completed or failed.
 */
-void CalendarMigrator::calendarCreated(CalendarCreator* creator)
+void AkonadiResourceMigrator::calendarCreated(CalendarCreator* creator)
 {
     int i = mCalendarsPending.indexOf(creator);
     if (i < 0)
@@ -379,9 +379,9 @@ void CalendarMigrator::calendarCreated(CalendarCreator* creator)
 * Note: the collection should be up to date: use AkonadiModel::refresh() before
 *       calling this function.
 */
-void CalendarMigrator::updateToCurrentFormat(const Resource& resource, bool ignoreKeepFormat, QObject* parent)
+void AkonadiResourceMigrator::updateToCurrentFormat(const Resource& resource, bool ignoreKeepFormat, QObject* parent)
 {
-    qCDebug(KALARM_LOG) << "CalendarMigrator::updateToCurrentFormat:" << resource.id();
+    qCDebug(KALARM_LOG) << "AkonadiResourceMigrator::updateToCurrentFormat:" << resource.id();
     if (CalendarUpdater::containsCollection(resource.id()))
         return;   // prevent multiple simultaneous user prompts
     const AgentInstance agent = AgentManager::self()->instance(resource.configName());
@@ -393,7 +393,7 @@ void CalendarMigrator::updateToCurrentFormat(const Resource& resource, bool igno
         dirResource = true;
     else
     {
-        qCCritical(KALARM_LOG) << "CalendarMigrator::updateToCurrentFormat: Invalid agent type" << id;
+        qCCritical(KALARM_LOG) << "AkonadiResourceMigrator::updateToCurrentFormat: Invalid agent type" << id;
         return;
     }
     const Collection& collection = AkonadiResource::collection(resource);
@@ -477,9 +477,9 @@ bool CalendarUpdater::update()
                     {
                         const AgentInstance agent = AgentManager::self()->instance(mCollection.resource());
                         if (mDirResource)
-                            CalendarMigrator::updateStorageFormat<OrgKdeAkonadiKAlarmDirSettingsInterface>(agent, errmsg, mParent);
+                            AkonadiResourceMigrator::updateStorageFormat<OrgKdeAkonadiKAlarmDirSettingsInterface>(agent, errmsg, mParent);
                         else
-                            CalendarMigrator::updateStorageFormat<OrgKdeAkonadiKAlarmSettingsInterface>(agent, errmsg, mParent);
+                            AkonadiResourceMigrator::updateStorageFormat<OrgKdeAkonadiKAlarmSettingsInterface>(agent, errmsg, mParent);
                     }
                     if (!errmsg.isEmpty())
                     {
@@ -506,19 +506,19 @@ bool CalendarUpdater::update()
 * KAlarm format.
 * Reply = true if success; if false, 'errorMessage' contains the error message.
 */
-template <class Interface> bool CalendarMigrator::updateStorageFormat(const AgentInstance& agent, QString& errorMessage, QObject* parent)
+template <class Interface> bool AkonadiResourceMigrator::updateStorageFormat(const AgentInstance& agent, QString& errorMessage, QObject* parent)
 {
-    qCDebug(KALARM_LOG) << "CalendarMigrator::updateStorageFormat";
+    qCDebug(KALARM_LOG) << "AkonadiResourceMigrator::updateStorageFormat";
     Interface* iface = getAgentInterface<Interface>(agent, errorMessage, parent);
     if (!iface)
     {
-        qCDebug(KALARM_LOG) << "CalendarMigrator::updateStorageFormat:" << errorMessage;
+        qCDebug(KALARM_LOG) << "AkonadiResourceMigrator::updateStorageFormat:" << errorMessage;
         return false;
     }
     iface->setUpdateStorageFormat(true);
     iface->save();
     delete iface;
-    qCDebug(KALARM_LOG) << "CalendarMigrator::updateStorageFormat: true";
+    qCDebug(KALARM_LOG) << "AkonadiResourceMigrator::updateStorageFormat: true";
     return true;
 }
 
@@ -527,14 +527,14 @@ template <class Interface> bool CalendarMigrator::updateStorageFormat(const Agen
 * Reply = interface if success
 *       = 0 if error: 'errorMessage' contains the error message.
 */
-template <class Interface> Interface* CalendarMigrator::getAgentInterface(const AgentInstance& agent, QString& errorMessage, QObject* parent)
+template <class Interface> Interface* AkonadiResourceMigrator::getAgentInterface(const AgentInstance& agent, QString& errorMessage, QObject* parent)
 {
     Interface* iface = new Interface(QLatin1String("org.freedesktop.Akonadi.Resource.") + agent.identifier(),
               QStringLiteral("/Settings"), QDBusConnection::sessionBus(), parent);
     if (!iface->isValid())
     {
         errorMessage = iface->lastError().message();
-        qCDebug(KALARM_LOG) << "CalendarMigrator::getAgentInterface: D-Bus error accessing resource:" << errorMessage;
+        qCDebug(KALARM_LOG) << "AkonadiResourceMigrator::getAgentInterface: D-Bus error accessing resource:" << errorMessage;
         delete iface;
         return nullptr;
     }
@@ -732,7 +732,7 @@ bool CalendarCreator::writeRemoteFileConfig()
 
 template <class Interface> Interface* CalendarCreator::writeBasicConfig()
 {
-    Interface* iface = CalendarMigrator::getAgentInterface<Interface>(mAgent, mErrorMessage, this);
+    Interface* iface = AkonadiResourceMigrator::getAgentInterface<Interface>(mAgent, mErrorMessage, this);
     if (iface)
     {
         iface->setReadOnly(mReadOnly);
@@ -894,6 +894,6 @@ QString conversionPrompt(const QString& calendarName, const QString& calendarVer
 }
 }
 
-#include "calendarmigrator.moc"
+#include "akonadiresourcemigrator.moc"
 
 // vim: et sw=4:

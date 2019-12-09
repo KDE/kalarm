@@ -153,7 +153,7 @@ class AkonadiModel : public Akonadi::EntityTreeModel, public ResourceDataModelBa
         };
 
         AkonadiModel(Akonadi::ChangeRecorder*, QObject* parent);
-        void          initCalendarMigrator();
+        void          initResourceMigrator();
         Resource&     updateResource(const Akonadi::Collection&) const;
 
         /** Return the alarm for the specified Akonadi Item.

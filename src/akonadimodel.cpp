@@ -20,8 +20,8 @@
 
 #include "akonadimodel.h"
 
-#include "calendarmigrator.h"
 #include "preferences.h"
+#include "resources/akonadiresourcemigrator.h"
 #include "resources/resources.h"
 #include "lib/synchtimer.h"
 #include "kalarm_debug.h"
@@ -103,7 +103,7 @@ AkonadiModel::AkonadiModel(ChangeRecorder* monitor, QObject* parent)
 
     connect(monitor, SIGNAL(collectionChanged(Akonadi::Collection,QSet<QByteArray>)), SLOT(slotCollectionChanged(Akonadi::Collection,QSet<QByteArray>)));
     connect(monitor, &Monitor::collectionRemoved, this, &AkonadiModel::slotCollectionRemoved);
-    initCalendarMigrator();
+    initResourceMigrator();
     MinuteTimer::connect(this, SLOT(slotUpdateTimeTo()));
     Preferences::connect(SIGNAL(archivedColourChanged(QColor)), this, SLOT(slotUpdateArchivedColour(QColor)));
     Preferences::connect(SIGNAL(disabledColourChanged(QColor)), this, SLOT(slotUpdateDisabledColour(QColor)));
@@ -150,13 +150,13 @@ void AkonadiModel::checkResources(ServerManager::State state)
             {
                 qCDebug(KALARM_LOG) << "AkonadiModel::checkResources: Server running";
                 setMigrationInitiated();
-                CalendarMigrator::execute();
+                AkonadiResourceMigrator::execute();
             }
             break;
         case ServerManager::NotRunning:
             qCDebug(KALARM_LOG) << "AkonadiModel::checkResources: Server stopped";
             setMigrationInitiated(false);
-            initCalendarMigrator();
+            initResourceMigrator();
             Q_EMIT serverStopped();
             break;
         default:
@@ -168,13 +168,13 @@ void AkonadiModel::checkResources(ServerManager::State state)
 * Initialise the calendar migrator so that it can be run (either for the first
 * time, or again).
 */
-void AkonadiModel::initCalendarMigrator()
+void AkonadiModel::initResourceMigrator()
 {
-    CalendarMigrator::reset();
-    connect(CalendarMigrator::instance(), &CalendarMigrator::creating,
-                                    this, &AkonadiModel::slotCollectionBeingCreated);
-    connect(CalendarMigrator::instance(), &QObject::destroyed,
-                                    this, &AkonadiModel::slotMigrationCompleted);
+    AkonadiResourceMigrator::reset();
+    connect(AkonadiResourceMigrator::instance(), &AkonadiResourceMigrator::creating,
+                                           this, &AkonadiModel::slotCollectionBeingCreated);
+    connect(AkonadiResourceMigrator::instance(), &QObject::destroyed,
+                                           this, &AkonadiModel::slotMigrationCompleted);
 }
 
 ChangeRecorder* AkonadiModel::monitor()
@@ -710,7 +710,7 @@ void AkonadiModel::setCollectionChanged(Resource& resource, const Collection& co
     {
         mCollectionIdsBeingCreated.removeAll(collection.id());
         if (mCollectionsBeingCreated.isEmpty() && mCollectionIdsBeingCreated.isEmpty()
-        &&  CalendarMigrator::completed())
+        &&  AkonadiResourceMigrator::completed())
         {
             qCDebug(KALARM_LOG) << "AkonadiModel::setCollectionChanged: Migration completed";
             setMigrationComplete();
