@@ -47,7 +47,7 @@ class CalendarMigrator : public QObject
         static CalendarMigrator* instance();
         static void reset();
         static void execute();
-        static void updateToCurrentFormat(const Resource&, bool ignoreKeepFormat, QWidget* parent = nullptr);
+        static void updateToCurrentFormat(const Resource&, bool ignoreKeepFormat, QObject* parent);
         static bool completed()    { return mCompleted; }
         template <class Interface> static Interface* getAgentInterface(const Akonadi::AgentInstance&, QString& errorMessage, QObject* parent);
 
@@ -72,7 +72,7 @@ class CalendarMigrator : public QObject
         template <class Interface> static bool updateStorageFormat(const Akonadi::AgentInstance&, QString& errorMessage, QObject* parent);
 
         static CalendarMigrator* mInstance;
-        QList<CalendarCreator*> mCalendarsPending;   // pending calendar migration or creation jobs
+        QList<CalendarCreator*> mCalendarsPending;  // pending calendar migration or creation jobs
         QList<Akonadi::CollectionFetchJob*> mFetchesPending;  // pending collection fetch jobs for existing resources
         CalEvent::Types mExistingAlarmTypes;   // alarm types provided by existing Akonadi resources
         static bool     mCompleted;            // execute() has completed

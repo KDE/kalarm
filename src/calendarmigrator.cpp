@@ -25,6 +25,7 @@
 #include "kalarmdirsettings.h"
 #include "mainwindow.h"
 #include "resources/akonadiresource.h"
+#include "resources/resources.h"
 #include "lib/messagebox.h"
 #include "kalarm_debug.h"
 
@@ -120,7 +121,7 @@ class CalendarUpdater : public QObject
         Q_OBJECT
     public:
         CalendarUpdater(const Collection& collection, bool dirResource,
-                        bool ignoreKeepFormat, bool newCollection, QObject* parent);
+                        bool ignoreKeepFormat, bool newCollection, QObject* parent, QWidget* promptParent = nullptr);
         ~CalendarUpdater();
         // Return whether another instance is already updating this collection
         bool isDuplicate() const   { return mDuplicate; }
@@ -134,6 +135,7 @@ class CalendarUpdater : public QObject
         static QList<CalendarUpdater*> mInstances;
         Akonadi::Collection mCollection;
         QObject*            mParent;
+        QWidget*            mPromptParent;
         const bool          mDirResource;
         const bool          mIgnoreKeepFormat;
         const bool          mNewCollection;
@@ -354,11 +356,8 @@ void CalendarMigrator::calendarCreated(CalendarCreator* creator)
                                "Failed to convert old configuration for calendar <resource>%1</resource>. "
                                "Please use Import Alarms to load its alarms into a new or existing calendar.", creator->resourceName());
         const QString locn = i18nc("@info File path or URL", "Location: %1", creator->path());
-        if (creator->errorMessage().isEmpty())
-            errmsg = xi18nc("@info", "<para>%1</para><para>%2</para>", errmsg, locn);
-        else
-            errmsg = xi18nc("@info", "<para>%1</para><para>%2<nl/>(%3)</para>", errmsg, locn, creator->errorMessage());
-        KAMessageBox::error(MainWindow::mainMainWindow(), errmsg);
+        errmsg = xi18nc("@info", "<para>%1</para><para>%2</para>", errmsg, locn);
+        Resources::notifyResourceMessage(-1, ResourceType::MessageType::Error, errmsg, creator->errorMessage());
     }
     creator->deleteLater();
 
@@ -380,7 +379,7 @@ void CalendarMigrator::calendarCreated(CalendarCreator* creator)
 * Note: the collection should be up to date: use AkonadiModel::refresh() before
 *       calling this function.
 */
-void CalendarMigrator::updateToCurrentFormat(const Resource& resource, bool ignoreKeepFormat, QWidget* parent)
+void CalendarMigrator::updateToCurrentFormat(const Resource& resource, bool ignoreKeepFormat, QObject* parent)
 {
     qCDebug(KALARM_LOG) << "CalendarMigrator::updateToCurrentFormat:" << resource.id();
     if (CalendarUpdater::containsCollection(resource.id()))
@@ -398,9 +397,7 @@ void CalendarMigrator::updateToCurrentFormat(const Resource& resource, bool igno
         return;
     }
     const Collection& collection = AkonadiResource::collection(resource);
-    if (!parent)
-        parent = MainWindow::mainMainWindow();
-    CalendarUpdater* updater = new CalendarUpdater(collection, dirResource, ignoreKeepFormat, false, parent);
+    CalendarUpdater* updater = new CalendarUpdater(collection, dirResource, ignoreKeepFormat, false, parent, qobject_cast<QWidget*>(parent));
     QTimer::singleShot(0, updater, &CalendarUpdater::update);
 }
 
@@ -409,9 +406,11 @@ void CalendarMigrator::updateToCurrentFormat(const Resource& resource, bool igno
 QList<CalendarUpdater*> CalendarUpdater::mInstances;
 
 CalendarUpdater::CalendarUpdater(const Collection& collection, bool dirResource,
-                                 bool ignoreKeepFormat, bool newCollection, QObject* parent)
-    : mCollection(collection)
+                                 bool ignoreKeepFormat, bool newCollection, QObject* parent, QWidget* promptParent)
+    : QObject(parent)
+    , mCollection(collection)
     , mParent(parent)
+    , mPromptParent(promptParent ? promptParent : MainWindow::mainMainWindow())
     , mDirResource(dirResource)
     , mIgnoreKeepFormat(ignoreKeepFormat)
     , mNewCollection(newCollection)
@@ -461,7 +460,7 @@ bool CalendarUpdater::update()
                 const QString versionString = KAlarmCal::getVersionString(compatAttr->version());
                 const QString msg = conversionPrompt(mCollection.name(), versionString, false);
                 qCDebug(KALARM_LOG) << "CalendarUpdater::update: Version" << versionString;
-                if (KAMessageBox::warningYesNo(qobject_cast<QWidget*>(mParent), msg) != KMessageBox::Yes)
+                if (KAMessageBox::warningYesNo(mPromptParent, msg) != KMessageBox::Yes)
                     result = false;   // the user chose not to update the calendar
                 else
                 {
@@ -484,10 +483,9 @@ bool CalendarUpdater::update()
                     }
                     if (!errmsg.isEmpty())
                     {
-                        KAMessageBox::error(MainWindow::mainMainWindow(),
-                                            xi18nc("@info", "%1<nl/>(%2)",
-                                                  xi18nc("@info/plain", "Failed to update format of calendar <resource>%1</resource>", mCollection.name()),
-                                            errmsg));
+                        Resources::notifyResourceMessage(mCollection.id(), ResourceType::MessageType::Error,
+                                                         xi18nc("@info", "Failed to update format of calendar <resource>%1</resource>", mCollection.name()),
+                                                         errmsg);
                     }
                 }
                 if (!mNewCollection)

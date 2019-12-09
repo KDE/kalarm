@@ -717,6 +717,7 @@ void AkonadiResource::notifyCollectionChanged(Resource& res, const Collection& c
         ||  !hadCompat
         ||  *collection.attribute<CompatibilityAttribute>() != *akres->mCollection.attribute<CompatibilityAttribute>())
         {
+//TODO: check if a temporary AkonadiResource object is actually needed, as in the comment
             // Update to current KAlarm format if necessary, and if the user agrees.
             // Create a new temporary 'Resource' object, because the one passed
             // to this method can get overwritten with an old version of its
@@ -725,7 +726,7 @@ void AkonadiResource::notifyCollectionChanged(Resource& res, const Collection& c
             qCDebug(KALARM_LOG) << "AkonadiResource::setCollectionChanged:" << collection.id() << ": compatibility ->" << collection.attribute<CompatibilityAttribute>()->compatibility();
             // Note that the AkonadiResource will be deleted once no more
             // QSharedPointers reference it.
-            CalendarMigrator::updateToCurrentFormat(res, false);
+            CalendarMigrator::updateToCurrentFormat(res, false, akres);
         }
     }
 }
