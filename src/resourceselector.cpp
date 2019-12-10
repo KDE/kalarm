@@ -219,7 +219,7 @@ void ResourceSelector::updateResource()
     const Resource resource = currentResource();
     if (!resource.isValid())
         return;
-    CalendarMigrator::updateToCurrentFormat(resource, true, this);
+    AkonadiResourceMigrator::updateToCurrentFormat(resource, true, this);
 }
 
 /******************************************************************************

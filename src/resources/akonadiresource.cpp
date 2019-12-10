@@ -22,7 +22,7 @@
 
 #include "resources.h"
 #include "akonadimodel.h"
-#include "calendarmigrator.h"
+#include "akonadiresourcemigrator.h"
 #include "lib/autoqpointer.h"
 #include "kalarm_debug.h"
 
@@ -348,7 +348,7 @@ KACalendar::Compat AkonadiResource::compatibilityVersion(QString& versionString)
 */
 bool AkonadiResource::updateStorageFormat()
 {
-//TODO: implement updateStorageFormat(): see CalendarMigrator::updateStorageFormat()
+//TODO: implement updateStorageFormat(): see AkonadiResourceMigrator::updateStorageFormat()
     return false;
 }
 
@@ -721,12 +721,12 @@ void AkonadiResource::notifyCollectionChanged(Resource& res, const Collection& c
             // Update to current KAlarm format if necessary, and if the user agrees.
             // Create a new temporary 'Resource' object, because the one passed
             // to this method can get overwritten with an old version of its
-            // CompatibilityAttribute before CalendarMigration finishes, due to
-            // AkonadiModel still containing an out of date value.
+            // CompatibilityAttribute before AkonadiResourceMigration finishes,
+            // due to AkonadiModel still containing an out of date value.
             qCDebug(KALARM_LOG) << "AkonadiResource::setCollectionChanged:" << collection.id() << ": compatibility ->" << collection.attribute<CompatibilityAttribute>()->compatibility();
             // Note that the AkonadiResource will be deleted once no more
             // QSharedPointers reference it.
-            CalendarMigrator::updateToCurrentFormat(res, false, akres);
+            AkonadiResourceMigrator::updateToCurrentFormat(res, false, akres);
         }
     }
 }
