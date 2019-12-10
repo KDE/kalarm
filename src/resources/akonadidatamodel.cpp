@@ -401,11 +401,11 @@ void AkonadiDataModel::slotUpdateWorkingHours()
 /******************************************************************************
 * Reload a collection from Akonadi storage. The backend data is not reloaded.
 */
-bool AkonadiDataModel::reloadResource(const Resource& resource)
+bool AkonadiDataModel::reload(const Resource& resource)
 {
     if (!resource.isValid())
         return false;
-    qCDebug(KALARM_LOG) << "AkonadiDataModel::reloadResource:" << resource.id();
+    qCDebug(KALARM_LOG) << "AkonadiDataModel::reload:" << resource.id();
     Collection collection(resource.id());
     mMonitor->setCollectionMonitored(collection, false);
     mMonitor->setCollectionMonitored(collection, true);
@@ -714,7 +714,6 @@ void AkonadiDataModel::setCollectionChanged(Resource& resource, const Collection
         {
             qCDebug(KALARM_LOG) << "AkonadiDataModel::setCollectionChanged: Migration completed";
             setMigrationComplete();
-            Q_EMIT migrationCompleted();
         }
     }
 }
@@ -770,7 +769,6 @@ void AkonadiDataModel::slotMigrationCompleted()
     {
         qCDebug(KALARM_LOG) << "AkonadiDataModel: Migration completed";
         setMigrationComplete();
-        Q_EMIT migrationCompleted();
     }
 }
 

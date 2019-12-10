@@ -22,7 +22,7 @@
 
 #include "functions.h"
 #include "templatelistview.h"
-#include "resources/akonadidatamodel.h"
+#include "resources/datamodel.h"
 #include "resources/eventmodel.h"
 #include "lib/config.h"
 #include "lib/shellprocess.h"
@@ -63,7 +63,7 @@ TemplatePickDlg::TemplatePickDlg(KAEvent::Actions type, QWidget* parent)
         type = static_cast<KAEvent::Actions>(type & ~KAEvent::ACT_COMMAND);
         shown = static_cast<KAEvent::Actions>(shown & ~KAEvent::ACT_COMMAND);
     }
-    mListFilterModel = TemplateListModel::create<AkonadiDataModel>(this);
+    mListFilterModel = DataModel::createTemplateListModel(this);
     mListFilterModel->setAlarmActionsEnabled(type);
     mListFilterModel->setAlarmActionFilter(shown);
     mListView = new TemplateListView(topWidget);

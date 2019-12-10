@@ -34,7 +34,7 @@
 #include "prefdlg.h"
 #include "startdaytimer.h"
 #include "traywindow.h"
-#include "resources/akonadidatamodel.h"
+#include "resources/datamodel.h"
 #include "resources/resources.h"
 #include "resources/eventmodel.h"
 #include "lib/desktop.h"
@@ -140,8 +140,8 @@ KAlarmApp::KAlarmApp(int& argc, char** argv)
                                  this, &KAlarmApp::purgeNewArchivedDefault);
         connect(Resources::instance(), &Resources::resourcesCreated,
                                  this, &KAlarmApp::checkWritableCalendar);
-        connect(AkonadiDataModel::instance(), &AkonadiDataModel::migrationCompleted,
-                                        this, &KAlarmApp::checkWritableCalendar);
+        connect(Resources::instance(), &Resources::migrationCompleted,
+                                 this, &KAlarmApp::checkWritableCalendar);
 
         KConfigGroup config(KSharedConfig::openConfig(), "General");
         mNoSystemTray        = config.readEntry("NoSystemTray", false);
@@ -1146,7 +1146,7 @@ void KAlarmApp::checkWritableCalendar()
         MessageWin::redisplayAlarms();
     }
     if (!treeFetched
-    ||  !AkonadiDataModel::instance()->isMigrationComplete())
+    ||  !DataModel::isMigrationComplete())
         return;
     static bool done = false;
     if (done)
@@ -1156,7 +1156,7 @@ void KAlarmApp::checkWritableCalendar()
 
     // Check for, and remove, any duplicate Akonadi resources, i.e. those which
     // use the same calendar file/directory.
-    AkonadiResource::removeDuplicateResources();
+    DataModel::removeDuplicateResources();
 
     // Find whether there are any writable active alarm calendars
     const bool active = !Resources::enabledResources(CalEvent::ACTIVE, true).isEmpty();
@@ -2344,7 +2344,7 @@ void KAlarmApp::commandMessage(ShellProcess* proc, QWidget* parent)
 * If this is the first time through, open the calendar file, and start
 * processing the execution queue.
 */
-bool KAlarmApp::initCheck(bool calendarOnly, bool waitForCollection, ResourceId resourceId)
+bool KAlarmApp::initCheck(bool calendarOnly, bool waitForResource, ResourceId resourceId)
 {
     static bool firstTime = true;
     if (firstTime)
@@ -2375,7 +2375,7 @@ bool KAlarmApp::initCheck(bool calendarOnly, bool waitForCollection, ResourceId 
     if (!calendarOnly)
         startProcessQueue();      // start processing the execution queue
 
-    if (waitForCollection)
+    if (waitForResource)
     {
         // Wait for one or all calendar resources to be populated
         if (!waitUntilPopulated(resourceId, AKONADI_TIMEOUT))
@@ -2398,7 +2398,7 @@ bool KAlarmApp::waitUntilPopulated(ResourceId id, int timeout)
         // Use AutoQPointer to guard against crash on application exit while
         // the event loop is still running. It prevents double deletion (both
         // on deletion of parent, and on return from this function).
-        AutoQPointer<QEventLoop> loop = new QEventLoop(AlarmListModel::all<AkonadiDataModel>());
+        AutoQPointer<QEventLoop> loop = new QEventLoop(DataModel::allAlarmListModel());
 //TODO: The choice of parent object for QEventLoop can prevent EntityTreeModel signals
 //      from activating connected slots in AkonadiDataModel, which prevents resources
 //      from being informed that collections have loaded. Need to find a better parent

@@ -563,16 +563,6 @@ KAEvent AkonadiResource::event(Resource& resource, const Akonadi::Item& item)
 }
 
 /******************************************************************************
-* Get the collection to use for storing an alarm.
-* Optionally, the standard collection for the alarm type is returned. If more
-* than one collection is a candidate, the user is prompted.
-*/
-Resource AkonadiResource::destination(CalEvent::Type type, QWidget* promptParent, bool noPrompt, bool* cancelled)
-{
-    return Resources::destination<AkonadiDataModel>(type, promptParent, noPrompt, cancelled);
-}
-
-/******************************************************************************
 * Check for, and remove, any Akonadi resources which duplicate use of calendar
 * files/directories.
 */

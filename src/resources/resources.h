@@ -21,6 +21,7 @@
 #ifndef RESOURCES_H
 #define RESOURCES_H
 
+#include "datamodel.h"
 #include "resource.h"
 #include "resourcemodel.h"
 
@@ -121,7 +122,6 @@ public:
      *  @param cancelled    If non-null: set to true if the user cancelled the
      *                      prompt dialogue; set to false if any other error
      */
-    template <class DataModel>
     static Resource destination(CalEvent::Type type, QWidget* promptParent = nullptr, bool noPrompt = false, bool* cancelled = nullptr);
 
     /** Return whether all configured resources have been created. */
@@ -150,6 +150,9 @@ public:
 
     /** Called by a resource to notify that loading of events has successfully completed. */
     static void notifyResourcePopulated(const ResourceType*);
+
+    /** Called to notify that migration/creation of resources has completed. */
+    static void notifyResourcesMigrated();
 
     /** Called by a resource to notify that its settings have changed.
      *  This will cause the settingsChanged() signal to be emitted.
@@ -184,11 +187,17 @@ Q_SIGNALS:
     void settingsChanged(Resource&, ResourceType::Changes);
 
     /** Emitted when all configured resource have been created (but not
-     *  necessarily populated). */
+     *  necessarily populated). Note that after this, resource migration and
+     *  the creation of default resources is performed and notified by the
+     *  signal migrationCompleted().
+     */
     void resourcesCreated();
 
     /** Emitted when all configured resources have been loaded for the first time. */
     void resourcesPopulated();
+
+    /** Signal emitted when resource migration/creation at startup has completed. */
+    void migrationCompleted();
 
     /** Emitted when a new resource has been created. */
     void resourceAdded(Resource&);
@@ -222,7 +231,6 @@ Q_SIGNALS:
 
 private:
     Resources();
-    static Resource destination(ResourceListModel* model, CalEvent::Type type, QWidget* promptParent, bool noPrompt, bool* cancelled);
 
     /** Add a new ResourceType instance, with a Resource owner.
      *  Once the resource has completed its initialisation, call
@@ -273,13 +281,6 @@ QVector<Resource> Resources::allResources(CalEvent::Type type)
             result += res;
     }
     return result;
-}
-
-template <class DataModel>
-Resource Resources::destination(CalEvent::Type type, QWidget* promptParent, bool noPrompt, bool* cancelled)
-{
-    ResourceListModel* model = ResourceListModel::create<DataModel>(promptParent);
-    return destination(model, type, promptParent, noPrompt, cancelled);
 }
 
 #endif // RESOURCES_H

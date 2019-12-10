@@ -30,6 +30,7 @@
 #include "resources/akonadidatamodel.h"
 #include "resources/akonadiresourcecreator.h"
 #include "resources/akonadiresourcemigrator.h"
+#include "resources/datamodel.h"
 #include "resources/resources.h"
 #include "resources/resourcemodel.h"
 #include "lib/autoqpointer.h"
@@ -71,7 +72,7 @@ ResourceSelector::ResourceSelector(QWidget* parent)
     topLayout->addWidget(mAlarmType);
     // No spacing between combo box and listview.
 
-    ResourceFilterCheckListModel* model = ResourceFilterCheckListModel::create<AkonadiDataModel>(this);
+    ResourceFilterCheckListModel* model = DataModel::createResourceFilterCheckListModel(this);
     mListView = new ResourceView(model, this);
     connect(mListView->selectionModel(), &QItemSelectionModel::selectionChanged, this, &ResourceSelector::selectionChanged);
     mListView->setContextMenuPolicy(Qt::CustomContextMenu);
@@ -175,7 +176,7 @@ void ResourceSelector::addResource()
 }
 
 /******************************************************************************
-* Called when a collection is added to the AkonadiDataModel, after being
+* Called when a resource is added to the calendar data model, after being
 * created by addResource().
 */
 void ResourceSelector::slotResourceAdded(Resource& resource, CalEvent::Type alarmType)
@@ -184,9 +185,9 @@ void ResourceSelector::slotResourceAdded(Resource& resource, CalEvent::Type alar
     resource.setEnabled(types);
     if (!(types & alarmType))
     {
-        // The user has selected alarm types for the resource
-        // which don't include the currently displayed type.
-        // Show a collection list which includes a selected type.
+        // The user has selected alarm types for the resource which don't
+        // include the currently displayed type.
+        // Show a resource list which includes a selected type.
         int index = -1;
         if (types & CalEvent::ACTIVE)
             index = 0;
@@ -400,9 +401,9 @@ void ResourceSelector::contextMenuRequested(const QPoint& viewportPos)
 */
 void ResourceSelector::reloadResource()
 {
-    const Resource resource = currentResource();
+    Resource resource = currentResource();
     if (resource.isValid())
-        AkonadiDataModel::instance()->reloadResource(resource);
+        DataModel::reload(resource);
 }
 
 /******************************************************************************

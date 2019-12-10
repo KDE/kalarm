@@ -20,7 +20,7 @@
 
 #include "resourcedatamodelbase.h"
 
-#include "resource.h"
+#include "resources.h"
 
 #include "alarmtime.h"
 #include "mainwindow.h"
@@ -621,6 +621,7 @@ void ResourceDataModelBase::setMigrationInitiated(bool started)
 void ResourceDataModelBase::setMigrationComplete()
 {
     mMigrationStatus = 1;
+    Resources::notifyResourcesMigrated();
 }
 
 // vim: et sw=4:

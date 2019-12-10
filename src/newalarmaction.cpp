@@ -22,7 +22,7 @@
 
 #include "functions.h"
 #include "templatemenuaction.h"
-#include "resources/akonadidatamodel.h"
+#include "resources/datamodel.h"
 #include "resources/resources.h"
 #include "resources/eventmodel.h"
 #include "lib/shellprocess.h"
@@ -83,7 +83,7 @@ NewAlarmAction::NewAlarmAction(bool templates, const QString& label, QObject* pa
         mTemplateAction = new TemplateMenuAction(QIcon::fromTheme(TEMPLATE_ICON), i18nc("@action", "New Alarm From &Template"), parent);
         menu()->addAction(mTemplateAction);
         connect(Resources::instance(), &Resources::settingsChanged, this, &NewAlarmAction::slotCalendarStatusChanged);
-        connect(TemplateListModel::all<AkonadiDataModel>(), &EventListModel::haveEventsStatus, this, &NewAlarmAction::slotCalendarStatusChanged);
+        connect(DataModel::allTemplateListModel(), &EventListModel::haveEventsStatus, this, &NewAlarmAction::slotCalendarStatusChanged);
         slotCalendarStatusChanged();   // initialise action states
     }
     setDelayed(false);
@@ -171,7 +171,7 @@ void NewAlarmAction::slotCalendarStatusChanged()
 {
     // Find whether there are any writable active alarm calendars
     bool active = !Resources::enabledResources(CalEvent::ACTIVE, true).isEmpty();
-    bool haveEvents = TemplateListModel::all<AkonadiDataModel>()->haveEvents();
+    bool haveEvents = DataModel::allTemplateListModel()->haveEvents();
     mTemplateAction->setEnabled(active && haveEvents);
     setEnabled(active);
 }

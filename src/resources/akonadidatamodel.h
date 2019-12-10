@@ -70,7 +70,7 @@ class AkonadiDataModel : public Akonadi::EntityTreeModel, public ResourceDataMod
         Akonadi::Collection* collection(const Resource&) const;
 
         /** Reload a collection's data from Akonadi storage (not from the backend). */
-        bool reloadResource(const Resource&);
+        bool reload(const Resource&);
 
         /** Reload all collections' data from Akonadi storage (not from the backend). */
         void reload();
@@ -100,9 +100,6 @@ class AkonadiDataModel : public Akonadi::EntityTreeModel, public ResourceDataMod
         void slotResourceMessage(Resource&, ResourceType::MessageType, const QString& message, const QString& details);
 
     Q_SIGNALS:
-        /** Signal emitted when calendar migration/creation has completed. */
-        void migrationCompleted();
-
         /** Signal emitted when the Akonadi server has stopped. */
         void serverStopped();
 

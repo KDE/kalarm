@@ -279,17 +279,6 @@ public:
     static KAEvent event(Resource&, const Akonadi::Item&);
     using QObject::event;   // prevent warning about hidden virtual method
 
-    /** Find the collection to be used to store an event of a given type.
-     *  This will be the standard collection for the type, but if this is not valid,
-     *  the user will be prompted to select a collection.
-     *  @param type         The event type
-     *  @param promptParent The parent widget for the prompt
-     *  @param noPrompt     Don't prompt the user even if the standard collection is not valid
-     *  @param cancelled    If non-null: set to true if the user cancelled the
-     *                      prompt dialogue; set to false if any other error
-     */
-    static Resource destination(CalEvent::Type type, QWidget* promptParent = nullptr, bool noPrompt = false, bool* cancelled = nullptr);
-
     /** Check for, and remove, Akonadi resources which duplicate use of
      *  calendar files/directories.
      */

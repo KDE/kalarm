@@ -238,11 +238,11 @@ void Resources::setStandard(Resource& resource, CalEvent::Types types)
 }
 
 /******************************************************************************
-* Get the collection to use for storing an alarm.
-* Optionally, the standard collection for the alarm type is returned. If more
-* than one collection is a candidate, the user is prompted.
+* Find the resource to be used to store an event of a given type.
+* This will be the standard resource for the type, but if this is not valid,
+* the user will be prompted to select a resource.
 */
-Resource Resources::destination(ResourceListModel* model, CalEvent::Type type, QWidget* promptParent, bool noPrompt, bool* cancelled)
+Resource Resources::destination(CalEvent::Type type, QWidget* promptParent, bool noPrompt, bool* cancelled)
 {
     if (cancelled)
         *cancelled = false;
@@ -257,6 +257,7 @@ Resource Resources::destination(ResourceListModel* model, CalEvent::Type type, Q
         return standard;
 
     // Prompt for which collection to use
+    ResourceListModel* model = DataModel::createResourceListModel(promptParent);
     model->setFilterWritable(true);
     model->setFilterEnabled(true);
     model->setEventTypeFilter(type);
@@ -384,6 +385,14 @@ void Resources::notifyResourcePopulated(const ResourceType* res)
 
     // Check whether all resources have now loaded at least once.
     checkResourcesPopulated();
+}
+
+/******************************************************************************
+* Called to notify that migration/creation of resources has completed.
+*/
+void Resources::notifyResourcesMigrated()
+{
+    Q_EMIT instance()->migrationCompleted();
 }
 
 /******************************************************************************

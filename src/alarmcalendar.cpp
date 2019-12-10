@@ -25,7 +25,7 @@
 #include "kalarmapp.h"
 #include "mainwindow.h"
 #include "preferences.h"
-#include "resources/akonadidatamodel.h"
+#include "resources/datamodel.h"
 #include "resources/resources.h"
 #include "lib/filedialog.h"
 #include "lib/messagebox.h"
@@ -72,7 +72,7 @@ bool AlarmCalendar::initialiseCalendars()
     QDir dir;
     dir.mkpath(QStandardPaths::writableLocation(QStandardPaths::DataLocation));
     QString displayCal = QStandardPaths::writableLocation(QStandardPaths::DataLocation) + QLatin1Char('/') + displayCalendarName;
-    AkonadiDataModel::instance();
+    DataModel::initialise();
     Preferences::setBackend(Preferences::Akonadi);
     Preferences::self()->save();
     mResourcesCalendar = new AlarmCalendar();
@@ -431,7 +431,7 @@ void AlarmCalendar::updateDisplayKAEvents()
             delete event;
             continue;    // ignore events without usable alarms
         }
-        event->setCollectionId(key);
+        event->setResourceId(key);
         events += event;
         mEventMap[EventId(key, kcalevent->uid())] = event;
     }
@@ -455,11 +455,11 @@ void AlarmCalendar::removeKAEvents(ResourceId key, bool closing, CalEvent::Types
         for (int i = 0, end = events.count();  i < end;  ++i)
         {
             KAEvent* event = events[i];
-            bool remove = (event->collectionId() != key);
+            bool remove = (event->resourceId() != key);
             if (remove)
             {
                 if (key != DISPLAY_COL_ID)
-                    qCCritical(KALARM_LOG) << "AlarmCalendar::removeKAEvents: Event" << event->id() << ", resource" << event->collectionId() << "Indexed under resource" << key;
+                    qCCritical(KALARM_LOG) << "AlarmCalendar::removeKAEvents: Event" << event->id() << ", resource" << event->resourceId() << "Indexed under resource" << key;
             }
             else
                 remove = event->category() & types;
@@ -501,12 +501,12 @@ void AlarmCalendar::slotResourceSettingsChanged(Resource& resource, ResourceType
         if (resource.isValid())
         {
             // For each alarm type which has been disabled, remove the
-            // collection's events from the map, but not from the resource.
+            // resource's events from the map, but not from the resource.
             const CalEvent::Types enabled = resource.enabledTypes();
             const CalEvent::Types disabled = ~enabled & (CalEvent::ACTIVE | CalEvent::ARCHIVED | CalEvent::TEMPLATE);
             removeKAEvents(resource.id(), false, disabled);
 
-            // For each alarm type which has been enabled, add the collection's
+            // For each alarm type which has been enabled, add the resource's
             // events to the map.
             if (enabled != CalEvent::EMPTY)
                 slotEventsAdded(resource, resource.events());
@@ -689,7 +689,7 @@ bool AlarmCalendar::importAlarms(QWidget* parent, Resource* resourceptr)
                     default:
                         continue;
                 }
-                res = Resources::destination<AkonadiDataModel>(type);
+                res = Resources::destination(type);
             }
 
             Event::Ptr newev(new Event(*event));
@@ -948,7 +948,7 @@ bool AlarmCalendar::addEvent(KAEvent& evnt, QWidget* promptParent, bool useEvent
             res = resource;
         else
         {
-            res = Resources::destination<AkonadiDataModel>(type, promptParent, noPrompt, cancelled);
+            res = Resources::destination(type, promptParent, noPrompt, cancelled);
             if (!res.isValid())
             {
                 const char* typeStr = (type == CalEvent::ACTIVE) ? "Active alarm" : (type == CalEvent::ARCHIVED) ? "Archived alarm" : "alarm Template";
@@ -1009,7 +1009,7 @@ bool AlarmCalendar::addEvent(KAEvent& evnt, QWidget* promptParent, bool useEvent
 void AlarmCalendar::addNewEvent(const Resource& resource, KAEvent* event, bool replace)
 {
     const ResourceId key = resource.id();
-    event->setCollectionId(key);
+    event->setResourceId(key);
     if (!replace)
     {
         mResourceMap[key] += event;
@@ -1169,7 +1169,7 @@ bool AlarmCalendar::deleteDisplayEvent(const QString& eventID, bool saveit)
 */
 CalEvent::Type AlarmCalendar::deleteEventInternal(const KAEvent& event, bool deleteFromAkonadi)
 {
-    Resource resource = Resources::resource(event.collectionId());
+    Resource resource = Resources::resource(event.resourceId());
     if (!resource.isValid())
         return CalEvent::EMPTY;
     return deleteEventInternal(event.id(), event, resource, deleteFromAkonadi);
@@ -1179,9 +1179,9 @@ CalEvent::Type AlarmCalendar::deleteEventInternal(const KAEvent& event, Resource
 {
     if (!resource.isValid())
         return CalEvent::EMPTY;
-    if (event.collectionId() != resource.id())
+    if (event.resourceId() != resource.id())
     {
-        qCCritical(KALARM_LOG) << "AlarmCalendar::deleteEventInternal: Event" << event.id() << ": resource" << event.collectionId() << "differs from 'resource'" << resource.id();
+        qCCritical(KALARM_LOG) << "AlarmCalendar::deleteEventInternal: Event" << event.id() << ": resource" << event.resourceId() << "differs from 'resource'" << resource.id();
         return CalEvent::EMPTY;
     }
     return deleteEventInternal(event.id(), event, resource, deleteFromAkonadi);
