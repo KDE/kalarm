@@ -101,6 +101,7 @@ set(kalarm_bin_SRCS ${kalarm_bin_SRCS}
     resources/resourcemodel.cpp
     resources/resourceselectdialog.cpp
     resources/eventmodel.cpp
+    resources/datamodel.cpp
     resources/akonadidatamodel.cpp
     resources/akonadiresource.cpp
     resources/akonadiresourcecreator.cpp
