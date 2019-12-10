@@ -1,5 +1,5 @@
 /*
- *  collectionsearch.cpp  -  Search Akonadi Collections
+ *  akonadicollectionsearch.cpp  -  Search Akonadi Collections
  *  Program:  kalarm
  *  Copyright © 2014,2019 David Jarvie <djarvie@kde.org>
  *
@@ -18,7 +18,7 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "collectionsearch.h"
+#include "akonadicollectionsearch.h"
 
 #include "kalarm_debug.h"
 
@@ -46,7 +46,7 @@ using namespace Akonadi;
 *   notify all Items with that GID.
 * - Otherwise, it will Q_EMIT the signal collections() to notify all Collections.
 */
-CollectionSearch::CollectionSearch(const QString& mimeType, const QString& gid, const QString& uid, bool remove)
+AkonadiCollectionSearch::AkonadiCollectionSearch(const QString& mimeType, const QString& gid, const QString& uid, bool remove)
     : mMimeType(mimeType)
     , mGid(gid)
     , mUid(uid)
@@ -60,7 +60,7 @@ CollectionSearch::CollectionSearch(const QString& mimeType, const QString& gid, 
             CollectionFetchJob* job = new CollectionFetchJob(Collection::root(), CollectionFetchJob::Recursive);
             job->fetchScope().setResource(agent.identifier());
             mCollectionJobs << job;
-            connect(job, &CollectionFetchJob::result, this, &CollectionSearch::collectionFetchResult);
+            connect(job, &CollectionFetchJob::result, this, &AkonadiCollectionSearch::collectionFetchResult);
         }
     }
 
@@ -68,18 +68,18 @@ CollectionSearch::CollectionSearch(const QString& mimeType, const QString& gid, 
     {
         // There are no resources containing the mime type, so ensure that a
         // signal is emitted after construction.
-        QTimer::singleShot(0, this, &CollectionSearch::finish);
+        QTimer::singleShot(0, this, &AkonadiCollectionSearch::finish);
     }
 }
 
 /******************************************************************************
 * Called when a CollectionFetchJob has completed.
 */
-void CollectionSearch::collectionFetchResult(KJob* j)
+void AkonadiCollectionSearch::collectionFetchResult(KJob* j)
 {
     CollectionFetchJob* job = qobject_cast<CollectionFetchJob*>(j);
     if (j->error())
-        qCCritical(KALARM_LOG) << "CollectionSearch::collectionFetchResult: CollectionFetchJob" << job->fetchScope().resource()<< "error: " << j->errorString();
+        qCCritical(KALARM_LOG) << "AkonadiCollectionSearch::collectionFetchResult: CollectionFetchJob" << job->fetchScope().resource()<< "error: " << j->errorString();
     else
     {
         const Collection::List collections = job->collections();
@@ -108,7 +108,7 @@ void CollectionSearch::collectionFetchResult(KJob* j)
                     continue;
                 }
                 mItemFetchJobs[ijob] = c.id();
-                connect(ijob, &ItemFetchJob::result, this, &CollectionSearch::itemFetchResult);
+                connect(ijob, &ItemFetchJob::result, this, &AkonadiCollectionSearch::itemFetchResult);
             }
         }
     }
@@ -125,15 +125,15 @@ void CollectionSearch::collectionFetchResult(KJob* j)
 /******************************************************************************
 * Called when an ItemFetchJob has completed.
 */
-void CollectionSearch::itemFetchResult(KJob* j)
+void AkonadiCollectionSearch::itemFetchResult(KJob* j)
 {
     ItemFetchJob* job = qobject_cast<ItemFetchJob*>(j);
     if (j->error())
     {
         if (!mUid.isEmpty())
-            qCDebug(KALARM_LOG) << "CollectionSearch::itemFetchResult: ItemFetchJob: collection" << mItemFetchJobs[job] << "UID" << mUid << "error: " << j->errorString();
+            qCDebug(KALARM_LOG) << "AkonadiCollectionSearch::itemFetchResult: ItemFetchJob: collection" << mItemFetchJobs[job] << "UID" << mUid << "error: " << j->errorString();
         else
-            qCDebug(KALARM_LOG) << "CollectionSearch::itemFetchResult: ItemFetchJob: collection" << mItemFetchJobs[job] << "GID" << mGid << "error: " << j->errorString();
+            qCDebug(KALARM_LOG) << "AkonadiCollectionSearch::itemFetchResult: ItemFetchJob: collection" << mItemFetchJobs[job] << "GID" << mGid << "error: " << j->errorString();
     }
     else
     {
@@ -155,7 +155,7 @@ void CollectionSearch::itemFetchResult(KJob* j)
                     continue;
                 ItemDeleteJob* djob = new ItemDeleteJob(item, this);
                 mItemDeleteJobs[djob] = mItemFetchJobs[job];
-                connect(djob, &ItemDeleteJob::result, this, &CollectionSearch::itemDeleteResult);
+                connect(djob, &ItemDeleteJob::result, this, &AkonadiCollectionSearch::itemDeleteResult);
             }
         }
         else
@@ -170,15 +170,15 @@ void CollectionSearch::itemFetchResult(KJob* j)
 /******************************************************************************
 * Called when an ItemDeleteJob has completed.
 */
-void CollectionSearch::itemDeleteResult(KJob* j)
+void AkonadiCollectionSearch::itemDeleteResult(KJob* j)
 {
     ItemDeleteJob* job = static_cast<ItemDeleteJob*>(j);
     if (j->error())
     {
         if (!mUid.isEmpty())
-            qCDebug(KALARM_LOG) << "CollectionSearch::itemDeleteResult: ItemDeleteJob: resource" << mItemDeleteJobs[job] << "UID" << mUid << "error: " << j->errorString();
+            qCDebug(KALARM_LOG) << "AkonadiCollectionSearch::itemDeleteResult: ItemDeleteJob: resource" << mItemDeleteJobs[job] << "UID" << mUid << "error: " << j->errorString();
         else
-            qCDebug(KALARM_LOG) << "CollectionSearch::itemDeleteResult: ItemDeleteJob: resource" << mItemDeleteJobs[job] << "GID" << mGid << "error: " << j->errorString();
+            qCDebug(KALARM_LOG) << "AkonadiCollectionSearch::itemDeleteResult: ItemDeleteJob: resource" << mItemDeleteJobs[job] << "GID" << mGid << "error: " << j->errorString();
     }
     else
         ++mDeleteCount;
@@ -191,7 +191,7 @@ void CollectionSearch::itemDeleteResult(KJob* j)
 /******************************************************************************
 * Notify the result of the search/delete operation, and delete this instance.
 */
-void CollectionSearch::finish()
+void AkonadiCollectionSearch::finish()
 {
     if (mDelete)
         Q_EMIT deleted(mDeleteCount);

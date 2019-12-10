@@ -24,11 +24,11 @@
 
 #include "resourceselector.h"
 
-#include "akonadimodel.h"
 #include "alarmcalendar.h"
-#include "akonadiresourcecreator.h"
 #include "kalarmapp.h"
 #include "preferences.h"
+#include "resources/akonadidatamodel.h"
+#include "resources/akonadiresourcecreator.h"
 #include "resources/akonadiresourcemigrator.h"
 #include "resources/resources.h"
 #include "resources/resourcemodel.h"
@@ -71,7 +71,7 @@ ResourceSelector::ResourceSelector(QWidget* parent)
     topLayout->addWidget(mAlarmType);
     // No spacing between combo box and listview.
 
-    ResourceFilterCheckListModel* model = ResourceFilterCheckListModel::create<AkonadiModel>(this);
+    ResourceFilterCheckListModel* model = ResourceFilterCheckListModel::create<AkonadiDataModel>(this);
     mListView = new ResourceView(model, this);
     connect(mListView->selectionModel(), &QItemSelectionModel::selectionChanged, this, &ResourceSelector::selectionChanged);
     mListView->setContextMenuPolicy(Qt::CustomContextMenu);
@@ -175,8 +175,8 @@ void ResourceSelector::addResource()
 }
 
 /******************************************************************************
-* Called when a collection is added to the AkonadiModel, after being created
-* by addResource().
+* Called when a collection is added to the AkonadiDataModel, after being
+* created by addResource().
 */
 void ResourceSelector::slotResourceAdded(Resource& resource, CalEvent::Type alarmType)
 {
@@ -402,7 +402,7 @@ void ResourceSelector::reloadResource()
 {
     const Resource resource = currentResource();
     if (resource.isValid())
-        AkonadiModel::instance()->reloadResource(resource);
+        AkonadiDataModel::instance()->reloadResource(resource);
 }
 
 /******************************************************************************

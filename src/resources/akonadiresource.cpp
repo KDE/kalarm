@@ -21,7 +21,7 @@
 #include "akonadiresource.h"
 
 #include "resources.h"
-#include "akonadimodel.h"
+#include "akonadidatamodel.h"
 #include "akonadiresourcemigrator.h"
 #include "lib/autoqpointer.h"
 #include "kalarm_debug.h"
@@ -105,7 +105,7 @@ AkonadiResource::AkonadiResource(const Collection& collection)
         // If the collection doesn't belong to a resource, it can't be used.
         mValid = AgentManager::self()->instance(mCollection.resource()).isValid();
 
-        connect(AkonadiModel::monitor(), &Monitor::collectionRemoved, this, &AkonadiResource::slotCollectionRemoved);
+        connect(AkonadiDataModel::monitor(), &Monitor::collectionRemoved, this, &AkonadiResource::slotCollectionRemoved);
     }
 }
 
@@ -222,7 +222,7 @@ void AkonadiResource::setEnabled(CalEvent::Types types)
 
 bool AkonadiResource::readOnly() const
 {
-    AkonadiModel::instance()->refresh(mCollection);    // update with latest data
+    AkonadiDataModel::instance()->refresh(mCollection);    // update with latest data
     return (mCollection.rights() & WritableRights) != WritableRights;
 }
 
@@ -230,7 +230,7 @@ int AkonadiResource::writableStatus(CalEvent::Type type) const
 {
     if (!mValid)
         return -1;
-    AkonadiModel::instance()->refresh(mCollection);    // update with latest data
+    AkonadiDataModel::instance()->refresh(mCollection);    // update with latest data
     if ((type == CalEvent::EMPTY  && !enabledTypes())
     ||  (type != CalEvent::EMPTY  && !isEnabled(type)))
         return -1;
@@ -335,7 +335,7 @@ KACalendar::Compat AkonadiResource::compatibilityVersion(QString& versionString)
     versionString.clear();
     if (!mValid)
         return KACalendar::Incompatible;
-    AkonadiModel::instance()->refresh(mCollection);    // update with latest data
+    AkonadiDataModel::instance()->refresh(mCollection);    // update with latest data
     if (!mCollection.hasAttribute<CompatibilityAttribute>())
         return KACalendar::Incompatible;
     const CompatibilityAttribute* attr = mCollection.attribute<CompatibilityAttribute>();
@@ -400,7 +400,7 @@ void AkonadiResource::slotCollectionRemoved(const Collection& collection)
     if (collection.id() == id())
     {
         qCDebug(KALARM_LOG) << "AkonadiResource::slotCollectionRemoved:" << id();
-        disconnect(AkonadiModel::monitor(), nullptr, this, nullptr);
+        disconnect(AkonadiDataModel::monitor(), nullptr, this, nullptr);
         ResourceType::removeResource(collection.id());
     }
 }
@@ -416,8 +416,8 @@ bool AkonadiResource::isPopulated() const
 {
     if (!ResourceType::isPopulated())
     {
-        const QModelIndex ix = AkonadiModel::instance()->resourceIndex(mCollection.id());
-        if (!ix.data(AkonadiModel::IsPopulatedRole).toBool())
+        const QModelIndex ix = AkonadiDataModel::instance()->resourceIndex(mCollection.id());
+        if (!ix.data(AkonadiDataModel::IsPopulatedRole).toBool())
             return false;
         setLoaded(true);
     }
@@ -462,7 +462,7 @@ bool AkonadiResource::addEvent(const KAEvent& event)
 bool AkonadiResource::updateEvent(const KAEvent& event)
 {
     qCDebug(KALARM_LOG) << "AkonadiResource::updateEvent:" << event.id();
-    Item item = AkonadiModel::instance()->itemForEvent(event.id());
+    Item item = AkonadiDataModel::instance()->itemForEvent(event.id());
     if (!item.isValid())
         return false;
     if (!KAlarmCal::setItemPayload(item, event, mCollection.contentMimeTypes()))
@@ -485,7 +485,7 @@ bool AkonadiResource::deleteEvent(const KAEvent& event)
         qCDebug(KALARM_LOG) << "AkonadiResource::deleteEvent: Collection being deleted";
         return true;    // the event's collection is being deleted
     }
-    const Item item = AkonadiModel::instance()->itemForEvent(event.id());
+    const Item item = AkonadiDataModel::instance()->itemForEvent(event.id());
     if (!item.isValid())
         return false;
     ItemDeleteJob* job = new ItemDeleteJob(item);
@@ -500,7 +500,7 @@ bool AkonadiResource::deleteEvent(const KAEvent& event)
 */
 void AkonadiResource::handleCommandErrorChange(const KAEvent& event)
 {
-    Item item = AkonadiModel::instance()->itemForEvent(event.id());
+    Item item = AkonadiDataModel::instance()->itemForEvent(event.id());
     if (item.isValid())
     {
         const KAEvent::CmdErrType err = event.commandError();
@@ -569,7 +569,7 @@ KAEvent AkonadiResource::event(Resource& resource, const Akonadi::Item& item)
 */
 Resource AkonadiResource::destination(CalEvent::Type type, QWidget* promptParent, bool noPrompt, bool* cancelled)
 {
-    return Resources::destination<AkonadiModel>(type, promptParent, noPrompt, cancelled);
+    return Resources::destination<AkonadiDataModel>(type, promptParent, noPrompt, cancelled);
 }
 
 /******************************************************************************
@@ -722,7 +722,7 @@ void AkonadiResource::notifyCollectionChanged(Resource& res, const Collection& c
             // Create a new temporary 'Resource' object, because the one passed
             // to this method can get overwritten with an old version of its
             // CompatibilityAttribute before AkonadiResourceMigration finishes,
-            // due to AkonadiModel still containing an out of date value.
+            // due to AkonadiDataModel still containing an out of date value.
             qCDebug(KALARM_LOG) << "AkonadiResource::setCollectionChanged:" << collection.id() << ": compatibility ->" << collection.attribute<CompatibilityAttribute>()->compatibility();
             // Note that the AkonadiResource will be deleted once no more
             // QSharedPointers reference it.
@@ -795,7 +795,7 @@ void AkonadiResource::queueItemModifyJob(const Item& item)
         {
             Item newItem = item;
             Item current = item;
-            if (AkonadiModel::instance()->refresh(current))  // fetch the up-to-date item
+            if (AkonadiDataModel::instance()->refresh(current))  // fetch the up-to-date item
                 newItem.setRevision(current.revision());
             mItemModifyJobQueue[item.id()] = Item();   // mark the queued item as now executing
             ItemModifyJob* job = new ItemModifyJob(newItem);
@@ -842,7 +842,7 @@ void AkonadiResource::itemJobDone(KJob* j)
         if (itemId >= 0  &&  jobClass == "Akonadi::ItemModifyJob")
         {
             // Execute the next queued job for this item
-            const Item current = AkonadiModel::instance()->itemById(itemId);  // fetch the up-to-date item
+            const Item current = AkonadiDataModel::instance()->itemById(itemId);  // fetch the up-to-date item
             checkQueuedItemModifyJob(current);
         }
         Resources::notifyResourceMessage(this, MessageType::Error, errMsg, j->errorString());
@@ -915,7 +915,7 @@ void AkonadiResource::checkQueuedItemModifyJob(const Item& item)
 void AkonadiResource::fetchCollectionAttribute(bool refresh) const
 {
     if (refresh)
-        AkonadiModel::instance()->refresh(mCollection);    // update with latest data
+        AkonadiDataModel::instance()->refresh(mCollection);    // update with latest data
     if (!mCollection.hasAttribute<CollectionAttribute>())
     {
         mCollectionAttribute = CollectionAttribute();
@@ -958,7 +958,7 @@ void AkonadiResource::modifyCollectionAttrJobDone(KJob* j)
     {
         // If the collection is being/has been deleted, ignore the error.
         if (!isBeingDeleted()
-        &&  AkonadiModel::instance()->resource(id).isValid()
+        &&  AkonadiDataModel::instance()->resource(id).isValid()
         &&  id == mCollection.id())
         {
             qCCritical(KALARM_LOG) << "AkonadiResource::modifyCollectionAttrJobDone:" << collection.id() << "Failed to update calendar" << displayName() << ":" << j->errorString();
@@ -967,7 +967,7 @@ void AkonadiResource::modifyCollectionAttrJobDone(KJob* j)
     }
     else
     {
-        AkonadiModel::instance()->refresh(mCollection);   // pick up the modified attribute
+        AkonadiDataModel::instance()->refresh(mCollection);   // pick up the modified attribute
         if (newEnabled)
         {
             const CalEvent::Types oldEnabled = mLastEnabled;

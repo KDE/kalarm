@@ -97,16 +97,16 @@ set(kalarm_bin_SRCS ${kalarm_bin_SRCS}
     resources/resourcetype.cpp
     resources/resource.cpp
     resources/resources.cpp
-    resources/akonadiresource.cpp
     resources/resourcedatamodelbase.cpp
     resources/resourcemodel.cpp
     resources/resourceselectdialog.cpp
     resources/eventmodel.cpp
-    kalarmmigrateapplication.cpp
-    akonadimodel.cpp
-    akonadiresourcecreator.cpp
-    collectionsearch.cpp
+    resources/akonadidatamodel.cpp
+    resources/akonadiresource.cpp
+    resources/akonadiresourcecreator.cpp
     resources/akonadiresourcemigrator.cpp
+    kalarmmigrateapplication.cpp
+    akonadicollectionsearch.cpp
     eventid.cpp
    )
 

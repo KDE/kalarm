@@ -20,7 +20,6 @@
 
 #include "traywindow.h"
 
-#include "akonadimodel.h"
 #include "alarmcalendar.h"
 #include "functions.h"
 #include "kalarmapp.h"
@@ -30,6 +29,7 @@
 #include "prefdlg.h"
 #include "preferences.h"
 #include "templatemenuaction.h"
+#include "resources/akonadidatamodel.h"
 #include "resources/eventmodel.h"
 #include "lib/synchtimer.h"
 #include "kalarm_debug.h"
@@ -134,7 +134,7 @@ TrayWindow::TrayWindow(MainWindow* parent)
     MinuteTimer::connect(mToolTipUpdateTimer, SLOT(start()));
 
     // Update when alarms are modified
-    AlarmListModel* all = AlarmListModel::all<AkonadiModel>();
+    AlarmListModel* all = AlarmListModel::all<AkonadiDataModel>();
     connect(all, SIGNAL(dataChanged(QModelIndex,QModelIndex)),
             mToolTipUpdateTimer, SLOT(start()));
     connect(all, SIGNAL(rowsInserted(QModelIndex,int,int)),

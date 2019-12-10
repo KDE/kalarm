@@ -20,10 +20,10 @@
 
 #include "akonadiresourcemigrator.h"
 
-#include "akonadimodel.h"
 #include "kalarmsettings.h"
 #include "kalarmdirsettings.h"
 #include "mainwindow.h"
+#include "resources/akonadidatamodel.h"
 #include "resources/akonadiresource.h"
 #include "resources/resources.h"
 #include "lib/messagebox.h"
@@ -376,8 +376,8 @@ void AkonadiResourceMigrator::calendarCreated(CalendarCreator* creator)
 * The CollectionAttribute's KeepFormat property will be updated if the user
 * chooses not to update the calendar.
 *
-* Note: the collection should be up to date: use AkonadiModel::refresh() before
-*       calling this function.
+* Note: the collection should be up to date: use AkonadiDataModel::refresh()
+*       before calling this function.
 */
 void AkonadiResourceMigrator::updateToCurrentFormat(const Resource& resource, bool ignoreKeepFormat, QObject* parent)
 {
@@ -470,7 +470,7 @@ bool CalendarUpdater::update()
                     {
                         // Refetch the collection's details because anything could
                         // have happened since the prompt was first displayed.
-                        if (!AkonadiModel::instance()->refresh(mCollection))
+                        if (!AkonadiDataModel::instance()->refresh(mCollection))
                             errmsg = i18nc("@info", "Invalid collection");
                     }
                     if (errmsg.isEmpty())
@@ -491,7 +491,7 @@ bool CalendarUpdater::update()
                 if (!mNewCollection)
                 {
                     // Record the user's choice of whether to update the calendar
-                    Resource resource = AkonadiModel::instance()->resource(mCollection.id());
+                    Resource resource = AkonadiDataModel::instance()->resource(mCollection.id());
                     resource.setKeepFormat(!result);
                 }
             }

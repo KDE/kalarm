@@ -241,7 +241,7 @@ public:
     bool isPopulated() const override;
 
     /** Save the resource.
-     *  Not applicable to AkonadiResource, since AkonadiModel handles saving
+     *  Not applicable to AkonadiResource, since AkonadiDataModel handles saving
      *  automatically.
      *  @return true.
      */
@@ -268,8 +268,8 @@ public:
 
     /******************************************************************************
     * Return a reference to the Collection held by an Akonadi resource.
-    * @reply Reference to the Collection, which belongs to AkonadiModel and whose
-    *        ID must not be changed.
+    * @reply Reference to the Collection, which belongs to AkonadiDataModel and
+    *        whose ID must not be changed.
     */
     static Akonadi::Collection& collection(Resource&);
     static const Akonadi::Collection& collection(const Resource&);

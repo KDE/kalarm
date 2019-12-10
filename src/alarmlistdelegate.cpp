@@ -20,8 +20,8 @@
 
 #include "alarmlistdelegate.h"
 
-#include "akonadimodel.h"
 #include "functions.h"
+#include "resources/resourcedatamodelbase.h"
 #include "resources/eventmodel.h"
 #include "kalarm_debug.h"
 

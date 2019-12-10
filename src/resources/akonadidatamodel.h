@@ -1,5 +1,5 @@
 /*
- *  akonadimodel.h  -  KAlarm calendar file access using Akonadi
+ *  akonadidatamodel.h  -  KAlarm calendar file access using Akonadi
  *  Program:  kalarm
  *  Copyright © 2010-2019 David Jarvie <djarvie@kde.org>
  *
@@ -18,8 +18,8 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef AKONADIMODEL_H
-#define AKONADIMODEL_H
+#ifndef AKONADIDATAMODEL_H
+#define AKONADIDATAMODEL_H
 
 #include "resources/resourcedatamodelbase.h"
 #include "resources/akonadiresource.h"
@@ -43,15 +43,15 @@ class KJob;
 using namespace KAlarmCal;
 
 
-class AkonadiModel : public Akonadi::EntityTreeModel, public ResourceDataModelBase
+class AkonadiDataModel : public Akonadi::EntityTreeModel, public ResourceDataModelBase
 {
         Q_OBJECT
     public:
         enum Change { Enabled, ReadOnly, AlarmTypes };
 
-        static AkonadiModel* instance();
+        static AkonadiDataModel* instance();
 
-        ~AkonadiModel() override;
+        ~AkonadiDataModel() override;
 
         static Akonadi::ChangeRecorder* monitor();
 
@@ -152,7 +152,7 @@ class AkonadiModel : public Akonadi::EntityTreeModel, public ResourceDataModelBa
             CalEvent::Type alarmType;
         };
 
-        AkonadiModel(Akonadi::ChangeRecorder*, QObject* parent);
+        AkonadiDataModel(Akonadi::ChangeRecorder*, QObject* parent);
         void          initResourceMigrator();
         Resource&     updateResource(const Akonadi::Collection&) const;
 
@@ -168,7 +168,7 @@ class AkonadiModel : public Akonadi::EntityTreeModel, public ResourceDataModelBa
         QList<KAEvent> events(ResourceId) const;
         void          getChildEvents(const QModelIndex& parent, QList<KAEvent>&) const;
 
-        static AkonadiModel*  mInstance;
+        static AkonadiDataModel*  mInstance;
         static int            mTimeHourPos;   // position of hour within time string, or -1 if leading zeroes included
 
         Akonadi::ChangeRecorder* mMonitor;
@@ -187,6 +187,6 @@ class AkonadiModel : public Akonadi::EntityTreeModel, public ResourceDataModelBa
         QQueue<KAEvent> mPendingEventChanges;   // changed events with changedEvent() signal pending
 };
 
-#endif // AKONADIMODEL_H
+#endif // AKONADIDATAMODEL_H
 
 // vim: et sw=4:

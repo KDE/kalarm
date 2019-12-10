@@ -21,9 +21,6 @@
 #ifndef AKONADIRESOURCECREATOR_H
 #define AKONADIRESOURCECREATOR_H
 
-#include "kalarmsettings.h"
-#include "kalarmdirsettings.h"
-
 #include <KAlarmCal/KACalendar>
 
 #include <AkonadiCore/AgentInstance>

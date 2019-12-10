@@ -20,12 +20,12 @@
 
 #include "alarmcalendar.h"
 
-#include "akonadimodel.h"
 #include "kalarm.h"
 #include "functions.h"
 #include "kalarmapp.h"
 #include "mainwindow.h"
 #include "preferences.h"
+#include "resources/akonadidatamodel.h"
 #include "resources/resources.h"
 #include "lib/filedialog.h"
 #include "lib/messagebox.h"
@@ -72,7 +72,7 @@ bool AlarmCalendar::initialiseCalendars()
     QDir dir;
     dir.mkpath(QStandardPaths::writableLocation(QStandardPaths::DataLocation));
     QString displayCal = QStandardPaths::writableLocation(QStandardPaths::DataLocation) + QLatin1Char('/') + displayCalendarName;
-    AkonadiModel::instance();
+    AkonadiDataModel::instance();
     Preferences::setBackend(Preferences::Akonadi);
     Preferences::self()->save();
     mResourcesCalendar = new AlarmCalendar();
@@ -689,7 +689,7 @@ bool AlarmCalendar::importAlarms(QWidget* parent, Resource* resourceptr)
                     default:
                         continue;
                 }
-                res = Resources::destination<AkonadiModel>(type);
+                res = Resources::destination<AkonadiDataModel>(type);
             }
 
             Event::Ptr newev(new Event(*event));
@@ -948,7 +948,7 @@ bool AlarmCalendar::addEvent(KAEvent& evnt, QWidget* promptParent, bool useEvent
             res = resource;
         else
         {
-            res = Resources::destination<AkonadiModel>(type, promptParent, noPrompt, cancelled);
+            res = Resources::destination<AkonadiDataModel>(type, promptParent, noPrompt, cancelled);
             if (!res.isValid())
             {
                 const char* typeStr = (type == CalEvent::ACTIVE) ? "Active alarm" : (type == CalEvent::ARCHIVED) ? "Archived alarm" : "alarm Template";
@@ -958,7 +958,7 @@ bool AlarmCalendar::addEvent(KAEvent& evnt, QWidget* promptParent, bool useEvent
         if (res.isValid())
         {
             // Don't add event to mEventMap yet - its Akonadi item id is not yet known.
-            // It will be added once it is inserted into AkonadiModel.
+            // It will be added once it is inserted into AkonadiDataModel.
             ok = res.addEvent(*event);
             remove = ok;   // if success, delete the local event instance on exit
             if (ok  &&  type == CalEvent::ACTIVE  &&  !event->enabled())

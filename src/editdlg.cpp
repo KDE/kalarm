@@ -22,7 +22,6 @@
 #include "editdlg_p.h"
 #include "editdlgtypes.h"
 
-#include "akonadimodel.h"
 #include "alarmcalendar.h"
 #include "alarmtimewidget.h"
 #include "deferdlg.h"
@@ -33,6 +32,7 @@
 #include "preferences.h"
 #include "recurrenceedit.h"
 #include "reminder.h"
+#include "resources/akonadidatamodel.h"
 #include "resources/resources.h"
 #include "lib/autoqpointer.h"
 #include "lib/buttongroup.h"
@@ -1162,7 +1162,7 @@ bool EditAlarmDlg::validate()
         bool cancelled = false;
         CalEvent::Type type = mTemplate ? CalEvent::TEMPLATE : CalEvent::ACTIVE;
         if (!mResource.isWritable(type))
-            mResource = Resources::destination<AkonadiModel>(type, this, false, &cancelled);
+            mResource = Resources::destination<AkonadiDataModel>(type, this, false, &cancelled);
         if (!mResource.isValid())
         {
             if (!cancelled)

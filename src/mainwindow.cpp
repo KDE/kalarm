@@ -20,7 +20,6 @@
 
 #include "mainwindow.h"
 
-#include "akonadimodel.h"
 #include "alarmcalendar.h"
 #include "alarmlistdelegate.h"
 #include "alarmlistview.h"
@@ -37,6 +36,7 @@
 #include "templatepickdlg.h"
 #include "traywindow.h"
 #include "wakedlg.h"
+#include "resources/akonadidatamodel.h"
 #include "resources/resources.h"
 #include "resources/eventmodel.h"
 #include "lib/autoqpointer.h"
@@ -160,7 +160,7 @@ MainWindow::MainWindow(bool restored)
     mSplitter->setStretchFactor(1, 1);
 
     // Create the alarm list widget
-    mListFilterModel = AlarmListModel::create<AkonadiModel>(this);
+    mListFilterModel = AlarmListModel::create<AkonadiDataModel>(this);
     mListFilterModel->setEventTypeFilter(mShowArchived ? CalEvent::ACTIVE | CalEvent::ARCHIVED : CalEvent::ACTIVE);
     mListView = new AlarmListView(WINDOW_NAME, mSplitter);
     mListView->setModel(mListFilterModel);
@@ -618,7 +618,7 @@ void MainWindow::enableTemplateMenuItem(bool enable)
 void MainWindow::refresh()
 {
     qCDebug(KALARM_LOG) << "MainWindow::refresh";
-    AkonadiModel::instance()->reload();
+    AkonadiDataModel::instance()->reload();
 }
 
 /******************************************************************************

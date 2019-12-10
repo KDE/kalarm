@@ -20,13 +20,13 @@
 
 #include "templatedlg.h"
 
-#include "akonadimodel.h"
 #include "alarmcalendar.h"
 #include "editdlg.h"
 #include "functions.h"
 #include "newalarmaction.h"
 #include "templatelistview.h"
 #include "undo.h"
+#include "resources/akonadidatamodel.h"
 #include "resources/resources.h"
 #include "resources/eventmodel.h"
 #include "lib/config.h"
@@ -69,7 +69,7 @@ TemplateDlg::TemplateDlg(QWidget* parent)
     QBoxLayout* layout = new QVBoxLayout();
     layout->setContentsMargins(0, 0, 0, 0);
     hlayout->addLayout(layout);
-    mListFilterModel = TemplateListModel::create<AkonadiModel>(this);
+    mListFilterModel = TemplateListModel::create<AkonadiDataModel>(this);
     if (!ShellProcess::authorised())
         mListFilterModel->setAlarmActionFilter(static_cast<KAEvent::Actions>(KAEvent::ACT_ALL & ~KAEvent::ACT_COMMAND));
     mListView = new TemplateListView(this);

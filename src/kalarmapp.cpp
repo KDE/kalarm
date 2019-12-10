@@ -20,7 +20,6 @@
 
 #include "kalarmapp.h"
 
-#include "akonadimodel.h"
 #include "alarmcalendar.h"
 #include "alarmtime.h"
 #include "commandoptions.h"
@@ -35,6 +34,7 @@
 #include "prefdlg.h"
 #include "startdaytimer.h"
 #include "traywindow.h"
+#include "resources/akonadidatamodel.h"
 #include "resources/resources.h"
 #include "resources/eventmodel.h"
 #include "lib/desktop.h"
@@ -140,8 +140,8 @@ KAlarmApp::KAlarmApp(int& argc, char** argv)
                                  this, &KAlarmApp::purgeNewArchivedDefault);
         connect(Resources::instance(), &Resources::resourcesCreated,
                                  this, &KAlarmApp::checkWritableCalendar);
-        connect(AkonadiModel::instance(), &AkonadiModel::migrationCompleted,
-                                    this, &KAlarmApp::checkWritableCalendar);
+        connect(AkonadiDataModel::instance(), &AkonadiDataModel::migrationCompleted,
+                                        this, &KAlarmApp::checkWritableCalendar);
 
         KConfigGroup config(KSharedConfig::openConfig(), "General");
         mNoSystemTray        = config.readEntry("NoSystemTray", false);
@@ -1146,7 +1146,7 @@ void KAlarmApp::checkWritableCalendar()
         MessageWin::redisplayAlarms();
     }
     if (!treeFetched
-    ||  !AkonadiModel::instance()->isMigrationComplete())
+    ||  !AkonadiDataModel::instance()->isMigrationComplete())
         return;
     static bool done = false;
     if (done)
@@ -2398,10 +2398,10 @@ bool KAlarmApp::waitUntilPopulated(ResourceId id, int timeout)
         // Use AutoQPointer to guard against crash on application exit while
         // the event loop is still running. It prevents double deletion (both
         // on deletion of parent, and on return from this function).
-        AutoQPointer<QEventLoop> loop = new QEventLoop(AlarmListModel::all<AkonadiModel>());
+        AutoQPointer<QEventLoop> loop = new QEventLoop(AlarmListModel::all<AkonadiDataModel>());
 //TODO: The choice of parent object for QEventLoop can prevent EntityTreeModel signals
-//      from activating connected slots in AkonadiModel, which prevents resources from
-//      being informed that collections have loaded. Need to find a better parent
+//      from activating connected slots in AkonadiDataModel, which prevents resources
+//      from being informed that collections have loaded. Need to find a better parent
 //      object - Qt item models seem to work, but what else?
 //      These don't work: Resources::instance(), qApp(), theApp(), MainWindow::mainMainWindow(), AlarmCalendar::resources(), QStandardItemModel.
 //      These do work: CollectionControlModel::instance(), AlarmListModel::all().

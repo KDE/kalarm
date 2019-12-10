@@ -1,5 +1,5 @@
 /*
- *  collectionsearch.h  -  Search Akonadi Collections
+ *  akonadicollectionsearch.h  -  Search Akonadi Collections
  *  Program:  kalarm
  *  Copyright © 2014,2019 David Jarvie <djarvie@kde.org>
  *
@@ -18,8 +18,8 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef COLLECTIONSEARCH_H
-#define COLLECTIONSEARCH_H
+#ifndef AKONADICOLLECTIONSEARCH_H
+#define AKONADICOLLECTIONSEARCH_H
 
 
 #include <AkonadiCore/Collection>
@@ -38,7 +38,7 @@ class ItemDeleteJob;
 }
 
 /*=============================================================================
-= Class: CollectionSearch
+= Class: AkonadiCollectionSearch
 = Fetches a list of all Akonadi collections which handle a specified mime type,
 = and then optionally fetches or deletes all Items from them with a given GID
 = or UID.
@@ -47,11 +47,11 @@ class ItemDeleteJob;
 = Instances must therefore be created on the heap by operator new(), not on the
 = stack.
 =============================================================================*/
-class CollectionSearch : public QObject
+class AkonadiCollectionSearch : public QObject
 {
         Q_OBJECT
     public:
-        explicit CollectionSearch(const QString& mimeType, const QString& gid = QString(), const QString& uid = QString(), bool remove = false);
+        explicit AkonadiCollectionSearch(const QString& mimeType, const QString& gid = QString(), const QString& uid = QString(), bool remove = false);
 
     Q_SIGNALS:
         // Signal emitted if action is to fetch all collections for the mime type
@@ -80,6 +80,6 @@ class CollectionSearch : public QObject
         bool                                   mDelete;
 };
 
-#endif // COLLECTIONSEARCH_H
+#endif // AKONADICOLLECTIONSEARCH_H
 
 // vim: et sw=4:

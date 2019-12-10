@@ -1,5 +1,5 @@
 /*
- *  akonadimodel.cpp  -  KAlarm calendar file access using Akonadi
+ *  akonadidatamodel.cpp  -  KAlarm calendar file access using Akonadi
  *  Program:  kalarm
  *  Copyright © 2007-2019 David Jarvie <djarvie@kde.org>
  *
@@ -18,7 +18,7 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "akonadimodel.h"
+#include "akonadidatamodel.h"
 
 #include "preferences.h"
 #include "resources/akonadiresourcemigrator.h"
@@ -60,26 +60,26 @@ using namespace KAlarmCal;
 static_assert((int)ResourceDataModelBase::UserRole>=(int)Akonadi::EntityTreeModel::UserRole, "ResourceDataModelBase::UserRole wrong value");
 
 /*=============================================================================
-= Class: AkonadiModel
+= Class: AkonadiDataModel
 =============================================================================*/
 
-AkonadiModel* AkonadiModel::mInstance = nullptr;
-int           AkonadiModel::mTimeHourPos = -2;
+AkonadiDataModel* AkonadiDataModel::mInstance = nullptr;
+int           AkonadiDataModel::mTimeHourPos = -2;
 
 /******************************************************************************
 * Construct and return the singleton.
 */
-AkonadiModel* AkonadiModel::instance()
+AkonadiDataModel* AkonadiDataModel::instance()
 {
     if (!mInstance)
-        mInstance = new AkonadiModel(new ChangeRecorder(qApp), qApp);
+        mInstance = new AkonadiDataModel(new ChangeRecorder(qApp), qApp);
     return mInstance;
 }
 
 /******************************************************************************
 * Constructor.
 */
-AkonadiModel::AkonadiModel(ChangeRecorder* monitor, QObject* parent)
+AkonadiDataModel::AkonadiDataModel(ChangeRecorder* monitor, QObject* parent)
     : EntityTreeModel(monitor, parent)
     , ResourceDataModelBase()
     , mMonitor(monitor)
@@ -102,7 +102,7 @@ AkonadiModel::AkonadiModel(ChangeRecorder* monitor, QObject* parent)
     AttributeFactory::registerAttribute<EventAttribute>();
 
     connect(monitor, SIGNAL(collectionChanged(Akonadi::Collection,QSet<QByteArray>)), SLOT(slotCollectionChanged(Akonadi::Collection,QSet<QByteArray>)));
-    connect(monitor, &Monitor::collectionRemoved, this, &AkonadiModel::slotCollectionRemoved);
+    connect(monitor, &Monitor::collectionRemoved, this, &AkonadiDataModel::slotCollectionRemoved);
     initResourceMigrator();
     MinuteTimer::connect(this, SLOT(slotUpdateTimeTo()));
     Preferences::connect(SIGNAL(archivedColourChanged(QColor)), this, SLOT(slotUpdateArchivedColour(QColor)));
@@ -110,15 +110,15 @@ AkonadiModel::AkonadiModel(ChangeRecorder* monitor, QObject* parent)
     Preferences::connect(SIGNAL(holidaysChanged(KHolidays::HolidayRegion)), this, SLOT(slotUpdateHolidays()));
     Preferences::connect(SIGNAL(workTimeChanged(QTime,QTime,QBitArray)), this, SLOT(slotUpdateWorkingHours()));
 
-    connect(Resources::instance(), &Resources::resourceMessage, this, &AkonadiModel::slotResourceMessage, Qt::QueuedConnection);
+    connect(Resources::instance(), &Resources::resourceMessage, this, &AkonadiDataModel::slotResourceMessage, Qt::QueuedConnection);
 
-    connect(this, &AkonadiModel::rowsInserted, this, &AkonadiModel::slotRowsInserted);
-    connect(this, &AkonadiModel::rowsAboutToBeRemoved, this, &AkonadiModel::slotRowsAboutToBeRemoved);
-    connect(this, &Akonadi::EntityTreeModel::collectionTreeFetched, this, &AkonadiModel::slotCollectionTreeFetched);
-    connect(this, &Akonadi::EntityTreeModel::collectionPopulated, this, &AkonadiModel::slotCollectionPopulated);
-    connect(monitor, &Monitor::itemChanged, this, &AkonadiModel::slotMonitoredItemChanged);
+    connect(this, &AkonadiDataModel::rowsInserted, this, &AkonadiDataModel::slotRowsInserted);
+    connect(this, &AkonadiDataModel::rowsAboutToBeRemoved, this, &AkonadiDataModel::slotRowsAboutToBeRemoved);
+    connect(this, &Akonadi::EntityTreeModel::collectionTreeFetched, this, &AkonadiDataModel::slotCollectionTreeFetched);
+    connect(this, &Akonadi::EntityTreeModel::collectionPopulated, this, &AkonadiDataModel::slotCollectionPopulated);
+    connect(monitor, &Monitor::itemChanged, this, &AkonadiDataModel::slotMonitoredItemChanged);
 
-    connect(ServerManager::self(), &ServerManager::stateChanged, this, &AkonadiModel::checkResources);
+    connect(ServerManager::self(), &ServerManager::stateChanged, this, &AkonadiDataModel::checkResources);
     checkResources(ServerManager::state());
 }
 
@@ -126,7 +126,7 @@ AkonadiModel::AkonadiModel(ChangeRecorder* monitor, QObject* parent)
 /******************************************************************************
 * Destructor.
 */
-AkonadiModel::~AkonadiModel()
+AkonadiDataModel::~AkonadiDataModel()
 {
     if (mInstance == this)
         mInstance = nullptr;
@@ -141,20 +141,20 @@ AkonadiModel::~AkonadiModel()
 * pre-Akonadi versions of KAlarm, or create default Akonadi calendar resources
 * if any are missing.
 */
-void AkonadiModel::checkResources(ServerManager::State state)
+void AkonadiDataModel::checkResources(ServerManager::State state)
 {
     switch (state)
     {
         case ServerManager::Running:
             if (!isMigrating()  &&  !isMigrationComplete())
             {
-                qCDebug(KALARM_LOG) << "AkonadiModel::checkResources: Server running";
+                qCDebug(KALARM_LOG) << "AkonadiDataModel::checkResources: Server running";
                 setMigrationInitiated();
                 AkonadiResourceMigrator::execute();
             }
             break;
         case ServerManager::NotRunning:
-            qCDebug(KALARM_LOG) << "AkonadiModel::checkResources: Server stopped";
+            qCDebug(KALARM_LOG) << "AkonadiDataModel::checkResources: Server stopped";
             setMigrationInitiated(false);
             initResourceMigrator();
             Q_EMIT serverStopped();
@@ -168,16 +168,16 @@ void AkonadiModel::checkResources(ServerManager::State state)
 * Initialise the calendar migrator so that it can be run (either for the first
 * time, or again).
 */
-void AkonadiModel::initResourceMigrator()
+void AkonadiDataModel::initResourceMigrator()
 {
     AkonadiResourceMigrator::reset();
     connect(AkonadiResourceMigrator::instance(), &AkonadiResourceMigrator::creating,
-                                           this, &AkonadiModel::slotCollectionBeingCreated);
+                                           this, &AkonadiDataModel::slotCollectionBeingCreated);
     connect(AkonadiResourceMigrator::instance(), &QObject::destroyed,
-                                           this, &AkonadiModel::slotMigrationCompleted);
+                                           this, &AkonadiDataModel::slotMigrationCompleted);
 }
 
-ChangeRecorder* AkonadiModel::monitor()
+ChangeRecorder* AkonadiDataModel::monitor()
 {
     return instance()->mMonitor;
 }
@@ -185,7 +185,7 @@ ChangeRecorder* AkonadiModel::monitor()
 /******************************************************************************
 * Return the data for a given role, for a specified item.
 */
-QVariant AkonadiModel::data(const QModelIndex& index, int role) const
+QVariant AkonadiDataModel::data(const QModelIndex& index, int role) const
 {
     if (role == ResourceIdRole)
         role = CollectionIdRole;
@@ -230,7 +230,7 @@ QVariant AkonadiModel::data(const QModelIndex& index, int role) const
 /******************************************************************************
 * Return the number of columns for either a collection or an item.
 */
-int AkonadiModel::entityColumnCount(HeaderGroup group) const
+int AkonadiDataModel::entityColumnCount(HeaderGroup group) const
 {
     switch (group)
     {
@@ -246,7 +246,7 @@ int AkonadiModel::entityColumnCount(HeaderGroup group) const
 /******************************************************************************
 * Return offset to add to headerData() role, for item models.
 */
-int AkonadiModel::headerDataEventRoleOffset() const
+int AkonadiDataModel::headerDataEventRoleOffset() const
 {
     return TerminalUserRole * ItemListHeaders;
 }
@@ -254,7 +254,7 @@ int AkonadiModel::headerDataEventRoleOffset() const
 /******************************************************************************
 * Return data for a column heading.
 */
-QVariant AkonadiModel::entityHeaderData(int section, Qt::Orientation orientation, int role, HeaderGroup group) const
+QVariant AkonadiDataModel::entityHeaderData(int section, Qt::Orientation orientation, int role, HeaderGroup group) const
 {
     bool eventHeaders = false;
     switch (group)
@@ -280,7 +280,7 @@ QVariant AkonadiModel::entityHeaderData(int section, Qt::Orientation orientation
 * Recursive function to Q_EMIT the dataChanged() signal for all items in a
 * specified column range.
 */
-void AkonadiModel::signalDataChanged(bool (*checkFunc)(const Item&), int startColumn, int endColumn, const QModelIndex& parent)
+void AkonadiDataModel::signalDataChanged(bool (*checkFunc)(const Item&), int startColumn, int endColumn, const QModelIndex& parent)
 {
     int start = -1;
     int end   = -1;
@@ -318,7 +318,7 @@ void AkonadiModel::signalDataChanged(bool (*checkFunc)(const Item&), int startCo
 static bool checkItem_isActive(const Item& item)
 { return item.mimeType() == KAlarmCal::MIME_ACTIVE; }
 
-void AkonadiModel::slotUpdateTimeTo()
+void AkonadiDataModel::slotUpdateTimeTo()
 {
     signalDataChanged(&checkItem_isActive, TimeToColumn, TimeToColumn, QModelIndex());
 }
@@ -330,9 +330,9 @@ void AkonadiModel::slotUpdateTimeTo()
 static bool checkItem_isArchived(const Item& item)
 { return item.mimeType() == KAlarmCal::MIME_ARCHIVED; }
 
-void AkonadiModel::slotUpdateArchivedColour(const QColor&)
+void AkonadiDataModel::slotUpdateArchivedColour(const QColor&)
 {
-    qCDebug(KALARM_LOG) << "AkonadiModel::slotUpdateArchivedColour";
+    qCDebug(KALARM_LOG) << "AkonadiDataModel::slotUpdateArchivedColour";
     signalDataChanged(&checkItem_isArchived, 0, ColumnCount - 1, QModelIndex());
 }
 
@@ -350,9 +350,9 @@ static bool checkItem_isDisabled(const Item& item)
     return false;
 }
 
-void AkonadiModel::slotUpdateDisabledColour(const QColor&)
+void AkonadiDataModel::slotUpdateDisabledColour(const QColor&)
 {
-    qCDebug(KALARM_LOG) << "AkonadiModel::slotUpdateDisabledColour";
+    qCDebug(KALARM_LOG) << "AkonadiDataModel::slotUpdateDisabledColour";
     signalDataChanged(&checkItem_isDisabled, 0, ColumnCount - 1, QModelIndex());
 }
 
@@ -370,9 +370,9 @@ static bool checkItem_excludesHolidays(const Item& item)
     return false;
 }
 
-void AkonadiModel::slotUpdateHolidays()
+void AkonadiDataModel::slotUpdateHolidays()
 {
-    qCDebug(KALARM_LOG) << "AkonadiModel::slotUpdateHolidays";
+    qCDebug(KALARM_LOG) << "AkonadiDataModel::slotUpdateHolidays";
     Q_ASSERT(TimeToColumn == TimeColumn + 1);  // signal should be emitted only for TimeTo and Time columns
     signalDataChanged(&checkItem_excludesHolidays, TimeColumn, TimeToColumn, QModelIndex());
 }
@@ -391,9 +391,9 @@ static bool checkItem_workTimeOnly(const Item& item)
     return false;
 }
 
-void AkonadiModel::slotUpdateWorkingHours()
+void AkonadiDataModel::slotUpdateWorkingHours()
 {
-    qCDebug(KALARM_LOG) << "AkonadiModel::slotUpdateWorkingHours";
+    qCDebug(KALARM_LOG) << "AkonadiDataModel::slotUpdateWorkingHours";
     Q_ASSERT(TimeToColumn == TimeColumn + 1);  // signal should be emitted only for TimeTo and Time columns
     signalDataChanged(&checkItem_workTimeOnly, TimeColumn, TimeToColumn, QModelIndex());
 }
@@ -401,11 +401,11 @@ void AkonadiModel::slotUpdateWorkingHours()
 /******************************************************************************
 * Reload a collection from Akonadi storage. The backend data is not reloaded.
 */
-bool AkonadiModel::reloadResource(const Resource& resource)
+bool AkonadiDataModel::reloadResource(const Resource& resource)
 {
     if (!resource.isValid())
         return false;
-    qCDebug(KALARM_LOG) << "AkonadiModel::reloadResource:" << resource.id();
+    qCDebug(KALARM_LOG) << "AkonadiDataModel::reloadResource:" << resource.id();
     Collection collection(resource.id());
     mMonitor->setCollectionMonitored(collection, false);
     mMonitor->setCollectionMonitored(collection, true);
@@ -415,9 +415,9 @@ bool AkonadiModel::reloadResource(const Resource& resource)
 /******************************************************************************
 * Reload all collections from Akonadi storage. The backend data is not reloaded.
 */
-void AkonadiModel::reload()
+void AkonadiDataModel::reload()
 {
-    qCDebug(KALARM_LOG) << "AkonadiModel::reload";
+    qCDebug(KALARM_LOG) << "AkonadiDataModel::reload";
     const Collection::List collections = mMonitor->collectionsMonitored();
     for (const Collection& collection : collections)
     {
@@ -429,7 +429,7 @@ void AkonadiModel::reload()
 /******************************************************************************
 * Returns the index to a specified event.
 */
-QModelIndex AkonadiModel::eventIndex(const KAEvent& event) const
+QModelIndex AkonadiDataModel::eventIndex(const KAEvent& event) const
 {
     return itemIndex(Item(mEventIds.value(event.id()).itemId));
 }
@@ -437,7 +437,7 @@ QModelIndex AkonadiModel::eventIndex(const KAEvent& event) const
 /******************************************************************************
 * Returns the index to a specified event.
 */
-QModelIndex AkonadiModel::eventIndex(const QString& eventId) const
+QModelIndex AkonadiDataModel::eventIndex(const QString& eventId) const
 {
     return itemIndex(Item(mEventIds.value(eventId).itemId));
 }
@@ -445,7 +445,7 @@ QModelIndex AkonadiModel::eventIndex(const QString& eventId) const
 /******************************************************************************
 * Return all events belonging to a collection.
 */
-QList<KAEvent> AkonadiModel::events(ResourceId id) const
+QList<KAEvent> AkonadiDataModel::events(ResourceId id) const
 {
     QList<KAEvent> list;
     const QModelIndex ix = modelIndexForCollection(this, Collection(id));
@@ -459,7 +459,7 @@ QList<KAEvent> AkonadiModel::events(ResourceId id) const
 /******************************************************************************
 * Recursive function to append all child Events with a given mime type.
 */
-void AkonadiModel::getChildEvents(const QModelIndex& parent, QList<KAEvent>& events) const
+void AkonadiDataModel::getChildEvents(const QModelIndex& parent, QList<KAEvent>& events) const
 {
     for (int row = 0, count = rowCount(parent);  row < count;  ++row)
     {
@@ -483,12 +483,12 @@ void AkonadiModel::getChildEvents(const QModelIndex& parent, QList<KAEvent>& eve
     }
 }
 
-KAEvent AkonadiModel::event(const QString& eventId) const
+KAEvent AkonadiDataModel::event(const QString& eventId) const
 {
     return event(eventIndex(eventId));
 }
 
-KAEvent AkonadiModel::event(const QModelIndex& ix) const
+KAEvent AkonadiDataModel::event(const QModelIndex& ix) const
 {
     if (!ix.isValid())
         return KAEvent();
@@ -501,7 +501,7 @@ KAEvent AkonadiModel::event(const QModelIndex& ix) const
 * Return the event for an Item at a specified model index.
 * The item's parent collection is set, as is the event's collection ID.
 */
-KAEvent AkonadiModel::event(Akonadi::Item& item, const QModelIndex& ix, Resource& res) const
+KAEvent AkonadiDataModel::event(Akonadi::Item& item, const QModelIndex& ix, Resource& res) const
 {
 //TODO: Tune performance: This function is called very frequently with the same parameters
     if (ix.isValid())
@@ -522,7 +522,7 @@ KAEvent AkonadiModel::event(Akonadi::Item& item, const QModelIndex& ix, Resource
 /******************************************************************************
 * Return the up to date Item for a specified Akonadi ID.
 */
-Item AkonadiModel::itemById(Item::Id id) const
+Item AkonadiDataModel::itemById(Item::Id id) const
 {
     Item item(id);
     if (!refresh(item))
@@ -533,7 +533,7 @@ Item AkonadiModel::itemById(Item::Id id) const
 /******************************************************************************
 * Return the Item for a given event.
 */
-Item AkonadiModel::itemForEvent(const QString& eventId) const
+Item AkonadiDataModel::itemForEvent(const QString& eventId) const
 {
     const QModelIndex ix = eventIndex(eventId);
     if (!ix.isValid())
@@ -549,9 +549,9 @@ Item AkonadiModel::itemForEvent(const QString& eventId) const
 * The event's 'updated' flag is cleared.
 * Reply = true if item creation has been scheduled.
 */
-bool AkonadiModel::addEvent(KAEvent& event, Resource& resource)
+bool AkonadiDataModel::addEvent(KAEvent& event, Resource& resource)
 {
-    qCDebug(KALARM_LOG) << "AkonadiModel::addEvent: ID:" << event.id();
+    qCDebug(KALARM_LOG) << "AkonadiDataModel::addEvent: ID:" << event.id();
     if (!resource.addEvent(event))
         return false;
     // Note that the item ID will be inserted in mEventIds after the Akonadi
@@ -564,9 +564,9 @@ bool AkonadiModel::addEvent(KAEvent& event, Resource& resource)
 /******************************************************************************
 * Called when rows have been inserted into the model.
 */
-void AkonadiModel::slotRowsInserted(const QModelIndex& parent, int start, int end)
+void AkonadiDataModel::slotRowsInserted(const QModelIndex& parent, int start, int end)
 {
-    qCDebug(KALARM_LOG) << "AkonadiModel::slotRowsInserted:" << start << "-" << end << "(parent =" << parent << ")";
+    qCDebug(KALARM_LOG) << "AkonadiDataModel::slotRowsInserted:" << start << "-" << end << "(parent =" << parent << ")";
     QHash<Resource, QList<KAEvent>> events;
     for (int row = start;  row <= end;  ++row)
     {
@@ -575,7 +575,7 @@ void AkonadiModel::slotRowsInserted(const QModelIndex& parent, int start, int en
         if (collection.isValid())
         {
             // A collection has been inserted. Create a new resource to hold it.
-            qCDebug(KALARM_LOG) << "AkonadiModel::slotRowsInserted: Collection" << collection.id() << collection.name();
+            qCDebug(KALARM_LOG) << "AkonadiDataModel::slotRowsInserted: Collection" << collection.id() << collection.name();
             Resource& resource = updateResource(collection);
             // Ignore it if it isn't owned by a valid Akonadi resource.
             if (resource.isValid())
@@ -591,7 +591,7 @@ void AkonadiModel::slotRowsInserted(const QModelIndex& parent, int start, int en
                     AgentInstance agent = AgentManager::self()->instance(collection.resource());
                     CollectionFetchJob* job = new CollectionFetchJob(Collection::root(), CollectionFetchJob::Recursive);
                     job->fetchScope().setResource(agent.identifier());
-                    connect(job, &CollectionFetchJob::result, instance(), &AkonadiModel::collectionFetchResult);
+                    connect(job, &CollectionFetchJob::result, instance(), &AkonadiDataModel::collectionFetchResult);
                 }
             }
         }
@@ -606,7 +606,7 @@ void AkonadiModel::slotRowsInserted(const QModelIndex& parent, int start, int en
                 const KAEvent evnt = event(item, ix, res);   // this sets item.parentCollection()
                 if (evnt.isValid())
                 {
-                    qCDebug(KALARM_LOG) << "AkonadiModel::slotRowsInserted: Event" << evnt.id();
+                    qCDebug(KALARM_LOG) << "AkonadiDataModel::slotRowsInserted: Event" << evnt.id();
                     // Only notify new events if the collection is already populated.
                     // If not populated, all events will be notified when it is
                     // eventually populated.
@@ -632,17 +632,17 @@ void AkonadiModel::slotRowsInserted(const QModelIndex& parent, int start, int en
 * Called when a CollectionFetchJob has completed.
 * Check for and process changes in attribute values.
 */
-void AkonadiModel::collectionFetchResult(KJob* j)
+void AkonadiDataModel::collectionFetchResult(KJob* j)
 {
     CollectionFetchJob* job = qobject_cast<CollectionFetchJob*>(j);
     if (j->error())
-        qCWarning(KALARM_LOG) << "AkonadiModel::collectionFetchResult: CollectionFetchJob" << job->fetchScope().resource()<< "error: " << j->errorString();
+        qCWarning(KALARM_LOG) << "AkonadiDataModel::collectionFetchResult: CollectionFetchJob" << job->fetchScope().resource()<< "error: " << j->errorString();
     else
     {
         const Collection::List collections = job->collections();
         for (const Collection& c : collections)
         {
-            qCDebug(KALARM_LOG) << "AkonadiModel::collectionFetchResult:" << c.id();
+            qCDebug(KALARM_LOG) << "AkonadiDataModel::collectionFetchResult:" << c.id();
             auto it = mResources.find(c.id());
             if (it == mResources.end())
                 continue;
@@ -655,9 +655,9 @@ void AkonadiModel::collectionFetchResult(KJob* j)
 /******************************************************************************
 * Called when rows are about to be removed from the model.
 */
-void AkonadiModel::slotRowsAboutToBeRemoved(const QModelIndex& parent, int start, int end)
+void AkonadiDataModel::slotRowsAboutToBeRemoved(const QModelIndex& parent, int start, int end)
 {
-    qCDebug(KALARM_LOG) << "AkonadiModel::slotRowsAboutToBeRemoved:" << start << "-" << end << "(parent =" << parent << ")";
+    qCDebug(KALARM_LOG) << "AkonadiDataModel::slotRowsAboutToBeRemoved:" << start << "-" << end << "(parent =" << parent << ")";
     QHash<Resource, QList<KAEvent>> events;
     for (int row = start;  row <= end;  ++row)
     {
@@ -667,7 +667,7 @@ void AkonadiModel::slotRowsAboutToBeRemoved(const QModelIndex& parent, int start
         const KAEvent evnt = event(item, ix, res);   // this sets item.parentCollection()
         if (evnt.isValid())
         {
-            qCDebug(KALARM_LOG) << "AkonadiModel::slotRowsAboutToBeRemoved: Collection:" << item.parentCollection().id() << ", Event ID:" << evnt.id();
+            qCDebug(KALARM_LOG) << "AkonadiDataModel::slotRowsAboutToBeRemoved: Collection:" << item.parentCollection().id() << ", Event ID:" << evnt.id();
             events[res] += evnt;
             mEventIds.remove(evnt.id());
         }
@@ -685,9 +685,9 @@ void AkonadiModel::slotRowsAboutToBeRemoved(const QModelIndex& parent, int start
 * Updates the collection held by the collection's resource, and notifies
 * changes of interest.
 */
-void AkonadiModel::slotCollectionChanged(const Akonadi::Collection& c, const QSet<QByteArray>& attributeNames)
+void AkonadiDataModel::slotCollectionChanged(const Akonadi::Collection& c, const QSet<QByteArray>& attributeNames)
 {
-    qCDebug(KALARM_LOG) << "AkonadiModel::slotCollectionChanged:" << c.id() << attributeNames;
+    qCDebug(KALARM_LOG) << "AkonadiDataModel::slotCollectionChanged:" << c.id() << attributeNames;
     auto it = mResources.find(c.id());
     if (it != mResources.end())
     {
@@ -703,7 +703,7 @@ void AkonadiModel::slotCollectionChanged(const Akonadi::Collection& c, const QSe
 * Called when a monitored collection's properties or content have changed.
 * Optionally emits a signal if properties of interest have changed.
 */
-void AkonadiModel::setCollectionChanged(Resource& resource, const Collection& collection, bool checkCompat)
+void AkonadiDataModel::setCollectionChanged(Resource& resource, const Collection& collection, bool checkCompat)
 {
     AkonadiResource::notifyCollectionChanged(resource, collection, checkCompat);
     if (isMigrating())
@@ -712,7 +712,7 @@ void AkonadiModel::setCollectionChanged(Resource& resource, const Collection& co
         if (mCollectionsBeingCreated.isEmpty() && mCollectionIdsBeingCreated.isEmpty()
         &&  AkonadiResourceMigrator::completed())
         {
-            qCDebug(KALARM_LOG) << "AkonadiModel::setCollectionChanged: Migration completed";
+            qCDebug(KALARM_LOG) << "AkonadiDataModel::setCollectionChanged: Migration completed";
             setMigrationComplete();
             Q_EMIT migrationCompleted();
         }
@@ -722,10 +722,10 @@ void AkonadiModel::setCollectionChanged(Resource& resource, const Collection& co
 /******************************************************************************
 * Called when a monitored collection is removed.
 */
-void AkonadiModel::slotCollectionRemoved(const Collection& collection)
+void AkonadiDataModel::slotCollectionRemoved(const Collection& collection)
 {
     const Collection::Id id = collection.id();
-    qCDebug(KALARM_LOG) << "AkonadiModel::slotCollectionRemoved:" << id;
+    qCDebug(KALARM_LOG) << "AkonadiDataModel::slotCollectionRemoved:" << id;
     mResources.remove(collection.id());
     // AkonadiResource will remove the resource from Resources.
 }
@@ -733,7 +733,7 @@ void AkonadiModel::slotCollectionRemoved(const Collection& collection)
 /******************************************************************************
 * Called when a collection creation is about to start, or has completed.
 */
-void AkonadiModel::slotCollectionBeingCreated(const QString& path, Akonadi::Collection::Id id, bool finished)
+void AkonadiDataModel::slotCollectionBeingCreated(const QString& path, Akonadi::Collection::Id id, bool finished)
 {
     if (finished)
     {
@@ -747,7 +747,7 @@ void AkonadiModel::slotCollectionBeingCreated(const QString& path, Akonadi::Coll
 /******************************************************************************
 * Called when the collection tree has been fetched for the first time.
 */
-void AkonadiModel::slotCollectionTreeFetched()
+void AkonadiDataModel::slotCollectionTreeFetched()
 {
     Resources::notifyResourcesCreated();
 }
@@ -755,20 +755,20 @@ void AkonadiModel::slotCollectionTreeFetched()
 /******************************************************************************
 * Called when a collection has been populated.
 */
-void AkonadiModel::slotCollectionPopulated(Akonadi::Collection::Id id)
+void AkonadiDataModel::slotCollectionPopulated(Akonadi::Collection::Id id)
 {
-    qCDebug(KALARM_LOG) << "AkonadiModel::slotCollectionPopulated:" << id;
+    qCDebug(KALARM_LOG) << "AkonadiDataModel::slotCollectionPopulated:" << id;
     AkonadiResource::notifyCollectionLoaded(id, events(id));
 }
 
 /******************************************************************************
 * Called when calendar migration has completed.
 */
-void AkonadiModel::slotMigrationCompleted()
+void AkonadiDataModel::slotMigrationCompleted()
 {
     if (mCollectionsBeingCreated.isEmpty() && mCollectionIdsBeingCreated.isEmpty())
     {
-        qCDebug(KALARM_LOG) << "AkonadiModel: Migration completed";
+        qCDebug(KALARM_LOG) << "AkonadiDataModel: Migration completed";
         setMigrationComplete();
         Q_EMIT migrationCompleted();
     }
@@ -777,9 +777,9 @@ void AkonadiModel::slotMigrationCompleted()
 /******************************************************************************
 * Called when an item in the monitored collections has changed.
 */
-void AkonadiModel::slotMonitoredItemChanged(const Akonadi::Item& item, const QSet<QByteArray>&)
+void AkonadiDataModel::slotMonitoredItemChanged(const Akonadi::Item& item, const QSet<QByteArray>&)
 {
-    qCDebug(KALARM_LOG) << "AkonadiModel::slotMonitoredItemChanged: item id=" << item.id() << ", revision=" << item.revision();
+    qCDebug(KALARM_LOG) << "AkonadiDataModel::slotMonitoredItemChanged: item id=" << item.id() << ", revision=" << item.revision();
     const QModelIndex ix = itemIndex(item);
     if (ix.isValid())
     {
@@ -796,7 +796,7 @@ void AkonadiModel::slotMonitoredItemChanged(const Akonadi::Item& item, const QSe
             // itemChanged() signal first, before we notify AkonadiResource
             // that the event has changed.
             mPendingEventChanges.enqueue(evnt);
-            QTimer::singleShot(0, this, &AkonadiModel::slotEmitEventUpdated);
+            QTimer::singleShot(0, this, &AkonadiDataModel::slotEmitEventUpdated);
         }
     }
 }
@@ -805,7 +805,7 @@ void AkonadiModel::slotMonitoredItemChanged(const Akonadi::Item& item, const QSe
 * Called to Q_EMIT a signal when an event in the monitored collections has
 * changed.
 */
-void AkonadiModel::slotEmitEventUpdated()
+void AkonadiDataModel::slotEmitEventUpdated()
 {
     while (!mPendingEventChanges.isEmpty())
     {
@@ -819,7 +819,7 @@ void AkonadiModel::slotEmitEventUpdated()
 * Refresh the specified Collection with up to date data.
 * Return: true if successful, false if collection not found.
 */
-bool AkonadiModel::refresh(Akonadi::Collection& collection) const
+bool AkonadiDataModel::refresh(Akonadi::Collection& collection) const
 {
     const QModelIndex ix = modelIndexForCollection(this, collection);
     if (!ix.isValid())
@@ -835,7 +835,7 @@ bool AkonadiModel::refresh(Akonadi::Collection& collection) const
 * Refresh the specified Item with up to date data.
 * Return: true if successful, false if item not found.
 */
-bool AkonadiModel::refresh(Akonadi::Item& item) const
+bool AkonadiDataModel::refresh(Akonadi::Item& item) const
 {
     const QModelIndex ix = itemIndex(item);
     if (!ix.isValid())
@@ -847,7 +847,7 @@ bool AkonadiModel::refresh(Akonadi::Item& item) const
 /******************************************************************************
 * Return the AkonadiResource object for a collection ID.
 */
-Resource AkonadiModel::resource(Collection::Id id) const
+Resource AkonadiDataModel::resource(Collection::Id id) const
 {
     return mResources.value(id, AkonadiResource::nullResource());
 }
@@ -855,7 +855,7 @@ Resource AkonadiModel::resource(Collection::Id id) const
 /******************************************************************************
 * Return the resource at a specified index, with up to date data.
 */
-Resource AkonadiModel::resource(const QModelIndex& ix) const
+Resource AkonadiDataModel::resource(const QModelIndex& ix) const
 {
     return mResources.value(ix.data(CollectionIdRole).toLongLong(), AkonadiResource::nullResource());
 }
@@ -863,7 +863,7 @@ Resource AkonadiModel::resource(const QModelIndex& ix) const
 /******************************************************************************
 * Find the QModelIndex of a resource.
 */
-QModelIndex AkonadiModel::resourceIndex(const Resource& resource) const
+QModelIndex AkonadiDataModel::resourceIndex(const Resource& resource) const
 {
     const Collection& collection = AkonadiResource::collection(resource);
     const QModelIndex ix = modelIndexForCollection(this, collection);
@@ -875,7 +875,7 @@ QModelIndex AkonadiModel::resourceIndex(const Resource& resource) const
 /******************************************************************************
 * Find the QModelIndex of a resource with a given ID.
 */
-QModelIndex AkonadiModel::resourceIndex(Akonadi::Collection::Id id) const
+QModelIndex AkonadiDataModel::resourceIndex(Akonadi::Collection::Id id) const
 {
     const QModelIndex ix = modelIndexForCollection(this, Collection(id));
     if (!ix.isValid())
@@ -888,7 +888,7 @@ QModelIndex AkonadiModel::resourceIndex(Akonadi::Collection::Id id) const
 * definitive copy of the collection used by this model.
 * Return: the collection held by the model, or null if not found.
 */
-Collection* AkonadiModel::collection(Collection::Id id) const
+Collection* AkonadiDataModel::collection(Collection::Id id) const
 {
     auto it = mResources.find(id);
     if (it != mResources.end())
@@ -905,7 +905,7 @@ Collection* AkonadiModel::collection(Collection::Id id) const
 * definitive copy of the collection used by this model.
 * Return: the collection held by the model, or null if not found.
 */
-Collection* AkonadiModel::collection(const Resource& resource) const
+Collection* AkonadiDataModel::collection(const Resource& resource) const
 {
     return collection(resource.id());
 }
@@ -913,7 +913,7 @@ Collection* AkonadiModel::collection(const Resource& resource) const
 /******************************************************************************
 * Find the QModelIndex of an item.
 */
-QModelIndex AkonadiModel::itemIndex(const Akonadi::Item& item) const
+QModelIndex AkonadiDataModel::itemIndex(const Akonadi::Item& item) const
 {
     const QModelIndexList ixs = modelIndexesForItem(this, item);
     for (const QModelIndex& ix : ixs)
@@ -930,7 +930,7 @@ QModelIndex AkonadiModel::itemIndex(const Akonadi::Item& item) const
 * Param: collection - this should have been fetched from the model to ensure
 *                     that its value is up to date.
 */
-Resource& AkonadiModel::updateResource(const Collection& collection) const
+Resource& AkonadiDataModel::updateResource(const Collection& collection) const
 {
     auto it = mResources.find(collection.id());
     if (it != mResources.end())
@@ -950,7 +950,7 @@ Resource& AkonadiModel::updateResource(const Collection& collection) const
 /******************************************************************************
 * Display a message to the user.
 */
-void AkonadiModel::slotResourceMessage(Resource&, ResourceType::MessageType type, const QString& message, const QString& details)
+void AkonadiDataModel::slotResourceMessage(Resource&, ResourceType::MessageType type, const QString& message, const QString& details)
 {
     handleResourceMessage(type, message, details);
 }

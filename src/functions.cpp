@@ -21,10 +21,9 @@
 #include "functions.h"
 #include "functions_p.h"
 
-#include "akonadimodel.h"
+#include "akonadicollectionsearch.h"
 #include "alarmcalendar.h"
 #include "alarmtime.h"
-#include "collectionsearch.h"
 #include "editdlg.h"
 #include "kalarmapp.h"
 #include "kamail.h"
@@ -33,6 +32,7 @@
 #include "preferences.h"
 #include "templatelistview.h"
 #include "templatemenuaction.h"
+#include "resources/akonadidatamodel.h"
 #include "resources/resources.h"
 #include "resources/eventmodel.h"
 #include "lib/autoqpointer.h"
@@ -258,7 +258,7 @@ UpdateResult addEvents(QVector<KAEvent>& events, QWidget* msgParent, bool allowK
         status.status = UPDATE_FAILED;
     else
     {
-        Resource resource = Resources::destination<AkonadiModel>(CalEvent::ACTIVE, msgParent);
+        Resource resource = Resources::destination<AkonadiDataModel>(CalEvent::ACTIVE, msgParent);
         if (!resource.isValid())
         {
             qCDebug(KALARM_LOG) << "KAlarm::addEvents: No calendar";
@@ -591,7 +591,7 @@ UpdateResult reactivateEvents(QVector<KAEvent>& events, QVector<EventId>& inelig
     if (resourceptr)
         resource = *resourceptr;
     if (!resource.isValid())
-        resource = Resources::destination<AkonadiModel>(CalEvent::ACTIVE, msgParent);
+        resource = Resources::destination<AkonadiDataModel>(CalEvent::ACTIVE, msgParent);
     if (!resource.isValid())
     {
         qCDebug(KALARM_LOG) << "KAlarm::reactivateEvents: No calendar";
@@ -746,7 +746,7 @@ QVector<KAEvent> getSortedActiveEvents(QObject* parent, AlarmListModel** model)
         model = &mdl;
     if (!*model)
     {
-        *model = AlarmListModel::create<AkonadiModel>(parent);
+        *model = AlarmListModel::create<AkonadiDataModel>(parent);
         (*model)->setEventTypeFilter(CalEvent::ACTIVE);
         (*model)->sort(AlarmListModel::TimeColumn);
     }
@@ -1590,7 +1590,7 @@ KAlarm::UpdateResult sendToKOrganizer(const KAEvent& event)
 KAlarm::UpdateResult deleteFromKOrganizer(const QString& eventID)
 {
     const QString newID = uidKOrganizer(eventID);
-    new CollectionSearch(KORG_MIME_TYPE, QString(), newID, true);  // this auto-deletes when complete
+    new AkonadiCollectionSearch(KORG_MIME_TYPE, QString(), newID, true);  // this auto-deletes when complete
     // Ignore errors
     return KAlarm::UpdateResult(KAlarm::UPDATE_OK);
 }
