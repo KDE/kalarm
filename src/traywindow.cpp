@@ -42,7 +42,6 @@
 #include <KMessageBox>
 #include <KStandardAction>
 #include <KStandardGuiItem>
-#include <KIconEffect>
 #include <KConfig>
 #include <KAboutData>
 

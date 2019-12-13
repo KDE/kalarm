@@ -48,7 +48,6 @@
 #include <KStandardGuiItem>
 #include <KLocalizedString>
 #include <KConfig>
-#include <KIconLoader>
 #include <KTextEdit>
 #include <KWindowSystem>
 #include <KIO/StatJob>
@@ -603,7 +602,7 @@ void MessageWin::initView()
         layout->addStretch();
         topLayout->addLayout(layout);
         QLabel* label = new QLabel(topWidget);
-        label->setPixmap(QIcon::fromTheme(QStringLiteral("dialog-error")).pixmap(IconSize(KIconLoader::Desktop), IconSize(KIconLoader::Desktop)));
+        label->setPixmap(QIcon::fromTheme(QStringLiteral("dialog-error")).pixmap(style()->pixelMetric(QStyle::PM_MessageBoxIconSize)));
         label->setFixedSize(label->sizeHint());
         layout->addWidget(label, 0, Qt::AlignRight);
         QVBoxLayout* vlayout = new QVBoxLayout();
@@ -663,13 +662,11 @@ void MessageWin::initView()
     else
         setDeferralLimit(mEvent);    // ensure that button is disabled when alarm can't be deferred any more
 
-    KIconLoader iconLoader;
     if (!mAudioFile.isEmpty()  &&  (mVolume || mFadeVolume > 0))
     {
         // Silence button to stop sound repetition
-        const QPixmap pixmap = iconLoader.loadIcon(QStringLiteral("media-playback-stop"), KIconLoader::MainToolbar);
         mSilenceButton = new PushButton(topWidget);
-        mSilenceButton->setIcon(pixmap);
+        mSilenceButton->setIcon(QIcon::fromTheme(QStringLiteral("media-playback-stop")));
         grid->addWidget(mSilenceButton, 0, gridIndex++, Qt::AlignHCenter);
         mSilenceButton->setToolTip(i18nc("@info:tooltip", "Stop sound"));
         mSilenceButton->setWhatsThis(i18nc("@info:whatsthis", "Stop playing the sound"));
@@ -680,9 +677,8 @@ void MessageWin::initView()
     if (mAkonadiItemId >= 0)
     {
         // KMail button
-        const QPixmap pixmap = iconLoader.loadIcon(QStringLiteral("internet-mail"), KIconLoader::MainToolbar);
         mKMailButton = new PushButton(topWidget);
-        mKMailButton->setIcon(pixmap);
+        mKMailButton->setIcon(QIcon::fromTheme(QStringLiteral("internet-mail")));
         connect(mKMailButton, &QAbstractButton::clicked, this, &MessageWin::slotShowKMailMessage);
         grid->addWidget(mKMailButton, 0, gridIndex++, Qt::AlignHCenter);
         mKMailButton->setToolTip(xi18nc("@info:tooltip Locate this email in KMail", "Locate in <application>KMail</application>"));
@@ -690,9 +686,8 @@ void MessageWin::initView()
     }
 
     // KAlarm button
-    const QPixmap pixmap = iconLoader.loadIcon(KAboutData::applicationData().componentName(), KIconLoader::MainToolbar);
     mKAlarmButton = new PushButton(topWidget);
-    mKAlarmButton->setIcon(pixmap);
+    mKAlarmButton->setIcon(QIcon::fromTheme(KAboutData::applicationData().componentName()));
     connect(mKAlarmButton, &QAbstractButton::clicked, this, &MessageWin::displayMainWindow);
     grid->addWidget(mKAlarmButton, 0, gridIndex++, Qt::AlignHCenter);
     mKAlarmButton->setToolTip(xi18nc("@info:tooltip", "Activate <application>KAlarm</application>"));
