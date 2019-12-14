@@ -34,7 +34,7 @@ using namespace KCalendarCore;
 using namespace KHolidays;
 #include <KConfigGroup>
 
-#include <QtTest>
+#include <QTest>
 
 QTEST_GUILESS_MAIN(KAEventTest)
 

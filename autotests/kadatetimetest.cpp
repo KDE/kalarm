@@ -27,7 +27,7 @@ using KAlarmCal::KADateTime;
 
 #include <KConfigGroup>
 
-#include <QtTest>
+#include <QTest>
 #include <QTimeZone>
 #include <QLocale>
 #include <QDBusConnection>
