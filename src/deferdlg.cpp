@@ -38,6 +38,11 @@
 #include <QPushButton>
 
 
+/******************************************************************************
+* Constructor.
+* If 'cancelButton' is true, the Cancel Deferral button will be shown to allow
+* any existing deferral to be cancelled.
+*/
 DeferAlarmDlg::DeferAlarmDlg(const DateTime& initialDT, bool anyTimeOption, bool cancelButton, QWidget* parent)
     : QDialog(parent)
 {
@@ -58,23 +63,23 @@ DeferAlarmDlg::DeferAlarmDlg(const DateTime& initialDT, bool anyTimeOption, bool
     layout->addWidget(mButtonBox);
     QPushButton* okButton = mButtonBox->addButton(QDialogButtonBox::Ok);
     okButton->setWhatsThis(i18nc("@info:whatsthis", "Defer the alarm until the specified time."));
-    if (cancelButton)
-        mButtonBox->addButton(QDialogButtonBox::Cancel);
-    QPushButton* deferButton = mButtonBox->addButton(i18nc("@action:button", "Cancel Deferral"), QDialogButtonBox::ActionRole);
-    deferButton->setWhatsThis(i18nc("@info:whatsthis", "Cancel the deferred alarm. This does not affect future recurrences."));
+    mButtonBox->addButton(QDialogButtonBox::Cancel);
     connect(mButtonBox, &QDialogButtonBox::accepted,
             this, &DeferAlarmDlg::slotOk);
     connect(mButtonBox, &QDialogButtonBox::rejected,
             this, &QDialog::reject);
-    connect(mButtonBox, &QDialogButtonBox::clicked,
-            [this, deferButton](QAbstractButton* btn)
-            {
-                if (btn == deferButton)
-                    slotCancelDeferral();
-            });
-
+    if (cancelButton)
+    {
+        QPushButton* deferButton = mButtonBox->addButton(i18nc("@action:button", "Cancel Deferral"), QDialogButtonBox::ActionRole);
+        deferButton->setWhatsThis(i18nc("@info:whatsthis", "Cancel the deferred alarm. This does not affect future recurrences."));
+        connect(mButtonBox, &QDialogButtonBox::clicked,
+                [this, deferButton](QAbstractButton* btn)
+                {
+                    if (btn == deferButton)
+                        slotCancelDeferral();
+                });
+    }
 }
-
 
 /******************************************************************************
 * Called when the OK button is clicked.
