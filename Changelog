@@ -1,6 +1,7 @@
 KAlarm Change Log
 
 === Version 2.13.1 (KDE Applications 19.12.1) --- 30 December 2019 ===
++ Make defer dialogue accessible when a full screen window is active.
 + Only show 'Cancel Deferral' in defer dialogue if a deferral is already active.
 
 === Version 2.13.0 (KDE Applications 19.12) --- 19 November 2019 ===

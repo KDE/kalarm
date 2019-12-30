@@ -142,18 +142,19 @@ class MessageText : public KTextEdit
 
 
 // Basic flags for the window
-static const Qt::WindowFlags          WFLAGS       = Qt::WindowStaysOnTopHint;
-static const Qt::WindowFlags          WFLAGS2      = Qt::WindowContextHelpButtonHint;
+static const Qt::WindowFlags     WFLAGS       = Qt::WindowStaysOnTopHint;
+static const Qt::WindowFlags     WFLAGS2      = Qt::WindowContextHelpButtonHint;
 static const Qt::WidgetAttribute WidgetFlags  = Qt::WA_DeleteOnClose;
 
 // Error message bit masks
-enum {
+enum
+{
     ErrMsg_Speak     = 0x01,
     ErrMsg_AudioFile = 0x02
 };
 
 
-QList<MessageWin*> MessageWin::mWindowList;
+QList<MessageWin*>      MessageWin::mWindowList;
 QMap<EventId, unsigned> MessageWin::mErrorMessages;
 bool                    MessageWin::mRedisplayed = false;
 // There can only be one audio thread at a time: trying to play multiple
@@ -2131,6 +2132,8 @@ void MessageWin::checkDeferralLimit()
 void MessageWin::slotDefer()
 {
     mDeferDlg = new DeferAlarmDlg(KADateTime::currentDateTime(Preferences::timeSpec()).addSecs(60), mDateTime.isDateOnly(), false, this);
+    if (windowFlags() & Qt::X11BypassWindowManagerHint)
+        mDeferDlg->setWindowFlags(mDeferDlg->windowFlags() | Qt::X11BypassWindowManagerHint);
     mDeferDlg->setObjectName(QStringLiteral("DeferDlg"));    // used by LikeBack
     mDeferDlg->setDeferMinutes(mDefaultDeferMinutes > 0 ? mDefaultDeferMinutes : Preferences::defaultDeferTime());
     mDeferDlg->setLimit(mEvent);
