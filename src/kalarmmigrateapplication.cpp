@@ -1,5 +1,5 @@
 /*
-  Copyright (c) 2015-2019 Laurent Montel <montel@kde.org>
+  Copyright (c) 2015-2020 Laurent Montel <montel@kde.org>
   Copyright © 2019 David Jarvie <djarvie@kde.org>
 
   based on code from Sune Vuorela <sune@vuorela.dk> (Rawatar source code)
