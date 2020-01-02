@@ -1,7 +1,7 @@
 /*
  *  akonadiresourcecreator.h  -  interactively create an Akonadi resource
  *  Program:  kalarm
- *  Copyright © 2011,2019 David Jarvie <djarvie@kde.org>
+ *  Copyright © 2011-2020 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -21,41 +21,33 @@
 #ifndef AKONADIRESOURCECREATOR_H
 #define AKONADIRESOURCECREATOR_H
 
-#include <KAlarmCal/KACalendar>
+#include "resourcecreator.h"
 
 #include <AkonadiCore/AgentInstance>
 #include <AkonadiCore/AgentType>
 
-using namespace KAlarmCal;
-
-class QWidget;
 class KJob;
-class Resource;
 
-class AkonadiResourceCreator : public QObject
+class AkonadiResourceCreator : public ResourceCreator
 {
-        Q_OBJECT
-    public:
-        AkonadiResourceCreator(CalEvent::Type defaultType, QWidget* parent);
-        void createResource();
-        Akonadi::AgentInstance agentInstance() const   { return mAgentInstance; }
+    Q_OBJECT
+public:
+    AkonadiResourceCreator(KAlarmCal::CalEvent::Type defaultType, QWidget* parent);
+    Akonadi::AgentInstance agentInstance() const   { return mAgentInstance; }
 
-    Q_SIGNALS:
-        void resourceAdded(Resource&, CalEvent::Type);
+protected Q_SLOTS:
+    void doCreateResource() override;
 
-    private Q_SLOTS:
-        void getAgentType();
-        void agentInstanceCreated(KJob*);
-        void slotResourceAdded(Resource&);
+private Q_SLOTS:
+    void agentInstanceCreated(KJob*);
+    void slotResourceAdded(Resource&);
 
-    private:
-        template <class Settings> void setResourceAlarmType();
-        template <class Settings> QString getResourcePath();
+private:
+    template <class Settings> void setResourceAlarmType();
+    template <class Settings> QString getResourcePath();
 
-        QWidget*               mParent;
-        CalEvent::Type         mDefaultType;
-        Akonadi::AgentType     mAgentType;
-        Akonadi::AgentInstance mAgentInstance;
+    Akonadi::AgentType     mAgentType;
+    Akonadi::AgentInstance mAgentInstance;
 };
 
 #endif // AKONADIRESOURCECREATOR_H

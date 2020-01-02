@@ -1,7 +1,7 @@
 /*
  *  datamodel.cpp  -  calendar data model dependent functions
  *  Program:  kalarm
- *  Copyright © 2019 David Jarvie <djarvie@kde.org>
+ *  Copyright © 2019-2020 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -22,6 +22,7 @@
 
 #include "akonadidatamodel.h"
 #include "akonadiresource.h"
+#include "akonadiresourcecreator.h"
 #include "eventmodel.h"
 #include "resourcemodel.h"
 
@@ -81,6 +82,11 @@ TemplateListModel* createTemplateListModel(QObject* parent)
 TemplateListModel* allTemplateListModel()
 {
     return TemplateListModel::all<AkonadiDataModel>();
+}
+
+ResourceCreator* createResourceCreator(KAlarmCal::CalEvent::Type defaultType, QWidget* parent)
+{
+    return new AkonadiResourceCreator(defaultType, parent);
 }
 
 } // namespace DataModel

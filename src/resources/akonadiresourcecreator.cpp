@@ -1,7 +1,7 @@
 /*
  *  akonadiresourcecreator.cpp  -  interactively create an Akonadi resource
  *  Program:  kalarm
- *  Copyright © 2011,2019 David Jarvie <djarvie@kde.org>
+ *  Copyright © 2011-2020 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -37,30 +37,21 @@
 #include <KMessageBox>
 #include <KLocalizedString>
 
-#include <QTimer>
-
 using namespace Akonadi;
 using namespace KAlarmCal;
 
 
 AkonadiResourceCreator::AkonadiResourceCreator(CalEvent::Type defaultType, QWidget* parent)
-    : QObject()
-    , mParent(parent)
-    , mDefaultType(defaultType)
+    : ResourceCreator(defaultType, parent)
 {
 }
 
 /******************************************************************************
 * Create a new resource. The user will be prompted to enter its configuration.
 */
-void AkonadiResourceCreator::createResource()
+void AkonadiResourceCreator::doCreateResource()
 {
-    QTimer::singleShot(0, this, &AkonadiResourceCreator::getAgentType);
-}
-
-void AkonadiResourceCreator::getAgentType()
-{
-    qCDebug(KALARM_LOG) << "AkonadiResourceCreator::getAgentType: Type:" << mDefaultType;
+    qCDebug(KALARM_LOG) << "AkonadiResourceCreator::doCreateResource: Type:" << mDefaultType;
     // Use AutoQPointer to guard against crash on application exit while
     // the dialogue is still open. It prevents double deletion (both on
     // deletion of parent, and on return from this function).

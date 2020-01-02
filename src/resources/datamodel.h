@@ -1,7 +1,7 @@
 /*
  *  datamodel.h  -  calendar data model dependent functions
  *  Program:  kalarm
- *  Copyright © 2019 David Jarvie <djarvie@kde.org>
+ *  Copyright © 2019-2020 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -21,12 +21,16 @@
 #ifndef DATAMODEL_H
 #define DATAMODEL_H
 
+#include <KAlarmCal/KACalendar>
+
 class Resource;
 class ResourceListModel;
 class ResourceFilterCheckListModel;
 class AlarmListModel;
 class TemplateListModel;
+class ResourceCreator;
 class QObject;
+class QWidget;
 
 /** Class to create objects dependent on data model. */
 namespace DataModel
@@ -57,6 +61,8 @@ AlarmListModel*    createAlarmListModel(QObject* parent);
 AlarmListModel*    allAlarmListModel();
 TemplateListModel* createTemplateListModel(QObject* parent);
 TemplateListModel* allTemplateListModel();
+
+ResourceCreator* createResourceCreator(KAlarmCal::CalEvent::Type defaultType, QWidget* parent);
 
 } // namespace DataModel
 
