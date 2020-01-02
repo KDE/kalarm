@@ -1,7 +1,7 @@
 /*
  *  resourcetype.h  -  base class for an alarm calendar resource type
  *  Program:  kalarm
- *  Copyright © 2019 David Jarvie <djarvie@kde.org>
+ *  Copyright © 2019-2020 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -96,6 +96,9 @@ public:
     /** Return the resource's unique ID. */
     ResourceId id() const    { return mId; }
 
+    /** Return the resource's unique ID, as shown to the user. */
+    virtual ResourceId displayId() const;
+
     /** Return the type of storage used by the resource. */
     virtual StorageType storageType() const = 0;
 
@@ -105,6 +108,11 @@ public:
      *                      false for brief label (e.g. "URL").
      */
     virtual QString storageTypeString(bool description) const = 0;
+
+    /** Return the type description of a resource (file, remote file, etc.)
+     *  for display purposes. This is equivalent to storageTypeString(true).
+     */
+    static QString storageTypeString(StorageType);
 
     /** Return the location(s) of the resource (URL, file path, etc.) */
     virtual QUrl location() const = 0;
@@ -423,7 +431,7 @@ protected:
      */
     void setFailed();
 
-    QString storageTypeStr(bool description, bool file, bool local) const;
+    static QString storageTypeStr(bool description, bool file, bool local);
     template <class T> static T* resource(Resource&);
     template <class T> static const T* resource(const Resource&);
 

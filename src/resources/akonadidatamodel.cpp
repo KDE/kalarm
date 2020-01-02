@@ -1,7 +1,7 @@
 /*
  *  akonadidatamodel.cpp  -  KAlarm calendar file access using Akonadi
  *  Program:  kalarm
- *  Copyright © 2007-2019 David Jarvie <djarvie@kde.org>
+ *  Copyright © 2007-2020 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -405,7 +405,7 @@ bool AkonadiDataModel::reload(const Resource& resource)
 {
     if (!resource.isValid())
         return false;
-    qCDebug(KALARM_LOG) << "AkonadiDataModel::reload:" << resource.id();
+    qCDebug(KALARM_LOG) << "AkonadiDataModel::reload:" << resource.displayId();
     Collection collection(resource.id());
     mMonitor->setCollectionMonitored(collection, false);
     mMonitor->setCollectionMonitored(collection, true);

@@ -1,7 +1,7 @@
 /*
  *  akonadiresource.cpp  -  class for an Akonadi alarm calendar resource
  *  Program:  kalarm
- *  Copyright © 2019 David Jarvie <djarvie@kde.org>
+ *  Copyright © 2019-2020 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -380,7 +380,7 @@ bool AkonadiResource::removeResource()
 {
     if (!isValid())
         return false;
-    qCDebug(KALARM_LOG) << "AkonadiResource::removeResource:" << id();
+    qCDebug(KALARM_LOG) << "AkonadiResource::removeResource:" << displayId();
     notifyDeletion();
     // Note: Don't use CollectionDeleteJob, since that also deletes the backend storage.
     AgentManager* agentManager = AgentManager::self();
@@ -399,7 +399,7 @@ void AkonadiResource::slotCollectionRemoved(const Collection& collection)
 {
     if (collection.id() == id())
     {
-        qCDebug(KALARM_LOG) << "AkonadiResource::slotCollectionRemoved:" << id();
+        qCDebug(KALARM_LOG) << "AkonadiResource::slotCollectionRemoved:" << displayId();
         disconnect(AkonadiDataModel::monitor(), nullptr, this, nullptr);
         ResourceType::removeResource(collection.id());
     }

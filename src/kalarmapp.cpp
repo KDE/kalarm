@@ -1,7 +1,7 @@
 /*
  *  kalarmapp.cpp  -  the KAlarm application object
  *  Program:  kalarm
- *  Copyright © 2001-2019 David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2020 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -1199,7 +1199,7 @@ void KAlarmApp::purgeNewArchivedDefault(const Resource& resource)
 {
     if (Resources::isStandard(resource, CalEvent::ARCHIVED))
     {
-        qCDebug(KALARM_LOG) << "KAlarmApp::purgeNewArchivedDefault:" << resource.id() << ": standard archived...";
+        qCDebug(KALARM_LOG) << "KAlarmApp::purgeNewArchivedDefault:" << resource.displayId() << ": standard archived...";
         if (mArchivedPurgeDays >= 0)
             purge(mArchivedPurgeDays);
         else

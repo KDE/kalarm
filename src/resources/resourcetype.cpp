@@ -1,7 +1,7 @@
 /*
  *  resourcetype.cpp  -  base class for an alarm calendar resource type
  *  Program:  kalarm
- *  Copyright © 2019 David Jarvie <djarvie@kde.org>
+ *  Copyright © 2019-2020 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -40,6 +40,11 @@ ResourceType::~ResourceType()
 bool ResourceType::failed() const
 {
     return mFailed  ||  !isValid();
+}
+
+ResourceId ResourceType::displayId() const
+{
+    return id();
 }
 
 bool ResourceType::isEnabled(CalEvent::Type type) const
@@ -295,7 +300,19 @@ void ResourceType::setFailed()
     mFailed = true;
 }
 
-QString ResourceType::storageTypeStr(bool description, bool file, bool local) const
+QString ResourceType::storageTypeString(StorageType type)
+{
+    switch (type)
+    {
+        case File:
+        case Directory:
+            return storageTypeStr(true, (type == File), true);
+        default:
+            return QString();
+    }
+}
+
+QString ResourceType::storageTypeStr(bool description, bool file, bool local)
 {
     if (description)
         return file ? i18nc("@info", "KAlarm Calendar File") : i18nc("@info", "KAlarm Calendar Directory");

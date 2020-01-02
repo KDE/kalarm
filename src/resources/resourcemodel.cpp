@@ -1,7 +1,7 @@
 /*
  *  resourcemodel.cpp  -  models containing flat list of resources
  *  Program:  kalarm
- *  Copyright © 2007-2019 David Jarvie <djarvie@kde.org>
+ *  Copyright © 2007-2020 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -421,9 +421,9 @@ void ResourceCheckListModel::resourceSettingsChanged(Resource& res, ResourceType
         return;
 
     if (change & ResourceType::Enabled)
-        qCDebug(KALARM_LOG) << debugType("resourceSettingsChanged").constData() << res.id() << "Enabled" << res.enabledTypes();
+        qCDebug(KALARM_LOG) << debugType("resourceSettingsChanged").constData() << res.displayId() << "Enabled" << res.enabledTypes();
     if (change & ResourceType::AlarmTypes)
-        qCDebug(KALARM_LOG) << debugType("resourceSettingsChanged").constData() << res.id() << "AlarmTypes" << res.alarmTypes();
+        qCDebug(KALARM_LOG) << debugType("resourceSettingsChanged").constData() << res.displayId() << "AlarmTypes" << res.alarmTypes();
 
     const QModelIndex ix = mModel->resourceIndex(res);
     if (ix.isValid())

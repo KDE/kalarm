@@ -1,7 +1,7 @@
 /*
  *  alarmcalendar.cpp  -  KAlarm calendar file access
  *  Program:  kalarm
- *  Copyright © 2001-2019 David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2020 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -899,7 +899,7 @@ bool AlarmCalendar::addEvent(KAEvent& evnt, QWidget* promptParent, bool useEvent
     // Check that the event type is valid for the calendar
     Resource nullresource;
     Resource& resource(resourceptr ? *resourceptr : nullresource);
-    qCDebug(KALARM_LOG) << "AlarmCalendar::addEvent:" << evnt.id() << ", resource" << resource.id();
+    qCDebug(KALARM_LOG) << "AlarmCalendar::addEvent:" << evnt.id() << ", resource" << resource.displayId();
     const CalEvent::Type type = evnt.category();
     if (type != mEventType)
     {

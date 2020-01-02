@@ -1,7 +1,7 @@
 /*
  *  resource.cpp  -  generic class containing an alarm calendar resource
  *  Program:  kalarm
- *  Copyright © 2019 David Jarvie <djarvie@kde.org>
+ *  Copyright © 2019-2020 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -78,6 +78,11 @@ ResourceId Resource::id() const
     return mResource.isNull() ? -1 : mResource->id();
 }
 
+ResourceId Resource::displayId() const
+{
+    return mResource.isNull() ? -1 : mResource->displayId();
+}
+
 Resource::StorageType Resource::storageType() const
 {
     return mResource.isNull() ? NoStorage : static_cast<StorageType>(mResource->storageType());
@@ -86,6 +91,11 @@ Resource::StorageType Resource::storageType() const
 QString Resource::storageTypeString(bool description) const
 {
     return mResource.isNull() ? QString() : mResource->storageTypeString(description);
+}
+
+QString Resource::storageTypeString(ResourceType::StorageType type)
+{
+    return ResourceType::storageTypeString(type);
 }
 
 QUrl Resource::location() const

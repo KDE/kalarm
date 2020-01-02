@@ -1,7 +1,7 @@
 /*
  *  resourcedatamodelbase.cpp  -  base for models containing calendars and events
  *  Program:  kalarm
- *  Copyright © 2007-2019 David Jarvie <djarvie@kde.org>
+ *  Copyright © 2007-2020 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -157,6 +157,9 @@ QVariant ResourceDataModelBase::headerData(int section, Qt::Orientation orientat
     return QVariant();
 }
 
+/******************************************************************************
+* Return whether resourceData() or eventData() handle a role.
+*/
 bool ResourceDataModelBase::roleHandled(int role) const
 {
     switch (role)

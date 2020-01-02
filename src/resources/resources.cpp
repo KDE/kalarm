@@ -1,7 +1,7 @@
 /*
  *  resource.cpp  -  generic class containing an alarm calendar resource
  *  Program:  kalarm
- *  Copyright © 2019 David Jarvie <djarvie@kde.org>
+ *  Copyright © 2019-2020 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -450,7 +450,7 @@ void Resources::notifySettingsChanged(ResourceType* res, ResourceType::Changes c
 
     if ((change & ResourceType::ReadOnly)  &&  res->readOnly())
     {
-        qCDebug(KALARM_LOG) << "Resources::notifySettingsChanged:" << res->id() << "ReadOnly";
+        qCDebug(KALARM_LOG) << "Resources::notifySettingsChanged:" << res->displayId() << "ReadOnly";
         // A read-only resource can't be the default for any alarm type
         const CalEvent::Types std = standardTypes(r, false);
         if (std != CalEvent::EMPTY)
