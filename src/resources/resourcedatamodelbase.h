@@ -1,7 +1,7 @@
 /*
  *  resourcedatamodelbase.h  -  base for models containing calendars and events
  *  Program:  kalarm
- *  Copyright © 2007-2019 David Jarvie <djarvie@kde.org>
+ *  Copyright © 2007-2020 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -72,6 +72,8 @@ class ResourceDataModelBase
             ColumnTitleRole,           // column titles (whether displayed or not)
             CommandErrorRole           // last command execution error for alarm (per user)
         };
+        /** The type of a model row. */
+        enum class Type { Error = 0, Event, Resource };
 
         virtual ~ResourceDataModelBase();
 

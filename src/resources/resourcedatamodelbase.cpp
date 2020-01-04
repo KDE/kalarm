@@ -173,6 +173,8 @@ bool ResourceDataModelBase::roleHandled(int role) const
         case Qt::SizeHintRole:
         case Qt::AccessibleTextRole:
         case Qt::ToolTipRole:
+        case ItemTypeRole:
+        case ResourceIdRole:
         case BaseColourRole:
         case TimeDisplayRole:
         case SortRole:
@@ -195,7 +197,7 @@ bool ResourceDataModelBase::roleHandled(int role) const
 */
 QVariant ResourceDataModelBase::resourceData(int& role, const Resource& resource, bool& handled) const
 {
-    if (roleHandled(role))   // Ensure that resourceDataHandles() is coded correctly
+    if (roleHandled(role))   // Ensure that roleHandled() is coded correctly
     {
         handled = true;
         switch (role)
@@ -210,12 +212,16 @@ QVariant ResourceDataModelBase::resourceData(int& role, const Resource& resource
                 const QColor colour = resource.backgroundColour();
                 if (colour.isValid())
                     return colour;
-                break;
+                break;    // use base model background colour
             }
             case Qt::ForegroundRole:
                 return resource.foregroundColour();
             case Qt::ToolTipRole:
                 return tooltip(resource, CalEvent::ACTIVE | CalEvent::ARCHIVED | CalEvent::TEMPLATE);
+            case ItemTypeRole:
+                return static_cast<int>(Type::Resource);
+            case ResourceIdRole:
+                return resource.id();
             default:
                 break;
         }
@@ -231,13 +237,20 @@ QVariant ResourceDataModelBase::resourceData(int& role, const Resource& resource
 QVariant ResourceDataModelBase::eventData(int role, int column, const KAEvent& event,
                                           const Resource& resource, bool& handled) const
 {
-    if (roleHandled(role))   // Ensure that eventDataHandles() is coded correctly
+    if (roleHandled(role))   // Ensure that roleHandled() is coded correctly
     {
         handled = true;
         bool calendarColour = false;
 
-        if (role == Qt::WhatsThisRole)
-            return whatsThisText(column);
+        switch (role)
+        {
+            case Qt::WhatsThisRole:
+                return whatsThisText(column);
+            case ItemTypeRole:
+                return static_cast<int>(Type::Event);
+            default:
+                break;
+        }
         if (!event.isValid())
             return QVariant();
         switch (role)

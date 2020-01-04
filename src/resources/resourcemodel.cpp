@@ -131,15 +131,11 @@ bool ResourceFilterModel::filterAcceptsRow(int sourceRow, const QModelIndex& sou
         return false;   // invalidly configured resource
     if (!mWritableOnly  &&  mAlarmType == CalEvent::EMPTY)
         return true;
-    if (mWritableOnly  &&  !resource.isWritable())
-        return false;
-    if (mAlarmType != CalEvent::EMPTY  &&  !(resource.alarmTypes() & mAlarmType))
-        return false;
-    if (mWritableOnly  &&  !resource.isCompatible())
-        return false;
-    if (mEnabledOnly  &&  !resource.isEnabled(mAlarmType))
-        return false;
-    if (!mFilterText.isEmpty()  &&  !resource.displayName().contains(mFilterText, Qt::CaseInsensitive))
+    if ((mWritableOnly  &&  !resource.isWritable())
+    ||  (mAlarmType != CalEvent::EMPTY  &&  !(resource.alarmTypes() & mAlarmType))
+    ||  (mWritableOnly  &&  !resource.isCompatible())
+    ||  (mEnabledOnly  &&  !resource.isEnabled(mAlarmType))
+    ||  (!mFilterText.isEmpty()  &&  !resource.displayName().contains(mFilterText, Qt::CaseInsensitive)))
         return false;
     return true;
 }
@@ -486,10 +482,13 @@ void ResourceFilterCheckListModel::setEventTypeFilter(CalEvent::Type type)
 {
     if (type != mAlarmType)
     {
-        disconnect(sourceModel(), &QAbstractItemModel::rowsAboutToBeInserted, this, nullptr);
-        disconnect(sourceModel(), &QAbstractItemModel::rowsAboutToBeRemoved, this, nullptr);
-        disconnect(sourceModel(), &QAbstractItemModel::rowsInserted, this, nullptr);
-        disconnect(sourceModel(), &QAbstractItemModel::rowsRemoved, this, nullptr);
+        if (sourceModel())
+        {
+            disconnect(sourceModel(), &QAbstractItemModel::rowsAboutToBeInserted, this, nullptr);
+            disconnect(sourceModel(), &QAbstractItemModel::rowsAboutToBeRemoved, this, nullptr);
+            disconnect(sourceModel(), &QAbstractItemModel::rowsInserted, this, nullptr);
+            disconnect(sourceModel(), &QAbstractItemModel::rowsRemoved, this, nullptr);
+        }
 
         ResourceCheckListModel* newModel;
         switch (type)

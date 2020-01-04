@@ -188,8 +188,8 @@ ChangeRecorder* AkonadiDataModel::monitor()
 QVariant AkonadiDataModel::data(const QModelIndex& index, int role) const
 {
     if (role == ResourceIdRole)
-        role = CollectionIdRole;
-    if (roleHandled(role))
+        role = CollectionIdRole;   // use the base model for this
+    if (roleHandled(role)  ||  role == ParentResourceIdRole)
     {
         const Collection collection = EntityTreeModel::data(index, CollectionRole).value<Collection>();
         if (collection.isValid())
