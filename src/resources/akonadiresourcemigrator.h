@@ -1,7 +1,7 @@
 /*
  *  akonadiresourcemigrator.h  -  migrates or creates KAlarm Akonadi resources
  *  Program:  kalarm
- *  Copyright © 2011-2019 David Jarvie <djarvie@kde.org>
+ *  Copyright © 2011-2020 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -23,14 +23,16 @@
 
 #include <KAlarmCal/KACalendar>
 
-#include <AkonadiCore/AgentInstance>
 #include <AkonadiCore/Collection>
 
 class KJob;
-namespace Akonadi { class CollectionFetchJob; }
+namespace Akonadi {
+class AgentInstance;
+class CollectionFetchJob;
+}
 
 class CalendarCreator;
-class CalendarUpdater;
+class AkonadiCalendarUpdater;
 class Resource;
 
 using namespace KAlarmCal;
@@ -49,7 +51,6 @@ class AkonadiResourceMigrator : public QObject
         static void execute();
         static void updateToCurrentFormat(const Resource&, bool ignoreKeepFormat, QObject* parent);
         static bool completed()    { return mCompleted; }
-        template <class Interface> static Interface* getAgentInterface(const Akonadi::AgentInstance&, QString& errorMessage, QObject* parent);
 
     Q_SIGNALS:
         /** Signal emitted when a resource is about to be created, and when creation has
@@ -69,7 +70,6 @@ class AkonadiResourceMigrator : public QObject
         AkonadiResourceMigrator(QObject* parent = nullptr);
         void migrateOrCreate();
         void createDefaultResources();
-        template <class Interface> static bool updateStorageFormat(const Akonadi::AgentInstance&, QString& errorMessage, QObject* parent);
 
         static AkonadiResourceMigrator* mInstance;
         QList<CalendarCreator*> mCalendarsPending;  // pending calendar migration or creation jobs
@@ -77,7 +77,7 @@ class AkonadiResourceMigrator : public QObject
         CalEvent::Types mExistingAlarmTypes;   // alarm types provided by existing Akonadi resources
         static bool     mCompleted;            // execute() has completed
 
-        friend class CalendarUpdater;
+        friend class AkonadiCalendarUpdater;
 };
 
 #endif // AKONADIRESOURCEMIGRATOR_H

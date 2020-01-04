@@ -1,7 +1,7 @@
 /*
  *  akonadiresourcemigrator.cpp  -  migrates or creates KAlarm Akonadi resources
  *  Program:  kalarm
- *  Copyright © 2011-2019 David Jarvie <djarvie@kde.org>
+ *  Copyright © 2011-2020 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -25,6 +25,7 @@
 #include "mainwindow.h"
 #include "resources/akonadidatamodel.h"
 #include "resources/akonadiresource.h"
+#include "resources/akonadicalendarupdater.h"
 #include "resources/resources.h"
 #include "lib/messagebox.h"
 #include "kalarm_debug.h"
@@ -51,13 +52,6 @@
 using namespace Akonadi;
 using namespace KAlarmCal;
 
-namespace
-{
-const QString KALARM_RESOURCE(QStringLiteral("akonadi_kalarm_resource"));
-const QString KALARM_DIR_RESOURCE(QStringLiteral("akonadi_kalarm_dir_resource"));
-
-QString conversionPrompt(const QString& calendarName, const QString& calendarVersion, bool whole);
-}
 
 // Creates, or migrates from KResources, a single alarm calendar
 class CalendarCreator : public QObject
@@ -115,36 +109,9 @@ class CalendarCreator : public QObject
         bool             mFinished{false};
 };
 
-// Updates the backend calendar format of a single alarm calendar
-class CalendarUpdater : public QObject
-{
-        Q_OBJECT
-    public:
-        CalendarUpdater(const Collection& collection, bool dirResource,
-                        bool ignoreKeepFormat, bool newCollection, QObject* parent, QWidget* promptParent = nullptr);
-        ~CalendarUpdater();
-        // Return whether another instance is already updating this collection
-        bool isDuplicate() const   { return mDuplicate; }
-        // Check whether any instance is for the given collection ID
-        static bool containsCollection(Collection::Id);
-
-    public Q_SLOTS:
-        bool update();
-
-    private:
-        static QList<CalendarUpdater*> mInstances;
-        Akonadi::Collection mCollection;
-        QObject*            mParent;
-        QWidget*            mPromptParent;
-        const bool          mDirResource;
-        const bool          mIgnoreKeepFormat;
-        const bool          mNewCollection;
-        const bool          mDuplicate;     // another instance is already updating this collection
-};
-
 
 AkonadiResourceMigrator* AkonadiResourceMigrator::mInstance = nullptr;
-bool              AkonadiResourceMigrator::mCompleted = false;
+bool                     AkonadiResourceMigrator::mCompleted = false;
 
 AkonadiResourceMigrator::AkonadiResourceMigrator(QObject* parent)
     : QObject(parent)
@@ -197,7 +164,7 @@ void AkonadiResourceMigrator::migrateOrCreate()
     for (const AgentInstance& agent : agents)
     {
         const QString type = agent.type().identifier();
-        if (type == KALARM_RESOURCE  ||  type == KALARM_DIR_RESOURCE)
+        if (type == AkonadiResource::KALARM_RESOURCE  ||  type == AkonadiResource::KALARM_DIR_RESOURCE)
         {
             // Fetch the resource's collection to determine its alarm types
             CollectionFetchJob* job = new CollectionFetchJob(Collection::root(), CollectionFetchJob::FirstLevel);
@@ -229,11 +196,11 @@ void AkonadiResourceMigrator::migrateOrCreate()
             const QString resourceType = configGroup.readEntry("ResourceType", QString());
             QString agentType;
             if (resourceType == QLatin1String("file"))
-                agentType = KALARM_RESOURCE;
+                agentType = AkonadiResource::KALARM_RESOURCE;
             else if (resourceType == QLatin1String("dir"))
-                agentType = KALARM_DIR_RESOURCE;
+                agentType = AkonadiResource::KALARM_DIR_RESOURCE;
             else if (resourceType == QLatin1String("remote"))
-                agentType = KALARM_RESOURCE;
+                agentType = AkonadiResource::KALARM_RESOURCE;
             else
                 continue;   // unknown resource type - can't convert
 
@@ -301,7 +268,7 @@ void AkonadiResourceMigrator::createDefaultResources()
         connect(creator, &CalendarCreator::finished, this, &AkonadiResourceMigrator::calendarCreated);
         connect(creator, &CalendarCreator::creating, this, &AkonadiResourceMigrator::creatingCalendar);
         mCalendarsPending << creator;
-        creator->createAgent(KALARM_RESOURCE, this);
+        creator->createAgent(AkonadiResource::KALARM_RESOURCE, this);
     }
     if (!(mExistingAlarmTypes & CalEvent::ARCHIVED))
     {
@@ -309,7 +276,7 @@ void AkonadiResourceMigrator::createDefaultResources()
         connect(creator, &CalendarCreator::finished, this, &AkonadiResourceMigrator::calendarCreated);
         connect(creator, &CalendarCreator::creating, this, &AkonadiResourceMigrator::creatingCalendar);
         mCalendarsPending << creator;
-        creator->createAgent(KALARM_RESOURCE, this);
+        creator->createAgent(AkonadiResource::KALARM_RESOURCE, this);
     }
     if (!(mExistingAlarmTypes & CalEvent::TEMPLATE))
     {
@@ -317,7 +284,7 @@ void AkonadiResourceMigrator::createDefaultResources()
         connect(creator, &CalendarCreator::finished, this, &AkonadiResourceMigrator::calendarCreated);
         connect(creator, &CalendarCreator::creating, this, &AkonadiResourceMigrator::creatingCalendar);
         mCalendarsPending << creator;
-        creator->createAgent(KALARM_RESOURCE, this);
+        creator->createAgent(AkonadiResource::KALARM_RESOURCE, this);
     }
 
     if (mCalendarsPending.isEmpty())
@@ -367,178 +334,6 @@ void AkonadiResourceMigrator::calendarCreated(CalendarCreator* creator)
         mCompleted = true;
         deleteLater();
     }
-}
-
-/******************************************************************************
-* If an existing Akonadi resource calendar can be converted to the current
-* KAlarm format, prompt the user whether to convert it, and if yes, tell the
-* Akonadi resource to update the backend storage to the current format.
-* The CollectionAttribute's KeepFormat property will be updated if the user
-* chooses not to update the calendar.
-*
-* Note: the collection should be up to date: use AkonadiDataModel::refresh()
-*       before calling this function.
-*/
-void AkonadiResourceMigrator::updateToCurrentFormat(const Resource& resource, bool ignoreKeepFormat, QObject* parent)
-{
-    qCDebug(KALARM_LOG) << "AkonadiResourceMigrator::updateToCurrentFormat:" << resource.id();
-    if (CalendarUpdater::containsCollection(resource.id()))
-        return;   // prevent multiple simultaneous user prompts
-    const AgentInstance agent = AgentManager::self()->instance(resource.configName());
-    const QString id = agent.type().identifier();
-    bool dirResource;
-    if (id == KALARM_RESOURCE)
-        dirResource = false;
-    else if (id == KALARM_DIR_RESOURCE)
-        dirResource = true;
-    else
-    {
-        qCCritical(KALARM_LOG) << "AkonadiResourceMigrator::updateToCurrentFormat: Invalid agent type" << id;
-        return;
-    }
-    const Collection& collection = AkonadiResource::collection(resource);
-    CalendarUpdater* updater = new CalendarUpdater(collection, dirResource, ignoreKeepFormat, false, parent, qobject_cast<QWidget*>(parent));
-    QTimer::singleShot(0, updater, &CalendarUpdater::update);
-}
-
-/*===========================================================================*/
-
-QList<CalendarUpdater*> CalendarUpdater::mInstances;
-
-CalendarUpdater::CalendarUpdater(const Collection& collection, bool dirResource,
-                                 bool ignoreKeepFormat, bool newCollection, QObject* parent, QWidget* promptParent)
-    : QObject(parent)
-    , mCollection(collection)
-    , mParent(parent)
-    , mPromptParent(promptParent ? promptParent : MainWindow::mainMainWindow())
-    , mDirResource(dirResource)
-    , mIgnoreKeepFormat(ignoreKeepFormat)
-    , mNewCollection(newCollection)
-    , mDuplicate(containsCollection(collection.id()))
-{
-    mInstances.append(this);
-}
-
-CalendarUpdater::~CalendarUpdater()
-{
-    mInstances.removeAll(this);
-}
-
-bool CalendarUpdater::containsCollection(Collection::Id id)
-{
-    for (CalendarUpdater* instance : mInstances)
-    {
-        if (instance->mCollection.id() == id)
-            return true;
-    }
-    return false;
-}
-
-bool CalendarUpdater::update()
-{
-    qCDebug(KALARM_LOG) << "CalendarUpdater::update:" << mCollection.id() << (mDirResource ? "directory" : "file");
-    bool result = true;
-    if (mDuplicate)
-        qCDebug(KALARM_LOG) << "CalendarUpdater::update: Not updating (concurrent update in progress)";
-    else if (mCollection.hasAttribute<CompatibilityAttribute>())   // must know format to update
-    {
-        const CompatibilityAttribute* compatAttr = mCollection.attribute<CompatibilityAttribute>();
-        const KACalendar::Compat compatibility = compatAttr->compatibility();
-        qCDebug(KALARM_LOG) << "CalendarUpdater::update: current format:" << compatibility;
-        if ((compatibility & ~KACalendar::Converted)
-        // The calendar isn't in the current KAlarm format
-        &&  !(compatibility & ~(KACalendar::Convertible | KACalendar::Converted)))
-        {
-            // The calendar format is convertible to the current KAlarm format
-            if (!mIgnoreKeepFormat
-            &&  mCollection.hasAttribute<CollectionAttribute>()
-            &&  mCollection.attribute<CollectionAttribute>()->keepFormat())
-                qCDebug(KALARM_LOG) << "CalendarUpdater::update: Not updating format (previous user choice)";
-            else
-            {
-                // The user hasn't previously said not to convert it
-                const QString versionString = KAlarmCal::getVersionString(compatAttr->version());
-                const QString msg = conversionPrompt(mCollection.name(), versionString, false);
-                qCDebug(KALARM_LOG) << "CalendarUpdater::update: Version" << versionString;
-                if (KAMessageBox::warningYesNo(mPromptParent, msg) != KMessageBox::Yes)
-                    result = false;   // the user chose not to update the calendar
-                else
-                {
-                    // Tell the resource to update the backend storage format
-                    QString errmsg;
-                    if (!mNewCollection)
-                    {
-                        // Refetch the collection's details because anything could
-                        // have happened since the prompt was first displayed.
-                        if (!AkonadiDataModel::instance()->refresh(mCollection))
-                            errmsg = i18nc("@info", "Invalid collection");
-                    }
-                    if (errmsg.isEmpty())
-                    {
-                        const AgentInstance agent = AgentManager::self()->instance(mCollection.resource());
-                        if (mDirResource)
-                            AkonadiResourceMigrator::updateStorageFormat<OrgKdeAkonadiKAlarmDirSettingsInterface>(agent, errmsg, mParent);
-                        else
-                            AkonadiResourceMigrator::updateStorageFormat<OrgKdeAkonadiKAlarmSettingsInterface>(agent, errmsg, mParent);
-                    }
-                    if (!errmsg.isEmpty())
-                    {
-                        Resources::notifyResourceMessage(mCollection.id(), ResourceType::MessageType::Error,
-                                                         xi18nc("@info", "Failed to update format of calendar <resource>%1</resource>", mCollection.name()),
-                                                         errmsg);
-                    }
-                }
-                if (!mNewCollection)
-                {
-                    // Record the user's choice of whether to update the calendar
-                    Resource resource = AkonadiDataModel::instance()->resource(mCollection.id());
-                    resource.setKeepFormat(!result);
-                }
-            }
-        }
-    }
-    deleteLater();
-    return result;
-}
-
-/******************************************************************************
-* Tell an Akonadi resource to update the backend storage format to the current
-* KAlarm format.
-* Reply = true if success; if false, 'errorMessage' contains the error message.
-*/
-template <class Interface> bool AkonadiResourceMigrator::updateStorageFormat(const AgentInstance& agent, QString& errorMessage, QObject* parent)
-{
-    qCDebug(KALARM_LOG) << "AkonadiResourceMigrator::updateStorageFormat";
-    Interface* iface = getAgentInterface<Interface>(agent, errorMessage, parent);
-    if (!iface)
-    {
-        qCDebug(KALARM_LOG) << "AkonadiResourceMigrator::updateStorageFormat:" << errorMessage;
-        return false;
-    }
-    iface->setUpdateStorageFormat(true);
-    iface->save();
-    delete iface;
-    qCDebug(KALARM_LOG) << "AkonadiResourceMigrator::updateStorageFormat: true";
-    return true;
-}
-
-/******************************************************************************
-* Create a D-Bus interface to an Akonadi resource.
-* Reply = interface if success
-*       = 0 if error: 'errorMessage' contains the error message.
-*/
-template <class Interface> Interface* AkonadiResourceMigrator::getAgentInterface(const AgentInstance& agent, QString& errorMessage, QObject* parent)
-{
-    Interface* iface = new Interface(QLatin1String("org.freedesktop.Akonadi.Resource.") + agent.identifier(),
-              QStringLiteral("/Settings"), QDBusConnection::sessionBus(), parent);
-    if (!iface->isValid())
-    {
-        errorMessage = iface->lastError().message();
-        qCDebug(KALARM_LOG) << "AkonadiResourceMigrator::getAgentInterface: D-Bus error accessing resource:" << errorMessage;
-        delete iface;
-        return nullptr;
-    }
-    return iface;
 }
 
 
@@ -732,7 +527,7 @@ bool CalendarCreator::writeRemoteFileConfig()
 
 template <class Interface> Interface* CalendarCreator::writeBasicConfig()
 {
-    Interface* iface = AkonadiResourceMigrator::getAgentInterface<Interface>(mAgent, mErrorMessage, this);
+    Interface* iface = AkonadiResource::getAgentInterface<Interface>(mAgent, mErrorMessage, this);
     if (iface)
     {
         iface->setReadOnly(mReadOnly);
@@ -815,7 +610,7 @@ void CalendarCreator::collectionFetchResult(KJob* j)
     bool duplicate = false;
     if (!mReadOnly)
     {
-        CalendarUpdater* updater = new CalendarUpdater(collection, dirResource, false, true, this);
+        AkonadiCalendarUpdater* updater = new AkonadiCalendarUpdater(collection, dirResource, false, true, this);
         duplicate = updater->isDuplicate();
         keep = !updater->update();   // note that 'updater' will auto-delete when finished
     }
@@ -870,28 +665,6 @@ void CalendarCreator::finish(bool cleanup)
         mFinished = true;
         Q_EMIT finished(this);
     }
-}
-
-namespace
-{
-/******************************************************************************
-* Return a prompt string to ask the user whether to convert the calendar to the
-* current format.
-*/
-QString conversionPrompt(const QString& calendarName, const QString& calendarVersion, bool whole)
-{
-    const QString msg = whole
-                ? xi18n("Calendar <resource>%1</resource> is in an old format (<application>KAlarm</application> version %2), "
-                        "and will be read-only unless you choose to update it to the current format.",
-                        calendarName, calendarVersion)
-                : xi18n("Some or all of the alarms in calendar <resource>%1</resource> are in an old <application>KAlarm</application> format, "
-                        "and will be read-only unless you choose to update them to the current format.",
-                        calendarName);
-    return xi18nc("@info", "<para>%1</para><para>"
-                 "<warning>Do not update the calendar if it is also used with an older version of <application>KAlarm</application> "
-                 "(e.g. on another computer). If you do so, the calendar may become unusable there.</warning></para>"
-                 "<para>Do you wish to update the calendar?</para>", msg);
-}
 }
 
 #include "akonadiresourcemigrator.moc"

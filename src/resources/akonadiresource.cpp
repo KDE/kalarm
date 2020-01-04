@@ -21,10 +21,10 @@
 #include "akonadiresource.h"
 
 #include "resources.h"
+#include "akonadicalendarupdater.h"
 #include "akonadidatamodel.h"
 #include "akonadiresourcemigrator.h"
 #include "lib/autoqpointer.h"
-#include "kalarm_debug.h"
 
 #include <KAlarmCal/Akonadi>
 #include <KAlarmCal/CompatibilityAttribute>
@@ -47,14 +47,14 @@ using namespace Akonadi;
 
 namespace
 {
-const QString KALARM_RESOURCE(QStringLiteral("akonadi_kalarm_resource"));
-const QString KALARM_DIR_RESOURCE(QStringLiteral("akonadi_kalarm_dir_resource"));
-
 const Collection::Rights WritableRights = Collection::CanChangeItem | Collection::CanCreateItem | Collection::CanDeleteItem;
 
 const QRegularExpression MatchMimeType(QStringLiteral("^application/x-vnd\\.kde\\.alarm.*"),
                                        QRegularExpression::DotMatchesEverythingOption);
 }
+
+const QString AkonadiResource::KALARM_RESOURCE(QStringLiteral("akonadi_kalarm_resource"));
+const QString AkonadiResource::KALARM_DIR_RESOURCE(QStringLiteral("akonadi_kalarm_dir_resource"));
 
 // Class to provide an object for removeDuplicateResources() signals to be received.
 class DuplicateResourceObject : public QObject
@@ -716,7 +716,7 @@ void AkonadiResource::notifyCollectionChanged(Resource& res, const Collection& c
             qCDebug(KALARM_LOG) << "AkonadiResource::setCollectionChanged:" << collection.id() << ": compatibility ->" << collection.attribute<CompatibilityAttribute>()->compatibility();
             // Note that the AkonadiResource will be deleted once no more
             // QSharedPointers reference it.
-            AkonadiResourceMigrator::updateToCurrentFormat(res, false, akres);
+            AkonadiCalendarUpdater::updateToCurrentFormat(res, false, akres);
         }
     }
 }

@@ -1,7 +1,7 @@
 /*
  *  akonadiresource.h  -  class for an Akonadi alarm calendar resource
  *  Program:  kalarm
- *  Copyright © 2019 David Jarvie <djarvie@kde.org>
+ *  Copyright © 2019-2020 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -23,12 +23,16 @@
 
 #include "resource.h"
 
+#include "kalarm_debug.h"
+
 #include <KAlarmCal/CollectionAttribute>
 
+#include <AkonadiCore/AgentInstance>
 #include <AkonadiCore/Collection>
 #include <AkonadiCore/Item>
 
 #include <QObject>
+#include <QDBusConnection>
 
 class KJob;
 class DuplicateResourceObject;
@@ -306,6 +310,18 @@ public:
      */
     static void notifyItemChanged(Resource&, const Akonadi::Item&, bool created);
 
+    /** Create a D-Bus interface to an Akonadi resource.
+     *  @return  If success: interface;
+     *           If error: null, with 'errorMessage' containing the error message.
+     */
+    template <class Interface>
+    static Interface* getAgentInterface(const Akonadi::AgentInstance& agent, QString& errorMessage, QObject* parent);
+
+    /** The resource type for a single file Akonadi resource. */
+    static const QString KALARM_RESOURCE;
+    /** The resource type for a directory Akonadi resource. */
+    static const QString KALARM_DIR_RESOURCE;
+
 private Q_SLOTS:
     void slotCollectionRemoved(const Akonadi::Collection&);
     void itemJobDone(KJob*);
@@ -330,6 +346,30 @@ private:
     mutable bool                mNewEnabled{false};
     bool                        mCollectionAttrChecked{false};  // CollectionAttribute has been processed first time
 };
+
+
+/*=============================================================================
+* Template definitions.
+*============================================================================*/
+
+/******************************************************************************
+* Create a D-Bus interface to an Akonadi resource.
+* Reply = interface if success
+*       = 0 if error: 'errorMessage' contains the error message.
+*/
+template <class Interface> Interface* AkonadiResource::getAgentInterface(const Akonadi::AgentInstance& agent, QString& errorMessage, QObject* parent)
+{
+    Interface* iface = new Interface(QLatin1String("org.freedesktop.Akonadi.Resource.") + agent.identifier(),
+              QStringLiteral("/Settings"), QDBusConnection::sessionBus(), parent);
+    if (!iface->isValid())
+    {
+        errorMessage = iface->lastError().message();
+        qCDebug(KALARM_LOG) << "AkonadiResource::getAgentInterface: D-Bus error accessing resource:" << errorMessage;
+        delete iface;
+        return nullptr;
+    }
+    return iface;
+}
 
 #endif // AKONADIRESOURCE_H
 

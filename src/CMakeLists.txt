@@ -107,6 +107,8 @@ set(kalarm_bin_SRCS ${kalarm_bin_SRCS}
     resources/akonadiresource.cpp
     resources/akonadiresourcecreator.cpp
     resources/akonadiresourcemigrator.cpp
+    resources/calendarupdater.cpp
+    resources/akonadicalendarupdater.cpp
     kalarmmigrateapplication.cpp
     akonadicollectionsearch.cpp
     eventid.cpp

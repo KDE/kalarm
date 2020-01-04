@@ -220,7 +220,7 @@ void ResourceSelector::updateResource()
     const Resource resource = currentResource();
     if (!resource.isValid())
         return;
-    AkonadiResourceMigrator::updateToCurrentFormat(resource, true, this);
+    DataModel::updateCalendarToCurrentFormat(resource, true, this);
 }
 
 /******************************************************************************

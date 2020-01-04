@@ -63,6 +63,7 @@ TemplateListModel* createTemplateListModel(QObject* parent);
 TemplateListModel* allTemplateListModel();
 
 ResourceCreator* createResourceCreator(KAlarmCal::CalEvent::Type defaultType, QWidget* parent);
+void updateCalendarToCurrentFormat(const Resource&, bool ignoreKeepFormat, QObject* parent);
 
 } // namespace DataModel
 

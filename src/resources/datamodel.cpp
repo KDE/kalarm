@@ -23,6 +23,7 @@
 #include "akonadidatamodel.h"
 #include "akonadiresource.h"
 #include "akonadiresourcecreator.h"
+#include "akonadicalendarupdater.h"
 #include "eventmodel.h"
 #include "resourcemodel.h"
 
@@ -87,6 +88,11 @@ TemplateListModel* allTemplateListModel()
 ResourceCreator* createResourceCreator(KAlarmCal::CalEvent::Type defaultType, QWidget* parent)
 {
     return new AkonadiResourceCreator(defaultType, parent);
+}
+
+void updateCalendarToCurrentFormat(const Resource& resource, bool ignoreKeepFormat, QObject* parent)
+{
+    AkonadiCalendarUpdater::updateToCurrentFormat(resource, ignoreKeepFormat, parent);
 }
 
 } // namespace DataModel
