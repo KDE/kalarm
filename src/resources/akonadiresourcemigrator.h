@@ -43,41 +43,41 @@ using namespace KAlarmCal;
  */
 class AkonadiResourceMigrator : public QObject
 {
-        Q_OBJECT
-    public:
-        ~AkonadiResourceMigrator();
-        static AkonadiResourceMigrator* instance();
-        static void reset();
-        static void execute();
-        static void updateToCurrentFormat(const Resource&, bool ignoreKeepFormat, QObject* parent);
-        static bool completed()    { return mCompleted; }
+    Q_OBJECT
+public:
+    ~AkonadiResourceMigrator();
+    static AkonadiResourceMigrator* instance();
+    static void reset();
+    static void execute();
+    static void updateToCurrentFormat(const Resource&, bool ignoreKeepFormat, QObject* parent);
+    static bool completed()    { return mCompleted; }
 
-    Q_SIGNALS:
-        /** Signal emitted when a resource is about to be created, and when creation has
-         *  completed (successfully or not).
-         *  @param path     path of the resource
-         *  @param id       collection ID if @p finished is @c true, else invalid
-         *  @param finished @c true if finished, @c false otherwise
-         */
-        void creating(const QString& path, Akonadi::Collection::Id id, bool finished);
+Q_SIGNALS:
+    /** Signal emitted when a resource is about to be created, and when creation has
+     *  completed (successfully or not).
+     *  @param path     path of the resource
+     *  @param id       collection ID if @p finished is @c true, else invalid
+     *  @param finished @c true if finished, @c false otherwise
+     */
+    void creating(const QString& path, Akonadi::Collection::Id id, bool finished);
 
-    private Q_SLOTS:
-        void collectionFetchResult(KJob*);
-        void creatingCalendar(const QString& path);
-        void calendarCreated(CalendarCreator*);
+private Q_SLOTS:
+    void collectionFetchResult(KJob*);
+    void creatingCalendar(const QString& path);
+    void calendarCreated(CalendarCreator*);
 
-    private:
-        AkonadiResourceMigrator(QObject* parent = nullptr);
-        void migrateOrCreate();
-        void createDefaultResources();
+private:
+    AkonadiResourceMigrator(QObject* parent = nullptr);
+    void migrateOrCreate();
+    void createDefaultResources();
 
-        static AkonadiResourceMigrator* mInstance;
-        QList<CalendarCreator*> mCalendarsPending;  // pending calendar migration or creation jobs
-        QList<Akonadi::CollectionFetchJob*> mFetchesPending;  // pending collection fetch jobs for existing resources
-        CalEvent::Types mExistingAlarmTypes;   // alarm types provided by existing Akonadi resources
-        static bool     mCompleted;            // execute() has completed
+    static AkonadiResourceMigrator* mInstance;
+    QList<CalendarCreator*> mCalendarsPending;  // pending calendar migration or creation jobs
+    QList<Akonadi::CollectionFetchJob*> mFetchesPending;  // pending collection fetch jobs for existing resources
+    CalEvent::Types mExistingAlarmTypes;   // alarm types provided by existing Akonadi resources
+    static bool     mCompleted;            // execute() has completed
 
-        friend class AkonadiCalendarUpdater;
+    friend class AkonadiCalendarUpdater;
 };
 
 #endif // AKONADIRESOURCEMIGRATOR_H

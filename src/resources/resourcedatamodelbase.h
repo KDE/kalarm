@@ -42,106 +42,106 @@ using namespace KAlarmCal;
 =============================================================================*/
 class ResourceDataModelBase
 {
-    public:
-        /** Data column numbers. */
-        enum
-        {
-            // Item columns
-            TimeColumn = 0, TimeToColumn, RepeatColumn, ColourColumn, TypeColumn, TextColumn,
-            TemplateNameColumn,
-            ColumnCount
-        };
-        /** Additional model data roles. */
-        enum
-        {
-            UserRole = Qt::UserRole + 500,   // copied from Akonadi::EntityTreeModel
-            ItemTypeRole = UserRole,   // item's type: calendar or event
-            // Calendar roles
-            ResourceIdRole,            // the resource ID
-            BaseColourRole,            // background colour ignoring collection colour
-            // Event roles
-            EventIdRole,               // the event ID
-            ParentResourceIdRole,      // the parent resource ID of the event
-            EnabledRole,               // true for enabled alarm, false for disabled
-            StatusRole,                // KAEvent::ACTIVE/ARCHIVED/TEMPLATE
-            AlarmActionsRole,          // KAEvent::Actions
-            AlarmSubActionRole,        // KAEvent::Action
-            ValueRole,                 // numeric value
-            SortRole,                  // the value to use for sorting
-            TimeDisplayRole,           // time column value with '~' representing omitted leading zeroes
-            ColumnTitleRole,           // column titles (whether displayed or not)
-            CommandErrorRole           // last command execution error for alarm (per user)
-        };
-        /** The type of a model row. */
-        enum class Type { Error = 0, Event, Resource };
+public:
+    /** Data column numbers. */
+    enum
+    {
+        // Item columns
+        TimeColumn = 0, TimeToColumn, RepeatColumn, ColourColumn, TypeColumn, TextColumn,
+        TemplateNameColumn,
+        ColumnCount
+    };
+    /** Additional model data roles. */
+    enum
+    {
+        UserRole = Qt::UserRole + 500,   // copied from Akonadi::EntityTreeModel
+        ItemTypeRole = UserRole,   // item's type: calendar or event
+        // Calendar roles
+        ResourceIdRole,            // the resource ID
+        BaseColourRole,            // background colour ignoring collection colour
+        // Event roles
+        EventIdRole,               // the event ID
+        ParentResourceIdRole,      // the parent resource ID of the event
+        EnabledRole,               // true for enabled alarm, false for disabled
+        StatusRole,                // KAEvent::ACTIVE/ARCHIVED/TEMPLATE
+        AlarmActionsRole,          // KAEvent::Actions
+        AlarmSubActionRole,        // KAEvent::Action
+        ValueRole,                 // numeric value
+        SortRole,                  // the value to use for sorting
+        TimeDisplayRole,           // time column value with '~' representing omitted leading zeroes
+        ColumnTitleRole,           // column titles (whether displayed or not)
+        CommandErrorRole           // last command execution error for alarm (per user)
+    };
+    /** The type of a model row. */
+    enum class Type { Error = 0, Event, Resource };
 
-        virtual ~ResourceDataModelBase();
+    virtual ~ResourceDataModelBase();
 
-    public:
-        static QSize   iconSize()       { return mIconSize; }
+public:
+    static QSize   iconSize()       { return mIconSize; }
 
-        /** Return a bulleted list of alarm types for inclusion in an i18n message. */
-        static QString typeListForDisplay(CalEvent::Types);
+    /** Return a bulleted list of alarm types for inclusion in an i18n message. */
+    static QString typeListForDisplay(CalEvent::Types);
 
-        /** Get the tooltip for a resource. The resource's enabled status is
-         *  evaluated for specified alarm types. */
-        QString tooltip(const Resource&, CalEvent::Types) const;
+    /** Get the tooltip for a resource. The resource's enabled status is
+     *  evaluated for specified alarm types. */
+    QString tooltip(const Resource&, CalEvent::Types) const;
 
-        /** Return the read-only status tooltip for a resource.
-         * A null string is returned if the resource is fully writable. */
-        static QString readOnlyTooltip(const Resource&);
+    /** Return the read-only status tooltip for a resource.
+     * A null string is returned if the resource is fully writable. */
+    static QString readOnlyTooltip(const Resource&);
 
-        /** Return offset to add to headerData() role, for item models. */
-        virtual int headerDataEventRoleOffset() const  { return 0; }
+    /** Return offset to add to headerData() role, for item models. */
+    virtual int headerDataEventRoleOffset() const  { return 0; }
 
-        /** Return whether calendar migration/creation at initialisation has completed. */
-        bool isMigrationComplete() const;
+    /** Return whether calendar migration/creation at initialisation has completed. */
+    bool isMigrationComplete() const;
 
-    protected:
-        ResourceDataModelBase();
+protected:
+    ResourceDataModelBase();
 
-        static QVariant headerData(int section, Qt::Orientation, int role, bool eventHeaders, bool& handled);
+    static QVariant headerData(int section, Qt::Orientation, int role, bool eventHeaders, bool& handled);
 
-        /** Return whether resourceData() and/or eventData() handle a role. */
-        bool roleHandled(int role) const;
+    /** Return whether resourceData() and/or eventData() handle a role. */
+    bool roleHandled(int role) const;
 
-        /** Return the model data for a resource.
-         *  @param role     may be updated for calling the base model.
-         *  @param handled  updated to true if the reply is valid, else set to false.
-         */
-        QVariant resourceData(int& role, const Resource&, bool& handled) const;
+    /** Return the model data for a resource.
+     *  @param role     may be updated for calling the base model.
+     *  @param handled  updated to true if the reply is valid, else set to false.
+     */
+    QVariant resourceData(int& role, const Resource&, bool& handled) const;
 
-        /** Return the model data for an event.
-         *  @param handled  updated to true if the reply is valid, else set to false.
-         */
-        QVariant eventData(int role, int column, const KAEvent& event, const Resource&, bool& handled) const;
+    /** Return the model data for an event.
+     *  @param handled  updated to true if the reply is valid, else set to false.
+     */
+    QVariant eventData(int role, int column, const KAEvent& event, const Resource&, bool& handled) const;
 
-        /** Called when a resource notifies a message to display to the user. */
-        void handleResourceMessage(ResourceType::MessageType, const QString& message, const QString& details);
+    /** Called when a resource notifies a message to display to the user. */
+    void handleResourceMessage(ResourceType::MessageType, const QString& message, const QString& details);
 
-        /** Return whether calendar migration is currently in progress. */
-        bool isMigrating() const;
+    /** Return whether calendar migration is currently in progress. */
+    bool isMigrating() const;
 
-        /** To be called when calendar migration has been initiated (or reset). */
-        void setMigrationInitiated(bool started = true);
+    /** To be called when calendar migration has been initiated (or reset). */
+    void setMigrationInitiated(bool started = true);
 
-        /** To be called when calendar migration has been initiated (or reset). */
-        void setMigrationComplete();
+    /** To be called when calendar migration has been initiated (or reset). */
+    void setMigrationComplete();
 
-        static QString  repeatText(const KAEvent&);
-        static QString  repeatOrder(const KAEvent&);
-        static QString  whatsThisText(int column);
-        static QPixmap* eventIcon(const KAEvent&);
+    static QString  repeatText(const KAEvent&);
+    static QString  repeatOrder(const KAEvent&);
+    static QString  whatsThisText(int column);
+    static QPixmap* eventIcon(const KAEvent&);
 
-    private:
-        static QPixmap* mTextIcon;
-        static QPixmap* mFileIcon;
-        static QPixmap* mCommandIcon;
-        static QPixmap* mEmailIcon;
-        static QPixmap* mAudioIcon;
-        static QSize    mIconSize;      // maximum size of any icon
+private:
+    static QPixmap* mTextIcon;
+    static QPixmap* mFileIcon;
+    static QPixmap* mCommandIcon;
+    static QPixmap* mEmailIcon;
+    static QPixmap* mAudioIcon;
+    static QSize    mIconSize;      // maximum size of any icon
 
-        int  mMigrationStatus{-1};      // migration status, -1 = no, 0 = initiated, 1 = complete
+    int  mMigrationStatus{-1};      // migration status, -1 = no, 0 = initiated, 1 = complete
 };
 
 #endif // RESOURCEDATAMODELBASE_H

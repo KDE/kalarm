@@ -56,57 +56,57 @@ using namespace KAlarmCal;
 // Creates, or migrates from KResources, a single alarm calendar
 class CalendarCreator : public QObject
 {
-        Q_OBJECT
-    public:
-        // Constructor to migrate a calendar from KResources.
-        CalendarCreator(const QString& resourceType, const KConfigGroup&);
-        // Constructor to create a default Akonadi calendar.
-        CalendarCreator(CalEvent::Type, const QString& file, const QString& name);
-        bool           isValid() const        { return mAlarmType != CalEvent::EMPTY; }
-        CalEvent::Type alarmType() const      { return mAlarmType; }
-        bool           newCalendar() const    { return mNew; }
-        QString        resourceName() const   { return mName; }
-        Collection::Id collectionId() const   { return mCollectionId; }
-        QString        path() const           { return mUrlString; }
-        QString        errorMessage() const   { return mErrorMessage; }
-        void           createAgent(const QString& agentType, QObject* parent);
+    Q_OBJECT
+public:
+    // Constructor to migrate a calendar from KResources.
+    CalendarCreator(const QString& resourceType, const KConfigGroup&);
+    // Constructor to create a default Akonadi calendar.
+    CalendarCreator(CalEvent::Type, const QString& file, const QString& name);
+    bool           isValid() const        { return mAlarmType != CalEvent::EMPTY; }
+    CalEvent::Type alarmType() const      { return mAlarmType; }
+    bool           newCalendar() const    { return mNew; }
+    QString        resourceName() const   { return mName; }
+    Collection::Id collectionId() const   { return mCollectionId; }
+    QString        path() const           { return mUrlString; }
+    QString        errorMessage() const   { return mErrorMessage; }
+    void           createAgent(const QString& agentType, QObject* parent);
 
-    public Q_SLOTS:
-        void agentCreated(KJob*);
+public Q_SLOTS:
+    void agentCreated(KJob*);
 
-    Q_SIGNALS:
-        void creating(const QString& path);
-        void finished(CalendarCreator*);
+Q_SIGNALS:
+    void creating(const QString& path);
+    void finished(CalendarCreator*);
 
-    private Q_SLOTS:
-        void fetchCollection();
-        void collectionFetchResult(KJob*);
-        void resourceSynchronised(KJob*);
-        void modifyCollectionJobDone(KJob*);
+private Q_SLOTS:
+    void fetchCollection();
+    void collectionFetchResult(KJob*);
+    void resourceSynchronised(KJob*);
+    void modifyCollectionJobDone(KJob*);
 
-    private:
-        void finish(bool cleanup);
-        bool writeLocalFileConfig();
-        bool writeLocalDirectoryConfig();
-        bool writeRemoteFileConfig();
-        template <class Interface> Interface* writeBasicConfig();
+private:
+    void finish(bool cleanup);
+    bool writeLocalFileConfig();
+    bool writeLocalDirectoryConfig();
+    bool writeRemoteFileConfig();
+    template <class Interface> Interface* writeBasicConfig();
 
-        enum ResourceType { LocalFile, LocalDir, RemoteFile };
+    enum ResourceType { LocalFile, LocalDir, RemoteFile };
 
-        AgentInstance    mAgent;
-        CalEvent::Type   mAlarmType;
-        ResourceType     mResourceType;
-        QString          mUrlString;
-        QString          mName;
-        QColor           mColour;
-        QString          mErrorMessage;
-        Collection::Id   mCollectionId;
-        int              mCollectionFetchRetryCount;
-        bool             mReadOnly;
-        bool             mEnabled;
-        bool             mStandard;
-        const bool       mNew;     // true if creating default, false if converting
-        bool             mFinished{false};
+    AgentInstance    mAgent;
+    CalEvent::Type   mAlarmType;
+    ResourceType     mResourceType;
+    QString          mUrlString;
+    QString          mName;
+    QColor           mColour;
+    QString          mErrorMessage;
+    Collection::Id   mCollectionId;
+    int              mCollectionFetchRetryCount;
+    bool             mReadOnly;
+    bool             mEnabled;
+    bool             mStandard;
+    const bool       mNew;     // true if creating default, false if converting
+    bool             mFinished{false};
 };
 
 
