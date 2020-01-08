@@ -215,8 +215,6 @@ QStringList CommandOptions::setOptions(QCommandLineParser* parser, const QString
         else
             mParser->addOption(*(mOptions.at(i)));
     }
-    mParser->addVersionOption();
-    mParser->addHelpOption();
     mParser->addPositionalArgument(QStringLiteral("message"),
                                    i18n("Message text to display"),
                                    QStringLiteral("[message]"));
