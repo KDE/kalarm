@@ -1,7 +1,7 @@
 /*
  *  mainwindow.cpp  -  main application window
  *  Program:  kalarm
- *  Copyright © 2001-2019 David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2020 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -84,6 +84,7 @@ using namespace KCalUtils;
 #include <QInputDialog>
 #include <QUrl>
 #include <QUrlQuery>
+#include <QMenuBar>
 #include <QSystemTrayIcon>
 
 using namespace KAlarmCal;
@@ -552,6 +553,7 @@ void MainWindow::initActions()
     // be deleted while still processing the action, resulting in a crash.
     QAction* act = KStandardAction::quit(nullptr, nullptr, actions);
     connect(act, &QAction::triggered, this, &MainWindow::slotQuit, Qt::QueuedConnection);
+    QAction* actionMenubar = KStandardAction::showMenubar(this, SLOT(slotShowMenubar()), actions);
     KStandardAction::keyBindings(this, SLOT(slotConfigureKeys()), actions);
     KStandardAction::configureToolbars(this, SLOT(slotConfigureToolbar()), actions);
     KStandardAction::preferences(this, SLOT(slotPreferences()), actions);
@@ -596,6 +598,9 @@ void MainWindow::initActions()
     mActionEnable->setEnabled(false);
     mActionCreateTemplate->setEnabled(false);
     mActionExport->setEnabled(false);
+
+    const bool menuVisible = !menuBar()->isHidden();
+    actionMenubar->setChecked(menuVisible);
 
     Undo::emitChanged();     // set the Undo/Redo menu texts
 //    Daemon::monitoringAlarms();
@@ -1098,6 +1103,15 @@ void MainWindow::slotRefreshAlarms()
 void MainWindow::slotPreferences()
 {
     KAlarmPrefDlg::display();
+}
+
+/******************************************************************************
+* Called when the Show Menubar menu item is selected.
+*/
+void MainWindow::slotShowMenubar()
+{
+    const bool visible = menuBar()->isVisible();
+    menuBar()->setVisible(!visible);
 }
 
 /******************************************************************************

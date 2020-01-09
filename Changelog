@@ -1,5 +1,8 @@
 KAlarm Change Log
 
+=== Version 2.13.2 (KDE Applications 19.12.2) --- 9 January 2020 ===
++ Add Show/Hide Menubar menu option; change New Email Alarm shortcut to Ctrl-L.
+
 === Version 2.13.1 (KDE Applications 19.12.1) --- 30 December 2019 ===
 + Make defer dialogue accessible when a full screen window is active.
 + Only show 'Cancel Deferral' in defer dialogue if a deferral is already active.

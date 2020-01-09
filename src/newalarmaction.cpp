@@ -1,7 +1,7 @@
 /*
  *  newalarmaction.cpp  -  menu action to select a new alarm type
  *  Program:  kalarm
- *  Copyright © 2007-2019 David Jarvie <djarvie@kde.org>
+ *  Copyright © 2007-2020 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -45,7 +45,7 @@ using namespace KAlarmCal;
 #define TEMPLATE_ICON QStringLiteral("document-new-from-template")
 #define DISP_KEY      QKeySequence(Qt::CTRL + Qt::Key_D)
 #define CMD_KEY       QKeySequence(Qt::CTRL + Qt::Key_C)
-#define MAIL_KEY      QKeySequence(Qt::CTRL + Qt::Key_M)
+#define MAIL_KEY      QKeySequence(Qt::CTRL + Qt::Key_L)
 #define AUDIO_KEY     QKeySequence(Qt::CTRL + Qt::Key_U)
 
 
