@@ -1,7 +1,7 @@
 /*
- *  eventid.cpp  -  KAlarm unique event identifier for Akonadi
+ *  eventid.cpp  -  KAlarm unique event identifier for resources
  *  Program:  kalarm
- *  Copyright © 2012,2019 David Jarvie <djarvie@kde.org>
+ *  Copyright © 2012-2020 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -46,6 +46,11 @@ EventId::EventId(const QString& resourceEventId)
         first  = -1;
         second = resourceEventId;
     }
+}
+
+ResourceId EventId::resourceDisplayId() const
+{
+    return first;
 }
 
 // vim: et sw=4:

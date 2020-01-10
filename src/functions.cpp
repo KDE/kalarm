@@ -1,7 +1,7 @@
 /*
  *  functions.cpp  -  miscellaneous functions
  *  Program:  kalarm
- *  Copyright © 2001-2019 David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2020 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -1162,7 +1162,7 @@ bool editAlarmById(const EventId& id, QWidget* parent)
     KAEvent* event = AlarmCalendar::resources()->event(id, true);
     if (!event)
     {
-        if (id.collectionId() != -1)
+        if (id.resourceId() != -1)
             qCWarning(KALARM_LOG) << "KAlarm::editAlarmById: Event ID not found, or duplicated:" << eventID;
         else
             qCWarning(KALARM_LOG) << "KAlarm::editAlarmById: Event ID not found:" << eventID;
@@ -1388,7 +1388,7 @@ QStringList dontShowErrors(const EventId& eventId)
         return QStringList();
     KConfig config(QStandardPaths::writableLocation(QStandardPaths::DataLocation) + QLatin1Char('/') + ALARM_OPTS_FILE);
     KConfigGroup group(&config, DONT_SHOW_ERRORS_GROUP);
-    const QString id = QStringLiteral("%1:%2").arg(eventId.collectionId()).arg(eventId.eventId());
+    const QString id = QStringLiteral("%1:%2").arg(eventId.resourceId()).arg(eventId.eventId());
     return group.readEntry(id, QStringList());
 }
 
@@ -1414,7 +1414,7 @@ void setDontShowErrors(const EventId& eventId, const QStringList& tags)
         return;
     KConfig config(QStandardPaths::writableLocation(QStandardPaths::DataLocation) + QLatin1Char('/') + ALARM_OPTS_FILE);
     KConfigGroup group(&config, DONT_SHOW_ERRORS_GROUP);
-    const QString id = QStringLiteral("%1:%2").arg(eventId.collectionId()).arg(eventId.eventId());
+    const QString id = QStringLiteral("%1:%2").arg(eventId.resourceId()).arg(eventId.eventId());
     if (tags.isEmpty())
         group.deleteEntry(id);
     else
@@ -1432,7 +1432,7 @@ void setDontShowErrors(const EventId& eventId, const QString& tag)
         return;
     KConfig config(QStandardPaths::writableLocation(QStandardPaths::DataLocation) + QLatin1Char('/') + ALARM_OPTS_FILE);
     KConfigGroup group(&config, DONT_SHOW_ERRORS_GROUP);
-    const QString id = QStringLiteral("%1:%2").arg(eventId.collectionId()).arg(eventId.eventId());
+    const QString id = QStringLiteral("%1:%2").arg(eventId.resourceId()).arg(eventId.eventId());
     QStringList tags = group.readEntry(id, QStringList());
     if (tags.indexOf(tag) < 0)
     {

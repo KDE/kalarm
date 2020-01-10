@@ -123,11 +123,17 @@ AlarmCalendar::AlarmCalendar()
     , mEventType(CalEvent::EMPTY)
 {
     Resources* resources = Resources::instance();
+    connect(resources, &Resources::resourceAdded, this, &AlarmCalendar::slotResourceAdded);
     connect(resources, &Resources::eventsAdded, this, &AlarmCalendar::slotEventsAdded);
     connect(resources, &Resources::eventsToBeRemoved, this, &AlarmCalendar::slotEventsToBeRemoved);
     connect(resources, &Resources::eventUpdated, this, &AlarmCalendar::slotEventUpdated);
     connect(resources, &Resources::resourcesPopulated, this, &AlarmCalendar::slotResourcesPopulated);
     connect(resources, &Resources::settingsChanged, this, &AlarmCalendar::slotResourceSettingsChanged);
+
+    // Fetch events from all resources which already exist.
+    QVector<Resource> allResources = Resources::enabledResources();
+    for (Resource& resource : allResources)
+        slotResourceAdded(resource);
 }
 
 /******************************************************************************
@@ -526,6 +532,16 @@ void AlarmCalendar::slotResourcesPopulated()
 }
 
 /******************************************************************************
+* Called when a resource has been added.
+* Add its KAEvent instances to those held by AlarmCalendar.
+* All events must have their resource ID set.
+*/
+void AlarmCalendar::slotResourceAdded(Resource& resource)
+{
+    slotEventsAdded(resource, resource.events());
+}
+
+/******************************************************************************
 * Called when events have been added to a resource.
 * Add corresponding KAEvent instances to those held by AlarmCalendar.
 * All events must have their resource ID set.
@@ -846,7 +862,7 @@ bool AlarmCalendar::endUpdate()
 
 /******************************************************************************
 * Save the calendar, or flag it for saving if in a group of calendar update calls.
-* Note that this method has no effect for Akonadi calendars.
+* Note that this method has no effect for resources calendars.
 */
 bool AlarmCalendar::save()
 {
@@ -1046,7 +1062,7 @@ void AlarmCalendar::addNewEvent(const Resource& resource, KAEvent* event, bool r
 */
 bool AlarmCalendar::modifyEvent(const EventId& oldEventId, KAEvent& newEvent)
 {
-    const EventId newId(oldEventId.collectionId(), newEvent.id());
+    const EventId newId(oldEventId.resourceId(), newEvent.id());
     qCDebug(KALARM_LOG) << "AlarmCalendar::modifyEvent:" << oldEventId << "->" << newId;
     bool noNewId = newId.isEmpty();
     if (!noNewId  &&  oldEventId == newId)
@@ -1058,8 +1074,7 @@ bool AlarmCalendar::modifyEvent(const EventId& oldEventId, KAEvent& newEvent)
         return false;
     if (mCalType == RESOURCES)
     {
-        // Set the event's ID and Akonadi ID, and update the old
-        // event in Akonadi.
+        // Set the event's ID, and update the old event in the resources calendar.
         const KAEvent* storedEvent = event(oldEventId);
         if (!storedEvent)
         {
@@ -1068,7 +1083,7 @@ bool AlarmCalendar::modifyEvent(const EventId& oldEventId, KAEvent& newEvent)
         }
         if (noNewId)
             newEvent.setEventId(CalFormat::createUniqueId());
-        Resource resource = Resources::resource(oldEventId.collectionId());
+        Resource resource = Resources::resource(oldEventId.resourceId());
         if (!resource.isValid())
             return false;
         // Don't add new event to mEventMap yet - its Akonadi item id is not yet known
@@ -1167,15 +1182,15 @@ bool AlarmCalendar::deleteDisplayEvent(const QString& eventID, bool saveit)
 *         resource or local calendar
 *       = CalEvent::EMPTY otherwise.
 */
-CalEvent::Type AlarmCalendar::deleteEventInternal(const KAEvent& event, bool deleteFromAkonadi)
+CalEvent::Type AlarmCalendar::deleteEventInternal(const KAEvent& event, bool deleteFromResources)
 {
     Resource resource = Resources::resource(event.resourceId());
     if (!resource.isValid())
         return CalEvent::EMPTY;
-    return deleteEventInternal(event.id(), event, resource, deleteFromAkonadi);
+    return deleteEventInternal(event.id(), event, resource, deleteFromResources);
 }
 
-CalEvent::Type AlarmCalendar::deleteEventInternal(const KAEvent& event, Resource& resource, bool deleteFromAkonadi)
+CalEvent::Type AlarmCalendar::deleteEventInternal(const KAEvent& event, Resource& resource, bool deleteFromResources)
 {
     if (!resource.isValid())
         return CalEvent::EMPTY;
@@ -1184,10 +1199,10 @@ CalEvent::Type AlarmCalendar::deleteEventInternal(const KAEvent& event, Resource
         qCCritical(KALARM_LOG) << "AlarmCalendar::deleteEventInternal: Event" << event.id() << ": resource" << event.resourceId() << "differs from 'resource'" << resource.id();
         return CalEvent::EMPTY;
     }
-    return deleteEventInternal(event.id(), event, resource, deleteFromAkonadi);
+    return deleteEventInternal(event.id(), event, resource, deleteFromResources);
 }
 
-CalEvent::Type AlarmCalendar::deleteEventInternal(const QString& eventID, const KAEvent& event, Resource& resource, bool deleteFromAkonadi)
+CalEvent::Type AlarmCalendar::deleteEventInternal(const QString& eventID, const KAEvent& event, Resource& resource, bool deleteFromResources)
 {
     // Make a copy of the KAEvent and the ID QString, since the supplied
     // references might be destructed when the event is deleted below.
@@ -1196,7 +1211,7 @@ CalEvent::Type AlarmCalendar::deleteEventInternal(const QString& eventID, const 
 
     Event::Ptr kcalEvent;
     if (mCalendarStorage)
-        kcalEvent = mCalendarStorage->calendar()->event(id);
+        kcalEvent = mCalendarStorage->calendar()->event(id);   // display calendar
     const ResourceId key = resource.id();
     KAEventMap::Iterator it = mEventMap.find(EventId(key, id));
     if (it != mEventMap.end())
@@ -1226,12 +1241,13 @@ CalEvent::Type AlarmCalendar::deleteEventInternal(const QString& eventID, const 
     CalEvent::Type status = CalEvent::EMPTY;
     if (kcalEvent)
     {
+        // It's a display calendar event
         status = CalEvent::status(kcalEvent);
         mCalendarStorage->calendar()->deleteEvent(kcalEvent);
     }
-    else if (deleteFromAkonadi)
+    else if (deleteFromResources)
     {
-        // It's an Akonadi event
+        // Delete from the resources calendar
         CalEvent::Type s = paramEvent.category();
         if (resource.deleteEvent(paramEvent))
             status = s;
@@ -1250,7 +1266,7 @@ KAEvent* AlarmCalendar::event(const EventId& uniqueID, bool checkDuplicates)
     if (!isValid())
         return nullptr;
     const QString eventId = uniqueID.eventId();
-    if (uniqueID.collectionId() == -1  &&  checkDuplicates)
+    if (uniqueID.resourceId() == -1  &&  checkDuplicates)
     {
         // The resource isn't known, but use the event ID if it is unique among
         // all resources.
@@ -1272,7 +1288,7 @@ KAEvent* AlarmCalendar::event(const EventId& uniqueID, bool checkDuplicates)
 
 /******************************************************************************
 * Return the event with the specified ID.
-* For the Akonadi version, this method is for the display calendar only.
+* This method is for the display calendar only.
 */
 Event::Ptr AlarmCalendar::kcalEvent(const QString& uniqueID)
 {
@@ -1360,7 +1376,7 @@ KAEvent::List AlarmCalendar::events(const Resource& resource, CalEvent::Types ty
 
 /******************************************************************************
 * Return all events in the calendar which contain usable alarms.
-* For the Akonadi version, this method is for the display calendar only.
+* This method is for the display calendar only.
 * Optionally the event type can be filtered, using an OR of event types.
 */
 Event::List AlarmCalendar::kcalEvents(CalEvent::Type type)

@@ -1,7 +1,7 @@
 /*
  *  messagewin.cpp  -  displays an alarm message
  *  Program:  kalarm
- *  Copyright © 2001-2019 David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2020 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -1057,7 +1057,7 @@ void MessageWin::showRestoredAlarm()
 void MessageWin::redisplayAlarm()
 {
     mResource = Resources::resourceForEvent(mEventId.eventId());
-    mEventId.setCollectionId(mResource.id());
+    mEventId.setResourceId(mResource.id());
     qCDebug(KALARM_LOG) << "MessageWin::redisplayAlarm:" << mEventId;
     // Delete any already existing window for the same event
     MessageWin* duplicate = findEvent(mEventId, this);

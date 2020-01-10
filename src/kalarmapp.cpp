@@ -410,7 +410,7 @@ int KAlarmApp::activateInstance(const QStringList& args, const QString& workingD
                 const EventFunc function = (command == CommandOptions::TRIGGER_EVENT) ? EVENT_TRIGGER : EVENT_CANCEL;
                 // Open the calendar, don't start processing execution queue yet,
                 // and wait for the calendar resources to be populated.
-                if (!initCheck(true, true, options->eventId().collectionId()))
+                if (!initCheck(true, true, options->eventId().resourceId()))
                     exitCode = 1;
                 else
                 {
@@ -443,7 +443,7 @@ int KAlarmApp::activateInstance(const QStringList& args, const QString& workingD
             case CommandOptions::EDIT:
                 // Edit a specified existing alarm.
                 // Open the calendar and wait for the calendar resources to be populated.
-                if (!initCheck(false, true, options->eventId().collectionId()))
+                if (!initCheck(false, true, options->eventId().resourceId()))
                     exitCode = 1;
                 else if (!KAlarm::editAlarmById(options->eventId()))
                 {
@@ -1427,7 +1427,7 @@ bool KAlarmApp::handleEvent(const EventId& id, EventFunc function, bool checkDup
     KAEvent* event = AlarmCalendar::resources()->event(id, checkDuplicates);
     if (!event)
     {
-        if (id.collectionId() != -1)
+        if (id.resourceId() != -1)
             qCWarning(KALARM_LOG) << "KAlarmApp::handleEvent: Event ID not found, or duplicated:" << eventID;
         else
             qCWarning(KALARM_LOG) << "KAlarmApp::handleEvent: Event ID not found:" << eventID;

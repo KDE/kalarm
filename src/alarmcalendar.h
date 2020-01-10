@@ -1,7 +1,7 @@
 /*
  *  alarmcalendar.h  -  KAlarm calendar file access
  *  Program:  kalarm
- *  Copyright © 2001-2019 David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2020 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -96,6 +96,7 @@ class AlarmCalendar : public QObject
     private Q_SLOTS:
         void                  slotResourceSettingsChanged(Resource&, ResourceType::Changes);
         void                  slotResourcesPopulated();
+        void                  slotResourceAdded(Resource&);
         void                  slotEventsAdded(Resource&, const QList<KAEvent>&);
         void                  slotEventsToBeRemoved(Resource&, const QList<KAEvent>&);
         void                  slotEventUpdated(Resource&, const KAEvent&);
@@ -110,10 +111,10 @@ class AlarmCalendar : public QObject
         bool                  saveCal(const QString& newFile = QString());
         bool                  isValid() const   { return mCalType == RESOURCES || mCalendarStorage; }
         void                  addNewEvent(const Resource&, KAEvent*, bool replace = false);
-        CalEvent::Type        deleteEventInternal(const KAEvent&, bool deleteFromAkonadi = true);
-        CalEvent::Type        deleteEventInternal(const KAEvent&, Resource&, bool deleteFromAkonadi = true);
+        CalEvent::Type        deleteEventInternal(const KAEvent&, bool deleteFromResources = true);
+        CalEvent::Type        deleteEventInternal(const KAEvent&, Resource&, bool deleteFromResources = true);
         CalEvent::Type        deleteEventInternal(const QString& eventID, const KAEvent&, Resource&,
-                                                  bool deleteFromAkonadi = true);
+                                                  bool deleteFromResources = true);
         void                  updateDisplayKAEvents();
         void                  removeKAEvents(ResourceId, bool closing = false, CalEvent::Types = CalEvent::ACTIVE | CalEvent::ARCHIVED | CalEvent::TEMPLATE);
         void                  findEarliestAlarm(const Resource&);
@@ -125,7 +126,7 @@ class AlarmCalendar : public QObject
         static AlarmCalendar* mDisplayCalendar;    // the display calendar
         static QUrl           mLastImportUrl;      // last URL for Import Alarms file dialogue
 
-        KCalendarCore::FileStorage::Ptr mCalendarStorage; // null pointer for Akonadi
+        KCalendarCore::FileStorage::Ptr mCalendarStorage; // for display calendar; null if resources calendar
         ResourceMap           mResourceMap;
         KAEventMap            mEventMap;           // lookup of all events by UID
         EarliestMap           mEarliestAlarm;      // alarm with earliest trigger time, by resource

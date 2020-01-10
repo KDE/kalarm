@@ -396,6 +396,19 @@ void Resources::notifyResourcesMigrated()
 }
 
 /******************************************************************************
+* Called to notify that a resource is about to be removed.
+*/
+void Resources::notifyResourceToBeRemoved(ResourceType* res)
+{
+    if (res)
+    {
+        Resource r = resource(res->id());
+        if (r.isValid())
+            Q_EMIT instance()->resourceToBeRemoved(r);
+    }
+}
+
+/******************************************************************************
 * Called by a resource to notify that its settings have changed.
 * Emits the settingsChanged() signal.
 * If the resource is now read-only and was standard, clear its standard status.

@@ -183,6 +183,7 @@ void ResourceType::removeResource(ResourceId id)
 */
 void ResourceType::setLoadedEvents(QHash<QString, KAEvent>& newEvents)
 {
+    qCDebug(KALARM_LOG) << "ResourceType::setLoadedEvents: count" << newEvents.count();
     const CalEvent::Types types = enabledTypes();
 
     // Replace existing events with the new ones, and find events which no

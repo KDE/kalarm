@@ -1,7 +1,7 @@
 /*
- *  eventid.h  -  KAlarm unique event identifier for Akonadi
+ *  eventid.h  -  KAlarm unique event identifier for resources
  *  Program:  kalarm
- *  Copyright © 2012,2014 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2012-2020 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -30,29 +30,33 @@
 using namespace KAlarmCal;
 
 /**
- * Unique event identifier for Akonadi.
- * This consists of the event UID within the individual calendar,
- * plus the collection ID.
+ * Unique event identifier for resources.
+ * This consists of the event UID within the individual calendar, plus the
+ * resource ID.
  *
- * Note that the collection ID of the display calendar is -1, since
- * it is not an Akonadi calendar.
+ * Note that the resource ID of the display calendar is -1, since it is not a
+ * resources calendar.
  */
-struct EventId : public QPair<Akonadi::Collection::Id, QString>
+struct EventId : public QPair<ResourceId, QString>
 {
     EventId() {}
-    EventId(Akonadi::Collection::Id c, const QString& e)
-        : QPair<Akonadi::Collection::Id, QString>(c, e) {}
+    EventId(ResourceId c, const QString& e)
+        : QPair<ResourceId, QString>(c, e) {}
     explicit EventId(const KAEvent& event)
-        : QPair<Akonadi::Collection::Id, QString>(event.collectionId(), event.id()) {}
+        : QPair<ResourceId, QString>(event.resourceId(), event.id()) {}
+
     /** Set by event ID prefixed by optional resource ID, in the format "[rid:]eid". */
     explicit EventId(const QString& resourceEventId);
+
     void clear()          { first = -1; second.clear(); }
+
     /** Return whether the instance contains any data. */
     bool isEmpty() const  { return second.isEmpty(); }
 
-    Akonadi::Collection::Id collectionId() const  { return first; }
-    QString                 eventId() const       { return second; }
-    void                    setCollectionId(Akonadi::Collection::Id id)  { first = id; }
+    ResourceId resourceId() const    { return first; }
+    ResourceId resourceDisplayId() const;
+    QString    eventId() const       { return second; }
+    void       setResourceId(ResourceId id)  { first = id; }
 };
 
 // Declare as a movable type (note that QString is movable).
@@ -60,7 +64,7 @@ Q_DECLARE_TYPEINFO(EventId, Q_MOVABLE_TYPE);
 
 inline QDebug operator<<(QDebug s, const EventId& id)
 {
-    s.nospace() << "\"" << id.collectionId() << "::" << id.eventId().toLatin1().constData() << "\"";
+    s.nospace() << "\"" << id.resourceDisplayId() << "::" << id.eventId().toLatin1().constData() << "\"";
     return s.space();
 }
 

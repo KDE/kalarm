@@ -154,6 +154,9 @@ public:
     /** Called to notify that migration/creation of resources has completed. */
     static void notifyResourcesMigrated();
 
+    /** Called to notify that a resource is about to be removed. */
+    static void notifyResourceToBeRemoved(ResourceType*);
+
     /** Called by a resource to notify that its settings have changed.
      *  This will cause the settingsChanged() signal to be emitted.
      */
@@ -176,7 +179,9 @@ public:
     /** Called by a resource to notify that it has added events. */
     static void notifyEventsAdded(ResourceType*, const QList<KAEvent>&);
 
-    /** Called by a resource to notify that it has changed an event. */
+    /** Called by a resource to notify that it has changed an event.
+     *  The event's UID must be unchanged.
+     */
     static void notifyEventUpdated(ResourceType*, const KAEvent& event);
 
     /** Called by a resource to notify that it is about to delete events. */
@@ -205,6 +210,9 @@ Q_SIGNALS:
     /** Emitted when a resource's events have been successfully loaded. */
     void resourcePopulated(Resource&);
 
+    /** Emitted when a resource's config and settings are about to be removed. */
+    void resourceToBeRemoved(Resource&);
+
     /** Emitted when a resource's config and settings have been removed. */
     void resourceRemoved(ResourceId);
 
@@ -221,6 +229,7 @@ Q_SIGNALS:
 
     /** Emitted when an event has been updated in a resource.
      *  Events are only notified whose alarm type is enabled.
+     *  The event's UID is unchanged.
      */
     void eventUpdated(Resource&, const KAEvent&);
 
