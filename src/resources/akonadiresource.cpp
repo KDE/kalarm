@@ -424,17 +424,19 @@ bool AkonadiResource::isPopulated() const
     return true;
 }
 
-bool AkonadiResource::save(bool writeThroughCache)
+bool AkonadiResource::save(bool writeThroughCache, bool force)
 {
     Q_UNUSED(writeThroughCache);
+    Q_UNUSED(force);
     AgentManager::self()->instance(mCollection.resource()).synchronize();
     return true;
 }
 
-#if 0
-        /** Reload the resource. Any cached data is first discarded. */
-        bool reload() override;
-#endif
+bool AkonadiResource::reload()
+{
+    // Akonadi provides no means to reload from the backend.
+    return false;
+}
 
 /******************************************************************************
 * Add an event to the resource, and add it to Akonadi.

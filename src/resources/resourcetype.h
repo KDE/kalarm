@@ -319,10 +319,8 @@ public:
      */
     virtual bool load(bool readThroughCache = true) = 0;
 
-#if 0
     /** Reload the resource. Any cached data is first discarded. */
     virtual bool reload() = 0;
-#endif
 
     /** Return whether the resource has fully loaded.
      *  Once loading completes after the resource has initialised, this should
@@ -336,10 +334,12 @@ public:
      *  if @p writeThroughCache is true, will then be uploaded from the resource file).
      *  @param writeThroughCache  If the resource is cached, update the file
      *                            after writing to the cache.
+     *  @param force              Save even if no changes have been made since last
+     *                            loaded or saved.
      *  @return true if saving succeeded or has been initiated.
      *          false if it failed.
      */
-    virtual bool save(bool writeThroughCache = true) = 0;
+    virtual bool save(bool writeThroughCache = true, bool force = false) = 0;
 
     /** Return whether the resource is waiting for a save() to complete. */
     virtual bool isSaving() const   { return false; }
@@ -416,9 +416,16 @@ protected:
     void setLoadedEvents(QHash<QString, KAEvent>& newEvents);
 
     /** To be called when events have been created or updated, to amend them in
-     * the resource's list.
+     *  the resource's list.
+     *  @param notify  Whether to notify added and updated events; if false,
+     *                 notifyUpdatedEvents() must be called afterwards.
      */
-    void setUpdatedEvents(const QList<KAEvent>& events);
+    void setUpdatedEvents(const QList<KAEvent>& events, bool notify = true);
+
+    /** Notify added and updated events, if setUpdatedEvents() was called with
+     *  notify = false.
+     */
+    void notifyUpdatedEvents();
 
     /** To be called when events have been deleted, to delete them from the resource's list. */
     void setDeletedEvents(const QList<KAEvent>& events);
@@ -440,6 +447,8 @@ private:
     static const ResourceType* data(const Resource&);
 
     QHash<QString, KAEvent> mEvents;    // all events (of ALL types) in the resource, indexed by ID
+    QList<KAEvent> mEventsAdded;        // events added to mEvents but not yet notified
+    QList<KAEvent> mEventsUpdated;      // events updated in mEvents but not yet notified
     ResourceId   mId{-1};               // resource's ID, which can't be changed
     bool         mFailed{false};        // the resource has a fatal error
     mutable bool mLoaded{false};        // the resource has finished loading

@@ -68,32 +68,28 @@ QColor ResourceType::foregroundColour(CalEvent::Types types) const
     else
         types &= alarmTypes();
 
-//TODO: Should this look for the first writable alarm type?
+    // Find the highest priority alarm type.
+    // Note that resources currently only contain a single alarm type.
     CalEvent::Type type;
+    QColor colour;        // default to invalid colour
     if (types & CalEvent::ACTIVE)
-        type = CalEvent::ACTIVE;
+    {
+        type   = CalEvent::ACTIVE;
+        colour = KColorScheme(QPalette::Active).foreground(KColorScheme::NormalText).color();
+    }
     else if (types & CalEvent::ARCHIVED)
-        type = CalEvent::ARCHIVED;
+    {
+        type   = CalEvent::ARCHIVED;
+        colour = Preferences::archivedColour();
+    }
     else if (types & CalEvent::TEMPLATE)
-        type = CalEvent::TEMPLATE;
+    {
+        type   = CalEvent::TEMPLATE;
+        colour = KColorScheme(QPalette::Active).foreground(KColorScheme::LinkText).color();
+    }
     else
         type = CalEvent::EMPTY;
 
-    QColor colour;
-    switch (type)
-    {
-        case CalEvent::ACTIVE:
-            colour = KColorScheme(QPalette::Active).foreground(KColorScheme::NormalText).color();
-            break;
-        case CalEvent::ARCHIVED:
-            colour = Preferences::archivedColour();
-            break;
-        case CalEvent::TEMPLATE:
-            colour = KColorScheme(QPalette::Active).foreground(KColorScheme::LinkText).color();
-            break;
-        default:
-            break;
-    }
     if (colour.isValid()  &&  !isWritable(type))
         return KColorUtils::lighten(colour, 0.2);
     return colour;
@@ -236,10 +232,11 @@ void ResourceType::setLoadedEvents(QHash<QString, KAEvent>& newEvents)
 * To be called when events have been created or updated, to amend them in the
 * resource's list.
 */
-void ResourceType::setUpdatedEvents(const QList<KAEvent>& events)
+void ResourceType::setUpdatedEvents(const QList<KAEvent>& events, bool notify)
 {
     const CalEvent::Types types = enabledTypes();
-    QList<KAEvent> eventsAdded;
+    mEventsAdded.clear();
+    mEventsUpdated.clear();
     for (const KAEvent& event : events)
     {
         auto it = mEvents.find(event.id());
@@ -247,7 +244,7 @@ void ResourceType::setUpdatedEvents(const QList<KAEvent>& events)
         {
             mEvents[event.id()] = event;
             if (event.category() & types)
-                eventsAdded += event;
+                mEventsAdded += event;
         }
         else
         {
@@ -255,11 +252,31 @@ void ResourceType::setUpdatedEvents(const QList<KAEvent>& events)
             bool changed = !ev.compare(event, KAEvent::Compare::Id | KAEvent::Compare::CurrentState);
             ev = event;   // update existing event
             if (changed  &&  (event.category() & types))
-                Resources::notifyEventUpdated(this, event);
+            {
+                if (notify)
+                    Resources::notifyEventUpdated(this, event);
+                else
+                    mEventsUpdated += event;
+            }
         }
     }
-    if (!eventsAdded.isEmpty())
-        Resources::notifyEventsAdded(this, eventsAdded);
+    if (notify  &&  !mEventsAdded.isEmpty())
+        Resources::notifyEventsAdded(this, mEventsAdded);
+}
+
+/******************************************************************************
+* Notifies added and updated events, after setUpdatedEvents() was called with
+* notify = false.
+*/
+void ResourceType::notifyUpdatedEvents()
+{
+    for (const KAEvent& event : qAsConst(mEventsUpdated))
+        Resources::notifyEventUpdated(this, event);
+    mEventsUpdated.clear();
+
+    if (!mEventsAdded.isEmpty())
+        Resources::notifyEventsAdded(this, mEventsAdded);
+    mEventsAdded.clear();
 }
 
 /******************************************************************************
@@ -281,7 +298,8 @@ void ResourceType::setDeletedEvents(const QList<KAEvent>& events)
                 eventsToNotify += event;
         }
     }
-    Resources::notifyEventsToBeRemoved(this, eventsToNotify);
+    if (!eventsToNotify.isEmpty())
+        Resources::notifyEventsToBeRemoved(this, eventsToNotify);
     for (const QString& id : eventsToDelete)
         mEvents.remove(id);
 }

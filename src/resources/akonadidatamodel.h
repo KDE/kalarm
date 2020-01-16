@@ -70,7 +70,7 @@ public:
     Akonadi::Collection* collection(const Resource&) const;
 
     /** Reload a collection's data from Akonadi storage (not from the backend). */
-    bool reload(const Resource&);
+    bool reload(Resource&);
 
     /** Reload all collections' data from Akonadi storage (not from the backend). */
     void reload();

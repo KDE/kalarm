@@ -293,10 +293,8 @@ public:
      */
     bool load(bool readThroughCache = true);
 
-#if 0
     /** Reload the resource. Any cached data is first discarded. */
     bool reload();
-#endif
 
     /** Return whether the resource has fully loaded. */
     bool isPopulated() const;

@@ -236,10 +236,8 @@ public:
      */
     bool load(bool readThroughCache = true) override;
 
-#if 0
     /** Reload the resource. Any cached data is first discarded. */
     bool reload() override;
-#endif
 
     /** Return whether the resource has fully loaded. */
     bool isPopulated() const override;
@@ -249,7 +247,7 @@ public:
      *  automatically.
      *  @return true.
      */
-    bool save(bool writeThroughCache = true) override;
+    bool save(bool writeThroughCache = true, bool force = false) override;
 
     /** Add an event to the resource, and add it to Akonadi. */
     bool addEvent(const KAEvent&) override;

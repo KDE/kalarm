@@ -491,24 +491,17 @@ QString ResourceDataModelBase::tooltip(const Resource& resource, CalEvent::Types
     const bool    inactive = !(resource.enabledTypes() & types);
     const QString readonly = readOnlyTooltip(resource);
     const bool    writable = readonly.isEmpty();
-//TODO: should the above line be   = resource.isWritable() ?
     const QString disabled = i18nc("@info", "Disabled");
-    if (inactive  &&  !writable)
-        return xi18nc("@info:tooltip",
-                     "%1"
-                     "<nl/>%2: <filename>%3</filename>"
-                     "<nl/>%4, %5",
-                     name, type, locn, disabled, readonly);
     if (inactive  ||  !writable)
         return xi18nc("@info:tooltip",
-                     "%1"
-                     "<nl/>%2: <filename>%3</filename>"
-                     "<nl/>%4",
-                     name, type, locn, (inactive ? disabled : readonly));
+                      "%1"
+                      "<nl/>%2: <filename>%3</filename>"
+                      "<nl/>%4",
+                      name, type, locn, (inactive ? disabled : readonly));
     return xi18nc("@info:tooltip",
-                 "%1"
-                 "<nl/>%2: <filename>%3</filename>",
-                 name, type, locn);
+                  "%1"
+                  "<nl/>%2: <filename>%3</filename>",
+                  name, type, locn);
 }
 
 /******************************************************************************

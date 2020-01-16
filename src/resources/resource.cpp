@@ -250,6 +250,11 @@ bool Resource::load(bool readThroughCache)
     return mResource.isNull() ? false : mResource->load(readThroughCache);
 }
 
+bool Resource::reload()
+{
+    return mResource.isNull() ? false : mResource->reload();
+}
+
 bool Resource::isPopulated() const
 {
     return mResource.isNull() ? false : mResource->isPopulated();

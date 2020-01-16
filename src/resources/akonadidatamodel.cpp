@@ -401,7 +401,7 @@ void AkonadiDataModel::slotUpdateWorkingHours()
 /******************************************************************************
 * Reload a collection from Akonadi storage. The backend data is not reloaded.
 */
-bool AkonadiDataModel::reload(const Resource& resource)
+bool AkonadiDataModel::reload(Resource& resource)
 {
     if (!resource.isValid())
         return false;
