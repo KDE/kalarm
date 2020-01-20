@@ -344,15 +344,6 @@ KACalendar::Compat AkonadiResource::compatibilityVersion(QString& versionString)
 }
 
 /******************************************************************************
-* Update the resource to the current KAlarm storage format.
-*/
-bool AkonadiResource::updateStorageFormat()
-{
-//TODO: implement updateStorageFormat(): see AkonadiResourceMigrator::updateStorageFormat()
-    return false;
-}
-
-/******************************************************************************
 * Edit the resource's configuration.
 */
 void AkonadiResource::editResource(QWidget* dialogParent)
@@ -709,12 +700,7 @@ void AkonadiResource::notifyCollectionChanged(Resource& res, const Collection& c
         ||  !hadCompat
         ||  *collection.attribute<CompatibilityAttribute>() != *akres->mCollection.attribute<CompatibilityAttribute>())
         {
-//TODO: check if a temporary AkonadiResource object is actually needed, as in the comment
             // Update to current KAlarm format if necessary, and if the user agrees.
-            // Create a new temporary 'Resource' object, because the one passed
-            // to this method can get overwritten with an old version of its
-            // CompatibilityAttribute before AkonadiResourceMigration finishes,
-            // due to AkonadiDataModel still containing an out of date value.
             qCDebug(KALARM_LOG) << "AkonadiResource::setCollectionChanged:" << collection.id() << ": compatibility ->" << collection.attribute<CompatibilityAttribute>()->compatibility();
             // Note that the AkonadiResource will be deleted once no more
             // QSharedPointers reference it.

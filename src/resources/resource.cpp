@@ -229,11 +229,6 @@ KACalendar::Compat Resource::compatibilityVersion(QString& versionString) const
     return mResource->compatibilityVersion(versionString);
 }
 
-bool Resource::updateStorageFormat()
-{
-    return mResource.isNull() ? false : mResource->updateStorageFormat();
-}
-
 void Resource::editResource(QWidget* dialogParent)
 {
     if (!mResource.isNull())

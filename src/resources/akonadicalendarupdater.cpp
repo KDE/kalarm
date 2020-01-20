@@ -43,7 +43,8 @@ using namespace KAlarmCal;
 
 
 AkonadiCalendarUpdater::AkonadiCalendarUpdater(const Collection& collection, bool dirResource,
-                                 bool ignoreKeepFormat, bool newCollection, QObject* parent, QWidget* promptParent)
+                                               bool ignoreKeepFormat, bool newCollection,
+                                               QObject* parent, QWidget* promptParent)
     : CalendarUpdater(collection.id(), ignoreKeepFormat, parent, promptParent)
     , mCollection(collection)
     , mDirResource(dirResource)

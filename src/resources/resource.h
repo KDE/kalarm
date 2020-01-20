@@ -266,9 +266,6 @@ public:
      */
     KACalendar::Compat compatibilityVersion(QString& versionString) const;
 
-    /** Update the resource to the current KAlarm storage format. */
-    bool updateStorageFormat();
-
     /** Edit the resource's configuration. */
     void editResource(QWidget* dialogParent);
 

@@ -217,9 +217,6 @@ public:
      */
     KACalendar::Compat compatibilityVersion(QString& versionString) const override;
 
-    /** Update the resource to the current KAlarm storage format. */
-    bool updateStorageFormat() override;
-
     /** Edit the resource's configuration. */
     void editResource(QWidget* dialogParent) override;
 

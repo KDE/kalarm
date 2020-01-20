@@ -289,9 +289,6 @@ public:
      */
     virtual KACalendar::Compat compatibilityVersion(QString& versionString) const = 0;
 
-    /** Update the resource to the current KAlarm storage format. */
-    virtual bool updateStorageFormat() = 0;
-
     /** Edit the resource's configuration. */
     virtual void editResource(QWidget* dialogParent) = 0;
 
@@ -439,6 +436,7 @@ protected:
     void setFailed();
 
     static QString storageTypeStr(bool description, bool file, bool local);
+
     template <class T> static T* resource(Resource&);
     template <class T> static const T* resource(const Resource&);
 
