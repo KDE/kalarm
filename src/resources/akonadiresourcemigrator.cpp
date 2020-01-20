@@ -83,13 +83,14 @@ private Q_SLOTS:
     void collectionFetchResult(KJob*);
     void resourceSynchronised(KJob*);
     void modifyCollectionJobDone(KJob*);
+    void checkIfFinished();
 
 private:
-    void finish(bool cleanup);
     bool writeLocalFileConfig();
     bool writeLocalDirectoryConfig();
     bool writeRemoteFileConfig();
     template <class Interface> Interface* writeBasicConfig();
+    void markComplete(bool cleanup);
 
     enum ResourceType { LocalFile, LocalDir, RemoteFile };
 
@@ -101,12 +102,14 @@ private:
     QColor           mColour;
     QString          mErrorMessage;
     Collection::Id   mCollectionId;
+    QPointer<AkonadiCalendarUpdater> mUpdater;
     int              mCollectionFetchRetryCount;
     bool             mReadOnly;
     bool             mEnabled;
     bool             mStandard;
     const bool       mNew;     // true if creating default, false if converting
-    bool             mFinished{false};
+    bool             mCompleted {false};   // completed except for updater
+    bool             mFinished {false};    // finished() signal has been emitted
 };
 
 
@@ -425,7 +428,7 @@ void CalendarCreator::agentCreated(KJob* j)
     {
         mErrorMessage = j->errorString();
         qCCritical(KALARM_LOG) << "CalendarCreator::agentCreated: AgentInstanceCreateJob error:" << mErrorMessage;
-        finish(false);
+        markComplete(false);
         return;
     }
 
@@ -452,7 +455,7 @@ void CalendarCreator::agentCreated(KJob* j)
     }
     if (!ok)
     {
-        finish(true);
+        markComplete(true);
         return;
     }
     mAgent.reconfigure();   // notify the agent that its configuration has been changed
@@ -550,7 +553,7 @@ void CalendarCreator::collectionFetchResult(KJob* j)
     {
         mErrorMessage = j->errorString();
         qCCritical(KALARM_LOG) << "CalendarCreator::collectionFetchResult: CollectionFetchJob error: " << mErrorMessage;
-        finish(true);
+        markComplete(true);
         return;
     }
     CollectionFetchJob* job = static_cast<CollectionFetchJob*>(j);
@@ -561,7 +564,7 @@ void CalendarCreator::collectionFetchResult(KJob* j)
         {
             mErrorMessage = i18nc("@info", "New configuration timed out");
             qCCritical(KALARM_LOG) << "CalendarCreator::collectionFetchResult: Timeout fetching collection for resource";
-            finish(true);
+            markComplete(true);
             return;
         }
         // Need to wait a bit longer until the resource has initialised and
@@ -574,7 +577,7 @@ void CalendarCreator::collectionFetchResult(KJob* j)
     {
         mErrorMessage = i18nc("@info", "New configuration was corrupt");
         qCCritical(KALARM_LOG) << "CalendarCreator::collectionFetchResult: Wrong number of collections for this resource:" << collections.count();
-        finish(true);
+        markComplete(true);
         return;
     }
 
@@ -610,9 +613,10 @@ void CalendarCreator::collectionFetchResult(KJob* j)
     bool duplicate = false;
     if (!mReadOnly)
     {
-        AkonadiCalendarUpdater* updater = new AkonadiCalendarUpdater(collection, dirResource, false, true, this);
-        duplicate = updater->isDuplicate();
-        keep = !updater->update();   // note that 'updater' will auto-delete when finished
+        mUpdater = new AkonadiCalendarUpdater(collection, dirResource, false, true, this);
+        connect(mUpdater, &QObject::destroyed, this, &CalendarCreator::checkIfFinished);
+        duplicate = mUpdater->isDuplicate();
+        keep = !mUpdater->update();   // note that 'updater' will auto-delete when finished
     }
     if (!duplicate)
     {
@@ -643,29 +647,44 @@ void CalendarCreator::modifyCollectionJobDone(KJob* j)
     {
         mErrorMessage = j->errorString();
         qCCritical(KALARM_LOG) << "CalendarCreator::modifyCollectionJobDone: CollectionFetchJob error: " << mErrorMessage;
-        finish(true);
+        markComplete(true);
     }
     else
     {
         qCDebug(KALARM_LOG) << "CalendarCreator::modifyCollectionJobDone: Completed:" << mName;
-        finish(false);
+        markComplete(false);
     }
 }
 
 /******************************************************************************
-* Emit the finished() signal. If 'cleanup' is true, delete the newly created
-* but incomplete Agent.
+* Set the status to complete. If 'cleanup' is true, delete the newly created
+* but incomplete Agent. If all is done, emit the finished() signal.
 */
-void CalendarCreator::finish(bool cleanup)
+void CalendarCreator::markComplete(bool cleanup)
 {
-    if (!mFinished)
+    if (!mCompleted)
     {
         if (cleanup)
             AgentManager::self()->removeInstance(mAgent);
-        mFinished = true;
-        Q_EMIT finished(this);
+        mCompleted = true;
+        checkIfFinished();
     }
 }
+
+/******************************************************************************
+* Called when the CalendarUpdater has been destroyed.
+* If all is complete, signal completion and delete this object.
+*/
+void CalendarCreator::checkIfFinished()
+{
+    if (mCompleted  &&  !mUpdater  &&  !mFinished)
+    {
+        mFinished = true;
+        Q_EMIT finished(this);
+        deleteLater();
+    }
+}
+
 
 #include "akonadiresourcemigrator.moc"
 

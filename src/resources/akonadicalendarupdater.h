@@ -50,6 +50,7 @@ public:
 public Q_SLOTS:
     /** If the calendar is not in the current KAlarm format, prompt the user
      *  whether to convert to the current format, and then perform the conversion.
+     *  This method calls deleteLater() on completion.
      */
     bool update() override;
 

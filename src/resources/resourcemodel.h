@@ -272,7 +272,6 @@ template <class DataModel>
 ResourceCheckListModel* ResourceCheckListModel::create(CalEvent::Type type, QObject* parent)
 {
     ResourceCheckListModel* model = new ResourceCheckListModel(type, parent);
-//TODO: should mModel be non-static, to allow different types of resource?
     if (!mModel)
         mModel = ResourceListModel::create<DataModel>(nullptr);
     model->init();
