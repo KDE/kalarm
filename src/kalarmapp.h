@@ -48,9 +48,19 @@ class KAlarmApp : public QApplication
 {
         Q_OBJECT
     public:
-        ~KAlarmApp();
+        ~KAlarmApp() override;
+
+        /** Create the unique instance. */
         static KAlarmApp*  create(int& argc, char** argv);
+
+        /** Must be called to complete initialisation after KAboutData is set,
+         *  but before the application is activated or restored.
+         */
+        void               initialise();
+
+        /** Return the unique instance. */
         static KAlarmApp*  instance()                      { return mInstance; }
+
         bool               checkCalendar()                 { return initCheck(); }
         bool               wantShowInSystemTray() const;
         bool               alarmsEnabled() const           { return mAlarmsEnabled; }
@@ -168,7 +178,6 @@ class KAlarmApp : public QApplication
         };
 
         KAlarmApp(int& argc, char** argv);
-        void               initialise();
         bool               initialiseTimerResources();
         int                activateInstance(const QStringList& args, const QString& workingDirectory, QString* outputText);
         bool               initCheck(bool calendarOnly = false, bool waitForCollection = false, ResourceId = -1);

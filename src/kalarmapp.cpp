@@ -162,7 +162,6 @@ KAlarmApp* KAlarmApp::create(int& argc, char** argv)
     if (!mInstance)
     {
         mInstance = new KAlarmApp(argc, argv);
-        mInstance->initialise();
 
         if (mFatalError)
             mInstance->quitFatal();
@@ -171,23 +170,23 @@ KAlarmApp* KAlarmApp::create(int& argc, char** argv)
 }
 
 /******************************************************************************
-* Perform initialisations which may require the constructor to have completed.
+* Perform initialisations which may require the constructor to have completed
+* and KAboutData to have been set up.
 */
 void KAlarmApp::initialise()
 {
     if (initialiseTimerResources())   // initialise calendars and alarm timer
     {
-        Resources* resources = Resources::instance();
-        connect(resources, &Resources::resourceAdded,
-                     this, &KAlarmApp::slotResourceAdded);
-        connect(resources, &Resources::resourcePopulated,
-                     this, &KAlarmApp::slotResourcePopulated);
-        connect(resources, &Resources::resourcePopulated,
-                     this, &KAlarmApp::purgeNewArchivedDefault);
-        connect(resources, &Resources::resourcesCreated,
-                     this, &KAlarmApp::checkWritableCalendar);
-        connect(resources, &Resources::migrationCompleted,
-                     this, &KAlarmApp::checkWritableCalendar);
+        connect(Resources::instance(), &Resources::resourceAdded,
+                                 this, &KAlarmApp::slotResourceAdded);
+        connect(Resources::instance(), &Resources::resourcePopulated,
+                                 this, &KAlarmApp::slotResourcePopulated);
+        connect(Resources::instance(), &Resources::resourcePopulated,
+                                 this, &KAlarmApp::purgeNewArchivedDefault);
+        connect(Resources::instance(), &Resources::resourcesCreated,
+                                 this, &KAlarmApp::checkWritableCalendar);
+        connect(AkonadiModel::instance(), &AkonadiModel::migrationCompleted,
+                                    this, &KAlarmApp::checkWritableCalendar);
 
         KConfigGroup config(KSharedConfig::openConfig(), "General");
         mNoSystemTray        = config.readEntry("NoSystemTray", false);

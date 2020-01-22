@@ -41,6 +41,7 @@ int main(int argc, char* argv[])
 {
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling, true);
     QCoreApplication::setAttribute(Qt::AA_UseHighDpiPixmaps, true);
+
     // Use QScopedPointer to ensure the QCoreApplication instance is deleted
     // before libraries unload, to avoid crashes during clean-up.
     QScopedPointer<KAlarmApp> app(KAlarmApp::create(argc, argv));
@@ -62,6 +63,7 @@ int main(int argc, char* argv[])
     KAboutData::setApplicationData(aboutData);
 
     qCDebug(KALARM_LOG) << "initialising";
+    app->initialise();
 
     QString outputText;
     int exitCode = app->activate(args, QDir::currentPath(), outputText);
