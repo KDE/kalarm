@@ -49,7 +49,6 @@ public:
     static AkonadiResourceMigrator* instance();
     static void reset();
     static void execute();
-    static void updateToCurrentFormat(const Resource&, bool ignoreKeepFormat, QObject* parent);
     static bool completed()    { return mCompleted; }
 
 Q_SIGNALS:

@@ -53,6 +53,8 @@ public:
     static void updateToCurrentFormat(const Resource&, bool ignoreKeepFormat, QObject* parent);
 #endif
 
+    static QString conversionPrompt(const QString& calendarName, const QString& calendarVersion, bool whole);
+
 public Q_SLOTS:
     /** If the calendar is not in the current KAlarm format, prompt the user
      *  whether to convert to the current format, and then perform the conversion.
@@ -61,8 +63,6 @@ public Q_SLOTS:
     virtual bool update() = 0;
 
 protected:
-    static QString conversionPrompt(const QString& calendarName, const QString& calendarVersion, bool whole);
-
     static QList<CalendarUpdater*> mInstances;
     ResourceId mResourceId;
     QObject*   mParent;

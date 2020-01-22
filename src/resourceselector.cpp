@@ -217,7 +217,7 @@ void ResourceSelector::editResource()
 */
 void ResourceSelector::updateResource()
 {
-    const Resource resource = currentResource();
+    Resource resource = currentResource();
     if (!resource.isValid())
         return;
     DataModel::updateCalendarToCurrentFormat(resource, true, this);
@@ -231,6 +231,7 @@ void ResourceSelector::removeResource()
     Resource resource = currentResource();
     if (!resource.isValid())
         return;
+    qCDebug(KALARM_LOG) << "ResourceSelector::removeResource:" << resource.displayName();
     const QString name = resource.configName();
     // Check if it's the standard or only resource for at least one type.
     const CalEvent::Types allTypes      = resource.alarmTypes();
