@@ -160,7 +160,6 @@ KAlarmApp* KAlarmApp::create(int& argc, char** argv)
     if (!mInstance)
     {
         mInstance = new KAlarmApp(argc, argv);
-        mInstance->initialise();
 
         if (mFatalError)
             mInstance->quitFatal();
@@ -169,7 +168,8 @@ KAlarmApp* KAlarmApp::create(int& argc, char** argv)
 }
 
 /******************************************************************************
-* Perform initialisations which may require the constructor to have completed.
+* Perform initialisations which may require the constructor to have completed
+* and KAboutData to have been set up.
 */
 void KAlarmApp::initialise()
 {
