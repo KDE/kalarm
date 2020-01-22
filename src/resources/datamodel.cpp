@@ -90,7 +90,7 @@ ResourceCreator* createResourceCreator(KAlarmCal::CalEvent::Type defaultType, QW
     return new AkonadiResourceCreator(defaultType, parent);
 }
 
-void updateCalendarToCurrentFormat(const Resource& resource, bool ignoreKeepFormat, QObject* parent)
+void updateCalendarToCurrentFormat(Resource& resource, bool ignoreKeepFormat, QObject* parent)
 {
     AkonadiCalendarUpdater::updateToCurrentFormat(resource, ignoreKeepFormat, parent);
 }
