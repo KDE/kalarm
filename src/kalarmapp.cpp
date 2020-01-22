@@ -181,6 +181,7 @@ KAlarmApp* KAlarmApp::create(int& argc, char** argv)
     if (!mInstance)
     {
         mInstance = new KAlarmApp(argc, argv);
+        mInstance->initialise();
 
         if (mFatalError)
             mInstance->quitFatal();
@@ -189,14 +190,41 @@ KAlarmApp* KAlarmApp::create(int& argc, char** argv)
 }
 
 /******************************************************************************
-* (Re)initialise things which are tidied up/closed by quitIf().
+* Perform initialisations which may require the constructor to have completed.
+*/
+void KAlarmApp::initialise()
+{
+    if (initialiseTimerResources())   // initialise calendars and alarm timer
+    {
+        Resources* resources = Resources::instance();
+        connect(resources, &Resources::resourceAdded,
+                     this, &KAlarmApp::slotResourceAdded);
+        connect(resources, &Resources::resourcePopulated,
+                     this, &KAlarmApp::slotResourcePopulated);
+        connect(resources, &Resources::resourcePopulated,
+                     this, &KAlarmApp::purgeNewArchivedDefault);
+        connect(resources, &Resources::resourcesCreated,
+                     this, &KAlarmApp::checkWritableCalendar);
+        connect(resources, &Resources::migrationCompleted,
+                     this, &KAlarmApp::checkWritableCalendar);
+
+        KConfigGroup config(KSharedConfig::openConfig(), "General");
+        mNoSystemTray        = config.readEntry("NoSystemTray", false);
+        mOldShowInSystemTray = wantShowInSystemTray();
+        DateTime::setStartOfDay(Preferences::startOfDay());
+        mPrefsArchivedColour = Preferences::archivedColour();
+    }
+}
+
+/******************************************************************************
+* Initialise or reinitialise things which are tidied up/closed by quitIf().
 * Reinitialisation can be necessary if session restoration finds nothing to
 * restore and starts quitting the application, but KAlarm then starts up again
 * before the application has exited.
 * Reply = true if calendars were initialised successfully,
 *         false if they were already initialised, or if initialisation failed.
 */
-bool KAlarmApp::initialise()
+bool KAlarmApp::initialiseTimerResources()
 {
     if (!mAlarmTimer)
     {
@@ -679,8 +707,8 @@ bool KAlarmApp::quitIf(int exitCode, bool force)
 
     // This was the last/only running "instance" of the program, so exit completely.
     // NOTE: Everything which is terminated/deleted here must where applicable
-    //       be initialised in the initialise() method, in case KAlarm is
-    //       started again before application exit completes!
+    //       be initialised in the initialiseTimerResources() method, in case
+    //       KAlarm is started again before application exit completes!
     qCDebug(KALARM_LOG) << "KAlarmApp::quitIf:" << exitCode << ": quitting";
     MessageWin::stopAudio(true);
     if (mCancelRtcWake)
@@ -2350,7 +2378,7 @@ bool KAlarmApp::initCheck(bool calendarOnly, bool waitForResource, ResourceId re
     if (firstTime)
         qCDebug(KALARM_LOG) << "KAlarmApp::initCheck: first time";
 
-    if (initialise()  ||  firstTime)
+    if (initialiseTimerResources()  ||  firstTime)
     {
         /* Need to open the display calendar now, since otherwise if display
          * alarms are immediately due, they will often be processed while

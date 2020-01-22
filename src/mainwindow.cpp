@@ -246,17 +246,17 @@ void MainWindow::readProperties(const KConfigGroup& config)
 */
 MainWindow* MainWindow::mainMainWindow()
 {
-    MainWindow* tray = theApp()->trayWindow() ? theApp()->trayWindow()->assocMainWindow() : nullptr;
+    MainWindow* tray = (theApp() && theApp()->trayWindow()) ? theApp()->trayWindow()->assocMainWindow() : nullptr;
     if (tray  &&  tray->isVisible())
         return tray;
     for (int i = 0, end = mWindowList.count();  i < end;  ++i)
-        if (mWindowList[i]->isVisible())
-            return mWindowList[i];
+        if (mWindowList.at(i)->isVisible())
+            return mWindowList.at(i);
     if (tray)
         return tray;
     if (mWindowList.isEmpty())
         return nullptr;
-    return mWindowList[0];
+    return mWindowList.at(0);
 }
 
 /******************************************************************************
