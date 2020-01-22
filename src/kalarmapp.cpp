@@ -130,25 +130,6 @@ KAlarmApp::KAlarmApp(int& argc, char** argv)
     KAEvent::setWorkTime(Preferences::workDays(), Preferences::workDayStart(), Preferences::workDayEnd());
     KAEvent::setHolidays(Preferences::holidays());
     KAEvent::setDefaultFont(Preferences::messageFont());
-    if (initialise())   // initialise calendars and alarm timer
-    {
-        connect(Resources::instance(), &Resources::resourceAdded,
-                                 this, &KAlarmApp::slotResourceAdded);
-        connect(Resources::instance(), &Resources::resourcePopulated,
-                                 this, &KAlarmApp::slotResourcePopulated);
-        connect(Resources::instance(), &Resources::resourcePopulated,
-                                 this, &KAlarmApp::purgeNewArchivedDefault);
-        connect(Resources::instance(), &Resources::resourcesCreated,
-                                 this, &KAlarmApp::checkWritableCalendar);
-        connect(Resources::instance(), &Resources::migrationCompleted,
-                                 this, &KAlarmApp::checkWritableCalendar);
-
-        KConfigGroup config(KSharedConfig::openConfig(), "General");
-        mNoSystemTray        = config.readEntry("NoSystemTray", false);
-        mOldShowInSystemTray = wantShowInSystemTray();
-        DateTime::setStartOfDay(Preferences::startOfDay());
-        mPrefsArchivedColour = Preferences::archivedColour();
-    }
 
     // Check if KOrganizer is installed
     const QString korg = QStringLiteral("korganizer");
