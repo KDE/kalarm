@@ -132,6 +132,7 @@ class KAlarmApp : public QApplication
         void               slotHolidaysChanged(const KHolidays::HolidayRegion&);
         void               slotFeb29TypeChanged(Feb29Type);
         void               checkWritableCalendar();
+        void               promptArchivedCalendar();
         void               slotMessageFontChanged(const QFont&);
         void               setArchivePurgeDays();
         void               slotResourceAdded(const Resource&);
@@ -185,6 +186,7 @@ class KAlarmApp : public QApplication
         bool               quitIf(int exitCode, bool force = false);
         bool               checkSystemTray();
         void               startProcessQueue();
+        void               checkArchivedCalendar();
         void               queueAlarmId(const KAEvent&);
         bool               dbusHandleEvent(const EventId&, EventFunc);
         bool               handleEvent(const EventId&, EventFunc, bool checkDuplicates = false);

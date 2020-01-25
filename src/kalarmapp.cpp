@@ -308,6 +308,7 @@ bool KAlarmApp::restoreSession()
         return false;    // quitIf() can sometimes return, despite calling exit()
 
     startProcessQueue();      // start processing the execution queue
+    checkArchivedCalendar();
     return true;
 }
 
@@ -424,6 +425,7 @@ int KAlarmApp::activateInstance(const QStringList& args, const QString& workingD
                 else
                 {
                     startProcessQueue();      // start processing the execution queue
+                    checkArchivedCalendar();
                     dontRedisplay = true;
                     if (!handleEvent(options->eventId(), function, true))
                     {
@@ -454,10 +456,14 @@ int KAlarmApp::activateInstance(const QStringList& args, const QString& workingD
                 // Open the calendar and wait for the calendar resources to be populated.
                 if (!initCheck(false, true, options->eventId().resourceId()))
                     exitCode = 1;
-                else if (!KAlarm::editAlarmById(options->eventId()))
+                else
                 {
-                    CommandOptions::printError(xi18nc("@info:shell", "%1: Event <resource>%2</resource> not found, or not editable", QStringLiteral("--") + options->commandName(), options->eventId().eventId()));
-                    exitCode = 1;
+                    checkArchivedCalendar();
+                    if (!KAlarm::editAlarmById(options->eventId()))
+                    {
+                        CommandOptions::printError(xi18nc("@info:shell", "%1: Event <resource>%2</resource> not found, or not editable", QStringLiteral("--") + options->commandName(), options->eventId().eventId()));
+                        exitCode = 1;
+                    }
                 }
                 break;
 
@@ -468,6 +474,8 @@ int KAlarmApp::activateInstance(const QStringList& args, const QString& workingD
                     exitCode = 1;
                 else
                 {
+                    checkArchivedCalendar();
+
                     EditAlarmDlg* editDlg = EditAlarmDlg::create(false, options->editType(), MainWindow::mainMainWindow());
                     if (options->alarmTime().isValid())
                         editDlg->setTime(options->alarmTime());
@@ -547,6 +555,8 @@ int KAlarmApp::activateInstance(const QStringList& args, const QString& workingD
                     exitCode = 1;
                 else
                 {
+                    checkArchivedCalendar();
+
                     // Execute the edit dialogue. Note that if no other instance of KAlarm is
                     // running, this new instance will not exit after the dialogue is closed.
                     // This is deliberate, since exiting would mean that KAlarm wouldn't
@@ -557,24 +567,34 @@ int KAlarmApp::activateInstance(const QStringList& args, const QString& workingD
 
             case CommandOptions::NEW:
                 // Display a message or file, execute a command, or send an email
-                if (!initCheck()
-                ||  !scheduleEvent(options->editAction(), options->text(), options->alarmTime(),
-                                   options->lateCancel(), options->flags(), options->bgColour(),
-                                   options->fgColour(), QFont(), options->audioFile(), options->audioVolume(),
-                                   options->reminderMinutes(), (options->recurrence() ? *options->recurrence() : KARecurrence()),
-                                   options->subRepeatInterval(), options->subRepeatCount(),
-                                   options->fromID(), options->addressees(),
-                                   options->subject(), options->attachments()))
+                if (!initCheck())
                     exitCode = 1;
+                else
+                {
+                    checkArchivedCalendar();
+                    if (!scheduleEvent(options->editAction(), options->text(), options->alarmTime(),
+                                       options->lateCancel(), options->flags(), options->bgColour(),
+                                       options->fgColour(), QFont(), options->audioFile(), options->audioVolume(),
+                                       options->reminderMinutes(), (options->recurrence() ? *options->recurrence() : KARecurrence()),
+                                       options->subRepeatInterval(), options->subRepeatCount(),
+                                       options->fromID(), options->addressees(),
+                                       options->subject(), options->attachments()))
+                        exitCode = 1;
+                }
                 break;
 
             case CommandOptions::TRAY:
                 // Display only the system tray icon
                 if (Preferences::showInSystemTray()  &&  QSystemTrayIcon::isSystemTrayAvailable())
                 {
-                    if (!initCheck()   // open the calendar, start processing execution queue
-                    ||  !displayTrayIcon(true))
+                    if (!initCheck())   // open the calendar, start processing execution queue
                         exitCode = 1;
+                    else
+                    {
+                        checkArchivedCalendar();
+                        if (!displayTrayIcon(true))
+                            exitCode = 1;
+                    }
                     break;
                 }
                 Q_FALLTHROUGH();   // fall through to NONE
@@ -588,6 +608,7 @@ int KAlarmApp::activateInstance(const QStringList& args, const QString& workingD
                     exitCode = 1;
                 else
                 {
+                    checkArchivedCalendar();
                     if (mTrayWindow  &&  mTrayWindow->assocMainWindow()  &&  !mTrayWindow->assocMainWindow()->isVisible())
                         mTrayWindow->showAssocMainWindow();
                     else
@@ -1154,17 +1175,19 @@ void KAlarmApp::checkWritableCalendar()
         mRedisplayAlarms = false;
         MessageWin::redisplayAlarms();
     }
+qDebug() << "KAlarmApp::checkWritableCalendar 1: treeFetched"<<treeFetched<<", migrated"<<DataModel::isMigrationComplete();
     if (!treeFetched
     ||  !DataModel::isMigrationComplete())
         return;
+qDebug() << "KAlarmApp::checkWritableCalendar 2";
     static bool done = false;
     if (done)
         return;
     done = true;
     qCDebug(KALARM_LOG) << "KAlarmApp::checkWritableCalendar";
 
-    // Check for, and remove, any duplicate Akonadi resources, i.e. those which
-    // use the same calendar file/directory.
+    // Check for, and remove, any duplicate resources, i.e. those which use the
+    // same calendar file/directory.
     DataModel::removeDuplicateResources();
 
     // Find whether there are any writable active alarm calendars
@@ -1176,6 +1199,56 @@ void KAlarmApp::checkWritableCalendar()
                                   xi18nc("@info", "Alarms cannot be created or updated, because no writable active alarm calendar is enabled.<nl/><nl/>"
                                                  "To fix this, use <interface>View | Show Calendars</interface> to check or change calendar statuses."),
                                   QString(), QStringLiteral("noWritableCal"));
+    }
+}
+
+/******************************************************************************
+* If alarms are being archived, check whether there is a default archived
+* calendar, and if not, warn the user.
+*/
+void KAlarmApp::checkArchivedCalendar()
+{
+    static bool done = false;
+    if (done)
+        return;
+    done = true;
+
+    // If alarms are to be archived, check that the default archived alarm
+    // calendar is writable.
+    if (Preferences::archivedKeepDays())
+    {
+        Resource standard = Resources::getStandard(CalEvent::ARCHIVED);
+        if (!standard.isValid())
+        {
+            // Schedule the display of a user prompt, without holding up
+            // other processing.
+            QTimer::singleShot(0, this, &KAlarmApp::promptArchivedCalendar);
+        }
+    }
+}
+
+/******************************************************************************
+* If alarms are being archived, check whether there is a default archived
+* calendar, and if not, warn the user.
+*/
+void KAlarmApp::promptArchivedCalendar()
+{
+    const bool archived = !Resources::enabledResources(CalEvent::ARCHIVED, true).isEmpty();
+    if (archived)
+    {
+        qCWarning(KALARM_LOG) << "KAlarmApp::checkArchivedCalendar: Archiving, but no writable archived calendar";
+        KAMessageBox::information(MainWindow::mainMainWindow(),
+                                  xi18nc("@info", "Alarms are configured to be archived, but this is not possible because no writable archived alarm calendar is enabled.<nl/><nl/>"
+                                                 "To fix this, use <interface>View | Show Calendars</interface> to check or change calendar statuses."),
+                                  QString(), QStringLiteral("noWritableArch"));
+    }
+    else
+    {
+        qCWarning(KALARM_LOG) << "KAlarmApp::checkArchivedCalendar: Archiving, but no standard archived calendar";
+        KAMessageBox::information(MainWindow::mainMainWindow(),
+                                  xi18nc("@info", "Alarms are configured to be archived, but this is not possible because no archived alarm calendar is set as default.<nl/><nl/>"
+                                                 "To fix this, use <interface>View | Show Calendars</interface>, select an archived alarms calendar, and check <interface>Use as Default for Archived Alarms</interface>."),
+                                  QString(), QStringLiteral("noStandardArch"));
     }
 }
 
@@ -2376,6 +2449,7 @@ bool KAlarmApp::initCheck(bool calendarOnly, bool waitForResource, ResourceId re
         setArchivePurgeDays();
 
         // Warn the user if there are no writable active alarm calendars
+qDebug()<<"CHECK WRITABLE CALENDAR";
         checkWritableCalendar();
 
         firstTime = false;
