@@ -24,13 +24,16 @@
 
 #include <KLocalizedString>
 
+#include <QCoreApplication>
+#include <QThread>
+
 
 /*=============================================================================
 = Class to prompt the user to update the storage format for a resource, if it
 = currently uses an old KAlarm storage format.
 =============================================================================*/
 
-QList<CalendarUpdater*> CalendarUpdater::mInstances;
+QVector<CalendarUpdater*> CalendarUpdater::mInstances;
 
 CalendarUpdater::CalendarUpdater(ResourceId resourceId, bool ignoreKeepFormat, QObject* parent, QWidget* promptParent)
     : QObject(parent)
@@ -56,6 +59,32 @@ bool CalendarUpdater::containsResource(ResourceId id)
             return true;
     }
     return false;
+}
+
+/******************************************************************************
+* Wait until all instances have completed and been deleted.
+*/
+void CalendarUpdater::waitForCompletion()
+{
+    while (!mInstances.isEmpty())
+    {
+        for (int i = mInstances.count();  --i >= 0;  )
+            if (mInstances.at(i)->isComplete())
+                delete mInstances.at(i);    // the destructor removes the instance from mInstances
+
+        QCoreApplication::processEvents();
+        if (!mInstances.isEmpty())
+            QThread::msleep(100);
+    }
+}
+
+/******************************************************************************
+* Mark the instance as completed, and schedule its deletion.
+*/
+void CalendarUpdater::setCompleted()
+{
+    mCompleted = true;
+    deleteLater();
 }
 
 /******************************************************************************

@@ -32,13 +32,19 @@ public:
     CalendarUpdater(ResourceId, bool ignoreKeepFormat, QObject* parent, QWidget* promptParent = nullptr);
     virtual ~CalendarUpdater();
 
-    // Check whether any instance is for the given resource ID
+    /** Check whether any instance is for the given resource ID. */
     static bool containsResource(ResourceId);
 
-    // Return whether another instance is already updating this collection
+    /** Return whether another instance is already updating this collection. */
     bool isDuplicate() const   { return mDuplicate; }
 
+    /** Return whether this instance has completed, and its deletion is pending. */
+    bool isComplete() const     { return mCompleted; }
+
     static bool pending()   { return !mInstances.isEmpty(); }
+
+    /** Wait until all completed instances have completed and been deleted. */
+    static void waitForCompletion();
 
 #if 0
     /** If an existing resource calendar can be converted to the current KAlarm
@@ -57,18 +63,24 @@ public Q_SLOTS:
     /** If the calendar is not in the current KAlarm format, prompt the user
      *  whether to convert to the current format, and then perform the conversion.
      *  This method must call deleteLater() on completion.
+     *  @return  false if the calendar is not in current format and the user
+     *           chose not to update it; true otherwise.
      */
     virtual bool update() = 0;
 
 protected:
+    /** Mark the instance as completed, and schedule its deletion. */
+    void setCompleted();
+
     static QString conversionPrompt(const QString& calendarName, const QString& calendarVersion, bool whole);
 
-    static QList<CalendarUpdater*> mInstances;
+    static QVector<CalendarUpdater*> mInstances;
     ResourceId mResourceId;
     QObject*   mParent;
     QWidget*   mPromptParent;
     const bool mIgnoreKeepFormat;
-    const bool mDuplicate;     // another instance is already updating this resource
+    const bool mDuplicate;          // another instance is already updating this resource
+    bool       mCompleted {false};  // completed, and deleteLater() called
 };
 
 #endif // CALENDARUPDATER_H

@@ -151,7 +151,7 @@ bool AkonadiCalendarUpdater::update()
             }
         }
     }
-    deleteLater();
+    setCompleted();
     return result;
 }
 
