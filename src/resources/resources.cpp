@@ -564,7 +564,8 @@ void Resources::checkResourcesPopulated()
         // Check whether all resources have now loaded at least once.
         for (auto it = mResources.constBegin();  it != mResources.constEnd();  ++it)
         {
-            if (!it.value().isPopulated())
+            const Resource& res = it.value();
+            if (res.isEnabled(CalEvent::EMPTY)  &&  !res.isPopulated())
                 return;
         }
         mPopulated = true;
