@@ -420,7 +420,8 @@ int KAlarmApp::activateInstance(const QStringList& args, const QString& workingD
                 const EventFunc function = (command == CommandOptions::TRIGGER_EVENT) ? EVENT_TRIGGER : EVENT_CANCEL;
                 // Open the calendar, don't start processing execution queue yet,
                 // and wait for the calendar resources to be populated.
-                if (!initCheck(true, true, options->eventId().resourceId()))
+                if (!initCheck(true)
+                ||  !waitUntilPopulated(options->eventId().resourceId(), AKONADI_TIMEOUT))
                     exitCode = 1;
                 else
                 {
@@ -441,7 +442,8 @@ int KAlarmApp::activateInstance(const QStringList& args, const QString& workingD
                 // and wait for all calendar resources to be populated.
                 mReadOnly = true;   // don't need write access to calendars
                 mAlarmsEnabled = false;   // prevent alarms being processed
-                if (!initCheck(true, true))
+                if (!initCheck(true)
+                ||  !waitUntilPopulated(-1, AKONADI_TIMEOUT))
                     exitCode = 1;
                 else
                 {
@@ -454,7 +456,8 @@ int KAlarmApp::activateInstance(const QStringList& args, const QString& workingD
             case CommandOptions::EDIT:
                 // Edit a specified existing alarm.
                 // Open the calendar and wait for the calendar resources to be populated.
-                if (!initCheck(false, true, options->eventId().resourceId()))
+                if (!initCheck(false)
+                ||  !waitUntilPopulated(options->eventId().resourceId(), AKONADI_TIMEOUT))
                     exitCode = 1;
                 else
                 {
@@ -1175,11 +1178,9 @@ void KAlarmApp::checkWritableCalendar()
         mRedisplayAlarms = false;
         MessageWin::redisplayAlarms();
     }
-qDebug() << "KAlarmApp::checkWritableCalendar 1: treeFetched"<<treeFetched<<", migrated"<<DataModel::isMigrationComplete();
     if (!treeFetched
     ||  !DataModel::isMigrationComplete())
         return;
-qDebug() << "KAlarmApp::checkWritableCalendar 2";
     static bool done = false;
     if (done)
         return;
@@ -2426,7 +2427,7 @@ void KAlarmApp::commandMessage(ShellProcess* proc, QWidget* parent)
 * If this is the first time through, open the calendar file, and start
 * processing the execution queue.
 */
-bool KAlarmApp::initCheck(bool calendarOnly, bool waitForResource, ResourceId resourceId)
+bool KAlarmApp::initCheck(bool calendarOnly)
 {
     static bool firstTime = true;
     if (firstTime)
@@ -2449,7 +2450,6 @@ bool KAlarmApp::initCheck(bool calendarOnly, bool waitForResource, ResourceId re
         setArchivePurgeDays();
 
         // Warn the user if there are no writable active alarm calendars
-qDebug()<<"CHECK WRITABLE CALENDAR";
         checkWritableCalendar();
 
         firstTime = false;
@@ -2458,12 +2458,6 @@ qDebug()<<"CHECK WRITABLE CALENDAR";
     if (!calendarOnly)
         startProcessQueue();      // start processing the execution queue
 
-    if (waitForResource)
-    {
-        // Wait for one or all calendar resources to be populated
-        if (!waitUntilPopulated(resourceId, AKONADI_TIMEOUT))
-            return false;
-    }
     return true;
 }
 

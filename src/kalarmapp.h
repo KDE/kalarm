@@ -181,7 +181,7 @@ class KAlarmApp : public QApplication
         KAlarmApp(int& argc, char** argv);
         bool               initialiseTimerResources();
         int                activateInstance(const QStringList& args, const QString& workingDirectory, QString* outputText);
-        bool               initCheck(bool calendarOnly = false, bool waitForCollection = false, ResourceId = -1);
+        bool               initCheck(bool calendarOnly = false);
         bool               waitUntilPopulated(ResourceId, int timeout);
         bool               quitIf(int exitCode, bool force = false);
         bool               checkSystemTray();
