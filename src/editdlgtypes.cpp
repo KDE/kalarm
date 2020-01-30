@@ -338,7 +338,7 @@ void EditDisplayAlarmDlg::type_initValues(const KAEvent* event)
         reminder()->enableOnceOnly(isTimedRecurrence());   // must be called after mRecurrenceEdit is set up
         if (mSpecialActionsButton)
         {
-            KAEvent::ExtraActionOptions opts(nullptr);
+            KAEvent::ExtraActionOptions opts({});
             if (Preferences::defaultExecPreActionOnDeferral())
                 opts |= KAEvent::ExecPreActOnDeferral;
             if (Preferences::defaultCancelOnPreActionError())

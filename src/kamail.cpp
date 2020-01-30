@@ -149,7 +149,7 @@ int KAMail::send(JobData& jobdata, QStringList& errmsgs)
     }
     jobdata.bcc  = (jobdata.event.emailBcc() ? Preferences::emailBccAddress() : QString());
     qCDebug(KALARM_LOG) << "KAMail::send: To:" << jobdata.event.emailAddresses(QStringLiteral(","))
-                        << endl << "Subject:" << jobdata.event.emailSubject();
+                        << "\nSubject:" << jobdata.event.emailSubject();
 
     KMime::Message::Ptr message = KMime::Message::Ptr(new KMime::Message);
 
