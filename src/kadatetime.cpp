@@ -1842,16 +1842,17 @@ QString KADateTime::toString(TimeFormat format) const
             result += QLatin1Char(' ');
             break;
 
-        case LocalDate:
+        case LocalDate: {
+            QLocale l;
             if (d->dateOnly())
-                result = d->date().toString(Qt::SystemLocaleShortDate);
+                result = l.toString(d->date(), QLocale::ShortFormat);
             else
-                result = d->dt().toString(Qt::SystemLocaleShortDate);
+                result = l.toString(d->dt(), QLocale::ShortFormat);
             if (result.isEmpty()  ||  d->specType == LocalZone)
                 return result;
             result += QLatin1Char(' ');
             break;
-
+        }
         default:
             return result;
     }
