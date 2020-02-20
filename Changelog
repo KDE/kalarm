@@ -1,5 +1,8 @@
 KAlarm Change Log
 
+=== Version 2.13.3 (KDE Applications 19.12.3) --- 20 February 2020 ===
++ Fix failure of command line options requiring calendar access [KDE Bug 417108]
+
 === Version 2.13.2 (KDE Applications 19.12.2) --- 9 January 2020 ===
 + Add Show/Hide Menubar menu option; change New Email Alarm shortcut to Ctrl-L.
 

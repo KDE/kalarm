@@ -1,7 +1,7 @@
 /*
  *  kalarmapp.cpp  -  the KAlarm application object
  *  Program:  kalarm
- *  Copyright © 2001-2019 David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2020 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -182,9 +182,11 @@ void KAlarmApp::initialise()
         connect(Resources::instance(), &Resources::resourcePopulated,
                                  this, &KAlarmApp::purgeNewArchivedDefault);
         connect(Resources::instance(), &Resources::resourcesCreated,
-                                 this, &KAlarmApp::checkWritableCalendar);
+                                 this, &KAlarmApp::slotResourcesCreated);
         connect(AkonadiModel::instance(), &AkonadiModel::migrationCompleted,
                                     this, &KAlarmApp::checkWritableCalendar);
+        connect(Resources::instance(), &Resources::resourcesPopulated,
+                                 this, &KAlarmApp::processQueue);
 
         KConfigGroup config(KSharedConfig::openConfig(), "General");
         mNoSystemTray        = config.readEntry("NoSystemTray", false);
@@ -427,6 +429,8 @@ int KAlarmApp::activateInstance(const QStringList& args, const QString& workingD
                         CommandOptions::printError(xi18nc("@info:shell", "%1: Event <resource>%2</resource> not found, or not unique", QStringLiteral("--") + options->commandName(), options->eventId().eventId()));
                         exitCode = 1;
                     }
+                    else
+                        createOnlyMainWindow();   // prevent the application from quitting
                 }
                 break;
             }
@@ -446,6 +450,7 @@ int KAlarmApp::activateInstance(const QStringList& args, const QString& workingD
                         std::cout << alarm.toUtf8().constData() << std::endl;
                 }
                 break;
+
             case CommandOptions::EDIT:
                 // Edit a specified existing alarm.
                 // Open the calendar and wait for the calendar resources to be populated.
@@ -456,6 +461,8 @@ int KAlarmApp::activateInstance(const QStringList& args, const QString& workingD
                     CommandOptions::printError(xi18nc("@info:shell", "%1: Event <resource>%2</resource> not found, or not editable", QStringLiteral("--") + options->commandName(), options->eventId().eventId()));
                     exitCode = 1;
                 }
+                else
+                    createOnlyMainWindow();   // prevent the application from quitting
                 break;
 
             case CommandOptions::EDIT_NEW:
@@ -530,6 +537,9 @@ int KAlarmApp::activateInstance(const QStringList& args, const QString& workingD
                         case EditAlarmDlg::NO_TYPE:
                             break;
                     }
+
+                    createOnlyMainWindow();   // prevent the application from quitting
+
                     // Execute the edit dialogue. Note that if no other instance of KAlarm is
                     // running, this new instance will not exit after the dialogue is closed.
                     // This is deliberate, since exiting would mean that KAlarm wouldn't
@@ -544,6 +554,8 @@ int KAlarmApp::activateInstance(const QStringList& args, const QString& workingD
                     exitCode = 1;
                 else
                 {
+                    createOnlyMainWindow();   // prevent the application from quitting
+
                     // Execute the edit dialogue. Note that if no other instance of KAlarm is
                     // running, this new instance will not exit after the dialogue is closed.
                     // This is deliberate, since exiting would mean that KAlarm wouldn't
@@ -554,6 +566,7 @@ int KAlarmApp::activateInstance(const QStringList& args, const QString& workingD
 
             case CommandOptions::NEW:
                 // Display a message or file, execute a command, or send an email
+                setResourcesTimeout();   // set timeout for resource initialisation
                 if (!initCheck()
                 ||  !scheduleEvent(options->editAction(), options->text(), options->alarmTime(),
                                    options->lateCancel(), options->flags(), options->bgColour(),
@@ -563,6 +576,8 @@ int KAlarmApp::activateInstance(const QStringList& args, const QString& workingD
                                    options->fromID(), options->addressees(),
                                    options->subject(), options->attachments()))
                     exitCode = 1;
+                else
+                    createOnlyMainWindow();   // prevent the application from quitting
                 break;
 
             case CommandOptions::TRAY:
@@ -635,6 +650,24 @@ int KAlarmApp::activateInstance(const QStringList& args, const QString& workingD
         return exitCode;    // exit this application instance
 
     return -1;   // continue executing the application instance
+}
+
+/******************************************************************************
+* Create a minimised main window if none already exists.
+* This prevents the application from quitting.
+*/
+void KAlarmApp::createOnlyMainWindow()
+{
+    if (!MainWindow::count())
+    {
+        if (Preferences::showInSystemTray()  &&  QSystemTrayIcon::isSystemTrayAvailable())
+        {
+            if (displayTrayIcon(true))
+                return;
+        }
+        MainWindow* win = MainWindow::create();
+        win->showMinimized();
+    }
 }
 
 /******************************************************************************
@@ -895,6 +928,7 @@ void KAlarmApp::processQueue()
         // Process queued events
         while (!mActionQueue.isEmpty())
         {
+            bool removeFromQueue = true;
             ActionQEntry& entry = mActionQueue.head();
             if (entry.eventId.isEmpty())
             {
@@ -905,7 +939,15 @@ void KAlarmApp::processQueue()
                         execAlarm(entry.event, entry.event.firstAlarm(), false);
                         break;
                     case EVENT_HANDLE:
-                        KAlarm::addEvent(entry.event, nullptr, nullptr, KAlarm::ALLOW_KORG_UPDATE | KAlarm::NO_RESOURCE_PROMPT);
+                        // Can't add a new event until resources have been populated.
+                        if (!Resources::allPopulated())
+                        {
+                            // Keep the queued item unless resource population has timed out.
+                            if (!mResourcesTimedOut)
+                                removeFromQueue = false;
+                        }
+                        else
+                            KAlarm::addEvent(entry.event, nullptr, nullptr, KAlarm::ALLOW_KORG_UPDATE | KAlarm::NO_RESOURCE_PROMPT);
                         break;
                     case EVENT_CANCEL:
                         break;
@@ -913,6 +955,8 @@ void KAlarmApp::processQueue()
             }
             else
                 handleEvent(entry.eventId, entry.function);
+            if (!removeFromQueue)
+                break;
             mActionQueue.dequeue();
         }
 
@@ -1135,9 +1179,47 @@ bool KAlarmApp::wantShowInSystemTray() const
 {
     return Preferences::showInSystemTray()  &&  QSystemTrayIcon::isSystemTrayAvailable();
 }
+ 
+/******************************************************************************
+* Set a timeout for populating resources.
+*/
+void KAlarmApp::setResourcesTimeout()
+{
+    QTimer::singleShot(AKONADI_TIMEOUT * 1000, this, &KAlarmApp::slotResourcesTimeout);
+}
 
 /******************************************************************************
-* Called when all calendars have been fetched at startup.
+* Called on a timeout to check whether resources have been populated.
+* If not, exit the program with code 1.
+*/
+void KAlarmApp::slotResourcesTimeout()
+{
+    if (!Resources::allPopulated())
+    {
+        // Resource population has timed out.
+        mResourcesTimedOut = true;
+        quitIf(1);
+    }
+}
+
+/******************************************************************************
+* Called when all resources have been created at startup.
+* Check whether there are any writable active calendars, and if not, warn the
+* user.
+*/
+void KAlarmApp::slotResourcesCreated()
+{
+    if (mRedisplayAlarms)
+    {
+        mRedisplayAlarms = false;
+        MessageWin::redisplayAlarms();
+    }
+    checkWritableCalendar();
+}
+
+/******************************************************************************
+* Called when all calendars have been fetched at startup, or calendar migration
+* has completed.
 * Check whether there are any writable active calendars, and if not, warn the
 * user.
 */
@@ -1145,13 +1227,7 @@ void KAlarmApp::checkWritableCalendar()
 {
     if (mReadOnly)
         return;    // don't need write access to calendars
-    const bool treeFetched = Resources::allCreated();
-    if (treeFetched && mRedisplayAlarms)
-    {
-        mRedisplayAlarms = false;
-        MessageWin::redisplayAlarms();
-    }
-    if (!treeFetched
+    if (!Resources::allCreated()
     ||  !AkonadiModel::instance()->isMigrationCompleted())
         return;
     static bool done = false;
@@ -1421,16 +1497,18 @@ QString KAlarmApp::dbusList()
 * c) Reschedule the event for its next repetition. If none remain, delete it.
 * If the event is deleted, it is removed from the calendar file and from every
 * main window instance.
+* If 'findUniqueId' is true and 'id' does not specify a resource, all resources
+* will be searched for the event's unique ID.
 * Reply = false if event ID not found, or if more than one event with the same
 *         ID is found.
 */
-bool KAlarmApp::handleEvent(const EventId& id, EventFunc function, bool checkDuplicates)
+bool KAlarmApp::handleEvent(const EventId& id, EventFunc function, bool findUniqueId)
 {
     // Delete any expired wake-on-suspend config data
     KAlarm::checkRtcWakeConfig();
 
     const QString eventID(id.eventId());
-    KAEvent* event = AlarmCalendar::resources()->event(id, checkDuplicates);
+    KAEvent* event = AlarmCalendar::resources()->event(id, findUniqueId);
     if (!event)
     {
         if (id.collectionId() != -1)
@@ -2371,9 +2449,6 @@ bool KAlarmApp::initCheck(bool calendarOnly, bool waitForCollection, Akonadi::Co
     if (firstTime)
     {
         setArchivePurgeDays();
-
-        // Warn the user if there are no writable active alarm calendars
-        checkWritableCalendar();
 
         firstTime = false;
     }

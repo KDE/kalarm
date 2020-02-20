@@ -131,6 +131,8 @@ class KAlarmApp : public QApplication
         void               slotWorkTimeChanged(const QTime& start, const QTime& end, const QBitArray& days);
         void               slotHolidaysChanged(const KHolidays::HolidayRegion&);
         void               slotFeb29TypeChanged(Feb29Type);
+        void               slotResourcesTimeout();
+        void               slotResourcesCreated();
         void               checkWritableCalendar();
         void               slotMessageFontChanged(const QFont&);
         void               setArchivePurgeDays();
@@ -143,7 +145,7 @@ class KAlarmApp : public QApplication
         enum EventFunc
         {
             EVENT_HANDLE,    // if the alarm is due, execute it and then reschedule it
-            EVENT_TRIGGER,   // execute the alarm regardless, and then reschedule it if it already due
+            EVENT_TRIGGER,   // execute the alarm regardless, and then reschedule it if it's already due
             EVENT_CANCEL     // delete the alarm
         };
         struct ProcData
@@ -183,11 +185,13 @@ class KAlarmApp : public QApplication
         bool               initCheck(bool calendarOnly = false, bool waitForCollection = false, Akonadi::Collection::Id = -1);
         bool               waitUntilPopulated(ResourceId, int timeout);
         bool               quitIf(int exitCode, bool force = false);
+        void               createOnlyMainWindow();
         bool               checkSystemTray();
         void               startProcessQueue();
+        void               setResourcesTimeout();
         void               queueAlarmId(const KAEvent&);
         bool               dbusHandleEvent(const EventId&, EventFunc);
-        bool               handleEvent(const EventId&, EventFunc, bool checkDuplicates = false);
+        bool               handleEvent(const EventId&, EventFunc, bool findUniqueId = false);
         int                rescheduleAlarm(KAEvent&, const KAAlarm&, bool updateCalAndDisplay,
                                            const KADateTime& nextDt = KADateTime());
         bool               cancelAlarm(KAEvent&, KAAlarm::Type, bool updateCalAndDisplay);
@@ -231,6 +235,7 @@ class KAlarmApp : public QApplication
         bool               mAlarmsEnabled{true};   // alarms are enabled
         bool               mKOrganizerEnabled;     // KOrganizer options are enabled (korganizer exists)
         bool               mWindowFocusBroken;     // keyboard focus transfer between windows doesn't work
+        bool               mResourcesTimedOut{false}; // timeout has expired for populating resources
 };
 
 inline KAlarmApp* theApp()  { return KAlarmApp::instance(); }
