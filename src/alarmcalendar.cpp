@@ -1258,15 +1258,15 @@ CalEvent::Type AlarmCalendar::deleteEventInternal(const QString& eventID, const 
 
 /******************************************************************************
 * Return the event with the specified ID.
-* If 'checkDuplicates' is true, and the resource ID is invalid, if there is
-* a unique event with the given ID, it will be returned.
+* If 'findUniqueId' is true, and the resource ID is invalid, if there is a
+* unique event with the given ID, it will be returned.
 */
-KAEvent* AlarmCalendar::event(const EventId& uniqueID, bool checkDuplicates)
+KAEvent* AlarmCalendar::event(const EventId& uniqueID, bool findUniqueId)
 {
     if (!isValid())
         return nullptr;
     const QString eventId = uniqueID.eventId();
-    if (uniqueID.resourceId() == -1  &&  checkDuplicates)
+    if (uniqueID.resourceId() == -1  &&  findUniqueId)
     {
         // The resource isn't known, but use the event ID if it is unique among
         // all resources.

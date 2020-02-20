@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.5)
 set(KDEPIM_VERSION_NUMBER "5.13.40")
 set(PIM_VERSION ${KDEPIM_VERSION_NUMBER})
 set(RELEASE_SERVICE_VERSION "20.03.70")
-set(KALARM_VERSION "2.13.2")
+set(KALARM_VERSION "2.13.4")
 
 project(kalarm VERSION ${KALARM_VERSION})
 set(KALARM_FULL_VERSION "${KALARM_VERSION} (KDE Apps ${RELEASE_SERVICE_VERSION})")
@@ -122,7 +122,6 @@ if (EXISTS "${CMAKE_SOURCE_DIR}/.git")
 	#add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0x060000) # for the moment we can't port QWheelEvent
    add_definitions(-DKF_DISABLE_DEPRECATED_BEFORE_AND_AT=0x060000)
 endif()
-
 
 
 add_subdirectory(src)
