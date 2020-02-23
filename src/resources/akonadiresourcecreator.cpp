@@ -33,7 +33,6 @@
 #include <AkonadiWidgets/AgentTypeDialog>
 #include <AkonadiWidgets/AgentConfigurationDialog>
 
-#include <KDBusConnectionPool>
 #include <KMessageBox>
 #include <KLocalizedString>
 
