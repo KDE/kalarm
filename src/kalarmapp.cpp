@@ -666,7 +666,8 @@ void KAlarmApp::createOnlyMainWindow()
                 return;
         }
         MainWindow* win = MainWindow::create();
-        win->showMinimized();
+        win->setWindowState(Qt::WindowMinimized);
+        win->show();
     }
 }
 
