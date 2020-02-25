@@ -35,6 +35,10 @@ void initialise()
     AkonadiDataModel::instance();
 }
 
+void terminate()
+{
+}
+
 void reload()
 {
     AkonadiDataModel::instance()->reload();

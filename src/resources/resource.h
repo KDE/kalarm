@@ -310,6 +310,11 @@ public:
     /** Return whether the resource is waiting for a save() to complete. */
     bool isSaving() const;
 
+    /** Close the resource. This saves any unsaved data.
+     *  Saving is not performed if the resource is disabled.
+     */
+    void close();
+
     /** Return all events belonging to this resource. */
     QList<KAEvent> events() const;
 

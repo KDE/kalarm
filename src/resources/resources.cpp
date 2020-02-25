@@ -51,6 +51,13 @@ Resources::Resources()
 {
 }
 
+Resources::~Resources()
+{
+    qCDebug(KALARM_LOG) << "Resources::~Resources";
+    for (auto it = mResources.begin();  it != mResources.end();  ++it)
+        it.value().close();
+}
+
 Resource Resources::resource(ResourceId id)
 {
     return mResources.value(id, Resource::null());

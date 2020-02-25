@@ -265,6 +265,12 @@ bool Resource::isSaving() const
     return mResource.isNull() ? false : mResource->isSaving();
 }
 
+void Resource::close()
+{
+    if (!mResource.isNull())
+        mResource->close();
+}
+
 QList<KAEvent> Resource::events() const
 {
     return mResource.isNull() ? QList<KAEvent>() : mResource->events();

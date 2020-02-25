@@ -38,6 +38,8 @@ namespace DataModel
 
 void initialise();
 
+void terminate();
+
 /** Reload all resources' data from storage.
  *  @note In the case of Akonadi, this does not reload from the backend storage.
  */

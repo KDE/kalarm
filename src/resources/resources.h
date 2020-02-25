@@ -1,7 +1,7 @@
 /*
  *  resources.h  -  container for all ResourceType instances
  *  Program:  kalarm
- *  Copyright © 2019 David Jarvie <djarvie@kde.org>
+ *  Copyright © 2019-2020 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -40,7 +40,7 @@ public:
     /** Creates the unique Resources instance. */
     static Resources* instance();
 
-    ~Resources() {}
+    ~Resources();
     Resources(const Resources&) = delete;
     Resources& operator=(const Resources&) const = delete;
 

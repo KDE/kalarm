@@ -98,8 +98,8 @@ class KAlarmApp : public QApplication
                                          uint mailFromID = 0, const KCalendarCore::Person::List& mailAddresses = KCalendarCore::Person::List(),
                                          const QString& mailSubject = QString(),
                                          const QStringList& mailAttachments = QStringList());
-        bool               dbusTriggerEvent(const EventId& eventID)   { return dbusHandleEvent(eventID, EVENT_TRIGGER); }
-        bool               dbusDeleteEvent(const EventId& eventID)    { return dbusHandleEvent(eventID, EVENT_CANCEL); }
+        bool               dbusTriggerEvent(const EventId& eventID)   { return dbusHandleEvent(eventID, QueuedAction::Trigger); }
+        bool               dbusDeleteEvent(const EventId& eventID)    { return dbusHandleEvent(eventID, QueuedAction::Cancel); }
         QString            dbusList();
 
     public Q_SLOTS:
@@ -143,11 +143,18 @@ class KAlarmApp : public QApplication
         void               slotCommandExited(ShellProcess*);
 
     private:
-        enum EventFunc
+        // Actions to execute in processQueue(). May be OR'ed together.
+        enum class QueuedAction
         {
-            EVENT_HANDLE,    // if the alarm is due, execute it and then reschedule it
-            EVENT_TRIGGER,   // execute the alarm regardless, and then reschedule it if it's already due
-            EVENT_CANCEL     // delete the alarm
+            // Action to execute
+            ActionMask = 0x07,  // bit mask to extract action to execute
+            Handle     = 0x01,  // if the alarm is due, execute it and then reschedule it
+            Trigger    = 0x02,  // execute the alarm regardless, and then reschedule it if it's already due
+            Cancel     = 0x03,  // delete the alarm
+            List       = 0x04,  // list all alarms
+            // Modifier flags
+            FindId     = 0x10,  // search all resources for unique event ID
+            Exit       = 0x20   // exit application after executing action
         };
         struct ProcData
         {
@@ -172,12 +179,12 @@ class KAlarmApp : public QApplication
         };
         struct ActionQEntry
         {
-            ActionQEntry(EventFunc f, const EventId& id) : function(f), eventId(id) { }
-            ActionQEntry(const KAEvent& e, EventFunc f = EVENT_HANDLE) : function(f), event(e) { }
+            ActionQEntry(QueuedAction a, const EventId& id) : action(a), eventId(id) { }
+            ActionQEntry(const KAEvent& e, QueuedAction a = QueuedAction::Handle) : action(a), event(e) { }
             ActionQEntry() { }
-            EventFunc  function;
-            EventId    eventId;
-            KAEvent    event;
+            QueuedAction  action;
+            EventId       eventId;
+            KAEvent       event;
         };
 
         KAlarmApp(int& argc, char** argv);
@@ -192,8 +199,8 @@ class KAlarmApp : public QApplication
         void               setResourcesTimeout();
         void               checkArchivedCalendar();
         void               queueAlarmId(const KAEvent&);
-        bool               dbusHandleEvent(const EventId&, EventFunc);
-        bool               handleEvent(const EventId&, EventFunc, bool findUniqueId = false);
+        bool               dbusHandleEvent(const EventId&, QueuedAction);
+        bool               handleEvent(const EventId&, QueuedAction, bool findUniqueId = false);
         int                rescheduleAlarm(KAEvent&, const KAAlarm&, bool updateCalAndDisplay,
                                            const KADateTime& nextDt = KADateTime());
         bool               cancelAlarm(KAEvent&, KAAlarm::Type, bool updateCalAndDisplay);
@@ -214,6 +221,7 @@ class KAlarmApp : public QApplication
         static int         mActiveCount;           // number of active instances without main windows
         static int         mFatalError;            // a fatal error has occurred - just wait to exit
         static QString     mFatalMessage;          // fatal error message to output
+        QString            mCommandOption;         // command option used on command line
         bool               mInitialised{false};    // initialisation complete: ready to process execution queue
         bool               mRedisplayAlarms{false}; // need to redisplay alarms when collection tree fetched
         bool               mQuitting{false};       // a forced quit is in progress

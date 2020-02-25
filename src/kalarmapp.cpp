@@ -418,23 +418,18 @@ int KAlarmApp::activateInstance(const QStringList& args, const QString& workingD
             case CommandOptions::CANCEL_EVENT:
             {
                 // Display or delete the event with the specified event ID
-                const EventFunc function = (command == CommandOptions::TRIGGER_EVENT) ? EVENT_TRIGGER : EVENT_CANCEL;
+                const QueuedAction action = static_cast<QueuedAction>(int((command == CommandOptions::TRIGGER_EVENT) ? QueuedAction::Trigger : QueuedAction::Cancel)
+                                                                      | int(QueuedAction::FindId) | int(QueuedAction::Exit));
                 // Open the calendar, don't start processing execution queue yet,
                 // and wait for the calendar resources to be populated.
-                if (!initCheck(true)
-                ||  !waitUntilPopulated(options->eventId().resourceId(), AKONADI_TIMEOUT))
+                if (!initCheck(true))
                     exitCode = 1;
                 else
                 {
+                    mCommandOption = options->commandName();
+                    mActionQueue.enqueue(ActionQEntry(action, options->eventId()));
                     startProcessQueue();      // start processing the execution queue
                     dontRedisplay = true;
-                    if (!handleEvent(options->eventId(), function, true))
-                    {
-                        CommandOptions::printError(xi18nc("@info:shell", "%1: Event <resource>%2</resource> not found, or not unique", QStringLiteral("--") + options->commandName(), options->eventId().eventId()));
-                        exitCode = 1;
-                    }
-                    else
-                        createOnlyMainWindow();   // prevent the application from quitting
                 }
                 break;
             }
@@ -444,15 +439,14 @@ int KAlarmApp::activateInstance(const QStringList& args, const QString& workingD
                 // and wait for all calendar resources to be populated.
                 mReadOnly = true;   // don't need write access to calendars
                 mAlarmsEnabled = false;   // prevent alarms being processed
-                if (!initCheck(true)
-                ||  !waitUntilPopulated(-1, AKONADI_TIMEOUT))
+                if (!initCheck(true))
                     exitCode = 1;
                 else
                 {
+                    const QueuedAction action = static_cast<QueuedAction>(int(QueuedAction::List) | int(QueuedAction::Exit));
+                    mActionQueue.enqueue(ActionQEntry(action, EventId()));
+                    startProcessQueue();      // start processing the execution queue
                     dontRedisplay = true;
-                    const QStringList alarms = scheduledAlarmList();
-                    for (const QString& alarm : alarms)
-                        std::cout << alarm.toUtf8().constData() << std::endl;
                 }
                 break;
 
@@ -466,7 +460,7 @@ int KAlarmApp::activateInstance(const QStringList& args, const QString& workingD
                 {
                     if (!KAlarm::editAlarmById(options->eventId()))
                     {
-                        CommandOptions::printError(xi18nc("@info:shell", "%1: Event <resource>%2</resource> not found, or not editable", QStringLiteral("--") + options->commandName(), options->eventId().eventId()));
+                        CommandOptions::printError(xi18nc("@info:shell", "%1: Event <resource>%2</resource> not found, or not editable", options->commandName(), options->eventId().eventId()));
                         exitCode = 1;
                     }
                     else
@@ -748,6 +742,7 @@ bool KAlarmApp::quitIf(int exitCode, bool force)
     mAlarmTimer = nullptr;
     mInitialised = false;   // prevent processQueue() from running
     AlarmCalendar::terminateCalendars();
+    DataModel::terminate();
     exit(exitCode);
     return true;    // sometimes we actually get to here, despite calling exit()
 }
@@ -902,10 +897,10 @@ void KAlarmApp::queueAlarmId(const KAEvent& event)
     const EventId id(event);
     for (const ActionQEntry& entry : qAsConst(mActionQueue))
     {
-        if (entry.function == EVENT_HANDLE  &&  entry.eventId == id)
+        if (entry.action == QueuedAction::Handle  &&  entry.eventId == id)
             return;  // the alarm is already queued
     }
-    mActionQueue.enqueue(ActionQEntry(EVENT_HANDLE, id));
+    mActionQueue.enqueue(ActionQEntry(QueuedAction::Handle, id));
 }
 
 /******************************************************************************
@@ -945,35 +940,60 @@ void KAlarmApp::processQueue()
         // Process queued events
         while (!mActionQueue.isEmpty())
         {
-            bool removeFromQueue = true;
+            // Can't add a new event until resources have been populated.
+            if (!Resources::allPopulated())
+            {
+                // If resource population has timed out, discard all queued events.
+                if (mResourcesTimedOut)
+                {
+                    qCCritical(KALARM_LOG) << "Error! Timeout reading calendars";
+                    mActionQueue.clear();
+                }
+                break;
+            }
+
             ActionQEntry& entry = mActionQueue.head();
+            const bool findUniqueId  = int(entry.action) & int(QueuedAction::FindId);
+            const bool exitAfter     = int(entry.action) & int(QueuedAction::Exit);
+            const QueuedAction action = static_cast<QueuedAction>(int(entry.action) & int(QueuedAction::ActionMask));
+
+            bool ok = true;
             if (entry.eventId.isEmpty())
             {
                 // It's a new alarm
-                switch (entry.function)
+                switch (action)
                 {
-                    case EVENT_TRIGGER:
+                    case QueuedAction::Trigger:
                         execAlarm(entry.event, entry.event.firstAlarm(), false);
                         break;
-                    case EVENT_HANDLE:
-                        // Can't add a new event until resources have been populated.
-                        if (!Resources::allPopulated())
-                        {
-                            // Keep the queued item unless resource population has timed out.
-                            if (!mResourcesTimedOut)
-                                removeFromQueue = false;
-                        }
-                        else
-                            KAlarm::addEvent(entry.event, nullptr, nullptr, KAlarm::ALLOW_KORG_UPDATE | KAlarm::NO_RESOURCE_PROMPT);
+                    case QueuedAction::Handle:
+                        KAlarm::addEvent(entry.event, nullptr, nullptr, KAlarm::ALLOW_KORG_UPDATE | KAlarm::NO_RESOURCE_PROMPT);
                         break;
-                    case EVENT_CANCEL:
+                    case QueuedAction::List:
+                    {
+                        const QStringList alarms = scheduledAlarmList();
+                        for (const QString& alarm : alarms)
+                            std::cout << alarm.toUtf8().constData() << std::endl;
+                        break;
+                    }
+                    default:
                         break;
                 }
             }
             else
-                handleEvent(entry.eventId, entry.function);
-            if (!removeFromQueue)
-                break;
+            {
+                ok = handleEvent(entry.eventId, action, findUniqueId);
+                if (!ok  &&  exitAfter)
+                    CommandOptions::printError(xi18nc("@info:shell", "%1: Event <resource>%2</resource> not found, or not unique", mCommandOption, entry.eventId.eventId()));
+            }
+
+            if (exitAfter)
+            {
+                mActionQueue.clear();   // ensure that quitIf() actually exits the program
+                quitIf(ok ? 0 : 1);
+                return;  // quitIf() can sometimes return, despite calling exit()
+            }
+
             mActionQueue.dequeue();
         }
 
@@ -1011,7 +1031,7 @@ void KAlarmApp::atLoginEventAdded(const KAEvent& event)
     {
         if (mAlarmsEnabled)
         {
-            mActionQueue.enqueue(ActionQEntry(EVENT_HANDLE, EventId(ev)));
+            mActionQueue.enqueue(ActionQEntry(QueuedAction::Handle, EventId(ev)));
             if (mInitialised)
                 QTimer::singleShot(0, this, &KAlarmApp::processQueue);
         }
@@ -1520,7 +1540,7 @@ bool KAlarmApp::scheduleEvent(KAEvent::SubAction action, const QString& text, co
         // Alarm is due for display already.
         // First execute it once without adding it to the calendar file.
         if (!mInitialised)
-            mActionQueue.enqueue(ActionQEntry(event, EVENT_TRIGGER));
+            mActionQueue.enqueue(ActionQEntry(event, QueuedAction::Trigger));
         else
             execAlarm(event, event.firstAlarm(), false);
         // If it's a recurring alarm, reschedule it for its next occurrence
@@ -1542,10 +1562,10 @@ bool KAlarmApp::scheduleEvent(KAEvent::SubAction action, const QString& text, co
 * Optionally display the event. Delete the event from the calendar file and
 * from every main window instance.
 */
-bool KAlarmApp::dbusHandleEvent(const EventId& eventID, EventFunc function)
+bool KAlarmApp::dbusHandleEvent(const EventId& eventID, QueuedAction action)
 {
     qCDebug(KALARM_LOG) << "KAlarmApp::dbusHandleEvent:" << eventID;
-    mActionQueue.append(ActionQEntry(function, eventID));
+    mActionQueue.append(ActionQEntry(action, eventID));
     if (mInitialised)
         QTimer::singleShot(0, this, &KAlarmApp::processQueue);
     return true;
@@ -1572,8 +1592,10 @@ QString KAlarmApp::dbusList()
 * Reply = false if event ID not found, or if more than one event with the same
 *         ID is found.
 */
-bool KAlarmApp::handleEvent(const EventId& id, EventFunc function, bool findUniqueId)
+bool KAlarmApp::handleEvent(const EventId& id, QueuedAction action, bool findUniqueId)
 {
+    Q_ASSERT(!(int(action) & ~int(QueuedAction::ActionMask)));
+
     // Delete any expired wake-on-suspend config data
     KAlarm::checkRtcWakeConfig();
 
@@ -1587,18 +1609,18 @@ bool KAlarmApp::handleEvent(const EventId& id, EventFunc function, bool findUniq
             qCWarning(KALARM_LOG) << "KAlarmApp::handleEvent: Event ID not found:" << eventID;
         return false;
     }
-    switch (function)
+    switch (action)
     {
-        case EVENT_CANCEL:
+        case QueuedAction::Cancel:
             qCDebug(KALARM_LOG) << "KAlarmApp::handleEvent:" << eventID << ", CANCEL";
             KAlarm::deleteEvent(*event, true);
             break;
 
-        case EVENT_TRIGGER:    // handle it if it's due, else execute it regardless
-        case EVENT_HANDLE:     // handle it if it's due
+        case QueuedAction::Trigger:    // handle it if it's due, else execute it regardless
+        case QueuedAction::Handle:     // handle it if it's due
         {
             const KADateTime now = KADateTime::currentUtcDateTime();
-            qCDebug(KALARM_LOG) << "KAlarmApp::handleEvent:" << eventID << "," << (function==EVENT_TRIGGER?"TRIGGER:":"HANDLE:") << qPrintable(now.qDateTime().toString(QStringLiteral("yyyy-MM-dd hh:mm"))) << "UTC";
+            qCDebug(KALARM_LOG) << "KAlarmApp::handleEvent:" << eventID << "," << (action==QueuedAction::Trigger?"TRIGGER:":"HANDLE:") << qPrintable(now.qDateTime().toString(QStringLiteral("yyyy-MM-dd hh:mm"))) << "UTC";
             bool updateCalAndDisplay = false;
             bool alarmToExecuteValid = false;
             KAAlarm alarmToExecute;
@@ -1774,7 +1796,7 @@ bool KAlarmApp::handleEvent(const EventId& id, EventFunc function, bool findUniq
                 execAlarm(*event, alarmToExecute, true, !alarmToExecute.repeatAtLogin());
             else
             {
-                if (function == EVENT_TRIGGER)
+                if (action == QueuedAction::Trigger)
                 {
                     // The alarm is to be executed regardless of whether it's due.
                     // Only trigger one alarm from the event - we don't want multiple
@@ -1785,10 +1807,12 @@ bool KAlarmApp::handleEvent(const EventId& id, EventFunc function, bool findUniq
                 }
                 if (updateCalAndDisplay)
                     KAlarm::updateEvent(*event);     // update the window lists and calendar file
-                else if (function != EVENT_TRIGGER) { qCDebug(KALARM_LOG) << "KAlarmApp::handleEvent: No action"; }
+                else if (action != QueuedAction::Trigger) { qCDebug(KALARM_LOG) << "KAlarmApp::handleEvent: No action"; }
             }
             break;
         }
+        default:
+            break;
     }
     return true;
 }

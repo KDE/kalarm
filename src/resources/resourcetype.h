@@ -341,6 +341,11 @@ public:
     /** Return whether the resource is waiting for a save() to complete. */
     virtual bool isSaving() const   { return false; }
 
+    /** Close the resource. This saves any unsaved data.
+     *  Saving is not performed if the resource is disabled.
+     */
+    virtual void close() {}
+
     /** Return all events belonging to this resource, for enabled alarm types. */
     QList<KAEvent> events() const;
 
