@@ -2577,7 +2577,7 @@ bool KAlarmApp::waitUntilPopulated(ResourceId id, int timeout)
         if (id < 0)
             connect(Resources::instance(), &Resources::resourcesPopulated, loop, &QEventLoop::quit);
         else
-            connect(Resources::instance(), &Resources::resourcePopulated, [loop, &id](Resource& r) {
+            connect(Resources::instance(), &Resources::resourcePopulated, [&loop, &id](Resource& r) {
                     if (r.id() == id) loop->quit(); });
         if (timeout > 0)
             QTimer::singleShot(timeout * 1000, loop, &QEventLoop::quit);
