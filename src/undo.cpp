@@ -78,7 +78,7 @@ class UndoItem
         virtual void       dumpDebugTitle(const char* typeName) const;
 
         QString            mName;      // specified action name (overrides default)
-        int                mId{0};     // unique identifier (only for mType = UNDO, REDO)
+        int                mId {0};    // unique identifier (only for mType = UNDO, REDO)
         Undo::Type         mType;      // which list (if any) the object is in
         CalEvent::Type     mCalendar;
 };

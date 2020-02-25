@@ -136,11 +136,11 @@ class AlarmCalendar : public QObject
         QString               mLocalFile;          // calendar file, or local copy if it's a remote file
         CalType               mCalType;            // what type of calendar mCalendar is (resources/ical/vcal)
         CalEvent::Type        mEventType;          // what type of events the calendar file is for
-        bool                  mOpen{false};        // true if the calendar file is open
-        bool                  mIgnoreAtLogin{false}; // ignore new/updated repeat-at-login alarms
-        int                   mUpdateCount{0};     // nesting level of group of calendar update calls
-        bool                  mUpdateSave{false};  // save() was called while mUpdateCount > 0
-        bool                  mHaveDisabledAlarms{false}; // there is at least one individually disabled alarm
+        bool                  mOpen {false};       // true if the calendar file is open
+        bool                  mIgnoreAtLogin {false}; // ignore new/updated repeat-at-login alarms
+        int                   mUpdateCount {0};    // nesting level of group of calendar update calls
+        bool                  mUpdateSave {false}; // save() was called while mUpdateCount > 0
+        bool                  mHaveDisabledAlarms {false}; // there is at least one individually disabled alarm
 
         using QObject::event;   // prevent "hidden" warning
 };

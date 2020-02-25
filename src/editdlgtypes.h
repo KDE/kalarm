@@ -102,10 +102,10 @@ class EditDisplayAlarmDlg : public EditAlarmDlg
         SoundPicker*        mSoundPicker;
         CheckBox*           mConfirmAck;
         FontColourButton*   mFontColourButton;
-        SpecialActionsButton* mSpecialActionsButton{nullptr};
+        SpecialActionsButton* mSpecialActionsButton {nullptr};
         Akonadi::Item::Id   mAkonadiItemId;      // if email text, message's Akonadi item ID, else -1
-        bool                mReminderDeferral{false};
-        bool                mReminderArchived{false};
+        bool                mReminderDeferral {false};
+        bool                mReminderArchived {false};
         // Text message alarm widgets
         TextEdit*           mTextMessageEdit;    // text message edit box
         // Text file alarm widgets
@@ -239,7 +239,7 @@ class EditEmailAlarmDlg : public EditAlarmDlg
         TextEdit*       mEmailMessageEdit;   // email body edit box
         QComboBox*      mEmailAttachList;
         QPushButton*    mEmailAddAttachButton;
-        QPushButton*    mEmailRemoveButton{nullptr};
+        QPushButton*    mEmailRemoveButton {nullptr};
         CheckBox*       mEmailBcc;
         QString         mAttachDefaultDir;
 
@@ -292,7 +292,7 @@ class EditAudioAlarmDlg : public EditAlarmDlg
         void            slotAudioPlaying(bool playing);
 
     private:
-        MessageWin*     mMessageWin{nullptr}; // MessageWin controlling test audio playback
+        MessageWin*     mMessageWin {nullptr}; // MessageWin controlling test audio playback
 
         // Audio alarm options
         SoundWidget*    mSoundConfig;

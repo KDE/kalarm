@@ -103,9 +103,9 @@ private Q_SLOTS:
 private:
     KAEvent      (*mEventFunction)(const QModelIndex&) {nullptr};  // function to fetch event from data model
     QModelIndex  (*mEventIndexFunction)(const QString&) {nullptr};  // function to fetch event index from data model
-    CalEvent::Types mAlarmTypes{CalEvent::EMPTY};  // only include events with these alarm types
-    int             mHeaderDataRoleOffset{0};  // offset for base class to add to headerData() role
-    bool            mHaveEvents{false};        // there are events in this model
+    CalEvent::Types mAlarmTypes {CalEvent::EMPTY};  // only include events with these alarm types
+    int             mHeaderDataRoleOffset {0};  // offset for base class to add to headerData() role
+    bool            mHaveEvents {false};        // there are events in this model
 };
 
 

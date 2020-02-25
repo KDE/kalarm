@@ -91,8 +91,8 @@ class LineEdit : public KLineEdit
         void         init();
 
         Type  mType;
-        bool  mNoSelect{false};
-        bool  mSetCursorAtEnd{false};  // setText() should position cursor at end
+        bool  mNoSelect {false};
+        bool  mSetCursorAtEnd {false};  // setText() should position cursor at end
 };
 
 #endif // LINEEDIT_H

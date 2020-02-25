@@ -305,7 +305,7 @@ class SpinBox2 : public QFrame
         int              mSingleShiftStep;    // right button increment with shift pressed
         int              mPageStep;           // left button increment
         int              mPageShiftStep;      // left button increment with shift pressed
-        bool             mReverseWithLayout{true};  // reverse button positions if reverse layout (default = true)
+        bool             mReverseWithLayout {true};  // reverse button positions if reverse layout (default = true)
 
     friend class MainSpinBox;
 };

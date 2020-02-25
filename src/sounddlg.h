@@ -74,11 +74,11 @@ class SoundWidget : public QWidget
 
     private:
         static QString       mDefaultDir;     // current default directory for mFileEdit
-        QPushButton*         mFilePlay{nullptr};
+        QPushButton*         mFilePlay {nullptr};
         LineEdit*            mFileEdit;
         PushButton*          mFileBrowseButton;
-        GroupBox*            mRepeatGroupBox{nullptr};
-        SpinBox*             mRepeatPause{nullptr};
+        GroupBox*            mRepeatGroupBox {nullptr};
+        SpinBox*             mRepeatPause {nullptr};
         CheckBox*            mVolumeCheckbox;
         Slider*              mVolumeSlider;
         CheckBox*            mFadeCheckbox;
@@ -88,9 +88,9 @@ class SoundWidget : public QWidget
         Slider*              mFadeSlider;
         mutable QUrl         mUrl;
         mutable QString      mValidatedFile;
-        Phonon::MediaObject* mPlayer{nullptr};
-        bool                 mReadOnly{false};
-        bool                 mEmptyFileAllowed{false};
+        Phonon::MediaObject* mPlayer {nullptr};
+        bool                 mReadOnly {false};
+        bool                 mEmptyFileAllowed {false};
 };
 
 
@@ -117,7 +117,7 @@ class SoundDlg : public QDialog
     private:
         SoundWidget*      mSoundWidget;
         QDialogButtonBox* mButtonBox;
-        bool              mReadOnly{false};
+        bool              mReadOnly {false};
 };
 
 #endif

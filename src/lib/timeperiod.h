@@ -140,11 +140,11 @@ class TimePeriod : public QWidget
         SpinBox*        mSpinBox;            // the minutes/days/weeks value spinbox
         TimeSpinBox*    mTimeSpinBox;        // the hours:minutes value spinbox
         ComboBox*       mUnitsCombo;
-        int             mMaxDays{9999};      // maximum day count
+        int             mMaxDays {9999};     // maximum day count
         int             mDateOnlyOffset;     // for mUnitsCombo: 2 if minutes & hours/minutes is disabled, else 0
         Units           mMaxUnitShown;       // for mUnitsCombo: maximum units shown
         bool            mNoHourMinute;       // hours/minutes cannot be displayed, ever
-        bool            mReadOnly{false};    // the widget is read only
+        bool            mReadOnly {false};   // the widget is read only
         bool            mHourMinuteRaised;   // hours:minutes spinbox is currently displayed
 };
 

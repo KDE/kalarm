@@ -59,8 +59,8 @@ class TimeSelector : public QFrame
     private:
         CheckBox*    mSelect;
         TimePeriod*  mPeriod;
-        ComboBox*    mSignWidget{nullptr};
-        bool         mReadOnly{false};          // the widget is read only
+        ComboBox*    mSignWidget {nullptr};
+        bool         mReadOnly {false};         // the widget is read only
 };
 
 #endif // TIMESELECTOR_H

@@ -78,9 +78,9 @@ class PushButton : public QPushButton
         void         keyReleaseEvent(QKeyEvent*) override;
         bool         event(QEvent*) override;
     private:
-        Qt::FocusPolicy mFocusPolicy;         // default focus policy for the PushButton
-        bool            mReadOnly{false};     // value cannot be changed
-        bool            mNoHighlight{false};  // don't highlight on mouse hover, if read-only
+        Qt::FocusPolicy mFocusPolicy;          // default focus policy for the PushButton
+        bool            mReadOnly {false};     // value cannot be changed
+        bool            mNoHighlight {false};  // don't highlight on mouse hover, if read-only
 };
 
 #endif // PUSHBUTTON_H

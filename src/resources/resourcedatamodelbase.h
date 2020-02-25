@@ -141,7 +141,7 @@ private:
     static QPixmap* mAudioIcon;
     static QSize    mIconSize;      // maximum size of any icon
 
-    int  mMigrationStatus{-1};      // migration status, -1 = no, 0 = initiated, 1 = complete
+    int  mMigrationStatus {-1};     // migration status, -1 = no, 0 = initiated, 1 = complete
 };
 
 #endif // RESOURCEDATAMODELBASE_H

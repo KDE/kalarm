@@ -150,8 +150,8 @@ class SoundPicker : public QFrame
         int            mRepeatPause;  // seconds to pause between repetitions of the sound file, or -1 if no repeat
         Preferences::SoundType mLastType;   // last selected sound option
         bool           mSpeakShowing;       // Speak option is shown in combo box
-        bool           mRevertType{false};  // reverting to last selected sound option
-        bool           mReadOnly{false};
+        bool           mRevertType {false}; // reverting to last selected sound option
+        bool           mReadOnly {false};
 };
 
 #endif // SOUNDPICKER_H

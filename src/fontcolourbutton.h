@@ -56,8 +56,8 @@ class FontColourButton : public PushButton
     private:
         QColor      mBgColour, mFgColour;
         QFont       mFont;
-        bool        mDefaultFont{true};
-        bool        mReadOnly{false};
+        bool        mDefaultFont {true};
+        bool        mReadOnly {false};
 };
 
 
@@ -83,7 +83,7 @@ class FontColourDlg : public QDialog
         QColor             mBgColour, mFgColour;
         QFont              mFont;
         bool               mDefaultFont;
-        bool               mReadOnly{false};
+        bool               mReadOnly {false};
 };
 
 #endif // FONTCOLOURBUTTON_H

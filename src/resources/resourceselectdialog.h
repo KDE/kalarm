@@ -63,11 +63,11 @@ private Q_SLOTS:
 
 private:
     ResourceListModel* mModel;
-    QListView*         mResourceList{nullptr};
-    QDialogButtonBox*  mButtonBox{nullptr};
-    ResourceId         mDefaultId{-1};
-    CalEvent::Types    mAlarmTypes{CalEvent::EMPTY};
-    bool               mWritable{false};
+    QListView*         mResourceList {nullptr};
+    QDialogButtonBox*  mButtonBox {nullptr};
+    ResourceId         mDefaultId {-1};
+    CalEvent::Types    mAlarmTypes {CalEvent::EMPTY};
+    bool               mWritable {false};
 };
 
 #endif // RESOURCESELECTDIALOG_H

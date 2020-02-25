@@ -175,8 +175,8 @@ private:
     QList<Akonadi::Collection::Id> mCollectionIdsBeingCreated;  // ids of new collections being created by migrator
     struct EventIds
     {
-        Akonadi::Collection::Id  collectionId{-1};
-        Akonadi::Item::Id        itemId{-1};
+        Akonadi::Collection::Id  collectionId {-1};
+        Akonadi::Item::Id        itemId {-1};
         explicit EventIds(Akonadi::Collection::Id c = -1, Akonadi::Item::Id i = -1) : collectionId(c), itemId(i) {}
     };
     QHash<QString, EventIds> mEventIds;     // collection and item ID for each event ID

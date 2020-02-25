@@ -79,10 +79,10 @@ class CheckBox : public QCheckBox
     protected Q_SLOTS:
         void         slotClicked();
     private:
-        Qt::FocusPolicy mFocusPolicy;          // default focus policy for the QCheckBox
-        QWidget*        mFocusWidget{nullptr}; // widget to receive focus when button is clicked on
-        bool            mFocusWidgetEnable;    // enable focus widget before setting focus
-        bool            mReadOnly{false};      // value cannot be changed
+        Qt::FocusPolicy mFocusPolicy;           // default focus policy for the QCheckBox
+        QWidget*        mFocusWidget {nullptr}; // widget to receive focus when button is clicked on
+        bool            mFocusWidgetEnable;     // enable focus widget before setting focus
+        bool            mReadOnly {false};      // value cannot be changed
 };
 
 #endif // CHECKBOX_H

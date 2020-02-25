@@ -449,13 +449,13 @@ private:
     static ResourceType* data(Resource&);
     static const ResourceType* data(const Resource&);
 
-    QHash<QString, KAEvent> mEvents;    // all events (of ALL types) in the resource, indexed by ID
-    QList<KAEvent> mEventsAdded;        // events added to mEvents but not yet notified
-    QList<KAEvent> mEventsUpdated;      // events updated in mEvents but not yet notified
-    ResourceId   mId{-1};               // resource's ID, which can't be changed
-    bool         mFailed{false};        // the resource has a fatal error
-    mutable bool mLoaded{false};        // the resource has finished loading
-    bool         mBeingDeleted{false};  // the resource is currently being deleted
+    QHash<QString, KAEvent> mEvents;     // all events (of ALL types) in the resource, indexed by ID
+    QList<KAEvent> mEventsAdded;         // events added to mEvents but not yet notified
+    QList<KAEvent> mEventsUpdated;       // events updated in mEvents but not yet notified
+    ResourceId   mId {-1};               // resource's ID, which can't be changed
+    bool         mFailed {false};        // the resource has a fatal error
+    mutable bool mLoaded {false};        // the resource has finished loading
+    bool         mBeingDeleted {false};  // the resource is currently being deleted
 };
 
 

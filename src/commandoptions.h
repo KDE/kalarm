@@ -146,38 +146,38 @@ class CommandOptions
         QString     arg(int n);
         QString     optionName(Option, bool shortName = false) const;
 
-        static CommandOptions* mFirstInstance;      // the first instance
-        QCommandLineParser* mParser{nullptr};
-        QVector<QCommandLineOption*> mOptions;      // all possible command line options
-        QStringList         mNonExecArguments;      // arguments except for --exec or --exec-display parameters
-        QStringList         mExecArguments;         // arguments for --exec or --exec-display
-        QString             mError;                 // error message
-        Command             mCommand{NONE};         // the selected command
-        Option              mCommandOpt;            // option for the selected command
-        EventId             mEventId;               // TRIGGER_EVENT, CANCEL_EVENT, EDIT: event ID
-        QString             mTemplateName;          // EDIT_NEW_PRESET: template name
-        EditAlarmDlg::Type  mEditType;              // NEW, EDIT_NEW_*: alarm edit type
-        KAEvent::SubAction  mEditAction;            // NEW: alarm edit sub-type
-        bool                mEditActionSet{false};  // NEW: mEditAction is valid
-        QString             mText;                  // NEW: alarm text
-        KADateTime          mAlarmTime;             // NEW: alarm time
-        KARecurrence*       mRecurrence{nullptr};   // NEW: recurrence
-        int                 mRepeatCount{0};        // NEW: sub-repetition count
-        KCalendarCore::Duration mRepeatInterval{0}; // NEW: sub-repetition interval
-        int                 mLateCancel{0};         // NEW: late-cancellation interval
-        QColor              mBgColour;              // NEW: background colour
-        QColor              mFgColour;              // NEW: foreground colour
-        int                 mReminderMinutes{0};    // NEW: reminder period
-        QString             mAudioFile;             // NEW: audio file path
-        float               mAudioVolume{-1.0f};    // NEW: audio file volume
-        KCalendarCore::Person::List mAddressees;    // NEW: email addressees
-        QStringList         mAttachments;           // NEW: email attachment file names
-        QString             mSubject;               // NEW: email subject
-        uint                mFromID{0};             // NEW: email sender ID
-        KAEvent::Flags      mFlags;                 // NEW: event flags
-        bool                mDisableAll{false};     // disable all alarm monitoring
+        static CommandOptions* mFirstInstance;       // the first instance
+        QCommandLineParser* mParser {nullptr};
+        QVector<QCommandLineOption*> mOptions;       // all possible command line options
+        QStringList         mNonExecArguments;       // arguments except for --exec or --exec-display parameters
+        QStringList         mExecArguments;          // arguments for --exec or --exec-display
+        QString             mError;                  // error message
+        Command             mCommand {NONE};         // the selected command
+        Option              mCommandOpt;             // option for the selected command
+        EventId             mEventId;                // TRIGGER_EVENT, CANCEL_EVENT, EDIT: event ID
+        QString             mTemplateName;           // EDIT_NEW_PRESET: template name
+        EditAlarmDlg::Type  mEditType;               // NEW, EDIT_NEW_*: alarm edit type
+        KAEvent::SubAction  mEditAction;             // NEW: alarm edit sub-type
+        bool                mEditActionSet {false};  // NEW: mEditAction is valid
+        QString             mText;                   // NEW: alarm text
+        KADateTime          mAlarmTime;              // NEW: alarm time
+        KARecurrence*       mRecurrence {nullptr};   // NEW: recurrence
+        int                 mRepeatCount {0};        // NEW: sub-repetition count
+        KCalendarCore::Duration mRepeatInterval {0}; // NEW: sub-repetition interval
+        int                 mLateCancel {0};         // NEW: late-cancellation interval
+        QColor              mBgColour;               // NEW: background colour
+        QColor              mFgColour;               // NEW: foreground colour
+        int                 mReminderMinutes {0};    // NEW: reminder period
+        QString             mAudioFile;              // NEW: audio file path
+        float               mAudioVolume {-1.0f};    // NEW: audio file volume
+        KCalendarCore::Person::List mAddressees;     // NEW: email addressees
+        QStringList         mAttachments;            // NEW: email attachment file names
+        QString             mSubject;                // NEW: email subject
+        uint                mFromID {0};             // NEW: email sender ID
+        KAEvent::Flags      mFlags;                  // NEW: event flags
+        bool                mDisableAll {false};     // disable all alarm monitoring
 #ifndef NDEBUG
-        KADateTime          mSimulationTime;        // system time to be simulated, or invalid if none
+        KADateTime          mSimulationTime;         // system time to be simulated, or invalid if none
 #endif
 };
 

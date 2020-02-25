@@ -77,8 +77,8 @@ class Label : public QLabel
 
     private:
         void              activated();
-        QRadioButton*     mRadioButton{nullptr};  // buddy widget if it's a radio button, else 0
-        LabelFocusWidget* mFocusWidget{nullptr};
+        QRadioButton*     mRadioButton {nullptr};  // buddy widget if it's a radio button, else 0
+        LabelFocusWidget* mFocusWidget {nullptr};
 };
 
 

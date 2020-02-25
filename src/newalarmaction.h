@@ -53,7 +53,7 @@ class NewAlarmAction : public KActionMenu
         QAction*            mCommandAction;
         QAction*            mEmailAction;
         QAction*            mAudioAction;
-        TemplateMenuAction* mTemplateAction{nullptr};  // New From Template action, for non-template menu only
+        TemplateMenuAction* mTemplateAction {nullptr};  // New From Template action, for non-template menu only
         KActionCollection*  mActionCollection;
         QMap<QAction*, EditAlarmDlg::Type> mTypes;
 };

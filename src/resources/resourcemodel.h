@@ -88,10 +88,10 @@ private:
     explicit ResourceFilterModel(QObject* parent);
 
     QModelIndex  (*mResourceIndexFunction)(const Resource&) {nullptr};  // function to fetch resource index from data model
-    QString        mFilterText;          // only include resources whose display names include this
-    CalEvent::Type mAlarmType{CalEvent::EMPTY};  // only include resources with this alarm type
-    bool           mWritableOnly{false}; // only include writable resources
-    bool           mEnabledOnly{false};  // only include enabled resources
+    QString        mFilterText;           // only include resources whose display names include this
+    CalEvent::Type mAlarmType {CalEvent::EMPTY};  // only include resources with this alarm type
+    bool           mWritableOnly {false}; // only include writable resources
+    bool           mEnabledOnly {false};  // only include enabled resources
 };
 
 /*=============================================================================
@@ -127,7 +127,7 @@ public:
 private:
     explicit ResourceListModel(QObject* parent);
 
-    bool mUseResourceColour{true};
+    bool mUseResourceColour {true};
 };
 
 
@@ -176,7 +176,7 @@ private:
     static int                mInstanceCount;
     CalEvent::Type            mAlarmType;     // alarm type contained in this model
     QItemSelectionModel*      mSelectionModel;
-    bool                      mResetting{false};   // currently handling rows inserted/removed
+    bool                      mResetting {false};   // currently handling rows inserted/removed
 };
 
 
@@ -219,10 +219,10 @@ private:
     explicit ResourceFilterCheckListModel(QObject* parent);
     void init();
 
-    ResourceCheckListModel* mActiveModel{nullptr};
-    ResourceCheckListModel* mArchivedModel{nullptr};
-    ResourceCheckListModel* mTemplateModel{nullptr};
-    CalEvent::Type          mAlarmType{CalEvent::EMPTY};  // alarm type contained in this model
+    ResourceCheckListModel* mActiveModel {nullptr};
+    ResourceCheckListModel* mArchivedModel {nullptr};
+    ResourceCheckListModel* mTemplateModel {nullptr};
+    CalEvent::Type          mAlarmType {CalEvent::EMPTY};  // alarm type contained in this model
     QString               (*mTooltipFunction)(const Resource&, CalEvent::Types) {nullptr};  // function to fetch tooltip from data model
 };
 

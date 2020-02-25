@@ -64,13 +64,13 @@ class Find : public QObject
         QCheckBox*         mCommandType;
         QCheckBox*         mEmailType;
         QCheckBox*         mAudioType;
-        KFind*             mFind{nullptr};
+        KFind*             mFind {nullptr};
         QStringList        mHistory;         // list of history items for Find dialog
         QString            mLastPattern;     // pattern used in last search
         QString            mStartID;         // ID of first alarm searched if 'from cursor' was selected
-        long               mOptions{0};      // OR of find dialog options
+        long               mOptions {0};     // OR of find dialog options
         bool               mNoCurrentItem;   // there is no current item for the purposes of searching
-        bool               mFound{false};    // true if any matches have been found
+        bool               mFound {false};   // true if any matches have been found
 };
 
 #endif // FIND_H

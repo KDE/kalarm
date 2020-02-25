@@ -335,11 +335,11 @@ private:
     QHash<Akonadi::Item::Id, Akonadi::Item> mItemModifyJobQueue; // pending item modification jobs, invalid item = queue empty but job active
     QList<Akonadi::Item::Id>    mItemsBeingCreated;    // new items not fully initialised yet
     bool                        mValid;                // whether the collection is valid and belongs to an Akonadi resource
-    mutable bool                mHaveCollectionAttribute{false};  // whether the collection has a CollectionAttribute
-    bool                        mHaveCompatibilityAttribute{false};  // whether the collection has a CompatibilityAttribute
-    CalEvent::Types             mLastEnabled{CalEvent::EMPTY};  // last known enabled status
-    mutable bool                mNewEnabled{false};
-    bool                        mCollectionAttrChecked{false};  // CollectionAttribute has been processed first time
+    mutable bool                mHaveCollectionAttribute {false};  // whether the collection has a CollectionAttribute
+    bool                        mHaveCompatibilityAttribute {false};  // whether the collection has a CompatibilityAttribute
+    CalEvent::Types             mLastEnabled {CalEvent::EMPTY};  // last known enabled status
+    mutable bool                mNewEnabled {false};
+    bool                        mCollectionAttrChecked {false};  // CollectionAttribute has been processed first time
 };
 
 

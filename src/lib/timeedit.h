@@ -113,11 +113,11 @@ class TimeEdit : public QWidget
     private:
         void          setAmPmCombo(int am, int pm);
 
-        TimeSpinBox*  mSpinBox;          // always holds the 24-hour time
-        ComboBox*     mAmPm{nullptr};
-        int           mAmIndex{-1};      // mAmPm index to "am", or -1 if none
-        int           mPmIndex{-1};      // mAmPm index to "pm", or -1 if none
-        bool          mReadOnly{false};  // the widget is read only
+        TimeSpinBox*  mSpinBox;           // always holds the 24-hour time
+        ComboBox*     mAmPm {nullptr};
+        int           mAmIndex {-1};      // mAmPm index to "am", or -1 if none
+        int           mPmIndex {-1};      // mAmPm index to "pm", or -1 if none
+        bool          mReadOnly {false};  // the widget is read only
 };
 
 #endif // TIMEEDIT_H

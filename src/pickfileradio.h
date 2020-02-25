@@ -117,12 +117,12 @@ class PickFileRadio : public RadioButton
         bool          doPickFile(QString& file);
         bool          pickFileIfNone();
 
-        ButtonGroup*     mGroup;               // button group which radio button is in
-        LineEdit*        mEdit{nullptr};       // file name edit box, or null if none
-        QPushButton*     mButton;              // push button to pick a file
-        QString          mFile;                // saved file name (if mEdit is null)
-        QAbstractButton* mLastButton{nullptr}; // previous radio button selected
-        bool             mRevertButton{false}; // true to revert to the previous radio button selection
+        ButtonGroup*     mGroup;                // button group which radio button is in
+        LineEdit*        mEdit {nullptr};       // file name edit box, or null if none
+        QPushButton*     mButton;               // push button to pick a file
+        QString          mFile;                 // saved file name (if mEdit is null)
+        QAbstractButton* mLastButton {nullptr}; // previous radio button selected
+        bool             mRevertButton {false}; // true to revert to the previous radio button selection
 };
 
 #endif // PICKFILERADIO_H

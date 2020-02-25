@@ -67,7 +67,7 @@ class BirthdayDlg : public QDialog
         FontColourButton*     mFontColourButton;
         CheckBox*             mConfirmAck;
         LateCancelSelector*   mLateCancel;
-        SpecialActionsButton* mSpecialActionsButton{nullptr};
+        SpecialActionsButton* mSpecialActionsButton {nullptr};
         RepetitionButton*     mSubRepetition;
         QDialogButtonBox*     mButtonBox;
         QString               mPrefixText;   // last entered value of prefix text

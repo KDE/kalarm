@@ -58,7 +58,7 @@ class SpecialActionsButton : public QPushButton
         QString  mPostAction;
         KAEvent::ExtraActionOptions mOptions;
         bool     mEnableCheckboxes;
-        bool     mReadOnly{false};
+        bool     mReadOnly {false};
 };
 
 
@@ -85,7 +85,7 @@ class SpecialActions : public QWidget
         CheckBox*    mDontShowError;
         CheckBox*    mExecOnDeferral;
         bool         mEnableCheckboxes;   // enable checkboxes even if mPreAction is blank
-        bool         mReadOnly{false};
+        bool         mReadOnly {false};
 };
 
 

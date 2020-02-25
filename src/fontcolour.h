@@ -58,11 +58,11 @@ class FontColourChooser : public QWidget
         void              slotDefaultFontToggled(bool);
 
     private:
-        ColourButton*    mFgColourButton{nullptr};
+        ColourButton*    mFgColourButton {nullptr};
         ColourButton*    mBgColourButton;
         KFontChooser*    mFontChooser;
-        CheckBox*        mDefaultFont{nullptr};
-        bool             mReadOnly{false};
+        CheckBox*        mDefaultFont {nullptr};
+        bool             mReadOnly {false};
 };
 
 #endif

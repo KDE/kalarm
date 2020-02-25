@@ -62,8 +62,8 @@ class EventListView : public QTreeView
     private:
         void              findNext(bool forward);
 
-        Find*             mFind{nullptr};
-        bool              mEditOnSingleClick{false};
+        Find*             mFind {nullptr};
+        bool              mEditOnSingleClick {false};
 
         using QObject::event;   // prevent "hidden" warning
 };

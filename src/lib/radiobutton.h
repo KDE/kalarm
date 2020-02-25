@@ -88,9 +88,9 @@ class RadioButton : public QRadioButton
 
     private:
         Qt::FocusPolicy mFocusPolicy;           // default focus policy for the QRadioButton
-        QWidget*        mFocusWidget{nullptr};  // widget to receive focus when button is clicked on
+        QWidget*        mFocusWidget {nullptr}; // widget to receive focus when button is clicked on
         bool            mFocusWidgetEnable;     // enable focus widget before setting focus
-        bool            mReadOnly{false};       // value cannot be changed
+        bool            mReadOnly {false};      // value cannot be changed
 };
 
 #endif // RADIOBUTTON_H

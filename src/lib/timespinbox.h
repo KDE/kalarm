@@ -115,8 +115,8 @@ class TimeSpinBox : public SpinBox2
         int             mMinimumValue;       // real minimum value, excluding special value for "**:**"
         bool            m12Hour;             // use 12-hour clock
         bool            mPm;                 // use PM for manually entered values (with 12-hour clock)
-        bool            mInvalid{false};            // value is currently invalid (asterisks)
-        bool            mEnteredSetValue{false};    // to prevent infinite recursion in setValue()
+        bool            mInvalid {false};          // value is currently invalid (asterisks)
+        bool            mEnteredSetValue {false};  // to prevent infinite recursion in setValue()
 };
 
 #endif // TIMESPINBOX_H

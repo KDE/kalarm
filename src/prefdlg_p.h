@@ -70,7 +70,7 @@ class PrefsTabBase : public StackedScrollWidget
         static int     mIndentWidth;           // indent width for checkboxes etc.
         QVBoxLayout*   mTopLayout;
         QList<QLabel*> mLabels;                // labels to right-align
-        bool           mLabelsAligned{false};  // labels have been aligned
+        bool           mLabelsAligned {false}; // labels have been aligned
 };
 
 
@@ -151,7 +151,7 @@ class StorePrefTab : public PrefsTabBase
         QLabel*       mPurgeAfterLabel;
         QPushButton*  mClearArchived;
         bool          mOldKeepArchived;    // previous setting of keep-archived
-        bool          mCheckKeepChanges{false};
+        bool          mCheckKeepChanges {false};
 };
 
 
@@ -191,8 +191,8 @@ class EmailPrefTab : public PrefsTabBase
         QLineEdit*   mEmailBccAddress;
         QCheckBox*   mEmailQueuedNotify;
         QCheckBox*   mEmailCopyToKMail;
-        bool         mAddressChanged{false};
-        bool         mBccAddressChanged{false};
+        bool         mAddressChanged {false};
+        bool         mBccAddressChanged {false};
 };
 
 
@@ -261,10 +261,10 @@ class ViewPrefTab : public PrefsTabBase
         QTabWidget*   mTabs;
         ColourButton* mDisabledColour;
         ColourButton* mArchivedColour;
-        QCheckBox*    mShowInSystemTrayCheck{nullptr};
-        QGroupBox*    mShowInSystemTrayGroup{nullptr};
-        ButtonGroup*  mAutoHideSystemTray{nullptr};
-        TimePeriod*   mAutoHideSystemTrayPeriod{nullptr};
+        QCheckBox*    mShowInSystemTrayCheck {nullptr};
+        QGroupBox*    mShowInSystemTrayGroup {nullptr};
+        ButtonGroup*  mAutoHideSystemTray {nullptr};
+        TimePeriod*   mAutoHideSystemTrayPeriod {nullptr};
         QCheckBox*    mTooltipShowAlarms;
         QCheckBox*    mTooltipMaxAlarms;
         SpinBox*      mTooltipMaxAlarmCount;

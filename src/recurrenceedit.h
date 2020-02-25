@@ -123,7 +123,7 @@ class RecurrenceEdit : public QFrame
 
         // Main rule box and choices
         QStackedWidget*   mRuleStack;
-        Rule*             mRule{nullptr};       // current rule widget, or 0 if NoRule
+        Rule*             mRule {nullptr};       // current rule widget, or 0 if NoRule
         NoRule*           mNoRule;
         SubDailyRule*     mSubDailyRule;
         DailyRule*        mDailyRule;
@@ -139,11 +139,11 @@ class RecurrenceEdit : public QFrame
         RadioButton*      mWeeklyButton;
         RadioButton*      mMonthlyButton;
         RadioButton*      mYearlyButton;
-        RepeatType        mRuleButtonType{INVALID_RECUR};
-        bool              mDailyShown{false};   // daily rule has been displayed at some time or other
-        bool              mWeeklyShown{false};  // weekly rule has been displayed at some time or other
-        bool              mMonthlyShown{false}; // monthly rule has been displayed at some time or other
-        bool              mYearlyShown{false};  // yearly rule has been displayed at some time or other
+        RepeatType        mRuleButtonType {INVALID_RECUR};
+        bool              mDailyShown {false};   // daily rule has been displayed at some time or other
+        bool              mWeeklyShown {false};  // weekly rule has been displayed at some time or other
+        bool              mMonthlyShown {false}; // monthly rule has been displayed at some time or other
+        bool              mYearlyShown {false};  // yearly rule has been displayed at some time or other
 
         // Range
         QGroupBox*        mRangeButtonBox;
@@ -170,7 +170,7 @@ class RecurrenceEdit : public QFrame
         // Current start date and time
         KADateTime        mCurrStartDateTime;
         RepetitionButton* mSubRepetition;
-        bool              mNoEmitTypeChanged{true};  // suppress typeChanged() signal
+        bool              mNoEmitTypeChanged {true};  // suppress typeChanged() signal
         bool              mReadOnly;
 
         // Initial state of non-rule controls

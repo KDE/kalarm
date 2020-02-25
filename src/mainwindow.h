@@ -190,14 +190,14 @@ class MainWindow : public MainWindowBase, public KCalendarCore::Calendar::Calend
         QMenu*               mActionsMenu;
         QMenu*               mContextMenu;
         QMap<QAction*, int>  mUndoMenuIds;         // items in the undo/redo menu, in order of appearance
-        int                  mResourcesWidth{-1};  // width of resource selector widget
-        bool                 mHiddenTrayParent{false}; // on session restoration, hide this window
+        int                  mResourcesWidth {-1}; // width of resource selector widget
+        bool                 mHiddenTrayParent {false}; // on session restoration, hide this window
         bool                 mShowResources;       // show resource selector
         bool                 mShowArchived;        // include archived alarms in the displayed list
-        bool                 mShown{false};        // true once the window has been displayed
+        bool                 mShown {false};       // true once the window has been displayed
         bool                 mActionEnableEnable;  // Enable/Disable action is set to "Enable"
         bool                 mMenuError;           // error occurred creating menus: need to show error message
-        bool                 mResizing{false};     // window resize is in progress
+        bool                 mResizing {false};    // window resize is in progress
 };
 
 #endif // MAINWINDOW_H

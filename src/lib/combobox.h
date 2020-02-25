@@ -58,7 +58,7 @@ class ComboBox : public KComboBox
         void         keyPressEvent(QKeyEvent*) override;
         void         keyReleaseEvent(QKeyEvent*) override;
     private:
-        bool    mReadOnly{false};      // value cannot be changed
+        bool    mReadOnly {false};      // value cannot be changed
 };
 
 #endif // COMBOBOX_H

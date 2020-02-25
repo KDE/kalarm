@@ -69,10 +69,10 @@ class TrayWindow : public KStatusNotifierItem
         MainWindow*     mAssocMainWindow;     // main window associated with this, or null
         KToggleAction*  mActionEnabled;
         NewAlarmAction* mActionNew;
-        mutable AlarmListModel* mAlarmsModel{nullptr}; // active alarms sorted in time order
+        mutable AlarmListModel* mAlarmsModel {nullptr}; // active alarms sorted in time order
         QTimer*         mStatusUpdateTimer;
         QTimer*         mToolTipUpdateTimer;
-        bool            mHaveDisabledAlarms{false};  // some individually disabled alarms exist
+        bool            mHaveDisabledAlarms {false};  // some individually disabled alarms exist
 };
 
 #endif // TRAYWINDOW_H

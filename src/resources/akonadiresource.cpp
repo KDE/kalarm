@@ -76,7 +76,7 @@ private:
     };
     QHash<QString, ResourceCol> mAgentPaths;   // path, (resource identifier, collection ID) pairs
 };
-DuplicateResourceObject* AkonadiResource::mDuplicateResourceObject{nullptr};
+DuplicateResourceObject* AkonadiResource::mDuplicateResourceObject {nullptr};
 
 
 Resource AkonadiResource::create(const Akonadi::Collection& collection)

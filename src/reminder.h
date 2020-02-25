@@ -63,7 +63,7 @@ class Reminder : public QFrame
         TimeSelector*  mTime;
         CheckBox*      mOnceOnly;
         ComboBox*      mTimeSignCombo;
-        bool           mReadOnly{false};    // the widget is read only
+        bool           mReadOnly {false};   // the widget is read only
         bool           mOnceOnlyEnabled;    // 'mOnceOnly' checkbox is allowed to be enabled
 };
 

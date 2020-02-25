@@ -58,7 +58,7 @@ class PackedLayout : public QLayout
 
         QList<QLayoutItem*> mItems;
         Qt::Alignment       mAlignment;
-        mutable int         mWidthCached{0};
+        mutable int         mWidthCached {0};
         mutable int         mHeightCached;
 };
 

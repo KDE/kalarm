@@ -61,9 +61,9 @@ class LateCancelSelector : public QFrame
         QFrame*         mTimeSelectorFrame;
         TimeSelector*   mTimeSelector;      // displayed when late cancellation is selected
         CheckBox*       mAutoClose;
-        bool            mDateOnly{false};   // hours/minutes units not allowed
-        bool            mReadOnly{false};   // widget is read-only
-        bool            mAutoCloseShown{false};  // auto-close checkbox is visible
+        bool            mDateOnly {false};  // hours/minutes units not allowed
+        bool            mReadOnly {false};  // widget is read-only
+        bool            mAutoCloseShown {false};  // auto-close checkbox is visible
 };
 
 #endif // LATECANCEL_H

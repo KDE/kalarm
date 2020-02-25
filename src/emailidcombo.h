@@ -44,7 +44,7 @@ class EmailIdCombo : public KIdentityManagement::IdentityCombo
         void keyReleaseEvent(QKeyEvent*) override;
 
     private:
-        bool    mReadOnly{false};      // value cannot be changed
+        bool    mReadOnly {false};      // value cannot be changed
 };
 
 #endif // EMAILIDCOMBO_H

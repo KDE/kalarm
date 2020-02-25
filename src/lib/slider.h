@@ -74,7 +74,7 @@ class Slider : public QSlider
         void         keyReleaseEvent(QKeyEvent*) override;
 
     private:
-        bool    mReadOnly{false};    // value cannot be changed by the user
+        bool    mReadOnly {false};    // value cannot be changed by the user
 };
 
 #endif // SLIDER_H

@@ -30,14 +30,14 @@
 
 #include <KLocalizedString>
 
-Resources* Resources::mInstance{nullptr};
+Resources* Resources::mInstance {nullptr};
 
 // Copy of all ResourceType instances with valid ID, wrapped in the Resource
 // container which manages the instance.
 QHash<ResourceId, Resource> Resources::mResources;
 
-bool Resources::mCreated{false};
-bool Resources::mPopulated{false};
+bool Resources::mCreated {false};
+bool Resources::mPopulated {false};
 
 
 Resources* Resources::instance()

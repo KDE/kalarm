@@ -89,17 +89,17 @@ class ResourceSelector : public QFrame
         QPushButton*    mDeleteButton;
         QPushButton*    mEditButton;
         CalEvent::Type  mCurrentAlarmType;
-        QMenu*          mContextMenu{nullptr};
-        QAction*        mActionReload{nullptr};
-        QAction*        mActionShowDetails{nullptr};
-        QAction*        mActionSetColour{nullptr};
-        QAction*        mActionClearColour{nullptr};
-        QAction*        mActionEdit{nullptr};
-        QAction*        mActionUpdate{nullptr};
-        QAction*        mActionRemove{nullptr};
-        QAction*        mActionImport{nullptr};
-        QAction*        mActionExport{nullptr};
-        KToggleAction*  mActionSetDefault{nullptr};
+        QMenu*          mContextMenu {nullptr};
+        QAction*        mActionReload {nullptr};
+        QAction*        mActionShowDetails {nullptr};
+        QAction*        mActionSetColour {nullptr};
+        QAction*        mActionClearColour {nullptr};
+        QAction*        mActionEdit {nullptr};
+        QAction*        mActionUpdate {nullptr};
+        QAction*        mActionRemove {nullptr};
+        QAction*        mActionImport {nullptr};
+        QAction*        mActionExport {nullptr};
+        KToggleAction*  mActionSetDefault {nullptr};
 };
 
 #endif

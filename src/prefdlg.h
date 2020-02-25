@@ -72,7 +72,7 @@ class KAlarmPrefDlg : public KPageDialog
 
         static KAlarmPrefDlg* mInstance;
         StackedScrollGroup*   mTabScrollGroup;
-        bool                  mShown{false};
+        bool                  mShown {false};
         bool                  mValid;
 };
 
