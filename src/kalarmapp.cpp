@@ -453,18 +453,16 @@ int KAlarmApp::activateInstance(const QStringList& args, const QString& workingD
             case CommandOptions::EDIT:
                 // Edit a specified existing alarm.
                 // Open the calendar and wait for the calendar resources to be populated.
-                if (!initCheck(false)
-                ||  !waitUntilPopulated(options->eventId().resourceId(), AKONADI_TIMEOUT))
+                if (!initCheck(false))
                     exitCode = 1;
                 else
                 {
-                    if (!KAlarm::editAlarmById(options->eventId()))
-                    {
-                        CommandOptions::printError(xi18nc("@info:shell", "%1: Event <resource>%2</resource> not found, or not editable", options->commandName(), options->eventId().eventId()));
-                        exitCode = 1;
-                    }
-                    else
-                        createOnlyMainWindow();   // prevent the application from quitting
+                    mCommandOption = options->commandName();
+                    if (firstInstance)
+                        mEditingCmdLineAlarm = 0x10;   // want to redisplay alarms if successful
+                    mActionQueue.enqueue(ActionQEntry(QueuedAction::Edit, options->eventId()));
+                    startProcessQueue();      // start processing the execution queue
+                    dontRedisplay = true;
                 }
                 break;
 
@@ -541,13 +539,13 @@ int KAlarmApp::activateInstance(const QStringList& args, const QString& workingD
                             break;
                     }
 
-                    createOnlyMainWindow();   // prevent the application from quitting
-
                     // Execute the edit dialogue. Note that if no other instance of KAlarm is
                     // running, this new instance will not exit after the dialogue is closed.
                     // This is deliberate, since exiting would mean that KAlarm wouldn't
                     // trigger the new alarm.
                     KAlarm::execNewAlarmDlg(editDlg);
+
+                    createOnlyMainWindow();   // prevent the application from quitting
                 }
                 break;
             }
@@ -557,13 +555,13 @@ int KAlarmApp::activateInstance(const QStringList& args, const QString& workingD
                     exitCode = 1;
                 else
                 {
-                    createOnlyMainWindow();   // prevent the application from quitting
-
                     // Execute the edit dialogue. Note that if no other instance of KAlarm is
                     // running, this new instance will not exit after the dialogue is closed.
                     // This is deliberate, since exiting would mean that KAlarm wouldn't
                     // trigger the new alarm.
                     KAlarm::editNewAlarm(options->templateName());
+
+                    createOnlyMainWindow();   // prevent the application from quitting
                 }
                 break;
 
@@ -941,8 +939,12 @@ void KAlarmApp::processQueue()
         // Process queued events
         while (!mActionQueue.isEmpty())
         {
-            // Can't add a new event until resources have been populated.
-            if (!Resources::allPopulated())
+            ActionQEntry& entry = mActionQueue.head();
+
+            // Can't process the first action until its resource has been populated.
+            const ResourceId id = entry.eventId.resourceId();
+            if ((id <  0 && !Resources::allPopulated())
+            ||  (id >= 0 && !Resources::resource(id).isPopulated()))
             {
                 // If resource population has timed out, discard all queued events.
                 if (mResourcesTimedOut)
@@ -953,7 +955,7 @@ void KAlarmApp::processQueue()
                 break;
             }
 
-            ActionQEntry& entry = mActionQueue.head();
+            // Process the first action in the queue.
             const bool findUniqueId  = int(entry.action) & int(QueuedAction::FindId);
             const bool exitAfter     = int(entry.action) & int(QueuedAction::Exit);
             const QueuedAction action = static_cast<QueuedAction>(int(entry.action) & int(QueuedAction::ActionMask));
@@ -983,9 +985,36 @@ void KAlarmApp::processQueue()
             }
             else
             {
-                ok = handleEvent(entry.eventId, action, findUniqueId);
-                if (!ok  &&  exitAfter)
-                    CommandOptions::printError(xi18nc("@info:shell", "%1: Event <resource>%2</resource> not found, or not unique", mCommandOption, entry.eventId.eventId()));
+                if (action == QueuedAction::Edit)
+                {
+                    int editingCmdLineAlarm = mEditingCmdLineAlarm & 3;
+                    bool keepQueued = editingCmdLineAlarm <= 1;
+                    switch (editingCmdLineAlarm)
+                    {
+                        case 0:
+                            // Initiate editing an alarm specified on the command line.
+                            mEditingCmdLineAlarm |= 1;
+                            QTimer::singleShot(0, this, &KAlarmApp::slotEditAlarmById);
+                            break;
+                        case 1:
+                            // Currently editing the alarm.
+                            break;
+                        case 2:
+                            // The edit has completed.
+                            mEditingCmdLineAlarm = 0;
+                            break;
+                        default:
+                            break;
+                    }
+                    if (keepQueued)
+                        break;
+                }
+                else
+                {
+                    ok = handleEvent(entry.eventId, action, findUniqueId);
+                    if (!ok  &&  exitAfter)
+                        CommandOptions::printError(xi18nc("@info:shell", "%1: Event <resource>%2</resource> not found, or not unique", mCommandOption, entry.eventId.eventId()));
+                }
             }
 
             if (exitAfter)
@@ -1014,8 +1043,11 @@ void KAlarmApp::processQueue()
 
         mProcessingQueue = false;
 
-        // Schedule the application to be woken when the next alarm is due
-        checkNextDueAlarm();
+        if (!mEditingCmdLineAlarm)
+        {
+            // Schedule the application to be woken when the next alarm is due
+            checkNextDueAlarm();
+        }
     }
 }
 
@@ -1315,6 +1347,32 @@ void KAlarmApp::checkArchivedCalendar()
             // other processing.
             QTimer::singleShot(0, this, &KAlarmApp::promptArchivedCalendar);
         }
+    }
+}
+
+/******************************************************************************
+* Edit an alarm specified on the command line.
+*/
+void KAlarmApp::slotEditAlarmById()
+{
+    qCDebug(KALARM_LOG) << "KAlarmApp::slotEditAlarmById";
+    ActionQEntry& entry = mActionQueue.head();
+    if (!KAlarm::editAlarmById(entry.eventId))
+    {
+        CommandOptions::printError(xi18nc("@info:shell", "%1: Event <resource>%2</resource> not found, or not editable", mCommandOption, entry.eventId.eventId()));
+        mActionQueue.clear();
+        quitIf(1);
+    }
+    else
+    {
+        createOnlyMainWindow();    // prevent the application from quitting
+        if (mEditingCmdLineAlarm & 0x10)
+        {
+            mRedisplayAlarms = false;
+            MessageWin::redisplayAlarms();
+        }
+        mEditingCmdLineAlarm = 2;  // indicate edit completion
+        QTimer::singleShot(0, this, &KAlarmApp::processQueue);
     }
 }
 
@@ -2552,39 +2610,6 @@ bool KAlarmApp::initCheck(bool calendarOnly)
         startProcessQueue();      // start processing the execution queue
 
     return true;
-}
-
-/******************************************************************************
-* Wait for one or all enabled resources to be populated.
-* Reply = true if successful.
-*/
-bool KAlarmApp::waitUntilPopulated(ResourceId id, int timeout)
-{
-    qCDebug(KALARM_LOG) << "KAlarmApp::waitUntilPopulated" << id;
-    const Resource res = Resources::resource(id);
-    if ((id <  0 && !Resources::allPopulated())
-    ||  (id >= 0 && !res.isPopulated()))
-    {
-        // Use AutoQPointer to guard against crash on application exit while
-        // the event loop is still running. It prevents double deletion (both
-        // on deletion of parent, and on return from this function).
-        AutoQPointer<QEventLoop> loop = new QEventLoop(DataModel::allAlarmListModel());
-//TODO: The choice of parent object for QEventLoop can prevent EntityTreeModel signals
-//      from activating connected slots in AkonadiDataModel, which prevents resources
-//      from being informed that collections have loaded. Need to find a better parent
-//      object - Qt item models seem to work, but what else?
-//      These don't work: Resources::instance(), qApp(), theApp(), MainWindow::mainMainWindow(), AlarmCalendar::resources(), QStandardItemModel.
-//      These do work: CollectionControlModel::instance(), AlarmListModel::all().
-        if (id < 0)
-            connect(Resources::instance(), &Resources::resourcesPopulated, loop, &QEventLoop::quit);
-        else
-            connect(Resources::instance(), &Resources::resourcePopulated, [&loop, &id](Resource& r) {
-                    if (r.id() == id) loop->quit(); });
-        if (timeout > 0)
-            QTimer::singleShot(timeout * 1000, loop, &QEventLoop::quit);
-        loop->exec();
-    }
-    return (id <  0) ? Resources::allPopulated() : res.isPopulated();
 }
 
 /******************************************************************************

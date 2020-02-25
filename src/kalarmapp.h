@@ -133,6 +133,7 @@ class KAlarmApp : public QApplication
         void               slotFeb29TypeChanged(Feb29Type);
         void               slotResourcesTimeout();
         void               slotResourcesCreated();
+        void               slotEditAlarmById();
         void               checkWritableCalendar();
         void               promptArchivedCalendar();
         void               slotMessageFontChanged(const QFont&);
@@ -151,7 +152,8 @@ class KAlarmApp : public QApplication
             Handle     = 0x01,  // if the alarm is due, execute it and then reschedule it
             Trigger    = 0x02,  // execute the alarm regardless, and then reschedule it if it's already due
             Cancel     = 0x03,  // delete the alarm
-            List       = 0x04,  // list all alarms
+            Edit       = 0x04,  // edit an alarm (command line option)
+            List       = 0x05,  // list all alarms (command line option)
             // Modifier flags
             FindId     = 0x10,  // search all resources for unique event ID
             Exit       = 0x20   // exit application after executing action
@@ -191,7 +193,6 @@ class KAlarmApp : public QApplication
         bool               initialiseTimerResources();
         int                activateInstance(const QStringList& args, const QString& workingDirectory, QString* outputText);
         bool               initCheck(bool calendarOnly = false);
-        bool               waitUntilPopulated(ResourceId, int timeout);
         bool               quitIf(int exitCode, bool force = false);
         void               createOnlyMainWindow();
         bool               checkSystemTray();
@@ -217,35 +218,36 @@ class KAlarmApp : public QApplication
         void               clearEventCommandError(const KAEvent&, KAEvent::CmdErrType) const;
         ProcData*          findCommandProcess(const QString& eventId) const;
 
-        static KAlarmApp*  mInstance;              // the one and only KAlarmApp instance
-        static int         mActiveCount;           // number of active instances without main windows
-        static int         mFatalError;            // a fatal error has occurred - just wait to exit
-        static QString     mFatalMessage;          // fatal error message to output
-        QString            mCommandOption;         // command option used on command line
-        bool               mInitialised{false};    // initialisation complete: ready to process execution queue
-        bool               mRedisplayAlarms{false}; // need to redisplay alarms when collection tree fetched
-        bool               mQuitting{false};       // a forced quit is in progress
-        bool               mReadOnly{false};       // only read-only access to calendars is needed
-        QString            mActivateArg0;          // activate()'s first arg the first time it was called
-        DBusHandler*       mDBusHandler;           // the parent of the main DCOP receiver object
-        TrayWindow*        mTrayWindow{nullptr};   // active system tray icon
-        QTimer*            mAlarmTimer{nullptr};   // activates KAlarm when next alarm is due
-        QColor             mPrefsArchivedColour;   // archived alarms text colour
-        int                mArchivedPurgeDays{-1}; // how long to keep archived alarms, 0 = don't keep, -1 = keep indefinitely
-        int                mPurgeDaysQueued{-1};   // >= 0 to purge the archive calendar from KAlarmApp::processLoop()
-        QVector<ResourceId> mPendingPurges;        // new resources which may need to be purged when populated
-        QList<ProcData*>   mCommandProcesses;      // currently active command alarm processes
-        QQueue<ActionQEntry> mActionQueue;         // queued commands and actions
-        int                mPendingQuitCode;       // exit code for a pending quit
-        bool               mPendingQuit{false};    // quit once the DCOP command and shell command queues have been processed
-        bool               mCancelRtcWake{false};  // cancel RTC wake on quitting
-        bool               mProcessingQueue{false}; // a mActionQueue entry is currently being processed
-        bool               mNoSystemTray;          // no system tray exists
-        bool               mOldShowInSystemTray;   // showing in system tray was selected
-        bool               mAlarmsEnabled{true};   // alarms are enabled
-        bool               mKOrganizerEnabled;     // KOrganizer options are enabled (korganizer exists)
-        bool               mWindowFocusBroken;     // keyboard focus transfer between windows doesn't work
-        bool               mResourcesTimedOut{false}; // timeout has expired for populating resources
+        static KAlarmApp*  mInstance;               // the one and only KAlarmApp instance
+        static int         mActiveCount;            // number of active instances without main windows
+        static int         mFatalError;             // a fatal error has occurred - just wait to exit
+        static QString     mFatalMessage;           // fatal error message to output
+        QString            mCommandOption;          // command option used on command line
+        bool               mInitialised {false};    // initialisation complete: ready to process execution queue
+        bool               mRedisplayAlarms {false}; // need to redisplay alarms when collection tree fetched
+        bool               mQuitting {false};       // a forced quit is in progress
+        bool               mReadOnly {false};       // only read-only access to calendars is needed
+        QString            mActivateArg0;           // activate()'s first arg the first time it was called
+        DBusHandler*       mDBusHandler;            // the parent of the main DCOP receiver object
+        TrayWindow*        mTrayWindow {nullptr};   // active system tray icon
+        QTimer*            mAlarmTimer {nullptr};   // activates KAlarm when next alarm is due
+        QColor             mPrefsArchivedColour;    // archived alarms text colour
+        int                mArchivedPurgeDays {-1}; // how long to keep archived alarms, 0 = don't keep, -1 = keep indefinitely
+        int                mPurgeDaysQueued {-1};   // >= 0 to purge the archive calendar from KAlarmApp::processLoop()
+        QVector<ResourceId> mPendingPurges;         // new resources which may need to be purged when populated
+        QList<ProcData*>   mCommandProcesses;       // currently active command alarm processes
+        QQueue<ActionQEntry> mActionQueue;          // queued commands and actions
+        int                mEditingCmdLineAlarm {0}; // whether currently editing alarm specified on command line
+        int                mPendingQuitCode;        // exit code for a pending quit
+        bool               mPendingQuit {false};    // quit once the DCOP command and shell command queues have been processed
+        bool               mCancelRtcWake {false};   // cancel RTC wake on quitting
+        bool               mProcessingQueue {false}; // a mActionQueue entry is currently being processed
+        bool               mNoSystemTray;           // no system tray exists
+        bool               mOldShowInSystemTray;    // showing in system tray was selected
+        bool               mAlarmsEnabled {true};   // alarms are enabled
+        bool               mKOrganizerEnabled;      // KOrganizer options are enabled (korganizer exists)
+        bool               mWindowFocusBroken;      // keyboard focus transfer between windows doesn't work
+        bool               mResourcesTimedOut {false}; // timeout has expired for populating resources
 };
 
 inline KAlarmApp* theApp()  { return KAlarmApp::instance(); }

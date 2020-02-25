@@ -39,7 +39,8 @@ using namespace KAlarmCal;
  */
 struct EventId : public QPair<ResourceId, QString>
 {
-    EventId() {}
+    EventId()
+        : QPair<ResourceId, QString>(-1, QString()) {}
     EventId(ResourceId c, const QString& e)
         : QPair<ResourceId, QString>(c, e) {}
     explicit EventId(const KAEvent& event)
