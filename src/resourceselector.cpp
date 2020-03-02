@@ -101,9 +101,6 @@ ResourceSelector::ResourceSelector(QWidget* parent)
     connect(mEditButton, &QPushButton::clicked, this, &ResourceSelector::editResource);
     connect(mDeleteButton, &QPushButton::clicked, this, &ResourceSelector::removeResource);
 
-    connect(Resources::instance(), &Resources::resourceRemoved,
-                             this, &ResourceSelector::selectionChanged);
-
     connect(mAlarmType, static_cast<void (QComboBox::*)(int)>(&QComboBox::activated), this, &ResourceSelector::alarmTypeSelected);
     QTimer::singleShot(0, this, SLOT(alarmTypeSelected()));
 

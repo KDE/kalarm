@@ -928,12 +928,19 @@ void MessageWin::saveProperties(KConfigGroup& config)
         config.writeEntry("ConfirmAck", mConfirmAck);
         if (mDateTime.isValid())
         {
-//TODO: Write KADateTime when it becomes possible
             config.writeEntry("Time", mDateTime.effectiveDateTime());
             config.writeEntry("DateOnly", mDateTime.isDateOnly());
             QByteArray zone;
             if (mDateTime.isUtc())
                 zone = "UTC";
+            else if (mDateTime.isOffsetFromUtc())
+            {
+                int offset = mDateTime.utcOffset();
+                if (offset >= 0)
+                    zone = '+' + QByteArray::number(offset);
+                else
+                    zone = QByteArray::number(offset);
+            }
             else if (mDateTime.timeType() == KADateTime::TimeZone)
             {
                 const QTimeZone tz = mDateTime.timeZone();
@@ -994,6 +1001,8 @@ void MessageWin::readProperties(const KConfigGroup& config)
         timeSpec = KADateTime::LocalZone;
     else if (zoneId == "UTC")
         timeSpec = KADateTime::UTC;
+    else if (zoneId.startsWith('+')  ||  zoneId.startsWith('-'))
+        timeSpec.setType(KADateTime::OffsetFromUTC, zoneId.toInt());
     else
         timeSpec = QTimeZone(zoneId);
     mDateTime = KADateTime(dt.date(), dt.time(), timeSpec);
