@@ -582,7 +582,11 @@ KAEventPrivate::KAEventPrivate(const KCalendarCore::Event::Ptr &event)
     mCategory               = CalEvent::status(event, &param);
     if (mCategory == CalEvent::DISPLAYING) {
         // It's a displaying calendar event - set values specific to displaying alarms
+#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
         const QStringList params = param.split(SC, QString::KeepEmptyParts);
+#else
+        const QStringList params = param.split(SC, Qt::KeepEmptyParts);
+#endif
         int n = params.count();
         if (n) {
             const qlonglong id = params[0].toLongLong(&ok);
@@ -612,7 +616,11 @@ KAEventPrivate::KAEventPrivate(const KCalendarCore::Event::Ptr &event)
 
     bool dateOnly = false;
     bool localZone = false;
+#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
     QStringList flags = event->customProperty(KACalendar::APPNAME, FLAGS_PROPERTY).split(SC, QString::SkipEmptyParts);
+#else
+    QStringList flags = event->customProperty(KACalendar::APPNAME, FLAGS_PROPERTY).split(SC, Qt::SkipEmptyParts);
+#endif
     flags << QString() << QString();    // to avoid having to check for end of list
     for (int i = 0, end = flags.count() - 1;  i < end;  ++i) {
         QString flag = flags.at(i);
@@ -4041,7 +4049,11 @@ void KAEventPrivate::readAlarm(const Alarm::Ptr &alarm, AlarmData &data, bool au
         }
     }
     QString property = alarm->customProperty(KACalendar::APPNAME, KAEventPrivate::FLAGS_PROPERTY);
+#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
     const QStringList flags = property.split(KAEventPrivate::SC, QString::SkipEmptyParts);
+#else
+    const QStringList flags = property.split(KAEventPrivate::SC, Qt::SkipEmptyParts);
+#endif
     switch (alarm->type()) {
     case Alarm::Procedure:
         data.action        = KAAlarm::COMMAND;
@@ -4074,7 +4086,11 @@ void KAEventPrivate::readAlarm(const Alarm::Ptr &alarm, AlarmData &data, bool au
             data.cleanText = AlarmText::fromCalendarText(alarm->text(), data.isEmailText);
         }
         const QString property = alarm->customProperty(KACalendar::APPNAME, KAEventPrivate::FONT_COLOUR_PROPERTY);
+#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
         const QStringList list = property.split(QLatin1Char(';'), QString::KeepEmptyParts);
+#else
+        const QStringList list = property.split(QLatin1Char(';'), Qt::KeepEmptyParts);
+#endif
         data.bgColour = QColor(255, 255, 255);   // white
         data.fgColour = QColor(0, 0, 0);         // black
         const int n = list.count();
@@ -4118,7 +4134,11 @@ void KAEventPrivate::readAlarm(const Alarm::Ptr &alarm, AlarmData &data, bool au
             bool ok;
             float fadeVolume;
             int   fadeSecs = 0;
+#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
             const QStringList list = property.split(QLatin1Char(';'), QString::KeepEmptyParts);
+#else
+            const QStringList list = property.split(QLatin1Char(';'), Qt::KeepEmptyParts);
+#endif
             data.soundVolume = list[0].toFloat(&ok);
             if (!ok  ||  data.soundVolume > 1.0f) {
                 data.soundVolume = -1;
@@ -4153,7 +4173,11 @@ void KAEventPrivate::readAlarm(const Alarm::Ptr &alarm, AlarmData &data, bool au
     bool repeatSound  = false;
     data.type = MAIN_ALARM;
     property = alarm->customProperty(KACalendar::APPNAME, KAEventPrivate::TYPE_PROPERTY);
+#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
     const QStringList types = property.split(QLatin1Char(','), QString::SkipEmptyParts);
+#else
+    const QStringList types = property.split(QLatin1Char(','), Qt::SkipEmptyParts);
+#endif
     for (int i = 0, end = types.count();  i < end;  ++i) {
         const QString type = types[i];
         if (type == KAEventPrivate::AT_LOGIN_TYPE) {
@@ -5346,7 +5370,11 @@ bool KAEvent::convertKCalEvents(const Calendar::Ptr &calendar, int calendarVersi
              * offsets to zero, and convert deferral alarm offsets to be relative to
              * the next recurrence.
              */
+#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
             const QStringList flags = event->customProperty(KACalendar::APPNAME, KAEventPrivate::FLAGS_PROPERTY).split(KAEventPrivate::SC, QString::SkipEmptyParts);
+#else
+            const QStringList flags = event->customProperty(KACalendar::APPNAME, KAEventPrivate::FLAGS_PROPERTY).split(KAEventPrivate::SC, Qt::SkipEmptyParts);
+#endif
             const bool dateOnly = flags.contains(KAEventPrivate::DATE_ONLY_FLAG);
             KADateTime startDateTime(event->dtStart());
             if (dateOnly) {
@@ -5368,7 +5396,11 @@ bool KAEvent::convertKCalEvents(const Calendar::Ptr &calendar, int calendarVersi
                 //  - DISPLAYING_TYPE
                 bool mainAlarm = true;
                 QString property = alarm->customProperty(KACalendar::APPNAME, KAEventPrivate::TYPE_PROPERTY);
+#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
                 const QStringList types = property.split(QLatin1Char(','), QString::SkipEmptyParts);
+#else
+                const QStringList types = property.split(QLatin1Char(','), Qt::SkipEmptyParts);
+#endif
                 for (const QString &type : types) {
                     if (type == KAEventPrivate::AT_LOGIN_TYPE
                     ||  type == KAEventPrivate::TIME_DEFERRAL_TYPE
@@ -5415,7 +5447,11 @@ bool KAEvent::convertKCalEvents(const Calendar::Ptr &calendar, int calendarVersi
                         continue;
                     }
                     const QString property = alarm->customProperty(KACalendar::APPNAME, KAEventPrivate::TYPE_PROPERTY);
+#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
                     const QStringList types = property.split(QLatin1Char(','), QString::SkipEmptyParts);
+#else
+                    const QStringList types = property.split(QLatin1Char(','), Qt::SkipEmptyParts);
+#endif
                     for (const QString &type : types) {
                         if (type == KAEventPrivate::TIME_DEFERRAL_TYPE
                         ||  type == KAEventPrivate::DATE_DEFERRAL_TYPE) {
@@ -5483,13 +5519,21 @@ bool KAEvent::convertKCalEvents(const Calendar::Ptr &calendar, int calendarVersi
             const QString prop = event->customProperty(KACalendar::APPNAME, ARCHIVE_PROPERTY);
             if (!prop.isEmpty()) {
                 // Convert the event's ARCHIVE property to parameters in the FLAGS property
+#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
                 flags = event->customProperty(KACalendar::APPNAME, KAEventPrivate::FLAGS_PROPERTY).split(KAEventPrivate::SC, QString::SkipEmptyParts);
+#else
+                flags = event->customProperty(KACalendar::APPNAME, KAEventPrivate::FLAGS_PROPERTY).split(KAEventPrivate::SC, Qt::SkipEmptyParts);
+#endif
                 flags << KAEventPrivate::ARCHIVE_FLAG;
                 flagsValid = true;
                 if (prop != QLatin1String("0")) { // "0" was a dummy parameter if no others were present
                     // It's the archive property containing a reminder time and/or repeat-at-login flag.
                     // This was present when no reminder/at-login alarm was pending.
+#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
                     const QStringList list = prop.split(KAEventPrivate::SC, QString::SkipEmptyParts);
+#else
+                    const QStringList list = prop.split(KAEventPrivate::SC, Qt::SkipEmptyParts);
+#endif
                     for (const QString &pr : list) {
                         if (pr == KAEventPrivate::AT_LOGIN_TYPE) {
                             flags << KAEventPrivate::AT_LOGIN_TYPE;
@@ -5533,7 +5577,11 @@ bool KAEvent::convertKCalEvents(const Calendar::Ptr &calendar, int calendarVersi
                     continue;
                 }
                 property = alarm->customProperty(KACalendar::APPNAME, KAEventPrivate::TYPE_PROPERTY);
+#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
                 QStringList types = property.split(QChar::fromLatin1(','), QString::SkipEmptyParts);
+#else
+                QStringList types = property.split(QChar::fromLatin1(','), Qt::SkipEmptyParts);
+#endif
                 const int r = types.indexOf(REMINDER_ONCE_TYPE);
                 if (r >= 0) {
                     // Move reminder-once indicator from the alarm to the event's FLAGS property
@@ -5555,7 +5603,11 @@ bool KAEvent::convertKCalEvents(const Calendar::Ptr &calendar, int calendarVersi
             if (!reminder.isEmpty()) {
                 // Write reminder parameters into the event's FLAGS property
                 if (!flagsValid) {
+#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
                     flags = event->customProperty(KACalendar::APPNAME, KAEventPrivate::FLAGS_PROPERTY).split(KAEventPrivate::SC, QString::SkipEmptyParts);
+#else
+                    flags = event->customProperty(KACalendar::APPNAME, KAEventPrivate::FLAGS_PROPERTY).split(KAEventPrivate::SC, Qt::SkipEmptyParts);
+#endif
                 }
                 if (!flags.contains(KAEventPrivate::REMINDER_TYPE)) {
                     flags += KAEventPrivate::REMINDER_TYPE;
@@ -5583,7 +5635,11 @@ bool KAEventPrivate::convertStartOfDay(const Event::Ptr &event)
 {
     bool changed = false;
     const QTime midnight(0, 0);
+#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
     const QStringList flags = event->customProperty(KACalendar::APPNAME, KAEventPrivate::FLAGS_PROPERTY).split(KAEventPrivate::SC, QString::SkipEmptyParts);
+#else
+    const QStringList flags = event->customProperty(KACalendar::APPNAME, KAEventPrivate::FLAGS_PROPERTY).split(KAEventPrivate::SC, Qt::SkipEmptyParts);
+#endif
     if (flags.contains(KAEventPrivate::DATE_ONLY_FLAG)) {
         // It's an untimed event, so fix it
         const QDateTime oldDt = event->dtStart();
