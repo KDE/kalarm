@@ -10,14 +10,7 @@ add_subdirectory(kconf_update)
 
 set(libkalarm_common_SRCS)
 
-if (ECM_VERSION VERSION_LESS "5.68.0")
-    ecm_qt_declare_logging_category(libkalarm_common_SRCS
-                                    HEADER kalarm_debug.h
-                                    IDENTIFIER KALARM_LOG
-                                    CATEGORY_NAME org.kde.pim.kalarm
-                                    DEFAULT_SEVERITY Warning)
-else()
-    ecm_qt_declare_logging_category(libkalarm_common_SRCS
+ecm_qt_declare_logging_category(libkalarm_common_SRCS
                                     HEADER kalarm_debug.h
                                     IDENTIFIER KALARM_LOG
                                     CATEGORY_NAME org.kde.pim.kalarm
@@ -26,7 +19,6 @@ else()
                                     OLD_CATEGORY_NAMES log_kalarm
                                     EXPORT KALARM
                                     )
-endif()
 
 
 ########### next target ###############
