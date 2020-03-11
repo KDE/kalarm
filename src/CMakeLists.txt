@@ -16,15 +16,11 @@ set(kalarmcal_LIB_SRCS
     eventattribute.cpp
 )
 
-if (ECM_VERSION VERSION_LESS "5.68.0")
-    ecm_qt_declare_logging_category(kalarmcal_LIB_SRCS HEADER kalarmcal_debug.h IDENTIFIER KALARMCAL_LOG CATEGORY_NAME org.kde.pim.kalarmcal)
-else()
-    ecm_qt_declare_logging_category(kalarmcal_LIB_SRCS HEADER kalarmcal_debug.h IDENTIFIER KALARMCAL_LOG CATEGORY_NAME org.kde.pim.kalarmcal
+ecm_qt_declare_logging_category(kalarmcal_LIB_SRCS HEADER kalarmcal_debug.h IDENTIFIER KALARMCAL_LOG CATEGORY_NAME org.kde.pim.kalarmcal
         DESCRIPTION "kalarmcal (kalarmcal)"
         OLD_CATEGORY_NAMES log_kalarmcal
         EXPORT KALARMCAL
     )
-endif()
 
 
 add_library(KF5AlarmCalendar ${kalarmcal_LIB_SRCS})
