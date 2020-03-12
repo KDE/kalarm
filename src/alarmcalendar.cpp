@@ -40,6 +40,7 @@
 #include <KJobWidgets>
 #include <KFileItem>
 #include <KSharedConfig>
+#include <kio_version.h>
 
 #include <QTemporaryFile>
 #include <QStandardPaths>
@@ -198,7 +199,11 @@ bool AlarmCalendar::open()
 
         // Check for file's existence, assuming that it does exist when uncertain,
         // to avoid overwriting it.
+#if KIO_VERSION < QT_VERSION_CHECK(5, 69, 0)
         auto statJob = KIO::stat(mUrl, KIO::StatJob::SourceSide, 2);
+#else
+        auto statJob = KIO::statDetails(mUrl, KIO::StatJob::SourceSide, KIO::StatDetail::StatDefaultDetails);
+#endif
         KJobWidgets::setWindow(statJob, MainWindow::mainMainWindow());
         if (!statJob->exec() ||  load() == 0)
         {
@@ -763,8 +768,11 @@ bool AlarmCalendar::exportAlarms(const KAEvent::List& events, QWidget* parent)
     FileStorage::Ptr calStorage(new FileStorage(calendar, file));
     if (append  &&  !calStorage->load())
     {
-        KIO::UDSEntry uds;
+#if KIO_VERSION < QT_VERSION_CHECK(5, 69, 0)
         auto statJob = KIO::stat(url, KIO::StatJob::SourceSide, 2);
+#else
+        auto statJob = KIO::statDetails(url, KIO::StatJob::SourceSide, KIO::StatDetail::StatDefaultDetails);
+#endif
         KJobWidgets::setWindow(statJob, parent);
         statJob->exec();
         KFileItem fi(statJob->statResult(), url);

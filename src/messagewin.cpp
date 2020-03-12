@@ -21,6 +21,7 @@
 #include "messagewin.h"
 #include "messagewin_p.h"
 #include "config-kalarm.h"
+#include <kio_version.h>
 
 #include "alarmcalendar.h"
 #include "deferdlg.h"
@@ -397,7 +398,11 @@ void MessageWin::initView()
                 // Display contents of file
                 const QUrl url = QUrl::fromUserInput(mMessage, QString(), QUrl::AssumeLocalFile);
 
-                auto statJob =  KIO::stat(url, KIO::StatJob::SourceSide, 0, KIO::HideProgressInfo);
+#if KIO_VERSION < QT_VERSION_CHECK(5, 69, 0)
+                auto statJob = KIO::stat(url, KIO::StatJob::SourceSide, 0, KIO::HideProgressInfo);
+#else
+                auto statJob = KIO::statDetails(url, KIO::StatJob::SourceSide, KIO::StatDetail::Basic, KIO::HideProgressInfo);
+#endif
                 const bool exists = statJob->exec();
                 const bool isDir = statJob->statResult().isDir();
 
