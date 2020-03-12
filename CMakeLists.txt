@@ -48,8 +48,8 @@ find_package(KF5CalendarUtils ${CALENDARUTILS_LIB_VERSION} CONFIG REQUIRED)
 
 add_definitions(-DQT_NO_FOREACH)
 if (EXISTS "${CMAKE_SOURCE_DIR}/.git")
-   add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0x060000)
-   add_definitions(-DKF_DISABLE_DEPRECATED_BEFORE_AND_AT=0x060000)
+   add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0x050e00)
+   add_definitions(-DKF_DISABLE_DEPRECATED_BEFORE_AND_AT=0x058000)
 endif()
 
 ########### Targets ###########
