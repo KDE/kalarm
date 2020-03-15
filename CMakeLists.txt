@@ -26,9 +26,9 @@ include(ECMQtDeclareLoggingCategory)
 
 set(KALARM_LIB_VERSION ${PIM_VERSION})
 
-set(CALENDARUTILS_LIB_VERSION "5.13.40")
-set(IDENTITYMANAGER_LIB_VERSION "5.13.40")
-set(AKONADI_LIB_VERSION "5.13.40")
+set(CALENDARUTILS_LIB_VERSION "5.13.80")
+set(IDENTITYMANAGER_LIB_VERSION "5.13.80")
+set(AKONADI_LIB_VERSION "5.13.80")
 ecm_setup_version(PROJECT VARIABLE_PREFIX KALARMCAL
                         VERSION_HEADER "${CMAKE_CURRENT_BINARY_DIR}/kalarmcal_version.h"
                         PACKAGE_VERSION_FILE "${CMAKE_CURRENT_BINARY_DIR}/KF5AlarmCalendarConfigVersion.cmake"
@@ -49,7 +49,7 @@ find_package(KF5CalendarUtils ${CALENDARUTILS_LIB_VERSION} CONFIG REQUIRED)
 add_definitions(-DQT_NO_FOREACH)
 if (EXISTS "${CMAKE_SOURCE_DIR}/.git")
    add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0x050e00)
-   add_definitions(-DKF_DISABLE_DEPRECATED_BEFORE_AND_AT=0x058000)
+   add_definitions(-DKF_DISABLE_DEPRECATED_BEFORE_AND_AT=0x054400)
 endif()
 
 ########### Targets ###########
