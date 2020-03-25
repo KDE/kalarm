@@ -401,7 +401,7 @@ void MessageWin::initView()
 #if KIO_VERSION < QT_VERSION_CHECK(5, 69, 0)
                 auto statJob = KIO::stat(url, KIO::StatJob::SourceSide, 0, KIO::HideProgressInfo);
 #else
-                auto statJob = KIO::statDetails(url, KIO::StatJob::SourceSide, KIO::StatDetail::Basic, KIO::HideProgressInfo);
+                auto statJob = KIO::statDetails(url, KIO::StatJob::SourceSide, KIO::StatBasic, KIO::HideProgressInfo);
 #endif
                 const bool exists = statJob->exec();
                 const bool isDir = statJob->statResult().isDir();
