@@ -1,7 +1,8 @@
 KAlarm Change Log
 
-=== Version 2.13.4 (KDE Applications 20.04) --- 25 January 2020 ===
+=== Version 2.14.0 (KDE Applications 20.04) --- 25 January 2020 ===
 + Warn user if archiving but no default archived alarms calendar is set.
++ Refactor to use generic resource classes (part 2).
 
 === Version 2.13.3 (KDE Applications 19.12.3) --- 20 February 2020 ===
 + Fix failure of command line options requiring calendar access [KDE Bug 417108]
@@ -19,7 +20,7 @@ KAlarm Change Log
 + Fix alarm type column being too wide in alarm template list.
 + Fix failure to display image when alarm is configured to display an image file.
 + Fix failure to set no-autostart for non-KDE desktops, if no autostart directory exists.
-+ Refactor to use generic resource classes.
++ Refactor to use generic resource classes (part 1).
 
 === Version 2.12.8 (KDE Applications 19.08.3) --- 16 October 2019 ===
 + Fix error on redo of an active alarm deletion.
