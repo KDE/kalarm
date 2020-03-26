@@ -1,0 +1,156 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>KAlarm Design Notes</title>
+  <meta content="KAlarm" name=description>
+  <style type="text/css">
+      body         { font-family: sans-serif }
+      .eg          { color: green }
+      .titlerow    { font-size: 1.2em; padding-top: 1em; padding-bottom: 0.5em; font-weight: bold }
+      td           { vertical-align: top; padding-right: 1em; padding-top: 3px }
+      th           { vertical-align: top; padding-right: 1em; padding-top: 0.3em; text-align: left }
+      *#divided    { border: 1px transparent }
+      tr.divided   { border: 1px transparent }
+      td.cont      { padding-top: 0 }
+  </style>
+
+</head>
+
+<body>
+
+<h1>KAlarm Design Notes</h1>
+
+See the KAlarmCal design notes (kalarmcal/DESIGN.html) for details of calendar storage.
+
+<h2>Classes</h2>
+
+<p>This section summarises some of the C++ classes used to build KAlarm.</p>
+
+<h3>Calendar Resource Classes</h3>
+
+
+<table>
+<tr><th>Class</th><th>Base class</th><th>Description</th></tr>
+
+<tr><td colspan=3><br><b>Generic Resource and Event Classes</b></td></tr>
+<tr><td><tt>ResourceType</tt></td><td><tt>QObject</tt></td>
+    <td>Abstract base class representing an alarm calendar resource. Classes
+    inherited from this class are accessed via the Resource class, which
+    encapsulates them.</td></tr>
+
+<tr><td><tt>Resource</tt></td><td><tt></tt></td>
+    <td>Represents an alarm calendar resource. Contains a shared pointer to a
+    ResourceType object. It is designed to be safe to use even if the pointer
+    to the ResourceType object is null.</td></tr>
+
+<tr><td><tt>Resources</tt></td><td><tt>QObject</tt></td>
+    <td>Singleton class which contains all ResourceType instances. It allows
+    connection to signals from all resource instances.</td></tr>
+
+<tr><td><tt>ResourceCreator</tt></td><td><tt>QObject</tt></td>
+    <td>Base class to interactively create a resource.</td></tr>
+
+<tr><td><tt>CalendarUpdater</tt></td><td><tt>QObject</tt></td>
+    <td>Base class to update the backend calendar format of a single alarm
+    calendar.</td></tr>
+
+<tr><td><tt>ResourceSelectDialog</tt></td><td><tt>QDialog</tt></td>
+    <td>A dialog which shows a list of resources and allows the user to select one.</td></tr>
+
+<tr><td><tt>DataModel</tt></td><td><tt></tt></td>
+    <td>A namespace which provides functions independent of which data model
+    type (Akonadi, etc.) is being used</td></tr>
+
+<tr><td><tt>ResourceDataModelBase</tt></td><td><tt></tt></td>
+    <td>Base class for models containing all calendars and the events
+    (alarms and templates) within them.</td></tr>
+
+<tr><td><tt>ResourceFilterModel</tt></td><td><tt>QSortFilterProxyModel</tt></td>
+    <td>Proxy filter model providing all calendar resources (not events) of a
+    specified alarm type (active/archived/template). The selected alarm type
+    may be changed as desired.</td></tr>
+
+<tr><td><tt>ResourceListModel</tt></td><td><tt>KDescendantsProxyModel</tt></td>
+    <td>Proxy model converting the resource tree into a flat
+    list. The model may be restricted to specified alarm types. It can
+    optionally be restricted to writable and/or enabled resources.</td></tr>
+
+<tr><td><tt>ResourceCheckListModel</tt></td><td><tt>KCheckableProxyModel</tt></td>
+    <td>Proxy model providing a checkable list of all resources.
+    An alarm type is specified, whereby resources which are enabled for that
+    alarm type are checked; Resources which do not contain that alarm type,
+    or which are disabled for that alarm type, are unchecked.</td></tr>
+
+<tr><td><tt>ResourceFilterCheckListModel</tt></td><td><tt>QSortFilterProxyModel</tt></td>
+    <td>Proxy model providing a checkable resource list, filtered to contain
+    only one alarm type. The selected alarm type may be changed as
+    desired.</td></tr>
+
+<tr><td><tt>EventListModel</tt></td><td><tt>QSortFilterProxyModel</tt></td>
+    <td>Proxy filter model providing all events of a specified alarm type
+    (active alarms, archived alarms or alarm templates), in enabled
+    resources.</td></tr>
+
+<tr><td><tt>AlarmListModel</tt></td><td><tt>EventListModel</tt></td>
+    <td>Filter proxy model containing all alarms of specified types (active,
+    archived, template), in enabled resources.</td></tr>
+
+<tr><td><tt>TemplateListModel</tt></td><td><tt>EventListModel</tt></td>
+    <td>Filter proxy model containing alarm templates, optionally for specified
+    alarm action types (display, command, etc.), in enabled
+    resources.</td></tr>
+
+<tr><td><tt>BirthdayModel</tt></td><td><tt>Akonadi::ContactsTreeModel</tt></td>
+    <td>Provides the model for all contacts.</td></tr>
+
+<tr><td><tt>BirthdaySortModel</tt></td><td><tt>QSortFilterProxyModel</tt></td>
+    <td>Filters and sorts contacts for display.</td></tr>
+
+<tr><td><tt>ResourceView</tt></td><td><tt>QListView</tt></td>
+    <td>View for a ResourceFilterCheckListModel.</td></tr>
+
+<tr><td><tt>EventListView</tt></td><td><tt>QTreeView</tt></td>
+    <td>View for an EventListModel.</td></tr>
+
+<tr><td><tt>AlarmListView</tt></td><td><tt>EventListView</tt></td>
+    <td>View showing a list of alarms.</td></tr>
+
+<tr><td><tt>TemplateListView</tt></td><td><tt>EventListView</tt></td>
+    <td>View showing a list of alarm templates.</td></tr>
+
+<tr><td><tt>EventListDelegate</tt></td><td><tt>QItemDelegate</tt></td>
+    <td>Delegate for an EventListView.</td></tr>
+
+<tr><td><tt>AlarmListDelegate</tt></td><td><tt>EventListDelegate</tt></td>
+    <td>Delegate for an AlarmListView. Handles editing and display of the alarm
+    list.</td></tr>
+
+<tr><td><tt>TemplateListDelegate</tt></td><td><tt>EventListDelegate</tt></td>
+    <td>Delegate for a TemplateListView. Handles editing and display of the
+    list of alarm templates.</td></tr>
+
+
+<tr><td colspan=3><br><b>Akonadi Resource and Event Classes</b></td></tr>
+<tr><td><tt>AkonadiDataModel</tt></td><td><tt>Akonadi::EntityTreeModel,<br>ResourceDataModelBase</tt></td>
+    <td>Contains all KAlarm collections and the items (alarms and templates)
+    within them.</td></tr>
+
+<tr><td><tt>CollectionSearch</tt></td><td><tt>QObject</tt></td>
+    <td>Fetches a list of all Akonadi collections which handle a specified mime
+    type, and then optionally fetches or deletes all Items from them with a
+    given GID.</td></tr>
+
+<tr><td><tt>AkonadiResourceMigrator</tt></td><td><tt>QObject</tt></td>
+    <td>Migrates KResources alarm calendars from pre-Akonadi versions of
+    KAlarm, and creates default calendar resources if none exist.</td></tr>
+
+<tr><td><tt>AkonadiResourceCreator</tt></td><td><tt>ResourceCreator</tt></td>
+    <td>Interactively creates an Akonadi resource.</td></tr>
+
+<tr><td><tt>AkonadiCalendarUpdater</tt></td><td><tt>CalendarUpdater</tt></td>
+    <td>Updates the backend calendar format of one Akonadi alarm calendar.</td></tr>
+
+</table>
+
+</body>
