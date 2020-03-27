@@ -1,7 +1,7 @@
 /*
  *  eventmodel.cpp  -  model containing flat list of events
  *  Program:  kalarm
- *  Copyright © 2007-2019 David Jarvie <djarvie@kde.org>
+ *  Copyright © 2007-2020 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -266,8 +266,8 @@ QVariant AlarmListModel::headerData(int section, Qt::Orientation orientation, in
 
 /*=============================================================================
 = Class: TemplateListModel
-= Filter proxy model containing all alarm templates for specified alarm types
-= in enabled resources.
+= Filter proxy model containing all alarm templates, optionally for specified
+= alarm action types (display, email, etc.) in enabled resources.
 =============================================================================*/
 TemplateListModel* TemplateListModel::mAllInstance = nullptr;
 

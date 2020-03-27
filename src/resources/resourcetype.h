@@ -458,6 +458,8 @@ private:
     bool         mBeingDeleted {false};  // the resource is currently being deleted
 };
 
+Q_DECLARE_METATYPE(ResourceType::MessageType)
+
 
 /*=============================================================================
 * Template definitions.

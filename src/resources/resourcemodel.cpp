@@ -222,8 +222,7 @@ QVariant ResourceListModel::data(const QModelIndex& index, int role) const
 
 /*=============================================================================
 = Class: ResourceCheckListModel
-= Proxy model providing a checkable list of all Resources. A Resource's
-= checked status is equivalent to whether it is selected or not.
+= Proxy model providing a checkable list of all Resources.
 = An alarm type is specified, whereby Resources which are enabled for that
 = alarm type are checked; Resources which do not contain that alarm type, or
 = which are disabled for that alarm type, are unchecked.
@@ -457,9 +456,8 @@ QByteArray ResourceCheckListModel::debugType(const char* func) const
 
 /*=============================================================================
 = Class: ResourceFilterCheckListModel
-= Proxy model providing a checkable resource list. The model contains all
-= alarm types, but returns only one type at any given time. The selected alarm
-= type may be changed as desired.
+= Proxy model providing a checkable resource list, filtered to contain only one
+= alarm type. The selected alarm type may be changed as desired.
 =============================================================================*/
 ResourceFilterCheckListModel::ResourceFilterCheckListModel(QObject* parent)
     : QSortFilterProxyModel(parent)

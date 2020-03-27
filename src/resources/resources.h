@@ -220,7 +220,7 @@ Q_SIGNALS:
      *  @note  Connections to this signal should use Qt::QueuedConnection type
      *         to allow processing to continue while the user message is displayed.
      */
-    void resourceMessage(Resource&, ResourceType::MessageType, const QString& message, const QString& details);
+    void resourceMessage(ResourceType::MessageType, const QString& message, const QString& details);
 
     /** Emitted when events have been added to a resource.
      *  Events are only notified whose alarm type is enabled.
