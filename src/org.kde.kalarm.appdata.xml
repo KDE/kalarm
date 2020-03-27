@@ -70,7 +70,7 @@
   <summary xml:lang="ro">Planificator personal de alarme</summary>
   <summary xml:lang="ru">Личные напоминания</summary>
   <summary xml:lang="sk">Osobný plánovač alarmov</summary>
-  <summary xml:lang="sl">Osebni razporejevalnik alarmov</summary>
+  <summary xml:lang="sl">Osebni planer alarmov</summary>
   <summary xml:lang="sr">Лични распоређивач аларма</summary>
   <summary xml:lang="sr-Latn">Lični raspoređivač alarma</summary>
   <summary xml:lang="sr-ijekavian">Лични распоређивач аларма</summary>
@@ -101,6 +101,7 @@
     <p xml:lang="pt-BR">O KAlarm é um aplicativo agendador pessoal de mensagens de alarme, comandos e e-mails do KDE</p>
     <p xml:lang="ru">KAlarm — разработанная KDE программа для установки напоминаний, а также для планирования запуска команд и отправки электронных писем</p>
     <p xml:lang="sk">KAlarm je aplikácia osobného budíku, príkazového a e-mailového plánovača od KDE</p>
+    <p xml:lang="sl">Kalarm je osebni planer alarmov, ukazov in e-pošte izdelan v skupnosti KDE</p>
     <p xml:lang="sv">Kalarm är ett schemaläggningsprogram av personliga alarmmeddelanden, kommandon och e-post av KDE</p>
     <p xml:lang="uk">KAlarm — інструмент від KDE для складання розкладу повідомлень, команд і поштових повідомлень для нагадування.</p>
     <p xml:lang="x-test">xxKAlarm is a personal alarm message, command and email scheduler application by KDExx</p>
@@ -170,7 +171,7 @@
       <li xml:lang="pt-BR">Mostra os alarmes usando sua própria mensagem de texto, o texto gerado por um comando ou um arquivo de texto ou de imagem.</li>
       <li xml:lang="ru">Показывает в напоминании либо выбранный вами текст, либо вывод команды, либо содержимое текстового файла или файла изображения;</li>
       <li xml:lang="sk">Zobrazí budíky pomocou vašej vlastnej textovej správy, text generovaný príkazom alebo text alebo súbor obrázku.</li>
-      <li xml:lang="sl">Prikazovanje alarmov z vašim besedilom, z besedilom, ki ga je ustvaril ukaz ali z besedilno oz. slikovno datoteko.</li>
+      <li xml:lang="sl">Prikaz alarmov z vašim besedilom, z besedilom, ki ga je ustvaril ukaz ali z besedilno oz. slikovno datoteko.</li>
       <li xml:lang="sr">Приказ аларма са ручно задатим текстом, текстом као излазом наредбе, или текстуалног фајла или слике.</li>
       <li xml:lang="sr-Latn">Prikaz alarma sa ručno zadatim tekstom, tekstom kao izlazom naredbe, ili tekstualnog fajla ili slike.</li>
       <li xml:lang="sr-ijekavian">Приказ аларма са ручно задатим текстом, текстом као излазом наредбе, или текстуалног фајла или слике.</li>
@@ -204,7 +205,7 @@
       <li xml:lang="pt-BR">Alarme sonoro usando um arquivo de som</li>
       <li xml:lang="ru">Воспроизведения звука из выбранного файла в назначенный момент;</li>
       <li xml:lang="sk">Zvukový budík pomocou zvukového súboru</li>
-      <li xml:lang="sl">Zvočni alarm z uporabo zvočne datoteke.</li>
+      <li xml:lang="sl">Zvočni alarm z uporabo zvočne datoteke</li>
       <li xml:lang="sr">Чујни аларм путем звучног фајла.</li>
       <li xml:lang="sr-Latn">Čujni alarm putem zvučnog fajla.</li>
       <li xml:lang="sr-ijekavian">Чујни аларм путем звучног фајла.</li>
@@ -272,7 +273,7 @@
       <li xml:lang="pt-BR">Mostra alarmes com cores e fontes personalizadas</li>
       <li xml:lang="ru">Настраиваемые цвет и шрифт текста в напоминаниях;</li>
       <li xml:lang="sk">Nastavenie farby a písma zobrazeného budíka</li>
-      <li xml:lang="sl">Prilagoditev barve alarmov in pisav.</li>
+      <li xml:lang="sl">Prilagoditev barve alarmov in pisav</li>
       <li xml:lang="sr">Прилагођавање боја и фонтова аларма.</li>
       <li xml:lang="sr-Latn">Prilagođavanje boja i fontova alarma.</li>
       <li xml:lang="sr-ijekavian">Прилагођавање боја и фонтова аларма.</li>
@@ -306,7 +307,7 @@
       <li xml:lang="pt-BR">Suporte a diversos calendários de alarmes, permitindo-lhe, por exemplo, compartilhar alarmes entre um notebook e um computador pessoal.</li>
       <li xml:lang="ru">Поддержка нескольких календарей напоминаний, например для совместного использования некоторых напоминаний на ноутбуке и на настольном компьютере.</li>
       <li xml:lang="sk">Podpora pre viaceho kalendárov budíkov, ktoré napríklad umožnia zdieľanie budíkov medzi prenosný, a stolným počítačom.</li>
-      <li xml:lang="sl">Podpora več koledarjem z alarmi, kar na primer pomeni, da lahko delite alarme med namiznim in prenosnim računalnikom.</li>
+      <li xml:lang="sl">Podpora več koledarjem z alarmi, kar na primer omogoča, da si lahko delite alarme med namiznim in prenosnim računalnikom.</li>
       <li xml:lang="sr">Подршка за више алармних календара, што на пример омогућава дељење аларма између преносног и стоног рачунара.</li>
       <li xml:lang="sr-Latn">Podrška za više alarmnih kalendara, što na primer omogućava deljenje alarma između prenosnog i stonog računara.</li>
       <li xml:lang="sr-ijekavian">Подршка за више алармних календара, што на пример омогућава дељење аларма између преносног и стоног рачунара.</li>
@@ -343,6 +344,7 @@
       <caption xml:lang="pt-BR">Janela de configuração do KAlarm com uma mensagem de teste de alarme</caption>
       <caption xml:lang="ru">Окно настроек KAlarm с напоминанием</caption>
       <caption xml:lang="sk">Konfiguračné okno KAlarm s testovacou správou alarmu</caption>
+      <caption xml:lang="sl">Okno za nastavitev alarma s tesnim sporočilom ob alarmu</caption>
       <caption xml:lang="sv">Inställningsfönstret i Kalarm med test av ett meddelandealarm</caption>
       <caption xml:lang="uk">Вікно налаштовування KAlarm із тестовим нагадуванням у форматі повідомлення</caption>
       <caption xml:lang="x-test">xxKAlarm configuration window with a testing message alarmxx</caption>
