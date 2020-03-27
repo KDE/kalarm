@@ -49,6 +49,7 @@ Resources* Resources::instance()
 
 Resources::Resources()
 {
+    qRegisterMetaType<ResourceType::MessageType>();
 }
 
 Resources::~Resources()
@@ -518,9 +519,8 @@ void Resources::notifyResourceMessage(ResourceType* res, ResourceType::MessageTy
 
 void Resources::notifyResourceMessage(ResourceId id, ResourceType::MessageType type, const QString& message, const QString& details)
 {
-    Resource r = resource(id);
-    if (r.isValid())
-        Q_EMIT instance()->resourceMessage(r, type, message, details);
+    if (resource(id).isValid())
+        Q_EMIT instance()->resourceMessage(type, message, details);
 }
 
 void Resources::notifyEventsAdded(ResourceType* res, const QList<KAEvent>& events)

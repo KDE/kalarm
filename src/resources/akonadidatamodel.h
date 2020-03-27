@@ -97,7 +97,7 @@ public:
 
 private Q_SLOTS:
     /** Called when a resource notifies a message to display to the user. */
-    void slotResourceMessage(Resource&, ResourceType::MessageType, const QString& message, const QString& details);
+    void slotResourceMessage(ResourceType::MessageType, const QString& message, const QString& details);
 
 Q_SIGNALS:
     /** Signal emitted when the Akonadi server has stopped. */

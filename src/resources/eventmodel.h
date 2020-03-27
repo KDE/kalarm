@@ -1,7 +1,7 @@
 /*
  *  eventmodel.h  -  model containing flat list of events
  *  Program:  kalarm
- *  Copyright © 2010-2019 David Jarvie <djarvie@kde.org>
+ *  Copyright © 2010-2020 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -161,8 +161,8 @@ private:
 
 /*=============================================================================
 = Class: TemplateListModel
-= Filter proxy model containing all alarm templates for specified alarm types
-= in enabled resources.
+= Filter proxy model containing all alarm templates, optionally for specified
+= alarm action types (display, email, etc.) in enabled resources.
 =============================================================================*/
 class TemplateListModel : public EventListModel
 {

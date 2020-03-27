@@ -1,7 +1,7 @@
 /*
  *  resourcemodel.h  -  models containing flat list of resources
  *  Program:  kalarm
- *  Copyright © 2010-2019 David Jarvie <djarvie@kde.org>
+ *  Copyright © 2010-2020 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -133,8 +133,7 @@ private:
 
 /*=============================================================================
 = Class: ResourceCheckListModel
-= Proxy model providing a checkable list of all Resources. A Resource's
-= checked status is equivalent to whether it is selected or not.
+= Proxy model providing a checkable list of all Resources.
 = An alarm type is specified, whereby Resources which are enabled for that
 = alarm type are checked; Resources which do not contain that alarm type, or
 = which are disabled for that alarm type, are unchecked.
@@ -182,9 +181,8 @@ private:
 
 /*=============================================================================
 = Class: ResourceFilterCheckListModel
-= Proxy model providing a checkable resource list. The model contains all
-= alarm types, but returns only one type at any given time. The selected alarm
-= type may be changed as desired.
+= Proxy model providing a checkable resource list, filtered to contain only one
+= alarm type. The selected alarm type may be changed as desired.
 =============================================================================*/
 class ResourceFilterCheckListModel : public QSortFilterProxyModel
 {

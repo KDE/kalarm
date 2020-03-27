@@ -948,7 +948,7 @@ Resource& AkonadiDataModel::updateResource(const Collection& collection) const
 /******************************************************************************
 * Display a message to the user.
 */
-void AkonadiDataModel::slotResourceMessage(Resource&, ResourceType::MessageType type, const QString& message, const QString& details)
+void AkonadiDataModel::slotResourceMessage(ResourceType::MessageType type, const QString& message, const QString& details)
 {
     handleResourceMessage(type, message, details);
 }
