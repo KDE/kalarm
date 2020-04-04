@@ -22,8 +22,8 @@
 
 #include "karecurrence.h"
 
-#include <kcalendarcore/recurrence.h>
-#include <kcalendarcore/icalformat.h>
+#include <KCalendarCore/Recurrence>
+#include <KCalendarCore/ICalFormat>
 
 #include "kalarmcal_debug.h"
 

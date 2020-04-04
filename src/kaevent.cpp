@@ -27,7 +27,7 @@
 #include "identities.h"
 #include "version.h"
 
-#include <kcalendarcore/memorycalendar.h>
+#include <KCalendarCore/MemoryCalendar>
 #include <KHolidays/Holiday>
 #include <KHolidays/HolidayRegion>
 

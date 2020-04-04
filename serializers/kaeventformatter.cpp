@@ -24,7 +24,7 @@
 #include "kaevent.h"
 #include "datetime.h"
 
-#include <kcalutils/incidenceformatter.h>
+#include <KCalUtils/IncidenceFormatter>
 
 #include <klocalizedstring.h>
 

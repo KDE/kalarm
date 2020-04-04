@@ -26,9 +26,9 @@
 #include "kalarmcal_export.h"
 #include "kadatetime.h"
 
-#include <kcalendarcore/recurrencerule.h>
-#include <kcalendarcore/duration.h>
-#include <kcalendarcore/incidencebase.h>
+#include <KCalendarCore/RecurrenceRule>
+#include <KCalendarCore/Duration>
+#include <KCalendarCore/IncidenceBase>
 namespace KCalendarCore
 {
 class Recurrence;

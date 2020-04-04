@@ -25,9 +25,9 @@
 
 #include "kalarmcal_export.h"
 
-#include <kcalendarcore/filestorage.h>
-#include <kcalendarcore/calendar.h>
-#include <kcalendarcore/event.h>
+#include <KCalendarCore/FileStorage>
+#include <KCalendarCore/Calendar>
+#include <KCalendarCore/Event>
 
 #include <AkonadiCore/Collection>
 

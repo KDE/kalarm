@@ -24,7 +24,7 @@
 #define KALARM_REPETITION_H
 
 #include "kalarmcal_export.h"
-#include <kcalendarcore/duration.h>
+#include <KCalendarCore/Duration>
 
 namespace KAlarmCal
 {

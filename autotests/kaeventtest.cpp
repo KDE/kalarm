@@ -25,8 +25,8 @@
 #include "kaevent.h"
 using namespace KAlarmCal;
 
-#include <kcalendarcore/event.h>
-#include <kcalendarcore/alarm.h>
+#include <KCalendarCore/Event>
+#include <KCalendarCore/Alarm>
 using namespace KCalendarCore;
 #include <AkonadiCore/collection.h>
 

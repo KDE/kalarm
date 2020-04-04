@@ -25,9 +25,9 @@
 #include "kaevent.h"
 #include "version.h"
 
-#include <kcalendarcore/event.h>
-#include <kcalendarcore/alarm.h>
-#include <kcalendarcore/memorycalendar.h>
+#include <KCalendarCore/Event>
+#include <KCalendarCore/Alarm>
+#include <KCalendarCore/MemoryCalendar>
 
 #include <klocalizedstring.h>
 #include "kalarmcal_debug.h"
