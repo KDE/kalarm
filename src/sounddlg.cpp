@@ -1,7 +1,7 @@
 /*
  *  sounddlg.cpp  -  sound file selection and configuration dialog and widget
  *  Program:  kalarm
- *  Copyright © 2005-2019 David Jarvie <djarvie@kde.org>
+ *  Copyright © 2005-2020 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -190,7 +190,7 @@ SoundWidget::SoundWidget(bool showPlay, bool showRepeat, QWidget* parent)
     mFileBrowseButton = new PushButton(box);
     boxHLayout->addWidget(mFileBrowseButton);
     mFileBrowseButton->setIcon(QIcon(QIcon::fromTheme(QStringLiteral("document-open"))));
-    int size = mFileBrowseButton->sizeHint().height();
+    const int size = mFileBrowseButton->sizeHint().height();
     mFileBrowseButton->setFixedSize(size, size);
     connect(mFileBrowseButton, &PushButton::clicked, this, &SoundWidget::slotPickFile);
     mFileBrowseButton->setToolTip(i18nc("@info:tooltip", "Choose a file"));
@@ -198,7 +198,7 @@ SoundWidget::SoundWidget(bool showPlay, bool showRepeat, QWidget* parent)
 
     if (mFilePlay)
     {
-        int size = qMax(mFilePlay->sizeHint().height(), mFileBrowseButton->sizeHint().height());
+        const int size = qMax(mFilePlay->sizeHint().height(), mFileBrowseButton->sizeHint().height());
         mFilePlay->setFixedSize(size, size);
         mFileBrowseButton->setFixedSize(size, size);
     }
@@ -237,11 +237,11 @@ SoundWidget::SoundWidget(bool showPlay, bool showRepeat, QWidget* parent)
     QGroupBox* group = new QGroupBox(i18nc("@title:group Sound volume", "Volume"), this);
     layout->addWidget(group);
     QGridLayout* grid = new QGridLayout(group);
-    int dcm = style()->pixelMetric(QStyle::PM_DefaultChildMargin);
+    const int dcm = style()->pixelMetric(QStyle::PM_DefaultChildMargin);
     grid->setContentsMargins(dcm, dcm, dcm, dcm);
     grid->setSpacing(style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     grid->setColumnStretch(2, 1);
-    int indentWidth = 3 * style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
+    const int indentWidth = 3 * style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
     grid->setColumnMinimumWidth(0, indentWidth);
     grid->setColumnMinimumWidth(1, indentWidth);
 
@@ -371,7 +371,7 @@ QString SoundWidget::fileName() const
 */
 bool SoundWidget::file(QUrl& url, bool showErrorMessage) const
 {
-    bool result = validate(showErrorMessage);
+    const bool result = validate(showErrorMessage);
     url = mUrl;
     return result;
 }
@@ -509,7 +509,7 @@ bool SoundWidget::validate(bool showErrorMessage) const
                     dir.setPath(soundDirs[i]);
                     if (dir.isReadable() && dir.count() > 2)
                     {
-                        QString f = soundDirs[i] + QDir::separator() + file;
+                        QString f = soundDirs[i] + QLatin1Char('/') + file;
                         err = File::checkFileExists(f, mUrl, MainWindow::mainMainWindow());
                         if (err == File::FileErr::None)
                             return true;
@@ -523,7 +523,7 @@ bool SoundWidget::validate(bool showErrorMessage) const
             }
             if (err == File::FileErr::Nonexistent)
             {
-                QString f = QDir::homePath() + QDir::separator() + file;
+                QString f = QDir::homePath() + QLatin1Char('/') + file;
                 err = File::checkFileExists(f, mUrl, MainWindow::mainMainWindow());
                 if (err == File::FileErr::None)
                     return true;
