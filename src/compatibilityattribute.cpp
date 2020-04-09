@@ -31,7 +31,7 @@ class Q_DECL_HIDDEN CompatibilityAttribute::Private
 {
 public:
     Private()  {}
-    bool operator==(const Private& other) const
+    bool operator==(KAlarmCal::CompatibilityAttribute::Private other) const
     {
         return mCompatibility == other.mCompatibility
            &&  mVersion       == other.mVersion;

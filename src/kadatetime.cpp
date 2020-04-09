@@ -1811,13 +1811,9 @@ QString KADateTime::toString(TimeFormat format) const
                 result += QLatin1Char('-');
                 year = -year;
             }
-            result += QStringLiteral("%1-%2-%3").arg(numString(year,              4))
-                                                .arg(numString(d->date().month(), 2))
-                                                .arg(numString(d->date().day(),   2));
+            result += QStringLiteral("%1-%2-%3").arg(numString(year,              4), numString(d->date().month(), 2), numString(d->date().day(),   2));
             if (!d->dateOnly()  ||  d->specType != LocalZone) {
-                result += QStringLiteral("T%1:%2:%3").arg(numString(d->time().hour(),   2))
-                                                     .arg(numString(d->time().minute(), 2))
-                                                     .arg(numString(d->time().second(), 2));
+                result += QStringLiteral("T%1:%2:%3").arg(numString(d->time().hour(),   2), numString(d->time().minute(), 2), numString(d->time().second(), 2));
                 if (d->time().msec()) {
                     // Comma is preferred by ISO8601 as the decimal point symbol,
                     // so use it unless '.' is the symbol used in this locale.

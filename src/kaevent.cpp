@@ -3857,7 +3857,7 @@ void KAEventPrivate::dumpDebug() const
         qCDebug(KALARMCAL_LOG) << "-- mLogFile:" << mLogFile;
     } else if (mActionSubType == KAEvent::EMAIL) {
         qCDebug(KALARMCAL_LOG) << "-- mEmail: FromKMail:" << mEmailFromIdentity;
-        qCDebug(KALARMCAL_LOG) << "--         Addresses:" << mEmailAddresses.join(QLatin1String(","));
+        qCDebug(KALARMCAL_LOG) << "--         Addresses:" << mEmailAddresses.join(QStringLiteral(","));
         qCDebug(KALARMCAL_LOG) << "--         Subject:" << mEmailSubject;
         qCDebug(KALARMCAL_LOG) << "--         Attachments:" << mEmailAttachments.join(QLatin1Char(','));
         qCDebug(KALARMCAL_LOG) << "--         Bcc:" << mEmailBcc;
@@ -4014,7 +4014,7 @@ void KAEventPrivate::readAlarms(const Event::Ptr &event, AlarmMap *alarmMap, boo
         }
     }
 
-    for (Alarm::Ptr alarm : alarms) {
+    for (const Alarm::Ptr &alarm : alarms) {
         // Parse the next alarm's text
         AlarmData data;
         readAlarm(alarm, data, audioOnly, cmdDisplay);
@@ -5287,7 +5287,7 @@ bool KAEvent::convertKCalEvents(const Calendar::Ptr &calendar, int calendarVersi
             int i;
             while ((i = cats.indexOf(TEMPL_DEF_TIME_CAT)) >= 0) {
                 cats.removeAt(i);
-                (flags += KAEventPrivate::TEMPL_AFTER_TIME_FLAG) += QLatin1String("0");
+                (flags += KAEventPrivate::TEMPL_AFTER_TIME_FLAG) += QStringLiteral("0");
             }
         }
 
@@ -5354,7 +5354,7 @@ bool KAEvent::convertKCalEvents(const Calendar::Ptr &calendar, int calendarVersi
         }
 
         if (addLateCancel) {
-            (flags += KAEventPrivate::LATE_CANCEL_FLAG) += QLatin1String("1");
+            (flags += KAEventPrivate::LATE_CANCEL_FLAG) += QStringLiteral("1");
         }
         if (!flags.isEmpty()) {
             event->setCustomProperty(KACalendar::APPNAME, KAEventPrivate::FLAGS_PROPERTY, flags.join(KAEventPrivate::SC));
@@ -5469,7 +5469,7 @@ bool KAEvent::convertKCalEvents(const Calendar::Ptr &calendar, int calendarVersi
              * It's a KAlarm pre-1.5.0 or KAlarm 1.9 series pre-1.9.9 calendar file.
              * Convert email identity names to uoids.
              */
-            for (Alarm::Ptr alarm : alarms) {
+            for (const Alarm::Ptr &alarm : alarms) {
                 const QString name = alarm->customProperty(KACalendar::APPNAME, KMAIL_ID_PROPERTY);
                 if (name.isEmpty()) {
                     continue;
