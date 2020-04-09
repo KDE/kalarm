@@ -243,28 +243,12 @@ QStringList CommandOptions::setOptions(QCommandLineParser* parser, const QString
 
 void CommandOptions::parse()
 {
-    if (!mParser->parse(mNonExecArguments))
-    {
-        setError(mParser->errorText());
-        return;
-    }
-    if (mParser->isSet(QStringLiteral("help")))
-    {
-        mCommand = EXIT;
-        mError = mParser->helpText();
-        return;
-    }
-    if (mParser->isSet(QStringLiteral("version")))
-    {
-        mCommand = EXIT;
-        mError = QCoreApplication::applicationName() + QLatin1String(" ") + QCoreApplication::applicationVersion();
-        return;
-    }
+    mParser->process(mNonExecArguments);
 }
 
 void CommandOptions::process()
 {
-    if (mCommand == CMD_ERROR  ||  mCommand == EXIT)
+    if (mCommand == CMD_ERROR)
         return;
 
 #ifndef NDEBUG

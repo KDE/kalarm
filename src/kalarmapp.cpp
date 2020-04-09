@@ -391,15 +391,6 @@ int KAlarmApp::activateInstance(const QStringList& args, const QString& workingD
                 mReadOnly = true;   // don't need write access to calendars
                 exitCode = 1;
                 break;
-            case CommandOptions::EXIT:
-                if (outputText)
-                {
-                    *outputText = options->outputText();
-                    delete options;
-                    return 0;
-                }
-                exitCode = -1;
-                break;
             default:
                 break;
         }

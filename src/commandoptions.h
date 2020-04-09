@@ -42,7 +42,6 @@ class CommandOptions
         {
             CMD_ERROR,        // error in command line options
             NONE,             // no command
-            EXIT,             // print outputText() and exit
             TRAY,             // --tray
             TRIGGER_EVENT,    // --triggerEvent
             CANCEL_EVENT,     // --cancelEvent
