@@ -846,7 +846,8 @@ void MainWindow::slotWakeFromSuspend()
 */
 void MainWindow::slotImportAlarms()
 {
-    AlarmCalendar::resources()->importAlarms(this);
+    Resource resource;
+    Resources::importAlarms(resource, this);
 }
 
 /******************************************************************************
@@ -858,8 +859,8 @@ void MainWindow::slotExportAlarms()
     QVector<KAEvent> events = mListView->selectedEvents();
     if (!events.isEmpty())
     {
-        KAEvent::List evts = KAEvent::ptrList(events);
-        AlarmCalendar::exportAlarms(evts, this);
+        const KAEvent::List evts = KAEvent::ptrList(events);
+        Resources::exportAlarms(evts, this);
     }
 }
 

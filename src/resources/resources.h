@@ -26,6 +26,7 @@
 #include "resourcemodel.h"
 
 #include <QObject>
+#include <QUrl>
 class QEventLoop;
 
 using namespace KAlarmCal;
@@ -123,6 +124,29 @@ public:
      *                      prompt dialogue; set to false if any other error
      */
     static Resource destination(CalEvent::Type type, QWidget* promptParent = nullptr, bool noPrompt = false, bool* cancelled = nullptr);
+
+    /** Prompt the user for an external calendar file to import alarms from,
+     *  and merge them into a resource. If the resource is invalid, the events
+     *  will be merged into the default resource for each alarm type (obtained
+     *  by calling destination(type)).
+     *  The alarms are given new unique event IDs.
+     *  @param parent    Parent widget for error message boxes
+     *  @param resource  Resource to import into
+     *  @return  true if all alarms in the calendar were successfully imported;
+     *           false if any alarms failed to be imported.
+     */
+    static bool importAlarms(Resource& resource, QWidget* parent);
+
+    /** Prompt the user for an external calendar file, and export a list of
+     *  alarms to it. If an existing file is chosen, the user has the choice
+     *  whether to append or overwrite.
+     *  The alarms are given new unique event IDs.
+     *  @param events  Events to export
+     *  @param parent  Parent widget for error message boxes
+     *  @return  true if all alarms in the calendar were successfully exported;
+     *           false if any alarms failed to be exported.
+     */
+    static bool exportAlarms(const KAEvent::List& events, QWidget* parent);
 
     /** Return whether all configured resources have been created. */
     static bool allCreated();
@@ -266,6 +290,7 @@ private:
     static QHash<ResourceId, Resource> mResources;   // contains all ResourceType instances with an ID
     static bool                        mCreated;     // all resources have been created
     static bool                        mPopulated;   // all resources have been loaded once
+    static QUrl                        mLastImportUrl; // last URL for Import Alarms file dialogue
 
     friend class ResourceType;
 };

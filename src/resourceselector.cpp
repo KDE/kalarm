@@ -454,7 +454,7 @@ void ResourceSelector::setStandard()
 void ResourceSelector::importCalendar()
 {
     Resource resource = currentResource();
-    AlarmCalendar::resources()->importAlarms(this, &resource);
+    Resources::importAlarms(resource, this);
 }
 
 /******************************************************************************
@@ -465,7 +465,7 @@ void ResourceSelector::exportCalendar()
 {
     const Resource resource = currentResource();
     if (resource.isValid())
-        AlarmCalendar::exportAlarms(AlarmCalendar::resources()->events(resource), this);
+        Resources::exportAlarms(AlarmCalendar::resources()->events(resource), this);
 }
 
 /******************************************************************************

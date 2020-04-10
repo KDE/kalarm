@@ -27,7 +27,6 @@
 #include "preferences.h"
 #include "resources/datamodel.h"
 #include "resources/resources.h"
-#include "lib/filedialog.h"
 #include "lib/messagebox.h"
 #include "kalarm_debug.h"
 
@@ -44,19 +43,17 @@
 
 #include <QTemporaryFile>
 #include <QStandardPaths>
-#include <QFileDialog>
+#include <QDir>
 
 using namespace KCalendarCore;
 using namespace KAlarmCal;
 
-static KACalendar::Compat fix(const KCalendarCore::FileStorage::Ptr&);
 
 static const QString displayCalendarName = QStringLiteral("displaying.ics");
 static const ResourceId DISPLAY_COL_ID = -1;   // resource ID used for displaying calendar
 
 AlarmCalendar* AlarmCalendar::mResourcesCalendar = nullptr;
 AlarmCalendar* AlarmCalendar::mDisplayCalendar = nullptr;
-QUrl           AlarmCalendar::mLastImportUrl;
 
 
 /******************************************************************************
@@ -71,8 +68,8 @@ QUrl           AlarmCalendar::mLastImportUrl;
 bool AlarmCalendar::initialiseCalendars()
 {
     QDir dir;
-    dir.mkpath(QStandardPaths::writableLocation(QStandardPaths::DataLocation));
-    QString displayCal = QStandardPaths::writableLocation(QStandardPaths::DataLocation) + QLatin1Char('/') + displayCalendarName;
+    dir.mkpath(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation));
+    const QString displayCal = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + QLatin1Char('/') + displayCalendarName;
     DataModel::initialise();
     Preferences::setBackend(Preferences::Akonadi);
     Preferences::self()->save();
@@ -138,27 +135,17 @@ AlarmCalendar::AlarmCalendar()
 }
 
 /******************************************************************************
-* Constructor for a calendar file.
+* Constructor for the display calendar file.
 */
 AlarmCalendar::AlarmCalendar(const QString& path, CalEvent::Type type)
-    : mEventType(type)
+    : mDisplayCalPath(path)
+    , mDisplayICalPath(path)
+    , mEventType(type)
 {
-    switch (type)
-    {
-        case CalEvent::ACTIVE:
-        case CalEvent::ARCHIVED:
-        case CalEvent::TEMPLATE:
-        case CalEvent::DISPLAYING:
-            break;
-        default:
-            Q_ASSERT(false);   // invalid event type for a calendar
-            break;
-    }
-    mUrl = QUrl::fromUserInput(path, QString(), QUrl::AssumeLocalFile);
-    QString icalPath = path;
-    icalPath.replace(QStringLiteral("\\.vcs$"), QStringLiteral(".ics"));
-    mICalUrl = QUrl::fromUserInput(icalPath, QString(), QUrl::AssumeLocalFile);
-    mCalType = (path == icalPath) ? LOCAL_ICAL : LOCAL_VCAL;    // is the calendar in ICal or VCal format?
+    Q_ASSERT(type == CalEvent::DISPLAYING);
+
+    mDisplayICalPath.replace(QStringLiteral("\\.vcs$"), QStringLiteral(".ics"));
+    mCalType = (mDisplayCalPath == mDisplayICalPath) ? LOCAL_ICAL : LOCAL_VCAL;    // is the calendar in ICal or VCal format?
 }
 
 AlarmCalendar::~AlarmCalendar()
@@ -187,45 +174,28 @@ bool AlarmCalendar::open()
     }
     else
     {
-        if (!mUrl.isValid())
-            return false;
-
-        qCDebug(KALARM_LOG) << "AlarmCalendar::open:" << mUrl.toDisplayString();
-        if (!mCalendarStorage)
+        // Open the display calendar.
+        qCDebug(KALARM_LOG) << "AlarmCalendar::open:" << mDisplayCalPath;
+        if (!mDisplayCalStorage)
         {
             MemoryCalendar::Ptr calendar(new MemoryCalendar(Preferences::timeSpecAsZone()));
-            mCalendarStorage = FileStorage::Ptr(new FileStorage(calendar));
+            mDisplayCalStorage = FileStorage::Ptr(new FileStorage(calendar, mDisplayCalPath));
         }
 
         // Check for file's existence, assuming that it does exist when uncertain,
         // to avoid overwriting it.
-#if KIO_VERSION < QT_VERSION_CHECK(5, 69, 0)
-        auto statJob = KIO::stat(mUrl, KIO::StatJob::SourceSide, 2);
-#else
-        auto statJob = KIO::statDetails(mUrl, KIO::StatJob::SourceSide, KIO::StatDetail::StatDefaultDetails);
-#endif
-        KJobWidgets::setWindow(statJob, MainWindow::mainMainWindow());
-        if (!statJob->exec() ||  load() == 0)
+        QFileInfo fi(mDisplayCalPath);
+        if (!fi.exists()  ||  !fi.isFile()  ||  load() == 0)
         {
             // The calendar file doesn't yet exist, or it's zero length, so create a new one
-            bool created = false;
-            if (mICalUrl.isLocalFile())
-                created = saveCal(mICalUrl.toLocalFile());
-            else
-            {
-                QTemporaryFile tmpFile;
-                tmpFile.setAutoRemove(false);
-                tmpFile.open();
-                created = saveCal(tmpFile.fileName());
-            }
-            if (created)
+            if (saveCal(mDisplayICalPath))
                 load();
         }
     }
     if (!mOpen)
     {
-        mCalendarStorage->calendar().clear();
-        mCalendarStorage.clear();
+        mDisplayCalStorage->calendar().clear();
+        mDisplayCalStorage.clear();
     }
     return isOpen();
 }
@@ -239,67 +209,32 @@ bool AlarmCalendar::open()
 */
 int AlarmCalendar::load()
 {
-    if (mCalType == RESOURCES)
+    if (mCalType != RESOURCES)
     {
-    }
-    else
-    {
-        if (!mCalendarStorage)
+        // Load the display calendar.
+        if (!mDisplayCalStorage)
             return -2;
 
-        QString filename;
-        qCDebug(KALARM_LOG) << "AlarmCalendar::load:" << mUrl.toDisplayString();
-        if (!mUrl.isLocalFile())
+        qCDebug(KALARM_LOG) << "AlarmCalendar::load:" << mDisplayCalPath;
+        if (!mDisplayCalStorage->load())
         {
-            auto getJob = KIO::storedGet(mUrl);
-            KJobWidgets::setWindow(getJob, MainWindow::mainMainWindow());
-            if (!getJob->exec())
-            {
-                qCCritical(KALARM_LOG) << "AlarmCalendar::load: Download failure";
-                KAMessageBox::error(MainWindow::mainMainWindow(),
-                                    xi18nc("@info", "Cannot download calendar: <filename>%1</filename>", mUrl.toDisplayString()));
-                return -1;
-            }
-            QTemporaryFile tmpFile;
-            tmpFile.setAutoRemove(false);
-            tmpFile.write(getJob->data());
-            qCDebug(KALARM_LOG) << "--- Downloaded to" << tmpFile.fileName();
-            filename = tmpFile.fileName();
-        }
-        else
-            filename = mUrl.toLocalFile();
-        mCalendarStorage->calendar()->setTimeZone(Preferences::timeSpecAsZone());
-        mCalendarStorage->setFileName(filename);
-        if (!mCalendarStorage->load())
-        {
-            // Check if the file is zero length
-            if (mUrl.isLocalFile())
-            {
-                auto statJob = KIO::stat(KIO::upUrl(mUrl));
-                KJobWidgets::setWindow(statJob, MainWindow::mainMainWindow());
-                statJob->exec();
-                KFileItem fi(statJob->statResult(), mUrl);
-                if (!fi.size())
-                    return 0;     // file is zero length
-            }
+            // Load error. Check if the file is zero length
+            QFileInfo fi(mDisplayCalPath);
+            if (fi.exists()  &&  !fi.size())
+                return 0;     // file is zero length
 
-            qCCritical(KALARM_LOG) << "AlarmCalendar::load: Error loading calendar file '" << filename <<"'";
+            qCCritical(KALARM_LOG) << "AlarmCalendar::load: Error loading calendar file '" << mDisplayCalPath <<"'";
             KAMessageBox::error(MainWindow::mainMainWindow(),
-                                xi18nc("@info", "<para>Error loading calendar:</para><para><filename>%1</filename></para><para>Please fix or delete the file.</para>", mUrl.toDisplayString()));
+                                xi18nc("@info", "<para>Error loading calendar:</para><para><filename>%1</filename></para><para>Please fix or delete the file.</para>", mDisplayCalPath));
             // load() could have partially populated the calendar, so clear it out
-            mCalendarStorage->calendar()->close();
-            mCalendarStorage->calendar().clear();
-            mCalendarStorage.clear();
+            mDisplayCalStorage->calendar()->close();
+            mDisplayCalStorage->calendar().clear();
+            mDisplayCalStorage.clear();
             mOpen = false;
             return -1;
         }
-        if (!mLocalFile.isEmpty())
-        {
-            if (mLocalFile.startsWith(QDir::tempPath()))
-                QFile::remove(mLocalFile);
-        }
-        mLocalFile = filename;
-        fix(mCalendarStorage);   // convert events to current KAlarm format for when calendar is saved
+        QString versionString;
+        KACalendar::updateVersion(mDisplayCalStorage, versionString);   // convert events to current KAlarm format for when calendar is saved
         updateDisplayKAEvents();
     }
     mOpen = true;
@@ -313,13 +248,12 @@ bool AlarmCalendar::reload()
 {
     if (mCalType == RESOURCES)
         return true;
-    if (!mCalendarStorage)
+    if (!mDisplayCalStorage)
         return false;
-    {
-        qCDebug(KALARM_LOG) << "AlarmCalendar::reload:" << mUrl.toDisplayString();
-        close();
-        return open();
-    }
+
+    qCDebug(KALARM_LOG) << "AlarmCalendar::reload:" << mDisplayCalPath;
+    close();
+    return open();
 }
 
 /******************************************************************************
@@ -330,77 +264,56 @@ bool AlarmCalendar::saveCal(const QString& newFile)
 {
     if (mCalType == RESOURCES)
         return true;
-    if (!mCalendarStorage)
+    if (!mDisplayCalStorage)
         return false;
+    if (!mOpen  &&  newFile.isEmpty())
+        return false;
+
+    qCDebug(KALARM_LOG) << "AlarmCalendar::saveCal:" << "\"" << newFile << "\"," << mEventType;
+    QString saveFilename = newFile.isEmpty() ? mDisplayCalPath : newFile;
+    if (mCalType == LOCAL_VCAL  &&  newFile.isNull())
+        saveFilename = mDisplayICalPath;
+    mDisplayCalStorage->setFileName(saveFilename);
+    mDisplayCalStorage->setSaveFormat(new ICalFormat);
+    if (!mDisplayCalStorage->save())
     {
-        if (!mOpen && newFile.isNull())
-            return false;
-
-        qCDebug(KALARM_LOG) << "AlarmCalendar::saveCal:" << "\"" << newFile << "\"," << mEventType;
-        QString saveFilename = newFile.isNull() ? mLocalFile : newFile;
-        if (mCalType == LOCAL_VCAL  &&  newFile.isNull()  &&  mUrl.isLocalFile())
-            saveFilename = mICalUrl.toLocalFile();
-        mCalendarStorage->setFileName(saveFilename);
-        mCalendarStorage->setSaveFormat(new ICalFormat);
-        if (!mCalendarStorage->save())
-        {
-            qCCritical(KALARM_LOG) << "AlarmCalendar::saveCal: Saving" << saveFilename << "failed.";
-            KAMessageBox::error(MainWindow::mainMainWindow(),
-                                xi18nc("@info", "Failed to save calendar to <filename>%1</filename>", mICalUrl.toDisplayString()));
-            return false;
-        }
-
-        if (!mICalUrl.isLocalFile())
-        {
-            QFile file(saveFilename);
-            file.open(QIODevice::ReadOnly);
-            auto putJob = KIO::storedPut(&file, mICalUrl, -1);
-            KJobWidgets::setWindow(putJob, MainWindow::mainMainWindow());
-            if (!putJob->exec())
-            {
-                qCCritical(KALARM_LOG) << "AlarmCalendar::saveCal:" << saveFilename << "upload failed.";
-                KAMessageBox::error(MainWindow::mainMainWindow(),
-                                    xi18nc("@info", "Cannot upload calendar to <filename>%1</filename>", mICalUrl.toDisplayString()));
-                return false;
-            }
-        }
-
-        if (mCalType == LOCAL_VCAL)
-        {
-            // The file was in vCalendar format, but has now been saved in iCalendar format.
-            mUrl  = mICalUrl;
-            mCalType = LOCAL_ICAL;
-        }
-        Q_EMIT calendarSaved(this);
+        qCCritical(KALARM_LOG) << "AlarmCalendar::saveCal: Saving" << saveFilename << "failed.";
+        KAMessageBox::error(MainWindow::mainMainWindow(),
+                            xi18nc("@info", "Failed to save calendar to <filename>%1</filename>", mDisplayICalPath));
+        return false;
     }
+
+    if (mCalType == LOCAL_VCAL)
+    {
+        // The file was in vCalendar format, but has now been saved in iCalendar format.
+        mDisplayCalPath = mDisplayICalPath;
+        mCalType = LOCAL_ICAL;
+    }
+    Q_EMIT calendarSaved(this);
 
     mUpdateSave = false;
     return true;
 }
 
 /******************************************************************************
-* Delete any temporary file at program exit.
+* Close display calendar file at program exit.
 */
 void AlarmCalendar::close()
 {
     if (mCalType != RESOURCES)
     {
-        if (!mLocalFile.isEmpty())
+        if (mDisplayCalStorage)
         {
-            if (mLocalFile.startsWith(QDir::tempPath())) // removes it only if it IS a temporary file
-                QFile::remove(mLocalFile);
-            mLocalFile = QStringLiteral("");
+            mDisplayCalStorage->calendar()->close();
+            mDisplayCalStorage->calendar().clear();
+            mDisplayCalStorage.clear();
         }
     }
+
     // Flag as closed now to prevent removeKAEvents() doing silly things
     // when it's called again
     mOpen = false;
-    if (mCalendarStorage)
-    {
-        mCalendarStorage->calendar()->close();
-        mCalendarStorage->calendar().clear();
-        mCalendarStorage.clear();
-    }
+
     // Resource map should be empty, but just in case...
     while (!mResourceMap.isEmpty())
         removeKAEvents(mResourceMap.begin().key(), true, CalEvent::ACTIVE | CalEvent::ARCHIVED | CalEvent::TEMPLATE | CalEvent::DISPLAYING);
@@ -425,7 +338,7 @@ void AlarmCalendar::updateDisplayKAEvents()
     }
     events.clear();
     mEarliestAlarm[key] = nullptr;
-    Calendar::Ptr cal = mCalendarStorage->calendar();
+    Calendar::Ptr cal = mDisplayCalStorage->calendar();
     if (!cal)
         return;
 
@@ -608,242 +521,6 @@ void AlarmCalendar::slotEventsToBeRemoved(Resource& resource, const QList<KAEven
 }
 
 /******************************************************************************
-* Import alarms from an external calendar and merge them into KAlarm's calendar.
-* The alarms are given new unique event IDs.
-* Parameters: parent = parent widget for error message boxes
-* Reply = true if all alarms in the calendar were successfully imported
-*       = false if any alarms failed to be imported.
-*/
-bool AlarmCalendar::importAlarms(QWidget* parent, Resource* resourceptr)
-{
-    if (mCalType != RESOURCES)
-        return false;
-    Resource nullresource;
-    Resource& resource(resourceptr ? *resourceptr : nullresource);
-    qCDebug(KALARM_LOG) << "AlarmCalendar::importAlarms";
-    const QUrl url = QFileDialog::getOpenFileUrl(parent, QString(), mLastImportUrl,
-                                                 QStringLiteral("%1 (*.vcs *.ics)").arg(i18nc("@info", "Calendar Files")));
-    if (url.isEmpty())
-    {
-        qCCritical(KALARM_LOG) << "AlarmCalendar::importAlarms: Empty URL";
-        return false;
-    }
-    if (!url.isValid())
-    {
-        qCDebug(KALARM_LOG) << "AlarmCalendar::importAlarms: Invalid URL";
-        return false;
-    }
-    mLastImportUrl = url.adjusted(QUrl::RemoveFilename);
-    qCDebug(KALARM_LOG) << "AlarmCalendar::importAlarms:" << url.toDisplayString();
-
-    bool success = true;
-    QString filename;
-    bool local = url.isLocalFile();
-    if (local)
-    {
-        filename = url.toLocalFile();
-        if (!QFile::exists(filename))
-        {
-            qCDebug(KALARM_LOG) << "AlarmCalendar::importAlarms: File '" << url.toDisplayString() <<"' not found";
-            KAMessageBox::error(parent, xi18nc("@info", "Could not load calendar <filename>%1</filename>.", url.toDisplayString()));
-            return false;
-        }
-    }
-    else
-    {
-        auto getJob = KIO::storedGet(url);
-        KJobWidgets::setWindow(getJob, MainWindow::mainMainWindow());
-        if (!getJob->exec())
-        {
-            qCCritical(KALARM_LOG) << "AlarmCalendar::importAlarms: Download failure";
-            KAMessageBox::error(parent, xi18nc("@info", "Cannot download calendar: <filename>%1</filename>", url.toDisplayString()));
-            return false;
-        }
-        QTemporaryFile tmpFile;
-        tmpFile.setAutoRemove(false);
-        tmpFile.write(getJob->data());
-        tmpFile.seek(0);
-        filename = tmpFile.fileName();
-        qCDebug(KALARM_LOG) << "--- Downloaded to" << filename;
-    }
-
-    // Read the calendar and add its alarms to the current calendars
-    MemoryCalendar::Ptr cal(new MemoryCalendar(Preferences::timeSpecAsZone()));
-    FileStorage::Ptr calStorage(new FileStorage(cal, filename));
-    success = calStorage->load();
-    if (!success)
-    {
-        qCDebug(KALARM_LOG) << "AlarmCalendar::importAlarms: Error loading calendar '" << filename <<"'";
-        KAMessageBox::error(parent, xi18nc("@info", "Could not load calendar <filename>%1</filename>.", url.toDisplayString()));
-    }
-    else
-    {
-        const KACalendar::Compat caltype = fix(calStorage);
-        const CalEvent::Types wantedTypes = resource.alarmTypes();
-        const Event::List events = cal->rawEvents();
-        for (Event::Ptr event : events)
-        {
-            if (event->alarms().isEmpty()  ||  !KAEvent(event).isValid())
-                continue;    // ignore events without alarms, or usable alarms
-            CalEvent::Type type = CalEvent::status(event);
-            if (type == CalEvent::TEMPLATE)
-            {
-                // If we know the event was not created by KAlarm, don't treat it as a template
-                if (caltype == KACalendar::Incompatible)
-                    type = CalEvent::ACTIVE;
-            }
-            Resource res;
-            if (resource.isValid())
-            {
-                if (!(type & wantedTypes))
-                    continue;
-                res = resource;
-            }
-            else
-            {
-                switch (type)
-                {
-                    case CalEvent::ACTIVE:
-                    case CalEvent::ARCHIVED:
-                    case CalEvent::TEMPLATE:
-                        break;
-                    default:
-                        continue;
-                }
-                res = Resources::destination(type);
-            }
-
-            Event::Ptr newev(new Event(*event));
-
-            // If there is a display alarm without display text, use the event
-            // summary text instead.
-            if (type == CalEvent::ACTIVE  &&  !newev->summary().isEmpty())
-            {
-                const Alarm::List& alarms = newev->alarms();
-                for (Alarm::Ptr alarm : alarms)
-                {
-                    if (alarm->type() == Alarm::Display  &&  alarm->text().isEmpty())
-                        alarm->setText(newev->summary());
-                }
-                newev->setSummary(QString());   // KAlarm only uses summary for template names
-            }
-
-            // Give the event a new ID and add it to the calendars
-            newev->setUid(CalEvent::uid(CalFormat::createUniqueId(), type));
-            if (!res.addEvent(KAEvent(newev)))
-                success = false;
-        }
-
-    }
-    if (!local)
-        QFile::remove(filename);
-    return success;
-}
-
-/******************************************************************************
-* Export all selected alarms to an external calendar.
-* The alarms are given new unique event IDs.
-* Parameters: parent = parent widget for error message boxes
-* Reply = true if all alarms in the calendar were successfully exported
-*       = false if any alarms failed to be exported.
-*/
-bool AlarmCalendar::exportAlarms(const KAEvent::List& events, QWidget* parent)
-{
-    bool append;
-    QString file = FileDialog::getSaveFileName(QUrl(QStringLiteral("kfiledialog:///exportalarms")),
-                                               QStringLiteral("*.ics|%1").arg(i18nc("@info", "Calendar Files")),
-                                               parent, i18nc("@title:window", "Choose Export Calendar"),
-                                               &append);
-    if (file.isEmpty())
-        return false;
-    const QUrl url = QUrl::fromLocalFile(file);
-    if (!url.isValid())
-    {
-        qCDebug(KALARM_LOG) << "AlarmCalendar::exportAlarms: Invalid URL" << url;
-        return false;
-    }
-    qCDebug(KALARM_LOG) << "AlarmCalendar::exportAlarms:" << url.toDisplayString();
-
-    MemoryCalendar::Ptr calendar(new MemoryCalendar(Preferences::timeSpecAsZone()));
-    FileStorage::Ptr calStorage(new FileStorage(calendar, file));
-    if (append  &&  !calStorage->load())
-    {
-#if KIO_VERSION < QT_VERSION_CHECK(5, 69, 0)
-        auto statJob = KIO::stat(url, KIO::StatJob::SourceSide, 2);
-#else
-        auto statJob = KIO::statDetails(url, KIO::StatJob::SourceSide, KIO::StatDetail::StatDefaultDetails);
-#endif
-        KJobWidgets::setWindow(statJob, parent);
-        statJob->exec();
-        KFileItem fi(statJob->statResult(), url);
-        if (fi.size())
-        {
-            qCCritical(KALARM_LOG) << "AlarmCalendar::exportAlarms: Error loading calendar file" << file << "for append";
-            KAMessageBox::error(MainWindow::mainMainWindow(),
-                                xi18nc("@info", "Error loading calendar to append to:<nl/><filename>%1</filename>", url.toDisplayString()));
-            return false;
-        }
-    }
-    KACalendar::setKAlarmVersion(calendar);
-
-    // Add the alarms to the calendar
-    bool success = true;
-    bool exported = false;
-    for (int i = 0, end = events.count();  i < end;  ++i)
-    {
-        const KAEvent* event = events[i];
-        Event::Ptr kcalEvent(new Event);
-        const CalEvent::Type type = event->category();
-        const QString id = CalEvent::uid(kcalEvent->uid(), type);
-        kcalEvent->setUid(id);
-        event->updateKCalEvent(kcalEvent, KAEvent::UID_IGNORE);
-        if (calendar->addEvent(kcalEvent))
-            exported = true;
-        else
-            success = false;
-    }
-
-    if (exported)
-    {
-        // One or more alarms have been exported to the calendar.
-        // Save the calendar to file.
-        QTemporaryFile* tempFile = nullptr;
-        bool local = url.isLocalFile();
-        if (!local)
-        {
-            tempFile = new QTemporaryFile;
-            file = tempFile->fileName();
-        }
-        calStorage->setFileName(file);
-        calStorage->setSaveFormat(new ICalFormat);
-        if (!calStorage->save())
-        {
-            qCCritical(KALARM_LOG) << "AlarmCalendar::exportAlarms:" << file << ": failed";
-            KAMessageBox::error(MainWindow::mainMainWindow(),
-                                xi18nc("@info", "Failed to save new calendar to:<nl/><filename>%1</filename>", url.toDisplayString()));
-            success = false;
-        }
-        else if (!local)
-        {
-            QFile qFile(file);
-            qFile.open(QIODevice::ReadOnly);
-            auto uploadJob = KIO::storedPut(&qFile, url, -1);
-            KJobWidgets::setWindow(uploadJob, parent);
-            if (!uploadJob->exec())
-            {
-                qCCritical(KALARM_LOG) << "AlarmCalendar::exportAlarms:" << file << ": upload failed";
-                KAMessageBox::error(MainWindow::mainMainWindow(),
-                                    xi18nc("@info", "Cannot upload new calendar to:<nl/><filename>%1</filename>", url.toDisplayString()));
-                success = false;
-            }
-        }
-        delete tempFile;
-    }
-    calendar->close();
-    return success;
-}
-
-/******************************************************************************
 * Flag the start of a group of calendar update calls.
 * The purpose is to avoid multiple calendar saves during a group of operations.
 */
@@ -997,7 +674,7 @@ bool AlarmCalendar::addEvent(KAEvent& evnt, QWidget* promptParent, bool useEvent
         if (!mEventMap.contains(EventId(key, event->id())))
         {
             addNewEvent(Resource(), event);
-            ok = mCalendarStorage->calendar()->addEvent(kcalEvent);
+            ok = mDisplayCalStorage->calendar()->addEvent(kcalEvent);
             remove = !ok;
         }
     }
@@ -1218,8 +895,8 @@ CalEvent::Type AlarmCalendar::deleteEventInternal(const QString& eventID, const 
     const KAEvent paramEvent = event;
 
     Event::Ptr kcalEvent;
-    if (mCalendarStorage)
-        kcalEvent = mCalendarStorage->calendar()->event(id);   // display calendar
+    if (mDisplayCalStorage)
+        kcalEvent = mDisplayCalStorage->calendar()->event(id);   // display calendar
     const ResourceId key = resource.id();
     KAEventMap::Iterator it = mEventMap.find(EventId(key, id));
     if (it != mEventMap.end())
@@ -1251,7 +928,7 @@ CalEvent::Type AlarmCalendar::deleteEventInternal(const QString& eventID, const 
     {
         // It's a display calendar event
         status = CalEvent::status(kcalEvent);
-        mCalendarStorage->calendar()->deleteEvent(kcalEvent);
+        mDisplayCalStorage->calendar()->deleteEvent(kcalEvent);
     }
     else if (deleteFromResources)
     {
@@ -1292,18 +969,6 @@ KAEvent* AlarmCalendar::event(const EventId& uniqueID, bool findUniqueId)
     if (it == mEventMap.constEnd())
         return nullptr;
     return it.value();
-}
-
-/******************************************************************************
-* Return the event with the specified ID.
-* This method is for the display calendar only.
-*/
-Event::Ptr AlarmCalendar::kcalEvent(const QString& uniqueID)
-{
-    Q_ASSERT(mCalType != RESOURCES);   // only allowed for display calendar
-    if (!mCalendarStorage)
-        return Event::Ptr();
-    return mCalendarStorage->calendar()->event(uniqueID);
 }
 
 /******************************************************************************
@@ -1349,7 +1014,7 @@ KAEvent::List AlarmCalendar::events(const QString& uniqueId) const
 KAEvent::List AlarmCalendar::events(const Resource& resource, CalEvent::Types type) const
 {
     KAEvent::List list;
-    if (mCalType != RESOURCES  &&  (!mCalendarStorage || resource.isValid()))
+    if (mCalType != RESOURCES  &&  (!mDisplayCalStorage || resource.isValid()))
         return list;
     if (resource.isValid())
     {
@@ -1383,6 +1048,18 @@ KAEvent::List AlarmCalendar::events(const Resource& resource, CalEvent::Types ty
 }
 
 /******************************************************************************
+* Return the event with the specified ID.
+* This method is for the display calendar only.
+*/
+Event::Ptr AlarmCalendar::kcalEvent(const QString& uniqueID)
+{
+    Q_ASSERT(mCalType != RESOURCES);   // only allowed for display calendar
+    if (!mDisplayCalStorage)
+        return Event::Ptr();
+    return mDisplayCalStorage->calendar()->event(uniqueID);
+}
+
+/******************************************************************************
 * Return all events in the calendar which contain usable alarms.
 * This method is for the display calendar only.
 * Optionally the event type can be filtered, using an OR of event types.
@@ -1391,9 +1068,9 @@ Event::List AlarmCalendar::kcalEvents(CalEvent::Type type)
 {
     Event::List list;
     Q_ASSERT(mCalType != RESOURCES);   // only allowed for display calendar
-    if (!mCalendarStorage)
+    if (!mDisplayCalStorage)
         return list;
-    list = mCalendarStorage->calendar()->rawEvents();
+    list = mDisplayCalStorage->calendar()->rawEvents();
     for (int i = 0;  i < list.count();  )
     {
         Event::Ptr event = list.at(i);
@@ -1577,19 +1254,6 @@ void AlarmCalendar::adjustStartOfDay()
         return;
     for (ResourceMap::ConstIterator rit = mResourceMap.constBegin();  rit != mResourceMap.constEnd();  ++rit)
         KAEvent::adjustStartOfDay(rit.value());
-}
-
-/******************************************************************************
-* Find the version of KAlarm which wrote the calendar file, and do any
-* necessary conversions to the current format.
-*/
-KACalendar::Compat fix(const FileStorage::Ptr& fileStorage)
-{
-    QString versionString;
-    int version = KACalendar::updateVersion(fileStorage, versionString);
-    if (version == KACalendar::IncompatibleFormat)
-        return KACalendar::Incompatible;  // calendar was created by another program, or an unknown version of KAlarm
-    return KACalendar::Current;
 }
 
 // vim: et sw=4:

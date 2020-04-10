@@ -24,11 +24,32 @@
 #include "resourcedatamodelbase.h"
 #include "resourcemodel.h"
 #include "resourceselectdialog.h"
+
+#include "mainwindow.h"
 #include "preferences.h"
 #include "lib/autoqpointer.h"
+#include "lib/filedialog.h"
+#include "lib/messagebox.h"
 #include "kalarm_debug.h"
 
+#include <KCalendarCore/MemoryCalendar>
+#include <KCalendarCore/ICalFormat>
 #include <KLocalizedString>
+#include <KFileItem>
+#include <KJobWidgets>
+#include <KIO/StatJob>
+#include <KIO/StoredTransferJob>
+#include <kio_version.h>
+
+#include <QTemporaryFile>
+#include <QFileDialog>
+
+using namespace KCalendarCore;
+
+namespace
+{
+bool updateCalendarFormat(const FileStorage::Ptr&);
+}
 
 Resources* Resources::mInstance {nullptr};
 
@@ -38,6 +59,7 @@ QHash<ResourceId, Resource> Resources::mResources;
 
 bool Resources::mCreated {false};
 bool Resources::mPopulated {false};
+QUrl Resources::mLastImportUrl;
 
 
 Resources* Resources::instance()
@@ -293,6 +315,240 @@ Resource Resources::destination(CalEvent::Type type, QWidget* promptParent, bool
         }
     }
     return res;
+}
+
+/******************************************************************************
+* Import alarms from an external calendar and merge them into KAlarm's calendar.
+* The alarms are given new unique event IDs.
+* Parameters: parent = parent widget for error message boxes
+* Reply = true if all alarms in the calendar were successfully imported
+*       = false if any alarms failed to be imported.
+*/
+bool Resources::importAlarms(Resource& resource, QWidget* parent)
+{
+    qCDebug(KALARM_LOG) << "Resources::importAlarms";
+    const QUrl url = QFileDialog::getOpenFileUrl(parent, QString(), mLastImportUrl,
+                                                 QStringLiteral("%1 (*.vcs *.ics)").arg(i18nc("@info", "Calendar Files")));
+    if (url.isEmpty())
+    {
+        qCCritical(KALARM_LOG) << "Resources::importAlarms: Empty URL";
+        return false;
+    }
+    if (!url.isValid())
+    {
+        qCDebug(KALARM_LOG) << "Resources::importAlarms: Invalid URL";
+        return false;
+    }
+    mLastImportUrl = url.adjusted(QUrl::RemoveFilename);
+    qCDebug(KALARM_LOG) << "Resources::importAlarms:" << url.toDisplayString();
+
+    // If the URL is remote, download it into a temporary local file.
+    QString filename;
+    bool local = url.isLocalFile();
+    if (local)
+    {
+        filename = url.toLocalFile();
+        if (!QFile::exists(filename))
+        {
+            qCDebug(KALARM_LOG) << "Resources::importAlarms: File '" << url.toDisplayString() <<"' not found";
+            KAMessageBox::error(parent, xi18nc("@info", "Could not load calendar <filename>%1</filename>.", url.toDisplayString()));
+            return false;
+        }
+    }
+    else
+    {
+        auto getJob = KIO::storedGet(url);
+        KJobWidgets::setWindow(getJob, MainWindow::mainMainWindow());
+        if (!getJob->exec())
+        {
+            qCCritical(KALARM_LOG) << "Resources::accessUrl: Download failure";
+            KAMessageBox::error(parent, xi18nc("@info", "Cannot download calendar: <filename>%1</filename>", url.toDisplayString()));
+            return false;
+        }
+        QTemporaryFile tmpFile;
+        tmpFile.setAutoRemove(false);
+        tmpFile.write(getJob->data());
+        tmpFile.seek(0);
+        filename = tmpFile.fileName();
+        qCDebug(KALARM_LOG) << "Resources::accessUrl: --- Downloaded to" << filename;
+    }
+
+    // Read the calendar and add its alarms to the current calendars
+    MemoryCalendar::Ptr cal(new MemoryCalendar(Preferences::timeSpecAsZone()));
+    FileStorage::Ptr calStorage(new FileStorage(cal, filename));
+    bool success = calStorage->load();
+    if (!success)
+    {
+        qCDebug(KALARM_LOG) << "Resources::importAlarms: Error loading calendar '" << filename <<"'";
+        KAMessageBox::error(parent, xi18nc("@info", "Could not load calendar <filename>%1</filename>.", url.toDisplayString()));
+    }
+    else
+    {
+        const bool currentFormat = updateCalendarFormat(calStorage);
+        const CalEvent::Types wantedTypes = resource.alarmTypes();
+        const Event::List events = cal->rawEvents();
+        for (Event::Ptr event : events)
+        {
+            if (event->alarms().isEmpty()  ||  !KAEvent(event).isValid())
+                continue;    // ignore events without alarms, or usable alarms
+            CalEvent::Type type = CalEvent::status(event);
+            if (type == CalEvent::TEMPLATE)
+            {
+                // If we know the event was not created by KAlarm, don't treat it as a template
+                if (!currentFormat)
+                    type = CalEvent::ACTIVE;
+            }
+            Resource res;
+            if (resource.isValid())
+            {
+                if (!(type & wantedTypes))
+                    continue;
+                res = resource;
+            }
+            else
+            {
+                switch (type)
+                {
+                    case CalEvent::ACTIVE:
+                    case CalEvent::ARCHIVED:
+                    case CalEvent::TEMPLATE:
+                        break;
+                    default:
+                        continue;
+                }
+//TODO: does this prompt for every alarm if no default is set?
+                res = Resources::destination(type);
+            }
+
+            Event::Ptr newev(new Event(*event));
+
+            // If there is a display alarm without display text, use the event
+            // summary text instead.
+            if (type == CalEvent::ACTIVE  &&  !newev->summary().isEmpty())
+            {
+                const Alarm::List& alarms = newev->alarms();
+                for (Alarm::Ptr alarm : alarms)
+                {
+                    if (alarm->type() == Alarm::Display  &&  alarm->text().isEmpty())
+                        alarm->setText(newev->summary());
+                }
+                newev->setSummary(QString());   // KAlarm only uses summary for template names
+            }
+
+            // Give the event a new ID and add it to the calendars
+            newev->setUid(CalEvent::uid(CalFormat::createUniqueId(), type));
+            if (!res.addEvent(KAEvent(newev)))
+                success = false;
+        }
+
+    }
+    if (!local)
+        QFile::remove(filename);
+    return success;
+}
+
+/******************************************************************************
+* Export all selected alarms to an external calendar.
+* The alarms are given new unique event IDs.
+* Parameters: parent = parent widget for error message boxes
+* Reply = true if all alarms in the calendar were successfully exported
+*       = false if any alarms failed to be exported.
+*/
+bool Resources::exportAlarms(const KAEvent::List& events, QWidget* parent)
+{
+    bool append;
+//TODO: exportalarms shows up afterwards in other file dialogues
+    QString file = FileDialog::getSaveFileName(QUrl(QStringLiteral("kfiledialog:///exportalarms")),
+                                               QStringLiteral("*.ics|%1").arg(i18nc("@info", "Calendar Files")),
+                                               parent, i18nc("@title:window", "Choose Export Calendar"),
+                                               &append);
+    if (file.isEmpty())
+        return false;
+    const QUrl url = QUrl::fromLocalFile(file);
+    if (!url.isValid())
+    {
+        qCDebug(KALARM_LOG) << "Resources::exportAlarms: Invalid URL" << url;
+        return false;
+    }
+    qCDebug(KALARM_LOG) << "Resources::exportAlarms:" << url.toDisplayString();
+
+    MemoryCalendar::Ptr calendar(new MemoryCalendar(Preferences::timeSpecAsZone()));
+    FileStorage::Ptr calStorage(new FileStorage(calendar, file));
+    if (append  &&  !calStorage->load())
+    {
+#if KIO_VERSION < QT_VERSION_CHECK(5, 69, 0)
+        auto statJob = KIO::stat(url, KIO::StatJob::SourceSide, 2);
+#else
+        auto statJob = KIO::statDetails(url, KIO::StatJob::SourceSide, KIO::StatDetail::StatDefaultDetails);
+#endif
+        KJobWidgets::setWindow(statJob, parent);
+        statJob->exec();
+        KFileItem fi(statJob->statResult(), url);
+        if (fi.size())
+        {
+            qCCritical(KALARM_LOG) << "Resources::exportAlarms: Error loading calendar file" << file << "for append";
+            KAMessageBox::error(MainWindow::mainMainWindow(),
+                                xi18nc("@info", "Error loading calendar to append to:<nl/><filename>%1</filename>", url.toDisplayString()));
+            return false;
+        }
+    }
+    KACalendar::setKAlarmVersion(calendar);
+
+    // Add the alarms to the calendar
+    bool success = true;
+    bool exported = false;
+    for (int i = 0, end = events.count();  i < end;  ++i)
+    {
+        const KAEvent* event = events[i];
+        Event::Ptr kcalEvent(new Event);
+        const CalEvent::Type type = event->category();
+        const QString id = CalEvent::uid(kcalEvent->uid(), type);
+        kcalEvent->setUid(id);
+        event->updateKCalEvent(kcalEvent, KAEvent::UID_IGNORE);
+        if (calendar->addEvent(kcalEvent))
+            exported = true;
+        else
+            success = false;
+    }
+
+    if (exported)
+    {
+        // One or more alarms have been exported to the calendar.
+        // Save the calendar to file.
+        QTemporaryFile* tempFile = nullptr;
+        bool local = url.isLocalFile();
+        if (!local)
+        {
+            tempFile = new QTemporaryFile;
+            file = tempFile->fileName();
+        }
+        calStorage->setFileName(file);
+        calStorage->setSaveFormat(new ICalFormat);
+        if (!calStorage->save())
+        {
+            qCCritical(KALARM_LOG) << "Resources::exportAlarms:" << file << ": failed";
+            KAMessageBox::error(MainWindow::mainMainWindow(),
+                                xi18nc("@info", "Failed to save new calendar to:<nl/><filename>%1</filename>", url.toDisplayString()));
+            success = false;
+        }
+        else if (!local)
+        {
+            QFile qFile(file);
+            qFile.open(QIODevice::ReadOnly);
+            auto uploadJob = KIO::storedPut(&qFile, url, -1);
+            KJobWidgets::setWindow(uploadJob, parent);
+            if (!uploadJob->exec())
+            {
+                qCCritical(KALARM_LOG) << "Resources::exportAlarms:" << file << ": upload failed";
+                KAMessageBox::error(MainWindow::mainMainWindow(),
+                                    xi18nc("@info", "Cannot upload new calendar to:<nl/><filename>%1</filename>", url.toDisplayString()));
+                success = false;
+            }
+        }
+        delete tempFile;
+    }
+    calendar->close();
+    return success;
 }
 
 /******************************************************************************
@@ -625,5 +881,23 @@ bool Resources::isPopulated(ResourceId id)
     return true;
 }
 #endif
+
+namespace
+{
+
+/******************************************************************************
+* Find the version of KAlarm which wrote the calendar file, and do any
+* necessary conversions to the current format.
+*/
+bool updateCalendarFormat(const FileStorage::Ptr& fileStorage)
+{
+    QString versionString;
+    int version = KACalendar::updateVersion(fileStorage, versionString);
+    if (version == KACalendar::IncompatibleFormat)
+        return false;  // calendar was created by another program, or an unknown version of KAlarm
+    return true;
+}
+
+}
 
 // vim: et sw=4:

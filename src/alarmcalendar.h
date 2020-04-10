@@ -45,8 +45,6 @@ class AlarmCalendar : public QObject
         Q_OBJECT
     public:
         ~AlarmCalendar() override;
-        bool                  valid() const         { return (mCalType == RESOURCES) || mUrl.isValid(); }
-        CalEvent::Type        type() const          { return (mCalType == RESOURCES) ? CalEvent::EMPTY : mEventType; }
         bool                  open();
         int                   load();
         bool                  reload();
@@ -58,12 +56,12 @@ class AlarmCalendar : public QObject
         void                  setAlarmPending(KAEvent*, bool pending = true);
         bool                  haveDisabledAlarms() const   { return mHaveDisabledAlarms; }
         void                  disabledChanged(const KAEvent*);
-        KCalendarCore::Event::Ptr  kcalEvent(const QString& uniqueID);   // if Akonadi, display calendar only
         KAEvent*              event(const EventId& uniqueId, bool findUniqueId = false);
         KAEvent*              templateEvent(const QString& templateName);
         KAEvent::List         events(const QString& uniqueId) const;
         KAEvent::List         events(CalEvent::Types s = CalEvent::EMPTY) const  { return events(Resource(), s); }
         KAEvent::List         events(const Resource&, CalEvent::Types = CalEvent::EMPTY) const;
+        KCalendarCore::Event::Ptr  kcalEvent(const QString& uniqueID);   // display calendar only
         KCalendarCore::Event::List kcalEvents(CalEvent::Type s = CalEvent::EMPTY);   // display calendar only
         bool                  eventReadOnly(const QString& eventId) const;
         bool                  addEvent(KAEvent&, QWidget* promptparent = nullptr, bool useEventID = false, Resource* = nullptr, bool noPrompt = false, bool* cancelled = nullptr);
@@ -74,8 +72,6 @@ class AlarmCalendar : public QObject
         bool                  deleteDisplayEvent(const QString& eventID, bool save = false);
         void                  purgeEvents(const KAEvent::List&);
         bool                  isOpen();
-        QString               path() const           { return (mCalType == RESOURCES) ? QString() : mUrl.toDisplayString(); }
-        QString               urlString() const      { return (mCalType == RESOURCES) ? QString() : mUrl.toString(); }
         void                  adjustStartOfDay();
 
         static bool           initialiseCalendars();
@@ -84,8 +80,6 @@ class AlarmCalendar : public QObject
         static AlarmCalendar* displayCalendar()      { return mDisplayCalendar; }
         static AlarmCalendar* displayCalendarOpen();
         static KAEvent*       getEvent(const EventId&);
-        bool                  importAlarms(QWidget*, Resource* = nullptr);
-        static bool           exportAlarms(const KAEvent::List&, QWidget* parent);
 
     Q_SIGNALS:
         void                  earliestAlarmChanged();
@@ -109,7 +103,7 @@ class AlarmCalendar : public QObject
         AlarmCalendar();
         AlarmCalendar(const QString& file, CalEvent::Type);
         bool                  saveCal(const QString& newFile = QString());
-        bool                  isValid() const   { return mCalType == RESOURCES || mCalendarStorage; }
+        bool                  isValid() const   { return mCalType == RESOURCES || mDisplayCalStorage; }
         void                  addNewEvent(const Resource&, KAEvent*, bool replace = false);
         CalEvent::Type        deleteEventInternal(const KAEvent&, bool deleteFromResources = true);
         CalEvent::Type        deleteEventInternal(const KAEvent&, Resource&, bool deleteFromResources = true);
@@ -124,16 +118,14 @@ class AlarmCalendar : public QObject
 
         static AlarmCalendar* mResourcesCalendar;  // the calendar resources
         static AlarmCalendar* mDisplayCalendar;    // the display calendar
-        static QUrl           mLastImportUrl;      // last URL for Import Alarms file dialogue
-
-        KCalendarCore::FileStorage::Ptr mCalendarStorage; // for display calendar; null if resources calendar
+        
         ResourceMap           mResourceMap;
         KAEventMap            mEventMap;           // lookup of all events by UID
         EarliestMap           mEarliestAlarm;      // alarm with earliest trigger time, by resource
         QSet<QString>         mPendingAlarms;      // IDs of alarms which are currently being processed after triggering
-        QUrl                  mUrl;                // URL of current calendar file
-        QUrl                  mICalUrl;            // URL of iCalendar file
-        QString               mLocalFile;          // calendar file, or local copy if it's a remote file
+        KCalendarCore::FileStorage::Ptr mDisplayCalStorage; // for display calendar; null if resources calendar
+        QString               mDisplayCalPath;     // path of display calendar file
+        QString               mDisplayICalPath;    // path of display iCalendar file
         CalType               mCalType;            // what type of calendar mCalendar is (resources/ical/vcal)
         CalEvent::Type        mEventType;          // what type of events the calendar file is for
         bool                  mOpen {false};       // true if the calendar file is open
