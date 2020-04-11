@@ -1,7 +1,7 @@
 /*
  *  traywindow.cpp  -  the KDE system tray applet
  *  Program:  kalarm
- *  Copyright © 2002-2019 David Jarvie <djarvie@kde.org>
+ *  Copyright © 2002-2020 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -115,10 +115,10 @@ TrayWindow::TrayWindow(MainWindow* parent)
     // Set icon to correspond with the alarms enabled menu status
     setEnabledStatus(theApp()->alarmsEnabled());
 
-    connect(AlarmCalendar::resources(), &AlarmCalendar::haveDisabledAlarmsChanged, this, &TrayWindow::slotHaveDisabledAlarms);
+    connect(ResourcesCalendar::instance(), &ResourcesCalendar::haveDisabledAlarmsChanged, this, &TrayWindow::slotHaveDisabledAlarms);
     connect(this, &TrayWindow::activateRequested, this, &TrayWindow::slotActivateRequested);
     connect(this, &TrayWindow::secondaryActivateRequested, this, &TrayWindow::slotSecondaryActivateRequested);
-    slotHaveDisabledAlarms(AlarmCalendar::resources()->haveDisabledAlarms());
+    slotHaveDisabledAlarms(ResourcesCalendar::instance()->haveDisabledAlarms());
 
     // Hack: KSNI does not let us know when it is about to show the tooltip,
     // so we need to update it whenever something change in it.
@@ -148,7 +148,7 @@ TrayWindow::TrayWindow(MainWindow* parent)
     // Set auto-hide status when next alarm or preferences change
     mStatusUpdateTimer->setSingleShot(true);
     connect(mStatusUpdateTimer, &QTimer::timeout, this, &TrayWindow::updateStatus);
-    connect(AlarmCalendar::resources(), &AlarmCalendar::earliestAlarmChanged, this, &TrayWindow::updateStatus);
+    connect(ResourcesCalendar::instance(), &ResourcesCalendar::earliestAlarmChanged, this, &TrayWindow::updateStatus);
     Preferences::connect(SIGNAL(autoHideSystemTrayChanged(int)), this, SLOT(updateStatus()));
     updateStatus();
 
@@ -283,7 +283,7 @@ void TrayWindow::updateStatus()
         active = theApp()->alarmsEnabled();
         if (active)
         {
-            KAEvent* event = AlarmCalendar::resources()->earliestAlarm();
+            KAEvent* event = ResourcesCalendar::instance()->earliestAlarm();
             active = static_cast<bool>(event);
             if (event  &&  period > 0)
             {

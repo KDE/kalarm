@@ -1479,7 +1479,7 @@ void MainWindow::slotSelection()
     bool enableEnableDisable = true;
     bool enableEnable = false;
     bool enableDisable = false;
-    AlarmCalendar* resources = AlarmCalendar::resources();
+    ResourcesCalendar* resources = ResourcesCalendar::instance();
     const KADateTime now = KADateTime::currentUtcDateTime();
     for (int i = 0;  i < count;  ++i)
     {

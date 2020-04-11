@@ -150,7 +150,9 @@ KAlarmApp::~KAlarmApp()
         mCommandProcesses.pop_front();
         delete pd;
     }
-    AlarmCalendar::terminateCalendars();
+    ResourcesCalendar::terminate();
+    DisplayCalendar::terminate();
+    DataModel::terminate();
 }
 
 /******************************************************************************
@@ -215,15 +217,15 @@ bool KAlarmApp::initialiseTimerResources()
         mAlarmTimer->setSingleShot(true);
         connect(mAlarmTimer, &QTimer::timeout, this, &KAlarmApp::checkNextDueAlarm);
     }
-    if (!AlarmCalendar::resources())
+    if (!ResourcesCalendar::instance())
     {
         qCDebug(KALARM_LOG) << "KAlarmApp::initialise: initialising calendars";
-        if (AlarmCalendar::initialiseCalendars())
-        {
-            connect(AlarmCalendar::resources(), &AlarmCalendar::earliestAlarmChanged, this, &KAlarmApp::checkNextDueAlarm);
-            connect(AlarmCalendar::resources(), &AlarmCalendar::atLoginEventAdded, this, &KAlarmApp::atLoginEventAdded);
-            return true;
-        }
+        DataModel::initialise();
+        ResourcesCalendar::initialise();
+        DisplayCalendar::initialise();
+        connect(ResourcesCalendar::instance(), &ResourcesCalendar::earliestAlarmChanged, this, &KAlarmApp::checkNextDueAlarm);
+        connect(ResourcesCalendar::instance(), &ResourcesCalendar::atLoginEventAdded, this, &KAlarmApp::atLoginEventAdded);
+        return true;
     }
     return false;
 }
@@ -628,7 +630,7 @@ int KAlarmApp::activateInstance(const QStringList& args, const QString& workingD
          * been deleted - if so, don't try to do anything. (This has been known
          * to happen under the Xfce desktop.)
          */
-        if (AlarmCalendar::resources())
+        if (ResourcesCalendar::instance())
         {
             if (Resources::allCreated())
             {
@@ -731,7 +733,8 @@ bool KAlarmApp::quitIf(int exitCode, bool force)
     delete mAlarmTimer;     // prevent checking for alarms after deleting calendars
     mAlarmTimer = nullptr;
     mInitialised = false;   // prevent processQueue() from running
-    AlarmCalendar::terminateCalendars();
+    ResourcesCalendar::terminate();
+    DisplayCalendar::terminate();
     DataModel::terminate();
     exit(exitCode);
     return true;    // sometimes we actually get to here, despite calling exit()
@@ -838,7 +841,7 @@ void KAlarmApp::checkNextDueAlarm()
     if (!mAlarmsEnabled)
         return;
     // Find the first alarm due
-    const KAEvent* nextEvent = AlarmCalendar::resources()->earliestAlarm();
+    const KAEvent* nextEvent = ResourcesCalendar::instance()->earliestAlarm();
     if (!nextEvent)
         return;   // there are no alarms pending
     const KADateTime nextDt = nextEvent->nextTrigger(KAEvent::ALL_TRIGGER).effectiveKDateTime();
@@ -1186,7 +1189,7 @@ void KAlarmApp::changeStartOfDay()
 {
     DateTime::setStartOfDay(Preferences::startOfDay());
     KAEvent::setStartOfDay(Preferences::startOfDay());
-    AlarmCalendar::resources()->adjustStartOfDay();
+    ResourcesCalendar::instance()->adjustStartOfDay();
 }
 
 /******************************************************************************
@@ -1650,7 +1653,7 @@ bool KAlarmApp::handleEvent(const EventId& id, QueuedAction action, bool findUni
     KAlarm::checkRtcWakeConfig();
 
     const QString eventID(id.eventId());
-    KAEvent* event = AlarmCalendar::resources()->event(id, findUniqueId);
+    KAEvent* event = ResourcesCalendar::instance()->event(id, findUniqueId);
     if (!event)
     {
         if (id.resourceId() != -1)
@@ -2120,7 +2123,7 @@ void* KAlarmApp::execAlarm(KAEvent& event, const KAAlarm& alarm, bool reschedule
                 const int flags = (reschedule ? ProcData::RESCHEDULE : 0) | (allowDefer ? ProcData::ALLOW_DEFER : 0);
                 if (doShellCommand(command, event, &alarm, (flags | ProcData::PRE_ACTION)))
                 {
-                    AlarmCalendar::resources()->setAlarmPending(&event);
+                    ResourcesCalendar::instance()->setAlarmPending(&event);
                     return result;     // display the message after the command completes
                 }
                 // Error executing command
@@ -2496,7 +2499,7 @@ void KAlarmApp::slotCommandExited(ShellProcess* proc)
                 }
             }
             if (pd->preAction())
-                AlarmCalendar::resources()->setAlarmPending(pd->event, false);
+                ResourcesCalendar::instance()->setAlarmPending(pd->event, false);
             if (executeAlarm)
                 execAlarm(*pd->event, *pd->alarm, pd->reschedule(), pd->allowDefer(), true);
             mCommandProcesses.removeAt(i);
@@ -2585,10 +2588,7 @@ bool KAlarmApp::initCheck(bool calendarOnly)
          * MessageWin::redisplayAlarms() is executing open() (but before open()
          * completes), which causes problems!!
          */
-        AlarmCalendar::displayCalendar()->open();
-
-        if (!AlarmCalendar::resources()->open())
-            return false;
+        DisplayCalendar::instance()->open();
     }
     if (firstTime)
     {
@@ -2631,7 +2631,7 @@ void KAlarmApp::setEventCommandError(const KAEvent& event, KAEvent::CmdErrType e
     if (err == KAEvent::CMD_ERROR_POST  &&  event.commandError() == KAEvent::CMD_ERROR_PRE)
         err = KAEvent::CMD_ERROR_PRE_POST;
     event.setCommandError(err);
-    KAEvent* ev = AlarmCalendar::resources()->event(EventId(event));
+    KAEvent* ev = ResourcesCalendar::instance()->event(EventId(event));
     if (ev  &&  ev->commandError() != err)
         ev->setCommandError(err);
     Resource resource = Resources::resourceForEvent(event.id());
@@ -2649,7 +2649,7 @@ void KAlarmApp::clearEventCommandError(const KAEvent& event, KAEvent::CmdErrType
 
     KAEvent::CmdErrType newerr = static_cast<KAEvent::CmdErrType>(event.commandError() & ~err);
     event.setCommandError(newerr);
-    KAEvent* ev = AlarmCalendar::resources()->event(EventId(event));
+    KAEvent* ev = ResourcesCalendar::instance()->event(EventId(event));
     if (ev)
     {
         newerr = static_cast<KAEvent::CmdErrType>(ev->commandError() & ~err);

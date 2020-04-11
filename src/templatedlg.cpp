@@ -1,7 +1,7 @@
 /*
  *  templatedlg.cpp  -  dialog to create, edit and delete alarm templates
  *  Program:  kalarm
- *  Copyright © 2004-2019 David Jarvie <djarvie@kde.org>
+ *  Copyright © 2004-2020 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -63,7 +63,7 @@ TemplateDlg::TemplateDlg(QWidget* parent)
 
     QBoxLayout* topLayout = new QVBoxLayout(this);
 
-    QBoxLayout* hlayout = new QHBoxLayout(this);
+    QBoxLayout* hlayout = new QHBoxLayout();
     topLayout->addLayout(hlayout);
 
     QBoxLayout* layout = new QVBoxLayout();
@@ -211,7 +211,7 @@ void TemplateDlg::slotDelete()
 */
 void TemplateDlg::slotSelectionChanged()
 {
-    AlarmCalendar* resources = AlarmCalendar::resources();
+    ResourcesCalendar* resources = ResourcesCalendar::instance();
     QVector<KAEvent> events = mListView->selectedEvents();
     int count = events.count();
     bool readOnly = false;

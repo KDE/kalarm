@@ -36,105 +36,144 @@
 using namespace KAlarmCal;
 
 
-/** Provides read and write access to calendar files and resources.
+/** Base class to provide read and write access to calendar files and resources.
  *  Either vCalendar or iCalendar files may be read, but the calendar is saved
  *  only in iCalendar format to avoid information loss.
  */
 class AlarmCalendar : public QObject
 {
-        Q_OBJECT
-    public:
-        ~AlarmCalendar() override;
-        bool                  open();
-        int                   load();
-        bool                  reload();
-        bool                  save();
-        void                  close();
-        void                  startUpdate();
-        bool                  endUpdate();
-        KAEvent*              earliestAlarm() const;
-        void                  setAlarmPending(KAEvent*, bool pending = true);
-        bool                  haveDisabledAlarms() const   { return mHaveDisabledAlarms; }
-        void                  disabledChanged(const KAEvent*);
-        KAEvent*              event(const EventId& uniqueId, bool findUniqueId = false);
-        KAEvent*              templateEvent(const QString& templateName);
-        KAEvent::List         events(const QString& uniqueId) const;
-        KAEvent::List         events(CalEvent::Types s = CalEvent::EMPTY) const  { return events(Resource(), s); }
-        KAEvent::List         events(const Resource&, CalEvent::Types = CalEvent::EMPTY) const;
-        KCalendarCore::Event::Ptr  kcalEvent(const QString& uniqueID);   // display calendar only
-        KCalendarCore::Event::List kcalEvents(CalEvent::Type s = CalEvent::EMPTY);   // display calendar only
-        bool                  eventReadOnly(const QString& eventId) const;
-        bool                  addEvent(KAEvent&, QWidget* promptparent = nullptr, bool useEventID = false, Resource* = nullptr, bool noPrompt = false, bool* cancelled = nullptr);
-        bool                  modifyEvent(const EventId& oldEventId, KAEvent& newEvent);
-        KAEvent*              updateEvent(const KAEvent&);
-        KAEvent*              updateEvent(const KAEvent*);
-        bool                  deleteEvent(const KAEvent&, bool save = false);
-        bool                  deleteDisplayEvent(const QString& eventID, bool save = false);
-        void                  purgeEvents(const KAEvent::List&);
-        bool                  isOpen();
-        void                  adjustStartOfDay();
+    Q_OBJECT
+public:
+    KAEvent*              event(const EventId& uniqueId);
+    bool                  addEvent(KAEvent&, QWidget* promptparent = nullptr, bool useEventID = false, Resource* = nullptr, bool noPrompt = false, bool* cancelled = nullptr);
+    void                  adjustStartOfDay();
 
-        static bool           initialiseCalendars();
-        static void           terminateCalendars();
-        static AlarmCalendar* resources()            { return mResourcesCalendar; }
-        static AlarmCalendar* displayCalendar()      { return mDisplayCalendar; }
-        static AlarmCalendar* displayCalendarOpen();
-        static KAEvent*       getEvent(const EventId&);
+    static void           initialise();
 
-    Q_SIGNALS:
-        void                  earliestAlarmChanged();
-        void                  haveDisabledAlarmsChanged(bool haveDisabled);
-        void                  atLoginEventAdded(const KAEvent&);
-        void                  calendarSaved(AlarmCalendar*);
+protected:
+    typedef QMap<ResourceId, KAEvent::List> ResourceMap;  // id = invalid for display calendar
+    typedef QHash<EventId, KAEvent*> KAEventMap;  // indexed by resource and event UID
 
-    private Q_SLOTS:
-        void                  slotResourceSettingsChanged(Resource&, ResourceType::Changes);
-        void                  slotResourcesPopulated();
-        void                  slotResourceAdded(Resource&);
-        void                  slotEventsAdded(Resource&, const QList<KAEvent>&);
-        void                  slotEventsToBeRemoved(Resource&, const QList<KAEvent>&);
-        void                  slotEventUpdated(Resource&, const KAEvent&);
-    private:
-        enum CalType { RESOURCES, LOCAL_ICAL, LOCAL_VCAL };
-        typedef QMap<ResourceId, KAEvent::List> ResourceMap;  // id = invalid for display calendar
-        typedef QMap<ResourceId, KAEvent*> EarliestMap;
-        typedef QHash<EventId, KAEvent*> KAEventMap;  // indexed by resource and event UID
+    AlarmCalendar();
+    virtual bool          isValid() const = 0;
+    KAEvent::List         events(CalEvent::Types, const Resource&) const;
+    virtual void          addNewEvent(const Resource&, KAEvent*, bool replace = false);
+    KAEvent*              deleteEventBase(const QString& eventID, Resource&);
+    bool                  removeKAEvents(ResourceId, CalEvent::Types);
 
-        AlarmCalendar();
-        AlarmCalendar(const QString& file, CalEvent::Type);
-        bool                  saveCal(const QString& newFile = QString());
-        bool                  isValid() const   { return mCalType == RESOURCES || mDisplayCalStorage; }
-        void                  addNewEvent(const Resource&, KAEvent*, bool replace = false);
-        CalEvent::Type        deleteEventInternal(const KAEvent&, bool deleteFromResources = true);
-        CalEvent::Type        deleteEventInternal(const KAEvent&, Resource&, bool deleteFromResources = true);
-        CalEvent::Type        deleteEventInternal(const QString& eventID, const KAEvent&, Resource&,
-                                                  bool deleteFromResources = true);
-        void                  updateDisplayKAEvents();
-        void                  removeKAEvents(ResourceId, bool closing = false, CalEvent::Types = CalEvent::ACTIVE | CalEvent::ARCHIVED | CalEvent::TEMPLATE);
-        void                  findEarliestAlarm(const Resource&);
-        void                  findEarliestAlarm(ResourceId);  //deprecated
-        void                  checkForDisabledAlarms();
-        void                  checkForDisabledAlarms(bool oldEnabled, bool newEnabled);
+    ResourceMap           mResourceMap;
+    KAEventMap            mEventMap;           // lookup of all events by UID
 
-        static AlarmCalendar* mResourcesCalendar;  // the calendar resources
-        static AlarmCalendar* mDisplayCalendar;    // the display calendar
-        
-        ResourceMap           mResourceMap;
-        KAEventMap            mEventMap;           // lookup of all events by UID
-        EarliestMap           mEarliestAlarm;      // alarm with earliest trigger time, by resource
-        QSet<QString>         mPendingAlarms;      // IDs of alarms which are currently being processed after triggering
-        KCalendarCore::FileStorage::Ptr mDisplayCalStorage; // for display calendar; null if resources calendar
-        QString               mDisplayCalPath;     // path of display calendar file
-        QString               mDisplayICalPath;    // path of display iCalendar file
-        CalType               mCalType;            // what type of calendar mCalendar is (resources/ical/vcal)
-        CalEvent::Type        mEventType;          // what type of events the calendar file is for
-        bool                  mOpen {false};       // true if the calendar file is open
-        bool                  mIgnoreAtLogin {false}; // ignore new/updated repeat-at-login alarms
-        int                   mUpdateCount {0};    // nesting level of group of calendar update calls
-        bool                  mUpdateSave {false}; // save() was called while mUpdateCount > 0
-        bool                  mHaveDisabledAlarms {false}; // there is at least one individually disabled alarm
+    using QObject::event;   // prevent "hidden" warning
+};
 
-        using QObject::event;   // prevent "hidden" warning
+/** Provides read and write access to resource calendars.
+ */
+class ResourcesCalendar : public AlarmCalendar
+{
+    Q_OBJECT
+public:
+    ~ResourcesCalendar() override;
+    bool                  reload();
+    bool                  save();
+    void                  close();
+    KAEvent*              earliestAlarm() const;
+    void                  setAlarmPending(KAEvent*, bool pending = true);
+    bool                  haveDisabledAlarms() const   { return mHaveDisabledAlarms; }
+    void                  disabledChanged(const KAEvent*);
+    using AlarmCalendar::event;
+    KAEvent*              event(const EventId& uniqueId, bool findUniqueId);
+    KAEvent*              templateEvent(const QString& templateName);
+    KAEvent::List         events(const QString& uniqueId) const;
+    KAEvent::List         events(const Resource&, CalEvent::Types = CalEvent::EMPTY) const;
+    KAEvent::List         events(CalEvent::Types s = CalEvent::EMPTY) const;
+    bool                  eventReadOnly(const QString& eventId) const;
+    bool                  addEvent(KAEvent&, QWidget* promptparent = nullptr, bool useEventID = false, Resource* = nullptr, bool noPrompt = false, bool* cancelled = nullptr);
+    bool                  modifyEvent(const EventId& oldEventId, KAEvent& newEvent);
+    KAEvent*              updateEvent(const KAEvent&);
+    bool                  deleteEvent(const KAEvent&, bool save = false);
+    void                  purgeEvents(const KAEvent::List&);
+
+    static void           initialise();
+    static void           terminate();
+    static ResourcesCalendar* instance()     { return mInstance; }
+    static KAEvent*       getEvent(const EventId&);
+
+Q_SIGNALS:
+    void                  earliestAlarmChanged();
+    void                  haveDisabledAlarmsChanged(bool haveDisabled);
+    void                  atLoginEventAdded(const KAEvent&);
+
+private Q_SLOTS:
+    void                  slotResourceSettingsChanged(Resource&, ResourceType::Changes);
+    void                  slotResourcesPopulated();
+    void                  slotResourceAdded(Resource&);
+    void                  slotEventsAdded(Resource&, const QList<KAEvent>&);
+    void                  slotEventsToBeRemoved(Resource&, const QList<KAEvent>&);
+    void                  slotEventUpdated(Resource&, const KAEvent&);
+private:
+    typedef QMap<ResourceId, KAEvent*> EarliestMap;
+
+    ResourcesCalendar();
+    bool                  isValid() const override  { return true; }
+    void                  addNewEvent(const Resource&, KAEvent*, bool replace = false) override;
+    CalEvent::Type        deleteEventInternal(const KAEvent&, bool deleteFromResources = true);
+    CalEvent::Type        deleteEventInternal(const KAEvent&, Resource&, bool deleteFromResources = true);
+    CalEvent::Type        deleteEventInternal(const QString& eventID, const KAEvent&, Resource&,
+                                              bool deleteFromResources = true);
+    bool                  removeKAEvents(ResourceId, bool closing = false, CalEvent::Types = CalEvent::ACTIVE | CalEvent::ARCHIVED | CalEvent::TEMPLATE);
+    void                  findEarliestAlarm(const Resource&);
+    void                  findEarliestAlarm(ResourceId);
+    void                  checkForDisabledAlarms();
+    void                  checkForDisabledAlarms(bool oldEnabled, bool newEnabled);
+
+    static ResourcesCalendar* mInstance;   // the unique instance
+    
+    EarliestMap           mEarliestAlarm;      // alarm with earliest trigger time, by resource
+    QSet<QString>         mPendingAlarms;      // IDs of alarms which are currently being processed after triggering
+    bool                  mIgnoreAtLogin {false}; // ignore new/updated repeat-at-login alarms
+    bool                  mHaveDisabledAlarms {false}; // there is at least one individually disabled alarm
+};
+
+/** Provides read and write access to the display calendar.
+ */
+class DisplayCalendar : public AlarmCalendar
+{
+    Q_OBJECT
+public:
+    ~DisplayCalendar() override;
+    bool                  open();
+    int                   load();
+    bool                  reload();
+    bool                  save();
+    void                  close();
+    KAEvent::List         events(CalEvent::Types = CalEvent::EMPTY) const;
+    KCalendarCore::Event::Ptr  kcalEvent(const QString& uniqueID);
+    KCalendarCore::Event::List kcalEvents(CalEvent::Type s = CalEvent::EMPTY);
+    bool                  addEvent(KAEvent&);
+    bool                  deleteEvent(const QString& eventID, bool save = false);
+    bool                  isOpen() const         { return mOpen; }
+
+    static void           initialise();
+    static void           terminate();
+    static DisplayCalendar* instance()      { return mInstance; }
+    static DisplayCalendar* instanceOpen();
+
+private:
+    enum CalType { LOCAL_ICAL, LOCAL_VCAL };
+
+    explicit DisplayCalendar(const QString& file);
+    bool                  saveCal(const QString& newFile = QString());
+    bool                  isValid() const override   { return mCalendarStorage; }
+    void                  updateKAEvents();
+
+    static DisplayCalendar* mInstance;    // the unique instance
+    
+    KCalendarCore::FileStorage::Ptr mCalendarStorage;
+    QString               mDisplayCalPath;     // path of display calendar file
+    QString               mDisplayICalPath;    // path of display iCalendar file
+    CalType               mCalType;            // what type of calendar mCalendar is (ical/vcal)
+    bool                  mOpen {false};       // true if the calendar file is open
 };
 
 #endif // ALARMCALENDAR_H

@@ -45,6 +45,7 @@
 #include <AkonadiCore/ItemFetchJob>
 #include <AkonadiCore/ItemFetchScope>
 
+#include <kwindowsystem_version.h>
 #include <KAboutData>
 #include <KStandardGuiItem>
 #include <KLocalizedString>
@@ -219,7 +220,7 @@ MessageWin::MessageWin(const KAEvent* event, const KAAlarm& alarm, int flags)
         mDateTime = alarm.dateTime(true);
     if (!(flags & (NO_INIT_VIEW | ALWAYS_HIDE)))
     {
-        const bool readonly = AlarmCalendar::resources()->eventReadOnly(mEventId.eventId());
+        const bool readonly = ResourcesCalendar::instance()->eventReadOnly(mEventId.eventId());
         mShowEdit = !mEventId.isEmpty()  &&  !readonly;
         mNoDefer  = readonly || (flags & NO_DEFER) || alarm.repeatAtLogin();
         initView();
@@ -1079,7 +1080,7 @@ void MessageWin::redisplayAlarm()
         qCDebug(KALARM_LOG) << "MessageWin::redisplayAlarm: Deleting duplicate window:" << mEventId;
     delete duplicate;
 
-    KAEvent* event = AlarmCalendar::resources()->event(mEventId);
+    KAEvent* event = ResourcesCalendar::instance()->event(mEventId);
     if (event)
     {
         mEvent = *event;
@@ -1106,7 +1107,7 @@ void MessageWin::redisplayAlarms()
         return;
     qCDebug(KALARM_LOG) << "MessageWin::redisplayAlarms";
     mRedisplayed = true;
-    AlarmCalendar* cal = AlarmCalendar::displayCalendar();
+    DisplayCalendar* cal = DisplayCalendar::instance();
     if (cal  &&  cal->isOpen())
     {
         KAEvent event;
@@ -1149,7 +1150,7 @@ void MessageWin::redisplayAlarms()
 */
 bool MessageWin::retrieveEvent(KAEvent& event, Resource& resource, bool& showEdit, bool& showDefer)
 {
-    const Event::Ptr kcalEvent = AlarmCalendar::displayCalendar()->kcalEvent(CalEvent::uid(mEventId.eventId(), CalEvent::DISPLAYING));
+    const Event::Ptr kcalEvent = DisplayCalendar::instance()->kcalEvent(CalEvent::uid(mEventId.eventId(), CalEvent::DISPLAYING));
     if (!reinstateFromDisplaying(kcalEvent, event, resource, showEdit, showDefer))
     {
         // The event isn't in the displaying calendar.
@@ -1157,7 +1158,7 @@ bool MessageWin::retrieveEvent(KAEvent& event, Resource& resource, bool& showEdi
         KAEvent* ev = nullptr;
         Resource archiveRes = Resources::getStandard(CalEvent::ARCHIVED);
         if (archiveRes.isValid())
-            ev = AlarmCalendar::resources()->event(EventId(archiveRes.id(), CalEvent::uid(mEventId.eventId(), CalEvent::ARCHIVED)));
+            ev = ResourcesCalendar::instance()->event(EventId(archiveRes.id(), CalEvent::uid(mEventId.eventId(), CalEvent::ARCHIVED)));
         if (!ev)
             return false;
         event = *ev;
@@ -1211,10 +1212,10 @@ void MessageWin::alarmShowing(KAEvent& event)
         const ResourceId id = Resources::resourceForEvent(event.id()).id();
         dispEvent.setDisplaying(event, mAlarmType, id,
                                 mDateTime.effectiveKDateTime(), mShowEdit, !mNoDefer);
-        AlarmCalendar* cal = AlarmCalendar::displayCalendarOpen();
+        DisplayCalendar* cal = DisplayCalendar::instanceOpen();
         if (cal)
         {
-            cal->deleteDisplayEvent(dispEvent.id());   // in case it already exists
+            cal->deleteEvent(dispEvent.id());   // in case it already exists
             cal->addEvent(dispEvent);
             cal->save();
         }
@@ -1659,7 +1660,7 @@ void MessageWin::repeat(const KAAlarm& alarm)
         delete mDeferDlg;
         mDeferDlg = nullptr;
     }
-    KAEvent* event = mEventId.isEmpty() ? nullptr : AlarmCalendar::resources()->event(mEventId);
+    KAEvent* event = mEventId.isEmpty() ? nullptr : ResourcesCalendar::instance()->event(mEventId);
     if (event)
     {
         mAlarmType = alarm.type();    // store new alarm type for use if it is later deferred
@@ -2151,7 +2152,7 @@ void MessageWin::slotDefer()
         const int      delayMins = mDeferDlg->deferMinutes();
         // Fetch the up-to-date alarm from the calendar. Note that it could have
         // changed since it was displayed.
-        const KAEvent* event = mEventId.isEmpty() ? nullptr : AlarmCalendar::resources()->event(mEventId);
+        const KAEvent* event = mEventId.isEmpty() ? nullptr : ResourcesCalendar::instance()->event(mEventId);
         if (event)
         {
             // The event still exists in the active calendar

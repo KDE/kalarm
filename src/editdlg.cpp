@@ -1,7 +1,7 @@
 /*
  *  editdlg.cpp  -  dialog to create or modify an alarm or alarm template
  *  Program:  kalarm
- *  Copyright © 2001-2019 David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2020 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -604,7 +604,7 @@ void EditAlarmDlg::initValues(const KAEvent* event)
     if (!deferGroupVisible  &&  mDeferGroup)
         mDeferGroup->hide();
 
-    bool empty = AlarmCalendar::resources()->events(CalEvent::TEMPLATE).isEmpty();
+    bool empty = ResourcesCalendar::instance()->events(CalEvent::TEMPLATE).isEmpty();
     if (mLoadTemplateButton)
         mLoadTemplateButton->setEnabled(!empty);
 }
@@ -1006,7 +1006,7 @@ bool EditAlarmDlg::validate()
             errmsg = i18nc("@info", "You must enter a name for the alarm template");
         else if (name != mSavedTemplateName)
         {
-            if (AlarmCalendar::resources()->templateEvent(name))
+            if (ResourcesCalendar::instance()->templateEvent(name))
                 errmsg = i18nc("@info", "Template name is already in use");
         }
         if (!errmsg.isEmpty())

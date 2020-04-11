@@ -1,7 +1,7 @@
 /*
  *  undo.cpp  -  undo/redo facility
  *  Program:  kalarm
- *  Copyright © 2005-2019 David Jarvie <djarvie@kde.org>
+ *  Copyright © 2005-2020 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -835,7 +835,7 @@ UndoItem* UndoAdd::doRestore(bool setArchive)
 {
     // Retrieve the current state of the alarm
     qCDebug(KALARM_LOG) << "UndoAdd::doRestore:" << mEventId;
-    const KAEvent* ev = AlarmCalendar::getEvent(EventId(mResource.id(), mEventId));
+    const KAEvent* ev = ResourcesCalendar::getEvent(EventId(mResource.id(), mEventId));
     if (!ev)
     {
         mRestoreError = ERR_NOT_FOUND;    // alarm is no longer in calendar
@@ -992,7 +992,7 @@ UndoItem* UndoEdit::restore()
 {
     qCDebug(KALARM_LOG) << "UndoEdit::restore:" << mNewEventId;
     // Retrieve the current state of the alarm
-    const KAEvent* event = AlarmCalendar::getEvent(EventId(mResource.id(), mNewEventId));
+    const KAEvent* event = ResourcesCalendar::getEvent(EventId(mResource.id(), mNewEventId));
     if (!event)
     {
         mRestoreError = ERR_NOT_FOUND;    // alarm is no longer in calendar

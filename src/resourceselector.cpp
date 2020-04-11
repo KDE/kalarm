@@ -465,7 +465,7 @@ void ResourceSelector::exportCalendar()
 {
     const Resource resource = currentResource();
     if (resource.isValid())
-        Resources::exportAlarms(AlarmCalendar::resources()->events(resource), this);
+        Resources::exportAlarms(ResourcesCalendar::instance()->events(resource), this);
 }
 
 /******************************************************************************
