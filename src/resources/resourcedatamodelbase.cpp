@@ -607,9 +607,17 @@ QPixmap* ResourceDataModelBase::eventIcon(const KAEvent& event)
 void ResourceDataModelBase::handleResourceMessage(ResourceType::MessageType type, const QString& message, const QString& details)
 {
     if (type == ResourceType::MessageType::Error)
+    {
+        qCDebug(KALARM_LOG) << "Resource Error!" << message << details;
         KAMessageBox::detailedError(MainWindow::mainMainWindow(), message, details);
+    }
     else if (type == ResourceType::MessageType::Info)
-        KAMessageBox::informationList(MainWindow::mainMainWindow(), message, {details});
+    {
+        qCDebug(KALARM_LOG) << "Resource user message:" << message << details;
+        // KMessageBox::informationList looks bad, so use our own formatting.
+        const QString msg = details.isEmpty() ? message : message + QStringLiteral("\n\n") + details;
+        KAMessageBox::information(MainWindow::mainMainWindow(), msg);
+    }
 }
 
 bool ResourceDataModelBase::isMigrationComplete() const
