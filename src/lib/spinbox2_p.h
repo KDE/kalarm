@@ -1,7 +1,7 @@
 /*
  *  spinbox2_p.h  -  private classes for SpinBox2
  *  Program:  kalarm
- *  Copyright © 2005,2006,2008 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2005,2006,2008,2020 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -87,7 +87,7 @@ class SpinMirror : public QGraphicsView
     private:
         void         mouseEvent(QMouseEvent*);
         void         setMirroredState(bool clear = false);
-        QPoint       spinboxPoint(const QPoint&) const;
+        QPointF      spinboxPoint(const QPointF&) const;
 
         ExtraSpinBox*        mSpinbox;    // spinbox whose spin buttons are being mirrored
         SpinBox*             mMainSpinbox;

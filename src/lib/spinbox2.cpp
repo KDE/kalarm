@@ -1,7 +1,7 @@
 /*
  *  spinbox2.cpp  -  spin box with extra pair of spin buttons
  *  Program:  kalarm
- *  Copyright © 2001-2019 David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2020 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -661,12 +661,12 @@ void SpinMirror::mouseEvent(QMouseEvent* e)
 {
     if (mReadOnly)
         return;
-    QPoint pt = e->pos();
+    QPointF pt = e->pos();
     QGraphicsItem* item = scene()->itemAt(pt, QTransform());
     if (item == mButtons)
         pt = spinboxPoint(pt);
     else
-        pt = QPoint(0, 0);  // allow auto-repeat to stop
+        pt = QPointF(0, 0);  // allow auto-repeat to stop
     QApplication::postEvent(mSpinbox, new QMouseEvent(e->type(), pt, e->button(), e->buttons(), e->modifiers()));
 }
 
@@ -678,7 +678,7 @@ void SpinMirror::wheelEvent(QWheelEvent* e)
 {
     if (mReadOnly)
         return;
-    QPoint pt = e->pos();
+    QPointF pt = e->posF();
     QGraphicsItem* item = scene()->itemAt(pt, QTransform());
     if (item == mButtons)
     {
@@ -690,11 +690,11 @@ void SpinMirror::wheelEvent(QWheelEvent* e)
 /******************************************************************************
 * Translate SpinMirror coordinates to those of the mirrored spinbox.
 */
-QPoint SpinMirror::spinboxPoint(const QPoint& param) const
+QPointF SpinMirror::spinboxPoint(const QPointF& param) const
 {
     const QRect r = mSpinbox->upRect();
     const QPointF ptf = mButtons->mapFromScene(param.x(), param.y());
-    QPoint pt(ptf.x(), ptf.y());
+    QPointF pt(ptf.x(), ptf.y());
     pt.setX(ptf.x() + r.left());
     pt.setY(ptf.y() + r.top());
     return pt;
@@ -740,7 +740,7 @@ bool SpinMirror::event(QEvent* e)
 
     if (he)
     {
-        QApplication::postEvent(mSpinbox, new QHoverEvent(e->type(), spinboxPoint(he->pos()), spinboxPoint(he->oldPos())));
+        QApplication::postEvent(mSpinbox, new QHoverEvent(e->type(), spinboxPoint(he->posF()), spinboxPoint(he->oldPosF())));
         setButtons();
     }
 
