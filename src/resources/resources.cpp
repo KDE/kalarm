@@ -39,7 +39,6 @@
 #include <KJobWidgets>
 #include <KIO/StatJob>
 #include <KIO/StoredTransferJob>
-#include <kio_version.h>
 
 #include <QTemporaryFile>
 #include <QFileDialog>
@@ -476,11 +475,7 @@ bool Resources::exportAlarms(const KAEvent::List& events, QWidget* parent)
     FileStorage::Ptr calStorage(new FileStorage(calendar, file));
     if (append  &&  !calStorage->load())
     {
-#if KIO_VERSION < QT_VERSION_CHECK(5, 69, 0)
-        auto statJob = KIO::stat(url, KIO::StatJob::SourceSide, 2);
-#else
         auto statJob = KIO::statDetails(url, KIO::StatJob::SourceSide, KIO::StatDetail::StatDefaultDetails);
-#endif
         KJobWidgets::setWindow(statJob, parent);
         statJob->exec();
         KFileItem fi(statJob->statResult(), url);

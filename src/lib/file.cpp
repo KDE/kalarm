@@ -23,7 +23,6 @@
 #include "lib/autoqpointer.h"
 #include "lib/messagebox.h"
 #include "kalarm_debug.h"
-#include <kio_version.h>
 
 #include <KLocalizedString>
 #include <KIO/StatJob>
@@ -87,11 +86,7 @@ FileErr checkFileExists(QString& filename, QUrl& url, QWidget* messageParent)
     else
     {
         filename = url.toDisplayString();
-#if KIO_VERSION < QT_VERSION_CHECK(5, 69, 0)
-        auto statJob = KIO::stat(url, KIO::StatJob::SourceSide, 2);
-#else
         auto statJob = KIO::statDetails(url, KIO::StatJob::SourceSide, KIO::StatDetail::StatDefaultDetails);
-#endif
         KJobWidgets::setWindow(statJob, messageParent);
         if (!statJob->exec())
             err = FileErr::Nonexistent;

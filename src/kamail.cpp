@@ -41,7 +41,6 @@
 #include <KMime/HeaderParsing>
 #include <KMime/Headers>
 #include <KMime/Message>
-#include <kio_version.h>
 
 #include <KEmailAddress>
 #include <KAboutData>
@@ -404,11 +403,7 @@ QString KAMail::appendBodyAttachments(KMime::Message& message, JobData& data)
             bool atterror = false;
             if (!url.isLocalFile())
             {
-#if KIO_VERSION < QT_VERSION_CHECK(5, 69, 0)
-                auto statJob = KIO::stat(url, KIO::StatJob::SourceSide, 2);
-#else
                 auto statJob = KIO::statDetails(url, KIO::StatJob::SourceSide, KIO::StatDetail::StatDefaultDetails);
-#endif
                 KJobWidgets::setWindow(statJob, MainWindow::mainMainWindow());
                 if (!statJob->exec())
                 {
