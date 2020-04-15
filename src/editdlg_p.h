@@ -36,7 +36,7 @@ class PageFrame : public QFrame
         explicit PageFrame(QWidget* parent = nullptr) : QFrame(parent) { }
 
     protected:
-        void      showEvent(QShowEvent*) override    { emit shown(); }
+        void      showEvent(QShowEvent*) override    { Q_EMIT shown(); }
 
     Q_SIGNALS:
         void      shown();

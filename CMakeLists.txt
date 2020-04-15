@@ -118,6 +118,7 @@ include_directories(${kalarm_SOURCE_DIR} ${kalarm_BINARY_DIR})
 
 add_definitions(-DQT_MESSAGELOGCONTEXT)
 add_definitions(-DQT_NO_FOREACH)
+add_definitions(-DQT_NO_KEYWORDS)
 if (EXISTS "${CMAKE_SOURCE_DIR}/.git")
 	#add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0x050e00) # for the moment we can't port QWheelEvent
    add_definitions(-DKF_DISABLE_DEPRECATED_BEFORE_AND_AT=0x054500)
