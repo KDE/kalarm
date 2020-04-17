@@ -50,7 +50,7 @@ EventId::EventId(const QString& resourceEventId)
 
 ResourceId EventId::resourceDisplayId() const
 {
-    return first;
+    return first & ~ResourceType::IdFlag;
 }
 
 // vim: et sw=4:

@@ -38,6 +38,14 @@ class ResourceType : public QObject
 {
     Q_OBJECT
 public:
+    /** Flag set in resource ID to distinguish File Resource IDs from Akonadi
+     *  Collection IDs.
+     *  This is the second-topmost bit, which is extremely unlikely to be set by
+     *  Akonadi, and does not make the ID negative.
+     */
+    static const ResourceId IdFlag = 1LL << (64 - 2);
+    static_assert(sizeof(IdFlag) == sizeof(qint64), "ResourceType::IdFlag is wrong");
+
     /** The type of storage used by a resource. */
     enum StorageType  { NoStorage, File, Directory };
 

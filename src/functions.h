@@ -1,7 +1,7 @@
 /*
  *  functions.h  -  miscellaneous functions
  *  Program:  kalarm
- *  Copyright © 2007-2019 David Jarvie <djarvie@kde.org>
+ *  Copyright © 2007-2020 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -134,6 +134,30 @@ UpdateResult        reactivateEvents(QVector<KAEvent>&, QVector<EventId>& inelig
 UpdateResult        enableEvents(QVector<KAEvent>&, bool enable, QWidget* msgParent = nullptr);
 QVector<KAEvent>    getSortedActiveEvents(QObject* parent, AlarmListModel** model = nullptr);
 void                purgeArchive(int purgeDays);    // must only be called from KAlarmApp::processQueue()
+
+/** Prompt the user for an external calendar file to import alarms from,
+ *  and merge them into a resource. If the resource is invalid, the events
+ *  will be merged into the default resource for each alarm type (obtained
+ *  by calling destination(type)).
+ *  The alarms are given new unique event IDs.
+ *  @param parent    Parent widget for error message boxes
+ *  @param resource  Resource to import into
+ *  @return  true if all alarms in the calendar were successfully imported;
+ *           false if any alarms failed to be imported.
+ */
+bool importAlarms(Resource& resource, QWidget* parent);
+
+/** Prompt the user for an external calendar file, and export a list of
+ *  alarms to it. If an existing file is chosen, the user has the choice
+ *  whether to append or overwrite.
+ *  The alarms are given new unique event IDs.
+ *  @param events  Events to export
+ *  @param parent  Parent widget for error message boxes
+ *  @return  true if all alarms in the calendar were successfully exported;
+ *           false if any alarms failed to be exported.
+ */
+bool exportAlarms(const KAEvent::List& events, QWidget* parent);
+
 void                displayKOrgUpdateError(QWidget* parent, UpdateError, const UpdateResult& korgError, int nAlarms = 0);
 QStringList         checkRtcWakeConfig(bool checkEventExists = false);
 void                deleteRtcWakeConfig();

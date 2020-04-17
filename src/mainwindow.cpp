@@ -847,7 +847,7 @@ void MainWindow::slotWakeFromSuspend()
 void MainWindow::slotImportAlarms()
 {
     Resource resource;
-    Resources::importAlarms(resource, this);
+    KAlarm::importAlarms(resource, this);
 }
 
 /******************************************************************************
@@ -860,7 +860,7 @@ void MainWindow::slotExportAlarms()
     if (!events.isEmpty())
     {
         const KAEvent::List evts = KAEvent::ptrList(events);
-        Resources::exportAlarms(evts, this);
+        KAlarm::exportAlarms(evts, this);
     }
 }
 

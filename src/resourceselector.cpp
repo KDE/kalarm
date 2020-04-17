@@ -25,6 +25,7 @@
 #include "resourceselector.h"
 
 #include "alarmcalendar.h"
+#include "functions.h"
 #include "kalarmapp.h"
 #include "preferences.h"
 #include "resources/akonadidatamodel.h"
@@ -454,7 +455,7 @@ void ResourceSelector::setStandard()
 void ResourceSelector::importCalendar()
 {
     Resource resource = currentResource();
-    Resources::importAlarms(resource, this);
+    KAlarm::importAlarms(resource, this);
 }
 
 /******************************************************************************
@@ -465,7 +466,7 @@ void ResourceSelector::exportCalendar()
 {
     const Resource resource = currentResource();
     if (resource.isValid())
-        Resources::exportAlarms(ResourcesCalendar::instance()->events(resource), this);
+        KAlarm::exportAlarms(ResourcesCalendar::instance()->events(resource), this);
 }
 
 /******************************************************************************
