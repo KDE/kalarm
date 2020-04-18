@@ -85,6 +85,7 @@ namespace
 {
 bool refreshAlarmsQueued = false;
 QUrl lastImportUrl;     // last URL for Import Alarms file dialogue
+QUrl lastExportUrl;     // last URL for Export Alarms file dialogue
 
 struct UpdateStatusData
 {
@@ -835,8 +836,7 @@ bool importAlarms(Resource& resource, QWidget* parent)
 bool exportAlarms(const KAEvent::List& events, QWidget* parent)
 {
     bool append;
-//TODO: exportalarms shows up afterwards in other file dialogues
-    QString file = FileDialog::getSaveFileName(QUrl(QStringLiteral("kfiledialog:///exportalarms")),
+    QString file = FileDialog::getSaveFileName(lastExportUrl,
                                                QStringLiteral("*.ics|%1").arg(i18nc("@info", "Calendar Files")),
                                                parent, i18nc("@title:window", "Choose Export Calendar"),
                                                &append);
@@ -848,6 +848,7 @@ bool exportAlarms(const KAEvent::List& events, QWidget* parent)
         qCDebug(KALARM_LOG) << "KAlarm::exportAlarms: Invalid URL" << url;
         return false;
     }
+    lastExportUrl = url.adjusted(QUrl::RemoveFilename);
     qCDebug(KALARM_LOG) << "KAlarm::exportAlarms:" << url.toDisplayString();
 
     MemoryCalendar::Ptr calendar(new MemoryCalendar(Preferences::timeSpecAsZone()));

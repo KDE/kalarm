@@ -649,8 +649,9 @@ bool ResourcesCalendar::addEvent(KAEvent& evnt, QWidget* promptParent, bool useE
     }
     if (res.isValid())
     {
-        // Don't add event to mEventMap yet - its Akonadi item id is not yet known.
-        // It will be added once it is inserted into AkonadiDataModel.
+        // Don't add event to mEventMap yet - its ID is not yet known.
+        // It will be added after it is inserted into the data model, when
+        // the resource signals eventsAdded().
         ok = res.addEvent(*event);
         remove = ok;   // if success, delete the local event instance on exit
         if (ok  &&  type == CalEvent::ACTIVE  &&  !event->enabled())
@@ -810,7 +811,8 @@ bool ResourcesCalendar::modifyEvent(const EventId& oldEventId, KAEvent& newEvent
     Resource resource = Resources::resource(oldEventId.resourceId());
     if (!resource.isValid())
         return false;
-    // Don't add new event to mEventMap yet - its Akonadi item id is not yet known
+    // Don't add new event to mEventMap yet - it will be added when the resource
+    // signals eventsAdded().
     if (!resource.addEvent(newEvent))
         return false;
     // Note: deleteEventInternal() will delete storedEvent before using the
