@@ -71,7 +71,7 @@
 #include <iostream>
 #include <climits>
 
-static const int AKONADI_TIMEOUT = 30;   // timeout (seconds) for Akonadi collections to be populated
+static const int RESOURCES_TIMEOUT = 30;   // timeout (seconds) for resources to be populated
 
 /******************************************************************************
 * Find the maximum number of seconds late which a late-cancel alarm is allowed
@@ -1249,7 +1249,7 @@ bool KAlarmApp::wantShowInSystemTray() const
 */
 void KAlarmApp::setResourcesTimeout()
 {
-    QTimer::singleShot(AKONADI_TIMEOUT * 1000, this, &KAlarmApp::slotResourcesTimeout);
+    QTimer::singleShot(RESOURCES_TIMEOUT * 1000, this, &KAlarmApp::slotResourcesTimeout);
 }
 
 /******************************************************************************

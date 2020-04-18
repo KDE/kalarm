@@ -62,6 +62,7 @@
       <choices name="Backend">
         <choice name="Kresources"><label context="@option">KResources</label></choice>
         <choice name="Akonadi"><label context="@option">Akonadi</label></choice>
+        <choice name="FileResources"><label context="@option">File Resources</label></choice>
       </choices>
     </entry>
     <entry name="Base_TimeZone" key="TimeZone" type="String">

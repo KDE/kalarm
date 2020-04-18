@@ -40,6 +40,11 @@ void initialise();
 
 void terminate();
 
+/** Disable the widget if the database engine is not available, and display an
+ *  error overlay.
+ */
+void widgetNeedsDatabase(QWidget*);
+
 /** Reload all resources' data from storage.
  *  @note In the case of Akonadi, this does not reload from the backend storage.
  */

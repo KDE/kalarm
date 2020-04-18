@@ -61,8 +61,6 @@ DisplayCalendar*  DisplayCalendar::mInstance = nullptr;
 */
 void AlarmCalendar::initialise()
 {
-    Preferences::setBackend(Preferences::Akonadi);
-    Preferences::self()->save();
     KACalendar::setProductId(KALARM_NAME, KALARM_VERSION);
     CalFormat::setApplication(QStringLiteral(KALARM_NAME), QString::fromLatin1(KACalendar::icalProductId()));
 }

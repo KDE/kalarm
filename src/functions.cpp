@@ -32,6 +32,7 @@
 #include "preferences.h"
 #include "templatelistview.h"
 #include "templatemenuaction.h"
+#include "resources/calendarfunctions.h"
 #include "resources/datamodel.h"
 #include "resources/resources.h"
 #include "resources/eventmodel.h"
@@ -134,8 +135,6 @@ KAlarm::UpdateResult sendToKOrganizer(const KAEvent&);
 KAlarm::UpdateResult deleteFromKOrganizer(const QString& eventID);
 KAlarm::UpdateResult runKOrganizer();
 QString uidKOrganizer(const QString& eventID);
-bool updateCalendarFormat(const FileStorage::Ptr&);
-bool importCalendarFile(const QUrl&, CalEvent::Types alarmTypes, QWidget* parent, QHash<CalEvent::Type, QVector<KAEvent>>&);
 }
 
 
@@ -802,7 +801,7 @@ bool importAlarms(Resource& resource, QWidget* parent)
             continue;
         }
         qCDebug(KALARM_LOG) << "KAlarm::importAlarms:" << url.toDisplayString();
-        importCalendarFile(url, alarmTypes, parent, events);
+        importCalendarFile(url, alarmTypes, true, parent, events);
     }
     if (events.isEmpty())
         return false;
@@ -817,7 +816,7 @@ bool importAlarms(Resource& resource, QWidget* parent)
         else
             res = Resources::destination(it.key());
 
-        for (const KAEvent& event : it.value())
+        for (const KAEvent& event : qAsConst(it.value()))
         {
             if (!res.addEvent(event))
                 success = false;
@@ -1793,115 +1792,6 @@ QString uidKOrganizer(const QString& id)
         return id;
     QString result = id;
     return result.insert(0, KORGANIZER_UID);
-}
-
-/******************************************************************************
-* Find the version of KAlarm which wrote the calendar file, and do any
-* necessary conversions to the current format.
-*/
-bool updateCalendarFormat(const FileStorage::Ptr& fileStorage)
-{
-    QString versionString;
-    int version = KACalendar::updateVersion(fileStorage, versionString);
-    if (version == KACalendar::IncompatibleFormat)
-        return false;  // calendar was created by another program, or an unknown version of KAlarm
-    return true;
-}
-
-/******************************************************************************
-* Import alarms from a calendar file. The alarms are converted to the current
-* KAlarm format and are given new unique event IDs.
-* Parameters: parent:    parent widget for error message boxes
-*             alarmList: imported alarms are added to this list
-*/
-bool importCalendarFile(const QUrl& url, CalEvent::Types alarmTypes, QWidget* parent, QHash<CalEvent::Type, QVector<KAEvent>>& alarmList)
-{
-    if (!url.isValid())
-    {
-        qCDebug(KALARM_LOG) << "KAlarm::importCalendarFile: Invalid URL";
-        return false;
-    }
-
-    // If the URL is remote, download it into a temporary local file.
-    QString filename;
-    bool local = url.isLocalFile();
-    if (local)
-    {
-        filename = url.toLocalFile();
-        if (!QFile::exists(filename))
-        {
-            qCDebug(KALARM_LOG) << "KAlarm::importCalendarFile:" << url.toDisplayString() << "not found";
-            KAMessageBox::error(parent, xi18nc("@info", "Could not load calendar <filename>%1</filename>.", url.toDisplayString()));
-            return false;
-        }
-    }
-    else
-    {
-        auto getJob = KIO::storedGet(url);
-        KJobWidgets::setWindow(getJob, MainWindow::mainMainWindow());
-        if (!getJob->exec())
-        {
-            qCCritical(KALARM_LOG) << "KAlarm::importCalendarFile: Download failure";
-            KAMessageBox::error(parent, xi18nc("@info", "Cannot download calendar: <filename>%1</filename>", url.toDisplayString()));
-            return false;
-        }
-        QTemporaryFile tmpFile;
-        tmpFile.setAutoRemove(false);
-        tmpFile.write(getJob->data());
-        tmpFile.seek(0);
-        filename = tmpFile.fileName();
-        qCDebug(KALARM_LOG) << "KAlarm::importCalendarFile: --- Downloaded to" << filename;
-    }
-
-    // Read the calendar and add its alarms to the current calendars
-    MemoryCalendar::Ptr cal(new MemoryCalendar(Preferences::timeSpecAsZone()));
-    FileStorage::Ptr calStorage(new FileStorage(cal, filename));
-    bool success = calStorage->load();
-    if (!local)
-        QFile::remove(filename);
-    if (!success)
-    {
-        qCDebug(KALARM_LOG) << "KAlarm::importCalendarFile: Error loading calendar '" << filename <<"'";
-        KAMessageBox::error(parent, xi18nc("@info", "Could not load calendar <filename>%1</filename>.", url.toDisplayString()));
-        return false;
-    }
-
-    const bool currentFormat = updateCalendarFormat(calStorage);
-    const Event::List events = cal->rawEvents();
-    for (Event::Ptr event : events)
-    {
-        if (event->alarms().isEmpty()  ||  !KAEvent(event).isValid())
-            continue;    // ignore events without alarms, or usable alarms
-        CalEvent::Type type = CalEvent::status(event);
-        if (type == CalEvent::TEMPLATE)
-        {
-            // If we know the event was not created by KAlarm, don't treat it as a template
-            if (!currentFormat)
-                type = CalEvent::ACTIVE;
-        }
-        if (!(type & alarmTypes))
-            continue;
-
-        Event::Ptr newev(new Event(*event));
-
-        // If there is a display alarm without display text, use the event
-        // summary text instead.
-        if (type == CalEvent::ACTIVE  &&  !newev->summary().isEmpty())
-        {
-            const Alarm::List& alarms = newev->alarms();
-            for (Alarm::Ptr alarm : alarms)
-            {
-                if (alarm->type() == Alarm::Display  &&  alarm->text().isEmpty())
-                    alarm->setText(newev->summary());
-            }
-            newev->setSummary(QString());   // KAlarm only uses summary for template names
-        }
-
-        // Give the event a new ID and add it to the list.
-        newev->setUid(CalEvent::uid(CalFormat::createUniqueId(), type));
-        alarmList[type] += KAEvent(newev);
-    }
-    return true;
 }
 
 } // namespace

@@ -100,6 +100,7 @@ set(kalarm_bin_SRCS ${libkalarm_SRCS}
     wakedlg.cpp
 )
 set(kalarm_bin_SRCS ${kalarm_bin_SRCS}
+    resources/calendarfunctions.cpp
     resources/resourcetype.cpp
     resources/resource.cpp
     resources/resources.cpp

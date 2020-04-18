@@ -95,6 +95,9 @@ public:
 
     int headerDataEventRoleOffset() const override;
 
+    /** Return the data storage backend type used by this model. */
+    Preferences::Backend dataStorageBackend() const override   { return Preferences::Akonadi; }
+
 private Q_SLOTS:
     /** Called when a resource notifies a message to display to the user. */
     void slotResourceMessage(ResourceType::MessageType, const QString& message, const QString& details);

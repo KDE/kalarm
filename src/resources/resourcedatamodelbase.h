@@ -23,6 +23,8 @@
 
 #include "resourcetype.h"
 
+#include "preferences.h"
+
 #include <KAlarmCal/KACalendar>
 
 #include <QSize>
@@ -78,6 +80,9 @@ public:
     virtual ~ResourceDataModelBase();
 
 public:
+    /** Return the data storage backend type used by this model. */
+    virtual Preferences::Backend dataStorageBackend() const = 0;
+
     static QSize   iconSize()       { return mIconSize; }
 
     /** Return a bulleted list of alarm types for inclusion in an i18n message. */

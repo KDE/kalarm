@@ -52,7 +52,6 @@
 #include <AkonadiCore/Item>
 #include <AkonadiCore/ItemFetchJob>
 #include <AkonadiCore/ItemFetchScope>
-#include <AkonadiWidgets/ControlGui>
 #include <KCalendarCore/MemoryCalendar>
 #include <KCalUtils/ICalDrag>
 using namespace KCalendarCore;
@@ -155,7 +154,7 @@ MainWindow::MainWindow(bool restored)
     setCentralWidget(mSplitter);
 
     // Create the calendar resource selector widget
-    Akonadi::ControlGui::widgetNeedsAkonadi(this);
+    DataModel::widgetNeedsDatabase(this);
     mResourceSelector = new ResourceSelector(mSplitter);
     mSplitter->setStretchFactor(0, 0);   // don't resize resource selector when window is resized
     mSplitter->setStretchFactor(1, 1);

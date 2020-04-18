@@ -32,11 +32,18 @@ namespace DataModel
 
 void initialise()
 {
-    AkonadiDataModel::instance();
+    AkonadiDataModel* model = AkonadiDataModel::instance();
+    Preferences::setBackend(model->dataStorageBackend());
+    Preferences::self()->save();
 }
 
 void terminate()
 {
+}
+
+void widgetNeedsDatabase(QWidget* widget)
+{
+    Akonadi::ControlGui::widgetNeedsAkonadi(widget);
 }
 
 void reload()
