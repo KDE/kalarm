@@ -27,6 +27,8 @@
 #include "eventmodel.h"
 #include "resourcemodel.h"
 
+#include <AkonadiWidgets/ControlGui>
+
 namespace DataModel
 {
 
