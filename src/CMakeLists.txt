@@ -77,9 +77,6 @@ ecm_generate_headers(KAlarmCal_CamelCase_HEADERS
 
 install(FILES
         ${CMAKE_CURRENT_BINARY_DIR}/kalarmcal_export.h
-        identities.h
-        kacalendar.h
-        version.h
         ${KAlarmCal_HEADERS}
         DESTINATION ${KDE_INSTALL_INCLUDEDIR_KF5}/KAlarmCal/kalarmcal
         COMPONENT Devel
