@@ -128,7 +128,7 @@ private:
     void                  checkForDisabledAlarms(bool oldEnabled, bool newEnabled);
 
     static ResourcesCalendar* mInstance;   // the unique instance
-    
+
     EarliestMap           mEarliestAlarm;      // alarm with earliest trigger time, by resource
     QSet<QString>         mPendingAlarms;      // IDs of alarms which are currently being processed after triggering
     bool                  mIgnoreAtLogin {false}; // ignore new/updated repeat-at-login alarms
@@ -168,7 +168,7 @@ private:
     void                  updateKAEvents();
 
     static DisplayCalendar* mInstance;    // the unique instance
-    
+
     KCalendarCore::FileStorage::Ptr mCalendarStorage;
     QString               mDisplayCalPath;     // path of display calendar file
     QString               mDisplayICalPath;    // path of display iCalendar file

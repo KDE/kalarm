@@ -1168,7 +1168,6 @@ bool ResourcesCalendar::eventReadOnly(const QString& eventId) const
     const Resource resource = Resources::resourceForEvent(eventId, event);
     return !event.isValid()  ||  event.isReadOnly()
        ||  !resource.isWritable(event.category());
-//TODO   ||  compatibility(event) != KACalendar::Current;
 }
 
 /******************************************************************************
