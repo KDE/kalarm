@@ -61,6 +61,14 @@ public:
     template <class Type = ResourceType>
     static QVector<Resource> allResources(CalEvent::Type alarmType = CalEvent::EMPTY);
 
+    /** Return all resources of a kind which contain a specified alarm type,
+     *  with the standard resource for the alarm type first in the list.
+     *  @tparam Type       Resource type to fetch, default = all types.
+     *  @param  alarmType  Alarm type to check for.
+     */
+    template <class Type = ResourceType>
+    static QVector<Resource> allResourcesOrdered(CalEvent::Type alarmType);
+
     /** Return the enabled resources which contain a specified alarm type.
      *  @param type      Alarm type to check for, or CalEvent::EMPTY for any type.
      *  @param writable  If true, only writable resources are included.
@@ -287,6 +295,20 @@ QVector<Resource> Resources::allResources(CalEvent::Type type)
     {
         const Resource& res = it.value();
         if (res.is<Type>()  &&  (res.alarmTypes() & types))
+            result += res;
+    }
+    return result;
+}
+
+template <class Type>
+QVector<Resource> Resources::allResourcesOrdered(CalEvent::Type type)
+{
+    Resource std = getStandard(type);
+    QVector<Resource> result {std};
+    for (auto it = mResources.constBegin();  it != mResources.constEnd();  ++it)
+    {
+        const Resource& res = it.value();
+        if (res != std  &&  res.is<Type>()  &&  (res.alarmTypes() & type))
             result += res;
     }
     return result;
