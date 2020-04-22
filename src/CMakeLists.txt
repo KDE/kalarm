@@ -75,7 +75,6 @@ set(kalarm_bin_SRCS ${libkalarm_SRCS}
     functions.cpp
     fontcolour.cpp
     fontcolourbutton.cpp
-    alarmtime.cpp
     alarmtimewidget.cpp
     specialactions.cpp
     reminder.cpp

@@ -21,7 +21,6 @@
 #include "kalarmapp.h"
 
 #include "alarmcalendar.h"
-#include "alarmtime.h"
 #include "commandoptions.h"
 #include "dbushandler.h"
 #include "editdlgtypes.h"

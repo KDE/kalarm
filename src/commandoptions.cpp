@@ -1,7 +1,7 @@
 /*
  *  commandoptions.cpp  -  extract command line options
  *  Program:  kalarm
- *  Copyright © 2001-2019 David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2020 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -20,7 +20,7 @@
 
 #include "commandoptions.h"
 
-#include "alarmtime.h"
+#include "functions.h"
 #include "kalarmapp.h"
 #include "kamail.h"
 #include "kalarm_debug.h"
@@ -255,7 +255,7 @@ void CommandOptions::process()
     if (mParser->isSet(*mOptions.at(TEST_SET_TIME)))
     {
         const QString time = mParser->value(*mOptions.at(TEST_SET_TIME));
-        if (!AlarmTime::convertTimeString(time.toLatin1(), mSimulationTime, KADateTime::realCurrentLocalDateTime(), true))
+        if (!KAlarm::convertTimeString(time.toLatin1(), mSimulationTime, KADateTime::realCurrentLocalDateTime(), true))
             setErrorParameter(TEST_SET_TIME);
     }
 #endif
@@ -442,7 +442,7 @@ void CommandOptions::process()
             if (mParser->isSet(*mOptions.at(TIME)))
             {
                 const QByteArray dateTime = mParser->value(*mOptions.at(TIME)).toLocal8Bit();
-                if (!AlarmTime::convertTimeString(dateTime, mAlarmTime))
+                if (!KAlarm::convertTimeString(dateTime, mAlarmTime))
                     setErrorParameter(TIME);
             }
             else
@@ -481,9 +481,9 @@ void CommandOptions::process()
                     const QByteArray dateTime = mParser->value(*mOptions.at(UNTIL)).toLocal8Bit();
                     bool ok;
                     if (mParser->isSet(*mOptions.at(TIME)))
-                        ok = AlarmTime::convertTimeString(dateTime, endTime, mAlarmTime);
+                        ok = KAlarm::convertTimeString(dateTime, endTime, mAlarmTime);
                     else
-                        ok = AlarmTime::convertTimeString(dateTime, endTime);
+                        ok = KAlarm::convertTimeString(dateTime, endTime);
                     if (!ok)
                         setErrorParameter(UNTIL);
                     else if (mAlarmTime.isDateOnly()  &&  !endTime.isDateOnly())

@@ -642,10 +642,7 @@ bool ResourcesCalendar::addEvent(KAEvent& evnt, QWidget* promptParent, bool useE
     {
         res = Resources::destination(type, promptParent, noPrompt, cancelled);
         if (!res.isValid())
-        {
-            const char* typeStr = (type == CalEvent::ACTIVE) ? "Active alarm" : (type == CalEvent::ARCHIVED) ? "Archived alarm" : "alarm Template";
-            qCWarning(KALARM_LOG) << "ResourcesCalendar::addEvent: Error! Cannot create" << typeStr << "(No default calendar is defined)";
-        }
+            qCWarning(KALARM_LOG) << "ResourcesCalendar::addEvent: Error! Cannot create" << type << "(No default calendar is defined)";
     }
     if (res.isValid())
     {

@@ -22,7 +22,6 @@
 
 #include "resources.h"
 
-#include "alarmtime.h"
 #include "mainwindow.h"
 #include "preferences.h"
 #include "lib/messagebox.h"
@@ -34,10 +33,17 @@
 #include <KLocalizedString>
 #include <KColorUtils>
 
+#include <QApplication>
 #include <QModelIndex>
 #include <QUrl>
 #include <QFileInfo>
 #include <QIcon>
+
+namespace
+{
+QString alarmTimeText(const DateTime& dateTime, char leadingZero = '\0');
+QString timeToAlarmText(const DateTime& dateTime);
+}
 
 /*=============================================================================
 = Class: ResourceDataModelBase
@@ -278,12 +284,12 @@ QVariant ResourceDataModelBase::eventData(int role, int column, const KAEvent& e
                         break;
                     case Qt::DisplayRole:
                         if (event.expired())
-                            return AlarmTime::alarmTimeText(event.startDateTime(), '0');
-                        return AlarmTime::alarmTimeText(event.nextTrigger(KAEvent::DISPLAY_TRIGGER), '0');
+                            return alarmTimeText(event.startDateTime(), '0');
+                        return alarmTimeText(event.nextTrigger(KAEvent::DISPLAY_TRIGGER), '0');
                     case TimeDisplayRole:
                         if (event.expired())
-                            return AlarmTime::alarmTimeText(event.startDateTime(), '~');
-                        return AlarmTime::alarmTimeText(event.nextTrigger(KAEvent::DISPLAY_TRIGGER), '~');
+                            return alarmTimeText(event.startDateTime(), '~');
+                        return alarmTimeText(event.nextTrigger(KAEvent::DISPLAY_TRIGGER), '~');
                     case Qt::TextAlignmentRole:
                         return Qt::AlignRight;
                     case SortRole:
@@ -309,7 +315,7 @@ QVariant ResourceDataModelBase::eventData(int role, int column, const KAEvent& e
                     case Qt::DisplayRole:
                         if (event.expired())
                             return QString();
-                        return AlarmTime::timeToAlarmText(event.nextTrigger(KAEvent::DISPLAY_TRIGGER));
+                        return timeToAlarmText(event.nextTrigger(KAEvent::DISPLAY_TRIGGER));
                     case Qt::TextAlignmentRole:
                         return Qt::AlignRight;
                     case SortRole:
@@ -639,6 +645,154 @@ void ResourceDataModelBase::setMigrationComplete()
 {
     mMigrationStatus = 1;
     Resources::notifyResourcesMigrated();
+}
+
+namespace
+{
+
+/******************************************************************************
+* Return the alarm time text in the form "date time".
+* Parameters:
+*   dateTime    = the date/time to format.
+*   leadingZero = the character to represent a leading zero, or '\0' for no leading zeroes.
+*/
+QString alarmTimeText(const DateTime& dateTime, char leadingZero)
+{
+    // Whether the date and time contain leading zeroes.
+    static bool    leadingZeroesChecked = false;
+    static QString dateFormat;      // date format for current locale
+    static QString timeFormat;      // time format for current locale
+    static QString timeFullFormat;  // time format with leading zero, if different from 'timeFormat'
+    static int     hourOffset = 0;  // offset within time string to the hour
+
+    if (!dateTime.isValid())
+        return i18nc("@info Alarm never occurs", "Never");
+    if (!leadingZeroesChecked  &&  QApplication::isLeftToRight())    // don't try to align right-to-left languages
+    {
+        // Check whether the day number and/or hour have no leading zeroes, if
+        // they are at the start of the date/time. If no leading zeroes, they
+        // will need to be padded when displayed, so that displayed dates/times
+        // can be aligned with each other.
+        // Note that if leading zeroes are not included in other components, no
+        // alignment will be attempted.
+        QLocale locale;
+        {
+            // Check the date format. 'dd' provides leading zeroes; single 'd'
+            // provides no leading zeroes.
+            dateFormat = locale.dateFormat(QLocale::ShortFormat);
+        }
+        {
+            // Check the time format.
+            // Remove all but hours, minutes and AM/PM, since alarms are on minute
+            // boundaries. Preceding separators are also removed.
+            timeFormat = locale.timeFormat(QLocale::ShortFormat);
+            for (int del = 0, predel = 0, c = 0;  c < timeFormat.size();  ++c)
+            {
+                char ch = timeFormat.at(c).toLatin1();
+                switch (ch)
+                {
+                    case 'H':
+                    case 'h':
+                    case 'm':
+                    case 'a':
+                    case 'A':
+                        if (predel == 1)
+                        {
+                            timeFormat.remove(del, c - del);
+                            c = del;
+                        }
+                        del = c + 1;   // start deleting from the next character
+                        if ((ch == 'A'  &&  del < timeFormat.size()  &&  timeFormat.at(del).toLatin1() == 'P')
+                        ||  (ch == 'a'  &&  del < timeFormat.size()  &&  timeFormat.at(del).toLatin1() == 'p'))
+                            ++c, ++del;
+                        predel = -1;
+                        break;
+
+                    case 's':
+                    case 'z':
+                    case 't':
+                        timeFormat.remove(del, c + 1 - del);
+                        c = del - 1;
+                        if (!predel)
+                            predel = 1;
+                        break;
+
+                    default:
+                        break;
+                }
+            }
+
+            // 'HH' and 'hh' provide leading zeroes; single 'H' or 'h' provide no
+            // leading zeroes.
+            int i = timeFormat.indexOf(QRegExp(QLatin1String("[hH]")));
+            int first = timeFormat.indexOf(QRegExp(QLatin1String("[hHmaA]")));
+            if (i >= 0  &&  i == first  &&  (i == timeFormat.size() - 1  ||  timeFormat.at(i) != timeFormat.at(i + 1)))
+            {
+                timeFullFormat = timeFormat;
+                timeFullFormat.insert(i, timeFormat.at(i));
+                // Find index to hour in formatted times
+                const QTime t(1,30,30);
+                const QString nozero = t.toString(timeFormat);
+                const QString zero   = t.toString(timeFullFormat);
+                for (int i = 0; i < nozero.size(); ++i)
+                    if (nozero[i] != zero[i])
+                    {
+                        hourOffset = i;
+                        break;
+                    }
+            }
+        }
+    }
+    leadingZeroesChecked = true;
+
+    const KADateTime kdt = dateTime.effectiveKDateTime().toTimeSpec(Preferences::timeSpec());
+    QString dateTimeText = kdt.date().toString(dateFormat);
+
+    if (!dateTime.isDateOnly()  ||  kdt.utcOffset() != dateTime.utcOffset())
+    {
+        // Display the time of day if it's a date/time value, or if it's
+        // a date-only value but it's in a different time zone
+        dateTimeText += QLatin1Char(' ');
+        bool useFullFormat = leadingZero && !timeFullFormat.isEmpty();
+        QString timeText = kdt.time().toString(useFullFormat ? timeFullFormat : timeFormat);
+        if (useFullFormat  &&  leadingZero != '0'  &&  timeText.at(hourOffset) == QLatin1Char('0'))
+            timeText[hourOffset] = leadingZero;
+        dateTimeText += timeText;
+    }
+    return dateTimeText + QLatin1Char(' ');
+}
+
+/******************************************************************************
+* Return the time-to-alarm text.
+*/
+QString timeToAlarmText(const DateTime& dateTime)
+{
+    if (!dateTime.isValid())
+        return i18nc("@info Alarm never occurs", "Never");
+    KADateTime now = KADateTime::currentUtcDateTime();
+    if (dateTime.isDateOnly())
+    {
+        int days = now.date().daysTo(dateTime.date());
+        // xgettext: no-c-format
+        return i18nc("@info n days", "%1d", days);
+    }
+    int mins = (now.secsTo(dateTime.effectiveKDateTime()) + 59) / 60;
+    if (mins < 0)
+        return QString();
+    char minutes[3] = "00";
+    minutes[0] = (mins%60) / 10 + '0';
+    minutes[1] = (mins%60) % 10 + '0';
+    if (mins < 24*60)
+        return i18nc("@info hours:minutes", "%1:%2", mins/60, QLatin1String(minutes));
+    // If we render a day count, then we zero-pad the hours, to make the days line up and be more scanable.
+    int hrs = mins / 60;
+    char hours[3] = "00";
+    hours[0] = (hrs%24) / 10 + '0';
+    hours[1] = (hrs%24) % 10 + '0';
+    int days = hrs / 24;
+    return i18nc("@info days hours:minutes", "%1d %2:%3", days, QLatin1String(hours), QLatin1String(minutes));
+}
+
 }
 
 // vim: et sw=4:

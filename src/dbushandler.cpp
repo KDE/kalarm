@@ -1,7 +1,7 @@
 /*
  *  dbushandler.cpp  -  handler for D-Bus calls by other applications
  *  Program:  kalarm
- *  Copyright © 2002-2019 David Jarvie <djarvie@kde.org>
+ *  Copyright © 2002-2020 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -21,7 +21,6 @@
 #include "dbushandler.h"
 
 #include "alarmcalendar.h"
-#include "alarmtime.h"
 #include "functions.h"
 #include "kalarmapp.h"
 #include "kamail.h"
@@ -461,7 +460,7 @@ KADateTime DBusHandler::convertDateTime(const QString& dateTime, const KADateTim
     }
     KADateTime result;
     if (!error)
-        result = AlarmTime::applyTimeZone(zone, date, time, haveTime, defaultDt);
+        result = KAlarm::applyTimeZone(zone, date, time, haveTime, defaultDt);
     if (error  ||  !result.isValid())
     {
         if (!defaultDt.isValid())

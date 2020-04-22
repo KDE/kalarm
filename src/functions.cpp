@@ -23,7 +23,6 @@
 
 #include "akonadicollectionsearch.h"
 #include "alarmcalendar.h"
-#include "alarmtime.h"
 #include "editdlg.h"
 #include "kalarmapp.h"
 #include "kamail.h"
@@ -1608,6 +1607,184 @@ void setDontShowErrors(const EventId& eventId, const QString& tag)
     }
 }
 
+/******************************************************************************
+* Convert a date/time specification string into a local date/time or date value.
+* Parameters:
+*   timeString  = in the form [[[yyyy-]mm-]dd-]hh:mm [TZ] or yyyy-mm-dd [TZ].
+*   dateTime  = receives converted date/time value.
+*   defaultDt = default date/time used for missing parts of timeString, or null
+*               to use current date/time.
+*   allowTZ   = whether to allow a time zone specifier in timeString.
+* Reply = true if successful.
+*/
+bool convertTimeString(const QByteArray& timeString, KADateTime& dateTime, const KADateTime& defaultDt, bool allowTZ)
+{
+#define MAX_DT_LEN 19
+    int i = timeString.indexOf(' ');
+    if (i > MAX_DT_LEN  ||  (i >= 0 && !allowTZ))
+        return false;
+    QString zone = (i >= 0) ? QString::fromLatin1(timeString.mid(i)) : QString();
+    char timeStr[MAX_DT_LEN+1];
+    strcpy(timeStr, timeString.left(i >= 0 ? i : MAX_DT_LEN).constData());
+    int dt[5] = { -1, -1, -1, -1, -1 };
+    char* s;
+    char* end;
+    bool noTime;
+    // Get the minute value
+    if ((s = strchr(timeStr, ':')) == nullptr)
+        noTime = true;
+    else
+    {
+        noTime = false;
+        *s++ = 0;
+        dt[4] = strtoul(s, &end, 10);
+        if (end == s  ||  *end  ||  dt[4] >= 60)
+            return false;
+        // Get the hour value
+        if ((s = strrchr(timeStr, '-')) == nullptr)
+            s = timeStr;
+        else
+            *s++ = 0;
+        dt[3] = strtoul(s, &end, 10);
+        if (end == s  ||  *end  ||  dt[3] >= 24)
+            return false;
+    }
+    bool noDate = true;
+    if (s != timeStr)
+    {
+        noDate = false;
+        // Get the day value
+        if ((s = strrchr(timeStr, '-')) == nullptr)
+            s = timeStr;
+        else
+            *s++ = 0;
+        dt[2] = strtoul(s, &end, 10);
+        if (end == s  ||  *end  ||  dt[2] == 0  ||  dt[2] > 31)
+            return false;
+        if (s != timeStr)
+        {
+            // Get the month value
+            if ((s = strrchr(timeStr, '-')) == nullptr)
+                s = timeStr;
+            else
+                *s++ = 0;
+            dt[1] = strtoul(s, &end, 10);
+            if (end == s  ||  *end  ||  dt[1] == 0  ||  dt[1] > 12)
+                return false;
+            if (s != timeStr)
+            {
+                // Get the year value
+                dt[0] = strtoul(timeStr, &end, 10);
+                if (end == timeStr  ||  *end)
+                    return false;
+            }
+        }
+    }
+
+    QDate date;
+    if (dt[0] >= 0)
+        date = QDate(dt[0], dt[1], dt[2]);
+    QTime time(0, 0, 0);
+    if (noTime)
+    {
+        // No time was specified, so the full date must have been specified
+        if (dt[0] < 0  ||  !date.isValid())
+            return false;
+        dateTime = applyTimeZone(zone, date, time, false, defaultDt);
+    }
+    else
+    {
+        // Compile the values into a date/time structure
+        time.setHMS(dt[3], dt[4], 0);
+        if (dt[0] < 0)
+        {
+            // Some or all of the date was omitted.
+            // Use the default date/time if provided.
+            if (defaultDt.isValid())
+            {
+                dt[0] = defaultDt.date().year();
+                date.setDate(dt[0],
+                            (dt[1] < 0 ? defaultDt.date().month() : dt[1]),
+                            (dt[2] < 0 ? defaultDt.date().day() : dt[2]));
+            }
+            else
+                date.setDate(2000, 1, 1);  // temporary substitute for date
+        }
+        dateTime = applyTimeZone(zone, date, time, true, defaultDt);
+        if (!dateTime.isValid())
+            return false;
+        if (dt[0] < 0)
+        {
+            // Some or all of the date was omitted.
+            // Use the current date in the specified time zone as default.
+            const KADateTime now = KADateTime::currentDateTime(dateTime.timeSpec());
+            date = dateTime.date();
+            date.setDate(now.date().year(),
+                        (dt[1] < 0 ? now.date().month() : dt[1]),
+                        (dt[2] < 0 ? now.date().day() : dt[2]));
+            if (!date.isValid())
+                return false;
+            if (noDate  &&  time < now.time())
+                date = date.addDays(1);
+            dateTime.setDate(date);
+        }
+    }
+    return dateTime.isValid();
+}
+
+/******************************************************************************
+* Convert a time zone specifier string and apply it to a given date and/or time.
+* The time zone specifier is a system time zone name, e.g. "Europe/London" or
+* "UTC". If no time zone is specified, it defaults to the local time zone.
+* If 'defaultDt' is valid, it supplies the time spec and default date.
+*/
+KADateTime applyTimeZone(const QString& tzstring, const QDate& date, const QTime& time,
+                         bool haveTime, const KADateTime& defaultDt)
+{
+    bool error = false;
+    KADateTime::Spec spec = KADateTime::LocalZone;
+    const QString zone = tzstring.trimmed();
+    if (!zone.isEmpty())
+    {
+        if (zone == QLatin1String("UTC"))
+            spec = KADateTime::UTC;
+        else
+        {
+            const QTimeZone tz(zone.toLatin1());
+            error = !tz.isValid();
+            if (!error)
+                spec = tz;
+        }
+    }
+    else if (defaultDt.isValid())
+        spec = defaultDt.timeSpec();
+
+    KADateTime result;
+    if (!error)
+    {
+        if (!date.isValid())
+        {
+            // It's a time without a date
+            if (defaultDt.isValid())
+                   result = KADateTime(defaultDt.date(), time, spec);
+            else if (spec == KADateTime::LocalZone)
+                result = KADateTime(KADateTime::currentLocalDate(), time, spec);
+        }
+        else if (haveTime)
+        {
+            // It's a date and time
+            result = KADateTime(date, time, spec);
+        }
+        else
+        {
+            // It's a date without a time
+            result = KADateTime(date, spec);
+        }
+    }
+    return result;
+}
+
+// vim: et sw=4:
 #ifndef NDEBUG
 /******************************************************************************
 * Set up KAlarm test conditions based on environment variables.
@@ -1619,7 +1796,7 @@ void setTestModeConditions()
     if (!newTime.isEmpty())
     {
         KADateTime dt;
-        if (AlarmTime::convertTimeString(newTime, dt, KADateTime::realCurrentLocalDateTime(), true))
+        if (convertTimeString(newTime, dt, KADateTime::realCurrentLocalDateTime(), true))
             setSimulatedSystemTime(dt);
     }
 }

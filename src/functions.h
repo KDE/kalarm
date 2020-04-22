@@ -164,6 +164,11 @@ void                deleteRtcWakeConfig();
 void                cancelRtcWake(QWidget* msgParent, const QString& eventId = QString());
 bool                setRtcWakeTime(unsigned triggerTime, QWidget* parent);
 
+bool                convertTimeString(const QByteArray& timeString, KADateTime& dateTime,
+                                  const KADateTime& defaultDt = KADateTime(), bool allowTZ = true);
+KADateTime          applyTimeZone(const QString& tzstring, const QDate& date, const QTime& time,
+                                   bool haveTime, const KADateTime& defaultDt = KADateTime());
+
 #ifndef NDEBUG
 void                setTestModeConditions();
 void                setSimulatedSystemTime(const KADateTime&);
