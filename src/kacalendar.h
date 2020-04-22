@@ -2,7 +2,7 @@
  *  kacalendar.h  -  KAlarm kcal library calendar and event categorisation
  *  This file is part of kalarmcal library, which provides access to KAlarm
  *  calendar data.
- *  Copyright © 2005-2019 David Jarvie <djarvie@kde.org>
+ *  Copyright © 2005-2020 David Jarvie <djarvie@kde.org>
  *
  *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Library General Public License as published
@@ -33,6 +33,7 @@
 
 #include <QByteArray>
 #include <QStringList>
+#include <QDebug>
 
 namespace KCalendarCore
 {
@@ -148,6 +149,8 @@ KALARMCAL_EXPORT QStringList mimeTypes(Types);
 Q_DECLARE_OPERATORS_FOR_FLAGS(CalEvent::Types)
 
 } // namespace KAlarmCal
+
+KALARMCAL_EXPORT QDebug operator<<(QDebug, KAlarmCal::CalEvent::Type);
 
 #endif // KALARM_KACALENDAR_H
 

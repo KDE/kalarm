@@ -2,7 +2,7 @@
  *  kacalendar.cpp  -  KAlarm kcal library calendar and event functions
  *  This file is part of kalarmcal library, which provides access to KAlarm
  *  calendar data.
- *  Copyright © 2001-2019 David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2020 David Jarvie <djarvie@kde.org>
  *
  *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Library General Public License as published
@@ -456,5 +456,18 @@ QStringList mimeTypes(Types types)
 } // namespace CalEvent
 
 } // namespace KAlarmCal
+
+QDebug operator<<(QDebug debug, KAlarmCal::CalEvent::Type type)
+{
+    const char* str;
+    switch (type) {
+    case KAlarmCal::CalEvent::ACTIVE:    str = "Active alarms";    break;
+    case KAlarmCal::CalEvent::ARCHIVED:  str = "Archived alarms";  break;
+    case KAlarmCal::CalEvent::TEMPLATE:  str = "Alarm templates";  break;
+    default:        return debug;
+    }
+    debug << str;
+    return debug;
+}
 
 // vim: et sw=4:
