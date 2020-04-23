@@ -70,18 +70,26 @@
 #include <iostream>
 #include <climits>
 
-static const int RESOURCES_TIMEOUT = 30;   // timeout (seconds) for resources to be populated
+namespace
+{
+const int RESOURCES_TIMEOUT = 30;   // timeout (seconds) for resources to be populated
 
 /******************************************************************************
 * Find the maximum number of seconds late which a late-cancel alarm is allowed
 * to be. This is calculated as the late cancel interval, plus a few seconds
 * leeway to cater for any timing irregularities.
 */
-static inline int maxLateness(int lateCancel)
+inline int maxLateness(int lateCancel)
 {
     static const int LATENESS_LEEWAY = 5;
     int lc = (lateCancel >= 1) ? (lateCancel - 1)*60 : 0;
     return LATENESS_LEEWAY + lc;
+}
+
+QWidget* mainWidget()
+{
+    return MainWindow::mainMainWindow();
+}
 }
 
 
@@ -219,6 +227,7 @@ bool KAlarmApp::initialiseTimerResources()
     if (!ResourcesCalendar::instance())
     {
         qCDebug(KALARM_LOG) << "KAlarmApp::initialise: initialising calendars";
+        Desktop::setMainWindowFunc(&mainWidget);
         DataModel::initialise();
         ResourcesCalendar::initialise();
         DisplayCalendar::initialise();
@@ -307,10 +316,10 @@ bool KAlarmApp::restoreSession()
     }
 
     --mActiveCount;
-    if (quitIf(0))           // quit if no windows are open
-        return false;    // quitIf() can sometimes return, despite calling exit()
+    if (quitIf(0))          // quit if no windows are open
+        return false;       // quitIf() can sometimes return, despite calling exit()
 
-    startProcessQueue();      // start processing the execution queue
+    startProcessQueue();    // start processing the execution queue
     return true;
 }
 

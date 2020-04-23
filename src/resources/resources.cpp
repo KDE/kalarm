@@ -25,7 +25,6 @@
 #include "resourcemodel.h"
 #include "resourceselectdialog.h"
 
-#include "mainwindow.h"
 #include "preferences.h"
 #include "lib/autoqpointer.h"
 #include "lib/messagebox.h"

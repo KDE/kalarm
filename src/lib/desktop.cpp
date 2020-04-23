@@ -1,7 +1,7 @@
 /*
  *  desktop.cpp  -  desktop functions
  *  Program:  kalarm
- *  Copyright © 2008-2019 David Jarvie <djarvie@kde.org>
+ *  Copyright © 2008-2020 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -31,6 +31,8 @@
 
 namespace Desktop
 {
+
+QWidget* (*mMainWindowFunc)() {nullptr};
 
 /******************************************************************************
 * Find the identity of the desktop we are running on.
@@ -65,6 +67,19 @@ QRect workArea(int screen)
     if (screen < 0  ||  screen >= screens.count())
         return QRect();
     return screens[screen]->availableGeometry();
+}
+
+/******************************************************************************
+* Return the top level application window, for use as parent for dialogues etc.
+*/
+QWidget* mainWindow()
+{
+    return (*mMainWindowFunc)();
+}
+
+void setMainWindowFunc(QWidget* (*func)())
+{
+    mMainWindowFunc = func;
 }
 
 } // namespace Desktop

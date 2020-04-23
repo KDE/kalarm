@@ -1,7 +1,7 @@
 /*
  *  desktop.h  -  desktop functions
  *  Program:  kalarm
- *  Copyright © 2008-2019 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2008-2020 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -22,6 +22,7 @@
 #define DESKTOP_H
 
 #include <QRect>
+class QWidget;
 
 namespace Desktop
 {
@@ -38,6 +39,12 @@ Type currentIdentity();
 QString currentIdentityName();
 
 QRect workArea(int screen = -1);
+
+/** Return the top level application window, for use as parent for dialogues etc. */
+QWidget* mainWindow();
+
+/** Set the function to return the parent window for prompt and information messages. */
+void setMainWindowFunc(QWidget* (*func)());
 
 } // namespace Desktop
 

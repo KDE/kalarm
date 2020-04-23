@@ -20,7 +20,7 @@
 
 #include "calendarupdater.h"
 
-#include "mainwindow.h"
+#include "lib/desktop.h"
 
 #include <KLocalizedString>
 
@@ -39,7 +39,7 @@ CalendarUpdater::CalendarUpdater(ResourceId resourceId, bool ignoreKeepFormat, Q
     : QObject(parent)
     , mResourceId(resourceId)
     , mParent(parent)
-    , mPromptParent(promptParent ? promptParent : MainWindow::mainMainWindow())
+    , mPromptParent(promptParent ? promptParent : Desktop::mainWindow())
     , mIgnoreKeepFormat(ignoreKeepFormat)
     , mDuplicate(containsResource(resourceId))
 {

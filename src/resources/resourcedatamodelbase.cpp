@@ -22,8 +22,8 @@
 
 #include "resources.h"
 
-#include "mainwindow.h"
 #include "preferences.h"
+#include "lib/desktop.h"
 #include "lib/messagebox.h"
 #include "kalarm_debug.h"
 
@@ -615,14 +615,14 @@ void ResourceDataModelBase::handleResourceMessage(ResourceType::MessageType type
     if (type == ResourceType::MessageType::Error)
     {
         qCDebug(KALARM_LOG) << "Resource Error!" << message << details;
-        KAMessageBox::detailedError(MainWindow::mainMainWindow(), message, details);
+        KAMessageBox::detailedError(Desktop::mainWindow(), message, details);
     }
     else if (type == ResourceType::MessageType::Info)
     {
         qCDebug(KALARM_LOG) << "Resource user message:" << message << details;
         // KMessageBox::informationList looks bad, so use our own formatting.
         const QString msg = details.isEmpty() ? message : message + QStringLiteral("\n\n") + details;
-        KAMessageBox::information(MainWindow::mainMainWindow(), msg);
+        KAMessageBox::information(Desktop::mainWindow(), msg);
     }
 }
 

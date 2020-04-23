@@ -22,7 +22,6 @@
 
 #include "kalarmsettings.h"
 #include "kalarmdirsettings.h"
-#include "mainwindow.h"
 #include "resources/akonadidatamodel.h"
 #include "resources/akonadiresource.h"
 #include "resources/akonadicalendarupdater.h"

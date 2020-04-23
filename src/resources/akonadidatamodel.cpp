@@ -64,7 +64,7 @@ static_assert((int)ResourceDataModelBase::UserRole>=(int)Akonadi::EntityTreeMode
 =============================================================================*/
 
 AkonadiDataModel* AkonadiDataModel::mInstance = nullptr;
-int           AkonadiDataModel::mTimeHourPos = -2;
+int               AkonadiDataModel::mTimeHourPos = -2;
 
 /******************************************************************************
 * Construct and return the singleton.
