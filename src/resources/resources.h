@@ -54,20 +54,21 @@ public:
      */
     static bool removeResource(Resource&);
 
+    /** Sorting criteria for allResources(Type, Sorting). May be OR'ed together. */
+    enum Sorts
+    {
+        NoSort       = 0,
+        DisplayName  = 0x01,   // sort by display name
+        DefaultFirst = 0x02    // default resource is first in list. Requires a CalEvent::Type to be specified.
+    };
+    Q_DECLARE_FLAGS(Sorting, Sorts)
     /** Return all resources of a kind which contain a specified alarm type.
-     *  @tparam Type       Resource type to fetch, default = all types.
+     *  @tparam RType      Resource type to fetch, default = all types.
      *  @param  alarmType  Alarm type to check for, or CalEvent::EMPTY for any type.
+     *  @param  sorting    Sorting criteria to use.
      */
-    template <class Type = ResourceType>
-    static QVector<Resource> allResources(CalEvent::Type alarmType = CalEvent::EMPTY);
-
-    /** Return all resources of a kind which contain a specified alarm type,
-     *  with the standard resource for the alarm type first in the list.
-     *  @tparam Type       Resource type to fetch, default = all types.
-     *  @param  alarmType  Alarm type to check for.
-     */
-    template <class Type = ResourceType>
-    static QVector<Resource> allResourcesOrdered(CalEvent::Type alarmType);
+    template <class RType = ResourceType>
+    static QVector<Resource> allResources(CalEvent::Type alarmType = CalEvent::EMPTY, Sorting sorting = NoSort);
 
     /** Return the enabled resources which contain a specified alarm type.
      *  @param type      Alarm type to check for, or CalEvent::EMPTY for any type.
@@ -278,39 +279,40 @@ private:
     friend class ResourceType;
 };
 
+Q_DECLARE_OPERATORS_FOR_FLAGS(Resources::Sorting)
+
 
 /*=============================================================================
 * Template definitions.
 *============================================================================*/
 
-template <class Type>
-QVector<Resource> Resources::allResources(CalEvent::Type type)
+template <class RType>
+QVector<Resource> Resources::allResources(CalEvent::Type type, Sorting sorting)
 {
     const CalEvent::Types types = (type == CalEvent::EMPTY)
                                 ? CalEvent::ACTIVE | CalEvent::ARCHIVED | CalEvent::TEMPLATE
                                 : type;
 
     QVector<Resource> result;
-    for (auto it = mResources.constBegin();  it != mResources.constEnd();  ++it)
+    Resource std;
+    if ((sorting & DefaultFirst)  &&  type != CalEvent::EMPTY)
     {
-        const Resource& res = it.value();
-        if (res.is<Type>()  &&  (res.alarmTypes() & types))
-            result += res;
+        std = getStandard(type);
+        if (std.isValid()  &&  std.is<RType>())
+            result += std;
     }
-    return result;
-}
+    const int start = result.size();
 
-template <class Type>
-QVector<Resource> Resources::allResourcesOrdered(CalEvent::Type type)
-{
-    Resource std = getStandard(type);
-    QVector<Resource> result {std};
     for (auto it = mResources.constBegin();  it != mResources.constEnd();  ++it)
     {
         const Resource& res = it.value();
-        if (res != std  &&  res.is<Type>()  &&  (res.alarmTypes() & type))
+        if (res != std  &&  res.is<RType>()  &&  (res.alarmTypes() & types))
             result += res;
     }
+
+    if (sorting & DisplayName)
+        std::sort(result.begin() + start, result.end(), [](const Resource& a, const Resource& b) { return a.displayName().compare(b.displayName(), Qt::CaseInsensitive) < 0; });
+
     return result;
 }
 

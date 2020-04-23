@@ -466,6 +466,7 @@ private:
     bool         mBeingDeleted {false};  // the resource is currently being deleted
 };
 
+Q_DECLARE_OPERATORS_FOR_FLAGS(ResourceType::Changes)
 Q_DECLARE_METATYPE(ResourceType::MessageType)
 
 
