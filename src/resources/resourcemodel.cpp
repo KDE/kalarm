@@ -463,6 +463,7 @@ ResourceFilterCheckListModel::ResourceFilterCheckListModel(QObject* parent)
     : QSortFilterProxyModel(parent)
 {
     setDynamicSortFilter(true);
+    setSortCaseSensitivity(Qt::CaseInsensitive);
 }
 
 void ResourceFilterCheckListModel::init()
@@ -606,6 +607,7 @@ ResourceView::ResourceView(ResourceFilterCheckListModel* model, QWidget* parent)
     : QListView(parent)
 {
     setModel(model);
+    model->sort(0, Qt::AscendingOrder);
 }
 
 ResourceFilterCheckListModel* ResourceView::resourceModel() const
