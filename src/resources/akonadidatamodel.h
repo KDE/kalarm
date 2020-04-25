@@ -69,12 +69,6 @@ public:
     Akonadi::Collection* collection(Akonadi::Collection::Id id) const;
     Akonadi::Collection* collection(const Resource&) const;
 
-    /** Reload a collection's data from Akonadi storage (not from the backend). */
-    bool reload(Resource&);
-
-    /** Reload all collections' data from Akonadi storage (not from the backend). */
-    void reload();
-
     KAEvent event(const QString& eventId) const;
     KAEvent event(const QModelIndex&) const;
     using QObject::event;   // prevent warning about hidden virtual method
@@ -95,9 +89,6 @@ public:
 
     int headerDataEventRoleOffset() const override;
 
-    /** Return the data storage backend type used by this model. */
-    Preferences::Backend dataStorageBackend() const override   { return Preferences::Akonadi; }
-
 private Q_SLOTS:
     /** Called when a resource notifies a message to display to the user. */
     void slotResourceMessage(ResourceType::MessageType, const QString& message, const QString& details);
@@ -107,6 +98,45 @@ Q_SIGNALS:
     void serverStopped();
 
 protected:
+    /** Terminate access to the data model, and tidy up. Not necessary for Akonadi. */
+    void terminate() override  {}
+
+    /** Reload all resources' data from storage.
+     *  @note This reloads data from Akonadi storage, not from the backend storage.
+     */
+    void reload() override;
+
+    /** Reload a resource's data from storage.
+     *  @note This reloads data from Akonadi storage, not from the backend storage.
+     */
+    bool reload(Resource&) override;
+
+    /** Check for, and remove, any duplicate resources, i.e. those which use
+     *  the same calendar file/directory.
+     */
+    void removeDuplicateResources() override;
+
+    /** Disable the widget if the database engine is not available, and display
+     *  an error overlay.
+     */
+    void widgetNeedsDatabase(QWidget*) override;
+
+    /** Create an AkonadiResourceCreator instance. */
+    ResourceCreator* createResourceCreator(KAlarmCal::CalEvent::Type defaultType, QWidget* parent) override;
+
+    /** Update a resource's backend calendar file to the current KAlarm format. */
+    void updateCalendarToCurrentFormat(Resource&, bool ignoreKeepFormat, QObject* parent) override;
+
+    ResourceListModel* createResourceListModel(QObject* parent) override;
+    ResourceFilterCheckListModel* createResourceFilterCheckListModel(QObject* parent) override;
+    AlarmListModel*    createAlarmListModel(QObject* parent) override;
+    AlarmListModel*    allAlarmListModel() override;
+    TemplateListModel* createTemplateListModel(QObject* parent) override;
+    TemplateListModel* allTemplateListModel() override;
+
+    /** Return the data storage backend type used by this model. */
+    Preferences::Backend dataStorageBackend() const override   { return Preferences::Akonadi; }
+
     QVariant entityHeaderData(int section, Qt::Orientation, int role, HeaderGroup) const override;
     int entityColumnCount(HeaderGroup) const override;
 
@@ -168,8 +198,8 @@ private:
     QList<KAEvent> events(ResourceId) const;
     void          getChildEvents(const QModelIndex& parent, QList<KAEvent>&) const;
 
-    static AkonadiDataModel*  mInstance;
-    static int            mTimeHourPos;   // position of hour within time string, or -1 if leading zeroes included
+    static bool   mInstanceIsOurs;        // mInstance is an AkonadiDataModel instance
+    static int    mTimeHourPos;           // position of hour within time string, or -1 if leading zeroes included
 
     Akonadi::ChangeRecorder* mMonitor;
     QHash<KJob*, CollJobData> mPendingCollectionJobs;  // pending collection creation/deletion jobs, with collection ID & name

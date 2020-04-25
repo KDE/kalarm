@@ -30,6 +30,11 @@
 #include <QSize>
 
 class Resource;
+class ResourceListModel;
+class ResourceFilterCheckListModel;
+class AlarmListModel;
+class TemplateListModel;
+class ResourceCreator;
 class QModelIndex;
 class QPixmap;
 
@@ -79,11 +84,7 @@ public:
 
     virtual ~ResourceDataModelBase();
 
-public:
-    /** Return the data storage backend type used by this model. */
-    virtual Preferences::Backend dataStorageBackend() const = 0;
-
-    static QSize   iconSize()       { return mIconSize; }
+    static QSize iconSize()       { return mIconSize; }
 
     /** Return a bulleted list of alarm types for inclusion in an i18n message. */
     static QString typeListForDisplay(CalEvent::Types);
@@ -99,11 +100,47 @@ public:
     /** Return offset to add to headerData() role, for item models. */
     virtual int headerDataEventRoleOffset() const  { return 0; }
 
-    /** Return whether calendar migration/creation at initialisation has completed. */
-    bool isMigrationComplete() const;
-
 protected:
     ResourceDataModelBase();
+
+    /** Terminate access to the data model, and tidy up. */
+    virtual void terminate() = 0;
+
+    /** Reload all resources' data from storage.
+     *  @note In the case of Akonadi, this does not reload from the backend storage.
+     */
+    virtual void reload() = 0;
+
+    /** Reload a resource's data from storage.
+     *  @note In the case of Akonadi, this does not reload from the backend storage.
+     */
+    virtual bool reload(Resource&) = 0;
+
+    /** Check for, and remove, any duplicate resources, i.e. those which use
+     *  the same calendar file/directory.
+     */
+    virtual void removeDuplicateResources() = 0;
+
+    /** Disable the widget if the database engine is not available, and display
+     *  an error overlay.
+     */
+    virtual void widgetNeedsDatabase(QWidget*) = 0;
+
+    /** Create a ResourceCreator instance for the model. */
+    virtual ResourceCreator* createResourceCreator(KAlarmCal::CalEvent::Type defaultType, QWidget* parent) = 0;
+
+    /** Update a resource's backend calendar file to the current KAlarm format. */
+    virtual void updateCalendarToCurrentFormat(Resource&, bool ignoreKeepFormat, QObject* parent) = 0;
+
+    virtual ResourceListModel* createResourceListModel(QObject* parent) = 0;
+    virtual ResourceFilterCheckListModel* createResourceFilterCheckListModel(QObject* parent) = 0;
+    virtual AlarmListModel*    createAlarmListModel(QObject* parent) = 0;
+    virtual AlarmListModel*    allAlarmListModel() = 0;
+    virtual TemplateListModel* createTemplateListModel(QObject* parent) = 0;
+    virtual TemplateListModel* allTemplateListModel() = 0;
+
+    /** Return the data storage backend type used by this model. */
+    virtual Preferences::Backend dataStorageBackend() const = 0;
 
     static QVariant headerData(int section, Qt::Orientation, int role, bool eventHeaders, bool& handled);
 
@@ -124,6 +161,9 @@ protected:
     /** Called when a resource notifies a message to display to the user. */
     void handleResourceMessage(ResourceType::MessageType, const QString& message, const QString& details);
 
+    /** Return whether calendar migration/creation at initialisation has completed. */
+    bool isMigrationComplete() const;
+
     /** Return whether calendar migration is currently in progress. */
     bool isMigrating() const;
 
@@ -138,6 +178,8 @@ protected:
     static QString  whatsThisText(int column);
     static QPixmap* eventIcon(const KAEvent&);
 
+    static ResourceDataModelBase* mInstance;
+
 private:
     static QPixmap* mTextIcon;
     static QPixmap* mFileIcon;
@@ -147,6 +189,8 @@ private:
     static QSize    mIconSize;      // maximum size of any icon
 
     int  mMigrationStatus {-1};     // migration status, -1 = no, 0 = initiated, 1 = complete
+
+friend class DataModel;
 };
 
 #endif // RESOURCEDATAMODELBASE_H

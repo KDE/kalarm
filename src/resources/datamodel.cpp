@@ -1,7 +1,7 @@
 /*
- *  datamodel.cpp  -  calendar data model dependent functions
+ *  datamodel.cpp  -  model independent access to calendar functions
  *  Program:  kalarm
- *  Copyright © 2019-2020 David Jarvie <djarvie@kde.org>
+ *  Copyright © 2020 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -20,94 +20,97 @@
 
 #include "datamodel.h"
 
+//#define USE_AKONADI
+#ifdef USE_AKONADI
 #include "akonadidatamodel.h"
-#include "akonadiresource.h"
-#include "akonadiresourcecreator.h"
-#include "akonadicalendarupdater.h"
-#include "eventmodel.h"
-#include "resourcemodel.h"
+#define DATA_MODEL AkonadiDataModel
+#else
+#include "fileresourcedatamodel.h"
+#define DATA_MODEL FileResourceDataModel
+#endif
 
-#include <AkonadiWidgets/ControlGui>
 
-namespace DataModel
+void DataModel::initialise()
 {
-
-void initialise()
-{
-    AkonadiDataModel* model = AkonadiDataModel::instance();
-    Preferences::setBackend(model->dataStorageBackend());
+    DATA_MODEL::instance();
+    // Record in kalarmrc, for information only, which backend is in use.
+    Preferences::setBackend(ResourceDataModelBase::mInstance->dataStorageBackend());
     Preferences::self()->save();
 }
 
-void terminate()
+void DataModel::terminate()
 {
+    if (ResourceDataModelBase::mInstance)
+        ResourceDataModelBase::mInstance->terminate();
 }
 
-void widgetNeedsDatabase(QWidget* widget)
+void DataModel::reload()
 {
-    Akonadi::ControlGui::widgetNeedsAkonadi(widget);
+    if (ResourceDataModelBase::mInstance)
+        ResourceDataModelBase::mInstance->reload();
 }
 
-void reload()
+bool DataModel::reload(Resource& resource)
 {
-    AkonadiDataModel::instance()->reload();
+    return ResourceDataModelBase::mInstance  &&  ResourceDataModelBase::mInstance->reload(resource);
 }
 
-bool reload(Resource& resource)
+bool DataModel::isMigrationComplete()
 {
-    return AkonadiDataModel::instance()->reload(resource);
+    return ResourceDataModelBase::mInstance  &&  ResourceDataModelBase::mInstance->isMigrationComplete();
 }
 
-bool isMigrationComplete()
+void DataModel::removeDuplicateResources()
 {
-    return AkonadiDataModel::instance()->isMigrationComplete();
+    if (ResourceDataModelBase::mInstance)
+        ResourceDataModelBase::mInstance->removeDuplicateResources();
 }
 
-void removeDuplicateResources()
+void DataModel::widgetNeedsDatabase(QWidget* widget)
 {
-    AkonadiResource::removeDuplicateResources();
+    if (ResourceDataModelBase::mInstance)
+        ResourceDataModelBase::mInstance->widgetNeedsDatabase(widget);
 }
 
-ResourceListModel* createResourceListModel(QObject* parent)
+ResourceCreator* DataModel::createResourceCreator(KAlarmCal::CalEvent::Type defaultType, QWidget* parent)
 {
-    return ResourceListModel::create<AkonadiDataModel>(parent);
+    return ResourceDataModelBase::mInstance ? ResourceDataModelBase::mInstance->createResourceCreator(defaultType, parent) : nullptr;
 }
 
-ResourceFilterCheckListModel* createResourceFilterCheckListModel(QObject* parent)
+void DataModel::updateCalendarToCurrentFormat(Resource& resource, bool ignoreKeepFormat, QObject* parent)
 {
-    return ResourceFilterCheckListModel::create<AkonadiDataModel>(parent);
+    if (ResourceDataModelBase::mInstance)
+        ResourceDataModelBase::mInstance->updateCalendarToCurrentFormat(resource, ignoreKeepFormat, parent);
 }
 
-AlarmListModel* createAlarmListModel(QObject* parent)
+ResourceListModel* DataModel::createResourceListModel(QObject* parent)
 {
-    return AlarmListModel::create<AkonadiDataModel>(parent);
+    return ResourceDataModelBase::mInstance ? ResourceDataModelBase::mInstance->createResourceListModel(parent) : nullptr;
 }
 
-AlarmListModel* allAlarmListModel()
+ResourceFilterCheckListModel* DataModel::createResourceFilterCheckListModel(QObject* parent)
 {
-    return AlarmListModel::all<AkonadiDataModel>();
+    return ResourceDataModelBase::mInstance ? ResourceDataModelBase::mInstance->createResourceFilterCheckListModel(parent) : nullptr;
 }
 
-TemplateListModel* createTemplateListModel(QObject* parent)
+AlarmListModel* DataModel::createAlarmListModel(QObject* parent)
 {
-    return TemplateListModel::create<AkonadiDataModel>(parent);
+    return ResourceDataModelBase::mInstance ? ResourceDataModelBase::mInstance->createAlarmListModel(parent) : nullptr;
 }
 
-TemplateListModel* allTemplateListModel()
+AlarmListModel* DataModel::allAlarmListModel()
 {
-    return TemplateListModel::all<AkonadiDataModel>();
+    return ResourceDataModelBase::mInstance ? ResourceDataModelBase::mInstance->allAlarmListModel() : nullptr;
 }
 
-ResourceCreator* createResourceCreator(KAlarmCal::CalEvent::Type defaultType, QWidget* parent)
+TemplateListModel* DataModel::createTemplateListModel(QObject* parent)
 {
-    return new AkonadiResourceCreator(defaultType, parent);
+    return ResourceDataModelBase::mInstance ? ResourceDataModelBase::mInstance->createTemplateListModel(parent) : nullptr;
 }
 
-void updateCalendarToCurrentFormat(Resource& resource, bool ignoreKeepFormat, QObject* parent)
+TemplateListModel* DataModel::allTemplateListModel()
 {
-    AkonadiCalendarUpdater::updateToCurrentFormat(resource, ignoreKeepFormat, parent);
+    return ResourceDataModelBase::mInstance ? ResourceDataModelBase::mInstance->allTemplateListModel() : nullptr;
 }
-
-} // namespace DataModel
 
 // vim: et sw=4:

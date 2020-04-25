@@ -49,6 +49,8 @@ QString timeToAlarmText(const DateTime& dateTime);
 = Class: ResourceDataModelBase
 =============================================================================*/
 
+ResourceDataModelBase* ResourceDataModelBase::mInstance = nullptr;
+
 QPixmap* ResourceDataModelBase::mTextIcon    = nullptr;
 QPixmap* ResourceDataModelBase::mFileIcon    = nullptr;
 QPixmap* ResourceDataModelBase::mCommandIcon = nullptr;

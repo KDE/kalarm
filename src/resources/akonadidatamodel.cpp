@@ -20,9 +20,14 @@
 
 #include "akonadidatamodel.h"
 
-#include "preferences.h"
+#include "resources/akonadicalendarupdater.h"
+#include "resources/akonadiresourcecreator.h"
 #include "resources/akonadiresourcemigrator.h"
+#include "resources/eventmodel.h"
+#include "resources/resourcemodel.h"
 #include "resources/resources.h"
+
+#include "preferences.h"
 #include "lib/synchtimer.h"
 #include "kalarm_debug.h"
 
@@ -42,6 +47,7 @@
 #include <AkonadiCore/Item>
 #include <AkonadiCore/ItemFetchScope>
 #include <AkonadiWidgets/AgentTypeDialog>
+#include <AkonadiWidgets/ControlGui>
 
 #include <KLocalizedString>
 #include <KColorUtils>
@@ -63,8 +69,8 @@ static_assert((int)ResourceDataModelBase::UserRole>=(int)Akonadi::EntityTreeMode
 = Class: AkonadiDataModel
 =============================================================================*/
 
-AkonadiDataModel* AkonadiDataModel::mInstance = nullptr;
-int               AkonadiDataModel::mTimeHourPos = -2;
+bool AkonadiDataModel::mInstanceIsOurs = false;
+int  AkonadiDataModel::mTimeHourPos = -2;
 
 /******************************************************************************
 * Construct and return the singleton.
@@ -72,8 +78,11 @@ int               AkonadiDataModel::mTimeHourPos = -2;
 AkonadiDataModel* AkonadiDataModel::instance()
 {
     if (!mInstance)
+    {
         mInstance = new AkonadiDataModel(new ChangeRecorder(qApp), qApp);
-    return mInstance;
+        mInstanceIsOurs = true;
+    }
+    return mInstanceIsOurs ? (AkonadiDataModel*)mInstance : nullptr;
 }
 
 /******************************************************************************
@@ -129,7 +138,10 @@ AkonadiDataModel::AkonadiDataModel(ChangeRecorder* monitor, QObject* parent)
 AkonadiDataModel::~AkonadiDataModel()
 {
     if (mInstance == this)
+    {
         mInstance = nullptr;
+        mInstanceIsOurs = false;
+    }
 }
 
 /******************************************************************************
@@ -399,6 +411,20 @@ void AkonadiDataModel::slotUpdateWorkingHours()
 }
 
 /******************************************************************************
+* Reload all collections from Akonadi storage. The backend data is not reloaded.
+*/
+void AkonadiDataModel::reload()
+{
+    qCDebug(KALARM_LOG) << "AkonadiDataModel::reload";
+    const Collection::List collections = mMonitor->collectionsMonitored();
+    for (const Collection& collection : collections)
+    {
+        mMonitor->setCollectionMonitored(collection, false);
+        mMonitor->setCollectionMonitored(collection, true);
+    }
+}
+
+/******************************************************************************
 * Reload a collection from Akonadi storage. The backend data is not reloaded.
 */
 bool AkonadiDataModel::reload(Resource& resource)
@@ -413,17 +439,70 @@ bool AkonadiDataModel::reload(Resource& resource)
 }
 
 /******************************************************************************
-* Reload all collections from Akonadi storage. The backend data is not reloaded.
+* Disable the widget if the database engine is not available, and display an
+* error overlay.
 */
-void AkonadiDataModel::reload()
+void AkonadiDataModel::widgetNeedsDatabase(QWidget* widget)
 {
-    qCDebug(KALARM_LOG) << "AkonadiDataModel::reload";
-    const Collection::List collections = mMonitor->collectionsMonitored();
-    for (const Collection& collection : collections)
-    {
-        mMonitor->setCollectionMonitored(collection, false);
-        mMonitor->setCollectionMonitored(collection, true);
-    }
+    Akonadi::ControlGui::widgetNeedsAkonadi(widget);
+}
+
+/******************************************************************************
+* Check for, and remove, any duplicate Akonadi resources, i.e. those which use
+* the same calendar file/directory.
+*/
+void AkonadiDataModel::removeDuplicateResources()
+{
+    AkonadiResource::removeDuplicateResources();
+}
+
+/******************************************************************************
+* Create an AkonadiResourceCreator instance.
+*/
+ResourceCreator* AkonadiDataModel::createResourceCreator(KAlarmCal::CalEvent::Type defaultType, QWidget* parent)
+{
+    return new AkonadiResourceCreator(defaultType, parent);
+}
+
+/******************************************************************************
+* Update a resource's backend calendar file to the current KAlarm format.
+*/
+void AkonadiDataModel::updateCalendarToCurrentFormat(Resource& resource, bool ignoreKeepFormat, QObject* parent)
+{
+    AkonadiCalendarUpdater::updateToCurrentFormat(resource, ignoreKeepFormat, parent);
+}
+
+/******************************************************************************
+* Create model instances which are dependent on the resource data model type.
+*/
+ResourceListModel* AkonadiDataModel::createResourceListModel(QObject* parent)
+{
+    return ResourceListModel::create<AkonadiDataModel>(parent);
+}
+
+ResourceFilterCheckListModel* AkonadiDataModel::createResourceFilterCheckListModel(QObject* parent)
+{
+    return ResourceFilterCheckListModel::create<AkonadiDataModel>(parent);
+}
+
+AlarmListModel* AkonadiDataModel::createAlarmListModel(QObject* parent)
+{
+    return AlarmListModel::create<AkonadiDataModel>(parent);
+}
+
+AlarmListModel* AkonadiDataModel::allAlarmListModel()
+{
+    return AlarmListModel::all<AkonadiDataModel>();
+}
+
+TemplateListModel* AkonadiDataModel::createTemplateListModel(QObject* parent)
+{
+    return TemplateListModel::create<AkonadiDataModel>(parent);
+}
+
+TemplateListModel* AkonadiDataModel::allTemplateListModel()
+{
+    return TemplateListModel::all<AkonadiDataModel>();
 }
 
 /******************************************************************************

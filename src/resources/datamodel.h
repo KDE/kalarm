@@ -1,5 +1,5 @@
 /*
- *  datamodel.h  -  calendar data model dependent functions
+ *  datamodel.h  -  model independent access to calendar functions
  *  Program:  kalarm
  *  Copyright © 2019-2020 David Jarvie <djarvie@kde.org>
  *
@@ -29,50 +29,75 @@ class ResourceFilterCheckListModel;
 class AlarmListModel;
 class TemplateListModel;
 class ResourceCreator;
-class QObject;
-class QWidget;
 
-/** Class to create objects dependent on data model. */
-namespace DataModel
+
+/*=============================================================================
+= Class: DataModel
+= Static methods providing model independent access to the resource data model.
+=============================================================================*/
+class DataModel
 {
+public:
+    /** Initialise the data model. */
+    static void initialise();
 
-void initialise();
+    /** Terminate access to the data model, and tidy up. */
+    static void terminate();
 
-void terminate();
+    /** Reload all resources' data from storage.
+     *  @note In the case of Akonadi, this does not reload from the backend storage.
+     */
+    static void reload();
 
-/** Disable the widget if the database engine is not available, and display an
- *  error overlay.
- */
-void widgetNeedsDatabase(QWidget*);
+    /** Reload a resource's data from storage.
+     *  @note In the case of Akonadi, this does not reload from the backend storage.
+     */
+    static bool reload(Resource&);
 
-/** Reload all resources' data from storage.
- *  @note In the case of Akonadi, this does not reload from the backend storage.
- */
-void reload();
+    /** Return whether calendar migration/creation at initialisation has completed. */
+    static bool isMigrationComplete();
 
-/** Reload a resource's data from storage.
- *  @note In the case of Akonadi, this does not reload from the backend storage.
- */
-bool reload(Resource&);
+    /** Check for, and remove, any duplicate Akonadi resources, i.e. those which
+     *  use the same calendar file/directory.
+     */
+    static void removeDuplicateResources();
 
-bool isMigrationComplete();
+    /** Disable the widget if the database engine is not available, and display an
+     *  error overlay.
+     */
+    static void widgetNeedsDatabase(QWidget*);
 
-/** Check for, and remove, any duplicate Akonadi resources, i.e. those which
- *  use the same calendar file/directory.
- */
-void removeDuplicateResources();
+    /** Create a ResourceCreator instance for the model. */
+    static ResourceCreator* createResourceCreator(KAlarmCal::CalEvent::Type defaultType, QWidget* parent);
 
-ResourceListModel* createResourceListModel(QObject* parent);
-ResourceFilterCheckListModel* createResourceFilterCheckListModel(QObject* parent);
-AlarmListModel*    createAlarmListModel(QObject* parent);
-AlarmListModel*    allAlarmListModel();
-TemplateListModel* createTemplateListModel(QObject* parent);
-TemplateListModel* allTemplateListModel();
+    /** Update a resource's backend calendar file to the current KAlarm format. */
+    static void updateCalendarToCurrentFormat(Resource&, bool ignoreKeepFormat, QObject* parent);
 
-ResourceCreator* createResourceCreator(KAlarmCal::CalEvent::Type defaultType, QWidget* parent);
-void updateCalendarToCurrentFormat(Resource&, bool ignoreKeepFormat, QObject* parent);
+    static ResourceListModel* createResourceListModel(QObject* parent);
+    static ResourceFilterCheckListModel* createResourceFilterCheckListModel(QObject* parent);
+    static AlarmListModel*    createAlarmListModel(QObject* parent);
+    static AlarmListModel*    allAlarmListModel();
+    static TemplateListModel* createTemplateListModel(QObject* parent);
+    static TemplateListModel* allTemplateListModel();
 
-} // namespace DataModel
+#if 0
+    static QSize   iconSize()       { return mIconSize; }
+
+    /** Return a bulleted list of alarm types for inclusion in an i18n message. */
+    static QString typeListForDisplay(CalEvent::Types);
+
+    /** Get the tooltip for a resource. The resource's enabled status is
+     *  evaluated for specified alarm types. */
+    QString tooltip(const Resource&, CalEvent::Types) const;
+
+    /** Return the read-only status tooltip for a resource.
+     * A null string is returned if the resource is fully writable. */
+    static QString readOnlyTooltip(const Resource&);
+
+    /** Return offset to add to headerData() role, for item models. */
+    virtual int headerDataEventRoleOffset() const  { return 0; }
+#endif
+};
 
 #endif // DATAMODEL_H
 
