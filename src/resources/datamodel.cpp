@@ -20,7 +20,7 @@
 
 #include "datamodel.h"
 
-//#define USE_AKONADI
+#define USE_AKONADI
 #ifdef USE_AKONADI
 #include "akonadidatamodel.h"
 #define DATA_MODEL AkonadiDataModel
