@@ -49,16 +49,6 @@ FileResource::~FileResource()
 
 bool FileResource::isValid() const
 {
-if (!mSettings->isValid())
-qDebug()<<"FileResource::isValid:"<<displayId()<<"NO (mSettings)";
-if (mStatus == Status::NotConfigured)
-qDebug()<<"FileResource::isValid:"<<displayId()<<"NO (Not configured)";
-if (mStatus == Status::Closed)
-qDebug()<<"FileResource::isValid:"<<displayId()<<"NO (Closed)";
-if (id() < 0)
-qDebug()<<"FileResource::isValid:"<<displayId()<<"NO (ID < 0)";
-if (mSettings->id() != id())
-qDebug()<<"FileResource::isValid:"<<displayId()<<"NO (ID:"<<id()<<mSettings->id()<<")";
     // The settings ID must not have changed since construction.
     return mSettings->isValid()
        &&  mStatus < Status::Unusable
@@ -256,7 +246,7 @@ void FileResource::editResource(QWidget* dialogParent)
 {
     switch (storageType())
     {
-        case FileResourceSettings::File:
+        case File:
         {
             // Use AutoQPointer to guard against crash on application exit while
             // the dialogue is still open. It prevents double deletion (both on
@@ -287,7 +277,7 @@ void FileResource::editResource(QWidget* dialogParent)
             }
             break;
         }
-        case FileResourceSettings::Directory:
+        case Directory:
             // Not currently intended to be implemented.
             break;
 
@@ -634,18 +624,5 @@ KACalendar::Compat FileResource::getCompatibility(const KCalendarCore::FileStora
             return KACalendar::Convertible;   // calendar is in an out of date format
     }
 }
-
-#ifndef NDEBUG
-QByteArray FileResource::typeName() const
-{
-    switch (mType)
-    {
-        case CalEvent::ACTIVE:    return "Active";
-        case CalEvent::ARCHIVED:  return "Archived";
-        case CalEvent::TEMPLATE:  return "Template";
-        default:                  return "Empty";
-    }
-}
-#endif
 
 // vim: et sw=4:
