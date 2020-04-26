@@ -20,13 +20,13 @@
 
 #include "datamodel.h"
 
-#define USE_AKONADI
-#ifdef USE_AKONADI
-#include "akonadidatamodel.h"
-#define DATA_MODEL AkonadiDataModel
-#else
+#include "config-kalarm.h"
+#if FILE_RESOURCES
 #include "fileresourcedatamodel.h"
 #define DATA_MODEL FileResourceDataModel
+#else
+#include "akonadidatamodel.h"
+#define DATA_MODEL AkonadiDataModel
 #endif
 
 

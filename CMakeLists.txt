@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.5)
 set(PIM_VERSION "5.14.40")
 set(PIM_VERSION ${PIM_VERSION})
 set(RELEASE_SERVICE_VERSION "20.07.40")
-set(KALARM_VERSION "2.14.0")
+set(KALARM_VERSION "3.0.0")
 
 project(kalarm VERSION ${KALARM_VERSION})
 set(KALARM_FULL_VERSION "${KALARM_VERSION} (KDE Apps ${RELEASE_SERVICE_VERSION})")
@@ -64,6 +64,8 @@ set(KCALENDARCORE_LIB_VERSION "5.14.40")
 set(CALENDARUTILS_LIB_VERSION "5.14.40")
 set(KDEPIM_APPS_LIB_VERSION_LIB "5.14.40")
 
+option(FILE_RESOURCES "Use file system resources instead of Akonadi resources." FALSE)
+
 # Find KF5 package
 find_package(KF5Auth ${KF5_MIN_VERSION} CONFIG REQUIRED)
 find_package(KF5Codecs ${KF5_MIN_VERSION} CONFIG REQUIRED)
@@ -111,8 +113,10 @@ endif()
 set(CMAKE_MODULE_PATH ${kalarm_SOURCE_DIR}/cmake/modules ${ECM_MODULE_PATH})
 find_package(Xsltproc)
 set_package_properties(Xsltproc PROPERTIES DESCRIPTION "XSLT processor from libxslt" TYPE REQUIRED PURPOSE "Required to generate D-Bus interfaces for all Akonadi resources.")
+
 set(KDEPIM_HAVE_X11 ${X11_FOUND})
-configure_file(src/config-kalarm.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-kalarm.h )
+set(FILE_RESOURCES ${FILE_RESOURCES})
+configure_file(src/config-kalarm.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-kalarm.h)
 
 include_directories(${kalarm_SOURCE_DIR} ${kalarm_BINARY_DIR})
 

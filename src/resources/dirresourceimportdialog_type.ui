@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>DirResourceImportTypeWidget</class>
+ <widget class="QWidget" name="DirResourceImportTypeWidget">
+  <layout class="QGridLayout" name="grid">
+   <item row="0" column="0" colspan="2">
+    <widget class="QRadioButton" name="mergeRadio">
+     <property name="text">
+      <string>Import into existing calendar file resource</string>
+     </property>
+     <property name="checked">
+      <bool>true</bool>
+     </property>
+     <attribute name="buttonGroup">
+      <string notr="true">optionGroup</string>
+     </attribute>
+    </widget>
+   </item>
+   <item row="1" column="1">
+    <widget class="QComboBox" name="mergeResource">
+     <property name="whatsThis">
+      <string>Select the resource to import the directory resource's alarms into.</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="1">
+    <spacer name="spacer1">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeType">
+      <enum>QSizePolicy::Fixed</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>20</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="3" column="0" colspan="2">
+    <widget class="QRadioButton" name="newRadio">
+     <property name="text">
+      <string>Import into new calendar file resource</string>
+     </property>
+     <property name="checked">
+      <bool>false</bool>
+     </property>
+     <attribute name="buttonGroup">
+      <string notr="true">optionGroup</string>
+     </attribute>
+    </widget>
+   </item>
+   <item row="4" column="1">
+    <layout class="QGridLayout" name="newGrid">
+     <item row="0" column="0">
+      <widget class="QLabel" name="pathLabel">
+       <property name="text">
+        <string>Filename:</string>
+       </property>
+       <property name="buddy">
+        <cstring>pathRequester</cstring>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="KUrlRequester" name="pathRequester">
+       <property name="toolTip">
+        <string>Select the file to contain this resource. The file must not already exist.</string>
+       </property>
+       <property name="whatsThis">
+        <string>Select the file to contain this resource.
+The file must not already exist.
+Note that if the URL of a remote file is specified, monitoring for file changes will not work.</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0" colspan="2">
+      <widget class="QLabel" name="statusLabel">
+       <property name="font">
+        <font>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>Status:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0">
+      <widget class="QLabel" name="nameLabel">
+       <property name="text">
+        <string>Display name:</string>
+       </property>
+       <property name="buddy">
+        <cstring>nameText</cstring>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1">
+      <widget class="KLineEdit" name="nameText">
+       <property name="toolTip">
+        <string>Enter the name used to identify this resource in displays.</string>
+       </property>
+       <property name="whatsThis">
+        <string>Enter the name used to identify this resource in displays.</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item row="5" column="1">
+    <spacer name="spacer2">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeType">
+      <enum>QSizePolicy::Fixed</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>20</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="6" column="0" colspan="2">
+    <widget class="QRadioButton" name="noRadio">
+     <property name="text">
+      <string>Do not import</string>
+     </property>
+     <property name="checked">
+      <bool>false</bool>
+     </property>
+     <attribute name="buttonGroup">
+      <string notr="true">optionGroup</string>
+     </attribute>
+    </widget>
+   </item>
+   <item row="7" column="1">
+    <spacer name="spacer3">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeType">
+      <enum>QSizePolicy::Fixed</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>0</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>KUrlRequester</class>
+   <extends>QWidget</extends>
+   <header>kurlrequester.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header>klineedit.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+ <buttongroups>
+  <buttongroup name="optionGroup"/>
+ </buttongroups>
+</ui>

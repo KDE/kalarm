@@ -50,8 +50,37 @@ set(libkalarm_SRCS
     lib/lineedit.cpp
     lib/synchtimer.cpp
 )
+set(resources_SRCS
+    resources/calendarfunctions.cpp
+    resources/resourcetype.cpp
+    resources/resource.cpp
+    resources/resources.cpp
+    resources/resourcedatamodelbase.cpp
+    resources/resourcemodel.cpp
+    resources/resourceselectdialog.cpp
+    resources/resourcecreator.cpp
+    resources/eventmodel.cpp
+    resources/datamodel.cpp
+    resources/akonadidatamodel.cpp
+    resources/akonadiresource.cpp
+    resources/akonadiresourcecreator.cpp
+    resources/akonadiresourcemigrator.cpp
+    resources/calendarupdater.cpp
+    resources/akonadicalendarupdater.cpp
+    resources/fileresource.cpp
+    resources/fileresourceconfigmanager.cpp
+    resources/fileresourcecreator.cpp
+    resources/fileresourcedatamodel.cpp
+    resources/fileresourcemigrator.cpp
+    resources/fileresourcesettings.cpp
+    resources/fileresourcecalendarupdater.cpp
+    resources/singlefileresource.cpp
+    resources/singlefileresourceconfigdialog.cpp
+    resources/dirresourceimportdialog.cpp
+    eventid.cpp
+   )
 
-set(kalarm_bin_SRCS ${libkalarm_SRCS}
+set(kalarm_bin_SRCS ${libkalarm_SRCS} ${resources_SRCS}
     ${libkalarm_common_SRCS}
     birthdaydlg.cpp
     birthdaymodel.cpp
@@ -97,31 +126,15 @@ set(kalarm_bin_SRCS ${libkalarm_SRCS}
     templatedlg.cpp
     templatemenuaction.cpp
     wakedlg.cpp
-)
-set(kalarm_bin_SRCS ${kalarm_bin_SRCS}
-    resources/calendarfunctions.cpp
-    resources/resourcetype.cpp
-    resources/resource.cpp
-    resources/resources.cpp
-    resources/resourcedatamodelbase.cpp
-    resources/resourcemodel.cpp
-    resources/resourceselectdialog.cpp
-    resources/resourcecreator.cpp
-    resources/eventmodel.cpp
-    resources/datamodel.cpp
-    resources/akonadidatamodel.cpp
-    resources/akonadiresource.cpp
-    resources/akonadiresourcecreator.cpp
-    resources/akonadiresourcemigrator.cpp
-    resources/calendarupdater.cpp
-    resources/akonadicalendarupdater.cpp
     kalarmmigrateapplication.cpp
     akonadicollectionsearch.cpp
-    eventid.cpp
-   )
+)
 
 ki18n_wrap_ui(kalarm_bin_SRCS
     wakedlg.ui
+    resources/singlefileresourceconfigdialog.ui
+    resources/dirresourceimportdialog_intro.ui
+    resources/dirresourceimportdialog_type.ui
 )
 
 qt5_add_dbus_adaptor(kalarm_bin_SRCS org.kde.kalarm.kalarm.xml dbushandler.h DBusHandler)
