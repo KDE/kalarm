@@ -30,6 +30,7 @@
 #include <AkonadiCore/AgentInstance>
 #include <AkonadiCore/Collection>
 #include <AkonadiCore/Item>
+#include <AkonadiCore/ServerManager>
 
 #include <QObject>
 #include <QDBusConnection>
@@ -354,8 +355,8 @@ private:
 */
 template <class Interface> Interface* AkonadiResource::getAgentInterface(const Akonadi::AgentInstance& agent, QString& errorMessage, QObject* parent)
 {
-    Interface* iface = new Interface(QLatin1String("org.freedesktop.Akonadi.Resource.") + agent.identifier(),
-              QStringLiteral("/Settings"), QDBusConnection::sessionBus(), parent);
+    const auto service = Akonadi::ServerManager::agentServiceName(Akonadi::ServerManager::Resource, agent.identifier());
+    Interface* iface = new Interface(service, QStringLiteral("/Settings"), QDBusConnection::sessionBus(), parent);
     if (!iface->isValid())
     {
         errorMessage = iface->lastError().message();

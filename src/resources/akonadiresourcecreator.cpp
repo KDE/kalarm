@@ -30,6 +30,7 @@
 #include <AkonadiCore/AgentFilterProxyModel>
 #include <AkonadiCore/AgentInstanceCreateJob>
 #include <AkonadiCore/AgentManager>
+#include <AkonadiCore/ServerManager>
 #include <AkonadiWidgets/AgentTypeDialog>
 #include <AkonadiWidgets/AgentConfigurationDialog>
 
@@ -183,8 +184,8 @@ void AkonadiResourceCreator::slotResourceAdded(Resource& resource)
 template <class Settings>
 void AkonadiResourceCreator::setResourceAlarmType()
 {
-    Settings iface(QStringLiteral("org.freedesktop.Akonadi.Resource.") + mAgentInstance.identifier(),
-                   QStringLiteral("/Settings"), QDBusConnection::sessionBus(), this);
+    const auto service = Akonadi::ServerManager::agentServiceName(Akonadi::ServerManager::Resource, mAgentInstance.identifier());
+    Settings iface(service, QStringLiteral("/Settings"), QDBusConnection::sessionBus(), this);
     if (!iface.isValid())
         qCCritical(KALARM_LOG) << "AkonadiResourceCreator::setResourceAlarmType: Error creating D-Bus interface for" << mAgentInstance.identifier() << "resource configuration.";
     else
@@ -201,8 +202,8 @@ void AkonadiResourceCreator::setResourceAlarmType()
 template <class Settings>
 QString AkonadiResourceCreator::getResourcePath()
 {
-    Settings iface(QStringLiteral("org.freedesktop.Akonadi.Resource.") + mAgentInstance.identifier(),
-                   QStringLiteral("/Settings"), QDBusConnection::sessionBus(), this);
+    const auto service = Akonadi::ServerManager::agentServiceName(Akonadi::ServerManager::Resource, mAgentInstance.identifier());
+    Settings iface(service, QStringLiteral("/Settings"), QDBusConnection::sessionBus(), this);
     if (!iface.isValid())
     {
         qCCritical(KALARM_LOG) << "AkonadiResourceCreator::getResourcePath: Error creating D-Bus interface for" << mAgentInstance.identifier() << "resource configuration.";
