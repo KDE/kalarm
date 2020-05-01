@@ -133,10 +133,11 @@ public:
      */
     static Resource destination(CalEvent::Type type, QWidget* promptParent = nullptr, bool noPrompt = false, bool* cancelled = nullptr);
 
-    /** Return whether all configured resources have been created. */
+    /** Return whether all configured and migrated resources have been created. */
     static bool allCreated();
 
-    /** Return whether all configured resources have been loaded at least once. */
+    /** Return whether all configured and migrated resources have been loaded
+     *  at least once. */
     static bool allPopulated();
 
     /** Return the resource which an event belongs to, provided that the event's
@@ -154,14 +155,12 @@ public:
      *  in order to emit the resourceAdded() signal. */
     static void notifyNewResourceInitialised(Resource&);
 
-    /** Called to notify that all configured resources have now been created. */
+    /** Called to notify that all configured and migrated resources have now
+     *  been created. */
     static void notifyResourcesCreated();
 
     /** Called by a resource to notify that loading of events has successfully completed. */
     static void notifyResourcePopulated(const ResourceType*);
-
-    /** Called to notify that migration/creation of resources has completed. */
-    static void notifyResourcesMigrated();
 
     /** Called to notify that a resource is about to be removed. */
     static void notifyResourceToBeRemoved(ResourceType*);
@@ -201,17 +200,15 @@ Q_SIGNALS:
     void settingsChanged(Resource&, ResourceType::Changes);
 
     /** Emitted when all configured resource have been created (but not
-     *  necessarily populated). Note that after this, resource migration and
-     *  the creation of default resources is performed and notified by the
-     *  signal migrationCompleted().
+     *  necessarily populated), and any necessary resource migration and
+     *  the creation of default resources has been performed.
      */
     void resourcesCreated();
 
-    /** Emitted when all configured resources have been loaded for the first time. */
+    /** Emitted when all configured and migrated resources have been loaded for
+     *  the first time.
+     */
     void resourcesPopulated();
-
-    /** Signal emitted when resource migration/creation at startup has completed. */
-    void migrationCompleted();
 
     /** Emitted when a new resource has been created. */
     void resourceAdded(Resource&);

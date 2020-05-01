@@ -646,7 +646,15 @@ void ResourceDataModelBase::setMigrationInitiated(bool started)
 void ResourceDataModelBase::setMigrationComplete()
 {
     mMigrationStatus = 1;
-    Resources::notifyResourcesMigrated();
+    if (mCreationStatus)
+        Resources::notifyResourcesCreated();
+}
+
+void ResourceDataModelBase::setCalendarsCreated()
+{
+    mCreationStatus = true;
+    if (mMigrationStatus == 1)
+        Resources::notifyResourcesCreated();
 }
 
 namespace

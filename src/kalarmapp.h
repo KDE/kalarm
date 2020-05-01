@@ -134,7 +134,6 @@ class KAlarmApp : public QApplication
         void               slotResourcesTimeout();
         void               slotResourcesCreated();
         void               slotEditAlarmById();
-        void               checkWritableCalendar();
         void               promptArchivedCalendar();
         void               slotMessageFontChanged(const QFont&);
         void               setArchivePurgeDays();
@@ -198,6 +197,7 @@ class KAlarmApp : public QApplication
         bool               checkSystemTray();
         void               startProcessQueue();
         void               setResourcesTimeout();
+        void               checkWritableCalendar();
         void               checkArchivedCalendar();
         void               queueAlarmId(const KAEvent&);
         bool               dbusHandleEvent(const EventId&, QueuedAction);

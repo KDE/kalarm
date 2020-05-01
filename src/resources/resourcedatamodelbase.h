@@ -173,6 +173,9 @@ protected:
     /** To be called when calendar migration has been initiated (or reset). */
     void setMigrationComplete();
 
+    /** To be called when all previously configured calendars have been created. */
+    void setCalendarsCreated();
+
     static QString  repeatText(const KAEvent&);
     static QString  repeatOrder(const KAEvent&);
     static QString  whatsThisText(int column);
@@ -189,6 +192,7 @@ private:
     static QSize    mIconSize;      // maximum size of any icon
 
     int  mMigrationStatus {-1};     // migration status, -1 = no, 0 = initiated, 1 = complete
+    bool mCreationStatus {false};   // previously configured calendar creation status
 
 friend class DataModel;
 };

@@ -70,7 +70,7 @@ void FileResourceConfigManager::createResources(QObject* parent)
         return;
     manager->mCreated = 1;
 
-    QStringList resourceGroups = manager->mConfig->groupList().filter(QRegularExpression(QStringLiteral("^Resource \\d+$")));
+    QStringList resourceGroups = manager->mConfig->groupList().filter(QRegularExpression(QStringLiteral("^Resource_\\d+$")));
     if (!resourceGroups.isEmpty())
     {
         std::sort(resourceGroups.begin(), resourceGroups.end(),
@@ -131,7 +131,6 @@ void FileResourceConfigManager::createResources(QObject* parent)
         FileResourceCalendarUpdater::waitForCompletion();
     }
     manager->mCreated = 2;
-    Resources::notifyResourcesCreated();
 }
 
 /******************************************************************************
@@ -244,7 +243,7 @@ int FileResourceConfigManager::findResourceGroup(ResourceId id) const
 */
 QString FileResourceConfigManager::groupName(int groupIndex)
 {
-    return QStringLiteral("Resource %1").arg(groupIndex);
+    return QStringLiteral("Resource_%1").arg(groupIndex);
 }
 
 /******************************************************************************

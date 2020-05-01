@@ -827,7 +827,7 @@ void AkonadiDataModel::slotCollectionBeingCreated(const QString& path, Akonadi::
 */
 void AkonadiDataModel::slotCollectionTreeFetched()
 {
-    Resources::notifyResourcesCreated();
+    setCalendarsCreated();
 }
 
 /******************************************************************************

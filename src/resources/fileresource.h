@@ -35,8 +35,9 @@ class FileResourceSettings;
 
 using namespace KAlarmCal;
 
-/** Base class for an alarm calendar resource accessed directly through the file system.
- *  Public access to this class and derived classes is normally via the Resource class.
+/** Abstract base class for an alarm calendar resource accessed directly
+ *  through the file system. Public access to this class and derived classes is
+ *  normally via the Resource class.
  */
 class FileResource : public ResourceType
 {

@@ -34,7 +34,7 @@ class SingleFileResourceConfigDialog : public QDialog
 {
     Q_OBJECT
 public:
-    explicit SingleFileResourceConfigDialog(bool create, QWidget* parent);
+    SingleFileResourceConfigDialog(bool create, QWidget* parent);
     ~SingleFileResourceConfigDialog();
 
     /** Return the file URL. */

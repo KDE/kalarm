@@ -106,9 +106,12 @@ FileResourceDataModel::FileResourceDataModel(QObject* parent)
                  this, &FileResourceDataModel::slotResourceMessage, Qt::QueuedConnection);
 
     FileResourceConfigManager::createResources(this);
+    setCalendarsCreated();
 
     FileResourceMigrator* migrator = FileResourceMigrator::instance();
-    if (migrator)
+    if (!migrator)
+        setMigrationComplete();
+    else
     {
         connect(migrator, &QObject::destroyed, this, &FileResourceDataModel::slotMigrationCompleted);
         setMigrationInitiated();

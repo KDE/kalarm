@@ -42,7 +42,8 @@ public:
 
     /** Return the unique instance, creating it if necessary.
      *  Note that the instance will be destroyed once migration has completed.
-     *  @return  Unique instance, or null if migration has already been done.
+     *  @return  Unique instance, or null if migration is not required or has
+     *           already been done.
      */
     static FileResourceMigrator* instance();
 

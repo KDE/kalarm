@@ -27,6 +27,14 @@ See the KAlarmCal design notes (kalarmcal/DESIGN.html) for details of calendar s
 
 <p>This section summarises some of the C++ classes used to build KAlarm.</p>
 
+<table>
+<tr><th>Class</th><th>Base class</th><th>Description</th></tr>
+<tr><td><tt>CollectionSearch</tt></td><td><tt>QObject</tt></td>
+    <td>Fetches a list of all Akonadi collections which handle a specified mime
+    type, and then optionally fetches or deletes all Items from them with a
+    given GID. This class is only used to access KOrganizer collections.</td></tr>
+</table>
+
 <h3>Calendar Resource Classes</h3>
 
 
@@ -59,8 +67,8 @@ See the KAlarmCal design notes (kalarmcal/DESIGN.html) for details of calendar s
     <td>A dialog which shows a list of resources and allows the user to select one.</td></tr>
 
 <tr><td><tt>DataModel</tt></td><td><tt></tt></td>
-    <td>A namespace which provides functions independent of which data model
-    type (Akonadi, etc.) is being used</td></tr>
+    <td>A class which provides functions independent of which data model
+    type (Akonadi or file resource) is being used</td></tr>
 
 <tr><td><tt>ResourceDataModelBase</tt></td><td><tt></tt></td>
     <td>Base class for models containing all calendars and the events
@@ -130,16 +138,18 @@ See the KAlarmCal design notes (kalarmcal/DESIGN.html) for details of calendar s
     <td>Delegate for a TemplateListView. Handles editing and display of the
     list of alarm templates.</td></tr>
 
+<tr><td><tt>DirResourceImportDialog</tt></td><td><tt>KAssistantDialog</tt></td>
+    <td>Dialogue for importing a calendar directory resource. For use when
+    migrating Akonadi alarm calendars.</td></tr>
+
 
 <tr><td colspan=3><br><b>Akonadi Resource and Event Classes</b></td></tr>
 <tr><td><tt>AkonadiDataModel</tt></td><td><tt>Akonadi::EntityTreeModel,<br>ResourceDataModelBase</tt></td>
     <td>Contains all KAlarm collections and the items (alarms and templates)
     within them.</td></tr>
 
-<tr><td><tt>CollectionSearch</tt></td><td><tt>QObject</tt></td>
-    <td>Fetches a list of all Akonadi collections which handle a specified mime
-    type, and then optionally fetches or deletes all Items from them with a
-    given GID.</td></tr>
+<tr><td><tt>AkonadiResource</tt></td><td><tt>ResourceType</tt></td>
+    <td>An Akonadi calendar resource.</td></tr>
 
 <tr><td><tt>AkonadiResourceMigrator</tt></td><td><tt>QObject</tt></td>
     <td>Migrates KResources alarm calendars from pre-Akonadi versions of
@@ -150,6 +160,39 @@ See the KAlarmCal design notes (kalarmcal/DESIGN.html) for details of calendar s
 
 <tr><td><tt>AkonadiCalendarUpdater</tt></td><td><tt>CalendarUpdater</tt></td>
     <td>Updates the backend calendar format of one Akonadi alarm calendar.</td></tr>
+
+
+<tr><td colspan=3><br><b>Non-Akonadi Resource and Event Classes</b></td></tr>
+<tr><td><tt>FileResourceDataModel</tt></td><td><tt>QAbstractItemModel,<br>ResourceDataModelBase</tt></td>
+    <td>Model containing all file system calendar resources and the events
+    (alarms and templates) within them.</td></tr>
+
+<tr><td><tt>FileResource</tt></td><td><tt>ResourceType</tt></td>
+    <td>Abstract base class for a file system calendar resource.</td></tr>
+
+<tr><td><tt>SingleFileResource</tt></td><td><tt>FileResource</tt></td>
+    <td>A file system calendar resource held in a single file.</td></tr>
+
+<tr><td><tt>SingleFileResourceConfigDialog</tt></td><td><tt>QDialog</tt></td>
+    <td>Configuration dialogue for a SingleFileResource resource.</td></tr>
+
+<tr><td><tt>FileResourceMigrator</tt></td><td><tt>QObject</tt></td>
+    <td>Migrates Akonadi or KResources alarm calendars from previous versions
+    of KAlarm, and creates default calendar resources if none exist.</td></tr>
+
+<tr><td><tt>FileResourceCreator</tt></td><td><tt>ResourceCreator</tt></td>
+    <td>Interactively creates a file resource.</td></tr>
+
+<tr><td><tt>FileResourceConfigManager</tt></td><td><tt></tt></td>
+    <td>Manager for file system resource configuration files. Reads
+    configuration files and creates resources at startup, and updates
+    configuration files with resource configuration changes.</td></tr>
+
+<tr><td><tt>FileResourceSettings</tt></td><td><tt></tt></td>
+    <td>Encapsulates the configuration settings of a file system resource.</td></tr>
+
+<tr><td><tt>FileResourceCalendarUpdater</tt></td><td><tt>CalendarUpdater</tt></td>
+    <td>Updates the backend calendar format of one file resource alarm calendar.</td></tr>
 
 </table>
 

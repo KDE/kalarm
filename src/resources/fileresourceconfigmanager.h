@@ -29,6 +29,10 @@
 
 class KConfig;
 
+/** Manager for configuration files for file system resources.
+ *  Reads configuration files and creates resources at startup, and updates
+ *  configuration files when resource configurations change.
+ */
 class FileResourceConfigManager
 {
 public:

@@ -195,8 +195,6 @@ void KAlarmApp::initialise()
                      this, &KAlarmApp::purgeNewArchivedDefault);
         connect(resources, &Resources::resourcesCreated,
                      this, &KAlarmApp::slotResourcesCreated);
-        connect(resources, &Resources::migrationCompleted,
-                     this, &KAlarmApp::checkWritableCalendar);
         connect(resources, &Resources::resourcesPopulated,
                      this, &KAlarmApp::processQueue);
 

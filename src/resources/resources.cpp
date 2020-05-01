@@ -376,6 +376,7 @@ void Resources::notifyNewResourceInitialised(Resource& res)
 */
 void Resources::notifyResourcesCreated()
 {
+    qCDebug() << "Resources::notifyResourcesCreated";
     mCreated = true;
     Q_EMIT instance()->resourcesCreated();
     checkResourcesPopulated();
@@ -396,14 +397,6 @@ void Resources::notifyResourcePopulated(const ResourceType* res)
 
     // Check whether all resources have now loaded at least once.
     checkResourcesPopulated();
-}
-
-/******************************************************************************
-* Called to notify that migration/creation of resources has completed.
-*/
-void Resources::notifyResourcesMigrated()
-{
-    Q_EMIT instance()->migrationCompleted();
 }
 
 /******************************************************************************

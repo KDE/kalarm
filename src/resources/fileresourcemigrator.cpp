@@ -87,7 +87,22 @@ FileResourceMigrator::~FileResourceMigrator()
 FileResourceMigrator* FileResourceMigrator::instance()
 {
     if (!mInstance  &&  !mCompleted)
+    {
+        // Check whether migration or default resource creation is actually needed.
+        CalEvent::Types needed = CalEvent::ACTIVE | CalEvent::ARCHIVED | CalEvent::TEMPLATE;
+        const QVector<Resource> resources = Resources::allResources<FileResource>();
+        for (const Resource& resource : resources)
+        {
+            needed &= ~resource.alarmTypes();
+            if (!needed)
+            {
+                mCompleted = true;
+                return mInstance;
+            }
+        }
+        // Migration or default resource creation is required.
         mInstance = new FileResourceMigrator;
+    }
     return mInstance;
 }
 
@@ -103,7 +118,7 @@ void FileResourceMigrator::execute()
         return;
     }
 
-    qCDebug(KALARM_LOG) << "FileResourceMigrator::migrateOrCreate";
+    qCDebug(KALARM_LOG) << "FileResourceMigrator::execute";
 
     // First, check whether any file system resources already exist, and if so,
     // find their alarm types.
