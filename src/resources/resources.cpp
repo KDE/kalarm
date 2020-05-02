@@ -376,7 +376,7 @@ void Resources::notifyNewResourceInitialised(Resource& res)
 */
 void Resources::notifyResourcesCreated()
 {
-    qCDebug() << "Resources::notifyResourcesCreated";
+    qCDebug(KALARM_LOG) << "Resources::notifyResourcesCreated";
     mCreated = true;
     Q_EMIT instance()->resourcesCreated();
     checkResourcesPopulated();
