@@ -31,11 +31,6 @@
 
 #include <KLocalizedString>
 
-namespace
-{
-const QString loadErrorMessage = i18n("Error loading calendar '%1'.");
-const QString saveErrorMessage = i18n("Error saving calendar '%1'.");
-}
 
 FileResource::FileResource(FileResourceSettings* settings)
     : ResourceType(settings->id())
@@ -310,7 +305,7 @@ bool FileResource::load(bool readThroughCache)
     if (!mSettings->isValid())
     {
         qCWarning(KALARM_LOG) << "FileResource::load: Resource not configured!" << mSettings->displayName();
-        errorMessage = i18n("Resource is not configured.");
+        errorMessage = i18nc("@info", "Resource is not configured.");
     }
     else if (mStatus == Status::Closed)
         qCWarning(KALARM_LOG) << "FileResource::load: Resource closed!" << mSettings->displayName();
@@ -339,7 +334,7 @@ bool FileResource::load(bool readThroughCache)
     }
 
     if (!errorMessage.isEmpty())
-        Resources::notifyResourceMessage(this, MessageType::Error, loadErrorMessage.arg(displayName()), errorMessage);
+        Resources::notifyResourceMessage(this, MessageType::Error, xi18nc("@info", "Error loading calendar <resource>%1</resource>.", displayName()), errorMessage);
     return false;
 }
 
@@ -354,7 +349,7 @@ void FileResource::loaded(bool success, QHash<QString, KAEvent>& newEvents, cons
         // If the resource previously loaded successfully, leave its events (in
         // mEvents) unchanged.
         if (!success  &&  !errorMessage.isEmpty())
-            Resources::notifyResourceMessage(this, MessageType::Error, loadErrorMessage.arg(displayName()), errorMessage);
+            Resources::notifyResourceMessage(this, MessageType::Error, xi18nc("@info", "Error loading calendar <resource>%1</resource>.", displayName()), errorMessage);
         return;
     }
 
@@ -413,7 +408,7 @@ bool FileResource::save(bool writeThroughCache, bool force)
 
         default:  // failure
             if (!errorMessage.isEmpty())
-                Resources::notifyResourceMessage(this, MessageType::Error, saveErrorMessage.arg(displayName()), errorMessage);
+                Resources::notifyResourceMessage(this, MessageType::Error, xi18nc("@info", "Error saving calendar <resource>%1</resource>.", displayName()), errorMessage);
             return false;
     }
 }
@@ -427,24 +422,24 @@ bool FileResource::checkSave()
     if (!mSettings->isValid())
     {
         qCWarning(KALARM_LOG) << "FileResource::checkSave: FileResource not configured!" << displayName();
-        errorMessage = i18n("Resource is not configured.");
+        errorMessage = i18nc("@info", "Resource is not configured.");
     }
     else if (!isValid()  ||  !mSettings->enabledTypes())
         return false;
     else if (readOnly())
     {
         qCWarning(KALARM_LOG) << "FileResource::checkSave: Read-only resource!" << displayName();
-        errorMessage = i18n("Resource is read-only.");
+        errorMessage = i18nc("@info", "Resource is read-only.");
     }
     else if (mCompatibility != KACalendar::Current)
     {
         qCWarning(KALARM_LOG) << "FileResource::checkSave: Calendar is in wrong format" << displayLocation();
-        errorMessage = i18n("Calendar file is in wrong format: '%1'.", displayLocation());
+        errorMessage = xi18nc("@info", "Calendar file is in wrong format: <filename>%1</filename>.", displayLocation());
     }
     else
         return true;
 
-    Resources::notifyResourceMessage(this, MessageType::Error, saveErrorMessage.arg(displayName()), errorMessage);
+    Resources::notifyResourceMessage(this, MessageType::Error, xi18nc("@info", "Error saving calendar <resource>%1</resource>.", displayName()), errorMessage);
     return false;
 }
 
@@ -454,7 +449,7 @@ bool FileResource::checkSave()
 void FileResource::saved(bool success, const QString& errorMessage)
 {
     if (!success  &&  !errorMessage.isEmpty())
-        Resources::notifyResourceMessage(this, MessageType::Error, saveErrorMessage.arg(displayName()), errorMessage);
+        Resources::notifyResourceMessage(this, MessageType::Error, xi18nc("@info", "Error saving calendar <resource>%1</resource>.", displayName()), errorMessage);
 }
 
 /******************************************************************************

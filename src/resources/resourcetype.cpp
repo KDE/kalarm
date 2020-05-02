@@ -334,10 +334,10 @@ QString ResourceType::storageTypeString(StorageType type)
 QString ResourceType::storageTypeStr(bool description, bool file, bool local)
 {
     if (description)
-        return file ? i18nc("@info", "KAlarm Calendar File") : i18nc("@info", "KAlarm Calendar Directory");
-    return (file && local)  ? i18nc("@info", "File")
-         : (file && !local) ? i18nc("@info", "URL")
-         : (!file && local) ? i18nc("@info Directory in filesystem", "Directory")
+        return file ? i18nc("@item:inlistbox", "KAlarm Calendar File") : i18nc("@item:inlistbox", "KAlarm Calendar Directory");
+    return (file && local)  ? i18nc("@item:intext What a resource is stored in", "File")
+         : (file && !local) ? i18nc("@item:intext What a resource is stored in", "URL")
+         : (!file && local) ? i18nc("@item:intext What a resource is stored in (directory in filesystem)", "Directory")
          : QString();
 }
 

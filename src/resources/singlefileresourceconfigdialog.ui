@@ -14,7 +14,7 @@
    <item>
     <widget class="QGroupBox" name="pathGroupBox">
      <property name="title">
-      <string>Calendar File</string>
+      <string comment="@title:group">Calendar File</string>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_4">
       <item>
@@ -22,7 +22,7 @@
         <item>
          <widget class="QLabel" name="pathLabel">
           <property name="text">
-           <string>Filename:</string>
+           <string comment="@label:textbox">Filename:</string>
           </property>
           <property name="buddy">
            <cstring>pathRequester</cstring>
@@ -46,7 +46,7 @@
         <item>
          <widget class="QLabel" name="statusLabel">
           <property name="text">
-           <string>Status:</string>
+           <string notr="true">Status:</string>
           </property>
          </widget>
         </item>
@@ -71,7 +71,7 @@
    <item>
     <widget class="QGroupBox" name="alarmTypeGroupBox">
      <property name="title">
-      <string>Alarm Type</string>
+      <string comment="@title:group">Alarm Type</string>
      </property>
      <layout class="QVBoxLayout" name="gridLayout">
       <item>
@@ -79,7 +79,7 @@
         <item>
          <widget class="QRadioButton" name="activeRadio">
           <property name="text">
-           <string>Acti&amp;ve Alarms</string>
+           <string comment="@option:radio">Acti&amp;ve Alarms</string>
           </property>
           <property name="checked">
            <bool>false</bool>
@@ -92,7 +92,7 @@
         <item>
          <widget class="QRadioButton" name="archivedRadio">
           <property name="text">
-           <string>Archived Alarms</string>
+           <string comment="@option:radio">Archived Alarms</string>
           </property>
           <property name="checked">
            <bool>false</bool>
@@ -105,7 +105,7 @@
         <item>
          <widget class="QRadioButton" name="templateRadio">
           <property name="text">
-           <string>Alarm &amp;Templates</string>
+           <string comment="@option:radio">Alarm &amp;Templates</string>
           </property>
           <property name="checked">
            <bool>false</bool>
@@ -135,7 +135,7 @@
         <item>
          <widget class="QLabel" name="alarmTypeLabel">
           <property name="text">
-           <string>Alarm type:</string>
+           <string comment="@label:textbox">Alarm type:</string>
           </property>
          </widget>
         </item>
@@ -148,7 +148,7 @@
            <bool>false</bool>
           </property>
           <property name="text">
-           <string>Active Alarms</string>
+           <string comment="@item">Active Alarms</string>
           </property>
          </widget>
         </item>
@@ -161,7 +161,7 @@
            <bool>false</bool>
           </property>
           <property name="text">
-           <string>Archived Alarms</string>
+           <string comment="@item">Archived Alarms</string>
           </property>
          </widget>
         </item>
@@ -174,7 +174,7 @@
            <bool>false</bool>
           </property>
           <property name="text">
-           <string>Alarm Templates</string>
+           <string comment="@item">Alarm Templates</string>
           </property>
          </widget>
         </item>
@@ -186,7 +186,7 @@
    <item>
     <widget class="QGroupBox" name="nameGroupBox">
      <property name="title">
-      <string>Display Name</string>
+      <string comment="@title:group">Display Name</string>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_2">
       <item>
@@ -194,7 +194,7 @@
         <item>
          <widget class="QLabel" name="label_1">
           <property name="text">
-           <string>&amp;Name:</string>
+           <string comment="@label:textbox">&amp;Name:</string>
           </property>
           <property name="buddy">
            <cstring>displayNameText</cstring>
@@ -225,13 +225,13 @@
    <item>
     <widget class="QGroupBox" name="readOnlyGroupBox">
      <property name="title">
-      <string>Access Rights</string>
+      <string comment="@title:group">Access Rights</string>
      </property>
      <layout class="QVBoxLayout" name="gridLayout_4">
       <item>
        <widget class="QCheckBox" name="readOnlyCheckbox">
         <property name="text">
-         <string>Read only</string>
+         <string comment="@option:check">Read only</string>
         </property>
         <property name="checked">
          <bool>false</bool>

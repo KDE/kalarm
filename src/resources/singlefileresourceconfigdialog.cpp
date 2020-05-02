@@ -42,14 +42,14 @@ SingleFileResourceConfigDialog::SingleFileResourceConfigDialog(bool create, QWid
 {
     mUi = new Ui_SingleFileResourceConfigWidget;
     mUi->setupUi(this);
-    setWindowTitle(i18n("Configure Calendar"));
+    setWindowTitle(i18nc("@title:window", "Configure Calendar"));
     if (mCreating)
     {
         mUi->pathText->setVisible(false);
         mUi->alarmTypeLabel->setVisible(false);
 
         mUi->pathRequester->setMode(KFile::File);
-        mUi->pathRequester->setFilter(QStringLiteral("*.ics|%1").arg(i18nc("@info", "Calendar Files")));
+        mUi->pathRequester->setFilter(QStringLiteral("*.ics|%1").arg(i18nc("@item:inlistbox", "Calendar Files")));
         mUi->pathRequester->setFocus();
         mUi->statusLabel->setText(QString());
         connect(mUi->pathRequester, &KUrlRequester::textChanged, this, &SingleFileResourceConfigDialog::validate);

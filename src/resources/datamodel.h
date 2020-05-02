@@ -79,24 +79,6 @@ public:
     static AlarmListModel*    allAlarmListModel();
     static TemplateListModel* createTemplateListModel(QObject* parent);
     static TemplateListModel* allTemplateListModel();
-
-#if 0
-    static QSize   iconSize()       { return mIconSize; }
-
-    /** Return a bulleted list of alarm types for inclusion in an i18n message. */
-    static QString typeListForDisplay(CalEvent::Types);
-
-    /** Get the tooltip for a resource. The resource's enabled status is
-     *  evaluated for specified alarm types. */
-    QString tooltip(const Resource&, CalEvent::Types) const;
-
-    /** Return the read-only status tooltip for a resource.
-     * A null string is returned if the resource is fully writable. */
-    static QString readOnlyTooltip(const Resource&);
-
-    /** Return offset to add to headerData() role, for item models. */
-    virtual int headerDataEventRoleOffset() const  { return 0; }
-#endif
 };
 
 #endif // DATAMODEL_H

@@ -445,11 +445,11 @@ void FileResourceMigrator::createDefaultResources()
 {
     qCDebug(KALARM_LOG) << "FileResourceMigrator::createDefaultResources";
     if (!(mExistingAlarmTypes & CalEvent::ACTIVE))
-        createCalendar(CalEvent::ACTIVE, QStringLiteral("calendar.ics"), i18nc("@info", "Active Alarms"));
+        createCalendar(CalEvent::ACTIVE, QStringLiteral("calendar.ics"), i18nc("@info/plain Name of a calendar", "Active Alarms"));
     if (!(mExistingAlarmTypes & CalEvent::ARCHIVED))
-        createCalendar(CalEvent::ARCHIVED, QStringLiteral("expired.ics"), i18nc("@info", "Archived Alarms"));
+        createCalendar(CalEvent::ARCHIVED, QStringLiteral("expired.ics"), i18nc("@info/plain Name of a calendar", "Archived Alarms"));
     if (!(mExistingAlarmTypes & CalEvent::TEMPLATE))
-        createCalendar(CalEvent::TEMPLATE, QStringLiteral("template.ics"), i18nc("@info", "Alarm Templates"));
+        createCalendar(CalEvent::TEMPLATE, QStringLiteral("template.ics"), i18nc("@info/plain Name of a calendar", "Alarm Templates"));
 
     mCompleted = true;
     checkIfComplete();    // delete this instance if everything is finished
@@ -469,9 +469,9 @@ void FileResourceMigrator::createCalendar(CalEvent::Type alarmType, const QStrin
     Resource resource = FileResourceConfigManager::addResource(settings);
     if (resource.failed())
     {
-        QString errmsg = xi18nc("@info/plain", "Failed to create default calendar <resource>%1</resource>", name);
-        const QString locn = i18nc("@info File path or URL", "Location: %1", resource.displayLocation());
-        errmsg = xi18nc("@info", "<para>%1</para><para>%2</para>", errmsg, locn);
+        const QString errmsg = xi18nc("@info", "<para>Failed to create default calendar <resource>%1</resource></para>"
+                                               "<para>Location: <filename>%2</filename></para>",
+                                      name, resource.displayLocation());
         Resources::notifyResourceMessage(resource.id(), ResourceType::MessageType::Error, errmsg, QString());
         return;
     }

@@ -478,25 +478,25 @@ void Resources::notifySettingsChanged(ResourceType* res, ResourceType::Changes c
             switch (std)
             {
                 case CalEvent::ACTIVE:
-                    msg = xi18n("The calendar <resource>%1</resource> has been made read-only. "
-                            "This was the default calendar for active alarms.",
-                            res->displayName());
+                    msg = xi18nc("@info", "The calendar <resource>%1</resource> has been made read-only. "
+                                 "This was the default calendar for active alarms.",
+                                 res->displayName());
                     break;
                 case CalEvent::ARCHIVED:
-                    msg = xi18n("The calendar <resource>%1</resource> has been made read-only. "
-                            "This was the default calendar for archived alarms.",
-                            res->displayName());
+                    msg = xi18nc("@info", "The calendar <resource>%1</resource> has been made read-only. "
+                                 "This was the default calendar for archived alarms.",
+                                 res->displayName());
                     break;
                 case CalEvent::TEMPLATE:
-                    msg = xi18n("The calendar <resource>%1</resource> has been made read-only. "
-                            "This was the default calendar for alarm templates.",
-                            res->displayName());
+                    msg = xi18nc("@info", "The calendar <resource>%1</resource> has been made read-only. "
+                                 "This was the default calendar for alarm templates.",
+                                 res->displayName());
                     break;
                 default:
                     msg = xi18nc("@info", "<para>The calendar <resource>%1</resource> has been made read-only. "
-                            "This was the default calendar for:%2</para>"
-                            "<para>Please select new default calendars.</para>",
-                            res->displayName(), ResourceDataModelBase::typeListForDisplay(std));
+                                 "This was the default calendar for:%2</para>"
+                                 "<para>Please select new default calendars.</para>",
+                                 res->displayName(), ResourceDataModelBase::typeListForDisplay(std));
                     singleType = false;
                     break;
             }

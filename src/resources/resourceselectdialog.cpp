@@ -1,7 +1,7 @@
 /*
  *  resourceselectdialog.cpp  -  Resource selection dialog
  *  Program:  kalarm
- *  Copyright © 2019 David Jarvie <djarvie@kde.org>
+ *  Copyright © 2019-2020 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -45,7 +45,7 @@ ResourceSelectDialog::ResourceSelectDialog(ResourceListModel* model, QWidget* pa
 
     QLineEdit* filterEdit = new QLineEdit(this);
     filterEdit->setClearButtonEnabled(true);
-    filterEdit->setPlaceholderText(i18nc("@info A prompt for user to enter what to search for", "Search"));
+    filterEdit->setPlaceholderText(xi18nc("@info A prompt for user to enter what to search for", "<placeholder>Search</placeholder>"));
     layout->addWidget(filterEdit);
 
     mResourceList = new QListView(this);

@@ -53,7 +53,6 @@ Q_DECLARE_METATYPE(QEventLoopLocker*)
 
 namespace
 {
-const QString reloadMessage = i18n("Calendar '%1' has been reloaded.");
 const int SAVE_TIMER_DELAY = 1000;   // 1 second
 }
 
@@ -188,13 +187,13 @@ int SingleFileResource::doLoad(QHash<QString, KAEvent>& newEvents, bool readThro
     if (mDownloadJob)
     {
         qCWarning(KALARM_LOG) << "SingleFileResource::load:" << displayId() << "Another download is still in progress";
-        errorMessage = i18n("A previous load is still in progress.");
+        errorMessage = i18nc("@info", "A previous load is still in progress.");
         return -1;
     }
     if (mUploadJob)
     {
         qCWarning(KALARM_LOG) << "SingleFileResource::load:" << displayId() << "Another file upload is still in progress.";
-        errorMessage = i18n("A previous save is still in progress.");
+        errorMessage = i18nc("@info", "A previous save is still in progress.");
         return -1;
     }
 
@@ -243,7 +242,7 @@ int SingleFileResource::doLoad(QHash<QString, KAEvent>& newEvents, bool readThro
             {
                 const QString path = mSettings->displayLocation();
                 qCWarning(KALARM_LOG) << "SingleFileResource::load:" << displayId() << "Could not create file" << path;
-                errorMessage = i18n("Could not create calendar file '%1'.", path);
+                errorMessage = xi18nc("@info", "Could not create calendar file <filename>%1</filename>.", path);
                 mStatus = Status::Broken;
                 mSaveUrl.clear();
                 setLoadFailure();
@@ -344,13 +343,13 @@ int SingleFileResource::doSave(bool writeThroughCache, bool force, QString& erro
         if (mDownloadJob)
         {
             qCWarning(KALARM_LOG) << "SingleFileResource::save:" << displayId() << "A download is still in progress.";
-            errorMessage = i18n("A previous load is still in progress.");
+            errorMessage = i18nc("@info", "A previous load is still in progress.");
             return -1;
         }
         if (mUploadJob)
         {
             qCWarning(KALARM_LOG) << "SingleFileResource::save:" << displayId() << "Another file upload is still in progress.";
-            errorMessage = i18n("A previous save is still in progress.");
+            errorMessage = i18nc("@info", "A previous save is still in progress.");
             return -1;
         }
         localFileName = cacheFilePath();
@@ -581,7 +580,7 @@ bool SingleFileResource::readFromFile(const QString& fileName, QString& errorMes
     if (!result)
     {
         qCCritical(KALARM_LOG) << "SingleFileResource::readFromFile: Error loading file " << fileName;
-        errorMessage = i18n("Could not load file '%1'.", fileName);
+        errorMessage = xi18nc("@info", "Could not load file <filename>%1</filename>.", fileName);
         return false;
     }
     if (mCalendar->incidences().isEmpty())
@@ -613,7 +612,7 @@ bool SingleFileResource::writeToFile(const QString& fileName, QString& errorMess
     if (!mCalendar)
     {
         qCCritical(KALARM_LOG) << "SingleFileResource::writeToFile:" << displayId() << "mCalendar is null!";
-        errorMessage = i18n("Calendar not open.");
+        errorMessage = i18nc("@info", "Calendar not open.");
         return false;
     }
     KACalendar::setKAlarmVersion(mCalendar);   // write the application ID into the calendar
@@ -626,7 +625,7 @@ bool SingleFileResource::writeToFile(const QString& fileName, QString& errorMess
     if (!fileStorage->save())    // this sets mCalendar->modified to false
     {
         qCCritical(KALARM_LOG) << "SingleFileResource::writeToFile:" << displayId() << "Failed to save calendar to file " << fileName;
-        errorMessage = i18n("Could not save file '%1'.", fileName);
+        errorMessage = xi18nc("@info", "Could not save file <filename>%1</filename>.", fileName);
         success = false;
     }
 
@@ -717,7 +716,7 @@ void SingleFileResource::slotDownloadJobResult(KJob* job)
         setLoadFailure();
         const QString path = mSettings->displayLocation();
         qCWarning(KALARM_LOG) << "SingleFileResource::slotDownloadJobResult:" << displayId() << "Could not load file" << path << job->errorString();
-        errorMessage = i18n("Could not load file '%1'. (%2)", path, job->errorString());
+        errorMessage = xi18nc("@info", "Could not load file <filename>%1</filename>. (%2)", path, job->errorString());
         success = false;
     }
     else
@@ -757,7 +756,7 @@ void SingleFileResource::slotUploadJobResult(KJob* job)
             mStatus = Status::Broken;
         const QString path = mSettings->displayLocation();
         qCWarning(KALARM_LOG) << "SingleFileResource::slotDownloadJobResult:" << displayId() << "Could not save file" << path << job->errorString();
-        errorMessage = i18n("Could not save file '%1'. (%2)", path, job->errorString());
+        errorMessage = xi18nc("@info", "Could not save file <filename>%1</filename>. (%2)", path, job->errorString());
         success = false;
     }
     else if (mStatus != Status::Closed)

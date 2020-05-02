@@ -9,7 +9,7 @@
       <bool>true</bool>
      </property>
      <property name="text">
-      <string>KAlarm no longer supports calendar directory resources. In order to continue using the contents of the directory resource below, you must import it into a KAlarm calendar file resource.</string>
+      <string comment="@info">KAlarm no longer supports calendar directory resources. In order to continue using the contents of the directory resource below, you must import it into a KAlarm calendar file resource.</string>
      </property>
     </widget>
    </item>
@@ -19,14 +19,14 @@
       <bool>true</bool>
      </property>
      <property name="text">
-      <string>KAlarm no longer supports calendar directory resources. In order to continue using the contents of the directory resource below, you must import each of its alarm types into separate KAlarm calendar file resources.</string>
+      <string comment="@info">KAlarm no longer supports calendar directory resources. In order to continue using the contents of the directory resource below, you must import each of its alarm types into separate KAlarm calendar file resources.</string>
      </property>
     </widget>
    </item>
    <item row="2" column="0">
     <widget class="QLabel" name="label1">
      <property name="text">
-      <string>Display name:</string>
+      <string comment="@label:textbox">Display name:</string>
      </property>
     </widget>
    </item>
@@ -40,7 +40,7 @@
    <item row="3" column="0">
     <widget class="QLabel" name="label2">
      <property name="text">
-      <string>Calendar directory:</string>
+      <string comment="@label:textbox">Calendar directory:</string>
      </property>
     </widget>
    </item>
@@ -54,7 +54,7 @@
    <item row="4" column="0">
     <widget class="QLabel" name="label3">
      <property name="text">
-      <string>Alarm types:</string>
+      <string comment="@label:textbox">Alarm types:</string>
      </property>
     </widget>
    </item>
@@ -71,7 +71,7 @@
       <bool>true</bool>
      </property>
      <property name="text">
-      <string>If you prefer, you can import this calendar directory resource later, by using the Import Alarms menu option to import the calendar files contained within it.</string>
+      <string comment="@info">If you prefer, you can import this calendar directory resource later, by using the Import Alarms menu option to import the calendar files contained within it.</string>
      </property>
     </widget>
    </item>

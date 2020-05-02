@@ -44,19 +44,19 @@ DirResourceImportDialog::DirResourceImportDialog(const QString& dirResourceName,
     : KAssistantDialog(parent)
     , mAlarmTypes(types)
 {
-    setWindowTitle(i18n("Import Directory Resource"));
+    setWindowTitle(i18nc("@title:window", "Import Directory Resource"));
     // Remove Help button
     buttonBox()->removeButton(button(QDialogButtonBox::Help));
 
     mPageIntro = new DirResourceImportIntroWidget(dirResourceName, dirResourcePath, types, this);
-    addPage(mPageIntro, i18n("Import Calendar Directory Resource"));
+    addPage(mPageIntro, i18nc("@title:tab", "Import Calendar Directory Resource"));
 
     mAlarmTypeCount = 0;
     if (mAlarmTypes & CalEvent::ACTIVE)
     {
         ++mAlarmTypeCount;
         mPageActive = new DirResourceImportTypeWidget(CalEvent::ACTIVE, this);
-        addPage(mPageActive, i18n("Import Active Alarms"));
+        addPage(mPageActive, i18nc("@title:tab", "Import Active Alarms"));
         connect(mPageActive, &DirResourceImportTypeWidget::status, this, &DirResourceImportDialog::typeStatusChanged);
         mLastPage = mPageActive;
     }
@@ -65,7 +65,7 @@ DirResourceImportDialog::DirResourceImportDialog(const QString& dirResourceName,
     {
         ++mAlarmTypeCount;
         mPageArchived = new DirResourceImportTypeWidget(CalEvent::ARCHIVED, this);
-        addPage(mPageArchived, i18n("Import Archived Alarms"));
+        addPage(mPageArchived, i18nc("@title:tab", "Import Archived Alarms"));
         connect(mPageArchived, &DirResourceImportTypeWidget::status, this, &DirResourceImportDialog::typeStatusChanged);
         mLastPage = mPageArchived;
     }
@@ -74,7 +74,7 @@ DirResourceImportDialog::DirResourceImportDialog(const QString& dirResourceName,
     {
         ++mAlarmTypeCount;
         mPageTemplate = new DirResourceImportTypeWidget(CalEvent::TEMPLATE, this);
-        addPage(mPageTemplate, i18n("Import Alarm Templates"));
+        addPage(mPageTemplate, i18nc("@title:tab", "Import Alarm Templates"));
         connect(mPageTemplate, &DirResourceImportTypeWidget::status, this, &DirResourceImportDialog::typeStatusChanged);
         mLastPage = mPageTemplate;
     }
@@ -201,11 +201,11 @@ DirResourceImportIntroWidget::DirResourceImportIntroWidget(const QString& dirRes
 
     QStringList typeNames;
     if (types & CalEvent::ACTIVE)
-        typeNames += i18n("Active alarms");
+        typeNames += i18nc("@item:intext", "Active alarms");
     if (types & CalEvent::ARCHIVED)
-        typeNames += i18n("Archived alarms");
+        typeNames += i18nc("@item:intext", "Archived alarms");
     if (types & CalEvent::TEMPLATE)
-        typeNames += i18n("Alarm templates");
+        typeNames += i18nc("@item:intext", "Alarm templates");
     mUi->dirTypesLabel->setText(typeNames.join(QStringLiteral(", ")));
 
     if (typeNames.size() > 1)
@@ -261,7 +261,7 @@ DirResourceImportTypeWidget::DirResourceImportTypeWidget(CalEvent::Type alarmTyp
     connect(mUi->optionGroup, QOverload<int, bool>::of(&QButtonGroup::buttonToggled), this, &DirResourceImportTypeWidget::importTypeSelected);
 
     mUi->pathRequester->setMode(KFile::File);
-    mUi->pathRequester->setFilter(QStringLiteral("*.ics|%1").arg(i18nc("@info", "Calendar Files")));
+    mUi->pathRequester->setFilter(QStringLiteral("*.ics|%1").arg(i18nc("@item:inlistbox", "Calendar Files")));
     mUi->statusLabel->setText(QString());
     mUi->pathRequester->setFocus();
     mUi->pathRequester->installEventFilter(this);
@@ -480,9 +480,9 @@ void DirResourceImportTypeWidget::slotStatJobResult(KJob* job)
         {
             KFileItem fi(statJob->statResult(), KIO::upUrl(mUi->pathRequester->url()));
             if (!fi.isDir())
-                setStatus(false, i18nc("@info:status", "Error! Cannot create file (directory does not exist)."));
+                setStatus(false, i18nc("@info", "Error! Cannot create file (directory does not exist)."));
             else if (!fi.isWritable())
-                setStatus(false, i18nc("@info:status", "Error! Cannot create file (directory is not writable)."));
+                setStatus(false, i18nc("@info", "Error! Cannot create file (directory is not writable)."));
             else
                 setStatus(true);
         }

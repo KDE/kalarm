@@ -64,7 +64,7 @@ void FileResourceCreator::doCreateResource()
             // deletion of ResourceSelector, and on return from this function).
             AutoQPointer<QInputDialog> dlg = new QInputDialog(mParent);
             dlg->setWindowTitle(i18nc("@title:window", "Calendar Configuration"));
-            dlg->setLabelText(i18nc("@info", "Select storage type of new calendar:"));
+            dlg->setLabelText(i18nc("@label:listbox", "Select storage type of new calendar:"));
             dlg->setOption(QInputDialog::UseListViewForComboBoxItems);
             dlg->setInputMode(QInputDialog::TextInput);
             dlg->setComboBoxEditable(false);
@@ -146,7 +146,7 @@ QString validateFileUrl(const QUrl& url)
         {
             const QString path = url.toDisplayString(QUrl::PrettyDecoded | QUrl::PreferLocalFile);
             qCWarning(KALARM_LOG) << "FileResourceCreator::validateFileUrl: Duplicate path for new resource:" << path;
-            return xi18nc("@info", "Error!  The file is already used by an existing resource.", path);
+            return xi18nc("@info", "Error!  The file <filename>%1</filename> is already used by an existing resource.", path);
         }
     }
     return QString();

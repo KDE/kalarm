@@ -85,11 +85,11 @@ QString ResourceDataModelBase::typeListForDisplay(CalEvent::Types alarmTypes)
 {
     QString list;
     if (alarmTypes & CalEvent::ACTIVE)
-        list += QLatin1String("<item>") + i18nc("@info", "Active Alarms") + QLatin1String("</item>");
+        list += QLatin1String("<item>") + i18nc("@item:intext", "Active Alarms") + QLatin1String("</item>");
     if (alarmTypes & CalEvent::ARCHIVED)
-        list += QLatin1String("<item>") + i18nc("@info", "Archived Alarms") + QLatin1String("</item>");
+        list += QLatin1String("<item>") + i18nc("@item:intext", "Archived Alarms") + QLatin1String("</item>");
     if (alarmTypes & CalEvent::TEMPLATE)
-        list += QLatin1String("<item>") + i18nc("@info", "Alarm Templates") + QLatin1String("</item>");
+        list += QLatin1String("<item>") + i18nc("@item:intext", "Alarm Templates") + QLatin1String("</item>");
     if (!list.isEmpty())
         list = QLatin1String("<list>") + list + QLatin1String("</list>");
     return list;
@@ -105,13 +105,13 @@ QString ResourceDataModelBase::readOnlyTooltip(const Resource& resource)
     switch (resource.compatibility())
     {
         case KACalendar::Current:
-            return resource.readOnly() ? i18nc("@info", "Read-only") : QString();
+            return resource.readOnly() ? i18nc("@item:intext Calendar status", "Read-only") : QString();
         case KACalendar::Converted:
         case KACalendar::Convertible:
-            return i18nc("@info", "Read-only (old format)");
+            return i18nc("@item:intext Calendar status", "Read-only (old format)");
         case KACalendar::Incompatible:
         default:
-            return i18nc("@info", "Read-only (other format)");
+            return i18nc("@item:intext Calendar status", "Read-only (other format)");
     }
 }
 
@@ -499,7 +499,7 @@ QString ResourceDataModelBase::tooltip(const Resource& resource, CalEvent::Types
     const bool    inactive = !(resource.enabledTypes() & types);
     const QString readonly = readOnlyTooltip(resource);
     const bool    writable = readonly.isEmpty();
-    const QString disabled = i18nc("@info", "Disabled");
+    const QString disabled = i18nc("@item:intext Calendar status", "Disabled");
     if (inactive  ||  !writable)
         return xi18nc("@info:tooltip",
                       "%1"
