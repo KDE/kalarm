@@ -149,7 +149,7 @@ private:
     void updateHaveEvents(bool have)        { mHaveEvents = have;  Q_EMIT haveEventsStatus(have); }
 
     static bool mInstanceIsOurs;        // mInstance is a FileResourceDataModel instance
-    // Resource nodes for model root [Resource = nullptr], and
+    // Resource nodes for model root [Resource = Resource()], and
     // Event nodes for each resource.
     QHash<Resource, QVector<Node*>> mResourceNodes;
     // Resources in the order in which they are held in the model.

@@ -76,6 +76,11 @@ FileResourceDataModel::FileResourceDataModel(QObject* parent)
     , ResourceDataModelBase()
     , mHaveEvents(false)
 {
+    qCDebug(KALARM_LOG) << "FileResourceDataModel::FileResourceDataModel";
+
+    // Create the vector of resource nodes for the model root.
+    mResourceNodes[Resource()];
+
     // Get a list of all resources, and their alarms, if they have already been
     // created before this, by a previous call to FileResourceConfigManager::createResources().
     const QList<ResourceId> resourceIds = FileResourceConfigManager::resourceIds();
