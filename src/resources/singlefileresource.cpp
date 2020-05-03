@@ -693,7 +693,7 @@ void SingleFileResource::localFileChanged(const QString& fileName)
 
     const QByteArray newHash = calculateHash(fileName);
 
-    // Only need to synchronise when the file was changed by another process.
+    // Only need to synchronize when the file was changed by another process.
     if (newHash == mCurrentHash)
         return;
 

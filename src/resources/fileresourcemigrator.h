@@ -61,7 +61,7 @@ private Q_SLOTS:
     void checkIfComplete();
 
 private:
-    FileResourceMigrator(QObject* parent = nullptr);
+    explicit FileResourceMigrator(QObject* parent = nullptr);
     void migrateAkonadiResources(Akonadi::ServerManager::State);
     void migrateKResources();
     void createDefaultResources();

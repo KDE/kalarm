@@ -53,7 +53,7 @@
        </layout>
       </item>
       <item>
-       <widget class="QTextEdit" name="pathDescription">
+       <widget class="KTextEdit" name="pathDescription">
         <property name="readOnly">
          <bool>true</bool>
         </property>
@@ -118,7 +118,7 @@
        </layout>
       </item>
       <item>
-       <widget class="QTextEdit" name="alarmTypeDescription">
+       <widget class="KTextEdit" name="alarmTypeDescription">
         <property name="readOnly">
          <bool>true</bool>
         </property>
@@ -207,7 +207,7 @@
        </layout>
       </item>
       <item>
-       <widget class="QTextEdit" name="nameDescription">
+       <widget class="KTextEdit" name="nameDescription">
         <property name="readOnly">
          <bool>true</bool>
         </property>
@@ -239,7 +239,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QTextEdit" name="readOnlyDescription">
+       <widget class="KTextEdit" name="readOnlyDescription">
         <property name="readOnly">
          <bool>true</bool>
         </property>
@@ -273,6 +273,11 @@
    <class>KLineEdit</class>
    <extends>QLineEdit</extends>
    <header>klineedit.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KTextEdit</class>
+   <extends>QTextEdit</extends>
+   <header>ktextedit.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

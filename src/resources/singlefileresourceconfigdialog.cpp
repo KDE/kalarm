@@ -32,7 +32,7 @@ using namespace KAlarmCal;
 
 namespace
 {
-void setTextEditHeight(QTextEdit*, QGroupBox*);
+void setTextEditHeight(KTextEdit*, QGroupBox*);
 }
 
 
@@ -283,9 +283,9 @@ void SingleFileResourceConfigDialog::disableOkButton(const QString& statusMessag
 }
 
 /******************************************************************************
-* When the dialog is displayed, set appropriate heights for QTextEdit elements,
+* When the dialog is displayed, set appropriate heights for KTextEdit elements,
 * and then remove empty space between widgets.
-* By default, QTextEdit has a minimum height of 4 text lines, and calling
+* By default, KTextEdit has a minimum height of 4 text lines, and calling
 * setMinimumHeight() doesn't affect this.
 */
 void SingleFileResourceConfigDialog::showEvent(QShowEvent* se)
@@ -306,7 +306,7 @@ void SingleFileResourceConfigDialog::showEvent(QShowEvent* se)
 namespace
 {
 
-void setTextEditHeight(QTextEdit* textEdit, QGroupBox* groupBox)
+void setTextEditHeight(KTextEdit* textEdit, QGroupBox* groupBox)
 {
     const QSize size = textEdit->document()->size().toSize();
     const int margin = textEdit->height() - textEdit->viewport()->height();
