@@ -25,8 +25,6 @@
 
 #include <KAlarmCal/KAEvent>
 
-#include <QPair>
-
 using namespace KAlarmCal;
 
 /**
@@ -37,31 +35,75 @@ using namespace KAlarmCal;
  * Note that the resource ID of the display calendar is -1, since it is not a
  * resources calendar.
  */
-struct EventId : public QPair<ResourceId, QString>
+class EventId
 {
-    EventId()
-        : QPair<ResourceId, QString>(-1, QString()) {}
+public:
+    EventId()   {}
     EventId(ResourceId c, const QString& e)
-        : QPair<ResourceId, QString>(c, e) {}
+        : mEventId(e)
+        , mResourceId(c)
+    {}
     explicit EventId(const KAEvent& event)
-        : QPair<ResourceId, QString>(event.resourceId(), event.id()) {}
+        : mEventId(event.id())
+        , mResourceId(event.resourceId())
+    {}
 
-    /** Set by event ID prefixed by optional resource ID, in the format "[rid:]eid". */
+    /** Set by event ID prefixed by optional resource ID, in the format "[rid:]eid".
+     *  "rid" can be the resource configuration name, or the resource ID number in
+     *  string format.
+     *  @note  Resources must have been created before calling this method;
+     *         otherwise, the resource ID will be invalid (-1).
+     */
     explicit EventId(const QString& resourceEventId);
 
-    void clear()          { first = -1; second.clear(); }
+    bool operator==(const EventId&) const;
+    bool operator!=(const EventId& other) const   { return !operator==(other); }
+
+    void clear()          { mResourceId = -1; mEventId.clear(); }
 
     /** Return whether the instance contains any data. */
-    bool isEmpty() const  { return second.isEmpty(); }
+    bool isEmpty() const  { return mEventId.isEmpty(); }
 
-    ResourceId resourceId() const    { return first; }
+    ResourceId resourceId() const            { return mResourceId; }
     ResourceId resourceDisplayId() const;
-    QString    eventId() const       { return second; }
-    void       setResourceId(ResourceId id)  { first = id; }
+    QString    eventId() const               { return mEventId; }
+    void       setResourceId(ResourceId id)  { mResourceId = id; }
+
+    /** Extract the resource and event ID strings from an ID in the format "[rid:]eid".
+     *  "rid" can be the resource configuration name, or the resource ID number in
+     *  string format.
+     *  @param resourceEventId  Full ID "[rid:]eid"
+     *  @param eventId          Receives the event ID "eid"
+     *  @return  The resource ID "rid".
+     */
+    static QString extractIDs(const QString& resourceEventId, QString& eventId);
+
+    /** Get the numerical resource ID from a resource ID string.
+     *  The string can be the resource configuration name, or the resource ID
+     *  number in string format.
+     *  @note  Resources must have been created before calling this function;
+     *         otherwise, the returned resource ID will be invalid (-1).
+     *
+     *  @param resourceIdString  Resource ID string "rid"
+     *  @return  The resource ID, or -1 if not found.
+     */
+    static ResourceId getResourceId(const QString& resourceIdString);
+
+private:
+    QString    mEventId;
+    ResourceId mResourceId {-1};
 };
 
 // Declare as a movable type (note that QString is movable).
 Q_DECLARE_TYPEINFO(EventId, Q_MOVABLE_TYPE);
+
+inline uint qHash(const EventId& eid, uint seed)
+{
+    uint h1 = qHash(eid.eventId(), seed);
+    uint h2 = qHash(eid.resourceId(), seed);
+    return ((h1 << 16) | (h1 >> 16)) ^ h2 ^ seed;
+
+}
 
 inline QDebug operator<<(QDebug s, const EventId& id)
 {

@@ -417,8 +417,8 @@ int KAlarmApp::activateInstance(const QStringList& args, const QString& workingD
             case CommandOptions::CANCEL_EVENT:
             {
                 // Display or delete the event with the specified event ID
-                const QueuedAction action = static_cast<QueuedAction>(int((command == CommandOptions::TRIGGER_EVENT) ? QueuedAction::Trigger : QueuedAction::Cancel)
-                                                                      | int(QueuedAction::FindId) | int(QueuedAction::Exit));
+                QueuedAction action = static_cast<QueuedAction>(int((command == CommandOptions::TRIGGER_EVENT) ? QueuedAction::Trigger : QueuedAction::Cancel)
+                                                                | int(QueuedAction::Exit));
                 // Open the calendar, don't start processing execution queue yet,
                 // and wait for the calendar resources to be populated.
                 if (!initCheck(true))
@@ -426,7 +426,12 @@ int KAlarmApp::activateInstance(const QStringList& args, const QString& workingD
                 else
                 {
                     mCommandOption = options->commandName();
-                    mActionQueue.enqueue(ActionQEntry(action, options->eventId()));
+                    // Get the resource ID string and event UID. Note that if
+                    // resources have not been created yet, the numeric
+                    // resource ID can't yet be looked up.
+                    if (options->resourceId().isEmpty())
+                        action = static_cast<QueuedAction>((int)action | int(QueuedAction::FindId));
+                    mActionQueue.enqueue(ActionQEntry(action, EventId(options->eventId()), options->resourceId()));
                     startProcessQueue();      // start processing the execution queue
                     dontRedisplay = true;
                 }
@@ -459,7 +464,10 @@ int KAlarmApp::activateInstance(const QStringList& args, const QString& workingD
                     mCommandOption = options->commandName();
                     if (firstInstance)
                         mEditingCmdLineAlarm = 0x10;   // want to redisplay alarms if successful
-                    mActionQueue.enqueue(ActionQEntry(QueuedAction::Edit, options->eventId()));
+                    // Get the resource ID string and event UID. Note that if
+                    // resources have not been created yet, the numeric
+                    // resource ID can't yet be looked up.
+                    mActionQueue.enqueue(ActionQEntry(QueuedAction::Edit, EventId(options->eventId()), options->resourceId()));
                     startProcessQueue();      // start processing the execution queue
                     dontRedisplay = true;
                 }
@@ -941,6 +949,25 @@ void KAlarmApp::processQueue()
         {
             ActionQEntry& entry = mActionQueue.head();
 
+            // If the first action's resource ID is a string, can't process it
+            // until its numeric resource ID can be found.
+            if (!entry.resourceId.isEmpty())
+            {
+                if (!Resources::allCreated())
+                {
+                    // If resource population has timed out, discard all queued events.
+                    if (mResourcesTimedOut)
+                    {
+                        qCCritical(KALARM_LOG) << "Error! Timeout creating calendars";
+                        mActionQueue.clear();
+                    }
+                    break;
+                }
+                // Convert the resource ID string to the numeric resource ID.
+                entry.eventId.setResourceId(EventId::getResourceId(entry.resourceId));
+                entry.resourceId.clear();
+            }
+
             // Can't process the first action until its resource has been populated.
             const ResourceId id = entry.eventId.resourceId();
             if ((id <  0 && !Resources::allPopulated())
@@ -1288,6 +1315,7 @@ void KAlarmApp::slotResourcesCreated()
     }
     checkWritableCalendar();
     checkArchivedCalendar();
+    processQueue();
 }
 
 /******************************************************************************

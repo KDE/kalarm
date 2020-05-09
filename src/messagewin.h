@@ -1,7 +1,7 @@
 /*
  *  messagewin.h  -  displays an alarm message
  *  Program:  kalarm
- *  Copyright © 2001-2019 David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2020 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -31,7 +31,7 @@
 #include <KAlarmCal/KAEvent>
 
 #include <QList>
-#include <QMap>
+#include <QHash>
 #include <QPointer>
 #include <QDateTime>
 
@@ -138,7 +138,7 @@ class MessageWin : public MainWindowBase
         static bool         isSpread(const QPoint& topLeft);
 
         static QList<MessageWin*>      mWindowList;    // list of existing message windows
-        static QMap<EventId, unsigned> mErrorMessages; // error messages currently displayed, by event ID
+        static QHash<EventId, unsigned> mErrorMessages; // error messages currently displayed, by event ID
         static bool         mRedisplayed;             // redisplayAlarms() was called
         // Sound file playing
         static QPointer<AudioThread> mAudioThread;    // thread to play audio file

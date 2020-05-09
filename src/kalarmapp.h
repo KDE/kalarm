@@ -181,11 +181,13 @@ class KAlarmApp : public QApplication
         struct ActionQEntry
         {
             ActionQEntry(QueuedAction a, const EventId& id) : action(a), eventId(id) { }
+            ActionQEntry(QueuedAction a, const EventId& id, const QString& resId) : action(a), eventId(id), resourceId(resId) { }
             ActionQEntry(const KAEvent& e, QueuedAction a = QueuedAction::Handle) : action(a), event(e) { }
             ActionQEntry() { }
             QueuedAction  action;
             EventId       eventId;
             KAEvent       event;
+            QString       resourceId;   // resource ID or name, if resources not created yet
         };
 
         KAlarmApp(int& argc, char** argv);
