@@ -155,9 +155,9 @@ enum
 };
 
 
-QList<MessageWin*>      MessageWin::mWindowList;
-QMap<EventId, unsigned> MessageWin::mErrorMessages;
-bool                    MessageWin::mRedisplayed = false;
+QList<MessageWin*>       MessageWin::mWindowList;
+QHash<EventId, unsigned> MessageWin::mErrorMessages;
+bool                     MessageWin::mRedisplayed = false;
 // There can only be one audio thread at a time: trying to play multiple
 // sound files simultaneously would result in a cacophony, and besides
 // that, Phonon currently crashes...

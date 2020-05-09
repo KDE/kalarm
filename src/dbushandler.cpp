@@ -27,6 +27,7 @@
 #include "kamail.h"
 #include "mainwindow.h"
 #include "preferences.h"
+#include "resources/resources.h"
 #include <kalarmadaptor.h>
 #include "kalarm_debug.h"
 
@@ -58,11 +59,15 @@ DBusHandler::DBusHandler()
 
 bool DBusHandler::cancelEvent(const QString& eventId)
 {
+    if (!Resources::allPopulated())
+        return false;    // can't access events before calendars are loaded
     return theApp()->dbusDeleteEvent(EventId(eventId));
 }
 
 bool DBusHandler::triggerEvent(const QString& eventId)
 {
+    if (!Resources::allPopulated())
+        return false;    // can't access events before calendars are loaded
     return theApp()->dbusTriggerEvent(EventId(eventId));
 }
 
@@ -257,6 +262,8 @@ bool DBusHandler::scheduleAudio(const QString& audioUrl, int volumePercent, cons
 
 bool DBusHandler::edit(const QString& eventID)
 {
+    if (!Resources::allPopulated())
+        return false;    // can't access events before calendars are loaded
     return KAlarm::editAlarmById(EventId(eventID));
 }
 

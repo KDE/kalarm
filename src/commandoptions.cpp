@@ -287,9 +287,9 @@ void CommandOptions::process()
     ||  checkCommand(OptCANCEL_EVENT, CANCEL_EVENT)
     ||  checkCommand(OptEDIT, EDIT))
     {
-        // Fetch the event ID. This can optionally include a prefix of the
-        // resource ID followed by a colon delimiter.
-        mEventId = EventId(mParser->value(*mOptions.at(mCommandOpt)));
+        // Fetch the resource and event IDs. The supplied ID is the event ID,
+        // optionally prefixed by the resource ID followed by a colon delimiter.
+        mResourceId = EventId::extractIDs(mParser->value(*mOptions.at(mCommandOpt)), mEventId);
     }
     if (checkCommand(OptEDIT_NEW_PRESET, EDIT_NEW_PRESET))
     {

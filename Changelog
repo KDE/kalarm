@@ -1,5 +1,8 @@
 KAlarm Change Log
 
+=== Version 2.14.1 (KDE Applications 20.04.1) --- 9 April 2020 ===
++ Correctly interpret resource IDs in command line and DBus calls.
+
 === Version 2.14.0 (KDE Applications 20.04) --- 27 March 2020 ===
 + Warn user if archiving but no default archived alarms calendar is set.
 + Fix some error messages not being displayed.
