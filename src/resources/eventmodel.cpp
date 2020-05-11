@@ -42,10 +42,10 @@ EventListModel::EventListModel(CalEvent::Types types, QObject* parent)
     setSourceModel(new KDescendantsProxyModel(this));
     setSortRole(ResourceDataModelBase::SortRole);
     setDynamicSortFilter(true);
-    connect(this, &QAbstractItemModel::rowsInserted, this, &EventListModel::slotRowsInserted);
-    connect(this, &QAbstractItemModel::rowsRemoved, this, &EventListModel::slotRowsRemoved);
+    connect(sourceModel(), &QAbstractItemModel::rowsInserted, this, &EventListModel::slotRowsInserted);
+    connect(sourceModel(), &QAbstractItemModel::rowsRemoved, this, &EventListModel::slotRowsRemoved);
     connect(Resources::instance(), &Resources::resourcePopulated,
-                             this, &QSortFilterProxyModel::invalidate);
+                             this, &EventListModel::slotResourcePopulated);
     connect(Resources::instance(), &Resources::settingsChanged,
                              this, &EventListModel::resourceSettingsChanged);
 }
@@ -128,6 +128,10 @@ QVariant EventListModel::headerData(int section, Qt::Orientation orientation, in
     return static_cast<KDescendantsProxyModel*>(sourceModel())->sourceModel()->headerData(section, orientation, role + mHeaderDataRoleOffset);
 }
 
+/******************************************************************************
+* Determine whether a source model item is included in this model.
+* This also determines whether it is counted in rowCount().
+*/
 bool EventListModel::filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const
 {
     // Get the resource which contains this event.
@@ -159,6 +163,25 @@ bool EventListModel::filterAcceptsColumn(int sourceColumn, const QModelIndex& so
     if (sourceColumn >= ResourceDataModelBase::ColumnCount)
         return false;
     return QSortFilterProxyModel::filterAcceptsColumn(sourceColumn, sourceParent);
+}
+
+/******************************************************************************
+* Called when a Resource has been initially populated.
+*/
+void EventListModel::slotResourcePopulated(Resource& resource)
+{
+    if (!(resource.enabledTypes() & mAlarmTypes))
+        return;    // the resource isn't included in this model
+
+    invalidate();
+
+    // Note that during initialisation, rows are inserted into the source model
+    // before they are added to the Resource. Until they have been added to the
+    // Resource, they will be filtered out by filterAcceptsRow() (and therefore
+    // omitted by rowCount()), because Resource::event(eventId) will not find
+    // them. The resourcePopulated() signal is emitted once they have been
+    // added to the Resource, so we need to re-process them now.
+    slotRowsInserted();
 }
 
 /******************************************************************************

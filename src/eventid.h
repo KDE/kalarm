@@ -102,7 +102,6 @@ inline uint qHash(const EventId& eid, uint seed)
     uint h1 = qHash(eid.eventId(), seed);
     uint h2 = qHash(eid.resourceId(), seed);
     return ((h1 << 16) | (h1 >> 16)) ^ h2 ^ seed;
-
 }
 
 inline QDebug operator<<(QDebug s, const EventId& id)

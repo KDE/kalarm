@@ -96,6 +96,7 @@ protected:
     bool filterAcceptsColumn(int sourceColumn, const QModelIndex &sourceParent) const override;
 
 private Q_SLOTS:
+    void slotResourcePopulated(Resource&);
     void slotRowsInserted();
     void slotRowsRemoved();
     void resourceSettingsChanged(Resource&, ResourceType::Changes);

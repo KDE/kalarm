@@ -1,7 +1,7 @@
 /*
  *  alarmlistview.cpp  -  widget showing list of alarms
  *  Program:  kalarm
- *  Copyright © 2007,2008,2010,2019 David Jarvie <djarvie@kde.org>
+ *  Copyright © 2007-2020 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -37,30 +37,7 @@ AlarmListView::AlarmListView(const QByteArray& configGroup, QWidget* parent)
     , mConfigGroup(configGroup)
 {
     setEditOnSingleClick(true);
-    connect(header(), &QHeaderView::sectionMoved, this, &AlarmListView::sectionMoved);
-}
-
-void AlarmListView::setModel(QAbstractItemModel* model)
-{
-    EventListView::setModel(model);
-    KConfigGroup config(KSharedConfig::openConfig(), mConfigGroup.constData());
-    const QByteArray settings = config.readEntry("ListHead", QByteArray());
-    if (!settings.isEmpty())
-        header()->restoreState(settings);
-    header()->setSectionsMovable(true);
-    header()->setStretchLastSection(false);
-    header()->setSectionResizeMode(AlarmListModel::TimeColumn, QHeaderView::ResizeToContents);
-    header()->setSectionResizeMode(AlarmListModel::TimeToColumn, QHeaderView::ResizeToContents);
-    header()->setSectionResizeMode(AlarmListModel::RepeatColumn, QHeaderView::ResizeToContents);
-    header()->setSectionResizeMode(AlarmListModel::ColourColumn, QHeaderView::Fixed);
-    header()->setSectionResizeMode(AlarmListModel::TypeColumn, QHeaderView::Fixed);
-    header()->setSectionResizeMode(AlarmListModel::TextColumn, QHeaderView::Stretch);
-    header()->setStretchLastSection(true);   // necessary to ensure ResizeToContents columns do resize to contents!
-    const int minWidth = viewOptions().fontMetrics.lineSpacing() * 3 / 4;
-    header()->setMinimumSectionSize(minWidth);
-    const int margin = QApplication::style()->pixelMetric(QStyle::PM_FocusFrameHMargin);
-    header()->resizeSection(AlarmListModel::ColourColumn, minWidth);
-    header()->resizeSection(AlarmListModel::TypeColumn, AlarmListModel::iconWidth() + 2*margin + 2);
+    connect(header(), &QHeaderView::sectionMoved, this, &AlarmListView::saveColumnsState);
     header()->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(header(), &QWidget::customContextMenuRequested, this, &AlarmListView::headerContextMenuRequested);
 }
@@ -98,10 +75,34 @@ void AlarmListView::setColumnsVisible(const QList<bool>& show)
 }
 
 /******************************************************************************
+* Initialize column settings and sizing.
+*/
+void AlarmListView::initSections()
+{
+    KConfigGroup config(KSharedConfig::openConfig(), mConfigGroup.constData());
+    const QByteArray settings = config.readEntry("ListHead", QByteArray());
+    if (!settings.isEmpty())
+        header()->restoreState(settings);
+    header()->setSectionsMovable(true);
+    header()->setSectionResizeMode(AlarmListModel::TimeColumn, QHeaderView::ResizeToContents);
+    header()->setSectionResizeMode(AlarmListModel::TimeToColumn, QHeaderView::ResizeToContents);
+    header()->setSectionResizeMode(AlarmListModel::RepeatColumn, QHeaderView::ResizeToContents);
+    header()->setSectionResizeMode(AlarmListModel::ColourColumn, QHeaderView::Fixed);
+    header()->setSectionResizeMode(AlarmListModel::TypeColumn, QHeaderView::Fixed);
+    header()->setSectionResizeMode(AlarmListModel::TextColumn, QHeaderView::Stretch);
+    header()->setStretchLastSection(true);   // necessary to ensure ResizeToContents columns do resize to contents!
+    const int minWidth = viewOptions().fontMetrics.lineSpacing() * 3 / 4;
+    header()->setMinimumSectionSize(minWidth);
+    const int margin = QApplication::style()->pixelMetric(QStyle::PM_FocusFrameHMargin);
+    header()->resizeSection(AlarmListModel::ColourColumn, minWidth);
+    header()->resizeSection(AlarmListModel::TypeColumn, AlarmListModel::iconWidth() + 2*margin + 2);
+}
+
+/******************************************************************************
 * Called when the column order is changed.
 * Save the new order for restoration on program restart.
 */
-void AlarmListView::sectionMoved()
+void AlarmListView::saveColumnsState()
 {
     KConfigGroup config(KSharedConfig::openConfig(), mConfigGroup.constData());
     config.writeEntry("ListHead", header()->saveState());
@@ -149,6 +150,7 @@ void AlarmListView::showHideColumn(QMenu& menu, QAction* act)
     header()->setSectionHidden(col, !show);
     if (col == AlarmListModel::TimeColumn  ||  col == AlarmListModel::TimeToColumn)
         enableTimeColumns(&menu);
+    saveColumnsState();
     Q_EMIT columnsVisibleChanged();
 }
 

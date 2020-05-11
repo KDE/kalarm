@@ -1,7 +1,7 @@
 /*
  *  eventlistview.h  -  base class for widget showing list of alarms
  *  Program:  kalarm
- *  Copyright © 2007-2019 David Jarvie <djarvie@kde.org>
+ *  Copyright © 2007-2020 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -33,39 +33,45 @@ using namespace KAlarmCal;
 
 class EventListView : public QTreeView
 {
-        Q_OBJECT
-    public:
-        explicit EventListView(QWidget* parent = nullptr);
-        EventListModel*   itemModel() const;
-        KAEvent           event(int row) const;
-        KAEvent           event(const QModelIndex&) const;
-        void              select(const QModelIndex&, bool scrollToIndex = false);
-        void              clearSelection();
-        QModelIndex       selectedIndex() const;
-        KAEvent           selectedEvent() const;
-        QVector<KAEvent>  selectedEvents() const;
-        void              setEditOnSingleClick(bool e) { mEditOnSingleClick = e; }
-        bool              editOnSingleClick() const    { return mEditOnSingleClick; }
+    Q_OBJECT
+public:
+    explicit EventListView(QWidget* parent = nullptr);
+    void              setModel(QAbstractItemModel*) override;
+    EventListModel*   itemModel() const;
+    KAEvent           event(int row) const;
+    KAEvent           event(const QModelIndex&) const;
+    void              select(const QModelIndex&, bool scrollToIndex = false);
+    void              clearSelection();
+    QModelIndex       selectedIndex() const;
+    KAEvent           selectedEvent() const;
+    QVector<KAEvent>  selectedEvents() const;
+    void              setEditOnSingleClick(bool e) { mEditOnSingleClick = e; }
+    bool              editOnSingleClick() const    { return mEditOnSingleClick; }
 
-    public Q_SLOTS:
-        virtual void      slotFind();
-        virtual void      slotFindNext()       { findNext(true); }
-        virtual void      slotFindPrev()       { findNext(false); }
+public Q_SLOTS:
+    virtual void      slotFind();
+    virtual void      slotFindNext()       { findNext(true); }
+    virtual void      slotFindPrev()       { findNext(false); }
 
-    Q_SIGNALS:
-        void              contextMenuRequested(const QPoint& globalPos);
-        void              findActive(bool);
+Q_SIGNALS:
+    void              contextMenuRequested(const QPoint& globalPos);
+    void              findActive(bool);
 
-    protected:
-        bool              viewportEvent(QEvent*) override;
-        void              contextMenuEvent(QContextMenuEvent*) override;
-    private:
-        void              findNext(bool forward);
+protected:
+    void              resizeEvent(QResizeEvent*) override;
+    bool              viewportEvent(QEvent*) override;
+    void              contextMenuEvent(QContextMenuEvent*) override;
 
-        Find*             mFind {nullptr};
-        bool              mEditOnSingleClick {false};
+protected Q_SLOTS:
+    virtual void      initSections() = 0;
 
-        using QObject::event;   // prevent "hidden" warning
+private:
+    void              findNext(bool forward);
+
+    Find*             mFind {nullptr};
+    bool              mEditOnSingleClick {false};
+
+    using QObject::event;   // prevent "hidden" warning
 };
 
 class EventListDelegate : public QItemDelegate

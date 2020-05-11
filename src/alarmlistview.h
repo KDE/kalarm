@@ -1,7 +1,7 @@
 /*
  *  alarmlistview.h  -  widget showing list of alarms
  *  Program:  kalarm
- *  Copyright © 2007,2019 David Jarvie <djarvie@kde.org>
+ *  Copyright © 2007-2020 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -28,25 +28,27 @@
 
 class AlarmListView : public EventListView
 {
-        Q_OBJECT
-    public:
-        explicit AlarmListView(const QByteArray& configGroup, QWidget* parent = nullptr);
-        void        setModel(QAbstractItemModel*) override;
-        QList<bool> columnsVisible() const;
-        void        setColumnsVisible(const QList<bool>& show);
+    Q_OBJECT
+public:
+    explicit AlarmListView(const QByteArray& configGroup, QWidget* parent = nullptr);
+    QList<bool> columnsVisible() const;
+    void        setColumnsVisible(const QList<bool>& show);
 
-    Q_SIGNALS:
-        void        columnsVisibleChanged();
+Q_SIGNALS:
+    void        columnsVisibleChanged();
 
-    private Q_SLOTS:
-        void        sectionMoved();
-        void        headerContextMenuRequested(const QPoint&);
+protected Q_SLOTS:
+    void        initSections() override;
 
-    private:
-        void        showHideColumn(QMenu&, QAction*);
-        void        enableTimeColumns(QMenu*);
+private Q_SLOTS:
+    void        saveColumnsState();
+    void        headerContextMenuRequested(const QPoint&);
 
-        QByteArray  mConfigGroup;
+private:
+    void        showHideColumn(QMenu&, QAction*);
+    void        enableTimeColumns(QMenu*);
+
+    QByteArray  mConfigGroup;
 };
 
 #endif // ALARMLISTVIEW_H
