@@ -1,7 +1,7 @@
 /*
  *  templatelistview.h  -  widget showing list of alarm templates
  *  Program:  kalarm
- *  Copyright © 2007,2008 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2007-2020 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -28,19 +28,22 @@
 
 class TemplateListView : public EventListView
 {
-        Q_OBJECT
-    public:
-        explicit TemplateListView(QWidget* parent = nullptr);
-        void setModel(QAbstractItemModel*) override;
+    Q_OBJECT
+public:
+    explicit TemplateListView(QWidget* parent = nullptr);
+
+protected Q_SLOTS:
+    void initSections() override;
 };
+
 
 class TemplateListDelegate : public EventListDelegate
 {
-        Q_OBJECT
-    public:
-        explicit TemplateListDelegate(TemplateListView* parent = nullptr)
-                   : EventListDelegate(parent) {}
-        void edit(KAEvent*, EventListView*) override;
+    Q_OBJECT
+public:
+    explicit TemplateListDelegate(TemplateListView* parent = nullptr)
+               : EventListDelegate(parent) {}
+    void edit(KAEvent*, EventListView*) override;
 };
 
 #endif // TEMPLATELISTVIEW_H

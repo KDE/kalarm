@@ -1,7 +1,7 @@
 /*
  *  eventlistview.cpp  -  base class for widget showing list of alarms
  *  Program:  kalarm
- *  Copyright © 2007-2019 David Jarvie <djarvie@kde.org>
+ *  Copyright © 2007-2020 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -42,6 +42,15 @@ EventListView::EventListView(QWidget* parent)
     setTextElideMode(Qt::ElideRight);
     // Set default WhatsThis text to be displayed when no actual item is clicked on
     setWhatsThis(i18nc("@info:whatsthis", "List of scheduled alarms"));
+}
+
+void EventListView::setModel(QAbstractItemModel* model)
+{
+    EventListModel* elm = qobject_cast<EventListModel*>(model);
+    Q_ASSERT(elm);   // model must be derived from EventListModel
+
+    QTreeView::setModel(model);
+    connect(elm, &EventListModel::haveEventsStatus, this, &EventListView::initSections);
 }
 
 /******************************************************************************
@@ -144,6 +153,12 @@ void EventListView::findNext(bool forward)
 {
     if (mFind)
         mFind->findNext(forward);
+}
+
+void EventListView::resizeEvent(QResizeEvent* se)
+{
+    QTreeView::resizeEvent(se);
+    initSections();
 }
 
 /******************************************************************************
