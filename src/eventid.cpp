@@ -41,7 +41,7 @@ bool EventId::operator==(const EventId& other) const
 
 ResourceId EventId::resourceDisplayId() const
 {
-    return mResourceId & ~ResourceType::IdFlag;
+    return (mResourceId > 0) ? (mResourceId & ~ResourceType::IdFlag) : mResourceId;
 }
 
 QString EventId::extractIDs(const QString& resourceEventId, QString& eventId)
