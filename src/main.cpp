@@ -27,6 +27,7 @@
 
 #include <KAboutData>
 #include <KLocalizedString>
+#include <KDBusService>
 #include <KCrash>
 
 #include <QDir>
@@ -49,9 +50,8 @@ int main(int argc, char* argv[])
     const QStringList args = app->arguments();
     KCrash::initialize();
 
-
     KLocalizedString::setApplicationDomain("kalarm");
-    KAboutData aboutData(QStringLiteral(PROGRAM_NAME), i18n("KAlarm"),
+    KAboutData aboutData(QStringLiteral(PROGRAM_NAME), i18n(KALARM_NAME),
                          QStringLiteral(KALARM_FULL_VERSION),
                          i18n("Personal alarm message, command and email scheduler by KDE"),
                          KAboutLicense::GPL,
@@ -59,14 +59,19 @@ int main(int argc, char* argv[])
                          QStringLiteral("http://www.astrojar.org.uk/kalarm"));
     aboutData.addAuthor(i18n("David Jarvie"), i18n("Author"), QStringLiteral("djarvie@kde.org"));
     aboutData.setOrganizationDomain("kde.org");
-    aboutData.setDesktopFileName(QStringLiteral("org.kde.kalarm"));
+    aboutData.setDesktopFileName(QStringLiteral(KALARM_DBUS_SERVICE));
     KAboutData::setApplicationData(aboutData);
+
+    // Make this a unique application.
+    KDBusService service(KDBusService::Unique);
+    QObject::connect(&service, &KDBusService::activateRequested, app.data(), &KAlarmApp::activateByDBus);
+    QObject::connect(app.data(), &KAlarmApp::setExitValue, &service, [&service](int ret) { service.setExitValue(ret); });
 
     qCDebug(KALARM_LOG) << "initialising";
     app->initialise();
 
     QString outputText;
-    int exitCode = app->activate(args, QDir::currentPath(), outputText);
+    int exitCode = app->activateInstance(args, QDir::currentPath(), &outputText);
     if (exitCode >= 0)
     {
         if (exitCode > 0)

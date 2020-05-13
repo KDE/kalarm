@@ -6,6 +6,9 @@ KAlarm Change Log
 + Show alarm calendars sorted by name in calendars list.
 + Refactor AlarmCalendar to split out resources and display calendars.
 
+=== Version 2.14.2 (KDE Applications 20.04.2) --- 13 May 2020 ===
++ Make multiple KAlarm invocations work (Qt >5.12, Frameworks >5.60) [KDE Bug 417108]
+
 === Version 2.14.1 (KDE Applications 20.04.1) --- 11 May 2020 ===
 + Correctly interpret resource IDs in command line and DBus calls.
 + Fix sizing and reconfiguration of columns in alarm and template lists.

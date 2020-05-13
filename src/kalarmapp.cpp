@@ -44,7 +44,6 @@
 #include <KAlarmCal/DateTime>
 #include <KAlarmCal/KARecurrence>
 
-#include <KDBusService>
 #include <KLocalizedString>
 #include <KConfig>
 #include <KConfigGui>
@@ -107,6 +106,44 @@ KAlarmApp::KAlarmApp(int& argc, char** argv)
     , mDBusHandler(new DBusHandler())
 {
     qCDebug(KALARM_LOG) << "KAlarmApp:";
+}
+
+/******************************************************************************
+*/
+KAlarmApp::~KAlarmApp()
+{
+    while (!mCommandProcesses.isEmpty())
+    {
+        ProcData* pd = mCommandProcesses.at(0);
+        mCommandProcesses.pop_front();
+        delete pd;
+    }
+    ResourcesCalendar::terminate();
+    DisplayCalendar::terminate();
+    DataModel::terminate();
+}
+
+/******************************************************************************
+* Return the one and only KAlarmApp instance.
+* If it doesn't already exist, it is created first.
+*/
+KAlarmApp* KAlarmApp::create(int& argc, char** argv)
+{
+    if (!mInstance)
+    {
+        mInstance = new KAlarmApp(argc, argv);
+
+        if (mFatalError)
+            mInstance->quitFatal();
+    }
+    return mInstance;
+}
+
+/******************************************************************************
+* Perform initialisations which may require KAboutData to have been set up.
+*/
+void KAlarmApp::initialise()
+{
     KAlarmMigrateApplication migrate;
     migrate.migrate();
 
@@ -145,45 +182,7 @@ KAlarmApp::KAlarmApp(int& argc, char** argv)
     // Check if the window manager can't handle keyboard focus transfer between windows
     mWindowFocusBroken = (Desktop::currentIdentity() == Desktop::Unity);
     if (mWindowFocusBroken) { qCDebug(KALARM_LOG) << "KAlarmApp: Window keyboard focus broken"; }
-}
 
-/******************************************************************************
-*/
-KAlarmApp::~KAlarmApp()
-{
-    while (!mCommandProcesses.isEmpty())
-    {
-        ProcData* pd = mCommandProcesses.at(0);
-        mCommandProcesses.pop_front();
-        delete pd;
-    }
-    ResourcesCalendar::terminate();
-    DisplayCalendar::terminate();
-    DataModel::terminate();
-}
-
-/******************************************************************************
-* Return the one and only KAlarmApp instance.
-* If it doesn't already exist, it is created first.
-*/
-KAlarmApp* KAlarmApp::create(int& argc, char** argv)
-{
-    if (!mInstance)
-    {
-        mInstance = new KAlarmApp(argc, argv);
-
-        if (mFatalError)
-            mInstance->quitFatal();
-    }
-    return mInstance;
-}
-
-/******************************************************************************
-* Perform initialisations which may require the constructor to have completed
-* and KAboutData to have been set up.
-*/
-void KAlarmApp::initialise()
-{
     if (initialiseTimerResources())   // initialise calendars and alarm timer
     {
         Resources* resources = Resources::instance();
@@ -322,29 +321,19 @@ bool KAlarmApp::restoreSession()
 }
 
 /******************************************************************************
-* Called for a unique QApplication when a new instance of the application is
-* started.
-* Reply: exit code (>= 0), or -1 to continue execution.
-*        If exit code >= 0, 'outputText' holds text to output before terminating.
-*/
-void KAlarmApp::activateByDBus(const QStringList& args, const QString& workingDirectory)
-{
-    activateInstance(args, workingDirectory, nullptr);
-}
-
-/******************************************************************************
-* Called to start a new instance of the application.
+* Called to start a new instance of the unique QApplication.
 * Reply: exit code (>= 0), or -1 to continue execution.
 *        If exit code >= 0, 'outputText' holds text to output before terminating.
 */
 int KAlarmApp::activateInstance(const QStringList& args, const QString& workingDirectory, QString* outputText)
 {
     Q_UNUSED(workingDirectory)
-    qCDebug(KALARM_LOG) << "KAlarmApp::activateInstance";
+    qCDebug(KALARM_LOG) << "KAlarmApp::activateInstance" << args;
     if (outputText)
         outputText->clear();
     if (mFatalError)
     {
+        Q_EMIT setExitValue(1);
         quitFatal();
         return 1;
     }
@@ -362,7 +351,7 @@ int KAlarmApp::activateInstance(const QStringList& args, const QString& workingD
     KAboutData::applicationData().setupCommandLine(&parser);
     parser.setApplicationDescription(QApplication::applicationDisplayName());
     CommandOptions* options = new CommandOptions;
-    const QStringList newArgs = options->setOptions(&parser, fixedArgs);
+    const QStringList nonexecArgs = options->setOptions(&parser, fixedArgs);
     options->parse();
     KAboutData::applicationData().processCommandLine(&parser);
 
@@ -390,6 +379,7 @@ int KAlarmApp::activateInstance(const QStringList& args, const QString& workingD
         switch (command)
         {
             case CommandOptions::CMD_ERROR:
+                Q_EMIT setExitValue(1);
                 if (outputText)
                 {
                     *outputText = options->outputText();
@@ -403,11 +393,6 @@ int KAlarmApp::activateInstance(const QStringList& args, const QString& workingD
                 break;
         }
     }
-
-    // Make this a unique application.
-    KDBusService* s = new KDBusService(KDBusService::Unique, this);
-    connect(this, &KAlarmApp::aboutToQuit, s, &KDBusService::deleteLater);
-    connect(s, &KDBusService::activateRequested, this, &KAlarmApp::activateByDBus);
 
     if (processOptions)
     {
@@ -750,6 +735,7 @@ bool KAlarmApp::quitIf(int exitCode, bool force)
     ResourcesCalendar::terminate();
     DisplayCalendar::terminate();
     DataModel::terminate();
+    Q_EMIT setExitValue(exitCode);
     exit(exitCode);
     return true;    // sometimes we actually get to here, despite calling exit()
 }
@@ -1586,7 +1572,7 @@ bool KAlarmApp::needWindowFocusFix() const
 }
 
 /******************************************************************************
-* Called to schedule a new alarm, either in response to a DCOP notification or
+* Called to schedule a new alarm, either in response to a D-Bus notification or
 * to command line options.
 * Reply = true unless there was a parameter error or an error opening calendar file.
 */
@@ -1597,12 +1583,17 @@ bool KAlarmApp::scheduleEvent(KAEvent::SubAction action, const QString& text, co
                               uint mailFromID, const KCalendarCore::Person::List& mailAddresses,
                               const QString& mailSubject, const QStringList& mailAttachments)
 {
-    qCDebug(KALARM_LOG) << "KAlarmApp::scheduleEvent:" << text;
     if (!dateTime.isValid())
+    {
+        qCWarning(KALARM_LOG) << "KAlarmApp::scheduleEvent: Error! Invalid time" << text;
         return false;
+    }
     const KADateTime now = KADateTime::currentUtcDateTime();
     if (lateCancel  &&  dateTime < now.addSecs(-maxLateness(lateCancel)))
+    {
+        qCDebug(KALARM_LOG) << "KAlarmApp::scheduleEvent: not executed (late-cancel)" << text;
         return true;               // alarm time was already archived too long ago
+    }
     KADateTime alarmTime = dateTime;
     // Round down to the nearest minute to avoid scheduling being messed up
     if (!dateTime.isDateOnly())
@@ -1626,6 +1617,7 @@ bool KAlarmApp::scheduleEvent(KAEvent::SubAction action, const QString& text, co
     {
         // Alarm is due for display already.
         // First execute it once without adding it to the calendar file.
+        qCDebug(KALARM_LOG) << "KAlarmApp::scheduleEvent: executing" << text;
         if (!mInitialised)
             mActionQueue.enqueue(ActionQEntry(event, QueuedAction::Trigger));
         else
@@ -1638,6 +1630,7 @@ bool KAlarmApp::scheduleEvent(KAEvent::SubAction action, const QString& text, co
     }
 
     // Queue the alarm for insertion into the calendar file
+    qCDebug(KALARM_LOG) << "KAlarmApp::scheduleEvent: creating new alarm" << text;
     mActionQueue.enqueue(ActionQEntry(event));
     if (mInitialised)
         QTimer::singleShot(0, this, &KAlarmApp::processQueue);
