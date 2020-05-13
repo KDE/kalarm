@@ -23,8 +23,6 @@
 #include "kalarmapp.h"
 #include "kalarm_debug.h"
 
-#include <KAlarmCal/Version>
-
 #include <KAboutData>
 #include <KLocalizedString>
 #include <KDBusService>
@@ -55,7 +53,7 @@ int main(int argc, char* argv[])
                          QStringLiteral(KALARM_FULL_VERSION),
                          i18n("Personal alarm message, command and email scheduler by KDE"),
                          KAboutLicense::GPL,
-                         ki18n("Copyright 2001-%1, David Jarvie").subs(2020).toString(), QString(),
+                         ki18n("Copyright 2001-%1, David Jarvie").subs(QStringLiteral("2020")).toString(), QString(),
                          QStringLiteral("http://www.astrojar.org.uk/kalarm"));
     aboutData.addAuthor(i18n("David Jarvie"), i18n("Author"), QStringLiteral("djarvie@kde.org"));
     aboutData.setOrganizationDomain("kde.org");
@@ -84,21 +82,5 @@ int main(int argc, char* argv[])
     app->restoreSession();
     return app->exec();
 }
-
-namespace KAlarm
-{
-
-/******************************************************************************
-* Return the current KAlarm version number.
-*/
-int Version()
-{
-    static int version = 0;
-    if (!version)
-        version = KAlarmCal::getVersionNumber(QStringLiteral(KALARM_VERSION));
-    return version;
-}
-
-} // namespace KAlarm
 
 // vim: et sw=4:

@@ -1,7 +1,7 @@
 /*
  *  kalarm.h  -  global header file
  *  Program:  kalarm
- *  Copyright © 2001-2019 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2020 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -21,17 +21,17 @@
 #ifndef KALARM_H
 #define KALARM_H
 
-#define VERSION_SUFFIX ""
-#define KALARM_VERSION VERSION VERSION_SUFFIX
+#include "config-kalarm.h"
+#if FILE_RESOURCES
+#define VERSION_SUFFIX "F"
+#else
+#define VERSION_SUFFIX "A"
+#endif
+#define KALARM_VERSION       VERSION VERSION_SUFFIX
+#define KALARM_FULL_VERSION  KALARM_VERSION " (KDE Apps " RELEASE_SERVICE_VERSION ")"
 
 #define KALARM_NAME "KAlarm"
 #define KALARM_DBUS_SERVICE  "org.kde.kalarm"  // D-Bus service name of KAlarm application
-
-namespace KAlarm
-{
-/** Return current KAlarm version number as an integer. */
-int Version();
-}
 
 #endif // KALARM_H
 

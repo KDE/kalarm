@@ -21,8 +21,6 @@
 #ifndef TEMPLATELISTVIEW_H
 #define TEMPLATELISTVIEW_H
 
-#include "kalarm.h"
-
 #include "eventlistview.h"
 
 
