@@ -1,7 +1,7 @@
 /*
  *  prefdlg.h  -  program preferences dialog
  *  Program:  kalarm
- *  Copyright © 2001-2013 David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2020 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -35,45 +35,50 @@ class StackedScrollGroup;
 // The Preferences dialog
 class KAlarmPrefDlg : public KPageDialog
 {
-        Q_OBJECT
-    public:
-        static void display();
-        ~KAlarmPrefDlg();
-        QSize minimumSizeHint() const override;
+    Q_OBJECT
+public:
+    static void display();
+    ~KAlarmPrefDlg();
+    QSize minimumSizeHint() const override;
 
-        MiscPrefTab*       mMiscPage;
-        TimePrefTab*       mTimePage;
-        StorePrefTab*      mStorePage;
-        EditPrefTab*       mEditPage;
-        EmailPrefTab*      mEmailPage;
-        ViewPrefTab*       mViewPage;
+protected:
+    void showEvent(QShowEvent*) override;
+    void resizeEvent(QResizeEvent*) override;
 
-        KPageWidgetItem*   mMiscPageItem;
-        KPageWidgetItem*   mTimePageItem;
-        KPageWidgetItem*   mStorePageItem;
-        KPageWidgetItem*   mEditPageItem;
-        KPageWidgetItem*   mEmailPageItem;
-        KPageWidgetItem*   mViewPageItem;
+protected Q_SLOTS:
+    virtual void slotOk();
+    virtual void slotApply();
+    virtual void slotHelp();
+    virtual void slotDefault();
+    virtual void slotCancel();
+    void         slotTabChanged(KPageWidgetItem*);
 
-    protected:
-        void         showEvent(QShowEvent*) override;
-        void         resizeEvent(QResizeEvent*) override;
+private:
+    KAlarmPrefDlg();
+    void restore(bool defaults);
+    void restoreTab();
 
-    protected Q_SLOTS:
-        virtual void slotOk();
-        virtual void slotApply();
-        virtual void slotHelp();
-        virtual void slotDefault();
-        virtual void slotCancel();
+    static KAlarmPrefDlg* mInstance;
+    enum TabType { AnyTab, Misc, Time, Store, Edit, Email, View };
+    static TabType        mLastTab;
+    StackedScrollGroup* mTabScrollGroup;
 
-    private:
-        KAlarmPrefDlg();
-        void         restore(bool defaults);
+    MiscPrefTab*        mMiscPage;
+    TimePrefTab*        mTimePage;
+    StorePrefTab*       mStorePage;
+    EditPrefTab*        mEditPage;
+    EmailPrefTab*       mEmailPage;
+    ViewPrefTab*        mViewPage;
 
-        static KAlarmPrefDlg* mInstance;
-        StackedScrollGroup*   mTabScrollGroup;
-        bool                  mShown {false};
-        bool                  mValid;
+    KPageWidgetItem*    mMiscPageItem;
+    KPageWidgetItem*    mTimePageItem;
+    KPageWidgetItem*    mStorePageItem;
+    KPageWidgetItem*    mEditPageItem;
+    KPageWidgetItem*    mEmailPageItem;
+    KPageWidgetItem*    mViewPageItem;
+
+    bool                mShown {false};
+    bool                mValid;
 };
 
 #endif // PREFDLG_H

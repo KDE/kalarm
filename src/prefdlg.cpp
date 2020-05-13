@@ -1,7 +1,7 @@
 /*
  *  prefdlg.cpp  -  program preferences dialog
  *  Program:  kalarm
- *  Copyright © 2001-2019 David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2020 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -115,7 +115,8 @@ static QString xtermCommands[] = {
 = Class KAlarmPrefDlg
 =============================================================================*/
 
-KAlarmPrefDlg* KAlarmPrefDlg::mInstance = nullptr;
+KAlarmPrefDlg*         KAlarmPrefDlg::mInstance = nullptr;
+KAlarmPrefDlg::TabType KAlarmPrefDlg::mLastTab  = AnyTab;
 
 void KAlarmPrefDlg::display()
 {
@@ -125,10 +126,12 @@ void KAlarmPrefDlg::display()
         QSize s;
         if (Config::readWindowSize(PREF_DIALOG_NAME, s))
             mInstance->resize(s);
+        mInstance->restoreTab();
         mInstance->show();
     }
     else
     {
+        mInstance->restoreTab();
 #if KDEPIM_HAVE_X11
         KWindowInfo info = KWindowInfo(mInstance->winId(), NET::WMGeometry | NET::WMDesktop);
         KWindowSystem::setCurrentDesktop(info.desktop());
@@ -190,6 +193,7 @@ KAlarmPrefDlg::KAlarmPrefDlg()
     connect(button(QDialogButtonBox::Apply), &QAbstractButton::clicked, this, &KAlarmPrefDlg::slotApply);
     connect(button(QDialogButtonBox::RestoreDefaults), &QAbstractButton::clicked, this, &KAlarmPrefDlg::slotDefault);
     connect(button(QDialogButtonBox::Help), &QAbstractButton::clicked, this, &KAlarmPrefDlg::slotHelp);
+    connect(this, &KPageDialog::currentPageChanged, this, &KAlarmPrefDlg::slotTabChanged);
     restore(false);
     adjustSize();
 }
@@ -334,6 +338,39 @@ void KAlarmPrefDlg::resizeEvent(QResizeEvent* re)
     if (isVisible())
         Config::writeWindowSize(PREF_DIALOG_NAME, re->size());
     KPageDialog::resizeEvent(re);
+}
+
+/******************************************************************************
+* Called when a new tab is selected, to note which one it is.
+*/
+void KAlarmPrefDlg::slotTabChanged(KPageWidgetItem* item)
+{
+    mLastTab = (item == mMiscPageItem)  ? Misc
+             : (item == mTimePageItem)  ? Time
+             : (item == mStorePageItem) ? Store
+             : (item == mEditPageItem)  ? Edit
+             : (item == mEmailPageItem) ? Email
+             : (item == mViewPageItem)  ? View : AnyTab;
+}
+
+/******************************************************************************
+* Selects the tab noted in mLastTab.
+*/
+void KAlarmPrefDlg::restoreTab()
+{
+    KPageWidgetItem* item = nullptr;
+    switch (mLastTab)
+    {
+        case Misc:   item = mMiscPageItem;   break;
+        case Time:   item = mTimePageItem;   break;
+        case Store:  item = mStorePageItem;  break;
+        case Edit:   item = mEditPageItem;   break;
+        case Email:  item = mEmailPageItem;  break;
+        case View:   item = mViewPageItem;   break;
+        default:
+            return;
+    }
+    setCurrentPage(item);
 }
 
 
