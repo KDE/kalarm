@@ -65,8 +65,7 @@ class KAlarmApp : public QApplication
         bool               wantShowInSystemTray() const;
         bool               alarmsEnabled() const           { return mAlarmsEnabled; }
         bool               korganizerEnabled() const       { return mKOrganizerEnabled; }
-        int                activate(const QStringList& args, const QString& workingDirectory, QString& outputText)
-                                                           { return activateInstance(args, workingDirectory, &outputText); }
+        int                activateInstance(const QStringList& args, const QString& workingDirectory, QString* outputText = nullptr);
         bool               restoreSession();
         bool               quitIf()                        { return quitIf(0); }
         void               doQuit(QWidget* parent);
@@ -89,7 +88,7 @@ class KAlarmApp : public QApplication
         void               setSpreadWindowsState(bool spread);
         bool               windowFocusBroken() const;
         bool               needWindowFocusFix() const;
-        // Methods called indirectly by the DCOP interface
+        // Methods called indirectly by the D-Bus interface
         bool               scheduleEvent(KAEvent::SubAction, const QString& text, const KADateTime&,
                                          int lateCancel, KAEvent::Flags flags, const QColor& bg, const QColor& fg,
                                          const QFont&, const QString& audioFile, float audioVolume,
@@ -103,7 +102,8 @@ class KAlarmApp : public QApplication
         QString            dbusList();
 
     public Q_SLOTS:
-        void               activateByDBus(const QStringList& args, const QString& workingDirectory);
+        void               activateByDBus(const QStringList& args, const QString& workingDirectory)
+                                            { activateInstance(args, workingDirectory); }
         void               processQueue();
         void               setAlarmsEnabled(bool);
         void               purgeNewArchivedDefault(const Resource&);
@@ -114,6 +114,7 @@ class KAlarmApp : public QApplication
         void               emailSent(KAMail::JobData&, const QStringList& errmsgs, bool copyerr = false);
 
     Q_SIGNALS:
+        void               setExitValue(int);   // set exit code for duplicate application instances
         void               trayIconToggled();
         void               alarmEnabledToggled(bool);
         void               audioPlaying(bool);
@@ -193,7 +194,6 @@ class KAlarmApp : public QApplication
 
         KAlarmApp(int& argc, char** argv);
         bool               initialiseTimerResources();
-        int                activateInstance(const QStringList& args, const QString& workingDirectory, QString* outputText);
         bool               initCheck(bool calendarOnly = false);
         bool               quitIf(int exitCode, bool force = false);
         void               createOnlyMainWindow();
@@ -230,7 +230,7 @@ class KAlarmApp : public QApplication
         bool               mQuitting {false};       // a forced quit is in progress
         bool               mReadOnly {false};       // only read-only access to calendars is needed
         QString            mActivateArg0;           // activate()'s first arg the first time it was called
-        DBusHandler*       mDBusHandler;            // the parent of the main DCOP receiver object
+        DBusHandler*       mDBusHandler;            // the parent of the main D-Bus receiver object
         TrayWindow*        mTrayWindow {nullptr};   // active system tray icon
         QTimer*            mAlarmTimer {nullptr};   // activates KAlarm when next alarm is due
         QColor             mPrefsArchivedColour;    // archived alarms text colour
@@ -241,7 +241,7 @@ class KAlarmApp : public QApplication
         QQueue<ActionQEntry> mActionQueue;          // queued commands and actions
         int                mEditingCmdLineAlarm {0}; // whether currently editing alarm specified on command line
         int                mPendingQuitCode;        // exit code for a pending quit
-        bool               mPendingQuit {false};    // quit once the DCOP command and shell command queues have been processed
+        bool               mPendingQuit {false};    // quit once the D-Bus command and shell command queues have been processed
         bool               mCancelRtcWake {false};   // cancel RTC wake on quitting
         bool               mProcessingQueue {false}; // a mActionQueue entry is currently being processed
         bool               mNoSystemTray;           // no system tray exists
