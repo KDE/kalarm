@@ -784,7 +784,7 @@ bool importAlarms(Resource& resource, QWidget* parent)
                                                 parent,
                                                 i18nc("@title:window", "Import Calendar Files"),
                                                 lastImportUrl,
-                                                QStringLiteral("%1 (*.ics *.vcs)").arg(i18nc("@info", "Calendar Files")));
+                                                QStringLiteral("%1 (*.ics *.vcs);;%2 (*)").arg(i18nc("@item:inlistbox File type selection filter", "Calendar Files")).arg(i18nc("@item:inlistbox File type selection filter", "All Files")));
     if (urls.isEmpty())
         return false;
     lastImportUrl = urls[0].adjusted(QUrl::RemoveFilename);
@@ -836,7 +836,7 @@ bool exportAlarms(const KAEvent::List& events, QWidget* parent)
 {
     bool append;
     QString file = FileDialog::getSaveFileName(lastExportUrl,
-                                               QStringLiteral("*.ics|%1").arg(i18nc("@info", "Calendar Files")),
+                                               QStringLiteral("*.ics|%1").arg(i18nc("@item:inlistbox File type selection filter", "Calendar Files")),
                                                parent, i18nc("@title:window", "Choose Export Calendar"),
                                                &append);
     if (file.isEmpty())
