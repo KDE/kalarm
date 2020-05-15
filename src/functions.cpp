@@ -784,7 +784,7 @@ bool importAlarms(Resource& resource, QWidget* parent)
                                                 parent,
                                                 i18nc("@title:window", "Import Calendar Files"),
                                                 lastImportUrl,
-                                                QStringLiteral("%1 (*.ics *.vcs);;%2 (*)").arg(i18nc("@item:inlistbox File type selection filter", "Calendar Files")).arg(i18nc("@item:inlistbox File type selection filter", "All Files")));
+                                                QStringLiteral("%1 (*.ics *.vcs);;%2 (*[^~])").arg(i18nc("@item:inlistbox File type selection filter", "Calendar files")).arg(i18nc("@item:inlistbox File type selection filter", "All files except backup files")));
     if (urls.isEmpty())
         return false;
     lastImportUrl = urls[0].adjusted(QUrl::RemoveFilename);
