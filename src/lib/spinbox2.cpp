@@ -679,9 +679,9 @@ void SpinMirror::wheelEvent(QWheelEvent* e)
     if (mReadOnly)
         return;
 #if QT_VERSION < QT_VERSION_CHECK(5, 14, 0)
-    QPointF pt = e->position();
-#else
     QPointF pt = e->posF();
+#else
+    QPointF pt = e->position();
 #endif
     QGraphicsItem* item = scene()->itemAt(pt, QTransform());
     if (item == mButtons)
