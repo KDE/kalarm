@@ -68,6 +68,7 @@ using namespace KCalendarCore;
 #include <KJobWidgets>
 #include <KIO/StatJob>
 #include <KIO/StoredTransferJob>
+#include <KFileCustomDialog>
 
 #include <QAction>
 #include <QDBusConnectionInterface>
@@ -75,7 +76,6 @@ using namespace KCalendarCore;
 #include <QTimer>
 #include <qglobal.h>
 #include <QStandardPaths>
-#include <QFileDialog>
 #include <QPushButton>
 #include <QTemporaryFile>
 
@@ -780,11 +780,23 @@ QVector<KAEvent> getSortedActiveEvents(QObject* parent, AlarmListModel** model)
 bool importAlarms(Resource& resource, QWidget* parent)
 {
     qCDebug(KALARM_LOG) << "KAlarm::importAlarms" << resource.displayId();
-    const QList<QUrl> urls = QFileDialog::getOpenFileUrls(
-                                                parent,
-                                                i18nc("@title:window", "Import Calendar Files"),
-                                                lastImportUrl,
-                                                QStringLiteral("%1 (*.ics *.vcs);;%2 (*[^~])").arg(i18nc("@item:inlistbox File type selection filter", "Calendar files")).arg(i18nc("@item:inlistbox File type selection filter", "All files except backup files")));
+    // Use KFileCustomDialog to allow files' mime types to be determined by
+    // both file name and content, instead of QFileDialog which only looks at
+    // files' names. This is needed in particular when importing an old KAlarm
+    // calendar directory, in order to list the calendar files within it, since
+    // each calendar file name is simply the UID of the event within it, without
+    // a .ics extension.
+    AutoQPointer<KFileCustomDialog> dlg = new KFileCustomDialog(lastImportUrl, parent);
+    dlg->setWindowTitle(i18nc("@title:window", "Import Calendar Files"));
+    KFileWidget* widget = dlg->fileWidget();
+    widget->setOperationMode(KFileWidget::Opening);
+    widget->setMode(KFile::Files | KFile::ExistingOnly);
+    widget->setMimeFilter({QStringLiteral("text/calendar")});
+    dlg->setWindowModality(Qt::WindowModal);
+    dlg->exec();
+    if (!dlg)
+        return false;
+    const QList<QUrl> urls = widget->selectedUrls();
     if (urls.isEmpty())
         return false;
     lastImportUrl = urls[0].adjusted(QUrl::RemoveFilename);
