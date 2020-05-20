@@ -187,6 +187,9 @@ public:
     /** Called by a resource to notify that it is about to delete events. */
     static void notifyEventsToBeRemoved(ResourceType*, const QList<KAEvent>&);
 
+    /** Called by a resource to notify that it has deleted events. */
+    static void notifyEventsRemoved(ResourceType*, const QList<KAEvent>&);
+
 Q_SIGNALS:
     /** Emitted when a resource's settings have changed. */
     void settingsChanged(Resource&, ResourceType::Changes);
@@ -237,6 +240,11 @@ Q_SIGNALS:
      *  Events are only notified whose alarm type is enabled.
      */
     void eventsToBeRemoved(Resource&, const QList<KAEvent>&);
+
+    /** Emitted when events have been deleted from a resource.
+     *  Events are only notified whose alarm type is enabled.
+     */
+    void eventsRemoved(Resource&, const QList<KAEvent>&);
 
 private:
     Resources();
