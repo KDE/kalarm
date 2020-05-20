@@ -42,12 +42,12 @@ EventListModel::EventListModel(CalEvent::Types types, QObject* parent)
     setSourceModel(new KDescendantsProxyModel(this));
     setSortRole(ResourceDataModelBase::SortRole);
     setDynamicSortFilter(true);
-    connect(sourceModel(), &QAbstractItemModel::rowsInserted, this, &EventListModel::slotRowsInserted);
-    connect(sourceModel(), &QAbstractItemModel::rowsRemoved, this, &EventListModel::slotRowsRemoved);
-    connect(Resources::instance(), &Resources::resourcePopulated,
-                             this, &EventListModel::slotResourcePopulated);
-    connect(Resources::instance(), &Resources::settingsChanged,
-                             this, &EventListModel::resourceSettingsChanged);
+
+    Resources* resources = Resources::instance();
+    connect(resources, &Resources::eventsAdded,       this, &EventListModel::slotRowsInserted);
+    connect(resources, &Resources::eventsRemoved,     this, &EventListModel::slotRowsRemoved);
+    connect(resources, &Resources::resourcePopulated, this, &EventListModel::slotResourcePopulated);
+    connect(resources, &Resources::settingsChanged,   this, &EventListModel::resourceSettingsChanged);
 }
 
 /******************************************************************************
@@ -174,21 +174,23 @@ void EventListModel::slotResourcePopulated(Resource& resource)
         return;    // the resource isn't included in this model
 
     invalidate();
-
-    // Note that during initialisation, rows are inserted into the source model
-    // before they are added to the Resource. Until they have been added to the
-    // Resource, they will be filtered out by filterAcceptsRow() (and therefore
-    // omitted by rowCount()), because Resource::event(eventId) will not find
-    // them. The resourcePopulated() signal is emitted once they have been
-    // added to the Resource, so we need to re-process them now.
-    slotRowsInserted();
 }
 
 /******************************************************************************
 * Called when rows have been inserted into the model.
+*
+* Note that during initialisation, rows are inserted into the source model
+* before they are added to the Resource. Until they have been added to the
+* Resource, they will be filtered out by filterAcceptsRow() (and therefore
+* omitted by rowCount()), because Resource::event(eventId) will not find them.
+* This method is called when the eventsAdded() signal indicates that they have
+* now been added to the Resource.
 */
-void EventListModel::slotRowsInserted()
+void EventListModel::slotRowsInserted(Resource& resource)
 {
+    if (!(resource.enabledTypes() & mAlarmTypes))
+        return;    // the resource isn't included in this model
+
     if (!mHaveEvents  &&  rowCount())
     {
         mHaveEvents = true;
@@ -199,8 +201,11 @@ void EventListModel::slotRowsInserted()
 /******************************************************************************
 * Called when rows have been deleted from the model.
 */
-void EventListModel::slotRowsRemoved()
+void EventListModel::slotRowsRemoved(Resource& resource)
 {
+    if (!(resource.enabledTypes() & mAlarmTypes))
+        return;    // the resource isn't included in this model
+
     if (mHaveEvents  &&  !rowCount())
     {
         mHaveEvents = false;

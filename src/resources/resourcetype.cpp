@@ -209,9 +209,12 @@ void ResourceType::setLoadedEvents(QHash<QString, KAEvent>& newEvents)
     }
 
     // Delete events which no longer exist.
-    Resources::notifyEventsToBeRemoved(this, eventsToNotifyDelete);
+    if (!eventsToNotifyDelete.isEmpty())
+        Resources::notifyEventsToBeRemoved(this, eventsToNotifyDelete);
     for (const QString& id : qAsConst(eventsToDelete))
         mEvents.remove(id);
+    if (!eventsToNotifyDelete.isEmpty())
+        Resources::notifyEventsRemoved(this, eventsToNotifyDelete);
 
     // Add new events.
     for (auto newit = newEvents.begin();  newit != newEvents.end(); )
@@ -222,7 +225,8 @@ void ResourceType::setLoadedEvents(QHash<QString, KAEvent>& newEvents)
         else
             newit = newEvents.erase(newit);   // remove disabled event from notification list
     }
-    Resources::notifyEventsAdded(this, newEvents.values());
+    if (!newEvents.isEmpty())
+        Resources::notifyEventsAdded(this, newEvents.values());
 
     newEvents.clear();
     setLoaded(true);
@@ -302,6 +306,8 @@ void ResourceType::setDeletedEvents(const QList<KAEvent>& events)
         Resources::notifyEventsToBeRemoved(this, eventsToNotify);
     for (const QString& id : eventsToDelete)
         mEvents.remove(id);
+    if (!eventsToNotify.isEmpty())
+        Resources::notifyEventsRemoved(this, eventsToNotify);
 }
 
 void ResourceType::setLoaded(bool loaded) const

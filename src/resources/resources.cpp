@@ -549,6 +549,16 @@ void Resources::notifyEventsToBeRemoved(ResourceType* res, const QList<KAEvent>&
     }
 }
 
+void Resources::notifyEventsRemoved(ResourceType* res, const QList<KAEvent>& events)
+{
+    if (res)
+    {
+        Resource r = resource(res->id());
+        if (r.isValid())
+            Q_EMIT instance()->eventsRemoved(r, events);
+    }
+}
+
 bool Resources::addResource(ResourceType* instance, Resource& resource)
 {
     if (!instance  ||  instance->id() < 0)

@@ -97,8 +97,8 @@ protected:
 
 private Q_SLOTS:
     void slotResourcePopulated(Resource&);
-    void slotRowsInserted();
-    void slotRowsRemoved();
+    void slotRowsInserted(Resource&);
+    void slotRowsRemoved(Resource&);
     void resourceSettingsChanged(Resource&, ResourceType::Changes);
 
 private:
