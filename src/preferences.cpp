@@ -1,7 +1,7 @@
 /*
  *  preferences.cpp  -  program preference settings
  *  Program:  kalarm
- *  Copyright © 2001-2019 David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2020 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -154,6 +154,7 @@ void Preferences::setNoAutoStart(bool yes)
     // Find the existing kalarm.autostart.desktop file, and whether it's writable.
     bool existingRO = true;   // whether the existing file is read-only
     QString autostartFile;
+    QString configDirRW;
     const QStringList autostartDirs = QStandardPaths::standardLocations(QStandardPaths::GenericConfigLocation);
     for (const QString& dir : autostartDirs)
     {
@@ -165,6 +166,8 @@ void Preferences::setNoAutoStart(bool yes)
             {
                 autostartFile = file;
                 existingRO = !info.isWritable();
+                if (!existingRO)
+                    configDirRW = dir;
                 break;
             }
         }
@@ -172,7 +175,6 @@ void Preferences::setNoAutoStart(bool yes)
 
     // If the existing file isn't writable, find the path to create a writable copy
     QString autostartFileRW = autostartFile;
-    QString configDirRW;
     if (existingRO)
     {
         configDirRW = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation);
