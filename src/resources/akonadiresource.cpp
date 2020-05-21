@@ -803,7 +803,7 @@ void AkonadiResource::itemJobDone(KJob* j)
         mPendingItemJobs.erase(it);
     }
     const QByteArray jobClass = j->metaObject()->className();
-    qCDebug(KALARM_LOG) << "AkonadiResource::itemJobDone:" << jobClass;
+    qCDebug(KALARM_LOG) << "AkonadiResource::itemJobDone:" << jobClass << "Item id:" << itemId;
     if (j->error())
     {
         QString errMsg;

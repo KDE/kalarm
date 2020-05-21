@@ -37,6 +37,7 @@
 #include <KMessageBox>
 
 #include <QFile>
+#include <QSaveFile>
 #include <QDir>
 #include <QStandardPaths>
 
@@ -247,7 +248,7 @@ void Preferences::setNoAutoStart(bool yes)
                 return;
             }
         }
-        QFile file(autostartFileRW);
+        QSaveFile file(autostartFileRW);
         if (!file.open(QIODevice::WriteOnly))
         {
             qCWarning(KALARM_LOG) << "Preferences::setNoAutoStart: Error writing autostart file:" << autostartFileRW;
@@ -256,6 +257,11 @@ void Preferences::setNoAutoStart(bool yes)
         QTextStream stream(&file);
         stream.setCodec("UTF-8");
         stream << lines.join(QLatin1Char('\n')) << "\n";
+        if (!file.commit())   // save the file
+        {
+            qCWarning(KALARM_LOG) << "Preferences::setNoAutoStart: Error writing autostart file:" << autostartFileRW;
+            return;
+        }
         qCDebug(KALARM_LOG) << "Preferences::setNoAutoStart: Written" << autostartFileRW;
     }
 
