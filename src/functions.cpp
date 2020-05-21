@@ -69,6 +69,7 @@ using namespace KCalendarCore;
 #include <KIO/StatJob>
 #include <KIO/StoredTransferJob>
 #include <KFileCustomDialog>
+#include <KWindowInfo>
 
 #include <QAction>
 #include <QDBusConnectionInterface>
@@ -160,8 +161,15 @@ MainWindow* displayMainWindowSelected(const QString& eventId)
     else
     {
         // There is already a main window, so make it the active window
-#pragma message("Don't hide unless necessary, since it moves the window")
-        win->hide();        // in case it's on a different desktop
+        KWindowInfo wi(win->winId(), NET::WMDesktop);
+        if (!wi.valid()  ||  !wi.isOnDesktop(KWindowSystem::currentDesktop()))
+        {
+            // The main window isn't on the current desktop. Hide it first so
+            // that it will be shown on the current desktop when it is shown
+            // again. Note that this shifts the window's position, so don't
+            // hide it if it's already on the current desktop.
+            win->hide();
+        }
         win->setWindowState(win->windowState() & ~Qt::WindowMinimized);
         win->show();
         win->raise();
