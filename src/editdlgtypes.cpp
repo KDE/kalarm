@@ -982,10 +982,13 @@ bool EditCommandAlarmDlg::type_validate(bool trial)
     }
     else if (mCmdOutputGroup->checkedButton() == mCmdExecInTerm)
     {
-        if (KAMessageBox::warningContinueCancel(this, xi18nc("@info", "<para>No terminal is selected for command alarms.</para>"
-                                                             "<para>Please set it in the <application>KAlarm</application> Configuration dialog.</para>"))
-                != KMessageBox::Continue)
-            return false;
+        if (Preferences::cmdXTermCommand().isEmpty())
+        {
+            if (KAMessageBox::warningContinueCancel(this, xi18nc("@info", "<para>No terminal is selected for command alarms.</para>"
+                                                                 "<para>Please set it in the <application>KAlarm</application> Configuration dialog.</para>"))
+                    != KMessageBox::Continue)
+                return false;
+        }
     }
     return true;
 }

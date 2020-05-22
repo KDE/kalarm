@@ -107,6 +107,7 @@ static QString xtermCommands[] = {
     QStringLiteral("eterm --pause -T %t -e %C"),    // some systems use eterm...
     QStringLiteral("Eterm --pause -T %t -e %C"),    // while some use Eterm
     QStringLiteral("rxvt -title %t -e ${SHELL:-sh} -c %w"),
+    QStringLiteral("xfce4-terminal -T %t -H -e %c"),
     QString()       // end of list indicator - don't change!
 };
 
