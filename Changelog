@@ -7,9 +7,10 @@ KAlarm Change Log
 + Return to last used tab in Configuration dialogue when it is reopened.
 + Refactor AlarmCalendar to split out resources and display calendars.
 
-=== Version 2.14.2 (KDE Applications 20.04.2) --- 21 May 2020 ===
+=== Version 2.14.2 (KDE Applications 20.04.2) --- 22 May 2020 ===
 + Make multiple KAlarm invocations work (Qt >5.12, Frameworks >5.60) [KDE Bug 417108]
 + Fix failure to set no-autostart for non-KDE desktops, if a writable autostart file exists.
+* Fix failure to execute command alarms in a terminal window.
 
 === Version 2.14.1 (KDE Applications 20.04.1) --- 11 May 2020 ===
 + Correctly interpret resource IDs in command line and DBus calls.
