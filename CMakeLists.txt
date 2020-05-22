@@ -62,7 +62,7 @@ set(LIBKDEPIM_LIB_VERSION_LIB "5.14.40")
 set(KCALENDARCORE_LIB_VERSION "5.14.40")
 set(CALENDARUTILS_LIB_VERSION "5.14.40")
 
-option(FILE_RESOURCES "Use file system resources instead of Akonadi resources." FALSE)
+option(FILE_RESOURCES "Use file system resources instead of Akonadi resources." TRUE)
 
 # Find KF5 package
 find_package(KF5Auth ${KF5_MIN_VERSION} CONFIG REQUIRED)
