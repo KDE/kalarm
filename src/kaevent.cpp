@@ -253,8 +253,8 @@ public:
     QString            mTemplateName;      // alarm template's name, or null if normal event
     QMap<QByteArray, QString> mCustomProperties; // KCalendarCore::Event's non-KAlarm custom properties
     Akonadi::Item::Id  mItemId{-1};        // Akonadi::Item ID for this event
-    mutable ResourceId mResourceId{-1};    // ID of collection containing the event, or for a displaying event,
-    // saved collection ID (not the collection the event is in)
+    mutable ResourceId mResourceId{-1};    // ID of resource containing the event, or for a displaying event,
+                                           // saved resource ID (not the resource the event is in)
     QString            mText;              // message text, file URL, command, email body [or audio file for KAAlarm]
     QString            mAudioFile;         // ATTACH: audio file to play
     QString            mPreAction;         // command to execute before alarm is displayed
@@ -591,7 +591,7 @@ KAEventPrivate::KAEventPrivate(const KCalendarCore::Event::Ptr &event)
         if (n) {
             const qlonglong id = params[0].toLongLong(&ok);
             if (ok) {
-                mResourceId = id;    // original collection ID which contained the event
+                mResourceId = id;    // original resource ID which contained the event
             }
             for (int i = 1;  i < n;  ++i) {
                 if (params[i] == DISP_DEFER) {
@@ -1134,7 +1134,7 @@ bool KAEventPrivate::updateKCalEvent(const Event::Ptr &ev, KAEvent::UidAction ui
 
     QString param;
     if (mCategory == CalEvent::DISPLAYING) {
-        param = QString::number(mResourceId);   // original collection ID which contained the event
+        param = QString::number(mResourceId);   // original resource ID which contained the event
         if (mDisplayingDefer) {
             param += SC + DISP_DEFER;
         }
@@ -1697,7 +1697,7 @@ void KAEvent::setResourceId_const(ResourceId id) const
 
 ResourceId KAEvent::resourceId() const
 {
-    // A displaying alarm contains the event's original collection ID
+    // A displaying alarm contains the event's original resource ID
     return d->mDisplaying ? -1 : d->mResourceId;
 }
 
@@ -3302,7 +3302,7 @@ bool KAEventPrivate::setDisplaying(const KAEventPrivate &event, KAAlarm::Type al
             // Change the event ID to avoid duplicating the same unique ID as the original event
             setCategory(CalEvent::DISPLAYING);
             mItemId             = -1;    // the display event doesn't have an associated Item
-            mResourceId         = resourceId;  // original collection ID which contained the event
+            mResourceId         = resourceId;  // original resource ID which contained the event
             mDisplayingDefer    = showDefer;
             mDisplayingEdit     = showEdit;
             mDisplaying         = true;
