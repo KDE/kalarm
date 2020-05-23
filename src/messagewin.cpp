@@ -2031,6 +2031,8 @@ void MessageWin::slotEdit()
     qCDebug(KALARM_LOG) << "MessageWin::slotEdit";
     MainWindow* mainWin = MainWindow::mainMainWindow();
     mEditDlg = EditAlarmDlg::create(false, &mOriginalEvent, false, mainWin, EditAlarmDlg::RES_IGNORE);
+    if (!mEditDlg)
+        return;
     mEditDlg->setAttribute(Qt::WA_NativeWindow, true);
     KWindowSystem::setMainWindow(mEditDlg->windowHandle(), winId());
     KWindowSystem::setOnAllDesktops(mEditDlg->winId(), false);

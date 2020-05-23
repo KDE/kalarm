@@ -467,6 +467,11 @@ int KAlarmApp::activateInstance(const QStringList& args, const QString& workingD
                 else
                 {
                     EditAlarmDlg* editDlg = EditAlarmDlg::create(false, options->editType(), MainWindow::mainMainWindow());
+                    if (!editDlg)
+                    {
+                        exitCode = 1;
+                        break;
+                    }
                     if (options->alarmTime().isValid())
                         editDlg->setTime(options->alarmTime());
                     if (options->recurrence())
