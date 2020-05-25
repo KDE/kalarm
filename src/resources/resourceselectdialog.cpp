@@ -45,7 +45,7 @@ ResourceSelectDialog::ResourceSelectDialog(ResourceListModel* model, QWidget* pa
 
     QLineEdit* filterEdit = new QLineEdit(this);
     filterEdit->setClearButtonEnabled(true);
-    filterEdit->setPlaceholderText(xi18nc("@info A prompt for user to enter what to search for", "<placeholder>Search</placeholder>"));
+    filterEdit->setPlaceholderText(i18nc("@info A prompt for user to enter what to search for", "Search"));
     layout->addWidget(filterEdit);
 
     mResourceList = new QListView(this);
