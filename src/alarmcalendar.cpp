@@ -653,6 +653,7 @@ bool ResourcesCalendar::addEvent(KAEvent& evnt, QWidget* promptParent, bool useE
         remove = ok;   // if success, delete the local event instance on exit
         if (ok  &&  type == CalEvent::ACTIVE  &&  !event->enabled())
             checkForDisabledAlarms(true, false);
+        event->setResourceId(res.id());
     }
     if (!ok)
     {
@@ -922,7 +923,6 @@ CalEvent::Type ResourcesCalendar::deleteEventInternal(const QString& eventID, co
     const QString id = eventID;
     const KAEvent paramEvent = event;
 
-
     const ResourceId key = resource.id();
     KAEvent* ev = deleteEventBase(eventID, resource);
     if (ev)
@@ -943,11 +943,10 @@ CalEvent::Type ResourcesCalendar::deleteEventInternal(const QString& eventID, co
         }
     }
 
-
     CalEvent::Type status = CalEvent::EMPTY;
     if (deleteFromResources)
     {
-        // Delete from the resources calendar
+        // Delete from the resource.
         CalEvent::Type s = paramEvent.category();
         if (resource.deleteEvent(paramEvent))
             status = s;
