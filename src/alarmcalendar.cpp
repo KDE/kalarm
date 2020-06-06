@@ -987,6 +987,7 @@ bool AlarmCalendar::addEvent(KAEvent& evnt, QWidget* promptParent, bool useEvent
             remove = ok;   // if success, delete the local event instance on exit
             if (ok  &&  type == CalEvent::ACTIVE  &&  !event->enabled())
                 checkForDisabledAlarms(true, false);
+            event->setResourceId(res.id());
         }
     }
     else
@@ -1255,7 +1256,7 @@ CalEvent::Type AlarmCalendar::deleteEventInternal(const QString& eventID, const 
     }
     else if (deleteFromResources)
     {
-        // Delete from the resources calendar
+        // Delete from the resource.
         CalEvent::Type s = paramEvent.category();
         if (resource.deleteEvent(paramEvent))
             status = s;
