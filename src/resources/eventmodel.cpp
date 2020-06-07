@@ -26,12 +26,7 @@
 #include "lib/messagebox.h"
 #include "kalarm_debug.h"
 
-#include <KLocalizedString>
 
-#include <QApplication>
-#include <QMouseEvent>
-#include <QHelpEvent>
-#include <QToolTip>
 
 /*============================================================================*/
 

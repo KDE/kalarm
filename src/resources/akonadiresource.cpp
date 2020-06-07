@@ -43,7 +43,6 @@ using namespace Akonadi;
 
 #include <KLocalizedString>
 
-#include <QFileInfo>
 
 namespace
 {

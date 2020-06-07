@@ -27,7 +27,6 @@
 #include "lib/messagebox.h"
 #include "kalarm_debug.h"
 
-#include <KLocalizedString>
 #include <KConfig>
 #include <KConfigGroup>
 

@@ -49,9 +49,7 @@
 #include <KConfigGui>
 #include <KAboutData>
 #include <KSharedConfig>
-#include <KFileItem>
 #include <KStandardGuiItem>
-#include <KServiceTypeTrader>
 #include <netwm.h>
 #include <KShell>
 

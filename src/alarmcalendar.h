@@ -31,7 +31,6 @@
 
 #include <QHash>
 #include <QObject>
-#include <QUrl>
 
 using namespace KAlarmCal;
 

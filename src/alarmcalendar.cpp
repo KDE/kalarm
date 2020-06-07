@@ -36,12 +36,9 @@
 #include <KLocalizedString>
 #include <KIO/StatJob>
 #include <KIO/StoredTransferJob>
-#include <KJobWidgets>
-#include <KFileItem>
 #include <KSharedConfig>
 #include <kio_version.h>
 
-#include <QTemporaryFile>
 #include <QStandardPaths>
 #include <QDir>
 

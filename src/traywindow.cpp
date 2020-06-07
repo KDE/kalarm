@@ -36,19 +36,14 @@
 
 #include <KAlarmCal/AlarmText>
 
-#include <KActionCollection>
-#include <KToggleAction>
 #include <KLocalizedString>
-#include <KMessageBox>
 #include <KStandardAction>
-#include <KStandardGuiItem>
-#include <KConfig>
 #include <KAboutData>
 
-#include <QMenu>
 #include <QList>
 #include <QTimer>
 #include <QLocale>
+#include <QMenu>
 
 #include <stdlib.h>
 #include <limits.h>

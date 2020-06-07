@@ -74,7 +74,6 @@
 #include <QLabel>
 #include <QPalette>
 #include <QTimer>
-#include <QPixmap>
 #include <QByteArray>
 #include <QFrame>
 #include <QGridLayout>

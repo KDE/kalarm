@@ -59,10 +59,8 @@ using namespace KCalendarCore;
 #include <KConfigGroup>
 #include <KSharedConfig>
 #include <KToggleAction>
-#include <KActionCollection>
 #include <KLocalizedString>
 #include <KAuth>
-#include <KStandardGuiItem>
 #include <KStandardShortcut>
 #include <KFileItem>
 #include <KJobWidgets>
@@ -70,6 +68,7 @@ using namespace KCalendarCore;
 #include <KIO/StoredTransferJob>
 #include <KFileCustomDialog>
 #include <KWindowInfo>
+#include <KWindowSystem>
 
 #include <QAction>
 #include <QDBusConnectionInterface>

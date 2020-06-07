@@ -47,7 +47,6 @@
 #include <KConfigGroup>
 
 #include <QStandardPaths>
-#include <QTimer>
 #include <QDirIterator>
 #include <QFileInfo>
 

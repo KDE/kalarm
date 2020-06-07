@@ -28,7 +28,6 @@
 
 #include <KAlarmCal/KAEvent>
 
-#include <QSize>
 #include <QString>
 #include <QVector>
 

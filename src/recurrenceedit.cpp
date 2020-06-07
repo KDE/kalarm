@@ -45,7 +45,6 @@
 using namespace KCalendarCore;
 
 #include <KLocalizedString>
-#include <KMessageBox>
 #include <KDateComboBox>
 
 #include <QHBoxLayout>

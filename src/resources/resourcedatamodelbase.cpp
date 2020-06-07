@@ -31,12 +31,8 @@
 #include <KAlarmCal/KAEvent>
 
 #include <KLocalizedString>
-#include <KColorUtils>
 
 #include <QApplication>
-#include <QModelIndex>
-#include <QUrl>
-#include <QFileInfo>
 #include <QIcon>
 
 namespace

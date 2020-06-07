@@ -40,7 +40,6 @@
 
 #include <KLocalizedString>
 #include <KConfigGroup>
-#include <KMessageBox>
 #include <KStandardAction>
 #include <KActionCollection>
 #include <KDescendantsProxyModel>

@@ -26,10 +26,8 @@
 #include <AkonadiCore/Collection>
 #include <KCalendarCore/FileStorage>
 
-#include <QObject>
 #include <QSharedPointer>
 #include <QHash>
-#include <QList>
 
 class FileResourceSettings;
 

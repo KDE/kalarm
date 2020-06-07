@@ -21,7 +21,6 @@
 #ifndef FUNCTIONS_P_H
 #define FUNCTIONS_P_H
 
-#include <KWindowSystem>
 #include <QObject>
 
 class EditAlarmDlg;

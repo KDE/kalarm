@@ -49,12 +49,8 @@
 #include <AkonadiWidgets/AgentTypeDialog>
 #include <AkonadiWidgets/ControlGui>
 
-#include <KLocalizedString>
-#include <KColorUtils>
 
-#include <QUrl>
 #include <QApplication>
-#include <QFileInfo>
 #include <QTimer>
 
 using namespace Akonadi;
