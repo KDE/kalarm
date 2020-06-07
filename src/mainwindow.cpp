@@ -753,8 +753,15 @@ void MainWindow::slotDelete(bool force)
     else
     {
         // Delete the events from the calendar and displays
-        KAlarm::deleteEvents(events, true, this);
-        Undo::saveDeletes(undos);
+        Resource resource;
+        const KAlarm::UpdateResult status = KAlarm::deleteEvents(events, resource, true, this);
+        if (status.status < KAlarm::UPDATE_FAILED)
+        {
+            // Create the undo list
+            for (int i = status.failed.count();  --i >= 0; )
+                undos.removeAt(status.failed.at(i));
+            Undo::saveDeletes(undos);
+        }
     }
 }
 
@@ -768,17 +775,20 @@ void MainWindow::slotReactivate()
     mListView->clearSelection();
 
     // Add the alarms to the displayed lists and to the calendar file
-    Undo::EventList undos;
-    QVector<EventId> ineligibleIDs;
-    KAlarm::reactivateEvents(events, ineligibleIDs, nullptr, this);
-
-    // Create the undo list, excluding ineligible events
-    for (int i = 0, end = events.count();  i < end;  ++i)
+    Resource resource;   // active alarms resource which alarms are restored to
+    QVector<int> ineligibleIndexes;
+    const KAlarm::UpdateResult status = KAlarm::reactivateEvents(events, ineligibleIndexes, resource, this);
+    if (status.status < KAlarm::UPDATE_FAILED)
     {
-        if (!ineligibleIDs.contains(EventId(events[i])))
-            undos.append(events[i], Resources::resourceForEvent(events[i].id()));
+        // Create the undo list, excluding ineligible events
+        Undo::EventList undos;
+        for (int i = 0, end = events.count();  i < end;  ++i)
+        {
+            if (!ineligibleIndexes.contains(i)  &&  !status.failed.contains(i))
+                undos.append(events[i], resource);
+        }
+        Undo::saveReactivates(undos);
     }
-    Undo::saveReactivates(undos);
 }
 
 /******************************************************************************
@@ -880,15 +890,19 @@ void MainWindow::slotBirthdays()
         {
             mListView->clearSelection();
             // Add alarm to the displayed lists and to the calendar file
-            KAlarm::UpdateResult status = KAlarm::addEvents(events, dlg, true, true);
+            Resource resource;
+            const KAlarm::UpdateResult status = KAlarm::addEvents(events, resource, dlg, true, true);
+            if (status.status < KAlarm::UPDATE_FAILED)
+            {
+                // Create the undo list
+                Undo::EventList undos;
+                for (int i = 0, end = events.count();  i < end;  ++i)
+                    if (!status.failed.contains(i))
+                        undos.append(events[i], resource);
+                Undo::saveAdds(undos, i18nc("@info", "Import birthdays"));
 
-            Undo::EventList undos;
-            for (int i = 0, end = events.count();  i < end;  ++i)
-                undos.append(events[i], Resources::resourceForEvent(events[i].id()));
-            Undo::saveAdds(undos, i18nc("@info", "Import birthdays"));
-
-            if (status != KAlarm::UPDATE_FAILED)
                 KAlarm::outputAlarmWarnings(dlg);
+            }
         }
     }
 }

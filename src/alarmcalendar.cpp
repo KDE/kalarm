@@ -282,9 +282,19 @@ bool ResourcesCalendar::save()
     bool ok = true;
     // Get all enabled, writable resources.
     QVector<Resource> resources = Resources::enabledResources(CalEvent::EMPTY, true);
-    for (Resource& resource : resources)
-        ok = ok && resource.save();
+    for (Resource& res : resources)
+        ok = ok && res.save();
     return ok;
+}
+
+/******************************************************************************
+* Save a resource in the calendar.
+* If errorMessage is non-null, it will receive the error message in case of
+* error, and the resource will not display the error message.
+*/
+bool ResourcesCalendar::save(Resource& resource, QString* errorMessage)
+{
+    return resource.save(errorMessage);
 }
 
 /******************************************************************************
@@ -574,7 +584,9 @@ void ResourcesCalendar::purgeEvents(const KAEvent::List& events)
 {
     for (const KAEvent* event : events)
     {
-        deleteEventInternal(*event);
+        Resource resource = Resources::resource(event->resourceId());
+        if (resource.isValid())
+            deleteEventInternal(event->id(), *event, resource, true);
     }
     if (mHaveDisabledAlarms)
         checkForDisabledAlarms();
@@ -586,18 +598,17 @@ void ResourcesCalendar::purgeEvents(const KAEvent::List& events)
 * created. In all other cases, the event ID is taken from 'evnt' (if non-null).
 * 'evnt' is updated with the actual event ID.
 * The event is added to 'resource' if specified; otherwise the default resource
-* is used or the user is prompted, depending on policy. If 'noPrompt' is true,
-* the user will not be prompted so that if no default resource is defined, the
-* function will fail.
+* is used or the user is prompted, depending on policy, and 'resource' is
+* updated with the actual resource used. If 'noPrompt' is true, the user will
+* not be prompted so that if no default resource is defined, the function will
+* fail.
 * Reply = true if 'evnt' was written to the calendar. 'evnt' is updated.
 *       = false if an error occurred, in which case 'evnt' is unchanged.
 */
-bool ResourcesCalendar::addEvent(KAEvent& evnt, QWidget* promptParent, bool useEventID, Resource* resourceptr, bool noPrompt, bool* cancelled)
+bool ResourcesCalendar::addEvent(KAEvent& evnt, Resource& resource, QWidget* promptParent, bool useEventID, bool noPrompt, bool* cancelled)
 {
     if (cancelled)
         *cancelled = false;
-    Resource nullresource;
-    Resource& resource(resourceptr ? *resourceptr : nullresource);
     qCDebug(KALARM_LOG) << "ResourcesCalendar::addEvent:" << evnt.id() << ", resource" << resource.displayId();
 
     // Check that the event type is valid for the calendar
@@ -632,25 +643,22 @@ bool ResourcesCalendar::addEvent(KAEvent& evnt, QWidget* promptParent, bool useE
 
     bool ok = false;
     bool remove = false;
-    Resource res;
-    if (resource.isEnabled(type))
-        res = resource;
-    else
+    if (!resource.isEnabled(type))
     {
-        res = Resources::destination(type, promptParent, noPrompt, cancelled);
-        if (!res.isValid())
+        resource = Resources::destination(type, promptParent, noPrompt, cancelled);
+        if (!resource.isValid())
             qCWarning(KALARM_LOG) << "ResourcesCalendar::addEvent: Error! Cannot create" << type << "(No default calendar is defined)";
     }
-    if (res.isValid())
+    if (resource.isValid())
     {
         // Don't add event to mEventMap yet - its ID is not yet known.
         // It will be added after it is inserted into the data model, when
         // the resource signals eventsAdded().
-        ok = res.addEvent(*event);
+        ok = resource.addEvent(*event);
         remove = ok;   // if success, delete the local event instance on exit
         if (ok  &&  type == CalEvent::ACTIVE  &&  !event->enabled())
             checkForDisabledAlarms(true, false);
-        event->setResourceId(res.id());
+        event->setResourceId(resource.id());
     }
     if (!ok)
     {
@@ -820,7 +828,8 @@ bool ResourcesCalendar::modifyEvent(const EventId& oldEventId, KAEvent& newEvent
 
 /******************************************************************************
 * Update the specified event in the calendar with its new contents.
-* The event retains the same ID. The event must be in the resource calendar.
+* The event retains the same ID. The event must be in the resource calendar,
+* and must have its resourceId() set correctly.
 * Reply = event which has been updated
 *       = 0 if error.
 */
@@ -829,7 +838,7 @@ KAEvent* ResourcesCalendar::updateEvent(const KAEvent& evnt)
     KAEvent* kaevnt = event(EventId(evnt));
     if (kaevnt)
     {
-        Resource resource = Resources::resourceForEvent(evnt.id());
+        Resource resource = Resources::resource(evnt.resourceId());
         if (resource.updateEvent(evnt))
         {
             *kaevnt = evnt;
@@ -845,11 +854,26 @@ KAEvent* ResourcesCalendar::updateEvent(const KAEvent& evnt)
 * Delete the specified event from the resource calendar, if it exists.
 * The calendar is then optionally saved.
 */
-bool ResourcesCalendar::deleteEvent(const KAEvent& event, bool saveit)
+bool ResourcesCalendar::deleteEvent(const KAEvent& event, Resource& resource, bool saveit)
 {
     Q_UNUSED(saveit);
 
-    const CalEvent::Type status = deleteEventInternal(event);
+    if (!resource.isValid())
+    {
+        resource = Resources::resource(event.resourceId());
+        if (!resource.isValid())
+        {
+            qCDebug(KALARM_LOG) << "ResourcesCalendar::deleteEvent: Resource not found for" << event.id();
+            return false;
+        }
+    }
+    else if (!resource.containsEvent(event.id()))
+    {
+        qCDebug(KALARM_LOG) << "ResourcesCalendar::deleteEvent: Event" << event.id() << "not in resource" << resource.displayId();
+        return false;
+    }
+    qCDebug(KALARM_LOG) << "ResourcesCalendar::deleteEvent:" << event.id();
+    const CalEvent::Type status = deleteEventInternal(event.id(), event, resource, true);
     if (mHaveDisabledAlarms)
         checkForDisabledAlarms();
     return status != CalEvent::EMPTY;
@@ -893,14 +917,6 @@ bool DisplayCalendar::deleteEvent(const QString& eventID, bool saveit)
 *         resource or local calendar
 *       = CalEvent::EMPTY otherwise.
 */
-CalEvent::Type ResourcesCalendar::deleteEventInternal(const KAEvent& event, bool deleteFromResources)
-{
-    Resource resource = Resources::resource(event.resourceId());
-    if (!resource.isValid())
-        return CalEvent::EMPTY;
-    return deleteEventInternal(event.id(), event, resource, deleteFromResources);
-}
-
 CalEvent::Type ResourcesCalendar::deleteEventInternal(const KAEvent& event, Resource& resource, bool deleteFromResources)
 {
     if (!resource.isValid())

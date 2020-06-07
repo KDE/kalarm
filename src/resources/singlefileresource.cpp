@@ -140,7 +140,7 @@ bool SingleFileResource::updateStorageFmt()
     qCDebug(KALARM_LOG) << "SingleFileResource::updateStorageFormat: Updating storage for" << mSettings->displayName();
     mCompatibility = KACalendar::Current;
     mVersion = KACalendar::CurrentFormat;
-    save(true, true);
+    save(nullptr, true, true);
 
     mSettings->setUpdateFormat(false);
     mSettings->save();
@@ -150,7 +150,7 @@ bool SingleFileResource::updateStorageFmt()
 /******************************************************************************
 * Re-read the file, ignoring saved hash or cache.
 */
-bool SingleFileResource::reload()
+bool SingleFileResource::reload(bool discardMods)
 {
     mCurrentHash.clear();   // ensure that load() re-reads the file
     mLoadedEvents.clear();
@@ -160,13 +160,11 @@ bool SingleFileResource::reload()
     qCDebug(KALARM_LOG) << "SingleFileResource::reload()" << displayName();
 
     // If it has been modified since its last load, write it back to save the changes.
-    if (mCalendar  &&  mCalendar->isModified()
+    if (!discardMods  &&  mCalendar  &&  mCalendar->isModified()
     &&  !mSaveUrl.isEmpty()  &&  isWritable(CalEvent::EMPTY))
     {
-        if (!save())
-            return false;
-        // No need to load again, since that would re-read what has just been saved.
-        return true;
+        if (save())
+            return true;  // no need to load again - we would re-read what has just been saved
     }
 
     return load();
@@ -421,7 +419,7 @@ void SingleFileResource::close()
     if (mDownloadJob)
         mDownloadJob->kill();
 
-    save(true);   // write through cache
+    save(nullptr, true);   // write through cache
     // If a remote file upload job has been started, the use of
     // QEventLoopLocker should ensure that it continues to completion even if
     // the destructor for this instance is executed.

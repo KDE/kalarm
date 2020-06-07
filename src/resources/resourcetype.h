@@ -324,8 +324,12 @@ public:
      */
     virtual bool load(bool readThroughCache = true) = 0;
 
-    /** Reload the resource. Any cached data is first discarded. */
-    virtual bool reload() = 0;
+    /** Reload the resource. Any cached data is first discarded.
+     *  @param discardMods  Discard any modifications since the last save.
+     *  @return true if loading succeeded or has been initiated.
+     *          false if it failed.
+     */
+    virtual bool reload(bool discardMods = false) = 0;
 
     /** Return whether the resource has fully loaded.
      *  Once loading completes after the resource has initialised, this should
@@ -337,6 +341,8 @@ public:
      *  Saving is not performed if the resource is disabled.
      *  If the resource is cached, it will be saved to the cache file (which
      *  if @p writeThroughCache is true, will then be uploaded from the resource file).
+     *  @param errorMessage       If non-null, receives error message if failure,
+     *                            in which case no error is displayed by the resource.
      *  @param writeThroughCache  If the resource is cached, update the file
      *                            after writing to the cache.
      *  @param force              Save even if no changes have been made since last
@@ -344,7 +350,7 @@ public:
      *  @return true if saving succeeded or has been initiated.
      *          false if it failed.
      */
-    virtual bool save(bool writeThroughCache = true, bool force = false) = 0;
+    virtual bool save(QString* errorMessage = nullptr, bool writeThroughCache = true, bool force = false) = 0;
 
     /** Return whether the resource is waiting for a save() to complete. */
     virtual bool isSaving() const   { return false; }

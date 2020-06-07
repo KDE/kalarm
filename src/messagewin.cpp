@@ -1140,7 +1140,8 @@ void MessageWin::redisplayAlarms()
 
 /******************************************************************************
 * Retrieves the event with the current ID from the displaying calendar file,
-* or if not found there, from the archive calendar.
+* or if not found there, from the archive calendar. 'resource' is set to the
+* resource which originally contained the event, or invalid if not known.
 */
 bool MessageWin::retrieveEvent(KAEvent& event, Resource& resource, bool& showEdit, bool& showDefer)
 {
@@ -1171,7 +1172,8 @@ bool MessageWin::retrieveEvent(KAEvent& event, Resource& resource, bool& showEdi
 
 /******************************************************************************
 * Retrieves the displayed event from the calendar file, or if not found there,
-* from the displaying calendar.
+* from the displaying calendar. 'resource' is set to the resource which
+* originally contained the event.
 */
 bool MessageWin::reinstateFromDisplaying(const Event::Ptr& kcalEvent, KAEvent& event, Resource& resource, bool& showEdit, bool& showDefer)
 {
@@ -1179,7 +1181,7 @@ bool MessageWin::reinstateFromDisplaying(const Event::Ptr& kcalEvent, KAEvent& e
         return false;
     ResourceId resourceId;
     event.reinstateFromDisplaying(kcalEvent, resourceId, showEdit, showDefer);
-    event.setCollectionId(resourceId);
+    event.setResourceId(resourceId);
     resource = Resources::resource(resourceId);
     qCDebug(KALARM_LOG) << "MessageWin::reinstateFromDisplaying:" << EventId(event) << ": success";
     return true;
@@ -2163,7 +2165,7 @@ void MessageWin::slotDefer()
         else
         {
             // Try to retrieve the event from the displaying or archive calendars
-            Resource resource;
+            Resource resource;   // receives the event's original resource, if known
             KAEvent event;
             bool showEdit, showDefer;
             if (!retrieveEvent(event, resource, showEdit, showDefer))
@@ -2184,13 +2186,14 @@ void MessageWin::slotDefer()
             event.setCommandError(mCommandError);
             // Add the event back into the calendar file, retaining its ID
             // and not updating KOrganizer.
-            KAlarm::addEvent(event, &resource, mDeferDlg, KAlarm::USE_EVENT_ID);
+            KAlarm::addEvent(event, resource, mDeferDlg, KAlarm::USE_EVENT_ID);
             if (event.deferred())
                 mNoPostAction = true;
             // Finally delete it from the archived calendar now that it has
             // been reactivated.
             event.setCategory(CalEvent::ARCHIVED);
-            KAlarm::deleteEvent(event, false);
+            Resource res;
+            KAlarm::deleteEvent(event, res, false);
         }
         if (theApp()->wantShowInSystemTray())
         {

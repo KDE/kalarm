@@ -986,8 +986,11 @@ void KAlarmApp::processQueue()
                         execAlarm(entry.event, entry.event.firstAlarm(), false);
                         break;
                     case QueuedAction::Handle:
-                        KAlarm::addEvent(entry.event, nullptr, nullptr, KAlarm::ALLOW_KORG_UPDATE | KAlarm::NO_RESOURCE_PROMPT);
+                    {
+                        Resource resource;
+                        KAlarm::addEvent(entry.event, resource, nullptr, KAlarm::ALLOW_KORG_UPDATE | KAlarm::NO_RESOURCE_PROMPT);
                         break;
+                    }
                     case QueuedAction::List:
                     {
                         const QStringList alarms = scheduledAlarmList();
@@ -1695,10 +1698,12 @@ bool KAlarmApp::handleEvent(const EventId& id, QueuedAction action, bool findUni
     switch (action)
     {
         case QueuedAction::Cancel:
+        {
             qCDebug(KALARM_LOG) << "KAlarmApp::handleEvent:" << eventID << ", CANCEL";
-            KAlarm::deleteEvent(*event, true);
+            Resource resource = Resources::resource(event->resourceId());
+            KAlarm::deleteEvent(*event, resource, true);
             break;
-
+        }
         case QueuedAction::Trigger:    // handle it if it's due, else execute it regardless
         case QueuedAction::Handle:     // handle it if it's due
         {
@@ -2045,9 +2050,10 @@ bool KAlarmApp::cancelAlarm(KAEvent& event, KAAlarm::Type alarmType, bool update
     qCDebug(KALARM_LOG) << "KAlarmApp::cancelAlarm";
     if (alarmType == KAAlarm::MAIN_ALARM  &&  !event.displaying()  &&  event.toBeArchived())
     {
-        // The event is being deleted. Save it in the archived resources first.
+        // The event is being deleted. Save it in the archived resource first.
+        Resource resource;
         KAEvent ev(event);
-        KAlarm::addArchivedEvent(ev);
+        KAlarm::addArchivedEvent(ev, resource);
     }
     event.removeExpiredAlarm(alarmType);
     if (!event.alarmCount())
@@ -2058,7 +2064,8 @@ bool KAlarmApp::cancelAlarm(KAEvent& event, KAAlarm::Type alarmType, bool update
             pd->eventDeleted = true;
 
         // Delete it
-        KAlarm::deleteEvent(event, false);
+        Resource resource;
+        KAlarm::deleteEvent(event, resource, false);
         return true;
     }
     if (updateCalAndDisplay)

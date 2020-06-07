@@ -66,6 +66,8 @@ struct UpdateResult
 {
     UpdateStatus  status;   // status code
     QString       message;  // error message if any
+    QVector<int>  failed;   // indexes to events whose update failed
+
     UpdateResult() : status(UPDATE_OK) {}
     explicit UpdateResult(UpdateStatus s, const QString& m = QString()) : status(s), message(m) {}
     UpdateResult& operator=(UpdateStatus s)  { status = s; message.clear(); return *this; }
@@ -115,22 +117,159 @@ enum         // 'options' parameter values for addEvent(). May be OR'ed together
     NO_RESOURCE_PROMPT = 0x02,   // don't prompt for resource
     ALLOW_KORG_UPDATE  = 0x04    // allow change to be sent to KOrganizer
 };
-UpdateResult        addEvent(KAEvent&, Resource* = nullptr, QWidget* msgParent = nullptr, int options = ALLOW_KORG_UPDATE, bool showKOrgErr = true);
-UpdateResult        addEvents(QVector<KAEvent>&, QWidget* msgParent = nullptr, bool allowKOrgUpdate = true, bool showKOrgErr = true);
-bool                addArchivedEvent(KAEvent&, Resource* = nullptr);
-UpdateResult        addTemplate(KAEvent&, Resource* = nullptr, QWidget* msgParent = nullptr);
-UpdateResult        modifyEvent(KAEvent& oldEvent, KAEvent& newEvent, QWidget* msgParent = nullptr, bool showKOrgErr = true);
-UpdateResult        updateEvent(KAEvent&, QWidget* msgParent = nullptr, bool archiveOnDelete = true);
-UpdateResult        updateTemplate(KAEvent&, QWidget* msgParent = nullptr);
-UpdateResult        deleteEvent(KAEvent&, bool archive = true, QWidget* msgParent = nullptr, bool showKOrgErr = true);
-UpdateResult        deleteEvents(QVector<KAEvent>&, bool archive = true, QWidget* msgParent = nullptr, bool showKOrgErr = true);
-UpdateResult        deleteTemplates(const KAEvent::List& events, QWidget* msgParent = nullptr);
+
+/** Add a new active (non-archived) alarm to a resource.
+ *  @param event      Updated with the actual event ID.
+ *  @param resource   Resource to add event to. If invalid, the default resource
+ *                    is used or the user is prompted, depending on policy, and
+ *                    'resource' is updated with the actual resource used.
+ *  @param msgParent  Parent widget for any calendar selection prompt or error
+ *                    message.
+ *  @return  Success status; if >= UPDATE_FAILED, the new alarm has been discarded.
+ */
+UpdateResult addEvent(KAEvent& event, Resource& resource, QWidget* msgParent = nullptr, int options = ALLOW_KORG_UPDATE, bool showKOrgErr = true);
+
+/** Add new active (non-archived) alarms to a resource.
+ *  @param events     Updated with the actual event IDs.
+ *  @param resource   Resource to add event to. If invalid, the default resource
+ *                    is used or the user is prompted, depending on policy, and
+ *                    'resource' is updated with the actual resource used.
+ *  @param msgParent  Parent widget for any calendar selection prompt or error
+ *                    message.
+ *  @return  Success status; if >= UPDATE_FAILED, all new alarms have been discarded.
+ */
+UpdateResult addEvents(QVector<KAEvent>& events, Resource& resource, QWidget* msgParent = nullptr, bool allowKOrgUpdate = true, bool showKOrgErr = true);
+
+/** Save the event in the archived calendar.
+ *  The event's ID is changed to an archived ID if necessary.
+ *  @param event      Updated with the archived event ID.
+ *  @param resource   Resource to add event to. If invalid, the default resource
+ *                    is used or the user is prompted, depending on policy, and
+ *                    'resource' is updated with the actual resource used.
+ */
+bool addArchivedEvent(KAEvent& event, Resource& resource);
+
+/** Add a new template to a resource.
+ *  @param event      Updated with the actual event ID.
+ *  @param resource   Resource to add event to. If invalid, the default resource
+ *                    is used or the user is prompted, depending on policy, and
+ *                    'resource' is updated with the actual resource used.
+ *  @param msgParent  Parent widget for any calendar selection prompt or error
+ *                    message.
+ *  @return  Success status; if >= UPDATE_FAILED, the new template has been discarded.
+ */
+UpdateResult addTemplate(KAEvent& event, Resource& resource, QWidget* msgParent = nullptr);
+
+/** Modify an active (non-archived) alarm in a resource.
+ *  The new event must have a different event ID from the old one.
+ *  @param oldEvent   Event to be replaced. Its resourceId() must give the ID of
+ *                    the resource which contains it.
+ *  @param newEvent   Modified version of the event. Updated with its new ID if
+ *                    it was not supplied with one.
+ *  @param msgParent  Parent widget for any calendar selection prompt or error
+ *                    message.
+ *  @return  Success status; if >= UPDATE_FAILED, the modification has been discarded.
+ */
+UpdateResult modifyEvent(KAEvent& oldEvent, KAEvent& newEvent, QWidget* msgParent = nullptr, bool showKOrgErr = true);
+
+/** Update an active (non-archived) alarm.
+ *  The new event will have the same event ID as the old one.
+ *  The event is not updated in KOrganizer, since this function is called when an
+ *  existing alarm is rescheduled (due to recurrence or deferral).
+ *  @param event      Event to be replaced. Its resourceId() must give the ID of
+ *                    the resource which contains it.
+ *  @param msgParent  Parent widget for any calendar selection prompt or error
+ *                    message.
+ *  @return  Success status; if >= UPDATE_FAILED, the update has been discarded.
+ */
+UpdateResult updateEvent(KAEvent& event, QWidget* msgParent = nullptr, bool archiveOnDelete = true);
+
+/** Update an alarm template.
+ *  The new event will have the same event ID as the old one.
+ *  @param event      Event to be replaced. Its resourceId() must give the ID of
+ *                    the resource which contains it.
+ *  @param msgParent  Parent widget for any calendar selection prompt or error
+ *                    message.
+ *  @return  Success status; if >= UPDATE_FAILED, the update has been discarded.
+ */
+UpdateResult updateTemplate(KAEvent& event, QWidget* msgParent = nullptr);
+
+/** Delete an alarm from a resource.
+ *  If the event is archived, the event's ID is changed to an archived ID if necessary.
+ *  @param event      Event to delete.
+ *  @param resource   Resource to delete event from. If invalid, this is
+ *                    updated to the resource which contained the event.
+ *  @param msgParent  Parent widget for any calendar selection prompt or error
+ *                    message.
+ *  @return  Success status; if >= UPDATE_FAILED, the deletion has been discarded.
+ */
+UpdateResult deleteEvent(KAEvent& event, Resource& resource, bool archive = true, QWidget* msgParent = nullptr, bool showKOrgErr = true);
+
+/** Delete alarms from the resources.
+ *  If the events are archived, the events' IDs are changed to archived IDs if necessary.
+ *  @param event      Event to delete.
+ *  @param resource   Resource to delete event from. If invalid, and all events
+ *                    are found in the same resource, this is updated to the
+ *                    resource which contained the events.
+ *  @param msgParent  Parent widget for any calendar selection prompt or error
+ *                    message.
+ *  @return  Success status; if >= UPDATE_FAILED, all deletions have been discarded.
+ */
+UpdateResult deleteEvents(QVector<KAEvent>&, Resource& resource, bool archive = true, QWidget* msgParent = nullptr, bool showKOrgErr = true);
+
+/** Delete templates from the resources.
+ *  @param event      Event to delete.
+ *  @param msgParent  Parent widget for any calendar selection prompt or error
+ *                    message.
+ *  @return  Success status; if >= UPDATE_FAILED, all deletions have been discarded.
+ */
+UpdateResult deleteTemplates(const KAEvent::List& events, QWidget* msgParent = nullptr);
+
 inline UpdateResult deleteTemplate(KAEvent& event, QWidget* msgParent = nullptr)
                         { KAEvent::List e;  e += &event;  return deleteTemplates(e, msgParent); }
 void                deleteDisplayEvent(const QString& eventID);
-UpdateResult        reactivateEvent(KAEvent&, Resource* = nullptr, QWidget* msgParent = nullptr, bool showKOrgErr = true);
-UpdateResult        reactivateEvents(QVector<KAEvent>&, QVector<EventId>& ineligibleIDs, Resource* = nullptr, QWidget* msgParent = nullptr, bool showKOrgErr = true);
-UpdateResult        enableEvents(QVector<KAEvent>&, bool enable, QWidget* msgParent = nullptr);
+
+/** Undelete an archived alarm.
+ *  The archive bit is set to ensure that it gets re-archived if deleted again.
+ *  @param event      Updated with the restored event.
+ *  @param resource   Active alarms resource to restore the event to. If
+ *                    invalid, the default resource is used or the user is
+ *                    prompted, depending on policy, and 'resource' is updated
+ *                    with the actual resource used.
+ *  @param msgParent  Parent widget for any calendar selection prompt or error
+ *                    message.
+ *  @return  Success status; if >= UPDATE_FAILED, the reactivated event has been discarded.
+ */
+UpdateResult reactivateEvent(KAEvent& event, Resource& resource, QWidget* msgParent = nullptr, bool showKOrgErr = true);
+
+/** Undelete archived alarms.
+ *  The archive bit is set to ensure that they get re-archived if deleted again.
+ *  @param events     Updated to contain the restored events.
+ *  @param ineligibleIndexes  Receives the indexes to any ineligible events.
+ *  @param resource   Active alarms resource to restore the events to. If
+ *                    invalid, the default resource is used or the user is
+ *                    prompted, depending on policy, and 'resource' is updated
+ *                    with the actual resource used.
+ *  @param msgParent  Parent widget for any calendar selection prompt or error
+ *                    message.
+ *  @return  Success status; if >= UPDATE_FAILED, all reactivated events have been discarded.
+ */
+UpdateResult reactivateEvents(QVector<KAEvent>& events, QVector<int>& ineligibleIndexes, Resource& resource, QWidget* msgParent = nullptr, bool showKOrgErr = true);
+
+/** Enable or disable alarms.
+ *  The new events will have the same event IDs as the old ones.
+ *  @param events     Events to be enabled. Each one's resourceId() must give
+ *                    the ID of the resource which contains it.
+ *  @param enable     Whether to enable or disable the events.
+ *  @param msgParent  Parent widget for any calendar selection prompt or error
+ *                    message.
+ *  @return  Success status; if == UPDATE_FAILED, the enabled status of all
+ *           events is unchanged; if == SAVE_FAILED, the enabled status of at
+ *           least one event has been successfully changed, but will be lost
+ *           when its resource is reloaded.
+ */
+UpdateResult enableEvents(QVector<KAEvent>& events, bool enable, QWidget* msgParent = nullptr);
+
 QVector<KAEvent>    getSortedActiveEvents(QObject* parent, AlarmListModel** model = nullptr);
 void                purgeArchive(int purgeDays);    // must only be called from KAlarmApp::processQueue()
 

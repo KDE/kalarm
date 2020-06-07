@@ -238,9 +238,9 @@ bool Resource::load(bool readThroughCache)
     return mResource.isNull() ? false : mResource->load(readThroughCache);
 }
 
-bool Resource::reload()
+bool Resource::reload(bool discardMods)
 {
-    return mResource.isNull() ? false : mResource->reload();
+    return mResource.isNull() ? false : mResource->reload(discardMods);
 }
 
 bool Resource::isPopulated() const
@@ -248,9 +248,9 @@ bool Resource::isPopulated() const
     return mResource.isNull() ? false : mResource->isPopulated();
 }
 
-bool Resource::save(bool writeThroughCache)
+bool Resource::save(QString* errorMessage, bool writeThroughCache)
 {
-    return mResource.isNull() ? false : mResource->save(writeThroughCache);
+    return mResource.isNull() ? false : mResource->save(errorMessage, writeThroughCache);
 }
 
 bool Resource::isSaving() const

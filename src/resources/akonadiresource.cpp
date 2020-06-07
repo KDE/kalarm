@@ -414,16 +414,19 @@ bool AkonadiResource::isPopulated() const
     return true;
 }
 
-bool AkonadiResource::save(bool writeThroughCache, bool force)
+bool AkonadiResource::save(QString* errorMessage, bool writeThroughCache, bool force)
 {
+    Q_UNUSED(errorMessage);
     Q_UNUSED(writeThroughCache);
     Q_UNUSED(force);
     AgentManager::self()->instance(mCollection.resource()).synchronize();
     return true;
 }
 
-bool AkonadiResource::reload()
+bool AkonadiResource::reload(bool discardMods)
 {
+    Q_UNUSED(discardMods);
+
     // Akonadi provides no means to reload from the backend.
     return false;
 }

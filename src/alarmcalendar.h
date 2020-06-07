@@ -75,6 +75,7 @@ public:
     ~ResourcesCalendar() override;
     bool                  reload();
     bool                  save();
+    bool                  save(Resource&, QString* errorMessage = nullptr);
     void                  close();
     KAEvent*              earliestAlarm() const;
     void                  setAlarmPending(KAEvent*, bool pending = true);
@@ -87,10 +88,10 @@ public:
     KAEvent::List         events(const Resource&, CalEvent::Types = CalEvent::EMPTY) const;
     KAEvent::List         events(CalEvent::Types s = CalEvent::EMPTY) const;
     bool                  eventReadOnly(const QString& eventId) const;
-    bool                  addEvent(KAEvent&, QWidget* promptparent = nullptr, bool useEventID = false, Resource* = nullptr, bool noPrompt = false, bool* cancelled = nullptr);
+    bool                  addEvent(KAEvent&, Resource&, QWidget* promptparent = nullptr, bool useEventID = false, bool noPrompt = false, bool* cancelled = nullptr);
     bool                  modifyEvent(const EventId& oldEventId, KAEvent& newEvent);
     KAEvent*              updateEvent(const KAEvent&);
-    bool                  deleteEvent(const KAEvent&, bool save = false);
+    bool                  deleteEvent(const KAEvent&, Resource&, bool save = false);
     void                  purgeEvents(const KAEvent::List&);
 
     static void           initialise();
@@ -116,7 +117,6 @@ private:
     ResourcesCalendar();
     bool                  isValid() const override  { return true; }
     void                  addNewEvent(const Resource&, KAEvent*, bool replace = false) override;
-    CalEvent::Type        deleteEventInternal(const KAEvent&, bool deleteFromResources = true);
     CalEvent::Type        deleteEventInternal(const KAEvent&, Resource&, bool deleteFromResources = true);
     CalEvent::Type        deleteEventInternal(const QString& eventID, const KAEvent&, Resource&,
                                               bool deleteFromResources = true);

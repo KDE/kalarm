@@ -290,8 +290,12 @@ public:
      */
     bool load(bool readThroughCache = true);
 
-    /** Reload the resource. Any cached data is first discarded. */
-    bool reload();
+    /** Reload the resource. Any cached data is first discarded.
+     *  @param discardMods  Discard any modifications since the last save.
+     *  @return true if loading succeeded or has been initiated.
+     *          false if it failed.
+     */
+    bool reload(bool discardMods = false);
 
     /** Return whether the resource has fully loaded. */
     bool isPopulated() const;
@@ -300,12 +304,14 @@ public:
      *  Saving is not performed if the resource is disabled.
      *  If the resource is cached, it will be saved to the cache file (which
      *  if @p writeThroughCache is true, will then be uploaded from the resource file).
+     *  @param errorMessage       If non-null, receives error message if failure,
+     *                            in which case no error is displayed by the resource.
      *  @param writeThroughCache  If the resource is cached, update the file
      *                            after writing to the cache.
      *  @return true if saving succeeded or has been initiated.
      *          false if it failed.
      */
-    bool save(bool writeThroughCache = true);
+    bool save(QString* errorMessage = nullptr, bool writeThroughCache = true);
 
     /** Return whether the resource is waiting for a save() to complete. */
     bool isSaving() const;

@@ -234,8 +234,12 @@ public:
      */
     bool load(bool readThroughCache = true) override;
 
-    /** Reload the resource. Any cached data is first discarded. */
-    bool reload() override;
+    /** Reload the resource. Any cached data is first discarded.
+     *  Not applicable to AkonadiResource, since Akonadi provides no means to
+     *  reload from the backend.
+     *  @return false
+     */
+    bool reload(bool discardMods = false) override;
 
     /** Return whether the resource has fully loaded. */
     bool isPopulated() const override;
@@ -245,7 +249,7 @@ public:
      *  automatically.
      *  @return true.
      */
-    bool save(bool writeThroughCache = true, bool force = false) override;
+    bool save(QString* errorMessage = nullptr, bool writeThroughCache = true, bool force = false) override;
 
     /** Add an event to the resource, and add it to Akonadi. */
     bool addEvent(const KAEvent&) override;

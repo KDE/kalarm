@@ -251,6 +251,8 @@ public:
      *  Saving is not performed if the resource is disabled.
      *  If the resource is cached, it will be saved to the cache file (which
      *  if @p writeThroughCache is true, will then be uploaded from the resource file).
+     *  @param errorMessage       If non-null, receives error message if failure,
+     *                            in which case no error is displayed by the resource.
      *  @param writeThroughCache  If the resource is cached, update the file
      *                            after writing to the cache.
      *  @param force              Save even if no changes have been made since last
@@ -258,7 +260,7 @@ public:
      *  @return true if saving succeeded or has been initiated.
      *          false if it failed.
      */
-    bool save(bool writeThroughCache = true, bool force = false) override;
+    bool save(QString* errorMessage = nullptr, bool writeThroughCache = true, bool force = false) override;
 
     /** Add an event to the resource.
      *  Derived classes must implement event addition in doAddEvent().
@@ -331,7 +333,7 @@ protected:
      *  @return true if saving succeeded or has been initiated/scheduled.
      *          false if it failed.
      */
-    virtual bool scheduleSave(bool writeThroughCache = true)  { return save(writeThroughCache); }
+    virtual bool scheduleSave(bool writeThroughCache = true)  { return save(nullptr, writeThroughCache); }
 
     /** This method is called by save() to allow derived classes to implement
      *  saving the resource to its backend.

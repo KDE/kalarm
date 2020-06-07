@@ -390,14 +390,14 @@ void FileResource::loaded(bool success, QHash<QString, KAEvent>& newEvents, cons
 /******************************************************************************
 * Save the resource.
 */
-bool FileResource::save(bool writeThroughCache, bool force)
+bool FileResource::save(QString* errorMessage, bool writeThroughCache, bool force)
 {
     qCDebug(KALARM_LOG) << "FileResource::save:" << displayName();
     if (!checkSave())
         return false;
 
-    QString errorMessage;
-    switch (doSave(writeThroughCache, force, errorMessage))
+    QString errMessage;
+    switch (doSave(writeThroughCache, force, errMessage))
     {
         case 1:   // success
             saved(true, QString());
@@ -407,8 +407,17 @@ bool FileResource::save(bool writeThroughCache, bool force)
             return true;
 
         default:  // failure
-            if (!errorMessage.isEmpty())
-                Resources::notifyResourceMessage(this, MessageType::Error, xi18nc("@info", "Error saving calendar <resource>%1</resource>.", displayName()), errorMessage);
+            if (!errMessage.isEmpty())
+            {
+                const QString msg = xi18nc("@info", "Error saving calendar <resource>%1</resource>.", displayName());
+                if (errorMessage)
+                {
+                    *errorMessage = msg + errMessage;
+                    errorMessage->replace(QRegularExpression(QStringLiteral("</html><html>")), QStringLiteral("<br><br>"));
+                }
+                else
+                    Resources::notifyResourceMessage(this, MessageType::Error, msg, errMessage);
+            }
             return false;
     }
 }

@@ -79,8 +79,12 @@ public:
      */
     int writableStatus(CalEvent::Type type = CalEvent::EMPTY) const override;
 
-    /** Reload the resource. Any cached data is first discarded. */
-    bool reload() override;
+    /** Reload the resource. Any cached data is first discarded.
+     *  @param discardMods  Discard any modifications since the last save.
+     *  @return true if loading succeeded or has been initiated.
+     *          false if it failed.
+     */
+    bool reload(bool discardMods = false) override;
 
     /** Return whether the resource is waiting for a save() to complete. */
     bool isSaving() const override;
@@ -199,7 +203,7 @@ protected:
     void saveHash(const QByteArray& hash) const;
 
 private Q_SLOTS:
-    void slotSave()   { save(mSavePendingCache); }
+    void slotSave()   { save(nullptr, mSavePendingCache); }
 //    void handleProgress(KJob*, unsigned long);
     void localFileChanged(const QString& fileName);
     void slotDownloadJobResult(KJob*);

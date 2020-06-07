@@ -854,7 +854,7 @@ UndoItem* UndoAdd::doRestore(bool setArchive)
             if (setArchive)
                 event.setArchive();
             // Archive it if it has already triggered
-            KAlarm::UpdateResult status = KAlarm::deleteEvent(event, true);
+            KAlarm::UpdateResult status = KAlarm::deleteEvent(event, mResource, true);
             switch (status.status)
             {
                 case KAlarm::UPDATE_ERROR:
@@ -881,8 +881,11 @@ UndoItem* UndoAdd::doRestore(bool setArchive)
                 mRestoreError = ERR_TEMPLATE;
             break;
         case CalEvent::ARCHIVED:    // redoing the deletion of an archived alarm
-            KAlarm::deleteEvent(event);
+        {
+            Resource resource;
+            KAlarm::deleteEvent(event, resource);
             break;
+        }
         default:
             delete undo;
             mRestoreError = ERR_PROG;
@@ -1130,7 +1133,7 @@ UndoItem* UndoDelete::restore()
                 // It was archived when it was deleted
                 mEvent->setCategory(CalEvent::ARCHIVED);
                 mEvent->setResourceId(Resources::resourceForEvent(mEvent->id()).id());
-                const KAlarm::UpdateResult status = KAlarm::reactivateEvent(*mEvent, &mResource);
+                const KAlarm::UpdateResult status = KAlarm::reactivateEvent(*mEvent, mResource);
                 switch (status.status)
                 {
                     case KAlarm::UPDATE_KORG_FUNCERR:
@@ -1153,7 +1156,7 @@ UndoItem* UndoDelete::restore()
             }
             else
             {
-                const KAlarm::UpdateResult status = KAlarm::addEvent(*mEvent, &mResource, nullptr, true);
+                const KAlarm::UpdateResult status = KAlarm::addEvent(*mEvent, mResource, nullptr, true);
                 switch (status.status)
                 {
                     case KAlarm::UPDATE_KORG_FUNCERR:
@@ -1177,14 +1180,14 @@ UndoItem* UndoDelete::restore()
             KAlarm::setDontShowErrors(EventId(*mEvent), mDontShowErrors);
             break;
         case CalEvent::TEMPLATE:
-            if (KAlarm::addTemplate(*mEvent, &mResource) != KAlarm::UPDATE_OK)
+            if (KAlarm::addTemplate(*mEvent, mResource) != KAlarm::UPDATE_OK)
             {
                 mRestoreError = ERR_CREATE;
                 return nullptr;
             }
             break;
         case CalEvent::ARCHIVED:
-            if (!KAlarm::addArchivedEvent(*mEvent, &mResource))
+            if (!KAlarm::addArchivedEvent(*mEvent, mResource))
             {
                 mRestoreError = ERR_CREATE;
                 return nullptr;
