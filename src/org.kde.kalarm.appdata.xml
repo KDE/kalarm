@@ -92,6 +92,7 @@
     <p xml:lang="fi">KAlarm on KDE:n henkilökohtainen hälytysten, komentojen ja sähköpostin ajastin</p>
     <p xml:lang="fr">KAlarm est un programmateur personnel de message d'alarme, de commande et de courrier électronique développé par KDE</p>
     <p xml:lang="gl">KAlarm é unha aplicación de KDE para programar mensaxes persoais de alarma, ordes e mensaxes de correo electrónico.</p>
+    <p xml:lang="ia">KAlarm es un application de planificator per posta, commando e message de alarma personal per KDE</p>
     <p xml:lang="id">KAlarm adalah sebuah perpesanan alarm personal, aplikasi penjadwal email dan perintah</p>
     <p xml:lang="it">KAlarm è un pianificatore personale di messaggi di avviso, di posta elettronica e per l'esecuzione di comandi sviluppato da KDE</p>
     <p xml:lang="ko">KAlarm은 KDE의 개인 알람, 명령, 이메일 스케줄러입니다</p>
@@ -159,6 +160,7 @@
       <li xml:lang="fr">Affiche des alarmes avec votre propre texte de message, un texte généré par une commande, ou un fichier texte ou image.</li>
       <li xml:lang="gl">Mostre alarmas coas súas propias mensaxes de texto, texto xerado cunha orde, ou un ficheiro de texto ou imaxe.</li>
       <li xml:lang="hu">Emlékeztetők megjelenítése saját szöveges üzenet, egy parancs által generált szöveg, vagy egy szöveg- vagy képfájl használatával.</li>
+      <li xml:lang="ia">Monstra alarmas usante tu proprie message de texto, le texto generate per un commando o un file de texto o imagine.</li>
       <li xml:lang="id">Displai alarm menggunakan perpesanan teks milikmu, teks yang dihasilkan oleh perintah atau teks atau file citra.</li>
       <li xml:lang="it">Mostra gli avvisi usando un tuo messaggio di testo, il testo generato da un comando, o un file di testo o immagine.</li>
       <li xml:lang="ko">텍스트 메시지, 명령에서 생성한 텍스트, 텍스트나 그림 파일로 알람 표시.</li>
@@ -193,6 +195,7 @@
       <li xml:lang="fr">Alarme sonore utilisant un fichier audio</li>
       <li xml:lang="gl">Alarma audíbel mediante un ficheiro de son.</li>
       <li xml:lang="hu">Hangos emlékeztetők egy hangfájl használatával.</li>
+      <li xml:lang="ia">Alarma audibile usante un file de sono</li>
       <li xml:lang="id">Alarm dapat diaudiokan menggunakan sebuah file sound</li>
       <li xml:lang="it">Avvisi acustici usando file sonori</li>
       <li xml:lang="ko">음성 파일을 사용한 알람</li>
@@ -227,6 +230,7 @@
       <li xml:lang="fr">Alarme récurrente sur une période en minutes, heures, jours, semaines, mois ou années, ou positionnée pour se déclencher à chaque fois que vous vous identifiez.</li>
       <li xml:lang="gl">Alarma con repetición cada certo número de horas e minutos, diariamente, semanalmente, mensualmente, anualmente, ou disparada automaticamente cada vez que accede.</li>
       <li xml:lang="hu">Ismétlődő emlékeztetők óránkénti/percenkénti, napi, heti, havi vagy évenkénti gyakorisággal, vagy minden bejelentkezéskor.</li>
+      <li xml:lang="ia">Alarma recurrente sur base de horas/minutas, quotidian,septimanal o annual, o poner lo per discatenar cata vice que tu te authentica. </li>
       <li xml:lang="id">Pengulangan alarm berdasarkan pada jam/menitan, harian, pekanan, bulanan atau tahunan atau mengesetnya untuk memicu setiap waktu kamu login.</li>
       <li xml:lang="it">Avvisi ricorrenti secondi intervalli di ore/minuti, giornalieri, settimanali, mensili o annuali, o impostati per attivarsi quando accedi al sistema.</li>
       <li xml:lang="ko">시/분, 일간, 주간, 월간, 년간 및 로그인 할 때마다 반복되는 알람.</li>
@@ -261,6 +265,7 @@
       <li xml:lang="fr">Personnalisation de la police et de la couleur des alarmes visuelles</li>
       <li xml:lang="gl">Personalice a cor e a fonte das alarmas que se mostran</li>
       <li xml:lang="hu">Emlékeztetők színének és betűtípusának testre szabása.</li>
+      <li xml:lang="ia">Monstra personalisation de font e color de alarmas</li>
       <li xml:lang="id">Warna dan font displai alarm yang dapat dikustomisasi</li>
       <li xml:lang="it">Personalizzazione dei colori e dei caratteri usati per gli avvisi</li>
       <li xml:lang="ko">알람 색상 및 글꼴 사용자 정의</li>
@@ -295,6 +300,7 @@
       <li xml:lang="fr">Prise en charge de plusieurs calendriers d'alarmes, ce qui vous permet par exemple de partager des alarmes entre un ordinateur portable et un ordinateur de bureau.</li>
       <li xml:lang="gl">Compatíbel con varios calendarios de alarma, o que por exemplo lle permite compartir alarmas entre o seu computador portátil e o computador de escritorio.</li>
       <li xml:lang="hu">Több naptár használata, lehetővé téve ezzel az emlékeztetők megosztását például a hordozható és az asztali számítógépe között.</li>
+      <li xml:lang="ia">Supporto per calendarios de alarma multiple, que per exemplo te habilitate a compartir alarmas inter un computator laptop o desktop.</li>
       <li xml:lang="id">Dukungan untuk kalender multi alarm, misalnya memungkinkan kamu untuk berbagi alarm antara laptop dan komputer desktop.</li>
       <li xml:lang="it">Supporto per più calendari di avvisi, permettendoti di condividere gli allarmi tra un portatile ed un computer desktop.</li>
       <li xml:lang="ko">두 대 이상의 컴퓨터와 동기화할 수 있는 등의 다중 알람 달력 지원.</li>
@@ -334,6 +340,7 @@
       <caption xml:lang="fi">KAlardmin asetusikkuna ja viestihälytyksen testaus</caption>
       <caption xml:lang="fr">Fenêtre de configuration de KAlarm avec une alarme contenant un message de test</caption>
       <caption xml:lang="gl">Xanela de configuración de KAlarm cunha alarma de mensaxe de proba</caption>
+      <caption xml:lang="ia">Fenestra de configuration de KAlarm con un alarma con message de prova</caption>
       <caption xml:lang="id">Window konfigurasi KAlarm dengan sebuah pengujian alarm perpesanan</caption>
       <caption xml:lang="it">Finestra di configurazione di KAlarm con un messaggio di avviso di prova</caption>
       <caption xml:lang="ko">메시지 알람 테스트가 표시된 KAlarm 설정 창</caption>
