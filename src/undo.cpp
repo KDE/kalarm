@@ -590,9 +590,9 @@ int Undo::findItem(int id, Undo::Type type)
 {
     const List& list = (type == UNDO) ? mUndoList : mRedoList;
     int i = 0;
-    for (const UndoItem* item : list)
+    for (int end = list.count();  i < end;  ++i)
     {
-        if (item->id() == id)
+        if (list[i]->id() == id)
             break;
     }
     return i;
