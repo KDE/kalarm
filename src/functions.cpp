@@ -255,7 +255,7 @@ UpdateResult addEvent(KAEvent& event, Resource& resource, QWidget* msgParent, in
         }
         else
         {
-            if (!cal->save(resource, &status.status.message))
+            if (!resource.save(&status.status.message))
             {
                 resource.reload(true);   // discard the new event
                 status.status.status = SAVE_FAILED;
@@ -319,7 +319,7 @@ UpdateResult addEvents(QVector<KAEvent>& events, Resource& resource, QWidget* ms
             }
             if (status.failedCount() == events.count())
                 status.status = UPDATE_FAILED;
-            else if (!cal->save(resource, &status.status.message))
+            else if (!resource.save(&status.status.message))
             {
                 resource.reload(true);   // discard the new events
                 status.updateError(SAVE_FAILED, events.count());  // everything failed
@@ -378,7 +378,7 @@ UpdateResult addTemplate(KAEvent& event, Resource& resource, QWidget* msgParent)
     else
     {
         event = newev;   // update event ID etc.
-        if (!cal->save(resource, &status.status.message))
+        if (!resource.save(&status.status.message))
         {
             resource.reload(true);   // discard the new template
             status.status.status = SAVE_FAILED;
@@ -423,7 +423,7 @@ UpdateResult modifyEvent(KAEvent& oldEvent, KAEvent& newEvent, QWidget* msgParen
             status.status = UPDATE_FAILED;
         else
         {
-            if (!cal->save(resource, &status.status.message))
+            if (!resource.save(&status.status.message))
             {
                 resource.reload(true);   // retrieve the pre-update version of the event
                 status.status.status = SAVE_FAILED;
@@ -542,7 +542,7 @@ UpdateResult deleteEvents(QVector<KAEvent>& events, Resource& resource, bool arc
     {
         QString msg;
         for (Resource res : resources)
-            if (!cal->save(res, &msg))
+            if (!res.save(&msg))
             {
                 res.reload(true);    // retrieve the events which couldn't be deleted
                 status.setError(SAVE_FAILED, status.failedCount(), msg);
@@ -588,7 +588,7 @@ UpdateResult deleteTemplates(const KAEvent::List& events, QWidget* msgParent)
     {
         QString msg;
         for (Resource res : resources)
-            if (!cal->save(res, &msg))
+            if (!res.save(&msg))
             {
                 res.reload(true);    // retrieve the templates which couldn't be deleted
                 status.status.message = msg;
@@ -688,7 +688,7 @@ UpdateResult reactivateEvents(QVector<KAEvent>& events, QVector<int>& ineligible
             status.setError(status.failedCount() == events.count() ? UPDATE_FAILED : UPDATE_ERROR, status.failedCount());
         if (status.failedCount() < events.count())
         {
-            if (!cal->save(resource, &status.status.message))
+            if (!resource.save(&status.status.message))
             {
                 resource.reload(true);
                 status.updateError(SAVE_FAILED, count);
@@ -767,7 +767,7 @@ UpdateResult enableEvents(QVector<KAEvent>& events, bool enable, QWidget* msgPar
         for (ResourceId id : resourceIds)
         {
             Resource res = Resources::resource(id);
-            if (!cal->save(res, &msg))
+            if (!res.save(&msg))
             {
                 // Don't reload resource after failed save. It's better to
                 // keep the new enabled status of the alarms at least until
@@ -1334,7 +1334,7 @@ KAlarm::UpdateResult updateEvent(KAEvent& event, KAlarm::UpdateError err, QWidge
     else
     {
         Resource resource = Resources::resource(event.resourceId());
-        if (!cal->save(resource, &status.status.message))
+        if (!resource.save(&status.status.message))
         {
             resource.reload(true);   // retrieve the pre-update version of the event
             status.status.status = KAlarm::SAVE_FAILED;
@@ -1616,7 +1616,9 @@ void refreshAlarmsIfQueued()
     if (refreshAlarmsQueued)
     {
         qCDebug(KALARM_LOG) << "KAlarm::refreshAlarmsIfQueued";
-        ResourcesCalendar::instance()->reload();
+        QVector<Resource> resources = Resources::enabledResources();
+        for (Resource& resource : resources)
+            resource.reload();
 
         // Close any message windows for alarms which are now disabled
         const KAEvent::List events = ResourcesCalendar::instance()->events(CalEvent::ACTIVE);

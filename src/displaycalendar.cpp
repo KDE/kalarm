@@ -20,13 +20,8 @@
 
 #include "displaycalendar.h"
 
-//#include "kalarm.h"
-//#include "functions.h"
-//#include "kalarmapp.h"
 #include "mainwindow.h"
 #include "preferences.h"
-//#include "resources/datamodel.h"
-//#include "resources/resources.h"
 #include "lib/messagebox.h"
 #include "kalarm_debug.h"
 
@@ -34,10 +29,6 @@
 #include <KCalendarCore/ICalFormat>
 
 #include <KLocalizedString>
-//#include <KIO/StatJob>
-//#include <KIO/StoredTransferJob>
-//#include <KSharedConfig>
-//#include <kio_version.h>
 
 #include <QStandardPaths>
 #include <QDir>
@@ -46,8 +37,10 @@ using namespace KCalendarCore;
 using namespace KAlarmCal;
 
 
-static const QString displayCalendarName = QStringLiteral("displaying.ics");
-static const ResourceId DISPLAY_RES_ID = -1;   // resource ID used for displaying calendar
+namespace
+{
+const QString displayCalendarName = QStringLiteral("displaying.ics");
+}
 
 DisplayCalendar*  DisplayCalendar::mInstance = nullptr;
 
@@ -272,7 +265,6 @@ void DisplayCalendar::updateKAEvents()
             delete event;
             continue;    // ignore events without usable alarms
         }
-        event->setResourceId(DISPLAY_RES_ID);
         mEventList += event;
         mEventMap[kcalevent->uid()] = event;
     }
@@ -307,7 +299,6 @@ bool DisplayCalendar::addEvent(KAEvent& evnt)
     bool remove = false;
     if (!mEventMap.contains(event->id()))
     {
-        event->setResourceId(DISPLAY_RES_ID);
         mEventList += event;
         mEventMap[event->id()] = event;
         ok = mCalendarStorage->calendar()->addEvent(kcalEvent);
@@ -348,7 +339,7 @@ bool DisplayCalendar::deleteEvent(const QString& eventID, bool saveit)
         // destructed when the event is deleted below.
         const QString id = eventID;
 
-        KAEventMap::Iterator it = mEventMap.find(id);
+        auto it = mEventMap.find(id);
         if (it != mEventMap.end())
         {
             KAEvent* ev = it.value();

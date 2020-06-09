@@ -21,33 +21,13 @@
 #include "resourcescalendar.h"
 
 #include "kalarm.h"
-#include "functions.h"
-#include "kalarmapp.h"
-#include "mainwindow.h"
-#include "preferences.h"
-#include "resources/datamodel.h"
 #include "resources/resources.h"
-#include "lib/messagebox.h"
 #include "kalarm_debug.h"
 
-#include <KCalendarCore/MemoryCalendar>
 #include <KCalendarCore/ICalFormat>
 
-#include <KLocalizedString>
-#include <KIO/StatJob>
-#include <KIO/StoredTransferJob>
-#include <KSharedConfig>
-#include <kio_version.h>
-
-#include <QStandardPaths>
-#include <QDir>
-
-using namespace KCalendarCore;
 using namespace KAlarmCal;
 
-
-static const QString displayCalendarName = QStringLiteral("displaying.ics");
-static const ResourceId DISPLAY_RES_ID = -1;   // resource ID used for displaying calendar
 
 ResourcesCalendar* ResourcesCalendar::mInstance = nullptr;
 
@@ -60,7 +40,7 @@ ResourcesCalendar* ResourcesCalendar::mInstance = nullptr;
 void ResourcesCalendar::initialise()
 {
     KACalendar::setProductId(KALARM_NAME, KALARM_VERSION);
-    CalFormat::setApplication(QStringLiteral(KALARM_NAME), QString::fromLatin1(KACalendar::icalProductId()));
+    KCalendarCore::CalFormat::setApplication(QStringLiteral(KALARM_NAME), QString::fromLatin1(KACalendar::icalProductId()));
     mInstance = new ResourcesCalendar();
 }
 
@@ -105,50 +85,6 @@ ResourcesCalendar::ResourcesCalendar()
 
 ResourcesCalendar::~ResourcesCalendar()
 {
-    close();
-}
-
-/******************************************************************************
-* Reload the calendar resources into memory.
-*/
-bool ResourcesCalendar::reload()
-{
-    qCDebug(KALARM_LOG) << "ResourcesCalendar::reload";
-    bool ok = true;
-    QVector<Resource> resources = Resources::enabledResources();
-    for (Resource& resource : resources)
-        ok = ok && resource.reload();
-    return ok;
-}
-
-/******************************************************************************
-* Save the calendar.
-*/
-bool ResourcesCalendar::save()
-{
-    bool ok = true;
-    // Get all enabled, writable resources.
-    QVector<Resource> resources = Resources::enabledResources(CalEvent::EMPTY, true);
-    for (Resource& res : resources)
-        ok = ok && res.save();
-    return ok;
-}
-
-/******************************************************************************
-* Save a resource in the calendar.
-* If errorMessage is non-null, it will receive the error message in case of
-* error, and the resource will not display the error message.
-*/
-bool ResourcesCalendar::save(Resource& resource, QString* errorMessage)
-{
-    return resource.save(errorMessage);
-}
-
-/******************************************************************************
-* Close display calendar file at program exit.
-*/
-void ResourcesCalendar::close()
-{
     // Resource map should be empty, but just in case...
     while (!mResourceMap.isEmpty())
         removeKAEvents(mResourceMap.begin().key(), true, CalEvent::ACTIVE | CalEvent::ARCHIVED | CalEvent::TEMPLATE | CalEvent::DISPLAYING);
@@ -173,10 +109,7 @@ bool ResourcesCalendar::removeKAEvents(ResourceId key, bool closing, CalEvent::T
             KAEvent* event = events[i];
             bool remove = (event->resourceId() != key);
             if (remove)
-            {
-                if (key != DISPLAY_RES_ID)
-                    qCCritical(KALARM_LOG) << "ResourcesCalendar::removeKAEvents: Event" << event->id() << ", resource" << event->resourceId() << "Indexed under resource" << key;
-            }
+                qCCritical(KALARM_LOG) << "ResourcesCalendar::removeKAEvents: Event" << event->id() << ", resource" << event->resourceId() << "Indexed under resource" << key;
             else
                 remove = event->category() & types;
             if (remove)
@@ -375,7 +308,7 @@ bool ResourcesCalendar::addEvent(KAEvent& evnt, Resource& resource, QWidget* pro
     else
         useEventID = true;
     if (id.isEmpty())
-        id = CalFormat::createUniqueId();
+        id = KCalendarCore::CalFormat::createUniqueId();
     if (useEventID)
         id = CalEvent::uid(id, type);   // include the alarm type tag in the ID
     event->setEventId(id);
@@ -484,7 +417,7 @@ bool ResourcesCalendar::modifyEvent(const EventId& oldEventId, KAEvent& newEvent
         return false;
     }
     if (noNewId)
-        newEvent.setEventId(CalFormat::createUniqueId());
+        newEvent.setEventId(KCalendarCore::CalFormat::createUniqueId());
     Resource resource = Resources::resource(oldEventId.resourceId());
     if (!resource.isValid())
         return false;

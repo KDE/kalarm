@@ -41,10 +41,6 @@ class ResourcesCalendar : public QObject
     Q_OBJECT
 public:
     ~ResourcesCalendar() override;
-    bool                  reload();
-    bool                  save();
-    bool                  save(Resource&, QString* errorMessage = nullptr);
-    void                  close();
     KAEvent*              earliestAlarm() const;
     void                  setAlarmPending(KAEvent*, bool pending = true);
     bool                  haveDisabledAlarms() const   { return mHaveDisabledAlarms; }
