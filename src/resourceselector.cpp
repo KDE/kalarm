@@ -24,10 +24,10 @@
 
 #include "resourceselector.h"
 
-#include "alarmcalendar.h"
 #include "functions.h"
 #include "kalarmapp.h"
 #include "preferences.h"
+#include "resourcescalendar.h"
 #include "resources/akonadidatamodel.h"
 #include "resources/akonadiresourcecreator.h"
 #include "resources/akonadiresourcemigrator.h"

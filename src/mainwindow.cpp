@@ -20,7 +20,6 @@
 
 #include "mainwindow.h"
 
-#include "alarmcalendar.h"
 #include "alarmlistdelegate.h"
 #include "alarmlistview.h"
 #include "birthdaydlg.h"
@@ -30,6 +29,7 @@
 #include "newalarmaction.h"
 #include "prefdlg.h"
 #include "preferences.h"
+#include "resourcescalendar.h"
 #include "resourceselector.h"
 #include "templatedlg.h"
 #include "templatemenuaction.h"

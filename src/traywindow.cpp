@@ -20,7 +20,6 @@
 
 #include "traywindow.h"
 
-#include "alarmcalendar.h"
 #include "functions.h"
 #include "kalarmapp.h"
 #include "mainwindow.h"
@@ -28,6 +27,7 @@
 #include "newalarmaction.h"
 #include "prefdlg.h"
 #include "preferences.h"
+#include "resourcescalendar.h"
 #include "templatemenuaction.h"
 #include "resources/datamodel.h"
 #include "resources/eventmodel.h"

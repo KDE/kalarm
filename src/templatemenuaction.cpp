@@ -20,8 +20,8 @@
 
 #include "templatemenuaction.h"
 
-#include "alarmcalendar.h"
 #include "functions.h"
+#include "resourcescalendar.h"
 #include "kalarm_debug.h"
 
 #include <KAlarmCal/KAEvent>

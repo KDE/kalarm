@@ -20,8 +20,8 @@
 
 #include "undo.h"
 
-#include "alarmcalendar.h"
 #include "functions.h"
+#include "resourcescalendar.h"
 #include "resources/resources.h"
 #include "lib/messagebox.h"
 #include "kalarm_debug.h"

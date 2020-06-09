@@ -20,10 +20,10 @@
 
 #include "deferdlg.h"
 
-#include "alarmcalendar.h"
 #include "alarmtimewidget.h"
 #include "functions.h"
 #include "kalarmapp.h"
+#include "resourcescalendar.h"
 #include "lib/messagebox.h"
 #include "kalarm_debug.h"
 

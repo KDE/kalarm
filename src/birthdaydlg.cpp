@@ -20,7 +20,6 @@
 
 #include "birthdaydlg.h"
 
-#include "alarmcalendar.h"
 #include "birthdaymodel.h"
 #include "editdlgtypes.h"
 #include "fontcolourbutton.h"
@@ -29,6 +28,7 @@
 #include "preferences.h"
 #include "reminder.h"
 #include "repetitionbutton.h"
+#include "resourcescalendar.h"
 #include "soundpicker.h"
 #include "specialactions.h"
 #include "lib/checkbox.h"

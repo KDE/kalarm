@@ -82,14 +82,15 @@ set(resources_SRCS
 
 set(kalarm_bin_SRCS ${libkalarm_SRCS} ${resources_SRCS}
     ${libkalarm_common_SRCS}
+    main.cpp
     birthdaydlg.cpp
     birthdaymodel.cpp
-    main.cpp
     editdlg.cpp
     editdlgtypes.cpp
     soundpicker.cpp
     sounddlg.cpp
-    alarmcalendar.cpp
+    displaycalendar.cpp
+    resourcescalendar.cpp
     undo.cpp
     kalarmapp.cpp
     mainwindowbase.cpp
@@ -213,4 +214,4 @@ add_executable(kalarm_helper rtcwakeaction.cpp ${libkalarm_common_SRCS})
 target_link_libraries(kalarm_helper KF5::AuthCore KF5::I18n)
 install(TARGETS kalarm_helper DESTINATION ${KAUTH_HELPER_INSTALL_DIR})
 kauth_install_helper_files(kalarm_helper org.kde.kalarm.rtcwake root)
-kauth_install_actions(org.kde.kalarm.rtcwake org.kde.kalarm.rtcwake.actions)
+#kauth_install_actions(org.kde.kalarm.rtcwake org.kde.kalarm.rtcwake.actions)

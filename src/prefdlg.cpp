@@ -21,7 +21,6 @@
 #include "prefdlg.h"
 #include "prefdlg_p.h"
 
-#include "alarmcalendar.h"
 #include "alarmtimewidget.h"
 #include "editdlg.h"
 #include "editdlgtypes.h"
@@ -33,6 +32,7 @@
 #include "mainwindow.h"
 #include "preferences.h"
 #include "recurrenceedit.h"
+#include "resourcescalendar.h"
 #include "sounddlg.h"
 #include "soundpicker.h"
 #include "specialactions.h"

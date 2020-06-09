@@ -20,9 +20,9 @@
 
 #include "kalarmapp.h"
 
-#include "alarmcalendar.h"
 #include "commandoptions.h"
 #include "dbushandler.h"
+#include "displaycalendar.h"
 #include "editdlgtypes.h"
 #include "functions.h"
 #include "kamail.h"
@@ -31,6 +31,7 @@
 #include "kalarmmigrateapplication.h"
 #include "preferences.h"
 #include "prefdlg.h"
+#include "resourcescalendar.h"
 #include "startdaytimer.h"
 #include "traywindow.h"
 #include "resources/datamodel.h"
@@ -1215,6 +1216,7 @@ void KAlarmApp::changeStartOfDay()
     DateTime::setStartOfDay(Preferences::startOfDay());
     KAEvent::setStartOfDay(Preferences::startOfDay());
     ResourcesCalendar::instance()->adjustStartOfDay();
+    DisplayCalendar::instance()->adjustStartOfDay();
 }
 
 /******************************************************************************
@@ -2625,7 +2627,7 @@ bool KAlarmApp::initCheck(bool calendarOnly)
          * MessageWin::redisplayAlarms() is executing open() (but before open()
          * completes), which causes problems!!
          */
-        DisplayCalendar::instance()->open();
+        DisplayCalendar::instanceOpen();
     }
     if (firstTime)
     {

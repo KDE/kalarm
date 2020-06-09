@@ -21,11 +21,11 @@
 #include "wakedlg.h"
 #include "ui_wakedlg.h"
 
-#include "alarmcalendar.h"
 #include "functions.h"
 #include "kalarmapp.h"
 #include "mainwindow.h"
 #include "preferences.h"
+#include "resourcescalendar.h"
 #include "lib/messagebox.h"
 #include "kalarm_debug.h"
 

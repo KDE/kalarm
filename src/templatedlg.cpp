@@ -20,10 +20,10 @@
 
 #include "templatedlg.h"
 
-#include "alarmcalendar.h"
 #include "editdlg.h"
 #include "functions.h"
 #include "newalarmaction.h"
+#include "resourcescalendar.h"
 #include "templatelistview.h"
 #include "undo.h"
 #include "resources/datamodel.h"

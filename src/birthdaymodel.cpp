@@ -21,7 +21,7 @@
 
 #include "birthdaymodel.h"
 
-#include "alarmcalendar.h"
+#include "resourcescalendar.h"
 
 #include <KAlarmCal/KAEvent>
 

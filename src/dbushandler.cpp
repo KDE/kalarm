@@ -20,12 +20,12 @@
 
 #include "dbushandler.h"
 
-#include "alarmcalendar.h"
 #include "functions.h"
 #include "kalarmapp.h"
 #include "kamail.h"
 #include "mainwindow.h"
 #include "preferences.h"
+#include "resourcescalendar.h"
 #include "resources/resources.h"
 #include <kalarmadaptor.h>
 #include "kalarm_debug.h"

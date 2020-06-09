@@ -22,7 +22,6 @@
 #include "editdlg_p.h"
 #include "editdlgtypes.h"
 
-#include "alarmcalendar.h"
 #include "alarmtimewidget.h"
 #include "deferdlg.h"
 #include "functions.h"
@@ -32,6 +31,7 @@
 #include "preferences.h"
 #include "recurrenceedit.h"
 #include "reminder.h"
+#include "resourcescalendar.h"
 #include "resources/datamodel.h"
 #include "resources/resources.h"
 #include "lib/autoqpointer.h"
