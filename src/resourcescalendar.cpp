@@ -54,17 +54,6 @@ void ResourcesCalendar::terminate()
 }
 
 /******************************************************************************
-* Find and return the event with the specified ID.
-* The calendar searched is determined by the calendar identifier in the ID.
-*/
-KAEvent* ResourcesCalendar::getEvent(const EventId& eventId)
-{
-    if (eventId.eventId().isEmpty())
-        return nullptr;
-    return mInstance->event(eventId);
-}
-
-/******************************************************************************
 * Constructor for the resources calendar.
 */
 ResourcesCalendar::ResourcesCalendar()

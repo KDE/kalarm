@@ -835,13 +835,13 @@ UndoItem* UndoAdd::doRestore(bool setArchive)
 {
     // Retrieve the current state of the alarm
     qCDebug(KALARM_LOG) << "UndoAdd::doRestore:" << mEventId;
-    const KAEvent* ev = ResourcesCalendar::getEvent(EventId(mResource.id(), mEventId));
-    if (!ev)
+    KAEvent event = mResource.event(mEventId);
+    if (!event.isValid())
     {
-        mRestoreError = ERR_NOT_FOUND;    // alarm is no longer in calendar
+        // Alarm is no longer in calendar, or its type is now disabled
+        mRestoreError = ERR_NOT_FOUND;
         return nullptr;
     }
-    KAEvent event(*ev);
 
     // Create a redo item to recreate the alarm.
     // Do it now, since 'event' gets modified by KAlarm::deleteEvent()
@@ -995,13 +995,12 @@ UndoItem* UndoEdit::restore()
 {
     qCDebug(KALARM_LOG) << "UndoEdit::restore:" << mNewEventId;
     // Retrieve the current state of the alarm
-    const KAEvent* event = ResourcesCalendar::getEvent(EventId(mResource.id(), mNewEventId));
-    if (!event)
+    KAEvent newEvent = mResource.event(mNewEventId);
+    if (!newEvent.isValid())
     {
         mRestoreError = ERR_NOT_FOUND;    // alarm is no longer in calendar
         return nullptr;
     }
-    KAEvent newEvent(*event);
 
     // Create a redo item to restore the edit
     const Undo::Type t = (type() == Undo::UNDO) ? Undo::REDO : (type() == Undo::REDO) ? Undo::UNDO : Undo::NONE;

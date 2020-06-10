@@ -1233,8 +1233,12 @@ QStringList checkRtcWakeConfig(bool checkEventExists)
     if (params.count() == 3  &&  params[2].toUInt() > KADateTime::currentUtcDateTime().toTime_t())
 #endif
     {
-        if (checkEventExists  &&  !ResourcesCalendar::getEvent(EventId(params[0].toLongLong(), params[1])))
-            return QStringList();
+        if (checkEventExists)
+        {
+            Resource resource = Resources::resource(params[0].toLongLong());
+            if (!resource.event(params[1]).isValid())
+                return QStringList();
+        }
         return params;                   // config entry is valid
     }
     if (!params.isEmpty())

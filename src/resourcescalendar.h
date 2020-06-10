@@ -62,7 +62,6 @@ public:
     static void           initialise();
     static void           terminate();
     static ResourcesCalendar* instance()     { return mInstance; }
-    static KAEvent*       getEvent(const EventId&);
 
 Q_SIGNALS:
     void                  earliestAlarmChanged();

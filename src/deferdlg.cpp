@@ -24,6 +24,7 @@
 #include "functions.h"
 #include "kalarmapp.h"
 #include "resourcescalendar.h"
+#include "resources/resources.h"
 #include "lib/messagebox.h"
 #include "kalarm_debug.h"
 
@@ -94,9 +95,10 @@ void DeferAlarmDlg::slotOk()
     if (!mLimitEventId.isEmpty())
     {
         // Get the event being deferred
-        const KAEvent* event = ResourcesCalendar::getEvent(mLimitEventId);
-        if (event)
-            endTime = event->deferralLimit(&limitType);
+        Resource resource = Resources::resource(mLimitEventId.resourceId());
+        const KAEvent event = resource.event(mLimitEventId.eventId());
+        if (event.isValid())
+            endTime = event.deferralLimit(&limitType);
     }
     else
     {
@@ -166,10 +168,11 @@ void DeferAlarmDlg::setLimit(const DateTime& limit)
 */
 DateTime DeferAlarmDlg::setLimit(const KAEvent& event)
 {
-    Q_ASSERT(event.collectionId() >= 0);
+    Q_ASSERT(event.resourceId() >= 0);
     mLimitEventId = EventId(event);
-    const KAEvent* evnt = ResourcesCalendar::getEvent(mLimitEventId);
-    mLimitDateTime = evnt ? evnt->deferralLimit() : DateTime();
+    Resource resource = Resources::resource(event.resourceId());
+    const KAEvent evnt = resource.event(event.id());
+    mLimitDateTime = evnt.isValid() ? evnt.deferralLimit() : DateTime();
     mTimeWidget->setMaxDateTime(mLimitDateTime);
     return mLimitDateTime;
 }

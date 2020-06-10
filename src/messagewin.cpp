@@ -980,8 +980,8 @@ void MessageWin::saveProperties(KConfigGroup& config)
 void MessageWin::readProperties(const KConfigGroup& config)
 {
     mInvalid             = config.readEntry("Invalid", false);
-    const QString eventId         = config.readEntry("EventID");
-    const ResourceId collectionId = config.readEntry("CollectionID", ResourceId(-1));
+    const QString eventId       = config.readEntry("EventID");
+    const ResourceId resourceId = config.readEntry("CollectionID", ResourceId(-1));
     mAlarmType           = static_cast<KAAlarm::Type>(config.readEntry("AlarmType", 0));
     if (mAlarmType == KAAlarm::INVALID_ALARM)
     {
@@ -1029,8 +1029,8 @@ void MessageWin::readProperties(const KConfigGroup& config)
     mDontShowAgain       = config.readEntry("DontShowAgain", QString());
     mShowEdit            = false;
     // Temporarily initialise mResource and mEventId - they will be set by redisplayAlarm()
-    mResource            = Resources::resource(collectionId);
-    mEventId             = EventId(collectionId, eventId);
+    mResource            = Resources::resource(resourceId);
+    mEventId             = EventId(resourceId, eventId);
     qCDebug(KALARM_LOG) << "MessageWin::readProperties:" << eventId;
     if (mAlarmType != KAAlarm::INVALID_ALARM)
     {
