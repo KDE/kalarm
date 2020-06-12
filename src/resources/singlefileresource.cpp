@@ -774,17 +774,6 @@ void SingleFileResource::slotUploadJobResult(KJob* job)
 void SingleFileResource::handleSettingsChange(Changes change)
 {
     qCDebug(KALARM_LOG) << "SingleFileResource::handleSettingsChange:" << displayId();
-    if (change & AlarmTypes)
-    {
-        qCDebug(KALARM_LOG) << "SingleFileResource::handleSettingsChange:" << displayId() << "Update alarm types";
-        load();
-    }
-    if (change & Enabled)
-    {
-        qCDebug(KALARM_LOG) << "SingleFileResource::handleSettingsChange:" << displayId() << "Update enabled status";
-        if (mSettings->enabledTypes())
-            load();
-    }
     if (change & UpdateFormat)
     {
         if (mSettings->updateFormat())
@@ -823,6 +812,7 @@ void SingleFileResource::handleSettingsChange(Changes change)
             mSettings->save();
         }
     }
+    FileResource::handleSettingsChange(change);
 }
 
 // vim: et sw=4:

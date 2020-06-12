@@ -629,4 +629,30 @@ KACalendar::Compat FileResource::getCompatibility(const KCalendarCore::FileStora
     }
 }
 
+/******************************************************************************
+* Called when the resource settings have changed.
+*/
+void FileResource::handleSettingsChange(Changes change)
+{
+    qCDebug(KALARM_LOG) << "FileResource::handleSettingsChange:" << displayId();
+    if (change & AlarmTypes)
+    {
+        qCDebug(KALARM_LOG) << "FileResource::handleSettingsChange:" << displayId() << "Update alarm types";
+        load();
+    }
+    if (change & Enabled)
+    {
+        qCDebug(KALARM_LOG) << "FileResource::handleSettingsChange:" << displayId() << "Update enabled status";
+        if (mSettings->enabledTypes())
+        {
+            // Alarms are now enabled. Reload the calendar file because,
+            // although ResourceType retains its record of alarms of disabled
+            // types, changes are not processed when disabled calendar files
+            // are updated. Also, when the calendar is loaded, disabled alarm
+            // types are not fully processed by loaded().
+            load();
+        }
+    }
+}
+
 // vim: et sw=4:

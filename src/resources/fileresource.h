@@ -385,7 +385,7 @@ protected:
      *  @note  Resources::notifySettingsChanged() is called after this, to
      *         notify clients.
      */
-    virtual void handleSettingsChange(Changes)  {}
+    virtual void handleSettingsChange(Changes);
 
     FileResourceSettings* mSettings;    // the resource's configuration
     int                   mVersion {KACalendar::IncompatibleFormat}; // the calendar format version
