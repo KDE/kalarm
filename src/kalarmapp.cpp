@@ -863,11 +863,14 @@ void KAlarmApp::checkNextDueAlarm()
     {
         // No alarm is due yet, so set timer to wake us when it's due.
         // Check for integer overflow before setting timer.
-#pragma message("TODO: use hibernation wakeup signal")
 #ifndef HIBERNATION_SIGNAL
-        /* TODO: REPLACE THIS CODE WHEN A SYSTEM NOTIFICATION SIGNAL BECOMES
-         *       AVAILABLE FOR WAKEUP FROM HIBERNATION.
-         * Re-evaluate the next alarm time every minute, in case the
+        /* TODO: Use hibernation wakeup signal:
+         *   #include <Solid/Power>
+         *   connect(Solid::Power::self(), &Solid::Power::resumeFromSuspend, ...)
+         * to be notified when wakeup from hibernation occurs. But can't use it
+         * unless we know that this notification is supported by the system!
+         */
+        /* Re-evaluate the next alarm time every minute, in case the
          * system clock jumps. The most common case when the clock jumps
          * is when a laptop wakes from hibernation. If timers were left to
          * run, they would trigger late by the length of time the system
