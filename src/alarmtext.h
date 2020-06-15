@@ -2,7 +2,7 @@
  *  alarmtext.h  -  text/email alarm text conversion
  *  This file is part of kalarmcal library, which provides access to KAlarm
  *  calendar data.
- *  Copyright © 2004-2019 David Jarvie <djarvie@kde.org>
+ *  Copyright © 2004-2020 David Jarvie <djarvie@kde.org>
  *
  *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Library General Public License as published
@@ -26,7 +26,7 @@
 #include "kalarmcal_export.h"
 
 #include <KCalendarCore/Todo>
-#include <AkonadiCore/item.h>
+#include <AkonadiCore/Item>
 #include <QString>
 
 namespace KAlarmCal
@@ -60,6 +60,9 @@ public:
     AlarmText(const AlarmText &other);
     ~AlarmText();
     AlarmText &operator=(const AlarmText &other);
+
+    /** Initialise the instance to an empty state. */
+    void clear();
 
     /** Set the alarm text.
      *  If @p text starts with '#!', it is flagged as a script, else plain text.

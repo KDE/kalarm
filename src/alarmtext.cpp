@@ -2,7 +2,7 @@
  *  alarmtext.cpp  -  text/email alarm text conversion
  *  This file is part of kalarmcal library, which provides access to KAlarm
  *  calendar data.
- *  Copyright © 2004-2019 David Jarvie <djarvie@kde.org>
+ *  Copyright © 2004-2020 David Jarvie <djarvie@kde.org>
  *
  *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Library General Public License as published
@@ -24,7 +24,7 @@
 
 #include "kaevent.h"
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 #include <QStringList>
 #include <QDateTime>
@@ -123,6 +123,11 @@ AlarmText &AlarmText::operator=(const AlarmText &other)
         *d = *other.d;
     }
     return *this;
+}
+
+void AlarmText::clear()
+{
+    d->clear();
 }
 
 void AlarmText::setText(const QString &text)
