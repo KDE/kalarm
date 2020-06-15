@@ -867,6 +867,7 @@ void KAlarmApp::checkNextDueAlarm()
         /* TODO: Use hibernation wakeup signal:
          *   #include <Solid/Power>
          *   connect(Solid::Power::self(), &Solid::Power::resumeFromSuspend, ...)
+         *   (or resumingFromSuspend?)
          * to be notified when wakeup from hibernation occurs. But can't use it
          * unless we know that this notification is supported by the system!
          */

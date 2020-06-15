@@ -1,7 +1,7 @@
 /*
  *  editdlg_p.h  -  private classes for editdlg.cpp
  *  Program:  kalarm
- *  Copyright © 2003-2005,2007-2009 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2003-2020 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -47,11 +47,17 @@ class TextEdit : public KTextEdit
         Q_OBJECT
     public:
         explicit TextEdit(QWidget* parent);
+        void      enableEmailDrop();
         QSize     sizeHint() const override         { return minimumSizeHint(); }
         QSize     minimumSizeHint() const override  { return minimumSize(); }
 
     protected:
         void      dragEnterEvent(QDragEnterEvent*) override;
+        void      dragMoveEvent(QDragMoveEvent*) override;
+        void      dropEvent(QDropEvent*) override;
+
+    private:
+        bool      mEmailDrop {false};
 };
 
 class CommandEdit : public QWidget

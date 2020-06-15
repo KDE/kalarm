@@ -1,11 +1,12 @@
 KAlarm Change Log
 
-=== Version 3.0.0 --- 7 June 2020 ===
+=== Version 3.0.0 --- 15 June 2020 ===
 + Provide option to use file system resources instead of Akonadi resources.
 + Enable selection of multiple calendar files in Import Alarms dialogue.
 + Show alarm calendars sorted by name in calendars list.
 + Return to last used tab in Configuration dialogue when it is reopened.
 + Fix handling of calendar update or save errors when making alarm changes.
++ Allow drag-and-drop of email onto display alarm text edit field.
 + Refactor AlarmCalendar to split out resources and display calendars.
 
 === Version 2.14.2 (KDE Applications 20.04.2) --- 8 June 2020 ===

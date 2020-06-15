@@ -47,10 +47,7 @@
 #include <KAlarmCal/AlarmText>
 #include <KAlarmCal/KAEvent>
 
-#include <KMime/Message>
 #include <AkonadiCore/Item>
-#include <AkonadiCore/ItemFetchJob>
-#include <AkonadiCore/ItemFetchScope>
 #include <KCalendarCore/MemoryCalendar>
 #include <KCalUtils/ICalDrag>
 using namespace KCalendarCore;
@@ -83,7 +80,6 @@ using namespace KCalUtils;
 #include <QMimeDatabase>
 #include <QInputDialog>
 #include <QUrl>
-#include <QUrlQuery>
 #include <QMenuBar>
 #include <QSystemTrayIcon>
 #include <QMimeData>
@@ -1200,8 +1196,7 @@ void MainWindow::executeDragEnterEvent(QDragEnterEvent* e)
 {
     const QMimeData* data = e->mimeData();
     bool accept = ICalDrag::canDecode(data) ? !e->source()   // don't accept "text/calendar" objects from this application
-                                               :    data->hasText()
-                                                 || data->hasUrls();
+                                            : data->hasText() || data->hasUrls();
     if (accept)
         e->acceptProposedAction();
 }
@@ -1215,12 +1210,6 @@ void MainWindow::dropEvent(QDropEvent* e)
     executeDropEvent(this, e);
 }
 
-static QString getMailHeader(const char* header, KMime::Content& content)
-{
-    KMime::Headers::Base* hd = content.headerByType(header);
-    return hd ? hd->asUnicodeString() : QString();
-}
-
 /******************************************************************************
 * Called when an object is dropped on a main or system tray window, to
 * evaluate the action required and extract the text.
@@ -1230,7 +1219,6 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
     qCDebug(KALARM_LOG) << "MainWindow::executeDropEvent: Formats:" << e->mimeData()->formats();
     const QMimeData* data = e->mimeData();
     KAEvent::SubAction action = KAEvent::MESSAGE;
-    QByteArray         bytes;
     AlarmText          alarmText;
     QList<QUrl>        urls;
     MemoryCalendar::Ptr calendar(new MemoryCalendar(Preferences::timeSpecAsZone()));
@@ -1243,23 +1231,11 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
      * provide more than one mime type.
      * Don't change them without careful thought !!
      */
-    if (!(bytes = data->data(QStringLiteral("message/rfc822"))).isEmpty())
+    if (KAlarm::dropRFC822(data, alarmText))
     {
         // Email message(s). Ignore all but the first.
         qCDebug(KALARM_LOG) << "MainWindow::executeDropEvent: email";
-        KMime::Content content;
-        content.setContent(bytes);
-        content.parse();
-        QString body;
-        if (content.textContent())
-            body = content.textContent()->decodedText(true, true);    // strip trailing newlines & spaces
-        unsigned long sernum = 0;
-        alarmText.setEmail(getMailHeader("To", content),
-                           getMailHeader("From", content),
-                           getMailHeader("Cc", content),
-                           getMailHeader("Date", content),
-                           getMailHeader("Subject", content),
-                   body, sernum);
+//TODO: Fetch attachments if an email alarm is created below
     }
     else if (ICalDrag::fromMimeData(data, calendar))
     {
@@ -1334,48 +1310,19 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
         }
         return;
     }
-    else if (!(urls = data->urls()).isEmpty())
+    else
     {
-        const QUrl& url(urls.at(0));
-        const Akonadi::Item item = Akonadi::Item::fromUrl(url);
-        if (item.isValid())
+        QUrl url;
+        Akonadi::Item item;
+        if (KAlarm::dropAkonadiEmail(data, url, item, alarmText))
         {
-            // It's an Akonadi item
-            qCDebug(KALARM_LOG) << "MainWindow::executeDropEvent: Akonadi item" << item.id();
-            if (QUrlQuery(url).queryItemValue(QStringLiteral("type")) == QLatin1String("message/rfc822"))
-            {
-                // It's an email held in Akonadi
-                qCDebug(KALARM_LOG) << "MainWindow::executeDropEvent: Akonadi email";
-                Akonadi::ItemFetchJob* job = new Akonadi::ItemFetchJob(item);
-                job->fetchScope().fetchFullPayload();
-                Akonadi::Item::List items;
-                if (job->exec())
-                    items = job->items();
-                if (items.isEmpty())
-                {
-                    qCWarning(KALARM_LOG) << "MainWindow::executeDropEvent: Akonadi item" << item.id() << "not found";
-                    return;
-                }
-                const Akonadi::Item& it = items.at(0);
-                if (!it.isValid()  ||  !it.hasPayload<KMime::Message::Ptr>())
-                {
-                    qCWarning(KALARM_LOG) << "MainWindow::executeDropEvent: invalid email";
-                    return;
-                }
-                KMime::Message::Ptr message = it.payload<KMime::Message::Ptr>();
-                QString body;
-                if (message->textContent())
-                    body = message->textContent()->decodedText(true, true);    // strip trailing newlines & spaces
-                alarmText.setEmail(getMailHeader("To", *message),
-                                   getMailHeader("From", *message),
-                                   getMailHeader("Cc", *message),
-                                   getMailHeader("Date", *message),
-                                   getMailHeader("Subject", *message),
-                           body, it.id());
-            }
+            // It's an email held in Akonadi
+            qCDebug(KALARM_LOG) << "MainWindow::executeDropEvent: Akonadi email";
+//TODO: Fetch attachments if an email alarm is created below
         }
-        else
+        else if (!url.isEmpty()  &&  !item.isValid())
         {
+            // The data provides a URL, but it isn't an Akonadi URL.
             qCDebug(KALARM_LOG) << "MainWindow::executeDropEvent: URL";
             // Try to find the mime type of the file, without downloading a remote file
             QMimeDatabase mimeDb;
@@ -1410,8 +1357,8 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
             else if (alarmText.isScript())
                 types += i18nc("@item:inlistbox", "Command Alarm");
             bool ok = false;
-            QString type = QInputDialog::getItem(mainMainWindow(), i18nc("@title:window", "Alarm Type"),
-                                                 i18nc("@info", "Choose alarm type to create:"), types, 0, false, &ok);
+            const QString type = QInputDialog::getItem(mainMainWindow(), i18nc("@title:window", "Alarm Type"),
+                                                       i18nc("@info", "Choose alarm type to create:"), types, 0, false, &ok);
             if (!ok)
                 return;   // user didn't press OK
             int i = types.indexOf(type);

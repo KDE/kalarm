@@ -1,7 +1,7 @@
 /*
  *  editdlgtypes.cpp  -  dialogs to create or edit alarm or alarm template types
  *  Program:  kalarm
- *  Copyright © 2001-2019 David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2020 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -23,6 +23,7 @@
 
 #include "emailidcombo.h"
 #include "fontcolourbutton.h"
+#include "functions.h"
 #include "kalarmapp.h"
 #include "kamail.h"
 #include "latecancel.h"
@@ -179,6 +180,7 @@ void EditDisplayAlarmDlg::type_init(QWidget* parent, QVBoxLayout* frameLayout)
     // Text message edit box
     mTextMessageEdit = new TextEdit(parent);
     mTextMessageEdit->setLineWrapMode(KTextEdit::NoWrap);
+    mTextMessageEdit->enableEmailDrop();         // allow drag-and-drop of emails onto this widget
     mTextMessageEdit->setWhatsThis(i18nc("@info:whatsthis", "Enter the text of the alarm message. It may be multi-line."));
     connect(mTextMessageEdit, &TextEdit::textChanged, this, &EditDisplayAlarmDlg::contentsChanged);
     frameLayout->addWidget(mTextMessageEdit);
@@ -1865,11 +1867,72 @@ TextEdit::TextEdit(QWidget* parent)
     setMinimumSize(tsize);
 }
 
+void TextEdit::enableEmailDrop()
+{
+    mEmailDrop = true;
+    setAcceptDrops(true);   // allow drag-and-drop onto this widget
+}
+
 void TextEdit::dragEnterEvent(QDragEnterEvent* e)
 {
     if (KCalUtils::ICalDrag::canDecode(e->mimeData()))
+    {
         e->ignore();   // don't accept "text/calendar" objects
+        return;
+    }
+    if (mEmailDrop  &&  KAlarm::mayHaveRFC822(e->mimeData()))
+    {
+        e->acceptProposedAction();
+        return;
+    }
     KTextEdit::dragEnterEvent(e);
+}
+
+void TextEdit::dragMoveEvent(QDragMoveEvent* e)
+{
+    if (mEmailDrop  &&  KAlarm::mayHaveRFC822(e->mimeData()))
+    {
+        e->acceptProposedAction();
+        return;
+    }
+    KTextEdit::dragMoveEvent(e);
+}
+
+/******************************************************************************
+* Called when an object is dropped on the widget.
+*/
+void TextEdit::dropEvent(QDropEvent* e)
+{
+    if (mEmailDrop)
+    {
+        const QMimeData* data = e->mimeData();
+        AlarmText alarmText;
+        bool haveEmail = false;
+        if (KAlarm::dropRFC822(data, alarmText))
+        {
+            // Email message(s). Ignore all but the first.
+            qCDebug(KALARM_LOG) << "TextEdit::dropEvent: email";
+            haveEmail = true;
+        }
+        else
+        {
+            QUrl url;
+            Akonadi::Item item;
+            if (KAlarm::dropAkonadiEmail(data, url, item, alarmText))
+            {
+                // It's an email held in Akonadi
+                qCDebug(KALARM_LOG) << "TextEdit::dropEvent: Akonadi email";
+                haveEmail = true;
+            }
+        }
+        if (haveEmail)
+        {
+            if (!alarmText.isEmpty())
+                setPlainText(alarmText.displayText());
+            return;
+        }
+    }
+    KTextEdit::dropEvent(e);
 }
 
 // vim: et sw=4:
