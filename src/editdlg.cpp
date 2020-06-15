@@ -50,8 +50,6 @@
 #include "lib/timespinbox.h"
 #include "kalarm_debug.h"
 
-#include <Libkdepim/MaillistDrag>
-
 #include <KLocalizedString>
 #include <KConfig>
 #include <KSharedConfig>

@@ -20,7 +20,6 @@
 
 #include "lineedit.h"
 
-#include <Libkdepim/MaillistDrag>
 #include <KContacts/VCardDrag>
 #include <KCalUtils/ICalDrag>
 
@@ -103,7 +102,6 @@ void LineEdit::dragEnterEvent(QDragEnterEvent* e)
     else
         ok = (data->hasText()
            || data->hasUrls()
-           || (mType != Url && KPIM::MailList::canDecode(data))
            || (mType == Emails && KContacts::VCardDrag::canDecode(data)));
     if (ok)
         e->accept(rect());
@@ -119,21 +117,7 @@ void LineEdit::dropEvent(QDropEvent* e)
     QList<QUrl>           files;
     KContacts::Addressee::List addrList;
 
-    if (mType != Url
-    &&  KPIM::MailList::canDecode(data))
-    {
-        KPIM::MailList mailList = KPIM::MailList::fromMimeData(data);
-        // KMail message(s) - ignore all but the first
-        if (mailList.count())
-        {
-            if (mType == Emails)
-                newText = mailList.first().from();
-            else
-                setText(mailList.first().subject());    // replace any existing text
-        }
-    }
-    // This must come before QUrl
-    else if (mType == Emails
+    if (mType == Emails
          &&  KContacts::VCardDrag::canDecode(data)  &&  KContacts::VCardDrag::fromMimeData(data, addrList))
     {
         // KAddressBook entries

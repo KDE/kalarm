@@ -47,7 +47,6 @@
 #include <KAlarmCal/AlarmText>
 #include <KAlarmCal/KAEvent>
 
-#include <Libkdepim/MaillistDrag>
 #include <KMime/Message>
 #include <AkonadiCore/Item>
 #include <AkonadiCore/ItemFetchJob>
@@ -87,6 +86,7 @@ using namespace KCalUtils;
 #include <QUrlQuery>
 #include <QMenuBar>
 #include <QSystemTrayIcon>
+#include <QMimeData>
 
 using namespace KAlarmCal;
 
@@ -1201,8 +1201,7 @@ void MainWindow::executeDragEnterEvent(QDragEnterEvent* e)
     const QMimeData* data = e->mimeData();
     bool accept = ICalDrag::canDecode(data) ? !e->source()   // don't accept "text/calendar" objects from this application
                                                :    data->hasText()
-                                                 || data->hasUrls()
-                                                 || KPIM::MailList::canDecode(data);
+                                                 || data->hasUrls();
     if (accept)
         e->acceptProposedAction();
 }
@@ -1233,7 +1232,6 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
     KAEvent::SubAction action = KAEvent::MESSAGE;
     QByteArray         bytes;
     AlarmText          alarmText;
-    KPIM::MailList     mailList;
     QList<QUrl>        urls;
     MemoryCalendar::Ptr calendar(new MemoryCalendar(Preferences::timeSpecAsZone()));
 #ifndef NDEBUG
@@ -1256,35 +1254,12 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
         if (content.textContent())
             body = content.textContent()->decodedText(true, true);    // strip trailing newlines & spaces
         unsigned long sernum = 0;
-        if (KPIM::MailList::canDecode(data))
-        {
-            // Get its KMail serial number to allow the KMail message
-            // to be called up from the alarm message window.
-            mailList = KPIM::MailList::fromMimeData(data);
-            if (!mailList.isEmpty())
-                sernum = mailList.at(0).serialNumber();
-        }
         alarmText.setEmail(getMailHeader("To", content),
                            getMailHeader("From", content),
                            getMailHeader("Cc", content),
                            getMailHeader("Date", content),
                            getMailHeader("Subject", content),
                    body, sernum);
-    }
-    else if (KPIM::MailList::canDecode(data))
-    {
-        mailList = KPIM::MailList::fromMimeData(data);
-        // KMail message(s). Ignore all but the first.
-        qCDebug(KALARM_LOG) << "MainWindow::executeDropEvent: KMail_list";
-        if (mailList.isEmpty())
-            return;
-        const KPIM::MailSummary& summary = mailList.at(0);
-        QDateTime dt;
-        dt.setSecsSinceEpoch(summary.date());
-        const QString body = KAMail::getMailBody(summary.serialNumber());
-        alarmText.setEmail(summary.to(), summary.from(), QString(),
-                           QLocale().toString(dt), summary.subject(),
-                           body, summary.serialNumber());
     }
     else if (ICalDrag::fromMimeData(data, calendar))
     {
