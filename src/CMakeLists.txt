@@ -29,6 +29,7 @@ set(libkalarm_SRCS
     lib/combobox.cpp
     lib/config.cpp
     lib/desktop.cpp
+    lib/dragdrop.cpp
     lib/file.cpp
     lib/filedialog.cpp
     lib/groupbox.cpp

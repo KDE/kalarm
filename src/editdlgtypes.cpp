@@ -40,6 +40,7 @@
 #include "lib/buttongroup.h"
 #include "lib/checkbox.h"
 #include "lib/colourbutton.h"
+#include "lib/dragdrop.h"
 #include "lib/file.h"
 #include "lib/lineedit.h"
 #include "lib/messagebox.h"
@@ -1880,7 +1881,7 @@ void TextEdit::dragEnterEvent(QDragEnterEvent* e)
         e->ignore();   // don't accept "text/calendar" objects
         return;
     }
-    if (mEmailDrop  &&  KAlarm::mayHaveRFC822(e->mimeData()))
+    if (mEmailDrop  &&  DragDrop::mayHaveRFC822(e->mimeData()))
     {
         e->acceptProposedAction();
         return;
@@ -1890,7 +1891,7 @@ void TextEdit::dragEnterEvent(QDragEnterEvent* e)
 
 void TextEdit::dragMoveEvent(QDragMoveEvent* e)
 {
-    if (mEmailDrop  &&  KAlarm::mayHaveRFC822(e->mimeData()))
+    if (mEmailDrop  &&  DragDrop::mayHaveRFC822(e->mimeData()))
     {
         e->acceptProposedAction();
         return;
@@ -1903,12 +1904,12 @@ void TextEdit::dragMoveEvent(QDragMoveEvent* e)
 */
 void TextEdit::dropEvent(QDropEvent* e)
 {
+    const QMimeData* data = e->mimeData();
     if (mEmailDrop)
     {
-        const QMimeData* data = e->mimeData();
         AlarmText alarmText;
         bool haveEmail = false;
-        if (KAlarm::dropRFC822(data, alarmText))
+        if (DragDrop::dropRFC822(data, alarmText))
         {
             // Email message(s). Ignore all but the first.
             qCDebug(KALARM_LOG) << "TextEdit::dropEvent: email";
@@ -1918,7 +1919,7 @@ void TextEdit::dropEvent(QDropEvent* e)
         {
             QUrl url;
             Akonadi::Item item;
-            if (KAlarm::dropAkonadiEmail(data, url, item, alarmText))
+            if (DragDrop::dropAkonadiEmail(data, url, item, alarmText))
             {
                 // It's an email held in Akonadi
                 qCDebug(KALARM_LOG) << "TextEdit::dropEvent: Akonadi email";
@@ -1931,6 +1932,12 @@ void TextEdit::dropEvent(QDropEvent* e)
                 setPlainText(alarmText.displayText());
             return;
         }
+    }
+    QString text;
+    if (DragDrop::dropPlainText(data, text))
+    {
+        setPlainText(text);
+        return;
     }
     KTextEdit::dropEvent(e);
 }

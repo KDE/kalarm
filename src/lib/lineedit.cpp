@@ -1,7 +1,7 @@
 /*
  *  lineedit.cpp  -  Line edit widget with extra drag and drop options
  *  Program:  kalarm
- *  Copyright © 2003-2019 David Jarvie <djarvie@kde.org>
+ *  Copyright © 2003-2020 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -20,6 +20,8 @@
 
 #include "lineedit.h"
 
+#include "dragdrop.h"
+
 #include <KContacts/VCardDrag>
 #include <KCalUtils/ICalDrag>
 
@@ -32,6 +34,7 @@
 #include <QDragEnterEvent>
 #include <QDropEvent>
 #include <QFocusEvent>
+#include <QDebug>
 
 
 /*=============================================================================
@@ -56,7 +59,6 @@ LineEdit::LineEdit(QWidget* parent)
 
 void LineEdit::init()
 {
-    setAcceptDrops(false);
     if (mType == Url)
     {
         setCompletionMode(KCompletion::CompletionShell);
@@ -104,21 +106,22 @@ void LineEdit::dragEnterEvent(QDragEnterEvent* e)
            || data->hasUrls()
            || (mType == Emails && KContacts::VCardDrag::canDecode(data)));
     if (ok)
-        e->accept(rect());
+        e->acceptProposedAction();
     else
-        e->ignore(rect());
+        e->ignore();
 }
 
 void LineEdit::dropEvent(QDropEvent* e)
 {
     const QMimeData* data = e->mimeData();
+    QString               txt;
     QString               newText;
     QStringList           newEmails;
     QList<QUrl>           files;
     KContacts::Addressee::List addrList;
 
     if (mType == Emails
-         &&  KContacts::VCardDrag::canDecode(data)  &&  KContacts::VCardDrag::fromMimeData(data, addrList))
+    &&  KContacts::VCardDrag::canDecode(data)  &&  KContacts::VCardDrag::fromMimeData(data, addrList))
     {
         // KAddressBook entries
         for (KContacts::Addressee::List::Iterator it = addrList.begin();  it != addrList.end();  ++it)
@@ -153,10 +156,9 @@ void LineEdit::dropEvent(QDropEvent* e)
                 break;
         }
     }
-    else if (data->hasText())
+    else if (DragDrop::dropPlainText(data, txt))
     {
         // Plain text
-        const QString txt = data->text();
         if (mType == Emails)
         {
             // Remove newlines from a list of email addresses, and allow an eventual mailto: scheme

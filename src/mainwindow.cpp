@@ -40,6 +40,7 @@
 #include "resources/resources.h"
 #include "resources/eventmodel.h"
 #include "lib/autoqpointer.h"
+#include "lib/dragdrop.h"
 #include "lib/messagebox.h"
 #include "lib/synchtimer.h"
 #include "kalarm_debug.h"
@@ -1231,7 +1232,7 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
      * provide more than one mime type.
      * Don't change them without careful thought !!
      */
-    if (KAlarm::dropRFC822(data, alarmText))
+    if (DragDrop::dropRFC822(data, alarmText))
     {
         // Email message(s). Ignore all but the first.
         qCDebug(KALARM_LOG) << "MainWindow::executeDropEvent: email";
@@ -1314,7 +1315,7 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
     {
         QUrl url;
         Akonadi::Item item;
-        if (KAlarm::dropAkonadiEmail(data, url, item, alarmText))
+        if (DragDrop::dropAkonadiEmail(data, url, item, alarmText))
         {
             // It's an email held in Akonadi
             qCDebug(KALARM_LOG) << "MainWindow::executeDropEvent: Akonadi email";
