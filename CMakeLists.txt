@@ -33,7 +33,7 @@ include(ECMQtDeclareLoggingCategory)
 set(KDEPIM_DEV_VERSION alpha)
 
 # add an extra space
-if(DEFINED KDEPIM_DEV_VERSION)
+if (DEFINED KDEPIM_DEV_VERSION)
     set(KDEPIM_DEV_VERSION " ${KDEPIM_DEV_VERSION}")
 endif()
 
@@ -120,17 +120,17 @@ add_definitions(-DQT_NO_FOREACH)
 add_definitions(-DQT_NO_KEYWORDS)
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-#add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0x050f00) # for the moment we can't port QWheelEvent
+add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0x050f00)
 add_definitions(-DKF_DISABLE_DEPRECATED_BEFORE_AND_AT=0x054700)
 
 
 add_subdirectory(src)
 
 ecm_qt_install_logging_categories(
-        EXPORT KALARM
-        FILE kalarm.categories
-        DESTINATION ${KDE_INSTALL_LOGGINGCATEGORIESDIR}
-        )
+    EXPORT KALARM
+    FILE kalarm.categories
+    DESTINATION ${KDE_INSTALL_LOGGINGCATEGORIESDIR}
+    )
 
 add_subdirectory(doc)
 feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)
