@@ -39,7 +39,7 @@
 
 <!-- Don't change format of date and version of the documentation -->
 
-<date>2020-06-18</date>
+<date>2020-06-20</date>
 <releaseinfo>3.0.0 (Applications 20.08)</releaseinfo>
 
 <abstract>
@@ -353,54 +353,54 @@ already filled in with a copy of the selected alarm's details.</para>
 
 <listitem>
 <para>To create a new alarm which displays an existing email message,
-drag the email from &kmail; onto &kalarm;'s main window or system tray
-icon. Then select the <guilabel>Display Alarm</guilabel> option. This
-opens the <link linkend="alarm-edit-dlg">Alarm Edit dialog</link> with
-the entire email message (including sender, recipient, &etc;) as the
-alarm text.</para>
+drag the email from &kmail; onto &kalarm;'s main window. Then select
+the <guilabel>Display Alarm</guilabel> option. This opens the
+<link linkend="alarm-edit-dlg">Alarm Edit dialog</link> with the
+entire email message (including sender, recipient, &etc;) as the alarm
+text.</para>
 </listitem>
 
 <listitem>
 <para>To create a new email alarm to send a copy of an existing email
-message, drag the email from &kmail; onto &kalarm;'s main window or
-system tray icon. Then select the <guilabel>Email Alarm</guilabel>
-option. The <link linkend="alarm-edit-dlg">Alarm Edit dialog</link> is
-preset with the entire email message except sender.</para>
+message, drag the email from &kmail; onto &kalarm;'s main window. Then
+select the <guilabel>Email Alarm</guilabel> option. The
+<link linkend="alarm-edit-dlg">Alarm Edit dialog</link> is preset with
+the entire email message except sender.</para>
 </listitem>
 
 <listitem>
 <para>To create a new alarm which displays a summary of an existing
 to-do, drag the to-do from &korganizer; or other application onto
-&kalarm;'s main window or system tray icon. This opens the
+&kalarm;'s main window. This opens the
 <link linkend="alarm-edit-dlg">Alarm Edit dialog</link> with the
 to-do contents as the alarm text.</para>
 </listitem>
 
 <listitem>
 <para>To create a new command alarm, drag the text of a script
-starting with <quote>#!</quote> onto &kalarm;'s main window or system
-tray icon. Then select the <guilabel>Command Alarm</guilabel> option.
-This opens the <link linkend="alarm-edit-dlg">Alarm Edit dialog</link>
-preset with the script text.</para>
+starting with <quote>#!</quote> onto &kalarm;'s main window. Then
+select the <guilabel>Command Alarm</guilabel> option. This opens the
+<link linkend="alarm-edit-dlg">Alarm Edit dialog</link> preset with
+the script text.</para>
 </listitem>
 
 <listitem>
 <para>To create a file display alarm, drag a text or image file &URL;
-onto &kalarm;'s main window or system tray icon. This opens the
+onto &kalarm;'s main window. This opens the
 <link linkend="alarm-edit-dlg">Alarm Edit dialog</link> and sets the
 file name.</para>
 </listitem>
 
 <listitem>
 <para>To create an audio alarm, drag an audio file &URL; onto
-&kalarm;'s main window or system tray icon. This opens the
+&kalarm;'s main window. This opens the
 <link linkend="alarm-edit-dlg">Alarm Edit dialog</link> and sets the
 file name.</para>
 </listitem>
 
 <listitem>
 <para>To create a text message alarm, drag any piece of text onto
-&kalarm;'s main window or system tray icon. If prompted, select the
+&kalarm;'s main window. If prompted, select the
 <guilabel>Display Alarm</guilabel> option. This opens the
 <link linkend="alarm-edit-dlg">Alarm Edit dialog</link> preset with
 the alarm text.</para>
@@ -2038,10 +2038,10 @@ shortcut key for this action.</para>
 
 <para>&kalarm; by default displays an icon in the system tray. The icon
 provides both control and an alarm monitoring status indication. A
-normal &kalarm; icon indicates that alarms are being monitored, while
-a gray icon indicates that alarms are not being monitored. If some
-individual alarms are disabled, a small cross is overlaid on the
-icon.</para>
+normal &kalarm; icon indicates that all alarms are being monitored,
+while two different modified icons indicate either that
+some alarms, or that all alarms, are not being monitored. The icon
+modifications depend on the icon theme being used.</para>
 
 <para>&kalarm;'s system tray icon is by default automatically hidden
 whenever there are no alarms due in the next 24 hours. You can change
