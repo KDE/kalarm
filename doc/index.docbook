@@ -39,7 +39,7 @@
 
 <!-- Don't change format of date and version of the documentation -->
 
-<date>2020-05-14</date>
+<date>2020-06-18</date>
 <releaseinfo>3.0.0 (Applications 20.08)</releaseinfo>
 
 <abstract>
@@ -4724,8 +4724,19 @@ information).</para></note>
 <para>What configuration files does &kalarm; use?</para>
 </question>
 <answer>
-<para><filename>kalarmrc</filename> in the folder <command>qtpaths --paths GenericConfigLocation</command>
-holds your &kalarm; preferences.</para>
+<para>&kalarm;'s configuration is held in the following files in the folder
+<command>qtpaths --paths GenericConfigLocation</command> :</para>
+
+<itemizedlist>
+<listitem>
+<para><filename>kalarmrc</filename> holds your &kalarm; preferences.</para>
+</listitem>
+
+<listitem>
+<para><filename>kalarmresources</filename> holds the list of alarm
+calendars currently used by &kalarm;.</para>
+</listitem>
+</itemizedlist>
 </answer>
 </qandaentry>
 
@@ -4735,36 +4746,39 @@ holds your &kalarm; preferences.</para>
 </question>
 <answer>
 
-<para>The names of the calendar files which &kalarm; creates the first
-time it is run are as follows:</para>
+<para>When &kalarm; is run the first time, it creates the following
+alarm calendars in the folder
+<command>qtpaths --paths GenericDataLocation</command> :</para>
 
 <itemizedlist>
 <listitem>
-<para><filename>kalarm/calendar.ics</filename>
-in the folder <command>qtpaths --paths GenericDataLocation</command>
-holds active alarms.</para>
+<para><filename>kalarm/calendar.ics</filename>, which holds active
+alarms.</para>
 </listitem>
 
 <listitem>
-<para><filename>kalarm/expired.ics</filename>
-in the folder <command>qtpaths --paths GenericDataLocation</command>
-holds archived alarms.</para>
+<para><filename>kalarm/expired.ics</filename>, which holds archived
+alarms.</para>
 </listitem>
 
 <listitem>
-<para><filename>kalarm/template.ics</filename>
-in the folder <command>qtpaths --paths GenericDataLocation</command>
-holds  alarm templates.</para>
+<para><filename>kalarm/template.ics</filename>, which holds alarm
+templates.</para>
+</listitem>
+
+<listitem>
+<para><filename>kalarm/displaying.ics</filename>, which is a special
+calendar file to hold details of alarms currently being displayed,
+which allows &kalarm;, when it is restarted, to redisplay alarms which
+were being displayed when it last stopped.</para>
 </listitem>
 </itemizedlist>
 
-<para>You can find out which calendar files are currently in use by
-viewing each calendar's details in the alarm calendars list. The file
-names are stored in the alarm calendar configuration file.</para>
-
-<para>Details of alarms currently being displayed are stored in the
-calendar file <filename>kalarm/displaying.ics</filename>
-in the folder <command>qtpaths --paths GenericDataLocation</command>.</para>
+<para>You can subsequently replace these calendars, except
+<filename>displaying.ics</filename>, or create
+additional alarm calendars in any location which you choose. You can
+find out which calendar files are currently in use by viewing each
+calendar's details in the alarm calendars list.</para>
 </answer>
 </qandaentry>
 
