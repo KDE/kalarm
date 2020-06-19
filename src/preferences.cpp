@@ -257,7 +257,9 @@ void Preferences::setNoAutoStart(bool yes)
         QTextStream stream(&file);
         stream.setCodec("UTF-8");
         stream << lines.join(QLatin1Char('\n')) << "\n";
-        if (!file.commit())   // save the file
+        // QSaveFile doesn't report a write error when the device is full (see Qt
+        // bug 75077), so check that the data can actually be written by flush().
+        if (!file.flush()  ||  !file.commit())   // save the file
         {
             qCWarning(KALARM_LOG) << "Preferences::setNoAutoStart: Error writing autostart file:" << autostartFileRW;
             return;

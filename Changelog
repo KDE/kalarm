@@ -1,5 +1,8 @@
 KAlarm Change Log
 
+=== Version 2.14.3 (KDE Applications 20.04.3) --- 19 June 2020 ===
++ Fix possible corruption of autostart.desktop file if disk is full.
+
 === Version 2.14.2 (KDE Applications 20.04.2) --- 8 June 2020 ===
 + Make multiple KAlarm invocations work (Qt >5.12, Frameworks >5.60) [KDE Bug 417108]
 + Fix failure to set no-autostart for non-KDE desktops, if a writable autostart file exists.
