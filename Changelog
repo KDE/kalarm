@@ -6,9 +6,13 @@ KAlarm Change Log
 + Show alarm calendars sorted by name in calendars list.
 + Return to last used tab in Configuration dialogue when it is reopened.
 + Fix handling of calendar update or save errors when making alarm changes.
++ Fix possible calendar file corruption if disk is full (requires KDE Frameworks 5.72) [KDE Bug 370708]
 + Allow drag-and-drop of email onto display alarm text edit field.
 + Fix drag-and-drop of text onto line edits in alarm edit dialogue.
 + Refactor AlarmCalendar to split out resources and display calendars.
+
+=== Version 2.14.3 (KDE Applications 20.04.3) --- 19 June 2020 ===
++ Fix possible corruption of autostart.desktop file if disk is full.
 
 === Version 2.14.2 (KDE Applications 20.04.2) --- 8 June 2020 ===
 + Make multiple KAlarm invocations work (Qt >5.12, Frameworks >5.60) [KDE Bug 417108]
