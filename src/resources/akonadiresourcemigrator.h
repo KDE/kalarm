@@ -27,7 +27,6 @@
 
 class KJob;
 namespace Akonadi {
-class AgentInstance;
 class CollectionFetchJob;
 }
 

@@ -26,7 +26,6 @@
 #include "resourcemodel.h"
 
 #include <QObject>
-class QEventLoop;
 
 using namespace KAlarmCal;
 

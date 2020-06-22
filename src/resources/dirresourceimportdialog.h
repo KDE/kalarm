@@ -29,7 +29,6 @@
 
 #include <QUrl>
 
-class KJob;
 namespace KIO { class StatJob; }
 class DirResourceImportIntroWidget;
 class DirResourceImportTypeWidget;

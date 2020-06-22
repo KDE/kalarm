@@ -35,7 +35,6 @@ class ResourceFilterCheckListModel;
 class AlarmListModel;
 class TemplateListModel;
 class ResourceCreator;
-class QModelIndex;
 class QPixmap;
 
 namespace KAlarmCal { class KAEvent; }
