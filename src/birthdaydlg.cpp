@@ -75,8 +75,11 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
     QGroupBox* textGroup = new QGroupBox(i18nc("@title:group", "Alarm Text"), this);
     topLayout->addWidget(textGroup);
     QGridLayout* grid = new QGridLayout(textGroup);
-    int dcm = style()->pixelMetric(QStyle::PM_DefaultChildMargin);
-    grid->setContentsMargins(dcm, dcm, dcm, dcm);
+    const int dcmLeft   = style()->pixelMetric(QStyle::PM_LayoutLeftMargin);
+    const int dcmTop    = style()->pixelMetric(QStyle::PM_LayoutTopMargin);
+    const int dcmRight  = style()->pixelMetric(QStyle::PM_LayoutRightMargin);
+    const int dcmBottom = style()->pixelMetric(QStyle::PM_LayoutBottomMargin);
+    grid->setContentsMargins(dcmLeft, dcmTop, dcmRight, dcmBottom);
     grid->setHorizontalSpacing(style()->pixelMetric(QStyle::PM_LayoutHorizontalSpacing));
     grid->setVerticalSpacing(style()->pixelMetric(QStyle::PM_LayoutVerticalSpacing));
     QLabel* label = new QLabel(i18nc("@label:textbox", "Prefix:"), textGroup);
@@ -149,7 +152,7 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
     group = new QGroupBox(i18nc("@title:group", "Alarm Configuration"), this);
     topLayout->addWidget(group);
     QVBoxLayout* groupLayout = new QVBoxLayout(group);
-    groupLayout->setContentsMargins(dcm, dcm, dcm, dcm);
+    groupLayout->setContentsMargins(dcmLeft, dcmTop, dcmRight, dcmBottom);
     groupLayout->setSpacing(style()->pixelMetric(QStyle::PM_LayoutVerticalSpacing));
 
     // Sound checkbox and file selector

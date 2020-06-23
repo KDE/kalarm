@@ -343,8 +343,11 @@ void MessageWin::initView()
     QWidget* topWidget = new QWidget(this);
     setCentralWidget(topWidget);
     QVBoxLayout* topLayout = new QVBoxLayout(topWidget);
-    int dcm = style()->pixelMetric(QStyle::PM_DefaultChildMargin);
-    topLayout->setContentsMargins(dcm, dcm, dcm, dcm);
+    const int dcmLeft   = style()->pixelMetric(QStyle::PM_LayoutLeftMargin);
+    const int dcmTop    = style()->pixelMetric(QStyle::PM_LayoutTopMargin);
+    const int dcmRight  = style()->pixelMetric(QStyle::PM_LayoutRightMargin);
+    const int dcmBottom = style()->pixelMetric(QStyle::PM_LayoutBottomMargin);
+    topLayout->setContentsMargins(dcmLeft, dcmTop, dcmRight, dcmBottom);
     topLayout->setSpacing(style()->pixelMetric(QStyle::PM_LayoutVerticalSpacing));
 
     QPalette labelPalette = palette();
@@ -491,7 +494,7 @@ void MessageWin::initView()
                 text->setMaximumWidth(s.width() + text->scrollBarWidth());
                 text->setWhatsThis(i18nc("@info:whatsthis", "The alarm message"));
                 const int vspace = lineSpacing/2;
-                const int hspace = lineSpacing - style()->pixelMetric(QStyle::PM_DefaultChildMargin);
+                const int hspace = lineSpacing - (dcmLeft + dcmRight)/2;
                 topLayout->addSpacing(vspace);
                 topLayout->addStretch();
                 // Don't include any horizontal margins if message is 2/3 screen width
@@ -561,7 +564,7 @@ void MessageWin::initView()
                 frame->setWhatsThis(i18nc("@info:whatsthis", "The email to send"));
                 topLayout->addWidget(frame, 0, Qt::AlignHCenter);
                 QGridLayout* grid = new QGridLayout(frame);
-                grid->setContentsMargins(dcm, dcm, dcm, dcm);
+                grid->setContentsMargins(dcmLeft, dcmTop, dcmRight, dcmBottom);
                 grid->setHorizontalSpacing(style()->pixelMetric(QStyle::PM_LayoutHorizontalSpacing));
                 grid->setVerticalSpacing(style()->pixelMetric(QStyle::PM_LayoutVerticalSpacing));
 
@@ -600,8 +603,7 @@ void MessageWin::initView()
     {
         setCaption(i18nc("@title:window", "Error"));
         QHBoxLayout* layout = new QHBoxLayout();
-        int m = 2 * dcm;
-        layout->setContentsMargins(m, m, m, m);
+        layout->setContentsMargins(2 * dcmLeft, 2 * dcmTop, 2 * dcmRight, 2 * dcmBottom);
         layout->addStretch();
         topLayout->addLayout(layout);
         QLabel* label = new QLabel(topWidget);
@@ -719,7 +721,7 @@ void MessageWin::initView()
     mKAlarmButton->setEnabled(false);
 
     topLayout->activate();
-    setMinimumSize(QSize(grid->sizeHint().width() + 2 * style()->pixelMetric(QStyle::PM_DefaultChildMargin),
+    setMinimumSize(QSize(grid->sizeHint().width() + dcmLeft + dcmRight,
                          sizeHint().height()));
     const bool modal = !(windowFlags() & Qt::X11BypassWindowManagerHint);
     NET::States wstate = NET::Sticky | NET::KeepAbove;
@@ -1720,7 +1722,8 @@ QSize MessageWin::sizeHint() const
             {
                 // For command output, expand the window to accommodate the text
                 const QSize texthint = mCommandText->sizeHint();
-                int w = texthint.width() + 2 * style()->pixelMetric(QStyle::PM_DefaultChildMargin);
+                int w = texthint.width() + style()->pixelMetric(QStyle::PM_LayoutLeftMargin)
+                                         + style()->pixelMetric(QStyle::PM_LayoutRightMargin);
                 if (w < width())
                     w = width();
                 const int ypadding = height() - mCommandText->height();

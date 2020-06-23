@@ -96,9 +96,12 @@ RecurrenceEdit::RecurrenceEdit(bool readOnly, QWidget* parent)
     QGroupBox* recurGroup = new QGroupBox(i18nc("@title:group", "Recurrence Rule"), this);
     topLayout->addWidget(recurGroup);
     QHBoxLayout* hlayout = new QHBoxLayout(recurGroup);
-    int dcm = style()->pixelMetric(QStyle::PM_DefaultChildMargin);
-    hlayout->setContentsMargins(dcm, dcm, dcm, dcm);
-    hlayout->setSpacing(style()->pixelMetric(QStyle::PM_DefaultChildMargin));   // use margin spacing due to vertical divider line
+    const int dcmLeft   = style()->pixelMetric(QStyle::PM_LayoutLeftMargin);
+    const int dcmTop    = style()->pixelMetric(QStyle::PM_LayoutTopMargin);
+    const int dcmRight  = style()->pixelMetric(QStyle::PM_LayoutRightMargin);
+    const int dcmBottom = style()->pixelMetric(QStyle::PM_LayoutBottomMargin);
+    hlayout->setContentsMargins(dcmLeft, dcmTop, dcmRight, dcmBottom);
+    hlayout->setSpacing((dcmLeft + dcmRight)/2);   // use margin spacing due to vertical divider line
 
     // Recurrence period radio buttons
     QVBoxLayout* vlayout = new QVBoxLayout();
@@ -209,7 +212,7 @@ RecurrenceEdit::RecurrenceEdit(bool readOnly, QWidget* parent)
     mRuleStack->addWidget(mWeeklyRule);
     mRuleStack->addWidget(mMonthlyRule);
     mRuleStack->addWidget(mYearlyRule);
-    hlayout->addSpacing(style()->pixelMetric(QStyle::PM_DefaultChildMargin));
+    hlayout->addSpacing((dcmLeft + dcmRight)/2);
 
     // Create the recurrence range group which contains the controls
     // which specify how long the recurrence is to last.
@@ -221,7 +224,7 @@ RecurrenceEdit::RecurrenceEdit(bool readOnly, QWidget* parent)
     connect(mRangeButtonGroup, &ButtonGroup::buttonSet, this, &RecurrenceEdit::contentsChanged);
 
     vlayout = new QVBoxLayout(mRangeButtonBox);
-    vlayout->setContentsMargins(dcm, dcm, dcm, dcm);
+    vlayout->setContentsMargins(dcmLeft, dcmTop, dcmRight, dcmBottom);
     vlayout->setSpacing(style()->pixelMetric(QStyle::PM_LayoutVerticalSpacing));
     mNoEndDateButton = new RadioButton(i18nc("@option:radio", "No end"), mRangeButtonBox);
     mNoEndDateButton->setFixedSize(mNoEndDateButton->sizeHint());
@@ -303,7 +306,7 @@ RecurrenceEdit::RecurrenceEdit(bool readOnly, QWidget* parent)
     topLayout->addWidget(mExceptionGroup);
     topLayout->setStretchFactor(mExceptionGroup, 2);
     hlayout = new QHBoxLayout(mExceptionGroup);
-    hlayout->setContentsMargins(dcm, dcm, dcm, dcm);
+    hlayout->setContentsMargins(dcmLeft, dcmTop, dcmRight, dcmBottom);
     hlayout->setSpacing(style()->pixelMetric(QStyle::PM_LayoutHorizontalSpacing));
     vlayout = new QVBoxLayout();
     vlayout->setContentsMargins(0, 0, 0, 0);

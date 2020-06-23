@@ -47,8 +47,10 @@ FontColourChooser::FontColourChooser(QWidget* parent, const QStringList& fontLis
         page = new QGroupBox(frameLabel, this);
         topLayout->addWidget(page);
         topLayout = new QVBoxLayout(page);
-        int dcm = style()->pixelMetric(QStyle::PM_DefaultChildMargin);
-        topLayout->setContentsMargins(dcm, dcm, dcm, dcm);
+        topLayout->setContentsMargins(style()->pixelMetric(QStyle::PM_LayoutLeftMargin),
+                                      style()->pixelMetric(QStyle::PM_LayoutTopMargin),
+                                      style()->pixelMetric(QStyle::PM_LayoutRightMargin),
+                                      style()->pixelMetric(QStyle::PM_LayoutBottomMargin));
         topLayout->setSpacing(style()->pixelMetric(QStyle::PM_LayoutVerticalSpacing));
     }
     QHBoxLayout* hlayout = new QHBoxLayout();
