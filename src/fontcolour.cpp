@@ -1,7 +1,7 @@
 /*
  *  fontcolour.cpp  -  font and colour chooser widget
  *  Program:  kalarm
- *  Copyright © 2001-2019 David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2020 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -40,7 +40,7 @@ FontColourChooser::FontColourChooser(QWidget* parent, const QStringList& fontLis
     : QWidget(parent)
 {
     QVBoxLayout* topLayout = new QVBoxLayout(this);
-    topLayout->setSpacing(style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    topLayout->setSpacing(style()->pixelMetric(QStyle::PM_LayoutVerticalSpacing));
     QWidget* page = this;
     if (!frameLabel.isNull())
     {
@@ -49,7 +49,7 @@ FontColourChooser::FontColourChooser(QWidget* parent, const QStringList& fontLis
         topLayout = new QVBoxLayout(page);
         int dcm = style()->pixelMetric(QStyle::PM_DefaultChildMargin);
         topLayout->setContentsMargins(dcm, dcm, dcm, dcm);
-        topLayout->setSpacing(style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+        topLayout->setSpacing(style()->pixelMetric(QStyle::PM_LayoutVerticalSpacing));
     }
     QHBoxLayout* hlayout = new QHBoxLayout();
     hlayout->setContentsMargins(0, 0, 0, 0);
@@ -63,7 +63,7 @@ FontColourChooser::FontColourChooser(QWidget* parent, const QStringList& fontLis
         colourLayout->addWidget(box);
         QHBoxLayout* boxHLayout = new QHBoxLayout(box);
         boxHLayout->setContentsMargins(0, 0, 0, 0);
-        boxHLayout->setSpacing(style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing) / 2);
+        boxHLayout->setSpacing(style()->pixelMetric(QStyle::PM_LayoutHorizontalSpacing) / 2);
 
         QLabel* label = new QLabel(i18nc("@label:listbox", "Foreground color:"), box);
         boxHLayout->addWidget(label);
@@ -79,7 +79,7 @@ FontColourChooser::FontColourChooser(QWidget* parent, const QStringList& fontLis
     colourLayout->addWidget(box);
     QHBoxLayout* boxHLayout = new QHBoxLayout(box);
     boxHLayout->setContentsMargins(0, 0, 0, 0);
-    boxHLayout->setSpacing(style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing) / 2);
+    boxHLayout->setSpacing(style()->pixelMetric(QStyle::PM_LayoutHorizontalSpacing) / 2);
 
     QLabel* label = new QLabel(i18nc("@label:listbox", "Background color:"), box);
     boxHLayout->addWidget(label);

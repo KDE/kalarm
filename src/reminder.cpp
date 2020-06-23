@@ -1,7 +1,7 @@
 /*
  *  reminder.cpp  -  reminder setting widget
  *  Program:  kalarm
- *  Copyright © 2003-2005,2007-2011 David Jarvie <djarvie@kde.org>
+ *  Copyright © 2003-2020 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -70,7 +70,7 @@ Reminder::Reminder(const QString& reminderWhatsThis, const QString& valueWhatsTh
     {
         QHBoxLayout* layout = new QHBoxLayout();
         layout->setContentsMargins(0, 0, 0, 0);
-        layout->addSpacing(3 * style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+        layout->addSpacing(3 * style()->pixelMetric(QStyle::PM_LayoutHorizontalSpacing));
         topLayout->addLayout(layout);
         mOnceOnly = new CheckBox(i18n_chk_FirstRecurrenceOnly(), this);
         mOnceOnly->setFixedSize(mOnceOnly->sizeHint());

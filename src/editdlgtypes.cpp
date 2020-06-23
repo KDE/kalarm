@@ -222,7 +222,7 @@ void EditDisplayAlarmDlg::type_init(QWidget* parent, QVBoxLayout* frameLayout)
     mSoundPicker->setFixedSize(mSoundPicker->sizeHint());
     connect(mSoundPicker, &SoundPicker::changed, this, &EditDisplayAlarmDlg::contentsChanged);
     hlayout->addWidget(mSoundPicker);
-    hlayout->addSpacing(2 * style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    hlayout->addSpacing(2 * style()->pixelMetric(QStyle::PM_LayoutHorizontalSpacing));
     hlayout->addStretch();
 
     // Font and colour choice button and sample text
@@ -776,7 +776,7 @@ void EditCommandAlarmDlg::type_init(QWidget* parent, QVBoxLayout* frameLayout)
     QVBoxLayout* vlayout = new QVBoxLayout(mCmdOutputBox);
     int dcm = style()->pixelMetric(QStyle::PM_DefaultChildMargin);
     vlayout->setContentsMargins(dcm, dcm, dcm, dcm);
-    vlayout->setSpacing(style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    vlayout->setSpacing(style()->pixelMetric(QStyle::PM_LayoutVerticalSpacing));
     mCmdOutputGroup = new ButtonGroup(mCmdOutputBox);
     connect(mCmdOutputGroup, &ButtonGroup::buttonSet, this, &EditCommandAlarmDlg::contentsChanged);
 
@@ -1736,7 +1736,7 @@ CommandEdit::CommandEdit(QWidget* parent)
 {
     QVBoxLayout* vlayout = new QVBoxLayout(this);
     vlayout->setContentsMargins(0, 0, 0, 0);
-    vlayout->setSpacing(style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    vlayout->setSpacing(style()->pixelMetric(QStyle::PM_LayoutVerticalSpacing));
     mTypeScript = new CheckBox(EditCommandAlarmDlg::i18n_chk_EnterScript(), this);
     mTypeScript->setFixedSize(mTypeScript->sizeHint());
     mTypeScript->setWhatsThis(i18nc("@info:whatsthis", "Check to enter the contents of a script instead of a shell command line"));
@@ -1848,7 +1848,7 @@ QSize CommandEdit::minimumSizeHint() const
 {
     QSize t(mTypeScript->minimumSizeHint());
     QSize s(mCommandEdit->minimumSizeHint().expandedTo(mScriptEdit->minimumSizeHint()));
-    s.setHeight(s.height() + style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing) + t.height());
+    s.setHeight(s.height() + style()->pixelMetric(QStyle::PM_LayoutVerticalSpacing) + t.height());
     if (s.width() < t.width())
         s.setWidth(t.width());
     return s;

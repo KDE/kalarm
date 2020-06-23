@@ -1,7 +1,7 @@
 /*
  *  packedlayout.cpp  -  layout to pack items into rows
  *  Program:  kalarm
- *  Copyright © 2007,2019 David Jarvie <djarvie@kde.org>
+ *  Copyright © 2007-2020 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -37,6 +37,26 @@ PackedLayout::~PackedLayout()
 {
     while (!mItems.isEmpty())
         delete mItems.takeFirst();
+}
+
+void PackedLayout::setHorizontalSpacing(int spacing)
+{
+    mHorizontalSpacing = spacing;
+}
+
+void PackedLayout::setVerticalSpacing(int spacing)
+{
+    mVerticalSpacing = spacing;
+}
+
+int PackedLayout::horizontalSpacing() const
+{
+    return (mHorizontalSpacing >= 0) ? mHorizontalSpacing : spacing();
+}
+
+int PackedLayout::verticalSpacing() const
+{
+    return (mVerticalSpacing >= 0) ? mVerticalSpacing : spacing();
 }
 
 /******************************************************************************
@@ -104,7 +124,7 @@ int PackedLayout::arrange(const QRect& rect, bool set) const
         if (right > rect.right()  &&  x > rect.x())
         {
             x = rect.x();
-            y = y + yrow + spacing();
+            y = y + yrow + verticalSpacing();
             right = x + size.width();
             yrow = size.height();
         }
@@ -112,7 +132,7 @@ int PackedLayout::arrange(const QRect& rect, bool set) const
             yrow = qMax(yrow, size.height());
         items.append(item);
         posn.append(QRect(QPoint(x, y), size));
-        x = right + spacing();
+        x = right + horizontalSpacing();
     }
     if (set)
     {

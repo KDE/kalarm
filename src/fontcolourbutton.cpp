@@ -1,7 +1,7 @@
 /*
  *  fontcolourbutton.cpp  -  pushbutton widget to select a font and colour
  *  Program:  kalarm
- *  Copyright © 2003-2013 David Jarvie <djarvie@kde.org>
+ *  Copyright © 2003-2020 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -91,7 +91,7 @@ FontColourDlg::FontColourDlg(const QColor& bgColour, const QColor& fgColour, con
     setWindowTitle(caption);
 
     QVBoxLayout* layout = new QVBoxLayout(this);
-    layout->setSpacing(style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    layout->setSpacing(style()->pixelMetric(QStyle::PM_LayoutVerticalSpacing));
     mChooser = new FontColourChooser(this, QStringList(), QString(), true, true);
     mChooser->setBgColour(bgColour);
     mChooser->setFgColour(fgColour);
@@ -100,7 +100,7 @@ FontColourDlg::FontColourDlg(const QColor& bgColour, const QColor& fgColour, con
     else
         mChooser->setFont(font);
     layout->addWidget(mChooser);
-    layout->addSpacing(style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    layout->addSpacing(style()->pixelMetric(QStyle::PM_LayoutVerticalSpacing));
 
     QDialogButtonBox* buttonBox = new QDialogButtonBox(this);
     buttonBox->addButton(QDialogButtonBox::Ok);

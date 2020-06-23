@@ -1,7 +1,7 @@
 /*
  *  soundpicker.cpp  -  widget to select a sound file or a beep
  *  Program:  kalarm
- *  Copyright © 2002-2019 David Jarvie <djarvie@kde.org>
+ *  Copyright © 2002-2020 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -58,7 +58,7 @@ SoundPicker::SoundPicker(QWidget* parent)
 {
     QHBoxLayout* soundLayout = new QHBoxLayout(this);
     soundLayout->setContentsMargins(0, 0, 0, 0);
-    soundLayout->setSpacing(style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    soundLayout->setSpacing(style()->pixelMetric(QStyle::PM_LayoutHorizontalSpacing));
     mTypeBox = new QWidget(this);    // this is to control the QWhatsThis text display area
     QHBoxLayout* typeBoxLayout = new QHBoxLayout(mTypeBox);
     typeBoxLayout->setContentsMargins(0, 0, 0, 0);

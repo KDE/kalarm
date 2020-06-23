@@ -239,9 +239,10 @@ SoundWidget::SoundWidget(bool showPlay, bool showRepeat, QWidget* parent)
     QGridLayout* grid = new QGridLayout(group);
     const int dcm = style()->pixelMetric(QStyle::PM_DefaultChildMargin);
     grid->setContentsMargins(dcm, dcm, dcm, dcm);
-    grid->setSpacing(style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    grid->setHorizontalSpacing(style()->pixelMetric(QStyle::PM_LayoutHorizontalSpacing));
+    grid->setVerticalSpacing(style()->pixelMetric(QStyle::PM_LayoutVerticalSpacing));
     grid->setColumnStretch(2, 1);
-    const int indentWidth = 3 * style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
+    const int indentWidth = 3 * style()->pixelMetric(QStyle::PM_LayoutHorizontalSpacing);
     grid->setColumnMinimumWidth(0, indentWidth);
     grid->setColumnMinimumWidth(1, indentWidth);
 

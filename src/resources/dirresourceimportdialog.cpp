@@ -335,7 +335,7 @@ void DirResourceImportTypeWidget::setUrlValidation(QString (*func)(const QUrl&))
 */
 void DirResourceImportTypeWidget::setTextSizes()
 {
-    const int spacing = style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
+    const int spacing = style()->pixelMetric(QStyle::PM_LayoutVerticalSpacing);
     mUi->spacer1->changeSize(10, 2*spacing, QSizePolicy::Fixed, QSizePolicy::Fixed);
     mUi->spacer2->changeSize(10, 2*spacing, QSizePolicy::Fixed, QSizePolicy::Fixed);
     mUi->spacer3->changeSize(10, 2*spacing, QSizePolicy::Fixed, QSizePolicy::Fixed);

@@ -1,7 +1,7 @@
 /*
  *  alarmtimewidget.cpp  -  alarm date/time entry widget
  *  Program:  kalarm
- *  Copyright © 2001-2019 David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2020 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -95,7 +95,7 @@ void AlarmTimeWidget::init(Mode mode, const QString& title)
     mButtonGroup = new ButtonGroup(this);
     connect(mButtonGroup, &ButtonGroup::buttonSet, this, &AlarmTimeWidget::slotButtonSet);
     QVBoxLayout* topLayout = new QVBoxLayout(topWidget);
-    topLayout->setSpacing(style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    topLayout->setSpacing(style()->pixelMetric(QStyle::PM_LayoutVerticalSpacing));
     int dcm = title.isEmpty() ? 0 : style()->pixelMetric(QStyle::PM_DefaultChildMargin);
     topLayout->setContentsMargins(dcm, dcm, dcm, dcm);
 
@@ -119,7 +119,7 @@ void AlarmTimeWidget::init(Mode mode, const QString& title)
     QWidget* timeBox = new QWidget(topWidget);
     QHBoxLayout* timeBoxHLayout = new QHBoxLayout(timeBox);
     timeBoxHLayout->setContentsMargins(0, 0, 0, 0);
-    timeBoxHLayout->setSpacing(2 * style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    timeBoxHLayout->setSpacing(2 * style()->pixelMetric(QStyle::PM_LayoutHorizontalSpacing));
     mTimeEdit = new TimeEdit(timeBox);
     timeBoxHLayout->addWidget(mTimeEdit);
     mTimeEdit->setFixedSize(mTimeEdit->sizeHint());
@@ -200,7 +200,7 @@ void AlarmTimeWidget::init(Mode mode, const QString& title)
 
         QHBoxLayout* layout = new QHBoxLayout();
         topLayout->addLayout(layout);
-        layout->setSpacing(2 * style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+        layout->setSpacing(2 * style()->pixelMetric(QStyle::PM_LayoutHorizontalSpacing));
 
         // Time zone selector
         mTimeZoneBox = new QWidget(topWidget);   // this is to control the QWhatsThis text display area

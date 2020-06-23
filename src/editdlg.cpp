@@ -233,7 +233,7 @@ void EditAlarmDlg::init(const KAEvent* event)
         QHBoxLayout* box = new QHBoxLayout();
         frame->setLayout(box);
         box->setContentsMargins(0, 0, 0, 0);
-        box->setSpacing(style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+        box->setSpacing(style()->pixelMetric(QStyle::PM_LayoutHorizontalSpacing));
         QLabel* label = new QLabel(i18nc("@label:textbox", "Template name:"));
         label->setFixedSize(label->sizeHint());
         box->addWidget(label);
@@ -259,7 +259,7 @@ void EditAlarmDlg::init(const KAEvent* event)
     QVBoxLayout* topLayout = new QVBoxLayout(mainPage);
     int dcm = style()->pixelMetric(QStyle::PM_DefaultChildMargin);
     topLayout->setContentsMargins(dcm, dcm, dcm, dcm);
-    topLayout->setSpacing(style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    topLayout->setSpacing(style()->pixelMetric(QStyle::PM_LayoutVerticalSpacing));
 
     // Recurrence tab
     StackedScrollWidget* recurScroll = new StackedScrollWidget(mTabScrollGroup);
@@ -283,7 +283,7 @@ void EditAlarmDlg::init(const KAEvent* event)
     topLayout->addWidget(actionBox, 1);
     QVBoxLayout* layout = new QVBoxLayout(actionBox);
     layout->setContentsMargins(dcm, dcm, dcm, dcm);
-    layout->setSpacing(style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    layout->setSpacing(style()->pixelMetric(QStyle::PM_LayoutVerticalSpacing));
 
     type_init(actionBox, layout);
 
@@ -294,7 +294,7 @@ void EditAlarmDlg::init(const KAEvent* event)
         topLayout->addWidget(mDeferGroup);
         QHBoxLayout* hlayout = new QHBoxLayout(mDeferGroup);
         hlayout->setContentsMargins(dcm, dcm, dcm, dcm);
-        hlayout->setSpacing(style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+        hlayout->setSpacing(style()->pixelMetric(QStyle::PM_LayoutHorizontalSpacing));
         QLabel* label = new QLabel(i18nc("@label", "Deferred to:"), mDeferGroup);
         label->setFixedSize(label->sizeHint());
         hlayout->addWidget(label);
@@ -320,7 +320,8 @@ void EditAlarmDlg::init(const KAEvent* event)
         topLayout->addWidget(templateTimeBox);
         QGridLayout* grid = new QGridLayout(templateTimeBox);
         grid->setContentsMargins(dcm, dcm, dcm, dcm);
-        grid->setSpacing(style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+        grid->setHorizontalSpacing(style()->pixelMetric(QStyle::PM_LayoutHorizontalSpacing));
+        grid->setVerticalSpacing(style()->pixelMetric(QStyle::PM_LayoutVerticalSpacing));
         mTemplateTimeGroup = new ButtonGroup(templateTimeBox);
         connect(mTemplateTimeGroup, &ButtonGroup::buttonSet, this, &EditAlarmDlg::slotTemplateTimeType);
         connect(mTemplateTimeGroup, &ButtonGroup::buttonSet, this, &EditAlarmDlg::contentsChanged);
@@ -336,7 +337,7 @@ void EditAlarmDlg::init(const KAEvent* event)
         QWidget* box = new QWidget(templateTimeBox);
         QHBoxLayout* layout = new QHBoxLayout(box);
         layout->setContentsMargins(0, 0, 0, 0);
-        layout->setSpacing(style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+        layout->setSpacing(style()->pixelMetric(QStyle::PM_LayoutHorizontalSpacing));
         mTemplateUseTime = new RadioButton(i18nc("@option:radio", "Time:"), box);
         mTemplateUseTime->setFixedSize(mTemplateUseTime->sizeHint());
         mTemplateUseTime->setReadOnly(mReadOnly);
@@ -364,7 +365,7 @@ void EditAlarmDlg::init(const KAEvent* event)
         box = new QWidget(templateTimeBox);
         layout = new QHBoxLayout(box);
         layout->setContentsMargins(0, 0, 0, 0);
-        layout->setSpacing(style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+        layout->setSpacing(style()->pixelMetric(QStyle::PM_LayoutHorizontalSpacing));
         mTemplateUseTimeAfter = new RadioButton(i18nc("@option:radio", "Time from now:"), box);
         mTemplateUseTimeAfter->setFixedSize(mTemplateUseTimeAfter->sizeHint());
         mTemplateUseTimeAfter->setReadOnly(mReadOnly);
@@ -400,7 +401,7 @@ void EditAlarmDlg::init(const KAEvent* event)
     topLayout->addWidget(mMoreOptions);
     QVBoxLayout* moreLayout = new QVBoxLayout(mMoreOptions);
     moreLayout->setContentsMargins(0, 0, 0, 0);
-    moreLayout->setSpacing(style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    moreLayout->setSpacing(style()->pixelMetric(QStyle::PM_LayoutVerticalSpacing));
 
     // Reminder
     mReminder = createReminder(mMoreOptions);
@@ -419,7 +420,8 @@ void EditAlarmDlg::init(const KAEvent* event)
     moreLayout->addWidget(mLateCancel, 0, Qt::AlignLeft);
 
     PackedLayout* playout = new PackedLayout(Qt::AlignJustify);
-    playout->setSpacing(2 * style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    playout->setHorizontalSpacing(2 * style()->pixelMetric(QStyle::PM_LayoutHorizontalSpacing));
+    playout->setVerticalSpacing(2 * style()->pixelMetric(QStyle::PM_LayoutVerticalSpacing));
     moreLayout->addLayout(playout);
 
     // Acknowledgement confirmation required - default = no confirmation
@@ -858,7 +860,7 @@ void EditAlarmDlg::showEvent(QShowEvent* se)
     if (!mDeferGroupHeight)
     {
         if (mDeferGroup)
-            mDeferGroupHeight = mDeferGroup->height() + style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
+            mDeferGroupHeight = mDeferGroup->height() + style()->pixelMetric(QStyle::PM_LayoutVerticalSpacing);
         QSize s;
         if (Config::readWindowSize(mTemplate ? TEMPLATE_DIALOG_NAME : EDIT_DIALOG_NAME, s))
         {

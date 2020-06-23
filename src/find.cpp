@@ -1,7 +1,7 @@
 /*
  *  find.cpp  -  search facility
  *  Program:  kalarm
- *  Copyright © 2005-2019 David Jarvie <djarvie@kde.org>
+ *  Copyright © 2005-2020 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -108,13 +108,14 @@ void Find::display()
         // Alarm types
         QVBoxLayout* layout = new QVBoxLayout(kalarmWidgets);
         layout->setContentsMargins(0, 0, 0, 0);
-        layout->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+        layout->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_LayoutVerticalSpacing));
         QGroupBox* group = new QGroupBox(i18nc("@title:group", "Alarm Type"), kalarmWidgets);
         layout->addWidget(group);
         QGridLayout* grid = new QGridLayout(group);
         int dcm = QApplication::style()->pixelMetric(QStyle::PM_DefaultChildMargin);
         grid->setContentsMargins(dcm, dcm, dcm, dcm);
-        grid->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+        grid->setHorizontalSpacing(QApplication::style()->pixelMetric(QStyle::PM_LayoutHorizontalSpacing));
+        grid->setVerticalSpacing(QApplication::style()->pixelMetric(QStyle::PM_LayoutVerticalSpacing));
         grid->setColumnStretch(1, 1);
 
         // Live & archived alarm selection

@@ -1,7 +1,7 @@
 /*
  *  birthdaydlg.cpp  -  dialog to pick birthdays from address book
  *  Program:  kalarm
- *  Copyright © 2002-2012,2018 David Jarvie <djarvie@kde.org>
+ *  Copyright © 2002-2020 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -64,7 +64,7 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
     setWindowTitle(i18nc("@title:window", "Import Birthdays From KAddressBook"));
 
     QVBoxLayout* topLayout = new QVBoxLayout(this);
-    topLayout->setSpacing(style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    topLayout->setSpacing(style()->pixelMetric(QStyle::PM_LayoutVerticalSpacing));
 
     // Prefix and suffix to the name in the alarm text
     // Get default prefix and suffix texts from config file
@@ -77,7 +77,8 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
     QGridLayout* grid = new QGridLayout(textGroup);
     int dcm = style()->pixelMetric(QStyle::PM_DefaultChildMargin);
     grid->setContentsMargins(dcm, dcm, dcm, dcm);
-    grid->setSpacing(style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    grid->setHorizontalSpacing(style()->pixelMetric(QStyle::PM_LayoutHorizontalSpacing));
+    grid->setVerticalSpacing(style()->pixelMetric(QStyle::PM_LayoutVerticalSpacing));
     QLabel* label = new QLabel(i18nc("@label:textbox", "Prefix:"), textGroup);
     label->setFixedSize(label->sizeHint());
     grid->addWidget(label, 0, 0);
@@ -149,7 +150,7 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
     topLayout->addWidget(group);
     QVBoxLayout* groupLayout = new QVBoxLayout(group);
     groupLayout->setContentsMargins(dcm, dcm, dcm, dcm);
-    groupLayout->setSpacing(style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    groupLayout->setSpacing(style()->pixelMetric(QStyle::PM_LayoutVerticalSpacing));
 
     // Sound checkbox and file selector
     QHBoxLayout* hlayout = new QHBoxLayout();
@@ -158,7 +159,7 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
     mSoundPicker = new SoundPicker(group);
     mSoundPicker->setFixedSize(mSoundPicker->sizeHint());
     hlayout->addWidget(mSoundPicker);
-    hlayout->addSpacing(2 * style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    hlayout->addSpacing(2 * style()->pixelMetric(QStyle::PM_LayoutHorizontalSpacing));
     hlayout->addStretch();
 
     // Font and colour choice button and sample text
@@ -181,12 +182,12 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
     // Acknowledgement confirmation required - default = no confirmation
     hlayout = new QHBoxLayout();
     hlayout->setContentsMargins(0, 0, 0, 0);
-    hlayout->setSpacing(2 * style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    hlayout->setSpacing(2 * style()->pixelMetric(QStyle::PM_LayoutHorizontalSpacing));
     groupLayout->addLayout(hlayout);
     mConfirmAck = EditDisplayAlarmDlg::createConfirmAckCheckbox(group);
     mConfirmAck->setFixedSize(mConfirmAck->sizeHint());
     hlayout->addWidget(mConfirmAck);
-    hlayout->addSpacing(2 * style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    hlayout->addSpacing(2 * style()->pixelMetric(QStyle::PM_LayoutHorizontalSpacing));
     hlayout->addStretch();
 
     if (ShellProcess::authorised())    // don't display if shell commands not allowed (e.g. kiosk mode)
@@ -200,7 +201,7 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
     // Late display checkbox - default = allow late display
     hlayout = new QHBoxLayout();
     hlayout->setContentsMargins(0, 0, 0, 0);
-    hlayout->setSpacing(2 * style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    hlayout->setSpacing(2 * style()->pixelMetric(QStyle::PM_LayoutHorizontalSpacing));
     groupLayout->addLayout(hlayout);
     mLateCancel = new LateCancelSelector(false, group);
     mLateCancel->setFixedSize(mLateCancel->sizeHint());

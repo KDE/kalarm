@@ -1,7 +1,7 @@
 /*
  *  latecancel.cpp  -  widget to specify cancellation if late
  *  Program:  kalarm
- *  Copyright © 2004-2019 David Jarvie <djarvie@kde.org>
+ *  Copyright © 2004-2020 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -52,7 +52,7 @@ LateCancelSelector::LateCancelSelector(bool allowHourMinute, QWidget* parent)
 
     QVBoxLayout* topLayout = new QVBoxLayout(this);
     topLayout->setContentsMargins(0, 0, 0, 0);
-    topLayout->setSpacing(style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    topLayout->setSpacing(style()->pixelMetric(QStyle::PM_LayoutVerticalSpacing));
 
     mStack = new QStackedWidget(this);
     topLayout->addWidget(mStack, 0, Qt::AlignLeft);
@@ -79,7 +79,7 @@ LateCancelSelector::LateCancelSelector(bool allowHourMinute, QWidget* parent)
 
     hlayout = new QHBoxLayout();
     hlayout->setContentsMargins(0, 0, 0, 0);
-    hlayout->addSpacing(3 * style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    hlayout->addSpacing(3 * style()->pixelMetric(QStyle::PM_LayoutHorizontalSpacing));
     topLayout->addLayout(hlayout);
     mAutoClose = new CheckBox(i18n_chk_AutoCloseWin(), this);
     connect(mAutoClose, &CheckBox::toggled, this, &LateCancelSelector::changed);

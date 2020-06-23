@@ -345,7 +345,7 @@ void MessageWin::initView()
     QVBoxLayout* topLayout = new QVBoxLayout(topWidget);
     int dcm = style()->pixelMetric(QStyle::PM_DefaultChildMargin);
     topLayout->setContentsMargins(dcm, dcm, dcm, dcm);
-    topLayout->setSpacing(style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    topLayout->setSpacing(style()->pixelMetric(QStyle::PM_LayoutVerticalSpacing));
 
     QPalette labelPalette = palette();
     labelPalette.setColor(backgroundRole(), labelPalette.color(QPalette::Window));
@@ -544,7 +544,7 @@ void MessageWin::initView()
                 MinuteTimer::connect(this, SLOT(setRemainingTextMinute()));   // update every minute
             }
             topLayout->addWidget(mRemainingText, 0, Qt::AlignHCenter);
-            topLayout->addSpacing(style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+            topLayout->addSpacing(style()->pixelMetric(QStyle::PM_LayoutVerticalSpacing));
             topLayout->addStretch();
         }
     }
@@ -562,7 +562,8 @@ void MessageWin::initView()
                 topLayout->addWidget(frame, 0, Qt::AlignHCenter);
                 QGridLayout* grid = new QGridLayout(frame);
                 grid->setContentsMargins(dcm, dcm, dcm, dcm);
-                grid->setSpacing(style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+                grid->setHorizontalSpacing(style()->pixelMetric(QStyle::PM_LayoutHorizontalSpacing));
+                grid->setVerticalSpacing(style()->pixelMetric(QStyle::PM_LayoutVerticalSpacing));
 
                 QLabel* label = new QLabel(i18nc("@info Email addressee", "To:"), frame);
                 label->setFixedSize(label->sizeHint());
