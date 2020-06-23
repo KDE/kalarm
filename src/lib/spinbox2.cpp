@@ -30,11 +30,8 @@
 #include <QTimer>
 #include <QFrame>
 #include <QBrush>
-#include <QStyle>
-#include <QObject>
 #include <QApplication>
 #include <QPixmap>
-#include <QMatrix>
 
 #include <stdlib.h>
 
@@ -549,9 +546,9 @@ void SpinMirror::setMirroredState(bool clear)
 {
     // Some styles only look right when the buttons are mirrored
     if (mMirrored)
-        setMatrix(QMatrix(-1, 0, 0, 1, width() - 1 , 0));  // mirror left to right
+        setTransform(QTransform(-1, 0, 0, 1, width() - 1 , 0));  // mirror left to right
     else if (clear)
-        setMatrix(QMatrix());
+        setTransform(QTransform());
 }
 
 void SpinMirror::setFrame()

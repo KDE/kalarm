@@ -12,7 +12,6 @@ find_package(ECM ${KF5_MIN_VERSION} CONFIG REQUIRED)
 set(CMAKE_MODULE_PATH ${kalarm_SOURCE_DIR}/cmake/modules ${ECM_MODULE_PATH})
 include(ECMInstallIcons)
 
-
 include(ECMSetupVersion)
 include(ECMAddTests)
 
@@ -120,7 +119,7 @@ add_definitions(-DQT_NO_FOREACH)
 add_definitions(-DQT_NO_KEYWORDS)
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0x050e00)
+add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0x050f00)
 add_definitions(-DKF_DISABLE_DEPRECATED_BEFORE_AND_AT=0x054700)
 
 
