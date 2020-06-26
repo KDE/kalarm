@@ -84,7 +84,6 @@ RecurrenceEdit::RecurrenceEdit(bool readOnly, QWidget* parent)
     qCDebug(KALARM_LOG) << "RecurrenceEdit:";
     QVBoxLayout* topLayout = new QVBoxLayout(this);
     topLayout->setContentsMargins(0, 0, 0, 0);
-    topLayout->setSpacing(style()->pixelMetric(QStyle::PM_LayoutVerticalSpacing));
 
     /* Create the recurrence rule Group box which holds the recurrence period
      * selection buttons, and the weekly, monthly and yearly recurrence rule
@@ -96,12 +95,9 @@ RecurrenceEdit::RecurrenceEdit(bool readOnly, QWidget* parent)
     QGroupBox* recurGroup = new QGroupBox(i18nc("@title:group", "Recurrence Rule"), this);
     topLayout->addWidget(recurGroup);
     QHBoxLayout* hlayout = new QHBoxLayout(recurGroup);
-    const int dcmLeft   = style()->pixelMetric(QStyle::PM_LayoutLeftMargin);
-    const int dcmTop    = style()->pixelMetric(QStyle::PM_LayoutTopMargin);
-    const int dcmRight  = style()->pixelMetric(QStyle::PM_LayoutRightMargin);
-    const int dcmBottom = style()->pixelMetric(QStyle::PM_LayoutBottomMargin);
-    hlayout->setContentsMargins(dcmLeft, dcmTop, dcmRight, dcmBottom);
-    hlayout->setSpacing((dcmLeft + dcmRight)/2);   // use margin spacing due to vertical divider line
+    const int marLeft  = style()->pixelMetric(QStyle::PM_LayoutLeftMargin);
+    const int marRight = style()->pixelMetric(QStyle::PM_LayoutRightMargin);
+    hlayout->setSpacing((marLeft + marRight)/2);   // use margin spacing due to vertical divider line
 
     // Recurrence period radio buttons
     QVBoxLayout* vlayout = new QVBoxLayout();
@@ -212,7 +208,7 @@ RecurrenceEdit::RecurrenceEdit(bool readOnly, QWidget* parent)
     mRuleStack->addWidget(mWeeklyRule);
     mRuleStack->addWidget(mMonthlyRule);
     mRuleStack->addWidget(mYearlyRule);
-    hlayout->addSpacing((dcmLeft + dcmRight)/2);
+    hlayout->addSpacing((marLeft + marRight)/2);
 
     // Create the recurrence range group which contains the controls
     // which specify how long the recurrence is to last.
@@ -224,8 +220,6 @@ RecurrenceEdit::RecurrenceEdit(bool readOnly, QWidget* parent)
     connect(mRangeButtonGroup, &ButtonGroup::buttonSet, this, &RecurrenceEdit::contentsChanged);
 
     vlayout = new QVBoxLayout(mRangeButtonBox);
-    vlayout->setContentsMargins(dcmLeft, dcmTop, dcmRight, dcmBottom);
-    vlayout->setSpacing(style()->pixelMetric(QStyle::PM_LayoutVerticalSpacing));
     mNoEndDateButton = new RadioButton(i18nc("@option:radio", "No end"), mRangeButtonBox);
     mNoEndDateButton->setFixedSize(mNoEndDateButton->sizeHint());
     mNoEndDateButton->setReadOnly(mReadOnly);
@@ -306,8 +300,6 @@ RecurrenceEdit::RecurrenceEdit(bool readOnly, QWidget* parent)
     topLayout->addWidget(mExceptionGroup);
     topLayout->setStretchFactor(mExceptionGroup, 2);
     hlayout = new QHBoxLayout(mExceptionGroup);
-    hlayout->setContentsMargins(dcmLeft, dcmTop, dcmRight, dcmBottom);
-    hlayout->setSpacing(style()->pixelMetric(QStyle::PM_LayoutHorizontalSpacing));
     vlayout = new QVBoxLayout();
     vlayout->setContentsMargins(0, 0, 0, 0);
     hlayout->addLayout(vlayout);
@@ -1087,11 +1079,9 @@ Rule::Rule(const QString& freqText, const QString& freqWhatsThis, bool time, boo
 {
     mLayout = new QVBoxLayout(this);
     mLayout->setContentsMargins(0, 0, 0, 0);
-    mLayout->setSpacing(style()->pixelMetric(QStyle::PM_LayoutVerticalSpacing));
 
     QHBoxLayout* freqLayout = new QHBoxLayout();
     freqLayout->setContentsMargins(0, 0, 0, 0);
-    freqLayout->setSpacing(style()->pixelMetric(QStyle::PM_LayoutHorizontalSpacing));
     mLayout->addLayout(freqLayout);
     QWidget* box = new QWidget(this);    // this is to control the QWhatsThis text display area
     freqLayout->addWidget(box, 0, Qt::AlignLeft);
@@ -1198,8 +1188,6 @@ DayWeekRule::DayWeekRule(const QString& freqText, const QString& freqWhatsThis, 
     QWidget* box = new QWidget(this);   // this is to control the QWhatsThis text display area
     QGridLayout* dgrid = new QGridLayout(box);
     dgrid->setContentsMargins(0, 0, 0, 0);
-    dgrid->setHorizontalSpacing(style()->pixelMetric(QStyle::PM_LayoutHorizontalSpacing));
-    dgrid->setVerticalSpacing(style()->pixelMetric(QStyle::PM_LayoutVerticalSpacing));
     QLocale locale;
     for (int i = 0;  i < 7;  ++i)
     {
@@ -1339,8 +1327,6 @@ MonthYearRule::MonthYearRule(const QString& freqText, const QString& freqWhatsTh
     // Month day selector
     QGridLayout* boxLayout = new QGridLayout();
     boxLayout->setContentsMargins(0, 0, 0, 0);
-    boxLayout->setHorizontalSpacing(style()->pixelMetric(QStyle::PM_LayoutHorizontalSpacing));
-    boxLayout->setVerticalSpacing(style()->pixelMetric(QStyle::PM_LayoutVerticalSpacing));
     layout()->addLayout(boxLayout);
 
     mDayButton = new RadioButton(i18nc("@option:radio On day number in the month", "O&n day"), this);
@@ -1556,8 +1542,6 @@ YearlyRule::YearlyRule(bool readOnly, QWidget* parent)
     hlayout->addWidget(w, 1, Qt::AlignLeft);
     QGridLayout* grid = new QGridLayout(w);
     grid->setContentsMargins(0, 0, 0, 0);
-    grid->setHorizontalSpacing(style()->pixelMetric(QStyle::PM_LayoutHorizontalSpacing));
-    grid->setVerticalSpacing(style()->pixelMetric(QStyle::PM_LayoutVerticalSpacing));
     QLocale locale;
     for (int i = 0;  i < 12;  ++i)
     {
@@ -1578,7 +1562,6 @@ YearlyRule::YearlyRule(bool readOnly, QWidget* parent)
     f29box->addWidget(w, 0, Qt::AlignLeft);
     QHBoxLayout* boxLayout = new QHBoxLayout(w);
     boxLayout->setContentsMargins(0, 0, 0, 0);
-    boxLayout->setSpacing(style()->pixelMetric(QStyle::PM_LayoutHorizontalSpacing));
     mFeb29Label = new QLabel(i18nc("@label:listbox", "February 2&9th alarm in non-leap years:"));
     mFeb29Label->setFixedSize(mFeb29Label->sizeHint());
     boxLayout->addWidget(mFeb29Label);

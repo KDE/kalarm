@@ -43,46 +43,59 @@ class QKeyEvent;
  */
 class CheckBox : public QCheckBox
 {
-        Q_OBJECT
-    public:
-        /** Constructor.
-         *  @param parent The parent object of this widget.
-         */
-        explicit CheckBox(QWidget* parent);
-        /** Constructor.
-         *  @param text Text to display.
-         *  @param parent The parent object of this widget.
-         */
-        CheckBox(const QString& text, QWidget* parent);
-        /** Returns true if the widget is read only. */
-        bool         isReadOnly() const          { return mReadOnly; }
-        /** Sets whether the check box is read-only for the user. If read-only,
-         *  its state cannot be changed by the user.
-         *  @param readOnly True to set the widget read-only, false to set it read-write.
-         */
-        virtual void setReadOnly(bool readOnly);
-        /** Returns the widget which receives focus when the user selects the check box by clicking on it. */
-        QWidget*     focusWidget() const         { return mFocusWidget; }
-        /** Specifies a widget to receive focus when the user selects the check box by clicking on it.
-         *  @param widget Widget to receive focus.
-         *  @param enable If true, @p widget will be enabled before receiving focus. If
-         *                false, the enabled state of @p widget will be left unchanged when
-         *                the check box is clicked.
-         */
-        void         setFocusWidget(QWidget* widget, bool enable = true);
-    protected:
-        void         mousePressEvent(QMouseEvent*) override;
-        void         mouseReleaseEvent(QMouseEvent*) override;
-        void         mouseMoveEvent(QMouseEvent*) override;
-        void         keyPressEvent(QKeyEvent*) override;
-        void         keyReleaseEvent(QKeyEvent*) override;
-    protected Q_SLOTS:
-        void         slotClicked();
-    private:
-        Qt::FocusPolicy mFocusPolicy;           // default focus policy for the QCheckBox
-        QWidget*        mFocusWidget {nullptr}; // widget to receive focus when button is clicked on
-        bool            mFocusWidgetEnable;     // enable focus widget before setting focus
-        bool            mReadOnly {false};      // value cannot be changed
+    Q_OBJECT
+public:
+    /** Constructor.
+     *  @param parent The parent object of this widget.
+     */
+    explicit CheckBox(QWidget* parent);
+
+    /** Constructor.
+     *  @param text Text to display.
+     *  @param parent The parent object of this widget.
+     */
+    CheckBox(const QString& text, QWidget* parent);
+
+    /** Returns true if the widget is read only. */
+    bool isReadOnly() const          { return mReadOnly; }
+
+    /** Sets whether the check box is read-only for the user. If read-only,
+     *  its state cannot be changed by the user.
+     *  @param readOnly True to set the widget read-only, false to set it read-write.
+     */
+    virtual void setReadOnly(bool readOnly);
+
+    /** Returns the widget which receives focus when the user selects the check box by clicking on it. */
+    QWidget* focusWidget() const         { return mFocusWidget; }
+
+    /** Specifies a widget to receive focus when the user selects the check box by clicking on it.
+     *  @param widget Widget to receive focus.
+     *  @param enable If true, @p widget will be enabled before receiving focus. If
+     *                false, the enabled state of @p widget will be left unchanged when
+     *                the check box is clicked.
+     */
+    void setFocusWidget(QWidget* widget, bool enable = true);
+
+    /** Return the indentation from the left of a checkbox widget to the start
+     *  of the checkbox text.
+     *  @param widget  Checkbox to use, or parent widget.
+     *  @return  Indentation to start of text.
+     */
+    static int textIndent(QWidget* cb);
+
+protected:
+    void         mousePressEvent(QMouseEvent*) override;
+    void         mouseReleaseEvent(QMouseEvent*) override;
+    void         mouseMoveEvent(QMouseEvent*) override;
+    void         keyPressEvent(QKeyEvent*) override;
+    void         keyReleaseEvent(QKeyEvent*) override;
+protected Q_SLOTS:
+    void         slotClicked();
+private:
+    Qt::FocusPolicy mFocusPolicy;           // default focus policy for the QCheckBox
+    QWidget*        mFocusWidget {nullptr}; // widget to receive focus when button is clicked on
+    bool            mFocusWidgetEnable;     // enable focus widget before setting focus
+    bool            mReadOnly {false};      // value cannot be changed
 };
 
 #endif // CHECKBOX_H

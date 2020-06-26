@@ -30,7 +30,6 @@ using namespace KCalendarCore;
 #include <QStackedWidget>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
-#include <QStyle>
 
 
 // Collect these widget labels together to ensure consistent wording and
@@ -52,7 +51,6 @@ LateCancelSelector::LateCancelSelector(bool allowHourMinute, QWidget* parent)
 
     QVBoxLayout* topLayout = new QVBoxLayout(this);
     topLayout->setContentsMargins(0, 0, 0, 0);
-    topLayout->setSpacing(style()->pixelMetric(QStyle::PM_LayoutVerticalSpacing));
 
     mStack = new QStackedWidget(this);
     topLayout->addWidget(mStack, 0, Qt::AlignLeft);
@@ -78,8 +76,7 @@ LateCancelSelector::LateCancelSelector(bool allowHourMinute, QWidget* parent)
     hlayout->addWidget(mTimeSelector, 0, Qt::AlignLeft);
 
     hlayout = new QHBoxLayout();
-    hlayout->setContentsMargins(0, 0, 0, 0);
-    hlayout->addSpacing(3 * style()->pixelMetric(QStyle::PM_LayoutHorizontalSpacing));
+    hlayout->setContentsMargins(CheckBox::textIndent(mCheckbox), 0, 0, 0);
     topLayout->addLayout(hlayout);
     mAutoClose = new CheckBox(i18n_chk_AutoCloseWin(), this);
     connect(mAutoClose, &CheckBox::toggled, this, &LateCancelSelector::changed);

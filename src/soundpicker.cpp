@@ -58,7 +58,6 @@ SoundPicker::SoundPicker(QWidget* parent)
 {
     QHBoxLayout* soundLayout = new QHBoxLayout(this);
     soundLayout->setContentsMargins(0, 0, 0, 0);
-    soundLayout->setSpacing(style()->pixelMetric(QStyle::PM_LayoutHorizontalSpacing));
     mTypeBox = new QWidget(this);    // this is to control the QWhatsThis text display area
     QHBoxLayout* typeBoxLayout = new QHBoxLayout(mTypeBox);
     typeBoxLayout->setContentsMargins(0, 0, 0, 0);

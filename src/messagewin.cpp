@@ -347,8 +347,6 @@ void MessageWin::initView()
     const int dcmTop    = style()->pixelMetric(QStyle::PM_LayoutTopMargin);
     const int dcmRight  = style()->pixelMetric(QStyle::PM_LayoutRightMargin);
     const int dcmBottom = style()->pixelMetric(QStyle::PM_LayoutBottomMargin);
-    topLayout->setContentsMargins(dcmLeft, dcmTop, dcmRight, dcmBottom);
-    topLayout->setSpacing(style()->pixelMetric(QStyle::PM_LayoutVerticalSpacing));
 
     QPalette labelPalette = palette();
     labelPalette.setColor(backgroundRole(), labelPalette.color(QPalette::Window));
@@ -564,9 +562,6 @@ void MessageWin::initView()
                 frame->setWhatsThis(i18nc("@info:whatsthis", "The email to send"));
                 topLayout->addWidget(frame, 0, Qt::AlignHCenter);
                 QGridLayout* grid = new QGridLayout(frame);
-                grid->setContentsMargins(dcmLeft, dcmTop, dcmRight, dcmBottom);
-                grid->setHorizontalSpacing(style()->pixelMetric(QStyle::PM_LayoutHorizontalSpacing));
-                grid->setVerticalSpacing(style()->pixelMetric(QStyle::PM_LayoutVerticalSpacing));
 
                 QLabel* label = new QLabel(i18nc("@info Email addressee", "To:"), frame);
                 label->setFixedSize(label->sizeHint());
@@ -592,7 +587,7 @@ void MessageWin::initView()
         }
     }
 
-    if (!mErrorMsgs.count())
+    if (mErrorMsgs.isEmpty())
     {
         topWidget->setAutoFillBackground(true);
         QPalette palette = topWidget->palette();

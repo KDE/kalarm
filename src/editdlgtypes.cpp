@@ -774,11 +774,6 @@ void EditCommandAlarmDlg::type_init(QWidget* parent, QVBoxLayout* frameLayout)
     mCmdOutputBox = new QGroupBox(i18nc("@title:group", "Command Output"), parent);
     frameLayout->addWidget(mCmdOutputBox);
     QVBoxLayout* vlayout = new QVBoxLayout(mCmdOutputBox);
-    vlayout->setContentsMargins(style()->pixelMetric(QStyle::PM_LayoutLeftMargin),
-                                style()->pixelMetric(QStyle::PM_LayoutTopMargin),
-                                style()->pixelMetric(QStyle::PM_LayoutRightMargin),
-                                style()->pixelMetric(QStyle::PM_LayoutBottomMargin));
-    vlayout->setSpacing(style()->pixelMetric(QStyle::PM_LayoutVerticalSpacing));
     mCmdOutputGroup = new ButtonGroup(mCmdOutputBox);
     connect(mCmdOutputGroup, &ButtonGroup::buttonSet, this, &EditCommandAlarmDlg::contentsChanged);
 
@@ -1738,7 +1733,6 @@ CommandEdit::CommandEdit(QWidget* parent)
 {
     QVBoxLayout* vlayout = new QVBoxLayout(this);
     vlayout->setContentsMargins(0, 0, 0, 0);
-    vlayout->setSpacing(style()->pixelMetric(QStyle::PM_LayoutVerticalSpacing));
     mTypeScript = new CheckBox(EditCommandAlarmDlg::i18n_chk_EnterScript(), this);
     mTypeScript->setFixedSize(mTypeScript->sizeHint());
     mTypeScript->setWhatsThis(i18nc("@info:whatsthis", "Check to enter the contents of a script instead of a shell command line"));

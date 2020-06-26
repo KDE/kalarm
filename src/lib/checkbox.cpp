@@ -1,7 +1,7 @@
 /*
  *  checkbox.cpp  -  check box with read-only option
  *  Program:  kalarm
- *  Copyright © 2002,2003,2005 David Jarvie <djarvie@kde.org>
+ *  Copyright © 2002-2005,2020 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -22,6 +22,7 @@
 
 #include <QMouseEvent>
 #include <QKeyEvent>
+#include <QStyleOptionButton>
 
 
 CheckBox::CheckBox(QWidget* parent)
@@ -60,6 +61,28 @@ void CheckBox::setFocusWidget(QWidget* w, bool enable)
         connect(this, &CheckBox::clicked, this, &CheckBox::slotClicked);
     else
         disconnect(this, &CheckBox::clicked, this, &CheckBox::slotClicked);
+}
+
+/******************************************************************************
+* Return the indentation from the left of a checkbox widget to the start of the
+* checkbox text.
+*/
+int CheckBox::textIndent(QWidget* widget)
+{
+    QStyleOptionButton opt;
+    QStyle* style;
+    if (qobject_cast<QCheckBox*>(widget))
+    {
+        opt.initFrom(widget);
+        style = widget->style();
+    }
+    else
+    {
+        QCheckBox cb(widget);
+        opt.initFrom(&cb);
+        style = cb.style();
+    }
+    return style->subElementRect(QStyle::SE_CheckBoxContents, &opt).left();
 }
 
 /******************************************************************************

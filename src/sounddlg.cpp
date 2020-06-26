@@ -46,7 +46,6 @@
 #include <QShowEvent>
 #include <QResizeEvent>
 #include <QDialogButtonBox>
-#include <QStyle>
 #include <QStandardPaths>
 
 
@@ -215,7 +214,7 @@ SoundWidget::SoundWidget(bool showPlay, bool showRepeat, QWidget* parent)
 
         // Pause between repetitions
         QWidget* box = new QWidget(mRepeatGroupBox);
-        glayout->addWidget(box);
+        glayout->addWidget(box, 0, Qt::AlignLeft);
         boxHLayout = new QHBoxLayout(box);
         boxHLayout->setContentsMargins(0, 0, 0, 0);
         label = new QLabel(i18nc("@label:spinbox Length of time to pause between repetitions", "Pause between repetitions:"), box);
@@ -237,14 +236,8 @@ SoundWidget::SoundWidget(bool showPlay, bool showRepeat, QWidget* parent)
     QGroupBox* group = new QGroupBox(i18nc("@title:group Sound volume", "Volume"), this);
     layout->addWidget(group);
     QGridLayout* grid = new QGridLayout(group);
-    grid->setContentsMargins(style()->pixelMetric(QStyle::PM_LayoutLeftMargin),
-                             style()->pixelMetric(QStyle::PM_LayoutTopMargin),
-                             style()->pixelMetric(QStyle::PM_LayoutRightMargin),
-                             style()->pixelMetric(QStyle::PM_LayoutBottomMargin));
-    grid->setHorizontalSpacing(style()->pixelMetric(QStyle::PM_LayoutHorizontalSpacing));
-    grid->setVerticalSpacing(style()->pixelMetric(QStyle::PM_LayoutVerticalSpacing));
     grid->setColumnStretch(2, 1);
-    const int indentWidth = 3 * style()->pixelMetric(QStyle::PM_LayoutHorizontalSpacing);
+    const int indentWidth = CheckBox::textIndent(this) - grid->horizontalSpacing();
     grid->setColumnMinimumWidth(0, indentWidth);
     grid->setColumnMinimumWidth(1, indentWidth);
 

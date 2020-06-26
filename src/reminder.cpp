@@ -70,7 +70,7 @@ Reminder::Reminder(const QString& reminderWhatsThis, const QString& valueWhatsTh
     {
         QHBoxLayout* layout = new QHBoxLayout();
         layout->setContentsMargins(0, 0, 0, 0);
-        layout->addSpacing(3 * style()->pixelMetric(QStyle::PM_LayoutHorizontalSpacing));
+        layout->setContentsMargins(CheckBox::textIndent(mTime), 0, 0, 0);
         topLayout->addLayout(layout);
         mOnceOnly = new CheckBox(i18n_chk_FirstRecurrenceOnly(), this);
         mOnceOnly->setFixedSize(mOnceOnly->sizeHint());

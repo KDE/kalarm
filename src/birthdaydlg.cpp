@@ -64,7 +64,6 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
     setWindowTitle(i18nc("@title:window", "Import Birthdays From KAddressBook"));
 
     QVBoxLayout* topLayout = new QVBoxLayout(this);
-    topLayout->setSpacing(style()->pixelMetric(QStyle::PM_LayoutVerticalSpacing));
 
     // Prefix and suffix to the name in the alarm text
     // Get default prefix and suffix texts from config file
@@ -75,13 +74,6 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
     QGroupBox* textGroup = new QGroupBox(i18nc("@title:group", "Alarm Text"), this);
     topLayout->addWidget(textGroup);
     QGridLayout* grid = new QGridLayout(textGroup);
-    const int dcmLeft   = style()->pixelMetric(QStyle::PM_LayoutLeftMargin);
-    const int dcmTop    = style()->pixelMetric(QStyle::PM_LayoutTopMargin);
-    const int dcmRight  = style()->pixelMetric(QStyle::PM_LayoutRightMargin);
-    const int dcmBottom = style()->pixelMetric(QStyle::PM_LayoutBottomMargin);
-    grid->setContentsMargins(dcmLeft, dcmTop, dcmRight, dcmBottom);
-    grid->setHorizontalSpacing(style()->pixelMetric(QStyle::PM_LayoutHorizontalSpacing));
-    grid->setVerticalSpacing(style()->pixelMetric(QStyle::PM_LayoutVerticalSpacing));
     QLabel* label = new QLabel(i18nc("@label:textbox", "Prefix:"), textGroup);
     label->setFixedSize(label->sizeHint());
     grid->addWidget(label, 0, 0);
@@ -152,8 +144,6 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
     group = new QGroupBox(i18nc("@title:group", "Alarm Configuration"), this);
     topLayout->addWidget(group);
     QVBoxLayout* groupLayout = new QVBoxLayout(group);
-    groupLayout->setContentsMargins(dcmLeft, dcmTop, dcmRight, dcmBottom);
-    groupLayout->setSpacing(style()->pixelMetric(QStyle::PM_LayoutVerticalSpacing));
 
     // Sound checkbox and file selector
     QHBoxLayout* hlayout = new QHBoxLayout();

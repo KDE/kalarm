@@ -64,7 +64,7 @@ void FontColourButton::slotButtonPressed()
 {
     // Use AutoQPointer to guard against crash on application exit while
     // the dialogue is still open. It prevents double deletion (both on
-        // deletion of FontColourButton, and on return from this function).
+    // deletion of FontColourButton, and on return from this function).
     AutoQPointer<FontColourDlg> dlg = new FontColourDlg(mBgColour, mFgColour, mFont, mDefaultFont,
                                              i18nc("@title:window", "Choose Alarm Font & Color"), this);
     dlg->setReadOnly(mReadOnly);
@@ -91,7 +91,6 @@ FontColourDlg::FontColourDlg(const QColor& bgColour, const QColor& fgColour, con
     setWindowTitle(caption);
 
     QVBoxLayout* layout = new QVBoxLayout(this);
-    layout->setSpacing(style()->pixelMetric(QStyle::PM_LayoutVerticalSpacing));
     mChooser = new FontColourChooser(this, QStringList(), QString(), true, true);
     mChooser->setBgColour(bgColour);
     mChooser->setFgColour(fgColour);

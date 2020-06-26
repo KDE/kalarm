@@ -51,7 +51,6 @@ DeferAlarmDlg::DeferAlarmDlg(const DateTime& initialDT, bool anyTimeOption, bool
     setWindowTitle(i18nc("@title:window", "Defer Alarm"));
 
     QVBoxLayout* layout = new QVBoxLayout(this);
-    layout->setSpacing(style()->pixelMetric(QStyle::PM_LayoutVerticalSpacing));
 
     mTimeWidget = new AlarmTimeWidget((anyTimeOption ? AlarmTimeWidget::DEFER_ANY_TIME : AlarmTimeWidget::DEFER_TIME), this);
     mTimeWidget->setDateTime(initialDT);
