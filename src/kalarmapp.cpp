@@ -28,7 +28,7 @@
 #include "kamail.h"
 #include "mainwindow.h"
 #include "messagewin.h"
-#include "kalarmmigrateapplication.h"
+#include "migratekde4files.h"
 #include "preferences.h"
 #include "prefdlg.h"
 #include "resourcescalendar.h"
@@ -144,7 +144,8 @@ KAlarmApp* KAlarmApp::create(int& argc, char** argv)
 */
 void KAlarmApp::initialise()
 {
-    KAlarmMigrateApplication migrate;
+    // Migrate config and data files from KDE4 locations.
+    MigrateKde4Files migrate;
     migrate.migrate();
 
 #ifndef NDEBUG

@@ -11,15 +11,14 @@ add_subdirectory(kconf_update)
 set(libkalarm_common_SRCS)
 
 ecm_qt_declare_logging_category(libkalarm_common_SRCS
-                                    HEADER kalarm_debug.h
-                                    IDENTIFIER KALARM_LOG
-                                    CATEGORY_NAME org.kde.pim.kalarm
-                                    DEFAULT_SEVERITY Warning
-                                    DESCRIPTION "kalarm (kalarm)"
-                                    OLD_CATEGORY_NAMES log_kalarm
-                                    EXPORT KALARM
-                                    )
-
+                                HEADER kalarm_debug.h
+                                IDENTIFIER KALARM_LOG
+                                CATEGORY_NAME org.kde.pim.kalarm
+                                DEFAULT_SEVERITY Warning
+                                DESCRIPTION "kalarm (kalarm)"
+                                OLD_CATEGORY_NAMES log_kalarm
+                                EXPORT KALARM
+                                )
 
 ########### next target ###############
 set(libkalarm_SRCS
@@ -78,7 +77,6 @@ set(resources_SRCS
     resources/singlefileresource.cpp
     resources/singlefileresourceconfigdialog.cpp
     resources/dirresourceimportdialog.cpp
-    eventid.cpp
    )
 
 set(kalarm_bin_SRCS ${libkalarm_SRCS} ${resources_SRCS}
@@ -103,6 +101,7 @@ set(kalarm_bin_SRCS ${libkalarm_SRCS} ${resources_SRCS}
     dbushandler.cpp
     recurrenceedit.cpp
     deferdlg.cpp
+    eventid.cpp
     functions.cpp
     fontcolour.cpp
     fontcolourbutton.cpp
@@ -128,7 +127,7 @@ set(kalarm_bin_SRCS ${libkalarm_SRCS} ${resources_SRCS}
     templatedlg.cpp
     templatemenuaction.cpp
     wakedlg.cpp
-    kalarmmigrateapplication.cpp
+    migratekde4files.cpp
     akonadicollectionsearch.cpp
 )
 
