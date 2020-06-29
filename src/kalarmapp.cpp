@@ -120,6 +120,7 @@ KAlarmApp::~KAlarmApp()
     ResourcesCalendar::terminate();
     DisplayCalendar::terminate();
     DataModel::terminate();
+    delete mDBusHandler;
 }
 
 /******************************************************************************
