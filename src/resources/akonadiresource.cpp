@@ -55,13 +55,22 @@ const QRegularExpression MatchMimeType(QStringLiteral("^application/x-vnd\\.kde\
 const QString AkonadiResource::KALARM_RESOURCE(QStringLiteral("akonadi_kalarm_resource"));
 const QString AkonadiResource::KALARM_DIR_RESOURCE(QStringLiteral("akonadi_kalarm_dir_resource"));
 
-// Class to provide an object for removeDuplicateResources() signals to be received.
+/*=============================================================================
+* Class to provide an object for removeDuplicateResources() signals to be received.
+*/
 class DuplicateResourceObject : public QObject
 {
     Q_OBJECT
 public:
+    typedef void (*CompletionFunction)();
     DuplicateResourceObject(QObject* parent = nullptr) : QObject(parent) {}
-    void reset()  { mAgentPaths.clear(); }
+    void reset(void (*completed)())
+    {
+        mAgentPaths.clear();
+        mCompletionFunc = completed;
+        agentCount = 0;
+    }
+    int agentCount {0};
 public Q_SLOTS:
     void collectionFetchResult(KJob*);
 private:
@@ -74,10 +83,13 @@ private:
             : resourceId(r), collectionId(c) {}
     };
     QHash<QString, ResourceCol> mAgentPaths;   // path, (resource identifier, collection ID) pairs
+    void (*mCompletionFunc)() {nullptr};       // function to call on completion
 };
 DuplicateResourceObject* AkonadiResource::mDuplicateResourceObject {nullptr};
 
 
+/******************************************************************************
+*/
 Resource AkonadiResource::create(const Akonadi::Collection& collection)
 {
     if (collection.id() < 0  ||  collection.remoteId().isEmpty())
@@ -561,21 +573,24 @@ KAEvent AkonadiResource::event(Resource& resource, const Akonadi::Item& item)
 * Check for, and remove, any Akonadi resources which duplicate use of calendar
 * files/directories.
 */
-void AkonadiResource::removeDuplicateResources()
+bool AkonadiResource::removeDuplicateResources(void (*completed)())
 {
+    qCDebug(KALARM_LOG) << "AkonadiResource::removeDuplicateResources";
     if (!mDuplicateResourceObject)
         mDuplicateResourceObject = new DuplicateResourceObject(Resources::instance());
-    mDuplicateResourceObject->reset();
+    mDuplicateResourceObject->reset(completed);
     const AgentInstance::List agents = AgentManager::self()->instances();
     for (const AgentInstance& agent : agents)
     {
         if (agent.type().mimeTypes().indexOf(MatchMimeType) >= 0)
         {
+            ++mDuplicateResourceObject->agentCount;
             CollectionFetchJob* job = new CollectionFetchJob(Collection::root(), CollectionFetchJob::Recursive);
             job->fetchScope().setResource(agent.identifier());
             connect(job, &CollectionFetchJob::result, mDuplicateResourceObject, &DuplicateResourceObject::collectionFetchResult);
         }
     }
+    return mDuplicateResourceObject->agentCount > 0;
 }
 
 /******************************************************************************
@@ -613,6 +628,12 @@ void DuplicateResourceObject::collectionFetchResult(KJob* j)
                 mAgentPaths[c.remoteId()] = thisRes;
             }
         }
+    }
+    if (--agentCount <= 0)
+    {
+        // De-duplication is complete. Notify the caller.
+        if (mCompletionFunc)
+            (*mCompletionFunc)();
     }
 }
 

@@ -285,8 +285,13 @@ public:
 
     /** Check for, and remove, Akonadi resources which duplicate use of
      *  calendar files/directories.
+     *  @param completed  Function to call on completion of de-duplication, if
+     *                    KAlarm Akonadi resources exist.
+     *  @return  true if de-duplication initiated;
+     *           false if no KAlarm Akonadi resources found, in which case @p
+     *           completed will not be called.
      */
-    static void removeDuplicateResources();
+    static bool removeDuplicateResources(void (*completed)() = nullptr);
 
     /** Called to notify that a resource's Collection has been populated.
      *  @param events  The full list of events in the Collection.

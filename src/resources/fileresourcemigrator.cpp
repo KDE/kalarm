@@ -20,6 +20,7 @@
 
 #include "fileresourcemigrator.h"
 
+#include "akonadiresource.h"
 #include "dirresourceimportdialog.h"
 #include "fileresourcecalendarupdater.h"
 #include "fileresourceconfigmanager.h"
@@ -38,6 +39,7 @@
 #include <AkonadiCore/AttributeFactory>
 #include <AkonadiCore/CollectionFetchJob>
 #include <AkonadiCore/CollectionFetchScope>
+#include <AkonadiCore/CollectionModifyJob>
 
 #include <KCalendarCore/MemoryCalendar>
 #include <KCalendarCore/ICalFormat>
@@ -45,6 +47,7 @@
 #include <KLocalizedString>
 #include <KConfig>
 #include <KConfigGroup>
+#include <Kdelibs4Migration>
 
 #include <QStandardPaths>
 #include <QDirIterator>
@@ -62,6 +65,17 @@ const Akonadi::Collection::Rights WritableRights = Akonadi::Collection::CanChang
 bool readDirectoryResource(const QString& dirPath, CalEvent::Types alarmTypes, QHash<CalEvent::Type, QVector<KAEvent>>& events);
 }
 
+// Private class to provide private signals.
+class FileResourceMigrator::AkonadiMigration : public QObject
+{
+    Q_OBJECT
+public:
+    AkonadiMigration()  {}
+    void setComplete(bool needed)   { required = needed; Q_EMIT completed(required); }
+    bool required {false};
+Q_SIGNALS:
+    void completed(bool needed);
+};
 
 FileResourceMigrator* FileResourceMigrator::mInstance = nullptr;
 bool                  FileResourceMigrator::mCompleted = false;
@@ -71,12 +85,14 @@ bool                  FileResourceMigrator::mCompleted = false;
 */
 FileResourceMigrator::FileResourceMigrator(QObject* parent)
     : QObject(parent)
+    , mAkonadiMigration(new AkonadiMigration)
 {
 }
 
 FileResourceMigrator::~FileResourceMigrator()
 {
     qCDebug(KALARM_LOG) << "~FileResourceMigrator";
+    delete mAkonadiMigration;
     mInstance = nullptr;
 }
 
@@ -109,7 +125,7 @@ FileResourceMigrator* FileResourceMigrator::instance()
 * Migrate old Akonadi or KResource calendars, and create default file system
 * resources.
 */
-void FileResourceMigrator::execute()
+void FileResourceMigrator::start()
 {
     if (mCompleted)
     {
@@ -117,7 +133,7 @@ void FileResourceMigrator::execute()
         return;
     }
 
-    qCDebug(KALARM_LOG) << "FileResourceMigrator::execute";
+    qCDebug(KALARM_LOG) << "FileResourceMigrator::start";
 
     // First, check whether any file system resources already exist, and if so,
     // find their alarm types.
@@ -129,78 +145,34 @@ void FileResourceMigrator::execute()
     {
         // Some file system resources already exist, so no migration is
         // required. Create any missing default file system resources.
-        createDefaultResources();
+        mMigrateKResources = false;   // ignore KResources
+        akonadiMigrationComplete();
     }
     else
     {
         // There are no file system resources, so migrate any Akonadi resources.
-        mMigratingAkonadi = true;
-        connect(Akonadi::ServerManager::self(), &Akonadi::ServerManager::stateChanged, this, &FileResourceMigrator::migrateAkonadiResources);
-        migrateAkonadiResources(Akonadi::ServerManager::state());
+        mAkonadiMigration->required = true;
+        connect(mAkonadiMigration, &FileResourceMigrator::AkonadiMigration::completed, this, &FileResourceMigrator::akonadiMigrationComplete);
+        connect(Akonadi::ServerManager::self(), &Akonadi::ServerManager::stateChanged, this, &FileResourceMigrator::checkAkonadiResources);
+        checkAkonadiResources(Akonadi::ServerManager::state());
         // Migration of Akonadi collections has now been initiated. On
-        // completion, any missing default resources will be created.
-
-        if (!mMigratingAkonadi)
-        {
-            // There are no Akonadi resources, so migrate any KResources alarm
-            // calendars from pre-Akonadi versions of KAlarm.
-            migrateKResources();
-        }
+        // completion, either KResource calendars will be migrated, or
+        // any missing default resources will be created.
     }
-
-    // Allow any calendar updater instances to complete and auto-delete.
-    FileResourceCalendarUpdater::waitForCompletion();
 }
 
 /******************************************************************************
 * Called when the Akonadi server manager changes state.
 * Once it is running, migrate any Akonadi KAlarm resources.
 */
-void FileResourceMigrator::migrateAkonadiResources(Akonadi::ServerManager::State state)
+void FileResourceMigrator::checkAkonadiResources(Akonadi::ServerManager::State state)
 {
     switch (state)
     {
         case Akonadi::ServerManager::Running:
         {
-            qCDebug(KALARM_LOG) << "FileResourceMigrator::migrateAkonadiResources: initiated";
-            Akonadi::AttributeFactory::registerAttribute<CollectionAttribute>();
-            const Akonadi::AgentInstance::List agents = Akonadi::AgentManager::self()->instances();
-
-            // First, migrate KAlarm calendar file resources.
-            // This will allow any KAlarm directory resources to be merged into
-            // single file resources, if the user prefers that.
-            for (const Akonadi::AgentInstance& agent : agents)
-            {
-                const QString type = agent.type().identifier();
-                if (type == KALARM_RESOURCE)
-                {
-                    // Fetch the resource's collection to determine its alarm types
-                    Akonadi::CollectionFetchJob* job = new Akonadi::CollectionFetchJob(Akonadi::Collection::root(), Akonadi::CollectionFetchJob::FirstLevel);
-                    job->fetchScope().setResource(agent.identifier());
-                    mFetchesPending << job;
-                    connect(job, &KJob::result, this, &FileResourceMigrator::collectionFetchResult);
-
-                    mMigrateKResources = false;   // ignore KResources if Akonadi resources exist
-                }
-            }
-            // Now migrate KAlarm directory resources, which must be merged
-            // or converted into single file resources.
-            for (const Akonadi::AgentInstance& agent : agents)
-            {
-                const QString type = agent.type().identifier();
-                if (type == KALARM_DIR_RESOURCE)
-                {
-                    // Fetch the resource's collection to determine its alarm types
-                    Akonadi::CollectionFetchJob* job = new Akonadi::CollectionFetchJob(Akonadi::Collection::root(), Akonadi::CollectionFetchJob::FirstLevel);
-                    job->fetchScope().setResource(agent.identifier());
-                    mFetchesPending << job;
-                    connect(job, &KJob::result, this, &FileResourceMigrator::collectionFetchResult);
-
-                    mMigrateKResources = false;   // ignore KResources if Akonadi resources exist
-                }
-            }
-            if (mFetchesPending.isEmpty())
-                mMigratingAkonadi = false;   // there are no Akonadi resources to migrate
+            if (!AkonadiResource::removeDuplicateResources(&callMigrateAkonadiResources))
+                mAkonadiMigration->setComplete(false);   // there are no Akonadi resources to migrate
             break;
         }
         case Akonadi::ServerManager::Stopping:
@@ -212,14 +184,67 @@ void FileResourceMigrator::migrateAkonadiResources(Akonadi::ServerManager::State
                 return;   // wait for the server to change to Running state
 
             // Can't start Akonadi, so give up trying to migrate.
-            qCWarning(KALARM_LOG) << "FileResourceMigrator::migrateAkonadiResources: Failed to start Akonadi server";
-            mMigratingAkonadi = false;
+            qCWarning(KALARM_LOG) << "FileResourceMigrator::checkAkonadiResources: Failed to start Akonadi server";
+            mAkonadiMigration->setComplete(false);
             break;
     }
 
     disconnect(Akonadi::ServerManager::self(), nullptr, this, nullptr);
-    if (mMigrateKResources)
-        migrateKResources();
+}
+
+/******************************************************************************
+* Called when removal of duplicate Akonadi KAlarm resources has completed.
+*/
+void FileResourceMigrator::callMigrateAkonadiResources()
+{
+    if (mInstance)
+        mInstance->migrateAkonadiResources();
+}
+
+/******************************************************************************
+* Migrate any Akonadi KAlarm resources.
+*/
+void FileResourceMigrator::migrateAkonadiResources()
+{
+    qCDebug(KALARM_LOG) << "FileResourceMigrator::migrateAkonadiResources: initiated";
+    Akonadi::AttributeFactory::registerAttribute<CollectionAttribute>();
+    const Akonadi::AgentInstance::List agents = Akonadi::AgentManager::self()->instances();
+
+    // First, migrate KAlarm calendar file resources.
+    // This will allow any KAlarm directory resources to be merged into
+    // single file resources, if the user prefers that.
+    for (const Akonadi::AgentInstance& agent : agents)
+    {
+        const QString type = agent.type().identifier();
+        if (type == KALARM_RESOURCE)
+        {
+            // Fetch the resource's collection to determine its alarm types
+            Akonadi::CollectionFetchJob* job = new Akonadi::CollectionFetchJob(Akonadi::Collection::root(), Akonadi::CollectionFetchJob::FirstLevel);
+            job->fetchScope().setResource(agent.identifier());
+            mFetchesPending << job;
+            connect(job, &KJob::result, this, &FileResourceMigrator::collectionFetchResult);
+
+            mMigrateKResources = false;   // ignore KResources if Akonadi resources exist
+        }
+    }
+    // Now migrate KAlarm directory resources, which must be merged
+    // or converted into single file resources.
+    for (const Akonadi::AgentInstance& agent : agents)
+    {
+        const QString type = agent.type().identifier();
+        if (type == KALARM_DIR_RESOURCE)
+        {
+            // Fetch the resource's collection to determine its alarm types
+            Akonadi::CollectionFetchJob* job = new Akonadi::CollectionFetchJob(Akonadi::Collection::root(), Akonadi::CollectionFetchJob::FirstLevel);
+            job->fetchScope().setResource(agent.identifier());
+            mFetchesPending << job;
+            connect(job, &KJob::result, this, &FileResourceMigrator::collectionFetchResult);
+
+            mMigrateKResources = false;   // ignore KResources if Akonadi resources exist
+        }
+    }
+    if (mFetchesPending.isEmpty())
+        mAkonadiMigration->setComplete(false);   // there are no Akonadi resources to migrate
 }
 
 /******************************************************************************
@@ -255,6 +280,7 @@ void FileResourceMigrator::collectionFetchResult(KJob* j)
                 standardTypes    = attr->standard();
                 backgroundColour = attr->backgroundColor();
             }
+            bool converted = false;
             if (resourceType == KALARM_RESOURCE)
             {
                 qCDebug(KALARM_LOG) << "FileResourceMigrator: Creating resource" << collection.displayName() << ", alarm types:" << alarmTypes << ", standard types:" << standardTypes;
@@ -264,8 +290,6 @@ void FileResourceMigrator::collectionFetchResult(KJob* j)
                               alarmTypes, collection.displayName(), backgroundColour,
                               enabledTypes, standardTypes, readOnly));
                 Resource resource = FileResourceConfigManager::addResource(settings);
-                // Don't delete the Akonadi resource in case it is wanted by any other application
-                //Akonadi::AgentManager::self()->removeInstance(agent);
 
                 // Update the calendar to the current KAlarm format if necessary,
                 // and if the user agrees.
@@ -274,6 +298,7 @@ void FileResourceMigrator::collectionFetchResult(KJob* j)
                 updater->update();   // note that 'updater' will auto-delete when finished
 
                 mExistingAlarmTypes |= alarmTypes;
+                converted = true;
             }
             else if (resourceType == KALARM_DIR_RESOURCE)
             {
@@ -322,9 +347,19 @@ void FileResourceMigrator::collectionFetchResult(KJob* j)
                                 resource.addEvent(event);
 
                             mExistingAlarmTypes |= alarmType;
+                            converted = true;
                         }
                     }
                 }
+            }
+
+            if (converted)
+            {
+                // Delete the Akonadi resource, to prevent it using CPU, on the
+                // assumption that Akonadi access won't be needed by any other
+                // application. Excess CPU usage is one of the major bugs which
+                // prompted replacing Akonadi with file resources.
+                Akonadi::AgentManager::self()->removeInstance(agent);
             }
         }
     }
@@ -332,11 +367,28 @@ void FileResourceMigrator::collectionFetchResult(KJob* j)
 
     if (mFetchesPending.isEmpty())
     {
-        // The alarm types of all collections have been found, so now create
-        // any necessary default file system resources.
-        mMigratingAkonadi = false;
-        createDefaultResources();
+        // The alarm types of all collections have been found.
+        mAkonadiMigration->setComplete(true);
     }
+}
+
+/******************************************************************************
+* Called when Akonadi migration is complete or is known not to be possible.
+*/
+void FileResourceMigrator::akonadiMigrationComplete()
+{
+    if (!mAkonadiMigration->required)
+    {
+        // There are no Akonadi resources, so migrate any KResources alarm
+        // calendars from pre-Akonadi versions of KAlarm.
+        migrateKResources();
+    }
+
+    // Create any necessary additional default file system resources.
+    createDefaultResources();
+
+    // Allow any calendar updater instances to complete and auto-delete.
+    FileResourceCalendarUpdater::waitForCompletion();
 }
 
 /******************************************************************************
@@ -354,12 +406,24 @@ void FileResourceMigrator::checkIfComplete()
 */
 void FileResourceMigrator::migrateKResources()
 {
+    if (!mMigrateKResources)
+        return;
     if (mExistingAlarmTypes == CalEvent::EMPTY)
     {
         // There are no file system resources, so migrate any KResources alarm
         // calendars from pre-Akonadi versions of KAlarm.
+        const QString kresConfFile = QStringLiteral("kresources/alarms/stdrc");
+        QString configFile = QStandardPaths::locate(QStandardPaths::ConfigLocation, kresConfFile);
+        if (configFile.isEmpty())
+        {
+            Kdelibs4Migration kde4;
+            if (!kde4.kdeHomeFound())
+                return;    // can't find $KDEHOME
+            configFile = kde4.locateLocal("config", kresConfFile);
+            if (configFile.isEmpty())
+                return;    // can't find KResources config file
+        }
         qCDebug(KALARM_LOG) << "FileResourceMigrator::migrateKResources";
-        const QString configFile = QStandardPaths::writableLocation(QStandardPaths::ConfigLocation) + QStringLiteral("/kresources/alarms/stdrc");
         const KConfig config(configFile, KConfig::SimpleConfig);
 
         // Fetch all the KResource identifiers which are actually in use
@@ -428,9 +492,6 @@ void FileResourceMigrator::migrateKResources()
             mExistingAlarmTypes |= alarmType;
         }
     }
-
-    // Create any necessary additional default file system resources.
-    createDefaultResources();
 }
 
 /******************************************************************************
@@ -521,6 +582,6 @@ bool readDirectoryResource(const QString& dirPath, CalEvent::Types alarmTypes, Q
 
 }
 
-//#include "fileresourcemigrator.moc"
+#include "fileresourcemigrator.moc"
 
 // vim: et sw=4:

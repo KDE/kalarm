@@ -52,25 +52,29 @@ public:
      *  Connect to the QObject::destroyed() signal to determine when
      *  execution has completed.
      */
-    void execute();
+    void start();
 
     static bool completed()    { return mCompleted; }
 
 private Q_SLOTS:
+    void checkAkonadiResources(Akonadi::ServerManager::State);
+    void akonadiMigrationComplete();
     void collectionFetchResult(KJob*);
     void checkIfComplete();
 
 private:
     explicit FileResourceMigrator(QObject* parent = nullptr);
-    void migrateAkonadiResources(Akonadi::ServerManager::State);
+    static void callMigrateAkonadiResources();
+    void migrateAkonadiResources();
     void migrateKResources();
     void createDefaultResources();
     void createCalendar(KAlarmCal::CalEvent::Type alarmType, const QString& file, const QString& name);
 
     static FileResourceMigrator* mInstance;
+    class AkonadiMigration;
+    AkonadiMigration* mAkonadiMigration {nullptr};
     QList<Akonadi::CollectionFetchJob*> mFetchesPending;  // pending collection fetch jobs for existing resources
     KAlarmCal::CalEvent::Types mExistingAlarmTypes {KAlarmCal::CalEvent::EMPTY};  // alarm types provided by existing non-Akonadi resources
-    bool            mMigratingAkonadi {false};  // attempting to migrate Akonadi resources
     bool            mMigrateKResources {true};  // need to migrate KResource resources
     static bool     mCompleted;                 // execute() has completed
 };

@@ -1,7 +1,7 @@
 KAlarm Change Log
 
-=== Version 3.0.0 --- 16 June 2020 ===
-+ Provide option to use file system resources instead of Akonadi resources.
+=== Version 3.0.0 --- 30 June 2020 ===
++ Default to using file system resources instead of Akonadi resources.
 + Enable selection of multiple calendar files in Import Alarms dialogue.
 + Show alarm calendars sorted by name in calendars list.
 + Return to last used tab in Configuration dialogue when it is reopened.

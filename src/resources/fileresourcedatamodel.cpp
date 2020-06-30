@@ -120,7 +120,7 @@ FileResourceDataModel::FileResourceDataModel(QObject* parent)
     {
         connect(migrator, &QObject::destroyed, this, &FileResourceDataModel::slotMigrationCompleted);
         setMigrationInitiated();
-        migrator->execute();
+        migrator->start();
     }
 
     MinuteTimer::connect(this, SLOT(slotUpdateTimeTo()));
