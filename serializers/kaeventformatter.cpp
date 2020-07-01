@@ -1,6 +1,6 @@
 /*
  *  kaeventformatter.cpp  -  converts KAlarmCal::KAEvent properties to text
- *  Copyright © 2010-2019 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2010-2019 David Jarvie <djarvie@kde.org>
  *
  *  This library is free software; you can redistribute it and/or modify it
  *  under the terms of the GNU Library General Public License as published by

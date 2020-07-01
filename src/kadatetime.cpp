@@ -3,7 +3,7 @@
     This file is part of kalarmcal library, which provides access to KAlarm
     calendar data. Qt5 version of KDE 4 kdelibs/kdecore/date/kdatetime.cpp.
 
-    Copyright © 2005-2019 David Jarvie <djarvie@kde.org>
+    SPDX-FileCopyrightText: 2005-2019 David Jarvie <djarvie@kde.org>
 
     This library is free software; you can redistribute it and/or modify it
     under the terms of the GNU Library General Public License as published by
