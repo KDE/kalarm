@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.5)
 set(PIM_VERSION "5.14.40")
 set(PIM_VERSION ${PIM_VERSION})
 set(RELEASE_SERVICE_VERSION "20.07.40")
-set(KALARM_VERSION "3.0.0")
+set(KALARM_VERSION "2.80.0")
 
 project(kalarm VERSION ${KALARM_VERSION})
 
