@@ -5,6 +5,7 @@ KAlarm Change Log
 + Enable selection of multiple calendar files in Import Alarms dialogue.
 + Show alarm calendars sorted by name in calendars list.
 + Return to last used tab in Configuration dialogue when it is reopened.
++ Add option for a command alarm to not notify execution errors [KDE Bug 315401]
 + Fix handling of calendar update or save errors when making alarm changes.
 + Fix possible calendar file corruption if disk is full (requires KDE Frameworks 5.72) [KDE Bug 370708]
 + Allow drag-and-drop of email onto display alarm text edit field.
