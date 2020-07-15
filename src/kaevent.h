@@ -208,7 +208,8 @@ public:
                                    //!< if a holiday region has been set by setHolidays().
         WORK_TIME_ONLY  = 0x8000,  //!< trigger the alarm only during working hours
         DISPLAY_COMMAND = 0x10000, //!< display command output in the alarm window
-        REMINDER_ONCE   = 0x20000  //!< only trigger the reminder on the first recurrence
+        REMINDER_ONCE   = 0x20000, //!< only trigger the reminder on the first recurrence
+        DONT_SHOW_ERROR = 0x40000  //!< do not notify command alarm errors to user
 
                           // IMPORTANT: if any values are added to this list, ensure that the
                           //            additional enum values in KAEventPrivate are also adjusted.
@@ -615,6 +616,11 @@ public:
 
     /** Return the command execution error for the last time the alarm triggered. */
     CmdErrType commandError() const;
+
+    /** Return whether execution errors for the command should not to be shown to the user.
+     *  @since 20.08
+     */
+    bool commandHideError() const;
 
     /** Set the log file to write command alarm output to.
      *  @param logfile  log file path
