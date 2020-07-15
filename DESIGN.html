@@ -134,7 +134,7 @@ Compliant with the iCalendar specification, KAlarm defines a number of custom fi
     <tr><td></td><td><tt>SPEAK</tt></td><td>For an audio alarm in an event whose main alarm is a display or command alarm, specifies that the alarm text should be spoken</td></tr>
     <tr><td class=cont></td><td class=cont><tt>EXECDEFER</tt></td><td class=cont>For a command alarm containing a pre-alarm action, indicates that the pre-alarm action should be executed when a deferred alarm triggers. Normally, it is executed only when the alarm proper triggers.</td></tr>
     <tr><td class=cont></td><td class=cont><tt>ERRCANCEL</tt></td><td class=cont>For a command alarm containing a pre-alarm action, indicates that the alarm should be cancelled if the pre-alarm action fails</td></tr>
-    <tr><td class=cont></td><td class=cont><tt>ERRNOSHOW</tt></td><td class=cont>For a command alarm containing a pre-alarm action, indicates that there should be no error notification if the pre-alarm action fails</td></tr>
+    <tr><td class=cont></td><td class=cont><tt>ERRNOSHOW</tt></td><td class=cont>For a command alarm (which is either the main alarm, or contains a pre-alarm action), indicates that there should be no error notification if the command fails</td></tr>
     <tr><td class=cont></td><td class=cont><tt>EMAILID;<em>uoid</em></tt></td><td class=cont>For an email alarm, holds the email ID (the KDE email UOID) to use in the 'From' field.</td></tr>
     <tr><td colspan=2><tt>X-KDE-KALARM-NEXTREPEAT</tt></td><td>The single parameter holds the repetition count of the next due sub-repetition: 0 = the main recurrence, 1 = the first sub-repetition, etc.</td></tr>
     <tr><td></td><td><tt><em>count</em></tt></td><td>Repetition number</td></tr>

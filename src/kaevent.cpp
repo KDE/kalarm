@@ -294,6 +294,7 @@ public:
     bool               mCommandScript{false};    // the command text is a script, not a shell command line
     bool               mCommandXterm{false};     // command alarm is to be executed in a terminal window
     bool               mCommandDisplay{false};   // command output is to be displayed in an alarm window
+    bool               mCommandHideError{false}; // don't show command execution errors to user
     bool               mEmailBcc{false};         // blind copy the email to the user
     bool               mBeep{false};             // whether to beep when the alarm is displayed
     bool               mSpeak{false};            // whether to speak the message when the alarm is displayed
@@ -523,6 +524,7 @@ KAEventPrivate::KAEventPrivate(const KADateTime &dateTime, const QString &text, 
     mCommandScript          = flags & KAEvent::SCRIPT;
     mCommandXterm           = flags & KAEvent::EXEC_IN_XTERM;
     mCommandDisplay         = flags & KAEvent::DISPLAY_COMMAND;
+    mCommandHideError       = flags & KAEvent::DONT_SHOW_ERROR;
     mCopyToKOrganizer       = flags & KAEvent::COPY_KORGANIZER;
     mExcludeHolidays        = flags & KAEvent::EXCL_HOLIDAYS;
     mExcludeHolidayRegion   = holidays();
@@ -855,6 +857,9 @@ KAEventPrivate::KAEventPrivate(const KCalendarCore::Event::Ptr &event)
                 switch (data.action) {
                 case KAAlarm::COMMAND:
                     mCommandScript = data.commandScript;
+                    if (data.extraActionOptions & KAEvent::DontShowPreActError) {
+                        mCommandHideError = true;
+                    }
                     if (!mCommandDisplay) {
                         break;
                     }
@@ -1038,6 +1043,7 @@ void KAEventPrivate::copy(const KAEventPrivate &event)
     mCommandScript           = event.mCommandScript;
     mCommandXterm            = event.mCommandXterm;
     mCommandDisplay          = event.mCommandDisplay;
+    mCommandHideError        = event.mCommandHideError;
     mEmailBcc                = event.mEmailBcc;
     mBeep                    = event.mBeep;
     mSpeak                   = event.mSpeak;
@@ -1457,6 +1463,9 @@ Alarm::Ptr KAEventPrivate::initKCalAlarm(const KCalendarCore::Event::Ptr &event,
                 setProcedureAlarm(alarm, mText);
             }
             display = mCommandDisplay;
+            if (mCommandHideError) {
+                flags += DONT_SHOW_ERROR_FLAG;
+            }
             break;
         case KAEvent::EMAIL:
             alarm->setEmailAlarm(mEmailSubject, mText, mEmailAddresses, mEmailAttachments);
@@ -1605,6 +1614,9 @@ KAEvent::Flags KAEventPrivate::flags() const
     }
     if (mCommandDisplay) {
         result |= KAEvent::DISPLAY_COMMAND;
+    }
+    if (mCommandHideError) {
+        result |= KAEvent::DONT_SHOW_ERROR;
     }
     if (mCopyToKOrganizer) {
         result |= KAEvent::COPY_KORGANIZER;
@@ -1867,6 +1879,11 @@ void KAEvent::setCommandError(CmdErrType t) const
 KAEvent::CmdErrType KAEvent::commandError() const
 {
     return d->mCommandError;
+}
+
+bool KAEvent::commandHideError() const
+{
+    return d->mCommandHideError;
 }
 
 void KAEvent::setLogFile(const QString &logfile)
@@ -3670,11 +3687,12 @@ bool KAEventPrivate::compare(const KAEventPrivate& other, KAEvent::Comparison co
 
     switch (mActionSubType) {
         case KAEvent::COMMAND:
-            if (mCommandScript  != other.mCommandScript
-            ||  mCommandXterm   != other.mCommandXterm
-            ||  mCommandDisplay != other.mCommandDisplay
-            ||  mCommandError   != other.mCommandError
-            ||  mLogFile        != other.mLogFile)
+            if (mCommandScript    != other.mCommandScript
+            ||  mCommandXterm     != other.mCommandXterm
+            ||  mCommandDisplay   != other.mCommandDisplay
+            ||  mCommandError     != other.mCommandError
+            ||  mCommandHideError != other.mCommandHideError
+            ||  mLogFile          != other.mLogFile)
                 return false;
             if (!mCommandDisplay) {
                 break;
@@ -3841,6 +3859,7 @@ void KAEventPrivate::dumpDebug() const
         qCDebug(KALARMCAL_LOG) << "-- mCommandScript:" << mCommandScript;
         qCDebug(KALARMCAL_LOG) << "-- mCommandXterm:" << mCommandXterm;
         qCDebug(KALARMCAL_LOG) << "-- mCommandDisplay:" << mCommandDisplay;
+        qCDebug(KALARMCAL_LOG) << "-- mCommandHideError:" << mCommandHideError;
         qCDebug(KALARMCAL_LOG) << "-- mLogFile:" << mLogFile;
     } else if (mActionSubType == KAEvent::EMAIL) {
         qCDebug(KALARMCAL_LOG) << "-- mEmail: FromKMail:" << mEmailFromIdentity;
