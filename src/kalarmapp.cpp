@@ -2583,21 +2583,26 @@ void KAlarmApp::commandErrorMsg(const ShellProcess* proc, const KAEvent& event, 
     }
     else
     {
-        dontShowAgain = QStringLiteral("Exec");
+        if (!event.commandHideError())
+            dontShowAgain = QStringLiteral("Exec");
         cmderr = KAEvent::CMD_ERROR;
     }
 
     // Record the alarm's error status
     setEventCommandError(event, cmderr);
-    // Display an error message
-    if (proc)
+
+    if (!dontShowAgain.isEmpty())
     {
-        errmsgs += proc->errorMessage();
-        if (!(flags & ProcData::TEMP_FILE))
-            errmsgs += proc->command();
-        dontShowAgain += QString::number(proc->status());
+        // Display an error message
+        if (proc)
+        {
+            errmsgs += proc->errorMessage();
+            if (!(flags & ProcData::TEMP_FILE))
+                errmsgs += proc->command();
+            dontShowAgain += QString::number(proc->status());
+        }
+        MessageWin::showError(event, (alarm ? alarm->dateTime() : DateTime()), errmsgs, dontShowAgain);
     }
-    MessageWin::showError(event, (alarm ? alarm->dateTime() : DateTime()), errmsgs, dontShowAgain);
 }
 
 /******************************************************************************

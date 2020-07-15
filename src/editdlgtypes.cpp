@@ -769,6 +769,11 @@ void EditCommandAlarmDlg::type_init(QWidget* parent, QVBoxLayout* frameLayout)
     connect(mCmdEdit, &CommandEdit::changed, this, &EditCommandAlarmDlg::contentsChanged);
     frameLayout->addWidget(mCmdEdit);
 
+    mCmdDontShowError = new CheckBox(i18nc("@option:check", "Do not notify errors"), parent);
+    mCmdDontShowError->setWhatsThis(i18nc("@info:whatsthis", "Do not show error error message if the command fails."));
+    frameLayout->addWidget(mCmdDontShowError, 0, Qt::AlignLeft);
+    connect(mCmdDontShowError, &CheckBox::toggled, this, &EditCommandAlarmDlg::contentsChanged);
+
     // What to do with command output
 
     mCmdOutputBox = new QGroupBox(i18nc("@title:group", "Command Output"), parent);
@@ -845,6 +850,7 @@ void EditCommandAlarmDlg::type_initValues(const KAEvent* event)
         if (logType == mCmdLogToFile)
             mCmdLogFileEdit->setText(event->logFile());    // set file name before setting radio button
         logType->setChecked(true);
+        mCmdDontShowError->setChecked(event->commandHideError());
     }
     else
     {
@@ -852,6 +858,7 @@ void EditCommandAlarmDlg::type_initValues(const KAEvent* event)
         mCmdEdit->setScript(Preferences::defaultCmdScript());
         mCmdLogFileEdit->setText(Preferences::defaultCmdLogFile());    // set file name before setting radio button
         mCmdOutputGroup->setButton(Preferences::defaultCmdLogType());
+        mCmdDontShowError->setChecked(false);
     }
     slotCmdScriptToggled(mCmdEdit->isScript());
 }
@@ -886,6 +893,7 @@ void EditCommandAlarmDlg::setReadOnly(bool readOnly)
     if (!isTemplate()  &&  !ShellProcess::authorised())
         readOnly = true;     // don't allow editing of existing command alarms in kiosk mode
     mCmdEdit->setReadOnly(readOnly);
+    mCmdDontShowError->setReadOnly(readOnly);
     mCmdExecInTerm->setReadOnly(readOnly);
     mCmdLogToFile->setReadOnly(readOnly);
     mCmdDiscardOutput->setReadOnly(readOnly);
@@ -898,9 +906,10 @@ void EditCommandAlarmDlg::setReadOnly(bool readOnly)
 void EditCommandAlarmDlg::saveState(const KAEvent* event)
 {
     EditAlarmDlg::saveState(event);
-    mSavedCmdScript      = mCmdEdit->isScript();
-    mSavedCmdOutputRadio = mCmdOutputGroup->checkedButton();
-    mSavedCmdLogFile     = mCmdLogFileEdit->text();
+    mSavedCmdScript        = mCmdEdit->isScript();
+    mSavedCmdDontShowError = mCmdDontShowError->isChecked();
+    mSavedCmdOutputRadio   = mCmdOutputGroup->checkedButton();
+    mSavedCmdLogFile       = mCmdLogFileEdit->text();
 }
 
 /******************************************************************************
@@ -911,8 +920,9 @@ void EditCommandAlarmDlg::saveState(const KAEvent* event)
 */
 bool EditCommandAlarmDlg::type_stateChanged() const
 {
-    if (mSavedCmdScript      != mCmdEdit->isScript()
-    ||  mSavedCmdOutputRadio != mCmdOutputGroup->checkedButton())
+    if (mSavedCmdScript        != mCmdEdit->isScript()
+    ||  mSavedCmdOutputRadio   != mCmdOutputGroup->checkedButton()
+    ||  mSavedCmdDontShowError != mCmdDontShowError->isChecked())
         return true;
     if (mCmdOutputGroup->checkedButton() == mCmdLogToFile)
     {
@@ -942,6 +952,7 @@ KAEvent::Flags EditCommandAlarmDlg::getAlarmFlags() const
     KAEvent::Flags flags = EditAlarmDlg::getAlarmFlags();
     if (mCmdEdit->isScript())                               flags |= KAEvent::SCRIPT;
     if (mCmdOutputGroup->checkedButton() == mCmdExecInTerm) flags |= KAEvent::EXEC_IN_XTERM;
+    if (mCmdDontShowError->isChecked())                     flags |= KAEvent::DONT_SHOW_ERROR;
     return flags;
 }
 
