@@ -39,7 +39,7 @@
 
 <!-- Don't change format of date and version of the documentation -->
 
-<date>2020-06-20</date>
+<date>2020-07-16</date>
 <releaseinfo>3.0.0 (Applications 20.08)</releaseinfo>
 
 <abstract>
@@ -1400,6 +1400,11 @@ execute. Remember to include a first line such as
 <literal>#!/bin/bash</literal> to ensure that the correct command
 interpreter is invoked.</para>
 </listitem>
+
+<listitem><para>If the command returns an error, an error message is
+normally displayed, and an error indication is shown in the alarm
+list. The error notification message can be prevented by checking
+<guilabel>Do not notify errors</guilabel>.</para></listitem>
 
 <listitem>
 <para>Use the <guilabel>Command Output</guilabel> group box to specify
