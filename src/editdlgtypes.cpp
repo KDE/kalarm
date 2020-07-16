@@ -770,7 +770,7 @@ void EditCommandAlarmDlg::type_init(QWidget* parent, QVBoxLayout* frameLayout)
     frameLayout->addWidget(mCmdEdit);
 
     mCmdDontShowError = new CheckBox(i18nc("@option:check", "Do not notify errors"), parent);
-    mCmdDontShowError->setWhatsThis(i18nc("@info:whatsthis", "Do not show error error message if the command fails."));
+    mCmdDontShowError->setWhatsThis(i18nc("@info:whatsthis", "Do not show error message if the command fails."));
     frameLayout->addWidget(mCmdDontShowError, 0, Qt::AlignLeft);
     connect(mCmdDontShowError, &CheckBox::toggled, this, &EditCommandAlarmDlg::contentsChanged);
 
