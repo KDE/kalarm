@@ -923,14 +923,6 @@ public:
      */
     static void adjustStartOfDay(const KAEvent::List &events);
 
-    /** Call when the user changes the start-of-day time, to adjust the data
-     *  for each date-only event in a list.
-     *  @param events list of events. Any date-time events in the list are ignored.
-     *  @see setStartOfDay()
-     *  @since 20.08
-     */
-    static void adjustStartOfDay(QVector<KAEvent> &events);
-
     /** Return the next time the alarm will trigger.
      *  @param type specifies whether to ignore reminders, working time
      *              restrictions, etc.
