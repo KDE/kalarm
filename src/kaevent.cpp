@@ -2440,8 +2440,16 @@ void KAEvent::setStartOfDay(const QTime &startOfDay)
 */
 void KAEvent::adjustStartOfDay(const KAEvent::List &events)
 {
-    for (KAEvent *event : events) {
-        KAEventPrivate *const p = event->d;
+    QVector<KAEvent> list;
+    for (KAEvent* event : events)
+        list += *event;
+    return adjustStartOfDay(list);
+}
+
+void KAEvent::adjustStartOfDay(QVector<KAEvent> &events)
+{
+    for (auto it = events.begin();  it != events.end();  ++it) {
+        KAEventPrivate *const p = (*it).d;
         if (p->mStartDateTime.isDateOnly()  &&  p->checkRecur() != KARecurrence::NO_RECUR) {
             p->mRecurrence->setStartDateTime(p->mStartDateTime.effectiveKDateTime(), true);
         }
