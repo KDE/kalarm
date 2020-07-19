@@ -284,7 +284,6 @@ bool ResourcesCalendar::addEvent(KAEvent& evnt, Resource& resource, QWidget* pro
             return false;
     }
 
-    const ResourceId key = resource.id();
     KAEvent* event = new KAEvent(evnt);
     QString id = event->id();
     if (type == CalEvent::ACTIVE)
@@ -303,7 +302,6 @@ bool ResourcesCalendar::addEvent(KAEvent& evnt, Resource& resource, QWidget* pro
     event->setEventId(id);
 
     bool ok = false;
-    bool remove = false;
     if (!resource.isEnabled(type))
     {
         resource = Resources::destination(type, promptParent, noPrompt, cancelled);
@@ -316,31 +314,14 @@ bool ResourcesCalendar::addEvent(KAEvent& evnt, Resource& resource, QWidget* pro
         // It will be added after it is inserted into the data model, when
         // the resource signals eventsAdded().
         ok = resource.addEvent(*event);
-        remove = ok;   // if success, delete the local event instance on exit
         if (ok  &&  type == CalEvent::ACTIVE  &&  !event->enabled())
             checkForDisabledAlarms(true, false);
         event->setResourceId(resource.id());
     }
-    if (!ok)
-    {
-        if (remove)
-        {
-            // Adding to mCalendar failed, so undo AlarmCalendar::addEvent()
-            mEventMap.remove(EventId(key, event->id()));
-            KAEvent::List& events = mResourceMap[key];
-            int i = events.indexOf(event);
-            if (i >= 0)
-                events.remove(i);
-            if (mEarliestAlarm[key] == event)
-                findEarliestAlarm(key);
-        }
-        delete event;
-        return false;
-    }
-    evnt = *event;
-    if (remove)
-        delete event;
-    return true;
+    if (ok)
+        evnt = *event;
+    delete event;
+    return ok;
 }
 
 /******************************************************************************
