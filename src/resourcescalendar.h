@@ -1,5 +1,5 @@
 /*
- *  resourcescalendar.h  -  KAlarm resources calendar file access
+ *  resourcescalendar.h  -  KAlarm calendar resources access
  *  Program:  kalarm
  *  Copyright © 2001-2020 David Jarvie <djarvie@kde.org>
  *
@@ -21,7 +21,6 @@
 #ifndef RESOURCESCALENDAR_H
 #define RESOURCESCALENDAR_H
 
-#include "eventid.h"
 #include "resources/resource.h"
 
 #include <KAlarmCal/KAEvent>
@@ -29,18 +28,26 @@
 #include <QHash>
 #include <QObject>
 
+class EventId;
+
 using namespace KAlarmCal;
 
 
 /** Provides read and write access to resource calendars.
- *  Either vCalendar or iCalendar files may be read, but the calendar is saved
- *  only in iCalendar format to avoid information loss.
+ *  This class provides the definitive access to events for the application.
+ *  When events are added, modified or deleted, additional processing is
+ *  performed beyond what the raw Resource classes do, to:
+ *  - keep track of which events are to be triggered first in each resource.
+ *  - keep track of whether any events are disabled.
+ *  - control the triggering of repeat-at-login alarms.
  */
 class ResourcesCalendar : public QObject
 {
     Q_OBJECT
 public:
     ~ResourcesCalendar() override;
+    static void             initialise(const QByteArray& appName, const QByteArray& appVersion);
+    static void             terminate();
     static KAEvent          earliestAlarm();
     static void             setAlarmPending(const KAEvent&, bool pending = true);
     static bool             haveDisabledAlarms()       { return mHaveDisabledAlarms; }
@@ -56,9 +63,6 @@ public:
     static KAEvent          updateEvent(const KAEvent&);
     static bool             deleteEvent(const KAEvent&, Resource&, bool save = false);
     static void             purgeEvents(const QVector<KAEvent>&);
-
-    static void             initialise();
-    static void             terminate();
     static ResourcesCalendar* instance()     { return mInstance; }
 
 Q_SIGNALS:
@@ -78,7 +82,8 @@ private:
     static CalEvent::Type deleteEventInternal(const KAEvent&, Resource&, bool deleteFromResource = true);
     static CalEvent::Type deleteEventInternal(const QString& eventID, const KAEvent&, Resource&,
                                               bool deleteFromResource = true);
-    void                  removeKAEvents(ResourceId, bool closing = false, CalEvent::Types = CalEvent::ACTIVE | CalEvent::ARCHIVED | CalEvent::TEMPLATE);
+    void                  removeKAEvents(ResourceId, bool closing = false,
+                                         CalEvent::Types = CalEvent::ACTIVE | CalEvent::ARCHIVED | CalEvent::TEMPLATE);
     static QVector<KAEvent> events(CalEvent::Types, const Resource&);
     void                  findEarliestAlarm(const Resource&);
     void                  checkForDisabledAlarms();

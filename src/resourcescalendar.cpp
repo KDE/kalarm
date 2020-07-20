@@ -1,5 +1,5 @@
 /*
- *  resourcescalendar.cpp  -  KAlarm resources calendar file access
+ *  resourcescalendar.cpp  -  KAlarm calendar resources access
  *  Program:  kalarm
  *  Copyright © 2001-2020 David Jarvie <djarvie@kde.org>
  *
@@ -20,11 +20,11 @@
 
 #include "resourcescalendar.h"
 
-#include "kalarm.h"
+#include "eventid.h"
 #include "resources/resources.h"
 #include "kalarm_debug.h"
 
-#include <KCalendarCore/ICalFormat>
+#include <KCalendarCore/CalFormat>
 
 using namespace KAlarmCal;
 
@@ -42,10 +42,10 @@ bool                           ResourcesCalendar::mHaveDisabledAlarms {false};
 * different. The resources calendar contains the active alarms, archived alarms
 * and alarm templates;
 */
-void ResourcesCalendar::initialise()
+void ResourcesCalendar::initialise(const QByteArray& appName, const QByteArray& appVersion)
 {
-    KACalendar::setProductId(KALARM_NAME, KALARM_VERSION);
-    KCalendarCore::CalFormat::setApplication(QStringLiteral(KALARM_NAME), QString::fromLatin1(KACalendar::icalProductId()));
+    KACalendar::setProductId(appName, appVersion);
+    KCalendarCore::CalFormat::setApplication(QString::fromLatin1(appName), QString::fromLatin1(KACalendar::icalProductId()));
     mInstance = new ResourcesCalendar();
 }
 
