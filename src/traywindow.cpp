@@ -113,7 +113,7 @@ TrayWindow::TrayWindow(MainWindow* parent)
     connect(ResourcesCalendar::instance(), &ResourcesCalendar::haveDisabledAlarmsChanged, this, &TrayWindow::slotHaveDisabledAlarms);
     connect(this, &TrayWindow::activateRequested, this, &TrayWindow::slotActivateRequested);
     connect(this, &TrayWindow::secondaryActivateRequested, this, &TrayWindow::slotSecondaryActivateRequested);
-    slotHaveDisabledAlarms(ResourcesCalendar::instance()->haveDisabledAlarms());
+    slotHaveDisabledAlarms(ResourcesCalendar::haveDisabledAlarms());
 
     // Hack: KSNI does not let us know when it is about to show the tooltip,
     // so we need to update it whenever something change in it.
@@ -278,11 +278,11 @@ void TrayWindow::updateStatus()
         active = theApp()->alarmsEnabled();
         if (active)
         {
-            KAEvent* event = ResourcesCalendar::instance()->earliestAlarm();
-            active = static_cast<bool>(event);
-            if (event  &&  period > 0)
+            const KAEvent& event = ResourcesCalendar::earliestAlarm();
+            active = event.isValid();
+            if (active  &&  period > 0)
             {
-                const KADateTime dt = event->nextTrigger(KAEvent::ALL_TRIGGER).effectiveKDateTime();
+                const KADateTime dt = event.nextTrigger(KAEvent::ALL_TRIGGER).effectiveKDateTime();
                 qint64 delay = KADateTime::currentLocalDateTime().secsTo(dt);
                 delay -= static_cast<qint64>(period) * 60;   // delay until icon to be shown
                 active = (delay <= 0);

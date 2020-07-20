@@ -99,7 +99,7 @@ KToggleAction*      createSpreadWindowsAction(QObject* parent);
 /** Returns a list of all alarm templates.
  *  If shell commands are disabled, command alarm templates are omitted.
  */
-KAEvent::List       templateList();
+QVector<KAEvent>    templateList();
 void                outputAlarmWarnings(QWidget* parent, const KAEvent* = nullptr);
 void                refreshAlarms();
 void                refreshAlarmsIfQueued();    // must only be called from KAlarmApp::processQueue()
@@ -271,6 +271,11 @@ UpdateResult reactivateEvents(QVector<KAEvent>& events, QVector<int>& ineligible
  */
 UpdateResult enableEvents(QVector<KAEvent>& events, bool enable, QWidget* msgParent = nullptr);
 
+/** Return whether an event is read-only.
+ *  This depends on whether the event or its resource is read-only.
+ */
+bool eventReadOnly(const QString& eventId);
+
 QVector<KAEvent>    getSortedActiveEvents(QObject* parent, AlarmListModel** model = nullptr);
 void                purgeArchive(int purgeDays);    // must only be called from KAlarmApp::processQueue()
 
@@ -295,7 +300,7 @@ bool importAlarms(Resource& resource, QWidget* parent);
  *  @return  true if all alarms in the calendar were successfully exported;
  *           false if any alarms failed to be exported.
  */
-bool exportAlarms(const KAEvent::List& events, QWidget* parent);
+bool exportAlarms(const QVector<KAEvent>& events, QWidget* parent);
 
 void                displayKOrgUpdateError(QWidget* parent, UpdateError, const UpdateResult& korgError, int nAlarms = 0);
 QStringList         checkRtcWakeConfig(bool checkEventExists = false);

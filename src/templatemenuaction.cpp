@@ -49,12 +49,11 @@ void TemplateMenuAction::slotInitMenu()
     mOriginalTexts.clear();
 
     // Compile a sorted list of template names
-    int i, end;
     QStringList sorted;
-    KAEvent::List templates = KAlarm::templateList();
-    for (i = 0, end = templates.count();  i < end;  ++i)
+    const QVector<KAEvent> templates = KAlarm::templateList();
+    for (const KAEvent& templ : templates)
     {
-        QString name = templates[i]->templateName();
+        const QString name = templ.templateName();
         int j = 0;
         for (int jend = sorted.count();
              j < jend  &&  QString::localeAwareCompare(name, sorted[j]) > 0;
@@ -62,10 +61,10 @@ void TemplateMenuAction::slotInitMenu()
         sorted.insert(j, name);
     }
 
-    for (i = 0, end = sorted.count();  i < end;  ++i)
+    for (const QString& name : sorted)
     {
-        QAction* act = m->addAction(sorted[i]);
-        mOriginalTexts[act] = sorted[i];   // keep original text, since action text has shortcuts added
+        QAction* act = m->addAction(name);
+        mOriginalTexts[act] = name;   // keep original text, since action text has shortcuts added
     }
 }
 
@@ -78,8 +77,8 @@ void TemplateMenuAction::slotSelected(QAction* action)
     QMap<QAction*, QString>::ConstIterator it = mOriginalTexts.constFind(action);
     if (it == mOriginalTexts.constEnd()  ||  it.value().isEmpty())
         return;
-    KAEvent* templ = ResourcesCalendar::instance()->templateEvent(it.value());
-    Q_EMIT selected(templ);
+    const KAEvent templ = ResourcesCalendar::templateEvent(it.value());
+    Q_EMIT selected(templ.isValid() ? &templ : nullptr);
 }
 
 // vim: et sw=4:

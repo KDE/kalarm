@@ -384,6 +384,11 @@ public:
     /** Delete an event from the resource. */
     virtual bool deleteEvent(const KAEvent&) = 0;
 
+    /** To be called when the start-of-day time has changed, to adjust the start
+     *  times of all date-only alarms' recurrences.
+     */
+    void adjustStartOfDay();
+
     /** Called to notify the resource that an event's command error has changed. */
     virtual void handleCommandErrorChange(const KAEvent&) = 0;
 

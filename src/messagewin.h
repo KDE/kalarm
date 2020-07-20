@@ -129,7 +129,7 @@ class MessageWin : public MainWindowBase
         bool                getWorkAreaAndModal();
         void                playAudio();
         void                setDeferralLimit(const KAEvent&);
-        void                alarmShowing(KAEvent&);
+        bool                alarmShowing(KAEvent&);
         bool                retrieveEvent(KAEvent&, Resource&, bool& showEdit, bool& showDefer);
         bool                haveErrorMessage(unsigned msg) const;
         void                clearErrorMessage(unsigned msg) const;

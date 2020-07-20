@@ -466,7 +466,7 @@ void ResourceSelector::exportCalendar()
 {
     const Resource resource = currentResource();
     if (resource.isValid())
-        KAlarm::exportAlarms(ResourcesCalendar::instance()->events(resource), this);
+        KAlarm::exportAlarms(ResourcesCalendar::events(resource), this);
 }
 
 /******************************************************************************

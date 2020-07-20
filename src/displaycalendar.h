@@ -27,7 +27,6 @@
 #include <KCalendarCore/Event>
 
 #include <QHash>
-#include <QObject>
 
 using namespace KAlarmCal;
 
@@ -36,44 +35,38 @@ using namespace KAlarmCal;
  *  This stores alarms currently being displayed, to enable them to be
  *  redisplayed if KAlarm is killed and restarted.
  */
-class DisplayCalendar : public QObject
+class DisplayCalendar
 {
-    Q_OBJECT
 public:
-    ~DisplayCalendar() override;
-    bool                       save();
-    KCalendarCore::Event::Ptr  kcalEvent(const QString& uniqueID);
-    KCalendarCore::Event::List kcalEvents(CalEvent::Type s = CalEvent::EMPTY);
-    bool                       addEvent(KAEvent&);
-    bool                       deleteEvent(const QString& eventID, bool save = false);
-    bool                       isOpen() const         { return mOpen; }
-    void                       adjustStartOfDay();
+    static bool                       save();
+    static KCalendarCore::Event::Ptr  kcalEvent(const QString& uniqueID);
+    static KCalendarCore::Event::List kcalEvents(CalEvent::Type s = CalEvent::EMPTY);
+    static bool                       addEvent(KAEvent&);
+    static bool                       deleteEvent(const QString& eventID, bool save = false);
+    static bool                       isOpen()               { return mInitialised && mOpen; }
+    static void                       adjustStartOfDay();
 
-    static void                initialise();
-    static void                terminate();
-    static DisplayCalendar*    instance()      { return mInstance; }
-    static DisplayCalendar*    instanceOpen();
+    static void                       initialise();
+    static bool                       open();
+    static void                       terminate();
 
 private:
     enum CalType { LOCAL_ICAL, LOCAL_VCAL };
 
-    explicit DisplayCalendar(const QString& file);
-    bool                       open();
-    int                        load();
-    void                       close();
-    bool                       saveCal(const QString& newFile = QString());
-    bool                       isValid() const   { return mCalendarStorage; }
-    void                       updateKAEvents();
+    static int                        load();
+    static void                       close();
+    static bool                       saveCal(const QString& newFile = QString());
+    static bool                       isValid()    { return mCalendarStorage; }
+    static void                       updateKAEvents();
 
-    static DisplayCalendar*    mInstance;    // the unique instance
-
-    KAEvent::List              mEventList;
-    QHash<QString, KAEvent*>   mEventMap;           // lookup of all events by UID
-    KCalendarCore::FileStorage::Ptr mCalendarStorage;
-    QString                    mDisplayCalPath;     // path of display calendar file
-    QString                    mDisplayICalPath;    // path of display iCalendar file
-    CalType                    mCalType;            // mCalendar's type (ical/vcal)
-    bool                       mOpen {false};       // true if the calendar file is open
+    static bool                       mInitialised;        // whether the calendar has been initialised
+    static KAEvent::List              mEventList;
+    static QHash<QString, KAEvent*>   mEventMap;           // lookup of all events by UID
+    static KCalendarCore::FileStorage::Ptr mCalendarStorage;
+    static QString                    mDisplayCalPath;     // path of display calendar file
+    static QString                    mDisplayICalPath;    // path of display iCalendar file
+    static CalType                    mCalType;            // mCalendar's type (ical/vcal)
+    static bool                       mOpen;               // true if the calendar file is open
 };
 
 #endif // DISPLAYCALENDAR_H

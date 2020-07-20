@@ -97,14 +97,13 @@ void BirthdaySortModel::setPrefixSuffix(const QString& prefix, const QString& su
     mPrefix = prefix;
     mSuffix = suffix;
 
-    KAEvent event;
-    const KAEvent::List events = ResourcesCalendar::instance()->events(CalEvent::ACTIVE);
-    for (KAEvent* event : events)
+    const QVector<KAEvent> events = ResourcesCalendar::events(CalEvent::ACTIVE);
+    for (const KAEvent& event : events)
     {
-        if (event->actionSubType() == KAEvent::MESSAGE
-        &&  event->recurType() == KARecurrence::ANNUAL_DATE
-        &&  (prefix.isEmpty()  ||  event->message().startsWith(prefix)))
-            mContactsWithAlarm.append(event->message());
+        if (event.actionSubType() == KAEvent::MESSAGE
+        &&  event.recurType() == KARecurrence::ANNUAL_DATE
+        &&  (prefix.isEmpty()  ||  event.message().startsWith(prefix)))
+            mContactsWithAlarm.append(event.message());
     }
 
     invalidateFilter();

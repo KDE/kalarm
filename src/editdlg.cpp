@@ -589,7 +589,7 @@ void EditAlarmDlg::initValues(const KAEvent* event)
     if (!deferGroupVisible  &&  mDeferGroup)
         mDeferGroup->hide();
 
-    bool empty = ResourcesCalendar::instance()->events(CalEvent::TEMPLATE).isEmpty();
+    bool empty = ResourcesCalendar::events(CalEvent::TEMPLATE).isEmpty();
     if (mLoadTemplateButton)
         mLoadTemplateButton->setEnabled(!empty);
 }
@@ -991,7 +991,7 @@ bool EditAlarmDlg::validate()
             errmsg = i18nc("@info", "You must enter a name for the alarm template");
         else if (name != mSavedTemplateName)
         {
-            if (ResourcesCalendar::instance()->templateEvent(name))
+            if (ResourcesCalendar::templateEvent(name).isValid())
                 errmsg = i18nc("@info", "Template name is already in use");
         }
         if (!errmsg.isEmpty())

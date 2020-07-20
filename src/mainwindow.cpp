@@ -862,12 +862,9 @@ void MainWindow::slotImportAlarms()
 */
 void MainWindow::slotExportAlarms()
 {
-    QVector<KAEvent> events = mListView->selectedEvents();
+    const QVector<KAEvent> events = mListView->selectedEvents();
     if (!events.isEmpty())
-    {
-        const KAEvent::List evts = KAEvent::ptrList(events);
-        KAlarm::exportAlarms(evts, this);
-    }
+        KAlarm::exportAlarms(events, this);
 }
 
 /******************************************************************************
@@ -1224,7 +1221,7 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
     QList<QUrl>        urls;
     MemoryCalendar::Ptr calendar(new MemoryCalendar(Preferences::timeSpecAsZone()));
 #ifndef NDEBUG
-    QString fmts = data->formats().join(QLatin1String(", "));
+    const QString fmts = data->formats().join(QLatin1String(", "));
     qCDebug(KALARM_LOG) << "MainWindow::executeDropEvent:" << fmts;
 #endif
 
@@ -1415,19 +1412,18 @@ void MainWindow::slotSelection()
     bool enableEnableDisable = true;
     bool enableEnable = false;
     bool enableDisable = false;
-    ResourcesCalendar* resources = ResourcesCalendar::instance();
     const KADateTime now = KADateTime::currentUtcDateTime();
     for (int i = 0;  i < count;  ++i)
     {
-        KAEvent* ev = resources->event(EventId(events.at(i)));   // get up-to-date status
-        KAEvent* event = ev ? ev : &events[i];
-        bool expired = event->expired();
+        const KAEvent ev = ResourcesCalendar::event(EventId(events.at(i)));   // get up-to-date status
+        const KAEvent& event = ev.isValid() ? ev : events[i];
+        bool expired = event.expired();
         if (!expired)
             allArchived = false;
-        if (resources->eventReadOnly(event->id()))
+        if (KAlarm::eventReadOnly(event.id()))
             readOnly = true;
         if (enableReactivate
-        &&  (!expired  ||  !event->occursAfter(now, true)))
+        &&  (!expired  ||  !event.occursAfter(now, true)))
             enableReactivate = false;
         if (enableEnableDisable)
         {
@@ -1435,9 +1431,9 @@ void MainWindow::slotSelection()
                 enableEnableDisable = enableEnable = enableDisable = false;
             else
             {
-                if (!enableEnable  &&  !event->enabled())
+                if (!enableEnable  &&  !event.enabled())
                     enableEnable = true;
-                if (!enableDisable  &&  event->enabled())
+                if (!enableDisable  &&  event.enabled())
                     enableDisable = true;
             }
         }
