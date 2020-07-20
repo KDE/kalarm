@@ -20,6 +20,7 @@
 
 #include "kalarmapp.h"
 
+#include "kalarm.h"
 #include "commandoptions.h"
 #include "dbushandler.h"
 #include "displaycalendar.h"
@@ -227,7 +228,7 @@ bool KAlarmApp::initialiseTimerResources()
         qCDebug(KALARM_LOG) << "KAlarmApp::initialise: initialising calendars";
         Desktop::setMainWindowFunc(&mainWidget);
         DataModel::initialise();
-        ResourcesCalendar::initialise();
+        ResourcesCalendar::initialise(KALARM_NAME, KALARM_VERSION);
         DisplayCalendar::initialise();
         connect(ResourcesCalendar::instance(), &ResourcesCalendar::earliestAlarmChanged, this, &KAlarmApp::checkNextDueAlarm);
         connect(ResourcesCalendar::instance(), &ResourcesCalendar::atLoginEventAdded, this, &KAlarmApp::atLoginEventAdded);
