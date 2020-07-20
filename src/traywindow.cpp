@@ -278,11 +278,11 @@ void TrayWindow::updateStatus()
         active = theApp()->alarmsEnabled();
         if (active)
         {
-            KAEvent* event = ResourcesCalendar::instance()->earliestAlarm();
-            active = static_cast<bool>(event);
-            if (event  &&  period > 0)
+            const KAEvent& event = ResourcesCalendar::instance()->earliestAlarm();
+            active = event.isValid();
+            if (active  &&  period > 0)
             {
-                const KADateTime dt = event->nextTrigger(KAEvent::ALL_TRIGGER).effectiveKDateTime();
+                const KADateTime dt = event.nextTrigger(KAEvent::ALL_TRIGGER).effectiveKDateTime();
                 qint64 delay = KADateTime::currentLocalDateTime().secsTo(dt);
                 delay -= static_cast<qint64>(period) * 60;   // delay until icon to be shown
                 active = (delay <= 0);

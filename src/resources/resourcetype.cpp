@@ -146,6 +146,18 @@ bool ResourceType::containsEvent(const QString& eventId) const
        &&  (it.value().category() & enabledTypes());
 }
 
+/******************************************************************************
+* Called when the user changes the start-of-day time.
+* Adjust the start times of all date-only alarms' recurrences.
+*/
+void ResourceType::adjustStartOfDay()
+{
+    KAEvent::List events;
+    for (auto it = mEvents.begin();  it != mEvents.end();  ++it)
+        events += &it.value();
+    KAEvent::adjustStartOfDay(events);
+}
+
 void ResourceType::notifyDeletion()
 {
     mBeingDeleted = true;
@@ -202,6 +214,7 @@ void ResourceType::setLoadedEvents(QHash<QString, KAEvent>& newEvents)
             KAEvent& event = it.value();
             bool changed = !event.compare(newit.value(), KAEvent::Compare::Id | KAEvent::Compare::CurrentState);
             event = newit.value();   // update existing event
+            event.setResourceId(mId);
             newEvents.erase(newit);
             if (changed  &&  (event.category() & types))
                 Resources::notifyEventUpdated(this, event);
@@ -219,6 +232,7 @@ void ResourceType::setLoadedEvents(QHash<QString, KAEvent>& newEvents)
     // Add new events.
     for (auto newit = newEvents.begin();  newit != newEvents.end(); )
     {
+        newit.value().setResourceId(mId);
         mEvents[newit.key()] = newit.value();
         if (newit.value().category() & types)
             ++newit;
@@ -246,15 +260,18 @@ void ResourceType::setUpdatedEvents(const QList<KAEvent>& events, bool notify)
         auto it = mEvents.find(event.id());
         if (it == mEvents.end())
         {
-            mEvents[event.id()] = event;
+            KAEvent& ev = mEvents[event.id()];
+            ev = event;
+            ev.setResourceId(mId);
             if (event.category() & types)
-                mEventsAdded += event;
+                mEventsAdded += ev;
         }
         else
         {
             KAEvent& ev = it.value();
             bool changed = !ev.compare(event, KAEvent::Compare::Id | KAEvent::Compare::CurrentState);
             ev = event;   // update existing event
+            ev.setResourceId(mId);
             if (changed  &&  (event.category() & types))
             {
                 if (notify)

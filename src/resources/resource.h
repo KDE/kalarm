@@ -344,6 +344,11 @@ public:
     /** Delete an event from the resource. */
     bool deleteEvent(const KAEvent&);
 
+    /** To be called when the start-of-day time has changed, to adjust the start
+     *  times of all date-only alarms' recurrences.
+     */
+    void adjustStartOfDay();
+
     /** Called to notify the resource that an event's command error has changed. */
     void handleCommandErrorChange(const KAEvent&);
 

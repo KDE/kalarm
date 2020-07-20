@@ -847,18 +847,18 @@ void KAlarmApp::checkNextDueAlarm()
     if (!mAlarmsEnabled)
         return;
     // Find the first alarm due
-    const KAEvent* nextEvent = ResourcesCalendar::instance()->earliestAlarm();
-    if (!nextEvent)
+    const KAEvent nextEvent = ResourcesCalendar::instance()->earliestAlarm();
+    if (!nextEvent.isValid())
         return;   // there are no alarms pending
-    const KADateTime nextDt = nextEvent->nextTrigger(KAEvent::ALL_TRIGGER).effectiveKDateTime();
+    const KADateTime nextDt = nextEvent.nextTrigger(KAEvent::ALL_TRIGGER).effectiveKDateTime();
     const KADateTime now = KADateTime::currentDateTime(Preferences::timeSpec());
     qint64 interval = now.msecsTo(nextDt);
     qCDebug(KALARM_LOG) << "KAlarmApp::checkNextDueAlarm: now:" << qPrintable(now.toString(QStringLiteral("%Y-%m-%d %H:%M %:Z"))) << ", next:" << qPrintable(nextDt.toString(QStringLiteral("%Y-%m-%d %H:%M %:Z"))) << ", due:" << interval;
     if (interval <= 0)
     {
         // Queue the alarm
-        queueAlarmId(*nextEvent);
-        qCDebug(KALARM_LOG) << "KAlarmApp::checkNextDueAlarm:" << nextEvent->id() << ": due now";
+        queueAlarmId(nextEvent);
+        qCDebug(KALARM_LOG) << "KAlarmApp::checkNextDueAlarm:" << nextEvent.id() << ": due now";
         QTimer::singleShot(0, this, &KAlarmApp::processQueue);
     }
     else
@@ -885,7 +885,7 @@ void KAlarmApp::checkNextDueAlarm()
         ++interval;    // ensure we don't trigger just before the minute boundary
         if (interval > INT_MAX)
             interval = INT_MAX;
-        qCDebug(KALARM_LOG) << "KAlarmApp::checkNextDueAlarm:" << nextEvent->id() << "wait" << interval/1000 << "seconds";
+        qCDebug(KALARM_LOG) << "KAlarmApp::checkNextDueAlarm:" << nextEvent.id() << "wait" << interval/1000 << "seconds";
         mAlarmTimer->start(static_cast<int>(interval));
     }
 }
@@ -1221,7 +1221,7 @@ void KAlarmApp::changeStartOfDay()
 {
     DateTime::setStartOfDay(Preferences::startOfDay());
     KAEvent::setStartOfDay(Preferences::startOfDay());
-    ResourcesCalendar::instance()->adjustStartOfDay();
+    Resources::adjustStartOfDay();
     DisplayCalendar::instance()->adjustStartOfDay();
 }
 
@@ -1694,13 +1694,15 @@ bool KAlarmApp::handleEvent(const EventId& id, QueuedAction action, bool findUni
     KAlarm::checkRtcWakeConfig();
 
     const QString eventID(id.eventId());
-    KAEvent* event = ResourcesCalendar::instance()->event(id, findUniqueId);
-    if (!event)
+    KAEvent event = ResourcesCalendar::instance()->event(id, findUniqueId);
+    if (!event.isValid())
     {
         if (id.resourceId() != -1)
+            qCWarning(KALARM_LOG) << "KAlarmApp::handleEvent: Event ID not found:" << eventID;
+        else if (findUniqueId)
             qCWarning(KALARM_LOG) << "KAlarmApp::handleEvent: Event ID not found, or duplicated:" << eventID;
         else
-            qCWarning(KALARM_LOG) << "KAlarmApp::handleEvent: Event ID not found:" << eventID;
+            qCCritical(KALARM_LOG) << "KAlarmApp::handleEvent: No resource ID specified for event:" << eventID;
         return false;
     }
     switch (action)
@@ -1708,8 +1710,8 @@ bool KAlarmApp::handleEvent(const EventId& id, QueuedAction action, bool findUni
         case QueuedAction::Cancel:
         {
             qCDebug(KALARM_LOG) << "KAlarmApp::handleEvent:" << eventID << ", CANCEL";
-            Resource resource = Resources::resource(event->resourceId());
-            KAlarm::deleteEvent(*event, resource, true);
+            Resource resource = Resources::resource(event.resourceId());
+            KAlarm::deleteEvent(event, resource, true);
             break;
         }
         case QueuedAction::Trigger:    // handle it if it's due, else execute it regardless
@@ -1723,9 +1725,9 @@ bool KAlarmApp::handleEvent(const EventId& id, QueuedAction action, bool findUni
             bool restart = false;
             // Check all the alarms in turn.
             // Note that the main alarm is fetched before any other alarms.
-            for (KAAlarm alarm = event->firstAlarm();
+            for (KAAlarm alarm = event.firstAlarm();
                  alarm.isValid();
-                 alarm = (restart ? event->firstAlarm() : event->nextAlarm(alarm)), restart = false)
+                 alarm = (restart ? event.firstAlarm() : event.nextAlarm(alarm)), restart = false)
             {
                 // Check if the alarm is due yet.
                 const KADateTime nextDT = alarm.dateTime(true).effectiveKDateTime();
@@ -1745,7 +1747,7 @@ bool KAlarmApp::handleEvent(const EventId& id, QueuedAction action, bool findUni
                 }
                 bool reschedule = false;
                 bool rescheduleWork = false;
-                if ((event->workTimeOnly() || event->holidaysExcluded())  &&  !alarm.deferred())
+                if ((event.workTimeOnly() || event.holidaysExcluded())  &&  !alarm.deferred())
                 {
                     // The alarm is restricted to working hours and/or non-holidays
                     // (apart from deferrals). This needs to be re-evaluated every
@@ -1754,10 +1756,10 @@ bool KAlarmApp::handleEvent(const EventId& id, QueuedAction action, bool findUni
                     {
                         KADateTime dt(nextDT);
                         dt.setDateOnly(true);
-                        reschedule = !event->isWorkingTime(dt);
+                        reschedule = !event.isWorkingTime(dt);
                     }
                     else
-                        reschedule = !event->isWorkingTime(nextDT);
+                        reschedule = !event.isWorkingTime(nextDT);
                     rescheduleWork = reschedule;
                     if (reschedule)
                         qCDebug(KALARM_LOG) << "KAlarmApp::handleEvent: Alarm" << alarm.type() << "at" << nextDT.qDateTime() << ": not during working hours";
@@ -1774,7 +1776,7 @@ bool KAlarmApp::handleEvent(const EventId& id, QueuedAction action, bool findUni
                     // Set the time to display if it's a display alarm
                     alarm.setTime(now);
                 }
-                if (!reschedule  &&  event->lateCancel())
+                if (!reschedule  &&  event.lateCancel())
                 {
                     // Alarm is due, and it is to be cancelled if too late.
                     qCDebug(KALARM_LOG) << "KAlarmApp::handleEvent: LATE_CANCEL";
@@ -1782,14 +1784,14 @@ bool KAlarmApp::handleEvent(const EventId& id, QueuedAction action, bool findUni
                     if (alarm.dateTime().isDateOnly())
                     {
                         // The alarm has no time, so cancel it if its date is too far past
-                        const int maxlate = event->lateCancel() / 1440;    // maximum lateness in days
+                        const int maxlate = event.lateCancel() / 1440;    // maximum lateness in days
                         KADateTime limit(DateTime(nextDT.addDays(maxlate + 1)).effectiveKDateTime());
                         if (now >= limit)
                         {
                             // It's too late to display the scheduled occurrence.
                             // Find the last previous occurrence of the alarm.
                             DateTime next;
-                            const KAEvent::OccurType type = event->previousOccurrence(now, next, true);
+                            const KAEvent::OccurType type = event.previousOccurrence(now, next, true);
                             switch (type & ~KAEvent::OCCURRENCE_REPEAT)
                             {
                                 case KAEvent::FIRST_OR_ONLY_OCCURRENCE:
@@ -1800,7 +1802,7 @@ bool KAlarmApp::handleEvent(const EventId& id, QueuedAction action, bool findUni
                                     if (now >= limit)
                                     {
                                         if (type == KAEvent::LAST_RECURRENCE
-                                        ||  (type == KAEvent::FIRST_OR_ONLY_OCCURRENCE && !event->recurs()))
+                                        ||  (type == KAEvent::FIRST_OR_ONLY_OCCURRENCE && !event.recurs()))
                                             cancel = true;   // last occurrence (and there are no repetitions)
                                         else
                                             reschedule = true;
@@ -1816,13 +1818,13 @@ bool KAlarmApp::handleEvent(const EventId& id, QueuedAction action, bool findUni
                     else
                     {
                         // The alarm is timed. Allow it to be the permitted amount late before cancelling it.
-                        const int maxlate = maxLateness(event->lateCancel());
+                        const int maxlate = maxLateness(event.lateCancel());
                         if (secs > maxlate)
                         {
                             // It's over the maximum interval late.
                             // Find the most recent occurrence of the alarm.
                             DateTime next;
-                            const KAEvent::OccurType type = event->previousOccurrence(now, next, true);
+                            const KAEvent::OccurType type = event.previousOccurrence(now, next, true);
                             switch (type & ~KAEvent::OCCURRENCE_REPEAT)
                             {
                                 case KAEvent::FIRST_OR_ONLY_OCCURRENCE:
@@ -1832,7 +1834,7 @@ bool KAlarmApp::handleEvent(const EventId& id, QueuedAction action, bool findUni
                                     if (next.effectiveKDateTime().secsTo(now) > maxlate)
                                     {
                                         if (type == KAEvent::LAST_RECURRENCE
-                                        ||  (type == KAEvent::FIRST_OR_ONLY_OCCURRENCE && !event->recurs()))
+                                        ||  (type == KAEvent::FIRST_OR_ONLY_OCCURRENCE && !event.recurs()))
                                             cancel = true;   // last occurrence (and there are no repetitions)
                                         else
                                             reschedule = true;
@@ -1849,8 +1851,8 @@ bool KAlarmApp::handleEvent(const EventId& id, QueuedAction action, bool findUni
                     if (cancel)
                     {
                         // All recurrences are finished, so cancel the event
-                        event->setArchive();
-                        if (cancelAlarm(*event, alarm.type(), false))
+                        event.setArchive();
+                        if (cancelAlarm(event, alarm.type(), false))
                             return true;   // event has been deleted
                         updateCalAndDisplay = true;
                         continue;
@@ -1859,7 +1861,7 @@ bool KAlarmApp::handleEvent(const EventId& id, QueuedAction action, bool findUni
                 if (reschedule)
                 {
                     // The latest repetition was too long ago, so schedule the next one
-                    switch (rescheduleAlarm(*event, alarm, false, (rescheduleWork ? nextDT : KADateTime())))
+                    switch (rescheduleAlarm(event, alarm, false, (rescheduleWork ? nextDT : KADateTime())))
                     {
                         case 1:
                             // A working-time-only alarm has been rescheduled and the
@@ -1889,7 +1891,7 @@ bool KAlarmApp::handleEvent(const EventId& id, QueuedAction action, bool findUni
             // If there is an alarm to execute, do this last after rescheduling/cancelling
             // any others. This ensures that the updated event is only saved once to the calendar.
             if (alarmToExecute.isValid())
-                execAlarm(*event, alarmToExecute, true, !alarmToExecute.repeatAtLogin());
+                execAlarm(event, alarmToExecute, true, !alarmToExecute.repeatAtLogin());
             else
             {
                 if (action == QueuedAction::Trigger)
@@ -1897,12 +1899,12 @@ bool KAlarmApp::handleEvent(const EventId& id, QueuedAction action, bool findUni
                     // The alarm is to be executed regardless of whether it's due.
                     // Only trigger one alarm from the event - we don't want multiple
                     // identical messages, for example.
-                    const KAAlarm alarm = event->firstAlarm();
+                    const KAAlarm alarm = event.firstAlarm();
                     if (alarm.isValid())
-                        execAlarm(*event, alarm, false);
+                        execAlarm(event, alarm, false);
                 }
                 if (updateCalAndDisplay)
-                    KAlarm::updateEvent(*event);     // update the window lists and calendar file
+                    KAlarm::updateEvent(event);     // update the window lists and calendar file
                 else if (action != QueuedAction::Trigger) { qCDebug(KALARM_LOG) << "KAlarmApp::handleEvent: No action"; }
             }
             break;
@@ -2168,7 +2170,7 @@ void* KAlarmApp::execAlarm(KAEvent& event, const KAAlarm& alarm, bool reschedule
                 const int flags = (reschedule ? ProcData::RESCHEDULE : 0) | (allowDefer ? ProcData::ALLOW_DEFER : 0);
                 if (doShellCommand(command, event, &alarm, (flags | ProcData::PRE_ACTION)))
                 {
-                    ResourcesCalendar::instance()->setAlarmPending(&event);
+                    ResourcesCalendar::instance()->setAlarmPending(event);
                     return result;     // display the message after the command completes
                 }
                 // Error executing command
@@ -2544,7 +2546,7 @@ void KAlarmApp::slotCommandExited(ShellProcess* proc)
                 }
             }
             if (pd->preAction())
-                ResourcesCalendar::instance()->setAlarmPending(pd->event, false);
+                ResourcesCalendar::instance()->setAlarmPending(*pd->event, false);
             if (executeAlarm)
                 execAlarm(*pd->event, *pd->alarm, pd->reschedule(), pd->allowDefer(), true);
             mCommandProcesses.removeAt(i);
@@ -2681,9 +2683,12 @@ void KAlarmApp::setEventCommandError(const KAEvent& event, KAEvent::CmdErrType e
     if (err == KAEvent::CMD_ERROR_POST  &&  event.commandError() == KAEvent::CMD_ERROR_PRE)
         err = KAEvent::CMD_ERROR_PRE_POST;
     event.setCommandError(err);
-    KAEvent* ev = ResourcesCalendar::instance()->event(EventId(event));
-    if (ev  &&  ev->commandError() != err)
-        ev->setCommandError(err);
+    KAEvent ev = ResourcesCalendar::instance()->event(EventId(event));
+    if (ev.isValid()  &&  ev.commandError() != err)
+    {
+        ev.setCommandError(err);
+        ResourcesCalendar::instance()->updateEvent(ev);
+    }
     Resource resource = Resources::resourceForEvent(event.id());
     resource.handleCommandErrorChange(event);
 }
@@ -2699,11 +2704,12 @@ void KAlarmApp::clearEventCommandError(const KAEvent& event, KAEvent::CmdErrType
 
     KAEvent::CmdErrType newerr = static_cast<KAEvent::CmdErrType>(event.commandError() & ~err);
     event.setCommandError(newerr);
-    KAEvent* ev = ResourcesCalendar::instance()->event(EventId(event));
-    if (ev)
+    KAEvent ev = ResourcesCalendar::instance()->event(EventId(event));
+    if (ev.isValid())
     {
-        newerr = static_cast<KAEvent::CmdErrType>(ev->commandError() & ~err);
-        ev->setCommandError(newerr);
+        newerr = static_cast<KAEvent::CmdErrType>(ev.commandError() & ~err);
+        ev.setCommandError(newerr);
+        ResourcesCalendar::instance()->updateEvent(ev);
     }
     Resource resource = Resources::resourceForEvent(event.id());
     resource.handleCommandErrorChange(event);

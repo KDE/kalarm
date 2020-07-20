@@ -991,7 +991,7 @@ bool EditAlarmDlg::validate()
             errmsg = i18nc("@info", "You must enter a name for the alarm template");
         else if (name != mSavedTemplateName)
         {
-            if (ResourcesCalendar::instance()->templateEvent(name))
+            if (ResourcesCalendar::instance()->templateEvent(name).isValid())
                 errmsg = i18nc("@info", "Template name is already in use");
         }
         if (!errmsg.isEmpty())

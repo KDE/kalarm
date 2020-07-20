@@ -150,6 +150,11 @@ public:
     /** Return the resource which has a given configuration identifier. */
     static Resource resourceForConfigName(const QString& configName);
 
+    /** To be called when the start-of-day time has changed, to adjust the start
+     *  times of all date-only alarms' recurrences, in all resources.
+     */
+    static void adjustStartOfDay();
+
     /** Called to notify that a new resource has completed its initialisation,
      *  in order to emit the resourceAdded() signal. */
     static void notifyNewResourceInitialised(Resource&);

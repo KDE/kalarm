@@ -362,6 +362,16 @@ Resource Resources::resourceForConfigName(const QString& configName)
 }
 
 /******************************************************************************
+* Called when the user changes the start-of-day time.
+* Adjust the start times of all date-only alarms' recurrences.
+*/
+void Resources::adjustStartOfDay()
+{
+    for (auto it = mResources.begin();  it != mResources.end();  ++it)
+        it.value().adjustStartOfDay();
+}
+
+/******************************************************************************
 * Called after a new resource has been created, when it has completed its
 * initialisation.
 */

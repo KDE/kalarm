@@ -41,23 +41,22 @@ class ResourcesCalendar : public QObject
     Q_OBJECT
 public:
     ~ResourcesCalendar() override;
-    KAEvent*              earliestAlarm() const;
-    void                  setAlarmPending(KAEvent*, bool pending = true);
+    KAEvent               earliestAlarm();
+    void                  setAlarmPending(const KAEvent&, bool pending = true);
     bool                  haveDisabledAlarms() const   { return mHaveDisabledAlarms; }
-    void                  disabledChanged(const KAEvent*);
+    void                  disabledChanged(const KAEvent&);
     using QObject::event;
-    KAEvent*              event(const EventId& uniqueId, bool findUniqueId = false);
-    KAEvent*              templateEvent(const QString& templateName);
-    KAEvent::List         events(const QString& uniqueId) const;
-    KAEvent::List         events(const Resource&, CalEvent::Types = CalEvent::EMPTY) const;
-    KAEvent::List         events(CalEvent::Types s = CalEvent::EMPTY) const;
+    KAEvent               event(const EventId& uniqueId, bool findUniqueId = false);
+    KAEvent               templateEvent(const QString& templateName);
+    QVector<KAEvent>      events(const QString& uniqueId) const;
+    QVector<KAEvent>      events(const Resource&, CalEvent::Types = CalEvent::EMPTY) const;
+    QVector<KAEvent>      events(CalEvent::Types s = CalEvent::EMPTY) const;
     bool                  eventReadOnly(const QString& eventId) const;
     bool                  addEvent(KAEvent&, Resource&, QWidget* promptparent = nullptr, bool useEventID = false, bool noPrompt = false, bool* cancelled = nullptr);
     bool                  modifyEvent(const EventId& oldEventId, KAEvent& newEvent);
-    KAEvent*              updateEvent(const KAEvent&);
+    KAEvent               updateEvent(const KAEvent&);
     bool                  deleteEvent(const KAEvent&, Resource&, bool save = false);
-    void                  purgeEvents(const KAEvent::List&);
-    void                  adjustStartOfDay();
+    void                  purgeEvents(const QVector<KAEvent>&);
 
     static void           initialise();
     static void           terminate();
@@ -76,26 +75,23 @@ private Q_SLOTS:
     void                  slotEventsToBeRemoved(Resource&, const QList<KAEvent>&);
     void                  slotEventUpdated(Resource&, const KAEvent&);
 private:
-    typedef QMap<ResourceId, KAEvent::List> ResourceMap;  // id = invalid for display calendar
-    typedef QHash<EventId, KAEvent*> KAEventMap;  // indexed by resource and event UID
-    typedef QMap<ResourceId, KAEvent*> EarliestMap;
-
     ResourcesCalendar();
-    void                  addNewEvent(const Resource&, KAEvent*, bool replace = false);
-    CalEvent::Type        deleteEventInternal(const KAEvent&, Resource&, bool deleteFromResources = true);
+    CalEvent::Type        deleteEventInternal(const KAEvent&, Resource&, bool deleteFromResource = true);
     CalEvent::Type        deleteEventInternal(const QString& eventID, const KAEvent&, Resource&,
-                                              bool deleteFromResources = true);
-    bool                  removeKAEvents(ResourceId, bool closing = false, CalEvent::Types = CalEvent::ACTIVE | CalEvent::ARCHIVED | CalEvent::TEMPLATE);
-    KAEvent::List         events(CalEvent::Types, const Resource&) const;
+                                              bool deleteFromResource = true);
+    void                  removeKAEvents(ResourceId, bool closing = false, CalEvent::Types = CalEvent::ACTIVE | CalEvent::ARCHIVED | CalEvent::TEMPLATE);
+    QVector<KAEvent>      events(CalEvent::Types, const Resource&) const;
     void                  findEarliestAlarm(const Resource&);
-    void                  findEarliestAlarm(ResourceId);
     void                  checkForDisabledAlarms();
     void                  checkForDisabledAlarms(bool oldEnabled, bool newEnabled);
+    QVector<KAEvent>      eventsForResource(const Resource&, const QSet<QString>& eventIds) const;
 
     static ResourcesCalendar* mInstance;   // the unique instance
 
+    typedef QHash<ResourceId, QSet<QString>> ResourceMap;  // event IDs for each resource
+    typedef QHash<ResourceId, QString> EarliestMap;  // event ID of earliest alarm, for each resource
+
     ResourceMap           mResourceMap;
-    KAEventMap            mEventMap;           // lookup of all events by UID
     EarliestMap           mEarliestAlarm;      // alarm with earliest trigger time, by resource
     QSet<QString>         mPendingAlarms;      // IDs of alarms which are currently being processed after triggering
     bool                  mIgnoreAtLogin {false}; // ignore new/updated repeat-at-login alarms

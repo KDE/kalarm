@@ -294,6 +294,12 @@ bool Resource::deleteEvent(const KAEvent& event)
     return mResource.isNull() ? false : mResource->deleteEvent(event);
 }
 
+void Resource::adjustStartOfDay()
+{
+    if (!mResource.isNull())
+        mResource->adjustStartOfDay();
+}
+
 void Resource::handleCommandErrorChange(const KAEvent& event)
 {
     if (!mResource.isNull())
