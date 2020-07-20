@@ -1100,12 +1100,11 @@ void MessageWin::redisplayAlarms()
         return;
     qCDebug(KALARM_LOG) << "MessageWin::redisplayAlarms";
     mRedisplayed = true;
-    DisplayCalendar* cal = DisplayCalendar::instance();
-    if (cal  &&  cal->isOpen())
+    if (DisplayCalendar::isOpen())
     {
         KAEvent event;
         Resource resource;
-        const Event::List events = cal->kcalEvents();
+        const Event::List events = DisplayCalendar::kcalEvents();
         for (int i = 0, end = events.count();  i < end;  ++i)
         {
             bool showDefer, showEdit;
@@ -1144,7 +1143,7 @@ void MessageWin::redisplayAlarms()
 */
 bool MessageWin::retrieveEvent(KAEvent& event, Resource& resource, bool& showEdit, bool& showDefer)
 {
-    const Event::Ptr kcalEvent = DisplayCalendar::instance()->kcalEvent(CalEvent::uid(mEventId.eventId(), CalEvent::DISPLAYING));
+    const Event::Ptr kcalEvent = DisplayCalendar::kcalEvent(CalEvent::uid(mEventId.eventId(), CalEvent::DISPLAYING));
     if (!reinstateFromDisplaying(kcalEvent, event, resource, showEdit, showDefer))
     {
         // The event isn't in the displaying calendar.
@@ -1207,12 +1206,11 @@ bool MessageWin::alarmShowing(KAEvent& event)
         const ResourceId id = Resources::resourceForEvent(event.id()).id();
         dispEvent.setDisplaying(event, mAlarmType, id,
                                 mDateTime.effectiveKDateTime(), mShowEdit, !mNoDefer);
-        DisplayCalendar* cal = DisplayCalendar::instanceOpen();
-        if (cal)
+        if (DisplayCalendar::open())
         {
-            cal->deleteEvent(dispEvent.id());   // in case it already exists
-            cal->addEvent(dispEvent);
-            cal->save();
+            DisplayCalendar::deleteEvent(dispEvent.id());   // in case it already exists
+            DisplayCalendar::addEvent(dispEvent);
+            DisplayCalendar::save();
         }
     }
     theApp()->rescheduleAlarm(event, alarm);

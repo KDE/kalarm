@@ -1222,7 +1222,7 @@ void KAlarmApp::changeStartOfDay()
     DateTime::setStartOfDay(Preferences::startOfDay());
     KAEvent::setStartOfDay(Preferences::startOfDay());
     Resources::adjustStartOfDay();
-    DisplayCalendar::instance()->adjustStartOfDay();
+    DisplayCalendar::adjustStartOfDay();
 }
 
 /******************************************************************************
@@ -2640,7 +2640,7 @@ bool KAlarmApp::initCheck(bool calendarOnly)
          * MessageWin::redisplayAlarms() is executing open() (but before open()
          * completes), which causes problems!!
          */
-        DisplayCalendar::instanceOpen();
+        DisplayCalendar::open();
     }
     if (firstTime)
     {

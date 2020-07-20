@@ -42,7 +42,14 @@ namespace
 const QString displayCalendarName = QStringLiteral("displaying.ics");
 }
 
-DisplayCalendar*  DisplayCalendar::mInstance = nullptr;
+bool                            DisplayCalendar::mInitialised {false};
+KAEvent::List                   DisplayCalendar::mEventList;
+QHash<QString, KAEvent*>        DisplayCalendar::mEventMap;
+KCalendarCore::FileStorage::Ptr DisplayCalendar::mCalendarStorage;
+QString                         DisplayCalendar::mDisplayCalPath;
+QString                         DisplayCalendar::mDisplayICalPath;
+DisplayCalendar::CalType        DisplayCalendar::mCalType;
+bool                            DisplayCalendar::mOpen {false};
 
 
 /******************************************************************************
@@ -54,8 +61,11 @@ void DisplayCalendar::initialise()
 {
     QDir dir;
     dir.mkpath(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation));
-    const QString displayCal = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + QLatin1Char('/') + displayCalendarName;
-    mInstance = new DisplayCalendar(displayCal);
+    mDisplayCalPath = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + QLatin1Char('/') + displayCalendarName;
+    mDisplayICalPath = mDisplayCalPath;
+    mDisplayICalPath.replace(QStringLiteral("\\.vcs$"), QStringLiteral(".ics"));
+    mCalType = (mDisplayCalPath == mDisplayICalPath) ? LOCAL_ICAL : LOCAL_VCAL;    // is the calendar in ICal or VCal format?
+    mInitialised = true;
 }
 
 /******************************************************************************
@@ -63,35 +73,8 @@ void DisplayCalendar::initialise()
 */
 void DisplayCalendar::terminate()
 {
-    delete mInstance;
-    mInstance = nullptr;
-}
-
-/******************************************************************************
-* Return the display calendar, opening it first if necessary.
-*/
-DisplayCalendar* DisplayCalendar::instanceOpen()
-{
-    if (mInstance->open())
-        return mInstance;
-    qCCritical(KALARM_LOG) << "DisplayCalendar::instanceOpen: Open error";
-    return nullptr;
-}
-
-/******************************************************************************
-* Constructor for the display calendar file.
-*/
-DisplayCalendar::DisplayCalendar(const QString& path)
-    : mDisplayCalPath(path)
-    , mDisplayICalPath(path)
-{
-    mDisplayICalPath.replace(QStringLiteral("\\.vcs$"), QStringLiteral(".ics"));
-    mCalType = (mDisplayCalPath == mDisplayICalPath) ? LOCAL_ICAL : LOCAL_VCAL;    // is the calendar in ICal or VCal format?
-}
-
-DisplayCalendar::~DisplayCalendar()
-{
     close();
+    mInitialised = false;
 }
 
 /******************************************************************************
@@ -99,7 +82,7 @@ DisplayCalendar::~DisplayCalendar()
 */
 bool DisplayCalendar::open()
 {
-    if (isOpen())
+    if (mOpen)
         return true;
 
     // Open the display calendar.
@@ -125,7 +108,7 @@ bool DisplayCalendar::open()
         mCalendarStorage->calendar().clear();
         mCalendarStorage.clear();
     }
-    return isOpen();
+    return mOpen;
 }
 
 /******************************************************************************

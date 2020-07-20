@@ -600,9 +600,8 @@ UpdateResult deleteTemplates(const KAEvent::List& events, QWidget* msgParent)
 void deleteDisplayEvent(const QString& eventID)
 {
     qCDebug(KALARM_LOG) << "KAlarm::deleteDisplayEvent:" << eventID;
-    DisplayCalendar* cal = DisplayCalendar::instanceOpen();
-    if (cal)
-        cal->deleteEvent(eventID, true);   // save calendar after deleting
+    if (DisplayCalendar::open())
+        DisplayCalendar::deleteEvent(eventID, true);   // save calendar after deleting
 }
 
 /******************************************************************************
