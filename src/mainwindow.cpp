@@ -1412,16 +1412,15 @@ void MainWindow::slotSelection()
     bool enableEnableDisable = true;
     bool enableEnable = false;
     bool enableDisable = false;
-    ResourcesCalendar* resources = ResourcesCalendar::instance();
     const KADateTime now = KADateTime::currentUtcDateTime();
     for (int i = 0;  i < count;  ++i)
     {
-        const KAEvent ev = resources->event(EventId(events.at(i)));   // get up-to-date status
+        const KAEvent ev = ResourcesCalendar::event(EventId(events.at(i)));   // get up-to-date status
         const KAEvent& event = ev.isValid() ? ev : events[i];
         bool expired = event.expired();
         if (!expired)
             allArchived = false;
-        if (resources->eventReadOnly(event.id()))
+        if (KAlarm::eventReadOnly(event.id()))
             readOnly = true;
         if (enableReactivate
         &&  (!expired  ||  !event.occursAfter(now, true)))

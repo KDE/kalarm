@@ -29,7 +29,12 @@
 using namespace KAlarmCal;
 
 
-ResourcesCalendar* ResourcesCalendar::mInstance = nullptr;
+ResourcesCalendar*             ResourcesCalendar::mInstance {nullptr};
+ResourcesCalendar::ResourceMap ResourcesCalendar::mResourceMap;
+ResourcesCalendar::EarliestMap ResourcesCalendar::mEarliestAlarm;
+QSet<QString>                  ResourcesCalendar::mPendingAlarms;
+bool                           ResourcesCalendar::mIgnoreAtLogin {false};
+bool                           ResourcesCalendar::mHaveDisabledAlarms {false};
 
 
 /******************************************************************************
@@ -250,7 +255,7 @@ void ResourcesCalendar::purgeEvents(const QVector<KAEvent>& events)
             deleteEventInternal(event.id(), event, resource, true);
     }
     if (mHaveDisabledAlarms)
-        checkForDisabledAlarms();
+        mInstance->checkForDisabledAlarms();
 }
 
 /******************************************************************************
@@ -315,7 +320,7 @@ bool ResourcesCalendar::addEvent(KAEvent& evnt, Resource& resource, QWidget* pro
         // the resource signals eventsAdded().
         ok = resource.addEvent(event);
         if (ok  &&  type == CalEvent::ACTIVE  &&  !event.enabled())
-            checkForDisabledAlarms(true, false);
+            mInstance->checkForDisabledAlarms(true, false);
         event.setResourceId(resource.id());
     }
     if (ok)
@@ -364,7 +369,7 @@ bool ResourcesCalendar::modifyEvent(const EventId& oldEventId, KAEvent& newEvent
         return false;
     deleteEventInternal(oldEvent, resource);
     if (mHaveDisabledAlarms)
-        checkForDisabledAlarms();
+        mInstance->checkForDisabledAlarms();
     return true;
 }
 
@@ -413,7 +418,7 @@ bool ResourcesCalendar::deleteEvent(const KAEvent& event, Resource& resource, bo
     qCDebug(KALARM_LOG) << "ResourcesCalendar::deleteEvent:" << event.id();
     const CalEvent::Type status = deleteEventInternal(event.id(), event, resource, true);
     if (mHaveDisabledAlarms)
-        checkForDisabledAlarms();
+        mInstance->checkForDisabledAlarms();
     return status != CalEvent::EMPTY;
 }
 
@@ -440,7 +445,7 @@ CalEvent::Type ResourcesCalendar::deleteEventInternal(const QString& eventID, co
     const ResourceId key = resource.id();
     mResourceMap[key].remove(eventID);
     if (mEarliestAlarm.value(key) == eventID)
-        findEarliestAlarm(resource);
+        mInstance->findEarliestAlarm(resource);
 
     CalEvent::Type status = CalEvent::EMPTY;
     if (deleteFromResource)
@@ -503,7 +508,7 @@ KAEvent ResourcesCalendar::templateEvent(const QString& templateName)
 /******************************************************************************
 * Return all events with the specified ID, from all calendars.
 */
-QVector<KAEvent> ResourcesCalendar::events(const QString& uniqueId) const
+QVector<KAEvent> ResourcesCalendar::events(const QString& uniqueId)
 {
     QVector<KAEvent> list;
     for (ResourceMap::ConstIterator rit = mResourceMap.constBegin();  rit != mResourceMap.constEnd();  ++rit)
@@ -514,18 +519,18 @@ QVector<KAEvent> ResourcesCalendar::events(const QString& uniqueId) const
     return list;
 }
 
-QVector<KAEvent> ResourcesCalendar::events(const Resource& resource, CalEvent::Types type) const
+QVector<KAEvent> ResourcesCalendar::events(const Resource& resource, CalEvent::Types type)
 {
     return events(type, resource);
 }
 
-QVector<KAEvent> ResourcesCalendar::events(CalEvent::Types type) const
+QVector<KAEvent> ResourcesCalendar::events(CalEvent::Types type)
 {
     Resource resource;
     return events(type, resource);
 }
 
-QVector<KAEvent> ResourcesCalendar::events(CalEvent::Types type, const Resource& resource) const
+QVector<KAEvent> ResourcesCalendar::events(CalEvent::Types type, const Resource& resource)
 {
     QVector<KAEvent> list;
     if (resource.isValid())
@@ -560,18 +565,6 @@ QVector<KAEvent> ResourcesCalendar::events(CalEvent::Types type, const Resource&
 }
 
 /******************************************************************************
-* Return whether an event is read-only.
-* Display calendar events are always returned as read-only.
-*/
-bool ResourcesCalendar::eventReadOnly(const QString& eventId) const
-{
-    KAEvent event;
-    const Resource resource = Resources::resourceForEvent(eventId, event);
-    return !event.isValid()  ||  event.isReadOnly()
-       ||  !resource.isWritable(event.category());
-}
-
-/******************************************************************************
 * Called when an alarm's enabled status has changed.
 */
 void ResourcesCalendar::disabledChanged(const KAEvent& event)
@@ -579,7 +572,7 @@ void ResourcesCalendar::disabledChanged(const KAEvent& event)
     if (event.category() == CalEvent::ACTIVE)
     {
         bool status = event.enabled();
-        checkForDisabledAlarms(!status, status);
+        mInstance->checkForDisabledAlarms(!status, status);
     }
 }
 
@@ -677,7 +670,7 @@ KAEvent ResourcesCalendar::earliestAlarm()
         {
             // Something went wrong: mEarliestAlarm wasn't updated when it should have been!!
             qCCritical(KALARM_LOG) << "ResourcesCalendar::earliestAlarm: resource" << eit.key() << "does not contain" << id;
-            findEarliestAlarm(res);
+            mInstance->findEarliestAlarm(res);
             return earliestAlarm();
         }
         const KADateTime dt = event.nextTrigger(KAEvent::ALL_TRIGGER).effectiveKDateTime();
@@ -712,13 +705,13 @@ void ResourcesCalendar::setAlarmPending(const KAEvent& event, bool pending)
         mPendingAlarms.remove(id);
     }
     // Now update the earliest alarm to trigger for its calendar
-    findEarliestAlarm(Resources::resourceForEvent(event.id()));
+    mInstance->findEarliestAlarm(Resources::resourceForEvent(event.id()));
 }
 
 /******************************************************************************
 * Get the events for a list of event IDs.
 */
-QVector<KAEvent> ResourcesCalendar::eventsForResource(const Resource& resource, const QSet<QString>& eventIds) const
+QVector<KAEvent> ResourcesCalendar::eventsForResource(const Resource& resource, const QSet<QString>& eventIds)
 {
     QVector<KAEvent> events;
     for (const QString& eventId : eventIds)

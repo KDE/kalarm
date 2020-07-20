@@ -136,7 +136,7 @@ void WakeFromSuspendDlg::showWakeClicked()
         const QStringList params = KAlarm::checkRtcWakeConfig();
         if (!params.isEmpty())
         {
-            const KAEvent event = ResourcesCalendar::instance()->event(EventId(params[0].toLongLong(), params[1]));
+            const KAEvent event = ResourcesCalendar::event(EventId(params[0].toLongLong(), params[1]));
             if (event.isValid())
             {
                 mMainWindow->selectEvent(event.id());

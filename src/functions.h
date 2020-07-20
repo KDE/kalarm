@@ -271,6 +271,11 @@ UpdateResult reactivateEvents(QVector<KAEvent>& events, QVector<int>& ineligible
  */
 UpdateResult enableEvents(QVector<KAEvent>& events, bool enable, QWidget* msgParent = nullptr);
 
+/** Return whether an event is read-only.
+ *  This depends on whether the event or its resource is read-only.
+ */
+bool eventReadOnly(const QString& eventId);
+
 QVector<KAEvent>    getSortedActiveEvents(QObject* parent, AlarmListModel** model = nullptr);
 void                purgeArchive(int purgeDays);    // must only be called from KAlarmApp::processQueue()
 

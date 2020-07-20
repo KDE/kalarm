@@ -219,7 +219,7 @@ MessageWin::MessageWin(const KAEvent* event, const KAAlarm& alarm, int flags)
         mDateTime = alarm.dateTime(true);
     if (!(flags & (NO_INIT_VIEW | ALWAYS_HIDE)))
     {
-        const bool readonly = ResourcesCalendar::instance()->eventReadOnly(mEventId.eventId());
+        const bool readonly = KAlarm::eventReadOnly(mEventId.eventId());
         mShowEdit = !mEventId.isEmpty()  &&  !readonly;
         mNoDefer  = readonly || (flags & NO_DEFER) || alarm.repeatAtLogin();
         initView();
@@ -1073,7 +1073,7 @@ void MessageWin::redisplayAlarm()
         qCDebug(KALARM_LOG) << "MessageWin::redisplayAlarm: Deleting duplicate window:" << mEventId;
     delete duplicate;
 
-    const KAEvent event = ResourcesCalendar::instance()->event(mEventId);
+    const KAEvent event = ResourcesCalendar::event(mEventId);
     if (event.isValid())
     {
         mEvent = event;
@@ -1152,7 +1152,7 @@ bool MessageWin::retrieveEvent(KAEvent& event, Resource& resource, bool& showEdi
         KAEvent ev;
         Resource archiveRes = Resources::getStandard(CalEvent::ARCHIVED);
         if (archiveRes.isValid())
-            ev = ResourcesCalendar::instance()->event(EventId(archiveRes.id(), CalEvent::uid(mEventId.eventId(), CalEvent::ARCHIVED)));
+            ev = ResourcesCalendar::event(EventId(archiveRes.id(), CalEvent::uid(mEventId.eventId(), CalEvent::ARCHIVED)));
         if (!ev.isValid())
             return false;
         event = ev;
@@ -1658,7 +1658,7 @@ void MessageWin::repeat(const KAAlarm& alarm)
     }
     if (mEventId.isEmpty())
         return;
-    KAEvent event = ResourcesCalendar::instance()->event(mEventId);
+    KAEvent event = ResourcesCalendar::event(mEventId);
     if (event.isValid())
     {
         mAlarmType = alarm.type();    // store new alarm type for use if it is later deferred
@@ -1678,7 +1678,7 @@ void MessageWin::repeat(const KAAlarm& alarm)
             }
         }
         if (alarmShowing(event))
-            ResourcesCalendar::instance()->updateEvent(event);
+            ResourcesCalendar::updateEvent(event);
     }
 }
 
@@ -2156,7 +2156,7 @@ void MessageWin::slotDefer()
         // changed since it was displayed.
         KAEvent event;
         if (!mEventId.isEmpty())
-            event = ResourcesCalendar::instance()->event(mEventId);
+            event = ResourcesCalendar::event(mEventId);
         if (event.isValid())
         {
             // The event still exists in the active calendar

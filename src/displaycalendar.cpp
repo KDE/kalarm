@@ -308,7 +308,7 @@ bool DisplayCalendar::addEvent(KAEvent& evnt)
     {
         if (remove)
         {
-            // Adding to mCalendar failed, so undo AlarmCalendar::addEvent()
+            // Adding to mCalendar failed, so undo DisplayCalendar::addEvent()
             mEventMap.remove(event->id());
             int i = mEventList.indexOf(event);
             if (i >= 0)

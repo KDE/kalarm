@@ -211,14 +211,13 @@ void TemplateDlg::slotDelete()
 */
 void TemplateDlg::slotSelectionChanged()
 {
-    ResourcesCalendar* resources = ResourcesCalendar::instance();
     QVector<KAEvent> events = mListView->selectedEvents();
     int count = events.count();
     bool readOnly = false;
     for (int i = 0;  i < count;  ++i)
     {
         const KAEvent* event = &events[i];
-        if (resources->eventReadOnly(event->id()))
+        if (KAlarm::eventReadOnly(event->id()))
         {
             readOnly = true;
             break;

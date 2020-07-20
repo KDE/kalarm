@@ -113,7 +113,7 @@ TrayWindow::TrayWindow(MainWindow* parent)
     connect(ResourcesCalendar::instance(), &ResourcesCalendar::haveDisabledAlarmsChanged, this, &TrayWindow::slotHaveDisabledAlarms);
     connect(this, &TrayWindow::activateRequested, this, &TrayWindow::slotActivateRequested);
     connect(this, &TrayWindow::secondaryActivateRequested, this, &TrayWindow::slotSecondaryActivateRequested);
-    slotHaveDisabledAlarms(ResourcesCalendar::instance()->haveDisabledAlarms());
+    slotHaveDisabledAlarms(ResourcesCalendar::haveDisabledAlarms());
 
     // Hack: KSNI does not let us know when it is about to show the tooltip,
     // so we need to update it whenever something change in it.
@@ -278,7 +278,7 @@ void TrayWindow::updateStatus()
         active = theApp()->alarmsEnabled();
         if (active)
         {
-            const KAEvent& event = ResourcesCalendar::instance()->earliestAlarm();
+            const KAEvent& event = ResourcesCalendar::earliestAlarm();
             active = event.isValid();
             if (active  &&  period > 0)
             {

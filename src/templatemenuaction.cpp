@@ -77,7 +77,7 @@ void TemplateMenuAction::slotSelected(QAction* action)
     QMap<QAction*, QString>::ConstIterator it = mOriginalTexts.constFind(action);
     if (it == mOriginalTexts.constEnd()  ||  it.value().isEmpty())
         return;
-    const KAEvent templ = ResourcesCalendar::instance()->templateEvent(it.value());
+    const KAEvent templ = ResourcesCalendar::templateEvent(it.value());
     Q_EMIT selected(templ.isValid() ? &templ : nullptr);
 }
 

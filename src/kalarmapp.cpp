@@ -847,7 +847,7 @@ void KAlarmApp::checkNextDueAlarm()
     if (!mAlarmsEnabled)
         return;
     // Find the first alarm due
-    const KAEvent nextEvent = ResourcesCalendar::instance()->earliestAlarm();
+    const KAEvent nextEvent = ResourcesCalendar::earliestAlarm();
     if (!nextEvent.isValid())
         return;   // there are no alarms pending
     const KADateTime nextDt = nextEvent.nextTrigger(KAEvent::ALL_TRIGGER).effectiveKDateTime();
@@ -1694,7 +1694,7 @@ bool KAlarmApp::handleEvent(const EventId& id, QueuedAction action, bool findUni
     KAlarm::checkRtcWakeConfig();
 
     const QString eventID(id.eventId());
-    KAEvent event = ResourcesCalendar::instance()->event(id, findUniqueId);
+    KAEvent event = ResourcesCalendar::event(id, findUniqueId);
     if (!event.isValid())
     {
         if (id.resourceId() != -1)
@@ -2170,7 +2170,7 @@ void* KAlarmApp::execAlarm(KAEvent& event, const KAAlarm& alarm, bool reschedule
                 const int flags = (reschedule ? ProcData::RESCHEDULE : 0) | (allowDefer ? ProcData::ALLOW_DEFER : 0);
                 if (doShellCommand(command, event, &alarm, (flags | ProcData::PRE_ACTION)))
                 {
-                    ResourcesCalendar::instance()->setAlarmPending(event);
+                    ResourcesCalendar::setAlarmPending(event);
                     return result;     // display the message after the command completes
                 }
                 // Error executing command
@@ -2546,7 +2546,7 @@ void KAlarmApp::slotCommandExited(ShellProcess* proc)
                 }
             }
             if (pd->preAction())
-                ResourcesCalendar::instance()->setAlarmPending(*pd->event, false);
+                ResourcesCalendar::setAlarmPending(*pd->event, false);
             if (executeAlarm)
                 execAlarm(*pd->event, *pd->alarm, pd->reschedule(), pd->allowDefer(), true);
             mCommandProcesses.removeAt(i);
@@ -2683,11 +2683,11 @@ void KAlarmApp::setEventCommandError(const KAEvent& event, KAEvent::CmdErrType e
     if (err == KAEvent::CMD_ERROR_POST  &&  event.commandError() == KAEvent::CMD_ERROR_PRE)
         err = KAEvent::CMD_ERROR_PRE_POST;
     event.setCommandError(err);
-    KAEvent ev = ResourcesCalendar::instance()->event(EventId(event));
+    KAEvent ev = ResourcesCalendar::event(EventId(event));
     if (ev.isValid()  &&  ev.commandError() != err)
     {
         ev.setCommandError(err);
-        ResourcesCalendar::instance()->updateEvent(ev);
+        ResourcesCalendar::updateEvent(ev);
     }
     Resource resource = Resources::resourceForEvent(event.id());
     resource.handleCommandErrorChange(event);
@@ -2704,12 +2704,12 @@ void KAlarmApp::clearEventCommandError(const KAEvent& event, KAEvent::CmdErrType
 
     KAEvent::CmdErrType newerr = static_cast<KAEvent::CmdErrType>(event.commandError() & ~err);
     event.setCommandError(newerr);
-    KAEvent ev = ResourcesCalendar::instance()->event(EventId(event));
+    KAEvent ev = ResourcesCalendar::event(EventId(event));
     if (ev.isValid())
     {
         newerr = static_cast<KAEvent::CmdErrType>(ev.commandError() & ~err);
         ev.setCommandError(newerr);
-        ResourcesCalendar::instance()->updateEvent(ev);
+        ResourcesCalendar::updateEvent(ev);
     }
     Resource resource = Resources::resourceForEvent(event.id());
     resource.handleCommandErrorChange(event);

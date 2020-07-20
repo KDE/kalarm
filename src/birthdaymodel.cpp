@@ -97,7 +97,7 @@ void BirthdaySortModel::setPrefixSuffix(const QString& prefix, const QString& su
     mPrefix = prefix;
     mSuffix = suffix;
 
-    const QVector<KAEvent> events = ResourcesCalendar::instance()->events(CalEvent::ACTIVE);
+    const QVector<KAEvent> events = ResourcesCalendar::events(CalEvent::ACTIVE);
     for (const KAEvent& event : events)
     {
         if (event.actionSubType() == KAEvent::MESSAGE
