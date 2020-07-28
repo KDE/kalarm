@@ -53,8 +53,7 @@ int main(int argc, char* argv[])
                          QStringLiteral(KALARM_FULL_VERSION),
                          i18n("Personal alarm message, command and email scheduler by KDE"),
                          KAboutLicense::GPL,
-                         ki18n("Copyright 2001-%1, David Jarvie").subs(QStringLiteral("2020")).toString(), QString(),
-                         QStringLiteral("http://www.astrojar.org.uk/kalarm"));
+                         ki18n("Copyright © 2001-%1, David Jarvie").subs(QStringLiteral("2020")).toString(), QString());
     aboutData.addAuthor(i18n("David Jarvie"), i18n("Author"), QStringLiteral("djarvie@kde.org"));
     aboutData.setOrganizationDomain("kde.org");
     aboutData.setDesktopFileName(QStringLiteral(KALARM_DBUS_SERVICE));
