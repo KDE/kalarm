@@ -326,7 +326,7 @@
       <li xml:lang="zh-TW">支援多重鬧鐘行事曆，例如可以讓您在筆記型電腦與桌上型電腦間分享鬧鐘。</li>
     </ul>
   </description>
-  <url type="homepage">http://www.astrojar.org.uk/kalarm/</url>
+  <url type="homepage">https://community.kde.org/KDE_PIM</url>
   <url type="bugtracker">https://bugs.kde.org/enter_bug.cgi?format=guided&amp;product=kalarm</url>
   <url type="help">https://docs.kde.org/stable5/en/pim/kalarm/index.html</url>
   <screenshots>
