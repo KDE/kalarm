@@ -469,6 +469,9 @@ QVariant ResourceDataModelBase::eventData(int role, int column, const KAEvent& e
                         return i18nc("@info:tooltip", "Pre- and post-alarm action execution failed");
                     default:
                     case KAEvent::CMD_NO_ERROR:
+                        // Return empty string to cancel any previous tooltip -
+                        // returning QVariant() leaves tooltip unchanged.
+                        return QString();
                         break;
                 }
                 break;
