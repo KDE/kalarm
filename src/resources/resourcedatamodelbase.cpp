@@ -472,7 +472,6 @@ QVariant ResourceDataModelBase::eventData(int role, int column, const KAEvent& e
                         // Return empty string to cancel any previous tooltip -
                         // returning QVariant() leaves tooltip unchanged.
                         return QString();
-                        break;
                 }
                 break;
             case EnabledRole:
