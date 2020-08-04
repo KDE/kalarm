@@ -23,7 +23,7 @@
 
 #include "config-kalarm.h"
 #if FILE_RESOURCES
-#define VERSION_SUFFIX "-F"
+#define VERSION_SUFFIX ""
 #else
 #define VERSION_SUFFIX "-A"
 #endif
