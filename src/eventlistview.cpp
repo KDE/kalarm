@@ -22,6 +22,7 @@
 
 #include "find.h"
 #include "resources/eventmodel.h"
+#include "resources/resourcedatamodelbase.h"
 #include "kalarm_debug.h"
 
 #include <KLocalizedString>
@@ -178,7 +179,8 @@ bool EventListView::viewportEvent(QEvent* e)
             if (i < 0)
             {
                 EventListModel* m = qobject_cast<EventListModel*>(model());
-                if (!m  ||  m->event(index).commandError() == KAEvent::CMD_NO_ERROR)
+                if (index.column() == ResourceDataModelBase::TextColumn
+                ||  !m  ||  m->event(index).commandError() == KAEvent::CMD_NO_ERROR)
                 {
                     // Single line tooltip. Only display it if the text column
                     // is truncated in the view display.
