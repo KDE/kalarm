@@ -60,8 +60,7 @@ int main(int argc, char *argv[])
     KAboutData aboutData(QStringLiteral(PROGRAM_NAME), i18n("KAlarm Autostart"),
                          QStringLiteral(PROGRAM_VERSION), i18n("KAlarm autostart at login"),
                          KAboutLicense::GPL,
-                         ki18n("Copyright 2001-%1, David Jarvie").subs(2020).toString(),
-                         QString(), QStringLiteral("http://www.astrojar.org.uk/kalarm"));
+                         ki18n("Copyright 2001-%1, David Jarvie").subs(QStringLiteral("2020")).toString(), QString());
     aboutData.addAuthor(i18n("David Jarvie"), i18n("Author"), QStringLiteral("djarvie@kde.org"));
     aboutData.setOrganizationDomain("kalarm.kde.org");
     KAboutData::setApplicationData(aboutData);
