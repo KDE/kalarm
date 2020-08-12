@@ -71,7 +71,6 @@ using namespace KHolidays;
 #include <KWindowInfo>
 #include <KWindowSystem>
 #endif
-#include <KToolInvocation>
 #include <KHelpClient>
 
 #include <QLabel>
