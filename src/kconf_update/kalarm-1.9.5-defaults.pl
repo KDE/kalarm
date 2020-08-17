@@ -1,6 +1,7 @@
 #!/usr/bin/perl -w
 # Convert pre-1.9.5 Defaults section settings.
 
+# SPDX-FileCopyrightText: 2010 David Jarvie <djarvie@kde.org>
 # SPDX-License-Identifier: GPL-2.0-or-later
 
 use strict;

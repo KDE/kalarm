@@ -1,6 +1,7 @@
 #!/usr/bin/perl -w
 # Convert pre-2.0.2 General section settings.
 
+# SPDX-FileCopyrightText: 2008 David Jarvie <djarvie@kde.org>
 # SPDX-License-Identifier: GPL-2.0-or-later
 
 use strict;
