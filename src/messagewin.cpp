@@ -33,7 +33,6 @@
 #include <AkonadiCore/ItemFetchJob>
 #include <AkonadiCore/ItemFetchScope>
 
-#include <kwindowsystem_version.h>
 #include <KAboutData>
 #include <KStandardGuiItem>
 #include <KLocalizedString>
