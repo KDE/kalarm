@@ -1,5 +1,8 @@
 KAlarm Change Log
 
+=== Version 3.0.1 (KDE Applications 20.08.1) --- 24 August 2020 ===
++ Don't show spurious error message when deleting alarm template [KDE Bug 425751]
+
 === Version 3.0.0 (KDE Applications 20.08) --- 5 August 2020 ===
 + Fix infinite loop when evaluating next alarm to schedule.
 + Cancel command execution error tooltip when mouse moves to another alarm.
