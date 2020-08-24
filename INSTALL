@@ -3,10 +3,10 @@ Requirements
 
 The following KDE packages must be installed in order to run KAlarm
 successfully:
-   - kdelibs
-   - kdepimlibs
-   - kdebase-runtime (specifically, ktimezoned)
-   - kdepim-runtime (for the Akonadi based version of KAlarm)
+   - Various KDE frameworks libraries
+   - Various KDE PIM libraries, notably kalarmcal
+   - kdepim-runtime: required for email alarms, and access to birthdays and
+           KOrganizer alarms and todos.
 
 The following optional packages enhance KAlarm if they are installed:
    - Jovie (from kdeaccessibility): if installed and configured (together with

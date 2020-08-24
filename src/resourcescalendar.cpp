@@ -538,7 +538,8 @@ QVector<KAEvent> ResourcesCalendar::events(CalEvent::Types type, const Resource&
     {
         for (ResourceMap::ConstIterator rit = mResourceMap.constBegin();  rit != mResourceMap.constEnd();  ++rit)
         {
-            const QVector<KAEvent> events = eventsForResource(resource, rit.value());
+            const Resource res = Resources::resource(rit.key());
+            const QVector<KAEvent> events = eventsForResource(res, rit.value());
             if (type == CalEvent::EMPTY)
                 list += events;
             else

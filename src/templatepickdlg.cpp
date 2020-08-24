@@ -1,7 +1,7 @@
 /*
  *  templatepickdlg.cpp  -  dialog to choose an alarm template
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2004-2019 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2004-2020 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -62,7 +62,7 @@ TemplatePickDlg::TemplatePickDlg(KAEvent::Actions type, QWidget* parent)
     mListView->setWhatsThis(i18nc("@info:whatsthis", "Select a template to base the new alarm on."));
     connect(mListView->selectionModel(), &QItemSelectionModel::selectionChanged, this, &TemplatePickDlg::slotSelectionChanged);
     // Require a real double click (even if KDE is in single-click mode) to accept the selection
-    connect(mListView, &TemplateListView::doubleClicked, this, &TemplatePickDlg::accept);
+    connect(mListView, &TemplateListView::doubleClicked, this, &TemplatePickDlg::slotDoubleClick);
     topLayout->addWidget(mListView);
 
     slotSelectionChanged();        // enable or disable the OK button
@@ -73,7 +73,7 @@ TemplatePickDlg::TemplatePickDlg(KAEvent::Actions type, QWidget* parent)
 }
 
 /******************************************************************************
-* Return the currently selected alarm template, or 0 if none.
+* Return the currently selected alarm template, or invalid if none.
 */
 KAEvent TemplatePickDlg::selectedTemplate() const
 {
@@ -90,6 +90,15 @@ void TemplatePickDlg::slotSelectionChanged()
     if (enable)
         enable = mListView->model()->flags(mListView->selectedIndex()) & Qt::ItemIsEnabled;
     mOkButton->setEnabled(enable);
+}
+
+/******************************************************************************
+* Called when the user double clicks to accept a selection.
+*/
+void TemplatePickDlg::slotDoubleClick()
+{
+    if (mListView->selectedEvent().isValid())
+        Q_EMIT accept();
 }
 
 /******************************************************************************

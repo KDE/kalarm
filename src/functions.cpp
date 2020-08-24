@@ -557,7 +557,7 @@ UpdateResult deleteTemplates(const KAEvent::List& events, QWidget* msgParent)
         // Delete the template from the calendar file
         const KAEvent* event = events[i];
         Resource resource;
-        if (!ResourcesCalendar::deleteEvent(*event, resource, false))   // don't save calendar after deleting
+        if (ResourcesCalendar::deleteEvent(*event, resource, false))   // don't save calendar after deleting
             resources.insert(resource);
         else
             status.appendFailed(i);
