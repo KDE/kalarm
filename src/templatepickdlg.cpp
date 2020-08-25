@@ -106,10 +106,11 @@ void TemplatePickDlg::slotSelectionChanged()
 
 /******************************************************************************
 * Called when the user double clicks to accept a selection.
+* Ignore if the double click is on a disabled item.
 */
-void TemplatePickDlg::slotDoubleClick()
+void TemplatePickDlg::slotDoubleClick(const QModelIndex& ix)
 {
-    if (mListView->selectedEvent().isValid())
+    if ((mListFilterModel->flags(ix) & (Qt::ItemIsEnabled | Qt::ItemIsSelectable)) == (Qt::ItemIsEnabled | Qt::ItemIsSelectable))
         Q_EMIT accept();
 }
 
