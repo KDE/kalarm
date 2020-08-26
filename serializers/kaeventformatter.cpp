@@ -1,6 +1,6 @@
 /*
  *  kaeventformatter.cpp  -  converts KAlarmCal::KAEvent properties to text
- *  SPDX-FileCopyrightText: 2010-2019 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2010-2020 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -133,6 +133,8 @@ QString KAEventFormatter::label(Parameter param)
         return i18nc("@label", "Log file");
     case CommandXTerm:
         return i18nc("@label Execute in terminal window", "Execute in terminal");
+    case CommandHideError:
+        return i18nc("@label", "Hide command error");
 
     case EmailSubject:
         return i18nc("@label", "Email subject");
@@ -220,6 +222,7 @@ bool KAEventFormatter::isApplicable(Parameter param) const
     case Command:
     case LogFile:
     case CommandXTerm:
+    case CommandHideError:
         return mEvent.actionSubType() == KAEvent::COMMAND;
 
     case EmailSubject:
@@ -385,6 +388,8 @@ QString KAEventFormatter::value(Parameter param) const
         return mEvent.logFile();
     case CommandXTerm:
         return trueFalse(mEvent.commandXterm());
+    case CommandHideError:
+        return trueFalse(mEvent.commandHideError());
 
     case EmailSubject:
         return mEvent.emailSubject();

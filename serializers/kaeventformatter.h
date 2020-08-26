@@ -1,6 +1,6 @@
 /*
  *  kaeventformatter.h  -  converts KAlarmCal::KAEvent properties to text
- *  SPDX-FileCopyrightText: 2010-2019 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2010-2020 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -71,6 +71,7 @@ public:
         Command,
         LogFile,
         CommandXTerm,
+        CommandHideError,
 
         EmailSubject,
         EmailFromId,
