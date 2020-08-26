@@ -22,10 +22,6 @@ include(FeatureSummary)
 include(ECMQtDeclareLoggingCategory)
 
 
-
-
-set(KALARM_LIB_VERSION ${PIM_VERSION})
-
 set(CALENDARUTILS_LIB_VERSION "5.15.40")
 set(IDENTITYMANAGER_LIB_VERSION "5.15.40")
 set(AKONADI_LIB_VERSION "5.15.40")
@@ -36,13 +32,12 @@ ecm_setup_version(PROJECT VARIABLE_PREFIX KALARMCAL
 )
 
 ########### Find packages ###########
+find_package(KF5CalendarCore ${KF5_MIN_VERSION} CONFIG REQUIRED)
 find_package(KF5Config ${KF5_MIN_VERSION} CONFIG REQUIRED)
-find_package(KF5I18n ${KF5_MIN_VERSION} CONFIG REQUIRED)
 find_package(KF5Holidays ${KF5_MIN_VERSION} CONFIG REQUIRED)
-
+find_package(KF5I18n ${KF5_MIN_VERSION} CONFIG REQUIRED)
 
 find_package(KF5Akonadi ${AKONADI_LIB_VERSION} CONFIG REQUIRED)
-find_package(KF5CalendarCore ${KF5_MIN_VERSION} CONFIG REQUIRED)
 find_package(KF5IdentityManagement ${IDENTITYMANAGER_LIB_VERSION} CONFIG REQUIRED)
 find_package(KF5CalendarUtils ${CALENDARUTILS_LIB_VERSION} CONFIG REQUIRED)
 
@@ -93,4 +88,3 @@ ecm_qt_install_logging_categories(
 
 
 feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)
-
