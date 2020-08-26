@@ -1,6 +1,6 @@
 /*
  *  akonadi_serializer_kalarm.cpp  -  Akonadi resource serializer for KAlarm
- *  SPDX-FileCopyrightText: 2009-2019 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2009-2020 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -263,6 +263,9 @@ void SerializerPluginKAlarm::compare(AbstractDifferencesReporter *reporter, cons
     }
     if (eventL.commandXterm() != eventR.commandXterm()) {
         reportDifference(reporter, KAEventFormatter::CommandXTerm);
+    }
+    if (eventL.commandHideError() != eventR.commandHideError()) {
+        reportDifference(reporter, KAEventFormatter::CommandHideError);
     }
     if (eventL.emailSubject() != eventR.emailSubject()) {
         reportDifference(reporter, KAEventFormatter::EmailSubject);
