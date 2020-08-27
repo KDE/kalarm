@@ -55,7 +55,8 @@ See the COPYING file for more details.
 
 DESIGN
 
-See DESIGN.html in kalarmcal for details of the alarm storage format.
+See DESIGN.html for some design information. Also see DESIGN.html in the
+kalarmcal library for details of the alarm storage format.
 
 
 BUGS:

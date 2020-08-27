@@ -138,17 +138,17 @@ ki18n_wrap_ui(kalarm_bin_SRCS
     resources/dirresourceimportdialog_type.ui
 )
 
-qt5_add_dbus_adaptor(kalarm_bin_SRCS org.kde.kalarm.kalarm.xml dbushandler.h DBusHandler)
+qt5_add_dbus_adaptor(kalarm_bin_SRCS data/org.kde.kalarm.kalarm.xml dbushandler.h DBusHandler)
 
-qt5_add_dbus_interfaces(kalarm_bin_SRCS kmail/org.kde.kmail.kmail.xml)
+qt5_add_dbus_interfaces(kalarm_bin_SRCS data/org.kde.kmail.kmail.xml)
 
-kcfg_generate_dbus_interface(${CMAKE_CURRENT_SOURCE_DIR}/kalarmresource.kcfg org.kde.Akonadi.KAlarm.Settings)
+kcfg_generate_dbus_interface(${CMAKE_CURRENT_SOURCE_DIR}/data/kalarmresource.kcfg org.kde.Akonadi.KAlarm.Settings)
 qt5_add_dbus_interface(kalarm_bin_SRCS ${CMAKE_CURRENT_BINARY_DIR}/org.kde.Akonadi.KAlarm.Settings.xml kalarmsettings KAlarmSettings)
 
-kcfg_generate_dbus_interface(${CMAKE_CURRENT_SOURCE_DIR}/kalarmdirresource.kcfg org.kde.Akonadi.KAlarmDir.Settings)
+kcfg_generate_dbus_interface(${CMAKE_CURRENT_SOURCE_DIR}/data/kalarmdirresource.kcfg org.kde.Akonadi.KAlarmDir.Settings)
 qt5_add_dbus_interface(kalarm_bin_SRCS ${CMAKE_CURRENT_BINARY_DIR}/org.kde.Akonadi.KAlarmDir.Settings.xml kalarmdirsettings KAlarmDirSettings)
 
-kconfig_add_kcfg_files(kalarm_bin_SRCS GENERATE_MOC kalarmconfig.kcfgc)
+kconfig_add_kcfg_files(kalarm_bin_SRCS GENERATE_MOC data/kalarmconfig.kcfgc)
 
 #if (UNIX)
 file(GLOB ICONS_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/appicons/*-apps-kalarm.png")
@@ -199,13 +199,13 @@ install(TARGETS kalarm_bin ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 
 ########### install files ###############
 
-install(FILES org.kde.kalarm.desktop  DESTINATION ${KDE_INSTALL_APPDIR})
-install(FILES kalarm.autostart.desktop DESTINATION ${KDE_INSTALL_AUTOSTARTDIR})
-install(FILES org.kde.kalarm.appdata.xml DESTINATION ${KDE_INSTALL_METAINFODIR})
+install(FILES data/org.kde.kalarm.desktop  DESTINATION ${KDE_INSTALL_APPDIR})
+install(FILES data/kalarm.autostart.desktop DESTINATION ${KDE_INSTALL_AUTOSTARTDIR})
+install(FILES data/org.kde.kalarm.appdata.xml DESTINATION ${KDE_INSTALL_METAINFODIR})
 
-install(FILES kalarmconfig.kcfg DESTINATION ${KDE_INSTALL_KCFGDIR})
-install(FILES kalarmui.rc DESTINATION ${KDE_INSTALL_KXMLGUI5DIR}/kalarm)
-install(FILES org.kde.kalarm.kalarm.xml DESTINATION ${KDE_INSTALL_DBUSINTERFACEDIR})
+install(FILES data/kalarmconfig.kcfg DESTINATION ${KDE_INSTALL_KCFGDIR})
+install(FILES data/kalarmui.rc DESTINATION ${KDE_INSTALL_KXMLGUI5DIR}/kalarm)
+install(FILES data/org.kde.kalarm.kalarm.xml DESTINATION ${KDE_INSTALL_DBUSINTERFACEDIR})
 
 ########### KAuth helper ###############
 
@@ -213,4 +213,4 @@ add_executable(kalarm_helper rtcwakeaction.cpp ${libkalarm_common_SRCS})
 target_link_libraries(kalarm_helper KF5::AuthCore KF5::I18n)
 install(TARGETS kalarm_helper DESTINATION ${KAUTH_HELPER_INSTALL_DIR})
 kauth_install_helper_files(kalarm_helper org.kde.kalarm.rtcwake root)
-kauth_install_actions(org.kde.kalarm.rtcwake org.kde.kalarm.rtcwake.actions)
+kauth_install_actions(org.kde.kalarm.rtcwake data/org.kde.kalarm.rtcwake.actions)
