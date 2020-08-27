@@ -28,7 +28,7 @@ protected:
     void    resizeEvent(QResizeEvent*) override;
 private Q_SLOTS:
     void    slotSelectionChanged();
-    void    slotDoubleClick();
+    void    slotDoubleClick(const QModelIndex&);
 private:
     TemplateListModel* mListFilterModel;
     TemplateListView*  mListView;
