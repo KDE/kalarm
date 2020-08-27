@@ -32,6 +32,18 @@ FileResource::~FileResource()
 
 bool FileResource::isValid() const
 {
+#ifdef DEBUG_DETAIL
+    if (!mSettings->isValid())
+        qDebug() << "FileResource::isValid:" << displayId() << "NO (mSettings)";
+    if (mStatus == Status::NotConfigured)
+        qDebug() << "FileResource::isValid:" << displayId() << "NO (Not configured)";
+    if (mStatus == Status::Closed)
+        qDebug() << "FileResource::isValid:" << displayId() << "NO (Closed)";
+    if (id() < 0)
+        qDebug() << "FileResource::isValid:" << displayId() << "NO (ID < 0)";
+    if (mSettings->id() != id())
+        qDebug() << "FileResource::isValid:" << displayId() << "NO (ID:" << id() << mSettings->id() << ")";
+#endif
     // The settings ID must not have changed since construction.
     return mSettings->isValid()
        &&  mStatus < Status::Unusable
