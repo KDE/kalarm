@@ -629,7 +629,7 @@ int KAlarmApp::activateInstance(const QStringList& args, const QString& workingD
             if (Resources::allCreated())
             {
                 mRedisplayAlarms = false;
-                MessageWin::redisplayAlarms();
+                MessageDisplay::redisplayAlarms();
             }
             else
                 mRedisplayAlarms = true;
