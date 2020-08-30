@@ -94,7 +94,9 @@ set(kalarm_bin_SRCS ${libkalarm_SRCS} ${resources_SRCS}
     kalarmapp.cpp
     mainwindowbase.cpp
     mainwindow.cpp
-    messagewin.cpp
+    messagedisplay.cpp
+    messagedisplayhelper.cpp
+    messagewindow.cpp
     preferences.cpp
     prefdlg.cpp
     traywindow.cpp

@@ -1513,7 +1513,7 @@ MainWindow* MainWindow::toggleWindow(MainWindow* win)
 * Called when the Edit button is clicked in an alarm message window.
 * This controls the alarm edit dialog created by the alarm window, and allows
 * it to remain unaffected by the alarm window closing.
-* See MessageWin::slotEdit() for more information.
+* See MessageWindow::slotEdit() for more information.
 */
 void MainWindow::editAlarm(EditAlarmDlg* dlg, const KAEvent& event)
 {

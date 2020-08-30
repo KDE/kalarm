@@ -21,7 +21,7 @@ MainWindowBase::MainWindowBase(QWidget* parent, Qt::WindowFlags f)
 * Called when the mouse cursor enters the window.
 * Activates this window if an Edit Alarm Dialog has activated itself.
 * This is only required on Ubuntu's Unity desktop, which doesn't transfer
-* keyboard focus properly between Edit Alarm Dialog windows and MessageWin
+* keyboard focus properly between Edit Alarm Dialog windows and MessageWindow
 * windows.
 */
 void MainWindowBase::enterEvent(QEvent* e)

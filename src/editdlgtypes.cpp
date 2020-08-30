@@ -16,7 +16,7 @@
 #include "kamail.h"
 #include "latecancel.h"
 #include "mainwindow.h"
-#include "messagewin.h"
+#include "messagewindow.h"
 #include "pickfileradio.h"
 #include "preferences.h"
 #include "reminder.h"
@@ -1506,7 +1506,7 @@ EditAudioAlarmDlg::EditAudioAlarmDlg(bool Template, const KAEvent* event, bool n
 {
     qCDebug(KALARM_LOG) << "EditAudioAlarmDlg: Event.id()";
     init(event);
-    mTryButton->setEnabled(!MessageWin::isAudioPlaying());
+    mTryButton->setEnabled(!MessageDisplay::isAudioPlaying());
     connect(theApp(), &KAlarmApp::audioPlaying, this, &EditAudioAlarmDlg::slotAudioPlaying);
 }
 
@@ -1670,12 +1670,12 @@ bool EditAudioAlarmDlg::checkText(QString& result, bool showErrorMessage) const
 */
 void EditAudioAlarmDlg::slotTry()
 {
-    if (!MessageWin::isAudioPlaying())
+    if (!MessageDisplay::isAudioPlaying())
         EditAlarmDlg::slotTry();   // play the audio file
-    else if (mMessageWin)
+    else if (mMessageWindow)
     {
-        mMessageWin->stopAudio();
-        mMessageWin = nullptr;
+        MessageDisplay::stopAudio();
+        mMessageWindow = nullptr;
     }
 }
 
@@ -1684,11 +1684,11 @@ void EditAudioAlarmDlg::slotTry()
 */
 void EditAudioAlarmDlg::type_executedTry(const QString&, void* result)
 {
-    mMessageWin = (MessageWin*)result;    // note which MessageWin controls the audio playback
-    if (mMessageWin)
+    mMessageWindow = (MessageWindow*)result;    // note which MessageWindow controls the audio playback
+    if (mMessageWindow)
     {
         slotAudioPlaying(true);
-        connect(mMessageWin, &MessageWin::destroyed, this, &EditAudioAlarmDlg::audioWinDestroyed);
+        connect(mMessageWindow, &MessageWindow::destroyed, this, &EditAudioAlarmDlg::audioWinDestroyed);
     }
 }
 
@@ -1704,9 +1704,9 @@ void EditAudioAlarmDlg::slotAudioPlaying(bool playing)
         mTryButton->setEnabled(true);
         mTryButton->setCheckable(false);
         mTryButton->setChecked(false);
-        mMessageWin = nullptr;
+        mMessageWindow = nullptr;
     }
-    else if (mMessageWin)
+    else if (mMessageWindow)
     {
         // The test sound file is playing, so enable the Try button and depress it
         mTryButton->setEnabled(true);

@@ -15,7 +15,7 @@
 #include "kalarmapp.h"
 #include "kamail.h"
 #include "mainwindow.h"
-#include "messagewin.h"
+#include "messagewindow.h"
 #include "preferences.h"
 #include "resourcescalendar.h"
 #include "templatelistview.h"
@@ -200,7 +200,7 @@ KToggleAction* createAlarmEnableAction(QObject* parent)
 QAction* createStopPlayAction(QObject* parent)
 {
     QAction* action = new QAction(QIcon::fromTheme(QStringLiteral("media-playback-stop")), i18nc("@action", "Stop Play"), parent);
-    action->setEnabled(MessageWin::isAudioPlaying());
+    action->setEnabled(MessageDisplay::isAudioPlaying());
     QObject::connect(action, &QAction::triggered, theApp(), &KAlarmApp::stopAudio);
     // The following line ensures that all instances are kept in the same state
     QObject::connect(theApp(), &KAlarmApp::audioPlaying, action, &QAction::setEnabled);
@@ -727,10 +727,10 @@ UpdateResult enableEvents(QVector<KAEvent>& events, bool enable, QWidget* msgPar
                 resourceIds.insert(event->resourceId());
                 ResourcesCalendar::disabledChanged(newev);
 
-                // If we're disabling a display alarm, close any message window
+                // If we're disabling a display alarm, close any message display
                 if (!enable  &&  (event->actionTypes() & KAEvent::ACT_DISPLAY))
                 {
-                    MessageWin* win = MessageWin::findEvent(EventId(*event));
+                    MessageDisplay* win = MessageDisplay::findEvent(EventId(*event));
                     delete win;
                 }
             }
@@ -1611,13 +1611,13 @@ void refreshAlarmsIfQueued()
         for (Resource& resource : resources)
             resource.reload();
 
-        // Close any message windows for alarms which are now disabled
+        // Close any message displays for alarms which are now disabled
         const QVector<KAEvent> events = ResourcesCalendar::events(CalEvent::ACTIVE);
         for (const KAEvent& event : events)
         {
             if (!event.enabled()  &&  (event.actionTypes() & KAEvent::ACT_DISPLAY))
             {
-                MessageWin* win = MessageWin::findEvent(EventId(event));
+                MessageDisplay* win = MessageDisplay::findEvent(EventId(event));
                 delete win;
             }
         }

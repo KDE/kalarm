@@ -11,7 +11,7 @@
 #include "functions.h"
 #include "kalarmapp.h"
 #include "mainwindow.h"
-#include "messagewin.h"
+#include "messagedisplay.h"
 #include "newalarmaction.h"
 #include "prefdlg.h"
 #include "preferences.h"
@@ -259,7 +259,7 @@ void TrayWindow::updateStatus()
     int period =  Preferences::autoHideSystemTray();
     // If the icon is always to be shown (AutoHideSystemTray = 0),
     // or audio is playing, show the icon.
-    bool active = !period || MessageWin::isAudioPlaying();
+    bool active = !period || MessageDisplay::isAudioPlaying();
     if (!active)
     {
         // Show the icon only if the next active alarm complies

@@ -858,7 +858,7 @@ void EditAlarmDlg::showEvent(QShowEvent* se)
 * Called when the window is first shown, to ensure that it initially becomes
 * the active window.
 * This is only required on Ubuntu's Unity desktop, which doesn't transfer
-* keyboard focus properly between Edit Alarm Dialog windows and MessageWin
+* keyboard focus properly between Edit Alarm Dialog windows and MessageWindow
 * windows.
 */
 void EditAlarmDlg::focusFixTimer()
@@ -873,9 +873,9 @@ void EditAlarmDlg::focusFixTimer()
 
 /******************************************************************************
 * Called to detect when the mouse is pressed anywhere inside the window.
-* Activates this window if a MessageWin window is also active.
+* Activates this window if a MessageWindow window is also active.
 * This is only required on Ubuntu's Unity desktop, which doesn't transfer
-* keyboard focus properly between Edit Alarm Dialog windows and MessageWin
+* keyboard focus properly between Edit Alarm Dialog windows and MessageWindow
 * windows.
 */
 bool EditAlarmDlg::eventFilter(QObject*, QEvent* e)

@@ -33,7 +33,7 @@ class CommandEdit;
 class LineEdit;
 class TextEdit;
 class SoundWidget;
-class MessageWin;
+class MessageWindow;
 class PickLogFileRadio;
 
 class EditDisplayAlarmDlg : public EditAlarmDlg
@@ -282,7 +282,7 @@ class EditAudioAlarmDlg : public EditAlarmDlg
         void            slotAudioPlaying(bool playing);
 
     private:
-        MessageWin*     mMessageWin {nullptr}; // MessageWin controlling test audio playback
+        MessageWindow*  mMessageWindow {nullptr}; // MessageWindow controlling test audio playback
 
         // Audio alarm options
         SoundWidget*    mSoundConfig;

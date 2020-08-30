@@ -16,7 +16,7 @@
 #include "functions.h"
 #include "kamail.h"
 #include "mainwindow.h"
-#include "messagewin.h"
+#include "messagewindow.h"
 #include "migratekde4files.h"
 #include "preferences.h"
 #include "prefdlg.h"
@@ -273,9 +273,9 @@ bool KAlarmApp::restoreSession()
             else
                 win->show();
         }
-        else if (type == QLatin1String("MessageWin"))
+        else if (type == QLatin1String("MessageWindow"))
         {
-            MessageWin* win = new MessageWin;
+            MessageWindow* win = new MessageWindow;
             win->restore(i, false);
             if (win->isValid())
             {
@@ -680,7 +680,7 @@ bool KAlarmApp::quitIf(int exitCode, bool force)
         MainWindow::closeAll();
         mQuitting = false;
         displayTrayIcon(false);
-        if (MessageWin::instanceCount(true))    // ignore always-hidden windows (e.g. audio alarms)
+        if (MessageDisplay::instanceCount(true))    // ignore always-hidden displays (e.g. audio alarms)
             return false;
     }
     else if (mQuitting)
@@ -689,7 +689,7 @@ bool KAlarmApp::quitIf(int exitCode, bool force)
     {
         // Quit only if there are no more "instances" running
         mPendingQuit = false;
-        if (mActiveCount > 0  ||  MessageWin::instanceCount(true))  // ignore always-hidden windows (e.g. audio alarms)
+        if (mActiveCount > 0  ||  MessageDisplay::instanceCount(true))  // ignore always-hidden displays (e.g. audio alarms)
             return false;
         const int mwcount = MainWindow::count();
         MainWindow* mw = mwcount ? MainWindow::firstWindow() : nullptr;
@@ -718,7 +718,7 @@ bool KAlarmApp::quitIf(int exitCode, bool force)
     //       be initialised in the initialiseTimerResources() method, in case
     //       KAlarm is started again before application exit completes!
     qCDebug(KALARM_LOG) << "KAlarmApp::quitIf:" << exitCode << ": quitting";
-    MessageWin::stopAudio(true);
+    MessageDisplay::stopAudio(true);
     if (mCancelRtcWake)
     {
         KAlarm::setRtcWakeTime(0, nullptr);
@@ -1300,7 +1300,7 @@ void KAlarmApp::slotResourcesCreated()
     if (mRedisplayAlarms)
     {
         mRedisplayAlarms = false;
-        MessageWin::redisplayAlarms();
+        MessageDisplay::redisplayAlarms();
     }
     checkWritableCalendar();
     checkArchivedCalendar();
@@ -1386,7 +1386,7 @@ void KAlarmApp::slotEditAlarmById()
         if (mEditingCmdLineAlarm & 0x10)
         {
             mRedisplayAlarms = false;
-            MessageWin::redisplayAlarms();
+            MessageDisplay::redisplayAlarms();
         }
         mEditingCmdLineAlarm = 2;  // indicate edit completion
         QTimer::singleShot(0, this, &KAlarmApp::processQueue);
@@ -1540,7 +1540,7 @@ void KAlarmApp::setAlarmsEnabled(bool enabled)
 */
 void KAlarmApp::spreadWindows(bool spread)
 {
-    spread = MessageWin::spread(spread);
+    spread = MessageWindow::spread(spread);
     Q_EMIT spreadWindowsToggled(spread);
 }
 
@@ -1556,7 +1556,7 @@ void KAlarmApp::setSpreadWindowsState(bool spread)
 /******************************************************************************
 * Check whether the window manager's handling of keyboard focus transfer
 * between application windows is broken. This is true for Ubuntu's Unity
-* desktop, where MessageWin windows steal keyboard focus from EditAlarmDlg
+* desktop, where MessageWindow windows steal keyboard focus from EditAlarmDlg
 * windows.
 */
 bool KAlarmApp::windowFocusBroken() const
@@ -1567,11 +1567,11 @@ bool KAlarmApp::windowFocusBroken() const
 /******************************************************************************
 * Check whether window/keyboard focus currently needs to be fixed manually due
 * to the window manager not handling it correctly. This will occur if there are
-* both EditAlarmDlg and MessageWin windows currently active.
+* both EditAlarmDlg and MessageWindow windows currently active.
 */
 bool KAlarmApp::needWindowFocusFix() const
 {
-    return mWindowFocusBroken && MessageWin::instanceCount(true) && EditAlarmDlg::instanceCount();
+    return mWindowFocusBroken && MessageWindow::windowCount(true) && EditAlarmDlg::instanceCount();
 }
 
 /******************************************************************************
@@ -2089,7 +2089,7 @@ bool KAlarmApp::cancelReminderAndDeferral(KAEvent& event)
 /******************************************************************************
 * Execute an alarm by displaying its message or file, or executing its command.
 * Reply = ShellProcess instance if a command alarm
-*       = MessageWin if an audio alarm
+*       = MessageWindow if an audio alarm
 *       != 0 if successful
 *       = -1 if execution has not completed
 *       = 0 if the alarm is disabled, or if an error message was output.
@@ -2126,13 +2126,13 @@ void* KAlarmApp::execAlarm(KAEvent& event, const KAAlarm& alarm, bool reschedule
         {
             // Display a message, file or command output, provided that the same event
             // isn't already being displayed
-            MessageWin* win = MessageWin::findEvent(EventId(event));
+            MessageDisplay* disp = MessageDisplay::findEvent(EventId(event));
             // Find if we're changing a reminder message to the real message
             const bool reminder = (alarm.type() & KAAlarm::REMINDER_ALARM);
-            const bool replaceReminder = !reminder && win && (win->alarmType() & KAAlarm::REMINDER_ALARM);
+            const bool replaceReminder = !reminder && disp && (disp->alarmType() & KAAlarm::REMINDER_ALARM);
             if (!reminder
             &&  (!event.deferred() || (event.extraActionOptions() & KAEvent::ExecPreActOnDeferral))
-            &&  (replaceReminder || !win)  &&  !noPreAction
+            &&  (replaceReminder || !disp)  &&  !noPreAction
             &&  !event.preAction().isEmpty())
             {
                 // It's not a reminder alarm, and it's not a deferred alarm unless the
@@ -2174,33 +2174,33 @@ void* KAlarmApp::execAlarm(KAEvent& event, const KAAlarm& alarm, bool reschedule
                 // Display the message even though it failed
             }
 
-            if (!win)
+            if (!disp)
             {
                 // There isn't already a message for this event
-                const int flags = (reschedule ? 0 : MessageWin::NO_RESCHEDULE) | (allowDefer ? 0 : MessageWin::NO_DEFER);
-                (new MessageWin(&event, alarm, flags))->show();
+                const int flags = (reschedule ? 0 : MessageDisplay::NO_RESCHEDULE) | (allowDefer ? 0 : MessageDisplay::NO_DEFER);
+                (new MessageWindow(&event, alarm, flags))->show();
             }
             else if (replaceReminder)
             {
                 // The caption needs to be changed from "Reminder" to "Message"
-                win->cancelReminder(event, alarm);
+                disp->cancelReminder(event, alarm);
             }
-            else if (!win->hasDefer() && !alarm.repeatAtLogin())
+            else if (!disp->hasDefer() && !alarm.repeatAtLogin())
             {
                 // It's a repeat-at-login message with no Defer button,
                 // which has now reached its final trigger time and needs
                 // to be replaced with a new message.
-                win->showDefer();
-                win->showDateTime(event, alarm);
+                disp->showDefer();
+                disp->showDateTime(event, alarm);
             }
             else
             {
                 // Use the existing message window
             }
-            if (win)
+            if (disp)
             {
                 // Raise the existing message window and replay any sound
-                win->repeat(alarm);    // N.B. this reschedules the alarm
+                disp->repeat(alarm);    // N.B. this reschedules the alarm
             }
             break;
         }
@@ -2231,19 +2231,19 @@ void* KAlarmApp::execAlarm(KAEvent& event, const KAAlarm& alarm, bool reschedule
         {
             // Play the sound, provided that the same event
             // isn't already playing
-            MessageWin* win = MessageWin::findEvent(EventId(event));
-            if (!win)
+            MessageDisplay* disp = MessageDisplay::findEvent(EventId(event));
+            if (!disp)
             {
                 // There isn't already a message for this event.
-                const int flags = (reschedule ? 0 : MessageWin::NO_RESCHEDULE) | MessageWin::ALWAYS_HIDE;
-                win = new MessageWin(&event, alarm, flags);
+                const int flags = (reschedule ? 0 : MessageDisplay::NO_RESCHEDULE) | MessageDisplay::ALWAYS_HIDE;
+                disp = new MessageWindow(&event, alarm, flags);
             }
             else
             {
                 // There's an existing message window: replay the sound
-                win->repeat(alarm);    // N.B. this reschedules the alarm
+                disp->repeat(alarm);    // N.B. this reschedules the alarm
             }
-            return win;
+            return disp;
         }
         default:
             return nullptr;
@@ -2261,7 +2261,7 @@ void KAlarmApp::emailSent(KAMail::JobData& data, const QStringList& errmsgs, boo
         // Some error occurred, although the email may have been sent successfully
         if (errmsgs.count() > 1)
             qCDebug(KALARM_LOG) << "KAlarmApp::emailSent:" << (copyerr ? "Copy error:" : "Failed:") << errmsgs[1];
-        MessageWin::showError(data.event, data.alarm.dateTime(), errmsgs);
+        MessageWindow::showError(data.event, data.alarm.dateTime(), errmsgs);
     }
     else if (data.queued)
         Q_EMIT execAlarmSuccess();
@@ -2473,7 +2473,7 @@ QString KAlarmApp::createTempScriptFile(const QString& command, bool insertShell
     }
 
     const QStringList errmsgs(i18nc("@info", "Error creating temporary script file"));
-    MessageWin::showError(event, alarm.dateTime(), errmsgs, QStringLiteral("Script"));
+    MessageWindow::showError(event, alarm.dateTime(), errmsgs, QStringLiteral("Script"));
     return QString();
 }
 
@@ -2592,7 +2592,7 @@ void KAlarmApp::commandErrorMsg(const ShellProcess* proc, const KAEvent& event, 
                 errmsgs += proc->command();
             dontShowAgain += QString::number(proc->status());
         }
-        MessageWin::showError(event, (alarm ? alarm->dateTime() : DateTime()), errmsgs, dontShowAgain);
+        MessageWindow::showError(event, (alarm ? alarm->dateTime() : DateTime()), errmsgs, dontShowAgain);
     }
 }
 
@@ -2626,8 +2626,8 @@ bool KAlarmApp::initCheck(bool calendarOnly)
     {
         /* Need to open the display calendar now, since otherwise if display
          * alarms are immediately due, they will often be processed while
-         * MessageWin::redisplayAlarms() is executing open() (but before open()
-         * completes), which causes problems!!
+         * MessageDisplay::redisplayAlarms() is executing open() (but before
+         * open() completes), which causes problems!!
          */
         DisplayCalendar::open();
     }
@@ -2657,7 +2657,7 @@ void KAlarmApp::notifyAudioPlaying(bool playing)
 */
 void KAlarmApp::stopAudio()
 {
-    MessageWin::stopAudio();
+    MessageDisplay::stopAudio();
 }
 
 /******************************************************************************
