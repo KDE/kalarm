@@ -1,7 +1,7 @@
 /*
  *  shellprocess.cpp  -  execute a shell process
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2004, 2005, 2007, 2008 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2004-2020 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -44,8 +44,7 @@ bool ShellProcess::start(OpenMode openMode)
     connect(this, SIGNAL(finished(int,QProcess::ExitStatus)), SLOT(slotExited(int,QProcess::ExitStatus)));
     connect(this, &QProcess::readyReadStandardOutput, this, &ShellProcess::stdoutReady);
     connect(this, &QProcess::readyReadStandardError, this, &ShellProcess::stderrReady);
-    QStringList args;
-    args << QStringLiteral("-c") << mCommand;
+    const QStringList args{ QStringLiteral("-c"), mCommand };
     QProcess::start(QLatin1String(shellName()), args, openMode);
     if (!waitForStarted())
     {
@@ -75,7 +74,7 @@ void ShellProcess::slotExited(int exitCode, QProcess::ExitStatus exitStatus)
     else
     {
         // Some shells report if the command couldn't be found, or is not executable
-        if ((mShellName == "bash"  &&  (exitCode == 126 || exitCode == 127))
+        if (((mShellName == "bash" || mShellName == "zsh")  &&  (exitCode == 126 || exitCode == 127))
         ||  (mShellName == "ksh"  &&  exitCode == 127))
         {
             qCWarning(KALARM_LOG) << "ShellProcess::slotExited:" << mCommand << ":" << mShellName << ": not found or not executable";
@@ -144,8 +143,9 @@ QString ShellProcess::errorMessage() const
         case UNAUTHORISED:
             return i18nc("@info", "Failed to execute command (shell access not authorized)");
         case START_FAIL:
-        case NOT_FOUND:
             return i18nc("@info", "Failed to execute command");
+        case NOT_FOUND:
+            return i18nc("@info", "Failed to execute command (not found or not executable)");
         case DIED:
             return i18nc("@info", "Command execution error");
         case SUCCESS:
