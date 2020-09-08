@@ -1,5 +1,9 @@
 KAlarm Change Log
 
+=== Version 3.0.2 (KDE Applications 20.08.2) --- 9 September 2020 ===
++ If command generating text for display alarm fails, only display error message,
+  not the display alarm, and don't redisplay the alarm on every restart.
+
 === Version 3.0.1 (KDE Applications 20.08.1) --- 24 August 2020 ===
 + Fix inability to create alarms from templates, or load templates in edit dialogue [KDE Bug 425751]
 + Don't show spurious error message when deleting alarm template [KDE Bug 425751]

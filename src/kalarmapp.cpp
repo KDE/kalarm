@@ -2284,7 +2284,7 @@ void KAlarmApp::emailSent(KAMail::JobData& data, const QStringList& errmsgs, boo
 * To connect to the output ready signals of the process, specify a slot to be
 * called by supplying 'receiver' and 'slot' parameters.
 */
-ShellProcess* KAlarmApp::execCommandAlarm(const KAEvent& event, const KAAlarm& alarm, const QObject* receiver, const char* slot)
+ShellProcess* KAlarmApp::execCommandAlarm(const KAEvent& event, const KAAlarm& alarm, QObject* receiver, const char* slotOutput, const char* methodExited)
 {
     // doShellCommand() will error if the user is not authorised to run
     // shell commands.
@@ -2301,12 +2301,12 @@ ShellProcess* KAlarmApp::execCommandAlarm(const KAEvent& event, const KAAlarm& a
             setEventCommandError(event, KAEvent::CMD_ERROR);
             return nullptr;
         }
-        return doShellCommand(tmpfile, event, &alarm, (flags | ProcData::TEMP_FILE), receiver, slot);
+        return doShellCommand(tmpfile, event, &alarm, (flags | ProcData::TEMP_FILE), receiver, slotOutput, methodExited);
     }
     else
     {
         qCDebug(KALARM_LOG) << "KAlarmApp::execCommandAlarm:" << command;
-        return doShellCommand(command, event, &alarm, flags, receiver, slot);
+        return doShellCommand(command, event, &alarm, flags, receiver, slotOutput, methodExited);
     }
 }
 
@@ -2317,13 +2317,15 @@ ShellProcess* KAlarmApp::execCommandAlarm(const KAEvent& event, const KAAlarm& a
 * derived from the remaining bits in 'flags'.
 * 'flags' must contain the bit PRE_ACTION or POST_ACTION if and only if it is
 * a pre- or post-alarm action respectively.
+* To connect to the exited signal of the process, specify the name of a method
+* to be called by supplying 'receiver' and 'methodExited' parameters.
 * To connect to the output ready signals of the process, specify a slot to be
 * called by supplying 'receiver' and 'slot' parameters.
 *
 * Note that if shell access is not authorised, the attempt to run the command
 * will be errored.
 */
-ShellProcess* KAlarmApp::doShellCommand(const QString& command, const KAEvent& event, const KAAlarm* alarm, int flags, const QObject* receiver, const char* slot)
+ShellProcess* KAlarmApp::doShellCommand(const QString& command, const KAEvent& event, const KAAlarm* alarm, int flags, QObject* receiver, const char* slotOutput, const char* methodExited)
 {
     qCDebug(KALARM_LOG) << "KAlarmApp::doShellCommand:" << command << "," << event.id();
     QIODevice::OpenMode mode = QIODevice::WriteOnly;
@@ -2357,10 +2359,10 @@ ShellProcess* KAlarmApp::doShellCommand(const QString& command, const KAEvent& e
         proc->setEnv(QStringLiteral("KALARM_UID"), event.id(), true);
         proc->setOutputChannelMode(KProcess::MergedChannels);   // combine stdout & stderr
         connect(proc, &ShellProcess::shellExited, this, &KAlarmApp::slotCommandExited);
-        if ((flags & ProcData::DISP_OUTPUT)  &&  receiver && slot)
+        if ((flags & ProcData::DISP_OUTPUT)  &&  receiver && slotOutput)
         {
-            connect(proc, SIGNAL(receivedStdout(ShellProcess*)), receiver, slot);
-            connect(proc, SIGNAL(receivedStderr(ShellProcess*)), receiver, slot);
+            connect(proc, SIGNAL(receivedStdout(ShellProcess*)), receiver, slotOutput);
+            connect(proc, SIGNAL(receivedStderr(ShellProcess*)), receiver, slotOutput);
         }
         if (mode == QIODevice::ReadWrite  &&  !event.logFile().isEmpty())
         {
@@ -2388,6 +2390,11 @@ ShellProcess* KAlarmApp::doShellCommand(const QString& command, const KAEvent& e
             pd->tempFiles += command;
         if (!tmpXtermFile.isEmpty())
             pd->tempFiles += tmpXtermFile;
+        if (receiver && methodExited)
+        {
+            pd->exitReceiver = receiver;
+            pd->exitMethod   = methodExited;
+        }
         mCommandProcesses.append(pd);
         if (proc->start(mode))
             return proc;
@@ -2551,6 +2558,8 @@ void KAlarmApp::slotCommandExited(ShellProcess* proc)
             if (executeAlarm)
                 execAlarm(*pd->event, *pd->alarm, pd->reschedule(), pd->allowDefer(), true);
             mCommandProcesses.removeAt(i);
+            if (pd->exitReceiver && !pd->exitMethod.isEmpty())
+                QMetaObject::invokeMethod(pd->exitReceiver, pd->exitMethod.constData(), Qt::DirectConnection, Q_ARG(ShellProcess::Status, status));
             delete pd;
             break;
         }

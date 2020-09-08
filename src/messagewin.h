@@ -27,6 +27,7 @@
 #include "mainwindowbase.h"
 #include "resources/resource.h"
 #include "lib/autoqpointer.h"
+#include "lib/shellprocess.h"
 
 #include <KAlarmCal/KAEvent>
 
@@ -46,7 +47,6 @@ class QLabel;
 class QTemporaryFile;
 class DeferAlarmDlg;
 class EditAlarmDlg;
-class ShellProcess;
 class AudioThread;
 
 using namespace KAlarmCal;
@@ -118,6 +118,7 @@ class MessageWin : public MainWindowBase
         void                setRemainingTextMinute();
         void                frameDrawn();
         void                readProcessOutput(ShellProcess*);
+        void                commandCompleted(ShellProcess::Status);
 
     private:
         MessageWin(const KAEvent*, const DateTime& alarmDateTime, const QStringList& errmsgs,

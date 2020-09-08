@@ -37,7 +37,6 @@
 #include "lib/file.h"
 #include "lib/messagebox.h"
 #include "lib/pushbutton.h"
-#include "lib/shellprocess.h"
 #include "lib/synchtimer.h"
 #include "kalarm_debug.h"
 
@@ -518,7 +517,7 @@ void MessageWin::initView()
                 mCommandText->setCurrentFont(mFont);
                 topLayout->addWidget(mCommandText);
                 mCommandText->setWhatsThis(i18nc("@info:whatsthis", "The output of the alarm's command"));
-                theApp()->execCommandAlarm(mEvent, mEvent.alarm(mAlarmType), this, SLOT(readProcessOutput(ShellProcess*)));
+                theApp()->execCommandAlarm(mEvent, mEvent.alarm(mAlarmType), this, SLOT(readProcessOutput(ShellProcess*)), "commandCompleted");
                 break;
             }
             case KAEvent::EMAIL:
@@ -903,6 +902,30 @@ void MessageWin::readProcessOutput(ShellProcess* proc)
         mCommandText->setNewLine(nl);
         mCommandText->insertPlainText(QString::fromLocal8Bit(data.data(), data.length() - nl));
         resize(sizeHint());
+    }
+}
+
+/******************************************************************************
+* Called when the command which is providing the text for this display has
+* completed. Check whether the command succeeded, even partially.
+*/
+void MessageWin::commandCompleted(ShellProcess::Status status)
+{
+    switch (status)
+    {
+        case ShellProcess::SUCCESS:
+        case ShellProcess::DIED:
+            break;
+
+        case ShellProcess::UNAUTHORISED:
+        case ShellProcess::NOT_FOUND:
+        case ShellProcess::START_FAIL:
+        case ShellProcess::INACTIVE:
+        default:
+            // The command failed completely. KAlarmApp will output an error
+            // message, so delete the empty window.
+            close();
+            break;
     }
 }
 
