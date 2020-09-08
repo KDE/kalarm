@@ -96,6 +96,7 @@ private Q_SLOTS:
     void                displayMainWindow();
     void                slotShowKMailMessage();
     void                enableButtons();
+    void                commandCompleted(bool success);
     void                frameDrawn();
 
 private:

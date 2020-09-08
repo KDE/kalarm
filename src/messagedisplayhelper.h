@@ -12,6 +12,7 @@
 #include "eventid.h"
 #include "resources/resource.h"
 #include "lib/file.h"
+#include "lib/shellprocess.h"
 
 #include <KAlarmCal/KAEvent>
 
@@ -22,7 +23,6 @@
 
 class KConfigGroup;
 class QTemporaryFile;
-class ShellProcess;
 class AudioThread;
 class PushButton;
 class MessageDisplay;
@@ -107,6 +107,9 @@ Q_SIGNALS:
      */
     void textsChanged(DisplayTexts::TextIds, const QString& change = QString());
 
+    /** Signal emitted on completion of the command providing the alarm message text. */
+    void commandExited(bool success);
+
     /** Signal emitted when the alarm should close, after the auto-close time. */
     void autoCloseNow();
 
@@ -120,6 +123,7 @@ private Q_SLOTS:
     void                slotSetRemainingTextDay()     { setRemainingTextDay(true); }
     void                slotSetRemainingTextMinute()  { setRemainingTextMinute(true); }
     void                readProcessOutput(ShellProcess*);
+    void                commandCompleted(ShellProcess::Status);
 
 private:
     QString             dateTimeToDisplay() const;

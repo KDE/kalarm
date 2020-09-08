@@ -139,6 +139,7 @@ MessageWindow::MessageWindow(const KAEvent* event, const KAAlarm& alarm, int fla
         setUpDisplay();
 
     connect(mHelper, &MessageDisplayHelper::textsChanged, this, &MessageWindow::textsChanged);
+    connect(mHelper, &MessageDisplayHelper::commandExited, this, &MessageWindow::commandCompleted);
 
     // Set to save settings automatically, but don't save window size.
     // File alarm window size is saved elsewhere.
@@ -189,7 +190,7 @@ MessageWindow::MessageWindow()
     getWorkAreaAndModal();
 
     connect(mHelper, &MessageDisplayHelper::textsChanged, this, &MessageWindow::textsChanged);
-#warning When restoring an error message, the window is blank
+    connect(mHelper, &MessageDisplayHelper::commandExited, this, &MessageWindow::commandCompleted);
 
     mWindowList.append(this);
 }
@@ -721,6 +722,20 @@ void MessageWindow::textsChanged(MessageDisplayHelper::DisplayTexts::TextIds ids
         // for this window. Add the output and resize the window to show it.
         mCommandText->insertPlainText(change);
         resize(sizeHint());
+    }
+}
+
+/******************************************************************************
+* Called when the command providing the alarm message text has exited.
+* 'success' is true if the command did not fail completely.
+*/
+void MessageWindow::commandCompleted(bool success)
+{
+    if (!success)
+    {
+        // The command failed completely. KAlarmApp will output an error
+        // message, so delete the empty window.
+        close();
     }
 }
 

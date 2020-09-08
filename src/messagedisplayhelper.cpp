@@ -18,7 +18,6 @@
 #include "resources/resources.h"
 #include "lib/messagebox.h"
 #include "lib/pushbutton.h"
-#include "lib/shellprocess.h"
 #include "lib/synchtimer.h"
 #include "kalarm_debug.h"
 
@@ -288,7 +287,8 @@ void MessageDisplayHelper::initTexts()
             }
             case KAEvent::COMMAND:
             {
-                theApp()->execCommandAlarm(mEvent, mEvent.alarm(mAlarmType), this, SLOT(readProcessOutput(ShellProcess*)));
+                theApp()->execCommandAlarm(mEvent, mEvent.alarm(mAlarmType),
+                                           this, SLOT(readProcessOutput(ShellProcess*)), "commandCompleted");
                 break;
             }
             case KAEvent::EMAIL:
@@ -512,6 +512,31 @@ void MessageDisplayHelper::readProcessOutput(ShellProcess* proc)
         mTexts.message += newText;
         Q_EMIT textsChanged(DisplayTexts::MessageAppend, newText);
     }
+}
+
+/******************************************************************************
+* Called when the command which is providing the text for this display has
+* completed. Check whether the command succeeded, even partially.
+*/
+void MessageDisplayHelper::commandCompleted(ShellProcess::Status status)
+{
+    bool failed;
+    switch (status)
+    {
+        case ShellProcess::SUCCESS:
+        case ShellProcess::DIED:
+            failed = false;
+            break;
+
+        case ShellProcess::UNAUTHORISED:
+        case ShellProcess::NOT_FOUND:
+        case ShellProcess::START_FAIL:
+        case ShellProcess::INACTIVE:
+        default:
+            failed = true;
+            break;
+    }
+    Q_EMIT commandExited(!failed);
 }
 
 /******************************************************************************
