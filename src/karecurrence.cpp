@@ -35,10 +35,9 @@ public:
 class Q_DECL_HIDDEN KARecurrence::Private
 {
 public:
-    Private()
-        : mFeb29Type(Feb29_None), mCachedType(-1) {}
+    Private() {}
     explicit Private(const Recurrence &r)
-        : mRecurrence(r), mFeb29Type(Feb29_None), mCachedType(-1) {}
+        : mRecurrence(r) {}
     void clear()
     {
         mRecurrence.clear();
@@ -55,8 +54,8 @@ public:
 
     static Feb29Type mDefaultFeb29;
     Recurrence_p     mRecurrence;
-    Feb29Type        mFeb29Type;    // yearly recurrence on Feb 29th (leap years) / Mar 1st (non-leap years)
-    mutable int      mCachedType;
+    Feb29Type        mFeb29Type = Feb29_None;    // yearly recurrence on Feb 29th (leap years) / Mar 1st (non-leap years)
+    mutable int      mCachedType = -1;
 };
 
 QTimeZone KARecurrence::Private::toTimeZone(const KADateTime::Spec &spec)

@@ -19,9 +19,7 @@ namespace KAlarmCal
 class Q_DECL_HIDDEN EventAttribute::Private
 {
 public:
-    Private() : mCommandError(KAEvent::CMD_NO_ERROR) {}
-
-    KAEvent::CmdErrType mCommandError;         // the last command execution error for the alarm
+    KAEvent::CmdErrType mCommandError = KAEvent::CMD_NO_ERROR;         // the last command execution error for the alarm
 };
 
 EventAttribute::EventAttribute()

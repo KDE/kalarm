@@ -71,10 +71,9 @@ KALARMCAL_EXPORT int KADateTime_zoneCacheHit = 0;
 class KADateTimeSpecPrivate
 {
 public:
-    KADateTimeSpecPrivate() : utcOffset(0) {}
     // *** NOTE: This structure is replicated in KADateTimePrivate. Any changes must be copied there.
     QTimeZone tz;            // if type == TimeZone, the instance's time zone.
-    int       utcOffset;     // if type == OffsetFromUTC, the offset from UTC
+    int       utcOffset = 0;     // if type == OffsetFromUTC, the offset from UTC
     KADateTime::SpecType type;  // time spec type
 };
 

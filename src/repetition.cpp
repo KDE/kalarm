@@ -17,7 +17,7 @@ namespace KAlarmCal
 class Q_DECL_HIDDEN Repetition::Private
 {
 public:
-    Private() : mInterval(0), mCount(0) {}
+    Private() {}
     Private(const Duration &interval, int count)
         : mInterval(interval), mCount(count)
     {
@@ -27,8 +27,8 @@ public:
         }
     }
 
-    Duration mInterval;   // sub-repetition interval
-    int      mCount;      // sub-repetition count (excluding the first time)
+    Duration mInterval = 0;   // sub-repetition interval
+    int      mCount = 0;      // sub-repetition count (excluding the first time)
 };
 
 Repetition::Repetition()
