@@ -6,7 +6,7 @@
  *
  * based on code from Sune Vuorela <sune@vuorela.dk> (Rawatar source code)
  *
- * SPDX-License-Identifier: GPL-2.0-only
+ * SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "migratekde4files.h"
