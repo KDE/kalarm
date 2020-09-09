@@ -13,11 +13,11 @@
 #include "kacalendar.h"
 #include "kaevent.h"
 
-#include <AkonadiCore/item.h>
-#include <AkonadiCore/abstractdifferencesreporter.h>
-#include <AkonadiCore/attributefactory.h>
+#include <AkonadiCore/Item>
+#include <AkonadiCore/AbstractDifferencesReporter>
+#include <AkonadiCore/AttributeFactory>
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 #include <QLocale>
 #include <qplugin.h>
@@ -242,6 +242,9 @@ void SerializerPluginKAlarm::compare(AbstractDifferencesReporter *reporter, cons
     }
     if (eventL.reminderOnceOnly() != eventR.reminderOnceOnly()) {
         reportDifference(reporter, KAEventFormatter::ReminderOnce);
+    }
+    if (eventL.notify() != eventR.notify()) {
+        reportDifference(reporter, KAEventFormatter::Notify);
     }
     if (eventL.deferred() != eventR.deferred()) {
         reportDifference(reporter, KAEventFormatter::DeferralType);

@@ -1,8 +1,8 @@
 /*
- *  kaevent.h  -  represents calendar events
+ *  kaevent.h  -  represents KAlarm calendar events
  *  This file is part of kalarmcal library, which provides access to KAlarm
  *  calendar data.
- *  SPDX-FileCopyrightText: 2001-2019 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2001-2020 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -209,7 +209,8 @@ public:
         WORK_TIME_ONLY  = 0x8000,  //!< trigger the alarm only during working hours
         DISPLAY_COMMAND = 0x10000, //!< display command output in the alarm window
         REMINDER_ONCE   = 0x20000, //!< only trigger the reminder on the first recurrence
-        DONT_SHOW_ERROR = 0x40000  //!< do not notify command alarm errors to user
+        DONT_SHOW_ERROR = 0x40000, //!< do not notify command alarm errors to user
+        NOTIFY          = 0x80000  //!< use the standard notification system instead of alarm message window
 
                           // IMPORTANT: if any values are added to this list, ensure that the
                           //            additional enum values in KAEventPrivate are also adjusted.
@@ -554,6 +555,20 @@ public:
      *  @see lateCancel(), setAutoClose()
      */
     bool autoClose() const;
+
+    /** Enable the notification system to be used for a display alarm, instead
+     *  of displaying a window.
+     *  @see notify()
+     */
+    void setNotify(bool useNotify);
+
+    /** Return whether the notification system is used instead of displaying
+     *  a window, for a display alarm.
+     *  @return @c true if it is a display alarm and it uses the notification
+     *          system
+     *  @see setNotify()
+     */
+    bool notify() const;
 
     /** Set the Akonadi item ID of the email which the alarm is related to.
      */

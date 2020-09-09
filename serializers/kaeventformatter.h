@@ -63,6 +63,7 @@ public:
         SoundFadeTime,
         Reminder,
         ReminderOnce,
+        Notify,
         DeferralType,
         DeferralTime,
         DeferDefault,

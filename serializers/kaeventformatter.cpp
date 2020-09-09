@@ -13,7 +13,7 @@
 
 #include <KCalUtils/IncidenceFormatter>
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 #include <QLocale>
 
@@ -118,6 +118,8 @@ QString KAEventFormatter::label(Parameter param)
         return i18nc("@label Whether the alarm has a reminder", "Reminder");
     case ReminderOnce:
         return i18nc("@label Whether reminder is on first recurrence only", "Reminder once only");
+    case Notify:
+        return i18nc("@label Whether to use standard notification system", "Notify");
     case DeferralType:
         return i18nc("@label Deferral type", "Deferral");
     case DeferralTime:
@@ -197,6 +199,7 @@ bool KAEventFormatter::isApplicable(Parameter param) const
     case ConfirmAck:
     case AkonadiItem:
     case Reminder:
+    case Notify:
     case DeferralType:
     case DeferDefault:
         return mEvent.actionTypes() & KAEvent::ACT_DISPLAY;
@@ -351,6 +354,8 @@ QString KAEventFormatter::value(Parameter param) const
         return mEvent.reminderMinutes() ? minutesHoursDays(mEvent.reminderMinutes()) : trueFalse(false);
     case ReminderOnce:
         return trueFalse(mEvent.reminderOnceOnly());
+    case Notify:
+        return trueFalse(mEvent.notify());
     case DeferralType:
         return mEvent.reminderDeferral() ? i18nc("@info", "Reminder") : trueFalse(mEvent.deferred());
     case DeferralTime:

@@ -1,8 +1,8 @@
 /*
- *  kaevent.cpp  -  represents calendar events
+ *  kaevent.cpp  -  represents KAlarm calendar events
  *  This file is part of kalarmcal library, which provides access to KAlarm
  *  calendar data.
- *  SPDX-FileCopyrightText: 2001-2019 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2001-2020 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -301,6 +301,7 @@ public:
     bool               mCopyToKOrganizer{false}; // KOrganizer should hold a copy of the event
     bool               mReminderOnceOnly{false}; // the reminder is output only for the first recurrence
     bool               mAutoClose{false};        // whether to close the alarm window after the late-cancel period
+    bool               mNotify{false};           // alarm should be shown by the notification system, not in a window
     bool               mMainExpired;             // main alarm has expired (in which case a deferral alarm will exist)
     bool               mRepeatAtLogin{false};    // whether to repeat the alarm at every login
     bool               mArchiveRepeatAtLogin{false}; // if now archived, original event was repeat-at-login
@@ -323,6 +324,7 @@ public:
     static const QString DEFER_FLAG;
     static const QString LATE_CANCEL_FLAG;
     static const QString AUTO_CLOSE_FLAG;
+    static const QString NOTIFY_FLAG;
     static const QString TEMPL_AFTER_TIME_FLAG;
     static const QString KMAIL_ITEM_FLAG;
     static const QString ARCHIVE_FLAG;
@@ -391,6 +393,7 @@ const QString    KAEventPrivate::REMINDER_ONCE_FLAG    = QStringLiteral("ONCE");
 const QString    KAEventPrivate::DEFER_FLAG            = QStringLiteral("DEFER");   // default defer interval for this alarm
 const QString    KAEventPrivate::LATE_CANCEL_FLAG      = QStringLiteral("LATECANCEL");
 const QString    KAEventPrivate::AUTO_CLOSE_FLAG       = QStringLiteral("LATECLOSE");
+const QString    KAEventPrivate::NOTIFY_FLAG           = QStringLiteral("NOTIFY");
 const QString    KAEventPrivate::TEMPL_AFTER_TIME_FLAG = QStringLiteral("TMPLAFTTIME");
 const QString    KAEventPrivate::KMAIL_ITEM_FLAG       = QStringLiteral("KMAIL");
 const QString    KAEventPrivate::ARCHIVE_FLAG          = QStringLiteral("ARCHIVE");
@@ -534,6 +537,7 @@ KAEventPrivate::KAEventPrivate(const KADateTime &dateTime, const QString &text, 
     mDisplaying             = flags & DISPLAYING_;
     mReminderOnceOnly       = flags & KAEvent::REMINDER_ONCE;
     mAutoClose              = (flags & KAEvent::AUTO_CLOSE) && mLateCancel;
+    mNotify                 = flags & KAEvent::NOTIFY;
     mRepeatSoundPause       = (flags & KAEvent::REPEAT_SOUND) ? 0 : -1;
     mSpeak                  = (flags & KAEvent::SPEAK) && action != KAEvent::AUDIO;
     mBeep                   = (flags & KAEvent::BEEP) && action != KAEvent::AUDIO && !mSpeak;
@@ -628,6 +632,8 @@ KAEventPrivate::KAEventPrivate(const KCalendarCore::Event::Ptr &event)
             mExcludeHolidayRegion = holidays();
         } else if (flag == WORK_TIME_ONLY_FLAG) {
             mWorkTimeOnly = 1;
+        } else if (flag == NOTIFY_FLAG) {
+            mNotify = true;
         } else if (flag == KMAIL_ITEM_FLAG) {
             const Akonadi::Item::Id id = flags.at(i + 1).toLongLong(&ok);
             if (!ok) {
@@ -1050,6 +1056,7 @@ void KAEventPrivate::copy(const KAEventPrivate &event)
     mCopyToKOrganizer        = event.mCopyToKOrganizer;
     mReminderOnceOnly        = event.mReminderOnceOnly;
     mAutoClose               = event.mAutoClose;
+    mNotify                  = event.mNotify;
     mMainExpired             = event.mMainExpired;
     mRepeatAtLogin           = event.mRepeatAtLogin;
     mArchiveRepeatAtLogin    = event.mArchiveRepeatAtLogin;
@@ -1157,6 +1164,9 @@ bool KAEventPrivate::updateKCalEvent(const Event::Ptr &ev, KAEvent::UidAction ui
     }
     if (mWorkTimeOnly) {
         flags += WORK_TIME_ONLY_FLAG;
+    }
+    if (mNotify) {
+        flags += NOTIFY_FLAG;
     }
     if (mLateCancel) {
         (flags += (mAutoClose ? AUTO_CLOSE_FLAG : LATE_CANCEL_FLAG)) += QString::number(mLateCancel);
@@ -1633,6 +1643,9 @@ KAEvent::Flags KAEventPrivate::flags() const
     if (mAutoClose) {
         result |= KAEvent::AUTO_CLOSE;
     }
+    if (mNotify) {
+        result |= KAEvent::NOTIFY;
+    }
     if (!mEnabled) {
         result |= KAEvent::DISABLED;
     }
@@ -1793,6 +1806,16 @@ void KAEvent::setAutoClose(bool ac)
 bool KAEvent::autoClose() const
 {
     return d->mAutoClose;
+}
+
+void KAEvent::setNotify(bool useNotify)
+{
+    d->mNotify = useNotify;
+}
+
+bool KAEvent::notify() const
+{
+    return d->mNotify;
 }
 
 void KAEvent::setAkonadiItemId(Akonadi::Item::Id id)
@@ -3714,6 +3737,7 @@ bool KAEventPrivate::compare(const KAEventPrivate& other, KAEvent::Comparison co
             ||  mExtraActionOptions   != other.mExtraActionOptions
             ||  mCommandError         != other.mCommandError
             ||  mConfirmAck           != other.mConfirmAck
+            ||  mNotify               != other.mNotify
             ||  mAkonadiItemId        != other.mAkonadiItemId
             ||  mBeep                 != other.mBeep
             ||  mSpeak                != other.mSpeak
@@ -3855,6 +3879,7 @@ void KAEventPrivate::dumpDebug() const
         qCDebug(KALARMCAL_LOG) << "-- mPostAction:" << mPostAction;
         qCDebug(KALARMCAL_LOG) << "-- mLateCancel:" << mLateCancel;
         qCDebug(KALARMCAL_LOG) << "-- mAutoClose:" << mAutoClose;
+        qCDebug(KALARMCAL_LOG) << "-- mNotify:" << mNotify;
     } else if (mActionSubType == KAEvent::COMMAND) {
         qCDebug(KALARMCAL_LOG) << "-- mCommandScript:" << mCommandScript;
         qCDebug(KALARMCAL_LOG) << "-- mCommandXterm:" << mCommandXterm;
