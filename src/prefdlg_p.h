@@ -202,6 +202,7 @@ private Q_SLOTS:
 
 private:
     QTabWidget*     mTabs;
+    QComboBox*      mDisplayMethod;
     QCheckBox*      mAutoClose;
     QCheckBox*      mConfirmAck;
     QComboBox*      mReminderUnits;
@@ -216,7 +217,7 @@ private:
     QCheckBox*      mSoundRepeat;
     QCheckBox*      mCopyToKOrganizer;
     QCheckBox*      mLateCancel;
-    ComboBox*      mRecurPeriod;
+    ComboBox*       mRecurPeriod;
     ButtonGroup*    mFeb29;
     FontColourChooser* mFontChooser;
     int             mTabGeneral;     // index of General tab

@@ -65,60 +65,60 @@ MessageDisplayHelper* AudioThread::mAudioOwner = nullptr;
 * the whole event needs to be stored for updating the calendar file when it is
 * displayed.
 */
-MessageDisplayHelper::MessageDisplayHelper(MessageDisplay* parent, const KAEvent* event, const KAAlarm& alarm, int flags)
+MessageDisplayHelper::MessageDisplayHelper(MessageDisplay* parent, const KAEvent& event, const KAAlarm& alarm, int flags)
     : mParent(parent)
-    , mMessage(event->cleanText())
-    , mFont(event->font())
-    , mBgColour(event->bgColour())
-    , mFgColour(event->fgColour())
-    , mEventId(*event)
-    , mAudioFile(event->audioFile())
-    , mVolume(event->soundVolume())
-    , mFadeVolume(event->fadeVolume())
-    , mFadeSeconds(qMin(event->fadeSeconds(), 86400))
-    , mDefaultDeferMinutes(event->deferDefaultMinutes())
+    , mMessage(event.cleanText())
+    , mFont(event.font())
+    , mBgColour(event.bgColour())
+    , mFgColour(event.fgColour())
+    , mEventId(event)
+    , mAudioFile(event.audioFile())
+    , mVolume(event.soundVolume())
+    , mFadeVolume(event.fadeVolume())
+    , mFadeSeconds(qMin(event.fadeSeconds(), 86400))
+    , mDefaultDeferMinutes(event.deferDefaultMinutes())
     , mAlarmType(alarm.type())
-    , mAction(event->actionSubType())
-    , mAkonadiItemId(event->akonadiItemId())
-    , mCommandError(event->commandError())
-    , mAudioRepeatPause(event->repeatSoundPause())
-    , mConfirmAck(event->confirmAck())
+    , mAction(event.actionSubType())
+    , mAkonadiItemId(event.akonadiItemId())
+    , mCommandError(event.commandError())
+    , mAudioRepeatPause(event.repeatSoundPause())
+    , mConfirmAck(event.confirmAck())
     , mNoDefer(true)
     , mInvalid(false)
-    , mEvent(*event)
-    , mOriginalEvent(*event)
+    , mEvent(event)
+    , mOriginalEvent(event)
     , mResource(Resources::resourceForEvent(mEventId.eventId()))
-    , mAlwaysHide(flags & MessageDisplay::ALWAYS_HIDE)
+    , mAlwaysHide(flags & MessageDisplay::AlwaysHide)
     , mNoPostAction(alarm.type() & KAAlarm::REMINDER_ALARM)
-    , mBeep(event->beep())
-    , mSpeak(event->speak())
+    , mBeep(event.beep())
+    , mSpeak(event.speak())
     , mNoRecordCmdError(flags & MessageDisplay::NoRecordCmdError)
-    , mRescheduleEvent(!(flags & MessageDisplay::NO_RESCHEDULE))
+    , mRescheduleEvent(!(flags & MessageDisplay::NoReschedule))
 {
-    qCDebug(KALARM_LOG) << "MessageDisplayHelper:" << mEventId;
+    qCDebug(KALARM_LOG) << "MessageDisplayHelper():" << mEventId;
     if (alarm.type() & KAAlarm::REMINDER_ALARM)
     {
-        if (event->reminderMinutes() < 0)
+        if (event.reminderMinutes() < 0)
         {
-            event->previousOccurrence(alarm.dateTime(false).effectiveKDateTime(), mDateTime, false);
-            if (!mDateTime.isValid()  &&  event->repeatAtLogin())
-                mDateTime = alarm.dateTime().addSecs(event->reminderMinutes() * 60);
+            event.previousOccurrence(alarm.dateTime(false).effectiveKDateTime(), mDateTime, false);
+            if (!mDateTime.isValid()  &&  event.repeatAtLogin())
+                mDateTime = alarm.dateTime().addSecs(event.reminderMinutes() * 60);
         }
         else
-            mDateTime = event->mainDateTime(true);
+            mDateTime = event.mainDateTime(true);
     }
     else
         mDateTime = alarm.dateTime(true);
-    if (!(flags & (MessageDisplay::NO_INIT_VIEW | MessageDisplay::ALWAYS_HIDE)))
+    if (!(flags & (MessageDisplay::NoInitView | MessageDisplay::AlwaysHide)))
     {
         const bool readonly = KAlarm::eventReadOnly(mEventId.eventId());
         mShowEdit = !mEventId.isEmpty()  &&  !readonly;
-        mNoDefer = readonly || (flags & MessageDisplay::NO_DEFER) || alarm.repeatAtLogin();
+        mNoDefer = readonly || (flags & MessageDisplay::NoDefer) || alarm.repeatAtLogin();
     }
 
     mInstanceList.append(this);
-    if (event->autoClose())
-        mCloseTime = alarm.dateTime().effectiveKDateTime().toUtc().qDateTime().addSecs(event->lateCancel() * 60);
+    if (event.autoClose())
+        mCloseTime = alarm.dateTime().effectiveKDateTime().toUtc().qDateTime().addSecs(event.lateCancel() * 60);
 }
 
 /******************************************************************************
@@ -126,14 +126,14 @@ MessageDisplayHelper::MessageDisplayHelper(MessageDisplay* parent, const KAEvent
 * If 'dontShowAgain' is non-null, a "Don't show again" option is displayed. Note
 * that the option is specific to 'event'.
 */
-MessageDisplayHelper::MessageDisplayHelper(MessageDisplay* parent, const KAEvent* event, const DateTime& alarmDateTime,
-                       const QStringList& errmsgs, const QString& dontShowAgain)
+MessageDisplayHelper::MessageDisplayHelper(MessageDisplay* parent, const KAEvent& event, const DateTime& alarmDateTime,
+                                           const QStringList& errmsgs, const QString& dontShowAgain)
     : mParent(parent)
-    , mMessage(event->cleanText())
+    , mMessage(event.cleanText())
     , mDateTime(alarmDateTime)
-    , mEventId(*event)
+    , mEventId(event)
     , mAlarmType(KAAlarm::MAIN_ALARM)
-    , mAction(event->actionSubType())
+    , mAction(event.actionSubType())
     , mAkonadiItemId(-1)
     , mCommandError(KAEvent::CMD_NO_ERROR)
     , mErrorMsgs(errmsgs)
@@ -142,8 +142,8 @@ MessageDisplayHelper::MessageDisplayHelper(MessageDisplay* parent, const KAEvent
     , mShowEdit(false)
     , mNoDefer(true)
     , mInvalid(false)
-    , mEvent(*event)
-    , mOriginalEvent(*event)
+    , mEvent(event)
+    , mOriginalEvent(event)
     , mErrorWindow(true)
     , mNoPostAction(true)
 {
@@ -167,7 +167,7 @@ MessageDisplayHelper::MessageDisplayHelper(MessageDisplay* parent)
 */
 MessageDisplayHelper::~MessageDisplayHelper()
 {
-    qCDebug(KALARM_LOG) << "~MessageDisplayHelper" << mEventId;
+    qCDebug(KALARM_LOG) << "~MessageDisplayHelper()" << mEventId;
     if (AudioThread::mAudioOwner == this  &&  !mAudioThread.isNull())
         mAudioThread->quit();
     mErrorMessages.remove(mEventId);
@@ -192,7 +192,7 @@ void MessageDisplayHelper::initTexts()
     if (mDateTime.isValid())
     {
         // Alarm date/time: display time zone if not local time zone.
-        mTexts.time = dateTimeToDisplay();
+        mTexts.time = mTexts.timeFull = dateTimeToDisplay();
         if (reminder)
         {
             // Reminder.
@@ -200,10 +200,11 @@ void MessageDisplayHelper::initTexts()
             // start of the translated string, allowing for possible HTML tags
             // enclosing "Reminder".
             QString s = i18nc("@info", "Reminder");
-            QRegExp re(QStringLiteral("^(<[^>]+>)*"));
+            QRegExp re(QStringLiteral("^(<[^>]+>)*"));  // search for HTML tag "<...>"
             re.indexIn(s);
+            // Prefix the time, plus a newline, to "Reminder", inside any HTML tags.
             s.insert(re.matchedLength(), mTexts.time + QLatin1String("<br/>"));
-            mTexts.time = s;
+            mTexts.timeFull = s;
         }
     }
 
@@ -281,17 +282,14 @@ void MessageDisplayHelper::initTexts()
                 break;
             }
             case KAEvent::MESSAGE:
-            {
-                // Message label
                 mTexts.message = mMessage;
                 break;
-            }
+
             case KAEvent::COMMAND:
-            {
                 theApp()->execCommandAlarm(mEvent, mEvent.alarm(mAlarmType), mNoRecordCmdError,
                                            this, SLOT(readProcessOutput(ShellProcess*)), "commandCompleted");
                 break;
-            }
+
             case KAEvent::EMAIL:
             default:
                 break;
@@ -393,11 +391,11 @@ bool MessageDisplayHelper::cancelReminder(const KAEvent& event, const KAAlarm& a
     if (event.autoClose())
         mCloseTime = alarm.dateTime().effectiveKDateTime().toUtc().qDateTime().addSecs(event.lateCancel() * 60);
     mTexts.title = i18nc("@title:window", "Message");
-    mTexts.time = dateTimeToDisplay();
+    mTexts.time = mTexts.timeFull = dateTimeToDisplay();
     mTexts.remainingTime.clear();
     MidnightTimer::disconnect(this, SLOT(slotSetRemainingTextDay()));
     MinuteTimer::disconnect(this, SLOT(slotSetRemainingTextMinute()));
-    Q_EMIT textsChanged(DisplayTexts::Title | DisplayTexts::Time | DisplayTexts::RemainingTime);
+    Q_EMIT textsChanged(DisplayTexts::Title | DisplayTexts::Time | DisplayTexts::TimeFull | DisplayTexts::RemainingTime);
     return true;
 }
 
@@ -409,7 +407,7 @@ bool MessageDisplayHelper::updateDateTime(const KAEvent& event, const KAAlarm& a
     mDateTime = (alarm.type() & KAAlarm::REMINDER_ALARM) ? event.mainDateTime(true) : alarm.dateTime(true);
     if (!mDateTime.isValid())
         return false;
-    mTexts.time = dateTimeToDisplay();
+    mTexts.time = mTexts.timeFull = dateTimeToDisplay();
     return true;
 }
 
@@ -503,6 +501,8 @@ void MessageDisplayHelper::readProcessOutput(ShellProcess* proc)
     const QByteArray data = proc->readAll();
     if (!data.isEmpty())
     {
+        mCommandOutput.clear();
+
         // Strip any trailing newline, to avoid showing trailing blank line
         // in message display.
         QString newText;
@@ -548,7 +548,6 @@ bool MessageDisplayHelper::saveProperties(KConfigGroup& config)
 {
     if (!mErrorWindow  &&  !mAlwaysHide)
     {
-        config.writeEntry("Display", mParent->mDisplayType);
         config.writeEntry("EventID", mEventId.eventId());
         config.writeEntry("CollectionID", mResource.id());
         config.writeEntry("AlarmType", static_cast<int>(mAlarmType));
@@ -616,8 +615,19 @@ bool MessageDisplayHelper::saveProperties(KConfigGroup& config)
 */
 bool MessageDisplayHelper::readProperties(const KConfigGroup& config)
 {
-    const QString displayType   = config.readEntry("Display");
-    const QString eventId       = config.readEntry("EventID");
+    return readPropertyValues(config)
+       &&  processPropertyValues();
+}
+
+/******************************************************************************
+* Read settings from the session managed config file.
+* This function is automatically called whenever the app is being restored.
+* Read in whatever was saved in saveProperties().
+* Reply = true if the parent display needs to initialise its display.
+*/
+bool MessageDisplayHelper::readPropertyValues(const KConfigGroup& config)
+{
+    const QString eventId = config.readEntry("EventID");
     const ResourceId resourceId = config.readEntry("CollectionID", ResourceId(-1));
     mInvalid             = config.readEntry("Invalid", false);
     mAlarmType           = static_cast<KAAlarm::Type>(config.readEntry("AlarmType", 0));
@@ -668,17 +678,16 @@ bool MessageDisplayHelper::readProperties(const KConfigGroup& config)
     // Temporarily initialise mResource and mEventId - they will be set by redisplayAlarm()
     mResource            = Resources::resource(resourceId);
     mEventId             = EventId(resourceId, eventId);
-    if (displayType != mParent->mDisplayType)
-    {
-        qCCritical(KALARM_LOG) << "MessageDisplayHelper::readProperties: Invalid display type: id=" << eventId;
-        return false;
-    }
     if (mAlarmType == KAAlarm::INVALID_ALARM)
         return false;
     qCDebug(KALARM_LOG) << "MessageDisplayHelper::readProperties:" << eventId;
+    return true;
+}
 
+bool MessageDisplayHelper::processPropertyValues()
+{
     // Recreate the event from the calendar file (if possible)
-    if (!eventId.isEmpty())
+    if (!mEventId.eventId().isEmpty())
     {
         // Close any other display for this alarm which has already been restored by redisplayAlarms()
         if (!Resources::allCreated())
@@ -728,7 +737,7 @@ void MessageDisplayHelper::redisplayAlarm()
     else
     {
         // It's not in the active calendar, so try the displaying or archive calendars
-        mParent->retrieveEvent(mEvent, mResource, mShowEdit, mNoDefer);
+        mParent->retrieveEvent(mEventId, mEvent, mResource, mShowEdit, mNoDefer);
         mNoDefer = !mNoDefer;
     }
 }
@@ -1163,6 +1172,100 @@ bool MessageDisplayHelper::closeEvent()
         }
     }
     return true;
+}
+
+/******************************************************************************
+* Create an alarm edit dialog.
+*
+* NOTE: The alarm edit dialog is made a child of the main window, not of
+*       displayParent(), so that if displayParent() closes before the dialog
+*       (e.g. on auto-close), KAlarm doesn't crash. The dialog is set non-modal
+*       so that the main window is unaffected, but modal mode is simulated so
+*       that displayParent() is inactive while the dialog is open.
+*/
+EditAlarmDlg* MessageDisplayHelper::createEdit()
+{
+    qCDebug(KALARM_LOG) << "MessageDisplayHelper::createEdit";
+    mEditDlg = EditAlarmDlg::create(false, &mOriginalEvent, false, MainWindow::mainMainWindow(), EditAlarmDlg::RES_IGNORE);
+    if (mEditDlg)
+    {
+        mEditDlg->setAttribute(Qt::WA_NativeWindow, true);
+        connect(mEditDlg, &QDialog::accepted, this, &MessageDisplayHelper::editCloseOk);
+        connect(mEditDlg, &QDialog::rejected, this, &MessageDisplayHelper::editCloseCancel);
+        connect(mEditDlg, &QObject::destroyed, this, &MessageDisplayHelper::editCloseCancel);
+    }
+    return mEditDlg;
+}
+
+/******************************************************************************
+* Execute the alarm edit dialog.
+*/
+void MessageDisplayHelper::executeEdit()
+{
+    MainWindow::mainMainWindow()->editAlarm(mEditDlg, mOriginalEvent);
+}
+
+/******************************************************************************
+* Called when OK is clicked in the alarm edit dialog invoked by the Edit button.
+* Closes the display.
+*/
+void MessageDisplayHelper::editCloseOk()
+{
+    mEditDlg = nullptr;
+    mNoCloseConfirm = true;   // allow window to close without confirmation prompt
+    mParent->closeDisplay();
+}
+
+/******************************************************************************
+* Called when Cancel is clicked in the alarm edit dialog invoked by the Edit
+* button, or when the dialog is deleted.
+*/
+void MessageDisplayHelper::editCloseCancel()
+{
+    mEditDlg = nullptr;
+    mParent->editDlgCancelled();
+}
+
+/******************************************************************************
+* Set up to disable the defer button when the deferral limit is reached.
+*/
+void MessageDisplayHelper::setDeferralLimit(const KAEvent& event)
+{
+    mDeferLimit = event.deferralLimit().effectiveKDateTime().toUtc().qDateTime();
+    MidnightTimer::connect(this, SLOT(checkDeferralLimit()));   // check every day
+    mDisableDeferral = false;
+    checkDeferralLimit();
+}
+
+/******************************************************************************
+* Check whether the deferral limit has been reached.
+* If so, disable the Defer button.
+* N.B. Ideally, just a single QTimer::singleShot() call would be made to disable
+*      the defer button at the corret time. But for a 32-bit integer, the
+*      milliseconds parameter overflows in about 25 days, so instead a daily
+*      check is done until the day when the deferral limit is reached, followed
+*      by a non-overflowing QTimer::singleShot() call.
+*/
+void MessageDisplayHelper::checkDeferralLimit()
+{
+    if (!mParent->isDeferButtonEnabled()  ||  !mDeferLimit.isValid())
+        return;
+    int n = KADateTime::currentLocalDate().daysTo(KADateTime(mDeferLimit, KADateTime::LocalZone).date());
+    if (n > 0)
+        return;
+    MidnightTimer::disconnect(this, SLOT(checkDeferralLimit()));
+    if (n == 0)
+    {
+        // The deferral limit will be reached today
+        n = QDateTime::currentDateTimeUtc().secsTo(mDeferLimit);
+        if (n > 0)
+        {
+            QTimer::singleShot(n * 1000, this, &MessageDisplayHelper::checkDeferralLimit);
+            return;
+        }
+    }
+    mParent->enableDeferButton(false);
+    mDisableDeferral = true;
 }
 
 /******************************************************************************

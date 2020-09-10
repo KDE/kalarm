@@ -1,0 +1,13 @@
+[Global]
+IconName=kalarm
+DesktopEntry=org.kde.kalarm
+Comment=KAlarm
+
+[Event/Message]
+Name=Alarm message
+Action=Popup
+
+[Event/MessageError]
+Name=Alarm error message
+Action=Popup|Sound
+Sound=Oxygen-Sys-App-Error.ogg

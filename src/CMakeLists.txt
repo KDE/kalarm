@@ -96,6 +96,7 @@ set(kalarm_bin_SRCS ${libkalarm_SRCS} ${resources_SRCS}
     mainwindow.cpp
     messagedisplay.cpp
     messagedisplayhelper.cpp
+    messagenotification.cpp
     messagewindow.cpp
     preferences.cpp
     prefdlg.cpp
@@ -208,6 +209,7 @@ install(FILES data/org.kde.kalarm.appdata.xml DESTINATION ${KDE_INSTALL_METAINFO
 install(FILES data/kalarmconfig.kcfg DESTINATION ${KDE_INSTALL_KCFGDIR})
 install(FILES data/kalarmui.rc DESTINATION ${KDE_INSTALL_KXMLGUI5DIR}/kalarm)
 install(FILES data/org.kde.kalarm.kalarm.xml DESTINATION ${KDE_INSTALL_DBUSINTERFACEDIR})
+install(FILES data/kalarm.notifyrc DESTINATION ${KDE_INSTALL_KNOTIFY5RCDIR})
 
 ########### KAuth helper ###############
 

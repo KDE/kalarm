@@ -61,6 +61,7 @@ using namespace KCalendarCore;
 using namespace KAlarmCal;
 
 enum { tTEXT, tFILE, tCOMMAND };  // order of mTypeCombo items
+enum { dWINDOW, dNOTIFY };        // order of mDisplayMethodCombo items
 
 
 /*=============================================================================
@@ -86,8 +87,10 @@ class PickLogFileRadio : public PickFileRadio
 = Dialog to edit display alarms.
 =============================================================================*/
 
+QString EditDisplayAlarmDlg::i18n_lbl_DisplayMethod() { return i18nc("@label:listbox", "Display method:"); }
+QString EditDisplayAlarmDlg::i18n_combo_Window()      { return i18nc("@item:inlistbox", "Window"); }
+QString EditDisplayAlarmDlg::i18n_combo_Notify()      { return i18nc("@item:inlistbox", "Notification"); }
 QString EditDisplayAlarmDlg::i18n_chk_ConfirmAck()    { return i18nc("@option:check", "Confirm acknowledgment"); }
-
 
 /******************************************************************************
 * Constructor.
@@ -135,9 +138,9 @@ void EditDisplayAlarmDlg::type_init(QWidget* parent, QVBoxLayout* frameLayout)
     label->setFixedSize(label->sizeHint());
     mTypeCombo = new ComboBox(box);
     boxHLayout->addWidget(mTypeCombo);
-    QString textItem    = i18nc("@item:inlistbox", "Text message");
-    QString fileItem    = i18nc("@item:inlistbox", "File contents");
-    QString commandItem = i18nc("@item:inlistbox", "Command output");
+    const QString textItem    = i18nc("@item:inlistbox", "Text message");
+    const QString fileItem    = i18nc("@item:inlistbox", "File contents");
+    const QString commandItem = i18nc("@item:inlistbox", "Command output");
     mTypeCombo->addItem(textItem);     // index = tTEXT
     mTypeCombo->addItem(fileItem);     // index = tFILE
     mTypeCombo->addItem(commandItem);  // index = tCOMMAND
@@ -220,13 +223,38 @@ void EditDisplayAlarmDlg::type_init(QWidget* parent, QVBoxLayout* frameLayout)
     connect(mFontColourButton, &FontColourButton::selected, this, &EditDisplayAlarmDlg::setColours);
     connect(mFontColourButton, &FontColourButton::selected, this, &EditDisplayAlarmDlg::contentsChanged);
 
+    // Display method selector
+    hlayout = new QHBoxLayout();
+    hlayout->setContentsMargins(0, 0, 0, 0);
+    frameLayout->addLayout(hlayout);
+    mDisplayMethodBox = new QWidget(parent);    // to group widgets for QWhatsThis text
+    boxHLayout = new QHBoxLayout(mDisplayMethodBox);
+    boxHLayout->setContentsMargins(0, 0, 0, 0);
+    label = new QLabel(i18n_lbl_DisplayMethod(), mDisplayMethodBox);
+    boxHLayout->addWidget(label);
+    label->setFixedSize(label->sizeHint());
+    mDisplayMethodCombo = new ComboBox(mDisplayMethodBox);
+    boxHLayout->addWidget(mDisplayMethodCombo);
+    const QString windowItem = i18n_combo_Window();
+    const QString notifyItem = i18n_combo_Notify();
+    mDisplayMethodCombo->addItem(windowItem);     // index = dWINDOW
+    mDisplayMethodCombo->addItem(notifyItem);     // index = dNOTIFY
+    mDisplayMethodCombo->setFixedSize(mDisplayMethodCombo->sizeHint());
+    connect(mDisplayMethodCombo, static_cast<void (ComboBox::*)(int)>(&ComboBox::currentIndexChanged), this, &EditDisplayAlarmDlg::slotDisplayMethodChanged);
+    connect(mDisplayMethodCombo, static_cast<void (ComboBox::*)(int)>(&ComboBox::currentIndexChanged), this, &EditDisplayAlarmDlg::contentsChanged);
+    label->setBuddy(mDisplayMethodCombo);
+    mDisplayMethodBox->setWhatsThis(i18nc("@info:whatsthis", "Select whether to display the alarm in a window or by the notification system."));
+    hlayout->addWidget(mDisplayMethodBox);
+    hlayout->addSpacing(2 * style()->pixelMetric(QStyle::PM_LayoutHorizontalSpacing));
+    hlayout->addStretch();
+
     if (ShellProcess::authorised())    // don't display if shell commands not allowed (e.g. kiosk mode)
     {
         // Special actions button
         mSpecialActionsButton = new SpecialActionsButton(false, parent);
         mSpecialActionsButton->setFixedSize(mSpecialActionsButton->sizeHint());
         connect(mSpecialActionsButton, &SpecialActionsButton::selected, this, &EditDisplayAlarmDlg::contentsChanged);
-        frameLayout->addWidget(mSpecialActionsButton, 0, Qt::AlignRight);
+        hlayout->addWidget(mSpecialActionsButton);
     }
 
     // Top-adjust the controls
@@ -279,6 +307,7 @@ void EditDisplayAlarmDlg::type_initValues(const KAEvent* event)
         mFontColourButton->setBgColour(event->bgColour());
         mFontColourButton->setFgColour(event->fgColour());
         setColours(event->fgColour(), event->bgColour());
+        mDisplayMethodCombo->setCurrentIndex(event->notify() ? dNOTIFY : dWINDOW);
         mConfirmAck->setChecked(event->confirmAck());
         bool recurs = event->recurs();
         int reminderMins = event->reminderMinutes();
@@ -324,6 +353,7 @@ void EditDisplayAlarmDlg::type_initValues(const KAEvent* event)
         mFontColourButton->setBgColour(Preferences::defaultBgColour());
         mFontColourButton->setFgColour(Preferences::defaultFgColour());
         setColours(Preferences::defaultFgColour(), Preferences::defaultBgColour());
+        mDisplayMethodCombo->setCurrentIndex(Preferences::defaultDisplayMethod() == Preferences::Display_Window ? dWINDOW : dNOTIFY);
         mConfirmAck->setChecked(Preferences::defaultConfirmAck());
         reminder()->setMinutes(0, false);
         reminder()->enableOnceOnly(isTimedRecurrence());   // must be called after mRecurrenceEdit is set up
@@ -352,9 +382,15 @@ void EditDisplayAlarmDlg::type_showOptions(bool more)
     if (mSpecialActionsButton)
     {
         if (more)
+        {
+            mDisplayMethodBox->show();
             mSpecialActionsButton->show();
+        }
         else
+        {
+            mDisplayMethodBox->hide();
             mSpecialActionsButton->hide();
+        }
     }
 }
 
@@ -449,6 +485,7 @@ void EditDisplayAlarmDlg::setReadOnly(bool readOnly)
     mCmdEdit->setReadOnly(readOnly);
     mFontColourButton->setReadOnly(readOnly);
     mSoundPicker->setReadOnly(readOnly);
+    mDisplayMethodCombo->setReadOnly(readOnly);
     mConfirmAck->setReadOnly(readOnly);
     reminder()->setReadOnly(readOnly);
     if (mSpecialActionsButton)
@@ -466,19 +503,20 @@ void EditDisplayAlarmDlg::setReadOnly(bool readOnly)
 void EditDisplayAlarmDlg::saveState(const KAEvent* event)
 {
     EditAlarmDlg::saveState(event);
-    mSavedType        = mTypeCombo->currentIndex();
-    mSavedCmdScript   = mCmdEdit->isScript();
-    mSavedSoundType   = mSoundPicker->sound();
-    mSavedSoundFile   = mSoundPicker->file();
-    mSavedSoundVolume = mSoundPicker->volume(mSavedSoundFadeVolume, mSavedSoundFadeSeconds);
-    mSavedRepeatPause = mSoundPicker->repeatPause();
-    mSavedConfirmAck  = mConfirmAck->isChecked();
-    mSavedFont        = mFontColourButton->font();
-    mSavedFgColour    = mFontColourButton->fgColour();
-    mSavedBgColour    = mFontColourButton->bgColour();
-    mSavedReminder    = reminder()->minutes();
-    mSavedOnceOnly    = reminder()->isOnceOnly();
-    mSavedAutoClose   = lateCancel()->isAutoClose();
+    mSavedType          = mTypeCombo->currentIndex();
+    mSavedCmdScript     = mCmdEdit->isScript();
+    mSavedSoundType     = mSoundPicker->sound();
+    mSavedSoundFile     = mSoundPicker->file();
+    mSavedSoundVolume   = mSoundPicker->volume(mSavedSoundFadeVolume, mSavedSoundFadeSeconds);
+    mSavedRepeatPause   = mSoundPicker->repeatPause();
+    mSavedDisplayMethod = mDisplayMethodCombo->currentIndex();
+    mSavedConfirmAck    = mConfirmAck->isChecked();
+    mSavedFont          = mFontColourButton->font();
+    mSavedFgColour      = mFontColourButton->fgColour();
+    mSavedBgColour      = mFontColourButton->bgColour();
+    mSavedReminder      = reminder()->minutes();
+    mSavedOnceOnly      = reminder()->isOnceOnly();
+    mSavedAutoClose     = lateCancel()->isAutoClose();
     if (mSpecialActionsButton)
     {
         mSavedPreAction        = mSpecialActionsButton->preAction();
@@ -495,17 +533,22 @@ void EditDisplayAlarmDlg::saveState(const KAEvent* event)
 */
 bool EditDisplayAlarmDlg::type_stateChanged() const
 {
-    if (mSavedType       != mTypeCombo->currentIndex()
-    ||  mSavedCmdScript  != mCmdEdit->isScript()
-    ||  mSavedSoundType  != mSoundPicker->sound()
-    ||  mSavedConfirmAck != mConfirmAck->isChecked()
-    ||  mSavedFont       != mFontColourButton->font()
-    ||  mSavedFgColour   != mFontColourButton->fgColour()
-    ||  mSavedBgColour   != mFontColourButton->bgColour()
-    ||  mSavedReminder   != reminder()->minutes()
-    ||  mSavedOnceOnly   != reminder()->isOnceOnly()
-    ||  mSavedAutoClose  != lateCancel()->isAutoClose())
+    if (mSavedType          != mTypeCombo->currentIndex()
+    ||  mSavedCmdScript     != mCmdEdit->isScript()
+    ||  mSavedSoundType     != mSoundPicker->sound()
+    ||  mSavedDisplayMethod != mDisplayMethodCombo->currentIndex()
+    ||  mSavedReminder      != reminder()->minutes()
+    ||  mSavedOnceOnly      != reminder()->isOnceOnly()
+    ||  mSavedAutoClose     != lateCancel()->isAutoClose())
         return true;
+    if (mDisplayMethodCombo->currentIndex() == dWINDOW)
+    {
+        if (mSavedConfirmAck    != mConfirmAck->isChecked()
+        ||  mSavedFont          != mFontColourButton->font()
+        ||  mSavedFgColour      != mFontColourButton->fgColour()
+        ||  mSavedBgColour      != mFontColourButton->bgColour())
+            return true;
+    }
     if (mSpecialActionsButton)
     {
         if (mSavedPreAction        != mSpecialActionsButton->preAction()
@@ -579,12 +622,13 @@ KAEvent::Flags EditDisplayAlarmDlg::getAlarmFlags() const
     if (mFontColourButton->defaultFont())                  flags |= KAEvent::DEFAULT_FONT;
     if (cmd)                                               flags |= KAEvent::DISPLAY_COMMAND;
     if (cmd && mCmdEdit->isScript())                       flags |= KAEvent::SCRIPT;
+    if (mDisplayMethodCombo->currentIndex() == dNOTIFY)    flags |= KAEvent::NOTIFY;
     return flags;
 }
 
 /******************************************************************************
-* Called when one of the alarm display type combo box is changed, to display
-* the appropriate set of controls for that action type.
+* Called when the alarm display type combo box is changed, to display the
+* appropriate set of controls for that action type.
 */
 void EditDisplayAlarmDlg::slotAlarmTypeChanged(int index)
 {
@@ -622,6 +666,17 @@ void EditDisplayAlarmDlg::slotAlarmTypeChanged(int index)
     }
     if (focus)
         focus->setFocus();
+}
+
+/******************************************************************************
+* Called when the display method combo box is changed, to enable/disable the
+* appropriate set of controls for that display method.
+*/
+void EditDisplayAlarmDlg::slotDisplayMethodChanged(int index)
+{
+    const bool enable = (index == dWINDOW);
+    mConfirmAck->setEnabled(enable);
+    mFontColourButton->setEnabled(enable);
 }
 
 /******************************************************************************

@@ -1205,6 +1205,21 @@ EditPrefTab::EditPrefTab(StackedScrollGroup* scrollGroup)
     mTabFontColour = mTabs->addTab(topFontColour, i18nc("@title:tab", "Font && Color"));
 
     // MISCELLANEOUS
+    // Alarm message display method
+    QWidget* widget = new QWidget;   // this is to control the QWhatsThis text display area
+    tgLayout->addWidget(widget);
+    QHBoxLayout* box = new QHBoxLayout(widget);
+    box->setContentsMargins(0, 0, 0, 0);
+    QLabel* label = new QLabel(EditDisplayAlarmDlg::i18n_lbl_DisplayMethod());
+    box->addWidget(label);
+    mDisplayMethod = new QComboBox();
+    mDisplayMethod->addItem(EditDisplayAlarmDlg::i18n_combo_Window());
+    mDisplayMethod->addItem(EditDisplayAlarmDlg::i18n_combo_Notify());
+    box->addWidget(mDisplayMethod);
+    box->addStretch();
+    label->setBuddy(mDisplayMethod);
+    widget->setWhatsThis(i18nc("@info:whatsthis", "The default setting for the alarm message display method in the alarm edit dialog."));
+
     // Show in KOrganizer
     mCopyToKOrganizer = new QCheckBox(EditAlarmDlg::i18n_chk_ShowInKOrganizer());
     mCopyToKOrganizer->setMinimumSize(mCopyToKOrganizer->sizeHint());
@@ -1212,9 +1227,9 @@ EditPrefTab::EditPrefTab(StackedScrollGroup* scrollGroup)
     tgLayout->addWidget(mCopyToKOrganizer);
 
     // Late cancellation
-    QWidget* widget = new QWidget;
+    widget = new QWidget;
     tgLayout->addWidget(widget);
-    QHBoxLayout* box = new QHBoxLayout(widget);
+    box = new QHBoxLayout(widget);
     box->setContentsMargins(0, 0, 0, 0);
     box->setSpacing(0);
     mLateCancel = new QCheckBox(LateCancelSelector::i18n_chk_CancelIfLate());
@@ -1227,7 +1242,7 @@ EditPrefTab::EditPrefTab(StackedScrollGroup* scrollGroup)
     tgLayout->addWidget(widget);
     box = new QHBoxLayout(widget);
     box->setContentsMargins(0, 0, 0, 0);
-    QLabel* label = new QLabel(i18nc("@label:listbox", "Recurrence:"));
+    label = new QLabel(i18nc("@label:listbox", "Recurrence:"));
     box->addWidget(label);
     mRecurPeriod = new ComboBox();
     mRecurPeriod->addItem(RecurrenceEdit::i18n_combo_NoRecur());
@@ -1391,6 +1406,7 @@ void EditPrefTab::restore(bool, bool allTabs)
     int index;
     if (allTabs  ||  mTabs->currentIndex() == mTabGeneral)
     {
+        mDisplayMethod->setCurrentIndex(Preferences::defaultDisplayMethod() == Preferences::Display_Window ? 0 : 1);
         mCopyToKOrganizer->setChecked(Preferences::defaultCopyToKOrganizer());
         mLateCancel->setChecked(Preferences::defaultLateCancel());
         switch (Preferences::defaultRecurPeriod())
@@ -1504,6 +1520,15 @@ void EditPrefTab::apply(bool syncToDisc)
     b = mEmailBcc->isChecked();
     if (b != Preferences::defaultEmailBcc())
         Preferences::setDefaultEmailBcc(b);
+    Preferences::DisplayMethod disp;
+    switch(mDisplayMethod->currentIndex())
+    {
+        case 1:  disp = Preferences::Display_Notification; break;
+        case 0:
+        default: disp = Preferences::Display_Window; break;
+    }
+    if (disp != Preferences::defaultDisplayMethod())
+        Preferences::setDefaultDisplayMethod(disp);
     b = mCopyToKOrganizer->isChecked();
     if (b != Preferences::defaultCopyToKOrganizer())
         Preferences::setDefaultCopyToKOrganizer(b);

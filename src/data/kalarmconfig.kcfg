@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Author: David Jarvie <djarvie@kde.org> -->
+<!--
+SPDX-FileCopyrightText: 2007-2020 David Jarvie <djarvie@kde.org>
+SPDX-License-Identifier: GPL-2.0-or-later
+-->
 <kcfg xmlns="http://www.kde.org/standards/kcfg/1.0"
       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       xsi:schemaLocation="http://www.kde.org/standards/kcfg/1.0
@@ -259,6 +262,15 @@
     </entry>
   </group>
   <group name="Defaults">
+    <entry name="DefaultDisplayMethod" key="DisplayMethod" type="Enum">
+      <label context="@label">Alarm message display method</label>
+      <whatsthis context="@info:whatsthis">Default setting in the alarm edit dialog for "display method", to determine whether to display alarm messages in windows or in system notifications.</whatsthis>
+      <choices name="DisplayMethod" prefix="Display_">
+        <choice name="Window"/>
+        <choice name="Notification"/>
+      </choices>
+      <default>Window</default>
+    </entry>
     <entry name="DefaultLateCancel" key="LateCancel" type="Int">
       <label context="@label">Cancel if late (minutes)</label>
       <whatsthis context="@info:whatsthis">Default value in the alarm edit dialog for late cancellation time (in minutes). 0 for no late cancellation, >0 how many minutes before cancelling.</whatsthis>

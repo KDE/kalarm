@@ -16,6 +16,7 @@
 #include <QObject>
 
 class KConfigGroup;
+class DeferAlarmDlg;
 class EventId;
 class MessageDisplayHelper;
 
@@ -30,12 +31,27 @@ public:
     /** Flags for constructor. */
     enum
     {
-        NO_RESCHEDULE    = 0x01,    // don't reschedule the event once it has displayed
-        NO_DEFER         = 0x02,    // don't display an option to defer
+        NoReschedule     = 0x01,    // don't reschedule the event once it has displayed
+        NoDefer          = 0x02,    // don't display an option to defer
         NoRecordCmdError = 0x04,    // don't record error executing command
-        ALWAYS_HIDE      = 0x08,    // never show the window (e.g. for audio-only alarms)
-        NO_INIT_VIEW     = 0x10     // for internal MessageDisplayHelper use only
+        AlwaysHide       = 0x08,    // never show the window (e.g. for audio-only alarms)
+        NoInitView       = 0x10     // for internal MessageDisplayHelper use only
     };
+
+    /** Create a MessageDisplay alarm message instance.
+     *  The instance type is dependent on the event->notify() value.
+     */
+    static MessageDisplay* create(const KAEvent& event, const KAAlarm& alarm, int flags);
+
+    /** Show an error message about the execution of an alarm.
+     *  The instance type is dependent on the event.notify() value.
+     *  @param event          The event for the alarm.
+     *  @param alarmDateTime  Date/time displayed in the message display.
+     *  @param errmsgs        The error messages to display.
+     *  @param dontShowAgain  The "don't show again" ID of the error message.
+     */
+    static void showError(const KAEvent& event, const DateTime& alarmDateTime,
+                          const QStringList& errmsgs, const QString& dontShowAgain = QString());
 
     virtual ~MessageDisplay();
 
@@ -47,8 +63,8 @@ public:
      */
     virtual void repeat(const KAAlarm&) = 0;
 
-    virtual bool hasDefer() const   { return false; }
-    virtual void showDefer()        {}
+    virtual bool hasDefer() const = 0;
+    virtual void showDefer() = 0;
     virtual void showDateTime(const KAEvent&, const KAAlarm&)  {}
 
     /** Convert a reminder display into a normal alarm display. */
@@ -71,11 +87,14 @@ public:
      *  @param resource  Is set to the resource which originally contained the
      *                   event, or invalid if not known.
      */
-    bool retrieveEvent(KAEvent&, Resource&, bool& showEdit, bool& showDefer);
+    static bool retrieveEvent(const EventId&, KAEvent&, Resource&, bool& showEdit, bool& showDefer);
 
     void        playAudio()                    { mHelper->playAudio(); }
     static void stopAudio(bool wait = false)   { MessageDisplayHelper::stopAudio(wait); }
     static bool isAudioPlaying()               { return MessageDisplayHelper::isAudioPlaying(); }
+
+    /** Called when the edit alarm dialog has been cancelled. */
+    virtual void editDlgCancelled()  {}
 
     /** For use by MessageDisplayHelper.
      *  Returns the widget to act as parent for error messages, etc. */
@@ -84,19 +103,21 @@ public:
     /** For use by MessageDisplayHelper only. Close the alarm message display. */
     virtual void closeDisplay() = 0;
 
+    /** Show the alarm message display. */
+    virtual void showDisplay() = 0;
+
     /** For use by MessageDisplayHelper only. Raise the alarm message display. */
     virtual void raiseDisplay() = 0;
-
-    /** For use by MessageDisplayHelper only. Hide the alarm message display. */
-    virtual void hideDisplay() = 0;
 
     static int instanceCount(bool excludeAlwaysHidden = false)    { return MessageDisplayHelper::instanceCount(excludeAlwaysHidden); }
 
 protected:
-    explicit MessageDisplay(const QString& displayType);
-    MessageDisplay(const QString& displayType, const KAEvent* event, const KAAlarm& alarm, int flags);
-    MessageDisplay(const QString& displayType, const KAEvent* event, const DateTime& alarmDateTime,
+    MessageDisplay();
+    MessageDisplay(const KAEvent& event, const KAAlarm& alarm, int flags);
+    MessageDisplay(const KAEvent& event, const DateTime& alarmDateTime,
                    const QStringList& errmsgs, const QString& dontShowAgain);
+
+    explicit MessageDisplay(MessageDisplayHelper* helper);
 
     /** Called by MessageDisplayHelper to confirm that the alarm message should be
      *  acknowledged (closed).
@@ -107,37 +128,60 @@ protected:
     /** Set up the alarm message display. */
     virtual void setUpDisplay() = 0;
 
-    /** Show the alarm message display. */
-    virtual void showDisplay() = 0;
+    void displayMainWindow();
 
-    const QString   mDisplayType;   // unique ID for each derived class
+    virtual bool isDeferButtonEnabled() const = 0;
+    virtual void enableDeferButton(bool enable) = 0;
+    virtual void enableEditButton(bool enable) = 0;
+
+    // Holds data required by defer dialog.
+    // This is needed because the display may have closed when the defer dialog
+    // is opened.
+    struct DeferDlgData
+    {
+        DeferAlarmDlg*      dlg;
+        EventId             eventId;
+        KAAlarm::Type       alarmType;
+        KAEvent::CmdErrType commandError;
+        bool                displayOpen;
+
+        DeferDlgData(DeferAlarmDlg* d) : dlg(d) {}
+        ~DeferDlgData();
+    };
+
+    DeferDlgData* createDeferDlg(bool displayClosing);
+    void          executeDeferDlg(DeferDlgData* data);
+
     MessageDisplayHelper* mHelper;
 
     // Access to MessageDisplayHelper data.
-    KAAlarm::Type&      mAlarmType()           { return mHelper->mAlarmType; }
-    KAEvent::SubAction  mAction() const        { return mHelper->mAction; }
-    const EventId&      mEventId() const       { return mHelper->mEventId; }
-    const KAEvent&      mEvent() const         { return mHelper->mEvent; }
-    const KAEvent&      mOriginalEvent() const { return mHelper->mOriginalEvent; }
-    const QFont&        mFont() const          { return mHelper->mFont; }
-    const QColor&       mBgColour() const      { return mHelper->mBgColour; }
-    const QColor&       mFgColour() const      { return mHelper->mFgColour; }
-    const QString&      mAudioFile() const     { return mHelper->mAudioFile; }
-    float               mVolume() const        { return mHelper->mVolume; }
-    float               mFadeVolume() const    { return mHelper->mFadeVolume; }
+    KAAlarm::Type&      mAlarmType()             { return mHelper->mAlarmType; }
+    KAEvent::SubAction  mAction() const          { return mHelper->mAction; }
+    const EventId&      mEventId() const         { return mHelper->mEventId; }
+    const KAEvent&      mEvent() const           { return mHelper->mEvent; }
+    const KAEvent&      mOriginalEvent() const   { return mHelper->mOriginalEvent; }
+    const QFont&        mFont() const            { return mHelper->mFont; }
+    const QColor&       mBgColour() const        { return mHelper->mBgColour; }
+    const QColor&       mFgColour() const        { return mHelper->mFgColour; }
+    const QString&      mAudioFile() const       { return mHelper->mAudioFile; }
+    float               mVolume() const          { return mHelper->mVolume; }
+    float               mFadeVolume() const      { return mHelper->mFadeVolume; }
     int                 mDefaultDeferMinutes() const  { return mHelper->mDefaultDeferMinutes; }
-    Akonadi::Item::Id   mAkonadiItemId() const { return mHelper->mAkonadiItemId; }
-    KAEvent::CmdErrType mCommandError() const  { return mHelper->mCommandError; }
-    bool&               mNoPostAction()        { return mHelper->mNoPostAction; }
+    Akonadi::Item::Id   mAkonadiItemId() const   { return mHelper->mAkonadiItemId; }
+    KAEvent::CmdErrType mCommandError() const    { return mHelper->mCommandError; }
+    bool&               mNoPostAction()          { return mHelper->mNoPostAction; }
 
-    const DateTime&     mDateTime() const      { return mHelper->mDateTime; }
-    bool                mIsValid() const       { return !mHelper->mInvalid; }
-    bool                mAlwaysHidden() const  { return mHelper->mAlwaysHide; }
-    bool                mErrorWindow() const   { return mHelper->mErrorWindow; }
-    const QStringList&  mErrorMsgs() const     { return mHelper->mErrorMsgs; }
-    bool&               mNoDefer()             { return mHelper->mNoDefer; }
-    bool                mShowEdit() const      { return mHelper->mShowEdit; }
-    const QString&      mDontShowAgain() const { return mHelper->mDontShowAgain; }
+    const DateTime&     mDateTime() const        { return mHelper->mDateTime; }
+    EditAlarmDlg*       mEditDlg() const         { return mHelper->mEditDlg; }
+    bool                mIsValid() const         { return !mHelper->mInvalid; }
+    bool                mDisableDeferral() const { return mHelper->mDisableDeferral; }
+    bool                mNoCloseConfirm() const  { return mHelper->mNoCloseConfirm; }
+    bool                mAlwaysHidden() const    { return mHelper->mAlwaysHide; }
+    bool                mErrorWindow() const     { return mHelper->mErrorWindow; }
+    const QStringList&  mErrorMsgs() const       { return mHelper->mErrorMsgs; }
+    bool&               mNoDefer()               { return mHelper->mNoDefer; }
+    bool                mShowEdit() const        { return mHelper->mShowEdit; }
+    const QString&      mDontShowAgain() const   { return mHelper->mDontShowAgain; }
 
 private:
     static bool reinstateFromDisplaying(const KCalendarCore::Event::Ptr&, KAEvent&, Resource&, bool& showEdit, bool& showDefer);

@@ -22,7 +22,6 @@
 #include "lib/file.h"
 #include "lib/messagebox.h"
 #include "lib/pushbutton.h"
-#include "lib/synchtimer.h"
 #include "kalarm_debug.h"
 
 #include <AkonadiCore/ItemFetchJob>
@@ -63,9 +62,6 @@ using namespace KAlarmCal;
 
 namespace
 {
-
-// Display type string for MessageWindow class.
-const QString DISPLAY_TYPE = QStringLiteral("window");
 
 #if KDEPIM_HAVE_X11
 enum FullScreenType { NoFullScreen = 0, FullScreen = 1, FullScreenActive = 2 };
@@ -118,7 +114,6 @@ public:
 
 
 QVector<MessageWindow*> MessageWindow::mWindowList;
-bool                    MessageWindow::mRedisplayed = false;
 
 /******************************************************************************
 * Construct the message window for the specified alarm.
@@ -126,16 +121,16 @@ bool                    MessageWindow::mRedisplayed = false;
 * the whole event needs to be stored for updating the calendar file when it is
 * displayed.
 */
-MessageWindow::MessageWindow(const KAEvent* event, const KAAlarm& alarm, int flags)
-    : MainWindowBase(nullptr, static_cast<Qt::WindowFlags>(WFLAGS | WFLAGS2 | ((flags & ALWAYS_HIDE) || getWorkAreaAndModal() ? Qt::WindowType(0) : Qt::X11BypassWindowManagerHint)))
-    , MessageDisplay(DISPLAY_TYPE, event, alarm, flags)
+MessageWindow::MessageWindow(const KAEvent& event, const KAAlarm& alarm, int flags)
+    : MainWindowBase(nullptr, static_cast<Qt::WindowFlags>(WFLAGS | WFLAGS2 | ((flags & AlwaysHide) || getWorkAreaAndModal() ? Qt::WindowType(0) : Qt::X11BypassWindowManagerHint)))
+    , MessageDisplay(event, alarm, flags)
     , mRestoreHeight(0)
 {
-    qCDebug(KALARM_LOG) << "MessageWindow:" << (void*)this << "event" << mEventId();
+    qCDebug(KALARM_LOG) << "MessageWindow():" << mEventId();
     setAttribute(static_cast<Qt::WidgetAttribute>(WidgetFlags));
     setWindowModality(Qt::WindowModal);
     setObjectName(QStringLiteral("MessageWindow"));    // used by LikeBack
-    if (!(flags & (NO_INIT_VIEW | ALWAYS_HIDE)))
+    if (!(flags & (NoInitView | AlwaysHide)))
         setUpDisplay();
 
     connect(mHelper, &MessageDisplayHelper::textsChanged, this, &MessageWindow::textsChanged);
@@ -157,13 +152,13 @@ MessageWindow::MessageWindow(const KAEvent* event, const KAAlarm& alarm, int fla
 * If 'dontShowAgain' is non-null, a "Don't show again" option is displayed. Note
 * that the option is specific to 'event'.
 */
-MessageWindow::MessageWindow(const KAEvent* event, const DateTime& alarmDateTime,
+MessageWindow::MessageWindow(const KAEvent& event, const DateTime& alarmDateTime,
                        const QStringList& errmsgs, const QString& dontShowAgain)
     : MainWindowBase(nullptr, WFLAGS | WFLAGS2)
-    , MessageDisplay(DISPLAY_TYPE, event, alarmDateTime, errmsgs, dontShowAgain)
+    , MessageDisplay(event, alarmDateTime, errmsgs, dontShowAgain)
     , mRestoreHeight(0)
 {
-    qCDebug(KALARM_LOG) << "MessageWindow: errmsg";
+    qCDebug(KALARM_LOG) << "MessageWindow(errmsg)";
     setAttribute(static_cast<Qt::WidgetAttribute>(WidgetFlags));
     setWindowModality(Qt::WindowModal);
     setObjectName(QStringLiteral("ErrorWin"));    // used by LikeBack
@@ -181,9 +176,9 @@ MessageWindow::MessageWindow(const KAEvent* event, const DateTime& alarmDateTime
 */
 MessageWindow::MessageWindow()
     : MainWindowBase(nullptr, WFLAGS)
-    , MessageDisplay(DISPLAY_TYPE)
+    , MessageDisplay()
 {
-    qCDebug(KALARM_LOG) << "MessageWindow:" << (void*)this << "restore";
+    qCDebug(KALARM_LOG) << "MessageWindow(): restore";
     setAttribute(WidgetFlags);
     setWindowModality(Qt::WindowModal);
     setObjectName(QStringLiteral("RestoredMsgWin"));    // used by LikeBack
@@ -202,22 +197,6 @@ MessageWindow::~MessageWindow()
 {
     qCDebug(KALARM_LOG) << "~MessageWindow" << (void*)this << mEventId();
     mWindowList.removeAll(this);
-}
-
-/******************************************************************************
-* Display an error message window.
-* If 'dontShowAgain' is non-null, a "Don't show again" option is displayed. Note
-* that the option is specific to 'event'.
-*/
-void MessageWindow::showError(const KAEvent& event, const DateTime& alarmDateTime,
-                              const QStringList& errmsgs, const QString& dontShowAgain)
-{
-    if (!dontShowAgain.isEmpty()
-    &&  KAlarm::dontShowErrors(EventId(event), dontShowAgain))
-        return;
-
-    if (MessageDisplayHelper::shouldShowError(event, errmsgs, dontShowAgain))
-        (new MessageWindow(&event, alarmDateTime, errmsgs, dontShowAgain))->show();
 }
 
 /******************************************************************************
@@ -245,14 +224,14 @@ void MessageWindow::setUpDisplay()
     // Show the alarm date/time, together with a reminder text where appropriate.
     // Alarm date/time: display time zone if not local time zone.
     mTimeLabel = new QLabel(topWidget);
-    mTimeLabel->setText(texts.time);
+    mTimeLabel->setText(texts.timeFull);
     mTimeLabel->setFrameStyle(QFrame::StyledPanel);
     mTimeLabel->setPalette(labelPalette);
     mTimeLabel->setAutoFillBackground(true);
     mTimeLabel->setAlignment(Qt::AlignHCenter);
     topLayout->addWidget(mTimeLabel, 0, Qt::AlignHCenter);
     mTimeLabel->setWhatsThis(i18nc("@info:whatsthis", "The scheduled date/time for the message (as opposed to the actual time of display)."));
-    if (texts.time.isEmpty())
+    if (texts.timeFull.isEmpty())
         mTimeLabel->hide();
 
     if (!mErrorWindow())
@@ -429,9 +408,9 @@ void MessageWindow::setUpDisplay()
         layout->addWidget(label, 0, Qt::AlignRight);
         QVBoxLayout* vlayout = new QVBoxLayout();
         layout->addLayout(vlayout);
-        for (QStringList::ConstIterator it = mErrorMsgs().constBegin();  it != mErrorMsgs().constEnd();  ++it)
+        for (const QString& msg : mErrorMsgs())
         {
-            label = new QLabel(*it, topWidget);
+            label = new QLabel(msg, topWidget);
             label->setFixedSize(label->sizeHint());
             vlayout->addWidget(label, 0, Qt::AlignLeft);
         }
@@ -484,7 +463,7 @@ void MessageWindow::setUpDisplay()
     if (mNoDefer())
         mDeferButton->hide();
     else
-        setDeferralLimit(mEvent());    // ensure that button is disabled when alarm can't be deferred any more
+        mHelper->setDeferralLimit(mEvent());    // ensure that button is disabled when alarm can't be deferred any more
 
     if (!mAudioFile().isEmpty()  &&  (mVolume() || mFadeVolume() > 0))
     {
@@ -587,17 +566,13 @@ void MessageWindow::closeDisplay()
 
 void MessageWindow::showDisplay()
 {
-    show();
+    if (!mAlwaysHidden())
+        show();
 }
 
 void MessageWindow::raiseDisplay()
 {
     raise();
-}
-
-void MessageWindow::hideDisplay()
-{
-    hide();
 }
 
 /******************************************************************************
@@ -608,12 +583,12 @@ void MessageWindow::repeat(const KAAlarm& alarm)
 {
     if (!mInitialised)
         return;
-    if (mDeferDlg)
+    if (mDeferData)
     {
         // Cancel any deferral dialog so that the user notices something's going on,
         // and also because the deferral time limit will have changed.
-        delete mDeferDlg;
-        mDeferDlg = nullptr;
+        delete mDeferData;
+        mDeferData = nullptr;
     }
     if (mEventId().isEmpty())
         return;
@@ -625,7 +600,7 @@ void MessageWindow::repeat(const KAAlarm& alarm)
             playAudio();
         else
         {
-            if (!mDeferDlg  ||  Preferences::modalMessages())
+            if (!mDeferData  ||  Preferences::modalMessages())
             {
                 raise();
                 playAudio();
@@ -633,7 +608,7 @@ void MessageWindow::repeat(const KAAlarm& alarm)
             if (mDeferButton->isVisible())
             {
                 mDeferButton->setEnabled(true);
-                setDeferralLimit(event);    // ensure that button is disabled when alarm can't be deferred any more
+                mHelper->setDeferralLimit(event);    // ensure that button is disabled when alarm can't be deferred any more
             }
         }
         if (mHelper->alarmShowing(event))
@@ -655,7 +630,7 @@ void MessageWindow::showDefer()
     {
         mNoDefer() = false;
         mDeferButton->show();
-        setDeferralLimit(mEvent());    // ensure that button is disabled when alarm can't be deferred any more
+        mHelper->setDeferralLimit(mEvent());    // ensure that button is disabled when alarm can't be deferred any more
         resize(sizeHint());
     }
 }
@@ -669,7 +644,7 @@ void MessageWindow::cancelReminder(const KAEvent& event, const KAAlarm& alarm)
     {
         const MessageDisplayHelper::DisplayTexts& texts = mHelper->texts();
         setCaption(texts.title);
-        mTimeLabel->setText(texts.time);
+        mTimeLabel->setText(texts.timeFull);
         if (mRemainingText)
             mRemainingText->hide();
         setMinimumHeight(0);
@@ -680,14 +655,14 @@ void MessageWindow::cancelReminder(const KAEvent& event, const KAAlarm& alarm)
 }
 
 /******************************************************************************
-* Show the alarm's trigger time.
+* Update and show the alarm's trigger time.
 * This is assumed to have previously been hidden.
 */
 void MessageWindow::showDateTime(const KAEvent& event, const KAAlarm& alarm)
 {
     if (mTimeLabel  &&  mHelper->updateDateTime(event, alarm))
     {
-        mTimeLabel->setText(mHelper->texts().time);
+        mTimeLabel->setText(mHelper->texts().timeFull);
         mTimeLabel->show();
     }
 }
@@ -702,8 +677,8 @@ void MessageWindow::textsChanged(MessageDisplayHelper::DisplayTexts::TextIds ids
     if (ids & MessageDisplayHelper::DisplayTexts::Title)
         setCaption(texts.title);
 
-    if (ids & MessageDisplayHelper::DisplayTexts::Time)
-        mTimeLabel->setText(texts.time);
+    if (ids & MessageDisplayHelper::DisplayTexts::TimeFull)
+        mTimeLabel->setText(texts.timeFull);
 
     if (ids & MessageDisplayHelper::DisplayTexts::RemainingTime)
     {
@@ -1043,7 +1018,7 @@ void MessageWindow::enableButtons()
 {
     mOkButton->setEnabled(true);
     mKAlarmButton->setEnabled(true);
-    if (mDeferButton->isVisible()  &&  !mDisableDeferral)
+    if (mDeferButton->isVisible()  &&  !mDisableDeferral())
         mDeferButton->setEnabled(true);
     if (mEditButton)
         mEditButton->setEnabled(true);
@@ -1096,7 +1071,7 @@ void MessageWindow::closeEvent(QCloseEvent* ce)
 */
 bool MessageWindow::confirmAcknowledgement()
 {
-    if (!mNoCloseConfirm)
+    if (!mNoCloseConfirm())
     {
         // Ask for confirmation of acknowledgement. Use warningYesNo() because its default is No.
         if (KAMessageBox::warningYesNo(this, i18nc("@info", "Do you really want to acknowledge this alarm?"),
@@ -1180,39 +1155,22 @@ void MessageWindow::slotShowKMailMessage()
 void MessageWindow::slotEdit()
 {
     qCDebug(KALARM_LOG) << "MessageWindow::slotEdit";
-    MainWindow* mainWin = MainWindow::mainMainWindow();
-    mEditDlg = EditAlarmDlg::create(false, &mOriginalEvent(), false, mainWin, EditAlarmDlg::RES_IGNORE);
-    if (!mEditDlg)
+    EditAlarmDlg* dlg = mHelper->createEdit();
+    if (!dlg)
         return;
-    mEditDlg->setAttribute(Qt::WA_NativeWindow, true);
-    KWindowSystem::setMainWindow(mEditDlg->windowHandle(), winId());
-    KWindowSystem::setOnAllDesktops(mEditDlg->winId(), false);
+    KWindowSystem::setMainWindow(dlg->windowHandle(), winId());
+    KWindowSystem::setOnAllDesktops(dlg->winId(), false);
     setButtonsReadOnly(true);
-    connect(mEditDlg, &QDialog::accepted, this, &MessageWindow::editCloseOk);
-    connect(mEditDlg, &QDialog::rejected, this, &MessageWindow::editCloseCancel);
-    connect(mEditDlg, &QObject::destroyed, this, &MessageWindow::editCloseCancel);
     connect(KWindowSystem::self(), &KWindowSystem::activeWindowChanged, this, &MessageWindow::activeWindowChanged);
-    mainWin->editAlarm(mEditDlg, mOriginalEvent());
-}
-
-/******************************************************************************
-* Called when OK is clicked in the alarm edit dialog invoked by the Edit button.
-* Closes the window.
-*/
-void MessageWindow::editCloseOk()
-{
-    mEditDlg = nullptr;
-    mNoCloseConfirm = true;   // allow window to close without confirmation prompt
-    close();
+    mHelper->executeEdit();
 }
 
 /******************************************************************************
 * Called when Cancel is clicked in the alarm edit dialog invoked by the Edit
 * button, or when the dialog is deleted.
 */
-void MessageWindow::editCloseCancel()
+void MessageWindow::editDlgCancelled()
 {
-    mEditDlg = nullptr;
     setButtonsReadOnly(false);
 }
 
@@ -1223,8 +1181,23 @@ void MessageWindow::editCloseCancel()
 */
 void MessageWindow::activeWindowChanged(WId win)
 {
-    if (mEditDlg  &&  win == winId())
-        KWindowSystem::activateWindow(mEditDlg->winId());
+    if (mEditDlg()  &&  win == winId())
+        KWindowSystem::activateWindow(mEditDlg()->winId());
+}
+
+/******************************************************************************
+* Called when the Defer... button is clicked.
+* Displays the defer message dialog.
+*/
+void MessageWindow::slotDefer()
+{
+    mDeferData = createDeferDlg(false);
+    if (windowFlags() & Qt::X11BypassWindowManagerHint)
+        mDeferData->dlg->setWindowFlags(mDeferData->dlg->windowFlags() | Qt::X11BypassWindowManagerHint);
+    if (!Preferences::modalMessages())
+        lower();
+    executeDeferDlg(mDeferData);
+    mDeferData = nullptr;   // it was deleted by executeDeferDlg()
 }
 
 /******************************************************************************
@@ -1234,7 +1207,8 @@ void MessageWindow::setButtonsReadOnly(bool ro)
 {
     mOkButton->setReadOnly(ro, true);
     mDeferButton->setReadOnly(ro, true);
-    mEditButton->setReadOnly(ro, true);
+    if (mEditButton)
+        mEditButton->setReadOnly(ro, true);
     if (mSilenceButton)
         mSilenceButton->setReadOnly(ro, true);
     if (mKMailButton)
@@ -1242,128 +1216,20 @@ void MessageWindow::setButtonsReadOnly(bool ro)
     mKAlarmButton->setReadOnly(ro, true);
 }
 
-/******************************************************************************
-* Set up to disable the defer button when the deferral limit is reached.
-*/
-void MessageWindow::setDeferralLimit(const KAEvent& event)
+bool MessageWindow::isDeferButtonEnabled() const
 {
-    mDeferLimit = event.deferralLimit().effectiveKDateTime().toUtc().qDateTime();
-    MidnightTimer::connect(this, SLOT(checkDeferralLimit()));   // check every day
-    mDisableDeferral = false;
-    checkDeferralLimit();
+    return mDeferButton->isEnabled()  &&  mDeferButton->isVisible();
 }
 
-/******************************************************************************
-* Check whether the deferral limit has been reached.
-* If so, disable the Defer button.
-* N.B. Ideally, just a single QTimer::singleShot() call would be made to disable
-*      the defer button at the corret time. But for a 32-bit integer, the
-*      milliseconds parameter overflows in about 25 days, so instead a daily
-*      check is done until the day when the deferral limit is reached, followed
-*      by a non-overflowing QTimer::singleShot() call.
-*/
-void MessageWindow::checkDeferralLimit()
+void MessageWindow::enableDeferButton(bool enable)
 {
-    if (!mDeferButton->isEnabled()  ||  !mDeferLimit.isValid())
-        return;
-    int n = KADateTime::currentLocalDate().daysTo(KADateTime(mDeferLimit, KADateTime::LocalZone).date());
-    if (n > 0)
-        return;
-    MidnightTimer::disconnect(this, SLOT(checkDeferralLimit()));
-    if (n == 0)
-    {
-        // The deferral limit will be reached today
-        n = QDateTime::currentDateTimeUtc().secsTo(mDeferLimit);
-        if (n > 0)
-        {
-            QTimer::singleShot(n * 1000, this, &MessageWindow::checkDeferralLimit);
-            return;
-        }
-    }
-    mDeferButton->setEnabled(false);
-    mDisableDeferral = true;
+    mDeferButton->setEnabled(enable);
 }
 
-/******************************************************************************
-* Called when the Defer... button is clicked.
-* Displays the defer message dialog.
-*/
-void MessageWindow::slotDefer()
+void MessageWindow::enableEditButton(bool enable)
 {
-    mDeferDlg = new DeferAlarmDlg(KADateTime::currentDateTime(Preferences::timeSpec()).addSecs(60), mDateTime().isDateOnly(), false, this);
-    if (windowFlags() & Qt::X11BypassWindowManagerHint)
-        mDeferDlg->setWindowFlags(mDeferDlg->windowFlags() | Qt::X11BypassWindowManagerHint);
-    mDeferDlg->setObjectName(QStringLiteral("DeferDlg"));    // used by LikeBack
-    mDeferDlg->setDeferMinutes(mDefaultDeferMinutes() > 0 ? mDefaultDeferMinutes() : Preferences::defaultDeferTime());
-    mDeferDlg->setLimit(mEvent());
-    if (!Preferences::modalMessages())
-        lower();
-    if (mDeferDlg->exec() == QDialog::Accepted)
-    {
-        const DateTime dateTime  = mDeferDlg->getDateTime();
-        const int      delayMins = mDeferDlg->deferMinutes();
-        // Fetch the up-to-date alarm from the calendar. Note that it could have
-        // changed since it was displayed.
-        KAEvent event;
-        if (!mEventId().isEmpty())
-            event = ResourcesCalendar::event(mEventId());
-        if (event.isValid())
-        {
-            // The event still exists in the active calendar
-            qCDebug(KALARM_LOG) << "MessageWindow::slotDefer: Deferring event" << mEventId();
-            KAEvent newev(event);
-            newev.defer(dateTime, (mAlarmType() & KAAlarm::REMINDER_ALARM), true);
-            newev.setDeferDefaultMinutes(delayMins);
-            KAlarm::updateEvent(newev, mDeferDlg, true);
-            if (newev.deferred())
-                mNoPostAction() = true;
-        }
-        else
-        {
-            // Try to retrieve the event from the displaying or archive calendars
-            Resource resource;   // receives the event's original resource, if known
-            KAEvent event2;
-            bool showEdit, showDefer;
-            if (!retrieveEvent(event2, resource, showEdit, showDefer))
-            {
-                // The event doesn't exist any more !?!, so recurrence data,
-                // flags, and more, have been lost.
-                KAMessageBox::error(this, xi18nc("@info", "<para>Cannot defer alarm:</para><para>Alarm not found.</para>"));
-                raise();
-                delete mDeferDlg;
-                mDeferDlg = nullptr;
-                mDeferButton->setEnabled(false);
-                mEditButton->setEnabled(false);
-                return;
-            }
-            qCDebug(KALARM_LOG) << "MessageWindow::slotDefer: Deferring retrieved event" << mEventId();
-            event2.defer(dateTime, (mAlarmType() & KAAlarm::REMINDER_ALARM), true);
-            event2.setDeferDefaultMinutes(delayMins);
-            event2.setCommandError(mCommandError());
-            // Add the event back into the calendar file, retaining its ID
-            // and not updating KOrganizer.
-            KAlarm::addEvent(event2, resource, mDeferDlg, KAlarm::USE_EVENT_ID);
-            if (event2.deferred())
-                mNoPostAction() = true;
-            // Finally delete it from the archived calendar now that it has
-            // been reactivated.
-            event2.setCategory(CalEvent::ARCHIVED);
-            Resource res;
-            KAlarm::deleteEvent(event2, res, false);
-        }
-        if (theApp()->wantShowInSystemTray())
-        {
-            // Alarms are to be displayed only if the system tray icon is running,
-            // so start it if necessary so that the deferred alarm will be shown.
-            theApp()->displayTrayIcon(true);
-        }
-        mNoCloseConfirm = true;   // allow window to close without confirmation prompt
-        close();
-    }
-    else
-        raise();
-    delete mDeferDlg;
-    mDeferDlg = nullptr;
+    if (mEditButton)
+        mEditButton->setEnabled(enable);
 }
 
 /******************************************************************************
@@ -1372,7 +1238,7 @@ void MessageWindow::slotDefer()
 */
 void MessageWindow::displayMainWindow()
 {
-    KAlarm::displayMainWindowSelected(mEventId().eventId());
+    MessageDisplay::displayMainWindow();
 }
 
 /******************************************************************************

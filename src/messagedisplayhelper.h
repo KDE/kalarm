@@ -25,6 +25,7 @@ class KConfigGroup;
 class QTemporaryFile;
 class AudioThread;
 class PushButton;
+class EditAlarmDlg;
 class MessageDisplay;
 
 using namespace KAlarmCal;
@@ -49,15 +50,17 @@ public:
         {
             Title         = 0x01,    //!< DisplayTexts::title
             Time          = 0x02,    //!< DisplayTexts::time
-            FileName      = 0x04,    //!< DisplayTexts::fileName
-            Message       = 0x08,    //!< DisplayTexts::message
-            MessageAppend = 0x10,    //!< Text has been appended to DisplayTexts::message
-            RemainingTime = 0x20     //!< DisplayTexts::remainingTime
+            TimeFull      = 0x04,    //!< DisplayTexts::timeFull
+            FileName      = 0x08,    //!< DisplayTexts::fileName
+            Message       = 0x10,    //!< DisplayTexts::message
+            MessageAppend = 0x20,    //!< Text has been appended to DisplayTexts::message
+            RemainingTime = 0x40     //!< DisplayTexts::remainingTime
         };
         Q_DECLARE_FLAGS(TextIds, TextId)
 
         QString title;            // window/notification title
         QString time;             // header showing alarm trigger time
+        QString timeFull;         // header showing alarm trigger time and "Reminder" if appropriate
         QString fileName;         // if message is a file's contents, the file name
         QString message;          // the alarm message
         QString remainingTime;    // if advance reminder, the remaining time until the actual alarm
@@ -67,13 +70,14 @@ public:
     };
 
     explicit MessageDisplayHelper(MessageDisplay* parent);     // for session management restoration only
-    MessageDisplayHelper(MessageDisplay* parent, const KAEvent*, const KAAlarm&, int flags);
-    MessageDisplayHelper(MessageDisplay* parent, const KAEvent*, const DateTime& alarmDateTime,
+    MessageDisplayHelper(MessageDisplay* parent, const KAEvent&, const KAAlarm&, int flags);
+    MessageDisplayHelper(MessageDisplay* parent, const KAEvent&, const DateTime& alarmDateTime,
                          const QStringList& errmsgs, const QString& dontShowAgain);
     MessageDisplayHelper(const MessageDisplayHelper&) = delete;
     MessageDisplayHelper& operator=(const MessageDisplayHelper&) = delete;
     ~MessageDisplayHelper() override;
-    void                setSilenceButton(PushButton* b)  { mSilenceButton = b; }
+    void                setParent(MessageDisplay* parent)  { mParent = parent; }
+    void                setSilenceButton(PushButton* b)    { mSilenceButton = b; }
     void                repeat(const KAAlarm&);
     const DateTime&     dateTime()             { return mDateTime; }
     KAAlarm::Type       alarmType() const      { return mAlarmType; }
@@ -87,6 +91,9 @@ public:
     void                displayComplete();
     bool                alarmShowing(KAEvent&);
     void                playAudio();
+    EditAlarmDlg*       createEdit();
+    void                executeEdit();
+    void                setDeferralLimit(const KAEvent&);
 
     /** Called when a close request has been received.
      *  @return  true to close the alarm message, false to keep it open.
@@ -95,6 +102,8 @@ public:
 
     bool                saveProperties(KConfigGroup&);
     bool                readProperties(const KConfigGroup&);
+    bool                readPropertyValues(const KConfigGroup&);
+    bool                processPropertyValues();
 
     static int          instanceCount(bool excludeAlwaysHidden = false);
     static bool         shouldShowError(const KAEvent& event, const QStringList& errmsgs, const QString& dontShowAgain = QString());
@@ -116,24 +125,27 @@ Q_SIGNALS:
     void autoCloseNow();
 
 private Q_SLOTS:
-    void                showRestoredAlarm();
-    void                slotSpeak();
-    void                audioTerminating();
-    void                startAudio();
-    void                playReady();
-    void                playFinished();
-    void                slotSetRemainingTextDay()     { setRemainingTextDay(true); }
-    void                slotSetRemainingTextMinute()  { setRemainingTextMinute(true); }
-    void                readProcessOutput(ShellProcess*);
-    void                commandCompleted(ShellProcess::Status);
+    void    showRestoredAlarm();
+    void    editCloseOk();
+    void    editCloseCancel();
+    void    checkDeferralLimit();
+    void    slotSpeak();
+    void    audioTerminating();
+    void    startAudio();
+    void    playReady();
+    void    playFinished();
+    void    slotSetRemainingTextDay()     { setRemainingTextDay(true); }
+    void    slotSetRemainingTextMinute()  { setRemainingTextMinute(true); }
+    void    readProcessOutput(ShellProcess*);
+    void    commandCompleted(ShellProcess::Status);
 
 private:
-    QString             dateTimeToDisplay() const;
-    void                setRemainingTextDay(bool notify);
-    void                setRemainingTextMinute(bool notify);
-    bool                haveErrorMessage(unsigned msg) const;
-    void                clearErrorMessage(unsigned msg) const;
-    void                redisplayAlarm();
+    QString dateTimeToDisplay() const;
+    void    setRemainingTextDay(bool notify);
+    void    setRemainingTextMinute(bool notify);
+    bool    haveErrorMessage(unsigned msg) const;
+    void    clearErrorMessage(unsigned msg) const;
+    void    redisplayAlarm();
 
     static QVector<MessageDisplayHelper*> mInstanceList;  // list of existing message displays
     static QHash<EventId, unsigned> mErrorMessages; // error messages currently displayed, by event ID
@@ -170,6 +182,10 @@ public:
     KAEvent             mOriginalEvent;           // the original event supplied to the constructor
     Resource            mResource;                // resource which the event comes/came from
     PushButton*         mSilenceButton {nullptr}; // button to stop audio, enabled when audio playing
+    EditAlarmDlg*       mEditDlg {nullptr};       // alarm edit dialog invoked by Edit button
+    QDateTime           mDeferLimit;              // last UTC time to which the message can currently be deferred
+    bool                mDisableDeferral {false}; // true if past deferral limit, so don't enable Defer button
+    bool                mNoCloseConfirm {false};  // the Defer or Edit button is closing the dialog
     bool                mAlwaysHide {false};      // the window should never be displayed
     bool                mErrorWindow {false};     // the window is simply an error message
     bool                mNoPostAction;            // don't execute any post-alarm action
@@ -178,9 +194,13 @@ public:
 private:
     DisplayTexts        mTexts;                   // texts to display in alarm message
     QTemporaryFile*     mTempFile {nullptr};      // temporary file used to display image/HTML
+    QByteArray          mCommandOutput;           // cumulative output from command
+    bool                mCommandHaveStdout {false}; // true if some stdout has been received from command
     bool                mNoRecordCmdError {false}; // don't record command alarm errors
     bool                mInitialised {false};     // initTexts() has been called to create the alarm's texts
     bool                mRescheduleEvent {false}; // true to delete event after message has been displayed
+
+//friend class MessageDisplay;
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(MessageDisplayHelper::DisplayTexts::TextIds)

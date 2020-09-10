@@ -17,6 +17,7 @@
 #include "kamail.h"
 #include "mainwindow.h"
 #include "messagewindow.h"
+#include "messagenotification.h"
 #include "migratekde4files.h"
 #include "preferences.h"
 #include "prefdlg.h"
@@ -286,6 +287,8 @@ bool KAlarmApp::restoreSession()
                 delete win;
         }
     }
+
+    MessageNotification::sessionRestore();
 
     // Try to display the system tray icon if it is configured to be shown
     if (trayParent  ||  wantShowInSystemTray())
@@ -2177,10 +2180,10 @@ void* KAlarmApp::execAlarm(KAEvent& event, const KAAlarm& alarm, ExecAlarmFlags 
             if (!disp)
             {
                 // There isn't already a message for this event
-                const int mdFlags = (flags & Reschedule ? 0 : MessageDisplay::NO_RESCHEDULE)
-                                  | (flags & AllowDefer ? 0 : MessageDisplay::NO_DEFER)
+                const int mdFlags = (flags & Reschedule ? 0 : MessageDisplay::NoReschedule)
+                                  | (flags & AllowDefer ? 0 : MessageDisplay::NoDefer)
                                   | (flags & NoRecordCmdError ? MessageDisplay::NoRecordCmdError : 0);
-                (new MessageWindow(&event, alarm, mdFlags))->show();
+                MessageDisplay::create(event, alarm, mdFlags)->showDisplay();
             }
             else if (replaceReminder)
             {
@@ -2237,8 +2240,8 @@ void* KAlarmApp::execAlarm(KAEvent& event, const KAAlarm& alarm, ExecAlarmFlags 
             if (!disp)
             {
                 // There isn't already a message for this event.
-                const int mdFlags = (flags & Reschedule ? 0 : MessageDisplay::NO_RESCHEDULE) | MessageDisplay::ALWAYS_HIDE;
-                disp = new MessageWindow(&event, alarm, mdFlags);
+                const int mdFlags = (flags & Reschedule ? 0 : MessageDisplay::NoReschedule) | MessageDisplay::AlwaysHide;
+                disp = MessageDisplay::create(event, alarm, mdFlags);
             }
             else
             {
@@ -2263,7 +2266,7 @@ void KAlarmApp::emailSent(KAMail::JobData& data, const QStringList& errmsgs, boo
         // Some error occurred, although the email may have been sent successfully
         if (errmsgs.count() > 1)
             qCDebug(KALARM_LOG) << "KAlarmApp::emailSent:" << (copyerr ? "Copy error:" : "Failed:") << errmsgs[1];
-        MessageWindow::showError(data.event, data.alarm.dateTime(), errmsgs);
+        MessageDisplay::showError(data.event, data.alarm.dateTime(), errmsgs);
     }
     else if (data.queued)
         Q_EMIT execAlarmSuccess();
@@ -2312,10 +2315,12 @@ ShellProcess* KAlarmApp::execCommandAlarm(const KAEvent& event, const KAAlarm& a
 * To connect to the exited signal of the process, specify the name of a method
 * to be called by supplying 'receiver' and 'methodExited' parameters.
 * To connect to the output ready signals of the process, specify a slot to be
-* called by supplying 'receiver' and 'slot' parameters.
+* called by supplying 'receiver' and 'slotOutput' parameters.
 *
 * Note that if shell access is not authorised, the attempt to run the command
 * will be errored.
+*
+* Reply = process which has been started, or null if a process couldn't be started.
 */
 ShellProcess* KAlarmApp::doShellCommand(const QString& command, const KAEvent& event, const KAAlarm* alarm, int flags, QObject* receiver, const char* slotOutput, const char* methodExited)
 {
@@ -2484,7 +2489,7 @@ QString KAlarmApp::createTempScriptFile(const QString& command, bool insertShell
     }
 
     const QStringList errmsgs(i18nc("@info", "Error creating temporary script file"));
-    MessageWindow::showError(event, alarm.dateTime(), errmsgs, QStringLiteral("Script"));
+    MessageDisplay::showError(event, alarm.dateTime(), errmsgs, QStringLiteral("Script"));
     return QString();
 }
 
@@ -2611,7 +2616,7 @@ void KAlarmApp::commandErrorMsg(const ShellProcess* proc, const KAEvent& event, 
                 errmsgs += proc->command();
             dontShowAgain += QString::number(proc->status());
         }
-        MessageWindow::showError(event, (alarm ? alarm->dateTime() : DateTime()), errmsgs, dontShowAgain);
+        MessageDisplay::showError(event, (alarm ? alarm->dateTime() : DateTime()), errmsgs, dontShowAgain);
     }
 }
 
@@ -2741,9 +2746,7 @@ KAlarmApp::ProcData::ProcData(ShellProcess* p, KAEvent* e, KAAlarm* a, int f)
     : process(p)
     , event(e)
     , alarm(a)
-    , messageBoxParent(nullptr)
     , flags(f)
-    , eventDeleted(false)
 { }
 
 KAlarmApp::ProcData::~ProcData()
