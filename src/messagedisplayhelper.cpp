@@ -92,9 +92,10 @@ MessageDisplayHelper::MessageDisplayHelper(MessageDisplay* parent, const KAEvent
     , mNoPostAction(alarm.type() & KAAlarm::REMINDER_ALARM)
     , mBeep(event->beep())
     , mSpeak(event->speak())
+    , mNoRecordCmdError(flags & MessageDisplay::NoRecordCmdError)
     , mRescheduleEvent(!(flags & MessageDisplay::NO_RESCHEDULE))
 {
-    qCDebug(KALARM_LOG) << "MessageDisplayHelper:" << (void*)this << "event" << mEventId;
+    qCDebug(KALARM_LOG) << "MessageDisplayHelper:" << mEventId;
     if (alarm.type() & KAAlarm::REMINDER_ALARM)
     {
         if (event->reminderMinutes() < 0)
@@ -146,7 +147,7 @@ MessageDisplayHelper::MessageDisplayHelper(MessageDisplay* parent, const KAEvent
     , mErrorWindow(true)
     , mNoPostAction(true)
 {
-    qCDebug(KALARM_LOG) << "MessageDisplayHelper: errmsg";
+    qCDebug(KALARM_LOG) << "MessageDisplayHelper(errmsg)";
     mInstanceList.append(this);
 }
 
@@ -157,7 +158,7 @@ MessageDisplayHelper::MessageDisplayHelper(MessageDisplay* parent, const KAEvent
 MessageDisplayHelper::MessageDisplayHelper(MessageDisplay* parent)
     : mParent(parent)
 {
-    qCDebug(KALARM_LOG) << "MessageDisplayHelper:" << (void*)this << "restore";
+    qCDebug(KALARM_LOG) << "MessageDisplayHelper(): restore";
     mInstanceList.append(this);
 }
 
@@ -166,7 +167,7 @@ MessageDisplayHelper::MessageDisplayHelper(MessageDisplay* parent)
 */
 MessageDisplayHelper::~MessageDisplayHelper()
 {
-    qCDebug(KALARM_LOG) << "~MessageDisplayHelper" << (void*)this << mEventId;
+    qCDebug(KALARM_LOG) << "~MessageDisplayHelper" << mEventId;
     if (AudioThread::mAudioOwner == this  &&  !mAudioThread.isNull())
         mAudioThread->quit();
     mErrorMessages.remove(mEventId);
@@ -287,7 +288,7 @@ void MessageDisplayHelper::initTexts()
             }
             case KAEvent::COMMAND:
             {
-                theApp()->execCommandAlarm(mEvent, mEvent.alarm(mAlarmType),
+                theApp()->execCommandAlarm(mEvent, mEvent.alarm(mAlarmType), mNoRecordCmdError,
                                            this, SLOT(readProcessOutput(ShellProcess*)), "commandCompleted");
                 break;
             }

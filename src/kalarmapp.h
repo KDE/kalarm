@@ -36,6 +36,17 @@ class KAlarmApp : public QApplication
 {
         Q_OBJECT
     public:
+        /** Flags for execAlarm(). */
+        enum ExecAlarmFlag
+        {
+            NoExecFlag       = 0,
+            Reschedule       = 0x01,  // reschedule the alarm after executing it
+            AllowDefer       = 0x02,  // allow the alarm to be deferred
+            NoRecordCmdError = 0x04,  // don't record command errors
+            NoPreAction      = 0x08
+        };
+        Q_DECLARE_FLAGS(ExecAlarmFlags, ExecAlarmFlag)
+
         ~KAlarmApp() override;
 
         /** Create the unique instance. */
@@ -66,8 +77,8 @@ class KAlarmApp : public QApplication
         bool               trayIconDisplayed() const       { return mTrayWindow; }
         bool               editNewAlarm(MainWindow* = nullptr);
 
-        void*              execAlarm(KAEvent&, const KAAlarm&, bool reschedule, bool allowDefer = true, bool noPreAction = false);
-        ShellProcess*      execCommandAlarm(const KAEvent&, const KAAlarm&,
+        void*              execAlarm(KAEvent&, const KAAlarm&, ExecAlarmFlags flags = NoExecFlag);
+        ShellProcess*      execCommandAlarm(const KAEvent&, const KAAlarm&, bool noRecordError = false,
                                             QObject* receiver = nullptr,
                                             const char* slotOutput = nullptr,
                                             const char* methodExited = nullptr);
@@ -154,14 +165,15 @@ class KAlarmApp : public QApplication
             ProcData(ShellProcess*, KAEvent*, KAAlarm*, int flags = 0);
             ~ProcData();
             enum { PRE_ACTION = 0x01, POST_ACTION = 0x02, RESCHEDULE = 0x04, ALLOW_DEFER = 0x08,
-                   TEMP_FILE = 0x10, EXEC_IN_XTERM = 0x20, DISP_OUTPUT = 0x40 };
-            bool  preAction() const   { return flags & PRE_ACTION; }
-            bool  postAction() const  { return flags & POST_ACTION; }
-            bool  reschedule() const  { return flags & RESCHEDULE; }
-            bool  allowDefer() const  { return flags & ALLOW_DEFER; }
-            bool  tempFile() const    { return flags & TEMP_FILE; }
-            bool  execInXterm() const { return flags & EXEC_IN_XTERM; }
-            bool  dispOutput() const  { return flags & DISP_OUTPUT; }
+                   TEMP_FILE = 0x10, EXEC_IN_XTERM = 0x20, DISP_OUTPUT = 0x40, NO_RECORD_ERROR = 0x80 };
+            bool  preAction() const      { return flags & PRE_ACTION; }
+            bool  postAction() const     { return flags & POST_ACTION; }
+            bool  reschedule() const     { return flags & RESCHEDULE; }
+            bool  allowDefer() const     { return flags & ALLOW_DEFER; }
+            bool  tempFile() const       { return flags & TEMP_FILE; }
+            bool  execInXterm() const    { return flags & EXEC_IN_XTERM; }
+            bool  dispOutput() const     { return flags & DISP_OUTPUT; }
+            bool  noRecordCmdErr() const { return flags & NO_RECORD_ERROR; }
             ShellProcess*     process;
             KAEvent*          event;
             KAAlarm*          alarm;
@@ -248,6 +260,8 @@ class KAlarmApp : public QApplication
 };
 
 inline KAlarmApp* theApp()  { return KAlarmApp::instance(); }
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(KAlarmApp::ExecAlarmFlags)
 
 #endif // KALARMAPP_H
 

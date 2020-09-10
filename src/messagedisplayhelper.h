@@ -70,6 +70,8 @@ public:
     MessageDisplayHelper(MessageDisplay* parent, const KAEvent*, const KAAlarm&, int flags);
     MessageDisplayHelper(MessageDisplay* parent, const KAEvent*, const DateTime& alarmDateTime,
                          const QStringList& errmsgs, const QString& dontShowAgain);
+    MessageDisplayHelper(const MessageDisplayHelper&) = delete;
+    MessageDisplayHelper& operator=(const MessageDisplayHelper&) = delete;
     ~MessageDisplayHelper() override;
     void                setSilenceButton(PushButton* b)  { mSilenceButton = b; }
     void                repeat(const KAAlarm&);
@@ -176,10 +178,9 @@ public:
 private:
     DisplayTexts        mTexts;                   // texts to display in alarm message
     QTemporaryFile*     mTempFile {nullptr};      // temporary file used to display image/HTML
+    bool                mNoRecordCmdError {false}; // don't record command alarm errors
     bool                mInitialised {false};     // initTexts() has been called to create the alarm's texts
     bool                mRescheduleEvent {false}; // true to delete event after message has been displayed
-
-//friend class MessageDisplay;
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(MessageDisplayHelper::DisplayTexts::TextIds)

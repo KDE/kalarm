@@ -27,11 +27,14 @@ using namespace KAlarmCal;
 class MessageDisplay
 {
 public:
-    enum {                // flags for constructor
-        NO_RESCHEDULE = 0x01,    // don't reschedule the event once it has displayed
-        NO_DEFER      = 0x02,    // don't display an option to defer
-        ALWAYS_HIDE   = 0x04,    // never show the window (e.g. for audio-only alarms)
-        NO_INIT_VIEW  = 0x08     // for internal MessageDisplayHelper use only
+    /** Flags for constructor. */
+    enum
+    {
+        NO_RESCHEDULE    = 0x01,    // don't reschedule the event once it has displayed
+        NO_DEFER         = 0x02,    // don't display an option to defer
+        NoRecordCmdError = 0x04,    // don't record error executing command
+        ALWAYS_HIDE      = 0x08,    // never show the window (e.g. for audio-only alarms)
+        NO_INIT_VIEW     = 0x10     // for internal MessageDisplayHelper use only
     };
 
     virtual ~MessageDisplay();
