@@ -197,6 +197,7 @@ MessageWin::MessageWin(const KAEvent* event, const KAAlarm& alarm, int flags)
     , mNoPostAction(alarm.type() & KAAlarm::REMINDER_ALARM)
     , mBeep(event->beep())
     , mSpeak(event->speak())
+    , mNoRecordCmdError(flags & NoRecordCmdError)
     , mRescheduleEvent(!(flags & NO_RESCHEDULE))
 {
     qCDebug(KALARM_LOG) << "MessageWin:" << (void*)this << "event" << mEventId;
@@ -517,7 +518,8 @@ void MessageWin::initView()
                 mCommandText->setCurrentFont(mFont);
                 topLayout->addWidget(mCommandText);
                 mCommandText->setWhatsThis(i18nc("@info:whatsthis", "The output of the alarm's command"));
-                theApp()->execCommandAlarm(mEvent, mEvent.alarm(mAlarmType), this, SLOT(readProcessOutput(ShellProcess*)), "commandCompleted");
+                theApp()->execCommandAlarm(mEvent, mEvent.alarm(mAlarmType), mNoRecordCmdError,
+                                           this, SLOT(readProcessOutput(ShellProcess*)), "commandCompleted");
                 break;
             }
             case KAEvent::EMAIL:

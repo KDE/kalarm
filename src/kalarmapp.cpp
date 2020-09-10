@@ -991,7 +991,7 @@ void KAlarmApp::processQueue()
                 switch (action)
                 {
                     case QueuedAction::Trigger:
-                        execAlarm(entry.event, entry.event.firstAlarm(), false);
+                        execAlarm(entry.event, entry.event.firstAlarm());
                         break;
                     case QueuedAction::Handle:
                     {
@@ -1636,7 +1636,7 @@ bool KAlarmApp::scheduleEvent(KAEvent::SubAction action, const QString& text, co
         if (!mInitialised)
             mActionQueue.enqueue(ActionQEntry(event, QueuedAction::Trigger));
         else
-            execAlarm(event, event.firstAlarm(), false);
+            execAlarm(event, event.firstAlarm());
         // If it's a recurring alarm, reschedule it for its next occurrence
         if (!event.recurs()
         ||  event.setNextOccurrence(now) == KAEvent::NO_OCCURRENCE)
@@ -1892,7 +1892,7 @@ bool KAlarmApp::handleEvent(const EventId& id, QueuedAction action, bool findUni
             // If there is an alarm to execute, do this last after rescheduling/cancelling
             // any others. This ensures that the updated event is only saved once to the calendar.
             if (alarmToExecute.isValid())
-                execAlarm(event, alarmToExecute, true, !alarmToExecute.repeatAtLogin());
+                execAlarm(event, alarmToExecute, Reschedule | (alarmToExecute.repeatAtLogin() ? NoExecFlag : AllowDefer));
             else
             {
                 if (action == QueuedAction::Trigger)
@@ -1902,7 +1902,7 @@ bool KAlarmApp::handleEvent(const EventId& id, QueuedAction action, bool findUni
                     // identical messages, for example.
                     const KAAlarm alarm = event.firstAlarm();
                     if (alarm.isValid())
-                        execAlarm(event, alarm, false);
+                        execAlarm(event, alarm);
                 }
                 if (updateCalAndDisplay)
                     KAlarm::updateEvent(event);     // update the window lists and calendar file
@@ -2106,13 +2106,13 @@ bool KAlarmApp::cancelReminderAndDeferral(KAEvent& event)
 *       = -1 if execution has not completed
 *       = 0 if the alarm is disabled, or if an error message was output.
 */
-void* KAlarmApp::execAlarm(KAEvent& event, const KAAlarm& alarm, bool reschedule, bool allowDefer, bool noPreAction)
+void* KAlarmApp::execAlarm(KAEvent& event, const KAAlarm& alarm, ExecAlarmFlags flags)
 {
     if (!mAlarmsEnabled  ||  !event.enabled())
     {
         // The event (or all events) is disabled
         qCDebug(KALARM_LOG) << "KAlarmApp::execAlarm:" << event.id() << ": disabled";
-        if (reschedule)
+        if (flags & Reschedule)
             rescheduleAlarm(event, alarm, true);
         return nullptr;
     }
@@ -2127,8 +2127,8 @@ void* KAlarmApp::execAlarm(KAEvent& event, const KAAlarm& alarm, bool reschedule
             {
                 // execCommandAlarm() will error if the user is not authorised
                 // to run shell commands.
-                result = execCommandAlarm(event, alarm);
-                if (reschedule)
+                result = execCommandAlarm(event, alarm, flags & NoRecordCmdError);
+                if (flags & Reschedule)
                     rescheduleAlarm(event, alarm, true);
                 break;
             }
@@ -2144,7 +2144,7 @@ void* KAlarmApp::execAlarm(KAEvent& event, const KAAlarm& alarm, bool reschedule
             const bool replaceReminder = !reminder && win && (win->alarmType() & KAAlarm::REMINDER_ALARM);
             if (!reminder
             &&  (!event.deferred() || (event.extraActionOptions() & KAEvent::ExecPreActOnDeferral))
-            &&  (replaceReminder || !win)  &&  !noPreAction
+            &&  (replaceReminder || !win)  &&  !(flags & NoPreAction)
             &&  !event.preAction().isEmpty())
             {
                 // It's not a reminder alarm, and it's not a deferred alarm unless the
@@ -2168,8 +2168,8 @@ void* KAlarmApp::execAlarm(KAEvent& event, const KAAlarm& alarm, bool reschedule
                 // shell commands.
                 const QString command = event.preAction();
                 qCDebug(KALARM_LOG) << "KAlarmApp::execAlarm: Pre-DISPLAY command:" << command;
-                const int flags = (reschedule ? ProcData::RESCHEDULE : 0) | (allowDefer ? ProcData::ALLOW_DEFER : 0);
-                if (doShellCommand(command, event, &alarm, (flags | ProcData::PRE_ACTION)))
+                const int pdFlags = (flags & Reschedule ? ProcData::RESCHEDULE : 0) | (flags & AllowDefer ? ProcData::ALLOW_DEFER : 0);
+                if (doShellCommand(command, event, &alarm, (pdFlags | ProcData::PRE_ACTION)))
                 {
                     ResourcesCalendar::setAlarmPending(event);
                     return result;     // display the message after the command completes
@@ -2179,7 +2179,7 @@ void* KAlarmApp::execAlarm(KAEvent& event, const KAAlarm& alarm, bool reschedule
                 {
                     // Cancel the rest of the alarm execution
                     qCDebug(KALARM_LOG) << "KAlarmApp::execAlarm:" << event.id() << ": pre-action failed: cancelled";
-                    if (reschedule)
+                    if (flags & Reschedule)
                         rescheduleAlarm(event, alarm, true);
                     return nullptr;
                 }
@@ -2189,8 +2189,10 @@ void* KAlarmApp::execAlarm(KAEvent& event, const KAAlarm& alarm, bool reschedule
             if (!win)
             {
                 // There isn't already a message for this event
-                const int flags = (reschedule ? 0 : MessageWin::NO_RESCHEDULE) | (allowDefer ? 0 : MessageWin::NO_DEFER);
-                (new MessageWin(&event, alarm, flags))->show();
+                const int mdFlags = (flags & Reschedule ? 0 : MessageWin::NO_RESCHEDULE)
+                                  | (flags & AllowDefer ? 0 : MessageWin::NO_DEFER)
+                                  | (flags & NoRecordCmdError ? MessageWin::NoRecordCmdError : 0);
+                (new MessageWin(&event, alarm, mdFlags))->show();
             }
             else if (replaceReminder)
             {
@@ -2220,7 +2222,7 @@ void* KAlarmApp::execAlarm(KAEvent& event, const KAAlarm& alarm, bool reschedule
         {
             qCDebug(KALARM_LOG) << "KAlarmApp::execAlarm: EMAIL to:" << event.emailAddresses(QStringLiteral(","));
             QStringList errmsgs;
-            KAMail::JobData data(event, alarm, reschedule, (reschedule || allowDefer));
+            KAMail::JobData data(event, alarm, flags & Reschedule, flags & (Reschedule | AllowDefer));
             data.queued = true;
             int ans = KAMail::send(data, errmsgs);
             if (ans)
@@ -2235,7 +2237,7 @@ void* KAlarmApp::execAlarm(KAEvent& event, const KAAlarm& alarm, bool reschedule
             {
                 result = (void*)-1;   // email has been queued
             }
-            if (reschedule)
+            if (flags & Reschedule)
                 rescheduleAlarm(event, alarm, true);
             break;
         }
@@ -2247,8 +2249,8 @@ void* KAlarmApp::execAlarm(KAEvent& event, const KAAlarm& alarm, bool reschedule
             if (!win)
             {
                 // There isn't already a message for this event.
-                const int flags = (reschedule ? 0 : MessageWin::NO_RESCHEDULE) | MessageWin::ALWAYS_HIDE;
-                win = new MessageWin(&event, alarm, flags);
+                const int mdFlags = (flags & Reschedule ? 0 : MessageWin::NO_RESCHEDULE) | MessageWin::ALWAYS_HIDE;
+                win = new MessageWin(&event, alarm, mdFlags);
             }
             else
             {
@@ -2284,12 +2286,14 @@ void KAlarmApp::emailSent(KAMail::JobData& data, const QStringList& errmsgs, boo
 * To connect to the output ready signals of the process, specify a slot to be
 * called by supplying 'receiver' and 'slot' parameters.
 */
-ShellProcess* KAlarmApp::execCommandAlarm(const KAEvent& event, const KAAlarm& alarm, QObject* receiver, const char* slotOutput, const char* methodExited)
+ShellProcess* KAlarmApp::execCommandAlarm(const KAEvent& event, const KAAlarm& alarm, bool noRecordError,
+                                          QObject* receiver, const char* slotOutput, const char* methodExited)
 {
     // doShellCommand() will error if the user is not authorised to run
     // shell commands.
     const int flags = (event.commandXterm()   ? ProcData::EXEC_IN_XTERM : 0)
-                    | (event.commandDisplay() ? ProcData::DISP_OUTPUT : 0);
+                    | (event.commandDisplay() ? ProcData::DISP_OUTPUT : 0)
+                    | (noRecordError          ? ProcData::NO_RECORD_ERROR : 0);
     const QString command = event.cleanText();
     if (event.commandScript())
     {
@@ -2556,7 +2560,12 @@ void KAlarmApp::slotCommandExited(ShellProcess* proc)
             if (pd->preAction())
                 ResourcesCalendar::setAlarmPending(*pd->event, false);
             if (executeAlarm)
-                execAlarm(*pd->event, *pd->alarm, pd->reschedule(), pd->allowDefer(), true);
+            {
+                execAlarm(*pd->event, *pd->alarm,   (pd->reschedule()     ? Reschedule : NoExecFlag)
+                                                  | (pd->allowDefer()     ? AllowDefer : NoExecFlag)
+                                                  | (pd->noRecordCmdErr() ? NoRecordCmdError : NoExecFlag)
+                                                  | NoPreAction);
+            }
             mCommandProcesses.removeAt(i);
             if (pd->exitReceiver && !pd->exitMethod.isEmpty())
                 QMetaObject::invokeMethod(pd->exitReceiver, pd->exitMethod.constData(), Qt::DirectConnection, Q_ARG(ShellProcess::Status, status));
@@ -2601,7 +2610,8 @@ void KAlarmApp::commandErrorMsg(const ShellProcess* proc, const KAEvent& event, 
     }
 
     // Record the alarm's error status
-    setEventCommandError(event, cmderr);
+    if (!(flags & ProcData::NO_RECORD_ERROR))
+        setEventCommandError(event, cmderr);
 
     if (!dontShowAgain.isEmpty())
     {

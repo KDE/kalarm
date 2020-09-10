@@ -59,10 +59,11 @@ class MessageWin : public MainWindowBase
         Q_OBJECT
     public:
         enum {                // flags for constructor
-            NO_RESCHEDULE = 0x01,    // don't reschedule the event once it has displayed
-            NO_DEFER      = 0x02,    // don't display the Defer button
-            ALWAYS_HIDE   = 0x04,    // never show the window (e.g. for audio-only alarms)
-            NO_INIT_VIEW  = 0x08     // for internal MessageWin use only
+            NO_RESCHEDULE    = 0x01,    // don't reschedule the event once it has displayed
+            NO_DEFER         = 0x02,    // don't display the Defer button
+            NoRecordCmdError = 0x04,    // don't record error executing command
+            ALWAYS_HIDE      = 0x08,    // never show the window (e.g. for audio-only alarms)
+            NO_INIT_VIEW     = 0x10     // for internal MessageWin use only
         };
 
         MessageWin();     // for session management restoration only
@@ -194,6 +195,7 @@ class MessageWin : public MainWindowBase
         bool                mRecreating {false};      // window is about to be deleted and immediately recreated
         bool                mBeep;
         bool                mSpeak;                   // the message should be spoken via kttsd
+        bool                mNoRecordCmdError {false}; // don't record command alarm errors
         bool                mRescheduleEvent {false}; // true to delete event after message has been displayed
         bool                mShown {false};           // true once the window has been displayed
         bool                mPositioning {false};     // true when the window is being positioned initially
