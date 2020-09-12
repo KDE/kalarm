@@ -2,12 +2,33 @@
 IconName=kalarm
 DesktopEntry=org.kde.kalarm
 Comment=KAlarm
+Comment[ca]=KAlarm
+Comment[ca@valencia]=KAlarm
+Comment[nl]=KAlarm
+Comment[pt]=KAlarm
+Comment[sv]=Kalarm
+Comment[uk]=KAlarm
+Comment[x-test]=xxKAlarmxx
 
 [Event/Message]
 Name=Alarm message
+Name[ca]=Missatge d'alarma
+Name[ca@valencia]=Missatge d'alarma
+Name[nl]=Herinneringsbericht
+Name[pt]=Mensagem do alarme
+Name[sv]=Alarmmeddelande
+Name[uk]=Повідомлення нагадування
+Name[x-test]=xxAlarm messagexx
 Action=Popup
 
 [Event/MessageError]
 Name=Alarm error message
+Name[ca]=Missatge d'error d'alarma
+Name[ca@valencia]=Missatge d'error d'alarma
+Name[nl]=Foutmelding van Alarm
+Name[pt]=Mensagem de erro do alarme
+Name[sv]=Alarmfelmeddelande
+Name[uk]=Повідомлення помилки нагадування
+Name[x-test]=xxAlarm error messagexx
 Action=Popup|Sound
 Sound=Oxygen-Sys-App-Error.ogg
