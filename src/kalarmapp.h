@@ -186,7 +186,7 @@ private:
         ShellProcess*     process;
         KAEvent*          event;
         KAAlarm*          alarm;
-        QObject*          exitReceiver {nullptr};
+        QPointer<QObject> exitReceiver;
         QByteArray        exitMethod;
         QPointer<QWidget> messageBoxParent;
         QStringList       tempFiles;
