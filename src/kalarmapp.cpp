@@ -2199,7 +2199,7 @@ void* KAlarmApp::execAlarm(KAEvent& event, const KAAlarm& alarm, ExecAlarmFlags 
                 // The caption needs to be changed from "Reminder" to "Message"
                 win->cancelReminder(event, alarm);
             }
-            else if (!win->hasDefer() && !alarm.repeatAtLogin())
+            else if (!win->hasDefer() && event.repeatAtLogin() && !alarm.repeatAtLogin())
             {
                 // It's a repeat-at-login message with no Defer button,
                 // which has now reached its final trigger time and needs
