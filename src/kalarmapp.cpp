@@ -228,10 +228,11 @@ bool KAlarmApp::initialiseTimerResources()
         qCDebug(KALARM_LOG) << "KAlarmApp::initialise: initialising calendars";
         Desktop::setMainWindowFunc(&mainWidget);
         DataModel::initialise();
-        ResourcesCalendar::initialise(KALARM_NAME, KALARM_VERSION);
+        ResourcesCalendar* resourcesCalendar = ResourcesCalendar::create(KALARM_NAME, KALARM_VERSION);
+        connect(resourcesCalendar, &ResourcesCalendar::earliestAlarmChanged, this, &KAlarmApp::checkNextDueAlarm);
+        connect(resourcesCalendar, &ResourcesCalendar::atLoginEventAdded, this, &KAlarmApp::atLoginEventAdded);
+        resourcesCalendar->start();
         DisplayCalendar::initialise();
-        connect(ResourcesCalendar::instance(), &ResourcesCalendar::earliestAlarmChanged, this, &KAlarmApp::checkNextDueAlarm);
-        connect(ResourcesCalendar::instance(), &ResourcesCalendar::atLoginEventAdded, this, &KAlarmApp::atLoginEventAdded);
         return true;
     }
     return false;
