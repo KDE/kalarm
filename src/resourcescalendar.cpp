@@ -32,9 +32,12 @@ bool                           ResourcesCalendar::mHaveDisabledAlarms {false};
 */
 void ResourcesCalendar::initialise(const QByteArray& appName, const QByteArray& appVersion)
 {
-    KACalendar::setProductId(appName, appVersion);
-    KCalendarCore::CalFormat::setApplication(QString::fromLatin1(appName), QString::fromLatin1(KACalendar::icalProductId()));
-    mInstance = new ResourcesCalendar();
+    if (!mInstance)
+    {
+        KACalendar::setProductId(appName, appVersion);
+        KCalendarCore::CalFormat::setApplication(QString::fromLatin1(appName), QString::fromLatin1(KACalendar::icalProductId()));
+        mInstance = new ResourcesCalendar();
+    }
 }
 
 /******************************************************************************

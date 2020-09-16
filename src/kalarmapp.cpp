@@ -216,11 +216,14 @@ bool KAlarmApp::initialiseTimerResources()
     {
         qCDebug(KALARM_LOG) << "KAlarmApp::initialise: initialising calendars";
         Desktop::setMainWindowFunc(&mainWidget);
-        DataModel::initialise();
+        // First, initialise calendar resources, which need to be ready to
+        // receive signals when resources initialise.
         ResourcesCalendar::initialise(KALARM_NAME, KALARM_VERSION);
-        DisplayCalendar::initialise();
         connect(ResourcesCalendar::instance(), &ResourcesCalendar::earliestAlarmChanged, this, &KAlarmApp::checkNextDueAlarm);
         connect(ResourcesCalendar::instance(), &ResourcesCalendar::atLoginEventAdded, this, &KAlarmApp::atLoginEventAdded);
+        DisplayCalendar::initialise();
+        // Finally, initialise the resources which generate signals as they initialise.
+        DataModel::initialise();
         return true;
     }
     return false;
@@ -2190,7 +2193,7 @@ void* KAlarmApp::execAlarm(KAEvent& event, const KAAlarm& alarm, ExecAlarmFlags 
                 // The caption needs to be changed from "Reminder" to "Message"
                 disp->cancelReminder(event, alarm);
             }
-            else if (!disp->hasDefer() && !alarm.repeatAtLogin())
+            else if (!disp->hasDefer() && event.repeatAtLogin() && !alarm.repeatAtLogin())
             {
                 // It's a repeat-at-login message with no Defer button,
                 // which has now reached its final trigger time and needs

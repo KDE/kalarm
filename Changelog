@@ -3,7 +3,8 @@ KAlarm Change Log
 === Version 3.1.0 (KDE Applications 20.12) --- 11 September 2020 ===
 + Add option to show alarm message as a notification instead of in a window [KDE Bug 345922]
 
-=== Version 3.0.2 (KDE Applications 20.08.2) --- 10 September 2020 ===
+=== Version 3.0.2 (KDE Applications 20.08.2) --- 16 September 2020 ===
++ Fix repeat-at-login alarms not triggering when KAlarm starts.
 + If command generating text for display alarm fails, only display error message,
   not the display alarm, and don't redisplay the alarm on every restart.
 + Fix next trigger time shown as "Never" after using Try button for command display alarm, if command fails.
