@@ -46,13 +46,7 @@ class ResourcesCalendar : public QObject
     Q_OBJECT
 public:
     ~ResourcesCalendar() override;
-
-    /** Create the resources calendar, to enable signal/slot connections to be made to it. */
-    static ResourcesCalendar* create(const QByteArray& appName, const QByteArray& appVersion);
-
-    /** Start resource calendar processing. */
-    void                    start();
-
+    static void             initialise(const QByteArray& appName, const QByteArray& appVersion);
     static void             terminate();
     static KAEvent          earliestAlarm();
     static void             setAlarmPending(const KAEvent&, bool pending = true);

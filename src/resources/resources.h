@@ -36,7 +36,10 @@ class Resources : public QObject
 {
     Q_OBJECT
 public:
-    /** Creates the unique Resources instance. */
+    /** Creates the unique Resources instance.
+     *  Note that this merely creates a container for individual resources,
+     *  and doesn't create or initialise any ResourceType instances.
+     */
     static Resources* instance();
 
     ~Resources();

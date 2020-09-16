@@ -42,33 +42,14 @@ bool                           ResourcesCalendar::mHaveDisabledAlarms {false};
 * different. The resources calendar contains the active alarms, archived alarms
 * and alarm templates;
 */
-ResourcesCalendar* ResourcesCalendar::create(const QByteArray& appName, const QByteArray& appVersion)
+void ResourcesCalendar::initialise(const QByteArray& appName, const QByteArray& appVersion)
 {
-    if (mInstance)
-        return nullptr;
-    KACalendar::setProductId(appName, appVersion);
-    KCalendarCore::CalFormat::setApplication(QString::fromLatin1(appName), QString::fromLatin1(KACalendar::icalProductId()));
-    mInstance = new ResourcesCalendar();
-    return mInstance;
-}
-
-/******************************************************************************
-* Start resource calendar processing.
-*/
-void ResourcesCalendar::start()
-{
-    Resources* resources = Resources::instance();
-    connect(resources, &Resources::resourceAdded, this, &ResourcesCalendar::slotResourceAdded);
-    connect(resources, &Resources::eventsAdded, this, &ResourcesCalendar::slotEventsAdded);
-    connect(resources, &Resources::eventsToBeRemoved, this, &ResourcesCalendar::slotEventsToBeRemoved);
-    connect(resources, &Resources::eventUpdated, this, &ResourcesCalendar::slotEventUpdated);
-    connect(resources, &Resources::resourcesPopulated, this, &ResourcesCalendar::slotResourcesPopulated);
-    connect(resources, &Resources::settingsChanged, this, &ResourcesCalendar::slotResourceSettingsChanged);
-
-    // Fetch events from all resources which already exist.
-    QVector<Resource> allResources = Resources::enabledResources();
-    for (Resource& resource : allResources)
-        slotResourceAdded(resource);
+    if (!mInstance)
+    {
+        KACalendar::setProductId(appName, appVersion);
+        KCalendarCore::CalFormat::setApplication(QString::fromLatin1(appName), QString::fromLatin1(KACalendar::icalProductId()));
+        mInstance = new ResourcesCalendar();
+    }
 }
 
 /******************************************************************************
@@ -85,6 +66,18 @@ void ResourcesCalendar::terminate()
 */
 ResourcesCalendar::ResourcesCalendar()
 {
+    Resources* resources = Resources::instance();
+    connect(resources, &Resources::resourceAdded, this, &ResourcesCalendar::slotResourceAdded);
+    connect(resources, &Resources::eventsAdded, this, &ResourcesCalendar::slotEventsAdded);
+    connect(resources, &Resources::eventsToBeRemoved, this, &ResourcesCalendar::slotEventsToBeRemoved);
+    connect(resources, &Resources::eventUpdated, this, &ResourcesCalendar::slotEventUpdated);
+    connect(resources, &Resources::resourcesPopulated, this, &ResourcesCalendar::slotResourcesPopulated);
+    connect(resources, &Resources::settingsChanged, this, &ResourcesCalendar::slotResourceSettingsChanged);
+
+    // Fetch events from all resources which already exist.
+    QVector<Resource> allResources = Resources::enabledResources();
+    for (Resource& resource : allResources)
+        slotResourceAdded(resource);
 }
 
 ResourcesCalendar::~ResourcesCalendar()

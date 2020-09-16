@@ -614,6 +614,7 @@ void Resources::checkResourcesPopulated()
                 return;
         }
         mPopulated = true;
+        qCDebug(KALARM_LOG) << "Resources::checkResourcesPopulated: emit signal";
         Q_EMIT instance()->resourcesPopulated();
     }
 }
