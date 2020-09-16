@@ -1,7 +1,7 @@
 /*
  *  buttongroup.cpp  -  QButtonGroup with an extra signal
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2002, 2004, 2005, 2008 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2002-2020 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -14,7 +14,7 @@
 ButtonGroup::ButtonGroup(QObject* parent)
     : QButtonGroup(parent)
 {
-    connect(this, SIGNAL(buttonClicked(QAbstractButton*)), SIGNAL(buttonSet(QAbstractButton*)));
+    connect(this, QOverload<QAbstractButton*>::of(&QButtonGroup::buttonClicked), this, &ButtonGroup::buttonSet);
 }
 
 /******************************************************************************

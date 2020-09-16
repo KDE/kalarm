@@ -12,7 +12,7 @@
 /* @file synchtimer.h - timers which synchronize to time boundaries */
 
 #include <QObject>
-#include <QList>
+#include <QVector>
 #include <QByteArray>
 #include <QTime>
 #include <QDate>
@@ -56,7 +56,7 @@ private Q_SLOTS:
     void                slotReceiverGone(QObject* r)  { disconnecT(r); }
 
 private:
-    QList<Connection>   mConnections;  // list of current clients
+    QVector<Connection> mConnections;  // list of current clients
 };
 
 
@@ -69,12 +69,14 @@ class MinuteTimer : public SynchTimer
     Q_OBJECT
 public:
     virtual ~MinuteTimer()  { mInstance = nullptr; }
+
     /** Connect to the timer signal.
      *  @param receiver Receiving object.
      *  @param member Slot to activate.
      */
     static void connect(QObject* receiver, const char* member)
                        { instance()->connecT(receiver, member); }
+
     /** Disconnect from the timer signal.
      *  @param receiver Receiving object.
      *  @param member Slot to disconnect. If null, all slots belonging to
@@ -109,6 +111,7 @@ class DailyTimer : public SynchTimer
     Q_OBJECT
 public:
     ~DailyTimer() override;
+
     /** Connect to the timer signal which triggers at the given fixed time of day.
      *  A new timer is created if necessary.
      *  @param timeOfDay Time at which the timer is to trigger.
@@ -117,6 +120,7 @@ public:
      */
     static void connect(const QTime& timeOfDay, QObject* receiver, const char* member)
                        { fixedInstance(timeOfDay)->connecT(receiver, member); }
+
     /** Disconnect from the timer signal which triggers at the given fixed time of day.
      *  If there are no remaining connections to that timer, it is destroyed.
      *  @param timeOfDay Time at which the timer triggers.
@@ -125,6 +129,7 @@ public:
      *                @p receiver will be disconnected.
      */
     static void disconnect(const QTime& timeOfDay, QObject* receiver, const char* member = nullptr);
+
     /** Change the time at which this variable timer triggers.
      *  @param newTimeOfDay New time at which the timer should trigger.
      *  @param triggerMissed If true, and if @p newTimeOfDay < @p oldTimeOfDay, and if the current
@@ -132,6 +137,7 @@ public:
      *                       triggered immediately so as to avoid missing today's trigger.
      */
     void changeTime(const QTime& newTimeOfDay, bool triggerMissed = true);
+
     /** Return the current time of day at which this variable timer triggers. */
     QTime timeOfDay() const  { return mTime; }
 
@@ -142,6 +148,7 @@ protected:
      *  timers are not created for the same use.
      */
     DailyTimer(const QTime&, bool fixed);
+
     /** Return the instance which triggers at the specified fixed time of day,
      *  optionally creating a new instance if necessary.
      *  @param timeOfDay Time at which the timer triggers.
@@ -150,13 +157,14 @@ protected:
      *  @return The instance for @p timeOfDay, or 0 if it does not exist.
      */
     static DailyTimer* fixedInstance(const QTime& timeOfDay, bool create = true);
+
     void start() override;
 
 protected Q_SLOTS:
     void slotTimer() override;
 
 private:
-    static QList<DailyTimer*>  mFixedTimers;   // list of timers whose trigger time is fixed
+    static QVector<DailyTimer*> mFixedTimers;  // list of timers whose trigger time is fixed
     QTime  mTime;
     QDate  mLastDate;  // the date on which the timer was last triggered
     bool   mFixed;     // the time at which the timer triggers cannot be changed
@@ -176,6 +184,7 @@ public:
      */
     static void connect(QObject* receiver, const char* member)
                        { DailyTimer::connect(QTime(0,0), receiver, member); }
+
     /** Disconnect from the timer signal.
      *  @param receiver Receiving object.
      *  @param member Slot to disconnect. If null, all slots belonging to
@@ -183,7 +192,6 @@ public:
      */
     static void disconnect(QObject* receiver, const char* member = nullptr)
                        { DailyTimer::disconnect(QTime(0,0), receiver, member); }
-
 };
 
 #endif // SYNCHTIMER_H

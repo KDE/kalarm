@@ -1,7 +1,7 @@
 /*
  *  stackedwidgets.cpp  -  group of stacked widgets
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2008 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2008, 2020 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -26,11 +26,8 @@ StackedScrollWidget::StackedScrollWidget(StackedScrollGroup* group, QWidget* par
 }
 
 StackedScrollGroup::StackedScrollGroup(QDialog* dlg, QObject* tabParent)
-    : StackedGroupT<QScrollArea>(tabParent),
-      mDialog(dlg),
-      mMinHeight(-1),
-      mHeightReduction(0),
-      mSized(false)
+    : StackedGroupT<QScrollArea>(tabParent)
+    , mDialog(dlg)
 {
 }
 
@@ -44,7 +41,7 @@ StackedScrollGroup::StackedScrollGroup(QDialog* dlg, QObject* tabParent)
 */
 QSize StackedScrollGroup::minimumSizeHint() const
 {
-    QSize s = maxMinimumSizeHint();
+    const QSize s = maxMinimumSizeHint();
     if (!s.isEmpty()  &&  mMinHeight > 0  &&  mMinHeight < s.height())
         return QSize(s.width() + mWidgets[0]->style()->pixelMetric(QStyle::PM_ScrollBarExtent), mMinHeight);
     return s;
@@ -56,12 +53,12 @@ QSize StackedScrollGroup::minimumSizeHint() const
 QSize StackedScrollGroup::maxMinimumSizeHint() const
 {
     QSize sz;
-    for (int i = 0, count = mWidgets.count();  i < count;  ++i)
+    for (const auto& sw : mWidgets)
     {
-        QWidget* w = static_cast<StackedScrollWidget*>(mWidgets[i])->widget();
+        QWidget* w = static_cast<StackedScrollWidget*>(sw)->widget();
         if (!w)
             return QSize();
-        QSize s = w->minimumSizeHint();
+        const QSize s = w->minimumSizeHint();
         if (!s.isValid())
             return QSize();
         sz = sz.expandedTo(s);
@@ -85,18 +82,18 @@ QSize StackedScrollGroup::adjustSize(bool force)
     // scroll widget contents widgets.
     mMinHeight = -1;
     mHeightReduction = 0;
-    QSize s = maxMinimumSizeHint();
+    const QSize s = maxMinimumSizeHint();
     if (s.isEmpty())
         return QSize();
-    int maxTabHeight = s.height();
-    for (int i = 0, count = mWidgets.count();  i < count;  ++i)
+    const int maxTabHeight = s.height();
+    for (auto& sw : mWidgets)
     {
-        mWidgets[i]->setMinimumHeight(maxTabHeight);
-        QWidget* w = static_cast<StackedScrollWidget*>(mWidgets[i])->widget();
+        sw->setMinimumHeight(maxTabHeight);
+        QWidget* w = static_cast<StackedScrollWidget*>(sw)->widget();
         if (w)
             w->resize(s);
     }
-    for (QWidget* w = mWidgets[0]->parentWidget();  w && w != mDialog;  w = w->parentWidget())
+    for (QWidget* w = mWidgets.at(0)->parentWidget();  w && w != mDialog;  w = w->parentWidget())
     {
         w->setMinimumHeight(0);
         w->adjustSize();
@@ -110,12 +107,12 @@ QSize StackedScrollGroup::adjustSize(bool force)
         // available, so use a guess of 25 pixels.
         decoration = 25;
     }
-    int desk = Desktop::workArea().height();
+    const int desk = Desktop::workArea().height();
     // There is no stored size, or the deferral group is visible.
     // Allow the tab contents to be scrolled vertically if that is necessary
     // to avoid the dialog exceeding the screen height.
     QSize dlgsize = mDialog->QDialog::minimumSizeHint();
-    int y = dlgsize.height() + decoration - desk;
+    const int y = dlgsize.height() + decoration - desk;
     if (y > 0)
     {
         mHeightReduction = y;
@@ -123,18 +120,18 @@ QSize StackedScrollGroup::adjustSize(bool force)
         qCDebug(KALARM_LOG) << "StackedScrollGroup::adjustSize: Scrolling: max tab height=" << maxTabHeight << ", reduction=" << mHeightReduction << "-> min tab height=" << mMinHeight;
         if (mMinHeight > 0)
         {
-            for (int i = 0, count = mWidgets.count();  i < count;  ++i)
+            for (auto& sw : mWidgets)
             {
-                mWidgets[i]->setMinimumHeight(mMinHeight);
-                mWidgets[i]->resize(QSize(mWidgets[i]->width(), mMinHeight));
+                sw->setMinimumHeight(mMinHeight);
+                sw->resize(QSize(sw->width(), mMinHeight));
             }
         }
         mSized = true;
-        QSize s = mWidgets[0]->parentWidget()->sizeHint();
+        QSize s = mWidgets.at(0)->parentWidget()->sizeHint();
         if (s.height() < mMinHeight)
             s.setHeight(mMinHeight);
-        mWidgets[0]->parentWidget()->resize(s);
-        for (QWidget* w = mWidgets[0]->parentWidget();  w && w != mDialog;  w = w->parentWidget())
+        mWidgets.at(0)->parentWidget()->resize(s);
+        for (QWidget* w = mWidgets.at(0)->parentWidget();  w && w != mDialog;  w = w->parentWidget())
             w->setMinimumHeight(qMin(w->minimumSizeHint().height(), w->sizeHint().height()));
         dlgsize.setHeight(dlgsize.height() - mHeightReduction);
         s = mDialog->QDialog::minimumSizeHint();

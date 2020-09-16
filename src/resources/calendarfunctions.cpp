@@ -88,7 +88,7 @@ bool importCalendarFile(const QUrl& url, CalEvent::Types alarmTypes, bool newId,
     QString versionString;
     const bool currentFormat = (KACalendar::updateVersion(calStorage, versionString) != KACalendar::IncompatibleFormat);
     const Event::List events = cal->rawEvents();
-    for (Event::Ptr event : events)
+    for (const Event::Ptr& event : events)
     {
         if (event->alarms().isEmpty()  ||  !KAEvent(event).isValid())
             continue;    // ignore events without alarms, or usable alarms

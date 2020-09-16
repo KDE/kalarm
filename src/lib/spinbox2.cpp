@@ -80,9 +80,8 @@ void SpinBox2::init()
     mSpinMirror = new SpinMirror(mUpdown2, mSpinbox, this);
     mSpinbox->installEventFilter(this);
     mUpdown2->installEventFilter(this);
-    connect(mSpinbox, SIGNAL(valueChanged(int)), SLOT(valueChange()));
-    connect(mSpinbox, SIGNAL(valueChanged(int)), SIGNAL(valueChanged(int)));
-    connect(mSpinbox, SIGNAL(valueChanged(QString)), SIGNAL(valueChanged(QString)));
+    connect(mSpinbox, &QSpinBox::valueChanged, this, &SpinBox2::valueChange);
+    connect(mSpinbox, &QSpinBox::valueChanged, this, &SpinBox2::valueChanged);
     connect(mUpdown2, &SpinBox::stepped, this, &SpinBox2::stepPage);
     connect(mUpdown2, &ExtraSpinBox::painted, this, &SpinBox2::paintTimer);
 }

@@ -1,7 +1,7 @@
 /*
  *  synchtimer.cpp  -  timers which synchronize to time boundaries
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2004, 2005, 2007-2009 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2004-2020 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -66,7 +66,7 @@ void SynchTimer::disconnecT(QObject* receiver, const char* member)
         {
             for (int i = 0;  i < mConnections.count();  )
             {
-                if (mConnections[i].receiver == receiver)
+                if (mConnections.at(i).receiver == receiver)
                     mConnections.removeAt(i);
                 else
                     ++i;
@@ -114,11 +114,11 @@ void MinuteTimer::slotTimer()
 =  Application-wide timer synchronized to midnight.
 =============================================================================*/
 
-QList<DailyTimer*> DailyTimer::mFixedTimers;
+QVector<DailyTimer*> DailyTimer::mFixedTimers;
 
 DailyTimer::DailyTimer(const QTime& timeOfDay, bool fixed)
-    : mTime(timeOfDay),
-      mFixed(fixed)
+    : mTime(timeOfDay)
+    , mFixed(fixed)
 {
     if (fixed)
         mFixedTimers.append(this);
@@ -132,9 +132,9 @@ DailyTimer::~DailyTimer()
 
 DailyTimer* DailyTimer::fixedInstance(const QTime& timeOfDay, bool create)
 {
-    for (int i = 0, end = mFixedTimers.count();  i < end;  ++i)
-        if (mFixedTimers[i]->mTime == timeOfDay)
-            return mFixedTimers[i];
+    for (DailyTimer* timer : mFixedTimers)
+        if (timer->mTime == timeOfDay)
+            return timer;
     return create ? new DailyTimer(timeOfDay, true) : nullptr;
 }
 

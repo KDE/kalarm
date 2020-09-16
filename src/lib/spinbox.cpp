@@ -1,7 +1,7 @@
 /*
  *  spinbox.cpp  -  spin box with read-only option and shift-click step value
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2002-2019 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2002-2020 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -50,7 +50,7 @@ void SpinBox::init()
 
     // Detect when the text field is edited
     connect(lineEdit(), &QLineEdit::textChanged, this, &SpinBox::textEdited);
-    connect(this, static_cast<void (SpinBox::*)(int)>(&SpinBox::valueChanged), this, &SpinBox::valueChange);
+    connect(this, &SpinBox::valueChanged, this, &SpinBox::valueChange);
 }
 
 void SpinBox::setReadOnly(bool ro)
@@ -112,8 +112,8 @@ void SpinBox::stepBy(int steps)
 void SpinBox::addValue(int change, bool current)
 {
     int newval = value() + change;
-    int maxval = current ? QSpinBox::maximum() : mMaxValue;
-    int minval = current ? QSpinBox::minimum() : mMinValue;
+    const int maxval = current ? QSpinBox::maximum() : mMaxValue;
+    const int minval = current ? QSpinBox::minimum() : mMinValue;
     if (wrapping())
     {
         int range = maxval - minval + 1;
@@ -136,7 +136,7 @@ void SpinBox::valueChange()
 {
     if (!mSuppressSignals)
     {
-        int val = value();
+        const int val = value();
         if (mShiftMinBound  &&  val >= mMinValue)
         {
             // Reinstate the minimum bound now that the value has returned to the normal range.
@@ -177,7 +177,7 @@ bool SpinBox::eventFilter(QObject* obj, QEvent* e)
             {
                 // Up and down arrow keys step the value
                 QKeyEvent* ke = (QKeyEvent*)e;
-                int key = ke->key();
+                const int key = ke->key();
                 if (key == Qt::Key_Up)
                     step = 1;
                 else if (key == Qt::Key_Down)
@@ -201,7 +201,7 @@ bool SpinBox::eventFilter(QObject* obj, QEvent* e)
             if ((ie->modifiers() & (Qt::ShiftModifier | Qt::AltModifier)) == Qt::ShiftModifier)
             {
                 // Shift stepping
-                int val = value();
+                const int val = value();
                 if (step > 0)
                     step = mLineShiftStep - val % mLineShiftStep;
                 else
@@ -251,7 +251,7 @@ bool SpinBox::clickEvent(QMouseEvent* e)
             e->accept();
             return true;
         }
-        bool shift = (e->modifiers() & (Qt::ShiftModifier | Qt::AltModifier)) == Qt::ShiftModifier;
+        const bool shift = (e->modifiers() & (Qt::ShiftModifier | Qt::AltModifier)) == Qt::ShiftModifier;
         if (setShiftStepping(shift, mCurrentButton))
         {
             e->accept();
@@ -265,7 +265,7 @@ void SpinBox::wheelEvent(QWheelEvent* e)
 {
     if (mReadOnly)
         return;   // discard the event
-    bool shift = (e->modifiers() & (Qt::ShiftModifier | Qt::AltModifier)) == Qt::ShiftModifier;
+    const bool shift = (e->modifiers() & (Qt::ShiftModifier | Qt::AltModifier)) == Qt::ShiftModifier;
     if (setShiftStepping(shift, (e->angleDelta().y() > 0 ? UP : DOWN)))
     {
         e->accept();
@@ -294,7 +294,7 @@ void SpinBox::mouseMoveEvent(QMouseEvent* e)
             // The mouse has moved to a new spin button.
             // Set normal or shift stepping as appropriate.
             mCurrentButton = newButton;
-            bool shift = (e->modifiers() & (Qt::ShiftModifier | Qt::AltModifier)) == Qt::ShiftModifier;
+            const bool shift = (e->modifiers() & (Qt::ShiftModifier | Qt::AltModifier)) == Qt::ShiftModifier;
             if (setShiftStepping(shift, mCurrentButton))
             {
                 e->accept();
@@ -319,15 +319,15 @@ void SpinBox::keyReleaseEvent(QKeyEvent* e)
 
 bool SpinBox::keyEvent(QKeyEvent* e)
 {
-    int key   = e->key();
-    int state = e->modifiers();
+    const int key   = e->key();
+    const int state = e->modifiers();
     if ((QApplication::mouseButtons() & Qt::LeftButton)
     &&  (key == Qt::Key_Shift  ||  key == Qt::Key_Alt))
     {
         // The left mouse button is down, and the Shift or Alt key has changed
         if (mReadOnly)
             return true;   // discard the event
-        bool shift = (state & (Qt::ShiftModifier | Qt::AltModifier)) == Qt::ShiftModifier;
+        const bool shift = (state & (Qt::ShiftModifier | Qt::AltModifier)) == Qt::ShiftModifier;
         if ((!shift && mShiftMouse)  ||  (shift && !mShiftMouse))
         {
             // The effective shift state has changed.
@@ -356,9 +356,9 @@ bool SpinBox::setShiftStepping(bool shift, int currentButton)
          * Then, if the mouse button is held down, the spin widget will continue to
          * step by the shift amount.
          */
-        int val = value();
-        int step = (currentButton == UP) ? mLineShiftStep : (currentButton == DOWN) ? -mLineShiftStep : 0;
-        int adjust = shiftStepAdjustment(val, step);
+        const int val = value();
+        const int step = (currentButton == UP) ? mLineShiftStep : (currentButton == DOWN) ? -mLineShiftStep : 0;
+        const int adjust = shiftStepAdjustment(val, step);
         mShiftMouse = true;
         if (adjust)
         {
@@ -374,8 +374,8 @@ bool SpinBox::setShiftStepping(bool shift, int currentButton)
                 // to the minimum value if that has a special text unless it is
                 // already at the minimum value + 1.
                 int newval = val + adjust + step;
-                int svt = specialValueText().isEmpty() ? 0 : 1;
-                int minval = mMinValue + svt;
+                const int svt = specialValueText().isEmpty() ? 0 : 1;
+                const int minval = mMinValue + svt;
                 if (newval <= minval  ||  newval >= mMaxValue)
                 {
                     // Stepping to the minimum or maximum value
@@ -390,7 +390,7 @@ bool SpinBox::setShiftStepping(bool shift, int currentButton)
 
                 // If the interim value will lie outside the spinbox's range,
                 // temporarily adjust the range to allow the value to be set.
-                int tempval = val + adjust;
+                const int tempval = val + adjust;
                 if (tempval < mMinValue)
                 {
                     QSpinBox::setMinimum(tempval);
@@ -405,7 +405,7 @@ bool SpinBox::setShiftStepping(bool shift, int currentButton)
 
             // Don't process changes since this new value will be stepped immediately
             mSuppressSignals = true;
-            bool blocked = signalsBlocked();
+            const bool blocked = signalsBlocked();
             blockSignals(true);
             addValue(adjust, true);
             blockSignals(blocked);

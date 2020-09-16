@@ -117,16 +117,11 @@ TrayWindow::TrayWindow(MainWindow* parent)
 
     // Update when alarms are modified
     AlarmListModel* all = DataModel::allAlarmListModel();
-    connect(all, SIGNAL(dataChanged(QModelIndex,QModelIndex)),
-            mToolTipUpdateTimer, SLOT(start()));
-    connect(all, SIGNAL(rowsInserted(QModelIndex,int,int)),
-            mToolTipUpdateTimer, SLOT(start()));
-    connect(all, SIGNAL(rowsMoved(QModelIndex,int,int,QModelIndex,int)),
-            mToolTipUpdateTimer, SLOT(start()));
-    connect(all, SIGNAL(rowsRemoved(QModelIndex,int,int)),
-            mToolTipUpdateTimer, SLOT(start()));
-    connect(all, SIGNAL(modelReset()),
-            mToolTipUpdateTimer, SLOT(start()));
+    connect(all, &QAbstractItemModel::dataChanged,  mToolTipUpdateTimer, QOverload<>::of(&QTimer::start));
+    connect(all, &QAbstractItemModel::rowsInserted, mToolTipUpdateTimer, QOverload<>::of(&QTimer::start));
+    connect(all, &QAbstractItemModel::rowsMoved,    mToolTipUpdateTimer, QOverload<>::of(&QTimer::start));
+    connect(all, &QAbstractItemModel::rowsRemoved,  mToolTipUpdateTimer, QOverload<>::of(&QTimer::start));
+    connect(all, &QAbstractItemModel::modelReset,   mToolTipUpdateTimer, QOverload<>::of(&QTimer::start));
 
     // Set auto-hide status when next alarm or preferences change
     mStatusUpdateTimer->setSingleShot(true);

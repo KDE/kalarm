@@ -186,7 +186,6 @@ void ResourceType::setLoadedEvents(QHash<QString, KAEvent>& newEvents)
     // longer exist.
     QStringList    eventsToDelete;
     QList<KAEvent> eventsToNotifyDelete;
-    QVector<decltype(mEvents)::iterator> iteratorsToDelete;
     for (auto it = mEvents.begin();  it != mEvents.end();  ++it)
     {
         const QString& id = it.key();
@@ -299,8 +298,7 @@ void ResourceType::setDeletedEvents(const QList<KAEvent>& events)
     QList<KAEvent> eventsToNotify;
     for (const KAEvent& event : events)
     {
-        QHash<QString, KAEvent>::iterator it = mEvents.find(event.id());
-        if (it != mEvents.end())
+        if (mEvents.constFind(event.id()) != mEvents.constEnd())
         {
             eventsToDelete += event.id();
             if (event.category() & types)
@@ -309,7 +307,7 @@ void ResourceType::setDeletedEvents(const QList<KAEvent>& events)
     }
     if (!eventsToNotify.isEmpty())
         Resources::notifyEventsToBeRemoved(this, eventsToNotify);
-    for (const QString& id : eventsToDelete)
+    for (const QString& id : qAsConst(eventsToDelete))
         mEvents.remove(id);
     if (!eventsToNotify.isEmpty())
         Resources::notifyEventsRemoved(this, eventsToNotify);

@@ -172,7 +172,7 @@ void LineEdit::dropEvent(QDropEvent* e)
         }
     }
 
-    if (newEmails.count())
+    if (!newEmails.isEmpty())
     {
         newText = newEmails.join(QLatin1Char(','));
         const int c = cursorPosition();

@@ -1086,6 +1086,8 @@ Rule::Rule(const QString& freqText, const QString& freqWhatsThis, bool time, boo
         mTimeSpinBox->setFixedSize(mTimeSpinBox->sizeHint());
         mTimeSpinBox->setReadOnly(readOnly);
         boxLayout->addWidget(mSpinBox, 0, Qt::AlignLeft);
+        connect(mTimeSpinBox, &SpinBox2::valueChanged, this, &Rule::frequencyChanged);
+        connect(mTimeSpinBox, &SpinBox2::valueChanged, this, &Rule::changed);
     }
     else
     {
@@ -1094,9 +1096,9 @@ Rule::Rule(const QString& freqText, const QString& freqWhatsThis, bool time, boo
         mIntSpinBox->setFixedSize(mIntSpinBox->sizeHint());
         mIntSpinBox->setReadOnly(readOnly);
         boxLayout->addWidget(mSpinBox, 0, Qt::AlignLeft);
+        connect(mIntSpinBox, &QSpinBox::valueChanged, this, &Rule::frequencyChanged);
+        connect(mIntSpinBox, &QSpinBox::valueChanged, this, &Rule::changed);
     }
-    connect(mSpinBox, SIGNAL(valueChanged(int)), SIGNAL(frequencyChanged()));
-    connect(mSpinBox, SIGNAL(valueChanged(int)), SIGNAL(changed()));
     label->setBuddy(mSpinBox);
     label = new QLabel(freqText, box);
     label->setFixedSize(label->sizeHint());

@@ -530,19 +530,19 @@ void MainWindow::initActions()
     actions->setDefaultShortcuts(mActionRedo, redoShortcut);
     connect(mActionRedo, &KToolBarPopupAction::triggered, this, &MainWindow::slotRedo);
 
-    KStandardAction::find(mListView, SLOT(slotFind()), actions);
-    mActionFindNext = KStandardAction::findNext(mListView, SLOT(slotFindNext()), actions);
-    mActionFindPrev = KStandardAction::findPrev(mListView, SLOT(slotFindPrev()), actions);
-    KStandardAction::selectAll(mListView, SLOT(selectAll()), actions);
-    KStandardAction::deselect(mListView, SLOT(clearSelection()), actions);
+    KStandardAction::find(mListView, &EventListView::slotFind, actions);
+    mActionFindNext = KStandardAction::findNext(mListView, &EventListView::slotFindNext, actions);
+    mActionFindPrev = KStandardAction::findPrev(mListView, &EventListView::slotFindPrev, actions);
+    KStandardAction::selectAll(mListView, &QTreeView::selectAll, actions);
+    KStandardAction::deselect(mListView, &QAbstractItemView::clearSelection, actions);
     // Quit only once the event loop is called; otherwise, the parent window will
     // be deleted while still processing the action, resulting in a crash.
     QAction* act = KStandardAction::quit(nullptr, nullptr, actions);
     connect(act, &QAction::triggered, this, &MainWindow::slotQuit, Qt::QueuedConnection);
-    QAction* actionMenubar = KStandardAction::showMenubar(this, SLOT(slotShowMenubar()), actions);
-    KStandardAction::keyBindings(this, SLOT(slotConfigureKeys()), actions);
-    KStandardAction::configureToolbars(this, SLOT(slotConfigureToolbar()), actions);
-    KStandardAction::preferences(this, SLOT(slotPreferences()), actions);
+    QAction* actionMenubar = KStandardAction::showMenubar(this, &MainWindow::slotShowMenubar, actions);
+    KStandardAction::keyBindings(this, &MainWindow::slotConfigureKeys, actions);
+    KStandardAction::configureToolbars(this, &MainWindow::slotConfigureToolbar, actions);
+    KStandardAction::preferences(this, &MainWindow::slotPreferences, actions);
     mResourceSelector->initActions(actions);
     setStandardToolBarMenuEnabled(true);
     createGUI(UI_FILE);

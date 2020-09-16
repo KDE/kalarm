@@ -41,7 +41,7 @@ bool ShellProcess::start(OpenMode openMode)
         return false;
     }
     connect(this, &QIODevice::bytesWritten, this, &ShellProcess::writtenStdin);
-    connect(this, SIGNAL(finished(int,QProcess::ExitStatus)), SLOT(slotExited(int,QProcess::ExitStatus)));
+    connect(this, &QProcess::finished, this, &ShellProcess::slotExited);
     connect(this, &QProcess::readyReadStandardOutput, this, &ShellProcess::stdoutReady);
     connect(this, &QProcess::readyReadStandardError, this, &ShellProcess::stderrReady);
     const QStringList args{ QStringLiteral("-c"), mCommand };
@@ -94,8 +94,8 @@ void ShellProcess::writeStdin(const char* buffer, int bufflen)
     mStdinQueue.enqueue(scopy);
     if (doWrite)
     {
-        mStdinBytes = mStdinQueue.head().length();
-        write(mStdinQueue.head());
+        mStdinBytes = qAsConst(mStdinQueue).head().length();
+        write(qAsConst(mStdinQueue).head());
     }
 }
 
@@ -114,8 +114,8 @@ void ShellProcess::writtenStdin(qint64 bytes)
         mStdinQueue.dequeue();   // free the buffer which has now been written
     if (!mStdinQueue.isEmpty())
     {
-        mStdinBytes = mStdinQueue.head().length();
-        write(mStdinQueue.head());
+        mStdinBytes = qAsConst(mStdinQueue).head().length();
+        write(qAsConst(mStdinQueue).head());
     }
     else if (mStdinExit)
         kill();

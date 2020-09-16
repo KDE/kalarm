@@ -1,7 +1,7 @@
 /*
  *  stackedwidgets.h  -  group of stacked widgets
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2008 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2008, 2020 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -9,7 +9,7 @@
 #ifndef STACKEDWIDGETS_H
 #define STACKEDWIDGETS_H
 
-#include <QList>
+#include <QVector>
 #include <QScrollArea>
 class QDialog;
 
@@ -24,23 +24,23 @@ template <class T> class StackedGroupT;
 template <class T>
 class StackedWidgetT : public T
 {
-    public:
-        /** Constructor.
-         *  @param parent The parent object of this widget.
-         *  @param group The stack group to insert this widget into.
-         */
-        explicit StackedWidgetT(StackedGroupT<T>* group, QWidget* parent = nullptr)
-              : T(parent),
-                mGroup(group)
-        {
-            mGroup->addWidget(this);
-        }
-        ~StackedWidgetT()  { mGroup->removeWidget(this); }
-        QSize sizeHint() const         override { return minimumSizeHint(); }
-        QSize minimumSizeHint() const  override { return mGroup->minimumSizeHint(); }
+public:
+    /** Constructor.
+     *  @param parent The parent object of this widget.
+     *  @param group The stack group to insert this widget into.
+     */
+    explicit StackedWidgetT(StackedGroupT<T>* group, QWidget* parent = nullptr)
+          : T(parent),
+            mGroup(group)
+    {
+        mGroup->addWidget(this);
+    }
+    ~StackedWidgetT()  { mGroup->removeWidget(this); }
+    QSize sizeHint() const         override { return minimumSizeHint(); }
+    QSize minimumSizeHint() const  override { return mGroup->minimumSizeHint(); }
 
-    private:
-        StackedGroupT<T>* mGroup;
+private:
+    StackedGroupT<T>* mGroup;
 };
 
 /**
@@ -55,22 +55,22 @@ class StackedWidgetT : public T
 template <class T>
 class StackedGroupT : public QObject
 {
-    public:
-        explicit StackedGroupT(QObject* parent = nullptr) : QObject(parent) {}
-        void  addWidget(StackedWidgetT<T>* w)     { mWidgets += w; }
-        void  removeWidget(StackedWidgetT<T>* w)  { mWidgets.removeAll(w); }
-        virtual QSize minimumSizeHint() const;
+public:
+    explicit StackedGroupT(QObject* parent = nullptr) : QObject(parent) {}
+    void  addWidget(StackedWidgetT<T>* w)     { mWidgets += w; }
+    void  removeWidget(StackedWidgetT<T>* w)  { mWidgets.removeAll(w); }
+    virtual QSize minimumSizeHint() const;
 
-    protected:
-        QList<StackedWidgetT<T>*> mWidgets;
+protected:
+    QVector<StackedWidgetT<T>*> mWidgets;
 };
 
 template <class T>
 QSize StackedGroupT<T>::minimumSizeHint() const
 {
     QSize sz;
-    for (int i = 0, count = mWidgets.count();  i < count;  ++i)
-        sz = sz.expandedTo(mWidgets[i]->T::minimumSizeHint());
+    for (const auto& w : mWidgets)
+        sz = sz.expandedTo(w->T::minimumSizeHint());
     return sz;
 }
 
@@ -90,9 +90,9 @@ class StackedScrollGroup;
  */
 class StackedScrollWidget : public StackedWidgetT<QScrollArea>
 {
-    public:
-        explicit StackedScrollWidget(StackedScrollGroup* group, QWidget* parent = nullptr);
-        QWidget* widget() const  { return viewport()->findChild<QWidget*>(); }
+public:
+    explicit StackedScrollWidget(StackedScrollGroup* group, QWidget* parent = nullptr);
+    QWidget* widget() const  { return viewport()->findChild<QWidget*>(); }
 };
 
 /**
@@ -103,21 +103,21 @@ class StackedScrollWidget : public StackedWidgetT<QScrollArea>
  */
 class StackedScrollGroup : public StackedGroupT<QScrollArea>
 {
-    public:
-        explicit StackedScrollGroup(QDialog*, QObject* tabParent);
-        QSize         minimumSizeHint() const override;
-        int           heightReduction() const { return mHeightReduction; }
-        QSize         adjustSize(bool force = false);
-        void          setSized()              { mSized = true; }
-        bool          sized() const           { return mSized; }
+public:
+    StackedScrollGroup(QDialog*, QObject* tabParent);
+    QSize    minimumSizeHint() const override;
+    int      heightReduction() const { return mHeightReduction; }
+    QSize    adjustSize(bool force = false);
+    void     setSized()              { mSized = true; }
+    bool     sized() const           { return mSized; }
 
-    private:
-        QSize         maxMinimumSizeHint() const;
+private:
+    QSize    maxMinimumSizeHint() const;
 
-        QDialog* mDialog;
-        int      mMinHeight;
-        int      mHeightReduction;
-        bool     mSized;
+    QDialog* mDialog;
+    int      mMinHeight {-1};
+    int      mHeightReduction {0};
+    bool     mSized {false};
 };
 
 #endif // STACKEDWIDGETS_H
