@@ -93,7 +93,7 @@ ResourceSelector::ResourceSelector(QWidget* parent)
     connect(mAlarmType, static_cast<void (QComboBox::*)(int)>(&QComboBox::activated), this, &ResourceSelector::alarmTypeSelected);
     QTimer::singleShot(0, this, &ResourceSelector::alarmTypeSelected);
 
-    Preferences::connect(SIGNAL(archivedKeepDaysChanged(int)), this, SLOT(archiveDaysChanged(int)));
+    Preferences::connect(&Preferences::archivedKeepDaysChanged, this, &ResourceSelector::archiveDaysChanged);
 }
 
 /******************************************************************************

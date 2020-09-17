@@ -1,7 +1,7 @@
 /*
  *  startdaytimer.cpp  -  timer triggered at the user-defined start-of-day time
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2004, 2005, 2009 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2004-2020 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -16,7 +16,7 @@ StartOfDayTimer* StartOfDayTimer::mInstance = nullptr;
 StartOfDayTimer::StartOfDayTimer()
     : DailyTimer(Preferences::startOfDay(), false)
 {
-    Preferences::connect(SIGNAL(startOfDayChanged(QTime)), this, SLOT(startOfDayChanged()));
+    Preferences::connect(&Preferences::startOfDayChanged, this, &StartOfDayTimer::startOfDayChanged);
 }
 
 StartOfDayTimer* StartOfDayTimer::instance()

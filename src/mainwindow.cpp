@@ -560,8 +560,8 @@ void MainWindow::initActions()
     connect(mActionRedo->menu(), &QMenu::triggered, this, &MainWindow::slotRedoItem);
     connect(Undo::instance(), &Undo::changed, this, &MainWindow::slotUndoStatus);
     connect(mListView, &AlarmListView::findActive, this, &MainWindow::slotFindActive);
-    Preferences::connect(SIGNAL(archivedKeepDaysChanged(int)), this, SLOT(updateKeepArchived(int)));
-    Preferences::connect(SIGNAL(showInSystemTrayChanged(bool)), this, SLOT(updateTrayIconAction()));
+    Preferences::connect(&Preferences::archivedKeepDaysChanged, this, &MainWindow::updateKeepArchived);
+    Preferences::connect(&Preferences::showInSystemTrayChanged, this, &MainWindow::updateTrayIconAction);
     connect(theApp(), &KAlarmApp::trayIconToggled, this, &MainWindow::updateTrayIconAction);
 
     // Set menu item states

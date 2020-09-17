@@ -127,11 +127,11 @@ TrayWindow::TrayWindow(MainWindow* parent)
     mStatusUpdateTimer->setSingleShot(true);
     connect(mStatusUpdateTimer, &QTimer::timeout, this, &TrayWindow::updateStatus);
     connect(ResourcesCalendar::instance(), &ResourcesCalendar::earliestAlarmChanged, this, &TrayWindow::updateStatus);
-    Preferences::connect(SIGNAL(autoHideSystemTrayChanged(int)), this, SLOT(updateStatus()));
+    Preferences::connect(&Preferences::autoHideSystemTrayChanged, this, &TrayWindow::updateStatus);
     updateStatus();
 
     // Update when tooltip preferences are modified
-    Preferences::connect(SIGNAL(tooltipPreferencesChanged()), mToolTipUpdateTimer, SLOT(start()));
+    Preferences::connect(&Preferences::tooltipPreferencesChanged, mToolTipUpdateTimer, QOverload<>::of(&QTimer::start));
 }
 
 TrayWindow::~TrayWindow()

@@ -152,13 +152,13 @@ void KAlarmApp::initialise()
         Preferences::setAutoStart(true);
         Preferences::self()->save();
     }
-    Preferences::connect(SIGNAL(startOfDayChanged(QTime)), this, SLOT(changeStartOfDay()));
-    Preferences::connect(SIGNAL(workTimeChanged(QTime,QTime,QBitArray)), this, SLOT(slotWorkTimeChanged(QTime,QTime,QBitArray)));
-    Preferences::connect(SIGNAL(holidaysChanged(KHolidays::HolidayRegion)), this, SLOT(slotHolidaysChanged(KHolidays::HolidayRegion)));
-    Preferences::connect(SIGNAL(feb29TypeChanged(Feb29Type)), this, SLOT(slotFeb29TypeChanged(Feb29Type)));
-    Preferences::connect(SIGNAL(showInSystemTrayChanged(bool)), this, SLOT(slotShowInSystemTrayChanged()));
-    Preferences::connect(SIGNAL(archivedKeepDaysChanged(int)), this, SLOT(setArchivePurgeDays()));
-    Preferences::connect(SIGNAL(messageFontChanged(QFont)), this, SLOT(slotMessageFontChanged(QFont)));
+    Preferences::connect(&Preferences::startOfDayChanged, this, &KAlarmApp::changeStartOfDay);
+    Preferences::connect(&Preferences::workTimeChanged, this, &KAlarmApp::slotWorkTimeChanged);
+    Preferences::connect(&Preferences::holidaysChanged, this, &KAlarmApp::slotHolidaysChanged);
+    Preferences::connect(&Preferences::feb29TypeChanged, this, &KAlarmApp::slotFeb29TypeChanged);
+    Preferences::connect(&Preferences::showInSystemTrayChanged, this, &KAlarmApp::slotShowInSystemTrayChanged);
+    Preferences::connect(&Preferences::archivedKeepDaysChanged, this, &KAlarmApp::setArchivePurgeDays);
+    Preferences::connect(&Preferences::messageFontChanged, this, &KAlarmApp::slotMessageFontChanged);
     slotFeb29TypeChanged(Preferences::defaultFeb29Type());
 
     KAEvent::setStartOfDay(Preferences::startOfDay());

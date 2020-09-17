@@ -112,10 +112,10 @@ FileResourceDataModel::FileResourceDataModel(QObject* parent)
     }
 
     MinuteTimer::connect(this, SLOT(slotUpdateTimeTo()));
-    Preferences::connect(SIGNAL(archivedColourChanged(QColor)), this, SLOT(slotUpdateArchivedColour(QColor)));
-    Preferences::connect(SIGNAL(disabledColourChanged(QColor)), this, SLOT(slotUpdateDisabledColour(QColor)));
-    Preferences::connect(SIGNAL(holidaysChanged(KHolidays::HolidayRegion)), this, SLOT(slotUpdateHolidays()));
-    Preferences::connect(SIGNAL(workTimeChanged(QTime,QTime,QBitArray)), this, SLOT(slotUpdateWorkingHours()));
+    Preferences::connect(&Preferences::archivedColourChanged, this, &FileResourceDataModel::slotUpdateArchivedColour);
+    Preferences::connect(&Preferences::disabledColourChanged, this, &FileResourceDataModel::slotUpdateDisabledColour);
+    Preferences::connect(&Preferences::holidaysChanged, this, &FileResourceDataModel::slotUpdateHolidays);
+    Preferences::connect(&Preferences::workTimeChanged, this, &FileResourceDataModel::slotUpdateWorkingHours);
 }
 
 /******************************************************************************

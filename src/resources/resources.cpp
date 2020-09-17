@@ -181,8 +181,8 @@ void Resources::setStandard(Resource& resource, CalEvent::Type type, bool standa
         return;
 
     Resources* manager = instance();
-    auto it = manager->mResources.find(resource.id());
-    if (it == manager->mResources.end())
+    auto it = manager->mResources.constFind(resource.id());
+    if (it == manager->mResources.constEnd())
         return;
     resource = it.value();   // just in case it's a different object!
     if (standard == resource.configIsStandard(type))
@@ -211,8 +211,8 @@ void Resources::setStandard(Resource& resource, CalEvent::Types types)
     types &= resource.enabledTypes();
 
     Resources* manager = instance();
-    auto it = manager->mResources.find(resource.id());
-    if (it == manager->mResources.end())
+    auto it = manager->mResources.constFind(resource.id());
+    if (it == manager->mResources.constEnd())
         return;
     resource = it.value();   // just in case it's a different object!
     if (types != resource.configStandardTypes()

@@ -277,7 +277,7 @@ void SoundPicker::slotPickFile()
 // Remove mRevertType, setLastType(), #include QTimer
         // But wait a moment until setting the radio button, or it won't work.
         mRevertType = true;   // prevent sound dialog popping up twice
-        QTimer::singleShot(0, this, SLOT(setLastType()));
+        QTimer::singleShot(0, this, &SoundPicker::setLastType);
 #else
         mTypeCombo->setCurrentIndex(indexes[mLastType]);
 #endif
