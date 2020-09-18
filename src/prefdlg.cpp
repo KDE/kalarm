@@ -401,17 +401,18 @@ void PrefsTabBase::showEvent(QShowEvent*)
     {
         int wid = 0;
         int i;
-        const int end = mLabels.count();
-        QList<int> xpos;
-        for (i = 0;  i < end;  ++i)
+        const int labelCount = mLabels.count();
+        QVector<int> xpos;
+        xpos.reserve(labelCount);
+        for (const QLabel* label : qAsConst(mLabels))
         {
-            const int x = mLabels[i]->mapTo(this, QPoint(0, 0)).x();
+            const int x = label->mapTo(this, QPoint(0, 0)).x();
             xpos += x;
-            const int w = x + mLabels[i]->sizeHint().width();
+            const int w = x + label->sizeHint().width();
             if (w > wid)
                 wid = w;
         }
-        for (i = 0;  i < end;  ++i)
+        for (i = 0;  i < labelCount;  ++i)
         {
             mLabels[i]->setFixedWidth(wid - xpos[i]);
             mLabels[i]->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
@@ -624,7 +625,7 @@ TimePrefTab::TimePrefTab(StackedScrollGroup* scrollGroup)
     // Default time zone
     QHBoxLayout* itemBox = new QHBoxLayout();
     itemBox->setContentsMargins(0, 0, 0, 0);
-    qobject_cast<QBoxLayout*>(topLayout())->addLayout(itemBox);
+    topLayout()->addLayout(itemBox);
 
     QWidget* widget = new QWidget; // this is to control the QWhatsThis text display area
     itemBox->addWidget(widget);
@@ -645,7 +646,7 @@ TimePrefTab::TimePrefTab(StackedScrollGroup* scrollGroup)
     // Holiday region
     itemBox = new QHBoxLayout();
     itemBox->setContentsMargins(0, 0, 0, 0);
-    qobject_cast<QBoxLayout*>(topLayout())->addLayout(itemBox);
+    topLayout()->addLayout(itemBox);
 
     widget = new QWidget;    // this is to control the QWhatsThis text display area
     itemBox->addWidget(widget);
@@ -682,7 +683,7 @@ TimePrefTab::TimePrefTab(StackedScrollGroup* scrollGroup)
     // Start-of-day time
     itemBox = new QHBoxLayout();
     itemBox->setContentsMargins(0, 0, 0, 0);
-    qobject_cast<QBoxLayout*>(topLayout())->addLayout(itemBox);
+    topLayout()->addLayout(itemBox);
 
     widget = new QWidget;   // this is to control the QWhatsThis text display area
     itemBox->addWidget(widget);

@@ -41,7 +41,7 @@ CalendarUpdater::~CalendarUpdater()
 
 bool CalendarUpdater::containsResource(ResourceId id)
 {
-    for (CalendarUpdater* instance : mInstances)
+    for (CalendarUpdater* instance : qAsConst(mInstances))
     {
         if (instance->mResourceId == id)
             return true;

@@ -99,7 +99,7 @@ void TemplatePickDlg::slotSelectionChanged()
 void TemplatePickDlg::slotDoubleClick(const QModelIndex& ix)
 {
     if ((mListFilterModel->flags(ix) & (Qt::ItemIsEnabled | Qt::ItemIsSelectable)) == (Qt::ItemIsEnabled | Qt::ItemIsSelectable))
-        Q_EMIT accept();
+        accept();
 }
 
 /******************************************************************************

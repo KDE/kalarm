@@ -1,7 +1,7 @@
 /*
  *  akonadicollectionsearch.cpp  -  Search Akonadi Collections
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2014, 2019 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2014-2020 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -142,7 +142,7 @@ void AkonadiCollectionSearch::itemFetchResult(KJob* j)
                 else if (mGid.isEmpty())
                     continue;
                 ItemDeleteJob* djob = new ItemDeleteJob(item, this);
-                mItemDeleteJobs[djob] = mItemFetchJobs[job];
+                mItemDeleteJobs[djob] = mItemFetchJobs.value(job);
                 connect(djob, &ItemDeleteJob::result, this, &AkonadiCollectionSearch::itemDeleteResult);
             }
         }

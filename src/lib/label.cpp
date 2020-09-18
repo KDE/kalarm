@@ -1,7 +1,7 @@
 /*
  *  label.cpp  -  label with radiobutton buddy option
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2004-2019 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2004-2020 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -22,7 +22,7 @@ Label::Label(const QString& text, QWidget* parent, Qt::WindowFlags f)
 Label::Label(QWidget* buddy, const QString& text, QWidget* parent, Qt::WindowFlags f)
     : QLabel(text, parent, f)
 {
-    setBuddy(buddy);
+    Label::setBuddy(buddy);
 }
 
 /******************************************************************************

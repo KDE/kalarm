@@ -372,7 +372,7 @@ QString TrayWindow::tooltipAlarmText() const
             int it = 0;
             for (int itend = items.count();  it < itend;  ++it)
             {
-                if (item.dateTime <= items[it].dateTime)
+                if (item.dateTime <= items.at(it).dateTime)
                     break;
             }
             items.insert(it, item);
@@ -383,10 +383,10 @@ QString TrayWindow::tooltipAlarmText() const
     int count = 0;
     for (i = 0, iend = items.count();  i < iend;  ++i)
     {
-        qCDebug(KALARM_LOG) << "TrayWindow::tooltipAlarmText: --" << (count+1) << ")" << items[i].text;
+        qCDebug(KALARM_LOG) << "TrayWindow::tooltipAlarmText: --" << (count+1) << ")" << items.at(i).text;
         if (i > 0)
             text += QLatin1String("<br />");
-        text += items[i].text;
+        text += items.at(i).text;
         if (++count == maxCount)
             break;
     }

@@ -2757,7 +2757,7 @@ KAlarmApp::ProcData::~ProcData()
     while (!tempFiles.isEmpty())
     {
         // Delete the temporary file called by the XTerm command
-        QFile f(tempFiles.first());
+        QFile f(tempFiles.constFirst());
         f.remove();
         tempFiles.removeFirst();
     }

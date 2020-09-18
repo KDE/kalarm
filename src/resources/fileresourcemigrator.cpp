@@ -547,7 +547,6 @@ bool readDirectoryResource(const QString& dirPath, CalEvent::Types alarmTypes, Q
         return false;
 
     // Read and parse each file in turn
-    QList<QUrl> files;
     QDirIterator it(dir);
     while (it.hasNext())
     {

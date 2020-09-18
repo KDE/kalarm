@@ -84,7 +84,7 @@ SingleFileResource::SingleFileResource(FileResourceSettings* settings)
 SingleFileResource::~SingleFileResource()
 {
     qCDebug(KALARM_LOG) << "SingleFileResource::~SingleFileResource" << displayName();
-    close();
+    SingleFileResource::close();    // avoid call to virtual method in destructor
 }
 
 bool SingleFileResource::readOnly() const

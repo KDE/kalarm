@@ -131,7 +131,7 @@ MessageWindow::MessageWindow(const KAEvent& event, const KAAlarm& alarm, int fla
     setWindowModality(Qt::WindowModal);
     setObjectName(QStringLiteral("MessageWindow"));    // used by LikeBack
     if (!(flags & (NoInitView | AlwaysHide)))
-        setUpDisplay();
+        MessageWindow::setUpDisplay();   // avoid calling virtual method from constructor
 
     connect(mHelper, &MessageDisplayHelper::textsChanged, this, &MessageWindow::textsChanged);
     connect(mHelper, &MessageDisplayHelper::commandExited, this, &MessageWindow::commandCompleted);
@@ -163,7 +163,7 @@ MessageWindow::MessageWindow(const KAEvent& event, const DateTime& alarmDateTime
     setWindowModality(Qt::WindowModal);
     setObjectName(QStringLiteral("ErrorWin"));    // used by LikeBack
     getWorkAreaAndModal();
-    setUpDisplay();
+    MessageWindow::setUpDisplay();   // avoid calling virtual method from constructor
 
     connect(mHelper, &MessageDisplayHelper::textsChanged, this, &MessageWindow::textsChanged);
 
@@ -891,7 +891,7 @@ void MessageWindow::showEvent(QShowEvent* se)
          */
         bool execComplete = true;
         QSize s = sizeHint();     // fit the window round the message
-        if (mAction() == KAEvent::FILE  &&  !mErrorMsgs().count())
+        if (mAction() == KAEvent::FILE  &&  mErrorMsgs().isEmpty())
             Config::readWindowSize("FileMessage", s);
         resize(s);
 
@@ -1045,7 +1045,7 @@ void MessageWindow::resizeEvent(QResizeEvent* re)
     }
     else
     {
-        if (mShown  &&  mAction() == KAEvent::FILE  &&  !mErrorMsgs().count())
+        if (mShown  &&  mAction() == KAEvent::FILE  &&  mErrorMsgs().isEmpty())
             Config::writeWindowSize("FileMessage", re->size());
         MainWindowBase::resizeEvent(re);
     }

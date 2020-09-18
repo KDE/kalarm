@@ -1,7 +1,7 @@
 /*
  *  kamail.cpp  -  email functions
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2002-2019 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2002-2020 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -275,7 +275,7 @@ void KAMail::slotEmailSent(KJob* job)
         errmsgs = errors(job->errorString(), SEND_ERROR);
     }
     JobData jobdata;
-    if (mJobs.isEmpty()  ||  mJobData.isEmpty()  ||  job != mJobs.head())
+    if (mJobs.isEmpty()  ||  mJobData.isEmpty()  ||  job != qAsConst(mJobs).head())
     {
         // The queue has been corrupted, so we can't locate the job's data
         qCCritical(KALARM_LOG) << "KAMail::slotEmailSent: Wrong job at head of queue: wiping queue";
@@ -297,8 +297,9 @@ void KAMail::slotEmailSent(KJob* job)
     if (!mJobs.isEmpty())
     {
         // Send the next queued email
-        connect(mJobs.head(), &KJob::result, instance(), &KAMail::slotEmailSent);
-        mJobs.head()->start();
+        auto job = mJobs.head();
+        connect(job, &KJob::result, instance(), &KAMail::slotEmailSent);
+        job->start();
     }
 }
 
@@ -350,7 +351,7 @@ void initHeaders(KMime::Message& message, KAMail::JobData& data)
 QString KAMail::appendBodyAttachments(KMime::Message& message, JobData& data)
 {
     const QStringList attachments = data.event.emailAttachments();
-    if (!attachments.count())
+    if (attachments.isEmpty())
     {
         // There are no attachments, so simply append the message body
         message.contentType()->setMimeType("text/plain");
@@ -870,7 +871,6 @@ using namespace KMime::HeaderParsing;
 bool parseUserName( const char* & scursor, const char * const send,
                     QString & result, bool isCRLF ) {
 
-  QString maybeLocalPart;
   QString tmp;
 
   if ( scursor != send ) {

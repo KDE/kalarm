@@ -1277,8 +1277,9 @@ bool MessageDisplayHelper::haveErrorMessage(unsigned msg) const
 {
     if (!mErrorMessages.contains(mEventId))
         mErrorMessages.insert(mEventId, 0);
-    const bool result = (mErrorMessages[mEventId] & msg);
-    mErrorMessages[mEventId] |= msg;
+    unsigned& message = mErrorMessages[mEventId];
+    const bool result = (message & msg);
+    message |= msg;
     return result;
 }
 
@@ -1286,10 +1287,11 @@ void MessageDisplayHelper::clearErrorMessage(unsigned msg) const
 {
     if (mErrorMessages.contains(mEventId))
     {
-        if (mErrorMessages[mEventId] == msg)
+        unsigned& message = mErrorMessages[mEventId];
+        if (message == msg)
             mErrorMessages.remove(mEventId);
         else
-            mErrorMessages[mEventId] &= ~msg;
+            message &= ~msg;
     }
 }
 

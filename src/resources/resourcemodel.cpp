@@ -603,11 +603,6 @@ ResourceFilterCheckListModel* ResourceView::resourceModel() const
     return static_cast<ResourceFilterCheckListModel*>(model());
 }
 
-void ResourceView::setModel(QAbstractItemModel* model)
-{
-    QListView::setModel(model);
-}
-
 /******************************************************************************
 * Return the resource for a given row.
 */

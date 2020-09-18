@@ -1,7 +1,7 @@
 /*
  *  pickfileradio.cpp  -  radio button with an associated file picker
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2005-2019 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2005-2020 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -47,7 +47,7 @@ void PickFileRadio::init(QPushButton* button, LineEdit* edit)
         connect(mEdit, &LineEdit::textChanged, this, &PickFileRadio::fileChanged);
     }
     connect(mGroup, &ButtonGroup::buttonSet, this, &PickFileRadio::slotSelectionChanged);
-    setReadOnly(RadioButton::isReadOnly());
+    PickFileRadio::setReadOnly(RadioButton::isReadOnly());   // avoid calling virtual method from constructor
 }
 
 void PickFileRadio::setReadOnly(bool ro)

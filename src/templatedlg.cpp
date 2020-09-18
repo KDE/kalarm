@@ -181,7 +181,9 @@ void TemplateDlg::slotDelete()
         return;
 
     KAEvent::List delEvents;
+    delEvents.reserve(n);
     Undo::EventList undos;
+    undos.reserve(n);
     for (int i = 0;  i < n;  ++i)
     {
         KAEvent* event = &events[i];

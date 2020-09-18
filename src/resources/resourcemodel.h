@@ -227,7 +227,6 @@ public:
     Resource  resource(const QModelIndex&) const;
 
 protected:
-    void setModel(QAbstractItemModel*) override;
     void mouseReleaseEvent(QMouseEvent*) override;
     bool viewportEvent(QEvent*) override;
 };

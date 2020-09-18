@@ -232,7 +232,7 @@ TimePeriod::Units TimePeriod::setDateOnly(const Duration& perod, bool dateOnly, 
             mUnitsCombo->insertItem(1, i18n_hours_mins());
             mDateOnlyOffset = 0;
             adjustDayWeekShown();
-            mUnitsCombo->setCurrentIndex(index += 2);
+            mUnitsCombo->setCurrentIndex(index + 2);
         }
         else if (dateOnly  &&  !mDateOnlyOffset)
         {

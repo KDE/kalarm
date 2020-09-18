@@ -143,7 +143,7 @@ MessageNotification::MessageNotification(const KAEvent& event, const KAAlarm& al
     qCDebug(KALARM_LOG) << "MessageNotification():" << mEventId();
     MNSessionManager::create();
     if (!(flags & (NoInitView | AlwaysHide)))
-        setUpDisplay();
+        MessageNotification::setUpDisplay();    // avoid calling virtual method from constructor
 
     connect(this, QOverload<unsigned int>::of(&KNotification::activated), this, &MessageNotification::buttonActivated);
     connect(this, &KNotification::closed, this, &MessageNotification::slotClosed);
@@ -167,7 +167,7 @@ MessageNotification::MessageNotification(const KAEvent& event, const DateTime& a
 {
     qCDebug(KALARM_LOG) << "MessageNotification(errmsg)";
     MNSessionManager::create();
-    setUpDisplay();
+    MessageNotification::setUpDisplay();    // avoid calling virtual method from constructor
 
     connect(this, QOverload<unsigned int>::of(&KNotification::activated), this, &MessageNotification::buttonActivated);
     connect(this, &KNotification::closed, this, &MessageNotification::slotClosed);
@@ -216,8 +216,6 @@ void MessageNotification::setUpDisplay()
     MessageDisplayHelper::DisplayTexts texts = mHelper->texts();
 
     setNotificationTitle(texts.title);
-
-    QString messageText;
 
     // Show the alarm date/time. Any reminder indication is shown in the
     // notification title.

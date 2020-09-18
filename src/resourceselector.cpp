@@ -274,7 +274,7 @@ void ResourceSelector::removeResource()
 */
 void ResourceSelector::selectionChanged()
 {
-    bool state = mListView->selectionModel()->selectedRows().count();
+    bool state = !mListView->selectionModel()->selectedRows().isEmpty();
     mDeleteButton->setEnabled(state);
     mEditButton->setEnabled(state);
 }

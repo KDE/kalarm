@@ -468,6 +468,7 @@ void FileResourceDataModel::slotEventsAdded(Resource& resource, const QList<KAEv
         {
             QVector<Node*>& resourceEventNodes = mResourceNodes[resource];
             int row = resourceEventNodes.count();
+            resourceEventNodes.reserve(row + eventsToAdd.count());
             const QModelIndex resourceIx = resourceIndex(resource);
             beginInsertRows(resourceIx, row, row + eventsToAdd.count() - 1);
             for (const KAEvent& event : qAsConst(eventsToAdd))
@@ -490,8 +491,8 @@ void FileResourceDataModel::slotEventsAdded(Resource& resource, const QList<KAEv
 */
 void FileResourceDataModel::slotEventUpdated(Resource& resource, const KAEvent& event)
 {
-    auto it = mEventNodes.find(event.id());
-    if (it != mEventNodes.end())
+    auto it = mEventNodes.constFind(event.id());
+    if (it != mEventNodes.constEnd())
     {
         Node* node = it.value();
         if (node  &&  node->parent() == resource)
@@ -529,6 +530,7 @@ bool FileResourceDataModel::deleteEvents(Resource& resource, const QList<KAEvent
 
     // Find the row numbers of the events to delete.
     QVector<int> rowsToDelete;
+    rowsToDelete.reserve(events.count());
     for (const KAEvent& event : events)
     {
         Node* node = mEventNodes.value(event.id(), nullptr);
@@ -598,6 +600,7 @@ void FileResourceDataModel::addResource(Resource& resource)
     if (!events.isEmpty())
     {
         QVector<Node*>& resourceEventNodes = mResourceNodes[resource];
+        resourceEventNodes.reserve(resourceEventNodes.count() + events.count());
         for (const KAEvent& event : events)
         {
             Node* node = new Node(new KAEvent(event), resource);
@@ -779,7 +782,7 @@ TemplateListModel* FileResourceDataModel::allTemplateListModel()
 int FileResourceDataModel::rowCount(const QModelIndex& parent) const
 {
     if (!parent.isValid())
-        return mResourceNodes.keys().count() - 1;
+        return mResourceNodes.count() - 1;
     const Node* node = reinterpret_cast<Node*>(parent.internalPointer());
     if (node  &&  node->type == Type::Resource)
         return mResourceNodes.value(node->resource()).count();

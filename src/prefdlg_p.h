@@ -56,11 +56,11 @@ protected:
     void showEvent(QShowEvent*) override;
 
 private:
-    static int     mIndentWidth;           // indent width for checkboxes etc.
-    static int     mGridIndentWidth;       // minimum grid column indent width for checkboxes etc.
-    QVBoxLayout*   mTopLayout;
-    QList<QLabel*> mLabels;                // labels to right-align
-    bool           mLabelsAligned {false}; // labels have been aligned
+    static int       mIndentWidth;           // indent width for checkboxes etc.
+    static int       mGridIndentWidth;       // minimum grid column indent width for checkboxes etc.
+    QVBoxLayout*     mTopLayout;
+    QVector<QLabel*> mLabels;                // labels to right-align
+    bool             mLabelsAligned {false}; // labels have been aligned
 };
 
 

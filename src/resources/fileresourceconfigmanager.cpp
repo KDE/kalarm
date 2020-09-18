@@ -63,15 +63,15 @@ void FileResourceConfigManager::createResources(QObject* parent)
         std::sort(resourceGroups.begin(), resourceGroups.end(),
                   [](const QString& g1, const QString& g2)
                   {
-                      return g1.mid(9).toInt() < g2.mid(9).toInt();
+                      return g1.midRef(9).toInt() < g2.midRef(9).toInt();
                   });
 
         KConfigGroup general(manager->mConfig, GROUP_GENERAL);
         manager->mLastId = general.readEntry(KEY_LASTID, 0) | ResourceType::IdFlag;
 
-        for (const QString& resourceGroup : resourceGroups)
+        for (const QString& resourceGroup : qAsConst(resourceGroups))
         {
-            int groupIndex = resourceGroup.mid(9).toInt();
+            int groupIndex = resourceGroup.midRef(9).toInt();
             FileResourceSettings::Ptr settings(new FileResourceSettings(manager->mConfig, resourceGroup));
             if (!settings->isValid())
             {

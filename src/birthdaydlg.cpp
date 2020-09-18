@@ -246,17 +246,18 @@ QVector<KAEvent> BirthdayDlg::events() const
 {
     QVector<KAEvent> list;
     const QModelIndexList indexes = mListView->selectionModel()->selectedRows();
-    int count = indexes.count();
+    const int count = indexes.count();
     if (!count)
         return list;
+    list.reserve(count);
     const QDate today = KADateTime::currentLocalDate();
     const KADateTime todayStart(today, KADateTime::LocalZone);
-    int thisYear = today.year();
-    int reminder = mReminder->minutes();
-    for (int i = 0;  i < count;  ++i)
+    const int thisYear = today.year();
+    const int reminder = mReminder->minutes();
+    for (const QModelIndex& index : indexes)
     {
-        const QModelIndex nameIndex = indexes[i].model()->index(indexes[i].row(), 0);
-        const QModelIndex birthdayIndex = indexes[i].model()->index(indexes[i].row(), 1);
+        const QModelIndex nameIndex     = index.model()->index(index.row(), 0);
+        const QModelIndex birthdayIndex = index.model()->index(index.row(), 1);
         const QString name = nameIndex.data(Qt::DisplayRole).toString();
         QDate date = birthdayIndex.data(BirthdayModel::DateRole).toDate();
         date.setDate(thisYear, date.month(), date.day());
@@ -269,8 +270,8 @@ QVector<KAEvent> BirthdayDlg::events() const
                       mFlags, true);
         float fadeVolume;
         int   fadeSecs;
-        float volume = mSoundPicker->volume(fadeVolume, fadeSecs);
-        int   repeatPause = mSoundPicker->repeatPause();
+        const float volume = mSoundPicker->volume(fadeVolume, fadeSecs);
+        const int   repeatPause = mSoundPicker->repeatPause();
         event.setAudioFile(mSoundPicker->file().toDisplayString(), volume, fadeVolume, fadeSecs, repeatPause);
         const QVector<int> months(1, date.month());
         event.setRecurAnnualByDate(1, months, 0, KARecurrence::defaultFeb29Type(), -1, QDate());
@@ -345,8 +346,8 @@ void BirthdayDlg::resizeViewColumns()
 */
 void BirthdayDlg::slotTextLostFocus()
 {
-    QString prefix = mPrefix->text();
-    QString suffix = mSuffix->text();
+    const QString prefix = mPrefix->text();
+    const QString suffix = mSuffix->text();
     if (prefix != mPrefixText  ||  suffix != mSuffixText)
     {
         // Text has changed - re-evaluate the selection list

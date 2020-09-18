@@ -19,7 +19,7 @@
 
 #include <KCalendarCore/Calendar>
 
-#include <QList>
+#include <QVector>
 #include <QMap>
 
 class QDragEnterEvent;
@@ -105,6 +105,7 @@ class MainWindow : public MainWindowBase, public KCalendarCore::Calendar::Calend
         void           slotPreferences();
         void           slotShowMenubar();
         void           slotConfigureKeys();
+        void           slotConfigureNotifications();
         void           slotConfigureToolbar();
         void           slotNewToolbarConfig();
         void           slotQuit();
@@ -132,7 +133,7 @@ class MainWindow : public MainWindowBase, public KCalendarCore::Calendar::Calend
         void           editAlarmDeleted(QObject*);
 
     private:
-        typedef QList<MainWindow*> WindowList;
+        typedef QVector<MainWindow*> WindowList;
 
         explicit MainWindow(bool restored);
         void           createListView(bool recreate);

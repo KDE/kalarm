@@ -72,7 +72,7 @@ ResourcesCalendar::~ResourcesCalendar()
 {
     // Resource map should be empty, but just in case...
     while (!mResourceMap.isEmpty())
-        removeKAEvents(mResourceMap.begin().key(), true, CalEvent::ACTIVE | CalEvent::ARCHIVED | CalEvent::TEMPLATE | CalEvent::DISPLAYING);
+        removeKAEvents(mResourceMap.constBegin().key(), true, CalEvent::ACTIVE | CalEvent::ARCHIVED | CalEvent::TEMPLATE | CalEvent::DISPLAYING);
 }
 
 /******************************************************************************
@@ -226,7 +226,7 @@ void ResourcesCalendar::slotEventsToBeRemoved(Resource& resource, const QList<KA
     const ResourceId key = resource.id();
     for (const KAEvent& event : events)
     {
-        if (mResourceMap[key].contains(event.id()))
+        if (mResourceMap.value(key).contains(event.id()))
             deleteEventInternal(event, resource, false);
     }
 }
@@ -706,6 +706,7 @@ void ResourcesCalendar::setAlarmPending(const KAEvent& event, bool pending)
 QVector<KAEvent> ResourcesCalendar::eventsForResource(const Resource& resource, const QSet<QString>& eventIds)
 {
     QVector<KAEvent> events;
+    events.reserve(eventIds.count());
     for (const QString& eventId : eventIds)
         events += resource.event(eventId);
     return events;

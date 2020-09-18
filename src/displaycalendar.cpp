@@ -197,7 +197,7 @@ void DisplayCalendar::close()
     mOpen = false;
 
     // Events list should be empty, but just in case...
-    for (KAEvent* event : mEventList)
+    for (KAEvent* event : qAsConst(mEventList))
     {
         mEventMap.remove(event->id());
         delete event;
@@ -213,7 +213,7 @@ void DisplayCalendar::close()
 void DisplayCalendar::updateKAEvents()
 {
     qCDebug(KALARM_LOG) << "DisplayCalendar::updateKAEvents";
-    for (KAEvent* event : mEventList)
+    for (KAEvent* event : qAsConst(mEventList))
     {
         mEventMap.remove(event->id());
         delete event;
@@ -224,7 +224,7 @@ void DisplayCalendar::updateKAEvents()
         return;
 
     const Event::List kcalevents = cal->rawEvents();
-    for (Event::Ptr kcalevent : kcalevents)
+    for (const Event::Ptr& kcalevent : kcalevents)
     {
         if (kcalevent->alarms().isEmpty())
             continue;    // ignore events without alarms

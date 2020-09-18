@@ -1913,7 +1913,7 @@ QSize CommandEdit::minimumSizeHint() const
 TextEdit::TextEdit(QWidget* parent)
     : KTextEdit(parent)
 {
-    QSize tsize = sizeHint();
+    QSize tsize = TextEdit::minimumSizeHint();   // avoid calling virtual method from constructor
     tsize.setHeight(fontMetrics().lineSpacing()*13/4 + 2*frameWidth());
     setMinimumSize(tsize);
 }

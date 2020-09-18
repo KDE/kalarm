@@ -28,8 +28,11 @@
 #include <QHBoxLayout>
 #include <QStandardPaths>
 
-
-static QMap<Preferences::SoundType, int> indexes;    // mapping from sound type to combo index
+namespace
+{
+QMap<Preferences::SoundType, int>        varIndexes;    // mapping from sound type to combo index
+const QMap<Preferences::SoundType, int>& indexes(varIndexes);
+}
 
 
 // Collect these widget labels together to ensure consistent wording and
@@ -56,12 +59,12 @@ SoundPicker::SoundPicker(QWidget* parent)
 
     // Sound type combo box
     // The order of combo box entries must correspond with the 'Type' enum.
-    if (indexes.isEmpty())
+    if (varIndexes.isEmpty())
     {
-        indexes[Preferences::Sound_None]  = 0;
-        indexes[Preferences::Sound_Beep]  = 1;
-        indexes[Preferences::Sound_File]  = 2;
-        indexes[Preferences::Sound_Speak] = 3;
+        varIndexes[Preferences::Sound_None]  = 0;
+        varIndexes[Preferences::Sound_Beep]  = 1;
+        varIndexes[Preferences::Sound_File]  = 2;
+        varIndexes[Preferences::Sound_Speak] = 3;
     }
 
     mTypeCombo = new ComboBox(mTypeBox);

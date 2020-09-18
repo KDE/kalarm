@@ -336,7 +336,7 @@ void MainWindow::resourcesResized()
 {
     if (!mShown  ||  mResizing)
         return;
-    QList<int> widths = mSplitter->sizes();
+    const QList<int> widths = mSplitter->sizes();
     if (widths.count() > 1)
     {
         mResourcesWidth = widths[0];
@@ -783,10 +783,11 @@ void MainWindow::slotReactivate()
 void MainWindow::slotEnable()
 {
     bool enable = mActionEnableEnable;    // save since changed in response to KAlarm::enableEvent()
-    QVector<KAEvent> events = mListView->selectedEvents();
+    const QVector<KAEvent> events = mListView->selectedEvents();
     QVector<KAEvent> eventCopies;
-    for (int i = 0, end = events.count();  i < end;  ++i)
-        eventCopies += events[i];
+    eventCopies.reserve(events.count());
+    for (const KAEvent& event : events)
+        eventCopies += event;
     KAlarm::enableEvents(eventCopies, enable, this);
     slotSelection();   // update Enable/Disable action text
 }
@@ -1006,7 +1007,7 @@ void MainWindow::slotRedo()
 */
 void MainWindow::slotUndoItem(QAction* action)
 {
-    int id = mUndoMenuIds[action];
+    int id = mUndoMenuIds.value(action);
     Undo::undo(id, this, Undo::actionText(Undo::UNDO, id));
 }
 
@@ -1015,7 +1016,7 @@ void MainWindow::slotUndoItem(QAction* action)
 */
 void MainWindow::slotRedoItem(QAction* action)
 {
-    int id = mUndoMenuIds[action];
+    int id = mUndoMenuIds.value(action);
     Undo::redo(id, this, Undo::actionText(Undo::REDO, id));
 }
 
@@ -1045,15 +1046,14 @@ void MainWindow::initUndoMenu(QMenu* menu, Undo::Type type)
     menu->clear();
     mUndoMenuIds.clear();
     const QString& action = (type == Undo::UNDO) ? undoTextStripped : redoTextStripped;
-    QList<int> ids = Undo::ids(type);
-    for (int i = 0, end = ids.count();  i < end;  ++i)
+    const QList<int> ids = Undo::ids(type);
+    for (const int id : ids)
     {
-        int id = ids[i];
-        QString actText = Undo::actionText(type, id);
-        QString descrip = Undo::description(type, id);
-        QString text = descrip.isEmpty()
-                     ? i18nc("@action Undo/Redo [action]", "%1 %2", action, actText)
-                     : i18nc("@action Undo [action]: message", "%1 %2: %3", action, actText, descrip);
+        const QString actText = Undo::actionText(type, id);
+        const QString descrip = Undo::description(type, id);
+        const QString text = descrip.isEmpty()
+                           ? i18nc("@action Undo/Redo [action]", "%1 %2", action, actText)
+                           : i18nc("@action Undo [action]: message", "%1 %2: %3", action, actText, descrip);
         QAction* act = menu->addAction(text);
         mUndoMenuIds[act] = id;
     }
@@ -1206,7 +1206,6 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
     const QMimeData* data = e->mimeData();
     KAEvent::SubAction action = KAEvent::MESSAGE;
     AlarmText          alarmText;
-    QList<QUrl>        urls;
     MemoryCalendar::Ptr calendar(new MemoryCalendar(Preferences::timeSpecAsZone()));
 #ifndef NDEBUG
     const QString fmts = data->formats().join(QLatin1String(", "));
@@ -1364,9 +1363,8 @@ void MainWindow::slotCalendarStatusChanged()
     // Find whether there are any writable calendars
     bool active  = !Resources::enabledResources(CalEvent::ACTIVE, true).isEmpty();
     bool templat = !Resources::enabledResources(CalEvent::TEMPLATE, true).isEmpty();
-    for (int i = 0, end = mWindowList.count();  i < end;  ++i)
+    for (MainWindow* w : qAsConst(mWindowList))
     {
-        MainWindow* w = mWindowList[i];
         w->mActionImportAlarms->setEnabled(active || templat);
         w->mActionImportBirthdays->setEnabled(active);
         w->mActionCreateTemplate->setEnabled(templat);

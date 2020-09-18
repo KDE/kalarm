@@ -49,7 +49,7 @@ void TemplateMenuAction::slotInitMenu()
         sorted.insert(j, name);
     }
 
-    for (const QString& name : sorted)
+    for (const QString& name : qAsConst(sorted))
     {
         QAction* act = m->addAction(name);
         mOriginalTexts[act] = name;   // keep original text, since action text has shortcuts added
