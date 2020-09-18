@@ -137,11 +137,12 @@ void MessageNotification::sessionRestore()
 * displayed.
 */
 MessageNotification::MessageNotification(const KAEvent& event, const KAAlarm& alarm, int flags)
-    : KNotification(getNotifyEventId(event), MainWindow::mainMainWindow(), NFLAGS)
+    : KNotification(getNotifyEventId(event), NFLAGS)
     , MessageDisplay(event, alarm, flags)
 {
     qCDebug(KALARM_LOG) << "MessageNotification():" << mEventId();
     MNSessionManager::create();
+    setWidget(MainWindow::mainMainWindow());
     if (!(flags & (NoInitView | AlwaysHide)))
         MessageNotification::setUpDisplay();    // avoid calling virtual method from constructor
 
@@ -162,11 +163,12 @@ MessageNotification::MessageNotification(const KAEvent& event, const KAAlarm& al
 */
 MessageNotification::MessageNotification(const KAEvent& event, const DateTime& alarmDateTime,
                        const QStringList& errmsgs, const QString& dontShowAgain)
-    : KNotification(ErrorId, MainWindow::mainMainWindow(), NFLAGS)
+    : KNotification(ErrorId, NFLAGS)
     , MessageDisplay(event, alarmDateTime, errmsgs, dontShowAgain)
 {
     qCDebug(KALARM_LOG) << "MessageNotification(errmsg)";
     MNSessionManager::create();
+    setWidget(MainWindow::mainMainWindow());
     MessageNotification::setUpDisplay();    // avoid calling virtual method from constructor
 
     connect(this, QOverload<unsigned int>::of(&KNotification::activated), this, &MessageNotification::buttonActivated);
@@ -182,11 +184,12 @@ MessageNotification::MessageNotification(const KAEvent& event, const DateTime& a
 * Ownership of the helper is taken by the new instance.
 */
 MessageNotification::MessageNotification(const QString& eventId, MessageDisplayHelper* helper)
-    : KNotification(eventId, MainWindow::mainMainWindow(), NFLAGS)
+    : KNotification(eventId, NFLAGS)
     , MessageDisplay(helper)
 {
     qCDebug(KALARM_LOG) << "MessageNotification(helper):" << mEventId();
     MNSessionManager::create();
+    setWidget(MainWindow::mainMainWindow());
 
     connect(this, QOverload<unsigned int>::of(&KNotification::activated), this, &MessageNotification::buttonActivated);
     connect(this, &KNotification::closed, this, &MessageNotification::slotClosed);

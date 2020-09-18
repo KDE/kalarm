@@ -1046,7 +1046,7 @@ void MainWindow::initUndoMenu(QMenu* menu, Undo::Type type)
     menu->clear();
     mUndoMenuIds.clear();
     const QString& action = (type == Undo::UNDO) ? undoTextStripped : redoTextStripped;
-    const QList<int> ids = Undo::ids(type);
+    const QVector<int> ids = Undo::ids(type);
     for (const int id : ids)
     {
         const QString actText = Undo::actionText(type, id);
