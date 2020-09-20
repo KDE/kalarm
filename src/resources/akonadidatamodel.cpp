@@ -951,8 +951,8 @@ QModelIndex AkonadiDataModel::resourceIndex(Akonadi::Collection::Id id) const
 */
 Collection* AkonadiDataModel::collection(Collection::Id id) const
 {
-    auto it = mResources.constFind(id);
-    if (it != mResources.constEnd())
+    auto it = mResources.find(id);
+    if (it != mResources.end())
     {
         Collection& c = AkonadiResource::collection(it.value());
         if (c.isValid())
