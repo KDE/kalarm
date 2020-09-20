@@ -39,6 +39,16 @@ Name[uk]=Повідомлення нагадування
 Name[x-test]=xxAlarm messagexx
 Action=Popup
 
+[Event/MessageBeep]
+Name=Alarm message with beep
+Action=Popup|Sound
+Sound=Oxygen-Sys-App-Message.ogg
+
+[Event/MessageSpeak]
+Name=Spoken alarm message
+Action=Popup|TTS
+TTS=%s
+
 [Event/MessageError]
 Name=Alarm error message
 Name[ca]=Missatge d'error d'alarma
