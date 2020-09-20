@@ -84,7 +84,7 @@ void EventListView::clearSelection()
 */
 QModelIndex EventListView::selectedIndex() const
 {
-    const QModelIndexList list = selectionModel()->selectedRows();
+    const QModelIndexList list = selectionModel()->selectedRows();      //clazy:exclude=inefficient-qlist
     if (list.count() != 1)
         return QModelIndex();
     return list[0];
@@ -96,7 +96,7 @@ QModelIndex EventListView::selectedIndex() const
 */
 KAEvent EventListView::selectedEvent() const
 {
-    const QModelIndexList list = selectionModel()->selectedRows();
+    const QModelIndexList list = selectionModel()->selectedRows();      //clazy:exclude=inefficient-qlist
     if (list.count() != 1)
         return KAEvent();
     const EventListModel* model = static_cast<const EventListModel*>(list[0].model());
@@ -109,7 +109,7 @@ KAEvent EventListView::selectedEvent() const
 QVector<KAEvent> EventListView::selectedEvents() const
 {
     QVector<KAEvent> elist;
-    const QModelIndexList ixlist = selectionModel()->selectedRows();
+    const QModelIndexList ixlist = selectionModel()->selectedRows();      //clazy:exclude=inefficient-qlist
     int count = ixlist.count();
     if (count)
     {

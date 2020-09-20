@@ -30,6 +30,8 @@
 #include <QLabel>
 #include <QHBoxLayout>
 
+//clazy:excludeall=non-pod-global-static
+
 static const QTime time_23_59(23, 59);
 
 

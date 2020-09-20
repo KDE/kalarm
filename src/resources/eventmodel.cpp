@@ -89,8 +89,8 @@ QModelIndexList EventListModel::match(const QModelIndex& start, int role, const 
     if (role < Qt::UserRole)
         return QSortFilterProxyModel::match(start, role, value, hits, flags);
 
-    QModelIndexList matches;
-    const QModelIndexList indexes = sourceModel()->match(mapToSource(start), role, value, hits, flags);
+    QModelIndexList matches;           //clazy:exclude=inefficient-qlist
+    const QModelIndexList indexes = sourceModel()->match(mapToSource(start), role, value, hits, flags);      //clazy:exclude=inefficient-qlist
     for (const QModelIndex& ix : indexes)
     {
         QModelIndex proxyIndex = mapFromSource(ix);

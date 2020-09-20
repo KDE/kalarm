@@ -91,8 +91,8 @@ QModelIndexList ResourceFilterModel::match(const QModelIndex& start, int role, c
     if (role < Qt::UserRole)
         return QSortFilterProxyModel::match(start, role, value, hits, flags);
 
-    QModelIndexList matches;
-    const QModelIndexList indexes = sourceModel()->match(mapToSource(start), role, value, hits, flags);
+    QModelIndexList matches;            //clazy:exclude=inefficient-qlist
+    const QModelIndexList indexes = sourceModel()->match(mapToSource(start), role, value, hits, flags);     //clazy:exclude=inefficient-qlist
     for (const QModelIndex& ix : indexes)
     {
         QModelIndex proxyIndex = mapFromSource(ix);
@@ -377,7 +377,7 @@ void ResourceCheckListModel::selectionChanged(const QItemSelection& selected, co
 {
     if (mResetting)
         return;
-    const QModelIndexList sel = selected.indexes();
+    const QModelIndexList sel = selected.indexes();           //clazy:exclude=inefficient-qlist
     for (const QModelIndex& ix : sel)
     {
         // Try to enable the resource, but untick it if not possible
@@ -386,7 +386,7 @@ void ResourceCheckListModel::selectionChanged(const QItemSelection& selected, co
         if (!resource.isEnabled(mAlarmType))
             mSelectionModel->select(ix, QItemSelectionModel::Deselect);
     }
-    const QModelIndexList desel = deselected.indexes();
+    const QModelIndexList desel = deselected.indexes();       //clazy:exclude=inefficient-qlist
     for (const QModelIndex& ix : desel)
         mModel->resource(ix).setEnabled(mAlarmType, false);
 }

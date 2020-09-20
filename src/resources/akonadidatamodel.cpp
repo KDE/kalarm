@@ -951,8 +951,8 @@ QModelIndex AkonadiDataModel::resourceIndex(Akonadi::Collection::Id id) const
 */
 Collection* AkonadiDataModel::collection(Collection::Id id) const
 {
-    auto it = mResources.find(id);
-    if (it != mResources.end())
+    auto it = mResources.constFind(id);
+    if (it != mResources.constEnd())
     {
         Collection& c = AkonadiResource::collection(it.value());
         if (c.isValid())
@@ -976,7 +976,7 @@ Collection* AkonadiDataModel::collection(const Resource& resource) const
 */
 QModelIndex AkonadiDataModel::itemIndex(const Akonadi::Item& item) const
 {
-    const QModelIndexList ixs = modelIndexesForItem(this, item);
+    const QModelIndexList ixs = modelIndexesForItem(this, item);      //clazy:exclude=inefficient-qlist
     for (const QModelIndex& ix : ixs)
     {
         if (ix.isValid())

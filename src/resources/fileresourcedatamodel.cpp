@@ -866,7 +866,7 @@ QModelIndexList FileResourceDataModel::match(const QModelIndex& start, int role,
     {
         case ResourceIdRole:
         {
-            QModelIndexList result;
+            QModelIndexList result;               //clazy:exclude=inefficient-qlist
             const ResourceId id = value.toLongLong();
             if (id >= 0)
             {
@@ -878,7 +878,7 @@ QModelIndexList FileResourceDataModel::match(const QModelIndex& start, int role,
         }
         case EventIdRole:
         {
-            QModelIndexList result;
+            QModelIndexList result;               //clazy:exclude=inefficient-qlist
             const QModelIndex ix = eventIndex(value.toString());
             if (ix.isValid())
                 result += ix;

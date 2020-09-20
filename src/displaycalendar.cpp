@@ -24,6 +24,8 @@
 using namespace KCalendarCore;
 using namespace KAlarmCal;
 
+//clazy:excludeall=non-pod-global-static
+
 
 namespace
 {

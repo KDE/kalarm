@@ -75,6 +75,8 @@ using namespace KCalUtils;
 
 using namespace KAlarmCal;
 
+//clazy:excludeall=non-pod-global-static
+
 namespace
 {
 const QString UI_FILE(QStringLiteral("kalarmui.rc"));

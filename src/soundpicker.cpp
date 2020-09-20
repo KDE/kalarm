@@ -28,6 +28,8 @@
 #include <QHBoxLayout>
 #include <QStandardPaths>
 
+//clazy:excludeall=non-pod-global-static
+
 namespace
 {
 QMap<Preferences::SoundType, int>        varIndexes;    // mapping from sound type to combo index

@@ -35,6 +35,8 @@
 using namespace KHolidays;
 using namespace KAlarmCal;
 
+//clazy:excludeall=non-pod-global-static
+
 // Config file entry names
 static const char* GENERAL_SECTION  = "General";
 

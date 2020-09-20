@@ -26,6 +26,8 @@ using namespace KCalendarCore;
 
 #include <stdlib.h>
 
+//clazy:excludeall=non-pod-global-static
+
 namespace
 {
 const QString REQUEST_DBUS_OBJECT(QStringLiteral("/kalarm"));   // D-Bus object path of KAlarm's request interface

@@ -245,7 +245,7 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
 QVector<KAEvent> BirthdayDlg::events() const
 {
     QVector<KAEvent> list;
-    const QModelIndexList indexes = mListView->selectionModel()->selectedRows();
+    const QModelIndexList indexes = mListView->selectionModel()->selectedRows();     //clazy:exclude=inefficient-qlist
     const int count = indexes.count();
     if (!count)
         return list;

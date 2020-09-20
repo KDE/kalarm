@@ -43,6 +43,8 @@
 
 using namespace KAlarmCal;
 
+//clazy:excludeall=non-pod-global-static
+
 namespace
 {
 const QString KALARM_RESOURCE(QStringLiteral("akonadi_kalarm_resource"));

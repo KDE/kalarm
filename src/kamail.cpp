@@ -662,7 +662,7 @@ QStringList KAMail::errors(const QString& err, ErrType prefix)
 QString KAMail::getMailBody(quint32 serialNumber)
 {
 //TODO: Need to use Akonadi instead
-    const QList<QVariant> args{serialNumber, (int)0};
+    const QList<QVariant> args{serialNumber, (int)0};       //clazy:exclude=inefficient-qlist
     QDBusInterface iface(KMAIL_DBUS_SERVICE, QString(), QStringLiteral("KMailIface"));
     const QDBusReply<QString> reply = iface.callWithArgumentList(QDBus::Block, QStringLiteral("getDecodedBodyPart"), args);
     if (!reply.isValid())
