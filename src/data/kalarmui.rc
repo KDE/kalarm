@@ -1,5 +1,5 @@
 <!DOCTYPE gui>
-<gui name="kalarm" version="220" >
+<gui name="kalarm" version="310" >
  <ToolBar noMerge="1" name="mainToolBar" >
   <Action name="new" />
   <Separator/>
@@ -68,6 +68,7 @@
    <Action name="options_show_menubar"/>
    <Separator/>
    <Action name="options_configure_keybinding" />
+   <Action name="options_configure_notifications" />
    <Action name="options_configure_toolbars" />
    <Action name="options_configure" />
   </Menu>

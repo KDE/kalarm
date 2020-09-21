@@ -40,7 +40,7 @@ public:
     void                showDateTime(const KAEvent&, const KAAlarm&) override;
     void                cancelReminder(const KAEvent&, const KAAlarm&) override;
     static void         redisplayAlarms();
-    static int          notificationCount(bool excludeAlwaysHidden = false);
+    static int          notificationCount();
 
 protected Q_SLOTS:
     void textsChanged(MessageDisplayHelper::DisplayTexts::TextIds ids, const QString& change);
@@ -62,7 +62,6 @@ private:
     void                setNotificationTitle(const QString&);
     void                setNotificationText();
     void                setNotificationButtons();
-    void                displayComplete();
 
     static QVector<MessageNotification*> mNotificationList;   // list of notification instances
     // Miscellaneous

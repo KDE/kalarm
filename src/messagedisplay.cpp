@@ -33,7 +33,7 @@ bool MessageDisplay::mRedisplayed = false;
 MessageDisplay* MessageDisplay::create(const KAEvent& event, const KAAlarm& alarm, int flags)
 {
     if (event.notify())
-        return new MessageNotification(event, alarm, flags);
+        return new MessageNotification(event, alarm, flags & ~AlwaysHide);
     else
         return new MessageWindow(event, alarm, flags);
 }

@@ -34,21 +34,21 @@ namespace
 // Notification eventIds: these are the IDs contained in the '[Event/ID]'
 // entries in kalarm.notifyrc.
 const QString MessageId = QStringLiteral("Message");
+const QString BeepId    = QStringLiteral("MessageBeep");
+const QString SpeakId   = QStringLiteral("MessageSpeak");
 const QString ErrorId   = QStringLiteral("MessageError");
 
 // Flags for the notification
 //const KNotification::NotificationFlags NFLAGS = KNotification::CloseWhenWidgetActivated
+const KNotification::NotificationFlags NFLAGS = KNotification::RaiseWidgetOnActivation;
 //                                              | KNotification::Persistent;
-const KNotification::NotificationFlags NFLAGS = KNotification::RaiseWidgetOnActivation
-                                              | KNotification::Persistent;
-//                                              | KNotification::LoopSound
 
 const QString NL = QStringLiteral("\n");
 const QString SP = QStringLiteral(" ");
 
 inline QString getNotifyEventId(const KAEvent& event)
 {
-    return MessageId;
+    return event.beep() ? BeepId : event.speak() ? SpeakId : MessageId;
 }
 
 } // namespace
@@ -145,7 +145,7 @@ MessageNotification::MessageNotification(const KAEvent& event, const KAAlarm& al
     qCDebug(KALARM_LOG) << "MessageNotification():" << mEventId();
     MNSessionManager::create();
     setWidget(MainWindow::mainMainWindow());
-    if (!(flags & (NoInitView | AlwaysHide)))
+    if (!(flags & NoInitView))
         MessageNotification::setUpDisplay();    // avoid calling virtual method from constructor
 
     connect(this, QOverload<unsigned int>::of(&KNotification::activated), this, &MessageNotification::buttonActivated);
@@ -154,8 +154,6 @@ MessageNotification::MessageNotification(const KAEvent& event, const KAAlarm& al
     connect(mHelper, &MessageDisplayHelper::commandExited, this, &MessageNotification::commandCompleted);
 
     mNotificationList.append(this);
-    if (mAlwaysHidden())
-        displayComplete();    // play audio, etc.
 }
 
 /******************************************************************************
@@ -314,20 +312,11 @@ void MessageNotification::setUpDisplay()
 }
 
 /******************************************************************************
-* Return the number of message notifications, optionally excluding always-hidden ones.
+* Return the number of message notifications.
 */
-int MessageNotification::notificationCount(bool excludeAlwaysHidden)
+int MessageNotification::notificationCount()
 {
-    int count = mNotificationList.count();
-    if (excludeAlwaysHidden)
-    {
-        for (MessageNotification* notif : qAsConst(mNotificationList))
-        {
-            if (notif->mAlwaysHidden())
-                --count;
-        }
-    }
-    return count;
+    return mNotificationList.count();
 }
 
 /******************************************************************************
@@ -350,7 +339,7 @@ void MessageNotification::closeDisplay()
 */
 void MessageNotification::showDisplay()
 {
-    if (mInitialised  &&  !mAlwaysHidden()  &&  mHelper->activateAutoClose())
+    if (mInitialised  &&  mHelper->activateAutoClose())
     {
         if (!mCommandInhibit  &&  !mShown)
         {
@@ -359,7 +348,7 @@ void MessageNotification::showDisplay()
             mShown = true;
         }
         if (!mDisplayComplete  &&  !mErrorWindow()  &&  mAlarmType() != KAAlarm::INVALID_ALARM)
-            displayComplete();    // play audio, etc.
+            mHelper->displayComplete(false);   // reschedule
         mDisplayComplete = true;
     }
 }
@@ -382,13 +371,6 @@ void MessageNotification::repeat(const KAAlarm& alarm)
     if (event.isValid())
     {
         mAlarmType() = alarm.type();    // store new alarm type for use if it is later deferred
-        if (mAlwaysHidden())
-            playAudio();
-        else
-        {
-            if (Preferences::modalMessages())
-                playAudio();
-        }
         if (mHelper->alarmShowing(event))
             ResourcesCalendar::updateEvent(event);
     }
@@ -572,15 +554,6 @@ void MessageNotification::saveProperties(KConfigGroup& config)
 {
     if (mDisplayComplete  &&  mHelper->saveProperties(config))
         config.writeEntry("NotifyId", eventId());
-}
-
-/******************************************************************************
-* Called when the notification has been displayed properly, to play sounds and
-* reschedule the event.
-*/
-void MessageNotification::displayComplete()
-{
-    mHelper->displayComplete();
 }
 
 /******************************************************************************

@@ -1144,11 +1144,12 @@ bool MessageDisplayHelper::activateAutoClose()
 * Called when the display has been shown properly (in its correct position),
 * to play sounds and reschedule the event.
 */
-void MessageDisplayHelper::displayComplete()
+void MessageDisplayHelper::displayComplete(bool audio)
 {
     delete mTempFile;
     mTempFile = nullptr;
-    playAudio();
+    if (audio)
+        playAudio();
     if (mRescheduleEvent)
         alarmShowing(mEvent);
 }

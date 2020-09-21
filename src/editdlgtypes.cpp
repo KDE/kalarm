@@ -87,7 +87,7 @@ class PickLogFileRadio : public PickFileRadio
 = Dialog to edit display alarms.
 =============================================================================*/
 
-QString EditDisplayAlarmDlg::i18n_lbl_DisplayMethod() { return i18nc("@label:listbox", "Display method:"); }
+QString EditDisplayAlarmDlg::i18n_lbl_DisplayMethod() { return i18nc("@label:listbox How to display alarms", "Display method:"); }
 QString EditDisplayAlarmDlg::i18n_combo_Window()      { return i18nc("@item:inlistbox", "Window"); }
 QString EditDisplayAlarmDlg::i18n_combo_Notify()      { return i18nc("@item:inlistbox", "Notification"); }
 QString EditDisplayAlarmDlg::i18n_chk_ConfirmAck()    { return i18nc("@option:check", "Confirm acknowledgment"); }
@@ -677,6 +677,7 @@ void EditDisplayAlarmDlg::slotDisplayMethodChanged(int index)
     const bool enable = (index == dWINDOW);
     mConfirmAck->setEnabled(enable);
     mFontColourButton->setEnabled(enable);
+    mSoundPicker->showFile(enable);
 }
 
 /******************************************************************************

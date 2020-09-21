@@ -105,6 +105,7 @@ private Q_SLOTS:
     void           slotPreferences();
     void           slotShowMenubar();
     void           slotConfigureKeys();
+    void           slotConfigureNotifications();
     void           slotConfigureToolbar();
     void           slotNewToolbarConfig();
     void           slotQuit();

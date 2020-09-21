@@ -999,7 +999,7 @@ void MessageWindow::frameDrawn()
 */
 void MessageWindow::displayComplete()
 {
-    mHelper->displayComplete();
+    mHelper->displayComplete(true);
 
     if (!mAlwaysHidden())
     {

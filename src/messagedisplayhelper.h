@@ -88,7 +88,7 @@ public:
     void                initTexts();
     const DisplayTexts& texts() const          { return mTexts; }
     bool                activateAutoClose();
-    void                displayComplete();
+    void                displayComplete(bool audio);
     bool                alarmShowing(KAEvent&);
     void                playAudio();
     EditAlarmDlg*       createEdit();

@@ -54,6 +54,7 @@ using namespace KCalUtils;
 #include <KEditToolBar>
 #include <KXMLGUIFactory>
 #include <KToggleAction>
+#include <KNotifyConfigWidget>
 #include <KToolBarPopupAction>
 
 #include <QAction>
@@ -543,6 +544,7 @@ void MainWindow::initActions()
     connect(act, &QAction::triggered, this, &MainWindow::slotQuit, Qt::QueuedConnection);
     QAction* actionMenubar = KStandardAction::showMenubar(this, &MainWindow::slotShowMenubar, actions);
     KStandardAction::keyBindings(this, &MainWindow::slotConfigureKeys, actions);
+    KStandardAction::configureNotifications(this, &MainWindow::slotConfigureNotifications, actions);
     KStandardAction::configureToolbars(this, &MainWindow::slotConfigureToolbar, actions);
     KStandardAction::preferences(this, &MainWindow::slotPreferences, actions);
     mResourceSelector->initActions(actions);
@@ -1120,6 +1122,14 @@ void MainWindow::slotShowMenubar()
 void MainWindow::slotConfigureKeys()
 {
     KShortcutsDialog::configure(actionCollection(), KShortcutsEditor::LetterShortcutsAllowed, this);
+}
+
+/******************************************************************************
+* Called when the Configure Notifications menu item is selected.
+*/
+void MainWindow::slotConfigureNotifications()
+{
+    KNotifyConfigWidget::configure(this);
 }
 
 /******************************************************************************

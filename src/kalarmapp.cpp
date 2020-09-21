@@ -2244,6 +2244,7 @@ void* KAlarmApp::execAlarm(KAEvent& event, const KAAlarm& alarm, ExecAlarmFlags 
             {
                 // There isn't already a message for this event.
                 const int mdFlags = (flags & Reschedule ? 0 : MessageDisplay::NoReschedule) | MessageDisplay::AlwaysHide;
+                event.setNotify(false);   // can't use notification system if audio only
                 disp = MessageDisplay::create(event, alarm, mdFlags);
             }
             else

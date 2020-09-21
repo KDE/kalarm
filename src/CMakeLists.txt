@@ -172,6 +172,7 @@ target_link_libraries(kalarm_bin
     KF5::Holidays
     KF5::KIOWidgets
     KF5::Notifications
+    KF5::NotifyConfig
     KF5::TextWidgets
     KF5::WindowSystem
     KF5::XmlGui
