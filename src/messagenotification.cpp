@@ -18,8 +18,10 @@
 
 #include <KAboutData>
 #include <KLocalizedString>
+#ifdef RESTORE_NOTIFICATIONS
 #include <KConfigGroup>
 #include <KConfigGui>
+#endif
 
 #include <QCloseEvent>
 #include <QSessionManager>
@@ -39,9 +41,7 @@ const QString SpeakId   = QStringLiteral("MessageSpeak");
 const QString ErrorId   = QStringLiteral("MessageError");
 
 // Flags for the notification
-//const KNotification::NotificationFlags NFLAGS = KNotification::CloseWhenWidgetActivated
 const KNotification::NotificationFlags NFLAGS = KNotification::RaiseWidgetOnActivation;
-//                                              | KNotification::Persistent;
 
 const QString NL = QStringLiteral("\n");
 const QString SP = QStringLiteral(" ");
@@ -57,6 +57,14 @@ inline QString getNotifyEventId(const KAEvent& event)
 /*=============================================================================
 * Helper class to save all message notifications' properties on session
 * shutdown, to enable them to be recreated on the next startup.
+*
+* NOTE: When a notification has closed, there is currently no way to know
+*       whether it has been closed by the user or has timed out. There is also
+*       no way to know when a notification in the notification history is
+*       closed by the user. So notifications are not restored on startup, since
+*       that might re-raise notifications which the user has already closed.
+*       If this changes in the future, notifications could be restored on
+*       startup, in the same way as alarm windows are restored.
 */
 class MNSessionManager : public QObject
 {
@@ -64,7 +72,9 @@ class MNSessionManager : public QObject
 public:
     MNSessionManager()
     {
+#ifdef RESTORE_NOTIFICATIONS
         connect(qApp, &QGuiApplication::saveStateRequest, this, &MNSessionManager::saveState);
+#endif
     }
     ~MNSessionManager() {} 
 
@@ -75,6 +85,7 @@ public:
     }
 
 private Q_SLOTS:
+#ifdef RESTORE_NOTIFICATIONS
     /******************************************************************************
     * Called by the session manager to request the application to save its state.
     */
@@ -93,6 +104,7 @@ private Q_SLOTS:
         KConfigGroup cg(config, "Number");
         cg.writeEntry("NumberOfNotifications", MessageNotification::mNotificationList.count());
     }
+#endif
 
 private:
     static MNSessionManager* mInstance;
@@ -108,6 +120,7 @@ QVector<MessageNotification*> MessageNotification::mNotificationList;
 */
 void MessageNotification::sessionRestore()
 {
+#ifdef RESTORE_NOTIFICATIONS
     KConfig* config = KConfigGui::sessionConfig();
     if (config)
     {
@@ -130,6 +143,7 @@ void MessageNotification::sessionRestore()
             }
         }
     }
+#endif
 }
 
 /******************************************************************************
@@ -552,8 +566,11 @@ void MessageNotification::enableEditButton(bool enable)
 */
 void MessageNotification::saveProperties(KConfigGroup& config)
 {
+    Q_UNUSED(config)
+#ifdef RESTORE_NOTIFICATIONS
     if (mDisplayComplete  &&  mHelper->saveProperties(config))
         config.writeEntry("NotifyId", eventId());
+#endif
 }
 
 /******************************************************************************
@@ -580,11 +597,14 @@ void MessageNotification::buttonActivated(unsigned int index)
 }
 
 /******************************************************************************
-* Called when the notification has closed.
+* Called when the notification has closed, either by user action of by timeout.
+* Note that when a notification has timed out, it shows in the notification
+* history, but there is no way to know if the user closes it there.
 * Only quits the application if there is no system tray icon displayed.
 */
 void MessageNotification::slotClosed()
 {
+    qCDebug(KALARM_LOG) << "MessageNotification::slotClosed";
     mHelper->closeEvent();
 }
 
