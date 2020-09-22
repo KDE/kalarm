@@ -74,9 +74,9 @@ SoundPicker::SoundPicker(QWidget* parent)
     mTypeBox->setWhatsThis(xi18nc("@info:whatsthis Combination of multiple whatsthis items",
                                   "<para>Choose a sound to play when the message is displayed."
                                   "<list><item><interface>%1</interface>: the message is displayed silently.</item>"
-                                  "<list><item><interface>%2</interface>: a simple beep is sounded.</item>"
-                                  "<list><item><interface>%3</interface>: an audio file is played. You will be prompted to choose the file and set play options. (Option not available if using notification.)</item>"
-                                  "<list><item><interface>%4</interface>: the message text is spoken. (Option requires working Qt text-to-speech installation.)</item>"
+                                  "<item><interface>%2</interface>: a simple beep is sounded.</item>"
+                                  "<item><interface>%3</interface>: an audio file is played. You will be prompted to choose the file and set play options. (Option not available if using notification.)</item>"
+                                  "<item><interface>%4</interface>: the message text is spoken. (Option requires working Qt text-to-speech installation.)</item>"
                                   "</list></para>",
                                   i18n_combo_None(), i18n_combo_Beep(), i18n_combo_File(), i18n_combo_Speak()));
 
