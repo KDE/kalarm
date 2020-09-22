@@ -121,6 +121,7 @@ void SoundPicker::showFile(bool show)
                 mTypeCombo->setCurrentIndex(NoneIndex);
             mTypeCombo->removeItem(FileIndex);
         }
+        mFilePicker->setVisible(show);
         mFileShowing = show;
     }
 }

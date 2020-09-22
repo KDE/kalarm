@@ -162,12 +162,15 @@ void EditDisplayAlarmDlg::type_init(QWidget* parent, QVBoxLayout* frameLayout)
     connect(mTypeCombo, static_cast<void (ComboBox::*)(int)>(&ComboBox::currentIndexChanged), this, &EditDisplayAlarmDlg::contentsChanged);
     label->setBuddy(mTypeCombo);
     box->setWhatsThis(xi18nc("@info:whatsthis", "<para>Select what the alarm should display:"
-          "<list><item><interface>%1</interface>: the alarm will display the text message you type in.</item>"
-          "<item><interface>%2</interface>: the alarm will display the contents of a text or image file.</item>"
-          "<item><interface>%3</interface>: the alarm will display the output from a command.</item></list></para>",
-          textItem, fileItem, commandItem));
-    boxHLayout->setStretchFactor(new QWidget(box), 1);    // left adjust the control
-    frameLayout->addWidget(box);
+                             "<list><item><interface>%1</interface>: the alarm will display the text message you type in.</item>"
+                             "<item><interface>%2</interface>: the alarm will display the contents of a text or image file.</item>"
+                             "<item><interface>%3</interface>: the alarm will display the output from a command.</item></list></para>",
+                             textItem, fileItem, commandItem));
+    QHBoxLayout* hlayout = new QHBoxLayout();
+    hlayout->setContentsMargins(0, 0, 0, 0);
+    frameLayout->addLayout(hlayout);
+    hlayout->addWidget(box);
+    hlayout->addStretch();    // left adjust the control
 
     // Text message edit box
     mTextMessageEdit = new TextEdit(parent);
@@ -206,7 +209,7 @@ void EditDisplayAlarmDlg::type_init(QWidget* parent, QVBoxLayout* frameLayout)
     frameLayout->addWidget(mCmdEdit);
 
     // Sound checkbox and file selector
-    QHBoxLayout* hlayout = new QHBoxLayout();
+    hlayout = new QHBoxLayout();
     hlayout->setContentsMargins(0, 0, 0, 0);
     frameLayout->addLayout(hlayout);
     mSoundPicker = new SoundPicker(parent);
@@ -675,9 +678,12 @@ void EditDisplayAlarmDlg::slotAlarmTypeChanged(int index)
 void EditDisplayAlarmDlg::slotDisplayMethodChanged(int index)
 {
     const bool enable = (index == dWINDOW);
-    mConfirmAck->setEnabled(enable);
-    mFontColourButton->setEnabled(enable);
+    mConfirmAck->setVisible(enable);
+    mFontColourButton->setVisible(enable);
     mSoundPicker->showFile(enable);
+    // Because notifications automatically time out after 10 seconds,
+    // auto-close would always occur after a notification closes.
+    lateCancel()->showAutoClose(enable);
 }
 
 /******************************************************************************
