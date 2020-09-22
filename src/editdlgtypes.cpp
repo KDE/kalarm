@@ -312,7 +312,7 @@ void EditDisplayAlarmDlg::type_initValues(const KAEvent* event)
         setColours(event->fgColour(), event->bgColour());
         mDisplayMethodCombo->setCurrentIndex(event->notify() ? dNOTIFY : dWINDOW);
         mConfirmAck->setChecked(event->confirmAck());
-        bool recurs = event->recurs();
+        const bool recurs = event->recurs();
         int reminderMins = event->reminderMinutes();
         if (reminderMins > 0  &&  !event->reminderActive())
             reminderMins = 0;   // don't show advance reminder which has already passed
@@ -403,18 +403,29 @@ void EditDisplayAlarmDlg::type_showOptions(bool more)
 */
 void EditDisplayAlarmDlg::setColours(const QColor& fgColour, const QColor& bgColour)
 {
-    QPalette pal = mTextMessageEdit->palette();
-    pal.setColor(mTextMessageEdit->backgroundRole(), bgColour);
-    pal.setColor(QPalette::Text, fgColour);
-    mTextMessageEdit->setPalette(pal);
-    pal = mTextMessageEdit->viewport()->palette();
-    pal.setColor(mTextMessageEdit->viewport()->backgroundRole(), bgColour);
-    pal.setColor(QPalette::Text, fgColour);
-    mTextMessageEdit->viewport()->setPalette(pal);
+    QColor fg(fgColour);
+    if (mDisplayMethodCombo->currentIndex() == dNOTIFY)
+    {
+        const QPalette pal = mFileMessageEdit->palette();
+        mTextMessageEdit->setPalette(pal);
+        mTextMessageEdit->viewport()->setPalette(pal);
+        fg = pal.color(QPalette::Text);
+    }
+    else
+    {
+        QPalette pal = mTextMessageEdit->palette();
+        pal.setColor(mTextMessageEdit->backgroundRole(), bgColour);
+        pal.setColor(QPalette::Text, fgColour);
+        mTextMessageEdit->setPalette(pal);
+        pal = mTextMessageEdit->viewport()->palette();
+        pal.setColor(mTextMessageEdit->viewport()->backgroundRole(), bgColour);
+        pal.setColor(QPalette::Text, fgColour);
+        mTextMessageEdit->viewport()->setPalette(pal);
+    }
     // Change the color of existing text
-    QTextCursor cursor = mTextMessageEdit->textCursor();
+    const QTextCursor cursor = mTextMessageEdit->textCursor();
     mTextMessageEdit->selectAll();
-    mTextMessageEdit->setTextColor(fgColour);
+    mTextMessageEdit->setTextColor(fg);
     mTextMessageEdit->setTextCursor(cursor);
 }
 
@@ -423,7 +434,7 @@ void EditDisplayAlarmDlg::setColours(const QColor& fgColour, const QColor& bgCol
 */
 void EditDisplayAlarmDlg::setAction(KAEvent::SubAction action, const AlarmText& alarmText)
 {
-    QString text = alarmText.displayText();
+    const QString text = alarmText.displayText();
     switch (action)
     {
         case KAEvent::MESSAGE:
@@ -541,15 +552,15 @@ bool EditDisplayAlarmDlg::type_stateChanged() const
     ||  mSavedSoundType     != mSoundPicker->sound()
     ||  mSavedDisplayMethod != mDisplayMethodCombo->currentIndex()
     ||  mSavedReminder      != reminder()->minutes()
-    ||  mSavedOnceOnly      != reminder()->isOnceOnly()
-    ||  mSavedAutoClose     != lateCancel()->isAutoClose())
+    ||  mSavedOnceOnly      != reminder()->isOnceOnly())
         return true;
     if (mDisplayMethodCombo->currentIndex() == dWINDOW)
     {
-        if (mSavedConfirmAck    != mConfirmAck->isChecked()
-        ||  mSavedFont          != mFontColourButton->font()
-        ||  mSavedFgColour      != mFontColourButton->fgColour()
-        ||  mSavedBgColour      != mFontColourButton->bgColour())
+        if (mSavedConfirmAck != mConfirmAck->isChecked()
+        ||  mSavedFont       != mFontColourButton->font()
+        ||  mSavedFgColour   != mFontColourButton->fgColour()
+        ||  mSavedBgColour   != mFontColourButton->bgColour()
+        ||  mSavedAutoClose  != lateCancel()->isAutoClose())
             return true;
     }
     if (mSpecialActionsButton)
@@ -591,8 +602,20 @@ void EditDisplayAlarmDlg::type_setEvent(KAEvent& event, const KADateTime& dt, co
         default:
         case tTEXT:     type = KAEvent::MESSAGE; break;
     }
-    event = KAEvent(dt, text, mFontColourButton->bgColour(), mFontColourButton->fgColour(),
-                    mFontColourButton->font(), type, lateCancel, getAlarmFlags());
+    QColor fgColour, bgColour;
+    QFont font;
+    if (mDisplayMethodCombo->currentIndex() == dNOTIFY)
+    {
+        bgColour = Preferences::defaultBgColour();
+        fgColour = Preferences::defaultFgColour();
+    }
+    else
+    {
+        bgColour = mFontColourButton->bgColour();
+        fgColour = mFontColourButton->fgColour();
+        font     = mFontColourButton->font();
+    }
+    event = KAEvent(dt, text, bgColour, fgColour, font, type, lateCancel, getAlarmFlags());
     if (type == KAEvent::MESSAGE)
     {
         if (AlarmText::checkIfEmail(text))
@@ -600,8 +623,8 @@ void EditDisplayAlarmDlg::type_setEvent(KAEvent& event, const KADateTime& dt, co
     }
     float fadeVolume;
     int   fadeSecs;
-    float volume = mSoundPicker->volume(fadeVolume, fadeSecs);
-    int   repeatPause = mSoundPicker->repeatPause();
+    const float volume = mSoundPicker->volume(fadeVolume, fadeSecs);
+    const int   repeatPause = mSoundPicker->repeatPause();
     event.setAudioFile(mSoundPicker->file().toDisplayString(), volume, fadeVolume, fadeSecs, repeatPause);
     if (!trial  &&  reminder()->isEnabled())
         event.setReminder(reminder()->minutes(), reminder()->isOnceOnly());
@@ -615,17 +638,24 @@ void EditDisplayAlarmDlg::type_setEvent(KAEvent& event, const KADateTime& dt, co
 */
 KAEvent::Flags EditDisplayAlarmDlg::getAlarmFlags() const
 {
-    bool cmd = (mTypeCombo->currentIndex() == tCOMMAND);
+    const bool cmd = (mTypeCombo->currentIndex() == tCOMMAND);
     KAEvent::Flags flags = EditAlarmDlg::getAlarmFlags();
     if (mSoundPicker->sound() == Preferences::Sound_Beep)  flags |= KAEvent::BEEP;
     if (mSoundPicker->sound() == Preferences::Sound_Speak) flags |= KAEvent::SPEAK;
     if (mSoundPicker->repeatPause() >= 0)                  flags |= KAEvent::REPEAT_SOUND;
-    if (mConfirmAck->isChecked())                          flags |= KAEvent::CONFIRM_ACK;
-    if (lateCancel()->isAutoClose())                       flags |= KAEvent::AUTO_CLOSE;
-    if (mFontColourButton->defaultFont())                  flags |= KAEvent::DEFAULT_FONT;
     if (cmd)                                               flags |= KAEvent::DISPLAY_COMMAND;
     if (cmd && mCmdEdit->isScript())                       flags |= KAEvent::SCRIPT;
-    if (mDisplayMethodCombo->currentIndex() == dNOTIFY)    flags |= KAEvent::NOTIFY;
+    if (mDisplayMethodCombo->currentIndex() == dNOTIFY)
+    {
+                                                           flags |= KAEvent::NOTIFY;
+                                                           flags |= KAEvent::DEFAULT_FONT;
+    }
+    else
+    {
+        if (mFontColourButton->defaultFont())              flags |= KAEvent::DEFAULT_FONT;
+        if (mConfirmAck->isChecked())                      flags |= KAEvent::CONFIRM_ACK;
+        if (lateCancel()->isAutoClose())                   flags |= KAEvent::AUTO_CLOSE;
+    }
     return flags;
 }
 
@@ -684,6 +714,8 @@ void EditDisplayAlarmDlg::slotDisplayMethodChanged(int index)
     // Because notifications automatically time out after 10 seconds,
     // auto-close would always occur after a notification closes.
     lateCancel()->showAutoClose(enable);
+    // Set the text message edit box colours according to the display metho according to the display methodd.
+    setColours(mFontColourButton->fgColour(), mFontColourButton->bgColour());
 }
 
 /******************************************************************************
@@ -1015,8 +1047,8 @@ bool EditCommandAlarmDlg::type_validate(bool trial)
     if (mCmdOutputGroup->checkedButton() == mCmdLogToFile)
     {
         // Validate the log file name
-        QString file = mCmdLogFileEdit->text();
-        QFileInfo info(file);
+        const QString file = mCmdLogFileEdit->text();
+        const QFileInfo info(file);
         QDir::setCurrent(QDir::homePath());
         bool err = file.isEmpty()  ||  info.isDir();
         if (!err)
@@ -1027,7 +1059,7 @@ bool EditCommandAlarmDlg::type_validate(bool trial)
             }
             else
             {
-                QFileInfo dirinfo(info.absolutePath());    // get absolute directory path
+                const QFileInfo dirinfo(info.absolutePath());    // get absolute directory path
                 err = (!dirinfo.isDir()  ||  !dirinfo.isWritable());
             }
         }
@@ -1264,7 +1296,7 @@ void EditEmailAlarmDlg::type_initValues(const KAEvent* event)
 */
 void EditEmailAlarmDlg::attachmentEnable()
 {
-    bool enable = mEmailAttachList->count();
+    const bool enable = mEmailAttachList->count();
     mEmailAttachList->setEnabled(enable);
     if (mEmailRemoveButton)
         mEmailRemoveButton->setEnabled(enable);
@@ -1380,7 +1412,7 @@ void EditEmailAlarmDlg::type_setEvent(KAEvent& event, const KADateTime& dt, cons
 {
     Q_UNUSED(trial);
     event = KAEvent(dt, text, QColor(), QColor(), QFont(), KAEvent::EMAIL, lateCancel, getAlarmFlags());
-    uint from = mEmailFromList ? mEmailFromList->currentIdentity() : 0;
+    const uint from = mEmailFromList ? mEmailFromList->currentIdentity() : 0;
     event.setEmail(from, mEmailAddresses, mEmailSubjectEdit->text(), mEmailAttachments);
 }
 
@@ -1400,12 +1432,12 @@ KAEvent::Flags EditEmailAlarmDlg::getAlarmFlags() const
 */
 bool EditEmailAlarmDlg::type_validate(bool trial)
 {
-    QString addrs = mEmailToEdit->text();
+    const QString addrs = mEmailToEdit->text();
     if (addrs.isEmpty())
         mEmailAddresses.clear();
     else
     {
-        QString bad = KAMail::convertAddresses(addrs, mEmailAddresses);
+        const QString bad = KAMail::convertAddresses(addrs, mEmailAddresses);
         if (!bad.isEmpty())
         {
             mEmailToEdit->setFocus();
@@ -1486,7 +1518,7 @@ void EditEmailAlarmDlg::openAddressBook()
     Akonadi::EmailAddressSelection::List selections = dlg->selectedAddresses();
     if (selections.isEmpty())
         return;
-    Person person(selections.first().name(), selections.first().email());
+    const Person person(selections.first().name(), selections.first().email());
     QString addrs = mEmailToEdit->text().trimmed();
     if (!addrs.isEmpty())
         addrs += QLatin1String(", ");
@@ -1519,9 +1551,9 @@ void EditEmailAlarmDlg::slotAddAttachment()
 */
 void EditEmailAlarmDlg::slotRemoveAttachment()
 {
-    int item = mEmailAttachList->currentIndex();
+    const int item = mEmailAttachList->currentIndex();
     mEmailAttachList->removeItem(item);
-    int count = mEmailAttachList->count();
+    const int count = mEmailAttachList->count();
     if (item >= count)
         mEmailAttachList->setCurrentIndex(count - 1);
     if (!count)
@@ -1694,7 +1726,7 @@ void EditAudioAlarmDlg::type_setEvent(KAEvent& event, const KADateTime& dt, cons
     float volume, fadeVolume;
     int   fadeSecs;
     mSoundConfig->getVolume(volume, fadeVolume, fadeSecs);
-    int   repeatPause = mSoundConfig->repeatPause();
+    const int repeatPause = mSoundConfig->repeatPause();
     QUrl url;
     mSoundConfig->file(url, false);
     event.setAudioFile(url.toString(), volume, fadeVolume, fadeSecs, repeatPause, isTemplate());
@@ -1861,7 +1893,7 @@ QString CommandEdit::text() const
 */
 QString CommandEdit::text(EditAlarmDlg* dlg, bool showErrorMessage) const
 {
-    QString result = text();
+    const QString result = text();
     if (showErrorMessage  &&  result.isEmpty())
         KAMessageBox::sorry(dlg, i18nc("@info", "Please enter a command or script to execute"));
     return result;
@@ -1903,7 +1935,7 @@ void CommandEdit::slotCmdScriptToggled(bool on)
 */
 QSize CommandEdit::minimumSizeHint() const
 {
-    QSize t(mTypeScript->minimumSizeHint());
+    const QSize t(mTypeScript->minimumSizeHint());
     QSize s(mCommandEdit->minimumSizeHint().expandedTo(mScriptEdit->minimumSizeHint()));
     s.setHeight(s.height() + style()->pixelMetric(QStyle::PM_LayoutVerticalSpacing) + t.height());
     if (s.width() < t.width())
