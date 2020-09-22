@@ -1492,7 +1492,7 @@ Alarm::Ptr KAEventPrivate::initKCalAlarm(const KCalendarCore::Event::Ptr &event,
             }
             break;
         }
-        if (display)
+        if (display  &&  !mNotify)
             alarm->setCustomProperty(KACalendar::APPNAME, FONT_COLOUR_PROPERTY,
                                      QStringLiteral("%1;%2;%3").arg(mBgColour.name(), mFgColour.name(), mUseDefaultFont ? QString() : mFont.toString()));
         break;
@@ -5232,7 +5232,7 @@ bool KAEvent::convertKCalEvents(const Calendar::Ptr &calendar, int calendarVersi
              * Set the DTEND time to the DTSTART time.
              * Convert all alarm times to DTSTART offsets.
              * For display alarms, convert the first unlabelled category to an
-             * X-KDE-KALARM-FONTCOLOUR property.
+             * X-KDE-KALARM-FONTCOLOR property.
              * Convert BEEP category into an audio alarm with no audio file.
              */
             if (CalEvent::status(event) == CalEvent::ARCHIVED) {
