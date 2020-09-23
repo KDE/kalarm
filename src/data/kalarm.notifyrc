@@ -42,6 +42,9 @@ Action=Popup
 [Event/MessageBeep]
 Name=Alarm message with beep
 Name[ca]=Missatge d'alarma amb timbre
+Name[ca@valencia]=Missatge d'alarma amb timbre
+Name[el]=Μήνυμα συναγερμού με σύντομο ήχο
+Name[ia]=Message de alarma con bip
 Name[nl]=Alarmbericht met piep
 Name[pt]=Mensagem do alarme com apito
 Name[pt_BR]=Mensagem de alarme com bip
@@ -54,8 +57,12 @@ Sound=Oxygen-Sys-App-Message.ogg
 [Event/MessageSpeak]
 Name=Spoken alarm message
 Name[ca]=Missatge d'alarma parlat
+Name[ca@valencia]=Missatge d'alarma parlat
+Name[el]=Μήνυμα συναγερμού με ομιλία
+Name[ia]=Message de alarma parlante
 Name[nl]=Gesproken alarmbericht
 Name[pt]=Mensagem do alarme falada
+Name[pt_BR]=Mensagem de alarme falada
 Name[sv]=Talat alarmmeddelande
 Name[uk]=Повідомлення нагадування з виголошенням тексту
 Name[x-test]=xxSpoken alarm messagexx
