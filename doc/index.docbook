@@ -39,8 +39,8 @@
 
 <!-- Don't change format of date and version of the documentation -->
 
-<date>2020-07-16</date>
-<releaseinfo>3.0.0 (Applications 20.08)</releaseinfo>
+<date>2020-09-24</date>
+<releaseinfo>3.1.0 (Applications 20.12)</releaseinfo>
 
 <abstract>
 <para>&kalarm; is a personal alarm message, command and email scheduler by &kde;.</para>
@@ -520,7 +520,7 @@ hibernation.</para>
 <sect2>
 <title>Acknowledging an Alarm</title>
 
-<para>See <link linkend="message-window">Alarm Message Window</link>
+<para>See <link linkend="message-display">Alarm Message Display</link>
 for how to acknowledge alarms.</para>
 
 </sect2>
@@ -1222,15 +1222,13 @@ displayed. Choose:</para>
 <listitem>
 <para><guilabel>Beep</guilabel> to sound a beep.</para>
 </listitem>
-<!--FIXME not in kf5?
+
 <listitem>
 <para><guilabel>Speak</guilabel> to have the alarm message spoken as
-well as being displayed. This option is only available if you have
-&jovie; (from the kdeaccessibility package) installed and configured,
-together with a compatible speech synthesizer, &eg;
-<application>Festival</application>.</para>
+well as being displayed. This option is only available if you have the
+&Qt; Speech module installed and working.</para>
 </listitem>
--->
+
 <listitem>
 <para><guilabel>Sound file</guilabel> to play an audio file. Use the
 button on the right to display the Sound File dialog which lets you
@@ -1292,6 +1290,33 @@ colors can be set in the
 
 <para>The selected colors are shown in the alarm message text entry
 field.</para>
+</listitem>
+
+<listitem>
+<para>The <guilabel>Display method</guilabel> option lets you select
+how to display the alarm message. Choose:</para>
+
+<itemizedlist>
+<listitem>
+<para><guilabel>Window</guilabel> to display the alarm message in a
+window. This option allows the full range of options to be used when
+configuring the alarm.</para>
+</listitem>
+
+<listitem>
+<para><guilabel>Notification</guilabel> to use the standard
+notification system to display the alarm message. Due to the
+limitations of the notification system, the following alarm
+configuration options cannot be used with notifications: setting font
+and color; setting an audio file to play when the alarm is displayed;
+confirmation of alarm acknowledgement; automatic closing of the
+display on expiry of the late-cancellation time.</para>
+</listitem>
+</itemizedlist>
+
+<para>See the
+<link linkend="message-display">Alarm Message Display</link> section
+for further details about how alarm messages are displayed.</para>
 </listitem>
 
 <listitem>
@@ -1890,8 +1915,19 @@ been made.</para>
 </sect2>
 </sect1>
 
-<sect1 id="message-window">
+<sect1 id="message-display">
+<title>Alarm Message Display</title>
+
+<para>Alarm messages may be displayed in windows or as notifications,
+depending on the option chosen in the 
+<link linkend="alarm-edit-dlg">Alarm Edit dialog</link>. These two
+display options are described below.</para>
+
+<sect2 id="message-window">
 <title>Alarm Message Window</title>
+
+<para>Alarm messages which are displayed in windows provide the
+fullest functionality.</para>
 
 <para>When an alarm message is due, it is displayed on each
 desktop and cannot be covered by ordinary windows, to ensure that
@@ -1974,7 +2010,8 @@ email in &kmail; will be lost.</para></warning>
 
 <listitem>
 <para>The button showing the <guiicon>&kalarm;</guiicon> icon provides
-a convenient way to activate &kalarm;.</para>
+a convenient way to activate &kalarm;'s main window, with that alarm
+highlighted.</para>
 </listitem>
 </itemizedlist>
 
@@ -2004,7 +2041,7 @@ application, it is shown as a non-modal window regardless of this
 configuration setting. This is due to a limitation of the window
 system.</para></note>
 
-<sect2>
+<sect3>
 <title>Positioning of Message Windows</title>
 
 <para>You can choose in the
@@ -2034,6 +2071,70 @@ corner of the screen, by means of the <menuchoice>
 <guimenu>View</guimenu><guimenuitem>Spread Windows</guimenuitem>
 </menuchoice> menu option. If you wish, you can set up a global
 shortcut key for this action.</para>
+
+</sect3>
+</sect2>
+
+<sect2>
+<title>Alarm Message Notifications</title>
+
+<para>Alarm messages which are displayed as notifications provide
+less functionality than those displayed in windows.</para>
+
+<para>When an alarm message is due, it is displayed as a notification.
+The notification shows the time for which the alarm was scheduled. If
+the alarm's scheduled time is in a different time zone
+from your local computer's setting, its time zone will also be
+displayed. (For reminder messages, the date/time shown is that for the
+main alarm or its recurrence, not the reminder message time, and a
+“Reminder” heading is shown.)</para>
+
+<para>The notification automatically closes after a  short time-out.
+(Note that the time-out is common to all applications; it can be
+changed in &systemsettings;.) After a notification times out, it can
+still be seen in the notification history until you remove it or
+until you log out. Because applications have no way to access the
+notification history, &kalarm; cannot remove or replace notifications
+in the history as it would for alarm windows. So the history may
+contain multiple notifications for the same alarm, including reminders
+and recurrences.</para>
+
+<para>The alarm message notification provides the following options.
+Note that selecting any option will immediately close the notification,
+and prevent it being shown in the notification history.
+Note also that these options are only available while the notification
+is active, before it times out. If you subsequently access the
+notification in the notification history, then due to the limitations
+of the notification system, the only interaction available is to
+remove it from the history.</para>
+
+<itemizedlist>
+<listitem>
+<para>Acknowledge the alarm by clicking the
+<guibutton>Close</guibutton> button. This closes the notification.</para>
+</listitem>
+
+<listitem>
+<para>Edit the alarm by clicking the <guibutton>Edit</guibutton>
+button. This displays the
+<link linkend="alarm-edit-dlg">Alarm Edit dialog</link>.</para>
+</listitem>
+
+<listitem>
+<para>Display options to defer the alarm until later by clicking the
+<guibutton>Defer</guibutton> button. This button is only shown if it
+is possible to defer the alarm. See the description of the defer
+option in the
+<link linkend="message-window">Alarm Message Window</link> section
+for details.</para>
+</listitem>
+
+<listitem>
+<para>Clicking the notification anywhere other than a button will
+activate &kalarm;'s main window, with that alarm highlighted.</para>
+</listitem>
+
+</itemizedlist>
 
 </sect2>
 </sect1>
@@ -2823,11 +2924,11 @@ seconds before they become active is set in
 </listitem>
 
 <listitem>
-<para><guilabel>Message windows have a titlebar and take keyboard focus</guilabel>: This
-option controls whether alarm message windows are modal or not, &ie;
-whether they grab the keyboard focus when they appear. See the
-<link linkend="message-window">Alarm Message Window</link> section for
-details.</para>
+<para><guilabel>Message windows have a titlebar and take keyboard focus</guilabel>:
+This option controls whether alarm message windows are modal or not,
+&ie; whether they grab the keyboard focus when they appear. See the
+<link linkend="message-display">Alarm Message Display</link> section
+for details.</para>
 </listitem>
 </itemizedlist>
 </sect1>
@@ -2844,6 +2945,10 @@ default values for the options in the
 which apply to all alarm types.</para>
 
 <itemizedlist>
+<listitem><para>Set the default method for displaying alarm
+messages.</para>
+</listitem>
+
 <listitem><para>Set the default states for the <guilabel>Show in
 KOrganizer</guilabel> and <guilabel>Cancel if late</guilabel> check
 boxes.</para>
