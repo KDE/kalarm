@@ -15,6 +15,7 @@
 
 #include <KLocalizedString>
 
+#include <QHeaderView>
 #include <QMouseEvent>
 #include <QToolTip>
 #include <QApplication>
@@ -24,13 +25,15 @@ EventListView::EventListView(QWidget* parent)
     : QTreeView(parent)
 {
     setRootIsDecorated(false);    // don't show expander icons for child-less items
-    setSortingEnabled(true);
     setAllColumnsShowFocus(true);
     setSelectionMode(ExtendedSelection);
     setSelectionBehavior(SelectRows);
     setTextElideMode(Qt::ElideRight);
     // Set default WhatsThis text to be displayed when no actual item is clicked on
     setWhatsThis(i18nc("@info:whatsthis", "List of scheduled alarms"));
+    header()->setSortIndicatorShown(true);
+    connect(header(), &QHeaderView::sortIndicatorChanged, this, &EventListView::sortChanged);
+    header()->setSectionsClickable(true);
 }
 
 void EventListView::setModel(QAbstractItemModel* model)
@@ -142,6 +145,14 @@ void EventListView::findNext(bool forward)
 {
     if (mFind)
         mFind->findNext(forward);
+}
+
+/******************************************************************************
+* Called when the user has changed the sort order in a column.
+*/
+void EventListView::sortChanged(int column, Qt::SortOrder order)
+{
+    sortByColumn(column, order);
 }
 
 void EventListView::resizeEvent(QResizeEvent* se)

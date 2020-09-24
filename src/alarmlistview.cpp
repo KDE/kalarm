@@ -59,6 +59,7 @@ void AlarmListView::setColumnsVisible(const QList<bool>& show)
     header()->setSectionHidden(AlarmListModel::RepeatColumn, !vis[2]);
     header()->setSectionHidden(AlarmListModel::ColourColumn, !vis[3]);
     header()->setSectionHidden(AlarmListModel::TypeColumn,   !vis[4]);
+    setSortingEnabled(false);  // sortByColumn() won't work if sorting is already enabled!
     sortByColumn(vis[0] ? AlarmListModel::TimeColumn : AlarmListModel::TimeToColumn, Qt::AscendingOrder);
 }
 

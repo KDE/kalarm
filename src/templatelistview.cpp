@@ -36,6 +36,7 @@ void TemplateListView::initSections()
     header()->setMinimumSectionSize(minWidth);
     const int margin = QApplication::style()->pixelMetric(QStyle::PM_FocusFrameHMargin);
     header()->resizeSection(TemplateListModel::TypeColumn, EventListModel::iconWidth() + 2*margin + 2);
+    sortByColumn(TemplateListModel::TemplateNameColumn, Qt::AscendingOrder);
 }
 
 void TemplateListDelegate::edit(KAEvent* event, EventListView* view)
