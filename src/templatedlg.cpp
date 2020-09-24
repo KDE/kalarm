@@ -74,7 +74,6 @@ TemplateDlg::TemplateDlg(QWidget* parent)
         mListFilterModel->setAlarmActionFilter(static_cast<KAEvent::Actions>(KAEvent::ACT_ALL & ~KAEvent::ACT_COMMAND));
     mListView = new TemplateListView(this);
     mListView->setModel(mListFilterModel);
-    mListView->sortByColumn(TemplateListModel::TemplateNameColumn, Qt::AscendingOrder);
     mListView->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding));
     mListView->setWhatsThis(i18nc("@info:whatsthis", "The list of alarm templates"));
     mListView->setItemDelegate(new TemplateListDelegate(mListView));

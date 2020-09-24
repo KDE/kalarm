@@ -64,6 +64,7 @@ protected:
 
 protected Q_SLOTS:
     virtual void      initSections() = 0;
+    void              sortChanged(int column, Qt::SortOrder);
 
 private:
     void              findNext(bool forward);
