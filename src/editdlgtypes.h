@@ -50,6 +50,7 @@ public:
     void            setAction(KAEvent::SubAction, const AlarmText& = AlarmText()) override;
     void            setBgColour(const QColor&);
     void            setFgColour(const QColor&);
+    void            setNotify(bool);
     void            setConfirmAck(bool);
     void            setAutoClose(bool);
     void            setAudio(Preferences::SoundType, const QString& file = QString(), float volume = -1, int repeatPause = -1);

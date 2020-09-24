@@ -469,6 +469,10 @@ void EditDisplayAlarmDlg::setFgColour(const QColor& colour)
     mFontColourButton->setFgColour(colour);
     setColours(colour, mFontColourButton->bgColour());
 }
+void EditDisplayAlarmDlg::setNotify(bool notify)
+{
+    mDisplayMethodCombo->setCurrentIndex(notify ? dNOTIFY : dWINDOW);
+}
 void EditDisplayAlarmDlg::setConfirmAck(bool confirm)
 {
     mConfirmAck->setChecked(confirm);

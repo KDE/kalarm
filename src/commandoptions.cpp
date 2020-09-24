@@ -139,6 +139,9 @@ QStringList CommandOptions::setOptions(QCommandLineParser* parser, const QString
               = new QCommandLineOption(QStringList{QStringLiteral("m"), QStringLiteral("mail")},
                                        i18n("Send an email to the given address (repeat as needed)"),
                                        QStringLiteral("address"));
+    mOptions[NOTIFY]
+              = new QCommandLineOption(QStringList{QStringLiteral("n"), QStringLiteral("notify")},
+                                       i18n("Display alarm message as a notification"));
     mOptions[PLAY]
               = new QCommandLineOption(QStringList{QStringLiteral("p"), QStringLiteral("play")},
                                        i18n("Audio file to play once"),
@@ -389,6 +392,7 @@ void CommandOptions::process()
     checkEditType(EditAlarmDlg::DISPLAY, REMINDER_ONCE);
     checkEditType(EditAlarmDlg::DISPLAY, ACK_CONFIRM);
     checkEditType(EditAlarmDlg::DISPLAY, AUTO_CLOSE);
+    checkEditType(EditAlarmDlg::DISPLAY, NOTIFY);
     checkEditType(EditAlarmDlg::EMAIL, SUBJECT);
     checkEditType(EditAlarmDlg::EMAIL, FROM_ID);
     checkEditType(EditAlarmDlg::EMAIL, ATTACH);
@@ -584,6 +588,20 @@ void CommandOptions::process()
             else if (mParser->isSet(*mOptions.at(AUTO_CLOSE)))
                 setErrorRequires(AUTO_CLOSE, LATE_CANCEL);
 
+            if (mParser->isSet(*mOptions.at(NOTIFY)))
+            {
+                if (mParser->isSet(*mOptions.at(COLOUR)))
+                    setErrorIncompatible(NOTIFY, COLOUR);
+                if (mParser->isSet(*mOptions.at(COLOURFG)))
+                    setErrorIncompatible(NOTIFY, COLOURFG);
+                if (mParser->isSet(*mOptions.at(ACK_CONFIRM)))
+                    setErrorIncompatible(NOTIFY, ACK_CONFIRM);
+                if (mParser->isSet(*mOptions.at(PLAY)))
+                    setErrorIncompatible(NOTIFY, PLAY);
+                if (mParser->isSet(*mOptions.at(AUTO_CLOSE)))
+                    setErrorIncompatible(NOTIFY, AUTO_CLOSE);
+            }
+
             if (mParser->isSet(*mOptions.at(ACK_CONFIRM)))
                 mFlags |= KAEvent::CONFIRM_ACK;
             if (mParser->isSet(*mOptions.at(AUTO_CLOSE)))
@@ -592,6 +610,8 @@ void CommandOptions::process()
                 mFlags |= KAEvent::BEEP;
             if (mParser->isSet(*mOptions.at(SPEAK)))
                 mFlags |= KAEvent::SPEAK;
+            if (mParser->isSet(*mOptions.at(NOTIFY)))
+                mFlags |= KAEvent::NOTIFY;
             if (mParser->isSet(*mOptions.at(KORGANIZER)))
                 mFlags |= KAEvent::COPY_KORGANIZER;
             if (mParser->isSet(*mOptions.at(DISABLE)))
@@ -647,6 +667,8 @@ void CommandOptions::process()
                 errors << optionName(REMINDER_ONCE);
             if (mParser->isSet(*mOptions.at(SPEAK)))
                 errors << optionName(SPEAK);
+            if (mParser->isSet(*mOptions.at(NOTIFY)))
+                errors << optionName(NOTIFY);
             if (mParser->isSet(*mOptions.at(SUBJECT)))
                 errors << optionName(SUBJECT);
             if (mParser->isSet(*mOptions.at(TIME)))

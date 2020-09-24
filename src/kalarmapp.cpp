@@ -499,6 +499,8 @@ int KAlarmApp::activateInstance(const QStringList& args, const QString& workingD
                             }
                             if (options->reminderMinutes())
                                 dlg->setReminder(options->reminderMinutes(), (options->flags() & KAEvent::REMINDER_ONCE));
+                            if (options->flags() & KAEvent::NOTIFY)
+                                dlg->setNotify(true);
                             if (options->flags() & KAEvent::CONFIRM_ACK)
                                 dlg->setConfirmAck(true);
                             if (options->flags() & KAEvent::AUTO_CLOSE)

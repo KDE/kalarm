@@ -488,6 +488,7 @@ KAEvent::Flags DBusHandler::convertStartFlags(const KADateTime& start, unsigned 
     if (flags & EXCL_HOLIDAYS)   kaEventFlags |= KAEvent::EXCL_HOLIDAYS;
     if (flags & WORK_TIME_ONLY)  kaEventFlags |= KAEvent::WORK_TIME_ONLY;
     if (flags & DISABLED)        kaEventFlags |= KAEvent::DISABLED;
+    if (flags & NOTIFY)          kaEventFlags |= KAEvent::NOTIFY;
     if (start.isDateOnly())      kaEventFlags |= KAEvent::ANY_TIME;
     return kaEventFlags;
 }
