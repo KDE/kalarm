@@ -100,6 +100,9 @@ alarm message:</para>
 </mediaobject>
 </screenshot>
 
+<para>Optionally, an alarm message may be displayed as a notification
+instead of in a window.</para>
+
 <para>When the alarm specifies a command to execute or an email to
 send, &kalarm; displays nothing.</para>
 
@@ -3207,6 +3210,14 @@ time.</para>
   <option>--ack-confirm</option>, <option>--beep</option>,
   <option>--color</option> and <option>--colorfg</option> are ignored
   with this option.</entry>
+</row>
+<row>
+  <entry><option>-n</option>, <option>--notify</option></entry>
+  <entry>Display the alarm as a notification, not in a window.
+  <option>--color</option>, <option>--colorfg</option>,
+  <option>--play</option>, <option>--ack-confirm</option> and
+  <option>--auto-close</option> cannot be specified with this
+  option.</entry>
 </row>
 <row>
   <entry><option>-p</option>, <option>--play <replaceable>URL</replaceable></option></entry>
