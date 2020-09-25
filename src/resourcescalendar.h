@@ -36,7 +36,13 @@ public:
     ~ResourcesCalendar() override;
     static void             initialise(const QByteArray& appName, const QByteArray& appVersion);
     static void             terminate();
-    static KAEvent          earliestAlarm();
+
+    /** Return the active alarm with the earliest trigger time.
+     *  @param nextTriggerTime  The next trigger time of the earliest alarm.
+     *  @return  The earliest alarm.
+     */
+    static KAEvent          earliestAlarm(KADateTime& nextTriggerTime);
+
     static void             setAlarmPending(const KAEvent&, bool pending = true);
     static bool             haveDisabledAlarms()       { return mHaveDisabledAlarms; }
     static void             disabledChanged(const KAEvent&);

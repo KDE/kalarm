@@ -844,10 +844,10 @@ void KAlarmApp::checkNextDueAlarm()
     if (!mAlarmsEnabled)
         return;
     // Find the first alarm due
-    const KAEvent nextEvent = ResourcesCalendar::earliestAlarm();
+    KADateTime nextDt;
+    const KAEvent nextEvent = ResourcesCalendar::earliestAlarm(nextDt);
     if (!nextEvent.isValid())
         return;   // there are no alarms pending
-    const KADateTime nextDt = nextEvent.nextTrigger(KAEvent::ALL_TRIGGER).effectiveKDateTime();
     const KADateTime now = KADateTime::currentDateTime(Preferences::timeSpec());
     qint64 interval = now.msecsTo(nextDt);
     qCDebug(KALARM_LOG) << "KAlarmApp::checkNextDueAlarm: now:" << qPrintable(now.toString(QStringLiteral("%Y-%m-%d %H:%M %:Z"))) << ", next:" << qPrintable(nextDt.toString(QStringLiteral("%Y-%m-%d %H:%M %:Z"))) << ", due:" << interval;

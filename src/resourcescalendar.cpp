@@ -647,7 +647,7 @@ void ResourcesCalendar::findEarliestAlarm(const Resource& resource)
 * Return the active alarm with the earliest trigger time.
 * Reply = invalid if none.
 */
-KAEvent ResourcesCalendar::earliestAlarm()
+KAEvent ResourcesCalendar::earliestAlarm(KADateTime& nextTriggerTime)
 {
     KAEvent earliest;
     KADateTime earliestTime;
@@ -663,7 +663,7 @@ KAEvent ResourcesCalendar::earliestAlarm()
             // Something went wrong: mEarliestAlarm wasn't updated when it should have been!!
             qCCritical(KALARM_LOG) << "ResourcesCalendar::earliestAlarm: resource" << eit.key() << "does not contain" << id;
             mInstance->findEarliestAlarm(res);
-            return earliestAlarm();
+            return earliestAlarm(nextTriggerTime);
         }
         const KADateTime dt = event.nextTrigger(KAEvent::ALL_TRIGGER).effectiveKDateTime();
         if (dt.isValid()  &&  (!earliest.isValid() || dt < earliestTime))
@@ -672,6 +672,7 @@ KAEvent ResourcesCalendar::earliestAlarm()
             earliest = event;
         }
     }
+    nextTriggerTime = earliestTime;
     return earliest;
 }
 
