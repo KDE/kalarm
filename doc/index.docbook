@@ -1297,12 +1297,12 @@ field.</para>
 
 <listitem>
 <para>The <guilabel>Display method</guilabel> option lets you select
-how to display the alarm message. Choose:</para>
+how to display the alarm. Choose:</para>
 
 <itemizedlist>
 <listitem>
-<para><guilabel>Window</guilabel> to display the alarm message in a
-window. This option allows the full range of options to be used when
+<para><guilabel>Window</guilabel> to display the alarm in a window.
+This option allows the full range of options to be used when
 configuring the alarm.</para>
 </listitem>
 
