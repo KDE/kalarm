@@ -167,19 +167,22 @@ void SingleFileResourceConfigDialog::setUrlValidation(QString (*func)(const QUrl
 void SingleFileResourceConfigDialog::validate()
 {
     // Validate URL first, in order to display any error message.
-    const QUrl currentUrl = mUi->pathRequester->url();
-    if (mUi->pathRequester->text().trimmed().isEmpty() || currentUrl.isEmpty())
+    const QUrl currentUrl = mUi->pathRequester->url();   // empty if not creating
+    if (mCreating)
     {
-        disableOkButton(QString());
-        return;
-    }
-    if (mUrlValidationFunc)
-    {
-        const QString error = (*mUrlValidationFunc)(currentUrl);
-        if (!error.isEmpty())
+        if (mUi->pathRequester->text().trimmed().isEmpty() || currentUrl.isEmpty())
         {
-            disableOkButton(error, true);
+            disableOkButton(QString());
             return;
+        }
+        if (mUrlValidationFunc)
+        {
+            const QString error = (*mUrlValidationFunc)(currentUrl);
+            if (!error.isEmpty())
+            {
+                disableOkButton(error, true);
+                return;
+            }
         }
     }
 
