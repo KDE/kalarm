@@ -871,7 +871,7 @@ using namespace KMime::HeaderParsing;
 bool parseUserName( const char* & scursor, const char * const send,
                     QString & result, bool isCRLF ) {
 
-  QString tmp;
+  QByteArray atom;
 
   if ( scursor != send ) {
     // first, eat any whitespace
@@ -886,10 +886,11 @@ bool parseUserName( const char* & scursor, const char * const send,
 
     default: // atom
       scursor--; // re-set scursor to point to ch again
-      tmp.clear();
-      if ( parseAtom( scursor, send, result, false /* no 8bit */ ) ) {
-        if (getpwnam(result.toLocal8Bit().constData()))
+      if ( parseAtom( scursor, send, atom, false /* no 8bit */ ) ) {
+        if (getpwnam(atom.constData())) {
+          result = QLatin1String(atom);
           return true;
+        }
       }
       return false; // parseAtom can only fail if the first char is non-atext.
     }
