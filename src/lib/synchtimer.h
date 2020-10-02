@@ -134,6 +134,14 @@ class DailyTimer : public SynchTimer
          *                @p receiver will be disconnected.
          */
         static void disconnect(const QTime& timeOfDay, QObject* receiver, const char* member = nullptr);
+    protected:
+        /** Construct an instance.
+         *  The constructor is protected to ensure that for variable timers, only derived classes
+         *  can construct instances. This ensures that multiple timers are not created for the same
+         *  use.
+         */
+        DailyTimer(const QTime&, bool fixed);
+
         /** Change the time at which this variable timer triggers.
          *  @param newTimeOfDay New time at which the timer should trigger.
          *  @param triggerMissed If true, and if @p newTimeOfDay < @p oldTimeOfDay, and if the current
@@ -144,13 +152,6 @@ class DailyTimer : public SynchTimer
         /** Return the current time of day at which this variable timer triggers. */
         QTime timeOfDay() const  { return mTime; }
 
-    protected:
-        /** Construct an instance.
-         *  The constructor is protected to ensure that for variable timers, only derived classes
-         *  can construct instances. This ensures that multiple timers are not created for the same
-         *  use.
-         */
-        DailyTimer(const QTime&, bool fixed);
         /** Return the instance which triggers at the specified fixed time of day,
          *  optionally creating a new instance if necessary.
          *  @param timeOfDay Time at which the timer triggers.
