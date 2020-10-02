@@ -126,7 +126,7 @@ private Q_SLOTS:
     void     addResource(Resource&);
     void     slotResourceLoaded(Resource&);
     void     slotResourceSettingsChanged(Resource&, ResourceType::Changes);
-    void     slotRemoveResource(Resource&);
+    void     removeResource(Resource&);
     void     slotEventsAdded(Resource&, const QList<KAEvent>&);
     void     slotEventUpdated(Resource&, const KAEvent&);
     bool     deleteEvents(Resource&, const QList<KAEvent>&);
