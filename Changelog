@@ -1,6 +1,6 @@
 KAlarm Change Log
 
-=== Version 3.0.2 (KDE Applications 20.08.2) --- 28 September 2020 ===
+=== Version 3.0.2 (KDE Applications 20.08.2) --- 3 October 2020 ===
 + Fix repeat-at-login alarms not triggering when KAlarm starts.
 + If command generating text for display alarm fails, only display error message,
   not the display alarm, and don't redisplay the alarm on every restart.
@@ -8,6 +8,7 @@ KAlarm Change Log
 + Display alarms in time order on startup (fixes regression).
 + Allow alarm list and template list to be sorted by clicking headers.
 + Fix inability to edit an existing calendar resource's configuration.
++ Fix memory leaks.
 
 === Version 3.0.1 (KDE Applications 20.08.1) --- 24 August 2020 ===
 + Fix inability to create alarms from templates, or load templates in edit dialogue [KDE Bug 425751]
