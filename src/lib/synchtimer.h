@@ -1,7 +1,7 @@
 /*
  *  synchtimer.h  -  timers which synchronize to time boundaries
  *  Program:  kalarm
- *  Copyright © 2004,2005 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2004-2020 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -53,7 +53,7 @@ class SynchTimer : public QObject
         SynchTimer();
         virtual void        start() = 0;
         void                connecT(QObject* receiver, const char* member);
-        void                disconnecT(QObject* receiver, const char* member = nullptr);
+        virtual void        disconnecT(QObject* receiver, const char* member = nullptr);
         bool                hasConnections() const   { return !mConnections.isEmpty(); }
 
         QTimer*             mTimer;
@@ -141,6 +141,8 @@ class DailyTimer : public SynchTimer
          *  use.
          */
         DailyTimer(const QTime&, bool fixed);
+
+        void disconnecT(QObject* receiver, const char* member = nullptr) override;
 
         /** Change the time at which this variable timer triggers.
          *  @param newTimeOfDay New time at which the timer should trigger.

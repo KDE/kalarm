@@ -1,7 +1,7 @@
 /*
  *  synchtimer.cpp  -  timers which synchronize to time boundaries
  *  Program:  kalarm
- *  Copyright © 2004,2005,2007-2009 David Jarvie <djarvie@kde.org>
+ *  Copyright © 2004-2020 David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -53,6 +53,7 @@ void SynchTimer::connecT(QObject* receiver, const char* member)
         return;           // the slot is already connected, so ignore request
     connect(mTimer, SIGNAL(timeout()), receiver, member);
     mConnections.append(connection);
+    connect(receiver, &QObject::destroyed, this, &SynchTimer::slotReceiverGone);
     if (!mTimer->isActive())
     {
         connect(mTimer, &QTimer::timeout, this, &SynchTimer::slotTimer);
@@ -157,11 +158,18 @@ DailyTimer* DailyTimer::fixedInstance(const QTime& timeOfDay, bool create)
 void DailyTimer::disconnect(const QTime& timeOfDay, QObject* receiver, const char* member)
 {
     DailyTimer* timer = fixedInstance(timeOfDay, false);
-    if (!timer)
-        return;
-    timer->disconnecT(receiver, member);
-    if (!timer->hasConnections())
-        delete timer;
+    if (timer)
+        timer->disconnecT(receiver, member);
+}
+
+/******************************************************************************
+* Disconnect from the timer. The timer is deleted if no longer used.
+*/
+void DailyTimer::disconnecT(QObject* receiver, const char* member)
+{
+    SynchTimer::disconnecT(receiver, member);
+    if (!hasConnections())
+        deleteLater();
 }
 
 /******************************************************************************
