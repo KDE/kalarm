@@ -44,7 +44,7 @@ protected:
     SynchTimer();
     virtual void        start() = 0;
     void                connecT(QObject* receiver, const char* member);
-    void                disconnecT(QObject* receiver, const char* member = nullptr);
+    virtual void        disconnecT(QObject* receiver, const char* member = nullptr);
     bool                hasConnections() const   { return !mConnections.isEmpty(); }
 
     QTimer*             mTimer;
@@ -130,6 +130,16 @@ public:
      */
     static void disconnect(const QTime& timeOfDay, QObject* receiver, const char* member = nullptr);
 
+protected:
+    /** Construct an instance.
+     *  The constructor is protected to ensure that for variable timers, only
+     *  derived classes can construct instances. This ensures that multiple
+     *  timers are not created for the same use.
+     */
+    DailyTimer(const QTime&, bool fixed);
+
+    void disconnecT(QObject* receiver, const char* member = nullptr) override;
+
     /** Change the time at which this variable timer triggers.
      *  @param newTimeOfDay New time at which the timer should trigger.
      *  @param triggerMissed If true, and if @p newTimeOfDay < @p oldTimeOfDay, and if the current
@@ -140,14 +150,6 @@ public:
 
     /** Return the current time of day at which this variable timer triggers. */
     QTime timeOfDay() const  { return mTime; }
-
-protected:
-    /** Construct an instance.
-     *  The constructor is protected to ensure that for variable timers, only
-     *  derived classes can construct instances. This ensures that multiple
-     *  timers are not created for the same use.
-     */
-    DailyTimer(const QTime&, bool fixed);
 
     /** Return the instance which triggers at the specified fixed time of day,
      *  optionally creating a new instance if necessary.

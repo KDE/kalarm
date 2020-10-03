@@ -85,7 +85,7 @@ FileResourceDataModel::FileResourceDataModel(QObject* parent)
     connect(resources, &Resources::resourcePopulated,
                  this, &FileResourceDataModel::slotResourceLoaded);
     connect(resources, &Resources::resourceToBeRemoved,
-                 this, &FileResourceDataModel::slotRemoveResource);
+                 this, &FileResourceDataModel::removeResource);
     connect(resources, &Resources::eventsAdded,
                  this, &FileResourceDataModel::slotEventsAdded);
     connect(resources, &Resources::eventUpdated,
@@ -128,6 +128,8 @@ FileResourceDataModel::~FileResourceDataModel()
         mInstance = nullptr;
         mInstanceIsOurs = false;
     }
+    while (!mResources.isEmpty())
+        removeResource(mResources.first());
     delete Resources::instance();
 }
 
@@ -622,18 +624,21 @@ void FileResourceDataModel::addResource(Resource& resource)
 * slotResourceSettingsChanged(Deleted) being triggered, leading to crashes when
 * data from the resource's events is fetched.
 */
-void FileResourceDataModel::slotRemoveResource(Resource& resource)
+void FileResourceDataModel::removeResource(Resource& resource)
 {
-    qCDebug(KALARM_LOG) << "FileResourceDataModel::slotRemoveResource" << resource.displayName();
+    qCDebug(KALARM_LOG) << "FileResourceDataModel::removeResource" << resource.displayName();
     int row = mResources.indexOf(resource);
     if (row < 0)
         return;
 
+    Resource r(resource);   // in case 'resource' is a reference to the copy in mResources
     int count = 0;
     beginRemoveRows(QModelIndex(), row, row);
     mResources.removeAt(row);
-    mResourceNodes[Resource()].removeAt(row);
-    auto it = mResourceNodes.find(resource);
+    QVector<Node*>& resourceNodes = mResourceNodes[Resource()];
+    delete resourceNodes.at(row);
+    resourceNodes.removeAt(row);
+    auto it = mResourceNodes.find(r);
     if (it != mResourceNodes.end())
     {
         count = removeResourceEvents(it.value());
