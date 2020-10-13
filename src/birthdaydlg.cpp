@@ -229,8 +229,8 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
 
 
     KActionCollection* actions = new KActionCollection(this);
-    KStandardAction::selectAll(mListView, SLOT(selectAll()), actions);
-    KStandardAction::deselect(mListView, SLOT(clearSelection()), actions);
+    KStandardAction::selectAll(mListView, &QTreeView::selectAll, actions);
+    KStandardAction::deselect(mListView, &QTreeView::clearSelection, actions);
     actions->addAssociatedWidget(mListView);
     const auto lstActions = actions->actions();
     for (QAction* action : lstActions)

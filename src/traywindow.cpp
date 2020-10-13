@@ -84,14 +84,14 @@ TrayWindow::TrayWindow(MainWindow* parent)
     addAction(QStringLiteral("tSpread"), a);
     contextMenu()->addAction(a);
     contextMenu()->addSeparator();
-    contextMenu()->addAction(KStandardAction::preferences(this, SLOT(slotPreferences()), this));
+    contextMenu()->addAction(KStandardAction::preferences(this, &TrayWindow::slotPreferences, this));
 
-    // Disable standard quit behaviour. We have to intercept the quit even,
-    // if the main window is hidden.
+    // Disable standard quit behaviour. We have to intercept the quit event
+    // (which triggers KStatusNotifierItem to quit unconditionally).
     QAction* act = action(QStringLiteral("quit"));
     if (act)
     {
-        act->disconnect(SIGNAL(triggered(bool)), this, SLOT(maybeQuit()));
+        disconnect(act, &QAction::triggered, this, nullptr);
         connect(act, &QAction::triggered, this, &TrayWindow::slotQuit);
     }
 

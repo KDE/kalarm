@@ -104,9 +104,9 @@ TemplateDlg::TemplateDlg(QWidget* parent)
     topLayout->addWidget(buttonBox);
 
     KActionCollection* actions = new KActionCollection(this);
-    QAction* act = KStandardAction::selectAll(mListView, SLOT(selectAll()), actions);
+    QAction* act = KStandardAction::selectAll(mListView, &QTreeView::selectAll, actions);
     topLevelWidget()->addAction(act);
-    act = KStandardAction::deselect(mListView, SLOT(clearSelection()), actions);
+    act = KStandardAction::deselect(mListView, &QAbstractItemView::clearSelection, actions);
     topLevelWidget()->addAction(act);
     slotSelectionChanged();          // enable/disable buttons as appropriate
 
