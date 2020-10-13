@@ -29,7 +29,6 @@ public:
     KAEvent           event(int row) const;
     KAEvent           event(const QModelIndex&) const;
     void              select(const QModelIndex&, bool scrollToIndex = false);
-    void              clearSelection();
     QModelIndex       selectedIndex() const;
     KAEvent           selectedEvent() const;
     QVector<KAEvent>  selectedEvents() const;
