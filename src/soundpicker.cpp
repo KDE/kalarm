@@ -67,7 +67,7 @@ SoundPicker::SoundPicker(QWidget* parent)
     mFileShowing = true;
     mSpeakShowing = !KPIMTextEdit::TextToSpeech::self()->isReady();
     showSpeak(!mSpeakShowing);            // index Speak (only displayed if appropriate)
-    connect(mTypeCombo, static_cast<void (ComboBox::*)(int)>(&ComboBox::activated), this, &SoundPicker::slotTypeSelected);
+    connect(mTypeCombo, &ComboBox::activated, this, &SoundPicker::slotTypeSelected);
     connect(mTypeCombo, static_cast<void (ComboBox::*)(int)>(&ComboBox::currentIndexChanged), this, &SoundPicker::changed);
     label->setBuddy(mTypeCombo);
     soundLayout->addWidget(mTypeBox);

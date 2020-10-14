@@ -229,8 +229,8 @@ RecurrenceEdit::RecurrenceEdit(bool readOnly, QWidget* parent)
     mRepeatCountEntry->setSelectOnStep(false);
     mRepeatCountEntry->setReadOnly(mReadOnly);
     mRepeatCountEntry->setWhatsThis(i18nc("@info:whatsthis", "Enter the total number of times to trigger the alarm"));
-    connect(mRepeatCountEntry, static_cast<void (SpinBox::*)(int)>(&SpinBox::valueChanged), this, &RecurrenceEdit::repeatCountChanged);
-    connect(mRepeatCountEntry, static_cast<void (SpinBox::*)(int)>(&SpinBox::valueChanged), this, &RecurrenceEdit::contentsChanged);
+    connect(mRepeatCountEntry, &SpinBox::valueChanged, this, &RecurrenceEdit::repeatCountChanged);
+    connect(mRepeatCountEntry, &SpinBox::valueChanged, this, &RecurrenceEdit::contentsChanged);
     mRepeatCountButton->setFocusWidget(mRepeatCountEntry);
     mRepeatCountLabel = new QLabel(i18nc("@label", "occurrence(s)"), mRangeButtonBox);
     mRepeatCountLabel->setFixedSize(mRepeatCountLabel->sizeHint());
@@ -1336,7 +1336,7 @@ MonthYearRule::MonthYearRule(const QString& freqText, const QString& freqWhatsTh
     mDayCombo->setReadOnly(readOnly);
     mDayCombo->setWhatsThis(i18nc("@info:whatsthis", "Select the day of the month on which to repeat the alarm"));
     mDayButton->setFocusWidget(mDayCombo);
-    connect(mDayCombo, static_cast<void (ComboBox::*)(int)>(&ComboBox::activated), this, &MonthYearRule::slotDaySelected);
+    connect(mDayCombo, &ComboBox::activated, this, &MonthYearRule::slotDaySelected);
     connect(mDayCombo, static_cast<void (ComboBox::*)(int)>(&ComboBox::currentIndexChanged), this, &MonthYearRule::changed);
     boxLayout->addWidget(mDayCombo, 0, 1, 1, 2, Qt::AlignLeft);
 

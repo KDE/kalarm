@@ -1,7 +1,7 @@
 /*
  *  timeperiod.h  -  time period data entry widget
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2003-2005, 2007, 2008, 2010 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2003-2020 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -46,12 +46,12 @@ TimePeriod::TimePeriod(bool allowHourMinute, QWidget* parent)
     mSpinBox->setSingleStep(1);
     mSpinBox->setSingleShiftStep(10);
     mSpinBox->setRange(1, mMaxDays);
-    connect(mSpinBox, static_cast<void (SpinBox::*)(int)>(&SpinBox::valueChanged), this, &TimePeriod::slotDaysChanged);
+    connect(mSpinBox, &SpinBox::valueChanged, this, &TimePeriod::slotDaysChanged);
     mSpinStack->addWidget(mSpinBox);
 
     mTimeSpinBox = new TimeSpinBox(0, 99999, mSpinStack);
     mTimeSpinBox->setRange(1, maxMinutes);    // max 999H59M
-    connect(mTimeSpinBox, static_cast<void (TimeSpinBox::*)(int)>(&TimeSpinBox::valueChanged), this, &TimePeriod::slotTimeChanged);
+    connect(mTimeSpinBox, &TimeSpinBox::valueChanged, this, &TimePeriod::slotTimeChanged);
     mSpinStack->addWidget(mTimeSpinBox);
 
     mSpinStack->setFixedSize(mSpinBox->sizeHint().expandedTo(mTimeSpinBox->sizeHint()));
@@ -73,7 +73,7 @@ TimePeriod::TimePeriod(bool allowHourMinute, QWidget* parent)
     mUnitsCombo->addItem(i18n_weeks());
     mMaxUnitShown = Weeks;
     mUnitsCombo->setFixedSize(mUnitsCombo->sizeHint());
-    connect(mUnitsCombo, static_cast<void (ComboBox::*)(int)>(&ComboBox::activated), this, &TimePeriod::slotUnitsSelected);
+    connect(mUnitsCombo, &ComboBox::activated, this, &TimePeriod::slotUnitsSelected);
     layout->addWidget(mUnitsCombo);
 
     setFocusProxy(mUnitsCombo);

@@ -146,7 +146,7 @@ void AlarmTimeWidget::init(Mode mode, const QString& title)
     mDelayTimeEdit = new TimeSpinBox(1, maxDelayTime, topWidget);
     mDelayTimeEdit->setValue(1439);
     mDelayTimeEdit->setFixedSize(mDelayTimeEdit->sizeHint());
-    connect(mDelayTimeEdit, static_cast<void (TimeSpinBox::*)(int)>(&TimeSpinBox::valueChanged), this, &AlarmTimeWidget::delayTimeChanged);
+    connect(mDelayTimeEdit, &TimeSpinBox::valueChanged, this, &AlarmTimeWidget::delayTimeChanged);
     mDelayTimeEdit->setWhatsThis(mDeferring ? xi18nc("@info:whatsthis", "<para>%1</para><para>%2</para>", i18n_TimeAfterPeriod(), TimeSpinBox::shiftWhatsThis())
                                             : xi18nc("@info:whatsthis", "<para>%1</para><para>%2</para><para>%3</para>", i18n_TimeAfterPeriod(), recurText, TimeSpinBox::shiftWhatsThis()));
     mAfterTimeRadio->setFocusWidget(mDelayTimeEdit);
@@ -200,7 +200,7 @@ void AlarmTimeWidget::init(Mode mode, const QString& title)
         mTimeZone = new TimeZoneCombo(mTimeZoneBox);
         hlayout->addWidget(mTimeZone);
         mTimeZone->setMaxVisibleItems(15);
-        connect(mTimeZone, static_cast<void (TimeZoneCombo::*)(int)>(&TimeZoneCombo::activated), this, &AlarmTimeWidget::slotTimeZoneChanged);
+        connect(mTimeZone, &TimeZoneCombo::activated, this, &AlarmTimeWidget::slotTimeZoneChanged);
         mTimeZoneBox->setWhatsThis(i18nc("@info:whatsthis", "Select the time zone to use for this alarm."));
         label->setBuddy(mTimeZone);
         layout->addWidget(mTimeZoneBox);

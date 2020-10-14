@@ -1,7 +1,7 @@
 /*
  *  timespinbox.cpp  -  time spinbox widget
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2001-2019 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2001-2020 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -36,7 +36,7 @@ TimeSpinBox::TimeSpinBox(bool use24hour, QWidget* parent)
     setShiftSteps(5, 360);    // shift-left button increments 5 min / 6 hours
     setSelectOnStep(false);
     setAlignment(Qt::AlignHCenter);
-    connect(this, static_cast<void (TimeSpinBox::*)(int)>(&TimeSpinBox::valueChanged), this, &TimeSpinBox::slotValueChanged);
+    connect(this, &TimeSpinBox::valueChanged, this, &TimeSpinBox::slotValueChanged);
 }
 
 /******************************************************************************

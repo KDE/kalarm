@@ -352,7 +352,7 @@ void EditAlarmDlg::init(const KAEvent* event)
         mTemplateTimeAfter->setValue(1439);
         mTemplateTimeAfter->setFixedSize(mTemplateTimeAfter->sizeHint());
         mTemplateTimeAfter->setReadOnly(mReadOnly);
-        connect(mTemplateTimeAfter, static_cast<void (TimeSpinBox::*)(int)>(&TimeSpinBox::valueChanged), this, &EditAlarmDlg::contentsChanged);
+        connect(mTemplateTimeAfter, &TimeSpinBox::valueChanged, this, &EditAlarmDlg::contentsChanged);
         mTemplateTimeAfter->setWhatsThis(xi18nc("@info:whatsthis", "<para>%1</para><para>%2</para>",
                                                AlarmTimeWidget::i18n_TimeAfterPeriod(), TimeSpinBox::shiftWhatsThis()));
         layout->addWidget(mTemplateTimeAfter);

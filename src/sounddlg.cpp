@@ -213,7 +213,7 @@ SoundWidget::SoundWidget(bool showPlay, bool showRepeat, QWidget* parent)
         mRepeatPause->setSingleShiftStep(10);
         mRepeatPause->setFixedSize(mRepeatPause->sizeHint());
         label->setBuddy(mRepeatPause);
-        connect(mRepeatPause, static_cast<void (SpinBox::*)(int)>(&SpinBox::valueChanged), this, &SoundWidget::changed);
+        connect(mRepeatPause, &SpinBox::valueChanged, this, &SoundWidget::changed);
         label = new QLabel(i18nc("@label", "seconds"), box);
         boxHLayout->addWidget(label);
         label->setFixedSize(label->sizeHint());
@@ -270,7 +270,7 @@ SoundWidget::SoundWidget(bool showPlay, bool showRepeat, QWidget* parent)
     mFadeTime->setSingleShiftStep(10);
     mFadeTime->setFixedSize(mFadeTime->sizeHint());
     label->setBuddy(mFadeTime);
-    connect(mFadeTime, static_cast<void (SpinBox::*)(int)>(&SpinBox::valueChanged), this, &SoundWidget::changed);
+    connect(mFadeTime, &SpinBox::valueChanged, this, &SoundWidget::changed);
     label = new QLabel(i18nc("@label", "seconds"), mFadeBox);
     boxHLayout->addWidget(label);
     label->setFixedSize(label->sizeHint());

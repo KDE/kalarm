@@ -1,7 +1,7 @@
 /*
  *  repetitionbutton.cpp  -  pushbutton and dialog to specify alarm repetition
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2004-2019 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2004-2020 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -164,7 +164,7 @@ RepetitionDlg::RepetitionDlg(const QString& caption, bool readOnly, QWidget* par
     mCount->setFixedSize(mCount->sizeHint());
     mCount->setSingleShiftStep(10);
     mCount->setSelectOnStep(false);
-    connect(mCount, static_cast<void (SpinBox::*)(int)>(&SpinBox::valueChanged), this, &RepetitionDlg::countChanged);
+    connect(mCount, &SpinBox::valueChanged, this, &RepetitionDlg::countChanged);
     mCount->setWhatsThis(i18nc("@info:whatsthis", "Enter the number of times to trigger the alarm after its initial occurrence"));
     layout->addWidget(mCount);
     mCountButton->setFocusWidget(mCount);
