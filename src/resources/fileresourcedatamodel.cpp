@@ -123,13 +123,14 @@ FileResourceDataModel::FileResourceDataModel(QObject* parent)
 FileResourceDataModel::~FileResourceDataModel()
 {
     qCDebug(KALARM_LOG) << "FileResourceDataModel::~FileResourceDataModel";
+    ResourceFilterCheckListModel::disable();   // prevent resources being disabled when they are removed
+    while (!mResources.isEmpty())
+        removeResource(mResources.first());
     if (mInstance == this)
     {
         mInstance = nullptr;
         mInstanceIsOurs = false;
     }
-    while (!mResources.isEmpty())
-        removeResource(mResources.first());
     delete Resources::instance();
 }
 

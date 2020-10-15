@@ -34,8 +34,8 @@ public:
     /** Constructs a new instance.
      *  @tparam DataModel  The data model class to use as the source model. It must
      *                     have the following methods:
-     *                       static Model* instance(); - returns the unique instance.
-     *                       QModelIndex resourceIndex(const Resource&) const;
+     *                     static Model* instance(); - returns the unique instance.
+     *                     QModelIndex resourceIndex(const Resource&) const;
      */
     template <class DataModel>
     static ResourceFilterModel* create(QObject* parent = nullptr);
@@ -94,9 +94,9 @@ class ResourceListModel : public KDescendantsProxyModel
 public:
     /** Constructs a new instance.
      *  @tparam DataModel  The data model class to use as the source model. It must
-     *                  have the following methods:
-     *                    static DataModel* instance(); - returns the unique instance.
-     *                    QModelIndex resourceIndex(const Resource&) const;
+     *                     have the following methods:
+     *                     static DataModel* instance(); - returns the unique instance.
+     *                     QModelIndex resourceIndex(const Resource&) const;
      */
     template <class DataModel>
     static ResourceListModel* create(QObject* parent = nullptr);
@@ -132,9 +132,9 @@ class ResourceCheckListModel : public KCheckableProxyModel
 public:
     /** Constructs a new instance.
      *  @tparam DataModel  The data model class to use as the source model. It must
-     *                  have the following methods:
-     *                    static DataModel* instance(); - returns the unique instance.
-     *                    QModelIndex resourceIndex(const Resource&) const;
+     *                     have the following methods:
+     *                     static DataModel* instance(); - returns the unique instance.
+     *                     QModelIndex resourceIndex(const Resource&) const;
      */
     template <class DataModel>
     static ResourceCheckListModel* create(CalEvent::Type, QObject* parent = nullptr);
@@ -142,6 +142,7 @@ public:
     ~ResourceCheckListModel();
     Resource resource(int row) const;
     Resource resource(const QModelIndex&) const;
+    void disable()    { mDisabled = true; }
     QVariant data(const QModelIndex&, int role = Qt::DisplayRole) const override;
     bool setData(const QModelIndex&, const QVariant& value, int role) override;
 
@@ -164,6 +165,7 @@ private:
     CalEvent::Type            mAlarmType;     // alarm type contained in this model
     QItemSelectionModel*      mSelectionModel;
     bool                      mResetting {false};   // currently handling rows inserted/removed
+    bool                      mDisabled {false};    // resources are being deleted on program exit
 };
 
 
@@ -176,19 +178,21 @@ class ResourceFilterCheckListModel : public QSortFilterProxyModel
 {
     Q_OBJECT
 public:
-    /** Constructs a new instance.
+    /** Constructs the unique instance.
      *  @tparam DataModel  The data model class to use as the source model. It must
-     *                  have the following methods:
-     *                    static DataModel* instance(); - returns the unique instance.
-     *                    QModelIndex resourceIndex(const Resource&) const;
-     *                    QString tooltip(const Resource&, CalEvent::Types) const;
+     *                     have the following methods:
+     *                     static DataModel* instance(); - returns the unique instance.
+     *                     QModelIndex resourceIndex(const Resource&) const;
+     *                     QString tooltip(const Resource&, CalEvent::Types) const;
      */
     template <class DataModel>
     static ResourceFilterCheckListModel* create(QObject* parent = nullptr);
 
+    ~ResourceFilterCheckListModel();
     void setEventTypeFilter(CalEvent::Type);
     Resource resource(int row) const;
     Resource resource(const QModelIndex&) const;
+    static void disable();
     QVariant data(const QModelIndex&, int role = Qt::DisplayRole) const override;
 
 protected:
@@ -205,6 +209,7 @@ private:
     explicit ResourceFilterCheckListModel(QObject* parent);
     void init();
 
+    static ResourceFilterCheckListModel* mInstance;
     ResourceCheckListModel* mActiveModel {nullptr};
     ResourceCheckListModel* mArchivedModel {nullptr};
     ResourceCheckListModel* mTemplateModel {nullptr};
@@ -266,13 +271,15 @@ ResourceCheckListModel* ResourceCheckListModel::create(CalEvent::Type type, QObj
 template <class DataModel>
 ResourceFilterCheckListModel* ResourceFilterCheckListModel::create(QObject* parent)
 {
-    ResourceFilterCheckListModel* model = new ResourceFilterCheckListModel(parent);
-    model->mActiveModel   = ResourceCheckListModel::create<DataModel>(CalEvent::ACTIVE, model);
-    model->mArchivedModel = ResourceCheckListModel::create<DataModel>(CalEvent::ARCHIVED, model);
-    model->mTemplateModel = ResourceCheckListModel::create<DataModel>(CalEvent::TEMPLATE, model);
-    model->mTooltipFunction = [](const Resource& r, CalEvent::Types t) { return DataModel::instance()->tooltip(r, t); };
-    model->init();
-    return model;
+    if (mInstance)
+        return nullptr;
+    mInstance = new ResourceFilterCheckListModel(parent);
+    mInstance->mActiveModel   = ResourceCheckListModel::create<DataModel>(CalEvent::ACTIVE, mInstance);
+    mInstance->mArchivedModel = ResourceCheckListModel::create<DataModel>(CalEvent::ARCHIVED, mInstance);
+    mInstance->mTemplateModel = ResourceCheckListModel::create<DataModel>(CalEvent::TEMPLATE, mInstance);
+    mInstance->mTooltipFunction = [](const Resource& r, CalEvent::Types t) { return DataModel::instance()->tooltip(r, t); };
+    mInstance->init();
+    return mInstance;
 }
 
 #endif // RESOURCEMODEL_H
