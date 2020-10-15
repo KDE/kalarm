@@ -1,5 +1,8 @@
 KAlarm Change Log
 
+=== Version 3.0.3 (KDE Applications 20.08.3) --- 15 October 2020 ===
++ Prevent resources being disabled at logout [KDE Bug 427722]
+
 === Version 3.0.2 (KDE Applications 20.08.2) --- 3 October 2020 ===
 + Fix repeat-at-login alarms not triggering when KAlarm starts.
 + If command generating text for display alarm fails, only display error message,

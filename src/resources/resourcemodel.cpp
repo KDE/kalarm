@@ -387,7 +387,7 @@ void ResourceCheckListModel::slotRowsInsertedRemoved()
 */
 void ResourceCheckListModel::selectionChanged(const QItemSelection& selected, const QItemSelection& deselected)
 {
-    if (mResetting)
+    if (mResetting  ||  mDisabled)
         return;
     const QModelIndexList sel = selected.indexes();
     for (const QModelIndex& ix : sel)
@@ -459,11 +459,19 @@ QByteArray ResourceCheckListModel::debugType(const char* func) const
 = Proxy model providing a checkable resource list, filtered to contain only one
 = alarm type. The selected alarm type may be changed as desired.
 =============================================================================*/
+ResourceFilterCheckListModel* ResourceFilterCheckListModel::mInstance {nullptr};
+
 ResourceFilterCheckListModel::ResourceFilterCheckListModel(QObject* parent)
     : QSortFilterProxyModel(parent)
 {
     setDynamicSortFilter(true);
     setSortCaseSensitivity(Qt::CaseInsensitive);
+}
+
+ResourceFilterCheckListModel::~ResourceFilterCheckListModel()
+{
+    if (this == mInstance)
+        mInstance = nullptr;
 }
 
 void ResourceFilterCheckListModel::init()
@@ -523,6 +531,16 @@ Resource ResourceFilterCheckListModel::resource(int row) const
 Resource ResourceFilterCheckListModel::resource(const QModelIndex& index) const
 {
     return static_cast<ResourceCheckListModel*>(sourceModel())->resource(mapToSource(index));
+}
+
+void ResourceFilterCheckListModel::disable()
+{
+    if (mInstance)
+    {
+        mInstance->mActiveModel->disable();
+        mInstance->mArchivedModel->disable();
+        mInstance->mTemplateModel->disable();
+    }
 }
 
 QVariant ResourceFilterCheckListModel::data(const QModelIndex& index, int role) const
