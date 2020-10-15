@@ -100,8 +100,8 @@ void AlarmTimeWidget::init(Mode mode, const QString& title)
     mDateEdit->setOptions(KDateComboBox::EditDate | KDateComboBox::SelectDate | KDateComboBox::DatePicker);
     connect(mDateEdit, &KDateComboBox::dateEntered, this, &AlarmTimeWidget::dateTimeChanged);
     mDateEdit->setWhatsThis(xi18nc("@info:whatsthis",
-          "<para>Enter the date to schedule the alarm.</para>"
-          "<para>%1</para>", (mDeferring ? tzText : recurText)));
+                                   "<para>Enter the date to schedule the alarm.</para>"
+                                   "<para>%1</para>", (mDeferring ? tzText : recurText)));
     mAtTimeRadio->setFocusWidget(mDateEdit);
 
     // Time edit box and Any time checkbox
@@ -114,9 +114,9 @@ void AlarmTimeWidget::init(Mode mode, const QString& title)
     mTimeEdit->setFixedSize(mTimeEdit->sizeHint());
     connect(mTimeEdit, &TimeEdit::valueChanged, this, &AlarmTimeWidget::dateTimeChanged);
     mTimeEdit->setWhatsThis(xi18nc("@info:whatsthis",
-          "<para>Enter the time to schedule the alarm.</para>"
-          "<para>%1</para>"
-          "<para>%2</para>", (mDeferring ? tzText : recurText), TimeSpinBox::shiftWhatsThis()));
+                                   "<para>Enter the time to schedule the alarm.</para>"
+                                   "<para>%1</para>"
+                                   "<para>%2</para>", (mDeferring ? tzText : recurText), TimeSpinBox::shiftWhatsThis()));
 
     mAnyTime = -1;    // current status is uninitialised
     if (mode == DEFER_TIME)
@@ -263,6 +263,7 @@ KADateTime AlarmTimeWidget::getDateTime(int* minsFromNow, bool checkExpired, boo
     now.setTime(QTime(now.time().hour(), now.time().minute(), 0));
     if (!mAtTimeRadio->isChecked())
     {
+        // A relative time has been entered.
         if (!mDelayTimeEdit->isValid())
         {
             if (showErrorMessage)
@@ -271,14 +272,15 @@ KADateTime AlarmTimeWidget::getDateTime(int* minsFromNow, bool checkExpired, boo
                 *errorWidget = mDelayTimeEdit;
             return KADateTime();
         }
-        int delayMins = mDelayTimeEdit->value();
+        const int delayMins = mDelayTimeEdit->value();
         if (minsFromNow)
             *minsFromNow = delayMins;
         return now.addSecs(delayMins * 60).toTimeSpec(mTimeSpec);
     }
     else
     {
-        bool dateOnly = mAnyTimeAllowed && mAnyTimeCheckBox && mAnyTimeCheckBox->isChecked();
+        // An absolute time has been entered.
+        const bool dateOnly = mAnyTimeAllowed && mAnyTimeCheckBox && mAnyTimeCheckBox->isChecked();
         if (!mDateEdit->date().isValid()  ||  !mTimeEdit->isValid())
         {
             // The date and/or time is invalid
@@ -357,7 +359,7 @@ void AlarmTimeWidget::setDateTime(const DateTime& dt)
     }
     if (mAnyTimeCheckBox)
     {
-        bool dateOnly = dt.isDateOnly();
+        const bool dateOnly = dt.isDateOnly();
         if (dateOnly)
             mAnyTimeAllowed = true;
         mAnyTimeCheckBox->setChecked(dateOnly);
@@ -465,7 +467,7 @@ void AlarmTimeWidget::setMaxDelayTime(const KADateTime& now)
 */
 void AlarmTimeWidget::setAnyTime()
 {
-    int old = mAnyTime;
+    const int old = mAnyTime;
     mAnyTime = (mAtTimeRadio->isChecked() && mAnyTimeAllowed && mAnyTimeCheckBox && mAnyTimeCheckBox->isChecked()) ? 1 : 0;
     if (mAnyTime != old)
         Q_EMIT dateOnlyToggled(mAnyTime);
@@ -479,7 +481,7 @@ void AlarmTimeWidget::enableAnyTime(bool enable)
     if (mAnyTimeCheckBox)
     {
         mAnyTimeAllowed = enable;
-        bool at = mAtTimeRadio->isChecked();
+        const bool at = mAtTimeRadio->isChecked();
         mAnyTimeCheckBox->setEnabled(enable && at);
         if (at)
             mTimeEdit->setEnabled(!enable || !mAnyTimeCheckBox->isChecked());
@@ -540,14 +542,14 @@ void AlarmTimeWidget::updateTimes()
 */
 void AlarmTimeWidget::slotButtonSet(QAbstractButton*)
 {
-    bool at = mAtTimeRadio->isChecked();
+    const bool at = mAtTimeRadio->isChecked();
     mDateEdit->setEnabled(at);
     mTimeEdit->setEnabled(at && (!mAnyTimeAllowed || !mAnyTimeCheckBox || !mAnyTimeCheckBox->isChecked()));
     if (mAnyTimeCheckBox)
         mAnyTimeCheckBox->setEnabled(at && mAnyTimeAllowed);
     // Ensure that the value of the delay edit box is > 0.
     const KADateTime att(mDateEdit->date(), mTimeEdit->time(), mTimeSpec);
-    int minutes = (KADateTime::currentUtcDateTime().secsTo(att) + 59) / 60;
+    const int minutes = (KADateTime::currentUtcDateTime().secsTo(att) + 59) / 60;
     if (minutes <= 0)
         mDelayTimeEdit->setValid(true);
     mDelayTimeEdit->setEnabled(!at);
@@ -618,8 +620,8 @@ void AlarmTimeWidget::showMoreOptions(bool more)
 void AlarmTimeWidget::dateTimeChanged()
 {
     const KADateTime dt(mDateEdit->date(), mTimeEdit->time(), mTimeSpec);
-    int minutes = (KADateTime::currentUtcDateTime().secsTo(dt) + 59) / 60;
-    bool blocked = mDelayTimeEdit->signalsBlocked();
+    const int minutes = (KADateTime::currentUtcDateTime().secsTo(dt) + 59) / 60;
+    const bool blocked = mDelayTimeEdit->signalsBlocked();
     mDelayTimeEdit->blockSignals(true);     // prevent infinite recursion between here and delayTimeChanged()
     if (minutes <= 0  ||  minutes > mDelayTimeEdit->maximum())
         mDelayTimeEdit->setValid(false);
@@ -641,8 +643,8 @@ void AlarmTimeWidget::delayTimeChanged(int minutes)
     if (mDelayTimeEdit->isValid())
     {
         QDateTime dt = KADateTime::currentUtcDateTime().addSecs(minutes * 60).toTimeSpec(mTimeSpec).qDateTime();
-        bool blockedT = mTimeEdit->signalsBlocked();
-        bool blockedD = mDateEdit->signalsBlocked();
+        const bool blockedT = mTimeEdit->signalsBlocked();
+        const bool blockedD = mDateEdit->signalsBlocked();
         mTimeEdit->blockSignals(true);     // prevent infinite recursion between here and dateTimeChanged()
         mDateEdit->blockSignals(true);
         mTimeEdit->setValue(dt.time());
