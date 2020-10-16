@@ -286,7 +286,6 @@ private:
     bool             eventFilter(QObject*, QEvent*) override;
     void             spinboxResized(QResizeEvent*);
     void             setUpdown2Size();
-    int              whichButton(QObject* spinWidget, const QPoint&);
     void             setShiftStepping(bool on);
 
     // Visible spin box class.

@@ -134,7 +134,6 @@ class EditAlarmDlg : public QDialog
         void            initValues(const KAEvent*);
         void            setEvent(KAEvent&, const QString& text, bool trial);
         bool            validate();
-        void            setRecurTabTitle(const KAEvent* = nullptr);
         virtual bool    stateChanged() const;
         void            showOptions(bool more);
 

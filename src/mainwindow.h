@@ -136,15 +136,11 @@ private:
     typedef QVector<MainWindow*> WindowList;
 
     explicit MainWindow(bool restored);
-    void           createListView(bool recreate);
     void           initActions();
-    void           initCalendarResources();
     void           selectionCleared();
     void           setEnableText(bool enable);
     void           initUndoMenu(QMenu*, Undo::Type);
     void           slotDelete(bool force);
-    static KAEvent::SubAction  getDropAction(QDropEvent*, QString& text);
-    static void    setUpdateTimer();
     static void    enableTemplateMenuItem(bool);
 
     static WindowList    mWindowList;   // active main windows

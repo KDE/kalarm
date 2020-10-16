@@ -39,7 +39,6 @@ public:
     void                showDefer() override;
     void                showDateTime(const KAEvent&, const KAAlarm&) override;
     void                cancelReminder(const KAEvent&, const KAAlarm&) override;
-    static void         redisplayAlarms();
     static int          notificationCount();
 
 protected Q_SLOTS:

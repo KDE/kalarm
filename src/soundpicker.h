@@ -134,7 +134,6 @@ private Q_SLOTS:
     void           setLastType();
 
 private:
-    void           setWhatsThisText();
     void           selectType(Preferences::SoundType);
 
     ComboBox*      mTypeCombo;
