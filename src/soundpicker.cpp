@@ -64,14 +64,15 @@ SoundPicker::SoundPicker(QWidget* parent)
     mTypeCombo->addItem(i18n_combo_None(), Preferences::Sound_None);     // index None
     mTypeCombo->addItem(i18n_combo_Beep(), Preferences::Sound_Beep);     // index Beep
     mTypeCombo->addItem(i18n_combo_File(), Preferences::Sound_File);     // index PlayFile
+    mTypeCombo->addItem(i18n_combo_Speak(), Preferences::Sound_Speak);   // index Speak (only displayed if appropriate)
     mFileShowing = true;
-    mSpeakShowing = !KPIMTextEdit::TextToSpeech::self()->isReady();
-    showSpeak(!mSpeakShowing);            // index Speak (only displayed if appropriate)
+    mSpeakShowing = true;
+    showSpeak(true);
     connect(mTypeCombo, &ComboBox::activated, this, &SoundPicker::slotTypeSelected);
     connect(mTypeCombo, static_cast<void (ComboBox::*)(int)>(&ComboBox::currentIndexChanged), this, &SoundPicker::changed);
     label->setBuddy(mTypeCombo);
     soundLayout->addWidget(mTypeBox);
-    mTypeBox->setWhatsThis(xi18nc("@info:whatsthis Combination of multiple whatsthis items",
+    mTypeBox->setWhatsThis(xi18nc("@info:whatsthis",
                                   "<para>Choose a sound to play when the message is displayed."
                                   "<list><item><interface>%1</interface>: the message is displayed silently.</item>"
                                   "<item><interface>%2</interface>: a simple beep is sounded.</item>"
