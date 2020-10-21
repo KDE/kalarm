@@ -39,7 +39,7 @@
 
 <!-- Don't change format of date and version of the documentation -->
 
-<date>2020-09-24</date>
+<date>2020-10-22</date>
 <releaseinfo>3.1.0 (Applications 20.12)</releaseinfo>
 
 <abstract>
@@ -1925,6 +1925,11 @@ been made.</para>
 depending on the option chosen in the 
 <link linkend="alarm-edit-dlg">Alarm Edit dialog</link>. These two
 display options are described below.</para>
+
+<para>If you inhibit notifications for the desktop, the execution of
+display alarms will be suspended until notifications are re-enabled.
+Note that this applies to all display alarms, regardless of whether
+they are displayed in windows or as notifications.</para>
 
 <sect2 id="message-window">
 <title>Alarm Message Window</title>

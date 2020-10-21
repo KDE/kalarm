@@ -43,7 +43,8 @@ public:
         Reschedule       = 0x01,  // reschedule the alarm after executing it
         AllowDefer       = 0x02,  // allow the alarm to be deferred
         NoRecordCmdError = 0x04,  // don't record command errors
-        NoPreAction      = 0x08
+        NoPreAction      = 0x08,  // it isn't a pre-alarm action
+        NoNotifyInhibit  = 0x10   // ignore notification inhibit
     };
     Q_DECLARE_FLAGS(ExecAlarmFlags, ExecAlarmFlag)
 
@@ -144,6 +145,9 @@ private Q_SLOTS:
     void               slotResourcePopulated(const Resource&);
     void               slotPurge()                     { purge(mArchivedPurgeDays); }
     void               slotCommandExited(ShellProcess*);
+    void               slotFDOPropertiesChanged(const QString& interface,
+                                                const QVariantMap& changedProperties,
+                                                const QStringList& invalidatedProperties);
 
 private:
     // Actions to execute in processQueue(). May be OR'ed together.
@@ -217,7 +221,7 @@ private:
     void               checkArchivedCalendar();
     void               queueAlarmId(const KAEvent&);
     bool               dbusHandleEvent(const EventId&, QueuedAction);
-    bool               handleEvent(const EventId&, QueuedAction, bool findUniqueId = false);
+    int                handleEvent(const EventId&, QueuedAction, bool findUniqueId = false);
     int                rescheduleAlarm(KAEvent&, const KAAlarm&, bool updateCalAndDisplay,
                                        const KADateTime& nextDt = KADateTime());
     bool               cancelAlarm(KAEvent&, KAAlarm::Type, bool updateCalAndDisplay);
@@ -266,6 +270,7 @@ private:
     bool               mKOrganizerEnabled;      // KOrganizer options are enabled (korganizer exists)
     bool               mWindowFocusBroken;      // keyboard focus transfer between windows doesn't work
     bool               mResourcesTimedOut {false}; // timeout has expired for populating resources
+    bool               mNotificationsInhibited {false};  // Freedesktop notifications are inhibited
 };
 
 inline KAlarmApp* theApp()  { return KAlarmApp::instance(); }

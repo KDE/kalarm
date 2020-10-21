@@ -1,7 +1,8 @@
 KAlarm Change Log
 
-=== Version 3.1.0 (KDE Applications 20.12) --- 24 September 2020 ===
+=== Version 3.1.0 (KDE Applications 20.12) --- 22 October 2020 ===
 + Add option to show alarm message as a notification instead of in a window [KDE Bug 345922]
++ Don't execute display alarms while desktop notifications are inhibited.
 
 === Version 3.0.3 (KDE Applications 20.08.3) --- 15 October 2020 ===
 + Prevent resources being disabled at logout [KDE Bug 427722]

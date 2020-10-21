@@ -1166,7 +1166,7 @@ void EditAlarmDlg::slotTry()
             event.setEventId(mEventId);
         }
         type_aboutToTry();
-        void* result = theApp()->execAlarm(event, event.firstAlarm(), KAlarmApp::NoRecordCmdError);
+        void* result = theApp()->execAlarm(event, event.firstAlarm(), KAlarmApp::NoRecordCmdError | KAlarmApp::NoNotifyInhibit);
         type_executedTry(text, result);
     }
 }

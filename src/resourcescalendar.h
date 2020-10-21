@@ -38,10 +38,11 @@ public:
     static void             terminate();
 
     /** Return the active alarm with the earliest trigger time.
-     *  @param nextTriggerTime  The next trigger time of the earliest alarm.
+     *  @param nextTriggerTime       The next trigger time of the earliest alarm.
+     *  @param excludeDisplayAlarms  Ignore display alarms.
      *  @return  The earliest alarm.
      */
-    static KAEvent          earliestAlarm(KADateTime& nextTriggerTime);
+    static KAEvent          earliestAlarm(KADateTime& nextTriggerTime, bool excludeDisplayAlarms = false);
 
     static void             setAlarmPending(const KAEvent&, bool pending = true);
     static bool             haveDisabledAlarms()       { return mHaveDisabledAlarms; }
@@ -90,7 +91,8 @@ private:
     typedef QHash<ResourceId, QString> EarliestMap;  // event ID of earliest alarm, for each resource
 
     static ResourceMap    mResourceMap;
-    static EarliestMap    mEarliestAlarm;      // alarm with earliest trigger time, by resource
+    static EarliestMap    mEarliestAlarm;        // alarm with earliest trigger time, by resource
+    static EarliestMap    mEarliestNonDispAlarm; // non-display alarm with earliest trigger time, by resource
     static QSet<QString>  mPendingAlarms;      // IDs of alarms which are currently being processed after triggering
     static bool           mIgnoreAtLogin;      // ignore new/updated repeat-at-login alarms
     static bool           mHaveDisabledAlarms; // there is at least one individually disabled alarm

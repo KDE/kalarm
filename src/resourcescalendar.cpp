@@ -20,6 +20,7 @@ using namespace KAlarmCal;
 ResourcesCalendar*             ResourcesCalendar::mInstance {nullptr};
 ResourcesCalendar::ResourceMap ResourcesCalendar::mResourceMap;
 ResourcesCalendar::EarliestMap ResourcesCalendar::mEarliestAlarm;
+ResourcesCalendar::EarliestMap ResourcesCalendar::mEarliestNonDispAlarm;
 QSet<QString>                  ResourcesCalendar::mPendingAlarms;
 bool                           ResourcesCalendar::mIgnoreAtLogin {false};
 bool                           ResourcesCalendar::mHaveDisabledAlarms {false};
@@ -111,6 +112,7 @@ void ResourcesCalendar::removeKAEvents(ResourceId key, bool closing, CalEvent::T
     if (removed)
     {
         mEarliestAlarm.remove(key);
+        mEarliestNonDispAlarm.remove(key);
         // Emit signal only if we're not in the process of closing the calendar
         if (!closing)
         {
@@ -193,17 +195,38 @@ void ResourcesCalendar::slotEventUpdated(Resource& resource, const KAEvent& even
     &&  event.category() == CalEvent::ACTIVE)
     {
         // Update the earliest alarm to trigger
-        const QString earliestId = mEarliestAlarm.value(key);
-        if (earliestId == event.id())
+        const QString earliestId        = mEarliestAlarm.value(key);
+        const QString earliestNonDispId = mEarliestNonDispAlarm.value(key);
+        if (earliestId == event.id()  ||  earliestNonDispId == event.id())
             findEarliestAlarm(resource);
         else
         {
             const KADateTime dt = event.nextTrigger(KAEvent::ALL_TRIGGER).effectiveKDateTime();
-            if (dt.isValid()
-            &&  (earliestId.isEmpty()  ||  dt < resource.event(earliestId).nextTrigger(KAEvent::ALL_TRIGGER)))
+            if (dt.isValid())
             {
-                mEarliestAlarm[key] = event.id();
-                Q_EMIT earliestAlarmChanged();
+                bool changed = false;
+                DateTime next;
+                if (!earliestId.isEmpty())
+                    next = resource.event(earliestId).nextTrigger(KAEvent::ALL_TRIGGER);
+                if (earliestId.isEmpty()  ||  dt < next)
+                {
+                    mEarliestAlarm[key] = event.id();
+                    changed = true;
+                }
+                if (!(event.actionTypes() & KAEvent::ACT_DISPLAY))
+                {
+                    // It is not a display event.
+                    DateTime nextNonDisp;
+                    if (!earliestNonDispId.isEmpty())
+                        nextNonDisp = (earliestId == earliestNonDispId) ? next : resource.event(earliestNonDispId).nextTrigger(KAEvent::ALL_TRIGGER);
+                    if (earliestNonDispId.isEmpty()  ||  dt < nextNonDisp)
+                    {
+                        mEarliestNonDispAlarm[key] = event.id();
+                        changed = true;
+                    }
+                }
+                if (changed)
+                    Q_EMIT earliestAlarmChanged();
             }
         }
     }
@@ -435,7 +458,8 @@ CalEvent::Type ResourcesCalendar::deleteEventInternal(const QString& eventID, co
 {
     const ResourceId key = resource.id();
     mResourceMap[key].remove(eventID);
-    if (mEarliestAlarm.value(key) == eventID)
+    if (mEarliestAlarm.value(key)        == eventID
+    ||  mEarliestNonDispAlarm.value(key) == eventID)
         mInstance->findEarliestAlarm(resource);
 
     CalEvent::Type status = CalEvent::EMPTY;
@@ -609,7 +633,8 @@ void ResourcesCalendar::checkForDisabledAlarms()
 }
 
 /******************************************************************************
-* Find and note the active alarm with the earliest trigger time for a calendar.
+* Find and note the active alarm with the earliest trigger time for a calendar,
+* and the non-display active alarm with the earliest trigger time.
 */
 void ResourcesCalendar::findEarliestAlarm(const Resource& resource)
 {
@@ -618,28 +643,46 @@ void ResourcesCalendar::findEarliestAlarm(const Resource& resource)
         return;
     if (!(resource.alarmTypes() & CalEvent::ACTIVE))
         return;
+
+    // Invalidate any existing earliest alarms for the resource
     EarliestMap::Iterator eit = mEarliestAlarm.find(key);
     if (eit != mEarliestAlarm.end())
         eit.value() = QString();
+    eit = mEarliestNonDispAlarm.find(key);
+    if (eit != mEarliestNonDispAlarm.end())
+        eit.value() = QString();
+
     ResourceMap::ConstIterator rit = mResourceMap.constFind(key);
     if (rit == mResourceMap.constEnd())
         return;
     const QVector<KAEvent> events = eventsForResource(resource, rit.value());
-    KAEvent earliest;
-    KADateTime earliestTime;
+    KAEvent earliest, earliestNonDisp;
+    KADateTime earliestTime, earliestNonDispTime;
     for (const KAEvent& event : events)
     {
         if (event.category() != CalEvent::ACTIVE
         ||  mPendingAlarms.contains(event.id()))
             continue;
         const KADateTime dt = event.nextTrigger(KAEvent::ALL_TRIGGER).effectiveKDateTime();
-        if (dt.isValid()  &&  (!earliest.isValid() || dt < earliestTime))
+        if (dt.isValid())
         {
-            earliestTime = dt;
-            earliest = event;
+            if (!earliest.isValid() || dt < earliestTime)
+            {
+                earliestTime = dt;
+                earliest = event;
+            }
+            if (!(event.actionTypes() & KAEvent::ACT_DISPLAY))
+            {
+                if (!earliestNonDisp.isValid() || dt < earliestNonDispTime)
+                {
+                    earliestNonDispTime = dt;
+                    earliestNonDisp = event;
+                }
+            }
         }
     }
-    mEarliestAlarm[key] = earliest.id();
+    mEarliestAlarm[key]        = earliest.id();
+    mEarliestNonDispAlarm[key] = earliestNonDisp.id();
     Q_EMIT earliestAlarmChanged();
 }
 
@@ -647,11 +690,12 @@ void ResourcesCalendar::findEarliestAlarm(const Resource& resource)
 * Return the active alarm with the earliest trigger time.
 * Reply = invalid if none.
 */
-KAEvent ResourcesCalendar::earliestAlarm(KADateTime& nextTriggerTime)
+KAEvent ResourcesCalendar::earliestAlarm(KADateTime& nextTriggerTime, bool excludeDisplayAlarms)
 {
     KAEvent earliest;
     KADateTime earliestTime;
-    for (EarliestMap::ConstIterator eit = mEarliestAlarm.constBegin();  eit != mEarliestAlarm.constEnd();  ++eit)
+    const EarliestMap& earliestAlarms(excludeDisplayAlarms ? mEarliestNonDispAlarm : mEarliestAlarm);
+    for (EarliestMap::ConstIterator eit = earliestAlarms.constBegin();  eit != earliestAlarms.constEnd();  ++eit)
     {
         const QString id = eit.value();
         if (id.isEmpty())
@@ -663,8 +707,9 @@ KAEvent ResourcesCalendar::earliestAlarm(KADateTime& nextTriggerTime)
             // Something went wrong: mEarliestAlarm wasn't updated when it should have been!!
             qCCritical(KALARM_LOG) << "ResourcesCalendar::earliestAlarm: resource" << eit.key() << "does not contain" << id;
             mInstance->findEarliestAlarm(res);
-            return earliestAlarm(nextTriggerTime);
+            return earliestAlarm(nextTriggerTime, excludeDisplayAlarms);
         }
+//TODO: use next trigger calculated in findEarliestAlarm() (allowing for it being out of date)?
         const KADateTime dt = event.nextTrigger(KAEvent::ALL_TRIGGER).effectiveKDateTime();
         if (dt.isValid()  &&  (!earliest.isValid() || dt < earliestTime))
         {

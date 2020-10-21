@@ -145,6 +145,9 @@ qt5_add_dbus_adaptor(kalarm_bin_SRCS data/org.kde.kalarm.kalarm.xml dbushandler.
 
 qt5_add_dbus_interfaces(kalarm_bin_SRCS data/org.kde.kmail.kmail.xml)
 
+qt5_add_dbus_interface(kalarm_bin_SRCS data/org.freedesktop.Notifications.xml notifications_interface)
+qt5_add_dbus_interface(kalarm_bin_SRCS data/org.freedesktop.DBus.Properties.xml dbusproperties)
+
 kcfg_generate_dbus_interface(${CMAKE_CURRENT_SOURCE_DIR}/data/kalarmresource.kcfg org.kde.Akonadi.KAlarm.Settings)
 qt5_add_dbus_interface(kalarm_bin_SRCS ${CMAKE_CURRENT_BINARY_DIR}/org.kde.Akonadi.KAlarm.Settings.xml kalarmsettings KAlarmSettings)
 

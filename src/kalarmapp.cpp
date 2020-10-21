@@ -30,6 +30,8 @@
 #include "lib/desktop.h"
 #include "lib/messagebox.h"
 #include "lib/shellprocess.h"
+#include "notifications_interface.h" // DBUS-generated
+#include "dbusproperties.h"          // DBUS-generated
 #include "kalarm_debug.h"
 
 #include <KAlarmCal/DateTime>
@@ -61,6 +63,9 @@
 namespace
 {
 const int RESOURCES_TIMEOUT = 30;   // timeout (seconds) for resources to be populated
+
+const char FDO_NOTIFICATIONS_SERVICE[] = "org.freedesktop.Notifications";
+const char FDO_NOTIFICATIONS_PATH[]    = "/org/freedesktop/Notifications";
 
 /******************************************************************************
 * Find the maximum number of seconds late which a late-cancel alarm is allowed
@@ -193,6 +198,23 @@ void KAlarmApp::initialise()
         mOldShowInSystemTray = wantShowInSystemTray();
         DateTime::setStartOfDay(Preferences::startOfDay());
         mPrefsArchivedColour = Preferences::archivedColour();
+    }
+
+    // Get notified when the Freedesktop notifications properties have changed.
+    QDBusConnection conn = QDBusConnection::sessionBus();
+    if (conn.interface()->isServiceRegistered(QString::fromLatin1(FDO_NOTIFICATIONS_SERVICE)))
+    {
+        OrgFreedesktopDBusPropertiesInterface* piface = new OrgFreedesktopDBusPropertiesInterface(
+                QString::fromLatin1(FDO_NOTIFICATIONS_SERVICE),
+                QString::fromLatin1(FDO_NOTIFICATIONS_PATH),
+                conn, this);
+        connect(piface, &OrgFreedesktopDBusPropertiesInterface::PropertiesChanged,
+                this, &KAlarmApp::slotFDOPropertiesChanged);
+        OrgFreedesktopNotificationsInterface niface(
+                QString::fromLatin1(FDO_NOTIFICATIONS_SERVICE),
+                QString::fromLatin1(FDO_NOTIFICATIONS_PATH),
+                conn);
+        mNotificationsInhibited = niface.inhibited();
     }
 }
 
@@ -845,7 +867,7 @@ void KAlarmApp::checkNextDueAlarm()
         return;
     // Find the first alarm due
     KADateTime nextDt;
-    const KAEvent nextEvent = ResourcesCalendar::earliestAlarm(nextDt);
+    const KAEvent nextEvent = ResourcesCalendar::earliestAlarm(nextDt, mNotificationsInhibited);
     if (!nextEvent.isValid())
         return;   // there are no alarms pending
     const KADateTime now = KADateTime::currentDateTime(Preferences::timeSpec());
@@ -981,13 +1003,15 @@ void KAlarmApp::processQueue()
             const QueuedAction action = static_cast<QueuedAction>(int(entry.action) & int(QueuedAction::ActionMask));
 
             bool ok = true;
+            bool inhibit = false;
             if (entry.eventId.isEmpty())
             {
                 // It's a new alarm
                 switch (action)
                 {
                     case QueuedAction::Trigger:
-                        execAlarm(entry.event, entry.event.firstAlarm());
+                        if (execAlarm(entry.event, entry.event.firstAlarm()) == (void*)-2)
+                            inhibit = true;
                         break;
                     case QueuedAction::Handle:
                     {
@@ -1034,13 +1058,22 @@ void KAlarmApp::processQueue()
                 }
                 else
                 {
-                    ok = handleEvent(entry.eventId, action, findUniqueId);
-                    if (!ok  &&  exitAfter)
+                    // Trigger the event if it's due.
+                    const int result = handleEvent(entry.eventId, action, findUniqueId);
+                    if (!result)
+                        inhibit = true;
+                    else if (result < 0  &&  exitAfter)
                         CommandOptions::printError(xi18nc("@info:shell", "%1: Event <resource>%2</resource> not found, or not unique", mCommandOption, entry.eventId.eventId()));
                 }
             }
 
-            if (exitAfter)
+            if (inhibit)
+            {
+                // It's a display event which can't be executed because notifications
+                // are inhibited. Move it to the inhibited queue until the inhibition
+                // is removed.
+            }
+            else if (exitAfter)
             {
                 mActionQueue.clear();   // ensure that quitIf() actually exits the program
                 quitIf(ok ? 0 : 1);
@@ -1506,6 +1539,29 @@ void KAlarmApp::purge(int daysToKeep)
     processQueue();
 }
 
+/******************************************************************************
+* Called when the Freedesktop notifications properties have changed.
+* Check whether the inhibited property has changed.
+*/
+void KAlarmApp::slotFDOPropertiesChanged(const QString& interface,
+                                         const QVariantMap& changedProperties,
+                                         const QStringList& invalidatedProperties)
+{
+    Q_UNUSED(interface);     // always "org.freedesktop.Notifications"
+    Q_UNUSED(invalidatedProperties);
+    const auto it = changedProperties.find(QStringLiteral("Inhibited"));
+    if (it != changedProperties.end())
+    {
+        const bool inhibited = it.value().toBool();
+        if (inhibited != mNotificationsInhibited)
+        {
+            qCDebug(KALARM_LOG) << "KAlarmApp::slotFDOPropertiesChanged: Notifications inhibited ->" << inhibited;
+            mNotificationsInhibited = inhibited;
+            if (!mNotificationsInhibited)
+                QTimer::singleShot(0, this, &KAlarmApp::processQueue);
+        }
+    }
+}
 
 /******************************************************************************
 * Output a list of pending alarms, with their next scheduled occurrence.
@@ -1626,13 +1682,12 @@ bool KAlarmApp::scheduleEvent(KAEvent::SubAction action, const QString& text, co
     event.endChanges();
     if (alarmTime <= now)
     {
-        // Alarm is due for display already.
+        // Alarm is due for execution already.
         // First execute it once without adding it to the calendar file.
         qCDebug(KALARM_LOG) << "KAlarmApp::scheduleEvent: executing" << text;
-        if (!mInitialised)
+        if (!mInitialised
+        ||  execAlarm(event, event.firstAlarm()) == (void*)-2)
             mActionQueue.enqueue(ActionQEntry(event, QueuedAction::Trigger));
-        else
-            execAlarm(event, event.firstAlarm());
         // If it's a recurring alarm, reschedule it for its next occurrence
         if (!event.recurs()
         ||  event.setNextOccurrence(now) == KAEvent::NO_OCCURRENCE)
@@ -1673,17 +1728,20 @@ QString KAlarmApp::dbusList()
 
 /******************************************************************************
 * Either:
-* a) Display the event and then delete it if it has no outstanding repetitions.
+* a) Execute the event if it's due, and then delete it if it has no outstanding
+*    repetitions.
 * b) Delete the event.
 * c) Reschedule the event for its next repetition. If none remain, delete it.
 * If the event is deleted, it is removed from the calendar file and from every
 * main window instance.
 * If 'findUniqueId' is true and 'id' does not specify a resource, all resources
 * will be searched for the event's unique ID.
-* Reply = false if event ID not found, or if more than one event with the same
-*         ID is found.
+* Reply = -1 if event ID not found, or if more than one event with the same ID
+*            is found.
+*       =  0 if can't trigger display event because notifications are inhibited.
+*       =  1 if success.
 */
-bool KAlarmApp::handleEvent(const EventId& id, QueuedAction action, bool findUniqueId)
+int KAlarmApp::handleEvent(const EventId& id, QueuedAction action, bool findUniqueId)
 {
     Q_ASSERT(!(int(action) & ~int(QueuedAction::ActionMask)));
 
@@ -1700,7 +1758,7 @@ bool KAlarmApp::handleEvent(const EventId& id, QueuedAction action, bool findUni
             qCWarning(KALARM_LOG) << "KAlarmApp::handleEvent: Event ID not found, or duplicated:" << eventID;
         else
             qCCritical(KALARM_LOG) << "KAlarmApp::handleEvent: No resource ID specified for event:" << eventID;
-        return false;
+        return -1;
     }
     switch (action)
     {
@@ -1850,7 +1908,7 @@ bool KAlarmApp::handleEvent(const EventId& id, QueuedAction action, bool findUni
                         // All recurrences are finished, so cancel the event
                         event.setArchive();
                         if (cancelAlarm(event, alarm.type(), false))
-                            return true;   // event has been deleted
+                            return 1;   // event has been deleted
                         updateCalAndDisplay = true;
                         continue;
                     }
@@ -1868,7 +1926,7 @@ bool KAlarmApp::handleEvent(const EventId& id, QueuedAction action, bool findUni
                             restart = true;
                             break;
                         case -1:
-                            return true;   // event has been deleted
+                            return 1;   // event has been deleted
                         default:
                             break;
                     }
@@ -1888,7 +1946,10 @@ bool KAlarmApp::handleEvent(const EventId& id, QueuedAction action, bool findUni
             // If there is an alarm to execute, do this last after rescheduling/cancelling
             // any others. This ensures that the updated event is only saved once to the calendar.
             if (alarmToExecute.isValid())
-                execAlarm(event, alarmToExecute, Reschedule | (alarmToExecute.repeatAtLogin() ? NoExecFlag : AllowDefer));
+            {
+                if (execAlarm(event, alarmToExecute, Reschedule | (alarmToExecute.repeatAtLogin() ? NoExecFlag : AllowDefer)) == (void*)-2)
+                    return 0;    // display alarm, but notifications are inhibited
+            }
             else
             {
                 if (action == QueuedAction::Trigger)
@@ -1898,7 +1959,10 @@ bool KAlarmApp::handleEvent(const EventId& id, QueuedAction action, bool findUni
                     // identical messages, for example.
                     const KAAlarm alarm = event.firstAlarm();
                     if (alarm.isValid())
-                        execAlarm(event, alarm);
+                    {
+                        if (execAlarm(event, alarm) == (void*)-2)
+                            return 0;    // display alarm, but notifications are inhibited
+                    }
                 }
                 if (updateCalAndDisplay)
                     KAlarm::updateEvent(event);     // update the window lists and calendar file
@@ -1909,7 +1973,7 @@ bool KAlarmApp::handleEvent(const EventId& id, QueuedAction action, bool findUni
         default:
             break;
     }
-    return true;
+    return 1;
 }
 
 /******************************************************************************
@@ -2098,9 +2162,10 @@ bool KAlarmApp::cancelReminderAndDeferral(KAEvent& event)
 * Execute an alarm by displaying its message or file, or executing its command.
 * Reply = ShellProcess instance if a command alarm
 *       = MessageWindow if an audio alarm
-*       != 0 if successful
+*       != null if successful
 *       = -1 if execution has not completed
-*       = 0 if the alarm is disabled, or if an error message was output.
+*       = -2 if can't execute display event because notifications are inhibited.
+*       = null if the alarm is disabled, or if an error message was output.
 */
 void* KAlarmApp::execAlarm(KAEvent& event, const KAAlarm& alarm, ExecAlarmFlags flags)
 {
@@ -2111,6 +2176,14 @@ void* KAlarmApp::execAlarm(KAEvent& event, const KAAlarm& alarm, ExecAlarmFlags 
         if (flags & Reschedule)
             rescheduleAlarm(event, alarm, true);
         return nullptr;
+    }
+
+    if (mNotificationsInhibited  &&  !(flags & NoNotifyInhibit)
+    &&  (event.actionTypes() & KAEvent::ACT_DISPLAY))
+    {
+        // It's a display event and notifications are inhibited.
+        qCDebug(KALARM_LOG) << "KAlarmApp::execAlarm:" << event.id() << ": notifications inhibited";
+        return (void*)-2;
     }
 
     void* result = (void*)1;
