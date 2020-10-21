@@ -374,6 +374,7 @@ void EditDisplayAlarmDlg::type_initValues(const KAEvent* event)
         mSoundPicker->set(Preferences::defaultSoundType(), Preferences::defaultSoundFile(),
                           Preferences::defaultSoundVolume(), -1, 0, (Preferences::defaultSoundRepeat() ? 0 : -1));
     }
+    slotDisplayMethodChanged(mDisplayMethodCombo->currentIndex());
 }
 
 /******************************************************************************
@@ -1786,7 +1787,7 @@ void EditAudioAlarmDlg::type_executedTry(const QString&, void* result)
     if (mMessageWindow)
     {
         slotAudioPlaying(true);
-        connect(mMessageWindow, &MessageWindow::destroyed, this, &EditAudioAlarmDlg::audioWinDestroyed);
+        connect(mMessageWindow, &QObject::destroyed, this, &EditAudioAlarmDlg::audioWinDestroyed);
     }
 }
 
