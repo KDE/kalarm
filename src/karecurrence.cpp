@@ -14,7 +14,6 @@
 
 #include "kalarmcal_debug.h"
 
-#include <QBitArray>
 #include <QDate>
 #include <QLocale>
 

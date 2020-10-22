@@ -10,7 +10,6 @@
 
 #include "kadatetime.h"
 
-#include <QDateTime>
 #include <QTimeZone>
 #include <QRegExp>
 #include <QStringList>

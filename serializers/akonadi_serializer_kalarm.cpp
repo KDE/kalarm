@@ -6,7 +6,6 @@
  */
 
 #include "akonadi_serializer_kalarm.h"
-#include "kaeventformatter.h"
 #include "akonadi_serializer_kalarm_debug.h"
 
 #include "eventattribute.h"
