@@ -2327,7 +2327,7 @@ void* KAlarmApp::execAlarm(KAEvent& event, const KAAlarm& alarm, ExecAlarmFlags 
                 // There's an existing message window: replay the sound
                 disp->repeat(alarm);    // N.B. this reschedules the alarm
             }
-            return disp;
+            return dynamic_cast<MessageWindow*>(disp);
         }
         default:
             return nullptr;
