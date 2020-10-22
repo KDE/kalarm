@@ -305,8 +305,10 @@ bool KAlarmApp::restoreSession()
             win->restore(i, false);
             if (win->isValid())
             {
-                if (Resources::allCreated())
+                if (Resources::allCreated()  &&  !mNotificationsInhibited)
                     win->show();
+                else
+                    mRestoredWindows += win;
             }
             else
                 delete win;
@@ -336,6 +338,31 @@ bool KAlarmApp::restoreSession()
 
     startProcessQueue();    // start processing the execution queue
     return true;
+}
+
+/******************************************************************************
+* If resources have been created and notifications are not inhibited,
+* show message windows restored at startup which are waiting to be displayed,
+* and redisplay alarms showing when the program crashed or was killed.
+*/
+void KAlarmApp::showRestoredWindows()
+{
+    if (!mNotificationsInhibited  &&  Resources::allCreated())
+    {
+        if (!mRestoredWindows.isEmpty())
+        {
+            // Display message windows restored at startup.
+            for (MessageWindow* win : mRestoredWindows)
+                win->show();
+            mRestoredWindows.clear();
+        }
+        if (mRedisplayAlarms)
+        {
+            // Display alarms which were showing when the program crashed or was killed.
+            mRedisplayAlarms = false;
+            MessageDisplay::redisplayAlarms();
+        }
+    }
 }
 
 /******************************************************************************
@@ -656,13 +683,8 @@ int KAlarmApp::activateInstance(const QStringList& args, const QString& workingD
          */
         if (ResourcesCalendar::instance())
         {
-            if (Resources::allCreated())
-            {
-                mRedisplayAlarms = false;
-                MessageDisplay::redisplayAlarms();
-            }
-            else
-                mRedisplayAlarms = true;
+            mRedisplayAlarms = true;
+            showRestoredWindows();
         }
     }
 
@@ -1338,11 +1360,7 @@ void KAlarmApp::slotResourcesTimeout()
 */
 void KAlarmApp::slotResourcesCreated()
 {
-    if (mRedisplayAlarms)
-    {
-        mRedisplayAlarms = false;
-        MessageDisplay::redisplayAlarms();
-    }
+    showRestoredWindows();   // display message windows restored at startup.
     checkWritableCalendar();
     checkArchivedCalendar();
     processQueue();
@@ -1426,8 +1444,8 @@ void KAlarmApp::slotEditAlarmById()
         createOnlyMainWindow();    // prevent the application from quitting
         if (mEditingCmdLineAlarm & 0x10)
         {
-            mRedisplayAlarms = false;
-            MessageDisplay::redisplayAlarms();
+            mRedisplayAlarms = true;
+            showRestoredWindows();
         }
         mEditingCmdLineAlarm = 2;  // indicate edit completion
         QTimer::singleShot(0, this, &KAlarmApp::processQueue);
@@ -1558,7 +1576,10 @@ void KAlarmApp::slotFDOPropertiesChanged(const QString& interface,
             qCDebug(KALARM_LOG) << "KAlarmApp::slotFDOPropertiesChanged: Notifications inhibited ->" << inhibited;
             mNotificationsInhibited = inhibited;
             if (!mNotificationsInhibited)
+            {
+                showRestoredWindows();   // display message windows restored at startup.
                 QTimer::singleShot(0, this, &KAlarmApp::processQueue);
+            }
         }
     }
 }

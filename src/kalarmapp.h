@@ -26,6 +26,7 @@ namespace KCal { class Event; }
 class Resource;
 class DBusHandler;
 class MainWindow;
+class MessageWindow;
 class TrayWindow;
 class ShellProcess;
 
@@ -213,6 +214,7 @@ private:
     bool               initialiseTimerResources();
     bool               initCheck(bool calendarOnly = false);
     bool               quitIf(int exitCode, bool force = false);
+    void               showRestoredWindows();
     void               createOnlyMainWindow();
     bool               checkSystemTray();
     void               startProcessQueue();
@@ -257,8 +259,9 @@ private:
     int                mArchivedPurgeDays {-1}; // how long to keep archived alarms, 0 = don't keep, -1 = keep indefinitely
     int                mPurgeDaysQueued {-1};   // >= 0 to purge the archive calendar from KAlarmApp::processLoop()
     QVector<ResourceId> mPendingPurges;         // new resources which may need to be purged when populated
-    QList<ProcData*>   mCommandProcesses;       // currently active command alarm processes
+    QVector<ProcData*>  mCommandProcesses;      // currently active command alarm processes
     QQueue<ActionQEntry> mActionQueue;          // queued commands and actions
+    QVector<MessageWindow*> mRestoredWindows;   // message windows restored at startup, waiting to be displayed
     int                mEditingCmdLineAlarm {0}; // whether currently editing alarm specified on command line
     int                mPendingQuitCode;        // exit code for a pending quit
     bool               mPendingQuit {false};    // quit once the D-Bus command and shell command queues have been processed
