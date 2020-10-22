@@ -13,7 +13,6 @@
 #include <KLocalizedString>
 #include <KIO/Job>
 
-#include <QUrl>
 #include <QTimer>
 
 using namespace KAlarmCal;

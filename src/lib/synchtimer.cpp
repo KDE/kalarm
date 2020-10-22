@@ -12,7 +12,6 @@
 
 #include <QTimer>
 #include <QDateTime>
-#include <QTime>
 
 /*=============================================================================
 =  Class: SynchTimer

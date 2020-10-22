@@ -19,7 +19,6 @@
 #include <KLocalizedString>
 #include <KIO/StatJob>
 
-#include <QUrl>
 #include <QTimer>
 
 using namespace KAlarmCal;

@@ -16,7 +16,6 @@
 #include <QGraphicsPixmapItem>
 #include <QPainter>
 #include <QTimer>
-#include <QFrame>
 #include <QBrush>
 #include <QApplication>
 #include <QPixmap>

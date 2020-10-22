@@ -23,7 +23,6 @@
 #include <QVBoxLayout>
 #include <QResizeEvent>
 #include <QDialogButtonBox>
-#include <QPushButton>
 #include <QLineEdit>
 
 

@@ -25,7 +25,6 @@
 #include <MailTransport/TransportManager>
 #include <MailTransport/Transport>
 #include <MailTransportAkonadi/MessageQueueJob>
-#include <KCalendarCore/Person>
 #include <KMime/HeaderParsing>
 #include <KMime/Headers>
 #include <KMime/Message>

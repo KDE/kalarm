@@ -16,7 +16,6 @@
 #include "lib/messagebox.h"
 #include "kalarm_debug.h"
 
-#include <KAlarmCal/DateTime>
 #include <KAlarmCal/KAEvent>
 
 #include <KLocalizedString>

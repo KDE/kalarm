@@ -10,7 +10,6 @@
 #include "eventid.h"
 
 #include "resources/resources.h"
-#include "kalarm_debug.h"
 
 #include <QRegularExpression>
 

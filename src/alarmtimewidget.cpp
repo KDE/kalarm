@@ -19,7 +19,6 @@
 #include "lib/timespinbox.h"
 #include "lib/timezonecombo.h"
 
-#include <KAlarmCal/DateTime>
 
 #include <KDateComboBox>
 #include <KLocalizedString>

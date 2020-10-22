@@ -6,7 +6,6 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#include "messagedisplayhelper.h"
 #include "messagewindow.h"
 #include "messagenotification.h"
 

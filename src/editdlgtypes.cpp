@@ -18,7 +18,6 @@
 #include "mainwindow.h"
 #include "messagewindow.h"
 #include "pickfileradio.h"
-#include "preferences.h"
 #include "reminder.h"
 #include "soundpicker.h"
 #include "sounddlg.h"

@@ -8,9 +8,7 @@
 
 #include "resources.h"
 
-#include "resource.h"
 #include "resourcedatamodelbase.h"
-#include "resourcemodel.h"
 #include "resourceselectdialog.h"
 
 #include "preferences.h"

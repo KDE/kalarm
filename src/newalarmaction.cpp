@@ -16,7 +16,6 @@
 #include "lib/shellprocess.h"
 #include "kalarm_debug.h"
 
-#include <KActionMenu>
 #include <KActionCollection>
 #include <KGlobalAccel>
 #include <KLocalizedString>

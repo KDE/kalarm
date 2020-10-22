@@ -10,7 +10,6 @@
 
 #include "resources.h"
 
-#include "preferences.h"
 #include "lib/desktop.h"
 #include "lib/messagebox.h"
 #include "kalarm_debug.h"

@@ -15,7 +15,6 @@
 #include "kalarm_debug.h"
 
 #include <KAlarmCal/AlarmText>
-#include <KAlarmCal/KAEvent>
 
 #include <KLocalizedString>
 

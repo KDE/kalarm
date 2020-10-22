@@ -11,7 +11,6 @@
 
 #include "akonadicollectionsearch.h"
 #include "displaycalendar.h"
-#include "editdlg.h"
 #include "kalarmapp.h"
 #include "kamail.h"
 #include "mainwindow.h"
@@ -33,7 +32,6 @@
 
 #include <kalarmcal_version.h>
 #include <KAlarmCal/Identities>
-#include <KAlarmCal/KAEvent>
 
 #include <KCalendarCore/Event>
 #include <KCalendarCore/ICalFormat>

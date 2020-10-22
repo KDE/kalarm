@@ -11,7 +11,6 @@
 #include "fontcolour.h"
 #include "preferences.h"
 #include "lib/autoqpointer.h"
-#include "lib/pushbutton.h"
 #include "kalarm_debug.h"
 
 #include <KLocalizedString>

@@ -20,7 +20,6 @@
 #include "kalarm_debug.h"
 
 #include <KAlarmCal/CollectionAttribute>
-#include <KAlarmCal/KACalendar>
 #include <KAlarmCal/Version>
 
 #include <AkonadiCore/AgentManager>

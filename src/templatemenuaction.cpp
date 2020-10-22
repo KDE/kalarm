@@ -14,7 +14,6 @@
 
 #include <KAlarmCal/KAEvent>
 
-#include <KActionMenu>
 #include <QMenu>
 
 

@@ -21,7 +21,6 @@
 #include <KAlarmCal/Identities>
 #include <KAlarmCal/KARecurrence>
 
-#include <KCalendarCore/Duration>
 using namespace KCalendarCore;
 
 #include <stdlib.h>
