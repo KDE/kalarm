@@ -567,7 +567,7 @@ void MessageWindow::closeDisplay()
 void MessageWindow::showDisplay()
 {
     if (!mAlwaysHidden())
-        show();
+        display();
 }
 
 void MessageWindow::raiseDisplay()
@@ -815,12 +815,12 @@ bool MessageWindow::isSpread(const QPoint& topLeft)
 }
 
 /******************************************************************************
-* Display the window.
+* Display the window, if it should not already be auto-closed.
 * If windows are being positioned away from the mouse cursor, it is initially
 * positioned at the top left to slightly reduce the number of times the
 * windows need to be moved in showEvent().
 */
-void MessageWindow::show()
+void MessageWindow::display()
 {
     if (mHelper->activateAutoClose())
     {

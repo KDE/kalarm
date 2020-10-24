@@ -49,7 +49,12 @@ public:
     void                showDefer() override;
     void                showDateTime(const KAEvent&, const KAAlarm&) override;
     void                cancelReminder(const KAEvent&, const KAAlarm&) override;
-    virtual void        show();
+
+    /** Use display() instead of show() to display a message window.
+     *  This prevents windows which should be auto-closed from being shown.
+     */
+    void                display();
+
     QSize               sizeHint() const override;
     static void         redisplayAlarms();
     static int          windowCount(bool excludeAlwaysHidden = false);
@@ -97,6 +102,7 @@ private:
     void                setButtonsReadOnly(bool);
     bool                getWorkAreaAndModal();
     static bool         isSpread(const QPoint& topLeft);
+    void show();   // ensure that display() is called instead of show() on a MessageWindow object
 
     static QVector<MessageWindow*> mWindowList;   // list of message window instances
     // Properties needed by readProperties()

@@ -304,7 +304,7 @@ bool KAlarmApp::restoreSession()
             if (win->isValid())
             {
                 if (Resources::allCreated()  &&  !mNotificationsInhibited)
-                    win->show();
+                    win->display();
                 else
                     mRestoredWindows += win;
             }
@@ -351,7 +351,7 @@ void KAlarmApp::showRestoredWindows()
         {
             // Display message windows restored at startup.
             for (MessageWindow* win : mRestoredWindows)
-                win->show();
+                win->display();
             mRestoredWindows.clear();
         }
         if (mRedisplayAlarms)

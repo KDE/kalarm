@@ -68,6 +68,7 @@ using namespace KCalUtils;
 #include <QMenu>
 #include <QMimeDatabase>
 #include <QInputDialog>
+#include <QTimer>
 #include <QUrl>
 #include <QMenuBar>
 #include <QSystemTrayIcon>
@@ -371,19 +372,20 @@ void MainWindow::showEvent(QShowEvent* se)
     }
     MainWindowBase::showEvent(se);
     mShown = true;
+
+    if (mMenuError)
+        QTimer::singleShot(0, this, &MainWindow::showMenuErrorMessage);
 }
 
 /******************************************************************************
-* Display the window.
+* Show the menu error message now that the main window has been displayed.
+* Waiting until now lets the user easily associate the message with the main
+* window which is faulty.
 */
-void MainWindow::show()
+void MainWindow::showMenuErrorMessage()
 {
-    MainWindowBase::show();
     if (mMenuError)
     {
-        // Show error message now that the main window has been displayed.
-        // Waiting until now lets the user easily associate the message with
-        // the main window which is faulty.
         KAMessageBox::error(this, xi18nc("@info", "Failure to create menus (perhaps <filename>%1</filename> missing or corrupted)", UI_FILE));
         mMenuError = false;
     }

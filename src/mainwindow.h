@@ -65,9 +65,6 @@ public:
     static MainWindow* firstWindow()      { return mWindowList.isEmpty() ? nullptr : mWindowList[0]; }
     static int         count()            { return mWindowList.count(); }
 
-public Q_SLOTS:
-    virtual void   show();
-
 Q_SIGNALS:
     void           selectionChanged();
 
@@ -128,6 +125,7 @@ private Q_SLOTS:
     void           slotCalendarStatusChanged();
     void           slotAlarmListColumnsChanged();
     void           resourcesResized();
+    void           showMenuErrorMessage();
     void           showErrorMessage(const QString&);
     void           editAlarmOk();
     void           editAlarmDeleted(QObject*);
