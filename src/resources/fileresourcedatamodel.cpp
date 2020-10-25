@@ -63,8 +63,10 @@ FileResourceDataModel* FileResourceDataModel::instance(QObject* parent)
 {
     if (!mInstance)
     {
-        mInstance = new FileResourceDataModel(parent);
+        FileResourceDataModel* inst = new FileResourceDataModel(parent);
+        mInstance = inst;
         mInstanceIsOurs = true;
+        inst->initialise();
     }
     return mInstanceIsOurs ? (FileResourceDataModel*)mInstance : nullptr;
 }
@@ -110,6 +112,15 @@ FileResourceDataModel::FileResourceDataModel(QObject* parent)
     connect(resources, &Resources::resourceMessage,
                  this, &FileResourceDataModel::slotResourceMessage, Qt::QueuedConnection);
 
+    // Exit now, so that ResourceDataModelBase::mInstance will be set before
+    // setCalendarsCreated() and setMigrationCompleted() are called in initialise().
+}
+
+/******************************************************************************
+* Initialise the instance. To be called immediately after construction.
+*/
+void FileResourceDataModel::initialise()
+{
     FileResourceConfigManager::createResources(this);
     setCalendarsCreated();
 

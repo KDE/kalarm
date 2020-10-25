@@ -139,6 +139,7 @@ private:
     struct Node;
 
     explicit FileResourceDataModel(QObject* parent = nullptr);
+    void     initialise();
     void     signalDataChanged(bool (*checkFunc)(const KAEvent*), int startColumn, int endColumn, const QModelIndex& parent);
 
     /** Remove a resource's events. */
