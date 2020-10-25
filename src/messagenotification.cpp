@@ -18,6 +18,7 @@
 
 #include <KAboutData>
 #include <KLocalizedString>
+#include <KIdleTime>
 #ifdef RESTORE_NOTIFICATIONS
 #include <KConfigGroup>
 #include <KConfigGui>
@@ -360,6 +361,9 @@ void MessageNotification::showDisplay()
             qCDebug(KALARM_LOG) << "MessageNotification::showDisplay: sendEvent";
             sendEvent();
             mShown = true;
+            // Ensure that the screen wakes from sleep, in case the window manager
+            // doesn't do this when the notification is displayed.
+            KIdleTime::instance()->simulateUserActivity();
         }
         if (!mDisplayComplete  &&  !mErrorWindow()  &&  mAlarmType() != KAAlarm::INVALID_ALARM)
             mHelper->displayComplete(false);   // reschedule

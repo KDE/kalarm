@@ -34,6 +34,7 @@
 #include <KTextEdit>
 #include <KWindowSystem>
 #include <KSqueezedTextLabel>
+#include <KIdleTime>
 #if KDEPIM_HAVE_X11
 #include <KWindowInfo>
 #include <netwm.h>
@@ -827,6 +828,9 @@ void MessageWindow::display()
         if (Preferences::messageButtonDelay() == 0)
             move(0, 0);
         MainWindowBase::show();
+        // Ensure that the screen wakes from sleep, in case the window manager
+        // doesn't do this when the window is displayed.
+        KIdleTime::instance()->simulateUserActivity();
     }
 }
 

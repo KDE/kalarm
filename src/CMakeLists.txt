@@ -173,6 +173,7 @@ target_link_libraries(kalarm_bin
     KF5::GlobalAccel
     KF5::GuiAddons
     KF5::Holidays
+    KF5::IdleTime
     KF5::KIOWidgets
     KF5::Notifications
     KF5::NotifyConfig
