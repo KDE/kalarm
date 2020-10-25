@@ -177,26 +177,25 @@ void KAlarmApp::initialise()
     mWindowFocusBroken = (Desktop::currentIdentity() == Desktop::Unity);
     if (mWindowFocusBroken) { qCDebug(KALARM_LOG) << "KAlarmApp: Window keyboard focus broken"; }
 
-    if (initialiseTimerResources())   // initialise calendars and alarm timer
-    {
-        Resources* resources = Resources::instance();
-        connect(resources, &Resources::resourceAdded,
-                     this, &KAlarmApp::slotResourceAdded);
-        connect(resources, &Resources::resourcePopulated,
-                     this, &KAlarmApp::slotResourcePopulated);
-        connect(resources, &Resources::resourcePopulated,
-                     this, &KAlarmApp::purgeNewArchivedDefault);
-        connect(resources, &Resources::resourcesCreated,
-                     this, &KAlarmApp::slotResourcesCreated);
-        connect(resources, &Resources::resourcesPopulated,
-                     this, &KAlarmApp::processQueue);
+    Resources* resources = Resources::instance();
+    connect(resources, &Resources::resourceAdded,
+                 this, &KAlarmApp::slotResourceAdded);
+    connect(resources, &Resources::resourcePopulated,
+                 this, &KAlarmApp::slotResourcePopulated);
+    connect(resources, &Resources::resourcePopulated,
+                 this, &KAlarmApp::purgeNewArchivedDefault);
+    connect(resources, &Resources::resourcesCreated,
+                 this, &KAlarmApp::slotResourcesCreated);
+    connect(resources, &Resources::resourcesPopulated,
+                 this, &KAlarmApp::processQueue);
 
-        KConfigGroup config(KSharedConfig::openConfig(), "General");
-        mNoSystemTray        = config.readEntry("NoSystemTray", false);
-        mOldShowInSystemTray = wantShowInSystemTray();
-        DateTime::setStartOfDay(Preferences::startOfDay());
-        mPrefsArchivedColour = Preferences::archivedColour();
-    }
+    initialiseTimerResources();   // initialise calendars and alarm timer
+
+    KConfigGroup config(KSharedConfig::openConfig(), "General");
+    mNoSystemTray        = config.readEntry("NoSystemTray", false);
+    mOldShowInSystemTray = wantShowInSystemTray();
+    DateTime::setStartOfDay(Preferences::startOfDay());
+    mPrefsArchivedColour = Preferences::archivedColour();
 
     // Get notified when the Freedesktop notifications properties have changed.
     QDBusConnection conn = QDBusConnection::sessionBus();

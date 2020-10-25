@@ -1,11 +1,13 @@
 KAlarm Change Log
 
-=== Version 3.1.0 (KDE Applications 20.12) --- 22 October 2020 ===
+=== Version 3.1.0 (KDE Applications 20.12) --- 25 October 2020 ===
 + Add option to show alarm message as a notification instead of in a window [KDE Bug 345922]
 + Don't execute display alarms while desktop notifications are inhibited.
 
-=== Version 3.0.3 (KDE Applications 20.08.3) --- 15 October 2020 ===
+=== Version 3.0.3 (KDE Applications 20.08.3) --- 25 October 2020 ===
 + Prevent resources being disabled at logout [KDE Bug 427722]
++ Fix regression introduced in version 3.0.0:
+    Warn user if no active alarm calendar is enabled.
 
 === Version 3.0.2 (KDE Applications 20.08.2) --- 3 October 2020 ===
 + Fix repeat-at-login alarms not triggering when KAlarm starts.
@@ -45,7 +47,8 @@ KAlarm Change Log
 + Fix failure to set no-autostart for non-KDE desktops, if a writable autostart file exists.
 * Fix failure to execute command alarms in a terminal window.
 + Fix occasional crash on opening alarm edit dialogue [KDE Bug 412181]
-+ Fix wrong Undo/Redo being performed when selected from list (fixes regression introduced in 2.13.0).
++ Fix regression introduced in version 2.13.0:
+    Fix wrong Undo/Redo being performed when selected from list.
 
 === Version 2.14.1 (KDE Applications 20.04.1) --- 11 May 2020 ===
 + Correctly interpret resource IDs in command line and DBus calls.
@@ -78,11 +81,13 @@ KAlarm Change Log
 + Fix error on redo of an active alarm deletion.
 + Archive repeat-at-login alarms if previously triggered, when they are deleted.
 + Fix layout of defer alarm dialogue.
-+ Make user settings changes take effect immediately (fixes regression introduced in 2.10.11).
++ Fix regression introduced in version 2.10.11:
+    Make user settings changes take effect immediately.
 
 === Version 2.12.7 (KDE Applications 19.08.2) --- 7 October 2019 ===
 + Show correct read-only status of an alarm in its context menu.
-+ Fix errors deleting and reactivating alarms (regression introduced in 2.12.5).
++ Fix regression introduced in version 2.12.5:
+    Fix errors deleting and reactivating alarms.
 + Fix error on undo of an active alarm deletion.
 + Don't trigger repeat-at-login alarms when they are edited or imported.
 
