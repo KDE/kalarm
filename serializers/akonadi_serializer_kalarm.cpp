@@ -129,7 +129,7 @@ void SerializerPluginKAlarm::compare(AbstractDifferencesReporter *reporter, cons
     if (eventL.category() != eventR.category()) {
         reportDifference(reporter, KAEventFormatter::AlarmCategory);
     }
-    if (eventL.templateName() != eventR.templateName()) {
+    if (eventL.name() != eventR.name()) {
         reportDifference(reporter, KAEventFormatter::TemplateName);
     }
     if (eventL.createdDateTime() != eventR.createdDateTime()) {

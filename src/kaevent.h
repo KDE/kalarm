@@ -309,6 +309,7 @@ public:
     /** Construct an event and initialise with the specified parameters.
      *  @param dt    start date/time. If @p dt is date-only, or if #ANY_TIME flag
      *               is specified, the event will be date-only.
+     *  @param name  name of the alarm.
      *  @param text  alarm message (@p action = #MESSAGE);
      *               file to display (@p action = #FILE);
      *               command to execute (@p action = #COMMAND);
@@ -326,7 +327,32 @@ public:
      *                        to the instance; call endChanges() when changes
      *                        are complete.
      */
-    KAEvent(const KADateTime &dt, const QString &text, const QColor &bg, const QColor &fg,
+    KAEvent(const KADateTime &dt, const QString &name, const QString &text,
+            const QColor &bg, const QColor &fg, const QFont &font,
+            SubAction action, int lateCancel, Flags flags, bool changesPending = false);
+
+    /** Construct an event and initialise with the specified parameters.
+     *  @param dt    start date/time. If @p dt is date-only, or if #ANY_TIME flag
+     *               is specified, the event will be date-only.
+     *  @param text  alarm message (@p action = #MESSAGE);
+     *               file to display (@p action = #FILE);
+     *               command to execute (@p action = #COMMAND);
+     *               email body (@p action = #EMAIL);
+     *               audio file (@p action = #AUDIO).
+     *  @param bg    background color (for display alarms, ignored otherwise).
+     *  @param fg    foreground color (for display alarms, ignored otherwise).
+     *  @param font  font (for display alarms, ignored otherwise). Ignored if
+     *               #DEFAULT_FONT flag is specified.
+     *  @param action         alarm action type.
+     *  @param lateCancel     late-cancellation period (minutes), else 0.
+     *  @param flags          OR of #Flag enum values.
+     *  @param changesPending true to inhibit automatic calculations and data
+     *                        updates until further changes have been applied
+     *                        to the instance; call endChanges() when changes
+     *                        are complete.
+     *  @deprecated Use the other constructor.
+     */
+    KALARMCAL_DEPRECATED KAEvent(const KADateTime &dt, const QString &text, const QColor &bg, const QColor &fg,
             const QFont &font, SubAction action, int lateCancel, Flags flags, bool changesPending = false);
 
     /** Construct an event and initialise it from a KCalendarCore::Event.
@@ -578,6 +604,9 @@ public:
      */
     Akonadi::Item::Id akonadiItemId() const;
 
+    /** Return the alarm's name. */
+    QString name() const;
+
     /** Return the alarm's text. Its significance depends on the type of alarm;
      *  alternatively, use message(), displayMessage(), fileName() or command(),
      *  which incorporate checks on alarm type.
@@ -767,8 +796,9 @@ public:
     /** Return the alarm template's name.
      *  @return template name, or empty if not a template
      *  @see setTemplate()
+     *  @deprecated Use name() instead.
      */
-    QString templateName() const;
+    KALARMCAL_DEPRECATED QString templateName() const;
 
     /** Return whether the alarm template does not specify a time.
      *  @return @c true if no time is specified, i.e. the normal default alarm time will

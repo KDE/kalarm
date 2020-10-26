@@ -39,6 +39,8 @@ QString KAEventFormatter::label(Parameter param)
         return i18nc("@label", "Alarm type");
     case AlarmCategory:
         return i18nc("@label", "Alarm status");
+    case Name:
+        return i18nc("@label", "Alarm name");
     case TemplateName:
         return i18nc("@label", "Template name");
     case CreatedTime:
@@ -160,6 +162,7 @@ bool KAEventFormatter::isApplicable(Parameter param) const
     case Id:
     case AlarmType:
     case AlarmCategory:
+    case Name:
     case CreatedTime:
     case StartTime:
     case Recurs:
@@ -272,8 +275,9 @@ QString KAEventFormatter::value(Parameter param) const
             break;
         }
         break;
+    case Name:
     case TemplateName:
-        return mEvent.templateName();
+        return mEvent.name();
     case CreatedTime:
         return mEvent.createdDateTime().toUtc().toString(QStringLiteral("%Y-%m-%d %H:%M:%SZ"));
     case StartTime:

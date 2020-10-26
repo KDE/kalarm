@@ -137,8 +137,9 @@ public:
     typedef QMap<AlarmType, AlarmData> AlarmMap;
 
     KAEventPrivate();
-    KAEventPrivate(const KADateTime &, const QString &message, const QColor &bg, const QColor &fg,
-                   const QFont &f, KAEvent::SubAction, int lateCancel, KAEvent::Flags flags,
+    KAEventPrivate(const KADateTime &, const QString &name, const QString &message,
+                   const QColor &bg, const QColor &fg, const QFont &f,
+                   KAEvent::SubAction, int lateCancel, KAEvent::Flags flags,
                    bool changesPending = false);
     explicit KAEventPrivate(const KCalendarCore::Event::Ptr &);
     KAEventPrivate(const KAEventPrivate &);
@@ -237,11 +238,11 @@ public:
     mutable KAEvent::CmdErrType mCommandError{KAEvent::CMD_NO_ERROR}; // command execution error last time the alarm triggered
 
     QString            mEventID;           // UID: KCalendarCore::Event unique ID
-    QString            mTemplateName;      // alarm template's name, or null if normal event
     QMap<QByteArray, QString> mCustomProperties; // KCalendarCore::Event's non-KAlarm custom properties
     Akonadi::Item::Id  mItemId{-1};        // Akonadi::Item ID for this event
     mutable ResourceId mResourceId{-1};    // ID of resource containing the event, or for a displaying event,
                                            // saved resource ID (not the resource the event is in)
+    QString            mName;              // name of the alarm
     QString            mText;              // message text, file URL, command, email body [or audio file for KAAlarm]
     QString            mAudioFile;         // ATTACH: audio file to play
     QString            mPreAction;         // command to execute before alarm is displayed
@@ -485,16 +486,26 @@ KAEventPrivate::KAEventPrivate()
 /******************************************************************************
 * Initialise the instance with the specified parameters.
 */
-KAEvent::KAEvent(const KADateTime &dt, const QString &message, const QColor &bg, const QColor &fg, const QFont &f,
+KAEvent::KAEvent(const KADateTime &dt, const QString &name, const QString &message,
+                 const QColor &bg, const QColor &fg, const QFont &f,
                  SubAction action, int lateCancel, Flags flags, bool changesPending)
-    : d(new KAEventPrivate(dt, message, bg, fg, f, action, lateCancel, flags, changesPending))
+    : d(new KAEventPrivate(dt, name, message, bg, fg, f, action, lateCancel, flags, changesPending))
 {
 }
 
-KAEventPrivate::KAEventPrivate(const KADateTime &dateTime, const QString &text, const QColor &bg, const QColor &fg,
-                               const QFont &font, KAEvent::SubAction action, int lateCancel, KAEvent::Flags flags,
+KAEvent::KAEvent(const KADateTime &dt, const QString &message,
+                 const QColor &bg, const QColor &fg, const QFont &f,
+                 SubAction action, int lateCancel, Flags flags, bool changesPending)
+    : d(new KAEventPrivate(dt, QString(), message, bg, fg, f, action, lateCancel, flags, changesPending))
+{
+}
+
+KAEventPrivate::KAEventPrivate(const KADateTime &dateTime, const QString &name, const QString &text,
+                               const QColor &bg, const QColor &fg, const QFont &font,
+                               KAEvent::SubAction action, int lateCancel, KAEvent::Flags flags,
                                bool changesPending)
-    : mAlarmCount(1)
+    : mName(name)
+    , mAlarmCount(1)
     , mBgColour(bg)
     , mFgColour(fg)
     , mFont(font)
@@ -565,6 +576,7 @@ KAEventPrivate::KAEventPrivate(const KCalendarCore::Event::Ptr &event)
     // Extract status from the event
     mEventID        = event->uid();
     mRevision       = event->revision();
+    mName           = event->summary();
     mBgColour       = QColor(255, 255, 255);    // missing/invalid colour - return white background
     mFgColour       = QColor(0, 0, 0);          // and black foreground
     mReadOnly       = event->isReadOnly();
@@ -729,9 +741,6 @@ KAEventPrivate::KAEventPrivate(const KCalendarCore::Event::Ptr &event)
     mCreatedDateTime = KADateTime(event->created());
     if (dateOnly  &&  !mRepetition.isDaily()) {
         mRepetition.set(Duration(mRepetition.intervalDays(), Duration::Days));
-    }
-    if (mCategory == CalEvent::TEMPLATE) {
-        mTemplateName = event->summary();
     }
     if (event->customStatus() == DISABLED_STATUS) {
         mEnabled = false;
@@ -996,10 +1005,10 @@ void KAEventPrivate::copy(const KAEventPrivate &event)
     mMainWorkTrigger         = event.mMainWorkTrigger;
     mCommandError            = event.mCommandError;
     mEventID                 = event.mEventID;
-    mTemplateName            = event.mTemplateName;
     mCustomProperties        = event.mCustomProperties;
     mItemId                  = event.mItemId;
     mResourceId              = event.mResourceId;
+    mName                    = event.mName;
     mText                    = event.mText;
     mAudioFile               = event.mAudioFile;
     mPreAction               = event.mPreAction;
@@ -1085,7 +1094,7 @@ void KAEvent::set(const KCalendarCore::Event::Ptr &e)
 void KAEvent::set(const KADateTime &dt, const QString &message, const QColor &bg, const QColor &fg,
                   const QFont &f, SubAction act, int lateCancel, Flags flags, bool changesPending)
 {
-    *this = KAEvent(dt, message, bg, fg, f, act, lateCancel, flags, changesPending);
+    *this = KAEvent(dt, QString(), message, bg, fg, f, act, lateCancel, flags, changesPending);
 }
 
 /******************************************************************************
@@ -1122,6 +1131,7 @@ bool KAEventPrivate::updateKCalEvent(const Event::Ptr &ev, KAEvent::UidAction ui
     ev->setTransparency(Event::Transparent);
 
     // Set up event-specific data
+    ev->setSummary(mName);
 
     // Set up custom properties.
     if (setCustomProperties) {
@@ -1185,7 +1195,7 @@ bool KAEventPrivate::updateKCalEvent(const Event::Ptr &ev, KAEvent::UidAction ui
         }
         (flags += DEFER_FLAG) += param;
     }
-    if (!mTemplateName.isEmpty()  &&  mTemplateAfterTime >= 0) {
+    if (mCategory == CalEvent::TEMPLATE  &&  mTemplateAfterTime >= 0) {
         (flags += TEMPL_AFTER_TIME_FLAG) += QString::number(mTemplateAfterTime);
     }
     if (mAkonadiItemId >= 0) {
@@ -1326,9 +1336,7 @@ bool KAEventPrivate::updateKCalEvent(const Event::Ptr &ev, KAEvent::UidAction ui
             ancillaryType = 2;
         }
     }
-    if (!mTemplateName.isEmpty()) {
-        ev->setSummary(mTemplateName);
-    } else if (mDisplaying) {
+    if (mDisplaying  &&  mCategory != CalEvent::TEMPLATE) {
         QStringList list(DISPLAYING_TYPE);
         if (mDisplayingFlags & KAEvent::REPEAT_AT_LOGIN) {
             list += AT_LOGIN_TYPE;
@@ -1828,6 +1836,11 @@ Akonadi::Item::Id KAEvent::akonadiItemId() const
     return d->mAkonadiItemId;
 }
 
+QString KAEvent::name() const
+{
+    return d->mName;
+}
+
 QString KAEvent::cleanText() const
 {
     return d->mText;
@@ -2068,19 +2081,19 @@ bool KAEvent::speak() const
 void KAEvent::setTemplate(const QString &name, int afterTime)
 {
     d->setCategory(CalEvent::TEMPLATE);
-    d->mTemplateName = name;
+    d->mName = name;
     d->mTemplateAfterTime = afterTime;
     d->mTriggerChanged = true;   // templates and archived don't have trigger times
 }
 
 bool KAEvent::isTemplate() const
 {
-    return !d->mTemplateName.isEmpty();
+    return d->mCategory == CalEvent::TEMPLATE;
 }
 
 QString KAEvent::templateName() const
 {
-    return d->mTemplateName;
+    return d->mName;
 }
 
 bool KAEvent::usingDefaultTime() const
@@ -3638,6 +3651,7 @@ bool KAEventPrivate::compare(const KAEventPrivate& other, KAEvent::Comparison co
     if (mCategory         != other.mCategory
     ||  mActionSubType    != other.mActionSubType
     ||  mDisplaying       != other.mDisplaying
+    ||  mName             != other.mName
     ||  mText             != other.mText
     ||  mStartDateTime    != other.mStartDateTime
     ||  mLateCancel       != other.mLateCancel
@@ -3699,8 +3713,7 @@ bool KAEventPrivate::compare(const KAEventPrivate& other, KAEvent::Comparison co
             }
             break;
         case CalEvent::TEMPLATE:
-            if (mTemplateName      != other.mTemplateName
-            ||  mTemplateAfterTime != other.mTemplateAfterTime) {
+            if (mTemplateAfterTime != other.mTemplateAfterTime) {
                 return false;
             }
             break;
@@ -3853,8 +3866,8 @@ void KAEventPrivate::dumpDebug() const
     qCDebug(KALARMCAL_LOG) << "-- mAllWorkTrigger:" << mAllWorkTrigger.toString();
     qCDebug(KALARMCAL_LOG) << "-- mMainWorkTrigger:" << mMainWorkTrigger.toString();
     qCDebug(KALARMCAL_LOG) << "-- mCategory:" << mCategory;
-    if (!mTemplateName.isEmpty()) {
-        qCDebug(KALARMCAL_LOG) << "-- mTemplateName:" << mTemplateName;
+    qCDebug(KALARMCAL_LOG) << "-- mName:" << mName;
+    if (mCategory == CalEvent::TEMPLATE) {
         qCDebug(KALARMCAL_LOG) << "-- mTemplateAfterTime:" << mTemplateAfterTime;
     }
     qCDebug(KALARMCAL_LOG) << "-- mText:" << mText;

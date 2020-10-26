@@ -23,6 +23,7 @@ public:
         Id,
         AlarmType,
         AlarmCategory,
+        Name,
         TemplateName,
         CreatedTime,
         StartTime,
