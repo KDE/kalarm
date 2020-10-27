@@ -514,7 +514,7 @@ KAEvent ResourcesCalendar::templateEvent(const QString& templateName)
     const QVector<KAEvent> eventlist = events(CalEvent::TEMPLATE);
     for (const KAEvent& event : eventlist)
     {
-        if (event.templateName() == templateName)
+        if (event.name() == templateName)
             return event;
     }
     return KAEvent();

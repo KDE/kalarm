@@ -40,7 +40,7 @@ void TemplateMenuAction::slotInitMenu()
     const QVector<KAEvent> templates = KAlarm::templateList();
     for (const KAEvent& templ : templates)
     {
-        const QString name = templ.templateName();
+        const QString name = templ.name();
         int j = 0;
         for (int jend = sorted.count();
              j < jend  &&  QString::localeAwareCompare(name, sorted[j]) > 0;

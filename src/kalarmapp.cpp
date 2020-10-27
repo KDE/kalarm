@@ -513,6 +513,7 @@ int KAlarmApp::activateInstance(const QStringList& args, const QString& workingD
                         exitCode = 1;
                         break;
                     }
+                    editDlg->setName(options->name());
                     if (options->alarmTime().isValid())
                         editDlg->setTime(options->alarmTime());
                     if (options->recurrence())
@@ -600,7 +601,7 @@ int KAlarmApp::activateInstance(const QStringList& args, const QString& workingD
                     // running, this new instance will not exit after the dialogue is closed.
                     // This is deliberate, since exiting would mean that KAlarm wouldn't
                     // trigger the new alarm.
-                    KAlarm::editNewAlarm(options->templateName());
+                    KAlarm::editNewAlarm(options->name());
 
                     createOnlyMainWindow();   // prevent the application from quitting
                 }
@@ -613,9 +614,10 @@ int KAlarmApp::activateInstance(const QStringList& args, const QString& workingD
                     exitCode = 1;
                 else
                 {
-                    if (!scheduleEvent(options->editAction(), options->text(), options->alarmTime(),
-                                       options->lateCancel(), options->flags(), options->bgColour(),
-                                       options->fgColour(), QFont(), options->audioFile(), options->audioVolume(),
+                    if (!scheduleEvent(options->editAction(), options->name(), options->text(),
+                                       options->alarmTime(), options->lateCancel(), options->flags(),
+                                       options->bgColour(), options->fgColour(), QFont(),
+                                       options->audioFile(), options->audioVolume(),
                                        options->reminderMinutes(), (options->recurrence() ? *options->recurrence() : KARecurrence()),
                                        options->subRepeatInterval(), options->subRepeatCount(),
                                        options->fromID(), options->addressees(),
@@ -1661,9 +1663,10 @@ bool KAlarmApp::needWindowFocusFix() const
 * to command line options.
 * Reply = true unless there was a parameter error or an error opening calendar file.
 */
-bool KAlarmApp::scheduleEvent(KAEvent::SubAction action, const QString& text, const KADateTime& dateTime,
-                              int lateCancel, KAEvent::Flags flags, const QColor& bg, const QColor& fg,
-                              const QFont& font, const QString& audioFile, float audioVolume, int reminderMinutes,
+bool KAlarmApp::scheduleEvent(KAEvent::SubAction action, const QString& name, const QString& text,
+                              const KADateTime& dateTime, int lateCancel, KAEvent::Flags flags,
+                              const QColor& bg, const QColor& fg, const QFont& font,
+                              const QString& audioFile, float audioVolume, int reminderMinutes,
                               const KARecurrence& recurrence, const KCalendarCore::Duration& repeatInterval, int repeatCount,
                               uint mailFromID, const KCalendarCore::Person::List& mailAddresses,
                               const QString& mailSubject, const QStringList& mailAttachments)
@@ -1684,7 +1687,7 @@ bool KAlarmApp::scheduleEvent(KAEvent::SubAction action, const QString& text, co
     if (!dateTime.isDateOnly())
         alarmTime.setTime(QTime(alarmTime.time().hour(), alarmTime.time().minute(), 0));
 
-    KAEvent event(alarmTime, text, bg, fg, font, action, lateCancel, flags, true);
+    KAEvent event(alarmTime, name, text, bg, fg, font, action, lateCancel, flags, true);
     if (reminderMinutes)
     {
         const bool onceOnly = flags & KAEvent::REMINDER_ONCE;

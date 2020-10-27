@@ -596,7 +596,7 @@ bool EditDisplayAlarmDlg::type_stateChanged() const
 * Extract the data in the dialog specific to the alarm type and set up a
 * KAEvent from it.
 */
-void EditDisplayAlarmDlg::type_setEvent(KAEvent& event, const KADateTime& dt, const QString& text, int lateCancel, bool trial)
+void EditDisplayAlarmDlg::type_setEvent(KAEvent& event, const KADateTime& dt, const QString& name, const QString& text, int lateCancel, bool trial)
 {
     KAEvent::SubAction type;
     switch (mTypeCombo->currentIndex())
@@ -619,7 +619,7 @@ void EditDisplayAlarmDlg::type_setEvent(KAEvent& event, const KADateTime& dt, co
         fgColour = mFontColourButton->fgColour();
         font     = mFontColourButton->font();
     }
-    event = KAEvent(dt, text, bgColour, fgColour, font, type, lateCancel, getAlarmFlags());
+    event = KAEvent(dt, name, text, bgColour, fgColour, font, type, lateCancel, getAlarmFlags());
     if (type == KAEvent::MESSAGE)
     {
         if (AlarmText::checkIfEmail(text))
@@ -1022,10 +1022,10 @@ bool EditCommandAlarmDlg::type_stateChanged() const
 * Extract the data in the dialog specific to the alarm type and set up a
 * KAEvent from it.
 */
-void EditCommandAlarmDlg::type_setEvent(KAEvent& event, const KADateTime& dt, const QString& text, int lateCancel, bool trial)
+void EditCommandAlarmDlg::type_setEvent(KAEvent& event, const KADateTime& dt, const QString& name, const QString& text, int lateCancel, bool trial)
 {
     Q_UNUSED(trial);
-    event = KAEvent(dt, text, QColor(), QColor(), QFont(), KAEvent::COMMAND, lateCancel, getAlarmFlags());
+    event = KAEvent(dt, name, text, QColor(), QColor(), QFont(), KAEvent::COMMAND, lateCancel, getAlarmFlags());
     if (mCmdOutputGroup->checkedButton() == mCmdLogToFile)
         event.setLogFile(mCmdLogFileEdit->text());
 }
@@ -1412,10 +1412,10 @@ bool EditEmailAlarmDlg::type_stateChanged() const
 * Extract the data in the dialog specific to the alarm type and set up a
 * KAEvent from it.
 */
-void EditEmailAlarmDlg::type_setEvent(KAEvent& event, const KADateTime& dt, const QString& text, int lateCancel, bool trial)
+void EditEmailAlarmDlg::type_setEvent(KAEvent& event, const KADateTime& dt, const QString& name, const QString& text, int lateCancel, bool trial)
 {
     Q_UNUSED(trial);
-    event = KAEvent(dt, text, QColor(), QColor(), QFont(), KAEvent::EMAIL, lateCancel, getAlarmFlags());
+    event = KAEvent(dt, name, text, QColor(), QColor(), QFont(), KAEvent::EMAIL, lateCancel, getAlarmFlags());
     const uint from = mEmailFromList ? mEmailFromList->currentIdentity() : 0;
     event.setEmail(from, mEmailAddresses, mEmailSubjectEdit->text(), mEmailAttachments);
 }
@@ -1722,11 +1722,11 @@ bool EditAudioAlarmDlg::type_stateChanged() const
 * Extract the data in the dialog specific to the alarm type and set up a
 * KAEvent from it.
 */
-void EditAudioAlarmDlg::type_setEvent(KAEvent& event, const KADateTime& dt, const QString& text, int lateCancel, bool trial)
+void EditAudioAlarmDlg::type_setEvent(KAEvent& event, const KADateTime& dt, const QString& name, const QString& text, int lateCancel, bool trial)
 {
     Q_UNUSED(text);
     Q_UNUSED(trial);
-    event = KAEvent(dt, QString(), QColor(), QColor(), QFont(), KAEvent::AUDIO, lateCancel, getAlarmFlags());
+    event = KAEvent(dt, name, QString(), QColor(), QColor(), QFont(), KAEvent::AUDIO, lateCancel, getAlarmFlags());
     float volume, fadeVolume;
     int   fadeSecs;
     mSoundConfig->getVolume(volume, fadeVolume, fadeSecs);

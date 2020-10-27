@@ -1276,7 +1276,7 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
             KAEvent::Flags flags = KAEvent::DEFAULT_FONT;
             if (start.isDateOnly())
                 flags |= KAEvent::ANY_TIME;
-            KAEvent ev(start, alarmText.displayText(), Preferences::defaultBgColour(), Preferences::defaultFgColour(),
+            KAEvent ev(start, todo->summary(), alarmText.displayText(), Preferences::defaultBgColour(), Preferences::defaultFgColour(),
                        QFont(), KAEvent::MESSAGE, 0, flags, true);
             ev.startChanges();
             if (todo->recurs())

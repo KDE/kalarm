@@ -445,10 +445,20 @@ MiscPrefTab::MiscPrefTab(StackedScrollGroup* scrollGroup)
     mQuitWarn->setWhatsThis(xi18nc("@info:whatsthis", "Check to display a warning prompt before quitting <application>KAlarm</application>."));
     vlayout->addWidget(mQuitWarn, 0, Qt::AlignLeft);
 
-    // Confirm alarm deletion?
+    // Use alarm names?
     QWidget* widget = new QWidget;  // this is for consistent left alignment
     topLayout()->addWidget(widget);
     QHBoxLayout* hbox = new QHBoxLayout(widget);
+    mUseAlarmNames = new QCheckBox(i18nc("@option:check", "Use alarm names"));
+    mUseAlarmNames->setMinimumSize(mUseAlarmNames->sizeHint());
+    mUseAlarmNames->setWhatsThis(i18nc("@info:whatsthis", "Check to have the option to give each alarm a name. This is a convenience to help you to identify alarms."));
+    hbox->addWidget(mUseAlarmNames);
+    hbox->addStretch();    // left adjust the controls
+
+    // Confirm alarm deletion?
+    widget = new QWidget;  // this is for consistent left alignment
+    topLayout()->addWidget(widget);
+    hbox = new QHBoxLayout(widget);
     mConfirmAlarmDeletion = new QCheckBox(i18nc("@option:check", "Confirm alarm deletions"));
     mConfirmAlarmDeletion->setMinimumSize(mConfirmAlarmDeletion->sizeHint());
     mConfirmAlarmDeletion->setWhatsThis(i18nc("@info:whatsthis", "Check to be prompted for confirmation each time you delete an alarm."));
@@ -527,6 +537,7 @@ void MiscPrefTab::restore(bool defaults, bool)
 {
     mAutoStart->setChecked(defaults ? true : Preferences::autoStart());
     mQuitWarn->setChecked(Preferences::quitWarn());
+    mUseAlarmNames->setChecked(Preferences::useAlarmName());
     mConfirmAlarmDeletion->setChecked(Preferences::confirmAlarmDeletion());
     mDefaultDeferTime->setValue(Preferences::defaultDeferTime());
     QString xtermCmd = Preferences::cmdXTermCommand();
@@ -587,6 +598,9 @@ void MiscPrefTab::apply(bool syncToDisc)
             Preferences::setNoAutoStart(false);
         Preferences::setAutoStartChangedByUser(true);  // prevent prompting the user on quit, about start-at-login
     }
+    b = mUseAlarmNames->isChecked();
+    if (b != Preferences::useAlarmName())
+        Preferences::setUseAlarmName(b);
     b = mConfirmAlarmDeletion->isChecked();
     if (b != Preferences::confirmAlarmDeletion())
         Preferences::setConfirmAlarmDeletion(b);

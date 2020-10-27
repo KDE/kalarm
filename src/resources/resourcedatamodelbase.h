@@ -41,7 +41,7 @@ public:
     enum
     {
         // Item columns
-        TimeColumn = 0, TimeToColumn, RepeatColumn, ColourColumn, TypeColumn, TextColumn,
+        TimeColumn = 0, TimeToColumn, RepeatColumn, ColourColumn, TypeColumn, NameColumn, TextColumn,
         TemplateNameColumn,
         ColumnCount
     };

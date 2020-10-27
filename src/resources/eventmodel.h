@@ -109,7 +109,7 @@ class AlarmListModel : public EventListModel
 public:
     enum   // data columns
     {
-        TimeColumn = 0, TimeToColumn, RepeatColumn, ColourColumn, TypeColumn, TextColumn,
+        TimeColumn = 0, TimeToColumn, RepeatColumn, ColourColumn, TypeColumn, NameColumn, TextColumn,
         ColumnCount
     };
 
@@ -133,6 +133,9 @@ public:
      */
     CalEvent::Types eventTypeFilter() const   { return mFilterTypes; }
 
+    /** Set whether to replace a blank alarm name with the alarm text. */
+    void setReplaceBlankName(bool replace)   { mReplaceBlankName = replace; }
+
     int  columnCount(const QModelIndex& = QModelIndex()) const  override { return ColumnCount; }
     QVariant headerData(int section, Qt::Orientation, int role = Qt::DisplayRole) const override;
 
@@ -141,10 +144,12 @@ protected:
 
     bool filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const override;
     bool filterAcceptsColumn(int sourceCol, const QModelIndex& sourceParent) const override;
+    QVariant data(const QModelIndex&, int role) const override;
 
 private:
     static AlarmListModel* mAllInstance;
-    CalEvent::Types mFilterTypes;  // types of events contained in this model
+    CalEvent::Types mFilterTypes;    // types of events contained in this model
+    bool mReplaceBlankName {false};  // replace Name with Text for Qt::DisplayRole if Name is blank
 };
 
 

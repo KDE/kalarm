@@ -39,7 +39,7 @@
 
 <!-- Don't change format of date and version of the documentation -->
 
-<date>2020-10-22</date>
+<date>2020-10-28</date>
 <releaseinfo>3.1.0 (Applications 20.12)</releaseinfo>
 
 <abstract>
@@ -66,10 +66,10 @@
 messages, the playing of sound files, the execution of commands and
 the sending of emails.</para>
 
-<para>In its default graphical mode, &kalarm; displays the list of
-pending alarms, showing their times and details.  You can create new
-alarms, or you can select existing alarms for modification or
-deletion. You can also optionally view expired alarms.</para>
+<para>&kalarm; displays the list of pending alarms, showing their
+times and details.  You can create new alarms, or you can select
+existing alarms for modification or deletion. You can also optionally
+view expired alarms.</para>
 
 <para>When configuring an alarm, you can choose whether it should
 repeat, and whether the alarm should be canceled if it cannot be
@@ -186,13 +186,18 @@ background.</para>
 <title>Alarm List</title>
 
 <para>The main &kalarm; window displays the current list of pending
-alarms, showing their times, repetition intervals, colors, and
+alarms, showing their times, repetition intervals, colors, names, and
 message texts, names of files to play or display, commands to execute
 or email subjects. (For a recurring alarm, the time shown is its next
 scheduled trigger time. For an alarm with a reminder, the time shown
 is the time of the alarm proper, not the reminder time.) An icon at
 the left of each alarm text/file/command/email subject indicates the
 type of alarm.</para>
+
+<para>Note that the <guilabel>Name</guilabel> column only exists if
+the use of alarm names is enabled in the
+<link linkend="preferences-general">General</link> tab of the
+Configuration dialog.</para>
 
 <screenshot>
 <screeninfo>Screenshot of the &kalarm; main window</screeninfo>
@@ -222,17 +227,19 @@ above.</para>
 <title>Changing the Alarm List Appearance</title>
 
 <para>The alarms may be ordered by date/time, repeat interval, color,
-type or text by clicking on the titlebar for the appropriate column.
-To reverse the sort order, click the column titlebar again.</para>
+type, name or text by clicking on the titlebar for the appropriate
+column. To reverse the sort order, click the column titlebar
+again.</para>
 
 <para>You can optionally show the remaining time until each alarm is
 due, together with, or instead of, the alarm's scheduled time.</para>
 
 <para>You can select which columns to display or hide by
 <mousebutton>Right</mousebutton> clicking on the column headings and
-using the context menu to set the columns to show. But note that the
-<guilabel>Message, File or Command</guilabel> column, and at least one
-of the <guilabel>Time</guilabel> or <guilabel>Time To</guilabel>
+using the context menu to set the columns to show. But note that at
+least one of the <guilabel>Name</guilabel> or
+<guilabel>Message, File or Command</guilabel> columns, and at least
+one of the <guilabel>Time</guilabel> or <guilabel>Time To</guilabel>
 columns, are always shown.</para>
 
 <para>If you use multiple alarm calendars, you can color code alarms
@@ -1172,6 +1179,21 @@ the Alarm Edit dialog using the
 <caption><para>Alarm Edit dialog for a display alarm, showing all options</para></caption>
 </mediaobject>
 </screenshot>
+
+<sect2>
+<title>Alarm Name</title>
+
+<para>You can give a name to the alarm in the
+<guilabel>Alarm name</guilabel> field. This is a convenience to help
+you identify the alarm more easily. You do not have to enter a name,
+and it need not be unique.</para>
+
+<para>Note that this field is only displayed if the the use of alarm
+names is enabled in the
+<link linkend="preferences-general">General</link> tab of the
+Configuration dialog.</para>
+
+</sect2>
 
 <sect2>
 <title>Alarm Action</title>
@@ -2549,6 +2571,14 @@ option is automatically re-enabled by default whenever you change run
 mode.</para>
 </listitem>
 
+<listitem><para><guilabel>Use alarm names</guilabel>: Specify
+whether each alarm can be given a name to help you to identify it.
+This determines whether the <guilabel>Name</guilabel> column will be
+shown in the <link linkend="alarm-list">alarm list</link>, and
+whether the <guilabel>Alarm name</guilabel> field will appear in the
+<link linkend="alarm-edit-dlg">Alarm Edit dialog</link>.</para>
+</listitem>
+
 <listitem><para><guilabel>Confirm alarm deletions</guilabel>: Specify
 whether you should be prompted for confirmation each time you delete
 an alarm.</para>
@@ -3217,7 +3247,11 @@ time.</para>
   with this option.</entry>
 </row>
 <row>
-  <entry><option>-n</option>, <option>--notify</option></entry>
+  <entry><option>-n</option>, <option>--name</option></entry>
+  <entry>Specify a name to help you to identify the alarm.</entry>
+</row>
+<row>
+  <entry><option>-N</option>, <option>--notify</option></entry>
   <entry>Display the alarm as a notification, not in a window.
   <option>--color</option>, <option>--colorfg</option>,
   <option>--play</option>, <option>--ack-confirm</option> and
@@ -3559,7 +3593,8 @@ unchanged.</para>
 </refnamediv>
 <refsynopsisdiv>
 <synopsis>
-bool scheduleMessage(const QString&amp; <replaceable>message</replaceable>,
+bool scheduleMessage(const QString&amp; <replaceable>name</replaceable>,
+                     const QString&amp; <replaceable>message</replaceable>,
                      const QString&amp; <replaceable>startDateTime</replaceable>,
                      int <replaceable>lateCancel</replaceable>,
                      unsigned <replaceable>flags</replaceable>, 
@@ -3573,7 +3608,8 @@ bool scheduleMessage(const QString&amp; <replaceable>message</replaceable>,
                      int <replaceable>subRepeatCount</replaceable>)
 </synopsis>
 <synopsis>
-bool scheduleMessage(const QString&amp; <replaceable>message</replaceable>, 
+bool scheduleMessage(const QString&amp; <replaceable>name</replaceable>,
+                     const QString&amp; <replaceable>message</replaceable>,
                      const QString&amp; <replaceable>startDateTime</replaceable>, 
                      int <replaceable>lateCancel</replaceable>,
                      unsigned <replaceable>flags</replaceable>, 
@@ -3587,7 +3623,8 @@ bool scheduleMessage(const QString&amp; <replaceable>message</replaceable>,
                      int <replaceable>recurCount</replaceable>)
 </synopsis>
 <synopsis>
-bool scheduleMessage(const QString&amp; <replaceable>message</replaceable>, 
+bool scheduleMessage(const QString&amp; <replaceable>name</replaceable>,
+                     const QString&amp; <replaceable>message</replaceable>,
                      const QString&amp; <replaceable>startDateTime</replaceable>, 
                      int <replaceable>lateCancel</replaceable>, 
                      unsigned <replaceable>flags</replaceable>, 
@@ -3604,6 +3641,13 @@ bool scheduleMessage(const QString&amp; <replaceable>message</replaceable>,
 <refsect2>
 <title>Parameters</title>
 <variablelist>
+<varlistentry>
+<term><parameter>name</parameter></term>
+<listitem>
+<para>Specifies an optional name for the alarm.</para>
+</listitem>
+</varlistentry>
+
 <varlistentry>
 <term><parameter>message</parameter></term>
 <listitem>
@@ -3819,7 +3863,8 @@ text or image file.</refpurpose>
 </refnamediv>
 <refsynopsisdiv>
 <synopsis>
-bool scheduleFile(const QString&amp; <replaceable>URL</replaceable>,
+bool scheduleFile(const QString&amp; <replaceable>name</replaceable>,
+                  const QString&amp; <replaceable>URL</replaceable>,
                   const QString&amp; <replaceable>startDateTime</replaceable>,
                   int <replaceable>lateCancel</replaceable>,
                   unsigned <replaceable>flags</replaceable>,
@@ -3831,7 +3876,8 @@ bool scheduleFile(const QString&amp; <replaceable>URL</replaceable>,
                   int <replaceable>subRepeatCount</replaceable>)
 </synopsis>
 <synopsis>
-bool scheduleFile(const QString&amp; <replaceable>URL</replaceable>,
+bool scheduleFile(const QString&amp; <replaceable>name</replaceable>,
+                  const QString&amp; <replaceable>URL</replaceable>,
                   const QString&amp; <replaceable>startDateTime</replaceable>,
                   int <replaceable>lateCancel</replaceable>,
                   unsigned <replaceable>flags</replaceable>,
@@ -3843,7 +3889,8 @@ bool scheduleFile(const QString&amp; <replaceable>URL</replaceable>,
                   int <replaceable>recurCount</replaceable>)
 </synopsis>
 <synopsis>
-bool scheduleFile(const QString&amp; <replaceable>URL</replaceable>,
+bool scheduleFile(const QString&amp; <replaceable>name</replaceable>,
+                  const QString&amp; <replaceable>URL</replaceable>,
                   const QString&amp; <replaceable>startDateTime</replaceable>,
                   int <replaceable>lateCancel</replaceable>,
                   unsigned <replaceable>flags</replaceable>,
@@ -3858,6 +3905,13 @@ bool scheduleFile(const QString&amp; <replaceable>URL</replaceable>,
 <refsect2>
 <title>Parameters</title>
 <variablelist>
+<varlistentry>
+<term><parameter>name</parameter></term>
+<listitem>
+<para>Specifies an optional name for the alarm.</para>
+</listitem>
+</varlistentry>
+
 <varlistentry>
 <term><parameter>URL</parameter></term>
 <listitem>
@@ -4043,7 +4097,8 @@ command.</refpurpose>
 </refnamediv>
 <refsynopsisdiv>
 <synopsis>
-bool scheduleCommand(const QString&amp; <replaceable>commandLine</replaceable>,
+bool scheduleCommand(const QString&amp; <replaceable>name</replaceable>,
+                     const QString&amp; <replaceable>commandLine</replaceable>,
                      const QString&amp; <replaceable>startDateTime</replaceable>,
                      int <replaceable>lateCancel</replaceable>,
                      unsigned <replaceable>flags</replaceable>,
@@ -4052,7 +4107,8 @@ bool scheduleCommand(const QString&amp; <replaceable>commandLine</replaceable>,
                      int <replaceable>subRepeatCount</replaceable>)
 </synopsis>
 <synopsis>
-bool scheduleCommand(const QString&amp; <replaceable>commandLine</replaceable>,
+bool scheduleCommand(const QString&amp; <replaceable>name</replaceable>,
+                     const QString&amp; <replaceable>commandLine</replaceable>,
                      const QString&amp; <replaceable>startDateTime</replaceable>,
                      int <replaceable>lateCancel</replaceable>,
                      unsigned <replaceable>flags</replaceable>,
@@ -4061,7 +4117,8 @@ bool scheduleCommand(const QString&amp; <replaceable>commandLine</replaceable>,
                      int <replaceable>recurCount</replaceable>)
 </synopsis>
 <synopsis>
-bool scheduleCommand(const QString&amp; <replaceable>commandLine</replaceable>,
+bool scheduleCommand(const QString&amp; <replaceable>name</replaceable>,
+                     const QString&amp; <replaceable>commandLine</replaceable>,
                      const QString&amp; <replaceable>startDateTime</replaceable>,
                      int <replaceable>lateCancel</replaceable>,
                      unsigned <replaceable>flags</replaceable>,
@@ -4073,6 +4130,13 @@ bool scheduleCommand(const QString&amp; <replaceable>commandLine</replaceable>,
 <refsect2>
 <title>Parameters</title>
 <variablelist>
+<varlistentry>
+<term><parameter>name</parameter></term>
+<listitem>
+<para>Specifies an optional name for the alarm.</para>
+</listitem>
+</varlistentry>
+
 <varlistentry>
 <term><parameter>commandLine</parameter></term>
 <listitem>
@@ -4225,7 +4289,8 @@ parameters, its usage is identical to
 </refnamediv>
 <refsynopsisdiv>
 <synopsis>
-bool scheduleEmail(const QString&amp; <replaceable>fromID</replaceable>,
+bool scheduleEmail(const QString&amp; <replaceable>name</replaceable>,
+                   const QString&amp; <replaceable>fromID</replaceable>,
                    const QString&amp; <replaceable>addresses</replaceable>,
                    const QString&amp; <replaceable>subject</replaceable>,
                    const QString&amp; <replaceable>message</replaceable>,
@@ -4238,7 +4303,8 @@ bool scheduleEmail(const QString&amp; <replaceable>fromID</replaceable>,
                    int <replaceable>subRepeatCount</replaceable>)
 </synopsis>
 <synopsis>
-bool scheduleEmail(const QString&amp; <replaceable>fromID</replaceable>,
+bool scheduleEmail(const QString&amp; <replaceable>name</replaceable>,
+                   const QString&amp; <replaceable>fromID</replaceable>,
                    const QString&amp; <replaceable>addresses</replaceable>,
                    const QString&amp; <replaceable>subject</replaceable>,
                    const QString&amp; <replaceable>message</replaceable>,
@@ -4251,7 +4317,8 @@ bool scheduleEmail(const QString&amp; <replaceable>fromID</replaceable>,
                    int <replaceable>recurCount</replaceable>)
 </synopsis>
 <synopsis>
-bool scheduleEmail(const QString&amp; <replaceable>fromID</replaceable>,
+bool scheduleEmail(const QString&amp; <replaceable>name</replaceable>,
+                   const QString&amp; <replaceable>fromID</replaceable>,
                    const QString&amp; <replaceable>addresses</replaceable>,
                    const QString&amp; <replaceable>subject</replaceable>,
                    const QString&amp; <replaceable>message</replaceable>,
@@ -4267,6 +4334,13 @@ bool scheduleEmail(const QString&amp; <replaceable>fromID</replaceable>,
 <refsect2>
 <title>Parameters</title>
 <variablelist>
+<varlistentry>
+<term><parameter>name</parameter></term>
+<listitem>
+<para>Specifies an optional name for the alarm.</para>
+</listitem>
+</varlistentry>
+
 <varlistentry>
 <term><parameter>fromID</parameter></term>
 <listitem>
@@ -4450,7 +4524,8 @@ command.</refpurpose>
 </refnamediv>
 <refsynopsisdiv>
 <synopsis>
-bool scheduleAudio(const QString&amp; <replaceable>audioURL</replaceable>,
+bool scheduleAudio(const QString&amp; <replaceable>name</replaceable>,
+                   const QString&amp; <replaceable>audioURL</replaceable>,
                    int <replaceable>volumePercent</replaceable>,
                    const QString&amp; <replaceable>startDateTime</replaceable>,
                    int <replaceable>lateCancel</replaceable>,
@@ -4460,7 +4535,8 @@ bool scheduleAudio(const QString&amp; <replaceable>audioURL</replaceable>,
                    int <replaceable>subRepeatCount</replaceable>)
 </synopsis>
 <synopsis>
-bool scheduleAudio(const QString&amp; <replaceable>audioURL</replaceable>,
+bool scheduleAudio(const QString&amp; <replaceable>name</replaceable>,
+                   const QString&amp; <replaceable>audioURL</replaceable>,
                    int <replaceable>volumePercent</replaceable>,
                    const QString&amp; <replaceable>startDateTime</replaceable>,
                    int <replaceable>lateCancel</replaceable>,
@@ -4470,7 +4546,8 @@ bool scheduleAudio(const QString&amp; <replaceable>audioURL</replaceable>,
                    int <replaceable>recurCount</replaceable>)
 </synopsis>
 <synopsis>
-bool scheduleAudio(const QString&amp; <replaceable>audioURL</replaceable>,
+bool scheduleAudio(const QString&amp; <replaceable>name</replaceable>,
+                   const QString&amp; <replaceable>audioURL</replaceable>,
                    int <replaceable>volumePercent</replaceable>,
                    const QString&amp; <replaceable>startDateTime</replaceable>,
                    int <replaceable>lateCancel</replaceable>,
@@ -4483,6 +4560,13 @@ bool scheduleAudio(const QString&amp; <replaceable>audioURL</replaceable>,
 <refsect2>
 <title>Parameters</title>
 <variablelist>
+<varlistentry>
+<term><parameter>name</parameter></term>
+<listitem>
+<para>Specifies an optional name for the alarm.</para>
+</listitem>
+</varlistentry>
+
 <varlistentry>
 <term><parameter>audioURL</parameter></term>
 <listitem>

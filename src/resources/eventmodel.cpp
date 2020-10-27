@@ -264,6 +264,33 @@ bool AlarmListModel::filterAcceptsColumn(int sourceCol, const QModelIndex& ix) c
     return (sourceCol != ResourceDataModelBase::TemplateNameColumn);
 }
 
+/******************************************************************************
+* Return the data for a given index from the model.
+*/
+QVariant AlarmListModel::data(const QModelIndex& ix, int role) const
+{
+    if (mReplaceBlankName  &&  ix.column() == NameColumn)
+    {
+        // It's the Name column, and the name is being replaced by the alarm text
+        // when the name is blank. Return the alarm text instead for display and
+        // tooltip.
+        switch (role)
+        {
+            case Qt::DisplayRole:
+            case Qt::ToolTipRole:
+                if (EventListModel::data(ix, role).toString().isEmpty())
+                {
+                    const QModelIndex& ix2 = ix.siblingAtColumn(TextColumn);
+                    return EventListModel::data(ix2, role);
+                }
+                break;
+            default:
+                break;
+        }
+    }
+    return EventListModel::data(ix, role);
+}
+
 QVariant AlarmListModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
     if (orientation == Qt::Horizontal)

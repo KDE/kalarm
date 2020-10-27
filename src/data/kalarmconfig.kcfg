@@ -37,6 +37,9 @@ SPDX-License-Identifier: GPL-2.0-or-later
     <argument type="DateTime">Base_WorkDayEnd</argument>
     <argument type="Int">Base_WorkDays</argument>
   </signal>
+  <signal name="useAlarmNameChanged">
+    <argument type="Bool">UseAlarmName</argument>
+  </signal>
   <signal name="messageFontChanged">
     <argument type="Font">MessageFont</argument>
   </signal>
@@ -87,6 +90,12 @@ SPDX-License-Identifier: GPL-2.0-or-later
       <label context="@label">Background color</label>
       <whatsthis context="@info:whatsthis">Default background color for alarm message windows.</whatsthis>
       <default code="true">KColorScheme(QPalette::Active).background(KColorScheme::NegativeBackground).color()</default>
+    </entry>
+    <entry name="UseAlarmName" type="Bool">
+      <label context="@label">Use alarm names</label>
+      <whatsthis context="@info:whatsthis">Choose whether to be able to give each alarm a name. This is a convenience to help you to identify alarms.</whatsthis>
+      <default>false</default>
+      <emit signal="useAlarmNameChanged"/>
     </entry>
     <entry name="MessageFont" type="Font">
       <label context="@label">Message font</label>

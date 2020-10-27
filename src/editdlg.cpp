@@ -215,24 +215,6 @@ void EditAlarmDlg::init(const KAEvent* event)
         mButtonBox->button(QDialogButtonBox::Ok)->setWhatsThis(i18nc("@info:whatsthis", "Schedule the alarm at the specified time."));
 
     QVBoxLayout* mainLayout = new QVBoxLayout(this);
-    if (mTemplate)
-    {
-        QFrame* frame = new QFrame;
-        QHBoxLayout* box = new QHBoxLayout();
-        frame->setLayout(box);
-        box->setContentsMargins(0, 0, 0, 0);
-        QLabel* label = new QLabel(i18nc("@label:textbox", "Template name:"));
-        label->setFixedSize(label->sizeHint());
-        box->addWidget(label);
-        mTemplateName = new QLineEdit();
-        mTemplateName->setReadOnly(mReadOnly);
-        connect(mTemplateName, &QLineEdit::textEdited, this, &EditAlarmDlg::contentsChanged);
-        label->setBuddy(mTemplateName);
-        box->addWidget(mTemplateName);
-        frame->setWhatsThis(i18nc("@info:whatsthis", "Enter the name of the alarm template"));
-        frame->setFixedHeight(box->sizeHint().height());
-        mainLayout->addWidget(frame);
-    }
     mTabs = new QTabWidget(this);
     mainLayout->addWidget(mTabs);
     mTabScrollGroup = new StackedScrollGroup(this, mTabs);
@@ -260,6 +242,27 @@ void EditAlarmDlg::init(const KAEvent* event)
     connect(mRecurrenceEdit, &RecurrenceEdit::frequencyChanged, this, &EditAlarmDlg::slotRecurFrequencyChange);
     connect(mRecurrenceEdit, &RecurrenceEdit::repeatNeedsInitialisation, this, &EditAlarmDlg::slotSetSubRepetition);
     connect(mRecurrenceEdit, &RecurrenceEdit::contentsChanged, this, &EditAlarmDlg::contentsChanged);
+
+    if (mTemplate  ||  Preferences::useAlarmName())
+    {
+        // Alarm/template name
+        QFrame* frame = new QFrame;
+        QHBoxLayout* box = new QHBoxLayout();
+        frame->setLayout(box);
+        box->setContentsMargins(0, 0, 0, 0);
+        QLabel* label = new QLabel(mTemplate ? i18nc("@label:textbox", "Template name:") : i18nc("@label:textbox", "Alarm name:"));
+        label->setFixedSize(label->sizeHint());
+        box->addWidget(label);
+        mName = new QLineEdit();
+        mName->setReadOnly(mReadOnly);
+        connect(mName, &QLineEdit::textEdited, this, &EditAlarmDlg::contentsChanged);
+        label->setBuddy(mName);
+        box->addWidget(mName);
+        frame->setWhatsThis(mTemplate ? i18nc("@info:whatsthis", "Enter the name of the alarm template")
+                                      : i18nc("@info:whatsthis", "Enter a name to help you identify this alarm. This is optional and need not be unique."));
+        frame->setFixedHeight(box->sizeHint().height());
+        topLayout->addWidget(frame);
+    }
 
     // Controls specific to the alarm type
     QGroupBox* actionBox = new QGroupBox(i18nc("@title:group", "Action"), mainPage);
@@ -424,8 +427,8 @@ void EditAlarmDlg::init(const KAEvent* event)
 
     // Initialise the state of all controls according to the specified event, if any
     initValues(event);
-    if (mTemplateName)
-        mTemplateName->setFocus();
+    if (mName)
+        mName->setFocus();
 
     if (!mNewAlarm)
     {
@@ -479,8 +482,8 @@ void EditAlarmDlg::initValues(const KAEvent* event)
     if (event)
     {
         // Set the values to those for the specified event
-        if (mTemplate)
-            mTemplateName->setText(event->templateName());
+        if (mName)
+            mName->setText(event->name());
         bool recurs = event->recurs();
         if ((recurs || event->repetition())  &&  !mTemplate  &&  event->deferred())
         {
@@ -585,6 +588,11 @@ void EditAlarmDlg::initValues(const KAEvent* event)
 /******************************************************************************
 * Initialise various values in the New Alarm dialogue.
 */
+void EditAlarmDlg::setName(const QString& name)
+{
+    if (mName)
+        mName->setText(name);
+}
 void EditAlarmDlg::setTime(const DateTime& start)
 {
     mTimeWidget->setDateTime(start);
@@ -641,9 +649,10 @@ void EditAlarmDlg::saveState(const KAEvent* event)
     mSavedEvent = nullptr;
     if (event)
         mSavedEvent = new KAEvent(*event);
+    if (mName)
+        mSavedName = mName->text();
     if (mTemplate)
     {
-        mSavedTemplateName      = mTemplateName->text();
         mSavedTemplateTimeType  = mTemplateTimeGroup->checkedButton();
         mSavedTemplateTime      = mTemplateTime->time();
         mSavedTemplateAfterTime = mTemplateTimeAfter->value();
@@ -671,12 +680,13 @@ bool EditAlarmDlg::stateChanged() const
     mOnlyDeferred = false;
     if (!mSavedEvent)
         return true;
+    if (mName  &&  mSavedName != mName->text())
+        return true;
     QString textFileCommandMessage;
     checkText(textFileCommandMessage, false);
     if (mTemplate)
     {
-        if (mSavedTemplateName     != mTemplateName->text()
-        ||  mSavedTemplateTimeType != mTemplateTimeGroup->checkedButton()
+        if (mSavedTemplateTimeType != mTemplateTimeGroup->checkedButton()
         ||  (mTemplateUseTime->isChecked()  &&  mSavedTemplateTime != mTemplateTime->time())
         ||  (mTemplateUseTimeAfter->isChecked()  &&  mSavedTemplateAfterTime != mTemplateTimeAfter->value()))
             return true;
@@ -761,7 +771,7 @@ void EditAlarmDlg::setEvent(KAEvent& event, const QString& text, bool trial)
     }
 
     int lateCancel = (trial || !mLateCancel->isEnabled()) ? 0 : mLateCancel->minutes();
-    type_setEvent(event, dt, text, lateCancel, trial);
+    type_setEvent(event, dt, (mName ? mName->text() : QString()), text, lateCancel, trial);
 
     if (!trial)
     {
@@ -802,7 +812,7 @@ void EditAlarmDlg::setEvent(KAEvent& event, const QString& text, bool trial)
         {
             int afterTime = mTemplateDefaultTime->isChecked() ? 0
                           : mTemplateUseTimeAfter->isChecked() ? mTemplateTimeAfter->value() : -1;
-            event.setTemplate(mTemplateName->text(), afterTime);
+            event.setTemplate(mName->text(), afterTime);
         }
     }
 }
@@ -974,17 +984,17 @@ bool EditAlarmDlg::validate()
     {
         // Check that the template name is not blank and is unique
         QString errmsg;
-        QString name = mTemplateName->text();
+        const QString name = mName->text();
         if (name.isEmpty())
             errmsg = i18nc("@info", "You must enter a name for the alarm template");
-        else if (name != mSavedTemplateName)
+        else if (name != mSavedName)
         {
             if (ResourcesCalendar::templateEvent(name).isValid())
                 errmsg = i18nc("@info", "Template name is already in use");
         }
         if (!errmsg.isEmpty())
         {
-            mTemplateName->setFocus();
+            mName->setFocus();
             KAMessageBox::sorry(this, errmsg);
             return false;
         }
@@ -1305,8 +1315,8 @@ void EditAlarmDlg::slotShowMainPage()
 {
     if (!mMainPageShown)
     {
-        if (mTemplateName)
-            mTemplateName->setFocus();
+        if (mName)
+            mName->setFocus();
         mMainPageShown = true;
     }
     else

@@ -125,6 +125,8 @@ QVariant ResourceDataModelBase::headerData(int section, Qt::Orientation orientat
                         return (role == Qt::DisplayRole) ? QString() : i18nc("@title:column", "Color");
                     case TypeColumn:
                         return (role == Qt::DisplayRole) ? QString() : i18nc("@title:column", "Type");
+                    case NameColumn:
+                        return i18nc("@title:column", "Name");
                     case TextColumn:
                         return i18nc("@title:column", "Message, File or Command");
                     case TemplateNameColumn:
@@ -396,6 +398,20 @@ QVariant ResourceDataModelBase::eventData(int role, int column, const KAEvent& e
                         return QStringLiteral("%1").arg(event.actionSubType(), 2, 10, QLatin1Char('0'));
                 }
                 break;
+            case NameColumn:
+            case TemplateNameColumn:
+                switch (role)
+                {
+                    case Qt::BackgroundRole:
+                        calendarColour = true;
+                        break;
+                    case Qt::DisplayRole:
+                    case Qt::ToolTipRole:
+                        return event.name();
+                    case SortRole:
+                        return event.name().toUpper();
+                }
+                break;
             case TextColumn:
                 switch (role)
                 {
@@ -409,18 +425,6 @@ QVariant ResourceDataModelBase::eventData(int role, int column, const KAEvent& e
                         return AlarmText::summary(event, 10);
                     default:
                         break;
-                }
-                break;
-            case TemplateNameColumn:
-                switch (role)
-                {
-                    case Qt::BackgroundRole:
-                        calendarColour = true;
-                        break;
-                    case Qt::DisplayRole:
-                        return event.templateName();
-                    case SortRole:
-                        return event.templateName().toUpper();
                 }
                 break;
             default:
@@ -562,6 +566,8 @@ QString ResourceDataModelBase::whatsThisText(int column)
             return i18nc("@info:whatsthis", "Background color of alarm message");
         case TypeColumn:
             return i18nc("@info:whatsthis", "Alarm type (message, file, command or email)");
+        case NameColumn:
+            return i18nc("@info:whatsthis", "Alarm name, or alarm text if name is blank");
         case TextColumn:
             return i18nc("@info:whatsthis", "Alarm message text, URL of text file to display, command to execute, or email subject line");
         case TemplateNameColumn:

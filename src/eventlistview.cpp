@@ -174,6 +174,7 @@ bool EventListView::viewportEvent(QEvent* e)
             {
                 EventListModel* m = qobject_cast<EventListModel*>(model());
                 if (index.column() == ResourceDataModelBase::TextColumn
+                ||  index.column() == ResourceDataModelBase::NameColumn
                 ||  !m  ||  m->event(index).commandError() == KAEvent::CMD_NO_ERROR)
                 {
                     // Single line tooltip. Only display it if the text column

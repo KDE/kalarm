@@ -643,7 +643,7 @@ UndoItem::~UndoItem()
 */
 QString UndoItem::description(const KAEvent& event) const
 {
-    return (mCalendar == CalEvent::TEMPLATE) ? event.templateName() : AlarmText::summary(event);
+    return (mCalendar == CalEvent::TEMPLATE) ? event.name() : AlarmText::summary(event);
 }
 
 /******************************************************************************

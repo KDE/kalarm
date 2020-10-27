@@ -93,9 +93,10 @@ public:
     bool               windowFocusBroken() const;
     bool               needWindowFocusFix() const;
     // Methods called indirectly by the D-Bus interface
-    bool               scheduleEvent(KAEvent::SubAction, const QString& text, const KADateTime&,
-                                     int lateCancel, KAEvent::Flags flags, const QColor& bg, const QColor& fg,
-                                     const QFont&, const QString& audioFile, float audioVolume,
+    bool               scheduleEvent(KAEvent::SubAction, const QString& name, const QString& text,
+                                     const KADateTime&, int lateCancel, KAEvent::Flags flags,
+                                     const QColor& bg, const QColor& fg, const QFont&,
+                                     const QString& audioFile, float audioVolume,
                                      int reminderMinutes, const KARecurrence& recurrence,
                                      const KCalendarCore::Duration& repeatInterval, int repeatCount,
                                      uint mailFromID = 0, const KCalendarCore::Person::List& mailAddresses = KCalendarCore::Person::List(),

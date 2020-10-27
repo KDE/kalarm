@@ -83,6 +83,7 @@ private:
 
     QCheckBox*    mAutoStart;
     QCheckBox*    mQuitWarn;
+    QCheckBox*    mUseAlarmNames;
     QCheckBox*    mConfirmAlarmDeletion;
     TimeSpinBox*  mDefaultDeferTime;
     ButtonGroup*  mXtermType;

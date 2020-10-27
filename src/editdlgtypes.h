@@ -72,7 +72,7 @@ protected:
     void            setReadOnly(bool readOnly) override;
     void            saveState(const KAEvent*) override;
     bool            type_stateChanged() const override;
-    void            type_setEvent(KAEvent&, const KADateTime&, const QString& text, int lateCancel, bool trial) override;
+    void            type_setEvent(KAEvent&, const KADateTime&, const QString& name, const QString& text, int lateCancel, bool trial) override;
     KAEvent::Flags  getAlarmFlags() const override;
     bool            type_validate(bool trial) override { Q_UNUSED(trial); return true; }
     CheckBox*       type_createConfirmAckCheckbox(QWidget* parent) override  { mConfirmAck = createConfirmAckCheckbox(parent); return mConfirmAck; }
@@ -159,7 +159,7 @@ protected:
     void            setReadOnly(bool readOnly) override;
     void            saveState(const KAEvent*) override;
     bool            type_stateChanged() const override;
-    void            type_setEvent(KAEvent&, const KADateTime&, const QString& text, int lateCancel, bool trial) override;
+    void            type_setEvent(KAEvent&, const KADateTime&, const QString& name, const QString& text, int lateCancel, bool trial) override;
     KAEvent::Flags  getAlarmFlags() const override;
     bool            type_validate(bool trial) override;
     void            type_executedTry(const QString& text, void* obj) override;
@@ -214,7 +214,7 @@ protected:
     void            setReadOnly(bool readOnly) override;
     void            saveState(const KAEvent*) override;
     bool            type_stateChanged() const override;
-    void            type_setEvent(KAEvent&, const KADateTime&, const QString& text, int lateCancel, bool trial) override;
+    void            type_setEvent(KAEvent&, const KADateTime&, const QString& name, const QString& text, int lateCancel, bool trial) override;
     KAEvent::Flags  getAlarmFlags() const override;
     bool            type_validate(bool trial) override;
     void            type_aboutToTry() override;
@@ -276,7 +276,7 @@ protected:
     void            setReadOnly(bool readOnly) override;
     void            saveState(const KAEvent*) override;
     bool            type_stateChanged() const override;
-    void            type_setEvent(KAEvent&, const KADateTime&, const QString& text, int lateCancel, bool trial) override;
+    void            type_setEvent(KAEvent&, const KADateTime&, const QString& name, const QString& text, int lateCancel, bool trial) override;
     KAEvent::Flags  getAlarmFlags() const override;
     bool            type_validate(bool trial) override { Q_UNUSED(trial); return true; }
     void            type_executedTry(const QString& text, void* obj) override;

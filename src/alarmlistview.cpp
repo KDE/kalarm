@@ -28,37 +28,52 @@ AlarmListView::AlarmListView(const QByteArray& configGroup, QWidget* parent)
     connect(header(), &QHeaderView::sectionMoved, this, &AlarmListView::saveColumnsState);
     header()->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(header(), &QWidget::customContextMenuRequested, this, &AlarmListView::headerContextMenuRequested);
+    Preferences::connect(&Preferences::useAlarmNameChanged, this, &AlarmListView::useAlarmNameChanged);
 }
 
 /******************************************************************************
 * Return which of the optional columns are currently shown.
 * Note that the column order must be the same as in setColumnsVisible().
+* Reply = array of 5 columns if not using alarm names;
+*       = array of 6 columns if not using alarm names.
 */
 QList<bool> AlarmListView::columnsVisible() const
 {
     if (!model())
         return {};
-    return { !header()->isSectionHidden(AlarmListModel::TimeColumn),
-             !header()->isSectionHidden(AlarmListModel::TimeToColumn),
-             !header()->isSectionHidden(AlarmListModel::RepeatColumn),
-             !header()->isSectionHidden(AlarmListModel::ColourColumn),
-             !header()->isSectionHidden(AlarmListModel::TypeColumn) };
+    QList<bool> vis{ !header()->isSectionHidden(AlarmListModel::TimeColumn),
+                     !header()->isSectionHidden(AlarmListModel::TimeToColumn),
+                     !header()->isSectionHidden(AlarmListModel::RepeatColumn),
+                     !header()->isSectionHidden(AlarmListModel::ColourColumn),
+                     !header()->isSectionHidden(AlarmListModel::TypeColumn) };
+    if (Preferences::useAlarmName())
+        vis += !header()->isSectionHidden(AlarmListModel::TextColumn);
+    return vis;
 }
 
 /******************************************************************************
 * Set which of the optional columns are to be shown.
+* 'show' = array of 5 columns if not using alarm names;
+*        = array of 6 columns if not using alarm names.
 * Note that the column order must be the same as in columnsVisible().
 */
 void AlarmListView::setColumnsVisible(const QList<bool>& show)
 {
     if (!model())
         return;
-    const QList<bool> vis = (show.size() < 5) ? QList<bool>{true, false, true, true, true} : show;
+    const bool useName = Preferences::useAlarmName();
+    QList<bool> vis{ true, false, true, true, true, !useName };
+    const int colCount = useName ? 6 : 5;
+    for (int i = 0;  i < colCount;  ++i)
+        vis[i] = show[i];
     header()->setSectionHidden(AlarmListModel::TimeColumn,   !vis[0]);
     header()->setSectionHidden(AlarmListModel::TimeToColumn, !vis[1]);
     header()->setSectionHidden(AlarmListModel::RepeatColumn, !vis[2]);
     header()->setSectionHidden(AlarmListModel::ColourColumn, !vis[3]);
     header()->setSectionHidden(AlarmListModel::TypeColumn,   !vis[4]);
+    header()->setSectionHidden(AlarmListModel::NameColumn,   !useName);
+    header()->setSectionHidden(AlarmListModel::TextColumn,   !vis[5]);
+    setReplaceBlankName();
     setSortingEnabled(false);  // sortByColumn() won't work if sorting is already enabled!
     sortByColumn(vis[0] ? AlarmListModel::TimeColumn : AlarmListModel::TimeToColumn, Qt::AscendingOrder);
 }
@@ -71,13 +86,23 @@ void AlarmListView::initSections()
     KConfigGroup config(KSharedConfig::openConfig(), mConfigGroup.constData());
     const QByteArray settings = config.readEntry("ListHead", QByteArray());
     if (!settings.isEmpty())
+    {
         header()->restoreState(settings);
+        const bool useName = Preferences::useAlarmName();
+        header()->setSectionHidden(AlarmListModel::NameColumn, !useName);
+        if (!useName)
+        {
+            header()->setSectionHidden(AlarmListModel::TextColumn, false);
+            setReplaceBlankName();
+        }
+    }
     header()->setSectionsMovable(true);
     header()->setSectionResizeMode(AlarmListModel::TimeColumn, QHeaderView::ResizeToContents);
     header()->setSectionResizeMode(AlarmListModel::TimeToColumn, QHeaderView::ResizeToContents);
     header()->setSectionResizeMode(AlarmListModel::RepeatColumn, QHeaderView::ResizeToContents);
     header()->setSectionResizeMode(AlarmListModel::ColourColumn, QHeaderView::Fixed);
     header()->setSectionResizeMode(AlarmListModel::TypeColumn, QHeaderView::Fixed);
+    header()->setSectionResizeMode(AlarmListModel::NameColumn, QHeaderView::ResizeToContents);
     header()->setSectionResizeMode(AlarmListModel::TextColumn, QHeaderView::Stretch);
     header()->setStretchLastSection(true);   // necessary to ensure ResizeToContents columns do resize to contents!
     const int minWidth = viewOptions().fontMetrics.lineSpacing() * 3 / 4;
@@ -105,10 +130,12 @@ void AlarmListView::saveColumnsState()
 void AlarmListView::headerContextMenuRequested(const QPoint& pt)
 {
     QAbstractItemModel* almodel = model();
-    int count = header()->count();
     QMenu menu;
-    for (int col = 0;  col < count;  ++col)
+    const bool useName = Preferences::useAlarmName();
+    for (int col = 0, count = header()->count();  col < count;  ++col)
     {
+        if (col == AlarmListModel::NameColumn  &&  !useName)
+            continue;
         const QString title = almodel->headerData(col, Qt::Horizontal, ResourceDataModelBase::ColumnTitleRole).toString();
         if (!title.isEmpty())
         {
@@ -116,8 +143,10 @@ void AlarmListView::headerContextMenuRequested(const QPoint& pt)
             act->setData(col);
             act->setCheckable(true);
             act->setChecked(!header()->isSectionHidden(col));
-            if (col == AlarmListModel::TextColumn)
-                act->setEnabled(false);    // don't allow text column to be hidden
+            if (col == AlarmListModel::NameColumn)
+                act->setEnabled(false);    // don't allow name column to be hidden if name is used
+            else if (col == AlarmListModel::TextColumn  &&  !useName)
+                act->setEnabled(false);    // don't allow text column to be hidden if name not used
             else
                 QObject::connect(act, &QAction::triggered,
                                  this, [this, &menu, act] { showHideColumn(menu, act); });
@@ -125,6 +154,16 @@ void AlarmListView::headerContextMenuRequested(const QPoint& pt)
     }
     enableTimeColumns(&menu);
     menu.exec(header()->mapToGlobal(pt));
+}
+
+/******************************************************************************
+* Called when the 'use alarm name' setting has changed.
+*/
+void AlarmListView::useAlarmNameChanged(bool use)
+{
+    header()->setSectionHidden(AlarmListModel::NameColumn, !use);
+    header()->setSectionHidden(AlarmListModel::TextColumn, use);
+    setReplaceBlankName();
 }
 
 /******************************************************************************
@@ -139,8 +178,21 @@ void AlarmListView::showHideColumn(QMenu& menu, QAction* act)
     header()->setSectionHidden(col, !show);
     if (col == AlarmListModel::TimeColumn  ||  col == AlarmListModel::TimeToColumn)
         enableTimeColumns(&menu);
+    if (col == AlarmListModel::TextColumn)
+        setReplaceBlankName();
     saveColumnsState();
     Q_EMIT columnsVisibleChanged();
+}
+
+/******************************************************************************
+* Set whether to replace a blank alarm name with the alarm text.
+*/
+void AlarmListView::setReplaceBlankName()
+{
+    bool textHidden = header()->isSectionHidden(AlarmListModel::TextColumn);
+    AlarmListModel* almodel = qobject_cast<AlarmListModel*>(model());
+    if (almodel)
+        almodel->setReplaceBlankName(textHidden);
 }
 
 /******************************************************************************

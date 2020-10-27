@@ -139,8 +139,11 @@ QStringList CommandOptions::setOptions(QCommandLineParser* parser, const QString
               = new QCommandLineOption(QStringList{QStringLiteral("m"), QStringLiteral("mail")},
                                        i18n("Send an email to the given address (repeat as needed)"),
                                        QStringLiteral("address"));
+    mOptions[NAME]
+              = new QCommandLineOption(QStringList{QStringLiteral("n"), QStringLiteral("name")},
+                                       i18n("Name of alarm"));
     mOptions[NOTIFY]
-              = new QCommandLineOption(QStringList{QStringLiteral("n"), QStringLiteral("notify")},
+              = new QCommandLineOption(QStringList{QStringLiteral("N"), QStringLiteral("notify")},
                                        i18n("Display alarm message as a notification"));
     mOptions[PLAY]
               = new QCommandLineOption(QStringList{QStringLiteral("p"), QStringLiteral("play")},
@@ -268,7 +271,7 @@ void CommandOptions::process()
     }
     if (checkCommand(OptEDIT_NEW_PRESET, EDIT_NEW_PRESET))
     {
-        mTemplateName = mParser->value(*mOptions.at(mCommandOpt));
+        mName = mParser->value(*mOptions.at(mCommandOpt));
     }
     if (checkCommand(FILE, NEW))
     {
@@ -408,6 +411,11 @@ void CommandOptions::process()
         case NEW:
         {
             // Display a message or file, execute a command, or send an email
+            if (mParser->isSet(*mOptions.at(NAME)))
+            {
+                // Alarm name is specified
+                mName = mParser->value(*mOptions.at(NAME));
+            }
             if (mParser->isSet(*mOptions.at(COLOUR)))
             {
                 // Background colour is specified
@@ -657,6 +665,10 @@ void CommandOptions::process()
                 errors << optionName(LATE_CANCEL);
             if (mParser->isSet(*mOptions.at(LOGIN)))
                 errors << optionName(LOGIN);
+            if (mParser->isSet(*mOptions.at(NAME)))
+                errors << optionName(NAME);
+            if (mParser->isSet(*mOptions.at(NOTIFY)))
+                errors << optionName(NOTIFY);
             if (mParser->isSet(*mOptions.at(PLAY)))
                 errors << optionName(PLAY);
             if (mParser->isSet(*mOptions.at(PLAY_REPEAT)))

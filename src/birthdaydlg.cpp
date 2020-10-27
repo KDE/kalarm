@@ -53,6 +53,21 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
 
     QVBoxLayout* topLayout = new QVBoxLayout(this);
 
+    if (Preferences::useAlarmName())
+    {
+        QHBoxLayout* hlayout = new QHBoxLayout();
+        hlayout->setContentsMargins(0, 0, 0, 0);
+        topLayout->addLayout(hlayout);
+        QLabel* label = new QLabel(i18nc("@label:textbox", "Alarm name:"), this);
+        label->setFixedSize(label->sizeHint());
+        hlayout->addWidget(label);
+        mName = new KLineEdit(this);
+        mName->setMinimumSize(mName->sizeHint());
+        label->setBuddy(mName);
+        mName->setWhatsThis(i18nc("@info:whatsthis", "Enter a name to help you identify this alarm. This is optional and need not be unique."));
+        hlayout->addWidget(mName);
+    }
+
     // Prefix and suffix to the name in the alarm text
     // Get default prefix and suffix texts from config file
     KConfigGroup config(KSharedConfig::openConfig(), "General");
@@ -264,6 +279,7 @@ QVector<KAEvent> BirthdayDlg::events() const
         if (date <= today)
             date.setDate(thisYear + 1, date.month(), date.day());
         KAEvent event(KADateTime(date, KADateTime::LocalZone),
+                      (mName ? mName->text() : QString()),
                       mPrefix->text() + name + mSuffix->text(),
                       mFontColourButton->bgColour(), mFontColourButton->fgColour(),
                       mFontColourButton->font(), KAEvent::MESSAGE, mLateCancel->minutes(),

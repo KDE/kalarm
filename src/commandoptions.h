@@ -48,7 +48,7 @@ public:
     QString             commandName() const       { return optionName(mCommandOpt); }
     QString             eventId() const           { return mEventId; }
     QString             resourceId() const        { return mResourceId; }
-    QString             templateName() const      { return mTemplateName; }
+    QString             name() const              { return mName; }
     EditAlarmDlg::Type  editType() const          { return mEditType; }
     KAEvent::SubAction  editAction() const        { return mEditAction; }
     QString             text() const              { return mText; }
@@ -103,6 +103,7 @@ private:
         OptLIST,
         LOGIN,
         MAIL,
+        NAME,
         NOTIFY,
         PLAY,
         PLAY_REPEAT,
@@ -145,7 +146,7 @@ private:
     Option              mCommandOpt;             // option for the selected command
     QString             mEventId;                // TRIGGER_EVENT, CANCEL_EVENT, EDIT: event ID
     QString             mResourceId;             // TRIGGER_EVENT, CANCEL_EVENT, EDIT: optional resource ID
-    QString             mTemplateName;           // EDIT_NEW_PRESET: template name
+    QString             mName;                   // NEW, EDIT_NEW_PRESET: alarm/template name
     EditAlarmDlg::Type  mEditType;               // NEW, EDIT_NEW_*: alarm edit type
     KAEvent::SubAction  mEditAction;             // NEW: alarm edit sub-type
     bool                mEditActionSet {false};  // NEW: mEditAction is valid
