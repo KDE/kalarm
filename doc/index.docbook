@@ -1188,7 +1188,7 @@ the Alarm Edit dialog using the
 you identify the alarm more easily. You do not have to enter a name,
 and it need not be unique.</para>
 
-<para>Note that this field is only displayed if the the use of alarm
+<para>Note that this field is only displayed if the use of alarm
 names is enabled in the
 <link linkend="preferences-general">General</link> tab of the
 Configuration dialog.</para>
