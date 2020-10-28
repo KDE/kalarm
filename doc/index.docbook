@@ -2571,7 +2571,7 @@ option is automatically re-enabled by default whenever you change run
 mode.</para>
 </listitem>
 
-<listitem><para><guilabel>Use alarm names</guilabel>: Specify
+<listitem><para><guilabel>Enable alarm names</guilabel>: Specify
 whether each alarm can be given a name to help you to identify it.
 This determines whether the <guilabel>Name</guilabel> column will be
 shown in the <link linkend="alarm-list">alarm list</link>, and

@@ -445,13 +445,13 @@ MiscPrefTab::MiscPrefTab(StackedScrollGroup* scrollGroup)
     mQuitWarn->setWhatsThis(xi18nc("@info:whatsthis", "Check to display a warning prompt before quitting <application>KAlarm</application>."));
     vlayout->addWidget(mQuitWarn, 0, Qt::AlignLeft);
 
-    // Use alarm names?
+    // Enable alarm names?
     QWidget* widget = new QWidget;  // this is for consistent left alignment
     topLayout()->addWidget(widget);
     QHBoxLayout* hbox = new QHBoxLayout(widget);
-    mUseAlarmNames = new QCheckBox(i18nc("@option:check", "Use alarm names"));
+    mUseAlarmNames = new QCheckBox(i18nc("@option:check", "Enable alarm names"));
     mUseAlarmNames->setMinimumSize(mUseAlarmNames->sizeHint());
-    mUseAlarmNames->setWhatsThis(i18nc("@info:whatsthis", "Check to have the option to give each alarm a name. This is a convenience to help you to identify alarms."));
+    mUseAlarmNames->setWhatsThis(i18nc("@info:whatsthis", "Check to have the option to give alarms a name. This is a convenience to help you to identify alarms."));
     hbox->addWidget(mUseAlarmNames);
     hbox->addStretch();    // left adjust the controls
 

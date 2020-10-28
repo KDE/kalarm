@@ -92,8 +92,8 @@ SPDX-License-Identifier: GPL-2.0-or-later
       <default code="true">KColorScheme(QPalette::Active).background(KColorScheme::NegativeBackground).color()</default>
     </entry>
     <entry name="UseAlarmName" type="Bool">
-      <label context="@label">Use alarm names</label>
-      <whatsthis context="@info:whatsthis">Choose whether to be able to give each alarm a name. This is a convenience to help you to identify alarms.</whatsthis>
+      <label context="@label">Enable alarm names</label>
+      <whatsthis context="@info:whatsthis">Choose whether to be able to give alarms a name. This is a convenience to help you to identify alarms.</whatsthis>
       <default>false</default>
       <emit signal="useAlarmNameChanged"/>
     </entry>
