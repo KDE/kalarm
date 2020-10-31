@@ -389,7 +389,7 @@ CalendarCreator::CalendarCreator(CalEvent::Type alarmType, const QString& file, 
     , mStandard(true)
     , mNew(true)
 {
-    const QString path = QStandardPaths::writableLocation(QStandardPaths::DataLocation) + QLatin1Char('/') + file;
+    const QString path = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + QLatin1Char('/') + file;
     mUrlString = QUrl::fromLocalFile(path).toString();
     qCDebug(KALARM_LOG) << "CalendarCreator: New:" << mName << ", type=" << mAlarmType << ", path=" << mUrlString;
 }

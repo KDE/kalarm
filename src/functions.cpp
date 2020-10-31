@@ -1658,7 +1658,7 @@ QStringList dontShowErrors(const EventId& eventId)
 {
     if (eventId.isEmpty())
         return QStringList();
-    KConfig config(QStandardPaths::writableLocation(QStandardPaths::DataLocation) + QLatin1Char('/') + ALARM_OPTS_FILE);
+    KConfig config(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + QLatin1Char('/') + ALARM_OPTS_FILE);
     KConfigGroup group(&config, DONT_SHOW_ERRORS_GROUP);
     const QString id = QStringLiteral("%1:%2").arg(eventId.resourceId()).arg(eventId.eventId());
     return group.readEntry(id, QStringList());
@@ -1684,7 +1684,7 @@ void setDontShowErrors(const EventId& eventId, const QStringList& tags)
 {
     if (eventId.isEmpty())
         return;
-    KConfig config(QStandardPaths::writableLocation(QStandardPaths::DataLocation) + QLatin1Char('/') + ALARM_OPTS_FILE);
+    KConfig config(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + QLatin1Char('/') + ALARM_OPTS_FILE);
     KConfigGroup group(&config, DONT_SHOW_ERRORS_GROUP);
     const QString id = QStringLiteral("%1:%2").arg(eventId.resourceId()).arg(eventId.eventId());
     if (tags.isEmpty())
@@ -1702,7 +1702,7 @@ void setDontShowErrors(const EventId& eventId, const QString& tag)
 {
     if (eventId.isEmpty()  ||  tag.isEmpty())
         return;
-    KConfig config(QStandardPaths::writableLocation(QStandardPaths::DataLocation) + QLatin1Char('/') + ALARM_OPTS_FILE);
+    KConfig config(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + QLatin1Char('/') + ALARM_OPTS_FILE);
     KConfigGroup group(&config, DONT_SHOW_ERRORS_GROUP);
     const QString id = QStringLiteral("%1:%2").arg(eventId.resourceId()).arg(eventId.eventId());
     QStringList tags = group.readEntry(id, QStringList());
