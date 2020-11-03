@@ -30,7 +30,7 @@ namespace KAlarmCal
 
 //=============================================================================
 
-typedef KCalendarCore::Person  EmailAddress;
+using EmailAddress = KCalendarCore::Person;
 class EmailAddressList : public KCalendarCore::Person::List
 {
 public:

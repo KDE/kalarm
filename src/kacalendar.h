@@ -36,7 +36,7 @@ extern const QLatin1String KALARMCAL_EXPORT MIME_ARCHIVED;  //!< The mime type f
 extern const QLatin1String KALARMCAL_EXPORT MIME_TEMPLATE;  //!< The mime type for KAlarm alarm templates
 
 /** Declaration type for a calendar resource ID. */
-typedef Akonadi::Collection::Id  ResourceId;
+using ResourceId = Akonadi::Collection::Id;
 
 /**
  * @short Class representing attributes of a KAlarm calendar.

@@ -64,7 +64,7 @@ bool SerializerPluginKAlarm::deserialize(Item &item, const QByteArray &label, QI
         if (!a) {
             qCCritical(AKONADI_SERIALIZER_KALARM_LOG) << "deserialize(): Event with uid" << event.id() << "contains null attribute";
         } else {
-            EventAttribute *evAttr = dynamic_cast<EventAttribute *>(a);
+            auto *evAttr = dynamic_cast<EventAttribute *>(a);
             if (!evAttr) {
                 // Registering EventAttribute doesn't work in the serializer
                 // unless the application also registers it. This doesn't

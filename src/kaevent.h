@@ -187,7 +187,7 @@ class KALARMCAL_EXPORT KAEvent
 {
 public:
     /** A list of pointers to KAEvent objects. */
-    typedef QVector<KAEvent *> List;
+    using List = QVector<KAEvent *>;
 
     /** Flags for use in D-Bus calls, etc. Flags may be combined by OR'ing them together. */
     enum Flag {
