@@ -105,7 +105,7 @@ bool dropAkonadiEmail(const QMimeData* data, QUrl& url, Akonadi::Item& item, KAl
 
     // It's an email held in Akonadi
     qCDebug(KALARM_LOG) << "KAlarm::dropAkonadiEmail: Akonadi email";
-    Akonadi::ItemFetchJob* job = new Akonadi::ItemFetchJob(item);
+    auto* job = new Akonadi::ItemFetchJob(item);
     job->fetchScope().fetchFullPayload();
     Akonadi::Item::List items;
     if (job->exec())

@@ -71,7 +71,7 @@ public:
     static void        dumpDebug(Type, int count);
 
     // Types for use by UndoItem class and its descendants
-    typedef AutoDeleteList<UndoItem> List;
+    using List = AutoDeleteList<UndoItem>;
 
 Q_SIGNALS:
     void               changed(const QString& undo, const QString& redo);

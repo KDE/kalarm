@@ -697,7 +697,7 @@ void AkonadiDataModel::slotRowsInserted(const QModelIndex& parent, int start, in
 */
 void AkonadiDataModel::collectionFetchResult(KJob* j)
 {
-    CollectionFetchJob* job = qobject_cast<CollectionFetchJob*>(j);
+    auto* job = qobject_cast<CollectionFetchJob*>(j);
     if (j->error())
         qCWarning(KALARM_LOG) << "AkonadiDataModel::collectionFetchResult: CollectionFetchJob" << job->fetchScope().resource()<< "error: " << j->errorString();
     else
@@ -929,7 +929,7 @@ QModelIndex AkonadiDataModel::resourceIndex(const Resource& resource) const
     const Collection& collection = AkonadiResource::collection(resource);
     const QModelIndex ix = modelIndexForCollection(this, collection);
     if (!ix.isValid())
-        return QModelIndex();
+        return {};
     return ix;
 }
 
@@ -940,7 +940,7 @@ QModelIndex AkonadiDataModel::resourceIndex(Akonadi::Collection::Id id) const
 {
     const QModelIndex ix = modelIndexForCollection(this, Collection(id));
     if (!ix.isValid())
-        return QModelIndex();
+        return {};
     return ix;
 }
 
@@ -982,7 +982,7 @@ QModelIndex AkonadiDataModel::itemIndex(const Akonadi::Item& item) const
         if (ix.isValid())
             return ix;
     }
-    return QModelIndex();
+    return {};
 }
 
 /******************************************************************************

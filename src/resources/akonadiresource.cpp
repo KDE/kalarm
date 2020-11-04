@@ -50,7 +50,7 @@ class DuplicateResourceObject : public QObject
 {
     Q_OBJECT
 public:
-    typedef void (*CompletionFunction)();
+    using CompletionFunction = void (*)();
     DuplicateResourceObject(QObject* parent = nullptr) : QObject(parent) {}
     void reset(void (*completed)())
     {
@@ -272,7 +272,7 @@ void AkonadiResource::setKeepFormat(bool keep)
 QColor AkonadiResource::backgroundColour() const
 {
     if (!mValid)
-        return QColor();
+        return {};
     if (!mHaveCollectionAttribute)
         fetchCollectionAttribute(true);
     return mCollectionAttribute.backgroundColor();
@@ -443,7 +443,7 @@ bool AkonadiResource::addEvent(const KAEvent& event)
         qCWarning(KALARM_LOG) << "AkonadiResource::addEvent: Invalid mime type for collection";
         return false;
     }
-    ItemCreateJob* job = new ItemCreateJob(item, mCollection);
+    auto* job = new ItemCreateJob(item, mCollection);
     connect(job, &ItemCreateJob::result, this, &AkonadiResource::itemJobDone);
     mPendingItemJobs[job] = -1;   // the Item doesn't have an ID yet
     job->start();
@@ -483,7 +483,7 @@ bool AkonadiResource::deleteEvent(const KAEvent& event)
     const Item item = AkonadiDataModel::instance()->itemForEvent(event.id());
     if (!item.isValid())
         return false;
-    ItemDeleteJob* job = new ItemDeleteJob(item);
+    auto* job = new ItemDeleteJob(item);
     connect(job, &ItemDeleteJob::result, this, &AkonadiResource::itemJobDone);
     mPendingItemJobs[job] = item.id();
     job->start();
@@ -510,7 +510,7 @@ void AkonadiResource::handleCommandErrorChange(const KAEvent& event)
             case KAEvent::CMD_ERROR_POST:
             case KAEvent::CMD_ERROR_PRE_POST:
             {
-                EventAttribute* attr = item.attribute<EventAttribute>(Item::AddIfMissing);
+                auto* attr = item.attribute<EventAttribute>(Item::AddIfMissing);
                 if (attr->commandError() == err)
                     return;   // no change
                 attr->setCommandError(err);
@@ -529,13 +529,13 @@ void AkonadiResource::handleCommandErrorChange(const KAEvent& event)
 Collection& AkonadiResource::collection(Resource& res)
 {
     static Collection nullCollection;
-    AkonadiResource* akres = resource<AkonadiResource>(res);
+    auto* akres = resource<AkonadiResource>(res);
     return akres ? akres->mCollection : nullCollection;
 }
 const Collection& AkonadiResource::collection(const Resource& res)
 {
     static const Collection nullCollection;
-    const AkonadiResource* akres = resource<AkonadiResource>(res);
+    const auto* akres = resource<AkonadiResource>(res);
     return akres ? akres->mCollection : nullCollection;
 }
 
@@ -586,7 +586,7 @@ bool AkonadiResource::removeDuplicateResources(void (*completed)())
 */
 void DuplicateResourceObject::collectionFetchResult(KJob* j)
 {
-    CollectionFetchJob* job = qobject_cast<CollectionFetchJob*>(j);
+    auto* job = qobject_cast<CollectionFetchJob*>(j);
     if (j->error())
         qCCritical(KALARM_LOG) << "AkonadiResource::collectionFetchResult: CollectionFetchJob" << job->fetchScope().resource()<< "error: " << j->errorString();
     else
@@ -635,7 +635,7 @@ void AkonadiResource::notifyCollectionLoaded(ResourceId id, const QList<KAEvent>
     if (id >= 0)
     {
         Resource res = Resources::resource(id);
-        AkonadiResource* akres = resource<AkonadiResource>(res);
+        auto* akres = resource<AkonadiResource>(res);
         if (akres)
         {
             const CalEvent::Types types = akres->alarmTypes();
@@ -657,7 +657,7 @@ void AkonadiResource::notifyCollectionChanged(Resource& res, const Collection& c
 {
     if (collection.id() != res.id())
         return;
-    AkonadiResource* akres = resource<AkonadiResource>(res);
+    auto* akres = resource<AkonadiResource>(res);
     if (!akres)
         return;
 
@@ -725,7 +725,7 @@ void AkonadiResource::notifyCollectionChanged(Resource& res, const Collection& c
 */
 void AkonadiResource::notifyEventsChanged(Resource& res, const QList<KAEvent>& events)
 {
-    AkonadiResource* akres = resource<AkonadiResource>(res);
+    auto* akres = resource<AkonadiResource>(res);
     if (akres)
         akres->setUpdatedEvents(events);
 }
@@ -735,7 +735,7 @@ void AkonadiResource::notifyEventsChanged(Resource& res, const QList<KAEvent>& e
 */
 void AkonadiResource::notifyItemChanged(Resource& res, const Akonadi::Item& item, bool created)
 {
-    AkonadiResource* akres = resource<AkonadiResource>(res);
+    auto* akres = resource<AkonadiResource>(res);
     if (akres)
     {
         int i = akres->mItemsBeingCreated.removeAll(item.id());   // the new item has now been initialised
@@ -749,7 +749,7 @@ void AkonadiResource::notifyItemChanged(Resource& res, const Akonadi::Item& item
 */
 void AkonadiResource::notifyEventsToBeDeleted(Resource& res, const QList<KAEvent>& events)
 {
-    AkonadiResource* akres = resource<AkonadiResource>(res);
+    auto* akres = resource<AkonadiResource>(res);
     if (akres)
         akres->setDeletedEvents(events);
 }
@@ -787,7 +787,7 @@ void AkonadiResource::queueItemModifyJob(const Item& item)
             if (AkonadiDataModel::instance()->refresh(current))  // fetch the up-to-date item
                 newItem.setRevision(current.revision());
             mItemModifyJobQueue[item.id()] = Item();   // mark the queued item as now executing
-            ItemModifyJob* job = new ItemModifyJob(newItem);
+            auto* job = new ItemModifyJob(newItem);
             job->disableRevisionCheck();
             connect(job, &ItemModifyJob::result, this, &AkonadiResource::itemJobDone);
             mPendingItemJobs[job] = item.id();
@@ -890,7 +890,7 @@ void AkonadiResource::checkQueuedItemModifyJob(const Item& item)
         // revision number to match that set by the job just completed.
         qitem.setRevision(item.revision());
         mItemModifyJobQueue[item.id()] = Item();   // mark the queued item as now executing
-        ItemModifyJob* job = new ItemModifyJob(qitem);
+        auto* job = new ItemModifyJob(qitem);
         job->disableRevisionCheck();
         connect(job, &ItemModifyJob::result, this, &AkonadiResource::itemJobDone);
         mPendingItemJobs[job] = qitem.id();
@@ -927,9 +927,9 @@ void AkonadiResource::modifyCollectionAttribute()
     // applications. So create a new Collection instance and only set a value
     // for CollectionAttribute.
     Collection c(mCollection.id());
-    CollectionAttribute* att = c.attribute<CollectionAttribute>(Collection::AddIfMissing);
+    auto* att = c.attribute<CollectionAttribute>(Collection::AddIfMissing);
     *att = mCollectionAttribute;
-    CollectionModifyJob* job = new CollectionModifyJob(c, this);
+    auto* job = new CollectionModifyJob(c, this);
     connect(job, &CollectionModifyJob::result, this, &AkonadiResource::modifyCollectionAttrJobDone);
 }
 

@@ -48,7 +48,7 @@ BirthdayModel* BirthdayModel::instance()
         scope.fetchFullPayload(true);
         scope.fetchAttribute<Akonadi::EntityDisplayAttribute>();
 
-        Akonadi::ChangeRecorder* recorder = new Akonadi::ChangeRecorder;
+        auto* recorder = new Akonadi::ChangeRecorder;
         recorder->setSession(session);
         recorder->fetchCollection(true);
         recorder->setItemFetchScope(scope);

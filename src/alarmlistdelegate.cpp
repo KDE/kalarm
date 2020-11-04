@@ -98,7 +98,7 @@ QSize AlarmListDelegate::sizeHint(const QStyleOptionViewItem& option, const QMod
             case AlarmListModel::ColourColumn:
             {
                 int h = option.fontMetrics.lineSpacing();
-                return QSize(h * 3 / 4, h);
+                return {h * 3 / 4, h};
             }
         }
     }

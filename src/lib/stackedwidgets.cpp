@@ -43,7 +43,7 @@ QSize StackedScrollGroup::minimumSizeHint() const
 {
     const QSize s = maxMinimumSizeHint();
     if (!s.isEmpty()  &&  mMinHeight > 0  &&  mMinHeight < s.height())
-        return QSize(s.width() + mWidgets[0]->style()->pixelMetric(QStyle::PM_ScrollBarExtent), mMinHeight);
+        return {s.width() + mWidgets[0]->style()->pixelMetric(QStyle::PM_ScrollBarExtent), mMinHeight};
     return s;
 }
 
@@ -57,7 +57,7 @@ QSize StackedScrollGroup::maxMinimumSizeHint() const
     {
         QWidget* w = static_cast<StackedScrollWidget*>(sw)->widget();
         if (!w)
-            return QSize();
+            return {};
         const QSize s = w->minimumSizeHint();
         if (!s.isValid())
             return QSize();
@@ -76,7 +76,7 @@ QSize StackedScrollGroup::adjustSize(bool force)
     if (force)
         mSized = false;
     if (mSized)
-        return QSize();
+        return {};
 
     // Cancel any previous minimum height and set the height of the
     // scroll widget contents widgets.

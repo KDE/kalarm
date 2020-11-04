@@ -29,7 +29,7 @@ class FileResourceSettings
 {
 public:
     /** A shared pointer to a FileResourceSettings object. */
-    typedef QSharedPointer<FileResourceSettings> Ptr;
+    using Ptr = QSharedPointer<FileResourceSettings>;
 
     enum StorageType { NoStorage, File, Directory };
 

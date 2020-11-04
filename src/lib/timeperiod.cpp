@@ -37,7 +37,7 @@ TimePeriod::TimePeriod(bool allowHourMinute, QWidget* parent)
     : QWidget(parent)
     , mNoHourMinute(!allowHourMinute)
 {
-    QHBoxLayout* layout = new QHBoxLayout;
+    auto* layout = new QHBoxLayout;
     setLayout(layout);
     layout->setContentsMargins(0, 0, 0, 0);
 
@@ -222,7 +222,7 @@ TimePeriod::Units TimePeriod::setDateOnly(const Duration& perod, bool dateOnly, 
     if (signal)
         oldinterval = period();
     int index = mUnitsCombo->currentIndex();
-    Units units = static_cast<Units>(index + mDateOnlyOffset);
+    auto units = static_cast<Units>(index + mDateOnlyOffset);
     if (!mNoHourMinute)
     {
         if (!dateOnly  &&  mDateOnlyOffset)
@@ -323,7 +323,7 @@ void TimePeriod::setUnitRange()
 */
 void TimePeriod::setUnits(Units units)
 {
-    const Units oldUnits = static_cast<Units>(mUnitsCombo->currentIndex() + mDateOnlyOffset);
+    const auto oldUnits = static_cast<Units>(mUnitsCombo->currentIndex() + mDateOnlyOffset);
     if (units == oldUnits)
         return;
     if (oldUnits == HoursMinutes  &&  units == Minutes)

@@ -92,7 +92,7 @@ QSize PackedLayout::minimumSize() const
         size = size.expandedTo(mItems[i]->minimumSize());
     int left, top, right, bottom;
     getContentsMargins(&left, &top, &right, &bottom);
-    return QSize(size.width() + left + right, size.height() + top + bottom);
+    return {size.width() + left + right, size.height() + top + bottom};
 }
 
 // Arranges widgets and returns height required.

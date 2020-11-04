@@ -213,7 +213,7 @@ private:
 template <class DataModel>
 EventListModel* EventListModel::create(CalEvent::Types types, QObject* parent)
 {
-    EventListModel* model = new EventListModel(types, parent);
+    auto* model = new EventListModel(types, parent);
     model->initialise<DataModel>();
     return model;
 }
@@ -229,7 +229,7 @@ template <class DataModel> void EventListModel::initialise()
 template <class DataModel>
 AlarmListModel* AlarmListModel::create(QObject* parent)
 {
-    AlarmListModel* model = new AlarmListModel(parent);
+    auto* model = new AlarmListModel(parent);
     model->EventListModel::initialise<DataModel>();
     return model;
 }
@@ -248,7 +248,7 @@ AlarmListModel* AlarmListModel::all()
 template <class DataModel>
 TemplateListModel* TemplateListModel::create(QObject* parent)
 {
-    TemplateListModel* model = new TemplateListModel(parent);
+    auto* model = new TemplateListModel(parent);
     model->EventListModel::initialise<DataModel>();
     return model;
 }

@@ -21,7 +21,7 @@ TimeSelector::TimeSelector(const QString& selectText, const QString& selectWhats
                            const QString& valueWhatsThis, bool allowHourMinute, QWidget* parent)
     : QFrame(parent)
 {
-    QHBoxLayout* layout = new QHBoxLayout(this);
+    auto* layout = new QHBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
     mSelect = new CheckBox(selectText, this);
     mSelect->setFixedSize(mSelect->sizeHint());
@@ -31,7 +31,7 @@ TimeSelector::TimeSelector(const QString& selectText, const QString& selectWhats
 
     QWidget* box = new QWidget(this);    // to group widgets for QWhatsThis text
     layout->addWidget(box);
-    QHBoxLayout* boxLayout = new QHBoxLayout(box);
+    auto* boxLayout = new QHBoxLayout(box);
     boxLayout->setContentsMargins(0, 0, 0, 0);
     mPeriod = new TimePeriod(allowHourMinute, box);
     boxLayout->addWidget(mPeriod);

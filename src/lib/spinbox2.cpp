@@ -306,14 +306,14 @@ bool SpinBox2::eventFilter(QObject* obj, QEvent* e)
                 break;
             case QEvent::HoverEnter:
             {
-                QHoverEvent* he = (QHoverEvent*)e;
+                auto* he = (QHoverEvent*)e;
                 QApplication::postEvent(mUpdown2, new QHoverEvent(e->type(), QPoint(1, he->pos().y()), he->oldPos()));
                 updateButtons = true;
                 break;
             }
             case QEvent::HoverLeave:
             {
-                QHoverEvent* he = (QHoverEvent*)e;
+                auto* he = (QHoverEvent*)e;
                 QApplication::postEvent(mUpdown2, new QHoverEvent(e->type(), he->pos(), QPoint(1, he->oldPos().y())));
                 updateButtons = true;
                 break;
@@ -321,7 +321,7 @@ bool SpinBox2::eventFilter(QObject* obj, QEvent* e)
             case QEvent::FocusIn:
             case QEvent::FocusOut:
             {
-                QFocusEvent* fe = (QFocusEvent*)e;
+                auto* fe = (QFocusEvent*)e;
                 QApplication::postEvent(mUpdown2, new QFocusEvent(e->type(), fe->reason()));
                 updateButtons = true;
                 break;

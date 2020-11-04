@@ -92,11 +92,11 @@ void Find::display()
         QWidget* kalarmWidgets = mDialog->findExtension();
 
         // Alarm types
-        QVBoxLayout* layout = new QVBoxLayout(kalarmWidgets);
+        auto* layout = new QVBoxLayout(kalarmWidgets);
         layout->setContentsMargins(0, 0, 0, 0);
         QGroupBox* group = new QGroupBox(i18nc("@title:group", "Alarm Type"), kalarmWidgets);
         layout->addWidget(group);
-        QGridLayout* grid = new QGridLayout(group);
+        auto* grid = new QGridLayout(group);
         grid->setColumnStretch(1, 1);
 
         // Live & archived alarm selection

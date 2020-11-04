@@ -96,7 +96,7 @@ LabelFocusWidget::LabelFocusWidget(QWidget* parent)
 
 void LabelFocusWidget::focusInEvent(QFocusEvent*)
 {
-    Label* parent = (Label*)parentWidget();
+    auto* parent = (Label*)parentWidget();
     parent->activated();
 
 }

@@ -71,7 +71,7 @@ void ResourceFilterModel::setFilterText(const QString& text)
 QModelIndex ResourceFilterModel::resourceIndex(const Resource& resource) const
 {
     if (!mResourceIndexFunction)
-        return QModelIndex();
+        return {};
     return mapFromSource((*mResourceIndexFunction)(resource));
 }
 

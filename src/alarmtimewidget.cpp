@@ -83,7 +83,7 @@ void AlarmTimeWidget::init(Mode mode, const QString& title)
     mDeferring = mode & DEFER_TIME;
     mButtonGroup = new ButtonGroup(this);
     connect(mButtonGroup, &ButtonGroup::buttonSet, this, &AlarmTimeWidget::slotButtonSet);
-    QVBoxLayout* topLayout = new QVBoxLayout(topWidget);
+    auto* topLayout = new QVBoxLayout(topWidget);
     if (title.isEmpty())
         topLayout->setContentsMargins(0, 0, 0, 0);
 
@@ -105,7 +105,7 @@ void AlarmTimeWidget::init(Mode mode, const QString& title)
 
     // Time edit box and Any time checkbox
     QWidget* timeBox = new QWidget(topWidget);
-    QHBoxLayout* timeBoxHLayout = new QHBoxLayout(timeBox);
+    auto* timeBoxHLayout = new QHBoxLayout(timeBox);
     timeBoxHLayout->setContentsMargins(0, 0, 0, 0);
     timeBoxHLayout->setSpacing(2 * style()->pixelMetric(QStyle::PM_LayoutHorizontalSpacing));
     mTimeEdit = new TimeEdit(timeBox);
@@ -151,7 +151,7 @@ void AlarmTimeWidget::init(Mode mode, const QString& title)
     mAfterTimeRadio->setFocusWidget(mDelayTimeEdit);
 
     // Set up the layout, either narrow or wide
-    QGridLayout* grid = new QGridLayout();
+    auto* grid = new QGridLayout();
     grid->setContentsMargins(0, 0, 0, 0);
     topLayout->addLayout(grid);
     if (mDeferring)
@@ -161,7 +161,7 @@ void AlarmTimeWidget::init(Mode mode, const QString& title)
         grid->addWidget(timeBox, 1, 1, Qt::AlignLeft);
         grid->setColumnStretch(2, 1);
         topLayout->addStretch();
-        QHBoxLayout* layout = new QHBoxLayout();
+        auto* layout = new QHBoxLayout();
         topLayout->addLayout(layout);
         layout->addWidget(mAfterTimeRadio);
         layout->addWidget(mDelayTimeEdit);
@@ -186,13 +186,13 @@ void AlarmTimeWidget::init(Mode mode, const QString& title)
         grid->setColumnStretch(2, 1);
         topLayout->addStretch();
 
-        QHBoxLayout* layout = new QHBoxLayout();
+        auto* layout = new QHBoxLayout();
         topLayout->addLayout(layout);
         layout->setSpacing(2 * style()->pixelMetric(QStyle::PM_LayoutHorizontalSpacing));
 
         // Time zone selector
         mTimeZoneBox = new QWidget(topWidget);   // this is to control the QWhatsThis text display area
-        QHBoxLayout* hlayout = new QHBoxLayout(mTimeZoneBox);
+        auto* hlayout = new QHBoxLayout(mTimeZoneBox);
         hlayout->setContentsMargins(0, 0, 0, 0);
         QLabel* label = new QLabel(i18nc("@label:listbox", "Time zone:"), mTimeZoneBox);
         hlayout->addWidget(label);

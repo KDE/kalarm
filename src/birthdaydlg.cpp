@@ -51,11 +51,11 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
     setObjectName(QStringLiteral("BirthdayDlg"));    // used by LikeBack
     setWindowTitle(i18nc("@title:window", "Import Birthdays From KAddressBook"));
 
-    QVBoxLayout* topLayout = new QVBoxLayout(this);
+    auto* topLayout = new QVBoxLayout(this);
 
     if (Preferences::useAlarmName())
     {
-        QHBoxLayout* hlayout = new QHBoxLayout();
+        auto* hlayout = new QHBoxLayout();
         hlayout->setContentsMargins(0, 0, 0, 0);
         topLayout->addLayout(hlayout);
         QLabel* label = new QLabel(i18nc("@label:textbox", "Alarm name:"), this);
@@ -76,7 +76,7 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
 
     QGroupBox* textGroup = new QGroupBox(i18nc("@title:group", "Alarm Text"), this);
     topLayout->addWidget(textGroup);
-    QGridLayout* grid = new QGridLayout(textGroup);
+    auto* grid = new QGridLayout(textGroup);
     QLabel* label = new QLabel(i18nc("@label:textbox", "Prefix:"), textGroup);
     label->setFixedSize(label->sizeHint());
     grid->addWidget(label, 0, 0);
@@ -103,7 +103,7 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
 
     QGroupBox* group = new QGroupBox(i18nc("@title:group", "Select Birthdays"), this);
     topLayout->addWidget(group);
-    QVBoxLayout* layout = new QVBoxLayout(group);
+    auto* layout = new QVBoxLayout(group);
     layout->setContentsMargins(0, 0, 0, 0);
 
     // Start Akonadi server as we need it for the birthday model to access contacts information
@@ -112,10 +112,10 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
     BirthdayModel* model = BirthdayModel::instance();
     connect(model, &BirthdayModel::dataChanged, this, &BirthdayDlg::resizeViewColumns);
 
-    KDescendantsProxyModel* descendantsModel = new KDescendantsProxyModel(this);
+    auto* descendantsModel = new KDescendantsProxyModel(this);
     descendantsModel->setSourceModel(model);
 
-    Akonadi::EntityMimeTypeFilterModel* mimeTypeFilter = new Akonadi::EntityMimeTypeFilterModel(this);
+    auto* mimeTypeFilter = new Akonadi::EntityMimeTypeFilterModel(this);
     mimeTypeFilter->setSourceModel(descendantsModel);
     mimeTypeFilter->addMimeTypeExclusionFilter(Akonadi::Collection::mimeType());
     mimeTypeFilter->setHeaderGroup(Akonadi::EntityTreeModel::ItemListHeaders);
@@ -146,10 +146,10 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
 
     group = new QGroupBox(i18nc("@title:group", "Alarm Configuration"), this);
     topLayout->addWidget(group);
-    QVBoxLayout* groupLayout = new QVBoxLayout(group);
+    auto* groupLayout = new QVBoxLayout(group);
 
     // Sound checkbox and file selector
-    QHBoxLayout* hlayout = new QHBoxLayout();
+    auto* hlayout = new QHBoxLayout();
     hlayout->setContentsMargins(0, 0, 0, 0);
     groupLayout->addLayout(hlayout);
     mSoundPicker = new SoundPicker(group);

@@ -431,7 +431,7 @@ MiscPrefTab::MiscPrefTab(StackedScrollGroup* scrollGroup)
 {
     QGroupBox* group = new QGroupBox(i18nc("@title:group", "Run Mode"));
     topLayout()->addWidget(group);
-    QVBoxLayout* vlayout = new QVBoxLayout(group);
+    auto* vlayout = new QVBoxLayout(group);
 
     // Start at login
     mAutoStart = new QCheckBox(i18nc("@option:check", "Start at login"), group);
@@ -448,7 +448,7 @@ MiscPrefTab::MiscPrefTab(StackedScrollGroup* scrollGroup)
     // Enable alarm names?
     QWidget* widget = new QWidget;  // this is for consistent left alignment
     topLayout()->addWidget(widget);
-    QHBoxLayout* hbox = new QHBoxLayout(widget);
+    auto* hbox = new QHBoxLayout(widget);
     mUseAlarmNames = new QCheckBox(i18nc("@option:check", "Enable alarm names"));
     mUseAlarmNames->setMinimumSize(mUseAlarmNames->sizeHint());
     mUseAlarmNames->setWhatsThis(i18nc("@info:whatsthis", "Check to have the option to give alarms a name. This is a convenience to help you to identify alarms."));
@@ -483,7 +483,7 @@ MiscPrefTab::MiscPrefTab(StackedScrollGroup* scrollGroup)
     group = new QGroupBox(i18nc("@title:group", "Terminal for Command Alarms"));
     group->setWhatsThis(i18nc("@info:whatsthis", "Choose which application to use when a command alarm is executed in a terminal window"));
     topLayout()->addWidget(group);
-    QGridLayout* grid = new QGridLayout(group);
+    auto* grid = new QGridLayout(group);
     int row = 0;
 
     mXtermType = new ButtonGroup(group);
@@ -495,7 +495,7 @@ MiscPrefTab::MiscPrefTab(StackedScrollGroup* scrollGroup)
         const QStringList args = KShell::splitArgs(cmd);
         if (args.isEmpty()  ||  QStandardPaths::findExecutable(args[0]).isEmpty())
             continue;
-        QRadioButton* radio = new QRadioButton(args[0], group);
+        auto* radio = new QRadioButton(args[0], group);
         radio->setMinimumSize(radio->sizeHint());
         mXtermType->addButton(radio, mXtermCount);
         if (mXtermFirst < 0)
@@ -512,7 +512,7 @@ MiscPrefTab::MiscPrefTab(StackedScrollGroup* scrollGroup)
     }
 
     // QHBox used here doesn't allow the QLineEdit to expand!?
-    QHBoxLayout* hlayout = new QHBoxLayout();
+    auto* hlayout = new QHBoxLayout();
     grid->addLayout(hlayout, row + 1, 0, 1, 3, Qt::AlignLeft);
     QRadioButton* radio = new QRadioButton(i18nc("@option:radio Other terminal window command", "Other:"), group);
     hlayout->addWidget(radio);
@@ -637,13 +637,13 @@ TimePrefTab::TimePrefTab(StackedScrollGroup* scrollGroup)
     : PrefsTabBase(scrollGroup)
 {
     // Default time zone
-    QHBoxLayout* itemBox = new QHBoxLayout();
+    auto* itemBox = new QHBoxLayout();
     itemBox->setContentsMargins(0, 0, 0, 0);
     topLayout()->addLayout(itemBox);
 
     QWidget* widget = new QWidget; // this is to control the QWhatsThis text display area
     itemBox->addWidget(widget);
-    QHBoxLayout* box =  new QHBoxLayout(widget);
+    auto* box =  new QHBoxLayout(widget);
     box->setContentsMargins(0, 0, 0, 0);
     QLabel* label = new QLabel(i18nc("@label:listbox", "Time zone:"));
     box->addWidget(label);
@@ -721,7 +721,7 @@ TimePrefTab::TimePrefTab(StackedScrollGroup* scrollGroup)
 
     QWidget* daybox = new QWidget(group);   // this is to control the QWhatsThis text display area
     layout->addWidget(daybox);
-    QGridLayout* wgrid = new QGridLayout(daybox);
+    auto* wgrid = new QGridLayout(daybox);
     const QLocale locale;
     for (int i = 0;  i < 7;  ++i)
     {
@@ -828,7 +828,7 @@ void TimePrefTab::apply(bool syncToDisc)
     QBitArray workDays(7);
     for (int i = 0;  i < 7;  ++i)
         if (mWorkDays[i]->isChecked())
-            workDays.setBit(Locale::localeDayInWeek_to_weekDay(i) - 1, 1);
+            workDays.setBit(Locale::localeDayInWeek_to_weekDay(i) - 1, true);
     Preferences::setWorkDays(workDays);
     Preferences::setKOrgEventDuration(mKOrgEventDuration->value());
     t = mKOrgEventDuration->value();
@@ -848,7 +848,7 @@ StorePrefTab::StorePrefTab(StackedScrollGroup* scrollGroup)
     // Which resource to save to
     QGroupBox* group = new QGroupBox(i18nc("@title:group", "New Alarms && Templates"));
     topLayout()->addWidget(group);
-    QButtonGroup* bgroup = new QButtonGroup(group);
+    auto* bgroup = new QButtonGroup(group);
     QBoxLayout* layout = new QVBoxLayout(group);
 
     mDefaultResource = new QRadioButton(i18nc("@option:radio", "Store in default calendar"), group);
@@ -865,7 +865,7 @@ StorePrefTab::StorePrefTab(StackedScrollGroup* scrollGroup)
     // Archived alarms
     group = new QGroupBox(i18nc("@title:group", "Archived Alarms"));
     topLayout()->addWidget(group);
-    QGridLayout* grid = new QGridLayout(group);
+    auto* grid = new QGridLayout(group);
     grid->setColumnStretch(1, 1);
     grid->setColumnMinimumWidth(0, gridIndentWidth());
     mKeepArchived = new QCheckBox(i18nc("@option:check", "Keep alarms after expiry"), group);
@@ -875,7 +875,7 @@ StorePrefTab::StorePrefTab(StackedScrollGroup* scrollGroup)
     grid->addWidget(mKeepArchived, 0, 0, 1, 2, Qt::AlignLeft);
 
     QWidget* widget = new QWidget;
-    QHBoxLayout* box = new QHBoxLayout(widget);
+    auto* box = new QHBoxLayout(widget);
     box->setContentsMargins(0, 0, 0, 0);
     mPurgeArchived = new QCheckBox(i18nc("@option:check", "Discard archived alarms after:"));
     mPurgeArchived->setMinimumSize(mPurgeArchived->sizeHint());
@@ -977,7 +977,7 @@ EmailPrefTab::EmailPrefTab(StackedScrollGroup* scrollGroup)
 {
     QWidget* widget = new QWidget;
     topLayout()->addWidget(widget);
-    QHBoxLayout* box = new QHBoxLayout(widget);
+    auto* box = new QHBoxLayout(widget);
     box->setSpacing(2 * style()->pixelMetric(QStyle::PM_LayoutHorizontalSpacing));
     QLabel* label = new QLabel(i18nc("@label", "Email client:"));
     box->addWidget(label);
@@ -1021,7 +1021,7 @@ EmailPrefTab::EmailPrefTab(StackedScrollGroup* scrollGroup)
     // Your Email Address group box
     QGroupBox* group = new QGroupBox(i18nc("@title:group", "Your Email Address"));
     topLayout()->addWidget(group);
-    QGridLayout* grid = new QGridLayout(group);
+    auto* grid = new QGridLayout(group);
     grid->setColumnStretch(2, 1);
 
     // 'From' email address controls ...
@@ -1205,25 +1205,25 @@ EditPrefTab::EditPrefTab(StackedScrollGroup* scrollGroup)
 
     mTabs = new QTabWidget();
     topLayout()->addWidget(mTabs);
-    StackedGroupT<QWidget>* tabgroup = new StackedGroupT<QWidget>(mTabs);
+    auto* tabgroup = new StackedGroupT<QWidget>(mTabs);
 
-    StackedWidgetT<QWidget>* topGeneral = new StackedWidgetT<QWidget>(tabgroup);
-    QVBoxLayout* tgLayout = new QVBoxLayout(topGeneral);
+    auto* topGeneral = new StackedWidgetT<QWidget>(tabgroup);
+    auto* tgLayout = new QVBoxLayout(topGeneral);
     mTabGeneral = mTabs->addTab(topGeneral, i18nc("@title:tab", "General"));
 
-    StackedWidgetT<QWidget>* topTypes = new StackedWidgetT<QWidget>(tabgroup);
-    QVBoxLayout* ttLayout = new QVBoxLayout(topTypes);
+    auto* topTypes = new StackedWidgetT<QWidget>(tabgroup);
+    auto* ttLayout = new QVBoxLayout(topTypes);
     mTabTypes = mTabs->addTab(topTypes, i18nc("@title:tab", "Alarm Types"));
 
-    StackedWidgetT<QWidget>* topFontColour = new StackedWidgetT<QWidget>(tabgroup);
-    QVBoxLayout* tfLayout = new QVBoxLayout(topFontColour);
+    auto* topFontColour = new StackedWidgetT<QWidget>(tabgroup);
+    auto* tfLayout = new QVBoxLayout(topFontColour);
     mTabFontColour = mTabs->addTab(topFontColour, i18nc("@title:tab", "Font && Color"));
 
     // MISCELLANEOUS
     // Alarm message display method
     QWidget* widget = new QWidget;   // this is to control the QWhatsThis text display area
     tgLayout->addWidget(widget);
-    QHBoxLayout* box = new QHBoxLayout(widget);
+    auto* box = new QHBoxLayout(widget);
     box->setContentsMargins(0, 0, 0, 0);
     QLabel* label = new QLabel(EditDisplayAlarmDlg::i18n_lbl_DisplayMethod());
     box->addWidget(label);
@@ -1275,7 +1275,7 @@ EditPrefTab::EditPrefTab(StackedScrollGroup* scrollGroup)
     // How to handle February 29th in yearly recurrences
     QWidget* febBox = new QWidget;  // this is to control the QWhatsThis text display area
     tgLayout->addWidget(febBox);
-    QVBoxLayout* vbox = new QVBoxLayout(febBox);
+    auto* vbox = new QVBoxLayout(febBox);
     vbox->setContentsMargins(0, 0, 0, 0);
     label = new QLabel(i18nc("@label", "In non-leap years, repeat yearly February 29th alarms on:"));
     label->setAlignment(Qt::AlignLeft);
@@ -1310,7 +1310,7 @@ EditPrefTab::EditPrefTab(StackedScrollGroup* scrollGroup)
     // DISPLAY ALARMS
     QGroupBox* group = new QGroupBox(i18nc("@title:group", "Display Alarms"));
     ttLayout->addWidget(group);
-    QVBoxLayout* vlayout = new QVBoxLayout(group);
+    auto* vlayout = new QVBoxLayout(group);
 
     mConfirmAck = new QCheckBox(EditDisplayAlarmDlg::i18n_chk_ConfirmAck());
     mConfirmAck->setMinimumSize(mConfirmAck->sizeHint());
@@ -1343,7 +1343,7 @@ EditPrefTab::EditPrefTab(StackedScrollGroup* scrollGroup)
     ttLayout->addWidget(bbox);
     vlayout = new QVBoxLayout(bbox);
 
-    QHBoxLayout* hlayout = new QHBoxLayout;
+    auto* hlayout = new QHBoxLayout;
     hlayout->setContentsMargins(0, 0, 0, 0);
     vlayout->addLayout(hlayout);
     mSound = new QComboBox();
@@ -1624,11 +1624,11 @@ ViewPrefTab::ViewPrefTab(StackedScrollGroup* scrollGroup)
     topLayout()->addWidget(mTabs);
 
     QWidget* widget = new QWidget;
-    QVBoxLayout* topGeneral = new QVBoxLayout(widget);
+    auto* topGeneral = new QVBoxLayout(widget);
     mTabGeneral = mTabs->addTab(widget, i18nc("@title:tab", "General"));
 
     widget =  new QWidget;
-    QVBoxLayout* topWindows = new QVBoxLayout(widget);
+    auto* topWindows = new QVBoxLayout(widget);
     mTabWindows = mTabs->addTab(widget, i18nc("@title:tab", "Alarm Windows"));
 
     // Run-in-system-tray check box or group.
@@ -1643,7 +1643,7 @@ ViewPrefTab::ViewPrefTab(StackedScrollGroup* scrollGroup)
         // icons, so don't show options to hide the system tray icon.
         widget = new QWidget;  // this is to allow left adjustment
         topGeneral->addWidget(widget);
-        QHBoxLayout* box = new QHBoxLayout(widget);
+        auto* box = new QHBoxLayout(widget);
         mShowInSystemTrayCheck = new QCheckBox(showInSysTrayText);
         mShowInSystemTrayCheck->setWhatsThis(showInSysTrayWhatsThis);
         box->addWidget(mShowInSystemTrayCheck);
@@ -1656,7 +1656,7 @@ ViewPrefTab::ViewPrefTab(StackedScrollGroup* scrollGroup)
         mShowInSystemTrayGroup->setCheckable(true);
         mShowInSystemTrayGroup->setWhatsThis(showInSysTrayWhatsThis);
         topGeneral->addWidget(mShowInSystemTrayGroup);
-        QGridLayout* grid = new QGridLayout(mShowInSystemTrayGroup);
+        auto* grid = new QGridLayout(mShowInSystemTrayGroup);
         grid->setColumnStretch(1, 1);
         grid->setColumnMinimumWidth(0, gridIndentWidth());
 
@@ -1698,7 +1698,7 @@ ViewPrefTab::ViewPrefTab(StackedScrollGroup* scrollGroup)
     // System tray tooltip group box
     QGroupBox* group = new QGroupBox(i18nc("@title:group", "System Tray Tooltip"));
     topGeneral->addWidget(group);
-    QGridLayout* grid = new QGridLayout(group);
+    auto* grid = new QGridLayout(group);
     grid->setColumnStretch(2, 1);
     grid->setColumnMinimumWidth(0, gridIndentWidth());
     grid->setColumnMinimumWidth(1, gridIndentWidth());
@@ -1711,7 +1711,7 @@ ViewPrefTab::ViewPrefTab(StackedScrollGroup* scrollGroup)
     grid->addWidget(mTooltipShowAlarms, 0, 0, 1, 3, Qt::AlignLeft);
 
     widget = new QWidget;
-    QHBoxLayout* box = new QHBoxLayout(widget);
+    auto* box = new QHBoxLayout(widget);
     box->setContentsMargins(0, 0, 0, 0);
     mTooltipMaxAlarms = new QCheckBox(i18nc("@option:check", "Maximum number of alarms to show:"));
     mTooltipMaxAlarms->setMinimumSize(mTooltipMaxAlarms->sizeHint());
@@ -1752,8 +1752,8 @@ ViewPrefTab::ViewPrefTab(StackedScrollGroup* scrollGroup)
 
     group = new QGroupBox(i18nc("@title:group", "Alarm List"));
     topGeneral->addWidget(group);
-    QHBoxLayout* hlayout = new QHBoxLayout(group);
-    QVBoxLayout* colourLayout = new QVBoxLayout();
+    auto* hlayout = new QHBoxLayout(group);
+    auto* colourLayout = new QVBoxLayout();
     colourLayout->setContentsMargins(0, 0, 0, 0);
     hlayout->addLayout(colourLayout);
 

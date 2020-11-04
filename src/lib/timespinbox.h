@@ -71,7 +71,7 @@ class TimeSpinBox : public SpinBox2
         /** Sets the maximum value which can be held in the spin box. */
         void            setMaximum(const QTime& t)   { SpinBox2::setMaximum(t.hour()*60 + t.minute()); }
         /** Returns the maximum value which can be held in the spin box. */
-        QTime           maxTime() const              { int mv = maximum();  return QTime(mv/60, mv%60); }
+        QTime           maxTime() const              { int mv = maximum();  return {mv/60, mv%60}; }
         /** Called whenever the user triggers a step, to adjust the value of the spin box.
          *  If the value was previously invalid, the spin box is set to the minimum value.
          */

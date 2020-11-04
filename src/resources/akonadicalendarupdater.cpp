@@ -68,7 +68,7 @@ void AkonadiCalendarUpdater::updateToCurrentFormat(const Resource& resource, boo
         return;
     }
     const Collection& collection = AkonadiResource::collection(resource);
-    AkonadiCalendarUpdater* updater = new AkonadiCalendarUpdater(collection, dirResource, ignoreKeepFormat, false, parent, qobject_cast<QWidget*>(parent));
+    auto* updater = new AkonadiCalendarUpdater(collection, dirResource, ignoreKeepFormat, false, parent, qobject_cast<QWidget*>(parent));
     QTimer::singleShot(0, updater, &AkonadiCalendarUpdater::update);
 }
 
@@ -151,7 +151,7 @@ bool AkonadiCalendarUpdater::update()
 template <class Interface> bool AkonadiCalendarUpdater::updateStorageFormat(const AgentInstance& agent, QString& errorMessage, QObject* parent)
 {
     qCDebug(KALARM_LOG) << "AkonadiCalendarUpdater::updateStorageFormat";
-    Interface* iface = AkonadiResource::getAgentInterface<Interface>(agent, errorMessage, parent);
+    auto* iface = AkonadiResource::getAgentInterface<Interface>(agent, errorMessage, parent);
     if (!iface)
     {
         qCDebug(KALARM_LOG) << "AkonadiCalendarUpdater::updateStorageFormat:" << errorMessage;

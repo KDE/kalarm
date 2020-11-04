@@ -51,7 +51,7 @@ FileResourceDataModel* FileResourceDataModel::instance(QObject* parent)
 {
     if (!mInstance)
     {
-        FileResourceDataModel* inst = new FileResourceDataModel(parent);
+        auto* inst = new FileResourceDataModel(parent);
         mInstance = inst;
         mInstanceIsOurs = true;
         inst->initialise();
@@ -197,7 +197,7 @@ QModelIndex FileResourceDataModel::resourceIndex(const Resource& resource) const
         if (row >= 0)
             return createIndex(row, 0, mResourceNodes.value(Resource()).at(row));
     }
-    return QModelIndex();
+    return {};
 }
 
 /******************************************************************************
@@ -259,7 +259,7 @@ QModelIndex FileResourceDataModel::eventIndex(const QString& eventId) const
                 return createIndex(row, 0, node);
         }
     }
-    return QModelIndex();
+    return {};
 }
 
 /******************************************************************************
@@ -487,7 +487,7 @@ void FileResourceDataModel::slotEventsAdded(Resource& resource, const QList<KAEv
             beginInsertRows(resourceIx, row, row + eventsToAdd.count() - 1);
             for (const KAEvent& event : qAsConst(eventsToAdd))
             {
-                KAEvent* ev = new KAEvent(event);
+                auto* ev = new KAEvent(event);
                 ev->setResourceId(resource.id());
                 Node* node = new Node(ev, resource);
                 resourceEventNodes += node;
@@ -852,7 +852,7 @@ QModelIndex FileResourceDataModel::index(int row, int column, const QModelIndex&
             }
         }
     }
-    return QModelIndex();
+    return {};
 }
 
 /******************************************************************************
@@ -871,7 +871,7 @@ QModelIndex FileResourceDataModel::parent(const QModelIndex& ix) const
                 return createIndex(row, 0, mResourceNodes.value(Resource()).at(row));
         }
     }
-    return QModelIndex();
+    return {};
 }
 
 /******************************************************************************

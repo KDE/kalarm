@@ -62,7 +62,7 @@ public:
     enum class MessageType { Info, Error };
 
     /** A shared pointer to an Resource object. */
-    typedef QSharedPointer<ResourceType> Ptr;
+    using Ptr = QSharedPointer<ResourceType>;
 
     ResourceType()  {}
 

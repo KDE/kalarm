@@ -70,7 +70,7 @@ void AkonadiResourceCreator::doCreateResource()
             connect(Resources::instance(), &Resources::resourceAdded,
                                      this, &AkonadiResourceCreator::slotResourceAdded);
 
-            AgentInstanceCreateJob* job = new AgentInstanceCreateJob(mAgentType, mParent);
+            auto* job = new AgentInstanceCreateJob(mAgentType, mParent);
             connect(job, &AgentInstanceCreateJob::result, this, &AkonadiResourceCreator::agentInstanceCreated);
             job->start();
             return;
@@ -85,7 +85,7 @@ void AkonadiResourceCreator::doCreateResource()
 */
 void AkonadiResourceCreator::agentInstanceCreated(KJob* j)
 {
-    AgentInstanceCreateJob* job = static_cast<AgentInstanceCreateJob*>(j);
+    auto* job = static_cast<AgentInstanceCreateJob*>(j);
     if (j->error())
     {
         qCCritical(KALARM_LOG) << "AkonadiResourceCreator::agentInstanceCreated: Failed to create new calendar resource:" << j->errorString();

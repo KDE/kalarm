@@ -131,7 +131,7 @@ private Q_SLOTS:
     void           editAlarmDeleted(QObject*);
 
 private:
-    typedef QVector<MainWindow*> WindowList;
+    using WindowList = QVector<MainWindow *>;
 
     explicit MainWindow(bool restored);
     void           initActions();

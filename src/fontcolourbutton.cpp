@@ -77,7 +77,7 @@ FontColourDlg::FontColourDlg(const QColor& bgColour, const QColor& fgColour, con
 {
     setWindowTitle(caption);
 
-    QVBoxLayout* layout = new QVBoxLayout(this);
+    auto* layout = new QVBoxLayout(this);
     mChooser = new FontColourChooser(this, QStringList(), QString(), true, true);
     mChooser->setBgColour(bgColour);
     mChooser->setFgColour(fgColour);
@@ -88,7 +88,7 @@ FontColourDlg::FontColourDlg(const QColor& bgColour, const QColor& fgColour, con
     layout->addWidget(mChooser);
     layout->addSpacing(style()->pixelMetric(QStyle::PM_LayoutVerticalSpacing));
 
-    QDialogButtonBox* buttonBox = new QDialogButtonBox(this);
+    auto* buttonBox = new QDialogButtonBox(this);
     buttonBox->addButton(QDialogButtonBox::Ok);
     buttonBox->addButton(QDialogButtonBox::Cancel);
     layout->addWidget(buttonBox);

@@ -166,7 +166,7 @@ void ResourceType::removeResource(ResourceId id)
     // Set the resource instance invalid, to ensure that any other references
     // to it now see an invalid resource.
     Resource res = Resources::resource(id);
-    ResourceType* tres = res.resource<ResourceType>();
+    auto* tres = res.resource<ResourceType>();
     if (tres)
         tres->mId = -1;   // set the resource instance invalid
     Resources::removeResource(id);

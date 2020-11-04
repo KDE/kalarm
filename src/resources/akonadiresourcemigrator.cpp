@@ -219,7 +219,7 @@ void AkonadiResourceMigrator::migrateOrCreate()
 */
 void AkonadiResourceMigrator::collectionFetchResult(KJob* j)
 {
-    CollectionFetchJob* job = static_cast<CollectionFetchJob*>(j);
+    auto* job = static_cast<CollectionFetchJob*>(j);
     const QString id = job->fetchScope().resource();
     if (j->error())
         qCCritical(KALARM_LOG) << "AkonadiResourceMigrator::collectionFetchResult: CollectionFetchJob" << id << "error: " << j->errorString();
@@ -400,7 +400,7 @@ CalendarCreator::CalendarCreator(CalEvent::Type alarmType, const QString& file, 
 void CalendarCreator::createAgent(const QString& agentType, QObject* parent)
 {
     Q_EMIT creating(mUrlString);
-    AgentInstanceCreateJob* job = new AgentInstanceCreateJob(agentType, parent);
+    auto* job = new AgentInstanceCreateJob(agentType, parent);
     connect(job, &KJob::result, this, &CalendarCreator::agentCreated);
     job->start();
 }
@@ -421,7 +421,7 @@ void CalendarCreator::agentCreated(KJob* j)
 
     // Configure the Akonadi Agent
     qCDebug(KALARM_LOG) << "CalendarCreator::agentCreated:" << mName;
-    AgentInstanceCreateJob* job = static_cast<AgentInstanceCreateJob*>(j);
+    auto* job = static_cast<AgentInstanceCreateJob*>(j);
     mAgent = job->instance();
     mAgent.setName(mName);
     bool ok = false;
@@ -448,7 +448,7 @@ void CalendarCreator::agentCreated(KJob* j)
     mAgent.reconfigure();   // notify the agent that its configuration has been changed
 
     // Wait for the resource to create its collection and synchronize the backend storage.
-    ResourceSynchronizationJob* sjob = new ResourceSynchronizationJob(mAgent);
+    auto* sjob = new ResourceSynchronizationJob(mAgent);
     connect(sjob, &KJob::result, this, &CalendarCreator::resourceSynchronised);
     sjob->start();   // this is required (not an Akonadi::Job)
 }
@@ -484,7 +484,7 @@ void CalendarCreator::fetchCollection()
 
 bool CalendarCreator::writeLocalFileConfig()
 {
-    OrgKdeAkonadiKAlarmSettingsInterface* iface = writeBasicConfig<OrgKdeAkonadiKAlarmSettingsInterface>();
+    auto* iface = writeBasicConfig<OrgKdeAkonadiKAlarmSettingsInterface>();
     if (!iface)
         return false;
     iface->setMonitorFile(true);
@@ -495,7 +495,7 @@ bool CalendarCreator::writeLocalFileConfig()
 
 bool CalendarCreator::writeLocalDirectoryConfig()
 {
-    OrgKdeAkonadiKAlarmDirSettingsInterface* iface = writeBasicConfig<OrgKdeAkonadiKAlarmDirSettingsInterface>();
+    auto* iface = writeBasicConfig<OrgKdeAkonadiKAlarmDirSettingsInterface>();
     if (!iface)
         return false;
     iface->setMonitorFiles(true);
@@ -506,7 +506,7 @@ bool CalendarCreator::writeLocalDirectoryConfig()
 
 bool CalendarCreator::writeRemoteFileConfig()
 {
-    OrgKdeAkonadiKAlarmSettingsInterface* iface = writeBasicConfig<OrgKdeAkonadiKAlarmSettingsInterface>();
+    auto* iface = writeBasicConfig<OrgKdeAkonadiKAlarmSettingsInterface>();
     if (!iface)
         return false;
     iface->setMonitorFile(true);
@@ -517,7 +517,7 @@ bool CalendarCreator::writeRemoteFileConfig()
 
 template <class Interface> Interface* CalendarCreator::writeBasicConfig()
 {
-    Interface* iface = AkonadiResource::getAgentInterface<Interface>(mAgent, mErrorMessage, this);
+    auto* iface = AkonadiResource::getAgentInterface<Interface>(mAgent, mErrorMessage, this);
     if (iface)
     {
         iface->setReadOnly(mReadOnly);
@@ -543,7 +543,7 @@ void CalendarCreator::collectionFetchResult(KJob* j)
         markComplete(true);
         return;
     }
-    CollectionFetchJob* job = static_cast<CollectionFetchJob*>(j);
+    auto* job = static_cast<CollectionFetchJob*>(j);
     const Collection::List collections = job->collections();
     if (collections.isEmpty())
     {
@@ -572,9 +572,9 @@ void CalendarCreator::collectionFetchResult(KJob* j)
     Collection collection = collections[0];
     mCollectionId = collection.id();
     collection.setContentMimeTypes(CalEvent::mimeTypes(mAlarmType));
-    EntityDisplayAttribute* dattr = collection.attribute<EntityDisplayAttribute>(Collection::AddIfMissing);
+    auto* dattr = collection.attribute<EntityDisplayAttribute>(Collection::AddIfMissing);
     dattr->setIconName(QStringLiteral("kalarm"));
-    CollectionAttribute* attr = collection.attribute<CollectionAttribute>(Collection::AddIfMissing);
+    auto* attr = collection.attribute<CollectionAttribute>(Collection::AddIfMissing);
     attr->setEnabled(mEnabled ? mAlarmType : CalEvent::EMPTY);
     if (mStandard)
         attr->setStandard(mAlarmType);
@@ -617,9 +617,9 @@ void CalendarCreator::collectionFetchResult(KJob* j)
     // for applications. So create a new Collection instance and only set a
     // value for CollectionAttribute.
     Collection c(collection.id());
-    CollectionAttribute* att = c.attribute<CollectionAttribute>(Collection::AddIfMissing);
+    auto* att = c.attribute<CollectionAttribute>(Collection::AddIfMissing);
     *att = *attr;
-    CollectionModifyJob* cmjob = new CollectionModifyJob(c, this);
+    auto* cmjob = new CollectionModifyJob(c, this);
     connect(cmjob, &KJob::result, this, &CalendarCreator::modifyCollectionJobDone);
 }
 

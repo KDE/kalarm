@@ -61,7 +61,7 @@ class TimeEdit : public QWidget
         /** Returns the entered time as a value in minutes. */
         int           value() const;
         /** Returns the entered time as a QTime value. */
-        QTime         time() const                 { int m = value();  return QTime(m/60, m%60); }
+        QTime         time() const                 { int m = value();  return {m/60, m%60}; }
         /** Returns true if it is possible to step the value from the highest value to the lowest value and vice versa. */
         bool          wrapping() const;
         /** Sets whether it is possible to step the value from the highest value to the lowest value and vice versa.
@@ -73,7 +73,7 @@ class TimeEdit : public QWidget
         /** Returns the maximum value of the widget in minutes. */
         int           maximum() const;
         /** Returns the maximum value of the widget as a QTime value. */
-        QTime         maxTime() const              { int mv = maximum();  return QTime(mv/60, mv%60); }
+        QTime         maxTime() const              { int mv = maximum();  return {mv/60, mv%60}; }
         /** Sets the minimum value of the widget. */
         void          setMinimum(int minutes);
         /** Sets the maximum value of the widget. */

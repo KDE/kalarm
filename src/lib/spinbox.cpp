@@ -176,7 +176,7 @@ bool SpinBox::eventFilter(QObject* obj, QEvent* e)
             case QEvent::KeyPress:
             {
                 // Up and down arrow keys step the value
-                QKeyEvent* ke = (QKeyEvent*)e;
+                auto* ke = (QKeyEvent*)e;
                 const int key = ke->key();
                 if (key == Qt::Key_Up)
                     step = 1;
@@ -186,7 +186,7 @@ bool SpinBox::eventFilter(QObject* obj, QEvent* e)
             }
             case QEvent::Wheel:
             {
-                QWheelEvent* we = (QWheelEvent*)e;
+                auto* we = (QWheelEvent*)e;
                 step = (we->angleDelta().y() > 0) ? 1 : -1;
                 break;
             }
@@ -197,7 +197,7 @@ bool SpinBox::eventFilter(QObject* obj, QEvent* e)
         {
             if (mReadOnly)
                 return true;    // discard up/down arrow keys
-            QInputEvent* ie = (QInputEvent*)e;
+            auto* ie = (QInputEvent*)e;
             if ((ie->modifiers() & (Qt::ShiftModifier | Qt::AltModifier)) == Qt::ShiftModifier)
             {
                 // Shift stepping

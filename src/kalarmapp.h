@@ -127,7 +127,7 @@ Q_SIGNALS:
     void               execAlarmSuccess();
 
 private:
-    typedef Preferences::Feb29Type Feb29Type;   // allow it to be used in SIGNAL mechanism
+    using Feb29Type = Preferences::Feb29Type;   // allow it to be used in SIGNAL mechanism
 
 private Q_SLOTS:
     void               quitFatal();

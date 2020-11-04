@@ -298,7 +298,7 @@ bool KAlarmApp::restoreSession()
         }
         else if (type == QLatin1String("MessageWindow"))
         {
-            MessageWindow* win = new MessageWindow;
+            auto* win = new MessageWindow;
             win->restore(i, false);
             if (win->isValid())
             {
@@ -392,7 +392,7 @@ int KAlarmApp::activateInstance(const QStringList& args, const QString& workingD
     QCommandLineParser parser;
     KAboutData::applicationData().setupCommandLine(&parser);
     parser.setApplicationDescription(QApplication::applicationDisplayName());
-    CommandOptions* options = new CommandOptions;
+    auto* options = new CommandOptions;
     const QStringList nonexecArgs = options->setOptions(&parser, fixedArgs);
     options->parse();
     KAboutData::applicationData().processCommandLine(&parser);
@@ -444,7 +444,7 @@ int KAlarmApp::activateInstance(const QStringList& args, const QString& workingD
             case CommandOptions::CANCEL_EVENT:
             {
                 // Display or delete the event with the specified event ID
-                QueuedAction action = static_cast<QueuedAction>(int((command == CommandOptions::TRIGGER_EVENT) ? QueuedAction::Trigger : QueuedAction::Cancel)
+                auto action = static_cast<QueuedAction>(int((command == CommandOptions::TRIGGER_EVENT) ? QueuedAction::Trigger : QueuedAction::Cancel)
                                                                 | int(QueuedAction::Exit));
                 // Open the calendar, don't start processing execution queue yet,
                 // and wait for the calendar resources to be populated.
@@ -474,7 +474,7 @@ int KAlarmApp::activateInstance(const QStringList& args, const QString& workingD
                     exitCode = 1;
                 else
                 {
-                    const QueuedAction action = static_cast<QueuedAction>(int(QueuedAction::List) | int(QueuedAction::Exit));
+                    const auto action = static_cast<QueuedAction>(int(QueuedAction::List) | int(QueuedAction::Exit));
                     mActionQueue.enqueue(ActionQEntry(action, EventId()));
                     startProcessQueue();      // start processing the execution queue
                     dontRedisplay = true;
@@ -530,7 +530,7 @@ int KAlarmApp::activateInstance(const QStringList& args, const QString& workingD
                         case EditAlarmDlg::DISPLAY:
                         {
                             // EditAlarmDlg::create() always returns EditDisplayAlarmDlg for type = DISPLAY
-                            EditDisplayAlarmDlg* dlg = qobject_cast<EditDisplayAlarmDlg*>(editDlg);
+                            auto* dlg = qobject_cast<EditDisplayAlarmDlg*>(editDlg);
                             if (options->fgColour().isValid())
                                 dlg->setFgColour(options->fgColour());
                             if (options->bgColour().isValid())
@@ -559,7 +559,7 @@ int KAlarmApp::activateInstance(const QStringList& args, const QString& workingD
                         case EditAlarmDlg::EMAIL:
                         {
                             // EditAlarmDlg::create() always returns EditEmailAlarmDlg for type = EMAIL
-                            EditEmailAlarmDlg* dlg = qobject_cast<EditEmailAlarmDlg*>(editDlg);
+                            auto* dlg = qobject_cast<EditEmailAlarmDlg*>(editDlg);
                             if (options->fromID()
                             ||  !options->addressees().isEmpty()
                             ||  !options->subject().isEmpty()
@@ -572,7 +572,7 @@ int KAlarmApp::activateInstance(const QStringList& args, const QString& workingD
                         case EditAlarmDlg::AUDIO:
                         {
                             // EditAlarmDlg::create() always returns EditAudioAlarmDlg for type = AUDIO
-                            EditAudioAlarmDlg* dlg = qobject_cast<EditAudioAlarmDlg*>(editDlg);
+                            auto* dlg = qobject_cast<EditAudioAlarmDlg*>(editDlg);
                             if (!options->audioFile().isEmpty()  ||  options->audioVolume() >= 0)
                                 dlg->setAudio(options->audioFile(), options->audioVolume());
                             break;
@@ -1021,7 +1021,7 @@ void KAlarmApp::processQueue()
             // Process the first action in the queue.
             const bool findUniqueId  = int(entry.action) & int(QueuedAction::FindId);
             const bool exitAfter     = int(entry.action) & int(QueuedAction::Exit);
-            const QueuedAction action = static_cast<QueuedAction>(int(entry.action) & int(QueuedAction::ActionMask));
+            const auto action = static_cast<QueuedAction>(int(entry.action) & int(QueuedAction::ActionMask));
 
             bool ok = true;
             bool inhibit = false;
@@ -2815,7 +2815,7 @@ void KAlarmApp::clearEventCommandError(const KAEvent& event, KAEvent::CmdErrType
     if (pd && pd->eventDeleted)
         return;   // the alarm has been deleted, so can't set error status
 
-    KAEvent::CmdErrType newerr = static_cast<KAEvent::CmdErrType>(event.commandError() & ~err);
+    auto newerr = static_cast<KAEvent::CmdErrType>(event.commandError() & ~err);
     event.setCommandError(newerr);
     KAEvent ev = ResourcesCalendar::event(EventId(event));
     if (ev.isValid())

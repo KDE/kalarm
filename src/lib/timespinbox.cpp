@@ -60,7 +60,7 @@ QString TimeSpinBox::shiftWhatsThis()
 
 QTime TimeSpinBox::time() const
 {
-    return QTime(value() / 60, value() % 60);
+    return {value() / 60, value() % 60};
 }
 
 QString TimeSpinBox::textFromValue(int v) const
@@ -228,14 +228,14 @@ QSize TimeSpinBox::sizeHint() const
 {
     QSize sz = SpinBox2::sizeHint();
     QFontMetrics fm(font());
-    return QSize(sz.width() + fm.horizontalAdvance(QLatin1Char(':')), sz.height());
+    return {sz.width() + fm.horizontalAdvance(QLatin1Char(':')), sz.height()};
 }
 
 QSize TimeSpinBox::minimumSizeHint() const
 {
     QSize sz = SpinBox2::minimumSizeHint();
     QFontMetrics fm(font());
-    return QSize(sz.width() + fm.horizontalAdvance(QLatin1Char(':')), sz.height());
+    return {sz.width() + fm.horizontalAdvance(QLatin1Char(':')), sz.height()};
 }
 
 /******************************************************************************

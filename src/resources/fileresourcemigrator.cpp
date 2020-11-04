@@ -242,7 +242,7 @@ void FileResourceMigrator::migrateAkonadiResources()
 */
 void FileResourceMigrator::collectionFetchResult(KJob* j)
 {
-    Akonadi::CollectionFetchJob* job = static_cast<Akonadi::CollectionFetchJob*>(j);
+    auto* job = static_cast<Akonadi::CollectionFetchJob*>(j);
     const QString id = job->fetchScope().resource();
     if (j->error())
         qCCritical(KALARM_LOG) << "FileResourceMigrator::collectionFetchResult: CollectionFetchJob" << id << "error: " << j->errorString();
@@ -264,7 +264,7 @@ void FileResourceMigrator::collectionFetchResult(KJob* j)
             QColor backgroundColour;
             if (collection.hasAttribute<CollectionAttribute>())
             {
-                const CollectionAttribute* attr = collection.attribute<CollectionAttribute>();
+                const auto* attr = collection.attribute<CollectionAttribute>();
                 enabledTypes     = attr->enabled();
                 standardTypes    = attr->standard();
                 backgroundColour = attr->backgroundColor();
@@ -282,7 +282,7 @@ void FileResourceMigrator::collectionFetchResult(KJob* j)
 
                 // Update the calendar to the current KAlarm format if necessary,
                 // and if the user agrees.
-                FileResourceCalendarUpdater* updater = new FileResourceCalendarUpdater(resource, true, this);
+                auto* updater = new FileResourceCalendarUpdater(resource, true, this);
                 connect(updater, &QObject::destroyed, this, &FileResourceMigrator::checkIfComplete);
                 updater->update();   // note that 'updater' will auto-delete when finished
 
@@ -474,7 +474,7 @@ void FileResourceMigrator::migrateKResources()
 
             // Update the calendar to the current KAlarm format if necessary,
             // and if the user agrees.
-            FileResourceCalendarUpdater* updater = new FileResourceCalendarUpdater(resource, true, this);
+            auto* updater = new FileResourceCalendarUpdater(resource, true, this);
             connect(updater, &QObject::destroyed, this, &FileResourceMigrator::checkIfComplete);
             updater->update();   // note that 'updater' will auto-delete when finished
 
@@ -527,7 +527,7 @@ void FileResourceMigrator::createCalendar(CalEvent::Type alarmType, const QStrin
 
     // Update the calendar to the current KAlarm format if necessary,
     // and if the user agrees.
-    FileResourceCalendarUpdater* updater = new FileResourceCalendarUpdater(resource, true, this);
+    auto* updater = new FileResourceCalendarUpdater(resource, true, this);
     connect(updater, &QObject::destroyed, this, &FileResourceMigrator::checkIfComplete);
     updater->update();   // note that 'updater' will auto-delete when finished
 }

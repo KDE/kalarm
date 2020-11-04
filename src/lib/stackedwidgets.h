@@ -75,9 +75,9 @@ QSize StackedGroupT<T>::minimumSizeHint() const
 }
 
 /** A non-scrollable stacked widget. */
-typedef StackedWidgetT<QWidget> StackedWidget;
+using StackedWidget = StackedWidgetT<QWidget>;
 /** A group of non-scrollable stacked widgets. */
-typedef StackedGroupT<QWidget> StackedGroup;
+using StackedGroup = StackedGroupT<QWidget>;
 
 
 class StackedScrollGroup;

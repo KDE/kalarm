@@ -256,7 +256,7 @@ void MessageDisplayHelper::initTexts()
                         switch (mTexts.fileType)
                         {
                             case File::Image:
-                                mTexts.message = QLatin1String("<div align=\"center\"><img src=\"") + mTempFile->fileName() + QLatin1String("\"></div>");
+                                mTexts.message = QLatin1String(R"(<div align="center"><img src=")") + mTempFile->fileName() + QLatin1String("\"></div>");
                                 mTempFile->close();   // keep the file available to be displayed
                                 break;
                             case File::TextFormatted:
@@ -996,7 +996,7 @@ void AudioThread::run()
     mAudioObject = new Phonon::MediaObject();
     mAudioObject->setCurrentSource(source);
     mAudioObject->setTransitionTime(100);   // workaround to prevent clipping of end of files in Xine backend
-    Phonon::AudioOutput* output = new Phonon::AudioOutput(Phonon::NotificationCategory, mAudioObject);
+    auto* output = new Phonon::AudioOutput(Phonon::NotificationCategory, mAudioObject);
     mPath = Phonon::createPath(mAudioObject, output);
     if (mVolume >= 0  ||  mFadeVolume >= 0)
     {
@@ -1005,7 +1005,7 @@ void AudioThread::run()
         output->setVolume(maxvol);
         if (mFadeVolume >= 0  &&  mFadeSeconds > 0)
         {
-            Phonon::VolumeFaderEffect* fader = new Phonon::VolumeFaderEffect(mAudioObject);
+            auto* fader = new Phonon::VolumeFaderEffect(mAudioObject);
             fader->setVolume(mFadeVolume / maxvol);
             fader->fadeTo(mVolume / maxvol, mFadeSeconds * 1000);
             mPath.insertEffect(fader);

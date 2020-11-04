@@ -53,7 +53,7 @@ QRect workArea(int screen)
 #endif
     const QList<QScreen*> screens = QGuiApplication::screens();
     if (screen < 0  ||  screen >= screens.count())
-        return QRect();
+        return {};
     return screens[screen]->availableGeometry();
 }
 

@@ -190,7 +190,7 @@ void AlarmListView::showHideColumn(QMenu& menu, QAction* act)
 void AlarmListView::setReplaceBlankName()
 {
     bool textHidden = header()->isSectionHidden(AlarmListModel::TextColumn);
-    AlarmListModel* almodel = qobject_cast<AlarmListModel*>(model());
+    auto* almodel = qobject_cast<AlarmListModel*>(model());
     if (almodel)
         almodel->setReplaceBlankName(textHidden);
 }
