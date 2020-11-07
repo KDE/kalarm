@@ -14,8 +14,11 @@ macro(macro_unit_tests)
         Qt5::Test)
   endforeach()
 endmacro()
-
+if (NOT WIN32)
 macro_unit_tests(
     kadatetimetest
     kaeventtest
 )
+else()
+    MESSAGE(STATUS "REACTIVATE AUTOTEST on WINDOWS")
+endif()
