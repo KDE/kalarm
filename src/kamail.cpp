@@ -51,6 +51,10 @@
 #include <QDBusInterface>
 
 #include <pwd.h>
+#ifdef Q_OS_WIN
+#define popen _popen
+#define pclose _pclose
+#endif
 
 static const QLatin1String KMAIL_DBUS_SERVICE("org.kde.kmail");
 //static const QLatin1String KMAIL_DBUS_PATH("/KMail");

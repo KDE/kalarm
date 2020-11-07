@@ -17,6 +17,10 @@
 #include <QDateTime>
 
 #include <stdio.h>
+#ifdef Q_OS_WIN
+#define popen _popen
+#define pclose _pclose
+#endif
 
 RtcWakeAction::RtcWakeAction()
 {
