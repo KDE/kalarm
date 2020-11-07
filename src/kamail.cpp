@@ -50,7 +50,6 @@
 #include <QStandardPaths>
 #include <QDBusInterface>
 
-#include <pwd.h>
 #ifdef Q_OS_WIN
 #define popen _popen
 #define pclose _pclose
