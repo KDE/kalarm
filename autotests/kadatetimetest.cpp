@@ -210,7 +210,7 @@ void KADateTimeTest::specConstructors()
 
     // Restore the original local time zone
     if (originalZone.isEmpty()) {
-        ::unsetenv("TZ");
+        unsetenv("TZ");
     } else {
         qputenv("TZ", originalZone);
     }
@@ -282,7 +282,7 @@ void KADateTimeTest::specSet()
 
     // Restore the original local time zone
     if (originalZone.isEmpty()) {
-        ::unsetenv("TZ");
+        unsetenv("TZ");
     } else {
         qputenv("TZ", originalZone);
     }
@@ -661,7 +661,7 @@ void KADateTimeTest::constructors()
 
     // Restore the original local time zone
     if (originalZone.isEmpty()) {
-        ::unsetenv("TZ");
+        unsetenv("TZ");
     } else {
         qputenv("TZ", originalZone);
     }
@@ -770,7 +770,7 @@ void KADateTimeTest::toUtc()
 
     // Restore the original local time zone
     if (originalZone.isEmpty()) {
-        ::unsetenv("TZ");
+        unsetenv("TZ");
     } else {
         qputenv("TZ", originalZone);
     }
@@ -987,7 +987,7 @@ void KADateTimeTest::toOffsetFromUtc()
 
     // Restore the original local time zone
     if (originalZone.isEmpty()) {
-        ::unsetenv("TZ");
+        unsetenv("TZ");
     } else {
         qputenv("TZ", originalZone);
     }
@@ -1068,7 +1068,7 @@ void KADateTimeTest::toLocalZone()
 
     // Restore the original local time zone
     if (originalZone.isEmpty()) {
-        ::unsetenv("TZ");
+        unsetenv("TZ");
     } else {
         qputenv("TZ", originalZone);
     }
@@ -1167,7 +1167,7 @@ void KADateTimeTest::toZone()
 
     // Restore the original local time zone
     if (originalZone.isEmpty()) {
-        ::unsetenv("TZ");
+        unsetenv("TZ");
     } else {
         qputenv("TZ", originalZone);
     }
@@ -1416,7 +1416,7 @@ void KADateTimeTest::toTimeSpec()
 
     // Restore the original local time zone
     if (originalZone.isEmpty()) {
-        ::unsetenv("TZ");
+        unsetenv("TZ");
     } else {
         qputenv("TZ", originalZone);
     }
@@ -1652,7 +1652,7 @@ void KADateTimeTest::set()
 
     // Restore the original local time zone
     if (originalZone.isEmpty()) {
-        ::unsetenv("TZ");
+        unsetenv("TZ");
     } else {
         qputenv("TZ", originalZone);
     }
@@ -1749,7 +1749,7 @@ void KADateTimeTest::equal()
 
     // Restore the original local time zone
     if (originalZone.isEmpty()) {
-        ::unsetenv("TZ");
+        unsetenv("TZ");
     } else {
         qputenv("TZ", originalZone);
     }
@@ -1868,7 +1868,7 @@ void KADateTimeTest::lessThan()
 
     // Restore the original local time zone
     if (originalZone.isEmpty()) {
-        ::unsetenv("TZ");
+        unsetenv("TZ");
     } else {
         qputenv("TZ", originalZone);
     }
@@ -1941,7 +1941,7 @@ void KADateTimeTest::compare()
 
     // Restore the original local time zone
     if (originalZone.isEmpty()) {
-        ::unsetenv("TZ");
+        unsetenv("TZ");
     } else {
         qputenv("TZ", originalZone);
     }
@@ -2117,7 +2117,7 @@ void KADateTimeTest::addSubtract()
 
     // Restore the original local time zone
     if (originalZone.isEmpty()) {
-        ::unsetenv("TZ");
+        unsetenv("TZ");
     } else {
         qputenv("TZ", originalZone);
     }
@@ -2227,7 +2227,7 @@ void KADateTimeTest::addMSecs()
 
     // Restore the original local time zone
     if (originalZone.isEmpty()) {
-        ::unsetenv("TZ");
+        unsetenv("TZ");
     } else {
         qputenv("TZ", originalZone);
     }
@@ -2537,7 +2537,7 @@ void KADateTimeTest::addSubtractDate()
 
     // Restore the original local time zone
     if (originalZone.isEmpty()) {
-        ::unsetenv("TZ");
+        unsetenv("TZ");
     } else {
         qputenv("TZ", originalZone);
     }
@@ -2631,7 +2631,7 @@ void KADateTimeTest::dstShifts()
 
     // Restore the original local time zone
     if (originalZone.isEmpty()) {
-        ::unsetenv("TZ");
+        unsetenv("TZ");
     } else {
         qputenv("TZ", originalZone);
     }
@@ -2874,7 +2874,7 @@ void KADateTimeTest::strings_iso8601()
 
     // Restore the original local time zone
     if (originalZone.isEmpty()) {
-        ::unsetenv("TZ");
+        unsetenv("TZ");
     } else {
         qputenv("TZ", originalZone);
     }
@@ -3072,7 +3072,7 @@ void KADateTimeTest::strings_rfc2822()
 
     // Restore the original local time zone
     if (originalZone.isEmpty()) {
-        ::unsetenv("TZ");
+        unsetenv("TZ");
     } else {
         qputenv("TZ", originalZone);
     }
@@ -3172,7 +3172,7 @@ void KADateTimeTest::strings_rfc3339()
 
     // Restore the original local time zone
     if (originalZone.isEmpty()) {
-        ::unsetenv("TZ");
+        unsetenv("TZ");
     } else {
         qputenv("TZ", originalZone);
     }
@@ -3264,7 +3264,7 @@ void KADateTimeTest::strings_qttextdate()
 
     // Restore the original local time zone
     if (originalZone.isEmpty()) {
-        ::unsetenv("TZ");
+        unsetenv("TZ");
     } else {
         qputenv("TZ", originalZone);
     }
@@ -3472,7 +3472,7 @@ void KADateTimeTest::strings_format()
 
     // Restore the original local time zone
     if (originalZone.isEmpty()) {
-        ::unsetenv("TZ");
+        unsetenv("TZ");
     } else {
         qputenv("TZ", originalZone);
     }
@@ -3561,7 +3561,7 @@ void KADateTimeTest::cache()
 
     // Restore the original local time zone
     if (originalZone.isEmpty()) {
-        ::unsetenv("TZ");
+        unsetenv("TZ");
     } else {
         qputenv("TZ", originalZone);
     }
@@ -3619,7 +3619,7 @@ void KADateTimeTest::stream()
 
     // Restore the original local time zone
     if (originalZone.isEmpty()) {
-        ::unsetenv("TZ");
+        unsetenv("TZ");
     } else {
         qputenv("TZ", originalZone);
     }
@@ -3650,7 +3650,7 @@ void KADateTimeTest::misc()
 
     // Restore the original local time zone
     if (originalZone.isEmpty()) {
-        ::unsetenv("TZ");
+        unsetenv("TZ");
     } else {
         qputenv("TZ", originalZone);
     }
