@@ -1454,9 +1454,6 @@ public:
      */
     static KADateTime realCurrentLocalDateTime();
 
-    friend QDataStream &operator<<(QDataStream &out, const KADateTime &dateTime);
-    friend QDataStream &operator>>(QDataStream &in, KADateTime &dateTime);
-
 private:
     QSharedDataPointer<KADateTimePrivate> d;
 };
