@@ -30,7 +30,6 @@
 #include <QStandardPaths>
 
 #include <time.h>
-#include <unistd.h>
 
 using namespace KHolidays;
 using namespace KAlarmCal;
