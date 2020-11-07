@@ -889,10 +889,13 @@ bool parseUserName( const char* & scursor, const char * const send,
     default: // atom
       scursor--; // re-set scursor to point to ch again
       if ( parseAtom( scursor, send, atom, false /* no 8bit */ ) ) {
+          //TODO FIXME on windows
+#ifndef WIN32
         if (getpwnam(atom.constData())) {
           result = QLatin1String(atom);
           return true;
         }
+#endif
       }
       return false; // parseAtom can only fail if the first char is non-atext.
     }
