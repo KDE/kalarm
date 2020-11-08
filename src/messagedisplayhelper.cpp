@@ -256,7 +256,7 @@ void MessageDisplayHelper::initTexts()
                         switch (mTexts.fileType)
                         {
                             case File::Image:
-                                mTexts.message = QLatin1String(R"(<div align="center"><img src=")") + mTempFile->fileName() + QLatin1String("\"></div>");
+                                mTexts.message = QLatin1String(R"(<div align="center"><img src=")") + mTempFile->fileName() + QLatin1String(R"("></div>)");
                                 mTempFile->close();   // keep the file available to be displayed
                                 break;
                             case File::TextFormatted:

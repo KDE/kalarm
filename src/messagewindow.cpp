@@ -109,7 +109,7 @@ public:
     {
         const QSizeF docsize = document()->size();
         return {static_cast<int>(docsize.width() + 0.99) + verticalScrollBar()->width(),
-                     static_cast<int>(docsize.height() + 0.99) + horizontalScrollBar()->height()};
+                static_cast<int>(docsize.height() + 0.99) + horizontalScrollBar()->height()};
     }
 };
 
