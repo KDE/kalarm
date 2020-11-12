@@ -294,6 +294,7 @@ CheckBox* EditDisplayAlarmDlg::createConfirmAckCheckbox(QWidget* parent)
 */
 void EditDisplayAlarmDlg::type_initValues(const KAEvent* event)
 {
+    mTryButton->setToolTip(i18nc("@info:tooltip", "Display the alarm now"));
     mAkonadiItemId = -1;
     lateCancel()->showAutoClose(true);
     if (event)
@@ -849,6 +850,7 @@ QString EditCommandAlarmDlg::type_caption() const
 void EditCommandAlarmDlg::type_init(QWidget* parent, QVBoxLayout* frameLayout)
 {
     mTryButton->setWhatsThis(i18nc("@info:whatsthis", "Execute the specified command now"));
+    mTryButton->setToolTip(i18nc("@info:tooltip", "Execute the specified command now"));
 
     mCmdEdit = new CommandEdit(parent);
     connect(mCmdEdit, &CommandEdit::scriptToggled, this, &EditCommandAlarmDlg::slotCmdScriptToggled);
@@ -1175,6 +1177,7 @@ QString EditEmailAlarmDlg::type_caption() const
 void EditEmailAlarmDlg::type_init(QWidget* parent, QVBoxLayout* frameLayout)
 {
     mTryButton->setWhatsThis(i18nc("@info:whatsthis", "Send the email to the specified addressees now"));
+    mTryButton->setToolTip(i18nc("@info:tooltip", "Send the email now"));
 
     auto* grid = new QGridLayout();
     grid->setContentsMargins(0, 0, 0, 0);
@@ -1622,6 +1625,8 @@ QString EditAudioAlarmDlg::type_caption() const
 */
 void EditAudioAlarmDlg::type_init(QWidget* parent, QVBoxLayout* frameLayout)
 {
+    mTryButton->setWhatsThis(i18nc("@info:whatsthis", "Play the audio file now"));
+    mTryButton->setToolTip(i18nc("@info:tooltip", "Play the audio file now"));
     // File name edit box
     mSoundConfig = new SoundWidget(false, true, parent);
     if (isTemplate())

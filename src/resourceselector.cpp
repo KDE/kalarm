@@ -81,7 +81,9 @@ ResourceSelector::ResourceSelector(QWidget* parent)
     blayout->addWidget(mAddButton);
     blayout->addWidget(mEditButton);
     blayout->addWidget(mDeleteButton);
-    mEditButton->setWhatsThis(i18nc("@info:whatsthis", "Edit the highlighted calendar"));
+    mEditButton->setToolTip(i18nc("@info:tooltip", "Reconfigure the selected calendar"));
+    mEditButton->setWhatsThis(i18nc("@info:whatsthis", "Edit the highlighted calendar's configuration"));
+    mDeleteButton->setToolTip(i18nc("@info:tooltip", "Remove the selected calendar from the list"));
     mDeleteButton->setWhatsThis(xi18nc("@info:whatsthis", "<para>Remove the highlighted calendar from the list.</para>"
                                      "<para>The calendar itself is left intact, and may subsequently be reinstated in the list if desired.</para>"));
     mEditButton->setDisabled(true);
