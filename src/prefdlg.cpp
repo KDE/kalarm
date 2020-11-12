@@ -139,6 +139,9 @@ KAlarmPrefDlg::KAlarmPrefDlg()
     setWindowTitle(i18nc("@title:window", "Configure"));
     setStandardButtons(QDialogButtonBox::Ok | QDialogButtonBox::Cancel | QDialogButtonBox::Help | QDialogButtonBox::RestoreDefaults | QDialogButtonBox::Apply);
     button(QDialogButtonBox::Ok)->setDefault(true);
+    button(QDialogButtonBox::RestoreDefaults)->setToolTip(KStandardGuiItem::defaults().toolTip());
+    button(QDialogButtonBox::Help)->setToolTip(KStandardGuiItem::help().toolTip());
+    button(QDialogButtonBox::Apply)->setToolTip(KStandardGuiItem::apply().toolTip());
     setFaceType(List);
     mTabScrollGroup = new StackedScrollGroup(this, this);
 

@@ -74,22 +74,26 @@ TemplateDlg::TemplateDlg(QWidget* parent)
     mNewAction = new NewAlarmAction(true, i18nc("@action", "New"), this);
     button->setMenu(mNewAction->menu());
     connect(mNewAction, &NewAlarmAction::selected, this, &TemplateDlg::slotNew);
+    button->setToolTip(i18nc("@info:tooltip", "Create a new alarm template"));
     button->setWhatsThis(i18nc("@info:whatsthis", "Create a new alarm template"));
     layout->addWidget(button);
 
     mEditButton = new QPushButton(i18nc("@action:button", "Edit..."));
     connect(mEditButton, &QPushButton::clicked, this, &TemplateDlg::slotEdit);
+    mEditButton->setToolTip(i18nc("@info:tooltip", "Edit the selected alarm template"));
     mEditButton->setWhatsThis(i18nc("@info:whatsthis", "Edit the currently highlighted alarm template"));
     layout->addWidget(mEditButton);
 
     mCopyButton = new QPushButton(i18nc("@action:button", "Copy"));
     connect(mCopyButton, &QPushButton::clicked, this, &TemplateDlg::slotCopy);
+    mCopyButton->setToolTip(i18nc("@info:tooltip", "Create a new alarm template based on the selected template"));
     mCopyButton->setWhatsThis(i18nc("@info:whatsthis", "Create a new alarm template based on a copy of the currently highlighted template"));
     layout->addWidget(mCopyButton);
 
     mDeleteButton = new QPushButton(i18nc("@action:button", "Delete"));
     connect(mDeleteButton, &QPushButton::clicked, this, &TemplateDlg::slotDelete);
-    mDeleteButton->setWhatsThis(i18nc("@info:whatsthis", "Delete the currently highlighted alarm template"));
+    mDeleteButton->setToolTip(i18nc("@info:tooltip", "Delete the selected alarm templates"));
+    mDeleteButton->setWhatsThis(i18nc("@info:whatsthis", "Delete the currently highlighted alarm templates"));
     layout->addWidget(mDeleteButton);
 
     layout->addStretch();

@@ -206,6 +206,7 @@ void EditAlarmDlg::init(const KAEvent* event)
         mTryButton = mButtonBox->addButton(i18nc("@action:button", "Try"), QDialogButtonBox::ActionRole);
         mLoadTemplateButton = mButtonBox->addButton(i18nc("@action:button", "Load Template..."),
                                                     QDialogButtonBox::HelpRole);
+        mLoadTemplateButton->setToolTip(i18nc("@info:tooltip", "Select an alarm template to preset the alarm"));
         mMoreLessButton = mButtonBox->addButton(QDialogButtonBox::RestoreDefaults);
     }
     connect(mButtonBox, &QDialogButtonBox::clicked,
@@ -1231,11 +1232,13 @@ void EditAlarmDlg::showOptions(bool more)
     {
         mMoreOptions->show();
         mMoreLessButton->setText(i18nc("@action:Button", "Fewer Options <<"));
+        mMoreLessButton->setToolTip(i18nc("@info:tooltip", "Show fewer options"));
     }
     else
     {
         mMoreOptions->hide();
         mMoreLessButton->setText(i18nc("@action:button", "More Options >>"));
+        mMoreLessButton->setToolTip(i18nc("@info:tooltip", "Show more options"));
     }
     if (mTimeWidget)
         mTimeWidget->showMoreOptions(more);
