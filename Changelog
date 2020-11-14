@@ -1,120 +1,120 @@
 KAlarm Change Log
 
 === Version 3.1.0 (KDE Applications 20.12) --- 14 November 2020 ===
-+ Add option to show alarm message as a notification instead of in a window [KDE Bug 345922]
-+ Add option to give alarms a name.
-+ Don't execute display alarms while desktop notifications are inhibited.
-+ Cancel any screen saver when an alarm is displayed.
-+ On completion, calendar migration restores previous Akonadi run state.
+* Add option to show alarm message as a notification instead of in a window [KDE Bug 345922]
+* Add option to give alarms a name.
+* Don't execute display alarms while desktop notifications are inhibited.
+* Cancel any screen saver when an alarm is displayed.
+* On completion, calendar migration restores previous Akonadi run state.
 
 === Version 3.0.3 (KDE Applications 20.08.3) --- 25 October 2020 ===
-+ Prevent resources being disabled at logout [KDE Bug 427722]
-+ Fix regression introduced in version 3.0.0:
+* Prevent resources being disabled at logout [KDE Bug 427722]
+* Fix regression introduced in version 3.0.0:
     Warn user if no active alarm calendar is enabled.
 
 === Version 3.0.2 (KDE Applications 20.08.2) --- 3 October 2020 ===
-+ Fix repeat-at-login alarms not triggering when KAlarm starts.
-+ If command generating text for display alarm fails, only display error message,
+* Fix repeat-at-login alarms not triggering when KAlarm starts.
+* If command generating text for display alarm fails, only display error message,
   not the display alarm, and don't redisplay the alarm on every restart.
-+ Fix next trigger time shown as "Never" after using Try button for command display alarm, if command fails.
-+ Display alarms in time order on startup (fixes regression).
-+ Allow alarm list and template list to be sorted by clicking headers.
-+ Fix inability to edit an existing calendar resource's configuration.
-+ Fix memory leaks.
+* Fix next trigger time shown as "Never" after using Try button for command display alarm, if command fails.
+* Display alarms in time order on startup (fixes regression).
+* Allow alarm list and template list to be sorted by clicking headers.
+* Fix inability to edit an existing calendar resource's configuration.
+* Fix memory leaks.
 
 === Version 3.0.1 (KDE Applications 20.08.1) --- 24 August 2020 ===
-+ Fix inability to create alarms from templates, or load templates in edit dialogue [KDE Bug 425751]
-+ Don't show spurious error message when deleting alarm template [KDE Bug 425751]
+* Fix inability to create alarms from templates, or load templates in edit dialogue [KDE Bug 425751]
+* Don't show spurious error message when deleting alarm template [KDE Bug 425751]
 
 === Version 3.0.0 (KDE Applications 20.08) --- 5 August 2020 ===
-+ Fix infinite loop when evaluating next alarm to schedule.
-+ Cancel command execution error tooltip when mouse moves to another alarm.
+* Fix infinite loop when evaluating next alarm to schedule.
+* Cancel command execution error tooltip when mouse moves to another alarm.
 
 === Version 2.80.0 (KDE Applications 20.08 beta) --- 30 June 2020 ===
-+ Default to using file system resources instead of Akonadi resources.
-+ Enable selection of multiple calendar files in Import Alarms dialogue.
-+ Show alarm calendars sorted by name in calendars list.
-+ Return to last used tab in Configuration dialogue when it is reopened.
-+ Add option for a command alarm to not notify execution errors [KDE Bug 315401]
-+ Fix handling of calendar update or save errors when making alarm changes.
-+ Fix possible calendar file corruption if disk is full (requires KDE Frameworks 5.72) [KDE Bug 370708]
-+ Allow drag-and-drop of email onto display alarm text edit field.
-+ Fix drag-and-drop of text onto line edits in alarm edit dialogue.
-+ Refactor AlarmCalendar to split out resources and display calendars.
+* Default to using file system resources instead of Akonadi resources.
+* Enable selection of multiple calendar files in Import Alarms dialogue.
+* Show alarm calendars sorted by name in calendars list.
+* Return to last used tab in Configuration dialogue when it is reopened.
+* Add option for a command alarm to not notify execution errors [KDE Bug 315401]
+* Fix handling of calendar update or save errors when making alarm changes.
+* Fix possible calendar file corruption if disk is full (requires KDE Frameworks 5.72) [KDE Bug 370708]
+* Allow drag-and-drop of email onto display alarm text edit field.
+* Fix drag-and-drop of text onto line edits in alarm edit dialogue.
+* Refactor AlarmCalendar to split out resources and display calendars.
 
 === Version 2.14.3 (KDE Applications 20.04.3) --- 19 June 2020 ===
-+ Fix possible corruption of autostart.desktop file if disk is full.
+* Fix possible corruption of autostart.desktop file if disk is full.
 
 === Version 2.14.2 (KDE Applications 20.04.2) --- 8 June 2020 ===
-+ Make multiple KAlarm invocations work (Qt >5.12, Frameworks >5.60) [KDE Bug 417108]
-+ Fix failure to set no-autostart for non-KDE desktops, if a writable autostart file exists.
+* Make multiple KAlarm invocations work (Qt >5.12, Frameworks >5.60) [KDE Bug 417108]
+* Fix failure to set no-autostart for non-KDE desktops, if a writable autostart file exists.
 * Fix failure to execute command alarms in a terminal window.
-+ Fix occasional crash on opening alarm edit dialogue [KDE Bug 412181]
-+ Fix regression introduced in version 2.13.0:
+* Fix occasional crash on opening alarm edit dialogue [KDE Bug 412181]
+* Fix regression introduced in version 2.13.0:
     Fix wrong Undo/Redo being performed when selected from list.
 
 === Version 2.14.1 (KDE Applications 20.04.1) --- 11 May 2020 ===
-+ Correctly interpret resource IDs in command line and DBus calls.
-+ Fix sizing and reconfiguration of columns in alarm and template lists.
+* Correctly interpret resource IDs in command line and DBus calls.
+* Fix sizing and reconfiguration of columns in alarm and template lists.
 
 === Version 2.14.0 (KDE Applications 20.04) --- 27 March 2020 ===
-+ Warn user if archiving but no default archived alarms calendar is set.
-+ Fix some error messages not being displayed.
-+ Refactor to use generic resource classes (part 2).
+* Warn user if archiving but no default archived alarms calendar is set.
+* Fix some error messages not being displayed.
+* Refactor to use generic resource classes (part 2).
 
 === Version 2.13.3 (KDE Applications 19.12.3) --- 20 February 2020 ===
-+ Fix failure of command line options requiring calendar access [KDE Bug 417108]
+* Fix failure of command line options requiring calendar access [KDE Bug 417108]
 
 === Version 2.13.2 (KDE Applications 19.12.2) --- 9 January 2020 ===
-+ Add Show/Hide Menubar menu option; change New Email Alarm shortcut to Ctrl-L.
+* Add Show/Hide Menubar menu option; change New Email Alarm shortcut to Ctrl-L.
 
 === Version 2.13.1 (KDE Applications 19.12.1) --- 30 December 2019 ===
-+ Make defer dialogue accessible when a full screen window is active [KDE Bug 414383]
-+ Only show 'Cancel Deferral' in defer dialogue if a deferral is already active.
+* Make defer dialogue accessible when a full screen window is active [KDE Bug 414383]
+* Only show 'Cancel Deferral' in defer dialogue if a deferral is already active.
 
 === Version 2.13.0 (KDE Applications 19.12) --- 19 November 2019 ===
-+ Fix user not always being prompted to update new resource if in old format.
-+ Terminate application after executing 'kalarm --list'.
-+ Fix alarm type column being too wide in alarm template list.
-+ Fix failure to display image when alarm is configured to display an image file.
-+ Fix failure to set no-autostart for non-KDE desktops, if no autostart directory exists.
-+ Refactor to use generic resource classes (part 1).
+* Fix user not always being prompted to update new resource if in old format.
+* Terminate application after executing 'kalarm --list'.
+* Fix alarm type column being too wide in alarm template list.
+* Fix failure to display image when alarm is configured to display an image file.
+* Fix failure to set no-autostart for non-KDE desktops, if no autostart directory exists.
+* Refactor to use generic resource classes (part 1).
 
 === Version 2.12.8 (KDE Applications 19.08.3) --- 16 October 2019 ===
-+ Fix error on redo of an active alarm deletion.
-+ Archive repeat-at-login alarms if previously triggered, when they are deleted.
-+ Fix layout of defer alarm dialogue.
-+ Fix regression introduced in version 2.10.11:
+* Fix error on redo of an active alarm deletion.
+* Archive repeat-at-login alarms if previously triggered, when they are deleted.
+* Fix layout of defer alarm dialogue.
+* Fix regression introduced in version 2.10.11:
     Make user settings changes take effect immediately.
 
 === Version 2.12.7 (KDE Applications 19.08.2) --- 7 October 2019 ===
-+ Show correct read-only status of an alarm in its context menu.
-+ Fix regression introduced in version 2.12.5:
+* Show correct read-only status of an alarm in its context menu.
+* Fix regression introduced in version 2.12.5:
     Fix errors deleting and reactivating alarms.
-+ Fix error on undo of an active alarm deletion.
-+ Don't trigger repeat-at-login alarms when they are edited or imported.
+* Fix error on undo of an active alarm deletion.
+* Don't trigger repeat-at-login alarms when they are edited or imported.
 
 === Version 2.12.6 (KDE Applications 19.08.1) --- 26 August 2019 ===
-+ Fix crash sometimes when a resource is enabled [KDE Bug 410596]
-+ Fix D-Bus alarm creation failing if time zone is omitted from start time [KDE Bug 411296]
-+ Fix command line options which don't work if KAlarm not already running:
+* Fix crash sometimes when a resource is enabled [KDE Bug 410596]
+* Fix D-Bus alarm creation failing if time zone is omitted from start time [KDE Bug 411296]
+* Fix command line options which don't work if KAlarm not already running:
     --edit, --list, --triggerEvent, --cancelEvent.
 
 === Version 2.12.5 (KDE Applications 19.08) --- 26 July 2019 ===
-+ Enable alarm list columns to be hidden using context menu on list header [KDE Bug 397093]
-+ Fix regression introduced in version 2.12.0:
+* Enable alarm list columns to be hidden using context menu on list header [KDE Bug 397093]
+* Fix regression introduced in version 2.12.0:
     Show time zone abbreviation in message window if alarm time has non-local time zone.
-+ If only one writable archived alarm calendar exists, automatically set it as the default.
-+ Don't allow user to create a new resource using same calendar file as an existing resource.
-+ Remove duplicate resources (i.e. which use the same calendar file) at startup [KDE Bug 403124]
-+ Fix drag and drop of emails from KMail, and KMail button in message window.
-+ Improve drag and drop of events and todos from KOrganizer.
+* If only one writable archived alarm calendar exists, automatically set it as the default.
+* Don't allow user to create a new resource using same calendar file as an existing resource.
+* Remove duplicate resources (i.e. which use the same calendar file) at startup [KDE Bug 403124]
+* Fix drag and drop of emails from KMail, and KMail button in message window.
+* Improve drag and drop of events and todos from KOrganizer.
 
 === Version 2.12.4 (KDE Applications 19.04.3) --- 4 July 2019 ===
-+ Fix calendar resource dialogue not configuring resource correctly [KDE Bug 407882]
-+ Fix calendar resource dialogue creating new resources unusable until restart [KDE Bug 407882]
-+ Enable resource after creating with the calendar resource dialogue [KDE Bug 407882]
-+ Fix colour and alarm type columns being too wide in alarm list.
+* Fix calendar resource dialogue not configuring resource correctly [KDE Bug 407882]
+* Fix calendar resource dialogue creating new resources unusable until restart [KDE Bug 407882]
+* Enable resource after creating with the calendar resource dialogue [KDE Bug 407882]
+* Fix colour and alarm type columns being too wide in alarm list.
 
 === Version 2.12.3 (KDE Applications 19.04.2) --- 23 May 2019 ===
 * Fix calendar configuration dialogue not appearing.
