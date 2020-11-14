@@ -56,7 +56,6 @@ set(KDEPIM_LIB_SOVERSION "5")
 
 set(QT_REQUIRED_VERSION "5.13.0")
 find_package(Qt5 ${QT_REQUIRED_VERSION} CONFIG REQUIRED DBus Gui Network Widgets)
-find_package(Qt5X11Extras NO_MODULE)
 set(MAILCOMMON_LIB_VERSION "5.15.80")
 set(CALENDARUTILS_LIB_VERSION "5.15.80")
 
@@ -106,6 +105,9 @@ configure_file(kalarm-version-string.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/kalarm-
 
 if (NOT APPLE)
     find_package(X11)
+endif()
+if (X11_FOUND)
+    find_package(Qt5X11Extras ${QT_REQUIRED_VERSION} REQUIRED NO_MODULE)
 endif()
 set(CMAKE_MODULE_PATH ${kalarm_SOURCE_DIR}/cmake/modules ${ECM_MODULE_PATH})
 find_package(Xsltproc)
