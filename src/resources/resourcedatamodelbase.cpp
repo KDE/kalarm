@@ -757,7 +757,7 @@ QString alarmTimeText(const DateTime& dateTime, char leadingZero)
         bool useFullFormat = leadingZero && !timeFullFormat.isEmpty();
         QString timeText = kdt.time().toString(useFullFormat ? timeFullFormat : timeFormat);
         if (useFullFormat  &&  leadingZero != '0'  &&  timeText.at(hourOffset) == QLatin1Char('0'))
-            timeText[hourOffset] = leadingZero;
+            timeText[hourOffset] = QChar::fromLatin1(leadingZero);
         dateTimeText += timeText;
     }
     return dateTimeText + QLatin1Char(' ');
