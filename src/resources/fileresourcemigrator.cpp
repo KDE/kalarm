@@ -143,7 +143,9 @@ void FileResourceMigrator::start()
         mAkonadiMigration->required = true;
         connect(mAkonadiMigration, &FileResourceMigrator::AkonadiMigration::completed, this, &FileResourceMigrator::akonadiMigrationComplete);
         connect(Akonadi::ServerManager::self(), &Akonadi::ServerManager::stateChanged, this, &FileResourceMigrator::checkAkonadiResources);
-        checkAkonadiResources(Akonadi::ServerManager::state());
+        auto akstate = Akonadi::ServerManager::state();
+        mAkonadiStart = (akstate == Akonadi::ServerManager::NotRunning);
+        checkAkonadiResources(akstate);
         // Migration of Akonadi collections has now been initiated. On
         // completion, either KResource calendars will be migrated, or
         // any missing default resources will be created.
@@ -366,6 +368,17 @@ void FileResourceMigrator::collectionFetchResult(KJob* j)
 */
 void FileResourceMigrator::akonadiMigrationComplete()
 {
+    // Ignore any further Akonadi server state changes, to prevent possible
+    // repeated migrations.
+    disconnect(Akonadi::ServerManager::self(), nullptr, this, nullptr);
+
+    if (mAkonadiStart)
+    {
+        // The Akonadi server wasn't running before we started it, so stop it
+        // now that it's no longer needed.
+        Akonadi::ServerManager::stop();
+    }
+
     if (!mAkonadiMigration->required)
     {
         // There are no Akonadi resources, so migrate any KResources alarm
