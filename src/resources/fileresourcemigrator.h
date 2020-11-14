@@ -64,6 +64,7 @@ private:
     QList<Akonadi::CollectionFetchJob*> mFetchesPending;  // pending collection fetch jobs for existing resources
     KAlarmCal::CalEvent::Types mExistingAlarmTypes {KAlarmCal::CalEvent::EMPTY};  // alarm types provided by existing non-Akonadi resources
     bool            mMigrateKResources {true};  // need to migrate KResource resources
+    bool            mAkonadiStart {false};      // Akonadi was started by the migrator
     static bool     mCompleted;                 // execute() has completed
 };
 
