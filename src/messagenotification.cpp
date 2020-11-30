@@ -24,7 +24,6 @@
 #include <KConfigGui>
 #endif
 
-#include <QCloseEvent>
 #include <QSessionManager>
 
 using namespace KAlarmCal;

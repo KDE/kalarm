@@ -22,7 +22,6 @@
 #include <QDragEnterEvent>
 #include <QDropEvent>
 #include <QFocusEvent>
-#include <QDebug>
 
 
 /*=============================================================================

@@ -51,7 +51,6 @@ using namespace KHolidays;
 
 #include <KLocalizedString>
 #include <KShell>
-#include <KLineEdit>
 #include <KAboutData>
 #include <KStandardGuiItem>
 #include <QIcon>
@@ -76,6 +75,7 @@ using namespace KHolidays;
 #include <QStandardPaths>
 #include <QComboBox>
 #include <QLocale>
+#include <QLineEdit>
 
 using namespace KCalendarCore;
 using namespace KAlarmCal;

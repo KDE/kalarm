@@ -20,7 +20,6 @@
 #include <QApplication>
 #include <QPointer>
 #include <QQueue>
-#include <QList>
 
 namespace KCal { class Event; }
 class Resource;

@@ -12,7 +12,6 @@
 #include "mainwindowbase.h"
 #include "messagedisplay.h"
 
-#include <QDateTime>
 
 class QShowEvent;
 class QMoveEvent;

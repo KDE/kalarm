@@ -13,7 +13,6 @@
 
 #include <KAlarmCal/KAEvent>
 
-#include <QObject>
 
 class KConfigGroup;
 class DeferAlarmDlg;

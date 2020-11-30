@@ -57,9 +57,7 @@ using namespace KCalUtils;
 #include <KToolBarPopupAction>
 
 #include <QAction>
-#include <QLocale>
 #include <QSplitter>
-#include <QByteArray>
 #include <QDragEnterEvent>
 #include <QDropEvent>
 #include <QResizeEvent>
