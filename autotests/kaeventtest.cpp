@@ -19,7 +19,6 @@ using namespace KCalendarCore;
 
 #include <KHolidays/HolidayRegion>
 using namespace KHolidays;
-#include <KConfigGroup>
 
 #include <QTest>
 

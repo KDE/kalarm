@@ -12,15 +12,12 @@
 #include "kadatetime.h"
 using KAlarmCal::KADateTime;
 
-#include <KConfigGroup>
 
 #include <QTest>
 #include <QTimeZone>
 #include <QLocale>
 #include <QDBusConnection>
 #include <QDBusConnectionInterface>
-#include <QDBusInterface>
-#include <QDBusReply>
 
 //TODO: test new methods
 
