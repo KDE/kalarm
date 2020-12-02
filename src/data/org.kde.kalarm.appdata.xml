@@ -385,9 +385,9 @@
     <binary>kalarm</binary>
   </provides>
   <releases>
+    <release version="3.1.0" date="2020-12-10"/>
     <release version="3.0.3" date="2020-11-05"/>
     <release version="3.0.2" date="2020-10-08"/>
     <release version="3.0.1" date="2020-09-03"/>
-    <release version="3.0.0" date="2020-08-13"/>
   </releases>
 </component>
