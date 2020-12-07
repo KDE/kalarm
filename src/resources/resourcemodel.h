@@ -139,7 +139,7 @@ public:
     template <class DataModel>
     static ResourceCheckListModel* create(CalEvent::Type, QObject* parent = nullptr);
 
-    ~ResourceCheckListModel();
+    ~ResourceCheckListModel() override;
     Resource resource(int row) const;
     Resource resource(const QModelIndex&) const;
     void disable()    { mDisabled = true; }
@@ -188,7 +188,7 @@ public:
     template <class DataModel>
     static ResourceFilterCheckListModel* create(QObject* parent = nullptr);
 
-    ~ResourceFilterCheckListModel();
+    ~ResourceFilterCheckListModel() override;
     void setEventTypeFilter(CalEvent::Type);
     Resource resource(int row) const;
     Resource resource(const QModelIndex&) const;

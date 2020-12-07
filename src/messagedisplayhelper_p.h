@@ -23,7 +23,7 @@ class AudioThread : public QThread
         Q_OBJECT
     public:
         AudioThread(MessageDisplayHelper* parent, const QString& audioFile, float volume, float fadeVolume, int fadeSeconds, int repeatPause);
-        ~AudioThread();
+        ~AudioThread() override;
         void    stop(bool wait = false);
         QString error() const;
 

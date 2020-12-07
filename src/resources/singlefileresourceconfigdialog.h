@@ -23,7 +23,7 @@ class SingleFileResourceConfigDialog : public QDialog
     Q_OBJECT
 public:
     SingleFileResourceConfigDialog(bool create, QWidget* parent);
-    ~SingleFileResourceConfigDialog();
+    ~SingleFileResourceConfigDialog() override;
 
     /** Return the file URL. */
     QUrl url() const;

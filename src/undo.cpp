@@ -77,7 +77,7 @@ class UndoMultiBase : public UndoItem
                 : UndoItem(t, name), mUndos(new Undo::List) {}
         UndoMultiBase(Undo::Type t, Undo::List* undos, const QString& name)
                 : UndoItem(t, name), mUndos(undos) {}
-        ~UndoMultiBase()  { delete mUndos; }
+        ~UndoMultiBase() override { delete mUndos; }
         const Undo::List* undos() const         { return mUndos; }
     protected:
         void               dumpDebugTitle(const char* typeName) const override;
@@ -125,7 +125,7 @@ class UndoEdit : public UndoItem
     public:
         UndoEdit(Undo::Type, const KAEvent& oldEvent, const QString& newEventID,
                  const Resource&, const QStringList& dontShowErrors, const QString& description);
-        ~UndoEdit();
+        ~UndoEdit() override;
         Operation          operation() const override     { return EDIT; }
         QString            defaultActionText() const override;
         QString            description() const override   { return mDescription; }
@@ -150,7 +150,7 @@ class UndoDelete : public UndoItem
     public:
         UndoDelete(Undo::Type, const Undo::Event&, const QString& name = QString());
         UndoDelete(Undo::Type, const KAEvent&, const Resource&, const QStringList& dontShowErrors, const QString& name = QString());
-        ~UndoDelete();
+        ~UndoDelete() override;
         Operation          operation() const override     { return DELETE; }
         QString            defaultActionText() const override;
         QString            description() const override   { return UndoItem::description(*mEvent); }

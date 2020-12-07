@@ -44,7 +44,7 @@ protected:
     explicit SingleFileResource(FileResourceSettings* settings);
 
 public:
-    ~SingleFileResource();
+    ~SingleFileResource() override;
 
     /** Return the type of storage used by the resource. */
     StorageType storageType() const override   { return File; }

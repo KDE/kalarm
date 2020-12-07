@@ -116,7 +116,7 @@ public:
     template <class DataModel>
     static AlarmListModel* create(QObject* parent = nullptr);
 
-    ~AlarmListModel();
+    ~AlarmListModel() override;
 
     /** Return the model containing all active and archived alarms. */
     template <class DataModel>
@@ -170,7 +170,7 @@ public:
     template <class DataModel>
     static TemplateListModel* create(QObject* parent = nullptr);
 
-    ~TemplateListModel();
+    ~TemplateListModel() override;
 
     /** Return the model containing all alarm templates. */
     template <class DataModel>

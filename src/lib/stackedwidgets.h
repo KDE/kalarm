@@ -35,7 +35,7 @@ public:
     {
         mGroup->addWidget(this);
     }
-    ~StackedWidgetT()  { mGroup->removeWidget(this); }
+    ~StackedWidgetT() override  { mGroup->removeWidget(this); }
     QSize sizeHint() const         override { return minimumSizeHint(); }
     QSize minimumSizeHint() const  override { return mGroup->minimumSizeHint(); }
 

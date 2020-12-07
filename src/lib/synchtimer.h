@@ -68,7 +68,7 @@ class MinuteTimer : public SynchTimer
 {
     Q_OBJECT
 public:
-    virtual ~MinuteTimer()  { mInstance = nullptr; }
+    ~MinuteTimer() override  { mInstance = nullptr; }
 
     /** Connect to the timer signal.
      *  @param receiver Receiving object.

@@ -48,7 +48,7 @@ public:
      */
     explicit FileResource(FileResourceSettings* settings);
 
-    ~FileResource();
+    ~FileResource() override;
 
     /** Return whether the resource has a valid configuration. */
     bool isValid() const override;

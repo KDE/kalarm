@@ -26,7 +26,7 @@ class KAlarmPrefDlg : public KPageDialog
     Q_OBJECT
 public:
     static void display();
-    ~KAlarmPrefDlg();
+    ~KAlarmPrefDlg() override;
     QSize minimumSizeHint() const override;
 
 protected:
