@@ -32,10 +32,10 @@ using namespace KAlarmCal;
 #define MAIL_ICON     QStringLiteral("mail-message-new")
 #define AUDIO_ICON    QStringLiteral("new-audio-alarm")
 #define TEMPLATE_ICON QStringLiteral("document-new-from-template")
-#define DISP_KEY      QKeySequence(Qt::CTRL + Qt::Key_D)
-#define CMD_KEY       QKeySequence(Qt::CTRL + Qt::Key_C)
-#define MAIL_KEY      QKeySequence(Qt::CTRL + Qt::Key_L)
-#define AUDIO_KEY     QKeySequence(Qt::CTRL + Qt::Key_U)
+#define DISP_KEY      QKeySequence(Qt::CTRL | Qt::Key_D)
+#define CMD_KEY       QKeySequence(Qt::CTRL | Qt::Key_C)
+#define MAIL_KEY      QKeySequence(Qt::CTRL | Qt::Key_L)
+#define AUDIO_KEY     QKeySequence(Qt::CTRL | Qt::Key_U)
 
 
 /******************************************************************************
