@@ -12,7 +12,7 @@
 
 #include "kalarmcal_export.h"
 
-class QStringList;
+#include <QStringList>
 namespace Akonadi
 {
 class Item;
