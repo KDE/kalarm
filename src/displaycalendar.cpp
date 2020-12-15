@@ -225,8 +225,8 @@ void DisplayCalendar::updateKAEvents()
     if (!cal)
         return;
 
-    const Event::List kcalevents = cal->rawEvents();
-    for (const Event::Ptr& kcalevent : kcalevents)
+    const KCalendarCore::Event::List kcalevents = cal->rawEvents();
+    for (const KCalendarCore::Event::Ptr& kcalevent : kcalevents)
     {
         if (kcalevent->alarms().isEmpty())
             continue;    // ignore events without alarms
@@ -258,7 +258,7 @@ bool DisplayCalendar::addEvent(KAEvent& evnt)
     if (type != CalEvent::DISPLAYING)
         return false;
 
-    Event::Ptr kcalEvent(new Event);
+    KCalendarCore::Event::Ptr kcalEvent(new KCalendarCore::Event);
     auto* event = new KAEvent(evnt);
     QString id = event->id();
     if (id.isEmpty())
@@ -304,7 +304,7 @@ bool DisplayCalendar::deleteEvent(const QString& eventID, bool saveit)
 {
     if (mOpen)
     {
-        Event::Ptr kcalEvent;
+        KCalendarCore::Event::Ptr kcalEvent;
         if (mCalendarStorage)
             kcalEvent = mCalendarStorage->calendar()->event(eventID);   // display calendar
 
@@ -344,10 +344,10 @@ bool DisplayCalendar::deleteEvent(const QString& eventID, bool saveit)
 * Return the event with the specified ID.
 * This method is for the display calendar only.
 */
-Event::Ptr DisplayCalendar::kcalEvent(const QString& uniqueID)
+KCalendarCore::Event::Ptr DisplayCalendar::kcalEvent(const QString& uniqueID)
 {
     if (!mCalendarStorage)
-        return Event::Ptr();
+        return KCalendarCore::Event::Ptr();
     return mCalendarStorage->calendar()->event(uniqueID);
 }
 
@@ -356,15 +356,15 @@ Event::Ptr DisplayCalendar::kcalEvent(const QString& uniqueID)
 * This method is for the display calendar only.
 * Optionally the event type can be filtered, using an OR of event types.
 */
-Event::List DisplayCalendar::kcalEvents(CalEvent::Type type)
+KCalendarCore::Event::List DisplayCalendar::kcalEvents(CalEvent::Type type)
 {
-    Event::List list;
+    KCalendarCore::Event::List list;
     if (!mCalendarStorage)
         return list;
     list = mCalendarStorage->calendar()->rawEvents();
     for (int i = 0;  i < list.count();  )
     {
-        Event::Ptr event = list.at(i);
+        KCalendarCore::Event::Ptr event = list.at(i);
         if (event->alarms().isEmpty()
         ||  (type != CalEvent::EMPTY  &&  !(type & CalEvent::status(event)))
         ||  !KAEvent(event).isValid())
