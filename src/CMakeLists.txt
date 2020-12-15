@@ -162,7 +162,7 @@ ecm_add_app_icon(kalarm_bin_SRCS ICONS ${ICONS_SRCS})
 add_executable(kalarm_bin ${kalarm_bin_SRCS})
 
 set_target_properties(kalarm_bin PROPERTIES OUTPUT_NAME kalarm)
-if (COMPILE_WITH_CMAKE_SUPPORT)
+if (COMPILE_WITH_UNITY_CMAKE_SUPPORT)
     set_target_properties(kalarm_bin PROPERTIES UNITY_BUILD ON)
 endif()
 
