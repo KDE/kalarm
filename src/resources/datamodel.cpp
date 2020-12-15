@@ -15,6 +15,7 @@
 #else
 #include "akonadidatamodel.h"
 #define DATA_MODEL AkonadiDataModel
+#error This option is now unmaintained
 #endif
 
 
