@@ -15,6 +15,9 @@ ecm_qt_declare_logging_category(akonadi_serializer_kalarm_SRCS
 
 
 add_library(akonadi_serializer_kalarm MODULE ${akonadi_serializer_kalarm_SRCS})
+if (COMPILE_WITH_CMAKE_SUPPORT)
+    set_target_properties(akonadi_serializer_kalarm PROPERTIES UNITY_BUILD ON)
+endif()
 target_link_libraries(akonadi_serializer_kalarm
     KF5::AlarmCalendar
     KF5::CalendarCore

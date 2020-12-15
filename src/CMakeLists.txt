@@ -24,6 +24,9 @@ ecm_qt_declare_logging_category(kalarmcal_LIB_SRCS HEADER kalarmcal_debug.h IDEN
 
 
 add_library(KF5AlarmCalendar ${kalarmcal_LIB_SRCS})
+if (COMPILE_WITH_CMAKE_SUPPORT)
+    set_target_properties(KF5AlarmCalendar PROPERTIES UNITY_BUILD ON)
+endif()
 
 generate_export_header(KF5AlarmCalendar BASE_NAME kalarmcal)
 
