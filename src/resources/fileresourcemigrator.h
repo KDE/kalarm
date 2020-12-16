@@ -15,6 +15,7 @@
 
 class KJob;
 namespace Akonadi { class CollectionFetchJob; }
+using namespace KAlarmCal;
 
 class Resource;
 
@@ -52,8 +53,10 @@ private Q_SLOTS:
 
 private:
     explicit FileResourceMigrator(QObject* parent = nullptr);
-    static void callMigrateAkonadiResources();
+
     void migrateAkonadiResources();
+    void doMigrateAkonadiResources();
+    void migrateAkonadiCollection(const Akonadi::Collection&, bool dirType);
     void migrateKResources();
     void createDefaultResources();
     void createCalendar(KAlarmCal::CalEvent::Type alarmType, const QString& file, const QString& name);
@@ -61,7 +64,17 @@ private:
     static FileResourceMigrator* mInstance;
     class AkonadiMigration;
     AkonadiMigration* mAkonadiMigration {nullptr};
-    QList<Akonadi::CollectionFetchJob*> mFetchesPending;  // pending collection fetch jobs for existing resources
+    struct AkResourceData
+    {
+        QString             resourceId;  // Akonadi resource identifier
+        Akonadi::Collection collection;  // Akonadi collection
+        bool                dirType;     // it's a directory resource
+        AkResourceData() {}
+        AkResourceData(const QString& r, const Akonadi::Collection& c, bool dir)
+            : resourceId(r), collection(c), dirType(dir) {}
+    };
+    QHash<QString, AkResourceData> mCollectionPaths;    // path, (Akonadi resource identifier, collection) pairs
+    QHash<Akonadi::CollectionFetchJob*, bool> mFetchesPending;  // pending collection fetch jobs for existing resources, and whether directory resource
     KAlarmCal::CalEvent::Types mExistingAlarmTypes {KAlarmCal::CalEvent::EMPTY};  // alarm types provided by existing non-Akonadi resources
     bool            mMigrateKResources {true};  // need to migrate KResource resources
     bool            mAkonadiStart {false};      // Akonadi was started by the migrator

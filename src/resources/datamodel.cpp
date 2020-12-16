@@ -8,15 +8,8 @@
 
 #include "datamodel.h"
 
-#include "config-kalarm.h"
-#if FILE_RESOURCES
 #include "fileresourcedatamodel.h"
 #define DATA_MODEL FileResourceDataModel
-#else
-#include "akonadidatamodel.h"
-#define DATA_MODEL AkonadiDataModel
-#error This option is now unmaintained
-#endif
 
 
 void DataModel::initialise()

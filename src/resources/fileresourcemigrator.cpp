@@ -8,7 +8,6 @@
 
 #include "fileresourcemigrator.h"
 
-#include "akonadiresource.h"
 #include "dirresourceimportdialog.h"
 #include "fileresourcecalendarupdater.h"
 #include "fileresourceconfigmanager.h"
@@ -161,11 +160,9 @@ void FileResourceMigrator::checkAkonadiResources(Akonadi::ServerManager::State s
     switch (state)
     {
         case Akonadi::ServerManager::Running:
-        {
-            if (!AkonadiResource::removeDuplicateResources(&callMigrateAkonadiResources))
-                mAkonadiMigration->setComplete(false);   // there are no Akonadi resources to migrate
+            migrateAkonadiResources();
             break;
-        }
+
         case Akonadi::ServerManager::Stopping:
             // Wait until the server has stopped, so that we can restart it.
             return;
@@ -184,54 +181,30 @@ void FileResourceMigrator::checkAkonadiResources(Akonadi::ServerManager::State s
 }
 
 /******************************************************************************
-* Called when removal of duplicate Akonadi KAlarm resources has completed.
-*/
-void FileResourceMigrator::callMigrateAkonadiResources()
-{
-    if (mInstance)
-        mInstance->migrateAkonadiResources();
-}
-
-/******************************************************************************
-* Migrate any Akonadi KAlarm resources.
+* Initiate migration of Akonadi KAlarm resources.
+* Reply = true if migration initiated;
+*       = false if no KAlarm Akonadi resources found.
 */
 void FileResourceMigrator::migrateAkonadiResources()
 {
     qCDebug(KALARM_LOG) << "FileResourceMigrator::migrateAkonadiResources: initiated";
+    mCollectionPaths.clear();
+    mFetchesPending.clear();
     Akonadi::AttributeFactory::registerAttribute<CollectionAttribute>();
+
+    // Create jobs to fetch all KAlarm Akonadi collections.
     const Akonadi::AgentInstance::List agents = Akonadi::AgentManager::self()->instances();
-
-    // First, migrate KAlarm calendar file resources.
-    // This will allow any KAlarm directory resources to be merged into
-    // single file resources, if the user prefers that.
     for (const Akonadi::AgentInstance& agent : agents)
     {
         const QString type = agent.type().identifier();
-        if (type == KALARM_RESOURCE)
+        if (type == KALARM_RESOURCE  ||  type == KALARM_DIR_RESOURCE)
         {
-            // Fetch the resource's collection to determine its alarm types
             Akonadi::CollectionFetchJob* job = new Akonadi::CollectionFetchJob(Akonadi::Collection::root(), Akonadi::CollectionFetchJob::FirstLevel);
             job->fetchScope().setResource(agent.identifier());
-            mFetchesPending << job;
+            mFetchesPending[job] = (type == KALARM_DIR_RESOURCE);
             connect(job, &KJob::result, this, &FileResourceMigrator::collectionFetchResult);
 
-            mMigrateKResources = false;   // ignore KResources if Akonadi resources exist
-        }
-    }
-    // Now migrate KAlarm directory resources, which must be merged
-    // or converted into single file resources.
-    for (const Akonadi::AgentInstance& agent : agents)
-    {
-        const QString type = agent.type().identifier();
-        if (type == KALARM_DIR_RESOURCE)
-        {
-            // Fetch the resource's collection to determine its alarm types
-            Akonadi::CollectionFetchJob* job = new Akonadi::CollectionFetchJob(Akonadi::Collection::root(), Akonadi::CollectionFetchJob::FirstLevel);
-            job->fetchScope().setResource(agent.identifier());
-            mFetchesPending << job;
-            connect(job, &KJob::result, this, &FileResourceMigrator::collectionFetchResult);
-
-            mMigrateKResources = false;   // ignore KResources if Akonadi resources exist
+            mMigrateKResources = false;   // Akonadi resources exist, so ignore KResources
         }
     }
     if (mFetchesPending.isEmpty())
@@ -240,11 +213,12 @@ void FileResourceMigrator::migrateAkonadiResources()
 
 /******************************************************************************
 * Called when an Akonadi collection fetch job has completed.
-* Migrate the collection to a file system resource.
+* Check for, and remove, any Akonadi resources which duplicate use of calendar
+* files/directories.
 */
 void FileResourceMigrator::collectionFetchResult(KJob* j)
 {
-    auto* job = static_cast<Akonadi::CollectionFetchJob*>(j);
+    auto* job = qobject_cast<Akonadi::CollectionFetchJob*>(j);
     const QString id = job->fetchScope().resource();
     if (j->error())
         qCCritical(KALARM_LOG) << "FileResourceMigrator::collectionFetchResult: CollectionFetchJob" << id << "error: " << j->errorString();
@@ -255,111 +229,167 @@ void FileResourceMigrator::collectionFetchResult(KJob* j)
             qCCritical(KALARM_LOG) << "FileResourceMigrator::collectionFetchResult: No collections found for resource" << id;
         else
         {
-            // Migrate this collection.
+            // Note that a KAlarm Akonadi agent contains only one collection.
             const Akonadi::Collection& collection(collections[0]);
-            const Akonadi::AgentInstance agent = Akonadi::AgentManager::self()->instance(collection.resource());
-            const QString resourceType = agent.type().identifier();
-            const bool readOnly = (collection.rights() & WritableRights) != WritableRights;
-            const CalEvent::Types alarmTypes = CalEvent::types(collections[0].contentMimeTypes());
-            CalEvent::Types enabledTypes  = CalEvent::EMPTY;
-            CalEvent::Types standardTypes = CalEvent::EMPTY;
-            QColor backgroundColour;
-            if (collection.hasAttribute<CollectionAttribute>())
+            const bool dirType = mFetchesPending.value(job, false);
+            const AkResourceData thisRes(job->fetchScope().resource(), collection, dirType);
+            bool saveThis = true;
+            auto it = mCollectionPaths.constFind(collection.remoteId());
+            if (it != mCollectionPaths.constEnd())
             {
-                const auto* attr = collection.attribute<CollectionAttribute>();
-                enabledTypes     = attr->enabled();
-                standardTypes    = attr->standard();
-                backgroundColour = attr->backgroundColor();
+                // Remove the resource containing the higher numbered Collection
+                // ID, which is likely to be the more recently created.
+                const AkResourceData prevRes = it.value();
+                saveThis = (thisRes.collection.id() < prevRes.collection.id());
+                const auto resourceToRemove = saveThis ? prevRes.resourceId : thisRes.resourceId;
+                qCWarning(KALARM_LOG) << "FileResourceMigrator::collectionFetchResult: Removing duplicate resource" << resourceToRemove;
+                Akonadi::AgentManager* agentManager = Akonadi::AgentManager::self();
+                agentManager->removeInstance(agentManager->instance(resourceToRemove));
             }
-            bool converted = false;
-            if (resourceType == KALARM_RESOURCE)
+            if (saveThis)
+                mCollectionPaths[collection.remoteId()] = thisRes;
+        }
+    }
+    mFetchesPending.remove(job);
+    if (mFetchesPending.isEmpty())
+    {
+        // De-duplication is complete. Migrate the remaining Akonadi resources.
+        doMigrateAkonadiResources();
+    }
+}
+
+/******************************************************************************
+* Migrate Akonadi KAlarm resources to file system resources.
+*/
+void FileResourceMigrator::doMigrateAkonadiResources()
+{
+    qCDebug(KALARM_LOG) << "FileResourceMigrator::doMigrateAkonadiResources";
+
+    // First, migrate KAlarm calendar file Akonadi resources.
+    // This will allow any KAlarm directory resources to be merged into
+    // single file resources, if the user prefers that.
+    for (auto it = mCollectionPaths.constBegin();  it != mCollectionPaths.constEnd();  ++it)
+    {
+        const AkResourceData& resourceData = it.value();
+        if (!resourceData.dirType)
+            migrateAkonadiCollection(resourceData.collection, false);
+    }
+
+    // Now migrate KAlarm directory Akonadi resources, which must be merged
+    // or converted into single file resources.
+    for (auto it = mCollectionPaths.constBegin();  it != mCollectionPaths.constEnd();  ++it)
+    {
+        const AkResourceData& resourceData = it.value();
+        if (resourceData.dirType)
+            migrateAkonadiCollection(resourceData.collection, true);
+    }
+
+    // The alarm types of all collections have been found.
+    mCollectionPaths.clear();
+    mAkonadiMigration->setComplete(true);
+}
+
+/******************************************************************************
+* Migrate one Akonadi collection to a file system resource.
+*/
+void FileResourceMigrator::migrateAkonadiCollection(const Akonadi::Collection& collection, bool dirType)
+{
+    const bool readOnly = (collection.rights() & WritableRights) != WritableRights;
+    const CalEvent::Types alarmTypes = CalEvent::types(collection.contentMimeTypes());
+    CalEvent::Types enabledTypes  = CalEvent::EMPTY;
+    CalEvent::Types standardTypes = CalEvent::EMPTY;
+    QColor backgroundColour;
+    if (collection.hasAttribute<CollectionAttribute>())
+    {
+        const auto* attr = collection.attribute<CollectionAttribute>();
+        enabledTypes     = attr->enabled();
+        standardTypes    = attr->standard();
+        backgroundColour = attr->backgroundColor();
+    }
+
+    bool converted = false;
+    if (!dirType)
+    {
+        // It's a single file resource.
+        qCDebug(KALARM_LOG) << "FileResourceMigrator: Creating resource" << collection.displayName() << ", alarm types:" << alarmTypes << ", standard types:" << standardTypes;
+        FileResourceSettings::Ptr settings(new FileResourceSettings(
+                      FileResourceSettings::File,
+                      QUrl::fromUserInput(collection.remoteId(), QString(), QUrl::AssumeLocalFile),
+                      alarmTypes, collection.displayName(), backgroundColour,
+                      enabledTypes, standardTypes, readOnly));
+        Resource resource = FileResourceConfigManager::addResource(settings);
+
+        // Update the calendar to the current KAlarm format if necessary,
+        // and if the user agrees.
+        auto* updater = new FileResourceCalendarUpdater(resource, true, this);
+        connect(updater, &QObject::destroyed, this, &FileResourceMigrator::checkIfComplete);
+        updater->update();   // note that 'updater' will auto-delete when finished
+
+        mExistingAlarmTypes |= alarmTypes;
+        converted = true;
+    }
+    else
+    {
+        // Convert Akonadi directory resource to single file resources.
+
+        // Use AutoQPointer to guard against crash on application exit while
+        // the dialogue is still open. It prevents double deletion (both on
+        // deletion of parent, and on return from this function).
+        AutoQPointer<DirResourceImportDialog> dlg = new DirResourceImportDialog(collection.displayName(), collection.remoteId(), alarmTypes, Desktop::mainWindow());
+        if (dlg->exec() == QDialog::Accepted)
+        {
+            if (dlg)
             {
-                qCDebug(KALARM_LOG) << "FileResourceMigrator: Creating resource" << collection.displayName() << ", alarm types:" << alarmTypes << ", standard types:" << standardTypes;
-                FileResourceSettings::Ptr settings(new FileResourceSettings(
-                              FileResourceSettings::File,
-                              QUrl::fromUserInput(collection.remoteId(), QString(), QUrl::AssumeLocalFile),
-                              alarmTypes, collection.displayName(), backgroundColour,
-                              enabledTypes, standardTypes, readOnly));
-                Resource resource = FileResourceConfigManager::addResource(settings);
+                QHash<CalEvent::Type, QVector<KAEvent>> events;
+                readDirectoryResource(collection.remoteId(), alarmTypes, events);
 
-                // Update the calendar to the current KAlarm format if necessary,
-                // and if the user agrees.
-                auto* updater = new FileResourceCalendarUpdater(resource, true, this);
-                connect(updater, &QObject::destroyed, this, &FileResourceMigrator::checkIfComplete);
-                updater->update();   // note that 'updater' will auto-delete when finished
-
-                mExistingAlarmTypes |= alarmTypes;
-                converted = true;
-            }
-            else if (resourceType == KALARM_DIR_RESOURCE)
-            {
-                // Convert Akonadi directory resource to single file resources.
-
-                // Use AutoQPointer to guard against crash on application exit while
-                // the dialogue is still open. It prevents double deletion (both on
-                // deletion of parent, and on return from this function).
-                AutoQPointer<DirResourceImportDialog> dlg = new DirResourceImportDialog(collection.displayName(), collection.remoteId(), alarmTypes, Desktop::mainWindow());
-                if (dlg->exec() == QDialog::Accepted)
+                for (auto it = events.constBegin();  it != events.constEnd();  ++it)
                 {
-                    if (dlg)
+                    const CalEvent::Type alarmType = it.key();
+                    Resource resource;
+                    const ResourceId id = dlg->resourceId(alarmType);
+                    if (id >= 0)
                     {
-                        QHash<CalEvent::Type, QVector<KAEvent>> events;
-                        readDirectoryResource(collection.remoteId(), alarmTypes, events);
-
-                        for (auto it = events.constBegin();  it != events.constEnd();  ++it)
-                        {
-                            const CalEvent::Type alarmType = it.key();
-                            Resource resource;
-                            const ResourceId id = dlg->resourceId(alarmType);
-                            if (id >= 0)
-                            {
-                                // The directory resource's alarms are to be
-                                // imported into an existing resource.
-                                resource = Resources::resource(id);
-                            }
-                            else
-                            {
-                                const QUrl destUrl = dlg->url(alarmType);
-                                if (!destUrl.isValid())
-                                    continue;   // this alarm type is not to be imported
-
-                                // The directory resource's alarms are to be
-                                // imported into a new resource.
-                                qCDebug(KALARM_LOG) << "FileResourceMigrator: Creating resource" << dlg->displayName(alarmType) << ", type:" << alarmType << ", standard:" << (bool)(standardTypes & alarmType);
-                                FileResourceSettings::Ptr settings(new FileResourceSettings(
-                                              FileResourceSettings::File, destUrl, alarmType,
-                                              dlg->displayName(alarmType), backgroundColour,
-                                              enabledTypes, (standardTypes & alarmType), readOnly));
-                                resource = FileResourceConfigManager::addResource(settings);
-                            }
-
-                            // Add directory events of the appropriate type to this resource.
-                            for (const KAEvent& event : qAsConst(it.value()))
-                                resource.addEvent(event);
-
-                            mExistingAlarmTypes |= alarmType;
-                            converted = true;
-                        }
+                        // The directory resource's alarms are to be
+                        // imported into an existing resource.
+                        resource = Resources::resource(id);
                     }
-                }
-            }
+                    else
+                    {
+                        const QUrl destUrl = dlg->url(alarmType);
+                        if (!destUrl.isValid())
+                            continue;   // this alarm type is not to be imported
 
-            if (converted)
-            {
-                // Delete the Akonadi resource, to prevent it using CPU, on the
-                // assumption that Akonadi access won't be needed by any other
-                // application. Excess CPU usage is one of the major bugs which
-                // prompted replacing Akonadi with file resources.
-                Akonadi::AgentManager::self()->removeInstance(agent);
+                        // The directory resource's alarms are to be
+                        // imported into a new resource.
+                        qCDebug(KALARM_LOG) << "FileResourceMigrator: Creating resource" << dlg->displayName(alarmType) << ", type:" << alarmType << ", standard:" << (bool)(standardTypes & alarmType);
+                        FileResourceSettings::Ptr settings(new FileResourceSettings(
+                                      FileResourceSettings::File, destUrl, alarmType,
+                                      dlg->displayName(alarmType), backgroundColour,
+                                      enabledTypes, (standardTypes & alarmType), readOnly));
+                        resource = FileResourceConfigManager::addResource(settings);
+                    }
+
+                    // Add directory events of the appropriate type to this resource.
+                    for (const KAEvent& event : qAsConst(it.value()))
+                        resource.addEvent(event);
+
+                    mExistingAlarmTypes |= alarmType;
+                    converted = true;
+                }
             }
         }
     }
-    mFetchesPending.removeAll(job);
 
-    if (mFetchesPending.isEmpty())
+    if (converted)
     {
-        // The alarm types of all collections have been found.
-        mAkonadiMigration->setComplete(true);
+        // Delete the Akonadi resource, to prevent it using CPU, on the
+        // assumption that Akonadi access won't be needed by any other
+        // application. Excess CPU usage is one of the major bugs which
+        // prompted replacing Akonadi resources with file resources.
+        Akonadi::AgentManager* agentManager = Akonadi::AgentManager::self();
+        const Akonadi::AgentInstance agent = agentManager->instance(collection.resource());
+        agentManager->removeInstance(agent);
     }
 }
 

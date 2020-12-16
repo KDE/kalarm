@@ -10,11 +10,7 @@
 #define KALARM_H
 
 #include "config-kalarm.h"
-#if FILE_RESOURCES
 #define VERSION_SUFFIX ""
-#else
-#define VERSION_SUFFIX "-A"
-#endif
 #define KALARM_VERSION       VERSION VERSION_SUFFIX
 #define KALARM_FULL_VERSION  KALARM_VERSION " (KDE Apps " RELEASE_SERVICE_VERSION ")"
 

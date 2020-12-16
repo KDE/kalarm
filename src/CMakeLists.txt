@@ -61,12 +61,7 @@ set(resources_SRCS
     resources/resourcecreator.cpp
     resources/eventmodel.cpp
     resources/datamodel.cpp
-    resources/akonadidatamodel.cpp
-    resources/akonadiresource.cpp
-    resources/akonadiresourcecreator.cpp
-    resources/akonadiresourcemigrator.cpp
     resources/calendarupdater.cpp
-    resources/akonadicalendarupdater.cpp
     resources/fileresource.cpp
     resources/fileresourceconfigmanager.cpp
     resources/fileresourcecreator.cpp

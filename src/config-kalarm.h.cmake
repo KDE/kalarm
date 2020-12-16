@@ -2,6 +2,3 @@
 
 /* Define to 1 if you have the Xlib */
 #cmakedefine01 KDEPIM_HAVE_X11
-
-/* Define to 1 to use file system resources instead of Akonadi resources */
-#cmakedefine01 FILE_RESOURCES

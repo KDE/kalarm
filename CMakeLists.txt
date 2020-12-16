@@ -59,8 +59,6 @@ find_package(Qt5 ${QT_REQUIRED_VERSION} CONFIG REQUIRED DBus Gui Network Widgets
 set(MAILCOMMON_LIB_VERSION "5.16.40")
 set(CALENDARUTILS_LIB_VERSION "5.16.40")
 
-option(FILE_RESOURCES "Use file system resources instead of Akonadi resources." TRUE)
-
 # Find KF5 packages
 find_package(KF5Auth ${KF5_MIN_VERSION} CONFIG REQUIRED)
 find_package(KF5CalendarCore ${KF5_MIN_VERSION} CONFIG REQUIRED)
@@ -114,7 +112,6 @@ find_package(Xsltproc)
 set_package_properties(Xsltproc PROPERTIES DESCRIPTION "XSLT processor from libxslt" TYPE REQUIRED PURPOSE "Required to generate D-Bus interfaces for all Akonadi resources.")
 
 set(KDEPIM_HAVE_X11 ${X11_FOUND})
-set(FILE_RESOURCES ${FILE_RESOURCES})
 configure_file(src/config-kalarm.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-kalarm.h)
 
 include_directories(${kalarm_SOURCE_DIR} ${kalarm_BINARY_DIR})
