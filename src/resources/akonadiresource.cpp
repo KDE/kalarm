@@ -34,6 +34,20 @@ using namespace Akonadi;
 
 namespace
 {
+
+// Holds an Akonadi Collection's properties.
+struct CollectionProperties
+{
+    QColor          backgroundColour;
+    CalEvent::Types alarmTypes;
+    CalEvent::Types enabledTypes {CalEvent::EMPTY};
+    CalEvent::Types standardTypes {CalEvent::EMPTY};
+    bool            readOnly;
+
+    // Fetch the properties of a Collection which has been fetched by CollectionFetchJob.
+    CollectionProperties(const Collection&);
+};
+
 const Collection::Rights WritableRights = Collection::CanChangeItem | Collection::CanCreateItem | Collection::CanDeleteItem;
 
 const QRegularExpression MatchMimeType(QStringLiteral("^application/x-vnd\\.kde\\.alarm.*"),
@@ -65,10 +79,10 @@ private:
     struct ResourceCol
     {
         QString    resourceId;    // Akonadi resource identifier
-        ResourceId collectionId;  // Akonadi collection ID
+        Collection collection;    // Akonadi collection
         ResourceCol() {}
-        ResourceCol(const QString& r, ResourceId c)
-            : resourceId(r), collectionId(c) {}
+        ResourceCol(const QString& r, const Collection& c)
+            : resourceId(r), collection(c) {}
     };
     QHash<QString, ResourceCol> mAgentPaths;   // path, (resource identifier, collection ID) pairs
     void (*mCompletionFunc)() {nullptr};       // function to call on completion
@@ -597,14 +611,25 @@ void DuplicateResourceObject::collectionFetchResult(KJob* j)
         {
             if (c.contentMimeTypes().indexOf(MatchMimeType) >= 0)
             {
-                ResourceCol thisRes(job->fetchScope().resource(), c.id());
+                ResourceCol thisRes(job->fetchScope().resource(), c);
                 auto it = mAgentPaths.constFind(c.remoteId());
                 if (it != mAgentPaths.constEnd())
                 {
-                    // Remove the resource containing the higher numbered Collection
-                    // ID, which is likely to be the more recently created.
+                    // Remove the resource which, in decreasing order of priority:
+                    // - Is disabled;
+                    // - Is not a standard resource;
+                    // - Contains the higher numbered Collection ID, which is likely
+                    //   to be the more recently created.
                     const ResourceCol prevRes = it.value();
-                    if (thisRes.collectionId > prevRes.collectionId)
+                    const CollectionProperties properties[2] = { CollectionProperties(prevRes.collection),
+                                                                 CollectionProperties(thisRes.collection) };
+                    int propToUse = (thisRes.collection.id() < prevRes.collection.id()) ? 1 : 0;
+                    if (properties[1 - propToUse].standardTypes  &&  !properties[propToUse].standardTypes)
+                        propToUse = 1 - propToUse;
+                    if (properties[1 - propToUse].enabledTypes  &&  !properties[propToUse].enabledTypes)
+                        propToUse = 1 - propToUse;
+
+                    if (propToUse == 0)
                     {
                         qCWarning(KALARM_LOG) << "AkonadiResource::collectionFetchResult: Removing duplicate resource" << thisRes.resourceId;
                         agentManager->removeInstance(agentManager->instance(thisRes.resourceId));
@@ -965,6 +990,27 @@ void AkonadiResource::modifyCollectionAttrJobDone(KJob* j)
             Resources::notifySettingsChanged(this, Enabled, oldEnabled);
         }
     }
+}
+
+namespace
+{
+
+/******************************************************************************
+* Fetch an Akonadi collection's properties.
+*/
+CollectionProperties::CollectionProperties(const Collection& collection)
+{
+    readOnly   = (collection.rights() & WritableRights) != WritableRights;
+    alarmTypes = CalEvent::types(collection.contentMimeTypes());
+    if (collection.hasAttribute<CollectionAttribute>())
+    {
+        const auto* attr = collection.attribute<CollectionAttribute>();
+        enabledTypes     = attr->enabled() & alarmTypes;
+        standardTypes    = attr->standard() & enabledTypes;
+        backgroundColour = attr->backgroundColor();
+    }
+}
+
 }
 
 #include "akonadiresource.moc"
