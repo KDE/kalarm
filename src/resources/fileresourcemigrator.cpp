@@ -48,6 +48,19 @@ namespace
 const QString KALARM_RESOURCE(QStringLiteral("akonadi_kalarm_resource"));
 const QString KALARM_DIR_RESOURCE(QStringLiteral("akonadi_kalarm_dir_resource"));
 
+// Holds an Akonadi collection's properties.
+struct CollectionProperties
+{
+    QColor          backgroundColour;
+    CalEvent::Types alarmTypes;
+    CalEvent::Types enabledTypes {CalEvent::EMPTY};
+    CalEvent::Types standardTypes {CalEvent::EMPTY};
+    bool            readOnly;
+
+    // Fetch the properties of a collection which has been fetched by CollectionFetchJob.
+    CollectionProperties(const Akonadi::Collection&);
+};
+
 const Akonadi::Collection::Rights WritableRights = Akonadi::Collection::CanChangeItem | Akonadi::Collection::CanCreateItem | Akonadi::Collection::CanDeleteItem;
 
 bool readDirectoryResource(const QString& dirPath, CalEvent::Types alarmTypes, QHash<CalEvent::Type, QVector<KAEvent>>& events);
@@ -237,10 +250,21 @@ void FileResourceMigrator::collectionFetchResult(KJob* j)
             auto it = mCollectionPaths.constFind(collection.remoteId());
             if (it != mCollectionPaths.constEnd())
             {
-                // Remove the resource containing the higher numbered Collection
-                // ID, which is likely to be the more recently created.
+                // Remove the resource which, in decreasing order of priority:
+                // - Is disabled;
+                // - Is not a standard resource;
+                // - Contains the higher numbered Collection ID, which is likely
+                //   to be the more recently created.
                 const AkResourceData prevRes = it.value();
-                saveThis = (thisRes.collection.id() < prevRes.collection.id());
+                const CollectionProperties properties[2] = { CollectionProperties(prevRes.collection),
+                                                             CollectionProperties(thisRes.collection) };
+                int propToUse = (thisRes.collection.id() < prevRes.collection.id()) ? 1 : 0;
+                if (properties[1 - propToUse].standardTypes  &&  !properties[propToUse].standardTypes)
+                    propToUse = 1 - propToUse;
+                if (properties[1 - propToUse].enabledTypes  &&  !properties[propToUse].enabledTypes)
+                    propToUse = 1 - propToUse;
+                saveThis = (propToUse == 1);
+
                 const auto resourceToRemove = saveThis ? prevRes.resourceId : thisRes.resourceId;
                 qCWarning(KALARM_LOG) << "FileResourceMigrator::collectionFetchResult: Removing duplicate resource" << resourceToRemove;
                 Akonadi::AgentManager* agentManager = Akonadi::AgentManager::self();
@@ -294,29 +318,19 @@ void FileResourceMigrator::doMigrateAkonadiResources()
 */
 void FileResourceMigrator::migrateAkonadiCollection(const Akonadi::Collection& collection, bool dirType)
 {
-    const bool readOnly = (collection.rights() & WritableRights) != WritableRights;
-    const CalEvent::Types alarmTypes = CalEvent::types(collection.contentMimeTypes());
-    CalEvent::Types enabledTypes  = CalEvent::EMPTY;
-    CalEvent::Types standardTypes = CalEvent::EMPTY;
-    QColor backgroundColour;
-    if (collection.hasAttribute<CollectionAttribute>())
-    {
-        const auto* attr = collection.attribute<CollectionAttribute>();
-        enabledTypes     = attr->enabled();
-        standardTypes    = attr->standard();
-        backgroundColour = attr->backgroundColor();
-    }
+    // Fetch the collection's properties.
+    const CollectionProperties colProperties(collection);
 
     bool converted = false;
     if (!dirType)
     {
         // It's a single file resource.
-        qCDebug(KALARM_LOG) << "FileResourceMigrator: Creating resource" << collection.displayName() << ", alarm types:" << alarmTypes << ", standard types:" << standardTypes;
+        qCDebug(KALARM_LOG) << "FileResourceMigrator: Creating resource" << collection.displayName() << ", alarm types:" << colProperties.alarmTypes << ", standard types:" << colProperties.standardTypes;
         FileResourceSettings::Ptr settings(new FileResourceSettings(
                       FileResourceSettings::File,
                       QUrl::fromUserInput(collection.remoteId(), QString(), QUrl::AssumeLocalFile),
-                      alarmTypes, collection.displayName(), backgroundColour,
-                      enabledTypes, standardTypes, readOnly));
+                      colProperties.alarmTypes, collection.displayName(), colProperties.backgroundColour,
+                      colProperties.enabledTypes, colProperties.standardTypes, colProperties.readOnly));
         Resource resource = FileResourceConfigManager::addResource(settings);
 
         // Update the calendar to the current KAlarm format if necessary,
@@ -325,7 +339,7 @@ void FileResourceMigrator::migrateAkonadiCollection(const Akonadi::Collection& c
         connect(updater, &QObject::destroyed, this, &FileResourceMigrator::checkIfComplete);
         updater->update();   // note that 'updater' will auto-delete when finished
 
-        mExistingAlarmTypes |= alarmTypes;
+        mExistingAlarmTypes |= colProperties.alarmTypes;
         converted = true;
     }
     else
@@ -335,13 +349,13 @@ void FileResourceMigrator::migrateAkonadiCollection(const Akonadi::Collection& c
         // Use AutoQPointer to guard against crash on application exit while
         // the dialogue is still open. It prevents double deletion (both on
         // deletion of parent, and on return from this function).
-        AutoQPointer<DirResourceImportDialog> dlg = new DirResourceImportDialog(collection.displayName(), collection.remoteId(), alarmTypes, Desktop::mainWindow());
+        AutoQPointer<DirResourceImportDialog> dlg = new DirResourceImportDialog(collection.displayName(), collection.remoteId(), colProperties.alarmTypes, Desktop::mainWindow());
         if (dlg->exec() == QDialog::Accepted)
         {
             if (dlg)
             {
                 QHash<CalEvent::Type, QVector<KAEvent>> events;
-                readDirectoryResource(collection.remoteId(), alarmTypes, events);
+                readDirectoryResource(collection.remoteId(), colProperties.alarmTypes, events);
 
                 for (auto it = events.constBegin();  it != events.constEnd();  ++it)
                 {
@@ -362,11 +376,11 @@ void FileResourceMigrator::migrateAkonadiCollection(const Akonadi::Collection& c
 
                         // The directory resource's alarms are to be
                         // imported into a new resource.
-                        qCDebug(KALARM_LOG) << "FileResourceMigrator: Creating resource" << dlg->displayName(alarmType) << ", type:" << alarmType << ", standard:" << (bool)(standardTypes & alarmType);
+                        qCDebug(KALARM_LOG) << "FileResourceMigrator: Creating resource" << dlg->displayName(alarmType) << ", type:" << alarmType << ", standard:" << (bool)(colProperties.standardTypes & alarmType);
                         FileResourceSettings::Ptr settings(new FileResourceSettings(
                                       FileResourceSettings::File, destUrl, alarmType,
-                                      dlg->displayName(alarmType), backgroundColour,
-                                      enabledTypes, (standardTypes & alarmType), readOnly));
+                                      dlg->displayName(alarmType), colProperties.backgroundColour,
+                                      colProperties.enabledTypes, (colProperties.standardTypes & alarmType), colProperties.readOnly));
                         resource = FileResourceConfigManager::addResource(settings);
                     }
 
@@ -577,6 +591,22 @@ void FileResourceMigrator::createCalendar(CalEvent::Type alarmType, const QStrin
 
 namespace
 {
+
+/******************************************************************************
+* Fetch an Akonadi collection's properties.
+*/
+CollectionProperties::CollectionProperties(const Akonadi::Collection& collection)
+{
+    readOnly   = (collection.rights() & WritableRights) != WritableRights;
+    alarmTypes = CalEvent::types(collection.contentMimeTypes());
+    if (collection.hasAttribute<CollectionAttribute>())
+    {
+        const auto* attr = collection.attribute<CollectionAttribute>();
+        enabledTypes     = attr->enabled() & alarmTypes;
+        standardTypes    = attr->standard() & enabledTypes;
+        backgroundColour = attr->backgroundColor();
+    }
+}
 
 /******************************************************************************
 * Load and parse events from each file in a calendar directory.

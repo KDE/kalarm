@@ -1,7 +1,8 @@
 KAlarm Change Log
 
-=== Version 3.1.1 (KDE Applications 20.12.1) --- 16 December 2020 ===
+=== Version 3.1.1 (KDE Applications 20.12.1) --- 18 December 2020 ===
 * Ensure that build uses the file resources option.
+* When removing duplicate Akonadi resources, in priority keep enabled/standard ones.
 * Fix regression introduced in version 3.1.0:
     Show correct alarm columns in main window on first run of KAlarm.
 
