@@ -661,20 +661,12 @@ void SpinMirror::wheelEvent(QWheelEvent* e)
 {
     if (mReadOnly)
         return;
-#if QT_VERSION < QT_VERSION_CHECK(5, 14, 0)
-    QPointF pt = e->posF();
-#else
     QPointF pt = e->position();
-#endif
     QGraphicsItem* item = scene()->itemAt(pt, QTransform());
     if (item == mButtons)
     {
         pt = spinboxPoint(pt);
-#if QT_VERSION < QT_VERSION_CHECK(5, 14, 0)
-        QApplication::postEvent(mSpinbox, new QWheelEvent(pt, e->globalPosF(), e->pixelDelta(), e->angleDelta(), e->buttons(), e->modifiers(), e->phase(), e->inverted(), e->source()));
-#else
         QApplication::postEvent(mSpinbox, new QWheelEvent(pt, e->globalPosition(), e->pixelDelta(), e->angleDelta(), e->buttons(), e->modifiers(), e->phase(), e->inverted(), e->source()));
-#endif
     }
 }
 
