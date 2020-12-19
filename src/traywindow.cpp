@@ -333,7 +333,7 @@ QString TrayWindow::tooltipAlarmText() const
 
     // Get today's and tomorrow's alarms, sorted in time order
     int i, iend;
-    QList<TipItem> items;
+    QList<TipItem> items;    //clazy:exclude=inefficient-qlist   QList is better than QVector for insertions
     QVector<KAEvent> events = KAlarm::getSortedActiveEvents(const_cast<TrayWindow*>(this), &mAlarmsModel);
     for (i = 0, iend = events.count();  i < iend;  ++i)
     {

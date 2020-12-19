@@ -349,7 +349,7 @@ void KAlarmApp::showRestoredWindows()
         if (!mRestoredWindows.isEmpty())
         {
             // Display message windows restored at startup.
-            for (MessageWindow* win : mRestoredWindows)
+            for (MessageWindow* win : qAsConst(mRestoredWindows))
                 win->display();
             mRestoredWindows.clear();
         }

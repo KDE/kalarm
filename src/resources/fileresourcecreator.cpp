@@ -43,7 +43,7 @@ void FileResourceCreator::doCreateResource()
     {
         QStringList typeDescs;
         for (ResourceType::StorageType t : types)
-            typeDescs += Resource::storageTypeString(t);
+            typeDescs += Resource::storageTypeString(t);   //clazy:exclude=reserve-candidates  There are very few types
         ResourceType::StorageType type = types[0];
         if (types.count() > 1)
         {

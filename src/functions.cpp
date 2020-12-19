@@ -819,8 +819,10 @@ QVector<KAEvent> getSortedActiveEvents(QObject* parent, AlarmListModel** model)
         (*model)->setEventTypeFilter(CalEvent::ACTIVE);
         (*model)->sort(AlarmListModel::TimeColumn);
     }
+    int count = (*model)->rowCount();
     QVector<KAEvent> result;
-    for (int i = 0, count = (*model)->rowCount();  i < count;  ++i)
+    result.reserve(count);
+    for (int i = 0;  i < count;  ++i)
     {
         const KAEvent event = (*model)->event(i);
         if (event.enabled()  &&  !event.expired())
