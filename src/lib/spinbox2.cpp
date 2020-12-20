@@ -249,7 +249,7 @@ void SpinBox2::paintEvent(QPaintEvent* e)
 
 void SpinBox2::paintTimer()
 {
-    QTimer::singleShot(0, this, &SpinBox2::updateMirrorButtons);
+    QTimer::singleShot(0, this, &SpinBox2::updateMirrorButtons);   //NOLINT(clang-analyzer-cplusplus.NewDeleteLeaks)
 }
 
 void SpinBox2::updateMirrorButtons()

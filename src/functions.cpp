@@ -1253,7 +1253,7 @@ void cancelRtcWake(QWidget* msgParent, const QString& eventId)
     if (!wakeup.isEmpty()  &&  (eventId.isEmpty() || wakeup[0] == eventId))
     {
         Private::instance()->mMsgParent = msgParent ? msgParent : MainWindow::mainMainWindow();
-        QTimer::singleShot(0, Private::instance(), &Private::cancelRtcWake);
+        QTimer::singleShot(0, Private::instance(), &Private::cancelRtcWake);   //NOLINT(clang-analyzer-cplusplus.NewDeleteLeaks)
     }
 }
 

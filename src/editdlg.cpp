@@ -861,7 +861,7 @@ void EditAlarmDlg::showEvent(QShowEvent* se)
     if (theApp()->needWindowFocusFix())
     {
         QApplication::setActiveWindow(this);
-        QTimer::singleShot(0, this, &EditAlarmDlg::focusFixTimer);
+        QTimer::singleShot(0, this, &EditAlarmDlg::focusFixTimer);   //NOLINT(clang-analyzer-cplusplus.NewDeleteLeaks)
     }
 }
 
@@ -878,7 +878,7 @@ void EditAlarmDlg::focusFixTimer()
     &&  QApplication::focusWidget()->window() != this)
     {
         QApplication::setActiveWindow(this);
-        QTimer::singleShot(0, this, &EditAlarmDlg::focusFixTimer);
+        QTimer::singleShot(0, this, &EditAlarmDlg::focusFixTimer);   //NOLINT(clang-analyzer-cplusplus.NewDeleteLeaks)
     }
 }
 
@@ -1245,7 +1245,7 @@ void EditAlarmDlg::showOptions(bool more)
     type_showOptions(more);
     mRecurrenceEdit->showMoreOptions(more);
     mShowingMore = more;
-    QTimer::singleShot(0, this, &EditAlarmDlg::slotResize);
+    QTimer::singleShot(0, this, &EditAlarmDlg::slotResize);   //NOLINT(clang-analyzer-cplusplus.NewDeleteLeaks)
 }
 
 /******************************************************************************

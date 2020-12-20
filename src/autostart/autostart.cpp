@@ -94,7 +94,7 @@ void AutostartApp::setCommandLine(const QString& exe, const QStringList& args)
     // Login session is starting up - need to wait for it to complete
     // in order to avoid starting the client before it is restored by
     // the session (where applicable).
-    QTimer::singleShot(AUTOSTART_DELAY * 1000, this, &AutostartApp::slotAutostart);
+    QTimer::singleShot(AUTOSTART_DELAY * 1000, this, &AutostartApp::slotAutostart);   //NOLINT(clang-analyzer-cplusplus.NewDeleteLeaks)
 }
 
 void AutostartApp::slotAutostart()

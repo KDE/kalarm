@@ -88,7 +88,7 @@ bool FileResourceCalendarUpdater::update(bool useTimer)
                 mPromptMessage = conversionPrompt(mResource.displayName(), versionString, false);
                 if (useTimer)
                 {
-                    QTimer::singleShot(0, this, &FileResourceCalendarUpdater::prompt);
+                    QTimer::singleShot(0, this, &FileResourceCalendarUpdater::prompt);   //NOLINT(clang-analyzer-cplusplus.NewDeleteLeaks)
                     return true;
                 }
                 return prompt();

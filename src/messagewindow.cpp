@@ -961,7 +961,7 @@ void MessageWindow::showEvent(QShowEvent* se)
     }
 
     // Set the window size etc. once the frame size is known
-    QTimer::singleShot(0, this, &MessageWindow::frameDrawn);
+    QTimer::singleShot(0, this, &MessageWindow::frameDrawn);   //NOLINT(clang-analyzer-cplusplus.NewDeleteLeaks)
 
     mShown = true;
 }
@@ -1009,7 +1009,7 @@ void MessageWindow::displayComplete()
     {
         // Enable the window's buttons either now or after the configured delay
         if (mButtonDelay > 0)
-            QTimer::singleShot(mButtonDelay, this, &MessageWindow::enableButtons);
+            QTimer::singleShot(mButtonDelay, this, &MessageWindow::enableButtons);   //NOLINT(clang-analyzer-cplusplus.NewDeleteLeaks)
         else
             enableButtons();
     }

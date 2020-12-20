@@ -56,7 +56,7 @@ AkonadiCollectionSearch::AkonadiCollectionSearch(const QString& mimeType, const 
     {
         // There are no resources containing the mime type, so ensure that a
         // signal is emitted after construction.
-        QTimer::singleShot(0, this, &AkonadiCollectionSearch::finish);
+        QTimer::singleShot(0, this, &AkonadiCollectionSearch::finish);   //NOLINT(clang-analyzer-cplusplus.NewDeleteLeaks)
     }
 }
 

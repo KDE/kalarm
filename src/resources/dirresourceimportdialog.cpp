@@ -266,7 +266,7 @@ DirResourceImportTypeWidget::DirResourceImportTypeWidget(CalEvent::Type alarmTyp
     mUi->grid->setColumnStretch(1, 1);
 
     importTypeSelected();
-    QTimer::singleShot(0, this, &DirResourceImportTypeWidget::validate);
+    QTimer::singleShot(0, this, &DirResourceImportTypeWidget::validate);   //NOLINT(clang-analyzer-cplusplus.NewDeleteLeaks)
 }
 
 DirResourceImportTypeWidget::~DirResourceImportTypeWidget()

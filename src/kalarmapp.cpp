@@ -850,7 +850,7 @@ void KAlarmApp::displayFatalError(const QString& message)
         mFatalError = 1;
         mFatalMessage = message;
         if (mInstance)
-            QTimer::singleShot(0, mInstance, &KAlarmApp::quitFatal);
+            QTimer::singleShot(0, mInstance, &KAlarmApp::quitFatal);   //NOLINT(clang-analyzer-cplusplus.NewDeleteLeaks)
     }
 }
 
@@ -874,7 +874,7 @@ void KAlarmApp::quitFatal()
                 mInstance->quitIf(1, true);
             break;
     }
-    QTimer::singleShot(1000, this, &KAlarmApp::quitFatal);
+    QTimer::singleShot(1000, this, &KAlarmApp::quitFatal);   //NOLINT(clang-analyzer-cplusplus.NewDeleteLeaks)
 }
 
 /******************************************************************************
@@ -899,7 +899,7 @@ void KAlarmApp::checkNextDueAlarm()
         // Queue the alarm
         queueAlarmId(nextEvent);
         qCDebug(KALARM_LOG) << "KAlarmApp::checkNextDueAlarm:" << nextEvent.id() << ": due now";
-        QTimer::singleShot(0, this, &KAlarmApp::processQueue);
+        QTimer::singleShot(0, this, &KAlarmApp::processQueue);   //NOLINT(clang-analyzer-cplusplus.NewDeleteLeaks)
     }
     else
     {
@@ -955,7 +955,8 @@ void KAlarmApp::startProcessQueue()
     {
         qCDebug(KALARM_LOG) << "KAlarmApp::startProcessQueue";
         mInitialised = true;
-        QTimer::singleShot(0, this, &KAlarmApp::processQueue);    // process anything already queued
+        // Process anything already queued.
+        QTimer::singleShot(0, this, &KAlarmApp::processQueue);   //NOLINT(clang-analyzer-cplusplus.NewDeleteLeaks)
     }
 }
 
@@ -1062,7 +1063,7 @@ void KAlarmApp::processQueue()
                         case 0:
                             // Initiate editing an alarm specified on the command line.
                             mEditingCmdLineAlarm |= 1;
-                            QTimer::singleShot(0, this, &KAlarmApp::slotEditAlarmById);
+                            QTimer::singleShot(0, this, &KAlarmApp::slotEditAlarmById);   //NOLINT(clang-analyzer-cplusplus.NewDeleteLeaks)
                             break;
                         case 1:
                             // Currently editing the alarm.
@@ -1143,7 +1144,7 @@ void KAlarmApp::atLoginEventAdded(const KAEvent& event)
         {
             mActionQueue.enqueue(ActionQEntry(QueuedAction::Handle, EventId(ev)));
             if (mInitialised)
-                QTimer::singleShot(0, this, &KAlarmApp::processQueue);
+                QTimer::singleShot(0, this, &KAlarmApp::processQueue);   //NOLINT(clang-analyzer-cplusplus.NewDeleteLeaks)
         }
     }
 }
@@ -1333,7 +1334,7 @@ bool KAlarmApp::wantShowInSystemTray() const
 */
 void KAlarmApp::setResourcesTimeout()
 {
-    QTimer::singleShot(RESOURCES_TIMEOUT * 1000, this, &KAlarmApp::slotResourcesTimeout);
+    QTimer::singleShot(RESOURCES_TIMEOUT * 1000, this, &KAlarmApp::slotResourcesTimeout);   //NOLINT(clang-analyzer-cplusplus.NewDeleteLeaks)
 }
 
 /******************************************************************************
@@ -1420,7 +1421,7 @@ void KAlarmApp::checkArchivedCalendar()
         {
             // Schedule the display of a user prompt, without holding up
             // other processing.
-            QTimer::singleShot(0, this, &KAlarmApp::promptArchivedCalendar);
+            QTimer::singleShot(0, this, &KAlarmApp::promptArchivedCalendar);   //NOLINT(clang-analyzer-cplusplus.NewDeleteLeaks)
         }
     }
 }
@@ -1447,7 +1448,7 @@ void KAlarmApp::slotEditAlarmById()
             showRestoredWindows();
         }
         mEditingCmdLineAlarm = 2;  // indicate edit completion
-        QTimer::singleShot(0, this, &KAlarmApp::processQueue);
+        QTimer::singleShot(0, this, &KAlarmApp::processQueue);   //NOLINT(clang-analyzer-cplusplus.NewDeleteLeaks)
     }
 }
 
@@ -1577,7 +1578,7 @@ void KAlarmApp::slotFDOPropertiesChanged(const QString& interface,
             if (!mNotificationsInhibited)
             {
                 showRestoredWindows();   // display message windows restored at startup.
-                QTimer::singleShot(0, this, &KAlarmApp::processQueue);
+                QTimer::singleShot(0, this, &KAlarmApp::processQueue);   //NOLINT(clang-analyzer-cplusplus.NewDeleteLeaks)
             }
         }
     }
@@ -1720,7 +1721,7 @@ bool KAlarmApp::scheduleEvent(KAEvent::SubAction action, const QString& name, co
     qCDebug(KALARM_LOG) << "KAlarmApp::scheduleEvent: creating new alarm" << text;
     mActionQueue.enqueue(ActionQEntry(event));
     if (mInitialised)
-        QTimer::singleShot(0, this, &KAlarmApp::processQueue);
+        QTimer::singleShot(0, this, &KAlarmApp::processQueue);   //NOLINT(clang-analyzer-cplusplus.NewDeleteLeaks)
     return true;
 }
 
@@ -1734,7 +1735,7 @@ bool KAlarmApp::dbusHandleEvent(const EventId& eventID, QueuedAction action)
     qCDebug(KALARM_LOG) << "KAlarmApp::dbusHandleEvent:" << eventID;
     mActionQueue.append(ActionQEntry(action, eventID));
     if (mInitialised)
-        QTimer::singleShot(0, this, &KAlarmApp::processQueue);
+        QTimer::singleShot(0, this, &KAlarmApp::processQueue);   //NOLINT(clang-analyzer-cplusplus.NewDeleteLeaks)
     return true;
 }
 

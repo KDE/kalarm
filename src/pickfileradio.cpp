@@ -168,7 +168,7 @@ bool PickFileRadio::doPickFile(QString& file)
         // No file is selected, so revert to the previous radio button selection.
         // But wait a moment before setting the radio button, or it won't work.
         mRevertButton = true;   // prevent picker dialog popping up twice
-        QTimer::singleShot(0, this, &PickFileRadio::setLastButton);
+        QTimer::singleShot(0, this, &PickFileRadio::setLastButton);   //NOLINT(clang-analyzer-cplusplus.NewDeleteLeaks)
     }
     file = mFile;
     return true;

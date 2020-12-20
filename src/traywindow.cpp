@@ -177,7 +177,7 @@ void TrayWindow::slotPreferences()
 void TrayWindow::slotQuit()
 {
     // Note: QTimer::singleShot(0, ...) never calls the slot.
-    QTimer::singleShot(1, this, &TrayWindow::slotQuitAfter);
+    QTimer::singleShot(1, this, &TrayWindow::slotQuitAfter);   //NOLINT(resources/fileresourcecalendarupdater.cpp)
 }
 void TrayWindow::slotQuitAfter()
 {

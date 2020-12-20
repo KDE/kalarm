@@ -27,7 +27,7 @@ ResourceCreator::ResourceCreator(CalEvent::Type defaultType, QWidget* parent)
 */
 void ResourceCreator::createResource()
 {
-    QTimer::singleShot(0, this, &ResourceCreator::doCreateResource);
+    QTimer::singleShot(0, this, &ResourceCreator::doCreateResource);   //NOLINT(clang-analyzer-cplusplus.NewDeleteLeaks)
 }
 
 // vim: et sw=4:

@@ -92,7 +92,7 @@ ResourceSelector::ResourceSelector(QWidget* parent)
     connect(mDeleteButton, &QPushButton::clicked, this, &ResourceSelector::removeResource);
 
     connect(mAlarmType, &QComboBox::activated, this, &ResourceSelector::alarmTypeSelected);
-    QTimer::singleShot(0, this, &ResourceSelector::alarmTypeSelected);
+    QTimer::singleShot(0, this, &ResourceSelector::alarmTypeSelected);   //NOLINT(clang-analyzer-cplusplus.NewDeleteLeaks)
 
     Preferences::connect(&Preferences::archivedKeepDaysChanged, this, &ResourceSelector::archiveDaysChanged);
 }
@@ -128,7 +128,7 @@ void ResourceSelector::alarmTypeSelected()
     mAddButton->setWhatsThis(addTip);
     mAddButton->setToolTip(addTip);
     // WORKAROUND: Switch scroll bars back on after allowing geometry to update ...
-    QTimer::singleShot(0, this, &ResourceSelector::reinstateAlarmTypeScrollBars);
+    QTimer::singleShot(0, this, &ResourceSelector::reinstateAlarmTypeScrollBars);   //NOLINT(clang-analyzer-cplusplus.NewDeleteLeaks)
 
     selectionChanged();   // enable/disable buttons
 }

@@ -812,7 +812,7 @@ void MessageDisplayHelper::playAudio()
     {
         // The message is to be spoken. In case of error messges,
         // call it on a timer to allow the display to be shown first.
-        QTimer::singleShot(0, this, &MessageDisplayHelper::slotSpeak);
+        QTimer::singleShot(0, this, &MessageDisplayHelper::slotSpeak);   //NOLINT(resources/fileresourcecalendarupdater.cpp)
     }
 }
 
@@ -895,7 +895,7 @@ void MessageDisplayHelper::playReady()
 */
 void MessageDisplayHelper::audioTerminating()
 {
-    QTimer::singleShot(0, this, &MessageDisplayHelper::startAudio);
+    QTimer::singleShot(0, this, &MessageDisplayHelper::startAudio);   //NOLINT(resources/fileresourcecalendarupdater.cpp)
 }
 
 /******************************************************************************
@@ -950,7 +950,7 @@ AudioThread::~AudioThread()
         mAudioOwner = nullptr;
     // Notify after deleting mAudioThread, so that isAudioPlaying() will
     // return the correct value.
-    QTimer::singleShot(0, theApp(), &KAlarmApp::notifyAudioStopped);
+    QTimer::singleShot(0, theApp(), &KAlarmApp::notifyAudioStopped);   //NOLINT(resources/fileresourcecalendarupdater.cpp)
 }
 
 /******************************************************************************
@@ -1059,7 +1059,7 @@ void AudioThread::checkAudioPlay()
             {
                 // Pause before playing the file again
                 mPausing = true;
-                QTimer::singleShot(mRepeatPause * 1000, this, &AudioThread::checkAudioPlay);
+                QTimer::singleShot(mRepeatPause * 1000, this, &AudioThread::checkAudioPlay);   //NOLINT(resources/fileresourcecalendarupdater.cpp)
                 mMutex.unlock();
                 return;
             }
@@ -1133,7 +1133,7 @@ bool MessageDisplayHelper::activateAutoClose()
         int delay = QDateTime::currentDateTimeUtc().secsTo(mCloseTime);
         if (delay < 0)
             delay = 0;
-        QTimer::singleShot(delay * 1000, this, &MessageDisplayHelper::autoCloseNow);
+        QTimer::singleShot(delay * 1000, this, &MessageDisplayHelper::autoCloseNow);   //NOLINT(resources/fileresourcecalendarupdater.cpp)
         if (!delay)
             return false;    // don't show the alarm if auto-closing is already due
     }
@@ -1261,7 +1261,7 @@ void MessageDisplayHelper::checkDeferralLimit()
         n = QDateTime::currentDateTimeUtc().secsTo(mDeferLimit);
         if (n > 0)
         {
-            QTimer::singleShot(n * 1000, this, &MessageDisplayHelper::checkDeferralLimit);
+            QTimer::singleShot(n * 1000, this, &MessageDisplayHelper::checkDeferralLimit);   //NOLINT(resources/fileresourcecalendarupdater.cpp)
             return;
         }
     }

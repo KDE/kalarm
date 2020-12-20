@@ -791,7 +791,7 @@ void SingleFileResource::handleSettingsChange(Changes change)
                         break;
                     }
                     // Update the backend storage format to the current KAlarm format
-                    QTimer::singleShot(0, this, [this] { updateFormat(); });
+                    QTimer::singleShot(0, this, [this] { updateFormat(); });   //NOLINT(clang-analyzer-cplusplus.NewDeleteLeaks)
                     return;
                 }
             }

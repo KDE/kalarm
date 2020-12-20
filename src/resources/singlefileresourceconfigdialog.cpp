@@ -58,7 +58,7 @@ SingleFileResourceConfigDialog::SingleFileResourceConfigDialog(bool create, QWid
     connect(mUi->displayNameText, &QLineEdit::textChanged, this, &SingleFileResourceConfigDialog::validate);
     connect(mUi->buttonBox, &QDialogButtonBox::rejected, this, &SingleFileResourceConfigDialog::close);
     connect(mUi->buttonBox, &QDialogButtonBox::accepted, this, &SingleFileResourceConfigDialog::accept);
-    QTimer::singleShot(0, this, &SingleFileResourceConfigDialog::validate);
+    QTimer::singleShot(0, this, &SingleFileResourceConfigDialog::validate);   //NOLINT(clang-analyzer-cplusplus.NewDeleteLeaks)
 }
 
 SingleFileResourceConfigDialog::~SingleFileResourceConfigDialog()
