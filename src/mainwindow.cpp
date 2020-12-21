@@ -372,7 +372,7 @@ void MainWindow::showEvent(QShowEvent* se)
     mShown = true;
 
     if (mMenuError)
-        QTimer::singleShot(0, this, &MainWindow::showMenuErrorMessage);    //NOLINT(resources/fileresourcecalendarupdater.cpp)
+        QTimer::singleShot(0, this, &MainWindow::showMenuErrorMessage);    //NOLINT(clang-analyzer-cplusplus.NewDeleteLeaks)
 }
 
 /******************************************************************************

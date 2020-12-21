@@ -106,7 +106,7 @@ TemplateDlg::TemplateDlg(QWidget* parent)
             this, &QDialog::close);
     topLayout->addWidget(buttonBox);
 
-    KActionCollection* actions = new KActionCollection(this);
+    KActionCollection* actions = new KActionCollection(this);   //NOLINT(clang-analyzer-cplusplus.NewDeleteLeaks)
     QAction* act = KStandardAction::selectAll(mListView, &QTreeView::selectAll, actions);
     topLevelWidget()->addAction(act);
     act = KStandardAction::deselect(mListView, &QAbstractItemView::clearSelection, actions);

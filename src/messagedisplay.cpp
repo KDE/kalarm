@@ -108,7 +108,8 @@ void MessageDisplay::redisplayAlarms()
         for (const Event::Ptr& kcalEvent : kcalEvents)
         {
             bool showDefer, showEdit;
-            reinstateFromDisplaying(kcalEvent, event, resource, showEdit, showDefer);
+            if (!reinstateFromDisplaying(kcalEvent, event, resource, showEdit, showDefer))
+                continue;
             const EventId eventId(event);
             if (findEvent(eventId))
                 qCDebug(KALARM_LOG) << "MessageDisplay::redisplayAlarms: Message display already exists:" << eventId;

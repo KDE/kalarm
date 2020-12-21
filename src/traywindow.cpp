@@ -177,7 +177,7 @@ void TrayWindow::slotPreferences()
 void TrayWindow::slotQuit()
 {
     // Note: QTimer::singleShot(0, ...) never calls the slot.
-    QTimer::singleShot(1, this, &TrayWindow::slotQuitAfter);   //NOLINT(resources/fileresourcecalendarupdater.cpp)
+    QTimer::singleShot(1, this, &TrayWindow::slotQuitAfter);   //NOLINT(clang-analyzer-cplusplus.NewDeleteLeaks)
 }
 void TrayWindow::slotQuitAfter()
 {
@@ -333,7 +333,7 @@ QString TrayWindow::tooltipAlarmText() const
 
     // Get today's and tomorrow's alarms, sorted in time order
     int i, iend;
-    QList<TipItem> items;    //clazy:exclude=inefficient-qlist   QList is better than QVector for insertions
+    QList<TipItem> items;    //clazy:exclude=inefficient-qlist,inefficient-qlist-soft   QList is better than QVector for insertions
     QVector<KAEvent> events = KAlarm::getSortedActiveEvents(const_cast<TrayWindow*>(this), &mAlarmsModel);
     for (i = 0, iend = events.count();  i < iend;  ++i)
     {

@@ -437,7 +437,7 @@ void SoundWidget::playSound()
     mPlayer->setParent(this);
 #else
     mPlayer = new Phonon::MediaObject(this);
-    auto* output = new Phonon::AudioOutput(Phonon::MusicCategory, mPlayer);
+    auto* output = new Phonon::AudioOutput(Phonon::MusicCategory, mPlayer);   //NOLINT(clang-analyzer-cplusplus.NewDeleteLeaks)
     mPlayer->setCurrentSource(mUrl);
     Phonon::createPath(mPlayer, output);
 #endif

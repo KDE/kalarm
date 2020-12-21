@@ -97,6 +97,6 @@ ActionReply RtcWakeAction::settimer(const QVariantMap& args)
     return reply;
 }
 
-KAUTH_HELPER_MAIN("org.kde.kalarm.rtcwake", RtcWakeAction)
+KAUTH_HELPER_MAIN("org.kde.kalarm.rtcwake", RtcWakeAction)   //NOLINT(clang-analyzer-cplusplus.NewDeleteLeaks)
 
 // vim: et sw=4:

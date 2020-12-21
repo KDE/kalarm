@@ -1734,7 +1734,8 @@ bool convertTimeString(const QByteArray& timeString, KADateTime& dateTime, const
         return false;
     QString zone = (i >= 0) ? QString::fromLatin1(timeString.mid(i)) : QString();
     char timeStr[MAX_DT_LEN+1];
-    strcpy(timeStr, timeString.left(i >= 0 ? i : MAX_DT_LEN).constData());
+    strncpy(timeStr, timeString.left(i >= 0 ? i : MAX_DT_LEN).constData(), MAX_DT_LEN);
+    timeStr[MAX_DT_LEN] = '\0';
     int dt[5] = { -1, -1, -1, -1, -1 };
     char* s;
     char* end;

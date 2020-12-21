@@ -1247,7 +1247,7 @@ QString UndoDeletes::defaultActionText() const
 {
     if (mUndos->isEmpty())
         return QString();
-    for (const UndoItem* item : *mUndos)
+    for (const UndoItem* item : qAsConst(*mUndos))
     {
         switch (item->calendar())
         {
