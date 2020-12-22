@@ -2227,7 +2227,7 @@ bool KAEvent::reminderDeferral() const
 */
 void KAEvent::defer(const DateTime &dt, bool reminder, bool adjustRecurrence)
 {
-    return d->defer(dt, reminder, adjustRecurrence);
+    d->defer(dt, reminder, adjustRecurrence);
 }
 
 void KAEventPrivate::defer(const DateTime &dateTime, bool reminder, bool adjustRecurrence)
@@ -4039,7 +4039,7 @@ void KAEventPrivate::readAlarms(const Event::Ptr &event, AlarmMap *alarmMap, boo
 
     // Check if it's an audio event with no display alarm
     bool audioOnly = false;
-    for (Alarm::Ptr alarm : alarms) {
+    for (const Alarm::Ptr &alarm : alarms) {
         bool done = false;
         switch (alarm->type()) {
         case Alarm::Display:
@@ -5263,7 +5263,7 @@ bool KAEvent::convertKCalEvents(const Calendar::Ptr &calendar, int calendarVersi
             }
 
             if (!cats.isEmpty()) {
-                for (Alarm::Ptr alarm : alarms) {
+                for (Alarm::Ptr alarm : alarms) {     //clazy:exclude=range-loop   Can't use reference because 'alarms' is const
                     if (alarm->type() == Alarm::Display)
                         alarm->setCustomProperty(KACalendar::APPNAME, KAEventPrivate::FONT_COLOUR_PROPERTY,
                                                  QStringLiteral("%1;;").arg(cats.at(0)));
@@ -5931,8 +5931,10 @@ EmailAddressList &EmailAddressList::operator=(const Person::List &addresses)
 */
 EmailAddressList::operator QStringList() const
 {
+    int cnt = count();
     QStringList list;
-    for (int p = 0, end = count();  p < end;  ++p) {
+    list.reserve(cnt);
+    for (int p = 0;  p < cnt;  ++p) {
         list += address(p);
     }
     return list;
@@ -5996,8 +5998,10 @@ QString EmailAddressList::address(int index) const
 */
 QStringList EmailAddressList::pureAddresses() const
 {
+    int cnt = count();
     QStringList list;
-    for (int p = 0, end = count();  p < end;  ++p) {
+    list.reserve(cnt);
+    for (int p = 0;  p < cnt;  ++p) {
         list += at(p).email();
     }
     return list;

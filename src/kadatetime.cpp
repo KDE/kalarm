@@ -3,7 +3,7 @@
     This file is part of kalarmcal library, which provides access to KAlarm
     calendar data. Qt5 version of KDE 4 kdelibs/kdecore/date/kdatetime.cpp.
 
-    SPDX-FileCopyrightText: 2005-2019 David Jarvie <djarvie@kde.org>
+    SPDX-FileCopyrightText: 2005-2020 David Jarvie <djarvie@kde.org>
 
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
@@ -1753,35 +1753,36 @@ QString KADateTime::toString(TimeFormat format) const
             QString seconds;
             if (d->time().second())
                 seconds = QLatin1String(":") + numString(d->time().second(), 2);
-            result += QStringLiteral("%1 %2 ").arg(numString(d->date().day(),   2))
-                                              .arg(shortMonth(d->date().month()));
+            result += QStringLiteral("%1 %2 ").arg(numString(d->date().day(),   2),
+                                                   shortMonth(d->date().month()));
             int year = d->date().year();
             if (year < 0) {
                 result += QLatin1Char('-');
                 year = -year;
             }
-            result += QStringLiteral("%1 %2:%3%4 ").arg(numString(year,                    4))
-                                                   .arg(numString(d->time().hour(),   2))
-                                                   .arg(numString(d->time().minute(), 2))
-                                                   .arg(seconds);
+            result += QStringLiteral("%1 %2:%3%4 ").arg(numString(year,               4),
+                                                        numString(d->time().hour(),   2),
+                                                        numString(d->time().minute(), 2),
+                                                        seconds);
             break;
         }
         case RFC3339Date: {
             result += QStringLiteral("%1-%2-%3T%4:%5:%6")
-                                      .arg(numString(d->date().year(),        4))
-                                      .arg(numString(d->date().month(),       2))
-                                      .arg(numString(d->date().day(),         2))
-                                      .arg(numString(d->time().hour(),   2))
-                                      .arg(numString(d->time().minute(), 2))
-                                      .arg(numString(d->time().second(), 2));
+                                      .arg(numString(d->date().year(),   4),
+                                           numString(d->date().month(),  2),
+                                           numString(d->date().day(),    2),
+                                           numString(d->time().hour(),   2),
+                                           numString(d->time().minute(), 2),
+                                           numString(d->time().second(), 2));
             int msec = d->time().msec();
             if (msec) {
                 int digits = 3;
-                if (!(msec % 10))
+                if (!(msec % 10)) {
                     msec /= 10, --digits;
-                if (!(msec % 10))
-                    msec /= 10, --digits;
-                result += QStringLiteral(".%1").arg(numString(d->time().msec(), digits));
+                    if (!(msec % 10))
+                        msec /= 10, --digits;
+                }
+                result += QStringLiteral(".%1").arg(numString(msec, digits));
             }
             if (d->specType == UTC)
                 return result + QLatin1Char('Z');
@@ -2142,8 +2143,8 @@ KADateTime KADateTime::fromString(const QString &string, TimeFormat format, bool
                 d = QDate(year, 1, 1).addDays(day - 1);
                 if (!d.isValid()  || (d.year() != year))
                     break;
-                day   = d.day();
-                month = d.month();
+                //day   = d.day();
+                //month = d.month();
             } else {
                 // A month and day are specified
                 month = parts[3].leftRef(2).toInt(&ok);

@@ -2,7 +2,7 @@
    This file is part of kalarmcal library, which provides access to KAlarm
    calendar data.
 
-   SPDX-FileCopyrightText: 2005-2019 David Jarvie <djarvie@kde.org>
+   SPDX-FileCopyrightText: 2005-2020 David Jarvie <djarvie@kde.org>
 
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
@@ -18,6 +18,8 @@ using KAlarmCal::KADateTime;
 #include <QLocale>
 #include <QDBusConnection>
 #include <QDBusConnectionInterface>
+
+//clazy:excludeall=non-pod-global-static
 
 //TODO: test new methods
 
@@ -296,7 +298,6 @@ void KADateTimeTest::constructors()
     QTime t(3, 45, 14);
     QDateTime dtLocal(d, t, Qt::LocalTime);
     QDateTime dtUTC(d, t, Qt::UTC);
-    QDateTime dtLocal2(QDate(2016,3,27), QTime(1,0,0));  //Europe/London daylight savings change time
     QTimeZone london("Europe/London");
 
     QByteArray originalZone = qgetenv("TZ");   // save the original local time zone
@@ -3292,26 +3293,26 @@ void KADateTimeTest::strings_format()
     KADateTime dt(QDate(1999, 2, 3), QTime(6, 5, 0), KADateTime::LocalZone);
     QString s = dt.toString(all);
     QCOMPARE(s, QStringLiteral("1999.99.02.2.%1.%2.03.3.%3.%4-06.6.06.6.05.00?000?am.AM.-08.-0800.PST.America/Los_Angeles.Wednesday.Wed.February.Feb/.-08:00.%.")
-             .arg(locale.monthName(2, QLocale::LongFormat))
-             .arg(locale.monthName(2, QLocale::ShortFormat))
-             .arg(locale.dayName(3, QLocale::LongFormat))
-             .arg(locale.dayName(3, QLocale::ShortFormat)));
+             .arg(locale.monthName(2, QLocale::LongFormat),
+                  locale.monthName(2, QLocale::ShortFormat),
+                  locale.dayName(3, QLocale::LongFormat),
+                  locale.dayName(3, QLocale::ShortFormat)));
 
     KADateTime dtzone(QDate(1970, 4, 30), QTime(12, 45, 16, 25), london);
     s = dtzone.toString(all);
     QCOMPARE(s, QStringLiteral("1970.70.04.4.%1.%2.30.30.%3.%4-12.12.12.12.45.16?025?pm.PM.+01.+0100.BST.Europe/London.Thursday.Thu.April.Apr/:16.+01:00.%.")
-             .arg(locale.monthName(4, QLocale::LongFormat))
-             .arg(locale.monthName(4, QLocale::ShortFormat))
-             .arg(locale.dayName(4, QLocale::LongFormat))
-             .arg(locale.dayName(4, QLocale::ShortFormat)));
+             .arg(locale.monthName(4, QLocale::LongFormat),
+                  locale.monthName(4, QLocale::ShortFormat),
+                  locale.dayName(4, QLocale::LongFormat),
+                  locale.dayName(4, QLocale::ShortFormat)));
 
     KADateTime dtutc(QDate(2000, 12, 31), QTime(13, 45, 16, 100), KADateTime::UTC);
     s = dtutc.toString(all);
     QCOMPARE(s, QStringLiteral("2000.00.12.12.%1.%2.31.31.%3.%4-13.13.01.1.45.16?100?pm.PM.+00.+0000.UTC.UTC.Sunday.Sun.December.Dec/:16.+00:00.%.")
-             .arg(locale.monthName(12, QLocale::LongFormat))
-             .arg(locale.monthName(12, QLocale::ShortFormat))
-             .arg(locale.dayName(7, QLocale::LongFormat))
-             .arg(locale.dayName(7, QLocale::ShortFormat)));
+             .arg(locale.monthName(12, QLocale::LongFormat),
+                  locale.monthName(12, QLocale::ShortFormat),
+                  locale.dayName(7, QLocale::LongFormat),
+                  locale.dayName(7, QLocale::ShortFormat)));
 
     // fromString() without QList<QTimeZone> parameter
     dt = KADateTime::fromString(QStringLiteral("2005/9/05/20:2,03"), QStringLiteral("%Y/%:m/%d/%S:%k,%M"));
@@ -3320,16 +3321,16 @@ void KADateTimeTest::strings_format()
     QCOMPARE(dt.timeType(), KADateTime::LocalZone);
 
     dt = KADateTime::fromString(QStringLiteral("%1pm05ab%2t/052/20:2,03+10")
-                               .arg(locale.dayName(1, QLocale::LongFormat))
-                               .arg(locale.monthName(9, QLocale::LongFormat)),
+                               .arg(locale.dayName(1, QLocale::LongFormat),
+                                    locale.monthName(9, QLocale::LongFormat)),
                                QStringLiteral("%a%p%yab%Bt/%e2/%S:%l,%M %z"));
     QCOMPARE(dt.date(), QDate(2005, 9, 5));
     QCOMPARE(dt.time(), QTime(14, 3, 20));
     QCOMPARE(dt.timeType(), KADateTime::OffsetFromUTC);
     QCOMPARE(dt.utcOffset(), 10 * 3600);
     dt = KADateTime::fromString(QStringLiteral("%1pm05ab%2t/052/20:2,03+10")
-                               .arg(locale.dayName(1, QLocale::ShortFormat))
-                               .arg(locale.monthName(9, QLocale::ShortFormat)),
+                               .arg(locale.dayName(1, QLocale::ShortFormat),
+                                    locale.monthName(9, QLocale::ShortFormat)),
                                QStringLiteral("%a%p%yab%Bt/%d2/%s:%l,%:M %z"));
     QCOMPARE(dt.date(), QDate(2005, 9, 5));
     QCOMPARE(dt.time(), QTime(14, 3, 20));
