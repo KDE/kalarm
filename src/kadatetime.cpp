@@ -3,7 +3,7 @@
     This file is part of kalarmcal library, which provides access to KAlarm
     calendar data. Qt5 version of KDE 4 kdelibs/kdecore/date/kdatetime.cpp.
 
-    SPDX-FileCopyrightText: 2005-2019 David Jarvie <djarvie@kde.org>
+    SPDX-FileCopyrightText: 2005-2020 David Jarvie <djarvie@kde.org>
 
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
@@ -1777,11 +1777,12 @@ QString KADateTime::toString(TimeFormat format) const
             int msec = d->time().msec();
             if (msec) {
                 int digits = 3;
-                if (!(msec % 10))
+                if (!(msec % 10)) {
                     msec /= 10, --digits;
-                if (!(msec % 10))
-                    msec /= 10, --digits;
-                result += QStringLiteral(".%1").arg(numString(d->time().msec(), digits));
+                    if (!(msec % 10))
+                        msec /= 10, --digits;
+                }
+                result += QStringLiteral(".%1").arg(numString(msec, digits));
             }
             if (d->specType == UTC)
                 return result + QLatin1Char('Z');

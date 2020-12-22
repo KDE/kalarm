@@ -2,7 +2,7 @@
    This file is part of kalarmcal library, which provides access to KAlarm
    calendar data.
 
-   SPDX-FileCopyrightText: 2005-2019 David Jarvie <djarvie@kde.org>
+   SPDX-FileCopyrightText: 2005-2020 David Jarvie <djarvie@kde.org>
 
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
@@ -3089,9 +3089,9 @@ void KADateTimeTest::strings_rfc3339()
     ::tzset();
 
     bool negZero = true;
-    KADateTime dtlocal(QDate(1999, 2, 9), QTime(3, 45, 6), KADateTime::LocalZone);
+    KADateTime dtlocal(QDate(1999, 2, 9), QTime(3, 45, 6, 236), KADateTime::LocalZone);
     QString s = dtlocal.toString(KADateTime::RFC3339Date);
-    QCOMPARE(s, QStringLiteral("1999-02-09T03:45:06-08:00"));
+    QCOMPARE(s, QStringLiteral("1999-02-09T03:45:06.236-08:00"));
     KADateTime dtlocal1 = KADateTime::fromString(s, KADateTime::RFC3339Date, &negZero);
     QCOMPARE(dtlocal1.qDateTime().toUTC(), dtlocal.qDateTime().toUTC());
     QCOMPARE(dtlocal1.timeType(), KADateTime::OffsetFromUTC);
@@ -3102,9 +3102,9 @@ void KADateTimeTest::strings_rfc3339()
     s = dtlocal.toString(KADateTime::RFC3339Date);
     QCOMPARE(s, QStringLiteral("1999-02-09T00:00:00-08:00"));
 
-    KADateTime dtzone(QDate(1999, 6, 9), QTime(3, 45, 06), london);
+    KADateTime dtzone(QDate(1999, 6, 9), QTime(3, 45, 06, 230), london);
     s = dtzone.toString(KADateTime::RFC3339Date);
-    QCOMPARE(s, QStringLiteral("1999-06-09T03:45:06+01:00"));
+    QCOMPARE(s, QStringLiteral("1999-06-09T03:45:06.23+01:00"));
     KADateTime dtzone1 = KADateTime::fromString(s, KADateTime::RFC3339Date);
     QCOMPARE(dtzone1.qDateTime().toUTC(), dtzone.qDateTime().toUTC());
     QCOMPARE(dtzone1.timeType(), KADateTime::OffsetFromUTC);
@@ -3113,6 +3113,12 @@ void KADateTimeTest::strings_rfc3339()
     dtzone.setDateOnly(true);
     s = dtzone.toString(KADateTime::RFC3339Date);
     QCOMPARE(s, QStringLiteral("1999-06-09T00:00:00+01:00"));
+
+    KADateTime dtzone2(QDate(1999, 6, 9), QTime(3, 45, 06, 200), london);
+    s = dtzone2.toString(KADateTime::RFC3339Date);
+    QCOMPARE(s, QStringLiteral("1999-06-09T03:45:06.2+01:00"));
+    KADateTime dtzone3 = KADateTime::fromString(s, KADateTime::RFC3339Date);
+    QCOMPARE(dtzone3.qDateTime().toUTC(), dtzone2.qDateTime().toUTC());
 
     KADateTime dtutc(QDate(1999, 2, 9), QTime(3, 45, 00), KADateTime::UTC);
     s = dtutc.toString(KADateTime::RFC3339Date);
