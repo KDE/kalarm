@@ -8,8 +8,6 @@
 
 #include "newalarmaction.h"
 
-#include <kwidgetsaddons_version.h>
-
 #include "functions.h"
 #include "templatemenuaction.h"
 #include "resources/datamodel.h"
@@ -75,11 +73,7 @@ NewAlarmAction::NewAlarmAction(bool templates, const QString& label, QObject* pa
         connect(DataModel::allTemplateListModel(), &EventListModel::haveEventsStatus, this, &NewAlarmAction::slotCalendarStatusChanged);
         slotCalendarStatusChanged();   // initialise action states
     }
-#if KWIDGETSADDONS_VERSION >= QT_VERSION_CHECK(5, 77, 0)
     setPopupMode(QToolButton::InstantPopup);
-#else
-    setDelayed(false);
-#endif
     connect(menu(), &QMenu::aboutToShow, this, &NewAlarmAction::slotInitMenu);
     connect(menu(), &QMenu::triggered, this, &NewAlarmAction::slotSelected);
 }

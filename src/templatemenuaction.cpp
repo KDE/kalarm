@@ -12,7 +12,6 @@
 #include "resourcescalendar.h"
 #include "kalarm_debug.h"
 
-#include <kwidgetsaddons_version.h>
 #include <KAlarmCal/KAEvent>
 
 #include <QMenu>
@@ -21,11 +20,7 @@
 TemplateMenuAction::TemplateMenuAction(const QIcon& icon, const QString& label, QObject* parent)
     : KActionMenu(icon, label, parent)
 {
-#if KWIDGETSADDONS_VERSION >= QT_VERSION_CHECK(5, 77, 0)
     setPopupMode(QToolButton::InstantPopup);
-#else
-    setDelayed(false);
-#endif
     connect(menu(), &QMenu::aboutToShow, this, &TemplateMenuAction::slotInitMenu);
     connect(menu(), &QMenu::triggered, this, &TemplateMenuAction::slotSelected);
 }
