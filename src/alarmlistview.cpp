@@ -134,8 +134,6 @@ void AlarmListView::headerContextMenuRequested(const QPoint& pt)
     const bool useName = Preferences::useAlarmName();
     for (int col = 0, count = header()->count();  col < count;  ++col)
     {
-        if (col == AlarmListModel::NameColumn  &&  !useName)
-            continue;
         const QString title = almodel->headerData(col, Qt::Horizontal, ResourceDataModelBase::ColumnTitleRole).toString();
         if (!title.isEmpty())
         {
@@ -143,6 +141,9 @@ void AlarmListView::headerContextMenuRequested(const QPoint& pt)
             act->setData(col);
             act->setCheckable(true);
             act->setChecked(!header()->isSectionHidden(col));
+            // Always show Name column, but disabled.
+            // If the alarm name feature is not enabled, this serves as a small
+            // hint to the user that the name feature exists.
             if (col == AlarmListModel::NameColumn)
                 act->setEnabled(false);    // don't allow name column to be hidden if name is used
             else if (col == AlarmListModel::TextColumn  &&  !useName)
