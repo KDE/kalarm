@@ -104,7 +104,6 @@ private Q_SLOTS:
 
 private:
     Preferences();         // only one instance allowed
-    static int              startOfDayCheck(const QTime&);
     static void             setNotify(const QString& messageID, bool notify);
     static bool             notifying(const QString& messageID);
 

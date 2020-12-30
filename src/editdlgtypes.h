@@ -86,7 +86,6 @@ private Q_SLOTS:
     void            setColours(const QColor& fg, const QColor& bg);
 
 private:
-    void            setSoundPicker();
 
     // Display alarm options
     ComboBox*           mTypeCombo;
