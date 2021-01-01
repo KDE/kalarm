@@ -1,7 +1,7 @@
 /*
  * migratekde4files.cpp - migrate KDE4 config and data file locations
  * Program:  kalarm
- * SPDX-FileCopyrightText: 2015-2020 Laurent Montel <montel@kde.org>
+ * SPDX-FileCopyrightText: 2015-2021 Laurent Montel <montel@kde.org>
  * SPDX-FileCopyrightText: 2019 David Jarvie <djarvie@kde.org>
  *
  * based on code from Sune Vuorela <sune@vuorela.dk> (Rawatar source code)
