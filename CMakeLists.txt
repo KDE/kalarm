@@ -22,9 +22,9 @@ include(FeatureSummary)
 include(ECMQtDeclareLoggingCategory)
 
 
-set(CALENDARUTILS_LIB_VERSION "5.16.1")
-set(IDENTITYMANAGER_LIB_VERSION "5.16.1")
-set(AKONADI_LIB_VERSION "5.16.1")
+set(CALENDARUTILS_LIB_VERSION "5.16.2")
+set(IDENTITYMANAGER_LIB_VERSION "5.16.2")
+set(AKONADI_LIB_VERSION "5.16.2")
 ecm_setup_version(PROJECT VARIABLE_PREFIX KALARMCAL
                         VERSION_HEADER "${CMAKE_CURRENT_BINARY_DIR}/kalarmcal_version.h"
                         PACKAGE_VERSION_FILE "${CMAKE_CURRENT_BINARY_DIR}/KF5AlarmCalendarConfigVersion.cmake"
