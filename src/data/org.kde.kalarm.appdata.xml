@@ -351,7 +351,7 @@
   <screenshots>
     <screenshot type="default">
       <caption>KAlarm configuration window with a testing message alarm</caption>
-      <caption xml:lang="ca">Finestra de configuració del KAlarm amb una alarma de missatge de prova.</caption>
+      <caption xml:lang="ca">Finestra de configuració del KAlarm amb una alarma de missatge de prova</caption>
       <caption xml:lang="ca-valencia">Finestra de configuració del KAlarm amb una alarma de missatge de prova.</caption>
       <caption xml:lang="de">Der Einrichtungsdialog von KAlarm mit dem Test einer Erinnerungsnachricht</caption>
       <caption xml:lang="el">Παράθυρο διαμόρφωσης KAlarm με ένα δοκιμαστικό μήνυμα συναγερμού.</caption>
