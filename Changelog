@@ -1,5 +1,8 @@
 KAlarm Change Log
 
+=== Version 3.1.2 (KDE Applications 20.12.2) --- 11 January 2021 ===
+* Default to using alarm names.
+
 === Version 3.1.1 (KDE Applications 20.12.1) --- 18 December 2020 ===
 * Ensure that build uses the file resources option.
 * When removing duplicate Akonadi resources, in priority keep enabled/standard ones.

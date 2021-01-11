@@ -94,7 +94,7 @@ SPDX-License-Identifier: GPL-2.0-or-later
     <entry name="UseAlarmName" type="Bool">
       <label context="@label">Enable alarm names</label>
       <whatsthis context="@info:whatsthis">Choose whether to be able to give alarms a name. This is a convenience to help you to identify alarms.</whatsthis>
-      <default>false</default>
+      <default>true</default>
       <emit signal="useAlarmNameChanged"/>
     </entry>
     <entry name="MessageFont" type="Font">
