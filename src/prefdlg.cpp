@@ -1,7 +1,7 @@
 /*
  *  prefdlg.cpp  -  program preferences dialog
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2001-2020 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2001-2021 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -169,17 +169,17 @@ KAlarmPrefDlg::KAlarmPrefDlg()
     mEmailPageItem->setIcon(QIcon::fromTheme(QStringLiteral("internet-mail")));
     addPage(mEmailPageItem);
 
+    mEditPage = new EditPrefTab(mTabScrollGroup);
+    mEditPageItem = new KPageWidgetItem(mEditPage, i18nc("@title:tab", "Defaults"));
+    mEditPageItem->setHeader(i18nc("@title", "Default Alarm Edit Settings"));
+    mEditPageItem->setIcon(QIcon::fromTheme(QStringLiteral("document-properties")));
+    addPage(mEditPageItem);
+
     mViewPage = new ViewPrefTab(mTabScrollGroup);
     mViewPageItem = new KPageWidgetItem(mViewPage, i18nc("@title:tab", "View"));
     mViewPageItem->setHeader(i18nc("@title", "View Settings"));
     mViewPageItem->setIcon(QIcon::fromTheme(QStringLiteral("preferences-desktop-theme")));
     addPage(mViewPageItem);
-
-    mEditPage = new EditPrefTab(mTabScrollGroup);
-    mEditPageItem = new KPageWidgetItem(mEditPage, i18nc("@title:tab", "Edit"));
-    mEditPageItem->setHeader(i18nc("@title", "Default Alarm Edit Settings"));
-    mEditPageItem->setIcon(QIcon::fromTheme(QStringLiteral("document-properties")));
-    addPage(mEditPageItem);
     connect(button(QDialogButtonBox::Ok), &QAbstractButton::clicked, this, &KAlarmPrefDlg::slotOk);
     connect(button(QDialogButtonBox::Cancel), &QAbstractButton::clicked, this, &KAlarmPrefDlg::slotCancel);
     connect(button(QDialogButtonBox::Apply), &QAbstractButton::clicked, this, &KAlarmPrefDlg::slotApply);
