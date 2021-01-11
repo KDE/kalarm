@@ -170,7 +170,7 @@ KAlarmPrefDlg::KAlarmPrefDlg()
     addPage(mEmailPageItem);
 
     mEditPage = new EditPrefTab(mTabScrollGroup);
-    mEditPageItem = new KPageWidgetItem(mEditPage, i18nc("@title:tab", "Defaults"));
+    mEditPageItem = new KPageWidgetItem(mEditPage, i18nc("@title:tab", "Alarm Defaults"));
     mEditPageItem->setHeader(i18nc("@title", "Default Alarm Edit Settings"));
     mEditPageItem->setIcon(QIcon::fromTheme(QStringLiteral("document-properties")));
     addPage(mEditPageItem);
