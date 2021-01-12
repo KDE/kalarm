@@ -1,7 +1,7 @@
 /*
  *  prefdlg_p.h  -  private classes for program preferences dialog
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2001-2020 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2001-2021 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -26,11 +26,13 @@ class QComboBox;
 class QVBoxLayout;
 class QTabWidget;
 class FontColourChooser;
+class CheckBox;
 class ColourButton;
 class ButtonGroup;
 class RadioButton;
 class TimeEdit;
 class TimePeriod;
+class Slider;
 class SpinBox;
 class TimeSpinBox;
 class SpecialActionsButton;
@@ -215,6 +217,8 @@ private:
     QLabel*         mSoundFileLabel;
     QLineEdit*      mSoundFile;
     QPushButton*    mSoundFileBrowse;
+    CheckBox*       mSoundVolumeCheckbox;
+    Slider*         mSoundVolumeSlider;
     QCheckBox*      mSoundRepeat;
     QCheckBox*      mCopyToKOrganizer;
     QCheckBox*      mLateCancel;

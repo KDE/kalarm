@@ -35,6 +35,7 @@
 #include "lib/locale.h"
 #include "lib/messagebox.h"
 #include "lib/radiobutton.h"
+#include "lib/slider.h"
 #include "lib/stackedwidgets.h"
 #include "lib/timeedit.h"
 #include "lib/timespinbox.h"
@@ -1216,7 +1217,7 @@ EditPrefTab::EditPrefTab(StackedScrollGroup* scrollGroup)
 
     auto* topTypes = new StackedWidgetT<QWidget>(tabgroup);
     auto* ttLayout = new QVBoxLayout(topTypes);
-    mTabTypes = mTabs->addTab(topTypes, i18nc("@title:tab", "Alarm Types"));
+    mTabTypes = mTabs->addTab(topTypes, i18nc("@title:tab Settings specific to alarm type", "Type Specific"));
 
     auto* topFontColour = new StackedWidgetT<QWidget>(tabgroup);
     auto* tfLayout = new QVBoxLayout(topFontColour);
@@ -1381,6 +1382,25 @@ EditPrefTab::EditPrefTab(StackedScrollGroup* scrollGroup)
     widget->setWhatsThis(i18nc("@info:whatsthis", "Enter the default sound file to use in the alarm edit dialog."));
     vlayout->addWidget(widget);
 
+    box = new QHBoxLayout();
+    box->setContentsMargins(0, 0, 0, 0);
+    mSoundVolumeCheckbox = new CheckBox(SoundWidget::i18n_chk_SetVolume(), nullptr);
+    connect(mSoundVolumeCheckbox, &CheckBox::toggled, this, [this](bool on) { mSoundVolumeSlider->setEnabled(on); });
+    box->addWidget(mSoundVolumeCheckbox);
+    mSoundVolumeSlider = new Slider(0, 100, 10, Qt::Horizontal);
+    mSoundVolumeCheckbox->setWhatsThis(i18nc("@info:whatsthis", "Select to set the default volume for sound files in the alarm edit dialog."));
+    mSoundVolumeSlider->setTickPosition(QSlider::TicksBelow);
+    mSoundVolumeSlider->setTickInterval(10);
+    mSoundVolumeSlider->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed));
+    mSoundVolumeSlider->setWhatsThis(i18nc("@info:whatsthis", "The default volume for sound files in the alarm edit dialog."));
+    mSoundVolumeSlider->setEnabled(false);
+    box->addWidget(mSoundVolumeSlider);
+    label = new QLabel;
+    mSoundVolumeSlider->setValueLabel(label, QStringLiteral("%1%"), true);
+    box->addWidget(label);
+    mSoundVolumeCheckbox->setFocusWidget(mSoundVolumeSlider);
+    vlayout->addLayout(box);
+
     // COMMAND ALARMS
     group = new QGroupBox(i18nc("@title:group", "Command Alarms"));
     ttLayout->addWidget(group);
@@ -1465,6 +1485,9 @@ void EditPrefTab::restore(bool, bool allTabs)
         mSound->setCurrentIndex(soundIndex(Preferences::defaultSoundType()));
         mSoundFile->setText(Preferences::defaultSoundFile());
         mSoundRepeat->setChecked(Preferences::defaultSoundRepeat());
+        const int volume = Preferences::defaultSoundVolume() * 100;
+        mSoundVolumeCheckbox->setChecked(volume >= 0);
+        mSoundVolumeSlider->setValue(volume >= 0 ? volume : 100);
         mCmdScript->setChecked(Preferences::defaultCmdScript());
         mCmdXterm->setChecked(Preferences::defaultCmdLogType() == Preferences::Log_Terminal);
         mEmailBcc->setChecked(Preferences::defaultEmailBcc());
@@ -1529,6 +1552,9 @@ void EditPrefTab::apply(bool syncToDisc)
     b = mSoundRepeat->isChecked();
     if (b != Preferences::defaultSoundRepeat())
         Preferences::setDefaultSoundRepeat(b);
+    const float v = mSoundVolumeCheckbox->isChecked() ? (float)mSoundVolumeSlider->value() / 100 : -1;
+    if (v != Preferences::defaultSoundVolume())
+        Preferences::setDefaultSoundVolume(v);
     b = mCmdScript->isChecked();
     if (b != Preferences::defaultCmdScript())
         Preferences::setDefaultCmdScript(b);

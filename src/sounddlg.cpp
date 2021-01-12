@@ -1,7 +1,7 @@
 /*
  *  sounddlg.cpp  -  sound file selection and configuration dialog and widget
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2005-2020 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2005-2021 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -40,6 +40,7 @@
 // Collect these widget labels together to ensure consistent wording and
 // translations across different modules.
 QString SoundWidget::i18n_chk_Repeat()      { return i18nc("@option:check", "Repeat"); }
+QString SoundWidget::i18n_chk_SetVolume()   { return i18nc("@option:check", "Set volume"); }
 
 static const char SOUND_DIALOG_NAME[] = "SoundDialog";
 
@@ -234,7 +235,7 @@ SoundWidget::SoundWidget(bool showPlay, bool showRepeat, QWidget* parent)
     grid->addWidget(box, 1, 0, 1, 3);
     boxHLayout = new QHBoxLayout(box);
     boxHLayout->setContentsMargins(0, 0, 0, 0);
-    mVolumeCheckbox = new CheckBox(i18nc("@option:check", "Set volume"), box);
+    mVolumeCheckbox = new CheckBox(i18n_chk_SetVolume(), box);
     boxHLayout->addWidget(mVolumeCheckbox);
     mVolumeCheckbox->setFixedSize(mVolumeCheckbox->sizeHint());
     connect(mVolumeCheckbox, &CheckBox::toggled, this, &SoundWidget::slotVolumeToggled);
@@ -249,6 +250,9 @@ SoundWidget::SoundWidget(bool showPlay, bool showRepeat, QWidget* parent)
     mVolumeSlider->setWhatsThis(i18nc("@info:whatsthis", "Choose the volume for playing the sound file."));
     mVolumeCheckbox->setFocusWidget(mVolumeSlider);
     connect(mVolumeSlider, &Slider::valueChanged, this, &SoundWidget::changed);
+    label = new QLabel;
+    mVolumeSlider->setValueLabel(label, QStringLiteral("%1%"), true);
+    boxHLayout->addWidget(label);
 
     // Fade checkbox
     mFadeCheckbox = new CheckBox(i18nc("@option:check", "Fade"), group);

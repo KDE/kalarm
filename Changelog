@@ -1,8 +1,9 @@
 KAlarm Change Log
 
-=== Version 3.2.0 (KDE Applications 21.04) --- 11 January 2021 ===
+=== Version 3.2.0 (KDE Applications 21.04) --- 12 January 2021 ===
 * Remove KAlarm Akonadi resource code.
-* Rename Settings 'Edit' tab to 'Defaults'.
+* Rename Preferences 'Edit' tab to 'Alarm Defaults'.
+* Add default sound volume setting to Preferences dialogue.
 
 === Version 3.1.2 (KDE Applications 20.12.2) --- 11 January 2021 ===
 * Default to using alarm names.
@@ -743,7 +744,7 @@ recurs.
 
 === Version 1.4.3 (KDE 3.5.4) --- 11 July 2006 ===
 * Add facility to import alarms from other calendar files.
-* Fix Defer dialog time interval maximum to match maximum date/time value.
+* Fix Defer dialogue time interval maximum to match maximum date/time value.
 * Fix crash when a deferred expired recurring alarm is edited from message window.
 * Fix crash when a message is redisplayed after login.
 * Prevent inapplicable 'Unable to speak' error when alarm redisplayed after login.
@@ -776,7 +777,7 @@ recurs.
 * Fix New From Template not creating alarm if template contents are not changed.
 * Ensure that day and month names translations are independent of locale calendar.
 * Display alarm message windows within current screen in multi-head systems.
-* Reduce size of Preferences dialog to fit in 1024x768 screen.
+* Reduce size of Preferences dialogue to fit in 1024x768 screen.
 
 === Version 1.3.5 --- 14 December 2005 ===
 * Fix email attachments being forgotten when saving alarms.
@@ -786,7 +787,7 @@ recurs.
 * Fix incorrect recurrence frequency in Alarm Edit dialogue's Alarm tab.
 
 === Version 1.3.3 --- 22 September 2005 ===
-* Add day-of-week selection to daily recurrence dialog.
+* Add day-of-week selection to daily recurrence dialogue.
 
 === Version 1.3.2 (KDE 3.5 beta 1) --- 10 September 2005 ===
 * Add option to show alarms in KOrganizer's active calendar.
@@ -824,10 +825,10 @@ recurs.
 * Fix failure to enable "Reminder for first recurrence only" checkbox.
 
 === Version 1.2.7 --- 20 April 2005 ===
-* Use a sensible default for terminal window command in Preferences dialog.
-* Validate terminal window command entered in Preferences dialog.
-* Fix date range no longer being validated in Defer dialog.
-* Don't ignore Sound setting in Preferences dialog Edit tab.
+* Use a sensible default for terminal window command in Preferences dialogue.
+* Validate terminal window command entered in Preferences dialogue.
+* Fix date range no longer being validated in Defer dialogue.
+* Don't ignore Sound setting in Preferences dialogue Edit tab.
 * Reset sound volume (if it was set) as soon as audio file playing is complete.
 * Don't start KMix when an alarm is displayed if no sound volume is specified.
 * Add command script and execute-in-terminal options to DCOP interface.
@@ -847,19 +848,19 @@ recurs.
 * Add option to run command alarms in terminal windows.
 * Accept drag and drop of KAddressBook entries to alarm edit dialog email fields.
 * Drag and drop now inserts text where appropriate, rather than replacing it.
-* Display correct controls after loading a template in alarm edit dialog.
+* Display correct controls after loading a template in alarm edit dialogue.
 
 === Version 1.2.3 --- 7 December 2004 ===
 * Put alarm type icons in a separate, sortable, column in alarm list.
 * Align times in alarm list.
 * Fix crash when the last recurrence of an alarm is reached.
 * Fix random limit on expired alarm discard time if stepping with spinbox buttons.
-* Fix dialog layouts for right-to-left languages.
+* Fix dialogue layouts for right-to-left languages.
 * Fix time spin box layout for right-to-left languages.
 
 === Version 1.2.2 --- 27 November 2004 ===
 * Make alarm daemon (kalarmd) exclusive to KAlarm.
-* Move control options for alarm daemon into KAlarm preferences dialog.
+* Move control options for alarm daemon into KAlarm preferences dialogue.
 * Allow user to specify the late-cancellation period for an alarm.
 * Add option to automatically close window after late-cancellation period.
 * Add facility to enable and disable individual alarms.
