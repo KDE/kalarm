@@ -1,7 +1,7 @@
 /*
  *  functions.cpp  -  miscellaneous functions
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2001-2020 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2001-2021 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -1280,7 +1280,15 @@ bool setRtcWakeTime(unsigned triggerTime, QWidget* parent)
     args[QStringLiteral("time")] = triggerTime;
     KAuth::Action action(QStringLiteral("org.kde.kalarm.rtcwake.settimer"));
     action.setHelperId(QStringLiteral("org.kde.kalarm.rtcwake"));
-#if KAUTH_VERSION < QT_VERSION_CHECK(5, 79, 0)
+#if KAUTH_VERSION >= QT_VERSION_CHECK(5, 79, 0)
+    if (parent)
+    {
+        // Set the WA_NativeWindow attribute to force the creation of the QWindow.
+        // Without this, QWidget::windowHandle() returns nullptr.
+        parent->setAttribute(Qt::WA_NativeWindow, true);
+        action.setParentWindow(parent->windowHandle());
+    }
+#else
     action.setParentWidget(parent);
 #endif
     action.setArguments(args);
