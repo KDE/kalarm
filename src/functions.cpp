@@ -29,7 +29,6 @@
 #include "lib/shellprocess.h"
 #include "config-kalarm.h"
 #include "kalarm_debug.h"
-#include "kauth_version.h"
 
 #include <kalarmcal_version.h>
 #include <KAlarmCal/Identities>
@@ -1280,17 +1279,7 @@ bool setRtcWakeTime(unsigned triggerTime, QWidget* parent)
     args[QStringLiteral("time")] = triggerTime;
     KAuth::Action action(QStringLiteral("org.kde.kalarm.rtcwake.settimer"));
     action.setHelperId(QStringLiteral("org.kde.kalarm.rtcwake"));
-#if KAUTH_VERSION >= QT_VERSION_CHECK(5, 79, 0)
-    if (parent)
-    {
-        // Set the WA_NativeWindow attribute to force the creation of the QWindow.
-        // Without this, QWidget::windowHandle() returns nullptr.
-        parent->setAttribute(Qt::WA_NativeWindow, true);
-        action.setParentWindow(parent->windowHandle());
-    }
-#else
     action.setParentWidget(parent);
-#endif
     action.setArguments(args);
     KAuth::ExecuteJob* job = action.execute();
     if (!job->exec())
