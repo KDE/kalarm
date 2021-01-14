@@ -2442,7 +2442,7 @@ void KADateTime::setFromStringDefault(const Spec &spec)
 
 void KADateTime::setSimulatedSystemTime(const KADateTime &newTime)
 {
-    Q_UNUSED(newTime);
+    Q_UNUSED(newTime)
 #ifdef SIMULATION
 #ifndef NDEBUG
     if (newTime.isValid()) {

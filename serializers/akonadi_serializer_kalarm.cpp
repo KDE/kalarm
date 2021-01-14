@@ -27,7 +27,7 @@ using namespace KAlarmCal;
 // Convert from backend data stream to a KAEvent, and set it into the item's payload.
 bool SerializerPluginKAlarm::deserialize(Item &item, const QByteArray &label, QIODevice &data, int version)
 {
-    Q_UNUSED(version);
+    Q_UNUSED(version)
 
     if (label != Item::FullPayload) {
         return false;
@@ -86,7 +86,7 @@ bool SerializerPluginKAlarm::deserialize(Item &item, const QByteArray &label, QI
 // Convert an item's KAEvent payload to backend data stream.
 void SerializerPluginKAlarm::serialize(const Item &item, const QByteArray &label, QIODevice &data, int &version)
 {
-    Q_UNUSED(version);
+    Q_UNUSED(version)
 
     if (label != Item::FullPayload || !item.hasPayload<KAEvent>()) {
         return;
