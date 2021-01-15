@@ -380,11 +380,7 @@ QString AlarmText::summary(const KAEvent &event, int maxLines, bool *truncated)
 */
 bool AlarmText::checkIfEmail(const QString &text)
 {
-#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
-    const QStringList lines = text.split(QLatin1Char('\n'), QString::SkipEmptyParts);
-#else
     const QStringList lines = text.split(QLatin1Char('\n'), Qt::SkipEmptyParts);
-#endif
     return Private::emailHeaderCount(lines);
 }
 
@@ -395,11 +391,7 @@ bool AlarmText::checkIfEmail(const QString &text)
 */
 QString AlarmText::emailHeaders(const QString &text, bool subjectOnly)
 {
-#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
-    const QStringList lines = text.split(QLatin1Char('\n'), QString::SkipEmptyParts);
-#else
     const QStringList lines = text.split(QLatin1Char('\n'), Qt::SkipEmptyParts);
-#endif
     const int n = Private::emailHeaderCount(lines);
     if (!n) {
         return QString();
@@ -424,11 +416,7 @@ QString AlarmText::emailHeaders(const QString &text, bool subjectOnly)
 QString AlarmText::fromCalendarText(const QString &text, bool &email)
 {
     Private::initialise();
-#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
-    const QStringList lines = text.split(QLatin1Char('\n'), QString::SkipEmptyParts);
-#else
     const QStringList lines = text.split(QLatin1Char('\n'), Qt::SkipEmptyParts);
-#endif
     const int maxn = lines.count();
     if (maxn >= MAIL_MIN_LINES
     &&  lines[MAIL_FROM_LINE].startsWith(Private::mFromPrefixEn)
@@ -469,11 +457,7 @@ QString AlarmText::fromCalendarText(const QString &text, bool &email)
 QString AlarmText::toCalendarText(const QString &text)
 {
     Private::setUpTranslations();
-#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
-    const QStringList lines = text.split(QLatin1Char('\n'), QString::SkipEmptyParts);
-#else
     const QStringList lines = text.split(QLatin1Char('\n'), Qt::SkipEmptyParts);
-#endif
     const int maxn = lines.count();
     if (maxn >= MAIL_MIN_LINES
     &&  lines[MAIL_FROM_LINE].startsWith(Private::mFromPrefix)
@@ -566,11 +550,7 @@ int AlarmText::Private::emailHeaderCount(const QStringList &lines)
 QString AlarmText::Private::todoTitle(const QString &text)
 {
     setUpTranslations();
-#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
-    const QStringList lines = text.split(QLatin1Char('\n'), QString::SkipEmptyParts);
-#else
     const QStringList lines = text.split(QLatin1Char('\n'), Qt::SkipEmptyParts);
-#endif
     int n;
     for (n = 0;  n < lines.count() && lines[n].contains(QLatin1Char('\t'));  ++n) ;
     if (!n  ||  n > 3) {
