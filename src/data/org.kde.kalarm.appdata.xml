@@ -28,6 +28,7 @@
   <name xml:lang="nb">KAlarm</name>
   <name xml:lang="nds">KAlarm</name>
   <name xml:lang="nl">KAlarm</name>
+  <name xml:lang="nn">KAlarm</name>
   <name xml:lang="pl">KAlarm</name>
   <name xml:lang="pt">KAlarm</name>
   <name xml:lang="pt-BR">KAlarm</name>
@@ -68,6 +69,7 @@
   <summary xml:lang="nb">Personlig varslingsplanlegger</summary>
   <summary xml:lang="nds">Persöönlich Anstöötgever</summary>
   <summary xml:lang="nl">Persoonlijke alarmplanner</summary>
+  <summary xml:lang="nn">Planleggjar for alarmar/påminningar</summary>
   <summary xml:lang="pl">Planowanie alarmów osobistych</summary>
   <summary xml:lang="pt">Calendarização de Alarmes Pessoais</summary>
   <summary xml:lang="pt-BR">Agendador de alarme pessoal</summary>
@@ -140,6 +142,7 @@
     <p xml:lang="nb">Egenskaper:</p>
     <p xml:lang="nds">Markmalen:</p>
     <p xml:lang="nl">Mogelijkheden:</p>
+    <p xml:lang="nn">Funksjonar:</p>
     <p xml:lang="pl">Możliwości:</p>
     <p xml:lang="pt">Funcionalidades:</p>
     <p xml:lang="pt-BR">Funcionalidades:</p>
