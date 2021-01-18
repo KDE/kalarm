@@ -587,11 +587,7 @@ KAEventPrivate::KAEventPrivate(const KCalendarCore::Event::Ptr &event)
     mCategory               = CalEvent::status(event, &param);
     if (mCategory == CalEvent::DISPLAYING) {
         // It's a displaying calendar event - set values specific to displaying alarms
-#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
-        const QStringList params = param.split(SC, QString::KeepEmptyParts);
-#else
         const QStringList params = param.split(SC, Qt::KeepEmptyParts);
-#endif
         int n = params.count();
         if (n) {
             const qlonglong id = params[0].toLongLong(&ok);
@@ -4122,11 +4118,7 @@ void KAEventPrivate::readAlarm(const Alarm::Ptr &alarm, AlarmData &data, bool au
             data.cleanText = AlarmText::fromCalendarText(alarm->text(), data.isEmailText);
         }
         const QString property = alarm->customProperty(KACalendar::APPNAME, KAEventPrivate::FONT_COLOUR_PROPERTY);
-#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
-        const QStringList list = property.split(QLatin1Char(';'), QString::KeepEmptyParts);
-#else
         const QStringList list = property.split(QLatin1Char(';'), Qt::KeepEmptyParts);
-#endif
         data.bgColour = QColor(255, 255, 255);   // white
         data.fgColour = QColor(0, 0, 0);         // black
         const int n = list.count();
@@ -4170,11 +4162,7 @@ void KAEventPrivate::readAlarm(const Alarm::Ptr &alarm, AlarmData &data, bool au
             bool ok;
             float fadeVolume;
             int   fadeSecs = 0;
-#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
-            const QStringList list = property.split(QLatin1Char(';'), QString::KeepEmptyParts);
-#else
             const QStringList list = property.split(QLatin1Char(';'), Qt::KeepEmptyParts);
-#endif
             data.soundVolume = list[0].toFloat(&ok);
             if (!ok  ||  data.soundVolume > 1.0f) {
                 data.soundVolume = -1;
