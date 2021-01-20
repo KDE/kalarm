@@ -245,7 +245,7 @@ public:
     /** Update an event in the resource, and update it in Akonadi.
      *  Its UID must be unchanged.
      */
-    bool updateEvent(const KAEvent&) override;
+    bool updateEvent(const KAEvent&, bool saveIfReadOnly = true) override;
 
     /** Delete an event from the resource, and from Akonadi. */
     bool deleteEvent(const KAEvent&) override;

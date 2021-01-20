@@ -468,8 +468,9 @@ bool AkonadiResource::addEvent(const KAEvent& event)
 * Update an event in the resource, and update it in Akonadi.
 * Its UID must be unchanged.
 */
-bool AkonadiResource::updateEvent(const KAEvent& event)
+bool AkonadiResource::updateEvent(const KAEvent& event, bool saveIfReadOnly)
 {
+    Q_UNUSED(saveIfReadOnly);
     qCDebug(KALARM_LOG) << "AkonadiResource::updateEvent:" << event.id();
     Item item = AkonadiDataModel::instance()->itemForEvent(event.id());
     if (!item.isValid())
