@@ -204,14 +204,24 @@ Q_SIGNALS:
     void resourcesCreated();
 
     /** Emitted when all configured and migrated resources have been loaded for
-     *  the first time.
+     *  the first time. This is always emitted after resourcesCreated().
      */
     void resourcesPopulated();
 
-    /** Emitted when a new resource has been created. */
+    /** Emitted when a new resource has been created.
+     *  The resource may or may not have loaded its events before the signal is
+     *  emitted.
+     */
     void resourceAdded(Resource&);
 
-    /** Emitted when a resource's events have been successfully loaded. */
+    /** Emitted when a resource's events have been successfully loaded.
+     *
+     *  This signal is not emitted if the resource's events have already been
+     *  loaded before its resourceAdded() signal is emitted.
+     *
+     *  @see Resource::isPopulated() can be called at any time to check whether
+     *  the resource's events have been loaded.
+     */
     void resourcePopulated(Resource&);
 
     /** Emitted when a resource's config and settings are about to be removed. */
@@ -228,6 +238,9 @@ Q_SIGNALS:
 
     /** Emitted when events have been added to a resource.
      *  Events are only notified whose alarm type is enabled.
+     *
+     *  This signal is not emitted if the resource's events have already been
+     *  loaded before its resourceAdded() signal is emitted.
      */
     void eventsAdded(Resource&, const QList<KAEvent>&);
 
