@@ -1,7 +1,7 @@
 /*
  *  resource.cpp  -  generic class containing an alarm calendar resource
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2019-2020 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2019-2021 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -272,9 +272,9 @@ bool Resource::addEvent(const KAEvent& event)
     return mResource.isNull() ? false : mResource->addEvent(event);
 }
 
-bool Resource::updateEvent(const KAEvent& event)
+bool Resource::updateEvent(const KAEvent& event, bool saveIfReadOnly)
 {
-    return mResource.isNull() ? false : mResource->updateEvent(event);
+    return mResource.isNull() ? false : mResource->updateEvent(event, saveIfReadOnly);
 }
 
 bool Resource::deleteEvent(const KAEvent& event)

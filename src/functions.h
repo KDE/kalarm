@@ -1,7 +1,7 @@
 /*
  *  functions.h  -  miscellaneous functions
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2007-2020 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2007-2021 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -165,13 +165,17 @@ UpdateResult modifyEvent(KAEvent& oldEvent, KAEvent& newEvent, QWidget* msgParen
  *  The new event will have the same event ID as the old one.
  *  The event is not updated in KOrganizer, since this function is called when an
  *  existing alarm is rescheduled (due to recurrence or deferral).
- *  @param event      Event to be replaced. Its resourceId() must give the ID of
- *                    the resource which contains it.
- *  @param msgParent  Parent widget for any calendar selection prompt or error
- *                    message.
+ *  @param event           Event to be replaced. Its resourceId() must give the
+ *                         ID of the resource which contains it.
+ *  @param msgParent       Parent widget for any calendar selection prompt or
+ *                         error message.
+ *  @param saveIfReadOnly  If the resource is read-only, whether to try to save
+ *                         the resource after updating the event. (Writable
+ *                         resources will always be saved.)
  *  @return  Success status; if >= UPDATE_FAILED, the update has been discarded.
  */
-UpdateResult updateEvent(KAEvent& event, QWidget* msgParent = nullptr, bool archiveOnDelete = true);
+UpdateResult updateEvent(KAEvent& event, QWidget* msgParent = nullptr, bool archiveOnDelete = true,
+                         bool saveIfReadOnly = true);
 
 /** Update an alarm template.
  *  The new event will have the same event ID as the old one.

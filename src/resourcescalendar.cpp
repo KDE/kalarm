@@ -1,7 +1,7 @@
 /*
  *  resourcescalendar.cpp  -  KAlarm calendar resources access
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2001-2020 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2001-2021 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -394,12 +394,12 @@ bool ResourcesCalendar::modifyEvent(const EventId& oldEventId, KAEvent& newEvent
 * Reply = event which has been updated
 *       = invalid if error.
 */
-KAEvent ResourcesCalendar::updateEvent(const KAEvent& evnt)
+KAEvent ResourcesCalendar::updateEvent(const KAEvent& evnt, bool saveIfReadOnly)
 {
     if (mResourceMap.value(evnt.resourceId()).contains(evnt.id()))
     {
         Resource resource = Resources::resource(evnt.resourceId());
-        if (resource.updateEvent(evnt))
+        if (resource.updateEvent(evnt, saveIfReadOnly))
             return evnt;
     }
     qCDebug(KALARM_LOG) << "ResourcesCalendar::updateEvent: error" << evnt.id();

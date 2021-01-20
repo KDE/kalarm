@@ -1,7 +1,7 @@
 /*
  *  kalarmapp.cpp  -  the KAlarm application object
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2001-2020 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2001-2021 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -2128,7 +2128,7 @@ int KAlarmApp::rescheduleAlarm(KAEvent& event, const KAAlarm& alarm, bool update
     }
     event.endChanges();
     if (update)
-        KAlarm::updateEvent(event);     // update the window lists and calendar file
+        KAlarm::updateEvent(event, nullptr, true, false);   // update the window lists and calendar file
     return reply;
 }
 
