@@ -1,7 +1,7 @@
 /*
  *  resourcetype.h  -  base class for an alarm calendar resource type
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2019-2020 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2019-2021 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -366,8 +366,12 @@ public:
     /** Add an event to the resource. */
     virtual bool addEvent(const KAEvent&) = 0;
 
-    /** Update an event in the resource. Its UID must be unchanged. */
-    virtual bool updateEvent(const KAEvent&) = 0;
+    /** Update an event in the resource. Its UID must be unchanged.
+     *  @param saveIfReadOnly  If the resource is read-only, whether to try to save
+     *                         the resource after updating the event. (A writable
+     *                         resource will always be saved.)
+     */
+    virtual bool updateEvent(const KAEvent&, bool saveIfReadOnly = true) = 0;
 
     /** Delete an event from the resource. */
     virtual bool deleteEvent(const KAEvent&) = 0;

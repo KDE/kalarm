@@ -1,7 +1,7 @@
 /*
  *  fileresource.cpp  -  base class for calendar resource accessed via file system
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2006-2020 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2006-2021 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -500,27 +500,39 @@ bool FileResource::addEvent(const KAEvent& event)
 /******************************************************************************
 * Update an event in the resource. Its UID must be unchanged.
 */
-bool FileResource::updateEvent(const KAEvent& event)
+bool FileResource::updateEvent(const KAEvent& event, bool saveIfReadOnly)
 {
     qCDebug(KALARM_LOG) << "FileResource::updateEvent:" << event.id();
     if (!isValid())
         qCWarning(KALARM_LOG) << "FileResource::updateEvent: Resource invalid!" << displayName();
     else if (!isEnabled(CalEvent::EMPTY))
         qCDebug(KALARM_LOG) << "FileResource::updateEvent: Resource disabled!" << displayName();
-    else if (!isWritable(event.category()))
-        qCWarning(KALARM_LOG) << "FileResource::updateEvent: Calendar not writable" << displayName();
-
-    else if (doUpdateEvent(event))
+    else
     {
-        setUpdatedEvents({event}, false);
+        const bool wantSave = saveIfReadOnly || !readOnly();
+        if (!isWritable(event.category()))
+        {
+            if (wantSave)
+            {
+                qCWarning(KALARM_LOG) << "FileResource::updateEvent: Calendar not writable" << displayName();
+                return false;
+            }
+            qCDebug(KALARM_LOG) << "FileResource::updateEvent: Not saving read-only calendar" << displayName();
+        }
 
-        // Update command errors held in the settings, if appropriate.
-        if (mSettings->isEnabled(CalEvent::ACTIVE))
-            handleCommandErrorChange(event);
+        if (doUpdateEvent(event))
+        {
+            setUpdatedEvents({event}, false);
 
-        scheduleSave();
-        notifyUpdatedEvents();
-        return true;
+            // Update command errors held in the settings, if appropriate.
+            if (mSettings->isEnabled(CalEvent::ACTIVE))
+                handleCommandErrorChange(event);
+
+            if (wantSave)
+                scheduleSave();
+            notifyUpdatedEvents();
+            return true;
+        }
     }
     return false;
 }

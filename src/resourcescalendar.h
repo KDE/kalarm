@@ -1,7 +1,7 @@
 /*
  *  resourcescalendar.h  -  KAlarm calendar resources access
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2001-2020 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2001-2021 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -55,7 +55,7 @@ public:
     static QVector<KAEvent> events(CalEvent::Types s = CalEvent::EMPTY);
     static bool             addEvent(KAEvent&, Resource&, QWidget* promptparent = nullptr, bool useEventID = false, bool noPrompt = false, bool* cancelled = nullptr);
     static bool             modifyEvent(const EventId& oldEventId, KAEvent& newEvent);
-    static KAEvent          updateEvent(const KAEvent&);
+    static KAEvent          updateEvent(const KAEvent&, bool saveIfReadOnly = true);
     static bool             deleteEvent(const KAEvent&, Resource&, bool save = false);
     static void             purgeEvents(const QVector<KAEvent>&);
     static ResourcesCalendar* instance()     { return mInstance; }

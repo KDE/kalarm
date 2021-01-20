@@ -1,7 +1,7 @@
 /*
  *  resources.h  -  container for all ResourceType instances
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2019-2020 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2019-2021 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -239,8 +239,8 @@ Q_SIGNALS:
     /** Emitted when events have been added to a resource.
      *  Events are only notified whose alarm type is enabled.
      *
-     *  This signal is not emitted if the resource's events have already been
-     *  loaded before its resourceAdded() signal is emitted.
+     *  This signal is not emitted when events are added to the resource before
+     *  its resourceAdded() signal is emitted.
      */
     void eventsAdded(Resource&, const QList<KAEvent>&);
 

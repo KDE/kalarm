@@ -5,8 +5,9 @@ KAlarm Change Log
 * Rename Preferences 'Edit' tab to 'Alarm Defaults'.
 * Add default sound volume setting to Preferences dialogue.
 
-=== Version 3.1.2 (KDE Applications 20.12.2) --- 11 January 2021 ===
+=== Version 3.1.2 (KDE Applications 20.12.2) --- 20 January 2021 ===
 * Default to using alarm names.
+* Fix hang when an alarm is triggered in a read-only resource.
 
 === Version 3.1.1 (KDE Applications 20.12.1) --- 18 December 2020 ===
 * Ensure that build uses the file resources option.

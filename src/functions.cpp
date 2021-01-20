@@ -129,7 +129,7 @@ const QLatin1String KORGANIZER_UID("korg-");
 const QLatin1String ALARM_OPTS_FILE("alarmopts");
 const char*         DONT_SHOW_ERRORS_GROUP = "DontShowErrors";
 
-KAlarm::UpdateResult updateEvent(KAEvent&, KAlarm::UpdateError, QWidget* msgParent);
+KAlarm::UpdateResult updateEvent(KAEvent&, KAlarm::UpdateError, QWidget* msgParent, bool saveIfReadOnly);
 void editNewTemplate(EditAlarmDlg::Type, const KAEvent* preset, QWidget* parent);
 void displayUpdateError(QWidget* parent, KAlarm::UpdateError, const UpdateStatusData&, bool showKOrgError = true);
 KAlarm::UpdateResult sendToKOrganizer(const KAEvent&);
@@ -435,7 +435,7 @@ UpdateResult modifyEvent(KAEvent& oldEvent, KAEvent& newEvent, QWidget* msgParen
 * The event is not updated in KOrganizer, since this function is called when an
 * existing alarm is rescheduled (due to recurrence or deferral).
 */
-UpdateResult updateEvent(KAEvent& event, QWidget* msgParent, bool archiveOnDelete)
+UpdateResult updateEvent(KAEvent& event, QWidget* msgParent, bool archiveOnDelete, bool saveIfReadOnly)
 {
     qCDebug(KALARM_LOG) << "KAlarm::updateEvent:" << event.id();
 
@@ -447,7 +447,7 @@ UpdateResult updateEvent(KAEvent& event, QWidget* msgParent, bool archiveOnDelet
     }
 
     // Update the event in the resource.
-    return ::updateEvent(event, ERR_MODIFY, msgParent);
+    return ::updateEvent(event, ERR_MODIFY, msgParent, saveIfReadOnly);
 }
 
 /******************************************************************************
@@ -455,7 +455,7 @@ UpdateResult updateEvent(KAEvent& event, QWidget* msgParent, bool archiveOnDelet
 */
 UpdateResult updateTemplate(KAEvent& event, QWidget* msgParent)
 {
-    return ::updateEvent(event, ERR_TEMPLATE, msgParent);
+    return ::updateEvent(event, ERR_TEMPLATE, msgParent, true);
 }
 
 /******************************************************************************
@@ -1313,16 +1313,17 @@ namespace
 /******************************************************************************
 * Update an event in its resource.
 */
-KAlarm::UpdateResult updateEvent(KAEvent& event, KAlarm::UpdateError err, QWidget* msgParent)
+KAlarm::UpdateResult updateEvent(KAEvent& event, KAlarm::UpdateError err, QWidget* msgParent, bool saveIfReadOnly)
 {
     UpdateStatusData status;
-    const KAEvent newEvent = ResourcesCalendar::updateEvent(event);
+    const KAEvent newEvent = ResourcesCalendar::updateEvent(event, saveIfReadOnly);
     if (!newEvent.isValid())
         status.status = KAlarm::UPDATE_FAILED;
     else
     {
         Resource resource = Resources::resource(event.resourceId());
-        if (!resource.save(&status.status.message))
+        if ((saveIfReadOnly || !resource.readOnly())
+        &&  !resource.save(&status.status.message))
         {
             resource.reload(true);   // retrieve the pre-update version of the event
             status.status.status = KAlarm::SAVE_FAILED;
@@ -1406,7 +1407,7 @@ void editAlarm(KAEvent* event, QWidget* parent)
         if (changeDeferral)
         {
             // The only change has been to an existing deferral
-            if (updateEvent(newEvent, editDlg, true) != UPDATE_OK)   // keep the same event ID
+            if (updateEvent(newEvent, editDlg, true, true) != UPDATE_OK)   // keep the same event ID
                 return;   // failed to save event
         }
         else

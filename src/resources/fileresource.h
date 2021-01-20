@@ -1,7 +1,7 @@
 /*
  *  fileresource.h  -  base class for calendar resource accessed via file system
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2020 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2020-2021 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -257,8 +257,11 @@ public:
 
     /** Update an event in the resource. Its UID must be unchanged.
      *  Derived classes must implement event update in doUpdateEvent().
+     *  @param saveIfReadOnly  If the resource is read-only, whether to try to save
+     *                         the resource after updating the event. (A writable
+     *                         resource will always be saved.)
      */
-    bool updateEvent(const KAEvent&) override;
+    bool updateEvent(const KAEvent&, bool saveIfReadOnly = true) override;
 
     /** Delete an event from the resource.
      *  Derived classes must implement event deletion in doDeleteEvent().
