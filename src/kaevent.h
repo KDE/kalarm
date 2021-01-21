@@ -1227,7 +1227,8 @@ public:
     /** Return the repetition interval as text suitable for display. */
     QString repetitionText(bool brief = false) const;
 
-    /** Determine whether the event will occur after the specified date/time.
+    /** Determine whether the event will occur strictly after the specified
+     *  date/time. Reminders are ignored.
      *  @param preDateTime        the specified date/time.
      *  @param includeRepetitions if true and the alarm has a sub-repetition, the
      *                            method will return true if any sub-repetitions
@@ -1246,8 +1247,8 @@ public:
      */
     OccurType setNextOccurrence(const KADateTime &preDateTime);
 
-    /** Get the date/time of the next occurrence of the event, after the specified
-     *  date/time.
+    /** Get the date/time of the next occurrence of the event, strictly after
+     *  the specified date/time. Reminders are ignored.
      *  @param preDateTime the specified date/time.
      *  @param result      date/time of next occurrence, or invalid date/time if none.
      *  @param option      how/whether to make allowance for sub-repetitions.
@@ -1255,8 +1256,8 @@ public:
      */
     OccurType nextOccurrence(const KADateTime &preDateTime, DateTime &result, OccurOption option = IGNORE_REPETITION) const;
 
-    /** Get the date/time of the last previous occurrence of the event, before the
-     *  specified date/time.
+    /** Get the date/time of the last previous occurrence of the event,
+     *  strictly before the specified date/time. Reminders are ignored.
      *  @param afterDateTime       the specified date/time.
      *  @param result              date/time of previous occurrence, or invalid
      *                             date/time if none.
