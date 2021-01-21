@@ -2,7 +2,7 @@
  *  kaevent.h  -  represents KAlarm calendar events
  *  This file is part of kalarmcal library, which provides access to KAlarm
  *  calendar data.
- *  SPDX-FileCopyrightText: 2001-2020 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2001-2021 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -268,13 +268,31 @@ public:
         LIMIT_REMINDER     //!< a reminder
     };
 
-    /** Alarm trigger type. */
+    /** Next trigger type for an alarm. */
     enum TriggerType {
-        ALL_TRIGGER,       //!< next trigger, including reminders, ignoring working hours & holidays
-        MAIN_TRIGGER,      //!< next trigger, excluding reminders, ignoring working hours & holidays
-        WORK_TRIGGER,      //!< next main working time trigger, excluding reminders
-        ALL_WORK_TRIGGER,  //!< next actual working time trigger, including reminders
-        DISPLAY_TRIGGER    //!< next trigger time for display purposes (i.e. excluding reminders)
+
+        /** Next trigger, including reminders. No account is taken of any
+         *  working hours or holiday restrictions when evaluating this. */
+        ALL_TRIGGER,
+
+        /** Next trigger of the main alarm, i.e. excluding reminders. No
+         *  account is taken of any working hours or holiday restrictions when
+         *  evaluating this. */
+        MAIN_TRIGGER,
+
+        /** Next trigger of the main alarm, i.e. excluding reminders, taking
+         *  account of any working hours or holiday restrictions. If the event
+         *  has no working hours or holiday restrictions, this is equivalent to
+         *  MAIN_TRIGGER. */
+        WORK_TRIGGER,
+
+        /** Next trigger, including reminders, taking account of any working
+         *  hours or holiday restrictions. If the event has no working hours or
+         *  holiday restrictions, this is equivalent to ALL_TRIGGER. */
+        ALL_WORK_TRIGGER,
+
+        /** Next trigger time for display purposes (i.e. excluding reminders). */
+        DISPLAY_TRIGGER
     };
 
     /** Command execution error type for last time the alarm was triggered. */
