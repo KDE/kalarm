@@ -1,7 +1,7 @@
 /*
  *  templatemenuaction.cpp  -  menu action to select a template
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2005-2020 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2005-2021 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -64,7 +64,8 @@ void TemplateMenuAction::slotSelected(QAction* action)
     QMap<QAction*, QString>::ConstIterator it = mOriginalTexts.constFind(action);
     if (it == mOriginalTexts.constEnd()  ||  it.value().isEmpty())
         return;
-    const KAEvent templ = ResourcesCalendar::templateEvent(it.value());
+    KAEvent templ = ResourcesCalendar::templateEvent(it.value());
+    templ.setName(QString());
     Q_EMIT selected(templ.isValid() ? &templ : nullptr);
 }
 
