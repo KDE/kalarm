@@ -1,7 +1,7 @@
 /*
  *  eventlistview.cpp  -  base class for widget showing list of alarms
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2007-2020 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2007-2021 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -241,7 +241,7 @@ bool EventListDelegate::editorEvent(QEvent* e, QAbstractItemModel* model, const 
         else
         {
             KAEvent event = itemModel->event(index);
-            edit(&event, static_cast<EventListView*>(parent()));
+            edit(event, static_cast<EventListView*>(parent()));
             return true;
         }
     }

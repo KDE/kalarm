@@ -65,8 +65,8 @@ void TemplateMenuAction::slotSelected(QAction* action)
     if (it == mOriginalTexts.constEnd()  ||  it.value().isEmpty())
         return;
     KAEvent templ = ResourcesCalendar::templateEvent(it.value());
-    templ.setName(QString());
-    Q_EMIT selected(templ.isValid() ? &templ : nullptr);
+    templ.setName(QString());   // don't preset the new alarm with the template's name
+    Q_EMIT selected(templ);
 }
 
 // vim: et sw=4:

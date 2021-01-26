@@ -1,7 +1,7 @@
 /*
  *  editdlgtypes.cpp  -  dialogs to create or edit alarm or alarm template types
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2001-2020 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2001-2021 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -102,10 +102,10 @@ EditDisplayAlarmDlg::EditDisplayAlarmDlg(bool Template, QWidget* parent, GetReso
     : EditAlarmDlg(Template, KAEvent::MESSAGE, parent, getResource)
 {
     qCDebug(KALARM_LOG) << "EditDisplayAlarmDlg: New";
-    init(nullptr);
+    init(KAEvent());
 }
 
-EditDisplayAlarmDlg::EditDisplayAlarmDlg(bool Template, const KAEvent* event, bool newAlarm, QWidget* parent,
+EditDisplayAlarmDlg::EditDisplayAlarmDlg(bool Template, const KAEvent& event, bool newAlarm, QWidget* parent,
                                          GetResourceType getResource, bool readOnly)
     : EditAlarmDlg(Template, event, newAlarm, parent, getResource, readOnly)
 {
@@ -292,54 +292,54 @@ CheckBox* EditDisplayAlarmDlg::createConfirmAckCheckbox(QWidget* parent)
 /******************************************************************************
 * Initialise the dialog controls from the specified event.
 */
-void EditDisplayAlarmDlg::type_initValues(const KAEvent* event)
+void EditDisplayAlarmDlg::type_initValues(const KAEvent& event)
 {
     mTryButton->setToolTip(i18nc("@info:tooltip", "Display the alarm now"));
     mAkonadiItemId = -1;
     lateCancel()->showAutoClose(true);
-    if (event)
+    if (event.isValid())
     {
-        if (mAlarmType == KAEvent::MESSAGE  &&  event->akonadiItemId()
-        &&  AlarmText::checkIfEmail(event->cleanText()))
-            mAkonadiItemId = event->akonadiItemId();
-        lateCancel()->setAutoClose(event->autoClose());
-        if (event->useDefaultFont())
+        if (mAlarmType == KAEvent::MESSAGE  &&  event.akonadiItemId()
+        &&  AlarmText::checkIfEmail(event.cleanText()))
+            mAkonadiItemId = event.akonadiItemId();
+        lateCancel()->setAutoClose(event.autoClose());
+        if (event.useDefaultFont())
             mFontColourButton->setDefaultFont();
         else
-            mFontColourButton->setFont(event->font());
-        mFontColourButton->setBgColour(event->bgColour());
-        mFontColourButton->setFgColour(event->fgColour());
-        setColours(event->fgColour(), event->bgColour());
-        mDisplayMethodCombo->setCurrentIndex(event->notify() ? dNOTIFY : dWINDOW);
-        mConfirmAck->setChecked(event->confirmAck());
-        const bool recurs = event->recurs();
-        int reminderMins = event->reminderMinutes();
-        if (reminderMins > 0  &&  !event->reminderActive())
+            mFontColourButton->setFont(event.font());
+        mFontColourButton->setBgColour(event.bgColour());
+        mFontColourButton->setFgColour(event.fgColour());
+        setColours(event.fgColour(), event.bgColour());
+        mDisplayMethodCombo->setCurrentIndex(event.notify() ? dNOTIFY : dWINDOW);
+        mConfirmAck->setChecked(event.confirmAck());
+        const bool recurs = event.recurs();
+        int reminderMins = event.reminderMinutes();
+        if (reminderMins > 0  &&  !event.reminderActive())
             reminderMins = 0;   // don't show advance reminder which has already passed
         if (!reminderMins)
         {
-            if (event->reminderDeferral()  &&  !recurs)
+            if (event.reminderDeferral()  &&  !recurs)
             {
-                reminderMins = event->deferDateTime().minsTo(event->mainDateTime());
+                reminderMins = event.deferDateTime().minsTo(event.mainDateTime());
                 mReminderDeferral = true;
             }
-            else if (event->reminderMinutes()  &&  recurs)
+            else if (event.reminderMinutes()  &&  recurs)
             {
-                reminderMins = event->reminderMinutes();
+                reminderMins = event.reminderMinutes();
                 mReminderArchived = true;
             }
         }
         reminder()->setMinutes(reminderMins, dateOnly());
-        reminder()->setOnceOnly(event->reminderOnceOnly());
+        reminder()->setOnceOnly(event.reminderOnceOnly());
         reminder()->enableOnceOnly(recurs);
         if (mSpecialActionsButton)
-            mSpecialActionsButton->setActions(event->preAction(), event->postAction(), event->extraActionOptions());
-        Preferences::SoundType soundType = event->speak()                ? Preferences::Sound_Speak
-                                         : event->beep()                 ? Preferences::Sound_Beep
-                                         : !event->audioFile().isEmpty() ? Preferences::Sound_File
-                                         :                                 Preferences::Sound_None;
-        mSoundPicker->set(soundType, event->audioFile(), event->soundVolume(),
-                          event->fadeVolume(), event->fadeSeconds(), event->repeatSoundPause());
+            mSpecialActionsButton->setActions(event.preAction(), event.postAction(), event.extraActionOptions());
+        Preferences::SoundType soundType = event.speak()                ? Preferences::Sound_Speak
+                                         : event.beep()                 ? Preferences::Sound_Beep
+                                         : !event.audioFile().isEmpty() ? Preferences::Sound_File
+                                         :                                Preferences::Sound_None;
+        mSoundPicker->set(soundType, event.audioFile(), event.soundVolume(),
+                          event.fadeVolume(), event.fadeSeconds(), event.repeatSoundPause());
     }
     else
     {
@@ -824,10 +824,10 @@ EditCommandAlarmDlg::EditCommandAlarmDlg(bool Template, QWidget* parent, GetReso
     : EditAlarmDlg(Template, KAEvent::COMMAND, parent, getResource)
 {
     qCDebug(KALARM_LOG) << "EditCommandAlarmDlg: New";
-    init(nullptr);
+    init(KAEvent());
 }
 
-EditCommandAlarmDlg::EditCommandAlarmDlg(bool Template, const KAEvent* event, bool newAlarm, QWidget* parent,
+EditCommandAlarmDlg::EditCommandAlarmDlg(bool Template, const KAEvent& event, bool newAlarm, QWidget* parent,
                                          GetResourceType getResource, bool readOnly)
     : EditAlarmDlg(Template, event, newAlarm, parent, getResource, readOnly)
 {
@@ -927,18 +927,18 @@ void EditCommandAlarmDlg::type_init(QWidget* parent, QVBoxLayout* frameLayout)
 /******************************************************************************
 * Initialise the dialog controls from the specified event.
 */
-void EditCommandAlarmDlg::type_initValues(const KAEvent* event)
+void EditCommandAlarmDlg::type_initValues(const KAEvent& event)
 {
-    if (event)
+    if (event.isValid())
     {
         // Set the values to those for the specified event
-        RadioButton* logType = event->commandXterm()       ? mCmdExecInTerm
-                             : !event->logFile().isEmpty() ? mCmdLogToFile
+        RadioButton* logType = event.commandXterm()       ? mCmdExecInTerm
+                             : !event.logFile().isEmpty() ? mCmdLogToFile
                              :                               mCmdDiscardOutput;
         if (logType == mCmdLogToFile)
-            mCmdLogFileEdit->setText(event->logFile());    // set file name before setting radio button
+            mCmdLogFileEdit->setText(event.logFile());    // set file name before setting radio button
         logType->setChecked(true);
-        mCmdDontShowError->setChecked(event->commandHideError());
+        mCmdDontShowError->setChecked(event.commandHideError());
     }
     else
     {
@@ -1151,10 +1151,10 @@ EditEmailAlarmDlg::EditEmailAlarmDlg(bool Template, QWidget* parent, GetResource
     : EditAlarmDlg(Template, KAEvent::EMAIL, parent, getResource)
 {
     qCDebug(KALARM_LOG) << "EditEmailAlarmDlg: New";
-    init(nullptr);
+    init(KAEvent());
 }
 
-EditEmailAlarmDlg::EditEmailAlarmDlg(bool Template, const KAEvent* event, bool newAlarm, QWidget* parent,
+EditEmailAlarmDlg::EditEmailAlarmDlg(bool Template, const KAEvent& event, bool newAlarm, QWidget* parent,
                                      GetResourceType getResource, bool readOnly)
     : EditAlarmDlg(Template, event, newAlarm, parent, getResource, readOnly)
 {
@@ -1278,17 +1278,17 @@ void EditEmailAlarmDlg::type_init(QWidget* parent, QVBoxLayout* frameLayout)
 /******************************************************************************
 * Initialise the dialog controls from the specified event.
 */
-void EditEmailAlarmDlg::type_initValues(const KAEvent* event)
+void EditEmailAlarmDlg::type_initValues(const KAEvent& event)
 {
-    if (event)
+    if (event.isValid())
     {
         // Set the values to those for the specified event
-        mEmailAttachList->addItems(event->emailAttachments());
-        mEmailToEdit->setText(event->emailAddresses(QStringLiteral(", ")));
-        mEmailSubjectEdit->setText(event->emailSubject());
-        mEmailBcc->setChecked(event->emailBcc());
+        mEmailAttachList->addItems(event.emailAttachments());
+        mEmailToEdit->setText(event.emailAddresses(QStringLiteral(", ")));
+        mEmailSubjectEdit->setText(event.emailSubject());
+        mEmailBcc->setChecked(event.emailBcc());
         if (mEmailFromList)
-            mEmailFromList->setCurrentIdentity(event->emailFromId());
+            mEmailFromList->setCurrentIdentity(event.emailFromId());
     }
     else
     {
@@ -1600,10 +1600,10 @@ EditAudioAlarmDlg::EditAudioAlarmDlg(bool Template, QWidget* parent, GetResource
     : EditAlarmDlg(Template, KAEvent::AUDIO, parent, getResource)
 {
     qCDebug(KALARM_LOG) << "EditAudioAlarmDlg: New";
-    init(nullptr);
+    init(KAEvent());
 }
 
-EditAudioAlarmDlg::EditAudioAlarmDlg(bool Template, const KAEvent* event, bool newAlarm, QWidget* parent,
+EditAudioAlarmDlg::EditAudioAlarmDlg(bool Template, const KAEvent& event, bool newAlarm, QWidget* parent,
                                      GetResourceType getResource, bool readOnly)
     : EditAlarmDlg(Template, event, newAlarm, parent, getResource, readOnly)
 {
@@ -1648,12 +1648,12 @@ void EditAudioAlarmDlg::type_init(QWidget* parent, QVBoxLayout* frameLayout)
 /******************************************************************************
 * Initialise the dialog controls from the specified event.
 */
-void EditAudioAlarmDlg::type_initValues(const KAEvent* event)
+void EditAudioAlarmDlg::type_initValues(const KAEvent& event)
 {
-    if (event)
+    if (event.isValid())
     {
-        mSoundConfig->set(event->audioFile(), event->soundVolume(), event->fadeVolume(), event->fadeSeconds(),
-                          (event->flags() & KAEvent::REPEAT_SOUND) ? event->repeatSoundPause() : -1);
+        mSoundConfig->set(event.audioFile(), event.soundVolume(), event.fadeVolume(), event.fadeSeconds(),
+                          (event.flags() & KAEvent::REPEAT_SOUND) ? event.repeatSoundPause() : -1);
     }
     else
     {

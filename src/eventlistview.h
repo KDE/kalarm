@@ -1,7 +1,7 @@
 /*
  *  eventlistview.h  -  base class for widget showing list of alarms
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2007-2020 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2007-2021 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -69,7 +69,7 @@ class EventListDelegate : public QItemDelegate
         explicit EventListDelegate(EventListView* parent = nullptr) : QItemDelegate(parent) {}
         QWidget*     createEditor(QWidget*, const QStyleOptionViewItem&, const QModelIndex&) const override  { return nullptr; }
         bool         editorEvent(QEvent*, QAbstractItemModel*, const QStyleOptionViewItem&, const QModelIndex&) override;
-        virtual void edit(KAEvent*, EventListView*) = 0;
+        virtual void edit(KAEvent&, EventListView*) = 0;
 };
 
 #endif // EVENTLISTVIEW_H

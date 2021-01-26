@@ -1,7 +1,7 @@
 /*
  *  mainwindow.h  -  main application window
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2001-2020 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2001-2021 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -80,11 +80,7 @@ protected:
 
 private Q_SLOTS:
     void           slotNew(EditAlarmDlg::Type);
-    void           slotNewDisplay()   { slotNew(EditAlarmDlg::DISPLAY); }
-    void           slotNewCommand()   { slotNew(EditAlarmDlg::COMMAND); }
-    void           slotNewEmail()     { slotNew(EditAlarmDlg::EMAIL); }
-    void           slotNewAudio()     { slotNew(EditAlarmDlg::AUDIO); }
-    void           slotNewFromTemplate(const KAEvent*);
+    void           slotNewFromTemplate(const KAEvent&);
     void           slotNewTemplate();
     void           slotCopy();
     void           slotModify();

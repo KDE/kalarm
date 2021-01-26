@@ -1,7 +1,7 @@
 /*
  *  editdlgtypes.h  -  dialogues to create or edit alarm or alarm template types
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2001-2020 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2001-2021 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -41,7 +41,7 @@ class EditDisplayAlarmDlg : public EditAlarmDlg
     Q_OBJECT
 public:
     explicit EditDisplayAlarmDlg(bool Template, QWidget* parent = nullptr, GetResourceType = RES_PROMPT);
-    EditDisplayAlarmDlg(bool Template, const KAEvent*, bool newAlarm, QWidget* parent = nullptr,
+    EditDisplayAlarmDlg(bool Template, const KAEvent&, bool newAlarm, QWidget* parent = nullptr,
                  GetResourceType = RES_PROMPT, bool readOnly = false);
 
     // Methods to initialise values in the New Alarm dialogue.
@@ -67,7 +67,7 @@ public:
 protected:
     QString         type_caption() const override;
     void            type_init(QWidget* parent, QVBoxLayout* frameLayout) override;
-    void            type_initValues(const KAEvent*) override;
+    void            type_initValues(const KAEvent&) override;
     void            type_showOptions(bool more) override;
     void            setReadOnly(bool readOnly) override;
     void            saveState(const KAEvent*) override;
@@ -138,7 +138,7 @@ class EditCommandAlarmDlg : public EditAlarmDlg
     Q_OBJECT
 public:
     explicit EditCommandAlarmDlg(bool Template, QWidget* parent = nullptr, GetResourceType = RES_PROMPT);
-    EditCommandAlarmDlg(bool Template, const KAEvent*, bool newAlarm, QWidget* parent = nullptr,
+    EditCommandAlarmDlg(bool Template, const KAEvent&, bool newAlarm, QWidget* parent = nullptr,
                         GetResourceType = RES_PROMPT, bool readOnly = false);
 
     // Methods to initialise values in the New Alarm dialogue.
@@ -153,7 +153,7 @@ public:
 protected:
     QString         type_caption() const override;
     void            type_init(QWidget* parent, QVBoxLayout* frameLayout) override;
-    void            type_initValues(const KAEvent*) override;
+    void            type_initValues(const KAEvent&) override;
     void            type_showOptions(bool more) override;
     void            setReadOnly(bool readOnly) override;
     void            saveState(const KAEvent*) override;
@@ -192,7 +192,7 @@ class EditEmailAlarmDlg : public EditAlarmDlg
     Q_OBJECT
 public:
     explicit EditEmailAlarmDlg(bool Template, QWidget* parent = nullptr, GetResourceType = RES_PROMPT);
-    EditEmailAlarmDlg(bool Template, const KAEvent*, bool newAlarm, QWidget* parent = nullptr,
+    EditEmailAlarmDlg(bool Template, const KAEvent&, bool newAlarm, QWidget* parent = nullptr,
                       GetResourceType = RES_PROMPT, bool readOnly = false);
 
     // Methods to initialise values in the New Alarm dialogue.
@@ -208,7 +208,7 @@ public:
 protected:
     QString         type_caption() const override;
     void            type_init(QWidget* parent, QVBoxLayout* frameLayout) override;
-    void            type_initValues(const KAEvent*) override;
+    void            type_initValues(const KAEvent&) override;
     void            type_showOptions(bool) override  {}
     void            setReadOnly(bool readOnly) override;
     void            saveState(const KAEvent*) override;
@@ -258,7 +258,7 @@ class EditAudioAlarmDlg : public EditAlarmDlg
     Q_OBJECT
 public:
     explicit EditAudioAlarmDlg(bool Template, QWidget* parent = nullptr, GetResourceType = RES_PROMPT);
-    EditAudioAlarmDlg(bool Template, const KAEvent*, bool newAlarm, QWidget* parent = nullptr,
+    EditAudioAlarmDlg(bool Template, const KAEvent&, bool newAlarm, QWidget* parent = nullptr,
                  GetResourceType = RES_PROMPT, bool readOnly = false);
 
     // Methods to initialise values in the New Alarm dialogue.
@@ -270,7 +270,7 @@ public:
 protected:
     QString         type_caption() const override;
     void            type_init(QWidget* parent, QVBoxLayout* frameLayout) override;
-    void            type_initValues(const KAEvent*) override;
+    void            type_initValues(const KAEvent&) override;
     void            type_showOptions(bool) override  {}
     void            setReadOnly(bool readOnly) override;
     void            saveState(const KAEvent*) override;

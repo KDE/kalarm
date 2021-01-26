@@ -1,7 +1,7 @@
 /*
  *  templatelistview.h  -  widget showing list of alarm templates
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2007-2020 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2007-2021 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -29,7 +29,7 @@ class TemplateListDelegate : public EventListDelegate
 public:
     explicit TemplateListDelegate(TemplateListView* parent = nullptr)
                : EventListDelegate(parent) {}
-    void edit(KAEvent*, EventListView*) override;
+    void edit(KAEvent&, EventListView*) override;
 };
 
 #endif // TEMPLATELISTVIEW_H

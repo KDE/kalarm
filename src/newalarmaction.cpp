@@ -1,7 +1,7 @@
 /*
  *  newalarmaction.cpp  -  menu action to select a new alarm type
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2007-2020 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2007-2021 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -58,6 +58,7 @@ NewAlarmAction::NewAlarmAction(bool templates, const QString& label, QObject* pa
     mTypes[mAudioAction] = EditAlarmDlg::AUDIO;
     if (!templates)
     {
+        // Sub-menu is to create new alarms (not new alarm templates).
         if (!mActionCollection)
         {
             mDisplayAction->setShortcut(DISP_KEY);
@@ -69,6 +70,7 @@ NewAlarmAction::NewAlarmAction(bool templates, const QString& label, QObject* pa
         // Include New From Template only in non-template menu
         mTemplateAction = new TemplateMenuAction(QIcon::fromTheme(TEMPLATE_ICON), i18nc("@action", "New Alarm From &Template"), parent);
         menu()->addAction(mTemplateAction);
+        connect(mTemplateAction, &TemplateMenuAction::selected, this, &NewAlarmAction::selectedTemplate);
         connect(Resources::instance(), &Resources::settingsChanged, this, &NewAlarmAction::slotCalendarStatusChanged);
         connect(DataModel::allTemplateListModel(), &EventListModel::haveEventsStatus, this, &NewAlarmAction::slotCalendarStatusChanged);
         slotCalendarStatusChanged();   // initialise action states
@@ -80,55 +82,34 @@ NewAlarmAction::NewAlarmAction(bool templates, const QString& label, QObject* pa
 
 /******************************************************************************
 */
-QAction* NewAlarmAction::displayAlarmAction(const QString& name)
+void NewAlarmAction::setActionNames(const QString& displayName, const QString& commandName,
+                                    const QString& emailName, const QString& audioName,
+                                    const QString& templateName)
 {
     if (mActionCollection)
     {
-        mActionCollection->addAction(name, mDisplayAction);
+        mActionCollection->addAction(displayName, mDisplayAction);
         mActionCollection->setDefaultShortcut(mDisplayAction, DISP_KEY);
         KGlobalAccel::setGlobalShortcut(mDisplayAction, QList<QKeySequence>());  // allow user to set a global shortcut
-    }
-    return mDisplayAction;
-}
 
-QAction* NewAlarmAction::commandAlarmAction(const QString& name)
-{
-    if (mActionCollection)
-    {
-        mActionCollection->addAction(name, mCommandAction);
+        mActionCollection->addAction(commandName, mCommandAction);
         mActionCollection->setDefaultShortcut(mCommandAction, CMD_KEY);
         KGlobalAccel::setGlobalShortcut(mCommandAction, QList<QKeySequence>());  // allow user to set a global shortcut
-    }
-    return mCommandAction;
-}
 
-QAction* NewAlarmAction::emailAlarmAction(const QString& name)
-{
-    if (mActionCollection)
-    {
-        mActionCollection->addAction(name, mEmailAction);
+        mActionCollection->addAction(emailName, mEmailAction);
         mActionCollection->setDefaultShortcut(mEmailAction, MAIL_KEY);
         KGlobalAccel::setGlobalShortcut(mEmailAction, QList<QKeySequence>());  // allow user to set a global shortcut
-    }
-    return mEmailAction;
-}
 
-QAction* NewAlarmAction::audioAlarmAction(const QString& name)
-{
-    if (mActionCollection)
-    {
-        mActionCollection->addAction(name, mAudioAction);
+        mActionCollection->addAction(audioName, mAudioAction);
         mActionCollection->setDefaultShortcut(mAudioAction, AUDIO_KEY);
         KGlobalAccel::setGlobalShortcut(mAudioAction, QList<QKeySequence>());  // allow user to set a global shortcut
-    }
-    return mAudioAction;
-}
 
-TemplateMenuAction* NewAlarmAction::fromTemplateAlarmAction(const QString& name)
-{
-    if (mActionCollection)
-        mActionCollection->addAction(name, mTemplateAction);
-    return mTemplateAction;
+        if (mTemplateAction)
+        {
+            Q_ASSERT(!templateName.isEmpty());
+            mActionCollection->addAction(templateName, mTemplateAction);
+        }
+    }
 }
 
 /******************************************************************************

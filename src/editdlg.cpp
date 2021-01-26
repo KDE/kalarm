@@ -1,7 +1,7 @@
 /*
  *  editdlg.cpp  -  dialog to create or modify an alarm or alarm template
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2001-2020 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2001-2021 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -97,10 +97,10 @@ EditAlarmDlg* EditAlarmDlg::create(bool Template, Type type, QWidget* parent, Ge
     return nullptr;
 }
 
-EditAlarmDlg* EditAlarmDlg::create(bool Template, const KAEvent* event, bool newAlarm, QWidget* parent,
+EditAlarmDlg* EditAlarmDlg::create(bool Template, const KAEvent& event, bool newAlarm, QWidget* parent,
                                    GetResourceType getResource, bool readOnly)
 {
-    switch (event->actionTypes())
+    switch (event.actionTypes())
     {
         case KAEvent::ACT_COMMAND:  return new EditCommandAlarmDlg(Template, event, newAlarm, parent, getResource, readOnly);
         case KAEvent::ACT_DISPLAY_COMMAND:
@@ -119,7 +119,7 @@ EditAlarmDlg* EditAlarmDlg::create(bool Template, const KAEvent* event, bool new
 * Parameters:
 *   Template = true to edit/create an alarm template
 *            = false to edit/create an alarm.
-*   event   != to initialise the dialog to show the specified event's data.
+*   event    to initialise the dialog to show the specified event's data.
 */
 EditAlarmDlg::EditAlarmDlg(bool Template, KAEvent::SubAction action, QWidget* parent, GetResourceType getResource)
     : QDialog(parent)
@@ -129,15 +129,15 @@ EditAlarmDlg::EditAlarmDlg(bool Template, KAEvent::SubAction action, QWidget* pa
     , mDesiredReadOnly(false)
     , mReadOnly(false)
 {
-    init(nullptr, getResource);
+    init(KAEvent(), getResource);
     mWindowList.append(this);
 }
 
-EditAlarmDlg::EditAlarmDlg(bool Template, const KAEvent* event, bool newAlarm, QWidget* parent,
+EditAlarmDlg::EditAlarmDlg(bool Template, const KAEvent& event, bool newAlarm, QWidget* parent,
                            GetResourceType getResource, bool readOnly)
     : QDialog(parent)
-    , mAlarmType(event->actionSubType())
-    , mEventId(newAlarm ? QString() : event->id())
+    , mAlarmType(event.actionSubType())
+    , mEventId(newAlarm ? QString() : event.id())
     , mTemplate(Template)
     , mNewAlarm(newAlarm)
     , mDesiredReadOnly(readOnly)
@@ -147,14 +147,14 @@ EditAlarmDlg::EditAlarmDlg(bool Template, const KAEvent* event, bool newAlarm, Q
     mWindowList.append(this);
 }
 
-void EditAlarmDlg::init(const KAEvent* event, GetResourceType getResource)
+void EditAlarmDlg::init(const KAEvent& event, GetResourceType getResource)
 {
     switch (getResource)
     {
         case RES_USE_EVENT_ID:
-            if (event)
+            if (event.isValid())
             {
-                mResourceEventId = event->id();
+                mResourceEventId = event.id();
                 mUseResourceEventId = true;
                 break;
             }
@@ -171,14 +171,14 @@ void EditAlarmDlg::init(const KAEvent* event, GetResourceType getResource)
     }
 }
 
-void EditAlarmDlg::init(const KAEvent* event)
+void EditAlarmDlg::init(const KAEvent& event)
 {
     setObjectName(mTemplate ? QStringLiteral("TemplEditDlg") : QStringLiteral("EditDlg"));    // used by LikeBack
     QString caption;
     if (mReadOnly)
         caption = mTemplate ? i18nc("@title:window", "Alarm Template [read-only]")
-                : event->expired() ? i18nc("@title:window", "Archived Alarm [read-only]")
-                                   : i18nc("@title:window", "Alarm [read-only]");
+                : event.expired() ? i18nc("@title:window", "Archived Alarm [read-only]")
+                                  : i18nc("@title:window", "Alarm [read-only]");
     else
         caption = type_caption();
     setWindowTitle(caption);
@@ -434,7 +434,7 @@ void EditAlarmDlg::init(const KAEvent* event)
     if (!mNewAlarm)
     {
         // Save the initial state of all controls so that we can later tell if they have changed
-        saveState((event && (mTemplate || !event->isTemplate())) ? event : nullptr);
+        saveState((event.isValid() && (mTemplate || !event.isTemplate())) ? &event : nullptr);
         contentsChanged();    // enable/disable OK button
     }
 
@@ -471,7 +471,7 @@ int EditAlarmDlg::instanceCount()
 /******************************************************************************
 * Initialise the dialog controls from the specified event.
 */
-void EditAlarmDlg::initValues(const KAEvent* event)
+void EditAlarmDlg::initValues(const KAEvent& event)
 {
     setReadOnly(mDesiredReadOnly);
 
@@ -480,42 +480,42 @@ void EditAlarmDlg::initValues(const KAEvent* event)
     mExpiredRecurrence = false;
     mLateCancel->showAutoClose(false);
     bool deferGroupVisible = false;
-    if (event)
+    if (event.isValid())
     {
         // Set the values to those for the specified event
         if (mName)
-            mName->setText(event->name());
-        bool recurs = event->recurs();
-        if ((recurs || event->repetition())  &&  !mTemplate  &&  event->deferred())
+            mName->setText(event.name());
+        bool recurs = event.recurs();
+        if ((recurs || event.repetition())  &&  !mTemplate  &&  event.deferred())
         {
             deferGroupVisible = true;
-            mDeferDateTime = event->deferDateTime();
+            mDeferDateTime = event.deferDateTime();
             mDeferTimeLabel->setText(mDeferDateTime.formatLocale());
             mDeferGroup->show();
         }
         if (mTemplate)
         {
             // Editing a template
-            int afterTime = event->isTemplate() ? event->templateAfterTime() : -1;
+            int afterTime = event.isTemplate() ? event.templateAfterTime() : -1;
             bool noTime   = !afterTime;
-            bool useTime  = !event->mainDateTime().isDateOnly();
+            bool useTime  = !event.mainDateTime().isDateOnly();
             RadioButton* button = noTime          ? mTemplateDefaultTime :
                                   (afterTime > 0) ? mTemplateUseTimeAfter :
                                   useTime         ? mTemplateUseTime : mTemplateAnyTime;
             button->setChecked(true);
             mTemplateTimeAfter->setValue(afterTime > 0 ? afterTime : 1);
             if (!noTime && useTime)
-                mTemplateTime->setValue(event->mainDateTime().kDateTime().time());
+                mTemplateTime->setValue(event.mainDateTime().kDateTime().time());
             else
                 mTemplateTime->setValue(0);
         }
         else
         {
-            if (event->isTemplate())
+            if (event.isTemplate())
             {
                 // Initialising from an alarm template: use current date
                 const KADateTime now = KADateTime::currentDateTime(Preferences::timeSpec());
-                int afterTime = event->templateAfterTime();
+                int afterTime = event.templateAfterTime();
                 if (afterTime >= 0)
                 {
                     mTimeWidget->setDateTime(now.addSecs(afterTime * 60));
@@ -523,7 +523,7 @@ void EditAlarmDlg::initValues(const KAEvent* event)
                 }
                 else
                 {
-                    KADateTime dt = event->startDateTime().kDateTime();
+                    KADateTime dt = event.startDateTime().kDateTime();
                     dt.setTimeSpec(Preferences::timeSpec());
                     QDate d = now.date();
                     if (!dt.isDateOnly()  &&  now.time() >= dt.time())
@@ -534,27 +534,27 @@ void EditAlarmDlg::initValues(const KAEvent* event)
             }
             else
             {
-                mExpiredRecurrence = recurs && event->mainExpired();
-                mTimeWidget->setDateTime(recurs || event->category() == CalEvent::ARCHIVED ? event->startDateTime()
-                                         : event->mainExpired() ? event->deferDateTime() : event->mainDateTime());
+                mExpiredRecurrence = recurs && event.mainExpired();
+                mTimeWidget->setDateTime(recurs || event.category() == CalEvent::ARCHIVED ? event.startDateTime()
+                                         : event.mainExpired() ? event.deferDateTime() : event.mainDateTime());
             }
         }
 
-        KAEvent::SubAction action = event->actionSubType();
+        KAEvent::SubAction action = event.actionSubType();
         AlarmText altext;
-        if (event->commandScript())
-            altext.setScript(event->cleanText());
+        if (event.commandScript())
+            altext.setScript(event.cleanText());
         else
-            altext.setText(event->cleanText());
+            altext.setText(event.cleanText());
         setAction(action, altext);
 
-        mLateCancel->setMinutes(event->lateCancel(), event->startDateTime().isDateOnly(),
+        mLateCancel->setMinutes(event.lateCancel(), event.startDateTime().isDateOnly(),
                                 TimePeriod::HoursMinutes);
         if (mShowInKorganizer)
-            mShowInKorganizer->setChecked(event->copyToKOrganizer());
+            mShowInKorganizer->setChecked(event.copyToKOrganizer());
         type_initValues(event);
-        mRecurrenceEdit->set(*event);   // must be called after mTimeWidget is set up, to ensure correct date-only enabling
-        mTabs->setTabText(mRecurPageIndex, recurText(*event));
+        mRecurrenceEdit->set(event);   // must be called after mTimeWidget is set up, to ensure correct date-only enabling
+        mTabs->setTabText(mRecurPageIndex, recurText(event));
     }
     else
     {
@@ -571,7 +571,7 @@ void EditAlarmDlg::initValues(const KAEvent* event)
         mLateCancel->setMinutes((Preferences::defaultLateCancel() ? 1 : 0), false, TimePeriod::HoursMinutes);
         if (mShowInKorganizer)
             mShowInKorganizer->setChecked(Preferences::defaultCopyToKOrganizer());
-        type_initValues(nullptr);
+        type_initValues(KAEvent());
         mRecurrenceEdit->setDefaults(defaultTime);   // must be called after mTimeWidget is set up, to ensure correct date-only enabling
         slotRecurFrequencyChange();      // update the Recurrence text
     }
@@ -1206,7 +1206,7 @@ void EditAlarmDlg::slotHelp()
     if (dlg->exec() == QDialog::Accepted)
     {
         KAEvent event = dlg->selectedTemplate();
-        initValues(&event);
+        initValues(event);
     }
 }
 

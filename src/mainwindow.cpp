@@ -1,7 +1,7 @@
 /*
  *  mainwindow.cpp  -  main application window
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2001-2020 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2001-2021 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -20,7 +20,6 @@
 #include "resourcescalendar.h"
 #include "resourceselector.h"
 #include "templatedlg.h"
-#include "templatemenuaction.h"
 #include "templatepickdlg.h"
 #include "traywindow.h"
 #include "wakedlg.h"
@@ -409,22 +408,10 @@ void MainWindow::initActions()
     connect(mActionTemplates, &QAction::triggered, this, &MainWindow::slotTemplates);
 
     mActionNew = new NewAlarmAction(false, i18nc("@action", "&New"), this, actions);
+    mActionNew->setActionNames(QStringLiteral("newDisplay"), QStringLiteral("newCommand"), QStringLiteral("newEmail"), QStringLiteral("newAudio"), QStringLiteral("newFromTemplate"));
     actions->addAction(QStringLiteral("new"), mActionNew);
-
-    QAction* action = mActionNew->displayAlarmAction(QStringLiteral("newDisplay"));
-    connect(action, &QAction::triggered, this, &MainWindow::slotNewDisplay);
-
-    action = mActionNew->commandAlarmAction(QStringLiteral("newCommand"));
-    connect(action, &QAction::triggered, this, &MainWindow::slotNewCommand);
-
-    action = mActionNew->emailAlarmAction(QStringLiteral("newEmail"));
-    connect(action, &QAction::triggered, this, &MainWindow::slotNewEmail);
-
-    action = mActionNew->audioAlarmAction(QStringLiteral("newAudio"));
-    connect(action, &QAction::triggered, this, &MainWindow::slotNewAudio);
-
-    TemplateMenuAction* templateMenuAction = mActionNew->fromTemplateAlarmAction(QStringLiteral("newFromTemplate"));
-    connect(templateMenuAction, &TemplateMenuAction::selected, this, &MainWindow::slotNewFromTemplate);
+    connect(mActionNew, &NewAlarmAction::selected, this, &MainWindow::slotNew);
+    connect(mActionNew, &NewAlarmAction::selectedTemplate, this, &MainWindow::slotNewFromTemplate);
 
     mActionCreateTemplate = new QAction(i18nc("@action", "Create Tem&plate..."), this);
     actions->addAction(QStringLiteral("createTemplate"), mActionCreateTemplate);
@@ -461,7 +448,7 @@ void MainWindow::initActions()
     actions->setDefaultShortcut(mActionEnable, QKeySequence(Qt::CTRL | Qt::Key_B));
     connect(mActionEnable, &QAction::triggered, this, &MainWindow::slotEnable);
 
-    action = new QAction(i18nc("@action", "Wake From Suspend..."), this);
+    QAction* action = new QAction(i18nc("@action", "Wake From Suspend..."), this);
     actions->addAction(QStringLiteral("wakeSuspend"), action);
     connect(action, &QAction::triggered, this, &MainWindow::slotWakeFromSuspend);
 
@@ -667,7 +654,7 @@ void MainWindow::slotNew(EditAlarmDlg::Type type)
 * Called when a template is selected from the New From Template popup menu.
 * Executes a New Alarm dialog, preset from the selected template.
 */
-void MainWindow::slotNewFromTemplate(const KAEvent* tmplate)
+void MainWindow::slotNewFromTemplate(const KAEvent& tmplate)
 {
     KAlarm::editNewAlarm(tmplate, mListView);
 }
@@ -680,7 +667,7 @@ void MainWindow::slotNewTemplate()
 {
     KAEvent event = mListView->selectedEvent();
     if (event.isValid())
-        KAlarm::editNewTemplate(&event, this);
+        KAlarm::editNewTemplate(event, this);
 }
 
 /******************************************************************************
@@ -691,7 +678,7 @@ void MainWindow::slotCopy()
 {
     KAEvent event = mListView->selectedEvent();
     if (event.isValid())
-        KAlarm::editNewAlarm(&event, this);
+        KAlarm::editNewAlarm(event, this);
 }
 
 /******************************************************************************
@@ -702,7 +689,7 @@ void MainWindow::slotModify()
 {
     KAEvent event = mListView->selectedEvent();
     if (event.isValid())
-        KAlarm::editAlarm(&event, this);   // edit alarm (view-only mode if archived or read-only)
+        KAlarm::editAlarm(event, this);   // edit alarm (view-only mode if archived or read-only)
 }
 
 /******************************************************************************
@@ -1250,7 +1237,7 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
                 event->addAlarm(alarm);
             }
             KAEvent ev(event);
-            KAlarm::editNewAlarm(&ev, win);
+            KAlarm::editNewAlarm(ev, win);
             return;
         }
         // If todos are included, use the first todo
@@ -1302,7 +1289,7 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
                     ev.setReminder(-offset / 60, false);
             }
             ev.endChanges();
-            KAlarm::editNewAlarm(&ev, win);
+            KAlarm::editNewAlarm(ev, win);
         }
         return;
     }

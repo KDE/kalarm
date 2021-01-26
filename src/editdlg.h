@@ -1,7 +1,7 @@
 /*
  *  editdlg.h  -  dialog to create or modify an alarm or alarm template
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2001-2020 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2001-2021 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -55,7 +55,7 @@ public:
 
     static EditAlarmDlg* create(bool Template, Type, QWidget* parent = nullptr,
                                 GetResourceType = RES_PROMPT);
-    static EditAlarmDlg* create(bool Template, const KAEvent*, bool newAlarm, QWidget* parent = nullptr,
+    static EditAlarmDlg* create(bool Template, const KAEvent&, bool newAlarm, QWidget* parent = nullptr,
                                 GetResourceType = RES_PROMPT, bool readOnly = false);
     ~EditAlarmDlg() override;
     bool            getEvent(KAEvent&, Resource&);
@@ -79,16 +79,16 @@ public:
 protected:
     EditAlarmDlg(bool Template, KAEvent::SubAction, QWidget* parent = nullptr,
                  GetResourceType = RES_PROMPT);
-    EditAlarmDlg(bool Template, const KAEvent*, bool newAlarm, QWidget* parent = nullptr,
+    EditAlarmDlg(bool Template, const KAEvent&, bool newAlarm, QWidget* parent = nullptr,
                  GetResourceType = RES_PROMPT, bool readOnly = false);
-    void            init(const KAEvent* event);
+    void            init(const KAEvent& event);
     void            resizeEvent(QResizeEvent*) override;
     void            showEvent(QShowEvent*) override;
     void            closeEvent(QCloseEvent*) override;
     bool            eventFilter(QObject*, QEvent*) override;
     virtual QString type_caption() const = 0;
     virtual void    type_init(QWidget* parent, QVBoxLayout* frameLayout) = 0;
-    virtual void    type_initValues(const KAEvent*) = 0;
+    virtual void    type_initValues(const KAEvent&) = 0;
     virtual void    type_showOptions(bool more) = 0;
     virtual void    setReadOnly(bool readOnly) = 0;
     virtual void    saveState(const KAEvent*) = 0;
@@ -131,8 +131,8 @@ private Q_SLOTS:
     void            focusFixTimer();
 
 private:
-    void            init(const KAEvent* event, GetResourceType getResource);
-    void            initValues(const KAEvent*);
+    void            init(const KAEvent& event, GetResourceType getResource);
+    void            initValues(const KAEvent&);
     void            setEvent(KAEvent&, const QString& text, bool trial);
     bool            validate();
     virtual bool    stateChanged() const;

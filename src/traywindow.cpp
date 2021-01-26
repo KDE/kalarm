@@ -1,7 +1,7 @@
 /*
  *  traywindow.cpp  -  the KDE system tray applet
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2002-2020 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2002-2021 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -16,7 +16,6 @@
 #include "prefdlg.h"
 #include "preferences.h"
 #include "resourcescalendar.h"
-#include "templatemenuaction.h"
 #include "resources/datamodel.h"
 #include "resources/eventmodel.h"
 #include "lib/synchtimer.h"
@@ -71,7 +70,7 @@ TrayWindow::TrayWindow(MainWindow* parent)
     addAction(QStringLiteral("tNew"), mActionNew);
     contextMenu()->addAction(mActionNew);
     connect(mActionNew, &NewAlarmAction::selected, this, &TrayWindow::slotNewAlarm);
-    connect(mActionNew->fromTemplateAlarmAction(QString()), &TemplateMenuAction::selected, this, &TrayWindow::slotNewFromTemplate);
+    connect(mActionNew, &NewAlarmAction::selectedTemplate, this, &TrayWindow::slotNewFromTemplate);
     contextMenu()->addSeparator();
 
     QAction* a = KAlarm::createStopPlayAction(this);
@@ -153,7 +152,7 @@ void TrayWindow::slotNewAlarm(EditAlarmDlg::Type type)
 * Called when the "New Alarm" menu item is selected to edit a new alarm from a
 * template.
 */
-void TrayWindow::slotNewFromTemplate(const KAEvent* event)
+void TrayWindow::slotNewFromTemplate(const KAEvent& event)
 {
     KAlarm::editNewAlarm(event);
 }

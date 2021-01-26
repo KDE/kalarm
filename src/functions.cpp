@@ -18,7 +18,6 @@
 #include "preferences.h"
 #include "resourcescalendar.h"
 #include "templatelistview.h"
-#include "templatemenuaction.h"
 #include "resources/calendarfunctions.h"
 #include "resources/datamodel.h"
 #include "resources/resources.h"
@@ -130,7 +129,7 @@ const QLatin1String ALARM_OPTS_FILE("alarmopts");
 const char*         DONT_SHOW_ERRORS_GROUP = "DontShowErrors";
 
 KAlarm::UpdateResult updateEvent(KAEvent&, KAlarm::UpdateError, QWidget* msgParent, bool saveIfReadOnly);
-void editNewTemplate(EditAlarmDlg::Type, const KAEvent* preset, QWidget* parent);
+void editNewTemplate(EditAlarmDlg::Type, const KAEvent& preset, QWidget* parent);
 void displayUpdateError(QWidget* parent, KAlarm::UpdateError, const UpdateStatusData&, bool showKOrgError = true);
 KAlarm::UpdateResult sendToKOrganizer(const KAEvent&);
 KAlarm::UpdateResult deleteFromKOrganizer(const QString& eventID);
@@ -1092,7 +1091,7 @@ void editNewAlarm(KAEvent::SubAction action, QWidget* parent, const AlarmText* t
 * Execute a New Alarm dialog, optionally either presetting it to the supplied
 * event, or setting the action and text.
 */
-void editNewAlarm(const KAEvent* preset, QWidget* parent)
+void editNewAlarm(const KAEvent& preset, QWidget* parent)
 {
     EditAlarmDlg* editDlg = EditAlarmDlg::create(false, preset, true, parent);
     if (editDlg)
@@ -1178,7 +1177,7 @@ bool editNewAlarm(const QString& templateName, QWidget* parent)
         KAEvent templateEvent = ResourcesCalendar::templateEvent(templateName);
         if (templateEvent.isValid())
         {
-            editNewAlarm(&templateEvent, parent);
+            editNewAlarm(templateEvent, parent);
             return true;
         }
         qCWarning(KALARM_LOG) << "KAlarm::editNewAlarm:" << templateName << ": template not found";
@@ -1191,13 +1190,13 @@ bool editNewAlarm(const QString& templateName, QWidget* parent)
 */
 void editNewTemplate(EditAlarmDlg::Type type, QWidget* parent)
 {
-    ::editNewTemplate(type, nullptr, parent);
+    ::editNewTemplate(type, KAEvent(), parent);
 }
 
 /******************************************************************************
 * Create a new template, based on an existing event or template.
 */
-void editNewTemplate(const KAEvent* preset, QWidget* parent)
+void editNewTemplate(const KAEvent& preset, QWidget* parent)
 {
     ::editNewTemplate(EditAlarmDlg::Type(0), preset, parent);
 }
@@ -1342,7 +1341,7 @@ KAlarm::UpdateResult updateEvent(KAEvent& event, KAlarm::UpdateError err, QWidge
 * 'preset' is non-null to base it on an existing event or template; otherwise,
 * the alarm type is set to 'type'.
 */
-void editNewTemplate(EditAlarmDlg::Type type, const KAEvent* preset, QWidget* parent)
+void editNewTemplate(EditAlarmDlg::Type type, const KAEvent& preset, QWidget* parent)
 {
     if (Resources::enabledResources(CalEvent::TEMPLATE, true).isEmpty())
     {
@@ -1353,7 +1352,7 @@ void editNewTemplate(EditAlarmDlg::Type type, const KAEvent* preset, QWidget* pa
     // the dialogue is still open. It prevents double deletion (both on
     // deletion of parent, and on return from this function).
     AutoQPointer<EditAlarmDlg> editDlg;
-    if (preset)
+    if (preset.isValid())
         editDlg = EditAlarmDlg::create(true, preset, true, parent);
     else
         editDlg = EditAlarmDlg::create(true, type, parent);
@@ -1377,14 +1376,14 @@ namespace KAlarm
 * Open the Edit Alarm dialog to edit the specified alarm.
 * If the alarm is read-only or archived, the dialog is opened read-only.
 */
-void editAlarm(KAEvent* event, QWidget* parent)
+void editAlarm(KAEvent& event, QWidget* parent)
 {
-    if (event->expired()  ||  eventReadOnly(event->id()))
+    if (event.expired()  ||  eventReadOnly(event.id()))
     {
         viewAlarm(event, parent);
         return;
     }
-    const EventId id(*event);
+    const EventId id(event);
     // Use AutoQPointer to guard against crash on application exit while
     // the dialogue is still open. It prevents double deletion (both on
     // deletion of parent, and on return from this function).
@@ -1403,7 +1402,7 @@ void editAlarm(KAEvent* event, QWidget* parent)
         bool changeDeferral = !editDlg->getEvent(newEvent, resource);
 
         // Update the event in the displays and in the calendar file
-        const Undo::Event undo(*event, resource);
+        const Undo::Event undo(event, resource);
         if (changeDeferral)
         {
             // The only change has been to an existing deferral
@@ -1412,7 +1411,7 @@ void editAlarm(KAEvent* event, QWidget* parent)
         }
         else
         {
-            const UpdateResult status = modifyEvent(*event, newEvent, editDlg);
+            const UpdateResult status = modifyEvent(event, newEvent, editDlg);
             if (status.status != UPDATE_OK  &&  status.status <= UPDATE_KORG_ERR)
                 displayKOrgUpdateError(editDlg, ERR_MODIFY, status);
         }
@@ -1453,7 +1452,7 @@ bool editAlarmById(const EventId& id, QWidget* parent)
             qCCritical(KALARM_LOG) << "KAlarm::editAlarmById:" << eventID << ": event not active or template";
             return false;
     }
-    editAlarm(&event, parent);
+    editAlarm(event, parent);
     return true;
 }
 
@@ -1461,9 +1460,9 @@ bool editAlarmById(const EventId& id, QWidget* parent)
 * Open the Edit Alarm dialog to edit the specified template.
 * If the template is read-only, the dialog is opened read-only.
 */
-void editTemplate(KAEvent* event, QWidget* parent)
+void editTemplate(KAEvent& event, QWidget* parent)
 {
-    if (eventReadOnly(event->id()))
+    if (eventReadOnly(event.id()))
     {
         // The template is read-only, so make the dialogue read-only.
         // Use AutoQPointer to guard against crash on application exit while
@@ -1483,12 +1482,12 @@ void editTemplate(KAEvent* event, QWidget* parent)
         KAEvent newEvent;
         Resource resource;
         editDlg->getEvent(newEvent, resource);
-        const QString id = event->id();
+        const QString id = event.id();
         newEvent.setEventId(id);
-        newEvent.setResourceId(event->resourceId());
+        newEvent.setResourceId(event.resourceId());
 
         // Update the event in the displays and in the calendar file
-        const Undo::Event undo(*event, resource);
+        const Undo::Event undo(event, resource);
         updateTemplate(newEvent, editDlg);
         Undo::saveEdit(undo, newEvent);
     }
@@ -1497,7 +1496,7 @@ void editTemplate(KAEvent* event, QWidget* parent)
 /******************************************************************************
 * Open the Edit Alarm dialog to view the specified alarm (read-only).
 */
-void viewAlarm(const KAEvent* event, QWidget* parent)
+void viewAlarm(const KAEvent& event, QWidget* parent)
 {
     // Use AutoQPointer to guard against crash on application exit while
     // the dialogue is still open. It prevents double deletion (both on

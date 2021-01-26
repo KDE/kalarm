@@ -1,7 +1,7 @@
 /*
  *  templatedlg.cpp  -  dialog to create, edit and delete alarm templates
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2004-2020 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2004-2021 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -153,7 +153,7 @@ void TemplateDlg::slotCopy()
 {
     KAEvent event = mListView->selectedEvent();
     if (event.isValid())
-        KAlarm::editNewTemplate(&event, mListView);
+        KAlarm::editNewTemplate(event, mListView);
 }
 
 /******************************************************************************
@@ -164,7 +164,7 @@ void TemplateDlg::slotEdit()
 {
     KAEvent event = mListView->selectedEvent();
     if (event.isValid())
-        KAlarm::editTemplate(&event, mListView);
+        KAlarm::editTemplate(event, mListView);
 }
 
 /******************************************************************************

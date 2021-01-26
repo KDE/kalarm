@@ -1,7 +1,7 @@
 /*
  *  alarmlistdelegate.cpp  -  handles editing and display of alarm list
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2007-2019 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2007-2021 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -105,7 +105,7 @@ QSize AlarmListDelegate::sizeHint(const QStyleOptionViewItem& option, const QMod
     return QItemDelegate::sizeHint(option, index);
 }
 
-void AlarmListDelegate::edit(KAEvent* event, EventListView* view)
+void AlarmListDelegate::edit(KAEvent& event, EventListView* view)
 {
     KAlarm::editAlarm(event, static_cast<AlarmListView*>(view));   // edit alarm (view-only mode if archived or read-only)
 }

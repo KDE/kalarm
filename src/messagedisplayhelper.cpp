@@ -1,7 +1,7 @@
 /*
  *  messagedisplayhelper.cpp  -  helper class to display an alarm or error message
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2001-2020 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2001-2021 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -1187,7 +1187,7 @@ bool MessageDisplayHelper::closeEvent()
 EditAlarmDlg* MessageDisplayHelper::createEdit()
 {
     qCDebug(KALARM_LOG) << "MessageDisplayHelper::createEdit";
-    mEditDlg = EditAlarmDlg::create(false, &mOriginalEvent, false, MainWindow::mainMainWindow(), EditAlarmDlg::RES_IGNORE);
+    mEditDlg = EditAlarmDlg::create(false, mOriginalEvent, false, MainWindow::mainMainWindow(), EditAlarmDlg::RES_IGNORE);
     if (mEditDlg)
     {
         mEditDlg->setAttribute(Qt::WA_NativeWindow, true);
