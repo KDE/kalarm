@@ -604,6 +604,9 @@ public:
      */
     Akonadi::Item::Id akonadiItemId() const;
 
+    /** Set the alarm's name. */
+    void setName(const QString& newName);
+
     /** Return the alarm's name. */
     QString name() const;
 

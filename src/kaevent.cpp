@@ -2,7 +2,7 @@
  *  kaevent.cpp  -  represents KAlarm calendar events
  *  This file is part of kalarmcal library, which provides access to KAlarm
  *  calendar data.
- *  SPDX-FileCopyrightText: 2001-2020 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2001-2021 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -1834,6 +1834,11 @@ void KAEvent::setAkonadiItemId(Akonadi::Item::Id id)
 Akonadi::Item::Id KAEvent::akonadiItemId() const
 {
     return d->mAkonadiItemId;
+}
+
+void KAEvent::setName(const QString& newName)
+{
+    d->mName = newName;
 }
 
 QString KAEvent::name() const
