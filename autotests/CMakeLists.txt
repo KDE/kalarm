@@ -10,8 +10,8 @@ macro(macro_unit_tests)
     ecm_mark_as_test(${_testname})
     target_link_libraries(${_testname}
         KF5AlarmCalendar
-        Qt::DBus
-        Qt::Test)
+        Qt5::DBus
+        Qt5::Test)
   endforeach()
 endmacro()
 if (NOT WIN32)
