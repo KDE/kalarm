@@ -196,7 +196,9 @@ void Preferences::setNoAutoStart(bool yes)
             return;
         }
         QTextStream stream(&file);
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
         stream.setCodec("UTF-8");
+#endif
         stream.setAutoDetectUnicode(true);
         lines = stream.readAll().split(QLatin1Char('\n'));
         for (int i = 0; i < lines.size(); ++i)
@@ -244,7 +246,9 @@ void Preferences::setNoAutoStart(bool yes)
             return;
         }
         QTextStream stream(&file);
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
         stream.setCodec("UTF-8");
+#endif
         stream << lines.join(QLatin1Char('\n')) << "\n";
         // QSaveFile doesn't report a write error when the device is full (see Qt
         // bug 75077), so check that the data can actually be written by flush().
