@@ -949,6 +949,9 @@ public:
     /** Return the start time for the event. If the event recurs, this is the
      *  time of the first recurrence. If the event is date-only, this returns a
      *  date-only value.
+     *  @note No account is taken of any working hours or holiday restrictions.
+     *        when determining the start date/time.
+     *
      *  @see mainDateTime()
      */
     DateTime startDateTime() const;
@@ -960,17 +963,26 @@ public:
     void setTime(const KADateTime &dt);
 
     /** Return the next time the main alarm will trigger.
+     *  @note No account is taken of any working hours or holiday restrictions.
+     *        when determining the next trigger date/time.
+     *
      *  @param withRepeats  true to include sub-repetitions, false to exclude them.
      *  @see mainTime(), startDateTime(), setTime()
      */
     DateTime mainDateTime(bool withRepeats = false) const;
 
     /** Return the time at which the main alarm will next trigger.
-     *  Sub-repetitions are ignored. */
+     *  Sub-repetitions are ignored.
+     *  @note No account is taken of any working hours or holiday restrictions.
+     *        when determining the next trigger time.
+     */
     QTime mainTime() const;
 
-    /** Return the time at which the last sub-repetition of the main
-     *  alarm will occur.
+    /** Return the time at which the last sub-repetition of the current
+     *  recurrence of the main alarm will occur.
+     *  @note No account is taken of any working hours or holiday restrictions
+     *        when determining the last sub-repetition time.
+     *
      *  @return last sub-repetition time, or main alarm time if no
      *          sub-repetitions are configured.
      */
@@ -1195,6 +1207,8 @@ public:
     int recurInterval() const;
 
     /** Return the longest interval which can occur between consecutive recurrences.
+     *  @note No account is taken of any working hours or holiday restrictions
+     *        when evaluating consecutive recurrence dates/times.
      *  @see recurInterval()
      */
     KCalendarCore::Duration longestRecurrenceInterval() const;
@@ -1202,6 +1216,8 @@ public:
     /** Adjust the event date/time to the first recurrence of the event, on or after
      *  the event start date/time. The event start date may not be a recurrence date,
      *  in which case a later date will be set.
+     *  @note No account is taken of any working hours or holiday restrictions
+     *        when determining the first recurrence of the event.
      */
     void setFirstRecurrence();
 
@@ -1222,6 +1238,9 @@ public:
     Repetition repetition() const;
 
     /** Return the count of the next sub-repetition which is due.
+     *  @note No account is taken of any working hours or holiday restrictions
+     *        when determining the next event sub-repetition.
+     *
      *  @return sub-repetition count (>=1), or 0 for the main recurrence.
      *  @see nextOccurrence()
      */
@@ -1232,6 +1251,9 @@ public:
 
     /** Determine whether the event will occur strictly after the specified
      *  date/time. Reminders are ignored.
+     *  @note No account is taken of any working hours or holiday restrictions
+     *        when determining event occurrences.
+     *
      *  @param preDateTime        the specified date/time.
      *  @param includeRepetitions if true and the alarm has a sub-repetition, the
      *                            method will return true if any sub-repetitions
@@ -1246,12 +1268,18 @@ public:
      *  If the alarm has a sub-repetition, and a sub-repetition of a previous
      *  recurrence occurs after the specified date/time, that sub-repetition is
      *  set as the next occurrence.
+     *  @note No account is taken of any working hours or holiday restrictions
+     *        when determining and setting the next occurrence date/time.
+     *
      *  @see nextOccurrence()
      */
     OccurType setNextOccurrence(const KADateTime &preDateTime);
 
     /** Get the date/time of the next occurrence of the event, strictly after
      *  the specified date/time. Reminders are ignored.
+     *  @note No account is taken of any working hours or holiday restrictions
+     *        when determining the next event occurrence.
+     *
      *  @param preDateTime the specified date/time.
      *  @param result      date/time of next occurrence, or invalid date/time if none.
      *  @param option      how/whether to make allowance for sub-repetitions.
@@ -1261,6 +1289,9 @@ public:
 
     /** Get the date/time of the last previous occurrence of the event,
      *  strictly before the specified date/time. Reminders are ignored.
+     *  @note No account is taken of any working hours or holiday restrictions
+     *        when determining the previous event occurrence.
+     *
      *  @param afterDateTime       the specified date/time.
      *  @param result              date/time of previous occurrence, or invalid
      *                             date/time if none.
