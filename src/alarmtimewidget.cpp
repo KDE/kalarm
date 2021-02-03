@@ -1,7 +1,7 @@
 /*
  *  alarmtimewidget.cpp  -  alarm date/time entry widget
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2001-2020 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2001-2021 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -234,13 +234,19 @@ void AlarmTimeWidget::setReadOnly(bool ro)
 }
 
 /******************************************************************************
-* Select the "Time from now" radio button.
+* Select the "Time from now" radio button, or if minutes < 0, select
+* 'At date/time'.
 */
 void AlarmTimeWidget::selectTimeFromNow(int minutes)
 {
-    mAfterTimeRadio->setChecked(true);
-    if (minutes > 0)
-        mDelayTimeEdit->setValue(minutes);
+    if (minutes >= 0)
+    {
+        mAfterTimeRadio->setChecked(true);
+        if (minutes > 0)
+            mDelayTimeEdit->setValue(minutes);
+    }
+    else
+        mAtTimeRadio->setChecked(true);
 }
 
 /******************************************************************************

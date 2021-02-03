@@ -70,8 +70,10 @@ MainWindow*         displayMainWindowSelected(const QString& eventId);
 
 bool                editNewAlarm(const QString& templateName, QWidget* parent = nullptr);
 void                editNewAlarm(EditAlarmDlg::Type, QWidget* parent = nullptr);
+void                editNewAlarm(EditAlarmDlg::Type, const QDate& startDate, QWidget* parent = nullptr);
 void                editNewAlarm(KAEvent::SubAction, QWidget* parent = nullptr, const AlarmText* = nullptr);
 void                editNewAlarm(const KAEvent& preset, QWidget* parent = nullptr);
+void                editNewAlarm(const KAEvent& preset, const QDate& startDate, QWidget* parent = nullptr);
 void                editAlarm(KAEvent&, QWidget* parent = nullptr);
 bool                editAlarmById(const EventId& eventID, QWidget* parent = nullptr);
 void                updateEditedAlarm(EditAlarmDlg*, KAEvent&, Resource&);
@@ -79,7 +81,7 @@ void                viewAlarm(const KAEvent&, QWidget* parent = nullptr);
 void                editNewTemplate(EditAlarmDlg::Type, QWidget* parent = nullptr);
 void                editNewTemplate(const KAEvent& preset, QWidget* parent = nullptr);
 void                editTemplate(KAEvent&, QWidget* parent = nullptr);
-void                execNewAlarmDlg(EditAlarmDlg*);
+void                execNewAlarmDlg(EditAlarmDlg*, const QDate& startDate = QDate());
 /** Create a "New From Template" QAction */
 KToggleAction*      createAlarmEnableAction(QObject* parent);
 QAction*            createStopPlayAction(QObject* parent);

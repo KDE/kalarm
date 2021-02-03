@@ -597,6 +597,11 @@ void EditAlarmDlg::setName(const QString& name)
 void EditAlarmDlg::setTime(const DateTime& start)
 {
     mTimeWidget->setDateTime(start);
+    mTimeWidget->selectTimeFromNow(-1);    // select 'At date/time' option
+}
+KADateTime EditAlarmDlg::time() const
+{
+    return mTimeWidget->getDateTime(nullptr, false, false);
 }
 void EditAlarmDlg::setRecurrence(const KARecurrence& recur, const KCalendarCore::Duration& subRepeatInterval, int subRepeatCount)
 {

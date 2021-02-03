@@ -1048,9 +1048,13 @@ void displayKOrgUpdateError(QWidget* parent, UpdateError code, const UpdateResul
 */
 void editNewAlarm(EditAlarmDlg::Type type, QWidget* parent)
 {
+    editNewAlarm(type, QDate(), parent);
+}
+void editNewAlarm(EditAlarmDlg::Type type, const QDate& startDate, QWidget* parent)
+{
     EditAlarmDlg* editDlg = EditAlarmDlg::create(false, type, parent);
     if (editDlg)
-        execNewAlarmDlg(editDlg);
+        execNewAlarmDlg(editDlg, startDate);
 }
 
 /******************************************************************************
@@ -1093,16 +1097,27 @@ void editNewAlarm(KAEvent::SubAction action, QWidget* parent, const AlarmText* t
 */
 void editNewAlarm(const KAEvent& preset, QWidget* parent)
 {
+    editNewAlarm(preset, QDate(), parent);
+}
+void editNewAlarm(const KAEvent& preset, const QDate& startDate, QWidget* parent)
+{
     EditAlarmDlg* editDlg = EditAlarmDlg::create(false, preset, true, parent);
     if (editDlg)
-        execNewAlarmDlg(editDlg);
+        execNewAlarmDlg(editDlg, startDate);
 }
 
 /******************************************************************************
 * Common code for editNewAlarm() variants.
 */
-void execNewAlarmDlg(EditAlarmDlg* editDlg)
+void execNewAlarmDlg(EditAlarmDlg* editDlg, const QDate& startDate)
 {
+    if (startDate.isValid())
+    {
+        KADateTime defaultTime = editDlg->time();
+        defaultTime.setDate(startDate);
+        editDlg->setTime(defaultTime);
+    }
+
     // Create a PrivateNewAlarmDlg parented by editDlg.
     // It will be deleted when editDlg is closed.
     new PrivateNewAlarmDlg(editDlg);

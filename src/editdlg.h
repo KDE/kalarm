@@ -62,9 +62,16 @@ public:
 
     // Methods to initialise values in the New Alarm dialogue.
     void            setName(const QString&);
-    // N.B. setTime() must be called first to set the date-only characteristic,
-    //      followed by setRecurrence() if applicable.
+
+    /** Set the start date/time for the alarm.
+     * N.B. setTime() must be called first to set the date-only characteristic,
+     *      followed by setRecurrence() if applicable.
+     */
     void            setTime(const DateTime&);    // must be called first to set date-only value
+
+    /** Return the start date/time for the alarm. */
+    KADateTime      time() const;
+
     void            setRecurrence(const KARecurrence&, const KCalendarCore::Duration& subRepeatInterval, int subRepeatCount);
     void            setRepeatAtLogin();
     virtual void    setAction(KAEvent::SubAction, const AlarmText& = AlarmText()) = 0;

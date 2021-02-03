@@ -1,7 +1,7 @@
 /*
  *  alarmtimewidget.h  -  alarm date/time entry widget
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2001-2019 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2001-2021 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -47,6 +47,10 @@ class AlarmTimeWidget : public QFrame
         void              setReadOnly(bool);
         bool              anyTime() const               { return mAnyTime; }
         void              enableAnyTime(bool enable);
+        /** Select/deselect 'Time from now' option.
+         *  @param minutes  Value to set in 'Time from now', or
+         *                  if < 0, select 'At date/time' option.
+         */
         void              selectTimeFromNow(int minutes = 0);
         void              showMoreOptions(bool);
         QSize             sizeHint() const override              { return minimumSizeHint(); }
