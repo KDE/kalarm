@@ -1,7 +1,7 @@
 /*
  *  locale.h  -  miscellaneous locale functions
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2004-2019 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2004-2021 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -15,8 +15,8 @@ namespace Locale
 /**
 * Given a standard KDE day number, return the day number in the week for the
 * user's locale.
-* @param weekDay  Locale day number in week = 0 .. 6
-* @return  Standard day number = 1 (Mon) .. 7 (Sun)
+* @param weekDay  Standard day number = 1 (Mon) .. 7 (Sun)
+* @return  Locale day number in week = 0 .. 6
 */
 int weekDay_to_localeDayInWeek(int weekDay);
 
