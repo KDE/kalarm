@@ -513,7 +513,7 @@ void KARecurrence::Private::writeRecurrence(const KARecurrence *q, Recurrence &r
 
         // It recurs on the 29th February.
         // Create an additional 60th day of the year, or last day of February, rule.
-        auto *rrule2 = new RecurrenceRule();
+        auto rrule2 = new RecurrenceRule();
         rrule2->setRecurrenceType(RecurrenceRule::rYearly);
         rrule2->setFrequency(freq);
         rrule2->setStartDt(mRecurrence.startDateTime());
@@ -625,7 +625,7 @@ KADateTime KARecurrence::Private::endDateTime() const
      * 4 years. So shift the temporary recurrence date to the 28th to ensure
      * that it occurs every year, thus giving the correct occurrence count.
      */
-    auto *rrule = new RecurrenceRule();
+    auto rrule = new RecurrenceRule();
     rrule->setRecurrenceType(RecurrenceRule::rYearly);
     KADateTime dt = KADateTime(mRecurrence.startDateTime());
     QDate da = dt.date();
