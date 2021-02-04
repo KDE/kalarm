@@ -1070,14 +1070,28 @@ public:
     bool workTimeOnly() const;
 
     /** Check whether a date/time is during working hours and/or holidays, depending
-     *  on the flags set for the specified event. */
-    bool isWorkingTime(const KADateTime &dt) const;
+     *  on the flags set for the specified event.
+     *  @deprecated Use !excludedByWorkTimeOrHoliday() instead.
+     */
+    KALARMCAL_DEPRECATED bool isWorkingTime(const KADateTime &dt) const;
+
+    /** Check whether a date/time conflicts with working hours and/or holiday
+     *  restrictions for the alarm.
+     *  @return true if the alarm is disabled from occurring at time @p dt
+     *               because @p dt is outside working hours (if the alarm is
+     *               working time only) or is during a holiday (if the alarm is
+     *               disabled on holidays);
+     *         false if the alarm is permitted to occur at time @p dt. (But
+     *               note that no check is made as to whether the alarm is
+     *               actually scheduled to occur at time @p dt.)
+     */
+    bool excludedByWorkTimeOrHoliday(const KADateTime &dt) const;
 
     /** Set working days and times, to be used by all KAEvent instances.
      *  @param days   bits set to 1 for each working day. Array element 0 = Monday ... 6 = Sunday.
      *  @param start  start time in working day.
      *  @param end    end time in working day.
-     *  @see setWorkTimeOnly(), isWorkingTime()
+     *  @see setWorkTimeOnly(), excludedByWorkTimeOrHoliday()
      */
     static void setWorkTime(const QBitArray &days, const QTime &start, const QTime &end);
 

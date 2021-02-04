@@ -188,7 +188,7 @@ public:
     }
     DateTime           deferralLimit(KAEvent::DeferLimitType * = nullptr) const;
     KAEvent::Flags     flags() const;
-    bool               isWorkingTime(const KADateTime &) const;
+    bool               excludedByWorkTimeOrHoliday(const KADateTime &dt) const;
     bool               setRepetition(const Repetition &);
     bool               occursAfter(const KADateTime &preDateTime, bool includeRepetitions) const;
     KAEvent::OccurType nextOccurrence(const KADateTime &preDateTime, DateTime &result, KAEvent::OccurOption = KAEvent::IGNORE_REPETITION) const;
@@ -2586,25 +2586,30 @@ bool KAEvent::workTimeOnly() const
 }
 
 /******************************************************************************
-* Check whether a date/time is during working hours and/or holidays, depending
-* on the flags set for the specified event.
+* Check whether a date/time conflicts with working hours and/or holiday
+* restrictions for the alarm.
 */
-bool KAEvent::isWorkingTime(const KADateTime &dt) const
+bool KAEvent::excludedByWorkTimeOrHoliday(const KADateTime &dt) const
 {
-    return d->isWorkingTime(dt);
+    return d->excludedByWorkTimeOrHoliday(dt);
 }
 
-bool KAEventPrivate::isWorkingTime(const KADateTime &dt) const
+bool KAEvent::isWorkingTime(const KADateTime &dt) const
+{
+    return !excludedByWorkTimeOrHoliday(dt);
+}
+
+bool KAEventPrivate::excludedByWorkTimeOrHoliday(const KADateTime &dt) const
 {
     if ((mWorkTimeOnly  &&  !mWorkDays.testBit(dt.date().dayOfWeek() - 1))
     ||  (mExcludeHolidays  &&  holidays()->isHoliday(dt.date()))) {
-        return false;
-    }
-    if (!mWorkTimeOnly) {
         return true;
     }
-    return dt.isDateOnly()
-        || (dt.time() >= mWorkDayStart  &&  dt.time() < mWorkDayEnd);
+    if (!mWorkTimeOnly) {
+        return false;
+    }
+    return !dt.isDateOnly()
+       &&  (dt.time() < mWorkDayStart  ||  dt.time() >= mWorkDayEnd);
 }
 
 /******************************************************************************
@@ -4342,7 +4347,7 @@ void KAEventPrivate::calcTriggerTimes() const
         // unless it falls during working hours.
         if ((!mWorkTimeOnly && !excludeHolidays)
         ||  !recurs
-        ||  isWorkingTime(mMainTrigger.kDateTime())) {
+        ||  !excludedByWorkTimeOrHoliday(mMainTrigger.kDateTime())) {
             // It only occurs once, or it complies with any working hours/holiday
             // restrictions.
             mMainWorkTrigger = mMainTrigger;
@@ -4370,7 +4375,7 @@ void KAEventPrivate::calcTriggerTimes() const
                     if (!nextTrigger.isValid()) {
                         break;
                     }
-                    if (isWorkingTime(nextTrigger.kDateTime())) {
+                    if (!excludedByWorkTimeOrHoliday(nextTrigger.kDateTime())) {
                         const int reminder = (mReminderMinutes > 0) ? mReminderMinutes : 0;   // only interested in reminders BEFORE the alarm
                         mMainWorkTrigger = nextTrigger;
                         mAllWorkTrigger = (type & KAEvent::OCCURRENCE_REPEAT) ? mMainWorkTrigger : mMainWorkTrigger.addMins(-reminder);
