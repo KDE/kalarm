@@ -1833,10 +1833,10 @@ int KAlarmApp::handleEvent(const EventId& id, QueuedAction action, bool findUniq
                     {
                         KADateTime dt(nextDT);
                         dt.setDateOnly(true);
-                        reschedule = !event.isWorkingTime(dt);
+                        reschedule = event.excludedByWorkTimeOrHoliday(dt);
                     }
                     else
-                        reschedule = !event.isWorkingTime(nextDT);
+                        reschedule = event.excludedByWorkTimeOrHoliday(nextDT);
                     rescheduleWork = reschedule;
                     if (reschedule)
                         qCDebug(KALARM_LOG) << "KAlarmApp::handleEvent: Alarm" << alarm.type() << "at" << nextDT.qDateTime() << ": not during working hours";
@@ -2111,10 +2111,10 @@ int KAlarmApp::rescheduleAlarm(KAEvent& event, const KAAlarm& alarm, bool update
                 {
                     KADateTime dt(next_dt);
                     dt.setDateOnly(true);
-                    next = !event.isWorkingTime(dt);
+                    next = event.excludedByWorkTimeOrHoliday(dt);
                 }
                 else
-                    next = !event.isWorkingTime(next_dt);
+                    next = event.excludedByWorkTimeOrHoliday(next_dt);
             }
         } while (next && next_dt <= now);
         reply = (!cancelled && next_dt.isValid() && (next_dt <= now)) ? 1 : 0;
