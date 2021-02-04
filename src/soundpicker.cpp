@@ -48,10 +48,10 @@ QString SoundPicker::i18n_combo_File()    { return i18nc("@item:inlistbox", "Sou
 SoundPicker::SoundPicker(QWidget* parent)
     : QFrame(parent)
 {
-    auto* soundLayout = new QHBoxLayout(this);
+    auto soundLayout = new QHBoxLayout(this);
     soundLayout->setContentsMargins(0, 0, 0, 0);
     mTypeBox = new QWidget(this);    // this is to control the QWhatsThis text display area
-    auto* typeBoxLayout = new QHBoxLayout(mTypeBox);
+    auto typeBoxLayout = new QHBoxLayout(mTypeBox);
     typeBoxLayout->setContentsMargins(0, 0, 0, 0);
 
     QLabel* label = new QLabel(i18n_label_Sound(), mTypeBox);

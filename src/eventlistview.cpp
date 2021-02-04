@@ -38,7 +38,7 @@ EventListView::EventListView(QWidget* parent)
 
 void EventListView::setModel(QAbstractItemModel* model)
 {
-    auto* elm = qobject_cast<EventListModel*>(model);
+    auto elm = qobject_cast<EventListModel*>(model);
     Q_ASSERT(elm);   // model must be derived from EventListModel
 
     QTreeView::setModel(model);
@@ -97,7 +97,7 @@ KAEvent EventListView::selectedEvent() const
     const QModelIndexList list = selectionModel()->selectedRows();      //clazy:exclude=inefficient-qlist
     if (list.count() != 1)
         return KAEvent();
-    const auto* model = static_cast<const EventListModel*>(list[0].model());
+    const auto model = static_cast<const EventListModel*>(list[0].model());
     return model->event(list[0]);
 }
 
@@ -111,7 +111,7 @@ QVector<KAEvent> EventListView::selectedEvents() const
     int count = ixlist.count();
     if (count)
     {
-        const auto* model = static_cast<const EventListModel*>(ixlist[0].model());
+        const auto model = static_cast<const EventListModel*>(ixlist[0].model());
         elist.reserve(count);
         for (int i = 0;  i < count;  ++i)
             elist += model->event(ixlist[i]);
@@ -163,7 +163,7 @@ bool EventListView::viewportEvent(QEvent* e)
 {
     if (e->type() == QEvent::ToolTip  &&  isActiveWindow())
     {
-        auto* he = static_cast<QHelpEvent*>(e);
+        auto he = static_cast<QHelpEvent*>(e);
         const QModelIndex index = indexAt(he->pos());
         QVariant value = model()->data(index, Qt::ToolTipRole);
         if (value.canConvert<QString>())
@@ -172,7 +172,7 @@ bool EventListView::viewportEvent(QEvent* e)
             int i = toolTip.indexOf(QLatin1Char('\n'));
             if (i < 0)
             {
-                auto* m = qobject_cast<EventListModel*>(model());
+                auto m = qobject_cast<EventListModel*>(model());
                 if (index.column() == ResourceDataModelBase::TextColumn
                 ||  index.column() == ResourceDataModelBase::NameColumn
                 ||  !m  ||  m->event(index).commandError() == KAEvent::CMD_NO_ERROR)
@@ -219,11 +219,11 @@ bool EventListDelegate::editorEvent(QEvent* e, QAbstractItemModel* model, const 
             break;
         case QEvent::MouseButtonRelease:
         {
-            auto* view = static_cast<EventListView*>(parent());
+            auto view = static_cast<EventListView*>(parent());
             if (!view->editOnSingleClick()
             ||  !view->style()->styleHint(QStyle::SH_ItemView_ActivateItemOnSingleClick, nullptr, view))
                 return false;
-            auto* me = static_cast<QMouseEvent*>(e);
+            auto me = static_cast<QMouseEvent*>(e);
             if (me->button() != Qt::LeftButton  ||  me->buttons()
             ||  me->modifiers() != Qt::NoModifier)
                 return false;
@@ -235,7 +235,7 @@ bool EventListDelegate::editorEvent(QEvent* e, QAbstractItemModel* model, const 
     if (index.isValid())
     {
         qCDebug(KALARM_LOG) << "EventListDelegate::editorEvent";
-        auto* itemModel = qobject_cast<EventListModel*>(model);
+        auto itemModel = qobject_cast<EventListModel*>(model);
         if (!itemModel)
             qCCritical(KALARM_LOG) << "EventListDelegate::editorEvent: Invalid cast to EventListModel*";
         else

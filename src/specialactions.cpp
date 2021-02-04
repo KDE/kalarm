@@ -91,12 +91,12 @@ SpecialActionsDlg::SpecialActionsDlg(const QString& preAction, const QString& po
     : QDialog(parent)
 {
     setWindowTitle(i18nc("@title:window", "Special Alarm Actions"));
-    auto* mainLayout = new QVBoxLayout;
+    auto mainLayout = new QVBoxLayout;
     setLayout(mainLayout);
 
     QWidget* page = new QWidget(this);
     mainLayout->addWidget(page);
-    auto* layout = new QVBoxLayout(page);
+    auto layout = new QVBoxLayout(page);
     layout->setContentsMargins(0, 0, 0, 0);
 
     mActions = new SpecialActions(enableCheckboxes, page);
@@ -147,17 +147,17 @@ SpecialActions::SpecialActions(bool enableCheckboxes, QWidget* parent)
     : QWidget(parent)
     , mEnableCheckboxes(enableCheckboxes)
 {
-    auto* topLayout = new QVBoxLayout(this);
+    auto topLayout = new QVBoxLayout(this);
     topLayout->setContentsMargins(0, 0, 0, 0);
 
     // Pre-alarm action
     QGroupBox* group = new QGroupBox(i18nc("@title:group", "Pre-Alarm Action"), this);
     topLayout->addWidget(group);
-    auto* vlayout = new QVBoxLayout(group);
+    auto vlayout = new QVBoxLayout(group);
 
     QWidget* box = new QWidget(group);   // this is to control the QWhatsThis text display area
     vlayout->addWidget(box);
-    auto* boxLayout = new QHBoxLayout(box);
+    auto boxLayout = new QHBoxLayout(box);
     boxLayout->setContentsMargins(0, 0, 0, 0);
     QLabel* label = new QLabel(i18nc("@label:textbox", "Command:"), box);
     boxLayout->addWidget(label);

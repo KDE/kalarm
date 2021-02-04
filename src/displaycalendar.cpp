@@ -231,7 +231,7 @@ void DisplayCalendar::updateKAEvents()
         if (kcalevent->alarms().isEmpty())
             continue;    // ignore events without alarms
 
-        auto* event = new KAEvent(kcalevent);
+        auto event = new KAEvent(kcalevent);
         if (!event->isValid())
         {
             qCWarning(KALARM_LOG) << "DisplayCalendar::updateKAEvents: Ignoring unusable event" << kcalevent->uid();
@@ -259,7 +259,7 @@ bool DisplayCalendar::addEvent(KAEvent& evnt)
         return false;
 
     KCalendarCore::Event::Ptr kcalEvent(new KCalendarCore::Event);
-    auto* event = new KAEvent(evnt);
+    auto event = new KAEvent(evnt);
     QString id = event->id();
     if (id.isEmpty())
         id = kcalEvent->uid();

@@ -49,7 +49,7 @@ SoundDlg::SoundDlg(const QString& file, float volume, float fadeVolume, int fade
                    const QString& caption, QWidget* parent)
     : QDialog(parent)
 {
-    auto* layout = new QVBoxLayout(this);
+    auto layout = new QVBoxLayout(this);
     mSoundWidget = new SoundWidget(true, true, this);
     layout->addWidget(mSoundWidget);
 
@@ -139,7 +139,7 @@ QString SoundWidget::mDefaultDir;
 SoundWidget::SoundWidget(bool showPlay, bool showRepeat, QWidget* parent)
     : QWidget(parent)
 {
-    auto* layout = new QVBoxLayout(this);
+    auto layout = new QVBoxLayout(this);
 
     QLabel* label = nullptr;
     if (!showPlay)
@@ -150,7 +150,7 @@ SoundWidget::SoundWidget(bool showPlay, bool showRepeat, QWidget* parent)
 
     QWidget* box = new QWidget(this);
     layout->addWidget(box);
-    auto* boxHLayout = new QHBoxLayout(box);
+    auto boxHLayout = new QHBoxLayout(box);
     boxHLayout->setContentsMargins(0, 0, 0, 0);
     boxHLayout->setSpacing(0);
 
@@ -199,7 +199,7 @@ SoundWidget::SoundWidget(bool showPlay, bool showRepeat, QWidget* parent)
         mRepeatGroupBox->setWhatsThis(i18nc("@info:whatsthis", "If checked, the sound file will be played repeatedly for as long as the message is displayed."));
         connect(mRepeatGroupBox, &GroupBox::toggled, this, &SoundWidget::changed);
         layout->addWidget(mRepeatGroupBox);
-        auto* glayout = new QVBoxLayout(mRepeatGroupBox);
+        auto glayout = new QVBoxLayout(mRepeatGroupBox);
 
         // Pause between repetitions
         QWidget* box = new QWidget(mRepeatGroupBox);
@@ -224,7 +224,7 @@ SoundWidget::SoundWidget(bool showPlay, bool showRepeat, QWidget* parent)
     // Volume
     QGroupBox* group = new QGroupBox(i18nc("@title:group Sound volume", "Volume"), this);
     layout->addWidget(group);
-    auto* grid = new QGridLayout(group);
+    auto grid = new QGridLayout(group);
     grid->setColumnStretch(2, 1);
     const int indentWidth = CheckBox::textIndent(this) - grid->horizontalSpacing();
     grid->setColumnMinimumWidth(0, indentWidth);
@@ -441,7 +441,7 @@ void SoundWidget::playSound()
     mPlayer->setParent(this);
 #else
     mPlayer = new Phonon::MediaObject(this);
-    auto* output = new Phonon::AudioOutput(Phonon::MusicCategory, mPlayer);   //NOLINT(clang-analyzer-cplusplus.NewDeleteLeaks)
+    auto output = new Phonon::AudioOutput(Phonon::MusicCategory, mPlayer);   //NOLINT(clang-analyzer-cplusplus.NewDeleteLeaks)
     mPlayer->setCurrentSource(mUrl);
     Phonon::createPath(mPlayer, output);
 #endif

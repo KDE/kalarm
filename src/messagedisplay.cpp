@@ -210,7 +210,7 @@ MessageDisplay::DeferDlgData* MessageDisplay::createDeferDlg(bool displayClosing
     dlg->setObjectName(QStringLiteral("DeferDlg"));    // used by LikeBack
     dlg->setDeferMinutes(mDefaultDeferMinutes() > 0 ? mDefaultDeferMinutes() : Preferences::defaultDeferTime());
     dlg->setLimit(mEvent());
-    auto* data = new DeferDlgData(dlg);
+    auto data = new DeferDlgData(dlg);
     data->eventId      = mEventId();
     data->alarmType    = mAlarmType();
     data->commandError = mCommandError();

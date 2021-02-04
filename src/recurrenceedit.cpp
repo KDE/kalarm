@@ -70,7 +70,7 @@ RecurrenceEdit::RecurrenceEdit(bool readOnly, QWidget* parent)
     , mReadOnly(readOnly)
 {
     qCDebug(KALARM_LOG) << "RecurrenceEdit:";
-    auto* topLayout = new QVBoxLayout(this);
+    auto topLayout = new QVBoxLayout(this);
     topLayout->setContentsMargins(0, 0, 0, 0);
 
     /* Create the recurrence rule Group box which holds the recurrence period
@@ -82,13 +82,13 @@ RecurrenceEdit::RecurrenceEdit(bool readOnly, QWidget* parent)
 
     QGroupBox* recurGroup = new QGroupBox(i18nc("@title:group", "Recurrence Rule"), this);
     topLayout->addWidget(recurGroup);
-    auto* hlayout = new QHBoxLayout(recurGroup);
+    auto hlayout = new QHBoxLayout(recurGroup);
     const int marLeft  = style()->pixelMetric(QStyle::PM_LayoutLeftMargin);
     const int marRight = style()->pixelMetric(QStyle::PM_LayoutRightMargin);
     hlayout->setSpacing((marLeft + marRight)/2);   // use margin spacing due to vertical divider line
 
     // Recurrence period radio buttons
-    auto* vlayout = new QVBoxLayout();
+    auto vlayout = new QVBoxLayout();
     vlayout->setSpacing(0);
     vlayout->setContentsMargins(0, 0, 0, 0);
     hlayout->addLayout(vlayout);
@@ -1068,12 +1068,12 @@ Rule::Rule(const QString& freqText, const QString& freqWhatsThis, bool time, boo
     mLayout = new QVBoxLayout(this);
     mLayout->setContentsMargins(0, 0, 0, 0);
 
-    auto* freqLayout = new QHBoxLayout();
+    auto freqLayout = new QHBoxLayout();
     freqLayout->setContentsMargins(0, 0, 0, 0);
     mLayout->addLayout(freqLayout);
     QWidget* box = new QWidget(this);    // this is to control the QWhatsThis text display area
     freqLayout->addWidget(box, 0, Qt::AlignLeft);
-    auto* boxLayout = new QHBoxLayout(box);
+    auto boxLayout = new QHBoxLayout(box);
     boxLayout->setContentsMargins(0, 0, 0, 0);
 
     QLabel* label = new QLabel(i18nc("@label:spinbox", "Recur e&very"), box);
@@ -1163,7 +1163,7 @@ DayWeekRule::DayWeekRule(const QString& freqText, const QString& freqWhatsThis, 
     : Rule(freqText, freqWhatsThis, false, readOnly, parent)
     , mSavedDays(7)
 {
-    auto* grid = new QGridLayout();
+    auto grid = new QGridLayout();
     grid->setContentsMargins(0, 0, 0, 0);
     grid->setRowStretch(0, 1);
     layout()->addLayout(grid);
@@ -1176,7 +1176,7 @@ DayWeekRule::DayWeekRule(const QString& freqText, const QString& freqWhatsThis, 
     // List the days of the week starting at the user's start day of the week.
     // Save the first day of the week, just in case it changes while the dialog is open.
     QWidget* box = new QWidget(this);   // this is to control the QWhatsThis text display area
-    auto* dgrid = new QGridLayout(box);
+    auto dgrid = new QGridLayout(box);
     dgrid->setContentsMargins(0, 0, 0, 0);
     QLocale locale;
     for (int i = 0;  i < 7;  ++i)
@@ -1315,7 +1315,7 @@ MonthYearRule::MonthYearRule(const QString& freqText, const QString& freqWhatsTh
     mButtonGroup = new ButtonGroup(this);
 
     // Month day selector
-    auto* boxLayout = new QGridLayout();
+    auto boxLayout = new QGridLayout();
     boxLayout->setContentsMargins(0, 0, 0, 0);
     layout()->addLayout(boxLayout);
 
@@ -1520,7 +1520,7 @@ YearlyRule::YearlyRule(bool readOnly, QWidget* parent)
            true, readOnly, parent)
 {
     // Set up the month selection widgets
-    auto* hlayout = new QHBoxLayout();
+    auto hlayout = new QHBoxLayout();
     hlayout->setContentsMargins(0, 0, 0, 0);
     layout()->addLayout(hlayout);
     QLabel* label = new QLabel(i18nc("@label List of months to select", "Months:"), this);
@@ -1530,7 +1530,7 @@ YearlyRule::YearlyRule(bool readOnly, QWidget* parent)
     // List the months of the year.
     QWidget* w = new QWidget(this);   // this is to control the QWhatsThis text display area
     hlayout->addWidget(w, 1, Qt::AlignLeft);
-    auto* grid = new QGridLayout(w);
+    auto grid = new QGridLayout(w);
     grid->setContentsMargins(0, 0, 0, 0);
     QLocale locale;
     for (int i = 0;  i < 12;  ++i)
@@ -1546,11 +1546,11 @@ YearlyRule::YearlyRule(bool readOnly, QWidget* parent)
     w->setWhatsThis(i18nc("@info:whatsthis", "Select the months of the year in which to repeat the alarm"));
 
     // February 29th handling option
-    auto* f29box = new QHBoxLayout;
+    auto f29box = new QHBoxLayout;
     layout()->addLayout(f29box);
     w = new QWidget(this);     // this is to control the QWhatsThis text display area
     f29box->addWidget(w, 0, Qt::AlignLeft);
-    auto* boxLayout = new QHBoxLayout(w);
+    auto boxLayout = new QHBoxLayout(w);
     boxLayout->setContentsMargins(0, 0, 0, 0);
     mFeb29Label = new QLabel(i18nc("@label:listbox", "February 2&9th alarm in non-leap years:"));
     mFeb29Label->setFixedSize(mFeb29Label->sizeHint());

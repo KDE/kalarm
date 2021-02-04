@@ -123,9 +123,9 @@ void DirResourceImportDialog::pageChanged(KPageWidgetItem* current, KPageWidgetI
 
     if (current)
     {
-        auto* page = static_cast<DirResourceImportWidgetBase*>(current->widget());
+        auto page = static_cast<DirResourceImportWidgetBase*>(current->widget());
         page->setTextSizes();
-        auto* typePage = qobject_cast<DirResourceImportTypeWidget*>(page);
+        auto typePage = qobject_cast<DirResourceImportTypeWidget*>(page);
         if (typePage)
             typePage->validate();
     }
@@ -138,7 +138,7 @@ void DirResourceImportDialog::pageChanged(KPageWidgetItem* current, KPageWidgetI
 */
 void DirResourceImportDialog::typeStatusChanged(bool ok)
 {
-    auto* page = qobject_cast<DirResourceImportTypeWidget*>(currentPage()->widget());
+    auto page = qobject_cast<DirResourceImportTypeWidget*>(currentPage()->widget());
     if (page)
     {
         nextButton()->setEnabled(ok  &&  (page != mLastPage));
@@ -432,7 +432,7 @@ void DirResourceImportTypeWidget::validate()
 */
 void DirResourceImportTypeWidget::slotStatJobResult(KJob* job)
 {
-    auto* statJob = static_cast<KIO::StatJob*>(job);
+    auto statJob = static_cast<KIO::StatJob*>(job);
     mStatJob = nullptr;
 
     if (!mCheckingDir)

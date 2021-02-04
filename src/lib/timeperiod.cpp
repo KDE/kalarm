@@ -37,7 +37,7 @@ TimePeriod::TimePeriod(bool allowHourMinute, QWidget* parent)
     : QWidget(parent)
     , mNoHourMinute(!allowHourMinute)
 {
-    auto* layout = new QHBoxLayout;
+    auto layout = new QHBoxLayout;
     setLayout(layout);
     layout->setContentsMargins(0, 0, 0, 0);
 

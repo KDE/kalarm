@@ -134,7 +134,7 @@ RepetitionDlg::RepetitionDlg(const QString& caption, bool readOnly, QWidget* par
 {
     setWindowTitle(caption);
 
-    auto* topLayout = new QVBoxLayout(this);
+    auto topLayout = new QVBoxLayout(this);
 
     mTimeSelector = new TimeSelector(i18nc("@option:check Repeat every 10 minutes", "Repeat every"),
                       i18nc("@info:whatsthis", "Instead of the alarm triggering just once at each recurrence, "
@@ -151,8 +151,8 @@ RepetitionDlg::RepetitionDlg(const QString& caption, bool readOnly, QWidget* par
     mButtonGroup = new ButtonGroup(mButtonBox);
     connect(mButtonGroup, &ButtonGroup::buttonSet, this, &RepetitionDlg::typeClicked);
 
-    auto* vlayout = new QVBoxLayout(mButtonBox);
-    auto* layout = new QHBoxLayout();
+    auto vlayout = new QVBoxLayout(mButtonBox);
+    auto layout = new QHBoxLayout();
     layout->setContentsMargins(0, 0, 0, 0);
     vlayout->addLayout(layout);
     mCountButton = new RadioButton(i18nc("@option:radio", "Number of repetitions:"), mButtonBox);
@@ -186,7 +186,7 @@ RepetitionDlg::RepetitionDlg(const QString& caption, bool readOnly, QWidget* par
     mDurationButton->setFocusWidget(mDuration);
     layout->addStretch();
 
-    auto* buttonBox = new QDialogButtonBox(this);
+    auto buttonBox = new QDialogButtonBox(this);
     buttonBox->addButton(QDialogButtonBox::Ok);
     buttonBox->addButton(QDialogButtonBox::Cancel);
     connect(buttonBox, &QDialogButtonBox::accepted,

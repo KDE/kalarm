@@ -65,7 +65,7 @@ AkonadiCollectionSearch::AkonadiCollectionSearch(const QString& mimeType, const 
 */
 void AkonadiCollectionSearch::collectionFetchResult(KJob* j)
 {
-    auto* job = qobject_cast<CollectionFetchJob*>(j);
+    auto job = qobject_cast<CollectionFetchJob*>(j);
     if (j->error())
         qCCritical(KALARM_LOG) << "AkonadiCollectionSearch::collectionFetchResult: CollectionFetchJob" << job->fetchScope().resource()<< "error: " << j->errorString();
     else
@@ -115,7 +115,7 @@ void AkonadiCollectionSearch::collectionFetchResult(KJob* j)
 */
 void AkonadiCollectionSearch::itemFetchResult(KJob* j)
 {
-    auto* job = qobject_cast<ItemFetchJob*>(j);
+    auto job = qobject_cast<ItemFetchJob*>(j);
     if (j->error())
     {
         if (!mUid.isEmpty())
@@ -141,7 +141,7 @@ void AkonadiCollectionSearch::itemFetchResult(KJob* j)
                 }
                 else if (mGid.isEmpty())
                     continue;
-                auto* djob = new ItemDeleteJob(item, this);
+                auto djob = new ItemDeleteJob(item, this);
                 mItemDeleteJobs[djob] = mItemFetchJobs.value(job);
                 connect(djob, &ItemDeleteJob::result, this, &AkonadiCollectionSearch::itemDeleteResult);
             }
@@ -160,7 +160,7 @@ void AkonadiCollectionSearch::itemFetchResult(KJob* j)
 */
 void AkonadiCollectionSearch::itemDeleteResult(KJob* j)
 {
-    auto* job = static_cast<ItemDeleteJob*>(j);
+    auto job = static_cast<ItemDeleteJob*>(j);
     if (j->error())
     {
         if (!mUid.isEmpty())

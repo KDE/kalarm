@@ -25,7 +25,7 @@ FontColourChooser::FontColourChooser(QWidget* parent, const QStringList& fontLis
            const QString& frameLabel, bool fg, bool defaultFont, int visibleListSize)
     : QWidget(parent)
 {
-    auto* topLayout = new QVBoxLayout(this);
+    auto topLayout = new QVBoxLayout(this);
     QWidget* page = this;
     if (!frameLabel.isNull())
     {
@@ -35,17 +35,17 @@ FontColourChooser::FontColourChooser(QWidget* parent, const QStringList& fontLis
     }
     else
         topLayout->setContentsMargins(0, 0, 0, 0);
-    auto* hlayout = new QHBoxLayout();
+    auto hlayout = new QHBoxLayout();
     hlayout->setContentsMargins(0, 0, 0, 0);
     topLayout->addLayout(hlayout);
-    auto* colourLayout = new QVBoxLayout();
+    auto colourLayout = new QVBoxLayout();
     colourLayout->setContentsMargins(0, 0, 0, 0);
     hlayout->addLayout(colourLayout);
     if (fg)
     {
         QWidget* box = new QWidget(page);    // to group widgets for QWhatsThis text
         colourLayout->addWidget(box);
-        auto* boxHLayout = new QHBoxLayout(box);
+        auto boxHLayout = new QHBoxLayout(box);
         boxHLayout->setContentsMargins(0, 0, 0, 0);
 
         QLabel* label = new QLabel(i18nc("@label:listbox", "Foreground color:"), box);
@@ -60,7 +60,7 @@ FontColourChooser::FontColourChooser(QWidget* parent, const QStringList& fontLis
 
     QWidget* box = new QWidget(page);    // to group widgets for QWhatsThis text
     colourLayout->addWidget(box);
-    auto* boxHLayout = new QHBoxLayout(box);
+    auto boxHLayout = new QHBoxLayout(box);
     boxHLayout->setContentsMargins(0, 0, 0, 0);
 
     QLabel* label = new QLabel(i18nc("@label:listbox", "Background color:"), box);
@@ -75,7 +75,7 @@ FontColourChooser::FontColourChooser(QWidget* parent, const QStringList& fontLis
 
     if (defaultFont)
     {
-        auto* layout = new QHBoxLayout();
+        auto layout = new QHBoxLayout();
         layout->setContentsMargins(0, 0, 0, 0);
         topLayout->addLayout(layout);
         mDefaultFont = new CheckBox(i18nc("@option:check", "Use default font"), page);

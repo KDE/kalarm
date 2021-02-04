@@ -244,7 +244,7 @@ protected:
 template <class DataModel>
 ResourceFilterModel* ResourceFilterModel::create(QObject* parent)
 {
-    auto* model = new ResourceFilterModel(parent);
+    auto model = new ResourceFilterModel(parent);
     model->setSourceModel(DataModel::instance());
     model->mResourceIndexFunction = [](const Resource& r) { return DataModel::instance()->resourceIndex(r); };
     return model;
@@ -253,7 +253,7 @@ ResourceFilterModel* ResourceFilterModel::create(QObject* parent)
 template <class DataModel>
 ResourceListModel* ResourceListModel::create(QObject* parent)
 {
-    auto* model = new ResourceListModel(parent);
+    auto model = new ResourceListModel(parent);
     model->setSourceModel(ResourceFilterModel::create<DataModel>(model));
     return model;
 }
@@ -261,7 +261,7 @@ ResourceListModel* ResourceListModel::create(QObject* parent)
 template <class DataModel>
 ResourceCheckListModel* ResourceCheckListModel::create(CalEvent::Type type, QObject* parent)
 {
-    auto* model = new ResourceCheckListModel(type, parent);
+    auto model = new ResourceCheckListModel(type, parent);
     if (!mModel)
         mModel = ResourceListModel::create<DataModel>(nullptr);
     model->init();

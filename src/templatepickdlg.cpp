@@ -30,7 +30,7 @@ TemplatePickDlg::TemplatePickDlg(KAEvent::Actions type, QWidget* parent)
     : QDialog(parent)
 {
     QWidget* topWidget = new QWidget(this);
-    auto* mainLayout = new QVBoxLayout;
+    auto mainLayout = new QVBoxLayout;
     setLayout(mainLayout);
     mainLayout->addWidget(topWidget);
     setWindowTitle(i18nc("@title:window", "Choose Alarm Template"));
@@ -41,7 +41,7 @@ TemplatePickDlg::TemplatePickDlg(KAEvent::Actions type, QWidget* parent)
     mOkButton->setShortcut(Qt::CTRL | Qt::Key_Return);
     connect(buttonBox, &QDialogButtonBox::accepted, this, &TemplatePickDlg::accept);
     connect(buttonBox, &QDialogButtonBox::rejected, this, &TemplatePickDlg::reject);
-    auto* topLayout = new QVBoxLayout(topWidget);
+    auto topLayout = new QVBoxLayout(topWidget);
     topLayout->setContentsMargins(0, 0, 0, 0);
 
     // Display the list of templates, but exclude command alarms if in kiosk mode.

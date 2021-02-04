@@ -46,7 +46,7 @@ KAEvent EventListModel::event(int row) const
 */
 KAEvent EventListModel::event(const QModelIndex& index) const
 {
-    auto* proxyModel = static_cast<KDescendantsProxyModel*>(sourceModel());
+    auto proxyModel = static_cast<KDescendantsProxyModel*>(sourceModel());
     const QModelIndex dataIndex = proxyModel->mapToSource(mapToSource(index));
     return (*mEventFunction)(dataIndex);
 }
@@ -56,7 +56,7 @@ KAEvent EventListModel::event(const QModelIndex& index) const
 */
 QModelIndex EventListModel::eventIndex(const QString& eventId) const
 {
-    auto* proxyModel = static_cast<KDescendantsProxyModel*>(sourceModel());
+    auto proxyModel = static_cast<KDescendantsProxyModel*>(sourceModel());
     return mapFromSource(proxyModel->mapFromSource(((*mEventIndexFunction)(eventId))));
 }
 
@@ -118,7 +118,7 @@ QVariant EventListModel::headerData(int section, Qt::Orientation orientation, in
 bool EventListModel::filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const
 {
     // Get the resource which contains this event.
-    auto* proxyModel = static_cast<KDescendantsProxyModel*>(sourceModel());
+    auto proxyModel = static_cast<KDescendantsProxyModel*>(sourceModel());
     const QModelIndex dataIndex = proxyModel->mapToSource(proxyModel->index(sourceRow, 0, sourceParent));
     const QString eventId = dataIndex.data(ResourceDataModelBase::EventIdRole).toString();
     if (eventId.isEmpty())

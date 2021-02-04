@@ -51,7 +51,7 @@ FileResourceDataModel* FileResourceDataModel::instance(QObject* parent)
 {
     if (!mInstance)
     {
-        auto* inst = new FileResourceDataModel(parent);
+        auto inst = new FileResourceDataModel(parent);
         mInstance = inst;
         mInstanceIsOurs = true;
         inst->initialise();
@@ -487,7 +487,7 @@ void FileResourceDataModel::slotEventsAdded(Resource& resource, const QList<KAEv
             beginInsertRows(resourceIx, row, row + eventsToAdd.count() - 1);
             for (const KAEvent& event : qAsConst(eventsToAdd))
             {
-                auto* ev = new KAEvent(event);
+                auto ev = new KAEvent(event);
                 ev->setResourceId(resource.id());
                 Node* node = new Node(ev, resource);
                 resourceEventNodes += node;

@@ -24,7 +24,7 @@ bool use12HourClock();
 TimeEdit::TimeEdit(QWidget* parent)
     : QWidget(parent)
 {
-    auto* layout = new QHBoxLayout;
+    auto layout = new QHBoxLayout;
     layout->setContentsMargins(0, 0, 0, 0);
     layout->setSpacing(0);
     setLayout(layout);

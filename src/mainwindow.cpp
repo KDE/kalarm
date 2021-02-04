@@ -293,7 +293,7 @@ bool MainWindow::eventFilter(QObject* obj, QEvent* e)
         {
             case QEvent::KeyPress:
             {
-                auto* ke = static_cast<QKeyEvent*>(e);
+                auto ke = static_cast<QKeyEvent*>(e);
                 if (ke->key() == Qt::Key_Delete  &&  ke->modifiers() == Qt::ShiftModifier)
                 {
                     // Prevent Shift-Delete being processed by EventListDelegate
@@ -1526,7 +1526,7 @@ void MainWindow::editAlarm(EditAlarmDlg* dlg, const KAEvent& event)
 */
 void MainWindow::editAlarmOk()
 {
-    auto* dlg = qobject_cast<EditAlarmDlg*>(sender());
+    auto dlg = qobject_cast<EditAlarmDlg*>(sender());
     if (!dlg)
         return;
     QMap<EditAlarmDlg*, KAEvent>::Iterator it = mEditAlarmMap.find(dlg);

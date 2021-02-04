@@ -130,7 +130,7 @@ void EditDisplayAlarmDlg::type_init(QWidget* parent, QVBoxLayout* frameLayout)
     // Display type combo box
     QWidget* box = new QWidget(parent);    // to group widgets for QWhatsThis text
 
-    auto* boxHLayout = new QHBoxLayout(box);
+    auto boxHLayout = new QHBoxLayout(box);
     boxHLayout->setContentsMargins(0, 0, 0, 0);
     QLabel* label = new QLabel(i18nc("@label:listbox", "Display type:"), box);
     boxHLayout->addWidget(label);
@@ -148,7 +148,7 @@ void EditDisplayAlarmDlg::type_init(QWidget* parent, QVBoxLayout* frameLayout)
     if (!ShellProcess::authorised())
     {
         // User not authorised to issue shell commands - disable Command Output option
-        auto* model = qobject_cast<QStandardItemModel*>(mTypeCombo->model());
+        auto model = qobject_cast<QStandardItemModel*>(mTypeCombo->model());
         if (model)
         {
             QModelIndex index = model->index(2, mTypeCombo->modelColumn(), mTypeCombo->rootModelIndex());
@@ -165,7 +165,7 @@ void EditDisplayAlarmDlg::type_init(QWidget* parent, QVBoxLayout* frameLayout)
                              "<item><interface>%2</interface>: the alarm will display the contents of a text or image file.</item>"
                              "<item><interface>%3</interface>: the alarm will display the output from a command.</item></list></para>",
                              textItem, fileItem, commandItem));
-    auto* hlayout = new QHBoxLayout();
+    auto hlayout = new QHBoxLayout();
     hlayout->setContentsMargins(0, 0, 0, 0);
     frameLayout->addLayout(hlayout);
     hlayout->addWidget(box);
@@ -182,7 +182,7 @@ void EditDisplayAlarmDlg::type_init(QWidget* parent, QVBoxLayout* frameLayout)
     // File name edit box
     mFileBox = new QWidget(parent);
     frameLayout->addWidget(mFileBox);
-    auto* fileBoxHLayout = new QHBoxLayout(mFileBox);
+    auto fileBoxHLayout = new QHBoxLayout(mFileBox);
     fileBoxHLayout->setContentsMargins(0, 0, 0, 0);
     fileBoxHLayout->setSpacing(0);
     mFileMessageEdit = new LineEdit(LineEdit::Url, mFileBox);
@@ -866,7 +866,7 @@ void EditCommandAlarmDlg::type_init(QWidget* parent, QVBoxLayout* frameLayout)
 
     mCmdOutputBox = new QGroupBox(i18nc("@title:group", "Command Output"), parent);
     frameLayout->addWidget(mCmdOutputBox);
-    auto* vlayout = new QVBoxLayout(mCmdOutputBox);
+    auto vlayout = new QVBoxLayout(mCmdOutputBox);
     mCmdOutputGroup = new ButtonGroup(mCmdOutputBox);
     connect(mCmdOutputGroup, &ButtonGroup::buttonSet, this, &EditCommandAlarmDlg::contentsChanged);
 
@@ -879,7 +879,7 @@ void EditCommandAlarmDlg::type_init(QWidget* parent, QVBoxLayout* frameLayout)
 
     // Log file name edit box
     QWidget* box = new QWidget(mCmdOutputBox);
-    auto* boxHLayout = new QHBoxLayout(box);
+    auto boxHLayout = new QHBoxLayout(box);
     boxHLayout->setContentsMargins(0, 0, 0, 0);
     boxHLayout->setSpacing(0);
     (new QWidget(box))->setFixedWidth(mCmdExecInTerm->style()->pixelMetric(QStyle::PM_ExclusiveIndicatorWidth));   // indent the edit box
@@ -891,7 +891,7 @@ void EditCommandAlarmDlg::type_init(QWidget* parent, QVBoxLayout* frameLayout)
 
     // Log file browse button.
     // The file browser dialog is activated by the PickLogFileRadio class.
-    auto* browseButton = new QPushButton(box);
+    auto browseButton = new QPushButton(box);
     boxHLayout->addWidget(browseButton);
     browseButton->setIcon(QIcon::fromTheme(QStringLiteral("document-open")));
     int size = browseButton->sizeHint().height();
@@ -917,7 +917,7 @@ void EditCommandAlarmDlg::type_init(QWidget* parent, QVBoxLayout* frameLayout)
 
     // Top-adjust the controls
     mCmdPadding = new QWidget(parent);
-    auto* hlayout = new QHBoxLayout(mCmdPadding);
+    auto hlayout = new QHBoxLayout(mCmdPadding);
     hlayout->setContentsMargins(0, 0, 0, 0);
     hlayout->setSpacing(0);
     frameLayout->addWidget(mCmdPadding);
@@ -1179,7 +1179,7 @@ void EditEmailAlarmDlg::type_init(QWidget* parent, QVBoxLayout* frameLayout)
     mTryButton->setWhatsThis(i18nc("@info:whatsthis", "Send the email to the specified addressees now"));
     mTryButton->setToolTip(i18nc("@info:tooltip", "Send the email now"));
 
-    auto* grid = new QGridLayout();
+    auto grid = new QGridLayout();
     grid->setContentsMargins(0, 0, 0, 0);
     grid->setColumnStretch(1, 1);
     frameLayout->addLayout(grid);
@@ -1638,7 +1638,7 @@ void EditAudioAlarmDlg::type_init(QWidget* parent, QVBoxLayout* frameLayout)
 
     // Top-adjust the controls
     mPadding = new QWidget(parent);
-    auto* hlayout = new QHBoxLayout(mPadding);
+    auto hlayout = new QHBoxLayout(mPadding);
     hlayout->setContentsMargins(0, 0, 0, 0);
     hlayout->setSpacing(0);
     frameLayout->addWidget(mPadding);
@@ -1835,7 +1835,7 @@ void EditAudioAlarmDlg::slotAudioPlaying(bool playing)
 CommandEdit::CommandEdit(QWidget* parent)
     : QWidget(parent)
 {
-    auto* vlayout = new QVBoxLayout(this);
+    auto vlayout = new QVBoxLayout(this);
     vlayout->setContentsMargins(0, 0, 0, 0);
     mTypeScript = new CheckBox(EditCommandAlarmDlg::i18n_chk_EnterScript(), this);
     mTypeScript->setFixedSize(mTypeScript->sizeHint());

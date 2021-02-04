@@ -231,7 +231,7 @@ void FileResourceMigrator::migrateAkonadiResources()
 */
 void FileResourceMigrator::collectionFetchResult(KJob* j)
 {
-    auto* job = qobject_cast<Akonadi::CollectionFetchJob*>(j);
+    auto job = qobject_cast<Akonadi::CollectionFetchJob*>(j);
     const QString id = job->fetchScope().resource();
     if (j->error())
         qCCritical(KALARM_LOG) << "FileResourceMigrator::collectionFetchResult: CollectionFetchJob" << id << "error: " << j->errorString();
@@ -335,7 +335,7 @@ void FileResourceMigrator::migrateAkonadiCollection(const Akonadi::Collection& c
 
         // Update the calendar to the current KAlarm format if necessary,
         // and if the user agrees.
-        auto* updater = new FileResourceCalendarUpdater(resource, true, this);
+        auto updater = new FileResourceCalendarUpdater(resource, true, this);
         connect(updater, &QObject::destroyed, this, &FileResourceMigrator::checkIfComplete);
         updater->update();   // note that 'updater' will auto-delete when finished
 
@@ -531,7 +531,7 @@ void FileResourceMigrator::migrateKResources()
 
             // Update the calendar to the current KAlarm format if necessary,
             // and if the user agrees.
-            auto* updater = new FileResourceCalendarUpdater(resource, true, this);
+            auto updater = new FileResourceCalendarUpdater(resource, true, this);
             connect(updater, &QObject::destroyed, this, &FileResourceMigrator::checkIfComplete);
             updater->update();   // note that 'updater' will auto-delete when finished
 
@@ -584,7 +584,7 @@ void FileResourceMigrator::createCalendar(CalEvent::Type alarmType, const QStrin
 
     // Update the calendar to the current KAlarm format if necessary,
     // and if the user agrees.
-    auto* updater = new FileResourceCalendarUpdater(resource, true, this);
+    auto updater = new FileResourceCalendarUpdater(resource, true, this);
     connect(updater, &QObject::destroyed, this, &FileResourceMigrator::checkIfComplete);
     updater->update();   // note that 'updater' will auto-delete when finished
 }

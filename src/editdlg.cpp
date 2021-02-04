@@ -215,25 +215,25 @@ void EditAlarmDlg::init(const KAEvent& event)
     if (mButtonBox->button(QDialogButtonBox::Ok))
         mButtonBox->button(QDialogButtonBox::Ok)->setWhatsThis(i18nc("@info:whatsthis", "Schedule the alarm at the specified time."));
 
-    auto* mainLayout = new QVBoxLayout(this);
+    auto mainLayout = new QVBoxLayout(this);
     mTabs = new QTabWidget(this);
     mainLayout->addWidget(mTabs);
     mTabScrollGroup = new StackedScrollGroup(this, mTabs);
 
-    auto* mainScroll = new StackedScrollWidget(mTabScrollGroup);
+    auto mainScroll = new StackedScrollWidget(mTabScrollGroup);
     mTabs->addTab(mainScroll, i18nc("@title:tab", "Alarm"));
     mMainPageIndex = 0;
-    auto* mainPage = new PageFrame(mainScroll);
+    auto mainPage = new PageFrame(mainScroll);
     mainScroll->setWidget(mainPage);   // mainPage becomes the child of mainScroll
     connect(mainPage, &PageFrame::shown, this, &EditAlarmDlg::slotShowMainPage);
-    auto* topLayout = new QVBoxLayout(mainPage);
+    auto topLayout = new QVBoxLayout(mainPage);
 
     // Recurrence tab
-    auto* recurScroll = new StackedScrollWidget(mTabScrollGroup);
+    auto recurScroll = new StackedScrollWidget(mTabScrollGroup);
     mTabs->addTab(recurScroll, QString());
     mRecurPageIndex = 1;
     QFrame* recurTab = new QFrame;
-    auto* recurTabLayout = new QVBoxLayout();
+    auto recurTabLayout = new QVBoxLayout();
     recurTab->setLayout(recurTabLayout);
     recurScroll->setWidget(recurTab);   // recurTab becomes the child of recurScroll
     mRecurrenceEdit = new RecurrenceEdit(mReadOnly);
@@ -248,7 +248,7 @@ void EditAlarmDlg::init(const KAEvent& event)
     {
         // Alarm/template name
         QFrame* frame = new QFrame;
-        auto* box = new QHBoxLayout();
+        auto box = new QHBoxLayout();
         frame->setLayout(box);
         box->setContentsMargins(0, 0, 0, 0);
         QLabel* label = new QLabel(mTemplate ? i18nc("@label:textbox", "Template name:") : i18nc("@label:textbox", "Alarm name:"));
@@ -268,7 +268,7 @@ void EditAlarmDlg::init(const KAEvent& event)
     // Controls specific to the alarm type
     QGroupBox* actionBox = new QGroupBox(i18nc("@title:group", "Action"), mainPage);
     topLayout->addWidget(actionBox, 1);
-    auto* layout = new QVBoxLayout(actionBox);
+    auto layout = new QVBoxLayout(actionBox);
 
     type_init(actionBox, layout);
 
@@ -277,7 +277,7 @@ void EditAlarmDlg::init(const KAEvent& event)
         // Deferred date/time: visible only for a deferred recurring event.
         mDeferGroup = new QGroupBox(i18nc("@title:group", "Deferred Alarm"), mainPage);
         topLayout->addWidget(mDeferGroup);
-        auto* hlayout = new QHBoxLayout(mDeferGroup);
+        auto hlayout = new QHBoxLayout(mDeferGroup);
         QLabel* label = new QLabel(i18nc("@label", "Deferred to:"), mDeferGroup);
         label->setFixedSize(label->sizeHint());
         hlayout->addWidget(label);
@@ -292,7 +292,7 @@ void EditAlarmDlg::init(const KAEvent& event)
 //??        mDeferGroup->addSpace(0);
     }
 
-    auto* hlayout = new QHBoxLayout();
+    auto hlayout = new QHBoxLayout();
     hlayout->setContentsMargins(0, 0, 0, 0);
     topLayout->addLayout(hlayout);
 
@@ -301,7 +301,7 @@ void EditAlarmDlg::init(const KAEvent& event)
     {
         QGroupBox* templateTimeBox = new QGroupBox(i18nc("@title:group", "Time"), mainPage);
         topLayout->addWidget(templateTimeBox);
-        auto* grid = new QGridLayout(templateTimeBox);
+        auto grid = new QGridLayout(templateTimeBox);
         mTemplateTimeGroup = new ButtonGroup(templateTimeBox);
         connect(mTemplateTimeGroup, &ButtonGroup::buttonSet, this, &EditAlarmDlg::slotTemplateTimeType);
         connect(mTemplateTimeGroup, &ButtonGroup::buttonSet, this, &EditAlarmDlg::contentsChanged);
@@ -315,7 +315,7 @@ void EditAlarmDlg::init(const KAEvent& event)
         grid->addWidget(mTemplateDefaultTime, 0, 0, Qt::AlignLeft);
 
         QWidget* box = new QWidget(templateTimeBox);
-        auto* layout = new QHBoxLayout(box);
+        auto layout = new QHBoxLayout(box);
         layout->setContentsMargins(0, 0, 0, 0);
         mTemplateUseTime = new RadioButton(i18nc("@option:radio", "Time:"), box);
         mTemplateUseTime->setFixedSize(mTemplateUseTime->sizeHint());
@@ -377,7 +377,7 @@ void EditAlarmDlg::init(const KAEvent& event)
     mMoreOptions = new QFrame(mainPage);
     mMoreOptions->setFrameStyle(QFrame::NoFrame);
     topLayout->addWidget(mMoreOptions);
-    auto* moreLayout = new QVBoxLayout(mMoreOptions);
+    auto moreLayout = new QVBoxLayout(mMoreOptions);
     moreLayout->setContentsMargins(0, 0, 0, 0);
 
     // Reminder
@@ -1330,7 +1330,7 @@ void EditAlarmDlg::slotShowMainPage()
     else
     {
         // Set scroll position to top, since it otherwise jumps randomly
-        auto* main = static_cast<StackedScrollWidget*>(mTabs->widget(0));
+        auto main = static_cast<StackedScrollWidget*>(mTabs->widget(0));
         main->verticalScrollBar()->setValue(0);
     }
     if (mTimeWidget)

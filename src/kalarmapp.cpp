@@ -298,7 +298,7 @@ bool KAlarmApp::restoreSession()
         }
         else if (type == QLatin1String("MessageWindow"))
         {
-            auto* win = new MessageWindow;
+            auto win = new MessageWindow;
             win->restore(i, false);
             if (win->isValid())
             {
@@ -392,7 +392,7 @@ int KAlarmApp::activateInstance(const QStringList& args, const QString& workingD
     QCommandLineParser parser;
     KAboutData::applicationData().setupCommandLine(&parser);
     parser.setApplicationDescription(QApplication::applicationDisplayName());
-    auto* options = new CommandOptions;
+    auto options = new CommandOptions;
     const QStringList nonexecArgs = options->setOptions(&parser, fixedArgs);
     options->parse();
     KAboutData::applicationData().processCommandLine(&parser);
@@ -530,7 +530,7 @@ int KAlarmApp::activateInstance(const QStringList& args, const QString& workingD
                         case EditAlarmDlg::DISPLAY:
                         {
                             // EditAlarmDlg::create() always returns EditDisplayAlarmDlg for type = DISPLAY
-                            auto* dlg = qobject_cast<EditDisplayAlarmDlg*>(editDlg);
+                            auto dlg = qobject_cast<EditDisplayAlarmDlg*>(editDlg);
                             if (options->fgColour().isValid())
                                 dlg->setFgColour(options->fgColour());
                             if (options->bgColour().isValid())
@@ -559,7 +559,7 @@ int KAlarmApp::activateInstance(const QStringList& args, const QString& workingD
                         case EditAlarmDlg::EMAIL:
                         {
                             // EditAlarmDlg::create() always returns EditEmailAlarmDlg for type = EMAIL
-                            auto* dlg = qobject_cast<EditEmailAlarmDlg*>(editDlg);
+                            auto dlg = qobject_cast<EditEmailAlarmDlg*>(editDlg);
                             if (options->fromID()
                             ||  !options->addressees().isEmpty()
                             ||  !options->subject().isEmpty()
@@ -572,7 +572,7 @@ int KAlarmApp::activateInstance(const QStringList& args, const QString& workingD
                         case EditAlarmDlg::AUDIO:
                         {
                             // EditAlarmDlg::create() always returns EditAudioAlarmDlg for type = AUDIO
-                            auto* dlg = qobject_cast<EditAudioAlarmDlg*>(editDlg);
+                            auto dlg = qobject_cast<EditAudioAlarmDlg*>(editDlg);
                             if (!options->audioFile().isEmpty()  ||  options->audioVolume() >= 0)
                                 dlg->setAudio(options->audioFile(), options->audioVolume());
                             break;

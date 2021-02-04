@@ -729,7 +729,7 @@ UndoMulti<T>::UndoMulti(Undo::Type type, const Undo::EventList& events, const QS
 template <class T>
 UndoItem* UndoMulti<T>::restore()
 {
-    auto* newUndos = new Undo::List;
+    auto newUndos = new Undo::List;
     for (int i = 0, end = mUndos->count();  i < end;  ++i)
     {
         UndoItem* undo = (*mUndos)[i]->restore();

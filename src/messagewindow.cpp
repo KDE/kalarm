@@ -213,7 +213,7 @@ void MessageWindow::setUpDisplay()
     setCaption(texts.title);
     QWidget* topWidget = new QWidget(this);
     setCentralWidget(topWidget);
-    auto* topLayout = new QVBoxLayout(topWidget);
+    auto topLayout = new QVBoxLayout(topWidget);
     const int dcmLeft   = style()->pixelMetric(QStyle::PM_LayoutLeftMargin);
     const int dcmTop    = style()->pixelMetric(QStyle::PM_LayoutTopMargin);
     const int dcmRight  = style()->pixelMetric(QStyle::PM_LayoutRightMargin);
@@ -243,7 +243,7 @@ void MessageWindow::setUpDisplay()
             case KAEvent::FILE:
             {
                 // Display the file name
-                auto* label = new KSqueezedTextLabel(texts.fileName, topWidget);
+                auto label = new KSqueezedTextLabel(texts.fileName, topWidget);
                 label->setFrameStyle(QFrame::StyledPanel);
                 label->setTextInteractionFlags(Qt::TextSelectableByMouse | Qt::TextSelectableByKeyboard);
                 label->setPalette(labelPalette);
@@ -254,7 +254,7 @@ void MessageWindow::setUpDisplay()
                 if (mErrorMsgs().isEmpty())
                 {
                     // Display contents of file
-                    auto* view = new QTextBrowser(topWidget);
+                    auto view = new QTextBrowser(topWidget);
                     view->setFrameStyle(QFrame::NoFrame);
                     view->setWordWrapMode(QTextOption::NoWrap);
                     QPalette pal = view->viewport()->palette();
@@ -290,7 +290,7 @@ void MessageWindow::setUpDisplay()
             {
                 // Message label
                 // Using MessageText instead of QLabel allows scrolling and mouse copying
-                auto* text = new MessageText(topWidget);
+                auto text = new MessageText(topWidget);
                 text->setAutoFillBackground(true);
                 text->setBackgroundColour(mBgColour());
                 text->setTextColor(mFgColour());
@@ -312,7 +312,7 @@ void MessageWindow::setUpDisplay()
                     topLayout->addWidget(text, 1, Qt::AlignHCenter);
                 else
                 {
-                    auto* layout = new QHBoxLayout();
+                    auto layout = new QHBoxLayout();
                     layout->addSpacing(hspace);
                     layout->addWidget(text, 1, Qt::AlignHCenter);
                     layout->addSpacing(hspace);
@@ -364,7 +364,7 @@ void MessageWindow::setUpDisplay()
                 frame->setFrameStyle(QFrame::Box | QFrame::Raised);
                 frame->setWhatsThis(i18nc("@info:whatsthis", "The email to send"));
                 topLayout->addWidget(frame, 0, Qt::AlignHCenter);
-                auto* grid = new QGridLayout(frame);
+                auto grid = new QGridLayout(frame);
 
                 QLabel* label = new QLabel(texts.errorEmail[0], frame);
                 label->setFixedSize(label->sizeHint());
@@ -399,7 +399,7 @@ void MessageWindow::setUpDisplay()
     }
     else
     {
-        auto* layout = new QHBoxLayout();
+        auto layout = new QHBoxLayout();
         layout->setContentsMargins(2 * dcmLeft, 2 * dcmTop, 2 * dcmRight, 2 * dcmBottom);
         layout->addStretch();
         topLayout->addLayout(layout);
@@ -407,7 +407,7 @@ void MessageWindow::setUpDisplay()
         label->setPixmap(QIcon::fromTheme(QStringLiteral("dialog-error")).pixmap(style()->pixelMetric(QStyle::PM_MessageBoxIconSize)));
         label->setFixedSize(label->sizeHint());
         layout->addWidget(label, 0, Qt::AlignRight);
-        auto* vlayout = new QVBoxLayout();
+        auto vlayout = new QVBoxLayout();
         layout->addLayout(vlayout);
         for (const QString& msg : mErrorMsgs())
         {
@@ -424,7 +424,7 @@ void MessageWindow::setUpDisplay()
         }
     }
 
-    auto* grid = new QGridLayout();
+    auto grid = new QGridLayout();
     grid->setColumnStretch(0, 1);     // keep the buttons right-adjusted in the window
     topLayout->addLayout(grid);
     int gridIndex = 1;

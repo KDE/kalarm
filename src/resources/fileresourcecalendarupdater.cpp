@@ -46,7 +46,7 @@ void FileResourceCalendarUpdater::updateToCurrentFormat(Resource& resource, bool
 
     if (containsResource(resource.id()))
         return;   // prevent multiple simultaneous user prompts
-    auto* updater = new FileResourceCalendarUpdater(resource, ignoreKeepFormat, parent, qobject_cast<QWidget*>(parent));
+    auto updater = new FileResourceCalendarUpdater(resource, ignoreKeepFormat, parent, qobject_cast<QWidget*>(parent));
     updater->update(true);
 }
 

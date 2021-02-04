@@ -239,7 +239,7 @@ int KAMail::send(JobData& jobdata, QStringList& errmsgs)
             return -1;
         }
 
-        auto* mailjob = new MailTransport::MessageQueueJob(qApp);
+        auto mailjob = new MailTransport::MessageQueueJob(qApp);
         mailjob->setMessage(message);
         mailjob->transportAttribute().setTransportId(transport->id());
         // MessageQueueJob email addresses must be pure, i.e. without display name. Note
@@ -310,15 +310,15 @@ void KAMail::slotEmailSent(KJob* job)
 */
 void initHeaders(KMime::Message& message, KAMail::JobData& data)
 {
-    auto* date = new KMime::Headers::Date;
+    auto date = new KMime::Headers::Date;
     date->setDateTime(KADateTime::currentDateTime(Preferences::timeSpec()).qDateTime());
     message.setHeader(date);
 
-    auto* from = new KMime::Headers::From;
+    auto from = new KMime::Headers::From;
     from->fromUnicodeString(data.from, autoDetectCharset(data.from));
     message.setHeader(from);
 
-    auto* to = new KMime::Headers::To;
+    auto to = new KMime::Headers::To;
     const KCalendarCore::Person::List toList = data.event.emailAddressees();
     for (const KCalendarCore::Person& who : toList)
         to->addAddress(who.email().toLatin1(), who.name());
@@ -326,21 +326,21 @@ void initHeaders(KMime::Message& message, KAMail::JobData& data)
 
     if (!data.bcc.isEmpty())
     {
-        auto* bcc = new KMime::Headers::Bcc;
+        auto bcc = new KMime::Headers::Bcc;
         bcc->fromUnicodeString(data.bcc, autoDetectCharset(data.bcc));
         message.setHeader(bcc);
     }
 
-    auto* subject = new KMime::Headers::Subject;
+    auto subject = new KMime::Headers::Subject;
     const QString str = data.event.emailSubject();
     subject->fromUnicodeString(str, autoDetectCharset(str));
     message.setHeader(subject);
 
-    auto* agent = new KMime::Headers::UserAgent;
+    auto agent = new KMime::Headers::UserAgent;
     agent->fromUnicodeString(KAboutData::applicationData().displayName() + QLatin1String("/" KALARM_VERSION), "us-ascii");
     message.setHeader(agent);
 
-    auto* id = new KMime::Headers::MessageID;
+    auto id = new KMime::Headers::MessageID;
     id->generate(data.from.mid(data.from.indexOf(QLatin1Char('@')) + 1).toLatin1());
     message.setHeader(id);
 }
@@ -373,7 +373,7 @@ QString KAMail::appendBodyAttachments(KMime::Message& message, JobData& data)
         if (!data.event.message().isEmpty())
         {
             // There is a message body
-            auto* content = new KMime::Content();
+            auto content = new KMime::Content();
             content->contentType()->setMimeType("text/plain");
             content->contentType()->setCharset("utf-8");
             content->fromUnicodeString(data.event.message());
@@ -435,19 +435,19 @@ QString KAMail::appendBodyAttachments(KMime::Message& message, JobData& data)
             }
 
             QByteArray coded = KCodecs::base64Encode(contents);
-            auto* content = new KMime::Content();
+            auto content = new KMime::Content();
             content->setBody(coded + "\n\n");
 
             // Set the content type
             QMimeDatabase mimeDb;
             QString typeName = mimeDb.mimeTypeForUrl(url).name();
-            auto* ctype = new KMime::Headers::ContentType;
+            auto ctype = new KMime::Headers::ContentType;
             ctype->fromUnicodeString(typeName, autoDetectCharset(typeName));
             ctype->setName(attachment, "local");
             content->setHeader(ctype);
 
             // Set the encoding
-            auto* cte = new KMime::Headers::ContentTransferEncoding;
+            auto cte = new KMime::Headers::ContentTransferEncoding;
             cte->setEncoding(KMime::Headers::CEbase64);
             cte->setDecoded(false);
             content->setHeader(cte);
