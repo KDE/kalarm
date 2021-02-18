@@ -1,7 +1,7 @@
 /*
  *  resource.cpp  -  generic class containing an alarm calendar resource
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2019-2020 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2019-2021 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -78,11 +78,10 @@ QVector<Resource> Resources::enabledResources(CalEvent::Type type, bool writable
 /******************************************************************************
 * Return the standard resource for an alarm type.
 */
-Resource Resources::getStandard(CalEvent::Type type)
+Resource Resources::getStandard(CalEvent::Type type, bool useOnlyResource)
 {
     Resources* manager = instance();
-    bool wantDefaultArchived = (type == CalEvent::ARCHIVED);
-    Resource defaultArchived;
+    Resource defaultResource;
     for (auto it = manager->mResources.constBegin();  it != manager->mResources.constEnd();  ++it)
     {
         const Resource& res = it.value();
@@ -90,23 +89,23 @@ Resource Resources::getStandard(CalEvent::Type type)
         {
             if (res.configIsStandard(type))
                 return res;
-            if (wantDefaultArchived)
+            if (useOnlyResource)
             {
-                if (defaultArchived.isValid())
-                    wantDefaultArchived = false;   // found two archived alarm resources
+                if (defaultResource.isValid())
+                    useOnlyResource = false;   // found two resources for the type
                 else
-                    defaultArchived = res;   // this is the first archived alarm resource
+                    defaultResource = res;   // this is the first resource for the type
             }
         }
     }
 
-    if (wantDefaultArchived  &&  defaultArchived.isValid())
+    if (useOnlyResource  &&  defaultResource.isValid())
     {
-        // There is no resource specified as the standard archived alarm
-        // resource, but there is exactly one writable archived alarm
-        // resource. Set that resource to be the standard.
-        defaultArchived.configSetStandard(CalEvent::ARCHIVED, true);
-        return defaultArchived;
+        // There is no resource specified as the standard resource for the
+        // alarm type, but there is exactly one writable reseource for the
+        // type. Set that resource to be the standard.
+        defaultResource.configSetStandard(type, true);
+        return defaultResource;
     }
 
     return Resource();
@@ -121,7 +120,7 @@ bool Resources::isStandard(const Resource& resource, CalEvent::Type type)
     // If it's for archived alarms, get and also set the standard resource if
     // necessary.
     if (type == CalEvent::ARCHIVED)
-        return getStandard(type) == resource;
+        return getStandard(type, true) == resource;
 
     return resource.configIsStandard(type) && resource.isWritable(type);
 }
@@ -147,7 +146,7 @@ CalEvent::Types Resources::standardTypes(const Resource& resource, bool useDefau
         if (!(stdTypes & CalEvent::ARCHIVED)  &&  resource.isEnabled(CalEvent::ARCHIVED))
         {
             // If it's the only enabled archived alarm resource, set it as standard.
-            getStandard(CalEvent::ARCHIVED);
+            getStandard(CalEvent::ARCHIVED, true);
             stdTypes = resource.configStandardTypes() & resource.enabledTypes();
         }
         CalEvent::Types enabledNotStd = resource.enabledTypes() & ~stdTypes;
@@ -239,17 +238,17 @@ void Resources::setStandard(Resource& resource, CalEvent::Types types)
 * This will be the standard resource for the type, but if this is not valid,
 * the user will be prompted to select a resource.
 */
-Resource Resources::destination(CalEvent::Type type, QWidget* promptParent, bool noPrompt, bool* cancelled)
+Resource Resources::destination(CalEvent::Type type, QWidget* promptParent, DestOptions options, bool* cancelled)
 {
     if (cancelled)
         *cancelled = false;
     Resource standard;
     if (type == CalEvent::EMPTY)
         return standard;
-    standard = getStandard(type);
+    standard = getStandard(type, (options & UseOnlyResource));
     // Archived alarms are always saved in the default resource,
     // else only prompt if necessary.
-    if (type == CalEvent::ARCHIVED  ||  noPrompt
+    if (type == CalEvent::ARCHIVED  ||  (options & NoResourcePrompt)
     ||  (!Preferences::askResource()  &&  standard.isValid()))
         return standard;
 

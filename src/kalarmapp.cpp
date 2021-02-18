@@ -1037,7 +1037,7 @@ void KAlarmApp::processQueue()
                     case QueuedAction::Handle:
                     {
                         Resource resource;
-                        KAlarm::addEvent(entry.event, resource, nullptr, KAlarm::ALLOW_KORG_UPDATE | KAlarm::NO_RESOURCE_PROMPT);
+                        KAlarm::addEvent(entry.event, resource, nullptr, KAlarm::ALLOW_KORG_UPDATE | KAlarm::NO_RESOURCE_PROMPT | KAlarm::USE_ONLY_RESOURCE);
                         break;
                     }
                     case QueuedAction::List:
@@ -1415,7 +1415,7 @@ void KAlarmApp::checkArchivedCalendar()
     // calendar is writable.
     if (Preferences::archivedKeepDays())
     {
-        Resource standard = Resources::getStandard(CalEvent::ARCHIVED);
+        Resource standard = Resources::getStandard(CalEvent::ARCHIVED, true);
         if (!standard.isValid())
         {
             // Schedule the display of a user prompt, without holding up

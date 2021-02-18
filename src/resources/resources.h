@@ -73,10 +73,12 @@ public:
      *  as standard and there is exactly one writable archived alarm resource,
      *  that resource will be automatically set as standard.
      *
-     *  @param type  alarm type
+     *  @param type             Alarm type.
+     *  @param useOnlyResource  If there is only one resource for the alarm type,
+     *                          set it as standard.
      *  @return standard resource, or null if none.
      */
-    static Resource getStandard(CalEvent::Type type);
+    static Resource getStandard(CalEvent::Type type, bool useOnlyResource = false);
 
     /** Return whether a resource is the standard resource for a specified alarm
      *  type. Only enabled and writable resources can be standard.
@@ -112,16 +114,25 @@ public:
      */
     static void setStandard(Resource& resource, CalEvent::Types);
 
+    /** Options for destination(). May be OR'ed together. */
+    enum DestOption
+    {
+        NoDestOption     = 0,
+        NoResourcePrompt = 0x01,   //!< Don't prompt the user even if the standard resource is not valid.
+        UseOnlyResource  = 0x02    //!< If there is only one enabled resource, set it as standard.
+    };
+    Q_DECLARE_FLAGS(DestOptions, DestOption)
+
     /** Find the resource to be used to store an event of a given type.
      *  This will be the standard resource for the type, but if this is not valid,
      *  the user will be prompted to select a resource.
      *  @param type         The event type
      *  @param promptParent The parent widget for the prompt
-     *  @param noPrompt     Don't prompt the user even if the standard resource is not valid
+     *  @param options      Options to use
      *  @param cancelled    If non-null: set to true if the user cancelled the
      *                      prompt dialogue; set to false if any other error
      */
-    static Resource destination(CalEvent::Type type, QWidget* promptParent = nullptr, bool noPrompt = false, bool* cancelled = nullptr);
+    static Resource destination(CalEvent::Type type, QWidget* promptParent = nullptr, DestOptions options = NoDestOption, bool* cancelled = nullptr);
 
     /** Return whether all configured and migrated resources have been created. */
     static bool allCreated();
@@ -280,6 +291,7 @@ private:
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(Resources::Sorting)
+Q_DECLARE_OPERATORS_FOR_FLAGS(Resources::DestOptions)
 
 
 /*=============================================================================
@@ -297,7 +309,7 @@ QVector<Resource> Resources::allResources(CalEvent::Type type, Sorting sorting)
     Resource std;
     if ((sorting & DefaultFirst)  &&  type != CalEvent::EMPTY)
     {
-        std = getStandard(type);
+        std = getStandard(type, (type == CalEvent::ARCHIVED));
         if (std.isValid()  &&  std.is<RType>())
             result += std;
     }

@@ -1,5 +1,8 @@
 KAlarm Change Log
 
+=== Version 3.1.3 (KDE Applications 20.12.3) --- 18 February 2021 ===
+* Fix error creating alarm from command line if the only active alarm calendar is not the default [KDE Bug 417108].
+
 === Version 3.1.2 (KDE Applications 20.12.2) --- 26 January 2021 ===
 * Default to using alarm names.
 * Fix hang when an alarm is triggered in a read-only resource.

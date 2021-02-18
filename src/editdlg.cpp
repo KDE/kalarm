@@ -1146,7 +1146,7 @@ bool EditAlarmDlg::validate()
         bool cancelled = false;
         CalEvent::Type type = mTemplate ? CalEvent::TEMPLATE : CalEvent::ACTIVE;
         if (!mResource.isWritable(type))
-            mResource = Resources::destination(type, this, false, &cancelled);
+            mResource = Resources::destination(type, this, Resources::NoDestOption, &cancelled);
         if (!mResource.isValid())
         {
             if (!cancelled)

@@ -285,8 +285,9 @@ void ResourcesCalendar::purgeEvents(const QVector<KAEvent>& events)
 * Reply = true if 'evnt' was written to the calendar. 'evnt' is updated.
 *       = false if an error occurred, in which case 'evnt' is unchanged.
 */
-bool ResourcesCalendar::addEvent(KAEvent& evnt, Resource& resource, QWidget* promptParent, bool useEventID, bool noPrompt, bool* cancelled)
+bool ResourcesCalendar::addEvent(KAEvent& evnt, Resource& resource, QWidget* promptParent, AddEventOptions options, bool* cancelled)
 {
+    bool useEventID = options & UseEventId;
     if (cancelled)
         *cancelled = false;
     qCDebug(KALARM_LOG) << "ResourcesCalendar::addEvent:" << evnt.id() << ", resource" << resource.displayId();
@@ -323,7 +324,12 @@ bool ResourcesCalendar::addEvent(KAEvent& evnt, Resource& resource, QWidget* pro
     bool ok = false;
     if (!resource.isEnabled(type))
     {
-        resource = Resources::destination(type, promptParent, noPrompt, cancelled);
+        Resources::DestOptions destOptions {};
+        if (options & NoResourcePrompt)
+            destOptions |= Resources::NoResourcePrompt;
+        if (options & UseOnlyResource)
+            destOptions |= Resources::UseOnlyResource;
+        resource = Resources::destination(type, promptParent, destOptions, cancelled);
         if (!resource.isValid())
             qCWarning(KALARM_LOG) << "ResourcesCalendar::addEvent: Error! Cannot create" << type << "(No default calendar is defined)";
     }
