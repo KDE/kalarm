@@ -61,6 +61,10 @@ struct UpdateResult
     UpdateResult& operator=(UpdateStatus s)  { status = s; message.clear(); return *this; }
     bool operator==(UpdateStatus s) const  { return status == s; }
     bool operator!=(UpdateStatus s) const  { return status != s; }
+    bool operator>(UpdateStatus s) const   { return status > s; }
+    bool operator>=(UpdateStatus s) const  { return status >= s; }
+    bool operator<=(UpdateStatus s) const  { return status <= s; }
+    bool operator<(UpdateStatus s) const   { return status < s; }
     void set(UpdateStatus s) { operator=(s); }
     void set(UpdateStatus s, const QString& m) { status = s; message = m; }
 };
@@ -104,8 +108,7 @@ enum         // 'options' parameter values for addEvent(). May be OR'ed together
 {
     USE_EVENT_ID       = 0x01,   // use event ID if it's provided
     NO_RESOURCE_PROMPT = 0x02,   // don't prompt for resource
-    USE_ONLY_RESOURCE  = 0x04,   // if there is only one enabled resource, use it as the default
-    ALLOW_KORG_UPDATE  = 0x08    // allow change to be sent to KOrganizer
+    ALLOW_KORG_UPDATE  = 0x04    // allow change to be sent to KOrganizer
 };
 
 /** Add a new active (non-archived) alarm to a resource.

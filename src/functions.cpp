@@ -240,8 +240,6 @@ UpdateResult addEvent(KAEvent& event, Resource& resource, QWidget* msgParent, in
             rc_options |= ResourcesCalendar::UseEventId;
         if (options & NO_RESOURCE_PROMPT)
             rc_options |= ResourcesCalendar::NoResourcePrompt;
-        if (options & USE_ONLY_RESOURCE)
-            rc_options |= ResourcesCalendar::UseOnlyResource;
         if (!ResourcesCalendar::addEvent(event, resource, msgParent, rc_options, &cancelled))
         {
             status.status = UPDATE_FAILED;

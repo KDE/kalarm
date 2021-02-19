@@ -59,8 +59,7 @@ public:
     {
         NoOption         = 0,
         UseEventId       = 0x01,   // use event ID if it's provided
-        NoResourcePrompt = 0x02,   // don't prompt for resource
-        UseOnlyResource  = 0x04    // if there is only one enabled resource, use it as the default
+        NoResourcePrompt = 0x02    // don't prompt for resource
     };
     Q_DECLARE_FLAGS(AddEventOptions, AddEventOption)
 
