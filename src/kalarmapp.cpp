@@ -1048,13 +1048,11 @@ void KAlarmApp::processQueue()
                         {
                             qCWarning(KALARM_LOG) << "KAlarmApp::processQueue: Error! Cannot create alarm (no default calendar is defined)";
 
-#if 0
                             if (commandLine)
                             {
                                 const QString errmsg = xi18nc("@info:shell", "Cannot create alarm: No default calendar is defined");
                                 std::cerr << errmsg.toLocal8Bit().data() << std::endl;
                             }
-#endif
                             ok = false;
                         }
                         else
