@@ -1,7 +1,7 @@
 /*
  *  messagedisplay.cpp  -  base class to display an alarm or error message
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2001-2020 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2001-2021 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -152,7 +152,7 @@ bool MessageDisplay::retrieveEvent(const EventId& evntId, KAEvent& event, Resour
         // The event isn't in the displaying calendar.
         // Try to retrieve it from the archive calendar.
         KAEvent ev;
-        Resource archiveRes = Resources::getStandard(CalEvent::ARCHIVED);
+        Resource archiveRes = Resources::getStandard(CalEvent::ARCHIVED, true);
         if (archiveRes.isValid())
             ev = ResourcesCalendar::event(EventId(archiveRes.id(), CalEvent::uid(eventId, CalEvent::ARCHIVED)));
         if (!ev.isValid())

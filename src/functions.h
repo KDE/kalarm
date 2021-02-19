@@ -61,6 +61,10 @@ struct UpdateResult
     UpdateResult& operator=(UpdateStatus s)  { status = s; message.clear(); return *this; }
     bool operator==(UpdateStatus s) const  { return status == s; }
     bool operator!=(UpdateStatus s) const  { return status != s; }
+    bool operator>(UpdateStatus s) const   { return status > s; }
+    bool operator>=(UpdateStatus s) const  { return status >= s; }
+    bool operator<=(UpdateStatus s) const  { return status <= s; }
+    bool operator<(UpdateStatus s) const   { return status < s; }
     void set(UpdateStatus s) { operator=(s); }
     void set(UpdateStatus s, const QString& m) { status = s; message = m; }
 };

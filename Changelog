@@ -5,6 +5,10 @@ KAlarm Change Log
 * Rename Preferences 'Edit' tab to 'Alarm Defaults'.
 * Add default sound volume setting to Preferences dialogue.
 
+=== Version 3.1.3 (KDE Applications 20.12.3) --- 19 February 2021 ===
+* Fix error creating alarm from command line if the only active alarm calendar is not the default [KDE Bug 417108].
+* If command line action fails, quit application if not previously running.
+
 === Version 3.1.2 (KDE Applications 20.12.2) --- 26 January 2021 ===
 * Default to using alarm names.
 * Fix hang when an alarm is triggered in a read-only resource.

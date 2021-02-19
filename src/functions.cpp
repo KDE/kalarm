@@ -234,7 +234,12 @@ UpdateResult addEvent(KAEvent& event, Resource& resource, QWidget* msgParent, in
     {
         // Save the event details in the calendar file, and get the new event ID
         // Note that ResourcesCalendar::addEvent() updates 'event'.
-        if (!ResourcesCalendar::addEvent(event, resource, msgParent, (options & USE_EVENT_ID), (options & NO_RESOURCE_PROMPT), &cancelled))
+        ResourcesCalendar::AddEventOptions rc_options = {};
+        if (options & USE_EVENT_ID)
+            rc_options |= ResourcesCalendar::UseEventId;
+        if (options & NO_RESOURCE_PROMPT)
+            rc_options |= ResourcesCalendar::NoResourcePrompt;
+        if (!ResourcesCalendar::addEvent(event, resource, msgParent, rc_options, &cancelled))
         {
             status.status = UPDATE_FAILED;
         }
@@ -288,7 +293,7 @@ UpdateResult addEvents(QVector<KAEvent>& events, Resource& resource, QWidget* ms
             {
                 // Save the event details in the calendar file, and get the new event ID
                 KAEvent& event = events[i];
-                if (!ResourcesCalendar::addEvent(event, resource, msgParent, false))
+                if (!ResourcesCalendar::addEvent(event, resource, msgParent))
                 {
                     status.appendFailed(i);
                     status.setError(UPDATE_ERROR);
@@ -336,7 +341,7 @@ bool addArchivedEvent(KAEvent& event, Resource& resource)
     // Add the event from the archived resource. It's not too important whether
     // the resource is saved successfully after the deletion, so allow it to be
     // saved automatically.
-    if (!ResourcesCalendar::addEvent(newevent, resource, nullptr, false))
+    if (!ResourcesCalendar::addEvent(newevent, resource))
         return false;
     event = *newev;   // update event ID etc.
 
@@ -355,7 +360,7 @@ UpdateResult addTemplate(KAEvent& event, Resource& resource, QWidget* msgParent)
 
     // Add the template to the calendar file
     KAEvent newev(event);
-    if (!ResourcesCalendar::addEvent(newev, resource, msgParent, false))
+    if (!ResourcesCalendar::addEvent(newev, resource, msgParent))
         status.status = UPDATE_FAILED;
     else
     {
@@ -645,7 +650,7 @@ UpdateResult reactivateEvents(QVector<KAEvent>& events, QVector<int>& ineligible
 
             // Save the event details in the calendar file.
             // This converts the event ID.
-            if (!ResourcesCalendar::addEvent(newevent, resource, msgParent, true))
+            if (!ResourcesCalendar::addEvent(newevent, resource, msgParent, ResourcesCalendar::UseEventId))
             {
                 status.appendFailed(i);
                 continue;
@@ -776,7 +781,7 @@ void purgeArchive(int purgeDays)
         return;
     qCDebug(KALARM_LOG) << "KAlarm::purgeArchive:" << purgeDays;
     const QDate cutoff = KADateTime::currentLocalDate().addDays(-purgeDays);
-    const Resource resource = Resources::getStandard(CalEvent::ARCHIVED);
+    const Resource resource = Resources::getStandard(CalEvent::ARCHIVED, true);
     if (!resource.isValid())
         return;
     QVector<KAEvent> events = ResourcesCalendar::events(resource);

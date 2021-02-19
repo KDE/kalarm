@@ -53,7 +53,17 @@ public:
     static QVector<KAEvent> events(const QString& uniqueId);
     static QVector<KAEvent> events(const Resource&, CalEvent::Types = CalEvent::EMPTY);
     static QVector<KAEvent> events(CalEvent::Types s = CalEvent::EMPTY);
-    static bool             addEvent(KAEvent&, Resource&, QWidget* promptparent = nullptr, bool useEventID = false, bool noPrompt = false, bool* cancelled = nullptr);
+
+    /** Options for addEvent(). May be OR'ed together. */
+    enum AddEventOption
+    {
+        NoOption         = 0,
+        UseEventId       = 0x01,   // use event ID if it's provided
+        NoResourcePrompt = 0x02    // don't prompt for resource
+    };
+    Q_DECLARE_FLAGS(AddEventOptions, AddEventOption)
+
+    static bool             addEvent(KAEvent&, Resource&, QWidget* promptparent = nullptr, AddEventOptions options = NoOption, bool* cancelled = nullptr);
     static bool             modifyEvent(const EventId& oldEventId, KAEvent& newEvent);
     static KAEvent          updateEvent(const KAEvent&, bool saveIfReadOnly = true);
     static bool             deleteEvent(const KAEvent&, Resource&, bool save = false);
@@ -97,6 +107,8 @@ private:
     static bool           mIgnoreAtLogin;      // ignore new/updated repeat-at-login alarms
     static bool           mHaveDisabledAlarms; // there is at least one individually disabled alarm
 };
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(ResourcesCalendar::AddEventOptions)
 
 #endif // RESOURCESCALENDAR_H
 

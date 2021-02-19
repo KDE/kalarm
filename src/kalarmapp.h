@@ -1,7 +1,7 @@
 /*
  *  kalarmapp.h  -  the KAlarm application object
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2001-2020 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2001-2021 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -92,15 +92,21 @@ public:
     bool               windowFocusBroken() const;
     bool               needWindowFocusFix() const;
     // Methods called indirectly by the D-Bus interface
-    bool               scheduleEvent(KAEvent::SubAction, const QString& name, const QString& text,
-                                     const KADateTime&, int lateCancel, KAEvent::Flags flags,
-                                     const QColor& bg, const QColor& fg, const QFont&,
+    bool               scheduleEvent(KAEvent::SubAction subAction, const QString& name, const QString& text,
+                                     const KADateTime& dt, int lateCancel, KAEvent::Flags flags,
+                                     const QColor& bg, const QColor& fg, const QFont& font,
                                      const QString& audioFile, float audioVolume,
                                      int reminderMinutes, const KARecurrence& recurrence,
                                      const KCalendarCore::Duration& repeatInterval, int repeatCount,
                                      uint mailFromID = 0, const KCalendarCore::Person::List& mailAddresses = KCalendarCore::Person::List(),
                                      const QString& mailSubject = QString(),
-                                     const QStringList& mailAttachments = QStringList());
+                                     const QStringList& mailAttachments = QStringList())
+    { return scheduleEvent(QueuedAction::NoAction,
+                           subAction, name, text, dt, lateCancel, flags,
+                           bg, fg, font, audioFile, audioVolume,
+                           reminderMinutes, recurrence, repeatInterval, repeatCount,
+                           mailFromID, mailAddresses, mailSubject, mailAttachments);
+    }
     bool               dbusTriggerEvent(const EventId& eventID)   { return dbusHandleEvent(eventID, QueuedAction::Trigger); }
     bool               dbusDeleteEvent(const EventId& eventID)    { return dbusHandleEvent(eventID, QueuedAction::Cancel); }
     QString            dbusList();
@@ -155,6 +161,7 @@ private:
     enum class QueuedAction
     {
         // Action to execute
+        NoAction   = 0,
         ActionMask = 0x07,  // bit mask to extract action to execute
         Handle     = 0x01,  // if the alarm is due, execute it and then reschedule it
         Trigger    = 0x02,  // execute the alarm regardless, and then reschedule it if it's already due
@@ -163,7 +170,9 @@ private:
         List       = 0x05,  // list all alarms (command line option)
         // Modifier flags
         FindId     = 0x10,  // search all resources for unique event ID
-        Exit       = 0x20   // exit application after executing action
+        Exit       = 0x20,  // exit application after executing action
+        ErrorExit  = 0x40,  // exit application after executing action if it fails
+        CmdLine    = 0x80   // the action is from the command line, so output error messages
     };
     struct ProcData
     {
@@ -223,6 +232,16 @@ private:
     void               checkArchivedCalendar();
     void               queueAlarmId(const KAEvent&);
     bool               dbusHandleEvent(const EventId&, QueuedAction);
+    bool               scheduleEvent(QueuedAction queuedActionFlags,
+                                     KAEvent::SubAction, const QString& name, const QString& text,
+                                     const KADateTime&, int lateCancel, KAEvent::Flags flags,
+                                     const QColor& bg, const QColor& fg, const QFont&,
+                                     const QString& audioFile, float audioVolume,
+                                     int reminderMinutes, const KARecurrence& recurrence,
+                                     const KCalendarCore::Duration& repeatInterval, int repeatCount,
+                                     uint mailFromID = 0, const KCalendarCore::Person::List& mailAddresses = KCalendarCore::Person::List(),
+                                     const QString& mailSubject = QString(),
+                                     const QStringList& mailAttachments = QStringList());
     int                handleEvent(const EventId&, QueuedAction, bool findUniqueId = false);
     int                rescheduleAlarm(KAEvent&, const KAAlarm&, bool updateCalAndDisplay,
                                        const KADateTime& nextDt = KADateTime());

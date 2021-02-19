@@ -614,7 +614,11 @@ int KAlarmApp::activateInstance(const QStringList& args, const QString& workingD
                     exitCode = 1;
                 else
                 {
-                    if (!scheduleEvent(options->editAction(), options->name(), options->text(),
+                    QueuedAction flags = QueuedAction::CmdLine;
+                    if (!MainWindow::count())
+                        flags = static_cast<QueuedAction>(int(flags) + int(QueuedAction::ErrorExit));
+                    if (!scheduleEvent(flags,
+                                       options->editAction(), options->name(), options->text(),
                                        options->alarmTime(), options->lateCancel(), options->flags(),
                                        options->bgColour(), options->fgColour(), QFont(),
                                        options->audioFile(), options->audioVolume(),
@@ -1020,8 +1024,10 @@ void KAlarmApp::processQueue()
             }
 
             // Process the first action in the queue.
-            const bool findUniqueId  = int(entry.action) & int(QueuedAction::FindId);
-            const bool exitAfter     = int(entry.action) & int(QueuedAction::Exit);
+            const bool findUniqueId   = int(entry.action) & int(QueuedAction::FindId);
+            bool       exitAfter      = int(entry.action) & int(QueuedAction::Exit);
+            const bool exitAfterError = int(entry.action) & int(QueuedAction::ErrorExit);
+            const bool commandLine    = int(entry.action) & int(QueuedAction::CmdLine);
             const auto action = static_cast<QueuedAction>(int(entry.action) & int(QueuedAction::ActionMask));
 
             bool ok = true;
@@ -1037,8 +1043,38 @@ void KAlarmApp::processQueue()
                         break;
                     case QueuedAction::Handle:
                     {
-                        Resource resource;
-                        KAlarm::addEvent(entry.event, resource, nullptr, KAlarm::ALLOW_KORG_UPDATE | KAlarm::NO_RESOURCE_PROMPT);
+                        Resource resource = Resources::destination(CalEvent::ACTIVE, nullptr, Resources::NoResourcePrompt | Resources::UseOnlyResource);
+                        if (!resource.isValid())
+                        {
+                            qCWarning(KALARM_LOG) << "KAlarmApp::processQueue: Error! Cannot create alarm (no default calendar is defined)";
+
+#if 0
+                            if (commandLine)
+                            {
+                                const QString errmsg = xi18nc("@info:shell", "Cannot create alarm: No default calendar is defined");
+                                std::cerr << errmsg.toLocal8Bit().data() << std::endl;
+                            }
+#endif
+                            ok = false;
+                        }
+                        else
+                        {
+                            const KAlarm::UpdateResult result = KAlarm::addEvent(entry.event, resource, nullptr, KAlarm::ALLOW_KORG_UPDATE | KAlarm::NO_RESOURCE_PROMPT);
+                            if (result >= KAlarm::UPDATE_ERROR)
+                            {
+//TODO: display error message for command line action, but first ensure that one is returned by addEvent()!
+#if 0
+                                if (commandLine)
+                                {
+                                    const QString errmsg = xi18nc("@info:shell", "Error creating alarm");
+                                    std::cerr << errmsg.toLocal8Bit().data();
+                                }
+#endif
+                                ok = false;
+                            }
+                        }
+                        if (!ok  &&  exitAfterError)
+                            exitAfter = true;
                         break;
                     }
                     case QueuedAction::List:
@@ -1085,7 +1121,10 @@ void KAlarmApp::processQueue()
                     if (!result)
                         inhibit = true;
                     else if (result < 0  &&  exitAfter)
+                    {
                         CommandOptions::printError(xi18nc("@info:shell", "%1: Event <resource>%2</resource> not found, or not unique", mCommandOption, entry.eventId.eventId()));
+                        ok = false;
+                    }
                 }
             }
 
@@ -1098,7 +1137,7 @@ void KAlarmApp::processQueue()
             else if (exitAfter)
             {
                 mActionQueue.clear();   // ensure that quitIf() actually exits the program
-                quitIf(ok ? 0 : 1);
+                quitIf((ok ? 0 : 1), exitAfterError);
                 return;  // quitIf() can sometimes return, despite calling exit()
             }
 
@@ -1416,7 +1455,7 @@ void KAlarmApp::checkArchivedCalendar()
     // calendar is writable.
     if (Preferences::archivedKeepDays())
     {
-        Resource standard = Resources::getStandard(CalEvent::ARCHIVED);
+        Resource standard = Resources::getStandard(CalEvent::ARCHIVED, true);
         if (!standard.isValid())
         {
             // Schedule the display of a user prompt, without holding up
@@ -1664,7 +1703,8 @@ bool KAlarmApp::needWindowFocusFix() const
 * to command line options.
 * Reply = true unless there was a parameter error or an error opening calendar file.
 */
-bool KAlarmApp::scheduleEvent(KAEvent::SubAction action, const QString& name, const QString& text,
+bool KAlarmApp::scheduleEvent(QueuedAction queuedActionFlags,
+                              KAEvent::SubAction action, const QString& name, const QString& text,
                               const KADateTime& dateTime, int lateCancel, KAEvent::Flags flags,
                               const QColor& bg, const QColor& fg, const QFont& font,
                               const QString& audioFile, float audioVolume, int reminderMinutes,
@@ -1719,7 +1759,8 @@ bool KAlarmApp::scheduleEvent(KAEvent::SubAction action, const QString& name, co
 
     // Queue the alarm for insertion into the calendar file
     qCDebug(KALARM_LOG) << "KAlarmApp::scheduleEvent: creating new alarm" << text;
-    mActionQueue.enqueue(ActionQEntry(event));
+    const QueuedAction qaction = static_cast<QueuedAction>(int(QueuedAction::Handle) + int(queuedActionFlags));
+    mActionQueue.enqueue(ActionQEntry(event, qaction));
     if (mInitialised)
         QTimer::singleShot(0, this, &KAlarmApp::processQueue);   //NOLINT(clang-analyzer-cplusplus.NewDeleteLeaks)
     return true;

@@ -944,7 +944,7 @@ void StorePrefTab::slotArchivedToggled(bool)
 {
     const bool keep = mKeepArchived->isChecked();
     if (keep  &&  !mOldKeepArchived  &&  mCheckKeepChanges
-    &&  !Resources::getStandard(CalEvent::ARCHIVED).isValid())
+    &&  !Resources::getStandard(CalEvent::ARCHIVED, true).isValid())
     {
         KAMessageBox::sorry(topLayout()->parentWidget(),
              xi18nc("@info", "<para>A default calendar is required in order to archive alarms, but none is currently enabled.</para>"

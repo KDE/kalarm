@@ -1,7 +1,7 @@
 /*
  *  resourceselector.cpp  -  calendar resource selection widget
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2006-2020 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2006-2021 David Jarvie <djarvie@kde.org>
  *  Based on KOrganizer's ResourceView class and KAddressBook's ResourceSelection class,
  *  SPDX-FileCopyrightText: 2003, 2004 Cornelius Schumacher <schumacher@kde.org>
  *  SPDX-FileCopyrightText: 2003-2004 Reinhold Kainhofer <reinhold@kainhofer.com>
@@ -411,7 +411,7 @@ void ResourceSelector::archiveDaysChanged(int days)
 {
     if (days)
     {
-        const Resource resource = Resources::getStandard(CalEvent::ARCHIVED);
+        const Resource resource = Resources::getStandard(CalEvent::ARCHIVED, true);
         if (resource.isValid())
             theApp()->purgeNewArchivedDefault(resource);
     }
