@@ -142,4 +142,6 @@ ecm_qt_install_logging_categories(
     )
 
 add_subdirectory(doc)
+ki18n_install(po)
+kdoctools_install(po)
 feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)
