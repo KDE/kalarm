@@ -252,7 +252,7 @@ DirResourceImportTypeWidget::DirResourceImportTypeWidget(CalEvent::Type alarmTyp
     mUi->statusLabel->setText(QString());
     mUi->pathRequester->setFocus();
     mUi->pathRequester->installEventFilter(this);
-    connect(mUi->pathRequester, QOverload<>::of(&KUrlRequester::returnPressed), this, [this]() { validate(); });
+    connect(mUi->pathRequester, QOverload<const QString &>::of(&KUrlRequester::returnPressed), this, [this]() { validate(); });
     connect(mUi->pathRequester, &KUrlRequester::urlSelected, this, [this]() { validate(); });
     connect(mUi->pathRequester, &KUrlRequester::textChanged, this, [this]() { setStatus(false); });
     connect(mUi->nameText, &QLineEdit::textChanged, this, [this]() { validate(); });
