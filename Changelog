@@ -1,6 +1,6 @@
 KAlarm Change Log
 
-=== Version 3.2.0 (KDE Applications 21.04) --- 12 January 2021 ===
+=== Version 3.2.0 (KDE Applications 21.04) --- 19 February 2021 ===
 * Remove KAlarm Akonadi resource code.
 * Rename Preferences 'Edit' tab to 'Alarm Defaults'.
 * Add default sound volume setting to Preferences dialogue.
