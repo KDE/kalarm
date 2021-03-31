@@ -5,8 +5,7 @@
  *  SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
-#ifndef AKONADI_SERIALIZER_KALARM_H
-#define AKONADI_SERIALIZER_KALARM_H
+#pragma once
 
 #include "kaeventformatter.h"
 
@@ -44,4 +43,3 @@ private:
     QString mRegistered;
 };
 
-#endif // AKONADI_SERIALIZER_KALARM_H

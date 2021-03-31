@@ -5,8 +5,7 @@
  *  SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
-#ifndef KAEVENTFORMATTER_H
-#define KAEVENTFORMATTER_H
+#pragma once
 
 #include <kalarmcal/kaevent.h>
 
@@ -102,4 +101,3 @@ private:
     QString mUnspecifiedValue;
 };
 
-#endif // KAEVENTFORMATTER_H

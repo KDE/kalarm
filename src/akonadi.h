@@ -7,8 +7,7 @@
  *  SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
-#ifndef KALARMCAL_AKONADI_H
-#define KALARMCAL_AKONADI_H
+#pragma once
 
 #include "kalarmcal_export.h"
 
@@ -35,4 +34,3 @@ KALARMCAL_EXPORT bool setItemPayload(Akonadi::Item &item, const KAEvent &event, 
 
 }
 
-#endif // KALARMCAL_AKONADI_H

@@ -7,8 +7,7 @@
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#ifndef KAEVENTTEST_H
-#define KAEVENTTEST_H
+#pragma once
 
 #include <QObject>
 
@@ -22,4 +21,3 @@ private Q_SLOTS:
     void toKCalEvent();
 };
 
-#endif

@@ -7,8 +7,7 @@
  *  SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
-#ifndef KALARM_KARECURRENCE_H
-#define KALARM_KARECURRENCE_H
+#pragma once
 
 #include "kalarmcal_export.h"
 #include "kadatetime.h"
@@ -446,6 +445,5 @@ private:
 
 } // namespace KAlarmCal
 
-#endif // KALARM_KARECURRENCE_H
 
 // vim: et sw=4:

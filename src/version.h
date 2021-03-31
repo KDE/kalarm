@@ -7,8 +7,7 @@
  *  SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
-#ifndef KALARM_VERSION_H
-#define KALARM_VERSION_H
+#pragma once
 
 #include "kalarmcal_export.h"
 #include <QString>
@@ -27,6 +26,5 @@ KALARMCAL_EXPORT QString getVersionString(int version);
 
 }
 
-#endif // KALARM_VERSION_H
 
 // vim: et sw=4:

@@ -7,8 +7,7 @@
  *  SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
-#ifndef KALARM_KACALENDAR_H
-#define KALARM_KACALENDAR_H
+#pragma once
 
 #include "kalarmcal_export.h"
 
@@ -139,6 +138,5 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(CalEvent::Types)
 
 KALARMCAL_EXPORT QDebug operator<<(QDebug, KAlarmCal::CalEvent::Type);
 
-#endif // KALARM_KACALENDAR_H
 
 // vim: et sw=4:

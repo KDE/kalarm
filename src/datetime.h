@@ -6,8 +6,7 @@
  *
  *  SPDX-License-Identifier: LGPL-2.0-or-later
  */
-#ifndef KALARM_DATETIME_H
-#define KALARM_DATETIME_H
+#pragma once
 
 #include "kalarmcal_export.h"
 
@@ -333,6 +332,5 @@ inline bool operator<=(const KADateTime &dt1, const DateTime &dt2)
 
 } // namespace KAlarmCal
 
-#endif // KALARM_DATETIME_H
 
 // vim: et sw=4:

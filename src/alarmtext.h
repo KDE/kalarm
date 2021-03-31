@@ -7,8 +7,7 @@
  *  SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
-#ifndef KALARM_ALARMTEXT_H
-#define KALARM_ALARMTEXT_H
+#pragma once
 
 #include "kalarmcal_export.h"
 
@@ -199,6 +198,5 @@ private:
 
 } // namespace KAlarmCal
 
-#endif // KALARM_ALARMTEXT_H
 
 // vim: et sw=4:

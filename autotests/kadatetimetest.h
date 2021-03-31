@@ -7,8 +7,7 @@
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#ifndef KADATETIMETEST_H
-#define KADATETIMETEST_H
+#pragma once
 
 #include <QObject>
 
@@ -44,4 +43,3 @@ private Q_SLOTS:
     void misc();
 };
 
-#endif

@@ -12,8 +12,7 @@
  * @author David Jarvie <djarvie@kde.org>.
  */
 
-#ifndef KALARM_KADATETIME_H
-#define KALARM_KADATETIME_H
+#pragma once
 
 #include "kalarmcal_export.h"
 
@@ -1473,6 +1472,5 @@ KALARMCAL_EXPORT QDataStream &operator>>(QDataStream &in, KADateTime &dateTime);
 Q_DECLARE_METATYPE(KAlarmCal::KADateTime)
 Q_DECLARE_METATYPE(KAlarmCal::KADateTime::Spec)
 
-#endif // KALARM_KADATETIME_H
 
 // vim: et sw=4:

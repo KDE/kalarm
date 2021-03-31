@@ -7,8 +7,7 @@
  *  SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
-#ifndef KALARM_EVENT_ATTRIBUTE_H
-#define KALARM_EVENT_ATTRIBUTE_H
+#pragma once
 
 #include "kalarmcal_export.h"
 
@@ -68,6 +67,5 @@ private:
 
 } // namespace KAlarmCal
 
-#endif // KALARM_EVENT_ATTRIBUTE_H
 
 // vim: et sw=4:

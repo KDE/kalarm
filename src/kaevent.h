@@ -7,8 +7,7 @@
  *  SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
-#ifndef KALARM_KAEVENT_H
-#define KALARM_KAEVENT_H
+#pragma once
 
 #include "kalarmcal_export.h"
 
@@ -1474,6 +1473,5 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(KAlarmCal::KAEvent::Flags)
 Q_DECLARE_OPERATORS_FOR_FLAGS(KAlarmCal::KAEvent::Comparison)
 Q_DECLARE_METATYPE(KAlarmCal::KAEvent)
 
-#endif // KALARM_KAEVENT_H
 
 // vim: et sw=4:

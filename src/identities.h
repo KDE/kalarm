@@ -7,8 +7,7 @@
  *  SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
-#ifndef KALARM_IDENTITIES_H
-#define KALARM_IDENTITIES_H
+#pragma once
 
 #include "kalarmcal_export.h"
 #include <qglobal.h>
@@ -42,6 +41,5 @@ KALARMCAL_EXPORT uint identityUoid(const QString &identityUoidOrName);
 
 }
 
-#endif // KALARM_IDENTITIES_H
 
 // vim: et sw=4:
