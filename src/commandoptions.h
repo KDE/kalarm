@@ -6,8 +6,7 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#ifndef COMMANDOPTIONS_H
-#define COMMANDOPTIONS_H
+#pragma once
 
 #include "editdlg.h"
 #include "eventid.h"
@@ -172,6 +171,5 @@ private:
 #endif
 };
 
-#endif // COMMANDOPTIONS_H
 
 // vim: et sw=4:

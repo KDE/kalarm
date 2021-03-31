@@ -6,8 +6,7 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#ifndef CALENDARUPDATER_H
-#define CALENDARUPDATER_H
+#pragma once
 
 #include "resource.h"
 
@@ -71,6 +70,5 @@ protected:
     bool       mCompleted {false};  // completed, and deleteLater() called
 };
 
-#endif // CALENDARUPDATER_H
 
 // vim: et sw=4:

@@ -6,8 +6,7 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#ifndef FONTCOLOURBUTTON_H
-#define FONTCOLOURBUTTON_H
+#pragma once
 
 #include "lib/pushbutton.h"
 
@@ -74,6 +73,5 @@ private:
     bool               mReadOnly {false};
 };
 
-#endif // FONTCOLOURBUTTON_H
 
 // vim: et sw=4:

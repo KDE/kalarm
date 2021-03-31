@@ -8,8 +8,7 @@
  * SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-#ifndef MIGRATEKDE4FILES_H
-#define MIGRATEKDE4FILES_H
+#pragma once
 
 #include <PimCommon/MigrateApplicationFiles>
 
@@ -29,6 +28,5 @@ private:
     PimCommon::MigrateApplicationFiles mMigrator;
 };
 
-#endif // MIGRATEKDE4FILES_H
 
 // vim: et sw=4:

@@ -6,8 +6,7 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#ifndef ALARMLISTDELEGATE_H
-#define ALARMLISTDELEGATE_H
+#pragma once
 
 #include "alarmlistview.h"
 
@@ -23,6 +22,5 @@ public:
     void edit(KAEvent&, EventListView*) override;
 };
 
-#endif
 
 // vim: et sw=4:

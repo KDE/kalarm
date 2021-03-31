@@ -6,8 +6,7 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#ifndef DIRRESOURCEIMPORTDIALOG_H
-#define DIRRESOURCEIMPORTDIALOG_H
+#pragma once
 
 #include "resource.h"
 
@@ -64,6 +63,5 @@ private:
     friend struct TypeData;
 };
 
-#endif // DIRRESOURCEIMPORTDIALOG_H
 
 // vim: et sw=4:

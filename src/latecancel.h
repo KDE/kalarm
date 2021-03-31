@@ -6,8 +6,7 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#ifndef LATECANCEL_H
-#define LATECANCEL_H
+#pragma once
 
 #include "timeselector.h"
 #include "lib/timeperiod.h"
@@ -54,6 +53,5 @@ class LateCancelSelector : public QFrame
         bool            mAutoCloseShown {false};  // auto-close checkbox is visible
 };
 
-#endif // LATECANCEL_H
 
 // vim: et sw=4:

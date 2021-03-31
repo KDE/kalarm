@@ -6,8 +6,7 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#ifndef DISPLAYCALENDAR_H
-#define DISPLAYCALENDAR_H
+#pragma once
 
 #include <KAlarmCal/KAEvent>
 
@@ -57,6 +56,5 @@ private:
     static bool                       mOpen;               // true if the calendar file is open
 };
 
-#endif // DISPLAYCALENDAR_H
 
 // vim: et sw=4:

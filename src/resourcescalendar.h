@@ -6,8 +6,7 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#ifndef RESOURCESCALENDAR_H
-#define RESOURCESCALENDAR_H
+#pragma once
 
 #include "resources/resource.h"
 
@@ -110,6 +109,5 @@ private:
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(ResourcesCalendar::AddEventOptions)
 
-#endif // RESOURCESCALENDAR_H
 
 // vim: et sw=4:

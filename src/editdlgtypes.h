@@ -6,8 +6,7 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#ifndef EDITDLGTYPES_H
-#define EDITDLGTYPES_H
+#pragma once
 
 #include "editdlg.h"
 #include "preferences.h"
@@ -303,6 +302,5 @@ private:
     int             mSavedRepeatPause; // sound file repeat pause
 };
 
-#endif // EDITDLGTYPES_H
 
 // vim: et sw=4:

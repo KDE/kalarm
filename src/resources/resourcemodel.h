@@ -6,8 +6,7 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#ifndef RESOURCEMODEL_H
-#define RESOURCEMODEL_H
+#pragma once
 
 #include "resource.h"
 
@@ -282,6 +281,5 @@ ResourceFilterCheckListModel* ResourceFilterCheckListModel::create(QObject* pare
     return mInstance;
 }
 
-#endif // RESOURCEMODEL_H
 
 // vim: et sw=4:

@@ -6,8 +6,7 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#ifndef RESOURCESELECTDIALOG_H
-#define RESOURCESELECTDIALOG_H
+#pragma once
 
 #include "resource.h"
 
@@ -58,6 +57,5 @@ private:
     bool               mWritable {false};
 };
 
-#endif // RESOURCESELECTDIALOG_H
 
 // vim: et sw=4:

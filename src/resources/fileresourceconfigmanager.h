@@ -6,8 +6,7 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#ifndef FILERESOURCECONFIGMANAGER_H
-#define FILERESOURCECONFIGMANAGER_H
+#pragma once
 
 #include "resource.h"
 #include "fileresource.h"
@@ -88,6 +87,5 @@ private:
     int                             mCreated {0};    // 1 = createResources() has been run, 2 = completed
 };
 
-#endif // FILERESOURCECONFIGMANAGER_H
 
 // vim: et sw=4:

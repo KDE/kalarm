@@ -6,8 +6,7 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#ifndef LIB_LOCALE_H
-#define LIB_LOCALE_H
+#pragma once
 
 namespace Locale
 {
@@ -36,6 +35,5 @@ unsigned defaultWorkDays();
 
 } // namespace Locale
 
-#endif // LIB_LOCALE_H
 
 // vim: et sw=4:

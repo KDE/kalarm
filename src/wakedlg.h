@@ -6,8 +6,7 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#ifndef WAKEDLG_H
-#define WAKEDLG_H
+#pragma once
 
 #include <QDialog>
 
@@ -38,6 +37,5 @@ class WakeFromSuspendDlg : public QDialog
         QTimer*     mTimer;
 };
 
-#endif // WAKEDLG_H
 
 // vim: et sw=4:

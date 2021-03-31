@@ -6,8 +6,7 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#ifndef EMAILIDCOMBO_H
-#define EMAILIDCOMBO_H
+#pragma once
 
 #include "lib/combobox.h"
 
@@ -35,6 +34,5 @@ class EmailIdCombo : public KIdentityManagement::IdentityCombo
         bool    mReadOnly {false};      // value cannot be changed
 };
 
-#endif // EMAILIDCOMBO_H
 
 // vim: et sw=4:

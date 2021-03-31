@@ -6,8 +6,7 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#ifndef REPETITIONBUTTON_H
-#define REPETITIONBUTTON_H
+#pragma once
 
 #include <KAlarmCal/Repetition>
 
@@ -88,6 +87,5 @@ class RepetitionDlg : public QDialog
         bool           mReadOnly;        // the widget is read only
 };
 
-#endif // REPETITIONBUTTON_H
 
 // vim: et sw=4:

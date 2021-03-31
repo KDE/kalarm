@@ -6,8 +6,7 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#ifndef TIMEPERIOD_H
-#define TIMEPERIOD_H
+#pragma once
 
 #include <KCalendarCore/Duration>
 #include <QWidget>
@@ -136,6 +135,5 @@ class TimePeriod : public QWidget
         bool            mHourMinuteRaised;   // hours:minutes spinbox is currently displayed
 };
 
-#endif // TIMEPERIOD_H
 
 // vim: et sw=4:

@@ -6,8 +6,7 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#ifndef DBUSHANDLER_H
-#define DBUSHANDLER_H
+#pragma once
 
 #include "kalarmiface.h"
 
@@ -152,6 +151,5 @@ private:
     static bool      convertRecurrence(KARecurrence&, const KADateTime& start, int recurType, int recurInterval, int recurCount, const KADateTime& end);
 };
 
-#endif // DBUSHANDLER_H
 
 // vim: et sw=4:

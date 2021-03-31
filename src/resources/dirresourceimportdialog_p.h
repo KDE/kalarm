@@ -6,8 +6,7 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#ifndef DIRRESOURCEIMPORTDIALOG_P_H
-#define DIRRESOURCEIMPORTDIALOG_P_H
+#pragma once
 
 #include <KAlarmCal/KACalendar>
 using namespace KAlarmCal;
@@ -91,6 +90,5 @@ private:
 
 };
 
-#endif // DIRRESOURCEIMPORTDIALOG_P_H
 
 // vim: et sw=4:

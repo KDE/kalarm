@@ -6,8 +6,7 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#ifndef TIMESPINBOX_H
-#define TIMESPINBOX_H
+#pragma once
 
 #include "spinbox2.h"
 #include <QTime>
@@ -107,6 +106,5 @@ class TimeSpinBox : public SpinBox2
         bool            mEnteredSetValue {false};  // to prevent infinite recursion in setValue()
 };
 
-#endif // TIMESPINBOX_H
 
 // vim: et sw=4:

@@ -6,8 +6,7 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#ifndef BIRTHDAYMODEL_H
-#define BIRTHDAYMODEL_H
+#pragma once
 
 #include <Akonadi/Contact/ContactsTreeModel>
 
@@ -71,6 +70,5 @@ class BirthdaySortModel : public QSortFilterProxyModel
         QString     mSuffix;
 };
 
-#endif
 
 // vim: et sw=4:

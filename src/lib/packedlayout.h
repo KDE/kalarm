@@ -5,8 +5,7 @@
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
-#ifndef PACKEDLAYOUT_H
-#define PACKEDLAYOUT_H
+#pragma once
 
 #include <QLayout>
 #include <QList>
@@ -57,6 +56,5 @@ private:
     mutable int         mHeightCached;
 };
 
-#endif // PACKEDLAYOUT_H
 
 // vim: et sw=4:

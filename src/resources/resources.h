@@ -6,8 +6,7 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#ifndef RESOURCES_H
-#define RESOURCES_H
+#pragma once
 
 #include "datamodel.h"
 #include "resource.h"
@@ -341,6 +340,5 @@ QVector<Resource> Resources::allResources(CalEvent::Type type, Sorting sorting)
     return result;
 }
 
-#endif // RESOURCES_H
 
 // vim: et sw=4:

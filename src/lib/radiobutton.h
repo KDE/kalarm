@@ -6,8 +6,7 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#ifndef RADIOBUTTON_H
-#define RADIOBUTTON_H
+#pragma once
 
 #include <QRadioButton>
 class QMouseEvent;
@@ -81,6 +80,5 @@ class RadioButton : public QRadioButton
         bool            mReadOnly {false};      // value cannot be changed
 };
 
-#endif // RADIOBUTTON_H
 
 // vim: et sw=4:

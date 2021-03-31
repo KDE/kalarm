@@ -6,8 +6,7 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#ifndef FILERESOURCECREATOR_H
-#define FILERESOURCECREATOR_H
+#pragma once
 
 #include "resourcecreator.h"
 
@@ -26,6 +25,5 @@ private:
     bool createSingleFileResource();
 };
 
-#endif // FILERESOURCECREATOR_H
 
 // vim: et sw=4:

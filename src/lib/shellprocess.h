@@ -6,8 +6,7 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#ifndef SHELLPROCESS_H
-#define SHELLPROCESS_H
+#pragma once
 
 /** @file shellprocess.h - execute a process through the shell */
 
@@ -139,6 +138,5 @@ private:
     bool               mStdinExit {false}; // exit once STDIN queue has been written
 };
 
-#endif // SHELLPROCESS_H
 
 // vim: et sw=4:

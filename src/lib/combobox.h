@@ -6,8 +6,7 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#ifndef COMBOBOX_H
-#define COMBOBOX_H
+#pragma once
 
 #include <KComboBox>
 class QMouseEvent;
@@ -49,6 +48,5 @@ class ComboBox : public KComboBox
         bool    mReadOnly {false};      // value cannot be changed
 };
 
-#endif // COMBOBOX_H
 
 // vim: et sw=4:

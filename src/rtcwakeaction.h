@@ -6,8 +6,7 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#ifndef RTCWAKEACTION_H
-#define RTCWAKEACTION_H
+#pragma once
 
 #include <KAuth>
 
@@ -23,6 +22,5 @@ class RtcWakeAction : public QObject
         ActionReply settimer(const QVariantMap& args);
 };
 
-#endif // RTCWAKEACTION_H
 
 // vim: et sw=4:

@@ -6,8 +6,7 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#ifndef LIB_CONFIG_H
-#define LIB_CONFIG_H
+#pragma once
 
 class QSize;
 
@@ -19,6 +18,5 @@ void writeWindowSize(const char* window, const QSize&, int splitterWidth = -1);
 
 } // namespace Config
 
-#endif // LIB_CONFIG_H
 
 // vim: et sw=4:

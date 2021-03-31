@@ -6,8 +6,7 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#ifndef CHECKBOX_H
-#define CHECKBOX_H
+#pragma once
 
 #include <QCheckBox>
 class QMouseEvent;
@@ -86,6 +85,5 @@ private:
     bool            mReadOnly {false};      // value cannot be changed
 };
 
-#endif // CHECKBOX_H
 
 // vim: et sw=4:

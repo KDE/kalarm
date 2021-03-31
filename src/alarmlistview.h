@@ -6,8 +6,7 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#ifndef ALARMLISTVIEW_H
-#define ALARMLISTVIEW_H
+#pragma once
 
 #include "eventlistview.h"
 
@@ -44,6 +43,5 @@ private:
     QByteArray  mConfigGroup;
 };
 
-#endif // ALARMLISTVIEW_H
 
 // vim: et sw=4:

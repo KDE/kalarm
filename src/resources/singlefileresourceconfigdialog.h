@@ -6,8 +6,7 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#ifndef SINGLEFILERESOURCECONFIGDIALOG_H
-#define SINGLEFILERESOURCECONFIGDIALOG_H
+#pragma once
 
 #include <KAlarmCal/KACalendar>
 
@@ -74,6 +73,5 @@ private:
     bool          mCheckingDir {false};
 };
 
-#endif // SINGLEFILERESOURCECONFIGDIALOG_H
 
 // vim: et sw=4:

@@ -6,8 +6,7 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#ifndef PREFERENCES_H
-#define PREFERENCES_H
+#pragma once
 
 #include "kalarmconfig.h"
 
@@ -120,6 +119,5 @@ private:
     static bool             mAutoStartChangedByUser; // AutoStart has been changed by the user
 };
 
-#endif // PREFERENCES_H
 
 // vim: et sw=4:

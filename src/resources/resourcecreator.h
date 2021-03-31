@@ -6,8 +6,7 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#ifndef RESOURCECREATOR_H
-#define RESOURCECREATOR_H
+#pragma once
 
 #include <KAlarmCal/KACalendar>
 
@@ -40,6 +39,5 @@ protected:
     KAlarmCal::CalEvent::Type mDefaultType;
 };
 
-#endif // RESOURCECREATOR_H
 
 // vim: et sw=4:

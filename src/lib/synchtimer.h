@@ -6,8 +6,7 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#ifndef SYNCHTIMER_H
-#define SYNCHTIMER_H
+#pragma once
 
 /* @file synchtimer.h - timers which synchronize to time boundaries */
 
@@ -196,6 +195,5 @@ public:
                        { DailyTimer::disconnect(QTime(0,0), receiver, member); }
 };
 
-#endif // SYNCHTIMER_H
 
 // vim: et sw=4:

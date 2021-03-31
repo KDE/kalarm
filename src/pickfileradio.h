@@ -6,8 +6,7 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#ifndef PICKFILERADIO_H
-#define PICKFILERADIO_H
+#pragma once
 
 /** @file pickfileradio.h - radio button with an associated file picker */
 
@@ -113,6 +112,5 @@ class PickFileRadio : public RadioButton
         bool             mRevertButton {false}; // true to revert to the previous radio button selection
 };
 
-#endif // PICKFILERADIO_H
 
 // vim: et sw=4:

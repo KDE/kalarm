@@ -6,8 +6,7 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#ifndef MESSAGEDISPLAY_H
-#define MESSAGEDISPLAY_H
+#pragma once
 
 #include "messagedisplayhelper.h"
 
@@ -190,6 +189,5 @@ private:
 friend class MessageDisplayHelper;
 };
 
-#endif // MESSAGEDISPLAY_H
 
 // vim: et sw=4:

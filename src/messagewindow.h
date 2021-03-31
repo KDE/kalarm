@@ -6,8 +6,7 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#ifndef MESSAGEWINDOW_H
-#define MESSAGEWINDOW_H
+#pragma once
 
 #include "mainwindowbase.h"
 #include "messagedisplay.h"
@@ -125,6 +124,5 @@ private:
     bool                mPositioning {false};     // true when the window is being positioned initially
 };
 
-#endif // MESSAGEWINDOW_H
 
 // vim: et sw=4:

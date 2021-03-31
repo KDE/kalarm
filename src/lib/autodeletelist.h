@@ -6,8 +6,7 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#ifndef AUTODELETELIST_H
-#define AUTODELETELIST_H
+#pragma once
 
 #include <QList>
 
@@ -35,6 +34,5 @@ public:
     AutoDeleteList& operator=(const AutoDeleteList&) = delete;
 };
 
-#endif // AUTODELETELIST_H
 
 // vim: et sw=4:

@@ -6,8 +6,7 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#ifndef KAMAIL_H
-#define KAMAIL_H
+#pragma once
 
 #include <KAlarmCal/KAEvent>
 
@@ -74,6 +73,5 @@ class KAMail : public QObject
         static QQueue<JobData>                         mJobData;
 };
 
-#endif // KAMAIL_H
 
 // vim: et sw=4:

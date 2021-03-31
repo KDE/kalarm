@@ -6,8 +6,7 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#ifndef TEMPLATEMENUACTION_H
-#define TEMPLATEMENUACTION_H
+#pragma once
 
 #include <KActionMenu>
 #include <QIcon>
@@ -36,6 +35,5 @@ private:
     QMap<QAction*, QString> mOriginalTexts;   // menu item texts without added ampersands
 };
 
-#endif // TEMPLATEMENUACTION_H
 
 // vim: et sw=4:

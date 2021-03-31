@@ -6,8 +6,7 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#ifndef AKONADICOLLECTIONSEARCH_H
-#define AKONADICOLLECTIONSEARCH_H
+#pragma once
 
 
 #include <AkonadiCore/Collection>
@@ -68,6 +67,5 @@ class AkonadiCollectionSearch : public QObject
         bool                                   mDelete;
 };
 
-#endif // AKONADICOLLECTIONSEARCH_H
 
 // vim: et sw=4:

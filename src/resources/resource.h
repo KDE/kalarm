@@ -6,8 +6,7 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#ifndef RESOURCE_H
-#define RESOURCE_H
+#pragma once
 
 #include "resourcetype.h"
 
@@ -399,6 +398,5 @@ template <class T> T* Resource::resource() const
     return qobject_cast<T*>(mResource.data());
 }
 
-#endif // RESOURCE_H
 
 // vim: et sw=4:

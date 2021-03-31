@@ -6,8 +6,7 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#ifndef EVENTID_H
-#define EVENTID_H
+#pragma once
 
 #include "kalarm_debug.h"
 
@@ -98,6 +97,5 @@ inline QDebug operator<<(QDebug s, const EventId& id)
     return s.space();
 }
 
-#endif // EVENTID_H
 
 // vim: et sw=4:

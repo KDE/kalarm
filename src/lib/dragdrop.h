@@ -6,8 +6,7 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#ifndef DRAGDROP_H
-#define DRAGDROP_H
+#pragma once
 
 namespace KAlarmCal { class AlarmText; }
 namespace Akonadi { class Item; }
@@ -49,6 +48,5 @@ bool dropAkonadiEmail(const QMimeData* data, QUrl& url, Akonadi::Item& item, KAl
 
 } // namespace KAlarm
 
-#endif // DRAGDROP_H
 
 // vim: et sw=4:

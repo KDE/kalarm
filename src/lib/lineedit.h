@@ -6,8 +6,7 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#ifndef LINEEDIT_H
-#define LINEEDIT_H
+#pragma once
 
 #include <KLineEdit>
 
@@ -86,6 +85,5 @@ private:
     bool  mSetCursorAtEnd {false};  // setText() should position cursor at end
 };
 
-#endif // LINEEDIT_H
 
 // vim: et sw=4:

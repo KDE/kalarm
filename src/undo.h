@@ -6,8 +6,7 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#ifndef UNDO_H
-#define UNDO_H
+#pragma once
 
 /**  @file undo.h - undo/redo facility */
 
@@ -98,6 +97,5 @@ private:
 friend class UndoItem;
 };
 
-#endif // UNDO_H
 
 // vim: et sw=4:

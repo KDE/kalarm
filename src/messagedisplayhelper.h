@@ -6,8 +6,7 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#ifndef MESSAGEDISPLAYHELPER_H
-#define MESSAGEDISPLAYHELPER_H
+#pragma once
 
 #include "eventid.h"
 #include "resources/resource.h"
@@ -205,6 +204,5 @@ private:
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(MessageDisplayHelper::DisplayTexts::TextIds)
 
-#endif // MESSAGEDISPLAYHELPER_H
 
 // vim: et sw=4:

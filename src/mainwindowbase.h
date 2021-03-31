@@ -6,8 +6,7 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#ifndef MAINWINDOWBASE_H
-#define MAINWINDOWBASE_H
+#pragma once
 
 #include <KXmlGuiWindow>
 
@@ -29,6 +28,5 @@ class MainWindowBase : public KXmlGuiWindow
         void enterEvent(QEvent*) override;
 };
 
-#endif // MAINWINDOWBASE_H
 
 // vim: et sw=4:

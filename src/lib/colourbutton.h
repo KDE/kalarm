@@ -6,8 +6,7 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#ifndef COLOURBUTTON_H
-#define COLOURBUTTON_H
+#pragma once
 
 #include <KColorButton>
 
@@ -50,6 +49,5 @@ class ColourButton : public KColorButton
         bool         mReadOnly {false};        // value cannot be changed
 };
 
-#endif // COLOURBUTTON_H
 
 // vim: et sw=4:

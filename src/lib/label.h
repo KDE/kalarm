@@ -6,8 +6,7 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#ifndef LABEL_H
-#define LABEL_H
+#pragma once
 
 #include <QLabel>
 class QFocusEvent;
@@ -81,6 +80,5 @@ class LabelFocusWidget : public QWidget
         void focusInEvent(QFocusEvent*) override;
 };
 
-#endif // LABEL_H
 
 // vim: et sw=4:

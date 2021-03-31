@@ -6,8 +6,7 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#ifndef ALARMTIMEWIDGET_H
-#define ALARMTIMEWIDGET_H
+#pragma once
 
 #include <KAlarmCal/DateTime>
 
@@ -100,6 +99,5 @@ class AlarmTimeWidget : public QFrame
         bool              mTimerSyncing;          // mTimer is not yet synchronized to the minute boundary
 };
 
-#endif // ALARMTIMEWIDGET_H
 
 // vim: et sw=4:

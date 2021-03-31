@@ -6,8 +6,7 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#ifndef FUNCTIONS_P_H
-#define FUNCTIONS_P_H
+#pragma once
 
 #include <QObject>
 
@@ -54,6 +53,5 @@ class PrivateNewAlarmDlg : public QObject
 
 } // namespace KAlarm
 
-#endif // FUNCTIONS_P_H
 
 // vim: et sw=4:

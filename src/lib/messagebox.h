@@ -6,8 +6,7 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#ifndef MESSAGEBOX_H
-#define MESSAGEBOX_H
+#pragma once
 
 #include <KStandardGuiItem>
 #include <KMessageBox>
@@ -181,6 +180,5 @@ class KAMessageBox
         static QMap<QString, KMessageBox::ButtonCode> mContinueDefaults;
 };
 
-#endif
 
 // vim: et sw=4:

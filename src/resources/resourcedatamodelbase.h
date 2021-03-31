@@ -6,8 +6,7 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#ifndef RESOURCEDATAMODELBASE_H
-#define RESOURCEDATAMODELBASE_H
+#pragma once
 
 #include "resourcetype.h"
 
@@ -184,6 +183,5 @@ private:
 friend class DataModel;
 };
 
-#endif // RESOURCEDATAMODELBASE_H
 
 // vim: et sw=4:

@@ -6,8 +6,7 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#ifndef KALARM_H
-#define KALARM_H
+#pragma once
 
 #include "config-kalarm.h"
 #define VERSION_SUFFIX ""
@@ -17,5 +16,4 @@
 #define KALARM_NAME "KAlarm"
 #define KALARM_DBUS_SERVICE  "org.kde.kalarm"  // D-Bus service name of KAlarm application
 
-#endif // KALARM_H
 

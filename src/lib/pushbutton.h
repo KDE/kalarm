@@ -6,8 +6,7 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#ifndef PUSHBUTTON_H
-#define PUSHBUTTON_H
+#pragma once
 
 #include <QPushButton>
 class QMouseEvent;
@@ -71,6 +70,5 @@ class PushButton : public QPushButton
         bool            mNoHighlight {false};  // don't highlight on mouse hover, if read-only
 };
 
-#endif // PUSHBUTTON_H
 
 // vim: et sw=4:

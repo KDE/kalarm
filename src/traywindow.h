@@ -6,8 +6,7 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#ifndef TRAYWINDOW_H
-#define TRAYWINDOW_H
+#pragma once
 
 #include "editdlg.h"
 
@@ -63,6 +62,5 @@ private:
     bool            mHaveDisabledAlarms {false};  // some individually disabled alarms exist
 };
 
-#endif // TRAYWINDOW_H
 
 // vim: et sw=4:

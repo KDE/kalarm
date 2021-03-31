@@ -6,8 +6,7 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#ifndef DESKTOP_H
-#define DESKTOP_H
+#pragma once
 
 #include <QRect>
 class QWidget;
@@ -36,6 +35,5 @@ void setMainWindowFunc(QWidget* (*func)());
 
 } // namespace Desktop
 
-#endif // DESKTOP_H
 
 // vim: et sw=4:

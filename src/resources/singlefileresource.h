@@ -6,8 +6,7 @@
  *  SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
-#ifndef SINGLEFILERESOURCE_H
-#define SINGLEFILERESOURCE_H
+#pragma once
 
 #include "fileresource.h"
 #include "fileresourceconfigmanager.h"
@@ -213,6 +212,5 @@ private:
     bool               mFileReadOnly {false}; // the calendar file is a read-only local file
 };
 
-#endif // SINGLEFILERESOURCE_H
 
 // vim: et sw=4:

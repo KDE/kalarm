@@ -6,8 +6,7 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#ifndef FILERESOURCECALENDARUPDATER_H
-#define FILERESOURCECALENDARUPDATER_H
+#pragma once
 
 #include "calendarupdater.h"
 
@@ -47,6 +46,5 @@ private:
     QString  mPromptMessage;
 };
 
-#endif // FILERESOURCECALENDARUPDATER_H
 
 // vim: et sw=4:

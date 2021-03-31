@@ -6,8 +6,7 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#ifndef KALARMIFACE_H
-#define KALARMIFACE_H
+#pragma once
 
 /** @file kalarmiface.h - D-Bus interface to KAlarm */
 
@@ -60,6 +59,5 @@ public:
     };
 };
 
-#endif // KALARMIFACE_H
 
 // vim: et sw=4:

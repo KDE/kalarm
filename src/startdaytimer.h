@@ -6,8 +6,7 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#ifndef STARTDAYTIMER_H
-#define STARTDAYTIMER_H
+#pragma once
 
 /* @file startdaytimer.h - timer triggered at the user-defined start-of-day time */
 
@@ -50,6 +49,5 @@ class StartOfDayTimer : public DailyTimer
         static StartOfDayTimer* mInstance;    // exists solely to receive signals
 };
 
-#endif // STARTDAYTIMER_H
 
 // vim: et sw=4:

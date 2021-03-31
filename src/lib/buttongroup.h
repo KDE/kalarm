@@ -5,8 +5,7 @@
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
-#ifndef BUTTONGROUP_H
-#define BUTTONGROUP_H
+#pragma once
 
 #include <QButtonGroup>
 #include <QMap>
@@ -76,6 +75,5 @@ class ButtonGroup : public QButtonGroup
         QMap<int, QAbstractButton*> mIds;
 };
 
-#endif // BUTTONGROUP_H
 
 // vim: et sw=4:

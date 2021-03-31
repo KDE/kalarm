@@ -6,8 +6,7 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#ifndef FONTCOLOUR_H
-#define FONTCOLOUR_H
+#pragma once
 
 #include <KLocalizedString>
 #include <QWidget>
@@ -53,6 +52,5 @@ class FontColourChooser : public QWidget
         bool             mReadOnly {false};
 };
 
-#endif
 
 // vim: et sw=4:

@@ -6,8 +6,7 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#ifndef FILEDIALOG_H
-#define FILEDIALOG_H
+#pragma once
 
 #include <KFileCustomDialog>
 #include <QUrl>
@@ -28,6 +27,5 @@ class FileDialog : public KFileCustomDialog
         static QCheckBox* mAppendCheck;
 };
 
-#endif
 
 // vim: et sw=4:

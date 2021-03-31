@@ -6,8 +6,7 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#ifndef AUTOQPOINTER_H
-#define AUTOQPOINTER_H
+#pragma once
 
 #include <QPointer>
 
@@ -29,6 +28,5 @@ class AutoQPointer : public QPointer<T>
         AutoQPointer<T>& operator=(T* p) { QPointer<T>::operator=(p); return *this; }
 };
 
-#endif // AUTOQPOINTER_H
 
 // vim: et sw=4:

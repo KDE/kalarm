@@ -6,8 +6,7 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#ifndef EDITDLG_P_H
-#define EDITDLG_P_H
+#pragma once
 
 #include <KTextEdit>
 #include <QFrame>
@@ -75,6 +74,5 @@ class CommandEdit : public QWidget
         TextEdit* mScriptEdit;      // script edit box
 };
 
-#endif // EDITDLG_P_H
 
 // vim: et sw=4:

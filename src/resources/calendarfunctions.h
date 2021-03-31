@@ -6,8 +6,7 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#ifndef CALENDARFUNCTIONS_H
-#define CALENDARFUNCTIONS_H
+#pragma once
 
 #include <KAlarmCal/KAEvent>
 
@@ -36,6 +35,5 @@ bool importCalendarFile(const QUrl& url, CalEvent::Types alarmTypes, bool newId,
 
 } // namespace KAlarm
 
-#endif // CALENDARFUNCTIONS_H
 
 // vim: et sw=4:

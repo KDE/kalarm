@@ -6,8 +6,7 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#ifndef FILERESOURCEMIGRATOR_H
-#define FILERESOURCEMIGRATOR_H
+#pragma once
 
 #include <KAlarmCal/KACalendar>
 
@@ -81,6 +80,5 @@ private:
     static bool     mCompleted;                 // execute() has completed
 };
 
-#endif // FILERESOURCEMIGRATOR_H
 
 // vim: et sw=4:

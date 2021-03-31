@@ -6,8 +6,7 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#ifndef TIMEEDIT_H
-#define TIMEEDIT_H
+#pragma once
 
 #include <QWidget>
 #include <QTime>
@@ -108,6 +107,5 @@ class TimeEdit : public QWidget
         bool          mReadOnly {false};  // the widget is read only
 };
 
-#endif // TIMEEDIT_H
 
 // vim: et sw=4:

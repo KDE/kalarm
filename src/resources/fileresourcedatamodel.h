@@ -6,8 +6,7 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#ifndef FILERESOURCEDATAMODEL_H
-#define FILERESOURCEDATAMODEL_H
+#pragma once
 
 #include "resourcedatamodelbase.h"
 #include "fileresourceconfigmanager.h"
@@ -148,6 +147,5 @@ private:
     bool                  mHaveEvents;  // there are events in this model
 };
 
-#endif // FILERESOURCEDATAMODEL_H
 
 // vim: et sw=4:

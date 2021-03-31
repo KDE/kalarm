@@ -6,8 +6,7 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#ifndef TEMPLATELISTVIEW_H
-#define TEMPLATELISTVIEW_H
+#pragma once
 
 #include "eventlistview.h"
 
@@ -32,6 +31,5 @@ public:
     void edit(KAEvent&, EventListView*) override;
 };
 
-#endif // TEMPLATELISTVIEW_H
 
 // vim: et sw=4:

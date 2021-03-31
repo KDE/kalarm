@@ -6,8 +6,7 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#ifndef SPINBOX2_P_H
-#define SPINBOX2_P_H
+#pragma once
 
 #include "spinbox.h"
 
@@ -84,6 +83,5 @@ class SpinMirror : public QGraphicsView
         bool                 mMirrored;   // mirror left-to-right
 };
 
-#endif // SPINBOX2_P_H
 
 // vim: et sw=4:

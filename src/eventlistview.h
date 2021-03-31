@@ -6,8 +6,7 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#ifndef EVENTLISTVIEW_H
-#define EVENTLISTVIEW_H
+#pragma once
 
 #include <KAlarmCal/KAEvent>
 
@@ -72,6 +71,5 @@ class EventListDelegate : public QItemDelegate
         virtual void edit(KAEvent&, EventListView*) = 0;
 };
 
-#endif // EVENTLISTVIEW_H
 
 // vim: et sw=4:

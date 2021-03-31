@@ -6,8 +6,7 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#ifndef DEFERDLG_H
-#define DEFERDLG_H
+#pragma once
 
 #include "eventid.h"
 
@@ -49,6 +48,5 @@ class DeferAlarmDlg : public QDialog
         int              mDeferMinutes;    // number of minutes deferral selected, or 0 if date/time entered
 };
 
-#endif // DEFERDLG_H
 
 // vim: et sw=4:

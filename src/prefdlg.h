@@ -6,8 +6,7 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#ifndef PREFDLG_H
-#define PREFDLG_H
+#pragma once
 
 #include <KPageDialog>
 
@@ -69,6 +68,5 @@ private:
     bool                mValid;
 };
 
-#endif // PREFDLG_H
 
 // vim: et sw=4:

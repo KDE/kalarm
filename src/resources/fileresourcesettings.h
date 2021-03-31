@@ -6,8 +6,7 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#ifndef FILERESOURCESETTINGS_H
-#define FILERESOURCESETTINGS_H
+#pragma once
 
 #include "fileresource.h"
 
@@ -288,6 +287,5 @@ private:
     bool              mUpdateFormat {false}; // request to update the calendar file to the current KAlarm format
 };
 
-#endif // FILERESOURCESETTINGS_H
 
 // vim: et sw=4:

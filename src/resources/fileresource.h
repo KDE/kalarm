@@ -6,8 +6,7 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#ifndef FILERESOURCE_H
-#define FILERESOURCE_H
+#pragma once
 
 #include "resourcetype.h"
 
@@ -389,6 +388,5 @@ CompatibilityMap    mCompatibilityMap;  // whether individual events are in comp
     Status                mStatus {Status::NotConfigured};  // current status of resource
 };
 
-#endif // FILERESOURCE_H
 
 // vim: et sw=4:

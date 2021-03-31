@@ -6,8 +6,7 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#ifndef STACKEDWIDGETS_H
-#define STACKEDWIDGETS_H
+#pragma once
 
 #include <QVector>
 #include <QScrollArea>
@@ -120,6 +119,5 @@ private:
     bool     mSized {false};
 };
 
-#endif // STACKEDWIDGETS_H
 
 // vim: et sw=4:

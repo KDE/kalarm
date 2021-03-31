@@ -6,8 +6,7 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#ifndef SPINBOX2_H
-#define SPINBOX2_H
+#pragma once
 
 #include "spinbox.h"
 
@@ -329,6 +328,5 @@ private:
 friend class MainSpinBox;
 };
 
-#endif // SPINBOX2_H
 
 // vim: et sw=4:

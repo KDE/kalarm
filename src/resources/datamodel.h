@@ -6,8 +6,7 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#ifndef DATAMODEL_H
-#define DATAMODEL_H
+#pragma once
 
 #include <KAlarmCal/KACalendar>
 
@@ -69,6 +68,5 @@ public:
     static TemplateListModel* allTemplateListModel();
 };
 
-#endif // DATAMODEL_H
 
 // vim: et sw=4:

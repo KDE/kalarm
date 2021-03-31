@@ -6,8 +6,7 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#ifndef KALARMAPP_H
-#define KALARMAPP_H
+#pragma once
 
 /** @file kalarmapp.h - the KAlarm application object */
 
@@ -299,6 +298,5 @@ inline KAlarmApp* theApp()  { return KAlarmApp::instance(); }
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(KAlarmApp::ExecAlarmFlags)
 
-#endif // KALARMAPP_H
 
 // vim: et sw=4:

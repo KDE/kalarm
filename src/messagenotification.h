@@ -6,8 +6,7 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#ifndef MESSAGENOTIFICATION_H
-#define MESSAGENOTIFICATION_H
+#pragma once
 
 #include "messagedisplay.h"
 #include <KNotification>
@@ -79,6 +78,5 @@ private:
 friend class MNSessionManager;
 };
 
-#endif // MESSAGENOTIFICATION_H
 
 // vim: et sw=4:

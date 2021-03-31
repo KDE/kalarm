@@ -6,8 +6,7 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#ifndef SOUNDDLG_H
-#define SOUNDDLG_H
+#pragma once
 
 #include <QUrl>
 #include <QDialog>
@@ -109,6 +108,5 @@ private:
     bool              mReadOnly {false};
 };
 
-#endif
 
 // vim: et sw=4:

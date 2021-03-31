@@ -6,8 +6,7 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#ifndef SPECIALACTIONS_H
-#define SPECIALACTIONS_H
+#pragma once
 
 #include <KAlarmCal/KAEvent>
 
@@ -101,6 +100,5 @@ class SpecialActionsDlg : public QDialog
         SpecialActions* mActions;
 };
 
-#endif // SPECIALACTIONS_H
 
 // vim: et sw=4:

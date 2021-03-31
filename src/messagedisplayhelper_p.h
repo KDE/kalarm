@@ -6,8 +6,7 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#ifndef MESSAGEDISPLAYHELPER_P_H
-#define MESSAGEDISPLAYHELPER_P_H
+#pragma once
 
 #include <phonon/phononnamespace.h>
 #include <phonon/path.h>
@@ -54,6 +53,5 @@ class AudioThread : public QThread
         bool                 mPausing;      // currently pausing between repeats
 };
 
-#endif // MESSAGEDISPLAYHELPER_P_H
 
 // vim: et sw=4:

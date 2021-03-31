@@ -6,8 +6,7 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#ifndef AUTOSTART_H
-#define AUTOSTART_H
+#pragma once
 
 #include <QCoreApplication>
 
@@ -27,6 +26,5 @@ class AutostartApp : public QCoreApplication
         QStringList mArgs;
 };
 
-#endif // AUTOSTART_H
 
 // vim: et sw=4:

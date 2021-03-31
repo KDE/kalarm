@@ -5,8 +5,7 @@
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
-#ifndef BIRTHDAYDLG_H
-#define BIRTHDAYDLG_H
+#pragma once
 
 #include <KAlarmCal/KAEvent>
 
@@ -81,6 +80,5 @@ protected:
     void focusOutEvent(QFocusEvent*) override { Q_EMIT focusLost(); }
 };
 
-#endif // BIRTHDAYDLG_H
 
 // vim: et sw=4:

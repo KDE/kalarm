@@ -6,8 +6,7 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#ifndef EDITDLG_H
-#define EDITDLG_H
+#pragma once
 
 #include "resources/resource.h"
 
@@ -217,6 +216,5 @@ private:
     bool                mSavedShowInKorganizer; // mShowInKorganizer status
 };
 
-#endif // EDITDLG_H
 
 // vim: et sw=4:

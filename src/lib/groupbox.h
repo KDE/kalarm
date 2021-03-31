@@ -6,8 +6,7 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#ifndef GROUPBOX_H
-#define GROUPBOX_H
+#pragma once
 
 #include <QGroupBox>
 class QMouseEvent;
@@ -54,6 +53,5 @@ class GroupBox : public QGroupBox
         bool  mReadOnly {false};      // value cannot be changed
 };
 
-#endif // GROUPBOX_H
 
 // vim: et sw=4:

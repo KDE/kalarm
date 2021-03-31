@@ -6,8 +6,7 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#ifndef PREFDLG_P_H
-#define PREFDLG_P_H
+#pragma once
 
 #include "preferences.h"
 #include "prefdlg.h"
@@ -276,6 +275,5 @@ private:
     int           mTabWindows;    // index of Alarm Windows tab
 };
 
-#endif // PREFDLG_P_H
 
 // vim: et sw=4:

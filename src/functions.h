@@ -6,8 +6,7 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#ifndef FUNCTIONS_H
-#define FUNCTIONS_H
+#pragma once
 
 /**  @file functions.h - miscellaneous functions */
 
@@ -320,6 +319,5 @@ void                setSimulatedSystemTime(const KADateTime&);
 
 bool caseInsensitiveLessThan(const QString& s1, const QString& s2);
 
-#endif // FUNCTIONS_H
 
 // vim: et sw=4:

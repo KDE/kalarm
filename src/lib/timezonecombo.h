@@ -6,8 +6,7 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#ifndef TIMEZONECOMBO_H
-#define TIMEZONECOMBO_H
+#pragma once
 
 #include "lib/combobox.h"
 
@@ -49,6 +48,5 @@ class TimeZoneCombo : public ComboBox
         QList<QByteArray> mZoneNames;
 };
 
-#endif // TIMEZONECOMBO_H
 
 // vim: et sw=4:

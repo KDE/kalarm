@@ -5,8 +5,7 @@
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
-#ifndef TEMPLATEPICKDLG_H
-#define TEMPLATEPICKDLG_H
+#pragma once
 
 #include <KAlarmCal/KAEvent>
 
@@ -35,6 +34,5 @@ private:
     QPushButton*       mOkButton;
 };
 
-#endif // TEMPLATEPICKDLG_H
 
 // vim: et sw=4:

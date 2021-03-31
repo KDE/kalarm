@@ -6,8 +6,7 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#ifndef SLIDER_H
-#define SLIDER_H
+#pragma once
 
 #include <QSlider>
 class QLabel;
@@ -88,6 +87,5 @@ private:
     bool    mReadOnly {false};      // value cannot be changed by the user
 };
 
-#endif // SLIDER_H
 
 // vim: et sw=4:

@@ -6,8 +6,7 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#ifndef RECURRENCEEDIT_P_H
-#define RECURRENCEEDIT_P_H
+#pragma once
 
 #include "lib/radiobutton.h"
 
@@ -203,6 +202,5 @@ class YearlyRule : public MonthYearRule
         int              mSavedFeb29Type;    // February 29th recurrence type
 };
 
-#endif // RECURRENCEEDIT_P_H
 
 // vim: et sw=4:

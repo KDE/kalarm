@@ -6,8 +6,7 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#ifndef REMINDER_H
-#define REMINDER_H
+#pragma once
 
 #include <QFrame>
 
@@ -55,6 +54,5 @@ class Reminder : public QFrame
         bool           mOnceOnlyEnabled;    // 'mOnceOnly' checkbox is allowed to be enabled
 };
 
-#endif // REMINDER_H
 
 // vim: et sw=4:

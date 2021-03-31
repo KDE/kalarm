@@ -10,8 +10,7 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#ifndef RESOURCESELECTOR_H
-#define RESOURCESELECTOR_H
+#pragma once
 
 #include "resources/resource.h"
 
@@ -90,6 +89,5 @@ class ResourceSelector : public QFrame
         KToggleAction*  mActionSetDefault {nullptr};
 };
 
-#endif
 
 // vim: et sw=4:

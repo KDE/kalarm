@@ -6,8 +6,7 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#ifndef LIB_FILE_H
-#define LIB_FILE_H
+#pragma once
 
 #include <QString>
 class QMimeType;
@@ -54,6 +53,5 @@ bool browseFile(QString& file, const QString& caption, QString& defaultDir,
 
 }
 
-#endif // LIB_FILE_H
 
 // vim: et sw=4:

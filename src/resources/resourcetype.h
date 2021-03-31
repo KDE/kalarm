@@ -6,8 +6,7 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#ifndef RESOURCETYPE_H
-#define RESOURCETYPE_H
+#pragma once
 
 #include <KAlarmCal/KACalendar>
 #include <KAlarmCal/KAEvent>
@@ -487,6 +486,5 @@ template <class T> const T* ResourceType::resource(const Resource& res)
     return qobject_cast<const T*>(data(res));
 }
 
-#endif // RESOURCETYPE_H
 
 // vim: et sw=4:

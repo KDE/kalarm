@@ -5,8 +5,7 @@
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
-#ifndef TEMPLATEDLG_H
-#define TEMPLATEDLG_H
+#pragma once
 
 #include "editdlg.h"
 #include <QDialog>
@@ -51,6 +50,5 @@ class TemplateDlg : public QDialog
         NewAlarmAction*    mNewAction;
 };
 
-#endif // TEMPLATEDLG_H
 
 // vim: et sw=4:

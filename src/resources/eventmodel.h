@@ -6,8 +6,7 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#ifndef EVENTMODEL_H
-#define EVENTMODEL_H
+#pragma once
 
 #include "resource.h"
 
@@ -264,6 +263,5 @@ TemplateListModel* TemplateListModel::all()
     return mAllInstance;
 }
 
-#endif // EVENTMODEL_H
 
 // vim: et sw=4:

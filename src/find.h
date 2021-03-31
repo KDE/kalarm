@@ -6,8 +6,7 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#ifndef FIND_H
-#define FIND_H
+#pragma once
 
 #include <QObject>
 #include <QPointer>
@@ -61,6 +60,5 @@ class Find : public QObject
         bool               mFound {false};   // true if any matches have been found
 };
 
-#endif // FIND_H
 
 // vim: et sw=4:

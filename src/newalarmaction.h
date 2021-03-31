@@ -6,8 +6,7 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#ifndef NEWALARMACTION_H
-#define NEWALARMACTION_H
+#pragma once
 
 #include "editdlg.h"
 
@@ -86,6 +85,5 @@ private:
     QMap<QAction*, EditAlarmDlg::Type> mTypes;
 };
 
-#endif // NEWALARMACTION_H
 
 // vim: et sw=4:

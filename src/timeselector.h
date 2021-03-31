@@ -6,8 +6,7 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#ifndef TIMESELECTOR_H
-#define TIMESELECTOR_H
+#pragma once
 
 #include "lib/timeperiod.h"
 
@@ -51,6 +50,5 @@ class TimeSelector : public QFrame
         bool         mReadOnly {false};         // the widget is read only
 };
 
-#endif // TIMESELECTOR_H
 
 // vim: et sw=4:

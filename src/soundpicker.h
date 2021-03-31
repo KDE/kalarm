@@ -6,8 +6,7 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#ifndef SOUNDPICKER_H
-#define SOUNDPICKER_H
+#pragma once
 
 #include "preferences.h"
 
@@ -151,6 +150,5 @@ private:
     bool           mReadOnly {false};
 };
 
-#endif // SOUNDPICKER_H
 
 // vim: et sw=4:

@@ -9,8 +9,7 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#ifndef RECURRENCEEDIT_H
-#define RECURRENCEEDIT_H
+#pragma once
 
 #include <KAlarmCal/Repetition>
 #include <KAlarmCal/KADateTime>
@@ -172,6 +171,5 @@ class RecurrenceEdit : public QFrame
         bool              mSavedWorkTimeOnly;        // only during working hours
 };
 
-#endif // RECURRENCEEDIT_H
 
 // vim: et sw=4:

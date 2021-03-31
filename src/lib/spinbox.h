@@ -6,8 +6,7 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#ifndef SPINBOX_H
-#define SPINBOX_H
+#pragma once
 
 #include <QSpinBox>
 class QEvent;
@@ -158,6 +157,5 @@ class SpinBox : public QSpinBox
         bool         mEdited {false};            // text field has been edited
 };
 
-#endif // SPINBOX_H
 
 // vim: et sw=4:
