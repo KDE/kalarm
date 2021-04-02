@@ -353,9 +353,11 @@ public:
 
     /** Return the event with the given ID, provided its alarm type is enabled for
      *  the resource.
+     *  @param eventId        ID of the event to return.
+     *  @param allowDisabled  Return the event even if its alarm type is disabled.
      *  @return  The event, or invalid event if not found or alarm type is disabled.
      */
-    KAEvent event(const QString& eventId) const;
+    KAEvent event(const QString& eventId, bool allowDisabled = false) const;
     using QObject::event;   // prevent "hidden" warning
 
     /** Return whether the resource contains the event whose ID is given, provided

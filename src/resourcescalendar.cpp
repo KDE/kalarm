@@ -93,7 +93,7 @@ void ResourcesCalendar::removeKAEvents(ResourceId key, bool closing, CalEvent::T
         QSet<QString>& eventIds = rit.value();
         for (auto it = eventIds.constBegin();  it != eventIds.constEnd();  ++it)
         {
-            const KAEvent event = resource.event(*it);
+            const KAEvent event = resource.event(*it, true);
             bool remove = (event.resourceId() != key);
             if (remove)
                 qCCritical(KALARM_LOG) << "ResourcesCalendar::removeKAEvents: Event" << event.id() << ", resource" << event.resourceId() << "Indexed under resource" << key;

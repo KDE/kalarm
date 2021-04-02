@@ -1,7 +1,7 @@
 /*
  *  resourcetype.cpp  -  base class for an alarm calendar resource type
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2019-2020 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2019-2021 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -114,11 +114,11 @@ QList<KAEvent> ResourceType::events() const
 * Return the event with the given ID, provided its alarm type is enabled for
 * the resource.
 */
-KAEvent ResourceType::event(const QString& eventId) const
+KAEvent ResourceType::event(const QString& eventId, bool allowDisabled) const
 {
     auto it = mEvents.constFind(eventId);
     if (it != mEvents.constEnd()
-    &&  (it.value().category() & enabledTypes()))
+    &&  (allowDisabled || (it.value().category() & enabledTypes())))
         return it.value();
     return KAEvent();
 }
