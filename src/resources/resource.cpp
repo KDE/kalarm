@@ -257,9 +257,9 @@ QList<KAEvent> Resource::events() const
     return mResource.isNull() ? QList<KAEvent>() : mResource->events();
 }
 
-KAEvent Resource::event(const QString& eventId) const
+KAEvent Resource::event(const QString& eventId, bool allowDisabled) const
 {
-    return mResource.isNull() ? KAEvent() : mResource->event(eventId);
+    return mResource.isNull() ? KAEvent() : mResource->event(eventId, allowDisabled);
 }
 
 bool Resource::containsEvent(const QString& eventId) const
