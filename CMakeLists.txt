@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.5 FATAL_ERROR)
-set(PIM_VERSION "5.16.90")
+set(PIM_VERSION "5.17.0")
 set(PIM_VERSION ${PIM_VERSION})
-set(RELEASE_SERVICE_VERSION "21.03.80")
+set(RELEASE_SERVICE_VERSION "21.04.0")
 set(KALARM_VERSION "3.2.0")
 
 project(kalarm VERSION ${KALARM_VERSION})
@@ -29,7 +29,7 @@ include(ECMAddAppIcon)
 include(ECMQtDeclareLoggingCategory)
 
 # Do NOT add quote
-set(KDEPIM_DEV_VERSION beta)
+set(KDEPIM_DEV_VERSION)
 
 # add an extra space
 if (DEFINED KDEPIM_DEV_VERSION)
