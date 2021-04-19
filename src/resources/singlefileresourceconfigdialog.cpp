@@ -40,7 +40,7 @@ SingleFileResourceConfigDialog::SingleFileResourceConfigDialog(bool create, QWid
         mUi->pathRequester->setFocus();
         mUi->statusLabel->setText(QString());
         connect(mUi->pathRequester, &KUrlRequester::textChanged, this, &SingleFileResourceConfigDialog::validate);
-        connect(mUi->alarmTypeGroup, QOverload<QAbstractButton*, bool>::of(&QButtonGroup::buttonToggled), this, &SingleFileResourceConfigDialog::validate);
+        connect(mUi->alarmTypeGroup, &QButtonGroup::idToggled, this, &SingleFileResourceConfigDialog::validate);
     }
     else
     {

@@ -245,7 +245,7 @@ DirResourceImportTypeWidget::DirResourceImportTypeWidget(CalEvent::Type alarmTyp
             mUi->mergeResource->addItem(resource.displayName(), QVariant(resource.id()));
     }
 
-    connect(mUi->optionGroup, QOverload<QAbstractButton*, bool>::of(&QButtonGroup::buttonToggled), this, &DirResourceImportTypeWidget::importTypeSelected);
+    connect(mUi->optionGroup, &QButtonGroup::idToggled, this, &DirResourceImportTypeWidget::importTypeSelected);
 
     mUi->pathRequester->setMode(KFile::File);
     mUi->pathRequester->setFilter(QStringLiteral("*.ics|%1").arg(i18nc("@item:inlistbox File type selection filter", "Calendar files")));
