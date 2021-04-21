@@ -10,7 +10,7 @@
 */
 
 #include "migratekde4files.h"
-
+#if KCOREADDONS_VERSION < QT_VERSION_CHECK(6, 0, 0)
 #include "kalarm_debug.h"
 
 #include <Kdelibs4ConfigMigrator>
@@ -55,5 +55,5 @@ void MigrateKde4Files::initializeMigrator()
     migrateInfoIcs.setFilePatterns({QStringLiteral("*.ics")});
     mMigrator.insertMigrateInfo(migrateInfoIcs);
 }
-
+#endif
 // vim: et sw=4:

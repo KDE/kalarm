@@ -9,7 +9,9 @@
 */
 
 #pragma once
-
+#include <QObject>
+#include <kcoreaddons_version.h>
+#if KCOREADDONS_VERSION < QT_VERSION_CHECK(6, 0, 0)
 #include <PimCommon/MigrateApplicationFiles>
 
 /** Class to migrate KAlarm config and data files from KDE4 locations to Qt5
@@ -27,6 +29,6 @@ private:
 
     PimCommon::MigrateApplicationFiles mMigrator;
 };
-
+#endif
 
 // vim: et sw=4:
