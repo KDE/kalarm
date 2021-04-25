@@ -143,7 +143,6 @@ ecm_qt_install_logging_categories(
     DESTINATION ${KDE_INSTALL_LOGGINGCATEGORIESDIR}
     )
 
-add_subdirectory(doc)
 if(KF5DocTools_FOUND)
     kdoctools_install(po)
     add_subdirectory(doc)
