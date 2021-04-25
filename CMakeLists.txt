@@ -70,7 +70,6 @@ find_package(KF5Config ${KF5_MIN_VERSION} CONFIG REQUIRED)
 find_package(KF5ConfigWidgets ${KF5_MIN_VERSION} CONFIG REQUIRED)
 find_package(KF5Crash ${KF5_MIN_VERSION} CONFIG REQUIRED)
 find_package(KF5DBusAddons ${KF5_MIN_VERSION} CONFIG REQUIRED)
-find_package(KF5DocTools ${KF5_MIN_VERSION} REQUIRED)
 find_package(KF5GlobalAccel ${KF5_MIN_VERSION} REQUIRED)
 find_package(KF5GuiAddons ${KF5_MIN_VERSION} REQUIRED)
 find_package(KF5Holidays ${KF5_MIN_VERSION} CONFIG REQUIRED)
@@ -86,6 +85,13 @@ find_package(KF5WidgetsAddons ${KF5_MIN_VERSION} CONFIG REQUIRED)
 find_package(KF5WindowSystem ${KF5_MIN_VERSION} CONFIG REQUIRED)
 find_package(KF5XmlGui ${KF5_MIN_VERSION} CONFIG REQUIRED)
 find_package(Phonon4Qt5 CONFIG REQUIRED)
+
+find_package(KF5DocTools ${KF5_MIN_VERSION})
+set_package_properties(KF5DocTools PROPERTIES DESCRIPTION
+    "Tools to generate documentation"
+    TYPE OPTIONAL
+)
+
 
 # Find KDE PIM packages
 find_package(KF5IMAP ${KIMAP_LIB_VERSION} CONFIG REQUIRED)
@@ -138,6 +144,9 @@ ecm_qt_install_logging_categories(
     )
 
 add_subdirectory(doc)
+if(KF5DocTools_FOUND)
+    kdoctools_install(po)
+    add_subdirectory(doc)
+endif()
 ki18n_install(po)
-kdoctools_install(po)
 feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)
