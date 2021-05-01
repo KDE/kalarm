@@ -440,7 +440,7 @@ QString AlarmText::fromCalendarText(const QString &text, bool &email)
             int i = text.indexOf(Private::mSubjectPrefixEn);
             i = text.indexOf(QLatin1Char('\n'), i);
             if (i > 0) {
-                dispText += text.midRef(i);
+                dispText += QStringView(text).mid(i);
             }
             email = true;
             return dispText;
@@ -481,7 +481,7 @@ QString AlarmText::toCalendarText(const QString &text)
             int i = text.indexOf(Private::mSubjectPrefix);
             i = text.indexOf(QLatin1Char('\n'), i);
             if (i > 0) {
-                calText += text.midRef(i);
+                calText += QStringView(text).mid(i);
             }
             return calText;
         }
