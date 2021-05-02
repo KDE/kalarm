@@ -38,7 +38,7 @@ void AlarmListDelegate::paint(QPainter* painter, const QStyleOptionViewItem& opt
             {
                 const QString str = index.data(ResourceDataModelBase::TimeDisplayRole).toString();
                 // Need to pad out spacing to align times without leading zeroes
-                int i = str.indexOf(QLatin1Char('~'));    // look for indicator of a leading zero to be omitted
+                const int i = str.indexOf(QLatin1Char('~'));    // look for indicator of a leading zero to be omitted
                 if (i >= 0)
                 {
                     painter->save();
@@ -46,26 +46,20 @@ void AlarmListDelegate::paint(QPainter* painter, const QStyleOptionViewItem& opt
                     const QVariant value = index.data(Qt::ForegroundRole);
                     if (value.isValid())
                         opt.palette.setColor(QPalette::Text, value.value<QColor>());
-                    QRect displayRect;
-                    {
-                        QString str0 = str;
-                        str0[i] = QLatin1Char('0');
-                        QRect r = opt.rect;
-                        r.setWidth(INT_MAX/256);
-                        displayRect = textRectangle(painter, r, opt.font, str0);
-                        displayRect = QStyle::alignedRect(opt.direction, opt.displayAlignment,
-                                                          displayRect.size().boundedTo(opt.rect.size()),
-                                                          opt.rect);
-                    }
-                    const QString date = str.left(i);
-                    const QString time = str.mid(i + 1);
+                    drawBackground(painter, opt, index);
                     if (i > 0)
                     {
+                        QRect displayRect;
+                        QString str0 = str;
+                        str0[i] = QLatin1Char('0');
+                        displayRect = textRect(str0, painter, opt);
                         opt.displayAlignment = Qt::AlignLeft;
-                        drawDisplay(painter, opt, displayRect, date);
+                        drawDisplay(painter, opt, displayRect, str.left(i));   // date
                         opt.displayAlignment = Qt::AlignRight;
                     }
-                    drawDisplay(painter, opt, displayRect, time);
+                    const QString time = str.mid(i + 1);
+                    const QRect timeRect = textRect(time, painter, opt);
+                    drawDisplay(painter, opt, timeRect, time);
                     painter->restore();
                     return;
                 }
@@ -116,6 +110,18 @@ QSize AlarmListDelegate::sizeHint(const QStyleOptionViewItem& option, const QMod
 void AlarmListDelegate::edit(KAEvent& event, EventListView* view)
 {
     KAlarm::editAlarm(event, static_cast<AlarmListView*>(view));   // edit alarm (view-only mode if archived or read-only)
+}
+
+QRect AlarmListDelegate::textRect(const QString& text, QPainter* painter, const QStyleOptionViewItem& opt) const
+{
+    QRect displayRect;
+    QRect r = opt.rect;
+    r.setWidth(INT_MAX/256);
+    displayRect = textRectangle(painter, r, opt.font, text);
+    displayRect = QStyle::alignedRect(opt.direction, opt.displayAlignment,
+                                      displayRect.size().boundedTo(opt.rect.size()),
+                                      opt.rect);
+    return displayRect;
 }
 
 // vim: et sw=4:
