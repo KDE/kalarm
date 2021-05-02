@@ -74,11 +74,19 @@ void AlarmListDelegate::paint(QPainter* painter, const QStyleOptionViewItem& opt
             case AlarmListModel::ColourColumn:
             {
                 const KAEvent event = static_cast<const EventListModel*>(index.model())->event(index);
-                if (event.isValid()  &&  event.commandError() != KAEvent::CMD_NO_ERROR)
+                if (event.isValid())
                 {
-                    opt.font.setBold(true);
-                    opt.font.setStyleHint(QFont::Serif);
-                    opt.font.setPointSize(opt.rect.height() - 2);
+                    if (event.commandError() == KAEvent::CMD_NO_ERROR)
+                    {
+                        if (event.actionTypes() & KAEvent::ACT_DISPLAY)
+                            opt.palette.setColor(QPalette::Highlight, event.bgColour());
+                    }
+                    else
+                    {
+                        opt.font.setBold(true);
+                        opt.font.setStyleHint(QFont::Serif);
+                        opt.font.setPointSize(opt.rect.height() - 2);
+                    }
                 }
                 break;
             }
