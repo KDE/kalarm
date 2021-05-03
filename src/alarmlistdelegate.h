@@ -20,6 +20,9 @@ public:
     void paint(QPainter*, const QStyleOptionViewItem&, const QModelIndex&) const override;
     QSize sizeHint(const QStyleOptionViewItem&, const QModelIndex&) const override;
     void edit(KAEvent&, EventListView*) override;
+
+private:
+    QRect textRect(const QString& text, QPainter*, const QStyleOptionViewItem&) const;
 };
 
 
