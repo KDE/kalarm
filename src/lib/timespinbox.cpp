@@ -85,18 +85,18 @@ QString TimeSpinBox::textFromValue(int v) const
  */
 int TimeSpinBox::valueFromText(const QString&) const
 {
-    QString text = cleanText();
-    int colon = text.indexOf(QLatin1Char(':'));
+    const QString text = cleanText();
+    const int colon = text.indexOf(QLatin1Char(':'));
     if (colon >= 0)
     {
         // [h]:m format for any time value
-        QString hour   = text.left(colon).trimmed();
-        QString minute = text.mid(colon + 1).trimmed();
+        const QString hour   = text.left(colon).trimmed();
+        const QString minute = text.mid(colon + 1).trimmed();
         if (!minute.isEmpty())
         {
             bool okmin;
             bool okhour = true;
-            int m = minute.toUInt(&okmin);
+            const int m = minute.toUInt(&okmin);
             int h = 0;
             if (!hour.isEmpty())
                 h = hour.toUInt(&okhour);
@@ -111,7 +111,7 @@ int TimeSpinBox::valueFromText(const QString&) const
                     if (mPm)
                         h += 12;     // convert to PM
                 }
-                int t = h * 60 + m;
+                const int t = h * 60 + m;
                 if (t >= mMinimumValue  &&  t <= maximum())
                     return t;
             }
@@ -121,10 +121,10 @@ int TimeSpinBox::valueFromText(const QString&) const
     {
         // hhmm format for time of day
         bool okn;
-        int mins = text.toUInt(&okn);
+        const int mins = text.toUInt(&okn);
         if (okn)
         {
-            int m = mins % 100;
+            const int m = mins % 100;
             int h = mins / 100;
             if (m12Hour)
             {
@@ -135,7 +135,7 @@ int TimeSpinBox::valueFromText(const QString&) const
                 if (mPm)
                     h += 12;    // convert to PM
             }
-            int t = h * 60 + m;
+            const int t = h * 60 + m;
             if (h < 24  &&  m < 60  &&  t >= mMinimumValue  &&  t <= maximum())
                 return t;
         }
@@ -226,15 +226,15 @@ void TimeSpinBox::slotValueChanged(int value)
 
 QSize TimeSpinBox::sizeHint() const
 {
-    QSize sz = SpinBox2::sizeHint();
-    QFontMetrics fm(font());
+    const QSize sz = SpinBox2::sizeHint();
+    const QFontMetrics fm(font());
     return {sz.width() + fm.horizontalAdvance(QLatin1Char(':')), sz.height()};
 }
 
 QSize TimeSpinBox::minimumSizeHint() const
 {
-    QSize sz = SpinBox2::minimumSizeHint();
-    QFontMetrics fm(font());
+    const QSize sz = SpinBox2::minimumSizeHint();
+    const QFontMetrics fm(font());
     return {sz.width() + fm.horizontalAdvance(QLatin1Char(':')), sz.height()};
 }
 
@@ -245,19 +245,19 @@ QSize TimeSpinBox::minimumSizeHint() const
  */
 QValidator::State TimeSpinBox::validate(QString& text, int&) const
 {
-    QString cleanText = text.trimmed();
+    const QString cleanText = text.trimmed();
     if (cleanText.isEmpty())
         return QValidator::Intermediate;
     QValidator::State state = QValidator::Acceptable;
-    int maxMinute = maximum();
+    const int maxMinute = maximum();
     QString hour;
     bool ok;
     int hr = 0;
     int mn = 0;
-    int colon = cleanText.indexOf(QLatin1Char(':'));
+    const int colon = cleanText.indexOf(QLatin1Char(':'));
     if (colon >= 0)
     {
-        QString minute = cleanText.mid(colon + 1);
+        const QString minute = cleanText.mid(colon + 1);
         if (minute.isEmpty())
             state = QValidator::Intermediate;
         else if ((mn = minute.toUInt(&ok)) >= 60  ||  !ok)
@@ -278,7 +278,7 @@ QValidator::State TimeSpinBox::validate(QString& text, int&) const
         if (cleanText.length() < 4)
             state = QValidator::Intermediate;
         hour = cleanText.left(2);
-        QString minute = cleanText.mid(2);
+        const QString minute = cleanText.mid(2);
         if (!minute.isEmpty()
         &&  ((mn = minute.toUInt(&ok)) >= 60  ||  !ok))
             return QValidator::Invalid;
@@ -299,9 +299,10 @@ QValidator::State TimeSpinBox::validate(QString& text, int&) const
         if (!ok  ||  hr > maxMinute/60)
             return QValidator::Invalid;
     }
+
     if (state == QValidator::Acceptable)
     {
-        int t = hr * 60 + mn;
+        const int t = hr * 60 + mn;
         if (t < minimum()  ||  t > maxMinute)
             return QValidator::Invalid;
     }
