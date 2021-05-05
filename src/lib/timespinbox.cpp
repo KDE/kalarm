@@ -1,7 +1,7 @@
 /*
  *  timespinbox.cpp  -  time spinbox widget
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2001-2020 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2001-2021 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -287,8 +287,10 @@ QValidator::State TimeSpinBox::validate(QString& text, int&) const
     if (!hour.isEmpty())
     {
         hr = hour.toUInt(&ok);
-        if (m12Hour)
+        if (ok  &&  m12Hour)
         {
+            if (hr == 0)
+                return QValidator::Intermediate;
             if (hr == 0  ||  hr > 12)
                 hr = 100;    // error;
             else if (hr == 12)
@@ -299,6 +301,8 @@ QValidator::State TimeSpinBox::validate(QString& text, int&) const
         if (!ok  ||  hr > maxMinute/60)
             return QValidator::Invalid;
     }
+    else if (m12Hour)
+        return QValidator::Intermediate;
 
     if (state == QValidator::Acceptable)
     {
