@@ -1,8 +1,10 @@
 KAlarm Change Log
 
-=== Version 3.2.1 (KDE Applications 21.04.1) --- 3 May 2021 ===
+=== Version 3.2.1 (KDE Applications 21.04.1) --- 6 May 2021 ===
 * In alarm list, don't hide display alarm colour for selected alarms [KDE Bug 436434]
 * Fix date sometimes being hidden for selected alarms in alarm list [KDE Bug 436434]
+* In alarm edit dialogue, enable OK button when date is edited [KDE Bug 436558]
+* If time format is AM/PM, allow zero hours as an interim value while editing times.
 
 === Version 3.2.0 (KDE Applications 21.04) --- 2 April 2021 ===
 * Remove KAlarm Akonadi resource code.

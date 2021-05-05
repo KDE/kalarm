@@ -97,7 +97,8 @@ void AlarmTimeWidget::init(Mode mode, const QString& title)
     // Date edit box
     mDateEdit = new KDateComboBox(topWidget);
     mDateEdit->setOptions(KDateComboBox::EditDate | KDateComboBox::SelectDate | KDateComboBox::DatePicker);
-    connect(mDateEdit, &KDateComboBox::dateEntered, this, &AlarmTimeWidget::dateTimeChanged);
+    connect(mDateEdit, &KDateComboBox::dateChanged, this, &AlarmTimeWidget::dateTimeChanged);
+    connect(mDateEdit, &KDateComboBox::dateEdited, this, &AlarmTimeWidget::dateTimeChanged);
     mDateEdit->setWhatsThis(xi18nc("@info:whatsthis",
                                    "<para>Enter the date to schedule the alarm.</para>"
                                    "<para>%1</para>", (mDeferring ? tzText : recurText)));
