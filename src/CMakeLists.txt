@@ -136,18 +136,18 @@ ki18n_wrap_ui(kalarm_bin_SRCS
     resources/dirresourceimportdialog_type.ui
 )
 
-qt5_add_dbus_adaptor(kalarm_bin_SRCS data/org.kde.kalarm.kalarm.xml dbushandler.h DBusHandler)
+qt_add_dbus_adaptor(kalarm_bin_SRCS data/org.kde.kalarm.kalarm.xml dbushandler.h DBusHandler)
 
-qt5_add_dbus_interfaces(kalarm_bin_SRCS data/org.kde.kmail.kmail.xml)
+qt_add_dbus_interfaces(kalarm_bin_SRCS data/org.kde.kmail.kmail.xml)
 
-qt5_add_dbus_interface(kalarm_bin_SRCS data/org.freedesktop.Notifications.xml notifications_interface)
-qt5_add_dbus_interface(kalarm_bin_SRCS data/org.freedesktop.DBus.Properties.xml dbusproperties)
+qt_add_dbus_interface(kalarm_bin_SRCS data/org.freedesktop.Notifications.xml notifications_interface)
+qt_add_dbus_interface(kalarm_bin_SRCS data/org.freedesktop.DBus.Properties.xml dbusproperties)
 
 kcfg_generate_dbus_interface(${CMAKE_CURRENT_SOURCE_DIR}/data/kalarmresource.kcfg org.kde.Akonadi.KAlarm.Settings)
-qt5_add_dbus_interface(kalarm_bin_SRCS ${CMAKE_CURRENT_BINARY_DIR}/org.kde.Akonadi.KAlarm.Settings.xml kalarmsettings KAlarmSettings)
+qt_add_dbus_interface(kalarm_bin_SRCS ${CMAKE_CURRENT_BINARY_DIR}/org.kde.Akonadi.KAlarm.Settings.xml kalarmsettings KAlarmSettings)
 
 kcfg_generate_dbus_interface(${CMAKE_CURRENT_SOURCE_DIR}/data/kalarmdirresource.kcfg org.kde.Akonadi.KAlarmDir.Settings)
-qt5_add_dbus_interface(kalarm_bin_SRCS ${CMAKE_CURRENT_BINARY_DIR}/org.kde.Akonadi.KAlarmDir.Settings.xml kalarmdirsettings KAlarmDirSettings)
+qt_add_dbus_interface(kalarm_bin_SRCS ${CMAKE_CURRENT_BINARY_DIR}/org.kde.Akonadi.KAlarmDir.Settings.xml kalarmdirsettings KAlarmDirSettings)
 
 kconfig_add_kcfg_files(kalarm_bin_SRCS GENERATE_MOC data/kalarmconfig.kcfgc)
 
