@@ -79,7 +79,7 @@ protected:
 
 private Q_SLOTS:
     void           slotNew(EditAlarmDlg::Type);
-    void           slotNewFromTemplate(const KAEvent&);
+    void           slotNewFromTemplate(const KAlarmCal::KAEvent&);
     void           slotNewTemplate();
     void           slotCopy();
     void           slotModify();

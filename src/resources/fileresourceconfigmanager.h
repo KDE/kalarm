@@ -75,7 +75,7 @@ private:
         FileResourceSettings::Ptr settings;
 
         ResourceData() {}
-        ResourceData(Resource r, FileResourceSettings::Ptr s) : resource(r), settings(s) {}
+        ResourceData(const Resource &r, FileResourceSettings::Ptr s) : resource(r), settings(s) {}
         ResourceData(const ResourceData&) = default;
         ResourceData& operator=(const ResourceData&) = default;
     };

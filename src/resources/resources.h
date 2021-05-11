@@ -238,7 +238,7 @@ Q_SIGNALS:
     void resourceToBeRemoved(Resource&);
 
     /** Emitted when a resource's config and settings have been removed. */
-    void resourceRemoved(ResourceId);
+    void resourceRemoved(KAlarmCal::ResourceId);
 
     /** Emitted when a resource message should be displayed to the user.
      *  @note  Connections to this signal should use Qt::QueuedConnection type

@@ -72,7 +72,7 @@ public:
 Q_SIGNALS:
     void                  earliestAlarmChanged();
     void                  haveDisabledAlarmsChanged(bool haveDisabled);
-    void                  atLoginEventAdded(const KAEvent&);
+    void                  atLoginEventAdded(const KAlarmCal::KAEvent&);
 
 private Q_SLOTS:
     void                  slotResourceSettingsChanged(Resource&, ResourceType::Changes);
@@ -83,7 +83,7 @@ private Q_SLOTS:
     void                  slotEventUpdated(Resource&, const KAEvent&);
 private:
     ResourcesCalendar();
-    static CalEvent::Type deleteEventInternal(const KAEvent&, Resource&, bool deleteFromResource = true);
+    static CalEvent::Type deleteEventInternal(const KAlarmCal::KAEvent&, Resource&, bool deleteFromResource = true);
     static CalEvent::Type deleteEventInternal(const QString& eventID, const KAEvent&, Resource&,
                                               bool deleteFromResource = true);
     void                  removeKAEvents(ResourceId, bool closing = false,

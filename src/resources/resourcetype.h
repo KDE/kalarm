@@ -398,13 +398,13 @@ public:
 
 Q_SIGNALS:
     /** Emitted by the all() instance, when the resource's settings have changed. */
-    void settingsChanged(ResourceId, Changes);
+    void settingsChanged(KAlarmCal::ResourceId, ResourceType::Changes);
 
     /** Emitted by the all() instance, when a resource message should be displayed to the user.
      *  @note  Connections to this signal should use Qt::QueuedConnection type.
      *  @param message  Derived classes must include the resource's display name.
      */
-    void resourceMessage(ResourceId, MessageType, const QString& message, const QString& details);
+    void resourceMessage(KAlarmCal::ResourceId, ResourceType::MessageType, const QString& message, const QString& details);
 
 protected:
     /** Add a new ResourceType instance, with a Resource owner.
