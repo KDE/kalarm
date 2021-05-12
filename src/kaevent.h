@@ -1124,7 +1124,7 @@ public:
      *  @param end   = end date (set invalid to use @p count instead).
      *  @return @c false if no recurrence was set up.
      */
-    bool setRecurDaily(int freq, const QBitArray &days, int count, const QDate &end);
+    bool setRecurDaily(int freq, const QBitArray &days, int count, QDate end);
 
     /** Set the recurrence to recur weekly, on the specified weekdays.
      *  @param freq   how many weeks between recurrences.
@@ -1135,7 +1135,7 @@ public:
      *  @param end   = end date (set invalid to use @p count instead).
      *  @return @c false if no recurrence was set up.
      */
-    bool setRecurWeekly(int freq, const QBitArray &days, int count, const QDate &end);
+    bool setRecurWeekly(int freq, const QBitArray &days, int count, QDate end);
 
     /** Set the recurrence to recur monthly, on the specified days within the month.
      *  @param freq   how many months between recurrences.
@@ -1146,7 +1146,7 @@ public:
      *  @param end   = end date (set invalid to use @p count instead).
      *  @return @c false if no recurrence was set up.
      */
-    bool setRecurMonthlyByDate(int freq, const QVector<int> &days, int count, const QDate &end);
+    bool setRecurMonthlyByDate(int freq, const QVector<int> &days, int count, QDate end);
 
     /** Holds days of the week combined with a week number in the month,
      *  used to specify some monthly or annual recurrences. */
@@ -1166,7 +1166,7 @@ public:
      *  @param end   = end date (set invalid to use @p count instead).
      *  @return @c false if no recurrence was set up.
      */
-    bool setRecurMonthlyByPos(int freq, const QVector<MonthPos> &pos, int count, const QDate &end);
+    bool setRecurMonthlyByPos(int freq, const QVector<MonthPos> &pos, int count, QDate end);
 
     /** Set the recurrence to recur annually, on the specified day in each
      *  of the specified months.
@@ -1181,7 +1181,7 @@ public:
      *  @param end   = end date (set invalid to use @p count instead).
      *  @return @c false if no recurrence was set up.
      */
-    bool setRecurAnnualByDate(int freq, const QVector<int> &months, int day, KARecurrence::Feb29Type, int count, const QDate &end);
+    bool setRecurAnnualByDate(int freq, const QVector<int> &months, int day, KARecurrence::Feb29Type, int count, QDate end);
 
     /** Set the recurrence to recur annually, on the specified weekdays in the
      *  specified weeks of the specified months.
@@ -1194,7 +1194,7 @@ public:
      *  @param end   = end date (set invalid to use @p count instead).
      *  @return @c false if no recurrence was set up.
      */
-    bool setRecurAnnualByPos(int freq, const QVector<MonthPos> &pos, const QVector<int> &months, int count, const QDate &end);
+    bool setRecurAnnualByPos(int freq, const QVector<MonthPos> &pos, const QVector<int> &months, int count, QDate end);
 
     /** Return whether the event recurs.
      *  @see recurType()

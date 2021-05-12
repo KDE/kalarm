@@ -194,7 +194,7 @@ public:
     KAEvent::OccurType nextOccurrence(const KADateTime &preDateTime, DateTime &result, KAEvent::OccurOption = KAEvent::IGNORE_REPETITION) const;
     KAEvent::OccurType previousOccurrence(const KADateTime &afterDateTime, DateTime &result, bool includeRepetitions = false) const;
     void               setRecurrence(const KARecurrence &);
-    bool               setRecur(KCalendarCore::RecurrenceRule::PeriodType, int freq, int count, const QDate &end, KARecurrence::Feb29Type = KARecurrence::Feb29_None);
+    bool               setRecur(KCalendarCore::RecurrenceRule::PeriodType, int freq, int count, QDate end, KARecurrence::Feb29Type = KARecurrence::Feb29_None);
     bool               setRecur(KCalendarCore::RecurrenceRule::PeriodType, int freq, int count, const KADateTime &end, KARecurrence::Feb29Type = KARecurrence::Feb29_None);
     KARecurrence::Type checkRecur() const;
     void               clearRecur();
@@ -2703,7 +2703,7 @@ bool KAEvent::setRecurMinutely(int freq, int count, const KADateTime &end)
 *    end   = end date (invalid to use 'count' instead).
 * Reply = false if no recurrence was set up.
 */
-bool KAEvent::setRecurDaily(int freq, const QBitArray &days, int count, const QDate &end)
+bool KAEvent::setRecurDaily(int freq, const QBitArray &days, int count, QDate end)
 {
     const bool success = d->setRecur(RecurrenceRule::rDaily, freq, count, end);
     if (success) {
@@ -2731,7 +2731,7 @@ bool KAEvent::setRecurDaily(int freq, const QBitArray &days, int count, const QD
 *    end   = end date (invalid to use 'count' instead).
 * Reply = false if no recurrence was set up.
 */
-bool KAEvent::setRecurWeekly(int freq, const QBitArray &days, int count, const QDate &end)
+bool KAEvent::setRecurWeekly(int freq, const QBitArray &days, int count, QDate end)
 {
     const bool success = d->setRecur(RecurrenceRule::rWeekly, freq, count, end);
     if (success) {
@@ -2752,7 +2752,7 @@ bool KAEvent::setRecurWeekly(int freq, const QBitArray &days, int count, const Q
 *    end   = end date (invalid to use 'count' instead).
 * Reply = false if no recurrence was set up.
 */
-bool KAEvent::setRecurMonthlyByDate(int freq, const QVector<int> &days, int count, const QDate &end)
+bool KAEvent::setRecurMonthlyByDate(int freq, const QVector<int> &days, int count, QDate end)
 {
     const bool success = d->setRecur(RecurrenceRule::rMonthly, freq, count, end);
     if (success) {
@@ -2776,7 +2776,7 @@ bool KAEvent::setRecurMonthlyByDate(int freq, const QVector<int> &days, int coun
 *    end   = end date (invalid to use 'count' instead).
 * Reply = false if no recurrence was set up.
 */
-bool KAEvent::setRecurMonthlyByPos(int freq, const QVector<MonthPos> &posns, int count, const QDate &end)
+bool KAEvent::setRecurMonthlyByPos(int freq, const QVector<MonthPos> &posns, int count, QDate end)
 {
     const bool success = d->setRecur(RecurrenceRule::rMonthly, freq, count, end);
     if (success) {
@@ -2802,7 +2802,7 @@ bool KAEvent::setRecurMonthlyByPos(int freq, const QVector<MonthPos> &posns, int
 *    end    = end date (invalid to use 'count' instead).
 * Reply = false if no recurrence was set up.
 */
-bool KAEvent::setRecurAnnualByDate(int freq, const QVector<int> &months, int day, KARecurrence::Feb29Type feb29, int count, const QDate &end)
+bool KAEvent::setRecurAnnualByDate(int freq, const QVector<int> &months, int day, KARecurrence::Feb29Type feb29, int count, QDate end)
 {
     const bool success = d->setRecur(RecurrenceRule::rYearly, freq, count, end, feb29);
     if (success) {
@@ -2830,7 +2830,7 @@ bool KAEvent::setRecurAnnualByDate(int freq, const QVector<int> &months, int day
 *    end    = end date (invalid to use 'count' instead).
 * Reply = false if no recurrence was set up.
 */
-bool KAEvent::setRecurAnnualByPos(int freq, const QVector<MonthPos> &posns, const QVector<int> &months, int count, const QDate &end)
+bool KAEvent::setRecurAnnualByPos(int freq, const QVector<MonthPos> &posns, const QVector<int> &months, int count, QDate end)
 {
     const bool success = d->setRecur(RecurrenceRule::rYearly, freq, count, end);
     if (success) {
@@ -2855,7 +2855,7 @@ bool KAEvent::setRecurAnnualByPos(int freq, const QVector<MonthPos> &posns, cons
 *    end   = end date/time (invalid to use 'count' instead).
 * Reply = false if no recurrence was set up.
 */
-bool KAEventPrivate::setRecur(KCalendarCore::RecurrenceRule::PeriodType recurType, int freq, int count, const QDate &end, KARecurrence::Feb29Type feb29)
+bool KAEventPrivate::setRecur(KCalendarCore::RecurrenceRule::PeriodType recurType, int freq, int count, QDate end, KARecurrence::Feb29Type feb29)
 {
     KADateTime edt = mNextMainDateTime.kDateTime();
     edt.setDate(end);
@@ -5249,7 +5249,7 @@ bool KAEvent::convertKCalEvents(const Calendar::Ptr &calendar, int calendarVersi
             }
 
             if (!cats.isEmpty()) {
-                for (Alarm::Ptr alarm : alarms) {     //clazy:exclude=range-loop   Can't use reference because 'alarms' is const
+                for (const Alarm::Ptr &alarm : alarms) {     //clazy:exclude=range-loop   Can't use reference because 'alarms' is const
                     if (alarm->type() == Alarm::Display)
                         alarm->setCustomProperty(KACalendar::APPNAME, KAEventPrivate::FONT_COLOUR_PROPERTY,
                                                  QStringLiteral("%1;;").arg(cats.at(0)));
