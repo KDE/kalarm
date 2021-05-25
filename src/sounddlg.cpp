@@ -312,7 +312,8 @@ SoundWidget::~SoundWidget()
 void SoundWidget::set(const QString& file, float volume, float fadeVolume, int fadeSeconds, int repeatPause)
 {
     // Initialise the control values
-    mFileEdit->setText(File::pathOrUrl(file));
+    QUrl url(file);
+    mFileEdit->setText(url.isLocalFile() ? url.toLocalFile() : url.toDisplayString());
     if (mRepeatGroupBox)
     {
         mRepeatGroupBox->setChecked(repeatPause >= 0);
