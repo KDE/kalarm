@@ -1,5 +1,8 @@
 KAlarm Change Log
 
+=== Version 3.2.2 (KDE Applications 21.04.2) --- 26 May 2021 ===
+* In audio alarm edit dialogue, don't show file name in encoded format [KDE Bug 437676]
+
 === Version 3.2.1 (KDE Applications 21.04.1) --- 6 May 2021 ===
 * In alarm list, don't hide display alarm colour for selected alarms [KDE Bug 436434]
 * Fix date sometimes being hidden for selected alarms in alarm list [KDE Bug 436434]
