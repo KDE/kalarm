@@ -1,6 +1,9 @@
 add_definitions(-DTRANSLATION_DOMAIN=\"libkalarmcal5\")
 ########### next target ###############
-set(kalarmcal_LIB_SRCS
+add_library(KF5AlarmCalendar)
+add_library(KF5::AlarmCalendar ALIAS KF5AlarmCalendar)
+
+target_sources(KF5AlarmCalendar PRIVATE
     kacalendar.cpp
     karecurrence.cpp
     akonadi.cpp
@@ -16,21 +19,18 @@ set(kalarmcal_LIB_SRCS
     eventattribute.cpp
 )
 
-ecm_qt_declare_logging_category(kalarmcal_LIB_SRCS HEADER kalarmcal_debug.h IDENTIFIER KALARMCAL_LOG CATEGORY_NAME org.kde.pim.kalarmcal
+ecm_qt_declare_logging_category(KF5AlarmCalendar HEADER kalarmcal_debug.h IDENTIFIER KALARMCAL_LOG CATEGORY_NAME org.kde.pim.kalarmcal
         DESCRIPTION "kalarmcal (kalarmcal)"
         OLD_CATEGORY_NAMES log_kalarmcal
         EXPORT KALARMCAL
     )
-
-
-add_library(KF5AlarmCalendar ${kalarmcal_LIB_SRCS})
 if (COMPILE_WITH_UNITY_CMAKE_SUPPORT)
     set_target_properties(KF5AlarmCalendar PROPERTIES UNITY_BUILD ON)
 endif()
 
 generate_export_header(KF5AlarmCalendar BASE_NAME kalarmcal)
 
-add_library(KF5::AlarmCalendar ALIAS KF5AlarmCalendar)
+
 
 target_link_libraries(KF5AlarmCalendar
 PUBLIC
