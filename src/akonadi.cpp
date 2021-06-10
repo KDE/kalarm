@@ -12,7 +12,6 @@
 
 #include <AkonadiCore/Item>
 
-#include <QStringList>
 
 namespace KAlarmCal
 {
