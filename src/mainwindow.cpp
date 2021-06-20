@@ -1107,7 +1107,7 @@ void MainWindow::slotShowMenubar()
 */
 void MainWindow::slotConfigureKeys()
 {
-    KShortcutsDialog::configure(actionCollection(), KShortcutsEditor::LetterShortcutsAllowed, this);
+    KShortcutsDialog::showDialog(actionCollection(),  KShortcutsEditor::LetterShortcutsAllowed, true /*isModal*/, this);
 }
 
 /******************************************************************************
