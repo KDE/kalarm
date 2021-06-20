@@ -54,6 +54,7 @@ using namespace KCalUtils;
 #include <KToggleAction>
 #include <KNotifyConfigWidget>
 #include <KToolBarPopupAction>
+#include <kxmlgui_version.h>
 
 #include <QAction>
 #include <QSplitter>
@@ -1107,7 +1108,11 @@ void MainWindow::slotShowMenubar()
 */
 void MainWindow::slotConfigureKeys()
 {
+#if KXMLGUI_VERSION < QT_VERSION_CHECK(5,83,0)
+    KShortcutsDialog::configure(actionCollection(), KShortcutsEditor::LetterShortcutsAllowed, this);
+#else
     KShortcutsDialog::showDialog(actionCollection(),  KShortcutsEditor::LetterShortcutsAllowed, true /*isModal*/, this);
+#endif
 }
 
 /******************************************************************************
