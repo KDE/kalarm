@@ -1108,7 +1108,7 @@ void MainWindow::slotShowMenubar()
 */
 void MainWindow::slotConfigureKeys()
 {
-#if KXMLGUI_VERSION < QT_VERSION_CHECK(5,83,0)
+#if KXMLGUI_VERSION < QT_VERSION_CHECK(5,84,0)
     KShortcutsDialog::configure(actionCollection(), KShortcutsEditor::LetterShortcutsAllowed, this);
 #else
     KShortcutsDialog::showDialog(actionCollection(),  KShortcutsEditor::LetterShortcutsAllowed, true /*isModal*/, this);
