@@ -886,7 +886,7 @@ void RecurrenceEdit::set(const KAEvent& event)
     mExceptionDates = event.recurrence()->exDates();
     std::sort(mExceptionDates.begin(), mExceptionDates.end());
     mExceptionDateList->clear();
-    for (const QDate& exceptionDate : qAsConst(mExceptionDates))
+    for (const QDate& exceptionDate : std::as_const(mExceptionDates))
         new QListWidgetItem(QLocale().toString(exceptionDate, QLocale::LongFormat), mExceptionDateList);
     enableExceptionButtons();
     mExcludeHolidays->setChecked(event.holidaysExcluded());

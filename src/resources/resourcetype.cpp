@@ -211,7 +211,7 @@ void ResourceType::setLoadedEvents(QHash<QString, KAEvent>& newEvents)
     // Delete events which no longer exist.
     if (!eventsToNotifyDelete.isEmpty())
         Resources::notifyEventsToBeRemoved(this, eventsToNotifyDelete);
-    for (const QString& id : qAsConst(eventsToDelete))
+    for (const QString& id : std::as_const(eventsToDelete))
         mEvents.remove(id);
     if (!eventsToNotifyDelete.isEmpty())
         Resources::notifyEventsRemoved(this, eventsToNotifyDelete);
@@ -278,7 +278,7 @@ void ResourceType::setUpdatedEvents(const QList<KAEvent>& events, bool notify)
 */
 void ResourceType::notifyUpdatedEvents()
 {
-    for (const KAEvent& event : qAsConst(mEventsUpdated))
+    for (const KAEvent& event : std::as_const(mEventsUpdated))
         Resources::notifyEventUpdated(this, event);
     mEventsUpdated.clear();
 
@@ -307,7 +307,7 @@ void ResourceType::setDeletedEvents(const QList<KAEvent>& events)
     }
     if (!eventsToNotify.isEmpty())
         Resources::notifyEventsToBeRemoved(this, eventsToNotify);
-    for (const QString& id : qAsConst(eventsToDelete))
+    for (const QString& id : std::as_const(eventsToDelete))
         mEvents.remove(id);
     if (!eventsToNotify.isEmpty())
         Resources::notifyEventsRemoved(this, eventsToNotify);

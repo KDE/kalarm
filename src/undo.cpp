@@ -523,7 +523,7 @@ QVector<int> Undo::ids(Undo::Type type)
             }
             if (omit)
             {
-                for (const QString& newID : qAsConst(newIDs))
+                for (const QString& newID : std::as_const(newIDs))
                     ignoreIDs.append(newID);
             }
         }
@@ -1247,7 +1247,7 @@ QString UndoDeletes::defaultActionText() const
 {
     if (mUndos->isEmpty())
         return QString();
-    for (const UndoItem* item : qAsConst(*mUndos))
+    for (const UndoItem* item : std::as_const(*mUndos))
     {
         switch (item->calendar())
         {

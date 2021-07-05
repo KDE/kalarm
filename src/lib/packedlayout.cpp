@@ -103,7 +103,7 @@ int PackedLayout::arrange(const QRect& rect, bool set) const
     int yrow = 0;
     QVector<QRect> posn;
     QVector<QLayoutItem*> items;
-    for (QLayoutItem* item : qAsConst(mItems))
+    for (QLayoutItem* item : std::as_const(mItems))
     {
         if (item->isEmpty())
             continue;

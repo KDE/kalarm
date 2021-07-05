@@ -577,7 +577,7 @@ bool SingleFileResource::readFromFile(const QString& fileName, QString& errorMes
 
     // Retrieve events from the calendar
     const KCalendarCore::Event::List events = mCalendar->events();
-    for (const KCalendarCore::Event::Ptr& kcalEvent : qAsConst(events))
+    for (const KCalendarCore::Event::Ptr& kcalEvent : std::as_const(events))
     {
         if (kcalEvent->alarms().isEmpty())
             qCDebug(KALARM_LOG) << "SingleFileResource::readFromFile:" << displayId() << "KCalendarCore::Event has no alarms:" << kcalEvent->uid();

@@ -385,7 +385,7 @@ void FileResourceMigrator::migrateAkonadiCollection(const Akonadi::Collection& c
                     }
 
                     // Add directory events of the appropriate type to this resource.
-                    for (const KAEvent& event : qAsConst(it.value()))
+                    for (const KAEvent& event : std::as_const(it.value()))
                         resource.addEvent(event);
 
                     mExistingAlarmTypes |= alarmType;

@@ -131,7 +131,7 @@ void LineEdit::dropEvent(QDropEvent* e)
             {
                 // Email entry field - ignore all but mailto: URLs
                 const QString mailto = QStringLiteral("mailto");
-                for (const QUrl& file : qAsConst(files))
+                for (const QUrl& file : std::as_const(files))
                 {
                     if (file.scheme() == mailto)
                         newEmails.append(file.path());

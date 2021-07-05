@@ -132,7 +132,7 @@ DailyTimer::~DailyTimer()
 
 DailyTimer* DailyTimer::fixedInstance(const QTime& timeOfDay, bool create)
 {
-    for (DailyTimer* timer : qAsConst(mFixedTimers))
+    for (DailyTimer* timer : std::as_const(mFixedTimers))
         if (timer->mTime == timeOfDay)
             return timer;
     return create ? new DailyTimer(timeOfDay, true) : nullptr;

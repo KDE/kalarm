@@ -69,7 +69,7 @@ void FileResourceConfigManager::createResources(QObject* parent)
         KConfigGroup general(manager->mConfig, GROUP_GENERAL);
         manager->mLastId = general.readEntry(KEY_LASTID, 0) | ResourceType::IdFlag;
 
-        for (const QString& resourceGroup : qAsConst(resourceGroups))
+        for (const QString& resourceGroup : std::as_const(resourceGroups))
         {
             int groupIndex = resourceGroup.midRef(9).toInt();
             FileResourceSettings::Ptr settings(new FileResourceSettings(manager->mConfig, resourceGroup));

@@ -94,8 +94,8 @@ void ShellProcess::writeStdin(const char* buffer, int bufflen)
     mStdinQueue.enqueue(scopy);
     if (doWrite)
     {
-        mStdinBytes = qAsConst(mStdinQueue).head().length();
-        write(qAsConst(mStdinQueue).head());
+        mStdinBytes = std::as_const(mStdinQueue).head().length();
+        write(std::as_const(mStdinQueue).head());
     }
 }
 
@@ -114,8 +114,8 @@ void ShellProcess::writtenStdin(qint64 bytes)
         mStdinQueue.dequeue();   // free the buffer which has now been written
     if (!mStdinQueue.isEmpty())
     {
-        mStdinBytes = qAsConst(mStdinQueue).head().length();
-        write(qAsConst(mStdinQueue).head());
+        mStdinBytes = std::as_const(mStdinQueue).head().length();
+        write(std::as_const(mStdinQueue).head());
     }
     else if (mStdinExit)
         kill();

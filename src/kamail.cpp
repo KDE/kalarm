@@ -277,7 +277,7 @@ void KAMail::slotEmailSent(KJob* job)
         errmsgs = errors(job->errorString(), SEND_ERROR);
     }
     JobData jobdata;
-    if (mJobs.isEmpty()  ||  mJobData.isEmpty()  ||  job != qAsConst(mJobs).head())
+    if (mJobs.isEmpty()  ||  mJobData.isEmpty()  ||  job != std::as_const(mJobs).head())
     {
         // The queue has been corrupted, so we can't locate the job's data
         qCCritical(KALARM_LOG) << "KAMail::slotEmailSent: Wrong job at head of queue: wiping queue";

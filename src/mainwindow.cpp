@@ -1366,7 +1366,7 @@ void MainWindow::slotCalendarStatusChanged()
     // Find whether there are any writable calendars
     bool active  = !Resources::enabledResources(CalEvent::ACTIVE, true).isEmpty();
     bool templat = !Resources::enabledResources(CalEvent::TEMPLATE, true).isEmpty();
-    for (MainWindow* w : qAsConst(mWindowList))
+    for (MainWindow* w : std::as_const(mWindowList))
     {
         w->mActionImportAlarms->setEnabled(active || templat);
         w->mActionImportBirthdays->setEnabled(active);

@@ -32,12 +32,12 @@ int localeFirstDayOfWeek()
         locale = QLocale();
         firstDay = locale.firstDayOfWeek();
         QList<Qt::DayOfWeek> weekDays = locale.weekdays();
-        for (Qt::DayOfWeek weekDay : qAsConst(weekDays))
+        for (Qt::DayOfWeek weekDay : std::as_const(weekDays))
             workDays |= 1 << (weekDay - 1);
 
         std::sort(weekDays.begin(), weekDays.end());
         int day = 0;
-        for (Qt::DayOfWeek weekDay : qAsConst(weekDays))
+        for (Qt::DayOfWeek weekDay : std::as_const(weekDays))
             if (++day < weekDay)
             {
                 lastWorkDay = (day == 1) ? weekDays.at(weekDays.size() - 1) : day - 1;

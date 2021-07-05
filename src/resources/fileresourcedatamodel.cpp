@@ -485,7 +485,7 @@ void FileResourceDataModel::slotEventsAdded(Resource& resource, const QList<KAEv
             resourceEventNodes.reserve(row + eventsToAdd.count());
             const QModelIndex resourceIx = resourceIndex(resource);
             beginInsertRows(resourceIx, row, row + eventsToAdd.count() - 1);
-            for (const KAEvent& event : qAsConst(eventsToAdd))
+            for (const KAEvent& event : std::as_const(eventsToAdd))
             {
                 auto ev = new KAEvent(event);
                 ev->setResourceId(resource.id());

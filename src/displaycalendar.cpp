@@ -199,7 +199,7 @@ void DisplayCalendar::close()
     mOpen = false;
 
     // Events list should be empty, but just in case...
-    for (KAEvent* event : qAsConst(mEventList))
+    for (KAEvent* event : std::as_const(mEventList))
     {
         mEventMap.remove(event->id());
         delete event;
@@ -215,7 +215,7 @@ void DisplayCalendar::close()
 void DisplayCalendar::updateKAEvents()
 {
     qCDebug(KALARM_LOG) << "DisplayCalendar::updateKAEvents";
-    for (KAEvent* event : qAsConst(mEventList))
+    for (KAEvent* event : std::as_const(mEventList))
     {
         mEventMap.remove(event->id());
         delete event;

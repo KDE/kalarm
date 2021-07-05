@@ -347,7 +347,7 @@ int MessageDisplayHelper::instanceCount(bool excludeAlwaysHidden)
     int count = mInstanceList.count();
     if (excludeAlwaysHidden)
     {
-        for (const MessageDisplayHelper* h : qAsConst(mInstanceList))
+        for (const MessageDisplayHelper* h : std::as_const(mInstanceList))
         {
             if (h->mAlwaysHide)
                 --count;
@@ -369,7 +369,7 @@ bool MessageDisplayHelper::shouldShowError(const KAEvent& event, const QStringLi
 
     // Don't pile up duplicate error messages for the same alarm
     EventId eid(event);
-    for (const MessageDisplayHelper* h : qAsConst(mInstanceList))
+    for (const MessageDisplayHelper* h : std::as_const(mInstanceList))
     {
         if (h->mErrorWindow  &&  h->mEventId == eid
         &&  h->mErrorMsgs == errmsgs  &&  h->mDontShowAgain == dontShowAgain)
@@ -782,7 +782,7 @@ MessageDisplay* MessageDisplayHelper::findEvent(const EventId& eventId, MessageD
 {
     if (!eventId.isEmpty())
     {
-        for (const MessageDisplayHelper* h : qAsConst(mInstanceList))
+        for (const MessageDisplayHelper* h : std::as_const(mInstanceList))
         {
             if (h->mParent != exclude  &&  h->mEventId == eventId  &&  !h->mErrorWindow)
                 return h->mParent;

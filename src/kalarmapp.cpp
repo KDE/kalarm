@@ -353,7 +353,7 @@ void KAlarmApp::showRestoredWindows()
         if (!mRestoredWindows.isEmpty())
         {
             // Display message windows restored at startup.
-            for (MessageWindow* win : qAsConst(mRestoredWindows))
+            for (MessageWindow* win : std::as_const(mRestoredWindows))
                 win->display();
             mRestoredWindows.clear();
         }
@@ -946,7 +946,7 @@ void KAlarmApp::checkNextDueAlarm()
 void KAlarmApp::queueAlarmId(const KAEvent& event)
 {
     const EventId id(event);
-    for (const ActionQEntry& entry : qAsConst(mActionQueue))
+    for (const ActionQEntry& entry : std::as_const(mActionQueue))
     {
         if (entry.action == QueuedAction::Handle  &&  entry.eventId == id)
             return;  // the alarm is already queued
@@ -2289,7 +2289,7 @@ void* KAlarmApp::execAlarm(KAEvent& event, const KAAlarm& alarm, ExecAlarmFlags 
                 // NOTE: The pre-action is not executed for a recurring alarm if an
                 // alarm message window for a previous occurrence is still visible.
                 // Check whether the command is already being executed for this alarm.
-                for (const ProcData* pd : qAsConst(mCommandProcesses))
+                for (const ProcData* pd : std::as_const(mCommandProcesses))
                 {
                     if (pd->event->id() == event.id()  &&  (pd->flags & ProcData::PRE_ACTION))
                     {
@@ -2770,7 +2770,7 @@ void KAlarmApp::commandErrorMsg(const ShellProcess* proc, const KAEvent& event, 
 void KAlarmApp::commandMessage(ShellProcess* proc, QWidget* parent)
 {
     // Find this command in the command list
-    for (ProcData* pd : qAsConst(mCommandProcesses))
+    for (ProcData* pd : std::as_const(mCommandProcesses))
     {
         if (pd->process == proc)
         {
@@ -2877,7 +2877,7 @@ void KAlarmApp::clearEventCommandError(const KAEvent& event, KAEvent::CmdErrType
 */
 KAlarmApp::ProcData* KAlarmApp::findCommandProcess(const QString& eventId) const
 {
-    for (ProcData* pd : qAsConst(mCommandProcesses))
+    for (ProcData* pd : std::as_const(mCommandProcesses))
     {
         if (pd->event->id() == eventId)
             return pd;

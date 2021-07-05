@@ -408,7 +408,7 @@ void PrefsTabBase::showEvent(QShowEvent*)
         const int labelCount = mLabels.count();
         QVector<int> xpos;
         xpos.reserve(labelCount);
-        for (const QLabel* label : qAsConst(mLabels))
+        for (const QLabel* label : std::as_const(mLabels))
         {
             const int x = label->mapTo(this, QPoint(0, 0)).x();
             xpos += x;

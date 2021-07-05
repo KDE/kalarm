@@ -543,7 +543,7 @@ int MessageWindow::windowCount(bool excludeAlwaysHidden)
     int count = mWindowList.count();
     if (excludeAlwaysHidden)
     {
-        for (MessageWindow* win : qAsConst(mWindowList))
+        for (MessageWindow* win : std::as_const(mWindowList))
         {
             if (win->mAlwaysHidden())
                 --count;
@@ -767,7 +767,7 @@ bool MessageWindow::spread(bool scatter)
         {
             // Display alarm messages first, then error messages, since most
             // error messages tend to be the same height.
-            for (MessageWindow* w : qAsConst(mWindowList))
+            for (MessageWindow* w : std::as_const(mWindowList))
             {
                 if ((!errmsgs && w->mErrorWindow())
                 ||  (errmsgs && !w->mErrorWindow()))
@@ -795,7 +795,7 @@ bool MessageWindow::spread(bool scatter)
     else
     {
         // Move all windows to the top left corner
-        for (MessageWindow* w : qAsConst(mWindowList))
+        for (MessageWindow* w : std::as_const(mWindowList))
             w->move(desk.topLeft());
     }
     return scatter;
@@ -807,7 +807,7 @@ bool MessageWindow::spread(bool scatter)
 */
 bool MessageWindow::isSpread(const QPoint& topLeft)
 {
-    for (MessageWindow* w : qAsConst(mWindowList))
+    for (MessageWindow* w : std::as_const(mWindowList))
     {
         if (w->pos() != topLeft)
             return true;

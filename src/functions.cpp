@@ -893,7 +893,7 @@ bool importAlarms(Resource& resource, QWidget* parent)
         else
             res = Resources::destination(it.key());
 
-        for (const KAEvent& event : qAsConst(it.value()))
+        for (const KAEvent& event : std::as_const(it.value()))
         {
             if (!res.addEvent(event))
                 success = false;

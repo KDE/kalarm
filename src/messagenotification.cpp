@@ -95,7 +95,7 @@ private Q_SLOTS:
         KConfig* config = KConfigGui::sessionConfig();
         // Save each MessageNotification's data.
         int n = 1;
-        for (MessageNotification* notif : qAsConst(MessageNotification::mNotificationList))
+        for (MessageNotification* notif : std::as_const(MessageNotification::mNotificationList))
         {
             const QByteArray group = "Notification_" + QByteArray::number(++n);
             KConfigGroup cg(config, group.constData());
