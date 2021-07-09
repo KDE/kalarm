@@ -1,7 +1,7 @@
 /*
  *  resourcedatamodelbase.h  -  base for models containing calendars and events
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2007-2020 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2007-2021 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -85,6 +85,15 @@ public:
 
     /** Return offset to add to headerData() role, for item models. */
     virtual int headerDataEventRoleOffset() const  { return 0; }
+
+    /** Return the alarm time text in the form "date time".
+     *  @param dateTime     the date/time to format.
+     *  @param leadingZero  the character to represent a leading zero, or '\0' for no leading zeroes.
+     */
+    static QString alarmTimeText(const DateTime& dateTime, char leadingZero = '\0');
+
+    /** Return the time-to-alarm text. */
+    static QString timeToAlarmText(const DateTime&);
 
 protected:
     ResourceDataModelBase();

@@ -34,6 +34,7 @@ class KToggleAction;
 class KToolBarPopupAction;
 class AlarmListModel;
 class AlarmListView;
+class DatePicker;
 class NewAlarmAction;
 class TemplateDlg;
 class ResourceSelector;
@@ -117,8 +118,10 @@ private Q_SLOTS:
     void           slotFindActive(bool);
     void           updateTrayIconAction();
     void           slotToggleResourceSelector();
+    void           slotToggleDateNavigator();
     void           slotCalendarStatusChanged();
     void           slotAlarmListColumnsChanged();
+    void           datesSelected(const QVector<QDate>& dates);
     void           resourcesResized();
     void           showMenuErrorMessage();
     void           showErrorMessage(const QString&);
@@ -132,6 +135,8 @@ private:
     void           initActions();
     void           selectionCleared();
     void           setEnableText(bool enable);
+    void           setPanelWidth(int panelWidth);
+    void           setSplitterSizes();
     void           initUndoMenu(QMenu*, Undo::Type);
     void           slotDelete(bool force);
     static void    enableTemplateMenuItem(bool);
@@ -142,9 +147,12 @@ private:
     AlarmListModel*      mListFilterModel;
     AlarmListView*       mListView;
     ResourceSelector*    mResourceSelector;    // resource selector widget
+    DatePicker*          mDatePicker;          // date navigator widget
     QSplitter*           mSplitter;            // splits window into list and resource selector
+    QWidget*             mPanel;               // panel containing resource selector & date navigator
     QMap<EditAlarmDlg*, KAEvent> mEditAlarmMap; // edit alarm dialogs to be handled by this window
     KToggleAction*       mActionToggleResourceSel;
+    KToggleAction*       mActionToggleDateNavigator;
     QAction*             mActionImportAlarms;
     QAction*             mActionExportAlarms;
     QAction*             mActionExport;
@@ -171,6 +179,7 @@ private:
     int                  mResourcesWidth {-1}; // width of resource selector widget
     bool                 mHiddenTrayParent {false}; // on session restoration, hide this window
     bool                 mShowResources;       // show resource selector
+    bool                 mShowDateNavigator;   // show date navigator
     bool                 mShowArchived;        // include archived alarms in the displayed list
     bool                 mShown {false};       // true once the window has been displayed
     bool                 mActionEnableEnable;  // Enable/Disable action is set to "Enable"

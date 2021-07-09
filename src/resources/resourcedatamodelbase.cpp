@@ -1,7 +1,7 @@
 /*
  *  resourcedatamodelbase.cpp  -  base for models containing calendars and events
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2007-2020 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2007-2021 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -22,11 +22,6 @@
 #include <QApplication>
 #include <QIcon>
 
-namespace
-{
-QString alarmTimeText(const DateTime& dateTime, char leadingZero = '\0');
-QString timeToAlarmText(const DateTime& dateTime);
-}
 
 /*=============================================================================
 = Class: ResourceDataModelBase
@@ -648,16 +643,13 @@ void ResourceDataModelBase::setCalendarsCreated()
         Resources::notifyResourcesCreated();
 }
 
-namespace
-{
-
 /******************************************************************************
 * Return the alarm time text in the form "date time".
 * Parameters:
 *   dateTime    = the date/time to format.
 *   leadingZero = the character to represent a leading zero, or '\0' for no leading zeroes.
 */
-QString alarmTimeText(const DateTime& dateTime, char leadingZero)
+QString ResourceDataModelBase::alarmTimeText(const DateTime& dateTime, char leadingZero)
 {
     // Whether the date and time contain leading zeroes.
     static bool    leadingZeroesChecked = false;
@@ -766,7 +758,7 @@ QString alarmTimeText(const DateTime& dateTime, char leadingZero)
 /******************************************************************************
 * Return the time-to-alarm text.
 */
-QString timeToAlarmText(const DateTime& dateTime)
+QString ResourceDataModelBase::timeToAlarmText(const DateTime& dateTime)
 {
     if (!dateTime.isValid())
         return i18nc("@info Alarm never occurs", "Never");
@@ -792,8 +784,6 @@ QString timeToAlarmText(const DateTime& dateTime)
     hours[1] = (hrs%24) % 10 + '0';
     int days = hrs / 24;
     return i18nc("@info days hours:minutes", "%1d %2:%3", days, QLatin1String(hours), QLatin1String(minutes));
-}
-
 }
 
 // vim: et sw=4:

@@ -1,7 +1,7 @@
 /*
  *  eventmodel.cpp  -  model containing flat list of events
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2007-2020 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2007-2021 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -48,6 +48,16 @@ KAEvent EventListModel::event(const QModelIndex& index) const
 {
     auto proxyModel = static_cast<KDescendantsProxyModel*>(sourceModel());
     const QModelIndex dataIndex = proxyModel->mapToSource(mapToSource(index));
+    return (*mEventFunction)(dataIndex);
+}
+
+/******************************************************************************
+* Return the event for a given row in the source model.
+*/
+KAEvent EventListModel::eventForSourceRow(int sourceRow) const
+{
+    auto proxyModel = static_cast<KDescendantsProxyModel*>(sourceModel());
+    const QModelIndex dataIndex = proxyModel->mapToSource(proxyModel->index(sourceRow, 0));
     return (*mEventFunction)(dataIndex);
 }
 
@@ -225,6 +235,15 @@ AlarmListModel::AlarmListModel(QObject* parent)
     : EventListModel(CalEvent::ACTIVE | CalEvent::ARCHIVED, parent)
     , mFilterTypes(CalEvent::ACTIVE | CalEvent::ARCHIVED)
 {
+    // Note: Use Resources::*() signals rather than
+    //       ResourceDataModel::rowsAboutToBeRemoved(), since the former is
+    //       emitted last. This ensures that mDateFilterCache won't be updated
+    //       with the removed events after removing them.
+    Resources* resources = Resources::instance();
+    connect(resources, &Resources::settingsChanged, this, &AlarmListModel::slotResourceSettingsChanged);
+    connect(resources, &Resources::resourceRemoved, this, &AlarmListModel::slotResourceRemoved);
+    connect(resources, &Resources::eventUpdated,    this, &AlarmListModel::slotEventUpdated);
+    connect(resources, &Resources::eventsRemoved,   this, &AlarmListModel::slotEventsRemoved);
 }
 
 AlarmListModel::~AlarmListModel()
@@ -247,12 +266,124 @@ void AlarmListModel::setEventTypeFilter(CalEvent::Types types)
     }
 }
 
+/******************************************************************************
+* Only show alarms which are due on specified dates, or show all alarms.
+* The default is to show all alarms.
+*/
+void AlarmListModel::setDateFilter(const QVector<QDate>& dates)
+{
+    QList<std::pair<KADateTime, KADateTime>> oldFilterDates = mFilterDates;
+    mFilterDates.clear();
+    if (!dates.isEmpty())
+    {
+        // Set the filter to ranges of consecutive dates.
+        const KADateTime::Spec timeSpec = Preferences::timeSpec();
+        QDate start = dates[0];
+        QDate end = start;
+        QDate date;
+        for (int i = 1, count = dates.count();  i <= count;  ++i)
+        {
+            if (i < count)
+                date = dates[i];
+            if (i == count  ||  date > end.addDays(1))
+            {
+                const KADateTime from(start, QTime(0,0,0), timeSpec);
+                const KADateTime to(end, QTime(23,59,0), timeSpec);
+                mFilterDates += std::make_pair(from, to);
+                start = date;
+            }
+            end = date;
+        }
+    }
+
+    if (mFilterDates != oldFilterDates)
+    {
+        mDateFilterCache.clear();   // clear cache of date filter statuses
+        // Cause the view to refresh. Note that because date/time values
+        // returned by the model will change, invalidateFilter() is not
+        // adequate for this.
+        invalidate();
+    }
+}
+
 bool AlarmListModel::filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const
 {
     if (!EventListModel::filterAcceptsRow(sourceRow, sourceParent))
         return false;
     if (mFilterTypes == CalEvent::EMPTY)
         return false;
+    if (!mFilterDates.isEmpty())
+    {
+        const KAEvent ev = eventForSourceRow(sourceRow);
+        if (ev.category() != CalEvent::ACTIVE)
+            return false;    // only include active alarms in the filter
+        const KADateTime::Spec timeSpec = Preferences::timeSpec();
+        const KADateTime now = KADateTime::currentDateTime(timeSpec);
+        auto& resourceHash = mDateFilterCache[ev.resourceId()];
+        const auto eit = resourceHash.constFind(ev.id());
+        bool haveEvent = (eit != resourceHash.constEnd());
+        if (haveEvent)
+        {
+            // Use cached date filter status for this event.
+            if (!eit.value().isValid())
+                return false;
+            if (eit.value() < now)
+            {
+                resourceHash.erase(eit); // occurrence has passed - check again
+                haveEvent = false;
+            }
+        }
+        if (!haveEvent)
+        {
+            // Determine whether this event is included in the date filter,
+            // and cache its status.
+            KADateTime occurs;
+            for (int i = 0, count = mFilterDates.size();  i < count && !occurs.isValid();  ++i)
+            {
+                const auto& dateRange = mFilterDates[i];
+                KADateTime from = std::max(dateRange.first, now).addSecs(-60);
+                while (!occurs.isValid())
+                {
+                    DateTime nextDt;
+                    ev.nextOccurrence(from, nextDt, KAEvent::RETURN_REPETITION);
+                    if (!nextDt.isValid())
+                    {
+                        resourceHash[ev.id()] = KADateTime();
+                        return false;
+                    }
+                    from = nextDt.effectiveKDateTime().toTimeSpec(timeSpec);
+                    if (from > dateRange.second)
+                    {
+                        // The event first occurs after the end of this date range.
+                        // Find the next date range which it might be in.
+                        while (++i < count  &&  from > mFilterDates[i].second) ;
+                        if (i >= count)
+                        {
+                            resourceHash[ev.id()] = KADateTime();
+                            return false;    // the event occurs after all date ranges
+                        }
+                        if (from < mFilterDates[i].first)
+                        {
+                            // It is before this next date range.
+                            // Find another occurrence and keep checking.
+                            --i;
+                            break;
+                        }
+                    }
+                    // It lies in this date range.
+                    if (!ev.excludedByWorkTimeOrHoliday(from))
+                    {
+                        occurs = from;
+                        break;    // event occurs in this date range
+                    }
+                    // This occurrence is excluded, so check for another.
+                }
+            }
+            resourceHash[ev.id()] = occurs;
+            if (!occurs.isValid())
+                return false;
+        }
+    }
     const int type = sourceModel()->data(sourceModel()->index(sourceRow, 0, sourceParent), ResourceDataModelBase::StatusRole).toInt();
     return static_cast<CalEvent::Type>(type) & mFilterTypes;
 }
@@ -288,6 +419,68 @@ QVariant AlarmListModel::data(const QModelIndex& ix, int role) const
                 break;
         }
     }
+    else if (!mFilterDates.isEmpty())
+    {
+        bool timeCol = false;
+        switch (ix.column())
+        {
+            case TimeColumn:
+                timeCol = true;
+                Q_FALLTHROUGH();
+            case TimeToColumn:
+            {
+                switch (role)
+                {
+                    case Qt::DisplayRole:
+#if 1
+                    case ResourceDataModelBase::TimeDisplayRole:
+                    case ResourceDataModelBase::SortRole:
+#endif
+                    {
+                        // Return a value based on the first occurrence in the date filter range.
+                        const KAEvent ev = event(ix);
+                        const auto rit = mDateFilterCache.constFind(ev.resourceId());
+                        if (rit != mDateFilterCache.constEnd())
+                        {
+                            const auto resourceHash = rit.value();
+                            const auto eit = resourceHash.constFind(ev.id());
+                            if (eit != resourceHash.constEnd()  &&  eit.value().isValid())
+                            {
+                                const KADateTime next = eit.value();
+                                switch (role)
+                                {
+                                    case Qt::DisplayRole:
+                                        return timeCol ? ResourceDataModelBase::alarmTimeText(next, '0')
+                                                       : ResourceDataModelBase::timeToAlarmText(next);
+                                    case ResourceDataModelBase::TimeDisplayRole:
+                                        if (timeCol)
+                                            return ResourceDataModelBase::alarmTimeText(next, '~');
+                                        break;
+                                    case ResourceDataModelBase::SortRole:
+                                        if (timeCol)
+                                            return DateTime(next).effectiveKDateTime().toUtc().qDateTime();
+                                        else
+                                        {
+                                            const KADateTime now = KADateTime::currentUtcDateTime();
+                                            if (next.isDateOnly())
+                                                return now.date().daysTo(next.date()) * 1440;
+                                            return (now.secsTo(DateTime(next).effectiveKDateTime()) + 59) / 60;
+                                        }
+                                    default:
+                                        break;
+                                }
+                            }
+                        }
+                        break;
+                    }
+                    default:
+                        break;
+                }
+            }
+            default:
+                break;
+        }
+    }
     return EventListModel::data(ix, role);
 }
 
@@ -299,6 +492,56 @@ QVariant AlarmListModel::headerData(int section, Qt::Orientation orientation, in
             return QVariant();
     }
     return EventListModel::headerData(section, orientation, role);
+}
+
+/******************************************************************************
+* Called when the enabled or read-only status of a resource has changed.
+* If the resource is now disabled, remove its events from the date filter cache.
+*/
+void AlarmListModel::slotResourceSettingsChanged(Resource& resource, ResourceType::Changes change)
+{
+    if ((change & ResourceType::Enabled)
+    &&  !resource.isEnabled(CalEvent::ACTIVE))
+    {
+        mDateFilterCache.remove(resource.id());
+    }
+}
+
+/******************************************************************************
+* Called when a resource has been removed.
+* Remove all its events from the date filter cache.
+*/
+void AlarmListModel::slotResourceRemoved(ResourceId id)
+{
+    mDateFilterCache.remove(id);
+}
+
+/******************************************************************************
+* Called when an event has been updated.
+* Remove it from the date filter cache.
+*/
+void AlarmListModel::slotEventUpdated(Resource& resource, const KAEvent& event)
+{
+    auto rit = mDateFilterCache.find(resource.id());
+    if (rit != mDateFilterCache.end())
+        rit.value().remove(event.id());
+}
+
+/******************************************************************************
+* Called when events have been removed.
+* Remove them from the date filter cache.
+*/
+void AlarmListModel::slotEventsRemoved(Resource& resource, const QList<KAEvent>& events)
+{
+    if (!mFilterDates.isEmpty())
+    {
+        auto rit = mDateFilterCache.find(resource.id());
+        if (rit != mDateFilterCache.end())
+        {
+            for (const KAEvent& event : events)
+                rit.value().remove(event.id());
+        }
+    }
 }
 
 

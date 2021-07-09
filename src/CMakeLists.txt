@@ -121,6 +121,8 @@ set(kalarm_bin_SRCS ${libkalarm_SRCS} ${resources_SRCS}
     newalarmaction.cpp
     commandoptions.cpp
     resourceselector.cpp
+    datepicker.cpp
+    daymatrix.cpp
     templatepickdlg.cpp
     templatedlg.cpp
     templatemenuaction.cpp

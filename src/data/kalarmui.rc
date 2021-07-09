@@ -1,5 +1,5 @@
 <!DOCTYPE gui>
-<gui name="kalarm" version="310" >
+<gui name="kalarm" version="330" >
  <ToolBar noMerge="1" name="mainToolBar" >
   <Action name="new" />
   <Separator/>
@@ -46,7 +46,9 @@
    <text>&amp;View</text>
    <Action name="showArchivedAlarms" />
    <Action name="showInSystemTray" />
+   <Separator/>
    <Action name="showResources" />
+   <Action name="showDateNavigator" />
    <Separator/>
    <Action name="spread" />
   </Menu>

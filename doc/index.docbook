@@ -31,7 +31,7 @@
 </authorgroup>
 
 <copyright>
-<year>2001</year><year>2002</year><year>2003</year><year>2004</year><year>2005</year><year>2006</year><year>2007</year><year>2008</year><year>2009</year><year>2010</year><year>2011</year><year>2012</year><year>2013</year><year>2016</year><year>2018</year><year>2019</year><year>2020</year>
+<year>2001</year><year>2002</year><year>2003</year><year>2004</year><year>2005</year><year>2006</year><year>2007</year><year>2008</year><year>2009</year><year>2010</year><year>2011</year><year>2012</year><year>2013</year><year>2016</year><year>2018</year><year>2019</year><year>2020</year><year>2021</year>
 <holder>&David.Jarvie;</holder>
 </copyright>
 
@@ -39,8 +39,8 @@
 
 <!-- Don't change format of date and version of the documentation -->
 
-<date>2020-10-28</date>
-<releaseinfo>3.1.0 (Applications 20.12)</releaseinfo>
+<date>2021-7-9</date>
+<releaseinfo>3.3.0 (Applications 21.08)</releaseinfo>
 
 <abstract>
 <para>&kalarm; is a personal alarm message, command and email scheduler by &kde;.</para>
@@ -267,6 +267,21 @@ Alarms</guimenuitem></menuchoice>.</para>
 
 </sect2>
 
+<sect2 id="datepicker">
+<title>Filtering the Alarm List by Date</title>
+
+<para>You can restrict the alarm list to show only alarms which are
+scheduled to occur on a selected date. This is achieved by means of
+the alarm date selector, which can be displayed or hidden by
+<menuchoice><guimenu>View</guimenu>
+<guimenuitem>Show Date Selector</guimenuitem>
+</menuchoice>. Select a date by clicking on it in the date selector,
+or deselect it by clicking on it again. The date selector displays a
+single month. To display a different month, use the arrow controls in
+the date selector.</para>
+
+</sect2>
+
 <sect2 id="search">
 <title>Searching the Alarm List</title>
 
@@ -347,6 +362,15 @@ the context menu.</para>
 various sources:</para>
 
 <itemizedlist>
+<listitem>
+<para>To preset the alarm's date in the
+<link linkend="alarm-edit-dlg">Alarm Edit dialog</link>,
+<mousebutton>right</mousebutton> click on the desired date in the alarm
+date selector (see <link linkend="datepicker">Filtering the Alarm List
+by Date</link>) and select the appropriate alarm type from the context
+menu.</para>
+</listitem>
+
 <listitem>
 <para>To base your new alarm on an alarm template, follow the
 instructions in the <link linkend="templates">Alarm Templates</link>

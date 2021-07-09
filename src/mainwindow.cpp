@@ -11,6 +11,7 @@
 #include "alarmlistdelegate.h"
 #include "alarmlistview.h"
 #include "birthdaydlg.h"
+#include "datepicker.h"
 #include "functions.h"
 #include "kalarmapp.h"
 #include "kamail.h"
@@ -58,6 +59,7 @@ using namespace KCalUtils;
 
 #include <QAction>
 #include <QSplitter>
+#include <QVBoxLayout>
 #include <QDragEnterEvent>
 #include <QDropEvent>
 #include <QResizeEvent>
@@ -81,10 +83,12 @@ namespace
 const QString UI_FILE(QStringLiteral("kalarmui.rc"));
 const char*   WINDOW_NAME = "MainWindow";
 
-const char*   VIEW_GROUP         = "View";
-const char*   SHOW_COLUMNS       = "ShowColumns";
-const char*   SHOW_ARCHIVED_KEY  = "ShowArchivedAlarms";
-const char*   SHOW_RESOURCES_KEY = "ShowResources";
+const char*   VIEW_GROUP          = "View";
+const char*   SHOW_COLUMNS        = "ShowColumns";
+const char*   SHOW_ARCHIVED_KEY   = "ShowArchivedAlarms";
+const char*   SHOW_RESOURCES_KEY  = "ShowResources";
+const char*   RESOURCES_WIDTH_KEY = "ResourcesWidth";
+const char*   SHOW_DATE_NAVIGATOR = "ShowDateNavigator";
 
 QString             undoText;
 QString             undoTextStripped;
@@ -117,20 +121,18 @@ MainWindow* MainWindow::create(bool restored)
 MainWindow::MainWindow(bool restored)
     : MainWindowBase(nullptr, Qt::WindowContextHelpButtonHint)
 {
+    Q_UNUSED(restored)
     qCDebug(KALARM_LOG) << "MainWindow:";
     setAttribute(Qt::WA_DeleteOnClose);
     setWindowModality(Qt::WindowModal);
     setObjectName(QStringLiteral("MainWin"));    // used by LikeBack
     setPlainCaption(KAboutData::applicationData().displayName());
     KConfigGroup config(KSharedConfig::openConfig(), VIEW_GROUP);
-    mShowResources = config.readEntry(SHOW_RESOURCES_KEY, false);
-    mShowArchived  = config.readEntry(SHOW_ARCHIVED_KEY, false);
+    mShowResources     = config.readEntry(SHOW_RESOURCES_KEY, false);
+    mShowDateNavigator = config.readEntry(SHOW_DATE_NAVIGATOR, false);
+    mShowArchived      = config.readEntry(SHOW_ARCHIVED_KEY, false);
+    mResourcesWidth    = config.readEntry(RESOURCES_WIDTH_KEY, 0);
     const QList<bool> showColumns = config.readEntry(SHOW_COLUMNS, QList<bool>());
-    if (!restored)
-    {
-        KConfigGroup wconfig(KSharedConfig::openConfig(), WINDOW_NAME);
-        mResourcesWidth = wconfig.readEntry(QStringLiteral("Splitter %1").arg(QApplication::desktop()->width()), (int)0);
-    }
 
     setAcceptDrops(true);         // allow drag-and-drop onto this window
 
@@ -141,9 +143,18 @@ MainWindow::MainWindow(bool restored)
 
     // Create the calendar resource selector widget
     DataModel::widgetNeedsDatabase(this);
-    mResourceSelector = new ResourceSelector(mSplitter);
+    mPanel = new QWidget(mSplitter);
+    QVBoxLayout* vlayout = new QVBoxLayout(mPanel);
+    vlayout->setContentsMargins(0, 0, 0, 0);
+
+    mResourceSelector = new ResourceSelector(mPanel);
+    vlayout->addWidget(mResourceSelector);
     mSplitter->setStretchFactor(0, 0);   // don't resize resource selector when window is resized
     mSplitter->setStretchFactor(1, 1);
+
+    mDatePicker = new DatePicker(mPanel);
+    vlayout->addWidget(mDatePicker);
+    vlayout->addStretch();
 
     // Create the alarm list widget
     mListFilterModel = DataModel::createAlarmListModel(this);
@@ -158,6 +169,7 @@ MainWindow::MainWindow(bool restored)
     connect(Resources::instance(), &Resources::settingsChanged,
                              this, &MainWindow::slotCalendarStatusChanged);
     connect(mResourceSelector, &ResourceSelector::resized, this, &MainWindow::resourcesResized);
+    connect(mDatePicker, &DatePicker::datesSelected, this, &MainWindow::datesSelected);
     mListView->installEventFilter(this);
     initActions();
 
@@ -183,6 +195,8 @@ MainWindow::~MainWindow()
     // Prevent view updates during window destruction
     delete mResourceSelector;
     mResourceSelector = nullptr;
+    delete mDatePicker;
+    mDatePicker = nullptr;
     delete mListView;
     mListView = nullptr;
 
@@ -206,8 +220,10 @@ void MainWindow::saveProperties(KConfigGroup& config)
 {
     config.writeEntry("HiddenTrayParent", isTrayParent() && isHidden());
     config.writeEntry("ShowArchived", mShowArchived);
+    config.writeEntry("ShowResources", mShowResources);
+    config.writeEntry("ShowDateNavigator", mShowDateNavigator);
     config.writeEntry("ShowColumns", mListView->columnsVisible());
-    config.writeEntry("ResourcesWidth", mResourceSelector->isHidden() ? 0 : mResourceSelector->width());
+    config.writeEntry("ResourcesWidth", mResourceSelector->isVisible() ? mResourceSelector->width() : 0);
 }
 
 /******************************************************************************
@@ -217,10 +233,13 @@ void MainWindow::saveProperties(KConfigGroup& config)
 */
 void MainWindow::readProperties(const KConfigGroup& config)
 {
-    mHiddenTrayParent = config.readEntry("HiddenTrayParent", true);
-    mShowArchived     = config.readEntry("ShowArchived", false);
-    mResourcesWidth   = config.readEntry("ResourcesWidth", (int)0);
-    mShowResources    = (mResourcesWidth > 0);
+    mHiddenTrayParent  = config.readEntry("HiddenTrayParent", true);
+    mShowArchived      = config.readEntry("ShowArchived", false);
+    mShowResources     = config.readEntry("ShowResources", false);
+    mResourcesWidth    = config.readEntry("ResourcesWidth", (int)0);
+    if (mResourcesWidth <= 0)
+        mShowResources = false;
+    mShowDateNavigator = config.readEntry("ShowDateNavigator", false);
     mListView->setColumnsVisible(config.readEntry("ShowColumns", QList<bool>()));
 }
 
@@ -320,13 +339,15 @@ void MainWindow::resizeEvent(QResizeEvent* re)
 {
     // Save the window's new size only if it's the first main window
     MainWindowBase::resizeEvent(re);
-    if (mResourcesWidth > 0)
-    {
-        QList<int> widths;
-        widths.append(mResourcesWidth);
-        widths.append(width() - mResourcesWidth - mSplitter->handleWidth());
-        mSplitter->setSizes(widths);
-    }
+    setSplitterSizes();
+}
+
+/******************************************************************************
+* Emitted when the date selection changes in the date picker.
+*/
+void MainWindow::datesSelected(const QVector<QDate>& dates)
+{
+    mListFilterModel->setDateFilter(dates);
 }
 
 /******************************************************************************
@@ -338,7 +359,7 @@ void MainWindow::resourcesResized()
     if (!mShown  ||  mResizing)
         return;
     const QList<int> widths = mSplitter->sizes();
-    if (widths.count() > 1)
+    if (widths.count() > 1  &&  mResourceSelector->isVisible())
     {
         mResourcesWidth = widths[0];
         // Width is reported as non-zero when resource selector is
@@ -347,8 +368,10 @@ void MainWindow::resourcesResized()
             mResourcesWidth = 0;
         else if (mainMainWindow() == this)
         {
-            KConfigGroup config(KSharedConfig::openConfig(), WINDOW_NAME);
-            config.writeEntry(QStringLiteral("Splitter %1").arg(QApplication::desktop()->width()), mResourcesWidth);
+            KConfigGroup config(KSharedConfig::openConfig(), VIEW_GROUP);
+            config.writeEntry(SHOW_RESOURCES_KEY, mShowResources);
+            if (mShowResources)
+                config.writeEntry(RESOURCES_WIDTH_KEY, mResourcesWidth);
             config.sync();
         }
     }
@@ -361,18 +384,26 @@ void MainWindow::resourcesResized()
 */
 void MainWindow::showEvent(QShowEvent* se)
 {
-    if (mResourcesWidth > 0)
-    {
-        QList<int> widths;
-        widths.append(mResourcesWidth);
-        widths.append(width() - mResourcesWidth - mSplitter->handleWidth());
-        mSplitter->setSizes(widths);
-    }
+    setSplitterSizes();
     MainWindowBase::showEvent(se);
     mShown = true;
 
     if (mMenuError)
         QTimer::singleShot(0, this, &MainWindow::showMenuErrorMessage);    //NOLINT(clang-analyzer-cplusplus.NewDeleteLeaks)
+}
+
+/******************************************************************************
+* Set the sizes of the splitter panels.
+*/
+void MainWindow::setSplitterSizes()
+{
+    if (mShowResources  &&  mResourcesWidth > 0)
+    {
+        const QList<int> widths{ mResourcesWidth,
+                                 width() - mResourcesWidth - mSplitter->handleWidth()
+                               };
+        mSplitter->setSizes(widths);
+    }
 }
 
 /******************************************************************************
@@ -470,6 +501,10 @@ void MainWindow::initActions()
     actions->addAction(QStringLiteral("showResources"), mActionToggleResourceSel);
     connect(mActionToggleResourceSel, &KToggleAction::triggered, this, &MainWindow::slotToggleResourceSelector);
 
+    mActionToggleDateNavigator = new KToggleAction(QIcon::fromTheme(QStringLiteral("view-calendar-month")), i18nc("@action", "Show Date Selector"), this);
+    actions->addAction(QStringLiteral("showDateNavigator"), mActionToggleDateNavigator);
+    connect(mActionToggleDateNavigator, &KToggleAction::triggered, this, &MainWindow::slotToggleDateNavigator);
+
     mActionSpreadWindows = KAlarm::createSpreadWindowsAction(this);
     actions->addAction(QStringLiteral("spread"), mActionSpreadWindows);
     KGlobalAccel::setGlobalShortcut(mActionSpreadWindows, QList<QKeySequence>());  // allow user to set a global shortcut
@@ -561,7 +596,9 @@ void MainWindow::initActions()
     if (!Preferences::archivedKeepDays())
         mActionShowArchived->setEnabled(false);
     mActionToggleResourceSel->setChecked(mShowResources);
-    slotToggleResourceSelector();
+    mActionToggleDateNavigator->setChecked(mShowDateNavigator);
+    slotToggleResourceSelector();   // give priority to resource selector over date navigator
+    slotToggleDateNavigator();
     updateTrayIconAction();         // set the correct text for this action
     mActionUndo->setEnabled(Undo::haveUndo());
     mActionRedo->setEnabled(Undo::haveRedo());
@@ -580,7 +617,6 @@ void MainWindow::initActions()
     actionMenubar->setChecked(menuVisible);
 
     Undo::emitChanged();     // set the Undo/Redo menu texts
-//    Daemon::monitoringAlarms();
 }
 
 /******************************************************************************
@@ -925,28 +961,83 @@ void MainWindow::slotToggleResourceSelector()
     mShowResources = mActionToggleResourceSel->isChecked();
     if (mShowResources)
     {
+        const bool dateNavigatorShown = mShowDateNavigator;
+        mShowDateNavigator = false;
+        mDatePicker->hide();    // prevent it forcing the width value
         if (mResourcesWidth <= 0)
-        {
             mResourcesWidth = mResourceSelector->sizeHint().width();
-            mResourceSelector->resize(mResourcesWidth, mResourceSelector->height());
-            QList<int> widths = mSplitter->sizes();
-            if (widths.count() == 1)
-            {
-                int listwidth = widths[0] - mSplitter->handleWidth() - mResourcesWidth;
-                mListView->resize(listwidth, mListView->height());
-                widths.append(listwidth);
-                widths[0] = mResourcesWidth;
-            }
-            mSplitter->setSizes(widths);
-        }
+        mResourceSelector->resize(mResourcesWidth, mResourceSelector->height());
+        setPanelWidth(mResourcesWidth);
         mResourceSelector->show();
+
+        // Hide the date navigator if it's visible
+        if (dateNavigatorShown)
+        {
+            mActionToggleDateNavigator->setChecked(false);
+            slotToggleDateNavigator();
+        }
+        mPanel->show();
     }
     else
+    {
         mResourceSelector->hide();
+        if (!mShowDateNavigator)
+            mPanel->hide();
+    }
 
     KConfigGroup config(KSharedConfig::openConfig(), VIEW_GROUP);
     config.writeEntry(SHOW_RESOURCES_KEY, mShowResources);
+    if (mShowResources)
+        config.writeEntry(RESOURCES_WIDTH_KEY, mResourcesWidth);
     config.sync();
+}
+
+/******************************************************************************
+* Called when the Show Date Navigator menu item is selected.
+*/
+void MainWindow::slotToggleDateNavigator()
+{
+    mShowDateNavigator = mActionToggleDateNavigator->isChecked();
+    if (mShowDateNavigator)
+    {
+        const bool resourcesShown = mShowResources;
+        mShowResources = false;   // prevent resources width being saved in config
+        mResourceSelector->hide();
+        const int panelWidth = mDatePicker->sizeHint().width();
+        mDatePicker->resize(panelWidth, mDatePicker->height());
+        setPanelWidth(panelWidth);
+        mDatePicker->show();
+
+        // Hide the resource selector if it's visible
+        if (resourcesShown)
+        {
+            mActionToggleResourceSel->setChecked(false);
+            slotToggleResourceSelector();
+        }
+        mPanel->show();
+    }
+    else
+    {
+        // When the date navigator is not visible, prevent it from filtering alarms.
+        mDatePicker->clearSelection();
+        mDatePicker->hide();
+        if (!mShowResources)
+            mPanel->hide();
+    }
+
+    KConfigGroup config(KSharedConfig::openConfig(), VIEW_GROUP);
+    config.writeEntry(SHOW_DATE_NAVIGATOR, mShowDateNavigator);
+    config.sync();
+}
+
+/******************************************************************************
+* Set the width of the panel containing the resource selector or date navigator.
+*/
+void MainWindow::setPanelWidth(int panelWidth)
+{
+    const int listWidth = width() - mSplitter->handleWidth() - panelWidth;
+    mListView->resize(listWidth, mListView->height());
+    mSplitter->setSizes({ panelWidth, listWidth });
 }
 
 /******************************************************************************

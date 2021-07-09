@@ -1,7 +1,7 @@
 /*
  *  eventmodel.h  -  model containing flat list of events
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2010-2020 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2010-2021 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -79,6 +79,9 @@ protected:
      */
     template <class DataModel> void initialise();
 
+    /** Return the event for a given source model row. */
+    KAEvent eventForSourceRow(int sourceRow) const;
+
     bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const override;
     bool filterAcceptsColumn(int sourceColumn, const QModelIndex &sourceParent) const override;
 
@@ -132,6 +135,11 @@ public:
      */
     CalEvent::Types eventTypeFilter() const   { return mFilterTypes; }
 
+    /** Set a filter to include only alarms which are due on specified dates.
+     *  @param dates  Dates for inclusion, in date order, or empty to remove filter.
+     */
+    void setDateFilter(const QVector<QDate>& dates);
+
     /** Set whether to replace a blank alarm name with the alarm text. */
     void setReplaceBlankName(bool replace)   { mReplaceBlankName = replace; }
 
@@ -145,9 +153,17 @@ protected:
     bool filterAcceptsColumn(int sourceCol, const QModelIndex& sourceParent) const override;
     QVariant data(const QModelIndex&, int role) const override;
 
+private Q_SLOTS:
+    void slotResourceSettingsChanged(Resource&, ResourceType::Changes);
+    void slotResourceRemoved(ResourceId);
+    void slotEventUpdated(Resource&, const KAEvent&);
+    void slotEventsRemoved(Resource&, const QList<KAEvent>&);
+
 private:
     static AlarmListModel* mAllInstance;
     CalEvent::Types mFilterTypes;    // types of events contained in this model
+    QList<std::pair<KADateTime, KADateTime>> mFilterDates;  // date/time ranges to include in filter
+    mutable QHash<ResourceId, QHash<QString, KADateTime>> mDateFilterCache;  // if date filter, whether events are included in filter
     bool mReplaceBlankName {false};  // replace Name with Text for Qt::DisplayRole if Name is blank
 };
 
