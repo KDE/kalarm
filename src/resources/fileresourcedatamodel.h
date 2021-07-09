@@ -35,12 +35,26 @@ public:
      */
     Type           type(const QModelIndex& ix) const;
 
-    Resource       resource(ResourceId) const;
-    Resource       resource(const QModelIndex&) const;
-    QModelIndex    resourceIndex(const Resource&) const;
-    QModelIndex    resourceIndex(ResourceId) const;
+    /** Return the resource with the given ID. */
+    Resource resource(ResourceId) const;
 
+    /** Return the resource referred to by an index.
+     *  @return  the resource, or invalid resource if the index is not for a resource.
+     */
+    Resource resource(const QModelIndex&) const;
+
+    /** Return the QModelIndex of a resource. */
+    QModelIndex resourceIndex(const Resource&) const;
+
+    /** Return the QModelIndex of a resource. */
+    QModelIndex resourceIndex(ResourceId) const;
+
+    /** Return the event with the given ID. */
     KAEvent event(const QString& eventId) const;
+
+    /** Return the event referred to by an index.
+     *  @return  the event, or invalid event if the index is not for an event.
+     */
     KAEvent event(const QModelIndex&) const;
     using QObject::event;   // prevent warning about hidden virtual method
 

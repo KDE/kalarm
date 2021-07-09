@@ -308,7 +308,7 @@ public:
      */
     void close();
 
-    /** Return all events belonging to this resource. */
+    /** Return all events belonging to this resource, for enabled alarm types. */
     QList<KAEvent> events() const;
 
     /** Return the event with the given ID, provided its alarm type is enabled for
