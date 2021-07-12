@@ -502,7 +502,7 @@ void MainWindow::initActions()
     connect(mActionToggleResourceSel, &KToggleAction::triggered, this, &MainWindow::slotToggleResourceSelector);
 
     mActionToggleDateNavigator = new KToggleAction(QIcon::fromTheme(QStringLiteral("view-calendar-month")), i18nc("@action", "Show Date Selector"), this);
-    actions->addAction(QStringLiteral("showDateNavigator"), mActionToggleDateNavigator);
+    actions->addAction(QStringLiteral("showDateSelector"), mActionToggleDateNavigator);
     connect(mActionToggleDateNavigator, &KToggleAction::triggered, this, &MainWindow::slotToggleDateNavigator);
 
     mActionSpreadWindows = KAlarm::createSpreadWindowsAction(this);
@@ -564,11 +564,19 @@ void MainWindow::initActions()
     // be deleted while still processing the action, resulting in a crash.
     QAction* act = KStandardAction::quit(nullptr, nullptr, actions);
     connect(act, &QAction::triggered, this, &MainWindow::slotQuit, Qt::QueuedConnection);
-    QAction* actionMenubar = KStandardAction::showMenubar(this, &MainWindow::slotShowMenubar, actions);
     KStandardAction::keyBindings(this, &MainWindow::slotConfigureKeys, actions);
     KStandardAction::configureNotifications(this, &MainWindow::slotConfigureNotifications, actions);
     KStandardAction::configureToolbars(this, &MainWindow::slotConfigureToolbar, actions);
     KStandardAction::preferences(this, &MainWindow::slotPreferences, actions);
+    mActionShowMenuBar = KStandardAction::showMenubar(this, &MainWindow::slotToggleMenubar, actions);
+    mHamburgerMenu = KStandardAction::hamburgerMenu(nullptr, nullptr, actions);
+    mHamburgerMenu->setShowMenuBarAction(mActionShowMenuBar);
+    mHamburgerMenu->setMenuBar(menuBar());
+    connect(mHamburgerMenu, &KHamburgerMenu::aboutToShowMenu, this, [this]() {
+        slotInitHamburgerMenu();
+        // Needs to be run on demand, but the contents won't change, so disconnect now.
+        disconnect(mHamburgerMenu, &KHamburgerMenu::aboutToShowMenu, this, nullptr);
+    });
     mResourceSelector->initActions(actions);
     setStandardToolBarMenuEnabled(true);
     createGUI(UI_FILE);
@@ -611,10 +619,30 @@ void MainWindow::initActions()
     mActionCreateTemplate->setEnabled(false);
     mActionExport->setEnabled(false);
 
-    const bool menuVisible = !menuBar()->isHidden();
-    actionMenubar->setChecked(menuVisible);
+    mActionShowMenuBar->setChecked(Preferences::showMenuBar());
+    slotToggleMenubar(true);
 
     Undo::emitChanged();     // set the Undo/Redo menu texts
+}
+
+/******************************************************************************
+* Set up the Hamburger menu, which allows the menu bar to be easily reinstated
+* after it has been hidden.
+*/
+void MainWindow::slotInitHamburgerMenu()
+{
+    QMenu* menu = new QMenu;
+    KActionCollection* actions = actionCollection();
+    menu->addAction(actions->action(QStringLiteral("new")));
+    menu->addAction(actions->action(QStringLiteral("templates")));
+    menu->addSeparator();
+    menu->addAction(actions->action(QStringLiteral("edit_find")));
+    menu->addSeparator();
+    menu->addAction(actions->action(QStringLiteral("showArchivedAlarms")));
+    menu->addAction(actions->action(QStringLiteral("showDateSelector")));
+    menu->addSeparator();
+    menu->addAction(actions->action(QLatin1String(KStandardAction::name(KStandardAction::Quit))));
+    mHamburgerMenu->setMenu(menu);
 }
 
 /******************************************************************************
@@ -1198,10 +1226,28 @@ void MainWindow::slotPreferences()
 /******************************************************************************
 * Called when the Show Menubar menu item is selected.
 */
-void MainWindow::slotShowMenubar()
+void MainWindow::slotToggleMenubar(bool dontShowWarning)
 {
-    const bool visible = menuBar()->isVisible();
-    menuBar()->setVisible(!visible);
+    if (menuBar())
+    {
+        if (mActionShowMenuBar->isChecked())
+            menuBar()->show();
+        else
+        {
+            if (!dontShowWarning
+            &&  (!toolBar()->isVisible() || !toolBar()->actions().contains(mHamburgerMenu)))
+            {
+                const QString accel = mActionShowMenuBar->shortcut().toString();
+                KMessageBox::information(this,
+                                         i18n("<qt>This will hide the menu bar completely."
+                                              " You can show it again by typing %1.</qt>", accel),
+                                         i18n("Hide menu bar"), QStringLiteral("HideMenuBarWarning"));
+            }
+            menuBar()->hide();
+        }
+        Preferences::setShowMenuBar(mActionShowMenuBar->isChecked());
+        Preferences::self()->save();
+    }
 }
 
 /******************************************************************************

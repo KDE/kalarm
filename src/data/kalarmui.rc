@@ -7,12 +7,12 @@
   <Action name="modify" />
   <Action name="delete" />
   <Separator/>
-  <Action name="showResources" />
-  <Separator/>
   <Action name="edit_undo" />
   <Action name="edit_redo" />
   <Separator/>
   <Action name="edit_find"/>
+  <Spacer/>
+  <Action name="hamburger_menu"/>
  </ToolBar>
  <MenuBar>
   <Menu name="file" >
@@ -48,7 +48,7 @@
    <Action name="showInSystemTray" />
    <Separator/>
    <Action name="showResources" />
-   <Action name="showDateNavigator" />
+   <Action name="showDateSelector" />
    <Separator/>
    <Action name="spread" />
   </Menu>
@@ -66,8 +66,8 @@
   </Menu>
   <Menu noMerge="1" name="settings" >
    <text>&amp;Settings</text>
-   <Merge name="StandardToolBarMenuHandler" />
    <Action name="options_show_menubar"/>
+   <Merge name="StandardToolBarMenuHandler" />
    <Separator/>
    <Action name="options_configure_keybinding" />
    <Action name="options_configure_notifications" />

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-SPDX-FileCopyrightText: 2007-2020 David Jarvie <djarvie@kde.org>
+SPDX-FileCopyrightText: 2007-2021 David Jarvie <djarvie@kde.org>
 SPDX-License-Identifier: GPL-2.0-or-later
 -->
 <kcfg xmlns="http://www.kde.org/standards/kcfg/1.0"
@@ -268,6 +268,12 @@ SPDX-License-Identifier: GPL-2.0-or-later
       <label context="@label">Number of minutes before alarm to wake from suspend</label>
       <whatsthis context="@info:whatsthis">Enter how many minutes before the alarm trigger time to wake the system from suspend. This can be used to ensure that the system is fully restored by the time the alarm triggers.</whatsthis>
       <default>2</default>
+    </entry>
+    <entry name="ShowMenuBar" type="Bool">
+      <default>true</default>
+       <!-- label and whatsthis are already provided by KStandardAction::showMenubar -->
+      <label></label>
+      <whatsthis></whatsthis>
     </entry>
   </group>
   <group name="Defaults">
