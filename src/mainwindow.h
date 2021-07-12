@@ -20,6 +20,7 @@
 
 #include <QVector>
 #include <QMap>
+#include <QPointer>
 
 class QDragEnterEvent;
 class QHideEvent;
@@ -32,6 +33,7 @@ class QMenu;
 class QAction;
 class KToggleAction;
 class KToolBarPopupAction;
+class KHamburgerMenu;
 class AlarmListModel;
 class AlarmListView;
 class DatePicker;
@@ -54,6 +56,7 @@ public:
     KAEvent            selectedEvent() const;
     void               editAlarm(EditAlarmDlg*, const KAEvent&);
     void               clearSelection();
+    QMenu*             resourceContextMenu();
     bool               eventFilter(QObject*, QEvent*) override;
 
     static void        refresh();
@@ -79,6 +82,7 @@ protected:
     void           readProperties(const KConfigGroup&) override;
 
 private Q_SLOTS:
+    void           slotInitHamburgerMenu();
     void           slotNew(EditAlarmDlg::Type);
     void           slotNewFromTemplate(const KAlarmCal::KAEvent&);
     void           slotNewTemplate();
@@ -96,7 +100,7 @@ private Q_SLOTS:
     void           slotTemplates();
     void           slotTemplatesEnd();
     void           slotPreferences();
-    void           slotShowMenubar();
+    void           slotToggleMenubar(bool dontShowWarning);
     void           slotConfigureKeys();
     void           slotConfigureNotifications();
     void           slotConfigureToolbar();
@@ -151,6 +155,7 @@ private:
     QSplitter*           mSplitter;            // splits window into list and resource selector
     QWidget*             mPanel;               // panel containing resource selector & date navigator
     QMap<EditAlarmDlg*, KAEvent> mEditAlarmMap; // edit alarm dialogs to be handled by this window
+    KToggleAction*       mActionShowMenuBar;
     KToggleAction*       mActionToggleResourceSel;
     KToggleAction*       mActionToggleDateNavigator;
     QAction*             mActionImportAlarms;
@@ -173,8 +178,9 @@ private:
     KToggleAction*       mActionToggleTrayIcon;
     KToggleAction*       mActionShowArchived;
     KToggleAction*       mActionSpreadWindows;
-    QMenu*               mActionsMenu;
-    QMenu*               mContextMenu;
+    KHamburgerMenu*      mHamburgerMenu;
+    QPointer<QMenu>      mContextMenu;
+    QPointer<QMenu>      mResourceContextMenu;
     QMap<QAction*, int>  mUndoMenuIds;         // items in the undo/redo menu, in order of appearance
     int                  mResourcesWidth {-1}; // width of resource selector widget
     bool                 mHiddenTrayParent {false}; // on session restoration, hide this window

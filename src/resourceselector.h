@@ -1,7 +1,7 @@
 /*
  *  resourceselector.h  -  alarm calendar resource selection widget
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2006-2019 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2006-2021 David Jarvie <djarvie@kde.org>
  *  Based on KOrganizer's ResourceView class and KAddressBook's ResourceSelection class,
  *  SPDX-FileCopyrightText: 2003, 2004 Cornelius Schumacher <schumacher@kde.org>
  *  SPDX-FileCopyrightText: 2003-2004 Reinhold Kainhofer <reinhold@kainhofer.com>
@@ -26,6 +26,7 @@ class KActionCollection;
 class KToggleAction;
 class QComboBox;
 class QMenu;
+class MainWindow;
 class ResourceView;
 
 
@@ -36,9 +37,8 @@ class ResourceSelector : public QFrame
 {
         Q_OBJECT
     public:
-        explicit ResourceSelector(QWidget* parent = nullptr);
+        explicit ResourceSelector(MainWindow* parentWindow, QWidget* parent = nullptr);
         void  initActions(KActionCollection*);
-        void  setContextMenu(QMenu*);
 
     Q_SIGNALS:
         void  resized(const QSize& oldSize, const QSize& newSize);
@@ -70,6 +70,7 @@ class ResourceSelector : public QFrame
         CalEvent::Type currentResourceType() const;
         Resource currentResource() const;
 
+        MainWindow*     mMainWindow;
         ResourceView*   mListView;
         QComboBox*      mAlarmType;
         QPushButton*    mAddButton;

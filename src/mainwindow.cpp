@@ -147,7 +147,7 @@ MainWindow::MainWindow(bool restored)
     QVBoxLayout* vlayout = new QVBoxLayout(mPanel);
     vlayout->setContentsMargins(0, 0, 0, 0);
 
-    mResourceSelector = new ResourceSelector(mPanel);
+    mResourceSelector = new ResourceSelector(this, mPanel);
     vlayout->addWidget(mResourceSelector);
     mSplitter->setStretchFactor(0, 0);   // don't resize resource selector when window is resized
     mSplitter->setStretchFactor(1, 1);
@@ -502,7 +502,7 @@ void MainWindow::initActions()
     connect(mActionToggleResourceSel, &KToggleAction::triggered, this, &MainWindow::slotToggleResourceSelector);
 
     mActionToggleDateNavigator = new KToggleAction(QIcon::fromTheme(QStringLiteral("view-calendar-month")), i18nc("@action", "Show Date Selector"), this);
-    actions->addAction(QStringLiteral("showDateNavigator"), mActionToggleDateNavigator);
+    actions->addAction(QStringLiteral("showDateSelector"), mActionToggleDateNavigator);
     connect(mActionToggleDateNavigator, &KToggleAction::triggered, this, &MainWindow::slotToggleDateNavigator);
 
     mActionSpreadWindows = KAlarm::createSpreadWindowsAction(this);
@@ -564,11 +564,19 @@ void MainWindow::initActions()
     // be deleted while still processing the action, resulting in a crash.
     QAction* act = KStandardAction::quit(nullptr, nullptr, actions);
     connect(act, &QAction::triggered, this, &MainWindow::slotQuit, Qt::QueuedConnection);
-    QAction* actionMenubar = KStandardAction::showMenubar(this, &MainWindow::slotShowMenubar, actions);
     KStandardAction::keyBindings(this, &MainWindow::slotConfigureKeys, actions);
     KStandardAction::configureNotifications(this, &MainWindow::slotConfigureNotifications, actions);
     KStandardAction::configureToolbars(this, &MainWindow::slotConfigureToolbar, actions);
     KStandardAction::preferences(this, &MainWindow::slotPreferences, actions);
+    mActionShowMenuBar = KStandardAction::showMenubar(this, &MainWindow::slotToggleMenubar, actions);
+    mHamburgerMenu = KStandardAction::hamburgerMenu(nullptr, nullptr, actions);
+    mHamburgerMenu->setShowMenuBarAction(mActionShowMenuBar);
+    mHamburgerMenu->setMenuBar(menuBar());
+    connect(mHamburgerMenu, &KHamburgerMenu::aboutToShowMenu, this, [this]() {
+        slotInitHamburgerMenu();
+        // Needs to be run on demand, but the contents won't change, so disconnect now.
+        disconnect(mHamburgerMenu, &KHamburgerMenu::aboutToShowMenu, this, nullptr);
+    });
     mResourceSelector->initActions(actions);
     setStandardToolBarMenuEnabled(true);
     createGUI(UI_FILE);
@@ -576,10 +584,8 @@ void MainWindow::initActions()
     applyMainWindowSettings(KSharedConfig::openConfig()->group(WINDOW_NAME));
 
     mContextMenu = static_cast<QMenu*>(factory()->container(QStringLiteral("listContext"), this));
-    mActionsMenu = static_cast<QMenu*>(factory()->container(QStringLiteral("actions"), this));
-    QMenu* resourceMenu = static_cast<QMenu*>(factory()->container(QStringLiteral("resourceContext"), this));
-    mResourceSelector->setContextMenu(resourceMenu);
-    mMenuError = (!mContextMenu  ||  !mActionsMenu  ||  !resourceMenu);
+    QMenu* actionsMenu = static_cast<QMenu*>(factory()->container(QStringLiteral("actions"), this));
+    mMenuError = (!mContextMenu  ||  !actionsMenu  ||  !resourceContextMenu());
     connect(mActionUndo->menu(), &QMenu::aboutToShow, this, &MainWindow::slotInitUndoMenu);
     connect(mActionUndo->menu(), &QMenu::triggered, this, &MainWindow::slotUndoItem);
     connect(mActionRedo->menu(), &QMenu::aboutToShow, this, &MainWindow::slotInitRedoMenu);
@@ -613,10 +619,30 @@ void MainWindow::initActions()
     mActionCreateTemplate->setEnabled(false);
     mActionExport->setEnabled(false);
 
-    const bool menuVisible = !menuBar()->isHidden();
-    actionMenubar->setChecked(menuVisible);
+    mActionShowMenuBar->setChecked(Preferences::showMenuBar());
+    slotToggleMenubar(true);
 
     Undo::emitChanged();     // set the Undo/Redo menu texts
+}
+
+/******************************************************************************
+* Set up the Hamburger menu, which allows the menu bar to be easily reinstated
+* after it has been hidden.
+*/
+void MainWindow::slotInitHamburgerMenu()
+{
+    QMenu* menu = new QMenu;
+    KActionCollection* actions = actionCollection();
+    menu->addAction(actions->action(QStringLiteral("new")));
+    menu->addAction(actions->action(QStringLiteral("templates")));
+    menu->addSeparator();
+    menu->addAction(actions->action(QStringLiteral("edit_find")));
+    menu->addSeparator();
+    menu->addAction(actions->action(QStringLiteral("showArchivedAlarms")));
+    menu->addAction(actions->action(QStringLiteral("showDateSelector")));
+    menu->addSeparator();
+    menu->addAction(actions->action(QLatin1String(KStandardAction::name(KStandardAction::Quit))));
+    mHamburgerMenu->setMenu(menu);
 }
 
 /******************************************************************************
@@ -677,6 +703,18 @@ KAEvent MainWindow::selectedEvent() const
 void MainWindow::clearSelection()
 {
     mListView->clearSelection();
+}
+
+/******************************************************************************
+* Provide the context menu for the resource selector to use.
+*/
+QMenu* MainWindow::resourceContextMenu()
+{
+    // Recreate the resource selector context menu if it has been deleted
+    // (which happens if the toolbar is edited).
+    if (!mResourceContextMenu)
+        mResourceContextMenu = static_cast<QMenu*>(factory()->container(QStringLiteral("resourceContext"), this));
+    return mResourceContextMenu;
 }
 
 /******************************************************************************
@@ -1188,10 +1226,28 @@ void MainWindow::slotPreferences()
 /******************************************************************************
 * Called when the Show Menubar menu item is selected.
 */
-void MainWindow::slotShowMenubar()
+void MainWindow::slotToggleMenubar(bool dontShowWarning)
 {
-    const bool visible = menuBar()->isVisible();
-    menuBar()->setVisible(!visible);
+    if (menuBar())
+    {
+        if (mActionShowMenuBar->isChecked())
+            menuBar()->show();
+        else
+        {
+            if (!dontShowWarning
+            &&  (!toolBar()->isVisible() || !toolBar()->actions().contains(mHamburgerMenu)))
+            {
+                const QString accel = mActionShowMenuBar->shortcut().toString();
+                KMessageBox::information(this,
+                                         i18n("<qt>This will hide the menu bar completely."
+                                              " You can show it again by typing %1.</qt>", accel),
+                                         i18n("Hide menu bar"), QStringLiteral("HideMenuBarWarning"));
+            }
+            menuBar()->hide();
+        }
+        Preferences::setShowMenuBar(mActionShowMenuBar->isChecked());
+        Preferences::self()->save();
+    }
 }
 
 /******************************************************************************
@@ -1541,8 +1597,11 @@ void MainWindow::slotSelection()
 void MainWindow::slotContextMenuRequested(const QPoint& globalPos)
 {
     qCDebug(KALARM_LOG) << "MainWindow::slotContextMenuRequested";
-    if (mContextMenu)
-        mContextMenu->popup(globalPos);
+    // Recreate the context menu if it has been deleted (which happens if the
+    // toolbar is edited).
+    if (!mContextMenu)
+        mContextMenu = static_cast<QMenu*>(factory()->container(QStringLiteral("listContext"), this));
+    mContextMenu->popup(globalPos);
 }
 
 /******************************************************************************
