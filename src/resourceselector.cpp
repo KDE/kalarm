@@ -14,6 +14,7 @@
 
 #include "functions.h"
 #include "kalarmapp.h"
+#include "mainwindow.h"
 #include "preferences.h"
 #include "resourcescalendar.h"
 #include "resources/resourcedatamodelbase.h"
@@ -43,8 +44,9 @@
 using namespace KCalendarCore;
 
 
-ResourceSelector::ResourceSelector(QWidget* parent)
+ResourceSelector::ResourceSelector(MainWindow* parentWindow, QWidget* parent)
     : QFrame(parent)
+    , mMainWindow(parentWindow)
 {
     QBoxLayout* topLayout = new QVBoxLayout(this);
 
@@ -320,16 +322,12 @@ void ResourceSelector::initActions(KActionCollection* actions)
     connect(mActionExport, &QAction::triggered, this, &ResourceSelector::exportCalendar);
 }
 
-void ResourceSelector::setContextMenu(QMenu* menu)
-{
-    mContextMenu = menu;
-}
-
 /******************************************************************************
 * Display the context menu for the selected calendar.
 */
 void ResourceSelector::contextMenuRequested(const QPoint& viewportPos)
 {
+    mContextMenu = mMainWindow->resourceContextMenu();
     if (!mContextMenu)
         return;
     bool active    = false;

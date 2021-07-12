@@ -1,7 +1,8 @@
 KAlarm Change Log
 
-=== Version 3.3.0 (KDE Applications 21.08) --- 9 July 2021 ===
-* Add date selector option to filter alarms.
+=== Version 3.3.0 (KDE Applications 21.08) --- 12 July 2021 ===
+* Add date selector option to enable alarm list view to be filtered.
+* Fix crash when context menu is requested after toolbar has been edited.
 
 === Version 3.2.2 (KDE Applications 21.04.2) --- 26 May 2021 ===
 * In audio alarm edit dialogue, don't show file name in encoded format [KDE Bug 437676]

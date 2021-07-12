@@ -147,7 +147,7 @@ MainWindow::MainWindow(bool restored)
     QVBoxLayout* vlayout = new QVBoxLayout(mPanel);
     vlayout->setContentsMargins(0, 0, 0, 0);
 
-    mResourceSelector = new ResourceSelector(mPanel);
+    mResourceSelector = new ResourceSelector(this, mPanel);
     vlayout->addWidget(mResourceSelector);
     mSplitter->setStretchFactor(0, 0);   // don't resize resource selector when window is resized
     mSplitter->setStretchFactor(1, 1);
@@ -576,10 +576,8 @@ void MainWindow::initActions()
     applyMainWindowSettings(KSharedConfig::openConfig()->group(WINDOW_NAME));
 
     mContextMenu = static_cast<QMenu*>(factory()->container(QStringLiteral("listContext"), this));
-    mActionsMenu = static_cast<QMenu*>(factory()->container(QStringLiteral("actions"), this));
-    QMenu* resourceMenu = static_cast<QMenu*>(factory()->container(QStringLiteral("resourceContext"), this));
-    mResourceSelector->setContextMenu(resourceMenu);
-    mMenuError = (!mContextMenu  ||  !mActionsMenu  ||  !resourceMenu);
+    QMenu* actionsMenu = static_cast<QMenu*>(factory()->container(QStringLiteral("actions"), this));
+    mMenuError = (!mContextMenu  ||  !actionsMenu  ||  !resourceContextMenu());
     connect(mActionUndo->menu(), &QMenu::aboutToShow, this, &MainWindow::slotInitUndoMenu);
     connect(mActionUndo->menu(), &QMenu::triggered, this, &MainWindow::slotUndoItem);
     connect(mActionRedo->menu(), &QMenu::aboutToShow, this, &MainWindow::slotInitRedoMenu);
@@ -677,6 +675,18 @@ KAEvent MainWindow::selectedEvent() const
 void MainWindow::clearSelection()
 {
     mListView->clearSelection();
+}
+
+/******************************************************************************
+* Provide the context menu for the resource selector to use.
+*/
+QMenu* MainWindow::resourceContextMenu()
+{
+    // Recreate the resource selector context menu if it has been deleted
+    // (which happens if the toolbar is edited).
+    if (!mResourceContextMenu)
+        mResourceContextMenu = static_cast<QMenu*>(factory()->container(QStringLiteral("resourceContext"), this));
+    return mResourceContextMenu;
 }
 
 /******************************************************************************
@@ -1541,8 +1551,11 @@ void MainWindow::slotSelection()
 void MainWindow::slotContextMenuRequested(const QPoint& globalPos)
 {
     qCDebug(KALARM_LOG) << "MainWindow::slotContextMenuRequested";
-    if (mContextMenu)
-        mContextMenu->popup(globalPos);
+    // Recreate the context menu if it has been deleted (which happens if the
+    // toolbar is edited).
+    if (!mContextMenu)
+        mContextMenu = static_cast<QMenu*>(factory()->container(QStringLiteral("listContext"), this));
+    mContextMenu->popup(globalPos);
 }
 
 /******************************************************************************

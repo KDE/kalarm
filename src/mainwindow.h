@@ -20,6 +20,7 @@
 
 #include <QVector>
 #include <QMap>
+#include <QPointer>
 
 class QDragEnterEvent;
 class QHideEvent;
@@ -54,6 +55,7 @@ public:
     KAEvent            selectedEvent() const;
     void               editAlarm(EditAlarmDlg*, const KAEvent&);
     void               clearSelection();
+    QMenu*             resourceContextMenu();
     bool               eventFilter(QObject*, QEvent*) override;
 
     static void        refresh();
@@ -173,8 +175,8 @@ private:
     KToggleAction*       mActionToggleTrayIcon;
     KToggleAction*       mActionShowArchived;
     KToggleAction*       mActionSpreadWindows;
-    QMenu*               mActionsMenu;
-    QMenu*               mContextMenu;
+    QPointer<QMenu>      mContextMenu;
+    QPointer<QMenu>      mResourceContextMenu;
     QMap<QAction*, int>  mUndoMenuIds;         // items in the undo/redo menu, in order of appearance
     int                  mResourcesWidth {-1}; // width of resource selector widget
     bool                 mHiddenTrayParent {false}; // on session restoration, hide this window
