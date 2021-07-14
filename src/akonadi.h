@@ -25,7 +25,7 @@ class KAEvent;
  *  Note that the event is not updated with the Item ID, and the Item is not
  *  added to the Collection.
  *  @param item                 the Item to initialise.
- *  @param event                the event whose data will be used to intialise the Item.
+ *  @param event                the event whose data will be used to initialise the Item.
  *  @param collectionMimeTypes  the mime types for the Collection which will contain the Item.
  *  @return @c true if successful; @c false if the event's category does not match the
  *          collection's mime types.

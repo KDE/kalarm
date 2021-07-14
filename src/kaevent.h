@@ -828,7 +828,7 @@ public:
 
     /** Return the number of minutes (>= 0) after the default alarm time which is
      *  specified in the alarm template. If this is specified, an alarm based on
-     *  this template wll have the "Time from now" radio button enabled in the alarm
+     *  this template will have the "Time from now" radio button enabled in the alarm
      *  edit dialog.
      *  @return minutes after the default time, or -1 if the template specifies a time
      *          of day or a date-only alarm.

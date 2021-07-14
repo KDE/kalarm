@@ -290,7 +290,7 @@ public:
      * Example: pos = 2, and bits 0 and 2 are set in days
      *   If months are specified (via addYearlyMonth), e.g. March, the rule is
      *   to repeat every year on the 2nd Monday and Wednesday of March.
-     *   If no months are specified, the fule is to repeat every year on the
+     *   If no months are specified, the file is to repeat every year on the
      *   2nd Monday and Wednesday of the year.
      */
     void addYearlyPos(short pos, const QBitArray &days);
