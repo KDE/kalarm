@@ -270,7 +270,7 @@ private:
     ButtonGroup*  mWindowPosition;
     QSpinBox*     mWindowButtonDelay;
     QLabel*       mWindowButtonDelayLabel;
-    QCheckBox*    mModalMessages;
+    QCheckBox*    mModalMessages {nullptr};
     int           mTabGeneral;    // index of General tab
     int           mTabWindows;    // index of Alarm Windows tab
 };

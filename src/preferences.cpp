@@ -23,6 +23,7 @@
 #include <KSharedConfig>
 #include <KConfigGroup>
 #include <KMessageBox>
+#include <KWindowSystem>
 
 #include <QFile>
 #include <QSaveFile>
@@ -261,6 +262,23 @@ void Preferences::setNoAutoStart(bool yes)
     }
 
     self()->setBase_NoAutoStart(yes);
+}
+
+/******************************************************************************
+* Get whether message windows should have a title bar and take keyboard focus.
+*/
+bool Preferences::modalMessages()
+{
+    return !KWindowSystem::isPlatformX11() || self()->base_ModalMessages();
+}
+
+/******************************************************************************
+* Set whether message windows should have a title bar and take keyboard focus.
+*/
+void Preferences::setModalMessages(bool yes)
+{
+    if (KWindowSystem::isPlatformX11())
+        self()->setBase_ModalMessages(yes);
 }
 
 /******************************************************************************

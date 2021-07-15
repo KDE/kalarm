@@ -1,7 +1,7 @@
 /*
  *  preferences.h  -  program preference settings
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2001-2020 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2001-2021 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -48,6 +48,8 @@ public:
     static void             setAskAutoStart(bool yes);
     static bool             noAutoStart()                    { return self()->base_NoAutoStart(); }
     static void             setNoAutoStart(bool yes);
+    static bool             modalMessages();
+    static void             setModalMessages(bool yes);
     static KADateTime::Spec timeSpec();
     static QTimeZone        timeSpecAsZone();
     static void             setTimeSpec(const KADateTime::Spec&);

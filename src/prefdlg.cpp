@@ -57,8 +57,8 @@ using namespace KHolidays;
 #include <QIcon>
 #if KDEPIM_HAVE_X11
 #include <KWindowInfo>
-#include <KWindowSystem>
 #endif
+#include <KWindowSystem>
 #include <KHelpClient>
 
 #include <QLabel>
@@ -1852,16 +1852,19 @@ ViewPrefTab::ViewPrefTab(StackedScrollGroup* scrollGroup)
     box->setStretchFactor(new QWidget(widget), 1);    // left adjust the controls
     grid->addWidget(widget, 2, 1, Qt::AlignLeft);
 
-    grid->setRowMinimumHeight(3, style()->pixelMetric(QStyle::PM_LayoutVerticalSpacing));
+    if (KWindowSystem::isPlatformX11())
+    {
+        grid->setRowMinimumHeight(3, style()->pixelMetric(QStyle::PM_LayoutVerticalSpacing));
 
-    mModalMessages = new QCheckBox(i18nc("@option:check", "Message windows have a title bar and take keyboard focus"), group);
-    mModalMessages->setMinimumSize(mModalMessages->sizeHint());
-    mModalMessages->setWhatsThis(xi18nc("@info:whatsthis",
-          "<para>Specify the characteristics of alarm message windows:"
-          "<list><item>If checked, the window is a normal window with a title bar, which grabs keyboard input when it is displayed.</item>"
-          "<item>If unchecked, the window does not interfere with your typing when "
-          "it is displayed, but it has no title bar and cannot be moved or resized.</item></list></para>"));
-    grid->addWidget(mModalMessages, 4, 0, 1, 2, Qt::AlignLeft);
+        mModalMessages = new QCheckBox(i18nc("@option:check", "Message windows have a title bar and take keyboard focus"), group);
+        mModalMessages->setMinimumSize(mModalMessages->sizeHint());
+        mModalMessages->setWhatsThis(xi18nc("@info:whatsthis",
+              "<para>Specify the characteristics of alarm message windows:"
+              "<list><item>If checked, the window is a normal window with a title bar, which grabs keyboard input when it is displayed.</item>"
+              "<item>If unchecked, the window does not interfere with your typing when "
+              "it is displayed, but it has no title bar and cannot be moved or resized.</item></list></para>"));
+        grid->addWidget(mModalMessages, 4, 0, 1, 2, Qt::AlignLeft);
+    }
 
     if (topWindows)
         topWindows->addStretch();    // top adjust the widgets
@@ -1910,7 +1913,8 @@ void ViewPrefTab::restore(bool, bool allTabs)
     {
         mWindowPosition->setButton(Preferences::messageButtonDelay() ? 1 : 0);
         mWindowButtonDelay->setValue(Preferences::messageButtonDelay());
-        mModalMessages->setChecked(Preferences::modalMessages());
+        if (mModalMessages)
+            mModalMessages->setChecked(Preferences::modalMessages());
     }
 }
 
@@ -1957,9 +1961,12 @@ void ViewPrefTab::apply(bool syncToDisc)
         n = mWindowButtonDelay->value();
     if (n != Preferences::messageButtonDelay())
         Preferences::setMessageButtonDelay(n);
-    b = mModalMessages->isChecked();
-    if (b != Preferences::modalMessages())
-        Preferences::setModalMessages(b);
+    if (mModalMessages)
+    {
+        b = mModalMessages->isChecked();
+        if (b != Preferences::modalMessages())
+            Preferences::setModalMessages(b);
+    }
     PrefsTabBase::apply(syncToDisc);
 }
 

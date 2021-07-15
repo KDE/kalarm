@@ -139,7 +139,7 @@ SPDX-License-Identifier: GPL-2.0-or-later
       <whatsthis context="@info:whatsthis">&lt;p>When saving a new alarm or alarm template, prompt for which calendar to store it in, if there is more than one active calendar.&lt;/p>&lt;p>Note that archived alarms are always stored in the default archived alarm calendar.&lt;/p></whatsthis>
       <default>true</default>
     </entry>
-    <entry name="ModalMessages" type="Bool">
+    <entry name="Base_ModalMessages" key="ModalMessages" type="Bool">
       <label context="@label">Message windows have a title bar and take keyboard focus</label>
       <whatsthis context="@info:whatsthis">&lt;p>Specify the characteristics of alarm message windows:&lt;ul>&lt;li>If checked, the window is a normal window with a title bar, which grabs keyboard input when it is displayed.&lt;/li>&lt;li>If unchecked, the window does not interfere with your typing when it is displayed, but it has no title bar and cannot be moved or resized.&lt;/li>&lt;/ul>&lt;/p></whatsthis>
       <default>true</default>
