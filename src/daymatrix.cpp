@@ -359,7 +359,7 @@ void DayMatrix::mousePressEvent(QMouseEvent* e)
     {
         if (i < mSelStart  ||  i > mSelEnd)
             setMouseSelection(i, i, true);
-        popupMenu();
+        popupMenu(e->globalPos());
     }
     else if (e->button() == Qt::LeftButton)
     {
@@ -374,13 +374,13 @@ void DayMatrix::mousePressEvent(QMouseEvent* e)
     }
 }
 
-void DayMatrix::popupMenu()
+void DayMatrix::popupMenu(const QPoint& pos)
 {
     NewAlarmAction newAction(false, QString(), nullptr);
     QMenu* popup = newAction.menu();
     connect(&newAction, &NewAlarmAction::selected, this, &DayMatrix::newAlarm);
     connect(&newAction, &NewAlarmAction::selectedTemplate, this, &DayMatrix::newAlarmFromTemplate);
-    popup->exec(QCursor::pos());
+    popup->exec(pos);
 }
 
 void DayMatrix::mouseReleaseEvent(QMouseEvent* e)

@@ -93,7 +93,7 @@ private:
     bool recalculateToday();
     QString getHolidayLabel(int offset) const;
     void setMouseSelection(int start, int end, bool emitSignal);
-    void popupMenu();     // pop up a context menu for creating a new alarm
+    void popupMenu(const QPoint&);     // pop up a context menu for creating a new alarm
     int getDayIndex(const QPoint&) const;   // get index of the day located at a point in the matrix
 
     // If changes are pending, recalculates which days in the matrix have
