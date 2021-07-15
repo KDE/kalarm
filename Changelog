@@ -4,7 +4,7 @@ KAlarm Change Log
 * Add date selector option to enable alarm list view to be filtered.
 * Show hamburger menu when menu bar is hidden, to allow access to all options.
 * Fix crash when context menu is requested after toolbar has been edited.
-* Fix crash at startup on multiple screen system using Wayland.
+* Fix crash when alarm message is shown on a multiple screen system using Wayland [KDE Bug 439853]
 
 === Version 3.2.2 (KDE Applications 21.04.2) --- 26 May 2021 ===
 * In audio alarm edit dialogue, don't show file name in encoded format [KDE Bug 437676]
