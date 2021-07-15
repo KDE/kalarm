@@ -631,7 +631,7 @@ void MainWindow::initActions()
 */
 void MainWindow::slotInitHamburgerMenu()
 {
-    QMenu* menu = new QMenu;
+    QMenu* menu = new QMenu(this);
     KActionCollection* actions = actionCollection();
     menu->addAction(actions->action(QStringLiteral("new")));
     menu->addAction(actions->action(QStringLiteral("templates")));
