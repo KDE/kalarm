@@ -1,7 +1,7 @@
 /*
  *  messagewindow.cpp  -  displays an alarm message in a window
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2001-2020 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2001-2021 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -64,11 +64,9 @@ using namespace KAlarmCal;
 namespace
 {
 
-#if KDEPIM_HAVE_X11
 enum FullScreenType { NoFullScreen = 0, FullScreen = 1, FullScreenActive = 2 };
 FullScreenType haveFullScreenWindow(int screen);
 FullScreenType findFullScreenWindows(const QVector<QRect>& screenRects, QVector<FullScreenType>& screenTypes);
-#endif
 
 const QLatin1String KMAIL_DBUS_SERVICE("org.kde.kmail");
 const QLatin1String KMAIL_DBUS_PATH("/KMail");
@@ -1259,7 +1257,6 @@ bool MessageWindow::getWorkAreaAndModal()
 {
     mScreenNumber = -1;
     const bool modal = Preferences::modalMessages();
-#if KDEPIM_HAVE_X11
     const QList<QScreen*> screens = QGuiApplication::screens();
     const int numScreens = screens.count();
     if (numScreens > 1)
@@ -1335,7 +1332,6 @@ bool MessageWindow::getWorkAreaAndModal()
         }
         return false;  // can't logically get here, since there can only be one active window...
     }
-#endif
     if (modal)
     {
         const WId activeId = KWindowSystem::activeWindow();
@@ -1346,7 +1342,6 @@ bool MessageWindow::getWorkAreaAndModal()
     return modal;
 }
 
-#if KDEPIM_HAVE_X11
 namespace
 {
 
@@ -1357,23 +1352,29 @@ namespace
 FullScreenType haveFullScreenWindow(int screen)
 {
     FullScreenType type = NoFullScreen;
-    xcb_connection_t* connection = QX11Info::connection();
-    const NETRootInfo rootInfo(connection, NET::ClientList | NET::ActiveWindow, NET::Properties2(), screen);
-    const xcb_window_t rootWindow   = rootInfo.rootWindow();
-    const xcb_window_t activeWindow = rootInfo.activeWindow();
-    const xcb_window_t* windows     = rootInfo.clientList();
-    const int windowCount           = rootInfo.clientListCount();
-    for (int w = 0;  w < windowCount;  ++w)
+//TODO: implement on Wayland
+#if KDEPIM_HAVE_X11
+    if (KWindowSystem::isPlatformX11())
     {
-        NETWinInfo winInfo(connection, windows[w], rootWindow, NET::WMState|NET::WMGeometry, NET::Properties2());
-        if (winInfo.state() & NET::FullScreen)
+        xcb_connection_t* connection = QX11Info::connection();
+        const NETRootInfo rootInfo(connection, NET::ClientList | NET::ActiveWindow, NET::Properties2(), screen);
+        const xcb_window_t rootWindow   = rootInfo.rootWindow();
+        const xcb_window_t activeWindow = rootInfo.activeWindow();
+        const xcb_window_t* windows     = rootInfo.clientList();
+        const int windowCount           = rootInfo.clientListCount();
+        for (int w = 0;  w < windowCount;  ++w)
         {
+            NETWinInfo winInfo(connection, windows[w], rootWindow, NET::WMState|NET::WMGeometry, NET::Properties2());
+            if (winInfo.state() & NET::FullScreen)
+            {
 //qCDebug(KALARM_LOG)<<"Found FULL SCREEN: " << windows[w];
-            type = FullScreen;
-            if (windows[w] == activeWindow)
-                return FullScreenActive;
+                type = FullScreen;
+                if (windows[w] == activeWindow)
+                    return FullScreenActive;
+            }
         }
     }
+#endif // KDEPIM_HAVE_X11
     return type;
 }
 
@@ -1385,49 +1386,53 @@ FullScreenType findFullScreenWindows(const QVector<QRect>& screenRects, QVector<
 {
     FullScreenType result = NoFullScreen;
     screenTypes.fill(NoFullScreen);
-    xcb_connection_t* connection = QX11Info::connection();
-    const NETRootInfo rootInfo(connection, NET::ClientList | NET::ActiveWindow, NET::Properties2());
-    const xcb_window_t rootWindow   = rootInfo.rootWindow();
-    const xcb_window_t activeWindow = rootInfo.activeWindow();
-    const xcb_window_t* windows     = rootInfo.clientList();
-    const int windowCount           = rootInfo.clientListCount();
-//qCDebug(KALARM_LOG)<<"Virtual desktops: Window count="<<windowCount<<", active="<<activeWindow<<", geom="<<QApplication::desktop()->screenGeometry(0);
-    NETRect netgeom;
-    NETRect netframe;
-    for (int w = 0;  w < windowCount;  ++w)
+//TODO: implement on Wayland
+#if KDEPIM_HAVE_X11
+    if (KWindowSystem::isPlatformX11())
     {
-        NETWinInfo winInfo(connection, windows[w], rootWindow, NET::WMState | NET::WMGeometry, NET::Properties2());
-        if (winInfo.state() & NET::FullScreen)
+        xcb_connection_t* connection = QX11Info::connection();
+        const NETRootInfo rootInfo(connection, NET::ClientList | NET::ActiveWindow, NET::Properties2());
+        const xcb_window_t rootWindow   = rootInfo.rootWindow();
+        const xcb_window_t activeWindow = rootInfo.activeWindow();
+        const xcb_window_t* windows     = rootInfo.clientList();
+        const int windowCount           = rootInfo.clientListCount();
+//qCDebug(KALARM_LOG)<<"Virtual desktops: Window count="<<windowCount<<", active="<<activeWindow<<", geom="<<QApplication::desktop()->screenGeometry(0);
+        NETRect netgeom;
+        NETRect netframe;
+        for (int w = 0;  w < windowCount;  ++w)
         {
-            // Found a full screen window - find which screen it's on
-            const bool active = (windows[w] == activeWindow);
-            winInfo.kdeGeometry(netframe, netgeom);
-            const QRect winRect(netgeom.pos.x, netgeom.pos.y, netgeom.size.width, netgeom.size.height);
-//qCDebug(KALARM_LOG)<<"Found FULL SCREEN: "<<windows[w]<<", geom="<<winRect;
-            for (int s = 0, count = screenRects.count();  s < count;  ++s)
+            NETWinInfo winInfo(connection, windows[w], rootWindow, NET::WMState | NET::WMGeometry, NET::Properties2());
+            if (winInfo.state() & NET::FullScreen)
             {
-                if (screenRects[s].contains(winRect))
+                // Found a full screen window - find which screen it's on
+                const bool active = (windows[w] == activeWindow);
+                winInfo.kdeGeometry(netframe, netgeom);
+                const QRect winRect(netgeom.pos.x, netgeom.pos.y, netgeom.size.width, netgeom.size.height);
+//qCDebug(KALARM_LOG)<<"Found FULL SCREEN: "<<windows[w]<<", geom="<<winRect;
+                for (int s = 0, count = screenRects.count();  s < count;  ++s)
                 {
-//qCDebug(KALARM_LOG)<<"FULL SCREEN on screen"<<s<<", active="<<active;
-                    if (active)
-                        screenTypes[s] = result = FullScreenActive;
-                    else
+                    if (screenRects[s].contains(winRect))
                     {
-                        if (screenTypes[s] == NoFullScreen)
-                            screenTypes[s] = FullScreen;
-                        if (result == NoFullScreen)
-                            result = FullScreen;
+//qCDebug(KALARM_LOG)<<"FULL SCREEN on screen"<<s<<", active="<<active;
+                        if (active)
+                            screenTypes[s] = result = FullScreenActive;
+                        else
+                        {
+                            if (screenTypes[s] == NoFullScreen)
+                                screenTypes[s] = FullScreen;
+                            if (result == NoFullScreen)
+                                result = FullScreen;
+                        }
+                        break;
                     }
-                    break;
                 }
             }
         }
     }
+#endif // KDEPIM_HAVE_X11
     return result;
 }
 
 } // namespace
-
-#endif
 
 // vim: et sw=4:
