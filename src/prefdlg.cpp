@@ -1282,7 +1282,8 @@ EditPrefTab::EditPrefTab(StackedScrollGroup* scrollGroup)
     auto vbox = new QVBoxLayout(febBox);
     vbox->setContentsMargins(0, 0, 0, 0);
     label = new QLabel(i18nc("@label", "In non-leap years, repeat yearly February 29th alarms on:"));
-    label->setAlignment(Qt::AlignLeft);
+    // *** Workaround for the bug that QLabel doesn't align correctly in right-to-left mode. ***
+    label->setAlignment((layoutDirection() == Qt::LeftToRight ? Qt::AlignLeft : Qt::AlignRight) | Qt::AlignAbsolute);
     label->setWordWrap(true);
     vbox->addWidget(label);
     box = new QHBoxLayout();

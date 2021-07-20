@@ -1,7 +1,7 @@
 /*
  *  packedlayout.h  -  layout to pack items into rows
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2007, 2020 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2007-2021 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -47,6 +47,8 @@ public:
 
 private:
     int              arrange(const QRect&, bool set) const;
+    QRect            alignRect(const QRect& rect, const QRect& itemRect) const;
+
 
     QList<QLayoutItem*> mItems;
     Qt::Alignment       mAlignment;
