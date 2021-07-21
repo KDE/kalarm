@@ -1,12 +1,14 @@
 /*
  *  checkbox.cpp  -  check box with read-only option
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2002-2005, 2020 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2002-2021 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "checkbox.h"
+
+#include "kalarm_debug.h"
 
 #include <QMouseEvent>
 #include <QKeyEvent>
@@ -70,7 +72,8 @@ int CheckBox::textIndent(QWidget* widget)
         opt.initFrom(&cb);
         style = cb.style();
     }
-    return style->subElementRect(QStyle::SE_CheckBoxContents, &opt).left();
+    const QRect contents = style->subElementRect(QStyle::SE_CheckBoxContents, &opt);
+    return (widget->layoutDirection() == Qt::LeftToRight) ? contents.left() : opt.rect.right() - contents.right();
 }
 
 /******************************************************************************

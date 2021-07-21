@@ -1,7 +1,7 @@
 /*
  *  reminder.cpp  -  reminder setting widget
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2003-2020 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2003-2021 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -58,7 +58,11 @@ Reminder::Reminder(const QString& reminderWhatsThis, const QString& valueWhatsTh
     {
         auto layout = new QHBoxLayout();
         layout->setContentsMargins(0, 0, 0, 0);
-        layout->setContentsMargins(CheckBox::textIndent(mTime), 0, 0, 0);
+        const int indent = CheckBox::textIndent(mTime);
+        if (layoutDirection() == Qt::LeftToRight)
+            layout->setContentsMargins(indent, 0, 0, 0);
+        else
+            layout->setContentsMargins(0, 0, indent, 0);
         topLayout->addLayout(layout);
         mOnceOnly = new CheckBox(i18n_chk_FirstRecurrenceOnly(), this);
         mOnceOnly->setFixedSize(mOnceOnly->sizeHint());

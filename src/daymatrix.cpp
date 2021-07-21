@@ -283,8 +283,9 @@ int DayMatrix::getDayIndex(const QPoint& pt) const
     const int y = pt.y();
     if (x < 0  ||  y < 0  ||  x > width()  ||  y > height())
         return NO_SELECTION;
+    const int xd = static_cast<int>(x / mDaySize.width());
     const int i = 7 * int(y / mDaySize.height())
-                  + int((QApplication::isRightToLeft() ? 6 - x : x) / mDaySize.width());
+                + (QApplication::isRightToLeft() ? 6 - xd : xd);
     if (i < mTodayIndex  ||  i > NUMDAYS-1)
         return NO_SELECTION;
     return i;

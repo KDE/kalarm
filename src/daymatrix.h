@@ -23,7 +23,7 @@
 #include <QSet>
 
 class Resource;
-namespace { class TextColours; }
+namespace { struct TextColours; }
 
 /**
  *  Displays one month's dates in a grid, one line per week, highlighting days

@@ -1,7 +1,7 @@
 /*
  *  latecancel.cpp  -  widget to specify cancellation if late
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2004-2020 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2004-2021 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -64,7 +64,11 @@ LateCancelSelector::LateCancelSelector(bool allowHourMinute, QWidget* parent)
     hlayout->addWidget(mTimeSelector, 0, Qt::AlignLeft);
 
     hlayout = new QHBoxLayout();
-    hlayout->setContentsMargins(CheckBox::textIndent(mCheckbox), 0, 0, 0);
+    const int indent = CheckBox::textIndent(mCheckbox);
+    if (layoutDirection() == Qt::LeftToRight)
+        hlayout->setContentsMargins(indent, 0, 0, 0);
+    else
+        hlayout->setContentsMargins(0, 0, indent, 0);
     topLayout->addLayout(hlayout);
     mAutoClose = new CheckBox(i18n_chk_AutoCloseWin(), this);
     connect(mAutoClose, &CheckBox::toggled, this, &LateCancelSelector::changed);

@@ -1,13 +1,16 @@
 /*
  *  packedlayout.cpp  -  layout to pack items into rows
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2007-2020 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2007-2021 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "packedlayout.h"
 
+#include "kalarm_debug.h"
+
+#include <QWidget>
 
 PackedLayout::PackedLayout(QWidget* parent, Qt::Alignment alignment)
     : QLayout(parent)
@@ -48,8 +51,8 @@ int PackedLayout::verticalSpacing() const
 }
 
 /******************************************************************************
- * Inserts a button into the group.
- */
+* Inserts a button into the group.
+*/
 void PackedLayout::addItem(QLayoutItem* item)
 {
     mWidthCached = 0;
@@ -130,7 +133,7 @@ int PackedLayout::arrange(const QRect& rect, bool set) const
             // Left aligned: no position adjustment needed
             // Set the positions of all the layout items
             for (int i = 0;  i < count;  ++i)
-                items[i]->setGeometry(posn[i]);
+                items[i]->setGeometry(alignRect(rect, posn[i]));
         }
         else
         {
@@ -148,13 +151,13 @@ int PackedLayout::arrange(const QRect& rect, bool set) const
                     case Qt::AlignJustify:
                         if (n == 1)
                         {
-                            items[i]->setGeometry(posn[i]);
+                            items[i]->setGeometry(alignRect(rect, posn[i]));
                             ++i;
                         }
                         else if (n > 1)
                         {
                             for (int j = 0;  i < last;  ++j, ++i)
-                                items[i]->setGeometry(QRect(QPoint(posn[i].x() + (free * j)/(n - 1), y), posn[i].size()));
+                                items[i]->setGeometry(alignRect(rect, QRect(QPoint(posn[i].x() + (free * j)/(n - 1), y), posn[i].size())));
                         }
                         break;
                     case Qt::AlignHCenter:
@@ -163,7 +166,7 @@ int PackedLayout::arrange(const QRect& rect, bool set) const
                         Q_FALLTHROUGH();
                     case Qt::AlignRight:
                         for ( ;  i < last;  ++i)
-                            items[i]->setGeometry(QRect(QPoint(posn[i].x() + free, y), posn[i].size()));
+                            items[i]->setGeometry(alignRect(rect, QRect(QPoint(posn[i].x() + free, y), posn[i].size())));
                         break;
                     default:
                         break;
@@ -172,6 +175,17 @@ int PackedLayout::arrange(const QRect& rect, bool set) const
         }
     }
     return y + yrow - rect.y();
+}
+
+/******************************************************************************
+* Adjust an item's geometry if using right-to-left alignment.
+*/
+QRect PackedLayout::alignRect(const QRect& rect, const QRect& itemRect) const
+{
+    QRect result(itemRect);
+    if (parentWidget()->layoutDirection() == Qt::RightToLeft)
+        result.moveRight(rect.right() - (itemRect.left() - rect.left()));
+    return result;
 }
 
 // vim: et sw=4:
