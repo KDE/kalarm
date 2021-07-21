@@ -5,6 +5,7 @@ KAlarm Change Log
 * Show hamburger menu when menu bar is hidden, to allow access to all options.
 * Fix crash when context menu is requested after toolbar has been edited.
 * Fix crash when alarm message is shown on a multiple screen system using Wayland [KDE Bug 439853]
+* Fix alarm time showing blank in alarm list when using right-to-left languages.
 * Fixes to dialogue layouts when using right-to-left languages.
 
 === Version 3.2.2 (KDE Applications 21.04.2) --- 26 May 2021 ===
