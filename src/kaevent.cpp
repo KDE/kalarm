@@ -787,6 +787,7 @@ KAEventPrivate::KAEventPrivate(const KCalendarCore::Event::Ptr &event)
             alTime = mAtLoginDateTime;
             break;
         case REMINDER_ALARM:
+            --mAlarmCount;   // reminder alarms only contribute to the alarm count if active
             // N.B. there can be a start offset but no valid date/time (e.g. in template)
             if (data.alarm->startOffset().asSeconds() / 60) {
                 mReminderActive = ACTIVE_REMINDER;
@@ -942,6 +943,10 @@ KAEventPrivate::KAEventPrivate(const KCalendarCore::Event::Ptr &event)
         }
         setRepeatAtLoginTrue(false);   // clear other incompatible statuses
     }
+
+    // Adjust the alarm count if there is an active reminder alarm.
+    if (mReminderActive != NO_REMINDER)
+        ++mAlarmCount;
 
     if (mMainExpired  &&  !deferralOffset.isNull()  &&  checkRecur() != KARecurrence::NO_RECUR) {
         // Adjust the deferral time for an expired recurrence, since the
@@ -2140,15 +2145,16 @@ void KAEventPrivate::setReminder(int minutes, bool onceOnly)
         minutes = 0;
     }
     if (minutes != mReminderMinutes  || (minutes && mReminderActive != ACTIVE_REMINDER)) {
-        if (minutes  &&  mReminderActive == NO_REMINDER) {
-            ++mAlarmCount;
-        } else if (!minutes  &&  mReminderActive != NO_REMINDER) {
-            --mAlarmCount;
-        }
+        const ReminderType oldReminderActive = mReminderActive;
         mReminderMinutes   = minutes;
         mReminderActive    = minutes > 0 ? ACTIVE_REMINDER : NO_REMINDER;
         mReminderOnceOnly  = onceOnly;
         mReminderAfterTime = DateTime();
+        if (mReminderActive != NO_REMINDER  &&  oldReminderActive == NO_REMINDER) {
+            ++mAlarmCount;
+        } else if (mReminderActive == NO_REMINDER  &&  oldReminderActive != NO_REMINDER) {
+            --mAlarmCount;
+        }
         mTriggerChanged = true;
     }
 }
