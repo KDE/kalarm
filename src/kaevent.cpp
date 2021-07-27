@@ -2146,7 +2146,7 @@ void KAEventPrivate::setReminder(int minutes, bool onceOnly)
             --mAlarmCount;
         }
         mReminderMinutes   = minutes;
-        mReminderActive    = minutes ? ACTIVE_REMINDER : NO_REMINDER;
+        mReminderActive    = minutes > 0 ? ACTIVE_REMINDER : NO_REMINDER;
         mReminderOnceOnly  = onceOnly;
         mReminderAfterTime = DateTime();
         mTriggerChanged = true;
