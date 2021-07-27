@@ -770,7 +770,7 @@ QString ResourceDataModelBase::timeToAlarmText(const DateTime& dateTime)
         return i18nc("@info n days", "%1d", days);
     }
     int mins = (now.secsTo(dateTime.effectiveKDateTime()) + 59) / 60;
-    if (mins < 0)
+    if (mins <= 0)
         return QString();
     char minutes[3] = "00";
     minutes[0] = (mins%60) / 10 + '0';
