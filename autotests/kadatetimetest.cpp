@@ -2,7 +2,7 @@
    This file is part of kalarmcal library, which provides access to KAlarm
    calendar data.
 
-   SPDX-FileCopyrightText: 2005-2020 David Jarvie <djarvie@kde.org>
+   SPDX-FileCopyrightText: 2005-2021 David Jarvie <djarvie@kde.org>
 
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
@@ -2113,6 +2113,19 @@ void KADateTimeTest::addSubtract()
     QVERIFY(!(local1 < zone1));
     QVERIFY(!(local1 <= zone1));
 
+    KADateTime dt(QDate(1998, 3, 1), QTime(0, 0), QTimeZone("America/New_York"));
+    const KADateTime dtF = dt.addMonths(1);
+    while (dt < dtF)
+    {
+        if (!dt.addSecs(1200).isValid())
+        {
+            qDebug() << "Last valid date" << dt.toString();   // print the value which fails
+            QVERIFY(dt.addSecs(1200).isValid());   // now fail the test
+            break;
+        }
+        dt = dt.addSecs(1200);
+    }
+
     // Restore the original local time zone
     if (originalZone.isEmpty()) {
         unsetenv("TZ");
@@ -3321,70 +3334,70 @@ void KADateTimeTest::strings_format()
                   locale.dayName(7, QLocale::ShortFormat)));
 
     // fromString() without QList<QTimeZone> parameter
-    dt = KADateTime::fromString(QStringLiteral("2005/9/05/20:2,03"), QStringLiteral("%Y/%:m/%d/%S:%k,%M"));
-    QCOMPARE(dt.date(), QDate(2005, 9, 5));
+    dt = KADateTime::fromString(QStringLiteral("2005/10/03/20:2,03"), QStringLiteral("%Y/%:m/%d/%S:%k,%M"));
+    QCOMPARE(dt.date(), QDate(2005, 10, 3));
     QCOMPARE(dt.time(), QTime(2, 3, 20));
     QCOMPARE(dt.timeType(), KADateTime::LocalZone);
 
-    dt = KADateTime::fromString(QStringLiteral("%1pm05ab%2t/052/20:2,03+10")
+    dt = KADateTime::fromString(QStringLiteral("%1pm05ab%2t/032/20:2,03+10")
                                .arg(locale.dayName(1, QLocale::LongFormat),
-                                    locale.monthName(9, QLocale::LongFormat)),
+                                    locale.monthName(10, QLocale::LongFormat)),
                                QStringLiteral("%a%p%yab%Bt/%e2/%S:%l,%M %z"));
-    QCOMPARE(dt.date(), QDate(2005, 9, 5));
+    QCOMPARE(dt.date(), QDate(2005, 10, 3));
     QCOMPARE(dt.time(), QTime(14, 3, 20));
     QCOMPARE(dt.timeType(), KADateTime::OffsetFromUTC);
     QCOMPARE(dt.utcOffset(), 10 * 3600);
-    dt = KADateTime::fromString(QStringLiteral("%1pm05ab%2t/052/20:2,03+10")
+    dt = KADateTime::fromString(QStringLiteral("%1pm05ab%2t/032/20:2,03+10")
                                .arg(locale.dayName(1, QLocale::ShortFormat),
-                                    locale.monthName(9, QLocale::ShortFormat)),
+                                    locale.monthName(10, QLocale::ShortFormat)),
                                QStringLiteral("%a%p%yab%Bt/%d2/%s:%l,%:M %z"));
-    QCOMPARE(dt.date(), QDate(2005, 9, 5));
+    QCOMPARE(dt.date(), QDate(2005, 10, 3));
     QCOMPARE(dt.time(), QTime(14, 3, 20));
     QCOMPARE(dt.timeType(), KADateTime::OffsetFromUTC);
     QCOMPARE(dt.utcOffset(), 10 * 3600);
-    dt = KADateTime::fromString(QStringLiteral("monpm05absEpt/052/20:2,03+10"), QStringLiteral("%a%p%yab%Bt/%d2/%S:%l,%M %z"));
-    QCOMPARE(dt.date(), QDate(2005, 9, 5));
+    dt = KADateTime::fromString(QStringLiteral("monpm05aboCtt/032/20:2,03+10"), QStringLiteral("%a%p%yab%Bt/%d2/%S:%l,%M %z"));
+    QCOMPARE(dt.date(), QDate(2005, 10, 3));
     QCOMPARE(dt.time(), QTime(14, 3, 20));
     QCOMPARE(dt.timeType(), KADateTime::OffsetFromUTC);
     QCOMPARE(dt.utcOffset(), 10 * 3600);
-    dt = KADateTime::fromString(QStringLiteral("monDAYpm05absEptemBert/052/20:2,03+10"), QStringLiteral("%a%p%yab%Bt/%e2/%S:%l,%M %z"));
-    QCOMPARE(dt.date(), QDate(2005, 9, 5));
+    dt = KADateTime::fromString(QStringLiteral("monDAYpm05aboCtoBert/032/20:2,03+10"), QStringLiteral("%a%p%yab%Bt/%e2/%S:%l,%M %z"));
+    QCOMPARE(dt.date(), QDate(2005, 10, 3));
     QCOMPARE(dt.time(), QTime(14, 3, 20));
     QCOMPARE(dt.timeType(), KADateTime::OffsetFromUTC);
     QCOMPARE(dt.utcOffset(), 10 * 3600);
-    dt = KADateTime::fromString(QStringLiteral("monDAYpm05abmzatemer/052/20:2,03+10"), QStringLiteral("%a%p%yab%B/%e2/%S:%l,%M %z"));
+    dt = KADateTime::fromString(QStringLiteral("monDAYpm05abmzatemer/032/20:2,03+10"), QStringLiteral("%a%p%yab%B/%e2/%S:%l,%M %z"));
     QVERIFY(!dt.isValid());    // invalid month name
-    dt = KADateTime::fromString(QStringLiteral("monDApm05absep/052/20:2,03+10"), QStringLiteral("%a%p%yab%B/%e2/%S:%l,%M %z"));
+    dt = KADateTime::fromString(QStringLiteral("monDApm05aboct/032/20:2,03+10"), QStringLiteral("%a%p%yab%B/%e2/%S:%l,%M %z"));
     QVERIFY(!dt.isValid());    // invalid day name
-    dt = KADateTime::fromString(QStringLiteral("mONdAYPM2005absEpt/052/20:02,03+1000"), QStringLiteral("%:A%:p%Yab%Bt/%d2/%S:%I,%M %:u"));
-    QCOMPARE(dt.date(), QDate(2005, 9, 5));
+    dt = KADateTime::fromString(QStringLiteral("mONdAYPM2005aboCtt/032/20:02,03+1000"), QStringLiteral("%:A%:p%Yab%Bt/%d2/%S:%I,%M %:u"));
+    QCOMPARE(dt.date(), QDate(2005, 10, 3));
     QCOMPARE(dt.time(), QTime(14, 3, 20));
     QCOMPARE(dt.utcOffset(), 10 * 3600);
     QCOMPARE(dt.timeType(), KADateTime::OffsetFromUTC);
-    KADateTime dtlocal = KADateTime::fromString(QStringLiteral("mONdAYPM2005abSept/052/20:02,03+100"), QStringLiteral("%:A%:p%Yab%Bt/%e2/%S:%l,%M %:u"));
+    KADateTime dtlocal = KADateTime::fromString(QStringLiteral("mONdAYPM2005abOctt/032/20:02,03+100"), QStringLiteral("%:A%:p%Yab%Bt/%e2/%S:%l,%M %:u"));
     QVERIFY(!dtlocal.isValid());    // wrong number of digits in UTC offset
-    dtlocal = KADateTime::fromString(QStringLiteral("mONdAYPM2005abSept/052/20:02,03+1"), QStringLiteral("%:A%:p%Yab%Bt/%d2/%S:%I,%M %z"));
+    dtlocal = KADateTime::fromString(QStringLiteral("mONdAYPM2005abOctt/032/20:02,03+1"), QStringLiteral("%:A%:p%Yab%Bt/%d2/%S:%I,%M %z"));
     QVERIFY(!dtlocal.isValid());    // wrong number of digits in UTC offset
-    dtlocal = KADateTime::fromString(QStringLiteral("mONdAYPM2005absEpt/052/20:13,03+1000"), QStringLiteral("%:A%:p%Yab%Bt/%d2/%S:%I,%M %:u"));
+    dtlocal = KADateTime::fromString(QStringLiteral("mONdAYPM2005aboCtt/032/20:13,03+1000"), QStringLiteral("%:A%:p%Yab%Bt/%d2/%S:%I,%M %:u"));
     QVERIFY(!dtlocal.isValid());    // hours out of range for am/pm
-    dtlocal = KADateTime::fromString(QStringLiteral("mONdAYPM2005absEpt/052/20:00,03+1000"), QStringLiteral("%:A%:p%Yab%Bt/%d2/%S:%I,%M %:u"));
+    dtlocal = KADateTime::fromString(QStringLiteral("mONdAYPM2005aboCtt/032/20:00,03+1000"), QStringLiteral("%:A%:p%Yab%Bt/%d2/%S:%I,%M %:u"));
     QVERIFY(!dtlocal.isValid());    // hours out of range for am/pm
 
     // fromString() with QList<QTimeZone> parameter
-    dt = KADateTime::fromString(QStringLiteral("mon 2005/9/05/20:2,03"), QStringLiteral("%:a %Y/%:m/%e/%S:%k,%M"), &zones);
-    QCOMPARE(dt.date(), QDate(2005, 9, 5));
+    dt = KADateTime::fromString(QStringLiteral("mon 2005/10/03/20:2,03"), QStringLiteral("%:a %Y/%:m/%e/%S:%k,%M"), &zones);
+    QCOMPARE(dt.date(), QDate(2005, 10, 3));
     QCOMPARE(dt.time(), QTime(2, 3, 20));
     QCOMPARE(dt.timeType(), KADateTime::LocalZone);
-    dt = KADateTime::fromString(QStringLiteral("tue 2005/9/05/20:2,03"), QStringLiteral("%:a %Y/%:m/%d/%S:%k,%M"), &zones);
+    dt = KADateTime::fromString(QStringLiteral("tue 2005/10/03/20:2,03"), QStringLiteral("%:a %Y/%:m/%d/%S:%k,%M"), &zones);
     QVERIFY(!dt.isValid());    // wrong day-of-week
 
-    dt = KADateTime::fromString(QStringLiteral("pm2005absEpt/05monday/20:2,03+03:00"), QStringLiteral("%p%Yab%Bt/%e%:A/%S:%l,%M %:z"), &zones);
-    QCOMPARE(dt.date(), QDate(2005, 9, 5));
+    dt = KADateTime::fromString(QStringLiteral("pm2005aboCtt/03monday/20:2,03+03:00"), QStringLiteral("%p%Yab%Bt/%e%:A/%S:%l,%M %:z"), &zones);
+    QCOMPARE(dt.date(), QDate(2005, 10, 3));
     QCOMPARE(dt.time(), QTime(14, 3, 20));
-    QCOMPARE(dt.timeType(), KADateTime::TimeZone);
+    QCOMPARE(dt.timeType(), KADateTime::OffsetFromUTC);
     QCOMPARE(dt.utcOffset(), 3 * 3600);
-    QCOMPARE(dt.timeZone(), cairo);
-    dt = KADateTime::fromString(QStringLiteral("pm2005absEpt/05sunday/20:2,03+03:00"), QStringLiteral("%p%Yab%Bt/%d%A/%S:%l,%M %:z"), &zones);
+    QVERIFY(!dt.timeZone().isValid());
+    dt = KADateTime::fromString(QStringLiteral("pm2005aboCtt/03sunday/20:2,03+03:00"), QStringLiteral("%p%Yab%Bt/%d%A/%S:%l,%M %:z"), &zones);
     QVERIFY(!dt.isValid());    // wrong day-of-week
 
     dtutc = KADateTime::fromString(QStringLiteral("2000-01-01T00:00:00.000+0000"), QStringLiteral("%Y-%m-%dT%H:%M%:S%:s%z"));
@@ -3398,72 +3411,72 @@ void KADateTimeTest::strings_format()
     QVERIFY(dt.isValid());
     QVERIFY(dtutc == dt);
 
-    dt = KADateTime::fromString(QStringLiteral("200509051430:01.3+0100"), QStringLiteral("%Y%m%d%H%M%:S%:s%z"), &zones, true);
-    QCOMPARE(dt.date(), QDate(2005, 9, 5));
+    dt = KADateTime::fromString(QStringLiteral("200510031430:01.3+0100"), QStringLiteral("%Y%m%d%H%M%:S%:s%z"), &zones, true);
+    QCOMPARE(dt.date(), QDate(2005, 10, 3));
     QCOMPARE(dt.time(), QTime(14, 30, 01, 300));
     QCOMPARE(dt.timeType(), KADateTime::TimeZone);
     QCOMPARE(dt.timeZone(), london);
     QCOMPARE(dt.utcOffset(), 3600);
 
-    dt = KADateTime::fromString(QStringLiteral("200509051430:01.3+0500"), QStringLiteral("%Y%m%d%H%M%:S%:s%z"), &zones, false);
-    QCOMPARE(dt.date(), QDate(2005, 9, 5));
+    dt = KADateTime::fromString(QStringLiteral("200510031430:01.3+0500"), QStringLiteral("%Y%m%d%H%M%:S%:s%z"), &zones, false);
+    QCOMPARE(dt.date(), QDate(2005, 10, 3));
     QCOMPARE(dt.time(), QTime(14, 30, 01, 300));
     QCOMPARE(dt.timeType(), KADateTime::OffsetFromUTC);
     QCOMPARE(dt.utcOffset(), 5 * 3600);
 
-    dt = KADateTime::fromString(QStringLiteral("200509051430:01.3+0200"), QStringLiteral("%Y%m%d%H%M%:S%:s%z"), &zones, true);
-    QCOMPARE(dt.date(), QDate(2005, 9, 5));
+    dt = KADateTime::fromString(QStringLiteral("200510031430:01.3+0200"), QStringLiteral("%Y%m%d%H%M%:S%:s%z"), &zones, true);
+    QCOMPARE(dt.date(), QDate(2005, 10, 3));
     QCOMPARE(dt.time(), QTime(14, 30, 01, 300));
     QCOMPARE(dt.timeType(), KADateTime::OffsetFromUTC);
     QCOMPARE(dt.utcOffset(), 2 * 3600);
-    dt = KADateTime::fromString(QStringLiteral("200509051430:01.3+0200"), QStringLiteral("%Y%m%d%H%M%:S%:s%z"), &zones, false);
+    dt = KADateTime::fromString(QStringLiteral("200509031430:01.3+0200"), QStringLiteral("%Y%m%d%H%M%:S%:s%z"), &zones, false);
     QVERIFY(!dt.isValid());    // matches paris and berlin
 
-    dt = KADateTime::fromString(QStringLiteral("2005September051430 CEST"), QStringLiteral("%Y%:B%d%H%M%:S %Z"), &zones, true);
-    QCOMPARE(dt.date(), QDate(2005, 9, 5));
+    dt = KADateTime::fromString(QStringLiteral("2005October051430 CEST"), QStringLiteral("%Y%:B%d%H%M%:S %Z"), &zones, true);
+    QCOMPARE(dt.date(), QDate(2005, 10, 5));
     QCOMPARE(dt.time(), QTime(14, 30, 0));
     QCOMPARE(dt.timeType(), KADateTime::OffsetFromUTC);
     QCOMPARE(dt.utcOffset(), 2 * 3600);
-    dt = KADateTime::fromString(QStringLiteral("2005September051430 CEST"), QStringLiteral("%Y%:B%d%H%M%:S %Z"), &zones, false);
+    dt = KADateTime::fromString(QStringLiteral("2005October051430 CEST"), QStringLiteral("%Y%:B%d%H%M%:S %Z"), &zones, false);
     QVERIFY(!dt.isValid());    // matches paris and berlin
 
-    dt = KADateTime::fromString(QStringLiteral("pm05absEptembeRt/   052/   20:12,03+0100"), QStringLiteral("%:P%yab%:bt/  %e2/%t%S:%l,%M %z"), &zones);
-    QCOMPARE(dt.date(), QDate(2005, 9, 5));
+    dt = KADateTime::fromString(QStringLiteral("pm05aboCtobeRt/   052/   20:12,03+0100"), QStringLiteral("%:P%yab%:bt/  %e2/%t%S:%l,%M %z"), &zones);
+    QCOMPARE(dt.date(), QDate(2005, 10, 5));
     QCOMPARE(dt.time(), QTime(12, 3, 20));
     QCOMPARE(dt.timeType(), KADateTime::TimeZone);
     QCOMPARE(dt.utcOffset(), 3600);
     QCOMPARE(dt.timeZone(), london);
 
-    dt = KADateTime::fromString(QStringLiteral("2005absEpt/042sun/20.0123456:12Am,3Africa/Cairo%"), QStringLiteral("%Yab%bt/%e2%a/%S%:s:%I%P,%:M %:Z%%"), &zones);
-    QCOMPARE(dt.date(), QDate(2005, 9, 4));
+    dt = KADateTime::fromString(QStringLiteral("2005aboCtt/022sun/20.0123456:12Am,3Africa/Cairo%"), QStringLiteral("%Yab%bt/%e2%a/%S%:s:%I%P,%:M %:Z%%"), &zones);
+    QCOMPARE(dt.date(), QDate(2005, 10, 2));
     QCOMPARE(dt.time(), QTime(0, 3, 20, 12));
     QCOMPARE(dt.timeType(), KADateTime::TimeZone);
     QCOMPARE(dt.timeZone(), cairo);
-    QCOMPARE(dt.utcOffset(), 3 * 3600);
+    QCOMPARE(dt.utcOffset(), 2 * 3600);
 
     // Test large and minimum date values
-    dt = KADateTime(QDate(-2005, 9, 5), QTime(0, 0, 06, 1), KADateTime::LocalZone);
+    dt = KADateTime(QDate(-2005, 10, 3), QTime(0, 0, 06, 1), KADateTime::LocalZone);
     s = dt.toString(QStringLiteral("%Y"));
     QCOMPARE(s, QStringLiteral("-2005"));
 
-    dt = KADateTime(QDate(-15, 9, 5), QTime(0, 0, 06, 1), KADateTime::LocalZone);
+    dt = KADateTime(QDate(-15, 10, 3), QTime(0, 0, 06, 1), KADateTime::LocalZone);
     s = dt.toString(QStringLiteral("%Y"));
     QCOMPARE(s, QStringLiteral("-0015"));
 
-    dt = KADateTime::fromString(QStringLiteral("-471209051430:01.3+0500"), QStringLiteral("%Y%m%d%H%M%:S%:s%z"));
-    QCOMPARE(dt.date(), QDate(-4712, 9, 5));
+    dt = KADateTime::fromString(QStringLiteral("-471210031430:01.3+0500"), QStringLiteral("%Y%m%d%H%M%:S%:s%z"));
+    QCOMPARE(dt.date(), QDate(-4712, 10, 3));
     QCOMPARE(dt.time(), QTime(14, 30, 1, 300));
     QCOMPARE(dt.utcOffset(), 5 * 3600);
     QVERIFY(dt.isValid());
 
-    dt = KADateTime::fromString(QStringLiteral("999909051430:01.3+0500"), QStringLiteral("%Y%m%d%H%M%:S%:s%z"));
-    QCOMPARE(dt.date(), QDate(9999, 9, 5));
+    dt = KADateTime::fromString(QStringLiteral("999910031430:01.3+0500"), QStringLiteral("%Y%m%d%H%M%:S%:s%z"));
+    QCOMPARE(dt.date(), QDate(9999, 10, 3));
     QCOMPARE(dt.time(), QTime(14, 30, 1, 300));
     QCOMPARE(dt.utcOffset(), 5 * 3600);
     QVERIFY(dt.isValid());
 
-    dt = KADateTime::fromString(QStringLiteral("123456.09051430:01.3+0500"), QStringLiteral("%:Y.%m%d%H%M%:S%:s%z"));
-    QCOMPARE(dt.date(), QDate(123456, 9, 5));
+    dt = KADateTime::fromString(QStringLiteral("123456.10031430:01.3+0500"), QStringLiteral("%:Y.%m%d%H%M%:S%:s%z"));
+    QCOMPARE(dt.date(), QDate(123456, 10, 3));
     QCOMPARE(dt.time(), QTime(14, 30, 1, 300));
     QCOMPARE(dt.utcOffset(), 5 * 3600);
     QVERIFY(dt.isValid());
