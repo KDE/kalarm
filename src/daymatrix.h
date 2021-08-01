@@ -11,8 +11,7 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later WITH Qt-Commercial-exception-1.0
 */
 
-#ifndef DAYMATRIX_H
-#define DAYMATRIX_H
+#pragma once
 
 #include "editdlg.h"
 
@@ -128,6 +127,5 @@ private:
     bool   mPendingChanges {false};   // the display needs to be updated
 };
 
-#endif // DAYMATRIX_H
 
 // vim: et sw=4:

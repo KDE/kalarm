@@ -6,8 +6,7 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#ifndef DATEPICKER_H
-#define DATEPICKER_H
+#pragma once
 
 #include "editdlg.h"
 
@@ -71,6 +70,5 @@ private:
     QDate        mStartDate;      // earliest date currently displayed
 };
 
-#endif // DATEPICKER_H
 
 // vim: et sw=4:
