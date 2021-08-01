@@ -73,7 +73,7 @@ class PickLogFileRadio : public PickFileRadio
             : PickFileRadio(b, e, text, group, parent) { }
         bool pickFile(QString& file) override    // called when browse button is pressed to select a log file
         {
-            return File::browseFile(file, i18nc("@title:window", "Choose Log File"), mDefaultDir, fileEdit()->text(), QString(),
+            return File::browseFile(file, i18nc("@title:window", "Choose Log File"), mDefaultDir, fileEdit()->text(),
                                     false, parentWidget());
         }
     private:
@@ -731,7 +731,7 @@ void EditDisplayAlarmDlg::slotPickFile()
     static QString defaultDir;   // default directory for file browse button
     QString file;
     if (File::browseFile(file, i18nc("@title:window", "Choose Text or Image File to Display"),
-                         defaultDir, mFileMessageEdit->text(), QString(), true, this))
+                         defaultDir, mFileMessageEdit->text(), true, this))
     {
         if (!file.isEmpty())
         {
@@ -1542,7 +1542,7 @@ void EditEmailAlarmDlg::slotAddAttachment()
 {
     QString file;
     if (File::browseFile(file, i18nc("@title:window", "Choose File to Attach"),
-                         mAttachDefaultDir, QString(), QString(), true, this))
+                         mAttachDefaultDir, QString(), true, this))
     {
         if (!file.isEmpty())
         {

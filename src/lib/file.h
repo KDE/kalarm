@@ -1,7 +1,7 @@
 /*
  *  lib/file.h  -  functions to handle files
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2005-2019 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2005-2021 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -47,9 +47,17 @@ bool showFileErrMessage(const QString& filename, FileErr, FileErr blankError, QW
 /** If a url string is a local file, strip off the 'file:/' prefix. */
 QString pathOrUrl(const QString& url);
 
+/* Display a modal dialog to choose a file, initially highlighting any
+ * specified file. */
 bool browseFile(QString& file, const QString& caption, QString& defaultDir,
                 const QString& initialFile = QString(),
-                const QString& filter = QString(), bool existing = false, QWidget* parent = nullptr);
+                bool existing = false, QWidget* parent = nullptr);
+
+/* Display a modal dialog to choose a file, initially highlighting any
+ * specified file. */
+bool browseFile(QString& file, const QString& caption, QString& defaultDir,
+                const QString& fileNameFilter, const QString& initialFile,
+                bool existing = false, QWidget* parent = nullptr);
 
 }
 

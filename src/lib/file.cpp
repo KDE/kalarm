@@ -1,7 +1,7 @@
 /*
  *  lib/file.cpp  -  functions to handle files
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2005-2019 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2005-2021 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -155,7 +155,14 @@ QString pathOrUrl(const QString& url)
 *         the parent widget was probably also deleted).
 */
 bool browseFile(QString& file, const QString& caption, QString& defaultDir,
-                const QString& initialFile, const QString& filter, bool existing, QWidget* parent)
+                const QString& initialFile, bool existing, QWidget* parent)
+{
+    return browseFile(file, caption, defaultDir, {}, initialFile, existing, parent);
+}
+
+bool browseFile(QString& file, const QString& caption, QString& defaultDir,
+                const QString& fileNameFilter, const QString& initialFile,
+                bool existing, QWidget* parent)
 {
     file.clear();
     const QString initialDir = !initialFile.isEmpty() ? QString(initialFile).remove(QRegExp(QLatin1String("/[^/]*$")))
@@ -164,9 +171,14 @@ bool browseFile(QString& file, const QString& caption, QString& defaultDir,
     // Use AutoQPointer to guard against crash on application exit while
     // the dialogue is still open. It prevents double deletion (both on
     // deletion of parent, and on return from this function).
-    AutoQPointer<QFileDialog> fileDlg = new QFileDialog(parent, caption, initialDir, filter);
+    AutoQPointer<QFileDialog> fileDlg = new QFileDialog(parent, caption, initialDir);
     fileDlg->setAcceptMode(existing ? QFileDialog::AcceptOpen : QFileDialog::AcceptSave);
     fileDlg->setFileMode(existing ? QFileDialog::ExistingFile : QFileDialog::AnyFile);
+    QStringList nameFilters;
+    if (!fileNameFilter.isEmpty())
+        nameFilters << fileNameFilter;
+    nameFilters << QStringLiteral("All files (*)");
+    fileDlg->setNameFilters(nameFilters);
     if (!initialFile.isEmpty())
         fileDlg->selectFile(initialFile);
     if (fileDlg->exec() != QDialog::Accepted)

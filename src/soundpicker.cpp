@@ -1,7 +1,7 @@
 /*
  *  soundpicker.cpp  -  widget to select a sound file or a beep
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2002-2020 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2002-2021 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -27,6 +27,7 @@
 #include <QLabel>
 #include <QHBoxLayout>
 #include <QStandardPaths>
+#include <QMimeDatabase>
 
 //clazy:excludeall=non-pod-global-static
 
@@ -307,6 +308,22 @@ void SoundPicker::setLastType()
 */
 bool SoundPicker::browseFile(QString& file, QString& defaultDir, const QString& initialFile)
 {
+    static QString audioFilter;
+    if (audioFilter.isEmpty())
+    {
+        audioFilter = QStringLiteral("Audio files (");
+        QMimeDatabase db;
+        const QStringList mimeTypes = Phonon::BackendCapabilities::availableMimeTypes();
+        for (const QString& mimeType : mimeTypes)
+            if (mimeType.startsWith(QStringLiteral("audio/")))
+            {
+                const QMimeType mt = db.mimeTypeForName(mimeType);
+                audioFilter += mt.globPatterns().join(QLatin1Char(' '));
+                audioFilter += QLatin1Char(' ');
+            }
+        audioFilter[audioFilter.length() - 1] = QLatin1Char(')');
+    }
+
     static QString kdeSoundDir;     // directory containing KDE sound files
     if (defaultDir.isEmpty())
     {
@@ -317,9 +334,9 @@ bool SoundPicker::browseFile(QString& file, QString& defaultDir, const QString& 
         }
         defaultDir = kdeSoundDir;
     }
-    const QString filter = Phonon::BackendCapabilities::availableMimeTypes().join(QLatin1Char(' '));
-    return File::browseFile(file, i18nc("@title:window", "Choose Sound File"),
-                            defaultDir, initialFile, filter, true, nullptr);
+
+    return File::browseFile(file, i18nc("@title:window", "Choose Sound File"), defaultDir,
+                            audioFilter, initialFile, true, nullptr);
 }
 
 /******************************************************************************
