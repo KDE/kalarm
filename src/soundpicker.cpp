@@ -311,7 +311,7 @@ bool SoundPicker::browseFile(QString& file, QString& defaultDir, const QString& 
     static QString audioFilter;
     if (audioFilter.isEmpty())
     {
-        audioFilter = QStringLiteral("Audio files (");
+        audioFilter = QStringLiteral("%1 (").arg(i18nc("@item:inlistbox", "Audio files"));
         QMimeDatabase db;
         const QStringList mimeTypes = Phonon::BackendCapabilities::availableMimeTypes();
         for (const QString& mimeType : mimeTypes)

@@ -177,7 +177,7 @@ bool browseFile(QString& file, const QString& caption, QString& defaultDir,
     QStringList nameFilters;
     if (!fileNameFilter.isEmpty())
         nameFilters << fileNameFilter;
-    nameFilters << QStringLiteral("All files (*)");
+    nameFilters << QStringLiteral("%1 (*)").arg(i18nc("@item:inlistbox File type", "All files"));
     fileDlg->setNameFilters(nameFilters);
     if (!initialFile.isEmpty())
         fileDlg->selectFile(initialFile);
