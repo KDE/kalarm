@@ -141,6 +141,10 @@ QString uidKOrganizer(const QString& eventID);
 namespace KAlarm
 {
 
+// Collect these widget labels together to ensure consistent wording and
+// translations across different modules.
+QString i18n_act_StopPlay()    { return i18nc("@action", "Stop Play"); }
+
 Private* Private::mInstance = nullptr;
 
 /******************************************************************************
@@ -197,7 +201,7 @@ KToggleAction* createAlarmEnableAction(QObject* parent)
 */
 QAction* createStopPlayAction(QObject* parent)
 {
-    QAction* action = new QAction(QIcon::fromTheme(QStringLiteral("media-playback-stop")), i18nc("@action", "Stop Play"), parent);
+    QAction* action = new QAction(QIcon::fromTheme(QStringLiteral("media-playback-stop")), i18n_act_StopPlay(), parent);
     action->setEnabled(MessageDisplay::isAudioPlaying());
     QObject::connect(action, &QAction::triggered, theApp(), &KAlarmApp::stopAudio);
     // The following line ensures that all instances are kept in the same state

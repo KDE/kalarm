@@ -1,7 +1,7 @@
 /*
  *  specialactions.cpp  -  widget to specify special alarm actions
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2004-2019 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2004-2021 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -39,6 +39,7 @@ SpecialActionsButton::SpecialActionsButton(bool enableCheckboxes, QWidget* paren
     setCheckable(true);
     setChecked(false);
     connect(this, &SpecialActionsButton::clicked, this, &SpecialActionsButton::slotButtonPressed);
+    setToolTip(i18nc("@info:tooltip", "Set commands to execute"));
     setWhatsThis(i18nc("@info:whatsthis", "Specify actions to execute before and after the alarm is displayed."));
 }
 

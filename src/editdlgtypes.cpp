@@ -1630,7 +1630,8 @@ void EditAudioAlarmDlg::type_init(QWidget* parent, QVBoxLayout* frameLayout)
     mTryButton->setWhatsThis(i18nc("@info:whatsthis", "Play the audio file now"));
     mTryButton->setToolTip(i18nc("@info:tooltip", "Play the audio file now"));
     // File name edit box
-    mSoundConfig = new SoundWidget(false, true, parent);
+    const QString repWhatsThis = i18nc("@info:whatsthis", "If checked, the sound file will be played repeatedly until %1 is clicked.", KAlarm::i18n_act_StopPlay());
+    mSoundConfig = new SoundWidget(false, repWhatsThis, parent);
     if (isTemplate())
         mSoundConfig->setAllowEmptyFile();
     connect(mSoundConfig, &SoundWidget::changed, this, &EditAudioAlarmDlg::contentsChanged);

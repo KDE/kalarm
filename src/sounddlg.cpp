@@ -50,7 +50,8 @@ SoundDlg::SoundDlg(const QString& file, float volume, float fadeVolume, int fade
     : QDialog(parent)
 {
     auto layout = new QVBoxLayout(this);
-    mSoundWidget = new SoundWidget(true, true, this);
+    const QString repWhatsThis = i18nc("@info:whatsthis", "If checked, the sound file will be played repeatedly for as long as the message is displayed.");
+    mSoundWidget = new SoundWidget(true, repWhatsThis, this);
     layout->addWidget(mSoundWidget);
 
     mButtonBox = new QDialogButtonBox;
@@ -136,8 +137,9 @@ void SoundDlg::slotButtonClicked(QAbstractButton* button)
 =============================================================================*/
 QString SoundWidget::mDefaultDir;
 
-SoundWidget::SoundWidget(bool showPlay, bool showRepeat, QWidget* parent)
+SoundWidget::SoundWidget(bool showPlay, const QString& repeatWhatsThis, QWidget* parent)
     : QWidget(parent)
+    , mRepeatWhatsThis(repeatWhatsThis)
 {
     auto layout = new QVBoxLayout(this);
 
@@ -191,35 +193,32 @@ SoundWidget::SoundWidget(bool showPlay, bool showRepeat, QWidget* parent)
         mFileBrowseButton->setFixedSize(size, size);
     }
 
-    if (showRepeat)
-    {
-        // Sound repetition checkbox
-        mRepeatGroupBox = new GroupBox(i18n_chk_Repeat(), this);
-        mRepeatGroupBox->setCheckable(true);
-        mRepeatGroupBox->setWhatsThis(i18nc("@info:whatsthis", "If checked, the sound file will be played repeatedly for as long as the message is displayed."));
-        connect(mRepeatGroupBox, &GroupBox::toggled, this, &SoundWidget::changed);
-        layout->addWidget(mRepeatGroupBox);
-        auto glayout = new QVBoxLayout(mRepeatGroupBox);
+    // Sound repetition checkbox
+    mRepeatGroupBox = new GroupBox(i18n_chk_Repeat(), this);
+    mRepeatGroupBox->setCheckable(true);
+    mRepeatGroupBox->setWhatsThis(mRepeatWhatsThis);
+    connect(mRepeatGroupBox, &GroupBox::toggled, this, &SoundWidget::changed);
+    layout->addWidget(mRepeatGroupBox);
+    auto glayout = new QVBoxLayout(mRepeatGroupBox);
 
-        // Pause between repetitions
-        QWidget* box = new QWidget(mRepeatGroupBox);
-        glayout->addWidget(box, 0, Qt::AlignLeft);
-        boxHLayout = new QHBoxLayout(box);
-        boxHLayout->setContentsMargins(0, 0, 0, 0);
-        label = new QLabel(i18nc("@label:spinbox Length of time to pause between repetitions", "Pause between repetitions:"), box);
-        boxHLayout->addWidget(label);
-        label->setFixedSize(label->sizeHint());
-        mRepeatPause = new SpinBox(0, 999, box);
-        boxHLayout->addWidget(mRepeatPause);
-        mRepeatPause->setSingleShiftStep(10);
-        mRepeatPause->setFixedSize(mRepeatPause->sizeHint());
-        label->setBuddy(mRepeatPause);
-        connect(mRepeatPause, &SpinBox::valueChanged, this, &SoundWidget::changed);
-        label = new QLabel(i18nc("@label", "seconds"), box);
-        boxHLayout->addWidget(label);
-        label->setFixedSize(label->sizeHint());
-        box->setWhatsThis(i18nc("@info:whatsthis", "Enter how many seconds to pause between repetitions."));
-    }
+    // Pause between repetitions
+    box = new QWidget(mRepeatGroupBox);
+    glayout->addWidget(box, 0, Qt::AlignLeft);
+    boxHLayout = new QHBoxLayout(box);
+    boxHLayout->setContentsMargins(0, 0, 0, 0);
+    label = new QLabel(i18nc("@label:spinbox Length of time to pause between repetitions", "Pause between repetitions:"), box);
+    boxHLayout->addWidget(label);
+    label->setFixedSize(label->sizeHint());
+    mRepeatPause = new SpinBox(0, 999, box);
+    boxHLayout->addWidget(mRepeatPause);
+    mRepeatPause->setSingleShiftStep(10);
+    mRepeatPause->setFixedSize(mRepeatPause->sizeHint());
+    label->setBuddy(mRepeatPause);
+    connect(mRepeatPause, &SpinBox::valueChanged, this, &SoundWidget::changed);
+    label = new QLabel(i18nc("@label", "seconds"), box);
+    label->setFixedSize(label->sizeHint());
+    boxHLayout->addWidget(label);
+    box->setWhatsThis(i18nc("@info:whatsthis", "Enter how many seconds to pause between repetitions."));
 
     // Volume
     QGroupBox* group = new QGroupBox(i18nc("@title:group Sound volume", "Volume"), this);

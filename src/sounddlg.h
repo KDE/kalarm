@@ -30,7 +30,7 @@ class SoundWidget : public QWidget
 {
     Q_OBJECT
 public:
-    SoundWidget(bool showPlay, bool showRepeat, QWidget* parent);
+    SoundWidget(bool showPlay, const QString& repeatWhatsThis, QWidget* parent);
     ~SoundWidget() override;
     void           set(const QString& file, float volume, float fadeVolume = -1, int fadeSeconds = 0, int repeatPause = -1);
     void           setReadOnly(bool);
@@ -62,6 +62,7 @@ private Q_SLOTS:
 
 private:
     static QString       mDefaultDir;     // current default directory for mFileEdit
+    const QString        mRepeatWhatsThis;
     QPushButton*         mFilePlay {nullptr};
     LineEdit*            mFileEdit;
     PushButton*          mFileBrowseButton;

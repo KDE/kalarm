@@ -131,6 +131,7 @@ void AlarmTimeWidget::init(Mode mode, const QString& title)
         timeBoxHLayout->addWidget(mAnyTimeCheckBox);
         mAnyTimeCheckBox->setFixedSize(mAnyTimeCheckBox->sizeHint());
         connect(mAnyTimeCheckBox, &CheckBox::toggled, this, &AlarmTimeWidget::slotAnyTimeToggled);
+        mAnyTimeCheckBox->setToolTip(i18nc("@info:tooltip", "Set only a date (without a time) for the alarm"));
         mAnyTimeCheckBox->setWhatsThis(i18nc("@info:whatsthis",
               "Check to specify only a date (without a time) for the alarm. The alarm will trigger at the first opportunity on the selected date."));
     }
@@ -180,6 +181,7 @@ void AlarmTimeWidget::init(Mode mode, const QString& title)
         // Time zone selection push button
         mTimeZoneButton = new PushButton(i18nc("@action:button", "Time Zone..."), topWidget);
         connect(mTimeZoneButton, &PushButton::clicked, this, &AlarmTimeWidget::showTimeZoneSelector);
+        mTimeZoneButton->setToolTip(i18nc("@info:tooltip", "Choose a time zone for this alarm"));
         mTimeZoneButton->setWhatsThis(i18nc("@info:whatsthis",
               "Choose a time zone for this alarm which is different from the default time zone set in KAlarm's configuration dialog."));
         grid->addWidget(mTimeZoneButton, 2, 2, 1, 2, Qt::AlignRight);

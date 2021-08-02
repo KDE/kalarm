@@ -1,7 +1,7 @@
 /*
  *  fontcolourbutton.cpp  -  pushbutton widget to select a font and colour
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2003-2020 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2003-2021 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -29,6 +29,7 @@ FontColourButton::FontColourButton(QWidget* parent)
     : PushButton(i18nc("@action:button", "Font && Color..."), parent)
 {
     connect(this, &FontColourButton::clicked, this, &FontColourButton::slotButtonPressed);
+    setToolTip(i18nc("@info:tooltip", "Set alarm message font and color"));
     setWhatsThis(i18nc("@info:whatsthis", "Choose the font, and foreground and background color, for the alarm message."));
 }
 

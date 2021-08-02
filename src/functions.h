@@ -68,6 +68,8 @@ struct UpdateResult
     void set(UpdateStatus s, const QString& m) { status = s; message = m; }
 };
 
+QString i18n_act_StopPlay();      // text of Stop Play action
+
 /** Display a main window with the specified event selected */
 MainWindow*         displayMainWindowSelected(const QString& eventId);
 
