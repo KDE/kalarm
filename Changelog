@@ -1,10 +1,12 @@
 KAlarm Change Log
 
-=== Version 3.3.0 (KDE Applications 21.08) --- 21 July 2021 ===
+=== Version 3.3.0 (KDE Applications 21.08) --- 1 August 2021 ===
 * Add date selector option to enable alarm list view to be filtered.
 * Show hamburger menu when menu bar is hidden, to allow access to all options.
 * Fix crash when context menu is requested after toolbar has been edited.
 * Fix crash when alarm message is shown on a multiple screen system using Wayland [KDE Bug 439853]
+* Fix alarm not triggering if a reminder is set after the main alarm (requires kalarmcal 21.08) [KDE Bug 440200]
+* Fix 'Choose sound file' dialogue not showing audio files, under XFCE etc [KDE Bug 437217]
 * Fix alarm time showing blank in alarm list when using right-to-left languages.
 * Fixes to dialogue layouts when using right-to-left languages.
 
