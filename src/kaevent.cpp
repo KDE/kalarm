@@ -513,8 +513,9 @@ KAEventPrivate::KAEventPrivate(const KADateTime &dateTime, const QString &name, 
     , mCategory(CalEvent::ACTIVE)
 {
     mStartDateTime = dateTime;
-    if (flags & KAEvent::ANY_TIME)
+    if (flags & KAEvent::ANY_TIME) {
         mStartDateTime.setDateOnly(true);
+    }
     mNextMainDateTime = mStartDateTime;
     switch (action) {
     case KAEvent::MESSAGE:
@@ -945,8 +946,9 @@ KAEventPrivate::KAEventPrivate(const KCalendarCore::Event::Ptr &event)
     }
 
     // Adjust the alarm count if there is an active reminder alarm.
-    if (mReminderActive != NO_REMINDER)
+    if (mReminderActive != NO_REMINDER) {
         ++mAlarmCount;
+    }
 
     if (mMainExpired  &&  !deferralOffset.isNull()  &&  checkRecur() != KARecurrence::NO_RECUR) {
         // Adjust the deferral time for an expired recurrence, since the
@@ -1448,9 +1450,10 @@ Alarm::Ptr KAEventPrivate::initKCalAlarm(const KCalendarCore::Event::Ptr &event,
     case MAIN_ALARM:
         alarm->setSnoozeTime(mRepetition.interval());
         alarm->setRepeatCount(mRepetition.count());
-        if (mRepetition)
+        if (mRepetition) {
             alarm->setCustomProperty(KACalendar::APPNAME, NEXT_REPEAT_PROPERTY,
                                      QString::number(mNextRepeat));
+        }
         // fall through to INVALID_ALARM
         Q_FALLTHROUGH();
     case REMINDER_ALARM:
@@ -1497,9 +1500,10 @@ Alarm::Ptr KAEventPrivate::initKCalAlarm(const KCalendarCore::Event::Ptr &event,
             }
             break;
         }
-        if (display  &&  !mNotify)
+        if (display && !mNotify) {
             alarm->setCustomProperty(KACalendar::APPNAME, FONT_COLOUR_PROPERTY,
                                      QStringLiteral("%1;%2;%3").arg(mBgColour.name(), mFgColour.name(), mUseDefaultFont ? QString() : mFont.toString()));
+        }
         break;
     }
     case DEFERRED_ALARM:
@@ -1525,21 +1529,24 @@ Alarm::Ptr KAEventPrivate::initKCalAlarm(const KCalendarCore::Event::Ptr &event,
 */
 int KAEventPrivate::transitionIndex(const QDateTime &utc, const QTimeZone::OffsetDataList& transitions)
 {
-    if (utc.timeSpec() != Qt::UTC  ||  transitions.isEmpty())
+    if (utc.timeSpec() != Qt::UTC || transitions.isEmpty()) {
         return -1;
+    }
     int start = 0;
     int end = transitions.size() - 1;
     while (start != end) {
         int i = (start + end + 1) / 2;
-        if (transitions[i].atUtc == utc)
+        if (transitions[i].atUtc == utc) {
             return i;
+        }
         if (transitions[i].atUtc > utc) {
             end = i - 1;
-            if (end < 0)
+            if (end < 0) {
                 return -1;
-        }
-        else
+            }
+        } else {
             start = i;
+        }
     }
     return start;
 }
@@ -3731,13 +3738,10 @@ bool KAEventPrivate::compare(const KAEventPrivate& other, KAEvent::Comparison co
 
     switch (mActionSubType) {
         case KAEvent::COMMAND:
-            if (mCommandScript    != other.mCommandScript
-            ||  mCommandXterm     != other.mCommandXterm
-            ||  mCommandDisplay   != other.mCommandDisplay
-            ||  mCommandError     != other.mCommandError
-            ||  mCommandHideError != other.mCommandHideError
-            ||  mLogFile          != other.mLogFile)
+            if (mCommandScript != other.mCommandScript || mCommandXterm != other.mCommandXterm || mCommandDisplay != other.mCommandDisplay
+                || mCommandError != other.mCommandError || mCommandHideError != other.mCommandHideError || mLogFile != other.mLogFile) {
                 return false;
+            }
             if (!mCommandDisplay) {
                 break;
             }
@@ -4258,9 +4262,10 @@ void KAEventPrivate::readAlarm(const Alarm::Ptr &alarm, AlarmData &data, bool au
             &&  flags.contains(KAEventPrivate::HIDDEN_REMINDER_FLAG)) {
                 data.hiddenReminder = true;
             }
-        } else if (data.type == DISPLAYING_ALARM)
+        } else if (data.type == DISPLAYING_ALARM) {
             data.displayingFlags = dateDeferral ? REMINDER | DATE_DEFERRAL
                                    : deferral ? REMINDER | TIME_DEFERRAL : REMINDER;
+        }
     } else if (deferral) {
         if (data.type == MAIN_ALARM) {
             data.type = DEFERRED_ALARM;
@@ -4281,8 +4286,9 @@ void KAEventPrivate::readAlarm(const Alarm::Ptr &alarm, AlarmData &data, bool au
 
 QSharedPointer<const HolidayRegion> KAEventPrivate::holidays()
 {
-    if (!mHolidays)
+    if (!mHolidays) {
         mHolidays.reset(new HolidayRegion());
+    }
     return mHolidays;
 }
 
@@ -4943,9 +4949,10 @@ bool KAEventPrivate::mayOccurDailyDuringWork(const KADateTime &kdt) const
 void KAEventPrivate::setAudioAlarm(const Alarm::Ptr &alarm) const
 {
     alarm->setAudioAlarm(mAudioFile);  // empty for a beep or for speaking
-    if (mSoundVolume >= 0)
+    if (mSoundVolume >= 0) {
         alarm->setCustomProperty(KACalendar::APPNAME, VOLUME_PROPERTY,
                                  QStringLiteral("%1;%2;%3").arg(QString::number(mSoundVolume, 'f', 2), QString::number(mFadeVolume, 'f', 2), QString::number(mFadeSeconds)));
+    }
 }
 
 /******************************************************************************
@@ -5141,7 +5148,9 @@ bool KAEvent::convertKCalEvents(const Calendar::Ptr &calendar, int calendarVersi
                 const int length = txt.length();
                 int i = 0;
                 if (txt[0].isDigit()) {
-                    while (++i < length  &&  txt[i].isDigit()) ;
+                    while (++i < length && txt[i].isDigit()) {
+                        ;
+                    }
                     if (i < length  &&  txt[i++] == SEPARATOR) {
                         while (i < length) {
                             const QChar ch = txt[i++];
@@ -5256,9 +5265,10 @@ bool KAEvent::convertKCalEvents(const Calendar::Ptr &calendar, int calendarVersi
 
             if (!cats.isEmpty()) {
                 for (const Alarm::Ptr &alarm : alarms) {     //clazy:exclude=range-loop   Can't use reference because 'alarms' is const
-                    if (alarm->type() == Alarm::Display)
+                    if (alarm->type() == Alarm::Display) {
                         alarm->setCustomProperty(KACalendar::APPNAME, KAEventPrivate::FONT_COLOUR_PROPERTY,
                                                  QStringLiteral("%1;;").arg(cats.at(0)));
+                    }
                 }
                 cats.removeAt(0);
             }
@@ -6042,7 +6052,9 @@ static void setProcedureAlarm(const Alarm::Ptr &alarm, const QString &commandLin
     }
 
     // Skip any spaces after the command
-    for (;  pos < posMax  &&  commandLine[pos] == QLatin1Char(' ');  ++pos) ;
+    for (; pos < posMax && commandLine[pos] == QLatin1Char(' '); ++pos) {
+        ;
+    }
     arguments = commandLine.mid(pos);
 
     alarm->setProcedureAlarm(command, arguments);

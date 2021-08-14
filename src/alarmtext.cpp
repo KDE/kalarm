@@ -552,7 +552,9 @@ QString AlarmText::Private::todoTitle(const QString &text)
     setUpTranslations();
     const QStringList lines = text.split(QLatin1Char('\n'), Qt::SkipEmptyParts);
     int n;
-    for (n = 0;  n < lines.count() && lines[n].contains(QLatin1Char('\t'));  ++n) ;
+    for (n = 0; n < lines.count() && lines[n].contains(QLatin1Char('\t')); ++n) {
+        ;
+    }
     if (!n  ||  n > 3) {
         return QString();
     }

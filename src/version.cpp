@@ -52,7 +52,9 @@ int getVersionNumber(const QString &version, QString *subVersion)
             return 0;
         }
         int i;
-        for (i = 0;  i < n && issue[i].isDigit();  ++i) ;
+        for (i = 0; i < n && issue[i].isDigit(); ++i) {
+            ;
+        }
         if (subVersion) {
             *subVersion = issue.mid(i);
         }

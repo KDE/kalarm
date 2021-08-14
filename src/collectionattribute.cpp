@@ -176,12 +176,13 @@ QByteArray CollectionAttribute::serialized() const
                    + QByteArray::number(d->mStandard) + ' '
                    + QByteArray(d->mKeepFormat ? "1" : "0") + ' '
                    + QByteArray(d->mBackgroundColour.isValid() ? "1" : "0");
-    if (d->mBackgroundColour.isValid())
+    if (d->mBackgroundColour.isValid()) {
         v += ' '
              + QByteArray::number(d->mBackgroundColour.red()) + ' '
              + QByteArray::number(d->mBackgroundColour.green()) + ' '
              + QByteArray::number(d->mBackgroundColour.blue()) + ' '
              + QByteArray::number(d->mBackgroundColour.alpha());
+    }
     qCDebug(KALARMCAL_LOG) << v;
     return v;
 }

@@ -247,7 +247,9 @@ bool KARecurrence::Private::init(RecurrenceRule::PeriodType recurType, int freq,
              * This is necessary because KARecurrence represents all types
              * of 29th February recurrences by a simple 29th February.
              */
-            while (!QDate::isLeapYear(--year)) ;
+            while (!QDate::isLeapYear(--year)) {
+                ;
+            }
             startdt.setDate(QDate(year, 2, 29));
         }
         mFeb29Type = feb29Type;
@@ -837,15 +839,17 @@ bool KARecurrence::recursOn(const QDate &dt, const KADateTime::Spec &timeSpec) c
         return true;
     }
     const RecurrenceRule::List rulelist = d->mRecurrence.rRules();
-    for (const RecurrenceRule *rule : rulelist)
+    for (const RecurrenceRule *rule : rulelist) {
         if (rule->recursOn(dt, Private::toTimeZone(timeSpec))) {
             return true;
         }
+    }
     const auto dtlist = d->mRecurrence.rDateTimes();
-    for (const QDateTime &dtime : dtlist)
+    for (const QDateTime &dtime : dtlist) {
         if (dtime.date() == dt) {
             return true;
         }
+    }
     return false;
 }
 
@@ -995,10 +999,11 @@ Duration KARecurrence::longestInterval() const
         // further restrict when the recurrence occurs.
         // So the maximum interval may be greater than the frequency.
         bool ds[7] = { false, false, false, false, false, false, false };
-        for (const RecurrenceRule::WDayPos &day : days)
+        for (const RecurrenceRule::WDayPos &day : days) {
             if (day.pos() == 0) {
                 ds[day.day() - 1] = true;
             }
+        }
         if (freq % 7) {
             // It will recur on every day of the week in some week or other
             // (except for those days which are excluded).
@@ -1127,10 +1132,11 @@ Duration KARecurrence::regularInterval() const
         // further restrict when the recurrence occurs.
         // Find which days occur, and count the number of days which occur.
         bool ds[7] = { false, false, false, false, false, false, false };
-        for (const RecurrenceRule::WDayPos &day : days)
+        for (const RecurrenceRule::WDayPos &day : days) {
             if (day.pos() == 0) {
                 ds[day.day() - 1] = true;
             }
+        }
         if (!(freq % 7)) {
             // It will recur on the same day of the week every time.
             // Check whether that day is in the list of included days.
@@ -1140,10 +1146,11 @@ Duration KARecurrence::regularInterval() const
             break;
         }
         int n = 0;   // number of days which occur
-        for (int i = 0;  i < 7;  ++i)
+        for (int i = 0; i < 7; ++i) {
             if (ds[i]) {
                 ++n;
             }
+        }
         if (n == 7) {
             return Duration(freq, Duration::Days);    // every day is included
         }
@@ -1161,15 +1168,17 @@ Duration KARecurrence::regularInterval() const
         // recurrence occurs.
         // Find which days occur, and count the number of days which occur.
         bool ds[7] = { false, false, false, false, false, false, false };
-        for (const RecurrenceRule::WDayPos &day : days)
+        for (const RecurrenceRule::WDayPos &day : days) {
             if (day.pos() == 0) {
                 ds[day.day() - 1] = true;
             }
+        }
         int n = 0;   // number of days which occur
-        for (int i = 0;  i < 7;  ++i)
+        for (int i = 0; i < 7; ++i) {
             if (ds[i]) {
                 ++n;
             }
+        }
         if (n == 7) {
             if (freq == 1) {
                 return Duration(freq, Duration::Days);    // every day is included

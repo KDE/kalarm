@@ -3597,7 +3597,8 @@ void KADateTimeTest::stream()
     // don't affect the new contents.
     QByteArray data;
     QDataStream ds(&data, QIODevice::ReadWrite);
-    KADateTime testdt, result;
+    KADateTime testdt;
+    KADateTime result;
 
     data.clear();
     testdt = KADateTime(QDate(2005, 6, 1), QTime(12, 0, 0), KADateTime::LocalZone);

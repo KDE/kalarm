@@ -262,7 +262,8 @@ QString uid(const QString &id, Type status)
 {
     QString result = id;
     Type oldType;
-    int i, len;
+    int i;
+    int len;
     if (result.startsWith(staticStrings->ARCHIVED_UID)) {
         oldType = ARCHIVED;
         len = staticStrings->ARCHIVED_UID.length();
