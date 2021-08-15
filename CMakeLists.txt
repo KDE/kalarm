@@ -55,7 +55,7 @@ set(GRANTLEETHEME_LIB_VERSION "5.18.40")
 set(KDEPIM_LIB_VERSION "${PIM_VERSION}")
 set(KDEPIM_LIB_SOVERSION "5")
 
-set(QT_REQUIRED_VERSION "5.15.0")
+set(QT_REQUIRED_VERSION "5.15.2")
 find_package(Qt5 ${QT_REQUIRED_VERSION} CONFIG REQUIRED DBus Gui Network Widgets)
 set(CALENDARUTILS_LIB_VERSION "5.18.40")
 
@@ -124,7 +124,7 @@ configure_file(src/config-kalarm.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-kala
 include_directories(${kalarm_SOURCE_DIR} ${kalarm_BINARY_DIR})
 
 add_definitions(-DQT_MESSAGELOGCONTEXT)
-add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0x050f00)
+add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0x050f02)
 add_definitions(-DKF_DISABLE_DEPRECATED_BEFORE_AND_AT=0x055600)
 option(USE_UNITY_CMAKE_SUPPORT "Use UNITY cmake support (speedup compile time)" OFF)
 
