@@ -1,7 +1,7 @@
 /*
  *  resourcemodel.cpp  -  models containing flat list of resources
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2007-2020 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2007-2021 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -448,7 +448,7 @@ QByteArray ResourceCheckListModel::debugType(const char* func) const
 = Proxy model providing a checkable resource list, filtered to contain only one
 = alarm type. The selected alarm type may be changed as desired.
 =============================================================================*/
-ResourceFilterCheckListModel* ResourceFilterCheckListModel::mInstance {nullptr};
+QVector<ResourceFilterCheckListModel*> ResourceFilterCheckListModel::mInstances;
 
 ResourceFilterCheckListModel::ResourceFilterCheckListModel(QObject* parent)
     : QSortFilterProxyModel(parent)
@@ -459,8 +459,7 @@ ResourceFilterCheckListModel::ResourceFilterCheckListModel(QObject* parent)
 
 ResourceFilterCheckListModel::~ResourceFilterCheckListModel()
 {
-    if (this == mInstance)
-        mInstance = nullptr;
+    mInstances.removeAll(this);
 }
 
 void ResourceFilterCheckListModel::init()
@@ -524,11 +523,11 @@ Resource ResourceFilterCheckListModel::resource(const QModelIndex& index) const
 
 void ResourceFilterCheckListModel::disable()
 {
-    if (mInstance)
+    for (auto instance : std::as_const(mInstances))
     {
-        mInstance->mActiveModel->disable();
-        mInstance->mArchivedModel->disable();
-        mInstance->mTemplateModel->disable();
+        instance->mActiveModel->disable();
+        instance->mArchivedModel->disable();
+        instance->mTemplateModel->disable();
     }
 }
 

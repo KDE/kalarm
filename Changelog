@@ -1,5 +1,8 @@
 KAlarm Change Log
 
+=== Version 3.3.1 (KDE Applications 21.08.1) --- 29 August 2021 ===
+* Fix crash when KAlarm is launched while already running [KDE Bug 441660]
+
 === Version 3.3.0 (KDE Applications 21.08) --- 1 August 2021 ===
 * Add date selector option to enable alarm list view to be filtered.
 * Show hamburger menu when menu bar is hidden, to allow access to all options.

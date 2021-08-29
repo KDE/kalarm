@@ -1,7 +1,7 @@
 /*
  *  resourcemodel.h  -  models containing flat list of resources
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2010-2020 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2010-2021 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -177,7 +177,7 @@ class ResourceFilterCheckListModel : public QSortFilterProxyModel
 {
     Q_OBJECT
 public:
-    /** Constructs the unique instance.
+    /** Constructs an instance.
      *  @tparam DataModel  The data model class to use as the source model. It must
      *                     have the following methods:
      *                     static DataModel* instance(); - returns the unique instance.
@@ -208,7 +208,7 @@ private:
     explicit ResourceFilterCheckListModel(QObject* parent);
     void init();
 
-    static ResourceFilterCheckListModel* mInstance;
+    static QVector<ResourceFilterCheckListModel*> mInstances;
     ResourceCheckListModel* mActiveModel {nullptr};
     ResourceCheckListModel* mArchivedModel {nullptr};
     ResourceCheckListModel* mTemplateModel {nullptr};
@@ -270,15 +270,14 @@ ResourceCheckListModel* ResourceCheckListModel::create(CalEvent::Type type, QObj
 template <class DataModel>
 ResourceFilterCheckListModel* ResourceFilterCheckListModel::create(QObject* parent)
 {
-    if (mInstance)
-        return nullptr;
-    mInstance = new ResourceFilterCheckListModel(parent);
-    mInstance->mActiveModel   = ResourceCheckListModel::create<DataModel>(CalEvent::ACTIVE, mInstance);
-    mInstance->mArchivedModel = ResourceCheckListModel::create<DataModel>(CalEvent::ARCHIVED, mInstance);
-    mInstance->mTemplateModel = ResourceCheckListModel::create<DataModel>(CalEvent::TEMPLATE, mInstance);
-    mInstance->mTooltipFunction = [](const Resource& r, CalEvent::Types t) { return DataModel::instance()->tooltip(r, t); };
-    mInstance->init();
-    return mInstance;
+    ResourceFilterCheckListModel* instance = new ResourceFilterCheckListModel(parent);
+    mInstances.append(instance);
+    instance->mActiveModel   = ResourceCheckListModel::create<DataModel>(CalEvent::ACTIVE, instance);
+    instance->mArchivedModel = ResourceCheckListModel::create<DataModel>(CalEvent::ARCHIVED, instance);
+    instance->mTemplateModel = ResourceCheckListModel::create<DataModel>(CalEvent::TEMPLATE, instance);
+    instance->mTooltipFunction = [](const Resource& r, CalEvent::Types t) { return DataModel::instance()->tooltip(r, t); };
+    instance->init();
+    return instance;
 }
 
 
