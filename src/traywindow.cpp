@@ -116,11 +116,11 @@ TrayWindow::TrayWindow(MainWindow* parent)
 
     // Update when alarms are modified
     AlarmListModel* all = DataModel::allAlarmListModel();
-    connect(all, &QAbstractItemModel::dataChanged,  mToolTipUpdateTimer, QOverload<>::of(&QTimer::start));
-    connect(all, &QAbstractItemModel::rowsInserted, mToolTipUpdateTimer, QOverload<>::of(&QTimer::start));
-    connect(all, &QAbstractItemModel::rowsMoved,    mToolTipUpdateTimer, QOverload<>::of(&QTimer::start));
-    connect(all, &QAbstractItemModel::rowsRemoved,  mToolTipUpdateTimer, QOverload<>::of(&QTimer::start));
-    connect(all, &QAbstractItemModel::modelReset,   mToolTipUpdateTimer, QOverload<>::of(&QTimer::start));
+    connect(all, &QAbstractItemModel::dataChanged,  mToolTipUpdateTimer, qOverload<>(&QTimer::start));
+    connect(all, &QAbstractItemModel::rowsInserted, mToolTipUpdateTimer, qOverload<>(&QTimer::start));
+    connect(all, &QAbstractItemModel::rowsMoved,    mToolTipUpdateTimer, qOverload<>(&QTimer::start));
+    connect(all, &QAbstractItemModel::rowsRemoved,  mToolTipUpdateTimer, qOverload<>(&QTimer::start));
+    connect(all, &QAbstractItemModel::modelReset,   mToolTipUpdateTimer, qOverload<>(&QTimer::start));
 
     // Set auto-hide status when next alarm or preferences change
     mStatusUpdateTimer->setSingleShot(true);
@@ -130,7 +130,7 @@ TrayWindow::TrayWindow(MainWindow* parent)
     updateStatus();
 
     // Update when tooltip preferences are modified
-    Preferences::connect(&Preferences::tooltipPreferencesChanged, mToolTipUpdateTimer, QOverload<>::of(&QTimer::start));
+    Preferences::connect(&Preferences::tooltipPreferencesChanged, mToolTipUpdateTimer, qOverload<>(&QTimer::start));
 }
 
 TrayWindow::~TrayWindow()
