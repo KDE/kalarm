@@ -73,7 +73,7 @@ Q_SIGNALS:
     void selected(const QVector<QDate>& dates);
 
     void newAlarm(EditAlarmDlg::Type);
-    void newAlarmFromTemplate(const KAEvent&);
+    void newAlarmFromTemplate(const KAlarmCal::KAEvent&);
 
 protected:
     bool event(QEvent*) override;

@@ -1059,7 +1059,7 @@ void editNewAlarm(EditAlarmDlg::Type type, QWidget* parent)
 {
     editNewAlarm(type, QDate(), parent);
 }
-void editNewAlarm(EditAlarmDlg::Type type, const QDate& startDate, QWidget* parent)
+void editNewAlarm(EditAlarmDlg::Type type, QDate startDate, QWidget* parent)
 {
     EditAlarmDlg* editDlg = EditAlarmDlg::create(false, type, parent);
     if (editDlg)
@@ -1118,7 +1118,7 @@ void editNewAlarm(const KAEvent& preset, const QDate& startDate, QWidget* parent
 /******************************************************************************
 * Common code for editNewAlarm() variants.
 */
-void execNewAlarmDlg(EditAlarmDlg* editDlg, const QDate& startDate)
+void execNewAlarmDlg(EditAlarmDlg* editDlg, QDate startDate)
 {
     if (startDate.isValid())
     {
@@ -1872,7 +1872,7 @@ bool convertTimeString(const QByteArray& timeString, KADateTime& dateTime, const
 * "UTC". If no time zone is specified, it defaults to the local time zone.
 * If 'defaultDt' is valid, it supplies the time spec and default date.
 */
-KADateTime applyTimeZone(const QString& tzstring, const QDate& date, const QTime& time,
+KADateTime applyTimeZone(const QString& tzstring, QDate date, QTime time,
                          bool haveTime, const KADateTime& defaultDt)
 {
     bool error = false;

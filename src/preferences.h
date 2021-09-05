@@ -56,12 +56,12 @@ public:
     static const KHolidays::HolidayRegion& holidays();
     static void             setHolidayRegion(const QString& regionCode);
     static QTime            startOfDay()                     { return self()->mBase_StartOfDay.time(); }
-    static void             setStartOfDay(const QTime&);
+    static void             setStartOfDay(QTime);
     static QTime            workDayStart()                   { return self()->mBase_WorkDayStart.time(); }
     static QTime            workDayEnd()                     { return self()->mBase_WorkDayEnd.time(); }
     static QBitArray        workDays();
-    static void             setWorkDayStart(const QTime& t)  { self()->setBase_WorkDayStart(QDateTime(QDate(1900,1,1), t)); }
-    static void             setWorkDayEnd(const QTime& t)    { self()->setBase_WorkDayEnd(QDateTime(QDate(1900,1,1), t)); }
+    static void             setWorkDayStart(QTime t)  { self()->setBase_WorkDayStart(QDateTime(QDate(1900,1,1), t)); }
+    static void             setWorkDayEnd(QTime t)    { self()->setBase_WorkDayEnd(QDateTime(QDate(1900,1,1), t)); }
     static void             setWorkDays(const QBitArray&);
     static bool             quitWarn()                       { return mUsingDefaults ? self()->base_QuitWarn() : notifying(QUIT_WARN); }
     static void             setQuitWarn(bool yes)            { setNotify(QUIT_WARN, yes); }

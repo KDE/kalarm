@@ -19,7 +19,7 @@ class RtcWakeAction : public QObject
         RtcWakeAction();
 
     public Q_SLOTS:
-        ActionReply settimer(const QVariantMap& args);
+        KAuth::ActionReply settimer(const QVariantMap& args);
 };
 
 

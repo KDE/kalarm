@@ -155,9 +155,9 @@ protected:
 
 private Q_SLOTS:
     void slotResourceSettingsChanged(Resource&, ResourceType::Changes);
-    void slotResourceRemoved(ResourceId);
-    void slotEventUpdated(Resource&, const KAEvent&);
-    void slotEventsRemoved(Resource&, const QList<KAEvent>&);
+    void slotResourceRemoved(KAlarmCal::ResourceId);
+    void slotEventUpdated(Resource&, const KAlarmCal::KAEvent&);
+    void slotEventsRemoved(Resource&, const QList<KAlarmCal::KAEvent>&);
 
 private:
     static AlarmListModel* mAllInstance;

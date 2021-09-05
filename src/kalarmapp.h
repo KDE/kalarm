@@ -116,7 +116,7 @@ public Q_SLOTS:
     void               processQueue();
     void               setAlarmsEnabled(bool);
     void               purgeNewArchivedDefault(const Resource&);
-    void               atLoginEventAdded(const KAEvent&);
+    void               atLoginEventAdded(const KAlarmCal::KAEvent&);
     void               notifyAudioStopped()  { notifyAudioPlaying(false); }
     void               stopAudio();
     void               spreadWindows(bool);
@@ -140,7 +140,7 @@ private Q_SLOTS:
     void               changeStartOfDay();
     void               slotWorkTimeChanged(const QTime& start, const QTime& end, const QBitArray& days);
     void               slotHolidaysChanged(const KHolidays::HolidayRegion&);
-    void               slotFeb29TypeChanged(Feb29Type);
+    void               slotFeb29TypeChanged(KAlarmApp::Feb29Type);
     void               slotResourcesTimeout();
     void               slotResourcesCreated();
     void               slotEditAlarmById();

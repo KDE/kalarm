@@ -66,7 +66,7 @@ public:
     static bool             modifyEvent(const EventId& oldEventId, KAEvent& newEvent);
     static KAEvent          updateEvent(const KAEvent&, bool saveIfReadOnly = true);
     static bool             deleteEvent(const KAEvent&, Resource&, bool save = false);
-    static void             purgeEvents(const QVector<KAEvent>&);
+    static void             purgeEvents(const QVector<KAlarmCal::KAEvent>&);
     static ResourcesCalendar* instance()     { return mInstance; }
 
 Q_SIGNALS:
@@ -78,9 +78,9 @@ private Q_SLOTS:
     void                  slotResourceSettingsChanged(Resource&, ResourceType::Changes);
     void                  slotResourcesPopulated();
     void                  slotResourceAdded(Resource&);
-    void                  slotEventsAdded(Resource&, const QList<KAEvent>&);
-    void                  slotEventsToBeRemoved(Resource&, const QList<KAEvent>&);
-    void                  slotEventUpdated(Resource&, const KAEvent&);
+    void                  slotEventsAdded(Resource&, const QList<KAlarmCal::KAEvent>&);
+    void                  slotEventsToBeRemoved(Resource&, const QList<KAlarmCal::KAEvent>&);
+    void                  slotEventUpdated(Resource&, const KAlarmCal::KAEvent&);
 private:
     ResourcesCalendar();
     static CalEvent::Type deleteEventInternal(const KAlarmCal::KAEvent&, Resource&, bool deleteFromResource = true);

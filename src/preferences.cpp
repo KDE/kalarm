@@ -330,7 +330,7 @@ void Preferences::holidaysChange(const QString& regionCode)
     Q_EMIT mInstance->holidaysChanged(holidays());
 }
 
-void Preferences::setStartOfDay(const QTime& t)
+void Preferences::setStartOfDay(QTime t)
 {
     if (t != self()->mBase_StartOfDay.time())
     {
