@@ -75,7 +75,7 @@ MainWindow*         displayMainWindowSelected(const QString& eventId);
 
 bool                editNewAlarm(const QString& templateName, QWidget* parent = nullptr);
 void                editNewAlarm(EditAlarmDlg::Type, QWidget* parent = nullptr);
-void                editNewAlarm(EditAlarmDlg::Type, QDate startDate, QWidget* parent = nullptr);
+void                editNewAlarm(EditAlarmDlg::Type, const QDate& startDate, QWidget* parent = nullptr);
 void                editNewAlarm(KAEvent::SubAction, QWidget* parent = nullptr, const AlarmText* = nullptr);
 void                editNewAlarm(const KAEvent& preset, QWidget* parent = nullptr);
 void                editNewAlarm(const KAEvent& preset, const QDate& startDate, QWidget* parent = nullptr);
@@ -86,7 +86,7 @@ void                viewAlarm(const KAEvent&, QWidget* parent = nullptr);
 void                editNewTemplate(EditAlarmDlg::Type, QWidget* parent = nullptr);
 void                editNewTemplate(const KAEvent& preset, QWidget* parent = nullptr);
 void                editTemplate(KAEvent&, QWidget* parent = nullptr);
-void                execNewAlarmDlg(EditAlarmDlg*, QDate startDate = QDate());
+void                execNewAlarmDlg(EditAlarmDlg*, const QDate& startDate = QDate());
 /** Create a "New From Template" QAction */
 KToggleAction*      createAlarmEnableAction(QObject* parent);
 QAction*            createStopPlayAction(QObject* parent);
@@ -309,7 +309,7 @@ bool                setRtcWakeTime(unsigned triggerTime, QWidget* parent);
 
 bool                convertTimeString(const QByteArray& timeString, KADateTime& dateTime,
                                   const KADateTime& defaultDt = KADateTime(), bool allowTZ = true);
-KADateTime          applyTimeZone(const QString& tzstring, QDate date, QTime time,
+KADateTime          applyTimeZone(const QString& tzstring, const QDate& date, const QTime& time,
                                    bool haveTime, const KADateTime& defaultDt = KADateTime());
 
 #ifndef NDEBUG
