@@ -15,7 +15,7 @@
 #include <KCalendarCore/Calendar>
 #include <KCalendarCore/Event>
 
-#include <AkonadiCore/Collection>
+#include <Akonadi/Collection>
 
 #include <QByteArray>
 #include <QStringList>

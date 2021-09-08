@@ -13,7 +13,7 @@
 
 #include "kaevent.h"
 
-#include <attribute.h>
+#include <akonadi/attribute.h>
 
 namespace KAlarmCal
 {

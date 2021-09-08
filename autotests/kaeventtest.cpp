@@ -15,7 +15,7 @@ using namespace KAlarmCal;
 #include <KCalendarCore/Event>
 #include <KCalendarCore/Alarm>
 using namespace KCalendarCore;
-#include <AkonadiCore/collection.h>
+#include <Akonadi/Collection>
 
 #include <KHolidays/HolidayRegion>
 using namespace KHolidays;

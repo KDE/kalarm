@@ -16,11 +16,10 @@
 #include "kacalendar.h"
 #include "repetition.h"
 
-#include <collection.h>
-#include <item.h>
-#include <KCalendarCore/Person>
+#include <Akonadi/Collection>
+#include <Akonadi/Item>
 #include <KCalendarCore/Calendar>
-#include <AkonadiCore/item.h>
+#include <KCalendarCore/Person>
 
 #include <QBitArray>
 #include <QColor>

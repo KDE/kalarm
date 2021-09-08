@@ -12,9 +12,9 @@
 #include "kacalendar.h"
 #include "kaevent.h"
 
-#include <AkonadiCore/Item>
-#include <AkonadiCore/AbstractDifferencesReporter>
-#include <AkonadiCore/AttributeFactory>
+#include <Akonadi/AbstractDifferencesReporter>
+#include <Akonadi/AttributeFactory>
+#include <Akonadi/Item>
 
 #include <KLocalizedString>
 

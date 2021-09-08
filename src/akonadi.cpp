@@ -10,8 +10,7 @@
 #include "akonadi.h"
 #include "kaevent.h"
 
-#include <AkonadiCore/Item>
-
+#include <Akonadi/Item>
 
 namespace KAlarmCal
 {

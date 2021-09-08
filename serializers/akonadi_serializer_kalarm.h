@@ -9,9 +9,9 @@
 
 #include "kaeventformatter.h"
 
-#include <AkonadiCore/itemserializerplugin.h>
-#include <AkonadiCore/differencesalgorithminterface.h>
-#include <AkonadiCore/gidextractorinterface.h>
+#include <Akonadi/DifferencesAlgorithmInterface>
+#include <Akonadi/GidExtractorInterface>
+#include <Akonadi/ItemSerializerPlugin>
 #include <KCalendarCore/ICalFormat>
 
 #include <QObject>

@@ -11,8 +11,8 @@
 
 #include "kalarmcal_export.h"
 
+#include <Akonadi/Item>
 #include <KCalendarCore/Todo>
-#include <AkonadiCore/Item>
 #include <QString>
 
 namespace KAlarmCal
