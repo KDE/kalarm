@@ -8,9 +8,8 @@
 
 #pragma once
 
-
-#include <AkonadiCore/Collection>
-#include <AkonadiCore/Item>
+#include <Akonadi/Collection>
+#include <Akonadi/Item>
 
 #include <QObject>
 #include <QMap>

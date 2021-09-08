@@ -10,7 +10,7 @@
 
 #include <KAlarmCal/KACalendar>
 
-#include <AkonadiCore/ServerManager>
+#include <Akonadi/ServerManager>
 
 class KJob;
 namespace Akonadi { class CollectionFetchJob; }

@@ -24,8 +24,8 @@
 #include "lib/pushbutton.h"
 #include "kalarm_debug.h"
 
-#include <AkonadiCore/ItemFetchJob>
-#include <AkonadiCore/ItemFetchScope>
+#include <Akonadi/ItemFetchJob>
+#include <Akonadi/ItemFetchScope>
 
 #include <KAboutData>
 #include <KStandardGuiItem>

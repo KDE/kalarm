@@ -10,7 +10,7 @@
 
 #include "resourcetype.h"
 
-#include <AkonadiCore/Collection>
+#include <Akonadi/Collection>
 #include <KCalendarCore/FileStorage>
 
 #include <QSharedPointer>

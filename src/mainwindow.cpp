@@ -35,9 +35,9 @@
 
 #include <KAlarmCal/AlarmText>
 
-#include <AkonadiCore/Item>
-#include <KCalendarCore/MemoryCalendar>
+#include <Akonadi/Item>
 #include <KCalUtils/ICalDrag>
+#include <KCalendarCore/MemoryCalendar>
 using namespace KCalendarCore;
 using namespace KCalUtils;
 

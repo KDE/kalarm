@@ -23,8 +23,8 @@
 #include "lib/shellprocess.h"
 #include "kalarm_debug.h"
 
-#include <AkonadiWidgets/ControlGui>
-#include <AkonadiCore/EntityMimeTypeFilterModel>
+#include <Akonadi/ControlGui>
+#include <Akonadi/EntityMimeTypeFilterModel>
 
 #include <KLocalizedString>
 #include <KConfigGroup>

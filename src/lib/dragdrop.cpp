@@ -12,8 +12,8 @@
 
 #include <KAlarmCal/AlarmText>
 
-#include <AkonadiCore/ItemFetchJob>
-#include <AkonadiCore/ItemFetchScope>
+#include <Akonadi/ItemFetchJob>
+#include <Akonadi/ItemFetchScope>
 #include <KMime/Message>
 
 #include <QMimeData>
