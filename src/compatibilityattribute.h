@@ -12,7 +12,7 @@
 
 #include "kacalendar.h"
 
-#include <akonadi/attribute.h>
+#include <Akonadi/Attribute>
 
 namespace KAlarmCal
 {

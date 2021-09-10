@@ -13,7 +13,7 @@
 
 #include "kacalendar.h"
 
-#include <akonadi/attribute.h>
+#include <Akonadi/Attribute>
 
 #include <QColor>
 
