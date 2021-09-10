@@ -17,7 +17,7 @@
 #include <Akonadi/EntityDisplayAttribute>
 #include <Akonadi/ItemFetchScope>
 #include <KContacts/Addressee>
-#include <akonadi/session.h>
+#include <Akonadi/Session>
 
 #include <QLocale>
 
