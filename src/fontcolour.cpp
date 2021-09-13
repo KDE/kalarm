@@ -87,13 +87,9 @@ FontColourChooser::FontColourChooser(QWidget* parent, const QStringList& fontLis
         layout->addWidget(new QWidget(page));    // left adjust the widget
     }
 
-#if KWIDGETSADDONS_VERSION >= QT_VERSION_CHECK(5, 86, 0)
     mFontChooser = new KFontChooser(KFontChooser::DisplayFrame, page);
     mFontChooser->setFontListItems(fontList);
     mFontChooser->setMinVisibleItems(visibleListSize);
-#else
-    mFontChooser = new KFontChooser(page, KFontChooser::DisplayFrame, fontList, visibleListSize);
-#endif
 
     mFontChooser->installEventFilter(this);   // for read-only mode
     QList<QWidget*> kids = mFontChooser->findChildren<QWidget*>();
