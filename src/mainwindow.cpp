@@ -55,7 +55,6 @@ using namespace KCalUtils;
 #include <KToggleAction>
 #include <KNotifyConfigWidget>
 #include <KToolBarPopupAction>
-#include <kxmlgui_version.h>
 
 #include <QAction>
 #include <QSplitter>
