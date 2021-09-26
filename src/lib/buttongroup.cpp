@@ -14,7 +14,7 @@
 ButtonGroup::ButtonGroup(QObject* parent)
     : QButtonGroup(parent)
 {
-    connect(this, qOverload<QAbstractButton*>(&QButtonGroup::buttonClicked), this, &ButtonGroup::buttonSet);
+    connect(this, &QButtonGroup::buttonClicked, this, &ButtonGroup::buttonSet);
 }
 
 /******************************************************************************
