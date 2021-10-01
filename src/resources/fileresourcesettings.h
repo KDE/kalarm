@@ -1,7 +1,7 @@
 /*
  *  fileresourcesettings.h  -  settings for calendar resource accessed via file system
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2020 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2020,2021 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -91,6 +91,9 @@ public:
     /** Set the resource's display name.
      *  @param name  display name to set
      *  @param save  whether to save the config
+     *  @return  The status changes which have actually occurred, ie. the
+     *           status types (Name) for which the new status differs from the
+     *           old status.
      */
     ResourceType::Changes setDisplayName(const QString& name, bool save = true);
 
@@ -107,6 +110,9 @@ public:
      *  contain.
      *  @param types  alarm types
      *  @param save   whether to save the config
+     *  @return  The status changes which have actually occurred, ie. the
+     *           status types (AlarmTypes/Enabled/Standard) for which the new
+     *           status differs from the old status.
      */
     ResourceType::Changes setAlarmTypes(CalEvent::Types types, bool save = true);
 
@@ -132,6 +138,9 @@ public:
      *  @param type     alarm type
      *  @param enabled  true to set enabled, false to set disabled.
      *  @param save     whether to save the config
+     *  @return  The status changes which have actually occurred, ie. the
+     *           status types (Enabled/Standard) for which the new status
+     *           differs from the old status.
      */
     ResourceType::Changes setEnabled(CalEvent::Type type, bool enabled, bool save = true);
 
@@ -139,6 +148,9 @@ public:
      *  is enabled for.
      *  @param types  alarm types to enable
      *  @param save   whether to save the config
+     *  @return  The status changes which have actually occurred, ie. the
+     *           status types (Enabled/Standard) for which the new status
+     *           differs from the old status.
      */
     ResourceType::Changes setEnabled(CalEvent::Types types, bool save = true);
 
@@ -164,6 +176,9 @@ public:
      *  @param type      alarm type
      *  @param standard  true to set as standard, false to clear standard status.
      *  @param save      whether to save the config
+     *  @return  The status changes which have actually occurred, ie. the
+     *           status types (Standard) for which the new status differs from
+     *           the old status.
      */
     ResourceType::Changes setStandard(CalEvent::Type, bool standard, bool save = true);
 
@@ -173,6 +188,9 @@ public:
      *  cleared as standard in all other settings instances.
      *  @param types  alarm types.to set as standard
      *  @param save   whether to save the config
+     *  @return  The status changes which have actually occurred, ie. the
+     *           status types (Standard) for which the new status differs from
+     *           the old status.
      */
     ResourceType::Changes setStandard(CalEvent::Types types, bool save = true);
 
@@ -184,6 +202,9 @@ public:
     /** Set the background colour for this resource and its alarms.
      *  @param c     background colour
      *  @param save  whether to save the config
+     *  @return  The status changes which have actually occurred, ie. the
+     *           status types (BackgroundColour) for which the new status
+     *           differs from the old status.
      */
     ResourceType::Changes setBackgroundColour(const QColor& c, bool save = true);
 
@@ -195,6 +216,9 @@ public:
      *  is not in the current KAlarm calendar format.
      *  @param ronly  true to set read-only, false to allow writes.
      *  @param save   whether to save the config
+     *  @return  The status changes which have actually occurred, ie. the
+     *           status types (ReadOnly) for which the new status
+     *           differs from the old status.
      */
     ResourceType::Changes setReadOnly(bool ronly, bool save = true);
 
@@ -206,6 +230,9 @@ public:
     /** Set whether to keep the old calendar storage format unchanged.
      *  @param keep  true to keep format unchanged, false to allow changes.
      *  @param save  whether to save the config
+     *  @return  The status changes which have actually occurred, ie. the
+     *           status types (KeepFormat) for which the new status
+     *           differs from the old status.
      */
     ResourceType::Changes setKeepFormat(bool keep, bool save = true);
 
@@ -218,6 +245,9 @@ public:
      *  KAlarm format.
      *  @param update  true to update format, false to leave unchanged
      *  @param save    whether to save the config
+     *  @return  The status changes which have actually occurred, ie. the
+     *           status types (UpdateFormat) for which the new status
+     *           differs from the old status.
      */
     ResourceType::Changes setUpdateFormat(bool update, bool save = true);
 
