@@ -291,7 +291,7 @@ QValidator::State TimeSpinBox::validate(QString& text, int&) const
         {
             if (hr == 0)
                 return QValidator::Intermediate;
-            if (hr == 0  ||  hr > 12)
+            if (hr > 12)
                 hr = 100;    // error;
             else if (hr == 12)
                 hr = 0;      // convert 12:nn to 0:nn
