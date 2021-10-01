@@ -1,7 +1,7 @@
 /*
  *  fileresourcedatamodel.cpp  -  model containing file system resources and their events
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2007-2020 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2007-2021 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -410,14 +410,19 @@ void FileResourceDataModel::slotResourceLoaded(Resource& resource)
 /******************************************************************************
 * Called when a resource setting has changed.
 */
-void FileResourceDataModel::slotResourceSettingsChanged(Resource& res, ResourceType::Changes change)
+void FileResourceDataModel::slotResourceSettingsChanged(Resource& res, ResourceType::Changes changes)
 {
-    if (change & ResourceType::Enabled)
+    if (changes & ResourceType::Enabled)
     {
         if (res.enabledTypes())
         {
-            qCDebug(KALARM_LOG) << "FileResourceDataModel::slotResourceSettingsChanged: Enabled" << res.displayName();
-            addResource(res);
+            // If the resource has just been loaded, addResource() will already
+            // have been called, so don't call it again.
+            if (!(changes & ResourceType::Loaded))
+            {
+                qCDebug(KALARM_LOG) << "FileResourceDataModel::slotResourceSettingsChanged: Enabled" << res.displayName();
+                addResource(res);
+            }
         }
         else
         {
@@ -425,14 +430,14 @@ void FileResourceDataModel::slotResourceSettingsChanged(Resource& res, ResourceT
             removeResourceEvents(res);
         }
     }
-    if (change & (ResourceType::Name | ResourceType::Standard | ResourceType::ReadOnly))
+    if (changes & (ResourceType::Name | ResourceType::Standard | ResourceType::ReadOnly))
     {
         qCDebug(KALARM_LOG) << "FileResourceDataModel::slotResourceSettingsChanged:" << res.displayName();
         const QModelIndex resourceIx = resourceIndex(res);
         if (resourceIx.isValid())
             Q_EMIT dataChanged(resourceIx, resourceIx);
     }
-    if (change & ResourceType::BackgroundColour)
+    if (changes & ResourceType::BackgroundColour)
     {
         qCDebug(KALARM_LOG) << "FileResourceDataModel::slotResourceSettingsChanged: Colour" << res.displayName();
         const QVector<Node*>& eventNodes = mResourceNodes.value(res);
@@ -441,7 +446,7 @@ void FileResourceDataModel::slotResourceSettingsChanged(Resource& res, ResourceT
             Q_EMIT dataChanged(createIndex(0, 0, eventNodes[0]), createIndex(lastRow, ColumnCount - 1, eventNodes[lastRow]));
     }
 
-//    if (change & (ResourceType::AlarmTypes | ResourceType::KeepFormat | ResourceType::UpdateFormat))
+//    if (changes & (ResourceType::AlarmTypes | ResourceType::KeepFormat | ResourceType::UpdateFormat))
 //        qCDebug(KALARM_LOG) << "FileResourceDataModel::slotResourceSettingsChanged: UNHANDLED" << res.displayName();
 }
 

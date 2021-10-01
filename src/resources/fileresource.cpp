@@ -106,22 +106,14 @@ void FileResource::setEnabled(CalEvent::Type type, bool enabled)
 {
     const CalEvent::Types oldEnabled = mSettings->enabledTypes();
     const Changes changes = mSettings->setEnabled(type, enabled);
-    if (changes)
-    {
-        handleSettingsChange(changes);
-        Resources::notifySettingsChanged(this, changes, oldEnabled);
-    }
+    handleEnabledChange(changes, oldEnabled);
 }
 
 void FileResource::setEnabled(CalEvent::Types types)
 {
     const CalEvent::Types oldEnabled = mSettings->enabledTypes();
     const Changes changes = mSettings->setEnabled(types);
-    if (changes)
-    {
-        handleSettingsChange(changes);
-        Resources::notifySettingsChanged(this, changes, oldEnabled);
-    }
+    handleEnabledChange(changes, oldEnabled);
 }
 
 bool FileResource::readOnly() const
@@ -132,7 +124,7 @@ bool FileResource::readOnly() const
 void FileResource::setReadOnly(bool ronly)
 {
     const CalEvent::Types oldEnabled = mSettings->enabledTypes();
-    const Changes changes = mSettings->setReadOnly(ronly);
+    Changes changes = mSettings->setReadOnly(ronly);
     if (changes)
     {
         handleSettingsChange(changes);
@@ -172,7 +164,7 @@ bool FileResource::keepFormat() const
 void FileResource::setKeepFormat(bool keep)
 {
     const CalEvent::Types oldEnabled = mSettings->enabledTypes();
-    const Changes changes = mSettings->setKeepFormat(keep);
+    Changes changes = mSettings->setKeepFormat(keep);
     if (changes)
     {
         handleSettingsChange(changes);
@@ -188,7 +180,7 @@ QColor FileResource::backgroundColour() const
 void FileResource::setBackgroundColour(const QColor& colour)
 {
     const CalEvent::Types oldEnabled = mSettings->enabledTypes();
-    const Changes changes = mSettings->setBackgroundColour(colour);
+    Changes changes = mSettings->setBackgroundColour(colour);
     if (changes)
     {
         handleSettingsChange(changes);
@@ -209,7 +201,7 @@ CalEvent::Types FileResource::configStandardTypes() const
 void FileResource::configSetStandard(CalEvent::Type type, bool standard)
 {
     const CalEvent::Types oldEnabled = mSettings->enabledTypes();
-    const Changes changes = mSettings->setStandard(type, standard);
+    Changes changes = mSettings->setStandard(type, standard);
     if (changes)
     {
         handleSettingsChange(changes);
@@ -220,7 +212,7 @@ void FileResource::configSetStandard(CalEvent::Type type, bool standard)
 void FileResource::configSetStandard(CalEvent::Types types)
 {
     const CalEvent::Types oldEnabled = mSettings->enabledTypes();
-    const Changes changes = mSettings->setStandard(types);
+    Changes changes = mSettings->setStandard(types);
     if (changes)
     {
         handleSettingsChange(changes);
@@ -266,9 +258,9 @@ void FileResource::editResource(QWidget* dialogParent)
                 // Note that the location and alarm type cannot be changed.
                 qCDebug(KALARM_LOG) << "FileResource::editResource: Edited" << dlg->displayName();
                 setReadOnly(dlg->readOnly());
-                const Changes change = mSettings->setDisplayName(dlg->displayName());
-                if (change != NoChange)
-                    Resources::notifySettingsChanged(this, change, enabled);
+                Changes changes = mSettings->setDisplayName(dlg->displayName());
+                if (changes != NoChange)
+                    Resources::notifySettingsChanged(this, changes, enabled);
             }
             break;
         }
@@ -644,15 +636,15 @@ KACalendar::Compat FileResource::getCompatibility(const KCalendarCore::FileStora
 /******************************************************************************
 * Called when the resource settings have changed.
 */
-void FileResource::handleSettingsChange(Changes change)
+void FileResource::handleSettingsChange(Changes& changes)
 {
     qCDebug(KALARM_LOG) << "FileResource::handleSettingsChange:" << displayId();
-    if (change & AlarmTypes)
+    if (changes & AlarmTypes)
     {
         qCDebug(KALARM_LOG) << "FileResource::handleSettingsChange:" << displayId() << "Update alarm types";
         load();
     }
-    if (change & Enabled)
+    if (changes & Enabled)
     {
         qCDebug(KALARM_LOG) << "FileResource::handleSettingsChange:" << displayId() << "Update enabled status";
         if (mSettings->enabledTypes())
@@ -663,7 +655,20 @@ void FileResource::handleSettingsChange(Changes change)
             // are updated. Also, when the calendar is loaded, disabled alarm
             // types are not fully processed by loaded().
             load();
+            changes |= Loaded;
         }
+    }
+}
+
+/******************************************************************************
+* Called when the resource settings have changed.
+*/
+void FileResource::handleEnabledChange(Changes changes, CalEvent::Types oldEnabled)
+{
+    if (changes)
+    {
+        handleSettingsChange(changes);
+        Resources::notifySettingsChanged(this, changes, oldEnabled);
     }
 }
 

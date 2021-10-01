@@ -2,7 +2,7 @@
  *  singlefileresource.cpp  -  calendar resource held in a single file
  *  Program:  kalarm
  *  Partly based on ICalResourceBase and SingleFileResource in kdepim-runtime.
- *  SPDX-FileCopyrightText: 2009-2020 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2009-2021 David Jarvie <djarvie@kde.org>
  *  SPDX-FileCopyrightText: 2008 Bertjan Broeksema <broeksema@kde.org>
  *  SPDX-FileCopyrightText: 2008 Volker Krause <vkrause@kde.org>
  *  SPDX-FileCopyrightText: 2006 Till Adam <adam@kde.org>
@@ -758,10 +758,10 @@ void SingleFileResource::slotUploadJobResult(KJob* job)
 /******************************************************************************
 * Called when the resource settings have changed.
 */
-void SingleFileResource::handleSettingsChange(Changes change)
+void SingleFileResource::handleSettingsChange(Changes& changes)
 {
     qCDebug(KALARM_LOG) << "SingleFileResource::handleSettingsChange:" << displayId();
-    if (change & UpdateFormat)
+    if (changes & UpdateFormat)
     {
         if (mSettings->updateFormat())
         {
@@ -799,7 +799,7 @@ void SingleFileResource::handleSettingsChange(Changes change)
             mSettings->save();
         }
     }
-    FileResource::handleSettingsChange(change);
+    FileResource::handleSettingsChange(changes);
 }
 
 // vim: et sw=4:

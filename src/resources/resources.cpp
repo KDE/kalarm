@@ -426,8 +426,6 @@ void Resources::notifySettingsChanged(ResourceType* res, ResourceType::Changes c
 
     if (change & ResourceType::Enabled)
     {
-        ResourceType::Changes change = ResourceType::Enabled;
-
         // Find which alarm types (if any) have been newly enabled.
         const CalEvent::Types extra    = res->enabledTypes() & ~oldEnabled;
         CalEvent::Types       std      = res->configStandardTypes();
@@ -456,6 +454,8 @@ void Resources::notifySettingsChanged(ResourceType* res, ResourceType::Changes c
         }
         if (std)
             change |= ResourceType::Standard;
+        if (res->enabledTypes() == oldEnabled)
+            change &= ~ResourceType::Enabled;
     }
 
     Q_EMIT manager->settingsChanged(r, change);

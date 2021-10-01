@@ -1,7 +1,7 @@
 /*
  *  singlefileresource.h  -  calendar resource held in a single file
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2020 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2020-2021 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -169,7 +169,7 @@ protected:
      *  @note  Resources::notifySettingsChanged() is called after this, to
      *         notify clients.
      */
-    void handleSettingsChange(Changes) override;
+    void handleSettingsChange(Changes&) override;
 
     /**
      * Generates the full path for the cache file in the case that a remote file

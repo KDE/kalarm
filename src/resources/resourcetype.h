@@ -53,7 +53,9 @@ public:
         ReadOnly         = 0x10,   //!< The resource's read-only setting.
         KeepFormat       = 0x20,   //!< Whether the user has chosen not to convert to the current KAlarm format.
         UpdateFormat     = 0x40,   //!< The resource should now be converted to the current KAlarm format.
-        BackgroundColour = 0x80    //!< The background colour to display the resource.
+        BackgroundColour = 0x80,   //!< The background colour to display the resource.
+        // Non-status types...
+        Loaded           = 0x100   //!< The resource has been loaded from file. Note that this is an event notification type, not a status type.
     };
     Q_DECLARE_FLAGS(Changes, Change)
 

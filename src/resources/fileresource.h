@@ -375,7 +375,7 @@ protected:
      *  @note  Resources::notifySettingsChanged() is called after this, to
      *         notify clients.
      */
-    virtual void handleSettingsChange(Changes);
+    virtual void handleSettingsChange(Changes&);
 
     FileResourceSettings* mSettings;    // the resource's configuration
     int                   mVersion {KACalendar::IncompatibleFormat}; // the calendar format version
@@ -386,6 +386,9 @@ typedef QHash<const QString&, KACalendar::Compat>  CompatibilityMap;  // indexed
 CompatibilityMap    mCompatibilityMap;  // whether individual events are in compatible format
 */
     Status                mStatus {Status::NotConfigured};  // current status of resource
+
+private:
+    void handleEnabledChange(Changes changes, CalEvent::Types oldEnabled);
 };
 
 
