@@ -16,6 +16,5 @@ Dependencies:
     'kde/pim/kmailtransport' : '@same'
     'kde/pim/kmime' : '@same'
     'kde/pim/kpimtextedit' : '@same'
-    'kde/pim/libkdepim' : '@same'
     'kde/pim/mailcommon' : '@same'
     'kde/pim/pimcommon' : '@same'
