@@ -88,6 +88,7 @@ QVector<QDate> DayMatrix::selectedDates() const
     QVector<QDate> selDays;
     if (mSelStart != NO_SELECTION)
     {
+        selDays.reserve(mSelEnd - mSelStart + 1);
         for (int i = mSelStart;  i <= mSelEnd;  ++i)
             selDays.append(mStartDate.addDays(i));
     }

@@ -150,7 +150,7 @@ void AlarmListView::headerContextMenuRequested(const QPoint& pt)
                 act->setEnabled(false);    // don't allow text column to be hidden if name not used
             else
                 QObject::connect(act, &QAction::triggered,
-                                 this, [this, &menu, act] { showHideColumn(menu, act); });
+                                 this, [this, &menu, act] { showHideColumn(menu, act); });   //clazy:exclude=lambda-in-connect
         }
     }
     enableTimeColumns(&menu);
