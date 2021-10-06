@@ -63,7 +63,6 @@ using namespace KCalUtils;
 #include <QDropEvent>
 #include <QResizeEvent>
 #include <QCloseEvent>
-#include <QDesktopWidget>
 #include <QMenu>
 #include <QMimeDatabase>
 #include <QInputDialog>

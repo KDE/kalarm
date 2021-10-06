@@ -11,7 +11,6 @@
 #include <QLabel>
 #include <QMouseEvent>
 
-#include <QDebug>
 
 Slider::Slider(QWidget* parent)
     : QSlider(parent)
