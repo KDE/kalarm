@@ -55,7 +55,7 @@ Name[sv]=Alarmmeddelande
 Name[ta]=அலாரம் தகவல்
 Name[uk]=Повідомлення нагадування
 Name[x-test]=xxAlarm messagexx
-Name[zh_CN]=闹钟信息
+Name[zh_CN]=闹钟消息
 Action=Popup
 
 [Event/MessageBeep]
@@ -83,7 +83,7 @@ Name[sv]=Alarmmeddelande med ton
 Name[ta]=ஒலியுடன் கூடிய அலாரம் தகவல்
 Name[uk]=Повідомлення нагадування з гудком
 Name[x-test]=xxAlarm message with beepxx
-Name[zh_CN]=闹钟响铃信息
+Name[zh_CN]=哔！——闹钟消息
 Action=Popup|Sound
 Sound=Oxygen-Sys-App-Message.ogg
 
@@ -112,7 +112,7 @@ Name[sv]=Talat alarmmeddelande
 Name[ta]=பேச்சுவழி அலாரம் தகவல்
 Name[uk]=Повідомлення нагадування з виголошенням тексту
 Name[x-test]=xxSpoken alarm messagexx
-Name[zh_CN]=语音播报闹钟信息
+Name[zh_CN]=语音播报闹钟消息
 Action=Popup|TTS
 TTS=%s
 
@@ -141,6 +141,6 @@ Name[sv]=Alarmfelmeddelande
 Name[ta]=அலாரம் பிழைகுறித்த தகவல்
 Name[uk]=Повідомлення помилки нагадування
 Name[x-test]=xxAlarm error messagexx
-Name[zh_CN]=闹钟错误信息
+Name[zh_CN]=闹钟错误消息
 Action=Popup|Sound
 Sound=Oxygen-Sys-App-Error.ogg
