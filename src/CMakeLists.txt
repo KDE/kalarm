@@ -6,7 +6,6 @@ include_directories(
 add_subdirectory(appicons)
 add_subdirectory(pixmaps)
 add_subdirectory(autostart)
-add_subdirectory(kconf_update)
 
 set(libkalarm_common_SRCS)
 
