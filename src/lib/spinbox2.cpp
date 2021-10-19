@@ -1,7 +1,7 @@
 /*
  *  spinbox2.cpp  -  spin box with extra pair of spin buttons
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2001-2020 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2001-2021 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -121,12 +121,12 @@ void SpinBox2::setWrapping(bool on)
 
 QRect SpinBox2::up2Rect() const
 {
-    return mUpdown2->upRect();
+    return mShowUpdown2 ? mUpdown2->upRect() : QRect();
 }
 
 QRect SpinBox2::down2Rect() const
 {
-    return mUpdown2->downRect();
+    return mShowUpdown2 ? mUpdown2->downRect() : QRect();
 }
 
 void SpinBox2::setSingleStep(int step)
@@ -213,16 +213,15 @@ void SpinBox2::valueChange()
 */
 void SpinBox2::showEvent(QShowEvent*)
 {
-    setUpdown2Size();   // set the new size of the second pair of spin buttons
-    arrange();
-    mSpinMirror->setFrame();
+    rearrange();
 }
 
 QSize SpinBox2::sizeHint() const
 {
     getMetrics();
     QSize size = mSpinbox->sizeHint();
-    size.setWidth(size.width() - wSpinboxHide + wUpdown2);
+    if (mShowUpdown2)
+        size.setWidth(size.width() - wSpinboxHide + wUpdown2);
     return size;
 }
 
@@ -230,45 +229,46 @@ QSize SpinBox2::minimumSizeHint() const
 {
     getMetrics();
     QSize size = mSpinbox->minimumSizeHint();
-    size.setWidth(size.width() - wSpinboxHide + wUpdown2);
+    if (mShowUpdown2)
+        size.setWidth(size.width() - wSpinboxHide + wUpdown2);
     return size;
-}
-
-void SpinBox2::styleChange(QStyle&)
-{
-    setUpdown2Size();   // set the new size of the second pair of spin buttons
-    arrange();
-    mSpinMirror->setFrame();
 }
 
 void SpinBox2::paintEvent(QPaintEvent* e)
 {
     QFrame::paintEvent(e);
-    QTimer::singleShot(0, this, &SpinBox2::updateMirrorFrame);
+    if (mShowUpdown2)
+        QTimer::singleShot(0, this, &SpinBox2::updateMirrorFrame);
 }
 
 void SpinBox2::paintTimer()
 {
-    QTimer::singleShot(0, this, &SpinBox2::updateMirrorButtons);   //NOLINT(clang-analyzer-cplusplus.NewDeleteLeaks)
+    if (mShowUpdown2)
+        QTimer::singleShot(0, this, &SpinBox2::updateMirrorButtons);   //NOLINT(clang-analyzer-cplusplus.NewDeleteLeaks)
 }
 
 void SpinBox2::updateMirrorButtons()
 {
-    mSpinMirror->setButtons();
+    if (mShowUpdown2)
+        mSpinMirror->setButtons();
 }
 
 void SpinBox2::updateMirrorFrame()
 {
-    mSpinMirror->setFrame();
+    if (mShowUpdown2)
+        mSpinMirror->setFrame();
 }
 
 void SpinBox2::spinboxResized(QResizeEvent* e)
 {
-    const int h = e->size().height();
-    if (h != mUpdown2->height())
+    if (mShowUpdown2)
     {
-        mUpdown2->setFixedSize(mUpdown2->width(), e->size().height());
-        setUpdown2Size();
+        const int h = e->size().height();
+        if (h != mUpdown2->height())
+        {
+            mUpdown2->setFixedSize(mUpdown2->width(), e->size().height());
+            setUpdown2Size();
+        }
     }
 }
 
@@ -278,7 +278,8 @@ void SpinBox2::spinboxResized(QResizeEvent* e)
 */
 void SpinBox2::setUpdown2Size()
 {
-    mSpinMirror->setButtons();
+    if (mShowUpdown2)
+        mSpinMirror->setButtons();
 }
 
 /******************************************************************************
@@ -293,6 +294,13 @@ void SpinBox2::updateMirror()
 
 bool SpinBox2::eventFilter(QObject* obj, QEvent* e)
 {
+    if (obj == mSpinbox  &&  e->type() == QEvent::StyleChange)
+    {
+        rearrange();
+        return false;
+    }
+    if (!mShowUpdown2)
+        return false;
     bool updateButtons = false;
     if (obj == mSpinbox)
     {
@@ -351,24 +359,44 @@ bool SpinBox2::eventFilter(QObject* obj, QEvent* e)
 }
 
 /******************************************************************************
+* Set up the widget's geometry. Called when the widget is about to be
+* displayed, or when the style changes.
+*/
+void SpinBox2::rearrange()
+{
+    setUpdown2Size();   // set the new size of the second pair of spin buttons
+    arrange();
+    if (mShowUpdown2)
+    {
+        mSpinMirror->setFrame();
+        mSpinMirror->rearrange();
+    }
+}
+
+/******************************************************************************
 * Set the positions and sizes of all the child widgets.
 */
 void SpinBox2::arrange()
 {
+    mSpinbox->setMinimumSize(mSpinbox->minimumSizeHint());
+    mSpinboxFrame->setMinimumSize(mSpinbox->minimumSizeHint());
     getMetrics();
-    mUpdown2->move(-mUpdown2->width(), 0);   // keep completely hidden
-    const QRect arrowRect = style()->visualRect((mRightToLeft ? Qt::RightToLeft : Qt::LeftToRight), rect(), QRect(0, 0, wUpdown2, height()));
-    QRect r(wUpdown2, 0, width() - wUpdown2, height());
-    if (mRightToLeft)
-        r.moveLeft(0);
-    mSpinboxFrame->setGeometry(r);
-    mSpinbox->setGeometry(mRightToLeft ? 0 : -wSpinboxHide, 0, mSpinboxFrame->width() + wSpinboxHide, height());
-//    qCDebug(KALARM_LOG) << "arrowRect="<<arrowRect<<", mUpdown2="<<mUpdown2->geometry()<<", mSpinboxFrame="<<mSpinboxFrame->geometry()<<", mSpinbox="<<mSpinbox->geometry()<<", width="<<width();
+    if (mShowUpdown2)
+    {
+        mUpdown2->move(-mUpdown2->width(), 0);   // keep completely hidden
+        const QRect arrowRect = style()->visualRect((mRightToLeft ? Qt::RightToLeft : Qt::LeftToRight), rect(), QRect(0, 0, wUpdown2, height()));
+        QRect r(wUpdown2, 0, width() - wUpdown2, height());
+        if (mRightToLeft)
+            r.moveLeft(0);
+        mSpinboxFrame->setGeometry(r);
+        mSpinbox->setGeometry(mRightToLeft ? 0 : -wSpinboxHide, 0, mSpinboxFrame->width() + wSpinboxHide, height());
+//        qCDebug(KALARM_LOG) << "arrowRect="<<arrowRect<<", mUpdown2="<<mUpdown2->geometry()<<", mSpinboxFrame="<<mSpinboxFrame->geometry()<<", mSpinbox="<<mSpinbox->geometry()<<", width="<<width();
 
-    mSpinMirror->resize(wUpdown2, mUpdown2->height());
-    mSpinMirror->setGeometry(arrowRect);
-    mSpinMirror->setButtonPos(mButtonPos);
-    mSpinMirror->setButtons();
+        mSpinMirror->resize(wUpdown2, mUpdown2->height());
+        mSpinMirror->setGeometry(arrowRect);
+        mSpinMirror->setButtonPos(mButtonPos);
+        mSpinMirror->setButtons();
+    }
 }
 
 /******************************************************************************
@@ -385,6 +413,18 @@ void SpinBox2::getMetrics() const
     if (style()->inherits("PlastikStyle"))
         butRect.setLeft(butRect.left() - 1);    // Plastik excludes left border from spin widget rectangle
     QRect r = spinBoxEditFieldRect(mSpinbox, option);
+    {
+        // Check whether both mSpinbox spin buttons are on the same side of the control,
+        // and if not, show only the normal spinbox without extra spin buttons.
+        const QRect upRect   = mSpinbox->style()->subControlRect(QStyle::CC_SpinBox, &option, QStyle::SC_SpinBoxUp);
+        const QRect downRect = mSpinbox->style()->subControlRect(QStyle::CC_SpinBox, &option, QStyle::SC_SpinBoxDown);
+        mShowUpdown2 = ((upRect.left() > r.left())  &&  (downRect.left() > r.left()))
+                   ||  ((upRect.right() < r.right())  &&  (downRect.right() < r.right()));
+        mUpdown2->setVisible(mShowUpdown2);
+        mSpinMirror->setVisible(mShowUpdown2);
+        if (!mShowUpdown2)
+            return;
+    }
     wSpinboxHide = mRightToLeft ? mSpinbox->style()->subControlRect(QStyle::CC_SpinBox, &option, QStyle::SC_SpinBoxFrame).right() - r.right() : r.left();
     const QRect edRect = spinBoxEditFieldRect(mUpdown2, option);
     int butx;
@@ -472,7 +512,7 @@ void SpinBox2::stepPage(int step)
 */
 int SpinBox2::MainSpinBox::shiftStepAdjustment(int oldValue, int shiftStep)
 {
-    if (owner->reverseButtons())
+    if (owner->mShowUpdown2  &&  owner->reverseButtons())
     {
         // The button pairs have the opposite function from normal.
         // Page shift stepping - step up or down to a multiple of the
@@ -630,9 +670,9 @@ void SpinMirror::resizeEvent(QResizeEvent* e)
     setMirroredState();
 }
 
-void SpinMirror::styleChange(QStyle& st)
+void SpinMirror::rearrange()
 {
-    mMirrored = isMirrorStyle(&st);
+    mMirrored = isMirrorStyle(style());
     setMirroredState(true);
 }
 
