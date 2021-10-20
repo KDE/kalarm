@@ -101,7 +101,7 @@ void SpinBox2::setReverseWithLayout(bool reverse)
     {
         mReverseWithLayout = reverse;
         setSteps(mSingleStep, mPageStep);
-        setShiftSteps(mSingleShiftStep, mPageShiftStep);
+        setShiftSteps(mSingleShiftStep, mPageShiftStep, mSingleControlStep, mModControlStep);
     }
 }
 
@@ -154,10 +154,12 @@ void SpinBox2::setSteps(int single, int page)
     }
 }
 
-void SpinBox2::setShiftSteps(int single, int page)
+void SpinBox2::setShiftSteps(int single, int page, int control, bool modControl)
 {
-    mSingleShiftStep = single;
-    mPageShiftStep   = page;
+    mSingleShiftStep   = single;
+    mPageShiftStep     = page;
+    mSingleControlStep = control;
+    mModControlStep    = modControl;
     if (reverseButtons())
     {
         mUpdown2->setSingleShiftStep(single);   // reverse layout, but still set the right buttons
@@ -168,6 +170,8 @@ void SpinBox2::setShiftSteps(int single, int page)
         mSpinbox->setSingleShiftStep(single);
         mUpdown2->setSingleShiftStep(page);
     }
+    if (!mShowUpdown2)
+        mSpinbox->setSingleControlStep(control, modControl);
 }
 
 void SpinBox2::setButtonSymbols(QSpinBox::ButtonSymbols newSymbols)
@@ -422,6 +426,7 @@ void SpinBox2::getMetrics() const
                    ||  ((upRect.right() < r.right())  &&  (downRect.right() < r.right()));
         mUpdown2->setVisible(mShowUpdown2);
         mSpinMirror->setVisible(mShowUpdown2);
+        mSpinbox->setSingleControlStep(mShowUpdown2 ? 0 : mSingleControlStep, !mShowUpdown2 && mModControlStep);
         if (!mShowUpdown2)
             return;
     }
@@ -465,9 +470,9 @@ void SpinBox2::getMetrics() const
 * Normally this is a page step, but with a right-to-left language where the
 * button functions are reversed, this is a line step.
 */
-void SpinBox2::stepPage(int step)
+void SpinBox2::stepPage(int step, bool modified)
 {
-    if (abs(step) == mUpdown2->singleStep())
+    if (abs(step) == mUpdown2->singleStep()  ||  modified)
         mSpinbox->setValue(mUpdown2->value());
     else
     {
@@ -798,6 +803,5 @@ static QRect spinBoxEditFieldRect(const QWidget* w, const QStyleOptionSpinBox& o
     }
     return r;
 }
-
 
 // vim: et sw=4:

@@ -209,10 +209,14 @@ public:
     /** Sets the shifted step increments for the two pairs of spin buttons,
      *  i.e. the amount by which the spin box value changes when a spin button
      *  is clicked while the shift key is pressed.
-     *  @param line The shift step increment for the right-hand spin buttons.
-     *  @param page The shift step increment for the left-hand spin buttons.
+     *  @param line     The shift step increment for the right-hand spin buttons.
+     *  @param page     The shift step increment for the left-hand spin buttons.
+     *  @param control  The control step increment for the left-hand spin buttons.
+     *                  N.B. Qt multiplies the step increment by 10 when the Control
+     *                       key is pressed, so this parameter value should be 
+     *  @param modControl  Control steps should always set value to multiple of @p step.
      */
-    void             setShiftSteps(int line, int page);
+    void             setShiftSteps(int line, int page, int control, bool modControl = true);
 
     /** Increments the current value by adding the unshifted step increment for
      *  the left-hand spin buttons.
@@ -276,7 +280,7 @@ protected:
 
 protected Q_SLOTS:
     virtual void     valueChange();
-    virtual void     stepPage(int);
+    virtual void     stepPage(int, bool);
 
 private Q_SLOTS:
     void             updateMirrorButtons();
@@ -327,12 +331,13 @@ private:
     int              mMaxValue;
     int              mSingleStep;         // right button increment
     int              mSingleShiftStep;    // right button increment with shift pressed
+    int              mSingleControlStep;  // right button increment with control pressed
     int              mPageStep;           // left button increment
     int              mPageShiftStep;      // left button increment with shift pressed
+    bool             mModControlStep {true};     // control steps set value to multiple of step
     bool             mReverseWithLayout {true};  // reverse button positions if reverse layout (default = true)
 
 friend class MainSpinBox;
 };
-
 
 // vim: et sw=4:

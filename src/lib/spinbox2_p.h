@@ -83,5 +83,4 @@ private:
     bool                 mMirrored;   // mirror left-to-right
 };
 
-
 // vim: et sw=4:
