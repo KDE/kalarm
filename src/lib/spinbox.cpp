@@ -1,12 +1,13 @@
 /*
  *  spinbox.cpp  -  spin box with read-only option and shift-click step value
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2002-2020 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2002-2021 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "spinbox.h"
+#include "spinbox_p.h"
 
 #include "kalarm_debug.h"
 
@@ -44,6 +45,7 @@ void SpinBox::init()
     int step = QSpinBox::singleStep();
     mLineStep        = step;
     mLineShiftStep   = step;
+    mLineControlStep = 0;
     mCurrentButton   = NO_BUTTON;
 
     lineEdit()->installEventFilter(this);   // handle shift-up/down arrow presses
@@ -53,6 +55,11 @@ void SpinBox::init()
     connect(this, &SpinBox::valueChanged, this, &SpinBox::valueChange);
 }
 
+SpinBox::~SpinBox()
+{
+    delete mControlStyle;
+}
+
 void SpinBox::setReadOnly(bool ro)
 {
     if (ro != mReadOnly)
@@ -60,7 +67,7 @@ void SpinBox::setReadOnly(bool ro)
         mReadOnly = ro;
         lineEdit()->setReadOnly(ro);
         if (ro)
-            setShiftStepping(false, mCurrentButton);
+            setShiftStepping(NoModifier, mCurrentButton);
     }
 }
 
@@ -86,22 +93,36 @@ void SpinBox::setMaximum(int val)
 void SpinBox::setSingleStep(int step)
 {
     mLineStep = step;
-    if (!mShiftMouse)
+    if (mMouseKey == NoModifier)
         QSpinBox::setSingleStep(step);
 }
 
 void SpinBox::setSingleShiftStep(int step)
 {
     mLineShiftStep = step;
-    if (mShiftMouse)
+    if (mMouseKey == ShiftModifier)
         QSpinBox::setSingleStep(step);
+}
+
+void SpinBox::setSingleControlStep(int step, bool mod)
+{
+    if (mLineControlStep != step  ||  mModControlStep != mod)
+    {
+        mLineControlStep = step;
+        mModControlStep  = step && mod;
+        if (mMouseKey == ControlModifier)
+            QSpinBox::setSingleStep(mLineControlStep ? mLineControlStep : mLineStep);
+        if (mLineControlStep  &&  !mControlStyle)
+            mControlStyle = new SpinBoxStyle;
+        setStyle(mLineControlStep ? mControlStyle : QApplication::style());
+    }
 }
 
 void SpinBox::stepBy(int steps)
 {
     int increment = steps * QSpinBox::singleStep();
     addValue(increment);
-    Q_EMIT stepped(increment);
+    Q_EMIT stepped(increment, steps != 1);
 }
 
 /******************************************************************************
@@ -198,17 +219,19 @@ bool SpinBox::eventFilter(QObject* obj, QEvent* e)
             if (mReadOnly)
                 return true;    // discard up/down arrow keys
             auto* ie = (QInputEvent*)e;
-            if ((ie->modifiers() & (Qt::ShiftModifier | Qt::AltModifier)) == Qt::ShiftModifier)
+            const Modifier modifier = getModifier(ie->modifiers());
+            const int lineStep = (modifier == ShiftModifier) ? mLineShiftStep : (modifier == ControlModifier && mLineControlStep) ? mLineControlStep : mLineStep;
+            if (modifier == ShiftModifier  ||  (modifier == ControlModifier && mModControlStep))
             {
-                // Shift stepping
+                // Shift/control stepping, to a multiple of the step
                 const int val = value();
                 if (step > 0)
-                    step = mLineShiftStep - val % mLineShiftStep;
+                    step = lineStep - val % lineStep;
                 else
-                    step = - ((val + mLineShiftStep - 1) % mLineShiftStep + 1);
+                    step = - ((val + lineStep - 1) % lineStep + 1);
             }
             else
-                step = (step > 0) ? mLineStep : -mLineStep;
+                step = (step > 0) ? lineStep : -lineStep;
             addValue(step, false);
             return true;
         }
@@ -251,8 +274,7 @@ bool SpinBox::clickEvent(QMouseEvent* e)
             e->accept();
             return true;
         }
-        const bool shift = (e->modifiers() & (Qt::ShiftModifier | Qt::AltModifier)) == Qt::ShiftModifier;
-        if (setShiftStepping(shift, mCurrentButton))
+        if (setShiftStepping(getModifier(e->modifiers()), mCurrentButton))
         {
             e->accept();
             return true;     // hide the event from the spin widget
@@ -265,8 +287,7 @@ void SpinBox::wheelEvent(QWheelEvent* e)
 {
     if (mReadOnly)
         return;   // discard the event
-    const bool shift = (e->modifiers() & (Qt::ShiftModifier | Qt::AltModifier)) == Qt::ShiftModifier;
-    if (setShiftStepping(shift, (e->angleDelta().y() > 0 ? UP : DOWN)))
+    if (setShiftStepping(getModifier(e->modifiers()), (e->angleDelta().y() > 0 ? UP : DOWN)))
     {
         e->accept();
         return;     // hide the event from the spin widget
@@ -276,8 +297,8 @@ void SpinBox::wheelEvent(QWheelEvent* e)
 
 void SpinBox::mouseReleaseEvent(QMouseEvent* e)
 {
-    if (e->button() == Qt::LeftButton  &&  mShiftMouse)
-        setShiftStepping(false, mCurrentButton);    // cancel shift stepping
+    if (e->button() == Qt::LeftButton  &&  mMouseKey != NoModifier)
+        setShiftStepping(NoModifier, mCurrentButton);    // cancel shift stepping
     QSpinBox::mouseReleaseEvent(e);
 }
 
@@ -294,8 +315,7 @@ void SpinBox::mouseMoveEvent(QMouseEvent* e)
             // The mouse has moved to a new spin button.
             // Set normal or shift stepping as appropriate.
             mCurrentButton = newButton;
-            const bool shift = (e->modifiers() & (Qt::ShiftModifier | Qt::AltModifier)) == Qt::ShiftModifier;
-            if (setShiftStepping(shift, mCurrentButton))
+            if (setShiftStepping(getModifier(e->modifiers()), mCurrentButton))
             {
                 e->accept();
                 return;     // hide the event from the spin widget
@@ -319,20 +339,19 @@ void SpinBox::keyReleaseEvent(QKeyEvent* e)
 
 bool SpinBox::keyEvent(QKeyEvent* e)
 {
-    const int key   = e->key();
-    const int state = e->modifiers();
+    const int key = e->key();
     if ((QApplication::mouseButtons() & Qt::LeftButton)
-    &&  (key == Qt::Key_Shift  ||  key == Qt::Key_Alt))
+    &&  (key == Qt::Key_Shift  ||  key == Qt::Key_Control  ||  key == Qt::Key_Alt))
     {
-        // The left mouse button is down, and the Shift or Alt key has changed
+        // The left mouse button is down, and the Shift, Control or Alt key has changed
         if (mReadOnly)
             return true;   // discard the event
-        const bool shift = (state & (Qt::ShiftModifier | Qt::AltModifier)) == Qt::ShiftModifier;
-        if ((!shift && mShiftMouse)  ||  (shift && !mShiftMouse))
+        const Modifier modifier = getModifier(e->modifiers());
+        if (modifier != mMouseKey)
         {
-            // The effective shift state has changed.
+            // The effective shift or control state has changed.
             // Set normal or shift stepping as appropriate.
-            if (setShiftStepping(shift, mCurrentButton))
+            if (setShiftStepping(modifier, mCurrentButton))
             {
                 e->accept();
                 return true;     // hide the event from the spin widget
@@ -345,21 +364,24 @@ bool SpinBox::keyEvent(QKeyEvent* e)
 /******************************************************************************
 * Set spin widget stepping to the normal or shift increment.
 */
-bool SpinBox::setShiftStepping(bool shift, int currentButton)
+bool SpinBox::setShiftStepping(Modifier modifier, int currentButton)
 {
     if (currentButton == NO_BUTTON)
-        shift = false;
-    if (shift  &&  !mShiftMouse)
+        modifier = NoModifier;
+    if (modifier == ControlModifier  &&  !mLineControlStep)
+        modifier = NoModifier;    // Qt automatically handles Control key modifier
+    if (modifier != NoModifier  &&  modifier != mMouseKey)
     {
-        /* The value is to be stepped to a multiple of the shift increment.
+        /* The value is to be stepped to a multiple of the shift or control increment.
          * Adjust the value so that after the spin widget steps it, it will be correct.
          * Then, if the mouse button is held down, the spin widget will continue to
          * step by the shift amount.
          */
         const int val = value();
-        const int step = (currentButton == UP) ? mLineShiftStep : (currentButton == DOWN) ? -mLineShiftStep : 0;
-        const int adjust = shiftStepAdjustment(val, step);
-        mShiftMouse = true;
+        const int lineStep = (modifier == ShiftModifier) ? mLineShiftStep : mLineControlStep;
+        const int step = (currentButton == UP) ? lineStep : (currentButton == DOWN) ? -lineStep : 0;
+        const int adjust = (modifier == ShiftModifier || mModControlStep) ? shiftStepAdjustment(val, step) : 0;
+        mMouseKey = modifier;
         if (adjust)
         {
             /* The value is to be stepped by other than the shift increment,
@@ -384,7 +406,7 @@ bool SpinBox::setShiftStepping(bool shift, int currentButton)
                     else
                         newval = (newval <= minval) ? minval : mMaxValue;
                     QSpinBox::setValue(newval);
-                    Q_EMIT stepped(step);
+                    Q_EMIT stepped(step, false);
                     return true;
                 }
 
@@ -411,16 +433,16 @@ bool SpinBox::setShiftStepping(bool shift, int currentButton)
             blockSignals(blocked);
             mSuppressSignals = false;
         }
-        QSpinBox::setSingleStep(mLineShiftStep);
+        QSpinBox::setSingleStep(lineStep);
     }
-    else if (!shift  &&  mShiftMouse)
+    else if (modifier == NoModifier  &&  mMouseKey != NoModifier)
     {
         // Reinstate to normal (non-shift) stepping
         QSpinBox::setSingleStep(mLineStep);
         QSpinBox::setMinimum(mMinValue);
         QSpinBox::setMaximum(mMaxValue);
         mShiftMinBound = mShiftMaxBound = false;
-        mShiftMouse = false;
+        mMouseKey = NoModifier;
     }
     return false;
 }
@@ -515,6 +537,161 @@ void SpinBox::initStyleOption(QStyleOptionSpinBox& so) const
     so.buttonSymbols = buttonSymbols();
     so.frame         = hasFrame();
     so.stepEnabled   = stepEnabled();
+}
+
+/******************************************************************************
+* Given input modifier keys, find which modifier is active.
+*/
+SpinBox::Modifier SpinBox::getModifier(Qt::KeyboardModifiers modifiers)
+{
+    const int state = modifiers & (Qt::ShiftModifier | Qt::ControlModifier | Qt::AltModifier);
+    return (state == Qt::ShiftModifier) ? ShiftModifier
+         : (state == Qt::ControlModifier) ? ControlModifier
+         : NoModifier;
+}
+
+
+/*=============================================================================
+* SpinBoxStyle class.
+*/
+SpinBoxStyle::SpinBoxStyle()
+{
+}
+
+void SpinBoxStyle::polish(QWidget* widget)
+{
+    QApplication::style()->polish(widget);
+}
+
+void SpinBoxStyle::unpolish(QWidget* widget)
+{
+    QApplication::style()->unpolish(widget);
+}
+
+void SpinBoxStyle::polish(QApplication* application)
+{
+    QApplication::style()->polish(application);
+}
+
+void SpinBoxStyle::unpolish(QApplication* application)
+{
+    QApplication::style()->unpolish(application);
+}
+
+void SpinBoxStyle::polish(QPalette& palette)
+{
+    QApplication::style()->polish(palette);
+}
+
+QRect SpinBoxStyle::itemTextRect(const QFontMetrics& fm, const QRect& r,
+                       int flags, bool enabled,
+                       const QString& text) const
+{
+    return QApplication::style()->itemTextRect(fm, r, flags, enabled, text);
+}
+
+QRect SpinBoxStyle::itemPixmapRect(const QRect& r, int flags, const QPixmap& pixmap) const
+{
+    return QApplication::style()->itemPixmapRect(r, flags, pixmap);
+}
+
+void SpinBoxStyle::drawItemText(QPainter* painter, const QRect& rect,
+                          int flags, const QPalette& pal, bool enabled,
+                          const QString& text, QPalette::ColorRole textRole) const
+{
+    QApplication::style()->drawItemText(painter, rect, flags, pal, enabled, text, textRole);
+}
+
+void SpinBoxStyle::drawItemPixmap(QPainter* painter, const QRect& rect,
+                            int alignment, const QPixmap& pixmap) const
+{
+    QApplication::style()->drawItemPixmap(painter, rect, alignment, pixmap);
+}
+
+QPalette SpinBoxStyle::standardPalette() const
+{
+    return QApplication::style()->standardPalette();
+}
+
+void SpinBoxStyle::drawPrimitive(PrimitiveElement pe, const QStyleOption* opt, QPainter* p,
+                           const QWidget* w) const
+{
+    QApplication::style()->drawPrimitive(pe, opt, p, w);
+}
+
+void SpinBoxStyle::drawControl(ControlElement element, const QStyleOption* opt, QPainter* p,
+                         const QWidget* w) const
+{
+    QApplication::style()->drawControl(element, opt, p, w);
+}
+
+QRect SpinBoxStyle::subElementRect(SubElement subElement, const QStyleOption* option,
+                             const QWidget* widget) const
+{
+    return QApplication::style()->subElementRect(subElement, option, widget);
+}
+
+void SpinBoxStyle::drawComplexControl(ComplexControl cc, const QStyleOptionComplex* opt, QPainter* p,
+                                const QWidget* widget) const
+{
+    QApplication::style()->drawComplexControl(cc, opt, p, widget);
+}
+
+QStyle::SubControl SpinBoxStyle::hitTestComplexControl(ComplexControl cc, const QStyleOptionComplex* opt,
+                                         const QPoint& pt, const QWidget* widget) const
+{
+    return QApplication::style()->hitTestComplexControl(cc, opt, pt, widget);
+}
+
+QRect SpinBoxStyle::subControlRect(ComplexControl cc, const QStyleOptionComplex* opt,
+                             SubControl sc, const QWidget* widget) const
+{
+    return QApplication::style()->subControlRect(cc, opt, sc, widget);
+}
+
+int SpinBoxStyle::pixelMetric(PixelMetric metric, const QStyleOption* option,
+                        const QWidget* widget) const
+{
+    return QApplication::style()->pixelMetric(metric, option, widget);
+}
+
+QSize SpinBoxStyle::sizeFromContents(ContentsType ct, const QStyleOption* opt,
+                               const QSize& contentsSize, const QWidget* w) const
+{
+    return QApplication::style()->sizeFromContents(ct, opt, contentsSize, w);
+}
+
+int SpinBoxStyle::styleHint(StyleHint stylehint, const QStyleOption* opt,
+                      const QWidget* widget, QStyleHintReturn* returnData) const
+{
+    if (stylehint == SH_SpinBox_StepModifier)
+        return Qt::NoModifier;
+    return QApplication::style()->styleHint(stylehint, opt, widget, returnData);
+}
+
+QPixmap SpinBoxStyle::standardPixmap(StandardPixmap standardPixmap, const QStyleOption* opt,
+                               const QWidget* widget) const
+{
+    return QApplication::style()->standardPixmap(standardPixmap, opt, widget);
+}
+
+QIcon SpinBoxStyle::standardIcon(StandardPixmap standardIcon, const QStyleOption* option,
+                           const QWidget* widget) const
+{
+    return QApplication::style()->standardIcon(standardIcon, option, widget);
+}
+
+QPixmap SpinBoxStyle::generatedIconPixmap(QIcon::Mode iconMode, const QPixmap& pixmap,
+                                    const QStyleOption* opt) const
+{
+    return QApplication::style()->generatedIconPixmap(iconMode, pixmap, opt);
+}
+
+int SpinBoxStyle::layoutSpacing(QSizePolicy::ControlType control1,
+                          QSizePolicy::ControlType control2, Qt::Orientation orientation,
+                          const QStyleOption* option, const QWidget* widget) const
+{
+    return QApplication::style()->layoutSpacing(control1, control2, orientation, option, widget);
 }
 
 // vim: et sw=4:

@@ -1,7 +1,7 @@
 /*
  *  spinbox2.h  -  spin box with extra pair of spin buttons
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2001-2020 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2001-2021 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -20,7 +20,8 @@ class ExtraSpinBox;
 /**
  *  @short Spin box with a pair of spin buttons on either side.
  *
- *  The SpinBox2 class provides a spin box with two pairs of spin buttons, one on either side.
+ *  The SpinBox2 class provides a spin box with two pairs of spin buttons, one on either side,
+ *  provided that the current style places the two spin buttons on the same side of a QSpinBox.
  *
  *  It is designed as a base class for implementing such facilities as time spin boxes, where
  *  the hours and minutes values are separately displayed in the edit field. When the
@@ -157,10 +158,14 @@ public:
     /** Returns the geometry of the right-hand "down" button. */
     QRect            downRect() const            { return mSpinbox->downRect(); }
 
-    /** Returns the geometry of the left-hand "up" button. */
+    /** Returns the geometry of the left-hand "up" button.
+     *  @return Button geometry, or invalid if left-hand buttons are not visible.
+     */
     QRect            up2Rect() const;
 
-    /** Returns the geometry of the left-hand "down" button. */
+    /** Returns the geometry of the left-hand "down" button.
+     *  @return Button geometry, or invalid if left-hand buttons are not visible.
+     */
     QRect            down2Rect() const;
 
     /** Returns the unshifted step increment for the right-hand spin buttons,
@@ -204,10 +209,14 @@ public:
     /** Sets the shifted step increments for the two pairs of spin buttons,
      *  i.e. the amount by which the spin box value changes when a spin button
      *  is clicked while the shift key is pressed.
-     *  @param line The shift step increment for the right-hand spin buttons.
-     *  @param page The shift step increment for the left-hand spin buttons.
+     *  @param line     The shift step increment for the right-hand spin buttons.
+     *  @param page     The shift step increment for the left-hand spin buttons.
+     *  @param control  The control step increment for the left-hand spin buttons.
+     *                  N.B. Qt multiplies the step increment by 10 when the Control
+     *                       key is pressed, so this parameter value should be 
+     *  @param modControl  Control steps should always set value to multiple of @p step.
      */
-    void             setShiftSteps(int line, int page);
+    void             setShiftSteps(int line, int page, int control, bool modControl = true);
 
     /** Increments the current value by adding the unshifted step increment for
      *  the left-hand spin buttons.
@@ -262,16 +271,16 @@ protected:
     virtual int      valueFromText(const QString& t) const  { return mSpinbox->valFromText(t); }
     void             paintEvent(QPaintEvent*) override;
     void             showEvent(QShowEvent*) override;
-    virtual void     styleChange(QStyle&);
     virtual void     getMetrics() const;
 
     mutable int      wUpdown2;        // width of second spin widget
     mutable int      wSpinboxHide;    // width at left of 'mSpinbox' hidden by second spin widget
     mutable QPoint   mButtonPos;      // position of buttons inside mirror widget
+    mutable bool     mShowUpdown2 {true};  // the extra pair of spin buttons are displayed
 
 protected Q_SLOTS:
     virtual void     valueChange();
-    virtual void     stepPage(int);
+    virtual void     stepPage(int, bool);
 
 private Q_SLOTS:
     void             updateMirrorButtons();
@@ -280,6 +289,7 @@ private Q_SLOTS:
 
 private:
     void             init();
+    void             rearrange();
     void             arrange();
     void             updateMirror();
     bool             eventFilter(QObject*, QEvent*) override;
@@ -321,12 +331,13 @@ private:
     int              mMaxValue;
     int              mSingleStep;         // right button increment
     int              mSingleShiftStep;    // right button increment with shift pressed
+    int              mSingleControlStep;  // right button increment with control pressed
     int              mPageStep;           // left button increment
     int              mPageShiftStep;      // left button increment with shift pressed
+    bool             mModControlStep {true};     // control steps set value to multiple of step
     bool             mReverseWithLayout {true};  // reverse button positions if reverse layout (default = true)
 
 friend class MainSpinBox;
 };
-
 
 // vim: et sw=4:

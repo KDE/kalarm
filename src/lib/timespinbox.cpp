@@ -10,6 +10,7 @@
 
 #include <KLocalizedString>
 
+#include <QDebug>
 
 /*=============================================================================
 = Class TimeSpinBox
@@ -33,7 +34,7 @@ TimeSpinBox::TimeSpinBox(bool use24hour, QWidget* parent)
 {
     setWrapping(true);
     setReverseWithLayout(false);   // keep buttons the same way round even if right-to-left language
-    setShiftSteps(5, 360);    // shift-left button increments 5 min / 6 hours
+    setShiftSteps(5, 360, 60, false);    // shift-left button increments 5 min / 6 hours
     setSelectOnStep(false);
     setAlignment(Qt::AlignHCenter);
     connect(this, &TimeSpinBox::valueChanged, this, &TimeSpinBox::slotValueChanged);
@@ -48,7 +49,7 @@ TimeSpinBox::TimeSpinBox(int minMinute, int maxMinute, QWidget* parent)
     , m12Hour(false)
 {
     setReverseWithLayout(false);   // keep buttons the same way round even if right-to-left language
-    setShiftSteps(5, 300);    // shift-left button increments 5 min / 5 hours
+    setShiftSteps(5, 300, 60, false);    // shift-left button increments 5 min / 5 hours
     setSelectOnStep(false);
     setAlignment(Qt::AlignRight);
 }
@@ -228,6 +229,7 @@ QSize TimeSpinBox::sizeHint() const
 {
     const QSize sz = SpinBox2::sizeHint();
     const QFontMetrics fm(font());
+qDebug()<<(void*)this<<"TIMESPINBOX::sizeHint:"<<QSize{sz.width() + fm.horizontalAdvance(QLatin1Char(':')), sz.height()};
     return {sz.width() + fm.horizontalAdvance(QLatin1Char(':')), sz.height()};
 }
 
@@ -235,6 +237,7 @@ QSize TimeSpinBox::minimumSizeHint() const
 {
     const QSize sz = SpinBox2::minimumSizeHint();
     const QFontMetrics fm(font());
+qDebug()<<(void*)this<<"TIMESPINBOX::minimumSizeHint:"<<QSize{sz.width() + fm.horizontalAdvance(QLatin1Char(':')), sz.height()};
     return {sz.width() + fm.horizontalAdvance(QLatin1Char(':')), sz.height()};
 }
 
