@@ -12,7 +12,7 @@
 #include <QWidget>
 #include <QString>
 
-class QStackedWidget;
+class StackedWidget;
 class ComboBox;
 class SpinBox;
 class TimeSpinBox;
@@ -123,7 +123,7 @@ class TimePeriod : public QWidget
         static QString i18n_days();          // text of 'days' units
         static QString i18n_weeks();         // text of 'weeks' units
 
-        QStackedWidget* mSpinStack;          // displays either the days/weeks or hours:minutes spinbox
+        StackedWidget*  mSpinStack;          // displays either the days/weeks or hours:minutes spinbox
         SpinBox*        mSpinBox;            // the minutes/days/weeks value spinbox
         TimeSpinBox*    mTimeSpinBox;        // the hours:minutes value spinbox
         ComboBox*       mUnitsCombo;

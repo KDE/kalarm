@@ -1,7 +1,7 @@
 /*
- *  stackedwidgets.cpp  -  group of stacked widgets
+ *  stackedwidgets.cpp  -  classes implementing stacked widgets
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2008, 2020 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2008-2021 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -15,8 +15,27 @@
 #include <QStyle>
 
 
+QSize StackedWidget::sizeHint() const
+{
+    QSize sz;
+    for (int i = count();  --i >= 0;  )
+        sz = sz.expandedTo(widget(i)->sizeHint());
+    return sz;
+}
+
+QSize StackedWidget::minimumSizeHint() const
+{
+    QSize sz;
+    for (int i = count();  --i >= 0;  )
+        sz = sz.expandedTo(widget(i)->minimumSizeHint());
+    return sz;
+}
+
+
+/******************************************************************************
+*/
 StackedScrollWidget::StackedScrollWidget(StackedScrollGroup* group, QWidget* parent)
-    : StackedWidgetT<QScrollArea>(group, parent)
+    : StackedGroupWidgetT<QScrollArea>(group, parent)
 {
     setFrameStyle(QFrame::NoFrame);
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);

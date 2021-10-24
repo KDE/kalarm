@@ -1209,17 +1209,17 @@ EditPrefTab::EditPrefTab(StackedScrollGroup* scrollGroup)
 
     mTabs = new QTabWidget();
     topLayout()->addWidget(mTabs);
-    auto tabgroup = new StackedGroupT<QWidget>(mTabs);
+    auto tabgroup = new StackedGroup(mTabs);
 
-    auto topGeneral = new StackedWidgetT<QWidget>(tabgroup);
+    auto topGeneral = new StackedGroupWidget(tabgroup);
     auto tgLayout = new QVBoxLayout(topGeneral);
     mTabGeneral = mTabs->addTab(topGeneral, i18nc("@title:tab", "General"));
 
-    auto topTypes = new StackedWidgetT<QWidget>(tabgroup);
+    auto topTypes = new StackedGroupWidget(tabgroup);
     auto ttLayout = new QVBoxLayout(topTypes);
     mTabTypes = mTabs->addTab(topTypes, i18nc("@title:tab Settings specific to alarm type", "Type Specific"));
 
-    auto topFontColour = new StackedWidgetT<QWidget>(tabgroup);
+    auto topFontColour = new StackedGroupWidget(tabgroup);
     auto tfLayout = new QVBoxLayout(topFontColour);
     mTabFontColour = mTabs->addTab(topFontColour, i18nc("@title:tab", "Font && Color"));
 

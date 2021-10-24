@@ -1,7 +1,7 @@
 /*
  *  timeperiod.h  -  time period data entry widget
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2003-2020 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2003-2021 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -11,11 +11,11 @@
 #include "combobox.h"
 #include "spinbox.h"
 #include "timespinbox.h"
+#include "lib/stackedwidgets.h"
 
 #include <KLocalizedString>
 
 #include <QHBoxLayout>
-#include <QStackedWidget>
 
 using namespace KCalendarCore;
 
@@ -41,7 +41,7 @@ TimePeriod::TimePeriod(bool allowHourMinute, QWidget* parent)
     setLayout(layout);
     layout->setContentsMargins(0, 0, 0, 0);
 
-    mSpinStack = new QStackedWidget(this);
+    mSpinStack = new StackedWidget(this);
     mSpinBox = new SpinBox(mSpinStack);
     mSpinBox->setSingleStep(1);
     mSpinBox->setSingleShiftStep(10);

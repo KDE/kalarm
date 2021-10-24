@@ -1,16 +1,34 @@
 /*
- *  stackedwidgets.h  -  group of stacked widgets
+ *  stackedwidgets.h  -  classes implementing stacked widgets
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2008, 2020 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2008-2021 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #pragma once
 
+#include <QStackedWidget>
 #include <QVector>
 #include <QScrollArea>
 class QDialog;
+
+/**
+ *  A QStackedWidget, whose size hint is that of the largest widget in the stack.
+ *
+ *  @author David Jarvie <djarvie@kde.org>
+ */
+class StackedWidget : public QStackedWidget
+{
+public:
+    /** Constructor.
+     *  @param parent The parent object of this widget.
+     */
+    explicit StackedWidget(QWidget* parent = nullptr)
+          : QStackedWidget(parent)  {}
+    QSize sizeHint() const override;
+    QSize minimumSizeHint() const override;
+};
 
 template <class T> class StackedGroupT;
 
@@ -21,20 +39,20 @@ template <class T> class StackedGroupT;
  *  @author David Jarvie <djarvie@kde.org>
  */
 template <class T>
-class StackedWidgetT : public T
+class StackedGroupWidgetT : public T
 {
 public:
     /** Constructor.
      *  @param parent The parent object of this widget.
      *  @param group The stack group to insert this widget into.
      */
-    explicit StackedWidgetT(StackedGroupT<T>* group, QWidget* parent = nullptr)
+    explicit StackedGroupWidgetT(StackedGroupT<T>* group, QWidget* parent = nullptr)
           : T(parent),
             mGroup(group)
     {
         mGroup->addWidget(this);
     }
-    ~StackedWidgetT() override  { mGroup->removeWidget(this); }
+    ~StackedGroupWidgetT() override  { mGroup->removeWidget(this); }
     QSize sizeHint() const         override { return minimumSizeHint(); }
     QSize minimumSizeHint() const  override { return mGroup->minimumSizeHint(); }
 
@@ -56,12 +74,12 @@ class StackedGroupT : public QObject
 {
 public:
     explicit StackedGroupT(QObject* parent = nullptr) : QObject(parent) {}
-    void  addWidget(StackedWidgetT<T>* w)     { mWidgets += w; }
-    void  removeWidget(StackedWidgetT<T>* w)  { mWidgets.removeAll(w); }
+    void  addWidget(StackedGroupWidgetT<T>* w)     { mWidgets += w; }
+    void  removeWidget(StackedGroupWidgetT<T>* w)  { mWidgets.removeAll(w); }
     virtual QSize minimumSizeHint() const;
 
 protected:
-    QVector<StackedWidgetT<T>*> mWidgets;
+    QVector<StackedGroupWidgetT<T>*> mWidgets;
 };
 
 template <class T>
@@ -74,7 +92,7 @@ QSize StackedGroupT<T>::minimumSizeHint() const
 }
 
 /** A non-scrollable stacked widget. */
-using StackedWidget = StackedWidgetT<QWidget>;
+using StackedGroupWidget = StackedGroupWidgetT<QWidget>;
 /** A group of non-scrollable stacked widgets. */
 using StackedGroup = StackedGroupT<QWidget>;
 
@@ -87,7 +105,7 @@ class StackedScrollGroup;
  *
  *  @author David Jarvie <djarvie@kde.org>
  */
-class StackedScrollWidget : public StackedWidgetT<QScrollArea>
+class StackedScrollWidget : public StackedGroupWidgetT<QScrollArea>
 {
 public:
     explicit StackedScrollWidget(StackedScrollGroup* group, QWidget* parent = nullptr);
