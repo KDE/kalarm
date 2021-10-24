@@ -3016,9 +3016,6 @@ QDateTime fromStr(const QString &string, const QString &format, int &utcOffset,
             }
         }
     }
-    if (day == NO_NUMBER) {
-        day = 1;
-    }
     dateOnly = (hour == NO_NUMBER && minute == NO_NUMBER && second == NO_NUMBER && millisec == NO_NUMBER);
     if (hour == NO_NUMBER) {
         hour = 0;
