@@ -42,23 +42,24 @@ void AlarmListDelegate::paint(QPainter* painter, const QStyleOptionViewItem& opt
                 if (i >= 0)
                 {
                     painter->save();
-                    opt.displayAlignment = Qt::AlignRight;
+                    opt.displayAlignment = Qt::AlignLeft;
                     const QVariant value = index.data(Qt::ForegroundRole);
                     if (value.isValid())
                         opt.palette.setColor(QPalette::Text, value.value<QColor>());
                     drawBackground(painter, opt, index);
+                    const QString time = str.mid(i + 1);
+                    QRect timeRect;
                     if (i > 0)
                     {
-                        QRect displayRect;
                         QString str0 = str;
                         str0[i] = QLatin1Char('0');
-                        displayRect = textRect(str0, painter, opt);
-                        opt.displayAlignment = Qt::AlignLeft;
+                        QRect displayRect = textRect(str0, painter, opt);
+                        timeRect = textRect(time, painter, opt);
+                        timeRect.moveRight(displayRect.right());
                         drawDisplay(painter, opt, displayRect, str.left(i));   // date
-                        opt.displayAlignment = Qt::AlignRight;
                     }
-                    const QString time = str.mid(i + 1);
-                    const QRect timeRect = textRect(time, painter, opt);
+                    else
+                        timeRect = textRect(time, painter, opt);
                     drawDisplay(painter, opt, timeRect, time);
                     painter->restore();
                     return;
