@@ -660,6 +660,7 @@ QString ResourceDataModelBase::alarmTimeText(const DateTime& dateTime, char lead
 
     if (!dateTime.isValid())
         return i18nc("@info Alarm never occurs", "Never");
+    QLocale locale;
     if (!leadingZeroesChecked)
     {
         // Check whether the day number and/or hour have no leading zeroes, if
@@ -671,7 +672,6 @@ QString ResourceDataModelBase::alarmTimeText(const DateTime& dateTime, char lead
 
         // Check the date format. 'dd' provides leading zeroes; single 'd'
         // provides no leading zeroes.
-        QLocale locale;
         dateFormat = locale.dateFormat(QLocale::ShortFormat);
 
         // Check the time format.
@@ -724,8 +724,8 @@ QString ResourceDataModelBase::alarmTimeText(const DateTime& dateTime, char lead
             timeFullFormat.insert(i, timeFormat.at(i));
             // Find index to hour in formatted times
             const QTime t(1,30,30);
-            const QString nozero = t.toString(timeFormat);
-            const QString zero   = t.toString(timeFullFormat);
+            const QString nozero = locale.toString(t, timeFormat);
+            const QString zero   = locale.toString(t, timeFullFormat);
             for (int i = 0; i < nozero.size(); ++i)
                 if (nozero[i] != zero[i])
                 {
@@ -737,7 +737,6 @@ QString ResourceDataModelBase::alarmTimeText(const DateTime& dateTime, char lead
         leadingZeroesChecked = true;
     }
 
-    QLocale locale;
     const KADateTime kdt = dateTime.effectiveKDateTime().toTimeSpec(Preferences::timeSpec());
     QString dateTimeText = locale.toString(kdt.date(), dateFormat);
 

@@ -419,8 +419,9 @@ QString MessageDisplayHelper::dateTimeToDisplay() const
     QString tm;
     if (mDateTime.isValid())
     {
+        QLocale locale;
         if (mDateTime.isDateOnly())
-            tm = QLocale().toString(mDateTime.date(), QLocale::ShortFormat);
+            tm = locale.toString(mDateTime.date(), QLocale::ShortFormat);
         else
         {
             bool showZone = false;
@@ -437,9 +438,9 @@ QString MessageDisplayHelper::dateTimeToDisplay() const
                 showZone = (local.toString(QStringLiteral("%Z")) != tz);
             }
             const QDateTime dt = mDateTime.qDateTime();
-            tm = QLocale().toString(dt, QLocale::ShortFormat);
+            tm = locale.toString(dt, QLocale::ShortFormat);
             if (showZone)
-                tm += QLatin1Char(' ') + mDateTime.timeZone().displayName(dt, QTimeZone::ShortName, QLocale());
+                tm += QLatin1Char(' ') + mDateTime.timeZone().displayName(dt, QTimeZone::ShortName, locale);
         }
     }
     return tm;
