@@ -273,7 +273,7 @@ QVariant ResourceDataModelBase::eventData(int role, int column, const KAEvent& e
                             return alarmTimeText(event.startDateTime(), '~');
                         return alarmTimeText(event.nextTrigger(KAEvent::DISPLAY_TRIGGER), '~');
                     case Qt::TextAlignmentRole:
-                        return Qt::AlignRight;
+                        return Qt::AlignLeft;
                     case SortRole:
                     {
                         DateTime due;
@@ -737,8 +737,9 @@ QString ResourceDataModelBase::alarmTimeText(const DateTime& dateTime, char lead
         leadingZeroesChecked = true;
     }
 
+    QLocale locale;
     const KADateTime kdt = dateTime.effectiveKDateTime().toTimeSpec(Preferences::timeSpec());
-    QString dateTimeText = kdt.date().toString(dateFormat);
+    QString dateTimeText = locale.toString(kdt.date(), dateFormat);
 
     if (!dateTime.isDateOnly()  ||  kdt.utcOffset() != dateTime.utcOffset())
     {
@@ -747,7 +748,7 @@ QString ResourceDataModelBase::alarmTimeText(const DateTime& dateTime, char lead
         dateTimeText += QLatin1Char(' ');
         // Don't try to align right-to-left languages...
         const bool useFullFormat = QApplication::isLeftToRight() && leadingZero && !timeFullFormat.isEmpty();
-        QString timeText = kdt.time().toString(useFullFormat ? timeFullFormat : timeFormat);
+        QString timeText = locale.toString(kdt.time(), (useFullFormat ? timeFullFormat : timeFormat));
         if (useFullFormat  &&  leadingZero != '0'  &&  timeText.at(hourOffset) == QLatin1Char('0'))
             timeText[hourOffset] = QChar::fromLatin1(leadingZero);
         dateTimeText += timeText;

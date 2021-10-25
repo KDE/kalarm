@@ -1,7 +1,7 @@
 /*
  *  timeedit.cpp  -  time-of-day edit widget, with AM/PM shown depending on locale
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2001-2020 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2001-2021 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -30,14 +30,12 @@ TimeEdit::TimeEdit(QWidget* parent)
     setLayout(layout);
     bool use12hour = use12HourClock();
     mSpinBox = new TimeSpinBox(!use12hour, this);
-    mSpinBox->setFixedSize(mSpinBox->sizeHint());
     connect(mSpinBox, &TimeSpinBox::valueChanged, this, &TimeEdit::slotValueChanged);
     layout->addWidget(mSpinBox);
     if (use12hour)
     {
         mAmPm = new ComboBox(this);
         setAmPmCombo(1, 1);     // add "am" and "pm" options to the combo box
-        mAmPm->setFixedSize(mAmPm->sizeHint());
         connect(mAmPm, &ComboBox::highlighted, this, &TimeEdit::slotAmPmChanged);
         layout->addWidget(mAmPm);
     }
@@ -165,11 +163,12 @@ void TimeEdit::slotAmPmChanged(int item)
  */
 void TimeEdit::setAmPmCombo(int am, int pm)
 {
+    QLocale locale;
     if (am > 0  &&  mAmIndex < 0)
     {
         // Insert "am"
         mAmIndex = 0;
-        mAmPm->insertItem(mAmIndex, i18nc("@item:inlistbox Morning, as in 2am", "am"));
+        mAmPm->insertItem(mAmIndex, locale.amText());
         if (mPmIndex >= 0)
             mPmIndex = 1;
         mAmPm->setCurrentIndex(mPmIndex >= 0 ? mPmIndex : mAmIndex);
@@ -188,7 +187,7 @@ void TimeEdit::setAmPmCombo(int am, int pm)
     {
         // Insert "pm"
         mPmIndex = mAmIndex + 1;
-        mAmPm->insertItem(mPmIndex, i18nc("@item:inlistbox Afternoon, as in 2pm", "pm"));
+        mAmPm->insertItem(mPmIndex, locale.pmText());
         if (mAmIndex < 0)
             mAmPm->setCurrentIndex(mPmIndex);
     }

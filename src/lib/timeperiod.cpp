@@ -54,7 +54,6 @@ TimePeriod::TimePeriod(bool allowHourMinute, QWidget* parent)
     connect(mTimeSpinBox, &TimeSpinBox::valueChanged, this, &TimePeriod::slotTimeChanged);
     mSpinStack->addWidget(mTimeSpinBox);
 
-    mSpinStack->setFixedSize(mSpinBox->sizeHint().expandedTo(mTimeSpinBox->sizeHint()));
     mHourMinuteRaised = mNoHourMinute;
     showHourMin(!mNoHourMinute);
     layout->addWidget(mSpinStack);
@@ -72,7 +71,6 @@ TimePeriod::TimePeriod(bool allowHourMinute, QWidget* parent)
     mUnitsCombo->addItem(i18n_days());
     mUnitsCombo->addItem(i18n_weeks());
     mMaxUnitShown = Weeks;
-    mUnitsCombo->setFixedSize(mUnitsCombo->sizeHint());
     connect(mUnitsCombo, &ComboBox::activated, this, &TimePeriod::slotUnitsSelected);
     layout->addWidget(mUnitsCombo);
 
