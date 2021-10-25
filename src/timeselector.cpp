@@ -1,7 +1,7 @@
 /*
  *  timeselector.cpp  -  widget to optionally set a time period
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2004-2016 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2004-2021 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -35,7 +35,6 @@ TimeSelector::TimeSelector(const QString& selectText, const QString& selectWhats
     boxLayout->setContentsMargins(0, 0, 0, 0);
     mPeriod = new TimePeriod(allowHourMinute, box);
     boxLayout->addWidget(mPeriod);
-    mPeriod->setFixedSize(mPeriod->sizeHint());
     mPeriod->setSelectOnStep(false);
     connect(mPeriod, &TimePeriod::valueChanged, this, &TimeSelector::periodChanged);
     mSelect->setFocusWidget(mPeriod);
