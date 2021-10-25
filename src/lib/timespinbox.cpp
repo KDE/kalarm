@@ -229,7 +229,6 @@ QSize TimeSpinBox::sizeHint() const
 {
     const QSize sz = SpinBox2::sizeHint();
     const QFontMetrics fm(font());
-qDebug()<<(void*)this<<"TIMESPINBOX::sizeHint:"<<QSize{sz.width() + fm.horizontalAdvance(QLatin1Char(':')), sz.height()};
     return {sz.width() + fm.horizontalAdvance(QLatin1Char(':')), sz.height()};
 }
 
@@ -237,7 +236,6 @@ QSize TimeSpinBox::minimumSizeHint() const
 {
     const QSize sz = SpinBox2::minimumSizeHint();
     const QFontMetrics fm(font());
-qDebug()<<(void*)this<<"TIMESPINBOX::minimumSizeHint:"<<QSize{sz.width() + fm.horizontalAdvance(QLatin1Char(':')), sz.height()};
     return {sz.width() + fm.horizontalAdvance(QLatin1Char(':')), sz.height()};
 }
 
