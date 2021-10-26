@@ -2,6 +2,7 @@ KAlarm Change Log
 
 === Version 3.3.2 (KDE Applications 21.08.3) --- 25 October 2021 ===
 * Make time edit field arrows work with Breeze application style [KDE Bug 443062]
+* Fix unusable sub-daily recurrence editor with non-Breeze application style.
 * Use translated forms of "am" and "pm" when displaying times.
 
 === Version 3.3.1 (KDE Applications 21.08.1) --- 29 August 2021 ===
