@@ -19,7 +19,7 @@ class TemplateMenuAction : public KActionMenu
     Q_OBJECT
 public:
     TemplateMenuAction(const QIcon& icon, const QString& label, QObject* parent);
-    virtual ~TemplateMenuAction() {}
+    ~TemplateMenuAction() override {}
 
 Q_SIGNALS:
     /** Signal emitted when the action has been selected.

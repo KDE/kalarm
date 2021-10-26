@@ -25,7 +25,7 @@ class Find : public QObject
         Q_OBJECT
     public:
         explicit Find(EventListView* parent);
-        ~Find();
+        ~Find() override;
         void        display();
         void        findNext(bool forward)     { findNext(forward, false, false); }
 

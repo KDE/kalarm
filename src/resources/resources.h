@@ -29,7 +29,7 @@ public:
      */
     static Resources* instance();
 
-    ~Resources();
+    ~Resources() override;
     Resources(const Resources&) = delete;
     Resources& operator=(const Resources&) const = delete;
 

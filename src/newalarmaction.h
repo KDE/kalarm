@@ -32,7 +32,7 @@ public:
      */
     NewAlarmAction(bool templates, const QString& label, QObject* parent, KActionCollection* collection = nullptr);
 
-    virtual ~NewAlarmAction() {}
+    ~NewAlarmAction() override {}
 
     /** If a KActionCollection was supplied to the constructor, add the actions
      *  to the collection, and configure to allow the user to set a global shortcut

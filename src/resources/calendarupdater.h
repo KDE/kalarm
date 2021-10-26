@@ -17,7 +17,7 @@ class CalendarUpdater : public QObject
     Q_OBJECT
 public:
     CalendarUpdater(ResourceId, bool ignoreKeepFormat, QObject* parent, QWidget* promptParent = nullptr);
-    virtual ~CalendarUpdater();
+    ~CalendarUpdater() override;
 
     /** Check whether any instance is for the given resource ID. */
     static bool containsResource(ResourceId);

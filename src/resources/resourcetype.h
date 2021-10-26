@@ -74,7 +74,7 @@ public:
      */
     explicit ResourceType(ResourceId);
 
-    virtual ~ResourceType() = 0;
+    ~ResourceType() override = 0;
 
     /** Return whether the resource has a valid configuration.
      *  Note that the resource may be unusable even if it has a valid

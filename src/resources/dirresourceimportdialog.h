@@ -26,7 +26,7 @@ class DirResourceImportDialog : public KAssistantDialog
     Q_OBJECT
 public:
     DirResourceImportDialog(const QString& dirResourceName, const QString& dirResourcePath, KAlarmCal::CalEvent::Types types, QWidget* parent);
-    ~DirResourceImportDialog();
+    ~DirResourceImportDialog() override;
 
     /** Return the existing resource to import into, for a specified alarm type.
      *  @return resource ID, or -1 if not importing into an existing resource.

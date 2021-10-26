@@ -15,7 +15,7 @@ class AutostartApp : public QCoreApplication
         Q_OBJECT
     public:
         AutostartApp(int& argc, char** argv);
-        ~AutostartApp()  {}
+        ~AutostartApp()  override {}
         void setCommandLine(const QString& exe, const QStringList& args);
 
     private Q_SLOTS:

@@ -35,7 +35,7 @@ public:
      */
     explicit ResourceSelectDialog(ResourceListModel* model, QWidget* parent = nullptr);
 
-    ~ResourceSelectDialog();
+    ~ResourceSelectDialog() override;
 
     /** Set the initial resource to select. */
     void setDefaultResource(const Resource&);

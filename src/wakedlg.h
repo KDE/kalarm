@@ -19,7 +19,7 @@ class WakeFromSuspendDlg : public QDialog
         Q_OBJECT
     public:
         static WakeFromSuspendDlg* create(QWidget* parent);
-        ~WakeFromSuspendDlg();
+        ~WakeFromSuspendDlg() override;
 
     private Q_SLOTS:
         void enableDisableUseButton();

@@ -27,7 +27,7 @@ class TrayWindow : public KStatusNotifierItem
     Q_OBJECT
 public:
     explicit TrayWindow(MainWindow* parent);
-    ~TrayWindow();
+    ~TrayWindow() override;
     void         removeWindow(MainWindow*);
     MainWindow*  assocMainWindow() const               { return mAssocMainWindow; }
     void         setAssocMainWindow(MainWindow* win)   { mAssocMainWindow = win; }

@@ -26,7 +26,7 @@ class FileResourceMigrator : public QObject
 {
     Q_OBJECT
 public:
-    ~FileResourceMigrator();
+    ~FileResourceMigrator() override;
 
     /** Return the unique instance, creating it if necessary.
      *  Note that the instance will be destroyed once migration has completed.

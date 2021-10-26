@@ -23,7 +23,7 @@ class StartOfDayTimer : public DailyTimer
 {
         Q_OBJECT
     public:
-        virtual ~StartOfDayTimer()  { }
+        ~StartOfDayTimer()  override { }
         /** Connect to the timer signal.
          *  @param receiver Receiving object.
          *  @param member Slot to activate.
