@@ -273,7 +273,7 @@ protected:
     void             showEvent(QShowEvent*) override;
     virtual void     getMetrics() const;
 
-    mutable int      wUpdown2;        // width of second spin widget
+    mutable int      wUpdown2 {0};    // width of second spin widget
     mutable int      wSpinboxHide;    // width at left of 'mSpinbox' hidden by second spin widget
     mutable QPoint   mButtonPos;      // position of buttons inside mirror widget
     mutable bool     mShowUpdown2 {true};  // the extra pair of spin buttons are displayed
@@ -301,10 +301,10 @@ private:
     class MainSpinBox : public SpinBox
     {
         public:
-            MainSpinBox(SpinBox2* sb2, QWidget* parent)
-                            : SpinBox(parent), owner(sb2) { }
-            MainSpinBox(int minValue, int maxValue, SpinBox2* sb2, QWidget* parent)
-                            : SpinBox(minValue, maxValue, parent), owner(sb2) { }
+            MainSpinBox(SpinBox2* parent)
+                            : SpinBox(parent), owner(parent) { }
+            MainSpinBox(int minValue, int maxValue, SpinBox2* parent)
+                            : SpinBox(minValue, maxValue, parent), owner(parent) { }
             QString textFromValue(int v) const override  { return owner->textFromValue(v); }
             int     valueFromText(const QString& t) const override
                                                 { return owner->valueFromText(t); }
@@ -323,7 +323,6 @@ private:
     enum { NO_BUTTON = -1, UP, DOWN, UP2, DOWN2 };
 
     static int       mRightToLeft;    // widgets are mirrored right to left
-    QFrame*          mSpinboxFrame;   // contains the main spin box
     ExtraSpinBox*    mUpdown2;        // the extra pair of spin buttons
     MainSpinBox*     mSpinbox;        // the visible spin box
     SpinMirror*      mSpinMirror;     // image of the extra pair of spin buttons
