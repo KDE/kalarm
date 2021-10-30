@@ -1,7 +1,7 @@
 /*
  *  recurrenceedit.cpp  -  widget to edit the event's recurrence definition
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2002-2020 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2002-2021 David Jarvie <djarvie@kde.org>
  *
  *  Based originally on KOrganizer module koeditorrecurrence.cpp,
  *  SPDX-FileCopyrightText: 2000, 2001 Cornelius Schumacher <schumacher@kde.org>
@@ -1083,7 +1083,6 @@ Rule::Rule(const QString& freqText, const QString& freqWhatsThis, bool time, boo
     {
         mIntSpinBox = nullptr;
         mSpinBox = mTimeSpinBox = new TimeSpinBox(1, 5999, box);
-        mTimeSpinBox->setFixedSize(mTimeSpinBox->sizeHint());
         mTimeSpinBox->setReadOnly(readOnly);
         boxLayout->addWidget(mSpinBox, 0, Qt::AlignLeft);
         connect(mTimeSpinBox, &SpinBox2::valueChanged, this, &Rule::frequencyChanged);

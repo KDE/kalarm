@@ -213,7 +213,7 @@ public:
      *  @param page     The shift step increment for the left-hand spin buttons.
      *  @param control  The control step increment for the left-hand spin buttons.
      *                  N.B. Qt multiplies the step increment by 10 when the Control
-     *                       key is pressed, so this parameter value should be 
+     *                       key is pressed, so this parameter value should be
      *  @param modControl  Control steps should always set value to multiple of @p step.
      */
     void             setShiftSteps(int line, int page, int control, bool modControl = true);
@@ -273,8 +273,9 @@ protected:
     void             showEvent(QShowEvent*) override;
     virtual void     getMetrics() const;
 
-    mutable int      wUpdown2 {0};    // width of second spin widget
-    mutable int      wSpinboxHide;    // width at left of 'mSpinbox' hidden by second spin widget
+    mutable int      wUpdown2 {0};    // width of second spin widget, including outer frame decoration
+    mutable int      wBorderWidth;    // thickness of border between spin buttons and edge of widget
+    mutable int      wFrameWidth;     // thickness of frame round widget
     mutable QPoint   mButtonPos;      // position of buttons inside mirror widget
     mutable bool     mShowUpdown2 {true};  // the extra pair of spin buttons are displayed
 
@@ -323,9 +324,9 @@ private:
     enum { NO_BUTTON = -1, UP, DOWN, UP2, DOWN2 };
 
     static int       mRightToLeft;    // widgets are mirrored right to left
-    ExtraSpinBox*    mUpdown2;        // the extra pair of spin buttons
+    ExtraSpinBox*    mSpinbox2;       // hidden spin box providing an extra pair of spin buttons
     MainSpinBox*     mSpinbox;        // the visible spin box
-    SpinMirror*      mSpinMirror;     // image of the extra pair of spin buttons
+    SpinMirror*      mSpinMirror;     // image of the extra pair of spin buttons in mSpinbox2
     int              mMinValue;
     int              mMaxValue;
     int              mSingleStep;         // right button increment
