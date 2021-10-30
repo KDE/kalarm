@@ -57,8 +57,8 @@ public:
     explicit SpinMirror(ExtraSpinBox*, SpinBox*, QWidget* parent = nullptr);
     void    setReadOnly(bool ro)        { mReadOnly = ro; }
     bool    isReadOnly() const          { return mReadOnly; }
-    void    setButtons();
-    void    setFrame();
+    void    setFrameImage();
+    void    setButtonsImage();
     void    setButtonPos(const QPoint&);
     void    rearrange();
 
