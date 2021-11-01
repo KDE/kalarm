@@ -4786,7 +4786,6 @@ void KAEventPrivate::calcNextWorkingTime(const DateTime &nextTrigger) const
             // Check the next seasonal time change (for an arbitrary 10 times,
             // even though that might not guarantee the correct result)
             QDate dateRecur = kdtRecur.date();
-            int dayRecur = dateRecur.dayOfWeek() - 1;   // Monday = 0
             int repeatNum = kdtRecur.secsTo(kdt) / repeatFreq;
             kdt = kdtRecur.addSecs(repeatNum * repeatFreq);
 
@@ -4852,7 +4851,7 @@ void KAEventPrivate::calcNextWorkingTime(const DateTime &nextTrigger) const
                 nextOccurrence(kdtRecur, newdt, KAEvent::IGNORE_REPETITION);
                 kdtNextRecur = newdt.effectiveKDateTime();
                 dateRecur = kdtRecur.date();
-                dayRecur = dateRecur.dayOfWeek() - 1;
+                const int dayRecur = dateRecur.dayOfWeek() - 1;   // Monday = 0
                 if (recurDuringWork  &&  mWorkDays.testBit(dayRecur)) {
                     mMainWorkTrigger = kdtRecur;
                     mAllWorkTrigger  = kdtRecur.addSecs(-60 * reminder);
