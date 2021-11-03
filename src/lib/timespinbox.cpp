@@ -10,8 +10,6 @@
 
 #include <KLocalizedString>
 
-#include <QDebug>
-
 /*=============================================================================
 = Class TimeSpinBox
 = This is a spin box displaying a time in the format hh:mm, with a pair of
