@@ -24,7 +24,6 @@ TimeSelector::TimeSelector(const QString& selectText, const QString& selectWhats
     auto layout = new QHBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
     mSelect = new CheckBox(selectText, this);
-    mSelect->setFixedSize(mSelect->sizeHint());
     connect(mSelect, &CheckBox::toggled, this, &TimeSelector::selectToggled);
     mSelect->setWhatsThis(selectWhatsThis);
     layout->addWidget(mSelect);

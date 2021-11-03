@@ -57,7 +57,6 @@ SoundPicker::SoundPicker(QWidget* parent)
 
     QLabel* label = new QLabel(i18n_label_Sound(), mTypeBox);
     typeBoxLayout->addWidget(label);
-    label->setFixedSize(label->sizeHint());
 
     // Sound type combo box
     mTypeCombo = new ComboBox(mTypeBox);
@@ -85,8 +84,6 @@ SoundPicker::SoundPicker(QWidget* parent)
     // Sound file picker button
     mFilePicker = new PushButton(this);
     mFilePicker->setIcon(QIcon::fromTheme(QStringLiteral("audio-x-generic")));
-    int size = mFilePicker->sizeHint().height();
-    mFilePicker->setFixedSize(size, size);
     connect(mFilePicker, &PushButton::clicked, this, &SoundPicker::slotPickFile);
     mFilePicker->setToolTip(i18nc("@info:tooltip", "Configure sound file"));
     mFilePicker->setWhatsThis(i18nc("@info:whatsthis", "Configure a sound file to play when the alarm is displayed."));

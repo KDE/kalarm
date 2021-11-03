@@ -1,7 +1,7 @@
 /*
  *  birthdaydlg.cpp  -  dialog to pick birthdays from address book
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2002-2020 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2002-2021 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -59,7 +59,6 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
         hlayout->setContentsMargins(0, 0, 0, 0);
         topLayout->addLayout(hlayout);
         QLabel* label = new QLabel(i18nc("@label:textbox", "Alarm name:"), this);
-        label->setFixedSize(label->sizeHint());
         hlayout->addWidget(label);
         mName = new KLineEdit(this);
         mName->setMinimumSize(mName->sizeHint());
@@ -78,7 +77,6 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
     topLayout->addWidget(textGroup);
     auto grid = new QGridLayout(textGroup);
     QLabel* label = new QLabel(i18nc("@label:textbox", "Prefix:"), textGroup);
-    label->setFixedSize(label->sizeHint());
     grid->addWidget(label, 0, 0);
     mPrefix = new BLineEdit(mPrefixText, textGroup);
     mPrefix->setMinimumSize(mPrefix->sizeHint());
@@ -90,7 +88,6 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
     grid->addWidget(mPrefix, 0, 1);
 
     label = new QLabel(i18nc("@label:textbox", "Suffix:"), textGroup);
-    label->setFixedSize(label->sizeHint());
     grid->addWidget(label, 1, 0);
     mSuffix = new BLineEdit(mSuffixText, textGroup);
     mSuffix->setMinimumSize(mSuffix->sizeHint());
@@ -153,7 +150,6 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
     hlayout->setContentsMargins(0, 0, 0, 0);
     groupLayout->addLayout(hlayout);
     mSoundPicker = new SoundPicker(group);
-    mSoundPicker->setFixedSize(mSoundPicker->sizeHint());
     hlayout->addWidget(mSoundPicker);
     hlayout->addSpacing(2 * style()->pixelMetric(QStyle::PM_LayoutHorizontalSpacing));
     hlayout->addStretch();
@@ -170,7 +166,6 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
                                   "This is in addition to the alarm which is displayed on the birthday."),
                              i18nc("@info:whatsthis", "Select whether the reminder should be triggered before or after the birthday."),
                              false, false, group);
-    mReminder->setFixedSize(mReminder->sizeHint());
     mReminder->setMaximum(0, 364);
     mReminder->setMinutes(0, true);
     groupLayout->addWidget(mReminder, 0, Qt::AlignLeft);
@@ -181,7 +176,6 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
     hlayout->setSpacing(2 * style()->pixelMetric(QStyle::PM_LayoutHorizontalSpacing));
     groupLayout->addLayout(hlayout);
     mConfirmAck = EditDisplayAlarmDlg::createConfirmAckCheckbox(group);
-    mConfirmAck->setFixedSize(mConfirmAck->sizeHint());
     hlayout->addWidget(mConfirmAck);
     hlayout->addSpacing(2 * style()->pixelMetric(QStyle::PM_LayoutHorizontalSpacing));
     hlayout->addStretch();
@@ -190,7 +184,6 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
     {
         // Special actions button
         mSpecialActionsButton = new SpecialActionsButton(false, group);
-        mSpecialActionsButton->setFixedSize(mSpecialActionsButton->sizeHint());
         hlayout->addWidget(mSpecialActionsButton);
     }
 
@@ -200,13 +193,11 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
     hlayout->setSpacing(2 * style()->pixelMetric(QStyle::PM_LayoutHorizontalSpacing));
     groupLayout->addLayout(hlayout);
     mLateCancel = new LateCancelSelector(false, group);
-    mLateCancel->setFixedSize(mLateCancel->sizeHint());
     hlayout->addWidget(mLateCancel);
     hlayout->addStretch();
 
     // Sub-repetition button
     mSubRepetition = new RepetitionButton(i18nc("@action:button", "Sub-Repetition"), false, group);
-    mSubRepetition->setFixedSize(mSubRepetition->sizeHint());
     mSubRepetition->set(Repetition(), true, 364*24*60);
     mSubRepetition->setWhatsThis(i18nc("@info:whatsthis", "Set up an additional alarm repetition"));
     hlayout->addWidget(mSubRepetition);

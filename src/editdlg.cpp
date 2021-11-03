@@ -252,7 +252,6 @@ void EditAlarmDlg::init(const KAEvent& event)
         frame->setLayout(box);
         box->setContentsMargins(0, 0, 0, 0);
         QLabel* label = new QLabel(mTemplate ? i18nc("@label:textbox", "Template name:") : i18nc("@label:textbox", "Alarm name:"));
-        label->setFixedSize(label->sizeHint());
         box->addWidget(label);
         mName = new QLineEdit();
         mName->setReadOnly(mReadOnly);
@@ -261,7 +260,6 @@ void EditAlarmDlg::init(const KAEvent& event)
         box->addWidget(mName);
         frame->setWhatsThis(mTemplate ? i18nc("@info:whatsthis", "Enter the name of the alarm template")
                                       : i18nc("@info:whatsthis", "Enter a name to help you identify this alarm. This is optional and need not be unique."));
-        frame->setFixedHeight(box->sizeHint().height());
         topLayout->addWidget(frame);
     }
 
@@ -279,17 +277,14 @@ void EditAlarmDlg::init(const KAEvent& event)
         topLayout->addWidget(mDeferGroup);
         auto hlayout = new QHBoxLayout(mDeferGroup);
         QLabel* label = new QLabel(i18nc("@label", "Deferred to:"), mDeferGroup);
-        label->setFixedSize(label->sizeHint());
         hlayout->addWidget(label);
         mDeferTimeLabel = new QLabel(mDeferGroup);
         hlayout->addWidget(mDeferTimeLabel);
 
         mDeferChangeButton = new QPushButton(i18nc("@action:button", "Change..."), mDeferGroup);
-        mDeferChangeButton->setFixedSize(mDeferChangeButton->sizeHint());
         connect(mDeferChangeButton, &QPushButton::clicked, this, &EditAlarmDlg::slotEditDeferral);
         mDeferChangeButton->setWhatsThis(i18nc("@info:whatsthis", "Change the alarm's deferred time, or cancel the deferral"));
         hlayout->addWidget(mDeferChangeButton);
-//??        mDeferGroup->addSpace(0);
     }
 
     auto hlayout = new QHBoxLayout();
@@ -307,7 +302,6 @@ void EditAlarmDlg::init(const KAEvent& event)
         connect(mTemplateTimeGroup, &ButtonGroup::buttonSet, this, &EditAlarmDlg::contentsChanged);
 
         mTemplateDefaultTime = new RadioButton(i18nc("@option:radio", "Default time"), templateTimeBox);
-        mTemplateDefaultTime->setFixedSize(mTemplateDefaultTime->sizeHint());
         mTemplateDefaultTime->setReadOnly(mReadOnly);
         mTemplateDefaultTime->setWhatsThis(i18nc("@info:whatsthis", "Do not specify a start time for alarms based on this template. "
                                                 "The normal default start time will be used."));
@@ -318,13 +312,11 @@ void EditAlarmDlg::init(const KAEvent& event)
         auto layout = new QHBoxLayout(box);
         layout->setContentsMargins(0, 0, 0, 0);
         mTemplateUseTime = new RadioButton(i18nc("@option:radio", "Time:"), box);
-        mTemplateUseTime->setFixedSize(mTemplateUseTime->sizeHint());
         mTemplateUseTime->setReadOnly(mReadOnly);
         mTemplateUseTime->setWhatsThis(i18nc("@info:whatsthis", "Specify a start time for alarms based on this template."));
         layout->addWidget(mTemplateUseTime);
         mTemplateTimeGroup->addButton(mTemplateUseTime);
         mTemplateTime = new TimeEdit();
-        mTemplateTime->setFixedSize(mTemplateTime->sizeHint());
         mTemplateTime->setReadOnly(mReadOnly);
         mTemplateTime->setWhatsThis(xi18nc("@info:whatsthis",
               "<para>Enter the start time for alarms based on this template.</para><para>%1</para>",
@@ -335,7 +327,6 @@ void EditAlarmDlg::init(const KAEvent& event)
         grid->addWidget(box, 0, 1, Qt::AlignLeft);
 
         mTemplateAnyTime = new RadioButton(i18nc("@option:radio", "Date only"), templateTimeBox);
-        mTemplateAnyTime->setFixedSize(mTemplateAnyTime->sizeHint());
         mTemplateAnyTime->setReadOnly(mReadOnly);
         mTemplateAnyTime->setWhatsThis(xi18nc("@info:whatsthis", "Set the <interface>Any time</interface> option for alarms based on this template."));
         mTemplateTimeGroup->addButton(mTemplateAnyTime);
@@ -345,7 +336,6 @@ void EditAlarmDlg::init(const KAEvent& event)
         layout = new QHBoxLayout(box);
         layout->setContentsMargins(0, 0, 0, 0);
         mTemplateUseTimeAfter = new RadioButton(i18nc("@option:radio", "Time from now:"), box);
-        mTemplateUseTimeAfter->setFixedSize(mTemplateUseTimeAfter->sizeHint());
         mTemplateUseTimeAfter->setReadOnly(mReadOnly);
         mTemplateUseTimeAfter->setWhatsThis(i18nc("@info:whatsthis",
                                                   "Set alarms based on this template to start after the specified time "
@@ -354,13 +344,11 @@ void EditAlarmDlg::init(const KAEvent& event)
         mTemplateTimeGroup->addButton(mTemplateUseTimeAfter);
         mTemplateTimeAfter = new TimeSpinBox(1, maxDelayTime);
         mTemplateTimeAfter->setValue(1439);
-        mTemplateTimeAfter->setFixedSize(mTemplateTimeAfter->sizeHint());
         mTemplateTimeAfter->setReadOnly(mReadOnly);
         connect(mTemplateTimeAfter, &TimeSpinBox::valueChanged, this, &EditAlarmDlg::contentsChanged);
         mTemplateTimeAfter->setWhatsThis(xi18nc("@info:whatsthis", "<para>%1</para><para>%2</para>",
                                                AlarmTimeWidget::i18n_TimeAfterPeriod(), TimeSpinBox::shiftWhatsThis()));
         layout->addWidget(mTemplateTimeAfter);
-        box->setFixedHeight(box->sizeHint().height());
         grid->addWidget(box, 1, 1, Qt::AlignLeft);
 
         hlayout->addStretch();
@@ -384,7 +372,6 @@ void EditAlarmDlg::init(const KAEvent& event)
     mReminder = createReminder(mMoreOptions);
     if (mReminder)
     {
-        mReminder->setFixedSize(mReminder->sizeHint());
         connect(mReminder, &Reminder::changed, this, &EditAlarmDlg::contentsChanged);
         moreLayout->addWidget(mReminder, 0, Qt::AlignLeft);
         if (mTimeWidget)
@@ -405,7 +392,6 @@ void EditAlarmDlg::init(const KAEvent& event)
     CheckBox* confirmAck = type_createConfirmAckCheckbox(mMoreOptions);
     if (confirmAck)
     {
-        confirmAck->setFixedSize(confirmAck->sizeHint());
         connect(confirmAck, &CheckBox::toggled, this, &EditAlarmDlg::contentsChanged);
         playout->addWidget(confirmAck);
     }
@@ -414,7 +400,6 @@ void EditAlarmDlg::init(const KAEvent& event)
     {
         // Show in KOrganizer checkbox
         mShowInKorganizer = new CheckBox(i18n_chk_ShowInKOrganizer(), mMoreOptions);
-        mShowInKorganizer->setFixedSize(mShowInKorganizer->sizeHint());
         connect(mShowInKorganizer, &CheckBox::toggled, this, &EditAlarmDlg::contentsChanged);
         mShowInKorganizer->setWhatsThis(i18nc("@info:whatsthis", "Check to copy the alarm into KOrganizer's calendar"));
         playout->addWidget(mShowInKorganizer);

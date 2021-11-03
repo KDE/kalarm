@@ -1,7 +1,7 @@
 /*
  *  repetitionbutton.cpp  -  pushbutton and dialog to specify alarm repetition
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2004-2020 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2004-2021 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -141,7 +141,6 @@ RepetitionDlg::RepetitionDlg(const QString& caption, bool readOnly, QWidget* par
                             "checking this option makes the alarm trigger multiple times at each recurrence."),
                       i18nc("@info:whatsthis", "Enter the time between repetitions of the alarm"),
                       true, this);
-    mTimeSelector->setFixedSize(mTimeSelector->sizeHint());
     connect(mTimeSelector, &TimeSelector::valueChanged, this, &RepetitionDlg::intervalChanged);
     connect(mTimeSelector, &TimeSelector::toggled, this, &RepetitionDlg::repetitionToggled);
     topLayout->addWidget(mTimeSelector, 0, Qt::AlignLeft);
@@ -156,12 +155,10 @@ RepetitionDlg::RepetitionDlg(const QString& caption, bool readOnly, QWidget* par
     layout->setContentsMargins(0, 0, 0, 0);
     vlayout->addLayout(layout);
     mCountButton = new RadioButton(i18nc("@option:radio", "Number of repetitions:"), mButtonBox);
-    mCountButton->setFixedSize(mCountButton->sizeHint());
     mCountButton->setWhatsThis(i18nc("@info:whatsthis", "Check to specify the number of times the alarm should repeat after each recurrence"));
     mButtonGroup->addButton(mCountButton);
     layout->addWidget(mCountButton);
     mCount = new SpinBox(1, MAX_COUNT, mButtonBox);
-    mCount->setFixedSize(mCount->sizeHint());
     mCount->setSingleShiftStep(10);
     mCount->setSelectOnStep(false);
     connect(mCount, &SpinBox::valueChanged, this, &RepetitionDlg::countChanged);
@@ -174,12 +171,10 @@ RepetitionDlg::RepetitionDlg(const QString& caption, bool readOnly, QWidget* par
     layout->setContentsMargins(0, 0, 0, 0);
     vlayout->addLayout(layout);
     mDurationButton = new RadioButton(i18nc("@option:radio", "Duration:"), mButtonBox);
-    mDurationButton->setFixedSize(mDurationButton->sizeHint());
     mDurationButton->setWhatsThis(i18nc("@info:whatsthis", "Check to specify how long the alarm is to be repeated"));
     mButtonGroup->addButton(mDurationButton);
     layout->addWidget(mDurationButton);
     mDuration = new TimePeriod(true, mButtonBox);
-    mDuration->setFixedSize(mDuration->sizeHint());
     connect(mDuration, &TimePeriod::valueChanged, this, &RepetitionDlg::durationChanged);
     mDuration->setWhatsThis(i18nc("@info:whatsthis", "Enter the length of time to repeat the alarm"));
     layout->addWidget(mDuration);

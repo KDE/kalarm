@@ -41,8 +41,6 @@
 #include <QComboBox>
 #include <QMenu>
 
-using namespace KCalendarCore;
-
 
 ResourceSelector::ResourceSelector(MainWindow* parentWindow, QWidget* parent)
     : QFrame(parent)
@@ -57,7 +55,6 @@ ResourceSelector::ResourceSelector(MainWindow* parentWindow, QWidget* parent)
     mAlarmType->addItem(i18nc("@item:inlistbox", "Active Alarms"));
     mAlarmType->addItem(i18nc("@item:inlistbox", "Archived Alarms"));
     mAlarmType->addItem(i18nc("@item:inlistbox", "Alarm Templates"));
-    mAlarmType->setFixedHeight(mAlarmType->sizeHint().height());
     mAlarmType->setWhatsThis(i18nc("@info:whatsthis", "Choose which type of data to show alarm calendars for"));
     topLayout->addWidget(mAlarmType);
     // No spacing between combo box and listview.

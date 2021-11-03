@@ -180,8 +180,6 @@ SoundWidget::SoundWidget(bool showPlay, const QString& repeatWhatsThis, QWidget*
     mFileBrowseButton = new PushButton(box);
     boxHLayout->addWidget(mFileBrowseButton);
     mFileBrowseButton->setIcon(QIcon(QIcon::fromTheme(QStringLiteral("document-open"))));
-    const int size = mFileBrowseButton->sizeHint().height();
-    mFileBrowseButton->setFixedSize(size, size);
     connect(mFileBrowseButton, &PushButton::clicked, this, &SoundWidget::slotPickFile);
     mFileBrowseButton->setToolTip(i18nc("@info:tooltip", "Choose a file"));
     mFileBrowseButton->setWhatsThis(i18nc("@info:whatsthis", "Select a sound file to play."));
@@ -208,15 +206,12 @@ SoundWidget::SoundWidget(bool showPlay, const QString& repeatWhatsThis, QWidget*
     boxHLayout->setContentsMargins(0, 0, 0, 0);
     label = new QLabel(i18nc("@label:spinbox Length of time to pause between repetitions", "Pause between repetitions:"), box);
     boxHLayout->addWidget(label);
-    label->setFixedSize(label->sizeHint());
     mRepeatPause = new SpinBox(0, 999, box);
     boxHLayout->addWidget(mRepeatPause);
     mRepeatPause->setSingleShiftStep(10);
-    mRepeatPause->setFixedSize(mRepeatPause->sizeHint());
     label->setBuddy(mRepeatPause);
     connect(mRepeatPause, &SpinBox::valueChanged, this, &SoundWidget::changed);
     label = new QLabel(i18nc("@label", "seconds"), box);
-    label->setFixedSize(label->sizeHint());
     boxHLayout->addWidget(label);
     box->setWhatsThis(i18nc("@info:whatsthis", "Enter how many seconds to pause between repetitions."));
 
@@ -236,7 +231,6 @@ SoundWidget::SoundWidget(bool showPlay, const QString& repeatWhatsThis, QWidget*
     boxHLayout->setContentsMargins(0, 0, 0, 0);
     mVolumeCheckbox = new CheckBox(i18n_chk_SetVolume(), box);
     boxHLayout->addWidget(mVolumeCheckbox);
-    mVolumeCheckbox->setFixedSize(mVolumeCheckbox->sizeHint());
     connect(mVolumeCheckbox, &CheckBox::toggled, this, &SoundWidget::slotVolumeToggled);
     mVolumeCheckbox->setWhatsThis(i18nc("@info:whatsthis", "Select to choose the volume for playing the sound file."));
 
@@ -255,7 +249,6 @@ SoundWidget::SoundWidget(bool showPlay, const QString& repeatWhatsThis, QWidget*
 
     // Fade checkbox
     mFadeCheckbox = new CheckBox(i18nc("@option:check", "Fade"), group);
-    mFadeCheckbox->setFixedSize(mFadeCheckbox->sizeHint());
     connect(mFadeCheckbox, &CheckBox::toggled, this, &SoundWidget::slotFadeToggled);
     mFadeCheckbox->setWhatsThis(i18nc("@info:whatsthis", "Select to fade the volume when the sound file first starts to play."));
     grid->addWidget(mFadeCheckbox, 2, 1, 1, 2, Qt::AlignLeft);
@@ -267,16 +260,13 @@ SoundWidget::SoundWidget(bool showPlay, const QString& repeatWhatsThis, QWidget*
     boxHLayout->setContentsMargins(0, 0, 0, 0);
     label = new QLabel(i18nc("@label:spinbox Time period over which to fade the sound", "Fade time:"), mFadeBox);
     boxHLayout->addWidget(label);
-    label->setFixedSize(label->sizeHint());
     mFadeTime = new SpinBox(1, 999, mFadeBox);
     boxHLayout->addWidget(mFadeTime);
     mFadeTime->setSingleShiftStep(10);
-    mFadeTime->setFixedSize(mFadeTime->sizeHint());
     label->setBuddy(mFadeTime);
     connect(mFadeTime, &SpinBox::valueChanged, this, &SoundWidget::changed);
     label = new QLabel(i18nc("@label", "seconds"), mFadeBox);
     boxHLayout->addWidget(label);
-    label->setFixedSize(label->sizeHint());
     mFadeBox->setWhatsThis(i18nc("@info:whatsthis", "Enter how many seconds to fade the sound before reaching the set volume."));
 
     // Fade slider
@@ -286,7 +276,6 @@ SoundWidget::SoundWidget(bool showPlay, const QString& repeatWhatsThis, QWidget*
     boxHLayout->setContentsMargins(0, 0, 0, 0);
     label = new QLabel(i18nc("@label:slider", "Initial volume:"), mFadeVolumeBox);
     boxHLayout->addWidget(label);
-    label->setFixedSize(label->sizeHint());
     mFadeSlider = new Slider(0, 100, 10, Qt::Horizontal, mFadeVolumeBox);
     boxHLayout->addWidget(mFadeSlider);
     mFadeSlider->setTickPosition(QSlider::TicksBelow);

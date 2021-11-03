@@ -39,9 +39,8 @@
 #include <KAlarmCal/Identities>
 
 #include <Akonadi/Contact/EmailAddressSelectionDialog>
-#include <KCalendarCore/Person>
 #include <KCalUtils/ICalDrag>
-using namespace KCalendarCore;
+#include <KCalendarCore/Person>
 
 #include <KLocalizedString>
 #include <KFileItem>
@@ -58,6 +57,7 @@ using namespace KCalendarCore;
 #include <QStandardItemModel>
 
 using namespace KAlarmCal;
+using namespace KCalendarCore;
 
 enum { tTEXT, tFILE, tCOMMAND };  // order of mTypeCombo items
 enum { dWINDOW, dNOTIFY };        // order of mDisplayMethodCombo items
@@ -134,7 +134,6 @@ void EditDisplayAlarmDlg::type_init(QWidget* parent, QVBoxLayout* frameLayout)
     boxHLayout->setContentsMargins(0, 0, 0, 0);
     QLabel* label = new QLabel(i18nc("@label:listbox", "Display type:"), box);
     boxHLayout->addWidget(label);
-    label->setFixedSize(label->sizeHint());
     mTypeCombo = new ComboBox(box);
     boxHLayout->addWidget(mTypeCombo);
     const QString textItem    = i18nc("@item:inlistbox", "Text message");
@@ -143,7 +142,6 @@ void EditDisplayAlarmDlg::type_init(QWidget* parent, QVBoxLayout* frameLayout)
     mTypeCombo->addItem(textItem);     // index = tTEXT
     mTypeCombo->addItem(fileItem);     // index = tFILE
     mTypeCombo->addItem(commandItem);  // index = tCOMMAND
-    mTypeCombo->setFixedSize(mTypeCombo->sizeHint());
     mTypeCombo->setCurrentIndex(-1);    // ensure slotAlarmTypeChanged() is called when index is set
     if (!ShellProcess::authorised())
     {
@@ -195,8 +193,6 @@ void EditDisplayAlarmDlg::type_init(QWidget* parent, QVBoxLayout* frameLayout)
     mFileBrowseButton = new QPushButton(mFileBox);
     fileBoxHLayout->addWidget(mFileBrowseButton);
     mFileBrowseButton->setIcon(QIcon::fromTheme(QStringLiteral("document-open")));
-    int size = mFileBrowseButton->sizeHint().height();
-    mFileBrowseButton->setFixedSize(size, size);
     mFileBrowseButton->setToolTip(i18nc("@info:tooltip", "Choose a file"));
     mFileBrowseButton->setWhatsThis(i18nc("@info:whatsthis", "Select a text or image file to display."));
     connect(mFileBrowseButton, &QPushButton::clicked, this, &EditDisplayAlarmDlg::slotPickFile);
@@ -212,7 +208,6 @@ void EditDisplayAlarmDlg::type_init(QWidget* parent, QVBoxLayout* frameLayout)
     hlayout->setContentsMargins(0, 0, 0, 0);
     frameLayout->addLayout(hlayout);
     mSoundPicker = new SoundPicker(parent);
-    mSoundPicker->setFixedSize(mSoundPicker->sizeHint());
     connect(mSoundPicker, &SoundPicker::changed, this, &EditDisplayAlarmDlg::contentsChanged);
     hlayout->addWidget(mSoundPicker);
     hlayout->addSpacing(2 * style()->pixelMetric(QStyle::PM_LayoutHorizontalSpacing));
@@ -234,14 +229,12 @@ void EditDisplayAlarmDlg::type_init(QWidget* parent, QVBoxLayout* frameLayout)
     boxHLayout->setContentsMargins(0, 0, 0, 0);
     label = new QLabel(i18n_lbl_DisplayMethod(), mDisplayMethodBox);
     boxHLayout->addWidget(label);
-    label->setFixedSize(label->sizeHint());
     mDisplayMethodCombo = new ComboBox(mDisplayMethodBox);
     boxHLayout->addWidget(mDisplayMethodCombo);
     const QString windowItem = i18n_combo_Window();
     const QString notifyItem = i18n_combo_Notify();
     mDisplayMethodCombo->addItem(windowItem);     // index = dWINDOW
     mDisplayMethodCombo->addItem(notifyItem);     // index = dNOTIFY
-    mDisplayMethodCombo->setFixedSize(mDisplayMethodCombo->sizeHint());
     connect(mDisplayMethodCombo, static_cast<void (ComboBox::*)(int)>(&ComboBox::currentIndexChanged), this, &EditDisplayAlarmDlg::slotDisplayMethodChanged);
     connect(mDisplayMethodCombo, static_cast<void (ComboBox::*)(int)>(&ComboBox::currentIndexChanged), this, &EditDisplayAlarmDlg::contentsChanged);
     label->setBuddy(mDisplayMethodCombo);
@@ -254,7 +247,6 @@ void EditDisplayAlarmDlg::type_init(QWidget* parent, QVBoxLayout* frameLayout)
     {
         // Special actions button
         mSpecialActionsButton = new SpecialActionsButton(false, parent);
-        mSpecialActionsButton->setFixedSize(mSpecialActionsButton->sizeHint());
         connect(mSpecialActionsButton, &SpecialActionsButton::selected, this, &EditDisplayAlarmDlg::contentsChanged);
         hlayout->addWidget(mSpecialActionsButton);
     }
@@ -872,7 +864,6 @@ void EditCommandAlarmDlg::type_init(QWidget* parent, QVBoxLayout* frameLayout)
 
     // Execute in terminal window
     mCmdExecInTerm = new RadioButton(i18n_radio_ExecInTermWindow(), mCmdOutputBox);
-    mCmdExecInTerm->setFixedSize(mCmdExecInTerm->sizeHint());
     mCmdExecInTerm->setWhatsThis(i18nc("@info:whatsthis", "Check to execute the command in a terminal window"));
     mCmdOutputGroup->addButton(mCmdExecInTerm, Preferences::Log_Terminal);
     vlayout->addWidget(mCmdExecInTerm, 0, Qt::AlignLeft);
@@ -894,14 +885,11 @@ void EditCommandAlarmDlg::type_init(QWidget* parent, QVBoxLayout* frameLayout)
     auto browseButton = new QPushButton(box);
     boxHLayout->addWidget(browseButton);
     browseButton->setIcon(QIcon::fromTheme(QStringLiteral("document-open")));
-    int size = browseButton->sizeHint().height();
-    browseButton->setFixedSize(size, size);
     browseButton->setToolTip(i18nc("@info:tooltip", "Choose a file"));
     browseButton->setWhatsThis(i18nc("@info:whatsthis", "Select a log file."));
 
     // Log output to file
     mCmdLogToFile = new PickLogFileRadio(browseButton, mCmdLogFileEdit, i18nc("@option:radio", "Log to file"), mCmdOutputGroup, mCmdOutputBox);
-    mCmdLogToFile->setFixedSize(mCmdLogToFile->sizeHint());
     mCmdLogToFile->setWhatsThis(i18nc("@info:whatsthis", "Check to log the command output to a local file. The output will be appended to any existing contents of the file."));
     connect(mCmdLogToFile, &PickLogFileRadio::fileChanged, this, &EditCommandAlarmDlg::contentsChanged);
     mCmdOutputGroup->addButton(mCmdLogToFile, Preferences::Log_File);
@@ -910,7 +898,6 @@ void EditCommandAlarmDlg::type_init(QWidget* parent, QVBoxLayout* frameLayout)
 
     // Discard output
     mCmdDiscardOutput = new RadioButton(i18nc("@option:radio", "Discard"), mCmdOutputBox);
-    mCmdDiscardOutput->setFixedSize(mCmdDiscardOutput->sizeHint());
     mCmdDiscardOutput->setWhatsThis(i18nc("@info:whatsthis", "Check to discard command output."));
     mCmdOutputGroup->addButton(mCmdDiscardOutput, Preferences::Log_Discard);
     vlayout->addWidget(mCmdDiscardOutput, 0, Qt::AlignLeft);
@@ -1189,7 +1176,6 @@ void EditEmailAlarmDlg::type_init(QWidget* parent, QVBoxLayout* frameLayout)
     {
         // Email sender identity
         QLabel* label = new QLabel(i18nc("@label:listbox 'From' email address", "From:"), parent);
-        label->setFixedSize(label->sizeHint());
         grid->addWidget(label, 0, 0);
 
         mEmailFromList = new EmailIdCombo(Identities::identityManager(), parent);
@@ -1202,7 +1188,6 @@ void EditEmailAlarmDlg::type_init(QWidget* parent, QVBoxLayout* frameLayout)
 
     // Email recipients
     QLabel* label = new QLabel(i18nc("@label:textbox Email addressee", "To:"), parent);
-    label->setFixedSize(label->sizeHint());
     grid->addWidget(label, 1, 0);
 
     mEmailToEdit = new LineEdit(LineEdit::Emails, parent);
@@ -1214,8 +1199,6 @@ void EditEmailAlarmDlg::type_init(QWidget* parent, QVBoxLayout* frameLayout)
 
     mEmailAddressButton = new QPushButton(parent);
     mEmailAddressButton->setIcon(QIcon::fromTheme(QStringLiteral("help-contents")));
-    int size = mEmailAddressButton->sizeHint().height();
-    mEmailAddressButton->setFixedSize(size, size);
     connect(mEmailAddressButton, &QPushButton::clicked, this, &EditEmailAlarmDlg::openAddressBook);
     mEmailAddressButton->setToolTip(i18nc("@info:tooltip", "Open address book"));
     mEmailAddressButton->setWhatsThis(i18nc("@info:whatsthis", "Select email addresses from your address book."));
@@ -1223,7 +1206,6 @@ void EditEmailAlarmDlg::type_init(QWidget* parent, QVBoxLayout* frameLayout)
 
     // Email subject
     label = new QLabel(i18nc("@label:textbox Email subject", "Subject:"), parent);
-    label->setFixedSize(label->sizeHint());
     grid->addWidget(label, 2, 0);
 
     mEmailSubjectEdit = new LineEdit(parent);
@@ -1244,7 +1226,6 @@ void EditEmailAlarmDlg::type_init(QWidget* parent, QVBoxLayout* frameLayout)
     grid->setContentsMargins(0, 0, 0, 0);
     frameLayout->addLayout(grid);
     label = new QLabel(i18nc("@label:listbox", "Attachments:"), parent);
-    label->setFixedSize(label->sizeHint());
     grid->addWidget(label, 0, 0);
 
     mEmailAttachList = new QComboBox(parent);
@@ -1269,7 +1250,6 @@ void EditEmailAlarmDlg::type_init(QWidget* parent, QVBoxLayout* frameLayout)
 
     // BCC email to sender
     mEmailBcc = new CheckBox(i18n_chk_CopyEmailToSelf(), parent);
-    mEmailBcc->setFixedSize(mEmailBcc->sizeHint());
     mEmailBcc->setWhatsThis(i18nc("@info:whatsthis", "If checked, the email will be blind copied to you."));
     connect(mEmailBcc, &CheckBox::toggled, this, &EditEmailAlarmDlg::contentsChanged);
     grid->addWidget(mEmailBcc, 1, 0, 1, 2, Qt::AlignLeft);
@@ -1839,7 +1819,6 @@ CommandEdit::CommandEdit(QWidget* parent)
     auto vlayout = new QVBoxLayout(this);
     vlayout->setContentsMargins(0, 0, 0, 0);
     mTypeScript = new CheckBox(EditCommandAlarmDlg::i18n_chk_EnterScript(), this);
-    mTypeScript->setFixedSize(mTypeScript->sizeHint());
     mTypeScript->setWhatsThis(i18nc("@info:whatsthis", "Check to enter the contents of a script instead of a shell command line"));
     connect(mTypeScript, &CheckBox::toggled, this, &CommandEdit::slotCmdScriptToggled);
     connect(mTypeScript, &CheckBox::toggled, this, &CommandEdit::changed);

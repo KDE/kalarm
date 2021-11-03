@@ -365,17 +365,13 @@ void MessageWindow::setUpDisplay()
                 auto grid = new QGridLayout(frame);
 
                 QLabel* label = new QLabel(texts.errorEmail[0], frame);
-                label->setFixedSize(label->sizeHint());
                 grid->addWidget(label, 0, 0, Qt::AlignLeft);
                 label = new QLabel(texts.errorEmail[1], frame);
-                label->setFixedSize(label->sizeHint());
                 grid->addWidget(label, 0, 1, Qt::AlignLeft);
 
                 label = new QLabel(texts.errorEmail[2], frame);
-                label->setFixedSize(label->sizeHint());
                 grid->addWidget(label, 1, 0, Qt::AlignLeft);
                 label = new QLabel(texts.errorEmail[3], frame);
-                label->setFixedSize(label->sizeHint());
                 grid->addWidget(label, 1, 1, Qt::AlignLeft);
                 break;
             }
@@ -403,21 +399,18 @@ void MessageWindow::setUpDisplay()
         topLayout->addLayout(layout);
         QLabel* label = new QLabel(topWidget);
         label->setPixmap(QIcon::fromTheme(QStringLiteral("dialog-error")).pixmap(style()->pixelMetric(QStyle::PM_MessageBoxIconSize)));
-        label->setFixedSize(label->sizeHint());
         layout->addWidget(label, 0, Qt::AlignRight);
         auto vlayout = new QVBoxLayout();
         layout->addLayout(vlayout);
         for (const QString& msg : mErrorMsgs())
         {
             label = new QLabel(msg, topWidget);
-            label->setFixedSize(label->sizeHint());
             vlayout->addWidget(label, 0, Qt::AlignLeft);
         }
         layout->addStretch();
         if (!mDontShowAgain().isEmpty())
         {
             mDontShowAgainCheck = new QCheckBox(i18nc("@option:check", "Do not display this error message again for this alarm"), topWidget);
-            mDontShowAgainCheck->setFixedSize(mDontShowAgainCheck->sizeHint());
             topLayout->addWidget(mDontShowAgainCheck, 0, Qt::AlignLeft);
         }
     }
@@ -432,7 +425,6 @@ void MessageWindow::setUpDisplay()
     // Prevent accidental acknowledgement of the message if the user is typing when the window appears
     mOkButton->clearFocus();
     mOkButton->setFocusPolicy(Qt::ClickFocus);    // don't allow keyboard selection
-    mOkButton->setFixedSize(mOkButton->sizeHint());
     connect(mOkButton, &QAbstractButton::clicked, this, &MessageWindow::slotOk);
     grid->addWidget(mOkButton, 0, gridIndex++, Qt::AlignHCenter);
     mOkButton->setWhatsThis(i18nc("@info:whatsthis", "Acknowledge the alarm"));
@@ -442,7 +434,6 @@ void MessageWindow::setUpDisplay()
         // Edit button
         mEditButton = new PushButton(i18nc("@action:button", "&Edit..."), topWidget);
         mEditButton->setFocusPolicy(Qt::ClickFocus);    // don't allow keyboard selection
-        mEditButton->setFixedSize(mEditButton->sizeHint());
         connect(mEditButton, &QAbstractButton::clicked, this, &MessageWindow::slotEdit);
         grid->addWidget(mEditButton, 0, gridIndex++, Qt::AlignHCenter);
         mEditButton->setToolTip(i18nc("@info:tooltip", "Edit the alarm"));
@@ -452,7 +443,6 @@ void MessageWindow::setUpDisplay()
     // Defer button
     mDeferButton = new PushButton(i18nc("@action:button", "&Defer..."), topWidget);
     mDeferButton->setFocusPolicy(Qt::ClickFocus);    // don't allow keyboard selection
-    mDeferButton->setFixedSize(mDeferButton->sizeHint());
     connect(mDeferButton, &QAbstractButton::clicked, this, &MessageWindow::slotDefer);
     grid->addWidget(mDeferButton, 0, gridIndex++, Qt::AlignHCenter);
     mDeferButton->setToolTip(i18nc("@info:tooltip", "Defer the alarm until later"));

@@ -15,15 +15,15 @@
 #include "kalarm_debug.h"
 
 #include <KAlarmCal/KADateTime>
-using namespace KAlarmCal;
 #include <KCalendarCore/Duration>
-using namespace KCalendarCore;
 
 #include <KLocalizedString>
 
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 
+using namespace KAlarmCal;
+using namespace KCalendarCore;
 
 // Collect these widget labels together to ensure consistent wording and
 // translations across different modules.
@@ -48,7 +48,6 @@ Reminder::Reminder(const QString& reminderWhatsThis, const QString& valueWhatsTh
     mTimeSignCombo->addItem(i18nc("@item:inlistbox", "afterwards"));
     mTimeSignCombo->setWhatsThis(beforeAfterWhatsThis);
     mTimeSignCombo->setCurrentIndex(0);   // default to "in advance"
-    mTime->setFixedSize(mTime->sizeHint());
     connect(mTime, &TimeSelector::toggled, this, &Reminder::slotReminderToggled);
     connect(mTime, &TimeSelector::valueChanged, this, &Reminder::changed);
     connect(mTimeSignCombo, static_cast<void (ComboBox::*)(int)>(&ComboBox::currentIndexChanged), this, &Reminder::changed);
@@ -65,7 +64,6 @@ Reminder::Reminder(const QString& reminderWhatsThis, const QString& valueWhatsTh
             layout->setContentsMargins(0, 0, indent, 0);
         topLayout->addLayout(layout);
         mOnceOnly = new CheckBox(i18n_chk_FirstRecurrenceOnly(), this);
-        mOnceOnly->setFixedSize(mOnceOnly->sizeHint());
         connect(mOnceOnly, &CheckBox::toggled, this, &Reminder::changed);
         mOnceOnly->setWhatsThis(i18nc("@info:whatsthis", "Display the reminder only for the first time the alarm is scheduled"));
         layout->addWidget(mOnceOnly);

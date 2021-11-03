@@ -19,7 +19,6 @@
 #include "lib/timespinbox.h"
 #include "lib/timezonecombo.h"
 
-
 #include <KDateComboBox>
 #include <KLocalizedString>
 
@@ -89,7 +88,6 @@ void AlarmTimeWidget::init(Mode mode, const QString& title)
 
     // At time radio button/label
     mAtTimeRadio = new RadioButton((mDeferring ? i18nc("@option:radio", "Defer to date/time:") : i18nc("@option:radio", "At date/time:")), topWidget);
-    mAtTimeRadio->setFixedSize(mAtTimeRadio->sizeHint());
     mAtTimeRadio->setWhatsThis(mDeferring ? i18nc("@info:whatsthis", "Reschedule the alarm to the specified date and time.")
                                           : i18nc("@info:whatsthis", "Specify the date, or date and time, to schedule the alarm."));
     mButtonGroup->addButton(mAtTimeRadio);
@@ -108,10 +106,8 @@ void AlarmTimeWidget::init(Mode mode, const QString& title)
     QWidget* timeBox = new QWidget(topWidget);
     auto timeBoxHLayout = new QHBoxLayout(timeBox);
     timeBoxHLayout->setContentsMargins(0, 0, 0, 0);
-    timeBoxHLayout->setSpacing(2 * style()->pixelMetric(QStyle::PM_LayoutHorizontalSpacing));
     mTimeEdit = new TimeEdit(timeBox);
     timeBoxHLayout->addWidget(mTimeEdit);
-    mTimeEdit->setFixedSize(mTimeEdit->sizeHint());
     connect(mTimeEdit, &TimeEdit::valueChanged, this, &AlarmTimeWidget::dateTimeChanged);
     mTimeEdit->setWhatsThis(xi18nc("@info:whatsthis",
                                    "<para>Enter the time to schedule the alarm.</para>"
@@ -129,7 +125,6 @@ void AlarmTimeWidget::init(Mode mode, const QString& title)
         mAnyTimeAllowed = true;
         mAnyTimeCheckBox = new CheckBox(i18nc("@option:check", "Any time"), timeBox);
         timeBoxHLayout->addWidget(mAnyTimeCheckBox);
-        mAnyTimeCheckBox->setFixedSize(mAnyTimeCheckBox->sizeHint());
         connect(mAnyTimeCheckBox, &CheckBox::toggled, this, &AlarmTimeWidget::slotAnyTimeToggled);
         mAnyTimeCheckBox->setToolTip(i18nc("@info:tooltip", "Set only a date (without a time) for the alarm"));
         mAnyTimeCheckBox->setWhatsThis(i18nc("@info:whatsthis",
@@ -138,7 +133,6 @@ void AlarmTimeWidget::init(Mode mode, const QString& title)
 
     // 'Time from now' radio button/label
     mAfterTimeRadio = new RadioButton((mDeferring ? i18nc("@option:radio", "Defer for time interval:") : i18nc("@option:radio", "Time from now:")), topWidget);
-    mAfterTimeRadio->setFixedSize(mAfterTimeRadio->sizeHint());
     mAfterTimeRadio->setWhatsThis(mDeferring ? i18nc("@info:whatsthis", "Reschedule the alarm for the specified time interval after now.")
                                              : i18nc("@info:whatsthis", "Schedule the alarm after the specified time interval from now."));
     mButtonGroup->addButton(mAfterTimeRadio);
@@ -146,7 +140,6 @@ void AlarmTimeWidget::init(Mode mode, const QString& title)
     // Delay time spin box
     mDelayTimeEdit = new TimeSpinBox(1, maxDelayTime, topWidget);
     mDelayTimeEdit->setValue(1439);
-    mDelayTimeEdit->setFixedSize(mDelayTimeEdit->sizeHint());
     connect(mDelayTimeEdit, &TimeSpinBox::valueChanged, this, &AlarmTimeWidget::delayTimeChanged);
     mDelayTimeEdit->setWhatsThis(mDeferring ? xi18nc("@info:whatsthis", "<para>%1</para><para>%2</para>", i18n_TimeAfterPeriod(), TimeSpinBox::shiftWhatsThis())
                                             : xi18nc("@info:whatsthis", "<para>%1</para><para>%2</para><para>%3</para>", i18n_TimeAfterPeriod(), recurText, TimeSpinBox::shiftWhatsThis()));
@@ -172,8 +165,11 @@ void AlarmTimeWidget::init(Mode mode, const QString& title)
     else
     {
         grid->addWidget(mAtTimeRadio, 0, 0, Qt::AlignLeft);
-        grid->addWidget(mDateEdit, 0, 1, Qt::AlignLeft);
-        grid->addWidget(timeBox, 0, 2, Qt::AlignLeft);
+        auto hLayout = new QHBoxLayout;
+        hLayout->addWidget(mDateEdit);
+        hLayout->addSpacing(2 * style()->pixelMetric(QStyle::PM_LayoutHorizontalSpacing));
+        hLayout->addWidget(timeBox);
+        grid->addLayout(hLayout, 0, 1, Qt::AlignLeft);
         grid->setRowStretch(1, 1);
         grid->addWidget(mAfterTimeRadio, 2, 0, Qt::AlignLeft);
         grid->addWidget(mDelayTimeEdit, 2, 1, Qt::AlignLeft);
