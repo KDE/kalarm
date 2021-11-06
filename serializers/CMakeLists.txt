@@ -4,7 +4,9 @@ add_library(akonadi_serializer_kalarm MODULE)
 target_sources(akonadi_serializer_kalarm PRIVATE
     akonadi_serializer_kalarm.cpp
     kaeventformatter.cpp
-)
+    akonadi_serializer_kalarm.h
+    kaeventformatter.h
+    )
 
 ecm_qt_declare_logging_category(akonadi_serializer_kalarm
         HEADER akonadi_serializer_kalarm_debug.h

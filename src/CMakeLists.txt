@@ -17,6 +17,19 @@ target_sources(KF5AlarmCalendar PRIVATE
     collectionattribute.cpp
     compatibilityattribute.cpp
     eventattribute.cpp
+    kacalendar.h
+    karecurrence.h
+    akonadi.h
+    alarmtext.h
+    identities.h
+    kaevent.h
+    kadatetime.h
+    datetime.h
+    repetition.h
+    version.h
+    collectionattribute.h
+    compatibilityattribute.h
+    eventattribute.h
 )
 
 ecm_qt_declare_logging_category(KF5AlarmCalendar HEADER kalarmcal_debug.h IDENTIFIER KALARMCAL_LOG CATEGORY_NAME org.kde.pim.kalarmcal
