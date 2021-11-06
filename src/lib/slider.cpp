@@ -10,6 +10,7 @@
 
 #include <QLabel>
 #include <QMouseEvent>
+#include <QLocale>
 
 
 Slider::Slider(QWidget* parent)
@@ -51,6 +52,21 @@ void Slider::setValueLabel(QLabel* label, const QString& format, bool hideIfDisa
         mValueLabelHide = hideIfDisabled;
         connect(this, &QAbstractSlider::valueChanged, this, &Slider::valueHasChanged);
         connect(mValueLabel, &QObject::destroyed, this, &Slider::valueLabelDestroyed);
+
+        // Substitute any '%' character with the locale's percent symbol.
+        for (int i = 0;  i < mValueFormat.size();  ++i)
+        {
+            if (mValueFormat.at(i) == QLatin1Char('%'))
+            {
+                if (i < mValueFormat.size() - 1  &&  mValueFormat.at(i + 1) == QLatin1Char('1'))
+                {
+                    // Convert "%1" to "%L1" to display the value in localised form.
+                    mValueFormat.insert(++i, QLatin1Char('L'));
+                    continue;
+                }
+                mValueFormat[i] = QLocale().percent();
+            }
+        }
     }
     else
         disconnect(this, &QAbstractSlider::valueChanged, this, &Slider::valueHasChanged);

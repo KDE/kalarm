@@ -653,7 +653,6 @@ QString ResourceDataModelBase::alarmTimeText(const DateTime& dateTime, char lead
 {
     // Whether the date and time contain leading zeroes.
     static bool    leadingZeroesChecked = false;
-    static QString dateFormat;      // date format for current locale
     static QString timeFormat;      // time format for current locale
     static QString timeFullFormat;  // time format with leading zero, if different from 'timeFormat'
     static int     hourOffset = 0;  // offset within time string to the hour
@@ -669,10 +668,6 @@ QString ResourceDataModelBase::alarmTimeText(const DateTime& dateTime, char lead
         // can be aligned with each other.
         // Note that if leading zeroes are not included in other components, no
         // alignment will be attempted.
-
-        // Check the date format. 'dd' provides leading zeroes; single 'd'
-        // provides no leading zeroes.
-        dateFormat = locale.dateFormat(QLocale::ShortFormat);
 
         // Check the time format.
         // Remove all but hours, minutes and AM/PM, since alarms are on minute
@@ -738,7 +733,7 @@ QString ResourceDataModelBase::alarmTimeText(const DateTime& dateTime, char lead
     }
 
     const KADateTime kdt = dateTime.effectiveKDateTime().toTimeSpec(Preferences::timeSpec());
-    QString dateTimeText = locale.toString(kdt.date(), dateFormat);
+    QString dateTimeText = locale.toString(kdt.date(), QLocale::ShortFormat);
 
     if (!dateTime.isDateOnly()  ||  kdt.utcOffset() != dateTime.utcOffset())
     {
@@ -762,28 +757,29 @@ QString ResourceDataModelBase::timeToAlarmText(const DateTime& dateTime)
 {
     if (!dateTime.isValid())
         return i18nc("@info Alarm never occurs", "Never");
-    KADateTime now = KADateTime::currentUtcDateTime();
+    const KADateTime now = KADateTime::currentUtcDateTime();
     if (dateTime.isDateOnly())
     {
-        int days = now.date().daysTo(dateTime.date());
+        const int days = now.date().daysTo(dateTime.date());
         // xgettext: no-c-format
         return i18nc("@info n days", "%1d", days);
     }
-    int mins = (now.secsTo(dateTime.effectiveKDateTime()) + 59) / 60;
+    const int mins = (now.secsTo(dateTime.effectiveKDateTime()) + 59) / 60;
     if (mins <= 0)
         return QString();
-    char minutes[3] = "00";
-    minutes[0] = (mins%60) / 10 + '0';
-    minutes[1] = (mins%60) % 10 + '0';
+    QLocale locale;
+    QString minutes = locale.toString(mins % 60);
+    if (minutes.size() == 1)
+        minutes.prepend(locale.zeroDigit());
     if (mins < 24*60)
-        return i18nc("@info hours:minutes", "%1:%2", mins/60, QLatin1String(minutes));
+        return i18nc("@info hours:minutes", "%1:%2", mins/60, minutes);
     // If we render a day count, then we zero-pad the hours, to make the days line up and be more scanable.
-    int hrs = mins / 60;
-    char hours[3] = "00";
-    hours[0] = (hrs%24) / 10 + '0';
-    hours[1] = (hrs%24) % 10 + '0';
-    int days = hrs / 24;
-    return i18nc("@info days hours:minutes", "%1d %2:%3", days, QLatin1String(hours), QLatin1String(minutes));
+    const int hrs = mins / 60;
+    QString hours = locale.toString(hrs % 24);
+    if (hours.size() == 1)
+        hours.prepend(locale.zeroDigit());
+    const QString days = locale.toString(hrs / 24);
+    return i18nc("@info days hours:minutes", "%1d %2:%3", days, hours, minutes);
 }
 
 // vim: et sw=4:

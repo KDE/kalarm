@@ -60,8 +60,11 @@ public:
 
     /** Set a label to display the slider's value.
      *  The label will be updated whenever the slider value changes.
+     *  The value will be displayed in localised form.
      *  @param label           The label to display the slider's value.
-     *  @param format          Format string for the value to display.
+     *  @param format          Format string for the value to display, containing "%1"
+     *                         where the value is to be substituted. Any other '%'
+     *                         will be substituted with the locale's percent symbol.
      *  @param hideIfDisabled  Hide the label if the slider is disabled.
      */
     void setValueLabel(QLabel* label, const QString& format = QStringLiteral("%1"), bool hideIfDisabled = false);
@@ -86,6 +89,5 @@ private:
     bool    mValueLabelHide;        // hide mValueLabel if slider is disabled
     bool    mReadOnly {false};      // value cannot be changed by the user
 };
-
 
 // vim: et sw=4:

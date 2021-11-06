@@ -1308,11 +1308,12 @@ MonthYearRule::MonthYearRule(const QString& freqText, const QString& freqWhatsTh
     mDayButton->setWhatsThis(i18nc("@info:whatsthis", "Repeat the alarm on the selected day of the month"));
     boxLayout->addWidget(mDayButton, 0, 0);
 
+    QLocale locale;
     mDayCombo = new ComboBox(this);
     mDayCombo->setEditable(false);
     mDayCombo->setMaxVisibleItems(11);
     for (int i = 0;  i < 31;  ++i)
-        mDayCombo->addItem(QString::number(i + 1));
+        mDayCombo->addItem(locale.toString(i + 1));
     mDayCombo->addItem(i18nc("@item:inlistbox Last day of month", "Last"));
     mDayCombo->setReadOnly(readOnly);
     mDayCombo->setWhatsThis(i18nc("@info:whatsthis", "Select the day of the month on which to repeat the alarm"));
@@ -1354,7 +1355,6 @@ MonthYearRule::MonthYearRule(const QString& freqText, const QString& freqWhatsTh
 
     mDayOfWeekCombo = new ComboBox(this);
     mDayOfWeekCombo->setEditable(false);
-    QLocale locale;
     for (int i = 0;  i < 7;  ++i)
     {
         int day = Locale::localeDayInWeek_to_weekDay(i);
