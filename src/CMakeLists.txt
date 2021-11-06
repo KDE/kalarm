@@ -48,6 +48,33 @@ set(libkalarm_SRCS
     lib/stackedwidgets.cpp
     lib/lineedit.cpp
     lib/synchtimer.cpp
+    lib/buttongroup.h
+    lib/checkbox.h
+    lib/colourbutton.h
+    lib/combobox.h
+    lib/config.h
+    lib/desktop.h
+    lib/dragdrop.h
+    lib/file.h
+    lib/filedialog.h
+    lib/groupbox.h
+    lib/label.h
+    lib/locale.h
+    lib/messagebox.h
+    lib/packedlayout.h
+    lib/pushbutton.h
+    lib/radiobutton.h
+    lib/timeedit.h
+    lib/timespinbox.h
+    lib/timeperiod.h
+    lib/timezonecombo.h
+    lib/shellprocess.h
+    lib/slider.h
+    lib/spinbox.h
+    lib/spinbox2.h
+    lib/stackedwidgets.h
+    lib/lineedit.h
+    lib/synchtimer.h
 )
 set(resources_SRCS
     resources/calendarfunctions.cpp
@@ -71,6 +98,27 @@ set(resources_SRCS
     resources/singlefileresource.cpp
     resources/singlefileresourceconfigdialog.cpp
     resources/dirresourceimportdialog.cpp
+    resources/calendarfunctions.h
+    resources/resourcetype.h
+    resources/resource.h
+    resources/resources.h
+    resources/resourcedatamodelbase.h
+    resources/resourcemodel.h
+    resources/resourceselectdialog.h
+    resources/resourcecreator.h
+    resources/eventmodel.h
+    resources/datamodel.h
+    resources/calendarupdater.h
+    resources/fileresource.h
+    resources/fileresourceconfigmanager.h
+    resources/fileresourcecreator.h
+    resources/fileresourcedatamodel.h
+    resources/fileresourcemigrator.h
+    resources/fileresourcesettings.h
+    resources/fileresourcecalendarupdater.h
+    resources/singlefileresource.h
+    resources/singlefileresourceconfigdialog.h
+    resources/dirresourceimportdialog.h
    )
 
 set(kalarm_bin_SRCS ${libkalarm_SRCS} ${resources_SRCS}
@@ -128,6 +176,58 @@ set(kalarm_bin_SRCS ${libkalarm_SRCS} ${resources_SRCS}
     wakedlg.cpp
     migratekde4files.cpp
     akonadicollectionsearch.cpp
+    birthdaydlg.h
+    birthdaymodel.h
+    editdlg.h
+    editdlgtypes.h
+    soundpicker.h
+    sounddlg.h
+    displaycalendar.h
+    resourcescalendar.h
+    undo.h
+    kalarmapp.h
+    mainwindowbase.h
+    mainwindow.h
+    messagedisplay.h
+    messagedisplayhelper.h
+    messagenotification.h
+    messagewindow.h
+    preferences.h
+    prefdlg.h
+    traywindow.h
+    dbushandler.h
+    recurrenceedit.h
+    deferdlg.h
+    eventid.h
+    functions.h
+    fontcolour.h
+    fontcolourbutton.h
+    alarmtimewidget.h
+    specialactions.h
+    reminder.h
+    startdaytimer.h
+    eventlistview.h
+    alarmlistdelegate.h
+    alarmlistview.h
+    templatelistview.h
+    kamail.h
+    timeselector.h
+    latecancel.h
+    repetitionbutton.h
+    emailidcombo.h
+    find.h
+    pickfileradio.h
+    newalarmaction.h
+    commandoptions.h
+    resourceselector.h
+    datepicker.h
+    daymatrix.h
+    templatepickdlg.h
+    templatedlg.h
+    templatemenuaction.h
+    wakedlg.h
+    migratekde4files.h
+    akonadicollectionsearch.h
 )
 
 ki18n_wrap_ui(kalarm_bin_SRCS
