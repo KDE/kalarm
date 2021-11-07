@@ -2987,6 +2987,7 @@ QString KAEvent::recurrenceText(bool brief) const
         return brief ? i18nc("@info Brief form of 'At Login'", "Login") : i18nc("@info", "At login");
     }
     if (d->mRecurrence) {
+        QLocale locale;
         const int frequency = d->mRecurrence->frequency();
         switch (d->mRecurrence->defaultRRuleConst()->recurrenceType()) {
         case RecurrenceRule::rMinutely:
@@ -2995,7 +2996,7 @@ QString KAEvent::recurrenceText(bool brief) const
             } else if (frequency % 60 == 0) {
                 return i18ncp("@info", "1 Hour", "%1 Hours", frequency / 60);
             } else {
-                return i18nc("@info Hours and minutes", "%1h %2m", frequency / 60, QString::asprintf("%02d", frequency % 60));
+                return i18nc("@info Hours and minutes", "%1h %2m", locale.toString(frequency / 60), locale.toString(frequency % 60));
             }
         case RecurrenceRule::rDaily:
             return i18ncp("@info", "1 Day", "%1 Days", frequency);
