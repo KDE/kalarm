@@ -31,10 +31,9 @@ TimeSpinBox::TimeSpinBox(bool use24hour, QWidget* parent)
     , mPm(false)
 {
     setWrapping(true);
-    setReverseWithLayout(false);   // keep buttons the same way round even if right-to-left language
     setShiftSteps(5, 360, 60, false);    // shift-left button increments 5 min / 6 hours
-    setSelectOnStep(false);
     setAlignment(Qt::AlignHCenter);
+    init();
     connect(this, &TimeSpinBox::valueChanged, this, &TimeSpinBox::slotValueChanged);
 }
 
@@ -46,10 +45,77 @@ TimeSpinBox::TimeSpinBox(int minMinute, int maxMinute, QWidget* parent)
     , mMinimumValue(minMinute)
     , m12Hour(false)
 {
-    setReverseWithLayout(false);   // keep buttons the same way round even if right-to-left language
     setShiftSteps(5, 300, 60, false);    // shift-left button increments 5 min / 5 hours
-    setSelectOnStep(false);
     setAlignment(Qt::AlignRight);
+    init();
+}
+
+void TimeSpinBox::init()
+{
+    setReverseWithLayout(false);   // keep buttons the same way round even if right-to-left language
+    setSelectOnStep(false);
+
+    // Determine the time format, including only hours and minutes.
+    // Find the separator between hours and minutes, for the current locale.
+    const QString timeFormat = QLocale().timeFormat(QLocale::ShortFormat);
+    bool done = false;
+    bool quote = false;
+    int searching = 0;   // -1 for hours, 1 for minutes
+    for (int i = 0;  i < timeFormat.size() && !done;  ++i)
+    {
+        const QChar qch = timeFormat.at(i);
+        const char ch = qch.toLatin1();
+        if (quote  &&  ch != '\'')
+        {
+            if (searching)
+                mSeparator += qch;
+            continue;
+        }
+        switch (ch)
+        {
+            case 'h':
+            case 'H':
+                if (searching == 0)
+                    searching = 1;
+                else if (searching == 1)   // searching for minutes
+                    mSeparator.clear();
+                else if (searching == -1)   // searching for hours
+                {
+                    mReversed = true;   // minutes are before hours
+                    done = true;
+                }
+                if (i < timeFormat.size() - 1  &&  timeFormat.at(i + 1) == qch)
+                    ++i;
+                break;
+
+            case 'm':
+                if (searching == 0)
+                    searching = -1;
+                else if (searching == -1)   // searching for minutes
+                    mSeparator.clear();
+                else if (searching == 1)    // searching for hours
+                    done = true;
+                if (i < timeFormat.size() - 1  &&  timeFormat.at(i + 1) == qch)
+                    ++i;
+                break;
+
+            case '\'':
+                if (!quote  &&  searching
+                &&  i < timeFormat.size() - 1  &&  timeFormat.at(i + 1) == qch)
+                {
+                    mSeparator += qch;    // two consecutive single quotes means a literal quote
+                    ++i;
+                }
+                else
+                    quote = !quote;
+                break;
+
+            default:
+                if (searching)
+                    mSeparator += qch;
+                break;
+        }
+    }
 }
 
 QString TimeSpinBox::shiftWhatsThis()
@@ -71,8 +137,14 @@ QString TimeSpinBox::textFromValue(int v) const
         else if (v >= 780)
             v -= 720;      // convert 13 - 23 hours to 1 - 11
     }
-    const QString s = QString::asprintf((wrapping() ? "%02d:%02d" : "%d:%02d"), v/60, v%60);
-    return s;
+    QLocale locale;
+    QString hours = locale.toString(v / 60);
+    if (wrapping()  &&  hours.size() == 1)
+        hours.prepend(locale.zeroDigit());
+    QString mins = locale.toString(v % 60);
+    if (mins.size() == 1)
+        mins.prepend(locale.zeroDigit());
+    return mReversed ? mins + mSeparator + hours : hours + mSeparator + mins;
 }
 
 /******************************************************************************
@@ -84,21 +156,24 @@ QString TimeSpinBox::textFromValue(int v) const
  */
 int TimeSpinBox::valueFromText(const QString&) const
 {
+    QLocale locale;
     const QString text = cleanText();
-    const int colon = text.indexOf(QLatin1Char(':'));
+    const int colon = text.indexOf(mSeparator);
     if (colon >= 0)
     {
         // [h]:m format for any time value
-        const QString hour   = text.left(colon).trimmed();
-        const QString minute = text.mid(colon + 1).trimmed();
+        const QString first  = text.left(colon).trimmed();
+        const QString second = text.mid(colon + mSeparator.size()).trimmed();
+        const QString hour   = mReversed ? second : first;
+        const QString minute = mReversed ? first : second;
         if (!minute.isEmpty())
         {
             bool okmin;
             bool okhour = true;
-            const int m = minute.toUInt(&okmin);
+            const int m = locale.toUInt(minute, &okmin);
             int h = 0;
             if (!hour.isEmpty())
-                h = hour.toUInt(&okhour);
+                h = locale.toUInt(hour, &okhour);
             if (okhour  &&  okmin  &&  m < 60)
             {
                 if (m12Hour)
@@ -116,11 +191,11 @@ int TimeSpinBox::valueFromText(const QString&) const
             }
         }
     }
-    else if (text.length() == 4)
+    else if (text.length() == 4  &&  !mReversed)
     {
         // hhmm format for time of day
         bool okn;
-        const int mins = text.toUInt(&okn);
+        const int mins = locale.toUInt(text, &okn);
         if (okn)
         {
             const int m = mins % 100;
@@ -162,7 +237,7 @@ void TimeSpinBox::setValid(bool valid)
     {
         mInvalid = true;
         SpinBox2::setMinimum(mMinimumValue - 1);
-        setSpecialValueText(QStringLiteral("**:**"));
+        setSpecialValueText(QStringLiteral("**%1**").arg(mSeparator));
         SpinBox2::setValue(mMinimumValue - 1);
     }
 }
@@ -227,14 +302,14 @@ QSize TimeSpinBox::sizeHint() const
 {
     const QSize sz = SpinBox2::sizeHint();
     const QFontMetrics fm(font());
-    return {sz.width() + fm.horizontalAdvance(QLatin1Char(':')), sz.height()};
+    return {sz.width() + fm.horizontalAdvance(mSeparator), sz.height()};
 }
 
 QSize TimeSpinBox::minimumSizeHint() const
 {
     const QSize sz = SpinBox2::minimumSizeHint();
     const QFontMetrics fm(font());
-    return {sz.width() + fm.horizontalAdvance(QLatin1Char(':')), sz.height()};
+    return {sz.width() + fm.horizontalAdvance(mSeparator), sz.height()};
 }
 
 /******************************************************************************
@@ -249,29 +324,35 @@ QValidator::State TimeSpinBox::validate(QString& text, int&) const
         return QValidator::Intermediate;
     QValidator::State state = QValidator::Acceptable;
     const int maxMinute = maximum();
+    QLocale locale;
     QString hour;
     bool ok;
     int hr = 0;
     int mn = 0;
-    const int colon = cleanText.indexOf(QLatin1Char(':'));
+    const int colon = cleanText.indexOf(mSeparator);
     if (colon >= 0)
     {
-        const QString minute = cleanText.mid(colon + 1);
+        const QString first  = cleanText.left(colon);
+        const QString second = cleanText.mid(colon + mSeparator.size());
+
+        const QString minute = mReversed ? first : second;
         if (minute.isEmpty())
             state = QValidator::Intermediate;
-        else if ((mn = minute.toUInt(&ok)) >= 60  ||  !ok)
+        else if ((mn = locale.toUInt(minute, &ok)) >= 60  ||  !ok)
             return QValidator::Invalid;
 
-        hour = cleanText.left(colon);
+        hour = mReversed ? second : first;
     }
-    else if (maxMinute >= 1440)
+    else if (!wrapping())
     {
-        // The hhmm form of entry is only allowed for time-of-day, i.e. <= 2359
+        // It's a time duration, so the hhmm form of entry is not allowed.
         hour = cleanText;
         state = QValidator::Intermediate;
     }
-    else
+    else if (!mReversed)
     {
+        // It's a time of day, where the hhmm form of entry is allowed as long
+        // as the order is hours followed by minutes.
         if (cleanText.length() > 4)
             return QValidator::Invalid;
         if (cleanText.length() < 4)
@@ -279,13 +360,13 @@ QValidator::State TimeSpinBox::validate(QString& text, int&) const
         hour = cleanText.left(2);
         const QString minute = cleanText.mid(2);
         if (!minute.isEmpty()
-        &&  ((mn = minute.toUInt(&ok)) >= 60  ||  !ok))
+        &&  ((mn = locale.toUInt(minute, &ok)) >= 60  ||  !ok))
             return QValidator::Invalid;
     }
 
     if (!hour.isEmpty())
     {
-        hr = hour.toUInt(&ok);
+        hr = locale.toUInt(hour, &ok);
         if (ok  &&  m12Hour)
         {
             if (hr == 0)

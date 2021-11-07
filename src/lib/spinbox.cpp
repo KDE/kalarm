@@ -45,8 +45,6 @@ void SpinBox::init()
     int step = QSpinBox::singleStep();
     mLineStep        = step;
     mLineShiftStep   = step;
-    mLineControlStep = 0;
-    mCurrentButton   = NO_BUTTON;
 
     lineEdit()->installEventFilter(this);   // handle shift-up/down arrow presses
 

@@ -1,7 +1,9 @@
 KAlarm Change Log
 
-=== Version 3.3.3 (KDE Applications 21.12) --- 6 November 2021 ===
+=== Version 3.3.3 (KDE Applications 21.12) --- 7 November 2021 ===
 * Show numbers in localised form.
+* Make time edit spinboxes show time using localised format and numbers.
+* Fix infinite loop due to invalid recurrence date when using locale with non-ASCII numbers (requires kalarmcal 21.12).
 
 === Version 3.3.2 (KDE Applications 21.08.3) --- 30 October 2021 ===
 * Make time edit field arrows work with Breeze application style [KDE Bug 443062]

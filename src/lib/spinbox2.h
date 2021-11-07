@@ -208,13 +208,14 @@ public:
 
     /** Sets the shifted step increments for the two pairs of spin buttons,
      *  i.e. the amount by which the spin box value changes when a spin button
-     *  is clicked while the shift key is pressed.
+     *  is clicked while the shift key is pressed. It also sets the increment
+     *  when the left spin button is clicked when the control key is pressed.
      *  @param line     The shift step increment for the right-hand spin buttons.
      *  @param page     The shift step increment for the left-hand spin buttons.
-     *  @param control  The control step increment for the left-hand spin buttons.
-     *                  N.B. Qt multiplies the step increment by 10 when the Control
-     *                       key is pressed, so this parameter value should be
-     *  @param modControl  Control steps should always set value to multiple of @p step.
+     *  @param control  The increment for the left-hand spin buttons when Control,
+     *                  is pressed, or 0 to use default Qt handling which
+     *                  multiplies the single step by 10.
+     *  @param modControl  Control steps should always set value to multiple of @p control.
      */
     void             setShiftSteps(int line, int page, int control, bool modControl = true);
 
@@ -290,12 +291,15 @@ private Q_SLOTS:
 
 private:
     void             init();
+    void             setSteps() const;
+    void             setShiftSteps() const;
     void             rearrange();
     void             arrange();
     void             updateMirror();
     bool             eventFilter(QObject*, QEvent*) override;
     void             spinboxResized(QResizeEvent*);
     void             setUpdown2Size();
+    void             setShowUpdown2(bool show) const;
 
     // Visible spin box class.
     // Declared here to allow use of mSpinBox in inline methods.

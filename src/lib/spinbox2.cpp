@@ -99,6 +99,9 @@ void SpinBox2::init()
     connect(mSpinbox, &QSpinBox::valueChanged, this, &SpinBox2::valueChanged);
     connect(mSpinbox2, &SpinBox::stepped, this, &SpinBox2::stepPage);
     connect(mSpinbox2, &ExtraSpinBox::painted, this, &SpinBox2::paintTimer);
+
+    mShowUpdown2 = false;   // ensure that setShowUpdown2(true) actually does something
+    setShowUpdown2(true);
 }
 
 void SpinBox2::setReadOnly(bool ro)
@@ -116,8 +119,8 @@ void SpinBox2::setReverseWithLayout(bool reverse)
     if (reverse != mReverseWithLayout)
     {
         mReverseWithLayout = reverse;
-        setSteps(mSingleStep, mPageStep);
-        setShiftSteps(mSingleShiftStep, mPageShiftStep, mSingleControlStep, mModControlStep);
+        setSteps();
+        setShiftSteps();
     }
 }
 
@@ -158,15 +161,20 @@ void SpinBox2::setSteps(int single, int page)
 {
     mSingleStep = single;
     mPageStep   = page;
-    if (reverseButtons())
+    setSteps();
+}
+
+void SpinBox2::setSteps() const
+{
+    if (reverseButtons()  &&  mShowUpdown2)
     {
-        mSpinbox2->setSingleStep(single);   // reverse layout, but still set the right buttons
-        mSpinbox->setSingleStep(page);
+        mSpinbox2->setSingleStep(mSingleStep);   // reverse layout, but still set the right buttons
+        mSpinbox->setSingleStep(mPageStep);
     }
     else
     {
-        mSpinbox->setSingleStep(single);
-        mSpinbox2->setSingleStep(page);
+        mSpinbox->setSingleStep(mSingleStep);
+        mSpinbox2->setSingleStep(mPageStep);
     }
 }
 
@@ -176,18 +184,25 @@ void SpinBox2::setShiftSteps(int single, int page, int control, bool modControl)
     mPageShiftStep     = page;
     mSingleControlStep = control;
     mModControlStep    = modControl;
-    if (reverseButtons())
+    setShiftSteps();
+}
+
+void SpinBox2::setShiftSteps() const
+{
+    if (reverseButtons()  &&  mShowUpdown2)
     {
-        mSpinbox2->setSingleShiftStep(single);   // reverse layout, but still set the right buttons
-        mSpinbox->setSingleShiftStep(page);
+        mSpinbox2->setSingleShiftStep(mSingleShiftStep);   // reverse layout, but still set the right buttons
+        mSpinbox->setSingleShiftStep(mPageShiftStep);
     }
     else
     {
-        mSpinbox->setSingleShiftStep(single);
-        mSpinbox2->setSingleShiftStep(page);
+        mSpinbox->setSingleShiftStep(mSingleShiftStep);
+        mSpinbox2->setSingleShiftStep(mPageShiftStep);
     }
-    if (!mShowUpdown2)
-        mSpinbox->setSingleControlStep(control, modControl);
+    if (mShowUpdown2)
+        mSpinbox->setSingleControlStep(0);
+    else
+        mSpinbox->setSingleControlStep(mSingleControlStep, mModControlStep);
 }
 
 void SpinBox2::setButtonSymbols(QSpinBox::ButtonSymbols newSymbols)
@@ -455,11 +470,9 @@ void SpinBox2::getMetrics() const
         // and if not, show only the normal spinbox without extra spin buttons.
         const QRect upRect   = mSpinbox->style()->subControlRect(QStyle::CC_SpinBox, &option, QStyle::SC_SpinBoxUp);
         const QRect downRect = mSpinbox->style()->subControlRect(QStyle::CC_SpinBox, &option, QStyle::SC_SpinBoxDown);
-        mShowUpdown2 = ((upRect.left() > editRect.left())  &&  (downRect.left() > editRect.left()))
-                   ||  ((upRect.right() < editRect.right())  &&  (downRect.right() < editRect.right()));
-        mSpinbox2->setVisible(mShowUpdown2);
-        mSpinMirror->setVisible(mShowUpdown2);
-        mSpinbox->setSingleControlStep(mShowUpdown2 ? 0 : mSingleControlStep, !mShowUpdown2 && mModControlStep);
+        bool showUpdown2 = ((upRect.left() > editRect.left())  &&  (downRect.left() > editRect.left()))
+                       ||  ((upRect.right() < editRect.right())  &&  (downRect.right() < editRect.right()));
+        setShowUpdown2(showUpdown2);
         if (!mShowUpdown2)
             return;
     }
@@ -516,6 +529,21 @@ void SpinBox2::stepPage(int step, bool modified)
 
     // Make the covering arrows image show the pressed arrow
     mSpinMirror->setButtonsImage();
+}
+
+/******************************************************************************
+* Set whether the second pair of spin buttons should be shown.
+*/
+void SpinBox2::setShowUpdown2(bool show) const
+{
+    if (show != mShowUpdown2)
+    {
+        mShowUpdown2 = show;
+        mSpinbox2->setVisible(mShowUpdown2);
+        mSpinMirror->setVisible(mShowUpdown2);
+        setSteps();
+        setShiftSteps();
+    }
 }
 
 
