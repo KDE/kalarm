@@ -3,7 +3,7 @@
     This file is part of kalarmcal library, which provides access to KAlarm
     calendar data. Qt5 version of KDE 4 kdelibs/kdecore/date/kdatetime.cpp.
 
-    SPDX-FileCopyrightText: 2005-2020 David Jarvie <djarvie@kde.org>
+    SPDX-FileCopyrightText: 2005-2021 David Jarvie <djarvie@kde.org>
 
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
@@ -1642,24 +1642,24 @@ QString KADateTime::toString(const QString &format) const
                     break;
                 case 'P': {   // am/pm
                     bool am = (d->time().hour() < 12);
-                    QString text = am ? locale.amText() : locale.pmText();
+                    QString text = (am ? locale.amText() : locale.pmText()).toLower();
                     if (text == QLatin1String("a.m.")) {
                         text = QStringLiteral("am");
                     } else if (text == QLatin1String("p.m.")) {
                         text = QStringLiteral("pm");
                     }
-                    result += text.toLower();
+                    result += text;
                     break;
                 }
                 case 'p': {   // AM/PM
                     bool am = (d->time().hour() < 12);
-                    QString text = am ? locale.amText() : locale.pmText();
-                    if (text == QLatin1String("a.m.")) {
-                        text = QStringLiteral("am");
-                    } else if (text == QLatin1String("p.m.")) {
-                        text = QStringLiteral("pm");
+                    QString text = (am ? locale.amText() : locale.pmText()).toUpper();
+                    if (text == QLatin1String("A.M.")) {
+                        text = QStringLiteral("AM");
+                    } else if (text == QLatin1String("P.M.")) {
+                        text = QStringLiteral("PM");
                     }
-                    result += text.toUpper();
+                    result += text;
                     break;
                 }
                 case 'z':     // UTC offset in hours and minutes
