@@ -1251,7 +1251,7 @@ bool KAEventPrivate::updateKCalEvent(const Event::Ptr &ev, KAEvent::UidAction ui
         if (!archived  &&  checkRecur() != KARecurrence::NO_RECUR) {
             QDateTime dt = mNextMainDateTime.kDateTime().toTimeSpec(mStartDateTime.timeSpec()).qDateTime();
             ev->setCustomProperty(KACalendar::APPNAME, NEXT_RECUR_PROPERTY,
-                                  dt.toString(mNextMainDateTime.isDateOnly() ? QStringLiteral("yyyyMMdd") : QStringLiteral("yyyyMMddThhmmss")));
+                                  QLocale::c().toString(dt, mNextMainDateTime.isDateOnly() ? QStringLiteral("yyyyMMdd") : QStringLiteral("yyyyMMddThhmmss")));
         }
         // Add the main alarm
         initKCalAlarm(ev, 0, QStringList(), MAIN_ALARM);
@@ -5459,7 +5459,7 @@ bool KAEvent::convertKCalEvents(const Calendar::Ptr &calendar, int calendarVersi
                         if (nextMainDateTime != startDateTime) {
                             QDateTime dt = nextMainDateTime.qDateTime();
                             event->setCustomProperty(KACalendar::APPNAME, KAEventPrivate::NEXT_RECUR_PROPERTY,
-                                                     dt.toString(dateOnly ? QStringLiteral("yyyyMMdd") : QStringLiteral("yyyyMMddThhmmss")));
+                                                     QLocale::c().toString(dt, dateOnly ? QStringLiteral("yyyyMMdd") : QStringLiteral("yyyyMMddThhmmss")));
                         }
                     }
                     alarm->setStartOffset(0);
