@@ -6,6 +6,6 @@ Dependencies:
   'require':
     'frameworks/extra-cmake-modules': '@latest'
     'frameworks/kcalendarcore' : '@latest'
-    'kde/pim/akonadi' : '@same'
-    'kde/pim/kcalutils' : '@same'
-    'kde/pim/kidentitymanagement' : '@same'
+    'pim/akonadi' : '@same'
+    'pim/kcalutils' : '@same'
+    'pim/kidentitymanagement' : '@same'
