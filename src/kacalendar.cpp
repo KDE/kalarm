@@ -306,7 +306,7 @@ QString uid(const QString &id, Type status)
 Type status(const Event::Ptr &event, QString *param)
 {
     // Set up a static quick lookup for type strings
-    typedef QMap<QString, Type> PropertyMap;
+    using PropertyMap = QMap<QString, Type>;
     static PropertyMap properties;
     if (properties.isEmpty()) {
         properties[staticStrings->ACTIVE_STATUS]     = ACTIVE;
@@ -424,7 +424,8 @@ QString mimeType(Type type)
     case ACTIVE:    return MIME_ACTIVE;
     case ARCHIVED:  return MIME_ARCHIVED;
     case TEMPLATE:  return MIME_TEMPLATE;
-    default:        return QString();
+    default:
+      return {};
     }
 }
 

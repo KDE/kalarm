@@ -91,7 +91,7 @@ void SerializerPluginKAlarm::serialize(const Item &item, const QByteArray &label
     if (label != Item::FullPayload || !item.hasPayload<KAEvent>()) {
         return;
     }
-    const KAEvent e = item.payload<KAEvent>();
+    const auto e = item.payload<KAEvent>();
     KCalendarCore::Event::Ptr kcalEvent(new KCalendarCore::Event);
     e.updateKCalEvent(kcalEvent, KAEvent::UID_SET);
     QByteArray head = "BEGIN:VCALENDAR\nPRODID:";
@@ -110,8 +110,8 @@ void SerializerPluginKAlarm::compare(AbstractDifferencesReporter *reporter, cons
     Q_ASSERT(left.hasPayload<KAEvent>());
     Q_ASSERT(right.hasPayload<KAEvent>());
 
-    KAEvent eventL = left.payload<KAEvent>();
-    KAEvent eventR = right.payload<KAEvent>();
+    auto eventL = left.payload<KAEvent>();
+    auto eventR = right.payload<KAEvent>();
     // Note that event attributes are not included, since they are not part of the payload
     mValueL = KAEventFormatter(eventL, false);
     mValueR = KAEventFormatter(eventR, false);

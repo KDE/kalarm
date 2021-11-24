@@ -134,7 +134,7 @@ public:
         bool                        timedDeferral;
         bool                        hiddenReminder;
     };
-    typedef QMap<AlarmType, AlarmData> AlarmMap;
+    using AlarmMap = QMap<AlarmType, AlarmData>;
 
     KAEventPrivate();
     KAEventPrivate(const KADateTime &, const QString &name, const QString &message,
@@ -371,7 +371,7 @@ public:
 
 QByteArray KAEvent::currentCalendarVersionString()
 {
-    return QByteArray("2.7.0");   // This is NOT the KAlarmCal library .so version!
+  return {"2.7.0"}; // This is NOT the KAlarmCal library .so version!
 }
 int        KAEvent::currentCalendarVersion()
 {
@@ -480,8 +480,7 @@ KAEvent::KAEvent()
     : d(*emptyKAEventPrivate)
 { }
 
-KAEventPrivate::KAEventPrivate()
-{ }
+KAEventPrivate::KAEventPrivate() = default;
 
 /******************************************************************************
 * Initialise the instance with the specified parameters.
@@ -979,11 +978,10 @@ KAEventPrivate::KAEventPrivate(const KAEventPrivate &other)
 }
 
 KAEvent::KAEvent(const KAEvent &other)
-    : d(other.d)
-{ }
 
-KAEvent::~KAEvent()
-{ }
+    = default;
+
+KAEvent::~KAEvent() = default;
 
 KAEvent &KAEvent::operator=(const KAEvent &other)
 {
@@ -2508,7 +2506,8 @@ DateTime KAEvent::nextTrigger(TriggerType type) const
                ? (reminderAfter ? d->mAllWorkTrigger : d->mMainWorkTrigger)
                : (reminderAfter ? d->mAllTrigger : d->mMainTrigger);
     }
-    default:                return DateTime();
+    default:
+      return {};
     }
 }
 
@@ -3524,7 +3523,7 @@ KAAlarm KAEventPrivate::firstAlarm() const
         }
         return nextAlarm(KAAlarm::MAIN_ALARM);
     }
-    return KAAlarm();
+    return {};
 }
 
 /******************************************************************************
@@ -3580,7 +3579,7 @@ KAAlarm KAEventPrivate::nextAlarm(KAAlarm::Type previousType) const
     default:
         break;
     }
-    return KAAlarm();
+    return {};
 }
 
 int KAEvent::alarmCount() const
@@ -5773,9 +5772,7 @@ KAAlarm::KAAlarm()
 {
 }
 
-KAAlarm::Private::Private()
-{
-}
+KAAlarm::Private::Private() = default;
 
 KAAlarm::KAAlarm(const KAAlarm &other)
     : d(new Private(*other.d))
@@ -5935,7 +5932,7 @@ QString EmailAddressList::join(const QString &separator) const
 QString EmailAddressList::address(int index) const
 {
     if (index < 0  ||  index > count()) {
-        return QString();
+      return {};
     }
     QString result;
     bool quote = false;

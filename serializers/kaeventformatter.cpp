@@ -153,7 +153,7 @@ QString KAEventFormatter::label(Parameter param)
     case EmailAttachments:
         return i18nc("@label", "Email attachments");
     }
-    return QString();
+    return {};
 }
 
 bool KAEventFormatter::isApplicable(Parameter param) const
@@ -326,7 +326,7 @@ QString KAEventFormatter::value(Parameter param) const
     case CustomProperties:
     {
         if (mEvent.customProperties().isEmpty()) {
-            return QString();
+          return {};
         }
         QString value;
         const auto customProperties = mEvent.customProperties();

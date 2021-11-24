@@ -82,9 +82,7 @@ public:
         EmailAttachments
     };
 
-    KAEventFormatter()
-    {
-    }
+    KAEventFormatter() = default;
 
     KAEventFormatter(const KAEvent &e, bool falseForUnspecified);
     bool isApplicable(Parameter) const;

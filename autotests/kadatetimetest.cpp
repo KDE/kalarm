@@ -8,8 +8,8 @@
 */
 
 #include "kadatetimetest.h"
-#include <stdlib.h>
 #include "kadatetime.h"
+#include <cstdlib>
 using KAlarmCal::KADateTime;
 
 

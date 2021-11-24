@@ -17,13 +17,11 @@ namespace KAlarmCal
 class Q_DECL_HIDDEN CollectionAttribute::Private
 {
 public:
-    Private()  {}
-    bool operator==(const Private& other) const
-    {
-        return mBackgroundColour == other.mBackgroundColour
-           &&  mEnabled          == other.mEnabled
-           &&  mStandard         == other.mStandard
-           &&  mKeepFormat       == other.mKeepFormat;
+  Private() = default;
+  bool operator==(const Private &other) const {
+    return mBackgroundColour == other.mBackgroundColour &&
+           mEnabled == other.mEnabled && mStandard == other.mStandard &&
+           mKeepFormat == other.mKeepFormat;
     }
 
     QColor           mBackgroundColour;          // background color for collection and its alarms

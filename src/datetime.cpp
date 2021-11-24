@@ -17,15 +17,17 @@ namespace KAlarmCal
 class Q_DECL_HIDDEN DateTime::Private
 {
 public:
-    Private() {}
-    Private(const QDate &d, const KADateTime::Spec &spec) : mDateTime(d, spec) {}
-    Private(const QDate &d, const QTime &t, const KADateTime::Spec &spec) : mDateTime(d, t, spec) {}
-    Private(const QDateTime &dt, const KADateTime::Spec &spec) : mDateTime(dt, spec) {}
-    Private(const QDateTime &dt) : mDateTime(dt) {}
-    Private(const KADateTime &dt) : mDateTime(dt) {}
+  Private() = default;
+  Private(const QDate &d, const KADateTime::Spec &spec) : mDateTime(d, spec) {}
+  Private(const QDate &d, const QTime &t, const KADateTime::Spec &spec)
+      : mDateTime(d, t, spec) {}
+  Private(const QDateTime &dt, const KADateTime::Spec &spec)
+      : mDateTime(dt, spec) {}
+  Private(const QDateTime &dt) : mDateTime(dt) {}
+  Private(const KADateTime &dt) : mDateTime(dt) {}
 
-    static QTime mStartOfDay;
-    KADateTime    mDateTime;
+  static QTime mStartOfDay;
+  KADateTime mDateTime;
 };
 
 QTime DateTime::Private::mStartOfDay;
