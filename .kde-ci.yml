@@ -7,6 +7,8 @@ Dependencies:
     'frameworks/extra-cmake-modules': '@latest'
     'frameworks/kcalendarcore' : '@latest'
     'frameworks/kholidays': '@latest'
+    'frameworks/ki18n': '@latest'
+    'frameworks/kconfig': '@latest'
     'pim/akonadi' : '@same'
     'pim/kcalutils' : '@same'
     'pim/kidentitymanagement' : '@same'
