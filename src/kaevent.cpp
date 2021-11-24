@@ -371,7 +371,7 @@ public:
 
 QByteArray KAEvent::currentCalendarVersionString()
 {
-  return {"2.7.0"}; // This is NOT the KAlarmCal library .so version!
+    return {"2.7.0"};   // This is NOT the KAlarmCal library .so version!
 }
 int        KAEvent::currentCalendarVersion()
 {
@@ -977,9 +977,7 @@ KAEventPrivate::KAEventPrivate(const KAEventPrivate &other)
     copy(other);
 }
 
-KAEvent::KAEvent(const KAEvent &other)
-
-    = default;
+KAEvent::KAEvent(const KAEvent &other) = default;
 
 KAEvent::~KAEvent() = default;
 
@@ -2506,8 +2504,7 @@ DateTime KAEvent::nextTrigger(TriggerType type) const
                ? (reminderAfter ? d->mAllWorkTrigger : d->mMainWorkTrigger)
                : (reminderAfter ? d->mAllTrigger : d->mMainTrigger);
     }
-    default:
-      return {};
+    default:                return {};
     }
 }
 
@@ -5932,7 +5929,7 @@ QString EmailAddressList::join(const QString &separator) const
 QString EmailAddressList::address(int index) const
 {
     if (index < 0  ||  index > count()) {
-      return {};
+        return {};
     }
     QString result;
     bool quote = false;

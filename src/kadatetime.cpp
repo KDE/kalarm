@@ -161,7 +161,7 @@ QTimeZone KADateTime::Spec::timeZone() const
         case KADateTime::LocalZone:
             return QTimeZone::systemTimeZone();
         default:
-          return {};
+            return {};
     }
 }
 
@@ -176,11 +176,11 @@ bool KADateTime::Spec::isUtc() const
 KADateTime::Spec KADateTime::Spec::UTC() { return {KADateTime::UTC}; }
 KADateTime::Spec KADateTime::Spec::LocalZone()
 {
-  return {KADateTime::LocalZone};
+    return {KADateTime::LocalZone};
 }
 KADateTime::Spec KADateTime::Spec::OffsetFromUTC(int utcOffset)
 {
-  return {KADateTime::OffsetFromUTC, utcOffset};
+    return {KADateTime::OffsetFromUTC, utcOffset};
 }
 KADateTime::SpecType KADateTime::Spec::type() const
 {
@@ -355,9 +355,7 @@ public:
         }
     }
 
-    KADateTimePrivate(const KADateTimePrivate &rhs)
-
-        = default;
+    KADateTimePrivate(const KADateTimePrivate &rhs) = default;
 
     ~KADateTimePrivate() = default;
     const QDateTime &rawDt() const
@@ -514,9 +512,9 @@ KADateTime::Spec KADateTimePrivate::spec() const
         case KADateTime::TimeZone:
             return KADateTime::Spec(mDt.timeZone());
         case KADateTime::OffsetFromUTC:
-          return {specType, mDt.offsetFromUtc()};
+            return {specType, mDt.offsetFromUtc()};
         default:
-          return {specType};
+            return {specType};
     }
 }
 
@@ -974,7 +972,7 @@ QTimeZone KADateTime::timeZone() const
         case LocalZone:
             return QTimeZone::systemTimeZone();
         default:
-          return {};
+            return {};
     }
 }
 
@@ -998,7 +996,7 @@ int KADateTime::utcOffset() const
 KADateTime KADateTime::toUtc() const
 {
     if (!isValid()) {
-      return {};
+        return {};
     }
     if (d->specType == UTC) {
         return *this;
@@ -1009,7 +1007,7 @@ KADateTime KADateTime::toUtc() const
     QTimeZone local;
     const QDateTime udt = d->toUtc(local);
     if (!udt.isValid()) {
-      return {};
+        return {};
     }
     return KADateTime(udt, UTC);
 }
@@ -1017,7 +1015,7 @@ KADateTime KADateTime::toUtc() const
 KADateTime KADateTime::toOffsetFromUtc() const
 {
     if (!isValid()) {
-      return {};
+        return {};
     }
     int offset = 0;
     switch (d->specType) {
@@ -1042,10 +1040,10 @@ KADateTime KADateTime::toOffsetFromUtc() const
             break;
         }
         default:
-          return {};
+            return {};
     }
     if (offset == InvalidOffset) {
-      return {};
+        return {};
     }
     if (d->dateOnly()) {
         return KADateTime(d->date(), Spec(OffsetFromUTC, offset));
@@ -1056,7 +1054,7 @@ KADateTime KADateTime::toOffsetFromUtc() const
 KADateTime KADateTime::toOffsetFromUtc(int utcOffset) const
 {
     if (!isValid()) {
-      return {};
+        return {};
     }
     if (d->specType == OffsetFromUTC && d->spec().utcOffset() == utcOffset) {
         return *this;
@@ -1071,7 +1069,7 @@ KADateTime KADateTime::toOffsetFromUtc(int utcOffset) const
 KADateTime KADateTime::toLocalZone() const
 {
     if (!isValid()) {
-      return {};
+        return {};
     }
     if (d->dateOnly()) {
         return KADateTime(d->date(), LocalZone);
@@ -1092,14 +1090,14 @@ KADateTime KADateTime::toLocalZone() const
         case LocalZone:
             return *this;
         default:
-          return {};
+            return {};
     }
 }
 
 KADateTime KADateTime::toZone(const QTimeZone &zone) const
 {
     if (!zone.isValid() || !isValid()) {
-      return {};
+        return {};
     }
     if (d->specType == TimeZone && d->timeZone() == zone) {
         return *this;    // preserve UTC cache, if any
@@ -1124,7 +1122,7 @@ KADateTime KADateTime::toTimeSpec(const Spec &spec) const
         return *this;
     }
     if (!isValid()) {
-      return {};
+        return {};
     }
     if (d->dateOnly()) {
         return KADateTime(d->date(), spec);
@@ -1213,7 +1211,7 @@ KADateTime KADateTime::addMSecs(qint64 msecs) const
         return *this;    // retain cache - don't create another instance
     }
     if (!isValid()) {
-      return {};
+        return {};
     }
     if (d->dateOnly()) {
         KADateTime result(*this);
@@ -1540,7 +1538,7 @@ bool KADateTime::operator<(const KADateTime &other) const
 QString KADateTime::toString(const QString &format) const
 {
     if (!isValid()) {
-      return {};
+        return {};
     }
 
     enum { TZNone, UTCOffsetShort, UTCOffset, UTCOffsetColon, TZAbbrev, TZName };
@@ -1937,7 +1935,7 @@ KADateTime KADateTime::fromString(const QString &string, TimeFormat format, bool
     }
     const QString str = string.trimmed();
     if (str.isEmpty()) {
-      return {};
+        return {};
     }
 
     switch (format) {
@@ -2398,7 +2396,7 @@ KADateTime KADateTime::fromString(const QString &string, const QString &format,
     QString zoneAbbrev;
     QDateTime qdt = fromStr(string, format, utcOffset, zoneName, zoneAbbrev, dateOnly);
     if (!qdt.isValid()) {
-      return {};
+        return {};
     }
     if (zones) {
         // Try to find a time zone match
@@ -2429,13 +2427,13 @@ KADateTime KADateTime::fromString(const QString &string, const QString &format,
                     int offset2;
                     int offset = offsetAtZoneTime(tz, qdt, &offset2);
                     if (offset == InvalidOffset) {
-                      return {};
+                        return {};
                     }
                     // Found a time zone which uses this abbreviation at the specified date/time
                     if (zone.isValid()) {
                         // Abbreviation is used by more than one time zone
                         if (!offsetIfAmbiguous || offset != utcOffset) {
-                          return {};
+                            return {};
                         }
                         useUtcOffset = true;
                     } else {
@@ -2466,7 +2464,7 @@ KADateTime KADateTime::fromString(const QString &string, const QString &format,
                     if (zone.isValid()  ||  !utcOffset) {
                         // UTC offset is used by more than one time zone
                         if (!offsetIfAmbiguous) {
-                          return {};
+                            return {};
                         }
                         if (dateOnly) {
                             return KADateTime(qdt.date(), Spec(OffsetFromUTC, utcOffset));
@@ -2478,7 +2476,7 @@ KADateTime KADateTime::fromString(const QString &string, const QString &format,
             }
         }
         if (!zone.isValid() && zname) {
-          return {}; // an unknown zone name or abbreviation was found
+            return {};   // an unknown zone name or abbreviation was found
         }
         if (zone.isValid()) {
             if (dateOnly) {
@@ -2510,13 +2508,13 @@ KADateTime KADateTime::fromString(const QString &string, const QString &format,
                     int offset2;
                     int offset = offsetAtZoneTime(z, qdt, &offset2);
                     if (offset == InvalidOffset) {
-                      return {};
+                        return {};
                     }
                     // Found a time zone which uses this abbreviation at the specified date/time
                     if (zone.isValid()) {
                         // Abbreviation is used by more than one time zone
                         if (!offsetIfAmbiguous || offset != utcOffset) {
-                          return {};
+                            return {};
                         }
                         useUtcOffset = true;
                     } else {
@@ -2549,7 +2547,7 @@ KADateTime KADateTime::fromString(const QString &string, const QString &format,
                     if (zone.isValid()  ||  !utcOffset) {
                         // UTC offset is used by more than one time zone
                         if (!offsetIfAmbiguous) {
-                          return {};
+                            return {};
                         }
                         if (dateOnly) {
                             return KADateTime(qdt.date(), Spec(OffsetFromUTC, utcOffset));
@@ -2561,7 +2559,7 @@ KADateTime KADateTime::fromString(const QString &string, const QString &format,
             }
         }
         if (!zone.isValid() && zname) {
-          return {}; // an unknown zone name or abbreviation was found
+            return {};   // an unknown zone name or abbreviation was found
         }
         if (zone.isValid()) {
             if (dateOnly) {
@@ -2683,7 +2681,7 @@ QDateTime fromStr(const QString &string, const QString &format, int &utcOffset,
             } else if (format[f] == str[s]) {
                 ++s;
             } else {
-              return {};
+                return {};
             }
             continue;
         }
@@ -2691,7 +2689,7 @@ QDateTime fromStr(const QString &string, const QString &format, int &utcOffset,
             switch (ch) {
                 case '%':
                     if (str[s++] != QLatin1Char('%')) {
-                      return {};
+                        return {};
                     }
                     break;
                 case ':':
@@ -2699,88 +2697,88 @@ QDateTime fromStr(const QString &string, const QString &format, int &utcOffset,
                     break;
                 case 'Y':     // full year, 4 digits
                     if (!getNumber(str, s, 4, 4, NO_NUMBER, -1, year)) {
-                      return {};
+                        return {};
                     }
                     break;
                 case 'y':     // year, 2 digits
                     if (!getNumber(str, s, 2, 2, 0, 99, year)) {
-                      return {};
+                        return {};
                     }
                     year += (year <= 50) ? 2000 : 1999;
                     break;
                 case 'm':     // month, 2 digits, 01 - 12
                     if (!getNumber(str, s, 2, 2, 1, 12, month)) {
-                      return {};
+                        return {};
                     }
                     break;
                 case 'B':
                 case 'b': {   // month name, translated or English
                     int m = matchMonth(str, s, true);
                     if (m <= 0 || (month != NO_NUMBER && month != m)) {
-                      return {};
+                        return {};
                     }
                     month = m;
                     break;
                 }
                 case 'd':     // day of month, 2 digits, 01 - 31
                     if (!getNumber(str, s, 2, 2, 1, 31, day)) {
-                      return {};
+                        return {};
                     }
                     break;
                 case 'e':     // day of month, 1 - 31
                     if (!getNumber(str, s, 1, 2, 1, 31, day)) {
-                      return {};
+                        return {};
                     }
                     break;
                 case 'A':
                 case 'a': {   // week day name, translated or English
                     int dow = matchDay(str, s, true);
                     if (dow <= 0 || (dayOfWeek != NO_NUMBER && dayOfWeek != dow)) {
-                      return {};
+                        return {};
                     }
                     dayOfWeek = dow;
                     break;
                 }
                 case 'H':     // hour, 2 digits, 00 - 23
                     if (!getNumber(str, s, 2, 2, 0, 23, hour)) {
-                      return {};
+                        return {};
                     }
                     break;
                 case 'k':     // hour, 0 - 23
                     if (!getNumber(str, s, 1, 2, 0, 23, hour)) {
-                      return {};
+                        return {};
                     }
                     break;
                 case 'I':     // hour, 2 digits, 01 - 12
                     if (!getNumber(str, s, 2, 2, 1, 12, hour)) {
-                      return {};
+                        return {};
                     }
                     break;
                 case 'l':     // hour, 1 - 12
                     if (!getNumber(str, s, 1, 2, 1, 12, hour)) {
-                      return {};
+                        return {};
                     }
                     break;
                 case 'M':     // minutes, 2 digits, 00 - 59
                     if (!getNumber(str, s, 2, 2, 0, 59, minute)) {
-                      return {};
+                        return {};
                     }
                     break;
                 case 'S':     // seconds, 2 digits, 00 - 59
                     if (!getNumber(str, s, 2, 2, 0, 59, second)) {
-                      return {};
+                        return {};
                     }
                     break;
                 case 's':     // seconds, 0 - 59
                     if (!getNumber(str, s, 1, 2, 0, 59, second)) {
-                      return {};
+                        return {};
                     }
                     break;
                 case 'P':
                 case 'p': {   // am/pm
                     int ap = getAmPm(str, s, true);
                     if (!ap || (ampm != NO_NUMBER && ampm != ap)) {
-                      return {};
+                        return {};
                     }
                     ampm = ap;
                     break;
@@ -2793,12 +2791,12 @@ QDateTime fromStr(const QString &string, const QString &format, int &utcOffset,
                     break;
                 case 't':     // whitespace
                     if (str[s++] != QLatin1Char(' ')) {
-                      return {};
+                        return {};
                     }
                     break;
                 default:
                     if (s + 2 > send || str[s++] != QLatin1Char('%') || str[s++] != format[f]) {
-                      return {};
+                        return {};
                     }
                     break;
             }
@@ -2808,14 +2806,14 @@ QDateTime fromStr(const QString &string, const QString &format, int &utcOffset,
             switch (ch) {
                 case 'Y':     // full year, >= 4 digits
                     if (!getNumber(str, s, 4, 100, NO_NUMBER, -1, year)) {
-                      return {};
+                        return {};
                     }
                     break;
                 case 'A':
                 case 'a': {   // week day name in English
                     int dow = matchDay(str, s, false);
                     if (dow <= 0 || (dayOfWeek != NO_NUMBER && dayOfWeek != dow)) {
-                      return {};
+                        return {};
                     }
                     dayOfWeek = dow;
                     break;
@@ -2824,28 +2822,28 @@ QDateTime fromStr(const QString &string, const QString &format, int &utcOffset,
                 case 'b': {   // month name in English
                     int m = matchMonth(str, s, false);
                     if (m <= 0 || (month != NO_NUMBER && month != m)) {
-                      return {};
+                        return {};
                     }
                     month = m;
                     break;
                 }
                 case 'm':     // month, 1 - 12
                     if (!getNumber(str, s, 1, 2, 1, 12, month)) {
-                      return {};
+                        return {};
                     }
                     break;
                 case 'P':
                 case 'p': {   // am/pm in English
                     int ap = getAmPm(str, s, false);
                     if (!ap || (ampm != NO_NUMBER && ampm != ap)) {
-                      return {};
+                        return {};
                     }
                     ampm = ap;
                     break;
                 }
                 case 'M':     // minutes, 0 - 59
                     if (!getNumber(str, s, 1, 2, 0, 59, minute)) {
-                      return {};
+                        return {};
                     }
                     break;
                 case 'S':     // seconds with ':' prefix, defaults to zero
@@ -2855,7 +2853,7 @@ QDateTime fromStr(const QString &string, const QString &format, int &utcOffset,
                     }
                     ++s;
                     if (!getNumber(str, s, 1, 2, 0, 59, second)) {
-                      return {};
+                        return {};
                     }
                     break;
                 case 's': {   // milliseconds, with decimal point prefix
@@ -2863,12 +2861,12 @@ QDateTime fromStr(const QString &string, const QString &format, int &utcOffset,
                         // If no locale, try comma, it is preferred by ISO8601 as the decimal point symbol
                         const QChar dpt = QLocale().decimalPoint();
                         if (!str.midRef(s).startsWith(dpt)) {
-                          return {};
+                            return {};
                         }
                     }
                     ++s;
                     if (s >= send) {
-                      return {};
+                        return {};
                     }
                     QString val = str.mid(s);
                     int i = 0;
@@ -2876,14 +2874,14 @@ QDateTime fromStr(const QString &string, const QString &format, int &utcOffset,
                         ;
                     }
                     if (!i) {
-                      return {};
+                        return {};
                     }
                     val.truncate(i);
                     val += QLatin1String("00");
                     val.truncate(3);
                     int ms = val.toInt();
                     if (millisec != NO_NUMBER && millisec != ms) {
-                      return {};
+                        return {};
                     }
                     millisec = ms;
                     s += i;
@@ -2900,7 +2898,7 @@ QDateTime fromStr(const QString &string, const QString &format, int &utcOffset,
                     break;
                 default:
                     if (s + 3 > send || str[s++] != QLatin1Char('%') || str[s++] != QLatin1Char(':') || str[s++] != format[f]) {
-                      return {};
+                        return {};
                     }
                     break;
             }
@@ -2916,33 +2914,33 @@ QDateTime fromStr(const QString &string, const QString &format, int &utcOffset,
                 case UTCOffset:
                 case UTCOffsetColon:
                     if (!zoneAbbrev.isEmpty() || !zoneName.isEmpty()) {
-                      return {};
+                        return {};
                     }
                     if (!getUTCOffset(str, s, (zone == UTCOffsetColon), tzoffset)) {
-                      return {};
+                        return {};
                     }
                     break;
                 case TZAbbrev: {   // time zone abbreviation
                     if (tzoffset != NO_NUMBER || !zoneName.isEmpty()) {
-                      return {};
+                        return {};
                     }
                     int start = s;
                     while (s < send && str[s].isLetterOrNumber()) {
                         ++s;
                     }
                     if (s == start) {
-                      return {};
+                        return {};
                     }
                     const QString z = str.mid(start, s - start);
                     if (!zoneAbbrev.isEmpty() && z != zoneAbbrev) {
-                      return {};
+                        return {};
                     }
                     zoneAbbrev = z;
                     break;
                 }
                 case TZName: {     // time zone name
                     if (tzoffset != NO_NUMBER || !zoneAbbrev.isEmpty()) {
-                      return {};
+                        return {};
                     }
                     QString z;
                     if (f + 1 >= fend) {
@@ -2963,12 +2961,12 @@ QDateTime fromStr(const QString &string, const QString &format, int &utcOffset,
                             ;
                         }
                         if (s == start) {
-                          return {};
+                            return {};
                         }
                         z = str.mid(start, s - start);
                     }
                     if (!zoneName.isEmpty() && z != zoneName) {
-                      return {};
+                        return {};
                     }
                     zoneName = z;
                     break;
@@ -2987,7 +2985,7 @@ QDateTime fromStr(const QString &string, const QString &format, int &utcOffset,
     }
     QDate d = QDate(year, month, (day > 0 ? day : 1));
     if (!d.isValid()) {
-      return {};
+        return {};
     }
     if (dayOfWeek != NO_NUMBER) {
         if (day == NO_NUMBER) {
@@ -2997,7 +2995,7 @@ QDateTime fromStr(const QString &string, const QString &format, int &utcOffset,
             }
         } else {
             if (QDate(year, month, day).dayOfWeek() != dayOfWeek) {
-              return {};
+                return {};
             }
         }
     }
@@ -3016,7 +3014,7 @@ QDateTime fromStr(const QString &string, const QString &format, int &utcOffset,
     }
     if (ampm != NO_NUMBER) {
         if (!hour || hour > 12) {
-          return {};
+            return {};
         }
         if (ampm == 1 && hour == 12) {
             hour = 0;
@@ -3290,7 +3288,7 @@ QDateTime toZoneTime(const QTimeZone &tz, const QDateTime &utcDateTime, bool *se
         *secondOccurrence = false;
     }
     if (!utcDateTime.isValid() || utcDateTime.timeSpec() != Qt::UTC) {
-      return {};
+        return {};
     }
     const QDateTime dt = utcDateTime.toTimeZone(tz);
     if (secondOccurrence) {

@@ -17,13 +17,14 @@ namespace KAlarmCal
 class Q_DECL_HIDDEN Repetition::Private
 {
 public:
-  Private() = default;
-  Private(const Duration &interval, int count)
-      : mInterval(interval), mCount(count) {
-    if ((!count && !interval.isNull()) || (count && interval.isNull())) {
-      mCount = 0;
-      mInterval = 0;
-    }
+    Private() = default;
+    Private(const Duration &interval, int count)
+      : mInterval(interval)
+      , mCount(count) {
+        if ((!count && !interval.isNull()) || (count && interval.isNull())) {
+            mCount = 0;
+            mInterval = 0;
+        }
     }
 
     Duration mInterval = 0;   // sub-repetition interval

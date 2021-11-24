@@ -425,7 +425,7 @@ QString mimeType(Type type)
     case ARCHIVED:  return MIME_ARCHIVED;
     case TEMPLATE:  return MIME_TEMPLATE;
     default:
-      return {};
+        return {};
     }
 }
 

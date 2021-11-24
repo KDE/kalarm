@@ -394,7 +394,7 @@ QString AlarmText::emailHeaders(const QString &text, bool subjectOnly)
     const QStringList lines = text.split(QLatin1Char('\n'), Qt::SkipEmptyParts);
     const int n = Private::emailHeaderCount(lines);
     if (!n) {
-      return {};
+        return {};
     }
     if (subjectOnly) {
         return lines[n - 1].mid(Private::mSubjectPrefix.length()).trimmed();
@@ -556,7 +556,7 @@ QString AlarmText::Private::todoTitle(const QString &text)
         ;
     }
     if (!n  ||  n > 3) {
-      return {};
+        return {};
     }
     QString title;
     int i = 0;

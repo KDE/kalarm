@@ -326,7 +326,7 @@ QString KAEventFormatter::value(Parameter param) const
     case CustomProperties:
     {
         if (mEvent.customProperties().isEmpty()) {
-          return {};
+            return {};
         }
         QString value;
         const auto customProperties = mEvent.customProperties();
