@@ -68,5 +68,4 @@ private:
     bool                mValid;
 };
 
-
 // vim: et sw=4:

@@ -25,5 +25,4 @@ private:
     QRect textRect(const QString& text, QPainter*, const QStyleOptionViewItem&) const;
 };
 
-
 // vim: et sw=4:

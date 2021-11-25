@@ -32,7 +32,7 @@ TimeZoneCombo::TimeZoneCombo(QWidget* parent)
 QTimeZone TimeZoneCombo::timeZone() const
 {
     if (!currentIndex())
-        return QTimeZone();
+        return {};
     return QTimeZone(mZoneNames[currentIndex()]);
 }
 

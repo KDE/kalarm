@@ -63,5 +63,4 @@ private:
     friend struct TypeData;
 };
 
-
 // vim: et sw=4:

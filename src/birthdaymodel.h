@@ -25,50 +25,49 @@ namespace Akonadi
  */
 class BirthdayModel : public Akonadi::ContactsTreeModel
 {
-        Q_OBJECT
-    public:
-        enum {   // data columns
-            NameColumn, DateColumn,
-            ColumnCount
-        };
+    Q_OBJECT
+public:
+    enum {   // data columns
+        NameColumn, DateColumn,
+        ColumnCount
+    };
 
-        /**
-         * Destroys the global contact model.
-         */
-        ~BirthdayModel() override;
+    /**
+     * Destroys the global contact model.
+     */
+    ~BirthdayModel() override;
 
-        /**
-         * Returns the global contact model instance.
-         */
-        static BirthdayModel* instance();
+    /**
+     * Returns the global contact model instance.
+     */
+    static BirthdayModel* instance();
 
-        QVariant entityData(const Akonadi::Item&, int column, int role = Qt::DisplayRole) const override;
-        QVariant entityData(const Akonadi::Collection& collection, int column, int role = Qt::DisplayRole) const override
-                                    { return Akonadi::ContactsTreeModel::entityData(collection, column, role); }
+    QVariant entityData(const Akonadi::Item&, int column, int role = Qt::DisplayRole) const override;
+    QVariant entityData(const Akonadi::Collection& collection, int column, int role = Qt::DisplayRole) const override
+                                { return Akonadi::ContactsTreeModel::entityData(collection, column, role); }
 
-  private:
-        explicit BirthdayModel(Akonadi::ChangeRecorder* recorder);
+private:
+    explicit BirthdayModel(Akonadi::ChangeRecorder* recorder);
 
-        static BirthdayModel* mInstance;
+    static BirthdayModel* mInstance;
 };
 
 
 class BirthdaySortModel : public QSortFilterProxyModel
 {
-        Q_OBJECT
-    public:
-        explicit BirthdaySortModel(QObject* parent = nullptr);
+    Q_OBJECT
+public:
+    explicit BirthdaySortModel(QObject* parent = nullptr);
 
-        void setPrefixSuffix(const QString& prefix, const QString& suffix);
+    void setPrefixSuffix(const QString& prefix, const QString& suffix);
 
-    protected:
-        bool filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const override;
+protected:
+    bool filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const override;
 
-    private:
-        QStringList mContactsWithAlarm;
-        QString     mPrefix;
-        QString     mSuffix;
+private:
+    QStringList mContactsWithAlarm;
+    QString     mPrefix;
+    QString     mSuffix;
 };
-
 
 // vim: et sw=4:

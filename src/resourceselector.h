@@ -35,60 +35,59 @@ class ResourceView;
 */
 class ResourceSelector : public QFrame
 {
-        Q_OBJECT
-    public:
-        explicit ResourceSelector(MainWindow* parentWindow, QWidget* parent = nullptr);
-        void  initActions(KActionCollection*);
+    Q_OBJECT
+public:
+    explicit ResourceSelector(MainWindow* parentWindow, QWidget* parent = nullptr);
+    void  initActions(KActionCollection*);
 
-    Q_SIGNALS:
-        void  resized(const QSize& oldSize, const QSize& newSize);
+Q_SIGNALS:
+    void  resized(const QSize& oldSize, const QSize& newSize);
 
-    protected:
-        void  resizeEvent(QResizeEvent*) override;
+protected:
+    void  resizeEvent(QResizeEvent*) override;
 
-    private Q_SLOTS:
-        void  alarmTypeSelected();
-        void  addResource();
-        void  editResource();
-        void  updateResource();
-        void  removeResource();
-        void  selectionChanged();
-        void  contextMenuRequested(const QPoint&);
-        void  reloadResource();
-        void  saveResource();
-        void  setStandard();
-        void  setColour();
-        void  clearColour();
-        void  importCalendar();
-        void  exportCalendar();
-        void  showInfo();
-        void  archiveDaysChanged(int days);
-        void  slotResourceAdded(Resource&, CalEvent::Type);
-        void  reinstateAlarmTypeScrollBars();
+private Q_SLOTS:
+    void  alarmTypeSelected();
+    void  addResource();
+    void  editResource();
+    void  updateResource();
+    void  removeResource();
+    void  selectionChanged();
+    void  contextMenuRequested(const QPoint&);
+    void  reloadResource();
+    void  saveResource();
+    void  setStandard();
+    void  setColour();
+    void  clearColour();
+    void  importCalendar();
+    void  exportCalendar();
+    void  showInfo();
+    void  archiveDaysChanged(int days);
+    void  slotResourceAdded(Resource&, CalEvent::Type);
+    void  reinstateAlarmTypeScrollBars();
 
-    private:
-        CalEvent::Type currentResourceType() const;
-        Resource currentResource() const;
+private:
+    CalEvent::Type currentResourceType() const;
+    Resource currentResource() const;
 
-        MainWindow*     mMainWindow;
-        ResourceView*   mListView;
-        QComboBox*      mAlarmType;
-        QPushButton*    mAddButton;
-        QPushButton*    mDeleteButton;
-        QPushButton*    mEditButton;
-        CalEvent::Type  mCurrentAlarmType;
-        QMenu*          mContextMenu {nullptr};
-        QAction*        mActionReload {nullptr};
-        QAction*        mActionShowDetails {nullptr};
-        QAction*        mActionSetColour {nullptr};
-        QAction*        mActionClearColour {nullptr};
-        QAction*        mActionEdit {nullptr};
-        QAction*        mActionUpdate {nullptr};
-        QAction*        mActionRemove {nullptr};
-        QAction*        mActionImport {nullptr};
-        QAction*        mActionExport {nullptr};
-        KToggleAction*  mActionSetDefault {nullptr};
+    MainWindow*     mMainWindow;
+    ResourceView*   mListView;
+    QComboBox*      mAlarmType;
+    QPushButton*    mAddButton;
+    QPushButton*    mDeleteButton;
+    QPushButton*    mEditButton;
+    CalEvent::Type  mCurrentAlarmType;
+    QMenu*          mContextMenu {nullptr};
+    QAction*        mActionReload {nullptr};
+    QAction*        mActionShowDetails {nullptr};
+    QAction*        mActionSetColour {nullptr};
+    QAction*        mActionClearColour {nullptr};
+    QAction*        mActionEdit {nullptr};
+    QAction*        mActionUpdate {nullptr};
+    QAction*        mActionRemove {nullptr};
+    QAction*        mActionImport {nullptr};
+    QAction*        mActionExport {nullptr};
+    KToggleAction*  mActionSetDefault {nullptr};
 };
-
 
 // vim: et sw=4:

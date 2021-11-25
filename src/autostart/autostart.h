@@ -12,19 +12,18 @@
 
 class AutostartApp : public QCoreApplication
 {
-        Q_OBJECT
-    public:
-        AutostartApp(int& argc, char** argv);
-        ~AutostartApp()  override {}
-        void setCommandLine(const QString& exe, const QStringList& args);
+    Q_OBJECT
+public:
+    AutostartApp(int& argc, char** argv);
+    ~AutostartApp()  override = default;
+    void setCommandLine(const QString& exe, const QStringList& args);
 
-    private Q_SLOTS:
-        void slotAutostart();
+private Q_SLOTS:
+    void slotAutostart();
 
-    private:
-        QString     mExecutable;
-        QStringList mArgs;
+private:
+    QString     mExecutable;
+    QStringList mArgs;
 };
-
 
 // vim: et sw=4:

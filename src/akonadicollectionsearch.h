@@ -35,36 +35,35 @@ class ItemDeleteJob;
 =============================================================================*/
 class AkonadiCollectionSearch : public QObject
 {
-        Q_OBJECT
-    public:
-        explicit AkonadiCollectionSearch(const QString& mimeType, const QString& gid = QString(), const QString& uid = QString(), bool remove = false);
+    Q_OBJECT
+public:
+    explicit AkonadiCollectionSearch(const QString& mimeType, const QString& gid = QString(), const QString& uid = QString(), bool remove = false);
 
-    Q_SIGNALS:
-        // Signal emitted if action is to fetch all collections for the mime type
-        void collections(const Akonadi::Collection::List&);
-        // Signal emitted if action is to fetch all items with the remote ID
-        void items(const Akonadi::Item::List&);
-        // Signal emitted if action is to delete all items with the remote ID
-        void deleted(int count);
+Q_SIGNALS:
+    // Signal emitted if action is to fetch all collections for the mime type
+    void collections(const Akonadi::Collection::List&);
+    // Signal emitted if action is to fetch all items with the remote ID
+    void items(const Akonadi::Item::List&);
+    // Signal emitted if action is to delete all items with the remote ID
+    void deleted(int count);
 
-    private Q_SLOTS:
-        void collectionFetchResult(KJob*);
-        void itemFetchResult(KJob*);
-        void itemDeleteResult(KJob*);
-        void finish();
+private Q_SLOTS:
+    void collectionFetchResult(KJob*);
+    void itemFetchResult(KJob*);
+    void itemDeleteResult(KJob*);
+    void finish();
 
-    private:
-        QString                                mMimeType;
-        QString                                mGid;
-        QString                                mUid;
-        QList<Akonadi::CollectionFetchJob*>    mCollectionJobs;
-        QMap<Akonadi::ItemFetchJob*, Akonadi::Collection::Id>  mItemFetchJobs;
-        QMap<Akonadi::ItemDeleteJob*, Akonadi::Collection::Id> mItemDeleteJobs;
-        Akonadi::Collection::List              mCollections;
-        Akonadi::Item::List                    mItems;
-        int                                    mDeleteCount {0};
-        bool                                   mDelete;
+private:
+    QString                                mMimeType;
+    QString                                mGid;
+    QString                                mUid;
+    QList<Akonadi::CollectionFetchJob*>    mCollectionJobs;
+    QMap<Akonadi::ItemFetchJob*, Akonadi::Collection::Id>  mItemFetchJobs;
+    QMap<Akonadi::ItemDeleteJob*, Akonadi::Collection::Id> mItemDeleteJobs;
+    Akonadi::Collection::List              mCollections;
+    Akonadi::Item::List                    mItems;
+    int                                    mDeleteCount {0};
+    bool                                   mDelete;
 };
-
 
 // vim: et sw=4:

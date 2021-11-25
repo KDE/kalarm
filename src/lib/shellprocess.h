@@ -138,5 +138,4 @@ private:
     bool               mStdinExit {false}; // exit once STDIN queue has been written
 };
 
-
 // vim: et sw=4:

@@ -189,5 +189,4 @@ private:
 friend class MessageDisplayHelper;
 };
 
-
 // vim: et sw=4:

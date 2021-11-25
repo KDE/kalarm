@@ -183,7 +183,7 @@ Resource FileResourceDataModel::resource(const QModelIndex& ix) const
                 return res;
         }
     }
-    return Resource();
+    return {};
 }
 
 /******************************************************************************
@@ -220,7 +220,7 @@ KAEvent FileResourceDataModel::event(const QString& eventId) const
         if (event)
             return *event;
     }
-    return KAEvent();
+    return {};
 }
 
 /******************************************************************************
@@ -239,7 +239,7 @@ KAEvent FileResourceDataModel::event(const QModelIndex& ix) const
                 return *event;
         }
     }
-    return KAEvent();
+    return {};
 }
 
 /******************************************************************************
@@ -966,7 +966,7 @@ QVariant FileResourceDataModel::data(const QModelIndex& ix, int role) const
                 break;
         }
     }
-    return QVariant();
+    return {};
 }
 
 /******************************************************************************
@@ -1010,7 +1010,7 @@ QVariant FileResourceDataModel::headerData(int section, Qt::Orientation orientat
     QVariant value = ResourceDataModelBase::headerData(section, orientation, role, true, handled);
     if (handled)
         return value;
-    return QVariant();
+    return {};
 }
 
 Qt::ItemFlags FileResourceDataModel::flags(const QModelIndex& ix) const

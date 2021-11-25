@@ -48,42 +48,46 @@ public:
      *               are dropped, only the first is used; the rest are ignored.
      */
     enum Type { Text, Url, Emails };
+
     /** Constructor.
      *  @param type The content type for the line edit.
      *  @param parent The parent object of this widget.
      */
     explicit LineEdit(Type type, QWidget* parent = nullptr);
+
     /** Constructs a line edit whose content type is Text.
      *  @param parent The parent object of this widget.
      */
     explicit LineEdit(QWidget* parent = nullptr);
+
     /** Return the entered text.
      *  If the type is Url, tilde expansion is performed.
      */
-    QString      text() const;
+    QString text() const;
+
     /** Prevents the line edit's contents being selected when the widget receives focus. */
-    void         setNoSelect()   { mNoSelect = true; }
+    void setNoSelect()   { mNoSelect = true; }
+
     /** Sets whether the cursor should be set at the beginning or end of the text when
      *  setText() is called.
      */
-    void         setCursorAtEnd(bool end = true)  { mSetCursorAtEnd = end; }
+    void setCursorAtEnd(bool end = true)  { mSetCursorAtEnd = end; }
 
 public Q_SLOTS:
     /** Sets the contents of the line edit to be @p str. */
-    void         setText(const QString& str) override;
+    void setText(const QString& str) override;
 
 protected:
-    void         focusInEvent(QFocusEvent*) override;
-    void         dragEnterEvent(QDragEnterEvent*) override;
-    void         dropEvent(QDropEvent*) override;
+    void focusInEvent(QFocusEvent*) override;
+    void dragEnterEvent(QDragEnterEvent*) override;
+    void dropEvent(QDropEvent*) override;
 
 private:
-    void         init();
+    void init();
 
     Type  mType;
     bool  mNoSelect {false};
     bool  mSetCursorAtEnd {false};  // setText() should position cursor at end
 };
-
 
 // vim: et sw=4:

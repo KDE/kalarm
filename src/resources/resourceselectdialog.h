@@ -57,5 +57,4 @@ private:
     bool               mWritable {false};
 };
 
-
 // vim: et sw=4:

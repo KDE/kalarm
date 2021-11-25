@@ -35,5 +35,4 @@ unsigned defaultWorkDays();
 
 } // namespace Locale
 
-
 // vim: et sw=4:

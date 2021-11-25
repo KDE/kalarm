@@ -407,7 +407,7 @@ KAEvent ResourcesCalendar::updateEvent(const KAEvent& evnt, bool saveIfReadOnly)
             return evnt;
     }
     qCDebug(KALARM_LOG) << "ResourcesCalendar::updateEvent: error" << evnt.id();
-    return KAEvent();
+    return {};
 }
 
 
@@ -494,16 +494,16 @@ KAEvent ResourcesCalendar::event(const EventId& uniqueID, bool findUniqueId)
         if (list.count() > 1)
         {
             qCWarning(KALARM_LOG) << "ResourcesCalendar::event: Multiple events found with ID" << eventId;
-            return KAEvent();
+            return {};
         }
         if (list.isEmpty())
-            return KAEvent();
+            return {};
         return list[0];
     }
 
     // The resource is specified.
     if (!mResourceMap.value(resourceId).contains(eventId))
-        return KAEvent();
+        return {};
     return Resources::resource(resourceId).event(eventId);
 }
 
@@ -514,14 +514,14 @@ KAEvent ResourcesCalendar::event(const EventId& uniqueID, bool findUniqueId)
 KAEvent ResourcesCalendar::templateEvent(const QString& templateName)
 {
     if (templateName.isEmpty())
-        return KAEvent();
+        return {};
     const QVector<KAEvent> eventlist = events(CalEvent::TEMPLATE);
     for (const KAEvent& event : eventlist)
     {
         if (event.name() == templateName)
             return event;
     }
-    return KAEvent();
+    return {};
 }
 
 /******************************************************************************

@@ -137,7 +137,7 @@ QString validateFileUrl(const QUrl& url)
             return xi18nc("@info", "Error!  The file <filename>%1</filename> is already used by an existing resource.", path);
         }
     }
-    return QString();
+    return {};
 }
 
 }

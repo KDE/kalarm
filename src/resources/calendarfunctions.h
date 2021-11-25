@@ -35,5 +35,4 @@ bool importCalendarFile(const QUrl& url, CalEvent::Types alarmTypes, bool newId,
 
 } // namespace KAlarm
 
-
 // vim: et sw=4:

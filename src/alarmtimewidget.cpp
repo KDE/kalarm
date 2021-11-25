@@ -274,7 +274,7 @@ KADateTime AlarmTimeWidget::getDateTime(int* minsFromNow, bool checkExpired, boo
                 KAMessageBox::sorry(const_cast<AlarmTimeWidget*>(this), i18nc("@info", "Invalid time"));
             if (errorWidget)
                 *errorWidget = mDelayTimeEdit;
-            return KADateTime();
+            return {};
         }
         const int delayMins = mDelayTimeEdit->value();
         if (minsFromNow)
@@ -302,7 +302,7 @@ KADateTime AlarmTimeWidget::getDateTime(int* minsFromNow, bool checkExpired, boo
                 if (errorWidget)
                     *errorWidget = mTimeEdit;
             }
-            return KADateTime();
+            return {};
         }
 
         KADateTime result;
@@ -315,7 +315,7 @@ KADateTime AlarmTimeWidget::getDateTime(int* minsFromNow, bool checkExpired, boo
                     KAMessageBox::sorry(const_cast<AlarmTimeWidget*>(this), i18nc("@info", "Alarm date has already expired"));
                 if (errorWidget)
                     *errorWidget = mDateEdit;
-                return KADateTime();
+                return {};
             }
         }
         else
@@ -327,7 +327,7 @@ KADateTime AlarmTimeWidget::getDateTime(int* minsFromNow, bool checkExpired, boo
                     KAMessageBox::sorry(const_cast<AlarmTimeWidget*>(this), i18nc("@info", "Alarm time has already expired"));
                 if (errorWidget)
                     *errorWidget = mTimeEdit;
-                return KADateTime();
+                return {};
             }
         }
         return result;

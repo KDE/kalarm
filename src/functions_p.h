@@ -18,40 +18,39 @@ namespace KAlarm
 // Private class which exists solely to allow signals/slots to work.
 class Private : public QObject
 {
-        Q_OBJECT
-    public:
-        explicit Private(QObject* parent = nullptr) : QObject(parent), mMsgParent(nullptr) {}
-        static Private* instance()
-        {
-            if (!mInstance)
-                mInstance = new Private;
-            return mInstance;
-        }
+    Q_OBJECT
+public:
+    explicit Private(QObject* parent = nullptr) : QObject(parent), mMsgParent(nullptr) {}
+    static Private* instance()
+    {
+        if (!mInstance)
+            mInstance = new Private;
+        return mInstance;
+    }
 
-        QWidget* mMsgParent;
+    QWidget* mMsgParent;
 
-    public Q_SLOTS:
-        void cancelRtcWake();
+public Q_SLOTS:
+    void cancelRtcWake();
 
-    private:
-        static Private* mInstance;
+private:
+    static Private* mInstance;
 };
 
 // Private class to handle Edit New Alarm dialog OK button.
 class PrivateNewAlarmDlg : public QObject
 {
-        Q_OBJECT
-    public:
-        PrivateNewAlarmDlg() {}
-        explicit PrivateNewAlarmDlg(EditAlarmDlg*);
-        void accept(EditAlarmDlg*);
+    Q_OBJECT
+public:
+    PrivateNewAlarmDlg() = default;
+    explicit PrivateNewAlarmDlg(EditAlarmDlg*);
+    void accept(EditAlarmDlg*);
 
-    private Q_SLOTS:
-        void okClicked();
-        void cancelClicked();
+private Q_SLOTS:
+    void okClicked();
+    void cancelClicked();
 };
 
 } // namespace KAlarm
-
 
 // vim: et sw=4:

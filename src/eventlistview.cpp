@@ -96,7 +96,7 @@ KAEvent EventListView::selectedEvent() const
 {
     const QModelIndexList list = selectionModel()->selectedRows();      //clazy:exclude=inefficient-qlist
     if (list.count() != 1)
-        return KAEvent();
+        return {};
     const auto model = static_cast<const EventListModel*>(list[0].model());
     return model->event(list[0]);
 }

@@ -85,5 +85,4 @@ private:
     QMap<QAction*, EditAlarmDlg::Type> mTypes;
 };
 
-
 // vim: et sw=4:

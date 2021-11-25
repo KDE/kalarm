@@ -71,5 +71,4 @@ class EventListDelegate : public QItemDelegate
         virtual void edit(KAEvent&, EventListView*) = 0;
 };
 
-
 // vim: et sw=4:

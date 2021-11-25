@@ -61,5 +61,4 @@ bool browseFile(QString& file, const QString& caption, QString& defaultDir,
 
 }
 
-
 // vim: et sw=4:

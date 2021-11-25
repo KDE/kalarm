@@ -776,7 +776,7 @@ QString CommandOptions::optionName(Option opt, bool shortName) const
         return QStringLiteral("message");
     const QStringList names = mOptions.at(opt)->names();
     if (names.empty())
-        return QString();
+        return {};
     for (const QString& name : names)
     {
         if (shortName  &&  name.size() == 1)

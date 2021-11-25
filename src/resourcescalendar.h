@@ -109,5 +109,4 @@ private:
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(ResourcesCalendar::AddEventOptions)
 
-
 // vim: et sw=4:

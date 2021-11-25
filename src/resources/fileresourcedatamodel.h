@@ -161,5 +161,4 @@ private:
     bool                  mHaveEvents;  // there are events in this model
 };
 
-
 // vim: et sw=4:

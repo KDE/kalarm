@@ -70,5 +70,4 @@ protected:
     bool       mCompleted {false};  // completed, and deleteLater() called
 };
 
-
 // vim: et sw=4:

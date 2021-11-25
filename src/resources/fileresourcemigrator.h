@@ -68,7 +68,7 @@ private:
         QString             resourceId;  // Akonadi resource identifier
         Akonadi::Collection collection;  // Akonadi collection
         bool                dirType;     // it's a directory resource
-        AkResourceData() {}
+        AkResourceData() = default;
         AkResourceData(const QString& r, const Akonadi::Collection& c, bool dir)
             : resourceId(r), collection(c), dirType(dir) {}
     };
@@ -79,6 +79,5 @@ private:
     bool            mAkonadiStart {false};      // Akonadi was started by the migrator
     static bool     mCompleted;                 // execute() has completed
 };
-
 
 // vim: et sw=4:

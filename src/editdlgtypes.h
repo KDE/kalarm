@@ -302,5 +302,4 @@ private:
     int             mSavedRepeatPause; // sound file repeat pause
 };
 
-
 // vim: et sw=4:

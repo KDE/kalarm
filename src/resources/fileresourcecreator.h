@@ -25,5 +25,4 @@ private:
     bool createSingleFileResource();
 };
 
-
 // vim: et sw=4:

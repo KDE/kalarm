@@ -33,7 +33,7 @@ public:
 
     struct Connection
     {
-        Connection() { }
+        Connection() = default;
         Connection(QObject* r, const char* s) : receiver(r), slot(s) { }
         bool operator==(const Connection& c) const  { return receiver == c.receiver && slot == c.slot; }
         QObject*   receiver;
@@ -85,7 +85,7 @@ public:
                        { if (mInstance) mInstance->disconnecT(receiver, member); }
 
 protected:
-    MinuteTimer() : SynchTimer() { }
+    MinuteTimer() = default;
     static MinuteTimer* instance();
     void        start() override    { slotTimer(); }
 
@@ -194,6 +194,5 @@ public:
     static void disconnect(QObject* receiver, const char* member = nullptr)
                        { DailyTimer::disconnect(QTime(0,0), receiver, member); }
 };
-
 
 // vim: et sw=4:

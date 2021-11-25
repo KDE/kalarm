@@ -18,21 +18,20 @@ class QKeyEvent;
 
 class EmailIdCombo : public KIdentityManagement::IdentityCombo
 {
-        Q_OBJECT
-    public:
-        explicit EmailIdCombo(KIdentityManagement::IdentityManager*, QWidget* parent = nullptr);
-        void setReadOnly(bool ro)    { mReadOnly = ro; }
+    Q_OBJECT
+public:
+    explicit EmailIdCombo(KIdentityManagement::IdentityManager*, QWidget* parent = nullptr);
+    void setReadOnly(bool ro)    { mReadOnly = ro; }
 
-    protected:
-        void mousePressEvent(QMouseEvent*) override;
-        void mouseReleaseEvent(QMouseEvent*) override;
-        void mouseMoveEvent(QMouseEvent*) override;
-        void keyPressEvent(QKeyEvent*) override;
-        void keyReleaseEvent(QKeyEvent*) override;
+protected:
+    void mousePressEvent(QMouseEvent*) override;
+    void mouseReleaseEvent(QMouseEvent*) override;
+    void mouseMoveEvent(QMouseEvent*) override;
+    void keyPressEvent(QKeyEvent*) override;
+    void keyReleaseEvent(QKeyEvent*) override;
 
-    private:
-        bool    mReadOnly {false};      // value cannot be changed
+private:
+    bool    mReadOnly {false};      // value cannot be changed
 };
-
 
 // vim: et sw=4:

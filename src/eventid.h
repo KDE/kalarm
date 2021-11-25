@@ -25,7 +25,7 @@ using namespace KAlarmCal;
 class EventId
 {
 public:
-    EventId()   {}
+    EventId() = default;
     EventId(ResourceId c, const QString& e)
         : mEventId(e)
         , mResourceId(c)
@@ -96,6 +96,5 @@ inline QDebug operator<<(QDebug s, const EventId& id)
     s.nospace() << "\"" << id.resourceDisplayId() << "::" << id.eventId().toLatin1().constData() << "\"";
     return s.space();
 }
-
 
 // vim: et sw=4:

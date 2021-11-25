@@ -19,7 +19,7 @@ class TemplateMenuAction : public KActionMenu
     Q_OBJECT
 public:
     TemplateMenuAction(const QIcon& icon, const QString& label, QObject* parent);
-    ~TemplateMenuAction() override {}
+    ~TemplateMenuAction() override = default;
 
 Q_SIGNALS:
     /** Signal emitted when the action has been selected.
@@ -34,6 +34,5 @@ private Q_SLOTS:
 private:
     QMap<QAction*, QString> mOriginalTexts;   // menu item texts without added ampersands
 };
-
 
 // vim: et sw=4:

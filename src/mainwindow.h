@@ -193,5 +193,4 @@ private:
     bool                 mResizing {false};    // window resize is in progress
 };
 
-
 // vim: et sw=4:

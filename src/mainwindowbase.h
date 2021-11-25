@@ -19,14 +19,13 @@
  */
 class MainWindowBase : public KXmlGuiWindow
 {
-        Q_OBJECT
+    Q_OBJECT
 
-    public:
-        explicit MainWindowBase(QWidget* parent = nullptr, Qt::WindowFlags f = Qt::Window);
+public:
+    explicit MainWindowBase(QWidget* parent = nullptr, Qt::WindowFlags f = Qt::Window);
 
-    protected:
-        void enterEvent(QEvent*) override;
+protected:
+    void enterEvent(QEvent*) override;
 };
-
 
 // vim: et sw=4:

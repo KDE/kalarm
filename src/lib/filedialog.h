@@ -14,18 +14,17 @@ class QCheckBox;
 
 class FileDialog : public KFileCustomDialog
 {
-        Q_OBJECT
-    public:
-        FileDialog(const QUrl& startDir, const QString& filter, QWidget* parent = nullptr);
-        static QString getSaveFileName(const QUrl& dir = QUrl(), const QString& filter = QString(),
-                                       QWidget* parent = nullptr, const QString& caption = QString(), bool* append = nullptr);
+    Q_OBJECT
+public:
+    FileDialog(const QUrl& startDir, const QString& filter, QWidget* parent = nullptr);
+    static QString getSaveFileName(const QUrl& dir = QUrl(), const QString& filter = QString(),
+                                   QWidget* parent = nullptr, const QString& caption = QString(), bool* append = nullptr);
 
-    private Q_SLOTS:
-        void appendToggled(bool);
+private Q_SLOTS:
+    void appendToggled(bool);
 
-    private:
-        static QCheckBox* mAppendCheck;
+private:
+    static QCheckBox* mAppendCheck;
 };
-
 
 // vim: et sw=4:

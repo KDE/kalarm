@@ -18,5 +18,4 @@ void writeWindowSize(const char* window, const QSize&, int splitterWidth = -1);
 
 } // namespace Config
 
-
 // vim: et sw=4:

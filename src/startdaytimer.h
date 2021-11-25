@@ -21,33 +21,32 @@
  */
 class StartOfDayTimer : public DailyTimer
 {
-        Q_OBJECT
-    public:
-        ~StartOfDayTimer()  override { }
-        /** Connect to the timer signal.
-         *  @param receiver Receiving object.
-         *  @param member Slot to activate.
-         */
-        static void connect(QObject* receiver, const char* member)
-                           { instance()->connecT(receiver, member); }
-        /** Disconnect from the timer signal.
-         *  @param receiver Receiving object.
-         *  @param member Slot to disconnect. If null, all slots belonging to
-         *                @p receiver will be disconnected.
-         */
-        static void disconnect(QObject* receiver, const char* member = nullptr)
-                           { if (mInstance) mInstance->disconnecT(receiver, member); }
+    Q_OBJECT
+public:
+    ~StartOfDayTimer() override = default;
+    /** Connect to the timer signal.
+     *  @param receiver Receiving object.
+     *  @param member Slot to activate.
+     */
+    static void connect(QObject* receiver, const char* member)
+                       { instance()->connecT(receiver, member); }
+    /** Disconnect from the timer signal.
+     *  @param receiver Receiving object.
+     *  @param member Slot to disconnect. If null, all slots belonging to
+     *                @p receiver will be disconnected.
+     */
+    static void disconnect(QObject* receiver, const char* member = nullptr)
+                       { if (mInstance) mInstance->disconnecT(receiver, member); }
 
-    protected:
-        StartOfDayTimer();
-        static StartOfDayTimer* instance();
+protected:
+    StartOfDayTimer();
+    static StartOfDayTimer* instance();
 
-    private Q_SLOTS:
-        void startOfDayChanged();
+private Q_SLOTS:
+    void startOfDayChanged();
 
-    private:
-        static StartOfDayTimer* mInstance;    // exists solely to receive signals
+private:
+    static StartOfDayTimer* mInstance;    // exists solely to receive signals
 };
-
 
 // vim: et sw=4:

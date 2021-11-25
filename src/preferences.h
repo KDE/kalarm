@@ -121,5 +121,4 @@ private:
     static bool             mAutoStartChangedByUser; // AutoStart has been changed by the user
 };
 
-
 // vim: et sw=4:

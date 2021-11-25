@@ -120,7 +120,7 @@ KAEvent ResourceType::event(const QString& eventId, bool allowDisabled) const
     if (it != mEvents.constEnd()
     &&  (allowDisabled || (it.value().category() & enabledTypes())))
         return it.value();
-    return KAEvent();
+    return {};
 }
 
 /******************************************************************************
@@ -336,7 +336,7 @@ QString ResourceType::storageTypeString(StorageType type)
         case Directory:
             return storageTypeStr(true, (type == File), true);
         default:
-            return QString();
+            return {};
     }
 }
 

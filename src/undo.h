@@ -31,7 +31,7 @@ public:
     // don't-show-errors status is not contained within the KAEvent itself.
     struct Event
     {
-        Event() {}
+        Event() = default;
         Event(const KAEvent&, const Resource&);
         KAEvent          event;
         mutable Resource resource;
@@ -82,7 +82,7 @@ protected:
     static void        replace(UndoItem* old, UndoItem* New);
 
 private:
-    Undo(QObject* parent)  : QObject(parent) { }
+    Undo(QObject* parent)  : QObject(parent) {}
     static void        removeRedos(const QString& eventID);
     static bool        undo(int index, Type, QWidget* parent, const QString& action);
     static UndoItem*   getItem(int id, Type);
@@ -96,6 +96,5 @@ private:
 
 friend class UndoItem;
 };
-
 
 // vim: et sw=4:

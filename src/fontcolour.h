@@ -19,38 +19,37 @@ class ColourButton;
 
 class FontColourChooser : public QWidget
 {
-        Q_OBJECT
-    public:
-        explicit FontColourChooser(QWidget* parent = nullptr,
-               const QStringList& fontList = QStringList(),
-               const QString& frameLabel = i18n("Requested font"),
-               bool fg = true, bool defaultFont = false, int visibleListSize = 8);
+    Q_OBJECT
+public:
+    explicit FontColourChooser(QWidget* parent = nullptr,
+           const QStringList& fontList = QStringList(),
+           const QString& frameLabel = i18n("Requested font"),
+           bool fg = true, bool defaultFont = false, int visibleListSize = 8);
 
-        void              setDefaultFont();
-        void              setFont(const QFont&, bool onlyFixed = false);
-        bool              defaultFont() const;
-        QFont             font() const;
-        QColor            fgColour() const;
-        QColor            bgColour() const;
-        void              setFgColour(const QColor&);
-        void              setBgColour(const QColor&);
-        QString           sampleText() const;
-        void              setSampleText(const QString& text);
-        bool              isReadOnly() const     { return mReadOnly; }
-        void              setReadOnly(bool);
-        bool              eventFilter(QObject*, QEvent*) override;
+    void          setDefaultFont();
+    void          setFont(const QFont&, bool onlyFixed = false);
+    bool          defaultFont() const;
+    QFont         font() const;
+    QColor        fgColour() const;
+    QColor        bgColour() const;
+    void          setFgColour(const QColor&);
+    void          setBgColour(const QColor&);
+    QString       sampleText() const;
+    void          setSampleText(const QString& text);
+    bool          isReadOnly() const     { return mReadOnly; }
+    void          setReadOnly(bool);
+    bool          eventFilter(QObject*, QEvent*) override;
 
-    private Q_SLOTS:
-        void              setSampleColour();
-        void              slotDefaultFontToggled(bool);
+private Q_SLOTS:
+    void          setSampleColour();
+    void          slotDefaultFontToggled(bool);
 
-    private:
-        ColourButton*    mFgColourButton {nullptr};
-        ColourButton*    mBgColourButton;
-        KFontChooser*    mFontChooser;
-        CheckBox*        mDefaultFont {nullptr};
-        bool             mReadOnly {false};
+private:
+    ColourButton* mFgColourButton {nullptr};
+    ColourButton* mBgColourButton;
+    KFontChooser* mFontChooser;
+    CheckBox*     mDefaultFont {nullptr};
+    bool          mReadOnly {false};
 };
-
 
 // vim: et sw=4:

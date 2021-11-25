@@ -62,5 +62,4 @@ private:
     bool            mHaveDisabledAlarms {false};  // some individually disabled alarms exist
 };
 
-
 // vim: et sw=4:

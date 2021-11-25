@@ -23,30 +23,29 @@ using namespace KAlarmCal;
 
 class DeferAlarmDlg : public QDialog
 {
-        Q_OBJECT
-    public:
-        DeferAlarmDlg(const DateTime& initialDT, bool anyTimeOption, bool cancelButton, QWidget* parent = nullptr);
-        void             setLimit(const DateTime&);
-        DateTime         setLimit(const KAEvent& event);
-        const DateTime&  getDateTime() const   { return mAlarmDateTime; }
-        void             setDeferMinutes(int mins);
-        int              deferMinutes() const  { return mDeferMinutes; }
+    Q_OBJECT
+public:
+    DeferAlarmDlg(const DateTime& initialDT, bool anyTimeOption, bool cancelButton, QWidget* parent = nullptr);
+    void             setLimit(const DateTime&);
+    DateTime         setLimit(const KAEvent& event);
+    const DateTime&  getDateTime() const   { return mAlarmDateTime; }
+    void             setDeferMinutes(int mins);
+    int              deferMinutes() const  { return mDeferMinutes; }
 
-    protected Q_SLOTS:
-        virtual void     slotOk();
-        virtual void     slotCancelDeferral();
+protected Q_SLOTS:
+    virtual void     slotOk();
+    virtual void     slotCancelDeferral();
 
-    private Q_SLOTS:
-        void             slotPastLimit();
+private Q_SLOTS:
+    void             slotPastLimit();
 
-    private:
-        AlarmTimeWidget* mTimeWidget;
-        QDialogButtonBox* mButtonBox;
-        DateTime         mAlarmDateTime;
-        DateTime         mLimitDateTime;   // latest date/time allowed for deferral
-        EventId          mLimitEventId;    // event IDs from whose recurrences to derive the limit date/time for deferral
-        int              mDeferMinutes;    // number of minutes deferral selected, or 0 if date/time entered
+private:
+    AlarmTimeWidget* mTimeWidget;
+    QDialogButtonBox* mButtonBox;
+    DateTime         mAlarmDateTime;
+    DateTime         mLimitDateTime;   // latest date/time allowed for deferral
+    EventId          mLimitEventId;    // event IDs from whose recurrences to derive the limit date/time for deferral
+    int              mDeferMinutes;    // number of minutes deferral selected, or 0 if date/time entered
 };
-
 
 // vim: et sw=4:

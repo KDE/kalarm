@@ -79,7 +79,7 @@ QSize StackedScrollGroup::maxMinimumSizeHint() const
             return {};
         const QSize s = w->minimumSizeHint();
         if (!s.isValid())
-            return QSize();
+            return {};
         sz = sz.expandedTo(s);
     }
     return sz;
@@ -103,7 +103,7 @@ QSize StackedScrollGroup::adjustSize(bool force)
     mHeightReduction = 0;
     const QSize s = maxMinimumSizeHint();
     if (s.isEmpty())
-        return QSize();
+        return {};
     const int maxTabHeight = s.height();
     for (auto& sw : mWidgets)
     {

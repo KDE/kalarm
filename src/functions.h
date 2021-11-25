@@ -321,5 +321,4 @@ void                setSimulatedSystemTime(const KADateTime&);
 
 bool caseInsensitiveLessThan(const QString& s1, const QString& s2);
 
-
 // vim: et sw=4:

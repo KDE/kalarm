@@ -56,5 +56,4 @@ private:
     static bool                       mOpen;               // true if the calendar file is open
 };
 
-
 // vim: et sw=4:

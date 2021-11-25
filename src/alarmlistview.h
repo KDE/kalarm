@@ -43,5 +43,4 @@ private:
     QByteArray  mConfigGroup;
 };
 
-
 // vim: et sw=4:

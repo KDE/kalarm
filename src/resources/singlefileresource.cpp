@@ -655,7 +655,7 @@ QByteArray SingleFileResource::calculateHash(const QString& fileName) const
             return hash.result();
         }
     }
-    return QByteArray();
+    return {};
 }
 
 /******************************************************************************

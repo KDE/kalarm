@@ -279,5 +279,4 @@ TemplateListModel* TemplateListModel::all()
     return mAllInstance;
 }
 
-
 // vim: et sw=4:

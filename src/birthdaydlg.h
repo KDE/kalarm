@@ -80,5 +80,4 @@ protected:
     void focusOutEvent(QFocusEvent*) override { Q_EMIT focusLost(); }
 };
 
-
 // vim: et sw=4:

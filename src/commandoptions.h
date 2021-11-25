@@ -171,5 +171,4 @@ private:
 #endif
 };
 
-
 // vim: et sw=4:

@@ -35,5 +35,4 @@ void setMainWindowFunc(QWidget* (*func)());
 
 } // namespace Desktop
 
-
 // vim: et sw=4:

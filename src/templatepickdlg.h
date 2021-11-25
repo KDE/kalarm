@@ -34,5 +34,4 @@ private:
     QPushButton*       mOkButton;
 };
 
-
 // vim: et sw=4:

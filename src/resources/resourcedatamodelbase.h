@@ -192,5 +192,4 @@ private:
 friend class DataModel;
 };
 
-
 // vim: et sw=4:

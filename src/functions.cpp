@@ -1245,7 +1245,7 @@ QStringList checkRtcWakeConfig(bool checkEventExists)
         {
             Resource resource = Resources::resource(params[0].toLongLong());
             if (!resource.event(params[1]).isValid())
-                return QStringList();
+                return {};
         }
         return params;                   // config entry is valid
     }
@@ -1254,7 +1254,7 @@ QStringList checkRtcWakeConfig(bool checkEventExists)
         config.deleteEntry("RtcWake");   // delete the expired config entry
         config.sync();
     }
-    return QStringList();
+    return {};
 }
 
 /******************************************************************************
@@ -1667,7 +1667,7 @@ QString runKMail()
             return xi18nc("@info", "Unable to start <application>KMail</application><nl/>(<message>%1</message>)", errmsg);
         }
     }
-    return QString();
+    return {};
 }
 
 /******************************************************************************
@@ -1683,7 +1683,7 @@ QString runKMail()
 QStringList dontShowErrors(const EventId& eventId)
 {
     if (eventId.isEmpty())
-        return QStringList();
+        return {};
     KConfig config(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + QLatin1Char('/') + ALARM_OPTS_FILE);
     KConfigGroup group(&config, DONT_SHOW_ERRORS_GROUP);
     const QString id = QStringLiteral("%1:%2").arg(eventId.resourceId()).arg(eventId.eventId());

@@ -400,5 +400,4 @@ template <class T> T* Resource::resource() const
     return qobject_cast<T*>(mResource.data());
 }
 
-
 // vim: et sw=4:

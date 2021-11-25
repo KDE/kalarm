@@ -65,7 +65,7 @@ public:
     /** A shared pointer to an Resource object. */
     using Ptr = QSharedPointer<ResourceType>;
 
-    ResourceType()  {}
+    ResourceType() = default;
 
     /** Constructor.
      *  @param temporary  If false, the new instance will be added to the list
@@ -489,6 +489,5 @@ template <class T> const T* ResourceType::resource(const Resource& res)
 {
     return qobject_cast<const T*>(data(res));
 }
-
 
 // vim: et sw=4:

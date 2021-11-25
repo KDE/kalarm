@@ -212,5 +212,4 @@ private:
     bool               mFileReadOnly {false}; // the calendar file is a read-only local file
 };
 
-
 // vim: et sw=4:

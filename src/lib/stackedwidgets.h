@@ -137,5 +137,4 @@ private:
     bool     mSized {false};
 };
 
-
 // vim: et sw=4:

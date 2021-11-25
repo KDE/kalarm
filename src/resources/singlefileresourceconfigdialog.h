@@ -73,5 +73,4 @@ private:
     bool          mCheckingDir {false};
 };
 
-
 // vim: et sw=4:

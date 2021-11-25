@@ -68,5 +68,4 @@ public:
     static TemplateListModel* allTemplateListModel();
 };
 
-
 // vim: et sw=4:

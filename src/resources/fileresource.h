@@ -391,5 +391,4 @@ private:
     void handleEnabledChange(Changes changes, CalEvent::Types oldEnabled);
 };
 
-
 // vim: et sw=4:

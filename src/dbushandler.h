@@ -151,5 +151,4 @@ private:
     static bool      convertRecurrence(KARecurrence&, const KADateTime& start, int recurType, int recurInterval, int recurCount, const KADateTime& end);
 };
 
-
 // vim: et sw=4:

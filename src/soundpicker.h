@@ -53,25 +53,25 @@ public:
      *                     @p repeatPause provides the default should 'file'
      *                     later be selected by the user.
      */
-    void           set(Preferences::SoundType type, const QString& filename, float volume, float fadeVolume, int fadeSeconds, int repeatPause);
+    void set(Preferences::SoundType type, const QString& filename, float volume, float fadeVolume, int fadeSeconds, int repeatPause);
 
     /** Returns true if the widget is read only for the user. */
-    bool           isReadOnly() const          { return mReadOnly; }
+    bool isReadOnly() const          { return mReadOnly; }
 
     /** Sets whether the widget can be changed the user.
      *  @param readOnly True to set the widget read-only, false to set it read-write.
      */
-    void           setReadOnly(bool readOnly);
+    void setReadOnly(bool readOnly);
 
     /** Show or hide the 'file' option.
      *  If it is to be hidden and it is currently selected, sound is turned off.
      */
-    void           showFile(bool show);
+    void showFile(bool show);
 
     /** Show or hide the 'speak' option.
      *  If it is to be hidden and it is currently selected, sound is turned off.
      */
-    void           showSpeak(bool show);
+    void showSpeak(bool show);
 
     /** Returns the selected option. */
     Preferences::SoundType sound() const;
@@ -79,7 +79,7 @@ public:
     /** If the 'file' option is selected, returns the URL of the chosen file.
      *  Otherwise returns an empty URL.
      */
-    QUrl           file() const;
+    QUrl file() const;
 
     /** Returns the volume and fade characteristics for playing a sound file.
      *  @param fadeVolume  Receives the initial volume if the volume is to
@@ -89,20 +89,20 @@ public:
      *  @return            Volume to play the sound file, or < 0 if the
      *                     'file' option is not selected.
      */
-    float          volume(float& fadeVolume, int& fadeSeconds) const;
+    float volume(float& fadeVolume, int& fadeSeconds) const;
 
     /** Returns pause in seconds between repetitions of the sound file,
      *  or -1 if no repeat or 'file' option is not selected.
      */
-    int            repeatPause() const;
+    int repeatPause() const;
 
     /** Returns the current file URL regardless of whether the 'file' option is selected. */
-    QUrl           fileSetting() const   { return mFile; }
+    QUrl fileSetting() const   { return mFile; }
 
     /** Returns the current file repetition setting regardless of whether
      *  the 'file' option is selected.
      */
-    bool           repeatPauseSetting() const { return mRepeatPause; }
+    bool repeatPauseSetting() const { return mRepeatPause; }
 
     /** Display a dialog to choose a sound file, initially highlighting
      *  @p initialFile if non-null.
@@ -116,7 +116,7 @@ public:
      *  @return            true if @p file value can be used,
      *                     false if the dialog was deleted while visible.
      */
-    static bool    browseFile(QString& file, QString& initialDir, const QString& initialFile = QString());
+    static bool browseFile(QString& file, QString& initialDir, const QString& initialFile = QString());
 
     static QString i18n_label_Sound();  // text of Sound label
     static QString i18n_combo_None();   // text of None combo box item
@@ -149,6 +149,5 @@ private:
     bool           mRevertType {false}; // reverting to last selected sound option
     bool           mReadOnly {false};
 };
-
 
 // vim: et sw=4:

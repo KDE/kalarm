@@ -156,7 +156,7 @@ QString ShellProcess::errorMessage() const
         case INACTIVE:
         case RUNNING:
         default:
-            return QString();
+            return {};
     }
 }
 

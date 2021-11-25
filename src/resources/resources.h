@@ -340,5 +340,4 @@ QVector<Resource> Resources::allResources(CalEvent::Type type, Sorting sorting)
     return result;
 }
 
-
 // vim: et sw=4:

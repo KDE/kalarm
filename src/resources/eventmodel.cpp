@@ -489,7 +489,7 @@ QVariant AlarmListModel::headerData(int section, Qt::Orientation orientation, in
     if (orientation == Qt::Horizontal)
     {
         if (section < 0  ||  section >= ColumnCount)
-            return QVariant();
+            return {};
     }
     return EventListModel::headerData(section, orientation, role);
 }
@@ -615,7 +615,7 @@ QVariant TemplateListModel::headerData(int section, Qt::Orientation orientation,
                 section = ResourceDataModelBase::TemplateNameColumn;
                 break;
             default:
-                return QVariant();
+                return {};
         }
     }
     return EventListModel::headerData(section, orientation, role);

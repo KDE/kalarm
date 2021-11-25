@@ -38,7 +38,7 @@ public:
         KAEvent::CmdErrType error;
     };
 
-    FileResourceSettings()  {}
+    FileResourceSettings() = default;
 
     /** Initialises the settings from a config file section. */
     FileResourceSettings(KConfig* config, const QString& resourceGroup);
@@ -316,6 +316,5 @@ private:
     bool              mKeepFormat {true}; // do not update the calendar file to the current KAlarm format
     bool              mUpdateFormat {false}; // request to update the calendar file to the current KAlarm format
 };
-
 
 // vim: et sw=4:

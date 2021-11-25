@@ -59,5 +59,4 @@ public:
     };
 };
 
-
 // vim: et sw=4:

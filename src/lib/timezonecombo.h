@@ -26,27 +26,26 @@ class QTimeZone;
  */
 class TimeZoneCombo : public ComboBox
 {
-        Q_OBJECT
-    public:
-        /** Constructor.
-         *  @param parent The parent object of this widget.
-         */
-        explicit TimeZoneCombo(QWidget* parent = nullptr);
+    Q_OBJECT
+public:
+    /** Constructor.
+     *  @param parent The parent object of this widget.
+     */
+    explicit TimeZoneCombo(QWidget* parent = nullptr);
 
-        /**
-         * Returns the currently selected time zone.
-         * @return The selected time zone, or invalid for the system time zone.
-         */
-        QTimeZone timeZone() const;
+    /**
+     * Returns the currently selected time zone.
+     * @return The selected time zone, or invalid for the system time zone.
+     */
+    QTimeZone timeZone() const;
 
-        /** Selects the specified time zone.
-         *  @param tz The time zone to select, or invalid to select "System".
-         */
-        void setTimeZone(const QTimeZone& tz);
+    /** Selects the specified time zone.
+     *  @param tz The time zone to select, or invalid to select "System".
+     */
+    void setTimeZone(const QTimeZone& tz);
 
-    private:
-        QList<QByteArray> mZoneNames;
+private:
+    QList<QByteArray> mZoneNames;
 };
-
 
 // vim: et sw=4:

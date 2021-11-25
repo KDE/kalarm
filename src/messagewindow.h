@@ -124,5 +124,4 @@ private:
     bool                mPositioning {false};     // true when the window is being positioned initially
 };
 
-
 // vim: et sw=4:

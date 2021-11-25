@@ -270,7 +270,7 @@ void DayMatrix::updateEvents()
 QString DayMatrix::getHolidayLabel(int offset) const
 {
     if (offset < 0 || offset > NUMDAYS - 1)
-        return QString();
+        return {};
     return mHolidays[offset];
 }
 

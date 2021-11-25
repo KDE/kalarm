@@ -78,5 +78,4 @@ private:
 friend class MNSessionManager;
 };
 
-
 // vim: et sw=4:

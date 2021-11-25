@@ -127,5 +127,4 @@ private:
     bool   mPendingChanges {false};   // the display needs to be updated
 };
 
-
 // vim: et sw=4:

@@ -60,7 +60,7 @@ QString FileDialog::getSaveFileName(const QUrl& dir, const QString& filter, QWid
     dlg->setWindowModality(Qt::WindowModal);
     dlg->exec();
     if (!dlg)
-        return QString();   // dialogue was deleted
+        return {};   // dialogue was deleted
 
     QString filename = dlg->fileWidget()->selectedFile();
     if (!filename.isEmpty())

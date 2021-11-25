@@ -58,5 +58,4 @@ private:
     mutable int         mHeightCached;
 };
 
-
 // vim: et sw=4:

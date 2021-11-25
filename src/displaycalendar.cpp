@@ -347,7 +347,7 @@ bool DisplayCalendar::deleteEvent(const QString& eventID, bool saveit)
 KCalendarCore::Event::Ptr DisplayCalendar::kcalEvent(const QString& uniqueID)
 {
     if (!mCalendarStorage)
-        return KCalendarCore::Event::Ptr();
+        return {};
     return mCalendarStorage->calendar()->event(uniqueID);
 }
 

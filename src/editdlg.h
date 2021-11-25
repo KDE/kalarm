@@ -216,5 +216,4 @@ private:
     bool                mSavedShowInKorganizer; // mShowInKorganizer status
 };
 
-
 // vim: et sw=4:

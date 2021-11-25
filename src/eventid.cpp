@@ -38,7 +38,7 @@ QString EventId::extractIDs(const QString& resourceEventId, QString& eventId)
     if (!rxmatch.hasMatch())
     {
         eventId = resourceEventId;   // no resource ID supplied
-        return QString();
+        return {};
     }
 
     // A resource ID has been supplied

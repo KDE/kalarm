@@ -211,7 +211,7 @@ private:
         ActionQEntry(QueuedAction a, const EventId& id) : action(a), eventId(id) { }
         ActionQEntry(QueuedAction a, const EventId& id, const QString& resId) : action(a), eventId(id), resourceId(resId) { }
         ActionQEntry(const KAEvent& e, QueuedAction a = QueuedAction::Handle) : action(a), event(e) { }
-        ActionQEntry() { }
+        ActionQEntry() = default;
         QueuedAction  action;
         EventId       eventId;
         KAEvent       event;
@@ -297,6 +297,5 @@ private:
 inline KAlarmApp* theApp()  { return KAlarmApp::instance(); }
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(KAlarmApp::ExecAlarmFlags)
-
 
 // vim: et sw=4:

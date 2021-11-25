@@ -48,5 +48,4 @@ bool dropAkonadiEmail(const QMimeData* data, QUrl& url, Akonadi::Item& item, KAl
 
 } // namespace KAlarm
 
-
 // vim: et sw=4:

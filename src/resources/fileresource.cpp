@@ -67,7 +67,7 @@ QString FileResource::storageTypeString(bool description) const
             file = false;
             break;
         default:
-            return QString();
+            return {};
     }
     return storageTypeStr(description, file, mSettings->url().isLocalFile());
 }

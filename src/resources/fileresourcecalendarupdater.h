@@ -46,5 +46,4 @@ private:
     QString  mPromptMessage;
 };
 
-
 // vim: et sw=4:

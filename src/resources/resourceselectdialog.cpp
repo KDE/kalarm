@@ -70,7 +70,7 @@ Resource ResourceSelectDialog::selectedResource() const
 {
     const QModelIndexList indexes = mResourceList->selectionModel()->selectedRows();    //clazy:exclude=inefficient-qlist
     if (indexes.isEmpty())
-        return Resource();
+        return {};
     return mModel->resource(indexes[0].row());
 }
 

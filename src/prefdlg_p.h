@@ -275,5 +275,4 @@ private:
     int           mTabWindows;    // index of Alarm Windows tab
 };
 
-
 // vim: et sw=4:

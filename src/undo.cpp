@@ -35,11 +35,11 @@ class UndoItem
         virtual Operation  operation() const = 0;
         virtual QString    actionText() const    { return !mName.isEmpty() ? mName : defaultActionText(); }
         virtual QString    defaultActionText() const = 0;
-        virtual QString    description() const   { return QString(); }
-        virtual QString    eventID() const       { return QString(); }
-        virtual QString    oldEventID() const    { return QString(); }
-        virtual QString    newEventID() const    { return QString(); }
-        virtual Resource   resource() const      { return Resource(); }
+        virtual QString    description() const   { return {}; }
+        virtual QString    eventID() const       { return {}; }
+        virtual QString    oldEventID() const    { return {}; }
+        virtual QString    newEventID() const    { return {}; }
+        virtual Resource   resource() const      { return {}; }
         int                id() const            { return mId; }
         Undo::Type         type() const          { return mType; }
         void               setType(Undo::Type t) { mType = t; }
@@ -158,7 +158,7 @@ class UndoDelete : public UndoItem
         QString            eventID() const override       { return mEvent->id(); }
         QString            oldEventID() const override    { return mEvent->id(); }
         UndoItem*          restore() override;
-        KAEvent*           event() const                         { return mEvent; }
+        KAEvent*           event() const                  { return mEvent; }
         void               dumpDebug() const override;
     protected:
         virtual UndoItem*  createRedo(const KAEvent&, const Resource&);
@@ -668,7 +668,7 @@ QString UndoItem::addDeleteActionText(CalEvent::Type calendar, bool add)
         default:
             break;
     }
-    return QString();
+    return {};
 }
 
 /******************************************************************************
@@ -1048,7 +1048,7 @@ QString UndoEdit::defaultActionText() const
         default:
             break;
     }
-    return QString();
+    return {};
 }
 
 /******************************************************************************
@@ -1246,7 +1246,7 @@ UndoItem* UndoDeletes::createRedo(Undo::List* undos)
 QString UndoDeletes::defaultActionText() const
 {
     if (mUndos->isEmpty())
-        return QString();
+        return {};
     for (const UndoItem* item : std::as_const(*mUndos))
     {
         switch (item->calendar())
@@ -1258,7 +1258,7 @@ QString UndoDeletes::defaultActionText() const
             case CalEvent::ARCHIVED:
                 break;    // check if they are ALL archived
             default:
-                return QString();
+                return {};
         }
     }
     return i18nc("@info", "Delete multiple archived alarms");

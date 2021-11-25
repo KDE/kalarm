@@ -73,5 +73,4 @@ private:
     bool               mReadOnly {false};
 };
 
-
 // vim: et sw=4:

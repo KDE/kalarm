@@ -16,26 +16,25 @@ class Ui_WakeFromSuspendDlgWidget;
 
 class WakeFromSuspendDlg : public QDialog
 {
-        Q_OBJECT
-    public:
-        static WakeFromSuspendDlg* create(QWidget* parent);
-        ~WakeFromSuspendDlg() override;
+    Q_OBJECT
+public:
+    static WakeFromSuspendDlg* create(QWidget* parent);
+    ~WakeFromSuspendDlg() override;
 
-    private Q_SLOTS:
-        void enableDisableUseButton();
-        void showWakeClicked();
-        void useWakeClicked();
-        void cancelWakeClicked();
-        bool checkPendingAlarm();
+private Q_SLOTS:
+    void enableDisableUseButton();
+    void showWakeClicked();
+    void useWakeClicked();
+    void cancelWakeClicked();
+    bool checkPendingAlarm();
 
-    private:
-        explicit WakeFromSuspendDlg(QWidget* parent);
+private:
+    explicit WakeFromSuspendDlg(QWidget* parent);
 
-        static WakeFromSuspendDlg* mInstance;   // the one and only instance of the dialog
-        Ui_WakeFromSuspendDlgWidget* mUi;
-        MainWindow* mMainWindow;
-        QTimer*     mTimer;
+    static WakeFromSuspendDlg* mInstance;   // the one and only instance of the dialog
+    Ui_WakeFromSuspendDlgWidget* mUi;
+    MainWindow* mMainWindow;
+    QTimer*     mTimer;
 };
-
 
 // vim: et sw=4:

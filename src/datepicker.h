@@ -70,5 +70,4 @@ private:
     QDate        mStartDate;      // earliest date currently displayed
 };
 
-
 // vim: et sw=4:

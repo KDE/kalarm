@@ -39,5 +39,4 @@ protected:
     KAlarmCal::CalEvent::Type mDefaultType;
 };
 
-
 // vim: et sw=4:

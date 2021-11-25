@@ -74,7 +74,7 @@ private:
         Resource                 resource;
         FileResourceSettings::Ptr settings;
 
-        ResourceData() {}
+        ResourceData() = default;
         ResourceData(const Resource &r, FileResourceSettings::Ptr s) : resource(r), settings(s) {}
         ResourceData(const ResourceData&) = default;
         ResourceData& operator=(const ResourceData&) = default;
@@ -86,6 +86,5 @@ private:
     ResourceId                      mLastId {0};     // last ID which was allocated to any resource
     int                             mCreated {0};    // 1 = createResources() has been run, 2 = completed
 };
-
 
 // vim: et sw=4:

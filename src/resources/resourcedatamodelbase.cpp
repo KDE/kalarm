@@ -105,7 +105,7 @@ QVariant ResourceDataModelBase::headerData(int section, Qt::Orientation orientat
         {
             // Event column headers
             if (section < 0  ||  section >= ColumnCount)
-                return QVariant();
+                return {};
             if (role == Qt::DisplayRole  ||  role == ColumnTitleRole)
             {
                 switch (section)
@@ -135,14 +135,14 @@ QVariant ResourceDataModelBase::headerData(int section, Qt::Orientation orientat
         {
             // Calendar column headers
             if (section != 0)
-                return QVariant();
+                return {};
             if (role == Qt::DisplayRole)
                 return i18nc("@title:column", "Calendars");
         }
     }
 
     handled = false;
-    return QVariant();
+    return {};
 }
 
 /******************************************************************************
@@ -216,7 +216,7 @@ QVariant ResourceDataModelBase::resourceData(int& role, const Resource& resource
     }
 
     handled = false;
-    return QVariant();
+    return {};
 }
 
 /******************************************************************************
@@ -240,7 +240,7 @@ QVariant ResourceDataModelBase::eventData(int role, int column, const KAEvent& e
                 break;
         }
         if (!event.isValid())
-            return QVariant();
+            return {};
         switch (role)
         {
             case EventIdRole:
@@ -468,7 +468,7 @@ QVariant ResourceDataModelBase::eventData(int role, int column, const KAEvent& e
     }
 
     handled = false;
-    return QVariant();
+    return {};
 }
 
 /******************************************************************************
@@ -568,7 +568,7 @@ QString ResourceDataModelBase::whatsThisText(int column)
         case TemplateNameColumn:
             return i18nc("@info:whatsthis", "Name of the alarm template");
         default:
-            return QString();
+            return {};
     }
 }
 
@@ -766,7 +766,7 @@ QString ResourceDataModelBase::timeToAlarmText(const DateTime& dateTime)
     }
     const int mins = (now.secsTo(dateTime.effectiveKDateTime()) + 59) / 60;
     if (mins <= 0)
-        return QString();
+        return {};
     QLocale locale;
     QString minutes = locale.toString(mins % 60);
     if (minutes.size() == 1)

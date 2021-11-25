@@ -1171,7 +1171,7 @@ QString EmailPrefTab::validate()
         mBccAddressChanged = false;
         return validateAddr(mBccAddressGroup, mEmailBccAddress, i18nc("@info", "No valid 'Bcc' email address is specified."));
     }
-    return QString();
+    return {};
 }
 
 QString EmailPrefTab::validateAddr(ButtonGroup* group, QLineEdit* addr, const QString& msg)
@@ -1181,17 +1181,17 @@ QString EmailPrefTab::validateAddr(ButtonGroup* group, QLineEdit* addr, const QS
     {
         case Preferences::MAIL_FROM_SYS_SETTINGS:
             if (!KAMail::controlCentreAddress().isEmpty())
-                return QString();
+                return {};
             errmsg = xi18nc("@info", "No default email address is currently set in <application>KMail</application> or KDE System Settings. %1", errmsg);
             break;
         case Preferences::MAIL_FROM_KMAIL:
             if (Identities::identitiesExist())
-                return QString();
+                return {};
             errmsg = xi18nc("@info", "No <application>KMail</application> identities currently exist. %1", errmsg);
             break;
         case Preferences::MAIL_FROM_ADDR:
             if (!addr->text().trimmed().isEmpty())
-                return QString();
+                return {};
             break;
     }
     return errmsg;
@@ -1639,7 +1639,7 @@ QString EditPrefTab::validate()
         mSoundFile->setFocus();
         return xi18nc("@info", "You must enter a sound file when <interface>%1</interface> is selected as the default sound type", SoundPicker::i18n_combo_File());;
     }
-    return QString();
+    return {};
 }
 
 

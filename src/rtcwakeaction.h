@@ -14,13 +14,12 @@ using namespace KAuth;
 
 class RtcWakeAction : public QObject
 {
-        Q_OBJECT
-    public:
-        RtcWakeAction();
+    Q_OBJECT
+public:
+    RtcWakeAction();
 
-    public Q_SLOTS:
-        KAuth::ActionReply settimer(const QVariantMap& args);
+public Q_SLOTS:
+    KAuth::ActionReply settimer(const QVariantMap& args);
 };
-
 
 // vim: et sw=4:

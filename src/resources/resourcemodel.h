@@ -280,5 +280,4 @@ ResourceFilterCheckListModel* ResourceFilterCheckListModel::create(QObject* pare
     return instance;
 }
 
-
 // vim: et sw=4:

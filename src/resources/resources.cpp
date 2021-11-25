@@ -108,7 +108,7 @@ Resource Resources::getStandard(CalEvent::Type type, bool useOnlyResource)
         return defaultResource;
     }
 
-    return Resource();
+    return {};
 }
 
 /******************************************************************************

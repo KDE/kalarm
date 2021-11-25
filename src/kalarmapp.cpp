@@ -2564,7 +2564,7 @@ QString KAlarmApp::composeXTermCommand(const QString& command, const KAEvent& ev
     tempScriptFile.clear();
     QString cmd = Preferences::cmdXTermCommand();
     if (cmd.isEmpty())
-        return QString();   // no terminal application is configured
+        return {};   // no terminal application is configured
     cmd.replace(QLatin1String("%t"), KAboutData::applicationData().displayName());  // set the terminal window title
     if (cmd.indexOf(QLatin1String("%C")) >= 0)
     {
@@ -2575,7 +2575,7 @@ QString KAlarmApp::composeXTermCommand(const QString& command, const KAEvent& ev
         {
             tempScriptFile = createTempScriptFile(command, true, event, *alarm);
             if (tempScriptFile.isEmpty())
-                return QString();
+                return {};
             cmd.replace(QLatin1String("%C"), tempScriptFile);    // %C indicates where to insert the command
         }
     }
@@ -2585,7 +2585,7 @@ QString KAlarmApp::composeXTermCommand(const QString& command, const KAEvent& ev
         // with a sleep after the command is executed
         tempScriptFile = createTempScriptFile(command + QLatin1String("\nsleep 86400\n"), true, event, *alarm);
         if (tempScriptFile.isEmpty())
-            return QString();
+            return {};
         cmd.replace(QLatin1String("%W"), tempScriptFile);    // %w indicates where to insert the command
     }
     else if (cmd.indexOf(QLatin1String("%w")) >= 0)
@@ -2634,7 +2634,7 @@ QString KAlarmApp::createTempScriptFile(const QString& command, bool insertShell
 
     const QStringList errmsgs(i18nc("@info", "Error creating temporary script file"));
     MessageDisplay::showError(event, alarm.dateTime(), errmsgs, QStringLiteral("Script"));
-    return QString();
+    return {};
 }
 
 /******************************************************************************

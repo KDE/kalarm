@@ -209,6 +209,7 @@ bool use12HourClock()
     // 'A' or 'a' = show am/pm; 'H' displays 24-hour format regardless.
     return fmt.contains(QLatin1Char('a'), Qt::CaseInsensitive) && !fmt.contains(QLatin1Char('H'));
 }
+
 }
 
 // vim: et sw=4:

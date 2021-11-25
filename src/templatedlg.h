@@ -19,36 +19,35 @@ class TemplateListView;
 
 class TemplateDlg : public QDialog
 {
-        Q_OBJECT
-    public:
-        static TemplateDlg*  create(QWidget* parent = nullptr);
-        ~TemplateDlg() override;
+    Q_OBJECT
+public:
+    static TemplateDlg*  create(QWidget* parent = nullptr);
+    ~TemplateDlg() override;
 
-    Q_SIGNALS:
-        void          emptyToggled(bool notEmpty);
+Q_SIGNALS:
+    void          emptyToggled(bool notEmpty);
 
-    protected:
-        void          resizeEvent(QResizeEvent*) override;
+protected:
+    void          resizeEvent(QResizeEvent*) override;
 
-    private Q_SLOTS:
-        void          slotNew(EditAlarmDlg::Type);
-        void          slotCopy();
-        void          slotEdit();
-        void          slotDelete();
-        void          slotSelectionChanged();
+private Q_SLOTS:
+    void          slotNew(EditAlarmDlg::Type);
+    void          slotCopy();
+    void          slotEdit();
+    void          slotDelete();
+    void          slotSelectionChanged();
 
-    private:
-        explicit TemplateDlg(QWidget* parent);
+private:
+    explicit TemplateDlg(QWidget* parent);
 
-        static TemplateDlg* mInstance;   // the current instance, to prevent multiple dialogues
+    static TemplateDlg* mInstance;   // the current instance, to prevent multiple dialogues
 
-        TemplateListModel* mListFilterModel;
-        TemplateListView*  mListView;
-        QPushButton*       mEditButton;
-        QPushButton*       mCopyButton;
-        QPushButton*       mDeleteButton;
-        NewAlarmAction*    mNewAction;
+    TemplateListModel* mListFilterModel;
+    TemplateListView*  mListView;
+    QPushButton*       mEditButton;
+    QPushButton*       mCopyButton;
+    QPushButton*       mDeleteButton;
+    NewAlarmAction*    mNewAction;
 };
-
 
 // vim: et sw=4:

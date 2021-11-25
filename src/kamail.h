@@ -29,49 +29,48 @@ using namespace KAlarmCal;
 
 class KAMail : public QObject
 {
-        Q_OBJECT
-    public:
-        // Data to store for each mail send job.
-        // Some data is required by KAMail, while other data is used by the caller.
-        struct JobData
-        {
-            JobData() {}
-            JobData(KAEvent& e, const KAAlarm& a, bool resched, bool notify)
-                  : event(e), alarm(a), reschedule(resched), allowNotify(notify), queued(false) {}
-            KAEvent  event;
-            KAAlarm  alarm;
-            QString  from, bcc, subject;
-            bool     reschedule;
-            bool     allowNotify;
-            bool     queued;
-        };
+    Q_OBJECT
+public:
+    // Data to store for each mail send job.
+    // Some data is required by KAMail, while other data is used by the caller.
+    struct JobData
+    {
+        JobData() = default;
+        JobData(KAEvent& e, const KAAlarm& a, bool resched, bool notify)
+              : event(e), alarm(a), reschedule(resched), allowNotify(notify), queued(false) {}
+        KAEvent  event;
+        KAAlarm  alarm;
+        QString  from, bcc, subject;
+        bool     reschedule;
+        bool     allowNotify;
+        bool     queued;
+    };
 
-        static int         send(JobData&, QStringList& errmsgs);
-        static int         checkAddress(QString& address);
-        static int         checkAttachment(QString& attachment, QUrl* = nullptr);
-        static bool        checkAttachment(const QUrl&);
-        static QString     convertAddresses(const QString& addresses, KCalendarCore::Person::List&);
-        static QString     convertAttachments(const QString& attachments, QStringList& list);
-        static QString     controlCentreAddress();
-        static QString     getMailBody(quint32 serialNumber);
-        static QString     i18n_NeedFromEmailAddress();
-        static QString     i18n_sent_mail();
+    static int         send(JobData&, QStringList& errmsgs);
+    static int         checkAddress(QString& address);
+    static int         checkAttachment(QString& attachment, QUrl* = nullptr);
+    static bool        checkAttachment(const QUrl&);
+    static QString     convertAddresses(const QString& addresses, KCalendarCore::Person::List&);
+    static QString     convertAttachments(const QString& attachments, QStringList& list);
+    static QString     controlCentreAddress();
+    static QString     getMailBody(quint32 serialNumber);
+    static QString     i18n_NeedFromEmailAddress();
+    static QString     i18n_sent_mail();
 
-    private Q_SLOTS:
-        void               slotEmailSent(KJob*);
+private Q_SLOTS:
+    void               slotEmailSent(KJob*);
 
-    private:
-        KAMail() {}
-        static KAMail*     instance();
-        static QString     appendBodyAttachments(KMime::Message& message, JobData&);
-        static void        notifyQueued(const KAEvent&);
-        enum ErrType { SEND_FAIL, SEND_ERROR };
-        static QStringList errors(const QString& error = QString(), ErrType = SEND_FAIL);
+private:
+    KAMail() = default;
+    static KAMail*     instance();
+    static QString     appendBodyAttachments(KMime::Message& message, JobData&);
+    static void        notifyQueued(const KAEvent&);
+    enum ErrType { SEND_FAIL, SEND_ERROR };
+    static QStringList errors(const QString& error = QString(), ErrType = SEND_FAIL);
 
-        static KAMail*     mInstance;
-        static QQueue<MailTransport::MessageQueueJob*> mJobs;
-        static QQueue<JobData>                         mJobData;
+    static KAMail*     mInstance;
+    static QQueue<MailTransport::MessageQueueJob*> mJobs;
+    static QQueue<JobData>                         mJobData;
 };
-
 
 // vim: et sw=4:

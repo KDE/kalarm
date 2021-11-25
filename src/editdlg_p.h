@@ -18,61 +18,60 @@ class LineEdit;
 
 class PageFrame : public QFrame
 {
-        Q_OBJECT
-    public:
-        explicit PageFrame(QWidget* parent = nullptr) : QFrame(parent) { }
+    Q_OBJECT
+public:
+    explicit PageFrame(QWidget* parent = nullptr) : QFrame(parent) { }
 
-    protected:
-        void      showEvent(QShowEvent*) override    { Q_EMIT shown(); }
+protected:
+    void      showEvent(QShowEvent*) override    { Q_EMIT shown(); }
 
-    Q_SIGNALS:
-        void      shown();
+Q_SIGNALS:
+    void      shown();
 };
 
 class TextEdit : public KTextEdit
 {
-        Q_OBJECT
-    public:
-        explicit TextEdit(QWidget* parent);
-        void      enableEmailDrop();
-        QSize     sizeHint() const override         { return minimumSizeHint(); }
-        QSize     minimumSizeHint() const override  { return minimumSize(); }
+    Q_OBJECT
+public:
+    explicit TextEdit(QWidget* parent);
+    void      enableEmailDrop();
+    QSize     sizeHint() const override         { return minimumSizeHint(); }
+    QSize     minimumSizeHint() const override  { return minimumSize(); }
 
-    protected:
-        void      dragEnterEvent(QDragEnterEvent*) override;
-        void      dragMoveEvent(QDragMoveEvent*) override;
-        void      dropEvent(QDropEvent*) override;
+protected:
+    void      dragEnterEvent(QDragEnterEvent*) override;
+    void      dragMoveEvent(QDragMoveEvent*) override;
+    void      dropEvent(QDropEvent*) override;
 
-    private:
-        bool      mEmailDrop {false};
+private:
+    bool      mEmailDrop {false};
 };
 
 class CommandEdit : public QWidget
 {
-        Q_OBJECT
-    public:
-        explicit CommandEdit(QWidget* parent);
-        bool      isScript() const;
-        void      setScript(bool);
-        QString   text() const;
-        QString   text(EditAlarmDlg*, bool showErrorMessage) const;
-        void      setText(const AlarmText&);
-        void      setReadOnly(bool);
-        QSize     minimumSizeHint() const override;
-        QSize     sizeHint() const override   { return minimumSizeHint(); }
+    Q_OBJECT
+public:
+    explicit CommandEdit(QWidget* parent);
+    bool      isScript() const;
+    void      setScript(bool);
+    QString   text() const;
+    QString   text(EditAlarmDlg*, bool showErrorMessage) const;
+    void      setText(const AlarmText&);
+    void      setReadOnly(bool);
+    QSize     minimumSizeHint() const override;
+    QSize     sizeHint() const override   { return minimumSizeHint(); }
 
-    Q_SIGNALS:
-        void      scriptToggled(bool);
-        void      changed();        // emitted when any changes occur
+Q_SIGNALS:
+    void      scriptToggled(bool);
+    void      changed();        // emitted when any changes occur
 
-    private Q_SLOTS:
-        void      slotCmdScriptToggled(bool);
+private Q_SLOTS:
+    void      slotCmdScriptToggled(bool);
 
-    private:
-        CheckBox* mTypeScript;      // entering a script
-        LineEdit* mCommandEdit;     // command line edit box
-        TextEdit* mScriptEdit;      // script edit box
+private:
+    CheckBox* mTypeScript;      // entering a script
+    LineEdit* mCommandEdit;     // command line edit box
+    TextEdit* mScriptEdit;      // script edit box
 };
-
 
 // vim: et sw=4:

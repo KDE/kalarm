@@ -20,7 +20,7 @@ template <class T>
 class AutoDeleteList : public QList<T*>
 {
 public:
-    AutoDeleteList() : QList<T*>() {}
+    AutoDeleteList() = default;
     ~AutoDeleteList()
     {
         // Remove from list first before deleting the pointer, in
@@ -33,6 +33,5 @@ public:
     AutoDeleteList(const AutoDeleteList&) = delete;
     AutoDeleteList& operator=(const AutoDeleteList&) = delete;
 };
-
 
 // vim: et sw=4:

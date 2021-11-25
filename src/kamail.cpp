@@ -458,7 +458,7 @@ QString KAMail::appendBodyAttachments(KMime::Message& message, JobData& data)
         }
         message.assemble();
     }
-    return QString();
+    return {};
 }
 
 /******************************************************************************
@@ -514,7 +514,7 @@ QString KAMail::convertAddresses(const QString& items, KCalendarCore::Person::Li
         const KCalendarCore::Person person(mailbox.name(), mailbox.addrSpec().asString());
         list += person;
     }
-    return QString();
+    return {};
 }
 
 /******************************************************************************
@@ -597,7 +597,7 @@ QString KAMail::convertAttachments(const QString& items, QStringList& list)
         }
         next = i + 1;
     }
-    return QString();
+    return {};
 }
 
 /******************************************************************************
@@ -670,7 +670,7 @@ QString KAMail::getMailBody(quint32 serialNumber)
     if (!reply.isValid())
     {
         qCCritical(KALARM_LOG) << "KAMail::getMailBody: D-Bus call failed:" << reply.error().message();
-        return QString();
+        return {};
     }
     return reply.value();
 }
@@ -722,7 +722,7 @@ QByteArray autoDetectCharset(const QString& text)
             }
         }
     }
-    return QByteArray();
+    return {};
 }
 
 //-----------------------------------------------------------------------------
@@ -797,7 +797,7 @@ KMime::Types::Mailbox::List parseAddresses(const QString& text, QString& invalid
                     else if (ch != ' ')
                     {
                         invalidItem = text.mid(start);
-                        return KMime::Types::Mailbox::List();
+                        return {};
                     }
                     break;
                 case 10:   // looking for closing quote
@@ -833,7 +833,7 @@ KMime::Types::Mailbox::List parseAddresses(const QString& text, QString& invalid
             if (mbox.address().isEmpty())
             {
                 invalidItem = text.mid(start, endAddr - start);
-                return KMime::Types::Mailbox::List();
+                return {};
             }
             if (endName)
             {

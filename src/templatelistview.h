@@ -31,5 +31,4 @@ public:
     void edit(KAEvent&, EventListView*) override;
 };
 
-
 // vim: et sw=4:

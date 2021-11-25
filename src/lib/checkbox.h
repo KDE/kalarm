@@ -85,5 +85,4 @@ private:
     bool            mReadOnly {false};      // value cannot be changed
 };
 
-
 // vim: et sw=4:
