@@ -127,18 +127,23 @@ endif()
 configure_file(kalarm-version-string.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/kalarm-version-string.h @ONLY)
 
 if (NOT APPLE)
-    find_package(X11)
-endif()
-if (X11_FOUND)
-    if (QT_MAJOR_VERSION STREQUAL "5")
-        find_package(Qt5X11Extras ${QT_REQUIRED_VERSION} REQUIRED NO_MODULE)
-    else()
-        find_package(Qt${QT_MAJOR_VERSION} ${QT_REQUIRED_VERSION} CONFIG REQUIRED Gui) # qtx11extras_p.h for Qt6 < 6.2
+    option(WITHOUT_X11 "Build without X11 integration (skips finding X11)" OFF)
+    if (NOT WITHOUT_X11)
+        find_package(X11)
+        set(KDEPIM_HAVE_X11 ${X11_FOUND})
+        if (X11_FOUND)
+            if (QT_MAJOR_VERSION STREQUAL "5")
+                find_package(Qt5X11Extras ${QT_REQUIRED_VERSION} REQUIRED NO_MODULE)
+            else()
+                find_package(Qt${QT_MAJOR_VERSION} ${QT_REQUIRED_VERSION} CONFIG REQUIRED Gui) # qtx11extras_p.h for Qt6 < 6.2
+            endif()
+        endif()
     endif()
+    add_feature_info(WITHOUT_X11 ${WITHOUT_X11} "Build without X11 integration")
 endif()
+
 set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH})
 
-set(KDEPIM_HAVE_X11 ${X11_FOUND})
 configure_file(src/config-kalarm.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-kalarm.h)
 
 include_directories(${kalarm_SOURCE_DIR} ${kalarm_BINARY_DIR})

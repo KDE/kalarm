@@ -335,7 +335,7 @@ if (ENABLE_WAKE_FROM_SUSPEND)
 	target_link_libraries(kalarm_bin KF5::AuthCore)
 endif()
 
-if(X11_FOUND)
+if(KDEPIM_HAVE_X11)
     if (QT_MAJOR_VERSION STREQUAL "5")
         target_link_libraries(kalarm_bin Qt${QT_MAJOR_VERSION}::X11Extras ${X11_X11_LIB})
     elseif (Qt6_VERSION_MINOR LESS 2)
