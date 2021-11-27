@@ -272,7 +272,7 @@ void AlarmListModel::setEventTypeFilter(CalEvent::Types types)
 */
 void AlarmListModel::setDateFilter(const QVector<QDate>& dates)
 {
-    QList<std::pair<KADateTime, KADateTime>> oldFilterDates = mFilterDates;
+    const QVector<std::pair<KADateTime, KADateTime>> oldFilterDates = mFilterDates;
     mFilterDates.clear();
     if (!dates.isEmpty())
     {
@@ -432,10 +432,8 @@ QVariant AlarmListModel::data(const QModelIndex& ix, int role) const
                 switch (role)
                 {
                     case Qt::DisplayRole:
-#if 1
                     case ResourceDataModelBase::TimeDisplayRole:
                     case ResourceDataModelBase::SortRole:
-#endif
                     {
                         // Return a value based on the first occurrence in the date filter range.
                         const KAEvent ev = event(ix);

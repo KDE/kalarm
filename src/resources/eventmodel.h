@@ -162,7 +162,7 @@ private Q_SLOTS:
 private:
     static AlarmListModel* mAllInstance;
     CalEvent::Types mFilterTypes;    // types of events contained in this model
-    QList<std::pair<KADateTime, KADateTime>> mFilterDates;  // date/time ranges to include in filter
+    QVector<std::pair<KADateTime, KADateTime>> mFilterDates;  // date/time ranges to include in filter
     mutable QHash<ResourceId, QHash<QString, KADateTime>> mDateFilterCache;  // if date filter, whether events are included in filter
     bool mReplaceBlankName {false};  // replace Name with Text for Qt::DisplayRole if Name is blank
 };
