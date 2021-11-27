@@ -39,7 +39,6 @@
 #include <KWindowInfo>
 #include <netwm.h>
 #include <qx11info_x11.h>
-#include <QScreen>
 #endif
 
 #include <QTextBrowser>
@@ -55,6 +54,7 @@
 #include <QResizeEvent>
 #include <QCloseEvent>
 #include <QDesktopWidget>
+#include <QScreen>
 #include <QStyle>
 
 #include "kmailinterface.h"
