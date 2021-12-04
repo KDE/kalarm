@@ -711,7 +711,7 @@ void EditDisplayAlarmDlg::slotDisplayMethodChanged(int index)
     // Because notifications automatically time out after 10 seconds,
     // auto-close would always occur after a notification closes.
     lateCancel()->showAutoClose(enable);
-    // Set the text message edit box colours according to the display metho according to the display methodd.
+    // Set the text message edit box colours according to the display method.
     setColours(mFontColourButton->fgColour(), mFontColourButton->bgColour());
 }
 

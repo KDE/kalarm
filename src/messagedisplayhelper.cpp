@@ -811,7 +811,7 @@ void MessageDisplayHelper::playAudio()
     }
     else if (mSpeak)
     {
-        // The message is to be spoken. In case of error messges,
+        // The message is to be spoken. In case of error messages,
         // call it on a timer to allow the display to be shown first.
         QTimer::singleShot(0, this, &MessageDisplayHelper::slotSpeak);   //NOLINT(clang-analyzer-cplusplus.NewDeleteLeaks)
     }
@@ -1243,7 +1243,7 @@ void MessageDisplayHelper::setDeferralLimit(const KAEvent& event)
 * Check whether the deferral limit has been reached.
 * If so, disable the Defer button.
 * N.B. Ideally, just a single QTimer::singleShot() call would be made to disable
-*      the defer button at the corret time. But for a 32-bit integer, the
+*      the defer button at the correct time. But for a 32-bit integer, the
 *      milliseconds parameter overflows in about 25 days, so instead a daily
 *      check is done until the day when the deferral limit is reached, followed
 *      by a non-overflowing QTimer::singleShot() call.

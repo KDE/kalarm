@@ -35,7 +35,7 @@ public:
     explicit Slider(QWidget* parent = nullptr);
 
     /** Constructor.
-     *  @param orient The orientation of the slider, either Qt::Horizonal or Qt::Vertical.
+     *  @param orient The orientation of the slider, either Qt::Horizontal or Qt::Vertical.
      *  @param parent The parent object of this widget.
      */
     explicit Slider(Qt::Orientation orient, QWidget* parent = nullptr);
@@ -44,7 +44,7 @@ public:
      *  @param minValue The minimum value which the slider can have.
      *  @param maxValue The maximum value which the slider can have.
      *  @param pageStep The page step increment.
-     *  @param orient The orientation of the slider, either Qt::Horizonal or Qt::Vertical.
+     *  @param orient The orientation of the slider, either Qt::Horizontal or Qt::Vertical.
      *  @param parent The parent object of this widget.
      */
     Slider(int minValue, int maxValue, int pageStep, Qt::Orientation orient,
