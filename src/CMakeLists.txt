@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: CC0-1.0
+# SPDX-FileCopyrightText: none
 add_definitions(-DTRANSLATION_DOMAIN=\"libkalarmcal5\")
 ########### next target ###############
 add_library(KF5AlarmCalendar)
