@@ -198,7 +198,7 @@ private Q_SLOTS:
     bool addLoadedEvent(const KCalendarCore::Event::Ptr&);
 
 private:
-    void setLoadFailure();
+    void setLoadFailure(bool exists);
 
     QUrl               mSaveUrl;   // current local file for save() to use (may be temporary)
     KIO::FileCopyJob*  mDownloadJob {nullptr};

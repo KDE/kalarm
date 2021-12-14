@@ -1,5 +1,8 @@
 KAlarm Change Log
 
+=== Version 3.3.4 (KDE Applications 21.12.1) --- 14 December 2021 ===
+* Treat empty read-only, or non-existent, calendar files as loaded.
+
 === Version 3.3.3 (KDE Applications 21.12) --- 7 November 2021 ===
 * Show numbers in localised form.
 * Make time edit spinboxes show time using localised format and numbers.
