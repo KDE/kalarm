@@ -449,7 +449,7 @@ int KAlarmApp::activateInstance(const QStringList& args, const QString& workingD
             {
                 // Display or delete the event with the specified event ID
                 auto action = static_cast<QueuedAction>(int((command == CommandOptions::TRIGGER_EVENT) ? QueuedAction::Trigger : QueuedAction::Cancel)
-                                                                | int(QueuedAction::Exit));
+                                                      | int(QueuedAction::Exit));
                 // Open the calendar, don't start processing execution queue yet,
                 // and wait for the calendar resources to be populated.
                 if (!initCheck(true))
@@ -463,7 +463,7 @@ int KAlarmApp::activateInstance(const QStringList& args, const QString& workingD
                     if (options->resourceId().isEmpty())
                         action = static_cast<QueuedAction>((int)action | int(QueuedAction::FindId));
                     mActionQueue.enqueue(ActionQEntry(action, EventId(options->eventId()), options->resourceId()));
-                    startProcessQueue();      // start processing the execution queue
+                    startProcessQueue(true);      // start processing the execution queue
                     dontRedisplay = true;
                 }
                 break;
@@ -480,7 +480,7 @@ int KAlarmApp::activateInstance(const QStringList& args, const QString& workingD
                 {
                     const auto action = static_cast<QueuedAction>(int(QueuedAction::List) | int(QueuedAction::Exit));
                     mActionQueue.enqueue(ActionQEntry(action, EventId()));
-                    startProcessQueue();      // start processing the execution queue
+                    startProcessQueue(true);      // start processing the execution queue
                     dontRedisplay = true;
                 }
                 break;
@@ -499,7 +499,7 @@ int KAlarmApp::activateInstance(const QStringList& args, const QString& workingD
                     // resources have not been created yet, the numeric
                     // resource ID can't yet be looked up.
                     mActionQueue.enqueue(ActionQEntry(QueuedAction::Edit, EventId(options->eventId()), options->resourceId()));
-                    startProcessQueue();      // start processing the execution queue
+                    startProcessQueue(true);      // start processing the execution queue
                     dontRedisplay = true;
                 }
                 break;
@@ -957,9 +957,9 @@ void KAlarmApp::queueAlarmId(const KAEvent& event)
 /******************************************************************************
 * Start processing the execution queue.
 */
-void KAlarmApp::startProcessQueue()
+void KAlarmApp::startProcessQueue(bool evenIfStarted)
 {
-    if (!mInitialised)
+    if (!mInitialised  ||  evenIfStarted)
     {
         qCDebug(KALARM_LOG) << "KAlarmApp::startProcessQueue";
         mInitialised = true;

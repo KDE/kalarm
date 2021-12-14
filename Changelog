@@ -2,6 +2,7 @@ KAlarm Change Log
 
 === Version 3.3.4 (KDE Applications 21.12.1) --- 14 December 2021 ===
 * Treat empty read-only, or non-existent, calendar files as loaded.
+* Ensure KAlarm command line actions are performed if KAlarm is already running [KDE Bug 446749]
 
 === Version 3.3.3 (KDE Applications 21.12) --- 7 November 2021 ===
 * Show numbers in localised form.
