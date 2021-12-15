@@ -473,7 +473,8 @@ int KAlarmApp::activateInstance(const QStringList& args, const QString& workingD
                 // Open the calendar, don't start processing execution queue yet,
                 // and wait for all calendar resources to be populated.
                 mReadOnly = true;   // don't need write access to calendars
-                mAlarmsEnabled = false;   // prevent alarms being processed
+                if (firstInstance)
+                    mAlarmsEnabled = false;   // prevent alarms being processed if no other instance is running
                 if (!initCheck(true))
                     exitCode = 1;
                 else
@@ -1130,6 +1131,8 @@ void KAlarmApp::processQueue()
                 }
             }
 
+            mActionQueue.dequeue();
+
             if (inhibit)
             {
                 // It's a display event which can't be executed because notifications
@@ -1138,12 +1141,11 @@ void KAlarmApp::processQueue()
             }
             else if (exitAfter)
             {
+                mProcessingQueue = false;   // in case there is another instance
                 mActionQueue.clear();   // ensure that quitIf() actually exits the program
                 quitIf((ok ? 0 : 1), exitAfterError);
                 return;  // quitIf() can sometimes return, despite calling exit()
             }
-
-            mActionQueue.dequeue();
         }
 
         // Purge the default archived alarms resource if it's time to do so
