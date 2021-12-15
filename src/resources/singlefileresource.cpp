@@ -207,7 +207,7 @@ int SingleFileResource::doLoad(QHash<QString, KAEvent>& newEvents, bool readThro
             // The resource's location should never change, so this code should
             // never be reached!
             qCWarning(KALARM_LOG) << "SingleFileResource::load:" << displayId() << "Error? File location changed to" << localFileName;
-            setLoadFailure();
+            setLoadFailure(true);
             mFileStorage.clear();
             mCalendar.clear();
             mLoadedEvents.clear();
@@ -230,7 +230,22 @@ int SingleFileResource::doLoad(QHash<QString, KAEvent>& newEvents, bool readThro
                 errorMessage = xi18nc("@info", "Could not create calendar file <filename>%1</filename>.", path);
                 mStatus = Status::Broken;
                 mSaveUrl.clear();
-                setLoadFailure();
+                setLoadFailure(false);
+                return -1;
+            }
+            // Check whether this user can actually write to the newly created file.
+            // This might not tally with the open() permissions, since there are
+            // circumstances on Linux where a file created by a user can be owned by root.
+            QFile fnew(localFileName);
+            if (!fnew.isWritable())
+            {
+                fnew.remove();
+                const QString path = mSettings->displayLocation();
+                qCWarning(KALARM_LOG) << "SingleFileResource::load:" << displayId() << "Could not create writable file" << path;
+                errorMessage = xi18nc("@info", "Could not create writable calendar file <filename>%1</filename>.", path);
+                mStatus = Status::Broken;
+                mSaveUrl.clear();
+                setLoadFailure(false);
                 return -1;
             }
             mFileReadOnly = false;
@@ -270,7 +285,7 @@ int SingleFileResource::doLoad(QHash<QString, KAEvent>& newEvents, bool readThro
         qCWarning(KALARM_LOG) << "SingleFileResource::load:" << displayId() << "Could not read file" << localFileName;
         // A user error message has been set by readLocalFile().
         mStatus = Status::Broken;
-        setLoadFailure();
+        setLoadFailure(true);
         return -1;
     }
 
@@ -282,12 +297,17 @@ int SingleFileResource::doLoad(QHash<QString, KAEvent>& newEvents, bool readThro
     return 1;     // success
 }
 
-void SingleFileResource::setLoadFailure()
+/******************************************************************************
+* Called when loading fails.
+* If the resource file doesn't exist or can't be created, the resource is still
+* regarded as loaded.
+*/
+void SingleFileResource::setLoadFailure(bool exists)
 {
     mLoadedEvents.clear();
     QHash<QString, KAEvent> events;
     setLoadedEvents(events);
-    setLoaded(false);
+    setLoaded(!exists);
 }
 
 /******************************************************************************
@@ -526,6 +546,8 @@ bool SingleFileResource::doDeleteEvent(const KAEvent& event)
 */
 bool SingleFileResource::readLocalFile(const QString& fileName, QString& errorMessage)
 {
+    if (mFileReadOnly  &&  !QFileInfo(fileName).size())
+        return true;
     const QByteArray newHash = calculateHash(fileName);
     if (newHash == mCurrentHash)
         qCDebug(KALARM_LOG) << "SingleFileResource::readLocalFile:" << displayId() << "hash unchanged";
@@ -698,7 +720,7 @@ void SingleFileResource::slotDownloadJobResult(KJob* job)
     {
         if (mStatus != Status::Closed)
             mStatus = Status::Broken;
-        setLoadFailure();
+        setLoadFailure(false);
         const QString path = mSettings->displayLocation();
         qCWarning(KALARM_LOG) << "SingleFileResource::slotDownloadJobResult:" << displayId() << "Could not load file" << path << job->errorString();
         errorMessage = xi18nc("@info", "Could not load file <filename>%1</filename>. (%2)", path, job->errorString());
@@ -713,7 +735,7 @@ void SingleFileResource::slotDownloadJobResult(KJob* job)
             // A user error message has been set by readLocalFile().
             if (mStatus != Status::Closed)
                 mStatus = Status::Broken;
-            setLoadFailure();
+            setLoadFailure(true);
             success = false;
         }
         else if (mStatus != Status::Closed)

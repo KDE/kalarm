@@ -449,7 +449,7 @@ int KAlarmApp::activateInstance(const QStringList& args, const QString& workingD
             {
                 // Display or delete the event with the specified event ID
                 auto action = static_cast<QueuedAction>(int((command == CommandOptions::TRIGGER_EVENT) ? QueuedAction::Trigger : QueuedAction::Cancel)
-                                                                | int(QueuedAction::Exit));
+                                                      | int(QueuedAction::Exit));
                 // Open the calendar, don't start processing execution queue yet,
                 // and wait for the calendar resources to be populated.
                 if (!initCheck(true))
@@ -463,7 +463,7 @@ int KAlarmApp::activateInstance(const QStringList& args, const QString& workingD
                     if (options->resourceId().isEmpty())
                         action = static_cast<QueuedAction>((int)action | int(QueuedAction::FindId));
                     mActionQueue.enqueue(ActionQEntry(action, EventId(options->eventId()), options->resourceId()));
-                    startProcessQueue();      // start processing the execution queue
+                    startProcessQueue(true);      // start processing the execution queue
                     dontRedisplay = true;
                 }
                 break;
@@ -473,14 +473,15 @@ int KAlarmApp::activateInstance(const QStringList& args, const QString& workingD
                 // Open the calendar, don't start processing execution queue yet,
                 // and wait for all calendar resources to be populated.
                 mReadOnly = true;   // don't need write access to calendars
-                mAlarmsEnabled = false;   // prevent alarms being processed
+                if (firstInstance)
+                    mAlarmsEnabled = false;   // prevent alarms being processed if no other instance is running
                 if (!initCheck(true))
                     exitCode = 1;
                 else
                 {
                     const auto action = static_cast<QueuedAction>(int(QueuedAction::List) | int(QueuedAction::Exit));
                     mActionQueue.enqueue(ActionQEntry(action, EventId()));
-                    startProcessQueue();      // start processing the execution queue
+                    startProcessQueue(true);      // start processing the execution queue
                     dontRedisplay = true;
                 }
                 break;
@@ -499,7 +500,7 @@ int KAlarmApp::activateInstance(const QStringList& args, const QString& workingD
                     // resources have not been created yet, the numeric
                     // resource ID can't yet be looked up.
                     mActionQueue.enqueue(ActionQEntry(QueuedAction::Edit, EventId(options->eventId()), options->resourceId()));
-                    startProcessQueue();      // start processing the execution queue
+                    startProcessQueue(true);      // start processing the execution queue
                     dontRedisplay = true;
                 }
                 break;
@@ -957,9 +958,9 @@ void KAlarmApp::queueAlarmId(const KAEvent& event)
 /******************************************************************************
 * Start processing the execution queue.
 */
-void KAlarmApp::startProcessQueue()
+void KAlarmApp::startProcessQueue(bool evenIfStarted)
 {
-    if (!mInitialised)
+    if (!mInitialised  ||  evenIfStarted)
     {
         qCDebug(KALARM_LOG) << "KAlarmApp::startProcessQueue";
         mInitialised = true;
@@ -1130,6 +1131,8 @@ void KAlarmApp::processQueue()
                 }
             }
 
+            mActionQueue.dequeue();
+
             if (inhibit)
             {
                 // It's a display event which can't be executed because notifications
@@ -1138,12 +1141,11 @@ void KAlarmApp::processQueue()
             }
             else if (exitAfter)
             {
+                mProcessingQueue = false;   // don't inhibit processing if there is another instance
                 mActionQueue.clear();   // ensure that quitIf() actually exits the program
                 quitIf((ok ? 0 : 1), exitAfterError);
                 return;  // quitIf() can sometimes return, despite calling exit()
             }
-
-            mActionQueue.dequeue();
         }
 
         // Purge the default archived alarms resource if it's time to do so

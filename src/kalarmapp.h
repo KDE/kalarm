@@ -225,7 +225,7 @@ private:
     void               showRestoredWindows();
     void               createOnlyMainWindow();
     bool               checkSystemTray();
-    void               startProcessQueue();
+    void               startProcessQueue(bool evenIfStarted = false);
     void               setResourcesTimeout();
     void               checkWritableCalendar();
     void               checkArchivedCalendar();
