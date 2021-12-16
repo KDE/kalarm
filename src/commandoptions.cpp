@@ -1,7 +1,7 @@
 /*
  *  commandoptions.cpp  -  extract command line options
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2001-2020 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2001-2021 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -237,7 +237,17 @@ QStringList CommandOptions::setOptions(QCommandLineParser* parser, const QString
 
 void CommandOptions::parse()
 {
-    mParser->process(mNonExecArguments);
+    // First check for parse errors (unknown option, missing argument).
+    // Simply calling mParser->process() would exit the program if an error is found,
+    // which isn't the correct action if another KAlarm instance is running.
+    if (!mParser->parse(mNonExecArguments))
+    {
+        qCWarning(KALARM_LOG) << "CommandOptions::parse:" << mParser->errorText();
+        mError.clear();
+        setError(mParser->errorText());
+    }
+    else
+        mParser->process(mNonExecArguments);
 }
 
 void CommandOptions::process()

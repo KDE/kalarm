@@ -1,9 +1,11 @@
 KAlarm Change Log
 
-=== Version 3.3.4 (KDE Applications 21.12.1) --- 15 December 2021 ===
+=== Version 3.3.4 (KDE Applications 21.12.1) --- 16 December 2021 ===
 * Treat empty read-only, or non-existent, calendar files as loaded.
 * Ensure KAlarm command line actions are performed if KAlarm is already running [KDE Bug 446749]
 * Don't disable alarms after KAlarm command line action while KAlarm is already running [KDE Bug 446749]
+* Fix resource ID numbers not working in command line & DBUS commands.
+* If KAlarm is already running, don't exit if a new activation has unknown command line options.
 
 === Version 3.3.3 (KDE Applications 21.12) --- 7 November 2021 ===
 * Show numbers in localised form.

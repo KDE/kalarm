@@ -1,7 +1,7 @@
 /*
  *  eventid.cpp  -  KAlarm unique event identifier for resources
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2012-2020 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2012-2021 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -58,9 +58,9 @@ ResourceId EventId::getResourceId(const QString& resourceIdString)
     const ResourceId id = resourceIdString.toLongLong(&ok);
     if (ok)
     {
-        res = Resources::resource(id);
+        res = Resources::resourceFromDisplayId(id);
         if (res.isValid())
-            return id;
+            return res.id();
     }
     return -1;
 }

@@ -38,6 +38,12 @@ public:
      */
     static Resource resource(ResourceId);
 
+    /** Return a copy of the resource with a given display ID.
+     *  @return  The resource, or invalid if the ID doesn't already exist or is invalid
+     *           or if more than one resource has the same display ID.
+     */
+    static Resource resourceFromDisplayId(ResourceId);
+
     /** Remove a resource. The calendar file is not removed.
      *  @return true if the resource has been removed or a removal job has been scheduled.
      */

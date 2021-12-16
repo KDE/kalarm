@@ -428,10 +428,13 @@ int KAlarmApp::activateInstance(const QStringList& args, const QString& workingD
                 Q_EMIT setExitValue(1);
                 if (outputText)
                 {
+                    // Instance was activated from main().
                     *outputText = options->outputText();
                     delete options;
                     return 1;
                 }
+                // Instance was activated by DBus.
+                std::cerr << qPrintable(options->outputText()) << std::endl;;
                 mReadOnly = true;   // don't need write access to calendars
                 exitCode = 1;
                 break;
@@ -1056,7 +1059,7 @@ void KAlarmApp::processQueue()
                             if (commandLine)
                             {
                                 const QString errmsg = xi18nc("@info:shell", "Cannot create alarm: No default calendar is defined");
-                                std::cerr << errmsg.toLocal8Bit().data() << std::endl;
+                                std::cerr << qPrintable(errmsg) << std::endl;
                             }
                             ok = false;
                         }
@@ -1084,7 +1087,7 @@ void KAlarmApp::processQueue()
                     {
                         const QStringList alarms = scheduledAlarmList();
                         for (const QString& alarm : alarms)
-                            std::cout << alarm.toUtf8().constData() << std::endl;
+                            std::cout << qUtf8Printable(alarm) << std::endl;
                         break;
                     }
                     default:
@@ -1142,7 +1145,6 @@ void KAlarmApp::processQueue()
             else if (exitAfter)
             {
                 mProcessingQueue = false;   // don't inhibit processing if there is another instance
-                mActionQueue.clear();   // ensure that quitIf() actually exits the program
                 quitIf((ok ? 0 : 1), exitAfterError);
                 return;  // quitIf() can sometimes return, despite calling exit()
             }

@@ -53,6 +53,22 @@ Resource Resources::resource(ResourceId id)
     return mResources.value(id, Resource::null());
 }
 
+Resource Resources::resourceFromDisplayId(ResourceId id)
+{
+    Resource result = Resource::null();
+    for (auto it = mResources.constBegin();  it != mResources.constEnd();  ++it)
+    {
+        const Resource& res = it.value();
+        if (res.displayId() == id)
+        {
+            if (result != Resource::null())
+                return Resource::null();
+            result = res;
+        }
+    }
+    return result;
+}
+
 /******************************************************************************
 * Return the resources which are enabled for a specified alarm type.
 * If 'writable' is true, only writable resources are included.
