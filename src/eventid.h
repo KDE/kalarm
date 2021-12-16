@@ -1,7 +1,7 @@
 /*
  *  eventid.h  -  KAlarm unique event identifier for resources
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2012-2020 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2012-2021 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -38,6 +38,8 @@ public:
     /** Set by event ID prefixed by optional resource ID, in the format "[rid:]eid".
      *  "rid" can be the resource configuration name, or the resource ID number in
      *  string format.
+     *  @note  The resource ID number is the ID as used in the config and as known
+     *         to the user, not the internal ID (where different).
      *  @note  Resources must have been created before calling this method;
      *         otherwise, the resource ID will be invalid (-1).
      */
@@ -59,15 +61,20 @@ public:
     /** Extract the resource and event ID strings from an ID in the format "[rid:]eid".
      *  "rid" can be the resource configuration name, or the resource ID number in
      *  string format.
+     *  @note  The resource ID number is the ID as used in the config and as known
+     *         to the user, not the internal ID (where different).
+     *
      *  @param resourceEventId  Full ID "[rid:]eid"
      *  @param eventId          Receives the event ID "eid"
-     *  @return  The resource ID "rid".
+     *  @return  The resource ID "rid" (see note above).
      */
     static QString extractIDs(const QString& resourceEventId, QString& eventId);
 
     /** Get the numerical resource ID from a resource ID string.
      *  The string can be the resource configuration name, or the resource ID
      *  number in string format.
+     *  @note  The resource ID number is the ID as used in the config and as known
+     *         to the user, not the internal ID (where different).
      *  @note  Resources must have been created before calling this function;
      *         otherwise, the returned resource ID will be invalid (-1).
      *

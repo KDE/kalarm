@@ -1141,8 +1141,7 @@ void KAlarmApp::processQueue()
             }
             else if (exitAfter)
             {
-                mProcessingQueue = false;   // in case there is another instance
-                mActionQueue.clear();   // ensure that quitIf() actually exits the program
+                mProcessingQueue = false;   // don't inhibit processing if there is another instance
                 quitIf((ok ? 0 : 1), exitAfterError);
                 return;  // quitIf() can sometimes return, despite calling exit()
             }
