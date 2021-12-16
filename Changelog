@@ -5,6 +5,7 @@ KAlarm Change Log
 * Ensure KAlarm command line actions are performed if KAlarm is already running [KDE Bug 446749]
 * Don't disable alarms after KAlarm command line action while KAlarm is already running [KDE Bug 446749]
 * Fix resource ID numbers not working in command line & DBUS commands.
+* If KAlarm is already running, don't exit if a new activation has unknown command line options.
 
 === Version 3.3.3 (KDE Applications 21.12) --- 7 November 2021 ===
 * Show numbers in localised form.

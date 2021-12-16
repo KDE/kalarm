@@ -59,10 +59,13 @@ int main(int argc, char* argv[])
     int exitCode = app->activateInstance(args, QDir::currentPath(), &outputText);
     if (exitCode >= 0)
     {
-        if (exitCode > 0)
-            std::cout << qPrintable(outputText) << std::endl;
-        else
-            std::cerr << qPrintable(outputText) << std::endl;
+        if (!outputText.isEmpty())
+        {
+            if (exitCode > 0)
+                std::cerr << qPrintable(outputText) << std::endl;
+            else
+                std::cout << qPrintable(outputText) << std::endl;
+        }
         exit(exitCode);
     }
 
