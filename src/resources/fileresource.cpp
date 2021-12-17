@@ -33,7 +33,7 @@ FileResource::~FileResource()
 bool FileResource::isValid() const
 {
 #ifdef DEBUG_DETAIL
-    if (!mSettings->isValid())
+    if (!mSettings  ||  !mSettings->isValid())
         qDebug() << "FileResource::isValid:" << displayId() << "NO (mSettings)";
     if (mStatus == Status::NotConfigured)
         qDebug() << "FileResource::isValid:" << displayId() << "NO (Not configured)";
@@ -41,11 +41,11 @@ bool FileResource::isValid() const
         qDebug() << "FileResource::isValid:" << displayId() << "NO (Closed)";
     if (id() < 0)
         qDebug() << "FileResource::isValid:" << displayId() << "NO (ID < 0)";
-    if (mSettings->id() != id())
+    if (mSettings  &&  mSettings->id() != id())
         qDebug() << "FileResource::isValid:" << displayId() << "NO (ID:" << id() << mSettings->id() << ")";
 #endif
     // The settings ID must not have changed since construction.
-    return mSettings->isValid()
+    return mSettings  &&  mSettings->isValid()
        &&  mStatus < Status::Unusable
        &&  id() >= 0  &&  mSettings->id() == id();
 }
@@ -57,6 +57,8 @@ ResourceId FileResource::displayId() const
 
 QString FileResource::storageTypeString(bool description) const
 {
+    if (!mSettings)
+        return {};
     bool file;
     switch (mSettings->storageType())
     {
@@ -74,67 +76,76 @@ QString FileResource::storageTypeString(bool description) const
 
 QUrl FileResource::location() const
 {
-    return mSettings->url();
+    return mSettings ? mSettings->url() : QUrl();
 }
 
 QString FileResource::displayLocation() const
 {
-    return mSettings->displayLocation();
+    return mSettings ? mSettings->displayLocation() : QString();
 }
 
 QString FileResource::displayName() const
 {
-    return mSettings->displayName();
+    return mSettings ? mSettings->displayName() : QString();
 }
 
 QString FileResource::configName() const
 {
-    return mSettings->configName();
+    return mSettings ? mSettings->configName() : QString();
 }
 
 CalEvent::Types FileResource::alarmTypes() const
 {
-    return mSettings->alarmTypes();
+    return mSettings ? mSettings->alarmTypes() : CalEvent::EMPTY;
 }
 
 CalEvent::Types FileResource::enabledTypes() const
 {
-    return mSettings->isValid() ? mSettings->enabledTypes() : CalEvent::EMPTY;
+    return mSettings && mSettings->isValid() ? mSettings->enabledTypes() : CalEvent::EMPTY;
 }
 
 void FileResource::setEnabled(CalEvent::Type type, bool enabled)
 {
-    const CalEvent::Types oldEnabled = mSettings->enabledTypes();
-    const Changes changes = mSettings->setEnabled(type, enabled);
-    handleEnabledChange(changes, oldEnabled);
+    if (mSettings)
+    {
+        const CalEvent::Types oldEnabled = mSettings->enabledTypes();
+        const Changes changes = mSettings->setEnabled(type, enabled);
+        handleEnabledChange(changes, oldEnabled);
+    }
 }
 
 void FileResource::setEnabled(CalEvent::Types types)
 {
-    const CalEvent::Types oldEnabled = mSettings->enabledTypes();
-    const Changes changes = mSettings->setEnabled(types);
-    handleEnabledChange(changes, oldEnabled);
+    if (mSettings)
+    {
+        const CalEvent::Types oldEnabled = mSettings->enabledTypes();
+        const Changes changes = mSettings->setEnabled(types);
+        handleEnabledChange(changes, oldEnabled);
+    }
 }
 
 bool FileResource::readOnly() const
 {
-    return mSettings->readOnly();
+    return mSettings ? mSettings->readOnly() : true;
 }
 
 void FileResource::setReadOnly(bool ronly)
 {
-    const CalEvent::Types oldEnabled = mSettings->enabledTypes();
-    Changes changes = mSettings->setReadOnly(ronly);
-    if (changes)
+    if (mSettings)
     {
-        handleSettingsChange(changes);
-        Resources::notifySettingsChanged(this, changes, oldEnabled);
+        const CalEvent::Types oldEnabled = mSettings->enabledTypes();
+        Changes changes = mSettings->setReadOnly(ronly);
+        if (changes)
+        {
+            handleSettingsChange(changes);
+            Resources::notifySettingsChanged(this, changes, oldEnabled);
+        }
     }
 }
 
 int FileResource::writableStatus(CalEvent::Type type) const
 {
-    if (!mSettings->isValid()  ||  mSettings->readOnly())
+    if (!mSettings  ||  !mSettings->isValid()  ||  mSettings->readOnly())
         return -1;
     if ((type == CalEvent::EMPTY  && !mSettings->enabledTypes())
     ||  (type != CalEvent::EMPTY  && !mSettings->isEnabled(type)))
@@ -158,65 +169,77 @@ bool FileResource::isWritable(const KAEvent& event) const
 
 bool FileResource::keepFormat() const
 {
-    return mSettings->keepFormat();
+    return mSettings ? mSettings->keepFormat() : true;
 }
 
 void FileResource::setKeepFormat(bool keep)
 {
-    const CalEvent::Types oldEnabled = mSettings->enabledTypes();
-    Changes changes = mSettings->setKeepFormat(keep);
-    if (changes)
+    if (mSettings)
     {
-        handleSettingsChange(changes);
-        Resources::notifySettingsChanged(this, changes, oldEnabled);
+        const CalEvent::Types oldEnabled = mSettings->enabledTypes();
+        Changes changes = mSettings->setKeepFormat(keep);
+        if (changes)
+        {
+            handleSettingsChange(changes);
+            Resources::notifySettingsChanged(this, changes, oldEnabled);
+        }
     }
 }
 
 QColor FileResource::backgroundColour() const
 {
-    return mSettings->backgroundColour();
+    return mSettings ? mSettings->backgroundColour() : QColor();
 }
 
 void FileResource::setBackgroundColour(const QColor& colour)
 {
-    const CalEvent::Types oldEnabled = mSettings->enabledTypes();
-    Changes changes = mSettings->setBackgroundColour(colour);
-    if (changes)
+    if (mSettings)
     {
-        handleSettingsChange(changes);
-        Resources::notifySettingsChanged(this, changes, oldEnabled);
+        const CalEvent::Types oldEnabled = mSettings->enabledTypes();
+        Changes changes = mSettings->setBackgroundColour(colour);
+        if (changes)
+        {
+            handleSettingsChange(changes);
+            Resources::notifySettingsChanged(this, changes, oldEnabled);
+        }
     }
 }
 
 bool FileResource::configIsStandard(CalEvent::Type type) const
 {
-    return mSettings->isStandard(type);
+    return mSettings ? mSettings->isStandard(type) : false;
 }
 
 CalEvent::Types FileResource::configStandardTypes() const
 {
-    return mSettings->standardTypes();
+    return mSettings ? mSettings->standardTypes() : CalEvent::EMPTY;
 }
 
 void FileResource::configSetStandard(CalEvent::Type type, bool standard)
 {
-    const CalEvent::Types oldEnabled = mSettings->enabledTypes();
-    Changes changes = mSettings->setStandard(type, standard);
-    if (changes)
+    if (mSettings)
     {
-        handleSettingsChange(changes);
-        Resources::notifySettingsChanged(this, changes, oldEnabled);
+        const CalEvent::Types oldEnabled = mSettings->enabledTypes();
+        Changes changes = mSettings->setStandard(type, standard);
+        if (changes)
+        {
+            handleSettingsChange(changes);
+            Resources::notifySettingsChanged(this, changes, oldEnabled);
+        }
     }
 }
 
 void FileResource::configSetStandard(CalEvent::Types types)
 {
-    const CalEvent::Types oldEnabled = mSettings->enabledTypes();
-    Changes changes = mSettings->setStandard(types);
-    if (changes)
+    if (mSettings)
     {
-        handleSettingsChange(changes);
-        Resources::notifySettingsChanged(this, changes, oldEnabled);
+        const CalEvent::Types oldEnabled = mSettings->enabledTypes();
+        Changes changes = mSettings->setStandard(types);
+        if (changes)
+        {
+            handleSettingsChange(changes);
+            Resources::notifySettingsChanged(this, changes, oldEnabled);
+        }
     }
 }
 
@@ -258,7 +281,7 @@ void FileResource::editResource(QWidget* dialogParent)
                 // Note that the location and alarm type cannot be changed.
                 qCDebug(KALARM_LOG) << "FileResource::editResource: Edited" << dlg->displayName();
                 setReadOnly(dlg->readOnly());
-                Changes changes = mSettings->setDisplayName(dlg->displayName());
+                Changes changes = mSettings ? mSettings->setDisplayName(dlg->displayName()) : NoChange;
                 if (changes != NoChange)
                     Resources::notifySettingsChanged(this, changes, enabled);
             }
@@ -294,19 +317,19 @@ bool FileResource::load(bool readThroughCache)
 {
     qCDebug(KALARM_LOG) << "FileResource::load:" << displayName();
     QString errorMessage;
-    if (!mSettings->isValid())
+    if (!mSettings  ||  !mSettings->isValid())
     {
-        qCWarning(KALARM_LOG) << "FileResource::load: Resource not configured!" << mSettings->displayName();
+        qCWarning(KALARM_LOG) << "FileResource::load: Resource not configured!" << displayName();
         errorMessage = i18nc("@info", "Resource is not configured.");
     }
     else if (mStatus == Status::Closed)
-        qCWarning(KALARM_LOG) << "FileResource::load: Resource closed!" << mSettings->displayName();
+        qCWarning(KALARM_LOG) << "FileResource::load: Resource closed!" << displayName();
     else
     {
         if (!isEnabled(CalEvent::EMPTY))
         {
             // Don't load a disabled resource, but mark it as usable (but not loaded).
-            qCDebug(KALARM_LOG) << "FileResource::load: Resource disabled" << mSettings->displayName();
+            qCDebug(KALARM_LOG) << "FileResource::load: Resource disabled" << displayName();
             mStatus = Status::Ready;
             return false;
         }
@@ -335,6 +358,8 @@ bool FileResource::load(bool readThroughCache)
 */
 void FileResource::loaded(bool success, QHash<QString, KAEvent>& newEvents, const QString& errorMessage)
 {
+    if (!mSettings)
+        return;
     if (!success)
     {
         // This is only done when a delayed load fails.
@@ -420,7 +445,7 @@ bool FileResource::save(QString* errorMessage, bool writeThroughCache, bool forc
 bool FileResource::checkSave()
 {
     QString errorMessage;
-    if (!mSettings->isValid())
+    if (!mSettings  ||  !mSettings->isValid())
     {
         qCWarning(KALARM_LOG) << "FileResource::checkSave: FileResource not configured!" << displayName();
         errorMessage = i18nc("@info", "Resource is not configured.");
@@ -470,7 +495,7 @@ bool FileResource::addEvent(const KAEvent& event)
     {
         setUpdatedEvents({event}, false);
 
-        if (mSettings->isEnabled(CalEvent::ACTIVE))
+        if (mSettings  &&  mSettings->isEnabled(CalEvent::ACTIVE))
         {
             // Add this event's command error to the settings.
             if (event.category() == CalEvent::ACTIVE
@@ -517,7 +542,7 @@ bool FileResource::updateEvent(const KAEvent& event, bool saveIfReadOnly)
             setUpdatedEvents({event}, false);
 
             // Update command errors held in the settings, if appropriate.
-            if (mSettings->isEnabled(CalEvent::ACTIVE))
+            if (mSettings  &&  mSettings->isEnabled(CalEvent::ACTIVE))
                 handleCommandErrorChange(event);
 
             if (wantSave)
@@ -546,7 +571,7 @@ bool FileResource::deleteEvent(const KAEvent& event)
     {
         setDeletedEvents({event});
 
-        if (mSettings->isEnabled(CalEvent::ACTIVE))
+        if (mSettings  &&  mSettings->isEnabled(CalEvent::ACTIVE))
         {
             QHash<QString, KAEvent::CmdErrType> cmdErrors = mSettings->commandErrors();
             if (cmdErrors.remove(event.id()))
@@ -564,6 +589,8 @@ bool FileResource::deleteEvent(const KAEvent& event)
 */
 void FileResource::handleCommandErrorChange(const KAEvent& event)
 {
+    if (!mSettings)
+        return;
     // Update command errors held in the settings, if appropriate.
     bool changed = false;
     QHash<QString, KAEvent::CmdErrType> cmdErrors = mSettings->commandErrors();
@@ -612,6 +639,8 @@ bool FileResource::updateStorageFormat(Resource& res)
 */
 QString FileResource::identifier() const
 {
+    if (!mSettings)
+        return {};
     return QStringLiteral("FileResource%1").arg(mSettings->id() & ~IdFlag);
 }
 
@@ -647,7 +676,7 @@ void FileResource::handleSettingsChange(Changes& changes)
     if (changes & Enabled)
     {
         qCDebug(KALARM_LOG) << "FileResource::handleSettingsChange:" << displayId() << "Update enabled status";
-        if (mSettings->enabledTypes())
+        if (mSettings  &&  mSettings->enabledTypes())
         {
             // Alarms are now enabled. Reload the calendar file because,
             // although ResourceType retains its record of alarms of disabled

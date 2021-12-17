@@ -197,6 +197,7 @@ bool FileResourceConfigManager::removeResource(Resource& resource)
             const QString configGroup = groupName(groupIndex);
             manager->mConfig->deleteGroup(configGroup);
             manager->mConfigGroups.remove(groupIndex);
+            Resources::notifySettingsDestroyed(id);   // removing from mResources will destroy settings instance
             manager->mResources.remove(id);
             return true;
         }

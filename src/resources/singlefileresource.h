@@ -80,6 +80,9 @@ public:
      */
     void close() override;
 
+    /** Called when the resource's FileResourceSettings object is about to be destroyed. */
+    void removeSettings() override;
+
 protected:
     /** Update the resource to the current KAlarm storage format. */
     bool updateStorageFmt() override;
