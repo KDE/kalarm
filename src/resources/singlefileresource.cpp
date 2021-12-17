@@ -63,7 +63,7 @@ SingleFileResource::SingleFileResource(FileResourceSettings* settings)
     : FileResource(settings)
     , mSaveTimer(new QTimer(this))
 {
-    qCDebug(KALARM_LOG) << "SingleFileResource: Starting" << mSettings->displayName();
+    qCDebug(KALARM_LOG) << "SingleFileResource: Starting" << displayName();
     if (!load())
         setFailed();
     else
@@ -109,7 +109,7 @@ int SingleFileResource::writableStatus(CalEvent::Type type) const
 */
 bool SingleFileResource::updateStorageFmt()
 {
-    if (failed()  ||  readOnly()  ||  enabledTypes() == CalEvent::EMPTY)
+    if (failed()  ||  readOnly()  ||  enabledTypes() == CalEvent::EMPTY  ||  !mSettings)
         return false;
     if (!mFileStorage)
     {
@@ -124,7 +124,7 @@ bool SingleFileResource::updateStorageFmt()
         return false;
     }
 
-    qCDebug(KALARM_LOG) << "SingleFileResource::updateStorageFormat: Updating storage for" << mSettings->displayName();
+    qCDebug(KALARM_LOG) << "SingleFileResource::updateStorageFormat: Updating storage for" << displayName();
     mCompatibility = KACalendar::Current;
     mVersion = KACalendar::CurrentFormat;
     save(nullptr, true, true);
@@ -167,6 +167,9 @@ bool SingleFileResource::isSaving() const
 */
 int SingleFileResource::doLoad(QHash<QString, KAEvent>& newEvents, bool readThroughCache, QString& errorMessage)
 {
+    if (!mSettings)
+        return -1;
+
     newEvents.clear();
 
     if (mDownloadJob)
@@ -431,11 +434,21 @@ void SingleFileResource::close()
     // QEventLoopLocker should ensure that it continues to completion even if
     // the destructor for this instance is executed.
 
-    if (mSettings->url().isLocalFile())
+    if (mSettings  &&  mSettings->url().isLocalFile())
         KDirWatch::self()->removeFile(mSettings->url().toLocalFile());
     mCalendar.clear();
     mFileStorage.clear();
     mStatus = Status::Closed;
+}
+
+/******************************************************************************
+* Called when the resource's settings object is about to be destroyed.
+*/
+void SingleFileResource::removeSettings()
+{
+    if (mSettings  &&  mSettings->url().isLocalFile())
+        KDirWatch::self()->removeFile(mSettings->url().toLocalFile());
+    FileResource::removeSettings();
 }
 
 /******************************************************************************
@@ -464,6 +477,9 @@ bool SingleFileResource::doAddEvent(const KAEvent& event)
 */
 bool SingleFileResource::addLoadedEvent(const KCalendarCore::Event::Ptr& kcalEvent)
 {
+    if (!mSettings)
+        return false;
+
     KAEvent event(kcalEvent);
     if (!event.isValid())
     {
@@ -685,8 +701,11 @@ QByteArray SingleFileResource::calculateHash(const QString& fileName) const
 */
 void SingleFileResource::saveHash(const QByteArray& hash) const
 {
-    mSettings->setHash(hash.toHex());
-    mSettings->save();
+    if (mSettings)
+    {
+        mSettings->setHash(hash.toHex());
+        mSettings->save();
+    }
 }
 
 /******************************************************************************
@@ -695,6 +714,9 @@ void SingleFileResource::saveHash(const QByteArray& hash) const
 */
 void SingleFileResource::localFileChanged(const QString& fileName)
 {
+    if (!mSettings)
+        return;
+
     if (fileName != mSettings->url().toLocalFile())
         return;   // not the calendar file for this resource
 
@@ -721,7 +743,7 @@ void SingleFileResource::slotDownloadJobResult(KJob* job)
         if (mStatus != Status::Closed)
             mStatus = Status::Broken;
         setLoadFailure(false);
-        const QString path = mSettings->displayLocation();
+        const QString path = displayLocation();
         qCWarning(KALARM_LOG) << "SingleFileResource::slotDownloadJobResult:" << displayId() << "Could not load file" << path << job->errorString();
         errorMessage = xi18nc("@info", "Could not load file <filename>%1</filename>. (%2)", path, job->errorString());
         success = false;
@@ -761,7 +783,7 @@ void SingleFileResource::slotUploadJobResult(KJob* job)
     {
         if (mStatus != Status::Closed)
             mStatus = Status::Broken;
-        const QString path = mSettings->displayLocation();
+        const QString path = displayLocation();
         qCWarning(KALARM_LOG) << "SingleFileResource::slotDownloadJobResult:" << displayId() << "Could not save file" << path << job->errorString();
         errorMessage = xi18nc("@info", "Could not save file <filename>%1</filename>. (%2)", path, job->errorString());
         success = false;
@@ -785,7 +807,7 @@ void SingleFileResource::handleSettingsChange(Changes& changes)
     qCDebug(KALARM_LOG) << "SingleFileResource::handleSettingsChange:" << displayId();
     if (changes & UpdateFormat)
     {
-        if (mSettings->updateFormat())
+        if (mSettings  &&  mSettings->updateFormat())
         {
             // This is a request to update the backend calendar storage format
             // to the current KAlarm format.

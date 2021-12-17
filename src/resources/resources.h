@@ -209,6 +209,9 @@ public:
     /** Called by a resource to notify that it has deleted events. */
     static void notifyEventsRemoved(ResourceType*, const QList<KAEvent>&);
 
+    /** Called by a resource settings instance to notify that it is about to be destructed. */
+    static void notifySettingsDestroyed(ResourceId);
+
 Q_SIGNALS:
     /** Emitted when a resource's settings have changed. */
     void settingsChanged(Resource&, ResourceType::Changes);

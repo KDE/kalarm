@@ -270,6 +270,9 @@ public:
     /** Called to notify the resource that an event's command error has changed. */
     void handleCommandErrorChange(const KAEvent&) override;
 
+    /** Called when the resource's FileResourceSettings object is about to be destroyed. */
+    void removeSettings() override   { mSettings = nullptr; }
+
 virtual void showProgress(bool)  {}
 
     /*-----------------------------------------------------------------------------

@@ -570,6 +570,13 @@ void Resources::notifyEventsRemoved(ResourceType* res, const QList<KAEvent>& eve
     }
 }
 
+void Resources::notifySettingsDestroyed(ResourceId id)
+{
+    Resource r = resource(id);
+    if (r.isValid())
+        r.removeSettings();
+}
+
 bool Resources::addResource(ResourceType* instance, Resource& resource)
 {
     if (!instance  ||  instance->id() < 0)

@@ -294,6 +294,12 @@ void Resource::handleCommandErrorChange(const KAEvent& event)
         mResource->handleCommandErrorChange(event);
 }
 
+void Resource::removeSettings()
+{
+    if (!mResource.isNull())
+        mResource->removeSettings();
+}
+
 void Resource::notifyDeletion()
 {
     if (!mResource.isNull())

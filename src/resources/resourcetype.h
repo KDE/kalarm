@@ -387,6 +387,9 @@ public:
     /** Called to notify the resource that an event's command error has changed. */
     virtual void handleCommandErrorChange(const KAEvent&) = 0;
 
+    /** Called when the resource's settings object is about to be destroyed. */
+    virtual void removeSettings()  {}
+
     /** Must be called to notify the resource that it is being deleted.
      *  This is to prevent expected errors being displayed to the user.
      *  @see isBeingDeleted
