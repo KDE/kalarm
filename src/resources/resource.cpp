@@ -54,6 +54,11 @@ bool Resource::failed() const
     return mResource.isNull() ? true : mResource->failed();
 }
 
+bool Resource::inError() const
+{
+    return mResource.isNull() ? true : mResource->inError();
+}
+
 ResourceId Resource::id() const
 {
     return mResource.isNull() ? -1 : mResource->id();

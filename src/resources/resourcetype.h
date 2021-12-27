@@ -90,6 +90,11 @@ public:
      */
     bool failed() const;
 
+    /** Return whether the resource has an error (fatal or non-fatal), and
+     *  cannot currently be used. This will be true if failed() is true.
+     */
+    bool inError() const;
+
     /** Return the resource's unique ID. */
     ResourceId id() const    { return mId; }
 
@@ -457,6 +462,11 @@ protected:
      */
     void setFailed();
 
+    /** To be called if the resource has encountered a non-fatal error.
+     *  A non-fatal error is one that can be recovered from.
+     */
+    void setError(bool error);
+
     static QString storageTypeStr(bool description, bool file, bool local);
 
     template <class T> static T* resource(Resource&);
@@ -471,6 +481,7 @@ private:
     QList<KAEvent> mEventsUpdated;       // events updated in mEvents but not yet notified
     ResourceId   mId {-1};               // resource's ID, which can't be changed
     bool         mFailed {false};        // the resource has a fatal error
+    bool         mInError {false};       // the resource has a non-fatal error
     mutable bool mLoaded {false};        // the resource has finished loading
     bool         mBeingDeleted {false};  // the resource is currently being deleted
 };

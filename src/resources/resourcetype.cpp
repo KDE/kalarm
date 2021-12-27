@@ -30,6 +30,11 @@ bool ResourceType::failed() const
     return mFailed  ||  !isValid();
 }
 
+bool ResourceType::inError() const
+{
+    return mInError  ||  failed();
+}
+
 ResourceId ResourceType::displayId() const
 {
     return id();
@@ -318,14 +323,18 @@ void ResourceType::setLoaded(bool loaded) const
     if (loaded != mLoaded)
     {
         mLoaded = loaded;
-        if (loaded)
-            Resources::notifyResourcePopulated(this);
+        Resources::notifyResourcePopulated(this);
     }
 }
 
 void ResourceType::setFailed()
 {
     mFailed = true;
+}
+
+void ResourceType::setError(bool error)
+{
+    mInError = error;
 }
 
 QString ResourceType::storageTypeString(StorageType type)
