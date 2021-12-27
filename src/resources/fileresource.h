@@ -29,15 +29,17 @@ class FileResource : public ResourceType
     Q_OBJECT
 public:
     /** Current status of resource. */
-    // IF YOU ALTER THE ORDER OF THIS ENUM, ENSURE THAT ALL VALUES WHICH INDICATE AN
-    // UNUSABLE RESOURCE ARE >= 'Unusable'.
+    // IF YOU ALTER THE ORDER OF THIS ENUM, ENSURE THAT:
+    // - ALL VALUES WHICH INDICATE AN UNUSABLE RESOURCE ARE >= 'Broken'.
+    // - ALL VALUES WHICH INDICATE AN RESOURCE WHICH CANNOT BECOME USABLE ARE > 'Unusable'.
     enum class Status
     {
         Ready,          // the resource is ready to use
         Loading,        // the resource is loading, and will be ready soon
         Saving,         // the resource is saving, and will be ready soon
         Broken,         // the resource is in error
-        Unusable,       // ... values greater than this indicate an unusable resource
+        // Values >= Unusable indicate an unusable resource:
+        Unusable,       // the resource has not yet initialised
         Closed,         // the resource has been closed. (Closed resources cannot be reopened.)
         NotConfigured   // the resource lacks necessary configuration
     };
@@ -49,7 +51,7 @@ public:
 
     ~FileResource() override;
 
-    /** Return whether the resource has a valid configuration. */
+    /** Return whether the resource has a valid configuration and is not closed. */
     bool isValid() const override;
 
     /** Return the resource's unique ID, as shown to the user. */
@@ -380,6 +382,11 @@ protected:
      */
     virtual void handleSettingsChange(Changes&);
 
+    /** Set the new status of the resource.
+     *  If the resource status is already Unusable, it cannot be set usable again.
+     */
+    void setStatus(Status);
+
     FileResourceSettings* mSettings;    // the resource's configuration
     int                   mVersion {KACalendar::IncompatibleFormat}; // the calendar format version
     KACalendar::Compat    mCompatibility {KACalendar::Incompatible}; // whether resource is in compatible format
@@ -388,10 +395,11 @@ protected:
 typedef QHash<const QString&, KACalendar::Compat>  CompatibilityMap;  // indexed by event ID
 CompatibilityMap    mCompatibilityMap;  // whether individual events are in compatible format
 */
-    Status                mStatus {Status::NotConfigured};  // current status of resource
 
 private:
     void handleEnabledChange(Changes changes, CalEvent::Types oldEnabled);
+
+    Status mStatus {Status::Unusable};    // current status of resource
 };
 
 

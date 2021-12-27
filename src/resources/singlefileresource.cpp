@@ -64,9 +64,7 @@ SingleFileResource::SingleFileResource(FileResourceSettings* settings)
     , mSaveTimer(new QTimer(this))
 {
     qCDebug(KALARM_LOG) << "SingleFileResource: Starting" << displayName();
-    if (!load())
-        setFailed();
-    else
+    if (load())
     {
         // Monitor local file changes (but not cache files).
         connect(KDirWatch::self(), &KDirWatch::dirty, this, &SingleFileResource::localFileChanged);
@@ -210,7 +208,7 @@ int SingleFileResource::doLoad(QHash<QString, KAEvent>& newEvents, bool readThro
             // The resource's location should never change, so this code should
             // never be reached!
             qCWarning(KALARM_LOG) << "SingleFileResource::load:" << displayId() << "Error? File location changed to" << localFileName;
-            setLoadFailure(true);
+            setLoadFailure(true, Status::NotConfigured);
             mFileStorage.clear();
             mCalendar.clear();
             mLoadedEvents.clear();
@@ -231,9 +229,8 @@ int SingleFileResource::doLoad(QHash<QString, KAEvent>& newEvents, bool readThro
                 const QString path = mSettings->displayLocation();
                 qCWarning(KALARM_LOG) << "SingleFileResource::load:" << displayId() << "Could not create file" << path;
                 errorMessage = xi18nc("@info", "Could not create calendar file <filename>%1</filename>.", path);
-                mStatus = Status::Broken;
                 mSaveUrl.clear();
-                setLoadFailure(false);
+                setLoadFailure(false, Status::Broken);
                 return -1;
             }
             // Check whether this user can actually write to the newly created file.
@@ -246,13 +243,12 @@ int SingleFileResource::doLoad(QHash<QString, KAEvent>& newEvents, bool readThro
                 const QString path = mSettings->displayLocation();
                 qCWarning(KALARM_LOG) << "SingleFileResource::load:" << displayId() << "Could not create writable file" << path;
                 errorMessage = xi18nc("@info", "Could not create calendar file <filename>%1</filename>.", path);
-                mStatus = Status::Broken;
                 mSaveUrl.clear();
-                setLoadFailure(false);
+                setLoadFailure(false, Status::Broken);
                 return -1;
             }
             mFileReadOnly = false;
-            mStatus = Status::Ready;
+            setStatus(Status::Ready);
         }
         else
             mFileReadOnly = !QFileInfo(localFileName).isWritable();
@@ -274,7 +270,7 @@ int SingleFileResource::doLoad(QHash<QString, KAEvent>& newEvents, bool readThro
             connect(mDownloadJob, &KJob::result,
                     this, &SingleFileResource::slotDownloadJobResult);
 //            connect(mDownloadJob, SIGNAL(percent(KJob*,ulong)), SLOT(handleProgress(KJob*,ulong)));
-            mStatus = Status::Loading;
+            setStatus(Status::Loading);
             return 0;     // loading initiated
         }
 
@@ -287,8 +283,7 @@ int SingleFileResource::doLoad(QHash<QString, KAEvent>& newEvents, bool readThro
     {
         qCWarning(KALARM_LOG) << "SingleFileResource::load:" << displayId() << "Could not read file" << localFileName;
         // A user error message has been set by readLocalFile().
-        mStatus = Status::Broken;
-        setLoadFailure(true);
+        setLoadFailure(true, Status::Broken);
         return -1;
     }
 
@@ -296,7 +291,7 @@ int SingleFileResource::doLoad(QHash<QString, KAEvent>& newEvents, bool readThro
         KDirWatch::self()->addFile(settingsLocalFileName);
 
     newEvents = mLoadedEvents;
-    mStatus = Status::Ready;
+    setStatus(Status::Ready);
     return 1;     // success
 }
 
@@ -305,8 +300,9 @@ int SingleFileResource::doLoad(QHash<QString, KAEvent>& newEvents, bool readThro
 * If the resource file doesn't exist or can't be created, the resource is still
 * regarded as loaded.
 */
-void SingleFileResource::setLoadFailure(bool exists)
+void SingleFileResource::setLoadFailure(bool exists, Status newStatus)
 {
+    setStatus(newStatus);
     mLoadedEvents.clear();
     QHash<QString, KAEvent> events;
     setLoadedEvents(events);
@@ -331,7 +327,7 @@ int SingleFileResource::doSave(bool writeThroughCache, bool force, QString& erro
     if (mSaveUrl.isEmpty())
     {
         qCWarning(KALARM_LOG) << "SingleFileResource::save:" << displayId() << "No file specified";
-        mStatus = Status::Broken;
+        setStatus(Status::Broken);
         return -1;
     }
 
@@ -379,7 +375,7 @@ int SingleFileResource::doSave(bool writeThroughCache, bool force, QString& erro
     {
         qCWarning(KALARM_LOG) << "SingleFileResource::save:" << displayId() << "Error writing to file" << localFileName;
         // A user error message has been set by writeToFile().
-        mStatus = Status::Broken;
+        setStatus(Status::Broken);
         return -1;
     }
 
@@ -393,11 +389,11 @@ int SingleFileResource::doSave(bool writeThroughCache, bool force, QString& erro
         connect(mUploadJob, &KJob::result,
                 this, &SingleFileResource::slotUploadJobResult);
 //        connect(mUploadJob, SIGNAL(percent(KJob*,ulong)), SLOT(handleProgress(KJob*,ulong)));
-        mStatus = Status::Saving;
+        setStatus(Status::Saving);
         return 0;
     }
 
-    mStatus = Status::Ready;
+    setStatus(Status::Ready);
     return 1;
 }
 
@@ -438,7 +434,7 @@ void SingleFileResource::close()
         KDirWatch::self()->removeFile(mSettings->url().toLocalFile());
     mCalendar.clear();
     mFileStorage.clear();
-    mStatus = Status::Closed;
+    setStatus(Status::Closed);
 }
 
 /******************************************************************************
@@ -740,9 +736,7 @@ void SingleFileResource::slotDownloadJobResult(KJob* job)
     QString errorMessage;
     if (job->error() && job->error() != KIO::ERR_DOES_NOT_EXIST)
     {
-        if (mStatus != Status::Closed)
-            mStatus = Status::Broken;
-        setLoadFailure(false);
+        setLoadFailure(false, Status::Broken);
         const QString path = displayLocation();
         qCWarning(KALARM_LOG) << "SingleFileResource::slotDownloadJobResult:" << displayId() << "Could not load file" << path << job->errorString();
         errorMessage = xi18nc("@info", "Could not load file <filename>%1</filename>. (%2)", path, job->errorString());
@@ -755,13 +749,11 @@ void SingleFileResource::slotDownloadJobResult(KJob* job)
         {
             qCWarning(KALARM_LOG) << "SingleFileResource::slotDownloadJobResult:" << displayId() << "Could not load local file" << localFileName;
             // A user error message has been set by readLocalFile().
-            if (mStatus != Status::Closed)
-                mStatus = Status::Broken;
-            setLoadFailure(true);
+            setLoadFailure(true, Status::Broken);
             success = false;
         }
-        else if (mStatus != Status::Closed)
-            mStatus = Status::Ready;
+        else
+            setStatus(Status::Ready);
     }
 
     mDownloadJob = nullptr;
@@ -781,15 +773,14 @@ void SingleFileResource::slotUploadJobResult(KJob* job)
     bool success = true;
     if (job->error())
     {
-        if (mStatus != Status::Closed)
-            mStatus = Status::Broken;
+        setStatus(Status::Broken);
         const QString path = displayLocation();
         qCWarning(KALARM_LOG) << "SingleFileResource::slotDownloadJobResult:" << displayId() << "Could not save file" << path << job->errorString();
         errorMessage = xi18nc("@info", "Could not save file <filename>%1</filename>. (%2)", path, job->errorString());
         success = false;
     }
-    else if (mStatus != Status::Closed)
-        mStatus = Status::Ready;
+    else
+        setStatus(Status::Ready);
 
     mUploadJob = nullptr;
     auto ref = job->property("QEventLoopLocker").value<QEventLoopLocker*>();

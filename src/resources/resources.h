@@ -170,7 +170,8 @@ public:
      *  been created. */
     static void notifyResourcesCreated();
 
-    /** Called by a resource to notify that loading of events has successfully completed. */
+    /** Called by a resource to notify that loading of events has successfully completed,
+     *  or that loading has failed. */
     static void notifyResourcePopulated(const ResourceType*);
 
     /** Called to notify that a resource is about to be removed. */
@@ -223,7 +224,8 @@ Q_SIGNALS:
     void resourcesCreated();
 
     /** Emitted when all configured and migrated resources have been loaded for
-     *  the first time. This is always emitted after resourcesCreated().
+     *  the first time, or cannot currently be loaded.
+     *  This is always emitted after resourcesCreated().
      */
     void resourcesPopulated();
 

@@ -394,7 +394,7 @@ void Resources::notifyResourcesCreated()
 }
 
 /******************************************************************************
-* Called when a resource's events have been loaded.
+* Called when a resource's events have been loaded, or when loading fails.
 * Emits a signal if all collections have been populated.
 */
 void Resources::notifyResourcePopulated(const ResourceType* res)
@@ -402,7 +402,7 @@ void Resources::notifyResourcePopulated(const ResourceType* res)
     if (res)
     {
         Resource r = resource(res->id());
-        if (r.isValid())
+        if (r.isValid()  &&  !r.inError())
             Q_EMIT instance()->resourcePopulated(r);
     }
 
@@ -608,17 +608,18 @@ void Resources::removeResource(ResourceId id)
 
 /******************************************************************************
 * To be called when a resource has been created or loaded.
-* If all resources have now loaded for the first time, emit signal.
+* If all resources have now loaded for the first time, or cannot currently be
+* loaded, emit signal.
 */
 void Resources::checkResourcesPopulated()
 {
     if (!mPopulated  &&  mCreated)
     {
-        // Check whether all resources have now loaded at least once.
+        // Check whether all resources have now loaded at least once, or cannot currently be loaded.
         for (auto it = mResources.constBegin();  it != mResources.constEnd();  ++it)
         {
             const Resource& res = it.value();
-            if (res.isEnabled(CalEvent::EMPTY)  &&  !res.isPopulated())
+            if (res.isEnabled(CalEvent::EMPTY)  &&  !res.inError()  &&  !res.isPopulated())
                 return;
         }
         mPopulated = true;

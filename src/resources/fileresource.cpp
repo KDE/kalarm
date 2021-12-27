@@ -24,6 +24,9 @@ FileResource::FileResource(FileResourceSettings* settings)
     : ResourceType(settings->id())
     , mSettings(settings)
 {
+    if (!mSettings  ||  !mSettings->isValid()
+    ||  id() < 0  ||  mSettings->id() != id())
+        mStatus = Status::NotConfigured;
 }
 
 FileResource::~FileResource()
@@ -35,7 +38,7 @@ bool FileResource::isValid() const
 #ifdef DEBUG_DETAIL
     if (!mSettings  ||  !mSettings->isValid())
         qDebug() << "FileResource::isValid:" << displayId() << "NO (mSettings)";
-    if (mStatus == Status::NotConfigured)
+    if (mStatus == Status::NotConfigured  ||  mStatus == Status::Unusable)
         qDebug() << "FileResource::isValid:" << displayId() << "NO (Not configured)";
     if (mStatus == Status::Closed)
         qDebug() << "FileResource::isValid:" << displayId() << "NO (Closed)";
@@ -330,7 +333,7 @@ bool FileResource::load(bool readThroughCache)
         {
             // Don't load a disabled resource, but mark it as usable (but not loaded).
             qCDebug(KALARM_LOG) << "FileResource::load: Resource disabled" << displayName();
-            mStatus = Status::Ready;
+            setStatus(Status::Ready);
             return false;
         }
 
@@ -698,6 +701,22 @@ void FileResource::handleEnabledChange(Changes changes, CalEvent::Types oldEnabl
     {
         handleSettingsChange(changes);
         Resources::notifySettingsChanged(this, changes, oldEnabled);
+    }
+}
+
+/******************************************************************************
+* Set the new status of the resource.
+* If the resource status is already Unusable, it cannot be set usable again.
+*/
+void FileResource::setStatus(Status newStatus)
+{
+    if (newStatus != mStatus
+    &&  (mStatus < Status::Unusable  ||  mStatus == Status::Unusable  ||  newStatus > mStatus))
+    {
+        mStatus = newStatus;
+        if (mStatus > Status::Unusable)
+            setFailed();
+        setError(mStatus == Status::Broken);
     }
 }
 

@@ -57,6 +57,11 @@ public:
      */
     bool failed() const;
 
+    /** Return whether the resource has an error (fatal or non-fatal), and
+     *  cannot currently be used. This will be true if failed() is true.
+     */
+    bool inError() const;
+
     /** Return the resource's unique ID. */
     ResourceId id() const;
 
