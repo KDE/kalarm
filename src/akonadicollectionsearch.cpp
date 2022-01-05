@@ -132,9 +132,9 @@ void AkonadiCollectionSearch::itemFetchResult(KJob* j)
             {
                 if (!mUid.isEmpty())
                 {
-                    if (item.mimeType() == mMimeType  &&  item.hasPayload<Event::Ptr>())
+                    if (item.mimeType() == mMimeType  &&  item.hasPayload<KCalendarCore::Event::Ptr>())
                     {
-                        const Event::Ptr kcalEvent = item.payload<Event::Ptr>();
+                        const KCalendarCore::Event::Ptr kcalEvent = item.payload<KCalendarCore::Event::Ptr>();
                         if (kcalEvent->uid() != mUid)
                             continue;
                     }
