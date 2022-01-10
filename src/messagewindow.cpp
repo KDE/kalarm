@@ -1,7 +1,7 @@
 /*
  *  messagewindow.cpp  -  displays an alarm message in a window
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2001-2021 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2001-2022 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -1184,7 +1184,7 @@ void MessageWindow::activeWindowChanged(WId win)
 */
 void MessageWindow::slotDefer()
 {
-    mDeferData = createDeferDlg(false);
+    mDeferData = createDeferDlg(this, false);
     if (windowFlags() & Qt::X11BypassWindowManagerHint)
         mDeferData->dlg->setWindowFlags(mDeferData->dlg->windowFlags() | Qt::X11BypassWindowManagerHint);
     if (!Preferences::modalMessages())

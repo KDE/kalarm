@@ -1,7 +1,7 @@
 /*
  *  messagenotification.cpp  -  displays an alarm message in a system notification
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2020 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2020-2022 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -594,7 +594,7 @@ void MessageNotification::buttonActivated(unsigned int index)
     }
     else if (i == mDeferButtonIndex + 1)
     {
-        DeferDlgData* data = createDeferDlg(true);
+        DeferDlgData* data = createDeferDlg(this, true);
         executeDeferDlg(data);
     }
 }
