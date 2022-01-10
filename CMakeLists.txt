@@ -82,7 +82,7 @@ install(EXPORT KF5AlarmCalendarTargets DESTINATION "${CMAKECONFIG_INSTALL_DIR}" 
 
 install(FILES
    ${CMAKE_CURRENT_BINARY_DIR}/kalarmcal_version.h
-  DESTINATION ${KDE_INSTALL_INCLUDEDIR_KF5} COMPONENT Devel
+  DESTINATION ${KDE_INSTALL_INCLUDEDIR_KF} COMPONENT Devel
 )
 
 ecm_qt_install_logging_categories(

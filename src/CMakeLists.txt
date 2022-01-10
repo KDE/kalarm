@@ -66,7 +66,7 @@ set_target_properties(KF5AlarmCalendar PROPERTIES
 )
 
 
-target_include_directories(KF5AlarmCalendar INTERFACE "$<INSTALL_INTERFACE:${KDE_INSTALL_INCLUDEDIR_KF5}/KAlarmCal>")
+target_include_directories(KF5AlarmCalendar INTERFACE "$<INSTALL_INTERFACE:${KDE_INSTALL_INCLUDEDIR_KF}/KAlarmCal>")
 target_include_directories(KF5AlarmCalendar PUBLIC "$<BUILD_INTERFACE:${KAlarmCal_SOURCE_DIR}/src;${KAlarmCal_BINARY_DIR}/src>")
 
 
@@ -96,17 +96,17 @@ ecm_generate_headers(KAlarmCal_CamelCase_HEADERS
 install(FILES
         ${CMAKE_CURRENT_BINARY_DIR}/kalarmcal_export.h
         ${KAlarmCal_HEADERS}
-        DESTINATION ${KDE_INSTALL_INCLUDEDIR_KF5}/KAlarmCal/kalarmcal
+        DESTINATION ${KDE_INSTALL_INCLUDEDIR_KF}/KAlarmCal/kalarmcal
         COMPONENT Devel
 )
 install(FILES
         ${KAlarmCal_CamelCase_HEADERS}
-        DESTINATION ${KDE_INSTALL_INCLUDEDIR_KF5}/KAlarmCal/KAlarmCal/
+        DESTINATION ${KDE_INSTALL_INCLUDEDIR_KF}/KAlarmCal/KAlarmCal/
         COMPONENT Devel
 )
 
 
-ecm_generate_pri_file(BASE_NAME KAlarmCal LIB_NAME KF5AlarmCalendar DEPS "KHolidays KIdentityManagement KCoreAddons KCalendarCore AkonadiCore" FILENAME_VAR PRI_FILENAME INCLUDE_INSTALL_DIR ${KDE_INSTALL_INCLUDEDIR_KF5}/KAlarmCal/)
+ecm_generate_pri_file(BASE_NAME KAlarmCal LIB_NAME KF5AlarmCalendar DEPS "KHolidays KIdentityManagement KCoreAddons KCalendarCore AkonadiCore" FILENAME_VAR PRI_FILENAME INCLUDE_INSTALL_DIR ${KDE_INSTALL_INCLUDEDIR_KF}/KAlarmCal/)
 
 if (BUILD_QCH)
     ecm_add_qch(
