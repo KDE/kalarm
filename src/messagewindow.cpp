@@ -811,6 +811,7 @@ bool MessageWindow::isSpread(const QPoint& topLeft)
 */
 void MessageWindow::display()
 {
+    connect(mHelper, &MessageDisplayHelper::autoCloseNow, this, &QWidget::close);
     if (mHelper->activateAutoClose())
     {
         if (Preferences::messageButtonDelay() == 0)

@@ -1,5 +1,9 @@
 KAlarm Change Log
 
+=== Version 3.3.5 (KDE Applications 21.12.2) --- 10 January 2022 ===
+* Fix regression introduced in version 3.1.0:
+    Make auto-close work for message windows.
+
 === Version 3.3.4 (KDE Applications 21.12.1) --- 28 December 2021 ===
 * Treat empty read-only, or non-existent, calendar files as loaded.
 * Fix bad calendar files preventing command line actions from running.
