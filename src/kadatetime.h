@@ -1101,11 +1101,11 @@ public:
      * -  %%   literal '\%' character
      *
      * If you want to use the current locale's date format, you should call
-     * KLocale::formatDate() to format the date part of the KADateTime.
+     * QLocale::toString() to format the date part of the KADateTime.
      *
      * @param format format for the string
      * @return formatted string
-     * @see fromString(), KLocale::formatDate()
+     * @see fromString(), QLocale::toString()
      */
     QString toString(const QString &format) const;
 
