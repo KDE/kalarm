@@ -54,7 +54,7 @@ set(KDEPIM_LIB_VERSION "${PIM_VERSION}")
 set(KDEPIM_LIB_SOVERSION "5")
 
 set(QT_REQUIRED_VERSION "5.15.2")
-find_package(Qt5 ${QT_REQUIRED_VERSION} CONFIG REQUIRED DBus Gui Network Widgets)
+find_package(Qt${QT_MAJOR_VERSION} ${QT_REQUIRED_VERSION} CONFIG REQUIRED DBus Gui Network Widgets)
 set(CALENDARUTILS_LIB_VERSION "5.19.40")
 
 option(FILE_RESOURCES "Use file system resources instead of Akonadi resources." TRUE)
@@ -82,7 +82,7 @@ find_package(KF5Service ${KF5_MIN_VERSION} CONFIG REQUIRED)
 find_package(KF5WidgetsAddons ${KF5_MIN_VERSION} CONFIG REQUIRED)
 find_package(KF5WindowSystem ${KF5_MIN_VERSION} CONFIG REQUIRED)
 find_package(KF5XmlGui ${KF5_MIN_VERSION} CONFIG REQUIRED)
-find_package(Phonon4Qt5 CONFIG REQUIRED)
+find_package(Phonon4Qt${QT_MAJOR_VERSION} CONFIG REQUIRED)
 
 find_package(KF5DocTools ${KF5_MIN_VERSION})
 set_package_properties(KF5DocTools PROPERTIES DESCRIPTION
@@ -110,7 +110,7 @@ if (NOT APPLE)
     find_package(X11)
 endif()
 if (X11_FOUND)
-    find_package(Qt5X11Extras ${QT_REQUIRED_VERSION} REQUIRED NO_MODULE)
+    find_package(Qt${QT_MAJOR_VERSION}X11Extras ${QT_REQUIRED_VERSION} REQUIRED NO_MODULE)
 endif()
 set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH})
 

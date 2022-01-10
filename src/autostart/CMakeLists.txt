@@ -21,7 +21,7 @@ add_executable(kalarmautostart ${kalarmautostart_SRCS})
 target_link_libraries(kalarmautostart
     KF5::I18n
     KF5::CoreAddons
-    Qt::Widgets
-    Qt::DBus)
+    Qt${QT_MAJOR_VERSION}::Widgets
+    Qt${QT_MAJOR_VERSION}::DBus)
 
 install(TARGETS kalarmautostart  ${KDE_INSTALL_TARGETS_DEFAULT_ARGS} )

@@ -282,7 +282,7 @@ target_link_libraries(kalarm_bin
     KF5::XmlGui
     KF5::KIOFileWidgets
     KF5::Crash
-    Phonon::phonon4qt5
+    Phonon::phonon4qt${QT_MAJOR_VERSION}
     KF5::AkonadiCore
     KF5::AkonadiMime
     KF5::AkonadiContact
@@ -297,8 +297,8 @@ target_link_libraries(kalarm_bin
     KF5::PimCommon
 )
 
-if (Qt5X11Extras_FOUND)
-    target_link_libraries(kalarm_bin Qt::X11Extras ${X11_X11_LIB})
+if (Qt${QT_MAJOR_VERSION}X11Extras_FOUND)
+    target_link_libraries(kalarm_bin Qt${QT_MAJOR_VERSION}::X11Extras ${X11_X11_LIB})
 endif()
 
 
