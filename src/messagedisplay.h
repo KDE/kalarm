@@ -1,7 +1,7 @@
 /*
  *  messagedisplay.h  -  base class to display an alarm or error message
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2001-2020 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2001-2022 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -109,6 +109,25 @@ public:
 
     static int instanceCount(bool excludeAlwaysHidden = false)    { return MessageDisplayHelper::instanceCount(excludeAlwaysHidden); }
 
+    // Holds data required by defer dialog.
+    // This is needed because the display may have closed when the defer dialog
+    // is opened.
+    struct DeferDlgData
+    {
+        DeferAlarmDlg*      dlg;
+        QPointer<QObject>   displayObj {nullptr};
+        MessageDisplay*     display;
+        EventId             eventId;
+        KAAlarm::Type       alarmType;
+        KAEvent::CmdErrType commandError;
+
+        DeferDlgData(MessageDisplay* m, DeferAlarmDlg* d) : dlg(d), display(m) {}
+        ~DeferDlgData();
+    };
+
+    /** For use by MainWindow only. Called when a defer alarm dialog completes. */
+    static void processDeferDlg(DeferDlgData*, int result);
+
 protected:
     MessageDisplay();
     MessageDisplay(const KAEvent& event, const KAAlarm& alarm, int flags);
@@ -132,23 +151,8 @@ protected:
     virtual void enableDeferButton(bool enable) = 0;
     virtual void enableEditButton(bool enable) = 0;
 
-    // Holds data required by defer dialog.
-    // This is needed because the display may have closed when the defer dialog
-    // is opened.
-    struct DeferDlgData
-    {
-        DeferAlarmDlg*      dlg;
-        EventId             eventId;
-        KAAlarm::Type       alarmType;
-        KAEvent::CmdErrType commandError;
-        bool                displayOpen;
-
-        DeferDlgData(DeferAlarmDlg* d) : dlg(d) {}
-        ~DeferDlgData();
-    };
-
-    DeferDlgData* createDeferDlg(bool displayClosing);
-    void          executeDeferDlg(DeferDlgData* data);
+    DeferDlgData* createDeferDlg(QObject* thisObject, bool displayClosing);
+    static void   executeDeferDlg(DeferDlgData*);
 
     MessageDisplayHelper* mHelper;
 

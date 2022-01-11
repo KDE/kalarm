@@ -1,7 +1,7 @@
 /*
  *  mainwindow.h  -  main application window
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2001-2021 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2001-2022 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -12,6 +12,7 @@
 
 #include "editdlg.h"
 #include "mainwindowbase.h"
+#include "messagedisplay.h"
 #include "undo.h"
 
 #include <KAlarmCal/KAEvent>
@@ -37,6 +38,7 @@ class KHamburgerMenu;
 class AlarmListModel;
 class AlarmListView;
 class DatePicker;
+class DeferAlarmDlg;
 class NewAlarmAction;
 class TemplateDlg;
 class ResourceSelector;
@@ -55,6 +57,7 @@ public:
     void               selectEvent(const QString& eventId);
     KAEvent            selectedEvent() const;
     void               editAlarm(EditAlarmDlg*, const KAEvent&);
+    void               showDeferAlarmDlg(MessageDisplay::DeferDlgData*);
     void               clearSelection();
     QMenu*             resourceContextMenu();
     bool               eventFilter(QObject*, QEvent*) override;
@@ -131,6 +134,8 @@ private Q_SLOTS:
     void           showErrorMessage(const QString&);
     void           editAlarmOk();
     void           editAlarmDeleted(QObject*);
+    void           deferAlarmDlgDone(int result);
+    void           deferAlarmDlgDeleted(QObject* obj)  { processDeferAlarmDlg(obj, QDialog::Rejected); }
 
 private:
     using WindowList = QVector<MainWindow*>;
@@ -143,6 +148,7 @@ private:
     void           setSplitterSizes();
     void           initUndoMenu(QMenu*, Undo::Type);
     void           slotDelete(bool force);
+    void           processDeferAlarmDlg(QObject*, int result);
     static void    enableTemplateMenuItem(bool);
 
     static WindowList    mWindowList;   // active main windows
@@ -154,7 +160,8 @@ private:
     DatePicker*          mDatePicker;          // date navigator widget
     QSplitter*           mSplitter;            // splits window into list and resource selector
     QWidget*             mPanel;               // panel containing resource selector & date navigator
-    QMap<EditAlarmDlg*, KAEvent> mEditAlarmMap; // edit alarm dialogs to be handled by this window
+    QMap<EditAlarmDlg*, KAEvent> mEditAlarmMap;  // edit alarm dialogs to be handled by this window
+    QMap<DeferAlarmDlg*, MessageDisplay::DeferDlgData*> mDeferAlarmMap; // defer alarm dialogs to be handled by this window
     KToggleAction*       mActionShowMenuBar;
     KToggleAction*       mActionToggleResourceSel;
     KToggleAction*       mActionToggleDateNavigator;

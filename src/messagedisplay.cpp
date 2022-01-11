@@ -1,7 +1,7 @@
 /*
  *  messagedisplay.cpp  -  base class to display an alarm or error message
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2001-2021 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2001-2022 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -13,6 +13,7 @@
 #include "displaycalendar.h"
 #include "functions.h"
 #include "kalarmapp.h"
+#include "mainwindow.h"
 #include "resourcescalendar.h"
 #include "resources/resources.h"
 #include "lib/messagebox.h"
@@ -204,17 +205,18 @@ MessageDisplay::DeferDlgData::~DeferDlgData()
 /******************************************************************************
 * Create a defer message dialog.
 */
-MessageDisplay::DeferDlgData* MessageDisplay::createDeferDlg(bool displayClosing)
+MessageDisplay::DeferDlgData* MessageDisplay::createDeferDlg(QObject* thisObject, bool displayClosing)
 {
-    DeferAlarmDlg* dlg = new DeferAlarmDlg(KADateTime::currentDateTime(Preferences::timeSpec()).addSecs(60), mDateTime().isDateOnly(), false, displayParent());
+    DeferAlarmDlg* dlg = new DeferAlarmDlg(KADateTime::currentDateTime(Preferences::timeSpec()).addSecs(60), mDateTime().isDateOnly(), false, MainWindow::mainMainWindow());
     dlg->setObjectName(QStringLiteral("DeferDlg"));    // used by LikeBack
     dlg->setDeferMinutes(mDefaultDeferMinutes() > 0 ? mDefaultDeferMinutes() : Preferences::defaultDeferTime());
     dlg->setLimit(mEvent());
-    auto data = new DeferDlgData(dlg);
+    auto data = new DeferDlgData(this, dlg);
+    if (!displayClosing)
+        data->displayObj = thisObject;
     data->eventId      = mEventId();
     data->alarmType    = mAlarmType();
     data->commandError = mCommandError();
-    data->displayOpen  = !displayClosing;
     return data;
 }
 
@@ -223,7 +225,16 @@ MessageDisplay::DeferDlgData* MessageDisplay::createDeferDlg(bool displayClosing
 */
 void MessageDisplay::executeDeferDlg(DeferDlgData* data)
 {
-    if (data->dlg->exec() == QDialog::Accepted)
+    MainWindow::mainMainWindow()->showDeferAlarmDlg(data);
+}
+
+/******************************************************************************
+* Process the result of a defer message dialog.
+*/
+void MessageDisplay::processDeferDlg(DeferDlgData* data, int result)
+{
+    MessageDisplay* display = data->displayObj ? data->display : nullptr;
+    if (result == QDialog::Accepted)
     {
         const DateTime dateTime  = data->dlg->getDateTime();
         const int      delayMins = data->dlg->deferMinutes();
@@ -240,10 +251,10 @@ void MessageDisplay::executeDeferDlg(DeferDlgData* data)
             newev.defer(dateTime, (data->alarmType & KAAlarm::REMINDER_ALARM), true);
             newev.setDeferDefaultMinutes(delayMins);
             KAlarm::updateEvent(newev, data->dlg, true);
-            if (data->displayOpen)
+            if (display)
             {
                 if (newev.deferred())
-                    mNoPostAction() = true;
+                    display->mNoPostAction() = true;
             }
         }
         else
@@ -256,12 +267,13 @@ void MessageDisplay::executeDeferDlg(DeferDlgData* data)
             {
                 // The event doesn't exist any more !?!, so recurrence data,
                 // flags, and more, have been lost.
-                KAMessageBox::error(displayParent(), xi18nc("@info", "<para>Cannot defer alarm:</para><para>Alarm not found.</para>"));
-                if (data->displayOpen)
+                QWidget* par = display ? display->displayParent() : MainWindow::mainMainWindow();
+                KAMessageBox::error(par, xi18nc("@info", "<para>Cannot defer alarm:</para><para>Alarm not found.</para>"));
+                if (display)
                 {
-                    raiseDisplay();
-                    enableDeferButton(false);
-                    enableEditButton(false);
+                    display->raiseDisplay();
+                    display->enableDeferButton(false);
+                    display->enableEditButton(false);
                 }
                 delete data;
                 return;
@@ -273,10 +285,10 @@ void MessageDisplay::executeDeferDlg(DeferDlgData* data)
             // Add the event back into the calendar file, retaining its ID
             // and not updating KOrganizer.
             KAlarm::addEvent(event2, resource, data->dlg, KAlarm::USE_EVENT_ID);
-            if (data->displayOpen)
+            if (display)
             {
                 if (event2.deferred())
-                    mNoPostAction() = true;
+                    display->mNoPostAction() = true;
             }
             // Finally delete it from the archived calendar now that it has
             // been reactivated.
@@ -290,16 +302,16 @@ void MessageDisplay::executeDeferDlg(DeferDlgData* data)
             // so start it if necessary so that the deferred alarm will be shown.
             theApp()->displayTrayIcon(true);
         }
-        if (data->displayOpen)
+        if (display)
         {
-            mHelper->mNoCloseConfirm = true;   // allow window to close without confirmation prompt
-            closeDisplay();
+            display->mHelper->mNoCloseConfirm = true;   // allow window to close without confirmation prompt
+            display->closeDisplay();
         }
     }
     else
     {
-        if (data->displayOpen)
-            raiseDisplay();
+        if (display)
+            display->raiseDisplay();
     }
     delete data;
 }

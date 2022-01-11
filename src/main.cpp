@@ -1,7 +1,7 @@
 /*
  *  main.cpp
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2001-2021 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2001-2022 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -43,7 +43,7 @@ int main(int argc, char* argv[])
                          QStringLiteral(KALARM_FULL_VERSION),
                          i18n("Personal alarm message, command and email scheduler by KDE"),
                          KAboutLicense::GPL,
-                         i18n("Copyright © 2001-%1, David Jarvie", QStringLiteral("2021")), QString());
+                         ki18n("Copyright © 2001-%1, David Jarvie").subs(QStringLiteral("2022")).toString(), QString());
     aboutData.addAuthor(i18n("David Jarvie"), i18n("Author"), QStringLiteral("djarvie@kde.org"));
     aboutData.setOrganizationDomain("kde.org");
     aboutData.setDesktopFileName(QStringLiteral(KALARM_DBUS_SERVICE));

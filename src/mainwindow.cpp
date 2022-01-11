@@ -1,7 +1,7 @@
 /*
  *  mainwindow.cpp  -  main application window
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2001-2021 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2001-2022 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -12,9 +12,11 @@
 #include "alarmlistview.h"
 #include "birthdaydlg.h"
 #include "datepicker.h"
+#include "deferdlg.h"
 #include "functions.h"
 #include "kalarmapp.h"
 #include "kamail.h"
+#include "messagedisplay.h"
 #include "newalarmaction.h"
 #include "prefdlg.h"
 #include "preferences.h"
@@ -1698,6 +1700,48 @@ void MainWindow::editAlarmOk()
 void MainWindow::editAlarmDeleted(QObject* obj)
 {
     mEditAlarmMap.remove(static_cast<EditAlarmDlg*>(obj));
+}
+
+/******************************************************************************
+* Called when the Defer button is clicked in an alarm window or notification.
+* This controls the defer dialog created by the alarm display, and allows it to
+* remain unaffected by the alarm display closing.
+* See MessageWindow::slotEdit() for more information.
+*/
+void MainWindow::showDeferAlarmDlg(MessageDisplay::DeferDlgData* data)
+{
+    DeferAlarmDlg* dlg = data->dlg;
+    mDeferAlarmMap[dlg] = data;
+    connect(dlg, &KEditToolBar::finished, this, &MainWindow::deferAlarmDlgDone);
+    connect(dlg, &KEditToolBar::destroyed, this, &MainWindow::deferAlarmDlgDeleted);
+    dlg->setAttribute(Qt::WA_DeleteOnClose, true);   // ensure no memory leaks
+    dlg->show();
+}
+
+/******************************************************************************
+* Called when OK is clicked in the defer alarm dialog shown by
+* showDeferAlarmDlg().
+*/
+void MainWindow::deferAlarmDlgDone(int result)
+{
+    processDeferAlarmDlg(sender(), result);
+}
+
+/******************************************************************************
+* Called when the defer alarm dialog shown by showDeferAlarmDlg() is complete.
+* Removes the dialog from the pending list, and processes the result.
+*/
+void MainWindow::processDeferAlarmDlg(QObject* obj, int result)
+{
+    auto dlg = qobject_cast<DeferAlarmDlg*>(obj);
+    if (!dlg)
+        return;
+    QMap<DeferAlarmDlg*, MessageDisplay::DeferDlgData*>::Iterator it = mDeferAlarmMap.find(dlg);
+    if (it == mDeferAlarmMap.end())
+        return;
+    MessageDisplay::DeferDlgData* data = it.value();
+    mDeferAlarmMap.erase(it);
+    MessageDisplay::processDeferDlg(data, result);
 }
 
 // vim: et sw=4:
