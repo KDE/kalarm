@@ -14,7 +14,6 @@
 #include "lib/checkbox.h"
 
 #include <KFontChooser>
-#include <kwidgetsaddons_version.h>
 
 #include <QGroupBox>
 #include <QLabel>

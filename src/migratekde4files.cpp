@@ -10,7 +10,7 @@
 */
 
 #include "migratekde4files.h"
-#if KCOREADDONS_VERSION < QT_VERSION_CHECK(6, 0, 0)
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 #include "kalarm_debug.h"
 
 #include <Kdelibs4ConfigMigrator>
