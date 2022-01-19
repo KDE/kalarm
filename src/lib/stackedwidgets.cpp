@@ -1,7 +1,7 @@
 /*
  *  stackedwidgets.cpp  -  classes implementing stacked widgets
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2008-2021 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2008-2022 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -44,17 +44,17 @@ StackedScrollWidget::StackedScrollWidget(StackedScrollGroup* group, QWidget* par
     setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
 }
 
-StackedScrollGroup::StackedScrollGroup(QDialog* dlg, QObject* tabParent)
-    : StackedGroupT<QScrollArea>(tabParent)
+StackedScrollGroup::StackedScrollGroup(QDialog* dlg, QWidget* container)
+    : StackedGroupT<QScrollArea>(container)
     , mDialog(dlg)
 {
 }
 
 /******************************************************************************
-* Return the minimum size for the tab, adjusted if necessary to a height that
-* fits the screen.
-* In order to make the QStackedWidget containing the tabs take the correct
-* size, the value returned is actually the minimum size of the largest tab.
+* Return the minimum size for the tabs, constrained if necessary to a height
+* that fits the screen.
+* In order to make the widget containing the tabs take the correct size, the
+* value returned is actually the minimum size of the largest tab.
 * Otherwise, only the currently visible tab would be taken into account with
 * the result that the dialog would initially be displayed too small.
 */
