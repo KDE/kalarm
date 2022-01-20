@@ -31,6 +31,9 @@ class QDropEvent;
 class QCloseEvent;
 class QSplitter;
 class QMenu;
+class QScrollArea;
+class QFrame;
+class QVBoxLayout;
 class QAction;
 class KToggleAction;
 class KToolBarPopupAction;
@@ -144,7 +147,7 @@ private:
     void           initActions();
     void           selectionCleared();
     void           setEnableText(bool enable);
-    void           setPanelWidth(int panelWidth);
+    void           arrangePanel();
     void           setSplitterSizes();
     void           initUndoMenu(QMenu*, Undo::Type);
     void           slotDelete(bool force);
@@ -159,7 +162,9 @@ private:
     ResourceSelector*    mResourceSelector;    // resource selector widget
     DatePicker*          mDatePicker;          // date navigator widget
     QSplitter*           mSplitter;            // splits window into list and resource selector
-    QWidget*             mPanel;               // panel containing resource selector & date navigator
+    QScrollArea*         mPanel;               // side panel containing resource selector & date navigator
+    QVBoxLayout*         mPanelLayout;         // layout for side panel contents
+    QFrame*              mPanelDivider {nullptr};
     QMap<EditAlarmDlg*, KAEvent> mEditAlarmMap;  // edit alarm dialogs to be handled by this window
     QMap<DeferAlarmDlg*, MessageDisplay::DeferDlgData*> mDeferAlarmMap; // defer alarm dialogs to be handled by this window
     KToggleAction*       mActionShowMenuBar;
@@ -190,9 +195,11 @@ private:
     QPointer<QMenu>      mResourceContextMenu;
     QMap<QAction*, int>  mUndoMenuIds;         // items in the undo/redo menu, in order of appearance
     int                  mResourcesWidth {-1}; // width of resource selector widget
+    int                  mPanelScrollBarWidth {0};  // width of side panel vertical scroll bar
     bool                 mHiddenTrayParent {false}; // on session restoration, hide this window
     bool                 mShowResources;       // show resource selector
     bool                 mShowDateNavigator;   // show date navigator
+    bool                 mDateNavigatorTop {true};  // date navigator is at top of panel
     bool                 mShowArchived;        // include archived alarms in the displayed list
     bool                 mShown {false};       // true once the window has been displayed
     bool                 mActionEnableEnable;  // Enable/Disable action is set to "Enable"
