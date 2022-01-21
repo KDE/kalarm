@@ -1,7 +1,7 @@
 /*
  *  fileresourceconfigmanager.cpp  -  config manager for resources accessed via file system
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2020 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2020-2022 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -71,7 +71,7 @@ void FileResourceConfigManager::createResources(QObject* parent)
 
         for (const QString& resourceGroup : std::as_const(resourceGroups))
         {
-            int groupIndex = resourceGroup.midRef(9).toInt();
+            const int groupIndex = resourceGroup.midRef(9).toInt();
             FileResourceSettings::Ptr settings(new FileResourceSettings(manager->mConfig, resourceGroup));
             if (!settings->isValid())
             {
@@ -113,6 +113,7 @@ void FileResourceConfigManager::createResources(QObject* parent)
                 }
             }
         }
+        manager->mConfig->sync();
 
         // Allow any calendar updater instances to complete and auto-delete.
         FileResourceCalendarUpdater::waitForCompletion();
@@ -158,7 +159,7 @@ Resource FileResourceConfigManager::addResource(FileResourceSettings::Ptr& setti
     int lastIndex = 0;
     for (auto it = manager->mConfigGroups.constBegin();  it != manager->mConfigGroups.constEnd();  ++it)
     {
-        int index = it.key();
+        const int index = it.key();
         if (index > lastIndex + 1)
             break;
         lastIndex = index;
@@ -196,6 +197,7 @@ bool FileResourceConfigManager::removeResource(Resource& resource)
         {
             const QString configGroup = groupName(groupIndex);
             manager->mConfig->deleteGroup(configGroup);
+            manager->mConfig->sync();
             manager->mConfigGroups.remove(groupIndex);
             Resources::notifySettingsDestroyed(id);   // removing from mResources will destroy settings instance
             manager->mResources.remove(id);
