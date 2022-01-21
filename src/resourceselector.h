@@ -40,18 +40,14 @@ public:
     explicit ResourceSelector(MainWindow* parentWindow, QWidget* parent = nullptr);
     void  initActions(KActionCollection*);
 
-    /** Resize this widget to fit its list view size hint.
-     *  This will adjust the size according to the change in list view height
-     *  when the signal calendarCountChanged() was last emitted.
+    /** Automatically resize this widget to fit the number of calendars in the
+     *  list, whenever the number changes.
      */
-    void  adjustSize();
+    void setResizeToList()    { mResizeToList = true; }
 
 Q_SIGNALS:
     /** Emitted when the widget has been resized. */
     void  resized(const QSize& oldSize, const QSize& newSize);
-
-    /** Emitted when the number of calendars has changed. */
-    void  calendarCountChanged();
 
 protected:
     void  resizeEvent(QResizeEvent*) override;
@@ -75,6 +71,7 @@ private Q_SLOTS:
     void  archiveDaysChanged(int days);
     void  slotResourceAdded(Resource&, CalEvent::Type);
     void  reinstateAlarmTypeScrollBars();
+    void  resizeToList();
 
 private:
     CalEvent::Type currentResourceType() const;
@@ -98,7 +95,7 @@ private:
     QAction*        mActionImport {nullptr};
     QAction*        mActionExport {nullptr};
     KToggleAction*  mActionSetDefault {nullptr};
-    int             mListViewAdjustment {0};   // adjustment in mListView height when calendarCountChanged() was last emitted
+    bool            mResizeToList {false};    // widget should be resized when calendar list changes
 };
 
 // vim: et sw=4:

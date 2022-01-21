@@ -64,11 +64,7 @@ ResourceSelector::ResourceSelector(MainWindow* parentWindow, QWidget* parent)
     connect(mListView->selectionModel(), &QItemSelectionModel::selectionChanged, this, &ResourceSelector::selectionChanged);
     mListView->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(mListView, &ResourceView::customContextMenuRequested, this, &ResourceSelector::contextMenuRequested);
-    connect(mListView, &ResourceView::rowCountChanged, this, [this]()
-            {
-                mListViewAdjustment = mListView->sizeHint().height() - mListView->height();
-                Q_EMIT calendarCountChanged();
-            });
+    connect(mListView, &ResourceView::rowCountChanged, this, &ResourceSelector::resizeToList);
     mListView->setWhatsThis(i18nc("@info:whatsthis",
                                   "List of available calendars of the selected type. The checked state shows whether a calendar "
                                  "is enabled (checked) or disabled (unchecked). The default calendar is shown in bold."));
@@ -557,14 +553,17 @@ CalEvent::Type ResourceSelector::currentResourceType() const
 }
 
 /******************************************************************************
-* Resize this widget to fit its list view size hint.
-* This will adjust the size according to the change in list view height when
-* the signal calendarCountChanged() was last emitted.
+* Called when the size hint for the list view has changed.
+* Resize the list view and this widget to fit the new list view size hint.
 */
-void ResourceSelector::adjustSize()
+void ResourceSelector::resizeToList()
 {
-    mListView->resize(mListView->width(), mListView->height() + mListViewAdjustment);
-    resize(width(), height() + mListViewAdjustment);
+    if (mResizeToList)
+    {
+        const int change = mListView->sizeHint().height() - mListView->height();
+        mListView->resize(mListView->width(), mListView->height() + change);
+        resize(width(), height() + change);
+    }
 }
 
 void ResourceSelector::resizeEvent(QResizeEvent* re)

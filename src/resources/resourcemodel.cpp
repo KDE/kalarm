@@ -644,7 +644,7 @@ QSize ResourceView::sizeHint() const
     const QRect lastItem = visualRect(model()->index(model()->rowCount() - 1, 0));
     const int border = height() - viewport()->height();
     QSize sz = QListView::sizeHint();
-    const int itemsHeight = lastItem.bottom() + lastItem.height()*0.7 + border;
+    const int itemsHeight = lastItem.bottom() + lastItem.height() + border;
     if (itemsHeight < sz.height())
         sz.setHeight(itemsHeight);
     return sz;
