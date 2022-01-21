@@ -1,7 +1,7 @@
 /*
  *  resourceselector.cpp  -  calendar resource selection widget
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2006-2021 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2006-2022 David Jarvie <djarvie@kde.org>
  *  Based on KOrganizer's ResourceView class and KAddressBook's ResourceSelection class,
  *  SPDX-FileCopyrightText: 2003, 2004 Cornelius Schumacher <schumacher@kde.org>
  *  SPDX-FileCopyrightText: 2003-2004 Reinhold Kainhofer <reinhold@kainhofer.com>
@@ -64,6 +64,11 @@ ResourceSelector::ResourceSelector(MainWindow* parentWindow, QWidget* parent)
     connect(mListView->selectionModel(), &QItemSelectionModel::selectionChanged, this, &ResourceSelector::selectionChanged);
     mListView->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(mListView, &ResourceView::customContextMenuRequested, this, &ResourceSelector::contextMenuRequested);
+    connect(mListView, &ResourceView::rowCountChanged, this, [this]()
+            {
+                mListViewAdjustment = mListView->sizeHint().height() - mListView->height();
+                Q_EMIT calendarCountChanged();
+            });
     mListView->setWhatsThis(i18nc("@info:whatsthis",
                                   "List of available calendars of the selected type. The checked state shows whether a calendar "
                                  "is enabled (checked) or disabled (unchecked). The default calendar is shown in bold."));
@@ -549,6 +554,17 @@ CalEvent::Type ResourceSelector::currentResourceType() const
         case 2:  return CalEvent::TEMPLATE;
         default:  return CalEvent::EMPTY;
     }
+}
+
+/******************************************************************************
+* Resize this widget to fit its list view size hint.
+* This will adjust the size according to the change in list view height when
+* the signal calendarCountChanged() was last emitted.
+*/
+void ResourceSelector::adjustSize()
+{
+    mListView->resize(mListView->width(), mListView->height() + mListViewAdjustment);
+    resize(width(), height() + mListViewAdjustment);
 }
 
 void ResourceSelector::resizeEvent(QResizeEvent* re)

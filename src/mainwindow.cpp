@@ -163,6 +163,7 @@ MainWindow::MainWindow(bool restored)
 
     DataModel::widgetNeedsDatabase(this);
     mResourceSelector = new ResourceSelector(this, panelContents);
+    connect(mResourceSelector, &ResourceSelector::calendarCountChanged, this, [this]() { mResourceSelector->adjustSize(); });
     mPanelLayout->addWidget(mResourceSelector);
     mPanelLayout->addStretch();
 

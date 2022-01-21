@@ -1,7 +1,7 @@
 /*
  *  resourcemodel.cpp  -  models containing flat list of resources
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2007-2021 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2007-2022 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -614,6 +614,8 @@ ResourceView::ResourceView(ResourceFilterCheckListModel* model, QWidget* parent)
 {
     setModel(model);
     model->sort(0, Qt::AscendingOrder);
+    connect(model, &QAbstractItemModel::rowsInserted, this, &ResourceView::rowCountChanged);
+    connect(model, &QAbstractItemModel::rowsRemoved, this, &ResourceView::rowCountChanged);
 }
 
 ResourceFilterCheckListModel* ResourceView::resourceModel() const
@@ -632,6 +634,20 @@ Resource ResourceView::resource(int row) const
 Resource ResourceView::resource(const QModelIndex& index) const
 {
     return static_cast<ResourceFilterCheckListModel*>(model())->resource(index);
+}
+
+/******************************************************************************
+* Return the size hint reduced to show a maximum of one empty line.
+*/
+QSize ResourceView::sizeHint() const
+{
+    const QRect lastItem = visualRect(model()->index(model()->rowCount() - 1, 0));
+    const int border = height() - viewport()->height();
+    QSize sz = QListView::sizeHint();
+    const int itemsHeight = lastItem.bottom() + lastItem.height()*0.7 + border;
+    if (itemsHeight < sz.height())
+        sz.setHeight(itemsHeight);
+    return sz;
 }
 
 /******************************************************************************

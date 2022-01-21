@@ -1,7 +1,8 @@
 KAlarm Change Log
 
-=== Version 3.4.0 (KDE Applications 22.04) --- 20 January 2022 ===
-+ Allow calendars and date picker to be shown together in side panel [KDE Bug 440250]
+=== Version 3.4.0 (KDE Applications 22.04) --- 21 January 2022 ===
+* Allow calendars and date picker to be shown together in side panel [KDE Bug 440250]
+* Shrink calendar list to remove empty space when too large.
 
 === Version 3.3.5 (KDE Applications 21.12.2) --- 11 January 2022 ===
 * Fix crash after Defer is selected in alarm notification message [KDE Bug 448212]

@@ -1,7 +1,7 @@
 /*
  *  resourcemodel.h  -  models containing flat list of resources
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2010-2021 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2010-2022 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -229,6 +229,10 @@ public:
     ResourceFilterCheckListModel* resourceModel() const;
     Resource  resource(int row) const;
     Resource  resource(const QModelIndex&) const;
+    QSize     sizeHint() const override;
+
+Q_SIGNALS:
+    void rowCountChanged();
 
 protected:
     void mouseReleaseEvent(QMouseEvent*) override;

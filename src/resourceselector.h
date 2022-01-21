@@ -1,7 +1,7 @@
 /*
  *  resourceselector.h  -  alarm calendar resource selection widget
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2006-2021 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2006-2022 David Jarvie <djarvie@kde.org>
  *  Based on KOrganizer's ResourceView class and KAddressBook's ResourceSelection class,
  *  SPDX-FileCopyrightText: 2003, 2004 Cornelius Schumacher <schumacher@kde.org>
  *  SPDX-FileCopyrightText: 2003-2004 Reinhold Kainhofer <reinhold@kainhofer.com>
@@ -40,8 +40,18 @@ public:
     explicit ResourceSelector(MainWindow* parentWindow, QWidget* parent = nullptr);
     void  initActions(KActionCollection*);
 
+    /** Resize this widget to fit its list view size hint.
+     *  This will adjust the size according to the change in list view height
+     *  when the signal calendarCountChanged() was last emitted.
+     */
+    void  adjustSize();
+
 Q_SIGNALS:
+    /** Emitted when the widget has been resized. */
     void  resized(const QSize& oldSize, const QSize& newSize);
+
+    /** Emitted when the number of calendars has changed. */
+    void  calendarCountChanged();
 
 protected:
     void  resizeEvent(QResizeEvent*) override;
@@ -88,6 +98,7 @@ private:
     QAction*        mActionImport {nullptr};
     QAction*        mActionExport {nullptr};
     KToggleAction*  mActionSetDefault {nullptr};
+    int             mListViewAdjustment {0};   // adjustment in mListView height when calendarCountChanged() was last emitted
 };
 
 // vim: et sw=4:
