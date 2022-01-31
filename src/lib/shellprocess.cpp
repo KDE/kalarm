@@ -1,7 +1,7 @@
 /*
  *  shellprocess.cpp  -  execute a shell process
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2004-2020 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2004-2022 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -45,7 +45,7 @@ bool ShellProcess::start(OpenMode openMode)
     connect(this, &QProcess::readyReadStandardOutput, this, &ShellProcess::stdoutReady);
     connect(this, &QProcess::readyReadStandardError, this, &ShellProcess::stderrReady);
     const QStringList args{ QStringLiteral("-c"), mCommand };
-    QProcess::start(QLatin1String(shellName()), args, openMode);
+    QProcess::start(QLatin1String(shellPath()), args, openMode);
     if (!waitForStarted())
     {
         mStatus = START_FAIL;

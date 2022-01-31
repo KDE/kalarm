@@ -1,8 +1,9 @@
 KAlarm Change Log
 
-=== Version 3.3.5 (KDE Applications 21.12.2) --- 21 January 2022 ===
+=== Version 3.3.5 (KDE Applications 21.12.2) --- 31 January 2022 ===
 * Fix crash after Defer is selected in alarm notification message [KDE Bug 448212]
 * Fix deleted calendar resources reappearing when KAlarm restarts.
+* For command alarms, use path to find executables, instead of current directory.
 * Fix regression introduced in version 3.1.0:
     Make auto-close work for message windows.
 
