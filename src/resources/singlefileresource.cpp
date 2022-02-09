@@ -2,7 +2,7 @@
  *  singlefileresource.cpp  -  calendar resource held in a single file
  *  Program:  kalarm
  *  Partly based on ICalResourceBase and SingleFileResource in kdepim-runtime.
- *  SPDX-FileCopyrightText: 2009-2021 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2009-2022 David Jarvie <djarvie@kde.org>
  *  SPDX-FileCopyrightText: 2008 Bertjan Broeksema <broeksema@kde.org>
  *  SPDX-FileCopyrightText: 2008 Volker Krause <vkrause@kde.org>
  *  SPDX-FileCopyrightText: 2006 Till Adam <adam@kde.org>
