@@ -1,7 +1,7 @@
 /*
  *  editdlgtypes.cpp  -  dialogs to create or edit alarm or alarm template types
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2001-2021 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2001-2022 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -1591,6 +1591,12 @@ EditAudioAlarmDlg::EditAudioAlarmDlg(bool Template, const KAEvent& event, bool n
     init(event);
     mTryButton->setEnabled(!MessageDisplay::isAudioPlaying());
     connect(theApp(), &KAlarmApp::audioPlaying, this, &EditAudioAlarmDlg::slotAudioPlaying);
+}
+
+EditAudioAlarmDlg::~EditAudioAlarmDlg()
+{
+    if (mMessageWindow)
+        MessageDisplay::stopAudio();
 }
 
 /******************************************************************************

@@ -1,7 +1,7 @@
 /*
  *  editdlgtypes.h  -  dialogues to create or edit alarm or alarm template types
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2001-2021 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2001-2022 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -259,6 +259,7 @@ public:
     explicit EditAudioAlarmDlg(bool Template, QWidget* parent = nullptr, GetResourceType = RES_PROMPT);
     EditAudioAlarmDlg(bool Template, const KAEvent&, bool newAlarm, QWidget* parent = nullptr,
                  GetResourceType = RES_PROMPT, bool readOnly = false);
+    ~EditAudioAlarmDlg() override;
 
     // Methods to initialise values in the New Alarm dialogue.
     // N.B. setTime() must be called first to set the date-only characteristic,
