@@ -1,7 +1,7 @@
 /*
  *  messagedisplayhelper.cpp  -  helper class to display an alarm or error message
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2001-2021 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2001-2022 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -35,6 +35,7 @@
 
 #include <QLocale>
 #include <QTimer>
+#include <QThread>
 #include <QByteArray>
 #include <QMimeDatabase>
 #include <QUrl>
@@ -56,8 +57,9 @@ QHash<EventId, unsigned>       MessageDisplayHelper::mErrorMessages;
 // There can only be one audio thread at a time: trying to play multiple
 // sound files simultaneously would result in a cacophony, and besides
 // that, Phonon currently crashes...
-QPointer<AudioThread> MessageDisplayHelper::mAudioThread;
-MessageDisplayHelper* AudioThread::mAudioOwner = nullptr;
+QPointer<QThread>     MessageDisplayHelper::mAudioThread;
+QPointer<AudioPlayer> MessageDisplayHelper::mAudioPlayer;
+MessageDisplayHelper* MessageDisplayHelper::mAudioOwner = nullptr;
 
 /******************************************************************************
 * Construct the message display handler for the specified alarm.
@@ -168,8 +170,14 @@ MessageDisplayHelper::MessageDisplayHelper(MessageDisplay* parent)
 MessageDisplayHelper::~MessageDisplayHelper()
 {
     qCDebug(KALARM_LOG) << "~MessageDisplayHelper()" << mEventId;
-    if (AudioThread::mAudioOwner == this  &&  !mAudioThread.isNull())
-        mAudioThread->quit();
+    if (mAudioOwner == this  &&  !mAudioPlayer.isNull())
+        delete mAudioPlayer;
+    if (mAudioOwner == this)
+        mAudioOwner = nullptr;
+    // If the audio thread is destroyed while still running, it will crash.
+    // So remove this instance as its parent to prevent its deletion as a child.
+    if (mAudioThread.data())
+        mAudioThread->setParent(nullptr);
     mErrorMessages.remove(mEventId);
     mInstanceList.removeAll(this);
     delete mTempFile;
@@ -182,8 +190,6 @@ MessageDisplayHelper::~MessageDisplayHelper()
 */
 void MessageDisplayHelper::initTexts()
 {
-    DisplayTexts texts;
-
     const bool reminder = (!mErrorWindow  &&  (mAlarmType & KAAlarm::REMINDER_ALARM));
     mTexts.title = (mAlarmType & KAAlarm::REMINDER_ALARM) ? i18nc("@title:window", "Reminder")
                                                           : i18nc("@title:window", "Message");
@@ -685,9 +691,11 @@ bool MessageDisplayHelper::readPropertyValues(const KConfigGroup& config)
     return true;
 }
 
+/******************************************************************************
+* Recreate the event from the calendar file (if possible).
+*/
 bool MessageDisplayHelper::processPropertyValues()
 {
-    // Recreate the event from the calendar file (if possible)
     if (!mEventId.eventId().isEmpty())
     {
         // Close any other display for this alarm which has already been restored by redisplayAlarms()
@@ -851,15 +859,31 @@ void MessageDisplayHelper::startAudio()
     else
     {
         qCDebug(KALARM_LOG) << "MessageDisplayHelper::startAudio:" << QThread::currentThread();
-        mAudioThread = new AudioThread(this, mAudioFile, mVolume, mFadeVolume, mFadeSeconds, mAudioRepeatPause);
-        connect(mAudioThread.data(), &AudioThread::readyToPlay, this, &MessageDisplayHelper::playReady);
-        connect(mAudioThread.data(), &QThread::finished, this, &MessageDisplayHelper::playFinished);
+        mAudioOwner = this;
+
+        // Create a thread for the audio player to run in, and create the audio
+        // player as a worker to run in the thread created inside QThread.
+        QThread* audioThread = new QThread(this);
+        mAudioThread = audioThread;    // set the QPointer
+        AudioPlayer* audioPlayer = new AudioPlayer(mAudioFile, mVolume, mFadeVolume, mFadeSeconds, mAudioRepeatPause);
+        mAudioPlayer = audioPlayer;    // set the QPointer
+        audioPlayer->moveToThread(audioThread);
+        connect(audioThread, &QThread::started, audioPlayer, &AudioPlayer::execute);
+        connect(audioPlayer, &AudioPlayer::destroyed, audioThread, &QThread::quit);
+        connect(audioThread, &QThread::finished, audioThread, &QThread::deleteLater);
+        connect(audioThread, &QThread::destroyed, audioThread, []() { qCDebug(KALARM_LOG) << "MessageDisplayHelper: Audio thread deleted"; });
+        connect(audioThread, &QThread::destroyed, this, [this]() { if (mAudioOwner == parent()) mAudioOwner = nullptr; });
+
+        // Set up connections not in the thread-worker relationship.
+        connect(audioPlayer, &AudioPlayer::readyToPlay, this, &MessageDisplayHelper::playReady);
+        connect(audioThread, &QThread::finished, this, &MessageDisplayHelper::playFinished);
         if (mSilenceButton)
-            connect(mSilenceButton, &QAbstractButton::clicked, mAudioThread.data(), &QThread::quit);
-        // Notify after creating mAudioThread, so that isAudioPlaying() will
+            connect(mSilenceButton, &QAbstractButton::clicked, audioThread, &QThread::quit);
+
+        // Notify after creating mAudioPlayer, so that isAudioPlaying() will
         // return the correct value.
         theApp()->notifyAudioPlaying(true);
-        mAudioThread->start();
+        audioThread->start();
     }
 }
 
@@ -868,7 +892,7 @@ void MessageDisplayHelper::startAudio()
 */
 bool MessageDisplayHelper::isAudioPlaying()
 {
-    return mAudioThread;
+    return mAudioPlayer;
 }
 
 /******************************************************************************
@@ -877,8 +901,20 @@ bool MessageDisplayHelper::isAudioPlaying()
 void MessageDisplayHelper::stopAudio(bool wait)
 {
     qCDebug(KALARM_LOG) << "MessageDisplayHelper::stopAudio";
+    delete mAudioPlayer.data();
     if (mAudioThread)
-        mAudioThread->stop(wait);
+    {
+        // Quit the audio thread and wait for thread completion and tidy up.
+        mAudioThread->quit();       // stop playing and tidy up
+        mAudioThread->wait(3000);   // wait for run() to exit (timeout 3 seconds)
+        if (!mAudioThread->isFinished())
+        {
+            // Something has gone wrong - forcibly kill the thread
+            mAudioThread->terminate();
+            if (wait)
+                mAudioThread->wait();
+        }
+    }
 }
 
 /******************************************************************************
@@ -906,9 +942,9 @@ void MessageDisplayHelper::playFinished()
 {
     if (mSilenceButton)
         mSilenceButton->setEnabled(false);
-    if (mAudioThread)   // mAudioThread can actually be null here!
+    if (mAudioPlayer)   // mAudioPlayer can actually be null here!
     {
-        const QString errmsg = mAudioThread->error();
+        const QString errmsg = mAudioPlayer->error();
         if (!errmsg.isEmpty()  &&  !haveErrorMessage(ErrMsg_AudioFile))
         {
             KAMessageBox::error(mParent->displayParent(), errmsg);
@@ -921,60 +957,37 @@ void MessageDisplayHelper::playFinished()
 }
 
 /******************************************************************************
-* Constructor for audio thread.
+* Constructor for audio player.
 */
-AudioThread::AudioThread(MessageDisplayHelper* parent, const QString& audioFile, float volume, float fadeVolume, int fadeSeconds, int repeatPause)
-    : QThread(parent),
-      mFile(audioFile),
-      mVolume(volume),
-      mFadeVolume(fadeVolume),
-      mFadeSeconds(fadeSeconds),
-      mRepeatPause(repeatPause),
-      mAudioObject(nullptr)
+AudioPlayer::AudioPlayer(const QString& audioFile, float volume, float fadeVolume, int fadeSeconds, int repeatPause)
+    : QObject()
+    , mFile(audioFile)
+    , mVolume(volume)
+    , mFadeVolume(fadeVolume)
+    , mFadeSeconds(fadeSeconds)
+    , mRepeatPause(repeatPause)
+    , mAudioObject(nullptr)
 {
-    if (mAudioOwner)
-        qCCritical(KALARM_LOG) << "MessageDisplayHelper::AudioThread: mAudioOwner already set";
-    mAudioOwner = parent;
 }
 
 /******************************************************************************
-* Destructor for audio thread. Waits for thread completion and tidies up.
-* Note that this destructor is executed in the parent thread.
+* Destructor for audio player.
+* Note that this destructor may be executed in the parent thread.
 */
-AudioThread::~AudioThread()
+AudioPlayer::~AudioPlayer()
 {
-    qCDebug(KALARM_LOG) << "~MessageDisplayHelper::AudioThread";
-    stop(true);   // stop playing and tidy up (timeout 3 seconds)
+    qCDebug(KALARM_LOG) << "MessageDisplayHelper::~AudioPlayer";
     delete mAudioObject;
     mAudioObject = nullptr;
-    if (mAudioOwner == parent())
-        mAudioOwner = nullptr;
-    // Notify after deleting mAudioThread, so that isAudioPlaying() will
+    // Notify after deleting mAudioPlayer, so that isAudioPlaying() will
     // return the correct value.
     QTimer::singleShot(0, theApp(), &KAlarmApp::notifyAudioStopped);   //NOLINT(clang-analyzer-cplusplus.NewDeleteLeaks)
 }
 
 /******************************************************************************
-* Quits the thread and waits for thread completion and tidies up.
+* Kick off playing the audio file.
 */
-void AudioThread::stop(bool waiT)
-{
-    qCDebug(KALARM_LOG) << "MessageDisplayHelper::AudioThread::stop";
-    quit();       // stop playing and tidy up
-    wait(3000);   // wait for run() to exit (timeout 3 seconds)
-    if (!isFinished())
-    {
-        // Something has gone wrong - forcibly kill the thread
-        terminate();
-        if (waiT)
-            wait();
-    }
-}
-
-/******************************************************************************
-* Kick off the thread to play the audio file.
-*/
-void AudioThread::run()
+void AudioPlayer::execute()
 {
     mMutex.lock();
     if (mAudioObject)
@@ -982,7 +995,7 @@ void AudioThread::run()
         mMutex.unlock();
         return;
     }
-    qCDebug(KALARM_LOG) << "MessageDisplayHelper::AudioThread::run:" << QThread::currentThread() << mFile;
+    qCDebug(KALARM_LOG) << "MessageDisplayHelper::AudioPlayer::run:" << QThread::currentThread() << mFile;
     const QString audioFile = mFile;
     const QUrl url = QUrl::fromUserInput(mFile);
     mFile = url.isLocalFile() ? url.toLocalFile() : url.toString();
@@ -991,7 +1004,7 @@ void AudioThread::run()
     {
         mError = xi18nc("@info", "Cannot open audio file: <filename>%1</filename>", audioFile);
         mMutex.unlock();
-        qCCritical(KALARM_LOG) << "MessageDisplayHelper::AudioThread::run: Open failure:" << audioFile;
+        qCCritical(KALARM_LOG) << "MessageDisplayHelper::AudioPlayer::run: Open failure:" << audioFile;
         return;
     }
     mAudioObject = new Phonon::MediaObject();
@@ -1012,20 +1025,13 @@ void AudioThread::run()
             mPath.insertEffect(fader);
         }
     }
-    connect(mAudioObject, &Phonon::MediaObject::stateChanged, this, &AudioThread::playStateChanged, Qt::DirectConnection);
-    connect(mAudioObject, &Phonon::MediaObject::finished, this, &AudioThread::checkAudioPlay, Qt::DirectConnection);
+    connect(mAudioObject, &Phonon::MediaObject::stateChanged, this, &AudioPlayer::playStateChanged, Qt::DirectConnection);
+    connect(mAudioObject, &Phonon::MediaObject::finished, this, &AudioPlayer::checkAudioPlay, Qt::DirectConnection);
     mPlayedOnce = false;
     mPausing    = false;
     mMutex.unlock();
     Q_EMIT readyToPlay();
     checkAudioPlay();
-
-    // Start an event loop.
-    // The function will exit once exit() or quit() is called.
-    // First, ensure that the thread object is deleted once it has completed.
-    connect(this, &QThread::finished, this, &QObject::deleteLater);
-    exec();
-    stopPlay();
 }
 
 /******************************************************************************
@@ -1034,7 +1040,7 @@ void AudioThread::run()
 * If it is ready to play, start playing it (for the first time or repeated).
 * If play has not yet completed, wait a bit longer.
 */
-void AudioThread::checkAudioPlay()
+void AudioPlayer::checkAudioPlay()
 {
     mMutex.lock();
     if (!mAudioObject)
@@ -1060,7 +1066,7 @@ void AudioThread::checkAudioPlay()
             {
                 // Pause before playing the file again
                 mPausing = true;
-                QTimer::singleShot(mRepeatPause * 1000, this, &AudioThread::checkAudioPlay);   //NOLINT(clang-analyzer-cplusplus.NewDeleteLeaks)
+                QTimer::singleShot(mRepeatPause * 1000, this, &AudioPlayer::checkAudioPlay);   //NOLINT(clang-analyzer-cplusplus.NewDeleteLeaks)
                 mMutex.unlock();
                 return;
             }
@@ -1069,7 +1075,7 @@ void AudioThread::checkAudioPlay()
     }
 
     // Start playing the file, either for the first time or again
-    qCDebug(KALARM_LOG) << "MessageDisplayHelper::AudioThread::checkAudioPlay: start";
+    qCDebug(KALARM_LOG) << "MessageDisplayHelper::AudioPlayer::checkAudioPlay: start";
     mAudioObject->play();
     mMutex.unlock();
 }
@@ -1078,7 +1084,7 @@ void AudioThread::checkAudioPlay()
 * Called when the playback object changes state.
 * If an error has occurred, quit and return the error to the caller.
 */
-void AudioThread::playStateChanged(Phonon::State newState)
+void AudioPlayer::playStateChanged(Phonon::State newState)
 {
     if (newState == Phonon::ErrorState)
     {
@@ -1086,7 +1092,7 @@ void AudioThread::playStateChanged(Phonon::State newState)
         const QString err = mAudioObject->errorString();
         if (!err.isEmpty())
         {
-            qCCritical(KALARM_LOG) << "MessageDisplayHelper::AudioThread::playStateChanged: Play failure:" << mFile << ":" << err;
+            qCCritical(KALARM_LOG) << "MessageDisplayHelper::AudioPlayer::playStateChanged: Play failure:" << mFile << ":" << err;
             mError = xi18nc("@info", "<para>Error playing audio file: <filename>%1</filename></para><para>%2</para>", mFile, err);
             exit(1);
         }
@@ -1097,7 +1103,7 @@ void AudioThread::playStateChanged(Phonon::State newState)
 * Called when play completes, the Silence button is clicked, or the display is
 * closed, to terminate audio access.
 */
-void AudioThread::stopPlay()
+void AudioPlayer::stopPlay()
 {
     mMutex.lock();
     if (mAudioObject)
@@ -1113,10 +1119,10 @@ void AudioThread::stopPlay()
         mAudioObject = nullptr;
     }
     mMutex.unlock();
-    quit();   // exit the event loop, if it's still running
+    deleteLater();
 }
 
-QString AudioThread::error() const
+QString AudioPlayer::error() const
 {
     QMutexLocker locker(&mMutex);
     return mError;

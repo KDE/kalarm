@@ -1,7 +1,7 @@
 /*
  *  messagedisplayhelper_p.h  -  private declarations for MessageDisplayHelper
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2009-2013 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2009-2022 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -10,29 +10,25 @@
 
 #include <phonon/phononnamespace.h>
 #include <phonon/path.h>
-#include <QThread>
+#include <QObject>
 #include <QMutex>
 
 class MessageDisplayHelper;
 
 namespace Phonon { class MediaObject; }
 
-class AudioThread : public QThread
+// Class to play an audio file, optionally repeated.
+class AudioPlayer : public QObject
 {
     Q_OBJECT
 public:
-    AudioThread(MessageDisplayHelper* parent, const QString& audioFile, float volume, float fadeVolume, int fadeSeconds, int repeatPause);
-    ~AudioThread() override;
-    void    stop(bool wait = false);
+    AudioPlayer(const QString& audioFile, float volume, float fadeVolume, int fadeSeconds, int repeatPause);
+    ~AudioPlayer() override;
+    void    execute();
     QString error() const;
-
-    static MessageDisplayHelper* mAudioOwner;    // window which owns the unique AudioThread
 
 Q_SIGNALS:
     void    readyToPlay();
-
-protected:
-    void    run() override;
 
 private Q_SLOTS:
     void    checkAudioPlay();
