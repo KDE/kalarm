@@ -1,12 +1,16 @@
 KAlarm Change Log
 
-=== Version 3.4.0 (KDE Applications 22.04) --- 21 January 2022 ===
+=== Version 3.4.0 (KDE Applications 22.04) --- 9 February 2022 ===
 * Allow calendars and date picker to be shown together in side panel [KDE Bug 440250]
 * Shrink calendar list to remove empty space when too large.
 
-=== Version 3.3.5 (KDE Applications 21.12.2) --- 21 January 2022 ===
+=== Version 3.3.6 (KDE Applications 21.12.3) --- 9 February 2022 ===
+* Fix failure to create a missing calendar file after enabling a resource.
+
+=== Version 3.3.5 (KDE Applications 21.12.2) --- 31 January 2022 ===
 * Fix crash after Defer is selected in alarm notification message [KDE Bug 448212]
 * Fix deleted calendar resources reappearing when KAlarm restarts.
+* For command alarms, use path to find executables, instead of current directory.
 * Fix regression introduced in version 3.1.0:
     Make auto-close work for message windows.
 

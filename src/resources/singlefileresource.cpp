@@ -2,7 +2,7 @@
  *  singlefileresource.cpp  -  calendar resource held in a single file
  *  Program:  kalarm
  *  Partly based on ICalResourceBase and SingleFileResource in kdepim-runtime.
- *  SPDX-FileCopyrightText: 2009-2021 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2009-2022 David Jarvie <djarvie@kde.org>
  *  SPDX-FileCopyrightText: 2008 Bertjan Broeksema <broeksema@kde.org>
  *  SPDX-FileCopyrightText: 2008 Volker Krause <vkrause@kde.org>
  *  SPDX-FileCopyrightText: 2006 Till Adam <adam@kde.org>
@@ -224,23 +224,24 @@ int SingleFileResource::doLoad(QHash<QString, KAEvent>& newEvents, bool readThro
             if (!dir.exists())
                 dir.mkpath(dir.path());
 
+            const QString path = mSettings->displayLocation();
             if (!f.open(QIODevice::WriteOnly)  ||  !f.resize(0))
             {
-                const QString path = mSettings->displayLocation();
                 qCWarning(KALARM_LOG) << "SingleFileResource::load:" << displayId() << "Could not create file" << path;
                 errorMessage = xi18nc("@info", "Could not create calendar file <filename>%1</filename>.", path);
                 mSaveUrl.clear();
                 setLoadFailure(false, Status::Broken);
                 return -1;
             }
+            qCDebug(KALARM_LOG) << "SingleFileResource::load:" << displayId() << "Created file" << path;
+
             // Check whether this user can actually write to the newly created file.
             // This might not tally with the open() permissions, since there are
-            // circumstances on Linux where a file created by a user can be owned by root.
-            QFile fnew(localFileName);
-            if (!fnew.isWritable())
+            // circumstances on Linux where a file created by a user can be owned by
+            // root. (This has occurred in a VirtualBox shared folder.)
+            if (!QFileInfo(localFileName).isWritable())
             {
-                fnew.remove();
-                const QString path = mSettings->displayLocation();
+                f.remove();
                 qCWarning(KALARM_LOG) << "SingleFileResource::load:" << displayId() << "Could not create writable file" << path;
                 errorMessage = xi18nc("@info", "Could not create writable calendar file <filename>%1</filename>.", path);
                 mSaveUrl.clear();
