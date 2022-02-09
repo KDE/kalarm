@@ -1,5 +1,8 @@
 KAlarm Change Log
 
+=== Version 3.3.6 (KDE Applications 21.12.3) --- 9 February 2022 ===
+* Fix failure to create a missing calendar file after enabling a resource.
+
 === Version 3.3.5 (KDE Applications 21.12.2) --- 31 January 2022 ===
 * Fix crash after Defer is selected in alarm notification message [KDE Bug 448212]
 * Fix deleted calendar resources reappearing when KAlarm restarts.
