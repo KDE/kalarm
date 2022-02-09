@@ -51,6 +51,9 @@ public:
     static void showError(const KAEvent& event, const DateTime& alarmDateTime,
                           const QStringList& errmsgs, const QString& dontShowAgain = QString());
 
+    MessageDisplay(const MessageDisplay&) = delete;
+    MessageDisplay& operator=(const MessageDisplay&) = delete;
+
     virtual ~MessageDisplay();
 
     bool isValid() const   { return mHelper->isValid(); }

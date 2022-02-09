@@ -1,7 +1,7 @@
 /*
  *  kalarmapp.cpp  -  the KAlarm application object
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2001-2021 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2001-2022 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -405,8 +405,7 @@ int KAlarmApp::activateInstance(const QStringList& args, const QString& workingD
     static bool firstInstance = true;
     bool dontRedisplay = false;
     CommandOptions::Command command = CommandOptions::NONE;
-    const bool processOptions = (!firstInstance || !isSessionRestored());
-    if (processOptions)
+    if (!firstInstance  ||  !isSessionRestored())
     {
         options->process();
 #ifndef NDEBUG
@@ -440,10 +439,7 @@ int KAlarmApp::activateInstance(const QStringList& args, const QString& workingD
             default:
                 break;
         }
-    }
 
-    if (processOptions)
-    {
         switch (command)
         {
             case CommandOptions::TRIGGER_EVENT:
@@ -549,7 +545,7 @@ int KAlarmApp::activateInstance(const QStringList& args, const QString& workingD
                                 const Preferences::SoundType type = (flags & KAEvent::BEEP) ? Preferences::Sound_Beep
                                                                   : (flags & KAEvent::SPEAK) ? Preferences::Sound_Speak
                                                                   : Preferences::Sound_File;
-                                dlg->setAudio(type, options->audioFile(), options->audioVolume(), (flags & KAEvent::REPEAT_SOUND ? 0 : -1));
+                                dlg->setAudio(type, options->audioFile(), options->audioVolume(), ((flags & KAEvent::REPEAT_SOUND) ? 0 : -1));
                             }
                             if (options->reminderMinutes())
                                 dlg->setReminder(options->reminderMinutes(), (options->flags() & KAEvent::REMINDER_ONCE));

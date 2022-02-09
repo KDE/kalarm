@@ -1092,14 +1092,11 @@ void MainWindow::arrangePanel()
     else
     {
         int minWidth = 0;
-        if (top)
-        {
-            top->show();
-            mPanelLayout->addWidget(top);
-            mPanelLayout->addStretch();
-            mPanel->show();
-            minWidth = top->minimumSizeHint().width();
-        }
+        top->show();
+        mPanelLayout->addWidget(top);
+        mPanelLayout->addStretch();
+        mPanel->show();
+        minWidth = top->minimumSizeHint().width();
         if (bottom)
         {
             bottom->show();

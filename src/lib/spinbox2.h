@@ -306,7 +306,7 @@ private:
     class MainSpinBox : public SpinBox
     {
         public:
-            MainSpinBox(SpinBox2* parent)
+            explicit MainSpinBox(SpinBox2* parent)
                             : SpinBox(parent), owner(parent) { }
             MainSpinBox(int minValue, int maxValue, SpinBox2* parent)
                             : SpinBox(minValue, maxValue, parent), owner(parent) { }

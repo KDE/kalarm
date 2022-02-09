@@ -82,7 +82,7 @@ protected:
     static void        replace(UndoItem* old, UndoItem* New);
 
 private:
-    Undo(QObject* parent)  : QObject(parent) {}
+    explicit Undo(QObject* parent)  : QObject(parent) {}
     static void        removeRedos(const QString& eventID);
     static bool        undo(int index, Type, QWidget* parent, const QString& action);
     static UndoItem*   getItem(int id, Type);

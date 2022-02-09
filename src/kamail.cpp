@@ -299,9 +299,9 @@ void KAMail::slotEmailSent(KJob* job)
     if (!mJobs.isEmpty())
     {
         // Send the next queued email
-        auto job = mJobs.head();
-        connect(job, &KJob::result, instance(), &KAMail::slotEmailSent);
-        job->start();
+        auto job1 = mJobs.head();
+        connect(job1, &KJob::result, instance(), &KAMail::slotEmailSent);
+        job1->start();
     }
 }
 

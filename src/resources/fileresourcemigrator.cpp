@@ -58,7 +58,7 @@ struct CollectionProperties
     bool            readOnly;
 
     // Fetch the properties of a collection which has been fetched by CollectionFetchJob.
-    CollectionProperties(const Akonadi::Collection&);
+    explicit CollectionProperties(const Akonadi::Collection&);
 };
 
 const Akonadi::Collection::Rights WritableRights = Akonadi::Collection::CanChangeItem | Akonadi::Collection::CanCreateItem | Akonadi::Collection::CanDeleteItem;

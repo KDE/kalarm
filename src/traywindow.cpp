@@ -324,7 +324,6 @@ void TrayWindow::updateIcon()
 */
 QString TrayWindow::tooltipAlarmText() const
 {
-    KAEvent event;
     const QString& prefix = Preferences::tooltipTimeToPrefix();
     int maxCount = Preferences::tooltipAlarmCount();
     const KADateTime now = KADateTime::currentLocalDateTime();

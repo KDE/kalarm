@@ -146,16 +146,16 @@ QSize StackedScrollGroup::adjustSize(bool force)
             }
         }
         mSized = true;
-        QSize s = mWidgets.at(0)->parentWidget()->sizeHint();
-        if (s.height() < mMinHeight)
-            s.setHeight(mMinHeight);
-        mWidgets.at(0)->parentWidget()->resize(s);
+        QSize sz = mWidgets.at(0)->parentWidget()->sizeHint();
+        if (sz.height() < mMinHeight)
+            sz.setHeight(mMinHeight);
+        mWidgets.at(0)->parentWidget()->resize(sz);
         for (QWidget* w = mWidgets.at(0)->parentWidget();  w && w != mDialog;  w = w->parentWidget())
             w->setMinimumHeight(qMin(w->minimumSizeHint().height(), w->sizeHint().height()));
         dlgsize.setHeight(dlgsize.height() - mHeightReduction);
-        s = mDialog->QDialog::minimumSizeHint();
-        if (s.height() > dlgsize.height())
-            dlgsize.setHeight(s.height());
+        sz = mDialog->QDialog::minimumSizeHint();
+        if (sz.height() > dlgsize.height())
+            dlgsize.setHeight(sz.height());
         mDialog->setMinimumHeight(dlgsize.height());
     }
     mSized = true;

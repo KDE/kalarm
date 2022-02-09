@@ -1,7 +1,7 @@
 /*
  *  fileresourceconfigmanager.h  -  config manager for resources accessed via file system
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2020 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2020-2022 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -28,6 +28,9 @@ public:
      *  the resources defined in it.
      */
     static FileResourceConfigManager* instance();
+
+    FileResourceConfigManager(const FileResourceConfigManager&) = delete;
+    FileResourceConfigManager& operator=(const FileResourceConfigManager&) = delete;
 
     /** Destructor.
      *  Writes the 'kalarmresources' config file.

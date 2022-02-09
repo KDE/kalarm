@@ -368,7 +368,7 @@ void FileResource::loaded(bool success, QHash<QString, KAEvent>& newEvents, cons
         // This is only done when a delayed load fails.
         // If the resource previously loaded successfully, leave its events (in
         // mEvents) unchanged.
-        if (!success  &&  !errorMessage.isEmpty())
+        if (!errorMessage.isEmpty())
             Resources::notifyResourceMessage(this, MessageType::Error, xi18nc("@info", "Error loading calendar <resource>%1</resource>.", displayName()), errorMessage);
         return;
     }

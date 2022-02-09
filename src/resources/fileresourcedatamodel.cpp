@@ -1,7 +1,7 @@
 /*
  *  fileresourcedatamodel.cpp  -  model containing file system resources and their events
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2007-2021 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2007-2022 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -29,7 +29,7 @@ private:
 public:
     Type type;
 
-    Node(Resource& r) : ritem(r), type(Type::Resource) {}
+    explicit Node(Resource& r) : ritem(r), type(Type::Resource) {}
     Node(KAEvent* e, Resource& r) : eitem(e), owner(r), type(Type::Event) {}
     ~Node()
     {
@@ -835,7 +835,7 @@ QModelIndex FileResourceDataModel::index(int row, int column, const QModelIndex&
             if (!column)
             {
                 const QVector<Node*>& nodes = mResourceNodes.value(Resource());
-                if (row >= 0  &&  row < nodes.count())
+                if (row < nodes.count())
                     return createIndex(row, column, nodes[row]);
             }
         }
@@ -945,9 +945,9 @@ QVariant FileResourceDataModel::data(const QModelIndex& ix, int role) const
                 // This is an Event row
                 if (role == ParentResourceIdRole)
                     return node->parent().id();
-                const Resource res = node->parent();
+                const Resource resp = node->parent();
                 bool handled;
-                const QVariant value = eventData(role, ix.column(), *event, res, handled);
+                const QVariant value = eventData(role, ix.column(), *event, resp, handled);
                 if (handled)
                     return value;
             }

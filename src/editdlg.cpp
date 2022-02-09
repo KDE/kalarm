@@ -266,9 +266,9 @@ void EditAlarmDlg::init(const KAEvent& event)
     // Controls specific to the alarm type
     QGroupBox* actionBox = new QGroupBox(i18nc("@title:group", "Action"), mainPage);
     topLayout->addWidget(actionBox, 1);
-    auto layout = new QVBoxLayout(actionBox);
+    auto vlayout = new QVBoxLayout(actionBox);
 
-    type_init(actionBox, layout);
+    type_init(actionBox, vlayout);
 
     if (!mTemplate)
     {

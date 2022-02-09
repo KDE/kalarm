@@ -1,7 +1,7 @@
 /*
  *  kalarmapp.h  -  the KAlarm application object
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2001-2021 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2001-2022 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -210,7 +210,7 @@ private:
     {
         ActionQEntry(QueuedAction a, const EventId& id) : action(a), eventId(id) { }
         ActionQEntry(QueuedAction a, const EventId& id, const QString& resId) : action(a), eventId(id), resourceId(resId) { }
-        ActionQEntry(const KAEvent& e, QueuedAction a = QueuedAction::Handle) : action(a), event(e) { }
+        explicit ActionQEntry(const KAEvent& e, QueuedAction a = QueuedAction::Handle) : action(a), event(e) { }
         ActionQEntry() = default;
         QueuedAction  action;
         EventId       eventId;

@@ -1,7 +1,7 @@
 /*
  *  undo.cpp  -  undo/redo facility
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2005-2020 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2005-2022 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -77,6 +77,8 @@ class UndoMultiBase : public UndoItem
                 : UndoItem(t, name), mUndos(new Undo::List) {}
         UndoMultiBase(Undo::Type t, Undo::List* undos, const QString& name)
                 : UndoItem(t, name), mUndos(undos) {}
+        UndoMultiBase(const UndoMultiBase&) = delete;
+        UndoMultiBase& operator=(const UndoMultiBase&) = delete;
         ~UndoMultiBase() override { delete mUndos; }
         const Undo::List* undos() const         { return mUndos; }
     protected:
@@ -125,6 +127,8 @@ class UndoEdit : public UndoItem
     public:
         UndoEdit(Undo::Type, const KAEvent& oldEvent, const QString& newEventID,
                  const Resource&, const QStringList& dontShowErrors, const QString& description);
+        UndoEdit(const UndoEdit&) = delete;
+        UndoEdit& operator=(const UndoEdit&) = delete;
         ~UndoEdit() override;
         Operation          operation() const override     { return EDIT; }
         QString            defaultActionText() const override;
@@ -150,6 +154,8 @@ class UndoDelete : public UndoItem
     public:
         UndoDelete(Undo::Type, const Undo::Event&, const QString& name = QString());
         UndoDelete(Undo::Type, const KAEvent&, const Resource&, const QStringList& dontShowErrors, const QString& name = QString());
+        UndoDelete(const UndoDelete&) = delete;
+        UndoDelete& operator=(const UndoDelete&) = delete;
         ~UndoDelete() override;
         Operation          operation() const override     { return DELETE; }
         QString            defaultActionText() const override;

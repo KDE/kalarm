@@ -1,7 +1,7 @@
 /*
  *  commandoptions.cpp  -  extract command line options
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2001-2021 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2001-2022 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -489,7 +489,6 @@ void CommandOptions::process()
                 {
                     count = 0;
                     const QByteArray dateTime = mParser->value(*mOptions.at(UNTIL)).toLocal8Bit();
-                    bool ok;
                     if (mParser->isSet(*mOptions.at(TIME)))
                         ok = KAlarm::convertTimeString(dateTime, endTime, mAlarmTime);
                     else
@@ -738,8 +737,7 @@ bool CommandOptions::checkCommand(Option command, Command code, EditAlarmDlg::Ty
     ||  !mParser->isSet(*mOptions.at(command)))
         return false;
     if (mCommand != NONE
-    &&  (allowedEditType == EditAlarmDlg::NO_TYPE
-      || (allowedEditType != EditAlarmDlg::NO_TYPE  &&  (mCommand != NEW || mEditType != allowedEditType))))
+    &&  (allowedEditType == EditAlarmDlg::NO_TYPE  ||  (mCommand != NEW || mEditType != allowedEditType)))
         setErrorIncompatible(mCommandOpt, command);
     qCDebug(KALARM_LOG).nospace() << "CommandOptions::checkCommand: " << optionName(command);
     mCommand = code;

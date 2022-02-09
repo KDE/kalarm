@@ -687,8 +687,8 @@ TimePrefTab::TimePrefTab(StackedScrollGroup* scrollGroup)
     {
         const QString name = HolidayRegion::name(regionCode);
         const QString languageName = QLocale::languageToString(QLocale(HolidayRegion::languageCode(regionCode)).language());
-        const QString label = languageName.isEmpty() ? name : i18nc("Holiday region, region language", "%1 (%2)", name, languageName);
-        regionsMap.insert(label, regionCode);
+        const QString labelText = languageName.isEmpty() ? name : i18nc("Holiday region, region language", "%1 (%2)", name, languageName);
+        regionsMap.insert(labelText, regionCode);
     }
 
     mHolidays->addItem(i18nc("No holiday region", "None"), QString());
@@ -801,8 +801,8 @@ void TimePrefTab::restore(bool, bool)
 {
     KADateTime::Spec timeSpec = Preferences::timeSpec();
     mTimeZone->setTimeZone(timeSpec.type() == KADateTime::TimeZone ? timeSpec.timeZone() : QTimeZone());
-    const int i = Preferences::holidays().isValid() ? mHolidays->findData(Preferences::holidays().regionCode()) : 0;
-    mHolidays->setCurrentIndex(i);
+    const int ix = Preferences::holidays().isValid() ? mHolidays->findData(Preferences::holidays().regionCode()) : 0;
+    mHolidays->setCurrentIndex(ix);
     mStartOfDay->setValue(Preferences::startOfDay());
     mWorkStart->setValue(Preferences::workDayStart());
     mWorkEnd->setValue(Preferences::workDayEnd());

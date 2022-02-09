@@ -721,10 +721,10 @@ QString ResourceDataModelBase::alarmTimeText(const DateTime& dateTime, char lead
             const QTime t(1,30,30);
             const QString nozero = locale.toString(t, timeFormat);
             const QString zero   = locale.toString(t, timeFullFormat);
-            for (int i = 0; i < nozero.size(); ++i)
-                if (nozero[i] != zero[i])
+            for (int j = 0; j < nozero.size(); ++j)
+                if (nozero[j] != zero[j])
                 {
-                    hourOffset = i;
+                    hourOffset = j;
                     break;
                 }
         }

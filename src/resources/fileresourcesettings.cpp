@@ -101,10 +101,10 @@ bool FileResourceSettings::readConfig()
     mStandard          = readAlarmTypes(KEY_STANDARD);
 
     // Read storage type and validate against location.
-    const QString type = mConfigGroup->readEntry(KEY_TYPE, QString());
-    if (type == STORAGE_FILE)
+    const QString storageType = mConfigGroup->readEntry(KEY_TYPE, QString());
+    if (storageType == STORAGE_FILE)
         mStorageType = File;
-    else if (type == STORAGE_DIR)
+    else if (storageType == STORAGE_DIR)
         mStorageType = Directory;
     else
     {
