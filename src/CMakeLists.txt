@@ -291,7 +291,8 @@ target_link_libraries(kalarm_bin
     KF5::CalendarCore
     KF5::CalendarUtils
     KF5::Contacts
-    KF5::IdentityManagement
+    KF5::IdentityManagementWidgets
+    KF5::PimTextEdit
     KF5::MailTransportAkonadi
     KF5::Mime
     KF5::PimCommon
