@@ -9,8 +9,8 @@
 
 #include "identities.h"
 
-#include <identitymanager.h>
-#include <identity.h>
+#include <KIdentityManagement/IdentityManager>
+#include <KIdentityManagement/Identity>
 
 namespace KAlarmCal
 {
