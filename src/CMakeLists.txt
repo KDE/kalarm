@@ -313,7 +313,7 @@ install(FILES data/kalarm.autostart.desktop DESTINATION ${KDE_INSTALL_AUTOSTARTD
 install(FILES data/org.kde.kalarm.appdata.xml DESTINATION ${KDE_INSTALL_METAINFODIR})
 
 install(FILES data/kalarmconfig.kcfg DESTINATION ${KDE_INSTALL_KCFGDIR})
-install(FILES data/kalarmui.rc DESTINATION ${KDE_INSTALL_KXMLGUI5DIR}/kalarm)
+install(FILES data/kalarmui.rc DESTINATION ${KDE_INSTALL_KXMLGUIDIR}/kalarm)
 install(FILES data/org.kde.kalarm.kalarm.xml DESTINATION ${KDE_INSTALL_DBUSINTERFACEDIR})
 install(FILES data/kalarm.notifyrc DESTINATION ${KDE_INSTALL_KNOTIFY5RCDIR})
 
