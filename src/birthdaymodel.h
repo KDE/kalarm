@@ -8,7 +8,7 @@
 
 #pragma once
 
-#include <Akonadi/Contact/ContactsTreeModel>
+#include <Akonadi/ContactsTreeModel>
 
 #include <QSortFilterProxyModel>
 

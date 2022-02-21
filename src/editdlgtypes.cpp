@@ -38,7 +38,7 @@
 
 #include <KAlarmCal/Identities>
 
-#include <Akonadi/Contact/EmailAddressSelectionDialog>
+#include <Akonadi/EmailAddressSelectionDialog>
 #include <KCalUtils/ICalDrag>
 #include <KCalendarCore/Person>
 
