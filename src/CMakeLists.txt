@@ -245,10 +245,10 @@ qt_add_dbus_interface(kalarm_bin_SRCS data/org.freedesktop.Notifications.xml not
 qt_add_dbus_interface(kalarm_bin_SRCS data/org.freedesktop.DBus.Properties.xml dbusproperties)
 
 kcfg_generate_dbus_interface(${CMAKE_CURRENT_SOURCE_DIR}/data/kalarmresource.kcfg org.kde.Akonadi.KAlarm.Settings)
-qt_add_dbus_interface(kalarm_bin_SRCS ${CMAKE_CURRENT_BINARY_DIR}/org.kde.Akonadi.KAlarm.Settings.xml kalarmsettings KAlarmSettings)
+qt_add_dbus_interface(kalarm_bin_SRCS ${CMAKE_CURRENT_BINARY_DIR}/org.kde.Akonadi.KAlarm.Settings.xml kalarmsettings)
 
 kcfg_generate_dbus_interface(${CMAKE_CURRENT_SOURCE_DIR}/data/kalarmdirresource.kcfg org.kde.Akonadi.KAlarmDir.Settings)
-qt_add_dbus_interface(kalarm_bin_SRCS ${CMAKE_CURRENT_BINARY_DIR}/org.kde.Akonadi.KAlarmDir.Settings.xml kalarmdirsettings KAlarmDirSettings)
+qt_add_dbus_interface(kalarm_bin_SRCS ${CMAKE_CURRENT_BINARY_DIR}/org.kde.Akonadi.KAlarmDir.Settings.xml kalarmdirsettings)
 
 kconfig_add_kcfg_files(kalarm_bin_SRCS GENERATE_MOC data/kalarmconfig.kcfgc)
 
