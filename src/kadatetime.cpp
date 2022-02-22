@@ -2265,13 +2265,8 @@ KADateTime KADateTime::fromString(const QString &string, TimeFormat format, bool
                 //month = d.month();
             } else {
                 // A month and day are specified
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-                month = parts[3].leftRef(2).toInt(&ok);
-                day   = parts[3].rightRef(2).toInt(&ok1);
-#else
                 month = QStringView(parts[3]).left(2).toInt(&ok);
                 day   = QStringView(parts[3]).right(2).toInt(&ok1);
-#endif
                 if (!ok || !ok1) {
                     break;
                 }
@@ -2864,17 +2859,10 @@ QDateTime fromStr(const QString &string, const QString &format, int &utcOffset,
                 case 's': {   // milliseconds, with decimal point prefix
                     if (str[s] != QLatin1Char('.')) {
                         // If no locale, try comma, it is preferred by ISO8601 as the decimal point symbol
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
                         const QChar dpt = QLocale().decimalPoint();
-                        if (!str.midRef(s).startsWith(dpt)) {
-                            return {};
-                        }
-#else
-                        const QString dpt = QLocale().decimalPoint();
                         if (!QStringView(str).mid(s).startsWith(dpt)) {
                             return {};
                         }
-#endif
                     }
                     ++s;
                     if (s >= send) {
@@ -3225,11 +3213,7 @@ bool getNumber(const QString &string, int &offset, int mindigits, int maxdigits,
         return false;
     }
     bool ok;
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-    int n = string.midRef(offset, ndigits).toInt(&ok);
-#else
     int n = QStringView(string).mid(offset, ndigits).toInt(&ok);
-#endif
     if (neg) {
         n = -n;
     }

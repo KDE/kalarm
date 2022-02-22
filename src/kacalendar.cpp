@@ -2,7 +2,7 @@
  *  kacalendar.cpp  -  KAlarm kcal library calendar and event functions
  *  This file is part of kalarmcal library, which provides access to KAlarm
  *  calendar data.
- *  SPDX-FileCopyrightText: 2001-2020 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2001-2022 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -34,9 +34,7 @@ const QLatin1String MIME_ARCHIVED("application/x-vnd.kde.alarm.archived");
 const QLatin1String MIME_TEMPLATE("application/x-vnd.kde.alarm.template");
 
 static const QByteArray VERSION_PROPERTY("VERSION");     // X-KDE-KALARM-VERSION VCALENDAR property
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-static bool isUTC(const QString &localFile);
-#endif
+
 class Private
 {
 public:
@@ -89,24 +87,10 @@ int updateVersion(const FileStorage::Ptr &fileStorage, QString &versionString)
         return IncompatibleFormat;    // calendar was created by another program, or an unknown version of KAlarm
     }
 
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     // Calendar was created by an earlier version of KAlarm.
-    // Convert it to the current format.
-    const QString localFile = fileStorage->fileName();
-    int ver = version;
-    if (version == KAlarmCal::Version(0, 5, 7)  &&  !localFile.isEmpty()) {
-        // KAlarm version 0.5.7 - check whether times are stored in UTC, in which
-        // case it is the KDE 3.0.0 version, which needs adjustment of summer times.
-        if (isUTC(localFile)) {
-            ver = -version;
-        }
-        qCDebug(KALARMCAL_LOG) << "KAlarm version 0.5.7 (" << (ver < 0 ? "" : "non-") << "UTC)";
-    } else {
-        qCDebug(KALARMCAL_LOG) << "KAlarm version" << version;
-    }
     // Convert events to current KAlarm format for when/if the calendar is saved.
-    KAEvent::convertKCalEvents(fileStorage->calendar(), ver);
-#endif
+    qCDebug(KALARMCAL_LOG) << "KAlarm version" << version;
+    KAEvent::convertKCalEvents(fileStorage->calendar(), version);
     // Set the new calendar version.
     setKAlarmVersion(fileStorage->calendar());
     return version;
@@ -175,48 +159,7 @@ int Private::readKAlarmVersion(const FileStorage::Ptr &fileStorage, QString &sub
     }
     return KAlarmCal::getVersionNumber(versionString, &subVersion);
 }
-// This code is for kde 3.0.0 (we will release in the future kf6
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-/******************************************************************************
-* Check whether the calendar file has its times stored as UTC times,
-* indicating that it was written by the KDE 3.0.0 version of KAlarm 0.5.7.
-* Reply = true if times are stored in UTC
-*       = false if the calendar is a vCalendar, times are not UTC, or any error occurred.
-*/
-bool isUTC(const QString &localFile)
-{
-    // Read the calendar file into a string
-    QFile file(localFile);
-    if (!file.open(QIODevice::ReadOnly)) {
-        return false;
-    }
-    QTextStream ts(&file);
-    ts.setCodec("ISO 8859-1");
-    const QByteArray text = ts.readAll().toLocal8Bit();
-    file.close();
 
-    // Extract the CREATED property for the first VEVENT from the calendar
-    const QByteArray BEGIN_VCALENDAR("BEGIN:VCALENDAR");
-    const QByteArray BEGIN_VEVENT("BEGIN:VEVENT");
-    const QByteArray CREATED("CREATED:");
-    const QList<QByteArray> lines = text.split('\n');
-    for (int i = 0, end = lines.count();  i < end;  ++i) {
-        if (lines[i].startsWith(BEGIN_VCALENDAR)) {
-            while (++i < end) {
-                if (lines[i].startsWith(BEGIN_VEVENT)) {
-                    while (++i < end) {
-                        if (lines[i].startsWith(CREATED)) {
-                            return lines[i].endsWith('Z');
-                        }
-                    }
-                }
-            }
-            break;
-        }
-    }
-    return false;
-}
-#endif
 //=============================================================================
 
 namespace CalEvent

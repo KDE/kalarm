@@ -58,11 +58,7 @@ int getVersionNumber(const QString &version, QString *subVersion)
         if (subVersion) {
             *subVersion = issue.mid(i);
         }
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-        v = issue.leftRef(i).toUInt();   // issue number
-#else
         v = QStringView(issue).left(i).toUInt();   // issue number
-#endif
         vernum += (v < 99 ? v : 99);
     }
     return vernum;
