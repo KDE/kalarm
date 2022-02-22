@@ -315,7 +315,7 @@ install(FILES data/org.kde.kalarm.appdata.xml DESTINATION ${KDE_INSTALL_METAINFO
 install(FILES data/kalarmconfig.kcfg DESTINATION ${KDE_INSTALL_KCFGDIR})
 install(FILES data/kalarmui.rc DESTINATION ${KDE_INSTALL_KXMLGUIDIR}/kalarm)
 install(FILES data/org.kde.kalarm.kalarm.xml DESTINATION ${KDE_INSTALL_DBUSINTERFACEDIR})
-install(FILES data/kalarm.notifyrc DESTINATION ${KDE_INSTALL_KNOTIFY5RCDIR})
+install(FILES data/kalarm.notifyrc DESTINATION ${KDE_INSTALL_KNOTIFYRCDIR})
 
 ########### KAuth helper ###############
 

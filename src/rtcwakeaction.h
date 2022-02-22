@@ -5,10 +5,13 @@
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
-
+#include <QObject>
 #pragma once
-
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 #include <KAuth>
+#else
+#include <KAuth/KAuth>
+#endif
 
 using namespace KAuth;
 

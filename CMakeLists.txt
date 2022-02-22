@@ -111,7 +111,11 @@ if (NOT APPLE)
     find_package(X11)
 endif()
 if (X11_FOUND)
-    find_package(Qt${QT_MAJOR_VERSION}X11Extras ${QT_REQUIRED_VERSION} REQUIRED NO_MODULE)
+    if (QT_MAJOR_VERSION STREQUAL "5")
+       find_package(Qt5X11Extras ${QT_REQUIRED_VERSION} REQUIRED NO_MODULE)
+    else()
+	    #TODO
+    endif()	    
 endif()
 set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH})
 
