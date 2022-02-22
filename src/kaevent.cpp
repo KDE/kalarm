@@ -656,7 +656,11 @@ KAEventPrivate::KAEventPrivate(const KCalendarCore::Event::Ptr &event)
                 flag = flags.at(++i);
             }
             const int len = flag.length() - 1;
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
             mReminderMinutes = -flag.leftRef(len).toInt();    // -> 0 if conversion fails
+#else
+            mReminderMinutes = -QStringView(flag).left(len).toInt();    // -> 0 if conversion fails
+#endif
             switch (flag.at(len).toLatin1()) {
             case 'M':  break;
             case 'H':  mReminderMinutes *= 60;  break;
@@ -4015,16 +4019,28 @@ DateTime KAEventPrivate::readDateTime(const Event::Ptr &event, bool localZone, b
     const QString prop = event->customProperty(KACalendar::APPNAME, KAEventPrivate::NEXT_RECUR_PROPERTY);
     if (prop.length() >= SZ_DATE) {
         // The next due recurrence time is specified
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
         const QDate d(prop.leftRef(SZ_YEAR).toInt(),
                       prop.midRef(SZ_YEAR, SZ_MONTH).toInt(),
                       prop.midRef(SZ_YEAR + SZ_MONTH, SZ_DAY).toInt());
+#else
+        const QDate d(QStringView(prop).left(SZ_YEAR).toInt(),
+                      QStringView(prop).mid(SZ_YEAR, SZ_MONTH).toInt(),
+                      QStringView(prop).mid(SZ_YEAR + SZ_MONTH, SZ_DAY).toInt());
+#endif
         if (d.isValid()) {
             if (dateOnly  &&  prop.length() == SZ_DATE) {
                 next.setDate(d);
             } else if (!dateOnly  &&  prop.length() == IX_TIME + SZ_TIME  &&  prop[SZ_DATE] == QLatin1Char('T')) {
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
                 const QTime t(prop.midRef(IX_TIME, SZ_HOUR).toInt(),
                               prop.midRef(IX_TIME + SZ_HOUR, SZ_MIN).toInt(),
                               prop.midRef(IX_TIME + SZ_HOUR + SZ_MIN, SZ_SEC).toInt());
+#else
+                const QTime t(QStringView(prop).mid(IX_TIME, SZ_HOUR).toInt(),
+                              QStringView(prop).mid(IX_TIME + SZ_HOUR, SZ_MIN).toInt(),
+                              QStringView(prop).mid(IX_TIME + SZ_HOUR + SZ_MIN, SZ_SEC).toInt());
+#endif
                 if (t.isValid()) {
                     next.setDate(d);
                     next.setTime(t);

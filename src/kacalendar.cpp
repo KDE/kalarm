@@ -34,9 +34,9 @@ const QLatin1String MIME_ARCHIVED("application/x-vnd.kde.alarm.archived");
 const QLatin1String MIME_TEMPLATE("application/x-vnd.kde.alarm.template");
 
 static const QByteArray VERSION_PROPERTY("VERSION");     // X-KDE-KALARM-VERSION VCALENDAR property
-
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 static bool isUTC(const QString &localFile);
-
+#endif
 class Private
 {
 public:
@@ -89,6 +89,7 @@ int updateVersion(const FileStorage::Ptr &fileStorage, QString &versionString)
         return IncompatibleFormat;    // calendar was created by another program, or an unknown version of KAlarm
     }
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     // Calendar was created by an earlier version of KAlarm.
     // Convert it to the current format.
     const QString localFile = fileStorage->fileName();
@@ -103,9 +104,9 @@ int updateVersion(const FileStorage::Ptr &fileStorage, QString &versionString)
     } else {
         qCDebug(KALARMCAL_LOG) << "KAlarm version" << version;
     }
-
     // Convert events to current KAlarm format for when/if the calendar is saved.
     KAEvent::convertKCalEvents(fileStorage->calendar(), ver);
+#endif
     // Set the new calendar version.
     setKAlarmVersion(fileStorage->calendar());
     return version;
@@ -174,7 +175,8 @@ int Private::readKAlarmVersion(const FileStorage::Ptr &fileStorage, QString &sub
     }
     return KAlarmCal::getVersionNumber(versionString, &subVersion);
 }
-
+// This code is for kde 3.0.0 (we will release in the future kf6
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 /******************************************************************************
 * Check whether the calendar file has its times stored as UTC times,
 * indicating that it was written by the KDE 3.0.0 version of KAlarm 0.5.7.
@@ -214,7 +216,7 @@ bool isUTC(const QString &localFile)
     }
     return false;
 }
-
+#endif
 //=============================================================================
 
 namespace CalEvent

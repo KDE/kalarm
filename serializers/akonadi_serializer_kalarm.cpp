@@ -19,6 +19,7 @@
 #include <KLocalizedString>
 
 #include <QLocale>
+#include <QIODevice>
 #include <qplugin.h>
 
 using namespace Akonadi;

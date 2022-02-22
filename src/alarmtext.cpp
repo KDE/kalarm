@@ -16,6 +16,7 @@
 #include <QStringList>
 #include <QDateTime>
 #include <QLocale>
+#include <QRegExp>
 
 namespace
 {

@@ -59,6 +59,10 @@ PUBLIC
 PRIVATE
 )
 
+if (QT_MAJOR_VERSION STREQUAL "6")
+    target_link_libraries(KF5AlarmCalendar PRIVATE Qt6::Core5Compat)
+endif()
+
 set_target_properties(KF5AlarmCalendar PROPERTIES
       VERSION ${KALARMCAL_VERSION}
       SOVERSION ${KALARMCAL_SOVERSION}
