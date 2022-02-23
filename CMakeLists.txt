@@ -127,6 +127,9 @@ ecm_set_disabled_deprecation_versions(QT 5.15.2 KF 5.92.0)
 
 option(USE_UNITY_CMAKE_SUPPORT "Use UNITY cmake support (speedup compile time)" OFF)
 
+option(ENABLE_KAUTH_HELPER "Build and install KAuth helper" ON)
+add_feature_info(KAUTH_HELPER ${ENABLE_KAUTH_HELPER} "Build and install KAuth helper")
+
 set(COMPILE_WITH_UNITY_CMAKE_SUPPORT OFF)
 if (USE_UNITY_CMAKE_SUPPORT)
     set(COMPILE_WITH_UNITY_CMAKE_SUPPORT ON)
