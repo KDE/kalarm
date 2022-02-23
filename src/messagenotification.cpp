@@ -76,7 +76,7 @@ public:
         connect(qApp, &QGuiApplication::saveStateRequest, this, &MNSessionManager::saveState);
 #endif
     }
-    ~MNSessionManager() override {} 
+    ~MNSessionManager() override {}
 
     static void create()
     {

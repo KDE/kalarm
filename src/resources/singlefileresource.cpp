@@ -270,7 +270,6 @@ int SingleFileResource::doLoad(QHash<QString, KAEvent>& newEvents, bool readThro
             mDownloadJob->setProperty("QEventLoopLocker", QVariant::fromValue(ref));
             connect(mDownloadJob, &KJob::result,
                     this, &SingleFileResource::slotDownloadJobResult);
-//            connect(mDownloadJob, SIGNAL(percent(KJob*,ulong)), SLOT(handleProgress(KJob*,ulong)));
             setStatus(Status::Loading);
             return 0;     // loading initiated
         }
@@ -389,7 +388,6 @@ int SingleFileResource::doSave(bool writeThroughCache, bool force, QString& erro
         mUploadJob->setProperty("QEventLoopLocker", QVariant::fromValue(ref));
         connect(mUploadJob, &KJob::result,
                 this, &SingleFileResource::slotUploadJobResult);
-//        connect(mUploadJob, SIGNAL(percent(KJob*,ulong)), SLOT(handleProgress(KJob*,ulong)));
         setStatus(Status::Saving);
         return 0;
     }
@@ -427,9 +425,9 @@ void SingleFileResource::close()
         mDownloadJob->kill();
 
     save(nullptr, true);   // write through cache
-    // If a remote file upload job has been started, the use of
-    // QEventLoopLocker should ensure that it continues to completion even if
-    // the destructor for this instance is executed.
+    // If a remote file upload job has been started, the use of QEventLoopLocker
+    // in doSave() should ensure that it continues to completion even if the
+    // destructor for this instance is executed.
 
     if (mSettings  &&  mSettings->url().isLocalFile())
         KDirWatch::self()->removeFile(mSettings->url().toLocalFile());
@@ -679,7 +677,7 @@ QByteArray SingleFileResource::calculateHash(const QString& fileName) const
     {
         if (file.open(QIODevice::ReadOnly))
         {
-            const qint64 blockSize = 512 * 1024; // Read blocks of 512K
+            const qint64 blockSize = 512 * 1024;  // read blocks of 512K
             QCryptographicHash hash(QCryptographicHash::Md5);
 
             while (!file.atEnd())

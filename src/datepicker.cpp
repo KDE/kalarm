@@ -125,7 +125,7 @@ DatePicker::DatePicker(QWidget* parent)
     connect(mDayMatrix, &DayMatrix::newAlarmFromTemplate, this, &DatePicker::slotNewAlarmFromTemplate);
 
     // Initialise the display.
-    mMonthShown.setDate(currentDate.year(), currentDate.month(), 1); 
+    mMonthShown.setDate(currentDate.year(), currentDate.month(), 1);
     newMonthShown();
     updateDisplay();
 
@@ -210,7 +210,7 @@ void DatePicker::nextMonthClicked()
 void DatePicker::updateToday()
 {
     const QDate currentDate = KADateTime::currentDateTime(Preferences::timeSpec()).date();
-    const QDate monthToShow(currentDate.year(), currentDate.month(), 1); 
+    const QDate monthToShow(currentDate.year(), currentDate.month(), 1);
     if (monthToShow > mMonthShown)
     {
         mMonthShown = monthToShow;
