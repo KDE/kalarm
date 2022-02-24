@@ -7,10 +7,11 @@
  */
 #include <QObject>
 #pragma once
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-#include <KAuth>
-#else
+#include <kauth_version.h>
+#if KAUTH_VERSION >= QT_VERSION_CHECK(5, 92, 0)
 #include <KAuth/KAuth>
+#else
+#include <KAuth>
 #endif
 
 using namespace KAuth;
