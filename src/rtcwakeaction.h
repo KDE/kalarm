@@ -9,7 +9,8 @@
 #pragma once
 #include <kauth_version.h>
 #if KAUTH_VERSION >= QT_VERSION_CHECK(5, 92, 0)
-#include <KAuth/KAuth>
+#include <KAuth/ActionReply>
+#include <KAuth/HelperSupport>
 #else
 #include <KAuth>
 #endif
