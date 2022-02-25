@@ -21,7 +21,10 @@
 #include "lib/synchtimer.h"
 #include "kalarm_debug.h"
 
+#include <kpimtextedit/kpimtextedit-texttospeech.h>
+#if KPIMTEXTEDIT_TEXT_TO_SPEECH
 #include <KPIMTextEdit/TextToSpeech>
+#endif
 
 #include <KLocalizedString>
 #include <KConfig>
@@ -831,6 +834,7 @@ void MessageDisplayHelper::playAudio()
 */
 void MessageDisplayHelper::slotSpeak()
 {
+#if KPIMTEXTEDIT_TEXT_TO_SPEECH
     KPIMTextEdit::TextToSpeech* tts = KPIMTextEdit::TextToSpeech::self();
     if (!tts->isReady())
     {
@@ -840,6 +844,7 @@ void MessageDisplayHelper::slotSpeak()
     }
 
     tts->say(mMessage);
+#endif
 }
 
 /******************************************************************************

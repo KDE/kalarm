@@ -16,7 +16,10 @@
 #include "lib/pushbutton.h"
 #include "kalarm_debug.h"
 
+#include <kpimtextedit/kpimtextedit-texttospeech.h>
+#if KPIMTEXTEDIT_TEXT_TO_SPEECH
 #include <KPIMTextEdit/TextToSpeech>
+#endif
 
 #include <KLocalizedString>
 #include <phonon/backendcapabilities.h>
@@ -130,7 +133,9 @@ void SoundPicker::showFile(bool show)
 */
 void SoundPicker::showSpeak(bool show)
 {
+#if KPIMTEXTEDIT_TEXT_TO_SPEECH
     if (!KPIMTextEdit::TextToSpeech::self()->isReady())
+#endif
         show = false;    // speech capability is not installed or configured
     if (show != mSpeakShowing)
     {
