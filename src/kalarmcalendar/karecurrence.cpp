@@ -1,7 +1,8 @@
 /*
  *  karecurrence.cpp  -  recurrence with special yearly February 29th handling
- *  This file is part of kalarmcal library, which provides access to KAlarm
+ *  This file is part of kalarmprivate library, which provides access to KAlarm
  *  calendar data.
+ *  Program:  kalarm
  *  SPDX-FileCopyrightText: 2005-2019 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: LGPL-2.0-or-later
@@ -9,10 +10,10 @@
 
 #include "karecurrence.h"
 
+#include "kalarmcal_debug.h"
+
 #include <KCalendarCore/Recurrence>
 #include <KCalendarCore/ICalFormat>
-
-#include "kalarmcal_debug.h"
 
 #include <QDate>
 #include <QLocale>

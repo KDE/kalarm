@@ -1,40 +1,34 @@
 /*
  *  collectionattribute.h  -  Akonadi attribute holding Collection characteristics
- *  This file is part of kalarmcal library, which provides access to KAlarm
- *  calendar data.
- *  SPDX-FileCopyrightText: 2010-2019 David Jarvie <djarvie@kde.org>
+ *  Program:  kalarm
+ *  SPDX-FileCopyrightText: 2010-2022 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
 #pragma once
 
-#include "kalarmcal_export.h"
-
-#include "kacalendar.h"
+#include "kalarmcalendar/kacalendar.h"
 
 #include <Akonadi/Attribute>
 
 #include <QColor>
 
-namespace KAlarmCal
-{
-
 /**
  * @short An Attribute for a KAlarm Collection containing various status information.
  *
- * This class represents an Akonadi attribute of a KAlarm Collection. It contains
- * information on the enabled status, the alarm types allowed in the resource,
- * which alarm types the resource is the standard Collection for, etc.
+ * This class represents an Akonadi attribute of a legacy KAlarm Collection. It
+ * contains information on the enabled status, the alarm types allowed in the
+ * resource, which alarm types the resource is the standard Collection for, etc.
  *
- * The attribute is maintained by client applications.
+ * This class is only used for migrating from legacy KAlarm Akonadi collections.
  *
  * @see CompatibilityAttribute
  *
  * @author David Jarvie <djarvie@kde.org>
  */
 
-class KALARMCAL_EXPORT CollectionAttribute : public Akonadi::Attribute
+class CollectionAttribute : public Akonadi::Attribute
 {
 public:
     CollectionAttribute();
@@ -55,11 +49,11 @@ public:
      *  (active, archived, template or displaying).
      *  @param type  alarm type to check for.
      */
-    bool isEnabled(CalEvent::Type type) const;
+    bool isEnabled(KAlarmCal::CalEvent::Type type) const;
 
     /** Return which alarm types (active, archived or template) the
      *  collection is enabled for. */
-    CalEvent::Types enabled() const;
+    KAlarmCal::CalEvent::Types enabled() const;
 
     /** Set the enabled/disabled state of the collection and its alarms,
      *  for a specified alarm type (active, archived or template). The
@@ -70,38 +64,38 @@ public:
      *  @param type     alarm type
      *  @param enabled  true to set enabled, false to set disabled.
      */
-    void setEnabled(CalEvent::Type type, bool enabled);
+    void setEnabled(KAlarmCal::CalEvent::Type type, bool enabled);
 
     /** Set which alarm types (active, archived or template) the collection
      *  is enabled for.
      *  @param types  alarm types
      */
-    void setEnabled(CalEvent::Types types);
+    void setEnabled(KAlarmCal::CalEvent::Types types);
 
     /** Return whether the collection is the standard collection for a specified
      *  alarm type (active, archived or template).
      *  @param type  alarm type
      */
-    bool isStandard(CalEvent::Type type) const;
+    bool isStandard(KAlarmCal::CalEvent::Type type) const;
 
     /** Set or clear the collection as the standard collection for a specified
      *  alarm type (active, archived or template).
      *  @param type      alarm type
      *  @param standard  true to set as standard, false to clear standard status.
      */
-    void setStandard(CalEvent::Type, bool standard);
+    void setStandard(KAlarmCal::CalEvent::Type, bool standard);
 
     /** Return which alarm types (active, archived or template) the
      *  collection is standard for.
      *  @return alarm types.
      */
-    CalEvent::Types standard() const;
+    KAlarmCal::CalEvent::Types standard() const;
 
     /** Set which alarm types (active, archived or template) the
      *  collection is the standard collection for.
      *  @param types  alarm types.
      */
-    void setStandard(CalEvent::Types types);
+    void setStandard(KAlarmCal::CalEvent::Types types);
 
     /** Return the background color to display this collection and its alarms,
      *  or invalid color if none is set.
@@ -141,8 +135,5 @@ private:
     Private *const d;
     //@endcond
 };
-
-} // namespace KAlarmCal
-
 
 // vim: et sw=4:

@@ -1,11 +1,13 @@
 //#define SIMULATION
 /*
-    This file is part of kalarmcal library, which provides access to KAlarm
-    calendar data. Qt5 version of KDE 4 kdelibs/kdecore/date/kdatetime.cpp.
-
-    SPDX-FileCopyrightText: 2005-2021 David Jarvie <djarvie@kde.org>
-
-    SPDX-License-Identifier: LGPL-2.0-or-later
+ *  kadatetime.cpp  -  represents a date and optional time with a time zone
+ *  This file is part of kalarmprivate library, which provides access to KAlarm
+ *  calendar data.
+ *  It is the Qt5 version of KDE 4 kdelibs/kdecore/date/kdatetime.cpp.
+ *  Program:  kalarm
+ *  SPDX-FileCopyrightText: 2005-2022 David Jarvie <djarvie@kde.org>
+ *
+ *  SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
 #include "kadatetime.h"
@@ -1147,15 +1149,6 @@ qint64 KADateTime::toSecsSinceEpoch() const
     return qdt.toSecsSinceEpoch();
 }
 
-uint KADateTime::toTime_t() const
-{
-    qint64 t = toSecsSinceEpoch();
-    if (static_cast<quint64>(t) >= uint(-1)) {
-        return uint(-1);
-    }
-    return static_cast<uint>(t);
-}
-
 void KADateTime::setSecsSinceEpoch(qint64 seconds)
 {
     QDateTime dt;
@@ -1164,11 +1157,6 @@ void KADateTime::setSecsSinceEpoch(qint64 seconds)
     d->specType = UTC;
     d->setDateOnly(false);
     d->setDtWithSpec(dt);
-}
-
-void KADateTime::setTime_t(qint64 seconds)
-{
-    setSecsSinceEpoch(seconds);
 }
 
 void KADateTime::setDateOnly(bool dateOnly)

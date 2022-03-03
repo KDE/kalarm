@@ -1,10 +1,11 @@
 /*
-    This file is part of kalarmcal library, which provides access to KAlarm
-    calendar data. Qt5 version of KDE 4 kdelibs/kdecore/date/kdatetime.h.
-
-    SPDX-FileCopyrightText: 2005-2019 David Jarvie <djarvie@kde.org>
-
-    SPDX-License-Identifier: LGPL-2.0-or-later
+ *  This file is part of kalarmprivate library, which provides access to KAlarm
+ *  calendar data.
+ *  This is the Qt5 version of KDE 4 kdelibs/kdecore/date/kdatetime.h.
+ *  Program:  kalarm
+ *  SPDX-FileCopyrightText: 2005-2022 David Jarvie <djarvie@kde.org>
+ *
+ *  SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
 /** @file
@@ -772,16 +773,6 @@ public:
     qint64 toSecsSinceEpoch() const;
 
     /**
-     * Converts the time to a UTC time, measured in seconds since 00:00:00 UTC
-     * 1st January 1970 (as returned by time(2)).
-     *
-     * @return converted time, or @c uint(-1) if the date is out of range or invalid
-     * @see setTime_t()
-     * @deprecated Use toSecsSinceEpoch()
-     */
-    KALARMCAL_DEPRECATED uint toTime_t() const;
-
-    /**
      * Sets the time to a UTC time, specified as seconds since 00:00:00 UTC
      * 1st January 1970 (as returned by time(2)).
      *
@@ -789,16 +780,6 @@ public:
      * @see toSecsSinceEpoch()
      */
     void setSecsSinceEpoch(qint64 seconds);
-
-    /**
-     * Sets the time to a UTC time, specified as seconds since 00:00:00 UTC
-     * 1st January 1970 (as returned by time(2)).
-     *
-     * @param seconds number of seconds since 00:00:00 UTC 1st January 1970
-     * @see toTime_t()
-     * @deprecated Use setSecsSinceEpoch()
-     */
-    KALARMCAL_DEPRECATED void setTime_t(qint64 seconds);
 
     /**
      * Sets the instance either to being a date and time value, or a date-only
@@ -1471,6 +1452,5 @@ KALARMCAL_EXPORT QDataStream &operator>>(QDataStream &in, KADateTime &dateTime);
 
 Q_DECLARE_METATYPE(KAlarmCal::KADateTime)
 Q_DECLARE_METATYPE(KAlarmCal::KADateTime::Spec)
-
 
 // vim: et sw=4:

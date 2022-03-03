@@ -1,8 +1,9 @@
 /*
  *  kaevent.h  -  represents KAlarm calendar events
- *  This file is part of kalarmcal library, which provides access to KAlarm
+ *  This file is part of kalarmprivate library, which provides access to KAlarm
  *  calendar data.
- *  SPDX-FileCopyrightText: 2001-2021 David Jarvie <djarvie@kde.org>
+ *  Program:  kalarm
+ *  SPDX-FileCopyrightText: 2001-2022 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -347,80 +348,16 @@ public:
             const QColor &bg, const QColor &fg, const QFont &font,
             SubAction action, int lateCancel, Flags flags, bool changesPending = false);
 
-    /** Construct an event and initialise with the specified parameters.
-     *  @param dt    start date/time. If @p dt is date-only, or if #ANY_TIME flag
-     *               is specified, the event will be date-only.
-     *  @param text  alarm message (@p action = #MESSAGE);
-     *               file to display (@p action = #FILE);
-     *               command to execute (@p action = #COMMAND);
-     *               email body (@p action = #EMAIL);
-     *               audio file (@p action = #AUDIO).
-     *  @param bg    background color (for display alarms, ignored otherwise).
-     *  @param fg    foreground color (for display alarms, ignored otherwise).
-     *  @param font  font (for display alarms, ignored otherwise). Ignored if
-     *               #DEFAULT_FONT flag is specified.
-     *  @param action         alarm action type.
-     *  @param lateCancel     late-cancellation period (minutes), else 0.
-     *  @param flags          OR of #Flag enum values.
-     *  @param changesPending true to inhibit automatic calculations and data
-     *                        updates until further changes have been applied
-     *                        to the instance; call endChanges() when changes
-     *                        are complete.
-     *  @deprecated Use the other constructor.
-     */
-    KALARMCAL_DEPRECATED KAEvent(const KADateTime &dt, const QString &text, const QColor &bg, const QColor &fg,
-            const QFont &font, SubAction action, int lateCancel, Flags flags, bool changesPending = false);
-
     /** Construct an event and initialise it from a KCalendarCore::Event.
      *
      *  The initialisation is identical to that performed by set().
      */
     explicit KAEvent(const KCalendarCore::Event::Ptr &);
 
-    /** Initialise the instance from a KCalendarCore::Event.
-     *
-     *  It uses the following properties from KCalendarCore::Event:
-     *  - Unique ID.
-     *  - Summary.
-     *  - Creation date/time.
-     *  - Start date/time.
-     *  - Recurrence rule.
-     *  - Alarms.
-     *  - Read only.
-     *  - Custom properties. X-KDE-KALARM- properties are interpreted and used to
-     *    set numerous KAEvent properties; non-KAlarm properties are simply stored.
-     *  - Custom status if equal to "DISABLED".
-     *  - Revision number.
-     *  @deprecated Use constructor and operator=() instead.
-     */
-    KALARMCAL_DEPRECATED void set(const KCalendarCore::Event::Ptr &);
-
     KAEvent(const KAEvent &other);
     ~KAEvent();
 
     KAEvent &operator=(const KAEvent &other);
-
-    /** Initialise the instance with the specified parameters.
-     *  @param dt    start date/time
-     *  @param text  alarm message (@p action = #MESSAGE);
-     *               file to display (@p action = #FILE);
-     *               command to execute (@p action = #COMMAND);
-     *               email body (@p action = #EMAIL);
-     *               audio file (@p action = #AUDIO)
-     *  @param bg    background color (for display alarms, ignored otherwise)
-     *  @param fg    background color (for display alarms, ignored otherwise)
-     *  @param font  font (for display alarms, ignored otherwise)
-     *  @param action         alarm action type
-     *  @param lateCancel     late-cancellation period (minutes), else 0
-     *  @param flags          OR of #Flag enum values
-     *  @param changesPending true to inhibit automatic data updates until
-     *                        further changes have been applied to the instance;
-     *                        call endChanges() when changes are complete.
-     *  @deprecated Use constructor and operator=() instead.
-     */
-    KALARMCAL_DEPRECATED void set(const KADateTime &dt, const QString &text, const QColor &bg,
-             const QColor &fg, const QFont &font, SubAction action, int lateCancel,
-             Flags flags, bool changesPending = false);
 
     /** Update an existing KCalendarCore::Event with the KAEvent data.
      *  @param event  Event to update.
@@ -524,24 +461,6 @@ public:
 
     /** Return the ID of the calendar resource which contains the event. */
     ResourceId  resourceId() const;
-
-    /** Set the ID of the Akonadi Item which contains the event.
-     *  @deprecated KAlarmCal will no longer provide this functionality.
-     */
-    KALARMCAL_DEPRECATED void setItemId(Akonadi::Item::Id id);
-
-    /** Return the ID of the Akonadi Item which contains the event.
-     *  @deprecated KAlarmCal will no longer provide this functionality.
-     */
-    KALARMCAL_DEPRECATED Akonadi::Item::Id  itemId() const;
-
-    /** Initialise an Akonadi::Item with the event's data.
-     *  Note that the event is not updated with the Item ID.
-     *  @return @c true if successful; @c false if the event's category does not match the
-     *          collection's mime types.
-     *  @deprecated Use KAlarmCal::setItemPayload() instead.
-     */
-    KALARMCAL_DEPRECATED bool setItemPayload(Akonadi::Item &, const QStringList &collectionMimeTypes) const;
 
     /** Note the event's storage format compatibility compared to the current KAlarm calendar format. */
     void setCompatibility(KACalendar::Compat c);
@@ -803,7 +722,7 @@ public:
      *  @param name      template's name
      *  @param afterTime number of minutes after default time to schedule alarm for, or
      *                   -1 to not use 'time from now'
-     *  @see isTemplate(), templateName()
+     *  @see isTemplate(), name()
      */
     void setTemplate(const QString &name, int afterTime = -1);
 
@@ -811,13 +730,6 @@ public:
      *  @see setTemplate()
      */
     bool isTemplate() const;
-
-    /** Return the alarm template's name.
-     *  @return template name, or empty if not a template
-     *  @see setTemplate()
-     *  @deprecated Use name() instead.
-     */
-    KALARMCAL_DEPRECATED QString templateName() const;
 
     /** Return whether the alarm template does not specify a time.
      *  @return @c true if no time is specified, i.e. the normal default alarm time will
@@ -1066,12 +978,6 @@ public:
      *  @see setWorkTimeOnly()
      */
     bool workTimeOnly() const;
-
-    /** Check whether a date/time is during working hours and/or holidays, depending
-     *  on the flags set for the specified event.
-     *  @deprecated Use !excludedByWorkTimeOrHoliday() instead.
-     */
-    KALARMCAL_DEPRECATED bool isWorkingTime(const KADateTime &dt) const;
 
     /** Check whether a date/time conflicts with working hours and/or holiday
      *  restrictions for the alarm.
@@ -1471,6 +1377,5 @@ private:
 Q_DECLARE_OPERATORS_FOR_FLAGS(KAlarmCal::KAEvent::Flags)
 Q_DECLARE_OPERATORS_FOR_FLAGS(KAlarmCal::KAEvent::Comparison)
 Q_DECLARE_METATYPE(KAlarmCal::KAEvent)
-
 
 // vim: et sw=4:

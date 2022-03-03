@@ -1,7 +1,8 @@
 /*
  *  version.cpp  -  program version functions
- *  This file is part of kalarmcal library, which provides access to KAlarm
+ *  This file is part of kalarmprivate library, which provides access to KAlarm
  *  calendar data.
+ *  Program:  kalarm
  *  SPDX-FileCopyrightText: 2002-2007, 2011, 2013 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: LGPL-2.0-or-later

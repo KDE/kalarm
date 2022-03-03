@@ -11,7 +11,10 @@ macro(macro_unit_tests)
     add_test(NAME ${_testname} COMMAND ${_testname})
     ecm_mark_as_test(${_testname})
     target_link_libraries(${_testname}
-        KF5AlarmCalendar
+        KF5::AkonadiCore
+        KF5::CalendarCore
+        KF5::Holidays
+        kalarmprivate
         Qt${QT_MAJOR_VERSION}::DBus
         Qt${QT_MAJOR_VERSION}::Test)
   endforeach()

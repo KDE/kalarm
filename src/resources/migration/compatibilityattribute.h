@@ -1,36 +1,31 @@
 /*
  *  compatibilityattribute.h  -  Akonadi attribute holding Collection compatibility
- *  This file is part of kalarmcal library, which provides access to KAlarm
- *  calendar data.
- *  SPDX-FileCopyrightText: 2011-2019 David Jarvie <djarvie@kde.org>
+ *  Program:  kalarm
+ *  SPDX-FileCopyrightText: 2011-2022 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: LGPL-2.0-or-later
  */
 #pragma once
 
-#include "kalarmcal_export.h"
-
-#include "kacalendar.h"
+#include "kalarmcalendar/kacalendar.h"
 
 #include <Akonadi/Attribute>
-
-namespace KAlarmCal
-{
 
 /**
  * @short An Attribute for a KAlarm Collection containing compatibility information.
  *
- * This class represents an Akonadi attribute of a KAlarm Collection. It contains
- * information on the compatibility of the Collection and its Items with the
- * current KAlarm calendar format. The attribute is maintained by the Akonadi
- * resource, and should be treated as read-only by applications.
+ * This class represents an Akonadi attribute of a legacy KAlarm Collection. It
+ * contains information on the compatibility of the Collection and its Items with
+ * the current KAlarm calendar format.
+ *
+ * This class is only used for migrating from legacy KAlarm Akonadi collections.
  *
  * @see CollectionAttribute
  *
  * @author David Jarvie <djarvie@kde.org>
  */
 
-class KALARMCAL_EXPORT CompatibilityAttribute : public Akonadi::Attribute
+class CompatibilityAttribute : public Akonadi::Attribute
 {
 public:
     /** Default constructor. Creates an incompatible attribute. */
@@ -49,10 +44,10 @@ public:
     bool operator!=(const CompatibilityAttribute &other) const  { return !operator==(other); }
 
     /** Return the compatibility status for the entity. */
-    KACalendar::Compat compatibility() const;
+    KAlarmCal::KACalendar::Compat compatibility() const;
 
     /** Set the compatibility status for the entity. */
-    void setCompatibility(KACalendar::Compat c);
+    void setCompatibility(KAlarmCal::KACalendar::Compat c);
 
     /** Return the KAlarm version of the backend calendar format.
      *  @return version number in the format returned by KAlarmCal::Version().
@@ -82,8 +77,5 @@ private:
     Private *const d;
     //@endcond
 };
-
-} // namespace KAlarmCal
-
 
 // vim: et sw=4:

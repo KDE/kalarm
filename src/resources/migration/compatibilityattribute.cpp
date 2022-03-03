@@ -1,24 +1,22 @@
 /*
  *  compatibilityattribute.cpp  -  Akonadi attribute holding Collection compatibility
- *  This file is part of kalarmcal library, which provides access to KAlarm
- *  calendar data.
- *  SPDX-FileCopyrightText: 2011-2019 David Jarvie <djarvie@kde.org>
+ *  Program:  kalarm
+ *  SPDX-FileCopyrightText: 2011-2022 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
 #include "compatibilityattribute.h"
 
-#include "kalarmcal_debug.h"
+#include "kalarm_debug.h"
 
-namespace KAlarmCal
-{
+using namespace KAlarmCal;
 
-class Q_DECL_HIDDEN CompatibilityAttribute::Private
+class CompatibilityAttribute::Private
 {
 public:
   Private() = default;
-  bool operator==(KAlarmCal::CompatibilityAttribute::Private other) const {
+  bool operator==(CompatibilityAttribute::Private other) const {
     return mCompatibility == other.mCompatibility
        &&  mVersion       == other.mVersion;
     }
@@ -97,13 +95,13 @@ QByteArray CompatibilityAttribute::serialized() const
 {
     const QByteArray v = QByteArray::number(d->mCompatibility) + ' '
                          + QByteArray::number(d->mVersion);
-    qCDebug(KALARMCAL_LOG) << v;
+    qCDebug(KALARM_LOG) << v;
     return v;
 }
 
 void CompatibilityAttribute::deserialize(const QByteArray &data)
 {
-    qCDebug(KALARMCAL_LOG) << data;
+    qCDebug(KALARM_LOG) << data;
 
     // Set default values
     d->mCompatibility = KACalendar::Incompatible;
@@ -133,7 +131,5 @@ void CompatibilityAttribute::deserialize(const QByteArray &data)
         d->mVersion = c;
     }
 }
-
-} // namespace KAlarmCal
 
 // vim: et sw=4:

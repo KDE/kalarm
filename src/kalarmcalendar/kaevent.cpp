@@ -1,26 +1,25 @@
 /*
  *  kaevent.cpp  -  represents KAlarm calendar events
- *  This file is part of kalarmcal library, which provides access to KAlarm
+ *  This file is part of kalarmprivate library, which provides access to KAlarm
  *  calendar data.
- *  SPDX-FileCopyrightText: 2001-2021 David Jarvie <djarvie@kde.org>
+ *  Program:  kalarm
+ *  SPDX-FileCopyrightText: 2001-2022 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
 #include "kaevent.h"
 
-#include "akonadi.h"   // for deprecated setItemPayload() only
 #include "alarmtext.h"
 #include "identities.h"
 #include "version.h"
+#include "kalarmcal_debug.h"
 
 #include <KCalendarCore/MemoryCalendar>
 #include <KHolidays/Holiday>
 #include <KHolidays/HolidayRegion>
 
-#include <klocalizedstring.h>
-
-#include "kalarmcal_debug.h"
+#include <KLocalizedString>
 
 using namespace KCalendarCore;
 using namespace KHolidays;
@@ -489,13 +488,6 @@ KAEvent::KAEvent(const KADateTime &dt, const QString &name, const QString &messa
                  const QColor &bg, const QColor &fg, const QFont &f,
                  SubAction action, int lateCancel, Flags flags, bool changesPending)
     : d(new KAEventPrivate(dt, name, message, bg, fg, f, action, lateCancel, flags, changesPending))
-{
-}
-
-KAEvent::KAEvent(const KADateTime &dt, const QString &message,
-                 const QColor &bg, const QColor &fg, const QFont &f,
-                 SubAction action, int lateCancel, Flags flags, bool changesPending)
-    : d(new KAEventPrivate(dt, QString(), message, bg, fg, f, action, lateCancel, flags, changesPending))
 {
 }
 
@@ -1077,19 +1069,6 @@ void KAEventPrivate::copy(const KAEventPrivate &event)
     } else {
         mRecurrence = nullptr;
     }
-}
-
-// Deprecated
-void KAEvent::set(const KCalendarCore::Event::Ptr &e)
-{
-    *this = KAEvent(e);
-}
-
-// Deprecated
-void KAEvent::set(const KADateTime &dt, const QString &message, const QColor &bg, const QColor &fg,
-                  const QFont &f, SubAction act, int lateCancel, Flags flags, bool changesPending)
-{
-    *this = KAEvent(dt, QString(), message, bg, fg, f, act, lateCancel, flags, changesPending);
 }
 
 /******************************************************************************
@@ -1737,27 +1716,6 @@ Akonadi::Collection::Id KAEvent::collectionId() const
     return d->mDisplaying ? -1 : d->mResourceId;
 }
 
-void KAEvent::setItemId(Akonadi::Item::Id id)
-{
-    d->mItemId = id;
-}
-
-Akonadi::Item::Id KAEvent::itemId() const
-{
-    return d->mItemId;
-}
-
-/******************************************************************************
-* Initialise an Item with the event.
-* Note that the event is not updated with the Item ID.
-* Reply = true if successful,
-*         false if event's category does not match collection's mime types.
-*/
-bool KAEvent::setItemPayload(Akonadi::Item &item, const QStringList &collectionMimeTypes) const
-{
-    return KAlarmCal::setItemPayload(item, *this, collectionMimeTypes);
-}
-
 void KAEvent::setCompatibility(KACalendar::Compat c)
 {
     d->mCompatibility = c;
@@ -2094,11 +2052,6 @@ void KAEvent::setTemplate(const QString &name, int afterTime)
 bool KAEvent::isTemplate() const
 {
     return d->mCategory == CalEvent::TEMPLATE;
-}
-
-QString KAEvent::templateName() const
-{
-    return d->mName;
 }
 
 bool KAEvent::usingDefaultTime() const
@@ -2601,11 +2554,6 @@ bool KAEvent::workTimeOnly() const
 bool KAEvent::excludedByWorkTimeOrHoliday(const KADateTime &dt) const
 {
     return d->excludedByWorkTimeOrHoliday(dt);
-}
-
-bool KAEvent::isWorkingTime(const KADateTime &dt) const
-{
-    return !excludedByWorkTimeOrHoliday(dt);
 }
 
 bool KAEventPrivate::excludedByWorkTimeOrHoliday(const KADateTime &dt) const

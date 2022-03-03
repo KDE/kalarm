@@ -1,20 +1,18 @@
 /*
  *  collectionattribute.cpp  -  Akonadi attribute holding Collection characteristics
- *  This file is part of kalarmcal library, which provides access to KAlarm
- *  calendar data.
- *  SPDX-FileCopyrightText: 2010-2019 David Jarvie <djarvie@kde.org>
+ *  Program:  kalarm
+ *  SPDX-FileCopyrightText: 2010-2022 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
 #include "collectionattribute.h"
 
-#include "kalarmcal_debug.h"
+#include "kalarm_debug.h"
 
-namespace KAlarmCal
-{
+using namespace KAlarmCal;
 
-class Q_DECL_HIDDEN CollectionAttribute::Private
+class CollectionAttribute::Private
 {
 public:
   Private() = default;
@@ -182,13 +180,13 @@ QByteArray CollectionAttribute::serialized() const
              + QByteArray::number(d->mBackgroundColour.blue()) + ' '
              + QByteArray::number(d->mBackgroundColour.alpha());
     }
-    qCDebug(KALARMCAL_LOG) << v;
+    qCDebug(KALARM_LOG) << v;
     return v;
 }
 
 void CollectionAttribute::deserialize(const QByteArray &data)
 {
-    qCDebug(KALARMCAL_LOG) << data;
+    qCDebug(KALARM_LOG) << data;
 
     // Set default values
     d->mEnabled          = CalEvent::EMPTY;
@@ -251,7 +249,5 @@ void CollectionAttribute::deserialize(const QByteArray &data)
         }
     }
 }
-
-} // namespace KAlarmCal
 
 // vim: et sw=4:

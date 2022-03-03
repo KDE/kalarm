@@ -1,13 +1,15 @@
 /*
  *  repetition.cpp  -  represents a sub-repetition: interval and count
- *  This file is part of kalarmcal library, which provides access to KAlarm
+ *  This file is part of kalarmprivate library, which provides access to KAlarm
  *  calendar data.
+ *  Program:  kalarm
  *  SPDX-FileCopyrightText: 2009-2012, 2018 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
 #include "repetition.h"
+
 #include "kadatetime.h"
 
 using namespace KCalendarCore;

@@ -1,7 +1,8 @@
 /*
  *  akonadi.cpp  -  Akonadi object functions
- *  This file is part of kalarmcal library, which provides access to KAlarm
+ *  This file is part of kalarmprivate library, which provides access to KAlarm
  *  calendar data.
+ *  Program:  kalarm
  *  SPDX-FileCopyrightText: 2011, 2019 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: LGPL-2.0-or-later
@@ -39,3 +40,5 @@ bool setItemPayload(Akonadi::Item &item, const KAEvent &event, const QStringList
 }
 
 }
+
+// vim: et sw=4:

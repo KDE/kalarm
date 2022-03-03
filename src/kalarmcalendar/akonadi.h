@@ -1,7 +1,8 @@
 /*
  *  akonadi.h  -  Akonadi object functions
- *  This file is part of kalarmcal library, which provides access to KAlarm
+ *  This file is part of kalarmprivate library, which provides access to KAlarm
  *  calendar data.
+ *  Program:  kalarm
  *  SPDX-FileCopyrightText: 2011, 2019 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: LGPL-2.0-or-later
@@ -12,6 +13,7 @@
 #include "kalarmcal_export.h"
 
 #include <QStringList>
+
 namespace Akonadi
 {
 class Item;
@@ -34,3 +36,4 @@ KALARMCAL_EXPORT bool setItemPayload(Akonadi::Item &item, const KAEvent &event, 
 
 }
 
+// vim: et sw=4:

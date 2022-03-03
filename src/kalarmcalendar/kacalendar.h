@@ -1,7 +1,8 @@
 /*
  *  kacalendar.h  -  KAlarm kcal library calendar and event categorisation
- *  This file is part of kalarmcal library, which provides access to KAlarm
+ *  This file is part of kalarmprivate library, which provides access to KAlarm
  *  calendar data.
+ *  Program:  kalarm
  *  SPDX-FileCopyrightText: 2005-2020 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: LGPL-2.0-or-later
@@ -137,6 +138,5 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(CalEvent::Types)
 } // namespace KAlarmCal
 
 KALARMCAL_EXPORT QDebug operator<<(QDebug, KAlarmCal::CalEvent::Type);
-
 
 // vim: et sw=4:

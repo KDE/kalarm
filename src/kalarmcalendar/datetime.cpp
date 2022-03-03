@@ -1,11 +1,13 @@
 /*
  *  datetime.cpp  -  date/time with start-of-day time for date-only values
- *  This file is part of kalarmcal library, which provides access to KAlarm
+ *  This file is part of kalarmprivate library, which provides access to KAlarm
  *  calendar data.
- *  SPDX-FileCopyrightText: 2003-2019 David Jarvie <djarvie@kde.org>
+ *  Program:  kalarm
+ *  SPDX-FileCopyrightText: 2003-2022 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: LGPL-2.0-or-later
  */
+
 #include "datetime.h"
 
 #include <QTimeZone>
@@ -261,19 +263,9 @@ qint64 DateTime::toSecsSinceEpoch() const
     return d->mDateTime.toSecsSinceEpoch();
 }
 
-uint DateTime::toTime_t() const
-{
-    return d->mDateTime.toTime_t();
-}
-
 void DateTime::setSecsSinceEpoch(qint64 secs)
 {
     d->mDateTime.setSecsSinceEpoch(secs);
-}
-
-void DateTime::setTime_t(uint secs)
-{
-    d->mDateTime.setTime_t(secs);
 }
 
 DateTime DateTime::addSecs(qint64 n) const
