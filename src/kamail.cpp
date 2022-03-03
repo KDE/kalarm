@@ -1,7 +1,7 @@
 /*
  *  kamail.cpp  -  email functions
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2002-2020 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2002-2022 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -14,11 +14,10 @@
 #include "mainwindow.h"
 #include "preferences.h"
 #include "lib/messagebox.h"
+#include "kalarmcalendar/identities.h"
 #include "kalarm_debug.h"
 
 #include "kmailinterface.h"
-
-#include <KAlarmCal/Identities>
 
 #include <KIdentityManagement/IdentityManager>
 #include <KIdentityManagement/Identity>

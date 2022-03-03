@@ -29,12 +29,12 @@
 #include "lib/shellprocess.h"
 #include "notifications_interface.h" // DBUS-generated
 #include "dbusproperties.h"          // DBUS-generated
-#include "kalarm_debug.h"
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 #include "migratekde4files.h"
 #endif
-#include <KAlarmCal/DateTime>
-#include <KAlarmCal/KARecurrence>
+#include "kalarmcalendar/datetime.h"
+#include "kalarmcalendar/karecurrence.h"
+#include "kalarm_debug.h"
 
 #include <KLocalizedString>
 #include <KConfig>

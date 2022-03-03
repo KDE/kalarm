@@ -1,7 +1,7 @@
 /*
  *  resourcedatamodelbase.h  -  base for models containing calendars and events
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2007-2021 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2007-2022 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -9,10 +9,8 @@
 #pragma once
 
 #include "resourcetype.h"
-
 #include "preferences.h"
-
-#include <KAlarmCal/KACalendar>
+#include "kalarmcalendar/kacalendar.h"
 
 #include <QSize>
 

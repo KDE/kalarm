@@ -34,9 +34,8 @@
 #include "lib/radiobutton.h"
 #include "lib/shellprocess.h"
 #include "lib/timespinbox.h"
+#include "kalarmcalendar/identities.h"
 #include "kalarm_debug.h"
-
-#include <KAlarmCal/Identities>
 
 #include <Akonadi/EmailAddressSelectionDialog>
 #include <KCalUtils/ICalDrag>

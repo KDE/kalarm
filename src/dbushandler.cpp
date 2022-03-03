@@ -1,7 +1,7 @@
 /*
  *  dbushandler.cpp  -  handler for D-Bus calls by other applications
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2002-2020 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2002-2022 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -16,10 +16,9 @@
 #include "resourcescalendar.h"
 #include "resources/resources.h"
 #include <kalarmadaptor.h>
+#include "kalarmcalendar/identities.h"
+#include "kalarmcalendar/karecurrence.h"
 #include "kalarm_debug.h"
-
-#include <KAlarmCal/Identities>
-#include <KAlarmCal/KARecurrence>
 
 using namespace KCalendarCore;
 

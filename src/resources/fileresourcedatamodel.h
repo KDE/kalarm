@@ -1,7 +1,7 @@
 /*
  *  fileresourcedatamodel.h  -  model containing file system resources and their events
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2007-2020 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2007-2022 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -10,8 +10,7 @@
 
 #include "resourcedatamodelbase.h"
 #include "fileresourceconfigmanager.h"
-
-#include <KAlarmCal/KAEvent>
+#include "kalarmcalendar/kaevent.h"
 
 #include <QAbstractItemModel>
 

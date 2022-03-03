@@ -1,7 +1,7 @@
 /*
  *  fileresourcemigrator.cpp  -  migrates or creates KAlarm non-Akonadi resources
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2011-2020 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2011-2022 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -12,14 +12,13 @@
 #include "fileresourcecalendarupdater.h"
 #include "fileresourceconfigmanager.h"
 #include "resources.h"
+#include "migration/collectionattribute.h"
 #include "calendarfunctions.h"
 #include "preferences.h"
 #include "lib/autoqpointer.h"
 #include "lib/desktop.h"
+#include "kalarmcalendar/version.h"
 #include "kalarm_debug.h"
-
-#include <KAlarmCal/CollectionAttribute>
-#include <KAlarmCal/Version>
 
 #include <Akonadi/AgentManager>
 #include <Akonadi/AttributeFactory>

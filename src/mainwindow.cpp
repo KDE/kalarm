@@ -33,9 +33,8 @@
 #include "lib/dragdrop.h"
 #include "lib/messagebox.h"
 #include "lib/synchtimer.h"
+#include "kalarmcalendar/alarmtext.h"
 #include "kalarm_debug.h"
-
-#include <KAlarmCal/AlarmText>
 
 #include <Akonadi/Item>
 #include <KCalUtils/ICalDrag>

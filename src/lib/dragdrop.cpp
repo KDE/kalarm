@@ -1,16 +1,15 @@
 /*
  *  dragdrop.cpp  -  drag and drop functions
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2003-2020 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2003-2022 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "dragdrop.h"
 
+#include "kalarmcalendar/alarmtext.h"
 #include "kalarm_debug.h"
-
-#include <KAlarmCal/AlarmText>
 
 #include <Akonadi/ItemFetchJob>
 #include <Akonadi/ItemFetchScope>

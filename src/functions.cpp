@@ -1,7 +1,7 @@
 /*
  *  functions.cpp  -  miscellaneous functions
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2001-2021 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2001-2022 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -26,11 +26,9 @@
 #include "lib/filedialog.h"
 #include "lib/messagebox.h"
 #include "lib/shellprocess.h"
-#include "config-kalarm.h"
+#include "kalarmcalendar/identities.h"
 #include "kalarm_debug.h"
-
-#include <kalarmcal_version.h>
-#include <KAlarmCal/Identities>
+#include "config-kalarm.h"
 
 #include <KCalendarCore/Event>
 #include <KCalendarCore/ICalFormat>

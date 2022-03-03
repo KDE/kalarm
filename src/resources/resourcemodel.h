@@ -9,8 +9,7 @@
 #pragma once
 
 #include "resource.h"
-
-#include <KAlarmCal/KACalendar>
+#include "kalarmcalendar/kacalendar.h"
 
 #include <KDescendantsProxyModel>
 #include <KCheckableProxyModel>

@@ -1,7 +1,7 @@
 /*
  *  eventmodel.h  -  model containing flat list of events
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2010-2021 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2010-2022 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -9,8 +9,7 @@
 #pragma once
 
 #include "resource.h"
-
-#include <KAlarmCal/KACalendar>
+#include "kalarmcalendar/kacalendar.h"
 
 #include <KDescendantsProxyModel>
 

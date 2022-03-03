@@ -3,6 +3,7 @@ include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/
 )
 
+add_subdirectory(kalarmcalendar)
 add_subdirectory(appicons)
 add_subdirectory(pixmaps)
 add_subdirectory(autostart)
@@ -75,7 +76,7 @@ set(libkalarm_SRCS
     lib/stackedwidgets.h
     lib/lineedit.h
     lib/synchtimer.h
-)
+   )
 set(resources_SRCS
     resources/calendarfunctions.cpp
     resources/resourcetype.cpp
@@ -98,6 +99,8 @@ set(resources_SRCS
     resources/singlefileresource.cpp
     resources/singlefileresourceconfigdialog.cpp
     resources/dirresourceimportdialog.cpp
+    resources/migration/collectionattribute.cpp
+    resources/migration/compatibilityattribute.cpp
     resources/calendarfunctions.h
     resources/resourcetype.h
     resources/resource.h
@@ -119,6 +122,8 @@ set(resources_SRCS
     resources/singlefileresource.h
     resources/singlefileresourceconfigdialog.h
     resources/dirresourceimportdialog.h
+    resources/migration/collectionattribute.h
+    resources/migration/compatibilityattribute.h
    )
 
 set(kalarm_bin_SRCS ${libkalarm_SRCS} ${resources_SRCS}
@@ -260,6 +265,7 @@ target_compile_definitions(kalarm_bin PRIVATE -DVERSION="${KALARM_VERSION}")
 
 
 target_link_libraries(kalarm_bin
+    kalarmprivate
     KF5::Codecs
     KF5::ConfigCore
     KF5::Completion
@@ -281,7 +287,6 @@ target_link_libraries(kalarm_bin
     KF5::AkonadiMime
     KF5::AkonadiContact
     KF5::AkonadiWidgets
-    KF5::AlarmCalendar
     KF5::CalendarCore
     KF5::CalendarUtils
     KF5::Contacts

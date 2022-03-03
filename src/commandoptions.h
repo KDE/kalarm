@@ -1,7 +1,7 @@
 /*
  *  commandoptions.h  -  extract command line options
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2001-2020 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2001-2022 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -11,9 +11,9 @@
 #include "editdlg.h"
 #include "eventid.h"
 
-#include <KAlarmCal/KAEvent>
-#include <KAlarmCal/KARecurrence>
-#include <KAlarmCal/KADateTime>
+#include "kalarmcalendar/kaevent.h"
+#include "kalarmcalendar/karecurrence.h"
+#include "kalarmcalendar/kadatetime.h"
 
 #include <QColor>
 #include <QStringList>

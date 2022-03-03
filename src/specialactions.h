@@ -1,14 +1,14 @@
 /*
  *  specialactions.h  -  widget to specify special alarm actions
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2004-2019 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2004-2022 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #pragma once
 
-#include <KAlarmCal/KAEvent>
+#include "kalarmcalendar/kaevent.h"
 
 #include <QDialog>
 #include <QWidget>

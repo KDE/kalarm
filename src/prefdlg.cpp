@@ -1,7 +1,7 @@
 /*
  *  prefdlg.cpp  -  program preferences dialog
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2001-2021 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2001-2022 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -40,10 +40,9 @@
 #include "lib/timeedit.h"
 #include "lib/timespinbox.h"
 #include "lib/timezonecombo.h"
+#include "kalarmcalendar/identities.h"
 #include "config-kalarm.h"
 #include "kalarm_debug.h"
-
-#include <KAlarmCal/Identities>
 
 #include <KHolidays/HolidayRegion>
 using namespace KHolidays;

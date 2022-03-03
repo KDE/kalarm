@@ -1,13 +1,13 @@
 /*
  *  birthdaydlg.h  -  dialog to pick birthdays from address book
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2002-2020 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2002-2022 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 #pragma once
 
-#include <KAlarmCal/KAEvent>
+#include "kalarmcalendar/kaevent.h"
 
 #include <KLineEdit>
 

@@ -1,7 +1,7 @@
 /*
  *  undo.h  -  undo/redo facility
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2005-2020 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2005-2022 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -12,8 +12,7 @@
 
 #include "resources/resource.h"
 #include "lib/autodeletelist.h"
-
-#include <KAlarmCal/KAEvent>
+#include "kalarmcalendar/kaevent.h"
 
 #include <QStringList>
 

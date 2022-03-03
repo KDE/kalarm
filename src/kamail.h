@@ -1,14 +1,14 @@
 /*
  *  kamail.h  -  email functions
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2002-2011 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2002-2022 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #pragma once
 
-#include <KAlarmCal/KAEvent>
+#include "kalarmcalendar/kaevent.h"
 
 #include <KCalendarCore/Person>
 

@@ -1,14 +1,14 @@
 /*
  *  dirresourceimportdialog.h - configuration dialog to import directory resources
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2020 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2020-2022 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #pragma once
 
-#include <KAlarmCal/KACalendar>
+#include "kalarmcalendar/kacalendar.h"
 using namespace KAlarmCal;
 
 #include <QWidget>

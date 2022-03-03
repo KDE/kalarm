@@ -1,7 +1,7 @@
 /*
  *  dbushandler.h  -  handler for D-Bus calls by other applications
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2001-2020 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2001-2022 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -10,7 +10,7 @@
 
 #include "kalarmiface.h"
 
-#include <KAlarmCal/KAEvent>
+#include "kalarmcalendar/kaevent.h"
 
 #include <KCalendarCore/Duration>
 

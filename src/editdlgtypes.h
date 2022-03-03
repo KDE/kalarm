@@ -10,9 +10,8 @@
 
 #include "editdlg.h"
 #include "preferences.h"
-
-#include <KAlarmCal/AlarmText>
-#include <KAlarmCal/KAEvent>
+#include "kalarmcalendar/alarmtext.h"
+#include "kalarmcalendar/kaevent.h"
 
 using namespace KAlarmCal;
 

@@ -1,7 +1,7 @@
 /*
  *  preferences.cpp  -  program preference settings
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2001-2020 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2001-2022 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -12,9 +12,8 @@
 #include "kamail.h"
 #include "lib/desktop.h"
 #include "lib/messagebox.h"
+#include "kalarmcalendar/identities.h"
 #include "kalarm_debug.h"
-
-#include <KAlarmCal/Identities>
 
 #include <KIdentityManagement/Identity>
 #include <KIdentityManagement/IdentityManager>

@@ -1,7 +1,7 @@
 /*
  *  find.cpp  -  search facility
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2005-2021 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2005-2022 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -13,9 +13,8 @@
 #include "preferences.h"
 #include "resources/eventmodel.h"
 #include "lib/messagebox.h"
+#include "kalarmcalendar/kaevent.h"
 #include "kalarm_debug.h"
-
-#include <KAlarmCal/KAEvent>
 
 #include <KFindDialog>
 #include <KFind>

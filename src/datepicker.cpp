@@ -1,7 +1,7 @@
 /*
  *  datepicker.cpp  -  date chooser widget
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2021 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2021-2022 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -13,8 +13,7 @@
 #include "preferences.h"
 #include "lib/locale.h"
 #include "lib/synchtimer.h"
-
-#include <KAlarmCal/KADateTime>
+#include "kalarmcalendar/kadatetime.h"
 
 #include <KLocalizedString>
 

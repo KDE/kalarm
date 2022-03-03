@@ -13,8 +13,7 @@
 #include "eventid.h"
 #include "kamail.h"
 #include "preferences.h"
-
-#include <KAlarmCal/KAEvent>
+#include "kalarmcalendar/kaevent.h"
 
 #include <QApplication>
 #include <QPointer>

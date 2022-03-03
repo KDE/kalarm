@@ -1,7 +1,7 @@
 /*
  *  traywindow.cpp  -  the KDE system tray applet
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2002-2021 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2002-2022 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -19,9 +19,8 @@
 #include "resources/datamodel.h"
 #include "resources/eventmodel.h"
 #include "lib/synchtimer.h"
+#include "kalarmcalendar/alarmtext.h"
 #include "kalarm_debug.h"
-
-#include <KAlarmCal/AlarmText>
 
 #include <KLocalizedString>
 #include <KStandardAction>

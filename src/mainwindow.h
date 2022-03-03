@@ -14,8 +14,7 @@
 #include "mainwindowbase.h"
 #include "messagedisplay.h"
 #include "undo.h"
-
-#include <KAlarmCal/KAEvent>
+#include "kalarmcalendar/kaevent.h"
 
 #include <KCalendarCore/Calendar>
 

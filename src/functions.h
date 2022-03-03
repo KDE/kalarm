@@ -1,7 +1,7 @@
 /*
  *  functions.h  -  miscellaneous functions
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2007-2021 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2007-2022 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -12,8 +12,7 @@
 
 #include "editdlg.h"
 #include "eventid.h"
-
-#include <KAlarmCal/KAEvent>
+#include "kalarmcalendar/kaevent.h"
 
 #include <QString>
 #include <QVector>

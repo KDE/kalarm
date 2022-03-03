@@ -1,7 +1,7 @@
 /*
  *  wakedlg.cpp  -  dialog to configure wake-from-suspend alarms
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2011-2020 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2011-2022 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -15,10 +15,8 @@
 #include "preferences.h"
 #include "resourcescalendar.h"
 #include "lib/messagebox.h"
+#include "kalarmcalendar/kaevent.h"
 #include "kalarm_debug.h"
-
-#include <kalarmcal_version.h>
-#include <KAlarmCal/KAEvent>
 
 #include <KLocalizedString>
 #include <KSharedConfig>
@@ -160,11 +158,7 @@ void WakeFromSuspendDlg::useWakeClicked()
             != KMessageBox::Continue)
         return;
     const int advance = mUi->advanceWakeTime->value();
-#if KALARMCAL_VERSION >= QT_VERSION_CHECK(5,12,1)
     const qint64 triggerTime = dt.addSecs(-advance * 60).toSecsSinceEpoch();
-#else
-    unsigned triggerTime = dt.addSecs(-advance * 60).toTime_t();
-#endif
     if (KAlarm::setRtcWakeTime(triggerTime, this))
     {
         const QStringList param{QString::number(event.resourceId()), event.id(), QString::number(triggerTime)};

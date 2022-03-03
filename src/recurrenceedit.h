@@ -1,7 +1,7 @@
 /*
  *  recurrenceedit.h  -  widget to edit the event's recurrence definition
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2002-2019 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2002-2022 David Jarvie <djarvie@kde.org>
  *
  *  Based originally on KOrganizer module koeditorrecurrence.h,
  *  SPDX-FileCopyrightText: 2000, 2001 Cornelius Schumacher <schumacher@kde.org>
@@ -11,8 +11,8 @@
 
 #pragma once
 
-#include <KAlarmCal/Repetition>
-#include <KAlarmCal/KADateTime>
+#include "kalarmcalendar/repetition.h"
+#include "kalarmcalendar/kadatetime.h"
 
 #include <QFrame>
 

@@ -1,7 +1,7 @@
 /*
  *  templatemenuaction.cpp  -  menu action to select a template
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2005-2021 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2005-2022 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -10,9 +10,8 @@
 
 #include "functions.h"
 #include "resourcescalendar.h"
+#include "kalarmcalendar/kaevent.h"
 #include "kalarm_debug.h"
-
-#include <KAlarmCal/KAEvent>
 
 #include <QMenu>
 

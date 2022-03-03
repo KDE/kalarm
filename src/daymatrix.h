@@ -6,7 +6,7 @@
  *  SPDX-FileCopyrightText: 2001 Eitzenberger Thomas <thomas.eitzenberger@siemens.at>
  *  SPDX-FileCopyrightText: 2003 Cornelius Schumacher <schumacher@kde.org>
  *  SPDX-FileCopyrightText: 2003-2004 Reinhold Kainhofer <reinhold@kainhofer.com>
- *  SPDX-FileCopyrightText: 2021 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2021-2022 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later WITH Qt-Commercial-exception-1.0
 */
@@ -14,8 +14,7 @@
 #pragma once
 
 #include "editdlg.h"
-
-#include <KAlarmCal/KAEvent>
+#include "kalarmcalendar/kaevent.h"
 
 #include <QFrame>
 #include <QDate>

@@ -1,7 +1,7 @@
 /*
  *  deferdlg.h  -  dialog to defer an alarm
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2002-2019 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2002-2022 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -9,8 +9,7 @@
 #pragma once
 
 #include "eventid.h"
-
-#include <KAlarmCal/DateTime>
+#include "kalarmcalendar/datetime.h"
 
 #include <QDialog>
 

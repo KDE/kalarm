@@ -13,10 +13,9 @@
 #include "singlefileresource.h"
 
 #include "resources.h"
+#include "kalarmcalendar/kacalendar.h"
+#include "kalarmcalendar/kaevent.h"
 #include "kalarm_debug.h"
-
-#include <KAlarmCal/KACalendar>
-#include <KAlarmCal/KAEvent>
 
 #include <KCalendarCore/ICalFormat>
 

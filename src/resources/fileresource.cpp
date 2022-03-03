@@ -1,7 +1,7 @@
 /*
  *  fileresource.cpp  -  base class for calendar resource accessed via file system
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2006-2021 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2006-2022 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -13,9 +13,8 @@
 #include "singlefileresourceconfigdialog.h"
 #include "resources.h"
 #include "lib/autoqpointer.h"
+#include "kalarmcalendar/version.h"
 #include "kalarm_debug.h"
-
-#include <KAlarmCal/Version>
 
 #include <KLocalizedString>
 

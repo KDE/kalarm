@@ -1,7 +1,7 @@
 /*
  *  recurrenceedit_p.h  -  private classes for recurrenceedit.cpp
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2003, 2005, 2007, 2009-2011 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2003-2022 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -9,8 +9,7 @@
 #pragma once
 
 #include "lib/radiobutton.h"
-
-#include <KAlarmCal/KARecurrence>
+#include "kalarmcalendar/karecurrence.h"
 
 #include <QList>
 #include <QVector>

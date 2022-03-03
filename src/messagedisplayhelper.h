@@ -12,8 +12,7 @@
 #include "resources/resource.h"
 #include "lib/file.h"
 #include "lib/shellprocess.h"
-
-#include <KAlarmCal/KAEvent>
+#include "kalarmcalendar/kaevent.h"
 
 #include <QObject>
 #include <QHash>

@@ -2,7 +2,7 @@
  *  birthdaymodel.cpp  -  model class for birthdays from address book
  *  Program:  kalarm
  *  SPDX-FileCopyrightText: 2009 Tobias Koenig <tokoe@kde.org>
- *  SPDX-FileCopyrightText: 2007-2020 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2007-2022 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -10,8 +10,7 @@
 #include "birthdaymodel.h"
 
 #include "resourcescalendar.h"
-
-#include <KAlarmCal/KAEvent>
+#include "kalarmcalendar/kaevent.h"
 
 #include <Akonadi/ChangeRecorder>
 #include <Akonadi/EntityDisplayAttribute>

@@ -9,9 +9,7 @@
 #pragma once
 
 #include "messagedisplayhelper.h"
-
-#include <KAlarmCal/KAEvent>
-
+#include "kalarmcalendar/kaevent.h"
 
 class KConfigGroup;
 class DeferAlarmDlg;

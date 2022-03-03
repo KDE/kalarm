@@ -1,7 +1,7 @@
 /*
  *  reminder.cpp  -  reminder setting widget
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2003-2021 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2003-2022 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -12,9 +12,9 @@
 #include "timeselector.h"
 #include "lib/checkbox.h"
 #include "lib/combobox.h"
+#include "kalarmcalendar/kadatetime.h"
 #include "kalarm_debug.h"
 
-#include <KAlarmCal/KADateTime>
 #include <KCalendarCore/Duration>
 
 #include <KLocalizedString>

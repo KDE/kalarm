@@ -9,9 +9,8 @@
 #pragma once
 
 #include "fileresource.h"
-
-#include <KAlarmCal/KACalendar>
-#include <KAlarmCal/KAEvent>
+#include "kalarmcalendar/kacalendar.h"
+#include "kalarmcalendar/kaevent.h"
 
 #include <QUrl>
 #include <QColor>

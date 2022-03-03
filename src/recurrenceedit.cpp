@@ -1,7 +1,7 @@
 /*
  *  recurrenceedit.cpp  -  widget to edit the event's recurrence definition
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2002-2021 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2002-2022 David Jarvie <djarvie@kde.org>
  *
  *  Based originally on KOrganizer module koeditorrecurrence.cpp,
  *  SPDX-FileCopyrightText: 2000, 2001 Cornelius Schumacher <schumacher@kde.org>
@@ -24,10 +24,9 @@
 #include "lib/spinbox.h"
 #include "lib/timeedit.h"
 #include "lib/timespinbox.h"
+#include "kalarmcalendar/kaevent.h"
+#include "kalarmcalendar/karecurrence.h"
 #include "kalarm_debug.h"
-
-#include <KAlarmCal/KAEvent>
-#include <KAlarmCal/KARecurrence>
 
 #include <KCalendarCore/Event>
 

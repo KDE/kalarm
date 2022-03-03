@@ -11,9 +11,9 @@
 #include "functions.h"
 #include "kalarmapp.h"
 #include "kamail.h"
+#include "kalarmcalendar/identities.h"
 #include "kalarm_debug.h"
 
-#include <KAlarmCal/Identities>
 #include <KPIMTextEdit/TextToSpeech>
 #include <KLocalizedString>
 
