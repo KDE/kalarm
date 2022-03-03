@@ -1,0 +1,39 @@
+/*!
+ * @mainpage The KAlarm client library
+ *
+ * @section purpose Purpose
+ *
+ * This library provides access to and handling of KAlarm calendar data.
+ *
+ * @section desc Description
+ *
+ * This library provides access to KAlarm calendar data, but not to the storage
+ * of the data, which is handled separately.
+ * The main class, KAEvent, represents a KAlarm event, and contains both the
+ * event definition including the main alarm and optional subsidiary alarms, and
+ * status information about the event.
+ *
+ * Calendar format information is accessed through the KACalendar class, which
+ * provides read and write access to the calendar format version and
+ * iCalendar product ID.
+ *
+ * Recurrence and sub-repetition information is represented by the KARecurrence
+ * and Repetition classes respectively.
+ *
+ * The KADateTime class is analagous to QDateTime, but can alternatively hold
+ * a date-only value, and its time zone definition is more flexible than
+ * QDateTime. The DateTime class is similar to KADateTime but with a
+ * configurable start-of-day time for date-only times.
+ *
+ * Three Akonadi attributes, for Collections and Items, are provided by
+ * CollectionAttribute, CompatibilityAttribute and EventAttribute classes.
+ *
+ * @authors
+ * David Jarvie \<djarvie@kde.org\>
+ *
+ * @licenses
+ * @lgpl
+ */
+
+// DOXYGEN_PROJECTNAME=KAlarm Library
+// DOXYGEN_REFERENCES=kdecore kcalendarcore kholidays kpimidentities akonadi
