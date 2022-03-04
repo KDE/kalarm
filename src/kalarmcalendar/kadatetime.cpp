@@ -1558,16 +1558,13 @@ QString KADateTime::toString(const QString& format) const
     enum { TZNone, UTCOffsetShort, UTCOffset, UTCOffsetColon, TZAbbrev, TZName };
     const QLocale locale;
     QString result;
-    int num;
-    int numLength;
-    int zone;
     bool escape = false;
     ushort flag = 0;
     for (int i = 0, end = format.length();  i < end;  ++i)
     {
-        zone = TZNone;
-        num = NO_NUMBER;
-        numLength = 0;    // no leading zeroes
+        int zone = TZNone;
+        int num = NO_NUMBER;
+        int numLength = 0;    // no leading zeroes
         ushort ch = format[i].unicode();
         if (!escape)
         {
@@ -1748,7 +1745,6 @@ QString KADateTime::toString(const QString& format) const
         else if (zone != TZNone)
         {
             QTimeZone tz;
-            int offset;
             switch (d->specType)
             {
                 case UTC:
@@ -1772,8 +1768,8 @@ QString KADateTime::toString(const QString& format) const
                 case OffsetFromUTC:
                 {
                     QTimeZone local;
-                    offset = (d->specType == TimeZone || d->specType == LocalZone) ? d->timeZoneOffset(local)
-                           : (d->specType == OffsetFromUTC) ? d->spec().utcOffset() : 0;
+                    int offset = (d->specType == TimeZone || d->specType == LocalZone) ? d->timeZoneOffset(local)
+                               : (d->specType == OffsetFromUTC) ? d->spec().utcOffset() : 0;
                     if (offset == InvalidOffset)
                         return result + QLatin1String("+ERROR");
                     offset /= 60;
@@ -2078,8 +2074,8 @@ KADateTime KADateTime::fromString(const QString& string, TimeFormat format, bool
                         {
                             // Check for any other alphabetic time zone
                             bool nonalpha = false;
-                            for (int i = 0, end = zone.size(); i < end && !nonalpha; ++i)
-                                nonalpha = !isalpha(zone[i]);
+                            for (int j = 0, end = zone.size(); j < end && !nonalpha; ++j)
+                                nonalpha = !isalpha(zone[j]);
                             if (nonalpha)
                                 break;
                             // TODO: Attempt to recognize the time zone abbreviation?
@@ -2268,12 +2264,10 @@ KADateTime KADateTime::fromString(const QString& string, TimeFormat format, bool
                         break;
                 }
             }
-            int month;
-            int day;
             if (parts[3].length() == 3)
             {
                 // A day of the year is specified
-                day = parts[3].toInt(&ok);
+                int day = parts[3].toInt(&ok);
                 if (!ok || day < 1 || day > 366)
                     break;
                 d = QDate(year, 1, 1).addDays(day - 1);
@@ -2285,8 +2279,8 @@ KADateTime KADateTime::fromString(const QString& string, TimeFormat format, bool
             else
             {
                 // A month and day are specified
-                month = QStringView(parts[3]).left(2).toInt(&ok);
-                day   = QStringView(parts[3]).right(2).toInt(&ok1);
+                int month = QStringView(parts[3]).left(2).toInt(&ok);
+                int day   = QStringView(parts[3]).right(2).toInt(&ok1);
                 if (!ok || !ok1)
                     break;
                 d = QDate(year, month, day);
@@ -2701,14 +2695,13 @@ QDateTime fromStr(const QString& string, const QString& format, int& utcOffset,
     zoneAbbrev.clear();
 
     enum { TZNone, UTCOffset, UTCOffsetColon, TZAbbrev, TZName };
-    int zone;
     int s = 0;
     int send = str.length();
     bool escape = false;
     ushort flag = 0;
     for (int f = 0, fend = format.length();  f < fend && s < send;  ++f)
     {
-        zone = TZNone;
+        int zone = TZNone;
         ushort ch = format[f].unicode();
         if (!escape)
         {

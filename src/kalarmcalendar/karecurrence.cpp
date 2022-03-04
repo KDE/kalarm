@@ -27,7 +27,7 @@ class Recurrence_p : public Recurrence
 public:
     using Recurrence::setNewRecurrenceType;
     Recurrence_p() : Recurrence() {}
-    Recurrence_p(const Recurrence& r) : Recurrence(r) {}
+    explicit Recurrence_p(const Recurrence& r) : Recurrence(r) {}
     Recurrence_p(const Recurrence_p& r) = default;
     Recurrence_p& operator=(const Recurrence_p& r) = delete;
 };

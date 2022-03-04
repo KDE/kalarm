@@ -294,10 +294,10 @@ Type status(const Event::Ptr& event, QString* param)
     // The event either wasn't written by KAlarm, or was written by a pre-2.0 version.
     // Check first for an old KAlarm format, which indicated the event type in the
     // middle of its UID.
-    const QString uid = event->uid();
-    if (uid.indexOf(staticStrings->OLD_ARCHIVED_UID) > 0)
+    const QString euid = event->uid();
+    if (euid.indexOf(staticStrings->OLD_ARCHIVED_UID) > 0)
         return ARCHIVED;
-    if (uid.indexOf(staticStrings->OLD_TEMPLATE_UID) > 0)
+    if (euid.indexOf(staticStrings->OLD_TEMPLATE_UID) > 0)
         return TEMPLATE;
 
     // Otherwise, assume it's an active alarm
@@ -343,21 +343,21 @@ Type type(const QString& mimeType)
 Types types(const QStringList& mimeTypes)
 {
     Types types = {};
-    for (const QString& type : mimeTypes)
+    for (const QString& mtype : mimeTypes)
     {
-        if (type == MIME_ACTIVE)
+        if (mtype == MIME_ACTIVE)
             types |= ACTIVE;
-        else if (type == MIME_ARCHIVED)
+        else if (mtype == MIME_ARCHIVED)
             types |= ARCHIVED;
-        else if (type == MIME_TEMPLATE)
+        else if (mtype == MIME_TEMPLATE)
             types |= TEMPLATE;
     }
     return types;
 }
 
-QString mimeType(Type type)
+QString mimeType(Type mtype)
 {
-    switch (type)
+    switch (mtype)
     {
         case ACTIVE:    return MIME_ACTIVE;
         case ARCHIVED:  return MIME_ARCHIVED;

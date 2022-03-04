@@ -1482,7 +1482,7 @@ bool editAlarmById(const EventId& id, QWidget* parent)
 * Open the Edit Alarm dialog to edit the specified template.
 * If the template is read-only, the dialog is opened read-only.
 */
-void editTemplate(KAEvent& event, QWidget* parent)
+void editTemplate(const KAEvent& event, QWidget* parent)
 {
     if (eventReadOnly(event.id()))
     {

@@ -84,7 +84,7 @@ void                updateEditedAlarm(EditAlarmDlg*, KAEvent&, Resource&);
 void                viewAlarm(const KAEvent&, QWidget* parent = nullptr);
 void                editNewTemplate(EditAlarmDlg::Type, QWidget* parent = nullptr);
 void                editNewTemplate(const KAEvent& preset, QWidget* parent = nullptr);
-void                editTemplate(KAEvent&, QWidget* parent = nullptr);
+void                editTemplate(const KAEvent&, QWidget* parent = nullptr);
 void                execNewAlarmDlg(EditAlarmDlg*, const QDate& startDate = QDate());
 /** Create a "New From Template" QAction */
 KToggleAction*      createAlarmEnableAction(QObject* parent);

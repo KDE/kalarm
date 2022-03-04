@@ -34,7 +34,7 @@ class EmailAddressList : public KCalendarCore::Person::List
 {
 public:
     EmailAddressList() : KCalendarCore::Person::List() {}
-    EmailAddressList(const KCalendarCore::Person::List& list)
+    explicit EmailAddressList(const KCalendarCore::Person::List& list)
     {
         operator=(list);
     }
@@ -502,6 +502,7 @@ KAEventPrivate::KAEventPrivate(const KADateTime& dateTime, const QString& name, 
                                KAEvent::SubAction action, int lateCancel, KAEvent::Flags flags,
                                bool changesPending)
     : mName(name)
+    , mStartDateTime(dateTime)
     , mAlarmCount(1)
     , mBgColour(bg)
     , mFgColour(fg)
@@ -509,7 +510,6 @@ KAEventPrivate::KAEventPrivate(const KADateTime& dateTime, const QString& name, 
     , mLateCancel(lateCancel)     // do this before setting flags
     , mCategory(CalEvent::ACTIVE)
 {
-    mStartDateTime = dateTime;
     if (flags & KAEvent::ANY_TIME)
         mStartDateTime.setDateOnly(true);
     mNextMainDateTime = mStartDateTime;
@@ -831,10 +831,10 @@ KAEventPrivate::KAEventPrivate(const KCalendarCore::Event::Ptr& event)
             {
                 mDisplaying      = true;
                 mDisplayingFlags = data.displayingFlags;
-                const bool dateOnly = (mDisplayingFlags & DEFERRAL) ? !(mDisplayingFlags & TIMED_FLAG)
+                const bool dateonly = (mDisplayingFlags & DEFERRAL) ? !(mDisplayingFlags & TIMED_FLAG)
                                                                     : mStartDateTime.isDateOnly();
                 mDisplayingTime = dateTime;
-                mDisplayingTime.setDateOnly(dateOnly);
+                mDisplayingTime.setDateOnly(dateonly);
                 alTime = mDisplayingTime;
                 break;
             }
@@ -1169,10 +1169,10 @@ bool KAEventPrivate::updateKCalEvent(const Event::Ptr& ev, KAEvent::UidAction ui
     }
     if (mDeferDefaultMinutes)
     {
-        QString param = QString::number(mDeferDefaultMinutes);
+        QString ddparam = QString::number(mDeferDefaultMinutes);
         if (mDeferDefaultDateOnly)
-            param += QLatin1Char('D');
-        (flags += DEFER_FLAG) += param;
+            ddparam += QLatin1Char('D');
+        (flags += DEFER_FLAG) += ddparam;
     }
     if (mCategory == CalEvent::TEMPLATE  &&  mTemplateAfterTime >= 0)
         (flags += TEMPL_AFTER_TIME_FLAG) += QString::number(mTemplateAfterTime);
@@ -1240,8 +1240,8 @@ bool KAEventPrivate::updateKCalEvent(const Event::Ptr& ev, KAEvent::UidAction ui
     {
         // Alarm repetition is normally held in the main alarm, but since
         // the main alarm has expired, store in a custom property.
-        const QString param = QStringLiteral("%1:%2").arg(mRepetition.intervalMinutes()).arg(mRepetition.count());
-        ev->setCustomProperty(KACalendar::APPNAME, REPEAT_PROPERTY, param);
+        const QString repparam = QStringLiteral("%1:%2").arg(mRepetition.intervalMinutes()).arg(mRepetition.count());
+        ev->setCustomProperty(KACalendar::APPNAME, REPEAT_PROPERTY, repparam);
     }
 
     // Add subsidiary alarms
@@ -2203,7 +2203,7 @@ void KAEventPrivate::defer(const DateTime& dateTime, bool reminder, bool adjustR
                     mTriggerChanged = true;
                 }
             }
-            else if (mReminderMinutes < 0  &&  reminder)
+            else if (reminder)
                 deferReminder = true;    // deferring a reminder AFTER the main alarm
             if (deferReminder)
             {
@@ -4123,8 +4123,8 @@ void KAEventPrivate::readAlarm(const Alarm::Ptr& alarm, AlarmData& data, bool au
                 data.action    = KAAlarm::MESSAGE;
                 data.cleanText = AlarmText::fromCalendarText(alarm->text(), data.isEmailText);
             }
-            const QString property = alarm->customProperty(KACalendar::APPNAME, KAEventPrivate::FONT_COLOUR_PROPERTY);
-            const QStringList list = property.split(QLatin1Char(';'), Qt::KeepEmptyParts);
+            const QString prop = alarm->customProperty(KACalendar::APPNAME, KAEventPrivate::FONT_COLOUR_PROPERTY);
+            const QStringList list = prop.split(QLatin1Char(';'), Qt::KeepEmptyParts);
             data.bgColour = QColor(255, 255, 255);   // white
             data.fgColour = QColor(0, 0, 0);         // black
             const int n = list.count();
@@ -4165,19 +4165,18 @@ void KAEventPrivate::readAlarm(const Alarm::Ptr& alarm, AlarmData& data, bool au
             data.soundVolume = -1;
             data.fadeVolume  = -1;
             data.fadeSeconds = 0;
-            QString property = alarm->customProperty(KACalendar::APPNAME, KAEventPrivate::VOLUME_PROPERTY);
-            if (!property.isEmpty())
+            QString prop = alarm->customProperty(KACalendar::APPNAME, KAEventPrivate::VOLUME_PROPERTY);
+            if (!prop.isEmpty())
             {
                 bool ok;
-                float fadeVolume;
-                int   fadeSecs = 0;
-                const QStringList list = property.split(QLatin1Char(';'), Qt::KeepEmptyParts);
+                const QStringList list = prop.split(QLatin1Char(';'), Qt::KeepEmptyParts);
                 data.soundVolume = list[0].toFloat(&ok);
                 if (!ok  ||  data.soundVolume > 1.0f)
                     data.soundVolume = -1;
                 if (data.soundVolume >= 0  &&  list.count() >= 3)
                 {
-                    fadeVolume = list[1].toFloat(&ok);
+                    float fadeVolume = list[1].toFloat(&ok);
+                    int   fadeSecs = 0;
                     if (ok)
                         fadeSecs = static_cast<int>(list[2].toUInt(&ok));
                     if (ok  &&  fadeVolume >= 0  &&  fadeVolume <= 1.0f  &&  fadeSecs > 0)
@@ -4449,12 +4448,11 @@ void KAEventPrivate::calcNextWorkingTime(const DateTime& nextTrigger) const
     if (!rrule)
         return;    // no recurrence rule!
     unsigned allDaysMask = 0x7F;  // mask bits for all days of week
-    bool noWorkPos = false;  // true if no recurrence day position is working day
     const QList<RecurrenceRule::WDayPos> pos = rrule->byDays();
     const int nDayPos = pos.count();  // number of day positions
     if (nDayPos)
     {
-        noWorkPos = true;
+        bool noWorkPos = true;  // true if no recurrence day position is working day
         allDaysMask = 0;
         for (const RecurrenceRule::WDayPos& p : pos)
         {
@@ -5450,8 +5448,8 @@ bool KAEvent::convertKCalEvents(const Calendar::Ptr& calendar, int calendarVersi
              * offsets to zero, and convert deferral alarm offsets to be relative to
              * the next recurrence.
              */
-            const QStringList flags = event->customProperty(KACalendar::APPNAME, KAEventPrivate::FLAGS_PROPERTY).split(KAEventPrivate::SC, Qt::SkipEmptyParts);
-            const bool dateOnly = flags.contains(KAEventPrivate::DATE_ONLY_FLAG);
+            const QStringList flagsProp = event->customProperty(KACalendar::APPNAME, KAEventPrivate::FLAGS_PROPERTY).split(KAEventPrivate::SC, Qt::SkipEmptyParts);
+            const bool dateOnly = flagsProp.contains(KAEventPrivate::DATE_ONLY_FLAG);
             KADateTime startDateTime(event->dtStart());
             if (dateOnly)
                 startDateTime.setDateOnly(true);
@@ -5590,15 +5588,15 @@ bool KAEvent::convertKCalEvents(const Calendar::Ptr& calendar, int calendarVersi
              * Move EMAILID, SPEAK, ERRCANCEL and ERRNOSHOW alarm properties into new FLAGS property.
              */
             bool flagsValid = false;
-            QStringList flags;
+            QStringList preFlags;
             QString reminder;
             bool    reminderOnce = false;
             const QString prop = event->customProperty(KACalendar::APPNAME, ARCHIVE_PROPERTY);
             if (!prop.isEmpty())
             {
                 // Convert the event's ARCHIVE property to parameters in the FLAGS property
-                flags = event->customProperty(KACalendar::APPNAME, KAEventPrivate::FLAGS_PROPERTY).split(KAEventPrivate::SC, Qt::SkipEmptyParts);
-                flags << KAEventPrivate::ARCHIVE_FLAG;
+                preFlags = event->customProperty(KACalendar::APPNAME, KAEventPrivate::FLAGS_PROPERTY).split(KAEventPrivate::SC, Qt::SkipEmptyParts);
+                preFlags << KAEventPrivate::ARCHIVE_FLAG;
                 flagsValid = true;
                 if (prop != QLatin1String("0"))
                 { // "0" was a dummy parameter if no others were present
@@ -5608,44 +5606,44 @@ bool KAEvent::convertKCalEvents(const Calendar::Ptr& calendar, int calendarVersi
                     for (const QString& pr : list)
                     {
                         if (pr == KAEventPrivate::AT_LOGIN_TYPE)
-                            flags << KAEventPrivate::AT_LOGIN_TYPE;
+                            preFlags << KAEventPrivate::AT_LOGIN_TYPE;
                         else if (pr == ARCHIVE_REMINDER_ONCE_TYPE)
                             reminderOnce = true;
                         else if (!pr.isEmpty()  &&  !pr.startsWith(QChar::fromLatin1('-')))
                             reminder = pr;
                     }
                 }
-                event->setCustomProperty(KACalendar::APPNAME, KAEventPrivate::FLAGS_PROPERTY, flags.join(KAEventPrivate::SC));
+                event->setCustomProperty(KACalendar::APPNAME, KAEventPrivate::FLAGS_PROPERTY, preFlags.join(KAEventPrivate::SC));
                 event->removeCustomProperty(KACalendar::APPNAME, ARCHIVE_PROPERTY);
             }
 
             for (Alarm::Ptr alarm : alarms)
             {
                 // Convert EMAILID, SPEAK, ERRCANCEL, ERRNOSHOW properties
-                QStringList flags;
+                QStringList alflags;
                 QString property = alarm->customProperty(KACalendar::APPNAME, EMAIL_ID_PROPERTY);
                 if (!property.isEmpty())
                 {
-                    flags << KAEventPrivate::EMAIL_ID_FLAG << property;
+                    alflags << KAEventPrivate::EMAIL_ID_FLAG << property;
                     alarm->removeCustomProperty(KACalendar::APPNAME, EMAIL_ID_PROPERTY);
                 }
                 if (!alarm->customProperty(KACalendar::APPNAME, SPEAK_PROPERTY).isEmpty())
                 {
-                    flags << KAEventPrivate::SPEAK_FLAG;
+                    alflags << KAEventPrivate::SPEAK_FLAG;
                     alarm->removeCustomProperty(KACalendar::APPNAME, SPEAK_PROPERTY);
                 }
                 if (!alarm->customProperty(KACalendar::APPNAME, CANCEL_ON_ERROR_PROPERTY).isEmpty())
                 {
-                    flags << KAEventPrivate::CANCEL_ON_ERROR_FLAG;
+                    alflags << KAEventPrivate::CANCEL_ON_ERROR_FLAG;
                     alarm->removeCustomProperty(KACalendar::APPNAME, CANCEL_ON_ERROR_PROPERTY);
                 }
                 if (!alarm->customProperty(KACalendar::APPNAME, DONT_SHOW_ERROR_PROPERTY).isEmpty())
                 {
-                    flags << KAEventPrivate::DONT_SHOW_ERROR_FLAG;
+                    alflags << KAEventPrivate::DONT_SHOW_ERROR_FLAG;
                     alarm->removeCustomProperty(KACalendar::APPNAME, DONT_SHOW_ERROR_PROPERTY);
                 }
-                if (!flags.isEmpty())
-                    alarm->setCustomProperty(KACalendar::APPNAME, KAEventPrivate::FLAGS_PROPERTY, flags.join(KAEventPrivate::SC));
+                if (!alflags.isEmpty())
+                    alarm->setCustomProperty(KACalendar::APPNAME, KAEventPrivate::FLAGS_PROPERTY, alflags.join(KAEventPrivate::SC));
 
                 // Invalidate negative reminder periods in alarms
                 if (!alarm->hasStartOffset())
@@ -5677,13 +5675,13 @@ bool KAEvent::convertKCalEvents(const Calendar::Ptr& calendar, int calendarVersi
             {
                 // Write reminder parameters into the event's FLAGS property
                 if (!flagsValid)
-                    flags = event->customProperty(KACalendar::APPNAME, KAEventPrivate::FLAGS_PROPERTY).split(KAEventPrivate::SC, Qt::SkipEmptyParts);
-                if (!flags.contains(KAEventPrivate::REMINDER_TYPE))
+                    preFlags = event->customProperty(KACalendar::APPNAME, KAEventPrivate::FLAGS_PROPERTY).split(KAEventPrivate::SC, Qt::SkipEmptyParts);
+                if (!preFlags.contains(KAEventPrivate::REMINDER_TYPE))
                 {
-                    flags += KAEventPrivate::REMINDER_TYPE;
+                    preFlags += KAEventPrivate::REMINDER_TYPE;
                     if (reminderOnce)
-                        flags += KAEventPrivate::REMINDER_ONCE_FLAG;
-                    flags += reminder;
+                        preFlags += KAEventPrivate::REMINDER_ONCE_FLAG;
+                    preFlags += reminder;
                 }
             }
         }
