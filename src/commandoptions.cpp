@@ -14,7 +14,10 @@
 #include "kalarmcalendar/identities.h"
 #include "kalarm_debug.h"
 
+#include <kpimtextedit/kpimtextedit-texttospeech.h>
+#if KPIMTEXTEDIT_TEXT_TO_SPEECH
 #include <KPIMTextEdit/TextToSpeech>
+#endif
 #include <KLocalizedString>
 
 #include <QCommandLineParser>
@@ -570,7 +573,11 @@ void CommandOptions::process()
             {
                 if (mParser->isSet(*mOptions.at(BEEP)))
                     setErrorIncompatible(BEEP, SPEAK);
+#if KPIMTEXTEDIT_TEXT_TO_SPEECH
                 else if (!KPIMTextEdit::TextToSpeech::self()->isReady())
+#else
+                else
+#endif
                     setError(xi18nc("@info:shell", "<icode>%1</icode> requires KAlarm to be compiled with QTextToSpeech support", optionName(SPEAK)));
             }
             const bool onceOnly = mParser->isSet(*mOptions.at(REMINDER_ONCE));

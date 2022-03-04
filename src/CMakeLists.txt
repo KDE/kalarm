@@ -293,6 +293,7 @@ target_link_libraries(kalarm_bin
     KF5::IdentityManagementWidgets
     KF5::PimTextEdit
     KF5::MailTransportAkonadi
+    KF5::MailTransport
     KF5::Mime
     KF5::PimCommon
 )

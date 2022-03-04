@@ -6,11 +6,14 @@ set(kalarmautostart_SRCS
     autostart.cpp
 )
 
-ecm_qt_declare_logging_category(kalarmautostart_SRCS HEADER kalarm_autostart_debug.h IDENTIFIER KALARMAUTOSTART_LOG CATEGORY_NAME org.kde.pim.autostart_kalarm
-                                    DESCRIPTION "kalarm (autostart_kalarm)"
-                                    OLD_CATEGORY_NAMES log_autostart_kalarm
-                                    EXPORT KALARM
-                                    )
+ecm_qt_declare_logging_category(kalarmautostart_SRCS
+                                HEADER kalarm_autostart_debug.h
+                                IDENTIFIER KALARMAUTOSTART_LOG
+                                CATEGORY_NAME org.kde.pim.autostart_kalarm
+                                DESCRIPTION "kalarm (autostart_kalarm)"
+                                OLD_CATEGORY_NAMES log_autostart_kalarm
+                                EXPORT KALARM
+                                )
 
 
 file(GLOB ICONS_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/../appicons/*-apps-kalarm.png")
