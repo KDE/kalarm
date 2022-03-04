@@ -32,13 +32,13 @@ namespace KAlarmCal
 namespace Identities
 {
 /** Return the unique identity manager instance. It is created if it does not already exist. */
-KALARMCAL_EXPORT KIdentityManagement::IdentityManager *identityManager();
+KALARMCAL_EXPORT KIdentityManagement::IdentityManager* identityManager();
 
 /** Return whether any identities exist. */
 KALARMCAL_EXPORT bool identitiesExist();
 
 /** Fetch the uoid of an identity name or uoid string. */
-KALARMCAL_EXPORT uint identityUoid(const QString &identityUoidOrName);
+KALARMCAL_EXPORT uint identityUoid(const QString& identityUoidOrName);
 }
 
 }

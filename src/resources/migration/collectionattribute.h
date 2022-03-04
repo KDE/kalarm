@@ -34,16 +34,16 @@ public:
     CollectionAttribute();
 
     /** Copy constructor. */
-    CollectionAttribute(const CollectionAttribute &other);
+    CollectionAttribute(const CollectionAttribute& other);
 
     /** Assignment operator. */
-    CollectionAttribute &operator=(const CollectionAttribute &other);
+    CollectionAttribute& operator=(const CollectionAttribute& other);
 
     ~CollectionAttribute() override;
 
     /** Comparison operator. */
-    bool operator==(const CollectionAttribute &other) const;
-    bool operator!=(const CollectionAttribute &other) const  { return !operator==(other); }
+    bool operator==(const CollectionAttribute& other) const;
+    bool operator!=(const CollectionAttribute& other) const  { return !operator==(other); }
 
     /** Return whether the collection is enabled for a specified alarm type
      *  (active, archived, template or displaying).
@@ -105,7 +105,7 @@ public:
     /** Set the background color for this collection and its alarms.
      *  @param c  background color
      */
-    void setBackgroundColor(const QColor &c);
+    void setBackgroundColor(const QColor& c);
 
     /** Return whether the user has chosen to keep the old calendar storage
      *  format, i.e. not update to current KAlarm format.
@@ -120,11 +120,11 @@ public:
     // Reimplemented from Attribute
     QByteArray type() const override;
     // Reimplemented from Attribute
-    CollectionAttribute *clone() const override;
+    CollectionAttribute* clone() const override;
     // Reimplemented from Attribute
     QByteArray serialized() const override;
     // Reimplemented from Attribute
-    void deserialize(const QByteArray &data) override;
+    void deserialize(const QByteArray& data) override;
 
     /** Return the attribute name. */
     static QByteArray name();
@@ -132,7 +132,7 @@ public:
 private:
     //@cond PRIVATE
     class Private;
-    Private *const d;
+    Private* const d;
     //@endcond
 };
 

@@ -15,10 +15,11 @@ using namespace KAlarmCal;
 class CompatibilityAttribute::Private
 {
 public:
-  Private() = default;
-  bool operator==(CompatibilityAttribute::Private other) const {
-    return mCompatibility == other.mCompatibility
-       &&  mVersion       == other.mVersion;
+    Private() = default;
+    bool operator==(CompatibilityAttribute::Private other) const
+    {
+        return mCompatibility == other.mCompatibility
+           &&  mVersion       == other.mVersion;
     }
 
     KACalendar::Compat mCompatibility{KACalendar::Incompatible};  // calendar compatibility with current KAlarm format
@@ -30,9 +31,9 @@ CompatibilityAttribute::CompatibilityAttribute()
 {
 }
 
-CompatibilityAttribute::CompatibilityAttribute(const CompatibilityAttribute &rhs)
-    : Akonadi::Attribute(rhs),
-      d(new Private(*rhs.d))
+CompatibilityAttribute::CompatibilityAttribute(const CompatibilityAttribute& rhs)
+    : Akonadi::Attribute(rhs)
+    , d(new Private(*rhs.d))
 {
 }
 
@@ -41,21 +42,22 @@ CompatibilityAttribute::~CompatibilityAttribute()
     delete d;
 }
 
-CompatibilityAttribute &CompatibilityAttribute::operator=(const CompatibilityAttribute &other)
+CompatibilityAttribute& CompatibilityAttribute::operator=(const CompatibilityAttribute& other)
 {
-    if (&other != this) {
+    if (&other != this)
+    {
         Attribute::operator=(other);
         *d = *other.d;
     }
     return *this;
 }
 
-bool CompatibilityAttribute::operator==(const CompatibilityAttribute &other) const
+bool CompatibilityAttribute::operator==(const CompatibilityAttribute& other) const
 {
     return *d == *other.d;
 }
 
-CompatibilityAttribute *CompatibilityAttribute::clone() const
+CompatibilityAttribute* CompatibilityAttribute::clone() const
 {
     return new CompatibilityAttribute(*this);
 }
@@ -99,7 +101,7 @@ QByteArray CompatibilityAttribute::serialized() const
     return v;
 }
 
-void CompatibilityAttribute::deserialize(const QByteArray &data)
+void CompatibilityAttribute::deserialize(const QByteArray& data)
 {
     qCDebug(KALARM_LOG) << data;
 
@@ -111,20 +113,24 @@ void CompatibilityAttribute::deserialize(const QByteArray &data)
     const QList<QByteArray> items = data.simplified().split(' ');
     const int count = items.count();
     int index = 0;
-    if (count > index) {
+    if (count > index)
+    {
         // 0: calendar format compatibility
         const int c = items[index++].toInt(&ok);
         const KACalendar::Compat AllCompat(KACalendar::Current | KACalendar::Converted | KACalendar::Convertible | KACalendar::Incompatible | KACalendar::Unknown);
-        if (!ok  || (c & static_cast<int>(AllCompat)) != c) {
+        if (!ok  || (c & static_cast<int>(AllCompat)) != c)
+        {
             qCritical() << "Invalid compatibility:" << c;
             return;
         }
         d->mCompatibility = static_cast<KACalendar::Compat>(c);
     }
-    if (count > index) {
+    if (count > index)
+    {
         // 1: KAlarm calendar version number
         const int c = items[index++].toInt(&ok);
-        if (!ok) {
+        if (!ok)
+        {
             qCritical() << "Invalid version:" << c;
             return;
         }

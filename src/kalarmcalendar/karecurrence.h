@@ -3,7 +3,7 @@
  *  This file is part of kalarmprivate library, which provides access to KAlarm
  *  calendar data.
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2005-2012 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2005-2022 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -50,7 +50,8 @@ public:
     /** The recurrence's period type.
      *  This is a subset of the possible KCalendarCore recurrence types.
      */
-    enum Type {
+    enum Type
+    {
         NO_RECUR,      //!< does not recur
         MINUTELY,      //!< at an hours/minutes interval
         DAILY,         //!< daily
@@ -62,36 +63,37 @@ public:
     };
 
     /** When annual February 29th recurrences should occur in non-leap years. */
-    enum Feb29Type {
+    enum Feb29Type
+    {
         Feb29_Feb28,   //!< occurs on 28 February in non-leap years
         Feb29_Mar1,    //!< occurs on 1 March in non-leap years
         Feb29_None     //!< does not occur in non-leap years
     };
 
     KARecurrence();
-    KARecurrence(const KCalendarCore::Recurrence &r);   //krazy:exclude=explicit  Allow implicit conversion
-    KARecurrence(const KARecurrence &r);
+    KARecurrence(const KCalendarCore::Recurrence& r);   //krazy:exclude=explicit  Allow implicit conversion
+    KARecurrence(const KARecurrence& r);
     ~KARecurrence();
 
     /**
      * Assignment operator.
      * @param r the recurrence which will be assigned to this.
      */
-    KARecurrence &operator=(const KARecurrence &r) = delete;
+    KARecurrence& operator=(const KARecurrence& r) = delete;
 
     /**
      * Comparison operator for equality.
      * @param r instance to compare with
      * @return true if recurrences are the same, false otherwise
      */
-    bool operator==(const KARecurrence &r) const;
+    bool operator==(const KARecurrence& r) const;
 
     /**
      * Comparison operator for inequality.
      * @param r instance to compare with
      * @return true if recurrences are the different, false if the same
      */
-    bool operator!=(const KARecurrence &r) const
+    bool operator!=(const KARecurrence& r) const
     {
         return !operator==(r);
     }
@@ -99,7 +101,7 @@ public:
     /** Initialise the recurrence from an iCalendar RRULE string.
      *  @return true if successful, false if an error occurred.
      */
-    bool set(const QString &icalRRULE);
+    bool set(const QString& icalRRULE);
 
     /** Set up a KARecurrence from recurrence parameters, using the start date to
      *  determine the recurrence day/month as appropriate.
@@ -109,14 +111,14 @@ public:
      *  weekly, monthly, yearly or none.
      *  @return true if successful.
      */
-    bool set(Type t, int freq, int count, const KADateTime &start, const KADateTime &end);
+    bool set(Type t, int freq, int count, const KADateTime& start, const KADateTime& end);
 
     /** Set up a KARecurrence from recurrence parameters, using the start date to
      *  determine the recurrence day/month as appropriate, and specifying how
      *  annual 29th February recurrences in non-leap years should be handled.
      *  @return true if successful.
      */
-    bool set(Type t, int freq, int count, const KADateTime &start, const KADateTime &end, Feb29Type f29);
+    bool set(Type t, int freq, int count, const KADateTime& start, const KADateTime& end, Feb29Type f29);
 
     /** Set up a KARecurrence from recurrence parameters.
      *  Annual 29th February recurrences in non-leap years will be handled
@@ -125,7 +127,7 @@ public:
      *  weekly, monthly, yearly or none.
      *  @return true if successful.
      */
-    bool init(KCalendarCore::RecurrenceRule::PeriodType t, int freq, int count, const KADateTime &start, const KADateTime &end);
+    bool init(KCalendarCore::RecurrenceRule::PeriodType t, int freq, int count, const KADateTime& start, const KADateTime& end);
 
     /** Set up a KARecurrence from recurrence parameters, specifying how
      *  annual 29th February recurrences in non-leap years should be handled.
@@ -133,7 +135,7 @@ public:
      *  weekly, monthly, yearly or none.
      *  @return true if successful.
      */
-    bool init(KCalendarCore::RecurrenceRule::PeriodType t, int freq, int count, const KADateTime &start, const KADateTime &end, Feb29Type f29);
+    bool init(KCalendarCore::RecurrenceRule::PeriodType t, int freq, int count, const KADateTime& start, const KADateTime& end, Feb29Type f29);
 
     /** Removes all recurrence and exception rules and dates. */
     void clear();
@@ -141,7 +143,7 @@ public:
     /** Initialise a KCalendarCore::Recurrence to be the same as this instance.
      *  Additional recurrence rules are created as necessary if it recurs on Feb 29th.
      */
-    void writeRecurrence(KCalendarCore::Recurrence &) const;
+    void writeRecurrence(KCalendarCore::Recurrence&) const;
 
     /** Convert the recurrence to KARecurrence types.
      *  Must be called after presetting with a KCalendarCore::Recurrence.
@@ -165,24 +167,24 @@ public:
      *  @param dt        start date/time.
      *  @param dateOnly  if true, sets the recurrence to all-day.
      */
-    void        setStartDateTime(const KADateTime &dt, bool dateOnly);
+    void setStartDateTime(const KADateTime& dt, bool dateOnly);
 
     /** Return the date/time of the last recurrence. */
-    KADateTime   endDateTime() const;
+    KADateTime endDateTime() const;
 
     /** Return the date of the last recurrence. */
-    QDate       endDate() const;
+    QDate endDate() const;
 
     /** Sets the date of the last recurrence. The end time is set to the recurrence start time.
      * @param endDate the ending date after which to stop recurring. If the
      *   recurrence is not all-day, the end time will be 23:59.
      */
-    void setEndDate(const QDate &endDate);
+    void setEndDate(const QDate& endDate);
 
     /** Sets the date and time of the last recurrence.
      * @param endDateTime the ending date/time after which to stop recurring.
      */
-    void setEndDateTime(const KADateTime &endDateTime);
+    void setEndDateTime(const KADateTime& endDateTime);
 
     /** Set whether the recurrence has no time, just a date.
      * All-day means -- according to rfc2445 -- that the event has no time
@@ -251,7 +253,7 @@ public:
     /** Adds days to the weekly day recurrence list.
      * @param days a 7 bit array indicating which days on which to recur (bit 0 = Monday).
      */
-    void addWeeklyDays(const QBitArray &days);
+    void addWeeklyDays(const QBitArray& days);
 
     /** Adds day number of year within a yearly recurrence.
      *  By default infinite recurrence is used. To set an end date use the
@@ -294,7 +296,7 @@ public:
      *   If no months are specified, the rule is to repeat every year on the
      *   2nd Monday and Wednesday of the year.
      */
-    void addYearlyPos(short pos, const QBitArray &days);
+    void addYearlyPos(short pos, const QBitArray& days);
 
     /** Adds a position (e.g. first monday) to the monthly recurrence rule.
      * @param pos the position in the month for the recurrence, with valid
@@ -303,7 +305,7 @@ public:
      * Example: pos = 2, and bits 0 and 2 are set in days:
      * the rule is to repeat every 2nd Monday and Wednesday in the month.
      */
-    void addMonthlyPos(short pos, const QBitArray &days);
+    void addMonthlyPos(short pos, const QBitArray& days);
     void addMonthlyPos(short pos, ushort day);
 
     /** Adds a date (e.g. the 15th of each month) to the monthly day
@@ -313,14 +315,14 @@ public:
     void addMonthlyDate(short day);
 
     /** Get the next time the recurrence occurs, strictly after a specified time. */
-    KADateTime   getNextDateTime(const KADateTime &preDateTime) const;
+    KADateTime   getNextDateTime(const KADateTime& preDateTime) const;
 
     /** Get the previous time the recurrence occurred, strictly before a specified time. */
-    KADateTime   getPreviousDateTime(const KADateTime &afterDateTime) const;
+    KADateTime   getPreviousDateTime(const KADateTime& afterDateTime) const;
 
     /** Return whether the event will recur on the specified date.
      *  The start date only returns true if it matches the recurrence rules. */
-    bool        recursOn(const QDate &, const KADateTime::Spec &) const;
+    bool        recursOn(const QDate&, const KADateTime::Spec&) const;
 
     /**
      * Returns true if the date/time specified is one at which the event will
@@ -328,7 +330,7 @@ public:
      *
      * @param dt is the date/time to check.
      */
-    bool recursAt(const KADateTime &dt) const;
+    bool recursAt(const KADateTime& dt) const;
 
     /** Returns a list of the times on the specified date at which the
      * recurrence will occur. The returned times should be interpreted in the
@@ -336,7 +338,7 @@ public:
      * @param date the date for which to find the recurrence times
      * @param timeSpec time specification for @p date
      */
-    KCalendarCore::TimeList recurTimesOn(const QDate &date, const KADateTime::Spec &timeSpec) const;
+    KCalendarCore::TimeList recurTimesOn(const QDate& date, const KADateTime::Spec& timeSpec) const;
 
     /** Returns a list of all the times at which the recurrence will occur
      * between two specified times.
@@ -350,7 +352,7 @@ public:
      * @param end inclusive end of interval
      * @return list of date/time values
      */
-    KCalendarCore::DateTimeList timesInInterval(const KADateTime &start, const KADateTime &end) const;
+    KCalendarCore::DateTimeList timesInInterval(const KADateTime& start, const KADateTime& end) const;
 
     /** Returns frequency of recurrence, in terms of the recurrence time period type. */
     int frequency() const;
@@ -372,12 +374,12 @@ public:
     /** Returns the number of recurrences up to and including the date/time specified.
      *  @warning This function can be very time consuming - use it sparingly!
      */
-    int durationTo(const KADateTime &dt) const;
+    int durationTo(const KADateTime& dt) const;
 
     /** Returns the number of recurrences up to and including the date specified.
      *  @warning This function can be very time consuming - use it sparingly!
      */
-    int durationTo(const QDate &date) const;
+    int durationTo(const QDate& date) const;
 
     /** Return the longest interval between recurrences.
      *  @return  0 if it never recurs.
@@ -391,10 +393,10 @@ public:
     KCalendarCore::Duration regularInterval() const;
     KCalendarCore::DateTimeList exDateTimes() const;
     KCalendarCore::DateList exDates() const;
-    void setExDateTimes(const KCalendarCore::DateTimeList &exdates);
-    void setExDates(const KCalendarCore::DateList &exdates);
-    void addExDateTime(const KADateTime &exdate);
-    void addExDate(const QDate &exdate);
+    void setExDateTimes(const KCalendarCore::DateTimeList& exdates);
+    void setExDates(const KCalendarCore::DateList& exdates);
+    void addExDateTime(const KADateTime& exdate);
+    void addExDate(const QDate& exdate);
 
     /**
      * Shift the times of the recurrence so that they appear at the same clock
@@ -410,17 +412,17 @@ public:
      * @param oldSpec the time specification which provides the clock times
      * @param newSpec the new time specification
      */
-    void shiftTimes(const QTimeZone &oldSpec, const QTimeZone &newSpec);
+    void shiftTimes(const QTimeZone& oldSpec, const QTimeZone& newSpec);
 
-    KCalendarCore::RecurrenceRule *defaultRRuleConst() const;
+    KCalendarCore::RecurrenceRule* defaultRRuleConst() const;
     /** Return the recurrence's period type. */
     Type type() const;
 
     /** Return the type of a recurrence rule. */
-    static Type type(const KCalendarCore::RecurrenceRule *);
+    static Type type(const KCalendarCore::RecurrenceRule*);
 
     /** Check if the recurrence rule is a daily rule with or without BYDAYS specified. */
-    static bool dailyType(const KCalendarCore::RecurrenceRule *);
+    static bool dailyType(const KCalendarCore::RecurrenceRule*);
 
     /** Return when 29th February annual recurrences should occur in non-leap years. */
     Feb29Type feb29Type() const;
@@ -440,7 +442,7 @@ public:
 private:
     //@cond PRIVATE
     class Private;
-    Private *const d;
+    Private* const d;
     //@endcond
 };
 

@@ -152,7 +152,8 @@ public:
      * is expressed in. For the full time specification (including time zone
      * details), see KADateTime::Spec.
      */
-    enum SpecType {
+    enum SpecType
+    {
         Invalid,    /**< an invalid time specification. */
         UTC,        /**< a UTC time. */
         OffsetFromUTC, /**< a local time which has a fixed offset from UTC. */
@@ -191,7 +192,7 @@ public:
          *
          * @param tz  time zone
          */
-        Spec(const QTimeZone &tz);   // allow implicit conversion
+        Spec(const QTimeZone& tz);   // allow implicit conversion
 
         /**
          * Constructs a time specification.
@@ -205,12 +206,12 @@ public:
         /**
          * Copy constructor.
          */
-        Spec(const Spec &spec);
+        Spec(const Spec& spec);
 
         /**
          * Assignment operator.
          */
-        Spec &operator=(const Spec &spec);
+        Spec& operator=(const Spec& spec);
 
         /**
          * Destructor
@@ -303,7 +304,7 @@ public:
          * @param tz new time zone
          * @see timeZone(), setType(SpecType)
          */
-        void setType(const QTimeZone &tz);
+        void setType(const QTimeZone& tz);
 
         /**
          * Comparison operator.
@@ -311,9 +312,9 @@ public:
          * @return @c true if the two instances are identical, @c false otherwise
          * @see equivalentTo()
          */
-        bool operator==(const Spec &other) const;
+        bool operator==(const Spec& other) const;
 
-        bool operator!=(const Spec &other) const
+        bool operator!=(const Spec& other) const
         {
             return !operator==(other);
         }
@@ -333,7 +334,7 @@ public:
          * @return @c true if the two instances are equivalent, @c false otherwise
          * @see operator==()
          */
-        bool equivalentTo(const Spec &other) const;
+        bool equivalentTo(const Spec& other) const;
 
         /**
          * The UTC time specification.
@@ -363,7 +364,8 @@ public:
     };
 
     /** Format for strings representing date/time values. */
-    enum TimeFormat {
+    enum TimeFormat
+    {
         ISODate,    /**< ISO 8601 format, i.e. [±]YYYY-MM-DDThh[:mm[:ss[.sss]]]TZ,
                      *   where TZ is the time zone offset (blank for local
                      *   time, Z for UTC, or ±hhmm for an offset from UTC).
@@ -426,7 +428,8 @@ public:
      * - s2 = start time of other instance
      * - e2 = end time of other instance.
      */
-    enum Comparison {
+    enum Comparison
+    {
         Before  = 0x01, /**< This KADateTime is strictly earlier than the other,
                          *   i.e. e1 < s2.
                          */
@@ -486,7 +489,7 @@ public:
      * @param date date in the time zone indicated by @p spec
      * @param spec time specification
      */
-    explicit KADateTime(const QDate &date, const Spec &spec = Spec(LocalZone));
+    explicit KADateTime(const QDate& date, const Spec& spec = Spec(LocalZone));
 
     /**
      * Constructs a date/time expressed as specified by @p spec.
@@ -504,7 +507,7 @@ public:
      * @param time time in the time zone indicated by @p spec
      * @param spec time specification
      */
-    KADateTime(const QDate &date, const QTime &time, const Spec &spec = Spec(LocalZone));
+    KADateTime(const QDate& date, const QTime& time, const Spec& spec = Spec(LocalZone));
 
     /**
      * Constructs a date/time expressed in a given time specification.
@@ -530,7 +533,7 @@ public:
      * @param dt date and time
      * @param spec time specification
      */
-    KADateTime(const QDateTime &dt, const Spec &spec);
+    KADateTime(const QDateTime& dt, const Spec& spec);
 
     /**
      * Constructs a date/time from a QDateTime.
@@ -538,12 +541,12 @@ public:
      *
      * @param dt date and time
      */
-    explicit KADateTime(const QDateTime &dt);
+    explicit KADateTime(const QDateTime& dt);
 
-    KADateTime(const KADateTime &other);
+    KADateTime(const KADateTime& other);
     ~KADateTime();
 
-    KADateTime &operator=(const KADateTime &other);
+    KADateTime& operator=(const KADateTime& other);
 
     /**
      * Returns whether the date/time is null.
@@ -739,7 +742,7 @@ public:
      * @return converted time
      * @see toUtc(), toOffsetFromUtc(), toLocalZone(), toTimeSpec(), QTimeZone::convert()
      */
-    KADateTime toZone(const QTimeZone &zone) const;
+    KADateTime toZone(const QTimeZone& zone) const;
 
     /**
      * Returns the time converted to a new time specification.
@@ -750,7 +753,7 @@ public:
      * @return converted time
      * @see toLocalZone(), toUtc(), toOffsetFromUtc(), toZone(), QTimeZone::convert()
      */
-    KADateTime toTimeSpec(const Spec &spec) const;
+    KADateTime toTimeSpec(const Spec& spec) const;
 
     /**
      * Returns the time converted to the time specification of another instance.
@@ -761,7 +764,7 @@ public:
      * @return converted time
      * @see toLocalZone(), toUtc(), toOffsetFromUtc(), toZone(), QTimeZone::convert()
      */
-    KADateTime toTimeSpec(const KADateTime &dt) const;
+    KADateTime toTimeSpec(const KADateTime& dt) const;
 
     /**
      * Converts the time to a UTC time, measured in seconds since 00:00:00 UTC
@@ -798,7 +801,7 @@ public:
      * @param date new date value
      * @see date(), setTime(), setTimeSpec(), setSecsSinceEpoch(), setDateOnly()
      */
-    void setDate(const QDate &date);
+    void setDate(const QDate& date);
 
     /**
      * Sets the time part of the date/time. If the instance was date-only, it
@@ -807,7 +810,7 @@ public:
      * @param time new time value
      * @see time(), setDate(), setTimeSpec(), setSecsSinceEpoch()
      */
-    void setTime(const QTime &time);
+    void setTime(const QTime& time);
 
     /**
      * Changes the time specification of the instance.
@@ -820,7 +823,7 @@ public:
      * @param spec new time specification
      * @see timeSpec(), timeZone()
      */
-    void setTimeSpec(const Spec &spec);
+    void setTimeSpec(const Spec& spec);
 
     /**
      * Sets whether the date/time is the second occurrence of this time. This
@@ -928,7 +931,7 @@ public:
      * @return number of milliseconds difference
      * @see addSecs(), daysTo()
      */
-    qint64 msecsTo(const KADateTime &other) const;
+    qint64 msecsTo(const KADateTime& other) const;
 
     /**
      * Returns the number of seconds from this date/time to the @p other date/time.
@@ -949,7 +952,7 @@ public:
      * @return number of seconds difference
      * @see addSecs(), daysTo()
      */
-    qint64 secsTo(const KADateTime &other) const;
+    qint64 secsTo(const KADateTime& other) const;
 
     /**
      * Calculates the number of days from this date/time to the @p other date/time.
@@ -970,7 +973,7 @@ public:
      * @return number of days difference
      * @see secsTo(), addDays()
      */
-    qint64 daysTo(const KADateTime &other) const;
+    qint64 daysTo(const KADateTime& other) const;
 
     /**
      * Returns the current date and time, as reported by the system clock,
@@ -1002,7 +1005,7 @@ public:
      * @return current date/time
      * @see currentUtcDateTime(), currentLocalDateTime()
      */
-    static KADateTime currentDateTime(const Spec &spec);
+    static KADateTime currentDateTime(const Spec& spec);
 
     /**
      * Returns the current date in the local time zone, as reported by the
@@ -1088,7 +1091,7 @@ public:
      * @return formatted string
      * @see fromString(), QLocale::toString()
      */
-    QString toString(const QString &format) const;
+    QString toString(const QString& format) const;
 
     /**
      * Returns the date/time as a string, formatted according to the @p format
@@ -1141,7 +1144,7 @@ public:
      * @return KADateTime value, or an invalid KADateTime if either parameter is invalid
      * @see setFromStringDefault(), toString(), QString::fromString()
      */
-    static KADateTime fromString(const QString &string, TimeFormat format = ISODate, bool *negZero = nullptr);
+    static KADateTime fromString(const QString& string, TimeFormat format = ISODate, bool *negZero = nullptr);
 
     /**
      * Returns the KADateTime represented by @p string, using the @p format
@@ -1275,7 +1278,7 @@ public:
      *         false
      * @see setFromStringDefault(), toString()
      */
-    static KADateTime fromString(const QString &string, const QString &format,
+    static KADateTime fromString(const QString& string, const QString& format,
                                 const QList<QTimeZone>* zones = nullptr, bool offsetIfAmbiguous = true);
 
     /**
@@ -1290,7 +1293,7 @@ public:
      * @param spec the new default time specification
      * @see fromString()
      */
-    static void setFromStringDefault(const Spec &spec);
+    static void setFromStringDefault(const Spec& spec);
 
     /**
      * Compare this instance with another to determine whether they are
@@ -1316,7 +1319,7 @@ public:
      * @return @c true if the two instances represent the same time, @c false otherwise
      * @see operator==(), operator!=(), operator<(), operator<=(), operator>=(), operator>()
      */
-    Comparison compare(const KADateTime &other) const;
+    Comparison compare(const KADateTime& other) const;
 
     /**
      * Check whether this date/time is simultaneous with another.
@@ -1334,9 +1337,9 @@ public:
      * @return @c true if the two instances represent the same time, @c false otherwise
      * @see compare()
      */
-    bool operator==(const KADateTime &other) const;
+    bool operator==(const KADateTime& other) const;
 
-    bool operator!=(const KADateTime &other) const
+    bool operator!=(const KADateTime& other) const
     {
         return !(*this == other);
     }
@@ -1356,17 +1359,17 @@ public:
      *         @c false otherwise
      * @see compare()
      */
-    bool operator<(const KADateTime &other) const;
+    bool operator<(const KADateTime& other) const;
 
-    bool operator<=(const KADateTime &other) const
+    bool operator<=(const KADateTime& other) const
     {
         return !(other < *this);
     }
-    bool operator>(const KADateTime &other) const
+    bool operator>(const KADateTime& other) const
     {
         return other < *this;
     }
-    bool operator>=(const KADateTime &other) const
+    bool operator>=(const KADateTime& other) const
     {
         return !(*this < other);
     }
@@ -1413,7 +1416,7 @@ public:
      *      currentLocalDate(), currentLocalTime()
      * @since 4.3
      */
-    static void setSimulatedSystemTime(const KADateTime &newTime);
+    static void setSimulatedSystemTime(const KADateTime& newTime);
 
     /**
      * Return the real (not simulated) system time.
@@ -1439,14 +1442,14 @@ private:
 };
 
 /** Write @p spec to the datastream @p out, in binary format. */
-KALARMCAL_EXPORT QDataStream &operator<<(QDataStream &out, const KADateTime::Spec &spec);
+KALARMCAL_EXPORT QDataStream& operator<<(QDataStream& out, const KADateTime::Spec& spec);
 /** Read a KADateTime::Spec object into @p spec from @p in, in binary format. */
-KALARMCAL_EXPORT QDataStream &operator>>(QDataStream &in, KADateTime::Spec &spec);
+KALARMCAL_EXPORT QDataStream& operator>>(QDataStream& in, KADateTime::Spec& spec);
 
 /** Write @p dateTime to the datastream @p out, in binary format. */
-KALARMCAL_EXPORT QDataStream &operator<<(QDataStream &out, const KADateTime &dateTime);
+KALARMCAL_EXPORT QDataStream& operator<<(QDataStream& out, const KADateTime& dateTime);
 /** Read a KADateTime object into @p dateTime from @p in, in binary format. */
-KALARMCAL_EXPORT QDataStream &operator>>(QDataStream &in, KADateTime &dateTime);
+KALARMCAL_EXPORT QDataStream& operator>>(QDataStream& in, KADateTime& dateTime);
 
 } // namespace KAlarmCal
 

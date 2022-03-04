@@ -3,7 +3,7 @@
  *  This file is part of kalarmprivate library, which provides access to KAlarm
  *  calendar data.
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2005-2020 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2005-2022 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -50,7 +50,8 @@ using ResourceId = Akonadi::Collection::Id;
 namespace KACalendar
 {
 /** Compatibility of resource backend calendar format. */
-enum Compatibility {
+enum Compatibility
+{
     Unknown      = 0,               //!< format not determined
     Current      = 0x02,            //!< in current KAlarm format
     Converted    = Current | 0x01,  //!< in current KAlarm format, but not yet saved
@@ -62,7 +63,8 @@ Q_DECLARE_FLAGS(Compat, Compatibility)
 /** Special calendar storage format version codes.
  *  Positive version values are actual KAlarm format version numbers.
  */
-enum {
+enum
+{
     CurrentFormat      = 0,    //!< current KAlarm format
     MixedFormat        = -2,   //!< calendar may contain more than one version
     IncompatibleFormat = -1    //!< not written by KAlarm, or a newer KAlarm version
@@ -80,13 +82,13 @@ enum {
                                unknown KAlarm format;
  *          >0 the older KAlarm version which wrote the calendar
  */
-KALARMCAL_EXPORT int updateVersion(const KCalendarCore::FileStorage::Ptr &, QString &versionString);
+KALARMCAL_EXPORT int updateVersion(const KCalendarCore::FileStorage::Ptr&, QString& versionString);
 
 /** Set the KAlarm version custom property for a calendar. */
-KALARMCAL_EXPORT void setKAlarmVersion(const KCalendarCore::Calendar::Ptr &);
+KALARMCAL_EXPORT void setKAlarmVersion(const KCalendarCore::Calendar::Ptr&);
 
 /** Set the program name and version for use in calendars. */
-KALARMCAL_EXPORT void setProductId(const QByteArray &progName, const QByteArray &progVersion);
+KALARMCAL_EXPORT void setProductId(const QByteArray& progName, const QByteArray& progVersion);
 
 /** Return the product ID string for use in calendars.
  *  setProductId() must have been called previously.
@@ -110,7 +112,8 @@ extern const QByteArray APPNAME;    //!< The application name ("KALARM") used in
 namespace CalEvent
 {
 /** The category of an event, indicated by the middle part of its UID. */
-enum Type {
+enum Type
+{
     EMPTY      = 0,       //!< the event has no alarms
     ACTIVE     = 0x01,    //!< the event is currently active
     ARCHIVED   = 0x02,    //!< the event is archived
@@ -119,14 +122,14 @@ enum Type {
 };
 Q_DECLARE_FLAGS(Types, Type)
 
-KALARMCAL_EXPORT QString uid(const QString &id, Type);
-KALARMCAL_EXPORT Type    status(const KCalendarCore::Event::Ptr &, QString *param = nullptr);
-KALARMCAL_EXPORT void    setStatus(const KCalendarCore::Event::Ptr &, Type, const QString &param = QString());
+KALARMCAL_EXPORT QString uid(const QString& id, Type);
+KALARMCAL_EXPORT Type    status(const KCalendarCore::Event::Ptr&, QString* param = nullptr);
+KALARMCAL_EXPORT void    setStatus(const KCalendarCore::Event::Ptr&, Type, const QString& param = QString());
 
 /** Return the alarm Type for a mime type string. */
-KALARMCAL_EXPORT Type    type(const QString &mimeType);
+KALARMCAL_EXPORT Type    type(const QString& mimeType);
 /** Return the alarm Types for a list of mime type strings. */
-KALARMCAL_EXPORT Types   types(const QStringList &mimeTypes);
+KALARMCAL_EXPORT Types   types(const QStringList& mimeTypes);
 /** Return the mime type string corresponding to an alarm Type. */
 KALARMCAL_EXPORT QString mimeType(Type);
 /** Return the mime type strings corresponding to alarm Types. */

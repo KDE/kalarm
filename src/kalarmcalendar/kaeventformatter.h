@@ -1,6 +1,6 @@
 /*
  *  kaeventformatter.h  -  converts KAlarmCal::KAEvent properties to text
- *  SPDX-FileCopyrightText: 2010-2020 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2010-2022 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -18,7 +18,8 @@ class KAEventFormatter
 public:
     // KAEvent parameter identifiers.
     // Note that parameters stored in Akonadi attributes are not included.
-    enum Parameter {
+    enum Parameter
+    {
         Id,
         AlarmType,
         AlarmCategory,
@@ -84,10 +85,10 @@ public:
 
     KAEventFormatter() = default;
 
-    KAEventFormatter(const KAEvent &e, bool falseForUnspecified);
+    KAEventFormatter(const KAEvent& e, bool falseForUnspecified);
     bool isApplicable(Parameter) const;
     QString value(Parameter) const;
-    const KAEvent &event() const
+    const KAEvent& event() const
     {
         return mEvent;
     }
@@ -99,3 +100,4 @@ private:
     QString mUnspecifiedValue;
 };
 
+// vim: et sw=4:

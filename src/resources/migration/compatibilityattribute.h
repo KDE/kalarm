@@ -32,16 +32,16 @@ public:
     CompatibilityAttribute();
 
     /** Copy constructor. */
-    CompatibilityAttribute(const CompatibilityAttribute &other);
+    CompatibilityAttribute(const CompatibilityAttribute& other);
 
     /** Assignment operator. */
-    CompatibilityAttribute &operator=(const CompatibilityAttribute &other);
+    CompatibilityAttribute& operator=(const CompatibilityAttribute& other);
 
     ~CompatibilityAttribute() override;
 
     /** Comparison operator. */
-    bool operator==(const CompatibilityAttribute &other) const;
-    bool operator!=(const CompatibilityAttribute &other) const  { return !operator==(other); }
+    bool operator==(const CompatibilityAttribute& other) const;
+    bool operator!=(const CompatibilityAttribute& other) const  { return !operator==(other); }
 
     /** Return the compatibility status for the entity. */
     KAlarmCal::KACalendar::Compat compatibility() const;
@@ -62,11 +62,11 @@ public:
     // Reimplemented from Attribute
     QByteArray type() const override;
     // Reimplemented from Attribute
-    CompatibilityAttribute *clone() const override;
+    CompatibilityAttribute* clone() const override;
     // Reimplemented from Attribute
     QByteArray serialized() const override;
     // Reimplemented from Attribute
-    void deserialize(const QByteArray &data) override;
+    void deserialize(const QByteArray& data) override;
 
     /** Return the attribute name. */
     static QByteArray name();
@@ -74,7 +74,7 @@ public:
 private:
     //@cond PRIVATE
     class Private;
-    Private *const d;
+    Private* const d;
     //@endcond
 };
 

@@ -3,7 +3,7 @@
  *  This file is part of kalarmprivate library, which provides access to KAlarm
  *  calendar data.
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2004-2019 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2004-2022 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -18,13 +18,12 @@ namespace KAlarmCal
 namespace Identities
 {
 
-KIdentityManagement::IdentityManager *identityManager()
+KIdentityManagement::IdentityManager* identityManager()
 {
-    static KIdentityManagement::IdentityManager *manager = nullptr;
+    static KIdentityManagement::IdentityManager* manager = nullptr;
 
-    if (!manager) {
+    if (!manager)
         manager = new KIdentityManagement::IdentityManager(true);   // create a read-only kmail identity manager
-    }
     return manager;
 }
 
@@ -33,22 +32,25 @@ KIdentityManagement::IdentityManager *identityManager()
 */
 bool identitiesExist()
 {
-    KIdentityManagement::IdentityManager *manager = identityManager();   // create identity manager if not already done
+    KIdentityManagement::IdentityManager* manager = identityManager();   // create identity manager if not already done
     return manager->begin() != manager->end();
 }
 
 /******************************************************************************
 * Fetch the uoid of an email identity name or uoid string.
 */
-uint identityUoid(const QString &identityUoidOrName)
+uint identityUoid(const QString& identityUoidOrName)
 {
     bool ok;
     uint id = identityUoidOrName.toUInt(&ok);
-    if (!ok  ||  identityManager()->identityForUoid(id).isNull()) {
-        KIdentityManagement::IdentityManager *manager = identityManager();  // fetch it if not already done
+    if (!ok  ||  identityManager()->identityForUoid(id).isNull())
+    {
+        KIdentityManagement::IdentityManager* manager = identityManager();  // fetch it if not already done
         for (KIdentityManagement::IdentityManager::ConstIterator it = manager->begin();
-                it != manager->end();  ++it) {
-            if ((*it).identityName() == identityUoidOrName) {
+             it != manager->end();  ++it)
+        {
+            if ((*it).identityName() == identityUoidOrName)
+            {
                 id = (*it).uoid();
                 break;
             }

@@ -34,28 +34,28 @@ QList<QString> shortMonthNames;
 QList<QString> longMonthNames;
 
 // Short day name, in English
-const QString &shortDay(int day);   // Mon = 1, ...
+const QString& shortDay(int day);   // Mon = 1, ...
 // Long day name, in English
-const QString &longDay(int day);   // Monday = 1, ...
+const QString& longDay(int day);   // Monday = 1, ...
 // Short month name, in English
-const QString &shortMonth(int month);   // Jan = 1, ...
+const QString& shortMonth(int month);   // Jan = 1, ...
 // Long month name, in English
-const QString &longMonth(int month);   // January = 1, ...
+const QString& longMonth(int month);   // January = 1, ...
 
-QDateTime fromStr(const QString &string, const QString &format, int &utcOffset,
-                  QString &zoneName, QString &zoneAbbrev, bool &dateOnly);
-int matchDay(const QString &string, int &offset, bool localised);
-int matchMonth(const QString &string, int &offset, bool localised);
-bool getUTCOffset(const QString &string, int &offset, bool colon, int &result);
-int getAmPm(const QString &string, int &offset, bool localised);
-bool getNumber(const QString &string, int &offset, int mindigits, int maxdigits, int minval, int maxval, int &result);
-using DayMonthName = const QString &(*)(int);
-int findString(const QString &string, DayMonthName func, int count, int &offset);
+QDateTime fromStr(const QString& string, const QString& format, int& utcOffset,
+                  QString& zoneName, QString& zoneAbbrev, bool& dateOnly);
+int matchDay(const QString& string, int& offset, bool localised);
+int matchMonth(const QString& string, int& offset, bool localised);
+bool getUTCOffset(const QString& string, int& offset, bool colon, int& result);
+int getAmPm(const QString& string, int& offset, bool localised);
+bool getNumber(const QString& string, int& offset, int mindigits, int maxdigits, int minval, int maxval, int& result);
+using DayMonthName = const QString& (*)(int);
+int findString(const QString& string, DayMonthName func, int count, int& offset);
 // Return number as zero-padded numeric string.
 QString numString(int n, int width);
 
-int offsetAtZoneTime(const QTimeZone &tz, const QDateTime&, int *secondOffset = nullptr);
-QDateTime toZoneTime(const QTimeZone &tz, const QDateTime &utcDateTime, bool *secondOccurrence = nullptr); 
+int offsetAtZoneTime(const QTimeZone& tz, const QDateTime&, int* secondOffset = nullptr);
+QDateTime toZoneTime(const QTimeZone& tz, const QDateTime& utcDateTime, bool* secondOccurrence = nullptr);
 
 } // namespace
 
@@ -84,7 +84,7 @@ KADateTime::Spec::Spec()
     d->type = KADateTime::Invalid;
 }
 
-KADateTime::Spec::Spec(const QTimeZone &tz)
+KADateTime::Spec::Spec(const QTimeZone& tz)
     : d(new KADateTimeSpecPrivate())
 {
     setType(tz);
@@ -96,7 +96,7 @@ KADateTime::Spec::Spec(SpecType type, int utcOffset)
     setType(type, utcOffset);
 }
 
-KADateTime::Spec::Spec(const Spec &spec)
+KADateTime::Spec::Spec(const Spec& spec)
     : d(new KADateTimeSpecPrivate())
 {
     operator=(spec);
@@ -107,26 +107,26 @@ KADateTime::Spec::~Spec()
     delete d;
 }
 
-KADateTime::Spec &KADateTime::Spec::operator=(const Spec &spec)
+KADateTime::Spec& KADateTime::Spec::operator=(const Spec& spec)
 {
-    if (&spec != this) {
+    if (&spec != this)
+    {
         d->type = spec.d->type;
-        if (d->type == KADateTime::TimeZone) {
+        if (d->type == KADateTime::TimeZone)
             d->tz = spec.d->tz;
-        } else if (d->type == KADateTime::OffsetFromUTC) {
+        else if (d->type == KADateTime::OffsetFromUTC)
             d->utcOffset = spec.d->utcOffset;
-        }
     }
     return *this;
 }
 
 void KADateTime::Spec::setType(SpecType type, int utcOffset)
 {
-    switch (type) {
+    switch (type)
+    {
         case KADateTime::OffsetFromUTC:
             d->utcOffset = utcOffset;
-            // fall through to UTC
-            Q_FALLTHROUGH();
+            Q_FALLTHROUGH(); // fall through to UTC
         case KADateTime::UTC:
             d->type = type;
             break;
@@ -141,21 +141,23 @@ void KADateTime::Spec::setType(SpecType type, int utcOffset)
     }
 }
 
-void KADateTime::Spec::setType(const QTimeZone &tz)
+void KADateTime::Spec::setType(const QTimeZone& tz)
 {
-    if (tz == QTimeZone::utc()) {
+    if (tz == QTimeZone::utc())
         d->type = KADateTime::UTC;
-    } else if (tz.isValid()) {
+    else if (tz.isValid())
+    {
         d->type = KADateTime::TimeZone;
         d->tz   = tz;
-    } else {
-        d->type = KADateTime::Invalid;
     }
+    else
+        d->type = KADateTime::Invalid;
 }
 
 QTimeZone KADateTime::Spec::timeZone() const
 {
-    switch (d->type) {
+    switch (d->type)
+    {
         case KADateTime::TimeZone:
             return d->tz;
         case KADateTime::UTC:
@@ -169,9 +171,8 @@ QTimeZone KADateTime::Spec::timeZone() const
 
 bool KADateTime::Spec::isUtc() const
 {
-    if (d->type == KADateTime::UTC || (d->type == KADateTime::OffsetFromUTC && d->utcOffset == 0)) {
+    if (d->type == KADateTime::UTC || (d->type == KADateTime::OffsetFromUTC && d->utcOffset == 0))
         return true;
-    }
     return false;
 }
 
@@ -205,41 +206,42 @@ int  KADateTime::Spec::utcOffset() const
     return d->type == KADateTime::OffsetFromUTC ? d->utcOffset : 0;
 }
 
-bool KADateTime::Spec::operator==(const Spec &other) const
+bool KADateTime::Spec::operator==(const Spec& other) const
 {
     if (d->type != other.d->type || (d->type == KADateTime::TimeZone && d->tz != other.d->tz)
-        || (d->type == KADateTime::OffsetFromUTC && d->utcOffset != other.d->utcOffset)) {
+    ||  (d->type == KADateTime::OffsetFromUTC && d->utcOffset != other.d->utcOffset))
         return false;
-    }
     return true;
 }
 
-bool KADateTime::Spec::equivalentTo(const Spec &other) const
+bool KADateTime::Spec::equivalentTo(const Spec& other) const
 {
-    if (d->type == other.d->type) {
-        if ((d->type == KADateTime::TimeZone && d->tz != other.d->tz) || (d->type == KADateTime::OffsetFromUTC && d->utcOffset != other.d->utcOffset)) {
+    if (d->type == other.d->type)
+    {
+        if ((d->type == KADateTime::TimeZone && d->tz != other.d->tz)
+        ||  (d->type == KADateTime::OffsetFromUTC && d->utcOffset != other.d->utcOffset))
             return false;
-        }
         return true;
-    } else {
+    }
+    else
+    {
         if ((d->type == KADateTime::UTC && other.d->type == KADateTime::OffsetFromUTC && other.d->utcOffset == 0)
-            || (other.d->type == KADateTime::UTC && d->type == KADateTime::OffsetFromUTC && d->utcOffset == 0)) {
+        ||  (other.d->type == KADateTime::UTC && d->type == KADateTime::OffsetFromUTC && d->utcOffset == 0))
             return true;
-        }
         const QTimeZone local = QTimeZone::systemTimeZone();
         if ((d->type == KADateTime::LocalZone && other.d->type == KADateTime::TimeZone && other.d->tz == local)
-            || (other.d->type == KADateTime::LocalZone && d->type == KADateTime::TimeZone && d->tz == local)) {
+        ||  (other.d->type == KADateTime::LocalZone && d->type == KADateTime::TimeZone && d->tz == local))
             return true;
-        }
         return false;
     }
 }
 
-QDataStream &operator<<(QDataStream &s, const KADateTime::Spec &spec)
+QDataStream& operator<<(QDataStream& s, const KADateTime::Spec& spec)
 {
     // The specification type is encoded in order to insulate from changes
     // to the SpecType enum.
-    switch (spec.type()) {
+    switch (spec.type())
+    {
         case KADateTime::UTC:
             s << static_cast<quint8>('u');
             break;
@@ -260,23 +262,26 @@ QDataStream &operator<<(QDataStream &s, const KADateTime::Spec &spec)
     return s;
 }
 
-QDataStream &operator>>(QDataStream &s, KADateTime::Spec &spec)
+QDataStream& operator>>(QDataStream& s, KADateTime::Spec& spec)
 {
     // The specification type is encoded in order to insulate from changes
     // to the SpecType enum.
     quint8 t;
     s >> t;
-    switch (static_cast<char>(t)) {
+    switch (static_cast<char>(t))
+    {
         case 'u':
             spec.setType(KADateTime::UTC);
             break;
-        case 'o': {
+        case 'o':
+        {
             int utcOffset;
             s >> utcOffset;
             spec.setType(KADateTime::OffsetFromUTC, utcOffset);
             break;
         }
-        case 'z': {
+        case 'z':
+        {
             QByteArray zone;
             s >> zone;
             spec.setType(QTimeZone(zone));
@@ -298,49 +303,50 @@ class KADateTimePrivate : public QSharedData
 {
 public:
     KADateTimePrivate()
-        : QSharedData(),
-          specType(KADateTime::Invalid),
-          utcCached(true),
-          convertedCached(false),
-          m2ndOccurrence(false),
-          mDateOnly(false)
+        : QSharedData()
+        , specType(KADateTime::Invalid)
+        , utcCached(true)
+        , convertedCached(false)
+        , m2ndOccurrence(false)
+        , mDateOnly(false)
     {}
 
-    KADateTimePrivate(const QDate &d, const QTime &t, const KADateTime::Spec &s, bool donly = false)
-        : QSharedData(),
-          mDt(QDateTime(d, t, Qt::UTC)),
-          specType(s.type()),
-          utcCached(false),
-          convertedCached(false),
-          m2ndOccurrence(false),
-          mDateOnly(donly)
+    KADateTimePrivate(const QDate& d, const QTime& t, const KADateTime::Spec& s, bool donly = false)
+        : QSharedData()
+        , mDt(QDateTime(d, t, Qt::UTC))
+        , specType(s.type())
+        , utcCached(false)
+        , convertedCached(false)
+        , m2ndOccurrence(false)
+        , mDateOnly(donly)
     {
         setDtSpec(s);
     }
 
-    KADateTimePrivate(const QDateTime &d, const KADateTime::Spec &s, bool donly = false)
-        : QSharedData(),
-          mDt(d),
-          specType(s.type()),
-          utcCached(false),
-          convertedCached(false),
-          m2ndOccurrence(false),
-          mDateOnly(donly)
+    KADateTimePrivate(const QDateTime& d, const KADateTime::Spec& s, bool donly = false)
+        : QSharedData()
+        , mDt(d)
+        , specType(s.type())
+        , utcCached(false)
+        , convertedCached(false)
+        , m2ndOccurrence(false)
+        , mDateOnly(donly)
     {
         setDtSpec(s);
         setDateTime(d);
     }
 
-    explicit KADateTimePrivate(const QDateTime &d)
-        : QSharedData(),
-          mDt(d),
-          specType(KADateTime::Invalid),
-          utcCached(false),
-          convertedCached(false),
-          m2ndOccurrence(false),
-          mDateOnly(false)
+    explicit KADateTimePrivate(const QDateTime& d)
+        : QSharedData()
+        , mDt(d)
+        , specType(KADateTime::Invalid)
+        , utcCached(false)
+        , convertedCached(false)
+        , m2ndOccurrence(false)
+        , mDateOnly(false)
     {
-        switch (d.timeSpec()) {
+        switch (d.timeSpec())
+        {
             case Qt::UTC:
                 specType = KADateTime::UTC;
                 break;
@@ -357,21 +363,20 @@ public:
         }
     }
 
-    KADateTimePrivate(const KADateTimePrivate &rhs) = default;
+    KADateTimePrivate(const KADateTimePrivate& rhs) = default;
 
     ~KADateTimePrivate() = default;
-    const QDateTime &rawDt() const
+    const QDateTime& rawDt() const
     {
         return mDt;
     }
     QDateTime dt() const
     {
-        if (specType == KADateTime::LocalZone) {
+        if (specType == KADateTime::LocalZone)
             return QDateTime(mDt.date(), mDt.time(), Qt::LocalTime);
-        }
         return mDt;
     }
-    QDateTime updatedDt(QTimeZone &local) const;
+    QDateTime updatedDt(QTimeZone& local) const;
     const QDate date() const
     {
         return mDt.date();
@@ -395,7 +400,7 @@ public:
     }
     // Set mDt and its time spec, without changing timeSpec.
     // Condition: 'dt' time spec must correspond to timeSpec.
-    void setDtWithSpec(const QDateTime &dt)
+    void setDtWithSpec(const QDateTime& dt)
     {
         mDt = dt;
         utcCached = convertedCached = m2ndOccurrence = false;
@@ -403,7 +408,7 @@ public:
     // Set mDt and its time spec, without changing timeSpec.
     // Condition: 'dt' time spec must correspond to timeSpec.
     // 'utcDt' is the UTC equivalent of dt.
-    void setDtWithSpec(const QDateTime &dt, const QDateTime &utcDt)
+    void setDtWithSpec(const QDateTime& dt, const QDateTime& utcDt)
     {
         mDt = dt;
         ut.date = utcDt.date();
@@ -413,14 +418,14 @@ public:
         m2ndOccurrence = false;
     }
 
-    void setDtSpec(const KADateTime::Spec &s);
-    void setDateTime(const QDateTime &d);
-    void setDate(const QDate &d)
+    void setDtSpec(const KADateTime::Spec& s);
+    void setDateTime(const QDateTime& d);
+    void setDate(const QDate& d)
     {
         mDt.setDate(d);
         utcCached = convertedCached = m2ndOccurrence = false;
     }
-    void setTime(const QTime &t)
+    void setTime(const QTime& t)
     {
         mDt.setTime(t);
         utcCached = convertedCached = mDateOnly = m2ndOccurrence = false;
@@ -436,16 +441,16 @@ public:
         return (specType == KADateTime::TimeZone) ? mDt.timeZone()
              : (specType == KADateTime::LocalZone) ? QTimeZone::systemTimeZone() : QTimeZone();
     }
-    int  timeZoneOffset(QTimeZone &local) const;
-    QDateTime toUtc(QTimeZone &local) const;
-    QDateTime toZone(const QTimeZone &zone, QTimeZone &local) const;
-    void newToZone(KADateTimePrivate *newd, const QTimeZone &zone, QTimeZone &local) const;
+    int  timeZoneOffset(QTimeZone& local) const;
+    QDateTime toUtc(QTimeZone& local) const;
+    QDateTime toZone(const QTimeZone& zone, QTimeZone& local) const;
+    void newToZone(KADateTimePrivate* newd, const QTimeZone& zone, QTimeZone& local) const;
     bool equalSpec(const KADateTimePrivate&) const;
     void clearCache()
     {
         utcCached = convertedCached = false;
     }
-    void setCachedUtc(const QDateTime &dt) const
+    void setCachedUtc(const QDateTime& dt) const
     {
         ut.date = dt.date();
         ut.time = dt.time();
@@ -454,7 +459,7 @@ public:
     }
 
     // Default time spec used by fromString()
-    static KADateTime::Spec &fromStringDefault()
+    static KADateTime::Spec& fromStringDefault()
     {
         static KADateTime::Spec s_fromStringDefault(KADateTime::LocalZone);
         return s_fromStringDefault;
@@ -480,12 +485,14 @@ private:
     // daylight savings times.
     QDateTime             mDt;
 public:
-    mutable struct ut {                // cached UTC equivalent of 'mDt'. Saves space compared to storing QDateTime.
+    mutable struct ut                  // cached UTC equivalent of 'mDt'. Saves space compared to storing QDateTime.
+    {
         QDate             date;
         QTime             time;
     } ut;
 private:
-    mutable struct converted {         // cached conversion to another time zone (if 'tz' is valid)
+    mutable struct converted           // cached conversion to another time zone (if 'tz' is valid)
+    {
         QDate             date;
         QTime             time;
         QTimeZone         tz;
@@ -510,7 +517,8 @@ QTimeZone KADateTimePrivate::simulationLocalZone;
 
 KADateTime::Spec KADateTimePrivate::spec() const
 {
-    switch (specType) {
+    switch (specType)
+    {
         case KADateTime::TimeZone:
             return KADateTime::Spec(mDt.timeZone());
         case KADateTime::OffsetFromUTC:
@@ -522,9 +530,10 @@ KADateTime::Spec KADateTimePrivate::spec() const
 
 // Set mDt to the appropriate time spec for a given KADateTime::Spec.
 // Its date and time components are not changed.
-void KADateTimePrivate::setDtSpec(const KADateTime::Spec &s)
+void KADateTimePrivate::setDtSpec(const KADateTime::Spec& s)
 {
-    switch (s.type()) {
+    switch (s.type())
+    {
         case KADateTime::UTC:
             mDt.setTimeSpec(Qt::UTC);
             break;
@@ -543,33 +552,38 @@ void KADateTimePrivate::setDtSpec(const KADateTime::Spec &s)
     }
 }
 
-void KADateTimePrivate::setSpec(const KADateTime::Spec &other)
+void KADateTimePrivate::setSpec(const KADateTime::Spec& other)
 {
-    if (specType == other.type()) {
-        switch (specType) {
-            case KADateTime::TimeZone: {
+    if (specType == other.type())
+    {
+        switch (specType)
+        {
+            case KADateTime::TimeZone:
+            {
                 const QTimeZone tz = other.timeZone();
-                if (mDt.timeZone() == tz) {
+                if (mDt.timeZone() == tz)
                     return;
-                }
                 mDt.setTimeZone(tz);
                 break;
             }
-            case KADateTime::OffsetFromUTC: {
+            case KADateTime::OffsetFromUTC:
+            {
                 int offset = other.utcOffset();
-                if (mDt.offsetFromUtc() == offset) {
+                if (mDt.offsetFromUtc() == offset)
                     return;
-                }
                 mDt.setOffsetFromUtc(offset);
                 break;
             }
             default:
                 return;
         }
-    } else {
+    }
+    else
+    {
         specType = other.type();
         setDtSpec(other);
-        if (specType == KADateTime::Invalid) {
+        if (specType == KADateTime::Invalid)
+        {
             ut.date = QDate();   // cache an invalid UTC value
             utcCached = true;
             convertedCached = m2ndOccurrence = false;
@@ -579,12 +593,12 @@ void KADateTimePrivate::setSpec(const KADateTime::Spec &other)
     utcCached = convertedCached = m2ndOccurrence = false;
 }
 
-bool KADateTimePrivate::equalSpec(const KADateTimePrivate &other) const
+bool KADateTimePrivate::equalSpec(const KADateTimePrivate& other) const
 {
-    if (specType != other.specType || (specType == KADateTime::TimeZone && mDt.timeZone() != other.mDt.timeZone())
-        || (specType == KADateTime::OffsetFromUTC && mDt.offsetFromUtc() != other.mDt.offsetFromUtc())) {
+    if (specType != other.specType
+    ||  (specType == KADateTime::TimeZone && mDt.timeZone() != other.mDt.timeZone())
+    ||  (specType == KADateTime::OffsetFromUTC && mDt.offsetFromUtc() != other.mDt.offsetFromUtc()))
         return false;
-    }
     return true;
 }
 
@@ -593,12 +607,14 @@ bool KADateTimePrivate::equalSpec(const KADateTimePrivate &other) const
  *   local - the local time zone if already known (if invalid, this function will
  *           fetch it if required)
  */
-QDateTime KADateTimePrivate::updatedDt(QTimeZone &local) const
+QDateTime KADateTimePrivate::updatedDt(QTimeZone& local) const
 {
     Q_UNUSED(local)
-    if (specType == KADateTime::LocalZone) {
+    if (specType == KADateTime::LocalZone)
+    {
         const QTimeZone local = QTimeZone::systemTimeZone();
-        if (mDt.timeZone() != local) {
+        if (mDt.timeZone() != local)
+        {
             const_cast<QDateTime*>(&mDt)->setTimeZone(local);
             utcCached = convertedCached = false;
         }
@@ -608,11 +624,13 @@ QDateTime KADateTimePrivate::updatedDt(QTimeZone &local) const
 
 // Set the date/time without changing the time spec.
 // 'd' is converted to the current time spec.
-void KADateTimePrivate::setDateTime(const QDateTime &d)
+void KADateTimePrivate::setDateTime(const QDateTime& d)
 {
-    switch (d.timeSpec()) {
+    switch (d.timeSpec())
+    {
         case Qt::UTC:
-            switch (specType) {
+            switch (specType)
+            {
                 case KADateTime::UTC:
                     setDtWithSpec(d);
                     break;
@@ -620,7 +638,8 @@ void KADateTimePrivate::setDateTime(const QDateTime &d)
                     setDtWithSpec(d.toOffsetFromUtc(mDt.offsetFromUtc()), d);
                     break;
                 case KADateTime::LocalZone:
-                case KADateTime::TimeZone: {
+                case KADateTime::TimeZone:
+                {
                     bool second = false;
                     setDtWithSpec(toZoneTime(mDt.timeZone(), d, &second), d);
                     m2ndOccurrence = second;
@@ -634,7 +653,8 @@ void KADateTimePrivate::setDateTime(const QDateTime &d)
             setDateTime(d.toUTC());
             break;
         case Qt::TimeZone:
-            switch (specType) {
+            switch (specType)
+            {
                 case KADateTime::UTC:
                     mDt               = d.toUTC();
                     utcCached         = false;
@@ -655,11 +675,14 @@ void KADateTimePrivate::setDateTime(const QDateTime &d)
                     break;
                 case KADateTime::LocalZone:
                 case KADateTime::TimeZone:
-                    if (d.timeZone() == mDt.timeZone()) {
+                    if (d.timeZone() == mDt.timeZone())
+                    {
                         mDt               = d;
                         utcCached         = false;
                         convertedCached   = false;
-                    } else {
+                    }
+                    else
+                    {
                         mDt               = d.toTimeZone(mDt.timeZone());
                         utcCached         = false;
                         converted.date    = d.date();
@@ -683,9 +706,11 @@ void KADateTimePrivate::setDateTime(const QDateTime &d)
 
 void KADateTimePrivate::setDateOnly(bool dateOnly)
 {
-    if (dateOnly != mDateOnly) {
+    if (dateOnly != mDateOnly)
+    {
         mDateOnly = dateOnly;
-        if (dateOnly  &&  mDt.time() != sod) {
+        if (dateOnly  &&  mDt.time() != sod)
+        {
             mDt.setTime(sod);
             utcCached = false;
             convertedCached = false;
@@ -701,27 +726,31 @@ void KADateTimePrivate::setDateOnly(bool dateOnly)
  *   local - the local time zone if already known (if invalid, this function will
  *           fetch it if required)
  */
-int KADateTimePrivate::timeZoneOffset(QTimeZone &local) const
+int KADateTimePrivate::timeZoneOffset(QTimeZone& local) const
 {
-    if (specType != KADateTime::TimeZone && specType != KADateTime::LocalZone) {
+    if (specType != KADateTime::TimeZone && specType != KADateTime::LocalZone)
         return InvalidOffset;
-    }
     QDateTime dt = updatedDt(local);   // update the cache if it's LocalZone
-    if (utcCached) {
+    if (utcCached)
+    {
         dt.setTimeSpec(Qt::UTC);
         return cachedUtc().secsTo(dt);
     }
     int secondOffset;
     int offset = offsetAtZoneTime(mDt.timeZone(), mDt, &secondOffset);
-    if (m2ndOccurrence) {
+    if (m2ndOccurrence)
+    {
         m2ndOccurrence = (secondOffset != offset);   // cancel "second occurrence" flag if not applicable
         offset = secondOffset;
     }
-    if (offset == InvalidOffset) {
+    if (offset == InvalidOffset)
+    {
         ut.date = QDate();   // cache an invalid UTC value
         utcCached = true;
         convertedCached = false;
-    } else {
+    }
+    else
+    {
         // Calculate the UTC time from the offset and cache it
         QDateTime utcdt = mDt;
         utcdt.setTimeSpec(Qt::UTC);
@@ -737,18 +766,20 @@ int KADateTimePrivate::timeZoneOffset(QTimeZone &local) const
  *   local - the local time zone if already known (if invalid, this function will
  *           fetch it if required)
  */
-QDateTime KADateTimePrivate::toUtc(QTimeZone &local) const
+QDateTime KADateTimePrivate::toUtc(QTimeZone& local) const
 {
     updatedDt(local);   // update the cache if it's LocalZone
-    if (utcCached) {
+    if (utcCached)
+    {
         // Return cached UTC value
-        if (specType == KADateTime::LocalZone) {
+        if (specType == KADateTime::LocalZone)
+        {
             // LocalZone uses the dynamic current local system time zone.
             // Check for a time zone change before using the cached UTC value.
-            if (!local.isValid()) {
+            if (!local.isValid())
                 local = QTimeZone::systemTimeZone();
-            }
-            if (mDt.timeZone() == local) {
+            if (mDt.timeZone() == local)
+            {
 //                qDebug() << "toUtc(): cached -> " << cachedUtc() << endl,
 #ifdef COMPILING_TESTS
                 ++KADateTime_utcCacheHit;
@@ -756,7 +787,9 @@ QDateTime KADateTimePrivate::toUtc(QTimeZone &local) const
                 return cachedUtc();
             }
             utcCached = false;
-        } else {
+        }
+        else
+        {
 //            qDebug() << "toUtc(): cached -> " << cachedUtc() << endl,
 #ifdef COMPILING_TESTS
             ++KADateTime_utcCacheHit;
@@ -766,13 +799,14 @@ QDateTime KADateTimePrivate::toUtc(QTimeZone &local) const
     }
 
     // No cached UTC value, so calculate it
-    switch (specType) {
+    switch (specType)
+    {
         case KADateTime::UTC:
             return mDt;
-        case KADateTime::OffsetFromUTC: {
-            if (!mDt.isValid()) {
+        case KADateTime::OffsetFromUTC:
+        {
+            if (!mDt.isValid())
                 break;
-            }
             const QDateTime dt = mDt.toUTC();
             setCachedUtc(dt);
 //            qDebug() << "toUtc(): calculated -> " << dt << endl,
@@ -780,9 +814,8 @@ QDateTime KADateTimePrivate::toUtc(QTimeZone &local) const
         }
         case KADateTime::LocalZone:   // mDt is set to the system time zone
         case KADateTime::TimeZone:
-            if (!mDt.isValid()) {
+            if (!mDt.isValid())
                 break;
-            }
             timeZoneOffset(local);   // calculate offset and cache UTC value
 //            qDebug() << "toUtc(): calculated -> " << cachedUtc() << endl,
             return cachedUtc();
@@ -806,17 +839,20 @@ QDateTime KADateTimePrivate::toUtc(QTimeZone &local) const
  *   local - the local time zone if already known (if invalid, this function will
  *           fetch it if required)
  */
-QDateTime KADateTimePrivate::toZone(const QTimeZone &zone, QTimeZone &local) const
+QDateTime KADateTimePrivate::toZone(const QTimeZone& zone, QTimeZone& local) const
 {
     updatedDt(local);   // update the cache if it's LocalZone
-    if (convertedCached  &&  converted.tz == zone) {
+    if (convertedCached  &&  converted.tz == zone)
+    {
         // Converted value is already cached
 #ifdef COMPILING_TESTS
 //        qDebug() << "KADateTimePrivate::toZone(" << zone->id() << "): " << mDt << " cached";
         ++KADateTime_zoneCacheHit;
 #endif
         return QDateTime(converted.date, converted.time, zone);
-    } else {
+    }
+    else
+    {
         // Need to convert the value
         bool second;
         const QDateTime result = toZoneTime(zone, toUtc(local), &second);
@@ -838,14 +874,15 @@ QDateTime KADateTimePrivate::toZone(const QTimeZone &zone, QTimeZone &local) con
  *   local - the local time zone if already known (if invalid, this function will
  *           fetch it if required)
  */
-void KADateTimePrivate::newToZone(KADateTimePrivate *newd, const QTimeZone &zone, QTimeZone &local) const
+void KADateTimePrivate::newToZone(KADateTimePrivate* newd, const QTimeZone& zone, QTimeZone& local) const
 {
     newd->mDt            = toZone(zone, local);
     newd->specType       = KADateTime::TimeZone;
     newd->utcCached      = utcCached;
     newd->mDateOnly      = mDateOnly;
     newd->m2ndOccurrence = converted2ndOccur;
-    switch (specType) {
+    switch (specType)
+    {
         case KADateTime::UTC:
             newd->ut.date = mDt.date();   // cache the UTC value
             newd->ut.time = mDt.time();
@@ -876,37 +913,34 @@ KADateTime::KADateTime()
 {
 }
 
-KADateTime::KADateTime(const QDate &date, const Spec &spec)
+KADateTime::KADateTime(const QDate& date, const Spec& spec)
     : d(new KADateTimePrivate(date, KADateTimePrivate::sod, spec, true))
 {
 }
 
-KADateTime::KADateTime(const QDate &date, const QTime &time, const Spec &spec)
+KADateTime::KADateTime(const QDate& date, const QTime& time, const Spec& spec)
     : d(new KADateTimePrivate(date, time, spec))
 {
 }
 
-KADateTime::KADateTime(const QDateTime &dt, const Spec &spec)
+KADateTime::KADateTime(const QDateTime& dt, const Spec& spec)
     : d(new KADateTimePrivate(dt, spec))
 {
 }
 
-KADateTime::KADateTime(const QDateTime &dt)
+KADateTime::KADateTime(const QDateTime& dt)
     : d(new KADateTimePrivate(dt))
 {
 }
 
-KADateTime::KADateTime(const KADateTime &other)
-
-    = default;
+KADateTime::KADateTime(const KADateTime& other) = default;
 
 KADateTime::~KADateTime() = default;
 
-KADateTime &KADateTime::operator=(const KADateTime &other)
+KADateTime& KADateTime::operator=(const KADateTime& other)
 {
-    if (&other != this) {
+    if (&other != this)
         d = other.d;
-    }
     return *this;
 }
 
@@ -966,7 +1000,8 @@ KADateTime::SpecType KADateTime::timeType() const
 
 QTimeZone KADateTime::timeZone() const
 {
-    switch (d->specType) {
+    switch (d->specType)
+    {
         case UTC:
             return QTimeZone::utc();
         case TimeZone:
@@ -980,9 +1015,11 @@ QTimeZone KADateTime::timeZone() const
 
 int KADateTime::utcOffset() const
 {
-    switch (d->specType) {
+    switch (d->specType)
+    {
         case TimeZone:
-        case LocalZone: {
+        case LocalZone:
+        {
             QTimeZone local;
             int offset = d->timeZoneOffset(local);   // calculate offset and cache UTC value
             return (offset == InvalidOffset) ? 0 : offset;
@@ -997,45 +1034,43 @@ int KADateTime::utcOffset() const
 
 KADateTime KADateTime::toUtc() const
 {
-    if (!isValid()) {
+    if (!isValid())
         return {};
-    }
-    if (d->specType == UTC) {
+    if (d->specType == UTC)
         return *this;
-    }
-    if (d->dateOnly()) {
+    if (d->dateOnly())
         return KADateTime(d->date(), Spec(UTC));
-    }
     QTimeZone local;
     const QDateTime udt = d->toUtc(local);
-    if (!udt.isValid()) {
+    if (!udt.isValid())
         return {};
-    }
     return KADateTime(udt, UTC);
 }
 
 KADateTime KADateTime::toOffsetFromUtc() const
 {
-    if (!isValid()) {
+    if (!isValid())
         return {};
-    }
     int offset = 0;
-    switch (d->specType) {
+    switch (d->specType)
+    {
         case OffsetFromUTC:
             return *this;
-        case UTC: {
-            if (d->dateOnly()) {
+        case UTC:
+        {
+            if (d->dateOnly())
                 return KADateTime(d->date(), Spec(OffsetFromUTC, 0));
-            }
             QDateTime qdt = d->rawDt();
             return KADateTime(qdt.date(), qdt.time(), Spec(OffsetFromUTC, 0));
         }
-        case TimeZone: {
+        case TimeZone:
+        {
             QTimeZone local;
             offset = d->timeZoneOffset(local);   // calculate offset and cache UTC value
             break;
         }
-        case LocalZone: {
+        case LocalZone:
+        {
             QTimeZone local;
             const QDateTime dt = d->updatedDt(local);
             offset = offsetAtZoneTime(dt.timeZone(), dt);
@@ -1044,46 +1079,40 @@ KADateTime KADateTime::toOffsetFromUtc() const
         default:
             return {};
     }
-    if (offset == InvalidOffset) {
+    if (offset == InvalidOffset)
         return {};
-    }
-    if (d->dateOnly()) {
+    if (d->dateOnly())
         return KADateTime(d->date(), Spec(OffsetFromUTC, offset));
-    }
     return KADateTime(d->date(), d->time(), Spec(OffsetFromUTC, offset));
 }
 
 KADateTime KADateTime::toOffsetFromUtc(int utcOffset) const
 {
-    if (!isValid()) {
+    if (!isValid())
         return {};
-    }
-    if (d->specType == OffsetFromUTC && d->spec().utcOffset() == utcOffset) {
+    if (d->specType == OffsetFromUTC && d->spec().utcOffset() == utcOffset)
         return *this;
-    }
-    if (d->dateOnly()) {
+    if (d->dateOnly())
         return KADateTime(d->date(), Spec(OffsetFromUTC, utcOffset));
-    }
     QTimeZone local;
     return KADateTime(d->toUtc(local), Spec(OffsetFromUTC, utcOffset));
 }
 
 KADateTime KADateTime::toLocalZone() const
 {
-    if (!isValid()) {
+    if (!isValid())
         return {};
-    }
-    if (d->dateOnly()) {
+    if (d->dateOnly())
         return KADateTime(d->date(), LocalZone);
-    }
     QTimeZone local = QTimeZone::systemTimeZone();
-    if (d->specType == TimeZone && d->timeZone() == local) {
+    if (d->specType == TimeZone && d->timeZone() == local)
         return KADateTime(d->date(), d->time(), LocalZone);
-    }
-    switch (d->specType) {
+    switch (d->specType)
+    {
         case TimeZone:
         case OffsetFromUTC:
-        case UTC: {
+        case UTC:
+        {
             KADateTime result;
             d->newToZone(result.d, local, local);  // cache the time zone conversion
             result.d->specType = LocalZone;
@@ -1096,40 +1125,35 @@ KADateTime KADateTime::toLocalZone() const
     }
 }
 
-KADateTime KADateTime::toZone(const QTimeZone &zone) const
+KADateTime KADateTime::toZone(const QTimeZone& zone) const
 {
-    if (!zone.isValid() || !isValid()) {
+    if (!zone.isValid() || !isValid())
         return {};
-    }
-    if (d->specType == TimeZone && d->timeZone() == zone) {
+    if (d->specType == TimeZone && d->timeZone() == zone)
         return *this;    // preserve UTC cache, if any
-    }
-    if (d->dateOnly()) {
+    if (d->dateOnly())
         return KADateTime(d->date(), Spec(zone));
-    }
     KADateTime result;
     QTimeZone local;
     d->newToZone(result.d, zone, local);  // cache the time zone conversion
     return result;
 }
 
-KADateTime KADateTime::toTimeSpec(const KADateTime &dt) const
+KADateTime KADateTime::toTimeSpec(const KADateTime& dt) const
 {
     return toTimeSpec(dt.timeSpec());
 }
 
-KADateTime KADateTime::toTimeSpec(const Spec &spec) const
+KADateTime KADateTime::toTimeSpec(const Spec& spec) const
 {
-    if (spec == d->spec()) {
+    if (spec == d->spec())
         return *this;
-    }
-    if (!isValid()) {
+    if (!isValid())
         return {};
-    }
-    if (d->dateOnly()) {
+    if (d->dateOnly())
         return KADateTime(d->date(), spec);
-    }
-    if (spec.type() == TimeZone) {
+    if (spec.type() == TimeZone)
+    {
         KADateTime result;
         QTimeZone local;
         d->newToZone(result.d, spec.timeZone(), local);  // cache the time zone conversion
@@ -1143,9 +1167,8 @@ qint64 KADateTime::toSecsSinceEpoch() const
 {
     QTimeZone local;
     const QDateTime qdt = d->toUtc(local);
-    if (!qdt.isValid()) {
+    if (!qdt.isValid())
         return LLONG_MIN;
-    }
     return qdt.toSecsSinceEpoch();
 }
 
@@ -1164,27 +1187,29 @@ void KADateTime::setDateOnly(bool dateOnly)
     d->setDateOnly(dateOnly);
 }
 
-void KADateTime::setDate(const QDate &date)
+void KADateTime::setDate(const QDate& date)
 {
     d->setDate(date);
 }
 
-void KADateTime::setTime(const QTime &time)
+void KADateTime::setTime(const QTime& time)
 {
     d->setTime(time);
 }
 
-void KADateTime::setTimeSpec(const Spec &other)
+void KADateTime::setTimeSpec(const Spec& other)
 {
     d->setSpec(other);
 }
 
 void KADateTime::setSecondOccurrence(bool second)
 {
-    if (d->specType == KADateTime::TimeZone  &&  second != d->m2ndOccurrence) {
+    if (d->specType == KADateTime::TimeZone  &&  second != d->m2ndOccurrence)
+    {
         d->m2ndOccurrence = second;
         d->clearCache();
-        if (second) {
+        if (second)
+        {
             // Check whether a second occurrence is actually possible, and
             // if not, reset m2ndOccurrence.
             QTimeZone local;
@@ -1195,13 +1220,12 @@ void KADateTime::setSecondOccurrence(bool second)
 
 KADateTime KADateTime::addMSecs(qint64 msecs) const
 {
-    if (!msecs) {
+    if (!msecs)
         return *this;    // retain cache - don't create another instance
-    }
-    if (!isValid()) {
+    if (!isValid())
         return {};
-    }
-    if (d->dateOnly()) {
+    if (d->dateOnly())
+    {
         KADateTime result(*this);
         result.d->setDate(d->date().addDays(msecs / 86400000));
         return result;
@@ -1217,9 +1241,8 @@ KADateTime KADateTime::addSecs(qint64 secs) const
 
 KADateTime KADateTime::addDays(qint64 days) const
 {
-    if (!days) {
+    if (!days)
         return *this;    // retain cache - don't create another instance
-    }
     KADateTime result(*this);
     result.d->setDate(d->date().addDays(days));
     return result;
@@ -1227,9 +1250,8 @@ KADateTime KADateTime::addDays(qint64 days) const
 
 KADateTime KADateTime::addMonths(int months) const
 {
-    if (!months) {
+    if (!months)
         return *this;    // retain cache - don't create another instance
-    }
     KADateTime result(*this);
     result.d->setDate(d->date().addMonths(months));
     return result;
@@ -1237,62 +1259,59 @@ KADateTime KADateTime::addMonths(int months) const
 
 KADateTime KADateTime::addYears(int years) const
 {
-    if (!years) {
+    if (!years)
         return *this;    // retain cache - don't create another instance
-    }
     KADateTime result(*this);
     result.d->setDate(d->date().addYears(years));
     return result;
 }
 
-qint64 KADateTime::msecsTo(const KADateTime &t2) const
+qint64 KADateTime::msecsTo(const KADateTime& t2) const
 {
-    if (!isValid() || !t2.isValid()) {
+    if (!isValid() || !t2.isValid())
         return 0;
-    }
-    if (d->dateOnly()) {
+    if (d->dateOnly())
+    {
         const QDate dat = t2.d->dateOnly() ? t2.d->date() : t2.toTimeSpec(d->spec()).d->date();
         return d->date().daysTo(dat) * 86400*1000;
     }
-    if (t2.d->dateOnly()) {
+    if (t2.d->dateOnly())
         return toTimeSpec(t2.d->spec()).d->date().daysTo(t2.d->date()) * 86400*1000;
-    }
     QTimeZone local;
     return d->toUtc(local).msecsTo(t2.d->toUtc(local));
 }
 
-qint64 KADateTime::secsTo(const KADateTime &t2) const
+qint64 KADateTime::secsTo(const KADateTime& t2) const
 {
-    if (!isValid() || !t2.isValid()) {
+    if (!isValid() || !t2.isValid())
         return 0;
-    }
-    if (d->dateOnly()) {
+    if (d->dateOnly())
+    {
         const QDate dat = t2.d->dateOnly() ? t2.d->date() : t2.toTimeSpec(d->spec()).d->date();
         return d->date().daysTo(dat) * 86400;
     }
-    if (t2.d->dateOnly()) {
+    if (t2.d->dateOnly())
         return toTimeSpec(t2.d->spec()).d->date().daysTo(t2.d->date()) * 86400;
-    }
     QTimeZone local;
     return d->toUtc(local).secsTo(t2.d->toUtc(local));
 }
 
-qint64 KADateTime::daysTo(const KADateTime &t2) const
+qint64 KADateTime::daysTo(const KADateTime& t2) const
 {
-    if (!isValid() || !t2.isValid()) {
+    if (!isValid() || !t2.isValid())
         return 0;
-    }
-    if (d->dateOnly()) {
+    if (d->dateOnly())
+    {
         const QDate dat = t2.d->dateOnly() ? t2.d->date() : t2.toTimeSpec(d->spec()).d->date();
         return d->date().daysTo(dat);
     }
-    if (t2.d->dateOnly()) {
+    if (t2.d->dateOnly())
         return toTimeSpec(t2.d->spec()).d->date().daysTo(t2.d->date());
-    }
 
     QDate dat;
     QTimeZone local;
-    switch (d->specType) {
+    switch (d->specType)
+    {
         case UTC:
             dat = t2.d->toUtc(local).date();
             break;
@@ -1316,12 +1335,14 @@ KADateTime KADateTime::currentLocalDateTime()
 {
 #ifdef SIMULATION
 #ifndef NDEBUG
-    if (KADateTimePrivate::simulationLocalZone.isValid()) {
+    if (KADateTimePrivate::simulationLocalZone.isValid())
+    {
         KADateTime dt = currentUtcDateTime().toZone(KADateTimePrivate::simulationLocalZone);
         dt.setSpec(LocalZone);
         return dt;
     }
-    if (KADateTimePrivate::simulationOffset) {
+    if (KADateTimePrivate::simulationOffset)
+    {
         KADateTime dt = currentUtcDateTime().toZone(QTimeZone::systemTimeZone());
         dt.setSpec(LocalZone);
         return dt;
@@ -1345,17 +1366,16 @@ KADateTime KADateTime::currentUtcDateTime()
 #endif
 }
 
-KADateTime KADateTime::currentDateTime(const Spec &spec)
+KADateTime KADateTime::currentDateTime(const Spec& spec)
 {
-    switch (spec.type()) {
+    switch (spec.type())
+    {
         case UTC:
             return currentUtcDateTime();
         case TimeZone:
-            if (spec.timeZone() != QTimeZone::systemTimeZone()) {
+            if (spec.timeZone() != QTimeZone::systemTimeZone())
                 break;
-            }
-            // fall through to LocalZone
-            Q_FALLTHROUGH();
+            Q_FALLTHROUGH(); // fall through to LocalZone
         case LocalZone:
             return currentLocalDateTime();
         default:
@@ -1374,100 +1394,110 @@ QTime KADateTime::currentLocalTime()
     return currentLocalDateTime().time();
 }
 
-KADateTime::Comparison KADateTime::compare(const KADateTime &other) const
+KADateTime::Comparison KADateTime::compare(const KADateTime& other) const
 {
     QDateTime start1;
     QDateTime start2;
     QTimeZone local;
     const bool conv = (!d->equalSpec(*other.d) || d->secondOccurrence() != other.d->secondOccurrence());
-    if (conv) {
+    if (conv)
+    {
         // Different time specs or one is a time which occurs twice,
         // so convert to UTC before comparing
         start1 = d->toUtc(local);
         start2 = other.d->toUtc(local);
-    } else {
+    }
+    else
+    {
         // Same time specs, so no need to convert to UTC
         start1 = d->dt();
         start2 = other.d->dt();
     }
-    if (d->dateOnly() || other.d->dateOnly()) {
+    if (d->dateOnly() || other.d->dateOnly())
+    {
         // At least one of the instances is date-only, so we need to compare
         // time periods rather than just times.
         QDateTime end1;
         QDateTime end2;
-        if (conv) {
-            if (d->dateOnly()) {
+        if (conv)
+        {
+            if (d->dateOnly())
+            {
                 KADateTime kdt(*this);
                 kdt.setTime(QTime(23, 59, 59, 999));
                 end1 = kdt.d->toUtc(local);
-            } else {
-                end1 = start1;
             }
-            if (other.d->dateOnly()) {
+            else
+                end1 = start1;
+            if (other.d->dateOnly())
+            {
                 KADateTime kdt(other);
                 kdt.setTime(QTime(23, 59, 59, 999));
                 end2 = kdt.d->toUtc(local);
-            } else {
+            }
+            else
                 end2 = start2;
-            }
-        } else {
-            end1 = d->dt();
-            if (d->dateOnly()) {
-                end1.setTime(QTime(23, 59, 59, 999));
-            }
-            end2 = other.d->dt();
-            if (other.d->dateOnly()) {
-                end2.setTime(QTime(23, 59, 59, 999));
-            }
         }
-        if (start1 == start2) {
+        else
+        {
+            end1 = d->dt();
+            if (d->dateOnly())
+                end1.setTime(QTime(23, 59, 59, 999));
+            end2 = other.d->dt();
+            if (other.d->dateOnly())
+                end2.setTime(QTime(23, 59, 59, 999));
+        }
+        if (start1 == start2)
+        {
             return !d->dateOnly() ? AtStart
                  : (end1 == end2) ? Equal
-                 : (end1 < end2) ? static_cast<Comparison>(AtStart | Inside)
-                 : static_cast<Comparison>(AtStart | Inside | AtEnd | After);
+                 : (end1 < end2)  ? static_cast<Comparison>(AtStart | Inside)
+                 :                  static_cast<Comparison>(AtStart | Inside | AtEnd | After);
         }
-        if (start1 < start2) {
-            return (end1 < start2) ? Before
-                 : (end1 == end2) ? static_cast<Comparison>(Before | AtStart | Inside | AtEnd)
+        if (start1 < start2)
+        {
+            return (end1 < start2)  ? Before
+                 : (end1 == end2)   ? static_cast<Comparison>(Before | AtStart | Inside | AtEnd)
                  : (end1 == start2) ? static_cast<Comparison>(Before | AtStart)
-                 : (end1 < end2) ? static_cast<Comparison>(Before | AtStart | Inside) : Outside;
-        } else {
-            return (start1 > end2) ? After
+                 : (end1 < end2)    ? static_cast<Comparison>(Before | AtStart | Inside)
+                 :                    Outside;
+        }
+        else
+        {
+            return (start1 > end2)  ? After
                  : (start1 == end2) ? (end1 == end2 ? AtEnd : static_cast<Comparison>(AtEnd | After))
-                 : (end1 == end2) ? static_cast<Comparison>(Inside | AtEnd)
-                 : (end1 < end2) ? Inside : static_cast<Comparison>(Inside | AtEnd | After);
+                 : (end1 == end2)   ? static_cast<Comparison>(Inside | AtEnd)
+                 : (end1 < end2)    ? Inside
+                 :                    static_cast<Comparison>(Inside | AtEnd | After);
         }
     }
     return (start1 == start2) ? Equal : (start1 < start2) ? Before : After;
 }
 
-bool KADateTime::operator==(const KADateTime &other) const
+bool KADateTime::operator==(const KADateTime& other) const
 {
-    if (d == other.d) {
+    if (d == other.d)
         return true;    // the two instances share the same data
-    }
-    if (d->dateOnly() != other.d->dateOnly()) {
+    if (d->dateOnly() != other.d->dateOnly())
         return false;
-    }
-    if (d->equalSpec(*other.d)) {
+    if (d->equalSpec(*other.d))
+    {
         // Both instances are in the same time zone, so compare directly
-        if (d->dateOnly()) {
+        if (d->dateOnly())
             return d->date() == other.d->date();
-        } else {
+        else
             return d->secondOccurrence() == other.d->secondOccurrence()
                &&  d->dt() == other.d->dt();
-        }
     }
     // Don't waste time converting to UTC if the dates aren't close enough.
-    if (qAbs(d->date().daysTo(other.d->date())) > 2) {
+    if (qAbs(d->date().daysTo(other.d->date())) > 2)
         return false;
-    }
     QTimeZone local;
-    if (d->dateOnly()) {
+    if (d->dateOnly())
+    {
         // Date-only values are equal if both the start and end of day times are equal.
-        if (d->toUtc(local) != other.d->toUtc(local)) {
+        if (d->toUtc(local) != other.d->toUtc(local))
             return false;    // start-of-day times differ
-        }
         KADateTime end1(*this);
         end1.setTime(QTime(23, 59, 59, 999));
         KADateTime end2(other);
@@ -1477,41 +1507,38 @@ bool KADateTime::operator==(const KADateTime &other) const
     return d->toUtc(local) == other.d->toUtc(local);
 }
 
-bool KADateTime::operator<(const KADateTime &other) const
+bool KADateTime::operator<(const KADateTime& other) const
 {
-    if (d == other.d) {
+    if (d == other.d)
         return false;    // the two instances share the same data
-    }
-    if (d->equalSpec(*other.d)) {
+    if (d->equalSpec(*other.d))
+    {
         // Both instances are in the same time zone, so compare directly
-        if (d->dateOnly() || other.d->dateOnly()) {
+        if (d->dateOnly() || other.d->dateOnly())
             return d->date() < other.d->date();
-        }
-        if (d->secondOccurrence() == other.d->secondOccurrence()) {
+        if (d->secondOccurrence() == other.d->secondOccurrence())
             return d->dt() < other.d->dt();
-        }
         // One is the second occurrence of a date/time, during a change from
         // daylight saving to standard time, so only do a direct comparison
         // if the dates are more than 1 day apart.
         const int dayDiff = d->date().daysTo(other.d->date());
-        if (dayDiff > 1) {
+        if (dayDiff > 1)
             return true;
-        }
-        if (dayDiff < -1) {
+        if (dayDiff < -1)
             return false;
-        }
-    } else {
+    }
+    else
+    {
         // Don't waste time converting to UTC if the dates aren't close enough.
         const int dayDiff = d->date().daysTo(other.d->date());
-        if (dayDiff > 2) {
+        if (dayDiff > 2)
             return true;
-        }
-        if (dayDiff < -2) {
+        if (dayDiff < -2)
             return false;
-        }
     }
     QTimeZone local;
-    if (d->dateOnly()) {
+    if (d->dateOnly())
+    {
         // This instance is date-only, so we need to compare the end of its
         // day with the other value. Note that if the other value is date-only,
         // we want to compare with the start of its day, which will happen
@@ -1523,11 +1550,10 @@ bool KADateTime::operator<(const KADateTime &other) const
     return d->toUtc(local) < other.d->toUtc(local);
 }
 
-QString KADateTime::toString(const QString &format) const
+QString KADateTime::toString(const QString& format) const
 {
-    if (!isValid()) {
+    if (!isValid())
         return {};
-    }
 
     enum { TZNone, UTCOffsetShort, UTCOffset, UTCOffsetColon, TZAbbrev, TZName };
     const QLocale locale;
@@ -1537,21 +1563,24 @@ QString KADateTime::toString(const QString &format) const
     int zone;
     bool escape = false;
     ushort flag = 0;
-    for (int i = 0, end = format.length();  i < end;  ++i) {
+    for (int i = 0, end = format.length();  i < end;  ++i)
+    {
         zone = TZNone;
         num = NO_NUMBER;
         numLength = 0;    // no leading zeroes
         ushort ch = format[i].unicode();
-        if (!escape) {
-            if (ch == '%') {
+        if (!escape)
+        {
+            if (ch == '%')
                 escape = true;
-            } else {
+            else
                 result += format[i];
-            }
             continue;
         }
-        if (!flag) {
-            switch (ch) {
+        if (!flag)
+        {
+            switch (ch)
+            {
                 case '%':
                     result += QLatin1Char('%');
                     break;
@@ -1578,8 +1607,7 @@ QString KADateTime::toString(const QString &format) const
                     break;
                 case 'd':     // day of month, 01 - 31
                     numLength = 2;
-                    // fall through to 'e'
-                    Q_FALLTHROUGH();
+                    Q_FALLTHROUGH(); // fall through to 'e'
                 case 'e':     // day of month, 1 - 31
                     num = d->date().day();
                     break;
@@ -1591,15 +1619,13 @@ QString KADateTime::toString(const QString &format) const
                     break;
                 case 'H':     // hour, 00 - 23
                     numLength = 2;
-                    // fall through to 'k'
-                    Q_FALLTHROUGH();
+                    Q_FALLTHROUGH(); // fall through to 'k'
                 case 'k':     // hour, 0 - 23
                     num = d->time().hour();
                     break;
                 case 'I':     // hour, 01 - 12
                     numLength = 2;
-                    // fall through to 'l'
-                    Q_FALLTHROUGH();
+                    Q_FALLTHROUGH(); // fall through to 'l'
                 case 'l':     // hour, 1 - 12
                     num = (d->time().hour() + 11) % 12 + 1;
                     break;
@@ -1611,25 +1637,25 @@ QString KADateTime::toString(const QString &format) const
                     num = d->time().second();
                     numLength = 2;
                     break;
-                case 'P': {   // am/pm
+                case 'P':
+                {   // am/pm
                     bool am = (d->time().hour() < 12);
                     QString text = (am ? locale.amText() : locale.pmText()).toLower();
-                    if (text == QLatin1String("a.m.")) {
+                    if (text == QLatin1String("a.m."))
                         text = QStringLiteral("am");
-                    } else if (text == QLatin1String("p.m.")) {
+                    else if (text == QLatin1String("p.m."))
                         text = QStringLiteral("pm");
-                    }
                     result += text;
                     break;
                 }
-                case 'p': {   // AM/PM
+                case 'p':
+                {   // AM/PM
                     bool am = (d->time().hour() < 12);
                     QString text = (am ? locale.amText() : locale.pmText()).toUpper();
-                    if (text == QLatin1String("A.M.")) {
+                    if (text == QLatin1String("A.M."))
                         text = QStringLiteral("AM");
-                    } else if (text == QLatin1String("P.M.")) {
+                    else if (text == QLatin1String("P.M."))
                         text = QStringLiteral("PM");
-                    }
                     result += text;
                     break;
                 }
@@ -1645,9 +1671,11 @@ QString KADateTime::toString(const QString &format) const
                     break;
             }
         }
-        else if (flag == ':') {
+        else if (flag == ':')
+        {
             // It's a "%:" sequence
-            switch (ch) {
+            switch (ch)
+            {
                 case 'A':     // week day name in English
                     result += longDay(d->date().dayOfWeek());
                     break;
@@ -1669,9 +1697,11 @@ QString KADateTime::toString(const QString &format) const
                 case 'p':     // AM/PM
                     result += (d->time().hour() < 12) ? QLatin1String("AM") : QLatin1String("PM");
                     break;
-                case 'S': {   // seconds with ':' prefix, only if non-zero
+                case 'S':
+                {   // seconds with ':' prefix, only if non-zero
                     int sec = d->time().second();
-                    if (sec || d->time().msec()) {
+                    if (sec || d->time().msec())
+                    {
                         result += QLatin1Char(':');
                         num = sec;
                         numLength = 2;
@@ -1697,29 +1727,35 @@ QString KADateTime::toString(const QString &format) const
             }
             flag = 0;
         }
-        if (!flag) {
+        if (!flag)
             escape = false;
-        }
 
         // Append any required number or time zone information
-        if (num != NO_NUMBER) {
-            if (!numLength) {
+        if (num != NO_NUMBER)
+        {
+            if (!numLength)
                 result += QString::number(num);
-            } else if (numLength == 2 || numLength == 4) {
-                if (num < 0) {
+            else if (numLength == 2 || numLength == 4)
+            {
+                if (num < 0)
+                {
                     num = -num;
                     result += QLatin1Char('-');
                 }
                 result += numString(num, (numLength == 2 ? 2 : 4));
             }
-        } else if (zone != TZNone) {
+        }
+        else if (zone != TZNone)
+        {
             QTimeZone tz;
             int offset;
-            switch (d->specType) {
+            switch (d->specType)
+            {
                 case UTC:
                 case TimeZone:
                 case LocalZone:
-                    switch (d->specType) {
+                    switch (d->specType)
+                    {
                         case UTC:
                             tz = QTimeZone::utc();
                             break;
@@ -1732,44 +1768,42 @@ QString KADateTime::toString(const QString &format) const
                         default:
                             break;
                     }
-                    // fall through to OffsetFromUTC
-                    Q_FALLTHROUGH();
-                case OffsetFromUTC: {
+                    Q_FALLTHROUGH(); // fall through to OffsetFromUTC
+                case OffsetFromUTC:
+                {
                     QTimeZone local;
                     offset = (d->specType == TimeZone || d->specType == LocalZone) ? d->timeZoneOffset(local)
                            : (d->specType == OffsetFromUTC) ? d->spec().utcOffset() : 0;
-                    if (offset == InvalidOffset) {
+                    if (offset == InvalidOffset)
                         return result + QLatin1String("+ERROR");
-                    }
                     offset /= 60;
-                    switch (zone) {
+                    switch (zone)
+                    {
                         case UTCOffsetShort:  // UTC offset in hours
                         case UTCOffset:       // UTC offset in hours and minutes
-                        case UTCOffsetColon: {  // UTC offset in hours and minutes, with colon
-                            if (offset >= 0) {
+                        case UTCOffsetColon:
+                        {  // UTC offset in hours and minutes, with colon
+                            if (offset >= 0)
                                 result += QLatin1Char('+');
-                            } else {
+                            else
+                            {
                                 result += QLatin1Char('-');
                                 offset = -offset;
                             }
                             result += numString(offset / 60, 2);
-                            if (zone == UTCOffsetColon) {
+                            if (zone == UTCOffsetColon)
                                 result += QLatin1Char(':');
-                            }
-                            if (ch != 'u' || offset % 60) {
+                            if (ch != 'u' || offset % 60)
                                 result += numString(offset % 60, 2);
-                            }
                             break;
                         }
                         case TZAbbrev:     // time zone abbreviation
-                            if (tz.isValid() && d->specType != OffsetFromUTC) {
+                            if (tz.isValid() && d->specType != OffsetFromUTC)
                                 result += tz.abbreviation(d->toUtc(local));
-                            }
                             break;
                         case TZName:       // time zone name
-                            if (tz.isValid() && d->specType != OffsetFromUTC) {
+                            if (tz.isValid() && d->specType != OffsetFromUTC)
                                 result += QString::fromLatin1(tz.id());
-                            }
                             break;
                     }
                     break;
@@ -1785,28 +1819,28 @@ QString KADateTime::toString(const QString &format) const
 QString KADateTime::toString(TimeFormat format) const
 {
     QString result;
-    if (!d->rawDt().isValid()) {
+    if (!d->rawDt().isValid())
         return result;
-    }
 
     QString tzsign = QStringLiteral("+");
     int offset = 0;
     QString tzcolon;
-    switch (format) {
+    switch (format)
+    {
         case RFCDateDay:
             result += shortDay(d->date().dayOfWeek());
             result += QLatin1String(", ");
-            // fall through to RFCDate
-            Q_FALLTHROUGH();
-        case RFCDate: {
+            Q_FALLTHROUGH(); // fall through to RFCDate
+        case RFCDate:
+        {
             QString seconds;
-            if (d->time().second()) {
+            if (d->time().second())
                 seconds = QLatin1String(":") + numString(d->time().second(), 2);
-            }
-            result += QStringLiteral("%1 %2 ").arg(numString(d->date().day(),   2),
+            result += QStringLiteral("%1 %2 ").arg(numString(d->date().day(), 2),
                                                    shortMonth(d->date().month()));
             int year = d->date().year();
-            if (year < 0) {
+            if (year < 0)
+            {
                 result += QLatin1Char('-');
                 year = -year;
             }
@@ -1816,7 +1850,8 @@ QString KADateTime::toString(TimeFormat format) const
                                                         seconds);
             break;
         }
-        case RFC3339Date: {
+        case RFC3339Date:
+        {
             result += QStringLiteral("%1-%2-%3T%4:%5:%6")
                                       .arg(numString(d->date().year(),   4),
                                            numString(d->date().month(),  2),
@@ -1825,71 +1860,74 @@ QString KADateTime::toString(TimeFormat format) const
                                            numString(d->time().minute(), 2),
                                            numString(d->time().second(), 2));
             int msec = d->time().msec();
-            if (msec) {
+            if (msec)
+            {
                 int digits = 3;
-                if (!(msec % 10)) {
+                if (!(msec % 10))
+                {
                     msec /= 10, --digits;
-                    if (!(msec % 10)) {
+                    if (!(msec % 10))
                         msec /= 10, --digits;
-                    }
                 }
                 result += QStringLiteral(".%1").arg(numString(msec, digits));
             }
-            if (d->specType == UTC) {
+            if (d->specType == UTC)
                 return result + QLatin1Char('Z');
-            }
             tzcolon = QStringLiteral(":");
             break;
         }
         case ISODate:
-        case ISODateFull: {
+        case ISODateFull:
+        {
             // QDateTime::toString(Qt::ISODate) doesn't output fractions of a second
             int year = d->date().year();
-            if (year < 0) {
+            if (year < 0)
+            {
                 result += QLatin1Char('-');
                 year = -year;
             }
-            result += QStringLiteral("%1-%2-%3").arg(numString(year,              4), numString(d->date().month(), 2), numString(d->date().day(),   2));
-            if (!d->dateOnly()  ||  d->specType != LocalZone) {
-                result += QStringLiteral("T%1:%2:%3").arg(numString(d->time().hour(),   2), numString(d->time().minute(), 2), numString(d->time().second(), 2));
-                if (d->time().msec()) {
+            result += QStringLiteral("%1-%2-%3").arg(numString(year, 4),
+                                                     numString(d->date().month(), 2),
+                                                     numString(d->date().day(),   2));
+            if (!d->dateOnly()  ||  d->specType != LocalZone)
+            {
+                result += QStringLiteral("T%1:%2:%3").arg(numString(d->time().hour(), 2),
+                                                          numString(d->time().minute(), 2),
+                                                          numString(d->time().second(), 2));
+                if (d->time().msec())
+                {
                     // Comma is preferred by ISO8601 as the decimal point symbol,
                     // so use it unless '.' is the symbol used in this locale.
                     result += (QLocale().decimalPoint() == QLatin1Char('.')) ? QLatin1Char('.') : QLatin1Char(',');
                     result += numString(d->time().msec(), 3);
                 }
             }
-            if (d->specType == UTC) {
+            if (d->specType == UTC)
                 return result + QLatin1Char('Z');
-            }
-            if (format == ISODate && d->specType == LocalZone) {
+            if (format == ISODate && d->specType == LocalZone)
                 return result;
-            }
             tzcolon = QStringLiteral(":");
             break;
         }
         case QtTextDate:
-            if (d->dateOnly()) {
+            if (d->dateOnly())
                 result = toString(QStringLiteral("%a %b %e %Y"));
-            } else {
+            else
                 result = toString(QStringLiteral("%a %b %e %H:%M:%S %Y"));
-            }
-            if (result.isEmpty() || d->specType == LocalZone) {
+            if (result.isEmpty() || d->specType == LocalZone)
                 return result;
-            }
             result += QLatin1Char(' ');
             break;
 
-        case LocalDate: {
+        case LocalDate:
+        {
             QLocale l;
-            if (d->dateOnly()) {
+            if (d->dateOnly())
                 result = l.toString(d->date(), QLocale::ShortFormat);
-            } else {
+            else
                 result = l.toString(d->dt(), QLocale::ShortFormat);
-            }
-            if (result.isEmpty() || d->specType == LocalZone) {
+            if (result.isEmpty() || d->specType == LocalZone)
                 return result;
-            }
             result += QLatin1Char(' ');
             break;
         }
@@ -1898,16 +1936,17 @@ QString KADateTime::toString(TimeFormat format) const
     }
 
     // Return the string with UTC offset ±hhmm appended
-    if (d->specType == OffsetFromUTC) {
+    if (d->specType == OffsetFromUTC)
         offset =  d->spec().utcOffset();
-    } else if (d->specType == TimeZone || d->specType == LocalZone) {
+    else if (d->specType == TimeZone || d->specType == LocalZone)
+    {
         QTimeZone local;
         offset = d->timeZoneOffset(local);   // calculate offset and cache UTC value
     }
-    if (d->specType == Invalid || offset == InvalidOffset) {
+    if (d->specType == Invalid || offset == InvalidOffset)
         return result + QLatin1String("+ERROR");
-    }
-    if (offset < 0) {
+    if (offset < 0)
+    {
         offset = -offset;
         tzsign = QStringLiteral("-");
     }
@@ -1916,19 +1955,19 @@ QString KADateTime::toString(TimeFormat format) const
                   + tzcolon + numString(offset % 60, 2);
 }
 
-KADateTime KADateTime::fromString(const QString &string, TimeFormat format, bool *negZero)
+KADateTime KADateTime::fromString(const QString& string, TimeFormat format, bool* negZero)
 {
-    if (negZero) {
+    if (negZero)
         *negZero = false;
-    }
     const QString str = string.trimmed();
-    if (str.isEmpty()) {
+    if (str.isEmpty())
         return {};
-    }
 
-    switch (format) {
+    switch (format)
+    {
         case RFCDateDay: // format is Wdy, DD Mon YYYY hh:mm:ss ±hhmm
-        case RFCDate: {  // format is [Wdy,] DD Mon YYYY hh:mm[:ss] ±hhmm
+        case RFCDate:    // format is [Wdy,] DD Mon YYYY hh:mm[:ss] ±hhmm
+        {
             int nyear  = 6;   // indexes within string to values
             int nmonth = 4;
             int nday   = 2;
@@ -1939,20 +1978,21 @@ KADateTime KADateTime::fromString(const QString &string, TimeFormat format, bool
             // Also accept obsolete form "Weekday, DD-Mon-YY HH:MM:SS ±hhmm"
             QRegExp rx(QLatin1String(R"(^(?:([A-Z][a-z]+),\s*)?(\d{1,2})(\s+|-)([^-\s]+)(\s+|-)(\d{2,4})\s+(\d\d):(\d\d)(?::(\d\d))?\s+(\S+)$)"));
             QStringList parts_;
-            if (!rx.indexIn(str)) {
+            if (!rx.indexIn(str))
+            {
                 // Check that if date has '-' separators, both separators are '-'.
                 parts_ = rx.capturedTexts();
                 bool h1 = (parts_.at(3) == QLatin1String("-"));
                 bool h2 = (parts_.at(5) == QLatin1String("-"));
-                if (h1 != h2) {
+                if (h1 != h2)
                     break;
-                }
-            } else {
+            }
+            else
+            {
                 // Check for the obsolete form "Wdy Mon DD HH:MM:SS YYYY"
                 rx = QRegExp(QLatin1String(R"(^([A-Z][a-z]+)\s+(\S+)\s+(\d\d)\s+(\d\d):(\d\d):(\d\d)\s+(\d\d\d\d)$)"));
-                if (rx.indexIn(str)) {
+                if (rx.indexIn(str))
                     break;
-                }
                 nyear  = 7;
                 nmonth = 2;
                 nday   = 3;
@@ -1968,41 +2008,35 @@ KADateTime KADateTime::fromString(const QString &string, TimeFormat format, bool
             int year   = parts[nyear].toInt(&ok[1]);
             int hour   = parts[nhour].toInt(&ok[2]);
             int minute = parts[nmin].toInt(&ok[3]);
-            if (!ok[0] || !ok[1] || !ok[2] || !ok[3]) {
+            if (!ok[0] || !ok[1] || !ok[2] || !ok[3])
                 break;
-            }
             int second = 0;
-            if (!parts[nsec].isEmpty()) {
+            if (!parts[nsec].isEmpty())
+            {
                 second = parts[nsec].toInt(&ok[0]);
-                if (!ok[0]) {
+                if (!ok[0])
                     break;
-                }
             }
             bool leapSecond = (second == 60);
-            if (leapSecond) {
+            if (leapSecond)
                 second = 59;    // apparently a leap second - validate below, once time zone is known
-            }
             int month = 0;
-            for (; month < 12 && parts[nmonth] != shortMonth(month + 1); ++month) {
-                ;
-            }
+            for (; month < 12 && parts[nmonth] != shortMonth(month + 1); ++month) {}
             int dayOfWeek = -1;
-            if (!parts[nwday].isEmpty()) {
+            if (!parts[nwday].isEmpty())
+            {
                 // Look up the weekday name
-                while (++dayOfWeek < 7 && shortDay(dayOfWeek + 1) != parts[nwday]) {
-                    ;
-                }
-                if (dayOfWeek >= 7) {
-                    for (dayOfWeek = 0; dayOfWeek < 7 && longDay(dayOfWeek + 1) != parts[nwday]; ++dayOfWeek) {
-                        ;
-                    }
+                while (++dayOfWeek < 7 && shortDay(dayOfWeek + 1) != parts[nwday]) {}
+                if (dayOfWeek >= 7)
+                {
+                    for (dayOfWeek = 0; dayOfWeek < 7 && longDay(dayOfWeek + 1) != parts[nwday]; ++dayOfWeek) {}
                 }
             }
-            if (month >= 12 || dayOfWeek >= 7 || (dayOfWeek < 0 && format == RFCDateDay)) {
+            if (month >= 12 || dayOfWeek >= 7 || (dayOfWeek < 0 && format == RFCDateDay))
                 break;
-            }
             int i = parts[nyear].size();
-            if (i < 4) {
+            if (i < 4)
+            {
                 // It's an obsolete year specification with less than 4 digits
                 year += (i == 2  &&  year < 50) ? 2000 : 1900;
             }
@@ -2010,42 +2044,44 @@ KADateTime KADateTime::fromString(const QString &string, TimeFormat format, bool
             // Parse the UTC offset part
             int offset = 0;           // set default to '-0000'
             bool negOffset = false;
-            if (parts.count() > 10) {
+            if (parts.count() > 10)
+            {
                 rx = QRegExp(QLatin1String(R"(^([+-])(\d\d)(\d\d)$)"));
-                if (!rx.indexIn(parts[10])) {
+                if (!rx.indexIn(parts[10]))
+                {
                     // It's a UTC offset ±hhmm
                     const QStringList partsu = rx.capturedTexts();
                     offset = partsu[2].toInt(&ok[0]) * 3600;
                     int offsetMin = partsu[3].toInt(&ok[1]);
-                    if (!ok[0] || !ok[1] || offsetMin > 59) {
+                    if (!ok[0] || !ok[1] || offsetMin > 59)
                         break;
-                    }
                     offset += offsetMin * 60;
                     negOffset = (partsu[1] == QLatin1String("-"));
-                    if (negOffset) {
+                    if (negOffset)
                         offset = -offset;
-                    }
-                } else {
+                }
+                else
+                {
                     // Check for an obsolete time zone name
                     const QByteArray zone = parts[10].toLatin1();
-                    if (zone.length() == 1 && isalpha(zone[0]) && toupper(zone[0]) != 'J') {
+                    if (zone.length() == 1 && isalpha(zone[0]) && toupper(zone[0]) != 'J')
                         negOffset = true;    // military zone: RFC 2822 treats as '-0000'
-                    } else if (zone != "UT" && zone != "GMT") { // treated as '+0000'
+                    else if (zone != "UT" && zone != "GMT")
+                    { // treated as '+0000'
                         offset = (zone == "EDT")                  ? -4 * 3600
                                : (zone == "EST" || zone == "CDT") ? -5 * 3600
                                : (zone == "CST" || zone == "MDT") ? -6 * 3600
                                : (zone == "MST" || zone == "PDT") ? -7 * 3600
                                : (zone == "PST")                  ? -8 * 3600
                                : 0;
-                        if (!offset) {
+                        if (!offset)
+                        {
                             // Check for any other alphabetic time zone
                             bool nonalpha = false;
-                            for (int i = 0, end = zone.size(); i < end && !nonalpha; ++i) {
+                            for (int i = 0, end = zone.size(); i < end && !nonalpha; ++i)
                                 nonalpha = !isalpha(zone[i]);
-                            }
-                            if (nonalpha) {
+                            if (nonalpha)
                                 break;
-                            }
                             // TODO: Attempt to recognize the time zone abbreviation?
                             negOffset = true;    // unknown time zone: RFC 2822 treats as '-0000'
                         }
@@ -2053,33 +2089,31 @@ KADateTime KADateTime::fromString(const QString &string, TimeFormat format, bool
                 }
             }
             const QDate qdate(year, month + 1, day);
-            if (!qdate.isValid()) {
+            if (!qdate.isValid())
                 break;
-            }
             KADateTime result(qdate, QTime(hour, minute, second), Spec(OffsetFromUTC, offset));
-            if (!result.isValid() || (dayOfWeek >= 0 && result.date().dayOfWeek() != dayOfWeek + 1)) {
+            if (!result.isValid() || (dayOfWeek >= 0 && result.date().dayOfWeek() != dayOfWeek + 1))
                 break;    // invalid date/time, or weekday doesn't correspond with date
-            }
-            if (!offset) {
-                if (negOffset && negZero) {
+            if (!offset)
+            {
+                if (negOffset && negZero)
                     *negZero = true;    // UTC offset given as "-0000"
-                }
                 result.setTimeSpec(UTC);
             }
-            if (leapSecond) {
+            if (leapSecond)
+            {
                 // Validate a leap second time. Leap seconds are inserted after 23:59:59 UTC.
                 // Convert the time to UTC and check that it is 00:00:00.
-                if ((hour * 3600 + minute * 60 + 60 - offset + 86400 * 5) % 86400) { // (max abs(offset) is 100 hours)
+                if ((hour * 3600 + minute * 60 + 60 - offset + 86400 * 5) % 86400)   // (max abs(offset) is 100 hours)
                     break;    // the time isn't the last second of the day
-                }
             }
             return result;
         }
-        case RFC3339Date: { // format is YYYY-MM-DDThh:mm:ss[.s]TZ
+        case RFC3339Date:   // format is YYYY-MM-DDThh:mm:ss[.s]TZ
+        {
             const QRegExp rx(QLatin1String(R"(^(\d{4})-(\d\d)-(\d\d)[Tt](\d\d):(\d\d):(\d\d)(?:\.(\d+))?([Zz]|([+-])(\d\d):(\d\d))$)"));
-            if (rx.indexIn(str)) {
+            if (rx.indexIn(str))
                 break;
-            }
             const QStringList parts = rx.capturedTexts();
             bool ok;
             bool ok1;
@@ -2089,66 +2123,60 @@ KADateTime KADateTime::fromString(const QString &string, TimeFormat format, bool
             int year = parts[1].toInt(&ok);
             int month = parts[2].toInt(&ok1);
             int day = parts[3].toInt(&ok2);
-            if (!ok || !ok1 || !ok2) {
+            if (!ok || !ok1 || !ok2)
                 break;
-            }
             const QDate d(year, month, day);
-            if (!d.isValid()) {
+            if (!d.isValid())
                 break;
-            }
             int hour = parts[4].toInt(&ok);
             int minute = parts[5].toInt(&ok1);
             int second = parts[6].toInt(&ok2);
-            if (!ok || !ok1 || !ok2) {
+            if (!ok || !ok1 || !ok2)
                 break;
-            }
             leapSecond = (second == 60);
-            if (leapSecond) {
+            if (leapSecond)
                 second = 59;    // apparently a leap second - validate below, once time zone is known
-            }
-            if (!parts[7].isEmpty()) {
+            if (!parts[7].isEmpty())
+            {
                 QString ms = parts[7] + QLatin1String("00");
                 ms.truncate(3);
                 msecs = ms.toInt(&ok);
-                if (!ok) {
+                if (!ok)
                     break;
-                }
-                if (msecs && leapSecond) {
+                if (msecs && leapSecond)
                     break;    // leap second only valid if 23:59:60.000
-                }
             }
             const QTime t(hour, minute, second, msecs);
-            if (!t.isValid()) {
+            if (!t.isValid())
                 break;
-            }
             int offset = 0;
             SpecType spec = (parts[8].toUpper() == QLatin1Char('Z')) ? UTC : OffsetFromUTC;
-            if (spec == OffsetFromUTC) {
+            if (spec == OffsetFromUTC)
+            {
                 offset = parts[10].toInt(&ok) * 3600;
                 offset += parts[11].toInt(&ok1) * 60;
-                if (!ok || !ok1) {
+                if (!ok || !ok1)
                     break;
-                }
-                if (parts[9] == QLatin1String("-")) {
-                    if (!offset && leapSecond) {
+                if (parts[9] == QLatin1String("-"))
+                {
+                    if (!offset && leapSecond)
                         break;    // leap second only valid if known time zone
-                    }
                     offset = -offset;
-                    if (!offset && negZero) {
+                    if (!offset && negZero)
                         *negZero = true;
-                    }
                 }
             }
-            if (leapSecond) {
+            if (leapSecond)
+            {
                 // Validate a leap second time. Leap seconds are inserted after 23:59:59 UTC.
                 // Convert the time to UTC and check that it is 00:00:00.
-                if ((hour * 3600 + minute * 60 + 60 - offset + 86400 * 5) % 86400) { // (max abs(offset) is 100 hours)
+                if ((hour * 3600 + minute * 60 + 60 - offset + 86400 * 5) % 86400)   // (max abs(offset) is 100 hours)
                     break;    // the time isn't the last second of the day
-                }
             }
             return KADateTime(d, t, Spec(spec, offset));
         }
-        case ISODate: {
+        case ISODate:
+        {
             /*
              * Extended format: [±]YYYY-MM-DD[Thh[:mm[:ss.s]][TZ]]
              * Basic format:    [±]YYYYMMDD[Thh[mm[ss.s]][TZ]]
@@ -2169,23 +2197,27 @@ KADateTime KADateTime::fromString(const QString &string, TimeFormat format, bool
             bool dateOnly = false;
             // Check first for the extended format of ISO 8601
             QRegExp rx(QLatin1String(R"(^([+-])?(\d{4,})-(\d\d\d|\d\d-\d\d)[T ](\d\d)(?::(\d\d)(?::(\d\d)(?:(?:\.|,)(\d+))?)?)?(Z|([+-])(\d\d)(?::(\d\d))?)?$)"));
-            if (rx.indexIn(str)) {
+            if (rx.indexIn(str))
+            {
                 // It's not the extended format - check for the basic format
                 rx = QRegExp(QLatin1String(R"(^([+-])?(\d{4,})(\d{4})[T ](\d\d)(?:(\d\d)(?:(\d\d)(?:(?:\.|,)(\d+))?)?)?(Z|([+-])(\d\d)(\d\d)?)?$)"));
-                if (rx.indexIn(str)) {
+                if (rx.indexIn(str))
+                {
                     rx = QRegExp(QLatin1String(R"(^([+-])?(\d{4})(\d{3})[T ](\d\d)(?:(\d\d)(?:(\d\d)(?:(?:\.|,)(\d+))?)?)?(Z|([+-])(\d\d)(\d\d)?)?$)"));
-                    if (rx.indexIn(str)) {
+                    if (rx.indexIn(str))
+                    {
                         // Check for date-only formats
                         dateOnly = true;
                         rx = QRegExp(QLatin1String(R"(^([+-])?(\d{4,})-(\d\d\d|\d\d-\d\d)$)"));
-                        if (rx.indexIn(str)) {
+                        if (rx.indexIn(str))
+                        {
                             // It's not the extended format - check for the basic format
                             rx = QRegExp(QLatin1String("^([+-])?(\\d{4,})(\\d{4})$"));
-                            if (rx.indexIn(str)) {
+                            if (rx.indexIn(str))
+                            {
                                 rx = QRegExp(QLatin1String("^([+-])?(\\d{4})(\\d{3})$"));
-                                if (rx.indexIn(str)) {
+                                if (rx.indexIn(str))
                                     break;
-                                }
                             }
                         }
                     }
@@ -2201,171 +2233,169 @@ KADateTime KADateTime::fromString(const QString &string, TimeFormat format, bool
             int msecs  = 0;
             bool leapSecond = false;
             int year = parts[2].toInt(&ok);
-            if (!ok) {
+            if (!ok)
                 break;
-            }
-            if (parts[1] == QLatin1String("-")) {
+            if (parts[1] == QLatin1String("-"))
                 year = -year;
-            }
-            if (!dateOnly) {
+            if (!dateOnly)
+            {
                 hour = parts[4].toInt(&ok);
-                if (!ok) {
+                if (!ok)
                     break;
-                }
-                if (!parts[5].isEmpty()) {
+                if (!parts[5].isEmpty())
+                {
                     minute = parts[5].toInt(&ok);
-                    if (!ok) {
+                    if (!ok)
                         break;
-                    }
                 }
-                if (!parts[6].isEmpty()) {
+                if (!parts[6].isEmpty())
+                {
                     second = parts[6].toInt(&ok);
-                    if (!ok) {
+                    if (!ok)
                         break;
-                    }
                 }
                 leapSecond = (second == 60);
-                if (leapSecond) {
+                if (leapSecond)
+                {
                     second = 59;    // apparently a leap second - validate below, once time zone is known
                 }
-                if (!parts[7].isEmpty()) {
+                if (!parts[7].isEmpty())
+                {
                     QString ms = parts[7] + QLatin1String("00");
                     ms.truncate(3);
                     msecs = ms.toInt(&ok);
-                    if (!ok) {
+                    if (!ok)
                         break;
-                    }
                 }
             }
             int month;
             int day;
-            if (parts[3].length() == 3) {
+            if (parts[3].length() == 3)
+            {
                 // A day of the year is specified
                 day = parts[3].toInt(&ok);
-                if (!ok || day < 1 || day > 366) {
+                if (!ok || day < 1 || day > 366)
                     break;
-                }
                 d = QDate(year, 1, 1).addDays(day - 1);
-                if (!d.isValid() || (d.year() != year)) {
+                if (!d.isValid() || (d.year() != year))
                     break;
-                }
                 //day   = d.day();
                 //month = d.month();
-            } else {
+            }
+            else
+            {
                 // A month and day are specified
                 month = QStringView(parts[3]).left(2).toInt(&ok);
                 day   = QStringView(parts[3]).right(2).toInt(&ok1);
-                if (!ok || !ok1) {
+                if (!ok || !ok1)
                     break;
-                }
                 d = QDate(year, month, day);
-                if (!d.isValid()) {
+                if (!d.isValid())
                     break;
-                }
             }
-            if (dateOnly) {
+            if (dateOnly)
                 return KADateTime(d, Spec(LocalZone));
-            }
-            if (hour == 24  && !minute && !second && !msecs) {
+            if (hour == 24  && !minute && !second && !msecs)
+            {
                 // A time of 24:00:00 is allowed by ISO 8601, and means midnight at the end of the day
                 d = d.addDays(1);
                 hour = 0;
             }
 
             QTime t(hour, minute, second, msecs);
-            if (!t.isValid()) {
+            if (!t.isValid())
                 break;
-            }
-            if (parts[8].isEmpty()) {
+            if (parts[8].isEmpty())
+            {
                 // No UTC offset is specified. Don't try to validate leap seconds.
                 return KADateTime(d, t, KADateTimePrivate::fromStringDefault());
             }
             int offset = 0;
             SpecType spec = (parts[8] == QLatin1Char('Z')) ? UTC : OffsetFromUTC;
-            if (spec == OffsetFromUTC) {
+            if (spec == OffsetFromUTC)
+            {
                 offset = parts[10].toInt(&ok) * 3600;
-                if (!ok) {
+                if (!ok)
                     break;
-                }
-                if (!parts[11].isEmpty()) {
+                if (!parts[11].isEmpty())
+                {
                     offset += parts[11].toInt(&ok) * 60;
-                    if (!ok) {
+                    if (!ok)
                         break;
-                    }
                 }
-                if (parts[9] == QLatin1String("-")) {
+                if (parts[9] == QLatin1String("-"))
+                {
                     offset = -offset;
-                    if (!offset && negZero) {
+                    if (!offset && negZero)
                         *negZero = true;
-                    }
                 }
             }
-            if (leapSecond) {
+            if (leapSecond)
+            {
                 // Validate a leap second time. Leap seconds are inserted after 23:59:59 UTC.
                 // Convert the time to UTC and check that it is 00:00:00.
-                if ((hour * 3600 + minute * 60 + 60 - offset + 86400 * 5) % 86400) { // (max abs(offset) is 100 hours)
+                if ((hour * 3600 + minute * 60 + 60 - offset + 86400 * 5) % 86400)   // (max abs(offset) is 100 hours)
                     break;    // the time isn't the last second of the day
-                }
             }
             return KADateTime(d, t, Spec(spec, offset));
         }
-        case QtTextDate: {  // format is Wdy Mth DD [hh:mm:ss] YYYY [±hhmm]
+        case QtTextDate:    // format is Wdy Mth DD [hh:mm:ss] YYYY [±hhmm]
+        {
             int offset = 0;
             QRegExp rx(QLatin1String(R"(^(\S+\s+\S+\s+\d\d\s+(\d\d:\d\d:\d\d\s+)?\d\d\d\d)\s*(.*)$)"));
-            if (rx.indexIn(str) < 0) {
+            if (rx.indexIn(str) < 0)
                 break;
-            }
             const QStringList parts = rx.capturedTexts();
             QDate     qd;
             QDateTime qdt;
             bool dateOnly = parts[2].isEmpty();
-            if (dateOnly) {
+            if (dateOnly)
+            {
                 qd = QDate::fromString(parts[1], Qt::TextDate);
-                if (!qd.isValid()) {
+                if (!qd.isValid())
                     break;
-                }
-            } else {
-                qdt = QDateTime::fromString(parts[1], Qt::TextDate);
-                if (!qdt.isValid()) {
-                    break;
-                }
             }
-            if (parts[3].isEmpty()) {
+            else
+            {
+                qdt = QDateTime::fromString(parts[1], Qt::TextDate);
+                if (!qdt.isValid())
+                    break;
+            }
+            if (parts[3].isEmpty())
+            {
                 // No time zone offset specified, so return a local clock time
-                if (dateOnly) {
+                if (dateOnly)
                     return KADateTime(qd, KADateTimePrivate::fromStringDefault());
-                } else {
+                else
+                {
                     // Do it this way to prevent UTC conversions changing the time
                     return KADateTime(qdt.date(), qdt.time(), KADateTimePrivate::fromStringDefault());
                 }
             }
             rx = QRegExp(QLatin1String(R"(([+-])([\d][\d])(?::?([\d][\d]))?$)"));
-            if (rx.indexIn(parts[3]) < 0) {
+            if (rx.indexIn(parts[3]) < 0)
                 break;
-            }
 
             // Extract the UTC offset at the end of the string
             bool ok;
             const QStringList parts2 = rx.capturedTexts();
             offset = parts2[2].toInt(&ok) * 3600;
-            if (!ok) {
+            if (!ok)
                 break;
-            }
-            if (parts2.count() > 3) {
+            if (parts2.count() > 3)
+            {
                 offset += parts2[3].toInt(&ok) * 60;
-                if (!ok) {
+                if (!ok)
                     break;
-                }
             }
-            if (parts2[1] == QLatin1String("-")) {
+            if (parts2[1] == QLatin1String("-"))
+            {
                 offset = -offset;
-                if (!offset && negZero) {
+                if (!offset && negZero)
                     *negZero = true;
-                }
             }
-            if (dateOnly) {
+            if (dateOnly)
                 return KADateTime(qd, Spec((offset ? OffsetFromUTC : UTC), offset));
-            }
             return KADateTime(qdt.date(), qdt.time(), Spec((offset ? OffsetFromUTC : UTC), offset));
         }
         case LocalDate:
@@ -2375,152 +2405,170 @@ KADateTime KADateTime::fromString(const QString &string, TimeFormat format, bool
     return {};
 }
 
-KADateTime KADateTime::fromString(const QString &string, const QString &format,
-                                const QList<QTimeZone>* zones, bool offsetIfAmbiguous)
+KADateTime KADateTime::fromString(const QString& string, const QString& format,
+                                  const QList<QTimeZone>* zones, bool offsetIfAmbiguous)
 {
     int     utcOffset = 0;    // UTC offset in seconds
     bool    dateOnly = false;
     QString zoneName;
     QString zoneAbbrev;
     QDateTime qdt = fromStr(string, format, utcOffset, zoneName, zoneAbbrev, dateOnly);
-    if (!qdt.isValid()) {
+    if (!qdt.isValid())
         return {};
-    }
-    if (zones) {
+    if (zones)
+    {
         // Try to find a time zone match
         bool zname = false;
         const QList<QTimeZone>& zoneList = *zones;
         QTimeZone zone;
-        if (!zoneName.isEmpty()) {
+        if (!zoneName.isEmpty())
+        {
             // A time zone name has been found.
             // Use the time zone with that name.
             const QByteArray name = zoneName.toLatin1();
-            for (const QTimeZone& tz : zoneList) {
-                if (tz.id() == name) {
+            for (const QTimeZone& tz : zoneList)
+            {
+                if (tz.id() == name)
+                {
                     zone = tz;
                     zname = true;
                     break;
                 }
             }
-        } else if (!zoneAbbrev.isEmpty()) {
+        }
+        else if (!zoneAbbrev.isEmpty())
+        {
             // A time zone abbreviation has been found.
             // Use the time zone which contains it, if any, provided that the
             // abbreviation applies at the specified date/time.
             bool useUtcOffset = false;
-            for (const QTimeZone& tz : zoneList) {
+            for (const QTimeZone& tz : zoneList)
+            {
                 qdt.setTimeZone(tz);
                 // TODO: This may not find abbreviations for second occurrence of
                 // the time zone time, after a daylight savings time shift.
-                if (tz.abbreviation(qdt) == zoneAbbrev) {
+                if (tz.abbreviation(qdt) == zoneAbbrev)
+                {
                     int offset2;
                     int offset = offsetAtZoneTime(tz, qdt, &offset2);
-                    if (offset == InvalidOffset) {
+                    if (offset == InvalidOffset)
                         return {};
-                    }
                     // Found a time zone which uses this abbreviation at the specified date/time
-                    if (zone.isValid()) {
+                    if (zone.isValid())
+                    {
                         // Abbreviation is used by more than one time zone
-                        if (!offsetIfAmbiguous || offset != utcOffset) {
+                        if (!offsetIfAmbiguous || offset != utcOffset)
                             return {};
-                        }
                         useUtcOffset = true;
-                    } else {
+                    }
+                    else
+                    {
                         zone = tz;
                         utcOffset = offset;
                     }
                 }
             }
-            if (useUtcOffset) {
+            if (useUtcOffset)
+            {
                 zone = QTimeZone();
-                if (!utcOffset) {
+                if (!utcOffset)
                     qdt.setTimeSpec(Qt::UTC);
-                }
-            } else {
-                zname = true;
             }
+            else
+                zname = true;
         }
-        else if (utcOffset  ||  qdt.timeSpec() == Qt::UTC) {
+        else if (utcOffset  ||  qdt.timeSpec() == Qt::UTC)
+        {
             // A UTC offset has been found.
             // Use the time zone which contains it, if any.
             // For a date-only value, use the start of the day.
             QDateTime dtUTC = qdt;
             dtUTC.setTimeSpec(Qt::UTC);
             dtUTC = dtUTC.addSecs(-utcOffset);
-            for (const QTimeZone& tz : zoneList) {
-                if (tz.offsetFromUtc(dtUTC) == utcOffset) {
+            for (const QTimeZone& tz : zoneList)
+            {
+                if (tz.offsetFromUtc(dtUTC) == utcOffset)
+                {
                     // Found a time zone which uses this offset at the specified time
-                    if (zone.isValid()  ||  !utcOffset) {
+                    if (zone.isValid()  ||  !utcOffset)
+                    {
                         // UTC offset is used by more than one time zone
-                        if (!offsetIfAmbiguous) {
+                        if (!offsetIfAmbiguous)
                             return {};
-                        }
-                        if (dateOnly) {
+                        if (dateOnly)
                             return KADateTime(qdt.date(), Spec(OffsetFromUTC, utcOffset));
-                        }
                         return KADateTime(qdt.date(), qdt.time(), Spec(OffsetFromUTC, utcOffset));
                     }
                     zone = tz;
                 }
             }
         }
-        if (!zone.isValid() && zname) {
+        if (!zone.isValid() && zname)
             return {};   // an unknown zone name or abbreviation was found
-        }
-        if (zone.isValid()) {
-            if (dateOnly) {
+        if (zone.isValid())
+        {
+            if (dateOnly)
                 return KADateTime(qdt.date(), Spec(zone));
-            }
             return KADateTime(qdt.date(), qdt.time(), Spec(zone));
         }
-    } else {
+    }
+    else
+    {
         // Try to find a time zone match
         bool zname = false;
         QTimeZone zone;
-        if (!zoneName.isEmpty()) {
+        if (!zoneName.isEmpty())
+        {
             // A time zone name has been found.
             // Use the time zone with that name.
             zone = QTimeZone(zoneName.toLatin1());
             zname = true;
-        } else if (!zoneAbbrev.isEmpty()) {
+        }
+        else if (!zoneAbbrev.isEmpty())
+        {
             // A time zone abbreviation has been found.
             // Use the time zone which contains it, if any, provided that the
             // abbreviation applies at the specified date/time.
             bool useUtcOffset = false;
             const QList<QByteArray> zoneIds = QTimeZone::availableTimeZoneIds();
-            for (const QByteArray& zoneId : zoneIds) {
+            for (const QByteArray& zoneId : zoneIds)
+            {
                 const QTimeZone z(zoneId);
                 qdt.setTimeZone(z);
-                if (z.abbreviation(qdt) == zoneAbbrev) {
+                if (z.abbreviation(qdt) == zoneAbbrev)
+                {
                     // TODO: This may not find abbreviations for second occurrence of
                     // the time zone time, after a daylight savings time shift.
                     int offset2;
                     int offset = offsetAtZoneTime(z, qdt, &offset2);
-                    if (offset == InvalidOffset) {
+                    if (offset == InvalidOffset)
                         return {};
-                    }
                     // Found a time zone which uses this abbreviation at the specified date/time
-                    if (zone.isValid()) {
+                    if (zone.isValid())
+                    {
                         // Abbreviation is used by more than one time zone
-                        if (!offsetIfAmbiguous || offset != utcOffset) {
+                        if (!offsetIfAmbiguous || offset != utcOffset)
                             return {};
-                        }
                         useUtcOffset = true;
-                    } else {
+                    }
+                    else
+                    {
                         zone = z;
                         utcOffset = offset;
                     }
                 }
             }
-            if (useUtcOffset) {
+            if (useUtcOffset)
+            {
                 zone = QTimeZone();
-                if (!utcOffset) {
+                if (!utcOffset)
                     qdt.setTimeSpec(Qt::UTC);
-                }
-            } else {
-                zname = true;
             }
+            else
+                zname = true;
         }
-        else if (utcOffset  ||  qdt.timeSpec() == Qt::UTC) {
+        else if (utcOffset  ||  qdt.timeSpec() == Qt::UTC)
+        {
             // A UTC offset has been found.
             // Use the time zone which contains it, if any.
             // For a date-only value, use the start of the day.
@@ -2528,65 +2576,68 @@ KADateTime KADateTime::fromString(const QString &string, const QString &format,
             dtUTC.setTimeSpec(Qt::UTC);
             dtUTC = dtUTC.addSecs(-utcOffset);
             const QList<QByteArray> zoneIds = QTimeZone::availableTimeZoneIds();
-            for (const QByteArray& zoneId : zoneIds) {
+            for (const QByteArray& zoneId : zoneIds)
+            {
                 const QTimeZone z(zoneId);
-                if (z.offsetFromUtc(dtUTC) == utcOffset) {
+                if (z.offsetFromUtc(dtUTC) == utcOffset)
+                {
                     // Found a time zone which uses this offset at the specified time
-                    if (zone.isValid()  ||  !utcOffset) {
+                    if (zone.isValid()  ||  !utcOffset)
+                    {
                         // UTC offset is used by more than one time zone
-                        if (!offsetIfAmbiguous) {
+                        if (!offsetIfAmbiguous)
                             return {};
-                        }
-                        if (dateOnly) {
+                        if (dateOnly)
                             return KADateTime(qdt.date(), Spec(OffsetFromUTC, utcOffset));
-                        }
                         return KADateTime(qdt.date(), qdt.time(), Spec(OffsetFromUTC, utcOffset));
                     }
                     zone = z;
                 }
             }
         }
-        if (!zone.isValid() && zname) {
+        if (!zone.isValid() && zname)
             return {};   // an unknown zone name or abbreviation was found
-        }
-        if (zone.isValid()) {
-            if (dateOnly) {
+        if (zone.isValid())
+        {
+            if (dateOnly)
                 return KADateTime(qdt.date(), Spec(zone));
-            }
             return KADateTime(qdt.date(), qdt.time(), Spec(zone));
         }
     }
 
     // No time zone match was found
     KADateTime result;
-    if (utcOffset) {
+    if (utcOffset)
         result = KADateTime(qdt.date(), qdt.time(), Spec(OffsetFromUTC, utcOffset));
-    } else if (qdt.timeSpec() == Qt::UTC) {
+    else if (qdt.timeSpec() == Qt::UTC)
         result = KADateTime(qdt.date(), qdt.time(), UTC);
-    } else {
+    else
+    {
         result = KADateTime(qdt.date(), qdt.time(), Spec(LocalZone));
         result.setTimeSpec(KADateTimePrivate::fromStringDefault());
     }
-    if (dateOnly) {
+    if (dateOnly)
         result.setDateOnly(true);
-    }
     return result;
 }
 
-void KADateTime::setFromStringDefault(const Spec &spec)
+void KADateTime::setFromStringDefault(const Spec& spec)
 {
     KADateTimePrivate::fromStringDefault() = spec;
 }
 
-void KADateTime::setSimulatedSystemTime(const KADateTime &newTime)
+void KADateTime::setSimulatedSystemTime(const KADateTime& newTime)
 {
     Q_UNUSED(newTime)
 #ifdef SIMULATION
 #ifndef NDEBUG
-    if (newTime.isValid()) {
+    if (newTime.isValid())
+    {
         KADateTimePrivate::simulationOffset = realCurrentLocalDateTime().secsTo_long(newTime);
         KADateTimePrivate::simulationLocalZone = newTime.timeZone();
-    } else {
+    }
+    else
+    {
         KADateTimePrivate::simulationOffset = 0;
         KADateTimePrivate::simulationLocalZone = QTimeZone();
     }
@@ -2599,24 +2650,23 @@ KADateTime KADateTime::realCurrentLocalDateTime()
     return KADateTime(QDateTime::currentDateTime(), Spec(QTimeZone::systemTimeZone()));
 }
 
-QDataStream &operator<<(QDataStream &s, const KADateTime &dt)
+QDataStream& operator<<(QDataStream& s, const KADateTime& dt)
 {
     s << dt.date() << dt.time() << dt.timeSpec() << quint8(dt.isDateOnly() ? 0x01 : 0x00);
     return s;
 }
 
-QDataStream &operator>>(QDataStream &s, KADateTime &kdt)
+QDataStream& operator>>(QDataStream& s, KADateTime& kdt)
 {
     QDate d;
     QTime t;
     KADateTime::Spec spec;
     quint8 flags;
     s >> d >> t >> spec >> flags;
-    if (flags & 0x01) {
+    if (flags & 0x01)
         kdt = KADateTime(d, spec);
-    } else {
+    else
         kdt = KADateTime(d, t, spec);
-    }
     return s;
 }
 
@@ -2633,8 +2683,8 @@ namespace
  * otherwise it is Qt::LocalTime. If Qt::LocalTime is returned and
  * utcOffset == 0, that indicates that no UTC offset was found.
  */
-QDateTime fromStr(const QString &string, const QString &format, int &utcOffset,
-                  QString &zoneName, QString &zoneAbbrev, bool &dateOnly)
+QDateTime fromStr(const QString& string, const QString& format, int& utcOffset,
+                  QString& zoneName, QString& zoneAbbrev, bool& dateOnly)
 {
     const QString str = string.simplified();
     int year      = NO_NUMBER;
@@ -2656,118 +2706,109 @@ QDateTime fromStr(const QString &string, const QString &format, int &utcOffset,
     int send = str.length();
     bool escape = false;
     ushort flag = 0;
-    for (int f = 0, fend = format.length();  f < fend && s < send;  ++f) {
+    for (int f = 0, fend = format.length();  f < fend && s < send;  ++f)
+    {
         zone = TZNone;
         ushort ch = format[f].unicode();
-        if (!escape) {
-            if (ch == '%') {
+        if (!escape)
+        {
+            if (ch == '%')
                 escape = true;
-            } else if (format[f].isSpace()) {
-                if (str[s].isSpace()) {
+            else if (format[f].isSpace())
+            {
+                if (str[s].isSpace())
                     ++s;
-                }
-            } else if (format[f] == str[s]) {
-                ++s;
-            } else {
-                return {};
             }
+            else if (format[f] == str[s])
+                ++s;
+            else
+                return {};
             continue;
         }
-        if (!flag) {
-            switch (ch) {
+        if (!flag)
+        {
+            switch (ch)
+            {
                 case '%':
-                    if (str[s++] != QLatin1Char('%')) {
+                    if (str[s++] != QLatin1Char('%'))
                         return {};
-                    }
                     break;
                 case ':':
                     flag = ch;
                     break;
                 case 'Y':     // full year, 4 digits
-                    if (!getNumber(str, s, 4, 4, NO_NUMBER, -1, year)) {
+                    if (!getNumber(str, s, 4, 4, NO_NUMBER, -1, year))
                         return {};
-                    }
                     break;
                 case 'y':     // year, 2 digits
-                    if (!getNumber(str, s, 2, 2, 0, 99, year)) {
+                    if (!getNumber(str, s, 2, 2, 0, 99, year))
                         return {};
-                    }
                     year += (year <= 50) ? 2000 : 1999;
                     break;
                 case 'm':     // month, 2 digits, 01 - 12
-                    if (!getNumber(str, s, 2, 2, 1, 12, month)) {
+                    if (!getNumber(str, s, 2, 2, 1, 12, month))
                         return {};
-                    }
                     break;
                 case 'B':
-                case 'b': {   // month name, translated or English
+                case 'b':     // month name, translated or English
+                {
                     int m = matchMonth(str, s, true);
-                    if (m <= 0 || (month != NO_NUMBER && month != m)) {
+                    if (m <= 0 || (month != NO_NUMBER && month != m))
                         return {};
-                    }
                     month = m;
                     break;
                 }
                 case 'd':     // day of month, 2 digits, 01 - 31
-                    if (!getNumber(str, s, 2, 2, 1, 31, day)) {
+                    if (!getNumber(str, s, 2, 2, 1, 31, day))
                         return {};
-                    }
                     break;
                 case 'e':     // day of month, 1 - 31
-                    if (!getNumber(str, s, 1, 2, 1, 31, day)) {
+                    if (!getNumber(str, s, 1, 2, 1, 31, day))
                         return {};
-                    }
                     break;
                 case 'A':
-                case 'a': {   // week day name, translated or English
+                case 'a':     // week day name, translated or English
+                {
                     int dow = matchDay(str, s, true);
-                    if (dow <= 0 || (dayOfWeek != NO_NUMBER && dayOfWeek != dow)) {
+                    if (dow <= 0 || (dayOfWeek != NO_NUMBER && dayOfWeek != dow))
                         return {};
-                    }
                     dayOfWeek = dow;
                     break;
                 }
                 case 'H':     // hour, 2 digits, 00 - 23
-                    if (!getNumber(str, s, 2, 2, 0, 23, hour)) {
+                    if (!getNumber(str, s, 2, 2, 0, 23, hour))
                         return {};
-                    }
                     break;
                 case 'k':     // hour, 0 - 23
-                    if (!getNumber(str, s, 1, 2, 0, 23, hour)) {
+                    if (!getNumber(str, s, 1, 2, 0, 23, hour))
                         return {};
-                    }
                     break;
                 case 'I':     // hour, 2 digits, 01 - 12
-                    if (!getNumber(str, s, 2, 2, 1, 12, hour)) {
+                    if (!getNumber(str, s, 2, 2, 1, 12, hour))
                         return {};
-                    }
                     break;
                 case 'l':     // hour, 1 - 12
-                    if (!getNumber(str, s, 1, 2, 1, 12, hour)) {
+                    if (!getNumber(str, s, 1, 2, 1, 12, hour))
                         return {};
-                    }
                     break;
                 case 'M':     // minutes, 2 digits, 00 - 59
-                    if (!getNumber(str, s, 2, 2, 0, 59, minute)) {
+                    if (!getNumber(str, s, 2, 2, 0, 59, minute))
                         return {};
-                    }
                     break;
                 case 'S':     // seconds, 2 digits, 00 - 59
-                    if (!getNumber(str, s, 2, 2, 0, 59, second)) {
+                    if (!getNumber(str, s, 2, 2, 0, 59, second))
                         return {};
-                    }
                     break;
                 case 's':     // seconds, 0 - 59
-                    if (!getNumber(str, s, 1, 2, 0, 59, second)) {
+                    if (!getNumber(str, s, 1, 2, 0, 59, second))
                         return {};
-                    }
                     break;
                 case 'P':
-                case 'p': {   // am/pm
+                case 'p':     // am/pm
+                {
                     int ap = getAmPm(str, s, true);
-                    if (!ap || (ampm != NO_NUMBER && ampm != ap)) {
+                    if (!ap || (ampm != NO_NUMBER && ampm != ap))
                         return {};
-                    }
                     ampm = ap;
                     break;
                 }
@@ -2778,99 +2819,92 @@ QDateTime fromStr(const QString &string, const QString &format, int &utcOffset,
                     zone = TZAbbrev;
                     break;
                 case 't':     // whitespace
-                    if (str[s++] != QLatin1Char(' ')) {
+                    if (str[s++] != QLatin1Char(' '))
                         return {};
-                    }
                     break;
                 default:
-                    if (s + 2 > send || str[s++] != QLatin1Char('%') || str[s++] != format[f]) {
+                    if (s + 2 > send || str[s++] != QLatin1Char('%') || str[s++] != format[f])
                         return {};
-                    }
                     break;
             }
         }
-        else if (flag == ':') {
+        else if (flag == ':')
+        {
             // It's a "%:" sequence
-            switch (ch) {
+            switch (ch)
+            {
                 case 'Y':     // full year, >= 4 digits
-                    if (!getNumber(str, s, 4, 100, NO_NUMBER, -1, year)) {
+                    if (!getNumber(str, s, 4, 100, NO_NUMBER, -1, year))
                         return {};
-                    }
                     break;
                 case 'A':
-                case 'a': {   // week day name in English
+                case 'a':     // week day name in English
+                {
                     int dow = matchDay(str, s, false);
-                    if (dow <= 0 || (dayOfWeek != NO_NUMBER && dayOfWeek != dow)) {
+                    if (dow <= 0 || (dayOfWeek != NO_NUMBER && dayOfWeek != dow))
                         return {};
-                    }
                     dayOfWeek = dow;
                     break;
                 }
                 case 'B':
-                case 'b': {   // month name in English
+                case 'b':     // month name in English
+                {
                     int m = matchMonth(str, s, false);
-                    if (m <= 0 || (month != NO_NUMBER && month != m)) {
+                    if (m <= 0 || (month != NO_NUMBER && month != m))
                         return {};
-                    }
                     month = m;
                     break;
                 }
                 case 'm':     // month, 1 - 12
-                    if (!getNumber(str, s, 1, 2, 1, 12, month)) {
+                    if (!getNumber(str, s, 1, 2, 1, 12, month))
                         return {};
-                    }
                     break;
                 case 'P':
-                case 'p': {   // am/pm in English
+                case 'p':     // am/pm in English
+                {
                     int ap = getAmPm(str, s, false);
-                    if (!ap || (ampm != NO_NUMBER && ampm != ap)) {
+                    if (!ap || (ampm != NO_NUMBER && ampm != ap))
                         return {};
-                    }
                     ampm = ap;
                     break;
                 }
                 case 'M':     // minutes, 0 - 59
-                    if (!getNumber(str, s, 1, 2, 0, 59, minute)) {
+                    if (!getNumber(str, s, 1, 2, 0, 59, minute))
                         return {};
-                    }
                     break;
                 case 'S':     // seconds with ':' prefix, defaults to zero
-                    if (str[s] != QLatin1Char(':')) {
+                    if (str[s] != QLatin1Char(':'))
+                    {
                         second = 0;
                         break;
                     }
                     ++s;
-                    if (!getNumber(str, s, 1, 2, 0, 59, second)) {
+                    if (!getNumber(str, s, 1, 2, 0, 59, second))
                         return {};
-                    }
                     break;
-                case 's': {   // milliseconds, with decimal point prefix
-                    if (str[s] != QLatin1Char('.')) {
+                case 's':     // milliseconds, with decimal point prefix
+                {
+                    if (str[s] != QLatin1Char('.'))
+                    {
                         // If no locale, try comma, it is preferred by ISO8601 as the decimal point symbol
                         const QChar dpt = QLocale().decimalPoint();
-                        if (!QStringView(str).mid(s).startsWith(dpt)) {
+                        if (!QStringView(str).mid(s).startsWith(dpt))
                             return {};
-                        }
                     }
                     ++s;
-                    if (s >= send) {
+                    if (s >= send)
                         return {};
-                    }
                     QString val = str.mid(s);
                     int i = 0;
-                    for (int end = val.length(); i < end && val.at(i).isDigit(); ++i) {
-                        ;
-                    }
-                    if (!i) {
+                    for (int end = val.length(); i < end && val.at(i).isDigit(); ++i) {}
+                    if (!i)
                         return {};
-                    }
                     val.truncate(i);
                     val += QLatin1String("00");
                     val.truncate(3);
                     int ms = val.toInt();
-                    if (millisec != NO_NUMBER && millisec != ms) {
+                    if (millisec != NO_NUMBER && millisec != ms)
                         return {};
-                    }
                     millisec = ms;
                     s += i;
                     break;
@@ -2885,77 +2919,71 @@ QDateTime fromStr(const QString &string, const QString &format, int &utcOffset,
                     zone = TZName;
                     break;
                 default:
-                    if (s + 3 > send || str[s++] != QLatin1Char('%') || str[s++] != QLatin1Char(':') || str[s++] != format[f]) {
+                    if (s + 3 > send || str[s++] != QLatin1Char('%') || str[s++] != QLatin1Char(':') || str[s++] != format[f])
                         return {};
-                    }
                     break;
             }
             flag = 0;
         }
-        if (!flag) {
+        if (!flag)
             escape = false;
-        }
 
-        if (zone != TZNone) {
+        if (zone != TZNone)
+        {
             // Read time zone or UTC offset
-            switch (zone) {
+            switch (zone)
+            {
                 case UTCOffset:
                 case UTCOffsetColon:
-                    if (!zoneAbbrev.isEmpty() || !zoneName.isEmpty()) {
+                    if (!zoneAbbrev.isEmpty() || !zoneName.isEmpty())
                         return {};
-                    }
-                    if (!getUTCOffset(str, s, (zone == UTCOffsetColon), tzoffset)) {
+                    if (!getUTCOffset(str, s, (zone == UTCOffsetColon), tzoffset))
                         return {};
-                    }
                     break;
-                case TZAbbrev: {   // time zone abbreviation
-                    if (tzoffset != NO_NUMBER || !zoneName.isEmpty()) {
+                case TZAbbrev:     // time zone abbreviation
+                {
+                    if (tzoffset != NO_NUMBER || !zoneName.isEmpty())
                         return {};
-                    }
                     int start = s;
-                    while (s < send && str[s].isLetterOrNumber()) {
+                    while (s < send && str[s].isLetterOrNumber())
                         ++s;
-                    }
-                    if (s == start) {
+                    if (s == start)
                         return {};
-                    }
                     const QString z = str.mid(start, s - start);
-                    if (!zoneAbbrev.isEmpty() && z != zoneAbbrev) {
+                    if (!zoneAbbrev.isEmpty() && z != zoneAbbrev)
                         return {};
-                    }
                     zoneAbbrev = z;
                     break;
                 }
-                case TZName: {     // time zone name
-                    if (tzoffset != NO_NUMBER || !zoneAbbrev.isEmpty()) {
+                case TZName:       // time zone name
+                {
+                    if (tzoffset != NO_NUMBER || !zoneAbbrev.isEmpty())
                         return {};
-                    }
                     QString z;
-                    if (f + 1 >= fend) {
+                    if (f + 1 >= fend)
+                    {
                         z = str.mid(s);
                         s = send;
-                    } else {
+                    }
+                    else
+                    {
                         // Get the terminating character for the zone name
                         QChar endchar = format[f + 1];
-                        if (endchar == QLatin1Char('%')  &&  f + 2 < fend) {
+                        if (endchar == QLatin1Char('%')  &&  f + 2 < fend)
+                        {
                             const QChar endchar2 = format[f + 2];
-                            if (endchar2 == QLatin1Char('n') || endchar2 == QLatin1Char('t')) {
+                            if (endchar2 == QLatin1Char('n') || endchar2 == QLatin1Char('t'))
                                 endchar = QLatin1Char(' ');
-                            }
                         }
                         // Extract from the input string up to the terminating character
                         int start = s;
-                        for (; s < send && str[s] != endchar; ++s) {
-                            ;
-                        }
-                        if (s == start) {
+                        for (; s < send && str[s] != endchar; ++s) {}
+                        if (s == start)
                             return {};
-                        }
                         z = str.mid(start, s - start);
                     }
-                    if (!zoneName.isEmpty() && z != zoneName) {
+                    if (!zoneName.isEmpty() && z != zoneName)
                         return {};
-                    }
                     zoneName = z;
                     break;
                 }
@@ -2965,50 +2993,44 @@ QDateTime fromStr(const QString &string, const QString &format, int &utcOffset,
         }
     }
 
-    if (year == NO_NUMBER) {
+    if (year == NO_NUMBER)
         year = KADateTime::currentLocalDate().year();
-    }
-    if (month == NO_NUMBER) {
+    if (month == NO_NUMBER)
         month = 1;
-    }
     QDate d = QDate(year, month, (day > 0 ? day : 1));
-    if (!d.isValid()) {
+    if (!d.isValid())
         return {};
-    }
-    if (dayOfWeek != NO_NUMBER) {
-        if (day == NO_NUMBER) {
+    if (dayOfWeek != NO_NUMBER)
+    {
+        if (day == NO_NUMBER)
+        {
             day = 1 + dayOfWeek - QDate(year, month, 1).dayOfWeek();
-            if (day <= 0) {
+            if (day <= 0)
                 day += 7;
-            }
-        } else {
-            if (QDate(year, month, day).dayOfWeek() != dayOfWeek) {
+        }
+        else
+        {
+            if (QDate(year, month, day).dayOfWeek() != dayOfWeek)
                 return {};
-            }
         }
     }
     dateOnly = (hour == NO_NUMBER && minute == NO_NUMBER && second == NO_NUMBER && millisec == NO_NUMBER);
-    if (hour == NO_NUMBER) {
+    if (hour == NO_NUMBER)
         hour = 0;
-    }
-    if (minute == NO_NUMBER) {
+    if (minute == NO_NUMBER)
         minute = 0;
-    }
-    if (second == NO_NUMBER) {
+    if (second == NO_NUMBER)
         second = 0;
-    }
-    if (millisec == NO_NUMBER) {
+    if (millisec == NO_NUMBER)
         millisec = 0;
-    }
-    if (ampm != NO_NUMBER) {
-        if (!hour || hour > 12) {
+    if (ampm != NO_NUMBER)
+    {
+        if (!hour || hour > 12)
             return {};
-        }
-        if (ampm == 1 && hour == 12) {
+        if (ampm == 1 && hour == 12)
             hour = 0;
-        } else if (ampm == 2 && hour < 12) {
+        else if (ampm == 2 && hour < 12)
             hour += 12;
-        }
     }
 
     QDateTime dt(d, QTime(hour, minute, second, millisec), (tzoffset == 0 ? Qt::UTC : Qt::LocalTime));
@@ -3023,26 +3045,30 @@ QDateTime fromStr(const QString &string, const QString &format, int &utcOffset,
  * 'offset' is incremented by the length of the match.
  * Reply = day number (1 - 7), or <= 0 if no match.
  */
-int matchDay(const QString &string, int &offset, bool localised)
+int matchDay(const QString& string, int& offset, bool localised)
 {
     int dayOfWeek;
     const QString part = string.mid(offset);
-    if (part.isEmpty()) {
+    if (part.isEmpty())
         return -1;
-    }
-    if (localised) {
+    if (localised)
+    {
         // Check for localised day name first
         const QLocale locale;
-        for (dayOfWeek = 1;  dayOfWeek <= 7;  ++dayOfWeek) {
+        for (dayOfWeek = 1;  dayOfWeek <= 7;  ++dayOfWeek)
+        {
             const QString name = locale.dayName(dayOfWeek, QLocale::LongFormat);
-            if (part.startsWith(name, Qt::CaseInsensitive)) {
+            if (part.startsWith(name, Qt::CaseInsensitive))
+            {
                 offset += name.length();
                 return dayOfWeek;
             }
         }
-        for (dayOfWeek = 1;  dayOfWeek <= 7;  ++dayOfWeek) {
+        for (dayOfWeek = 1;  dayOfWeek <= 7;  ++dayOfWeek)
+        {
             const QString name = locale.dayName(dayOfWeek, QLocale::ShortFormat);
-            if (part.startsWith(name, Qt::CaseInsensitive)) {
+            if (part.startsWith(name, Qt::CaseInsensitive))
+            {
                 offset += name.length();
                 return dayOfWeek;
             }
@@ -3051,9 +3077,8 @@ int matchDay(const QString &string, int &offset, bool localised)
 
     // Check for English day name
     dayOfWeek = findString(part, longDay, 7, offset);
-    if (dayOfWeek <= 0) {
+    if (dayOfWeek <= 0)
         dayOfWeek = findString(part, shortDay, 7, offset);
-    }
     return dayOfWeek;
 }
 
@@ -3062,26 +3087,30 @@ int matchDay(const QString &string, int &offset, bool localised)
  * 'offset' is incremented by the length of the match.
  * Reply = month number (1 - 12), or <= 0 if no match.
  */
-int matchMonth(const QString &string, int &offset, bool localised)
+int matchMonth(const QString& string, int& offset, bool localised)
 {
     int month;
     const QString part = string.mid(offset);
-    if (part.isEmpty()) {
+    if (part.isEmpty())
         return -1;
-    }
-    if (localised) {
+    if (localised)
+    {
         // Check for localised month name first
         const QLocale locale;
-        for (month = 1;  month <= 12;  ++month) {
+        for (month = 1;  month <= 12;  ++month)
+        {
             const QString name = locale.monthName(month, QLocale::LongFormat);
-            if (part.startsWith(name, Qt::CaseInsensitive)) {
+            if (part.startsWith(name, Qt::CaseInsensitive))
+            {
                 offset += name.length();
                 return month;
             }
         }
-        for (month = 1;  month <= 12;  ++month) {
+        for (month = 1;  month <= 12;  ++month)
+        {
             const QString name = locale.monthName(month, QLocale::ShortFormat);
-            if (part.startsWith(name, Qt::CaseInsensitive)) {
+            if (part.startsWith(name, Qt::CaseInsensitive))
+            {
                 offset += name.length();
                 return month;
             }
@@ -3089,23 +3118,22 @@ int matchMonth(const QString &string, int &offset, bool localised)
     }
     // Check for English month name
     month = findString(part, longMonth, 12, offset);
-    if (month <= 0) {
+    if (month <= 0)
         month = findString(part, shortMonth, 12, offset);
-    }
     return month;
 }
 
 /*
  * Read a UTC offset from the input string.
  */
-bool getUTCOffset(const QString &string, int &offset, bool colon, int &result)
+bool getUTCOffset(const QString& string, int& offset, bool colon, int& result)
 {
     int sign;
     int len = string.length();
-    if (offset >= len) {
+    if (offset >= len)
         return false;
-    }
-    switch (string[offset++].unicode()) {
+    switch (string[offset++].unicode())
+    {
         case '+':
             sign = 1;
             break;
@@ -3117,25 +3145,23 @@ bool getUTCOffset(const QString &string, int &offset, bool colon, int &result)
     }
     int tzhour = NO_NUMBER;
     int tzmin  = NO_NUMBER;
-    if (!getNumber(string, offset, 2, 2, 0, 99, tzhour)) {
+    if (!getNumber(string, offset, 2, 2, 0, 99, tzhour))
         return false;
-    }
-    if (colon) {
-        if (offset >= len || string[offset++] != QLatin1Char(':')) {
+    if (colon)
+    {
+        if (offset >= len || string[offset++] != QLatin1Char(':'))
             return false;
-        }
     }
-    if (offset >= len  ||  !string[offset].isDigit()) {
+    if (offset >= len  ||  !string[offset].isDigit())
         tzmin = 0;
-    } else {
-        if (!getNumber(string, offset, 2, 2, 0, 59, tzmin)) {
+    else
+    {
+        if (!getNumber(string, offset, 2, 2, 0, 59, tzmin))
             return false;
-        }
     }
     tzmin += tzhour * 60;
-    if (result != NO_NUMBER && result != tzmin) {
+    if (result != NO_NUMBER && result != tzmin)
         return false;
-    }
     result = sign * tzmin;
     return true;
 }
@@ -3145,36 +3171,40 @@ bool getUTCOffset(const QString &string, int &offset, bool colon, int &result)
  * 'offset' is incremented by the length of the match.
  * Reply = 1 (am), 2 (pm), or 0 if no match.
  */
-int getAmPm(const QString &string, int &offset, bool localised)
+int getAmPm(const QString& string, int& offset, bool localised)
 {
     QString part = string.mid(offset);
     int ap = 0;
     int n = 2;
-    if (localised) {
+    if (localised)
+    {
         // Check localised form first
         const QLocale locale;
         QString aps = locale.amText();
-        if (part.startsWith(aps, Qt::CaseInsensitive)) {
+        if (part.startsWith(aps, Qt::CaseInsensitive))
+        {
             ap = 1;
             n = aps.length();
-        } else {
+        }
+        else
+        {
             aps = locale.pmText();
-            if (part.startsWith(aps, Qt::CaseInsensitive)) {
+            if (part.startsWith(aps, Qt::CaseInsensitive))
+            {
                 ap = 2;
                 n = aps.length();
             }
         }
     }
-    if (!ap) {
-        if (part.startsWith(QLatin1String("am"), Qt::CaseInsensitive)) {
+    if (!ap)
+    {
+        if (part.startsWith(QLatin1String("am"), Qt::CaseInsensitive))
             ap = 1;
-        } else if (part.startsWith(QLatin1String("pm"), Qt::CaseInsensitive)) {
+        else if (part.startsWith(QLatin1String("pm"), Qt::CaseInsensitive))
             ap = 2;
-        }
     }
-    if (ap) {
+    if (ap)
         offset += n;
-    }
     return ap;
 }
 
@@ -3182,41 +3212,38 @@ int getAmPm(const QString &string, int &offset, bool localised)
  * If converted number differs from any current value in 'result', the function fails.
  * Reply = true if successful.
  */
-bool getNumber(const QString &string, int &offset, int mindigits, int maxdigits, int minval, int maxval, int &result)
+bool getNumber(const QString& string, int& offset, int mindigits, int maxdigits, int minval, int maxval, int& result)
 {
     int end = string.size();
     bool neg = false;
-    if (minval == NO_NUMBER  &&  offset < end  &&  string[offset] == QLatin1Char('-')) {
+    if (minval == NO_NUMBER  &&  offset < end  &&  string[offset] == QLatin1Char('-'))
+    {
         neg = true;
         ++offset;
     }
-    if (offset + maxdigits > end) {
+    if (offset + maxdigits > end)
         maxdigits = end - offset;
-    }
     int ndigits;
-    for (ndigits = 0; ndigits < maxdigits && string[offset + ndigits].isDigit(); ++ndigits) {
-        ;
-    }
-    if (ndigits < mindigits) {
+    for (ndigits = 0; ndigits < maxdigits && string[offset + ndigits].isDigit(); ++ndigits) {}
+    if (ndigits < mindigits)
         return false;
-    }
     bool ok;
     int n = QStringView(string).mid(offset, ndigits).toInt(&ok);
-    if (neg) {
+    if (neg)
         n = -n;
-    }
-    if (!ok || (result != NO_NUMBER && n != result) || (minval != NO_NUMBER && n < minval) || (n > maxval && maxval >= 0)) {
+    if (!ok || (result != NO_NUMBER && n != result) || (minval != NO_NUMBER && n < minval) || (n > maxval && maxval >= 0))
         return false;
-    }
     result = n;
     offset += ndigits;
     return true;
 }
 
-int findString(const QString &string, DayMonthName func, int count, int &offset)
+int findString(const QString& string, DayMonthName func, int count, int& offset)
 {
-    for (int i = 1; i <= count; ++i) {
-        if (string.startsWith(func(i), Qt::CaseInsensitive)) {
+    for (int i = 1; i <= count; ++i)
+    {
+        if (string.startsWith(func(i), Qt::CaseInsensitive))
+        {
             offset += func(i).size();
             return i;
         }
@@ -3230,33 +3257,38 @@ QString numString(int n, int width)
 }
 
 // Return the UTC offset in a given time zone, for a specified date/time.
-int offsetAtZoneTime(const QTimeZone &tz, const QDateTime &zoneDateTime, int *secondOffset)
+int offsetAtZoneTime(const QTimeZone& tz, const QDateTime& zoneDateTime, int* secondOffset)
 {
     if (!zoneDateTime.isValid()  // check for invalid time
-    ||  (zoneDateTime.timeSpec() != Qt::LocalTime && zoneDateTime.timeSpec() != Qt::TimeZone)) {
-        if (secondOffset) {
+    ||  (zoneDateTime.timeSpec() != Qt::LocalTime && zoneDateTime.timeSpec() != Qt::TimeZone))
+    {
+        if (secondOffset)
             *secondOffset = InvalidOffset;
-        }
         return InvalidOffset;
     }
     int offset = tz.offsetFromUtc(zoneDateTime);
-    if (secondOffset) {
+    if (secondOffset)
+    {
         // Check if there is a daylight savings shift around zoneDateTime.
         QDateTime utc1(zoneDateTime.date(), zoneDateTime.time(), Qt::UTC);
         QDateTime utc = utc1.addSecs(-offset);
         const QVector<QTimeZone::OffsetData> transitions = tz.transitions(utc.addSecs(-7200), utc.addSecs(7200));
-        if (!transitions.isEmpty()) {
+        if (!transitions.isEmpty())
+        {
             // Assume that there will only be one transition in a 4 hour period.
             const QTimeZone::OffsetData before = tz.previousTransition(transitions[0].atUtc);
-            if (before.atUtc.isValid()  &&  transitions[0].atUtc.isValid()) {
+            if (before.atUtc.isValid()  &&  transitions[0].atUtc.isValid())
+            {
                 int step = before.offsetFromUtc - transitions[0].offsetFromUtc;
-                if (step > 0) {
+                if (step > 0)
+                {
                     // The transition steps the local time backwards, so check for
                     // a second occurrence of the local time.
                     // Find the local time when the transition occurs.
                     const QDateTime changeStart = transitions[0].atUtc.addSecs(transitions[0].offsetFromUtc);
                     const QDateTime changeEnd   = transitions[0].atUtc.addSecs(before.offsetFromUtc);
-                    if (utc1 >= changeStart  &&  utc1 < changeEnd) {
+                    if (utc1 >= changeStart  &&  utc1 < changeEnd)
+                    {
                         // The local time occurs twice.
                         *secondOffset = transitions[0].offsetFromUtc;
                         return before.offsetFromUtc;
@@ -3270,24 +3302,26 @@ int offsetAtZoneTime(const QTimeZone &tz, const QDateTime &zoneDateTime, int *se
 }
 
 // Convert a UTC date/time to a time zone date/time.
-QDateTime toZoneTime(const QTimeZone &tz, const QDateTime &utcDateTime, bool *secondOccurrence)
+QDateTime toZoneTime(const QTimeZone& tz, const QDateTime& utcDateTime, bool* secondOccurrence)
 {
-    if (secondOccurrence) {
+    if (secondOccurrence)
         *secondOccurrence = false;
-    }
-    if (!utcDateTime.isValid() || utcDateTime.timeSpec() != Qt::UTC) {
+    if (!utcDateTime.isValid() || utcDateTime.timeSpec() != Qt::UTC)
         return {};
-    }
     const QDateTime dt = utcDateTime.toTimeZone(tz);
-    if (secondOccurrence) {
+    if (secondOccurrence)
+    {
         // Check if there is a daylight savings shift around zoneDateTime.
         const QVector<QTimeZone::OffsetData> transitions = tz.transitions(utcDateTime.addSecs(-7200), utcDateTime.addSecs(7200));
-        if (!transitions.isEmpty()) {
+        if (!transitions.isEmpty())
+        {
             // Assume that there will only be one transition in a 4 hour period.
             const QTimeZone::OffsetData before = tz.previousTransition(transitions[0].atUtc);
-            if (before.atUtc.isValid()  &&  transitions[0].atUtc.isValid()) {
+            if (before.atUtc.isValid()  &&  transitions[0].atUtc.isValid())
+            {
                 int step = before.offsetFromUtc - transitions[0].offsetFromUtc;
-                if (step > 0) {
+                if (step > 0)
+                {
                     // The transition steps the local time backwards, so check for
                     // a second occurrence of the local time.
                     // Find the local time when the transition occurs.
@@ -3295,7 +3329,8 @@ QDateTime toZoneTime(const QTimeZone &tz, const QDateTime &utcDateTime, bool *se
                     const QDateTime changeEnd   = transitions[0].atUtc.addSecs(before.offsetFromUtc);
                     QDateTime dtTz = dt;
                     dtTz.setTimeSpec(Qt::UTC);
-                    if (dtTz >= changeStart  &&  dtTz < changeEnd) {
+                    if (dtTz >= changeStart  &&  dtTz < changeEnd)
+                    {
                         // The local time occurs twice.
                         *secondOccurrence = (utcDateTime >= transitions[0].atUtc);
                         return dt;
@@ -3310,26 +3345,23 @@ QDateTime toZoneTime(const QTimeZone &tz, const QDateTime &utcDateTime, bool *se
 
 void initDayMonthNames()
 {
-    if (shortDayNames.isEmpty()) {
+    if (shortDayNames.isEmpty())
+    {
         QLocale locale(QStringLiteral("C"));   // US English locale
 
-        for (int i = 1; i <= 7; ++i) {
+        for (int i = 1; i <= 7; ++i)
             shortDayNames.push_back(locale.dayName(i, QLocale::ShortFormat));
-        }
-        for (int i = 1; i <= 7; ++i) {
+        for (int i = 1; i <= 7; ++i)
             longDayNames.push_back(locale.dayName(i, QLocale::LongFormat));
-        }
-        for (int i = 1; i <= 12; ++i) {
+        for (int i = 1; i <= 12; ++i)
             shortMonthNames.push_back(locale.monthName(i, QLocale::ShortFormat));
-        }
-        for (int i = 1; i <= 12; ++i) {
+        for (int i = 1; i <= 12; ++i)
             longMonthNames.push_back(locale.monthName(i, QLocale::LongFormat));
-        }
     }
 }
 
 // Short day name, in English
-const QString &shortDay(int day)   // Mon = 1, ...
+const QString& shortDay(int day)   // Mon = 1, ...
 {
     static QString error;
     initDayMonthNames();
@@ -3337,7 +3369,7 @@ const QString &shortDay(int day)   // Mon = 1, ...
 }
 
 // Long day name, in English
-const QString &longDay(int day)   // Mon = 1, ...
+const QString& longDay(int day)   // Mon = 1, ...
 {
     static QString error;
     initDayMonthNames();
@@ -3345,7 +3377,7 @@ const QString &longDay(int day)   // Mon = 1, ...
 }
 
 // Short month name, in English
-const QString &shortMonth(int month)   // Jan = 1, ...
+const QString& shortMonth(int month)   // Jan = 1, ...
 {
     static QString error;
     initDayMonthNames();
@@ -3353,7 +3385,7 @@ const QString &shortMonth(int month)   // Jan = 1, ...
 }
 
 // Long month name, in English
-const QString &longMonth(int month)   // Jan = 1, ...
+const QString& longMonth(int month)   // Jan = 1, ...
 {
     static QString error;
     initDayMonthNames();

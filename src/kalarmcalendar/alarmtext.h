@@ -3,7 +3,7 @@
  *  This file is part of kalarmprivate library, which provides access to KAlarm
  *  calendar data.
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2004-2020 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2004-2022 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -42,11 +42,11 @@ public:
      *  If @p text starts with '#!', it is flagged as a script, else plain text.
      *  @param text alarm text to set
      */
-    explicit AlarmText(const QString &text = QString());
+    explicit AlarmText(const QString& text = QString());
 
-    AlarmText(const AlarmText &other);
+    AlarmText(const AlarmText& other);
     ~AlarmText();
-    AlarmText &operator=(const AlarmText &other);
+    AlarmText& operator=(const AlarmText& other);
 
     /** Initialise the instance to an empty state. */
     void clear();
@@ -55,12 +55,12 @@ public:
      *  If @p text starts with '#!', it is flagged as a script, else plain text.
      *  @param text alarm text to set
      */
-    void setText(const QString &text);
+    void setText(const QString& text);
 
     /** Set the instance contents to be a script.
      *  @param text text of script to set
      */
-    void setScript(const QString &text);
+    void setScript(const QString& text);
 
     /** Set the instance contents to be an email.
      *  @param to       'To' header parameter
@@ -71,13 +71,13 @@ public:
      *  @param body     email body text
      *  @param itemId   Akonadi item ID of the email.
      */
-    void setEmail(const QString &to, const QString &from, const QString &cc, const QString &time,
-                  const QString &subject, const QString &body, Akonadi::Item::Id itemId = -1);
+    void setEmail(const QString& to, const QString& from, const QString& cc, const QString& time,
+                  const QString& subject, const QString& body, Akonadi::Item::Id itemId = -1);
 
     /** Set the instance contents to be a todo.
      *  @param todo Todo instance to set as the text
      */
-    void setTodo(const KCalendarCore::Todo::Ptr &todo);
+    void setTodo(const KCalendarCore::Todo::Ptr& todo);
 
     /** Return the text for a text message alarm, in display format.
      *  - An email is returned as a sequence of headers followed by the message body.
@@ -160,12 +160,12 @@ public:
      *                    if the text returned has been truncated, other than to
      *                    strip a trailing newline, or false otherwise
      */
-    static QString summary(const KAEvent &event, int maxLines = 1, bool *truncated = nullptr);
+    static QString summary(const KAEvent& event, int maxLines = 1, bool* truncated = nullptr);
 
     /** Return whether a text is an email, with at least To and From headers.
      *  @param text  text to check
      */
-    static bool checkIfEmail(const QString &text);
+    static bool checkIfEmail(const QString& text);
 
     /** Check whether a text is an email (with at least To and From headers),
      *  and if so return its headers or optionally only its subject line.
@@ -174,7 +174,7 @@ public:
      *                      false to return all headers
      *  @return headers/subject line, or QString() if not the text of an email.
      */
-    static QString emailHeaders(const QString &text, bool subjectOnly);
+    static QString emailHeaders(const QString& text, bool subjectOnly);
 
     /** Translate an alarm calendar text to a display text.
      *  Translation is needed for email texts, since the alarm calendar stores
@@ -182,18 +182,18 @@ public:
      *  @param text   text to translate
      *  @param email  updated to indicate whether it is an email text
      */
-    static QString fromCalendarText(const QString &text, bool &email);
+    static QString fromCalendarText(const QString& text, bool& email);
 
     /** Return the text for an alarm message text, in alarm calendar format.
      *  (The prefix strings are untranslated in the calendar.)
      *  @param text  alarm message text
      */
-    static QString toCalendarText(const QString &text);
+    static QString toCalendarText(const QString& text);
 
 private:
     //@cond PRIVATE
     class Private;
-    Private *const d;
+    Private* const d;
     //@endcond
 };
 

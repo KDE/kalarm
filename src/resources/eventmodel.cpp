@@ -356,7 +356,7 @@ bool AlarmListModel::filterAcceptsRow(int sourceRow, const QModelIndex& sourcePa
                     {
                         // The event first occurs after the end of this date range.
                         // Find the next date range which it might be in.
-                        while (++i < count  &&  from > mFilterDates[i].second) ;
+                        while (++i < count  &&  from > mFilterDates[i].second) {}
                         if (i >= count)
                         {
                             resourceHash[ev.id()] = KADateTime();

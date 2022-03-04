@@ -54,7 +54,8 @@ class KALARMCAL_EXPORT KAAlarm
 {
 public:
     /** The basic KAAlarm action types. */
-    enum Action {
+    enum Action
+    {
         MESSAGE,   //!< KCal::Alarm::Display type: display a text message
         FILE,      //!< KCal::Alarm::Display type: display a file (URL given by the alarm text)
         COMMAND,   //!< KCal::Alarm::Procedure type: execute a shell command
@@ -66,7 +67,8 @@ public:
      *  KAAlarm's of different types may be contained in a KAEvent,
      *  each KAAlarm defining a different component of the overall alarm.
      */
-    enum Type {
+    enum Type
+    {
         INVALID_ALARM       = 0,     //!< Not an alarm
         MAIN_ALARM          = 1,     //!< THE real alarm. Must be the first in the enumeration.
         REMINDER_ALARM      = 0x02,  //!< Reminder in advance of/after the main alarm
@@ -85,13 +87,13 @@ public:
     KAAlarm();
 
     /** Copy constructor. */
-    KAAlarm(const KAAlarm &other);
+    KAAlarm(const KAAlarm& other);
 
     /** Destructor. */
     ~KAAlarm();
 
     /** Assignment operator. */
-    KAAlarm &operator=(const KAAlarm &other);
+    KAAlarm& operator=(const KAAlarm& other);
 
     /** Return the action type for the alarm. */
     Action action() const;
@@ -125,10 +127,10 @@ public:
     QTime time() const;
 
     /** Set the alarm's trigger time. */
-    void setTime(const DateTime &dt);
+    void setTime(const DateTime& dt);
 
     /** Set the alarm's trigger time. */
-    void setTime(const KADateTime &dt);
+    void setTime(const KADateTime& dt);
 
     /** Return whether this is a repeat-at-login alarm. */
     bool repeatAtLogin() const;
@@ -148,7 +150,7 @@ public:
     /** Return an alarm type as a string.
      *  @return alarm type string, or the empty string if debug output is disabled.
      */
-    static const char *debugType(Type);
+    static const char* debugType(Type);
 
 private:
     //@cond PRIVATE
@@ -186,10 +188,11 @@ class KALARMCAL_EXPORT KAEvent
 {
 public:
     /** A list of pointers to KAEvent objects. */
-    using List = QVector<KAEvent *>;
+    using List = QVector<KAEvent*>;
 
     /** Flags for use in D-Bus calls, etc. Flags may be combined by OR'ing them together. */
-    enum Flag {
+    enum Flag
+    {
         BEEP            = 0x02,    //!< sound an audible beep when the alarm is displayed
         REPEAT_AT_LOGIN = 0x04,    //!< repeat the alarm at every login
         ANY_TIME        = 0x08,    //!< only a date is specified for the alarm, not a time
@@ -218,7 +221,8 @@ public:
 
     /** The basic action type(s) for the event's main alarm.
      *  Values may be combined by OR'ing them together. */
-    enum Actions {
+    enum Actions
+    {
         ACT_NONE            = 0,      //!< invalid
         ACT_DISPLAY         = 0x01,   //!< the alarm displays something
         ACT_COMMAND         = 0x02,   //!< the alarm executes a command
@@ -229,7 +233,8 @@ public:
     };
 
     /** The sub-action type for the event's main alarm. */
-    enum SubAction {
+    enum SubAction
+    {
         MESSAGE = KAAlarm::MESSAGE,    //!< display a message text
         FILE    = KAAlarm::FILE,       //!< display the contents of a file
         COMMAND = KAAlarm::COMMAND,    //!< execute a command
@@ -238,7 +243,8 @@ public:
     };
 
     /** What type of occurrence is due. */
-    enum OccurType {
+    enum OccurType
+    {
         NO_OCCURRENCE            = 0,      //!< no occurrence is due
         FIRST_OR_ONLY_OCCURRENCE = 0x01,   //!< the first occurrence (takes precedence over LAST_RECURRENCE)
         RECURRENCE_DATE          = 0x02,   //!< a recurrence with only a date, not a time
@@ -252,14 +258,16 @@ public:
     };
 
     /** How to treat sub-repetitions in nextOccurrence(). */
-    enum OccurOption {
+    enum OccurOption
+    {
         IGNORE_REPETITION,    //!< check for recurrences only, ignore sub-repetitions
         RETURN_REPETITION,    //!< return a sub-repetition if it's the next occurrence
         ALLOW_FOR_REPETITION  //!< if a sub-repetition is the next occurrence, return the previous recurrence, not the sub-repetition
     };
 
     /** What type of occurrence currently limits how long the alarm can be deferred. */
-    enum DeferLimitType {
+    enum DeferLimitType
+    {
         LIMIT_NONE,        //!< there is no limit
         LIMIT_MAIN,        //!< the main alarm
         LIMIT_RECURRENCE,  //!< a recurrence
@@ -268,7 +276,8 @@ public:
     };
 
     /** Next trigger type for an alarm. */
-    enum TriggerType {
+    enum TriggerType
+    {
 
         /** Next trigger, including reminders. No account is taken of any
          *  working hours or holiday restrictions when evaluating this. */
@@ -295,7 +304,8 @@ public:
     };
 
     /** Command execution error type for last time the alarm was triggered. */
-    enum CmdErrType {
+    enum CmdErrType
+    {
         CMD_NO_ERROR   = 0,      //!< no error
         CMD_ERROR      = 0x01,   //!< command alarm execution failed
         CMD_ERROR_PRE  = 0x02,   //!< pre-alarm command execution failed
@@ -306,7 +316,8 @@ public:
     /** Options for pre- or post-alarm actions. These may be OR'ed together.
      *  @since 4.9
      */
-    enum ExtraActionOption {
+    enum ExtraActionOption
+    {
         CancelOnPreActError  = 0x01,   //!< cancel alarm on pre-alarm action error
         DontShowPreActError  = 0x02,   //!< do not notify pre-alarm action errors to user
         ExecPreActOnDeferral = 0x04    //!< execute pre-alarm action also for deferred alarms
@@ -314,7 +325,8 @@ public:
     Q_DECLARE_FLAGS(ExtraActionOptions, ExtraActionOption)
 
     /** How to deal with the event UID in updateKCalEvent(). */
-    enum UidAction {
+    enum UidAction
+    {
         UID_IGNORE,        //!< leave KCal::Event UID unchanged
         UID_CHECK,         //!< verify that the KCal::Event UID is already the same as the KAEvent ID, if the latter is non-empty
         UID_SET            //!< set the KCal::Event UID to the KAEvent ID
@@ -344,20 +356,20 @@ public:
      *                        to the instance; call endChanges() when changes
      *                        are complete.
      */
-    KAEvent(const KADateTime &dt, const QString &name, const QString &text,
-            const QColor &bg, const QColor &fg, const QFont &font,
+    KAEvent(const KADateTime& dt, const QString& name, const QString& text,
+            const QColor& bg, const QColor& fg, const QFont& font,
             SubAction action, int lateCancel, Flags flags, bool changesPending = false);
 
     /** Construct an event and initialise it from a KCalendarCore::Event.
      *
      *  The initialisation is identical to that performed by set().
      */
-    explicit KAEvent(const KCalendarCore::Event::Ptr &);
+    explicit KAEvent(const KCalendarCore::Event::Ptr&);
 
-    KAEvent(const KAEvent &other);
+    KAEvent(const KAEvent& other);
     ~KAEvent();
 
-    KAEvent &operator=(const KAEvent &other);
+    KAEvent& operator=(const KAEvent& other);
 
     /** Update an existing KCalendarCore::Event with the KAEvent data.
      *  @param event  Event to update.
@@ -368,7 +380,7 @@ public:
      *                             KCal::Event's non-KAlarm custom properties
      *                             are left untouched.
      */
-    bool updateKCalEvent(const KCalendarCore::Event::Ptr &event, UidAction u, bool setCustomProperties = true) const;
+    bool updateKCalEvent(const KCalendarCore::Event::Ptr& event, UidAction u, bool setCustomProperties = true) const;
 
     /** Return whether the instance represents a valid event. */
     bool isValid() const;
@@ -414,7 +426,7 @@ public:
     /** Set the event's unique identifier. Note that the UID is guaranteed to be unique
      *  only within the calendar containing the event.
      */
-    void setEventId(const QString &id);
+    void setEventId(const QString& id);
 
     /** Return the event's unique identifier. Note that the UID is guaranteed to be unique
      *  only within the calendar containing the event.
@@ -571,7 +583,7 @@ public:
     QColor fgColour() const;
 
     /** Set the global default font for alarm message texts. */
-    static void setDefaultFont(const QFont &font);
+    static void setDefaultFont(const QFont& font);
 
     /** Return whether to use the default font (as set by setDefaultFont())
      *  for alarm message texts. */
@@ -607,7 +619,7 @@ public:
     /** Set the log file to write command alarm output to.
      *  @param logfile  log file path
      */
-    void setLogFile(const QString &logfile);
+    void setLogFile(const QString& logfile);
     /** Return the log file which command alarm output should be written to.
      *  @return log file path, or empty if no log file. */
     QString logFile() const;
@@ -619,8 +631,8 @@ public:
     bool copyToKOrganizer() const;
 
     /** Set the email related data for the event. */
-    void setEmail(uint from, const KCalendarCore::Person::List &, const QString &subject,
-                  const QStringList &attachments);
+    void setEmail(uint from, const KCalendarCore::Person::List&, const QString& subject,
+                  const QStringList& attachments);
 
     /** Return the email message body, for an email alarm.
      *  @return email body, or empty if not an email alarm
@@ -641,20 +653,20 @@ public:
     /** Return a string containing the email addressees, including names, for an email alarm.
      *  @param sep  separator string to insert between addresses.
      */
-    QString emailAddresses(const QString &sep) const;
+    QString emailAddresses(const QString& sep) const;
 
     /** Concatenate a list of email addresses into a string.
      *  @param addresses list of email addresses
      *  @param sep       separator string to insert between addresses
      */
-    static QString joinEmailAddresses(const KCalendarCore::Person::List &addresses, const QString &sep);
+    static QString joinEmailAddresses(const KCalendarCore::Person::List& addresses, const QString& sep);
     /** Return the list of email addressees, excluding names, for an email alarm. */
     QStringList emailPureAddresses() const;
 
     /** Return a string containing the email addressees, excluding names, for an email alarm.
      *  @param sep  separator string to insert between addresses.
      */
-    QString emailPureAddresses(const QString &sep) const;
+    QString emailPureAddresses(const QString& sep) const;
 
     /** Return the email subject line, for an email alarm. */
     QString emailSubject() const;
@@ -665,7 +677,7 @@ public:
     /** Return the file paths of the attachments, as a string, for an email alarm.
      *  @param sep  string separator
      */
-    QString emailAttachments(const QString &sep) const;
+    QString emailAttachments(const QString& sep) const;
 
     /** Return whether to send a blind copy of the email to the sender, for an email alarm. */
     bool emailBcc() const;
@@ -679,7 +691,7 @@ public:
      *  @param allowEmptyFile true to set the volume levels even if @p filename is empty
      *  @see audioFile(), soundVolume(), fadeVolume(), fadeSeconds()
      */
-    void setAudioFile(const QString &filename, float volume, float fadeVolume,
+    void setAudioFile(const QString& filename, float volume, float fadeVolume,
                       int fadeSeconds, int repeatPause = -1, bool allowEmptyFile = false);
 
     /** Return the audio file path.
@@ -724,7 +736,7 @@ public:
      *                   -1 to not use 'time from now'
      *  @see isTemplate(), name()
      */
-    void setTemplate(const QString &name, int afterTime = -1);
+    void setTemplate(const QString& name, int afterTime = -1);
 
     /** Return whether the event is an alarm template.
      *  @see setTemplate()
@@ -753,7 +765,7 @@ public:
      *  @see preAction(), postAction(), extraActionOptions()
      *  @since 4.9
      */
-    void setActions(const QString &pre, const QString &post, ExtraActionOptions preOptions);
+    void setActions(const QString& pre, const QString& post, ExtraActionOptions preOptions);
 
     /** Return the shell command to execute before the alarm is displayed. */
     QString preAction() const;
@@ -783,7 +795,7 @@ public:
      *  If there is no reminder after the main alarm, this method does nothing.
      *  @return @c true if successful (i.e. reminder falls before the next main alarm).
      */
-    void activateReminderAfter(const DateTime &mainAlarmTime);
+    void activateReminderAfter(const DateTime& mainAlarmTime);
 
     /** Return the number of minutes BEFORE the main alarm when a reminder alarm is set.
      *  @return >0 if the reminder is before the main alarm;
@@ -816,7 +828,7 @@ public:
      *
      *  @see cancelDefer(), deferred(), deferDateTime()
      */
-    void defer(const DateTime &dt, bool reminder, bool adjustRecurrence = false);
+    void defer(const DateTime& dt, bool reminder, bool adjustRecurrence = false);
 
     /** Cancel any deferral alarm which is pending.
      *  @see defer()
@@ -846,7 +858,7 @@ public:
      *                    the type of occurrence which currently limits the deferral.
      *  @return deferral limit, or invalid if no limit
      */
-    DateTime deferralLimit(DeferLimitType *limitType = nullptr) const;
+    DateTime deferralLimit(DeferLimitType* limitType = nullptr) const;
 
     /** Return the default deferral interval used in the deferral dialog.
      *  @see setDeferDefaultMinutes()
@@ -870,7 +882,7 @@ public:
      *  Note that for a recurring event, this should match one of the
      *  recurrence times.
      */
-    void setTime(const KADateTime &dt);
+    void setTime(const KADateTime& dt);
 
     /** Return the next time the main alarm will trigger.
      *  @note No account is taken of any working hours or holiday restrictions.
@@ -902,14 +914,14 @@ public:
      *  Note that adjustStartOfDay() should be called immediately after this,
      *  to adjust all events' internal data.
      */
-    static void setStartOfDay(const QTime &);
+    static void setStartOfDay(const QTime&);
 
     /** Call when the user changes the start-of-day time, to adjust the data
      *  for each date-only event in a list.
      *  @param events list of events. Any date-time events in the list are ignored.
      *  @see setStartOfDay()
      */
-    static void adjustStartOfDay(const KAEvent::List &events);
+    static void adjustStartOfDay(const KAEvent::List& events);
 
     /** Return the next time the alarm will trigger.
      *  @param type specifies whether to ignore reminders, working time
@@ -920,7 +932,7 @@ public:
     /** Set the date/time the event was created, or saved in the archive calendar.
      *  @see createdDateTime()
      */
-    void setCreatedDateTime(const KADateTime &dt);
+    void setCreatedDateTime(const KADateTime& dt);
 
     /** Return the date/time the event was created, or saved in the archive calendar.
      *  @see setCreatedDateTime()
@@ -965,7 +977,7 @@ public:
      *                 stores a pointer to @p region.
      *  @see setExcludeHolidays()
      */
-    static void setHolidays(const KHolidays::HolidayRegion &region);
+    static void setHolidays(const KHolidays::HolidayRegion& region);
 
     /** Enable or disable the alarm on non-working days and outside working hours.
      *  Note that this option only has any effect for recurring alarms.
@@ -989,7 +1001,7 @@ public:
      *               note that no check is made as to whether the alarm is
      *               actually scheduled to occur at time @p dt.)
      */
-    bool excludedByWorkTimeOrHoliday(const KADateTime &dt) const;
+    bool excludedByWorkTimeOrHoliday(const KADateTime& dt) const;
 
     /** Set working days and times, to be used by all KAEvent instances.
      *  @param days   bits set to 1 for each working day. Array element 0 = Monday ... 6 = Sunday.
@@ -997,7 +1009,7 @@ public:
      *  @param end    end time in working day.
      *  @see setWorkTimeOnly(), excludedByWorkTimeOrHoliday()
      */
-    static void setWorkTime(const QBitArray &days, const QTime &start, const QTime &end);
+    static void setWorkTime(const QBitArray& days, const QTime& start, const QTime& end);
 
     /** Clear the event's recurrence and sub-repetition data.
      *  @see setRecurrence(), recurs()
@@ -1008,7 +1020,7 @@ public:
      *  The event's start date/time is not changed.
      *  @see setRecurMinutely(), setRecurDaily(), setRecurWeekly(), setRecurMonthlyByDate(), setRecurMonthlyByPos(), setRecurAnnualByDate(), setRecurAnnualByPos(), setFirstRecurrence()
      */
-    void setRecurrence(const KARecurrence &r);
+    void setRecurrence(const KARecurrence& r);
 
     /** Set the recurrence to recur at a minutes interval.
      *  @param freq   how many minutes between recurrences.
@@ -1018,7 +1030,7 @@ public:
      *  @param end   = end date/time (set invalid to use @p count instead).
      *  @return @c false if no recurrence was set up.
      */
-    bool setRecurMinutely(int freq, int count, const KADateTime &end);
+    bool setRecurMinutely(int freq, int count, const KADateTime& end);
 
     /** Set the recurrence to recur daily.
      *  @param freq   how many days between recurrences.
@@ -1029,7 +1041,7 @@ public:
      *  @param end   = end date (set invalid to use @p count instead).
      *  @return @c false if no recurrence was set up.
      */
-    bool setRecurDaily(int freq, const QBitArray &days, int count, QDate end);
+    bool setRecurDaily(int freq, const QBitArray& days, int count, QDate end);
 
     /** Set the recurrence to recur weekly, on the specified weekdays.
      *  @param freq   how many weeks between recurrences.
@@ -1040,7 +1052,7 @@ public:
      *  @param end   = end date (set invalid to use @p count instead).
      *  @return @c false if no recurrence was set up.
      */
-    bool setRecurWeekly(int freq, const QBitArray &days, int count, QDate end);
+    bool setRecurWeekly(int freq, const QBitArray& days, int count, QDate end);
 
     /** Set the recurrence to recur monthly, on the specified days within the month.
      *  @param freq   how many months between recurrences.
@@ -1051,11 +1063,12 @@ public:
      *  @param end   = end date (set invalid to use @p count instead).
      *  @return @c false if no recurrence was set up.
      */
-    bool setRecurMonthlyByDate(int freq, const QVector<int> &days, int count, QDate end);
+    bool setRecurMonthlyByDate(int freq, const QVector<int>& days, int count, QDate end);
 
     /** Holds days of the week combined with a week number in the month,
      *  used to specify some monthly or annual recurrences. */
-    struct MonthPos {
+    struct MonthPos
+    {
         MonthPos() : days(7) {}    //krazy:exclude=inline (need default constructor)
         int        weeknum;     //!< Week in month, or < 0 to count from end of month.
         QBitArray  days;        //!< Days in week, element 0 = Monday.
@@ -1071,7 +1084,7 @@ public:
      *  @param end   = end date (set invalid to use @p count instead).
      *  @return @c false if no recurrence was set up.
      */
-    bool setRecurMonthlyByPos(int freq, const QVector<MonthPos> &pos, int count, QDate end);
+    bool setRecurMonthlyByPos(int freq, const QVector<MonthPos>& pos, int count, QDate end);
 
     /** Set the recurrence to recur annually, on the specified day in each
      *  of the specified months.
@@ -1086,7 +1099,7 @@ public:
      *  @param end   = end date (set invalid to use @p count instead).
      *  @return @c false if no recurrence was set up.
      */
-    bool setRecurAnnualByDate(int freq, const QVector<int> &months, int day, KARecurrence::Feb29Type, int count, QDate end);
+    bool setRecurAnnualByDate(int freq, const QVector<int>& months, int day, KARecurrence::Feb29Type, int count, QDate end);
 
     /** Set the recurrence to recur annually, on the specified weekdays in the
      *  specified weeks of the specified months.
@@ -1099,7 +1112,7 @@ public:
      *  @param end   = end date (set invalid to use @p count instead).
      *  @return @c false if no recurrence was set up.
      */
-    bool setRecurAnnualByPos(int freq, const QVector<MonthPos> &pos, const QVector<int> &months, int count, QDate end);
+    bool setRecurAnnualByPos(int freq, const QVector<MonthPos>& pos, const QVector<int>& months, int count, QDate end);
 
     /** Return whether the event recurs.
      *  @see recurType()
@@ -1116,7 +1129,7 @@ public:
      *  @return recurrence data, or null if none.
      *  @see recurrenceText()
      */
-    KARecurrence *recurrence() const;
+    KARecurrence* recurrence() const;
 
     /** Return the recurrence interval in units of the recurrence period type
      *  (minutes, days, etc).
@@ -1148,7 +1161,7 @@ public:
     *  @return @c false if a non-daily interval was specified for a date-only recurrence.
     *  @see repetition()
     */
-    bool setRepetition(const Repetition &r);
+    bool setRepetition(const Repetition& r);
 
     /** Return the event's sub-repetition data.
      *  @see setRepetition(), repetitionText()
@@ -1178,7 +1191,7 @@ public:
      *                            occur after @p preDateTime.
      *  @see nextOccurrence()
      */
-    bool occursAfter(const KADateTime &preDateTime, bool includeRepetitions) const;
+    bool occursAfter(const KADateTime& preDateTime, bool includeRepetitions) const;
 
     /** Set the date/time of the event to the next scheduled occurrence after a
      *  specified date/time, provided that this is later than its current date/time.
@@ -1191,7 +1204,7 @@ public:
      *
      *  @see nextOccurrence()
      */
-    OccurType setNextOccurrence(const KADateTime &preDateTime);
+    OccurType setNextOccurrence(const KADateTime& preDateTime);
 
     /** Get the date/time of the next occurrence of the event, strictly after
      *  the specified date/time. Reminders are ignored.
@@ -1203,7 +1216,7 @@ public:
      *  @param option      how/whether to make allowance for sub-repetitions.
      *  @see nextRepetition(), setNextOccurrence(), previousOccurrence(), occursAfter()
      */
-    OccurType nextOccurrence(const KADateTime &preDateTime, DateTime &result, OccurOption option = IGNORE_REPETITION) const;
+    OccurType nextOccurrence(const KADateTime& preDateTime, DateTime& result, OccurOption option = IGNORE_REPETITION) const;
 
     /** Get the date/time of the last previous occurrence of the event,
      *  strictly before the specified date/time. Reminders are ignored.
@@ -1218,7 +1231,7 @@ public:
      *                             appropriate.
      *  @see nextOccurrence()
      */
-    OccurType previousOccurrence(const KADateTime &afterDateTime, DateTime &result, bool includeRepetitions = false) const;
+    OccurType previousOccurrence(const KADateTime& afterDateTime, DateTime& result, bool includeRepetitions = false) const;
 
     /** Set the event to be a copy of the specified event, making the specified
      *  alarm the 'displaying' alarm.
@@ -1234,7 +1247,7 @@ public:
      *  @param showDefer  whether the Defer button was displayed
      *  @return @c true if successful, @c false if alarm was not copied.
      */
-    bool setDisplaying(const KAEvent &event, KAAlarm::Type type, ResourceId colId, const KADateTime &repeatAtLoginTime, bool showEdit, bool showDefer);
+    bool setDisplaying(const KAEvent& event, KAAlarm::Type type, ResourceId colId, const KADateTime& repeatAtLoginTime, bool showEdit, bool showDefer);
 
     /** Reinstate the original event from the 'displaying' event.
      *  This instance is initialised from the supplied displaying @p event,
@@ -1246,7 +1259,7 @@ public:
      *  @param showEdit   updated to true if Edit button was displayed, else false
      *  @param showDefer  updated to true if Defer button was displayed, else false
      */
-    void reinstateFromDisplaying(const KCalendarCore::Event::Ptr &event, ResourceId &colId, bool &showEdit, bool &showDefer);
+    void reinstateFromDisplaying(const KCalendarCore::Event::Ptr& event, ResourceId& colId, bool& showEdit, bool& showDefer);
 
     /** Return the original alarm which the displaying alarm refers to.
      *  Note that the caller is responsible for ensuring that the event was
@@ -1277,7 +1290,7 @@ public:
     /** Return the next alarm for the event, after the specified alarm.
      *  @see firstAlarm()
      */
-    KAAlarm nextAlarm(const KAAlarm &previousAlarm) const;
+    KAAlarm nextAlarm(const KAAlarm& previousAlarm) const;
 
     /** Return the next alarm for the event, after the specified alarm type.
      *  @see firstAlarm()
@@ -1300,7 +1313,8 @@ public:
     void removeExpiredAlarm(KAAlarm::Type type);
 
     /** Data categories for compare(). */
-    enum class Compare {
+    enum class Compare
+    {
         Id           = 0x01,   //!< the event ID
         ICalendar    = 0x02,   //!< extra event properties in the iCalendar file: custom properties, revision, creation timestamp
         UserSettable = 0x04,   //!< user settable data: resource ID, item ID
@@ -1360,10 +1374,10 @@ public:
      *                          which does not require the adjustment.
      *  @return @c true if any conversions were done.
      */
-    static bool convertKCalEvents(const KCalendarCore::Calendar::Ptr &, int calendarVersion);
+    static bool convertKCalEvents(const KCalendarCore::Calendar::Ptr&, int calendarVersion);
 
     /** Return a list of pointers to a list of KAEvent objects. */
-    static List ptrList(QVector<KAEvent> &events);
+    static List ptrList(QVector<KAEvent>& events);
 
     /** Output the event's data as debug output. */
     void dumpDebug() const;

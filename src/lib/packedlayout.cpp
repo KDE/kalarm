@@ -143,7 +143,7 @@ int PackedLayout::arrange(const QRect& rect, bool set) const
                 // Adjust item positions a row at a time
                 y = posn[i].y();
                 int last;   // after last item in this row
-                for (last = i + 1;  last < count && posn[last].y() == y;  ++last) ;
+                for (last = i + 1;  last < count && posn[last].y() == y;  ++last) {}
                 const int n = last - i;   // number of items in this row
                 int free = rect.right() - posn[last - 1].right();
                 switch (mAlignment)

@@ -34,32 +34,32 @@ public:
     DateTime();
 
     /** Constructor for a date-only value. */
-    DateTime(const QDate &d, const KADateTime::Spec &spec);
+    DateTime(const QDate& d, const KADateTime::Spec& spec);
 
     /** Constructor for a date-time value. */
-    DateTime(const QDate &d, const QTime &t, const KADateTime::Spec &spec);
+    DateTime(const QDate& d, const QTime& t, const KADateTime::Spec& spec);
 
     /** Constructor for a date-time value. */
-    DateTime(const QDateTime &dt, const KADateTime::Spec &spec);
+    DateTime(const QDateTime& dt, const KADateTime::Spec& spec);
 
     /** Constructor for a date-time value. */
-    explicit DateTime(const QDateTime &dt);
+    explicit DateTime(const QDateTime& dt);
 
     /** Constructor for a date-time value. */
-    DateTime(const KADateTime &dt);      //krazy:exclude=explicit  Allow implicit conversion
+    DateTime(const KADateTime& dt);      //krazy:exclude=explicit  Allow implicit conversion
 
     /** Copy constructor. */
-    DateTime(const DateTime &dt);
+    DateTime(const DateTime& dt);
 
     ~DateTime();
 
     /** Assignment operator. */
-    DateTime &operator=(const DateTime &dt);
+    DateTime& operator=(const DateTime& dt);
 
     /** Assignment operator.
      *  Sets the value to a specified date-time.
      */
-    DateTime &operator=(const KADateTime &dt);
+    DateTime& operator=(const KADateTime& dt);
 
     /** Returns true if the date is null and, if it is a date-time value, the time is also null. */
     bool isNull() const;
@@ -79,7 +79,7 @@ public:
     QDate date() const;
 
     /** Sets the date component of the value. */
-    void setDate(const QDate &d);
+    void setDate(const QDate& d);
 
     /** Returns the date and time of the value.
      *  If the value is date-only, the time part returned is 00:00:00. */
@@ -95,7 +95,7 @@ public:
 
     /** Sets the time component of the value.
      *  The value is converted if necessary to be a date-time value. */
-    void setTime(const QTime &t);
+    void setTime(const QTime& t);
 
     /** Returns the date and time of the value.
      *  If the value is date-only, the time part returned is equal to the start-of-day time set
@@ -128,7 +128,7 @@ public:
     /** Changes the time specification of the value.
      *  This will usually change the absolute time which this instance represents.
      */
-    void setTimeSpec(const KADateTime::Spec &spec);
+    void setTimeSpec(const KADateTime::Spec& spec);
 
     /** Returns the time specification type of the date/time, i.e. whether it is
      * UTC, has a time zone, etc. */
@@ -166,10 +166,10 @@ public:
     DateTime toLocalZone() const;
 
     /** Returns the time converted to a specified time zone. */
-    DateTime toZone(const QTimeZone &zone) const;
+    DateTime toZone(const QTimeZone& zone) const;
 
     /** Returns the time converted to a new time specification. */
-    DateTime toTimeSpec(const KADateTime::Spec &spec) const;
+    DateTime toTimeSpec(const KADateTime::Spec& spec) const;
 
     /** Converts the time to a UTC time, measured in seconds since 00:00:00 UTC
      * 1st January 1970 (as returned by time(2)). */
@@ -197,20 +197,20 @@ public:
     DateTime addYears(int n) const;
 
     /** Returns the number of days from this date or date-time to @p dt. */
-    int daysTo(const DateTime &dt) const;
+    int daysTo(const DateTime& dt) const;
 
     /** Returns the number of minutes from this date or date-time to @p dt. */
-    int minsTo(const DateTime &dt) const;
+    int minsTo(const DateTime& dt) const;
 
     /** Returns the number of seconds from this date or date-time to @p dt.
      *
      *  @warning The return value can overflow if the two values are far enough
      *           apart. Use sectTo_long() to avoid this.
      */
-    int secsTo(const DateTime &dt) const;
+    int secsTo(const DateTime& dt) const;
 
     /** Returns the number of seconds as a qint64 from this date or date-time to @p dt. */
-    qint64 secsTo_long(const DateTime &dt) const;
+    qint64 secsTo_long(const DateTime& dt) const;
 
     /** Returns the value as a string.
      *  If it is a date-time, both time and date are included in the output.
@@ -222,7 +222,7 @@ public:
      *  If it is a date-time, both time and date are included in the output.
      *  If it is date-only, only the date is included in the output.
      */
-    QString toString(const QString &format) const;
+    QString toString(const QString& format) const;
 
     /** Returns the value as a string, formatted according to the user's locale.
      *  If it is a date-time, both time and date are included in the output.
@@ -233,36 +233,36 @@ public:
     /** Sets the start-of-day time.
      *  The default value is midnight (0000 hrs).
      */
-    static void setStartOfDay(const QTime &sod);
+    static void setStartOfDay(const QTime& sod);
 
     /** Returns the start-of-day time. */
     static QTime startOfDay();
 
     /** Compare this value with another. */
-    KADateTime::Comparison compare(const DateTime &other) const;
+    KADateTime::Comparison compare(const DateTime& other) const;
 
-    KALARMCAL_EXPORT friend bool operator==(const KAlarmCal::DateTime &dt1, const KAlarmCal::DateTime &dt2);
-    KALARMCAL_EXPORT friend bool operator==(const KADateTime &dt1, const KAlarmCal::DateTime &dt2);
-    KALARMCAL_EXPORT friend bool operator<(const KAlarmCal::DateTime &dt1, const KAlarmCal::DateTime &dt2);
-    friend bool operator<(const KADateTime &dt1, const KAlarmCal::DateTime &dt2);
+    KALARMCAL_EXPORT friend bool operator==(const KAlarmCal::DateTime& dt1, const KAlarmCal::DateTime& dt2);
+    KALARMCAL_EXPORT friend bool operator==(const KADateTime& dt1, const KAlarmCal::DateTime& dt2);
+    KALARMCAL_EXPORT friend bool operator<(const KAlarmCal::DateTime& dt1, const KAlarmCal::DateTime& dt2);
+    friend bool operator<(const KADateTime& dt1, const KAlarmCal::DateTime& dt2);
 
 private:
     //@cond PRIVATE
     class Private;
-    Private *const d;
+    Private* const d;
     //@endcond
 };
 
 /** Returns true if the two values are equal. */
-KALARMCAL_EXPORT bool operator==(const DateTime &dt1, const DateTime &dt2);
-KALARMCAL_EXPORT bool operator==(const KADateTime &dt1, const DateTime &dt2);
+KALARMCAL_EXPORT bool operator==(const DateTime& dt1, const DateTime& dt2);
+KALARMCAL_EXPORT bool operator==(const KADateTime& dt1, const DateTime& dt2);
 
 /** Returns true if the two values are not equal. */
-inline bool operator!=(const DateTime &dt1, const DateTime &dt2)
+inline bool operator!=(const DateTime& dt1, const DateTime& dt2)
 {
     return !operator==(dt1, dt2);
 }
-inline bool operator!=(const KADateTime &dt1, const DateTime &dt2)
+inline bool operator!=(const KADateTime& dt1, const DateTime& dt2)
 {
     return !operator==(dt1, dt2);
 }
@@ -272,8 +272,8 @@ inline bool operator!=(const KADateTime &dt1, const DateTime &dt2)
  *  other is a date-time, the time used for the date-only value is the
  *  start-of-day time set in the KAlarm Preferences dialog.
  */
-KALARMCAL_EXPORT bool operator<(const DateTime &dt1, const DateTime &dt2);
-inline bool operator<(const KADateTime &dt1, const DateTime &dt2)
+KALARMCAL_EXPORT bool operator<(const DateTime& dt1, const DateTime& dt2);
+inline bool operator<(const KADateTime& dt1, const DateTime& dt2)
 {
     return operator<(DateTime(dt1), dt2);
 }
@@ -283,11 +283,11 @@ inline bool operator<(const KADateTime &dt1, const DateTime &dt2)
  *  other is a date-time, the time used for the date-only value is the
  *  start-of-day time set in the KAlarm Preferences dialog.
  */
-inline bool operator>(const DateTime &dt1, const DateTime &dt2)
+inline bool operator>(const DateTime& dt1, const DateTime& dt2)
 {
     return operator<(dt2, dt1);
 }
-inline bool operator>(const KADateTime &dt1, const DateTime &dt2)
+inline bool operator>(const KADateTime& dt1, const DateTime& dt2)
 {
     return operator<(dt2, DateTime(dt1));
 }
@@ -297,11 +297,11 @@ inline bool operator>(const KADateTime &dt1, const DateTime &dt2)
  *  other is a date-time, the time used for the date-only value is the
  *  start-of-day time set in the KAlarm Preferences dialog.
  */
-inline bool operator>=(const DateTime &dt1, const DateTime &dt2)
+inline bool operator>=(const DateTime& dt1, const DateTime& dt2)
 {
     return !operator<(dt1, dt2);
 }
-inline bool operator>=(const KADateTime &dt1, const DateTime &dt2)
+inline bool operator>=(const KADateTime& dt1, const DateTime& dt2)
 {
     return !operator<(DateTime(dt1), dt2);
 }
@@ -311,11 +311,11 @@ inline bool operator>=(const KADateTime &dt1, const DateTime &dt2)
  *  other is a date-time, the time used for the date-only value is the
  *  start-of-day time set in the KAlarm Preferences dialog.
  */
-inline bool operator<=(const DateTime &dt1, const DateTime &dt2)
+inline bool operator<=(const DateTime& dt1, const DateTime& dt2)
 {
     return !operator<(dt2, dt1);
 }
-inline bool operator<=(const KADateTime &dt1, const DateTime &dt2)
+inline bool operator<=(const KADateTime& dt1, const DateTime& dt2)
 {
     return !operator<(dt2, DateTime(dt1));
 }

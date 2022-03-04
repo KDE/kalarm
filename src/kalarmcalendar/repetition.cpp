@@ -3,7 +3,7 @@
  *  This file is part of kalarmprivate library, which provides access to KAlarm
  *  calendar data.
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2009-2012, 2018 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2009-2022 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -20,10 +20,12 @@ class Q_DECL_HIDDEN Repetition::Private
 {
 public:
     Private() = default;
-    Private(const Duration &interval, int count)
+    Private(const Duration& interval, int count)
       : mInterval(interval)
-      , mCount(count) {
-        if ((!count && !interval.isNull()) || (count && interval.isNull())) {
+      , mCount(count)
+    {
+        if ((!count && !interval.isNull()) || (count && interval.isNull()))
+        {
             mCount = 0;
             mInterval = 0;
         }
@@ -38,12 +40,12 @@ Repetition::Repetition()
 {
 }
 
-Repetition::Repetition(const KCalendarCore::Duration &interval, int count)
+Repetition::Repetition(const KCalendarCore::Duration& interval, int count)
     : d(new Private(interval, count))
 {
 }
 
-Repetition::Repetition(const Repetition &other)
+Repetition::Repetition(const Repetition& other)
     : d(new Private(*other.d))
 {
 }
@@ -53,32 +55,34 @@ Repetition::~Repetition()
     delete d;
 }
 
-Repetition &Repetition::operator=(const Repetition &other)
+Repetition& Repetition::operator=(const Repetition& other)
 {
-    if (&other != this) {
+    if (&other != this)
         *d = *other.d;
-    }
     return *this;
 }
 
-void Repetition::set(const KCalendarCore::Duration &interval, int count)
+void Repetition::set(const KCalendarCore::Duration& interval, int count)
 {
-    if (!count || interval.isNull()) {
+    if (!count || interval.isNull())
+    {
         d->mCount = 0;
         d->mInterval = 0;
-    } else {
+    }
+    else
+    {
         d->mCount = count;
         d->mInterval = interval;
     }
 }
 
-void Repetition::set(const KCalendarCore::Duration &interval)
+void Repetition::set(const KCalendarCore::Duration& interval)
 {
-    if (d->mCount) {
+    if (d->mCount)
+    {
         d->mInterval = interval;
-        if (interval.isNull()) {
+        if (interval.isNull())
             d->mCount = 0;
-        }
     }
 }
 
@@ -87,7 +91,7 @@ Repetition::operator bool() const
     return d->mCount;
 }
 
-bool Repetition::operator==(const Repetition &r) const
+bool Repetition::operator==(const Repetition& r) const
 {
     return d->mInterval == r.d->mInterval && d->mCount == r.d->mCount;
 }
@@ -132,14 +136,14 @@ int Repetition::intervalSeconds() const
     return d->mInterval.asSeconds();
 }
 
-int Repetition::nextRepeatCount(const KADateTime &from, const KADateTime &preDateTime) const
+int Repetition::nextRepeatCount(const KADateTime& from, const KADateTime& preDateTime) const
 {
     return d->mInterval.isDaily()
            ? from.daysTo(preDateTime) / d->mInterval.asDays() + 1
            : static_cast<int>(from.secsTo(preDateTime) / d->mInterval.asSeconds()) + 1;
 }
 
-int Repetition::previousRepeatCount(const KADateTime &from, const KADateTime &afterDateTime) const
+int Repetition::previousRepeatCount(const KADateTime& from, const KADateTime& afterDateTime) const
 {
     return d->mInterval.isDaily()
            ? from.daysTo(afterDateTime.addSecs(-1)) / d->mInterval.asDays()

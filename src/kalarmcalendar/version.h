@@ -21,7 +21,7 @@ namespace KAlarmCal
 KALARMCAL_EXPORT int Version(int major, int minor, int rev);
 
 /** Convert a version string to an integer. */
-KALARMCAL_EXPORT int getVersionNumber(const QString &version, QString *subVersion = nullptr);
+KALARMCAL_EXPORT int getVersionNumber(const QString& version, QString* subVersion = nullptr);
 
 /** Convert a version integer to a string. */
 KALARMCAL_EXPORT QString getVersionString(int version);
