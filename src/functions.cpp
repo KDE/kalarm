@@ -44,7 +44,14 @@ using namespace KCalendarCore;
 #include <KSharedConfig>
 #include <KToggleAction>
 #include <KLocalizedString>
+
+#include <kauth_version.h>
+#if KAUTH_VERSION >= QT_VERSION_CHECK(5, 92, 0)
+#include <KAuth/ActionReply>
+#include <KAuth/ExecuteJob>
+#else
 #include <KAuth>
+#endif
 #include <KStandardShortcut>
 #include <KFileItem>
 #include <KJobWidgets>
