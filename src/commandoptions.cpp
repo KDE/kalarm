@@ -81,7 +81,7 @@ bool convInterval(const QString& timeParam, KARecurrence::Type&, int& timeInterv
 class CommandOptions::Private
 {
 public:
-    Private(CommandOptions* parent)
+    explicit Private(CommandOptions* parent)
         : p(parent)
     {}
     bool    checkCommand(Option, Command, EditAlarmDlg::Type = EditAlarmDlg::NO_TYPE);

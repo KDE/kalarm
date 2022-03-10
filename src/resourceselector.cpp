@@ -285,6 +285,8 @@ void ResourceSelector::selectionChanged()
 */
 void ResourceSelector::initActions(KActionCollection* actions)
 {
+    if (mActionReload)
+        return;   // this function can only be called once
     mActionReload      = new QAction(QIcon::fromTheme(QStringLiteral("view-refresh")), i18nc("@action Reload calendar", "Re&load"), this);
     actions->addAction(QStringLiteral("resReload"), mActionReload);
     connect(mActionReload, &QAction::triggered, this, &ResourceSelector::reloadResource);

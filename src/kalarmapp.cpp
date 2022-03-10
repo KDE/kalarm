@@ -404,7 +404,6 @@ int KAlarmApp::activateInstance(const QStringList& args, const QString& workingD
     int exitCode = 0;               // default = success
     static bool firstInstance = true;
     bool dontRedisplay = false;
-    CommandOptions::Command command = CommandOptions::NONE;
     if (!firstInstance  ||  !isSessionRestored())
     {
         options->process();
@@ -412,7 +411,7 @@ int KAlarmApp::activateInstance(const QStringList& args, const QString& workingD
         if (options->simulationTime().isValid())
             KAlarm::setSimulatedSystemTime(options->simulationTime());
 #endif
-        command = options->command();
+        CommandOptions::Command command = options->command();
         if (options->disableAll())
             setAlarmsEnabled(false);   // disable alarm monitoring
 

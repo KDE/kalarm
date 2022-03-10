@@ -39,6 +39,8 @@ public:
     QStringList setOptions(QCommandLineParser*, const QStringList& args);
     static CommandOptions* firstInstance()        { return mFirstInstance; }
     CommandOptions();
+    CommandOptions(CommandOptions&) = delete;
+    CommandOptions& operator=(CommandOptions&) = delete;
     void                parse();
     void                process();
     Command             command() const           { return mCommand; }

@@ -1,7 +1,7 @@
 /*
  *  editdlg.cpp  -  dialog to create or modify an alarm or alarm template
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2001-2021 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2001-2022 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -906,8 +906,8 @@ void EditAlarmDlg::closeEvent(QCloseEvent* ce)
 */
 void EditAlarmDlg::slotResize()
 {
-    QSize s = mTabScrollGroup->adjustSize(true);
-    s = minimumSizeHint();
+    mTabScrollGroup->adjustSize(true);
+    const QSize s = minimumSizeHint();
     if (height() > s.height())
     {
         // Resize to slightly greater than the minimum height.
