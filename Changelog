@@ -5,6 +5,7 @@ KAlarm Change Log
 * Shrink calendar list to remove empty space when too large.
 * Cancel sound file playback if audio alarm edit dialogue is closed after clicking Try.
 * Remove all 'speak' functions if KAlarm is built with text-to-speech disabled.
+* Add option to disable wake-from-suspend alarms if KAlarm is built without KAuth.
 * Use threading correctly for playing sound files.
 * Incorporate kalarmcal library into KAlarm as a private library.
 
