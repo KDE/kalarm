@@ -59,8 +59,16 @@ set(CALENDARUTILS_LIB_VERSION "5.19.40")
 
 option(FILE_RESOURCES "Use file system resources instead of Akonadi resources." TRUE)
 
+option (ENABLE_WAKE_FROM_SUSPEND "Enable wake-from-suspend alarms (requires KAuth)" ON)
+if (ENABLE_WAKE_FROM_SUSPEND)
+    find_package(KF5Auth ${KF5_MIN_VERSION})
+    if (NOT KF5Auth_FOUND)
+        set(ENABLE_WAKE_FROM_SUSPEND OFF)
+    endif()
+endif()
+add_feature_info(WAKE_FROM_SUSPEND ${ENABLE_WAKE_FROM_SUSPEND} "Wake-from-suspend alarms")
+
 # Find KF5 packages
-find_package(KF5Auth ${KF5_MIN_VERSION} CONFIG REQUIRED)
 find_package(KF5CalendarCore ${KF5_MIN_VERSION} CONFIG REQUIRED)
 find_package(KF5Codecs ${KF5_MIN_VERSION} CONFIG REQUIRED)
 find_package(KF5Completion ${KF5_MIN_VERSION} REQUIRED)
@@ -126,9 +134,6 @@ add_definitions(-DQT_MESSAGELOGCONTEXT)
 ecm_set_disabled_deprecation_versions(QT 5.15.2 KF 5.92.0)
 
 option(USE_UNITY_CMAKE_SUPPORT "Use UNITY cmake support (speedup compile time)" OFF)
-
-option(ENABLE_KAUTH_HELPER "Build and install KAuth helper" ON)
-add_feature_info(KAUTH_HELPER ${ENABLE_KAUTH_HELPER} "Build and install KAuth helper")
 
 set(COMPILE_WITH_UNITY_CMAKE_SUPPORT OFF)
 if (USE_UNITY_CMAKE_SUPPORT)

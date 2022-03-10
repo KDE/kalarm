@@ -34,6 +34,7 @@
 #include "lib/messagebox.h"
 #include "lib/synchtimer.h"
 #include "kalarmcalendar/alarmtext.h"
+#include "config-kalarm.h"
 #include "kalarm_debug.h"
 
 #include <Akonadi/Item>
@@ -504,11 +505,13 @@ void MainWindow::initActions()
     actions->setDefaultShortcut(mActionEnable, QKeySequence(Qt::CTRL | Qt::Key_B));
     connect(mActionEnable, &QAction::triggered, this, &MainWindow::slotEnable);
 
-    QAction* action = new QAction(i18nc("@action", "Wake From Suspend..."), this);
-    actions->addAction(QStringLiteral("wakeSuspend"), action);
-    connect(action, &QAction::triggered, this, &MainWindow::slotWakeFromSuspend);
+#if ENABLE_WAKE_FROM_SUSPEND
+    QAction* waction = new QAction(i18nc("@action", "Wake From Suspend..."), this);
+    actions->addAction(QStringLiteral("wakeSuspend"), waction);
+    connect(waction, &QAction::triggered, this, &MainWindow::slotWakeFromSuspend);
+#endif
 
-    action = KAlarm::createStopPlayAction(this);
+    QAction* action = KAlarm::createStopPlayAction(this);
     actions->addAction(QStringLiteral("stopAudio"), action);
     KGlobalAccel::setGlobalShortcut(action, QList<QKeySequence>());  // allow user to set a global shortcut
 
@@ -921,7 +924,9 @@ void MainWindow::slotSpreadWindowsShortcut()
 */
 void MainWindow::slotWakeFromSuspend()
 {
+#if ENABLE_WAKE_FROM_SUSPEND
     (WakeFromSuspendDlg::create(this))->show();
+#endif
 }
 
 /******************************************************************************

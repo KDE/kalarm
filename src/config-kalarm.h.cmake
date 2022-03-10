@@ -2,3 +2,6 @@
 
 /* Define to 1 if you have the Xlib */
 #cmakedefine01 KDEPIM_HAVE_X11
+
+/* Define to 1 if wake-from-suspend is enabled */
+#cmakedefine01 ENABLE_WAKE_FROM_SUSPEND

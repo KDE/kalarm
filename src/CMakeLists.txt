@@ -319,7 +319,7 @@ install(FILES data/kalarm.notifyrc DESTINATION ${KDE_INSTALL_KNOTIFYRCDIR})
 
 ########### KAuth helper ###############
 
-if(ENABLE_KAUTH_HELPER)
+if (ENABLE_WAKE_FROM_SUSPEND)
     add_executable(kalarm_helper rtcwakeaction.cpp rtcwakeaction.h ${libkalarm_common_SRCS})
     target_link_libraries(kalarm_helper KF5::AuthCore KF5::I18n)
     install(TARGETS kalarm_helper DESTINATION ${KAUTH_HELPER_INSTALL_DIR})
