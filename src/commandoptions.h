@@ -9,8 +9,6 @@
 #pragma once
 
 #include "editdlg.h"
-#include "eventid.h"
-
 #include "kalarmcalendar/kaevent.h"
 #include "kalarmcalendar/karecurrence.h"
 #include "kalarmcalendar/kadatetime.h"
@@ -44,7 +42,7 @@ public:
     void                parse();
     void                process();
     Command             command() const           { return mCommand; }
-    QString             commandName() const       { return optionName(mCommandOpt); }
+    QString             commandName() const;
     QString             eventId() const           { return mEventId; }
     QString             resourceId() const        { return mResourceId; }
     QString             name() const              { return mName; }
@@ -74,66 +72,10 @@ public:
     static void         printError(const QString& errmsg);
 
 private:
-    enum Option
-    {
-        ACK_CONFIRM,
-        ATTACH,
-        AUTO_CLOSE,
-        BCC,
-        BEEP,
-        COLOUR,
-        COLOURFG,
-        OptCANCEL_EVENT,
-        DISABLE,
-        DISABLE_ALL,
-        EXEC,
-        EXEC_DISPLAY,
-        OptEDIT,
-        EDIT_NEW_DISPLAY,
-        EDIT_NEW_COMMAND,
-        EDIT_NEW_EMAIL,
-        EDIT_NEW_AUDIO,
-        OptEDIT_NEW_PRESET,
-        FILE,
-        FROM_ID,
-        INTERVAL,
-        KORGANIZER,
-        LATE_CANCEL,
-        OptLIST,
-        LOGIN,
-        MAIL,
-        NAME,
-        NOTIFY,
-        PLAY,
-        PLAY_REPEAT,
-        RECURRENCE,
-        REMINDER,
-        REMINDER_ONCE,
-        REPEAT,
-        SPEAK,
-        SUBJECT,
-#ifndef NDEBUG
-        TEST_SET_TIME,
-#endif
-        TIME,
-        OptTRAY,
-        OptTRIGGER_EVENT,
-        UNTIL,
-        VOLUME,
-        Num_Options,       // number of Option values
-        Opt_Message        // special value representing "message"
-    };
-
-    bool        checkCommand(Option, Command, EditAlarmDlg::Type = EditAlarmDlg::NO_TYPE);
-    void        setError(const QString& error);
-    void        setErrorRequires(Option opt, Option opt2, Option opt3 = Num_Options);
-    void        setErrorParameter(Option);
-    void        setErrorIncompatible(Option opt1, Option opt2);
-    void        checkEditType(EditAlarmDlg::Type type, Option opt)
-                              { checkEditType(type, EditAlarmDlg::NO_TYPE, opt); }
-    void        checkEditType(EditAlarmDlg::Type, EditAlarmDlg::Type, Option);
+    class Private;
+    friend class Private;
+    Private* const d;
     QString     arg(int n);
-    QString     optionName(Option, bool shortName = false) const;
 
     static CommandOptions* mFirstInstance;       // the first instance
     QCommandLineParser* mParser {nullptr};
@@ -142,7 +84,6 @@ private:
     QStringList         mExecArguments;          // arguments for --exec or --exec-display
     QString             mError;                  // error message
     Command             mCommand {NONE};         // the selected command
-    Option              mCommandOpt;             // option for the selected command
     QString             mEventId;                // TRIGGER_EVENT, CANCEL_EVENT, EDIT: event ID
     QString             mResourceId;             // TRIGGER_EVENT, CANCEL_EVENT, EDIT: optional resource ID
     QString             mName;                   // NEW, EDIT_NEW_PRESET: alarm/template name

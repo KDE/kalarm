@@ -18,6 +18,7 @@
 #include <KIdentityManagement/Identity>
 #include <KIdentityManagement/IdentityManager>
 #include <KHolidays/HolidayRegion>
+#include <kpimtextedit/kpimtextedit-texttospeech.h>
 
 #include <KSharedConfig>
 #include <KConfigGroup>
@@ -453,6 +454,24 @@ void Preferences::setCmdXTermCommand(const QString& cmd)
     self()->setBase_CmdXTermCommand(translateXTermPath(cmd, true));
 }
 
+Preferences::SoundType Preferences::defaultSoundType()
+{
+#if KPIMTEXTEDIT_TEXT_TO_SPEECH
+    return self()->base_DefaultSoundType();
+#else
+    SoundType type = self()->base_DefaultSoundType();
+    return (type == Sound_Speak) ? Sound_None : type;
+#endif
+}
+
+void Preferences::setDefaultSoundType(SoundType type)
+{
+#if !KPIMTEXTEDIT_TEXT_TO_SPEECH
+    if (type == Sound_Speak)
+        return;
+#endif
+    self()->setBase_DefaultSoundType(type);
+}
 
 void Preferences::connect(const char* signal, const QObject* receiver, const char* member)
 {

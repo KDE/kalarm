@@ -1,7 +1,7 @@
 /*
  *  soundpicker.cpp  -  widget to select a sound file or a beep
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2002-2021 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2002-2022 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -159,6 +159,10 @@ Preferences::SoundType SoundPicker::sound() const
 {
     if (mTypeCombo->currentIndex() < 0)
         return Preferences::Sound_None;
+#if !KPIMTEXTEDIT_TEXT_TO_SPEECH
+    if (mTypeCombo->currentData().toInt() == Preferences::Sound_Speak)
+        return Preferences::Sound_None;
+#endif
     return static_cast<Preferences::SoundType>(mTypeCombo->currentData().toInt());
 }
 

@@ -1359,7 +1359,7 @@ EditPrefTab::EditPrefTab(StackedScrollGroup* scrollGroup)
     mSound->addItem(SoundPicker::i18n_combo_File());         // index 2
 #if KPIMTEXTEDIT_TEXT_TO_SPEECH
     if (KPIMTextEdit::TextToSpeech::self()->isReady())
-        mSound->addItem(SoundPicker::i18n_combo_Speak());  // index 3
+        mSound->addItem(SoundPicker::i18n_combo_Speak());    // index 3
 #endif
     mSound->setMinimumSize(mSound->sizeHint());
     mSound->setWhatsThis(defsetting.subs(SoundPicker::i18n_label_Sound()).toString());
@@ -1543,7 +1543,9 @@ void EditPrefTab::apply(bool syncToDisc)
     Preferences::SoundType snd;
     switch (mSound->currentIndex())
     {
+#if KPIMTEXTEDIT_TEXT_TO_SPEECH
         case 3:  snd = Preferences::Sound_Speak; break;
+#endif
         case 2:  snd = Preferences::Sound_File;  break;
         case 1:  snd = Preferences::Sound_Beep;  break;
         case 0:
@@ -1628,7 +1630,9 @@ int EditPrefTab::soundIndex(Preferences::SoundType type)
 {
     switch (type)
     {
+#if KPIMTEXTEDIT_TEXT_TO_SPEECH
         case Preferences::Sound_Speak: return 3;
+#endif
         case Preferences::Sound_File:  return 2;
         case Preferences::Sound_Beep:  return 1;
         case Preferences::Sound_None:

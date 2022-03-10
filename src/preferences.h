@@ -79,6 +79,8 @@ public:
     static bool             emailBccUseSystemSettings();
     static QString          cmdXTermCommand();
     static void             setCmdXTermCommand(const QString& cmd);
+    static SoundType        defaultSoundType();
+    static void             setDefaultSoundType(SoundType);
     static float            defaultSoundVolume()             { int vol = self()->mBase_DefaultSoundVolume; return (vol < 0) ? -1 : static_cast<float>(vol) / 100; }
     static void             setDefaultSoundVolume(float v)   { self()->setBase_DefaultSoundVolume(v < 0 ? -1 : static_cast<int>(v * 100)); }
 

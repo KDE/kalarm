@@ -1,9 +1,10 @@
 KAlarm Change Log
 
-=== Version 3.4.0 (KDE Applications 22.04) --- 4 March 2022 ===
+=== Version 3.4.0 (KDE Applications 22.04) --- 10 March 2022 ===
 * Allow calendars and date picker to be shown together in side panel [KDE Bug 440250]
 * Shrink calendar list to remove empty space when too large.
 * Cancel sound file playback if audio alarm edit dialogue is closed after clicking Try.
+* Remove all 'speak' functions if KAlarm is built with text-to-speech disabled.
 * Use threading correctly for playing sound files.
 * Incorporate kalarmcal library into KAlarm as a private library.
 

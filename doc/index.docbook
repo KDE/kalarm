@@ -31,7 +31,7 @@
 </authorgroup>
 
 <copyright>
-<year>2001</year><year>2002</year><year>2003</year><year>2004</year><year>2005</year><year>2006</year><year>2007</year><year>2008</year><year>2009</year><year>2010</year><year>2011</year><year>2012</year><year>2013</year><year>2016</year><year>2018</year><year>2019</year><year>2020</year><year>2021</year>
+<year>2001</year><year>2002</year><year>2003</year><year>2004</year><year>2005</year><year>2006</year><year>2007</year><year>2008</year><year>2009</year><year>2010</year><year>2011</year><year>2012</year><year>2013</year><year>2016</year><year>2018</year><year>2019</year><year>2020</year><year>2021</year><year>2022</year>
 <holder>&David.Jarvie;</holder>
 </copyright>
 
@@ -39,8 +39,8 @@
 
 <!-- Don't change format of date and version of the documentation -->
 
-<date>2021-7-9</date>
-<releaseinfo>3.3.0 (Applications 21.08)</releaseinfo>
+<date>2022-3-10</date>
+<releaseinfo>3.4.0 (Applications 22.04)</releaseinfo>
 
 <abstract>
 <para>&kalarm; is a personal alarm message, command and email scheduler by &kde;.</para>
@@ -1274,8 +1274,9 @@ displayed. Choose:</para>
 
 <listitem>
 <para><guilabel>Speak</guilabel> to have the alarm message spoken as
-well as being displayed. This option is only available if you have the
-&Qt; Speech module installed and working.</para>
+well as being displayed. This option is only available if &kalarm; was
+built with speech enabled and you have the &Qt; Speech module installed
+and working.</para>
 </listitem>
 
 <listitem>
@@ -3348,10 +3349,10 @@ time.</para>
 <row>
   <entry><option>-s</option>, <option>--speak</option></entry>
   <entry>Speak the message when it is displayed. This option requires
-  &jovie; to be installed and configured, together with a compatible
-  speech synthesizer. <option>--beep</option>, <option>--play</option>
-  and <option>--play-repeat</option> cannot be specified with this
-  option.</entry>
+  &kalarm; to have been built with speech enabled and the &Qt; Speech
+  module to be installed and working. <option>--beep</option>,
+  <option>--play</option> and <option>--play-repeat</option> cannot be
+  specified with this option.</entry>
 </row>
 <row>
   <entry><option>-S</option>, <option>--subject

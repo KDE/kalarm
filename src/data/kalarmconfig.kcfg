@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-SPDX-FileCopyrightText: 2007-2021 David Jarvie <djarvie@kde.org>
+SPDX-FileCopyrightText: 2007-2022 David Jarvie <djarvie@kde.org>
 SPDX-License-Identifier: GPL-2.0-or-later
 -->
 <kcfg xmlns="http://www.kde.org/standards/kcfg/1.0"
@@ -307,7 +307,7 @@ SPDX-License-Identifier: GPL-2.0-or-later
       <whatsthis context="@info:whatsthis">Default setting in the alarm edit dialog for "show in KOrganizer".</whatsthis>
       <default>false</default>
     </entry>
-    <entry name="DefaultSoundType" key="SoundType" type="Enum">
+    <entry name="Base_DefaultSoundType" key="SoundType" type="Enum">
       <label context="@label Label for audio options">Sound</label>
       <whatsthis context="@info:whatsthis">Default sound type in the alarm edit dialog.</whatsthis>
       <choices name="SoundType" prefix="Sound_">
