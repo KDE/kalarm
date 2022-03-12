@@ -609,10 +609,9 @@ bool KADateTimePrivate::equalSpec(const KADateTimePrivate& other) const
  */
 QDateTime KADateTimePrivate::updatedDt(QTimeZone& local) const
 {
-    Q_UNUSED(local)
     if (specType == KADateTime::LocalZone)
     {
-        const QTimeZone local = QTimeZone::systemTimeZone();
+        local = QTimeZone::systemTimeZone();
         if (mDt.timeZone() != local)
         {
             const_cast<QDateTime*>(&mDt)->setTimeZone(local);
