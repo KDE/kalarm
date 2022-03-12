@@ -8,13 +8,13 @@
 
 #include "fileresourcemigrator.h"
 
+#include "collectionattribute.h"
 #include "dirresourceimportdialog.h"
-#include "fileresourcecalendarupdater.h"
-#include "fileresourceconfigmanager.h"
-#include "resources.h"
-#include "migration/collectionattribute.h"
-#include "calendarfunctions.h"
 #include "preferences.h"
+#include "resources/calendarfunctions.h"
+#include "resources/fileresourcecalendarupdater.h"
+#include "resources/fileresourceconfigmanager.h"
+#include "resources/resources.h"
 #include "lib/autoqpointer.h"
 #include "lib/desktop.h"
 #include "kalarmcalendar/version.h"

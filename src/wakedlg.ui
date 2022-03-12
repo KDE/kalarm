@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+   SPDX-FileCopyrightText: 2011 David Jarvie <djarvie@kde.org>
+   SPDX-License-Identifier: GPL-2.0-or-later
+-->
 <ui version="4.0">
  <class>WakeFromSuspendDlgWidget</class>
  <widget class="QWidget" name="WakeFromSuspendDlgWidget">
