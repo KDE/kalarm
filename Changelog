@@ -1,6 +1,6 @@
 KAlarm Change Log
 
-=== Version 3.4.0 (KDE Applications 22.04) --- 10 March 2022 ===
+=== Version 3.4.0 (KDE Gear 22.04) --- 10 March 2022 ===
 * Allow calendars and date picker to be shown together in side panel [KDE Bug 440250]
 * Shrink calendar list to remove empty space when too large.
 * Cancel sound file playback if audio alarm edit dialogue is closed after clicking Try.
@@ -9,17 +9,17 @@ KAlarm Change Log
 * Use threading correctly for playing sound files.
 * Incorporate kalarmcal library into KAlarm as a private library.
 
-=== Version 3.3.6 (KDE Applications 21.12.3) --- 9 February 2022 ===
+=== Version 3.3.6 (KDE Gear 21.12.3) --- 9 February 2022 ===
 * Fix failure to create a missing calendar file after enabling a resource.
 
-=== Version 3.3.5 (KDE Applications 21.12.2) --- 31 January 2022 ===
+=== Version 3.3.5 (KDE Gear 21.12.2) --- 31 January 2022 ===
 * Fix crash after Defer is selected in alarm notification message [KDE Bug 448212]
 * Fix deleted calendar resources reappearing when KAlarm restarts.
 * For command alarms, use path to find executables, instead of current directory.
 * Fix regression introduced in version 3.1.0:
     Make auto-close work for message windows.
 
-=== Version 3.3.4 (KDE Applications 21.12.1) --- 28 December 2021 ===
+=== Version 3.3.4 (KDE Gear 21.12.1) --- 28 December 2021 ===
 * Treat empty read-only, or non-existent, calendar files as loaded.
 * Fix bad calendar files preventing command line actions from running.
 * Ensure KAlarm command line actions are performed if KAlarm is already running [KDE Bug 446749]
@@ -28,21 +28,21 @@ KAlarm Change Log
 * If KAlarm is already running, don't exit if a new activation has unknown command line options.
 * Fix crash when a resource is removed.
 
-=== Version 3.3.3 (KDE Applications 21.12) --- 7 November 2021 ===
+=== Version 3.3.3 (KDE Gear 21.12) --- 7 November 2021 ===
 * Show numbers in localised form.
 * Make time edit spinboxes show time using localised format and numbers.
 * Fix infinite loop due to invalid recurrence date when using locale with non-ASCII numbers (requires kalarmcal 21.12).
 
-=== Version 3.3.2 (KDE Applications 21.08.3) --- 30 October 2021 ===
+=== Version 3.3.2 (KDE Gear 21.08.3) --- 30 October 2021 ===
 * Make time edit field arrows work with Breeze application style [KDE Bug 443062]
 * Fix display errors in time edit field arrows.
 * Fix unusable sub-daily recurrence editor with non-Breeze application style.
 * Use translated forms of "am" and "pm" when displaying times.
 
-=== Version 3.3.1 (KDE Applications 21.08.1) --- 29 August 2021 ===
+=== Version 3.3.1 (KDE Gear 21.08.1) --- 29 August 2021 ===
 * Fix crash when KAlarm is launched while already running [KDE Bug 441660]
 
-=== Version 3.3.0 (KDE Applications 21.08) --- 1 August 2021 ===
+=== Version 3.3.0 (KDE Gear 21.08) --- 1 August 2021 ===
 * Add date selector option to enable alarm list view to be filtered.
 * Show hamburger menu when menu bar is hidden, to allow access to all options.
 * Fix crash when context menu is requested after toolbar has been edited.
@@ -52,16 +52,16 @@ KAlarm Change Log
 * Fix alarm time showing blank in alarm list when using right-to-left languages.
 * Fixes to dialogue layouts when using right-to-left languages.
 
-=== Version 3.2.2 (KDE Applications 21.04.2) --- 26 May 2021 ===
+=== Version 3.2.2 (KDE Gear 21.04.2) --- 26 May 2021 ===
 * In audio alarm edit dialogue, don't show file name in encoded format [KDE Bug 437676]
 
-=== Version 3.2.1 (KDE Applications 21.04.1) --- 6 May 2021 ===
+=== Version 3.2.1 (KDE Gear 21.04.1) --- 6 May 2021 ===
 * In alarm list, don't hide display alarm colour for selected alarms [KDE Bug 436434]
 * Fix date sometimes being hidden for selected alarms in alarm list [KDE Bug 436434]
 * In alarm edit dialogue, enable OK button when date is edited [KDE Bug 436558]
 * If time format is AM/PM, allow zero hours as an interim value while editing times.
 
-=== Version 3.2.0 (KDE Applications 21.04) --- 2 April 2021 ===
+=== Version 3.2.0 (KDE Gear 21.04) --- 2 April 2021 ===
 * Remove KAlarm Akonadi resource code.
 * Rename Preferences 'Edit' tab to 'Alarm Defaults'.
 * Add default sound volume setting to Preferences dialogue.
