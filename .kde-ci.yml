@@ -18,3 +18,6 @@ Dependencies:
     'pim/kpimtextedit' : '@same'
     'pim/mailcommon' : '@same'
     'pim/pimcommon' : '@same'
+
+Options:
+    cppcheck-arguments: '--enable=warning,style,performance --inline-suppr'
