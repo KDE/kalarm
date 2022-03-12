@@ -46,7 +46,7 @@ public:
     explicit DateTime(const QDateTime& dt);
 
     /** Constructor for a date-time value. */
-    DateTime(const KADateTime& dt);      //cppcheck-suppress noExplicitConstructor  Allow implicit conversion
+    DateTime(const KADateTime& dt);      //cppcheck-suppress noExplicitConstructor; Allow implicit conversion
 
     /** Copy constructor. */
     DateTime(const DateTime& dt);
