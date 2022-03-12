@@ -10,7 +10,7 @@
 
 #include "fileresourcecalendarupdater.h"
 #include "fileresourcecreator.h"
-#include "fileresourcemigrator.h"
+#include "migration/fileresourcemigrator.h"
 #include "eventmodel.h"
 #include "resourcemodel.h"
 #include "resources.h"

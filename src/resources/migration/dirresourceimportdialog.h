@@ -8,7 +8,7 @@
 
 #pragma once
 
-#include "resource.h"
+#include "resources/resource.h"
 #include "kalarmcalendar/kacalendar.h"
 
 #include <KAssistantDialog>

@@ -93,14 +93,14 @@ set(resources_SRCS
     resources/fileresourceconfigmanager.cpp
     resources/fileresourcecreator.cpp
     resources/fileresourcedatamodel.cpp
-    resources/fileresourcemigrator.cpp
     resources/fileresourcesettings.cpp
     resources/fileresourcecalendarupdater.cpp
     resources/singlefileresource.cpp
     resources/singlefileresourceconfigdialog.cpp
-    resources/dirresourceimportdialog.cpp
     resources/migration/collectionattribute.cpp
     resources/migration/compatibilityattribute.cpp
+    resources/migration/dirresourceimportdialog.cpp
+    resources/migration/fileresourcemigrator.cpp
     resources/calendarfunctions.h
     resources/resourcetype.h
     resources/resource.h
@@ -116,14 +116,14 @@ set(resources_SRCS
     resources/fileresourceconfigmanager.h
     resources/fileresourcecreator.h
     resources/fileresourcedatamodel.h
-    resources/fileresourcemigrator.h
     resources/fileresourcesettings.h
     resources/fileresourcecalendarupdater.h
     resources/singlefileresource.h
     resources/singlefileresourceconfigdialog.h
-    resources/dirresourceimportdialog.h
     resources/migration/collectionattribute.h
     resources/migration/compatibilityattribute.h
+    resources/migration/dirresourceimportdialog.h
+    resources/migration/fileresourcemigrator.h
    )
 
 set(kalarm_bin_SRCS ${libkalarm_SRCS} ${resources_SRCS}
@@ -238,8 +238,8 @@ set(kalarm_bin_SRCS ${libkalarm_SRCS} ${resources_SRCS}
 ki18n_wrap_ui(kalarm_bin_SRCS
     wakedlg.ui
     resources/singlefileresourceconfigdialog.ui
-    resources/dirresourceimportdialog_intro.ui
-    resources/dirresourceimportdialog_type.ui
+    resources/migration/dirresourceimportdialog_intro.ui
+    resources/migration/dirresourceimportdialog_type.ui
 )
 
 qt_add_dbus_adaptor(kalarm_bin_SRCS data/org.kde.kalarm.kalarm.xml dbushandler.h DBusHandler)

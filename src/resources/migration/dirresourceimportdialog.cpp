@@ -11,8 +11,8 @@
 #include "ui_dirresourceimportdialog_intro.h"
 #include "ui_dirresourceimportdialog_type.h"
 
-#include "resources.h"
-#include "fileresource.h"
+#include "resources/resources.h"
+#include "resources/fileresource.h"
 
 #include <KFileItem>
 #include <KColorScheme>
