@@ -71,7 +71,7 @@ public:
     };
 
     KARecurrence();
-    KARecurrence(const KCalendarCore::Recurrence& r);   //krazy:exclude=explicit  Allow implicit conversion
+    KARecurrence(const KCalendarCore::Recurrence& r);   //cppcheck-suppress noExplicitConstructor  Allow implicit conversion
     KARecurrence(const KARecurrence& r);
     ~KARecurrence();
 

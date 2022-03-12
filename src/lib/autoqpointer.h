@@ -21,8 +21,8 @@ class AutoQPointer : public QPointer<T>
 {
 public:
     AutoQPointer() = default;
-    AutoQPointer(T* p) : QPointer<T>(p) {}    //cppcheck-suppress noExplicitConstructor
-    AutoQPointer(const QPointer<T>& p) : QPointer<T>(p) {}
+    AutoQPointer(T* p) : QPointer<T>(p) {}                    //cppcheck-suppress noExplicitConstructor  Allow implicit conversion
+    AutoQPointer(const QPointer<T>& p) : QPointer<T>(p) {}    //cppcheck-suppress noExplicitConstructor  Allow implicit conversion
     ~AutoQPointer()  { delete this->data(); }
     AutoQPointer<T>& operator=(const AutoQPointer<T>& p) { QPointer<T>::operator=(p); return *this; }
     AutoQPointer<T>& operator=(T* p) { QPointer<T>::operator=(p); return *this; }

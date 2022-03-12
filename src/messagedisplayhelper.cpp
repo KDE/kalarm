@@ -210,7 +210,7 @@ void MessageDisplayHelper::initTexts()
             // enclosing "Reminder".
             QString s = i18nc("@info", "Reminder");
             QRegExp re(QStringLiteral("^(<[^>]+>)*"));  // search for HTML tag "<...>"
-            re.indexIn(s);
+            (void) re.indexIn(s);
             // Prefix the time, plus a newline, to "Reminder", inside any HTML tags.
             s.insert(re.matchedLength(), mTexts.time + QLatin1String("<br/>"));
             mTexts.timeFull = s;

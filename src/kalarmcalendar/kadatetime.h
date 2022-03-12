@@ -192,7 +192,7 @@ public:
          *
          * @param tz  time zone
          */
-        Spec(const QTimeZone& tz);   // allow implicit conversion
+        Spec(const QTimeZone& tz);   //cppcheck-suppress noExplicitConstructor  Allow implicit conversion
 
         /**
          * Constructs a time specification.
@@ -201,7 +201,7 @@ public:
          * @param utcOffset number of seconds to add to UTC to get the local
          *                  time. Ignored if @p type is not @c OffsetFromUTC.
          */
-        Spec(SpecType type, int utcOffset = 0);   // allow implicit conversion
+        Spec(SpecType type, int utcOffset = 0);   //cppcheck-suppress noExplicitConstructor  Allow implicit conversion
 
         /**
          * Copy constructor.
