@@ -267,7 +267,7 @@ public:
     int                mNextRepeat{0};         // repetition count of next due sub-repetition
     int                mAlarmCount{0};         // number of alarms: count of !mMainExpired, mRepeatAtLogin, mDeferral, mReminderActive, mDisplaying
     DeferType          mDeferral{NO_DEFERRAL}; // whether the alarm is an extra deferred/deferred-reminder alarm
-    Akonadi::Item::Id  mAkonadiItemId{-1};     // if email text, message's Akonadi item ID
+    KAEvent::EmailId   mEmailId{-1};           // if email text, message's Akonadi item ID
     int                mTemplateAfterTime{-1}; // time not specified: use n minutes after default time, or -1 (applies to templates only)
     QColor             mBgColour;              // background colour of alarm message
     QColor             mFgColour;              // foreground colour of alarm message, or invalid for default
@@ -641,10 +641,10 @@ KAEventPrivate::KAEventPrivate(const KCalendarCore::Event::Ptr& event)
             mNotify = true;
         else if (flag == KMAIL_ITEM_FLAG)
         {
-            const Akonadi::Item::Id id = flags.at(i + 1).toLongLong(&ok);
+            const KAEvent::EmailId id = flags.at(i + 1).toLongLong(&ok);
             if (!ok)
                 continue;
-            mAkonadiItemId = id;
+            mEmailId = id;
             ++i;
         }
         else if (flag == KAEventPrivate::ARCHIVE_FLAG)
@@ -922,7 +922,7 @@ KAEventPrivate::KAEventPrivate(const KCalendarCore::Event::Ptr& event)
         }
     }
     if (!isEmailText)
-        mAkonadiItemId = -1;
+        mEmailId = -1;
 
     Recurrence* recur = event->recurrence();
     if (recur  &&  recur->recurs())
@@ -1034,7 +1034,7 @@ void KAEventPrivate::copy(const KAEventPrivate& event)
     mNextRepeat              = event.mNextRepeat;
     mAlarmCount              = event.mAlarmCount;
     mDeferral                = event.mDeferral;
-    mAkonadiItemId           = event.mAkonadiItemId;
+    mEmailId                 = event.mEmailId;
     mTemplateAfterTime       = event.mTemplateAfterTime;
     mBgColour                = event.mBgColour;
     mFgColour                = event.mFgColour;
@@ -1174,8 +1174,8 @@ bool KAEventPrivate::updateKCalEvent(const Event::Ptr& ev, KAEvent::UidAction ui
     }
     if (mCategory == CalEvent::TEMPLATE  &&  mTemplateAfterTime >= 0)
         (flags += TEMPL_AFTER_TIME_FLAG) += QString::number(mTemplateAfterTime);
-    if (mAkonadiItemId >= 0)
-        (flags += KMAIL_ITEM_FLAG) += QString::number(mAkonadiItemId);
+    if (mEmailId >= 0)
+        (flags += KMAIL_ITEM_FLAG) += QString::number(mEmailId);
     if (mArchive  &&  !archived)
     {
         flags += ARCHIVE_FLAG;
@@ -1749,14 +1749,14 @@ bool KAEvent::notify() const
     return d->mNotify;
 }
 
-void KAEvent::setAkonadiItemId(Akonadi::Item::Id id)
+void KAEvent::setEmailId(EmailId id)
 {
-    d->mAkonadiItemId = id;
+    d->mEmailId = id;
 }
 
-Akonadi::Item::Id KAEvent::akonadiItemId() const
+KAEvent::EmailId KAEvent::emailId() const
 {
-    return d->mAkonadiItemId;
+    return d->mEmailId;
 }
 
 void KAEvent::setName(const QString& newName)
@@ -3720,7 +3720,7 @@ bool KAEventPrivate::compare(const KAEventPrivate& other, KAEvent::Comparison co
             ||  mCommandError         != other.mCommandError
             ||  mConfirmAck           != other.mConfirmAck
             ||  mNotify               != other.mNotify
-            ||  mAkonadiItemId        != other.mAkonadiItemId
+            ||  mEmailId              != other.mEmailId
             ||  mBeep                 != other.mBeep
             ||  mSpeak                != other.mSpeak
             ||  mAudioFile            != other.mAudioFile)
@@ -3891,7 +3891,7 @@ void KAEventPrivate::dumpDebug() const
             qCDebug(KALARMCAL_LOG) << "-- mSoundVolume:-:";
         qCDebug(KALARMCAL_LOG) << "-- mRepeatSoundPause:" << mRepeatSoundPause;
     }
-    qCDebug(KALARMCAL_LOG) << "-- mAkonadiItemId:" << mAkonadiItemId;
+    qCDebug(KALARMCAL_LOG) << "-- mEmailId:" << mEmailId;
     qCDebug(KALARMCAL_LOG) << "-- mCopyToKOrganizer:" << mCopyToKOrganizer;
     qCDebug(KALARMCAL_LOG) << "-- mExcludeHolidays:" << mExcludeHolidays;
     qCDebug(KALARMCAL_LOG) << "-- mWorkTimeOnly:" << mWorkTimeOnly;

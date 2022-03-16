@@ -168,7 +168,7 @@ public:
     int                 mDefaultDeferMinutes;
     KAAlarm::Type       mAlarmType;
     KAEvent::SubAction  mAction;
-    Akonadi::Item::Id   mAkonadiItemId;           // if email text, message's Akonadi Item ID, else -1
+    KAEvent::EmailId    mEmailId;                 // if email text, message's Akonadi Item ID, else -1
     KAEvent::CmdErrType mCommandError;
     QStringList         mErrorMsgs;
     QString             mDontShowAgain;           // non-null for don't-show-again option with error message

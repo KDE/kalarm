@@ -56,10 +56,10 @@ public:
     static QString mSubjectPrefixEn;
     static bool    mInitialised;
 
-    QString           mBody, mFrom, mTo, mCc, mTime, mSubject;
-    Akonadi::Item::Id mAkonadiItemId;   // if email, message's Akonadi item ID, else -1
-    Type              mType;
-    bool              mIsEmail;
+    QString          mBody, mFrom, mTo, mCc, mTime, mSubject;
+    KAEvent::EmailId mEmailId;   // if email, message's Akonadi item ID, else -1
+    Type             mType;
+    bool             mIsEmail;
 };
 
 QString AlarmText::Private::mFromPrefix;
@@ -134,17 +134,17 @@ void AlarmText::setScript(const QString& text)
 }
 
 void AlarmText::setEmail(const QString& to, const QString& from, const QString& cc, const QString& time,
-                         const QString& subject, const QString& body, Akonadi::Item::Id itemId)
+                         const QString& subject, const QString& body, KAEvent::EmailId emailId)
 {
     d->clear();
-    d->mType          = Private::Email;
-    d->mTo            = to;
-    d->mFrom          = from;
-    d->mCc            = cc;
-    d->mTime          = time;
-    d->mSubject       = subject;
-    d->mBody          = body;
-    d->mAkonadiItemId = itemId;
+    d->mType    = Private::Email;
+    d->mTo      = to;
+    d->mFrom    = from;
+    d->mCc      = cc;
+    d->mTime    = time;
+    d->mSubject = subject;
+    d->mBody    = body;
+    d->mEmailId = emailId;
 }
 
 void AlarmText::setTodo(const KCalendarCore::Todo::Ptr& todo)
@@ -291,9 +291,9 @@ bool AlarmText::isTodo() const
     return d->mType == Private::Todo;
 }
 
-Akonadi::Item::Id AlarmText::akonadiItemId() const
+KAEvent::EmailId AlarmText::emailId() const
 {
-    return d->mAkonadiItemId;
+    return d->mEmailId;
 }
 
 /******************************************************************************
@@ -488,7 +488,7 @@ void AlarmText::Private::clear()
     mCc.clear();
     mTime.clear();
     mSubject.clear();
-    mAkonadiItemId = -1;
+    mEmailId = -1;
 }
 
 /******************************************************************************

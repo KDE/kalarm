@@ -468,7 +468,7 @@ void MessageWindow::setUpDisplay()
         mHelper->setSilenceButton(mSilenceButton);
     }
 
-    if (mAkonadiItemId() >= 0)
+    if (mEmailId() >= 0)
     {
         // KMail button
         mKMailButton = new PushButton(topWidget);
@@ -1094,7 +1094,7 @@ void MessageWindow::slotOk()
 void MessageWindow::slotShowKMailMessage()
 {
     qCDebug(KALARM_LOG) << "MessageWindow::slotShowKMailMessage";
-    if (mAkonadiItemId() < 0)
+    if (mEmailId() < 0)
         return;
     const QString err = KAlarm::runKMail();
     if (!err.isNull())
@@ -1104,7 +1104,7 @@ void MessageWindow::slotShowKMailMessage()
     }
     org::kde::kmail::kmail kmail(KMAIL_DBUS_SERVICE, KMAIL_DBUS_PATH, QDBusConnection::sessionBus());
     // Display the message contents
-    QDBusReply<bool> reply = kmail.showMail(mAkonadiItemId());
+    QDBusReply<bool> reply = kmail.showMail(mEmailId());
     bool failed1 = true;
     bool failed2 = true;
     if (!reply.isValid())
@@ -1113,13 +1113,13 @@ void MessageWindow::slotShowKMailMessage()
         failed1 = false;
 
     // Select the mail folder containing the message
-    Akonadi::ItemFetchJob* job = new Akonadi::ItemFetchJob(Akonadi::Item(mAkonadiItemId()));
+    Akonadi::ItemFetchJob* job = new Akonadi::ItemFetchJob(Akonadi::Item(mEmailId()));
     job->fetchScope().setAncestorRetrieval(Akonadi::ItemFetchScope::Parent);
     Akonadi::Item::List items;
     if (job->exec())
         items = job->items();
     if (items.isEmpty()  ||  !items.at(0).isValid())
-        qCWarning(KALARM_LOG) << "MessageWindow::slotShowKMailMessage: No parent found for item" << mAkonadiItemId();
+        qCWarning(KALARM_LOG) << "MessageWindow::slotShowKMailMessage: No parent found for item" << mEmailId();
     else
     {
         const Akonadi::Item& it = items.at(0);

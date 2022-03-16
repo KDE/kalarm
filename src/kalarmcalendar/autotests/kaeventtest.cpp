@@ -2,7 +2,7 @@
    This file is part of kalarmcal library, which provides access to KAlarm
    calendar data.
 
-   SPDX-FileCopyrightText: 2018-2020 David Jarvie <djarvie@kde.org>
+   SPDX-FileCopyrightText: 2018-2022 David Jarvie <djarvie@kde.org>
 
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
@@ -861,7 +861,7 @@ void KAEventTest::fromKCalEvent()
         KAEvent event(kcalevent);
         QVERIFY(!event.emailBcc());
         QCOMPARE(event.templateAfterTime(), 31);
-        QCOMPARE(event.akonadiItemId(), Akonadi::Item::Id(-1));
+        QCOMPARE(event.emailId(), KAEvent::EmailId(-1));
     }
     {
         // Akonadi item ID, with alarm message in email format
@@ -871,14 +871,14 @@ void KAEventTest::fromKCalEvent()
         kcalalarm->setText(QStringLiteral("From: a@b.c\nTo: d@e.f\nDate: Sun, 01 Apr 2018 17:36:06 +0100\nSubject: About this"));
         KAEvent event(kcalevent);
         QCOMPARE(event.templateAfterTime(), -1);
-        QCOMPARE(event.akonadiItemId(), Akonadi::Item::Id(759231));
+        QCOMPARE(event.emailId(), KAEvent::EmailId(759231));
     }
     {
         // Akonadi item ID, with alarm message in wrong format
         Event::Ptr kcalevent = createKcalEvent(dt.qDateTime(), createdDt);
         kcalevent->setCustomProperty("KALARM", "FLAGS", QStringLiteral("KMAIL;759231"));
         KAEvent event(kcalevent);
-        QCOMPARE(event.akonadiItemId(), Akonadi::Item::Id(-1));
+        QCOMPARE(event.emailId(), KAEvent::EmailId(-1));
     }
 
     // Alarm custom properties

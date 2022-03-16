@@ -372,7 +372,7 @@ QString KAEventFormatter::value(Parameter param) const
         case ConfirmAck:
             return trueFalse(mEvent.confirmAck());
         case AkonadiItem:
-            return (mEvent.akonadiItemId() >= 0) ? QLocale().toString(mEvent.akonadiItemId()) : trueFalse(false);
+            return (mEvent.emailId() >= 0) ? QLocale().toString(mEvent.emailId()) : trueFalse(false);
         case Sound:
             return !mEvent.audioFile().isEmpty() ? mEvent.audioFile()
                    : mEvent.speak() ? i18nc("@info", "Speak")

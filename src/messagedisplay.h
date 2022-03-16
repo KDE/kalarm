@@ -170,7 +170,7 @@ protected:
     float               mVolume() const          { return mHelper->mVolume; }
     float               mFadeVolume() const      { return mHelper->mFadeVolume; }
     int                 mDefaultDeferMinutes() const  { return mHelper->mDefaultDeferMinutes; }
-    Akonadi::Item::Id   mAkonadiItemId() const   { return mHelper->mAkonadiItemId; }
+    KAEvent::EmailId    mEmailId() const         { return mHelper->mEmailId; }
     KAEvent::CmdErrType mCommandError() const    { return mHelper->mCommandError; }
     bool&               mNoPostAction()          { return mHelper->mNoPostAction; }
 

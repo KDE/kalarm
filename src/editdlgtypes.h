@@ -95,7 +95,7 @@ private:
     CheckBox*           mConfirmAck;
     FontColourButton*   mFontColourButton;
     SpecialActionsButton* mSpecialActionsButton {nullptr};
-    Akonadi::Item::Id   mAkonadiItemId;      // if email text, message's Akonadi item ID, else -1
+    KAEvent::EmailId    mEmailId;            // if email text, message's Akonadi item ID, else -1
     bool                mReminderDeferral {false};
     bool                mReminderArchived {false};
     // Text message alarm widgets
