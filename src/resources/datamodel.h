@@ -44,8 +44,8 @@ public:
     /** Return whether calendar migration/creation at initialisation has completed. */
     static bool isMigrationComplete();
 
-    /** Check for, and remove, any duplicate Akonadi resources, i.e. those which
-     *  use the same calendar file/directory.
+    /** Check for, and remove, any duplicate resources, i.e. those which use
+     *  the same calendar file/directory.
      */
     static void removeDuplicateResources();
 

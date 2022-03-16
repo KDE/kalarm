@@ -11,6 +11,7 @@
 #include "kalarmcalendar/kacalendar.h"
 
 #include <Akonadi/ServerManager>
+#include <Akonadi/Collection>
 
 class KJob;
 namespace Akonadi { class CollectionFetchJob; }
