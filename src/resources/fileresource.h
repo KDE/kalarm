@@ -1,7 +1,7 @@
 /*
  *  fileresource.h  -  base class for calendar resource accessed via file system
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2020-2021 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2020-2022 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -10,7 +10,6 @@
 
 #include "resourcetype.h"
 
-#include <Akonadi/Collection>
 #include <KCalendarCore/FileStorage>
 
 #include <QSharedPointer>
