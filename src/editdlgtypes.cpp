@@ -286,13 +286,13 @@ CheckBox* EditDisplayAlarmDlg::createConfirmAckCheckbox(QWidget* parent)
 void EditDisplayAlarmDlg::type_initValues(const KAEvent& event)
 {
     mTryButton->setToolTip(i18nc("@info:tooltip", "Display the alarm now"));
-    mAkonadiItemId = -1;
+    mEmailId = -1;
     lateCancel()->showAutoClose(true);
     if (event.isValid())
     {
-        if (mAlarmType == KAEvent::MESSAGE  &&  event.akonadiItemId()
+        if (mAlarmType == KAEvent::MESSAGE  &&  event.emailId()
         &&  AlarmText::checkIfEmail(event.cleanText()))
-            mAkonadiItemId = event.akonadiItemId();
+            mEmailId = event.emailId();
         lateCancel()->setAutoClose(event.autoClose());
         if (event.useDefaultFont())
             mFontColourButton->setDefaultFont();
@@ -432,7 +432,7 @@ void EditDisplayAlarmDlg::setAction(KAEvent::SubAction action, const AlarmText& 
         case KAEvent::MESSAGE:
             mTypeCombo->setCurrentIndex(tTEXT);
             mTextMessageEdit->setPlainText(text);
-            mAkonadiItemId = alarmText.isEmail() ? alarmText.akonadiItemId() : -1;
+            mEmailId = alarmText.isEmail() ? alarmText.emailId() : -1;
             break;
         case KAEvent::FILE:
             mTypeCombo->setCurrentIndex(tFILE);
@@ -615,7 +615,7 @@ void EditDisplayAlarmDlg::type_setEvent(KAEvent& event, const KADateTime& dt, co
     if (type == KAEvent::MESSAGE)
     {
         if (AlarmText::checkIfEmail(text))
-            event.setAkonadiItemId(mAkonadiItemId);
+            event.setEmailId(mEmailId);
     }
     float fadeVolume;
     int   fadeSecs;

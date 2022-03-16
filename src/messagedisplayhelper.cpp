@@ -84,7 +84,7 @@ MessageDisplayHelper::MessageDisplayHelper(MessageDisplay* parent, const KAEvent
     , mDefaultDeferMinutes(event.deferDefaultMinutes())
     , mAlarmType(alarm.type())
     , mAction(event.actionSubType())
-    , mAkonadiItemId(event.akonadiItemId())
+    , mEmailId(event.emailId())
     , mCommandError(event.commandError())
     , mAudioRepeatPause(event.repeatSoundPause())
     , mConfirmAck(event.confirmAck())
@@ -139,7 +139,7 @@ MessageDisplayHelper::MessageDisplayHelper(MessageDisplay* parent, const KAEvent
     , mEventId(event)
     , mAlarmType(KAAlarm::MAIN_ALARM)
     , mAction(event.actionSubType())
-    , mAkonadiItemId(-1)
+    , mEmailId(-1)
     , mCommandError(KAEvent::CMD_NO_ERROR)
     , mErrorMsgs(errmsgs)
     , mDontShowAgain(dontShowAgain)
@@ -605,7 +605,7 @@ bool MessageDisplayHelper::saveProperties(KConfigGroup& config)
         config.writeEntry("DeferMins", mDefaultDeferMinutes);
         config.writeEntry("NoDefer", mNoDefer);
         config.writeEntry("NoPostAction", mNoPostAction);
-        config.writeEntry("AkonadiItemId", mAkonadiItemId);
+        config.writeEntry("EmailId", mEmailId);
         config.writeEntry("CmdErr", static_cast<int>(mCommandError));
         config.writeEntry("DontShowAgain", mDontShowAgain);
         return true;
@@ -681,7 +681,7 @@ bool MessageDisplayHelper::readPropertyValues(const KConfigGroup& config)
     mDefaultDeferMinutes = config.readEntry("DeferMins", 0);
     mNoDefer             = config.readEntry("NoDefer", false);
     mNoPostAction        = config.readEntry("NoPostAction", true);
-    mAkonadiItemId       = config.readEntry("AkonadiItemId", QVariant(QVariant::LongLong)).toLongLong();
+    mEmailId             = config.readEntry("EmailId", QVariant(QVariant::LongLong)).toLongLong();
     mCommandError        = KAEvent::CmdErrType(config.readEntry("CmdErr", static_cast<int>(KAEvent::CMD_NO_ERROR)));
     mDontShowAgain       = config.readEntry("DontShowAgain", QString());
     mShowEdit            = false;

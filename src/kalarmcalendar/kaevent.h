@@ -17,7 +17,6 @@
 #include "kacalendar.h"
 #include "repetition.h"
 
-#include <Akonadi/Item>
 #include <KCalendarCore/Calendar>
 #include <KCalendarCore/Person>
 
@@ -188,6 +187,9 @@ class KALARMCAL_EXPORT KAEvent
 public:
     /** A list of pointers to KAEvent objects. */
     using List = QVector<KAEvent*>;
+
+    /** Email ID, equivalent to Akonadi::Item::Id. */
+    using EmailId = qint64;
 
     /** Flags for use in D-Bus calls, etc. Flags may be combined by OR'ing them together. */
     enum Flag
@@ -515,11 +517,11 @@ public:
 
     /** Set the Akonadi item ID of the email which the alarm is related to.
      */
-    void setAkonadiItemId(Akonadi::Item::Id id);
+    void setEmailId(EmailId id);
 
-    /** Return the Akonadi item ID of the email which the alarm is related to.
+    /** Return the ID of the email which the alarm is related to.
      */
-    Akonadi::Item::Id akonadiItemId() const;
+    EmailId emailId() const;
 
     /** Set the alarm's name. */
     void setName(const QString& newName);

@@ -11,8 +11,8 @@
 #pragma once
 
 #include "kalarmcal_export.h"
+#include "kaevent.h"
 
-#include <Akonadi/Item>
 #include <KCalendarCore/Todo>
 #include <QString>
 
@@ -72,7 +72,7 @@ public:
      *  @param itemId   Akonadi item ID of the email.
      */
     void setEmail(const QString& to, const QString& from, const QString& cc, const QString& time,
-                  const QString& subject, const QString& body, Akonadi::Item::Id itemId = -1);
+                  const QString& subject, const QString& body, KAEvent::EmailId emailId = -1);
 
     /** Set the instance contents to be a todo.
      *  @param todo Todo instance to set as the text
@@ -148,10 +148,10 @@ public:
     /** Return whether the instance contains the text of a todo. */
     bool isTodo() const;
 
-    /** Return the Akonadi item ID of an email.
-     *  @return Item ID, or -1 if none.
+    /** Return the ID of an email.
+     *  @return Email ID, or -1 if none.
      */
-    Akonadi::Item::Id akonadiItemId() const;
+    KAEvent::EmailId emailId() const;
 
     /** Return the alarm summary text for either single line or tooltip display.
      *  @param event      event whose summary text is to be returned
