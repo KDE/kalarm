@@ -16,8 +16,6 @@
 #include <KCalendarCore/Calendar>
 #include <KCalendarCore/Event>
 
-#include <Akonadi/Collection>
-
 #include <QByteArray>
 #include <QStringList>
 #include <QDebug>
@@ -36,7 +34,7 @@ extern const QLatin1String KALARMCAL_EXPORT MIME_ARCHIVED;  //!< The mime type f
 extern const QLatin1String KALARMCAL_EXPORT MIME_TEMPLATE;  //!< The mime type for KAlarm alarm templates
 
 /** Declaration type for a calendar resource ID. */
-using ResourceId = Akonadi::Collection::Id;
+using ResourceId = qint64;
 
 /**
  * @short Class representing attributes of a KAlarm calendar.

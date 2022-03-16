@@ -19,7 +19,6 @@ add_library(kalarmprivate)
 
 target_sources(kalarmprivate PRIVATE
     ${kalarmcal_common_SRCS}
-    akonadi.cpp
     alarmtext.cpp
     datetime.cpp
     identities.cpp
@@ -30,7 +29,6 @@ target_sources(kalarmprivate PRIVATE
     repetition.cpp
     version.cpp
 
-    akonadi.h
     alarmtext.h
     datetime.h
     identities.h

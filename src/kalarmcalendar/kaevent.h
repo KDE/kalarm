@@ -17,7 +17,6 @@
 #include "kacalendar.h"
 #include "repetition.h"
 
-#include <Akonadi/Collection>
 #include <Akonadi/Item>
 #include <KCalendarCore/Calendar>
 #include <KCalendarCore/Person>
@@ -439,37 +438,8 @@ public:
     /** Return the revision number of the event (SEQUENCE property in iCalendar). */
     int revision() const;
 
-    /** Set the ID of the Akonadi Collection which contains the event.
-     *  @see setResourceId() is the generic form of this method.
-     */
-    void setCollectionId(Akonadi::Collection::Id id);
-
     /** Set the ID of the calendar resource which contains the event. */
     void setResourceId(ResourceId id);
-
-    /** Set the ID of the Akonadi Collection which contains the event.
-     *  @warning This is a const method, which means that any other instance
-     *           which references the same shared data will also be
-     *           updated. It is designed to be used when a KAEvent is
-     *           being created from an Akonadi Item, to avoid unnecessary
-     *           copying. Use with caution!
-     *  @see setResourceId_const() is the generic form of this method.
-     */
-    void setCollectionId_const(Akonadi::Collection::Id id) const;
-
-    /** Set the ID of the Akonadi Collection which contains the event.
-     *  @warning This is a const method, which means that any other instance
-     *           which references the same shared data will also be
-     *           updated. It is designed to be used when a KAEvent is
-     *           being created from an Akonadi Item, to avoid unnecessary
-     *           copying. Use with caution!
-     */
-    void setResourceId_const(ResourceId id) const;
-
-    /** Return the ID of the Akonadi Collection which contains the event.
-     *  @see resourceId() is the generic form of this method.
-     */
-    Akonadi::Collection::Id  collectionId() const;
 
     /** Return the ID of the calendar resource which contains the event. */
     ResourceId  resourceId() const;

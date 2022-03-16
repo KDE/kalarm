@@ -1,5 +1,5 @@
 /*!
- * @mainpage The KAlarm client library
+ * @mainpage The KAlarm calendar library
  *
  * @section purpose Purpose
  *
@@ -25,9 +25,6 @@
  * QDateTime. The DateTime class is similar to KADateTime but with a
  * configurable start-of-day time for date-only times.
  *
- * Three Akonadi attributes, for Collections and Items, are provided by
- * CollectionAttribute, CompatibilityAttribute and EventAttribute classes.
- *
  * @authors
  * David Jarvie \<djarvie@kde.org\>
  *
@@ -35,5 +32,5 @@
  * @lgpl
  */
 
-// DOXYGEN_PROJECTNAME=KAlarm Library
+// DOXYGEN_PROJECTNAME=KAlarm Calendar Library
 // DOXYGEN_REFERENCES=kdecore kcalendarcore kholidays kpimidentities akonadi

@@ -242,7 +242,6 @@ public:
 
     QString            mEventID;           // UID: KCalendarCore::Event unique ID
     QMap<QByteArray, QString> mCustomProperties; // KCalendarCore::Event's non-KAlarm custom properties
-    Akonadi::Item::Id  mItemId{-1};        // Akonadi::Item ID for this event
     mutable ResourceId mResourceId{-1};    // ID of resource containing the event, or for a displaying event,
                                            // saved resource ID (not the resource the event is in)
     QString            mName;              // name of the alarm
@@ -1012,7 +1011,6 @@ void KAEventPrivate::copy(const KAEventPrivate& event)
     mCommandError            = event.mCommandError;
     mEventID                 = event.mEventID;
     mCustomProperties        = event.mCustomProperties;
-    mItemId                  = event.mItemId;
     mResourceId              = event.mResourceId;
     mName                    = event.mName;
     mText                    = event.mText;
@@ -1678,30 +1676,9 @@ void KAEvent::setResourceId(ResourceId id)
     d->mResourceId = id;
 }
 
-void KAEvent::setResourceId_const(ResourceId id) const
-{
-    d->mResourceId = id;
-}
-
 ResourceId KAEvent::resourceId() const
 {
     // A displaying alarm contains the event's original resource ID
-    return d->mDisplaying ? -1 : d->mResourceId;
-}
-
-void KAEvent::setCollectionId(Akonadi::Collection::Id id)
-{
-    setResourceId(id);
-}
-
-void KAEvent::setCollectionId_const(Akonadi::Collection::Id id) const
-{
-    setResourceId_const(id);
-}
-
-Akonadi::Collection::Id KAEvent::collectionId() const
-{
-    // A displaying alarm contains the event's original collection ID
     return d->mDisplaying ? -1 : d->mResourceId;
 }
 
@@ -3337,7 +3314,6 @@ bool KAEventPrivate::setDisplaying(const KAEventPrivate& event, KAAlarm::Type al
             *this = event;
             // Change the event ID to avoid duplicating the same unique ID as the original event
             setCategory(CalEvent::DISPLAYING);
-            mItemId             = -1;    // the display event doesn't have an associated Item
             mResourceId         = resourceId;  // original resource ID which contained the event
             mDisplayingDefer    = showDefer;
             mDisplayingEdit     = showEdit;
@@ -3694,8 +3670,7 @@ bool KAEventPrivate::compare(const KAEventPrivate& other, KAEvent::Comparison co
     }
     if (comparison & KAEvent::Compare::UserSettable)
     {
-        if (mItemId     != other.mItemId
-        ||  mResourceId != other.mResourceId)
+        if (mResourceId != other.mResourceId)
             return false;
     }
     if (comparison & KAEvent::Compare::CurrentState)
@@ -3928,7 +3903,6 @@ void KAEventPrivate::dumpDebug() const
     qCDebug(KALARMCAL_LOG) << "-- mArchiveRepeatAtLogin:" << mArchiveRepeatAtLogin;
     qCDebug(KALARMCAL_LOG) << "-- mConfirmAck:" << mConfirmAck;
     qCDebug(KALARMCAL_LOG) << "-- mEnabled:" << mEnabled;
-    qCDebug(KALARMCAL_LOG) << "-- mItemId:" << mItemId;
     qCDebug(KALARMCAL_LOG) << "-- mResourceId:" << mResourceId;
     qCDebug(KALARMCAL_LOG) << "-- mCompatibility:" << mCompatibility;
     qCDebug(KALARMCAL_LOG) << "-- mReadOnly:" << mReadOnly;
