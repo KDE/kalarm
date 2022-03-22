@@ -271,7 +271,7 @@ void MessageDisplayHelper::initTexts()
                             case File::TextFormatted:
                             {
                                 QTextBrowser browser;
-                                browser.setSource(QUrl::fromLocalFile(mTempFile->fileName()));   //krazy:exclude=qclasses
+                                browser.setSource(QUrl::fromLocalFile(mTempFile->fileName()));
                                 mTexts.message = browser.toHtml();
                                 delete mTempFile;
                                 mTempFile = nullptr;

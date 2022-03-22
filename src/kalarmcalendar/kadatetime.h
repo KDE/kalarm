@@ -142,7 +142,7 @@ class KADateTimeSpecPrivate;
  * @see <a href="http://www.w3.org/TR/timezone/">W3C: Working with Time Zones</a>
  * @author David Jarvie \<djarvie@kde.org\>.
  */
-class KALARMCAL_EXPORT KADateTime //krazy:exclude=dpointer (implicitly shared)
+class KALARMCAL_EXPORT KADateTime
 {
 public:
     /**

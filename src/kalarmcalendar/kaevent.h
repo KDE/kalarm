@@ -1041,7 +1041,7 @@ public:
      *  used to specify some monthly or annual recurrences. */
     struct MonthPos
     {
-        MonthPos() : days(7) {}    //krazy:exclude=inline (need default constructor)
+        MonthPos() : days(7) {}
         int        weeknum;     //!< Week in month, or < 0 to count from end of month.
         QBitArray  days;        //!< Days in week, element 0 = Monday.
     };
