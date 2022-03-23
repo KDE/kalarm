@@ -201,17 +201,6 @@ int KAMail::send(JobData& jobdata, QStringList& errmsgs)
         fwrite(encoded.constData(), encoded.length(), 1, fd);
         pclose(fd);
 
-#ifdef KMAIL_SUPPORTED
-        if (Preferences::emailCopyToKMail())
-        {
-            // Create a copy of the sent email in KMail's 'sent-mail' folder,
-            // or if there was a send error, in KMail's 'outbox' folder.
-            err = addToKMailFolder(jobdata, "sent-mail", true);
-            if (!err.isNull())
-                errmsgs += errors(err, COPY_ERROR);    // not a fatal error - continue
-        }
-#endif
-
         if (jobdata.allowNotify)
             notifyQueued(jobdata.event);
         return 1;
@@ -648,9 +637,6 @@ QStringList KAMail::errors(const QString& err, ErrType prefix)
     {
         case SEND_FAIL:   error1 = i18nc("@info", "Failed to send email");  break;
         case SEND_ERROR:  error1 = i18nc("@info", "Error sending email");  break;
-#ifdef KMAIL_SUPPORTED
-        case COPY_ERROR:  error1 = i18nc("@info", "Error copying sent email to <application>KMail</application> <resource>%1</resource> folder", i18n_sent_mail());  break;
-#endif
     }
     if (err.isEmpty())
         return QStringList(error1);
