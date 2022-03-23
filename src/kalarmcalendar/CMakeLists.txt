@@ -57,7 +57,6 @@ target_link_libraries(kalarmprivate PRIVATE
     KF5::IdentityManagement
     KF5::CoreAddons
     KF5::CalendarCore
-    KF5::AkonadiCore
     )
 
 if (QT_MAJOR_VERSION STREQUAL "6")

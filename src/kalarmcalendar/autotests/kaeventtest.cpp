@@ -15,7 +15,6 @@ using namespace KAlarmCal;
 #include <KCalendarCore/Event>
 #include <KCalendarCore/Alarm>
 using namespace KCalendarCore;
-#include <Akonadi/Collection>
 
 #include <KHolidays/HolidayRegion>
 using namespace KHolidays;
@@ -632,7 +631,7 @@ void KAEventTest::fromKCalEvent()
     {
         bool showEdit = false;
         bool showDefer = false;
-        Akonadi::Collection::Id collectionId = -1;
+        ResourceId collectionId = -1;
         Alarm::Ptr kcalalarm;
         Event::Ptr kcalevent = createKcalEvent(dt.qDateTime(), createdDt, kcalalarm);
         Alarm::Ptr kcalalarmDisp = copyKcalAlarm(kcalevent, kcalalarm);
