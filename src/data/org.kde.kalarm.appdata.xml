@@ -91,7 +91,7 @@
     <p>KAlarm is a personal alarm message, command and email scheduler application by KDE</p>
     <p xml:lang="ar">منبّهك هو مجدوِل رسائل وأوامر وبريد إلكترونيّ شخصيّ بواسطة كدي</p>
     <p xml:lang="ca">El KAlarm és una aplicació de planificació personal per a alarmes de missatge, ordres i correu electrònic, creat per la comunitat KDE</p>
-    <p xml:lang="ca-valencia">El KAlarm és una aplicació de planificació personal per a alarmes de missatge, ordres i correu electrònic, creat per la comunitat KDE</p>
+    <p xml:lang="ca-valencia">KAlarm és una aplicació de planificació personal per a alarmes de missatge, ordres i correu electrònic, creat per la comunitat KDE</p>
     <p xml:lang="de">KAlarm ist ein Planer für Erinnerungsnachrichten sowie für termingesteuerten E-Mail-Versand und Befehlsausführungen von KDE</p>
     <p xml:lang="el">Το KAlarm είναι μία εφαρμογή προσωπικού χρονοπρογραμματιστή συναγερμών, εντολών και αλληλογραφίας από το KDE</p>
     <p xml:lang="en-GB">KAlarm is a personal alarm message, command and email scheduler application by KDE</p>
@@ -114,6 +114,7 @@
     <p xml:lang="sk">KAlarm je aplikácia osobného budíku, príkazového a e-mailového plánovača od KDE</p>
     <p xml:lang="sl">Kalarm je osebni planer alarmov, ukazov in e-pošte izdelan v skupnosti KDE</p>
     <p xml:lang="sv">Kalarm är ett schemaläggningsprogram av personliga alarmmeddelanden, kommandon och e-post av KDE</p>
+    <p xml:lang="tr">KAlarm, KDE tarafından yapılan bir kişisel alarm iletisi, komut ve e-posta zamanlayıcısıdır</p>
     <p xml:lang="uk">KAlarm — інструмент від KDE для складання розкладу повідомлень, команд і поштових повідомлень для нагадування.</p>
     <p xml:lang="x-test">xxKAlarm is a personal alarm message, command and email scheduler application by KDExx</p>
     <p xml:lang="zh-CN">KAlarm 是由 KDE 打造的个人消息、命令闹钟和电子邮件计划程序</p>
@@ -305,7 +306,7 @@
       <li xml:lang="sr-ijekavian">Прилагођавање боја и фонтова аларма.</li>
       <li xml:lang="sr-ijekavianlatin">Prilagođavanje boja i fontova alarma.</li>
       <li xml:lang="sv">Inställning av färg och teckensnitt för visade alarm</li>
-      <li xml:lang="tr">Alarm rengi ve yazı tipi özelleştirmesini göster</li>
+      <li xml:lang="tr">Alarm rengi ve yazıtipi özelleştirmesini göster</li>
       <li xml:lang="uk">можливість визначення кольору та шрифту тексту нагадування;</li>
       <li xml:lang="x-test">xxDisplay alarms color and font customizationxx</li>
       <li xml:lang="zh-CN">自定义闹钟消息的字体和颜色</li>
@@ -357,7 +358,7 @@
       <caption>KAlarm configuration window with a testing message alarm</caption>
       <caption xml:lang="ar">نافذة ضبط منبهك مع  رسائل تنبيه إختبارية</caption>
       <caption xml:lang="ca">Finestra de configuració del KAlarm amb una alarma de missatge de prova</caption>
-      <caption xml:lang="ca-valencia">Finestra de configuració del KAlarm amb una alarma de missatge de prova</caption>
+      <caption xml:lang="ca-valencia">Finestra de configuració de KAlarm amb una alarma de missatge de prova</caption>
       <caption xml:lang="de">Der Einrichtungsdialog von KAlarm mit dem Test einer Erinnerungsnachricht</caption>
       <caption xml:lang="el">Παράθυρο διαμόρφωσης KAlarm με ένα δοκιμαστικό μήνυμα συναγερμού.</caption>
       <caption xml:lang="en-GB">KAlarm configuration window with a testing message alarm</caption>
@@ -380,6 +381,7 @@
       <caption xml:lang="sk">Konfiguračné okno KAlarm s testovacou správou alarmu</caption>
       <caption xml:lang="sl">Okno za nastavitev alarma s tesnim sporočilom ob alarmu</caption>
       <caption xml:lang="sv">Inställningsfönstret i Kalarm med test av ett meddelandealarm</caption>
+      <caption xml:lang="tr">Bir sınama ileti alarmlı KAlarm yapılandırma penceresi</caption>
       <caption xml:lang="uk">Вікно налаштовування KAlarm із тестовим нагадуванням у форматі повідомлення</caption>
       <caption xml:lang="x-test">xxKAlarm configuration window with a testing message alarmxx</caption>
       <caption xml:lang="zh-CN">KAlarm 配置窗口，同时展示了一个测试闹钟</caption>
