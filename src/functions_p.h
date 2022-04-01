@@ -1,12 +1,14 @@
 /*
  *  functions_p.h  -  private declarations for miscellaneous functions
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2009, 2011 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2009-2022 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #pragma once
+
+#include "config-kalarm.h"
 
 #include <QObject>
 
@@ -30,8 +32,10 @@ public:
 
     QWidget* mMsgParent;
 
+#if ENABLE_WAKE_FROM_SUSPEND
 public Q_SLOTS:
     void cancelRtcWake();
+#endif
 
 private:
     static Private* mInstance;

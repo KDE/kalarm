@@ -10,6 +10,7 @@
 
 /**  @file functions.h - miscellaneous functions */
 
+#include "config-kalarm.h"
 #include "editdlg.h"
 #include "eventid.h"
 #include "kalarmcalendar/kaevent.h"
@@ -301,10 +302,12 @@ bool importAlarms(Resource& resource, QWidget* parent);
 bool exportAlarms(const QVector<KAEvent>& events, QWidget* parent);
 
 void                displayKOrgUpdateError(QWidget* parent, UpdateError, const UpdateResult& korgError, int nAlarms = 0);
+#if ENABLE_WAKE_FROM_SUSPEND
 QStringList         checkRtcWakeConfig(bool checkEventExists = false);
 void                deleteRtcWakeConfig();
 void                cancelRtcWake(QWidget* msgParent, const QString& eventId = QString());
 bool                setRtcWakeTime(unsigned triggerTime, QWidget* parent);
+#endif
 
 bool                convertTimeString(const QByteArray& timeString, KADateTime& dateTime,
                                   const KADateTime& defaultDt = KADateTime(), bool allowTZ = true);

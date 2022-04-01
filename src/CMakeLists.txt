@@ -178,7 +178,6 @@ set(kalarm_bin_SRCS ${libkalarm_SRCS} ${resources_SRCS}
     templatepickdlg.cpp
     templatedlg.cpp
     templatemenuaction.cpp
-    wakedlg.cpp
     migratekde4files.cpp
     akonadicollectionsearch.cpp
     birthdaydlg.h
@@ -230,10 +229,15 @@ set(kalarm_bin_SRCS ${libkalarm_SRCS} ${resources_SRCS}
     templatepickdlg.h
     templatedlg.h
     templatemenuaction.h
-    wakedlg.h
     migratekde4files.h
     akonadicollectionsearch.h
 )
+if (ENABLE_WAKE_FROM_SUSPEND)
+    set(kalarm_bin_SRCS ${kalarm_bin_SRCS}
+        wakedlg.cpp
+        wakedlg.h
+    )
+endif()
 
 ki18n_wrap_ui(kalarm_bin_SRCS
     wakedlg.ui
