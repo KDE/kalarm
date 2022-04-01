@@ -776,11 +776,13 @@ bool KAlarmApp::quitIf(int exitCode, bool force)
     //       KAlarm is started again before application exit completes!
     qCDebug(KALARM_LOG) << "KAlarmApp::quitIf:" << exitCode << ": quitting";
     MessageDisplay::stopAudio(true);
+#if ENABLE_WAKE_FROM_SUSPEND
     if (mCancelRtcWake)
     {
         KAlarm::setRtcWakeTime(0, nullptr);
         KAlarm::deleteRtcWakeConfig();
     }
+#endif
     delete mAlarmTimer;     // prevent checking for alarms after deleting calendars
     mAlarmTimer = nullptr;
     mInitialised = false;   // prevent processQueue() from running
@@ -806,6 +808,7 @@ void KAlarmApp::doQuit(QWidget* parent)
                                             KStandardGuiItem::cancel(), Preferences::QUIT_WARN
                                            ) != KMessageBox::Continue)
         return;
+#if ENABLE_WAKE_FROM_SUSPEND
     if (!KAlarm::checkRtcWakeConfig(true).isEmpty())
     {
         // A wake-on-suspend alarm is set
@@ -816,6 +819,7 @@ void KAlarmApp::doQuit(QWidget* parent)
             return;
         mCancelRtcWake = true;
     }
+#endif
     if (!Preferences::autoStart())
     {
         int option = KMessageBox::No;
@@ -1653,7 +1657,11 @@ void KAlarmApp::setAlarmsEnabled(bool enabled)
         mAlarmsEnabled = enabled;
         Q_EMIT alarmEnabledToggled(enabled);
         if (!enabled)
+#if ENABLE_WAKE_FROM_SUSPEND
             KAlarm::cancelRtcWake(nullptr);
+#else
+            ;
+#endif
         else if (!mProcessingQueue)
             checkNextDueAlarm();
     }
@@ -1808,8 +1816,10 @@ int KAlarmApp::handleEvent(const EventId& id, QueuedAction action, bool findUniq
 {
     Q_ASSERT(!(int(action) & ~int(QueuedAction::ActionMask)));
 
+#if ENABLE_WAKE_FROM_SUSPEND
     // Delete any expired wake-on-suspend config data
     KAlarm::checkRtcWakeConfig();
+#endif
 
     const QString eventID(id.eventId());
     KAEvent event = ResourcesCalendar::event(id, findUniqueId);
