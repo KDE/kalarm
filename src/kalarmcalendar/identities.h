@@ -12,7 +12,7 @@
 
 #include "kalarmcal_export.h"
 
-#include <qglobal.h>
+#include <QtGlobal>
 
 class QString;
 

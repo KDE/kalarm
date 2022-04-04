@@ -10,7 +10,6 @@
 
 #include "collectionattribute.h"
 #include "dirresourceimportdialog.h"
-#include "preferences.h"
 #include "resources/calendarfunctions.h"
 #include "resources/fileresourcecalendarupdater.h"
 #include "resources/fileresourceconfigmanager.h"

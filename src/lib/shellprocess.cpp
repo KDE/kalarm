@@ -13,7 +13,7 @@
 #include <KLocalizedString>
 #include <KAuthorized>
 
-#include <qglobal.h>
+#include <QtGlobal>
 #include <qplatformdefs.h>
 
 #include <stdlib.h>
