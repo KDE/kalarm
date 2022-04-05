@@ -19,7 +19,7 @@
 #include <KLocalizedString>
 
 
-FileResource::FileResource(FileResourceSettings* settings)
+FileResource::FileResource(FileResourceSettings::Ptr settings)
     : ResourceType(settings->id())
     , mSettings(settings)
 {

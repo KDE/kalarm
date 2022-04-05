@@ -34,13 +34,13 @@ public:
     /** Construct a new SingleFileResource.
      *  Initialises the resource and initiates loading its events.
      */
-    static Resource create(FileResourceSettings* settings);
+    static Resource create(FileResourceSettings::Ptr settings);
 
 protected:
     /** Constructor.
      *  Initialises the resource and initiates loading its events.
      */
-    explicit SingleFileResource(FileResourceSettings* settings);
+    explicit SingleFileResource(FileResourceSettings::Ptr settings);
 
 public:
     ~SingleFileResource() override;

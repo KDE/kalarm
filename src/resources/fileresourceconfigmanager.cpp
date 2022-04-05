@@ -252,7 +252,7 @@ Resource FileResourceConfigManager::createResource(FileResourceSettings::Ptr& se
     switch (settings->storageType())
     {
         case FileResourceSettings::File:
-            return SingleFileResource::create(settings.data());
+            return SingleFileResource::create(settings);
         case FileResourceSettings::Directory:   // not currently intended to be implemented
         default:
             return Resource::null();

@@ -42,7 +42,7 @@ namespace
 const int SAVE_TIMER_DELAY = 1000;   // 1 second
 }
 
-Resource SingleFileResource::create(FileResourceSettings* settings)
+Resource SingleFileResource::create(FileResourceSettings::Ptr settings)
 {
     if (!settings  ||  !settings->isValid())
         return Resource::null();    // return invalid Resource
@@ -58,7 +58,7 @@ Resource SingleFileResource::create(FileResourceSettings* settings)
 /******************************************************************************
 * Constructor.
 */
-SingleFileResource::SingleFileResource(FileResourceSettings* settings)
+SingleFileResource::SingleFileResource(FileResourceSettings::Ptr settings)
     : FileResource(settings)
     , mSaveTimer(new QTimer(this))
 {
@@ -633,10 +633,10 @@ bool SingleFileResource::writeToFile(const QString& fileName, QString& errorMess
         return false;
     }
     KACalendar::setKAlarmVersion(mCalendar);   // write the application ID into the calendar
-    KCalendarCore::FileStorage* fileStorage = mFileStorage.data();
+    KCalendarCore::FileStorage::Ptr fileStorage = mFileStorage;
     if (!mFileStorage  ||  fileName != mFileStorage->fileName())
-        fileStorage = new KCalendarCore::FileStorage(mCalendar, fileName,
-                                                     new KCalendarCore::ICalFormat());
+        fileStorage = KCalendarCore::FileStorage::Ptr::create(mCalendar, fileName,
+                                                              new KCalendarCore::ICalFormat());
 
     bool success = true;
     if (!fileStorage->save())    // this sets mCalendar->modified to false
@@ -645,9 +645,6 @@ bool SingleFileResource::writeToFile(const QString& fileName, QString& errorMess
         errorMessage = xi18nc("@info", "Could not save file <filename>%1</filename>.", fileName);
         success = false;
     }
-
-    if (fileStorage != mFileStorage.data())
-        delete fileStorage;
 
     return success;
 }

@@ -46,7 +46,7 @@ public:
     /** Constructor.
      *  Initialises the resource and initiates loading its events.
      */
-    explicit FileResource(FileResourceSettings* settings);
+    explicit FileResource(QSharedPointer<FileResourceSettings> settings);
 
     ~FileResource() override;
 
@@ -386,7 +386,7 @@ protected:
      */
     void setStatus(Status);
 
-    FileResourceSettings* mSettings;    // the resource's configuration
+    QSharedPointer<FileResourceSettings> mSettings;    // the resource's configuration
     int                   mVersion {KACalendar::IncompatibleFormat}; // the calendar format version
     KACalendar::Compat    mCompatibility {KACalendar::Incompatible}; // whether resource is in compatible format
 
