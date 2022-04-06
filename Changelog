@@ -4,6 +4,7 @@ KAlarm Change Log
 * Allow calendars and date picker to be shown together in side panel [KDE Bug 440250]
 * Shrink calendar list to remove empty space when too large.
 * When a resource is re-enabled, ensure its alarms are displayed.
+* When default resources are created on first run, set them as standard (default) calendars.
 * Cancel sound file playback if audio alarm edit dialogue is closed after clicking Try.
 * Remove all 'speak' functions if KAlarm is built with text-to-speech disabled.
 * Add option to disable wake-from-suspend alarms if KAlarm is built without KAuth.
