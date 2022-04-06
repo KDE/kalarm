@@ -457,6 +457,12 @@ protected:
     /** To be called when the loaded status of the resource has changed. */
     void setLoaded(bool loaded) const;
 
+    /** Mark the resource as being newly enabled, so that all its events
+     *  will be notified by setLoadedEvents() even if they already exist.
+     *  The flag is reset by setLoadedEvents() on completion.
+     */
+    void setNewlyEnabled(bool enabled = true)  { mNewlyEnabled = enabled; }
+
     /** To be called if the resource has encountered a fatal error.
      *  A fatal error is one that can never be recovered from.
      */
@@ -484,6 +490,7 @@ private:
     bool         mInError {false};       // the resource has a non-fatal error
     mutable bool mLoaded {false};        // the resource has finished loading
     bool         mBeingDeleted {false};  // the resource is currently being deleted
+    bool         mNewlyEnabled {false};  // the resource is being enabled, so notify all events
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(ResourceType::Changes)

@@ -1,7 +1,7 @@
 /*
  *  resourcetype.cpp  -  base class for an alarm calendar resource type
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2019-2021 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2019-2022 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -191,6 +191,7 @@ void ResourceType::setLoadedEvents(QHash<QString, KAEvent>& newEvents)
     // longer exist.
     QStringList    eventsToDelete;
     QList<KAEvent> eventsToNotifyDelete;
+    QList<KAEvent> eventsToNotifyNewlyEnabled;   // only if mNewlyEnabled is true
     for (auto it = mEvents.begin();  it != mEvents.end();  ++it)
     {
         const QString& id = it.key();
@@ -208,6 +209,8 @@ void ResourceType::setLoadedEvents(QHash<QString, KAEvent>& newEvents)
             event = newit.value();   // update existing event
             event.setResourceId(mId);
             newEvents.erase(newit);
+            if (mNewlyEnabled)
+                eventsToNotifyNewlyEnabled << event;
             if (changed  &&  (event.category() & types))
                 Resources::notifyEventUpdated(this, event);
         }
@@ -231,10 +234,11 @@ void ResourceType::setLoadedEvents(QHash<QString, KAEvent>& newEvents)
         else
             newit = newEvents.erase(newit);   // remove disabled event from notification list
     }
-    if (!newEvents.isEmpty())
-        Resources::notifyEventsAdded(this, newEvents.values());
+    if (!newEvents.isEmpty()  ||  !eventsToNotifyNewlyEnabled.isEmpty())
+        Resources::notifyEventsAdded(this, newEvents.values() + eventsToNotifyNewlyEnabled);
 
     newEvents.clear();
+    mNewlyEnabled = false;
     setLoaded(true);
 }
 

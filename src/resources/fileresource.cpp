@@ -352,6 +352,7 @@ bool FileResource::load(bool readThroughCache)
 
     if (!errorMessage.isEmpty())
         Resources::notifyResourceMessage(this, MessageType::Error, xi18nc("@info", "Error loading calendar <resource>%1</resource>.", displayName()), errorMessage);
+    setNewlyEnabled(false);
     return false;
 }
 
@@ -685,6 +686,7 @@ void FileResource::handleSettingsChange(Changes& changes)
             // types, changes are not processed when disabled calendar files
             // are updated. Also, when the calendar is loaded, disabled alarm
             // types are not fully processed by loaded().
+            setNewlyEnabled();   // ensure all events are notified
             load();
             changes |= Loaded;
         }
