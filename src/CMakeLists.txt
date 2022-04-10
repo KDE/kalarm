@@ -270,7 +270,6 @@ target_compile_definitions(kalarm_bin PRIVATE -DVERSION="${KALARM_VERSION}")
 
 target_link_libraries(kalarm_bin
     kalarmprivate
-    KF5::Auth
     KF5::Codecs
     KF5::ConfigCore
     KF5::Completion
@@ -302,6 +301,10 @@ target_link_libraries(kalarm_bin
     KF5::Mime
     KF5::PimCommon
 )
+
+if (ENABLE_WAKE_FROM_SUSPEND)
+    target_link_libraries(kalarm_bin KF5::Auth)
+endif()
 
 if (Qt${QT_MAJOR_VERSION}X11Extras_FOUND)
     target_link_libraries(kalarm_bin Qt${QT_MAJOR_VERSION}::X11Extras ${X11_X11_LIB})
