@@ -569,7 +569,7 @@ void FileResourceMigrator::createCalendar(CalEvent::Type alarmType, const QStrin
     qCDebug(KALARM_LOG) << "FileResourceMigrator: New:" << name << ", type=" << alarmType << ", path=" << url.toString();
     FileResourceSettings::Ptr settings(new FileResourceSettings(
                   FileResourceSettings::File, url, alarmType, name, QColor(), alarmType,
-                  CalEvent::EMPTY, false));
+                  alarmType, false));
     Resource resource = FileResourceConfigManager::addResource(settings);
     if (resource.failed())
     {
