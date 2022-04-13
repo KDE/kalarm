@@ -40,7 +40,7 @@ int main(int argc, char* argv[])
 
     KLocalizedString::setApplicationDomain("kalarm");
     KAboutData aboutData(QStringLiteral(PROGRAM_NAME), i18n(KALARM_NAME),
-                         QStringLiteral(KALARM_FULL_VERSION),
+                         QStringLiteral(KALARM_VERSION " (KDE Gear " RELEASE_SERVICE_VERSION ")"),
                          i18n("Personal alarm message, command and email scheduler by KDE"),
                          KAboutLicense::GPL,
                          ki18n("Copyright © 2001-%1, David Jarvie").subs(QStringLiteral("2022")).toString(), QString());

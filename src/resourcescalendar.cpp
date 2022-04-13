@@ -1,7 +1,7 @@
 /*
  *  resourcescalendar.cpp  -  KAlarm calendar resources access
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2001-2021 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2001-2022 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -36,7 +36,6 @@ void ResourcesCalendar::initialise(const QByteArray& appName, const QByteArray& 
     if (!mInstance)
     {
         KACalendar::setProductId(appName, appVersion);
-        KCalendarCore::CalFormat::setApplication(QString::fromLatin1(appName), QString::fromLatin1(KACalendar::icalProductId()));
         mInstance = new ResourcesCalendar();
     }
 }

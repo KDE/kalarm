@@ -15,6 +15,7 @@
 #include "kalarmcal_debug.h"
 
 #include <KCalendarCore/Alarm>
+#include <KCalendarCore/CalFormat>
 #include <KCalendarCore/MemoryCalendar>
 
 #include <KLocalizedString>
@@ -56,6 +57,7 @@ const QByteArray APPNAME("KALARM");
 void setProductId(const QByteArray& progName, const QByteArray& progVersion)
 {
     Private::mIcalProductId = QByteArray("-//K Desktop Environment//NONSGML " + progName + " " + progVersion + "//EN");
+    KCalendarCore::CalFormat::setApplication(QString::fromLatin1(progName), QString::fromLatin1(Private::mIcalProductId));
 }
 
 QByteArray icalProductId()
