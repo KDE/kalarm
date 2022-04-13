@@ -54,21 +54,21 @@
 #define pclose _pclose
 #endif
 
-static const QLatin1String KMAIL_DBUS_SERVICE("org.kde.kmail");
-//static const QLatin1String KMAIL_DBUS_PATH("/KMail");
-
 namespace HeaderParsing
 {
-bool parseAddress( const char* & scursor, const char * const send,
-                   KMime::Types::Address & result, bool isCRLF=false );
+bool parseAddress(const char* & scursor, const char* const send,
+                  KMime::Types::Address& result, bool isCRLF = false);
 }
 
-static void initHeaders(KMime::Message&, KAMail::JobData&);
-static KMime::Types::Mailbox::List parseAddresses(const QString& text, QString& invalidItem);
-static QString     extractEmailAndNormalize(const QString& emailAddress);
-static QStringList extractEmailsAndNormalize(const QString& emailAddresses);
-static QByteArray autoDetectCharset(const QString& text);
-static const QTextCodec* codecForName(const QByteArray& str);
+namespace
+{
+void                        initHeaders(KMime::Message&, KAMail::JobData&);
+KMime::Types::Mailbox::List parseAddresses(const QString& text, QString& invalidItem);
+QString                     extractEmailAndNormalize(const QString& emailAddress);
+QStringList                 extractEmailsAndNormalize(const QString& emailAddresses);
+QByteArray                  autoDetectCharset(const QString& text);
+const QTextCodec*           codecForName(const QByteArray& str);
+}
 
 QString KAMail::i18n_NeedFromEmailAddress()
 { return i18nc("@info", "A 'From' email address must be configured in order to execute email alarms."); }
@@ -142,8 +142,6 @@ int KAMail::send(JobData& jobdata, QStringList& errmsgs)
 
     KMime::Message::Ptr message = KMime::Message::Ptr(new KMime::Message);
 
-    MailTransport::TransportManager* manager = MailTransport::TransportManager::self();
-    MailTransport::Transport* transport = nullptr;
     if (Preferences::emailClient() == Preferences::sendmail)
     {
         qCDebug(KALARM_LOG) << "KAMail::send: Sending via sendmail";
@@ -208,8 +206,9 @@ int KAMail::send(JobData& jobdata, QStringList& errmsgs)
     else
     {
         qCDebug(KALARM_LOG) << "KAMail::send: Sending via KDE";
+        MailTransport::TransportManager* manager = MailTransport::TransportManager::self();
         const int transportId = identity.transport().isEmpty() ? -1 : identity.transport().toInt();
-        transport = manager->transportById(transportId, true);
+        MailTransport::Transport* transport = manager->transportById(transportId, true);
         if (!transport)
         {
             qCCritical(KALARM_LOG) << "KAMail::send: No mail transport found for identity" << identity.identityName() << "uoid" << identity.uoid();
@@ -291,46 +290,6 @@ void KAMail::slotEmailSent(KJob* job)
         connect(job1, &KJob::result, instance(), &KAMail::slotEmailSent);
         job1->start();
     }
-}
-
-/******************************************************************************
-* Create the headers part of the email.
-*/
-void initHeaders(KMime::Message& message, KAMail::JobData& data)
-{
-    auto date = new KMime::Headers::Date;
-    date->setDateTime(KADateTime::currentDateTime(Preferences::timeSpec()).qDateTime());
-    message.setHeader(date);
-
-    auto from = new KMime::Headers::From;
-    from->fromUnicodeString(data.from, autoDetectCharset(data.from));
-    message.setHeader(from);
-
-    auto to = new KMime::Headers::To;
-    const KCalendarCore::Person::List toList = data.event.emailAddressees();
-    for (const KCalendarCore::Person& who : toList)
-        to->addAddress(who.email().toLatin1(), who.name());
-    message.setHeader(to);
-
-    if (!data.bcc.isEmpty())
-    {
-        auto bcc = new KMime::Headers::Bcc;
-        bcc->fromUnicodeString(data.bcc, autoDetectCharset(data.bcc));
-        message.setHeader(bcc);
-    }
-
-    auto subject = new KMime::Headers::Subject;
-    const QString str = data.event.emailSubject();
-    subject->fromUnicodeString(str, autoDetectCharset(str));
-    message.setHeader(subject);
-
-    auto agent = new KMime::Headers::UserAgent;
-    agent->fromUnicodeString(KAboutData::applicationData().displayName() + QLatin1String("/" KALARM_VERSION), "us-ascii");
-    message.setHeader(agent);
-
-    auto id = new KMime::Headers::MessageID;
-    id->generate(data.from.mid(data.from.indexOf(QLatin1Char('@')) + 1).toLatin1());
-    message.setHeader(id);
 }
 
 /******************************************************************************
@@ -643,6 +602,49 @@ QStringList KAMail::errors(const QString& err, ErrType prefix)
     return QStringList{QStringLiteral("%1:").arg(error1), err};
 }
 
+namespace
+{
+
+/******************************************************************************
+* Create the headers part of the email.
+*/
+void initHeaders(KMime::Message& message, KAMail::JobData& data)
+{
+    auto date = new KMime::Headers::Date;
+    date->setDateTime(KADateTime::currentDateTime(Preferences::timeSpec()).qDateTime());
+    message.setHeader(date);
+
+    auto from = new KMime::Headers::From;
+    from->fromUnicodeString(data.from, autoDetectCharset(data.from));
+    message.setHeader(from);
+
+    auto to = new KMime::Headers::To;
+    const KCalendarCore::Person::List toList = data.event.emailAddressees();
+    for (const KCalendarCore::Person& who : toList)
+        to->addAddress(who.email().toLatin1(), who.name());
+    message.setHeader(to);
+
+    if (!data.bcc.isEmpty())
+    {
+        auto bcc = new KMime::Headers::Bcc;
+        bcc->fromUnicodeString(data.bcc, autoDetectCharset(data.bcc));
+        message.setHeader(bcc);
+    }
+
+    auto subject = new KMime::Headers::Subject;
+    const QString str = data.event.emailSubject();
+    subject->fromUnicodeString(str, autoDetectCharset(str));
+    message.setHeader(subject);
+
+    auto agent = new KMime::Headers::UserAgent;
+    agent->fromUnicodeString(KAboutData::applicationData().displayName() + QLatin1String("/" KALARM_VERSION), "us-ascii");
+    message.setHeader(agent);
+
+    auto id = new KMime::Headers::MessageID;
+    id->generate(data.from.mid(data.from.indexOf(QLatin1Char('@')) + 1).toLatin1());
+    message.setHeader(id);
+}
+
 /******************************************************************************
 * Extract the pure addresses from given email addresses.
 */
@@ -822,6 +824,8 @@ KMime::Types::Mailbox::List parseAddresses(const QString& text, QString& invalid
     return list;
 }
 
+} // namespace
+
 /*=============================================================================
 =  HeaderParsing :  modified and additional functions.
 =  The following functions are modified from, or additional to, those in
@@ -839,37 +843,40 @@ using namespace KMime::HeaderParsing;
 * New function.
 * Allow a local user name to be specified as an email address.
 */
-bool parseUserName( const char* & scursor, const char * const send,
-                    QString & result, bool isCRLF ) {
+bool parseUserName(const char* & scursor, const char* const send, QString& result, bool isCRLF)
+{
+    QByteArray atom;
 
-  QByteArray atom;
+    if (scursor != send)
+    {
+        // first, eat any whitespace
+        eatCFWS(scursor, send, isCRLF);
 
-  if ( scursor != send ) {
-    // first, eat any whitespace
-    eatCFWS( scursor, send, isCRLF );
+        char ch = *scursor++;
+        switch (ch)
+        {
+            case '.': // dot
+            case '@':
+            case '"': // quoted-string
+                return false;
 
-    char ch = *scursor++;
-    switch ( ch ) {
-    case '.': // dot
-    case '@':
-    case '"': // quoted-string
-      return false;
-
-    default: // atom
-      scursor--; // re-set scursor to point to ch again
-      if ( parseAtom( scursor, send, atom, false /* no 8bit */ ) ) {
-          //TODO FIXME on windows
+            default: // atom
+                scursor--; // re-set scursor to point to ch again
+                if (parseAtom(scursor, send, atom, false /* no 8bit */))
+                {
+                    //TODO FIXME on windows
 #ifndef WIN32
-        if (getpwnam(atom.constData())) {
-          result = QLatin1String(atom);
-          return true;
-        }
+                    if (getpwnam(atom.constData()))
+                    {
+                        result = QLatin1String(atom);
+                        return true;
+                    }
 #endif
-      }
-      return false; // parseAtom can only fail if the first char is non-atext.
+                }
+                return false; // parseAtom can only fail if the first char is non-atext.
+        }
     }
-  }
-  return false;
+    return false;
 }
 
 /******************************************************************************
@@ -877,52 +884,54 @@ bool parseUserName( const char* & scursor, const char * const send,
 * Allow a local user name to be specified as an email address, and reinstate
 * the original scursor on error return.
 */
-bool parseAddress( const char* & scursor, const char * const send,
-                   Address & result, bool isCRLF ) {
-  // address       := mailbox / group
+bool parseAddress(const char* & scursor, const char* const send, Address& result, bool isCRLF)
+{
+    // address       := mailbox / group
 
-  eatCFWS( scursor, send, isCRLF );
-  if ( scursor == send )
-    return false;
+    eatCFWS(scursor, send, isCRLF);
+    if (scursor == send)
+        return false;
 
-  // first try if it's a single mailbox:
-  Mailbox maybeMailbox;
-  const char * oldscursor = scursor;
-  if ( parseMailbox( scursor, send, maybeMailbox, isCRLF ) ) {
-    // yes, it is:
-    result.displayName.clear();
-    result.mailboxList.append( maybeMailbox );
+    // first try if it's a single mailbox:
+    Mailbox maybeMailbox;
+    const char * oldscursor = scursor;
+    if (parseMailbox(scursor, send, maybeMailbox, isCRLF))
+    {
+        // yes, it is:
+        result.displayName.clear();
+        result.mailboxList.append(maybeMailbox);
+        return true;
+    }
+    scursor = oldscursor;
+
+    // KAlarm: Allow a local user name to be specified
+    // no, it's not a single mailbox. Try if it's a local user name:
+    QString maybeUserName;
+    if (parseUserName(scursor, send, maybeUserName, isCRLF))
+    {
+        // yes, it is:
+        maybeMailbox.setName(QString());
+        AddrSpec addrSpec;
+        addrSpec.localPart = maybeUserName;
+        addrSpec.domain.clear();
+        maybeMailbox.setAddress(addrSpec);
+        result.displayName.clear();
+        result.mailboxList.append(maybeMailbox);
+        return true;
+    }
+    scursor = oldscursor;
+
+    Address maybeAddress;
+
+    // no, it's not a single mailbox. Try if it's a group:
+    if (!parseGroup(scursor, send, maybeAddress, isCRLF))
+    {
+        scursor = oldscursor;   // KAlarm: reinstate original scursor on error return
+        return false;
+    }
+
+    result = maybeAddress;
     return true;
-  }
-  scursor = oldscursor;
-
-  // KAlarm: Allow a local user name to be specified
-  // no, it's not a single mailbox. Try if it's a local user name:
-  QString maybeUserName;
-  if ( parseUserName( scursor, send, maybeUserName, isCRLF ) ) {
-    // yes, it is:
-    maybeMailbox.setName( QString() );
-    AddrSpec addrSpec;
-    addrSpec.localPart = maybeUserName;
-    addrSpec.domain.clear();
-    maybeMailbox.setAddress( addrSpec );
-    result.displayName.clear();
-    result.mailboxList.append( maybeMailbox );
-    return true;
-  }
-  scursor = oldscursor;
-
-  Address maybeAddress;
-
-  // no, it's not a single mailbox. Try if it's a group:
-  if ( !parseGroup( scursor, send, maybeAddress, isCRLF ) )
-  {
-    scursor = oldscursor;   // KAlarm: reinstate original scursor on error return
-    return false;
-  }
-
-  result = maybeAddress;
-  return true;
 }
 
 } // namespace HeaderParsing
