@@ -57,7 +57,7 @@ void Label::setBuddy(QWidget* bud)
         if (!mFocusWidget)
             mFocusWidget = new LabelFocusWidget(this);
         QLabel::setBuddy(mFocusWidget);
-        mRadioButton = (QRadioButton*)bud;
+        mRadioButton = static_cast<QRadioButton*>(bud);
         connect(mRadioButton, &QRadioButton::destroyed, this, &Label::buddyDead);
     }
 }
@@ -96,7 +96,7 @@ LabelFocusWidget::LabelFocusWidget(QWidget* parent)
 
 void LabelFocusWidget::focusInEvent(QFocusEvent*)
 {
-    auto* parent = (Label*)parentWidget();
+    auto* parent = static_cast<Label*>(parentWidget());
     parent->activated();
 
 }

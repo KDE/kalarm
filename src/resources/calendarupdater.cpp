@@ -61,7 +61,7 @@ void CalendarUpdater::waitForCompletion()
                 delete mInstances.at(i);    // the destructor removes the instance from mInstances
 
         QCoreApplication::processEvents();
-        if (!mInstances.isEmpty())
+        if (!mInstances.isEmpty())     //cppcheck-suppress knownConditionTrueFalse; 'delete' removes from mInstances
             QThread::msleep(100);
     }
 }

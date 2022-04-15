@@ -386,7 +386,7 @@ bool SpinBox2::eventFilter(QObject* obj, QEvent* e)
                 break;
             case QEvent::MouseButtonRelease:
             {
-                auto* me = (QMouseEvent*)e;
+                auto* me = static_cast<QMouseEvent*>(e);
                 if (me->button() == Qt::LeftButton)
                     paintTimer();   // cause the mirror widget buttons to be updated
                 break;
