@@ -1049,11 +1049,11 @@ EmailPrefTab::EmailPrefTab(StackedScrollGroup* scrollGroup)
     mFromAddrButton->setFocusWidget(mEmailAddress);
     grid->addWidget(mEmailAddress, 1, 2);
 
-    // 'From' email address to be taken from System Settings
-    mFromCCentreButton = new RadioButton(xi18nc("@option:radio", "Use default address from <application>KMail</application> or System Settings"), group);
+    // 'From' email address to be taken from KMail
+    mFromCCentreButton = new RadioButton(xi18nc("@option:radio", "Use default address from <application>KMail</application>"), group);
     mFromAddressGroup->addButton(mFromCCentreButton, Preferences::MAIL_FROM_SYS_SETTINGS);
     mFromCCentreButton->setWhatsThis(
-          xi18nc("@info:whatsthis", "Check to use the default email address set in <application>KMail</application> or KDE System Settings, to identify you as the sender when sending email alarms."));
+          xi18nc("@info:whatsthis", "Check to use the default email address set in <application>KMail</application>, to identify you as the sender when sending email alarms."));
     grid->addWidget(mFromCCentreButton, 2, 1, 1, 2, Qt::AlignLeft);
 
     // 'From' email address to be picked from KMail's identities when the email alarm is configured
@@ -1085,11 +1085,11 @@ EmailPrefTab::EmailPrefTab(StackedScrollGroup* scrollGroup)
     mBccAddrButton->setFocusWidget(mEmailBccAddress);
     grid->addWidget(mEmailBccAddress, 5, 2);
 
-    // 'Bcc' email address to be taken from System Settings
-    mBccCCentreButton = new RadioButton(xi18nc("@option:radio", "Use default address from <application>KMail</application> or System Settings"), group);
+    // 'Bcc' email address to be taken from KMail
+    mBccCCentreButton = new RadioButton(xi18nc("@option:radio", "Use default address from <application>KMail</application>"), group);
     mBccAddressGroup->addButton(mBccCCentreButton, Preferences::MAIL_FROM_SYS_SETTINGS);
     mBccCCentreButton->setWhatsThis(
-          xi18nc("@info:whatsthis", "Check to use the default email address set in <application>KMail</application> or KDE System Settings, for blind copying email alarms to yourself."));
+          xi18nc("@info:whatsthis", "Check to use the default email address set in <application>KMail</application>, for blind copying email alarms to yourself."));
     grid->addWidget(mBccCCentreButton, 6, 1, 1, 2, Qt::AlignLeft);
 
     topLayout()->addStretch();    // top adjust the widgets
@@ -1184,7 +1184,7 @@ QString EmailPrefTab::validateAddr(ButtonGroup* group, QLineEdit* addr, const QS
         case Preferences::MAIL_FROM_SYS_SETTINGS:
             if (!KAMail::controlCentreAddress().isEmpty())
                 return {};
-            errmsg = xi18nc("@info", "No default email address is currently set in <application>KMail</application> or KDE System Settings. %1", errmsg);
+            errmsg = xi18nc("@info", "No default email address is currently set in <application>KMail</application>. %1", errmsg);
             break;
         case Preferences::MAIL_FROM_KMAIL:
             if (Identities::identitiesExist())

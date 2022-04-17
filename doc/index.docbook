@@ -39,8 +39,8 @@
 
 <!-- Don't change format of date and version of the documentation -->
 
-<date>2022-3-10</date>
-<releaseinfo>3.4.0 (KDE Gear 22.04)</releaseinfo>
+<date>2022-4-17</date>
+<releaseinfo>3.8.0 (KDE Gear 22.08)</releaseinfo>
 
 <abstract>
 <para>&kalarm; is a personal alarm message, command and email scheduler by &kde;.</para>
@@ -1548,7 +1548,7 @@ this option inapplicable.</para>
 copy of the email to yourself when the alarm is triggered. The email
 address to which the copy will be sent may be set in the
 <link linkend="preferences-email">Configuration dialog</link>, the
-default being your email address set in &kmail; or the &systemsettings;.</para>
+default being your email address set in &kmail;.</para>
 </listitem>
 </itemizedlist>
 
@@ -2144,7 +2144,7 @@ displayed. (For reminder messages, the date/time shown is that for the
 main alarm or its recurrence, not the reminder message time, and a
 “Reminder” heading is shown.)</para>
 
-<para>The notification automatically closes after a  short time-out.
+<para>The notification automatically closes after a short time-out.
 (Note that the time-out is common to all applications; it can be
 changed in &systemsettings;.) After a notification times out, it can
 still be seen in the notification history until you remove it or
@@ -2845,9 +2845,8 @@ email alarms:</para>
 address.</para>
 </listitem>
 
-<listitem><para>Select <guilabel>Use default address from KMail or System
-Settings</guilabel> to use your default email address which is configured
-in &kmail; or the &systemsettings;.</para>
+<listitem><para>Select <guilabel>Use default address from KMail</guilabel>
+to use your default email address which is configured in &kmail;.</para>
 </listitem>
 
 <listitem><para>Select <guilabel>Use &kmail; identities</guilabel> to
@@ -2871,9 +2870,8 @@ computer which &kalarm; runs on, you could simply enter your user
 login name here.</para>
 </listitem>
 
-<listitem><para>Select <guilabel>Use default address from KMail or System
-Settings</guilabel> to use your default email address which is configured
-in &kmail; or the &systemsettings;.</para>
+<listitem><para>Select <guilabel>Use default address from KMail</guilabel>
+to use your default email address which is configured in &kmail;.</para>
 </listitem>
 </itemizedlist>
 </listitem>
