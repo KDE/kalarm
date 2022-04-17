@@ -1,5 +1,8 @@
 KAlarm Change Log
 
+=== Version 3.4.1 (KDE Gear 22.04.1) --- 18 April 2022 ===
+* Fix checkboxes being disabled in Preferences dialogue.
+
 === Version 3.4.0 (KDE Gear 22.04) --- 6 April 2022 ===
 * Allow calendars and date picker to be shown together in side panel [KDE Bug 440250]
 * Shrink calendar list to remove empty space when too large.

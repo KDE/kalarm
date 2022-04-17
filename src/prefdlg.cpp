@@ -1012,7 +1012,7 @@ EmailPrefTab::EmailPrefTab(StackedScrollGroup* scrollGroup)
     mEmailCopyToKMail = new QCheckBox(xi18nc("@option:check", "Copy sent emails into <application>KMail</application>'s <resource>%1</resource> folder", KAMail::i18n_sent_mail()));
     mEmailCopyToKMail->setWhatsThis(xi18nc("@info:whatsthis", "After sending an email, store a copy in <application>KMail</application>'s <resource>%1</resource> folder", KAMail::i18n_sent_mail()));
     box->addWidget(mEmailCopyToKMail);
-    box->setStretchFactor(new QWidget(widget), 1);    // left adjust the controls
+    box->addStretch();    // left adjust the controls
 
     widget = new QWidget;   // this is to allow left adjustment
     topLayout()->addWidget(widget);
@@ -1022,7 +1022,7 @@ EmailPrefTab::EmailPrefTab(StackedScrollGroup* scrollGroup)
           i18nc("@info:whatsthis", "Display a notification message whenever an email alarm has queued an email for sending to a remote system. "
                "This could be useful if, for example, you have a dial-up connection, so that you can then ensure that the email is actually transmitted."));
     box->addWidget(mEmailQueuedNotify);
-    box->setStretchFactor(new QWidget(widget), 1);    // left adjust the controls
+    box->addStretch();    // left adjust the controls
 
     // Your Email Address group box
     QGroupBox* group = new QGroupBox(i18nc("@title:group", "Your Email Address"));
@@ -1685,7 +1685,7 @@ ViewPrefTab::ViewPrefTab(StackedScrollGroup* scrollGroup)
         mShowInSystemTrayCheck = new QCheckBox(showInSysTrayText);
         mShowInSystemTrayCheck->setWhatsThis(showInSysTrayWhatsThis);
         box->addWidget(mShowInSystemTrayCheck);
-        box->setStretchFactor(new QWidget(widget), 1);    // left adjust the controls
+        box->addStretch();    // left adjust the controls
     }
     else
     {
@@ -1858,7 +1858,7 @@ ViewPrefTab::ViewPrefTab(StackedScrollGroup* scrollGroup)
     box->addWidget(mWindowButtonDelay);
     widget->setWhatsThis(i18nc("@info:whatsthis",
                             "Enter how long its buttons should remain disabled after the alarm message window is shown."));
-    box->setStretchFactor(new QWidget(widget), 1);    // left adjust the controls
+    box->addStretch();    // left adjust the controls
     grid->addWidget(widget, 2, 1, Qt::AlignLeft);
 
     if (KWindowSystem::isPlatformX11())
