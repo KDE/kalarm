@@ -1178,18 +1178,18 @@ QString EmailPrefTab::validate()
 
 QString EmailPrefTab::validateAddr(ButtonGroup* group, QLineEdit* addr, const QString& msg)
 {
-    QString errmsg = xi18nc("@info", "<para>%1</para><para>Are you sure you want to save your changes?</para>", msg);
+    QString errmsg = i18nc("@info", "Are you sure you want to save your changes?");
     switch (group->selectedId())
     {
         case Preferences::MAIL_FROM_SYS_SETTINGS:
             if (!KAMail::controlCentreAddress().isEmpty())
                 return {};
-            errmsg = xi18nc("@info", "No default email address is currently set in <application>KMail</application>. %1", errmsg);
+            errmsg = xi18nc("@info", "<para>No default email address is currently set in <application>KMail</application>.</para><para>%1</para>", errmsg);
             break;
         case Preferences::MAIL_FROM_KMAIL:
             if (Identities::identitiesExist())
                 return {};
-            errmsg = xi18nc("@info", "No <application>KMail</application> identities currently exist. %1", errmsg);
+            errmsg = xi18nc("@info", "<para>No <application>KMail</application> identities currently exist.</para><para>%1</para>", errmsg);
             break;
         case Preferences::MAIL_FROM_ADDR:
             if (!addr->text().trimmed().isEmpty())
