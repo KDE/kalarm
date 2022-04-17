@@ -126,7 +126,7 @@ int KAMail::send(JobData& jobdata, QStringList& errmsgs)
                 break;
             case Preferences::MAIL_FROM_SYS_SETTINGS:
                 errmsgs = errors(xi18nc("@info", "<para>No 'From' email address is configured.</para>"
-                                                "<para>Please set a default address in <application>KMail</application> or KDE System Settings or in the <application>KAlarm</application> Configuration dialog.</para>"));
+                                                "<para>Please set a default address in <application>KMail</application> or in the <application>KAlarm</application> Configuration dialog.</para>"));
                 break;
             case Preferences::MAIL_FROM_ADDR:
             default:
@@ -436,7 +436,7 @@ void KAMail::notifyQueued(const KAEvent& event)
 }
 
 /******************************************************************************
-* Fetch the user's email address configured in KMail or KDE System Settings.
+* Fetch the user's email address configured in KMail.
 */
 QString KAMail::controlCentreAddress()
 {
