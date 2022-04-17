@@ -1184,12 +1184,12 @@ QString EmailPrefTab::validateAddr(ButtonGroup* group, QLineEdit* addr, const QS
         case Preferences::MAIL_FROM_SYS_SETTINGS:
             if (!KAMail::controlCentreAddress().isEmpty())
                 return {};
-            errmsg = xi18nc("@info", "<para>No default email address is currently set in <application>KMail</application>.</para><para>%1</para>", errmsg);
+            errmsg = xi18nc("@info", "<para>No default email address is currently set in <application>KMail</application>.</para><para>%1</para><para>%2</para>", msg, errmsg);
             break;
         case Preferences::MAIL_FROM_KMAIL:
             if (Identities::identitiesExist())
                 return {};
-            errmsg = xi18nc("@info", "<para>No <application>KMail</application> identities currently exist.</para><para>%1</para>", errmsg);
+            errmsg = xi18nc("@info", "<para>No <application>KMail</application> identities currently exist.</para><para>%1</para><para>%2</para>", msg, errmsg);
             break;
         case Preferences::MAIL_FROM_ADDR:
             if (!addr->text().trimmed().isEmpty())
