@@ -99,8 +99,6 @@ void                outputAlarmWarnings(QWidget* parent, const KAEvent* = nullpt
 void                refreshAlarms();
 void                refreshAlarmsIfQueued();    // must only be called from KAlarmApp::processQueue()
 
-QString             runKMail();
-
 QStringList         dontShowErrors(const EventId&);
 bool                dontShowErrors(const EventId&, const QString& tag);
 void                setDontShowErrors(const EventId&, const QStringList& tags = QStringList());

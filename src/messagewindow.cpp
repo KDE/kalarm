@@ -1096,12 +1096,6 @@ void MessageWindow::slotShowKMailMessage()
     qCDebug(KALARM_LOG) << "MessageWindow::slotShowKMailMessage";
     if (mEmailId() < 0)
         return;
-    const QString err = KAlarm::runKMail();
-    if (!err.isNull())
-    {
-        KAMessageBox::sorry(this, err);
-        return;
-    }
     org::kde::kmail::kmail kmail(KMAIL_DBUS_SERVICE, KMAIL_DBUS_PATH, QDBusConnection::sessionBus());
     // Display the message contents
     QDBusReply<bool> reply = kmail.showMail(mEmailId());

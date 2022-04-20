@@ -115,15 +115,11 @@ struct UpdateStatusData
     }
 };
 
-const QLatin1String KMAIL_DBUS_SERVICE("org.kde.kmail");
-//const QLatin1String KMAIL_DBUS_IFACE("org.kde.kmail.kmail");
-//const QLatin1String KMAIL_DBUS_WINDOW_PATH("/kmail/kmail_mainwindow_1");
 const QLatin1String KORG_DBUS_SERVICE("org.kde.korganizer");
 const QLatin1String KORG_DBUS_IFACE("org.kde.korganizer.Korganizer");
 // D-Bus object path of KOrganizer's notification interface
 #define       KORG_DBUS_PATH            "/Korganizer"
 #define       KORG_DBUS_LOAD_PATH       "/korganizer_PimApplication"
-//const QLatin1String KORG_DBUS_WINDOW_PATH("/korganizer/MainWindow_1");
 const QLatin1String KORG_MIME_TYPE("application/x-vnd.akonadi.calendar.event");
 const QLatin1String KORGANIZER_UID("korg-");
 
@@ -1662,28 +1658,6 @@ void refreshAlarmsIfQueued()
         MainWindow::refresh();
         refreshAlarmsQueued = false;
     }
-}
-
-/******************************************************************************
-* Start KMail if it isn't already running, optionally minimised.
-* Reply = reason for failure to run KMail
-*       = null string if success.
-*/
-QString runKMail()
-{
-    const QDBusReply<bool> reply = QDBusConnection::sessionBus().interface()->isServiceRegistered(KMAIL_DBUS_SERVICE);
-    if (!reply.isValid()  ||  !reply.value())
-    {
-        // Program is not already running, so start it
-        const QDBusReply<void> startReply = QDBusConnection::sessionBus().interface()->startService(KMAIL_DBUS_SERVICE);
-        if (!startReply.isValid())
-        {
-            const QString errmsg = startReply.error().message();
-            qCCritical(KALARM_LOG) << "Couldn't start KMail (" << errmsg << ")";
-            return xi18nc("@info", "Unable to start <application>KMail</application><nl/>(<message>%1</message>)", errmsg);
-        }
-    }
-    return {};
 }
 
 /******************************************************************************
