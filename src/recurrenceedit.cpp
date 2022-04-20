@@ -1071,8 +1071,8 @@ Rule::Rule(const QString& freqText, const QString& freqWhatsThis, bool time, boo
         mSpinBox = mTimeSpinBox = new TimeSpinBox(1, 5999, box);
         mTimeSpinBox->setReadOnly(readOnly);
         boxLayout->addWidget(mSpinBox, 0, Qt::AlignLeft);
-        connect(mTimeSpinBox, &SpinBox2::valueChanged, this, &Rule::frequencyChanged);
-        connect(mTimeSpinBox, &SpinBox2::valueChanged, this, &Rule::changed);
+        connect(mTimeSpinBox, &TimeSpinBox::valueChanged, this, &Rule::frequencyChanged);
+        connect(mTimeSpinBox, &TimeSpinBox::valueChanged, this, &Rule::changed);
     }
     else
     {
