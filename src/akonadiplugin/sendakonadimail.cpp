@@ -9,7 +9,6 @@
 #include "sendakonadimail.h"
 
 #include "mailsend.h"
-#include "kalarmapp.h"
 #include "akonadiplugin_debug.h"
 
 #include <KIdentityManagement/Identity>
