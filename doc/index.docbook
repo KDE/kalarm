@@ -1086,8 +1086,9 @@ context menu.</para>
 <sect2 id="birthdays">
 <title>Importing Birthdays from &kaddressbook;</title>
 
-<note>This function is only available if &kalarm;'s
-<link linkend="akonadi-plugin">Akonadi plugin</link> is installed.
+<note><para>This function is only available if &kalarm;'s
+<link linkend="akonadi-plugin">Akonadi plugin</link> is
+installed.</para>
 </note>
 
 <para>You can set up display alarms for birthdays stored in
@@ -4970,12 +4971,13 @@ information).</para></note>
 
 <itemizedlist>
 <listitem>
-<para><filename>kalarmrc</filename> holds your &kalarm; preferences.</para>
+<simpara><filename>kalarmrc</filename> holds your &kalarm;
+preferences.</simpara>
 </listitem>
 
 <listitem>
-<para><filename>kalarmresources</filename> holds the list of alarm
-calendars currently used by &kalarm;.</para>
+<simpara><filename>kalarmresources</filename> holds the list of alarm
+calendars currently used by &kalarm;.</simpara>
 </listitem>
 </itemizedlist>
 </answer>
@@ -4993,25 +4995,25 @@ alarm calendars in the folder
 
 <itemizedlist>
 <listitem>
-<para><filename>kalarm/calendar.ics</filename>, which holds active
-alarms.</para>
+<simpara><filename>kalarm/calendar.ics</filename>, which holds active
+alarms.</simpara>
 </listitem>
 
 <listitem>
-<para><filename>kalarm/expired.ics</filename>, which holds archived
-alarms.</para>
+<simpara><filename>kalarm/expired.ics</filename>, which holds archived
+alarms.</simpara>
 </listitem>
 
 <listitem>
-<para><filename>kalarm/template.ics</filename>, which holds alarm
-templates.</para>
+<simpara><filename>kalarm/template.ics</filename>, which holds alarm
+templates.</simpara>
 </listitem>
 
 <listitem>
-<para><filename>kalarm/displaying.ics</filename>, which is a special
+<simpara><filename>kalarm/displaying.ics</filename>, which is a special
 calendar file to hold details of alarms currently being displayed,
 which allows &kalarm;, when it is restarted, to redisplay alarms which
-were being displayed when it last stopped.</para>
+were being displayed when it last stopped.</simpara>
 </listitem>
 </itemizedlist>
 
@@ -5051,22 +5053,22 @@ If this plugin is not installed, &kalarm; will lack the following
 features:
 <itemizedlist>
 <listitem>
-Sending emails via &kmail;, leaving &Sendmail; as the only option to
-send emails (see
-<link linkend="preferences-email">Email preferences</link>).
+<simpara>Sending emails via &kmail;, leaving &Sendmail; as the only
+optoin to send emails (see
+<link linkend="preferences-email">Email preferences</link>).</simpara>
 </listitem>
 <listitem>
-Drag and drop of emails.
+<simpara>Drag and drop of emails.</simpara>
 </listitem>
 <listitem>
-Selection of email addresses from &kaddressbook;.
+<simpara>Selection of email addresses from &kaddressbook;.</simpara>
 </listitem>
 <listitem>
-Import of birthdays from &kaddressbook;.
+<simpara>Import of birthdays from &kaddressbook;.</simpara>
 </listitem>
 <listitem>
-Migration of &akonadi; alarm calendar resources on the first run of a
-new version of &kalarm;.
+<simpara>Migration of &akonadi; alarm calendar resources on the first
+run of a new version of &kalarm;.</simpara>
 </listitem>
 </itemizedlist>
 </para>
