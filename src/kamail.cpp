@@ -12,18 +12,17 @@
 #include "functions.h"
 #include "kalarmapp.h"
 #include "mainwindow.h"
+#include "pluginmanager.h"
 #include "preferences.h"
 #include "lib/messagebox.h"
 #include "kalarmcalendar/identities.h"
+#include "akonadiplugin/akonadiplugin.h"
 #include "kalarm_debug.h"
 
 #include "kmailinterface.h"
 
 #include <KIdentityManagement/IdentityManager>
 #include <KIdentityManagement/Identity>
-#include <MailTransport/TransportManager>
-#include <MailTransport/Transport>
-#include <MailTransportAkonadi/MessageQueueJob>
 #include <KMime/HeaderParsing>
 #include <KMime/Headers>
 #include <KMime/Message>
@@ -54,6 +53,8 @@
 #define pclose _pclose
 #endif
 
+using namespace MailSend;
+
 namespace HeaderParsing
 {
 bool parseAddress(const char* & scursor, const char* const send,
@@ -62,10 +63,9 @@ bool parseAddress(const char* & scursor, const char* const send,
 
 namespace
 {
-void                        initHeaders(KMime::Message&, KAMail::JobData&);
+void                        initHeaders(KMime::Message&, JobData&);
 KMime::Types::Mailbox::List parseAddresses(const QString& text, QString& invalidItem);
 QString                     extractEmailAndNormalize(const QString& emailAddress);
-QStringList                 extractEmailsAndNormalize(const QString& emailAddresses);
 QByteArray                  autoDetectCharset(const QString& text);
 const QTextCodec*           codecForName(const QByteArray& str);
 }
@@ -76,9 +76,8 @@ QString KAMail::i18n_NeedFromEmailAddress()
 QString KAMail::i18n_sent_mail()
 { return i18nc("@info KMail folder name: this should be translated the same as in kmail", "sent-mail"); }
 
-KAMail*                                 KAMail::mInstance = nullptr;   // used only to enable signals/slots to work
-QQueue<MailTransport::MessageQueueJob*> KAMail::mJobs;
-QQueue<KAMail::JobData>                 KAMail::mJobData;
+KAMail*        KAMail::mInstance = nullptr;   // used only to enable signals/slots to work
+AkonadiPlugin* KAMail::mAkonadiPlugin = nullptr;
 
 KAMail* KAMail::instance()
 {
@@ -203,20 +202,9 @@ int KAMail::send(JobData& jobdata, QStringList& errmsgs)
             notifyQueued(jobdata.event);
         return 1;
     }
-    else
+    else if (PluginManager::instance()->akonadiPlugin())
     {
         qCDebug(KALARM_LOG) << "KAMail::send: Sending via KDE";
-        MailTransport::TransportManager* manager = MailTransport::TransportManager::self();
-        const int transportId = identity.transport().isEmpty() ? -1 : identity.transport().toInt();
-        MailTransport::Transport* transport = manager->transportById(transportId, true);
-        if (!transport)
-        {
-            qCCritical(KALARM_LOG) << "KAMail::send: No mail transport found for identity" << identity.identityName() << "uoid" << identity.uoid();
-            errmsgs = errors(xi18nc("@info", "No mail transport configured for email identity <resource>%1</resource>", identity.identityName()));
-            return -1;
-        }
-        qCDebug(KALARM_LOG) << "KAMail::send: Using transport" << transport->name() << ", id=" << transport->id();
-
         initHeaders(*message, jobdata);
         err = appendBodyAttachments(*message, jobdata);
         if (!err.isNull())
@@ -226,70 +214,32 @@ int KAMail::send(JobData& jobdata, QStringList& errmsgs)
             return -1;
         }
 
-        auto mailjob = new MailTransport::MessageQueueJob(qApp);
-        mailjob->setMessage(message);
-        mailjob->transportAttribute().setTransportId(transport->id());
-        // MessageQueueJob email addresses must be pure, i.e. without display name. Note
-        // that display names are included in the actual headers set up by initHeaders().
-        mailjob->addressAttribute().setFrom(extractEmailAndNormalize(jobdata.from));
-        mailjob->addressAttribute().setTo(extractEmailsAndNormalize(jobdata.event.emailAddresses(QStringLiteral(","))));
-        if (!jobdata.bcc.isEmpty())
-            mailjob->addressAttribute().setBcc(extractEmailsAndNormalize(jobdata.bcc));
-        MailTransport::SentBehaviourAttribute::SentBehaviour sentAction =
-                             (Preferences::emailClient() == Preferences::kmail || Preferences::emailCopyToKMail())
-                             ? MailTransport::SentBehaviourAttribute::MoveToDefaultSentCollection : MailTransport::SentBehaviourAttribute::Delete;
-        mailjob->sentBehaviourAttribute().setSentBehaviour(sentAction);
-        mJobs.enqueue(mailjob);
-        mJobData.enqueue(jobdata);
-        if (mJobs.count() == 1)
+        if (!mAkonadiPlugin)
         {
-            // There are no jobs already active or queued, so send now
-            connect(mailjob, &KJob::result, instance(), &KAMail::slotEmailSent);
-            mailjob->start();
+            mAkonadiPlugin = PluginManager::instance()->akonadiPlugin();
+            connect(mAkonadiPlugin, &AkonadiPlugin::emailSent, instance(), &KAMail::akonadiEmailSent);
+            connect(mAkonadiPlugin, &AkonadiPlugin::emailQueued, instance(), [](const KAEvent& e) { notifyQueued(e); });
+        }
+        const bool keepEmail = (Preferences::emailClient() == Preferences::kmail || Preferences::emailCopyToKMail());
+        err = mAkonadiPlugin->sendMail(message, identity, extractEmailAndNormalize(jobdata.from), keepEmail, jobdata);
+        if (!err.isEmpty())
+        {
+            errmsgs = errors(err);
+            return -1;
         }
     }
     return 0;
 }
 
 /******************************************************************************
-* Called when sending an email is complete.
+* Called when sending an email via Akonadi is complete.
 */
-void KAMail::slotEmailSent(KJob* job)
+void KAMail::akonadiEmailSent(const JobData& jobdata, const QStringList& errmsgs, bool sendError)
 {
-    bool copyerr = false;
-    QStringList errmsgs;
-    if (job->error())
-    {
-        qCCritical(KALARM_LOG) << "KAMail::slotEmailSent: Failed:" << job->errorString();
-        errmsgs = errors(job->errorString(), SEND_ERROR);
-    }
-    JobData jobdata;
-    if (mJobs.isEmpty()  ||  mJobData.isEmpty()  ||  job != std::as_const(mJobs).head())
-    {
-        // The queue has been corrupted, so we can't locate the job's data
-        qCCritical(KALARM_LOG) << "KAMail::slotEmailSent: Wrong job at head of queue: wiping queue";
-        mJobs.clear();
-        mJobData.clear();
-        if (!errmsgs.isEmpty())
-            theApp()->emailSent(jobdata, errmsgs);
-        errmsgs.clear();
-        errmsgs += i18nc("@info", "Emails may not have been sent");
-        errmsgs += i18nc("@info", "Program error");
-        theApp()->emailSent(jobdata, errmsgs);
-        return;
-    }
-    mJobs.dequeue();
-    jobdata = mJobData.dequeue();
-    if (jobdata.allowNotify)
-        notifyQueued(jobdata.event);
-    theApp()->emailSent(jobdata, errmsgs, copyerr);
-    if (!mJobs.isEmpty())
-    {
-        // Send the next queued email
-        auto job1 = mJobs.head();
-        connect(job1, &KJob::result, instance(), &KAMail::slotEmailSent);
-        job1->start();
-    }
+    QStringList messages = errmsgs;
+    if (!errmsgs.isEmpty()  &&  sendError)
+        messages = errors(errmsgs.at(0), SEND_ERROR);
+    theApp()->emailSent(jobdata, messages);
 }
 
 /******************************************************************************
@@ -608,7 +558,7 @@ namespace
 /******************************************************************************
 * Create the headers part of the email.
 */
-void initHeaders(KMime::Message& message, KAMail::JobData& data)
+void initHeaders(KMime::Message& message, JobData& data)
 {
     auto date = new KMime::Headers::Date;
     date->setDateTime(KADateTime::currentDateTime(Preferences::timeSpec()).qDateTime());
@@ -651,18 +601,6 @@ void initHeaders(KMime::Message& message, KAMail::JobData& data)
 QString extractEmailAndNormalize(const QString& emailAddress)
 {
     return KEmailAddress::extractEmailAddress(KEmailAddress::normalizeAddressesAndEncodeIdn(emailAddress));
-}
-
-QStringList extractEmailsAndNormalize(const QString& emailAddresses)
-{
-    const QStringList splitEmails(KEmailAddress::splitAddressList(emailAddresses));
-    QStringList normalizedEmail;
-    normalizedEmail.reserve(splitEmails.count());
-    for (const QString& email : splitEmails)
-    {
-        normalizedEmail << KEmailAddress::extractEmailAddress(KEmailAddress::normalizeAddressesAndEncodeIdn(email));
-    }
-    return normalizedEmail;
 }
 
 //-----------------------------------------------------------------------------

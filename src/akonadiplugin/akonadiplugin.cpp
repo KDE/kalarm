@@ -11,6 +11,7 @@
 #include "akonadicollectionsearch.h"
 #include "akonadiresourcemigrator.h"
 #include "birthdaymodel.h"
+#include "sendakonadimail.h"
 #include "lib/autoqpointer.h"
 #include "akonadiplugin_debug.h"
 
@@ -77,6 +78,21 @@ int AkonadiPlugin::birthdayModelEnum(BirthdayModelValue value) const
         case BirthdayModelValue::DateRole:    return BirthdayModel::DateRole;
         default:  return -1;
     }
+}
+
+/******************************************************************************
+* Send an email via Akonadi.
+*/
+QString AkonadiPlugin::sendMail(KMime::Message::Ptr message, const KIdentityManagement::Identity& identity,
+                                const QString normalizedFrom, bool keepSentMail, MailSend::JobData& jobdata)
+{
+    if (!mSendAkonadiMail)
+    {
+        mSendAkonadiMail = SendAkonadiMail::instance();
+        connect(mSendAkonadiMail, &SendAkonadiMail::sent, this, &AkonadiPlugin::emailSent);
+        connect(mSendAkonadiMail, &SendAkonadiMail::queued, this, &AkonadiPlugin::emailQueued);
+    }
+    return mSendAkonadiMail->send(message, identity, normalizedFrom, keepSentMail, jobdata);
 }
 
 /******************************************************************************

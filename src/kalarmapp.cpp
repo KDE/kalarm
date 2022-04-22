@@ -14,6 +14,8 @@
 #include "displaycalendar.h"
 #include "editdlgtypes.h"
 #include "functions.h"
+#include "kamail.h"
+#include "mailsend.h"
 #include "mainwindow.h"
 #include "messagewindow.h"
 #include "messagenotification.h"
@@ -2370,7 +2372,7 @@ void* KAlarmApp::execAlarm(KAEvent& event, const KAAlarm& alarm, ExecAlarmFlags 
         {
             qCDebug(KALARM_LOG) << "KAlarmApp::execAlarm: EMAIL to:" << event.emailAddresses(QStringLiteral(","));
             QStringList errmsgs;
-            KAMail::JobData data(event, alarm, flags & Reschedule, flags & (Reschedule | AllowDefer));
+            MailSend::JobData data(event, alarm, flags & Reschedule, flags & (Reschedule | AllowDefer));
             data.queued = true;
             int ans = KAMail::send(data, errmsgs);
             if (ans)
@@ -2417,7 +2419,7 @@ void* KAlarmApp::execAlarm(KAEvent& event, const KAAlarm& alarm, ExecAlarmFlags 
 /******************************************************************************
 * Called when sending an email has completed.
 */
-void KAlarmApp::emailSent(KAMail::JobData& data, const QStringList& errmsgs, bool copyerr)
+void KAlarmApp::emailSent(const MailSend::JobData& data, const QStringList& errmsgs, bool copyerr)
 {
     if (!errmsgs.isEmpty())
     {

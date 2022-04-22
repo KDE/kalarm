@@ -8,7 +8,7 @@
 
 #pragma once
 
-#include "kalarmcalendar/kaevent.h"
+#include "mailsend.h"
 
 #include <KCalendarCore/Person>
 
@@ -18,12 +18,11 @@
 #include <QQueue>
 
 class QUrl;
-class KJob;
-namespace MailTransport  { class MessageQueueJob; }
 namespace KMime {
     namespace Types { struct Address; }
     class Message;
 }
+class AkonadiPlugin;
 
 using namespace KAlarmCal;
 
@@ -31,22 +30,7 @@ class KAMail : public QObject
 {
     Q_OBJECT
 public:
-    // Data to store for each mail send job.
-    // Some data is required by KAMail, while other data is used by the caller.
-    struct JobData
-    {
-        JobData() = default;
-        JobData(KAEvent& e, const KAAlarm& a, bool resched, bool notify)
-              : event(e), alarm(a), reschedule(resched), allowNotify(notify), queued(false) {}
-        KAEvent  event;
-        KAAlarm  alarm;
-        QString  from, bcc, subject;
-        bool     reschedule;
-        bool     allowNotify;
-        bool     queued;
-    };
-
-    static int         send(JobData&, QStringList& errmsgs);
+    static int         send(MailSend::JobData&, QStringList& errmsgs);
     static int         checkAddress(QString& address);
     static int         checkAttachment(QString& attachment, QUrl* = nullptr);
     static bool        checkAttachment(const QUrl&);
@@ -57,19 +41,18 @@ public:
     static QString     i18n_sent_mail();
 
 private Q_SLOTS:
-    void               slotEmailSent(KJob*);
+    void akonadiEmailSent(const MailSend::JobData&, const QStringList& errmsgs, bool sendError);
 
 private:
     KAMail() = default;
     static KAMail*     instance();
-    static QString     appendBodyAttachments(KMime::Message& message, JobData&);
+    static QString     appendBodyAttachments(KMime::Message& message, MailSend::JobData&);
     static void        notifyQueued(const KAEvent&);
     enum ErrType { SEND_FAIL, SEND_ERROR };
     static QStringList errors(const QString& error = QString(), ErrType = SEND_FAIL);
 
-    static KAMail*     mInstance;
-    static QQueue<MailTransport::MessageQueueJob*> mJobs;
-    static QQueue<JobData>                         mJobData;
+    static KAMail*        mInstance;
+    static AkonadiPlugin* mAkonadiPlugin;
 };
 
 // vim: et sw=4:

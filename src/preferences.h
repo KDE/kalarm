@@ -66,8 +66,10 @@ public:
     static void             setQuitWarn(bool yes)            { setNotify(QUIT_WARN, yes); }
     static bool             confirmAlarmDeletion()           { return mUsingDefaults ? self()->base_ConfirmAlarmDeletion() : notifying(CONFIRM_ALARM_DELETION); }
     static void             setConfirmAlarmDeletion(bool yes){ setNotify(CONFIRM_ALARM_DELETION, yes); }
-    static bool             emailCopyToKMail()               { return self()->mBase_EmailCopyToKMail  &&  self()->mEmailClient == sendmail; }
-    static void             setEmailCopyToKMail(bool yes)    { self()->setBase_EmailCopyToKMail(yes); }
+    static MailClient       emailClient();
+    static void             setEmailClient(MailClient);
+    static bool             emailCopyToKMail();
+    static void             setEmailCopyToKMail(bool yes);
     static bool             emailQueuedNotify()              { return mUsingDefaults ? self()->base_EmailQueuedNotify() : notifying(EMAIL_QUEUED_NOTIFY); }
     static void             setEmailQueuedNotify(bool yes)   { setNotify(EMAIL_QUEUED_NOTIFY, yes); }
     static MailFrom         emailFrom();

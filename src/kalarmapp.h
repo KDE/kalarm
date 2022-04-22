@@ -11,7 +11,6 @@
 /** @file kalarmapp.h - the KAlarm application object */
 
 #include "eventid.h"
-#include "kamail.h"
 #include "preferences.h"
 #include "kalarmcalendar/kaevent.h"
 
@@ -20,6 +19,7 @@
 #include <QQueue>
 
 namespace KCal { class Event; }
+namespace MailSend { struct JobData; }
 class Resource;
 class DBusHandler;
 class MainWindow;
@@ -119,7 +119,7 @@ public Q_SLOTS:
     void               notifyAudioStopped()  { notifyAudioPlaying(false); }
     void               stopAudio();
     void               spreadWindows(bool);
-    void               emailSent(KAMail::JobData&, const QStringList& errmsgs, bool copyerr = false);
+    void               emailSent(const MailSend::JobData&, const QStringList& errmsgs, bool copyerr = false);
 
 Q_SIGNALS:
     void               setExitValue(int);   // set exit code for duplicate application instances

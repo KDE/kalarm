@@ -10,6 +10,7 @@
 
 #include "kalarm.h"
 #include "kamail.h"
+#include "pluginmanager.h"
 #include "lib/desktop.h"
 #include "lib/messagebox.h"
 #include "kalarmcalendar/identities.h"
@@ -375,6 +376,34 @@ void Preferences::workTimeChange(const QDateTime& start, const QDateTime& end, i
         if (days & (1 << i))
             dayBits.setBit(i);
     Q_EMIT mInstance->workTimeChanged(start.time(), end.time(), dayBits);
+}
+
+Preferences::MailClient Preferences::emailClient()
+{
+    if (!PluginManager::instance()->akonadiPlugin())
+        return sendmail;
+    return static_cast<MailClient>(self()->mBase_EmailClient);
+}
+
+void Preferences::setEmailClient(MailClient client)
+{
+    if (!PluginManager::instance()->akonadiPlugin())
+        client = sendmail;
+    self()->setBase_EmailClient(client);
+}
+
+bool Preferences::emailCopyToKMail()
+{
+    if (!PluginManager::instance()->akonadiPlugin())
+        return false;
+    return self()->mBase_EmailCopyToKMail  &&  static_cast<MailClient>(self()->mBase_EmailClient) == sendmail;
+}
+
+void Preferences::setEmailCopyToKMail(bool yes)
+{
+    if (!PluginManager::instance()->akonadiPlugin())
+        yes = false;
+    self()->setBase_EmailCopyToKMail(yes);
 }
 
 Preferences::MailFrom Preferences::emailFrom()

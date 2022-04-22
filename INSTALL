@@ -4,14 +4,20 @@ Requirements
 The following KDE packages must be installed in order to run KAlarm
 successfully:
    - Various KDE frameworks libraries
-   - Various KDE PIM libraries, notably kalarmcal
-   - kdepim-runtime: required for email alarms, and access to birthdays and
-           KOrganizer alarms and todos.
+   - Various KDE PIM libraries
+
+KAlarm can use Akonadi if available, to provide email alarms, access to
+birthdays, and KOrganizer alarms and todos. Akonadi functions are accessed
+via KAlarm's Akonadi plugin, which is optionally built and installed when
+KAlarm is built. The following KDE packages must be installed in order to
+use KAlarm's Akonadi plugin:
+   - Various KDE PIM Akonadi libraries
+   - kdepim-runtime
 
 The following optional packages enhance KAlarm if they are installed:
-   - Jovie (from kdeaccessibility): if installed and configured (together with
-	   compatible speech synthesiser packages), it allows KAlarm to speak
-	   alarm messages when alarms are displayed.
+   - Qt TextToSpeech: if installed and configured (together with compatible
+	   speech synthesiser packages), it allows KAlarm to speak alarm
+           messages when alarms are displayed.
 
 Setting up KAlarm on non-KDE desktops
 =====================================

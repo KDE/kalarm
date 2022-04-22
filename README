@@ -56,8 +56,8 @@ LICENSES directory, for more details.
 
 DESIGN
 
-See DESIGN.html for some design information. Also see DESIGN.html in the
-kalarmcal library for details of the alarm storage format.
+See DESIGN.html for some design information. DESIGN-kalarmcalendar.html contains
+details of the alarm storage format.
 
 
 BUGS:

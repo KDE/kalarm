@@ -18,6 +18,7 @@
 #include "kamail.h"
 #include "latecancel.h"
 #include "mainwindow.h"
+#include "pluginmanager.h"
 #include "preferences.h"
 #include "recurrenceedit.h"
 #include "resourcescalendar.h"
@@ -990,29 +991,44 @@ EmailPrefTab::EmailPrefTab(StackedScrollGroup* scrollGroup)
     mEmailClient = new ButtonGroup(widget);
     const QString kmailOption = i18nc("@option:radio", "KMail");
     const QString sendmailOption = i18nc("@option:radio", "Sendmail");
-    mKMailButton = new RadioButton(kmailOption);
-    mKMailButton->setMinimumSize(mKMailButton->sizeHint());
-    box->addWidget(mKMailButton);
-    mEmailClient->addButton(mKMailButton, Preferences::kmail);
+    if (PluginManager::instance()->akonadiPlugin())
+    {
+        mKMailButton = new RadioButton(kmailOption);
+        mKMailButton->setMinimumSize(mKMailButton->sizeHint());
+        box->addWidget(mKMailButton);
+        mEmailClient->addButton(mKMailButton, Preferences::kmail);
+    }
     mSendmailButton = new RadioButton(sendmailOption);
     mSendmailButton->setMinimumSize(mSendmailButton->sizeHint());
     box->addWidget(mSendmailButton);
     mEmailClient->addButton(mSendmailButton, Preferences::sendmail);
     connect(mEmailClient, &ButtonGroup::buttonSet, this, &EmailPrefTab::slotEmailClientChanged);
-    widget->setWhatsThis(xi18nc("@info:whatsthis",
-          "<para>Choose how to send email when an email alarm is triggered."
-          "<list><item><interface>%1</interface>: The email is sent automatically via <application>KMail</application>. <application>KMail</application> is started first if necessary.</item>"
-          "<item><interface>%2</interface>: The email is sent automatically. This option will only work if "
-          "your system is configured to use <application>sendmail</application> or a sendmail compatible mail transport agent.</item></list></para>",
-          kmailOption, sendmailOption));
+    const QString sendText = i18nc("@info", "Choose how to send email when an email alarm is triggered.");
+    if (PluginManager::instance()->akonadiPlugin())
+        widget->setWhatsThis(xi18nc("@info:whatsthis",
+            "<para>%1<list><item><interface>%2</interface>: "
+            "The email is sent automatically via <application>KMail</application>.</item>"
+            "<item><interface>%3</interface>: "
+            "The email is sent automatically. This option will only work if your system is "
+            "configured to use <application>sendmail</application> or a sendmail compatible mail transport agent.</item></list></para>",
+                                    sendText, kmailOption, sendmailOption));
+    else
+        widget->setWhatsThis(xi18nc("@info:whatsthis",
+            "<para>%1<list><item><interface>%2</interface>: "
+            "The email is sent automatically. This option will only work if your system is "
+            "configured to use <application>sendmail</application> or a sendmail compatible mail transport agent.</item></list></para>",
+                                    sendText, sendmailOption));
 
-    widget = new QWidget;  // this is to allow left adjustment
-    topLayout()->addWidget(widget);
-    box = new QHBoxLayout(widget);
-    mEmailCopyToKMail = new QCheckBox(xi18nc("@option:check", "Copy sent emails into <application>KMail</application>'s <resource>%1</resource> folder", KAMail::i18n_sent_mail()));
-    mEmailCopyToKMail->setWhatsThis(xi18nc("@info:whatsthis", "After sending an email, store a copy in <application>KMail</application>'s <resource>%1</resource> folder", KAMail::i18n_sent_mail()));
-    box->addWidget(mEmailCopyToKMail);
-    box->addStretch();    // left adjust the controls
+    if (PluginManager::instance()->akonadiPlugin())
+    {
+        widget = new QWidget;  // this is to allow left adjustment
+        topLayout()->addWidget(widget);
+        box = new QHBoxLayout(widget);
+        mEmailCopyToKMail = new QCheckBox(xi18nc("@option:check", "Copy sent emails into <application>KMail</application>'s <resource>%1</resource> folder", KAMail::i18n_sent_mail()));
+        mEmailCopyToKMail->setWhatsThis(xi18nc("@info:whatsthis", "After sending an email, store a copy in <application>KMail</application>'s <resource>%1</resource> folder", KAMail::i18n_sent_mail()));
+        box->addWidget(mEmailCopyToKMail);
+        box->addStretch();    // left adjust the controls
+    }
 
     widget = new QWidget;   // this is to allow left adjustment
     topLayout()->addWidget(widget);
@@ -1050,7 +1066,7 @@ EmailPrefTab::EmailPrefTab(StackedScrollGroup* scrollGroup)
     grid->addWidget(mEmailAddress, 1, 2);
 
     // 'From' email address to be taken from KMail
-    mFromCCentreButton = new RadioButton(xi18nc("@option:radio", "Use default address from <application>KMail</application>"), group);
+    mFromCCentreButton = new RadioButton(xi18nc("@option:radio", "Use default <application>KMail</application> identity"), group);
     mFromAddressGroup->addButton(mFromCCentreButton, Preferences::MAIL_FROM_SYS_SETTINGS);
     mFromCCentreButton->setWhatsThis(
           xi18nc("@info:whatsthis", "Check to use the default email address set in <application>KMail</application>, to identify you as the sender when sending email alarms."));
@@ -1086,7 +1102,7 @@ EmailPrefTab::EmailPrefTab(StackedScrollGroup* scrollGroup)
     grid->addWidget(mEmailBccAddress, 5, 2);
 
     // 'Bcc' email address to be taken from KMail
-    mBccCCentreButton = new RadioButton(xi18nc("@option:radio", "Use default address from <application>KMail</application>"), group);
+    mBccCCentreButton = new RadioButton(xi18nc("@option:radio", "Use default <application>KMail</application> identity"), group);
     mBccAddressGroup->addButton(mBccCCentreButton, Preferences::MAIL_FROM_SYS_SETTINGS);
     mBccCCentreButton->setWhatsThis(
           xi18nc("@info:whatsthis", "Check to use the default email address set in <application>KMail</application>, for blind copying email alarms to yourself."));
@@ -1098,7 +1114,8 @@ EmailPrefTab::EmailPrefTab(StackedScrollGroup* scrollGroup)
 void EmailPrefTab::restore(bool defaults, bool)
 {
     mEmailClient->setButton(Preferences::emailClient());
-    mEmailCopyToKMail->setChecked(Preferences::emailCopyToKMail());
+    if (mEmailCopyToKMail)
+        mEmailCopyToKMail->setChecked(Preferences::emailCopyToKMail());
     setEmailAddress(Preferences::emailFrom(), Preferences::emailAddress());
     setEmailBccAddress((Preferences::emailBccFrom() == Preferences::MAIL_FROM_SYS_SETTINGS), Preferences::emailBccAddress());
     mEmailQueuedNotify->setChecked(Preferences::emailQueuedNotify());
@@ -1111,15 +1128,18 @@ void EmailPrefTab::apply(bool syncToDisc)
     const int client = mEmailClient->selectedId();
     if (client >= 0  &&  static_cast<Preferences::MailClient>(client) != Preferences::emailClient())
         Preferences::setEmailClient(static_cast<Preferences::MailClient>(client));
-    bool b = mEmailCopyToKMail->isChecked();
-    if (b != Preferences::emailCopyToKMail())
-        Preferences::setEmailCopyToKMail(b);
+    if (mEmailCopyToKMail)
+    {
+        bool b = mEmailCopyToKMail->isChecked();
+        if (b != Preferences::emailCopyToKMail())
+            Preferences::setEmailCopyToKMail(b);
+    }
     int from = mFromAddressGroup->selectedId();
     QString text = mEmailAddress->text().trimmed();
     if ((from >= 0  &&  static_cast<Preferences::MailFrom>(from) != Preferences::emailFrom())
     ||  text != Preferences::emailAddress())
         Preferences::setEmailAddress(static_cast<Preferences::MailFrom>(from), text);
-    b = (mBccAddressGroup->checkedButton() == mBccCCentreButton);
+    bool b = (mBccAddressGroup->checkedButton() == mBccCCentreButton);
     Preferences::MailFrom bfrom = b ? Preferences::MAIL_FROM_SYS_SETTINGS : Preferences::MAIL_FROM_ADDR;;
     text = mEmailBccAddress->text().trimmed();
     if (bfrom != Preferences::emailBccFrom()  ||  text != Preferences::emailBccAddress())
@@ -1144,7 +1164,8 @@ void EmailPrefTab::setEmailBccAddress(bool useSystemSettings, const QString& add
 
 void EmailPrefTab::slotEmailClientChanged(QAbstractButton* button)
 {
-    mEmailCopyToKMail->setEnabled(button == mSendmailButton);
+    if (mEmailCopyToKMail)
+        mEmailCopyToKMail->setEnabled(button == mSendmailButton);
 }
 
 void EmailPrefTab::slotFromAddrChanged(QAbstractButton* button)

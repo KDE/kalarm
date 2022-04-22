@@ -11,11 +11,13 @@ kcoreaddons_add_plugin(akonadiplugin
         akonadiresourcemigrator.cpp
         birthdaymodel.cpp
         collectionattribute.cpp
+        sendakonadimail.cpp
         akonadiplugin.h
         akonadicollectionsearch.h
         akonadiresourcemigrator.h
         birthdaymodel.h
         collectionattribute.h
+        sendakonadimail.h
     INSTALL_NAMESPACE "kalarm"
 )
 
@@ -42,6 +44,7 @@ target_link_libraries(akonadiplugin
     KF5::AkonadiMime
     KF5::AkonadiContact
     KF5::AkonadiWidgets
+    KF5::IdentityManagement
     KF5::MailTransportAkonadi
     KF5::MailTransport
 )

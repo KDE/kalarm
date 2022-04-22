@@ -313,6 +313,7 @@ target_link_libraries(kalarm_bin
     KF5::GuiAddons
     KF5::Holidays
     KF5::IdleTime
+    KF5::ItemModels
     KF5::KIOWidgets
     KF5::Notifications
     KF5::NotifyConfig
@@ -327,8 +328,6 @@ target_link_libraries(kalarm_bin
     KF5::Contacts
     KF5::IdentityManagementWidgets
     KF5::PimTextEdit
-    KF5::MailTransportAkonadi
-    KF5::MailTransport
     KF5::Mime
 )
 

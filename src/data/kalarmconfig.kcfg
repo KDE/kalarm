@@ -184,9 +184,9 @@ SPDX-License-Identifier: GPL-2.0-or-later
       <default code="true">QLatin1String("+")</default>
       <emit signal="tooltipPreferencesChanged"/>
     </entry>
-    <entry name="EmailClient" key="EmailClient" type="Enum">
+    <entry name="Base_EmailClient" key="EmailClient" type="Enum">
       <label context="@label">Email client</label>
-      <whatsthis context="@info:whatsthis">&lt;p>How to send email when an email alarm is triggered.&lt;ul>&lt;li>KMail: The email is sent automatically via KMail. KMail is started first if necessary.&lt;/li>&lt;li>Sendmail: The email is sent automatically. This option will only work if your system is configured to use sendmail or a sendmail compatible mail transport agent.&lt;/li>&lt;/ul>&lt;/p></whatsthis>
+      <whatsthis context="@info:whatsthis">&lt;p>How to send email when an email alarm is triggered.&lt;ul>&lt;li>KMail: The email is sent automatically via KMail.&lt;/li>&lt;li>Sendmail: The email is sent automatically. This option will only work if your system is configured to use sendmail or a sendmail compatible mail transport agent.&lt;/li>&lt;/ul>&lt;/p></whatsthis>
       <choices name="MailClient">
         <choice name="sendmail"><label context="@option">Sendmail</label></choice>
         <choice name="kmail"><label context="@option">KMail</label></choice>
@@ -200,12 +200,12 @@ SPDX-License-Identifier: GPL-2.0-or-later
     </entry>
     <entry name="Base_EmailFrom" key="EmailFrom" type="String">
       <label context="@label">'From' email address</label>
-      <whatsthis context="@info:whatsthis">Your email address, used to identify you as the sender when sending email alarms. Enter "@SystemSettings" to use the default email address set in KMail or System Settings, "@KMail" to allow choice of KMail identities, or enter the actual email address otherwise.</whatsthis>
+      <whatsthis context="@info:whatsthis">Your email address, used to identify you as the sender when sending email alarms. Enter "@SystemSettings" to use the default email address set in KMail, "@KMail" to allow choice of KMail identities, or enter the actual email address otherwise.</whatsthis>
       <default code="true">KAlarmCal::Identities::identitiesExist() ? QLatin1String("@KMail") : QLatin1String("@SystemSettings")</default>
     </entry>
     <entry name="Base_EmailBccAddress" key="EmailBccAddress" type="String">
       <label context="@label">'Bcc' email address</label>
-      <whatsthis context="@info:whatsthis">Your email address, used for blind copying email alarms to yourself. If you want blind copies to be sent to your account on the computer which KAlarm runs on, you can simply enter your user login name. Enter "@SystemSettings" to use the default email address set in KMail or System Settings, or enter the actual email address otherwise.</whatsthis>
+      <whatsthis context="@info:whatsthis">Your email address, used for blind copying email alarms to yourself. If you want blind copies to be sent to your account on the computer which KAlarm runs on, you can simply enter your user login name. Enter "@SystemSettings" to use the default email address set in KMail, or enter the actual email address otherwise.</whatsthis>
       <default code="true">QLatin1String("@SystemSettings")</default>
     </entry>
     <entry name="Base_CmdXTermCommand" key="CmdXTerm" type="String">

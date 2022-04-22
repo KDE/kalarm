@@ -19,6 +19,9 @@ class QUrl;
 class QColor;
 namespace KMime { class Content; }
 namespace KCalendarCore { class Person; }
+namespace KIdentityManagement { class Identity; }
+namespace KAlarmCal { class KAEvent; }
+namespace MailSend { struct JobData; }
 class QSortFilterProxyModel;
 
 class KALARMPLUGINLIB_EXPORT PluginBase : public QObject
@@ -39,6 +42,12 @@ public:
     enum class BirthdayModelValue { NameColumn, DateColumn, DateRole };
     /** Return BirthdayModel enum values. */
     virtual int birthdayModelEnum(BirthdayModelValue) const = 0;
+
+    /** Send an email using PIM libraries.
+     *  @return  empty string if sending initiated successfully, else error message.
+     */
+    virtual QString sendMail(KMime::Message::Ptr message, const KIdentityManagement::Identity& identity,
+                             const QString normalizedFrom, bool keepSentMail, MailSend::JobData& jobdata) = 0;
 
     /** Extract dragged and dropped Akonadi RFC822 message data. */
     virtual KMime::Message::Ptr fetchAkonadiEmail(const QUrl&, qint64& emailId) = 0;
@@ -63,6 +72,12 @@ public:
 Q_SIGNALS:
     /** Emitted when the birthday contacts model's data has changed. */
     void birthdayModelDataChanged();
+
+    /** Emitted when an error has occurred sending an email. */
+    void emailSent(const MailSend::JobData&, const QStringList& errmsgs, bool sendError);
+
+    /** Emitted when an error has occurred sending an email. */
+    void emailQueued(const KAlarmCal::KAEvent&);
 
     /** Emitted when Akonadi resource migration has completed.
      *  @param migrated  true if Akonadi migration was required.

@@ -10,6 +10,8 @@
 
 #include "pluginbase.h"
 
+class SendAkonadiMail;
+
 class AkonadiPlugin : public PluginBase
 {
     Q_OBJECT
@@ -28,6 +30,12 @@ public:
 
     /** Return BirthdayModel enum values. */
     int birthdayModelEnum(BirthdayModelValue) const override;
+
+    /** Send an email using PIM libraries.
+     *  @return  empty string if sending initiated successfully, else error message.
+     */
+    QString sendMail(KMime::Message::Ptr message, const KIdentityManagement::Identity& identity,
+                     const QString normalizedFrom, bool keepSentMail, MailSend::JobData& jobdata) override;
 
     /** Extract dragged and dropped Akonadi RFC822 message data.
      *  @param url      the dropped URL.
@@ -52,6 +60,9 @@ public:
      *  This should be called after the resource has been migrated.
      */
     void deleteAkonadiResource(const QString& resourceName) override;
+
+private:
+    SendAkonadiMail* mSendAkonadiMail {nullptr};
 };
 
 // vim: et sw=4:

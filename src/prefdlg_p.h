@@ -1,7 +1,7 @@
 /*
  *  prefdlg_p.h  -  private classes for program preferences dialog
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2001-2021 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2001-2022 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -170,7 +170,7 @@ private:
     QString      validateAddr(ButtonGroup*, QLineEdit* addr, const QString& msg);
 
     ButtonGroup* mEmailClient;
-    RadioButton* mKMailButton;
+    RadioButton* mKMailButton {nullptr};
     RadioButton* mSendmailButton;
     ButtonGroup* mFromAddressGroup;
     RadioButton* mFromAddrButton;
@@ -182,7 +182,7 @@ private:
     RadioButton* mBccCCentreButton;
     QLineEdit*   mEmailBccAddress;
     QCheckBox*   mEmailQueuedNotify;
-    QCheckBox*   mEmailCopyToKMail;
+    QCheckBox*   mEmailCopyToKMail {nullptr};
     bool         mAddressChanged {false};
     bool         mBccAddressChanged {false};
 };
