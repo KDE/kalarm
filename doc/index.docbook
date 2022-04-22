@@ -39,8 +39,8 @@
 
 <!-- Don't change format of date and version of the documentation -->
 
-<date>2022-4-17</date>
-<releaseinfo>3.8.0 (KDE Gear 22.08)</releaseinfo>
+<date>2022-4-22</date>
+<releaseinfo>3.5.0 (KDE Gear 22.08)</releaseinfo>
 
 <abstract>
 <para>&kalarm; is a personal alarm message, command and email scheduler by &kde;.</para>
@@ -1086,6 +1086,10 @@ context menu.</para>
 <sect2 id="birthdays">
 <title>Importing Birthdays from &kaddressbook;</title>
 
+<note>This function is only available if &kalarm;'s
+<link linkend="akonadi-plugin">Akonadi plugin</link> is installed.
+</note>
+
 <para>You can set up display alarms for birthdays stored in
 &kaddressbook;, by <menuchoice><guimenu>File</guimenu>
 <guimenuitem>Import Birthdays...</guimenuitem></menuchoice>. This
@@ -1127,7 +1131,6 @@ added to the default active alarm calendar, or if you have selected the
 prompt option for new alarms and templates in the
 <link linkend="preferences-storage">Configuration dialog</link>, you will
 be prompted for the calendar to use.</para>
-
 </sect2>
 
 <sect2 id="undo">
@@ -1521,12 +1524,14 @@ message.</para>
 <para>Fill in the recipients' addresses, the email subject line and the
 message body in the three edit fields. Use the button beside the
 addressee edit box to display your &kde; address book from which you
-can select email recipients. Attachments may be added using the
-<guibutton>Add...</guibutton> button. Note that attached files must
-still exist when the alarm is triggered; no copy is stored at the time
-the alarm is configured. To remove an attachment, highlight it in the
-drop-down list and click the <guibutton>Remove</guibutton>
-button.</para>
+can select email recipients. (Note that the button is only shown if
+&kalarm;'s
+<link linkend="akonadi-plugin">Akonadi plugin</link> is installed.)
+Attachments may be added using the <guibutton>Add...</guibutton>
+button. Note that attached files must still exist when the alarm is
+triggered; no copy is stored at the time the alarm is configured. To
+remove an attachment, highlight it in the drop-down list and click the
+<guibutton>Remove</guibutton> button.</para>
 
 <para>Set the following options:</para>
 
@@ -2056,8 +2061,8 @@ showing the <quote>stop playing</quote> symbol.</para>
 <listitem>
 <para>If the alarm message was created by dragging an email from
 &kmail;, you can directly access the email in &kmail; by clicking the
-button showing the &kmail; icon. This will select and highlight the
-email in &kmail;'s folder list.</para>
+button showing the &kmail; icon. This will display the email and
+select the folder containing the email in &kmail;'s folder list.</para>
 
 <warning><para>If &kmail;'s indexes are regenerated, the link to the
 email in &kmail; will be lost.</para></warning>
@@ -2144,7 +2149,7 @@ displayed. (For reminder messages, the date/time shown is that for the
 main alarm or its recurrence, not the reminder message time, and a
 “Reminder” heading is shown.)</para>
 
-<para>The notification automatically closes after a short time-out.
+<para>The notification automatically closes after a  short time-out.
 (Note that the time-out is common to all applications; it can be
 changed in &systemsettings;.) After a notification times out, it can
 still be seen in the notification history until you remove it or
@@ -2794,6 +2799,10 @@ be archived according to the selected options.</para>
 <para>The <guilabel>Email</guilabel> section lets you choose options
 for sending and addressing email alarms:</para>
 
+<note><para>Options dependent on &kmail; are only available if &kalarm;'s
+<link linkend="akonadi-plugin">Akonadi plugin</link> is installed.</para>
+</note>
+
 <itemizedlist>
 <listitem>
 <para><guilabel>Email client</guilabel>: Specify the email
@@ -2801,8 +2810,7 @@ client to be used to send email alarms:</para>
 
 <itemizedlist>
 <listitem><para><guilabel>KMail</guilabel>: When an email alarm is
-triggered, the email is sent automatically using &kmail; (which is
-started first if necessary).</para>
+triggered, the email is sent automatically using &kmail;.</para>
 </listitem>
 
 <listitem><para><guilabel>Sendmail</guilabel>: When an email alarm is
@@ -2845,7 +2853,7 @@ email alarms:</para>
 address.</para>
 </listitem>
 
-<listitem><para>Select <guilabel>Use default address from KMail</guilabel>
+<listitem><para>Select <guilabel>Use default KMail identity</guilabel>
 to use your default email address which is configured in &kmail;.</para>
 </listitem>
 
@@ -2870,7 +2878,7 @@ computer which &kalarm; runs on, you could simply enter your user
 login name here.</para>
 </listitem>
 
-<listitem><para>Select <guilabel>Use default address from KMail</guilabel>
+<listitem><para>Select <guilabel>Use default KMail identity</guilabel>
 to use your default email address which is configured in &kmail;.</para>
 </listitem>
 </itemizedlist>
@@ -5027,8 +5035,41 @@ Internet Calendaring and Scheduling Core Object Specification
 (iCalendar)</ulink>. This is the standard format used by all kdepim
 applications. &kalarm; uses certain non-standard properties, in
 conformance with RFC2445. These are documented in the
-<filename>kalarmcal/DESIGN.html</filename> file which is distributed
-with &kalarm;.</para>
+<filename>DESIGN-kalarmcalendar.html</filename> file which is
+distributed with &kalarm;.</para>
+</answer>
+</qandaentry>
+
+<qandaentry id="akonadi-plugin">
+<question>
+<para>What is the function of &kalarm;'s Akonadi plugin?</para>
+</question>
+<answer>
+<para>&kalarm; uses its Akonadi plugin to provide all features which
+depend on &akonadi; (the &kde; &PIM; cross-desktop storage service).
+If this plugin is not installed, &kalarm; will lack the following
+features:
+<itemizedlist>
+<listitem>
+Sending emails via &kmail;, leaving &Sendmail; as the only option to
+send emails (see
+<link linkend="preferences-email">Email preferences</link>).
+</listitem>
+<listitem>
+Drag and drop of emails.
+</listitem>
+<listitem>
+Selection of email addresses from &kaddressbook;.
+</listitem>
+<listitem>
+Import of birthdays from &kaddressbook;.
+</listitem>
+<listitem>
+Migration of &akonadi; alarm calendar resources on the first run of a
+new version of &kalarm;.
+</listitem>
+</itemizedlist>
+</para>
 </answer>
 </qandaentry>
 
