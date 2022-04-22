@@ -229,9 +229,9 @@ private:
     // Email alarm options
     EmailIdCombo*   mEmailFromList;
     LineEdit*       mEmailToEdit;
-    QPushButton*    mEmailAddressButton; // email open address book button
+    QPushButton*    mEmailAddressButton {nullptr}; // email open address book button
     LineEdit*       mEmailSubjectEdit;
-    TextEdit*       mEmailMessageEdit;   // email body edit box
+    TextEdit*       mEmailMessageEdit;             // email body edit box
     QComboBox*      mEmailAttachList;
     QPushButton*    mEmailAddAttachButton;
     QPushButton*    mEmailRemoveButton {nullptr};

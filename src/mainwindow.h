@@ -172,7 +172,7 @@ private:
     QAction*             mActionImportAlarms;
     QAction*             mActionExportAlarms;
     QAction*             mActionExport;
-    QAction*             mActionImportBirthdays;
+    QAction*             mActionImportBirthdays {nullptr};
     QAction*             mActionTemplates;
     NewAlarmAction*      mActionNew;
     QAction*             mActionCreateTemplate;

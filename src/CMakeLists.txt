@@ -4,9 +4,50 @@ include_directories(
 )
 
 add_subdirectory(kalarmcalendar)
+add_subdirectory(akonadiplugin)
 add_subdirectory(appicons)
 add_subdirectory(pixmaps)
 add_subdirectory(autostart)
+
+########### next target ###############
+
+set(kalarmplugin_common_SRCS)
+
+ecm_qt_declare_logging_category(kalarmplugin_common_SRCS
+                                HEADER kalarmplugin_debug.h
+				IDENTIFIER KALARMPLUGIN_LOG
+                                CATEGORY_NAME org.kde.pim.kalarm.plugin
+                                DESCRIPTION "kalarm (plugin)"
+				EXPORT KALARMPLUGIN
+                                )
+
+add_library(kalarmplugin)
+
+target_sources(kalarmplugin PRIVATE
+    ${kalarmplugin_common_SRCS}
+    pluginbase.cpp
+    pluginmanager.cpp
+)
+generate_export_header(kalarmplugin BASE_NAME kalarmplugin)
+
+target_link_libraries(kalarmplugin PRIVATE
+    kalarmcalendar
+    KF5::CoreAddons
+    KF5::CalendarCore
+    KF5::Mime
+)
+
+target_include_directories(kalarmplugin PUBLIC "$<BUILD_INTERFACE:${kalarm_SOURCE_DIR}/src/kalarmcalendar;${kalarm_BINARY_DIR}/src/kalarmcalendar>")
+
+set_target_properties(kalarmplugin
+    PROPERTIES VERSION ${KDEPIM_LIB_VERSION}
+    SOVERSION ${KDEPIM_LIB_SOVERSION}
+    )
+
+install(TARGETS kalarmplugin ${KDE_INSTALL_TARGETS_DEFAULT_ARGS} LIBRARY NAMELINK_SKIP)
+
+
+########### next target ###############
 
 set(libkalarm_common_SRCS)
 
@@ -20,7 +61,6 @@ ecm_qt_declare_logging_category(libkalarm_common_SRCS
                                 EXPORT KALARM
                                 )
 
-########### next target ###############
 set(libkalarm_SRCS
     lib/buttongroup.cpp
     lib/checkbox.cpp
@@ -130,7 +170,6 @@ set(kalarm_bin_SRCS ${libkalarm_SRCS} ${resources_SRCS}
     ${libkalarm_common_SRCS}
     main.cpp
     birthdaydlg.cpp
-    birthdaymodel.cpp
     editdlg.cpp
     editdlgtypes.cpp
     soundpicker.cpp
@@ -179,9 +218,7 @@ set(kalarm_bin_SRCS ${libkalarm_SRCS} ${resources_SRCS}
     templatedlg.cpp
     templatemenuaction.cpp
     migratekde4files.cpp
-    akonadicollectionsearch.cpp
     birthdaydlg.h
-    birthdaymodel.h
     editdlg.h
     editdlgtypes.h
     soundpicker.h
@@ -230,7 +267,6 @@ set(kalarm_bin_SRCS ${libkalarm_SRCS} ${resources_SRCS}
     templatedlg.h
     templatemenuaction.h
     migratekde4files.h
-    akonadicollectionsearch.h
 )
 if (ENABLE_WAKE_FROM_SUSPEND)
     set(kalarm_bin_SRCS ${kalarm_bin_SRCS}
@@ -269,7 +305,8 @@ target_compile_definitions(kalarm_bin PRIVATE -DVERSION="${KALARM_VERSION}")
 
 
 target_link_libraries(kalarm_bin
-    kalarmprivate
+    kalarmcalendar
+    kalarmplugin
     KF5::Codecs
     KF5::ConfigCore
     KF5::Completion
@@ -289,8 +326,6 @@ target_link_libraries(kalarm_bin
     Phonon::phonon4qt${QT_MAJOR_VERSION}
     KF5::AkonadiCore
     KF5::AkonadiMime
-    KF5::AkonadiContact
-    KF5::AkonadiWidgets
     KF5::CalendarCore
     KF5::CalendarUtils
     KF5::Contacts

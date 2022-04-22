@@ -17,6 +17,7 @@
 #include "mainwindow.h"
 #include "messagewindow.h"
 #include "messagenotification.h"
+#include "pluginmanager.h"
 #include "prefdlg.h"
 #include "resourcescalendar.h"
 #include "startdaytimer.h"
@@ -171,6 +172,12 @@ void KAlarmApp::initialise()
     KAEvent::setWorkTime(Preferences::workDays(), Preferences::workDayStart(), Preferences::workDayEnd());
     KAEvent::setHolidays(Preferences::holidays());
     KAEvent::setDefaultFont(Preferences::messageFont());
+
+    // Load plugins
+    if (PluginManager::instance()->akonadiPlugin())
+        qCDebug(KALARM_LOG) << "KAlarmApp: Akonadi plugin found";
+    else
+        qCDebug(KALARM_LOG) << "KAlarmApp: Akonadi dependent features not available (Akonadi plugin not found)";
 
     // Check if KOrganizer is installed
     const QString korg = QStringLiteral("korganizer");

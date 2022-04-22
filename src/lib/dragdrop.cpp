@@ -11,9 +11,7 @@
 #include "kalarmcalendar/alarmtext.h"
 #include "kalarm_debug.h"
 
-#include <Akonadi/ItemFetchJob>
-#include <Akonadi/ItemFetchScope>
-#include <KMime/Message>
+#include <KMime/Content>
 
 #include <QMimeData>
 #include <QUrlQuery>
@@ -21,7 +19,6 @@
 
 namespace
 {
-KAlarmCal::AlarmText kMimeEmailToAlarmText(KMime::Content&, Akonadi::Item::Id);
 QString getMailHeader(const char* header, KMime::Content&);
 }
 
@@ -80,60 +77,9 @@ bool dropRFC822(const QMimeData* data, KAlarmCal::AlarmText& alarmText)
 }
 
 /******************************************************************************
-* Extract dragged and dropped Akonadi RFC822 message data.
-*/
-bool dropAkonadiEmail(const QMimeData* data, QUrl& url, Akonadi::Item& item, KAlarmCal::AlarmText& alarmText)
-{
-    alarmText.clear();
-    const QList<QUrl> urls = data->urls();
-    if (urls.isEmpty())
-    {
-        url = QUrl();
-        item.setId(-1);
-        return false;
-    }
-    url  = urls.at(0);
-    item = Akonadi::Item::fromUrl(url);
-    if (!item.isValid())
-        return false;
-
-    // It's an Akonadi item
-    qCDebug(KALARM_LOG) << "KAlarm::dropAkonadiEmail: Akonadi item" << item.id();
-    if (QUrlQuery(url).queryItemValue(QStringLiteral("type")) != QLatin1String("message/rfc822"))
-        return false;
-
-    // It's an email held in Akonadi
-    qCDebug(KALARM_LOG) << "KAlarm::dropAkonadiEmail: Akonadi email";
-    auto job = new Akonadi::ItemFetchJob(item);
-    job->fetchScope().fetchFullPayload();
-    Akonadi::Item::List items;
-    if (job->exec())
-        items = job->items();
-    if (items.isEmpty())
-        qCWarning(KALARM_LOG) << "KAlarm::dropAkonadiEmail: Akonadi item" << item.id() << "not found";
-    else
-    {
-        const Akonadi::Item& it = items.at(0);
-        if (!it.isValid()  ||  !it.hasPayload<KMime::Message::Ptr>())
-            qCWarning(KALARM_LOG) << "KAlarm::dropAkonadiEmail: invalid email";
-        else
-        {
-            KMime::Message::Ptr message = it.payload<KMime::Message::Ptr>();
-            alarmText = kMimeEmailToAlarmText(*message, it.id());
-        }
-    }
-    return true;
-}
-
-} // namespace DragDrop
-
-namespace
-{
-
-/******************************************************************************
 * Convert a KMime email instance to AlarmText.
 */
-KAlarmCal::AlarmText kMimeEmailToAlarmText(KMime::Content& content, Akonadi::Item::Id itemId)
+KAlarmCal::AlarmText kMimeEmailToAlarmText(KMime::Content& content, KAlarmCal::KAEvent::EmailId itemId)
 {
     QString body;
     if (content.textContent())
@@ -148,6 +94,11 @@ KAlarmCal::AlarmText kMimeEmailToAlarmText(KMime::Content& content, Akonadi::Ite
                        itemId);
     return alarmText;
 }
+
+} // namespace DragDrop
+
+namespace
+{
 
 QString getMailHeader(const char* header, KMime::Content& content)
 {

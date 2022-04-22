@@ -9,12 +9,12 @@
 #include "functions.h"
 #include "functions_p.h"
 
-#include "akonadicollectionsearch.h"
 #include "displaycalendar.h"
 #include "kalarmapp.h"
 #include "kamail.h"
 #include "mainwindow.h"
 #include "messagewindow.h"
+#include "pluginmanager.h"
 #include "preferences.h"
 #include "resourcescalendar.h"
 #include "templatelistview.h"
@@ -23,10 +23,12 @@
 #include "resources/resources.h"
 #include "resources/eventmodel.h"
 #include "lib/autoqpointer.h"
+#include "lib/dragdrop.h"
 #include "lib/filedialog.h"
 #include "lib/messagebox.h"
 #include "lib/shellprocess.h"
 #include "kalarmcalendar/identities.h"
+#include "akonadiplugin/akonadiplugin.h"
 #include "kalarm_debug.h"
 #include "config-kalarm.h"
 
@@ -63,6 +65,7 @@ using namespace KCalendarCore;
 #include <QDBusInterface>
 #include <QTimer>
 #include <QtGlobal>
+#include <QMimeData>
 #include <QStandardPaths>
 #include <QPushButton>
 #include <QTemporaryFile>
@@ -1857,6 +1860,35 @@ bool convertTimeString(const QByteArray& timeString, KADateTime& dateTime, const
 }
 
 /******************************************************************************
+* Extract dragged and dropped Akonadi RFC822 message data.
+*/
+bool dropAkonadiEmail(const QMimeData* data, QUrl& url, AlarmText& alarmText)
+{
+    alarmText.clear();
+    const QList<QUrl> urls = data->urls();
+    if (urls.isEmpty())
+        url = QUrl();
+    else
+    {
+        url  = urls.at(0);
+        AkonadiPlugin* akonadiPlugin = PluginManager::instance()->akonadiPlugin();
+        if (akonadiPlugin)
+        {
+            KAEvent::EmailId emailId;
+            KMime::Message::Ptr message = akonadiPlugin->fetchAkonadiEmail(url, emailId);
+            if (message)
+            {
+                // It's an email held in Akonadi
+                if (message->hasContent())
+                    alarmText = DragDrop::kMimeEmailToAlarmText(*message, emailId);
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+/******************************************************************************
 * Convert a time zone specifier string and apply it to a given date and/or time.
 * The time zone specifier is a system time zone name, e.g. "Europe/London" or
 * "UTC". If no time zone is specified, it defaults to the local time zone.
@@ -2058,8 +2090,12 @@ KAlarm::UpdateResult sendToKOrganizer(const KAEvent& event)
 */
 KAlarm::UpdateResult deleteFromKOrganizer(const QString& eventID)
 {
+    AkonadiPlugin* akonadiPlugin = PluginManager::instance()->akonadiPlugin();
+    if (!akonadiPlugin)
+        return KAlarm::UpdateResult(KAlarm::UPDATE_KORG_ERR);
+
     const QString newID = uidKOrganizer(eventID);
-    new AkonadiCollectionSearch(KORG_MIME_TYPE, QString(), newID, true);  // this auto-deletes when complete
+    akonadiPlugin->deleteEvent(KORG_MIME_TYPE, QString(), newID);
     // Ignore errors
     return KAlarm::UpdateResult(KAlarm::UPDATE_OK);
 }

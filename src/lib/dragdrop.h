@@ -1,17 +1,20 @@
 /*
  *  dragdrop.h  -  drag and drop functions
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2020 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2020-2022 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #pragma once
 
+#include "kalarmcalendar/kaevent.h"
+
+#include <QtGlobal>
+
 namespace KAlarmCal { class AlarmText; }
-namespace Akonadi { class Item; }
+namespace KMime { class Content; }
 class QString;
-class QUrl;
 class QMimeData;
 
 namespace DragDrop
@@ -35,17 +38,13 @@ bool mayHaveRFC822(const QMimeData* data);
  */
 bool dropRFC822(const QMimeData* data, KAlarmCal::AlarmText& alarmText);
 
-/** Extract dragged and dropped Akonadi RFC822 message data.
- *  @param data       Dropped data.
- *  @param url        Receives the first URL in the data, or empty if data does
- *                    not provide URLs.
- *  @param item       Receives the Akonadi Item specified by @p url, or invalid
- *                    if not an Akonadi URL.
- *  @param alarmText  Extracted email data.
- *  @return  true if @p data contained RFC822 message data, false if not.
+/** Convert a KMime email instance to AlarmText.
+ *  @param content  email content.
+ *  @param emailId  kmail email ID.
+ *  @return email contents in AlarmText format.
  */
-bool dropAkonadiEmail(const QMimeData* data, QUrl& url, Akonadi::Item& item, KAlarmCal::AlarmText& alarmText);
+KAlarmCal::AlarmText kMimeEmailToAlarmText(KMime::Content& content, KAlarmCal::KAEvent::EmailId emailId);
 
-} // namespace KAlarm
+} // namespace DragDrop
 
 // vim: et sw=4:

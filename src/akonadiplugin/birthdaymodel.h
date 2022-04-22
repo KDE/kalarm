@@ -2,6 +2,7 @@
  *  birthdaymodel.h  -  model class for birthdays from address book
  *  Program:  kalarm
  *  SPDX-FileCopyrightText: 2009 Tobias Koenig <tokoe@kde.org>
+ *  SPDX-FileCopyrightText: 2022 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -27,19 +28,14 @@ class BirthdayModel : public Akonadi::ContactsTreeModel
 {
     Q_OBJECT
 public:
-    enum {   // data columns
+    enum    // data columns
+    {
         NameColumn, DateColumn,
         ColumnCount
     };
 
-    /**
-     * Destroys the global contact model.
-     */
     ~BirthdayModel() override;
 
-    /**
-     * Returns the global contact model instance.
-     */
     static BirthdayModel* instance();
 
     QVariant entityData(const Akonadi::Item&, int column, int role = Qt::DisplayRole) const override;
@@ -59,7 +55,7 @@ class BirthdaySortModel : public QSortFilterProxyModel
 public:
     explicit BirthdaySortModel(QObject* parent = nullptr);
 
-    void setPrefixSuffix(const QString& prefix, const QString& suffix);
+    void setPrefixSuffix(const QString& prefix, const QString& suffix, const QStringList& alarmMessageList);
 
 protected:
     bool filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const override;

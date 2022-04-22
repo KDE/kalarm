@@ -15,6 +15,7 @@
 #include "functions.h"
 #include "kalarmapp.h"
 #include "mainwindow.h"
+#include "pluginmanager.h"
 #include "preferences.h"
 #include "resourcescalendar.h"
 #include "lib/config.h"
@@ -22,10 +23,8 @@
 #include "lib/file.h"
 #include "lib/messagebox.h"
 #include "lib/pushbutton.h"
+#include "akonadiplugin/akonadiplugin.h"
 #include "kalarm_debug.h"
-
-#include <Akonadi/ItemFetchJob>
-#include <Akonadi/ItemFetchScope>
 
 #include <KAboutData>
 #include <KStandardGuiItem>
@@ -468,7 +467,7 @@ void MessageWindow::setUpDisplay()
         mHelper->setSilenceButton(mSilenceButton);
     }
 
-    if (mEmailId() >= 0)
+    if (mEmailId() >= 0  &&  PluginManager::instance()->akonadiPlugin())
     {
         // KMail button
         mKMailButton = new PushButton(topWidget);
@@ -1093,6 +1092,9 @@ void MessageWindow::slotOk()
 */
 void MessageWindow::slotShowKMailMessage()
 {
+    AkonadiPlugin* akonadiPlugin = PluginManager::instance()->akonadiPlugin();
+    if (!akonadiPlugin)
+        return;
     qCDebug(KALARM_LOG) << "MessageWindow::slotShowKMailMessage";
     if (mEmailId() < 0)
         return;
@@ -1107,17 +1109,11 @@ void MessageWindow::slotShowKMailMessage()
         failed1 = false;
 
     // Select the mail folder containing the message
-    Akonadi::ItemFetchJob* job = new Akonadi::ItemFetchJob(Akonadi::Item(mEmailId()));
-    job->fetchScope().setAncestorRetrieval(Akonadi::ItemFetchScope::Parent);
-    Akonadi::Item::List items;
-    if (job->exec())
-        items = job->items();
-    if (items.isEmpty()  ||  !items.at(0).isValid())
+    qint64 colId = akonadiPlugin->getCollectionId(mEmailId());
+    if (colId < 0)
         qCWarning(KALARM_LOG) << "MessageWindow::slotShowKMailMessage: No parent found for item" << mEmailId();
     else
     {
-        const Akonadi::Item& it = items.at(0);
-        const Akonadi::Collection::Id colId = it.parentCollection().id();
         reply = kmail.selectFolder(QString::number(colId));
         if (!reply.isValid())
             qCCritical(KALARM_LOG) << "kmail 'selectFolder' D-Bus call failed:" << reply.error().message();

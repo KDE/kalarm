@@ -21,8 +21,10 @@
 using namespace KAlarmCal;
 
 namespace KCal { class Event; }
+namespace KAlarmCal { class AlarmText; }
 class QWidget;
 class QAction;
+class QMimeData;
 class KToggleAction;
 class Resource;
 class MainWindow;
@@ -306,6 +308,17 @@ void                deleteRtcWakeConfig();
 void                cancelRtcWake(QWidget* msgParent, const QString& eventId = QString());
 bool                setRtcWakeTime(unsigned triggerTime, QWidget* parent);
 #endif
+
+/** Extract dragged and dropped Akonadi RFC822 message data.
+ *  If the data does not contain an Akonadi email URL, or if the KAlarm Akonadi
+ *  plugin is not available, this function simply returns the dropped URL.
+ *  @param data       Dropped data.
+ *  @param url        Receives the first URL in the data, or empty if data does
+ *                    not provide URLs.
+ *  @param alarmText  Receives the extracted Akonadi email data.
+ *  @return  true if @p data contained Akonadi RFC822 message data, false if not.
+ */
+bool dropAkonadiEmail(const QMimeData* data, QUrl& url, AlarmText& alarmText);
 
 bool                convertTimeString(const QByteArray& timeString, KADateTime& dateTime,
                                   const KADateTime& defaultDt = KADateTime(), bool allowTZ = true);

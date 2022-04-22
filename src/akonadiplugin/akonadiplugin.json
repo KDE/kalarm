@@ -1,0 +1,8 @@
+{
+    "KPlugin": {
+        "Id": "akonadi",
+        "Description": "Functions which require Akonadi",
+        "Name": "Akonadi Functions",
+        "Version": "1.0"
+    }
+}

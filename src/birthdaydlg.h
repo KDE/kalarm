@@ -24,7 +24,7 @@ class RepetitionButton;
 class LateCancelSelector;
 class Reminder;
 class BLineEdit;
-class BirthdaySortModel;
+class QSortFilterProxyModel;
 class QDialogButtonBox;
 
 using namespace KAlarmCal;
@@ -46,22 +46,27 @@ private Q_SLOTS:
     void           setColours(const QColor& fg, const QColor& bg);
 
 private:
-    BirthdaySortModel*    mBirthdaySortModel;
-    QTreeView*            mListView;
-    KLineEdit*            mName {nullptr};
-    BLineEdit*            mPrefix;
-    BLineEdit*            mSuffix;
-    Reminder*             mReminder;
-    SoundPicker*          mSoundPicker;
-    FontColourButton*     mFontColourButton;
-    CheckBox*             mConfirmAck;
-    LateCancelSelector*   mLateCancel;
-    SpecialActionsButton* mSpecialActionsButton {nullptr};
-    RepetitionButton*     mSubRepetition;
-    QDialogButtonBox*     mButtonBox;
-    QString               mPrefixText;   // last entered value of prefix text
-    QString               mSuffixText;   // last entered value of suffix text
-    KAEvent::Flags        mFlags;        // event flag bits
+    void           setSortModelSelectionList();
+
+    QSortFilterProxyModel* mBirthdaySortModel;   // actually a BirthdaySortModel, inherited from QSortFilterProxyModel
+    QTreeView*             mListView;
+    KLineEdit*             mName {nullptr};
+    BLineEdit*             mPrefix;
+    BLineEdit*             mSuffix;
+    Reminder*              mReminder;
+    SoundPicker*           mSoundPicker;
+    FontColourButton*      mFontColourButton;
+    CheckBox*              mConfirmAck;
+    LateCancelSelector*    mLateCancel;
+    SpecialActionsButton*  mSpecialActionsButton {nullptr};
+    RepetitionButton*      mSubRepetition;
+    QDialogButtonBox*      mButtonBox;
+    QString                mPrefixText;   // last entered value of prefix text
+    QString                mSuffixText;   // last entered value of suffix text
+    KAEvent::Flags         mFlags;        // event flag bits
+    int                    mBirthdayModel_NameColumn {-1};
+    int                    mBirthdayModel_DateColumn {-1};
+    int                    mBirthdayModel_DateRole {-1};
 };
 
 

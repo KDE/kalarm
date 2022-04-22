@@ -18,6 +18,7 @@
 #include "kamail.h"
 #include "messagedisplay.h"
 #include "newalarmaction.h"
+#include "pluginmanager.h"
 #include "prefdlg.h"
 #include "preferences.h"
 #include "resourcescalendar.h"
@@ -37,7 +38,6 @@
 #include "config-kalarm.h"
 #include "kalarm_debug.h"
 
-#include <Akonadi/Item>
 #include <KCalUtils/ICalDrag>
 #include <KCalendarCore/MemoryCalendar>
 using namespace KCalendarCore;
@@ -540,9 +540,12 @@ void MainWindow::initActions()
     actions->addAction(QStringLiteral("importAlarms"), mActionImportAlarms);
     connect(mActionImportAlarms, &QAction::triggered, this, &MainWindow::slotImportAlarms);
 
-    mActionImportBirthdays = new QAction(i18nc("@action", "Import &Birthdays..."), this);
-    actions->addAction(QStringLiteral("importBirthdays"), mActionImportBirthdays);
-    connect(mActionImportBirthdays, &QAction::triggered, this, &MainWindow::slotBirthdays);
+    if (PluginManager::instance()->akonadiPlugin())
+    {
+        mActionImportBirthdays = new QAction(i18nc("@action", "Import Birthdays..."), this);
+        actions->addAction(QStringLiteral("importBirthdays"), mActionImportBirthdays);
+        connect(mActionImportBirthdays, &QAction::triggered, this, &MainWindow::slotBirthdays);
+    }
 
     mActionExportAlarms = new QAction(i18nc("@action", "E&xport Selected Alarms..."), this);
     actions->addAction(QStringLiteral("exportAlarms"), mActionExportAlarms);
@@ -956,29 +959,32 @@ void MainWindow::slotExportAlarms()
 */
 void MainWindow::slotBirthdays()
 {
-    // Use AutoQPointer to guard against crash on application exit while
-    // the dialogue is still open. It prevents double deletion (both on
-    // deletion of MainWindow, and on return from this function).
-    AutoQPointer<BirthdayDlg> dlg = new BirthdayDlg(this);
-    if (dlg->exec() == QDialog::Accepted)
+    if (PluginManager::instance()->akonadiPlugin())
     {
-        QVector<KAEvent> events = dlg->events();
-        if (!events.isEmpty())
+        // Use AutoQPointer to guard against crash on application exit while
+        // the dialogue is still open. It prevents double deletion (both on
+        // deletion of MainWindow, and on return from this function).
+        AutoQPointer<BirthdayDlg> dlg = new BirthdayDlg(this);
+        if (dlg->exec() == QDialog::Accepted)
         {
-            mListView->clearSelection();
-            // Add alarm to the displayed lists and to the calendar file
-            Resource resource;
-            const KAlarm::UpdateResult status = KAlarm::addEvents(events, resource, dlg, true, true);
-            if (status.status < KAlarm::UPDATE_FAILED)
+            QVector<KAEvent> events = dlg->events();
+            if (!events.isEmpty())
             {
-                // Create the undo list
-                Undo::EventList undos;
-                for (int i = 0, end = events.count();  i < end;  ++i)
-                    if (!status.failed.contains(i))
-                        undos.append(events[i], resource);
-                Undo::saveAdds(undos, i18nc("@info", "Import birthdays"));
+                mListView->clearSelection();
+                // Add alarm to the displayed lists and to the calendar file
+                Resource resource;
+                const KAlarm::UpdateResult status = KAlarm::addEvents(events, resource, dlg, true, true);
+                if (status.status < KAlarm::UPDATE_FAILED)
+                {
+                    // Create the undo list
+                    Undo::EventList undos;
+                    for (int i = 0, end = events.count();  i < end;  ++i)
+                        if (!status.failed.contains(i))
+                            undos.append(events[i], resource);
+                    Undo::saveAdds(undos, i18nc("@info", "Import birthdays"));
 
-                KAlarm::outputAlarmWarnings(dlg);
+                    KAlarm::outputAlarmWarnings(dlg);
+                }
             }
         }
     }
@@ -1499,16 +1505,15 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
     else
     {
         QUrl url;
-        Akonadi::Item item;
-        if (DragDrop::dropAkonadiEmail(data, url, item, alarmText))
+        if (KAlarm::dropAkonadiEmail(data, url, alarmText))
         {
             // It's an email held in Akonadi
             qCDebug(KALARM_LOG) << "MainWindow::executeDropEvent: Akonadi email";
 //TODO: Fetch attachments if an email alarm is created below
         }
-        else if (!url.isEmpty()  &&  !item.isValid())
+        else if (!url.isEmpty())
         {
-            // The data provides a URL, but it isn't an Akonadi URL.
+            // The data provides a URL, but it isn't an Akonadi email URL.
             qCDebug(KALARM_LOG) << "MainWindow::executeDropEvent: URL";
             // Try to find the mime type of the file, without downloading a remote file
             QMimeDatabase mimeDb;
@@ -1567,7 +1572,8 @@ void MainWindow::slotCalendarStatusChanged()
     for (MainWindow* w : std::as_const(mWindowList))
     {
         w->mActionImportAlarms->setEnabled(active || templat);
-        w->mActionImportBirthdays->setEnabled(active);
+        if (w->mActionImportBirthdays)
+            w->mActionImportBirthdays->setEnabled(active);
         w->mActionCreateTemplate->setEnabled(templat);
         // Note: w->mActionNew enabled status is set in the NewAlarmAction class.
         w->slotSelection();

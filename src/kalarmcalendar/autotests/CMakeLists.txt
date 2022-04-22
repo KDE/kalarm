@@ -13,9 +13,10 @@ macro(macro_unit_tests)
     target_link_libraries(${_testname}
         KF5::CalendarCore
         KF5::Holidays
-        kalarmprivate
+        kalarmcalendar
         Qt${QT_MAJOR_VERSION}::DBus
         Qt${QT_MAJOR_VERSION}::Test)
+    target_include_directories(${_testname} PUBLIC "$<BUILD_INTERFACE:${kalarm_SOURCE_DIR}/src/kalarmcalendar;${kalarm_BINARY_DIR}/src/kalarmcalendar>")
   endforeach()
 endmacro()
 if (NOT WIN32)

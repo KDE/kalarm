@@ -1,14 +1,14 @@
 /*
  *  birthdaydlg.cpp  -  dialog to pick birthdays from address book
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2002-2021 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2002-2022 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "birthdaydlg.h"
 
-#include "birthdaymodel.h"
+#include "akonadiplugin/akonadiplugin.h"
 #include "editdlgtypes.h"
 #include "fontcolourbutton.h"
 #include "kalarmapp.h"
@@ -20,17 +20,14 @@
 #include "soundpicker.h"
 #include "specialactions.h"
 #include "lib/checkbox.h"
+#include "pluginmanager.h"
 #include "lib/shellprocess.h"
 #include "kalarm_debug.h"
-
-#include <Akonadi/ControlGui>
-#include <Akonadi/EntityMimeTypeFilterModel>
 
 #include <KLocalizedString>
 #include <KConfigGroup>
 #include <KStandardAction>
 #include <KActionCollection>
-#include <KDescendantsProxyModel>
 #include <KSharedConfig>
 
 #include <QAction>
@@ -41,6 +38,7 @@
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QDialogButtonBox>
+#include <QSortFilterProxyModel>
 
 using namespace KCal;
 
@@ -51,16 +49,21 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
     setObjectName(QStringLiteral("BirthdayDlg"));    // used by LikeBack
     setWindowTitle(i18nc("@title:window", "Import Birthdays From KAddressBook"));
 
-    auto topLayout = new QVBoxLayout(this);
+    auto mainLayout = new QVBoxLayout(this);
+    QWidget* mainWidget = new QWidget;
+    mainLayout->addWidget(mainWidget);
+
+    auto topLayout = new QVBoxLayout(mainWidget);
+    topLayout->setContentsMargins(0, 0, 0, 0);
 
     if (Preferences::useAlarmName())
     {
         auto hlayout = new QHBoxLayout();
         hlayout->setContentsMargins(0, 0, 0, 0);
         topLayout->addLayout(hlayout);
-        QLabel* label = new QLabel(i18nc("@label:textbox", "Alarm name:"), this);
+        QLabel* label = new QLabel(i18nc("@label:textbox", "Alarm name:"), mainWidget);
         hlayout->addWidget(label);
-        mName = new KLineEdit(this);
+        mName = new KLineEdit(mainWidget);
         mName->setMinimumSize(mName->sizeHint());
         label->setBuddy(mName);
         mName->setWhatsThis(i18nc("@info:whatsthis", "Enter a name to help you identify this alarm. This is optional and need not be unique."));
@@ -73,7 +76,7 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
     mPrefixText = config.readEntry("BirthdayPrefix", i18nc("@info", "Birthday: "));
     mSuffixText = config.readEntry("BirthdaySuffix");
 
-    QGroupBox* textGroup = new QGroupBox(i18nc("@title:group", "Alarm Text"), this);
+    QGroupBox* textGroup = new QGroupBox(i18nc("@title:group", "Alarm Text"), mainWidget);
     topLayout->addWidget(textGroup);
     auto grid = new QGridLayout(textGroup);
     QLabel* label = new QLabel(i18nc("@label:textbox", "Prefix:"), textGroup);
@@ -98,41 +101,34 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
           "including any necessary leading spaces."));
     grid->addWidget(mSuffix, 1, 1);
 
-    QGroupBox* group = new QGroupBox(i18nc("@title:group", "Select Birthdays"), this);
+    QGroupBox* group = new QGroupBox(i18nc("@title:group", "Select Birthdays"), mainWidget);
     topLayout->addWidget(group);
     auto layout = new QVBoxLayout(group);
     layout->setContentsMargins(0, 0, 0, 0);
 
-    // Start Akonadi server as we need it for the birthday model to access contacts information
-    Akonadi::ControlGui::start();
+    AkonadiPlugin* akonadiPlugin = PluginManager::instance()->akonadiPlugin();
+    if (!akonadiPlugin)
+        return;   // no error message - this constructor should only be called if Akonadi plugin exists
+    mBirthdaySortModel = akonadiPlugin->createBirthdayModels(mainWidget, this);
+    connect(akonadiPlugin, &AkonadiPlugin::birthdayModelDataChanged, this, &BirthdayDlg::resizeViewColumns);
+    setSortModelSelectionList();
 
-    BirthdayModel* model = BirthdayModel::instance();
-    connect(model, &BirthdayModel::dataChanged, this, &BirthdayDlg::resizeViewColumns);
+    mBirthdayModel_NameColumn = akonadiPlugin->birthdayModelEnum(AkonadiPlugin::BirthdayModelValue::NameColumn);
+    mBirthdayModel_DateColumn = akonadiPlugin->birthdayModelEnum(AkonadiPlugin::BirthdayModelValue::DateColumn);
+    mBirthdayModel_DateRole   = akonadiPlugin->birthdayModelEnum(AkonadiPlugin::BirthdayModelValue::DateRole);
 
-    auto descendantsModel = new KDescendantsProxyModel(this);
-    descendantsModel->setSourceModel(model);
-
-    auto mimeTypeFilter = new Akonadi::EntityMimeTypeFilterModel(this);
-    mimeTypeFilter->setSourceModel(descendantsModel);
-    mimeTypeFilter->addMimeTypeExclusionFilter(Akonadi::Collection::mimeType());
-    mimeTypeFilter->setHeaderGroup(Akonadi::EntityTreeModel::ItemListHeaders);
-
-    mBirthdaySortModel = new BirthdaySortModel(this);
-    mBirthdaySortModel->setSourceModel(mimeTypeFilter);
-    mBirthdaySortModel->setSortCaseSensitivity(Qt::CaseInsensitive);
-    mBirthdaySortModel->setPrefixSuffix(mPrefixText, mSuffixText);
     mListView = new QTreeView(group);
     mListView->setEditTriggers(QAbstractItemView::NoEditTriggers);
     mListView->setModel(mBirthdaySortModel);
     mListView->setRootIsDecorated(false);    // don't show expander icons
     mListView->setSortingEnabled(true);
-    mListView->sortByColumn(BirthdayModel::NameColumn, mListView->header()->sortIndicatorOrder());
+    mListView->sortByColumn(mBirthdayModel_NameColumn, mListView->header()->sortIndicatorOrder());
     mListView->setAllColumnsShowFocus(true);
     mListView->setSelectionMode(QAbstractItemView::ExtendedSelection);
     mListView->setSelectionBehavior(QAbstractItemView::SelectRows);
     mListView->setTextElideMode(Qt::ElideRight);
-    mListView->header()->setSectionResizeMode(BirthdayModel::NameColumn, QHeaderView::Stretch);
-    mListView->header()->setSectionResizeMode(BirthdayModel::DateColumn, QHeaderView::ResizeToContents);
+    mListView->header()->setSectionResizeMode(mBirthdayModel_NameColumn, QHeaderView::Stretch);
+    mListView->header()->setSectionResizeMode(mBirthdayModel_DateColumn, QHeaderView::ResizeToContents);
     connect(mListView->selectionModel(), &QItemSelectionModel::selectionChanged, this, &BirthdayDlg::slotSelectionChanged);
     mListView->setWhatsThis(xi18nc("@info:whatsthis",
           "<para>Select birthdays to set alarms for.<nl/>"
@@ -141,7 +137,7 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
           "or by clicking the mouse while pressing Ctrl or Shift.</para>"));
     layout->addWidget(mListView);
 
-    group = new QGroupBox(i18nc("@title:group", "Alarm Configuration"), this);
+    group = new QGroupBox(i18nc("@title:group", "Alarm Configuration"), mainWidget);
     topLayout->addWidget(group);
     auto groupLayout = new QVBoxLayout(group);
 
@@ -231,7 +227,7 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
             this, &BirthdayDlg::slotOk);
     connect(mButtonBox, &QDialogButtonBox::rejected,
             this, &QDialog::reject);
-    topLayout->addWidget(mButtonBox);
+    mainLayout->addWidget(mButtonBox);
 
 
     KActionCollection* actions = new KActionCollection(this);
@@ -265,7 +261,7 @@ QVector<KAEvent> BirthdayDlg::events() const
         const QModelIndex nameIndex     = index.model()->index(index.row(), 0);
         const QModelIndex birthdayIndex = index.model()->index(index.row(), 1);
         const QString name = nameIndex.data(Qt::DisplayRole).toString();
-        QDate date = birthdayIndex.data(BirthdayModel::DateRole).toDate();
+        QDate date = birthdayIndex.data(mBirthdayModel_DateRole).toDate();
         date.setDate(thisYear, date.month(), date.day());
         if (date <= today)
             date.setDate(thisYear + 1, date.month(), date.day());
@@ -343,7 +339,7 @@ void BirthdayDlg::setColours(const QColor& fgColour, const QColor& bgColour)
 */
 void BirthdayDlg::resizeViewColumns()
 {
-    mListView->resizeColumnToContents(BirthdayModel::DateColumn);
+    mListView->resizeColumnToContents(mBirthdayModel_DateColumn);
 }
 
 /******************************************************************************
@@ -360,8 +356,29 @@ void BirthdayDlg::slotTextLostFocus()
         // Text has changed - re-evaluate the selection list
         mPrefixText = prefix;
         mSuffixText = suffix;
-        mBirthdaySortModel->setPrefixSuffix(mPrefixText, mSuffixText);
+        setSortModelSelectionList();
     }
+}
+
+/******************************************************************************
+* Re-evaluates the selection list according to the birthday alarm text format.
+*/
+void BirthdayDlg::setSortModelSelectionList()
+{
+    AkonadiPlugin* akonadiPlugin = PluginManager::instance()->akonadiPlugin();
+    if (!akonadiPlugin)
+        return;
+
+    QStringList alarmMessageList;
+    const QVector<KAEvent> activeEvents = ResourcesCalendar::events(CalEvent::ACTIVE);
+    for (const KAEvent& event : activeEvents)
+    {
+        if (event.actionSubType() == KAEvent::MESSAGE
+        &&  event.recurType() == KARecurrence::ANNUAL_DATE
+        &&  (mPrefixText.isEmpty()  ||  event.message().startsWith(mPrefixText)))
+            alarmMessageList.append(event.message());
+    }
+    akonadiPlugin->setPrefixSuffix(mBirthdaySortModel, mPrefixText, mSuffixText, alarmMessageList);
 }
 
 // vim: et sw=4:

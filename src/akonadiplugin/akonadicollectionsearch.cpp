@@ -1,14 +1,14 @@
 /*
  *  akonadicollectionsearch.cpp  -  Search Akonadi Collections
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2014-2020 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2014-2022 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include "akonadicollectionsearch.h"
 
-#include "kalarm_debug.h"
+#include "akonadiplugin_debug.h"
 
 #include <Akonadi/AgentInstance>
 #include <Akonadi/AgentManager>
@@ -67,7 +67,7 @@ void AkonadiCollectionSearch::collectionFetchResult(KJob* j)
 {
     auto job = qobject_cast<CollectionFetchJob*>(j);
     if (j->error())
-        qCCritical(KALARM_LOG) << "AkonadiCollectionSearch::collectionFetchResult: CollectionFetchJob" << job->fetchScope().resource()<< "error: " << j->errorString();
+        qCCritical(AKONADIPLUGIN_LOG) << "AkonadiCollectionSearch::collectionFetchResult: CollectionFetchJob" << job->fetchScope().resource()<< "error: " << j->errorString();
     else
     {
         const Collection::List collections = job->collections();
@@ -119,9 +119,9 @@ void AkonadiCollectionSearch::itemFetchResult(KJob* j)
     if (j->error())
     {
         if (!mUid.isEmpty())
-            qCDebug(KALARM_LOG) << "AkonadiCollectionSearch::itemFetchResult: ItemFetchJob: collection" << mItemFetchJobs[job] << "UID" << mUid << "error: " << j->errorString();
+            qCDebug(AKONADIPLUGIN_LOG) << "AkonadiCollectionSearch::itemFetchResult: ItemFetchJob: collection" << mItemFetchJobs[job] << "UID" << mUid << "error: " << j->errorString();
         else
-            qCDebug(KALARM_LOG) << "AkonadiCollectionSearch::itemFetchResult: ItemFetchJob: collection" << mItemFetchJobs[job] << "GID" << mGid << "error: " << j->errorString();
+            qCDebug(AKONADIPLUGIN_LOG) << "AkonadiCollectionSearch::itemFetchResult: ItemFetchJob: collection" << mItemFetchJobs[job] << "GID" << mGid << "error: " << j->errorString();
     }
     else
     {
@@ -164,9 +164,9 @@ void AkonadiCollectionSearch::itemDeleteResult(KJob* j)
     if (j->error())
     {
         if (!mUid.isEmpty())
-            qCDebug(KALARM_LOG) << "AkonadiCollectionSearch::itemDeleteResult: ItemDeleteJob: resource" << mItemDeleteJobs[job] << "UID" << mUid << "error: " << j->errorString();
+            qCDebug(AKONADIPLUGIN_LOG) << "AkonadiCollectionSearch::itemDeleteResult: ItemDeleteJob: resource" << mItemDeleteJobs[job] << "UID" << mUid << "error: " << j->errorString();
         else
-            qCDebug(KALARM_LOG) << "AkonadiCollectionSearch::itemDeleteResult: ItemDeleteJob: resource" << mItemDeleteJobs[job] << "GID" << mGid << "error: " << j->errorString();
+            qCDebug(AKONADIPLUGIN_LOG) << "AkonadiCollectionSearch::itemDeleteResult: ItemDeleteJob: resource" << mItemDeleteJobs[job] << "GID" << mGid << "error: " << j->errorString();
     }
     else
         ++mDeleteCount;

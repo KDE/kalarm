@@ -18,12 +18,12 @@
 #include "mainwindow.h"
 #include "messagewindow.h"
 #include "pickfileradio.h"
+#include "pluginmanager.h"
 #include "reminder.h"
 #include "soundpicker.h"
 #include "sounddlg.h"
 #include "specialactions.h"
 #include "templatepickdlg.h"
-#include "lib/autoqpointer.h"
 #include "lib/buttongroup.h"
 #include "lib/checkbox.h"
 #include "lib/colourbutton.h"
@@ -35,9 +35,9 @@
 #include "lib/shellprocess.h"
 #include "lib/timespinbox.h"
 #include "kalarmcalendar/identities.h"
+#include "akonadiplugin/akonadiplugin.h"
 #include "kalarm_debug.h"
 
-#include <Akonadi/EmailAddressSelectionDialog>
 #include <KCalUtils/ICalDrag>
 #include <KCalendarCore/Person>
 
@@ -53,6 +53,7 @@
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QDragEnterEvent>
+#include <QMimeData>
 #include <QStandardItemModel>
 
 using namespace KAlarmCal;
@@ -1196,12 +1197,15 @@ void EditEmailAlarmDlg::type_init(QWidget* parent, QVBoxLayout* frameLayout)
     connect(mEmailToEdit, &LineEdit::textChanged, this, &EditEmailAlarmDlg::contentsChanged);
     grid->addWidget(mEmailToEdit, 1, 1);
 
-    mEmailAddressButton = new QPushButton(parent);
-    mEmailAddressButton->setIcon(QIcon::fromTheme(QStringLiteral("help-contents")));
-    connect(mEmailAddressButton, &QPushButton::clicked, this, &EditEmailAlarmDlg::openAddressBook);
-    mEmailAddressButton->setToolTip(i18nc("@info:tooltip", "Open address book"));
-    mEmailAddressButton->setWhatsThis(i18nc("@info:whatsthis", "Select email addresses from your address book."));
-    grid->addWidget(mEmailAddressButton, 1, 2);
+    if (PluginManager::instance()->akonadiPlugin())
+    {
+        mEmailAddressButton = new QPushButton(parent);
+        mEmailAddressButton->setIcon(QIcon::fromTheme(QStringLiteral("help-contents")));
+        connect(mEmailAddressButton, &QPushButton::clicked, this, &EditEmailAlarmDlg::openAddressBook);
+        mEmailAddressButton->setToolTip(i18nc("@info:tooltip", "Open address book"));
+        mEmailAddressButton->setWhatsThis(i18nc("@info:whatsthis", "Select email addresses from your address book."));
+        grid->addWidget(mEmailAddressButton, 1, 2);
+    }
 
     // Email subject
     label = new QLabel(i18nc("@label:textbox Email subject", "Subject:"), parent);
@@ -1341,13 +1345,15 @@ void EditEmailAlarmDlg::setReadOnly(bool readOnly)
         mEmailFromList->setReadOnly(readOnly);
     if (readOnly)
     {
-        mEmailAddressButton->hide();
+        if (mEmailAddressButton)
+            mEmailAddressButton->hide();
         mEmailAddAttachButton->hide();
         mEmailRemoveButton->hide();
     }
     else
     {
-        mEmailAddressButton->show();
+        if (mEmailAddressButton)
+            mEmailAddressButton->show();
         mEmailAddAttachButton->show();
         mEmailRemoveButton->show();
     }
@@ -1496,22 +1502,18 @@ void EditEmailAlarmDlg::slotTrySuccess()
 */
 void EditEmailAlarmDlg::openAddressBook()
 {
-    // Use AutoQPointer to guard against crash on application exit while
-    // the dialogue is still open. It prevents double deletion (both on
-    // deletion of MainWindow, and on return from this function).
-    AutoQPointer<Akonadi::EmailAddressSelectionDialog> dlg = new Akonadi::EmailAddressSelectionDialog(this);
-    if (dlg->exec() != QDialog::Accepted)
-        return;
-
-    Akonadi::EmailAddressSelection::List selections = dlg->selectedAddresses();
-    if (selections.isEmpty())
-        return;
-    const Person person(selections.first().name(), selections.first().email());
-    QString addrs = mEmailToEdit->text().trimmed();
-    if (!addrs.isEmpty())
-        addrs += QLatin1String(", ");
-    addrs += person.fullName();
-    mEmailToEdit->setText(addrs);
+    AkonadiPlugin* akonadiPlugin = PluginManager::instance()->akonadiPlugin();
+    if (akonadiPlugin)
+    {
+        Person person;
+        if (!akonadiPlugin->getAddressBookSelection(person, this))
+            return;
+        QString addrs = mEmailToEdit->text().trimmed();
+        if (!addrs.isEmpty())
+            addrs += QLatin1String(", ");
+        addrs += person.fullName();
+        mEmailToEdit->setText(addrs);
+    }
 }
 
 /******************************************************************************
@@ -2003,8 +2005,7 @@ void TextEdit::dropEvent(QDropEvent* e)
         else
         {
             QUrl url;
-            Akonadi::Item item;
-            if (DragDrop::dropAkonadiEmail(data, url, item, alarmText))
+            if (KAlarm::dropAkonadiEmail(data, url, alarmText))
             {
                 // It's an email held in Akonadi
                 qCDebug(KALARM_LOG) << "TextEdit::dropEvent: Akonadi email";

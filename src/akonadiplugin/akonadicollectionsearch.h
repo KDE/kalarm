@@ -1,7 +1,7 @@
 /*
  *  akonadicollectionsearch.h  -  Search Akonadi Collections
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2014, 2019 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2014-2022 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -37,7 +37,7 @@ class AkonadiCollectionSearch : public QObject
 {
     Q_OBJECT
 public:
-    explicit AkonadiCollectionSearch(const QString& mimeType, const QString& gid = QString(), const QString& uid = QString(), bool remove = false);
+    explicit AkonadiCollectionSearch(const QString& mimeType, const QString& gid = {}, const QString& uid = {}, bool remove = false);
 
 Q_SIGNALS:
     // Signal emitted if action is to fetch all collections for the mime type

@@ -9,9 +9,6 @@
 
 #include "birthdaymodel.h"
 
-#include "resourcescalendar.h"
-#include "kalarmcalendar/kaevent.h"
-
 #include <Akonadi/ChangeRecorder>
 #include <Akonadi/EntityDisplayAttribute>
 #include <Akonadi/ItemFetchScope>
@@ -19,8 +16,6 @@
 #include <KContacts/Addressee>
 
 #include <QLocale>
-
-using namespace KAlarmCal;
 
 
 BirthdayModel* BirthdayModel::mInstance = nullptr;
@@ -78,20 +73,15 @@ BirthdaySortModel::BirthdaySortModel(QObject* parent)
 {
 }
 
-void BirthdaySortModel::setPrefixSuffix(const QString& prefix, const QString& suffix)
+/******************************************************************************
+* Set a new prefix and suffix for the alarm message, and set the selection list
+* based on them.
+*/
+void BirthdaySortModel::setPrefixSuffix(const QString& prefix, const QString& suffix, const QStringList& alarmMessageList)
 {
-    mContactsWithAlarm.clear();
     mPrefix = prefix;
     mSuffix = suffix;
-
-    const QVector<KAEvent> events = ResourcesCalendar::events(CalEvent::ACTIVE);
-    for (const KAEvent& event : events)
-    {
-        if (event.actionSubType() == KAEvent::MESSAGE
-        &&  event.recurType() == KARecurrence::ANNUAL_DATE
-        &&  (prefix.isEmpty()  ||  event.message().startsWith(prefix)))
-            mContactsWithAlarm.append(event.message());
-    }
+    mContactsWithAlarm = alarmMessageList;
 
     invalidateFilter();
 }
