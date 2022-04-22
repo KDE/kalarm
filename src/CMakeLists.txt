@@ -4,31 +4,33 @@ include_directories(
 )
 
 add_subdirectory(kalarmcalendar)
-add_subdirectory(akonadiplugin)
+if (ENABLE_AKONADI_PLUGIN)
+    add_subdirectory(akonadiplugin)
+endif()
 add_subdirectory(appicons)
 add_subdirectory(pixmaps)
 add_subdirectory(autostart)
 
 ########### next target ###############
 
-set(kalarmplugin_common_SRCS)
+set(kalarmpluginlib_common_SRCS)
 
-ecm_qt_declare_logging_category(kalarmplugin_common_SRCS
-                                HEADER kalarmplugin_debug.h
-				IDENTIFIER KALARMPLUGIN_LOG
-                                CATEGORY_NAME org.kde.pim.kalarm.plugin
-                                DESCRIPTION "kalarm (plugin)"
-				EXPORT KALARMPLUGIN
+ecm_qt_declare_logging_category(kalarmpluginlib_common_SRCS
+                                HEADER kalarmpluginlib_debug.h
+                                IDENTIFIER KALARMPLUGINLIB_LOG
+                                CATEGORY_NAME org.kde.pim.kalarm.pluginlib
+                                DESCRIPTION "kalarm (pluginlib)"
+                                EXPORT KALARMPLUGINLIB
                                 )
 
 add_library(kalarmplugin)
 
 target_sources(kalarmplugin PRIVATE
-    ${kalarmplugin_common_SRCS}
+    ${kalarmpluginlib_common_SRCS}
     pluginbase.cpp
     pluginmanager.cpp
 )
-generate_export_header(kalarmplugin BASE_NAME kalarmplugin)
+generate_export_header(kalarmplugin BASE_NAME kalarmpluginlib)
 
 target_link_libraries(kalarmplugin PRIVATE
     kalarmcalendar
@@ -137,8 +139,6 @@ set(resources_SRCS
     resources/fileresourcecalendarupdater.cpp
     resources/singlefileresource.cpp
     resources/singlefileresourceconfigdialog.cpp
-    resources/migration/collectionattribute.cpp
-    resources/migration/compatibilityattribute.cpp
     resources/migration/dirresourceimportdialog.cpp
     resources/migration/fileresourcemigrator.cpp
     resources/calendarfunctions.h
@@ -160,8 +160,6 @@ set(resources_SRCS
     resources/fileresourcecalendarupdater.h
     resources/singlefileresource.h
     resources/singlefileresourceconfigdialog.h
-    resources/migration/collectionattribute.h
-    resources/migration/compatibilityattribute.h
     resources/migration/dirresourceimportdialog.h
     resources/migration/fileresourcemigrator.h
    )
@@ -324,8 +322,6 @@ target_link_libraries(kalarm_bin
     KF5::KIOFileWidgets
     KF5::Crash
     Phonon::phonon4qt${QT_MAJOR_VERSION}
-    KF5::AkonadiCore
-    KF5::AkonadiMime
     KF5::CalendarCore
     KF5::CalendarUtils
     KF5::Contacts
@@ -334,7 +330,6 @@ target_link_libraries(kalarm_bin
     KF5::MailTransportAkonadi
     KF5::MailTransport
     KF5::Mime
-    KF5::PimCommon
 )
 
 if (ENABLE_WAKE_FROM_SUSPEND)

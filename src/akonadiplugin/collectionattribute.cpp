@@ -8,7 +8,7 @@
 
 #include "collectionattribute.h"
 
-#include "kalarm_debug.h"
+#include "akonadiplugin_debug.h"
 
 using namespace KAlarmCal;
 
@@ -186,13 +186,13 @@ QByteArray CollectionAttribute::serialized() const
              + QByteArray::number(d->mBackgroundColour.blue()) + ' '
              + QByteArray::number(d->mBackgroundColour.alpha());
     }
-    qCDebug(KALARM_LOG) << v;
+    qCDebug(AKONADIPLUGIN_LOG) << v;
     return v;
 }
 
 void CollectionAttribute::deserialize(const QByteArray& data)
 {
-    qCDebug(KALARM_LOG) << data;
+    qCDebug(AKONADIPLUGIN_LOG) << data;
 
     // Set default values
     d->mEnabled          = CalEvent::EMPTY;

@@ -9,7 +9,7 @@
 #pragma once
 
 #include "kalarmcalendar/kacalendar.h"
-#include "kalarmplugin_export.h"
+#include "kalarmpluginlib_export.h"
 
 #include <KMime/Message>
 
@@ -21,7 +21,7 @@ namespace KMime { class Content; }
 namespace KCalendarCore { class Person; }
 class QSortFilterProxyModel;
 
-class KALARMPLUGIN_EXPORT PluginBase : public QObject
+class KALARMPLUGINLIB_EXPORT PluginBase : public QObject
 {
     Q_OBJECT
 public:
@@ -52,9 +52,35 @@ public:
     /** Delete a KOrganizer event. */
     virtual void deleteEvent(const QString& mimeType, const QString& gid = {}, const QString& uid = {}) = 0;
 
+    /** Initiate Akonadi resource migration. */
+    virtual void initiateAkonadiResourceMigration() = 0;
+
+    /** Delete a named Akonadi resource.
+     *  This should be called after the resource has been migrated.
+     */
+    virtual void deleteAkonadiResource(const QString& resourceName) = 0;
+
 Q_SIGNALS:
     /** Emitted when the birthday contacts model's data has changed. */
     void birthdayModelDataChanged();
+
+    /** Emitted when Akonadi resource migration has completed.
+     *  @param migrated  true if Akonadi migration was required.
+     */
+    void akonadiMigrationComplete(bool migrated);
+
+    /** Emitted when a file resource needs to be migrated. */
+    void migrateFileResource(const QString& resourceName, const QUrl& location, KAlarmCal::CalEvent::Types alarmTypes,
+                             const QString& displayName, const QColor& backgroundColour,
+                             KAlarmCal::CalEvent::Types enabledTypes, KAlarmCal::CalEvent::Types standardTypes,
+                             bool readOnly);
+
+    /** Emitted when a directory resource needs to be migrated. */
+    void migrateDirResource(const QString& resourceName, const QString& path, KAlarmCal::CalEvent::Types alarmTypes,
+                            const QString& displayName, const QColor& backgroundColour,
+                            KAlarmCal::CalEvent::Types enabledTypes, KAlarmCal::CalEvent::Types standardTypes,
+                            bool readOnly);
+
 
 protected:
     void setName(const QString& pluginName)  { mName = pluginName; }

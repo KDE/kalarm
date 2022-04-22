@@ -8,13 +8,13 @@
 
 #pragma once
 
-#include "kalarmplugin_export.h"
+#include "kalarmpluginlib_export.h"
 
 #include <QObject>
 
 class AkonadiPlugin;
 
-class KALARMPLUGIN_EXPORT PluginManager : public QObject
+class KALARMPLUGINLIB_EXPORT PluginManager : public QObject
 {
     Q_OBJECT
 public:

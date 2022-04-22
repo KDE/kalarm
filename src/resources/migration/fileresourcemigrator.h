@@ -1,5 +1,5 @@
 /*
- *  fileresourcemigrator.h  -  migrates or creates KAlarm non-Akonadi resources
+ *  fileresourcemigrator.h  -  migrates or creates KAlarm file system resources
  *  Program:  kalarm
  *  SPDX-FileCopyrightText: 2020-2022 David Jarvie <djarvie@kde.org>
  *
@@ -10,14 +10,7 @@
 
 #include "kalarmcalendar/kacalendar.h"
 
-#include <Akonadi/ServerManager>
-#include <Akonadi/Collection>
-
-class KJob;
-namespace Akonadi { class CollectionFetchJob; }
-using namespace KAlarmCal;
-
-class Resource;
+class AkonadiPlugin;
 
 /**
  * Class to migrate Akonadi or KResources alarm calendars from previous
@@ -46,38 +39,31 @@ public:
     static bool completed()    { return mCompleted; }
 
 private Q_SLOTS:
-    void checkAkonadiResources(Akonadi::ServerManager::State);
-    void akonadiMigrationComplete();
-    void collectionFetchResult(KJob*);
+    void akonadiMigrationComplete(bool migrated);
     void checkIfComplete();
 
 private:
     explicit FileResourceMigrator(QObject* parent = nullptr);
 
     void migrateAkonadiResources();
-    void doMigrateAkonadiResources();
-    void migrateAkonadiCollection(const Akonadi::Collection&, bool dirType);
     void migrateKResources();
     void createDefaultResources();
+    void migrateFileResource(const QString& resourceName,
+                             const QUrl& location, KAlarmCal::CalEvent::Types alarmTypes,
+                             const QString& displayName, const QColor& backgroundColour,
+                             KAlarmCal::CalEvent::Types enabledTypes,
+                             KAlarmCal::CalEvent::Types standardTypes, bool readOnly);
+    void migrateDirResource(const QString& resourceName,
+                            const QString& path, KAlarmCal::CalEvent::Types alarmTypes,
+                            const QString& displayName, const QColor& backgroundColour,
+                            KAlarmCal::CalEvent::Types enabledTypes,
+                            KAlarmCal::CalEvent::Types standardTypes, bool readOnly);
     void createCalendar(KAlarmCal::CalEvent::Type alarmType, const QString& file, const QString& name);
 
     static FileResourceMigrator* mInstance;
-    class AkonadiMigration;
-    AkonadiMigration* mAkonadiMigration {nullptr};
-    struct AkResourceData
-    {
-        QString             resourceId;  // Akonadi resource identifier
-        Akonadi::Collection collection;  // Akonadi collection
-        bool                dirType;     // it's a directory resource
-        AkResourceData() = default;
-        AkResourceData(const QString& r, const Akonadi::Collection& c, bool dir)
-            : resourceId(r), collection(c), dirType(dir) {}
-    };
-    QHash<QString, AkResourceData> mCollectionPaths;    // path, (Akonadi resource identifier, collection) pairs
-    QHash<Akonadi::CollectionFetchJob*, bool> mFetchesPending;  // pending collection fetch jobs for existing resources, and whether directory resource
+    AkonadiPlugin* mAkonadiPlugin {nullptr};
     KAlarmCal::CalEvent::Types mExistingAlarmTypes {KAlarmCal::CalEvent::EMPTY};  // alarm types provided by existing non-Akonadi resources
     bool            mMigrateKResources {true};  // need to migrate KResource resources
-    bool            mAkonadiStart {false};      // Akonadi was started by the migrator
     static bool     mCompleted;                 // execute() has completed
 };
 

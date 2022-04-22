@@ -141,8 +141,7 @@ void KAlarmApp::initialise()
 {
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     // Migrate config and data files from KDE4 locations.
-    MigrateKde4Files migrate;
-    migrate.migrate();
+    MigrateKde4Files::migrate();
 #endif
 
 #ifndef NDEBUG

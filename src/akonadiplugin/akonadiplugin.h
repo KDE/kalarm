@@ -44,6 +44,14 @@ public:
 
     /** Delete a KOrganizer event. */
     void deleteEvent(const QString& mimeType, const QString& gid = {}, const QString& uid = {}) override;
+
+    /** Initiate Akonadi resource migration. */
+    void initiateAkonadiResourceMigration() override;
+
+    /** Delete a named Akonadi resource.
+     *  This should be called after the resource has been migrated.
+     */
+    void deleteAkonadiResource(const QString& resourceName) override;
 };
 
 // vim: et sw=4:

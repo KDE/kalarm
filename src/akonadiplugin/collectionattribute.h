@@ -23,8 +23,6 @@
  *
  * This class is only used for migrating from legacy KAlarm Akonadi collections.
  *
- * @see CompatibilityAttribute
- *
  * @author David Jarvie <djarvie@kde.org>
  */
 

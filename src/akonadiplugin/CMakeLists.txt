@@ -8,10 +8,14 @@ kcoreaddons_add_plugin(akonadiplugin
     SOURCES
         akonadiplugin.cpp
         akonadicollectionsearch.cpp
+        akonadiresourcemigrator.cpp
         birthdaymodel.cpp
+        collectionattribute.cpp
         akonadiplugin.h
         akonadicollectionsearch.h
+        akonadiresourcemigrator.h
         birthdaymodel.h
+        collectionattribute.h
     INSTALL_NAMESPACE "kalarm"
 )
 
@@ -19,27 +23,25 @@ set_target_properties(akonadiplugin PROPERTIES LIBRARY_OUTPUT_DIRECTORY "${CMAKE
 
 ecm_qt_declare_logging_category(akonadiplugin
                                 HEADER akonadiplugin_debug.h
-				IDENTIFIER AKONADIPLUGIN_LOG
+                                IDENTIFIER AKONADIPLUGIN_LOG
                                 CATEGORY_NAME org.kde.pim.kalarm.akonadiplugin
                                 DEFAULT_SEVERITY Warning
                                 DESCRIPTION "kalarm (akonadi plugin)"
-				EXPORT AKONADIPLUGIN
+                                EXPORT AKONADIPLUGIN
                                )
 
 generate_export_header(akonadiplugin BASE_NAME akonadiplugin)
 
 target_link_libraries(akonadiplugin
     kalarmplugin
-    #    KF5::Completion
+    kalarmcalendar
     KF5::CalendarCore
     KF5::I18n
     KF5::Mime
-    #    KF5::XmlGui
     KF5::AkonadiCore
     KF5::AkonadiMime
     KF5::AkonadiContact
     KF5::AkonadiWidgets
     KF5::MailTransportAkonadi
     KF5::MailTransport
-#    KF5::PimCommon
 )

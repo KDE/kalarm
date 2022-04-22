@@ -53,7 +53,7 @@ private Q_SLOTS:
     void updateToday();
     void slotNewAlarm(EditAlarmDlg::Type);
     void slotNewAlarmFromTemplate(const KAEvent&);
- 
+
 private:
     void newMonthShown();
     void updateDisplay();

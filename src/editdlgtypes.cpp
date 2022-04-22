@@ -1195,10 +1195,11 @@ void EditEmailAlarmDlg::type_init(QWidget* parent, QVBoxLayout* frameLayout)
     mEmailToEdit->setWhatsThis(i18nc("@info:whatsthis", "Enter the addresses of the email recipients. Separate multiple addresses by "
                                     "commas or semicolons."));
     connect(mEmailToEdit, &LineEdit::textChanged, this, &EditEmailAlarmDlg::contentsChanged);
-    grid->addWidget(mEmailToEdit, 1, 1);
 
     if (PluginManager::instance()->akonadiPlugin())
     {
+        grid->addWidget(mEmailToEdit, 1, 1);
+
         mEmailAddressButton = new QPushButton(parent);
         mEmailAddressButton->setIcon(QIcon::fromTheme(QStringLiteral("help-contents")));
         connect(mEmailAddressButton, &QPushButton::clicked, this, &EditEmailAlarmDlg::openAddressBook);
@@ -1206,6 +1207,8 @@ void EditEmailAlarmDlg::type_init(QWidget* parent, QVBoxLayout* frameLayout)
         mEmailAddressButton->setWhatsThis(i18nc("@info:whatsthis", "Select email addresses from your address book."));
         grid->addWidget(mEmailAddressButton, 1, 2);
     }
+    else
+        grid->addWidget(mEmailToEdit, 1, 1, 1, 2);
 
     // Email subject
     label = new QLabel(i18nc("@label:textbox Email subject", "Subject:"), parent);

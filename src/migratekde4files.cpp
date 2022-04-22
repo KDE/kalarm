@@ -2,7 +2,7 @@
  * migratekde4files.cpp - migrate KDE4 config and data file locations
  * Program:  kalarm
  * SPDX-FileCopyrightText: 2015-2022 Laurent Montel <montel@kde.org>
- * SPDX-FileCopyrightText: 2019 David Jarvie <djarvie@kde.org>
+ * SPDX-FileCopyrightText: 2019-2022 David Jarvie <djarvie@kde.org>
  *
  * based on code from Sune Vuorela <sune@vuorela.dk> (Rawatar source code)
  *
@@ -13,47 +13,72 @@
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 #include "kalarm_debug.h"
 
+#include <Kdelibs4Migration>
 #include <Kdelibs4ConfigMigrator>
+#include <KSharedConfig>
+#include <KConfigGroup>
 
-MigrateKde4Files::MigrateKde4Files()
-{
-    initializeMigrator();
-}
+#include <QFileInfo>
+#include <QFile>
+#include <QDir>
 
-void MigrateKde4Files::migrate()
+namespace MigrateKde4Files
 {
+
+void migrate()
+{
+    const QString application = QStringLiteral("kalarm");
+    const QString configFile  = QStringLiteral("kalarmrc");
+    const QString configGroup = QStringLiteral("Migratekde4");
+
     // Migrate config and ui files to Qt5 locations.
-    Kdelibs4ConfigMigrator migrate(QStringLiteral("kalarm"));
-    migrate.setConfigFiles({QStringLiteral("kalarmrc")});
-    migrate.setUiFiles({QStringLiteral("kalarmui.rc")});
-    migrate.migrate();
+    Kdelibs4ConfigMigrator configMigrator(application);
+    configMigrator.setConfigFiles({configFile});
+    configMigrator.setUiFiles({QStringLiteral("kalarmui.rc")});
+    if (!configMigrator.migrate())
+    {
+        qCWarning(KALARM_LOG) << "MigrateKde4Files::migrate: config file migration failed";
+        return;
+    }
 
     // Migrate data files to Qt5 locations.
-    if (mMigrator.checkIfNecessary())
+    KSharedConfig::Ptr config = KSharedConfig::openConfig(configFile, KConfig::SimpleConfig);
+    if (config->hasGroup(configGroup))
+        return;   // already migrated
+
+    Kdelibs4Migration migrator;
+    QString oldPath = migrator.locateLocal("data", application);
+    if (oldPath.isEmpty())
     {
-        // When done, this will add a [Migratekde4] entry to kalarmrc.
-        if (!mMigrator.start())
-            qCCritical(KALARM_LOG) << "Error migrating config files";
+        qCWarning(KALARM_LOG) << "MigrateKde4Files::migrate: Can't find KDE4 data directory";
+        return;
     }
+    const QString newPath = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + QLatin1Char('/') + application + QLatin1Char('/');
+    if (!QDir().mkpath(QFileInfo(newPath).absolutePath()))
+    {
+        qCWarning(KALARM_LOG) << "MigrateKde4Files::migrate: Error creating data directory" << QFileInfo(newPath).absolutePath();
+        return;
+    }
+
+    const QStringList files = QDir(oldPath).entryList({QStringLiteral("*.ics")}, QDir::Files);
+    if (!oldPath.endsWith(QLatin1Char('/')))
+        oldPath += QLatin1Char('/');
+    for (const QString& file : files)
+    {
+        if (!QFile(oldPath + file).copy(newPath + file))
+            qCWarning(KALARM_LOG) << "MigrateKde4Files::migrate: Error copying" << oldPath + file << "to" << newPath;
+    }
+
+    // Record that migration has been done.
+    KConfigGroup group = config->group(configGroup);
+    group.writeEntry(QStringLiteral("Version"), 1);
+    group.sync();
+
+    qCDebug(KALARM_LOG) << "MigrateKde4Files::migrate: done";
 }
 
-void MigrateKde4Files::initializeMigrator()
-{
-    const int currentVersion = 2;
-    mMigrator.setApplicationName(QStringLiteral("kalarm"));
-    mMigrator.setConfigFileName(QStringLiteral("kalarmrc"));
+} // namespace MigrateKde4Files
 
-    // To migrate we need a version > currentVersion
-    const int initialVersion = currentVersion + 1;
-
-    // ics file
-    PimCommon::MigrateFileInfo migrateInfoIcs;
-    migrateInfoIcs.setFolder(false);
-    migrateInfoIcs.setType(QStringLiteral("data"));
-    migrateInfoIcs.setPath(QStringLiteral("kalarm/"));
-    migrateInfoIcs.setVersion(initialVersion);
-    migrateInfoIcs.setFilePatterns({QStringLiteral("*.ics")});
-    mMigrator.insertMigrateInfo(migrateInfoIcs);
-}
 #endif
+
 // vim: et sw=4:

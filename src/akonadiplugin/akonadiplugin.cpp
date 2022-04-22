@@ -158,6 +158,25 @@ void AkonadiPlugin::deleteEvent(const QString& mimeType, const QString& gid, con
     new AkonadiCollectionSearch(mimeType, gid, uid, true);  // this auto-deletes when complete
 }
 
+void AkonadiPlugin::initiateAkonadiResourceMigration()
+{
+    AkonadiResourceMigrator* akonadiMigrator = AkonadiResourceMigrator::instance();
+    if (akonadiMigrator)
+    {
+        connect(akonadiMigrator, &AkonadiResourceMigrator::migrationComplete, this, &AkonadiPlugin::akonadiMigrationComplete);
+        connect(akonadiMigrator, &AkonadiResourceMigrator::fileResource, this, &AkonadiPlugin::migrateFileResource);
+        connect(akonadiMigrator, &AkonadiResourceMigrator::dirResource, this, &AkonadiPlugin::migrateDirResource);
+        akonadiMigrator->initiateMigration();
+    }
+}
+
+void AkonadiPlugin::deleteAkonadiResource(const QString& resourceName)
+{
+    AkonadiResourceMigrator* akonadiMigrator = AkonadiResourceMigrator::instance();
+    if (akonadiMigrator)
+        akonadiMigrator->deleteAkonadiResource(resourceName);
+}
+
 #include "akonadiplugin.moc"
 
 // vim: et sw=4:

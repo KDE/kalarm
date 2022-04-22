@@ -9,7 +9,7 @@
 #include "pluginmanager.h"
 
 #include "pluginbase.h"
-#include "kalarmplugin_debug.h"
+#include "kalarmpluginlib_debug.h"
 
 #include <KPluginFactory>
 #include <KPluginMetaData>
@@ -47,10 +47,11 @@ void PluginManager::loadPlugins()
 
     for (const auto& metaData : plugins)
     {
+        qCDebug(KALARMPLUGINLIB_LOG) << "PluginManager::loadPlugins: found " << metaData.pluginId();
         if (pluginVersion() != metaData.version())
-            qCWarning(KALARMPLUGIN_LOG) << "Error! Plugin" << metaData.name() << "has wrong version";
-       	else
-       	{
+            qCWarning(KALARMPLUGINLIB_LOG) << "Error! Plugin" << metaData.name() << "has wrong version";
+        else
+        {
             // Load the plugin
             auto plugin = KPluginFactory::instantiatePlugin<PluginBase>(metaData, this).plugin;
             if (plugin)
