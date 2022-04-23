@@ -5054,7 +5054,7 @@ features:
 <itemizedlist>
 <listitem>
 <simpara>Sending emails via &kmail;, leaving &Sendmail; as the only
-optoin to send emails (see
+option to send emails (see
 <link linkend="preferences-email">Email preferences</link>).</simpara>
 </listitem>
 <listitem>
