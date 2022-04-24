@@ -27,7 +27,7 @@ class SendAkonadiMail : public QObject
 public:
     static SendAkonadiMail* instance();
     static QString send(KMime::Message::Ptr message, const KIdentityManagement::Identity& identity,
-                        const QString normalizedFrom, bool keepSentMail, MailSend::JobData& jobdata);
+                        const QString& normalizedFrom, bool keepSentMail, MailSend::JobData& jobdata);
 
 Q_SIGNALS:
     /** Emitted when a send job has been queued. */

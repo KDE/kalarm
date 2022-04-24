@@ -47,7 +47,7 @@ public:
      *  @return  empty string if sending initiated successfully, else error message.
      */
     virtual QString sendMail(KMime::Message::Ptr message, const KIdentityManagement::Identity& identity,
-                             const QString normalizedFrom, bool keepSentMail, MailSend::JobData& jobdata) = 0;
+                             const QString& normalizedFrom, bool keepSentMail, MailSend::JobData& jobdata) = 0;
 
     /** Extract dragged and dropped Akonadi RFC822 message data. */
     virtual KMime::Message::Ptr fetchAkonadiEmail(const QUrl&, qint64& emailId) = 0;

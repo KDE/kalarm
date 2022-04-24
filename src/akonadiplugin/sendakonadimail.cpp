@@ -43,7 +43,7 @@ SendAkonadiMail* SendAkonadiMail::instance()
 *       = error message if the message was not sent.
 */
 QString SendAkonadiMail::send(KMime::Message::Ptr message, const KIdentityManagement::Identity& identity,
-                        const QString normalizedFrom, bool keepSentMail, JobData& jobdata)
+                        const QString& normalizedFrom, bool keepSentMail, JobData& jobdata)
 {
     qCDebug(AKONADIPLUGIN_LOG) << "SendAkonadiMail::send: Sending via KDE";
     MailTransport::TransportManager* manager = MailTransport::TransportManager::self();

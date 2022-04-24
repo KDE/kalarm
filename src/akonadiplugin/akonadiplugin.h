@@ -35,7 +35,7 @@ public:
      *  @return  empty string if sending initiated successfully, else error message.
      */
     QString sendMail(KMime::Message::Ptr message, const KIdentityManagement::Identity& identity,
-                     const QString normalizedFrom, bool keepSentMail, MailSend::JobData& jobdata) override;
+                     const QString& normalizedFrom, bool keepSentMail, MailSend::JobData& jobdata) override;
 
     /** Extract dragged and dropped Akonadi RFC822 message data.
      *  @param url      the dropped URL.
