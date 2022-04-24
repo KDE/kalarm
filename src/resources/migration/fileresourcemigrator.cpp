@@ -9,7 +9,7 @@
 #include "fileresourcemigrator.h"
 
 #include "dirresourceimportdialog.h"
-#include "pluginmanager.h"
+#include "preferences.h"
 #include "resources/calendarfunctions.h"
 #include "resources/fileresourcecalendarupdater.h"
 #include "resources/fileresourceconfigmanager.h"
@@ -109,7 +109,7 @@ void FileResourceMigrator::start()
     else
     {
         // There are no file system resources, so migrate any Akonadi resources.
-        mAkonadiPlugin = PluginManager::instance()->akonadiPlugin();
+        mAkonadiPlugin = Preferences::akonadiPlugin();
         if (!mAkonadiPlugin)
             akonadiMigrationComplete(false);   // Akonadi plugin is not available
         else

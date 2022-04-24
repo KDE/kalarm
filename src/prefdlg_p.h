@@ -86,6 +86,7 @@ private:
     QCheckBox*    mQuitWarn;
     QCheckBox*    mUseAlarmNames;
     QCheckBox*    mConfirmAlarmDeletion;
+    QCheckBox*    mUseAkonadi {nullptr};
     TimeSpinBox*  mDefaultDeferTime;
     ButtonGroup*  mXtermType;
     QLineEdit*    mXtermCommand;
@@ -157,6 +158,9 @@ public:
     QString      validate();
     void restore(bool defaults, bool allTabs) override;
     void apply(bool syncToDisc) override;
+
+protected:
+    void showEvent(QShowEvent*) override;
 
 private Q_SLOTS:
     void         slotEmailClientChanged(QAbstractButton*);

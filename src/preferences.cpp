@@ -104,6 +104,30 @@ Preferences::Preferences()
 }
 
 /******************************************************************************
+* Get whether the Akonadi plugin should be used, if available.
+*/
+bool Preferences::useAkonadi()
+{
+    return self()->mUseAkonadiIfAvailable  &&  PluginManager::instance()->akonadiPlugin();
+}
+
+/******************************************************************************
+* Return the Akonadi plugin to use, or null if not being used or not available.
+*/
+AkonadiPlugin* Preferences::akonadiPlugin()
+{
+    if (!self()->mUseAkonadiIfAvailable)
+        return nullptr;
+    return PluginManager::instance()->akonadiPlugin();
+}
+
+void Preferences::setUseAkonadi(bool yes)
+{
+    if (PluginManager::instance()->akonadiPlugin())
+        self()->setUseAkonadiIfAvailable(yes);
+}
+
+/******************************************************************************
 * Auto hiding of the system tray icon is only allowed on desktops which provide
 * GUI controls to show hidden icons.
 */
@@ -380,28 +404,28 @@ void Preferences::workTimeChange(const QDateTime& start, const QDateTime& end, i
 
 Preferences::MailClient Preferences::emailClient()
 {
-    if (!PluginManager::instance()->akonadiPlugin())
+    if (!useAkonadi())
         return sendmail;
     return static_cast<MailClient>(self()->mBase_EmailClient);
 }
 
 void Preferences::setEmailClient(MailClient client)
 {
-    if (!PluginManager::instance()->akonadiPlugin())
+    if (!useAkonadi())
         client = sendmail;
     self()->setBase_EmailClient(client);
 }
 
 bool Preferences::emailCopyToKMail()
 {
-    if (!PluginManager::instance()->akonadiPlugin())
+    if (!useAkonadi())
         return false;
     return self()->mBase_EmailCopyToKMail  &&  static_cast<MailClient>(self()->mBase_EmailClient) == sendmail;
 }
 
 void Preferences::setEmailCopyToKMail(bool yes)
 {
-    if (!PluginManager::instance()->akonadiPlugin())
+    if (!useAkonadi())
         yes = false;
     self()->setBase_EmailCopyToKMail(yes);
 }

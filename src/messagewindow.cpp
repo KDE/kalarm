@@ -15,7 +15,6 @@
 #include "functions.h"
 #include "kalarmapp.h"
 #include "mainwindow.h"
-#include "pluginmanager.h"
 #include "preferences.h"
 #include "resourcescalendar.h"
 #include "lib/config.h"
@@ -467,7 +466,7 @@ void MessageWindow::setUpDisplay()
         mHelper->setSilenceButton(mSilenceButton);
     }
 
-    if (mEmailId() >= 0  &&  PluginManager::instance()->akonadiPlugin())
+    if (mEmailId() >= 0  &&  Preferences::useAkonadi())
     {
         // KMail button
         mKMailButton = new PushButton(topWidget);
@@ -1092,7 +1091,7 @@ void MessageWindow::slotOk()
 */
 void MessageWindow::slotShowKMailMessage()
 {
-    AkonadiPlugin* akonadiPlugin = PluginManager::instance()->akonadiPlugin();
+    AkonadiPlugin* akonadiPlugin = Preferences::akonadiPlugin();
     if (!akonadiPlugin)
         return;
     qCDebug(KALARM_LOG) << "MessageWindow::slotShowKMailMessage";

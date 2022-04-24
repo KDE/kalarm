@@ -8,7 +8,6 @@
 
 #include "birthdaydlg.h"
 
-#include "akonadiplugin/akonadiplugin.h"
 #include "editdlgtypes.h"
 #include "fontcolourbutton.h"
 #include "kalarmapp.h"
@@ -20,8 +19,8 @@
 #include "soundpicker.h"
 #include "specialactions.h"
 #include "lib/checkbox.h"
-#include "pluginmanager.h"
 #include "lib/shellprocess.h"
+#include "akonadiplugin/akonadiplugin.h"
 #include "kalarm_debug.h"
 
 #include <KLocalizedString>
@@ -106,9 +105,9 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
     auto layout = new QVBoxLayout(group);
     layout->setContentsMargins(0, 0, 0, 0);
 
-    AkonadiPlugin* akonadiPlugin = PluginManager::instance()->akonadiPlugin();
+    AkonadiPlugin* akonadiPlugin = Preferences::akonadiPlugin();
     if (!akonadiPlugin)
-        return;   // no error message - this constructor should only be called if Akonadi plugin exists
+        return;   // no error message - this constructor should only be called if using Akonadi plugin
     mBirthdaySortModel = akonadiPlugin->createBirthdayModels(mainWidget, this);
     connect(akonadiPlugin, &AkonadiPlugin::birthdayModelDataChanged, this, &BirthdayDlg::resizeViewColumns);
     setSortModelSelectionList();
@@ -365,7 +364,7 @@ void BirthdayDlg::slotTextLostFocus()
 */
 void BirthdayDlg::setSortModelSelectionList()
 {
-    AkonadiPlugin* akonadiPlugin = PluginManager::instance()->akonadiPlugin();
+    AkonadiPlugin* akonadiPlugin = Preferences::akonadiPlugin();
     if (!akonadiPlugin)
         return;
 

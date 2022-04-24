@@ -39,7 +39,7 @@
 
 <!-- Don't change format of date and version of the documentation -->
 
-<date>2022-4-22</date>
+<date>2022-4-24</date>
 <releaseinfo>3.5.0 (KDE Gear 22.08)</releaseinfo>
 
 <abstract>
@@ -1088,7 +1088,7 @@ context menu.</para>
 
 <note><para>This function is only available if &kalarm;'s
 <link linkend="akonadi-plugin">Akonadi plugin</link> is
-installed.</para>
+installed and enabled.</para>
 </note>
 
 <para>You can set up display alarms for birthdays stored in
@@ -1527,7 +1527,8 @@ message body in the three edit fields. Use the button beside the
 addressee edit box to display your &kde; address book from which you
 can select email recipients. (Note that the button is only shown if
 &kalarm;'s
-<link linkend="akonadi-plugin">Akonadi plugin</link> is installed.)
+<link linkend="akonadi-plugin">Akonadi plugin</link> is installed and
+enabled.)
 Attachments may be added using the <guibutton>Add...</guibutton>
 button. Note that attached files must still exist when the alarm is
 triggered; no copy is stored at the time the alarm is configured. To
@@ -2677,6 +2678,13 @@ codes:</para>
 quoted before being inserted into the terminal window command.</para>
 </listitem>
 
+<listitem><para><guilabel>Enable Akonadi</guilabel>:
+Choose whether to use &akonadi; to provide features which depend on it.
+See <link linkend="akonadi-plugin">Akonadi plugin</link> for details.
+Note that this option is only shown if the Akonadi plugin is
+installed.</para>
+</listitem>
+
 </itemizedlist>
 </sect1>
 
@@ -2801,7 +2809,8 @@ be archived according to the selected options.</para>
 for sending and addressing email alarms:</para>
 
 <note><para>Options dependent on &kmail; are only available if &kalarm;'s
-<link linkend="akonadi-plugin">Akonadi plugin</link> is installed.</para>
+<link linkend="akonadi-plugin">Akonadi plugin</link> is installed and
+enabled.</para>
 </note>
 
 <itemizedlist>
@@ -5049,8 +5058,8 @@ distributed with &kalarm;.</para>
 <answer>
 <para>&kalarm; uses its Akonadi plugin to provide all features which
 depend on &akonadi; (the &kde; &PIM; cross-desktop storage service).
-If this plugin is not installed, &kalarm; will lack the following
-features:
+If this plugin is not installed and enabled, &kalarm; will lack the
+following features:
 <itemizedlist>
 <listitem>
 <simpara>Sending emails via &kmail;, leaving &Sendmail; as the only
@@ -5072,6 +5081,9 @@ run of a new version of &kalarm;.</simpara>
 </listitem>
 </itemizedlist>
 </para>
+<para>If the plugin is installed, it can be enabled or disabled in the
+<link linkend="preferences-general">General</link> tab of the
+Configuration dialog.</para>
 </answer>
 </qandaentry>
 

@@ -18,6 +18,7 @@
 using namespace KAlarmCal;
 
 namespace KHolidays { class HolidayRegion; }
+class AkonadiPlugin;
 
 
 // Settings configured in the Preferences dialog
@@ -36,6 +37,22 @@ public:
     {
         QObject::connect(self(), signal, receiver, member);
     }
+
+    /** Return whether Akonadi plugin is available and should be used.
+     *  @see useAkonadiIfAvailable().
+     */
+    static bool             useAkonadi();
+
+    /** Return the Akonadi plugin.
+     *  @return the Akonadi plugin, or null if not available or not to be used.
+     */
+    static AkonadiPlugin*   akonadiPlugin();
+
+    /** Set whether to use the Akonadi plugin if available.
+     *  @see setUseAkonadiIfAvailable().
+     */
+    static void             setUseAkonadi(bool yes);
+
     static int              autoHideSystemTray();
     static void             setAutoHideSystemTray(int timeout);
     static bool             autoStartChangedByUser()         { return mAutoStartChangedByUser; }

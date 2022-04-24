@@ -537,6 +537,22 @@ MiscPrefTab::MiscPrefTab(StackedScrollGroup* scrollGroup)
     radio->setWhatsThis(wt);
     mXtermCommand->setWhatsThis(wt);
 
+    if (PluginManager::instance()->akonadiPlugin())
+    {
+        // Plugins
+        group = new QGroupBox(i18nc("@title:group", "Plugins"));
+        topLayout()->addWidget(group);
+        vlayout = new QVBoxLayout(group);
+
+        // Akonadi plugin
+        mUseAkonadi = new QCheckBox(i18nc("@option:check", "Enable Akonadi"), group);
+        mUseAkonadi->setToolTip(i18nc("@info:tooltip",
+              "Enable the use of Akonadi to provide features including birthday import, some email functions, and email address book lookup."));
+        mUseAkonadi->setWhatsThis(i18nc("@info:whatsthis",
+              "Enable the use of Akonadi to provide features including birthday import, some email functions, and email address book lookup."));
+        vlayout->addWidget(mUseAkonadi, 0, Qt::AlignLeft);
+    }
+
     topLayout()->addStretch();    // top adjust the widgets
 }
 
@@ -560,6 +576,8 @@ void MiscPrefTab::restore(bool defaults, bool)
     mXtermType->setButton(id);
     mXtermCommand->setEnabled(id == mXtermCount);
     mXtermCommand->setText(id == mXtermCount ? xtermCmd : QString());
+    if (mUseAkonadi)
+        mUseAkonadi->setChecked(Preferences::useAkonadi());
 }
 
 void MiscPrefTab::apply(bool syncToDisc)
@@ -617,6 +635,12 @@ void MiscPrefTab::apply(bool syncToDisc)
     QString text = (xtermID < mXtermCount) ? xtermCommands[xtermID] : mXtermCommand->text();
     if (text != Preferences::cmdXTermCommand())
         Preferences::setCmdXTermCommand(text);
+    if (mUseAkonadi)
+    {
+        b = mUseAkonadi->isChecked();
+        if (b != Preferences::useAkonadi())
+            Preferences::setUseAkonadi(b);
+    }
     PrefsTabBase::apply(syncToDisc);
 }
 
@@ -1150,6 +1174,21 @@ void EmailPrefTab::apply(bool syncToDisc)
     PrefsTabBase::apply(syncToDisc);
 }
 
+void EmailPrefTab::showEvent(QShowEvent* e)
+{
+    bool enable = Preferences::useAkonadiIfAvailable();
+    if (mKMailButton)
+    {
+        mKMailButton->setEnabled(enable);
+        if (!enable)
+            mEmailClient->setButton(Preferences::sendmail);
+    }
+    if (mEmailCopyToKMail)
+        mEmailCopyToKMail->setEnabled(enable);
+
+    PrefsTabBase::showEvent(e);
+}
+
 void EmailPrefTab::setEmailAddress(Preferences::MailFrom from, const QString& address)
 {
     mFromAddressGroup->setButton(from);
@@ -1165,7 +1204,7 @@ void EmailPrefTab::setEmailBccAddress(bool useSystemSettings, const QString& add
 void EmailPrefTab::slotEmailClientChanged(QAbstractButton* button)
 {
     if (mEmailCopyToKMail)
-        mEmailCopyToKMail->setEnabled(button == mSendmailButton);
+        mEmailCopyToKMail->setEnabled(button == mSendmailButton  &&  Preferences::useAkonadiIfAvailable());
 }
 
 void EmailPrefTab::slotFromAddrChanged(QAbstractButton* button)

@@ -12,7 +12,6 @@
 #include "functions.h"
 #include "kalarmapp.h"
 #include "mainwindow.h"
-#include "pluginmanager.h"
 #include "preferences.h"
 #include "lib/messagebox.h"
 #include "kalarmcalendar/identities.h"
@@ -202,7 +201,7 @@ int KAMail::send(JobData& jobdata, QStringList& errmsgs)
             notifyQueued(jobdata.event);
         return 1;
     }
-    else if (PluginManager::instance()->akonadiPlugin())
+    else if (Preferences::useAkonadi())
     {
         qCDebug(KALARM_LOG) << "KAMail::send: Sending via KDE";
         initHeaders(*message, jobdata);
@@ -216,7 +215,7 @@ int KAMail::send(JobData& jobdata, QStringList& errmsgs)
 
         if (!mAkonadiPlugin)
         {
-            mAkonadiPlugin = PluginManager::instance()->akonadiPlugin();
+            mAkonadiPlugin = Preferences::akonadiPlugin();
             connect(mAkonadiPlugin, &AkonadiPlugin::emailSent, instance(), &KAMail::akonadiEmailSent);
             connect(mAkonadiPlugin, &AkonadiPlugin::emailQueued, instance(), [](const KAEvent& e) { notifyQueued(e); });
         }

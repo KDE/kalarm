@@ -18,7 +18,6 @@
 #include "mainwindow.h"
 #include "messagewindow.h"
 #include "pickfileradio.h"
-#include "pluginmanager.h"
 #include "reminder.h"
 #include "soundpicker.h"
 #include "sounddlg.h"
@@ -1196,7 +1195,7 @@ void EditEmailAlarmDlg::type_init(QWidget* parent, QVBoxLayout* frameLayout)
                                     "commas or semicolons."));
     connect(mEmailToEdit, &LineEdit::textChanged, this, &EditEmailAlarmDlg::contentsChanged);
 
-    if (PluginManager::instance()->akonadiPlugin())
+    if (Preferences::useAkonadi())
     {
         grid->addWidget(mEmailToEdit, 1, 1);
 
@@ -1505,7 +1504,7 @@ void EditEmailAlarmDlg::slotTrySuccess()
 */
 void EditEmailAlarmDlg::openAddressBook()
 {
-    AkonadiPlugin* akonadiPlugin = PluginManager::instance()->akonadiPlugin();
+    AkonadiPlugin* akonadiPlugin = Preferences::akonadiPlugin();
     if (akonadiPlugin)
     {
         Person person;

@@ -18,7 +18,6 @@
 #include "kamail.h"
 #include "messagedisplay.h"
 #include "newalarmaction.h"
-#include "pluginmanager.h"
 #include "prefdlg.h"
 #include "preferences.h"
 #include "resourcescalendar.h"
@@ -540,7 +539,7 @@ void MainWindow::initActions()
     actions->addAction(QStringLiteral("importAlarms"), mActionImportAlarms);
     connect(mActionImportAlarms, &QAction::triggered, this, &MainWindow::slotImportAlarms);
 
-    if (PluginManager::instance()->akonadiPlugin())
+    if (Preferences::useAkonadi())
     {
         mActionImportBirthdays = new QAction(i18nc("@action", "Import Birthdays..."), this);
         actions->addAction(QStringLiteral("importBirthdays"), mActionImportBirthdays);
@@ -959,7 +958,7 @@ void MainWindow::slotExportAlarms()
 */
 void MainWindow::slotBirthdays()
 {
-    if (PluginManager::instance()->akonadiPlugin())
+    if (Preferences::useAkonadi())
     {
         // Use AutoQPointer to guard against crash on application exit while
         // the dialogue is still open. It prevents double deletion (both on

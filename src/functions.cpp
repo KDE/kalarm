@@ -14,7 +14,6 @@
 #include "kamail.h"
 #include "mainwindow.h"
 #include "messagewindow.h"
-#include "pluginmanager.h"
 #include "preferences.h"
 #include "resourcescalendar.h"
 #include "templatelistview.h"
@@ -1871,7 +1870,7 @@ bool dropAkonadiEmail(const QMimeData* data, QUrl& url, AlarmText& alarmText)
     else
     {
         url  = urls.at(0);
-        AkonadiPlugin* akonadiPlugin = PluginManager::instance()->akonadiPlugin();
+        AkonadiPlugin* akonadiPlugin = Preferences::akonadiPlugin();
         if (akonadiPlugin)
         {
             KAEvent::EmailId emailId;
@@ -2090,7 +2089,7 @@ KAlarm::UpdateResult sendToKOrganizer(const KAEvent& event)
 */
 KAlarm::UpdateResult deleteFromKOrganizer(const QString& eventID)
 {
-    AkonadiPlugin* akonadiPlugin = PluginManager::instance()->akonadiPlugin();
+    AkonadiPlugin* akonadiPlugin = Preferences::akonadiPlugin();
     if (!akonadiPlugin)
         return KAlarm::UpdateResult(KAlarm::UPDATE_KORG_ERR);
 

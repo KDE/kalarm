@@ -71,6 +71,11 @@ SPDX-License-Identifier: GPL-2.0-or-later
         <choice name="FileResources"><label context="@option">File Resources</label></choice>
       </choices>
     </entry>
+    <entry name="UseAkonadiIfAvailable" type="Bool">
+      <label context="@label">Enable Akonadi plugin</label>
+      <whatsthis context="@info:whatsthis">Choose whether to enable KAlarm's Akonadi plugin, which uses Akonadi to provide features including birthday import, some email functions, email address book lookup, and Akonadi resource migration on first run.</whatsthis>
+      <default>true</default>
+    </entry>
     <entry name="Base_TimeZone" key="TimeZone" type="String">
       <label context="@label">Time zone</label>
       <whatsthis context="@info:whatsthis">Select the time zone which KAlarm should use as its default for displaying and entering dates and times.</whatsthis>
