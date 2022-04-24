@@ -1,8 +1,20 @@
 {
     "KPlugin": {
         "Description": "Functions which require Akonadi",
+        "Description[ca]": "Funcions que requereixen l'Akonadi",
+        "Description[en_GB]": "Functions which require Akonadi",
+        "Description[es]": "Funciones que requiere Akonadi",
+        "Description[nl]": "Functies die Akonadi vereisen",
+        "Description[uk]": "Функції, які потребують Akonadi",
+        "Description[x-test]": "xxFunctions which require Akonadixx",
         "Id": "akonadi",
         "Name": "Akonadi Functions",
+        "Name[ca]": "Funcions de l'Akonadi",
+        "Name[en_GB]": "Akonadi Functions",
+        "Name[es]": "Funciones de Akonadi",
+        "Name[nl]": "Functies van Akonadi",
+        "Name[uk]": "Функції Akonadi",
+        "Name[x-test]": "xxAkonadi Functionsxx",
         "Version": "1.0"
     }
 }
