@@ -883,7 +883,7 @@ void MessageDisplayHelper::startAudio()
         connect(audioPlayer, &AudioPlayer::readyToPlay, this, &MessageDisplayHelper::playReady);
         connect(audioThread, &QThread::finished, this, &MessageDisplayHelper::playFinished);
         if (mSilenceButton)
-            connect(mSilenceButton, &QAbstractButton::clicked, audioThread, &QThread::quit);
+            connect(mSilenceButton, &QAbstractButton::clicked, this, &MessageDisplayHelper::stopAudioPlay);
 
         // Notify after creating mAudioPlayer, so that isAudioPlaying() will
         // return the correct value.
@@ -982,6 +982,17 @@ AudioPlayer::AudioPlayer(const QString& audioFile, float volume, float fadeVolum
 AudioPlayer::~AudioPlayer()
 {
     qCDebug(KALARM_LOG) << "MessageDisplayHelper::~AudioPlayer";
+    // A bug in Phonon causes a crash when the VolumeFaderEffect is deleted due
+    // to being a child of MediaObject. This workaround prevents the crash by
+    // removing and deleting VolumeFaderEffect before ~MediaObject() is called.
+    const auto effects = mPath.effects();
+    for (Phonon::Effect* effect : effects)
+    {
+        mPath.removeEffect(effect);
+        delete effect;
+    }
+    // --- End of workaround for Phonon crash
+
     delete mAudioObject;
     mAudioObject = nullptr;
     // Notify after deleting mAudioPlayer, so that isAudioPlaying() will
