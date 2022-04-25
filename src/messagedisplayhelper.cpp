@@ -883,7 +883,7 @@ void MessageDisplayHelper::startAudio()
         connect(audioPlayer, &AudioPlayer::readyToPlay, this, &MessageDisplayHelper::playReady);
         connect(audioThread, &QThread::finished, this, &MessageDisplayHelper::playFinished);
         if (mSilenceButton)
-            connect(mSilenceButton, &QAbstractButton::clicked, audioThread, &QThread::quit);
+            connect(mSilenceButton, &QAbstractButton::clicked, this, &MessageDisplayHelper::stopAudioPlay);
 
         // Notify after creating mAudioPlayer, so that isAudioPlaying() will
         // return the correct value.

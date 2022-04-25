@@ -4,6 +4,7 @@ KAlarm Change Log
 * Fix checkboxes being disabled in Preferences dialogue.
 * Fix time spin boxes being displayed in the wrong position.
 * Fix crash when Try clicked to stop audio alarm with fade [KDE Bug 452962]
+* Fix Stop Play button not working for display alarm with audio file.
 
 === Version 3.4.0 (KDE Gear 22.04) --- 6 April 2022 ===
 * Allow calendars and date picker to be shown together in side panel [KDE Bug 440250]

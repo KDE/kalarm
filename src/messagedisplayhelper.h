@@ -130,6 +130,7 @@ private Q_SLOTS:
     void    slotSpeak();
     void    audioTerminating();
     void    startAudio();
+    void    stopAudioPlay()               { stopAudio(); }
     void    playReady();
     void    playFinished();
     void    slotSetRemainingTextDay()     { setRemainingTextDay(true); }
