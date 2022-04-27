@@ -12,6 +12,7 @@
         "Description[tr]": "Akonadi'yi gerektiren işlevler",
         "Description[uk]": "Функції, які потребують Akonadi",
         "Description[x-test]": "xxFunctions which require Akonadixx",
+        "Description[zh_CN]": "需要 Akonadi 的功能",
         "Id": "akonadi",
         "Name": "Akonadi Functions",
         "Name[ca@valencia]": "Funcions d'Akonadi",
@@ -25,6 +26,7 @@
         "Name[tr]": "Akonadi İşlevleri",
         "Name[uk]": "Функції Akonadi",
         "Name[x-test]": "xxAkonadi Functionsxx",
+        "Name[zh_CN]": "Akonadi 功能",
         "Version": "1.0"
     }
 }
