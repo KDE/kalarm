@@ -1,7 +1,7 @@
 /*
  *  fontcolour.h  -  font and colour chooser widget
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2001, 2003, 2008, 2009 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2001-2022 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -26,8 +26,7 @@ public:
            const QString& frameLabel = i18n("Requested font"),
            bool fg = true, bool defaultFont = false, int visibleListSize = 8);
 
-    void          setDefaultFont();
-    void          setFont(const QFont&, bool onlyFixed = false);
+    void          setFont(const QFont&, bool defaultFont = false, bool onlyFixed = false);
     bool          defaultFont() const;
     QFont         font() const;
     QColor        fgColour() const;

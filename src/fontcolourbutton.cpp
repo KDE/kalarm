@@ -1,7 +1,7 @@
 /*
  *  fontcolourbutton.cpp  -  pushbutton widget to select a font and colour
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2003-2021 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2003-2022 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -9,7 +9,6 @@
 #include "fontcolourbutton.h"
 
 #include "fontcolour.h"
-#include "preferences.h"
 #include "lib/autoqpointer.h"
 #include "kalarm_debug.h"
 
@@ -33,14 +32,9 @@ FontColourButton::FontColourButton(QWidget* parent)
     setWhatsThis(i18nc("@info:whatsthis", "Choose the font, and foreground and background color, for the alarm message."));
 }
 
-void FontColourButton::setDefaultFont()
+void FontColourButton::setFont(const QFont& font, bool defaultFont)
 {
-    mDefaultFont = true;
-}
-
-void FontColourButton::setFont(const QFont& font)
-{
-    mDefaultFont = false;
+    mDefaultFont = defaultFont;
     mFont = font;
 }
 
@@ -82,10 +76,7 @@ FontColourDlg::FontColourDlg(const QColor& bgColour, const QColor& fgColour, con
     mChooser = new FontColourChooser(this, QStringList(), QString(), true, true);
     mChooser->setBgColour(bgColour);
     mChooser->setFgColour(fgColour);
-    if (defaultFont)
-        mChooser->setDefaultFont();
-    else
-        mChooser->setFont(font);
+    mChooser->setFont(font, defaultFont);
     layout->addWidget(mChooser);
     layout->addSpacing(style()->pixelMetric(QStyle::PM_LayoutVerticalSpacing));
 
