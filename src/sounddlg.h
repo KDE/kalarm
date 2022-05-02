@@ -1,7 +1,7 @@
 /*
  *  sounddlg.h  -  sound file selection and configuration dialog and widget
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2005-2021 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2005-2022 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -70,11 +70,11 @@ private:
     SpinBox*             mRepeatPause {nullptr};
     CheckBox*            mVolumeCheckbox;
     Slider*              mVolumeSlider;
-    CheckBox*            mFadeCheckbox;
-    QWidget*             mFadeBox;
-    SpinBox*             mFadeTime;
-    QWidget*             mFadeVolumeBox;
-    Slider*              mFadeSlider;
+    CheckBox*            mFadeCheckbox {nullptr};
+    QWidget*             mFadeBox {nullptr};
+    SpinBox*             mFadeTime {nullptr};
+    QWidget*             mFadeVolumeBox {nullptr};
+    Slider*              mFadeSlider {nullptr};
     mutable QUrl         mUrl;
     mutable QString      mValidatedFile;
     Phonon::MediaObject* mPlayer {nullptr};
