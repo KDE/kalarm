@@ -199,7 +199,7 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
 
     // Set the values to their defaults
     setColours(Preferences::defaultFgColour(), Preferences::defaultBgColour());
-    mFontColourButton->setDefaultFont();
+    mFontColourButton->setFont(Preferences::messageFont(), true);
     mFontColourButton->setBgColour(Preferences::defaultBgColour());
     mFontColourButton->setFgColour(Preferences::defaultFgColour());
     mLateCancel->setMinutes(Preferences::defaultLateCancel(), true, TimePeriod::Days);

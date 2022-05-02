@@ -1,7 +1,7 @@
 /*
  *  sounddlg.cpp  -  sound file selection and configuration dialog and widget
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2005-2021 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2005-2022 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -21,8 +21,9 @@
 #include "kalarm_debug.h"
 
 #include <KLocalizedString>
-#include <phonon/mediaobject.h>
-#include <phonon/audiooutput.h>
+#include <phonon/MediaObject>
+#include <phonon/AudioOutput>
+#include <phonon/VolumeFaderEffect>
 
 #include <QIcon>
 #include <QLabel>
@@ -247,43 +248,47 @@ SoundWidget::SoundWidget(bool showPlay, const QString& repeatWhatsThis, QWidget*
     mVolumeSlider->setValueLabel(label, QStringLiteral("%1%"), true);
     boxHLayout->addWidget(label);
 
-    // Fade checkbox
-    mFadeCheckbox = new CheckBox(i18nc("@option:check", "Fade"), group);
-    connect(mFadeCheckbox, &CheckBox::toggled, this, &SoundWidget::slotFadeToggled);
-    mFadeCheckbox->setWhatsThis(i18nc("@info:whatsthis", "Select to fade the volume when the sound file first starts to play."));
-    grid->addWidget(mFadeCheckbox, 2, 1, 1, 2, Qt::AlignLeft);
+    // Show fade controls only if the current Phonon backend supports fading.
+    if (Phonon::VolumeFaderEffect(this).isValid())
+    {
+        // Fade checkbox
+        mFadeCheckbox = new CheckBox(i18nc("@option:check", "Fade"), group);
+        connect(mFadeCheckbox, &CheckBox::toggled, this, &SoundWidget::slotFadeToggled);
+        mFadeCheckbox->setWhatsThis(i18nc("@info:whatsthis", "Select to fade the volume when the sound file first starts to play."));
+        grid->addWidget(mFadeCheckbox, 2, 1, 1, 2, Qt::AlignLeft);
 
-    // Fade time
-    mFadeBox = new QWidget(group);
-    grid->addWidget(mFadeBox, 3, 2, Qt::AlignLeft);
-    boxHLayout = new QHBoxLayout(mFadeBox);
-    boxHLayout->setContentsMargins(0, 0, 0, 0);
-    label = new QLabel(i18nc("@label:spinbox Time period over which to fade the sound", "Fade time:"), mFadeBox);
-    boxHLayout->addWidget(label);
-    mFadeTime = new SpinBox(1, 999, mFadeBox);
-    boxHLayout->addWidget(mFadeTime);
-    mFadeTime->setSingleShiftStep(10);
-    label->setBuddy(mFadeTime);
-    connect(mFadeTime, &SpinBox::valueChanged, this, &SoundWidget::changed);
-    label = new QLabel(i18nc("@label", "seconds"), mFadeBox);
-    boxHLayout->addWidget(label);
-    mFadeBox->setWhatsThis(i18nc("@info:whatsthis", "Enter how many seconds to fade the sound before reaching the set volume."));
+        // Fade time
+        mFadeBox = new QWidget(group);
+        grid->addWidget(mFadeBox, 3, 2, Qt::AlignLeft);
+        boxHLayout = new QHBoxLayout(mFadeBox);
+        boxHLayout->setContentsMargins(0, 0, 0, 0);
+        label = new QLabel(i18nc("@label:spinbox Time period over which to fade the sound", "Fade time:"), mFadeBox);
+        boxHLayout->addWidget(label);
+        mFadeTime = new SpinBox(1, 999, mFadeBox);
+        boxHLayout->addWidget(mFadeTime);
+        mFadeTime->setSingleShiftStep(10);
+        label->setBuddy(mFadeTime);
+        connect(mFadeTime, &SpinBox::valueChanged, this, &SoundWidget::changed);
+        label = new QLabel(i18nc("@label", "seconds"), mFadeBox);
+        boxHLayout->addWidget(label);
+        mFadeBox->setWhatsThis(i18nc("@info:whatsthis", "Enter how many seconds to fade the sound before reaching the set volume."));
 
-    // Fade slider
-    mFadeVolumeBox = new QWidget(group);
-    grid->addWidget(mFadeVolumeBox, 4, 2);
-    boxHLayout = new QHBoxLayout(mFadeVolumeBox);
-    boxHLayout->setContentsMargins(0, 0, 0, 0);
-    label = new QLabel(i18nc("@label:slider", "Initial volume:"), mFadeVolumeBox);
-    boxHLayout->addWidget(label);
-    mFadeSlider = new Slider(0, 100, 10, Qt::Horizontal, mFadeVolumeBox);
-    boxHLayout->addWidget(mFadeSlider);
-    mFadeSlider->setTickPosition(QSlider::TicksBelow);
-    mFadeSlider->setTickInterval(10);
-    mFadeSlider->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed));
-    label->setBuddy(mFadeSlider);
-    connect(mFadeSlider, &Slider::valueChanged, this, &SoundWidget::changed);
-    mFadeVolumeBox->setWhatsThis(i18nc("@info:whatsthis", "Choose the initial volume for playing the sound file."));
+        // Fade slider
+        mFadeVolumeBox = new QWidget(group);
+        grid->addWidget(mFadeVolumeBox, 4, 2);
+        boxHLayout = new QHBoxLayout(mFadeVolumeBox);
+        boxHLayout->setContentsMargins(0, 0, 0, 0);
+        label = new QLabel(i18nc("@label:slider", "Initial volume:"), mFadeVolumeBox);
+        boxHLayout->addWidget(label);
+        mFadeSlider = new Slider(0, 100, 10, Qt::Horizontal, mFadeVolumeBox);
+        boxHLayout->addWidget(mFadeSlider);
+        mFadeSlider->setTickPosition(QSlider::TicksBelow);
+        mFadeSlider->setTickInterval(10);
+        mFadeSlider->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed));
+        label->setBuddy(mFadeSlider);
+        connect(mFadeSlider, &Slider::valueChanged, this, &SoundWidget::changed);
+        mFadeVolumeBox->setWhatsThis(i18nc("@info:whatsthis", "Choose the initial volume for playing the sound file."));
+    }
 
     slotVolumeToggled(false);
 }
@@ -309,9 +314,12 @@ void SoundWidget::set(const QString& file, float volume, float fadeVolume, int f
     }
     mVolumeCheckbox->setChecked(volume >= 0);
     mVolumeSlider->setValue(volume >= 0 ? static_cast<int>(volume*100) : 100);
-    mFadeCheckbox->setChecked(fadeVolume >= 0);
-    mFadeSlider->setValue(fadeVolume >= 0 ? static_cast<int>(fadeVolume*100) : 100);
-    mFadeTime->setValue(fadeSeconds);
+    if (mFadeCheckbox)
+    {
+        mFadeCheckbox->setChecked(fadeVolume >= 0);
+        mFadeSlider->setValue(fadeVolume >= 0 ? static_cast<int>(fadeVolume*100) : 100);
+        mFadeTime->setValue(fadeSeconds);
+    }
     slotVolumeToggled(volume >= 0);
 }
 
@@ -328,9 +336,12 @@ void SoundWidget::setReadOnly(bool readOnly)
             mRepeatGroupBox->setReadOnly(readOnly);
         mVolumeCheckbox->setReadOnly(readOnly);
         mVolumeSlider->setReadOnly(readOnly);
-        mFadeCheckbox->setReadOnly(readOnly);
-        mFadeTime->setReadOnly(readOnly);
-        mFadeSlider->setReadOnly(readOnly);
+        if (mFadeCheckbox)
+        {
+            mFadeCheckbox->setReadOnly(readOnly);
+            mFadeTime->setReadOnly(readOnly);
+            mFadeSlider->setReadOnly(readOnly);
+        }
         mReadOnly = readOnly;
     }
 }
@@ -361,7 +372,7 @@ bool SoundWidget::file(QUrl& url, bool showErrorMessage) const
 void SoundWidget::getVolume(float& volume, float& fadeVolume, int& fadeSeconds) const
 {
     volume = mVolumeCheckbox->isChecked() ? (float)mVolumeSlider->value() / 100 : -1;
-    if (mFadeCheckbox->isChecked())
+    if (mFadeCheckbox  &&  mFadeCheckbox->isChecked())
     {
         fadeVolume  = (float)mFadeSlider->value() / 100;
         fadeSeconds = mFadeTime->value();
@@ -388,13 +399,15 @@ int SoundWidget::repeatPause() const
 */
 void SoundWidget::resizeEvent(QResizeEvent* re)
 {
-    mVolumeSlider->resize(mFadeSlider->size());
+    if (mFadeCheckbox)
+        mVolumeSlider->resize(mFadeSlider->size());
     QWidget::resizeEvent(re);
 }
 
 void SoundWidget::showEvent(QShowEvent* se)
 {
-    mVolumeSlider->resize(mFadeSlider->size());
+    if (mFadeCheckbox)
+        mVolumeSlider->resize(mFadeSlider->size());
     QWidget::showEvent(se);
 }
 
@@ -524,8 +537,11 @@ bool SoundWidget::validate(bool showErrorMessage) const
 void SoundWidget::slotVolumeToggled(bool on)
 {
     mVolumeSlider->setEnabled(on);
-    mFadeCheckbox->setEnabled(on);
-    slotFadeToggled(on  &&  mFadeCheckbox->isChecked());
+    if (mFadeCheckbox)
+    {
+        mFadeCheckbox->setEnabled(on);
+        slotFadeToggled(on  &&  mFadeCheckbox->isChecked());
+    }
 }
 
 /******************************************************************************
@@ -533,9 +549,12 @@ void SoundWidget::slotVolumeToggled(bool on)
 */
 void SoundWidget::slotFadeToggled(bool on)
 {
-    mFadeBox->setEnabled(on);
-    mFadeVolumeBox->setEnabled(on);
-    Q_EMIT changed();
+    if (mFadeCheckbox)
+    {
+        mFadeBox->setEnabled(on);
+        mFadeVolumeBox->setEnabled(on);
+        Q_EMIT changed();
+    }
 }
 
 // vim: et sw=4:

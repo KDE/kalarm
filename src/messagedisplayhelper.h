@@ -107,7 +107,7 @@ public:
     static bool         shouldShowError(const KAEvent& event, const QStringList& errmsgs, const QString& dontShowAgain = QString());
     static MessageDisplay* findEvent(const EventId& eventId, MessageDisplay* exclude = nullptr);
     static bool         isAudioPlaying();
-    static void         stopAudio(bool wait = false);
+    static void         stopAudio();
 
 Q_SIGNALS:
     /** Signal emitted when texts in the alarm message have changed.

@@ -3,11 +3,14 @@ KAlarm Change Log
 === Version 3.5.0 (KDE Gear 22.08) --- 24 April 2022 ===
 * Provide options to build and/or run KAlarm without any Akonadi dependency.
 
-=== Version 3.4.1 (KDE Gear 22.04.1) --- 25 April 2022 ===
+=== Version 3.4.1 (KDE Gear 22.04.1) --- 2 May 2022 ===
 * Fix checkboxes being disabled in Preferences dialogue.
 * Fix time spin boxes being displayed in the wrong position.
 * Fix crash when Try clicked to stop audio alarm with fade [KDE Bug 452962]
+* Don't show volume fade controls if Phonon backend doesn't support fade.
+* Fix sound files not playing after previously playing with fade.
 * Fix Stop Play button not working for display alarm with audio file.
+* Fix crash in font chooser when style is selected after deselecting default font [KDE Bug 453193]
 
 === Version 3.4.0 (KDE Gear 22.04) --- 6 April 2022 ===
 * Allow calendars and date picker to be shown together in side panel [KDE Bug 440250]

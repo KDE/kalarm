@@ -32,9 +32,9 @@
 #include <KIO/StoredTransferJob>
 #include <KJobWidgets>
 #include <KNotification>
-#include <phonon/mediaobject.h>
-#include <phonon/audiooutput.h>
-#include <phonon/volumefadereffect.h>
+#include <phonon/MediaObject>
+#include <phonon/AudioOutput>
+#include <phonon/VolumeFaderEffect>
 
 #include <QLocale>
 #include <QTimer>
@@ -174,7 +174,7 @@ MessageDisplayHelper::~MessageDisplayHelper()
 {
     qCDebug(KALARM_LOG) << "~MessageDisplayHelper()" << mEventId;
     if (mAudioOwner == this  &&  !mAudioPlayer.isNull())
-        delete mAudioPlayer;
+        mAudioPlayer->stop();   // mAudioPlayer will delete once stopped
     if (mAudioOwner == this)
         mAudioOwner = nullptr;
     // If the audio thread is destroyed while still running, it will crash.
@@ -903,23 +903,11 @@ bool MessageDisplayHelper::isAudioPlaying()
 /******************************************************************************
 * Stop audio playback.
 */
-void MessageDisplayHelper::stopAudio(bool wait)
+void MessageDisplayHelper::stopAudio()
 {
     qCDebug(KALARM_LOG) << "MessageDisplayHelper::stopAudio";
-    delete mAudioPlayer.data();
-    if (mAudioThread)
-    {
-        // Quit the audio thread and wait for thread completion and tidy up.
-        mAudioThread->quit();       // stop playing and tidy up
-        mAudioThread->wait(3000);   // wait for run() to exit (timeout 3 seconds)
-        if (!mAudioThread->isFinished())
-        {
-            // Something has gone wrong - forcibly kill the thread
-            mAudioThread->terminate();
-            if (wait)
-                mAudioThread->wait();
-        }
-    }
+    if (mAudioPlayer)
+        mAudioPlayer->stop();
 }
 
 /******************************************************************************
@@ -971,7 +959,6 @@ AudioPlayer::AudioPlayer(const QString& audioFile, float volume, float fadeVolum
     , mFadeVolume(fadeVolume)
     , mFadeSeconds(fadeSeconds)
     , mRepeatPause(repeatPause)
-    , mAudioObject(nullptr)
 {
 }
 
@@ -982,19 +969,17 @@ AudioPlayer::AudioPlayer(const QString& audioFile, float volume, float fadeVolum
 AudioPlayer::~AudioPlayer()
 {
     qCDebug(KALARM_LOG) << "MessageDisplayHelper::~AudioPlayer";
-    // A bug in Phonon causes a crash when the VolumeFaderEffect is deleted due
-    // to being a child of MediaObject. This workaround prevents the crash by
-    // removing and deleting VolumeFaderEffect before ~MediaObject() is called.
-    const auto effects = mPath.effects();
-    for (Phonon::Effect* effect : effects)
+    mMutex.lock();
+    mPath.disconnect();
+    if (mFader)
     {
-        mPath.removeEffect(effect);
-        delete effect;
+        mPath.removeEffect(mFader);
+        delete mFader;
+        mFader = nullptr;
     }
-    // --- End of workaround for Phonon crash
-
     delete mAudioObject;
     mAudioObject = nullptr;
+    mMutex.unlock();
     // Notify after deleting mAudioPlayer, so that isAudioPlaying() will
     // return the correct value.
     QTimer::singleShot(0, theApp(), &KAlarmApp::notifyAudioStopped);   //NOLINT(clang-analyzer-cplusplus.NewDeleteLeaks)
@@ -1011,7 +996,7 @@ void AudioPlayer::execute()
         mMutex.unlock();
         return;
     }
-    qCDebug(KALARM_LOG) << "MessageDisplayHelper::AudioPlayer::run:" << QThread::currentThread() << mFile;
+    qCDebug(KALARM_LOG) << "MessageDisplayHelper::AudioPlayer::execute:" << QThread::currentThread() << mFile;
     const QString audioFile = mFile;
     const QUrl url = QUrl::fromUserInput(mFile);
     mFile = url.isLocalFile() ? url.toLocalFile() : url.toString();
@@ -1020,25 +1005,34 @@ void AudioPlayer::execute()
     {
         mError = xi18nc("@info", "Cannot open audio file: <filename>%1</filename>", audioFile);
         mMutex.unlock();
-        qCCritical(KALARM_LOG) << "MessageDisplayHelper::AudioPlayer::run: Open failure:" << audioFile;
+        qCCritical(KALARM_LOG) << "MessageDisplayHelper::AudioPlayer::execute: Open failure:" << audioFile;
         return;
     }
-    mAudioObject = new Phonon::MediaObject();
+    mAudioObject = new Phonon::MediaObject(this);
     mAudioObject->setCurrentSource(source);
     mAudioObject->setTransitionTime(100);   // workaround to prevent clipping of end of files in Xine backend
-    auto output = new Phonon::AudioOutput(Phonon::NotificationCategory, mAudioObject);   //NOLINT(clang-analyzer-cplusplus.NewDeleteLeaks)
+    auto output = new Phonon::AudioOutput(Phonon::NotificationCategory, this);   //NOLINT(clang-analyzer-cplusplus.NewDeleteLeaks)
     mPath = Phonon::createPath(mAudioObject, output);
     if (mVolume >= 0  ||  mFadeVolume >= 0)
     {
-        const float vol = (mVolume >= 0) ? mVolume : output->volume();
-        const float maxvol = qMax(vol, mFadeVolume);
-        output->setVolume(maxvol);
+        if (mVolume >= 0)
+            output->setVolume(mVolume);
         if (mFadeVolume >= 0  &&  mFadeSeconds > 0)
         {
-            auto fader = new Phonon::VolumeFaderEffect(mAudioObject);
-            fader->setVolume(mFadeVolume / maxvol);
-            fader->fadeTo(mVolume / maxvol, mFadeSeconds * 1000);
-            mPath.insertEffect(fader);
+            mFader = new Phonon::VolumeFaderEffect(this);
+            if (!mFader->isValid())
+            {
+                // The current Phonon backend doesn't support fading.
+                qCWarning(KALARM_LOG) << "MessageDisplayHelper::AudioPlayer: Current Phonon backend does not support fading";
+                delete mFader;
+                mFader = nullptr;
+            }
+            else
+            {
+                if (mVolume < 0)
+                    mVolume = output->volume();
+                mPath.insertEffect(mFader);
+            }
         }
     }
     connect(mAudioObject, &Phonon::MediaObject::stateChanged, this, &AudioPlayer::playStateChanged, Qt::DirectConnection);
@@ -1075,7 +1069,7 @@ void AudioPlayer::checkAudioPlay()
             {
                 // Play has completed
                 mMutex.unlock();
-                stopPlay();
+                stop();
                 return;
             }
             if (mRepeatPause > 0)
@@ -1092,6 +1086,11 @@ void AudioPlayer::checkAudioPlay()
 
     // Start playing the file, either for the first time or again
     qCDebug(KALARM_LOG) << "MessageDisplayHelper::AudioPlayer::checkAudioPlay: start";
+    if (mFader)
+    {
+        mFader->setVolume(mFadeVolume);
+        mFader->fadeTo(mVolume, mFadeSeconds * 1000);
+    }
     mAudioObject->play();
     mMutex.unlock();
 }
@@ -1102,16 +1101,42 @@ void AudioPlayer::checkAudioPlay()
 */
 void AudioPlayer::playStateChanged(Phonon::State newState)
 {
-    if (newState == Phonon::ErrorState)
+    qCDebug(KALARM_LOG) << "MessageDisplayHelper::AudioPlayer::playStateChanged:" << newState;
+    switch (newState)
     {
-        QMutexLocker locker(&mMutex);
-        const QString err = mAudioObject->errorString();
-        if (!err.isEmpty())
+        case Phonon::StoppedState:
+            mMutex.lock();
+            if (mStopping)
+            {
+                mPath.disconnect();
+                if (mFader)
+                {
+                    // Delete fader from the audio thread, in case it is still active.
+                    // because its timers can't be stopped from another thread.
+                    mPath.removeEffect(mFader);
+                    delete mFader;
+                    mFader = nullptr;
+                }
+                deleteLater();
+            }
+            mMutex.unlock();
+            break;
+
+        case Phonon::ErrorState:
         {
-            qCCritical(KALARM_LOG) << "MessageDisplayHelper::AudioPlayer::playStateChanged: Play failure:" << mFile << ":" << err;
-            mError = xi18nc("@info", "<para>Error playing audio file: <filename>%1</filename></para><para>%2</para>", mFile, err);
-            exit(1);
+            QMutexLocker locker(&mMutex);
+            const QString err = mAudioObject->errorString();
+            if (!err.isEmpty())
+            {
+                qCCritical(KALARM_LOG) << "MessageDisplayHelper::AudioPlayer::playStateChanged: Play failure:" << mFile << ":" << err;
+                mError = xi18nc("@info", "<para>Error playing audio file: <filename>%1</filename></para><para>%2</para>", mFile, err);
+                exit(1);
+            }
+            break;
         }
+
+        default:
+            break;
     }
 }
 
@@ -1119,20 +1144,19 @@ void AudioPlayer::playStateChanged(Phonon::State newState)
 * Called when play completes, the Silence button is clicked, or the display is
 * closed, to terminate audio access.
 */
-void AudioPlayer::stopPlay()
+void AudioPlayer::stop()
 {
+    qCDebug(KALARM_LOG) << "MessageDisplayHelper::AudioPlayer::stop";
     mMutex.lock();
+    mStopping = true;
     if (mAudioObject)
     {
-        mAudioObject->stop();
-        const QList<Phonon::Effect*> effects = mPath.effects();
-        for (int i = 0;  i < effects.count();  ++i)
+        if (mAudioObject->state() != Phonon::StoppedState)
         {
-            mPath.removeEffect(effects[i]);
-            delete effects[i];
+            mAudioObject->stop();
+            mMutex.unlock();
+            return;
         }
-        delete mAudioObject;
-        mAudioObject = nullptr;
     }
     mMutex.unlock();
     deleteLater();

@@ -783,7 +783,7 @@ bool KAlarmApp::quitIf(int exitCode, bool force)
     //       be initialised in the initialiseTimerResources() method, in case
     //       KAlarm is started again before application exit completes!
     qCDebug(KALARM_LOG) << "KAlarmApp::quitIf:" << exitCode << ": quitting";
-    MessageDisplay::stopAudio(true);
+    MessageDisplay::stopAudio();
 #if ENABLE_WAKE_FROM_SUSPEND
     if (mCancelRtcWake)
     {

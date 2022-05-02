@@ -294,10 +294,7 @@ void EditDisplayAlarmDlg::type_initValues(const KAEvent& event)
         &&  AlarmText::checkIfEmail(event.cleanText()))
             mEmailId = event.emailId();
         lateCancel()->setAutoClose(event.autoClose());
-        if (event.useDefaultFont())
-            mFontColourButton->setDefaultFont();
-        else
-            mFontColourButton->setFont(event.font());
+        mFontColourButton->setFont(event.font(), event.useDefaultFont());
         mFontColourButton->setBgColour(event.bgColour());
         mFontColourButton->setFgColour(event.fgColour());
         setColours(event.fgColour(), event.bgColour());
@@ -343,7 +340,7 @@ void EditDisplayAlarmDlg::type_initValues(const KAEvent& event)
         }
         lateCancel()->setAutoClose(Preferences::defaultAutoClose());
         mTypeCombo->setCurrentIndex(0);
-        mFontColourButton->setDefaultFont();
+        mFontColourButton->setFont(Preferences::messageFont(), true);
         mFontColourButton->setBgColour(Preferences::defaultBgColour());
         mFontColourButton->setFgColour(Preferences::defaultFgColour());
         setColours(Preferences::defaultFgColour(), Preferences::defaultBgColour());

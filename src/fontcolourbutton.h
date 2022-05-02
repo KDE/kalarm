@@ -1,7 +1,7 @@
 /*
  *  fontcolourbutton.h  -  pushbutton widget to select a font and colour
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2003-2020 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2003-2022 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -21,8 +21,14 @@ class FontColourButton : public PushButton
     Q_OBJECT
 public:
     explicit FontColourButton(QWidget* parent = nullptr);
-    void          setDefaultFont();
-    void          setFont(const QFont&);
+
+    /** Set the font to use. If using the default font, 
+     *  @param font  Font to use.
+     *               If @p defaultFont is true, this is the font which is currently the default.
+     *  @param defaultFont  true to use the default font.
+     */
+    void          setFont(const QFont& font, bool defaultFont);
+
     void          setBgColour(const QColor& c) { mBgColour = c; }
     void          setFgColour(const QColor& c) { mFgColour = c; }
     bool          defaultFont() const    { return mDefaultFont; }
