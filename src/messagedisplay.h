@@ -88,9 +88,9 @@ public:
      */
     static bool retrieveEvent(const EventId&, KAEvent&, Resource&, bool& showEdit, bool& showDefer);
 
-    void        playAudio()                    { mHelper->playAudio(); }
-    static void stopAudio(bool wait = false)   { MessageDisplayHelper::stopAudio(wait); }
-    static bool isAudioPlaying()               { return MessageDisplayHelper::isAudioPlaying(); }
+    void        playAudio()          { mHelper->playAudio(); }
+    static void stopAudio()          { MessageDisplayHelper::stopAudio(); }
+    static bool isAudioPlaying()     { return MessageDisplayHelper::isAudioPlaying(); }
 
     /** Called when the edit alarm dialog has been cancelled. */
     virtual void editDlgCancelled()  {}
