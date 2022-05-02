@@ -39,7 +39,7 @@
 
 <!-- Don't change format of date and version of the documentation -->
 
-<date>2022-4-24</date>
+<date>2022-5-2</date>
 <releaseinfo>3.5.0 (KDE Gear 22.08)</releaseinfo>
 
 <abstract>
@@ -1315,7 +1315,8 @@ played.</para>
 </listitem>
 
 <listitem>
-<para>If you wish, you can fade the volume. Fading means to start
+<para>If the &phonon; audio backend currently in use supports it, you
+can fade the volume. Fading means to start
 playing the audio file at one volume and gradually change to the final
 volume, over a specified time interval. The final volume is that
 entered in <guilabel>Volume</guilabel> above. To enable fade, check
@@ -1595,7 +1596,8 @@ played.</para>
 </listitem>
 
 <listitem>
-<para>If you wish, you can fade the volume. Fading means to start
+<para>If the &phonon; audio backend currently in use supports it, you
+can fade the volume. Fading means to start
 playing the audio file at one volume and gradually change to the final
 volume, over a specified time interval. The final volume is that
 entered in <guilabel>Volume</guilabel> above. To enable fade, check
