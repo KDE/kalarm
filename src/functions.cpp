@@ -29,7 +29,6 @@
 #include "kalarmcalendar/identities.h"
 #include "akonadiplugin/akonadiplugin.h"
 #include "kalarm_debug.h"
-#include "config-kalarm.h"
 
 #include <KCalendarCore/Event>
 #include <KCalendarCore/ICalFormat>

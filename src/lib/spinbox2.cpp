@@ -7,7 +7,6 @@
  */
 
 #include "spinbox2.h"
-#include "spinbox2_p.h"
 
 #include "kalarm_debug.h"
 

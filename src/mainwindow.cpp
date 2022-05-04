@@ -16,7 +16,6 @@
 #include "functions.h"
 #include "kalarmapp.h"
 #include "kamail.h"
-#include "messagedisplay.h"
 #include "newalarmaction.h"
 #include "prefdlg.h"
 #include "preferences.h"

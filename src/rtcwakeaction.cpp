@@ -11,7 +11,6 @@
 #include "kalarm_debug.h"
 
 #include <KLocalizedString>
-#include <KAuth/ActionReply>
 
 #include <QProcess>
 #include <QDateTime>

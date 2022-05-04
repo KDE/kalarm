@@ -10,7 +10,6 @@
 
 #include "alarmtext.h"
 
-#include "kaevent.h"
 
 #include <KLocalizedString>
 

@@ -8,7 +8,6 @@
 
 #include "sendakonadimail.h"
 
-#include "mailsend.h"
 #include "akonadiplugin_debug.h"
 
 #include <KIdentityManagement/Identity>
