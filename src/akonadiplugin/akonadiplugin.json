@@ -1,7 +1,7 @@
 {
     "KPlugin": {
         "Description": "Functions which require Akonadi",
-        "Description[ca@valencia]": "Funcions que requerisquen Akonadi",
+        "Description[ca@valencia]": "Funcions que requereixen Akonadi",
         "Description[ca]": "Funcions que requereixen l'Akonadi",
         "Description[en_GB]": "Functions which require Akonadi",
         "Description[es]": "Funciones que requiere Akonadi",
