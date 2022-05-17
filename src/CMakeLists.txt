@@ -332,7 +332,7 @@ target_link_libraries(kalarm_bin
 )
 
 if (ENABLE_WAKE_FROM_SUSPEND)
-    target_link_libraries(kalarm_bin KF5::Auth)
+	target_link_libraries(kalarm_bin KF5::AuthCore)
 endif()
 
 if (Qt${QT_MAJOR_VERSION}X11Extras_FOUND)
