@@ -353,6 +353,7 @@
   <url type="homepage">https://community.kde.org/KDE_PIM</url>
   <url type="bugtracker">https://bugs.kde.org/enter_bug.cgi?format=guided&amp;product=kalarm</url>
   <url type="help">https://docs.kde.org/?application=kalarm</url>
+  <content_rating type="oars-1.1"/>
   <screenshots>
     <screenshot type="default">
       <caption>KAlarm configuration window with a testing message alarm</caption>
