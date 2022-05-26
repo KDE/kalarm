@@ -33,6 +33,7 @@
 #include <QHBoxLayout>
 #include <QBoxLayout>
 #include <QResizeEvent>
+#include <QMenu>
 
 using namespace KCal;
 

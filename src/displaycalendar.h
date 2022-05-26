@@ -43,7 +43,7 @@ private:
     static int                        load();
     static void                       close();
     static bool                       saveCal(const QString& newFile = QString());
-    static bool                       isValid()    { return mCalendarStorage; }
+    static bool                       isValid()    { return !mCalendarStorage.isNull(); }
     static void                       updateKAEvents();
 
     static bool                       mInitialised;        // whether the calendar has been initialised

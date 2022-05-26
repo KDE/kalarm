@@ -64,7 +64,7 @@ void AlarmListView::setColumnsVisible(const QList<bool>& show)
     const bool useName = Preferences::useAlarmName();
     QList<bool> vis{ true, false, true, true, true, !useName };
     const int colCount = useName ? 6 : 5;
-    for (int i = 0, count = std::min(colCount, show.count());  i < count;  ++i)
+    for (int i = 0, count = std::min<int>(colCount, show.count());  i < count;  ++i)
         vis[i] = show[i];
     header()->setSectionHidden(AlarmListModel::TimeColumn,   !vis[0]);
     header()->setSectionHidden(AlarmListModel::TimeToColumn, !vis[1]);

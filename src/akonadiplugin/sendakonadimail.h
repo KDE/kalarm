@@ -14,8 +14,8 @@
 
 #include <QObject>
 #include <QQueue>
+#include <QStringList>
 
-class QStringList;
 class KJob;
 namespace KIdentityManagement { class Identity; }
 namespace MailTransport  { class MessageQueueJob; }

@@ -44,6 +44,7 @@
 #include <QUrl>
 #include <QTextBrowser>
 #include <QTemporaryFile>
+#include <QRegExp>
 
 using namespace KAlarmCal;
 

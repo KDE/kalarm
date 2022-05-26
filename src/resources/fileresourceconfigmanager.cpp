@@ -63,7 +63,11 @@ void FileResourceConfigManager::createResources(QObject* parent)
         std::sort(resourceGroups.begin(), resourceGroups.end(),
                   [](const QString& g1, const QString& g2)
                   {
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
                       return g1.midRef(9).toInt() < g2.midRef(9).toInt();
+#else
+                      return QStringView(g1).mid(9).toInt() < QStringView(g2).mid(9).toInt();
+#endif
                   });
 
         KConfigGroup general(manager->mConfig, GROUP_GENERAL);
@@ -71,7 +75,11 @@ void FileResourceConfigManager::createResources(QObject* parent)
 
         for (const QString& resourceGroup : std::as_const(resourceGroups))
         {
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
             const int groupIndex = resourceGroup.midRef(9).toInt();
+#else
+            const int groupIndex = QStringView(resourceGroup).mid(9).toInt();
+#endif
             FileResourceSettings::Ptr settings(new FileResourceSettings(manager->mConfig, resourceGroup));
             if (!settings->isValid())
             {

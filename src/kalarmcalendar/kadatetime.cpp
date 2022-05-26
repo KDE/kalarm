@@ -2879,7 +2879,7 @@ QDateTime fromStr(const QString& string, const QString& format, int& utcOffset,
                     if (str[s] != QLatin1Char('.'))
                     {
                         // If no locale, try comma, it is preferred by ISO8601 as the decimal point symbol
-                        const QChar dpt = QLocale().decimalPoint();
+                        const QString dpt = QLocale().decimalPoint();
                         if (!QStringView(str).mid(s).startsWith(dpt))
                             return {};
                     }
