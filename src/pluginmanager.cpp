@@ -43,7 +43,9 @@ void PluginManager::loadPlugins()
     mAkonadiPlugin = nullptr;
 
     // Load plugins which are available
-    const QVector<KPluginMetaData> plugins = KPluginMetaData::findPlugins(QStringLiteral("kalarm"));
+    const QVector<KPluginMetaData> plugins = KPluginMetaData::findPlugins(
+        QStringLiteral("pim" QT_STRINGIFY(QT_VERSION_MAJOR)) +
+        QStringLiteral("/kalarm"));
 
     for (const auto& metaData : plugins)
     {

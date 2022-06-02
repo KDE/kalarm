@@ -18,7 +18,7 @@ kcoreaddons_add_plugin(akonadiplugin
         birthdaymodel.h
         collectionattribute.h
         sendakonadimail.h
-    INSTALL_NAMESPACE "kalarm"
+    INSTALL_NAMESPACE "pim${QT_MAJOR_VERSION}/kalarm"
 )
 
 set_target_properties(akonadiplugin PROPERTIES LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin/plugins/kalarm")
