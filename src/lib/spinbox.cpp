@@ -528,7 +528,7 @@ void SpinBox::paintEvent(QPaintEvent* pe)
 
 void SpinBox::initStyleOption(QStyleOptionSpinBox& so) const
 {
-    so.init(this);
+    so.initFrom(this);
 //    so.activeSubControls = ??;
     so.subControls   = mUpDownOnly ? (QStyle::SC_SpinBoxUp | QStyle::SC_SpinBoxDown | QStyle::SC_SpinBoxFrame)
                                    : (QStyle::SC_SpinBoxUp | QStyle::SC_SpinBoxDown | QStyle::SC_SpinBoxFrame | QStyle::SC_SpinBoxEditField);
