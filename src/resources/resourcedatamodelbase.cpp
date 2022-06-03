@@ -19,6 +19,7 @@
 
 #include <QApplication>
 #include <QIcon>
+#include <QRegularExpression>
 
 
 /*=============================================================================
@@ -709,8 +710,10 @@ QString ResourceDataModelBase::alarmTimeText(const DateTime& dateTime, char lead
 
         // 'HH' and 'hh' provide leading zeroes; single 'H' or 'h' provide no
         // leading zeroes.
-        int i = timeFormat.indexOf(QRegExp(QLatin1String("[hH]")));
-        int first = timeFormat.indexOf(QRegExp(QLatin1String("[hHmaA]")));
+        static const QRegularExpression hourReg(QLatin1String("[hH]"));
+        int i = timeFormat.indexOf(hourReg);
+        static const QRegularExpression hourMonthReg(QLatin1String("[hH]"));
+        int first = timeFormat.indexOf(hourMonthReg);
         if (i >= 0  &&  i == first  &&  (i == timeFormat.size() - 1  ||  timeFormat.at(i) != timeFormat.at(i + 1)))
         {
             timeFullFormat = timeFormat;
