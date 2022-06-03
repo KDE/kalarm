@@ -156,6 +156,18 @@ void EventListView::resizeEvent(QResizeEvent* se)
     initSections();
 }
 
+QStyleOptionViewItem EventListView::listViewOptions() const
+{
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+    return QTreeView::viewOptions();
+#else
+    QStyleOptionViewItem option;
+    initViewItemOption(&option);
+    return option;
+#endif
+}
+
+
 /******************************************************************************
 * Called when a ToolTip or WhatsThis event occurs.
 */
@@ -180,7 +192,7 @@ bool EventListView::viewportEvent(QEvent* e)
                     // Single line tooltip. Only display it if the text column
                     // is truncated in the view display.
                     value = model()->data(index, Qt::FontRole);
-                    const QFontMetrics fm(qvariant_cast<QFont>(value).resolve(viewOptions().font));
+                    const QFontMetrics fm(qvariant_cast<QFont>(value).resolve(listViewOptions().font));
                     const int textWidth = fm.boundingRect(toolTip).width() + 1;
                     const int margin = QApplication::style()->pixelMetric(QStyle::PM_FocusFrameHMargin) + 1;
                     const int left = columnViewportPosition(index.column()) + margin;

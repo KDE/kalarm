@@ -105,11 +105,22 @@ void AlarmListView::initSections()
     header()->setSectionResizeMode(AlarmListModel::NameColumn, QHeaderView::ResizeToContents);
     header()->setSectionResizeMode(AlarmListModel::TextColumn, QHeaderView::Stretch);
     header()->setStretchLastSection(true);   // necessary to ensure ResizeToContents columns do resize to contents!
-    const int minWidth = viewOptions().fontMetrics.lineSpacing() * 3 / 4;
+    const int minWidth = listViewOptions().fontMetrics.lineSpacing() * 3 / 4;
     header()->setMinimumSectionSize(minWidth);
     const int margin = QApplication::style()->pixelMetric(QStyle::PM_FocusFrameHMargin);
     header()->resizeSection(AlarmListModel::ColourColumn, minWidth);
     header()->resizeSection(AlarmListModel::TypeColumn, AlarmListModel::iconWidth() + 2*margin + 2);
+}
+
+QStyleOptionViewItem AlarmListView::listViewOptions() const
+{
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+    return QTreeView::viewOptions();
+#else
+    QStyleOptionViewItem option;
+    initViewItemOption(&option);
+    return option;
+#endif
 }
 
 /******************************************************************************

@@ -681,14 +681,14 @@ bool ResourceView::viewportEvent(QEvent* e)
                 const int k = toolTip.indexOf(QLatin1Char('@'), j);
                 const QString name = toolTip.mid(i + 1, j - i - 1);
                 value = model()->data(index, Qt::FontRole);
-                const QFontMetrics fm(qvariant_cast<QFont>(value).resolve(viewOptions().font));
+                const QFontMetrics fm(qvariant_cast<QFont>(value).resolve(listViewOptions().font));
                 int textWidth = fm.boundingRect(name).width() + 1;
                 const int margin = QApplication::style()->pixelMetric(QStyle::PM_FocusFrameHMargin) + 1;
                 QStyleOptionButton opt;
-                opt.QStyleOption::operator=(viewOptions());
+                opt.QStyleOption::operator=(listViewOptions());
                 opt.rect = rectForIndex(index);
                 const int checkWidth = QApplication::style()->subElementRect(QStyle::SE_ItemViewItemCheckIndicator, &opt).width();
-                const int left = spacing() + 3*margin + checkWidth + viewOptions().decorationSize.width();   // left offset of text
+                const int left = spacing() + 3*margin + checkWidth + listViewOptions().decorationSize.width();   // left offset of text
                 const int right = left + textWidth;
                 if (left >= horizontalOffset() + spacing()
                 &&  right <= horizontalOffset() + width() - spacing() - 2*frameWidth())
@@ -711,4 +711,14 @@ bool ResourceView::viewportEvent(QEvent* e)
     return QListView::viewportEvent(e);
 }
 
+QStyleOptionViewItem ResourceView::listViewOptions() const
+{
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+    return QListView::viewOptions();
+#else
+    QStyleOptionViewItem option;
+    initViewItemOption(&option);
+    return option;
+#endif
+}
 // vim: et sw=4:

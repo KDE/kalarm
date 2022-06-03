@@ -32,11 +32,22 @@ void TemplateListView::initSections()
     header()->setSectionsMovable(false);
     header()->setStretchLastSection(true);
     header()->setSectionResizeMode(TemplateListModel::TypeColumn, QHeaderView::Fixed);
-    const int minWidth = viewOptions().fontMetrics.lineSpacing() * 3 / 4;
+    const int minWidth = listViewOptions().fontMetrics.lineSpacing() * 3 / 4;
     header()->setMinimumSectionSize(minWidth);
     const int margin = QApplication::style()->pixelMetric(QStyle::PM_FocusFrameHMargin);
     header()->resizeSection(TemplateListModel::TypeColumn, EventListModel::iconWidth() + 2*margin + 2);
     sortByColumn(TemplateListModel::TemplateNameColumn, Qt::AscendingOrder);
+}
+
+QStyleOptionViewItem TemplateListView::listViewOptions() const
+{
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+    return QTreeView::viewOptions();
+#else
+    QStyleOptionViewItem option;
+    initViewItemOption(&option);
+    return option;
+#endif
 }
 
 void TemplateListDelegate::edit(KAEvent& event, EventListView* view)

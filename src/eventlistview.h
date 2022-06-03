@@ -53,6 +53,7 @@ protected Q_SLOTS:
     void              sortChanged(int column, Qt::SortOrder);
 
 private:
+    QStyleOptionViewItem listViewOptions() const;
     void              findNext(bool forward);
 
     Find*             mFind {nullptr};
