@@ -335,10 +335,13 @@ if (ENABLE_WAKE_FROM_SUSPEND)
 	target_link_libraries(kalarm_bin KF5::AuthCore)
 endif()
 
-if (Qt${QT_MAJOR_VERSION}X11Extras_FOUND)
-    target_link_libraries(kalarm_bin Qt${QT_MAJOR_VERSION}::X11Extras ${X11_X11_LIB})
+if(X11_FOUND)
+    if (QT_MAJOR_VERSION STREQUAL "5")
+        target_link_libraries(kalarm_bin Qt${QT_MAJOR_VERSION}::X11Extras ${X11_X11_LIB})
+    else()
+        target_link_libraries(kalarm_bin Qt6::GuiPrivate  ${X11_X11_LIB})
+    endif()
 endif()
-
 
 install(TARGETS kalarm_bin ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 #endif (UNIX)
