@@ -36,7 +36,9 @@
 #if KDEPIM_HAVE_X11
 #include <KWindowInfo>
 #include <netwm.h>
-#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+#if QT_VERSION >= QT_VERSION_CHECK(6, 2, 0)
+#include <QGuiApplication>
+#elif QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
 #include <private/qtx11extras_p.h>
 #else
 #include <QX11Info>
@@ -1339,7 +1341,15 @@ FullScreenType haveFullScreenWindow(int screen)
 #if KDEPIM_HAVE_X11
     if (KWindowSystem::isPlatformX11())
     {
+#if QT_VERSION >= QT_VERSION_CHECK(6, 2, 0)
+        using namespace QNativeInterface;
+        auto* x11App = qGuiApp->nativeInterface<QX11Application>();
+        if (!x11App)
+            return type;
+        xcb_connection_t* connection = x11App->connection();
+#else
         xcb_connection_t* connection = QX11Info::connection();
+#endif
         const NETRootInfo rootInfo(connection, NET::ClientList | NET::ActiveWindow, NET::Properties2(), screen);
         const xcb_window_t rootWindow   = rootInfo.rootWindow();
         const xcb_window_t activeWindow = rootInfo.activeWindow();
@@ -1373,7 +1383,15 @@ FullScreenType findFullScreenWindows(const QVector<QRect>& screenRects, QVector<
 #if KDEPIM_HAVE_X11
     if (KWindowSystem::isPlatformX11())
     {
+#if QT_VERSION >= QT_VERSION_CHECK(6, 2, 0)
+        using namespace QNativeInterface;
+        auto* x11App = qGuiApp->nativeInterface<QX11Application>();
+        if (!x11App)
+            return type;
+        xcb_connection_t* connection = x11App->connection();
+#else
         xcb_connection_t* connection = QX11Info::connection();
+#endif
         const NETRootInfo rootInfo(connection, NET::ClientList | NET::ActiveWindow, NET::Properties2());
         const xcb_window_t rootWindow   = rootInfo.rootWindow();
         const xcb_window_t activeWindow = rootInfo.activeWindow();

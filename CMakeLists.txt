@@ -121,7 +121,7 @@ if (X11_FOUND)
     if (QT_MAJOR_VERSION STREQUAL "5")
         find_package(Qt5X11Extras ${QT_REQUIRED_VERSION} REQUIRED NO_MODULE)
     else()
-        find_package(Qt${QT_MAJOR_VERSION} ${REQUIRED_QT_VERSION} CONFIG REQUIRED Gui) # qtx11extras_p.h
+        find_package(Qt${QT_MAJOR_VERSION} ${QT_REQUIRED_VERSION} CONFIG REQUIRED Gui) # qtx11extras_p.h for Qt6 < 6.2
     endif()
 endif()
 set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH})
