@@ -395,7 +395,7 @@
     <binary>kalarm</binary>
   </provides>
   <releases>
-    <release version="3.4.1" date="2022-07-07"/>
+    <release version="3.4.1.220403" date="2022-07-07"/>
     <release version="3.4.1" date="2022-06-09"/>
     <release version="3.4.1" date="2022-05-12"/>
     <release version="3.4.0" date="2022-04-21"/>
