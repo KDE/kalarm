@@ -18,6 +18,7 @@ class MessageDisplayHelper;
 namespace Phonon
 {
     class MediaObject;
+    class AudioOutput;
     class VolumeFaderEffect;
 }
 
@@ -52,6 +53,7 @@ private:
     int                  mRepeatPause;
     Phonon::MediaObject* mAudioObject {nullptr};
     Phonon::Path         mPath;
+    Phonon::AudioOutput* mAudioOutput {nullptr};
     Phonon::VolumeFaderEffect* mFader {nullptr};
     QString              mError;
     bool                 mPlayedOnce;   // the sound file has started playing at least once

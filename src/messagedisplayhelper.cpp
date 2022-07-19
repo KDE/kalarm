@@ -1012,12 +1012,12 @@ void AudioPlayer::execute()
     mAudioObject = new Phonon::MediaObject(this);
     mAudioObject->setCurrentSource(source);
     mAudioObject->setTransitionTime(100);   // workaround to prevent clipping of end of files in Xine backend
-    auto output = new Phonon::AudioOutput(Phonon::NotificationCategory, this);   //NOLINT(clang-analyzer-cplusplus.NewDeleteLeaks)
-    mPath = Phonon::createPath(mAudioObject, output);
+    mAudioOutput = new Phonon::AudioOutput(Phonon::NotificationCategory, this);   //NOLINT(clang-analyzer-cplusplus.NewDeleteLeaks)
+    mPath = Phonon::createPath(mAudioObject, mAudioOutput);
     if (mVolume >= 0  ||  mFadeVolume >= 0)
     {
         if (mVolume >= 0)
-            output->setVolume(mVolume);
+            mAudioOutput->setVolume(mVolume);
         if (mFadeVolume >= 0  &&  mFadeSeconds > 0)
         {
             mFader = new Phonon::VolumeFaderEffect(this);
@@ -1031,7 +1031,7 @@ void AudioPlayer::execute()
             else
             {
                 if (mVolume < 0)
-                    mVolume = output->volume();
+                    mVolume = mAudioOutput->volume();
                 mPath.insertEffect(mFader);
             }
         }
@@ -1087,6 +1087,8 @@ void AudioPlayer::checkAudioPlay()
 
     // Start playing the file, either for the first time or again
     qCDebug(KALARM_LOG) << "MessageDisplayHelper::AudioPlayer::checkAudioPlay: start";
+    if (mVolume >= 0)
+        mAudioOutput->setVolume(mVolume);
     if (mFader)
     {
         mFader->setVolume(mFadeVolume);
