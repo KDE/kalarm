@@ -19,8 +19,6 @@ public:
 
 protected Q_SLOTS:
     void initSections() override;
-private:
-    QStyleOptionViewItem listViewOptions() const;
 };
 
 

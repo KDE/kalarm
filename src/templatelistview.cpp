@@ -39,17 +39,6 @@ void TemplateListView::initSections()
     sortByColumn(TemplateListModel::TemplateNameColumn, Qt::AscendingOrder);
 }
 
-QStyleOptionViewItem TemplateListView::listViewOptions() const
-{
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-    return QTreeView::viewOptions();
-#else
-    QStyleOptionViewItem option;
-    initViewItemOption(&option);
-    return option;
-#endif
-}
-
 void TemplateListDelegate::edit(KAEvent& event, EventListView* view)
 {
     KAlarm::editTemplate(event, static_cast<TemplateListView*>(view));

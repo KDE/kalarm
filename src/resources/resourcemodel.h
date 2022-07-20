@@ -236,7 +236,6 @@ Q_SIGNALS:
 protected:
     void mouseReleaseEvent(QMouseEvent*) override;
     bool viewportEvent(QEvent*) override;
-private:
     QStyleOptionViewItem listViewOptions() const;
 };
 

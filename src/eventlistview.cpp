@@ -156,18 +156,6 @@ void EventListView::resizeEvent(QResizeEvent* se)
     initSections();
 }
 
-QStyleOptionViewItem EventListView::listViewOptions() const
-{
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-    return QTreeView::viewOptions();
-#else
-    QStyleOptionViewItem option;
-    initViewItemOption(&option);
-    return option;
-#endif
-}
-
-
 /******************************************************************************
 * Called when a ToolTip or WhatsThis event occurs.
 */
@@ -214,6 +202,17 @@ bool EventListView::viewportEvent(QEvent* e)
 void EventListView::contextMenuEvent(QContextMenuEvent* e)
 {
     Q_EMIT contextMenuRequested(e->globalPos());
+}
+
+QStyleOptionViewItem EventListView::listViewOptions() const
+{
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+    return QTreeView::viewOptions();
+#else
+    QStyleOptionViewItem option;
+    initViewItemOption(&option);
+    return option;
+#endif
 }
 
 

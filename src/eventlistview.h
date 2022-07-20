@@ -47,13 +47,13 @@ protected:
     void              resizeEvent(QResizeEvent*) override;
     bool              viewportEvent(QEvent*) override;
     void              contextMenuEvent(QContextMenuEvent*) override;
+    QStyleOptionViewItem listViewOptions() const;
 
 protected Q_SLOTS:
     virtual void      initSections() = 0;
     void              sortChanged(int column, Qt::SortOrder);
 
 private:
-    QStyleOptionViewItem listViewOptions() const;
     void              findNext(bool forward);
 
     Find*             mFind {nullptr};

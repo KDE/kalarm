@@ -39,7 +39,6 @@ private:
     void        showHideColumn(QMenu&, QAction*);
     void        setReplaceBlankName();
     void        enableTimeColumns(QMenu*);
-    QStyleOptionViewItem listViewOptions() const;
 
     QByteArray  mConfigGroup;
 };

@@ -112,17 +112,6 @@ void AlarmListView::initSections()
     header()->resizeSection(AlarmListModel::TypeColumn, AlarmListModel::iconWidth() + 2*margin + 2);
 }
 
-QStyleOptionViewItem AlarmListView::listViewOptions() const
-{
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-    return QTreeView::viewOptions();
-#else
-    QStyleOptionViewItem option;
-    initViewItemOption(&option);
-    return option;
-#endif
-}
-
 /******************************************************************************
 * Called when the column order is changed.
 * Save the new order for restoration on program restart.

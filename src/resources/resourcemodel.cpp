@@ -721,4 +721,5 @@ QStyleOptionViewItem ResourceView::listViewOptions() const
     return option;
 #endif
 }
+
 // vim: et sw=4:
