@@ -10,7 +10,6 @@
 
 #include "alarmtext.h"
 
-
 #include <KLocalizedString>
 
 #include <QStringList>
