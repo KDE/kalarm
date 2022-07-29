@@ -1056,7 +1056,7 @@ bool EditCommandAlarmDlg::type_validate(bool trial)
         {
             showMainPage();
             mCmdLogFileEdit->setFocus();
-            KAMessageBox::sorry(this, i18nc("@info", "Log file must be the name or path of a local file, with write permission."));
+            KAMessageBox::error(this, i18nc("@info", "Log file must be the name or path of a local file, with write permission."));
             return false;
         }
         // Convert the log file to an absolute path
@@ -1892,7 +1892,7 @@ QString CommandEdit::text(EditAlarmDlg* dlg, bool showErrorMessage) const
 {
     const QString result = text();
     if (showErrorMessage  &&  result.isEmpty())
-        KAMessageBox::sorry(dlg, i18nc("@info", "Please enter a command or script to execute"));
+        KAMessageBox::error(dlg, i18nc("@info", "Please enter a command or script to execute"));
     return result;
 }
 

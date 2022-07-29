@@ -114,7 +114,7 @@ void DeferAlarmDlg::slotOk()
             case KAEvent::LIMIT_NONE:
                 break;   // can't happen with a valid endTime
         }
-        KAMessageBox::sorry(this, text);
+        KAMessageBox::error(this, text);
     }
     else
         accept();

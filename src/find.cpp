@@ -227,7 +227,7 @@ void Find::slotFind()
     if (!(mOptions & (FIND_LIVE | FIND_ARCHIVED))
     ||  !(mOptions & (FIND_MESSAGE | FIND_FILE | FIND_COMMAND | FIND_EMAIL | FIND_AUDIO)))
     {
-        KAMessageBox::sorry(mDialog, i18nc("@info", "No alarm types are selected to search"));
+        KAMessageBox::error(mDialog, i18nc("@info", "No alarm types are selected to search"));
         return;
     }
 

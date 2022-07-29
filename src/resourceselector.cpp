@@ -229,14 +229,14 @@ void ResourceSelector::removeResource()
                                   : CalEvent::EMPTY;
     if (stdType == CalEvent::ACTIVE)
     {
-        KAMessageBox::sorry(this, i18nc("@info", "You cannot remove your default active alarm calendar."));
+        KAMessageBox::error(this, i18nc("@info", "You cannot remove your default active alarm calendar."));
         return;
     }
     if (stdType == CalEvent::ARCHIVED  &&  Preferences::archivedKeepDays())
     {
         // Only allow the archived alarms standard resource to be removed if
         // we're not saving archived alarms.
-        KAMessageBox::sorry(this, i18nc("@info", "You cannot remove your default archived alarm calendar "
+        KAMessageBox::error(this, i18nc("@info", "You cannot remove your default archived alarm calendar "
                                         "while expired alarms are configured to be kept."));
         return;
     }

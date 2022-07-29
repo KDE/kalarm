@@ -1382,7 +1382,7 @@ void editNewTemplate(EditAlarmDlg::Type type, const KAEvent& preset, QWidget* pa
 {
     if (Resources::enabledResources(CalEvent::TEMPLATE, true).isEmpty())
     {
-        KAMessageBox::sorry(parent, i18nc("@info", "You must enable a template calendar to save the template in"));
+        KAMessageBox::error(parent, i18nc("@info", "You must enable a template calendar to save the template in"));
         return;
     }
     // Use AutoQPointer to guard against crash on application exit while

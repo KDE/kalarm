@@ -342,7 +342,7 @@ bool ResourceCheckListModel::setData(const QModelIndex& index, const QVariant& v
             }
             if (!errmsg.isEmpty())
             {
-                KAMessageBox::sorry(messageParent, errmsg);
+                KAMessageBox::error(messageParent, errmsg);
                 return false;
             }
         }

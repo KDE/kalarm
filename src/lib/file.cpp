@@ -113,10 +113,10 @@ bool showFileErrMessage(const QString& filename, FileErr err, FileErr blankError
                     errmsg = i18nc("@info", "Please select a file to play");
                 else
                     qFatal("showFileErrMessage: Program error");
-                KAMessageBox::sorry(errmsgParent, errmsg);
+                KAMessageBox::error(errmsgParent, errmsg);
                 return false;
             case FileErr::Directory:
-                KAMessageBox::sorry(errmsgParent, xi18nc("@info", "<filename>%1</filename> is a folder", file));
+                KAMessageBox::error(errmsgParent, xi18nc("@info", "<filename>%1</filename> is a folder", file));
                 return false;
             case FileErr::Nonexistent:   errmsg = xi18nc("@info", "<filename>%1</filename> not found", file);  break;
             case FileErr::Unreadable:    errmsg = xi18nc("@info", "<filename>%1</filename> is not readable", file);  break;

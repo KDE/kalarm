@@ -271,7 +271,7 @@ KADateTime AlarmTimeWidget::getDateTime(int* minsFromNow, bool checkExpired, boo
         if (!mDelayTimeEdit->isValid())
         {
             if (showErrorMessage)
-                KAMessageBox::sorry(const_cast<AlarmTimeWidget*>(this), i18nc("@info", "Invalid time"));
+                KAMessageBox::error(const_cast<AlarmTimeWidget*>(this), i18nc("@info", "Invalid time"));
             if (errorWidget)
                 *errorWidget = mDelayTimeEdit;
             return {};
@@ -291,14 +291,14 @@ KADateTime AlarmTimeWidget::getDateTime(int* minsFromNow, bool checkExpired, boo
             if (!mDateEdit->date().isValid())
             {
                 if (showErrorMessage)
-                    KAMessageBox::sorry(const_cast<AlarmTimeWidget*>(this), i18nc("@info", "Invalid date"));
+                    KAMessageBox::error(const_cast<AlarmTimeWidget*>(this), i18nc("@info", "Invalid date"));
                 if (errorWidget)
                     *errorWidget = mDateEdit;
             }
             else
             {
                 if (showErrorMessage)
-                    KAMessageBox::sorry(const_cast<AlarmTimeWidget*>(this), i18nc("@info", "Invalid time"));
+                    KAMessageBox::error(const_cast<AlarmTimeWidget*>(this), i18nc("@info", "Invalid time"));
                 if (errorWidget)
                     *errorWidget = mTimeEdit;
             }
@@ -312,7 +312,7 @@ KADateTime AlarmTimeWidget::getDateTime(int* minsFromNow, bool checkExpired, boo
             if (checkExpired  &&  result.date() < now.date())
             {
                 if (showErrorMessage)
-                    KAMessageBox::sorry(const_cast<AlarmTimeWidget*>(this), i18nc("@info", "Alarm date has already expired"));
+                    KAMessageBox::error(const_cast<AlarmTimeWidget*>(this), i18nc("@info", "Alarm date has already expired"));
                 if (errorWidget)
                     *errorWidget = mDateEdit;
                 return {};
@@ -324,7 +324,7 @@ KADateTime AlarmTimeWidget::getDateTime(int* minsFromNow, bool checkExpired, boo
             if (checkExpired  &&  result <= now.addSecs(1))
             {
                 if (showErrorMessage)
-                    KAMessageBox::sorry(const_cast<AlarmTimeWidget*>(this), i18nc("@info", "Alarm time has already expired"));
+                    KAMessageBox::error(const_cast<AlarmTimeWidget*>(this), i18nc("@info", "Alarm time has already expired"));
                 if (errorWidget)
                     *errorWidget = mTimeEdit;
                 return {};

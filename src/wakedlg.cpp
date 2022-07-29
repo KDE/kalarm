@@ -145,7 +145,7 @@ void WakeFromSuspendDlg::useWakeClicked()
     const KADateTime dt = event.mainDateTime().kDateTime();
     if (dt.isDateOnly())
     {
-        KAMessageBox::sorry(this, i18nc("@info", "Cannot schedule wakeup time for a date-only alarm"));
+        KAMessageBox::error(this, i18nc("@info", "Cannot schedule wakeup time for a date-only alarm"));
         return;
     }
     if (KAMessageBox::warningContinueCancel(this,

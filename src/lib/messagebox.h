@@ -82,13 +82,6 @@ public:
                               KMessageBox::Options options = KMessageBox::Options(KMessageBox::Notify|KMessageBox::WindowModal))
     { KMessageBox::detailedError(parent, text, details, caption, options); }
 
-    /** Same as KMessageBox::detailedSorry() except that it defaults to window-modal,
-     *  not application-modal. */
-    static void detailedSorry(QWidget* parent, const QString& text, const QString& details,
-                              const QString& caption = QString(),
-                              KMessageBox::Options options = KMessageBox::Options(KMessageBox::Notify|KMessageBox::WindowModal))
-    { KMessageBox::detailedSorry(parent, text, details, caption, options); }
-
     /** Same as KMessageBox::informationList() except that it defaults to window-modal,
      *  not application-modal. */
     static void informationList(QWidget* parent, const QString& text, const QStringList& details,
@@ -109,12 +102,6 @@ public:
                             const QString& dontShowAgainName = QString(),
                             KMessageBox::Options options = KMessageBox::Options(KMessageBox::Notify|KMessageBox::WindowModal))
     { KMessageBox::information(parent, text, caption, dontShowAgainName, options); }
-
-    /** Same as KMessageBox::sorry() except that it defaults to window-modal,
-     *  not application-modal. */
-    static void sorry(QWidget* parent, const QString& text, const QString& caption = QString(),
-                      KMessageBox::Options options = KMessageBox::Options(KMessageBox::Notify|KMessageBox::WindowModal))
-    { KMessageBox::sorry(parent, text, caption, options); }
 
     /** Same as KMessageBox::questionYesNo() except that it defaults to window-modal,
      *  not application-modal. */

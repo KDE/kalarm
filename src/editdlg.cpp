@@ -986,7 +986,7 @@ bool EditAlarmDlg::validate()
         if (!errmsg.isEmpty())
         {
             mName->setFocus();
-            KAMessageBox::sorry(this, errmsg);
+            KAMessageBox::error(this, errmsg);
             return false;
         }
     }
@@ -1053,7 +1053,7 @@ bool EditAlarmDlg::validate()
                 // has already expired, so we must adjust it.
                 if (event.nextOccurrence(now, mAlarmDateTime, KAEvent::ALLOW_FOR_REPETITION) == KAEvent::NO_OCCURRENCE)
                 {
-                    KAMessageBox::sorry(this, i18nc("@info", "Recurrence has already expired"));
+                    KAMessageBox::error(this, i18nc("@info", "Recurrence has already expired"));
                     return false;
                 }
                 if (event.workTimeOnly()  &&  !event.nextTrigger(KAEvent::DISPLAY_TRIGGER).isValid())
@@ -1070,7 +1070,7 @@ bool EditAlarmDlg::validate()
         {
             mTabs->setCurrentIndex(mRecurPageIndex);
             errWidget->setFocus();
-            KAMessageBox::sorry(this, errmsg);
+            KAMessageBox::error(this, errmsg);
             return false;
         }
     }
@@ -1087,7 +1087,7 @@ bool EditAlarmDlg::validate()
             {
                 mTabs->setCurrentIndex(mMainPageIndex);
                 mReminder->setFocusOnCount();
-                KAMessageBox::sorry(this, xi18nc("@info", "Reminder period must be less than the recurrence interval, unless <interface>%1</interface> is checked.",
+                KAMessageBox::error(this, xi18nc("@info", "Reminder period must be less than the recurrence interval, unless <interface>%1</interface> is checked.",
                                                 Reminder::i18n_chk_FirstRecurrenceOnly()));
                 return false;
             }
@@ -1102,14 +1102,14 @@ bool EditAlarmDlg::validate()
             if (longestRecurMinutes > 0
             &&  recurEvent.repetition().intervalMinutes() * recurEvent.repetition().count() >= longestRecurMinutes - reminder)
             {
-                KAMessageBox::sorry(this, i18nc("@info", "The duration of a repetition within the recurrence must be less than the recurrence interval minus any reminder period"));
+                KAMessageBox::error(this, i18nc("@info", "The duration of a repetition within the recurrence must be less than the recurrence interval minus any reminder period"));
                 mRecurrenceEdit->activateSubRepetition();   // display the alarm repetition dialog again
                 return false;
             }
             if (!recurEvent.repetition().isDaily()
             &&  ((mTemplate && mTemplateAnyTime->isChecked())  ||  (!mTemplate && mAlarmDateTime.isDateOnly())))
             {
-                KAMessageBox::sorry(this, i18nc("@info", "For a repetition within the recurrence, its period must be in units of days or weeks for a date-only alarm"));
+                KAMessageBox::error(this, i18nc("@info", "For a repetition within the recurrence, its period must be in units of days or weeks for a date-only alarm"));
                 mRecurrenceEdit->activateSubRepetition();   // display the alarm repetition dialog again
                 return false;
             }
@@ -1140,7 +1140,7 @@ bool EditAlarmDlg::validate()
         if (!mResource.isValid())
         {
             if (!cancelled)
-                KAMessageBox::sorry(this, i18nc("@info", "You must select a calendar to save the alarm in"));
+                KAMessageBox::error(this, i18nc("@info", "You must select a calendar to save the alarm in"));
             return false;
         }
     }

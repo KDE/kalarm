@@ -1126,7 +1126,7 @@ void MessageWindow::slotShowKMailMessage()
     }
 
     if (failed1 || failed2)
-        KAMessageBox::sorry(this, xi18nc("@info", "Unable to locate this email in <application>KMail</application>"));
+        KAMessageBox::error(this, xi18nc("@info", "Unable to locate this email in <application>KMail</application>"));
 }
 
 /******************************************************************************

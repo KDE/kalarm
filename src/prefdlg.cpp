@@ -222,7 +222,7 @@ void KAlarmPrefDlg::slotApply()
     if (!errmsg.isEmpty())
     {
         setCurrentPage(mEditPageItem);
-        KAMessageBox::sorry(this, errmsg);
+        KAMessageBox::error(this, errmsg);
         mValid = false;
         return;
     }
@@ -973,7 +973,7 @@ void StorePrefTab::slotArchivedToggled(bool)
     if (keep  &&  !mOldKeepArchived  &&  mCheckKeepChanges
     &&  !Resources::getStandard(CalEvent::ARCHIVED, true).isValid())
     {
-        KAMessageBox::sorry(topLayout()->parentWidget(),
+        KAMessageBox::error(topLayout()->parentWidget(),
              xi18nc("@info", "<para>A default calendar is required in order to archive alarms, but none is currently enabled.</para>"
                   "<para>If you wish to keep expired alarms, please first use the calendars view to select a default "
                   "archived alarms calendar.</para>"));
