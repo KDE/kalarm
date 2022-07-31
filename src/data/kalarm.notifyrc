@@ -91,7 +91,7 @@ Name[ta]=ஒலியுடன் கூடிய அலாரம் தகவ�
 Name[tr]=Bipli alarm iletisi
 Name[uk]=Повідомлення нагадування з гудком
 Name[x-test]=xxAlarm message with beepxx
-Name[zh_CN]=哔！——闹钟消息
+Name[zh_CN]=闹钟消息 (带声音提示)
 Action=Popup|Sound
 Sound=Oxygen-Sys-App-Message.ogg
 
