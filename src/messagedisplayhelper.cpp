@@ -44,7 +44,7 @@
 #include <QUrl>
 #include <QTextBrowser>
 #include <QTemporaryFile>
-#include <QRegExp>
+#include <QRegularExpression>
 
 using namespace KAlarmCal;
 
@@ -210,10 +210,10 @@ void MessageDisplayHelper::initTexts()
             // start of the translated string, allowing for possible HTML tags
             // enclosing "Reminder".
             QString s = i18nc("@info", "Reminder");
-            QRegExp re(QStringLiteral("^(<[^>]+>)*"));  // search for HTML tag "<...>"
-            (void) re.indexIn(s);
+            const QRegularExpression re(QStringLiteral("^(<[^>]+>)*"));  // search for HTML tag "<...>"
+            const QRegularExpressionMatch match = re.match(s);
             // Prefix the time, plus a newline, to "Reminder", inside any HTML tags.
-            s.insert(re.matchedLength(), mTexts.time + QLatin1String("<br/>"));
+            s.insert(match.capturedEnd(0), mTexts.time + QLatin1String("<br/>"));
             mTexts.timeFull = s;
         }
     }

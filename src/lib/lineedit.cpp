@@ -17,7 +17,6 @@
 #include <KShell>
 
 #include <QUrl>
-#include <QRegExp>
 #include <QMimeData>
 #include <QDragEnterEvent>
 #include <QDropEvent>

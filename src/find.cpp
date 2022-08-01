@@ -26,7 +26,7 @@
 #include <QCheckBox>
 #include <QVBoxLayout>
 #include <QGridLayout>
-#include <QRegExp>
+#include <QRegularExpression>
 
 using namespace KAlarmCal;
 
@@ -215,7 +215,7 @@ void Find::slotFind()
         return;
     mHistory = mDialog->findHistory();    // save search history so that it can be displayed again
     mOptions = mDialog->options() & ~FIND_KALARM_OPTIONS;
-    if ((mOptions & KFind::RegularExpression)  &&  !QRegExp(mDialog->pattern()).isValid())
+    if ((mOptions & KFind::RegularExpression)  &&  !QRegularExpression(mDialog->pattern()).isValid())
         return;
     mOptions |= (mLive->isEnabled()        && mLive->isChecked()        ? FIND_LIVE : 0)
              |  (mArchived->isEnabled()    && mArchived->isChecked()    ? FIND_ARCHIVED : 0)

@@ -1,7 +1,7 @@
 /*
  *  lib/file.cpp  -  functions to handle files
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2005-2021 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2005-2022 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -18,7 +18,7 @@
 #include <KFileItem>
 
 #include <QDir>
-#include <QRegExp>
+#include <QRegularExpression>
 #include <QFileDialog>
 
 namespace File
@@ -98,10 +98,7 @@ bool showFileErrMessage(const QString& filename, FileErr err, FileErr blankError
     if (err != FileErr::None)
     {
         // If file is a local file, remove "file://" from name
-        QString file = filename;
-        const QRegExp f(QStringLiteral("^file:/+"));
-        if (f.indexIn(file) >= 0)
-            file = file.mid(f.matchedLength() - 1);
+        const QString file = pathOrUrl(filename);
 
         QString errmsg;
         switch (err)
@@ -136,8 +133,9 @@ bool showFileErrMessage(const QString& filename, FileErr err, FileErr blankError
 */
 QString pathOrUrl(const QString& url)
 {
-    static const QRegExp localfile(QStringLiteral("^file:/+"));
-    return (localfile.indexIn(url) >= 0) ? url.mid(localfile.matchedLength() - 1) : url;
+    const QRegularExpression re(QStringLiteral("^file:/+"));
+    const QRegularExpressionMatch match = re.match(url);
+    return match.hasMatch() ? url.mid(match.capturedEnd(0) - 1) : url;
 }
 
 /******************************************************************************
@@ -165,7 +163,7 @@ bool browseFile(QString& file, const QString& caption, QString& defaultDir,
                 bool existing, QWidget* parent)
 {
     file.clear();
-    const QString initialDir = !initialFile.isEmpty() ? QString(initialFile).remove(QRegExp(QLatin1String("/[^/]*$")))
+    const QString initialDir = !initialFile.isEmpty() ? pathOrUrl(initialFile).remove(QRegularExpression(QLatin1String("/[^/]*$")))
                              : !defaultDir.isEmpty()  ? defaultDir
                              :                          QDir::homePath();
     // Use AutoQPointer to guard against crash on application exit while
