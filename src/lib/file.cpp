@@ -133,7 +133,7 @@ bool showFileErrMessage(const QString& filename, FileErr err, FileErr blankError
 */
 QString pathOrUrl(const QString& url)
 {
-    const QRegularExpression re(QStringLiteral("^file:/+"));
+    static const QRegularExpression re(QStringLiteral("^file:/+"));
     const QRegularExpressionMatch match = re.match(url);
     return match.hasMatch() ? url.mid(match.capturedEnd(0) - 1) : url;
 }

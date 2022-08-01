@@ -15,7 +15,7 @@
 #include <QStringList>
 #include <QDateTime>
 #include <QLocale>
-#include <QRegExp>
+#include <QRegularExpression>
 
 namespace
 {
@@ -302,23 +302,29 @@ KAEvent::EmailId AlarmText::emailId() const
 */
 QString AlarmText::summary(const KAEvent& event, int maxLines, bool* truncated)
 {
-    static const QRegExp localfile(QStringLiteral("^file:/+"));
+    static const QRegularExpression re(QStringLiteral("^file:/+"));
     QString text;
     switch (event.actionSubType())
     {
         case KAEvent::AUDIO:
+        {
             text = event.audioFile();
-            if (localfile.indexIn(text) >= 0)
-                text = text.mid(localfile.matchedLength() - 1);
+            const QRegularExpressionMatch match = re.match(text);
+            if (match.hasMatch())
+                text = text.mid(match.capturedEnd(0) - 1);
             break;
+        }
         case KAEvent::EMAIL:
             text = event.emailSubject();
             break;
         case KAEvent::COMMAND:
+        {
             text = event.cleanText();
-            if (localfile.indexIn(text) >= 0)
-                text = text.mid(localfile.matchedLength() - 1);
+            const QRegularExpressionMatch match = re.match(text);
+            if (match.hasMatch())
+                text = text.mid(match.capturedEnd(0) - 1);
             break;
+        }
         case KAEvent::FILE:
             text = event.cleanText();
             break;

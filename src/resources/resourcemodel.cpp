@@ -677,7 +677,7 @@ bool ResourceView::viewportEvent(QEvent* e)
             int i = toolTip.indexOf(QLatin1Char('@'));
             if (i > 0)
             {
-                const int j = toolTip.indexOf(QRegExp(QLatin1String("<(nl|br)"), Qt::CaseInsensitive), i + 1);
+                const int j = toolTip.indexOf(QRegularExpression(QLatin1String("<(nl|br)"), QRegularExpression::CaseInsensitiveOption), i + 1);
                 const int k = toolTip.indexOf(QLatin1Char('@'), j);
                 const QString name = toolTip.mid(i + 1, j - i - 1);
                 value = model()->data(index, Qt::FontRole);
