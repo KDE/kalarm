@@ -13,7 +13,7 @@
 #include "kadatetime.h"
 
 #include <QTimeZone>
-#include <QRegExp>
+#include <QRegularExpression>
 #include <QStringList>
 #include <QSharedData>
 #include <QDataStream>
@@ -1971,12 +1971,13 @@ KADateTime KADateTime::fromString(const QString& string, TimeFormat format, bool
             int nmin   = 8;
             int nsec   = 9;
             // Also accept obsolete form "Weekday, DD-Mon-YY HH:MM:SS ±hhmm"
-            QRegExp rx(QLatin1String(R"(^(?:([A-Z][a-z]+),\s*)?(\d{1,2})(\s+|-)([^-\s]+)(\s+|-)(\d{2,4})\s+(\d\d):(\d\d)(?::(\d\d))?\s+(\S+)$)"));
+            const QRegularExpression rx1(QLatin1String(R"(^(?:([A-Z][a-z]+),\s*)?(\d{1,2})(\s+|-)([^-\s]+)(\s+|-)(\d{2,4})\s+(\d\d):(\d\d)(?::(\d\d))?\s+(\S+)$)"));
+            const QRegularExpressionMatch match1 = rx1.match(str);
             QStringList parts_;
-            if (!rx.indexIn(str))
+            if (match1.hasMatch())
             {
                 // Check that if date has '-' separators, both separators are '-'.
-                parts_ = rx.capturedTexts();
+                parts_ = match1.capturedTexts();
                 bool h1 = (parts_.at(3) == QLatin1String("-"));
                 bool h2 = (parts_.at(5) == QLatin1String("-"));
                 if (h1 != h2)
@@ -1985,8 +1986,10 @@ KADateTime KADateTime::fromString(const QString& string, TimeFormat format, bool
             else
             {
                 // Check for the obsolete form "Wdy Mon DD HH:MM:SS YYYY"
-                rx = QRegExp(QLatin1String(R"(^([A-Z][a-z]+)\s+(\S+)\s+(\d\d)\s+(\d\d):(\d\d):(\d\d)\s+(\d\d\d\d)$)"));
-                if (rx.indexIn(str))
+                const QRegularExpression rx2(QLatin1String(R"(^([A-Z][a-z]+)\s+(\S+)\s+(\d\d)\s+(\d\d):(\d\d):(\d\d)\s+(\d\d\d\d)$)"));
+                const QRegularExpressionMatch match2 = rx2.match(str);
+                QStringList parts_;
+                if (!match2.hasMatch())
                     break;
                 nyear  = 7;
                 nmonth = 2;
@@ -1995,7 +1998,7 @@ KADateTime KADateTime::fromString(const QString& string, TimeFormat format, bool
                 nhour  = 4;
                 nmin   = 5;
                 nsec   = 6;
-                parts_ = rx.capturedTexts();
+                parts_ = match2.capturedTexts();
             }
             bool ok[4];
             const QStringList& parts(parts_);
@@ -2041,11 +2044,12 @@ KADateTime KADateTime::fromString(const QString& string, TimeFormat format, bool
             bool negOffset = false;
             if (parts.count() > 10)
             {
-                rx = QRegExp(QLatin1String(R"(^([+-])(\d\d)(\d\d)$)"));
-                if (!rx.indexIn(parts[10]))
+                const QRegularExpression rx(QLatin1String(R"(^([+-])(\d\d)(\d\d)$)"));
+                const QRegularExpressionMatch match = rx.match(parts[10]);
+                if (match.hasMatch())
                 {
                     // It's a UTC offset ±hhmm
-                    const QStringList partsu = rx.capturedTexts();
+                    const QStringList partsu = match.capturedTexts();
                     offset = partsu[2].toInt(&ok[0]) * 3600;
                     int offsetMin = partsu[3].toInt(&ok[1]);
                     if (!ok[0] || !ok[1] || offsetMin > 59)
@@ -2106,10 +2110,11 @@ KADateTime KADateTime::fromString(const QString& string, TimeFormat format, bool
         }
         case RFC3339Date:   // format is YYYY-MM-DDThh:mm:ss[.s]TZ
         {
-            const QRegExp rx(QLatin1String(R"(^(\d{4})-(\d\d)-(\d\d)[Tt](\d\d):(\d\d):(\d\d)(?:\.(\d+))?([Zz]|([+-])(\d\d):(\d\d))$)"));
-            if (rx.indexIn(str))
+            const QRegularExpression rx(QLatin1String(R"(^(\d{4})-(\d\d)-(\d\d)[Tt](\d\d):(\d\d):(\d\d)(?:\.(\d+))?([Zz]|([+-])(\d\d):(\d\d))$)"));
+            const QRegularExpressionMatch match = rx.match(str);
+            if (!match.hasMatch())
                 break;
-            const QStringList parts = rx.capturedTexts();
+            const QStringList parts = match.capturedTexts();
             bool ok;
             bool ok1;
             bool ok2;
@@ -2191,34 +2196,49 @@ KADateTime KADateTime::fromString(const QString& string, TimeFormat format, bool
              */
             bool dateOnly = false;
             // Check first for the extended format of ISO 8601
-            QRegExp rx(QLatin1String(R"(^([+-])?(\d{4,})-(\d\d\d|\d\d-\d\d)[T ](\d\d)(?::(\d\d)(?::(\d\d)(?:(?:\.|,)(\d+))?)?)?(Z|([+-])(\d\d)(?::(\d\d))?)?$)"));
-            if (rx.indexIn(str))
+            const QRegularExpression rx1(QLatin1String(R"(^([+-])?(\d{4,})-(\d\d\d|\d\d-\d\d)[T ](\d\d)(?::(\d\d)(?::(\d\d)(?:(?:\.|,)(\d+))?)?)?(Z|([+-])(\d\d)(?::(\d\d))?)?$)"));
+            QRegularExpressionMatch match = rx1.match(str);
+            if (!match.hasMatch())
             {
                 // It's not the extended format - check for the basic format
-                rx = QRegExp(QLatin1String(R"(^([+-])?(\d{4,})(\d{4})[T ](\d\d)(?:(\d\d)(?:(\d\d)(?:(?:\.|,)(\d+))?)?)?(Z|([+-])(\d\d)(\d\d)?)?$)"));
-                if (rx.indexIn(str))
+                const QRegularExpression rx2(QLatin1String(R"(^([+-])?(\d{4,})(\d{4})[T ](\d\d)(?:(\d\d)(?:(\d\d)(?:(?:\.|,)(\d+))?)?)?(Z|([+-])(\d\d)(\d\d)?)?$)"));
+                match = rx2.match(str);
+                if (!match.hasMatch())
                 {
-                    rx = QRegExp(QLatin1String(R"(^([+-])?(\d{4})(\d{3})[T ](\d\d)(?:(\d\d)(?:(\d\d)(?:(?:\.|,)(\d+))?)?)?(Z|([+-])(\d\d)(\d\d)?)?$)"));
-                    if (rx.indexIn(str))
+                    const QRegularExpression rx3(QLatin1String(R"(^([+-])?(\d{4})(\d{3})[T ](\d\d)(?:(\d\d)(?:(\d\d)(?:(?:\.|,)(\d+))?)?)?(Z|([+-])(\d\d)(\d\d)?)?$)"));
+                    match = rx3.match(str);
+                    if (!match.hasMatch())
                     {
                         // Check for date-only formats
                         dateOnly = true;
-                        rx = QRegExp(QLatin1String(R"(^([+-])?(\d{4,})-(\d\d\d|\d\d-\d\d)$)"));
-                        if (rx.indexIn(str))
+                        const QRegularExpression rx4(QLatin1String(R"(^([+-])?(\d{4,})-(\d\d\d|\d\d-\d\d)$)"));
+                        match = rx4.match(str);
+                        if (!match.hasMatch())
                         {
                             // It's not the extended format - check for the basic format
-                            rx = QRegExp(QLatin1String("^([+-])?(\\d{4,})(\\d{4})$"));
-                            if (rx.indexIn(str))
+                            const QRegularExpression rx5(QLatin1String("^([+-])?(\\d{4,})(\\d{4})$"));
+                            match = rx5.match(str);
+                            if (!match.hasMatch())
                             {
-                                rx = QRegExp(QLatin1String("^([+-])?(\\d{4})(\\d{3})$"));
-                                if (rx.indexIn(str))
+                                const QRegularExpression rx6(QLatin1String("^([+-])?(\\d{4})(\\d{3})$"));
+                                match = rx6.match(str);
+                                if (!match.hasMatch())
                                     break;
                             }
                         }
                     }
                 }
             }
-            const QStringList parts = rx.capturedTexts();
+            QStringList parts1 = match.capturedTexts();
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+            // Append any missing empty texts
+            const int n = dateOnly ? 4 : 12;
+            while (parts1.size() < n)
+                parts1.append(QString());
+#else
+            parts1.resize(dateOnly ? 4 : 12);   // append any missing empty texts
+#endif
+            const QStringList parts = parts1;
             bool ok;
             bool ok1;
             QDate d;
@@ -2335,10 +2355,11 @@ KADateTime KADateTime::fromString(const QString& string, TimeFormat format, bool
         case QtTextDate:    // format is Wdy Mth DD [hh:mm:ss] YYYY [±hhmm]
         {
             int offset = 0;
-            QRegExp rx(QLatin1String(R"(^(\S+\s+\S+\s+\d\d\s+(\d\d:\d\d:\d\d\s+)?\d\d\d\d)\s*(.*)$)"));
-            if (rx.indexIn(str) < 0)
+            const QRegularExpression rx(QLatin1String(R"(^(\S+\s+\S+\s+\d\d\s+(\d\d:\d\d:\d\d\s+)?\d\d\d\d)\s*(.*)$)"));
+            const QRegularExpressionMatch match = rx.match(str);
+            if (!match.hasMatch())
                 break;
-            const QStringList parts = rx.capturedTexts();
+            const QStringList parts = match.capturedTexts();
             QDate     qd;
             QDateTime qdt;
             bool dateOnly = parts[2].isEmpty();
@@ -2365,13 +2386,14 @@ KADateTime KADateTime::fromString(const QString& string, TimeFormat format, bool
                     return KADateTime(qdt.date(), qdt.time(), KADateTimePrivate::fromStringDefault());
                 }
             }
-            rx = QRegExp(QLatin1String(R"(([+-])([\d][\d])(?::?([\d][\d]))?$)"));
-            if (rx.indexIn(parts[3]) < 0)
+            const QRegularExpression rx2(QLatin1String(R"(([+-])([\d][\d])(?::?([\d][\d]))?$)"));
+            const QRegularExpressionMatch match2 = rx2.match(parts[3]);
+            if (!match2.hasMatch())
                 break;
 
             // Extract the UTC offset at the end of the string
             bool ok;
-            const QStringList parts2 = rx.capturedTexts();
+            const QStringList parts2 = match2.capturedTexts();
             offset = parts2[2].toInt(&ok) * 3600;
             if (!ok)
                 break;
