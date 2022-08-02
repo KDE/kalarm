@@ -128,18 +128,19 @@ configure_file(kalarm-version-string.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/kalarm-
 
 if (NOT APPLE)
     option(WITHOUT_X11 "Build without X11 integration (skips finding X11)" OFF)
+    add_feature_info(WITHOUT_X11 ${WITHOUT_X11} "Disable X11 integration, even if X11 is available")
     if (NOT WITHOUT_X11)
         find_package(X11)
-        set(KDEPIM_HAVE_X11 ${X11_FOUND})
+        set(ENABLE_X11 ${X11_FOUND})
         if (X11_FOUND)
             if (QT_MAJOR_VERSION STREQUAL "5")
                 find_package(Qt5X11Extras ${QT_REQUIRED_VERSION} REQUIRED NO_MODULE)
             else()
                 find_package(Qt${QT_MAJOR_VERSION} ${QT_REQUIRED_VERSION} CONFIG REQUIRED Gui) # qtx11extras_p.h for Qt6 < 6.2
             endif()
+            add_feature_info(ENABLE_X11 ${ENABLE_X11} "Enable use of X11")
         endif()
     endif()
-    add_feature_info(WITHOUT_X11 ${WITHOUT_X11} "Build without X11 integration")
 endif()
 
 set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH})
@@ -166,9 +167,10 @@ ecm_qt_install_logging_categories(
     DESTINATION ${KDE_INSTALL_LOGGINGCATEGORIESDIR}
     )
 
-if(KF5DocTools_FOUND)
+if (KF5DocTools_FOUND)
     kdoctools_install(po)
     add_subdirectory(doc)
 endif()
 ki18n_install(po)
+
 feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)

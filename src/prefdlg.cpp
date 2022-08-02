@@ -58,7 +58,7 @@ using namespace KHolidays;
 #include <KAboutData>
 #include <KStandardGuiItem>
 #include <QIcon>
-#if KDEPIM_HAVE_X11
+#if ENABLE_X11
 #include <KWindowInfo>
 #endif
 #include <KWindowSystem>
@@ -125,7 +125,7 @@ void KAlarmPrefDlg::display()
     else
     {
         mInstance->restoreTab();
-#if KDEPIM_HAVE_X11
+#if ENABLE_X11
         KWindowInfo info = KWindowInfo(mInstance->winId(), NET::WMGeometry | NET::WMDesktop);
         KWindowSystem::setCurrentDesktop(info.desktop());
 #endif

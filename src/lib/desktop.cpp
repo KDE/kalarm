@@ -10,7 +10,7 @@
 
 #include "config-kalarm.h"
 
-#if KDEPIM_HAVE_X11
+#if ENABLE_X11
 #include <KWindowSystem>
 #endif
 #include <QGuiApplication>
@@ -47,7 +47,7 @@ Type currentIdentity()
 */
 QRect workArea(int screen)
 {
-#if KDEPIM_HAVE_X11
+#if ENABLE_X11
     if (screen < 0)
         return KWindowSystem::workArea();
 #endif

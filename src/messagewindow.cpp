@@ -33,7 +33,7 @@
 #include <KWindowSystem>
 #include <KSqueezedTextLabel>
 #include <KIdleTime>
-#if KDEPIM_HAVE_X11
+#if ENABLE_X11
 #include <KWindowInfo>
 #include <netwm.h>
 #if QT_VERSION >= QT_VERSION_CHECK(6, 2, 0)
@@ -1338,7 +1338,7 @@ FullScreenType haveFullScreenWindow(int screen)
 {
     FullScreenType type = NoFullScreen;
 //TODO: implement on Wayland
-#if KDEPIM_HAVE_X11
+#if ENABLE_X11
     if (KWindowSystem::isPlatformX11())
     {
 #if QT_VERSION >= QT_VERSION_CHECK(6, 2, 0)
@@ -1367,7 +1367,7 @@ FullScreenType haveFullScreenWindow(int screen)
             }
         }
     }
-#endif // KDEPIM_HAVE_X11
+#endif // ENABLE_X11
     return type;
 }
 
@@ -1380,7 +1380,7 @@ FullScreenType findFullScreenWindows(const QVector<QRect>& screenRects, QVector<
     FullScreenType result = NoFullScreen;
     screenTypes.fill(NoFullScreen);
 //TODO: implement on Wayland
-#if KDEPIM_HAVE_X11
+#if ENABLE_X11
     if (KWindowSystem::isPlatformX11())
     {
 #if QT_VERSION >= QT_VERSION_CHECK(6, 2, 0)
@@ -1430,7 +1430,7 @@ FullScreenType findFullScreenWindows(const QVector<QRect>& screenRects, QVector<
             }
         }
     }
-#endif // KDEPIM_HAVE_X11
+#endif // ENABLE_X11
     return result;
 }
 
