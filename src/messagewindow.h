@@ -20,7 +20,6 @@ class PushButton;
 class MessageText;
 class QCheckBox;
 class QLabel;
-class EditAlarmDlg;
 
 using namespace KAlarmCal;
 

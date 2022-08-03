@@ -11,7 +11,6 @@
 #include "messagedisplayhelper.h"
 #include "kalarmcalendar/kaevent.h"
 
-class KConfigGroup;
 class DeferAlarmDlg;
 class EventId;
 class MessageDisplayHelper;
