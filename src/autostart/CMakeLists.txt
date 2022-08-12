@@ -4,6 +4,7 @@ include_directories( ../  )
 
 set(kalarmautostart_SRCS
     autostart.cpp
+    autostart.h
 )
 
 ecm_qt_declare_logging_category(kalarmautostart_SRCS

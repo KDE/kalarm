@@ -29,6 +29,8 @@ target_sources(kalarmplugin PRIVATE
     ${kalarmpluginlib_common_SRCS}
     pluginbase.cpp
     pluginmanager.cpp
+    pluginbase.h
+    pluginmanager.h
 )
 generate_export_header(kalarmplugin BASE_NAME kalarmpluginlib)
 
