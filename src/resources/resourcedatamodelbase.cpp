@@ -712,8 +712,8 @@ QString ResourceDataModelBase::alarmTimeText(const DateTime& dateTime, char lead
         // leading zeroes.
         static const QRegularExpression hourReg(QLatin1String("[hH]"));
         int i = timeFormat.indexOf(hourReg);
-        static const QRegularExpression hourMonthReg(QLatin1String("[hH]"));
-        int first = timeFormat.indexOf(hourMonthReg);
+        static const QRegularExpression hourMinAmPmReg(QLatin1String("[hHmaA]"));
+        int first = timeFormat.indexOf(hourMinAmPmReg);
         if (i >= 0  &&  i == first  &&  (i == timeFormat.size() - 1  ||  timeFormat.at(i) != timeFormat.at(i + 1)))
         {
             timeFullFormat = timeFormat;
