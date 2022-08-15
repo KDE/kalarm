@@ -57,7 +57,8 @@ void FileResourceConfigManager::createResources(QObject* parent)
         return;
     manager->mCreated = 1;
 
-    QStringList resourceGroups = manager->mConfig->groupList().filter(QRegularExpression(QStringLiteral("^Resource_\\d+$")));
+    static const QRegularExpression re(QStringLiteral("^Resource_\\d+$"));
+    QStringList resourceGroups = manager->mConfig->groupList().filter(re);
     if (!resourceGroups.isEmpty())
     {
         std::sort(resourceGroups.begin(), resourceGroups.end(),

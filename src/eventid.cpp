@@ -33,7 +33,7 @@ ResourceId EventId::resourceDisplayId() const
 
 QString EventId::extractIDs(const QString& resourceEventId, QString& eventId)
 {
-    QRegularExpression rx(QStringLiteral("^(\\w+):(.*)$"));
+    static const QRegularExpression rx(QStringLiteral("^(\\w+):(.*)$"));
     QRegularExpressionMatch rxmatch = rx.match(resourceEventId);
     if (!rxmatch.hasMatch())
     {

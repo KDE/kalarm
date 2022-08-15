@@ -433,7 +433,8 @@ bool FileResource::save(QString* errorMessage, bool writeThroughCache, bool forc
                 if (errorMessage)
                 {
                     *errorMessage = msg + errMessage;
-                    errorMessage->replace(QRegularExpression(QStringLiteral("</html><html>")), QStringLiteral("<br><br>"));
+                    static const QRegularExpression re(QStringLiteral("</html><html>"));
+                    errorMessage->replace(re, QStringLiteral("<br><br>"));
                 }
                 else
                     Resources::notifyResourceMessage(this, MessageType::Error, msg, errMessage);

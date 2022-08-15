@@ -150,7 +150,7 @@ void LineEdit::dropEvent(QDropEvent* e)
         {
             // Remove newlines from a list of email addresses, and allow an eventual mailto: scheme
             const QString mailto = QStringLiteral("mailto:");
-            static QRegularExpression regexp(QLatin1String("[\r\n]+"));
+            static const QRegularExpression regexp(QStringLiteral("[\r\n]+"));
             newEmails = txt.split(regexp, Qt::SkipEmptyParts);
             for (QStringList::Iterator it = newEmails.begin();  it != newEmails.end();  ++it)
             {

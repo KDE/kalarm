@@ -710,9 +710,9 @@ QString ResourceDataModelBase::alarmTimeText(const DateTime& dateTime, char lead
 
         // 'HH' and 'hh' provide leading zeroes; single 'H' or 'h' provide no
         // leading zeroes.
-        static const QRegularExpression hourReg(QLatin1String("[hH]"));
+        static const QRegularExpression hourReg(QStringLiteral("[hH]"));
         int i = timeFormat.indexOf(hourReg);
-        static const QRegularExpression hourMinAmPmReg(QLatin1String("[hHmaA]"));
+        static const QRegularExpression hourMinAmPmReg(QStringLiteral("[hHmaA]"));
         int first = timeFormat.indexOf(hourMinAmPmReg);
         if (i >= 0  &&  i == first  &&  (i == timeFormat.size() - 1  ||  timeFormat.at(i) != timeFormat.at(i + 1)))
         {

@@ -163,7 +163,8 @@ bool browseFile(QString& file, const QString& caption, QString& defaultDir,
                 bool existing, QWidget* parent)
 {
     file.clear();
-    const QString initialDir = !initialFile.isEmpty() ? pathOrUrl(initialFile).remove(QRegularExpression(QLatin1String("/[^/]*$")))
+    static const QRegularExpression re(QStringLiteral("/[^/]*$"));
+    const QString initialDir = !initialFile.isEmpty() ? pathOrUrl(initialFile).remove(re)
                              : !defaultDir.isEmpty()  ? defaultDir
                              :                          QDir::homePath();
     // Use AutoQPointer to guard against crash on application exit while

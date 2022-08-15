@@ -210,7 +210,7 @@ void MessageDisplayHelper::initTexts()
             // start of the translated string, allowing for possible HTML tags
             // enclosing "Reminder".
             QString s = i18nc("@info", "Reminder");
-            const QRegularExpression re(QStringLiteral("^(<[^>]+>)*"));  // search for HTML tag "<...>"
+            static const QRegularExpression re(QStringLiteral("^(<[^>]+>)*"));  // search for HTML tag "<...>"
             const QRegularExpressionMatch match = re.match(s);
             // Prefix the time, plus a newline, to "Reminder", inside any HTML tags.
             s.insert(match.capturedEnd(0), mTexts.time + QLatin1String("<br/>"));
