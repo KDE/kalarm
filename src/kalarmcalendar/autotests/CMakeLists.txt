@@ -14,8 +14,8 @@ macro(macro_unit_tests)
         KF5::CalendarCore
         KF5::Holidays
         kalarmcalendar
-        Qt${QT_MAJOR_VERSION}::DBus
-        Qt${QT_MAJOR_VERSION}::Test)
+        Qt::DBus
+        Qt::Test)
     target_include_directories(${_testname} PUBLIC "$<BUILD_INTERFACE:${kalarm_SOURCE_DIR}/src/kalarmcalendar;${kalarm_BINARY_DIR}/src/kalarmcalendar>")
   endforeach()
 endmacro()
