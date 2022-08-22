@@ -127,7 +127,6 @@ Comment[wa]=KAlarm s' enonde tot seu a l' elodjaedje
 Comment[x-test]=xxKAlarm autostart at loginxx
 Comment[zh_CN]=登录时自动运行 KAlarm
 Comment[zh_TW]=KAlarm 登入時自動啟動
-Terminal=false
 X-KDE-autostart-phase=2
 X-KDE-autostart-condition=kalarmrc:General:AutoStart:false
 OnlyShowIn=KDE

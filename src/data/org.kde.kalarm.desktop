@@ -139,7 +139,6 @@ GenericName[wa]=Programeu di xhîletes da sinne
 GenericName[x-test]=xxPersonal Alarm Schedulerxx
 GenericName[zh_CN]=个人闹钟计划程序
 GenericName[zh_TW]=個人鬧鐘排程程式
-Terminal=false
 X-DBUS-StartupType=Unique
 StartupNotify=true
 Categories=Qt;KDE;Utility;X-KDE-Utilities-PIM;
