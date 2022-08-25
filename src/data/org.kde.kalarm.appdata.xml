@@ -23,6 +23,7 @@
   <name xml:lang="ia">KAlarm</name>
   <name xml:lang="id">KAlarm</name>
   <name xml:lang="it">KAlarm</name>
+  <name xml:lang="ka">KAlarm</name>
   <name xml:lang="ko">KAlarm</name>
   <name xml:lang="lt">KAlarm</name>
   <name xml:lang="nb">KAlarm</name>
@@ -65,6 +66,7 @@
   <summary xml:lang="ia">Planificator de alarma personal</summary>
   <summary xml:lang="id">Penjadwal Alarm Personal</summary>
   <summary xml:lang="it">Programmatore degli avvisi personali</summary>
+  <summary xml:lang="ka">მაღვიძარის პირადი მგეგმავი</summary>
   <summary xml:lang="ko">개인 알람 스케줄러</summary>
   <summary xml:lang="nb">Personlig varslingsplanlegger</summary>
   <summary xml:lang="nds">Persöönlich Anstöötgever</summary>
@@ -139,6 +141,7 @@
     <p xml:lang="ia">Characteristicas:</p>
     <p xml:lang="id">Fitur:</p>
     <p xml:lang="it">Funzionalità:</p>
+    <p xml:lang="ka">თვისებები:</p>
     <p xml:lang="ko">기능:</p>
     <p xml:lang="lt">Ypatybės:</p>
     <p xml:lang="nb">Egenskaper:</p>
