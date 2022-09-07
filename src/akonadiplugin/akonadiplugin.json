@@ -1,6 +1,7 @@
 {
     "KPlugin": {
         "Description": "Functions which require Akonadi",
+        "Description[bg]": "Функции, изискващи Akonadi",
         "Description[ca@valencia]": "Funcions que requerixen Akonadi",
         "Description[ca]": "Funcions que requereixen l'Akonadi",
         "Description[cs]": "Funkce vyžadující Akonadi",
@@ -26,6 +27,7 @@
         "Description[zh_CN]": "需要 Akonadi 的功能",
         "Id": "akonadi",
         "Name": "Akonadi Functions",
+        "Name[bg]": "Функции на Akonadi",
         "Name[ca@valencia]": "Funcions d'Akonadi",
         "Name[ca]": "Funcions de l'Akonadi",
         "Name[cs]": "Funkce Akonadi",
