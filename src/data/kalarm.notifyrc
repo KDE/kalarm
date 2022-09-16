@@ -2,6 +2,7 @@
 IconName=kalarm
 DesktopEntry=org.kde.kalarm
 Comment=KAlarm
+Comment[ar]=منبّهك
 Comment[bg]=KAlarm
 Comment[ca]=KAlarm
 Comment[ca@valencia]=KAlarm
@@ -35,6 +36,7 @@ Comment[zh_CN]=KAlarm
 
 [Event/Message]
 Name=Alarm message
+Name[ar]=رسالة المنبّه
 Name[bg]=Съобщение на алармата
 Name[ca]=Missatge d'alarma
 Name[ca@valencia]=Missatge d'alarma
@@ -69,6 +71,7 @@ Action=Popup
 
 [Event/MessageBeep]
 Name=Alarm message with beep
+Name[ar]=رسالة تبيه مع صوت بييب
 Name[bg]=Алармено съобщение със звуков сигнал
 Name[ca]=Missatge d'alarma amb timbre
 Name[ca@valencia]=Missatge d'alarma amb timbre
@@ -103,6 +106,7 @@ Sound=Oxygen-Sys-App-Message.ogg
 
 [Event/MessageSpeak]
 Name=Spoken alarm message
+Name[ar]=رسالة تنبيه متحدثه
 Name[bg]=Алармено съобщение с изговаряне на текста
 Name[ca]=Missatge d'alarma parlat
 Name[ca@valencia]=Missatge d'alarma parlat
@@ -137,6 +141,7 @@ TTS=%s
 
 [Event/MessageError]
 Name=Alarm error message
+Name[ar]=رسالة خطأ المنبه
 Name[bg]=Съобщение за грешка на алармата
 Name[ca]=Missatge d'error d'alarma
 Name[ca@valencia]=Missatge d'error d'alarma
