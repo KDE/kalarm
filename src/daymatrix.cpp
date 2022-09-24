@@ -22,7 +22,6 @@
 #include "lib/synchtimer.h"
 
 #include <KHolidays/HolidayRegion>
-#include <kholidays_version.h>
 #include <KLocalizedString>
 
 #include <QMenu>
@@ -194,12 +193,9 @@ void DayMatrix::updateView()
     updateEvents();
 
     // Find which holidays occur for the dates in the matrix.
-    const KHolidays::HolidayRegion& region = Preferences::holidays();
-#if KHOLIDAYS_VERSION < QT_VERSION_CHECK(5, 95, 0)
-    const KHolidays::Holiday::List list = region.holidays(mStartDate, mStartDate.addDays(NUMDAYS-1));
-#else
-    const KHolidays::Holiday::List list = region.rawHolidaysWithAstroSeasons(mStartDate, mStartDate.addDays(NUMDAYS-1));
-#endif
+    const KHolidays::HolidayRegion &region = Preferences::holidays();
+    const KHolidays::Holiday::List list = region.rawHolidaysWithAstroSeasons(
+        mStartDate, mStartDate.addDays(NUMDAYS - 1));
 
     QHash<QDate, QStringList> holidaysByDate;
     for (const KHolidays::Holiday& holiday : list)
@@ -486,15 +482,12 @@ void DayMatrix::paintEvent(QPaintEvent*)
     // Find holidays which are non-work days.
     QSet<QDate> nonWorkHolidays;
     {
-        const KHolidays::HolidayRegion& region = Preferences::holidays();
-#if KHOLIDAYS_VERSION < QT_VERSION_CHECK(5, 95, 0)
-        const KHolidays::Holiday::List list = region.holidays(mStartDate, mStartDate.addDays(NUMDAYS-1));
-#else
-        const KHolidays::Holiday::List list = region.rawHolidaysWithAstroSeasons(mStartDate, mStartDate.addDays(NUMDAYS-1));
-#endif
-        for (const KHolidays::Holiday& holiday : list)
-            if (holiday.dayType() == KHolidays::Holiday::NonWorkday)
-                nonWorkHolidays += holiday.observedStartDate();
+      const KHolidays::HolidayRegion &region = Preferences::holidays();
+      const KHolidays::Holiday::List list = region.rawHolidaysWithAstroSeasons(
+          mStartDate, mStartDate.addDays(NUMDAYS - 1));
+      for (const KHolidays::Holiday &holiday : list)
+        if (holiday.dayType() == KHolidays::Holiday::NonWorkday)
+          nonWorkHolidays += holiday.observedStartDate();
     }
     const QBitArray workDays = Preferences::workDays();
 
