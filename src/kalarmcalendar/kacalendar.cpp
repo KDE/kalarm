@@ -16,14 +16,12 @@
 
 #include <KCalendarCore/Alarm>
 #include <KCalendarCore/CalFormat>
-#include <KCalendarCore/MemoryCalendar>
 
 #include <KLocalizedString>
 
-#include <QMap>
 #include <QFile>
 #include <QFileInfo>
-#include <QTextStream>
+#include <QMap>
 
 using namespace KCalendarCore;
 

@@ -15,7 +15,6 @@
 #include "version.h"
 #include "kalarmcal_debug.h"
 
-#include <KCalendarCore/MemoryCalendar>
 #include <KHolidays/Holiday>
 #include <KHolidays/HolidayRegion>
 

@@ -10,8 +10,6 @@
 
 #include "kalarmcalendar/kaevent.h"
 
-#include <QtGlobal>
-
 namespace KAlarmCal { class AlarmText; }
 namespace KMime { class Content; }
 class QString;

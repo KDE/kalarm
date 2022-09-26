@@ -14,8 +14,6 @@
 #include <KMime/Content>
 
 #include <QMimeData>
-#include <QUrlQuery>
-
 
 namespace
 {

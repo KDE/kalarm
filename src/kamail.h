@@ -15,7 +15,6 @@
 #include <QObject>
 #include <QString>
 #include <QStringList>
-#include <QQueue>
 
 class QUrl;
 namespace KMime {

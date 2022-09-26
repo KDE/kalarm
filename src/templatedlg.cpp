@@ -28,12 +28,11 @@
 #include <KSeparator>
 
 #include <QAction>
-#include <QPushButton>
-#include <QVBoxLayout>
-#include <QHBoxLayout>
 #include <QBoxLayout>
+#include <QHBoxLayout>
+#include <QPushButton>
 #include <QResizeEvent>
-#include <QMenu>
+#include <QVBoxLayout>
 
 using namespace KCal;
 

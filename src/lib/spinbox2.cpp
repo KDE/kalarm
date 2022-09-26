@@ -10,15 +10,13 @@
 
 #include "kalarm_debug.h"
 
-#include <QMouseEvent>
-#include <QStyleOptionSpinBox>
-#include <QGraphicsPixmapItem>
-#include <QPainter>
-#include <QTimer>
-#include <QBrush>
 #include <QApplication>
-#include <QPixmap>
+#include <QGraphicsPixmapItem>
 #include <QHBoxLayout>
+#include <QMouseEvent>
+#include <QPixmap>
+#include <QStyleOptionSpinBox>
+#include <QTimer>
 
 #include <stdlib.h>
 
