@@ -11,8 +11,8 @@
 #include "resourcedatamodelbase.h"
 #include "resourceselectdialog.h"
 
-#include "kalarm_debug.h"
 #include "lib/autoqpointer.h"
+#include "kalarm_debug.h"
 
 #include <KLocalizedString>
 

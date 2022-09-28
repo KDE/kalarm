@@ -10,10 +10,10 @@
 
 #include "alarmlistview.h"
 #include "eventlistview.h"
-#include "kalarmcalendar/kaevent.h"
-#include "lib/messagebox.h"
 #include "preferences.h"
 #include "resources/eventmodel.h"
+#include "lib/messagebox.h"
+#include "kalarmcalendar/kaevent.h"
 
 #include <KFindDialog>
 #include <KFind>

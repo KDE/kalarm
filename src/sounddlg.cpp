@@ -8,6 +8,8 @@
 
 #include "sounddlg.h"
 
+#include "mainwindow.h"
+#include "soundpicker.h"
 #include "lib/checkbox.h"
 #include "lib/config.h"
 #include "lib/file.h"
@@ -16,8 +18,6 @@
 #include "lib/pushbutton.h"
 #include "lib/slider.h"
 #include "lib/spinbox.h"
-#include "mainwindow.h"
-#include "soundpicker.h"
 
 #include <KLocalizedString>
 #include <phonon/MediaObject>

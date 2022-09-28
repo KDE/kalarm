@@ -9,8 +9,8 @@
 #include "templatemenuaction.h"
 
 #include "functions.h"
-#include "kalarmcalendar/kaevent.h"
 #include "resourcescalendar.h"
+#include "kalarmcalendar/kaevent.h"
 
 #include <QMenu>
 

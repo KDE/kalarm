@@ -15,9 +15,10 @@
 
 #include <QEvent>
 #include <QGroupBox>
-#include <QHBoxLayout>
 #include <QLabel>
+#include <QHBoxLayout>
 #include <QVBoxLayout>
+
 
 FontColourChooser::FontColourChooser(QWidget* parent, const QStringList& fontList,
            const QString& frameLabel, bool fg, bool defaultFont, int visibleListSize)

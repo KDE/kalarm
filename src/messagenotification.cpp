@@ -9,10 +9,10 @@
 #include "messagenotification.h"
 #include "messagedisplayhelper.h"
 
-#include "kalarm_debug.h"
-#include "lib/file.h"
 #include "mainwindow.h"
 #include "resourcescalendar.h"
+#include "lib/file.h"
+#include "kalarm_debug.h"
 
 #include <KAboutData>
 #include <KLocalizedString>

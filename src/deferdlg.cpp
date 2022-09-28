@@ -9,9 +9,9 @@
 #include "deferdlg.h"
 
 #include "alarmtimewidget.h"
-#include "kalarmcalendar/kaevent.h"
-#include "lib/messagebox.h"
 #include "resources/resources.h"
+#include "lib/messagebox.h"
+#include "kalarmcalendar/kaevent.h"
 
 #include <KLocalizedString>
 

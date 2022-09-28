@@ -8,11 +8,11 @@
 
 #include "soundpicker.h"
 
+#include "sounddlg.h"
 #include "lib/autoqpointer.h"
 #include "lib/combobox.h"
 #include "lib/file.h"
 #include "lib/pushbutton.h"
-#include "sounddlg.h"
 
 #include <kpimtextedit/kpimtextedit-texttospeech.h>
 #if KPIMTEXTEDIT_TEXT_TO_SPEECH

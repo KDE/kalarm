@@ -9,10 +9,10 @@
 #include "commandoptions.h"
 
 #include "functions.h"
-#include "kalarm_debug.h"
-#include "kalarmcalendar/identities.h"
 #include "kamail.h"
 #include "preferences.h"
+#include "kalarmcalendar/identities.h"
+#include "kalarm_debug.h"
 
 #include <kpimtextedit/kpimtextedit-texttospeech.h>
 #include <KLocalizedString>

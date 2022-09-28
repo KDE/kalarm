@@ -9,15 +9,15 @@
 #include "templatedlg.h"
 
 #include "functions.h"
-#include "lib/config.h"
-#include "lib/messagebox.h"
-#include "lib/shellprocess.h"
 #include "newalarmaction.h"
+#include "templatelistview.h"
+#include "undo.h"
 #include "resources/datamodel.h"
 #include "resources/eventmodel.h"
 #include "resources/resources.h"
-#include "templatelistview.h"
-#include "undo.h"
+#include "lib/config.h"
+#include "lib/messagebox.h"
+#include "lib/shellprocess.h"
 
 #include <KLocalizedString>
 #include <KGuiItem>

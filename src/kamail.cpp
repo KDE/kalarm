@@ -8,14 +8,14 @@
 
 #include "kamail.h"
 
-#include "akonadiplugin/akonadiplugin.h"
 #include "kalarm.h"
-#include "kalarm_debug.h"
 #include "kalarmapp.h"
-#include "kalarmcalendar/identities.h"
-#include "lib/messagebox.h"
 #include "mainwindow.h"
 #include "preferences.h"
+#include "lib/messagebox.h"
+#include "kalarmcalendar/identities.h"
+#include "akonadiplugin/akonadiplugin.h"
+#include "kalarm_debug.h"
 
 #include "kmailinterface.h"
 

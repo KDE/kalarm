@@ -8,9 +8,10 @@
 
 #include "eventmodel.h"
 
-#include "preferences.h"
 #include "resourcedatamodelbase.h"
 #include "resources.h"
+#include "preferences.h"
+
 
 /*============================================================================*/
 

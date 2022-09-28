@@ -12,9 +12,8 @@
 #include "recurrenceedit.h"
 #include "recurrenceedit_p.h"
 
-#include "kalarm_debug.h"
-#include "kalarmcalendar/kaevent.h"
-#include "kalarmcalendar/karecurrence.h"
+#include "preferences.h"
+#include "repetitionbutton.h"
 #include "lib/buttongroup.h"
 #include "lib/checkbox.h"
 #include "lib/combobox.h"
@@ -23,8 +22,9 @@
 #include "lib/spinbox.h"
 #include "lib/timeedit.h"
 #include "lib/timespinbox.h"
-#include "preferences.h"
-#include "repetitionbutton.h"
+#include "kalarmcalendar/kaevent.h"
+#include "kalarmcalendar/karecurrence.h"
+#include "kalarm_debug.h"
 
 #include <KCalendarCore/Event>
 
