@@ -8,30 +8,26 @@
 
 #include "kalarmapp.h"
 
-#include "kalarm.h"
 #include "commandoptions.h"
 #include "dbushandler.h"
+#include "dbusproperties.h" // DBUS-generated
 #include "displaycalendar.h"
 #include "editdlgtypes.h"
 #include "functions.h"
+#include "kalarm.h"
 #include "kamail.h"
-#include "mailsend.h"
+#include "lib/desktop.h"
+#include "lib/messagebox.h"
 #include "mainwindow.h"
-#include "messagewindow.h"
 #include "messagenotification.h"
+#include "messagewindow.h"
+#include "notifications_interface.h" // DBUS-generated
 #include "pluginmanager.h"
-#include "prefdlg.h"
+#include "resources/datamodel.h"
+#include "resources/resources.h"
 #include "resourcescalendar.h"
 #include "startdaytimer.h"
 #include "traywindow.h"
-#include "resources/datamodel.h"
-#include "resources/resources.h"
-#include "resources/eventmodel.h"
-#include "lib/desktop.h"
-#include "lib/messagebox.h"
-#include "lib/shellprocess.h"
-#include "notifications_interface.h" // DBUS-generated
-#include "dbusproperties.h"          // DBUS-generated
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 #include "migratekde4files.h"
 #endif

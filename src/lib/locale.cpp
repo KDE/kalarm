@@ -8,8 +8,6 @@
 
 #include "locale.h"
 
-#include "kalarm_debug.h"
-
 #include <QLocale>
 
 namespace

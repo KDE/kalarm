@@ -8,13 +8,11 @@
 
 #include "templatepickdlg.h"
 
-#include "functions.h"
-#include "templatelistview.h"
-#include "resources/datamodel.h"
-#include "resources/eventmodel.h"
 #include "lib/config.h"
 #include "lib/shellprocess.h"
-#include "kalarm_debug.h"
+#include "resources/datamodel.h"
+#include "resources/eventmodel.h"
+#include "templatelistview.h"
 
 #include <KLocalizedString>
 

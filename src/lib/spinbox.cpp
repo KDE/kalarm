@@ -9,8 +9,6 @@
 #include "spinbox.h"
 #include "spinbox_p.h"
 
-#include "kalarm_debug.h"
-
 #include <QLineEdit>
 #include <QObject>
 #include <QApplication>

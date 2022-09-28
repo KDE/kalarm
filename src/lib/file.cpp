@@ -10,7 +10,6 @@
 
 #include "lib/autoqpointer.h"
 #include "lib/messagebox.h"
-#include "kalarm_debug.h"
 
 #include <KLocalizedString>
 #include <KIO/StatJob>

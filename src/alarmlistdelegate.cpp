@@ -9,10 +9,8 @@
 #include "alarmlistdelegate.h"
 
 #include "functions.h"
-#include "resources/resourcedatamodelbase.h"
 #include "resources/eventmodel.h"
-#include "kalarmcalendar/kacalendar.h"
-#include "kalarm_debug.h"
+#include "resources/resourcedatamodelbase.h"
 
 #include <KColorScheme>
 

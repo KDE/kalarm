@@ -8,12 +8,10 @@
 
 #include "fileresourceconfigmanager.h"
 
+#include "fileresourcecalendarupdater.h"
+#include "kalarm_debug.h"
 #include "resources.h"
 #include "singlefileresource.h"
-#include "fileresourcecalendarupdater.h"
-#include "preferences.h"
-#include "lib/messagebox.h"
-#include "kalarm_debug.h"
 
 #include <KConfig>
 #include <KConfigGroup>

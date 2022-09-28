@@ -8,13 +8,11 @@
 
 #include "newalarmaction.h"
 
-#include "functions.h"
-#include "templatemenuaction.h"
-#include "resources/datamodel.h"
-#include "resources/resources.h"
-#include "resources/eventmodel.h"
 #include "lib/shellprocess.h"
-#include "kalarm_debug.h"
+#include "resources/datamodel.h"
+#include "resources/eventmodel.h"
+#include "resources/resources.h"
+#include "templatemenuaction.h"
 
 #include <KActionCollection>
 #include <KGlobalAccel>

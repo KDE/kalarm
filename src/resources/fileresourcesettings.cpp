@@ -8,8 +8,6 @@
 
 #include "fileresourcesettings.h"
 
-#include "fileresourceconfigmanager.h"
-
 #include <KConfig>
 #include <KConfigGroup>
 

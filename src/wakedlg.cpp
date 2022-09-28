@@ -11,12 +11,10 @@
 
 #include "functions.h"
 #include "kalarmapp.h"
-#include "mainwindow.h"
-#include "preferences.h"
-#include "resourcescalendar.h"
-#include "lib/messagebox.h"
 #include "kalarmcalendar/kaevent.h"
-#include "kalarm_debug.h"
+#include "lib/messagebox.h"
+#include "mainwindow.h"
+#include "resourcescalendar.h"
 
 #include <KLocalizedString>
 #include <KSharedConfig>

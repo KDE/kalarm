@@ -8,20 +8,18 @@
 
 #include "birthdaydlg.h"
 
+#include "akonadiplugin/akonadiplugin.h"
 #include "editdlgtypes.h"
 #include "fontcolourbutton.h"
-#include "kalarmapp.h"
 #include "latecancel.h"
+#include "lib/checkbox.h"
+#include "lib/shellprocess.h"
 #include "preferences.h"
 #include "reminder.h"
 #include "repetitionbutton.h"
 #include "resourcescalendar.h"
 #include "soundpicker.h"
 #include "specialactions.h"
-#include "lib/checkbox.h"
-#include "lib/shellprocess.h"
-#include "akonadiplugin/akonadiplugin.h"
-#include "kalarm_debug.h"
 
 #include <KLocalizedString>
 #include <KConfigGroup>
@@ -38,9 +36,6 @@
 #include <QVBoxLayout>
 #include <QDialogButtonBox>
 #include <QSortFilterProxyModel>
-
-using namespace KCal;
-
 
 BirthdayDlg::BirthdayDlg(QWidget* parent)
     : QDialog(parent)

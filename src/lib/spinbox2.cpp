@@ -8,8 +8,6 @@
 
 #include "spinbox2.h"
 
-#include "kalarm_debug.h"
-
 #include <QApplication>
 #include <QGraphicsPixmapItem>
 #include <QHBoxLayout>

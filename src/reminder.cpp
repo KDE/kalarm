@@ -8,12 +8,11 @@
 
 #include "reminder.h"
 
-#include "preferences.h"
-#include "timeselector.h"
+#include "kalarmcalendar/kadatetime.h"
 #include "lib/checkbox.h"
 #include "lib/combobox.h"
-#include "kalarmcalendar/kadatetime.h"
-#include "kalarm_debug.h"
+#include "preferences.h"
+#include "timeselector.h"
 
 #include <KCalendarCore/Duration>
 

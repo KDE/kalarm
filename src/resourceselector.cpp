@@ -13,19 +13,18 @@
 #include "resourceselector.h"
 
 #include "functions.h"
+#include "kalarm_debug.h"
 #include "kalarmapp.h"
-#include "mainwindow.h"
-#include "preferences.h"
-#include "resourcescalendar.h"
-#include "resources/resourcedatamodelbase.h"
-#include "resources/resourcecreator.h"
-#include "resources/datamodel.h"
-#include "resources/resources.h"
-#include "resources/resourcemodel.h"
-#include "lib/autoqpointer.h"
 #include "lib/messagebox.h"
 #include "lib/packedlayout.h"
-#include "kalarm_debug.h"
+#include "mainwindow.h"
+#include "preferences.h"
+#include "resources/datamodel.h"
+#include "resources/resourcecreator.h"
+#include "resources/resourcedatamodelbase.h"
+#include "resources/resourcemodel.h"
+#include "resources/resources.h"
+#include "resourcescalendar.h"
 
 #include <KLocalizedString>
 #include <KActionCollection>

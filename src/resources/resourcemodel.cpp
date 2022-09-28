@@ -8,11 +8,10 @@
 
 #include "resourcemodel.h"
 
+#include "kalarm_debug.h"
+#include "lib/messagebox.h"
 #include "resourcedatamodelbase.h"
 #include "resources.h"
-#include "preferences.h"
-#include "lib/messagebox.h"
-#include "kalarm_debug.h"
 
 #include <KLocalizedString>
 

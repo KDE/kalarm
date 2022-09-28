@@ -8,8 +8,6 @@
 
 #include "resourcecreator.h"
 
-#include "kalarm_debug.h"
-
 #include <QTimer>
 
 using namespace KAlarmCal;

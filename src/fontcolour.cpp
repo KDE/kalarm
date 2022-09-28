@@ -8,18 +8,16 @@
 
 #include "fontcolour.h"
 
-#include "kalarmapp.h"
-#include "preferences.h"
 #include "lib/colourbutton.h"
 #include "lib/checkbox.h"
 
 #include <KFontChooser>
 
+#include <QEvent>
 #include <QGroupBox>
+#include <QHBoxLayout>
 #include <QLabel>
 #include <QVBoxLayout>
-#include <QHBoxLayout>
-
 
 FontColourChooser::FontColourChooser(QWidget* parent, const QStringList& fontList,
            const QString& frameLabel, bool fg, bool defaultFont, int visibleListSize)

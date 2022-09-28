@@ -9,16 +9,13 @@
 #include "dbushandler.h"
 
 #include "functions.h"
+#include "kalarm_debug.h"
 #include "kalarmapp.h"
-#include "kamail.h"
-#include "mainwindow.h"
-#include "preferences.h"
-#include "resourcescalendar.h"
-#include "resources/resources.h"
-#include <kalarmadaptor.h>
 #include "kalarmcalendar/identities.h"
 #include "kalarmcalendar/karecurrence.h"
-#include "kalarm_debug.h"
+#include "kamail.h"
+#include "resources/resources.h"
+#include <kalarmadaptor.h>
 
 using namespace KCalendarCore;
 

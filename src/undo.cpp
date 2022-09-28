@@ -9,11 +9,10 @@
 #include "undo.h"
 
 #include "functions.h"
-#include "resourcescalendar.h"
-#include "resources/resources.h"
-#include "lib/messagebox.h"
-#include "kalarmcalendar/alarmtext.h"
 #include "kalarm_debug.h"
+#include "kalarmcalendar/alarmtext.h"
+#include "lib/messagebox.h"
+#include "resources/resources.h"
 
 #include <KLocalizedString>
 

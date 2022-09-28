@@ -18,8 +18,6 @@
 #include "newalarmaction.h"
 #include "preferences.h"
 #include "resources/resources.h"
-#include "lib/locale.h"
-#include "lib/synchtimer.h"
 
 #include <KHolidays/HolidayRegion>
 #include <KLocalizedString>

@@ -8,12 +8,9 @@
 
 #include "specialactions.h"
 
-#include "functions.h"
 #include "lib/autoqpointer.h"
 #include "lib/checkbox.h"
 #include "lib/config.h"
-#include "lib/shellprocess.h"
-#include "kalarm_debug.h"
 
 #include <KLocalizedString>
 
