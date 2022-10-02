@@ -1,0 +1,6744 @@
+<?xml version="1.0" ?>
+<!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.5-Based Variant V1.1//EN" "dtd/kdedbx45.dtd" [
+  <!ENTITY kappname "&kalarm;">
+  <!ENTITY package "kdepim">
+  <!ENTITY % addindex "IGNORE">
+  <!ENTITY % Estonian  "INCLUDE"
+><!-- change language only here -->
+]>
+
+<!-- The language must NOT be changed here. -->
+
+<book id="kalarm" lang="&language;">
+
+<bookinfo id="kalarminfo">
+<title
+>&kalarm;i käsiraamat</title>
+
+<authorgroup>
+<author
+><firstname
+>David</firstname
+> <surname
+>Jarvie</surname
+> <affiliation
+> <address
+>&David.Jarvie.mail;</address>
+</affiliation>
+</author>
+
+<othercredit role="developer"
+><firstname
+>David</firstname
+> <surname
+>Jarvie</surname
+> <affiliation
+><address
+>&David.Jarvie.mail;</address
+></affiliation>
+<contrib
+>Arendaja</contrib>
+</othercredit>
+
+<othercredit role="translator"
+> <firstname
+>Marek</firstname
+> <surname
+>Laane</surname
+> <affiliation
+><address
+><email
+>bald@smail.ee</email
+></address
+> </affiliation
+><contrib
+>Tõlge eesti keelde</contrib
+></othercredit
+> 
+</authorgroup>
+
+<copyright>
+<year
+>2001</year
+><year
+>2002</year
+><year
+>2003</year
+><year
+>2004</year
+><year
+>2005</year
+><year
+>2006</year
+><year
+>2007</year
+><year
+>2008</year
+><year
+>2009</year
+><year
+>2010</year
+><year
+>2011</year
+><year
+>2012</year
+><year
+>2013</year>
+<holder
+>&David.Jarvie;</holder>
+</copyright>
+
+<legalnotice
+>&FDLNotice;</legalnotice>
+
+<!-- Don't change format of date and version of the documentation -->
+
+<date
+>2013-05-28</date>
+<releaseinfo
+>2.10.03 (&kde; 4.11)</releaseinfo>
+
+<abstract>
+<para
+>&kalarm; on &kde; personaalsete häirete ja meeldetuletuste ajastaja.</para>
+</abstract>
+
+
+<keywordset>
+<keyword
+>KDE</keyword>
+<keyword
+>kdepim</keyword>
+<keyword
+>kalarm</keyword>
+<keyword
+>häire</keyword>
+<keyword
+>meeldetuletus</keyword>
+<keyword
+>ajastaja</keyword>
+</keywordset>
+
+</bookinfo>
+
+
+<chapter id="introduction">
+<title
+>Sissejuhatus</title>
+
+<para
+>&kalarm; võimaldab ajastada isiklike häireteadete näitamist, helifailide esitamist, käskude käivitamist ja kirjade saatmist.</para>
+
+<para
+>Vaikimisi käivitatavas graafilises režiimis näitab &kalarm; ootelolevate häirete nimekirja ühes käivitamise aja ja muude üksikasjadega. On võimalik luua uusi häireid või valida olemasolev, et seda muuta või sootuks kustutada. Lisavõimalusena võib lasta näidata ka varasemaid häireid.</para>
+
+<para
+>Häiret seadistades saab valida, kes seda tuleb korrata ja kas häire tuleks unustada, kui seda ei saa käivitada ettenähtud ajal. Näidatava häire korral saab kirja panna häire teate teksti, valida teksti- või pildifaili, mida sel puhul näidatakse, või määrata käsu, mille väljundit näidatakse. Samuti saab valida häireteate värvi ning heli esitamise või teate ettelugemise.</para>
+
+<para
+>Häireid saab ajastada ka käsurea abil või rakenduste esitatavate &DBus;-väljakutsete vahendusel.</para>
+
+<para
+>Kui häire aeg on kätte jõudnud, käivitatakse see kõigil &kde; töölaudadel, et sa kindlasti seda tähele paneksid. Teateaken näitab aega, millele häire on ajastatud. Tavaliselt on seal võimalik ka häiret edasi lükata. Üks näide häire kohta:</para>
+
+<screenshot>
+<screeninfo
+>&kalarm;i teate aken</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="alarmmessage.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>Häireteade</phrase>
+</textobject>
+</mediaobject>
+</screenshot>
+
+<para
+>Kui häire on määratud mingit käsku käivitama või kirja saatma, ei näita &kalarm; teadet.</para>
+
+<para
+>&kalarm; näitab tavaliselt ikooni süsteemses salves, kuigi selle võib soovi korral ka peita.</para>
+
+</chapter>
+
+<chapter id="using-kalarm">
+<title
+>&kalarm;i kasutamine</title>
+
+<para
+>Käivitatuna ilma käsurea argumentideta alustab &kalarm; tööd graafilisena ning näitab parajasti kehtivat häirete nimekirja.</para>
+
+<tip
+><para
+>Kõigil &kalarm;i kerimiskastidel on olemas kiirendusvõimalus: kui soovid, et kasti väärtus muutuks suurema sammu võrra, hoia kerimisnooltele klõpsates all klahvi &Shift;.</para>
+
+<mediaobject>
+<imageobject>
+<imagedata fileref="spinbox.png" format="PNG"/>
+</imageobject>
+</mediaobject>
+</tip>
+
+<sect1 id="alarm-types">
+<title
+>Häiretüübid</title>
+
+<para
+>&kalarm;i eri häiretüüpides leiduvad järgmised põhifunktsioonid:</para>
+
+<itemizedlist>
+<listitem>
+<para
+>Näidatavad häired näitavad kas eelnevalt kirja pandud teksti, mõnda teksti- või pildifaili või häire käivitamisel käivitatava käsu tekstilist väljundit. Lisaks sellele on võimalik panna häire esitama helifaili, lasta teksti kõnelda või esitada lihtne piiks. Samuti saab määrata käsud, mis käivitatakse enne ja pärast häire näitamist.</para>
+</listitem>
+
+<listitem>
+<para
+>Käsuhäired käivitavad kas käsu või shelliskripti. Kui ei esine viga, ei näidata midagi.</para>
+</listitem>
+
+<listitem>
+<para
+>Kirjahäired saadetakse e-kirjaga. Kui ei esine viga, ei näidata midagi.</para>
+</listitem>
+
+<listitem>
+<para
+>Helihäired esitavad helifaili. Kui ei esine viga, ei näidata midagi.</para>
+</listitem>
+</itemizedlist>
+
+<sect2 id="errors">
+<title
+>Veahaldusest lähemalt</title>
+
+<para
+>Kui häire käivitamisel tekib viga, näidatakse veateadet (kui just ei ole juba varem määratud, et seda tüüpi teadet rohkem ei näidata).</para>
+
+<para
+>Kui käivitamisviga tekib käsuhäire viimasel käivitamisel, näidatakse teate värviveerus punasel taustal valget hüüumärki. Vea üksikasju näeb kohtspikrina, kui viia hiirekursor häireloendis vastava rea kohale. Samasugust veatähist näidatakse näidatavate häirete korral, kui käivitamisviga puudutab eritoimingute dialoogis kindlaks määratud häirele eelnevaid või järgnevaid käske, ainult et värviveerus puudub sel juhul punane taust.</para>
+
+</sect2>
+</sect1>
+
+<sect1 id="alarm-list">
+<title
+>Häirete nimekiri</title>
+
+<para
+>&kalarm;i peaaken näitab eesseisvaid häireid koos käivitamise ajaga, kordamise intervalli, värvide ning näidatava teksti, teksti- või helifaili nime, käivitatava käsu või kirja saaja e-posti aadressiga. (Korduva häire korral on näidatav aeg järgmine käivitumise aeg. Meeldetuletusega häire korral näidatakse häire enda, mitte meeldetuletuse aega.) Iga häire teksti/faili/käsu kõrval vasakul asuv ikoon näitab, millist tüüpi häirega on tegemist.</para>
+
+<screenshot>
+<screeninfo
+>&kalarm;i peaken</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="mainwindow.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>Peaaken</phrase>
+</textobject>
+</mediaobject>
+</screenshot>
+
+<para
+>Korduva alarmi korral näidatakse nimekirjas järgmise käivitamise aega ning kordumise intervalli (&eg; <quote
+>1 päev</quote
+> igapäevaselt, <quote
+>3 nädalat</quote
+> iga kolmanda nädala esmas- ja kolmapäeval käivitatava häire või <quote
+>sisselogimisel</quote
+> alati sisselogimise ajal käivitatava häire korral).</para>
+
+<para
+>Kui käsuhäire viimasel käivitamisel või näidatava häire viimasele käivitamisele eelnenud või järgnenud käsu puhul tekkis käivitamishäire, näeb värviveerus veatähist, nagu kirjeldas lähemalt osa <link linkend="errors"
+>Veahaldusest lähemalt</link
+>.</para>
+
+<sect2 id="listappear">
+<title
+>Häireloendi välimuse muutmine</title>
+
+<para
+>Häireid võib sorteerida kuupäeva/aja, kordumise intervalli, värvi, tüübi või teksti järgi, klõpsates vastava veeru tiitliribale. Sorteerimiseks samal alusel, aga vastupidises järjekorras klõpsa uuesti tiitliribale.</para>
+
+<para
+>Näidata võib lasta ka iga häireni jäänud aega nii koos häire ajaga või ka ilma selleta. Häire ajaveeru näitamiseks või peitmiseks vali menüükäsk <menuchoice
+><guimenu
+>Vaade</guimenu
+><guimenuitem
+>Näita häirete aegu</guimenuitem
+></menuchoice
+>. Häireni jäänud aja näitamiseks/peitmiseks vali menüükäsk <menuchoice
+><guimenu
+>Vaade</guimenu
+><guimenuitem
+>Näita häireteni jäänud aega</guimenuitem
+></menuchoice
+>. Üht neist veergudest näidatakse alati.</para>
+
+<para
+>Kui kasutad mitut häirekalendrit, võid anda häiretele eri värvi vastavalt kalendrile, määrates selleks igale kalendrile erineva taustavärvi (vt. <link linkend="using-calendars"
+>Kalendrite kasutamine</link
+>).</para>
+
+</sect2>
+
+<sect2 id="expired">
+<title
+>Aegunud häired</title>
+
+<para
+>Vaikimisi salvestab &kalarm; häired teatud ajaks ka pärast seda, kui need on aegunud või kustutatud. (Pane siiski tähele, et kustutatud häired salvestatakse ainult siis, kui neid on vähemalt korra käivitatud.) Seda, kas &kalarm; aegunud häired salvestab ja kui kaua neid säilitatakse, saab määrata <link linkend="preferences-storage"
+>seadistustedialoogis</link
+>.</para>
+
+<para
+>Aegunud häirete nägemiseks nimekirjas vali menüükäsk <menuchoice
+> <guimenu
+>Vaade</guimenu
+><guimenuitem
+>Näita aegunud häireid</guimenuitem
+></menuchoice
+>. Nende varjamiseks vali taas <menuchoice
+> <guimenu
+>Vaade</guimenu
+><guimenuitem
+>Näita aegunud häireid</guimenuitem
+></menuchoice
+>.</para>
+
+</sect2>
+
+<sect2 id="search">
+<title
+>Otsimine häireloendis</title>
+
+<para
+>Konkreetsete häirete leidmiseks võib kasutada otsingut. Selleks vali menüükäsk <menuchoice
+> <guimenu
+>Redigeerimine</guimenu
+><guimenuitem
+>Otsi...</guimenuitem
+></menuchoice
+> Otsingudialoogis määra, millist laadi häiret soovid otsida. Täiendavate sobivate häirete leidmiseks kasuta menüükäske <menuchoice
+> <guimenu
+>Redigeerimine</guimenu
+><guimenuitem
+>Otsi järgmine</guimenuitem
+></menuchoice
+> ja <menuchoice
+> <guimenu
+>Redigeerimine</guimenu
+><guimenuitem
+>Otsi eelmine</guimenuitem
+> </menuchoice
+>.</para>
+
+<para
+>Otsing sooritatakse järgmiselt:</para>
+
+<itemizedlist>
+<listitem>
+<para
+>Näidatavad tekstihäired: otsitakse teate teksti.</para>
+</listitem>
+
+<listitem>
+<para
+>Näidatavad failihäired: otsitakse faili asukohta/&URL;-i.</para>
+</listitem>
+
+<listitem>
+<para
+>Käsuhäired: otsitakse käsurida või skripti.</para>
+</listitem>
+
+<listitem>
+<para
+>E-posti häired: lisaks kirja teemale ja sisule otsitakse ka saajaid ja kaasatud failide URL-e.</para>
+</listitem>
+
+<listitem>
+<para
+>Helihäired: otsitakse faili asukohta/&URL;-i.</para>
+</listitem>
+</itemizedlist>
+
+<note
+><para
+>Otsimiseks saab valida ainult häireid, mida näidatakse parajasti häireloendis. See tähendab, et kui soovid otsida aegunud häireid, tuleb need kõigepealt nimekirjas nähtavaks muuta (seda kirjeldati eespool).</para
+></note>
+</sect2>
+</sect1>
+
+<sect1 id="create-edit">
+<title
+>Häire loomine ja muutmine</title>
+
+<sect2>
+<title
+>Uue häire loomine</title>
+
+<para
+>Uue häire loomiseks talita ühel järgnevatest viisidest ning vali seejärel ilmuvast loendist häiretüüp. See avab <link linkend="alarm-edit-dlg"
+>häire muutmise dialoogi</link
+>, mis võimaldab häiret seadistada.</para>
+
+<itemizedlist>
+<listitem>
+<para
+>Vali menüükäsk <menuchoice
+><guimenu
+>Fail</guimenu
+> <guimenuitem
+>Uus</guimenuitem
+></menuchoice
+>.</para>
+</listitem>
+
+<listitem>
+<para
+>Klõpsa hiire <mousebutton
+>parema</mousebutton
+> nupuga süsteemisalve ikoonil ja vali ilmuvast menüüst <menuchoice
+><guimenuitem
+>Uus häire</guimenuitem
+></menuchoice
+>.</para>
+</listitem>
+
+<listitem>
+<para
+>Klõpsa hiire <mousebutton
+>parema</mousebutton
+> nupuga häire nimel loendis ja vali ilmuvast menüüst <menuchoice
+><guimenuitem
+>Uus</guimenuitem
+></menuchoice
+>.</para>
+</listitem>
+</itemizedlist>
+
+<para
+>Uusi häireid võib luua ka mitmesuguste allikate põhjal, mis annavad vähemalt osa parameetreid juba ette:</para>
+
+<itemizedlist>
+<listitem>
+<para
+>Uue häire loomiseks häiremalli põhjal järgi osas <link linkend="templates"
+>Häiremallid</link
+> toodud juhiseid.</para>
+</listitem>
+
+<listitem>
+<para
+>Uue häire lisamiseks varasema häire põhjal märgi soovitud häire nimekirjas ja vali menüükäsk <menuchoice
+> <guimenu
+>Fail</guimenu
+><guimenuitem
+>Kopeeri</guimenuitem
+></menuchoice
+>. See avab <link linkend="alarm-edit-dlg"
+>häire redigeerimise dialoogi</link
+>, kus on juba ees valitud häire parameetrid.</para>
+</listitem>
+
+<listitem>
+<para
+>Uue häire loomiseks, mis näitaks olemasolevat e-kirja, lohista vastav kiri &kmail;ist &kalarm;i peaaknasse või süsteemisalve ikoonile. Seejärel vali <guilabel
+>Nähtav häire</guilabel
+>. See avab <link linkend="alarm-edit-dlg"
+>häire muutmise dialoogi</link
+>, kus kogu kirja, kaasa arvatud saatja, saaja &etc;, näidatakse häire tekstina.</para>
+</listitem>
+
+<listitem>
+<para
+>Uue häire loomiseks, mis saadaks olemasoleva e-kirja koopia, lohista vastav kiri &kmail;ist &kalarm;i peaaknasse või süsteemisalve ikoonile. Seejärel vali <guilabel
+>Kirjahäire</guilabel
+>. <link linkend="alarm-edit-dlg"
+>Häire muutmise dialoog</link
+> näitab nüüd kogu kirja, välja arvatud saatja.</para>
+</listitem>
+
+<listitem>
+<para
+>Uue häire loomiseks, mis näitaks olemasolevat ülesande kokkuvõtet, lohista vastav ülesanne &korganizer;ist &kalarm;i peaaknasse või süsteemisalve ikoonile. See avab <link linkend="alarm-edit-dlg"
+>häire redigeerimise dialoogi</link
+>, kus ülesande sisu näidatakse häire tekstina.</para>
+</listitem>
+
+<listitem>
+<para
+>Uue käsuhäire loomiseks lohista skripti tekst alates reast <quote
+>#!</quote
+> &kalarm;i peaaknasse või süsteemisalve ikoonile. Seejärel vali <guilabel
+>Käsuhäire</guilabel
+>. <link linkend="alarm-edit-dlg"
+>Häire muutmise dialoog</link
+> näitab nüüd skripti teksti.</para>
+</listitem>
+
+<listitem>
+<para
+>Faili näitava häire loomiseks lohista teksti- või pildifaili &URL; &kalarm;i peaaknasse või süsteemisalve ikoonile. See avab <link linkend="alarm-edit-dlg"
+>häire redigeerimise dialoogi</link
+>, kus faili nimi on juba ette määratud.</para>
+</listitem>
+
+<listitem>
+<para
+>Helihäire loomiseks lohista helifaili &URL; &kalarm;i peaaknasse või süsteemisalve ikoonile. See avab <link linkend="alarm-edit-dlg"
+>häire redigeerimise dialoogi</link
+>, kus faili nimi on juba ette määratud.</para>
+</listitem>
+
+<listitem>
+<para
+>Uue tekstihäire loomiseks lohista mis tahes tekst &kalarm;i peaaknasse või süsteemisalve ikoonile. Vajaduse korral vali <guilabel
+>Nähtav häire</guilabel
+>. <link linkend="alarm-edit-dlg"
+>Häire muutmise dialoog</link
+> näitab nüüd häire teksti.</para>
+</listitem>
+
+<listitem>
+<para
+>Võimalik on automaatselt luua sünnipäevahäireid inimeste kohta, kes esinevad sinu &aadressiraamat;us. Seda kirjeldab lähemalt osa <link linkend="birthdays"
+>Sünnipäevade importimine &aadressiraamat;ust</link
+>.</para>
+</listitem>
+
+</itemizedlist>
+
+</sect2>
+
+<sect2 id="edit-alarm">
+<title
+>Olemasoleva häire muutmine</title>
+
+<para
+>Olemasoleva häire muutmiseks (midagi muuta ei saa vaid aegunud häirete juures) võta ette mõni järgnev samm:</para>
+
+<itemizedlist>
+<listitem>
+<para
+>Tee topeltklõps selle nimel häireloendis.</para>
+</listitem>
+
+<listitem>
+<para
+>Vali see klõpsuga häireloendis ja kasuta seejärel menüükäsku <menuchoice
+><guimenu
+>Redigeerimine</guimenu
+><guimenuitem
+>Muuda</guimenuitem
+></menuchoice
+></para>
+</listitem>
+
+<listitem>
+<para
+>Klõpsa selle nimel häireloendis hiire <mousebutton
+>parema</mousebutton
+> nupuga ja vali ilmuvast menüüst käsk <menuchoice
+><guimenuitem
+>Muuda</guimenuitem
+></menuchoice
+>.</para>
+</listitem>
+</itemizedlist>
+
+<para
+>See avab <link linkend="alarm-edit-dlg"
+>häire redigeerimise dialoogi</link
+>.</para>
+
+</sect2>
+
+<sect2>
+<title
+>Häire aktiveerimine/deaktiveerimine</title>
+
+<para
+>Olemasoleva häire kustutamiseks vali vajalik(ud) häire(d) häireloendis. Seejärel võta ette üks järgmistest tegevustest:</para>
+
+<itemizedlist>
+<listitem>
+<para
+>Vali menüükäsk <menuchoice
+><guimenu
+>Redigeerimine</guimenu
+> <guimenuitem
+>Kustuta</guimenuitem
+></menuchoice
+>.</para>
+</listitem>
+<listitem>
+<para
+>klõpsa hiire <mousebutton
+>parema</mousebutton
+> nupuga häire nimel loendis ja vali ilmuvast menüüst <menuchoice
+><guimenuitem
+>Kustuta</guimenuitem
+></menuchoice
+>.</para>
+</listitem>
+<listitem>
+<para
+>Kustutamiseks ilma kinnitusdialoogita vajuta klahve &Shift;-<keycap
+>Delete</keycap
+>.</para>
+</listitem>
+</itemizedlist>
+
+<para
+>Kui kustutad aktiivse häire, salvestatakse see aegunud häirena juhul, kui seda on enne kustutamist vähemalt korra käivitatud ja kui aegunud häirete salvestamine on üldse lubatud (seda, kas ja kui jah, siis kui kaua aegunud häireid salvestatakse, saab määrata <link linkend="preferences-storage"
+>seadistustedialoogis</link
+>). Kui kustutad aegunud häire või aktiivse, kuid käivitamata häire, kustutatakse see jäädavalt.</para>
+
+<para
+>Kustutatud häire saab aegunud häirete loendis uuesti aktiveerida, kui see ei ole just juba sealtki kustutatud. Selleks too kõigepealt aegunud häired nähtavale, nagu kirjeldab osa <link linkend="expired"
+>Aegunud häired</link
+>. Seejärel:</para>
+
+<itemizedlist>
+<listitem>
+<para
+>vali häire või häired klõpsuga nende nimel loendis. Seejärel vali menüükäsk <menuchoice
+> <guimenu
+>Toimingud</guimenu
+><guimenuitem
+>Aktiveeri uuesti</guimenuitem
+> </menuchoice
+>.</para>
+</listitem>
+<listitem>
+<para
+>klõpsa hiire <mousebutton
+>parema</mousebutton
+> nupuga häire nimel aegunud häirete loendis ja vali ilmuvast menüüst <menuchoice
+><guimenuitem
+>Aktiveeri uuesti</guimenuitem
+></menuchoice
+>.</para>
+</listitem>
+</itemizedlist>
+
+</sect2>
+
+<sect2>
+<title
+>Häire lubamine/keelamine</title>
+
+<para
+>Täpsemat infot häirete lubamise ja keelamise kohta ühe- või mitmekaupa leiab osast <link linkend="enable-disable"
+>Häirete lubamine/keelamine</link
+>.</para>
+
+</sect2>
+
+<sect2>
+<title
+>Häire määramine uneseisundist ärkamiseks</title>
+
+<para
+><link linkend="wake-suspend"
+>Ärkamine uneseisundist</link
+> räägib lähemalt, kuidas seadistada häiret süsteemi äratamiseks uneseisundist või talveunest.</para>
+
+</sect2>
+
+<sect2>
+<title
+>Häire nägemise kinnitamine</title>
+
+<para
+>Seda, kuidas anda märku häire kättesaamisest, vaata osast <link linkend="message-window"
+>Häireteate aken</link
+>.</para>
+
+</sect2>
+
+<sect2 id="templates">
+<title
+>Häiremallid</title>
+
+<para
+>Kui sul on sageli vaja ühesuguseid häireid käivitada, võid luua häiremalli, et mitte sisestada alati aina uuesti samu üksikasju. Mall võib sisaldada kõiki häires esinevaid detaile, välja arvatud muidugi algushetk.</para>
+
+<para
+>Näiteks soovid määrata häire meelde tuletama telesaadet, mille aeg nädalast nädalasse muutub. Mall sisaldab kõiki häire üksikasju (teate tekst, kas mängida heli või mitte &etc;), välja arvatud kuupäev ja kellaaeg. Siis on sul häire loomiseks vaja ainult <link linkend="alarm-edit-dlg"
+>häire redigeerimise dialoogis</link
+> laadida vajalik mall ning sisestada kuupäev ja kellaaeg.</para>
+
+<para
+>Uue häire loomiseks malli põhjal ava <link linkend="alarm-edit-dlg"
+>häire redigeerimise dialoog</link
+> malli eelnevalt täidetud andmetega:</para>
+
+<itemizedlist>
+<listitem>
+<para
+>Vali menüükäsk <menuchoice
+><guimenu
+>Fail</guimenu
+><guimenuitem
+>Uus</guimenuitem
+>  <guimenuitem
+>Uus häire mallist</guimenuitem
+></menuchoice
+> ja seejärel vajalik mall.</para>
+</listitem>
+
+<listitem>
+<para
+>klõpsa hiire <mousebutton
+>parema</mousebutton
+> nupuga ikoonil süsteemisalves ja vali kontekstimenüüst <menuchoice
+><guimenuitem
+>Uus häire</guimenuitem
+> <guimenuitem
+>Uus häire mallist</guimenuitem
+></menuchoice
+>. Seejärel vali vajalik mall.</para>
+</listitem>
+
+<listitem>
+<para
+>Ava <link linkend="alarm-edit-dlg"
+>häire redigeerimise dialoog</link
+> tavalisel viisil ning klõpsa nupule <guibutton
+>Laadi mall...</guibutton
+> Seejärel vali mall.</para>
+</listitem>
+</itemizedlist>
+
+<sect3>
+<title
+>Mallide seadistamine</title>
+
+<para
+>Malle saab luua, muuta või kustutada häiremallide dialoogis, samuti võib luua uue häiremalli olemasoleva malli baasil.</para>
+
+<para
+>Uue häiremalli loomiseks:</para>
+
+<itemizedlist>
+<listitem>
+<para
+>Ava häiremallide dialoog menüükäsuga <menuchoice
+> <guimenu
+>Fail</guimenu
+><guimenuitem
+>Mallid...</guimenuitem
+></menuchoice
+>, klõpsa nupule <guibutton
+>Uus</guibutton
+> ja vali ilmuvast nimekirjast häiretüüp. See avab tühja malli redigeerimise dialoogi.</para>
+</listitem>
+
+<listitem>
+<para
+>Ava häiremallide dialoog menüükäsuga <menuchoice
+> <guimenu
+>Fail</guimenu
+><guimenuitem
+>Mallid...</guimenuitem
+></menuchoice
+>, vali nimekirjast olemasolev mall ja klõpsa nupul <guibutton
+>Kopeeri</guibutton
+>. See avab malli redigeerimise dialoogi, kus on juba ees valitud häire parameetrid.</para>
+</listitem>
+
+<listitem>
+<para
+>Vali soovitud häire häireloendis ja seejärel menüükäsk <menuchoice
+> <guimenu
+>Fail</guimenu
+><guimenuitem
+>Loo mall...</guimenuitem
+></menuchoice
+> See avab malli redigeerimise dialoogi, kus on juba ees valitud häire parameetrid.</para>
+</listitem>
+</itemizedlist>
+
+<para
+>Olemasoleva malli muutmiseks ava häiremallide dialoog menüükäsuga <menuchoice
+> <guimenu
+>Fail</guimenu
+><guimenuitem
+>Mallid...</guimenuitem
+></menuchoice
+> ja klõpsa nupule <guibutton
+>Muuda</guibutton
+>. See avab allpool kirjeldatava malli redigeerimise dialoogi.</para>
+
+<para
+>Olemasoleva malli kustutamiseks ava häiremallide dialoog menüükäsuga <menuchoice
+> <guimenu
+>Fail</guimenu
+><guimenuitem
+>Mallid...</guimenuitem
+></menuchoice
+>, vali üks või enam mall ja klõpsa nupule <guibutton
+>Kustuta</guibutton
+>. Selle peale küsitakse sinu käest kinnitust, et vältida juhuslikku kustutamist.</para>
+
+</sect3>
+
+<sect3>
+<title
+>Malli redigeerimise dialoog</title>
+
+<para
+>Malli redigeerimise dialoog on sarnane <link linkend="alarm-edit-dlg"
+>häire redigeerimise dialoogiga</link
+>. Erinevad on järgmised võimalused:</para>
+
+<itemizedlist>
+<listitem>
+<para
+>Sisesta malli nimi väljale <guilabel
+>Malli nimi</guilabel
+>. See on nimi, mida näidatakse malli valimise nimekirjas, seepärast on mõttekas anda nimi, mille põhjal saaksid ka ise aru, milleks see on mõeldud. Mallil peab olema unikaalne nimi.</para>
+</listitem>
+
+<listitem>
+<para
+>Sektsioonis <guilabel
+>Aeg</guilabel
+> saab valida:</para>
+
+<itemizedlist>
+<listitem>
+<para
+><guilabel
+>Vaikeaeg</guilabel
+>, kui sa ei soovi määrata konkreetset käivitamise aega. Sellele mallile tuginevad häired kasutavad sellisel juhul tavalist uute häirete käivitamise vaikeaega.</para>
+</listitem>
+
+<listitem>
+<para
+><guilabel
+>Aeg</guilabel
+> võimaldab sisestada häire käivitamise aja.</para>
+</listitem>
+
+<listitem>
+<para
+><guilabel
+>Ainult kuupäev</guilabel
+> võimaldab määrata häire käivitumise aja ainult kuupäeva, mitte kellaajaga.</para>
+</listitem>
+
+<listitem>
+<para
+>Kastis <guilabel
+>Praegusest ajast alates</guilabel
+> saab sisestada, millal pärast praegust hetke (tundides ja minutites) tuleks häire käivitada.</para>
+</listitem>
+</itemizedlist>
+</listitem>
+
+<listitem>
+<para
+>Kaardi <guilabel
+>Kordumine</guilabel
+> sektsioonis <guilabel
+>Kordamise reegel</guilabel
+> ei ole vaja määrata kuupäeva ega kuud vastavalt iganädalaste või igakuiste häirete jaoks.</para>
+</listitem>
+</itemizedlist>
+
+</sect3>
+
+</sect2>
+
+<sect2 id="calendars">
+<title
+>Häirekalendrid</title>
+
+<para
+>Kui kasutad ainult ühte, eraldiseisvat arvutit, siis pole kuigi oluline, kuhu &kalarm; häired salvestab. Aga kui pead häireid kasutama mitmes arvutis või ka ühes arvutis, aga mitmes kohas, siis võib kindlaks määrata <quote
+>häirekalendrid</quote
+>, mis annavad &kalarm;ile korralduse kasutada lisaks vaikimisi kalendrile või selle asemel teisi kalendreid.</para>
+
+<para
+>Kalendreid saab näha ja hallata kalendrite nimekirjas, mida võib lasta näidata häireloendi kõrval &kalarm;i peaaknas. Häireloendis näidatakse korraga kõigi häirekalendrite häireid. Uue häire salvestamisel on võimalik valida, kas see salvestatakse automaatselt vaikekalendrisse või palutakse sul kalender valida. Olemasolevat häiret muutes salvestatakse see automaatselt kalendrisse, kuhu see varemgi kuulus.</para>
+
+<screenshot>
+<screeninfo
+>&kalarm;i peaaken kalendrinimekirjaga</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="mainwindow-calendars.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>Peaaken kalendrinimekirjaga</phrase>
+</textobject>
+</mediaobject>
+</screenshot>
+
+<sect3>
+<title
+>Kalendrite tüübid ja valikud</title>
+
+<para
+>Häirekalendreid saab jagada häirete tüübi ja salvestamistüübi järgi. Kalendrid võivad olla keelatud, kirjutuskaitstud või vaikekalender teatud häiretüübile.</para>
+
+<variablelist>
+<varlistentry>
+<term
+>Häiretüüp</term>
+<listitem>
+<para
+>Kolm häiretüüpi &ndash; aktiivsed häired, aegunud häired ja häiremallid &ndash; salvestatakse eraldi häirekalendrisse. Seepärast on &kalarm;il kolm standardset vaikekalendrit mainitud tüüpide jaoks (vaata täpsemalt osa <link linkend="faq"
+>Küsimused ja vastused</link
+>), mida saab soovi korral küll ka muuta.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+>Salvestamistüüp</term>
+<listitem>
+<para
+>&kalarm; kasutab kolme häirekalendrite salvestamistüüpi:</para>
+
+<itemizedlist>
+<listitem
+><para
+>Kohalik fail: häired salvestatakse ühte kohalikku faili iCalendari vormingus. &kalarm; kasutab kohaliku faili kalendrit vaikimisi (vaata täpsemalt osa <link linkend="faq"
+>Küsimused ja vastused</link
+>). <quote
+>Kohalikud failid</quote
+> võivad lisaks failidele kohalikus arvutis olla ka häirekalendrid kohtvõrgus, tingimuseks on ainult see, et nende asukohamäärangu alguses seisaks <literal
+>/</literal
+>.</para>
+</listitem>
+
+<listitem
+><para
+>Kohalik kataloog: häired salvestatakse kohalikku kataloogi, kus iga häire on salvestatud omaette iCalendari faili. Selle salvestamisviisi eeliseks on asjaolu, et failide riknemise korral kaotad ainult ühe häire, mitte aga tervet kalendrit.</para>
+</listitem>
+
+<listitem
+><para
+>Võrgufail: häired salvestatakse ühte võrgufaili iCalendari vormingus. See meetod võimaldab oma häireandmeid kasutada asukohast sõltumata, samuti on teistel inimestel võimalik häirekalendreid näha. Võrgufailide puhul kasutab &kalarm; andmete kohalikku puhvrit.</para>
+
+<warning
+><para
+>Kui võrgus paiknevat häirekalendrit kasutab mitu isikut, siis ei ole ühe isiku tehtud muudatused teistele automaatselt kättesaadavad ja see nõuab teatud aega.Nii on võimalik, et keegi teeb muudatusi, mille teine üle kirjutab, ilma et kumbki sellest teaks. Tehniliselt on selgitus järgmine: A tehtud muudatus on B-le kättesaadav alles siis, kui A puhverdatud koopia salvestatakse võrgufaili ning seejärel B puhverdatud koopia uuesti laaditakse. Millal ja kas üldse kalendrit salvestatakse ja uuesti laaditakse, sõltub kalendri seadistustest, mida iga kasutaja antud häirekalendrile määrab.</para>
+
+<para
+>Mainitud probleemi vältimiseks kohenda kalendri salvestamise ja taaslaadimise seadistusi või kehtesta reegel, et peale häirekalendri omaniku saavad teised seda avada ainult kirjutuskaitstult.</para
+></warning>
+</listitem>
+</itemizedlist>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+>Lubatud/keelatud olek</term>
+<listitem>
+<para
+>Kalendri keelamine on sama toimega nagu eemaldamine, ainult et see on endiselt näha kalendrite nimekirjas, kus seda saab hõlpsasti taas lubada. Keelamisel eiratakse kalendri häireid ning neid ei näidata ei häirete ega häiremallide nimekirjas. Taaslubamisel näidatakse kalendri häireid uuesti ja kui tegemist on aktiivsete häirete kalendriga, siis ka aktiveeritakse.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+>Kirjutuskaitstud olek</term>
+<listitem>
+<para
+>Kirjutuskaitstud kalendrit ei saa muuta ega sellele midagi lisada. See tähendab, et selle häireid ei saa redigeerida ega lisada kalendrile uusi häireid. Samuti ei ole häireid võimalik edasi lükata, sest selleks tuleks häiresse salvestada edasilükkamise aeg. Pärast häire käivitumist ei eemaldata seda kalendrist ega arhiveerita, kuni sina või mõni muu kasutaja ei saa õigust kalendrisse kirjutada.</para>
+
+<para
+>Kalendri saab kirjutuskaitstuks muuta kalendri seadistustedialoogis. Teatud kalendreid ei saagi aga mitmel põhjusel kirjutatavaks muuta:</para>
+
+<itemizedlist>
+<listitem
+><para
+>Kui kalender on loodud mõne muu rakendusega, ei ole turvaline lasta &kalarm;il seda uuendada, sest andmevormingu erinevused võivad muuta selle kasutamatuks rakenduses, millega kalender loodi.</para>
+</listitem>
+
+<listitem
+><para
+>Kui kalender on loodud &kalarm;i uuema versiooniga, võivad andmed kaotsi minna, kui sinu &kalarm;i versioon seda uuendab.</para>
+</listitem>
+
+<listitem
+><para
+>Kui kalender on loodud &kalarm;i vanema versiooniga, võivad andmed kaotsi minna või &kalarm; varasema versiooni jaoks kasutamiskõlbmatuks muutuda, kui sinu &kalarm;i versioon seda uuendab. Sinu käest päritakse, kas teisendada vorming, nii et kirjutatavaks muutmisel tuleb arvestada võimalike ühilduvusprobleemidega, kui &kalarm; varasem versioon vajab taas kalendrit.</para>
+</listitem>
+
+<listitem
+><para
+>Kui sul puudub õigus kirjutada kalendri faili või kataloogi.</para>
+</listitem>
+</itemizedlist>
+
+<para
+>Kui vajad kirjutamisõigust kalendri korral, mida ei saa kirjutatavaks muuta, võid kalendri häired kopeerida, importides need kirjutamisõigusega kalendrisse, kasutades selleks viimase kalendri kontekstimenüü käsku <menuchoice
+><guimenuitem
+>Impordi...</guimenuitem
+></menuchoice
+> (vaata <link linkend="import"
+>Häirete import välisest kalendrist</link
+>).</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+>Vaikekalendri olek</term>
+<listitem>
+<para
+>Iga häiretüübi korral võib ühe kalendri muuta selle tüübi vaikekalendriks. Vastavat tüüpi uued häired salvestatakse sel juhul automaatselt vaikekalendrisse, kui sa pole just valinud uutele häiretele ja mallidele muud võimalust <link linkend="preferences-storage"
+>seadistustedialoogis</link
+>.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+
+</sect3>
+
+<sect3 id="using-calendars">
+<title
+>Kalendrite kasutamine</title>
+
+<para
+>Kalendreid saab näha ja hallata kalendrite nimekirjas, mida saab lasta näidata või peita menüükäsuga <menuchoice
+><guimenu
+>Vaade</guimenu
+><guimenuitem
+>Näita kalendreid</guimenuitem
+></menuchoice
+>. Kalendrite nimekirja kasutamiseks vali kõigepealt nimekirja kohal olevast rippmenüüst häiretüüp. Seejärel klõpsa ühele nimekirja all olevatest nuppudest või klõpsa nimekirjas vajalikule kalendrile hiire <mousebutton
+>parema</mousebutton
+> nupuga ja vali kontekstimenüüst vajalik käsk. Toimingud on järgmised:</para>
+
+<variablelist>
+<varlistentry>
+<term
+><menuchoice
+><guimenuitem
+>Lisa...</guimenuitem
+></menuchoice
+></term>
+<listitem>
+<para
+>Lisab nimekirja valitud tüüpi kalendri. Sul palutakse valida salvestamistüüp ja seejärel avaneb kalendri seadistustedialoog, kus saab sisestada kalendri asukoha ja tunnused. Kui määratud asukohas pole eelnevalt häirekalendrit, luuakse uus.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenuitem
+>Eemalda</guimenuitem
+></menuchoice
+></term>
+<listitem>
+<para
+>Eemaldab valitud kalendri nimekirjast. Kalender ise jääb alles, see eemaldatakse ainult nimekirjast ning soovi korral saad selle hiljem taas sinna lisada.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenuitem
+>Muuda...</guimenuitem
+></menuchoice
+></term>
+<listitem>
+<para
+>Võimaldab valitud kalendrit redigeerida. Avatakse valitud kalendri seadistustedialoog.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenuitem
+>Laadi uuesti</guimenuitem
+></menuchoice
+></term>
+<listitem>
+<para
+>Laadib valitud kalendri uuesti. Kalender loetakse uuesti sisse salvestamiskohast, mis tagab, et kalendri hetkeoleku ning &kalarm;is nähtava oleku vahel ei valitse ebakõla. Kui kalender on ühiskasutuses, on nüüd &kalarm;is näha ka kõik teiste kasutajate tehtud muudatused.</para>
+
+<warning
+><para
+>Võrgukalendri taaslaadimisel lähevad kaotsi kõik muudatused häiretes, mida oled teinud pärast kalendri viimast salvestamist. Samuti võidakse uuesti käivitada häired, mis on aegunud pärast viimast salvestamist.</para
+></warning>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenuitem
+>Salvesta</guimenuitem
+></menuchoice
+></term>
+<listitem>
+<para
+>Salvestab muudatused valitud kalendrisse. Kalendris uuendatakse kõiki häirete muudatusi, mis on tehtud pärast kalendri viimast salvestamist või taaslaadimist. See on mõttekas ainult võrgukalendrite korral, sest kohalikud kalendrid salvestatakse automaatselt pärast iga muudatust. Seda, millal ja millise intervalliga võrgukalendrit automaatselt salvestada, saab määrata kalendri seadistustedialoogis (selle saab avada kalendri kontekstimenüüst käsuga <menuchoice
+><guimenuitem
+>Muuda...</guimenuitem
+></menuchoice
+>).</para>
+
+<warning
+><para
+>Kui salvestad ühiskasutuses oleva võrgukalendrit, lähevad kaotsi kõik muudatused, mida teised on teinud pärast seda, kui sina kalendri viimati laadisid (automaatselt või käsitsi).</para
+></warning>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenuitem
+>Impordi...</guimenuitem
+></menuchoice
+></term>
+<listitem>
+<para
+>Võimaldab importida valitud kalendrisse välise kalendri häired. Seda kirjeldab osa <link linkend="import"
+>Häirete import välistest kalendritest</link
+>. Seda käsku ei saa kasutada keelatud või kirjutuskaitstud kalendrite korral.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenuitem
+>Ekspordi...</guimenuitem
+></menuchoice
+></term>
+<listitem>
+<para
+>Võimaldab eksportida kõik valitud kalendri häired välise kalendri faili. Seda kirjeldab osa <link linkend="export"
+>Häirete eksport välistesse kalendritesse</link
+>. Seda käsku ei saa kasutada keelatud kalendrite korral.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenuitem
+>Näita üksikasju</guimenuitem
+></menuchoice
+></term>
+<listitem>
+<para
+>Näitab valitud kalendri üksikasju: asukoht, salvestamistüüp, olek. </para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenuitem
+>Kasuta vaikimisi</guimenuitem
+></menuchoice
+></term>
+<listitem>
+<para
+>Muudab valitud kalendri antud häiretüübi puhul vaikekalendriks. Seda käsku ei saa kasutada keelatud või kirjutuskaitstud kalendri korral.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenuitem
+>Määra värv...</guimenuitem
+></menuchoice
+></term>
+<listitem>
+<para
+>Võimaldab valida taustavärvi antud kalendri häirete eristamiseks häireloendis. See lubab hõlpsasti näha, milline häire on pärit millisest kalendrist.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenuitem
+>Eemalda värv</guimenuitem
+></menuchoice
+></term>
+<listitem>
+<para
+>Eemaldab antud kalendri häirete värviga esiletõstmise häireloendis.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+
+</sect3>
+
+</sect2>
+
+<sect2 id="import">
+<title
+>Häirete importimine välistest kalendritest</title>
+
+<para
+>Häireid saab importida muudest kalendrifailidest &kalarm;i importida. Importimisel otsitakse valitud kalendrifailist häireid sisaldavaid sündmusi ning kopeeritakse need (koos uue unikaalse ID-ga) &kalarm;i kalendrisse. Häireteta sündmusi ja muud tüüpi kalendrikirjeid eiratakse. Importida saab kahel viisil:</para>
+
+<itemizedlist>
+<listitem>
+<para
+>Mis tahes tüüpi häirete (aktiivsed häired, aegunud häired, häiremallid) importimiseks kalendrist vali menüükäsk <menuchoice
+><guimenu
+>Fail</guimenu
+> <guimenuitem
+>Impordi häired...</guimenuitem
+></menuchoice
+></para>
+
+<para
+>Kui oled seadistanud <link linkend="calendars"
+>häirekalendrid</link
+>, lisatakse iga tüüpi häired vastavasse vaikekalendrisse või küsitakse sinu käest, millisesse kalendrisse need salvestada, kui oled uute häirete ja mallide jaoks nii määranud <link linkend="preferences-storage"
+>seadistustedialoogis</link
+>.</para>
+</listitem>
+
+<listitem>
+<para
+>Klõpsa hiire <mousebutton
+>parema</mousebutton
+> nupuga kalendrite nimekirjas kalendril ja vali kontekstimenüüst käsk <menuchoice
+><guimenuitem
+>Impordi...</guimenuitem
+></menuchoice
+> Nii imporditakse valitud tüüpi häired valitud kalendrisse. Kui näiteks valitud kalendri tüübiks on häiremallid, imporditakse häiremallid, aga mitte aktiivsed või aegunud häired.</para>
+</listitem>
+</itemizedlist>
+
+<warning
+><para
+>Kui importida häireid kalendrifailist, mis on loodud mõne muu rakendusega kui &kalarm;, võivad häired importimisel muutuda &ndash; isegi häire aeg võib muutuda. See sõltub häire loomiseks kasutatud rakenduse andmesalvestuse viisist ning muutused on vältimatud, kui see erineb sellest, mida eeldab &kalarm;. Seepärast tasub alati imporditud häired üle kontrollida, et neis ei esineks soovimatuid muudatusi, ning vajaduse korral neid kohandada.</para
+></warning>
+
+</sect2>
+
+<sect2 id="export">
+<title
+>Häirete eksportimine välistesse kalendritesse</title>
+
+<para
+>Häireid saab eksportida &kalarm;ist teistesse kalendrifailidesse, olgu tegemist siis häireloendis valitud häiretega või mõnes häirekalendris leiduvate häiretega. Kuidas seda teha, on kirjeldatud allpool. Millist viisi sa ka ei kasutaks, tuleb kas luua uus kalendrifail või lisada eksporditavad häired olemasolevasse kalendrifaili. Häirete lisamiseks märgi failidialoogis ära valik <guilabel
+>Lisamine olemasolevale failile</guilabel
+>, sest vastasel juhul kirjutatakse olemasolev fail lihtsalt üle.</para>
+
+<itemizedlist>
+<listitem>
+<para
+>Häireloendis valitud häirete eksportimiseks klõpsa hiire <mousebutton
+>parema</mousebutton
+> nupuga valikule ja vali kontekstimenüüst <menuchoice
+><guimenuitem
+>Ekspordi...</guimenuitem
+></menuchoice
+> või kasuta menüükäsku <menuchoice
+> <guimenu
+>Fail</guimenu
+><guimenuitem
+>Ekspordi valitud häired</guimenuitem
+></menuchoice
+>.</para>
+</listitem>
+
+<listitem>
+<para
+>Mõne kalendri kõigi häirete eksportimiseks klõpsa kalendriloendis kalendril hiire <mousebutton
+>parema</mousebutton
+> nupuga ja vali kontekstimenüüst <menuchoice
+><guimenuitem
+>Ekspordi...</guimenuitem
+></menuchoice
+></para>
+</listitem>
+</itemizedlist>
+
+</sect2>
+
+<sect2 id="birthdays">
+<title
+>Sünnipäevade importimine &aadressiraamat;ust</title>
+
+<para
+>Sünnipäevade nägemiseks, mis leiduvad &aadressiraamat;us, vali menüükäsk <menuchoice
+><guimenu
+>Fail</guimenu
+> <guimenuitem
+>Impordi sünnipäevad...</guimenuitem
+></menuchoice
+>. See avab dialoogi, kus saab valida, millistele sünnipäevadele häire luua.</para>
+
+<itemizedlist>
+<listitem>
+<para
+>Sektsioonis <guilabel
+>Häire tekst</guilabel
+> saab anda teksti, mida näidatakse sünnipäevade häireteadetes. Selle saab luua kujul <guilabel
+>prefiks</guilabel
+> pluss isiku nimi pluss <guilabel
+>sufiks</guilabel
+>. Tühikuid automaatselt ei lisata, nii et väljal <guilabel
+>Prefiks</guilabel
+> tuleb sul endal anda lõpetav tühik ning väljal <guilabel
+>Sufiks</guilabel
+> alustav tühik.</para>
+
+<note
+><para
+>Häire teksti muutmisel vaatab rakendus sünnipäevade nimekirja uuesti üle.</para
+></note>
+</listitem>
+
+<listitem>
+<para
+>Nimekirjas <guilabel
+>Sünnipäevade valimine</guilabel
+> vali kõik need sünnipäevad, millele soovid häiret luua. Pane tähele, et nimekirjas näidatakse ainult neid &aadressiraamat;u kirjeid, mis sisaldavad sünnipäeva ja millele ei ole juba määratud häiret parajasti sektsioonis <guilabel
+>Häire tekst</guilabel
+> määratud vormis.</para>
+</listitem>
+
+<listitem>
+<para
+>Ülejäänud valikud on sarnased häirete <guilabel
+>tekst</guilabel
+>i võimalustega <link linkend="alarm-edit-dlg"
+>häirete redigeerimise dialoogis</link
+>.</para>
+</listitem>
+</itemizedlist>
+
+<para
+>Kui oled seadistanud <link linkend="calendars"
+>häirekalendrid</link
+>, lisatakse häired vastavasse vaikekalendrisse või küsitakse sinu käest, millist kalendrit kasutada, kui oled uute häirete ja mallide jaoks nii määranud <link linkend="preferences-storage"
+>seadistustedialoogis</link
+>.</para>
+
+</sect2>
+
+<sect2 id="undo">
+<title
+>Tagasivõtmine/uuestitegemine</title>
+
+<para
+>Enamikku &kalarm;i aktiivse seansi ajal ettevõetud toiminguid saab tagasi võtta ja uuesti teha, kaasa arvatud häirete ja häiremallide loomine, redigeerimine ja kustutamine ning häirete taasaktiveerimine. Et tagasivõtmiste ajalugu ei nõuaks liiga palju ressursse, on meeles peetavate muudatuste arvule seatud piiranguks 12.</para>
+
+<para
+>Viimase toimingu tühistamiseks vali menüükäsk <menuchoice
+> <guimenu
+>Redigeerimine</guimenu
+><guimenuitem
+>Võta tagasi</guimenuitem
+></menuchoice
+>. Viimase tagasivõetud toimingu taassooritamiseks vali menüükäsk <menuchoice
+> <guimenu
+>Redigeerimine</guimenu
+><guimenuitem
+>Tee uuesti</guimenuitem
+></menuchoice
+>.</para>
+
+<para
+>Mõne varasema muudatuse tühistamiseks klõpsa tööriistaribal nupule <guibutton
+>Võta tagasi</guibutton
+> ja hoia hiirenuppu all. Ilmub toimingute nimekiri, kus saad valida, milline neist tagasi võtta. Kui sa ei näe vajalikku toimingut, siis arvesta, et vaja võib olla kõigepealt tühistada mõned hilisemad toimingud, millest sinu soovitud toiming sõltub. Kui näiteks oled häiret redigeerinud ja seejärel selle kustutanud, ei saa sa redigeerimist tühistada, kui sa ei ole tühistanud kustutamiskäsku.</para>
+
+<para
+>Mõne varasema muudatuse taassooritamine käib samamoodi, ainult et mõistagi tööriistariba nupuga <guibutton
+>Tee uuesti</guibutton
+>.</para>
+
+</sect2>
+</sect1>
+
+<sect1 id="alarm-edit-dlg">
+<title
+>Häire redigeerimise dialoog</title>
+
+<para
+>Häire redigeerimise dialoogis saab häiret näha ja muuta. &kalarm;i esimesel kasutamisel avatakse dialoogi lihtne vorm, kus on näha ainult üksikud valikud. Kõigi valikute nägemiseks klõpsa nupule <guibutton
+>Rohkem valikuid</guibutton
+>, naasmiseks lihtsa dialoogi juurde nupule <guibutton
+>Vähem valikuid</guibutton
+>. &kalarm; jätab alati meelde viimase dialoogi vormi ning avab selle uuesti, kui avad taas häire redigeerimise dialoogi.</para>
+
+<para
+>Paljude häire muutmise dialoogi seadistuste vaikeväärtusi saab määrata <link linkend="preferences-edit"
+>seadistustedialoogi redigeerimise kaardil</link
+>.</para>
+
+<screenshot>
+<screeninfo
+>Lihtne häire redigeerimise dialoog</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="editwindow-simple.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>Lihtne nähtava häire redigeerimise dialoog</phrase>
+</textobject>
+<caption
+><para
+>Lihtne nähtava häire redigeerimise dialoog</para
+></caption>
+</mediaobject>
+</screenshot>
+
+<screenshot>
+<screeninfo
+>Häire redigeerimise dialoog kõigi valikutega</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="editwindow.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>Nähtava häire redigeerimise dialoog kõigi valikutega</phrase>
+</textobject>
+<caption
+><para
+>Nähtava häire redigeerimise dialoog kõigi valikutega</para
+></caption>
+</mediaobject>
+</screenshot>
+
+<sect2>
+<title
+>Häiretoiming</title>
+
+<para
+>Valikud rühmakastis <guilabel
+>Toiming</guilabel
+> sõltuvad redigeeritava häire tüübist.</para>
+
+<sect3>
+<title
+>Nähtav häire</title>
+
+<para
+>Nähtav häire kuvab häire käivitumisel akent. Ülal asuvas liitkastis saab valida häireakna sisu loomiseks kasutatava meetodi:</para>
+
+<itemizedlist>
+<listitem>
+<para
+><guilabel
+>Tekstiteade</guilabel
+> võimaldab sisestada tekstikasti häire teksti (see võib olla ka mitmel real ja tarvitada reavahetusi).</para>
+</listitem>
+
+<listitem>
+<para
+><guilabel
+>Faili sisu</guilabel
+> lubab sisestada teksti- või pildifaili nime või &URL;-i, mille sisu esitatakse häireteatena. Tekstivälja kõrval asuv nupp avab faili valimise dialoogi. Valik <guilabel
+>Ettelugemine</guilabel
+> pole selle häiretüübi korral kasutatav.</para>
+</listitem>
+
+<listitem>
+<para
+><guilabel
+>Käsu väljundi</guilabel
+> korral luuakse häireteate tekst käsuga, mis käivitatakse häire käivitamisel. Osa <link linkend="command-alarm"
+>Käsuhäired</link
+> selgitab täosemalt, kuidas sisestada käivitatav käsk või skript.</para>
+</listitem>
+</itemizedlist>
+
+<para
+>Nähtava häire puhul saab kasutada järgmisi valikuid:</para>
+
+<itemizedlist>
+<listitem>
+<para
+>Valik <guilabel
+>Heli</guilabel
+> võimaldab valida, kas häireteate näitamise ajal esitatakse ka heli. Valikud on järgmised:</para>
+
+<itemizedlist>
+<listitem>
+<para
+><guilabel
+>Puudub</guilabel
+> näitab häiret vaikselt.</para>
+</listitem>
+
+<listitem>
+<para
+><guilabel
+>Piiks</guilabel
+> toob kuuldavale piiksu.</para>
+</listitem>
+
+<listitem>
+<para
+><guilabel
+>Ettelugemine</guilabel
+> tähendab lisaks häireteate näitamisele ka selle kuuldavat esitamist. See valik on kasutatav ainult siis, kui paigaldatud ja seadistatud on &jovie; (moodulis kdeaccessibility) ning sobiv kõnesüntesaator, &eg; <application
+>Festival</application
+>.</para>
+</listitem>
+
+<listitem>
+<para
+><guilabel
+>Helifail</guilabel
+> esitab helifaili. Paremal asuva nupuga saab avada helifaili dialoogi, kus saab valida esitatava faili ning määrata selle helitugevuse ja soovi korral kordamise. Hiirt nupu kohal seisma jättes näeb kohtspikris parajasti valitud helifaili.</para>
+
+<para
+>Helifaili dialoogis:</para>
+
+<itemizedlist>
+<listitem>
+<para
+>Sisesta helifaili asukoht või kasuta tekstikasti kõrval olevat nuppu failidialoogi avamiseks. Valitud faili saab kuulata, kui klõpsata tekstiväljast vasakul pool asuvale esitamisnupule. Nupp muudab seejärel oma funktsiooni, võimaldades esitamise peatada, kui oled helifaili piisavalt kuulanud.</para>
+</listitem>
+
+<listitem>
+<para
+>Kasti <guilabel
+>Kordus</guilabel
+> märkimisel korratakse helifaili pidevalt seni, kuni häiret näidatakse (häireteate aknas on nupp, millega saab heli esitamise välja lülitada, kui soovid näha häiret ilma helita).</para>
+</listitem>
+
+<listitem>
+<para
+>Vali <guilabel
+>Helitugevus</guilabel
+> ja kasuta liugurit määramaks, kui vali peab helifail esitamisel olema.</para>
+</listitem>
+
+<listitem>
+<para
+>Soovi korral saab lasta helil tugevneda. See tähendab, et helifaili hakatakse mängima teatud helitugevusega, mis muutub järk-järgult, kuni saavutab määratud aja jooksul lõpliku helitugevuse. Lõplik helitugevus on see, mille määrasid valikuga <guilabel
+>Helitugevus</guilabel
+>. Tugevnemise võimaldamiseks märgi <guilabel
+>Tugevnemine</guilabel
+>, sisesta sekundites <guilabel
+>tugevnemise aeg</guilabel
+> ning määra liuguriga <guilabel
+>Algne helitugevus</guilabel
+>.</para>
+</listitem>
+</itemizedlist>
+
+<tip
+><para
+>Nupuga <guibutton
+>Proovi</guibutton
+> saab valitud helitugevust testida.</para
+></tip>
+</listitem>
+</itemizedlist>
+</listitem>
+
+<listitem>
+<para
+>Nupuga <guibutton
+>Font ja värv...</guibutton
+> saab valida häireteate fondi ning esi- või tagaplaani värvi. Dialoogis <guilabel
+>Häire fondi ja värvi valimine</guilabel
+> võib märkida kasti <guilabel
+>Kasutatakse vaikefonti</guilabel
+>, millisel juhul häiret näidatakse selle fondiga, mis häire kõlamise ajal on süsteemis vaikefondiks. Konkreetse fondi määramiseks häire tekstile eemalda märge kastist <guilabel
+>Kasutatakse vaikefonti</guilabel
+>. (Vaikefondi ja värvid saab paika panna <link linkend="preferences-edit"
+>seadistustedialoogis</link
+>.)</para>
+
+<para
+>Valitud värve näidatakse häireteate teksti sisestamisväljal.</para>
+</listitem>
+
+<listitem>
+<para
+>Nupuga <guibutton
+>Eritoimingud...</guibutton
+> saab määrata shellikäsud, mis käivitatakse enne häire või pärast näitamist. Dialoogis <guilabel
+>Spetsiaalsed häiretoimingud</guilabel
+>:</para>
+
+<itemizedlist>
+<listitem>
+<para
+>Sisesta väljale <guilabel
+>Häire-eelne toiming</guilabel
+> shellikäsk, mis tuleb käivitada enne häire näitamist. Pane tähele, et &kalarm; ootab käsu lõplikku täitmist, enne kui näitab häiret.</para>
+
+<para
+>Häire-eelne toiming võetakse ette ainult üks kord, enne häire esimest kasutamist, kaasa arvatud juhul, kui meeldetuletus on asendatud tegeliku häirega. Seda <emphasis
+>ei</emphasis
+> võeta ette järgmistel juhtudel:</para>
+
+<itemizedlist>
+<listitem
+><para
+>Meeldetuletuse esitamisel.</para
+></listitem>
+<listitem
+><para
+>Häire esitamisel uuesti pärast selle edasilükkamist, kui pole märgitud <guilabel
+>Käivitamine.edasilükatud häirete korral</guilabel
+>.</para
+></listitem>
+<listitem
+><para
+>Teate näitamisel ajal, mil sa olid välja loginud, ning kui see taastatakse, kui uuesti sisse logid.</para
+></listitem>
+<listitem
+><para
+>Korduva häire käivitumisel, kui eelmine häire (või edasilükatud häire) on veel nähtav - see tähendab juhul, kui häire eelmist korda ei ole veel kustutatud.</para
+></listitem>
+</itemizedlist>
+
+<para
+>Häire-eelse toiminguga saab määrata, kas häireteadet kuvatakse:</para>
+
+<itemizedlist>
+<listitem
+><para
+>Kui märkida <guilabel
+>Häirest loobumine vea korral</guilabel
+>, ei käivitata häiret, kui häire-eelne käsk tagastab vea. See takistab häireteate kuvamist ning häirejärgsete toimingute käivitamist.</para
+></listitem>
+
+<listitem
+><para
+>Kui häire-eelse käsu puhul tekib viga, näidatakse tavaliselt veateadet ning häirete nimekirja lisatakse osutus veale. Neid veamärguandeid saab vältida, kui märkida ära <guilabel
+>Vigadest märku ei anta</guilabel
+>.</para
+></listitem>
+</itemizedlist>
+</listitem>
+
+<listitem>
+<para
+>Väljale <guilabel
+>Häirejärgne toiming</guilabel
+> saab sisestada shellikäsu, mis käivitatakse pärast häire kustutamist (kas klõpsuga nupule <guibutton
+>Sulge</guibutton
+> või akna tiitliriba sulgemisnupule). Seda <emphasis
+>ei</emphasis
+> võeta ette järgmistel juhtudel:</para>
+
+<itemizedlist>
+<listitem
+><para
+>Meeldetuletuse sulgemisel.</para
+></listitem>
+<listitem
+><para
+>Häire edasilükkamisel, välja arvatud juhul, kui edasilükatud häire lõpuks suletakse.</para
+></listitem>
+<listitem
+><para
+>Häire sulgemisel väljalogimise tõttu.</para
+></listitem>
+</itemizedlist>
+</listitem>
+</itemizedlist>
+
+<para
+>Vaata allpool <link linkend="command-alarm"
+>häirekäskude</link
+> kirjeldust, kus on juttu, kuidas käivitatakse shellikäsud.</para>
+
+</listitem>
+</itemizedlist>
+</sect3>
+
+<sect3 id="command-alarm">
+<title
+>Käsuhäired</title>
+
+<para
+>Käsuhäired käivitavad käsu ilma mingit häireteadet kuvamata.</para>
+
+<note
+><para
+>Seda häiretüüpi ei saa kasutada, kui &kde; töötab nn. Kioski-režiimis.</para
+></note>
+
+<para
+>Käsu käivitamisel sisaldab keskkonnamuutuja <envar
+>KALARM_UID</envar
+> häire sündmuse UID-d. Pane tähele, et kui käsk käivitada häire muutmise dialoogis nupuga <guibutton
+>Proovi</guibutton
+>, on <envar
+>KALARM_UID</envar
+> tühi, kui tegemist on uue häirega või kui häiret on dialoogis muudetud, sest häire saab UID alles siis, kui see on salvestatud häirekalendrisse.</para>
+
+<para
+>Käsuhäirete puhul saab kasutada järgmisi valikuid:</para>
+
+<itemizedlist>
+<listitem>
+<para
+>Kastiga <guilabel
+>Skripti sisestamine</guilabel
+> saab määrata, kas sisestada shellikäsk või skripti.</para>
+
+<para
+>Kui see on märkimata, saab määrata käivitatava käsureakorralduse. Käsk edastatakse vahetult vaikeshellile (selle määrab keskkonnamuutuja <envar
+>SHELL</envar
+>) ning see võib sisaldada mis tahes võtmeid, argumente, filtreeritavaid käske &etc; , mida shell üheainsa käsureakorralduse puhul vähegi võimaldab.</para>
+
+<para
+>Kui see on märgitud, saab sisestada käivitatava skripti teksti. Pane tähele, et esimesel real oleks midagi sellist nagu <literal
+>#!/bin/bash</literal
+>, et kutsutaks välja sobiv käsuinterpretaator.</para>
+</listitem>
+
+<listitem>
+<para
+><guilabel
+>Käsu väljund</guilabel
+> võimaldab määrata, mida võtta ette käsu käivitamisel tekkiva terminali väljundiga.</para>
+
+<itemizedlist>
+<listitem>
+<para
+><guilabel
+>Käivitatakse terminali aknas</guilabel
+>: märkimisel käivitatakse käsk terminali aknas. Millist terminali kasutatakse, saab määrata <link linkend="preferences-general"
+>seadistustedialoogis</link
+>.</para>
+</listitem>
+
+<listitem>
+<para
+><guilabel
+>Logitakse faili</guilabel
+>: käsu väljund salvestatakse faili. Väljund, mille ette lisatakse päis, mis näitab aega, mil käsk oli ajastatud käivituma, lisatakse faili senisele sisule. Sisesta faili nimi tekstikasti või kasuta selle kõrval asuvat nuppu failidialoogi avamiseks, kust vajalik fail valida.</para>
+</listitem>
+
+<listitem>
+<para
+><guilabel
+>Visatakse minema</guilabel
+>: käsu väljund unustatakse.</para>
+</listitem>
+</itemizedlist>
+</listitem>
+</itemizedlist>
+</sect3>
+
+<sect3>
+<title
+>Kirjahäired</title>
+
+<para
+>Kirjahäired saadetakse e-kirjaga ilma mingit häireteadet kuvamata.</para>
+
+<para
+>Määra kolmel väljal saajate aadressid, kirja teema ehk subjekt ning selle sisu. Adressaatide välja kõrval asuva nupuga saab avada &kde; aadressiraamatu ning valida sealt vajalikud aadressid. Kirjale saab ka faile lisada, kasutades selleks nuppu <guibutton
+>Lisa...</guibutton
+>. Arvesta, et kaasatud failid peavad olemas olema ka sel hetkel, kui häire käivitub. Häire määramise ajal neist koopiaid ei salvestata. Kaasatud faili eemaldamiseks vali see hüpikmenüüst ning klõpsa nupule <guibutton
+>Eemalda</guibutton
+>.</para>
+
+<para
+>Võimalik on määrata järgmisi valikuid:</para>
+
+<itemizedlist>
+<listitem>
+<para
+>Liitkastis <guilabel
+>Kellelt</guilabel
+> saab valida, millist &kmail;i identiteeti kasutada oma e-posti aadressina kirja saatmisel. See on kasutatav ainult siis, kui sinu e-posti aadressi välja <guilabel
+>Kellelt</guilabel
+> jaoks on <link linkend="preferences-email"
+>seadistustedialoogis</link
+> määratud valik <guilabel
+>Kasutatakse &kmail;i identiteete</guilabel
+>. Kui aga oled <link linkend="preferences-email"
+>seadistustedialoogis</link
+> määranud konkreetse e-posti aadress, ei ole siin midagi valida.</para>
+</listitem>
+
+<listitem>
+<para
+>Kasti <guilabel
+>Kiri saadetakse ka iseendale</guilabel
+> märkimisel saadetakse häire käivitamisel pimekoopia (BCC) saadetavast kirjast ka sulle endale. Aadressi, millele kiri saadetakse, saab määrata <link linkend="preferences-email"
+>seadistustedialoogis</link
+>, vaikimisi kasutatakse &kde; Süsteemi seadistustes määratud aadressi.</para>
+</listitem>
+</itemizedlist>
+
+</sect3>
+
+<sect3>
+<title
+>Helihäired</title>
+
+<para
+>Helihäired esitavad helifaili ilma mingit häireteadet kuvamata.</para>
+
+<para
+>Võimalik on määrata järgmisi valikuid:</para>
+
+<itemizedlist>
+<listitem>
+<para
+>Siin saab sisestada helifaili asukoha või kasutada tekstikasti kõrval olevat nuppu failidialoogi avamiseks.</para>
+</listitem>
+
+<listitem>
+<para
+>Kui märkida <guilabel
+>Kordamine</guilabel
+>, korratakse helifaili, kuni klõpsatakse nupule <guilabel
+>Peata esitus</guilabel
+>. Faili esitamise peatamiseks vali menüükäsk <menuchoice
+><guimenu
+>Toimingud</guimenu
+> <guimenuitem
+>Peata esitus</guimenuitem
+></menuchoice
+> või tee hiire <mousebutton
+>parema</mousebutton
+> nupuga klõps süsteemisalve ikoonil ja vali kontekstimenüüst <menuchoice
+><guimenuitem
+>Peata esitus</guimenuitem
+></menuchoice
+>. Soovi korral võid sellele toimingule määata globaalse kiirklahvi.</para>
+</listitem>
+
+<listitem>
+<para
+>Vali <guilabel
+>Helitugevus</guilabel
+> ja kasuta liugurit määramaks, kui vali peab helifail esitamisel olema.</para>
+</listitem>
+
+<listitem>
+<para
+>Soovi korral saab lasta helil tugevneda. See tähendab, et helifaili hakatakse mängima teatud helitugevusega, mis muutub järk-järgult, kuni saavutab määratud aja jooksul lõpliku helitugevuse. Lõplik helitugevus on see, mille määrasid valikuga <guilabel
+>Helitugevus</guilabel
+>. Tugevnemise võimaldamiseks märgi <guilabel
+>Tugevnemine</guilabel
+>, sisesta sekundites <guilabel
+>tugevnemise aeg</guilabel
+> ning määra liuguriga <guilabel
+>Algne helitugevus</guilabel
+>.</para>
+</listitem>
+</itemizedlist>
+</sect3>
+</sect2>
+
+<sect2>
+<title
+>Edasilükkamine</title>
+
+<para
+>Kui häire on korduv ja viimasel näitamisel edasi lükatud, siis näitab sektsioon <guilabel
+>Edasilükatud häire</guilabel
+> aega, millele häire on edasi lükatud. Klõps nupul <guibutton
+>Muuda...</guibutton
+> avab dialoogi, kus saab edasilükkamise aega muuta või selle üldse tühistada.</para>
+
+</sect2>
+
+<sect2>
+<title
+>Aeg</title>
+
+<para
+>Sektsioonis <guilabel
+>Aeg</guilabel
+> saab</para>
+
+<itemizedlist>
+<listitem>
+<para
+>valikuga <guilabel
+>Kuupäeval/kellaajal</guilabel
+> määrata kuupäeva ja kellaaja, mil häire käivitatakse. Kui märkida <guilabel
+>Suvaline aeg</guilabel
+>, saab määrata ka ainult kuupäeva: sel juhul näidatakse häiret tol kuupäeval esimesel võimalusel või pärast määratud algusaega (selle määramist kirjeldab osa <link linkend="preferences-general"
+>&kalarm;i seadistamine</link
+>).</para>
+
+<para
+>Mittekorduva häire korral peab sisestatav kuupäev/kellaaeg olema tulevikus või kui sisestada ainult kuupäev, siis mitte varasem kui käesolev päev. Korduva häire korral sellist piirangut pole, sest sellisel juhul rakendatakse kuupäeva/kellaaega automaatselt esimesel sobival käesolevale hetkele järgneval ajal.</para>
+</listitem>
+
+<listitem>
+<para
+><guilabel
+>Praegusest ajast alates</guilabel
+> võimaldab määrata, millal pärast praegust hetke (tundides ja minutites) tuleks häire käivitada.</para>
+</listitem>
+</itemizedlist>
+
+<para
+>Soovi korral võib valida häire käivitamiseks ajavööndi. Seda kasutatakse kõigi antud häirega seotud kuupäevade ja kellaaegade puhul, kaasa arvatud kordumine ja erandid. Tavaliselt ei ole mõttekas ajavööndit muutma hakata, kui selleks ei ole just head põhjust.</para>
+
+<para
+>Ajavööndi valikuid näidatakse ainult siis, kui oled valinud ajavööndi, mis erineb vaikimisi ajavööndist, mis on määratud <link linkend="preferences-time"
+>seadistustedialoogis</link
+>, või klõpsad nupule <guibutton
+>Ajavöönd...</guibutton
+></para>
+
+<itemizedlist>
+<listitem>
+<para
+>Vali liitkastis vajalik ajavöönd. Uue häire loomisel seisab seal esialgu <link linkend="preferences-time"
+>seadistustedialoogis</link
+> valitud ajavöönd, milleks on sinu arvuti ajavöönd, kui sa seda just muutnud pole.</para>
+</listitem>
+
+<listitem>
+<para
+>Märgi kast <guilabel
+>Ajavööndit ei arvestata</guilabel
+>, kui soovid ajavööndi asemel kasutada kohaliku arvuti aega (seda, millel &kalarm; parajasti töötab).</para>
+
+<warning
+><para
+>Seda ei ole soovitatav valida, kui häire kordumine on määratud tundide ja minutitega: sellisel juhul võib häire suve/talveaja muutumisest tingituna käivituda ebasobival ajal.</para
+></warning>
+</listitem>
+</itemizedlist>
+
+</sect2>
+
+<sect2>
+<title
+>Meeldetuletus</title>
+
+<para
+>Kasti <guilabel
+>Meeldetuletus</guilabel
+> märkimisel saab lasta näidata meeldetuletust enne või pärast häiret ja selle kordusi (kui neid on). Seda, kui kaua enne või pärast häiret meeldetuletust näidatakse, saab määrata kohe kasti kõrval. Pane tähele, et kui häire on korduv, siis meeldetuletuse perioodi tavaliselt piiratakse, nii et see oleks väiksem kui kordumise või alamkordumise intervall.</para>
+
+<note
+><para
+>Meeldetuletusi ei näidata korduste alamkorduste puhul. Meeldetuletusi näidatakse ainult häire iga põhikorduse puhul.</para
+></note>
+
+<para
+>Korduva häire korral märgi ära kast <guilabel
+>Meeldetuletus ainult häire esimesel käivitamisel</guilabel
+>, kui soovid, et meeldetuletust näidataks ainult häire esmakordsel kasutamisel. Kui kast on märgitud ja tegemist on eelseisva meeldetuletusega, ei kehti meeldetuletuse perioodile tavapärane piirang, mille kohaselt selle periood peaks olema väiksem kui kordumise või alamkordumise intervall.</para>
+
+
+</sect2>
+
+<sect2>
+<title
+>Katkestamine</title>
+
+<para
+>Katkestamisvalikud lubavad määrata, mida võetakse häirega ette pärast selle käivitamise aja möödumist:</para>
+
+<itemizedlist>
+<listitem>
+<para
+><guilabel
+>Tähtaja möödumisel häire katkestatakse</guilabel
+> võimaldab määrata, mis juhtub siis, kui häiret ei saa ettenähtud ajal käivitada.</para>
+
+<para
+>Kasti märkimisel katkestatakse häire, kui seda ei õnnestu käivitada määratud aja jooksul pärast käivitamisaega. Tähtaja saab määrata valikutega, mis ilmuvad siis, kui kasti märgistad. Kui näiteks määrad tähtajaks 1 tunni, käivitatakse häire pärast käivitamisaja saabumist esimesel võimalusel järgneva tunni jooksul, aga kui seda selle tunni jooksul ei õnnestu käivitada, häire tühistatakse.</para>
+
+<note
+><para
+>Ainult kuupäevaga määratud häirete korral, &ie; häirete puhul, mille korral on valitud <guilabel
+>Suvaline aeg</guilabel
+>, arvutatakse tähtaega vaikimisi kehtivast päevaalgusest.</para
+></note>
+
+<para
+>Kui jätta kast märkimata, käivitatakse häire pärast käivitamisaja möödumist esimesel võimalusel alati sõltumata sellest, kui palju aega on möödunud.</para>
+
+<note
+><para
+>Häire on võimalik käivitada ainult siis, kui oled end sisse loginud ja kui nii X kui ka &kalarm; töötavad.</para
+></note>
+</listitem>
+
+<listitem>
+<para
+>Valiku <guilabel
+>Akna automaatne sulgemine pärast seda aega</guilabel
+> märkimisel suletakse häireaken automaatselt pärast määratud tähtaja möödumist.</para>
+</listitem>
+</itemizedlist>
+
+</sect2>
+
+<sect2>
+<title
+>Kordamine</title>
+
+<para
+>Kaardil <guilabel
+>Kordamine</guilabel
+> saab määrata, kas häiret korratakse.</para>
+
+<note
+><para
+>Häire kordumise põhimalli näidatakse kaardil <guilabel
+>Kordamine</guilabel
+>. Seal on esmalt näha kordamise intervall, seejärel aga kordamise intervall, mis on määratud nupuga <guibutton
+>Alamkordus</guibutton
+>.</para
+></note>
+
+<para
+>Sektsioonis <guilabel
+>Kordamise reegel</guilabel
+> saab määrata kordamiste tüübi või ajalise ulatuse:</para>
+
+<itemizedlist>
+<listitem
+><para
+>Häire ühekordseks käivitamiseks vali <guilabel
+>Ei korrata</guilabel
+>.</para
+></listitem>
+
+<listitem
+><para
+>Häire käivitamiseks igakordsel sisselogimisel kuni määratud lõpuni vali <guilabel
+>Sisselogimisel</guilabel
+> (arvesta, et sisselogimisel korratav häire käivitub ka juhul, kui &kalarm;i uuesti käivitad).</para
+></listitem>
+
+<listitem>
+<para
+>Kordamiseks regulaarse ajavahemiku järel vali meelepärane tüüp ning märgi kastis <guilabel
+>Kordumise intervall</guilabel
+> ära, milline hulk vastavaid perioode peab korduste vahele jääma. Näiteks selleks, et häire korduks iga kahe nädala järel, vali <guilabel
+>päeva tagant</guilabel
+> ja sisesta kasti 14 või vali <guilabel
+>nädala tagant</guilabel
+> ja kirjuta kasti 2. Vastavalt valitud perioodile saab kasutada ka lisavalikuid:</para>
+
+<itemizedlist>
+<listitem>
+<para
+>nädalase vahe korral saab valida, millisel nädalapäeval peaks häire käivituma.</para>
+</listitem>
+
+<listitem>
+<para
+>kuise vahe korral saab valida kas konkreetse kuupäeva või määratud nädalapäeva (&eg; teine teisipäev).</para>
+</listitem>
+
+<listitem>
+<para
+>aastase vahe korral saab valida kas konkreetse kuupäeva või määratud kuu päeva (&eg; mai viimane laupäev). Vali ühtlasi kõik kuud, millal soovid häire käivitada.</para>
+
+<para
+>Kui oled seadnud aastase kordumise 29. veebruarile, saab määrata, kuidas käsitletakse selliseid häireid juhul, kui tegemist ei ole liigaastaga. Selleks on mõeldud valik <guilabel
+>29. veebruari häire mitteliigaastal</guilabel
+>:</para>
+
+<itemizedlist>
+<listitem
+><para
+><guilabel
+>Puudub</guilabel
+>: häire käivitatakse liigaastal 29. veebruaril, muudel aastatel seda ei käivitatagi.</para>
+</listitem>
+
+<listitem
+><para
+><guilabel
+>28. veebruar</guilabel
+>: häire käivitatakse liigaastal 29. ning muudel aastatel 28. veebruaril.</para>
+</listitem>
+
+<listitem
+><para
+><guilabel
+>1. märts</guilabel
+>: häire käivitatakse liigaastal 29. veebruaril ning muudel aastatel 1. märtsil.</para>
+</listitem>
+</itemizedlist>
+</listitem>
+</itemizedlist>
+
+<tip
+><para
+>Häire käivitamiseks ainult teatud nädalapäevadel vali nädalane vahe ja märgi ära kõik vajalikud nädalapäevad.</para
+></tip>
+
+</listitem>
+</itemizedlist>
+
+<para
+>Sektsioonis <guilabel
+>Kordamise lõpetamine</guilabel
+> saab määrata kordamiste ajalise ulatuse:</para>
+
+<itemizedlist>
+<listitem
+><para
+><guilabel
+>ei lõpegi</guilabel
+> tähendab kordamist igavesti.</para
+></listitem>
+
+<listitem
+><para
+><guilabel
+>lõpp saabub pärast</guilabel
+> lubab määrata korduste koguarvu.</para
+></listitem>
+
+<listitem
+><para
+><guilabel
+>lõpp saabub</guilabel
+> lubab määrata kuupäeva/aja,millal häiret viimane kord korratakse. Pane tähele, et siin kasutatakse sama ajavööndit nagu häire algusaja puhul.</para>
+
+<note
+><para
+>Algus- ja lõpuaeg määrab viimase põhikorduse aja, aga ei piira alamkordusi. Kui viimased on määratud, käivitatakse nad täiesti loomulikult ka pärast viimast põhikordust sõltumata lõpuajast.</para
+></note>
+</listitem>
+</itemizedlist>
+
+<para
+>Rühmakastis <guilabel
+>Erandid</guilabel
+> saab kordumisest välistada teatavad kuupäevad või kellaajad. Pane tähele, et lihtsas häire redigeerimise dialoogis neid valikuid näha ei ole - kui soovid neid näha, klõpsa nupule <guibutton
+>Rohkem valikuid</guibutton
+>.</para>
+
+<itemizedlist>
+<listitem>
+<para
+>Erandite (&ie; väljajäetud kuupäevade/aegade) nimekirja näidatakse vasakul. Uue erandi lisamiseks määra kuupäev paremal ja klõpsa nupule <guibutton
+>Lisa</guibutton
+>. Erandi muutmiseks vali see nimekirjas, määra paremal uus kuupäev ja klõpsa nupule <guibutton
+>Muuda</guibutton
+>. Erandi kustutamiseks vali see nimekirjas ja klõpsa nupule <guibutton
+>Kustuta</guibutton
+>.</para>
+</listitem>
+
+<listitem>
+<para
+>Häire käivitamist võib piirata, kui märkida ära kast <guilabel
+>Välja arvatud puhkepäevad</guilabel
+>. See ei muuda midagi häire ajastamises, vaid ainult jätab selle käivitamata, kui käivitamise aeg peaks sattuma puhkepäevale. Oma riigis või piirkonnas kehtivad puhkepäevad saab kindlaks määrata <link linkend="preferences-time"
+>seadistustedialoogis</link
+>.</para>
+</listitem>
+
+<listitem>
+<para
+>Samuti saab häirete käivitamist piirata, kui märkida ära kast <guilabel
+>Ainult tööajal</guilabel
+>. See ei muuda midagi häire ajastamises, vaid ainult jätab selle käivitamata, kui käivitamise aeg peaks sattuma väljapoole tööaega. Tööpäevad ja -tunnid saab kindlaks määrata <link linkend="preferences-time"
+>seadistustedialoogis</link
+>.</para>
+</listitem>
+</itemizedlist>
+
+<sect3>
+<title
+>Alamkordus</title>
+
+<para
+>Nupu <guibutton
+>Alamkordus</guibutton
+> abil saab tekitada kordamisi kordamiste sees. Sellisel juhul ei käivitata häireid ajal, mida määrab kaart <guilabel
+>Kordamine</guilabel
+>, mitte ühekordselt, vaid korduvalt vastavalt intervallile, mis on määratud nupuga <guibutton
+>Alamkordus</guibutton
+>. Kui näiteks soovid luua häiret, mis kordub igal neljapäeval lõunast kella kuueni õhtul, võid kaardil <guilabel
+>Kordamine</guilabel
+> määrata häire kordamise iga nädala neljapäeval kell 12:00 ning lihtsa korduse dialoogis määrata intervalli 1 tund ja kordamise arvuks 7 või kestvuseks 6 tundi.</para>
+
+<para
+>Alamkorduse dialoogis, mille saab avada klõpsuga nupule <guibutton
+>Alamkordus</guibutton
+>, tuleb kordamise sisselülitamiseks märkida kast <guilabel
+>Kordumise intervall</guilabel
+>. Kui <guilabel
+>Kordumise intervall</guilabel
+> on märgitud, saab kordamise seadistada järgmiselt:</para>
+
+<itemizedlist>
+<listitem
+><para
+>Määra kordamistevaheline intervall kasti <guilabel
+>Kordumise intervall</guilabel
+> kõrval olevate elementidega. Vali vajalik ajaühik (&eg; <guilabel
+>päevad</guilabel
+>) ja seejärel ühiku arv.</para>
+</listitem>
+
+<listitem
+><para
+>Määra kas kordamiste arv või kestus:</para>
+
+<itemizedlist>
+<listitem
+><para
+><guilabel
+>Korduste arv</guilabel
+> võimaldab määrata, mitu korda häiret pärast põhikordust käivitatakse. Kui näiteks soovid, et häiret käivitataks pärast iga põhikordust veel 3 korral, sisestagi siia 3.</para>
+</listitem>
+
+<listitem
+><para
+><guilabel
+>Kestus</guilabel
+> võimaldab määrata aja, mille jooksul häiret korratakse. See ei pea täpselt ühilduma kordamise intervalliga: kui klõpsad <guibutton
+>OK</guibutton
+>, ümardatakse seda vajaduse korral intervallile vastavaks.</para>
+</listitem>
+</itemizedlist>
+</listitem>
+</itemizedlist>
+
+<note
+><para
+>Ühe ja sama häire alamkorduste kattumise vältimiseks on alamkorduste kestus piiratud: see peab olema väiksem kui põhikorduste pikim intervall. Iga kord, kui põhikorduses määratud häire aktiveerub, katkestatakse automaatselt kõik häire eelmisest kordusest kehtima jäänud aktiivsed alamkordused.</para
+></note>
+
+</sect3>
+</sect2>
+
+<sect2>
+<title
+>Muud valikud</title>
+
+<para
+>Kast <guilabel
+>Kinnituse küsimine</guilabel
+> lubab määrata, kas häireteate akna sulgemisel küsitakse sinu käest kinnitust. See võib olla kasulik näiteks häirete juhuslike sulgemiste vastu.</para>
+
+<para
+>Kasti <guilabel
+>Näitamine &korganizer;is</guilabel
+> märkimisel lisatakse häire &korganizer;i aktiivsesse kalendrisse, kus seda näidatakse ilma häireta sündmusena. See võimaldab pidada häiretel silma peal &korganizer;i abil ja kasutada samas kõiki &kalarm;i funktsioone.</para>
+
+<note
+><para
+>Kui hiljem muudad sellist häiret &kalarm;is või selle seal kustutad, muudetakse või kustutatakse vastav sündmus ka &korganizer;is. Kui aga muudad sündmust &korganizer;is, ei mõjuta see häiret &kalarm;is.</para
+></note>
+
+<para
+>Klõpsa nupule <guibutton
+>Laadi mall</guibutton
+> ja vali eelnevalt määratud võimalustega mall, mida kirjeldatakse osas <link linkend="create-edit"
+>Häirete loomine ja muutmine</link
+>. </para>
+
+<para
+>Häire testimiseks klõpsa nupule <guibutton
+>Proovi</guibutton
+>. See käivitab häire täpselt nagu tavalisel käivitamisel. Helihäire korral vajuta helifaili esitamise peatamiseks teistki korda nupule <guibutton
+>Proovi</guibutton
+>.</para>
+
+<para
+>Kui kõik üksikasjad on soovikohaselt paika pandud, klõpsa nupule <guibutton
+>OK</guibutton
+>, mis lisab häire nimekirja. Pane tähele, et kui muudad olemasolevat häiret, on nupp <guibutton
+>OK</guibutton
+> mitteaktiivne, kuni oled teinud kas või ühe muudatuse.</para>
+
+</sect2>
+</sect1>
+
+<sect1 id="message-window">
+<title
+>Häireteate aken</title>
+
+<para
+>Kui häire määratud aeg kätte jõuab, näidatakse seda igal &kde; töölaual ning seda ei saa varjata tavalise aknaga, mis tagab, et sa kindlasti seda märkad. Teateaken näitab aega, millal häire pidi käivituma, nii et sa võid seda näha ka juhul, kui oled arvuti juurde naasnud pärast mõningast eemalolekut. Kui häire käivitamine on ajastatud sinu arvuti omast erineva ajavööndi peale, näidatakse ka ajavööndit. (Meeldetuletuste korral on küll näidatav kuupäev/aeg häire toimumise või kordumise, mitte meeldetuletuse enda aeg, ning ka akna tiitliribal seisab <quote
+>Meeldetuletus</quote
+>.)</para>
+
+<para
+>Häireteate aknad jäävad nähtavale seni, kuni sa oled neile reageerinud, kui just pole märgitud valik <guilabel
+>Akna automaatne sulgemine pärast seda aega</guilabel
+> <link linkend="alarm-edit-dlg"
+>häire redigeerimise dialoogis</link
+>. Korduva häire korral ilmub juhul, kui eelmise häirega käivitunud aken on jäänud sulgemata, seesama aken uuesti. Nii välditakse arvukate ühesuguste teadete ilmumist ekraanile, kui sa mingil põhjusel ei soovi või ei saa teate nägemist kinnitada selle ilmumisel.</para>
+
+<para
+>Häireteate aken pakub vastavalt häire seadistustele järgmisi võimalusi:</para>
+
+<itemizedlist>
+<listitem>
+<para
+>Häire nägemist saab kinnitada klõpsuga nupule <guibutton
+>Sulge</guibutton
+>. See sulgeb akna (pärast kinnituse küsimist, kui märgitud on võimalus <guilabel
+>Häire kustutamisel küsitakse kinnitust</guilabel
+>).</para>
+</listitem>
+
+<listitem>
+<para
+>Häiret saab muuta klõpsuga nupule <guibutton
+>Muuda...</guibutton
+> See avab <link linkend="alarm-edit-dlg"
+>häire redigeerimise dialoogi</link
+>.</para>
+</listitem>
+
+<listitem>
+<para
+>Häire edasilükkamise võimalusi saab valida klõpsuga nupule <guibutton
+>Lükka edasi</guibutton
+>. Seejärel vali <guilabel
+>Lükka edasi kuupäevale/ajale</guilabel
+> ja sisesta kuupäev ning aeg, millal teadet uuesti tuleks näidata, või <guilabel
+>Lükka edasi ajavahemiku võrra</guilabel
+> ja sisesta, mitme tunni ja minuti võrra tuleks teate näitamist edasi lükata. Seejärel klõpsa häireteate edasilükkamiseks ja akna sulgemiseks nupule <guibutton
+>OK</guibutton
+>.</para>
+
+<note
+><para
+>Aeg, millele häire edasi lükatakse, peab olema varasem kui häire järgmine kordumine või meeldetuletus. Seepärast ei saa nuppu <guibutton
+>Lükka edasi</guibutton
+> häireteate aknas ja nuppu <guibutton
+>OK</guibutton
+> edasilükkamise dialoogis kasutada, kui häire järgmise korduseni või meeldetuletuseni on jäänud vähem kui minut.</para>
+<para
+>Pane tähele, et kui meeldetuletus on määratud <emphasis
+>pärast</emphasis
+> häiret, <emphasis
+>on võimalik</emphasis
+> häiret edasi lükata hilisemale ajale kui meeldetuletus. Sel juhul meeldetuletust lihtsalt ei arvestata.</para
+></note>
+
+<note
+><para
+>Nupp <guibutton
+>Lükka edasi</guibutton
+> ei ilmu nende häirete korral, mida näidatakse sisselogimisel võimaluse <guilabel
+>Korratakse sisselogimisel</guilabel
+> valimise tõttu.</para
+></note>
+</listitem>
+
+<listitem>
+<para
+>Nupp, millel on kujutatud <quote
+>mängimise lõpetamise</quote
+> sümbol, lubab lõpetada häirele määratud helifaili esitamise.</para>
+</listitem>
+
+<listitem>
+<para
+>Kui häireteade on loodud kirja &kmail;ist lohistades, saab kirja &kmail;is ka otsekohe näha klõpsuga &kmail;i ikooniga nupule. See valib kirja &kmail;is ja tõstab selle esile.</para>
+
+<warning
+><para
+>&kmail;i indeksi regenereerimisel läheb link kirjale &kmail;is kaotsi.</para
+></warning>
+</listitem>
+
+<listitem>
+<para
+>Nupp, millel on kujutatud <guiicon
+>&kalarm;</guiicon
+>i ikoon, pakub mugava võimaluse &kalarm; aktiveerida.</para>
+</listitem>
+</itemizedlist>
+
+<para
+><link linkend="preferences-view"
+>Seadistustedialoogis</link
+> saab valida, millist kahest võimalikust häireteate akna kuvamise viisist kasutada:</para>
+
+<itemizedlist>
+<listitem>
+<para
+>Tavalise akna korral võtab see ilmudes fookuse ka klaviatuuri jaoks, nii et kui töötad parajasti mõnes muus aknas, siis seal enam klahvile vajutamine ei toimi.</para>
+</listitem>
+
+<listitem>
+<para
+>Niinimetatud mittemodaalse akna korral häireteade küll ilmub, kuid klaviatuuri fookus ei muutu ning mõnes muus aknas töötamise korral võid seal oma tegevust jätkata. Selles režiimis ei ole aga aknal ka tiitliriba, mistõttu seda ei saa liigutada.</para>
+</listitem>
+</itemizedlist>
+
+<note
+><para
+>Kui häiret näidatakse täisekraanirežiimis rakenduse peal, on see sõltumata seadistustedialoogis määratust alati mittemodaalne. Selle põhjuseks on aknasüsteemi enda piirangud.</para
+></note>
+
+<sect2>
+<title
+>Häireteate akna asukoht</title>
+
+<para
+><link linkend="preferences-view"
+>Seadistustedialoogis</link
+> saab valida, millist kahest võimalikust häireteate akna asukoha valimise viisist kasutada:</para>
+
+<itemizedlist>
+<listitem>
+<para
+>Aknaid kuvatakse hiirekursori asukohast võimalikult kaugel. See vähendab sinu töövoo rikkumise võimalust, aga ka häire juhusliku kinnitamise võimalust.</para>
+</listitem>
+
+<listitem>
+<para
+>Aknaid kuvatakse ekraani keskel. Häire juhusliku kinnitamise võimaluse vähendamiseks on akna nupud esialgu mittekasutatavad ning muutuvad reageerimisvõimeliseks alles pärast määratud viivitust.</para>
+</listitem>
+</itemizedlist>
+
+<para
+>Kui lased kuvada mitut häireteate akent või veateadet, võid lasta aknad jaotada ekraanil, et nad oleks kõik nähtavad, või siis rühmitada nad kõik ekraani vasakusse serva. Selleks saab kasutada menüükäsku <menuchoice
+><guimenu
+>Vaade</guimenu
+><guimenuitem
+>Aseta aknad laiali</guimenuitem
+></menuchoice
+>. Soovi korral võib sellele käsule määrata ka kiirklahvi.</para>
+
+</sect2>
+</sect1>
+
+<sect1 id="system-tray">
+<title
+>Süsteemisalve ikoon</title>
+
+<para
+>&kalarm; on võimalik panna tööle ikoonina süsteemses salves. See ikoon võimaldab üheainsa klõpsuga aktiveerida &kalarm;i ning lubab häire jälgimist nii juhtida kui vaadata selle olekut. Tavaline &kalarm;i ikoon näitab, et häireid jälgitakse, hallikas ikoon aga osutab, et alarme ei jälgita. Kui mõned häired on keelatud, seisab ikooni peal väike rist.</para>
+
+<para
+>&kalarm;i süsteemisalve ikoon peidetakse vaikimisi automaatselt, kui järgmise 24 tunni jooksul pole ühtegi häiret. Automaatse peitmise ajapiirangut saab muuta, samuti saab lasta süsteemisalve ikooni alati näidata. Kasuta selleks <link linkend="preferences-view"
+>seadistustedialoogi</link
+>. Ikooni nägemiseks, kui see on automaatselt peidetud, klõpsa süsteemisalves noolele, mis näitab peidetud ikoone.</para>
+
+<para
+>Kui jätad hiirekursori mõneks hetkeks süsteemisalve ikooni kohale, näidatakse kohtspikrina järgmise 24 tunni jooksul käivitatavaid häireteateid või vähemalt neist esimesi. Selle võimaluse saab ka välja lülitada või näidatavate häirete arvu ja vormi muuta <link linkend="preferences-view"
+>seadistustedialoogis</link
+>.</para>
+
+<para
+>Klõps hiire <mousebutton
+>vasaku</mousebutton
+> nupuga süsteemisalve ikoonil lülitab &kalarm;i peaakna näitamist ja peitmist.</para>
+
+<para
+>Klõps hiire <mousebutton
+>parema</mousebutton
+> nupuga süsteemisalve ikoonil avab selle kontekstimenüü:</para>
+
+<variablelist>
+<varlistentry>
+<term
+><menuchoice
+><guimenuitem
+>Luba häired</guimenuitem
+></menuchoice
+></term>
+<listitem
+><para
+><action
+>Häirete jälgimise lubamine või keelamine</action
+></para>
+<para
+>Täpsemat infot leiab osast <link linkend="enable-disable"
+>Häirete lubamine ja keelamine</link
+>.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenuitem
+>Uus häire</guimenuitem
+></menuchoice
+></term>
+<listitem
+><para
+><action
+>Kui oled avanud ilmuvast loendist häiretüübi, avatakse häire redigeerimise dialoog, kus saab luua uue häire.</action
+></para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenuitem
+>Peata esitus</guimenuitem
+></menuchoice
+></term>
+<listitem
+><para
+><action
+>Peatab mängitava helifaili esitamise.</action
+></para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenuitem
+>Aseta aknad laiali</guimenuitem
+></menuchoice
+></term>
+<listitem
+><para
+><action
+>Asetab häire- ja veateateaknad ekraanil laiali või rühmitab nad uuesti.</action
+></para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenuitem
+>&kalarm;i seadistamine...</guimenuitem
+></menuchoice
+></term>
+<listitem
+><para
+><action
+>Avab &kalarm;i seadistustedialoogi.</action
+></para>
+<para
+>Seadistustedialoogi kirjeldatakse osas <link linkend="preferences"
+>&kalarm;i seadistamine</link
+>. Seal on juttu ka &kalarm;i süsteemisalve ikooni puudutavatest valikutest.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenuitem
+>Taasta / Minimeeri</guimenuitem
+></menuchoice
+></term>
+<listitem
+><para
+><action
+>Taastab või minimeerib &kalarm;i peaakna.</action
+></para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenuitem
+>Välju</guimenuitem
+></menuchoice
+></term>
+<listitem
+><para
+><action
+>Sulgeb &kalarm;i süsteemisalve ikooni ja peaakna.</action
+></para>
+<para
+>Lõpetab &kalarm;i töö, kui ei kuvata ühtegi häireteate akent.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+
+<sect2>
+<title
+>&kalarm;i näitamine süsteemisalves</title>
+
+<para
+>&kalarm;i nägemiseks süsteemisalves peab töötama &kde; töölaud või mõni muu sobiv aknahaldur.</para>
+
+<para
+>Vali <menuchoice
+><guimenu
+>Vaade</guimenu
+> <guimenuitem
+>Näitamine süsteemisalves</guimenuitem
+></menuchoice
+>, et näidata &kalarm;i süsteemisalves vastavalt määrangutele, mis on valitud seadistustedialoogi kaardil <link linkend="preferences-view"
+>Vaade</link
+>.</para>
+
+<para
+>&kalarm;i eemaldamiseks süsteemisalvest vali uuesti menüükäsk <menuchoice
+> <guimenu
+>Vaade</guimenu
+><guimenuitem
+>Näita ikooni süsteemisalves</guimenuitem
+></menuchoice
+>.</para>
+
+<para
+>Seda, kas &kalarm;i näidatakse rakenduse käivitamisel süsteemisalves või mitte, saab määrata seadistustedialoogi kaardil <link linkend="preferences-view"
+>Vaade</link
+>.</para>
+</sect2>
+</sect1>
+
+<sect1 id="refreshing">
+<title
+>Häirete uuendamine</title>
+
+<para
+>Väga ebatõenäolisel juhtumil, kui mõni häire ei käivitu ajal, mil ta pidanuks käivituma, saab häireloendit uuendada ja kõik vahelejäänud häired käivituma panna menüükäsuga <menuchoice
+><guimenu
+>Toimingud</guimenu
+><guimenuitem
+>Uuenda häireid</guimenuitem
+></menuchoice
+>. See sunnib &kalarm;i uuesti laadima kõik häirekalendrid.</para>
+
+<para
+>Konkreetse kalendri saab uuesti laadida ja kõiki selle häireloendis sisalduvaid häireid värskendada, kui teha kalendrite loendis kalendril klõps hiire <mousebutton
+>parema</mousebutton
+> nupuga ning valida kontekstimenüüst <menuchoice
+><guimenuitem
+>Laadi uuesti</guimenuitem
+></menuchoice
+>. Täpsemalt kõneleb sellest osa <link linkend="calendars"
+>Häirekalendrid</link
+>.</para>
+
+</sect1>
+
+<sect1 id="enable-disable">
+<title
+>Häirete lubamine ja keelamine</title>
+
+<para
+>Häireid saab lubada ja keelata nii korraga kui ükshaaval:</para>
+
+<itemizedlist>
+<listitem>
+<para
+><quote
+>Häirete jälgimine</quote
+> käib kõigi häirete kohta. Kui see on keelatud, ei käivitata häireid üldse. Kui häirete jälgimine on lubatud (vaikimisi ongi), käivitatakse ettenähtud ajal kõik häired, mida ei ole konkreetselt keelatud.</para>
+
+<para
+>Kui häirete jälgimine uuesti lubada, käivitatakse häired, mis oleks pidanud käivitama ajal, mil häirete jälgimine oli keelatud (kui seda ei takista just mõni tühistamise valik). Teisisõnu tähendab häirete jälgimise keelamine sama, mida &kalarm;i peatamine &ndash; häired lükatakse edasi, kuni see taas sisse lülitatakse.</para>
+</listitem>
+
+<listitem>
+<para
+>Sõltumata häirete jälgimise olekust saab häireid ka ükshaaval lubada või keelata. See tähendab, et konkreetsete häirete lubamise või keelamise olek ei muutu, kui häirete jälgimine keelata ning hiljem uuesti lubada. Kui häirete jälgimise võib lõpetada ka näiteks see, et &kalarm; ei tööta, siis konkreetseid häireid saab keelata ainult menüükäskudega.</para>
+
+<para
+>Kui häire on eraldi uuesti lubatud, ei käivitata seda nüüd, kui seda oleks pidanud käivitama ajal, mil see oli keelatud. Teisisõnu, konkreetse häire keelamine tühistab kõik selle esitamised seni, kuni see on taas sisse lülitatud.</para>
+
+<para
+>Iga häire olekut näitab selle värv häirete nimekirjas (värvi saab muuta seadistustedialoogi kaardil <link linkend="preferences-view"
+>Vaade</link
+>).</para>
+</listitem>
+</itemizedlist>
+
+<para
+>Häire käivitamiseks peab see olema lubatud, samuti peab olema lubatud häirete jälgimine.</para>
+
+<sect2>
+<title
+>Häire jälgimise lubamine</title>
+
+<para
+>Häire jälgimiseks peab &kalarm; töötama. Kui &kalarm; töötab, käivitub see automaatselt ka igal järgmisel sisselogimisel, kui see ei ole spetsiaalselt keelatud seadistustedialoogi kaardil <link linkend="preferences-general"
+>Üldine</link
+>.</para>
+
+<para
+>Kui häire jälgimine on parajasti keelatud, siis saab häired lubada järgmiselt:</para>
+
+<itemizedlist>
+<listitem>
+<para
+>vali menüükäsk <menuchoice
+><guimenu
+>Toimingud</guimenu
+> <guimenuitem
+>Luba häired</guimenuitem
+></menuchoice
+>.</para>
+</listitem>
+
+<listitem>
+<para
+>klõpsa hiire <mousebutton
+>parema</mousebutton
+> nupuga süsteemisalve ikoonil ja vali kontekstimenüüst <menuchoice
+><guimenuitem
+>Luba häired</guimenuitem
+></menuchoice
+>.</para>
+</listitem>
+</itemizedlist>
+
+</sect2>
+
+<sect2>
+<title
+>Häire jälgimise keelamine</title>
+
+<para
+>Häire jälgimist saab ajutiselt keelata ja nii takistada &kalarm;il näitamast häireid seni, kuni need on taas lubatud või kuni &ndash; eeldusel, et &kalarm; on seadistatud käivituma sisselogimisel &ndash; sa uuesti sisse logid.</para>
+
+<itemizedlist>
+<listitem>
+<para
+>Vali uuesti menüükäsk <menuchoice
+><guimenu
+>Toimingud</guimenu
+> <guimenuitem
+>Luba häired</guimenuitem
+></menuchoice
+>.</para>
+</listitem>
+
+<listitem>
+<para
+>Klõpsa hiire <mousebutton
+>parema</mousebutton
+> nupuga süsteemisalve ikoonil ja vali kontekstimenüüst uuesti <menuchoice
+><guimenuitem
+>Luba häired</guimenuitem
+></menuchoice
+>.</para>
+</listitem>
+
+<listitem>
+<para
+>Käivita &kalarm; käsureavõtmega <option
+>--disable</option
+>.</para>
+</listitem>
+
+<listitem>
+<para
+>Peata &kalarm;, nagu seda kirjeldab osa <link linkend="quitting"
+>&kalarm;i töö lõpetamine</link
+>.</para>
+</listitem>
+</itemizedlist>
+
+<para
+>Häired võib püsivalt keelata, kui mitte lubada &kalarm;il käivituda sisselogimisel (seda saab määrata seadistustedialoogi kaardil <link linkend="preferences-general"
+>Üldine</link
+>).</para>
+
+</sect2>
+
+<sect2>
+<title
+>Konkreetsete häirete lubamine ja keelamine</title>
+
+<para
+>Konkreetsete häirete lubamiseks, mis on parajasti keelatud, talita järgmiselt:</para>
+
+<itemizedlist>
+<listitem>
+<para
+>vali häire/häired klõpsuga selle/nende nimel nimekirjas. Seejärel vali menüükäsk <menuchoice
+> <guimenu
+>Toimingud</guimenu
+><guimenuitem
+>Luba</guimenuitem
+> </menuchoice
+>.</para>
+</listitem>
+
+<listitem>
+<para
+>klõpsa hiire <mousebutton
+>parema</mousebutton
+> nupuga häire nimel loendis ja vali ilmuvast menüüst <menuchoice
+><guimenuitem
+>Luba</guimenuitem
+></menuchoice
+>.</para>
+</listitem>
+</itemizedlist>
+
+<para
+>Konkreetsete häirete keelamiseks, mis on parajasti lubatud, talita järgmiselt:</para>
+
+<itemizedlist>
+<listitem>
+<para
+>vali häire/häired klõpsuga selle/nende nimel nimekirjas. Seejärel vali menüükäsk <menuchoice
+> <guimenu
+>Toimingud</guimenu
+><guimenuitem
+>Keela</guimenuitem
+> </menuchoice
+>.</para>
+</listitem>
+
+<listitem>
+<para
+>klõpsa hiire <mousebutton
+>parema</mousebutton
+> nupuga häire nimel loendis ja vali ilmuvast menüüst <menuchoice
+><guimenuitem
+>Keela</guimenuitem
+></menuchoice
+>.</para>
+</listitem>
+</itemizedlist>
+
+</sect2>
+</sect1>
+
+<sect1 id="wake-suspend">
+<title
+>Ärkamine uneseisundist</title>
+
+<para
+>Valitud häiret on võimalik panna arvutit äratama uneseisundist, kui häire käivitub, niisiis saab häiretoiming toimuda isegi siis, kui süsteem on seisatud. Seda võimalust saab seadistada dialoogiga, mille avab menüükäsk <menuchoice
+><guimenu
+>Toimingud</guimenu
+> <guimenuitem
+>Uneseisundist ärkamine</guimenuitem
+></menuchoice
+>. Dialoogis saab ärkamist uneseisundist määrata, likvideerida või lihtsalt näha.</para>
+
+<para
+>Uneseisundist ärkamise kasutamine nõuab administraatori õigusi. Uneseisundist ärkamise häiret luues või eemaldades küsitakse sinu käest administraatori parooli.</para>
+
+<note
+><para
+>Mõned arvutid, eriti vanemad, ei toeta uneseisundist ärkamise funktsiooni ning mõned toetavad ärkamisaja määramist ainult kuni 24 tunni peale. Samuti võib leiduda piiranguid, millisest uneseisundi liigist on võimalik ärgata ja millisest mitte. Mõttekas oleks enne selle võimaluse jäädavat kasutuselevõtmist kontrollida testhäiretega oma süsteemi võimalusi.</para
+></note>
+
+<warning
+><para
+>Arvuti saab ära korraga ära kasutada ainult üht uneseisundist ärkamist. Kui kasutad seda funktsiooni &kalarm;is, tuleb kontrollida, et see ei läheks vastuollu mõne teise rakendusega, mis samuti kasutab uneseisundist ärkamise funktsiooni. Kui mõni rakendus ajastab või eemaldab uneseisundist ärkamise, tühistab see alati kõik eelnevad uneseisundist ärkamise määratlused, olgu need kehtestatud &kalarm;i või mõne muu rakendusega.</para
+></warning>
+
+<para
+>Uneseisundist ärkamise dialoogi kasutatakse koostääs &kalarm;i peaakna häirete nimekirjaga.</para>
+
+<itemizedlist>
+<listitem>
+<para
+><guibutton
+>Kasuta esiletõstetud häiret</guibutton
+>: sellega määratakse häirete nimekirjas parajasti esile tõstetud häire uneseisundist ärkamise häireks. Nagu eespool mainitud, kõik muud uneseisundist ärkamised sellega tühistatakse. Nuppu saab kasutada ainult siis, kui esile on tõstetud täpselt üks häire.</para>
+</listitem>
+
+<listitem>
+<para
+><guibutton
+>Loobu uneseisundist ärkamisest</guibutton
+>: see katkestab kõik olemasolevad uneseisundist ärkamised (nagu eespool mainitud, sõltumata sellest, kas selle on määranud &kalarm; või mõni muu rakendus). Pane tähele, et sellega loobutakse ainult häirega seotud ärkamisfunktsioonist, häire ise jääb alles ja toimib nagu ikka.</para>
+</listitem>
+
+<listitem>
+<para
+><guibutton
+>Näita aktiivset häiret</guibutton
+>: see tõstab häirete nimekirjas esile aktiivse uneseisundist ärkamise häire, et seda oleks lihtsam leida. Nuppu ei saa kasutada, kui ühtegi uneseisundist ärkamise häiret pole määratud.</para>
+</listitem>
+
+<listitem>
+<para
+><guilabel
+>Minutit arv enne häiret uneseisundist ärkamiseks</guilabel
+>: see võimaldab soovi korral tagada, et süsteemil on aega end täielikult taastada, enne kui häire käivitub, et see saaks käivituda ettenähtud ajal.</para>
+</listitem>
+</itemizedlist>
+
+</sect1>
+
+<sect1 id="quitting">
+<title
+>&kalarm;i töö lõpetamine</title>
+
+<para
+>&kalarm;i töö lõpetamiseks vali menüükäsk <menuchoice
+><guimenu
+>Fail</guimenu
+> <guimenuitem
+>Välju</guimenuitem
+></menuchoice
+> või süsteemisalve ikooni kontekstimenüüst käsk <menuchoice
+><guimenuitem
+>Välju</guimenuitem
+></menuchoice
+>. Kui süsteemisalves ikooni pole, võib ka sulgeda kõik &kalarm;i aknad.</para>
+
+</sect1>
+</chapter>
+
+<chapter id="preferences">
+<title
+>&kalarm;i seadistamine</title>
+
+<para
+>&kalarm;i tegevuse seadistamiseks, nii et see rahuldaks nii süsteemi kui sind ennast, vali menüükäsk <menuchoice
+><guimenu
+>Seadistused</guimenu
+> <guimenuitem
+>&kalarm;i seadistamine...</guimenuitem
+></menuchoice
+> See avab, nagu nimigi ütleb, seadistustedialoogi.</para>
+
+<sect1 id="preferences-general">
+<title
+>Üldine</title>
+
+<para
+>Kaardil <guilabel
+>Üldine</guilabel
+> saab määrata &kalarm;i üldist käitumist:</para>
+
+<itemizedlist>
+<listitem>
+<para
+><guilabel
+>Käivitamine sisselogimisel</guilabel
+>: &kalarm; käivitatakse kohe &kde; seansi sisselogimise ajal, mis tagab, et &kalarm; töötab sisuliselt kogu aeg, kui sa just käsitsi selle tööd ei lõpeta.</para>
+
+<warning
+><para
+>See valik peaks olema alati märgitud, kui sa just ei kavatse &kalarm;i kasutamisest loobuda.</para
+></warning>
+
+<note
+><para
+>See valik lülitatakse alati automaatselt sisse, kui käivitad &kalarm;i. See tähendab, et kui oled selle valiku välja lülitanud ning soovid ka edaspidi vältida &kalarm;i töölepanekut sisselogimise ajal, tuleb see valik välja lülitada iga kord, kui käivitad &kalarm;i.</para
+></note>
+</listitem>
+
+<listitem>
+<para
+><guilabel
+>Hoiatus enne väljumist</guilabel
+>: kui häired &kalarm;i mittetöötamise ajal välja lülitada, siis selle võimaluse valimisel küsitakse sinu käest alati kinnitust, kui proovid lõpetada &kalarm;i töö süsteemisalve ikooni kontekstimenüü käsuga <menuchoice
+><guimenu
+>Välju</guimenu
+></menuchoice
+>. See väldib häirete juhuslikku väljalülitamist. Turvalisuse kaalutlustel lülitatakse see võimalus alati vaikimisi sisse, kui vahetad töörežiimi.</para>
+</listitem>
+
+<listitem
+><para
+><guilabel
+>Häire kustutamisel küsitakse kinnitust</guilabel
+>: määrab, kas iga kord, kui sulged häireteate, küsitakse sinu käest selle kinnitust.</para>
+</listitem>
+
+<listitem
+><para
+><guilabel
+>Vaikimisi edasilükkamise intervall</guilabel
+>: siin saab määrata vaikimisi intervalli tundides ja minutites, mida näidatakse siis, kui avad edasilükkamise dialoogi. Pane tähele, et kui häire on juba varem edasi lükatud, siis näidatakse edasilükkamise dialoogis algselt aega, mis võrdub viimase edasilükkamise ajaga.</para>
+</listitem>
+
+<listitem
+><para
+><guilabel
+>Käsuhäirete terminal</guilabel
+>: siin saab valida, millist terminali kasutatakse käsuhäirete jaoks, mis käivitatakse terminaliaknas. Mõned levinumad terminalirakendused on juba eelnevalt seadistatud, &eg; <application
+>xterm</application
+> või &konsole;, ehkki siin näidatakse ainult neid, mis on sinu süsteemi paigaldatud. Iga rakenduse korral kasutatavaid tegelikke käske näeb vastavate kirjete kontekstiabis.</para>
+
+<para
+>Kui soovid kasutada mõnda muud rakendust või mõnda nimekirjas olevat teistsuguste võtmetega, vali <guilabel
+>Muu</guilabel
+> ning sisesta käsk, millega terminaliaken välja kutsutakse. Vaikimisi lisatakse häire käsustring sellele, mida sa siia sisestad. Sa võid küll ka ise määrata, kuhu häire käsustring lisatakse, kasutades järgmisi koode:</para>
+
+<variablelist>
+<varlistentry>
+<term
+>%c</term>
+<listitem>
+<para
+>Häire käsustringi kohatäitja.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+>%w</term>
+<listitem>
+<para
+>Häire käsustringi kohatäitja, millele lisatakse <literal
+>sleep</literal
+>.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+>%C</term>
+<listitem>
+<para
+>Luuakse ajutine käsufail, mis sisaldab häire käsustringi, ning see asendab faili käivitamise käsku.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+>%W</term>
+<listitem>
+<para
+>Luuakse ajutine käsufail, mis sisaldab häire käsustringi ja mille lisatakse <literal
+>sleep</literal
+>, ning see asendab faili käivitamise käsku.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+
+<para
+>Käsuhäire käivitamisel seatakse käsustring jutumärkidesse, enne kui lisatakse terminaliakna käsku.</para>
+</listitem>
+
+</itemizedlist>
+</sect1>
+
+<sect1 id="preferences-time">
+<title
+>Aeg ja kuupäev</title>
+
+<para
+>Sektsioonis <guilabel
+>Aeg ja kuupäev</guilabel
+> saab määrata kellaaja ja kuupäevaga seotud asju:</para>
+
+<itemizedlist>
+<listitem
+><para
+><guilabel
+>Ajavöönd</guilabel
+>: siin saab valida ajavööndi. &kalarm; kasutab seda kõigi häirete korral, kuid seda saab ka konkreetsete häirete puhul tühistada.</para>
+</listitem>
+
+<listitem
+><para
+><guilabel
+>Pühade piirkond</guilabel
+>: siin saab valida riigi või piirkonna, mille pühasid kasutatakse. See mõjutab korduvaid häireid, mille korral on valitud pühade väljajätmine.</para>
+</listitem>
+
+<listitem
+><para
+><guilabel
+>Ainult kuupäevaga määratud häirete alguskellaaeg:</guilabel
+>: määrab alguskellaaja ainult kuupäevaga määratud häiretele, &ie; häiretele, mille puhul on valitud võimalus <guilabel
+>Suvaline aeg</guilabel
+>. Määratud kuupäeval käivituvad sellised häired alates alguskellaajast 24 tunni jooksul esimesel võimalusel.</para>
+</listitem>
+
+<listitem
+><para
+>Liitkast <guilabel
+>Töötunnid</guilabel
+> annab võimaluse kindlaks määrata töötunnid, mida läheb vaja, kui <link linkend="alarm-edit-dlg"
+>häire redigeerimise dialoogis</link
+> on kordumise puhul märgitud kast <guilabel
+>Ainult tööajal</guilabel
+>.</para>
+
+<itemizedlist>
+<listitem
+><para
+>Märgi ära kõik tööpäevad.</para>
+</listitem>
+
+<listitem
+><para
+><guilabel
+>Päeva algus</guilabel
+>: siin saab määrata, millal algab iga päev töö.</para>
+</listitem>
+
+<listitem
+><para
+><guilabel
+>Päeva lõpp</guilabel
+>: siin saab määrata, millal lõpeb iga päev töö.</para>
+</listitem>
+</itemizedlist>
+</listitem>
+
+<listitem
+><para
+><guilabel
+>KOrganizeri sündmuse kestus</guilabel
+>: Sisesta sündmuse kestus tundides ja minutites &korganizer;isse kopeeritavate häirete jaoks. Vaikimisi on kestus 0.</para>
+</listitem>
+
+</itemizedlist>
+</sect1>
+
+<sect1 id="preferences-storage">
+<title
+>Ressurss</title>
+
+<para
+>Sektsioonis <guilabel
+>Ressurss</guilabel
+> saab määrata häirete salvestamise ja arhiveerimise valikuid:</para>
+
+<itemizedlist>
+<listitem>
+<para
+><guilabel
+>Uued häired ja mallid</guilabel
+>: siin saab määrata, millisesse kalendrisse salvestada uued ja häiremallid, kui kasutad mitut häirekalendrit:</para>
+
+<itemizedlist>
+<listitem>
+<para
+><guilabel
+>Salvestatakse vaikekalendris</guilabel
+>: uued häired ja häiremallid lisatakse automaatselt vaikimisi häirekalendrisse ilma kinnitust küsimata.</para>
+</listitem>
+
+<listitem>
+<para
+><guilabel
+>Küsitakse, millisesse kalendrisse salvestada</guilabel
+>: kui lood uue häire või häiremalli ja kirjutusõigusega häirekalendreid on rohkem kui üks, päritakse millisesse kalendrisse salvestada. Pane tähele, et kui häire salvestatakse aegumise tõttu, salvestatakse see alati aegunud häirete vaikekalendrisse ilma kinnitust küsimata.</para>
+</listitem>
+</itemizedlist>
+</listitem>
+
+<listitem
+><para
+><guilabel
+>Aegunud häired</guilabel
+>: siinsed valikud puudutavad aegunud häirete salvestamist aegunud häirete vaikekalendrisse.</para>
+
+<itemizedlist>
+<listitem
+><para
+><guilabel
+>Häired jäetakse aegudes alles</guilabel
+>: selle valimisel aegunud häired salvestatakse, mittevalimisel häired pärast nende tähtaja läbisaamist kustutatakse. Pane tähele, et kustutatud häired salvestatakse ainult siis, kui neid on eelnevalt käivitatud. Kui kustutad häire enne selle käivitamist, kustutatakse see täielikult.</para>
+</listitem>
+
+<listitem
+><para
+><guilabel
+>Aegunud häired visatakse minema pärast</guilabel
+>: määrab päevade arvu, mille järel häired pärast nende viimast aktiveerimist kustutatakse.</para>
+</listitem>
+
+<listitem
+><para
+><guibutton
+>Kustuta aegunud häired</guibutton
+>: see nupp kustutab kõik parajasti salvestatud aegunud häired aegunud häirete vaikekalendrist (teisi aegunud häirete kalendreid see ei puuduta, kui need on ühiskasutuses). Sel ei ole mingit mõju häiretele, mis aeguvad alles hiljem: need salvestatakse vastavalt muudele valikutele.</para>
+</listitem>
+</itemizedlist>
+</listitem>
+
+</itemizedlist>
+</sect1>
+
+<sect1 id="preferences-email">
+<title
+>E-post</title>
+
+<para
+>Sektsioonis <guilabel
+>E-post</guilabel
+> saab määrata kirja teel saadetavate häirete saatmise valikuid ja aadresside võimalusi:</para>
+
+<itemizedlist>
+<listitem>
+<para
+><guilabel
+>E-posti rakendus</guilabel
+>: määrab, millist e-posti klienti kasutada häire saatmiseks kirja teel:</para>
+
+<itemizedlist>
+<listitem
+><para
+><guilabel
+>KMail</guilabel
+>: kirja teel saadetava häire käivitamisel lähetatakse kiri &kmail;i vahendusel (mis vajaduse korral esmalt käivitatakse) järgmiselt:</para>
+
+<itemizedlist>
+<listitem
+><para
+>kui &kmail; on versiooniga 1.7 või uuem, saadetakse kiri automaatselt.</para>
+</listitem>
+
+<listitem
+><para
+>kui &kmail; on vanema versiooniga, lisatakse kiri &kmail;i kausta <filename
+>väljuvad</filename
+>, kust selle saab hiljem ära saata.</para>
+</listitem>
+</itemizedlist>
+</listitem>
+
+<listitem
+><para
+><guilabel
+>Sendmail</guilabel
+>: kirja teel saadetava häire käivitamisel läkitatakse kiri automaatselt teele rakenduse &Sendmail; vahendusel. See võimalus toimib ainult siis, kui süsteem on seadistatud kasutama &Sendmail; või sellega ühilduvat rakendust, näiteks <application
+>postfix</application
+> või <application
+>qmail</application
+>.</para>
+</listitem>
+</itemizedlist>
+</listitem>
+
+<listitem>
+<para
+><guilabel
+>Koopia saadetud kirjadest jääb &kmail;i kausta 'saadetud'</guilabel
+>: selle valimisel salvestatakse iga kord, kui käivitatakse e-posti häire, saadetud kirja koopia &kmail;i kausta <filename
+>saadetud</filename
+>.</para>
+
+<note
+><para
+>Seda valikut ei saa kasutada, kui e-posti kliendiks on valitud &kmail;, sest &kmail; teeb seda niigi automaatselt.</para
+></note>
+</listitem>
+
+<listitem>
+<para
+><guilabel
+>Märguanne kirja järjekorda panekul</guilabel
+>: selle valimisel näidatakse märguannet, kui e-posti rakendus paneb kirja teel saadetava häire järjekorda, mitte ei saada seda kohe minema. See on kasulik näiteks juhul, kui kasutad sissehelistamist või kui kiri pannakse ootele &kmail;i kausta <filename
+>väljuvad</filename
+>, millisel juhul võid ette võtta vajalikud sammud, et kirjad ka tegelikult teele läkitataks.</para>
+</listitem>
+
+<listitem>
+<para
+>Vali oma e-posti aadress, mida kasutatakse e-posti häirete saatmisel saatja aadressina:</para>
+
+<itemizedlist>
+<listitem
+><para
+>Vali <guilabel
+>Kellelt</guilabel
+> e-posti aadressi sisestamiseks.</para>
+</listitem>
+
+<listitem
+><para
+>Vali <guilabel
+>Kasutatakse Süsteemi seadistustes määratud aadressi</guilabel
+>, et tarvitada aadressi, mis on määratud kindlaks &kde; Süsteemi seadistustes.</para>
+</listitem>
+
+<listitem
+><para
+>Vali <guilabel
+>Kasutatakse &kmail;i identiteete</guilabel
+>, mis võimaldab e-posti häire seadistamise ajal valida kasutatava &kmail;i identiteedi. Juba seadistatud häirete jaoks kasutatakse selle valiku valimisel &kmail;i vaikeidentiteeti.</para>
+</listitem>
+</itemizedlist>
+</listitem>
+
+<listitem>
+<para
+>Vali e-posti aadress, millega saata endale e-posti häiretest pimekoopia, kui valitud on <guilabel
+>Kiri saadetakse ka iseendale</guilabel
+>:</para>
+
+<itemizedlist>
+<listitem
+><para
+>Vali <guilabel
+>Pimekoopia</guilabel
+> e-posti aadressi sisestamiseks. Kui pimekoopia saadetakse sinu kontole samas arvutis, kus töötab &kalarm;, võid siia sisestada ka lihtsalt oma kasutajanime.</para>
+</listitem>
+
+<listitem
+><para
+>Vali <guilabel
+>Kasutatakse Süsteemi seadistustes määratud aadressi</guilabel
+>, et tarvitada aadressi, mis on määratud kindlaks &kde; Süsteemi seadistustes.</para>
+</listitem>
+</itemizedlist>
+</listitem>
+</itemizedlist>
+</sect1>
+
+<sect1 id="preferences-view">
+<title
+>Vaade</title>
+
+<para
+>Sektsioonis <guilabel
+>Vaade</guilabel
+> saab määrata mõningaid &kalarm;i välimusse puutuvaid valikuid. Kaardil <guilabel
+>Üldine</guilabel
+> leiab järgmised valikud:</para>
+<itemizedlist>
+
+<listitem>
+<para
+><guilabel
+>Näitamine süsteemisalves</guilabel
+>: valimise korral näidatakse &kalarm;i ikooni töötamise ajal süsteemisalves vastavalt valitud valikule:</para>
+
+<itemizedlist>
+<listitem>
+<para
+><guilabel
+>Näidatakse alati</guilabel
+>: süsteemisalve ikooni näidatakse alati.</para>
+</listitem>
+
+<listitem>
+<para
+><guilabel
+>Peidetakse automaatselt, kui pole aktiivseid häireid</guilabel
+>: süsteemisalve ikoon peidetakse, kui aktiivseid häireid ei ole.</para>
+</listitem>
+
+<listitem>
+<para
+><guilabel
+>Peidetakse automaatselt, kui häireid pole määratud ajavahemikus</guilabel
+>: süsteemisalv peidetakse, kui alates määramise hetkest ei ole ühtegi häiret määratud ajaühiku jooksul.</para>
+</listitem>
+</itemizedlist>
+
+<para
+>Kui süsteemisalve ikoon automaatselt peidetakse, saab selle nähtavale tuua süsteemisalve valikuga peidetud ikoonide näitamiseks.</para>
+
+<para
+>Kui <guilabel
+>Näitamine süsteemisalves</guilabel
+> on valitud, siis süsteemisalve ikooni sulgemine suleb kõik &kalarm;i peaaknad ja kui ühtki teadeteakent ei ole nähtaval, lõpetab ka rakenduse töö.</para>
+</listitem>
+
+<listitem>
+<para
+>Liitkastis <guilabel
+>Süsteemisalve kohtspikker</guilabel
+> saab määrata, millist infot näidatakse kohtspikril, mis ilmub, kui hoida hiirekursorit mõne hetke &kalarm;i süsteemse salve ikooni kohal.</para>
+
+<itemizedlist>
+<listitem>
+<para
+><guilabel
+>Järgmise 24 tunni häirete näitamine</guilabel
+>: selle valimisel näidatakse järgmise 24 tunni või vähemalt mõne esimese sellesse vahemikku jääva häire kokkuvõtet.</para>
+</listitem>
+
+<listitem>
+<para
+><guilabel
+>Maks. näidatavate häirete arv</guilabel
+>: selle valimata jätmisel näidatakse kõiki järgmise 24 tunni häireid, valimisel saab määrata, mitut häiret maksimaalselt näidatakse.</para>
+</listitem>
+
+<listitem>
+<para
+><guilabel
+>Häireaja näitamine</guilabel
+>: selle valimisel näidatakse aega, millal iga häire peab käivituma.</para>
+</listitem>
+
+<listitem>
+<para
+><guilabel
+>Häireni jäänud aja näitamine</guilabel
+>: selle valimisel näidatakse, kui palju aega on jäänud iga häire järgmise käivitamiseni. Aega näidatakse tundides ja minutites.</para>
+
+<itemizedlist>
+<listitem>
+<para
+><guilabel
+>Prefiks</guilabel
+>: määrab sümboli või teksti, mida näidatakse häireni jäänud aja korral, et oleks võimalik seda eristada häire enda ajast.</para>
+</listitem>
+</itemizedlist>
+</listitem>
+</itemizedlist>
+</listitem>
+
+<listitem>
+<para
+>Liitkast <guilabel
+>Häirete nimekiri</guilabel
+> võimaldab valida värvid, millega &kalarm;i peaakna häireloendis näidatakse keelatud ja aegunud häireid.</para>
+</listitem>
+</itemizedlist>
+
+<para
+>Kaardil <guilabel
+>Häireteate aknad</guilabel
+> saab määrata häireteadete akende välimust puudutavaid asju.</para>
+
+<itemizedlist>
+<listitem>
+<para
+><guilabel
+>Akende asetamine hiirekursorist kaugele</guilabel
+>: selle valimisel näidatakse häireteate akent hiirekursori asukohast võimalikult kaugel. See vähendab häire juhusliku kinnitamise võimalust kogemata nupule vajutamisega teateakna ilmumisel.</para>
+</listitem>
+
+<listitem>
+<para
+><guilabel
+>Akende asetamine ekraani keskele ja nuppude kasutamise ajutine väljalülitamine</guilabel
+>: selle valimisel näidatakse häireteadete aknaid keset ekraani. Häire juhusliku kinnitamise võimalise vähendamiseks on häireteate akna nupud esialgu mittekasutatavad. Viivituse enne nende toime taastumist saab määrata kerimiskastis <guilabel
+>Nuppude kasutamise viivitus (sek)</guilabel
+>.</para>
+</listitem>
+
+<listitem>
+<para
+><guilabel
+>Teateaknad on tiitliribaga ja alluvad klahvikorraldustele</guilabel
+>: määrab, kas häireteadete aknad on modaalsed või mitte; &ie; kas nad haaravad ilmudes endale ka klaviatuuri fookuse. Täpsemalt vaata osa <link linkend="message-window"
+>Häireteate aken</link
+></para>
+</listitem>
+</itemizedlist>
+</sect1>
+
+<sect1 id="preferences-edit">
+<title
+>Muutmine</title>
+
+<para
+>Sektsioonis <guilabel
+>Muutmine</guilabel
+> saab määrata <link linkend="alarm-edit-dlg"
+>häire redigeerimise dialoogi</link
+> vaikeväärtusi:</para>
+
+<itemizedlist>
+<listitem
+><para
+>Kaardil <guilabel
+>Üldine</guilabel
+> saab määrata kõigile häiretüüpidele kehtivaid valikuid.</para>
+
+<itemizedlist>
+<listitem
+><para
+>Vaikeväärtuse valimine võimalustele <guilabel
+>Näitamine KOrganizeris</guilabel
+> ja <guilabel
+>Tähtaja möödumisel häire katkestatakse</guilabel
+>.</para>
+</listitem>
+
+<listitem
+><para
+>Häirete kordamise vaiketüübi määramine.</para>
+</listitem>
+
+<listitem
+><para
+>Iga-aastaselt 29. veebruarile määratud häirete kohtlemise määramine mitteliigaastatel.</para>
+</listitem>
+</itemizedlist>
+</listitem>
+
+<listitem
+><para
+>Kaardil <guilabel
+>Häiretüübid</guilabel
+> saab määrata konkreetsetele häiretüüpidele kehtivaid vaikuid.</para>
+
+<itemizedlist>
+<listitem>
+<para
+>Näidatavate häirete korral:</para>
+
+<itemizedlist>
+<listitem
+><para
+>Valida vaikeväärtused võimalustele <guilabel
+>Akna automaatne sulgemine pärast seda aega</guilabel
+> ja <guilabel
+>Häire nägemise kinnituse küsimine</guilabel
+>.</para>
+</listitem>
+
+<listitem
+><para
+>Valida meeldetuletuste perioodi vaikeühik.</para>
+</listitem>
+
+<listitem
+><para
+>Valida spetsiaalse häire näitamise vaiketoimingu.</para>
+</listitem>
+
+<listitem
+><para
+>Määrata vaikimisi helivalikud. Pane tähele, et vaikehelifaili saab määrata isegi siis, kui heli tüübiks ei ole valitud <guilabel
+>helifail</guilabel
+>.</para>
+</listitem>
+</itemizedlist>
+</listitem>
+
+<listitem>
+<para
+>Käsuhäirete korral:</para>
+
+<itemizedlist>
+<listitem
+><para
+>Valida vaikeväärtused võimalustele <guilabel
+>Skripti sisestamine</guilabel
+> ja <guilabel
+>Käivitatakse terminaliaknas</guilabel
+>.</para>
+</listitem>
+</itemizedlist>
+</listitem>
+
+<listitem>
+<para
+>E-posti häirete korral:</para>
+
+<itemizedlist>
+<listitem
+><para
+>Valida vaikeväärtus võimalusele <guilabel
+>Kiri saadetakse ka iseendale</guilabel
+>.</para>
+</listitem>
+</itemizedlist>
+</listitem>
+</itemizedlist>
+</listitem>
+
+<listitem
+><para
+>Kaardil <guilabel
+>Font ja värv</guilabel
+> saab määrata häireteadete vaikevälimuse: vaikimisi fondi ning esiplaani ja taustavärvi.</para>
+</listitem>
+</itemizedlist>
+</sect1>
+
+</chapter>
+
+<chapter id="cmdline-operation">
+<title
+>Käsurea kasutamine</title>
+
+<para
+>Kui käivitamisel määratakse mingid käsurea argumendid, siis ei näita &kalarm; ajastatud häirete nimekirja, mida kirjeldati eespool <link linkend="using-kalarm"
+>&kalarm;i kasutamisest</link
+> kõneldes. &kalarm;i spetsiifilisi käsurea võtmeid saab kasutada järgmiste toimingute teostamiseks:</para>
+
+<itemizedlist>
+<listitem
+><para
+>uue häire ajastamine</para>
+</listitem>
+<listitem
+><para
+>&kalarm;i esitusviisi juhtimine</para>
+</listitem>
+<listitem
+><para
+>abi hankimine</para>
+</listitem>
+</itemizedlist>
+
+<para
+>Muid käsurea võtmeid saab kasutada ennekõike muude rakenduste &kalarm;iga suhtlemise võimaldamiseks. Neid kirjeldatakse peatükis <link linkend="cmdline-interface"
+>&kalarm;ist arendajatele</link
+>.</para>
+
+<para
+>Käsureale tohib korraga kaasata võtmeid ainult ühe &kalarm;i toimingu tarbeks. Kui soovid läbi viia mitu toimingut, tuleb &kalarm; välja kutsuda mitu korda, andes iga kord konkreetse toimingu võtmed.</para>
+
+<sect1 id="cmdline-schedule">
+<title
+>Uue häire ajastamine</title>
+
+<para
+>Uue häire ajastamiseks saab kasutada järgmisi võtmeid:</para>
+
+<informaltable>
+<tgroup cols="2">
+<thead>
+<row>
+  <entry
+>Võti</entry>
+  <entry
+>Kirjeldus</entry>
+</row>
+</thead>
+<tbody>
+<row>
+  <entry
+><option
+>-a</option
+>, <option
+>--ack-confirm</option
+></entry>
+  <entry
+>Kinnituse küsimine häire nägemisel ja sulgemisel.</entry>
+</row>
+<row>
+  <entry
+><option
+>-A</option
+>, <option
+>--attach <replaceable
+>URL</replaceable
+></option
+></entry>
+  <entry
+>Määrab kirjale kaasatava faili nime või &URL;-i. Seda võtit võib vajadusel korrata. Selle võtme kasutamisel peab olema määratud ka võti <option
+>--mail</option
+>.</entry>
+</row>
+<row>
+  <entry
+><option
+>--auto-close</option
+></entry>
+  <entry
+>Sulgeb automaatselt häireakna pärast aja möödumist, mille määrab <option
+>--late-cancel</option
+>. Selle võtme kasutamisel peab olema määratud ka võti <option
+>--late-cancel</option
+>.</entry>
+</row>
+<row>
+  <entry
+><option
+>-b</option
+>, <option
+>--beep</option
+></entry>
+  <entry
+>Kuuldava piiksu esitamine teate näitamisel. Selle võtme korral ei tohi kasutada võtit <option
+>--speak</option
+>, <option
+>--play</option
+> ega <option
+>--play-repeat</option
+>.</entry>
+</row>
+<row>
+  <entry
+><option
+>--bcc</option
+></entry>
+  <entry
+>Pimekoopia kirjast iseendale. Selle võtme kasutamisel peab olema määratud ka võti <option
+>--mail</option
+>.</entry>
+</row>
+<row>
+  <entry
+><option
+>-c</option
+>, <option
+>--color</option
+>, <option
+>--colour <replaceable
+>värv</replaceable
+></option
+></entry>
+  <entry
+>Määrab teate taustavärvi vastava &Qt; värvi nime või 16-koodis 0xRRGGBB kohaselt.</entry>
+</row>
+<row>
+  <entry
+><option
+>-C</option
+>, <option
+>--colorfg</option
+>, <option
+>--colourfg <replaceable
+>värv</replaceable
+></option
+></entry>
+  <entry
+>Määrab teate esiplaani vastava &Qt; värvi nime või 16-koodis 0xRRGGBB kohaselt.</entry>
+</row>
+<row>
+  <entry
+><option
+>-d</option
+>, <option
+>--disable</option
+></entry>
+  <entry
+>Keelab häire. Seda ei käivitata enne, kui oled selle käsitsi lubanud.</entry>
+</row>
+<row>
+  <entry
+><option
+>--disable-all</option
+></entry>
+  <entry
+>Häirete jälgimise keelamine. Sel juhul ei käivitata ühtegi häiret, kuni sa pole häireid uuesti lubanud või &kalarm;i taaskäivitanud, &eg; järgmisel sisselogimisel. Koos selle võtmega ei saa kasutada võtit <option
+>--triggerEvent</option
+>.</entry>
+</row>
+<row>
+  <entry
+><option
+>-e</option
+>, <option
+>--exec <replaceable
+>käsurea käsk</replaceable
+></option
+></entry>
+  <entry
+>Määrab käivitatava shellikäsu. Selle kasutamise korral peab see &kalarm;i võti olema &kalarm;i käsurea viimane võti. Kõiki eelnevaid võtmeid tõlgendatakse käivitatava käsu osana. Selle korral ei saa kasutada võtmeid <option
+>--file</option
+>, <option
+>--exec-display</option
+> ega <option
+>--mail</option
+>. Võtmeid <option
+>--ack-confirm</option
+>, <option
+>--beep</option
+>, <option
+>--color</option
+> ja <option
+>--colorfg</option
+> aga lihtsalt eiratakse.</entry>
+</row>
+<row>
+  <entry
+><option
+>-E</option
+>, <option
+>--exec-display <replaceable
+>käsurea käsk</replaceable
+></option
+></entry>
+  <entry
+>Määrab käivitatava shellikäsu, mis loob häireteate teksti. Selle kasutamise korral peab see &kalarm;i võti olema &kalarm;i käsurea viimane võti. Kõiki eelnevaid võtmeid tõlgendatakse käivitatava käsu osana. Selle korral ei saa kasutada võtmeid <option
+>--exec</option
+>, <option
+>-- file</option
+> ega <option
+>--mail</option
+>.</entry>
+</row>
+<row>
+  <entry
+><option
+>-f</option
+>, <option
+>--file <replaceable
+>URL</replaceable
+></option
+></entry>
+  <entry
+>Määrab teksti- või pildifaili nime või &URL;-i, mille sisu kujutab endast häireteate sisu. Selle puhul ei saa määrata võtmeid <option
+>--exec</option
+>, <option
+>--exec-display</option
+> ja <option
+>--mail</option
+> ning esineda ei tohi argument <replaceable
+>teade</replaceable
+>.</entry>
+</row>
+<row>
+  <entry
+><option
+>-F</option
+>, <option
+>--from-id <replaceable
+>ID</replaceable
+></option
+></entry>
+  <entry
+>Kirja saatjaks määratakse konkreetne &kmail;i identiteet. Selle kasutamisel peab kasutama ka võtit <option
+>--mail</option
+>.</entry>
+</row>
+<row>
+  <entry
+><option
+>-i</option
+>, <option
+>--interval <replaceable
+>periood</replaceable
+></option
+></entry>
+  <entry
+>Määrab intervalli häire kordamiste vahel. Tunnid ja minutid määratakse vormingus <replaceable
+>nHnM</replaceable
+>, kus <replaceable
+>n</replaceable
+> on arv, &eg; 3H30M. Muud perioodid määratakse vormingus <replaceable
+>nX</replaceable
+>, kus <replaceable
+>n</replaceable
+> on arv ja <replaceable
+>X</replaceable
+> üks järgmistest tähtedest: Y (aastad), M (kuud), W (nädalad), D (päevad). Kui määratud on ka võti <option
+>--recurrence</option
+>, ei saa kasutada Y (aastad) ja M (kuud). See võti on kohustuslik, kui kasutatakse võtmeid <option
+>--repeat</option
+> või <option
+>--until</option
+>.</entry>
+</row>
+<row>
+  <entry
+><option
+>-k</option
+>, <option
+>--korganizer</option
+></entry>
+  <entry
+>Näitab häiret sündmusena &korganizer;i aktiivses kalendris.</entry>
+</row>
+<row>
+  <entry
+><option
+>-l</option
+>, <option
+>--late-cancel <replaceable
+>periood</replaceable
+></option
+></entry>
+  <entry
+>Katkestab häire, kui seda ei saa käivitada määratud <replaceable
+>perioodi</replaceable
+> jooksul pärast õiget aega. Tunnid ja minutid määratakse vormingus <replaceable
+>nHnM</replaceable
+>, kus <replaceable
+>n</replaceable
+> on number, &eg; 3H30M. Muud perioodid määratakse vormingus <replaceable
+>nX</replaceable
+>, kus <replaceable
+>n</replaceable
+> on number ja <replaceable
+>X</replaceable
+> üks järgmistest tähtedest: Y (aastad), M (kuud), W (nädalad), D (päevad). <replaceable
+>Perioodi</replaceable
+> vaikeväärtus on 1 minut.</entry>
+</row>
+<row>
+  <entry
+><option
+>-L</option
+>, <option
+>--login</option
+></entry>
+  <entry
+>Käivitab häire igal sisselogimisel. Selle võtme kasutamisel ei saa kasutada võtmeid <option
+>--interval</option
+>, <option
+>--repeat</option
+> ja <option
+>--until</option
+>.</entry>
+</row>
+<row>
+  <entry
+><option
+>-m</option
+>, <option
+>--mail <replaceable
+>aadress</replaceable
+></option
+></entry>
+  <entry
+>Määrab kirja saatmise antud aadressile. Seda võtit võib vajadusel korrata. Sellega koos ei saa kasutada võtmeid <option
+>--exec</option
+>, <option
+>--exec-display</option
+> ja <option
+>--file</option
+>. Võtmeid <option
+>--ack-confirm</option
+>, <option
+>--beep</option
+>, <option
+>--color</option
+> ja <option
+>--colorfg</option
+> aga lihtsalt eiratakse.</entry>
+</row>
+<row>
+  <entry
+><option
+>-p</option
+>, <option
+>--play <replaceable
+>URL</replaceable
+></option
+></entry>
+  <entry
+>Määrab helihäire puhul või häire näitamisel mängitava helifaili asukoha või &URL;-i. Selle võtme kasutamisel ei saa kasutada võtit <option
+>--play-repeat</option
+>, <option
+>--beep</option
+> ega <option
+>--speak</option
+>.</entry>
+</row>
+<row>
+  <entry
+><option
+>-P</option
+>, <option
+>--play-repeat <replaceable
+>URL</replaceable
+></option
+></entry>
+  <entry
+>Määrab mängitava helifaili asukoha või &URL;-i, mida esitatakse, kuni klõpsatakse nupule <guilabel
+>Peata esitus</guilabel
+> või kuni häireteadet näidatakse. Selle võtme kasutamisel ei saa kasutada võtit <option
+>--play</option
+>, <option
+>--beep</option
+> ega <option
+>--speak</option
+>.</entry>
+</row>
+<row>
+  <entry
+><option
+>--recurrence <replaceable
+>määratlus</replaceable
+></option
+></entry>
+  <entry
+>Määrab häire korduma. Kordumise määratlus peab kasutama iCalendari süntaksit (selle defineerib <ulink url="http://www.w3.org/2002/12/cal/rfc2445.html"
+>RFC2445</ulink
+>), &eg; <quote
+>FREQ=MONTHLY;COUNT=4;INTERVAL=3;BYDAY=-1MO</quote
+>. Sellega koos ei saa kasutada võtit <option
+>--until</option
+>.</entry>
+</row>
+<row>
+  <entry
+><option
+>-r</option
+>, <option
+>--repeat <replaceable
+>kordade_arv</replaceable
+></option
+></entry>
+  <entry
+>Määrab, mitu korda häiret käivitatakse või kui võtmega <option
+>--recurrence</option
+> on määratud kordumine, siis mitu korda häire käivitatakse alati, kui <option
+>--recurrence</option
+> selle aktiveerib (&ie; kordus korduse sees). Kui võtit <option
+>--recurrence</option
+> pole antud, määrab väärtus -1 häire lõputult korduma. Selle võtmega peab kasutama võtit <option
+>--interval</option
+>, kuid ei saa kasutada võtit <option
+>--until</option
+>.</entry>
+</row>
+<row>
+  <entry
+><option
+>-R</option
+>, <option
+>--reminder <replaceable
+>periood</replaceable
+></option
+></entry>
+  <entry
+>Määrab meeldetuletuse näitamise määratud ajal enne või pärast häiret ja selle kordusi (kui neid on). <replaceable
+>Periood</replaceable
+> määratakse samas vormingus, nagu kirjeldatud võtme <option
+>--late-cancel</option
+> juures. Vaikimisi on meeldetuletus enne häiret. Meeldetuletuse kehtestamiseks pärast häiret lisa <replaceable
+>perioodi</replaceable
+> ette <replaceable
+>+</replaceable
+>, &eg; +3D. Seda võtit ei saa kasutada koos võtmetega <option
+>--exec</option
+>, <option
+>--mail</option
+> või <option
+>--reminder-once</option
+>.</entry>
+</row>
+<row>
+  <entry
+><option
+>--reminder-once <replaceable
+>periood</replaceable
+></option
+></entry>
+  <entry
+>Määrab meeldetuletuse näitamise määratud ajal enne või pärast häire esimest kordumist. Häire järgmiste kordumiste ajal (kui neid on) meeldetuletust enam ei näidata. <replaceable
+>Periood</replaceable
+> määratakse samas vormingus, nagu kirjeldatud võtme <option
+>--reminder</option
+> juures. Seda võtit ei saa kasutada koos võtmetega <option
+>--exec</option
+>, <option
+>--mail</option
+> või <option
+>--reminder</option
+>.</entry>
+</row>
+<row>
+  <entry
+><option
+>-s</option
+>, <option
+>--speak</option
+></entry>
+  <entry
+>Loeb näidatava teate ette. Selleks peab olema paigaldatud ja seadistatud &jovie; ning sobiv kõnesüntesaator. Seda võtit ei saa kasutada koos võtmetega <option
+>--beep</option
+>, <option
+>--play</option
+> ja <option
+>--play-repeat</option
+>.</entry>
+</row>
+<row>
+  <entry
+><option
+>-S</option
+>, <option
+>--subject <replaceable
+>teema</replaceable
+></option
+></entry>
+  <entry
+>Määrab kirja subjektirea ehk teema. Selle kasutamisel peab kasutama ka võtit <option
+>--mail</option
+>.</entry>
+</row>
+<row>
+  <entry
+><option
+>-t</option
+>, <option
+>--time <replaceable
+>kuupäev/aeg</replaceable
+></option
+></entry>
+  <entry
+>Käivitab häire määratud kuupäeval või kuupäeval/kellaajal. Kuupäev ilma kellaajata tuleb määrata kujul <replaceable
+>yyyy-mm-dd [TZ]</replaceable
+>; kuupäev ja kellaaeg kujul <replaceable
+>[[[yyyy-]mm-]dd-]hh:mm [TZ]</replaceable
+> (ärajätmise korral kasutatakse kuupäevaväljadel vaikimisi tänase päeva väärtusi). Kui ajavööndit pole määratud, kasutatakse kohaliku süsteemi ajavööndit. Ajavöönd <replaceable
+>TZ</replaceable
+> võib olla süsteemi ajavööndi nimi (&eg; <userinput
+>Euroopa/London</userinput
+>), <userinput
+>UTC</userinput
+>, mis tähistab Greenwichi aega või <userinput
+>Kell</userinput
+>, mille korral kasutatakse kohaliku arvuti kella ja eiratakse ajavööndit.</entry>
+</row>
+<row>
+  <entry
+><option
+>-v</option
+>, <option
+>--volume <replaceable
+>protsent</replaceable
+></option
+></entry>
+  <entry
+>Määrab helifaili esitamise helitugevuse. Seda võtit saab kasutada ainult koos võtmega <option
+>--play</option
+> või <option
+>--play-repeat</option
+>.</entry>
+</row>
+<row>
+  <entry
+><option
+>-u</option
+>, <option
+>--until <replaceable
+>kuupäev/aeg</replaceable
+></option
+></entry>
+  <entry
+>Kordab häiret kuni määratud kuupäeva või kuupäeva/kellaajani. Kuupäev ilma kellaajata määratakse samas vormingus nagu argumendi <option
+>--time</option
+> puhul. Pane tähele, et kui määratud on <option
+>--time</option
+>, võetakse ajavöönd selle väärtusest ning <option
+>--until</option
+> väärtusele ei tohi ajavööndit lisada. Selle võtme kasutamine nõuab võtit <option
+>--interval</option
+> ja välistab võtmed <option
+>--repeat</option
+> ning <option
+>--recurrence</option
+>.</entry>
+</row>
+<row>
+  <entry
+><replaceable
+>teade</replaceable
+></entry>
+  <entry
+>Näidatava teate tekst või koos võtmega <option
+>--mail</option
+> kirja sisu.</entry>
+</row>
+</tbody>
+</tgroup>
+</informaltable>
+
+<para
+>Määratud peab olema kas teate tekst, <option
+>--file</option
+>, <option
+>--exec</option
+>, <option
+>--exec-display</option
+>, <option
+>--play</option
+> or <option
+>--play-repeat</option
+>; kui ülal ei ole teisiti märgitud, on ülejäänud võtmed kõigest võimalikud, mitte kohustuslikud.</para>
+
+<para
+>Kaks alternatiivi, mis näitavad mitmerealist teadet punasel taustal käesoleva kuu 27. päeval kell 22.00:</para>
+
+<informalexample
+><screen
+><prompt
+>%</prompt
+> <userinput
+><command
+>kalarm</command
+> <option
+>-c <replaceable
+>red</replaceable
+></option
+> <option
+>-t <replaceable
+>27-22:00</replaceable
+></option
+> <option
+><replaceable
+>"Jäta nüüd töö\nKOHE POOLELI"</replaceable
+></option
+></userinput>
+<prompt
+>%</prompt
+> <userinput
+><command
+>kalarm</command
+> <option
+>-c <replaceable
+>0xFF0000</replaceable
+></option
+> <option
+>-t <replaceable
+>27-22:00</replaceable
+></option
+> <option
+><replaceable
+>"Jäta nüüd töö\nKOHE POOLELI"</replaceable
+></option
+></userinput
+>
+</screen>
+</informalexample>
+
+</sect1>
+
+<sect1 id="cmdline-other">
+<title
+>Muud võtmed</title>
+
+<para
+>Järgmisi võtmeid saab kasutada mitmesugusteks ülesanneteks, sealhulgas <link linkend="alarm-edit-dlg"
+>häire muutmisdialoogi</link
+> avamiseks.</para>
+
+<informaltable>
+<tgroup cols="2">
+<thead>
+<row>
+  <entry
+>Võti</entry>
+  <entry
+>Kirjeldus</entry>
+</row>
+</thead>
+<tbody>
+<row>
+  <entry
+><option
+>--edit <replaceable
+>sündmuseID</replaceable
+></option
+></entry>
+  <entry
+>Avab häire redigeerimisdialoogi määratud sündmuse ID-ga häire redigeerimiseks.</entry>
+</row>
+<row>
+  <entry
+><option
+>--edit-new-audio</option
+></entry>
+  <entry
+>Avab häire redigeerimise dialoogi uue helihäire redigeerimiseks.</entry>
+</row>
+<row>
+  <entry
+><option
+>--edit-new-command</option
+></entry>
+  <entry
+>Avab häire redigeerimise dialoogi uue käsuhäire redigeerimiseks.</entry>
+</row>
+<row>
+  <entry
+><option
+>--edit-new-display</option
+></entry>
+  <entry
+>Avab häire redigeerimise dialoogi uue nähtava häire redigeerimiseks.</entry>
+</row>
+<row>
+  <entry
+><option
+>--edit-new-email</option
+></entry>
+  <entry
+>Avab häire redigeerimise dialoogi uue kirjahäire redigeerimiseks.</entry>
+</row>
+<row>
+  <entry
+><option
+>--edit-new-preset <replaceable
+>mallinimi</replaceable
+></option
+></entry>
+  <entry
+>Avab häire redigeerimise dialoogi määratud nimega häiremalliga uue häire redigeerimiseks.</entry>
+</row>
+<row>
+  <entry
+><option
+>--list</option
+></entry>
+  <entry
+>Saadab ajastatud häirete loendi standardväljundisse (<filename
+>stdout</filename
+>). Loendis näidatakse iga ootel häire kohta lühiandmeid: ressursi identifikaator (kui kasutatakse Akonadit), UID, järgmine kavas olev aeg ning teate tekst või fail.</entry>
+</row>
+<row>
+  <entry
+><option
+>--tray</option
+></entry>
+  <entry
+>Näitab &kalarm;i ikoonina süsteemisalves.</entry>
+</row>
+<row>
+  <entry
+><option
+>--disable-all</option
+></entry>
+  <entry
+>Kõigi häirete jälgimise keelamine.</entry>
+</row>
+</tbody>
+</tgroup>
+</informaltable>
+
+</sect1>
+
+<sect1 id="cmdline-help">
+<title
+>Abivõtmed</title>
+
+<para
+>Järgmised abivõtmed on kasutatavad kõigi &kde; rakenduste puhul:</para>
+
+<informaltable>
+<tgroup cols="2">
+<thead>
+<row>
+  <entry
+>Võti</entry>
+  <entry
+>Kirjeldus</entry>
+</row>
+</thead>
+<tbody>
+<row>
+  <entry
+><option
+>--help</option
+></entry>
+  <entry
+>Näitab lühidalt võtmete abiteksti.</entry>
+</row>
+<row>
+  <entry
+><option
+>--help-qt</option
+></entry>
+  <entry
+>Näitab &Qt; spetsiifilisi võtmeid.</entry>
+</row>
+<row>
+  <entry
+><option
+>--help-kde</option
+></entry>
+  <entry
+>Näitab &kde; spetsiifilisi võtmeid.</entry>
+</row>
+<row>
+  <entry
+><option
+>--help-all</option
+></entry>
+  <entry
+>Näitab kõiki võtmeid.</entry>
+</row>
+<row>
+  <entry
+><option
+>--author</option
+></entry>
+  <entry
+>Näitab &kalarm;i autorite nimesid ja e-posti aadresse.</entry>
+</row>
+<row>
+  <entry
+><option
+>-v</option
+>, <option
+>--version</option
+></entry>
+  <entry
+>Näitab &Qt; teegi, &kde; ja &kalarm;i töötavat versiooni.</entry>
+</row>
+<row>
+  <entry
+><option
+>--license</option
+></entry>
+  <entry
+>Näitab infot litsentsi kohta.</entry>
+</row>
+</tbody>
+</tgroup>
+</informaltable>
+
+</sect1>
+</chapter>
+
+<chapter id="developers">
+<title
+>&kalarm;ist arendajatele</title>
+
+<para
+>&kalarm; pakub välja liidese, mis võimaldab muudel rakendustel esitada soovi järgmiste funktsioonide kasutamiseks:</para>
+
+<itemizedlist>
+<listitem
+><para
+>uue häire ajastamine</para
+></listitem>
+<listitem
+><para
+>juba ajastatud häire katkestamine</para
+></listitem>
+<listitem
+><para
+>juba ajastatud häire käivitamine</para
+></listitem>
+<listitem
+><para
+>häire redigeerimise dialoogi avamine</para
+></listitem>
+<listitem
+><para
+>ajastatud häirete loend</para
+></listitem>
+</itemizedlist>
+
+<para
+>Kõiki mainitud funktsioone saab teostada nii &DBus;i väljakutse kui käsurea vahendusel. &DBus;i väljakutsed on eelistatud, kui &kalarm; juba töötab.</para>
+
+<sect1 id="dbus-interface">
+<title
+>&DBus;i liides</title>
+
+<para
+>Käsiraamatus kirjeldatud &DBus;i väljakutsed on teostatud &kalarm;i &DBus;i objektis <constant
+>/kalarm</constant
+>. Liides on defineeritud failides <filename
+>org.kde.kalarm.kalarm.xml</filename
+> ja <filename
+>kalarmiface.h</filename
+>.</para>
+
+<refentry id="cancelEvent">
+<refmeta>
+<refentrytitle
+>cancelEvent</refentrytitle>
+</refmeta>
+<refnamediv>
+<refname
+>cancelEvent</refname>
+<refpurpose
+>katkestab juba ajastatud häire.</refpurpose>
+</refnamediv>
+<refsynopsisdiv>
+<synopsis
+>void cancelEvent(const QString&amp; <replaceable
+>sündmuseID</replaceable
+>)
+</synopsis>
+
+<refsect2>
+<title
+>Parameetrid</title>
+<variablelist>
+<varlistentry>
+<term
+><parameter
+>eventID</parameter
+></term>
+<listitem>
+<para
+>Määrab katkestatava sündmuse unikaalse ID.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+</refsect2>
+</refsynopsisdiv>
+
+<refsect1>
+<title
+>Kirjeldus</title>
+
+<para
+><function
+>cancelEvent()</function
+> on &DBus;i väljakutse määratud häire katkestamiseks. &kalarm; kustutab häire kalendrifailist ilma seda näitamata või käivitamata.</para>
+
+</refsect1>
+</refentry>
+
+<refentry id="triggerEvent">
+<refmeta>
+<refentrytitle
+>triggerEvent</refentrytitle>
+</refmeta>
+<refnamediv>
+<refname
+>triggerEvent</refname>
+<refpurpose
+>käivitab juba ajastatud häire.</refpurpose>
+</refnamediv>
+<refsynopsisdiv>
+<synopsis
+>void triggerEvent(const QString&amp; <replaceable
+>sündmuseID</replaceable
+>)
+</synopsis>
+
+<refsect2>
+<title
+>Parameetrid</title>
+<variablelist>
+<varlistentry>
+<term
+><parameter
+>eventID</parameter
+></term>
+<listitem>
+<para
+>Määrab käivitatava sündmuse unikaalse ID.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+</refsect2>
+</refsynopsisdiv>
+
+<refsect1>
+<title
+>Kirjeldus</title>
+
+<para
+><function
+>triggerEvent()</function
+> on &DBus;i väljakutse määratud häire koheseks näitamiseks või käivitamiseks (sõltumata ajast, mis selle käivitamiseks on määratud). &kalarm; hangib häire kalendrifailist ja seejärel näitab seda või käivitab selle.</para>
+
+<para
+>Kui häire tähtaeg on nagunii kätte jõudnud, kustutab &kalarm; seejärel kõik häire senised kordused ja kui kordusi ei ole rohkem järele jäänud, siis ka häire kalendrifailist. Kui häire tähtaeg ei ole veel saabunud, jäävad kõik ajastatud korrad muutmata.</para>
+
+</refsect1>
+</refentry>
+
+<refentry id="scheduleMessage">
+<refmeta>
+<refentrytitle
+>scheduleMessage</refentrytitle>
+</refmeta>
+<refnamediv>
+<refname
+>scheduleMessage</refname>
+<refpurpose
+>uue häire ajastamine.</refpurpose>
+</refnamediv>
+<refsynopsisdiv>
+<synopsis
+>bool scheduleMessage(const QString&amp; <replaceable
+>message</replaceable
+>,
+                     const QString&amp; <replaceable
+>startDateTime</replaceable
+>,
+                     int <replaceable
+>lateCancel</replaceable
+>,
+                     unsigned <replaceable
+>flags</replaceable
+>, 
+                     const QString&amp; <replaceable
+>bgColor</replaceable
+>, 
+                     const QString&amp; <replaceable
+>fgColor</replaceable
+>, 
+                     const QString&amp; <replaceable
+>font</replaceable
+>, 
+                     const QString&amp; <replaceable
+>audioURL</replaceable
+>, 
+                     int <replaceable
+>reminderMins</replaceable
+>, 
+                     const QString&amp; <replaceable
+>recurrence</replaceable
+>,
+                     int <replaceable
+>subRepeatInterval</replaceable
+>, 
+                     int <replaceable
+>subRepeatCount</replaceable
+>)
+</synopsis>
+<synopsis
+>bool scheduleMessage(const QString&amp; <replaceable
+>message</replaceable
+>, 
+                     const QString&amp; <replaceable
+>startDateTime</replaceable
+>, 
+                     int <replaceable
+>lateCancel</replaceable
+>,
+                     unsigned <replaceable
+>flags</replaceable
+>, 
+                     const QString&amp; <replaceable
+>bgColor</replaceable
+>, 
+                     const QString&amp; <replaceable
+>fgColor</replaceable
+>, 
+                     const QString&amp; <replaceable
+>font</replaceable
+>, 
+                     const QString&amp; <replaceable
+>audioURL</replaceable
+>, 
+                     int <replaceable
+>reminderMins</replaceable
+>, 
+                     int <replaceable
+>recurType</replaceable
+>, 
+                     int <replaceable
+>recurInterval</replaceable
+>, 
+                     int <replaceable
+>recurCount</replaceable
+>)
+</synopsis>
+<synopsis
+>bool scheduleMessage(const QString&amp; <replaceable
+>message</replaceable
+>, 
+                     const QString&amp; <replaceable
+>startDateTime</replaceable
+>, 
+                     int <replaceable
+>lateCancel</replaceable
+>, 
+                     unsigned <replaceable
+>flags</replaceable
+>, 
+                     const QString&amp; <replaceable
+>bgColor</replaceable
+>, 
+                     const QString&amp; <replaceable
+>fgColor</replaceable
+>, 
+                     const QString&amp; <replaceable
+>font</replaceable
+>, 
+                     const QString&amp; <replaceable
+>audioURL</replaceable
+>, 
+                     int <replaceable
+>reminderMins</replaceable
+>, 
+                     int <replaceable
+>recurType</replaceable
+>, 
+                     int <replaceable
+>recurInterval</replaceable
+>, 
+                     const QString&amp; <replaceable
+>endDateTime</replaceable
+>)
+</synopsis>
+
+<refsect2>
+<title
+>Parameetrid</title>
+<variablelist>
+<varlistentry>
+<term
+><parameter
+>message</parameter
+></term>
+<listitem>
+<para
+>Määrab ajastatava teate teksti või kui parameetrile <parameter
+>flags</parameter
+> on määratud <userinput
+>DISPLAY_COMMAND</userinput
+> bitt, siis käsurea käsu, mis käivitatakse teate teksti loomiseks.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>startDateTime</parameter
+></term>
+<listitem>
+<para
+>Määrab kuupäeva või kuupäeva ja kellaaja, millal teadet näidatakse. Ainult kuupäevaga määratud häire puhul peab string olema kujul <quote
+>YYYY-MM-DD [TZ]</quote
+> (nagu tagastab <methodname
+>QDate::toString(Qt::ISODate)</methodname
+>). Kuupäeva ja kellaajaga määratud häire korral peab string olema kujul <quote
+>YYYY-MM-DDTHH:MM[:SS] [TZ]</quote
+> (nagu tagastab <methodname
+>QDateTime::toString(Qt::ISODate)</methodname
+>) või <quote
+>HH:MM[:SS] [Clock]</quote
+> (nagu tagastab <methodname
+>QTime::toString(Qt::ISODate)</methodname
+>). Kui kuupäeva ei ole määratud, kasutatakse käesolevat kuupäeva. Pane tähele, et sekundeid ignoreeritakse.</para>
+
+<para
+>Kui ajavööndit pole määratud, kasutatakse kohaliku süsteemi ajavööndit. Ajavöönd <replaceable
+>TZ</replaceable
+> võib olla süsteemi ajavööndi nimi (&eg; <userinput
+>Euroopa/London</userinput
+>), <userinput
+>UTC</userinput
+>, mis tähistab Greenwichi aega või <userinput
+>Kell</userinput
+>, mille korral kasutatakse kohaliku arvuti kella ja eiratakse ajavööndit.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>lateCancel</parameter
+></term>
+<listitem>
+<para
+>Annab korralduse häire katkestada, kui seda ei saa käivitada määratud arvu minutite jooksul pärast häire ettenähtud aega. Kui väärtus on 0, ei katkestata häiret sellele vaatamata, kui palju aega on ettenähtud ajast möödas.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>flags</parameter
+></term>
+<listitem>
+<para
+>Määrab soovitud häirelippude loogilise funktsiooni OR. Lipubitid on määratud failis <filename
+>kalarmiface.h</filename
+> klassiga <classname
+>KAlarmIface</classname
+>. Arvesta, et mitte kõiki lipubitte ei saa teatehäire korral kasutada.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>bgColor</parameter
+></term>
+<listitem>
+<para
+>Määrab näidatava teate taustavärvi. String võib olla kujul <quote
+>#RRGGBB</quote
+> (nagu tagastab <methodname
+>QColor::name()</methodname
+>), kus RR, GG ja BB on vastavalt punase, rohelise ja sinise kahekohalised kuueteistkümnendväärtused. String võib olla mõnel muul kujul, mida tunnustab <methodname
+>QColor::setNamedColor()</methodname
+>, näiteks X'i värvide andmebaasi nimi (&eg; <quote
+>red</quote
+> või <quote
+>steelblue</quote
+>). Kui string tühjaks jätta, kasutatakse parajasti vaikimisi kehtivat taustavärvi.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>fgColor</parameter
+></term>
+<listitem>
+<para
+>Määrab näidatava teate esiplaani värvi. Stringi kuju on samasugune parameetriga <parameter
+>bgColor</parameter
+>. Kui string tühjaks jätta, kasutatakse parajasti vaikimisi kehtivat esiplaani värvi.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>font</parameter
+></term>
+<listitem>
+<para
+>Määrab teate näitamisel kasutatava fondi. String peab olema kujul, nagu seda tunnustab <methodname
+>QFont::toString()</methodname
+>. Kui string tühjaks jätta, kasutatakse teate näitamisel ajal kehtivat vaikimisi teatefonti.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>audioURL</parameter
+></term>
+<listitem>
+<para
+>Määrab teate näitamisel mängitava helifaili. Väärtuse 0 andmisel helifaili ei esitata.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>reminderMins</parameter
+></term>
+<listitem>
+<para
+>Määrab minutites aja enne häire ja selle korduste (kui neid on) käivitamist, millal näidatakse meeldetuletust. Meeldetuletuse näitamiseks pärast põhihäiret anna meeldetuletusele negatiivne väärtus. Kui meeldetuletust vaja ei ole, määra 0.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>recurrence</parameter
+></term>
+<listitem>
+<para
+>Määrab häire regulaarse kordumise iCalendari süntaksis, nagu selle defineerib <ulink url="http://www.w3.org/2002/12/cal/rfc2445.html"
+>RFC2445</ulink
+>. Näiteks <quote
+>FREQ=MONTHLY;COUNT=4;INTERVAL=3;BYDAY=-1MO</quote
+> määrab 4 kordust 3-kuiste intervallidega kuu viimasel esmaspäeval. Mittekorduva häire korral määra tühi string.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>recurType</parameter
+></term>
+<listitem>
+<para
+>Määrab häire kordumise tüübi. Lubatud väärtused on MINUTELY, DAILY, WEEKLY, MONTHLY, YEARLY. Need on defineeritud failis <filename
+>kalarmiface.h</filename
+> klassiga <classname
+>KAlarmIface</classname
+>. Igakuised kordumised on kuupäeva ja iga-aastased kordumised samuti kuupäeva tüüpi, kusjuures mõlemal juhul võetakse kuupäev parameetrist <parameter
+>startDateTime</parameter
+>.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>recurInterval</parameter
+></term>
+<listitem>
+<para
+>Määrab häire korduste vaheliste perioodide hulga (minutid/päevad/nädalad/kuud/aastad, nagu selle määrab <parameter
+>recurType</parameter
+>).</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>recurCount</parameter
+></term>
+<listitem>
+<para
+>Määrab, mitu korda häiret korrata. -1 tähendab häire lõputut kordamist.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>endDateTime</parameter
+></term>
+<listitem>
+<para
+>Määrab häire kordumise lõppkuupäeva või kuupäeva ja kellaaja. Kui <parameter
+>startDateTime</parameter
+> sisaldab kellaaega, peab ka see parameeter sisaldama kellaaega; kui <parameter
+>startDateTime</parameter
+> sisaldab ainult kuupäeva, peab ka see parameeter sisaldama ainult kuupäeva. See ei tohi sisaldada ajavööndit; parameetri väärtuse interpreteerimiseks kasutatakse sama ajavööndit nagu <parameter
+>startDateTime</parameter
+> korral.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>subRepeatInterval</parameter
+></term>
+<listitem>
+<para
+>Määrab häire alamkorduste intervalli minutites. Väärtuse 0 korral alamkordused puuduvad. Kui kordamist pole määratud, seda eiratakse.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>subRepeatCount</parameter
+></term>
+<listitem>
+<para
+>Määrab alamkorduste arvu (kaasa arvatud esimene kordus).</para>
+</listitem>
+</varlistentry>
+</variablelist>
+</refsect2>
+</refsynopsisdiv>
+
+<refsect1 id="scheduleMessage-descrip">
+<title
+>Kirjeldus</title>
+<para
+><function
+>scheduleMessage()</function
+> on &DBus;i väljakutse määratud häireteate ajastamiseks määratud kuupäevale ja ajale. Sel on kolm vormi. Kõige üldisem vorm lubab määrata suvalise kordumise ning seda saab kasutada ka mittekorduvate häirete korral. Teised vormid võimaldavad mugavalt määrata piiratuma häire kordumise tüübi, üks neist kindla korduste arvuga korduva häire ja teine lõppemisajaga korduva häire.</para>
+
+<para
+>Kui määratud aeg (sealhulgas ka korduste aeg) on juba möödas, näitab &kalarm; teadet otsekohe (kui just <parameter
+>lateCancel</parameter
+> väärtus ei anna teada, et häiret on juba liiga hilja näidata, millisel juhul &kalarm; ignoreerib soovi. Kui tähtaeg (või korduse tähtaeg) seisab veel ees, lisab &kalarm; häireteate aktiivsete häirete vaikekalendri, et seda hiljem näidata.</para>
+</refsect1>
+</refentry>
+
+<refentry id="scheduleFile">
+<refmeta>
+<refentrytitle
+>scheduleFile</refentrytitle>
+</refmeta>
+<refnamediv>
+<refname
+>scheduleFile</refname>
+<refpurpose
+>uue häire ajastamine, mis näitab teksti- või pildifaili sisu.</refpurpose>
+</refnamediv>
+<refsynopsisdiv>
+<synopsis
+>bool scheduleFile(const QString&amp; <replaceable
+>URL</replaceable
+>,
+                  const QString&amp; <replaceable
+>startDateTime</replaceable
+>,
+                  int <replaceable
+>lateCancel</replaceable
+>,
+                  unsigned <replaceable
+>flags</replaceable
+>,
+                  const QString&amp; <replaceable
+>bgColor</replaceable
+>,
+                  const QString&amp; <replaceable
+>audioURL</replaceable
+>,
+                  int <replaceable
+>reminderMins</replaceable
+>,
+                  const QString&amp; <replaceable
+>recurrence</replaceable
+>,
+                  int <replaceable
+>subRepeatInterval</replaceable
+>, 
+                  int <replaceable
+>subRepeatCount</replaceable
+>)
+</synopsis>
+<synopsis
+>bool scheduleFile(const QString&amp; <replaceable
+>URL</replaceable
+>,
+                  const QString&amp; <replaceable
+>startDateTime</replaceable
+>,
+                  int <replaceable
+>lateCancel</replaceable
+>,
+                  unsigned <replaceable
+>flags</replaceable
+>,
+                  const QString&amp; <replaceable
+>bgColor</replaceable
+>,
+                  const QString&amp; <replaceable
+>audioURL</replaceable
+>,
+                  int <replaceable
+>reminderMins</replaceable
+>,
+                  int <replaceable
+>recurType</replaceable
+>,
+                  int <replaceable
+>recurInterval</replaceable
+>,
+                  int <replaceable
+>recurCount</replaceable
+>)
+</synopsis>
+<synopsis
+>bool scheduleFile(const QString&amp; <replaceable
+>URL</replaceable
+>,
+                  const QString&amp; <replaceable
+>startDateTime</replaceable
+>,
+                  int <replaceable
+>lateCancel</replaceable
+>,
+                  unsigned <replaceable
+>flags</replaceable
+>,
+                  const QString&amp; <replaceable
+>bgColor</replaceable
+>,
+                  const QString&amp; <replaceable
+>audioURL</replaceable
+>,
+                  int <replaceable
+>reminderMins</replaceable
+>,
+                  int <replaceable
+>recurType</replaceable
+>,
+                  int <replaceable
+>recurInterval</replaceable
+>,
+                  const QString&amp; <replaceable
+>endDateTime</replaceable
+>)
+</synopsis>
+
+<refsect2>
+<title
+>Parameetrid</title>
+<variablelist>
+<varlistentry>
+<term
+><parameter
+>URL</parameter
+></term>
+<listitem>
+<para
+>Määrab teksti- või pildifaili, mille sisu näidatakse ajastatavas häireteates.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>startDateTime</parameter
+></term>
+<listitem>
+<para
+>Määrab kuupäeva või kuupäeva ja kellaaja, millal teadet näidatakse. Ainult kuupäevaga määratud häire puhul peab string olema kujul <quote
+>YYYY-MM-DD [TZ]</quote
+> (nagu tagastab <methodname
+>QDate::toString(Qt::ISODate)</methodname
+>). Kuupäeva ja kellaajaga määratud häire korral peab string olema kujul <quote
+>YYYY-MM-DDTHH:MM[:SS] [TZ]</quote
+> (nagu tagastab <methodname
+>QDateTime::toString(Qt::ISODate)</methodname
+>) või <quote
+>HH:MM[:SS] [Clock]</quote
+> (nagu tagastab <methodname
+>QTime::toString(Qt::ISODate)</methodname
+>). Kui kuupäeva ei ole määratud, kasutatakse käesolevat kuupäeva. Pane tähele, et sekundeid ignoreeritakse.</para>
+
+<para
+>Kui ajavööndit pole määratud, kasutatakse kohaliku süsteemi ajavööndit. Ajavöönd <replaceable
+>TZ</replaceable
+> võib olla süsteemi ajavööndi nimi (&eg; <userinput
+>Euroopa/London</userinput
+>), <userinput
+>UTC</userinput
+>, mis tähistab Greenwichi aega või <userinput
+>Kell</userinput
+>, mille korral kasutatakse kohaliku arvuti kella ja eiratakse ajavööndit.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>lateCancel</parameter
+></term>
+<listitem>
+<para
+>Annab korralduse häire katkestada, kui seda ei saa käivitada määratud arvu minutite jooksul pärast häire ettenähtud aega. Kui väärtus on 0, ei katkestata häiret sellele vaatamata, kui palju aega on ettenähtud ajast möödas.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>flags</parameter
+></term>
+<listitem>
+<para
+>Määrab soovitud häirelippude loogilise funktsiooni OR. Lipubitid on määratud failis <filename
+>kalarmiface.h</filename
+> klassiga <classname
+>KAlarmIface</classname
+>. Arvesta, et mitte kõiki lipubitte ei saa failihäire korral kasutada.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>bgColor</parameter
+></term>
+<listitem>
+<para
+>Määrab näidatava faili taustavärvi. String võib olla kujul <quote
+>#RRGGBB</quote
+> (nagu tagastab <methodname
+>QColor::name()</methodname
+>), kus RR, GG ja BB on vastavalt punase, rohelise ja sinise kahekohalised kuueteistkümnendväärtused. String võib olla mõnel muul kujul, mida tunnustab <methodname
+>QColor::setNamedColor()</methodname
+>, näiteks X'i värvide andmebaasi nimi (&eg; <quote
+>red</quote
+> või <quote
+>steelblue</quote
+>). Kui string tühjaks jätta, kasutatakse parajasti vaikimisi kehtivat taustavärvi.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>audioURL</parameter
+></term>
+<listitem>
+<para
+>Määrab teate näitamisel mängitava helifaili. Väärtuse 0 andmisel helifaili ei esitata.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>reminderMins</parameter
+></term>
+<listitem>
+<para
+>Määrab minutites aja enne häire ja selle korduste (kui neid on) käivitamist, millal näidatakse meeldetuletust. Meeldetuletuse näitamiseks pärast põhihäiret anna meeldetuletusele negatiivne väärtus. Kui meeldetuletust vaja ei ole, määra 0.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>recurrence</parameter
+></term>
+<listitem>
+<para
+>Määrab häire regulaarse kordumise iCalendari süntaksis, nagu selle defineerib <ulink url="http://www.w3.org/2002/12/cal/rfc2445.html"
+>RFC2445</ulink
+>. Näiteks <quote
+>FREQ=MONTHLY;COUNT=4;INTERVAL=3;BYDAY=-1MO</quote
+> määrab 4 kordust 3-kuiste intervallidega kuu viimasel esmaspäeval. Mittekorduva häire korral määra tühi string.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>recurType</parameter
+></term>
+<listitem>
+<para
+>Määrab häire kordumise tüübi. Lubatud väärtused on MINUTELY, DAILY, WEEKLY, MONTHLY, YEARLY. Need on defineeritud failis <filename
+>kalarmiface.h</filename
+> klassiga <classname
+>KAlarmIface</classname
+>. Igakuised kordumised on kuupäeva ja iga-aastased kordumised samuti kuupäeva tüüpi, kusjuures mõlemal juhul võetakse kuupäev parameetrist <parameter
+>startDateTime</parameter
+>.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>recurInterval</parameter
+></term>
+<listitem>
+<para
+>Määrab häire korduste vaheliste perioodide hulga (minutid/päevad/nädalad/kuud/aastad, nagu selle määrab <parameter
+>recurType</parameter
+>).</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>recurCount</parameter
+></term>
+<listitem>
+<para
+>Määrab, mitu korda häiret korrata. -1 tähendab häire lõputut kordamist.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>endDateTime</parameter
+></term>
+<listitem>
+<para
+>Määrab häire kordumise lõppkuupäeva või kuupäeva ja kellaaja. Kui <parameter
+>startDateTime</parameter
+> sisaldab kellaaega, peab ka see parameeter sisaldama kellaaega; kui <parameter
+>startDateTime</parameter
+> sisaldab ainult kuupäeva, peab ka see parameeter sisaldama ainult kuupäeva. See ei tohi sisaldada ajavööndit; parameetri väärtuse interpreteerimiseks kasutatakse sama ajavööndit nagu <parameter
+>startDateTime</parameter
+> korral.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>subRepeatInterval</parameter
+></term>
+<listitem>
+<para
+>Määrab häire alamkorduste intervalli minutites. Väärtuse 0 korral alamkordused puuduvad. Kui kordamist pole määratud, seda eiratakse.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>subRepeatCount</parameter
+></term>
+<listitem>
+<para
+>Määrab alamkorduste arvu (kaasa arvatud esimene kordus).</para>
+</listitem>
+</varlistentry>
+</variablelist>
+</refsect2>
+</refsynopsisdiv>
+
+<refsect1>
+<title
+>Kirjeldus</title>
+<para
+><function
+>scheduleFile()</function
+> on &DBus;i väljakutse määratud teksti- või pildifaili näitamise ajastamiseks määratud kuupäevale ja ajale. Kui kõrvale jätta faili nime või &URL;-i ning esiplaani värvi ja fondi määramine, on selle kasutamine samasugune funktsiooniga <link linkend="scheduleMessage-descrip"
+><function
+>scheduleMessage</function
+></link
+>, mille juurest tasubki otsida ka selle funktsiooni täpsemat kirjeldust.</para>
+</refsect1>
+</refentry>
+
+
+<refentry id="scheduleCommand">
+<refmeta>
+<refentrytitle
+>scheduleCommand</refentrytitle>
+</refmeta>
+<refnamediv>
+<refname
+>scheduleCommand</refname>
+<refpurpose
+>uue häire ajastamine, mis käivitab shellikäsu.</refpurpose>
+</refnamediv>
+<refsynopsisdiv>
+<synopsis
+>bool scheduleCommand(const QString&amp; <replaceable
+>commandLine</replaceable
+>,
+                     const QString&amp; <replaceable
+>startDateTime</replaceable
+>,
+                     int <replaceable
+>lateCancel</replaceable
+>,
+                     unsigned <replaceable
+>flags</replaceable
+>,
+                     const QString&amp; <replaceable
+>recurrence</replaceable
+>,
+                     int <replaceable
+>subRepeatInterval</replaceable
+>, 
+                     int <replaceable
+>subRepeatCount</replaceable
+>)
+</synopsis>
+<synopsis
+>bool scheduleCommand(const QString&amp; <replaceable
+>commandLine</replaceable
+>,
+                     const QString&amp; <replaceable
+>startDateTime</replaceable
+>,
+                     int <replaceable
+>lateCancel</replaceable
+>,
+                     unsigned <replaceable
+>flags</replaceable
+>,
+                     int <replaceable
+>recurType</replaceable
+>,
+                     int <replaceable
+>recurInterval</replaceable
+>,
+                     int <replaceable
+>recurCount</replaceable
+>)
+</synopsis>
+<synopsis
+>bool scheduleCommand(const QString&amp; <replaceable
+>commandLine</replaceable
+>,
+                     const QString&amp; <replaceable
+>startDateTime</replaceable
+>,
+                     int <replaceable
+>lateCancel</replaceable
+>,
+                     unsigned <replaceable
+>flags</replaceable
+>,
+                     int <replaceable
+>recurType</replaceable
+>,
+                     int <replaceable
+>recurInterval</replaceable
+>,
+                     const QString&amp; <replaceable
+>endDateTime</replaceable
+>)
+</synopsis>
+
+<refsect2>
+<title
+>Parameetrid</title>
+<variablelist>
+<varlistentry>
+<term
+><parameter
+>commandLine</parameter
+></term>
+<listitem>
+<para
+>Määrab käivitatava käsu. Parameeter <parameter
+>flags</parameter
+> osutab, kas parameeter sisaldab shellikäsku või skripti.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>startDateTime</parameter
+></term>
+<listitem>
+<para
+>Määrab kuupäeva või kuupäeva ja kellaaja, millal teadet näidatakse. Ainult kuupäevaga määratud häire puhul peab string olema kujul <quote
+>YYYY-MM-DD [TZ]</quote
+> (nagu tagastab <methodname
+>QDate::toString(Qt::ISODate)</methodname
+>). Kuupäeva ja kellaajaga määratud häire korral peab string olema kujul <quote
+>YYYY-MM-DDTHH:MM[:SS] [TZ]</quote
+> (nagu tagastab <methodname
+>QDateTime::toString(Qt::ISODate)</methodname
+>) või <quote
+>HH:MM[:SS] [Clock]</quote
+> (nagu tagastab <methodname
+>QTime::toString(Qt::ISODate)</methodname
+>). Kui kuupäeva ei ole määratud, kasutatakse käesolevat kuupäeva. Pane tähele, et sekundeid ignoreeritakse.</para>
+
+<para
+>Kui ajavööndit pole määratud, kasutatakse kohaliku süsteemi ajavööndit. Ajavöönd <replaceable
+>TZ</replaceable
+> võib olla süsteemi ajavööndi nimi (&eg; <userinput
+>Euroopa/London</userinput
+>), <userinput
+>UTC</userinput
+>, mis tähistab Greenwichi aega või <userinput
+>Kell</userinput
+>, mille korral kasutatakse kohaliku arvuti kella ja eiratakse ajavööndit.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>lateCancel</parameter
+></term>
+<listitem>
+<para
+>Annab korralduse häire katkestada, kui seda ei saa käivitada määratud arvu minutite jooksul pärast häire ettenähtud aega. Kui väärtus on 0, ei katkestata häiret sellele vaatamata, kui palju aega on ettenähtud ajast möödas.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>flags</parameter
+></term>
+<listitem>
+<para
+>Määrab soovitud häirelippude loogilise funktsiooni OR. Lipubitid on määratud failis <filename
+>kalarmiface.h</filename
+> klassiga <classname
+>KAlarmIface</classname
+>. Arvesta, et mitte kõiki lipubitte ei saa käsuhäire korral kasutada.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>recurrence</parameter
+></term>
+<listitem>
+<para
+>Määrab häire regulaarse kordumise iCalendari süntaksis, nagu selle defineerib <ulink url="http://www.w3.org/2002/12/cal/rfc2445.html"
+>RFC2445</ulink
+>. Näiteks <quote
+>FREQ=MONTHLY;COUNT=4;INTERVAL=3;BYDAY=-1MO</quote
+> määrab 4 kordust 3-kuiste intervallidega kuu viimasel esmaspäeval. Mittekorduva häire korral määra tühi string.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>recurType</parameter
+></term>
+<listitem>
+<para
+>Määrab häire kordumise tüübi. Lubatud väärtused on MINUTELY, DAILY, WEEKLY, MONTHLY, YEARLY. Need on defineeritud failis <filename
+>kalarmiface.h</filename
+> klassiga <classname
+>KAlarmIface</classname
+>. Igakuised kordumised on kuupäeva ja iga-aastased kordumised samuti kuupäeva tüüpi, kusjuures mõlemal juhul võetakse kuupäev parameetrist <parameter
+>startDateTime</parameter
+>.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>recurInterval</parameter
+></term>
+<listitem>
+<para
+>Määrab häire korduste vaheliste perioodide hulga (minutid/päevad/nädalad/kuud/aastad, nagu selle määrab <parameter
+>recurType</parameter
+>).</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>recurCount</parameter
+></term>
+<listitem>
+<para
+>Määrab, mitu korda häiret korrata. -1 tähendab häire lõputut kordamist.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>endDateTime</parameter
+></term>
+<listitem>
+<para
+>Määrab häire kordumise lõppkuupäeva või kuupäeva ja kellaaja. Kui <parameter
+>startDateTime</parameter
+> sisaldab kellaaega, peab ka see parameeter sisaldama kellaaega; kui <parameter
+>startDateTime</parameter
+> sisaldab ainult kuupäeva, peab ka see parameeter sisaldama ainult kuupäeva. See ei tohi sisaldada ajavööndit; parameetri väärtuse interpreteerimiseks kasutatakse sama ajavööndit nagu <parameter
+>startDateTime</parameter
+> korral.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>subRepeatInterval</parameter
+></term>
+<listitem>
+<para
+>Määrab häire alamkorduste intervalli minutites. Väärtuse 0 korral alamkordused puuduvad. Kui kordamist pole määratud, seda eiratakse.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>subRepeatCount</parameter
+></term>
+<listitem>
+<para
+>Määrab alamkorduste arvu (kaasa arvatud esimene kordus).</para>
+</listitem>
+</varlistentry>
+</variablelist>
+</refsect2>
+</refsynopsisdiv>
+
+<refsect1>
+<title
+>Kirjeldus</title>
+<para
+><function
+>scheduleCommand()</function
+> on &DBus;i väljakutse määratud shellikäsu käivitamise ajastamiseks määratud kuupäevale ja ajale. Kui kõrvale jätta ühelt poolt käsurea käsu määramine ning teiselt poolt teate värvi määramine, on selle kasutamine samasugune funktsiooniga <link linkend="scheduleMessage-descrip"
+><function
+>scheduleMessage</function
+></link
+>, mille juurest tasuks vaadata ka selle funktsiooni täpsemat kirjeldust.</para>
+</refsect1>
+</refentry>
+
+
+<refentry id="scheduleEmail">
+<refmeta>
+<refentrytitle
+>scheduleEmail</refentrytitle>
+</refmeta>
+<refnamediv>
+<refname
+>scheduleEmail</refname>
+<refpurpose
+>uue häire ajastamine, mis saadab häire e-postitsi.</refpurpose>
+</refnamediv>
+<refsynopsisdiv>
+<synopsis
+>bool scheduleEmail(const QString&amp; <replaceable
+>fromID</replaceable
+>,
+                   const QString&amp; <replaceable
+>addresses</replaceable
+>,
+                   const QString&amp; <replaceable
+>subject</replaceable
+>,
+                   const QString&amp; <replaceable
+>message</replaceable
+>,
+                   const QString&amp; <replaceable
+>attachments</replaceable
+>,
+                   const QString&amp; <replaceable
+>startDateTime</replaceable
+>,
+                   int <replaceable
+>lateCancel</replaceable
+>,
+                   unsigned <replaceable
+>flags</replaceable
+>,
+                   const QString&amp; <replaceable
+>recurrence</replaceable
+>,
+                   int <replaceable
+>subRepeatInterval</replaceable
+>, 
+                   int <replaceable
+>subRepeatCount</replaceable
+>)
+</synopsis>
+<synopsis
+>bool scheduleEmail(const QString&amp; <replaceable
+>fromID</replaceable
+>,
+                   const QString&amp; <replaceable
+>addresses</replaceable
+>,
+                   const QString&amp; <replaceable
+>subject</replaceable
+>,
+                   const QString&amp; <replaceable
+>message</replaceable
+>,
+                   const QString&amp; <replaceable
+>attachments</replaceable
+>,
+                   const QString&amp; <replaceable
+>startDateTime</replaceable
+>,
+                   int <replaceable
+>lateCancel</replaceable
+>,
+                   unsigned <replaceable
+>flags</replaceable
+>,
+                   int <replaceable
+>recurType</replaceable
+>,
+                   int <replaceable
+>recurInterval</replaceable
+>,
+                   int <replaceable
+>recurCount</replaceable
+>)
+</synopsis>
+<synopsis
+>bool scheduleEmail(const QString&amp; <replaceable
+>fromID</replaceable
+>,
+                   const QString&amp; <replaceable
+>addresses</replaceable
+>,
+                   const QString&amp; <replaceable
+>subject</replaceable
+>,
+                   const QString&amp; <replaceable
+>message</replaceable
+>,
+                   const QString&amp; <replaceable
+>attachments</replaceable
+>,
+                   const QString&amp; <replaceable
+>startDateTime</replaceable
+>,
+                   int <replaceable
+>lateCancel</replaceable
+>, 
+                   unsigned <replaceable
+>flags</replaceable
+>,
+                   int <replaceable
+>recurType</replaceable
+>,
+                   int <replaceable
+>recurInterval</replaceable
+>,
+                   const QString&amp; <replaceable
+>endTime</replaceable
+>)
+</synopsis>
+
+<refsect2>
+<title
+>Parameetrid</title>
+<variablelist>
+<varlistentry>
+<term
+><parameter
+>fromID</parameter
+></term>
+<listitem>
+<para
+>&kmail;i identiteet, mida kasutatakse kirja saatja määramiseks. Kui see on andmata, kasutatakse saatja aadressina aadressi, mis on määratud &kalarm;i <link linkend="preferences-email"
+>e-posti seadistustes</link
+>.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>addresses</parameter
+></term>
+<listitem>
+<para
+>Komadega eraldatud saajate e-posti aadresside nimekiri.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>subject</parameter
+></term>
+<listitem>
+<para
+>Määrab kirja subjektirea ehk teema.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>message</parameter
+></term>
+<listitem>
+<para
+>Määrab kirja sisu.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>attachments</parameter
+></term>
+<listitem>
+<para
+>Komadega eraldatud failide asukohtade või &URL;-ide nimekiri, mis kaasatakse kirjale.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>startDateTime</parameter
+></term>
+<listitem>
+<para
+>Määrab kuupäeva või kuupäeva ja kellaaja, millal teadet näidatakse. Ainult kuupäevaga määratud häire puhul peab string olema kujul <quote
+>YYYY-MM-DD [TZ]</quote
+> (nagu tagastab <methodname
+>QDate::toString(Qt::ISODate)</methodname
+>). Kuupäeva ja kellaajaga määratud häire korral peab string olema kujul <quote
+>YYYY-MM-DDTHH:MM[:SS] [TZ]</quote
+> (nagu tagastab <methodname
+>QDateTime::toString(Qt::ISODate)</methodname
+>) või <quote
+>HH:MM[:SS] [Clock]</quote
+> (nagu tagastab <methodname
+>QTime::toString(Qt::ISODate)</methodname
+>). Kui kuupäeva ei ole määratud, kasutatakse käesolevat kuupäeva. Pane tähele, et sekundeid ignoreeritakse.</para>
+
+<para
+>Kui ajavööndit pole määratud, kasutatakse kohaliku süsteemi ajavööndit. Ajavöönd <replaceable
+>TZ</replaceable
+> võib olla süsteemi ajavööndi nimi (&eg; <userinput
+>Euroopa/London</userinput
+>), <userinput
+>UTC</userinput
+>, mis tähistab Greenwichi aega või <userinput
+>Kell</userinput
+>, mille korral kasutatakse kohaliku arvuti kella ja eiratakse ajavööndit.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>lateCancel</parameter
+></term>
+<listitem>
+<para
+>Annab korralduse häire katkestada, kui seda ei saa käivitada määratud arvu minutite jooksul pärast häire ettenähtud aega. Kui väärtus on 0, ei katkestata häiret sellele vaatamata, kui palju aega on ettenähtud ajast möödas.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>flags</parameter
+></term>
+<listitem>
+<para
+>Määrab soovitud häirelippude loogilise funktsiooni OR. Lipubitid on määratud failis <filename
+>kalarmiface.h</filename
+> klassiga <classname
+>KAlarmIface</classname
+>. Arvesta, et mitte kõiki lipubitte ei saa e-posti häire korral kasutada.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>recurrence</parameter
+></term>
+<listitem>
+<para
+>Määrab häire regulaarse kordumise iCalendari süntaksis, nagu selle defineerib <ulink url="http://www.w3.org/2002/12/cal/rfc2445.html"
+>RFC2445</ulink
+>. Näiteks <quote
+>FREQ=MONTHLY;COUNT=4;INTERVAL=3;BYDAY=-1MO</quote
+> määrab 4 kordust 3-kuiste intervallidega kuu viimasel esmaspäeval. Mittekorduva häire korral määra tühi string.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>recurType</parameter
+></term>
+<listitem>
+<para
+>Määrab häire kordumise tüübi. Lubatud väärtused on MINUTELY, DAILY, WEEKLY, MONTHLY, YEARLY. Need on defineeritud failis <filename
+>kalarmiface.h</filename
+> klassiga <classname
+>KAlarmIface</classname
+>. Igakuised kordumised on kuupäeva ja iga-aastased kordumised samuti kuupäeva tüüpi, kusjuures mõlemal juhul võetakse kuupäev parameetrist <parameter
+>startDateTime</parameter
+>.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>recurInterval</parameter
+></term>
+<listitem>
+<para
+>Määrab häire korduste vaheliste perioodide hulga (minutid/päevad/nädalad/kuud/aastad, nagu selle määrab <parameter
+>recurType</parameter
+>).</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>recurCount</parameter
+></term>
+<listitem>
+<para
+>Määrab, mitu korda häiret korrata. -1 tähendab häire lõputut kordamist.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>endDateTime</parameter
+></term>
+<listitem>
+<para
+>Määrab häire kordumise lõppkuupäeva või kuupäeva ja kellaaja. Kui <parameter
+>startDateTime</parameter
+> sisaldab kellaaega, peab ka see parameeter sisaldama kellaaega; kui <parameter
+>startDateTime</parameter
+> sisaldab ainult kuupäeva, peab ka see parameeter sisaldama ainult kuupäeva. See ei tohi sisaldada ajavööndit; parameetri väärtuse interpreteerimiseks kasutatakse sama ajavööndit nagu <parameter
+>startDateTime</parameter
+> korral.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>subRepeatInterval</parameter
+></term>
+<listitem>
+<para
+>Määrab häire alamkorduste intervalli minutites. Väärtuse 0 korral alamkordused puuduvad. Kui kordamist pole määratud, seda eiratakse.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>subRepeatCount</parameter
+></term>
+<listitem>
+<para
+>Määrab alamkorduste arvu (kaasa arvatud esimene kordus).</para>
+</listitem>
+</varlistentry>
+</variablelist>
+</refsect2>
+</refsynopsisdiv>
+
+<refsect1>
+<title
+>Kirjeldus</title>
+<para
+><function
+>scheduleEmail()</function
+> on &DBus;i väljakutse määratud e-kirja saatmise ajastamiseks määratud kuupäevale ja ajale. Kui kõrvale jätta ühelt poolt kirja päise ja sisu määramine ning teiselt poolt teate värvi määramine, on selle kasutamine samasugune funktsiooniga <link linkend="scheduleMessage-descrip"
+><function
+>scheduleMessage</function
+></link
+>, mille juurest tasuks vaadata ka selle funktsiooni täpsemat kirjeldust.</para>
+</refsect1>
+</refentry>
+
+
+<refentry id="scheduleAudio">
+<refmeta>
+<refentrytitle
+>scheduleAudio</refentrytitle>
+</refmeta>
+<refnamediv>
+<refname
+>scheduleAudio</refname>
+<refpurpose
+>uue häire ajastamine, mis käivitab shellikäsu.</refpurpose>
+</refnamediv>
+<refsynopsisdiv>
+<synopsis
+>bool scheduleAudio(const QString&amp; <replaceable
+>audioURL</replaceable
+>,
+                   int <replaceable
+>volumePercent</replaceable
+>,
+                   const QString&amp; <replaceable
+>startDateTime</replaceable
+>,
+                   int <replaceable
+>lateCancel</replaceable
+>,
+                   unsigned <replaceable
+>flags</replaceable
+>,
+                   const QString&amp; <replaceable
+>recurrence</replaceable
+>,
+                   int <replaceable
+>subRepeatInterval</replaceable
+>, 
+                   int <replaceable
+>subRepeatCount</replaceable
+>)
+</synopsis>
+<synopsis
+>bool scheduleAudio(const QString&amp; <replaceable
+>audioURL</replaceable
+>,
+                   int <replaceable
+>volumePercent</replaceable
+>,
+                   const QString&amp; <replaceable
+>startDateTime</replaceable
+>,
+                   int <replaceable
+>lateCancel</replaceable
+>,
+                   unsigned <replaceable
+>flags</replaceable
+>,
+                   int <replaceable
+>recurType</replaceable
+>,
+                   int <replaceable
+>recurInterval</replaceable
+>,
+                   int <replaceable
+>recurCount</replaceable
+>)
+</synopsis>
+<synopsis
+>bool scheduleAudio(const QString&amp; <replaceable
+>audioURL</replaceable
+>,
+                   int <replaceable
+>volumePercent</replaceable
+>,
+                   const QString&amp; <replaceable
+>startDateTime</replaceable
+>,
+                   int <replaceable
+>lateCancel</replaceable
+>,
+                   unsigned <replaceable
+>flags</replaceable
+>,
+                   int <replaceable
+>recurType</replaceable
+>,
+                   int <replaceable
+>recurInterval</replaceable
+>,
+                   const QString&amp; <replaceable
+>endDateTime</replaceable
+>)
+</synopsis>
+
+<refsect2>
+<title
+>Parameetrid</title>
+<variablelist>
+<varlistentry>
+<term
+><parameter
+>audioURL</parameter
+></term>
+<listitem>
+<para
+>Määrab esitatava helifaili.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>volumePercent</parameter
+></term>
+<listitem>
+<para
+>Määrab kasutatava helitugevuse protsendina täishelitugevusest. Vaikimisi helitugevuse jaoks anna väärtuseks -1.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>startDateTime</parameter
+></term>
+<listitem>
+<para
+>Määrab kuupäeva või kuupäeva ja kellaaja, millal teadet näidatakse. Ainult kuupäevaga määratud häire puhul peab string olema kujul <quote
+>YYYY-MM-DD [TZ]</quote
+> (nagu tagastab <methodname
+>QDate::toString(Qt::ISODate)</methodname
+>). Kuupäeva ja kellaajaga määratud häire korral peab string olema kujul <quote
+>YYYY-MM-DDTHH:MM[:SS] [TZ]</quote
+> (nagu tagastab <methodname
+>QDateTime::toString(Qt::ISODate)</methodname
+>) või <quote
+>HH:MM[:SS] [Clock]</quote
+> (nagu tagastab <methodname
+>QTime::toString(Qt::ISODate)</methodname
+>). Kui kuupäeva ei ole määratud, kasutatakse käesolevat kuupäeva. Pane tähele, et sekundeid ignoreeritakse.</para>
+
+<para
+>Kui ajavööndit pole määratud, kasutatakse kohaliku süsteemi ajavööndit. Ajavöönd <replaceable
+>TZ</replaceable
+> võib olla süsteemi ajavööndi nimi (&eg; <userinput
+>Euroopa/London</userinput
+>), <userinput
+>UTC</userinput
+>, mis tähistab Greenwichi aega või <userinput
+>Kell</userinput
+>, mille korral kasutatakse kohaliku arvuti kella ja eiratakse ajavööndit.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>lateCancel</parameter
+></term>
+<listitem>
+<para
+>Annab korralduse häire katkestada, kui seda ei saa käivitada määratud arvu minutite jooksul pärast häire ettenähtud aega. Kui väärtus on 0, ei katkestata häiret sellele vaatamata, kui palju aega on ettenähtud ajast möödas.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>flags</parameter
+></term>
+<listitem>
+<para
+>Määrab soovitud häirelippude loogilise funktsiooni OR. Lipubitid on määratud failis <filename
+>kalarmiface.h</filename
+> klassiga <classname
+>KAlarmIface</classname
+>. Arvesta, et mitte kõiki lipubitte ei saa käsuhäire korral kasutada.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>recurrence</parameter
+></term>
+<listitem>
+<para
+>Määrab häire regulaarse kordumise iCalendari süntaksis, nagu selle defineerib <ulink url="http://www.w3.org/2002/12/cal/rfc2445.html"
+>RFC2445</ulink
+>. Näiteks <quote
+>FREQ=MONTHLY;COUNT=4;INTERVAL=3;BYDAY=-1MO</quote
+> määrab 4 kordust 3-kuiste intervallidega kuu viimasel esmaspäeval. Mittekorduva häire korral määra tühi string.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>recurType</parameter
+></term>
+<listitem>
+<para
+>Määrab häire kordumise tüübi. Lubatud väärtused on MINUTELY, DAILY, WEEKLY, MONTHLY, YEARLY. Need on defineeritud failis <filename
+>kalarmiface.h</filename
+> klassiga <classname
+>KAlarmIface</classname
+>. Igakuised kordumised on kuupäeva ja iga-aastased kordumised samuti kuupäeva tüüpi, kusjuures mõlemal juhul võetakse kuupäev parameetrist <parameter
+>startDateTime</parameter
+>.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>recurInterval</parameter
+></term>
+<listitem>
+<para
+>Määrab häire korduste vaheliste perioodide hulga (minutid/päevad/nädalad/kuud/aastad, nagu selle määrab <parameter
+>recurType</parameter
+>).</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>recurCount</parameter
+></term>
+<listitem>
+<para
+>Määrab, mitu korda häiret korrata. -1 tähendab häire lõputut kordamist.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>endDateTime</parameter
+></term>
+<listitem>
+<para
+>Määrab häire kordumise lõppkuupäeva või kuupäeva ja kellaaja. Kui <parameter
+>startDateTime</parameter
+> sisaldab kellaaega, peab ka see parameeter sisaldama kellaaega; kui <parameter
+>startDateTime</parameter
+> sisaldab ainult kuupäeva, peab ka see parameeter sisaldama ainult kuupäeva. See ei tohi sisaldada ajavööndit; parameetri väärtuse interpreteerimiseks kasutatakse sama ajavööndit nagu <parameter
+>startDateTime</parameter
+> korral.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>subRepeatInterval</parameter
+></term>
+<listitem>
+<para
+>Määrab häire alamkorduste intervalli minutites. Väärtuse 0 korral alamkordused puuduvad. Kui kordamist pole määratud, seda eiratakse.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>subRepeatCount</parameter
+></term>
+<listitem>
+<para
+>Määrab alamkorduste arvu (kaasa arvatud esimene kordus).</para>
+</listitem>
+</varlistentry>
+</variablelist>
+</refsect2>
+</refsynopsisdiv>
+
+<refsect1>
+<title
+>Kirjeldus</title>
+<para
+><function
+>scheduleAudio()</function
+> on &DBus;i väljakutse määratud helifaili esitamiseks määratud kuupäeval ja ajal. Kui kõrvale jätta helitugevuse määramine ning teate värvi ja fondi parameetrite puudumine, on selle kasutamine samasugune funktsiooniga <link linkend="scheduleMessage-descrip"
+><function
+>scheduleMessage</function
+></link
+>, mille juurest tasuks vaadata ka selle funktsiooni täpsemat kirjeldust.</para>
+</refsect1>
+</refentry>
+
+<refentry id="dbus_edit">
+<refmeta>
+<refentrytitle
+>edit</refentrytitle>
+</refmeta>
+<refnamediv>
+<refname
+>edit</refname>
+<refpurpose
+>avab <link linkend="alarm-edit-dlg"
+>häire redigeerimise dialoogi</link
+>.</refpurpose>
+</refnamediv>
+<refsynopsisdiv>
+<synopsis
+>bool edit(const QString&amp; <replaceable
+>sündmuseID</replaceable
+>)
+</synopsis>
+
+<refsect2>
+<title
+>Parameetrid</title>
+<variablelist>
+<varlistentry>
+<term
+><parameter
+>eventID</parameter
+></term>
+<listitem>
+<para
+>Määrab redigeeritava sündmuse unikaalse ID.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+</refsect2>
+
+<refsect2>
+<title
+>Tagastatav väärtus</title>
+<para
+><returnvalue
+>false</returnvalue
+>, kui määratud häiret ei leita või kui see ei ole redigeeritav, muul juhul <returnvalue
+>true</returnvalue
+>.</para>
+</refsect2>
+</refsynopsisdiv>
+
+<refsect1>
+<title
+>Kirjeldus</title>
+
+<para
+><function
+>edit()</function
+> on &DBus;i väljakutse, mis avab <link linkend="alarm-edit-dlg"
+>häire redigeerimise dialoogi</link
+> määratud häire redigeerimiseks.</para>
+
+</refsect1>
+</refentry>
+
+<refentry id="dbus_editnew">
+<refmeta>
+<refentrytitle
+>editNew</refentrytitle>
+</refmeta>
+<refnamediv>
+<refname
+>editNew</refname>
+<refpurpose
+>avab <link linkend="alarm-edit-dlg"
+>häire redigeerimise dialoogi</link
+> uue häire redigeerimiseks.</refpurpose>
+</refnamediv>
+<refsynopsisdiv>
+<synopsis
+>bool editNew(int <replaceable
+>tüüp</replaceable
+>)
+</synopsis>
+<synopsis
+>bool editNew(const QString&amp; <replaceable
+>mallinimi</replaceable
+>)
+</synopsis>
+
+<refsect2>
+<title
+>Parameetrid</title>
+<variablelist>
+<varlistentry>
+<term
+><parameter
+>tüüp</parameter
+></term>
+<listitem>
+<para
+>Määrab häiretüübi. Lubatud väärtused on DISPLAY, COMMAND, EMAIL, AUDIO. Need on määratud failis <filename
+>kalarmiface.h</filename
+> klassiga <classname
+>KAlarmIface</classname
+>.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>mallinimi</parameter
+></term>
+<listitem>
+<para
+>Määrab häiremalli nime, millele uus häire tugineb.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+</refsect2>
+
+<refsect2>
+<title
+>Tagastatav väärtus</title>
+<para
+><returnvalue
+>false</returnvalue
+>, kui <parameter
+>tüüp</parameter
+> on vigase väärtusega või kui malli nimega <parameter
+>mallinimi</parameter
+> ei leita, muul juhul <returnvalue
+>true</returnvalue
+>.</para>
+</refsect2>
+</refsynopsisdiv>
+
+<refsect1>
+<title
+>Kirjeldus</title>
+
+<para
+><function
+>editNew()</function
+> on &DBus;i väljakutse, mis avab <link linkend="alarm-edit-dlg"
+>häire redigeerimise dialoogi</link
+> uue häire redigeerimiseks. Kui parameetrina anda häiretüüp, avatakse tühi dialoog. Kui aga parameetrina anda häiremalli nimi, täidetakse dialoog ette malli andmetega.</para>
+
+</refsect1>
+</refentry>
+
+<refentry id="dbus_list">
+<refmeta>
+<refentrytitle
+>list</refentrytitle>
+</refmeta>
+<refnamediv>
+<refname
+>list</refname>
+<refpurpose
+>Tagastab ajastatud häirete loendi.</refpurpose>
+</refnamediv>
+<refsynopsisdiv>
+<synopsis
+>QString list()
+</synopsis>
+
+<refsect2>
+<title
+>Tagastatav väärtus</title>
+<para
+>Häirete loend eraldatuna reavahetustega, kõik vormingus <returnvalue
+><replaceable
+>ressursi_id</replaceable
+>:<replaceable
+>UID</replaceable
+> <replaceable
+>kellaaeg</replaceable
+> <replaceable
+>tekst</replaceable
+></returnvalue
+> (kui kasutusel on Akonadi) või <returnvalue
+><replaceable
+>UID</replaceable
+> <replaceable
+>kellaaeg</replaceable
+> <replaceable
+>tekst</replaceable
+></returnvalue
+> (kui kasutusel on KResources).</para>
+</refsect2>
+</refsynopsisdiv>
+
+<refsect1>
+<title
+>Kirjeldus</title>
+
+<para
+><function
+>list()</function
+> on &DBus;-i väljakutse, mis tagastab stringi ajastatud häirete kokkuvõttega. Selles näidatakse iga ootel häire kohta lühiandmeid: ressursi identifikaator (kui kasutusel on Akonadi), UID, järgmine kavas olev aeg ning teate tekst või fail.</para>
+
+</refsect1>
+</refentry>
+
+</sect1>
+
+<sect1 id="cmdline-interface">
+<title
+>Käsurealiides</title>
+
+<para
+>Käsurea võtmeid pakutakse võimaldamaks muudel rakendustel käivitada &kalarm;i, kui see juba ei tööta, ajastatud häirete käivitamiseks või katkestamiseks või uute häirete ajastamiseks. Põhjus, miks selleks kasutatakse käsurea võtmeid, peitub selles, et kui &kalarm; käivitada ilma käsurea parameetriteta ja seejärel esitada talle &DBus;i väljakutse, käivitub see vaikimisi graafilises režiimis, mis rakendustevaheliste väljakutsete puhul ei ole kindlasti soovitav.</para>
+
+<note
+><para
+>Rakendused peaksid esmalt kontrollima, kas &kalarm; juba töötab. Kui jah, siis tuleks vastavate toimingute soovid esitada &DBus;i väljakutsetena.</para
+></note>
+
+<para
+>Käsurea võtmeid uue häire ajastamiseks on kirjeldatud osas <link linkend="cmdline-operation"
+>Käsurea kasutamine</link
+>. Võtmed ajastatud häirete käivitamiseks ja peatamiseks on järgmised:</para>
+
+<note
+><para
+>Ka tavalised kasutajad võivad soovi korral siintoodud käsurea võtmeid kasutada (eeldusel mõistagi, et nad määravad parameetrile vajaliku info).</para
+></note>
+
+<informaltable>
+<tgroup cols="2">
+<thead>
+<row>
+  <entry
+>Võti</entry>
+  <entry
+>Kirjeldus</entry>
+</row>
+</thead>
+<tbody>
+<row>
+  <entry
+><option
+>--cancelEvent <replaceable
+>eventID</replaceable
+></option
+></entry>
+  <entry
+>Määratud ID-ga häire katkestamine. Selle võtme kasutamisel ei saa kasutada võtit <option
+>--triggerEvent</option
+>.</entry>
+</row>
+<row>
+  <entry
+><option
+>--triggerEvent <replaceable
+>eventID</replaceable
+></option
+></entry>
+  <entry
+>Käivitab määratud sündmuse ID-ga häire. Sooritatav toiming on samasugune, nagu &DBus;i väljakutse <link linkend="triggerEvent"
+>triggerEvent()</link
+>. Selle võtme kasutamisel ei saa kasutada võtit <option
+>--cancelEvent</option
+>.</entry>
+</row>
+</tbody>
+</tgroup>
+</informaltable>
+
+<para
+>Näited:</para>
+
+<informalexample
+><screen
+><prompt
+>%</prompt
+> <userinput
+><command
+>kalarm</command
+> <option
+>--triggerEvent <replaceable
+>&kalarm;-387486299.702</replaceable
+></option
+></userinput>
+<prompt
+>%</prompt
+> <userinput
+><command
+>kalarm</command
+> <option
+>--cancelEvent <replaceable
+>&kalarm;-388886299.793</replaceable
+></option
+></userinput
+>
+</screen>
+</informalexample>
+
+</sect1>
+</chapter>
+
+
+<chapter id="faq">
+<title
+>Küsimused ja vastused</title>
+&reporting.bugs; &updating.documentation; <qandaset id="faqlist">
+<qandaentry>
+<question>
+<para
+>Millist seadistustefaili kasutab &kalarm;?</para>
+</question>
+<answer>
+<para
+>&kalarm;i seadistused on failis <filename
+>$KDEHOME/share/config/kalarmrc</filename
+>.</para>
+<para
+>Häirekalendri seadistused on failis <filename
+>$KDEHOME/share/config/kresources/alarms/stdrc</filename
+>.</para>
+
+<para
+>($<envar
+>KDEHOME</envar
+> on tavaliselt <filename class="directory"
+>&tilde;/.kde</filename
+> või midagi sarnast.)</para>
+</answer>
+</qandaentry>
+
+<qandaentry>
+<question>
+<para
+>Kuhu salvestab &kalarm; häired?</para>
+</question>
+<answer>
+
+<para
+>Kalendrifailide nimed, mida &kalarm; loob esmakäivitusel, on järgmised (neid saab siiski tühistada kirjetega &kalarm;i seadistustefaili sektsioonis <parameter
+>General</parameter
+>):</para>
+
+<itemizedlist>
+<listitem>
+<para
+><filename
+>$KDEHOME/share/apps/kalarm/calendar.ics</filename
+> sisaldab aktiivseid häireid (tühistatav kirjega <parameter
+>Calendar</parameter
+>).</para>
+</listitem>
+
+<listitem>
+<para
+><filename
+>$KDEHOME/share/apps/kalarm/expired.ics</filename
+> sisaldab aegunud häireid (tühistatav kirjega <parameter
+>ExpiredCalendar</parameter
+>).</para>
+</listitem>
+
+<listitem>
+<para
+><filename
+>$KDEHOME/share/apps/kalarm/template.ics</filename
+> sisaldab häiremalle (tühistatav kirjega <parameter
+>TemplateCalendar</parameter
+>).</para>
+</listitem>
+</itemizedlist>
+
+<para
+>Parajasti kasutatava kalendreid näeb häirekalendrite nimekirjas kalendrite üksikasjade all. Failinimed on salvestatud häirekalendri seadistustefaili.</para>
+
+<para
+>Parajasti näidatavate häirete üksikasju sisaldab kalendrifail <filename
+>$KDEHOME/share/apps/kalarm/displaying.ics</filename
+>.</para>
+</answer>
+</qandaentry>
+
+<qandaentry>
+<question>
+<para
+>Millises vormingus häired salvestatakse?</para>
+</question>
+<answer>
+<para
+>Kalendrifailid, milles &kalarm; salvestab häired, on tekstifailid, mille vormingu määrab kindlaks dokument <ulink url="http://www.w3.org/2002/12/cal/rfc2445.html"
+>RFC2445 - Internet Calendaring and Scheduling Core Object Specification (iCalendar)</ulink
+>. See on standardvorming, mida kasutavad kõik mooduli kdepim rakendused. &kalarm; kasutab teatud mittestandardseid omadusi, mis vastavad küll RFC2445 nõuetele. Need on dokumenteeritud &kalarm;iga kaasa pandud failis <filename
+>DESIGN.html</filename
+>.</para>
+</answer>
+</qandaentry>
+
+<qandaentry>
+<question>
+<para
+>Mis programm on <application
+>kalarmautostart</application
+>?</para>
+</question>
+<answer>
+<para
+><application
+>kalarmautostart</application
+> on väike abiprogramm, mille ülesanne on käivitada &kalarm; automaatselt sisselogimisel.</para>
+
+<para
+>&kalarm;i taastab tavaliselt sisselogimisel seansihaldur, näidates aknaid taas samas olekus, nagu need jäid väljalogimisel. Aga kui see väljalogimisel ei tööta, ei saa seansihaldur seda ka taastada ning seetõttu ka mitte automaatselt käivitada. Asi on selles, kui rakendus allub korraga nii seansihaldusele kui ka on automaatselt käivitatav, ei saa kunagi kindel olla, kumma mõju avaldub varem. Kui see kõigepealt automaatselt käivitatakse, ei saa seansihaldur taastada rakenduse olekut.</para>
+
+<para
+>Selle probleemi vältimiseks käivitatakse sisselogimisel &kalarm;i asemel hoopis <application
+>kalarmautostart</application
+>. See lihtsalt ootab veidi, et tagada seansihalduri töö lõppemine, ning siis käivitab &kalarm;i ja lõpetab ise töö.</para>
+</answer>
+</qandaentry>
+
+</qandaset>
+</chapter>
+
+
+<chapter id="credits">
+
+<title
+>Autorid ja litsents</title>
+
+<para
+>&kalarm; </para>
+<para
+>Rakenduse autoriõigus 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011: &David.Jarvie; &David.Jarvie.mail; </para>
+
+<para
+>Dokumentatsiooni autoriõigus 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011: &David.Jarvie; &David.Jarvie.mail; </para>
+
+<para
+>Tõlge eesti keelde: Marek Laane<email
+>bald@smail.ee</email
+></para
+> 
+&underFDL; &underGPL; <para
+>Tänusõnad kuuluvad ka &kde; 1 rakenduse KAlarm autorile Stefan Nikolausele <email
+>stefan.nikolaus@stuco.uni-oldenburg.de</email
+>, kes lahkelt on lubanud nimetust &kalarm; kasutada alates &kde; 2 aegadest. </para>
+
+</chapter>
+
+<appendix id="installation">
+<title
+>Paigaldamine</title>
+
+<sect1 id="getting-kalarm">
+<title
+>&kalarm;i hankimine</title>
+&install.intro.documentation; <para
+>&kalarm; on saadaval  ka autonoomsena &kde; 4 jaoks ja vanemate &kde; 3 ja &kde; 2 jaoks veebiaadressil <ulink url="http://www.astrojar.org.uk/kalarm"
+>http://www.astrojar.org.uk/kalarm</ulink
+>. </para>
+
+</sect1>
+
+<sect1 id="requirements">
+<title
+>Nõuded</title>
+
+<para
+>&kalarm; nõuab &kde; standardsete teekide olemasolu (paketid <filename
+>kdelibs</filename
+> ja <filename
+>kdepimlibs</filename
+>). Lähtekoodi kompileerimiseks on vajalikud ka vajaliku teegi ning &Qt; arenduspaketid.</para>
+
+<para
+>Järgmised lisapaketid pakuvad paigaldamise korral &kalarm;ile lisavõimalusi:</para>
+
+<itemizedlist>
+<listitem
+><para
+>&jovie; (moodulis kdeaccessibility): kui see on paigaldatud ja seadistatud ning süsteemis on ka sobiv kõnesüntesaator, saab &kalarm;il lasta näidatavaid häireteateid ka ette lugeda.</para>
+</listitem>
+</itemizedlist>
+
+<para
+>Muudatustega saab tutvuda failis <filename
+>Changelog</filename
+> või veebiaadressil <ulink url="http://www.astrojar.org.uk/kalarm"
+>http://www.astrojar.org.uk/kalarm</ulink
+>.</para>
+</sect1>
+
+<sect1 id="compilation">
+<title
+>Kompileerimine ja paigaldus</title>
+
+<para
+>Kui sul ei õnnestu hankida sobivat eelkompileeritud binaarpaketti, tuleb &kalarm; käsitsi lähtekoodist kompileerida. Hangi selleks fail <filename
+>kdepim-x.x.tar.bz2</filename
+> või <filename
+>kalarm-x.x.tar.bz2</filename
+> (või midagi sarnast) vastavalt sellele, kas soovid paigaldada kogu &package; või ainult &kalarm;i. Paki see lahti uude kataloogi käsuga <userinput
+><command
+>tar</command
+> <option
+>xvfj <replaceable
+>pakett.tar.bz2</replaceable
+></option
+></userinput
+> (või sarnasega) ning liigu kataloogi, kuhu paketi lahti pakkisid.</para>
+&install.compile.documentation; <warning
+><para
+>Kui paigaldad &kalarm;i mõnda muusse kataloogi kui see, kuhu on paigaldatud &kde;, ei tööta rakendus korrektselt, kui sa ei anna selle asukohta &kde;-le teada. Selleks tuleb lisada keskkonnamuutujale <envar
+>KDEDIRS</envar
+> iga kord enne &kde; käivitamist &kalarm;i asukoht.</para>
+
+<para
+>Kui näiteks &kde; on paigaldatud asukohta <literal
+>/opt/kde</literal
+>, on <envar
+>KDEDIRS</envar
+> tavaliselt <literal
+>/etc/opt/kde:/opt/kde</literal
+>. Kui paigaldad &kalarm;i asukohta <literal
+>/usr/local</literal
+>, tuleb määrata <envar
+>KDEDIRS</envar
+> väärtuseks <literal
+>/usr/local:/etc/opt/kde:/opt/kde</literal
+>, enne kui &kde; käivitada.</para
+></warning>
+
+<para
+>&kalarm;il on spetsiaalne konfiguratsioonivõti, mis lubab määrata, millises keeles dokumentatsioon paigaldada, andes selles käsu <command
+>./configure</command
+> parameetrina ühe või enam keelekoodi. Vaikimisi paigaldatakse dokumentatsioon kõigis saadaolevates keeltes. Paketti kaasatud keelte loendi koos nende koodidega toob ära fail <filename
+>DOC-LANGUAGES</filename
+>. Näiteks ainult prantsus- ja ingliskeelse dokumentatsiooni paigaldamiseks anna käsk:</para>
+
+<para
+><userinput
+><command
+>./configure</command
+> --enable-doc-language=<replaceable
+>"fr en_GB"</replaceable
+></userinput
+></para>
+
+<para
+>Pane tähele, et see võti ei mõjuta seda, millises keeles kasutajaliidese tõlked on paigaldatud.</para>
+
+</sect1>
+
+<sect1 id="configuration">
+<title
+>Seadistamine</title>
+
+<para
+>&kalarm;i töötamiseks &kde; töölaual ei ole vaja midagi spetsiaalselt seadistada. Kui oled &kalarm;i esimest korda käivitanud, käivitub see edaspidi igal sisselogimisel ja hakkab jälgima ajastatud häireid.</para>
+
+<para
+>&kalarm;i kasutamiseks mõnel muul töölaual kui &kde; tuleb ennekõike tagada, et &kalarm; käivituks sisselogimisel automaatselt. Täpsemad juhised leiab failist <filename
+>INSTALL</filename
+>, mis on &kalarm;iga kaasa pandud.</para>
+
+</sect1>
+
+</appendix>
+
+&documentation.index;
+</book>
+<!--
+Local Variables:
+mode: sgml
+sgml-minimize-attributes:nil
+sgml-general-insert-case:lower
+sgml-indent-step:0
+sgml-indent-data:nil
+End:
+-->
+

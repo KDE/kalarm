@@ -1,0 +1,6452 @@
+<?xml version="1.0" ?>
+<!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.5-Based Variant V1.1//EN" "dtd/kdedbx45.dtd" [
+  <!ENTITY % addindex "IGNORE">
+  <!ENTITY % Portuguese "INCLUDE"
+><!-- change language only here -->
+]>
+
+<!-- The language must NOT be changed here. -->
+
+<book id="kalarm" lang="&language;">
+
+<bookinfo id="kalarminfo">
+<title
+>O Manual do &kalarm;</title>
+
+<authorgroup>
+<author
+><firstname
+>David</firstname
+> <surname
+>Jarvie</surname
+> <affiliation
+> <address
+>&David.Jarvie.mail;</address>
+</affiliation>
+</author>
+
+<othercredit role="developer"
+><firstname
+>David</firstname
+> <surname
+>Jarvie</surname
+> <affiliation
+><address
+>&David.Jarvie.mail;</address
+></affiliation>
+<contrib
+>Desenvolvimento</contrib>
+</othercredit>
+
+<othercredit role="translator"
+><firstname
+>José</firstname
+><surname
+>Pires</surname
+><affiliation
+><address
+><email
+>zepires@gmail.com</email
+></address
+></affiliation
+><contrib
+>Tradução</contrib
+></othercredit
+> 
+</authorgroup>
+
+<copyright>
+<year
+>2001</year
+><year
+>2002</year
+><year
+>2003</year
+><year
+>2004</year
+><year
+>2005</year
+><year
+>2006</year
+><year
+>2007</year
+><year
+>2008</year
+><year
+>2009</year
+><year
+>2010</year
+><year
+>2011</year
+><year
+>2012</year
+><year
+>2013</year
+><year
+>2016</year>
+<holder
+>&David.Jarvie;</holder>
+</copyright>
+
+<legalnotice
+>&FDLNotice;</legalnotice>
+
+<!-- Don't change format of date and version of the documentation -->
+
+<date
+>2016-12-06</date>
+<releaseinfo
+>2.11.11 (Aplicações 16.12)</releaseinfo>
+
+<abstract>
+<para
+>O &kalarm; é um escalonador pessoal de alarmes, comandos e mensagens de e-mail do &kde;.</para>
+</abstract>
+
+
+<keywordset>
+<keyword
+>KDE</keyword>
+<keyword
+>kdepim</keyword>
+<keyword
+>kalarm</keyword>
+<keyword
+>alarme</keyword>
+<keyword
+>chamada de atenção</keyword>
+<keyword
+>escalonador</keyword>
+</keywordset>
+
+</bookinfo>
+
+
+<chapter id="introduction">
+<title
+>Introdução</title>
+
+<para
+>O &kalarm; permite-lhe escalonar a visualização das mensagens de alarme pessoais, a reprodução de ficheiros de som, a execução de comandos e o envio de e-mails.</para>
+
+<para
+>No seu modo gráfico predefinido, o &kalarm; mostra a lista de alarmes pendentes, apresentando as suas horas e os seus detalhes. O utilizador pode criar novos alarmes ou seleccionar alarmes existentes para modificar ou remover. Poderá ainda, opcionalmente, ver os alarmes que expiraram.</para>
+
+<para
+>Ao configurar um alarme, poderá escolher se este se deverá repetir e se o mesmo deverá ser cancelado se não puder ser activado na hora agendada. Nos alarmes visíveis, poderá escrever o texto da mensagem de alarme, indicar um ficheiro de texto ou de imagem a mostrar ou indicar um comando para ser executado, cujo resultado será apresentado. Poderá também escolher a cor da mensagem de alarme, se esta se deve repetir, se deverá tocar um som ou falar o texto do alarme.</para>
+
+<para
+>Os alarmes também podem ser escalonados a partir da linha de comandos, ou através de chamadas &DBus; de programas.</para>
+
+<para
+>Quando uma mensagem de alarme atinge a sua hora, é mostrada em cada um dos ecrãs para garantir que você a vê. A janela da mensagem mostra a hora para a qual o alarme foi agendado. Tem normalmente uma opção de adiamento para lhe perguntar se o alarme deverá ser mostrado de novo mais tarde. Um exemplo de uma mensagem de alarme:</para>
+
+<screenshot>
+<screeninfo
+>Janela de mensagem do &kalarm;</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="alarmmessage.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>Mensagem de alarme</phrase>
+</textobject>
+</mediaobject>
+</screenshot>
+
+<para
+>Quando o alarme tem atribuído um comando para executar ou uma mensagem de e-mail para enviar, o &kalarm; não mostra nada.</para>
+
+<para
+>O &kalarm; mostra normalmente um ícone na bandeja do sistema, ainda que este possa ser escondido, se o desejar.</para>
+
+</chapter>
+
+<chapter id="using-kalarm">
+<title
+>Utilizar o &kalarm;</title>
+
+<para
+>Quando é executado sem parâmetros na linha de comandos, o &kalarm; começa no modo gráfico e mostra a lista actual de alarmes pendentes.</para>
+
+<tip
+><para
+>Todos os campos incrementais do &kalarm; têm uma funcionalidade de aceleração. Para que a mudança de valores use incrementos mais elevados, mantenha a tecla &Shift; pressionada, enquanto carrega nos campos incrementais.</para>
+
+<mediaobject>
+<imageobject>
+<imagedata fileref="spinbox.png" format="PNG"/>
+</imageobject>
+</mediaobject>
+</tip>
+
+<sect1 id="alarm-types">
+<title
+>Tipos de Alarme</title>
+
+<para
+>As funções básicas, disponíveis nos diferentes tipos de alarmes que o &kalarm; oferece, são:</para>
+
+<itemizedlist>
+<listitem>
+<para
+>Os alarmes visíveis apresentam uma mensagem de texto escrita por si ou então o conteúdo de um ficheiro de texto ou de imagem, ou ainda o resultado textual de um comando que é executado quando o alarme for desencadeado. Para além de mostrar um destes itens, poderão também reproduzir ficheiros de áudio, sintetizar o seu texto ou emitir um simples apito. Poderá também indicar os comandos a executar antes e depois da mensagem de alarme ser apresentada.</para>
+</listitem>
+
+<listitem>
+<para
+>Os comandos de alarme executam um comando ou um programa indicado por si. Não é apresentado nada, a menos que ocorra algum erro.</para>
+</listitem>
+
+<listitem>
+<para
+>Os alarmes por e-mail enviam um e-mail. Nada é apresentado, a menos que ocorra algum erro.</para>
+</listitem>
+
+<listitem>
+<para
+>Os alarmes de áudio tocam um ficheiro de som. Nada é apresentado, a menos que ocorra algum erro.</para>
+</listitem>
+</itemizedlist>
+
+<sect2 id="errors">
+<title
+>Tratamento de Erros</title>
+
+<para
+>Se ocorrer algum erro ao despoletar um alarme, será apresentada uma mensagem de erro (a menos que tenha dito explicitamente para não mostrar esse tipo de mensagens de novo).</para>
+
+<para
+>Se ocorreu um erro de execução da última vez que um alarme de comandos foi despoletado, é apresentado um ponto de exclamação branco sobre fundo vermelho, na coluna da cor da mensagem. Os detalhes do erro são apresentados numa dica, caso posicione o cursor sobre essa linha na lista de alarmes. As mesmas indicações de erros são apresentadas para os alarmes visíveis, caso ocorra um erro de execução para um comando pré- ou pós-alarme, caso sejam definidos na janela de Acções Especiais, exceptuando o facto que a coluna da cor não muda para um fundo vermelho.</para>
+
+</sect2>
+</sect1>
+
+<sect1 id="alarm-list">
+<title
+>Lista de Alarmes</title>
+
+<para
+>A janela principal do &kalarm; mostra a lista actual de alarmes pendentes, mostrando as suas horas, intervalos de repetição e textos de mensagens, os nomes dos ficheiros a apresentar, os comandos a executar ou os assuntos das mensagens de e-mail. (Para um alarme recorrente ou um alarme com uma chamada de atenção, a hora apresentada é a sua próxima hora agendada). Um ícone que se encontra à esquerda de cada texto/ficheiro/comando/assunto de e-mail do alarme indica o seu tipo.</para>
+
+<screenshot>
+<screeninfo
+>Imagem da janela principal do &kalarm;</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="mainwindow.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>Janela principal</phrase>
+</textobject>
+</mediaobject>
+</screenshot>
+
+<para
+>Para um alarme repetitivo, a lista mostra a sua próxima hora de activação e o seu intervalo básico de repetição (&eg; <quote
+>1 Dia</quote
+> para uma repetição diária, <quote
+>3 Semanas</quote
+> para uma repetição que se despoleta na Segunda e na Quarta na terceira semana e o <quote
+>Autenticação</quote
+> para um alarme que se repete depois da autenticação).</para>
+
+<para
+>Se ocorreu um erro de execução da última vez que foi desencadeado um alarme de comando, ou da última vez que foi executado um comando pré- ou pós-alarme, será apresentada uma indicação do erro na coluna da cor, como se encontra descrito acima no <link linkend="errors"
+>Tratamento de Erros</link
+>.</para>
+
+<sect2 id="listappear">
+<title
+>Alterar a Aparência da Lista de Alarmes</title>
+
+<para
+>Os alarmes poderão ser ordenados por data/hora, intervalo de repetição, cor ou texto se carregar na barra de título da coluna apropriada. Para inverter o critério de ordenação, carregue no título da coluna de novo.</para>
+
+<para
+>Você poderá, opcionalmente, mostrar o tempo restante até que cada alarme dispare, em conjunto com ou em vez da hora agendada do alarme. Para mostrar ou esconder a coluna da hora do alarme, seleccione <menuchoice
+><guimenu
+>Ver</guimenu
+><guimenuitem
+>Mostrar as Horas dos Alarmes</guimenuitem
+></menuchoice
+>. Para mostrar ou esconder a coluna com o tempo que falta até disparar os alarmes, seleccione a opção <menuchoice
+><guimenu
+>Ver</guimenu
+><guimenuitem
+>Mostrar a Hora Até Aos Alarmes</guimenuitem
+></menuchoice
+>. Pelo menos uma destas colunas é sempre visível.</para>
+
+<para
+>Se usar diversos calendários de alarmes, poderá colorir os alarmes com diferentes cores para distinguir o recurso a que pertencem, seleccionando uma cor de fundo diferente para cada recurso (ver em <link linkend="using-calendars"
+>Usar os Calendários</link
+>).</para>
+
+</sect2>
+
+<sect2 id="expired">
+<title
+>Alarmes Arquivados</title>
+
+<para
+>Por omissão, o &kalarm; guarda os alarmes durante um período limitado, logo que tenham expirado ou tenham sido removidos. (Mas repare que os alarmes que você apagar só são guardados se já tiverem sido disparados pelo menos uma vez.). Poderá controlar se o &kalarm; guarda os alarmes expirados, e durante quanto tempo, na <link linkend="preferences-storage"
+>janela de Configuração</link
+>.</para>
+
+<para
+>Os alarmes arquivados poderão ser mostrados na lista de alarmes se seleccionar a opção <menuchoice
+><guimenu
+>Ver</guimenu
+><guimenuitem
+>Mostrar os Alarmes Arquivados</guimenuitem
+></menuchoice
+>. Para os esconder de novo, desligue a opção <menuchoice
+><guimenu
+>Ver</guimenu
+><guimenuitem
+>Mostrar os Alarmes Arquivados</guimenuitem
+></menuchoice
+>.</para>
+
+</sect2>
+
+<sect2 id="search">
+<title
+>Procurar na Lista de Alarmes</title>
+
+<para
+>Poderá procurar na lista de alarmes para descobrir os alarmes que contêm um determinado texto de procura. Para invocar isto, seleccione a opção <menuchoice
+> <guimenu
+>Editar</guimenu
+><guimenuitem
+>Procurar...</guimenuitem
+></menuchoice
+>. Na janela de procura, seleccione os tipos de alarmes que deseja procurar. Para continuar a procurar por mais alarmes correspondentes, use a opção <menuchoice
+> <guimenu
+>Editar</guimenu
+><guimenuitem
+>Procurar o Próximo</guimenuitem
+></menuchoice
+> ou <menuchoice
+> <guimenu
+>Editar</guimenu
+><guimenuitem
+>Procurar o Anterior</guimenuitem
+> </menuchoice
+>.</para>
+
+<para
+>A procura é efectuada da seguinte forma:</para>
+
+<itemizedlist>
+<listitem>
+<para
+>Alarmes de texto: é pesquisado o texto da mensagem.</para>
+</listitem>
+
+<listitem>
+<para
+>Alarmes de ficheiros: é pesquisado o local/&URL; do ficheiro.</para>
+</listitem>
+
+<listitem>
+<para
+>Alarmes de comandos: é pesquisada a linha de comandos ou o programa respectivo.</para>
+</listitem>
+
+<listitem>
+<para
+>Alarmes de e-mail: para além do assunto e do corpo da mensagem de e-mail, são pesquisados os destinatários e os URLs dos anexos.</para>
+</listitem>
+
+<listitem>
+<para
+>Alarmes de áudio: é pesquisado o local/&URL; do ficheiro.</para>
+</listitem>
+</itemizedlist>
+
+<note
+><para
+>Só os alarmes que aparecem de momento na lista de alarmes é que poderão ser seleccionados para a pesquisa. Como tal, se desejar procurar nos alarmes expirados, terá primeiro de os mostrar como foi descrito na secção acima.</para
+></note>
+</sect2>
+</sect1>
+
+<sect1 id="create-edit">
+<title
+>Criar e Manipular Alarmes</title>
+
+<sect2>
+<title
+>Criar um Novo Alarme</title>
+
+<para
+>Para criar um alarme novo, faça uma das seguintes acções, seleccionando depois o tipo do alarme na lista que aparece. Isto mostra a <link linkend="alarm-edit-dlg"
+>janela de Edição do Alarme</link
+> através da qual irá configurar o alarme.</para>
+
+<itemizedlist>
+<listitem>
+<para
+>Seleccione <menuchoice
+><guimenu
+>Ficheiro</guimenu
+> <guimenuitem
+>Novo</guimenuitem
+></menuchoice
+>.</para>
+</listitem>
+
+<listitem>
+<para
+>Carregue com o botão <mousebutton
+>direito</mousebutton
+> no ícone da bandeja do sistema e escolha <menuchoice
+><guimenuitem
+>Novo Alarme</guimenuitem
+></menuchoice
+> no menu de contexto.</para>
+</listitem>
+
+<listitem>
+<para
+>Carregue com o &RMB; na lista de alarmes e escolha <menuchoice
+><guimenuitem
+>Novo</guimenuitem
+></menuchoice
+> no menu de contexto.</para>
+</listitem>
+</itemizedlist>
+
+<para
+>Em alternativa, poderá criar alarmes novos pré-configurados a partir de várias fontes:</para>
+
+<itemizedlist>
+<listitem>
+<para
+>Para basear o seu novo alarme num modelo previamente definido, siga as instruções na secção de <link linkend="templates"
+>Modelos de Alarmes</link
+>.</para>
+</listitem>
+
+<listitem>
+<para
+>Para basear o seu alarme num existente, escolha o alarme existente e seleccione a opção <menuchoice
+> <guimenu
+>Ficheiro</guimenu
+><guimenuitem
+>Copiar</guimenuitem
+></menuchoice
+>. Isto abre a <link linkend="alarm-edit-dlg"
+>janela de Edição do Alarme</link
+> já preenchida com uma cópia dos detalhes do alarme seleccionado.</para>
+</listitem>
+
+<listitem>
+<para
+>Para criar um alarme novo que mostre uma mensagem de e-mail existente, arraste a mensagem do &kmail; para a janela principal do &kalarm; ou para o seu ícone na bandeja do sistema. Depois, seleccione a opção <guilabel
+>Alarme Visível</guilabel
+>. Isto abre a <link linkend="alarm-edit-dlg"
+>janela de Edição do Alarme</link
+> com a mensagem de e-mail completa (com o remetente, o destinatário, &etc;) como texto do alarme.</para>
+</listitem>
+
+<listitem>
+<para
+>Para criar um alarme novo que mostre uma mensagem de e-mail existente, arraste a mensagem do &kmail; para a janela principal do &kalarm; ou para o seu ícone na bandeja do sistema. Depois, seleccione a opção <guilabel
+>Alarme de E-Mail</guilabel
+>. Isto abre a <link linkend="alarm-edit-dlg"
+>janela de Edição do Alarme</link
+> com a mensagem de e-mail completa (com o remetente, o destinatário, etc.) como texto do alarme.</para>
+</listitem>
+
+<listitem>
+<para
+>Para criar um alarme novo que mostre um resumo de um item por-fazer existente, arraste esse item do &korganizer; ou de outra aplicação para a janela principal do &kalarm; ou para o seu ícone na bandeja do sistema. Isto abre a <link linkend="alarm-edit-dlg"
+>janela de Edição do Alarme</link
+> com o conteúdo do item por-fazer como texto do alarme.</para>
+</listitem>
+
+<listitem>
+<para
+>Para criar um alarme novo de comandos, arraste o texto de um programa que comece por <quote
+>#!</quote
+> para a janela principal do &kalarm; ou para o seu ícone na bandeja do sistema. Depois, seleccione a opção <guilabel
+>Alarme de Comando</guilabel
+>. Isto abre a <link linkend="alarm-edit-dlg"
+>janela de Edição do Alarme</link
+> com o texto do programa.</para>
+</listitem>
+
+<listitem>
+<para
+>Para criar um alarme de visualização de um ficheiro, arraste um &URL; do mesmo para a janela principal do &kalarm; ou para o ícone da bandeja do sistema. Isto abre a <link linkend="alarm-edit-dlg"
+>janela de Edição do Alarme</link
+> e configura o nome do ficheiro.</para>
+</listitem>
+
+<listitem>
+<para
+>Para criar um alarme de áudio, arraste um &URL; do mesmo para a janela principal do &kalarm; ou para o ícone da bandeja do sistema. Isto abre a <link linkend="alarm-edit-dlg"
+>janela de Edição do Alarme</link
+> e configura o nome do ficheiro.</para>
+</listitem>
+
+<listitem>
+<para
+>Para criar um alarme de mensagem de texto, arraste qualquer texto para a janela principal do &kalarm; ou para o seu ícone na bandeja do sistema. Depois, seleccione a opção <guilabel
+>Alarme Visível</guilabel
+>. Isto abre a <link linkend="alarm-edit-dlg"
+>janela de Edição do Alarme</link
+> com o texto do alarme.</para>
+</listitem>
+
+<listitem>
+<para
+>Você poderá criar automaticamente alarmes para os aniversários das pessoas que estejam no &kaddressbook;, como é descrito em <link linkend="birthdays"
+>Importar os Aniversários do &kaddressbook;</link
+>.</para>
+</listitem>
+
+</itemizedlist>
+
+</sect2>
+
+<sect2 id="edit-alarm">
+<title
+>Modificar um Alarme Existente</title>
+
+<para
+>Para modificar um alarme pendente já existente (os alarmes expirados não poderão ser corrigidos), faça uma das seguintes coisas:</para>
+
+<itemizedlist>
+<listitem>
+<para
+>Carregue duas vezes no seu item na lista de alarmes.</para>
+</listitem>
+
+<listitem>
+<para
+>Seleccione-o, carregando no item respectivo na lista de alarme. Depois seleccione a opção <menuchoice
+><guimenu
+>Editar</guimenu
+> <guimenuitem
+>Editar</guimenuitem
+></menuchoice
+>.</para>
+</listitem>
+
+<listitem>
+<para
+>Carregue com o &RMB; no seu item da lista de alarmes e escolha a opção <menuchoice
+><guimenuitem
+>Editar</guimenuitem
+></menuchoice
+> no menu de contexto.</para>
+</listitem>
+</itemizedlist>
+
+<para
+>Isto mostra a <link linkend="alarm-edit-dlg"
+>janela de Edição do Alarme</link
+>.</para>
+
+</sect2>
+
+<sect2>
+<title
+>Apagar/Reactivar um alarme</title>
+
+<para
+>Para apagar os alarmes existentes, seleccione um ou mais, carregando nos seus itens na lista de alarmes. Depois, faça uma das seguintes coisas:</para>
+
+<itemizedlist>
+<listitem>
+<para
+>Seleccione <menuchoice
+><guimenu
+>Editar</guimenu
+> <guimenuitem
+>Apagar</guimenuitem
+></menuchoice
+>.</para>
+</listitem>
+<listitem>
+<para
+>Carregue com o botão <mousebutton
+>direito</mousebutton
+> nos itens desejados na lista de alarmes e escolha a opção <menuchoice
+><guimenuitem
+>Apagar</guimenuitem
+></menuchoice
+> do menu de contexto.</para>
+</listitem>
+<listitem>
+<para
+>Para os apagar sem qualquer mensagem de confirmação, carregue em &Shift;-<keycap
+>Delete</keycap
+>.</para>
+</listitem>
+</itemizedlist>
+
+<para
+>Quando você remove um alarme activo, este é guardado como um alarme expirado, desde que já tenha disparado pelo menos uma vez antes de ser removido, e desde que os alarmes expirados sejam guardados de todo. (Use a <link linkend="preferences-storage"
+>janela de Configuração</link
+> para controlar se e durante quanto tempo os alarmes expirados serão guardados). Quando remover um alarme expirado ou um alarme activo que ainda não tenha disparado, este é removido de forma permanente.</para>
+
+<para
+>Poderá reactivar um alarme removido na lista de alarmes expirados, desde que ainda não tenha expirado. Para o fazer, mostre primeiro os alarmes expirados, tal como está descrito em <link linkend="expired"
+>Alarmes Arquivados</link
+>. Depois:</para>
+
+<itemizedlist>
+<listitem>
+<para
+>Seleccione um ou mais alarmes expirados, carregando nos itens respectivos na lista de alarmes. Depois, escolha a opção <menuchoice
+> <guimenu
+>Acções</guimenu
+><guimenuitem
+>Reactivar</guimenuitem
+> </menuchoice
+>.</para>
+</listitem>
+<listitem>
+<para
+>Carregue com o botão <mousebutton
+>direito</mousebutton
+> nos itens desejados na lista de alarmes e escolha a opção <menuchoice
+><guimenuitem
+>Reactivar</guimenuitem
+></menuchoice
+> do menu de contexto.</para>
+</listitem>
+</itemizedlist>
+
+</sect2>
+
+<sect2>
+<title
+>Activar/Desactivar um Alarme</title>
+
+<para
+>Veja a <link linkend="enable-disable"
+>Activação/Desactivação dos Alarmes</link
+> para saber como activar e desactivar os alarmes, quer individualmente quer como um todo.</para>
+
+</sect2>
+
+<sect2>
+<title
+>Configurar um Alarme para Acordar da Suspensão</title>
+
+<para
+>Veja em <link linkend="wake-suspend"
+>Acordar da Suspensão</link
+> como configurar um alarme para reactivar o seu sistema a partir da suspensão ou hibernação.</para>
+
+</sect2>
+
+<sect2>
+<title
+>Aceitar um Alarme</title>
+
+<para
+>Veja a secção da <link linkend="message-window"
+>Janela da Mensagem do Alarme</link
+> para ver como aceitar os alarmes.</para>
+
+</sect2>
+
+<sect2 id="templates">
+<title
+>Modelos de Alarmes</title>
+
+<para
+>Se deseja configurar com frequência alarmes semelhantes, poderá criar um modelo de alarmes para evitar ter de introduzir todos os detalhes do zero de cada vez. Um modelo poderá conter todos os detalhes que um alarme possa conter, à parte da hora de início.</para>
+
+<para
+>Por exemplo, poderá querer configurar um alarme para o relembrar de um programa de televisão cuja hora varia de semana para semana. O modelo iria conter todos os detalhes do alarme (o texto da mensagem, se deverá tocar um som, &etc;), exceptuando a data e hora. Depois, para criar o alarme, tudo o que teria de fazer seria carregar na <link linkend="alarm-edit-dlg"
+>janela de Edição do Alarme</link
+> esse modelo e introduzir então a data e hora.</para>
+
+<para
+>Para criar um alarme com base num modelo, abra a <link linkend="alarm-edit-dlg"
+>janela de Edição do Alarme</link
+>, predefinida com os detalhes do modelo:</para>
+
+<itemizedlist>
+<listitem>
+<para
+>Seleccione a opção <menuchoice
+><guimenu
+>Ficheiro</guimenu
+> <guisubmenu
+>Novo</guisubmenu
+><guimenuitem
+>Novo a Partir de Modelo</guimenuitem
+></menuchoice
+>, seleccionando depois o modelo desejado.</para>
+</listitem>
+
+<listitem>
+<para
+>Carregue com o botão <mousebutton
+>direito</mousebutton
+> do rato no ícone da bandeja do sistema e escolha a opção <menuchoice
+><guimenu
+>Novo Alarme</guimenu
+><guimenuitem
+>Novo Alarme de Modelo</guimenuitem
+></menuchoice
+> no menu de contexto. Depois, seleccione o modelo desejado.</para>
+</listitem>
+
+<listitem>
+<para
+>Abra a <link linkend="alarm-edit-dlg"
+>janela de Edição do Alarme</link
+> da forma normal e carregue no botão <guibutton
+>Carregar um Modelo...</guibutton
+> para seleccionar um modelo com o qual predefinir a janela.</para>
+</listitem>
+</itemizedlist>
+
+<sect3>
+<title
+>Configurar os Modelos</title>
+
+<para
+>O utilizador poderá criar, modificar ou remover modelos com a janela de Modelos de Alarmes ou poderá ainda criar um novo modelo de alarme com base num alarme existente.</para>
+
+<para
+>Para criar um novo modelo de alarme, faço uma das seguintes operações:</para>
+
+<itemizedlist>
+<listitem>
+<para
+>Mostre a janela de Modelos de Alarmes, seleccionando a opção do menu <menuchoice
+> <guimenu
+>Ficheiro</guimenu
+><guimenuitem
+>Modelos...</guimenuitem
+> </menuchoice
+> e carregando no botão <guibutton
+>Novo</guibutton
+>, escolhendo depois o tipo de alarme na lista que aparece. Isto irá mostrar uma janela de Edição do Modelo em branco.</para>
+</listitem>
+
+<listitem>
+<para
+>Mostre a janela de Modelos de Alarmes, seleccionando a opção do menu <menuchoice
+> <guimenu
+>Ficheiro</guimenu
+><guimenuitem
+>Modelos...</guimenuitem
+> </menuchoice
+>, seleccione um modelo existente e carregue em <guibutton
+>Copiar</guibutton
+>. Isto abre a janela de Edição do Modelo já preenchida com uma cópia dos detalhes do modelo seleccionado.</para>
+</listitem>
+
+<listitem>
+<para
+>Seleccione um alarme na lista e escolha a opção <menuchoice
+> <guimenu
+>Ficheiro</guimenu
+><guimenuitem
+>Criar um Modelo...</guimenuitem
+> </menuchoice
+>. Isto abre a janela de Edição do Modelo já preenchida com uma cópia dos detalhes do alarme seleccionado.</para>
+</listitem>
+</itemizedlist>
+
+<para
+>Para modificar um modelo existente, mostre a janela de Modelos de Alarmes, seleccionando a opção <menuchoice
+> <guimenu
+>Ficheiro</guimenu
+><guimenuitem
+>Modelos...</guimenuitem
+> </menuchoice
+> e carregando em <guibutton
+>Editar</guibutton
+>. Isto irá mostrar a janela de Edição do Modelo, a qual é descrita em baixo.</para>
+
+<para
+>Para remover os modelos existentes, mostre a janela de Modelos de Alarmes, seleccionando a opção <menuchoice
+> <guimenu
+>Ficheiro</guimenu
+><guimenuitem
+>Modelos...</guimenuitem
+> </menuchoice
+>, seleccione um ou mais modelos e carregue em <guibutton
+>Remover</guibutton
+>. É apresentada uma mensagem de confirmação para evitar remoções acidentais.</para>
+
+</sect3>
+
+<sect3>
+<title
+>Janela de Edição do Modelo</title>
+
+<para
+>A janela de Edição do Modelo é semelhante à <link linkend="alarm-edit-dlg"
+>janela de Edição do Alarme</link
+>. Só os seguintes controlos são diferentes:</para>
+
+<itemizedlist>
+<listitem>
+<para
+>Indique o nome do modelo no campo <guilabel
+>Nome do modelo</guilabel
+>. É o nome do modelo que é apresentado nas listas de selecção de modelos, por isso é melhor escolher um nome que o relembre da sua função. Cada nome do modelo deverá ser único.</para>
+</listitem>
+
+<listitem>
+<para
+>No grupo <guilabel
+>Hora</guilabel
+>, seleccione uma das seguintes opções:</para>
+
+<itemizedlist>
+<listitem>
+<para
+><guilabel
+>Tempo por omissão</guilabel
+> se não quiser indicar nenhuma hora para activação. Os alarmes baseados neste modelo irão usar a hora de activação por omissão para os alarmes novos.</para>
+</listitem>
+
+<listitem>
+<para
+>Assinale a <guilabel
+>Hora</guilabel
+> para indicar uma hora em que o alarme será despoletado.</para>
+</listitem>
+
+<listitem>
+<para
+>Assinale <guilabel
+>Apenas a data</guilabel
+> para indicar que o alarme só deverá ter uma data, sem nenhuma hora.</para>
+</listitem>
+
+<listitem>
+<para
+>Assinale o <guilabel
+>Tempo a partir de agora</guilabel
+> para indicar quanto tempo (em horas e minutos) pode passar, após a criação do alarme, enquanto o alarme possa ser despoletado.</para>
+</listitem>
+</itemizedlist>
+</listitem>
+
+<listitem>
+<para
+>No grupo da <guilabel
+>Regra de Recorrência</guilabel
+> da página <guilabel
+>Recorrência</guilabel
+>, não é necessário escolher nenhum dia ou mês para as recorrências semanais ou anuais, respectivamente.</para>
+</listitem>
+</itemizedlist>
+
+</sect3>
+
+</sect2>
+
+<sect2 id="calendars">
+<title
+>Calendários de Alarme</title>
+
+<para
+>Se só usar um computador e trabalhar de forma independente, poderá não lhe interessar onde é que o &kalarm; guarda os seus alarmes. Porém, se precisar de aceder aos alarmes em mais de um computador ou de uma localização no seu computador local, poderá definir <quote
+>calendários de alarmes</quote
+> para dizer ao &kalarm; para usar outros calendários adicionais por omissão ou por substituição.</para>
+
+<para
+>Poderá ver e manipular os calendários através da lista de calendários, que poderá ser apresentada ao lado da lista de alarmes, na janela principal do &kalarm;. Os alarmes de todos os calendários aparecem reunidos em conjunto na lista de alarmes. Quando gravar um alarme novo, poderá definir uma opção de configuração para determinar se será gravado automaticamente no calendário predefinido ou se você será questionado para escolher um calendário. Quando editar um alarme existente, o mesmo é gravado de novo no seu calendário de alarmes original.</para>
+
+<screenshot>
+<screeninfo
+>Imagem da janela principal do &kalarm; a mostrar a lista de calendários</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="mainwindow-calendars.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>A janela principal a mostrar a lista de calendários</phrase>
+</textobject>
+</mediaobject>
+</screenshot>
+
+<sect3>
+<title
+>Tipos e Opções do Calendário</title>
+
+<para
+>Os calendários dos alarmes são categorizados por tipo de alarme e de armazenamento. Estes poderão ser desactivados, colocados apenas para leitura ou colocados como predefinidos para o seu tipo de alarme.</para>
+
+<variablelist>
+<varlistentry>
+<term
+>Tipo de alarme</term>
+<listitem>
+<para
+>Os três tipos de entidades de alarmes &ndash; alarmes activos, alarmes arquivados ou expirados e modelos de alarmes &ndash; são gravados em calendários de alarmes separados. Como tal, o &kalarm; tem três calendários predefinidos, um para cada tipo (veja as <link linkend="faq"
+>Perguntas e Respostas</link
+> para mais detalhes), os quais poderá alterar se o desejar.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+>Tipo de armazenamento</term>
+<listitem>
+<para
+>O &kalarm; lida com dois tipos de armazenamento dos calendários de alarmes:</para>
+
+<itemizedlist>
+<listitem
+><para
+>Ficheiro local: Os alarmes são guardados num único ficheiro local, no formato iCalendar. O &kalarm; usa os calendários de ficheiros locais por omissão (veja as <link linkend="faq"
+>Perguntas e Respostas</link
+> para mais detalhes). Os <quote
+>ficheiros locais</quote
+>, para além dos ficheiros no computador local, poderão incluir os calendários na rede local, desde que a sua localização possa ser representada por um caminho que comece por <literal
+>/</literal
+>.</para>
+</listitem>
+
+<listitem
+><para
+>Pasta local: Os alarmes são gravados numa pasta local, sendo cada um dos alarmes gravado num ficheiro iCalendar separado, dentro da pasta. Este método de armazenamento tem a vantagem de, no caso de corrupção do ficheiro, só irá perder um alarme, em vez de perder o calendário completo.</para>
+</listitem>
+<!--FIXME not in kf5?
+<listitem
+><para
+>Remote file: Alarms are stored in a single remote
+file in iCalendar format. This storage method allows you to access
+your alarm data remotely no matter where you are, or enables alarm
+calendars to be viewed by other people. When using remote files,
+&kalarm; works with a local cache of the data.</para>
+
+<warning
+><para
+>If a remote alarm calendar is shared between users,
+changes made by one person may not be automatically made available to
+another user, or there could be a time delay before the other user
+sees it. So one user could make a change which is then overwritten by
+another user without either person noticing what has happened. The
+technical reason for this is that a change made by person A will only
+be available to person B after person A's cached copy has first been
+saved to the remote file, and then person B's cached copy
+of the remote file has been reloaded. When and if the calendar is
+saved and reloaded depends on the calendar configuration parameters
+which each user has set for that alarm calendar.</para>
+
+<para
+>Ways to avoid this problem include adjusting the calendar save
+and reload configuration parameters, or adopting a policy that users
+other than the alarm calendar's owner should open it in read-only
+mode.</para
+></warning>
+</listitem>
+-->
+</itemizedlist>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+>Estado de activado/desactivado</term>
+<listitem>
+<para
+>A desactivação de um calendário tem o mesmo efeito que a sua remoção, com a diferença que aparece à mesma na lista de calendários, para uma simples reactivação. Quando estiver desactivado, os seus alarmes são ignorados e não aparecem na lista de alarmes ou na lista de modelos. Quando estiver reactivado, os seus alarmes voltam a aparecer e, se for um calendário de alarmes activo, os mesmos serão activados.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+>Estado apenas para leitura</term>
+<listitem>
+<para
+>Os alarmes de um calendário apenas para leitura não poderão ser modificados ou adicionados. Como tal, não poderá editar os seus alarmes ou gravar alarmes novos nele. Do mesmo modo, não é possível adiar os seus alarmes dado que, ao fazê-lo, a hora do adiamento teria de ser gravada no alarme. Depois de os seus alarmes tiverem sido despoletados, estes não são removidos do calendários e arquivados, somente quando você ou outro utilizador tiver acedido ao calendário no modo de leitura/escrita.</para>
+
+<para
+>Poderá configurar o estado de 'apenas para leitura' de um calendário na janela de configuração do mesmo. Contudo, alguns calendários não poderão ser modificados, por várias razões:</para>
+
+<itemizedlist>
+<listitem
+><para
+>Se um calendário tiver sido criado por outra aplicação, seria inseguro permitir ao &kalarm; actualizá-lo, dado que as diferenças no formato de dados podê-lo-iam inutilizar pela aplicação que o criou.</para>
+</listitem>
+
+<listitem
+><para
+>Se o calendário tiver sido criado por uma versão posterior do &kalarm;, os dados poder-se-ão perder, se a sua versão do &kalarm; os actualizar.</para>
+</listitem>
+
+<listitem
+><para
+>Se o calendário tiver sido criado por uma versão anterior do &kalarm;, os dados poder-se-ão perder ou corromper pela versão anterior do &kalarm;, se a sua versão do &kalarm; a actualizar. Será questionado se deseja converter o formato, para poder gravá-lo, tendo em mente os problemas potenciais de compatibilidade, se a versão anterior do &kalarm; necessitar de aceder a eles de novo.</para>
+</listitem>
+
+<listitem
+><para
+>Se não tiver permissões para gravar no ficheiro ou pasta do calendário.</para>
+</listitem>
+</itemizedlist>
+
+<para
+>Se precisar de acesso de escrita para os alarmes num calendário que não possa atribuir essas permissões, você poderá copiar os seus alarmes, importando-os para um calendário com permissões de escrita, usando a opção do menu de contexto <menuchoice
+><guimenuitem
+>Importar...</guimenuitem
+></menuchoice
+> do último calendário (veja em <link linkend="import"
+>Importar os Alarmes dos Calendários Externos</link
+>).</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+>Estado predefinido do calendário</term>
+<listitem>
+<para
+>O utilizador poderá predefinir um calendário para cada tipo de alarme, a título opcional. Os alarmes novos são gravados automaticamente no calendário predefinido, para o tipo de alarme apropriado, a menos que tenha seleccionado a opção de pergunta para os alarmes e modelos na <link linkend="preferences-storage"
+>janela de Configuração</link
+>.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+
+</sect3>
+
+<sect3 id="using-calendars">
+<title
+>Usar os Calendários</title>
+
+<para
+>Poderá ver e manipular os calendários na lista de calendários, a qual poderá aparecer ou ser escondidas com a opção <menuchoice
+> <guimenu
+>Ver</guimenu
+><guimenuitem
+>Mostrar os Calendários</guimenuitem
+> </menuchoice
+>. Quando usar a lista de calendários, seleccione primeiro o tipo de alarme com a lista que está por cima desta. Depois, carregue num dos botões por baixo da lista ou carregue com o botão <mousebutton
+>direito</mousebutton
+> no calendário apropriado da lista, escolhendo de seguida um item do menu de contexto. As acções disponíveis são:</para>
+
+<variablelist>
+<varlistentry>
+<term
+><menuchoice
+><guimenuitem
+>Adicionar...</guimenuitem
+></menuchoice
+></term>
+<listitem>
+<para
+>Adiciona um calendário do tipo seleccionado à lista. Ser-lhe-á pedido para escolher um tipo para o armazenamento, pelo que se segue a janela de configuração do calendário, onde poderá indicar a localização do calendário, bem como as suas características. Se não existir nenhum calendário de alarmes no local indicado, será criado um novo.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenuitem
+>Remover</guimenuitem
+></menuchoice
+></term>
+<listitem>
+<para
+>Remove o calendário seleccionado da lista. O calendário em si é deixado intacto; simplesmente desaparece da lista, podendo ser instanciado de novo na lista, se o desejar.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenuitem
+>Editar...</guimenuitem
+></menuchoice
+></term>
+<listitem>
+<para
+>Edita o calendário seleccionado. Isto mostra a janela de configuração do calendário seleccionado.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenuitem
+>Actualizar</guimenuitem
+></menuchoice
+></term>
+<listitem>
+<para
+>Volta a carregar o calendário seleccionado. O calendário é lido de novo do seu local de armazenamento, garantindo que não existe nenhuma discrepância entre o que o &kalarm; mostra e o estado actual do calendário. Se o calendário for partilhado com outros utilizadores, as alterações que eles façam serão vistas de seguida pelo &kalarm;.</para>
+
+<warning
+><para
+>Se voltar a carregar um calendário remoto, as alterações que faça desde a última gravação serão perdidas. Do mesmo modo, os alarmes que tiverem expirado desde a última gravação poderão ser despoletados de novo.</para
+></warning>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenuitem
+>Importar...</guimenuitem
+></menuchoice
+></term>
+<listitem>
+<para
+>Importa os alarmes de um ficheiro de calendário externo para o calendário seleccionado. Isto está descrito na secção <link linkend="import"
+>Importar os Alarmes de Calendários Externos</link
+>. Esta opção não está disponível para os calendários desactivados ou apenas para leitura.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenuitem
+>Exportar...</guimenuitem
+></menuchoice
+></term>
+<listitem>
+<para
+>Exporta todos os alarmes do calendário seleccionado para um ficheiro de calendário externo. Isto está descrito na secção <link linkend="export"
+>Exportar os Alarmes para Calendários Externos</link
+>. Esta opção não está disponível para os calendários desactivados.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenuitem
+>Mostrar os Detalhes</guimenuitem
+></menuchoice
+></term>
+<listitem>
+<para
+>Mostra os detalhes sobre o calendário seleccionado. Isto mostra a localização do calendário, bem como o tipo de armazenamento e a informação do estado. </para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenuitem
+>Usar como Predefinido</guimenuitem
+></menuchoice
+></term>
+<listitem>
+<para
+>Torna predefinido o calendário seleccionado para o tipo de calendário seleccionado. Esta opção não está disponível para os calendários desactivado ou apenas para leitura.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenuitem
+>Mudar a Cor...</guimenuitem
+></menuchoice
+></term>
+<listitem>
+<para
+>Seleccione uma cor de fundo para realçar os alarmes deste calendário na lista de alarmes. Isto permite-lhe ver imediatamente os alarmes que pertencem a um determinado calendário.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenuitem
+>Limpar a Cor</guimenuitem
+></menuchoice
+></term>
+<listitem>
+<para
+>Limpa o realce de cores para os alarmes deste calendário na lista de alarmes. A opção só aparece depois de a opção <guimenuitem
+>Mudar a Cor</guimenuitem
+> ser usada neste calendário.</para>
+</listitem>
+</varlistentry>
+
+</variablelist>
+
+</sect3>
+
+</sect2>
+
+<sect2 id="import">
+<title
+>Importar Alarmes de Calendários Externos</title>
+
+<para
+>Poderá importar os alarmes a partir de outros ficheiros de calendários para o &kalarm;. A função de importação verifica o ficheiro de calendário seleccionado, à procura de eventos que contenham alarmes, copiando-os (com novos identificadores únicos) para o calendário do &kalarm;. Os eventos sem alarmes, bem como os outros tipos de itens do calendário, serão ignorados. Existem duas formas de importar os alarmes:</para>
+
+<itemizedlist>
+<listitem>
+<para
+>Seleccione a opção <menuchoice
+><guimenu
+>Ficheiro</guimenu
+> <guimenuitem
+>Importar Alarmes...</guimenuitem
+></menuchoice
+> para importar os alarmes de vários tipos (alarmes activos, arquivados e modelos de alarmes) do calendário.</para>
+
+<para
+>Se tiver configurado os <link linkend="calendars"
+>calendários de alarmes</link
+>, os alarmes de cada serão adicionados ao calendário predefinido apropriado, ou será questionado pelo calendário, se tiver seleccionado a opção de pergunta nos alarmes e modelos novos, na <link linkend="preferences-storage"
+>janela de Configuração</link
+>.</para>
+</listitem>
+
+<listitem>
+<para
+>Carregue com o botão <mousebutton
+>direito</mousebutton
+> num calendário da lista e escolha a opção <menuchoice
+><guimenuitem
+>Importar...</guimenuitem
+></menuchoice
+> do menu de contexto. Isto importa os alarmes do tipo seleccionado de momento para esse calendário. Por exemplo, se o tipo de calendário seleccionado for os modelos de alarmes, serão importados os modelos de alarmes (e não os alarmes activos ou arquivados).</para>
+</listitem>
+</itemizedlist>
+
+<warning
+><para
+>Se importar os alarmes a partir de ficheiros de calendários criados por aplicações que não o &kalarm;, estes poderão ser alterados pelo processo de importação &ndash; as horas dos alarmes poderão inclusive mudar. Isto depende das convenções de armazenamento de dados usadas pela outra aplicação, e é inevitável desconhecer as diferenças dessas convenções face ao que o &kalarm; está à espera. Verifique sempre os alarmes importados, à espera de alterações inesperadas, e ajuste-os se necessário.</para
+></warning>
+
+</sect2>
+
+<sect2 id="export">
+<title
+>Exportar Alarmes para Calendários Externos</title>
+
+<para
+>Poderá exportar os alarmes do &kalarm; para outros ficheiros de calendário, usando os alarmes seleccionados de momento na lista de alarmes ou todos os alarmes de um dado calendário. Os métodos para o fazer são indicados abaixo. Seja qual for o método, tanto poderá criar um ficheiro de calendário novo como adicionar os alarmes exportados a um ficheiro existente. Para adicionar os alarmes, assinale a opção <guilabel
+>Adicionar a um ficheiro existente</guilabel
+> na janela de selecção dos ficheiros; caso contrário, todos os ficheiros existentes serão substituídos.</para>
+
+<itemizedlist>
+<listitem>
+<para
+>Para exportar os alarmes seleccionados de momento na lista, carregue com o botão <mousebutton
+>direito</mousebutton
+> na selecção e escolha <menuchoice
+><guimenuitem
+>Exportar...</guimenuitem
+></menuchoice
+> no menu de contexto, ou use então a opção <menuchoice
+><guimenu
+>Ficheiro</guimenu
+> <guimenuitem
+>Exportar os Alarmes Seleccionados...</guimenuitem
+></menuchoice
+> no menu principal.</para>
+</listitem>
+
+<listitem>
+<para
+>Para exportar todos os alarmes de um calendário, carregue com o botão <mousebutton
+>direito</mousebutton
+> num calendário da lista, e escolha <menuchoice
+><guimenuitem
+>Exportar...</guimenuitem
+></menuchoice
+> no menu de contexto.</para>
+</listitem>
+</itemizedlist>
+
+</sect2>
+
+<sect2 id="birthdays">
+<title
+>Importar Aniversários do &kaddressbook;</title>
+
+<para
+>O utilizador poderá configurar os alarmes para os aniversários que estão registados no &kaddressbook;, através da opção <menuchoice
+><guimenu
+>Ficheiro</guimenu
+> <guimenuitem
+>Importar os Aniversários...</guimenuitem
+></menuchoice
+>. Isto mostra uma janela que lhe permitirá escolher os aniversários para os quais deseja criar alarmes.</para>
+
+<itemizedlist>
+<listitem>
+<para
+>No grupo <guilabel
+>Texto do Alarme</guilabel
+>, poderá configurar o texto a mostrar nas mensagens de alarmes dos aniversários. O texto da mensagem é criado através da combinação do texto do <guilabel
+>Prefixo</guilabel
+> seguido do nome da pessoa e do texto do <guilabel
+>Sufixo</guilabel
+>. Não são adicionados nenhuns espaços, por isso lembre-se de incluir os espaços necessários no <guilabel
+>Prefixo</guilabel
+> e no <guilabel
+>Sufixo</guilabel
+>.</para>
+
+<note
+><para
+>Se alterar o texto do alarme, a lista de selecção dos aniversários será avaliada de novo.</para
+></note>
+</listitem>
+
+<listitem>
+<para
+>Na lista <guilabel
+>Seleccione os Aniversários</guilabel
+>, seleccione as datas de aniversários para as quais deseja criar alarmes. Lembre-se que a lista só mostra os itens no &kaddressbook; que contêm um aniversário e que não têm já um alarme no formato definido de momento no grupo do <guilabel
+>Texto do Alarme</guilabel
+>.</para>
+</listitem>
+
+<listitem>
+<para
+>Os controlos restantes são os mesmos que para os alarmes de <guilabel
+>Texto</guilabel
+> na <link linkend="alarm-edit-dlg"
+>janela de Edição do Alarme</link
+>.</para>
+</listitem>
+</itemizedlist>
+
+<para
+>Se tiver configurado os <link linkend="calendars"
+>calendários de alarmes</link
+>, os alarmes de cada serão adicionados ao calendário predefinido apropriado, ou será questionado pelo calendário, se tiver seleccionado a opção de pergunta nos alarmes e modelos novos, na <link linkend="preferences-storage"
+>janela de Configuração</link
+>.</para>
+
+</sect2>
+
+<sect2 id="undo">
+<title
+>Desfazer / Refazer</title>
+
+<para
+>Poderá desfazer e refazer as alterações mais recentes que tenha feito durante a sessão actual do &kalarm;. A maioria das acções poderá ser anulada, incluindo a criação, edição e remoção dos alarmes e modelos de alarmes, assim como a reactivação dos alarmes. Para evitar a utilização excessiva de recursos pelo histórico do Desfazer, o número de alterações armazenadas está limitado às últimas 12.</para>
+
+<para
+>Para anular a última modificação, seleccione a opção <menuchoice
+> <guimenu
+>Editar</guimenu
+><guimenuitem
+>Desfazer</guimenuitem
+></menuchoice
+>. Para voltar a repetir a última alteração que foi anulada, seleccione a opção <menuchoice
+> <guimenu
+>Editar</guimenu
+><guimenuitem
+>Refazer</guimenuitem
+> </menuchoice
+>.</para>
+
+<para
+>Para anular uma modificação que não a última, carregue no botão <guibutton
+>Desfazer</guibutton
+> na barra de ferramentas e mantenha o botão pressionado. Irá aparecer uma lista das acções, na qual poderá escolher a que deseja anular. Se não ver a acção que está à procura, lembre-se que poderá necessitar de desfazer as alterações mais recentes em primeiro lugar, da qual a modificação desejada depende. Por exemplo, se tiver editado um alarme e depois removido o mesmo, não poderá anular a edição até que anule, em primeiro lugar, a remoção.</para>
+
+<para
+>A repetição de uma modificação que não a última pode ser feita da mesma forma, usando o botão da barra de ferramentas para <guibutton
+>Refazer</guibutton
+>.</para>
+
+</sect2>
+</sect1>
+
+<sect1 id="alarm-edit-dlg">
+<title
+>A janela de Edição do Alarme</title>
+
+<para
+>A janela de Edição do Alarme permite-lhe ver e editar um alarme. Quando usar pela primeira vez o &kalarm;, é apresentada uma versão simplificada da janela, com apenas um número pequeno de opções visíveis. Para ver todas as opções, carregue no botão <guibutton
+>Mais Opções</guibutton
+>; para reverter para a janela simplificada, carregue no botão <guibutton
+>Menos Opções</guibutton
+>. O &kalarm; recorda sempre a sua última escolha apresentada, sempre que a janela de Edição do Alarme voltar a ser apresentada.</para>
+
+<para
+>Pode configurar os valores predefinidos de muitas das opções na janela de Edição do Alarme com a <link linkend="preferences-edit"
+>página Editar da janela de configuração</link
+>.</para>
+
+<screenshot>
+<screeninfo
+>Imagem da janela simplificada de Edição do Alarme</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="editwindow-simple.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>A janela simplificada de Edição do Alarme para um alarme visível</phrase>
+</textobject>
+<caption
+><para
+>A janela simplificada de Edição do Alarme para um alarme visível</para
+></caption>
+</mediaobject>
+</screenshot>
+
+<screenshot>
+<screeninfo
+>Imagem da janela de Edição do Alarme com todas as opções</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="editwindow.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase
+>A janela de Edição de Alarmes para um alarme visível com todas as opções</phrase>
+</textobject>
+<caption
+><para
+>A janela de Edição de Alarmes para um alarme visível com todas as opções</para
+></caption>
+</mediaobject>
+</screenshot>
+
+<sect2>
+<title
+>Acção do Alarme</title>
+
+<para
+>Os controlos no grupo <guilabel
+>Acção</guilabel
+> poderão variar de acordo com o tipo de alarme a ser editado.</para>
+
+<sect3>
+<title
+>Alarmes Visíveis</title>
+
+<para
+>Os alarmes visíveis mostram uma janela quando o alarme despoleta. Seleccione o método usado para gerar o conteúdo da janela de alarme, usando a lista no topo:</para>
+
+<itemizedlist>
+<listitem>
+<para
+><guilabel
+>Texto</guilabel
+> para indicar o texto da mensagem de alarme (o qual poderá conter várias linhas) no campo de texto.</para>
+</listitem>
+
+<listitem>
+<para
+><guilabel
+>Conteúdo do ficheiro</guilabel
+> para indicar o nome ou o &URL; de um ficheiro de texto ou de imagem cujo conteúdo seja mostrado na janela da mensagem. Use o botão ao lado do campo de edição para aparecer uma janela de selecção de ficheiros. A opção <guilabel
+>Falar</guilabel
+> não está disponível para este tipo de alarme.</para>
+</listitem>
+
+<listitem>
+<para
+><guilabel
+>Resultado do comando</guilabel
+> para indicar que o texto da mensagem de alarme será gerado por um comando que é executado quando o alarme disparar. Veja abaixo em <link linkend="command-alarm"
+>Alarmes por Comando</link
+> para saber mais detalhes como introduzir o comando ou o programa a executar.</para>
+</listitem>
+</itemizedlist>
+
+<para
+>Os controlos disponíveis para os alarmes visíveis são:</para>
+
+<itemizedlist>
+<listitem>
+<para
+>A opção <guilabel
+>Som</guilabel
+> permite-lhe seleccionar se deseja despoletar um alarme audível quando a mensagem de alarme for apresentada. Escolha:</para>
+
+<itemizedlist>
+<listitem>
+<para
+><guilabel
+>Nenhum</guilabel
+> para mostrar o alarme em silêncio.</para>
+</listitem>
+
+<listitem>
+<para
+><guilabel
+>Apitar</guilabel
+> para soar uma campainha.</para>
+</listitem>
+<!--FIXME not in kf5?
+<listitem>
+<para
+><guilabel
+>Speak</guilabel
+> to have the alarm message spoken as
+well as being displayed. This option is only available if you have
+&jovie; (from the kdeaccessibility package) installed and configured,
+together with a compatible speech synthesizer, &eg;
+<application
+>Festival</application
+>.</para>
+</listitem>
+-->
+<listitem>
+<para
+><guilabel
+>Ficheiro de som</guilabel
+> para tocar um ficheiro de áudio. Use o botão à direita para mostrar a janela do Ficheiro de Som, que lhe permite seleccionar o ficheiro a reproduzir e definir as opções do volume e de repetição. Se passar o rato por cima do botão, irá aparecer uma dica que lhe indica o ficheiro de áudio seleccionado de momento.</para>
+
+<para
+>Na janela do Ficheiro de Som:</para>
+
+<itemizedlist>
+<listitem>
+<para
+>Indique a localização do ficheiro de som, ou então use o botão ao lado do campo de edição para mostrar uma janela de selecção de ficheiros. Poderá ouvir o ficheiro seleccionado se carregar no botão de reprodução à esquerda do campo de edição. Esse botão irá então mudar de função para lhe permitir parar a reprodução quando já tiver ouvido o suficiente.</para>
+</listitem>
+
+<listitem>
+<para
+>Assinale o <guilabel
+>Repetir</guilabel
+> para que o som seja repetido continuamente durante o tempo em que o alarme é mostrado. (A janela da mensagem de alarme contém um botão para parar de tocar o som, no caso de precisar de silêncio mas deseje manter o alarme visível).</para>
+</listitem>
+
+<listitem>
+<para
+>Assinale o <guilabel
+>Volume</guilabel
+> e ajuste a barra deslizante se quiser ajustar o volume com que o ficheiro de áudio é tocado.</para>
+</listitem>
+
+<listitem>
+<para
+>Se o desejar, poderá desvanescer o volume. Isto significa que o ficheiro de som começa a ser reproduzido com um determinado volume e vai mudando gradualmente para o volume final, dentro de um determinado intervalo de tempo específico. O volume final é o que será introduzido no <guilabel
+>Volume</guilabel
+> acima. Para activar a variação gradual, assinale a opção <guilabel
+>Desvanescer</guilabel
+> e escolha o período no qual isso acontece no campo <guilabel
+>Tempo de desvanecimento</guilabel
+> e ajuste a barra do <guilabel
+>Volume inicial</guilabel
+>.</para>
+</listitem>
+</itemizedlist>
+
+<tip
+><para
+>Poderá usar o botão <guibutton
+>Tentar</guibutton
+> para testar os níveis de som seleccionados.</para
+></tip>
+</listitem>
+</itemizedlist>
+</listitem>
+
+<listitem>
+<para
+>Use o botão do <guibutton
+>Tipo de Letra &amp; Cor...</guibutton
+> para seleccionar um tipo de letra ou uma cor de texto ou de fundo para a mensagem de alarme. Na janela para <guilabel
+>Escolher o Tipo de Letra e Cor do Alarme</guilabel
+>, assinale a opção <guilabel
+>Usar o tipo de letra predefinido</guilabel
+> para mostrar a mensagem com o tipo de letra que estiver configurado por omissão na altura em que a mensagem for apresentada. (O tipo de letra por omissão pode ser configurado na <link linkend="preferences-edit"
+>janela de Configuração</link
+>.) Para escolher um tipo de letra específico para a mensagem, desligue a opção <guilabel
+>Usar o tipo de letra predefinido</guilabel
+>.</para>
+
+<para
+>As cores seleccionadas são apresentadas no campo de texto da mensagem de alarme.</para>
+</listitem>
+
+<listitem>
+<para
+>Use o botão <guibutton
+>Acções Especiais...</guibutton
+> para indicar os comandos a executar antes ou depois da apresentação do alarme. Na janela das <guilabel
+>Acções Especiais de Alarme</guilabel
+>:</para>
+
+<itemizedlist>
+<listitem>
+<para
+>No campo de <guilabel
+>Acção de pré-alarme</guilabel
+>, indique um comando a executar antes de mostrar o alarme. Lembre-se que o &kalarm; espera que o comando termine antes de mostrar o alarme.</para>
+
+<para
+>Uma acção pré-alarme só é executada uma vez quando a mensagem de alarme é apresentada inicialmente, incluindo quando uma mensagem de chamada de atenção é substituída pela mensagem de alarme verdadeira. <emphasis
+>Não</emphasis
+> é executada em nenhuma das seguintes circunstâncias:</para>
+
+<itemizedlist>
+<listitem
+><para
+>Quando é apresentada uma mensagem de chamada de atenção.</para
+></listitem>
+<listitem
+><para
+>Quando a mensagem volta a ser apresentada após adiar o alarme, a menos que a opção <guilabel
+>Executar para os alarmes adiados</guilabel
+> esteja assinalada.</para
+></listitem>
+<listitem
+><para
+>Quando a mensagem foi apresentada à hora em que você se desligou e é reposta quando você se ligar.</para
+></listitem>
+<listitem
+><para
+>Quando um alarme recorrente é despoletado, mas a mensagem de alarme (ou a mensagem de um alarme adiado) de uma ocorrência anterior do alarme ainda estiver visível; por outras palavras, quando a ocorrência anterior do alarme ainda não tiver sido confirmada.</para
+></listitem>
+</itemizedlist>
+
+<para
+>A acção pré-alarme pode ser usada para controlar se deseja mostrar a mensagem do alarme:</para>
+
+<itemizedlist>
+<listitem
+><para
+>Assinale a opção <guilabel
+>Cancelar o alarme em caso de erro</guilabel
+> para cancelar o alarme, caso o comando de pré-alarme devolva um estado de erro. Isto irá evitar que a mensagem de erro seja apresentada, assim como executar qualquer acção pós-alarme.</para
+></listitem>
+
+<listitem
+><para
+>Normalmente, se o comando pré-alarme devolver um erro, aparece uma mensagem de alarme e aparece uma indicação do erro na lista de alarmes. Estas notificações de erros poderão ser evitadas se assinalar a opção <guilabel
+>Não notificar os erros</guilabel
+>.</para
+></listitem>
+</itemizedlist>
+</listitem>
+
+<listitem>
+<para
+>No campo da <guilabel
+>Acção pós-alarme</guilabel
+>, indique um comando da consola a executar sempre que o alarme for aceite (quer ao carregar em <guibutton
+>Fechar</guibutton
+> quer usando o botão para fechar na barra de título da janela). <emphasis
+>Não</emphasis
+> é executada em nenhuma das seguintes circunstâncias:</para>
+
+<itemizedlist>
+<listitem
+><para
+>Quando uma mensagem de chamada de atenção é fechada.</para
+></listitem>
+<listitem
+><para
+>Quando adiar o alarme, excepto quando o alarme adiado for finalmente aceite.</para
+></listitem>
+<listitem
+><para
+>Quando a mensagem de alarme for fechada por ter saído da sessão.</para
+></listitem>
+</itemizedlist>
+</listitem>
+</itemizedlist>
+
+<para
+>Veja a descrição dos <link linkend="command-alarm"
+>alarmes de Comandos</link
+> em baixo para saber os detalhes com que os comandos são executados.</para>
+
+</listitem>
+</itemizedlist>
+</sect3>
+
+<sect3 id="command-alarm">
+<title
+>Alarmes de Comandos</title>
+
+<para
+>Os alarmes por comandos executam um comando sem mostrar qualquer mensagem de alarme.</para>
+
+<note
+><para
+>Este tipo de alarme não está disponível se o &kde; estiver a correr em modo quiosque.</para
+></note>
+
+<para
+>Quando o comando é executado, a variávle de ambiente <envar
+>KALARM_UID</envar
+> contém o UID do evento para o alarme. Lembre-se que, quando o comando é executado com o botão <guibutton
+>Tentar</guibutton
+> da janela de edição do alarme, o <envar
+>KALARM_UID</envar
+> estará em branco se for um alarme novo, ou se o alarme tiver sido modificado na janela, dado que o alarme só adquire um UID quando for gravado no calendário do alarme.</para>
+
+<para
+>Os controlos disponíveis para os alarmes de comandos são:</para>
+
+<itemizedlist>
+<listitem>
+<para
+>A opção <guilabel
+>Introduzir um programa</guilabel
+> permite-lhe escolher se deseja introduzir um comando de consola ou um programa.</para>
+
+<para
+>Se esta opção estiver desligada, poderá introduzir uma instrução da linha de comandos de modo a executá-la. O comando é passado para a linha de comandos por omissão (definida pela variável de ambiente <envar
+>SHELL</envar
+>) e pode incluir quaisquer opções, parâmetros, comandos via 'pipes', &etc;, sendo tudo permitido numa única linha de comandos.</para>
+
+<para
+>Se esta opção for assinalada, poderá introduzir o texto de um programa a executar. Lembre-se de incluir uma primeira linha do tipo <literal
+>#!/bin/bash</literal
+> para garantir que o interpretador de comandos correcto é invocado.</para>
+</listitem>
+
+<listitem>
+<para
+>Use o grupo do <guilabel
+>Resultado do Comando</guilabel
+> para indicar o que deseja fazer com o resultado para o terminal que o comando produza enquanto for executado.</para>
+
+<itemizedlist>
+<listitem>
+<para
+>Assinale a opção <guilabel
+>Executar numa janela de terminal</guilabel
+> para fazer com que o comando seja executado numa janela de terminal. Poderá escolher o tipo de janela de terminal que será usada na <link linkend="preferences-general"
+>janela de Configuração</link
+>.</para>
+</listitem>
+
+<listitem>
+<para
+>Assinale a opção <guilabel
+>Registar num ficheiro</guilabel
+> para gravar o resultado do comando num ficheiro. O resultado, antecedido de um cabeçalho que mostra a hora em que o comando foi agendado para correr, será adicionada ao conteúdo existente no ficheiro. Indique o nome do ficheiro no campo de texto ou use o botão ao lado do campo de texto para mostrar uma janela de selecção de ficheiros.</para>
+</listitem>
+
+<listitem>
+<para
+>Assinale a opção <guilabel
+>Esquecer</guilabel
+> para ignorar o resultado do comando.</para>
+</listitem>
+</itemizedlist>
+</listitem>
+</itemizedlist>
+</sect3>
+
+<sect3>
+<title
+>Alarmes por E-Mail</title>
+
+<para
+>Os alarmes por e-mail enviam um e-mail sem mostrar qualquer mensagem de alarme.</para>
+
+<para
+>Preencha os endereços dos destinatários, a linha do assunto da mensagem e o corpo da mesma nos três campos de texto. Use o botão ao lado do campo dos endereçados para mostrar o seu livro de endereços do &kde;, no qual poderá seleccionar os destinatários da mensagem. Os anexos poderão ser adicionados com o botão <guibutton
+>Adicionar...</guibutton
+>. Lembre-se que os ficheiros anexados precisam de existir quando o alarme for disparado; não é gravada nenhuma cópia na altura em que o alarme é configurado. Para remover um anexo, seleccione-o na lista e carregue no botão <guibutton
+>Remover</guibutton
+>.</para>
+
+<para
+>Escolha as seguintes opções:</para>
+
+<itemizedlist>
+<listitem>
+<para
+>A lista <guilabel
+>De</guilabel
+> permite-lhe seleccionar a identidade do &kmail; a usar como endereço de e-mail para enviar a mensagem. Esta opção só aparece se o seu endereço de e-mail <guilabel
+>De</guilabel
+> na <link linkend="preferences-email"
+>janela de Configuração</link
+> estiver configurada para <guilabel
+>Usar as identidades do &kmail;</guilabel
+>. Caso contrário, o seu endereço de e-mail estará predefinido na <link linkend="preferences-email"
+>janela de Configuração</link
+>, tornando esta opção inútil.</para>
+</listitem>
+
+<listitem>
+<para
+>Assinale a opção <guilabel
+>Copiar o e-mail para o próprio</guilabel
+> para enviar uma cópia implícita da mensagem para si próprio quando o alarme for despoletado. O endereço de e-mail para o qual será enviada a cópia pode ser definido na <link linkend="preferences-email"
+>janela de Configuração</link
+>.</para>
+</listitem>
+</itemizedlist>
+
+</sect3>
+
+<sect3>
+<title
+>Alarmes de Áudio</title>
+
+<para
+>Os alarmes de áudio tocam um ficheiro de áudio sem mostrar qualquer mensagem de alarme.</para>
+
+<para
+>Escolha as seguintes opções:</para>
+
+<itemizedlist>
+<listitem>
+<para
+>Indique a localização do ficheiro de som, ou então use o botão ao lado do campo de texto, de modo a mostrar uma janela de selecção de ficheiros.</para>
+</listitem>
+
+<listitem>
+<para
+>Assinale a opção <guilabel
+>Repetir</guilabel
+> para repetir de forma contínua o ficheiro de áudio, até que a opção <guilabel
+>Parar a Reprodução</guilabel
+> seja seleccionada. Para parar a reprodução do ficheiro, seleccione a opção do menu <menuchoice
+><guimenu
+>Acções</guimenu
+> <guimenuitem
+>Parar a Reprodução</guimenuitem
+></menuchoice
+> ou carregue com o botão <mousebutton
+>direito</mousebutton
+> do rato no ícone da bandeja e seleccione a opção <menuchoice
+><guimenuitem
+>Parar a Reprodução</guimenuitem
+></menuchoice
+> no menu de contexto. Se o desejar, poderá definir uma tecla de atalho para esta acção.</para>
+</listitem>
+
+<listitem>
+<para
+>Assinale o <guilabel
+>Volume</guilabel
+> e ajuste a barra deslizante se quiser ajustar o volume com que o ficheiro de áudio é tocado.</para>
+</listitem>
+
+<listitem>
+<para
+>Se o desejar, poderá desvanescer o volume. Isto significa que o ficheiro de som começa a ser reproduzido com um determinado volume e vai mudando gradualmente para o volume final, dentro de um determinado intervalo de tempo específico. O volume final é o que será introduzido no <guilabel
+>Volume</guilabel
+> acima. Para activar a variação gradual, assinale a opção <guilabel
+>Desvanescer</guilabel
+> e escolha o período no qual isso acontece no campo <guilabel
+>Tempo de desvanecimento</guilabel
+> e ajuste a barra do <guilabel
+>Volume inicial</guilabel
+>.</para>
+</listitem>
+</itemizedlist>
+</sect3>
+</sect2>
+
+<sect2>
+<title
+>Adiamento</title>
+
+<para
+>Se o alarme for recorrente e se foi adiado depois de ter sido mostrado pela última vez, o grupo <guilabel
+>Alarme Adiado</guilabel
+> mostra a hora para a qual o alarme foi adiado. O <guibutton
+>Modificar...</guibutton
+> mostra uma janela que lhe permite alterar a hora do adiamento ou cancelá-lo.</para>
+
+</sect2>
+
+<sect2>
+<title
+>Hora</title>
+
+<para
+>No grupo da <guilabel
+>Hora</guilabel
+>, seleccione</para>
+
+<itemizedlist>
+<listitem>
+<para
+><guilabel
+>Na data/hora</guilabel
+> se quiser introduzir a data e hora em que o alarme será disparado. Assinale a opção <guilabel
+>A qualquer hora</guilabel
+> para indicar apenas a data em que o alarme deverá ser despoletado: nesse caso, o alarme será apresentado na primeira oportunidade ou após a hora configurada para o início do dia, para a data indicada. (O <link linkend="preferences-general"
+>Configurar o &kalarm;</link
+> descreve como configurar a hora do início do dia.)</para>
+
+<para
+>Para um alarme não-repetitivo, a data/hora que aqui indicar dever-se-á passar no futuro ou, se só indicar uma data, terá de ser hoje ou depois. Para um alarme repetitivo, não existem estas restrições dado que a data/hora de início será ajustada automaticamente para a primeira repetição que aconteça a seguir à hora actual.</para>
+</listitem>
+
+<listitem>
+<para
+><guilabel
+>Tempo a partir de agora</guilabel
+> para indicar quanto tempo ficará à espera (em horas e minutos) até que o alarme seja despoletado.</para>
+</listitem>
+</itemizedlist>
+
+<para
+>Escolha o fuso-horário a aplicar no alarme. Este fuso-horário é usado por todas as datas e horas relacionadas com este alarme, incluindo as datas e horas de repetição e de excepção. Normalmente, deverá deixar os controlos de fuso-horário sem alteração, a menos que tenha uma boa razão para os alterar.</para>
+
+<para
+>Os controlos do fuso-horário só são apresentados quando o fuso-horário seleccionado é diferente do predefinido na <link linkend="preferences-time"
+>janela de Configuração</link
+> ou se carregar no botão <guibutton
+>Fuso-Horário...</guibutton
+>.</para>
+
+<itemizedlist>
+<listitem>
+<para
+>Na lista respectiva, escolha o fuso-horário que este alarme irá usar. Ao criar um alarme novo, este é configurado inicialmente com o fuso-horário seleccionado na <link linkend="preferences-general"
+>janela de Configuração</link
+>, o qual será o seu fuso-horário, a menos que o tenha alterado.</para>
+</listitem>
+
+<listitem>
+<para
+>Assinale a opção <guilabel
+>Ignorar o fuso-horário</guilabel
+> se quiser usar a hora do computador do local (no computador em que o &kalarm; esteja a correr), ignorando os fusos-horários.</para>
+
+<warning
+><para
+>Recomenda-se que não use esta opção se o alarme tiver uma repetição definida em horas e minutos; se o fizer, o alarme poderá ocorrer em horas inesperados, depois das mudanças de hora sazonais.</para
+></warning>
+</listitem>
+</itemizedlist>
+
+</sect2>
+
+<sect2>
+<title
+>Chamada de Atenção</title>
+
+<para
+>Para um alarme visível, assinale a <guilabel
+>Chamada de Atenção</guilabel
+> se quiser mostrar uma chamada de atenção antes do alarme principal e de cada uma das suas repetições (se existirem). Indique com que antecedência ou posteridade deseja, usando os controlos de edição por baixo da opção propriamente dita. Lembre-se que, se o alarme se repetir, o período da chamada de atenção está normalmente limitado a menos que o período de repetição ou sub-repetição.</para>
+
+<note
+><para
+>As chamadas de atenção não são apresentadas para as sub-repetições dentro de uma recorrência. As chamadas de atenção só aparecem antes de cada recorrência principal do alarme.</para
+></note>
+
+<para
+>Se o alarme se repetir, assinale a opção <guilabel
+>Chamada de atenção apenas para a primeira recorrência</guilabel
+> se desejar apenas uma chamada de atenção antes da primeira repetição do alarme. Se estiver assinalada, e se for uma chamada de atenção de avanço, o período da chamada de atenção não estará limitado a ser menor que o intervalo de repetição ou sub-repetição.</para>
+
+
+</sect2>
+
+<sect2>
+<title
+>Cancelamento</title>
+
+<para
+>As opções de cancelamento posterior determinam a forma como um alarme é tratado depois da sua hora agendada:</para>
+
+<itemizedlist>
+<listitem>
+<para
+>A opção <guilabel
+>Cancelar se atrasado</guilabel
+> indica o que acontece se o alarme não puder ser disparado à hora agendada.</para>
+
+<para
+>Assinale esta opção para cancelar o alarme, se não conseguir ser despoletado dentro de um determinado período de tempo após a hora agendada. O período de tempo é seleccionado com os campos que aparecem quando você assinalar a opção. Por exemplo, se indicar um período de tempo de 1 hora, o alarme será despoletado à primeira oportunidade que ocorrer até 1 hora após a hora exacta mas, se não conseguir ser disparado nesse período, a sua activação será cancelada.</para>
+
+<note
+><para
+>O atraso dos alarmes apenas para datas, &ie; os que tenham a opção <guilabel
+>A qualquer hora</guilabel
+> seleccionada, é calculado a partir da hora de início-do-dia na data agendada para o alarme.</para
+></note>
+
+<para
+>Deixe a opção desligada para despoletar o alarme à primeira oportunidade, a partir da hora agendada e independentemente do seu atraso.</para>
+
+<note
+><para
+>Um alarme só poderá ser desencadeado enquanto você estiver ligado e tanto o X como o &kalarm; estiverem em execução.</para
+></note>
+</listitem>
+
+<listitem>
+<para
+>Assinale a opção <guilabel
+>Fechar automaticamente a janela ao fim deste tempo</guilabel
+> se quiser que a janela do alarme seja fechada automaticamente se continuar visível, na altura em que a hora de cancelamento tardio expirar.</para>
+</listitem>
+</itemizedlist>
+
+</sect2>
+
+<sect2>
+<title
+>Recorrência</title>
+
+<para
+>Indique quando e como o alarme deverá ser repetido com a página de <guilabel
+>Recorrência</guilabel
+>.</para>
+
+<note
+><para
+>A característica básica de repetição do alarme é mostrada por conveniência na página de <guilabel
+>Recorrência</guilabel
+>. O intervalo de repetição, tal como está configurado na página de <guilabel
+>Recorrência</guilabel
+>, é mostrado em primeiro lugar, seguido do intervalo de todas as sub-repetições, configurado com o botão de <guibutton
+>Sub-Repetição</guibutton
+>.</para
+></note>
+
+<para
+>No grupo da <guilabel
+>Regra de Recorrência</guilabel
+>, indique o tipo de recorrência ou o período de tempo da seguinte forma:</para>
+
+<itemizedlist>
+<listitem
+><para
+>Para disparar o alarme somente uma vez, seleccione <guilabel
+>Sem recorrência</guilabel
+>.</para
+></listitem>
+
+<listitem
+><para
+>Seleccione <guilabel
+>Na autenticação</guilabel
+> para despoletar o alarme sempre que você se ligue, até à sua hora final agendada. Depois, na sua hora final, será despoletado uma última vez. (Lembre-se que um alarme repetido na autenticação será também despoletado de cada vez que você activar os alarme ou reiniciar o &kalarm;.)</para
+></listitem>
+
+<listitem>
+<para
+>Para que o alarme se repita em intervalos regulares, seleccione um dos tipos de períodos e indique depois no campo <guilabel
+>Recorrência a cada</guilabel
+> quantos períodos de tempo deverão passar entre cada repetição. Por exemplo, para repetir em cada quinzena, poderá seleccionar <guilabel
+>Diariamente</guilabel
+> e indicar um valor igual a 14 ou seleccione <guilabel
+>Semanalmente</guilabel
+> e introduza um valor igual a 2. Dependendo do tipo de período de tempo seleccionado, poderá ter outras opções:</para>
+
+<itemizedlist>
+<listitem>
+<para
+>Para uma recorrência semanal, assinale cada dia da semana em que deseja activar o alarme.</para>
+</listitem>
+
+<listitem>
+<para
+>Para uma recorrência mensal, poderá tanto indicar uma data fixa como uma posição (&eg; a segunda Terça-Feira).</para>
+</listitem>
+
+<listitem>
+<para
+>Para uma recorrência anual, tanto poderá escolher um dia fixo do mês ou uma posição dentro de um mês (&eg; o último Sábado de Maio). Assinale cada mês do ano em que deseja activar o alarme.</para>
+
+<para
+>Se você tiver configurado repetições anuais para o 29 de Fevereiro, indique como é que estas serão tratadas nos anos não-bissextos, seleccionando a opção apropriada em <guilabel
+>Alarme do 29 de Fevereiro nos anos não-bissextos</guilabel
+>:</para>
+
+<itemizedlist>
+<listitem
+><para
+><guilabel
+>Nada</guilabel
+>: o alarme irá ocorrer a 29 de Fevereiro nos anos bissextos, mas será suprimido nos outros anos.</para>
+</listitem>
+
+<listitem
+><para
+><guilabel
+>28 de Fevereiro</guilabel
+>: o alarme irá ocorrer a 29 de Fevereiro nos anos bissextos e a 28 de Fevereiro nos outros anos.</para>
+</listitem>
+
+<listitem
+><para
+><guilabel
+>1 de Março</guilabel
+>: o alarme irá ocorrer a 29 de Fevereiro nos anos bissextos e a 1 de Março nos outros anos.</para>
+</listitem>
+</itemizedlist>
+</listitem>
+</itemizedlist>
+
+<tip
+><para
+>Para configurar um alarme diário para ocorrer apenas nos dias da semana, use uma recorrência semanal e assinale todos os dias da semana.</para
+></tip>
+
+</listitem>
+</itemizedlist>
+
+<para
+>No grupo do <guilabel
+>Fim da Recorrência</guilabel
+>, configure a amplitude temporal de recorrência global da seguinte forma:</para>
+
+<itemizedlist>
+<listitem
+><para
+>Seleccione <guilabel
+>Sem fim</guilabel
+> para continuar as repetições indefinidamente.</para
+></listitem>
+
+<listitem
+><para
+>Seleccione <guilabel
+>Acabar ao fim de</guilabel
+> para indicar o número total de ocorrências do alarme.</para
+></listitem>
+
+<listitem
+><para
+>Seleccione <guilabel
+>Acabar em</guilabel
+> para indicar a data/hora até à qual o alarme será repetido. Lembre-se que isto usa o mesmo fuso-horário que a hora inicial do alarme.</para>
+
+<note
+><para
+>A data/hora do fim determina quando será a última recorrência principal, mas não limitas as sub-repetições. Se estas estiverem configuradas, irão despoletar normalmente após a última recorrência principal, independentemente da data/hora final.</para
+></note>
+</listitem>
+</itemizedlist>
+
+<para
+>O grupo <guilabel
+>Excepções</guilabel
+> permite-lhe excluir certas datas/horas da recorrência que tiver configurado. Lembre-se que estes controlos não aparecem na versão simplificada da janela de Edição do Alarme: para as ver, carregue em <guibutton
+>Mais Opções</guibutton
+>.</para>
+
+<itemizedlist>
+<listitem>
+<para
+>A lista de excepções (&ie;, as datas/horas excluídas) é mostrada à esquerda. Para adicionar uma nova excepção, introduza uma data à direita e carregue em <guibutton
+>Adicionar</guibutton
+>. Para alterar uma excepção, seleccione-a na lista, indique a nova data à direita e carregue em <guibutton
+>Modificar</guibutton
+>. Para remover uma excepção, seleccione-a na lista e carregue em <guibutton
+>Remover</guibutton
+>.</para>
+</listitem>
+
+<listitem>
+<para
+>Poderá restringir um alarme para não ocorrer nos feriados, se assinalar a opção <guilabel
+>Excluir os feriados</guilabel
+>. Isto não altera a forma como o alarme é agendado; simplesmente elimina o alarme sempre que este estiver agendado para despoletar após o horário de trabalho. O horário de trabalho é definida na <link linkend="preferences-time"
+>janela de Configuração</link
+>.</para>
+</listitem>
+
+<listitem>
+<para
+>Poderá restringir um alarme para ocorrer apenas durante o horário de trabalho, se assinalar a opção <guilabel
+>Só durante o horário de trabalho</guilabel
+>. Isto não altera a forma como o alarme é agendado; simplesmente elimina o alarme sempre que este estiver agendado para despoletar após o horário de trabalho. O horário de trabalho é definida na <link linkend="preferences-time"
+>janela de Configuração</link
+>.</para>
+</listitem>
+</itemizedlist>
+
+<sect3>
+<title
+>Sub-Repetição</title>
+
+<para
+>Poderá também usar o botão de <guibutton
+>Sub-Repetição</guibutton
+> para configurar uma repetição dentro de outra repetição. Neste caso, sempre que chegar a hora de um alarme, tal como foi indicado na página de <guilabel
+>Recorrência</guilabel
+>, em vez de ser despoletado uma vez, será disparado repetidamente, de acordo com a sua indicação de repetição simples. Por exemplo, para configurar um alarme que se repita a todas as horas, desde o meio-dia até às 6 da tarde de todas as Quintas-Feiras, poderia usar a página de <guilabel
+>Recorrência</guilabel
+> para configurar uma repetição semanal às Quintas ao meio-dia e usar a janela de Repetição Simples para indicar um intervalo de 1 hora e uma quantidade igual a 7 ou uma duração de 6 horas.</para>
+
+<para
+>Na janela de Sub-Repetição que aparece quando carregar no botão <guibutton
+>Sub-Repetição</guibutton
+>, assinale a opção <guilabel
+>Repetir a cada</guilabel
+> para configurar uma repetição ou desligue-a para remover as repetições. Se a opção <guilabel
+>Repetir a cada </guilabel
+> estiver assinalada, configure a repetição da seguinte forma:</para>
+
+<itemizedlist>
+<listitem
+><para
+>Indique o intervalo de tempo entre as repetições nas opções ao lado de <guilabel
+>Repetir a cada</guilabel
+>. Seleccione as unidades de tempo desejadas (&eg; <guilabel
+>dias</guilabel
+>) e indique depois o número de unidades.</para>
+</listitem>
+
+<listitem
+><para
+>Indique depois a quantidade de repetições ou a sua duração:</para>
+
+<itemizedlist>
+<listitem
+><para
+>Seleccione o <guilabel
+>Número de vezes</guilabel
+> para indicar o número de repetições que o alarme deverá ter, incluindo a sua ocorrência inicial. Como tal, por exemplo, para que o alarme ocorra 4 vezes em cada ocorrência principal, &ie; 3 vezes adicionais, deverá indicar 3 aqui.</para>
+</listitem>
+
+<listitem
+><para
+>Seleccione a <guilabel
+>Duração</guilabel
+> para indicar o período de tempo total, durante o qual o alarme deverá ser repetido. Este não precisa de ser um múltiplo exacto do intervalo de repetição; este será arredondado automaticamente quando você carregar em <guibutton
+>OK</guibutton
+>.</para>
+</listitem>
+</itemizedlist>
+</listitem>
+</itemizedlist>
+
+<note
+><para
+>Para evitar a sobreposição de sub-repetições para o mesmo alarme, a duração de uma sub-repetição está restringida a ser menor que o maior intervalo entre recorrências principais. Sempre que o alarme repetir, como estiver definido na recorrência principal, todas as sub-repetições activas que iniciaram na recorrência anterior são automaticamente canceladas.</para
+></note>
+
+</sect3>
+</sect2>
+
+<sect2>
+<title
+>Outros Controlos</title>
+
+<para
+>Para os alarmes visíveis, a opção <guilabel
+>Confirmar a recepção</guilabel
+> permite-lhe indicar se será notificado da confirmação quando fechar a janela da mensagem de alarme. Isto poderá ser usado como salvação para uma confirmação acidental dos alarmes.</para>
+
+<para
+>Seleccione a opção <guilabel
+>Mostrar no &korganizer;</guilabel
+> para adicionar o alarme ao calendário activo do &korganizer;, onde ele irá aparecer como um evento sem alarme. Esta opção permite-lhe registar os alarmes no &korganizer;, tirando à mesma partido das funções do &kalarm;.</para>
+
+<note
+><para
+>Se quiser modificar ou remover posteriormente o alarme no &kalarm;, o evento do &korganizer; será modificado ou removido por consequência. Contudo, se modificar o evento no &korganizer;, o alarme no &kalarm; não será afectado.</para
+></note>
+
+<para
+>Carregue no botão <guibutton
+>Carregar um Modelo</guibutton
+> para seleccionar um modelo com o qual preencher a janela, tal como descrito em <link linkend="create-edit"
+>Criar e Manipular Alarmes</link
+>. </para>
+
+<para
+>Carregue no botão <guibutton
+>Testar</guibutton
+> para exibir o alarme e verificar se funciona correctamente. O alarme é executado da mesma forma como se tivesse sido agendado da forma normal. No caso de um alarme de áudio, carregue no botão <guibutton
+>Testar</guibutton
+> uma segunda vez para parar de tocar o ficheiro de som.</para>
+
+<para
+>Carregue no botão <guibutton
+>OK</guibutton
+> quando todos os detalhes estiverem correctos para adicionar o alarme à lista agendada. Lembre-se que, ao editar um alarme existente, o botão <guibutton
+>OK</guibutton
+> fica desactivado enquanto não fizer nenhuma alteração.</para>
+
+</sect2>
+</sect1>
+
+<sect1 id="message-window">
+<title
+>Janela de Mensagem de Alarme</title>
+
+<para
+>Quando uma mensagem de alarme chega à sua hora, é mostrada em todos os ecrãs e não pode ser coberta pelas janelas normais, para garantir que você a vê. A janela da mensagem mostra a hora para a qual o alarme foi agendado, para que você possa ver quando apareceu se estava ausente nessa hora. (Para as mensagens das chamadas de atenção, todavia, a data/hora mostrada é a do alarme principal ou da sua repetição, não é a hora da mensagem da chamada de atenção, e o seu título é <quote
+>Chamada de Atenção</quote
+>).</para>
+
+<para
+>As janelas de mensagens de alarme permanecem visíveis até que as reconheça, a menos que a opção <guilabel
+>Fechar automaticamente a janela depois do período de cancelamento tardio</guilabel
+> esteja assinalada na <link linkend="alarm-edit-dlg"
+>janela de edição de alarmes</link
+>. No caso de um alarme repetitivo, se permanecer alguma janela aberta e não reconhecida de alguma ocorrência anterior do alarme, a janela existente simplesmente é realçada quando o alarme repetir. Isto evita que tenha de reconhecer várias cópias da mesma mensagem, no caso de não desejar, ou ser incapaz de, reconhecer uma mensagem na hora em que aparece.</para>
+
+<para
+>A janela da mensagem de alarme contém as opções que se seguem, desde que aplicadas ao alarme apresentado:</para>
+
+<itemizedlist>
+<listitem>
+<para
+>Confirmar o alarme ao carregar no botão <guibutton
+>Fechar</guibutton
+>. Isto fecha a janela (depois de um pedido de confirmação, se seleccionou a opção <guilabel
+>Confirmar a recepção</guilabel
+>).</para>
+</listitem>
+
+<listitem>
+<para
+>Edite o alarme, carregando no botão <guibutton
+>Editar...</guibutton
+>. Isto mostra a <link linkend="alarm-edit-dlg"
+>janela de Edição do Alarme</link
+>.</para>
+</listitem>
+
+<listitem>
+<para
+>Mostrar as opções para adiar o alarme para mais tarde, carregando no botão <guibutton
+>Adiar...</guibutton
+>. Depois seleccione a opção <guilabel
+>Adiar para a data/hora</guilabel
+> de modo a indicar a data e hora em que a mensagem deverá ser mostrada de novo ou seleccione o <guilabel
+>Adiar durante o intervalo de tempo</guilabel
+> para indicar em que tempo a partir de agora (em horas e minutos) é que a mensagem deverá ser mostrada de novo. Depois, carregue em <guibutton
+>OK</guibutton
+> para remeter a mensagem de alarme para mais tarde e fechar a sua janela.</para>
+
+<note
+><para
+>A hora para a qual é adiado um alarme deverá ser anterior à sua próxima ocorrência escalonada ou até à próxima chamada de atenção. Por essa razão, o botão <guibutton
+>Adiar...</guibutton
+> na janela da mensagem de alarme e o botão de <guibutton
+>OK</guibutton
+> na janela de adiamento, ficam desactivados um minuto antes da próxima ocorrência ou chamada de atenção.</para>
+<para
+>Lembre-se que, se estiver configurada uma chamada de atenção <emphasis
+>após</emphasis
+> o alarme, você <emphasis
+>pode</emphasis
+> adiar o alarme para depois da sua hora da chamada de atenção. Nesse caso, a mesma será suprimida.</para
+></note>
+
+<note
+><para
+>O botão <guibutton
+>Adiar...</guibutton
+> não está disponível para os alarmes que são apresentados após a autenticação, devido ao facto de a opção <guilabel
+>Repetir após a autenticação</guilabel
+> ter sido seleccionada.</para
+></note>
+</listitem>
+
+<listitem>
+<para
+>Pare de tocar o ficheiro de som do alarme, carregando no botão que mostra o símbolo para <quote
+>parar de tocar</quote
+>.</para>
+</listitem>
+
+<listitem>
+<para
+>Se a mensagem do alarme foi criada ao arrastar um e-mail do &kmail;, poderá aceder directamente ao &kmail;, carregando no botão que mostra o ícone do &kmail;. Isto irá seleccionar e realçar a mensagem de e-mail na lista de pastas do &kmail;.</para>
+
+<warning
+><para
+>Se os índices do &kmail; forem gerados de novo, a ligação à mensagem de e-mail do &kmail; será perdida.</para
+></warning>
+</listitem>
+
+<listitem>
+<para
+>O botão que mostra o ícone do <guiicon
+>&kalarm;</guiicon
+> oferece uma forma conveniente de activar o &kalarm;.</para>
+</listitem>
+</itemizedlist>
+
+<para
+>Também poderá escolher, na <link linkend="preferences-view"
+>janela de Configuração</link
+>, quais dos dois diferentes modos a usar nas janelas de mensagens de alarme:</para>
+
+<itemizedlist>
+<listitem>
+<para
+>Como uma janela normal. Neste modo, a captura do teclado é feita pela janela da mensagem de alarme logo que aparecer, por isso, se estiver a escrever alguma coisa na hora, os seus eventos de teclado serão desviados para ele em vez de ser para a sua aplicação original.</para>
+</listitem>
+
+<listitem>
+<para
+>Como uma janela não-modal. Neste modo, não há captura do teclado quando aparecer a janela da mensagem de alarme, como tal não irá interferir com a sua escrita. Contudo, neste modo, a janela não tem barra de título, como tal não a poderá mover ou redimensionar.</para>
+</listitem>
+</itemizedlist>
+
+<note
+><para
+>Quando for apresentado um alarme por cima de uma aplicação do ecrã completo, esta aparece como uma janela não-modal, independentemente desta opção de configuração. Isto deve-se a uma limitação do sistema de janelas.</para
+></note>
+
+<sect2>
+<title
+>Posicionamento das Janelas de Mensagens</title>
+
+<para
+>Poderá escolher, na <link linkend="preferences-view"
+>janela de Configuração</link
+>, qual dos dois esquemas a usar para posicionar as janelas de mensagens de alarmes:</para>
+
+<itemizedlist>
+<listitem>
+<para
+>As janelas aparecem o mais longe possível da posição actual do cursor. Isto minimiza o incómodo ao seu trabalho e minimiza também a possibilidade de aceitar sem querer o alarme.</para>
+</listitem>
+
+<listitem>
+<para
+>As janelas aparecem no centro do ecrã. Para reduzir as hipóteses de aceitar por acidente o alarme, os botões na janela aparecem desactivados inicialmente, só ficando activos ao fim de algum tempo (configurável).</para>
+</listitem>
+</itemizedlist>
+
+<para
+>Se tiver diversas janelas ou mensagens de alarmes visíveis, podê-las-á espalhar pelo ecrã, de modo a ficarem todas visíveis, ou então agrupá-las todas em conjunto no canto superior esquerdo do ecrã, através da opção do menu <menuchoice
+> <guimenu
+>Ver</guimenu
+><guimenuitem
+>Espalhar as Janelas</guimenuitem
+> </menuchoice
+>. Se o desejar, poderá configurar uma tecla de atalho global para esta acção.</para>
+
+</sect2>
+</sect1>
+
+<sect1 id="system-tray">
+<title
+>Operação na Bandeja do Sistema</title>
+
+<para
+>O &kalarm; poderá ser executado como um ícone na bandeja do sistema. Este ícone oferece tanto uma indicação do estado como o controlo da monitorização dos alarmes. Uma janela normal do &kalarm; indica que os alarmes estão a ser monitorizados, enquanto que um ícone cinzento indica que os alarmes não estão a ser monitorizados. Se alguns dos alarmes individuais estiverem desactivados, irá aparecer uma pequena cruz sobre o ícone.</para>
+
+<para
+>O ícone da bandeja do &kalarm; está automaticamente escondido sempre que não existirem alarmes a activar nas próximas 24 horas. Poderá alterar o limite de invisibilidade ou mostrar sempre o ícone, usando a <link linkend="preferences-view"
+>janela de configuração</link
+>. Para mostrar o ícone quando tiver sido escondido automaticamente, carregue na seta da bandeja do sistema para revelar os ícones escondidos.</para>
+
+<para
+>Se você passar o cursor do rato por cima do ícone da bandeja do sistema, aparece um resumo das primeiras mensagens de alarmes que irão ser activados nas próximas 24 horas como uma dica. Poderá desligar essa funcionalidade ou configurar o número de alarmes a mostrar e o seu formato na <link linkend="preferences-view"
+>janela de Configuração</link
+>.</para>
+
+<para
+>Carregue com o &LMB; no ícone da bandeja do sistema para esconder ou mostrar a janela principal do &kalarm;.</para>
+
+<para
+>Carregue com o &RMB; no ícone da bandeja do sistema para mostrar o seu menu de contexto:</para>
+
+<variablelist>
+<varlistentry>
+<term
+><menuchoice
+><guimenuitem
+>Activar os Alarmes</guimenuitem
+></menuchoice
+></term>
+<listitem
+><para
+><action
+>Activa ou desactiva a monitorização dos alarmes.</action
+></para>
+<para
+>Veja a <link linkend="enable-disable"
+>Activação/Desactivação dos Alarmes</link
+> para mais detalhes.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenuitem
+>Novo Alarme</guimenuitem
+></menuchoice
+></term>
+<listitem
+><para
+><action
+>Depois, poderá seleccionar o tipo de alarme na lista que aparece, que abre a janela de Edição de Alarmes para criar um novo alarme.</action
+></para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenuitem
+>Parar a Reprodução</guimenuitem
+></menuchoice
+></term>
+<listitem
+><para
+><action
+>Interrompe a reprodução do ficheiro de áudio actualmente em curso.</action
+></para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenuitem
+>Espalhar as Janelas</guimenuitem
+></menuchoice
+></term>
+<listitem
+><para
+><action
+>Espalha as janelas de mensagens de alarmes e erros pelo ecrã, ou então volta a agrupá-las de novo.</action
+></para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenuitem
+>Configurar o &kalarm;...</guimenuitem
+></menuchoice
+></term>
+<listitem
+><para
+><action
+>Mostra a janela de Configuração do &kalarm;.</action
+></para>
+<para
+>A janela de Configuração está descrita em <link linkend="preferences"
+>Configurar o &kalarm;</link
+>. Ela inclui as opções relacionadas com o ícone da bandeja do sistema para o &kalarm;.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenuitem
+>Restaurar / Minimizar</guimenuitem
+></menuchoice
+></term>
+<listitem
+><para
+><action
+>Restaura ou minimiza a janela principal do &kalarm;.</action
+></para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><menuchoice
+><guimenuitem
+>Sair</guimenuitem
+></menuchoice
+></term>
+<listitem
+><para
+><action
+>Fecha o ícone de bandeja do sistema e as janelas principais do &kalarm;.</action
+></para>
+<para
+>Sai do &kalarm; quando não estiverem apresentadas janelas de mensagens de alarme.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+
+<sect2>
+<title
+>Mostrar o &kalarm; na Bandeja do Sistema</title>
+
+<para
+>Deverá estar a correr o ambiente de trabalho &plasma; ou outro gestor de janelas adequado para mostrar o &kalarm; na bandeja do sistema.</para>
+
+<para
+>Seleccione <menuchoice
+><guimenu
+>Ver</guimenu
+> <guimenuitem
+>Mostrar na Bandeja do Sistema</guimenuitem
+></menuchoice
+> para mostrar o  &kalarm; na bandeja do sistema, de acordo com as preferências definidas na página <link linkend="preferences-view"
+>Ver</link
+> da janela de configuração.</para>
+
+<para
+>Para remover o &kalarm; da bandeja de sistema, desligue a opção <menuchoice
+> <guimenu
+>Ver</guimenu
+><guimenuitem
+>Mostrar na Bandeja do Sistema</guimenuitem
+> </menuchoice
+>.</para>
+
+<para
+>Para escolher se o &kalarm; deverá aparecer ou não, após o arranque, na bandeja do sistema, use a página <link linkend="preferences-view"
+>Ver</link
+> da janela de Configuração.</para>
+</sect2>
+</sect1>
+
+<sect1 id="refreshing">
+<title
+>Actualizar os Alarmes</title>
+
+<para
+>No caso pouco provável de algum alarme não ter sido desencadeado quando o deveria ter sido, poderá actualizar a lista de alarmes e despoletar os alarmes em falta, seleccionado a opção <menuchoice
+> <guimenu
+>Acções</guimenu
+><guimenuitem
+>Actualizar os Alarmes</guimenuitem
+> </menuchoice
+>. Isto fará com que o &kalarm; carregue de novo todos os ficheiros e calendários de calendários.</para>
+
+<para
+>Se precisar de acesso de escrita para os alarmes num calendário que não possa atribuir essas permissões, você poderá copiar os seus alarmes, importando-os para um calendário com permissões de escrita, usando a opção do menu de contexto <menuchoice
+><guimenuitem
+>Recarregar</guimenuitem
+></menuchoice
+>. Veja mais detalhes em <link linkend="calendars"
+>Calendários de Alarmes</link
+>.</para>
+
+</sect1>
+
+<sect1 id="enable-disable">
+<title
+>Activar/Desactivar os Alarmes</title>
+
+<para
+>Os alarmes poderão ser activados e desactivados por inteiro ou individualmente:</para>
+
+<itemizedlist>
+<listitem>
+<para
+>A <quote
+>Monitorização de alarmes</quote
+> aplica-se aos alarmes como um todo. Quando a monitorização de alarmes está desactivada, o &kalarm; deixa de verificar os alarmes e, como tal, não irá despoletar quaisquer alarmes. Quando a monitorização de alarmes estiver activa (a situação normal), todos os alarmes que não tenham sido desactivados individualmente irão disparar às horas apropriadas.</para>
+
+<para
+>Quando a monitorização dos alarmes estiver activa de novo, os alarmes que deveriam ter sido despoletados durante a sua desactivação serão agora activados (a menos que alguma opção de cancelamento posterior o impeça). Por outras palavras, a desactivação da monitorização dos alarmes tem o mesmo efeito que parar o &kalarm; &ndash; os alarmes são adiados até à sua nova activação.</para>
+</listitem>
+
+<listitem>
+<para
+>Os alarmes poderão ser activados ou desactivados individualmente, independentemente do estado de monitorização dos alarmes. Como tal, o estado de activado/desactivado dos alarmes individuais ficará inalterado se desactivar e voltar a activar a monitorização dos alarmes. Ao contrário da monitorização dos alarmes, que poderá potencialmente ser desactivada devido ao facto do &kalarm; não estar a correr ou não estar a funcionar, os alarmes individuais só poderão ser desactivados, se usar os comandos do menu para o fazer.</para>
+
+<para
+>Quando um alarme for reactivado individualmente, não será despoletado agora, no caso de ter ficado fora de prazo durante a sua desactivação. Por outras palavras, a desactivação de um alarme individual cancela todas as suas ocorrências até ser activado de novo.</para>
+
+<para
+>O estado de activado/desactivado individual de um alarme é indicado pela sua cor na lista de alarmes (a cor é configurável na página <link linkend="preferences-view"
+>Ver</link
+> da janela de Configuração).</para>
+</listitem>
+</itemizedlist>
+
+<para
+>Para um alarme disparar, deverá estar activo individualmente, assim como a monitorização do alarme deverá estar activa.</para>
+
+<sect2>
+<title
+>Activar a Monitorização de Alarmes</title>
+
+<para
+>Para a monitorização dos alarmes ocorrer, o &kalarm; deverá estar em execução. Assim que executar o &kalarm;, ele iniciar-se-á sempre que você iniciar uma sessão, a menos que o desactive posteriormente na página <link linkend="preferences-general"
+>Geral</link
+> da janela de Configuração.</para>
+
+<para
+>Se a monitorização de alarmes estiver desactivada de momento, faça uma das seguintes acções para activar os alarmes:</para>
+
+<itemizedlist>
+<listitem>
+<para
+>Seleccione <menuchoice
+><guimenu
+>Acções</guimenu
+> <guimenuitem
+>Activar Alarmes</guimenuitem
+></menuchoice
+>.</para>
+</listitem>
+
+<listitem>
+<para
+>Carregue com o &RMB; no ícone da bandeja do sistema e escolha a opção <menuchoice
+><guimenuitem
+>Activar os Alarmes</guimenuitem
+></menuchoice
+> no menu de contexto.</para>
+</listitem>
+</itemizedlist>
+
+</sect2>
+
+<sect2>
+<title
+>Desactivar a Monitorização de Alarmes</title>
+
+<para
+>Poderá desactivar a nível temporário a monitorização dos alarmes que impede o &kalarm; de mostrar os outros alarmes até que volte a activá-los, ou &ndash; assumindo que o &kalarm; esteja configurado para ser iniciado após a autenticação &ndash; até à próxima vez que se autenticar.</para>
+
+<itemizedlist>
+<listitem>
+<para
+>Seleccione <menuchoice
+><guimenu
+>Acções</guimenu
+> <guimenuitem
+>Activar os Alarmes</guimenuitem
+></menuchoice
+>.</para>
+</listitem>
+
+<listitem>
+<para
+>Carregue com o botão <mousebutton
+>direito</mousebutton
+> no ícone da bandeja do sistema e escolha a opção <menuchoice
+><guimenuitem
+>Activar os Alarmes</guimenuitem
+></menuchoice
+> no menu de contexto.</para>
+</listitem>
+
+<listitem>
+<para
+>Execute o &kalarm; com a opção da linha de comandos <option
+>--disable-all</option
+>.</para>
+</listitem>
+
+<listitem>
+<para
+>Pare o &kalarm;, como se encontra descrito em <link linkend="quitting"
+>Sair do &kalarm;</link
+>.</para>
+</listitem>
+</itemizedlist>
+
+<para
+>Os alarmes poderão ser desactivados de forma permanente se optar que o &kalarm; não deva ser iniciado no arranque da sessão, usando a página <link linkend="preferences-general"
+>Geral</link
+> da janela de Configuração.</para>
+
+</sect2>
+
+<sect2>
+<title
+>Activar/Desactivar os Alarmes Individualmente</title>
+
+<para
+>Para activar individualmente os alarmes que estejam desactivados de momento, faça uma das seguintes acções:</para>
+
+<itemizedlist>
+<listitem>
+<para
+>Seleccione um ou mais alarmes, carregando nos itens respectivos na lista de alarmes. Depois, escolha a opção <menuchoice
+> <guimenu
+>Acções</guimenu
+><guimenuitem
+>Activar</guimenuitem
+> </menuchoice
+>.</para>
+</listitem>
+
+<listitem>
+<para
+>Carregue com o &RMB; nos itens desejados na lista de alarmes e escolha a opção <menuchoice
+><guimenuitem
+>Activar</guimenuitem
+></menuchoice
+> do menu de contexto.</para>
+</listitem>
+</itemizedlist>
+
+<para
+>Para desactivar os alarmes individuais que estejam activos de momento, faça uma das seguintes acções:</para>
+
+<itemizedlist>
+<listitem>
+<para
+>Seleccione um ou mais alarmes, carregando nos itens respectivos na lista de alarmes. Depois, escolha a opção <menuchoice
+> <guimenu
+>Acções</guimenu
+><guimenuitem
+>Desactivar</guimenuitem
+> </menuchoice
+>.</para>
+</listitem>
+
+<listitem>
+<para
+>Carregue com o &RMB; nos itens desejados na lista de alarmes e escolha a opção <menuchoice
+><guimenuitem
+>Desactivar</guimenuitem
+></menuchoice
+> do menu de contexto.</para>
+</listitem>
+</itemizedlist>
+
+</sect2>
+</sect1>
+
+<sect1 id="wake-suspend">
+<title
+>Acordar da Suspensão</title>
+
+<para
+>É possível configurar um alarme seleccionado para acordar o seu sistema do estado de hibernação ou suspensão quando o alarme for activado, para que a acção do alarme possa ocorrer mesmo que o sistema tenha sido desligado. Esta função é controlada por uma janela acedida através da selecção da opção <menuchoice
+><guimenu
+>Acções</guimenu
+> <guimenuitem
+>Acordar da Suspensão</guimenuitem
+></menuchoice
+>. A janela permite definir o alarme para Acordar da Suspensão, assim como cancelá-lo ou realçá-lo.</para>
+
+<para
+>A utilização desta função necessita de privilégios de administração. Ser-lhe-á pedida a senha do administrador quando configurar ou cancelar um alarme para acordar da suspensão.</para>
+
+<note
+><para
+>Esta funcionalidade não é suportada em alguns computadores, especialmente os mais antigos, e alguns só suportam a definição de um tempo de activação nas próximas 24 horas. Poderão também existir algumas restrições sobre o modo de suspensão que a função irá usar. Deverá pensar em testar alguns alarmes, para verificar as capacidades do seu sistema, antes de usar a função efectivamente.</para
+></note>
+
+<warning
+><para
+>O seu computador só poderá agendar um único alarme deste tipo de cada vez. Se usar esta função com o &kalarm;, dever-se-á certificar que não entra em conflito com nenhuma outra aplicação que também use a funcionalidade para acordar da suspensão. Sempre que uma aplicação agendar ou limpar alarmes deste tipo, serão cancelados os alarmes anteriores, sejam eles definidos pelo &kalarm; ou por outra aplicação.</para
+></warning>
+
+<para
+>A janela para Acordar da Suspensão é usada em conjunto com a lista de alarmes na janela principal do &kalarm;.</para>
+
+<itemizedlist>
+<listitem>
+<para
+><guibutton
+>Usar o alarme seleccionado</guibutton
+>: isto configura o alarme actualmente seleccionado na lista para ser o alarme actual para Acordar da Suspensão. Todos os alarmes deste tipo são cancelados, como está explicado em cima. O botão só fica activo se estiver seleccionado apenas um alarme.</para>
+</listitem>
+
+<listitem>
+<para
+><guibutton
+>Cancelar a activação da suspensão</guibutton
+>: isto cancela qualquer alarme para Acordar da Suspensão existente (quer seja definido pelo &kalarm; quer por outra aplicação qualquer - ver acima). Lembre-se que este só cancela a função de activação associada ao alarme; o alarme em si não é removido e irá continuar a funcionar da forma normal.</para>
+</listitem>
+
+<listitem>
+<para
+><guibutton
+>Mostrar o alarme actual</guibutton
+>: este realça o alarme actual para Acordar da Suspensão na lista de alarmes, para que possa ser identificado. O botão fica desactivado se não estiver configurado nenhum alarme deste tipo.</para>
+</listitem>
+
+<listitem>
+<para
+>O <guilabel
+>Número de minutos antes de o alarme acordar da suspensão</guilabel
+> controla a possibilidade de, se o desejar, o sistema ter tempo para se repor por completo antes de o alarme ser despoletado, para que o mesmo possa funcionar na hora correcta.</para>
+</listitem>
+</itemizedlist>
+
+</sect1>
+
+<sect1 id="quitting">
+<title
+>Sair do &kalarm;</title>
+
+<para
+>Saia do &kalarm; com a opção <menuchoice
+><guimenu
+>Ficheiro</guimenu
+> <guimenuitem
+>Sair</guimenuitem
+></menuchoice
+> ou o item do menu de contexto do ícone da bandeja do sistema <menuchoice
+><guimenuitem
+>Sair</guimenuitem
+></menuchoice
+>. Em alternativa, se o ícone da bandeja não estiver vazio, feche todas as janelas do &kalarm;.</para>
+
+</sect1>
+</chapter>
+
+<chapter id="preferences">
+<title
+>Configurar o &kalarm;</title>
+
+<para
+>Para configurar a operação do &kalarm; de acordo com o seu sistema e com as suas Configuração pessoais, seleccione a opção <menuchoice
+><guimenu
+>Configuração</guimenu
+> <guimenuitem
+>Configurar o &kalarm;...</guimenuitem
+></menuchoice
+>. Isto mostra a janela de Configuração.</para>
+
+<sect1 id="preferences-general">
+<title
+>Geral</title>
+
+<para
+>A secção <guilabel
+>Geral</guilabel
+> permite-lhe controlar o comportamento global do &kalarm;:</para>
+
+<itemizedlist>
+<listitem>
+<para
+><guilabel
+>Arrancar no início da sessão</guilabel
+>: inicia automaticamente o &kalarm; no arranque da sessão, após a autenticação, para garantir que o &kalarm; corre a toda a hora, a menos que o termine manualmente.</para>
+
+<warning
+><para
+>Esta opção deverá ser sempre assinalada, a menos que pretenda desactivar a utilização do &kalarm;.</para
+></warning>
+
+<note
+><para
+>Esta opção fica automaticamente seleccionada de novo, sempre que o &kalarm; é executado. Por isso, se tiver desligado esta opção e quiser a evitar que o &kalarm; se execute no início, terá de desligar esta opção de novo, de cada vez que executar o &kalarm;.</para
+></note>
+</listitem>
+
+<listitem>
+<para
+><guilabel
+>Avisar antes de sair</guilabel
+>: Quando os alarmes forem desactivados enquanto o &kalarm; não estiver a correr, a selecção desta opção pede-lhe uma confirmação se tentar terminar o &kalarm; com a opção do ícone da bandeja do sistema <menuchoice
+><guimenu
+>Sair</guimenu
+></menuchoice
+>. Isto evita que os alarmes sejam desactivados acidentalmente. Por razões de segurança, esta opção é reactivada automaticamente sempre que mudar de modo de execução.</para>
+</listitem>
+
+<listitem
+><para
+><guilabel
+>Confirmar as remoções dos alarmes</guilabel
+>: Indique se será questionado para confirmar de cada vez que deseja remover um alarme.</para>
+</listitem>
+
+<listitem
+><para
+><guilabel
+>Intervalo de tempo de adiamento por omissão</guilabel
+>: Indique o intervalo de tempo por omissão, em horas e minutos, a mostrar inicialmente quando for apresentada a janela para Adiar o Alarme. Lembre-se que, se um alarme tiver sido anteriormente adiado, o intervalo que é apresentado inicialmente nessa janela será igual ao intervalo adiado que foi usado no último adiamento.</para>
+</listitem>
+
+<listitem
+><para
+><guilabel
+>Terminal para os Comandos de Alarme</guilabel
+>: Aqui poderá seleccionar o tipo de janela de terminal que será usado para os alarmes de comandos a serem executados numa janela de terminal. Algumas das aplicações de janelas de terminais estão pré-configuradas, &eg; o <application
+>xterm</application
+>, o &konsole;, ainda que só sejam visíveis os que estiverem instalados aqui. Poderá ver as opções actuais do comando que são usadas por cada aplicação, mostrando a ajuda de contexto para a sua opção respectiva.</para>
+
+<para
+>Se quiser usar outra aplicação ou quiser usar uma das que se encontram listadas, só que com opções do comando diferentes, seleccione <guilabel
+>Outro</guilabel
+> e indique o comando para invocar a janela do terminal. Por omissão, o texto do comando do alarme será adicionado ao que indicar. Em alternativa, poderá indicar onde é que o texto do comando do alarme será introduzido, usando um dos seguintes códigos:</para>
+
+<variablelist>
+<varlistentry>
+<term
+>%c</term>
+<listitem>
+<para
+>O texto do comando do alarme será substituído.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+>%w</term>
+<listitem>
+<para
+>O texto do comando do alarme será substituído, com um <literal
+>sleep</literal
+> adicionado.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+>%C</term>
+<listitem>
+<para
+>Um ficheiro de comando temporário, contendo o texto do comando do alarme, será criado, sendo substituído o comando para executar o ficheiro.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+>%W</term>
+<listitem>
+<para
+>Um ficheiro de comando temporário, contendo o texto do comando do alarme, será criado com um <literal
+>sleep</literal
+> adicionado, sendo substituído o comando para executar o ficheiro.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term
+>%t</term>
+<listitem>
+<para
+>o nome do &kalarm; na língua actual será substituído.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+
+<para
+>Quando o alarme do comando for despoletado, o seu texto de comando será rodeado de aspas antes de ser introduzido no comando da janela de terminal.</para>
+</listitem>
+
+</itemizedlist>
+</sect1>
+
+<sect1 id="preferences-time">
+<title
+>Data &amp; Hora</title>
+
+<para
+>A secção <guilabel
+>Data &amp; Hora</guilabel
+> permite-lhe escolher as opções relacionadas com a data e hora:</para>
+
+<itemizedlist>
+<listitem
+><para
+><guilabel
+>Fuso-horário</guilabel
+>: Seleccione o seu fuso-horário. O &kalarm; usa este fuso-horário em todo o lado, excepto quando o substituir nos alarmes individuais.</para>
+</listitem>
+
+<listitem
+><para
+><guilabel
+>Região dos feriados</guilabel
+>: Seleccione quais os feriados do país ou região a usar. Isto afecta os alarmes recorrentes, para os quais está seleccionada a opção de exclusão dos feriados.</para>
+</listitem>
+
+<listitem
+><para
+><guilabel
+>Início do dia para os alarmes por data</guilabel
+>: Define a hora do início do dia para o caso da activação dos alarmes apenas por data, &ie; os que têm a opção <guilabel
+>A qualquer hora</guilabel
+> seleccionada. Quando chegar a data exacta, estes alarmes serão activados na primeira oportunidade que for possível durante as 24 horas, a ter início na hora do início do dia.</para>
+</listitem>
+
+<listitem
+><para
+>Grupo do <guilabel
+>Horário de Trabalho</guilabel
+>: Estas opções permitem-lhe definir o seu horário de trabalho, o que é necessário quando a opção <guilabel
+>Apenas durante o horário de trabalho</guilabel
+> for seleccionada para uma recorrência na <link linkend="alarm-edit-dlg"
+>janela de Edição do Alarme</link
+>.</para>
+
+<itemizedlist>
+<listitem
+><para
+>Assinale todos os dias de trabalho.</para>
+</listitem>
+
+<listitem
+><para
+><guilabel
+>Hora inicial do dia</guilabel
+>: indique a hora para a qual começa a trabalhar todos os dias.</para>
+</listitem>
+
+<listitem
+><para
+><guilabel
+>Hora final do dia</guilabel
+>: indique a hora em que termina o trabalho todos os dias.</para>
+</listitem>
+</itemizedlist>
+</listitem>
+
+<listitem
+><para
+><guilabel
+>Duração do evento do KOrganizer</guilabel
+>: Indique a duração do evento a definir no &korganizer; para os alarmes que são copiados para o &korganizer;. A duração por omissão corresponde a zero.</para>
+</listitem>
+
+</itemizedlist>
+</sect1>
+
+<sect1 id="preferences-storage">
+<title
+>Armazenamento</title>
+
+<para
+>A secção <guilabel
+>Armazenamento</guilabel
+> permite-lhe escolher as opções para gravar e arquivar os alarmes:</para>
+
+<itemizedlist>
+<listitem>
+<para
+><guilabel
+>Novos Alarmes &amp; Modelos</guilabel
+>: Indique o calendário onde gravar os alarmes e modelos novos, ao usar calendários com vários alarmes:</para>
+
+<itemizedlist>
+<listitem>
+<para
+><guilabel
+>Guardar no calendário predefinido</guilabel
+>: Os alarmes e modelos novos são adicionados automaticamente ao calendário predefinido, sem pedir qualquer confirmação.</para>
+</listitem>
+
+<listitem>
+<para
+><guilabel
+>Perguntar o calendário onde gravar</guilabel
+>: Quando criar um alarme ou modelo novo, e existir mais que um calendário com possibilidades de gravação, será questionado para escolher o calendário onde o gravar. Lembre-se que, quando os alarmes forem gravados ao expirarem, eles são sempre gravados no alarme predefinido de arquivo, sem qualquer questão.</para>
+</listitem>
+</itemizedlist>
+</listitem>
+
+<listitem
+><para
+>Grupo dos <guilabel
+>Alarmes Arquivados</guilabel
+>: Estas opções controlam o armazenamento dos alarmes arquivados no calendário predefinido para os alarmes arquivados.</para>
+
+<itemizedlist>
+<listitem
+><para
+><guilabel
+>Manter os alarmes depois de expirarem</guilabel
+>: Seleccione esta opção para armazenar os alarmes expirados e removidos. Desligue-a para não guardar nenhum registo dos alarmes, logo que estes deixem de estar activos. Lembre-se que os alarmes removidos só são guardados se tiverem sido despoletados anteriormente. Se remover um alarme antes de este ser despoletado, será descartado.</para>
+</listitem>
+
+<listitem
+><para
+><guilabel
+>Descartar os alarmes arquivados ao fim de</guilabel
+>: Indique o número de dias para guardar os alarmes arquivados e removidos, após os quais eles serão removidos de forma permanente.</para>
+</listitem>
+
+<listitem
+><para
+><guibutton
+>Limpar os alarmes arquivados</guibutton
+>: Este botão limpa todos os alarmes arquivados que estejam armazenados no calendário predefinido para alarmes arquivados (Os outros calendários são deixados inalterados, no caso de estarem partilhados com outras pessoas). Isto não faz efeito nos alarmes que irão expirar a seguir; eles continuarão a ser guardados de acordo com as opções seleccionadas.</para>
+</listitem>
+</itemizedlist>
+</listitem>
+
+</itemizedlist>
+</sect1>
+
+<sect1 id="preferences-email">
+<title
+>E-mail</title>
+
+<para
+>A secção <guilabel
+>E-mail</guilabel
+> permite-lhe escolher as opções para enviar e endereçar os alarmes por e-mail:</para>
+
+<itemizedlist>
+<listitem>
+<para
+><guilabel
+>Cliente de e-mail</guilabel
+>: Indique o cliente de e-mail que será usado para enviar os alarmes por e-mail:</para>
+
+<itemizedlist>
+<listitem
+><para
+><guilabel
+>KMail</guilabel
+>: Quando um alarme de e-mail é activado, o e-mail é enviado automaticamente, utilizando o &kmail; (que é iniciado primeiro, se for necessário).</para>
+</listitem>
+
+<listitem
+><para
+><guilabel
+>Sendmail</guilabel
+>: Quando é despoletado um alarme por e-mail, a mensagem é enviada automaticamente com o &Sendmail;. Esta opção só irá funcionar se o seu sistema estiver configurado para usar o &Sendmail; ou um agente de transporte de e-mail compatível com o &Sendmail;, como o <application
+>postfix</application
+> ou o <application
+>qmail</application
+>.</para>
+</listitem>
+</itemizedlist>
+</listitem>
+
+<listitem>
+<para
+><guilabel
+>Copiar os e-mails enviados para a pasta de enviados do &kmail;</guilabel
+>: Seleccione esta opção se, de cada vez que um alarme por e-mail for despoletado, quiser que uma cópia da mensagem transmitida seja guardada na pasta <filename
+>enviado</filename
+> do &kmail;.</para>
+
+<note
+><para
+>Esta opção não está disponível quando o &kmail; está seleccionado como o cliente de e-mail, dado que o &kmail; faz isto automaticamente.</para
+></note>
+</listitem>
+
+<listitem>
+<para
+><guilabel
+>Notificar quando os e-mails remotos ficam em espera</guilabel
+>: Seleccione esta opção para mostrar uma notificação, sempre que um alarme por e-mail deixa uma mensagem em espera para ser enviada para um sistema remoto. Isto pode ser útil se, por exemplo, você tiver uma ligação telefónica ou se a mensagem fica em espera na pasta do &kmail; <filename
+>A enviar</filename
+>, de modo que possa garantir que faz tudo o que é necessário para enviar de facto a mensagem.</para>
+</listitem>
+
+<listitem>
+<para
+>Seleccione o seu endereço de e-mail a usar como endereço do remetente nas mensagens de alarme:</para>
+
+<itemizedlist>
+<listitem
+><para
+>Seleccione <guilabel
+>De</guilabel
+> para indicar um endereço de e-mail.</para>
+</listitem>
+
+<listitem
+><para
+>Seleccione a opção <guilabel
+>Usar as identidades do &kmail;</guilabel
+> para poder escolher, na altura em que configurar um alarme por e-mail, qual das identidades de e-mail que o &kmail; irá usar. A identidade por omissão do &kmail; será usada para os alarmes que já foram configurados, antes de seleccionar esta opção.</para>
+</listitem>
+</itemizedlist>
+</listitem>
+
+<listitem>
+<para
+>Seleccione o seu endereço de e-mail a usar para enviar as cópias invisíveis dos alarmes por e-mail para si próprio, quando a opção <guilabel
+>Copiar o e-mail para o próprio</guilabel
+> estiver seleccionada:</para>
+
+<itemizedlist>
+<listitem
+><para
+>Seleccione o <guilabel
+>Bcc</guilabel
+> para indicar um endereço de e-mail. Se as cópias invisíveis deverão ser enviadas para a sua conta, no computador em que o &kalarm; está a correr, poderá simplesmente indicar o seu nome de utilizador aqui.</para>
+</listitem>
+
+</itemizedlist>
+</listitem>
+</itemizedlist>
+</sect1>
+
+<sect1 id="preferences-view">
+<title
+>Ver</title>
+
+<para
+>A secção <guilabel
+>Ver</guilabel
+> permite-lhe controlar alguns aspectos da aparência do &kalarm;. Na página <guilabel
+>Geral</guilabel
+>:</para>
+<itemizedlist>
+
+<listitem>
+<para
+><guilabel
+>Mostrar na bandeja do sistema</guilabel
+>: Quando estiver seleccionado, o ícone da bandeja do sistema é sempre apresentado enquanto o &kalarm; estiver a correr, sujeito à opção seleccionada:</para>
+
+<itemizedlist>
+<listitem>
+<para
+><guilabel
+>Mostrar sempre</guilabel
+>: O ícone da bandeja está sempre visível.</para>
+</listitem>
+
+<listitem>
+<para
+><guilabel
+>Esconder automaticamente se não existirem alarmes activos</guilabel
+>: O ícone da bandeja está escondido se não existirem alarmes activos.</para>
+</listitem>
+
+<listitem>
+<para
+><guilabel
+>Esconder automaticamente se nenhum alarme expirar no período de tempo</guilabel
+>: O ícone da bandeja é escondido se nenhum alarme for activado dentro do período de tempo indicado, a partir de agora.</para>
+</listitem>
+</itemizedlist>
+
+<para
+>Quando o ícone da bandeja está escondido automaticamente, podê-lo-á tornar visível de novo com a opção da bandeja para mostrar os ícones escondidos.</para>
+
+<para
+>Quando a opção <guilabel
+>Mostrar na bandeja do sistema</guilabel
+> estiver seleccionada, ao fechar o ícone da bandeja do sistema, fecha todas as janelas principais do &kalarm; se não estiver nenhuma janela de mensagem visível, sai da aplicação.</para>
+</listitem>
+
+<listitem>
+<para
+>Grupo da <guilabel
+>Dica da Bandeja do Sistema</guilabel
+>: Estas opções controlam a informação que é apresentada na dica que aparece, sempre que o cursor do rato pára em cima do ícone da bandeja do sistema do &kalarm;.</para>
+
+<itemizedlist>
+<listitem>
+<para
+><guilabel
+>Mostrar os alarmes das próximas 24 horas</guilabel
+>: Quando estiver seleccionada a opção, é mostrado um resumo dos primeiros alarmes que irão ser despoletados nas próximas 24 horas.</para>
+</listitem>
+
+<listitem>
+<para
+><guilabel
+>Número máximo de alarmes a mostrar</guilabel
+>: Desligue esta opção para mostrar todos os alarmes das próximas 24 horas. Seleccione-a para definir o número máximo de alarmes que serão enumerados.</para>
+</listitem>
+
+<listitem>
+<para
+><guilabel
+>Mostrar a hora do alarme</guilabel
+>: Seleccione esta opção para mostrar a hora para a qual cada alarme está agendado.</para>
+</listitem>
+
+<listitem>
+<para
+><guilabel
+>Mostrar a hora até ao alarme</guilabel
+>: Seleccione esta opção para mostrar o período de tempo que falta até à próxima ocorrência de cada alarme. O período de tempo é definido em horas e minutos.</para>
+
+<itemizedlist>
+<listitem>
+<para
+><guilabel
+>Prefixo</guilabel
+>: Indique um símbolo ou texto a mostrar à frente do período de tempo até ao alarme, para o distinguir da hora para a qual foi agendado o alarme.</para>
+</listitem>
+</itemizedlist>
+</listitem>
+</itemizedlist>
+</listitem>
+
+<listitem>
+<para
+>O grupo da <guilabel
+>Lista de Alarmes</guilabel
+> permite a selecção das cores usadas na lista de alarmes da janela principal do &kalarm;, de modo a mostrar os alarmes desactivados e arquivados.</para>
+</listitem>
+</itemizedlist>
+
+<para
+>A página <guilabel
+>Janelas de Alarmes</guilabel
+> contém opções que controlam a aparência das janelas de mensagens de alarme.</para>
+
+<itemizedlist>
+<listitem>
+<para
+><guilabel
+>Posicionar as janelas longe do cursor do rato</guilabel
+>: Seleccione esta opção para mostrar as janelas de mensagens de alarme o mais longe possível da posição actual do cursor. Isto minimiza a hipótese de aceitar sem querer um alarme, carregando de forma não-intencional num botão, logo que apareça a janela do alarme.</para>
+</listitem>
+
+<listitem>
+<para
+><guilabel
+>Centrar as janelas, atrasar a activação dos botões da janela</guilabel
+>: Seleccione esta opção para mostrar as janelas das mensagens dos alarmes no centro do ecrã. Para reduzir a hipótese de aceitar sem querer um alarme, os botões da janela aparecem desactivados inicialmente. O atraso em segundos antes da sua activação é definido na opção <guilabel
+>Atraso de activação do botão (segundos)</guilabel
+>.</para>
+</listitem>
+
+<listitem>
+<para
+><guilabel
+>As janelas de mensagens têm uma barra de título e capturam o teclado</guilabel
+>: Esta opção controla se as janelas das mensagens de alarmes são modais ou não, &ie; se capturam os eventos do teclado logo que aparecem. Veja a secção da <link linkend="message-window"
+>Janela das Mensagens de Alarme</link
+> para mais detalhes.</para>
+</listitem>
+</itemizedlist>
+</sect1>
+
+<sect1 id="preferences-edit">
+<title
+>Editar</title>
+
+<para
+>A secção <guilabel
+>Editar</guilabel
+> permite-lhe escolher os valores por omissão para as opções na <link linkend="alarm-edit-dlg"
+>janela de Edição do Alarme</link
+>:</para>
+
+<itemizedlist>
+<listitem
+><para
+>A página <guilabel
+>Geral</guilabel
+> contém opções que se aplicam a todos os tipos de alarmes.</para>
+
+<itemizedlist>
+<listitem
+><para
+>Configura os estados por omissão para as opções <guilabel
+>Mostrar no KOrganizer</guilabel
+> ou <guilabel
+>Cancelar se atrasado</guilabel
+>.</para>
+</listitem>
+
+<listitem
+><para
+>Mudar o tipo de recorrência predefinido.</para>
+</listitem>
+
+<listitem
+><para
+>Seleccione o tratamento por omissão, nos anos não-bissextos, das recorrências anuais agendadas para 29 de Fevereiro.</para>
+</listitem>
+</itemizedlist>
+</listitem>
+
+<listitem
+><para
+>A página de <guilabel
+>Tipos de Alarmes</guilabel
+> contém opções que se aplicam a tipos específicos de alarmes.</para>
+
+<itemizedlist>
+<listitem>
+<para
+>Para os alarmes visíveis:</para>
+
+<itemizedlist>
+<listitem
+><para
+>Configura os estados por omissão para as opções <guilabel
+>Fechar automaticamente a janela ao fim deste tempo</guilabel
+> e <guilabel
+>Confirmar a recepção</guilabel
+>.</para>
+</listitem>
+
+<listitem
+><para
+>Configura as unidades dos períodos das chamadas de atenção por omissão.</para>
+</listitem>
+
+<listitem
+><para
+>Configura as acções de apresentação especiais dos alarmes por omissão.</para>
+</listitem>
+
+<listitem
+><para
+>Configura as opções por omissão do som. Lembre-se que poderá ser indicado um ficheiro de som por omissão, mesmo que o tipo de som não esteja como <guilabel
+>Ficheiro de som</guilabel
+>.</para>
+</listitem>
+</itemizedlist>
+</listitem>
+
+<listitem>
+<para
+>Para os alarmes de comandos:</para>
+
+<itemizedlist>
+<listitem
+><para
+>Configura os estados por omissão para as opções <guilabel
+>Indicar um programa</guilabel
+> ou <guilabel
+>Executar numa janela de terminal</guilabel
+>.</para>
+</listitem>
+</itemizedlist>
+</listitem>
+
+<listitem>
+<para
+>Para os alarmes de e-mail:</para>
+
+<itemizedlist>
+<listitem
+><para
+>Configura o estado predefinido para a opção <guilabel
+>Copiar o e-mail para o próprio</guilabel
+>.</para>
+</listitem>
+</itemizedlist>
+</listitem>
+</itemizedlist>
+</listitem>
+
+<listitem
+><para
+>A página <guilabel
+>Tipo de Letra &amp; Cor</guilabel
+> permite-lhe definir a aparência por omissão das mensagens de alarmes. Seleccione o tipo de letra por omissão e as cores principal e de fundo.</para>
+</listitem>
+</itemizedlist>
+</sect1>
+
+</chapter>
+
+<chapter id="cmdline-operation">
+<title
+>Operação com a Linha de Comandos</title>
+
+<para
+>Quando são fornecidos parâmetros na linha de comandos, o &kalarm; não mostra a lista de alarmes agendados, tal como foi descrito acima em <link linkend="using-kalarm"
+>Usar o &kalarm;</link
+>. As opções da linha de comandos específicas do &kalarm; poderão ser usadas para efectuar as seguintes operações:</para>
+
+<itemizedlist>
+<listitem
+><para
+>escalonar um novo alarme</para>
+</listitem>
+<listitem
+><para
+>controlar o modo de apresentação do &kalarm;</para>
+</listitem>
+<listitem
+><para
+>obter ajuda</para>
+</listitem>
+</itemizedlist>
+
+<para
+>As opções adicionais da linha de comandos são oferecidas em primeiro lugar para permitir aos outros programas interagirem com o  &kalarm;. Elas estão descritas no capítulo do <link linkend="cmdline-interface"
+>Guia do Programador do &kalarm;</link
+>.</para>
+
+<para
+>A linha de comandos só poderá conter as opções que se apliquem a uma operação do &kalarm;. Se quiser efectuar várias operações, terá de invocar o &kalarm; várias vezes com um conjunto único de opções de cada vez.</para>
+
+<sect1 id="cmdline-schedule">
+<title
+>Escalonar um Novo Alarme</title>
+
+<para
+>As seguintes opções são utilizar para escalonar um novo alarme:</para>
+
+<informaltable>
+<tgroup cols="2">
+<thead>
+<row>
+  <entry
+>Opção</entry>
+  <entry
+>Descrição</entry>
+</row>
+</thead>
+<tbody>
+<row>
+  <entry
+><option
+>-a</option
+>, <option
+>--ack-confirm</option
+></entry>
+  <entry
+>Pede uma confirmação quando a mensagem de alarme for recebida.</entry>
+</row>
+<row>
+  <entry
+><option
+>-A</option
+>, <option
+>--attach <replaceable
+>URL</replaceable
+></option
+></entry>
+  <entry
+>Indica o nome ou o &URL; de um ficheiro que deverá ser anexado à mensagem de e-mail. Esta opção poderá ser repetida tantas vezes quantas as necessárias. O <option
+>--mail</option
+> terá de ser fornecido com esta opção.</entry>
+</row>
+<row>
+  <entry
+><option
+>--auto-close</option
+></entry>
+  <entry
+>Fecha automaticamente a janela do alarme, depois de terminar o período indicado com a opção <option
+>--late-cancel</option
+>. A opção <option
+>--late-cancel</option
+> deverá ser indicada com esta opção.</entry>
+</row>
+<row>
+  <entry
+><option
+>-b</option
+>, <option
+>--beep</option
+></entry>
+  <entry
+>Toca uma campainha audível quando a mensagem for apresentada. O <option
+>--speak</option
+>, o <option
+>--play</option
+> e o <option
+>--play-repeat</option
+> não poderão ser indicados com esta opção.</entry>
+</row>
+<row>
+  <entry
+><option
+>--bcc</option
+></entry>
+  <entry
+>Envia uma cópia invisível para si próprio. O <option
+>--mail</option
+> necessita ser indicado com esta opção.</entry>
+</row>
+<row>
+  <entry
+><option
+>-c</option
+>, <option
+>--color</option
+>, <option
+>--colour <replaceable
+>cor</replaceable
+></option
+></entry>
+  <entry
+>Indica a cor de fundo da mensagem com o nome da cor no &Qt; ou com o código hexadecimal 0xRRGGBB.</entry>
+</row>
+<row>
+  <entry
+><option
+>-C</option
+>, <option
+>--colorfg</option
+>, <option
+>--colourfg <replaceable
+>cor</replaceable
+></option
+></entry>
+  <entry
+>Indica a cor do texto da mensagem com o nome da cor no &Qt; ou com o código hexadecimal 0xRRGGBB.</entry>
+</row>
+<row>
+  <entry
+><option
+>-d</option
+>, <option
+>--disable</option
+></entry>
+  <entry
+>Desactiva o alarme. Não irá disparar até que tenha sido activado manualmente.</entry>
+</row>
+<row>
+  <entry
+><option
+>--disable-all</option
+></entry>
+  <entry
+>Desactiva a monitorização do alarme. Isto impede que todos os alarmes sejam despoletados até que os reactive ou que reinicie o &kalarm;, &eg; no início da próxima sessão. O <option
+>--triggerEvent</option
+> não pode ser indicado com esta opção.</entry>
+</row>
+<row>
+  <entry
+><option
+>-e</option
+>, <option
+>--exec <replaceable
+>linha de comandos</replaceable
+></option
+></entry>
+  <entry
+>Indica um comando a executar. Se for fornecida, esta opção deverá ser a última opção da linha de comandos do &kalarm;. Todos os parâmetros subsequentes e as opções são interpretados como formando a linha de comandos a executar. O <option
+>--file</option
+>, o <option
+>--exec-display</option
+> e o <option
+>--mail</option
+> não podem ser indicados com esta opção. O <option
+>--ack-confirm</option
+>, o <option
+>--beep</option
+>, o <option
+>--color</option
+> e o <option
+>--colorfg</option
+> são ignorados com esta opção.</entry>
+</row>
+<row>
+  <entry
+><option
+>-E</option
+>, <option
+>--exec-display <replaceable
+>linha de comandos</replaceable
+></option
+></entry>
+  <entry
+>Indica um comando a executar. Se for fornecida, esta opção deverá ser a última opção da linha de comandos do &kalarm;. Todos os parâmetros subsequentes e as opções são interpretados como formando a linha de comandos a executar. O <option
+>--exec</option
+>, o <option
+>--file</option
+> e o <option
+>--mail</option
+> não podem ser indicados com esta opção.</entry>
+</row>
+<row>
+  <entry
+><option
+>-f</option
+>, <option
+>--file <replaceable
+>URL</replaceable
+></option
+></entry>
+  <entry
+>Indica o nome ou o &URL; de um ficheiro de texto ou de imagem cujo conteúdo irá formar a mensagem de alarme. O <option
+>--exec</option
+>, o <option
+>--exec-display</option
+> e o <option
+>--mail</option
+> não poderão ser indicados e a <replaceable
+>mensagem</replaceable
+> não deverá estar presente com esta mensagem.</entry>
+</row>
+<row>
+  <entry
+><option
+>-F</option
+>, <option
+>--from-id <replaceable
+>ID</replaceable
+></option
+></entry>
+  <entry
+>Usa a identidade do &kmail; indicada como remetente da mensagem de e-mail. O <option
+>--mail</option
+> deverá ser indicado com esta opção.</entry>
+</row>
+<row>
+  <entry
+><option
+>-i</option
+>, <option
+>--interval <replaceable
+>período</replaceable
+></option
+></entry>
+  <entry
+>Indica o intervalo entre repetições do alarme. As horas/minutos são indicados no formato <replaceable
+>nHnM</replaceable
+>, em que o <replaceable
+>n</replaceable
+> é um número, &eg; 3H30M. Os outros períodos de tempo são indicado no formato <replaceable
+>nX</replaceable
+>, em que o <replaceable
+>n</replaceable
+> é um número e o <replaceable
+>X</replaceable
+> é uma das seguintes letras: Y ('years' - anos), M ('months' - meses), W ('weeks' - semanas), D ('days' - dias). Se a opção <option
+>--recurrence</option
+> for também indicada, o Y (anos) e M (meses) não são permitidos. A opção é obrigatória se for usada a <option
+>--until</option
+> ou a <option
+>--repeat</option
+>.</entry>
+</row>
+<row>
+  <entry
+><option
+>-k</option
+>, <option
+>--korganizer</option
+></entry>
+  <entry
+>Mostra o alarme como um evento no calendário activo do &korganizer;.</entry>
+</row>
+<row>
+  <entry
+><option
+>-l</option
+>, <option
+>--late-cancel <replaceable
+>período</replaceable
+></option
+></entry>
+  <entry
+>Cancela o alarme se não puder ser despoletado no <replaceable
+>período</replaceable
+> após a hora actual. As horas/minutos são indicados no formato <replaceable
+>nHnM</replaceable
+>, em que o <replaceable
+>n</replaceable
+> é um número, &eg; 3H30M. Os outros períodos de tempo são indicado no formato <replaceable
+>nX</replaceable
+>, em que o <replaceable
+>n</replaceable
+> é um número e o <replaceable
+>X</replaceable
+> é uma das seguintes letras: W ('weeks' - semanas), D ('days' - dias). O valor por omissão do <replaceable
+>período</replaceable
+> é 1 minuto.</entry>
+</row>
+<row>
+  <entry
+><option
+>-L</option
+>, <option
+>--login</option
+></entry>
+  <entry
+>Dispara o alarme sempre que você se liga, após a autenticação. O <option
+>--interval</option
+>, o <option
+>--repeat</option
+> e o <option
+>--until</option
+> não podem ser fornecidos com esta opção.</entry>
+</row>
+<row>
+  <entry
+><option
+>-m</option
+>, <option
+>--mail <replaceable
+>endereço</replaceable
+></option
+></entry>
+  <entry
+>Envia uma mensagem de e-mail para o endereço indicado. Esta opção pode ser repetida tantas vezes quantas as necessárias. O <option
+>--exec</option
+>, o <option
+>--exec-display</option
+> e o <option
+>--file</option
+> não podem ser indicados com esta opção. O <option
+>--ack-confirm</option
+>, o <option
+>--beep</option
+>, o <option
+>--color</option
+> e o <option
+>--colorfg</option
+> são ignorados com esta opção.</entry>
+</row>
+<row>
+  <entry
+><option
+>-p</option
+>, <option
+>--play <replaceable
+>URL</replaceable
+></option
+></entry>
+  <entry
+>Indica o nome ou o &URL; de um ficheiro de áudio a ser tocado uma vez, quer como um alarme por áudio ou quando a mensagem de alarme for apresentada. O <option
+>--play-repeat</option
+>, o <option
+>--beep</option
+> e o <option
+>--speak</option
+> não podem ser indicados com esta opção.</entry>
+</row>
+<row>
+  <entry
+><option
+>-P</option
+>, <option
+>--play-repeat <replaceable
+>URL</replaceable
+></option
+></entry>
+  <entry
+>Indica o nome ou o &URL; de um ficheiro de áudio a ser tocado repetidamente,enquanto não for carregado o botão <guilabel
+>Parar a Reprodução</guilabel
+> ou a mensagem de alarme estiver visível. O <option
+>--play</option
+>, o <option
+>--beep</option
+> e o <option
+>--speak</option
+> não podem ser indicados com esta opção.</entry>
+</row>
+<row>
+  <entry
+><option
+>--recurrence <replaceable
+>especificação</replaceable
+></option
+></entry>
+  <entry
+>Indica o alarme a repetir. Especifique a repetição com a sintaxe do iCalendar (definida no <ulink url="http://www.w3.org/2002/12/cal/rfc2445.html"
+>RFC2445</ulink
+>), &eg; <quote
+>FREQ=MONTHLY;COUNT=4;INTERVAL=3;BYDAY=-1MO</quote
+>. O <option
+>--until</option
+> não pode ser indicado com esta opção.</entry>
+</row>
+<row>
+  <entry
+><option
+>-r</option
+>, <option
+>--repeat <replaceable
+>contagem</replaceable
+></option
+></entry>
+  <entry
+>Indica o número de vezes que o alarme deverá ser despoletado ou, se for indicada uma recorrência com a opção <option
+>--recurrence</option
+>, o número de vezes que o alarme deverá ser despoletado de cada vez que o <option
+>--recurrence</option
+> o activar (&ie; uma repetição dentro de uma recorrência). Se a opção <option
+>--recurrence</option
+> não estiver presente, indique -1 para repetir o alarme indefinidamente. O <option
+>--interval</option
+> deverá ser indicado, ainda que o <option
+>--until</option
+> não o possa ser, com esta opção.</entry>
+</row>
+<row>
+  <entry
+><option
+>-R</option
+>, <option
+>--reminder <replaceable
+>período</replaceable
+></option
+></entry>
+  <entry
+>Mostra um alarme de chamada de atenção no período de tempo antes ou depois do alarme principal e de cada uma das suas repetições (se houverem). O <replaceable
+>período</replaceable
+> é indicado no mesmo formato que no <option
+>--late-cancel</option
+>. Por omissão, a chamada de atenção irá ocorrer antes do alarme. Para indicar uma chamada de atenção após o alarme, anteceda o <replaceable
+>período</replaceable
+> com o prefixo <replaceable
+>+</replaceable
+>, &eg; +3D. Esta opção não pode ser usada com o <option
+>--exec</option
+>, o <option
+>--mail</option
+> ou o <option
+>--reminder-once</option
+>.</entry>
+</row>
+<row>
+  <entry
+><option
+>--reminder-once <replaceable
+>período</replaceable
+></option
+></entry>
+  <entry
+>Mostra um alarme de chamada de atenção apenas uma vez, no período de tempo antes ou depois da primeira ocorrência do alarme. O <replaceable
+>período</replaceable
+> é indicado no mesmo formato que em <option
+>--reminder</option
+>. Esta opção não poderá ser indicada com a <option
+>--exec</option
+>, <option
+>--mail</option
+> ou a <option
+>--reminder</option
+>.</entry>
+</row>
+<row>
+  <entry
+><option
+>-s</option
+>, <option
+>--speak</option
+></entry>
+  <entry
+>Fala a mensagem quando esta for apresentada. Esta opção necessita de ter o &jovie; instalado e configurado com um sintetizador de fala compatível. O <option
+>--beep</option
+>, o <option
+>--play</option
+> e o <option
+>--play-repeat</option
+> não poderão ser indicados com esta opção.</entry>
+</row>
+<row>
+  <entry
+><option
+>-S</option
+>, <option
+>--subject <replaceable
+>assunto</replaceable
+></option
+></entry>
+  <entry
+>A linha do assunto da mensagem de e-mail. O <option
+>--mail</option
+> deverá ser indicado com esta opção.</entry>
+</row>
+<!-- test-set-time time (debug mode)-->
+<row>
+  <entry
+><option
+>-t</option
+>, <option
+>--time <replaceable
+>data/hora</replaceable
+></option
+></entry>
+  <entry
+>Despoleta o alarme na data ou na data/hora indicadas. Indique uma data sem hora no formato <replaceable
+>aaaa-mm-dd [FH]</replaceable
+>; por outro lado, indique uma data e hora com <replaceable
+>[[[aaaa-]mm-]dd-]hh:mm [FH]</replaceable
+> Se não tiver sido escolhido nenhum fuso-horário, assume-se o fuso-horário do sistema local. Se estiver presente um indicador de fuso-horário <replaceable
+>FH</replaceable
+>, poderá ser o nome de um fuso-horário de sistema (&eg; <userinput
+>Europa/Londres</userinput
+>), <userinput
+>UTC</userinput
+> - representando o fuso-horário UTC ou <userinput
+>Clock</userinput
+> para usar o relógio do computador local e ignorar os fusos-horários.</entry>
+</row>
+<row>
+  <entry
+><option
+>--triggerEvent <replaceable
+>idEvento</replaceable
+></option
+></entry>
+  <entry
+>Despoletar o alarme com o identificador indicado.</entry>
+</row>
+<row>
+  <entry
+><option
+>-v</option
+>, <option
+>--volume <replaceable
+>percentagem</replaceable
+></option
+></entry>
+  <entry
+>Define o volume do áudio para tocar o ficheiro de áudio. Esta opção só poderá ser usada quando o <option
+>--play</option
+> ou o <option
+>--play-repeat</option
+> forem também usados.</entry>
+</row>
+<row>
+  <entry
+><option
+>-u</option
+>, <option
+>--until <replaceable
+>data/hora</replaceable
+></option
+></entry>
+  <entry
+>Repete o alarme até à data ou data/hora indicadas. Indique a data ou data/hora com a mesma sintaxe usada no <option
+>--time</option
+>. Lembre-se que, se for usada a opção <option
+>--time</option
+>, o fuso-horário será retirado a partir do seu valor e não será incluída nenhum fuso-horário no valor <option
+>--until</option
+>. O <option
+>--interval</option
+> deverá ser usado, enquanto que o <option
+>--repeat</option
+> e o <option
+>--recurrence</option
+> não poderão ser usados, com esta opção.</entry>
+</row>
+<row>
+  <entry
+><replaceable
+>mensagem</replaceable
+></entry>
+  <entry
+>O texto da mensagem a mostrar ou, se o <option
+>--mail</option
+> for indicado, o corpo da mensagem de e-mail.</entry>
+</row>
+</tbody>
+</tgroup>
+</informaltable>
+
+<para
+>Tanto deverá ser usado um texto de mensagem, o <option
+>--file</option
+>, o <option
+>--exec</option
+>, o <option
+>--exec-display</option
+>, o <option
+>--play</option
+> ou o <option
+>--play-repeat</option
+>; excepto nos casos acima indicados, todas as opções são opcionais.</para>
+
+<para
+>Aqui estão dois exemplos alternativos que mostram uma mensagem em várias linhas com um fundo vermelho às 22 horas, no dia 27 deste mês:</para>
+
+<informalexample
+><screen
+><prompt
+>%</prompt
+> <userinput
+><command
+>kalarm</command
+> <option
+>-c <replaceable
+>red</replaceable
+></option
+> <option
+>-t <replaceable
+>27-22:00</replaceable
+></option
+> <option
+><replaceable
+>"Lembre-se de\nPARAR"</replaceable
+></option
+></userinput>
+<prompt
+>%</prompt
+> <userinput
+><command
+>kalarm</command
+> <option
+>-c <replaceable
+>0xFF0000</replaceable
+></option
+> <option
+>-t <replaceable
+>27-22:00</replaceable
+></option
+> <option
+><replaceable
+>"Lembre-se de \nPARAR"</replaceable
+></option
+></userinput
+>
+</screen>
+</informalexample>
+
+</sect1>
+
+<sect1 id="cmdline-other">
+<title
+>Outras Opções</title>
+
+<para
+>As opções seguintes são usadas para mostrar a <link linkend="alarm-edit-dlg"
+>janela de Edição de Alarmes</link
+>.</para>
+
+<informaltable>
+<tgroup cols="2">
+<thead>
+<row>
+  <entry
+>Opção</entry>
+  <entry
+>Descrição</entry>
+</row>
+</thead>
+<tbody>
+<row>
+  <entry
+><option
+>--edit <replaceable
+>idEvento</replaceable
+></option
+></entry>
+  <entry
+>Mostra a janela de Edição de Alarmes para editar o alarme com o identificador indicado.</entry>
+</row>
+<row>
+  <entry
+><option
+>--edit-new-audio</option
+></entry>
+  <entry
+>Mostra a janela de Edição de Alarmes para editar um novo alarme de áudio.</entry>
+</row>
+<row>
+  <entry
+><option
+>--edit-new-command</option
+></entry>
+  <entry
+>Mostra a janela de Edição de Alarmes para editar um novo alarme por comando.</entry>
+</row>
+<row>
+  <entry
+><option
+>--edit-new-display</option
+></entry>
+  <entry
+>Mostra a janela de Edição de Alarmes para editar um novo alarme visível.</entry>
+</row>
+<row>
+  <entry
+><option
+>--edit-new-email</option
+></entry>
+  <entry
+>Mostra a janela de Edição de Alarmes para editar um novo alarme por e-mail.</entry>
+</row>
+<row>
+  <entry
+><option
+>--edit-new-preset <replaceable
+>nomeModelo</replaceable
+></option
+></entry>
+  <entry
+>Mostra a janela de Edição do Alarme, predefinida com o modelo de alarme com o nome indicado, para editar um alarme novo.</entry>
+</row>
+<row>
+  <entry
+><option
+>--list</option
+></entry>
+  <entry
+>Apresenta uma lista com os alarmes agendados no <filename
+>stdout</filename
+>. A lista mostra breves detalhes sobre cada alarme pendente: o seu identificador de recurso (se usar o Akonadi), o UID, a hora da próxima ocorrência e o texto ou o ficheiro da mensagem.</entry>
+</row>
+<row>
+  <entry
+><option
+>--tray</option
+></entry>
+  <entry
+>Mostra o &kalarm; como um ícone na bandeja do sistema.</entry>
+</row>
+<row>
+  <entry
+><option
+>--disable-all</option
+></entry>
+  <entry
+>Desactiva a monitorização de todos os alarmes.</entry>
+</row>
+</tbody>
+</tgroup>
+</informaltable>
+
+<para
+>Ver também:</para>
+<simplelist>
+<member
+>kf5options(7)</member>
+<member
+>qt5options(7)</member>
+</simplelist>
+
+</sect1>
+
+</chapter>
+
+<chapter id="developers">
+<title
+>Guia de Programador do &kalarm;</title>
+
+<para
+>O &kalarm; oferece uma interface para permitir às outras aplicações pedirem as seguintes funções:</para>
+
+<itemizedlist>
+<listitem
+><para
+>escalonar um novo alarme</para
+></listitem>
+<listitem
+><para
+>cancelar um alarme já agendado</para
+></listitem>
+<listitem
+><para
+>disparar um alarme já agendado</para
+></listitem>
+<listitem
+><para
+>mostra a janela de Edição do Alarme</para
+></listitem>
+<listitem
+><para
+>apresentar os alarmes agendados</para
+></listitem>
+</itemizedlist>
+
+<para
+>Cada uma das funções acima está implementada através de uma chamada de &DBus; e através da linha de comandos. As chamadas do &DBus; deverão ser usadas de preferência se o &kalarm; já estiver em execução.</para>
+
+<sect1 id="dbus-interface">
+<title
+>A Interface de &DBus;</title>
+
+<para
+>As chamadas de &DBus; descritas neste documento estão todas implementadas no local de &DBus; <constant
+>/kalarm</constant
+> do &kalarm;. A interface está definida nos ficheiros <filename
+>org.kde.kalarm.kalarm.xml</filename
+> e <filename
+>kalarmiface.h</filename
+>.</para>
+
+<refentry id="cancelEvent">
+<refmeta>
+<refentrytitle
+>cancelEvent</refentrytitle>
+</refmeta>
+<refnamediv>
+<refname
+>cancelEvent</refname>
+<refpurpose
+>cancela um alarme já agendado.</refpurpose>
+</refnamediv>
+<refsynopsisdiv>
+<synopsis
+>void cancelEvent(const QString&amp; <replaceable
+>idEvento</replaceable
+>)
+</synopsis>
+
+<refsect2>
+<title
+>Parâmetros</title>
+<variablelist>
+<varlistentry>
+<term
+><parameter
+>idEvento</parameter
+></term>
+<listitem>
+<para
+>Indica o identificador único do evento a cancelar.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+</refsect2>
+</refsynopsisdiv>
+
+<refsect1>
+<title
+>Descrição</title>
+
+<para
+>O <function
+>cancelEvent()</function
+> é uma chamada de &DBus; para cancelar o alarme indicado. O &kalarm; apaga o alarme do calendário sem o mostrar ou executar.</para>
+
+</refsect1>
+</refentry>
+
+<refentry id="triggerEvent">
+<refmeta>
+<refentrytitle
+>triggerEvent</refentrytitle>
+</refmeta>
+<refnamediv>
+<refname
+>triggerEvent</refname>
+<refpurpose
+>despoleta um alarme já escalonado.</refpurpose>
+</refnamediv>
+<refsynopsisdiv>
+<synopsis
+>void triggerEvent(const QString&amp; <replaceable
+>idEvento</replaceable
+>)
+</synopsis>
+
+<refsect2>
+<title
+>Parâmetros</title>
+<variablelist>
+<varlistentry>
+<term
+><parameter
+>idEvento</parameter
+></term>
+<listitem>
+<para
+>Indica o identificador único do evento a ser despoletado.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+</refsect2>
+</refsynopsisdiv>
+
+<refsect1>
+<title
+>Descrição</title>
+
+<para
+>O <function
+>triggerEvent()</function
+> é uma chamada de &DBus; para disparar o alarme indicado (independentemente da hora para que foi agendado). O &kalarm; obtém o alarme do ficheiro de calendário e depois mostra-o ou executa-o.</para>
+
+<para
+>Se o alarme já tiver sido disparado, o &kalarm; irá então remover todas as ocorrências agendadas do alarme até à hora actual e, se não existirem mais repetições do alarme, este é removido do calendário. Se ainda não chegou a sua hora, as suas ocorrências agendadas são deixadas sem alterações.</para>
+
+</refsect1>
+</refentry>
+
+<refentry id="scheduleMessage">
+<refmeta>
+<refentrytitle
+>scheduleMessage</refentrytitle>
+</refmeta>
+<refnamediv>
+<refname
+>scheduleMessage</refname>
+<refpurpose
+>escalonar uma nova mensagem de alarme.</refpurpose>
+</refnamediv>
+<refsynopsisdiv>
+<synopsis
+>bool scheduleMessage(const QString&amp; <replaceable
+>mensagem</replaceable
+>,
+                     const QString&amp; <replaceable
+>dataHora</replaceable
+>,
+                     int <replaceable
+>cancelarSeAtrasado</replaceable
+>,
+                     unsigned <replaceable
+>opcoes</replaceable
+>, 
+                     const QString&amp; <replaceable
+>corFundo</replaceable
+>, 
+                     const QString&amp; <replaceable
+>corTexto</replaceable
+>, 
+                     const QString&amp; <replaceable
+>tipoLetra</replaceable
+>, 
+                     const KURL&amp; <replaceable
+>urlAudio</replaceable
+>, 
+                     int <replaceable
+>chamadaAtencao</replaceable
+>, 
+                     const QString&amp; <replaceable
+>recorrencia</replaceable
+>,
+                     int <replaceable
+>intervaloSubRepeticoes</replaceable
+>, 
+                     int <replaceable
+>numeroSubRepeticoes</replaceable
+>)
+</synopsis>
+<synopsis
+>bool scheduleMessage(const QString&amp; <replaceable
+>mensagem</replaceable
+>, const QDateTime&amp; <replaceable
+>dataHora</replaceable
+>, const QColor&amp; <replaceable
+>fundo</replaceable
+>, const QColor&amp; <replaceable
+>texto</replaceable
+>, int <replaceable
+>cancelarSeAtrasado</replaceable
+>, unsigned <replaceable
+>opções</replaceable
+>, const QString&amp; <replaceable
+>urlAudio</replaceable
+>, int <replaceable
+>chamadaAtencao</replaceable
+>, int <replaceable
+>tipoRepeticaoSimples</replaceable
+>, int <replaceable
+>intervalo</replaceable
+>, int <replaceable
+>numeroRepeticoes</replaceable
+>)
+</synopsis>
+<synopsis
+>bool scheduleMessage(const QString&amp; <replaceable
+>mensagem</replaceable
+>, const QDateTime&amp; <replaceable
+>dataHora</replaceable
+>, const QColor&amp; <replaceable
+>fundo</replaceable
+>, const QColor&amp; <replaceable
+>texto</replaceable
+>, int <replaceable
+>cancelarSeAtrasado</replaceable
+>, unsigned <replaceable
+>opções</replaceable
+>, const QString&amp; <replaceable
+>urlAudio</replaceable
+>, int <replaceable
+>chamadaAtencao</replaceable
+>, int <replaceable
+>tipoRepeticaoSimples</replaceable
+>, int <replaceable
+>intervalo</replaceable
+>, const QDateTime&amp; <replaceable
+>dataFim</replaceable
+>)
+</synopsis>
+
+<refsect2>
+<title
+>Parâmetros</title>
+<variablelist>
+<varlistentry>
+<term
+><parameter
+>mensagem</parameter
+></term>
+<listitem>
+<para
+>Define o texto da mensagem a ser agendada ou, se as <parameter
+>opções</parameter
+> tiverem o bit <userinput
+>DISPLAY_COMMAND</userinput
+> activo, indica a linha de comandos a executar para gerar o texto da mensagem.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>dataHoraInicial</parameter
+></term>
+<listitem>
+<para
+>Indica a hora agendada, ou data e hora, a que a mensagem deverá ser mostrada. Para um alarme apenas de data, o texto deverá estar no formato <quote
+>AAAA-MM-DD [TZ]</quote
+> (tal como é devolvido pelo <methodname
+>QDate::toString(Qt::ISODate)</methodname
+>). Para um alarme com data e hora, o texto deverá estar no formato <quote
+>AAA-MM-DDTHH:MM[:SS] [TZ]</quote
+> (tal como é devolvido pelo <methodname
+>QDateTime::toString(Qt::ISODate)</methodname
+>) ou em <quote
+>HH:MM[:SS] [Relógio]</quote
+> (tal como é devolvido pelo <methodname
+>QTime::toString(Qt::ISODate)</methodname
+>). Se não for indicada qualquer data, será usada a data de hoje. Lembre-se que o valor dos segundos é ignorado.</para>
+
+<para
+>Se não tiver sido escolhido nenhum fuso-horário, assume-se o fuso-horário do sistema local. Se estiver presente um indicador de fuso-horário <replaceable
+>FH</replaceable
+>, poderá ser o nome de um fuso-horário de sistema (&eg; <userinput
+>Europa/Londres</userinput
+>), <userinput
+>UTC</userinput
+> - representando o fuso-horário UTC ou <userinput
+>Clock</userinput
+> para usar o relógio do computador local e ignorar os fusos-horários.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>cancelarSeAtrasado</parameter
+></term>
+<listitem>
+<para
+>Faz com que o alarme seja cancelado, se não puder ser disparado dentro do período indicado em minutos, após a hora agendada para o alarme. Se o valor for igual a 0, o alarme não será cancelado, independentemente do atraso com que é disparado.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>opções</parameter
+></term>
+<listitem>
+<para
+>Indica o OU lógico das opções desejadas para o alarme. Os 'bits' das opções são os que estão definidos na classe <classname
+>KAlarmIface</classname
+> no ficheiro <filename
+>kalarmiface.h</filename
+>. Repare que nem todos os 'bits' de opções se aplicam aos alarmes de mensagens.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>fundo</parameter
+></term>
+<listitem>
+<para
+>Indica a cor de fundo usada para mostrar a mensagem. O texto poderá estar no formato <quote
+>#RRGGBB</quote
+> (tal como é devolvido pelo <methodname
+>QColor::name()</methodname
+>) onde o RR, GG and BB são valores de dois algarismos em hexadecimal para o vermelho, verde e azul. Em alternativa, o texto poderá ser qualquer um dos outros formatos aceites pelo <methodname
+>QColor::setNamedColor()</methodname
+>, como o nome de uma cor na base de dados de cores do X (&eg; <quote
+>red</quote
+> ou <quote
+>steelblue</quote
+>). Ponha o texto vazio para indicar a cor de fundo por omissão actual.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>texto</parameter
+></term>
+<listitem>
+<para
+>Indica a cor do texto usada para mostrar a mensagem. O formato do texto é o mesmo que para o <parameter
+>fundo</parameter
+>; em alternativa, poderá pôr o texto nulo para indicar a cor de texto actualmente por omissão.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>tipoLetra</parameter
+></term>
+<listitem>
+<para
+>Indica o tipo de letra a usar para mostrar a mensagem. O formato do texto é o devolvido pelo <methodname
+>QFont::toString()</methodname
+>. Configure o texto como nulo, para usar o tipo de letra de mensagens actual, na altura em que é mostrada a mensagem.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>urlAudio</parameter
+></term>
+<listitem>
+<para
+>Indica o ficheiro de áudio a ser tocado quando for mostrada a mensagem. Configure o valor como nulo se não for para tocar nenhum ficheiro.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>minutosChamadaAtencao</parameter
+></term>
+<listitem>
+<para
+>Indica o número de minutos de avanço em relação ao alarme principal e a cada uma das suas repetições (se existirem) no qual será mostrado um alarme de chamada de atenção. Indique um valor negativo para uma chamada de atenção ser apresentada após o alarme principal. Indique 0 se não for necessária nenhuma chamada de atenção.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>recorrência</parameter
+></term>
+<listitem>
+<para
+>Indica uma recorrência normal para o alarme, usando a sintaxe do iCalendar que está definida no <ulink url="http://www.w3.org/2002/12/cal/rfc2445.html"
+>RFC2445</ulink
+>. Por exemplo, <quote
+>FREQ=MONTHLY;COUNT=4;INTERVAL=3;BYDAY=-1MO</quote
+> deverá indicar 4 repetições trimestrais na última Segunda-Feira do mês). Para um alarme não repetitivo, indique uma cadeia de caracteres vazia.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>tipoRecorrencia</parameter
+></term>
+<listitem>
+<para
+>Indica o tipo de repetição do alarme. Os valores permitidos são MINUTELY, DAILY, WEEKLY, MONTHLY, YEARLY. Estes estão definidos na classe <classname
+>KAlarmIface</classname
+> no <filename
+>kalarmiface.h</filename
+>. As repetições mensais são no dia do tipo de mês, assim como as repetições anuais são à data do tipo de ano, com a data extraída, em ambos os casos, a partir do parâmetro <parameter
+>dataHoraInicial</parameter
+>.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>intervaloRecorrencia</parameter
+></term>
+<listitem>
+<para
+>Indica o número de períodos (minutos/dias/semanas/meses/anos, como é definido no parâmetro <parameter
+>tipoRecorrencia</parameter
+>) entre repetições do alarme.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>numeroRepeticoes</parameter
+></term>
+<listitem>
+<para
+>Indica o número de vezes que o alarme deverá ser repetido. Indique -1 para repetir o alarme indefinidamente.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>dataHoraFim</parameter
+></term>
+<listitem>
+<para
+>Indica a data ou data/hora de fim para as repetições do alarme. Se o <parameter
+>dataHora</parameter
+> incluir uma hora, este parâmetro deverá também incluir uma hora; se o <parameter
+>dataHoraInicial</parameter
+> conter apenas uma data, este parâmetro também deverá apenas conter uma data. Não deverá conter um indicador de fuso-horário; é usado o mesmo fuso-horário do <parameter
+>dataHoraInicial</parameter
+> para interpretar o valor deste parâmetro.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>intervaloSubRepeticoes</parameter
+></term>
+<listitem>
+<para
+>Indica o número de minutos entre as sub-repetições do alarme. Indique 0 para não ocorrer qualquer sub-repetição. É ignorado se não for indicada qualquer recorrência.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>numeroSubRepeticoes</parameter
+></term>
+<listitem>
+<para
+>Indica o número de sub-repetições do alarme, incluindo a ocorrência inicial.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+</refsect2>
+</refsynopsisdiv>
+
+<refsect1 id="scheduleMessage-descrip">
+<title
+>Descrição</title>
+<para
+>O <function
+>scheduleMessage()</function
+> é uma chamada de &DBus; para agendar a mensagem de alarme fornecida para a data e hora indicadas. Tem várias formas possíveis. As forma mais geral permite a indicação de uma recorrência arbitrária para ser indicada &ndash; use também estas para os alarmes não-repetitivos. As outras formas oferecem um acesso conveniente a um conjunto restrito de tipos de recorrências de alarmes, uma para uma quantidade de repetições e a outra até uma hora de fim.</para>
+
+<para
+>Se a hora agendada (incluindo as repetições) já tiver passado, o &kalarm; mostra imediatamente a mensagem (a menos que o parâmetro <parameter
+>cancelarSeAtrasado</parameter
+> indique que já é muito tarde para mostrar o alarme onde, nesse caso, ignora o pedido). Se a hora agendada (ou a da repetição) for no futuro, o &kalarm; adiciona a mensagem de alarme ao ficheiro do calendário para mostrar posteriormente.</para>
+</refsect1>
+</refentry>
+
+<refentry id="scheduleFile">
+<refmeta>
+<refentrytitle
+>scheduleFile</refentrytitle>
+</refmeta>
+<refnamediv>
+<refname
+>scheduleFile</refname>
+<refpurpose
+>agendar um novo alarme que mostra o conteúdo de um ficheiro de texto ou de imagem.</refpurpose>
+</refnamediv>
+<refsynopsisdiv>
+<synopsis
+>bool scheduleFile(const KURL&amp; <replaceable
+>URL</replaceable
+>,
+                  const QString&amp; <replaceable
+>dataHora</replaceable
+>,
+                  int <replaceable
+>cancelarSeAtrasado</replaceable
+>,
+                  unsigned <replaceable
+>opcoes</replaceable
+>,
+                  const QString&amp; <replaceable
+>corFundo</replaceable
+>,
+                  const KURL&amp; <replaceable
+>urlAudio</replaceable
+>,
+                  int <replaceable
+>minutosChamadaAtencao</replaceable
+>,
+                  const QString&amp; <replaceable
+>recorrencia</replaceable
+>,
+                  int <replaceable
+>intervaloSubRepeticoes</replaceable
+>, 
+                  int <replaceable
+>numerSubRepeticoes</replaceable
+>)
+</synopsis>
+<synopsis
+>bool scheduleFile(const QString&amp; <replaceable
+>URL</replaceable
+>, const QDateTime&amp; <replaceable
+>dataHora</replaceable
+>, const QColor&amp; <replaceable
+>fundo</replaceable
+>, int <replaceable
+>cancelarSeAtrasado</replaceable
+>, unsigned <replaceable
+>opcoes</replaceable
+>, const QString&amp; <replaceable
+>urlAudio</replaceable
+>, int <replaceable
+>minutosChamadaAtencao</replaceable
+>, int <replaceable
+>tipoRepeticaoSimples</replaceable
+>, int <replaceable
+>intervalo</replaceable
+>, int <replaceable
+>numeroRepeticoes</replaceable
+>)
+</synopsis>
+<synopsis
+>bool scheduleFile(const QString&amp; <replaceable
+>URL</replaceable
+>, const QDateTime&amp; <replaceable
+>dataHora</replaceable
+>, const QColor&amp; <replaceable
+>fundo</replaceable
+>, int <replaceable
+>cancelarSeAtrasado</replaceable
+>, unsigned <replaceable
+>opcoes</replaceable
+>, const QString&amp; <replaceable
+>urlAudio</replaceable
+>, int <replaceable
+>minutosChamadaAtencao</replaceable
+>, int <replaceable
+>tipoRepeticaoSimples</replaceable
+>, int <replaceable
+>intervalo</replaceable
+>, const QDateTime&amp; <replaceable
+>dataFim</replaceable
+>)
+</synopsis>
+
+<refsect2>
+<title
+>Parâmetros</title>
+<variablelist>
+<varlistentry>
+<term
+><parameter
+>URL</parameter
+></term>
+<listitem>
+<para
+>Indica o ficheiro de texto ou imagem cujo conteúdo seja apresentado na mensagem a ser agendada.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>dataHoraInicial</parameter
+></term>
+<listitem>
+<para
+>Indica a hora agendada, ou data e hora, a que a mensagem deverá ser mostrada. Para um alarme apenas de data, o texto deverá estar no formato <quote
+>AAAA-MM-DD [TZ]</quote
+> (tal como é devolvido pelo <methodname
+>QDate::toString(Qt::ISODate)</methodname
+>). Para um alarme com data e hora, o texto deverá estar no formato <quote
+>AAA-MM-DDTHH:MM[:SS] [TZ]</quote
+> (tal como é devolvido pelo <methodname
+>QDateTime::toString(Qt::ISODate)</methodname
+>) ou em <quote
+>HH:MM[:SS] [Relógio]</quote
+> (tal como é devolvido pelo <methodname
+>QTime::toString(Qt::ISODate)</methodname
+>). Se não for indicada qualquer data, será usada a data de hoje. Lembre-se que o valor dos segundos é ignorado.</para>
+
+<para
+>Se não tiver sido escolhido nenhum fuso-horário, assume-se o fuso-horário do sistema local. Se estiver presente um indicador de fuso-horário <replaceable
+>FH</replaceable
+>, poderá ser o nome de um fuso-horário de sistema (&eg; <userinput
+>Europa/Londres</userinput
+>), <userinput
+>UTC</userinput
+> - representando o fuso-horário UTC ou <userinput
+>Clock</userinput
+> para usar o relógio do computador local e ignorar os fusos-horários.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>cancelarSeAtrasado</parameter
+></term>
+<listitem>
+<para
+>Faz com que o alarme seja cancelado, se não puder ser disparado dentro do período indicado em minutos, após a hora agendada para o alarme. Se o valor for igual a 0, o alarme não será cancelado, independentemente do atraso com que é disparado.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>opções</parameter
+></term>
+<listitem>
+<para
+>Indica o OU lógico das opções desejadas para o alarme. Os 'bits' das opções são os que estão definidos na classe <classname
+>KAlarmIface</classname
+> do <filename
+>kalarmiface.h</filename
+>. Repare que nem todos os 'bits' de opções se aplicam aos alarmes de ficheiros.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>fundo</parameter
+></term>
+<listitem>
+<para
+>Indica a cor de fundo usada para mostrar o ficheiro. O texto poderá estar no formato <quote
+>#RRGGBB</quote
+> (tal como é devolvido pelo <methodname
+>QColor::name()</methodname
+>) onde o RR, GG and BB são valores de dois algarismos em hexadecimal para o vermelho, verde e azul. Em alternativa, o texto poderá ser qualquer um dos formatos aceites pelo <methodname
+>QColor::setNamedColor()</methodname
+>, com o nome de uma cor na base de dados de cores do X (&eg; <quote
+>red</quote
+> ou <quote
+>steelblue</quote
+>). Ponha o texto vazio para indicar a cor de fundo por omissão actual.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>urlAudio</parameter
+></term>
+<listitem>
+<para
+>Indica o ficheiro de áudio a ser tocado quando for mostrada a mensagem. Configure o valor como nulo se não for para tocar nenhum ficheiro.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>minutosChamadaAtencao</parameter
+></term>
+<listitem>
+<para
+>Indica o número de minutos de avanço em relação ao alarme principal e a cada uma das suas repetições (se existirem) no qual será mostrado um alarme de chamada de atenção. Indique um valor negativo para uma chamada de atenção ser apresentada após o alarme principal. Indique 0 se não for necessária nenhuma chamada de atenção.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>recorrência</parameter
+></term>
+<listitem>
+<para
+>Indica uma recorrência normal para o alarme, usando a sintaxe do iCalendar que está definida no <ulink url="http://www.w3.org/2002/12/cal/rfc2445.html"
+>RFC2445</ulink
+>. Por exemplo, <quote
+>FREQ=MONTHLY;COUNT=4;INTERVAL=3;BYDAY=-1MO</quote
+> deverá indicar 4 repetições trimestrais na última Segunda-Feira do mês). Para um alarme não repetitivo, indique uma cadeia de caracteres vazia.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>tipoRecorrencia</parameter
+></term>
+<listitem>
+<para
+>Indica o tipo de repetição do alarme. Os valores permitidos são MINUTELY, DAILY, WEEKLY, MONTHLY, YEARLY. Estes estão definidos na classe <classname
+>KAlarmIface</classname
+> no <filename
+>kalarmiface.h</filename
+>. As repetições mensais são no dia do tipo de mês, assim como as repetições anuais são à data do tipo de ano, com a data extraída, em ambos os casos, a partir do parâmetro <parameter
+>dataHoraInicial</parameter
+>.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>intervaloRecorrencia</parameter
+></term>
+<listitem>
+<para
+>Indica o número de períodos (minutos/dias/semanas/meses/anos, como é definido no parâmetro <parameter
+>tipoRecorrencia</parameter
+>) entre repetições do alarme.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>numeroRepeticoes</parameter
+></term>
+<listitem>
+<para
+>Indica o número de vezes que o alarme deverá ser repetido. Indique -1 para repetir o alarme indefinidamente.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>dataHoraFim</parameter
+></term>
+<listitem>
+<para
+>Indica a data ou data/hora de fim para as repetições do alarme. Se o <parameter
+>dataHora</parameter
+> incluir uma hora, este parâmetro deverá também incluir uma hora; se o <parameter
+>dataHoraInicial</parameter
+> conter apenas uma data, este parâmetro também deverá apenas conter uma data. Não deverá conter um indicador de fuso-horário; é usado o mesmo fuso-horário do <parameter
+>dataHoraInicial</parameter
+> para interpretar o valor deste parâmetro.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>intervaloSubRepeticoes</parameter
+></term>
+<listitem>
+<para
+>Indica o número de minutos entre as sub-repetições do alarme. Indique 0 para não ocorrer qualquer sub-repetição. É ignorado se não for indicada qualquer recorrência.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>numeroSubRepeticoes</parameter
+></term>
+<listitem>
+<para
+>Indica o número de sub-repetições do alarme, incluindo a ocorrência inicial.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+</refsect2>
+</refsynopsisdiv>
+
+<refsect1>
+<title
+>Descrição</title>
+<para
+>O <function
+>scheduleFile()</function
+> é uma chamada de &DBus; para agendar o ficheiro de texto ou de imagem para a data e hora indicadas. Para além de indicar o nome ou &URL; de um ficheiro e omitir a cor do texto, a sua utilização é idêntica à do <link linkend="scheduleMessage-descrip"
+><function
+>scheduleMessage</function
+></link
+> - veja a descrição dessa função para mais detalhes.</para>
+</refsect1>
+</refentry>
+
+
+<refentry id="scheduleCommand">
+<refmeta>
+<refentrytitle
+>scheduleCommand</refentrytitle>
+</refmeta>
+<refnamediv>
+<refname
+>scheduleCommand</refname>
+<refpurpose
+>agenda um novo alarme que executa um determinado comando.</refpurpose>
+</refnamediv>
+<refsynopsisdiv>
+<synopsis
+>bool scheduleCommand(const QString&amp; <replaceable
+>linhaComandos</replaceable
+>,
+                     const QString&amp; <replaceable
+>dataHora</replaceable
+>,
+                     int <replaceable
+>cancelarSeAtrasado</replaceable
+>,
+                     unsigned <replaceable
+>opcoes</replaceable
+>,
+                     const QString&amp; <replaceable
+>recorrencia</replaceable
+>,
+                     int <replaceable
+>intervaloSubRepeticoes</replaceable
+>, 
+                     int <replaceable
+>numeroSubRepeticoes</replaceable
+>)
+</synopsis>
+<synopsis
+>bool scheduleCommand(const QString&amp; <replaceable
+>linhaComandos</replaceable
+>, const QDateTime&amp; <replaceable
+>dataHora</replaceable
+>, int <replaceable
+>cancelarSeAtrasado</replaceable
+>, unsigned <replaceable
+>opcoes</replaceable
+>, int <replaceable
+>tipoRepeticaoSimples</replaceable
+>, int <replaceable
+>intervalo</replaceable
+>, int <replaceable
+>numeroRepeticoes</replaceable
+>)
+</synopsis>
+<synopsis
+>bool scheduleCommand(const QString&amp; <replaceable
+>linhaComandos</replaceable
+>, const QDateTime&amp; <replaceable
+>dataHora</replaceable
+>, int <replaceable
+>cancelarSeAtrasado</replaceable
+>, unsigned <replaceable
+>opcoes</replaceable
+>, int <replaceable
+>tipoRepeticaoSimples</replaceable
+>, int <replaceable
+>intervalo</replaceable
+>, const QDateTime&amp; <replaceable
+>dataFim</replaceable
+>)
+</synopsis>
+
+<refsect2>
+<title
+>Parâmetros</title>
+<variablelist>
+<varlistentry>
+<term
+><parameter
+>commandLine</parameter
+></term>
+<listitem>
+<para
+>Indica o comando cuja execução será agendada. O parâmetro <parameter
+>opções</parameter
+> indica se este parâmetro contém uma linha de comandos ou o nome de um programa.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>dataHoraInicial</parameter
+></term>
+<listitem>
+<para
+>Indica a hora agendada, ou data e hora, a que a mensagem deverá ser mostrada. Para um alarme apenas de data, o texto deverá estar no formato <quote
+>AAAA-MM-DD [TZ]</quote
+> (tal como é devolvido pelo <methodname
+>QDate::toString(Qt::ISODate)</methodname
+>). Para um alarme com data e hora, o texto deverá estar no formato <quote
+>AAA-MM-DDTHH:MM[:SS] [TZ]</quote
+> (tal como é devolvido pelo <methodname
+>QDateTime::toString(Qt::ISODate)</methodname
+>) ou em <quote
+>HH:MM[:SS] [Relógio]</quote
+> (tal como é devolvido pelo <methodname
+>QTime::toString(Qt::ISODate)</methodname
+>). Se não for indicada qualquer data, será usada a data de hoje. Lembre-se que o valor dos segundos é ignorado.</para>
+
+<para
+>Se não tiver sido escolhido nenhum fuso-horário, assume-se o fuso-horário do sistema local. Se estiver presente um indicador de fuso-horário <replaceable
+>FH</replaceable
+>, poderá ser o nome de um fuso-horário de sistema (&eg; <userinput
+>Europa/Londres</userinput
+>), <userinput
+>UTC</userinput
+> - representando o fuso-horário UTC ou <userinput
+>Clock</userinput
+> para usar o relógio do computador local e ignorar os fusos-horários.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>cancelarSeAtrasado</parameter
+></term>
+<listitem>
+<para
+>Faz com que o alarme seja cancelado, se não puder ser disparado dentro do período indicado em minutos, após a hora agendada para o alarme. Se o valor for igual a 0, o alarme não será cancelado, independentemente do atraso com que é disparado.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>opções</parameter
+></term>
+<listitem>
+<para
+>Indica o OU lógico das opções desejadas para o alarme. Os 'bits' das opções são os que estão definidos na classe <classname
+>KAlarmIface</classname
+> do <filename
+>kalarmiface.h</filename
+>. Repare que nem todos os 'bits' de opções se aplicam aos alarmes de comandos.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>recorrência</parameter
+></term>
+<listitem>
+<para
+>Indica uma recorrência normal para o alarme, usando a sintaxe do iCalendar que está definida no <ulink url="http://www.w3.org/2002/12/cal/rfc2445.html"
+>RFC2445</ulink
+>. Por exemplo, <quote
+>FREQ=MONTHLY;COUNT=4;INTERVAL=3;BYDAY=-1MO</quote
+> deverá indicar 4 repetições trimestrais na última Segunda-Feira do mês). Para um alarme não repetitivo, indique uma cadeia de caracteres vazia.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>tipoRecorrencia</parameter
+></term>
+<listitem>
+<para
+>Indica o tipo de repetição do alarme. Os valores permitidos são MINUTELY, DAILY, WEEKLY, MONTHLY, YEARLY. Estes estão definidos na classe <classname
+>KAlarmIface</classname
+> no <filename
+>kalarmiface.h</filename
+>. As repetições mensais são no dia do tipo de mês, assim como as repetições anuais são à data do tipo de ano, com a data extraída, em ambos os casos, a partir do parâmetro <parameter
+>dataHoraInicial</parameter
+>.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>intervaloRecorrencia</parameter
+></term>
+<listitem>
+<para
+>Indica o número de períodos (minutos/dias/semanas/meses/anos, como é definido no parâmetro <parameter
+>tipoRecorrencia</parameter
+>) entre repetições do alarme.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>numeroRepeticoes</parameter
+></term>
+<listitem>
+<para
+>Indica o número de vezes que o alarme deverá ser repetido. Indique -1 para repetir o alarme indefinidamente.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>dataHoraFim</parameter
+></term>
+<listitem>
+<para
+>Indica a data ou data/hora de fim para as repetições do alarme. Se o <parameter
+>dataHora</parameter
+> incluir uma hora, este parâmetro deverá também incluir uma hora; se o <parameter
+>dataHoraInicial</parameter
+> conter apenas uma data, este parâmetro também deverá apenas conter uma data. Não deverá conter um indicador de fuso-horário; é usado o mesmo fuso-horário do <parameter
+>dataHoraInicial</parameter
+> para interpretar o valor deste parâmetro.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>intervaloSubRepeticoes</parameter
+></term>
+<listitem>
+<para
+>Indica o número de minutos entre as sub-repetições do alarme. Indique 0 para não ocorrer qualquer sub-repetição. É ignorado se não for indicada qualquer recorrência.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>numeroSubRepeticoes</parameter
+></term>
+<listitem>
+<para
+>Indica o número de sub-repetições do alarme, incluindo a ocorrência inicial.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+</refsect2>
+</refsynopsisdiv>
+
+<refsect1>
+<title
+>Descrição</title>
+<para
+>O <function
+>scheduleCommand()</function
+> é uma chamada de &DBus; para agendar o comando da consola para ser executado na data e hora indicadas. Para além de indicar uma linha de comandos e de omitir a cor do texto e o parâmetro do ficheiro de áudio, a sua utilização é idêntica à do <link linkend="scheduleMessage-descrip"
+><function
+>scheduleMessage</function
+></link
+> - veja a descrição dessa função para mais detalhes.</para>
+</refsect1>
+</refentry>
+
+
+<refentry id="scheduleEmail">
+<refmeta>
+<refentrytitle
+>scheduleEmail</refentrytitle>
+</refmeta>
+<refnamediv>
+<refname
+>scheduleEmail</refname>
+<refpurpose
+>agenda um novo alarme que envia uma mensagem de e-mail.</refpurpose>
+</refnamediv>
+<refsynopsisdiv>
+<synopsis
+>bool scheduleEmail(const QString&amp; <replaceable
+>idRemetente</replaceable
+>,
+                   const QString&amp; <replaceable
+>enderecos</replaceable
+>,
+                   const QString&amp; <replaceable
+>assunto</replaceable
+>,
+                   const QString&amp; <replaceable
+>mensagem</replaceable
+>,
+                   const QString&amp; <replaceable
+>anexos</replaceable
+>,
+                   const QString&amp; <replaceable
+>dataHora</replaceable
+>,
+                   int <replaceable
+>cancelarSeAtrasado</replaceable
+>,
+                   unsigned <replaceable
+>opcoes</replaceable
+>,
+                   const QString&amp; <replaceable
+>recorrencia</replaceable
+>,
+                   int <replaceable
+>intervaloSubRepeticoes</replaceable
+>, 
+                   int <replaceable
+>numeroSubRepeticoes</replaceable
+>)
+</synopsis>
+<synopsis
+>bool scheduleEmail(const QString&amp; <replaceable
+>idRemetente</replaceable
+>, const QString&amp; <replaceable
+>enderecos</replaceable
+>, const QString&amp; <replaceable
+>assunto</replaceable
+>, const QString&amp; <replaceable
+>mensagem</replaceable
+>, const QString&amp; <replaceable
+>anexos</replaceable
+>, const QDateTime&amp; <replaceable
+>dataHora</replaceable
+>, int <replaceable
+>cancelarSeAtrasado</replaceable
+>, unsigned <replaceable
+>opcoes</replaceable
+>, int <replaceable
+>tipoRepeticaoSimples</replaceable
+>, int <replaceable
+>intervalo</replaceable
+>, int <replaceable
+>numeroRepeticoes</replaceable
+>)
+</synopsis>
+<synopsis
+>bool scheduleEmail(const QString&amp; <replaceable
+>idRemetente</replaceable
+>, const QString&amp; <replaceable
+>enderecos</replaceable
+>, const QString&amp; <replaceable
+>assunto</replaceable
+>, const QString&amp; <replaceable
+>mensagem</replaceable
+>, const QString&amp; <replaceable
+>anexos</replaceable
+>, const QDateTime&amp; <replaceable
+>dataHora</replaceable
+>, int <replaceable
+>cancelarSeAtrasado</replaceable
+>, unsigned <replaceable
+>opcoes</replaceable
+>, int <replaceable
+>tipoRepeticaoSimples</replaceable
+>, int <replaceable
+>intervalo</replaceable
+>, const QDateTime&amp; <replaceable
+>dataFim</replaceable
+>)
+</synopsis>
+
+<refsect2>
+<title
+>Parâmetros</title>
+<variablelist>
+<varlistentry>
+<term
+><parameter
+>idRemetente</parameter
+></term>
+<listitem>
+<para
+>A identidade do &kmail; a usar como remetente para o e-mail. Se estiver vazio, será usado o endereço de e-mail do remetente que esteja configurado nas <link linkend="preferences-email"
+>preferências de e-mail</link
+> do &kalarm;.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>enderecos</parameter
+></term>
+<listitem>
+<para
+>Uma lista, separada por vírgulas, dos endereços de e-mail dos destinatários.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>assunto</parameter
+></term>
+<listitem>
+<para
+>Indica a linha de assunto da mensagem de e-mail.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>mensagem</parameter
+></term>
+<listitem>
+<para
+>Indica o conteúdo da mensagem do e-mail.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>anexos</parameter
+></term>
+<listitem>
+<para
+>Uma lista, separada por vírgulas, dos &URL;s dos ficheiros a enviar como anexos da mensagem de e-mail.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>dataHoraInicial</parameter
+></term>
+<listitem>
+<para
+>Indica a hora agendada, ou data e hora, a que a mensagem deverá ser mostrada. Para um alarme apenas de data, o texto deverá estar no formato <quote
+>AAAA-MM-DD [TZ]</quote
+> (tal como é devolvido pelo <methodname
+>QDate::toString(Qt::ISODate)</methodname
+>). Para um alarme com data e hora, o texto deverá estar no formato <quote
+>AAA-MM-DDTHH:MM[:SS] [TZ]</quote
+> (tal como é devolvido pelo <methodname
+>QDateTime::toString(Qt::ISODate)</methodname
+>) ou em <quote
+>HH:MM[:SS] [Relógio]</quote
+> (tal como é devolvido pelo <methodname
+>QTime::toString(Qt::ISODate)</methodname
+>). Se não for indicada qualquer data, será usada a data de hoje. Lembre-se que o valor dos segundos é ignorado.</para>
+
+<para
+>Se não tiver sido escolhido nenhum fuso-horário, assume-se o fuso-horário do sistema local. Se estiver presente um indicador de fuso-horário <replaceable
+>FH</replaceable
+>, poderá ser o nome de um fuso-horário de sistema (&eg; <userinput
+>Europa/Londres</userinput
+>), <userinput
+>UTC</userinput
+> - representando o fuso-horário UTC ou <userinput
+>Clock</userinput
+> para usar o relógio do computador local e ignorar os fusos-horários.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>cancelarSeAtrasado</parameter
+></term>
+<listitem>
+<para
+>Faz com que o alarme seja cancelado, se não puder ser disparado dentro do período indicado em minutos, após a hora agendada para o alarme. Se o valor for igual a 0, o alarme não será cancelado, independentemente do atraso com que é disparado.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>opções</parameter
+></term>
+<listitem>
+<para
+>Indica o OU lógico das opções desejadas para o alarme. Os 'bits' das opções são os que estão definidos na classe <classname
+>KAlarmIface</classname
+> do <filename
+>kalarmiface.h</filename
+>. Repare que nem todos os 'bits' de opções se aplicam a alarmes por e-mail.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>recorrência</parameter
+></term>
+<listitem>
+<para
+>Indica uma recorrência normal para o alarme, usando a sintaxe do iCalendar que está definida no <ulink url="http://www.w3.org/2002/12/cal/rfc2445.html"
+>RFC2445</ulink
+>. Por exemplo, <quote
+>FREQ=MONTHLY;COUNT=4;INTERVAL=3;BYDAY=-1MO</quote
+> deverá indicar 4 repetições trimestrais na última Segunda-Feira do mês). Para um alarme não repetitivo, indique uma cadeia de caracteres vazia.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>tipoRecorrencia</parameter
+></term>
+<listitem>
+<para
+>Indica o tipo de repetição do alarme. Os valores permitidos são MINUTELY, DAILY, WEEKLY, MONTHLY, YEARLY. Estes estão definidos na classe <classname
+>KAlarmIface</classname
+> no <filename
+>kalarmiface.h</filename
+>. As repetições mensais são no dia do tipo de mês, assim como as repetições anuais são à data do tipo de ano, com a data extraída, em ambos os casos, a partir do parâmetro <parameter
+>dataHoraInicial</parameter
+>.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>intervaloRecorrencia</parameter
+></term>
+<listitem>
+<para
+>Indica o número de períodos (minutos/dias/semanas/meses/anos, como é definido no parâmetro <parameter
+>tipoRecorrencia</parameter
+>) entre repetições do alarme.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>numeroRepeticoes</parameter
+></term>
+<listitem>
+<para
+>Indica o número de vezes que o alarme deverá ser repetido. Indique -1 para repetir o alarme indefinidamente.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>dataHoraFim</parameter
+></term>
+<listitem>
+<para
+>Indica a data ou data/hora de fim para as repetições do alarme. Se o <parameter
+>dataHora</parameter
+> incluir uma hora, este parâmetro deverá também incluir uma hora; se o <parameter
+>dataHoraInicial</parameter
+> conter apenas uma data, este parâmetro também deverá apenas conter uma data. Não deverá conter um indicador de fuso-horário; é usado o mesmo fuso-horário do <parameter
+>dataHoraInicial</parameter
+> para interpretar o valor deste parâmetro.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>intervaloSubRepeticoes</parameter
+></term>
+<listitem>
+<para
+>Indica o número de minutos entre as sub-repetições do alarme. Indique 0 para não ocorrer qualquer sub-repetição. É ignorado se não for indicada qualquer recorrência.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>numeroSubRepeticoes</parameter
+></term>
+<listitem>
+<para
+>Indica o número de sub-repetições do alarme, incluindo a ocorrência inicial.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+</refsect2>
+</refsynopsisdiv>
+
+<refsect1>
+<title
+>Descrição</title>
+<para
+>O <function
+>scheduleEmail()</function
+> é uma chamada de &DBus; para agendar o envio da mensagem de e-mail na data e hora indicadas. Para além de indicar o cabeçalho e o conteúdo da mensagem de e-mail e de omitir a cor do texto e o parâmetro do ficheiro de áudio, a sua utilização é idêntica à do <link linkend="scheduleMessage-descrip"
+><function
+>scheduleMessage</function
+></link
+> - veja a descrição dessa função para mais detalhes.</para>
+</refsect1>
+</refentry>
+
+
+<refentry id="scheduleAudio">
+<refmeta>
+<refentrytitle
+>scheduleAudio</refentrytitle>
+</refmeta>
+<refnamediv>
+<refname
+>scheduleAudio</refname>
+<refpurpose
+>agenda um novo alarme que executa um determinado comando.</refpurpose>
+</refnamediv>
+<refsynopsisdiv>
+<synopsis
+>bool scheduleAudio(const QString&amp; <replaceable
+>urlAudio</replaceable
+>,
+                   int <replaceable
+>percentagemVolume</replaceable
+>,
+                   const QString&amp; <replaceable
+>dataHoraInicio</replaceable
+>,
+                   int <replaceable
+>cancelarAtrasado</replaceable
+>,
+                   unsigned <replaceable
+>opções</replaceable
+>,
+                   const QString&amp; <replaceable
+>recorrencia</replaceable
+>,
+                   int <replaceable
+>intervaloSubRepeticoes</replaceable
+>, 
+                   int <replaceable
+>numeroSubRepeticoes</replaceable
+>)
+</synopsis>
+<synopsis
+>bool scheduleAudio(const QString&amp; <replaceable
+>urlAudio</replaceable
+>,
+                   int <replaceable
+>percentagemVolume</replaceable
+>,
+                   const QString&amp; <replaceable
+>dataHoraInicio</replaceable
+>,
+                   int <replaceable
+>cancelarAtrasado</replaceable
+>,
+                   unsigned <replaceable
+>opções</replaceable
+>,
+                   int <replaceable
+>tipoRecorrencia</replaceable
+>,
+                   int <replaceable
+>intevaloRecorrencia</replaceable
+>,
+                   int <replaceable
+>numeroRecorrencias</replaceable
+>)
+</synopsis>
+<synopsis
+>bool scheduleAudio(const QString&amp; <replaceable
+>urlAudio</replaceable
+>,
+                   int <replaceable
+>percentagemVolume</replaceable
+>,
+                   const QString&amp; <replaceable
+>dataHoraInicio</replaceable
+>,
+                   int <replaceable
+>cancelarAtrasado</replaceable
+>,
+                   unsigned <replaceable
+>opções</replaceable
+>,
+                   int <replaceable
+>tipoRecorrencia</replaceable
+>,
+                   int <replaceable
+>intevaloRecorrencia</replaceable
+>,
+                   const QString&amp; <replaceable
+>dataHoraFim</replaceable
+>)
+</synopsis>
+
+<refsect2>
+<title
+>Parâmetros</title>
+<variablelist>
+<varlistentry>
+<term
+><parameter
+>urlAudio</parameter
+></term>
+<listitem>
+<para
+>Indica o ficheiro de áudio a ser reproduzido.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>percentagemVolume</parameter
+></term>
+<listitem>
+<para
+>Define o nível de volume a usar como sendo uma percentagem do volume total. Indique -1 para usar o volume por omissão.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>dataHoraInicial</parameter
+></term>
+<listitem>
+<para
+>Indica a hora agendada, ou data e hora, a que a mensagem deverá ser mostrada. Para um alarme apenas de data, o texto deverá estar no formato <quote
+>AAAA-MM-DD [TZ]</quote
+> (tal como é devolvido pelo <methodname
+>QDate::toString(Qt::ISODate)</methodname
+>). Para um alarme com data e hora, o texto deverá estar no formato <quote
+>AAA-MM-DDTHH:MM[:SS] [TZ]</quote
+> (tal como é devolvido pelo <methodname
+>QDateTime::toString(Qt::ISODate)</methodname
+>) ou em <quote
+>HH:MM[:SS] [Relógio]</quote
+> (tal como é devolvido pelo <methodname
+>QTime::toString(Qt::ISODate)</methodname
+>). Se não for indicada qualquer data, será usada a data de hoje. Lembre-se que o valor dos segundos é ignorado.</para>
+
+<para
+>Se não tiver sido escolhido nenhum fuso-horário, assume-se o fuso-horário do sistema local. Se estiver presente um indicador de fuso-horário <replaceable
+>FH</replaceable
+>, poderá ser o nome de um fuso-horário de sistema (&eg; <userinput
+>Europa/Londres</userinput
+>), <userinput
+>UTC</userinput
+> - representando o fuso-horário UTC ou <userinput
+>Clock</userinput
+> para usar o relógio do computador local e ignorar os fusos-horários.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>cancelarSeAtrasado</parameter
+></term>
+<listitem>
+<para
+>Faz com que o alarme seja cancelado, se não puder ser disparado dentro do período indicado em minutos, após a hora agendada para o alarme. Se o valor for igual a 0, o alarme não será cancelado, independentemente do atraso com que é disparado.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>opções</parameter
+></term>
+<listitem>
+<para
+>Indica o OU lógico das opções desejadas para o alarme. Os 'bits' das opções são os que estão definidos na classe <classname
+>KAlarmIface</classname
+> do <filename
+>kalarmiface.h</filename
+>. Repare que nem todos os 'bits' de opções se aplicam aos alarmes de comandos.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>recorrência</parameter
+></term>
+<listitem>
+<para
+>Indica uma recorrência normal para o alarme, usando a sintaxe do iCalendar que está definida no <ulink url="http://www.w3.org/2002/12/cal/rfc2445.html"
+>RFC2445</ulink
+>. Por exemplo, <quote
+>FREQ=MONTHLY;COUNT=4;INTERVAL=3;BYDAY=-1MO</quote
+> deverá indicar 4 repetições trimestrais na última Segunda-Feira do mês). Para um alarme não repetitivo, indique uma cadeia de caracteres vazia.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>tipoRecorrencia</parameter
+></term>
+<listitem>
+<para
+>Indica o tipo de repetição do alarme. Os valores permitidos são MINUTELY, DAILY, WEEKLY, MONTHLY, YEARLY. Estes estão definidos na classe <classname
+>KAlarmIface</classname
+> no <filename
+>kalarmiface.h</filename
+>. As repetições mensais são no dia do tipo de mês, assim como as repetições anuais são à data do tipo de ano, com a data extraída, em ambos os casos, a partir do parâmetro <parameter
+>dataHoraInicial</parameter
+>.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>intervaloRecorrencia</parameter
+></term>
+<listitem>
+<para
+>Indica o número de períodos (minutos/dias/semanas/meses/anos, como é definido no parâmetro <parameter
+>tipoRecorrencia</parameter
+>) entre repetições do alarme.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>numeroRepeticoes</parameter
+></term>
+<listitem>
+<para
+>Indica o número de vezes que o alarme deverá ser repetido. Indique -1 para repetir o alarme indefinidamente.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>dataHoraFim</parameter
+></term>
+<listitem>
+<para
+>Indica a data ou data/hora de fim para as repetições do alarme. Se o <parameter
+>dataHora</parameter
+> incluir uma hora, este parâmetro deverá também incluir uma hora; se o <parameter
+>dataHoraInicial</parameter
+> conter apenas uma data, este parâmetro também deverá apenas conter uma data. Não deverá conter um indicador de fuso-horário; é usado o mesmo fuso-horário do <parameter
+>dataHoraInicial</parameter
+> para interpretar o valor deste parâmetro.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>intervaloSubRepeticoes</parameter
+></term>
+<listitem>
+<para
+>Indica o número de minutos entre as sub-repetições do alarme. Indique 0 para não ocorrer qualquer sub-repetição. É ignorado se não for indicada qualquer recorrência.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>numeroSubRepeticoes</parameter
+></term>
+<listitem>
+<para
+>Indica o número de sub-repetições do alarme, incluindo a ocorrência inicial.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+</refsect2>
+</refsynopsisdiv>
+
+<refsect1>
+<title
+>Descrição</title>
+<para
+>O <function
+>scheduleAudio()</function
+> é uma chamada de &DBus; para agendar o ficheiro de áudio indicado a ser reproduzido na data e hora indicadas. Para além de indicar o volume e de omitir a cor do texto e o parâmetro do ficheiro de áudio, a sua utilização é idêntica à do <link linkend="scheduleMessage-descrip"
+><function
+>scheduleMessage</function
+></link
+> - veja a descrição dessa função para mais detalhes.</para>
+</refsect1>
+</refentry>
+
+<refentry id="dbus_edit">
+<refmeta>
+<refentrytitle
+>edit</refentrytitle>
+</refmeta>
+<refnamediv>
+<refname
+>edit</refname>
+<refpurpose
+>Mostra a <link linkend="alarm-edit-dlg"
+>janela de Edição do Alarme</link
+> para editar um alarme.</refpurpose>
+</refnamediv>
+<refsynopsisdiv>
+<synopsis
+>bool edit(const QString&amp; <replaceable
+>idEvento</replaceable
+>)
+</synopsis>
+
+<refsect2>
+<title
+>Parâmetros</title>
+<variablelist>
+<varlistentry>
+<term
+><parameter
+>idEvento</parameter
+></term>
+<listitem>
+<para
+>Indica o identificador único do evento a editar.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+</refsect2>
+
+<refsect2>
+<title
+>Valor devolvido</title>
+<para
+><returnvalue
+>false</returnvalue
+>, se o alarme indicado não for encontrado ou for apenas para leitura, caso contrário <returnvalue
+>true</returnvalue
+>.</para>
+</refsect2>
+</refsynopsisdiv>
+
+<refsect1>
+<title
+>Descrição</title>
+
+<para
+>A <function
+>edit()</function
+> é uma chamada de &DBus; para mostrar a <link linkend="alarm-edit-dlg"
+>janela de Edição do Alarme</link
+>, para editar o alarme indicado.</para>
+
+</refsect1>
+</refentry>
+
+<refentry id="dbus_editnew">
+<refmeta>
+<refentrytitle
+>editNew</refentrytitle>
+</refmeta>
+<refnamediv>
+<refname
+>editNew</refname>
+<refpurpose
+>Isto mostra a <link linkend="alarm-edit-dlg"
+>janela de Edição do Alarme</link
+> para editar um alarme novo.</refpurpose>
+</refnamediv>
+<refsynopsisdiv>
+<synopsis
+>bool editNew(int <replaceable
+>tipo</replaceable
+>)
+</synopsis>
+<synopsis
+>bool editNew(const QString&amp; <replaceable
+>nomeModelo</replaceable
+>)
+</synopsis>
+
+<refsect2>
+<title
+>Parâmetros</title>
+<variablelist>
+<varlistentry>
+<term
+><parameter
+>tipo</parameter
+></term>
+<listitem>
+<para
+>Indica o tipo de alarme. Os valores permitidos são o DISPLAY, COMMAND, EMAIL, AUDIO. Estes estão definidos na classe <classname
+>KAlarmIface</classname
+> do <filename
+>kalarmiface.h</filename
+>.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><parameter
+>nomeModelo</parameter
+></term>
+<listitem>
+<para
+>Indica o nome de um modelo de alarme no qual basear o novo alarme.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+</refsect2>
+
+<refsect2>
+<title
+>Valor devolvido</title>
+<para
+><returnvalue
+>false</returnvalue
+>, se o <parameter
+>tipo</parameter
+> tiver um valor inválido ou se não existir um modelo com o nome <parameter
+>nomeModelo</parameter
+>; caso contrário, devolve <returnvalue
+>true</returnvalue
+>.</para>
+</refsect2>
+</refsynopsisdiv>
+
+<refsect1>
+<title
+>Descrição</title>
+
+<para
+>A <function
+>editNew()</function
+> é uma chamada de &DBus; para mostrar a <link linkend="alarm-edit-dlg"
+>janela de Edição de Alarmes</link
+> para poder editar um alarme novo. Se for indicado um tipo de alarme como parâmetro, irá aparecer uma janela em branco. Em alternativa, se o nome de um modelo de alarmes for indicado como parâmetro a janela é preenchida com os detalhes do modelo.</para>
+
+</refsect1>
+</refentry>
+
+<refentry id="dbus_list">
+<refmeta>
+<refentrytitle
+>list</refentrytitle>
+</refmeta>
+<refnamediv>
+<refname
+>list</refname>
+<refpurpose
+>Devolve uma lista com os alarmes agendados.</refpurpose>
+</refnamediv>
+<refsynopsisdiv>
+<synopsis
+>QString list()
+</synopsis>
+
+<refsect2>
+<title
+>Valor devolvido</title>
+<para
+>Uma lista de alarmes, separados por mudanças de linha, cada um no formato <returnvalue
+><replaceable
+>id_recurso</replaceable
+>:<replaceable
+>UID</replaceable
+> <replaceable
+>hora</replaceable
+> <replaceable
+>texto</replaceable
+></returnvalue
+></para>
+</refsect2>
+</refsynopsisdiv>
+
+<refsect1>
+<title
+>Descrição</title>
+
+<para
+>O <function
+>list()</function
+> é uma chamada de &DBus; para devolver um texto que contém um resumo dos alarmes agendados. A lista apresenta breves detalhes sobre cada alarme pendente: o seu identificador de recurso (se usar o Akonadi), o UID, a hora da próxima ocorrência e o texto ou ficheiro da mensagem.</para>
+
+</refsect1>
+</refentry>
+
+</sect1>
+
+<sect1 id="cmdline-interface">
+<title
+>Interface da Linha de Comando</title>
+
+<para
+>As opções da linha de comandos são disponibilizadas para permitir aos outros programas iniciarem o &kalarm; se não estiver já a correr, para que possam despoletar ou cancelar os alarmes agendados ou ainda para agendar alarmes novos. A razão para usar as opções da linha de comandos para este fim é que, se o &kalarm; fosse arrancado sem nenhuns parâmetros da linha de comandos e lhe fossem então enviados pedidos de &DBus;, ele iria iniciar no seu modo gráfico por omissão, o que é claramente indesejável para um pedido entre programas.</para>
+
+<note
+><para
+>Os programas deverão verificar primeiro se o &kalarm; já está a correr; se estiver, então aí deverão usar chamadas de &DBus; para efectuar essas operações.</para
+></note>
+
+<para
+>As opções da linha de comandos para agendar um alarme novo são as descritas no capítulo sobre a <link linkend="cmdline-operation"
+>Operação com a Linha de Comandos</link
+>. As opções para disparar e cancelar os alarmes agendados são as seguintes:</para>
+
+<note
+><para
+>Os utilizadores normais poderão também, se o desejarem, usar estas opções da linha de comandos (assumindo que podem passar a informação dos parâmetros necessários).</para
+></note>
+
+<informaltable>
+<tgroup cols="2">
+<thead>
+<row>
+  <entry
+>Opção</entry>
+  <entry
+>Descrição</entry>
+</row>
+</thead>
+<tbody>
+<row>
+  <entry
+><option
+>--cancelEvent <replaceable
+>idEvento</replaceable
+></option
+></entry>
+  <entry
+>Cancela o alarme com o ID de evento indicado. O <option
+>--triggerEvent</option
+> não pode ser indicado com esta opção.</entry>
+</row>
+<row>
+  <entry
+><option
+>--triggerEvent <replaceable
+>idEvento</replaceable
+></option
+></entry>
+  <entry
+>Dispara o alarme com o identificador de evento indicado. A acção tomada é a mesma da chamada de &DBus; <link linkend="triggerEvent"
+>triggerEvent()</link
+>. O <option
+>--cancelEvent</option
+> não pode ser indicado com esta opção.</entry>
+</row>
+</tbody>
+</tgroup>
+</informaltable>
+
+<para
+>Exemplos:</para>
+
+<informalexample
+><screen
+><prompt
+>%</prompt
+> <userinput
+><command
+>kalarm</command
+> <option
+>--triggerEvent <replaceable
+>&kalarm;-387486299.702</replaceable
+></option
+></userinput>
+<prompt
+>%</prompt
+> <userinput
+><command
+>kalarm</command
+> <option
+>--cancelEvent <replaceable
+>&kalarm;-388886299.793</replaceable
+></option
+></userinput
+>
+</screen>
+</informalexample>
+
+</sect1>
+</chapter>
+
+
+<chapter id="faq">
+<title
+>Perguntas e Respostas</title>
+
+<qandaset id="faqlist">
+<qandaentry>
+<question>
+<para
+>Que ficheiros de configuração é que o &kalarm; utiliza?</para>
+</question>
+<answer>
+<para
+>O <filename
+>kalarmrc</filename
+> na pasta <command
+>qtpaths --paths GenericConfigLocation</command
+> contém as preferências do seu &kalarm;.</para>
+</answer>
+</qandaentry>
+
+<qandaentry>
+<question>
+<para
+>Onde é que o &kalarm; grava os seus alarmes?</para>
+</question>
+<answer>
+
+<para
+>Os nomes dos ficheiros de calendários que o &kalarm; cria, da primeira vez que é executado, são os seguintes:</para>
+
+<itemizedlist>
+<listitem>
+<para
+>O <filename
+>kalarm/calendar.ics</filename
+>, na pasta <command
+>qtpaths --paths GenericDataLocation</command
+>. contém os alarmes activos.</para>
+</listitem>
+
+<listitem>
+<para
+>O <filename
+>kalarm/expired.ics</filename
+>, na pasta <command
+>qtpaths --paths GenericDataLocation</command
+>. contém os alarmes arquivados.</para>
+</listitem>
+
+<listitem>
+<para
+>O <filename
+>kalarm/template.ics</filename
+>, na pasta <command
+>qtpaths --paths GenericDataLocation</command
+>. contém os modelos de alarmes.</para>
+</listitem>
+</itemizedlist>
+
+<para
+>Poderá descobrir os ficheiros de calendários que estão a ser usados de momento, vendo os detalhes de cada calendário na lista de calendários de alarmes. Os nomes dos ficheiros são gravados no ficheiro de configuração do calendário de alarme.</para>
+
+<para
+>Os detalhes dos alarmes que estão visíveis de momento são guardados no ficheiro de calendário <filename
+>kalarm/displaying.ics</filename
+> na pasta <command
+>qtpaths --paths GenericDataLocation</command
+>.</para>
+</answer>
+</qandaentry>
+
+<qandaentry>
+<question>
+<para
+>Em que formato estão guardados os alarmes?</para>
+</question>
+<answer>
+<para
+>Os ficheiros de calendário em que o &kalarm; guarda os seus alarmes são ficheiros de texto, cujo formato está definido pelo documento <ulink url="http://www.w3.org/2002/12/cal/rfc2445.html"
+>RFC2445 - Internet Calendaring and Scheduling Core Object Specification (iCalendar)</ulink
+>. Este é o formato-padrão que é usado em todas as aplicações do 'kdepim'. O &kalarm; usa certas propriedades fora da norma no componente do Alarme, em relação ao RFC2445. Estas estão documentadas no ficheiro <filename
+>DESIGN.html</filename
+> que é distribuído com o &kalarm;.</para>
+</answer>
+</qandaentry>
+
+<qandaentry>
+<question>
+<para
+>O que é o programa <application
+>kalarmautostart</application
+>?</para>
+</question>
+<answer>
+<para
+>O <application
+>kalarmautostart</application
+> é um pequeno programa auxiliar, cuja função é iniciar automaticamente o &kalarm; no início da sessão.</para>
+
+<para
+>O &kalarm; é reposto normalmente pelo gestor de sessões no início de uma sessão (para mostrar de novo as suas janelas no mesmo estado em que estavam antes de encerrar a sessão anterior). Se não estava em execução quando encerrou a sessão, não será iniciado pelo gestor de sessões, pelo que terá de ser iniciado automaticamente. O problema é que, quando uma aplicação inicia automaticamente e é gerida pelo gestor de sessões, não há garantia do que irá ocorrer primeiro. Se o arranque automático aparecer primeiro, irá impedir que o gestor de sessões reponha o estado da aplicação.</para>
+
+<para
+>Para evitar este problema, o <application
+>kalarmautostart</application
+> é iniciado automaticamente no início da sessão, em vez do &kalarm;. Tudo o que este faz é esperar durante algum tempo (para garantir que o gestor de sessões tem tempo para a sua tarefa) antes de iniciar o &kalarm;, onde nessa altura termina.</para>
+</answer>
+</qandaentry>
+
+<qandaentry>
+<question>
+<para
+>Como é que uso o &kalarm; num ambiente de trabalho que não o &plasma;?</para>
+</question>
+<answer>
+<para
+>Para correr o &kalarm; num ambiente de trabalho não-&plasma;, o requisito principal é garantir que o &kalarm; é corrido automaticamente sempre que você iniciar uma sessão. Poderá obter instruções mais detalhadas no ficheiro <filename
+>INSTALL</filename
+> que é distribuído com o &kalarm;.</para>
+</answer>
+</qandaentry>
+
+</qandaset>
+</chapter>
+
+
+<chapter id="credits">
+
+<title
+>Créditos e Licença</title>
+
+<para
+>&kalarm; </para>
+<para
+>Programa com 'copyright' 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011 de &David.Jarvie; &David.Jarvie.mail; </para>
+
+<para
+>Documentação com 'copyright' 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011 de &David.Jarvie; &David.Jarvie.mail; </para>
+
+<para
+>Tradução de José Nuno Pires <email
+>zepires@gmail.com</email
+></para
+> 
+&underFDL; &underGPL; <para
+>Os agradecimentos vão para o autor da aplicação KAlarm do &kde; 1, o Stefan Nikolaus <email
+>stefan.nikolaus@stuco.uni-oldenburg.de</email
+>, que permitiu gentilmente o uso do &kalarm; nesta aplicação do &kde; 2 e suas versões posteriores. </para>
+
+</chapter>
+
+&documentation.index;
+</book>
+<!--
+Local Variables:
+mode: sgml
+sgml-minimize-attributes:nil
+sgml-general-insert-case:lower
+sgml-indent-step:0
+sgml-indent-data:nil
+End:
+-->
+
