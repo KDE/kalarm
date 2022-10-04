@@ -1,7 +1,10 @@
 KAlarm Change Log
 
-=== Version 3.5.2 (KDE Gear 22.12) --- 15 August 2022 ===
+=== Version 3.5.3 (KDE Gear 22.12) --- 4 October 2022 ===
 * Provide build option to disable use of X11, even if it is available.
+
+=== Version 3.5.2 (KDE Gear 22.08.2) --- 4 October 2022 ===
+* Fix possible crash when alarm restored at login is deferred [KDE Bug 459901]
 
 === Version 3.5.1 (KDE Gear 22.08.1) --- 15 August 2022 ===
 * Fix regression introduced in version 3.5.0:

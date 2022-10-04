@@ -321,20 +321,24 @@ bool KAlarmApp::restoreSession()
 
     MessageNotification::sessionRestore();
 
-    // Try to display the system tray icon if it is configured to be shown
+    // 1) There should have been a main window to restore, but even if not, there
+    //    must always be one, so create one if necessary but don't show it.
+    // 2) Try to display the system tray icon if it is configured to be shown
     if (trayParent  ||  wantShowInSystemTray())
     {
         if (!MainWindow::count())
-            qCWarning(KALARM_LOG) << "KAlarmApp::restoreSession: no main window to be restored!?";
-        else
         {
-            displayTrayIcon(true, trayParent);
-            // Occasionally for no obvious reason, the main main window is
-            // shown when it should be hidden, so hide it just to be sure.
-            if (trayParent)
-                trayParent->hide();
+            qCWarning(KALARM_LOG) << "KAlarmApp::restoreSession: no main window to restore!?";
+            trayParent = MainWindow::create();
         }
+        displayTrayIcon(true, trayParent);
+        // Occasionally for no obvious reason, the main main window is
+        // shown when it should be hidden, so hide it just to be sure.
+        if (trayParent)
+            trayParent->hide();
     }
+    else
+        createOnlyMainWindow();
 
     --mActiveCount;
     if (quitIf(0))          // quit if no windows are open
@@ -717,7 +721,7 @@ void KAlarmApp::createOnlyMainWindow()
 {
     if (!MainWindow::count())
     {
-        if (Preferences::showInSystemTray()  &&  QSystemTrayIcon::isSystemTrayAvailable())
+        if (wantShowInSystemTray())
         {
             if (displayTrayIcon(true))
                 return;
