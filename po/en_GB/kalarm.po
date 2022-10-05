@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-09-29 00:47+0000\n"
+"POT-Creation-Date: 2022-10-05 00:46+0000\n"
 "PO-Revision-Date: 2022-07-22 15:39+0100\n"
 "Last-Translator: Steve Allewell <steve.allewell@gmail.com>\n"
 "Language-Team: British English <kde-l10n-en_gb@kde.org>\n"
@@ -3256,7 +3256,7 @@ msgctxt "@info"
 msgid "Error saving alarm template"
 msgstr "Error saving alarm template"
 
-#: kalarmapp.cpp:810
+#: kalarmapp.cpp:814
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -3264,13 +3264,13 @@ msgid ""
 msgstr ""
 "Quitting will disable alarms (once any alarm message windows are closed)."
 
-#: kalarmapp.cpp:820
+#: kalarmapp.cpp:824
 #, kde-format
 msgctxt "@info"
 msgid "Quitting will cancel the scheduled Wake from Suspend."
 msgstr "Quitting will cancel the scheduled Wake from Suspend."
 
-#: kalarmapp.cpp:833
+#: kalarmapp.cpp:837
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3280,25 +3280,25 @@ msgstr ""
 "Do you want to start KAlarm at login?<nl/>(Note that alarms will be disabled "
 "if KAlarm is not started.)"
 
-#: kalarmapp.cpp:1063
+#: kalarmapp.cpp:1067
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "Cannot create alarm: No default calendar is defined"
 msgstr "Cannot create alarm: No default calendar is defined"
 
-#: kalarmapp.cpp:1077
+#: kalarmapp.cpp:1081
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "Error creating alarm"
 msgstr "Error creating alarm"
 
-#: kalarmapp.cpp:1133
+#: kalarmapp.cpp:1137
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "%1: Event <resource>%2</resource> not found, or not unique"
 msgstr "%1: Event <resource>%2</resource> not found, or not unique"
 
-#: kalarmapp.cpp:1445
+#: kalarmapp.cpp:1449
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3310,13 +3310,13 @@ msgstr ""
 "calendar is enabled.<nl/><nl/>To fix this, use <interface>View | Show "
 "Calendars</interface> to check or change calendar statuses."
 
-#: kalarmapp.cpp:1485
+#: kalarmapp.cpp:1489
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "%1: Event <resource>%2</resource> not found, or not editable"
 msgstr "%1: Event <resource>%2</resource> not found, or not editable"
 
-#: kalarmapp.cpp:1513
+#: kalarmapp.cpp:1517
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3330,7 +3330,7 @@ msgstr ""
 "<interface>View | Show Calendars</interface> to check or change calendar "
 "statuses."
 
-#: kalarmapp.cpp:1521
+#: kalarmapp.cpp:1525
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3346,7 +3346,7 @@ msgstr ""
 "calendar, and check <interface>Use as Default for Archived Alarms</"
 "interface>."
 
-#: kalarmapp.cpp:2494
+#: kalarmapp.cpp:2498
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -3356,19 +3356,19 @@ msgstr ""
 "Failed to execute command\n"
 "(no terminal selected for command alarms)"
 
-#: kalarmapp.cpp:2647
+#: kalarmapp.cpp:2651
 #, kde-format
 msgctxt "@info"
 msgid "Error creating temporary script file"
 msgstr "Error creating temporary script file"
 
-#: kalarmapp.cpp:2743
+#: kalarmapp.cpp:2747
 #, kde-format
 msgctxt "@info"
 msgid "Pre-alarm action:"
 msgstr "Pre-alarm action:"
 
-#: kalarmapp.cpp:2749
+#: kalarmapp.cpp:2753
 #, kde-format
 msgctxt "@info"
 msgid "Post-alarm action:"

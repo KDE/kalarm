@@ -22,7 +22,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-09-29 00:47+0000\n"
+"POT-Creation-Date: 2022-10-05 00:46+0000\n"
 "PO-Revision-Date: 2022-07-29 22:44+0300\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -3278,7 +3278,7 @@ msgctxt "@info"
 msgid "Error saving alarm template"
 msgstr "Virhe hälytysmallin tallennuksessa"
 
-#: kalarmapp.cpp:810
+#: kalarmapp.cpp:814
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -3286,13 +3286,13 @@ msgid ""
 msgstr ""
 "Lopettaminen estää hälytykset (minkä tahansa hälytysikkunan sulkeuduttua)."
 
-#: kalarmapp.cpp:820
+#: kalarmapp.cpp:824
 #, kde-format
 msgctxt "@info"
 msgid "Quitting will cancel the scheduled Wake from Suspend."
 msgstr "Lopettaminen peruu ajastetun lepotilasta heräämisen."
 
-#: kalarmapp.cpp:833
+#: kalarmapp.cpp:837
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3302,19 +3302,19 @@ msgstr ""
 "Haluatko käynnistää KAlarmin kirjauduttaessa?<nl/> (Huomaa, että hälytykset "
 "ovat poissa käytöstä, ellei KAlarmia käynnistetä.)"
 
-#: kalarmapp.cpp:1063
+#: kalarmapp.cpp:1067
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "Cannot create alarm: No default calendar is defined"
 msgstr "Hälytystä ei voida luoda: oletuskalenteria ei ole asetettu"
 
-#: kalarmapp.cpp:1077
+#: kalarmapp.cpp:1081
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "Error creating alarm"
 msgstr "Virhe hälytystä luotaessa"
 
-#: kalarmapp.cpp:1133
+#: kalarmapp.cpp:1137
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "%1: Event <resource>%2</resource> not found, or not unique"
@@ -3322,7 +3322,7 @@ msgstr ""
 "%1: Tapahtumaa <resource>%2</resource> ei löytynyt tai se ei ole "
 "ainutkertainen"
 
-#: kalarmapp.cpp:1445
+#: kalarmapp.cpp:1449
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3335,14 +3335,14 @@ msgstr ""
 "tai asettamalla kalenterien tila kohdasta <interface>Näkymä | Näytä "
 "kalenterit</interface>."
 
-#: kalarmapp.cpp:1485
+#: kalarmapp.cpp:1489
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "%1: Event <resource>%2</resource> not found, or not editable"
 msgstr ""
 "%1: Tapahtumaa <resource>%2</resource> ei löytynyt tai sitä ei voi muokata"
 
-#: kalarmapp.cpp:1513
+#: kalarmapp.cpp:1517
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3356,7 +3356,7 @@ msgstr ""
 "käyttöön.<nl/><nl/>Korjaa tämä valitsemalla tai muuttamalla kalenteria tilaa "
 "kohdassa <interface>Näytä | Näytä kalenterit</interface>."
 
-#: kalarmapp.cpp:1521
+#: kalarmapp.cpp:1525
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3372,7 +3372,7 @@ msgstr ""
 "valitsemalla arkistohälytyskalenteri ja <interface>Käytä oletuksena "
 "arkistoiduille hälytyksille</interface>."
 
-#: kalarmapp.cpp:2494
+#: kalarmapp.cpp:2498
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -3382,19 +3382,19 @@ msgstr ""
 "Komennon suoritus epäonnistui\n"
 "(komentohälytyksille ei ole valittu päätettä)"
 
-#: kalarmapp.cpp:2647
+#: kalarmapp.cpp:2651
 #, kde-format
 msgctxt "@info"
 msgid "Error creating temporary script file"
 msgstr "Virhe luotaessa väliaikaista komentojonotiedostoa"
 
-#: kalarmapp.cpp:2743
+#: kalarmapp.cpp:2747
 #, kde-format
 msgctxt "@info"
 msgid "Pre-alarm action:"
 msgstr "Hälytyksen esitoiminto:"
 
-#: kalarmapp.cpp:2749
+#: kalarmapp.cpp:2753
 #, kde-format
 msgctxt "@info"
 msgid "Post-alarm action:"

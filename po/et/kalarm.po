@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-09-29 00:47+0000\n"
+"POT-Creation-Date: 2022-10-05 00:46+0000\n"
 "PO-Revision-Date: 2020-05-15 08:19+0300\n"
 "Last-Translator: Marek Laane <qiilaq69@gmail.com>\n"
 "Language-Team: Estonian <kde-et@lists.linux.ee>\n"
@@ -3307,20 +3307,20 @@ msgctxt "@info"
 msgid "Error saving alarm template"
 msgstr "Viga häiremalli salvestamisel"
 
-#: kalarmapp.cpp:810
+#: kalarmapp.cpp:814
 #, kde-format
 msgctxt "@info"
 msgid ""
 "Quitting will disable alarms (once any alarm message windows are closed)."
 msgstr "Väljumine tühistab häired (kui kõik häireteadete aknad on suletud)."
 
-#: kalarmapp.cpp:820
+#: kalarmapp.cpp:824
 #, kde-format
 msgctxt "@info"
 msgid "Quitting will cancel the scheduled Wake from Suspend."
 msgstr "Väljumine katkestab ajastatud uneseisundist ärkamise häire."
 
-#: kalarmapp.cpp:833
+#: kalarmapp.cpp:837
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3330,13 +3330,13 @@ msgstr ""
 "Kas käivitada KAlarm sisselogimisel<nl/>(Pane tähele, et häired on välja "
 "lülitatud, kui KAlarm ei ole käivitatud.)"
 
-#: kalarmapp.cpp:1063
+#: kalarmapp.cpp:1067
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "Cannot create alarm: No default calendar is defined"
 msgstr ""
 
-#: kalarmapp.cpp:1077
+#: kalarmapp.cpp:1081
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info"
 #| msgid "Error recreating alarm"
@@ -3344,13 +3344,13 @@ msgctxt "@info:shell"
 msgid "Error creating alarm"
 msgstr "Tõrge häire taasloomisel"
 
-#: kalarmapp.cpp:1133
+#: kalarmapp.cpp:1137
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "%1: Event <resource>%2</resource> not found, or not unique"
 msgstr "%1: sündmust <resource>%2</resource> ei leitud või pole see unikaalne"
 
-#: kalarmapp.cpp:1445
+#: kalarmapp.cpp:1449
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3363,13 +3363,13 @@ msgstr ""
 "kasuta menüükäsku <interface>Vaade | Kalendrite näitamine</interface> "
 "kalendrite oleku kontrollimiseks või muutmiseks."
 
-#: kalarmapp.cpp:1485
+#: kalarmapp.cpp:1489
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "%1: Event <resource>%2</resource> not found, or not editable"
 msgstr "%1: sündmust <resource>%2</resource> ei leitud või pole see muudetav"
 
-#: kalarmapp.cpp:1513
+#: kalarmapp.cpp:1517
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3383,7 +3383,7 @@ msgstr ""
 "><nl/>Olukorra parandamiseks kasuta menüükäsku <interface>Vaade | Kalendrite "
 "näitamine</interface> kalendrite oleku kontrollimiseks või muutmiseks."
 
-#: kalarmapp.cpp:1521
+#: kalarmapp.cpp:1525
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3398,7 +3398,7 @@ msgstr ""
 ">Olukorra parandamiseks kasuta menüükäsku <interface>Vaade | Kalendrite "
 "näitamine</interface> kalendrite oleku kontrollimiseks või muutmiseks."
 
-#: kalarmapp.cpp:2494
+#: kalarmapp.cpp:2498
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -3408,19 +3408,19 @@ msgstr ""
 "Käsu käivitamine nurjus\n"
 "(käsuhäirele ei ole terminali valitud)"
 
-#: kalarmapp.cpp:2647
+#: kalarmapp.cpp:2651
 #, kde-format
 msgctxt "@info"
 msgid "Error creating temporary script file"
 msgstr "Viga ajutise skriptifaili loomisel"
 
-#: kalarmapp.cpp:2743
+#: kalarmapp.cpp:2747
 #, kde-format
 msgctxt "@info"
 msgid "Pre-alarm action:"
 msgstr "Häire-eelne toiming:"
 
-#: kalarmapp.cpp:2749
+#: kalarmapp.cpp:2753
 #, kde-format
 msgctxt "@info"
 msgid "Post-alarm action:"

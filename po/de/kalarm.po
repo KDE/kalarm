@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-09-29 00:47+0000\n"
+"POT-Creation-Date: 2022-10-05 00:46+0000\n"
 "PO-Revision-Date: 2022-07-24 14:41+0200\n"
 "Last-Translator: Frederik Schwarzer <schwarzer@kde.org>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
@@ -3443,7 +3443,7 @@ msgctxt "@info"
 msgid "Error saving alarm template"
 msgstr "Fehler beim Speichern der neuen Erinnerungsvorlage"
 
-#: kalarmapp.cpp:810
+#: kalarmapp.cpp:814
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -3452,7 +3452,7 @@ msgstr ""
 "Nach dem Beenden werden keine Erinnerungen mehr angezeigt (nachdem das "
 "letzte aktive Erinnerungsfenster geschlossen ist)."
 
-#: kalarmapp.cpp:820
+#: kalarmapp.cpp:824
 #, kde-format
 msgctxt "@info"
 msgid "Quitting will cancel the scheduled Wake from Suspend."
@@ -3460,7 +3460,7 @@ msgstr ""
 "Das Beenden wird die aktuelle Erinnerung für das Aufwachen aus dem Standby-"
 "Modus abbrechen."
 
-#: kalarmapp.cpp:833
+#: kalarmapp.cpp:837
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3470,7 +3470,7 @@ msgstr ""
 "Möchten Sie KAlarm bei der Anmeldung starten lassen?<nl/>(Wenn KAlarm nicht "
 "gestartet wird, werden keine Erinnerungen ausgelöst.)"
 
-#: kalarmapp.cpp:1063
+#: kalarmapp.cpp:1067
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "Cannot create alarm: No default calendar is defined"
@@ -3478,13 +3478,13 @@ msgstr ""
 "Erinnerung kann nicht erstellt werden, es wurde kein Standardkalender "
 "definiert."
 
-#: kalarmapp.cpp:1077
+#: kalarmapp.cpp:1081
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "Error creating alarm"
 msgstr "Fehler beim Erstellen der Erinnerung"
 
-#: kalarmapp.cpp:1133
+#: kalarmapp.cpp:1137
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "%1: Event <resource>%2</resource> not found, or not unique"
@@ -3492,7 +3492,7 @@ msgstr ""
 "%1: Termin <resource>%2</resource> wurde nicht gefunden oder ist nicht "
 "eindeutig"
 
-#: kalarmapp.cpp:1445
+#: kalarmapp.cpp:1449
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3505,7 +3505,7 @@ msgstr ""
 ">Um das zu ändern, benutzen Sie <interface>Ansicht -> Kalender anzeigen</"
 "interface>, um den Status von Kalendern zu überprüfen oder zu ändern."
 
-#: kalarmapp.cpp:1485
+#: kalarmapp.cpp:1489
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "%1: Event <resource>%2</resource> not found, or not editable"
@@ -3513,7 +3513,7 @@ msgstr ""
 "%1: Der Termin <resource>%2</resource> ist nicht auffindbar oder lässt sich "
 "nicht bearbeiten."
 
-#: kalarmapp.cpp:1513
+#: kalarmapp.cpp:1517
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3527,7 +3527,7 @@ msgstr ""
 "das zu ändern, benutzen Sie <interface>Ansicht -> Kalender anzeigen</"
 "interface>, um den Status von Kalendern zu überprüfen oder zu ändern."
 
-#: kalarmapp.cpp:1521
+#: kalarmapp.cpp:1525
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3544,7 +3544,7 @@ msgstr ""
 "aktivieren Sie <interface>Als Standard für abgelaufene Erinnerungen "
 "verwenden</interface>"
 
-#: kalarmapp.cpp:2494
+#: kalarmapp.cpp:2498
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -3554,19 +3554,19 @@ msgstr ""
 "Die Ausführung des Befehls ist fehlgeschlagen\n"
 "es ist kein Terminal für Befehls-Erinnerungen ausgewählt"
 
-#: kalarmapp.cpp:2647
+#: kalarmapp.cpp:2651
 #, kde-format
 msgctxt "@info"
 msgid "Error creating temporary script file"
 msgstr "Fehler beim Erstellen der temporären Skriptdatei"
 
-#: kalarmapp.cpp:2743
+#: kalarmapp.cpp:2747
 #, kde-format
 msgctxt "@info"
 msgid "Pre-alarm action:"
 msgstr "Vor der Erinnerung auszulösende Aktion:"
 
-#: kalarmapp.cpp:2749
+#: kalarmapp.cpp:2753
 #, kde-format
 msgctxt "@info"
 msgid "Post-alarm action:"

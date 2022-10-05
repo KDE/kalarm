@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-09-29 00:47+0000\n"
+"POT-Creation-Date: 2022-10-05 00:46+0000\n"
 "PO-Revision-Date: 2022-05-22 02:11+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -3220,20 +3220,20 @@ msgctxt "@info"
 msgid "Error saving alarm template"
 msgstr "알람 템플릿 저장 오류"
 
-#: kalarmapp.cpp:810
+#: kalarmapp.cpp:814
 #, kde-format
 msgctxt "@info"
 msgid ""
 "Quitting will disable alarms (once any alarm message windows are closed)."
 msgstr "끝내면 모든 알람 메시지 창이 닫힌 이후 알람이 비활성화됩니다."
 
-#: kalarmapp.cpp:820
+#: kalarmapp.cpp:824
 #, kde-format
 msgctxt "@info"
 msgid "Quitting will cancel the scheduled Wake from Suspend."
 msgstr "끝내면 예약된 절전 모드에서 깨우기가 취소됩니다."
 
-#: kalarmapp.cpp:833
+#: kalarmapp.cpp:837
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3243,25 +3243,25 @@ msgstr ""
 "로그인할 때 KAlarm을 시작하시겠습니까?<nl/>(KAlarm이 시작되지 않으면 알람이 "
 "비활성화됩니다.)"
 
-#: kalarmapp.cpp:1063
+#: kalarmapp.cpp:1067
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "Cannot create alarm: No default calendar is defined"
 msgstr "알람을 만들 수 없음: 기본 캘린더가 정의되지 않았음"
 
-#: kalarmapp.cpp:1077
+#: kalarmapp.cpp:1081
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "Error creating alarm"
 msgstr "알람 생성 오류"
 
-#: kalarmapp.cpp:1133
+#: kalarmapp.cpp:1137
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "%1: Event <resource>%2</resource> not found, or not unique"
 msgstr "%1: 이벤트 <resource>%2</resource>을(를) 찾을 수 없거나 유일하지 않음"
 
-#: kalarmapp.cpp:1445
+#: kalarmapp.cpp:1449
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3273,13 +3273,13 @@ msgstr ""
 "없습니다.<nl/><nl/>문제점을 수정하려면 <interface>보기 | 캘린더 표시</"
 "interface> 메뉴에서 캘린더 상태를 확인하거나 변경하십시오."
 
-#: kalarmapp.cpp:1485
+#: kalarmapp.cpp:1489
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "%1: Event <resource>%2</resource> not found, or not editable"
 msgstr "%1: 이벤트 <resource>%2</resource>을(를) 찾을 수 없거나 편집할 수 없음"
 
-#: kalarmapp.cpp:1513
+#: kalarmapp.cpp:1517
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3292,7 +3292,7 @@ msgstr ""
 "서 보관할 수 없습니다.<nl/><nl/>문제점을 수정하려면 <interface>보기 | 캘린더 "
 "표시</interface> 메뉴에서 캘린더 상태를 확인하거나 변경하십시오."
 
-#: kalarmapp.cpp:1521
+#: kalarmapp.cpp:1525
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3307,7 +3307,7 @@ msgstr ""
 "interface> 메뉴에서 보관된 알람 캘린더를 선택한 다음 <interface>보관된 알람"
 "의 기본값으로 사용</interface>을 선택하십시오."
 
-#: kalarmapp.cpp:2494
+#: kalarmapp.cpp:2498
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -3317,19 +3317,19 @@ msgstr ""
 "명령을 실행할 수 없음\n"
 "(명령 알람에 대해 선택된 터미널 없음)"
 
-#: kalarmapp.cpp:2647
+#: kalarmapp.cpp:2651
 #, kde-format
 msgctxt "@info"
 msgid "Error creating temporary script file"
 msgstr "임시 스크립트 알람을 만드는 중 오류 발생"
 
-#: kalarmapp.cpp:2743
+#: kalarmapp.cpp:2747
 #, kde-format
 msgctxt "@info"
 msgid "Pre-alarm action:"
 msgstr "알람 이전 동작:"
 
-#: kalarmapp.cpp:2749
+#: kalarmapp.cpp:2753
 #, kde-format
 msgctxt "@info"
 msgid "Post-alarm action:"

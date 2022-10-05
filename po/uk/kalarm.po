@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-09-29 00:47+0000\n"
+"POT-Creation-Date: 2022-10-05 00:46+0000\n"
 "PO-Revision-Date: 2022-04-25 09:01+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
@@ -3302,7 +3302,7 @@ msgctxt "@info"
 msgid "Error saving alarm template"
 msgstr "Помилка під час збереження шаблону нагадування"
 
-#: kalarmapp.cpp:810
+#: kalarmapp.cpp:814
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -3311,7 +3311,7 @@ msgstr ""
 "Після виходу з програми нагадування показуватись не будуть\n"
 "(якщо всі вікна повідомлень також закриті)."
 
-#: kalarmapp.cpp:820
+#: kalarmapp.cpp:824
 #, kde-format
 msgctxt "@info"
 msgid "Quitting will cancel the scheduled Wake from Suspend."
@@ -3319,7 +3319,7 @@ msgstr ""
 "Завершення роботи програми призведе до скасування запланованого пробудження "
 "системи"
 
-#: kalarmapp.cpp:833
+#: kalarmapp.cpp:837
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3329,25 +3329,25 @@ msgstr ""
 "Бажаєте, щоб система запускала KAlarm під час входу до неї?<nl/>(Зауважте, "
 "що, якщо KAlarm не буде запущено, нагадування буде вимкнено.)"
 
-#: kalarmapp.cpp:1063
+#: kalarmapp.cpp:1067
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "Cannot create alarm: No default calendar is defined"
 msgstr "Не вдалося створити нагадування: не визначено типового календаря"
 
-#: kalarmapp.cpp:1077
+#: kalarmapp.cpp:1081
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "Error creating alarm"
 msgstr "Помилка під час створення нагадування"
 
-#: kalarmapp.cpp:1133
+#: kalarmapp.cpp:1137
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "%1: Event <resource>%2</resource> not found, or not unique"
 msgstr "%1: подію <resource>%2</resource> не знайдено або вона не є унікальною"
 
-#: kalarmapp.cpp:1445
+#: kalarmapp.cpp:1449
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3360,14 +3360,14 @@ msgstr ""
 "скористайтеся пунктом меню <interface>Перегляд | Показати календарі</"
 "interface>, потім позначте або змініть стан пунктів календарів."
 
-#: kalarmapp.cpp:1485
+#: kalarmapp.cpp:1489
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "%1: Event <resource>%2</resource> not found, or not editable"
 msgstr ""
 "%1: подію <resource>%2</resource> не знайдено або її не можна змінювати"
 
-#: kalarmapp.cpp:1513
+#: kalarmapp.cpp:1517
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3382,7 +3382,7 @@ msgstr ""
 "меню <interface>Перегляд | Показати календарі</interface>, потім позначте "
 "або змініть стан пунктів календарів."
 
-#: kalarmapp.cpp:1521
+#: kalarmapp.cpp:1525
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3399,7 +3399,7 @@ msgstr ""
 "нагадувань і позначте пункт <interface>Використовувати як типовий для "
 "застарілих нагадувань</interface>."
 
-#: kalarmapp.cpp:2494
+#: kalarmapp.cpp:2498
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -3409,19 +3409,19 @@ msgstr ""
 "Не вдалося виконати команду\n"
 "(не вибрано термінал для нагадувань командою)"
 
-#: kalarmapp.cpp:2647
+#: kalarmapp.cpp:2651
 #, kde-format
 msgctxt "@info"
 msgid "Error creating temporary script file"
 msgstr "Помилка створення тимчасового файла скрипту"
 
-#: kalarmapp.cpp:2743
+#: kalarmapp.cpp:2747
 #, kde-format
 msgctxt "@info"
 msgid "Pre-alarm action:"
 msgstr "Дія перед нагадуванням:"
 
-#: kalarmapp.cpp:2749
+#: kalarmapp.cpp:2753
 #, kde-format
 msgctxt "@info"
 msgid "Post-alarm action:"

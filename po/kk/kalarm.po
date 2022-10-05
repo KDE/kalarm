@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-09-29 00:47+0000\n"
+"POT-Creation-Date: 2022-10-05 00:46+0000\n"
 "PO-Revision-Date: 2013-07-07 03:28+0600\n"
 "Last-Translator: Sairan Kikkarin <sairan@computer.org>\n"
 "Language-Team: Kazakh <kde-i18n-doc@kde.org>\n"
@@ -3435,7 +3435,7 @@ msgctxt "@info"
 msgid "Error saving alarm template"
 msgstr "Ескерту үлгісін сақтау қатесі"
 
-#: kalarmapp.cpp:810
+#: kalarmapp.cpp:814
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -3444,13 +3444,13 @@ msgstr ""
 "Шықсаңыз ескертулер бұғатталады (барлық ескерту хабарлама терезелері "
 "жабылса)."
 
-#: kalarmapp.cpp:820
+#: kalarmapp.cpp:824
 #, kde-format
 msgctxt "@info"
 msgid "Quitting will cancel the scheduled Wake from Suspend."
 msgstr "Шығу ескертуді аялдаудан оралып ескерту қасиетінен айырады."
 
-#: kalarmapp.cpp:833
+#: kalarmapp.cpp:837
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3460,13 +3460,13 @@ msgstr ""
 "Жүйеге кіргенде KAlarm жегілсін бе?<nl/>(KAlarm жегілмесе ескертулер "
 "болмайды.)"
 
-#: kalarmapp.cpp:1063
+#: kalarmapp.cpp:1067
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "Cannot create alarm: No default calendar is defined"
 msgstr ""
 
-#: kalarmapp.cpp:1077
+#: kalarmapp.cpp:1081
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info/plain"
 #| msgid "Error recreating alarm"
@@ -3474,13 +3474,13 @@ msgctxt "@info:shell"
 msgid "Error creating alarm"
 msgstr "Ескертуді қайта құру қатесі"
 
-#: kalarmapp.cpp:1133
+#: kalarmapp.cpp:1137
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "%1: Event <resource>%2</resource> not found, or not unique"
 msgstr "%1: <resource>%2</resource> оқиғасы табылмады немесе бірегейемес"
 
-#: kalarmapp.cpp:1445
+#: kalarmapp.cpp:1449
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3493,13 +3493,13 @@ msgstr ""
 "күнтізбенің күйін тексеріп не өзгертіп <interface>Көрініс -> Күнтізбелерді "
 "көрсету</interface> дегенге барыңыз."
 
-#: kalarmapp.cpp:1485
+#: kalarmapp.cpp:1489
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "%1: Event <resource>%2</resource> not found, or not editable"
 msgstr "%1: <resource>%2</resource> оқиғасы табылмады немесе өңдеуге келмейді"
 
-#: kalarmapp.cpp:1513
+#: kalarmapp.cpp:1517
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info"
 #| msgid ""
@@ -3518,7 +3518,7 @@ msgstr ""
 "күнтізбенің күйін тексеріп не өзгертіп <interface>Көрініс -> Күнтізбелерді "
 "көрсету</interface> дегенге барыңыз."
 
-#: kalarmapp.cpp:1521
+#: kalarmapp.cpp:1525
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info"
 #| msgid ""
@@ -3538,7 +3538,7 @@ msgstr ""
 "күнтізбенің күйін тексеріп не өзгертіп <interface>Көрініс -> Күнтізбелерді "
 "көрсету</interface> дегенге барыңыз."
 
-#: kalarmapp.cpp:2494
+#: kalarmapp.cpp:2498
 #, fuzzy, kde-format
 #| msgctxt "@info"
 #| msgid "Failed to execute command (shell access not authorized)"
@@ -3548,19 +3548,19 @@ msgid ""
 "(no terminal selected for command alarms)"
 msgstr "Команданы орындау қатесі (қоршау ортасына қатынау рұқсат етілмеген):"
 
-#: kalarmapp.cpp:2647
+#: kalarmapp.cpp:2651
 #, kde-format
 msgctxt "@info"
 msgid "Error creating temporary script file"
 msgstr "Уақытша скрипт файлын құру қатесі"
 
-#: kalarmapp.cpp:2743
+#: kalarmapp.cpp:2747
 #, kde-format
 msgctxt "@info"
 msgid "Pre-alarm action:"
 msgstr "Ескерту алдындағы әрекет:"
 
-#: kalarmapp.cpp:2749
+#: kalarmapp.cpp:2753
 #, kde-format
 msgctxt "@info"
 msgid "Post-alarm action:"

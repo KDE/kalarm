@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-09-29 00:47+0000\n"
+"POT-Creation-Date: 2022-10-05 00:46+0000\n"
 "PO-Revision-Date: 2007-02-28 14:12+0100\n"
 "Last-Translator: Bozidar Proevski <bobibobi@freemail.com.mk>\n"
 "Language-Team: Macedonian <mkde-l10n@lists.sourceforge.net>\n"
@@ -3486,7 +3486,7 @@ msgctxt "@info"
 msgid "Error saving alarm template"
 msgstr "Грешка при зачувувањето на образецот за аларм"
 
-#: kalarmapp.cpp:810
+#: kalarmapp.cpp:814
 #, fuzzy, kde-format
 #| msgid ""
 #| "Quitting will disable alarms\n"
@@ -3498,13 +3498,13 @@ msgstr ""
 "Напуштањето ќе ги оневозможи алармите\n"
 "(откако ќе се затворат сите прозорци со пораки од аларми)."
 
-#: kalarmapp.cpp:820
+#: kalarmapp.cpp:824
 #, kde-format
 msgctxt "@info"
 msgid "Quitting will cancel the scheduled Wake from Suspend."
 msgstr ""
 
-#: kalarmapp.cpp:833
+#: kalarmapp.cpp:837
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3512,27 +3512,27 @@ msgid ""
 "if KAlarm is not started.)"
 msgstr ""
 
-#: kalarmapp.cpp:1063
+#: kalarmapp.cpp:1067
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "Cannot create alarm: No default calendar is defined"
 msgstr ""
 
-#: kalarmapp.cpp:1077
+#: kalarmapp.cpp:1081
 #, fuzzy, kde-kuit-format
 #| msgid "Error recreating alarm"
 msgctxt "@info:shell"
 msgid "Error creating alarm"
 msgstr "Грешка при повторното креирање аларм."
 
-#: kalarmapp.cpp:1133
+#: kalarmapp.cpp:1137
 #, fuzzy, kde-kuit-format
 #| msgid "%1: Event %2 not found, or not editable"
 msgctxt "@info:shell"
 msgid "%1: Event <resource>%2</resource> not found, or not unique"
 msgstr "%1: Настанот %2 не е пронајден или не може да се уредува"
 
-#: kalarmapp.cpp:1445
+#: kalarmapp.cpp:1449
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3541,14 +3541,14 @@ msgid ""
 "Calendars</interface> to check or change calendar statuses."
 msgstr ""
 
-#: kalarmapp.cpp:1485
+#: kalarmapp.cpp:1489
 #, fuzzy, kde-kuit-format
 #| msgid "%1: Event %2 not found, or not editable"
 msgctxt "@info:shell"
 msgid "%1: Event <resource>%2</resource> not found, or not editable"
 msgstr "%1: Настанот %2 не е пронајден или не може да се уредува"
 
-#: kalarmapp.cpp:1513
+#: kalarmapp.cpp:1517
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3558,7 +3558,7 @@ msgid ""
 "statuses."
 msgstr ""
 
-#: kalarmapp.cpp:1521
+#: kalarmapp.cpp:1525
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3569,7 +3569,7 @@ msgid ""
 "interface>."
 msgstr ""
 
-#: kalarmapp.cpp:2494
+#: kalarmapp.cpp:2498
 #, fuzzy, kde-format
 #| msgid "Failed to execute command (shell access not authorized):"
 msgctxt "@info"
@@ -3579,21 +3579,21 @@ msgid ""
 msgstr ""
 "Не успеав да ја извршам наредбата (нема авторизиран пристап кон школката):"
 
-#: kalarmapp.cpp:2647
+#: kalarmapp.cpp:2651
 #, fuzzy, kde-format
 #| msgid "Error creating temporary script file"
 msgctxt "@info"
 msgid "Error creating temporary script file"
 msgstr "Грешка при создавањето на привремена скриптна датотека"
 
-#: kalarmapp.cpp:2743
+#: kalarmapp.cpp:2747
 #, fuzzy, kde-format
 #| msgid "Pre-alarm action:"
 msgctxt "@info"
 msgid "Pre-alarm action:"
 msgstr "Дејство пред алармот:"
 
-#: kalarmapp.cpp:2749
+#: kalarmapp.cpp:2753
 #, fuzzy, kde-format
 #| msgid "Post-alarm action:"
 msgctxt "@info"

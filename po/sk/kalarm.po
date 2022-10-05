@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-09-29 00:47+0000\n"
+"POT-Creation-Date: 2022-10-05 00:46+0000\n"
 "PO-Revision-Date: 2022-04-25 19:18+0200\n"
 "Last-Translator: Roman Paholik <wizzardsk@gmail.com>\n"
 "Language-Team: Slovak <kde-sk@linux.sk>\n"
@@ -3324,20 +3324,20 @@ msgctxt "@info"
 msgid "Error saving alarm template"
 msgstr "Chyba pri ukladaní šablóny alarmu"
 
-#: kalarmapp.cpp:810
+#: kalarmapp.cpp:814
 #, kde-format
 msgctxt "@info"
 msgid ""
 "Quitting will disable alarms (once any alarm message windows are closed)."
 msgstr "Ukončenie vypne alarmy (po zatvorení všetkých okien s alarmami)."
 
-#: kalarmapp.cpp:820
+#: kalarmapp.cpp:824
 #, kde-format
 msgctxt "@info"
 msgid "Quitting will cancel the scheduled Wake from Suspend."
 msgstr "Ukončenie zruší naplánované prebudenie z uspania."
 
-#: kalarmapp.cpp:833
+#: kalarmapp.cpp:837
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3347,13 +3347,13 @@ msgstr ""
 "Chcete spustiť KAlarm po prihlásení?<nl/>(Alarmy budú zakázané, ak nie je "
 "spustený KAlarm.)"
 
-#: kalarmapp.cpp:1063
+#: kalarmapp.cpp:1067
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "Cannot create alarm: No default calendar is defined"
 msgstr ""
 
-#: kalarmapp.cpp:1077
+#: kalarmapp.cpp:1081
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info"
 #| msgid "Error recreating alarm"
@@ -3361,13 +3361,13 @@ msgctxt "@info:shell"
 msgid "Error creating alarm"
 msgstr "Chyba pri znovuvytvorení alarmu"
 
-#: kalarmapp.cpp:1133
+#: kalarmapp.cpp:1137
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "%1: Event <resource>%2</resource> not found, or not unique"
 msgstr "%1: Udalosť <resource>%2</resource> nenájdená, alebo nie jedinečná"
 
-#: kalarmapp.cpp:1445
+#: kalarmapp.cpp:1449
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3380,7 +3380,7 @@ msgstr ""
 "<interface>Zobraziť | Zobraziť kalendáre</interface> na kontrolu alebo zmenu "
 "stavov kalendára."
 
-#: kalarmapp.cpp:1485
+#: kalarmapp.cpp:1489
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "%1: Event <resource>%2</resource> not found, or not editable"
@@ -3388,7 +3388,7 @@ msgstr ""
 "<icode>%1</icode>: Udalosť <resource>%2</resource> nenájdená alebo "
 "needitovateľná"
 
-#: kalarmapp.cpp:1513
+#: kalarmapp.cpp:1517
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info"
 #| msgid ""
@@ -3407,7 +3407,7 @@ msgstr ""
 "<interface>Zobraziť | Zobraziť kalendáre</interface> na kontrolu alebo zmenu "
 "stavov kalendára."
 
-#: kalarmapp.cpp:1521
+#: kalarmapp.cpp:1525
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info"
 #| msgid ""
@@ -3427,7 +3427,7 @@ msgstr ""
 "<interface>Zobraziť | Zobraziť kalendáre</interface> na kontrolu alebo zmenu "
 "stavov kalendára."
 
-#: kalarmapp.cpp:2494
+#: kalarmapp.cpp:2498
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -3437,19 +3437,19 @@ msgstr ""
 "Nepodarilo sa vykonať príkaz\n"
 "(nepovolený prístup k príkazovému riadku)"
 
-#: kalarmapp.cpp:2647
+#: kalarmapp.cpp:2651
 #, kde-format
 msgctxt "@info"
 msgid "Error creating temporary script file"
 msgstr "Chyba pri vytváraní dočasného súboru so skriptom"
 
-#: kalarmapp.cpp:2743
+#: kalarmapp.cpp:2747
 #, kde-format
 msgctxt "@info"
 msgid "Pre-alarm action:"
 msgstr "Akcia pred alarmom:"
 
-#: kalarmapp.cpp:2749
+#: kalarmapp.cpp:2753
 #, kde-format
 msgctxt "@info"
 msgid "Post-alarm action:"

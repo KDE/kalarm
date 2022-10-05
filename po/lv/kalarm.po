@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-09-29 00:47+0000\n"
+"POT-Creation-Date: 2022-10-05 00:46+0000\n"
 "PO-Revision-Date: 2012-07-05 12:56+0300\n"
 "Last-Translator: Maris Nartiss <maris.kde@gmail.com>\n"
 "Language-Team: Latvian\n"
@@ -3471,7 +3471,7 @@ msgctxt "@info"
 msgid "Error saving alarm template"
 msgstr "Kļūda saglabājot atgādinājuma sagatavi"
 
-#: kalarmapp.cpp:810
+#: kalarmapp.cpp:814
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -3480,13 +3480,13 @@ msgstr ""
 "Aizvēršana izslēgs atgādinājumus (tiklīdz jebkuri trauksmju ziņojumu logi "
 "tiks aizvērti)."
 
-#: kalarmapp.cpp:820
+#: kalarmapp.cpp:824
 #, kde-format
 msgctxt "@info"
 msgid "Quitting will cancel the scheduled Wake from Suspend."
 msgstr "Iziešana atcels ieplānoto atmošanos no iemigšanas."
 
-#: kalarmapp.cpp:833
+#: kalarmapp.cpp:837
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3496,13 +3496,13 @@ msgstr ""
 "Vai vēlaties palaist KAlarm piesakoties?<nl/>(Ievērojiet, ka, ja KAlarm nav "
 "palaists, atgādinājumi tiek atslēgti.)"
 
-#: kalarmapp.cpp:1063
+#: kalarmapp.cpp:1067
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "Cannot create alarm: No default calendar is defined"
 msgstr ""
 
-#: kalarmapp.cpp:1077
+#: kalarmapp.cpp:1081
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info/plain"
 #| msgid "Error recreating alarm"
@@ -3510,7 +3510,7 @@ msgctxt "@info:shell"
 msgid "Error creating alarm"
 msgstr "Kļūda izveidojot no jauna atgādinājumu"
 
-#: kalarmapp.cpp:1133
+#: kalarmapp.cpp:1137
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info:shell"
 #| msgid ""
@@ -3522,7 +3522,7 @@ msgstr ""
 "<icode>%1</icode>: notikums <resource>%2</resource> nav atrasts, vai arī nav "
 "rediģējams"
 
-#: kalarmapp.cpp:1445
+#: kalarmapp.cpp:1449
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3531,7 +3531,7 @@ msgid ""
 "Calendars</interface> to check or change calendar statuses."
 msgstr ""
 
-#: kalarmapp.cpp:1485
+#: kalarmapp.cpp:1489
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info:shell"
 #| msgid ""
@@ -3543,7 +3543,7 @@ msgstr ""
 "<icode>%1</icode>: notikums <resource>%2</resource> nav atrasts, vai arī nav "
 "rediģējams"
 
-#: kalarmapp.cpp:1513
+#: kalarmapp.cpp:1517
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3553,7 +3553,7 @@ msgid ""
 "statuses."
 msgstr ""
 
-#: kalarmapp.cpp:1521
+#: kalarmapp.cpp:1525
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3564,7 +3564,7 @@ msgid ""
 "interface>."
 msgstr ""
 
-#: kalarmapp.cpp:2494
+#: kalarmapp.cpp:2498
 #, fuzzy, kde-format
 #| msgctxt "@info"
 #| msgid "Failed to execute command (shell access not authorized)"
@@ -3574,19 +3574,19 @@ msgid ""
 "(no terminal selected for command alarms)"
 msgstr "Neizdevās izpildīt komandu (piekļuve čaulai nav atļauta)"
 
-#: kalarmapp.cpp:2647
+#: kalarmapp.cpp:2651
 #, kde-format
 msgctxt "@info"
 msgid "Error creating temporary script file"
 msgstr "Kļūda izveidojot pagaidu skripta failu"
 
-#: kalarmapp.cpp:2743
+#: kalarmapp.cpp:2747
 #, kde-format
 msgctxt "@info"
 msgid "Pre-alarm action:"
 msgstr "Pirmsatgādinājuma darbība:"
 
-#: kalarmapp.cpp:2749
+#: kalarmapp.cpp:2753
 #, kde-format
 msgctxt "@info"
 msgid "Post-alarm action:"

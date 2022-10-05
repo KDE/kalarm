@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-09-29 00:47+0000\n"
+"POT-Creation-Date: 2022-10-05 00:46+0000\n"
 "PO-Revision-Date: 2016-08-15 16:35+0100\n"
 "Last-Translator: Martin Schlander <mschlander@opensuse.org>\n"
 "Language-Team: Danish <kde-i18n-doc@kde.org>\n"
@@ -3343,7 +3343,7 @@ msgctxt "@info"
 msgid "Error saving alarm template"
 msgstr "Fejl under gemning af alarmskabelon"
 
-#: kalarmapp.cpp:810
+#: kalarmapp.cpp:814
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -3352,14 +3352,14 @@ msgstr ""
 "Lukning af programmet vil deaktivere alarmer (når alle alarmbesked-vinduer "
 "er lukkede)."
 
-#: kalarmapp.cpp:820
+#: kalarmapp.cpp:824
 #, kde-format
 msgctxt "@info"
 msgid "Quitting will cancel the scheduled Wake from Suspend."
 msgstr ""
 "Lukning af programmet vil annullere den skemalagte vækning fra suspendering."
 
-#: kalarmapp.cpp:833
+#: kalarmapp.cpp:837
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3369,13 +3369,13 @@ msgstr ""
 "Vil du have KAlarm til at starte ved login?<nl/>(Bemærk at alarmer vil være "
 "deaktiverede hvis KAlarm ikke startes.)"
 
-#: kalarmapp.cpp:1063
+#: kalarmapp.cpp:1067
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "Cannot create alarm: No default calendar is defined"
 msgstr ""
 
-#: kalarmapp.cpp:1077
+#: kalarmapp.cpp:1081
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info"
 #| msgid "Error recreating alarm"
@@ -3383,14 +3383,14 @@ msgctxt "@info:shell"
 msgid "Error creating alarm"
 msgstr "Fejl ved genskabelse af alarm"
 
-#: kalarmapp.cpp:1133
+#: kalarmapp.cpp:1137
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "%1: Event <resource>%2</resource> not found, or not unique"
 msgstr ""
 "%1: Begivenheden <resource>%2</resource> blev ikke fundet eller er ikke unik"
 
-#: kalarmapp.cpp:1445
+#: kalarmapp.cpp:1449
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3402,7 +3402,7 @@ msgstr ""
 "alarmkalender er aktiveret.<nl/><nl/>For at rette dette brug<interface>Vis | "
 "Vis kalendere</interface> for at tjekke eller ændre kalenderstatus."
 
-#: kalarmapp.cpp:1485
+#: kalarmapp.cpp:1489
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "%1: Event <resource>%2</resource> not found, or not editable"
@@ -3410,7 +3410,7 @@ msgstr ""
 "%1: Begivenheden <resource>%2</resource> blev ikke fundet eller er ikke "
 "redigerbar"
 
-#: kalarmapp.cpp:1513
+#: kalarmapp.cpp:1517
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info"
 #| msgid ""
@@ -3428,7 +3428,7 @@ msgstr ""
 "alarmkalender er aktiveret.<nl/><nl/>For at rette dette brug<interface>Vis | "
 "Vis kalendere</interface> for at tjekke eller ændre kalenderstatus."
 
-#: kalarmapp.cpp:1521
+#: kalarmapp.cpp:1525
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info"
 #| msgid ""
@@ -3447,7 +3447,7 @@ msgstr ""
 "alarmkalender er aktiveret.<nl/><nl/>For at rette dette brug<interface>Vis | "
 "Vis kalendere</interface> for at tjekke eller ændre kalenderstatus."
 
-#: kalarmapp.cpp:2494
+#: kalarmapp.cpp:2498
 #, fuzzy, kde-format
 #| msgctxt "@info"
 #| msgid "Failed to execute command (shell access not authorized)"
@@ -3457,19 +3457,19 @@ msgid ""
 "(no terminal selected for command alarms)"
 msgstr "Mislykkedes at køre kommando (skal-adgang ikke godkendt)"
 
-#: kalarmapp.cpp:2647
+#: kalarmapp.cpp:2651
 #, kde-format
 msgctxt "@info"
 msgid "Error creating temporary script file"
 msgstr "Fejl ved oprettelse af midlertidig scriptfil"
 
-#: kalarmapp.cpp:2743
+#: kalarmapp.cpp:2747
 #, kde-format
 msgctxt "@info"
 msgid "Pre-alarm action:"
 msgstr "Præ-alarm handling:"
 
-#: kalarmapp.cpp:2749
+#: kalarmapp.cpp:2753
 #, kde-format
 msgctxt "@info"
 msgid "Post-alarm action:"

@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-09-29 00:47+0000\n"
+"POT-Creation-Date: 2022-10-05 00:46+0000\n"
 "PO-Revision-Date: 2022-04-07 21:42+0530\n"
 "Last-Translator: Kishore G <kishore96@gmail.com>\n"
 "Language-Team: Tamil <kde-i18n-doc@kde.org>\n"
@@ -3255,7 +3255,7 @@ msgctxt "@info"
 msgid "Error saving alarm template"
 msgstr "அலார வார்ப்புருவை சேமிப்பதில் சிக்கல்"
 
-#: kalarmapp.cpp:810
+#: kalarmapp.cpp:814
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -3263,13 +3263,13 @@ msgid ""
 msgstr ""
 "வெளியேறுதல் அலாரங்களை செயலிழக்க செய்யும் (திறந்திருக்கும் தகவல் சாளரங்களை மூடியபின்)"
 
-#: kalarmapp.cpp:820
+#: kalarmapp.cpp:824
 #, kde-format
 msgctxt "@info"
 msgid "Quitting will cancel the scheduled Wake from Suspend."
 msgstr "கணினியை தூக்கத்திலிருந்து எழுப்ப வேண்டியதை வெளியேறுதல் ரத்து செய்யும்."
 
-#: kalarmapp.cpp:833
+#: kalarmapp.cpp:837
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3279,26 +3279,26 @@ msgstr ""
 "நுழையும்போது கேயலாரத்தை துவக்க வேண்டுமா?<nl/>(கேயலாரம் துவக்கப்படவில்லையெனில், "
 "அலாரங்களை செயல்படாது.)"
 
-#: kalarmapp.cpp:1063
+#: kalarmapp.cpp:1067
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "Cannot create alarm: No default calendar is defined"
 msgstr "அலாரத்தை உருவாக்க முடியவில்லை: இயல்பிருப்பு நாள்காட்டி அமைக்கப்படவில்லை"
 
-#: kalarmapp.cpp:1077
+#: kalarmapp.cpp:1081
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "Error creating alarm"
 msgstr "அலாரத்தை உருவாக்குவதில் சிக்கல்"
 
-#: kalarmapp.cpp:1133
+#: kalarmapp.cpp:1137
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "%1: Event <resource>%2</resource> not found, or not unique"
 msgstr ""
 "%1: <resource>%2</resource> என்ற நிகழ்வு கண்டுபிடிக்கப்படவில்லை, அல்லது முரண்படுகிறது"
 
-#: kalarmapp.cpp:1445
+#: kalarmapp.cpp:1449
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3310,7 +3310,7 @@ msgstr ""
 "திருத்தவோ முடியாது.<nl/><nl/>இதை சரிசெய்ய, <interface>பார்வை | நாள்காட்டிகளை "
 "காட்டு</interface> என்பதன் மூலம் நாள்காட்டிகளை அமையுங்கள்."
 
-#: kalarmapp.cpp:1485
+#: kalarmapp.cpp:1489
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "%1: Event <resource>%2</resource> not found, or not editable"
@@ -3318,7 +3318,7 @@ msgstr ""
 "%1: <resource>%2</resource> நிகழ்வை கண்டுபிடிக்க முடியவில்லை, அல்லது திருத்த "
 "முடியவில்லை"
 
-#: kalarmapp.cpp:1513
+#: kalarmapp.cpp:1517
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3332,7 +3332,7 @@ msgstr ""
 "<interface>பார்வை | நாள்காட்டிகளை காட்டு</interface> என்பதன் மூலம் நாள்காட்டிகளை "
 "அமையுங்கள்."
 
-#: kalarmapp.cpp:1521
+#: kalarmapp.cpp:1525
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3348,7 +3348,7 @@ msgstr ""
 "ஏதாவதொரு நாள்காட்டியை தேர்ந்தெடுத்து, <interface>காப்பகப்படுத்திய அலாரங்களுக்கு "
 "இயல்பிருப்பாக பயன்படுத்து</interface> என்பதை குறியுங்கள்."
 
-#: kalarmapp.cpp:2494
+#: kalarmapp.cpp:2498
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -3358,19 +3358,19 @@ msgstr ""
 "கட்டளையை இயக்கு முடியவில்லை\n"
 "(கட்டளை அலாரங்களுக்கு எந்த முனையமும் தேர்ந்தெடுக்கப்படவில்லை)"
 
-#: kalarmapp.cpp:2647
+#: kalarmapp.cpp:2651
 #, kde-format
 msgctxt "@info"
 msgid "Error creating temporary script file"
 msgstr "தற்காலிக சிறுநிரல் கோப்பை உருவாக்குவதில் சிக்கல்"
 
-#: kalarmapp.cpp:2743
+#: kalarmapp.cpp:2747
 #, kde-format
 msgctxt "@info"
 msgid "Pre-alarm action:"
 msgstr "அலாரத்திற்கு முந்தைய செயல்:"
 
-#: kalarmapp.cpp:2749
+#: kalarmapp.cpp:2753
 #, kde-format
 msgctxt "@info"
 msgid "Post-alarm action:"

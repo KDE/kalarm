@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-09-29 00:47+0000\n"
+"POT-Creation-Date: 2022-10-05 00:46+0000\n"
 "PO-Revision-Date: 2021-09-02 09:49+0300\n"
 "Last-Translator: Stelios <sstavra@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
@@ -3398,7 +3398,7 @@ msgctxt "@info"
 msgid "Error saving alarm template"
 msgstr "Σφάλμα αποθήκευσης του προτύπου συναγερμού"
 
-#: kalarmapp.cpp:810
+#: kalarmapp.cpp:814
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -3407,14 +3407,14 @@ msgstr ""
 "Τερματίζοντας θα απενεργοποιηθούν οι συναγερμοί (μόλις κλείσει οποιοδήποτε "
 "παράθυρο συναγερμού)."
 
-#: kalarmapp.cpp:820
+#: kalarmapp.cpp:824
 #, kde-format
 msgctxt "@info"
 msgid "Quitting will cancel the scheduled Wake from Suspend."
 msgstr ""
 "Η εγκατάλειψη θα ακυρώσει την προγραμματισμένη αφύπνιση από την Αναστολή."
 
-#: kalarmapp.cpp:833
+#: kalarmapp.cpp:837
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3424,27 +3424,27 @@ msgstr ""
 "Επιθυμείτε την εκκίνηση του KAlarm κατά τη σύνδεση;<nl/>(Σημειώστε ότι οι "
 "συναγερμοί θα απενεργοποιηθούν αν το KAlarm δεν εκτελείται)."
 
-#: kalarmapp.cpp:1063
+#: kalarmapp.cpp:1067
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "Cannot create alarm: No default calendar is defined"
 msgstr ""
 "Αδυναμία δημιουργίας συναγερμού: Δεν έχει οριστεί προκαθορισμένο ημερολόγιο"
 
-#: kalarmapp.cpp:1077
+#: kalarmapp.cpp:1081
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "Error creating alarm"
 msgstr "Σφάλμα κατα τη δημιουργία του συναγερμού"
 
-#: kalarmapp.cpp:1133
+#: kalarmapp.cpp:1137
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "%1: Event <resource>%2</resource> not found, or not unique"
 msgstr ""
 "%1: Το γεγονός <resource>%2</resource> δεν βρέθηκε ή δεν είναι μοναδικό"
 
-#: kalarmapp.cpp:1445
+#: kalarmapp.cpp:1449
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3458,14 +3458,14 @@ msgstr ""
 "ημερολογίων</interface> για να εξετάσετε ή να αλλάξετε τις καταστάσεις των "
 "ημερολογίων."
 
-#: kalarmapp.cpp:1485
+#: kalarmapp.cpp:1489
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "%1: Event <resource>%2</resource> not found, or not editable"
 msgstr ""
 "%1: Το γεγονός <resource>%2</resource> δεν βρέθηκε ή δεν είναι επεξεργάσιμο"
 
-#: kalarmapp.cpp:1513
+#: kalarmapp.cpp:1517
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3480,7 +3480,7 @@ msgstr ""
 "<interface>Προβολή | Εμφάνιση ημερολογίων</interface> για να εξετάσετε ή να "
 "αλλάξετε τις καταστάσεις των ημερολογίων."
 
-#: kalarmapp.cpp:1521
+#: kalarmapp.cpp:1525
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3497,7 +3497,7 @@ msgstr ""
 "ημερολόγιο αρχειοθετημένων συναγερμών και επιλέξτε <interface>Χρήση ως "
 "προκαθορισμένου για αρχειοθετημένους συναγερμούς</interface>."
 
-#: kalarmapp.cpp:2494
+#: kalarmapp.cpp:2498
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -3507,19 +3507,19 @@ msgstr ""
 "Αποτυχία εκτέλεσης εντολής\n"
 "(δεν επιλέχθηκε τερματικό για συναγερμούς εντολών)"
 
-#: kalarmapp.cpp:2647
+#: kalarmapp.cpp:2651
 #, kde-format
 msgctxt "@info"
 msgid "Error creating temporary script file"
 msgstr "Σφάλμα δημιουργίας προσωρινού αρχείου σεναρίου"
 
-#: kalarmapp.cpp:2743
+#: kalarmapp.cpp:2747
 #, kde-format
 msgctxt "@info"
 msgid "Pre-alarm action:"
 msgstr "Ενέργεια πριν το συναγερμό:"
 
-#: kalarmapp.cpp:2749
+#: kalarmapp.cpp:2753
 #, kde-format
 msgctxt "@info"
 msgid "Post-alarm action:"

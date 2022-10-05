@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-09-29 00:47+0000\n"
+"POT-Creation-Date: 2022-10-05 00:46+0000\n"
 "PO-Revision-Date: 2020-01-05 19:16+0100\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Galician <proxecto@trasno.gal>\n"
@@ -3394,7 +3394,7 @@ msgctxt "@info"
 msgid "Error saving alarm template"
 msgstr "Erro ao gardar o modelo de alarma"
 
-#: kalarmapp.cpp:810
+#: kalarmapp.cpp:814
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -3403,14 +3403,14 @@ msgstr ""
 "Ao saír desactivaranse as alarmas (unha vez que as xanelas das mensaxes de "
 "alarmas se pechen)."
 
-#: kalarmapp.cpp:820
+#: kalarmapp.cpp:824
 #, kde-format
 msgctxt "@info"
 msgid "Quitting will cancel the scheduled Wake from Suspend."
 msgstr ""
 "Se sae hase cancelar a recuperación da suspensión que estaba programada."
 
-#: kalarmapp.cpp:833
+#: kalarmapp.cpp:837
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3420,13 +3420,13 @@ msgstr ""
 "Quere iniciar KAlarm ao acceder?<nl/>(lembre que as alarmas se desactivan se "
 "KAlarm non estiver iniciado)"
 
-#: kalarmapp.cpp:1063
+#: kalarmapp.cpp:1067
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "Cannot create alarm: No default calendar is defined"
 msgstr ""
 
-#: kalarmapp.cpp:1077
+#: kalarmapp.cpp:1081
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info"
 #| msgid "Error recreating alarm"
@@ -3434,13 +3434,13 @@ msgctxt "@info:shell"
 msgid "Error creating alarm"
 msgstr "Erro ao recrear a alarma"
 
-#: kalarmapp.cpp:1133
+#: kalarmapp.cpp:1137
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "%1: Event <resource>%2</resource> not found, or not unique"
 msgstr "%1: Non se atopou o evento <resource>%2</resource>, ou non é único."
 
-#: kalarmapp.cpp:1445
+#: kalarmapp.cpp:1449
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3453,13 +3453,13 @@ msgstr ""
 "<interface>Vista | Mostrar os calendarios</interface> para comprobar ou "
 "cambiar os estados dos calendarios."
 
-#: kalarmapp.cpp:1485
+#: kalarmapp.cpp:1489
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "%1: Event <resource>%2</resource> not found, or not editable"
 msgstr "%1: Non se atopou o evento <resource>%2</resource>, ou non é único."
 
-#: kalarmapp.cpp:1513
+#: kalarmapp.cpp:1517
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info"
 #| msgid ""
@@ -3478,7 +3478,7 @@ msgstr ""
 "<interface>Vista | Mostrar os calendarios</interface> para comprobar ou "
 "cambiar os estados dos calendarios."
 
-#: kalarmapp.cpp:1521
+#: kalarmapp.cpp:1525
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info"
 #| msgid ""
@@ -3498,7 +3498,7 @@ msgstr ""
 "<interface>Vista | Mostrar os calendarios</interface> para comprobar ou "
 "cambiar os estados dos calendarios."
 
-#: kalarmapp.cpp:2494
+#: kalarmapp.cpp:2498
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -3508,19 +3508,19 @@ msgstr ""
 "Fallou a execución da orde\n"
 "(non se seleccionou ningún terminal para as alarmas de orde)"
 
-#: kalarmapp.cpp:2647
+#: kalarmapp.cpp:2651
 #, kde-format
 msgctxt "@info"
 msgid "Error creating temporary script file"
 msgstr "Produciuse un erro ao crear un ficheiro de script temporal"
 
-#: kalarmapp.cpp:2743
+#: kalarmapp.cpp:2747
 #, kde-format
 msgctxt "@info"
 msgid "Pre-alarm action:"
 msgstr "Acción previa á alarma:"
 
-#: kalarmapp.cpp:2749
+#: kalarmapp.cpp:2753
 #, kde-format
 msgctxt "@info"
 msgid "Post-alarm action:"
