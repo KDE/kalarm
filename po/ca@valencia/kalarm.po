@@ -1915,7 +1915,7 @@ msgstr ""
 #: data/kalarmui.rc:19
 #, kde-format
 msgid "&File"
-msgstr "&Fitxer"
+msgstr "Fi&txer"
 
 #. i18n: ectx: Menu (edit)
 #: data/kalarmui.rc:31
@@ -4467,7 +4467,7 @@ msgstr "E&xporta..."
 #, kde-format
 msgctxt "@action"
 msgid "&Refresh Alarms"
-msgstr "&Actualitza les alarmes"
+msgstr "Act&ualitza les alarmes"
 
 #: mainwindow.cpp:805
 #, kde-format
@@ -7828,7 +7828,7 @@ msgstr "Neteja el c&olor"
 #, kde-format
 msgctxt "@action"
 msgid "&Update Calendar Format"
-msgstr "Act&ualisa el format del calendari"
+msgstr "Act&ualitza el format del calendari"
 
 #: resourceselector.cpp:307
 #, kde-format
@@ -7840,7 +7840,7 @@ msgstr "&Elimina"
 #, kde-format
 msgctxt "@action"
 msgid "&Add..."
-msgstr "&Afig..."
+msgstr "Afi&g..."
 
 #: resourceselector.cpp:316
 #, kde-format
