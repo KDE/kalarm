@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: kdepim-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-10-05 00:46+0000\n"
-"PO-Revision-Date: 2022-04-27 12:54+0300\n"
+"PO-Revision-Date: 2022-10-08 12:41+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -25,7 +25,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 21.12.3\n"
+"X-Generator: Lokalize 22.08.1\n"
 "(http: //www.transifex.com/projects/p/kdepim-k-tr/language/tr/)\n"
 "X-POOTLE-MTIME: 1413131629.000000\n"
 
@@ -3131,7 +3131,7 @@ msgstr "Takvim Dosyaları"
 #, kde-format
 msgctxt "@title:window"
 msgid "Choose Export Calendar"
-msgstr "Dışarıya Aktarma Takvimini Seç"
+msgstr "Dışa Aktarma Takvimini Seç"
 
 #: functions.cpp:955
 #, kde-kuit-format
@@ -4376,31 +4376,31 @@ msgstr "Tarih Seçicisini Göster"
 #, kde-format
 msgctxt "@action"
 msgid "Import &Alarms..."
-msgstr "&Alarmları İçeri Aktar..."
+msgstr "&Alarmları İçe Aktar..."
 
 #: mainwindow.cpp:540
 #, kde-format
 msgctxt "@action"
 msgid "Import Birthdays..."
-msgstr "Doğum Günlerini İçeri Aktar..."
+msgstr "Doğum Günlerini İçe Aktar..."
 
 #: mainwindow.cpp:545
 #, kde-format
 msgctxt "@action"
 msgid "E&xport Selected Alarms..."
-msgstr "Seçili &Alarmları Dışarıya Aktar..."
+msgstr "Seçili &Alarmları Dışa Aktar..."
 
 #: mainwindow.cpp:549 resourceselector.cpp:319
 #, kde-format
 msgctxt "@action"
 msgid "E&xport..."
-msgstr "&Dışarıya Aktar..."
+msgstr "&Dışa Aktar..."
 
 #: mainwindow.cpp:553
 #, kde-format
 msgctxt "@action"
 msgid "&Refresh Alarms"
-msgstr "A&larmları Tazele"
+msgstr "A&larmları Yenile"
 
 #: mainwindow.cpp:805
 #, kde-format
