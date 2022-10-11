@@ -20,14 +20,14 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-10-05 00:46+0000\n"
-"PO-Revision-Date: 2022-01-28 18:04+0300\n"
+"PO-Revision-Date: 2022-10-10 11:04+0300\n"
 "Last-Translator: Olesya Gerasimenko <translation-team@basealt.ru>\n"
 "Language-Team: Basealt Translation Team\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 21.08.3\n"
+"X-Generator: Lokalize 22.04.3\n"
 "Plural-Forms: nplurals=4; plural=n==1 ? 3 : n%10==1 && n%100!=11 ? 0 : n"
 "%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 "X-Environment: kde\n"
@@ -483,7 +483,7 @@ msgstr "Открыть окно редактирования выбранног�
 #: commandoptions.cpp:173
 #, kde-format
 msgid "Display the alarm edit dialog to edit a new display alarm"
-msgstr "Открыть окно редактирования нового текстового напоминания"
+msgstr "Открыть окно редактирования нового визуального напоминания"
 
 #: commandoptions.cpp:176
 #, kde-format
@@ -768,7 +768,7 @@ msgstr "Файловые источники данных"
 #, kde-format
 msgctxt "@label"
 msgid "Enable Akonadi plugin"
-msgstr ""
+msgstr "Включить модуль Akonadi"
 
 #. i18n: ectx: whatsthis, entry (UseAkonadiIfAvailable), group (General)
 #: data/kalarmconfig.kcfg:76
@@ -779,6 +779,10 @@ msgid ""
 "provide features including birthday import, some email functions, email "
 "address book lookup, and Akonadi resource migration on first run."
 msgstr ""
+"Включить ли модуль Akonadi KAlarm, использующий Akonadi для предоставления "
+"ряда возможностей, среди которых импорт дней рождения, некоторые функции "
+"электронной почты, поиск в адресной книге, а также миграция ресурсов Akonadi "
+"при первом запуске."
 
 #. i18n: ectx: label, entry (Base_TimeZone), group (General)
 #: data/kalarmconfig.kcfg:80
@@ -1139,14 +1143,7 @@ msgstr "Почтовый клиент"
 
 #. i18n: ectx: whatsthis, entry (Base_EmailClient), group (General)
 #: data/kalarmconfig.kcfg:194
-#, fuzzy, kde-format
-#| msgctxt "@info:whatsthis"
-#| msgid ""
-#| "<p>How to send email when an email alarm is triggered.<ul><li>KMail: The "
-#| "email is sent automatically via KMail. KMail is started first if "
-#| "necessary.</li><li>Sendmail: The email is sent automatically. This option "
-#| "will only work if your system is configured to use sendmail or a sendmail "
-#| "compatible mail transport agent.</li></ul></p>"
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "<p>How to send email when an email alarm is triggered.<ul><li>KMail: The "
@@ -1156,9 +1153,7 @@ msgid ""
 msgstr ""
 "<p>Выберите способ отправки писем по электронной почте при срабатывании "
 "напоминания.\n"
-"<ul><li>KMail: письмо будет автоматически отправлено через KMail. Если "
-"приложение не запущено, то появится окно, из которого возможно отправить "
-"письмо.</li>\n"
+"<ul><li>KMail: письмо будет автоматически отправлено через KMail.</li>\n"
 "<li>Sendmail: письмо отправляется автоматически. Этот вариант работает "
 "только если в данной системе правильно настроена отправка писем через "
 "программу sendmail или совместимую с ней программу.</li></ul></p>"
@@ -1205,13 +1200,7 @@ msgstr "Адрес отправителя"
 
 #. i18n: ectx: whatsthis, entry (Base_EmailFrom), group (General)
 #: data/kalarmconfig.kcfg:208
-#, fuzzy, kde-format
-#| msgctxt "@info:whatsthis"
-#| msgid ""
-#| "Your email address, used to identify you as the sender when sending email "
-#| "alarms. Enter \"@SystemSettings\" to use the default email address set in "
-#| "KMail or System Settings, \"@KMail\" to allow choice of KMail identities, "
-#| "or enter the actual email address otherwise."
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "Your email address, used to identify you as the sender when sending email "
@@ -1221,9 +1210,8 @@ msgid ""
 msgstr ""
 "Адрес электронной почты, который будет подставляться в письмо как адрес "
 "отправителя. Введите «@SystemSettings» для подстановки адреса по умолчанию, "
-"указанного в программе KMail или в параметрах системы, «@KMail» для показа "
-"диалога выбора профилей KMail или просто укажите свой адрес электронной "
-"почты."
+"указанного в программе KMail, «@KMail» для показа диалога выбора профилей "
+"KMail или просто укажите свой адрес электронной почты."
 
 #. i18n: ectx: label, entry (Base_EmailBccAddress), group (General)
 #: data/kalarmconfig.kcfg:212
@@ -1234,14 +1222,7 @@ msgstr "Адрес скрытой копии"
 
 #. i18n: ectx: whatsthis, entry (Base_EmailBccAddress), group (General)
 #: data/kalarmconfig.kcfg:213
-#, fuzzy, kde-format
-#| msgctxt "@info:whatsthis"
-#| msgid ""
-#| "Your email address, used for blind copying email alarms to yourself. If "
-#| "you want blind copies to be sent to your account on the computer which "
-#| "KAlarm runs on, you can simply enter your user login name. Enter "
-#| "\"@SystemSettings\" to use the default email address set in KMail or "
-#| "System Settings, or enter the actual email address otherwise."
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "Your email address, used for blind copying email alarms to yourself. If you "
@@ -1255,8 +1236,7 @@ msgstr ""
 "отправлять себе скрытые копии на этом же компьютере, просто введите своё имя "
 "пользователя. Также возможно указать реальный адрес электронной почты или "
 "специальное слово «@SystemSettings», вместо которого будет использоваться "
-"адрес электронной почты по умолчанию, указанный в программе KMail или в "
-"параметрах системы."
+"адрес электронной почты по умолчанию, указанный в программе KMail."
 
 #. i18n: ectx: label, entry (Base_CmdXTermCommand), group (General)
 #: data/kalarmconfig.kcfg:217
@@ -1766,8 +1746,8 @@ msgstr "Единицы повторения"
 msgctxt "@info:whatsthis"
 msgid "Default reminder time units in the alarm edit dialog."
 msgstr ""
-"Значение единиц периода повторения по умолчанию в диалоге настройки "
-"напоминания."
+"Единицы измерения времени для предварительного напоминания по умолчанию в "
+"диалоге настройки напоминания."
 
 #. i18n: ectx: label, entry (DefaultReminderUnits), group (Defaults)
 #: data/kalarmconfig.kcfg:396
@@ -2017,8 +1997,8 @@ msgstr ""
 msgctxt "@info"
 msgid "Cannot defer past the alarm's next sub-repetition (currently %1)"
 msgstr ""
-"Невозможно отложить следующее дополнительное напоминание в прошлое (текущее "
-"%1)"
+"Невозможно отложить на время перед следующим дополнительным повторением "
+"(сейчас %1)"
 
 #: deferdlg.cpp:99
 #, kde-format
@@ -2369,25 +2349,25 @@ msgstr "Запросить подтверждение о прочтении на
 #, kde-format
 msgctxt "@title:window"
 msgid "New Display Alarm Template"
-msgstr "Создание шаблона текстового напоминания"
+msgstr "Создание шаблона визуального напоминания"
 
 #: editdlgtypes.cpp:120
 #, kde-format
 msgctxt "@title:window"
 msgid "Edit Display Alarm Template"
-msgstr "Изменение шаблона текстового напоминания"
+msgstr "Изменение шаблона визуального напоминания"
 
 #: editdlgtypes.cpp:121
 #, kde-format
 msgctxt "@title:window"
 msgid "New Display Alarm"
-msgstr "Создание текстового напоминания"
+msgstr "Создание визуального напоминания"
 
 #: editdlgtypes.cpp:121
 #, kde-format
 msgctxt "@title:window"
 msgid "Edit Display Alarm"
-msgstr "Изменение текстового напоминания"
+msgstr "Изменение визуального напоминания"
 
 #: editdlgtypes.cpp:134
 #, kde-format
@@ -3454,9 +3434,7 @@ msgid "Post-alarm action:"
 msgstr "Действие после напоминания:"
 
 #: kalarmcalendar/alarmtext.cpp:506
-#, fuzzy, kde-format
-#| msgctxt "@label:listbox 'From' email address"
-#| msgid "From:"
+#, kde-format
 msgctxt "@info 'From' email address"
 msgid "From:"
 msgstr "Отправитель:"
@@ -3471,13 +3449,13 @@ msgstr "Получатель:"
 #, kde-format
 msgctxt "@info Copy-to in email headers"
 msgid "Cc:"
-msgstr ""
+msgstr "Копия:"
 
 #: kalarmcalendar/alarmtext.cpp:509
 #, kde-format
 msgctxt "@info"
 msgid "Date:"
-msgstr ""
+msgstr "Дата:"
 
 #: kalarmcalendar/alarmtext.cpp:510 messagedisplayhelper.cpp:333
 #, kde-format
@@ -3489,21 +3467,19 @@ msgstr "Тема:"
 #, kde-format
 msgctxt "@info Todo calendar item's title field"
 msgid "To-do:"
-msgstr ""
+msgstr "Задача:"
 
 #: kalarmcalendar/alarmtext.cpp:513
-#, fuzzy, kde-format
-#| msgctxt "@info File path or URL"
-#| msgid "Location: %1"
+#, kde-format
 msgctxt "@info Todo calendar item's location field"
 msgid "Location:"
-msgstr "Расположение: %1"
+msgstr "Место:"
 
 #: kalarmcalendar/alarmtext.cpp:514
 #, kde-format
 msgctxt "@info Todo calendar item's due date/time"
 msgid "Due:"
-msgstr ""
+msgstr "Срок:"
 
 #: kalarmcalendar/kacalendar.cpp:135
 #, kde-format
@@ -3511,17 +3487,13 @@ msgid "KAlarm"
 msgstr "KAlarm"
 
 #: kalarmcalendar/kaevent.cpp:2922
-#, fuzzy, kde-format
-#| msgctxt "@item:inlistbox Recurrence type"
-#| msgid "At Login"
+#, kde-format
 msgctxt "@info Brief form of 'At Login'"
 msgid "Login"
-msgstr "При входе в систему"
+msgstr "При входе"
 
 #: kalarmcalendar/kaevent.cpp:2922
-#, fuzzy, kde-format
-#| msgctxt "@option"
-#| msgid "At login"
+#, kde-format
 msgctxt "@info"
 msgid "At login"
 msgstr "При входе в систему"
@@ -3529,16 +3501,14 @@ msgstr "При входе в систему"
 #: kalarmcalendar/kaevent.cpp:2931 kalarmcalendar/kaevent.cpp:3018
 #: kalarmcalendar/kaeventformatter.cpp:428
 #: kalarmcalendar/kaeventformatter.cpp:442
-#, fuzzy, kde-format
-#| msgctxt "@item:inlistbox"
-#| msgid "Minutes"
+#, kde-format
 msgctxt "@info"
 msgid "1 Minute"
 msgid_plural "%1 Minutes"
-msgstr[0] "Минуты"
-msgstr[1] "Минуты"
-msgstr[2] "Минуты"
-msgstr[3] "Минуты"
+msgstr[0] "%1 минута"
+msgstr[1] "%1 минуты"
+msgstr[2] "%1 минут"
+msgstr[3] "1 минута"
 
 #: kalarmcalendar/kaevent.cpp:2933 kalarmcalendar/kaevent.cpp:3020
 #: kalarmcalendar/kaeventformatter.cpp:444
@@ -3546,16 +3516,16 @@ msgstr[3] "Минуты"
 msgctxt "@info"
 msgid "1 Hour"
 msgid_plural "%1 Hours"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "%1 час"
+msgstr[1] "%1 часа"
+msgstr[2] "%1 часов"
+msgstr[3] "1 час"
 
 #: kalarmcalendar/kaevent.cpp:2935 kalarmcalendar/kaevent.cpp:3021
 #, kde-format
 msgctxt "@info Hours and minutes"
 msgid "%1h %2m"
-msgstr ""
+msgstr "%1ч %2м"
 
 #: kalarmcalendar/kaevent.cpp:2938 kalarmcalendar/kaevent.cpp:3025
 #: kalarmcalendar/kaeventformatter.cpp:446
@@ -3563,59 +3533,49 @@ msgstr ""
 msgctxt "@info"
 msgid "1 Day"
 msgid_plural "%1 Days"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "%1 день"
+msgstr[1] "%1 дня"
+msgstr[2] "%1 дней"
+msgstr[3] "1 день"
 
 #: kalarmcalendar/kaevent.cpp:2940 kalarmcalendar/kaevent.cpp:3026
-#, fuzzy, kde-format
-#| msgctxt "@item:inlistbox Recurrence type"
-#| msgid "Weekly"
+#, kde-format
 msgctxt "@info"
 msgid "1 Week"
 msgid_plural "%1 Weeks"
-msgstr[0] "Еженедельно"
-msgstr[1] "Еженедельно"
-msgstr[2] "Еженедельно"
-msgstr[3] "Еженедельно"
+msgstr[0] "%1 неделя"
+msgstr[1] "%1 недели"
+msgstr[2] "%1 недель"
+msgstr[3] "1 неделя"
 
 #: kalarmcalendar/kaevent.cpp:2942
-#, fuzzy, kde-format
-#| msgctxt "@item:inlistbox Recurrence type"
-#| msgid "Monthly"
+#, kde-format
 msgctxt "@info"
 msgid "1 Month"
 msgid_plural "%1 Months"
-msgstr[0] "Ежемесячно"
-msgstr[1] "Ежемесячно"
-msgstr[2] "Ежемесячно"
-msgstr[3] "Ежемесячно"
+msgstr[0] "%1 месяц"
+msgstr[1] "%1 месяца"
+msgstr[2] "%1 месяцев"
+msgstr[3] "1 месяц"
 
 #: kalarmcalendar/kaevent.cpp:2944
-#, fuzzy, kde-format
-#| msgctxt "@item:inlistbox Recurrence type"
-#| msgid "Yearly"
+#, kde-format
 msgctxt "@info"
 msgid "1 Year"
 msgid_plural "%1 Years"
-msgstr[0] "Ежегодно"
-msgstr[1] "Ежегодно"
-msgstr[2] "Ежегодно"
-msgstr[3] "Ежегодно"
+msgstr[0] "%1 год"
+msgstr[1] "%1 года"
+msgstr[2] "%1 лет"
+msgstr[3] "1 год"
 
 #: kalarmcalendar/kaevent.cpp:2950
-#, fuzzy, kde-format
-#| msgctxt "No holiday region"
-#| msgid "None"
+#, kde-format
 msgctxt "@info No recurrence"
 msgid "None"
 msgstr "Нет"
 
 #: kalarmcalendar/kaevent.cpp:3028
-#, fuzzy, kde-format
-#| msgctxt "No holiday region"
-#| msgid "None"
+#, kde-format
 msgctxt "@info No repetition"
 msgid "None"
 msgstr "Нет"
@@ -3624,495 +3584,391 @@ msgstr "Нет"
 #, kde-format
 msgctxt "@label Unique identifier"
 msgid "UID"
-msgstr ""
+msgstr "UID"
 
 #: kalarmcalendar/kaeventformatter.cpp:39
-#, fuzzy, kde-format
-#| msgctxt "@label:textbox"
-#| msgid "Alarm type:"
+#, kde-format
 msgctxt "@label"
 msgid "Alarm type"
-msgstr "Тип напоминания:"
+msgstr "Тип напоминания"
 
 #: kalarmcalendar/kaeventformatter.cpp:41
-#, fuzzy, kde-format
-#| msgctxt "@item:intext"
-#| msgid "Alarm templates"
+#, kde-format
 msgctxt "@label"
 msgid "Alarm status"
-msgstr "Шаблоны напоминаний"
+msgstr "Состояние напоминания"
 
 #: kalarmcalendar/kaeventformatter.cpp:43
-#, fuzzy, kde-format
-#| msgctxt "@label:textbox"
-#| msgid "Alarm name:"
+#, kde-format
 msgctxt "@label"
 msgid "Alarm name"
-msgstr "Название напоминания:"
+msgstr "Название напоминания"
 
 #: kalarmcalendar/kaeventformatter.cpp:45
-#, fuzzy, kde-format
-#| msgctxt "@label:textbox"
-#| msgid "Template name:"
+#, kde-format
 msgctxt "@label"
 msgid "Template name"
-msgstr "Имя шаблона:"
+msgstr "Имя шаблона"
 
 #: kalarmcalendar/kaeventformatter.cpp:47
-#, fuzzy, kde-format
-#| msgctxt "@option:radio"
-#| msgid "Default time"
+#, kde-format
 msgctxt "@label"
 msgid "Creation time"
-msgstr "Время по умолчанию"
+msgstr "Время создания"
 
 #: kalarmcalendar/kaeventformatter.cpp:49
-#, fuzzy, kde-format
-#| msgctxt "@label"
-#| msgid "Start at login"
+#, kde-format
 msgctxt "@label"
 msgid "Start time"
-msgstr "При входе в систему"
+msgstr "Время начала"
 
 #: kalarmcalendar/kaeventformatter.cpp:51
-#, fuzzy, kde-format
-#| msgctxt "@label:textbox"
-#| msgid "Template name:"
+#, kde-format
 msgctxt "@label Start delay configured in an alarm template"
 msgid "Template after time"
-msgstr "Имя шаблона:"
+msgstr "Время задержки из шаблона"
 
 #: kalarmcalendar/kaeventformatter.cpp:53
 #, kde-format
 msgctxt "@label"
 msgid "Recurs"
-msgstr ""
+msgstr "Повторяется"
 
 #: kalarmcalendar/kaeventformatter.cpp:55
-#, fuzzy, kde-format
-#| msgctxt "@label:listbox"
-#| msgid "Recurrence:"
+#, kde-format
 msgctxt "@label"
 msgid "Recurrence"
-msgstr "Повторение:"
+msgstr "Повторение"
 
 #: kalarmcalendar/kaeventformatter.cpp:57
-#, fuzzy, kde-format
-#| msgctxt "@action:button"
-#| msgid "Sub-Repetition"
+#, kde-format
 msgctxt "@label"
 msgid "Sub-repetition"
 msgstr "Дополнительное повторение"
 
 #: kalarmcalendar/kaeventformatter.cpp:59
-#, fuzzy, kde-format
-#| msgctxt "@action:button"
-#| msgid "Sub-Repetition"
+#, kde-format
 msgctxt "@label"
 msgid "Sub-repetition interval"
-msgstr "Дополнительное повторение"
+msgstr "Интервал дополнительного повторения"
 
 #: kalarmcalendar/kaeventformatter.cpp:61
-#, fuzzy, kde-format
-#| msgctxt "@action:button"
-#| msgid "Sub-Repetition"
+#, kde-format
 msgctxt "@label"
 msgid "Sub-repetition count"
-msgstr "Дополнительное повторение"
+msgstr "Количество дополнительных повторений"
 
 #: kalarmcalendar/kaeventformatter.cpp:63
-#, fuzzy, kde-format
-#| msgctxt "@action:button"
-#| msgid "Sub-Repetition"
+#, kde-format
 msgctxt "@label"
 msgid "Next sub-repetition"
-msgstr "Дополнительное повторение"
+msgstr "Следующее дополнительное повторение"
 
 #: kalarmcalendar/kaeventformatter.cpp:65
-#, fuzzy, kde-format
-#| msgctxt "@option:radio"
-#| msgid "Date only"
+#, kde-format
 msgctxt "@label"
 msgid "Work time only"
-msgstr "Только дата"
+msgstr "Только рабочее время"
 
 #: kalarmcalendar/kaeventformatter.cpp:67
 #, kde-format
 msgctxt "@label"
 msgid "Holidays excluded"
-msgstr ""
+msgstr "Праздники исключены"
 
 #: kalarmcalendar/kaeventformatter.cpp:69
-#, fuzzy, kde-format
-#| msgctxt "@option"
-#| msgid "No recurrence"
+#, kde-format
 msgctxt "@label"
 msgid "Next recurrence"
-msgstr "Без повторения"
+msgstr "Следующее повторение"
 
 #: kalarmcalendar/kaeventformatter.cpp:71
 #, kde-format
 msgctxt "@label"
 msgid "Late cancel"
-msgstr ""
+msgstr "Отмена в случае просрочки"
 
 #: kalarmcalendar/kaeventformatter.cpp:73
 #, kde-format
 msgctxt "@label Automatically close window"
 msgid "Auto close"
-msgstr ""
+msgstr "Закрыть автоматически"
 
 #: kalarmcalendar/kaeventformatter.cpp:75
-#, fuzzy, kde-format
-#| msgctxt "@label"
-#| msgid "Show in KOrganizer"
+#, kde-format
 msgctxt "@label"
 msgid "Copy to KOrganizer"
-msgstr "Показывать в KOrganizer"
+msgstr "Копировать в KOrganizer"
 
 #: kalarmcalendar/kaeventformatter.cpp:77
-#, fuzzy, kde-format
-#| msgctxt "@info"
-#| msgid "Enabled"
+#, kde-format
 msgctxt "@label"
 msgid "Enabled"
-msgstr "Включён"
+msgstr "Включено"
 
 #: kalarmcalendar/kaeventformatter.cpp:79
-#, fuzzy, kde-format
-#| msgctxt "@item:intext Calendar status"
-#| msgid "Read-only"
+#, kde-format
 msgctxt "@label"
 msgid "Read-only"
 msgstr "Только для чтения"
 
 #: kalarmcalendar/kaeventformatter.cpp:81
-#, fuzzy, kde-format
-#| msgctxt "@option:check Alarm type"
-#| msgid "Archived"
+#, kde-format
 msgctxt "@label Whether alarm should be archived"
 msgid "Archive"
-msgstr "Устаревшие"
+msgstr "Архивировать"
 
 #: kalarmcalendar/kaeventformatter.cpp:83
 #, kde-format
 msgctxt "@label"
 msgid "Revision"
-msgstr ""
+msgstr "Модификация"
 
 #: kalarmcalendar/kaeventformatter.cpp:85
 #, kde-format
 msgctxt "@label"
 msgid "Custom properties"
-msgstr ""
+msgstr "Пользовательские свойства"
 
 #: kalarmcalendar/kaeventformatter.cpp:88
-#, fuzzy, kde-format
-#| msgctxt "@label"
-#| msgid "Message font"
+#, kde-format
 msgctxt "@label"
 msgid "Message text"
-msgstr "Шрифт текста"
+msgstr "Текст сообщения"
 
 #: kalarmcalendar/kaeventformatter.cpp:90
-#, fuzzy, kde-format
-#| msgctxt "@label"
-#| msgid "Message font"
+#, kde-format
 msgctxt "@label File to provide text for message"
 msgid "Message file"
-msgstr "Шрифт текста"
+msgstr "Файл сообщения"
 
 #: kalarmcalendar/kaeventformatter.cpp:96
 #, kde-format
 msgctxt "@label"
 msgid "Font"
-msgstr ""
+msgstr "Шрифт"
 
 #: kalarmcalendar/kaeventformatter.cpp:98
-#, fuzzy, kde-format
-#| msgctxt "@label"
-#| msgid "Pre-alarm action"
+#, kde-format
 msgctxt "@label Shell command to execute before alarm"
 msgid "Pre-alarm action"
 msgstr "Предварительное действие"
 
 #: kalarmcalendar/kaeventformatter.cpp:100
-#, fuzzy, kde-format
-#| msgctxt "@label"
-#| msgid "Pre-alarm action"
+#, kde-format
 msgctxt "@label"
 msgid "Pre-alarm action cancel"
-msgstr "Предварительное действие"
+msgstr "Предварительное действие, отмена"
 
 #: kalarmcalendar/kaeventformatter.cpp:102
-#, fuzzy, kde-format
-#| msgctxt "@label"
-#| msgid "Pre-alarm action"
+#, kde-format
 msgctxt "@label"
 msgid "Pre-alarm action no error"
-msgstr "Предварительное действие"
+msgstr "Предварительное действие, без ошибок"
 
 #: kalarmcalendar/kaeventformatter.cpp:104
-#, fuzzy, kde-format
-#| msgctxt "@label"
-#| msgid "Post-alarm action"
+#, kde-format
 msgctxt "@label Shell command to execute after alarm"
 msgid "Post-alarm action"
 msgstr "Действие после напоминания"
 
 #: kalarmcalendar/kaeventformatter.cpp:108
-#, fuzzy, kde-format
-#| msgctxt "@option"
-#| msgid "Akonadi"
+#, kde-format
 msgctxt "@label"
 msgid "Akonadi Item ID"
-msgstr "Akonadi"
+msgstr "Идентификатор записи Akonadi"
 
 #: kalarmcalendar/kaeventformatter.cpp:110
-#, fuzzy, kde-format
-#| msgctxt "@label Label for audio options"
-#| msgid "Sound"
+#, kde-format
 msgctxt "@label Audio method"
 msgid "Sound"
 msgstr "Звук"
 
 #: kalarmcalendar/kaeventformatter.cpp:112
-#, fuzzy, kde-format
-#| msgctxt "@option"
-#| msgid "Do not repeat"
+#, kde-format
 msgctxt "@label Whether audio should repeat"
 msgid "Sound repeat"
-msgstr "Не повторять напоминание"
+msgstr "Повторение звука"
 
 #: kalarmcalendar/kaeventformatter.cpp:116
-#, fuzzy, kde-format
-#| msgctxt "@label"
-#| msgid "Sound volume"
+#, kde-format
 msgctxt "@label"
 msgid "Sound fade volume"
-msgstr "Уровень громкости"
+msgstr "Громкость затухания звука"
 
 #: kalarmcalendar/kaeventformatter.cpp:118
-#, fuzzy, kde-format
-#| msgctxt "@label"
-#| msgid "Sound file"
+#, kde-format
 msgctxt "@label"
 msgid "Sound fade time"
-msgstr "Звуковой файл"
+msgstr "Время затухания звука"
 
 #: kalarmcalendar/kaeventformatter.cpp:120
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Reminder"
+#, kde-format
 msgctxt "@label Whether the alarm has a reminder"
 msgid "Reminder"
 msgstr "Предварительное напоминание"
 
 #: kalarmcalendar/kaeventformatter.cpp:122
-#, fuzzy, kde-format
-#| msgctxt "@option:check"
-#| msgid "Reminder for first recurrence only"
+#, kde-format
 msgctxt "@label Whether reminder is on first recurrence only"
 msgid "Reminder once only"
-msgstr "Предварительное напоминание только для первого повторения"
+msgstr "Только одно предварительное напоминание"
 
 #: kalarmcalendar/kaeventformatter.cpp:124
 #, kde-format
 msgctxt "@label Whether to use standard notification system"
 msgid "Notify"
-msgstr ""
+msgstr "Уведомление"
 
 #: kalarmcalendar/kaeventformatter.cpp:126
-#, fuzzy, kde-format
-#| msgctxt "@action:button"
-#| msgid "Defer"
+#, kde-format
 msgctxt "@label Deferral type"
 msgid "Deferral"
-msgstr "Отложить"
+msgstr "Отсрочка"
 
 #: kalarmcalendar/kaeventformatter.cpp:128
-#, fuzzy, kde-format
-#| msgctxt "@option:radio"
-#| msgid "Default time"
+#, kde-format
 msgctxt "@label"
 msgid "Deferral time"
-msgstr "Время по умолчанию"
+msgstr "Время отсрочки"
 
 #: kalarmcalendar/kaeventformatter.cpp:130
 #, kde-format
 msgctxt "@label Default deferral delay"
 msgid "Deferral default"
-msgstr ""
+msgstr "Отсрочка по умолчанию"
 
 #: kalarmcalendar/kaeventformatter.cpp:132
 #, kde-format
 msgctxt "@label Whether deferral time is date-only by default"
 msgid "Deferral default date only"
-msgstr ""
+msgstr "Отсрочка по умолчанию только по дате"
 
 #: kalarmcalendar/kaeventformatter.cpp:135
-#, fuzzy, kde-format
-#| msgctxt "@option:check Alarm action"
-#| msgid "Command"
+#, kde-format
 msgctxt "@label A shell command"
 msgid "Command"
-msgstr "Выполнение команд"
+msgstr "Команда"
 
 #: kalarmcalendar/kaeventformatter.cpp:139
-#, fuzzy, kde-format
-#| msgctxt "@option"
-#| msgid "Execute in terminal window"
+#, kde-format
 msgctxt "@label Execute in terminal window"
 msgid "Execute in terminal"
-msgstr "Выполнить в окне терминала"
+msgstr "Запустить в терминале"
 
 #: kalarmcalendar/kaeventformatter.cpp:141
 #, kde-format
 msgctxt "@label"
 msgid "Hide command error"
-msgstr ""
+msgstr "Скрыть ошибку команды"
 
 #: kalarmcalendar/kaeventformatter.cpp:144
-#, fuzzy, kde-format
-#| msgid "Email subject line"
+#, kde-format
 msgctxt "@label"
 msgid "Email subject"
-msgstr "Строка темы электронного письма"
+msgstr "Тема письма"
 
 #: kalarmcalendar/kaeventformatter.cpp:146
-#, fuzzy, kde-format
-#| msgid "Email subject line"
+#, kde-format
 msgctxt "@label Email address"
 msgid "Email sender ID"
-msgstr "Строка темы электронного письма"
+msgstr "Идентификатор отправителя письма"
 
 #: kalarmcalendar/kaeventformatter.cpp:148
-#, fuzzy, kde-format
-#| msgctxt "@option:check Alarm action"
-#| msgid "Email"
+#, kde-format
 msgctxt "@label Email address"
 msgid "Email to"
-msgstr "Отправка писем"
+msgstr "Получатель письма"
 
 #: kalarmcalendar/kaeventformatter.cpp:150
-#, fuzzy, kde-format
-#| msgctxt "@option:check Alarm action"
-#| msgid "Email"
+#, kde-format
 msgctxt "@label true/false"
 msgid "Email bcc"
-msgstr "Отправка писем"
+msgstr "Скрытая копия письма"
 
 #: kalarmcalendar/kaeventformatter.cpp:152
-#, fuzzy, kde-format
-#| msgctxt "@option:check Alarm action"
-#| msgid "Email"
+#, kde-format
 msgctxt "@label"
 msgid "Email body"
-msgstr "Отправка писем"
+msgstr "Тело письма"
 
 #: kalarmcalendar/kaeventformatter.cpp:154
-#, fuzzy, kde-format
-#| msgctxt "@label"
-#| msgid "Email client"
+#, kde-format
 msgctxt "@label"
 msgid "Email attachments"
-msgstr "Почтовый клиент"
+msgstr "Вложения в письмо"
 
 #: kalarmcalendar/kaeventformatter.cpp:256
-#, fuzzy, kde-format
-#| msgctxt "@label:listbox"
-#| msgid "Display type:"
+#, kde-format
 msgctxt "@info Alarm type"
 msgid "Display (text)"
-msgstr "Тип отображения:"
+msgstr "Показ (текста)"
 
 #: kalarmcalendar/kaeventformatter.cpp:258
-#, fuzzy, kde-format
-#| msgctxt "@info:whatsthis"
-#| msgid "Display the file now"
+#, kde-format
 msgctxt "@info Alarm type"
 msgid "Display (file)"
-msgstr "Показать файл сейчас"
+msgstr "Показ (файла)"
 
 #: kalarmcalendar/kaeventformatter.cpp:261
-#, fuzzy, kde-format
-#| msgctxt "@info:whatsthis"
-#| msgid "Display the command output now"
+#, kde-format
 msgctxt "@info Alarm type"
 msgid "Display (command)"
-msgstr "Показать вывод команды сейчас"
+msgstr "Показ (команды)"
 
 #: kalarmcalendar/kaeventformatter.cpp:262
-#, fuzzy, kde-format
-#| msgctxt "@option:check Alarm action"
-#| msgid "Command"
+#, kde-format
 msgctxt "@info Alarm type"
 msgid "Command"
-msgstr "Выполнение команд"
+msgstr "Командное"
 
 #: kalarmcalendar/kaeventformatter.cpp:264
-#, fuzzy, kde-format
-#| msgctxt "@option:check Alarm action"
-#| msgid "Email"
+#, kde-format
 msgctxt "@info Alarm type"
 msgid "Email"
-msgstr "Отправка писем"
+msgstr "Почтовое"
 
 #: kalarmcalendar/kaeventformatter.cpp:266
-#, fuzzy, kde-format
-#| msgctxt "@option:check Alarm action"
-#| msgid "Audio"
+#, kde-format
 msgctxt "@info Alarm type"
 msgid "Audio"
-msgstr "Звуковые"
+msgstr "Звуковое"
 
 #: kalarmcalendar/kaeventformatter.cpp:273
-#, fuzzy, kde-format
-#| msgctxt "@option:check Alarm type"
-#| msgid "Active"
+#, kde-format
 msgctxt "@info Alarm type"
 msgid "Active"
-msgstr "Активные"
+msgstr "Активное"
 
 #: kalarmcalendar/kaeventformatter.cpp:275
-#, fuzzy, kde-format
-#| msgctxt "@option:check Alarm type"
-#| msgid "Archived"
+#, kde-format
 msgctxt "@info Alarm type"
 msgid "Archived"
-msgstr "Устаревшие"
+msgstr "Устаревшее"
 
 #: kalarmcalendar/kaeventformatter.cpp:277
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "&Templates..."
+#, kde-format
 msgctxt "@info Alarm type"
 msgid "Template"
-msgstr "&Шаблоны..."
+msgstr "Шаблон"
 
 #: kalarmcalendar/kaeventformatter.cpp:296
-#, fuzzy, kde-format
-#| msgctxt "@option"
-#| msgid "At login"
+#, kde-format
 msgctxt "@info Repeat at login"
 msgid "At login until %1"
-msgstr "При входе в систему"
+msgstr "При входе в систему до %1"
 
 #: kalarmcalendar/kaeventformatter.cpp:337
-#, fuzzy, kde-format
-#| msgctxt "@info n days"
-#| msgid "%1d"
+#, kde-format
 msgctxt "@info"
 msgid "%1"
-msgstr "%1д"
+msgstr "%1"
 
 #: kalarmcalendar/kaeventformatter.cpp:349
-#, fuzzy, kde-format
-#| msgctxt "@option:radio"
-#| msgid "Default time"
+#, kde-format
 msgctxt "@info Using default font"
 msgid "Default"
-msgstr "Время по умолчанию"
+msgstr "По умолчанию"
 
 #: kalarmcalendar/kaeventformatter.cpp:365 messagedisplayhelper.cpp:212
 #, kde-format
@@ -4121,17 +3977,13 @@ msgid "Reminder"
 msgstr "Предварительное напоминание"
 
 #: kalarmcalendar/kaeventformatter.cpp:378
-#, fuzzy, kde-format
-#| msgctxt "@item:inlistbox"
-#| msgid "Speak"
+#, kde-format
 msgctxt "@info"
 msgid "Speak"
-msgstr "Зачитать напоминание"
+msgstr "Зачитать"
 
 #: kalarmcalendar/kaeventformatter.cpp:379
-#, fuzzy, kde-format
-#| msgctxt "@item:inlistbox"
-#| msgid "Beep"
+#, kde-format
 msgctxt "@info"
 msgid "Beep"
 msgstr "Сигнал"
@@ -4141,43 +3993,35 @@ msgstr "Сигнал"
 #, kde-format
 msgctxt "@info Percentage"
 msgid "%1%%"
-msgstr ""
+msgstr "%1%%"
 
 #: kalarmcalendar/kaeventformatter.cpp:392
-#, fuzzy, kde-format
-#| msgctxt "@label"
-#| msgid "seconds"
+#, kde-format
 msgctxt "@info"
 msgid "1 Second"
 msgid_plural "%1 Seconds"
-msgstr[0] "с"
-msgstr[1] "с"
-msgstr[2] "с"
-msgstr[3] "с"
+msgstr[0] "%1 секунда"
+msgstr[1] "%1 секунды"
+msgstr[2] "%1 секунд"
+msgstr[3] "1 секунда"
 
 #: kalarmcalendar/kaeventformatter.cpp:417
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Error"
+#, kde-format
 msgctxt "@info Error indication"
 msgid "error!"
-msgstr "Ошибка"
+msgstr "ошибка!"
 
 #: kalarmcalendar/kaeventformatter.cpp:422
-#, fuzzy, kde-format
-#| msgctxt "@info Parameter in 'Default calendar: Yes/No'"
-#| msgid "Yes"
+#, kde-format
 msgctxt "@info General purpose status indication: yes or no"
 msgid "Yes"
-msgstr "да"
+msgstr "Да"
 
 #: kalarmcalendar/kaeventformatter.cpp:423
-#, fuzzy, kde-format
-#| msgctxt "@info Parameter in 'Default calendar: Yes/No'"
-#| msgid "No"
+#, kde-format
 msgctxt "@info General purpose status indication: yes or no"
 msgid "No"
-msgstr "нет"
+msgstr "Нет"
 
 #: kamail.cpp:72
 #, kde-format
@@ -4228,13 +4072,7 @@ msgstr ""
 "вручную в диалоге настройки <application>KAlarm</application>.</para>"
 
 #: kamail.cpp:125
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid ""
-#| "<para>No 'From' email address is configured.</para><para>Please set a "
-#| "default address in <application>KMail</application> or KDE System "
-#| "Settings or in the <application>KAlarm</application> Configuration dialog."
-#| "</para>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "<para>No 'From' email address is configured.</para><para>Please set a "
@@ -4242,9 +4080,8 @@ msgid ""
 "<application>KAlarm</application> Configuration dialog.</para>"
 msgstr ""
 "<para>Не указан отправитель.</para><para>Укажите адрес, который будет "
-"использоваться по умолчанию, в программе <application>KMail</application>, в "
-"параметрах системы или в диалоге настройки <application>KAlarm</application>."
-"</para>"
+"использоваться по умолчанию, в программе <application>KMail</application> "
+"или в диалоге настройки <application>KAlarm</application>.</para>"
 
 #: kamail.cpp:130
 #, kde-kuit-format
@@ -4574,12 +4411,10 @@ msgid "Import &Alarms..."
 msgstr "&Импорт напоминаний..."
 
 #: mainwindow.cpp:540
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "Import &Birthdays..."
+#, kde-format
 msgctxt "@action"
 msgid "Import Birthdays..."
-msgstr "Импорт дней &рождения..."
+msgstr "Импорт дней рождения..."
 
 #: mainwindow.cpp:545
 #, kde-format
@@ -4673,7 +4508,7 @@ msgstr "Скрыть строку меню"
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Display Alarm"
-msgstr "Текстовое напоминание"
+msgstr "Визуальное напоминание"
 
 #: mainwindow.cpp:1542
 #, kde-format
@@ -5016,13 +4851,13 @@ msgstr "Невозможно найти это письмо в <application>KMai
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "&Display Alarm Template"
-msgstr "Шаблон &текстового напоминания"
+msgstr "Шаблон &визуального напоминания"
 
 #: newalarmaction.cpp:45
 #, kde-format
 msgctxt "@action"
 msgid "New Display Alarm"
-msgstr "Текстовое напоминание"
+msgstr "Визуальное напоминание"
 
 #: newalarmaction.cpp:48
 #, kde-format
@@ -5287,15 +5122,13 @@ msgstr ""
 #, kde-format
 msgctxt "@title:group"
 msgid "Plugins"
-msgstr ""
+msgstr "Модули"
 
 #: prefdlg.cpp:548
-#, fuzzy, kde-format
-#| msgctxt "@option"
-#| msgid "Akonadi"
+#, kde-format
 msgctxt "@option:check"
 msgid "Enable Akonadi"
-msgstr "Akonadi"
+msgstr "Включить Akonadi"
 
 #: prefdlg.cpp:550
 #, kde-format
@@ -5304,6 +5137,9 @@ msgid ""
 "Enable the use of Akonadi to provide features including birthday import, "
 "some email functions, and email address book lookup."
 msgstr ""
+"Включить использование Akonadi для предоставления возможностей, среди "
+"которых импорт дней рождения, некоторые функции электронной почты, а также "
+"поиск в адресной книге."
 
 #: prefdlg.cpp:552
 #, kde-format
@@ -5312,6 +5148,9 @@ msgid ""
 "Enable the use of Akonadi to provide features including birthday import, "
 "some email functions, and email address book lookup."
 msgstr ""
+"Включить использование Akonadi для предоставления возможностей, среди "
+"которых импорт дней рождения, некоторые функции электронной почты, а также "
+"поиск в адресной книге."
 
 #: prefdlg.cpp:599
 #, kde-kuit-format
@@ -5597,18 +5436,11 @@ msgstr "Sendmail"
 msgctxt "@info"
 msgid "Choose how to send email when an email alarm is triggered."
 msgstr ""
+"Выберите, каким образом отправлять письма по электронной почте при "
+"срабатывании почтового напоминания."
 
 #: prefdlg.cpp:1033
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info:whatsthis"
-#| msgid ""
-#| "<para>Choose how to send email when an email alarm is triggered."
-#| "<list><item><interface>%1</interface>: The email is sent automatically "
-#| "via <application>KMail</application>. <application>KMail</application> is "
-#| "started first if necessary.</item><item><interface>%2</interface>: The "
-#| "email is sent automatically. This option will only work if your system is "
-#| "configured to use <application>sendmail</application> or a sendmail "
-#| "compatible mail transport agent.</item></list></para>"
+#, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
 "<para>%1<list><item><interface>%2</interface>: The email is sent "
@@ -5617,27 +5449,15 @@ msgid ""
 "if your system is configured to use <application>sendmail</application> or a "
 "sendmail compatible mail transport agent.</item></list></para>"
 msgstr ""
-"<para>Выберите тип отправки писем по электронной почте при наступлении "
-"времени напоминания.<list><item><interface>%1</interface>: письмо будет "
-"отправлено автоматически через программу <application>KMail</application>. "
-"Письмо будет помещено в папку «Исходящие», если эта программа запущена. Если "
-"необходимо, она запускается автоматически.</item> <item><interface>%2</"
-"interface>: письмо отправляется автоматически. Эта опция работает только "
-"если в данной системе правильно настроены отправка через "
-"<application>sendmail</application> или совместимые с ней программы.</item></"
-"list></para>"
+"<para>%1<list><item><interface>%2</interface>: письмо будет отправлено "
+"автоматически через программу <application>KMail</application>. </"
+"item><item><interface>%3</interface>: письмо отправляется автоматически. Эта "
+"опция работает только в том случае, если система настроена на использование "
+"<application>sendmail</application> или совместимого с sendmail агента "
+"транспорта почты.</item></list></para>"
 
 #: prefdlg.cpp:1041
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info:whatsthis"
-#| msgid ""
-#| "<para>Choose how to send email when an email alarm is triggered."
-#| "<list><item><interface>%1</interface>: The email is sent automatically "
-#| "via <application>KMail</application>. <application>KMail</application> is "
-#| "started first if necessary.</item><item><interface>%2</interface>: The "
-#| "email is sent automatically. This option will only work if your system is "
-#| "configured to use <application>sendmail</application> or a sendmail "
-#| "compatible mail transport agent.</item></list></para>"
+#, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
 "<para>%1<list><item><interface>%2</interface>: The email is sent "
@@ -5645,15 +5465,10 @@ msgid ""
 "use <application>sendmail</application> or a sendmail compatible mail "
 "transport agent.</item></list></para>"
 msgstr ""
-"<para>Выберите тип отправки писем по электронной почте при наступлении "
-"времени напоминания.<list><item><interface>%1</interface>: письмо будет "
-"отправлено автоматически через программу <application>KMail</application>. "
-"Письмо будет помещено в папку «Исходящие», если эта программа запущена. Если "
-"необходимо, она запускается автоматически.</item> <item><interface>%2</"
-"interface>: письмо отправляется автоматически. Эта опция работает только "
-"если в данной системе правильно настроены отправка через "
-"<application>sendmail</application> или совместимые с ней программы.</item></"
-"list></para>"
+"<para>%1<list><item><interface>%2</interface>: письмо будет отправлено "
+"автоматически. Эта опция работает только в том случае, если система "
+"настроена на использование <application>sendmail</application> или "
+"совместимого с sendmail агента транспорта почты.</item></list></para>"
 
 #: prefdlg.cpp:1051
 #, kde-kuit-format
@@ -5704,28 +5519,21 @@ msgstr ""
 "отправке напоминаний электронной почтой."
 
 #: prefdlg.cpp:1093 prefdlg.cpp:1129
-#, fuzzy, kde-kuit-format
-#| msgctxt "@option:radio"
-#| msgid "Use <application>KMail</application> identities"
+#, kde-kuit-format
 msgctxt "@option:radio"
 msgid "Use default <application>KMail</application> identity"
-msgstr "Использовать профиль <application>KMail</application>"
+msgstr "Использовать стандартный профиль <application>KMail</application>"
 
 #: prefdlg.cpp:1096
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info:whatsthis"
-#| msgid ""
-#| "Check to use the default email address set in <application>KMail</"
-#| "application> or KDE System Settings, to identify you as the sender when "
-#| "sending email alarms."
+#, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
 "Check to use the default email address set in <application>KMail</"
 "application>, to identify you as the sender when sending email alarms."
 msgstr ""
 "Использовать адрес электронной почты по умолчанию, указанный в программе "
-"<application>KMail</application> или в параметрах системы, для идентификации "
-"отправителя при отправке напоминаний электронной почтой."
+"<application>KMail</application>, для идентификации отправителя при отправке "
+"напоминаний электронной почтой."
 
 #: prefdlg.cpp:1100
 #, kde-kuit-format
@@ -5770,20 +5578,14 @@ msgstr ""
 "регистрации."
 
 #: prefdlg.cpp:1132
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info:whatsthis"
-#| msgid ""
-#| "Check to use the default email address set in <application>KMail</"
-#| "application> or KDE System Settings, for blind copying email alarms to "
-#| "yourself."
+#, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
 "Check to use the default email address set in <application>KMail</"
 "application>, for blind copying email alarms to yourself."
 msgstr ""
 "Использовать адрес электронной почты по умолчанию, указанный в программе "
-"<application>KMail</application> или в параметрах системы, для отправки "
-"скрытой копии самому себе."
+"<application>KMail</application>, для отправки скрытой копии самому себе."
 
 #: prefdlg.cpp:1234
 #, kde-format
@@ -5792,38 +5594,31 @@ msgid "No valid 'Bcc' email address is specified."
 msgstr "Не указан правильный адрес в поле «Скрытая копия»."
 
 #: prefdlg.cpp:1241
-#, fuzzy, kde-format
-#| msgctxt "@info"
-#| msgid ""
-#| "<para>%1</para><para>Are you sure you want to save your changes?</para>"
+#, kde-format
 msgctxt "@info"
 msgid "Are you sure you want to save your changes?"
-msgstr "<para>%1</para><para>Сохранить изменения?</para>"
+msgstr "Сохранить изменения?"
 
 #: prefdlg.cpp:1247
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid ""
-#| "No default email address is currently set in <application>KMail</"
-#| "application> or KDE System Settings. %1"
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "<para>No default email address is currently set in <application>KMail</"
 "application>.</para><para>%1</para><para>%2</para>"
 msgstr ""
-"Адрес электронной почты, который будет использоваться по умолчанию, не "
-"указан в программе <application>KMail</application> или в параметрах "
-"системы. %1"
+"<para>Адрес электронной почты, который будет использоваться по умолчанию, не "
+"указан в программе <application>KMail</application>.</para><para>%1</"
+"para><para>%2</para>"
 
 #: prefdlg.cpp:1252
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid "No <application>KMail</application> identities currently exist. %1"
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "<para>No <application>KMail</application> identities currently exist.</"
 "para><para>%1</para><para>%2</para>"
-msgstr "Нет доступных профилей <application>KMail</application>. %1"
+msgstr ""
+"<para>Нет доступных профилей <application>KMail</application>.</para><para>"
+"%1</para><para>%2</para>"
 
 #: prefdlg.cpp:1270
 #, kde-kuit-format
@@ -5930,8 +5725,8 @@ msgid ""
 "The default units for the reminder in the alarm edit dialog, for alarms due "
 "soon."
 msgstr ""
-"Значение единиц периода повторения по умолчанию в диалоге настройки "
-"напоминания."
+"Единицы измерения времени для предварительного напоминания по умолчанию в "
+"диалоге настройки напоминания."
 
 #: prefdlg.cpp:1409
 #, kde-format
@@ -6402,8 +6197,8 @@ msgid ""
 msgstr ""
 "<para>Повторять напоминание до указанных даты/времени.</"
 "para><para><note>Примечание: этот период задаётся только для основного "
-"напоминания. Он не ограничивает любые дополнительные повторения.</note></"
-"para>"
+"напоминания. Он не ограничивает какие-либо дополнительные повторения.</"
+"note></para>"
 
 #: recurrenceedit.cpp:241
 #, kde-format
@@ -6841,7 +6636,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title:window"
 msgid "Alarm Sub-Repetition"
-msgstr "Повтор дополнительных напоминаний"
+msgstr "Дополнительное повторение напоминаний"
 
 #: repetitionbutton.cpp:139
 #, kde-format
@@ -8823,10 +8618,6 @@ msgid "Number of minutes before alarm to wake from suspend"
 msgstr "Количество минут до сигнала «разбудить систему»"
 
 #, fuzzy
-#~| msgctxt "@option:radio"
-#~| msgid ""
-#~| "Use default address from <application>KMail</application> or System "
-#~| "Settings"
 #~ msgctxt "@option:radio"
 #~ msgid "Use default address from <application>KMail</application>"
 #~ msgstr ""
