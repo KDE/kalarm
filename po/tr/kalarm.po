@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: kdepim-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-10-05 00:46+0000\n"
-"PO-Revision-Date: 2022-10-09 05:58+0300\n"
+"PO-Revision-Date: 2022-10-12 01:11+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -464,7 +464,7 @@ msgstr "Bütün alarmların izlemesini kapat"
 #: commandoptions.cpp:161
 #, kde-format
 msgid "Execute a shell command line"
-msgstr "Bir kabuk komutunu çalıştır"
+msgstr "Bir kabuk komutunu yürüt"
 
 #: commandoptions.cpp:165
 #, kde-format
@@ -1249,7 +1249,7 @@ msgid ""
 "special codes described in the KAlarm handbook."
 msgstr ""
 "Uçbirim penceresinde KAlarm el kitabında belirtilen özel kodlar dahil, komut "
-"alarmlarını çalıştırmak için komut satırı."
+"alarmlarını yürütmek için komut satırı."
 
 #. i18n: ectx: label, entry (Base_StartOfDay), group (General)
 #: data/kalarmconfig.kcfg:221
@@ -1609,7 +1609,7 @@ msgstr "Günlük Dosyasına Kaydet"
 #, kde-format
 msgctxt "@option"
 msgid "Execute in terminal window"
-msgstr "Uçbirim penceresinde çalıştır"
+msgstr "Uçbirim penceresinde yürüt"
 
 #. i18n: ectx: label, entry (DefaultCmdLogFile), group (Defaults)
 #: data/kalarmconfig.kcfg:358 kalarmcalendar/kaeventformatter.cpp:137
@@ -1754,14 +1754,14 @@ msgstr "Alarm öncesi eylemi"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Default command to execute before displaying alarms."
-msgstr "Gösterilen alarmlardan önce çalıştırmak için öntanımlı komut."
+msgstr "Gösterilen alarmlardan önce yürütmek için öntanımlı komut."
 
 #. i18n: ectx: label, entry (DefaultExecPreActionOnDeferral), group (Defaults)
 #: data/kalarmconfig.kcfg:405
 #, kde-format
 msgctxt "@label"
 msgid "Execute pre-alarm action for deferred alarms"
-msgstr "Ertelenen alarmlar için alarm öncesi eylemini çalıştır"
+msgstr "Ertelenen alarmlar için alarm öncesi eylemini yürüt"
 
 #. i18n: ectx: whatsthis, entry (DefaultExecPreActionOnDeferral), group (Defaults)
 #: data/kalarmconfig.kcfg:406
@@ -1771,8 +1771,8 @@ msgid ""
 "Default setting for whether to execute the pre-alarm action before deferred "
 "alarms trigger."
 msgstr ""
-"Ertelenen alarmlardan önce alarm öncesi eyleminin çalıştırılıp "
-"çalıştırılmayacağını belirleyen öntanımlı ayar."
+"Ertelenen alarmlardan önce alarm öncesi eyleminin yürütülüp "
+"yürütülmeyeceğini belirleyen öntanımlı ayar."
 
 #. i18n: ectx: label, entry (DefaultCancelOnPreActionError), group (Defaults)
 #: data/kalarmconfig.kcfg:410
@@ -1823,7 +1823,7 @@ msgstr "Alarm sonrası eylemi"
 msgctxt "@info:whatsthis"
 msgid "Default command to execute after alarm message windows are closed."
 msgstr ""
-"Alarm ileti pencereleri kapatıldıktan sonra çalıştırmak için öntanımlı komut."
+"Alarm ileti pencereleri kapatıldıktan sonra yürütmek için öntanımlı komut."
 
 #. i18n: ectx: label, entry (Base_QuitWarn), group (Notification Messages)
 #: data/kalarmconfig.kcfg:427
@@ -2498,13 +2498,13 @@ msgstr "Bir betik girin"
 #, kde-format
 msgctxt "@option:radio"
 msgid "Execute in terminal window"
-msgstr "Uçbirim penceresinde çalıştır"
+msgstr "Uçbirim penceresinde yürüt"
 
 #: editdlgtypes.cpp:801
 #, kde-format
 msgctxt "@option:check"
 msgid "Execute in terminal window"
-msgstr "Uçbirim penceresinde çalıştır"
+msgstr "Uçbirim penceresinde yürüt"
 
 #: editdlgtypes.cpp:831
 #, kde-format
@@ -2534,13 +2534,13 @@ msgstr "Komut Alarmını Düzenle"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Execute the specified command now"
-msgstr "Belirtilen komutu şimdi çalıştır"
+msgstr "Belirtilen komutu şimdi yürüt"
 
 #: editdlgtypes.cpp:841
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Execute the specified command now"
-msgstr "Belirtilen komutu şimdi çalıştır"
+msgstr "Belirtilen komutu şimdi yürüt"
 
 #: editdlgtypes.cpp:848 specialactions.cpp:182
 #, kde-format
@@ -2564,7 +2564,7 @@ msgstr "Komut Çıktısı"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to execute the command in a terminal window"
-msgstr "Komutu bir uçbirim penceresinde çalıştırmak için bunu işaretleyin"
+msgstr "Komutu bir uçbirim penceresinde yürütmek için bunu işaretleyin"
 
 #: editdlgtypes.cpp:876
 #, kde-format
@@ -2629,7 +2629,7 @@ msgstr ""
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Command executed: <icode>%1</icode>"
-msgstr "Komut çalıştırıldı: <icode>%1</icode>"
+msgstr "Komut yürütüldü: <icode>%1</icode>"
 
 #: editdlgtypes.cpp:1123
 #, kde-format
@@ -2887,19 +2887,19 @@ msgstr ""
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter a shell command to execute."
-msgstr "Çalıştırılacak bir kabuk komutu girin."
+msgstr "Yürütülecek bir kabuk komutu girin."
 
 #: editdlgtypes.cpp:1839
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the contents of a script to execute"
-msgstr "Çalıştırılacak olan betiğin içeriğini girin"
+msgstr "Yürütülecek olan betiğin içeriğini girin"
 
 #: editdlgtypes.cpp:1895
 #, kde-format
 msgctxt "@info"
 msgid "Please enter a command or script to execute"
-msgstr "Lütfen çalıştırılacak olan komutu veya betiği girin"
+msgstr "Lütfen yürütülecek olan komutu veya betiği girin"
 
 #: eventlistview.cpp:33
 #, kde-format
@@ -3392,8 +3392,8 @@ msgid ""
 "Failed to execute command\n"
 "(no terminal selected for command alarms)"
 msgstr ""
-"Komut çalıştırılamadı\n"
-"(komut alarmları için seçili terminal yok)"
+"Komut yürütülemedi\n"
+"(komut alarmları için seçili uçbirim yok)"
 
 #: kalarmapp.cpp:2651
 #, kde-format
@@ -3822,7 +3822,7 @@ msgstr "Komut"
 #, kde-format
 msgctxt "@label Execute in terminal window"
 msgid "Execute in terminal"
-msgstr "Uçbirimde çalıştır"
+msgstr "Uçbirimde yürüt"
 
 #: kalarmcalendar/kaeventformatter.cpp:141
 #, kde-format
@@ -3995,7 +3995,7 @@ msgctxt "@info"
 msgid ""
 "A 'From' email address must be configured in order to execute email alarms."
 msgstr ""
-"E-posta alarmlarını çalıştırabilmek için bir 'Kimden' e-posta adresi "
+"E-posta alarmlarını yürütebilmek için bir 'Kimden' e-posta adresi "
 "yapılandırılmalıdır."
 
 #: kamail.cpp:75
@@ -4208,19 +4208,19 @@ msgstr "Varolan bir dosyaya ekle"
 #, kde-format
 msgctxt "@info"
 msgid "Failed to execute command (shell access not authorized)"
-msgstr "Komut çalıştırılamadı (kabuk erişimine izin verilmedi)"
+msgstr "Komut yürütülemedi (kabuk erişimine için yetkilendirilmemiş)"
 
 #: lib/shellprocess.cpp:145
 #, kde-format
 msgctxt "@info"
 msgid "Failed to execute command"
-msgstr "Komut çalıştırılamadı"
+msgstr "Komut yürütülemedi"
 
 #: lib/shellprocess.cpp:147
 #, kde-format
 msgctxt "@info"
 msgid "Failed to execute command (not found or not executable)"
-msgstr "Komut çalıştırılamadı (bulunamadı veya çalıştırılabilir değil)"
+msgstr "Komut yürütülemedi (bulunamadı veya yürütülebilir değil)"
 
 #: lib/shellprocess.cpp:149
 #, kde-format
@@ -5041,7 +5041,7 @@ msgid ""
 "Choose which application to use when a command alarm is executed in a "
 "terminal window"
 msgstr ""
-"Bir komut alarmı uç birim penceresinde çalıştırıldığında hangi uygulamanın "
+"Bir komut alarmı uçbirim penceresinde yürütüldüğünde hangi uygulamanın "
 "kullanılacağını seç"
 
 #: prefdlg.cpp:516
@@ -5050,8 +5050,8 @@ msgctxt "@info:whatsthis"
 msgid ""
 "Check to execute command alarms in a terminal window by <icode>%1</icode>"
 msgstr ""
-"<icode>%1</icode> tarafından bir uç birim penceresinde komut alarmı "
-"çalıştırmak için işaretleyin"
+"<icode>%1</icode> tarafından bir uçbirim penceresinde komut alarmı yürütmek "
+"için işaretleyin"
 
 #: prefdlg.cpp:524
 #, kde-format
@@ -5068,11 +5068,11 @@ msgid ""
 "what you enter here. See the <application>KAlarm</application> Handbook for "
 "details of special codes to tailor the command line."
 msgstr ""
-"Seçilen uç birim penceresinde bir  komut çalıştırmak için gerekli tam komut "
+"Seçilen uçbirim penceresinde bir komut yürütmek için gerekli tam komut "
 "satırını girin. Öntanımlı olarak buraya girdiğiniz komut dizisi alarmın "
 "komut dizisine eklenecektir. Komut satırına adapte etmek için özel kodların "
-"detaylarına <application>KAlarm</application> uygulaması El kitabından "
-"bakınız."
+"ayrıntılarına <application>KAlarm</application> uygulaması El Kitabı'ndan "
+"bakın."
 
 #: prefdlg.cpp:543
 #, kde-format
@@ -6275,7 +6275,7 @@ msgid ""
 "para><para>You can specify working days and hours in the Configuration "
 "dialog.</para>"
 msgstr ""
-"<para>Alarmı sadece çalışma günlerinde, çalışma saatleri boyunca çalıştır.</"
+"<para>Alarmı yalnızca çalışma günlerinde, çalışma saatleri boyunca yürüt.</"
 "para><para>Yapılandırma penceresinde çalışma günleri ve saatlerini "
 "belirtebilirsiniz.</para>"
 
@@ -7118,7 +7118,7 @@ msgstr "Takvimler"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Command execution failed"
-msgstr "Komut çalıştırılamadı"
+msgstr "Komut yürütülemedi"
 
 #: resources/resourcedatamodelbase.cpp:450
 #, kde-format
@@ -8050,14 +8050,14 @@ msgstr "Özel Eylemler..."
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Set commands to execute"
-msgstr "Çalıştırılacak bir komut girin"
+msgstr "Yürütelecek komutları girin"
 
 #: specialactions.cpp:40
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Specify actions to execute before and after the alarm is displayed."
 msgstr ""
-"Alarm gösterilmeden önce ve gösterildikten sonra çalıştırılacak eylemleri "
+"Alarm gösterilmeden önce ve gösterildikten sonra yürütülecek eylemleri "
 "belirtin."
 
 #: specialactions.cpp:91
@@ -8088,17 +8088,17 @@ msgid ""
 "will wait for the command to complete before displaying the alarm.</note></"
 "para>"
 msgstr ""
-"<para>Alarm görüntülenmeden önce çalıştırmak için bir kabuk komutu girin.</"
-"para><para>Unutmayın yalnızca uygun alarm görüntülendiğinde bu komut "
-"çalıştırılacaktır, ertelenen alarm ya da anımsatıcı görüntülendiğinde değil."
-"</para><para><note>KAlarm komut alarmı görüntülenmeden önce tamamlamak için "
+"<para>Alarm görüntülenmeden önce yürütmek için bir kabuk komutu girin.</"
+"para><para>Unutmayın; yalnızca uygun alarm görüntülendiğinde bu komut "
+"yürütülecektir, ertelenen alarm ya da anımsatıcı görüntülendiğinde değil.</"
+"para><para><note>KAlarm komut alarmı görüntülenmeden önce tamamlamak için "
 "bekleyecek.</note></para>"
 
 #: specialactions.cpp:173
 #, kde-format
 msgctxt "@option:check"
 msgid "Execute for deferred alarms"
-msgstr "Ertelenmiş alarmlar için çalıştır"
+msgstr "Ertelenmiş alarmlar için yürüt"
 
 #: specialactions.cpp:174
 #, kde-kuit-format
@@ -8109,8 +8109,8 @@ msgid ""
 "before a deferred alarm is displayed.</para>"
 msgstr ""
 "<para>Eğer işaretlenmemişse uygun alarm görüntülenmeden önce sadece komut "
-"çalıştırılır.</para><para>Eğer işaretlenmişse ertelenmiş bir alarm "
-"görüntülenmeden önce, ayrıca alarm öncesi komut çalıştırılır.</para>"
+"yürütülür.</para><para>Eğer işaretlenmişse ertelenmiş bir alarm "
+"görüntülenmeden önce, ayrıca alarm öncesi komut da yürütülür.</para>"
 
 #: specialactions.cpp:178
 #, kde-format
@@ -8126,7 +8126,7 @@ msgid ""
 "alarm or execute any post-alarm action command."
 msgstr ""
 "Alarm öncesi komutu başarısız olduysa alarmı iptal et, yani alarmı gösterme "
-"ya da alarm sonrası hiçbir komutu çalıştırma."
+"ya da alarm sonrası hiçbir komutu yürütme."
 
 #: specialactions.cpp:183
 #, kde-format
@@ -8151,10 +8151,10 @@ msgid ""
 "you defer the alarm, it is not executed until the alarm is finally "
 "acknowledged or closed.</para>"
 msgstr ""
-"<para>Alarm penceresi kapatıldıktan sonra çalıştırmak için bir kabuk komutu "
+"<para>Alarm penceresi kapatıldıktan sonra yürütmek için bir kabuk komutu "
 "girin.</para><para>Anımsatıcı pencere kapatıldıktan sonra bu komutun "
-"çalışmayacağını unutmayın. Eğer alarmı ertelerseniz alarm kabul ediline ya "
-"da kapatılana kadar çalışmayacaktır.</para>"
+"yürütülmeyeceğini unutmayın. Eğer alarmı ertelerseniz alarm kabul edilene ya "
+"da kapatılana kadar yürütülmeyecektir.</para>"
 
 #: templatedlg.cpp:47
 #, kde-format
