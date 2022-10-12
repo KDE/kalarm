@@ -31,6 +31,7 @@
 #include <QPushButton>
 #include <QResizeEvent>
 #include <QVBoxLayout>
+#include <QMenu>
 
 using namespace KCal;
 
