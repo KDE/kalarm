@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-10-05 00:46+0000\n"
+"POT-Creation-Date: 2022-10-13 00:47+0000\n"
 "PO-Revision-Date: 2022-07-24 14:41+0200\n"
 "Last-Translator: Frederik Schwarzer <schwarzer@kde.org>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
@@ -4588,7 +4588,7 @@ msgid_plural "Delete Alarms"
 msgstr[0] "Erinnerung löschen"
 msgstr[1] "Erinnerungen löschen"
 
-#: mainwindow.cpp:808 templatedlg.cpp:179
+#: mainwindow.cpp:808 templatedlg.cpp:180
 #, kde-format
 msgctxt "@action:button"
 msgid "&Delete"
@@ -6480,7 +6480,7 @@ msgstr ""
 "Den ausgewählten Eintrag in der Ausnahmeliste durch das eingegebene Datum "
 "ersetzen."
 
-#: recurrenceedit.cpp:318 templatedlg.cpp:91
+#: recurrenceedit.cpp:318 templatedlg.cpp:92
 #, kde-format
 msgctxt "@action:button"
 msgid "Delete"
@@ -7863,7 +7863,7 @@ msgstr ""
 "der Kalender aktiviert ist (Häkchen gesetzt) oder nicht (kein Häkchen "
 "gesetzt). Der fett dargestellte Kalender ist der Standard-Kalender."
 
-#: resourceselector.cpp:77 templatedlg.cpp:79
+#: resourceselector.cpp:77 templatedlg.cpp:80
 #, kde-format
 msgctxt "@action:button"
 msgid "Edit..."
@@ -8471,61 +8471,61 @@ msgstr ""
 "wird, dann wird der Befehl erst ausgeführt, wenn die Erinnerung endgültig "
 "quittiert wurde.</para>"
 
-#: templatedlg.cpp:47
+#: templatedlg.cpp:48
 #, kde-format
 msgctxt "@title:window"
 msgid "Alarm Templates"
 msgstr "Vorlagen für Erinnerungen"
 
-#: templatedlg.cpp:63 templatelistview.cpp:24
+#: templatedlg.cpp:64 templatelistview.cpp:24
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "The list of alarm templates"
 msgstr "Die Liste der Erinnerungsvorlagen"
 
-#: templatedlg.cpp:71
+#: templatedlg.cpp:72
 #, kde-format
 msgctxt "@action:button"
 msgid "New"
 msgstr "Neu"
 
-#: templatedlg.cpp:72
+#: templatedlg.cpp:73
 #, kde-format
 msgctxt "@action"
 msgid "New"
 msgstr "Neu"
 
-#: templatedlg.cpp:75
+#: templatedlg.cpp:76
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Create a new alarm template"
 msgstr "Neue Erinnerungsvorlage erstellen"
 
-#: templatedlg.cpp:76
+#: templatedlg.cpp:77
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Create a new alarm template"
 msgstr "Neue Erinnerungsvorlage erstellen"
 
-#: templatedlg.cpp:81
+#: templatedlg.cpp:82
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Edit the selected alarm template"
 msgstr "Bearbeiten Sie ausgewählte Erinnerungsvorlage"
 
-#: templatedlg.cpp:82
+#: templatedlg.cpp:83
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Edit the currently highlighted alarm template"
 msgstr "Bearbeiten Sie hiermit die momentan ausgewählte Erinnerungsvorlage"
 
-#: templatedlg.cpp:85
+#: templatedlg.cpp:86
 #, kde-format
 msgctxt "@action:button"
 msgid "Copy"
 msgstr "Kopieren"
 
-#: templatedlg.cpp:87
+#: templatedlg.cpp:88
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Create a new alarm template based on the selected template"
@@ -8533,7 +8533,7 @@ msgstr ""
 "Erstellen Sie eine neue Vorlage für die Erinnerung, die auf der momentan "
 "ausgewählten Vorlage basiert"
 
-#: templatedlg.cpp:88
+#: templatedlg.cpp:89
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -8543,19 +8543,19 @@ msgstr ""
 "Erstellen Sie eine neue Vorlage für die Erinnerung, die auf der momentan "
 "ausgewählten Vorlage basiert"
 
-#: templatedlg.cpp:93
+#: templatedlg.cpp:94
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Delete the selected alarm templates"
 msgstr "Entfernt die ausgewählten Erinnerungsvorlagen"
 
-#: templatedlg.cpp:94
+#: templatedlg.cpp:95
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Delete the currently highlighted alarm templates"
 msgstr "Entfernt den ausgewählten Eintrag aus der Vorlagenliste"
 
-#: templatedlg.cpp:176
+#: templatedlg.cpp:177
 #, kde-format
 msgctxt "@info"
 msgid "Do you really want to delete the selected alarm template?"
@@ -8564,7 +8564,7 @@ msgstr[0] "Möchten Sie die ausgewählte Erinnerungsvorlage wirklich löschen?"
 msgstr[1] ""
 "Möchten Sie die %1 ausgewählten Erinnerungsvorlagen wirklich löschen?"
 
-#: templatedlg.cpp:178
+#: templatedlg.cpp:179
 #, kde-format
 msgctxt "@title:window"
 msgid "Delete Alarm Template"

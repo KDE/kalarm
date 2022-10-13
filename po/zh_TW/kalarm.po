@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-10-05 00:46+0000\n"
+"POT-Creation-Date: 2022-10-13 00:47+0000\n"
 "PO-Revision-Date: 2018-05-19 11:56+0800\n"
 "Last-Translator: pan93412 <pan93412@gmail.com>\n"
 "Language-Team: Chinese <zh-l10n@lists.linux.org.tw>\n"
@@ -4464,7 +4464,7 @@ msgid "Delete Alarm"
 msgid_plural "Delete Alarms"
 msgstr[0] "刪除鬧鐘"
 
-#: mainwindow.cpp:808 templatedlg.cpp:179
+#: mainwindow.cpp:808 templatedlg.cpp:180
 #, kde-format
 msgctxt "@action:button"
 msgid "&Delete"
@@ -6250,7 +6250,7 @@ msgid ""
 "entered above"
 msgstr "將例外清單中所選取的日期改換成所輸入的日期"
 
-#: recurrenceedit.cpp:318 templatedlg.cpp:91
+#: recurrenceedit.cpp:318 templatedlg.cpp:92
 #, kde-format
 msgctxt "@action:button"
 msgid "Delete"
@@ -7678,7 +7678,7 @@ msgstr ""
 "這是所選取的型態可用的行事曆。有勾選的表示該行事曆開啟，反之則表示已關閉。預"
 "設的行事曆則以粗體顯示。"
 
-#: resourceselector.cpp:77 templatedlg.cpp:79
+#: resourceselector.cpp:77 templatedlg.cpp:80
 #, kde-format
 msgctxt "@action:button"
 msgid "Edit..."
@@ -8250,31 +8250,31 @@ msgstr ""
 "後執行，而不是在提醒視窗關閉後執行。如果您將鬧鐘延遲，則會在最終確認鬧鐘或關"
 "閉時執行。</para>"
 
-#: templatedlg.cpp:47
+#: templatedlg.cpp:48
 #, kde-format
 msgctxt "@title:window"
 msgid "Alarm Templates"
 msgstr "鬧鐘樣本"
 
-#: templatedlg.cpp:63 templatelistview.cpp:24
+#: templatedlg.cpp:64 templatelistview.cpp:24
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "The list of alarm templates"
 msgstr "鬧鐘樣本列表"
 
-#: templatedlg.cpp:71
+#: templatedlg.cpp:72
 #, kde-format
 msgctxt "@action:button"
 msgid "New"
 msgstr "新增"
 
-#: templatedlg.cpp:72
+#: templatedlg.cpp:73
 #, kde-format
 msgctxt "@action"
 msgid "New"
 msgstr "新增"
 
-#: templatedlg.cpp:75
+#: templatedlg.cpp:76
 #, fuzzy, kde-format
 #| msgctxt "@info:whatsthis"
 #| msgid "Create a new alarm template"
@@ -8282,13 +8282,13 @@ msgctxt "@info:tooltip"
 msgid "Create a new alarm template"
 msgstr "產生新的鬧鐘樣本"
 
-#: templatedlg.cpp:76
+#: templatedlg.cpp:77
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Create a new alarm template"
 msgstr "產生新的鬧鐘樣本"
 
-#: templatedlg.cpp:81
+#: templatedlg.cpp:82
 #, fuzzy, kde-format
 #| msgctxt "@info:whatsthis"
 #| msgid "Edit the currently highlighted alarm template"
@@ -8296,19 +8296,19 @@ msgctxt "@info:tooltip"
 msgid "Edit the selected alarm template"
 msgstr "編輯所選取的鬧鐘樣本"
 
-#: templatedlg.cpp:82
+#: templatedlg.cpp:83
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Edit the currently highlighted alarm template"
 msgstr "編輯所選取的鬧鐘樣本"
 
-#: templatedlg.cpp:85
+#: templatedlg.cpp:86
 #, kde-format
 msgctxt "@action:button"
 msgid "Copy"
 msgstr "複製"
 
-#: templatedlg.cpp:87
+#: templatedlg.cpp:88
 #, fuzzy, kde-format
 #| msgctxt "@info:whatsthis"
 #| msgid ""
@@ -8318,7 +8318,7 @@ msgctxt "@info:tooltip"
 msgid "Create a new alarm template based on the selected template"
 msgstr "從目前所選取的樣本複製一份成新的樣本。"
 
-#: templatedlg.cpp:88
+#: templatedlg.cpp:89
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -8326,7 +8326,7 @@ msgid ""
 "template"
 msgstr "從目前所選取的樣本複製一份成新的樣本。"
 
-#: templatedlg.cpp:93
+#: templatedlg.cpp:94
 #, fuzzy, kde-format
 #| msgctxt "@info:whatsthis"
 #| msgid "Delete the currently highlighted alarm template"
@@ -8334,7 +8334,7 @@ msgctxt "@info:tooltip"
 msgid "Delete the selected alarm templates"
 msgstr "刪除所選取的鬧鐘樣本"
 
-#: templatedlg.cpp:94
+#: templatedlg.cpp:95
 #, fuzzy, kde-format
 #| msgctxt "@info:whatsthis"
 #| msgid "Delete the currently highlighted alarm template"
@@ -8342,14 +8342,14 @@ msgctxt "@info:whatsthis"
 msgid "Delete the currently highlighted alarm templates"
 msgstr "刪除所選取的鬧鐘樣本"
 
-#: templatedlg.cpp:176
+#: templatedlg.cpp:177
 #, kde-format
 msgctxt "@info"
 msgid "Do you really want to delete the selected alarm template?"
 msgid_plural "Do you really want to delete the %1 selected alarm templates?"
 msgstr[0] "您真的要刪除這 %1 個鬧鐘樣本嗎？"
 
-#: templatedlg.cpp:178
+#: templatedlg.cpp:179
 #, kde-format
 msgctxt "@title:window"
 msgid "Delete Alarm Template"

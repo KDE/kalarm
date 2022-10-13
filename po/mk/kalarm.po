@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-10-05 00:46+0000\n"
+"POT-Creation-Date: 2022-10-13 00:47+0000\n"
 "PO-Revision-Date: 2007-02-28 14:12+0100\n"
 "Last-Translator: Bozidar Proevski <bobibobi@freemail.com.mk>\n"
 "Language-Team: Macedonian <mkde-l10n@lists.sourceforge.net>\n"
@@ -4752,7 +4752,7 @@ msgstr[0] "Бришење %1 аларм"
 msgstr[1] "Бришење %1 аларми"
 msgstr[2] "Бришење %1 аларми"
 
-#: mainwindow.cpp:808 templatedlg.cpp:179
+#: mainwindow.cpp:808 templatedlg.cpp:180
 #, fuzzy, kde-format
 msgctxt "@action:button"
 msgid "&Delete"
@@ -6600,7 +6600,7 @@ msgid ""
 "entered above"
 msgstr "Го отстранува избраниот елемент од листата на исклучоци"
 
-#: recurrenceedit.cpp:318 templatedlg.cpp:91
+#: recurrenceedit.cpp:318 templatedlg.cpp:92
 #, fuzzy, kde-format
 msgctxt "@action:button"
 msgid "Delete"
@@ -8077,7 +8077,7 @@ msgid ""
 "calendar is shown in bold."
 msgstr ""
 
-#: resourceselector.cpp:77 templatedlg.cpp:79
+#: resourceselector.cpp:77 templatedlg.cpp:80
 #, fuzzy, kde-format
 msgctxt "@action:button"
 msgid "Edit..."
@@ -8662,77 +8662,77 @@ msgid ""
 "acknowledged or closed.</para>"
 msgstr ""
 
-#: templatedlg.cpp:47
+#: templatedlg.cpp:48
 #, fuzzy, kde-format
 #| msgid "Alarm Templates"
 msgctxt "@title:window"
 msgid "Alarm Templates"
 msgstr "Обрасци за аларми"
 
-#: templatedlg.cpp:63 templatelistview.cpp:24
+#: templatedlg.cpp:64 templatelistview.cpp:24
 #, fuzzy, kde-format
 #| msgid "The list of alarm templates"
 msgctxt "@info:whatsthis"
 msgid "The list of alarm templates"
 msgstr "Листата на обрасците за аларми"
 
-#: templatedlg.cpp:71
+#: templatedlg.cpp:72
 #, fuzzy, kde-format
 #| msgid "&New..."
 msgctxt "@action:button"
 msgid "New"
 msgstr "&Нов..."
 
-#: templatedlg.cpp:72
+#: templatedlg.cpp:73
 #, fuzzy, kde-format
 #| msgid "&New..."
 msgctxt "@action"
 msgid "New"
 msgstr "&Нов..."
 
-#: templatedlg.cpp:75
+#: templatedlg.cpp:76
 #, fuzzy, kde-format
 #| msgid "Create a new alarm template"
 msgctxt "@info:tooltip"
 msgid "Create a new alarm template"
 msgstr "Креира нов образец за аларм"
 
-#: templatedlg.cpp:76
+#: templatedlg.cpp:77
 #, fuzzy, kde-format
 #| msgid "Create a new alarm template"
 msgctxt "@info:whatsthis"
 msgid "Create a new alarm template"
 msgstr "Креира нов образец за аларм"
 
-#: templatedlg.cpp:81
+#: templatedlg.cpp:82
 #, fuzzy, kde-format
 #| msgid "Edit the currently highlighted alarm template"
 msgctxt "@info:tooltip"
 msgid "Edit the selected alarm template"
 msgstr "Го уредува тековниот избран образец за аларм"
 
-#: templatedlg.cpp:82
+#: templatedlg.cpp:83
 #, fuzzy, kde-format
 #| msgid "Edit the currently highlighted alarm template"
 msgctxt "@info:whatsthis"
 msgid "Edit the currently highlighted alarm template"
 msgstr "Го уредува тековниот избран образец за аларм"
 
-#: templatedlg.cpp:85
+#: templatedlg.cpp:86
 #, fuzzy, kde-format
 #| msgid "Co&py"
 msgctxt "@action:button"
 msgid "Copy"
 msgstr "Ко&пирај"
 
-#: templatedlg.cpp:87
+#: templatedlg.cpp:88
 #, fuzzy, kde-format
 #| msgid "Delete the currently highlighted alarm template"
 msgctxt "@info:tooltip"
 msgid "Create a new alarm template based on the selected template"
 msgstr "Го брише тековниот избран образец за аларм"
 
-#: templatedlg.cpp:88
+#: templatedlg.cpp:89
 #, fuzzy, kde-format
 #| msgid "Delete the currently highlighted alarm template"
 msgctxt "@info:whatsthis"
@@ -8741,21 +8741,21 @@ msgid ""
 "template"
 msgstr "Го брише тековниот избран образец за аларм"
 
-#: templatedlg.cpp:93
+#: templatedlg.cpp:94
 #, fuzzy, kde-format
 #| msgid "Delete the currently highlighted alarm template"
 msgctxt "@info:tooltip"
 msgid "Delete the selected alarm templates"
 msgstr "Го брише тековниот избран образец за аларм"
 
-#: templatedlg.cpp:94
+#: templatedlg.cpp:95
 #, fuzzy, kde-format
 #| msgid "Delete the currently highlighted alarm template"
 msgctxt "@info:whatsthis"
 msgid "Delete the currently highlighted alarm templates"
 msgstr "Го брише тековниот избран образец за аларм"
 
-#: templatedlg.cpp:176
+#: templatedlg.cpp:177
 #, fuzzy, kde-format
 #| msgid "Do you really want to delete the selected alarm template?"
 #| msgid_plural "Do you really want to delete the %1 selected alarm templates?"
@@ -8769,7 +8769,7 @@ msgstr[1] ""
 msgstr[2] ""
 "Дали навистина сакате да ги избришете овие %1 избрани обрасци за аларми?"
 
-#: templatedlg.cpp:178
+#: templatedlg.cpp:179
 #, fuzzy, kde-format
 #| msgid "Delete Alarm Template"
 #| msgid_plural "Delete Alarm Templates"

@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-10-05 00:46+0000\n"
+"POT-Creation-Date: 2022-10-13 00:47+0000\n"
 "PO-Revision-Date: 2020-01-05 19:16+0100\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Galician <proxecto@trasno.gal>\n"
@@ -4686,7 +4686,7 @@ msgid_plural "Delete Alarms"
 msgstr[0] "Eliminar a alarma"
 msgstr[1] "Eliminar as alarmas"
 
-#: mainwindow.cpp:808 templatedlg.cpp:179
+#: mainwindow.cpp:808 templatedlg.cpp:180
 #, kde-format
 msgctxt "@action:button"
 msgid "&Delete"
@@ -6578,7 +6578,7 @@ msgstr ""
 "Substituír o elemento realzado na lista de excepcións coa data inserida "
 "enriba"
 
-#: recurrenceedit.cpp:318 templatedlg.cpp:91
+#: recurrenceedit.cpp:318 templatedlg.cpp:92
 #, kde-format
 msgctxt "@action:button"
 msgid "Delete"
@@ -8013,7 +8013,7 @@ msgstr ""
 "mostra se un calendario está activado (marcado) ou desactivado (sen marcar). "
 "O calendario predeterminado móstrase en letra grosa."
 
-#: resourceselector.cpp:77 templatedlg.cpp:79
+#: resourceselector.cpp:77 templatedlg.cpp:80
 #, kde-format
 msgctxt "@action:button"
 msgid "Edit..."
@@ -8610,31 +8610,31 @@ msgstr ""
 "pechar unha xanela de lembranza. Se fai que a alarma se demore, non se "
 "executa ata que finalmente se recoñeza ou peche a alarma.</para>"
 
-#: templatedlg.cpp:47
+#: templatedlg.cpp:48
 #, kde-format
 msgctxt "@title:window"
 msgid "Alarm Templates"
 msgstr "Modelos de alarma"
 
-#: templatedlg.cpp:63 templatelistview.cpp:24
+#: templatedlg.cpp:64 templatelistview.cpp:24
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "The list of alarm templates"
 msgstr "A lista de modelos de alarmas"
 
-#: templatedlg.cpp:71
+#: templatedlg.cpp:72
 #, kde-format
 msgctxt "@action:button"
 msgid "New"
 msgstr "Novo"
 
-#: templatedlg.cpp:72
+#: templatedlg.cpp:73
 #, kde-format
 msgctxt "@action"
 msgid "New"
 msgstr "Novo"
 
-#: templatedlg.cpp:75
+#: templatedlg.cpp:76
 #, fuzzy, kde-format
 #| msgctxt "@info:whatsthis"
 #| msgid "Create a new alarm template"
@@ -8642,13 +8642,13 @@ msgctxt "@info:tooltip"
 msgid "Create a new alarm template"
 msgstr "Crear un modelo de alarma novo"
 
-#: templatedlg.cpp:76
+#: templatedlg.cpp:77
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Create a new alarm template"
 msgstr "Crear un modelo de alarma novo"
 
-#: templatedlg.cpp:81
+#: templatedlg.cpp:82
 #, fuzzy, kde-format
 #| msgctxt "@info:whatsthis"
 #| msgid "Edit the currently highlighted alarm template"
@@ -8656,19 +8656,19 @@ msgctxt "@info:tooltip"
 msgid "Edit the selected alarm template"
 msgstr "Editar o modelo de alarma realzado"
 
-#: templatedlg.cpp:82
+#: templatedlg.cpp:83
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Edit the currently highlighted alarm template"
 msgstr "Editar o modelo de alarma realzado"
 
-#: templatedlg.cpp:85
+#: templatedlg.cpp:86
 #, kde-format
 msgctxt "@action:button"
 msgid "Copy"
 msgstr "Copiar"
 
-#: templatedlg.cpp:87
+#: templatedlg.cpp:88
 #, fuzzy, kde-format
 #| msgctxt "@info:whatsthis"
 #| msgid ""
@@ -8680,7 +8680,7 @@ msgstr ""
 "Crear un novo modelo de alarma baseado nunha copia do modelo que estea "
 "realzado"
 
-#: templatedlg.cpp:88
+#: templatedlg.cpp:89
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -8690,7 +8690,7 @@ msgstr ""
 "Crear un novo modelo de alarma baseado nunha copia do modelo que estea "
 "realzado"
 
-#: templatedlg.cpp:93
+#: templatedlg.cpp:94
 #, fuzzy, kde-format
 #| msgctxt "@info:whatsthis"
 #| msgid "Delete the currently highlighted alarm template"
@@ -8698,7 +8698,7 @@ msgctxt "@info:tooltip"
 msgid "Delete the selected alarm templates"
 msgstr "Eliminar o modelo de alarma que está realzado"
 
-#: templatedlg.cpp:94
+#: templatedlg.cpp:95
 #, fuzzy, kde-format
 #| msgctxt "@info:whatsthis"
 #| msgid "Delete the currently highlighted alarm template"
@@ -8706,7 +8706,7 @@ msgctxt "@info:whatsthis"
 msgid "Delete the currently highlighted alarm templates"
 msgstr "Eliminar o modelo de alarma que está realzado"
 
-#: templatedlg.cpp:176
+#: templatedlg.cpp:177
 #, kde-format
 msgctxt "@info"
 msgid "Do you really want to delete the selected alarm template?"
@@ -8714,7 +8714,7 @@ msgid_plural "Do you really want to delete the %1 selected alarm templates?"
 msgstr[0] "Seguro que quere eliminar o modelo de alarma seleccionado?"
 msgstr[1] "Seguro que quere eliminar os %1 modelos de alarma seleccionados?"
 
-#: templatedlg.cpp:178
+#: templatedlg.cpp:179
 #, kde-format
 msgctxt "@title:window"
 msgid "Delete Alarm Template"

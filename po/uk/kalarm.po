@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-10-05 00:46+0000\n"
+"POT-Creation-Date: 2022-10-13 00:47+0000\n"
 "PO-Revision-Date: 2022-04-25 09:01+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
@@ -4447,7 +4447,7 @@ msgstr[1] "Вилучити нагадування"
 msgstr[2] "Вилучити нагадування"
 msgstr[3] "Вилучити нагадування"
 
-#: mainwindow.cpp:808 templatedlg.cpp:179
+#: mainwindow.cpp:808 templatedlg.cpp:180
 #, kde-format
 msgctxt "@action:button"
 msgid "&Delete"
@@ -6283,7 +6283,7 @@ msgid ""
 "entered above"
 msgstr "Замінити виділений елемент у списку винятків на дату введену вище"
 
-#: recurrenceedit.cpp:318 templatedlg.cpp:91
+#: recurrenceedit.cpp:318 templatedlg.cpp:92
 #, kde-format
 msgctxt "@action:button"
 msgid "Delete"
@@ -7623,7 +7623,7 @@ msgstr ""
 "увімкнено (є позначка) або вимкнено (без позначки). Типовий календар "
 "показано жирним шрифтом."
 
-#: resourceselector.cpp:77 templatedlg.cpp:79
+#: resourceselector.cpp:77 templatedlg.cpp:80
 #, kde-format
 msgctxt "@action:button"
 msgid "Edit..."
@@ -8217,67 +8217,67 @@ msgstr ""
 "надійде повідомлення про ознайомлення з нагадуванням або нагадування не буде "
 "закрито</para>"
 
-#: templatedlg.cpp:47
+#: templatedlg.cpp:48
 #, kde-format
 msgctxt "@title:window"
 msgid "Alarm Templates"
 msgstr "Шаблони нагадувань"
 
-#: templatedlg.cpp:63 templatelistview.cpp:24
+#: templatedlg.cpp:64 templatelistview.cpp:24
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "The list of alarm templates"
 msgstr "Список шаблонів нагадування"
 
-#: templatedlg.cpp:71
+#: templatedlg.cpp:72
 #, kde-format
 msgctxt "@action:button"
 msgid "New"
 msgstr "Створити"
 
-#: templatedlg.cpp:72
+#: templatedlg.cpp:73
 #, kde-format
 msgctxt "@action"
 msgid "New"
 msgstr "Створити"
 
-#: templatedlg.cpp:75
+#: templatedlg.cpp:76
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Create a new alarm template"
 msgstr "Створити шаблон нагадування"
 
-#: templatedlg.cpp:76
+#: templatedlg.cpp:77
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Create a new alarm template"
 msgstr "Створити новий шаблон нагадування"
 
-#: templatedlg.cpp:81
+#: templatedlg.cpp:82
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Edit the selected alarm template"
 msgstr "Редагувати позначений шаблон нагадування"
 
-#: templatedlg.cpp:82
+#: templatedlg.cpp:83
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Edit the currently highlighted alarm template"
 msgstr "Редагувати виділений шаблон нагадування"
 
-#: templatedlg.cpp:85
+#: templatedlg.cpp:86
 #, kde-format
 msgctxt "@action:button"
 msgid "Copy"
 msgstr "Скопіювати"
 
-#: templatedlg.cpp:87
+#: templatedlg.cpp:88
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Create a new alarm template based on the selected template"
 msgstr "Створити новий шаблон нагадування на основі позначеного шаблону"
 
-#: templatedlg.cpp:88
+#: templatedlg.cpp:89
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -8285,19 +8285,19 @@ msgid ""
 "template"
 msgstr "Створити новий шаблон нагадування на основі виділеного шаблону"
 
-#: templatedlg.cpp:93
+#: templatedlg.cpp:94
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Delete the selected alarm templates"
 msgstr "Вилучити позначені шаблони нагадувань"
 
-#: templatedlg.cpp:94
+#: templatedlg.cpp:95
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Delete the currently highlighted alarm templates"
 msgstr "Вилучити поточні підсвічені шаблони нагадувань"
 
-#: templatedlg.cpp:176
+#: templatedlg.cpp:177
 #, kde-format
 msgctxt "@info"
 msgid "Do you really want to delete the selected alarm template?"
@@ -8307,7 +8307,7 @@ msgstr[1] "Ви дійсно хочете вилучити %1 шаблони н�
 msgstr[2] "Ви дійсно хочете вилучити %1 шаблонів нагадування?"
 msgstr[3] "Ви дійсно хочете вилучити %1 шаблон нагадування?"
 
-#: templatedlg.cpp:178
+#: templatedlg.cpp:179
 #, kde-format
 msgctxt "@title:window"
 msgid "Delete Alarm Template"

@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-10-05 00:46+0000\n"
+"POT-Creation-Date: 2022-10-13 00:47+0000\n"
 "PO-Revision-Date: 2022-04-26 20:00+0200\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@bredband.net>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
@@ -4406,7 +4406,7 @@ msgid_plural "Delete Alarms"
 msgstr[0] "Ta bort alarmet"
 msgstr[1] "Ta bort alarmen"
 
-#: mainwindow.cpp:808 templatedlg.cpp:179
+#: mainwindow.cpp:808 templatedlg.cpp:180
 #, kde-format
 msgctxt "@action:button"
 msgid "&Delete"
@@ -6225,7 +6225,7 @@ msgid ""
 msgstr ""
 "Ersätt aktuell markerad post i undantagslistan med ovan inskrivet datum"
 
-#: recurrenceedit.cpp:318 templatedlg.cpp:91
+#: recurrenceedit.cpp:318 templatedlg.cpp:92
 #, kde-format
 msgctxt "@action:button"
 msgid "Delete"
@@ -7559,7 +7559,7 @@ msgstr ""
 "kalender är aktiverad (markerad) eller inaktiverad (inte markerad). "
 "Standardkalendern visas med fetstil."
 
-#: resourceselector.cpp:77 templatedlg.cpp:79
+#: resourceselector.cpp:77 templatedlg.cpp:80
 #, kde-format
 msgctxt "@action:button"
 msgid "Edit..."
@@ -8142,67 +8142,67 @@ msgstr ""
 "du skjuter upp alarmet, körs det inte förrän alarmet verkligen bekräftas "
 "eller stängs.</para>"
 
-#: templatedlg.cpp:47
+#: templatedlg.cpp:48
 #, kde-format
 msgctxt "@title:window"
 msgid "Alarm Templates"
 msgstr "Alarmmallar"
 
-#: templatedlg.cpp:63 templatelistview.cpp:24
+#: templatedlg.cpp:64 templatelistview.cpp:24
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "The list of alarm templates"
 msgstr "Lista över alarmmallar"
 
-#: templatedlg.cpp:71
+#: templatedlg.cpp:72
 #, kde-format
 msgctxt "@action:button"
 msgid "New"
 msgstr "Ny"
 
-#: templatedlg.cpp:72
+#: templatedlg.cpp:73
 #, kde-format
 msgctxt "@action"
 msgid "New"
 msgstr "Ny"
 
-#: templatedlg.cpp:75
+#: templatedlg.cpp:76
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Create a new alarm template"
 msgstr "Skapa en ny alarmmall"
 
-#: templatedlg.cpp:76
+#: templatedlg.cpp:77
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Create a new alarm template"
 msgstr "Skapa en ny alarmmall"
 
-#: templatedlg.cpp:81
+#: templatedlg.cpp:82
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Edit the selected alarm template"
 msgstr "Redigera den markerade alarmmallen"
 
-#: templatedlg.cpp:82
+#: templatedlg.cpp:83
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Edit the currently highlighted alarm template"
 msgstr "Redigera aktuell markerad alarmmall"
 
-#: templatedlg.cpp:85
+#: templatedlg.cpp:86
 #, kde-format
 msgctxt "@action:button"
 msgid "Copy"
 msgstr "Kopiera"
 
-#: templatedlg.cpp:87
+#: templatedlg.cpp:88
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Create a new alarm template based on the selected template"
 msgstr "Skapa en ny alarmmall baserad på den markerade mallen"
 
-#: templatedlg.cpp:88
+#: templatedlg.cpp:89
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -8211,19 +8211,19 @@ msgid ""
 msgstr ""
 "Skapa en ny alarmmall baserad på en kopia av den aktuella markerade mallen"
 
-#: templatedlg.cpp:93
+#: templatedlg.cpp:94
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Delete the selected alarm templates"
 msgstr "Ta bort de markerade alarmmallarna"
 
-#: templatedlg.cpp:94
+#: templatedlg.cpp:95
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Delete the currently highlighted alarm templates"
 msgstr "Ta bort de aktuella markerade alarmmallarna"
 
-#: templatedlg.cpp:176
+#: templatedlg.cpp:177
 #, kde-format
 msgctxt "@info"
 msgid "Do you really want to delete the selected alarm template?"
@@ -8231,7 +8231,7 @@ msgid_plural "Do you really want to delete the %1 selected alarm templates?"
 msgstr[0] "Är du säker på att du vill ta bort den markerade alarmmallen?"
 msgstr[1] "Är du säker på att du vill ta bort de %1 markerade alarmmallarna?"
 
-#: templatedlg.cpp:178
+#: templatedlg.cpp:179
 #, kde-format
 msgctxt "@title:window"
 msgid "Delete Alarm Template"

@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-10-05 00:46+0000\n"
+"POT-Creation-Date: 2022-10-13 00:47+0000\n"
 "PO-Revision-Date: 2012-07-05 12:56+0300\n"
 "Last-Translator: Maris Nartiss <maris.kde@gmail.com>\n"
 "Language-Team: Latvian\n"
@@ -4766,7 +4766,7 @@ msgstr[0] "Dzēst atgādinājumu"
 msgstr[1] "Dzēst atgādinājumus"
 msgstr[2] "Dzēst atgādinājumus"
 
-#: mainwindow.cpp:808 templatedlg.cpp:179
+#: mainwindow.cpp:808 templatedlg.cpp:180
 #, kde-format
 msgctxt "@action:button"
 msgid "&Delete"
@@ -6676,7 +6676,7 @@ msgid ""
 msgstr ""
 "Aizvietot pašreiz izcelto ierakstu izņēmumu sarakstā ar augšā ievadīto datumu"
 
-#: recurrenceedit.cpp:318 templatedlg.cpp:91
+#: recurrenceedit.cpp:318 templatedlg.cpp:92
 #, kde-format
 msgctxt "@action:button"
 msgid "Delete"
@@ -8129,7 +8129,7 @@ msgstr ""
 "kalendārs ir ieslēgts (atzīmēts) vai izslēgts (nav atzīmēts). Noklusētais "
 "kalendārs ir parādīts treknrakstā."
 
-#: resourceselector.cpp:77 templatedlg.cpp:79
+#: resourceselector.cpp:77 templatedlg.cpp:80
 #, kde-format
 msgctxt "@action:button"
 msgid "Edit..."
@@ -8744,31 +8744,31 @@ msgstr ""
 "loga aizvēršanas. Ja atliekat atgādinājumu, komanda netiks izpildīta, līdz "
 "atgādinājums beidzot tiek apstiprināts vai aizvērts.</para>"
 
-#: templatedlg.cpp:47
+#: templatedlg.cpp:48
 #, kde-format
 msgctxt "@title:window"
 msgid "Alarm Templates"
 msgstr "Atgādinājumu sagataves"
 
-#: templatedlg.cpp:63 templatelistview.cpp:24
+#: templatedlg.cpp:64 templatelistview.cpp:24
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "The list of alarm templates"
 msgstr "Atgādinājumu sagatavju saraksts"
 
-#: templatedlg.cpp:71
+#: templatedlg.cpp:72
 #, kde-format
 msgctxt "@action:button"
 msgid "New"
 msgstr "Jauns"
 
-#: templatedlg.cpp:72
+#: templatedlg.cpp:73
 #, kde-format
 msgctxt "@action"
 msgid "New"
 msgstr "Jauns"
 
-#: templatedlg.cpp:75
+#: templatedlg.cpp:76
 #, fuzzy, kde-format
 #| msgctxt "@info:whatsthis"
 #| msgid "Create a new alarm template"
@@ -8776,13 +8776,13 @@ msgctxt "@info:tooltip"
 msgid "Create a new alarm template"
 msgstr "Izveidot jaunu atgādinājuma sagatavi"
 
-#: templatedlg.cpp:76
+#: templatedlg.cpp:77
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Create a new alarm template"
 msgstr "Izveidot jaunu atgādinājuma sagatavi"
 
-#: templatedlg.cpp:81
+#: templatedlg.cpp:82
 #, fuzzy, kde-format
 #| msgctxt "@info:whatsthis"
 #| msgid "Edit the currently highlighted alarm template"
@@ -8790,19 +8790,19 @@ msgctxt "@info:tooltip"
 msgid "Edit the selected alarm template"
 msgstr "Rediģēt pašreiz izcelto atgādinājuma sagatavi"
 
-#: templatedlg.cpp:82
+#: templatedlg.cpp:83
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Edit the currently highlighted alarm template"
 msgstr "Rediģēt pašreiz izcelto atgādinājuma sagatavi"
 
-#: templatedlg.cpp:85
+#: templatedlg.cpp:86
 #, kde-format
 msgctxt "@action:button"
 msgid "Copy"
 msgstr "Kopēt"
 
-#: templatedlg.cpp:87
+#: templatedlg.cpp:88
 #, fuzzy, kde-format
 #| msgctxt "@info:whatsthis"
 #| msgid ""
@@ -8813,7 +8813,7 @@ msgid "Create a new alarm template based on the selected template"
 msgstr ""
 "Izveidot jaunu atgādinājuma sagatavi, balstoties uz pašreiz izcelto sagatavi"
 
-#: templatedlg.cpp:88
+#: templatedlg.cpp:89
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -8822,7 +8822,7 @@ msgid ""
 msgstr ""
 "Izveidot jaunu atgādinājuma sagatavi, balstoties uz pašreiz izcelto sagatavi"
 
-#: templatedlg.cpp:93
+#: templatedlg.cpp:94
 #, fuzzy, kde-format
 #| msgctxt "@info:whatsthis"
 #| msgid "Delete the currently highlighted alarm template"
@@ -8830,7 +8830,7 @@ msgctxt "@info:tooltip"
 msgid "Delete the selected alarm templates"
 msgstr "Dzēst pašreiz izcelto atgādinājuma sagatavi"
 
-#: templatedlg.cpp:94
+#: templatedlg.cpp:95
 #, fuzzy, kde-format
 #| msgctxt "@info:whatsthis"
 #| msgid "Delete the currently highlighted alarm template"
@@ -8838,7 +8838,7 @@ msgctxt "@info:whatsthis"
 msgid "Delete the currently highlighted alarm templates"
 msgstr "Dzēst pašreiz izcelto atgādinājuma sagatavi"
 
-#: templatedlg.cpp:176
+#: templatedlg.cpp:177
 #, kde-format
 msgctxt "@info"
 msgid "Do you really want to delete the selected alarm template?"
@@ -8847,7 +8847,7 @@ msgstr[0] "Vai tiešām vēlaties dzēst %1 izvēlēto atgādinājuma sagatavi?"
 msgstr[1] "Vai tiešām vēlaties dzēst %1 izvēlētos atgādinājumus?"
 msgstr[2] "Vai tiešām vēlaties dzēst %1 izvēlētos atgādinājumus?"
 
-#: templatedlg.cpp:178
+#: templatedlg.cpp:179
 #, kde-format
 msgctxt "@title:window"
 msgid "Delete Alarm Template"

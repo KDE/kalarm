@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdepim/kalarm.po\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-10-05 00:46+0000\n"
+"POT-Creation-Date: 2022-10-13 00:47+0000\n"
 "PO-Revision-Date: 2004-12-03 14:52-0500\n"
 "Last-Translator: Kevin Scannell <kscanne@gmail.com>\n"
 "Language-Team: Irish <gaeilge-gnulinux@lists.sourceforge.net>\n"
@@ -4406,7 +4406,7 @@ msgstr[2] "Scrios na hAláraim"
 msgstr[3] "Scrios na hAláraim"
 msgstr[4] "Scrios na hAláraim"
 
-#: mainwindow.cpp:808 templatedlg.cpp:179
+#: mainwindow.cpp:808 templatedlg.cpp:180
 #, kde-format
 msgctxt "@action:button"
 msgid "&Delete"
@@ -6137,7 +6137,7 @@ msgid ""
 "entered above"
 msgstr ""
 
-#: recurrenceedit.cpp:318 templatedlg.cpp:91
+#: recurrenceedit.cpp:318 templatedlg.cpp:92
 #, kde-format
 msgctxt "@action:button"
 msgid "Delete"
@@ -7540,7 +7540,7 @@ msgid ""
 "calendar is shown in bold."
 msgstr ""
 
-#: resourceselector.cpp:77 templatedlg.cpp:79
+#: resourceselector.cpp:77 templatedlg.cpp:80
 #, kde-format
 msgctxt "@action:button"
 msgid "Edit..."
@@ -8116,31 +8116,31 @@ msgid ""
 "acknowledged or closed.</para>"
 msgstr ""
 
-#: templatedlg.cpp:47
+#: templatedlg.cpp:48
 #, kde-format
 msgctxt "@title:window"
 msgid "Alarm Templates"
 msgstr "Teimpléid Aláraim"
 
-#: templatedlg.cpp:63 templatelistview.cpp:24
+#: templatedlg.cpp:64 templatelistview.cpp:24
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "The list of alarm templates"
 msgstr "Liosta na dteimpléad aláraim"
 
-#: templatedlg.cpp:71
+#: templatedlg.cpp:72
 #, kde-format
 msgctxt "@action:button"
 msgid "New"
 msgstr "Nua"
 
-#: templatedlg.cpp:72
+#: templatedlg.cpp:73
 #, kde-format
 msgctxt "@action"
 msgid "New"
 msgstr "Nua"
 
-#: templatedlg.cpp:75
+#: templatedlg.cpp:76
 #, fuzzy, kde-format
 #| msgctxt "@info:whatsthis"
 #| msgid "Create a new alarm template"
@@ -8148,13 +8148,13 @@ msgctxt "@info:tooltip"
 msgid "Create a new alarm template"
 msgstr "Cruthaigh teimpléad nua aláraim"
 
-#: templatedlg.cpp:76
+#: templatedlg.cpp:77
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Create a new alarm template"
 msgstr "Cruthaigh teimpléad nua aláraim"
 
-#: templatedlg.cpp:81
+#: templatedlg.cpp:82
 #, fuzzy, kde-format
 #| msgctxt "@info:whatsthis"
 #| msgid "Edit the currently highlighted alarm template"
@@ -8162,19 +8162,19 @@ msgctxt "@info:tooltip"
 msgid "Edit the selected alarm template"
 msgstr "Iontráil an t-ainm ar an teimpléad aláraim"
 
-#: templatedlg.cpp:82
+#: templatedlg.cpp:83
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Edit the currently highlighted alarm template"
 msgstr "Iontráil an t-ainm ar an teimpléad aláraim"
 
-#: templatedlg.cpp:85
+#: templatedlg.cpp:86
 #, kde-format
 msgctxt "@action:button"
 msgid "Copy"
 msgstr "Cóipeáil"
 
-#: templatedlg.cpp:87
+#: templatedlg.cpp:88
 #, fuzzy, kde-format
 #| msgctxt "@info:whatsthis"
 #| msgid "Create a new alarm template"
@@ -8182,7 +8182,7 @@ msgctxt "@info:tooltip"
 msgid "Create a new alarm template based on the selected template"
 msgstr "Cruthaigh teimpléad nua aláraim"
 
-#: templatedlg.cpp:88
+#: templatedlg.cpp:89
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -8190,7 +8190,7 @@ msgid ""
 "template"
 msgstr ""
 
-#: templatedlg.cpp:93
+#: templatedlg.cpp:94
 #, fuzzy, kde-format
 #| msgctxt "@info"
 #| msgid "Do you really want to delete the selected alarm template?"
@@ -8199,7 +8199,7 @@ msgctxt "@info:tooltip"
 msgid "Delete the selected alarm templates"
 msgstr "An bhfuil tú cinnte gur mian leat an teimpléad roghnaithe a scriosadh?"
 
-#: templatedlg.cpp:94
+#: templatedlg.cpp:95
 #, fuzzy, kde-format
 #| msgctxt "@info:whatsthis"
 #| msgid "Edit the currently highlighted alarm template"
@@ -8207,7 +8207,7 @@ msgctxt "@info:whatsthis"
 msgid "Delete the currently highlighted alarm templates"
 msgstr "Iontráil an t-ainm ar an teimpléad aláraim"
 
-#: templatedlg.cpp:176
+#: templatedlg.cpp:177
 #, kde-format
 msgctxt "@info"
 msgid "Do you really want to delete the selected alarm template?"
@@ -8223,7 +8223,7 @@ msgstr[3] ""
 msgstr[4] ""
 "An bhfuil tú cinnte gur mian leat na %1 teimpléad roghnaithe a scriosadh?"
 
-#: templatedlg.cpp:178
+#: templatedlg.cpp:179
 #, kde-format
 msgctxt "@title:window"
 msgid "Delete Alarm Template"

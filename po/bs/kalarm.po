@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-10-05 00:46+0000\n"
+"POT-Creation-Date: 2022-10-13 00:47+0000\n"
 "PO-Revision-Date: 2015-01-08 09:03+0100\n"
 "Last-Translator: Samir Ribic <samir.ribic@etf.unsa.ba>\n"
 "Language-Team: bosanski <bs@li.org>\n"
@@ -4614,7 +4614,7 @@ msgstr[0] "Obriši alarm"
 msgstr[1] "Obriši alarme"
 msgstr[2] "Obriši alarme"
 
-#: mainwindow.cpp:808 templatedlg.cpp:179
+#: mainwindow.cpp:808 templatedlg.cpp:180
 #, kde-format
 msgctxt "@action:button"
 msgid "&Delete"
@@ -6480,7 +6480,7 @@ msgstr ""
 "Mijenja trenutno označenu stavku u listi izuzetaka sa prethodno navedenim "
 "datumom"
 
-#: recurrenceedit.cpp:318 templatedlg.cpp:91
+#: recurrenceedit.cpp:318 templatedlg.cpp:92
 #, kde-format
 msgctxt "@action:button"
 msgid "Delete"
@@ -7880,7 +7880,7 @@ msgstr ""
 "je kalendar  omogućen (obilježen) ili isključen (neobilježen).Zadani "
 "kalendar je prikazan podebljano."
 
-#: resourceselector.cpp:77 templatedlg.cpp:79
+#: resourceselector.cpp:77 templatedlg.cpp:80
 #, kde-format
 msgctxt "@action:button"
 msgid "Edit..."
@@ -8475,31 +8475,31 @@ msgstr ""
 "podsjetnika. Ako odgodite alarm, ne izvršava se sve dok alarm konačno nije "
 "priznat ili zatvoren.</para>"
 
-#: templatedlg.cpp:47
+#: templatedlg.cpp:48
 #, kde-format
 msgctxt "@title:window"
 msgid "Alarm Templates"
 msgstr "Šabloni alarma"
 
-#: templatedlg.cpp:63 templatelistview.cpp:24
+#: templatedlg.cpp:64 templatelistview.cpp:24
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "The list of alarm templates"
 msgstr "Spisak šablona za alarme"
 
-#: templatedlg.cpp:71
+#: templatedlg.cpp:72
 #, kde-format
 msgctxt "@action:button"
 msgid "New"
 msgstr "Novi"
 
-#: templatedlg.cpp:72
+#: templatedlg.cpp:73
 #, kde-format
 msgctxt "@action"
 msgid "New"
 msgstr "Novi"
 
-#: templatedlg.cpp:75
+#: templatedlg.cpp:76
 #, fuzzy, kde-format
 #| msgctxt "@info:whatsthis"
 #| msgid "Create a new alarm template"
@@ -8507,13 +8507,13 @@ msgctxt "@info:tooltip"
 msgid "Create a new alarm template"
 msgstr "Kreiraj novi šablon za alarme"
 
-#: templatedlg.cpp:76
+#: templatedlg.cpp:77
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Create a new alarm template"
 msgstr "Kreiraj novi šablon za alarme"
 
-#: templatedlg.cpp:81
+#: templatedlg.cpp:82
 #, fuzzy, kde-format
 #| msgctxt "@info:whatsthis"
 #| msgid "Edit the currently highlighted alarm template"
@@ -8521,19 +8521,19 @@ msgctxt "@info:tooltip"
 msgid "Edit the selected alarm template"
 msgstr "Izmijenite trenutno izabrani šablon za alarme"
 
-#: templatedlg.cpp:82
+#: templatedlg.cpp:83
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Edit the currently highlighted alarm template"
 msgstr "Izmijenite trenutno izabrani šablon za alarme"
 
-#: templatedlg.cpp:85
+#: templatedlg.cpp:86
 #, kde-format
 msgctxt "@action:button"
 msgid "Copy"
 msgstr "Kopiraj"
 
-#: templatedlg.cpp:87
+#: templatedlg.cpp:88
 #, fuzzy, kde-format
 #| msgctxt "@info:whatsthis"
 #| msgid ""
@@ -8544,7 +8544,7 @@ msgid "Create a new alarm template based on the selected template"
 msgstr ""
 "Kreiraj novi šablon za alarme baziran na kopiji trenutno izabranog šablona"
 
-#: templatedlg.cpp:88
+#: templatedlg.cpp:89
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -8553,7 +8553,7 @@ msgid ""
 msgstr ""
 "Kreiraj novi šablon za alarme baziran na kopiji trenutno izabranog šablona"
 
-#: templatedlg.cpp:93
+#: templatedlg.cpp:94
 #, fuzzy, kde-format
 #| msgctxt "@info:whatsthis"
 #| msgid "Delete the currently highlighted alarm template"
@@ -8561,7 +8561,7 @@ msgctxt "@info:tooltip"
 msgid "Delete the selected alarm templates"
 msgstr "Briše trenutno izabrani šablon za alarme"
 
-#: templatedlg.cpp:94
+#: templatedlg.cpp:95
 #, fuzzy, kde-format
 #| msgctxt "@info:whatsthis"
 #| msgid "Delete the currently highlighted alarm template"
@@ -8569,7 +8569,7 @@ msgctxt "@info:whatsthis"
 msgid "Delete the currently highlighted alarm templates"
 msgstr "Briše trenutno izabrani šablon za alarme"
 
-#: templatedlg.cpp:176
+#: templatedlg.cpp:177
 #, kde-format
 msgctxt "@info"
 msgid "Do you really want to delete the selected alarm template?"
@@ -8578,7 +8578,7 @@ msgstr[0] "Da li stvarno želite obrisati izabrani %1 šablon za alarme?"
 msgstr[1] "Da li stvarno želite obrisati %1 izabrana šablona za alarme?"
 msgstr[2] "Da li stvarno želite obrisati %1 izabranih šablona za alarme?"
 
-#: templatedlg.cpp:178
+#: templatedlg.cpp:179
 #, kde-format
 msgctxt "@title:window"
 msgid "Delete Alarm Template"

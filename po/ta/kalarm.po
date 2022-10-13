@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-10-05 00:46+0000\n"
+"POT-Creation-Date: 2022-10-13 00:47+0000\n"
 "PO-Revision-Date: 2022-04-07 21:42+0530\n"
 "Last-Translator: Kishore G <kishore96@gmail.com>\n"
 "Language-Team: Tamil <kde-i18n-doc@kde.org>\n"
@@ -4472,7 +4472,7 @@ msgid_plural "Delete Alarms"
 msgstr[0] "அலாரத்தை நீக்குதல்"
 msgstr[1] "அலாரங்களை நீக்குதல்"
 
-#: mainwindow.cpp:808 templatedlg.cpp:179
+#: mainwindow.cpp:808 templatedlg.cpp:180
 #, kde-format
 msgctxt "@action:button"
 msgid "&Delete"
@@ -6283,7 +6283,7 @@ msgid ""
 msgstr ""
 "விதிவிலக்குகளின் பட்டியலில் தேர்ந்தெடுக்கப்பட்ட தேதிக்கு பதிலாக மேலுள்ள தேதியை சேர்க்கும்"
 
-#: recurrenceedit.cpp:318 templatedlg.cpp:91
+#: recurrenceedit.cpp:318 templatedlg.cpp:92
 #, kde-format
 msgctxt "@action:button"
 msgid "Delete"
@@ -7619,7 +7619,7 @@ msgstr ""
 "குறிப்புப்பெட்டி நிரப்பப்பட்டிருக்கும்; மாறாக முடக்கப்பட்டிருந்தால், குறிப்புப்பெட்டி "
 "காலியாக இருக்கும். இயல்பிருப்பு நாள்காட்டி தடித்த எழுத்துக்களுடன் காணப்படும்."
 
-#: resourceselector.cpp:77 templatedlg.cpp:79
+#: resourceselector.cpp:77 templatedlg.cpp:80
 #, kde-format
 msgctxt "@action:button"
 msgid "Edit..."
@@ -8205,61 +8205,61 @@ msgstr ""
 "அலாரத்தை நீங்கள் ஒத்திவைத்தால், அலாரத்தை இறுதியாக மூடும்போதுதான் இக்கட்டளை இயக்கப்படும்.</"
 "para>"
 
-#: templatedlg.cpp:47
+#: templatedlg.cpp:48
 #, kde-format
 msgctxt "@title:window"
 msgid "Alarm Templates"
 msgstr "அலார வார்ப்புருக்கள்"
 
-#: templatedlg.cpp:63 templatelistview.cpp:24
+#: templatedlg.cpp:64 templatelistview.cpp:24
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "The list of alarm templates"
 msgstr "அலார வார்ப்புருக்களின் பட்டியல்"
 
-#: templatedlg.cpp:71
+#: templatedlg.cpp:72
 #, kde-format
 msgctxt "@action:button"
 msgid "New"
 msgstr "புதியது"
 
-#: templatedlg.cpp:72
+#: templatedlg.cpp:73
 #, kde-format
 msgctxt "@action"
 msgid "New"
 msgstr "புதியது"
 
-#: templatedlg.cpp:75
+#: templatedlg.cpp:76
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Create a new alarm template"
 msgstr "புதிய அலார வார்ப்புருவை உருவாக்கு"
 
-#: templatedlg.cpp:76
+#: templatedlg.cpp:77
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Create a new alarm template"
 msgstr "புதிய அலார வார்ப்புருவை உருவாக்க உதவும்"
 
-#: templatedlg.cpp:81
+#: templatedlg.cpp:82
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Edit the selected alarm template"
 msgstr "தேர்ந்தெடுக்கப்பட்ட அலார வார்ப்புருவை திருத்து"
 
-#: templatedlg.cpp:82
+#: templatedlg.cpp:83
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Edit the currently highlighted alarm template"
 msgstr "தற்போது தேர்ந்தெடுக்கப்பட்டுள்ள அலார வார்ப்புருவை திருத்த உதவும்"
 
-#: templatedlg.cpp:85
+#: templatedlg.cpp:86
 #, kde-format
 msgctxt "@action:button"
 msgid "Copy"
 msgstr "நகலெடு"
 
-#: templatedlg.cpp:87
+#: templatedlg.cpp:88
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Create a new alarm template based on the selected template"
@@ -8267,7 +8267,7 @@ msgstr ""
 "தேர்ந்தெடுக்கப்பட்ட அலார வார்ப்புருவை அடிப்படையாக கொண்டு புதிய அலார வார்ப்புருவை "
 "உருவாக்கு"
 
-#: templatedlg.cpp:88
+#: templatedlg.cpp:89
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -8277,19 +8277,19 @@ msgstr ""
 "தற்போது தேர்ந்தெடுக்கப்பட்டுள்ள அலார வார்ப்புருவை அடிப்படையாக கொண்டு புதிய அலார "
 "வார்ப்புருவை உருவாக்க உதவும்"
 
-#: templatedlg.cpp:93
+#: templatedlg.cpp:94
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Delete the selected alarm templates"
 msgstr "தேர்ந்தெடுக்கப்பட்ட அலார வார்ப்புருக்களை நீக்கு"
 
-#: templatedlg.cpp:94
+#: templatedlg.cpp:95
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Delete the currently highlighted alarm templates"
 msgstr "தற்போது தேர்ந்தெடுக்கப்பட்டுள்ள அலார வார்ப்புருக்களை நீக்கும்"
 
-#: templatedlg.cpp:176
+#: templatedlg.cpp:177
 #, kde-format
 msgctxt "@info"
 msgid "Do you really want to delete the selected alarm template?"
@@ -8297,7 +8297,7 @@ msgid_plural "Do you really want to delete the %1 selected alarm templates?"
 msgstr[0] "தேர்ந்தெடுக்கப்பட்டுள்ள அலார வார்ப்புருவை உறுதியாக நீக்க வேண்டுமா?"
 msgstr[1] "தேர்ந்தெடுக்கப்பட்டுள்ள %1 அலார வார்ப்புருக்களை உறுதியாக நீக்க வேண்டுமா?"
 
-#: templatedlg.cpp:178
+#: templatedlg.cpp:179
 #, kde-format
 msgctxt "@title:window"
 msgid "Delete Alarm Template"

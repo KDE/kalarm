@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-10-05 00:46+0000\n"
+"POT-Creation-Date: 2022-10-13 00:47+0000\n"
 "PO-Revision-Date: 2007-08-22 18:39+0330\n"
 "Last-Translator: Nazanin Kazemi <kazemi@itland.ir>\n"
 "Language-Team: Persian <kde-i18n-fa@kde.org>\n"
@@ -4939,7 +4939,7 @@ msgid "Delete Alarm"
 msgid_plural "Delete Alarms"
 msgstr[0] "حذف هشدار"
 
-#: mainwindow.cpp:808 templatedlg.cpp:179
+#: mainwindow.cpp:808 templatedlg.cpp:180
 #, kde-format
 msgctxt "@action:button"
 msgid "&Delete"
@@ -6893,7 +6893,7 @@ msgid ""
 "entered above"
 msgstr "جایگزینی فقره مشخص‌شده جاری در فهرست استثناها با تاریخ واردشده در بالا"
 
-#: recurrenceedit.cpp:318 templatedlg.cpp:91
+#: recurrenceedit.cpp:318 templatedlg.cpp:92
 #, kde-format
 msgctxt "@action:button"
 msgid "Delete"
@@ -8365,7 +8365,7 @@ msgstr ""
 "فهرست موجود نوع برگزیده. وضعیت علامت‌خورده نشان می‌دهد که منبع فعال "
 "است )علامت‌دار( یا غیرفعال )بدون علامت(. منبع پیش‌فرض توپر نمایش داده می‌شود."
 
-#: resourceselector.cpp:77 templatedlg.cpp:79
+#: resourceselector.cpp:77 templatedlg.cpp:80
 #, kde-format
 msgctxt "@action:button"
 msgid "Edit..."
@@ -9007,32 +9007,32 @@ msgstr ""
 "توجه کنید که پس از بستن پنجره باقی‌مانده اجرا نمی‌شود. اگر هشدار را به تعویق "
 "بیندازید، تا وقتی هشدار تأیید نهایی یا بسته نشود اجرا نمی‌شود."
 
-#: templatedlg.cpp:47
+#: templatedlg.cpp:48
 #, kde-format
 msgctxt "@title:window"
 msgid "Alarm Templates"
 msgstr "قالبهای هشدار"
 
-#: templatedlg.cpp:63 templatelistview.cpp:24
+#: templatedlg.cpp:64 templatelistview.cpp:24
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "The list of alarm templates"
 msgstr "فهرست قالبهای هشدار"
 
-#: templatedlg.cpp:71
+#: templatedlg.cpp:72
 #, kde-format
 msgctxt "@action:button"
 msgid "New"
 msgstr "&جدید‌"
 
-#: templatedlg.cpp:72
+#: templatedlg.cpp:73
 #, fuzzy, kde-format
 #| msgid "&New..."
 msgctxt "@action"
 msgid "New"
 msgstr "&جدید...‌"
 
-#: templatedlg.cpp:75
+#: templatedlg.cpp:76
 #, fuzzy, kde-format
 #| msgctxt "@info:whatsthis"
 #| msgid "Create a new alarm template"
@@ -9040,13 +9040,13 @@ msgctxt "@info:tooltip"
 msgid "Create a new alarm template"
 msgstr "ایجاد قالب هشدار جدید"
 
-#: templatedlg.cpp:76
+#: templatedlg.cpp:77
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Create a new alarm template"
 msgstr "ایجاد قالب هشدار جدید"
 
-#: templatedlg.cpp:81
+#: templatedlg.cpp:82
 #, fuzzy, kde-format
 #| msgctxt "@info:whatsthis"
 #| msgid "Edit the currently highlighted alarm template"
@@ -9054,19 +9054,19 @@ msgctxt "@info:tooltip"
 msgid "Edit the selected alarm template"
 msgstr "ویرایش قالب هشدار مشخص‌شده جاری"
 
-#: templatedlg.cpp:82
+#: templatedlg.cpp:83
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Edit the currently highlighted alarm template"
 msgstr "ویرایش قالب هشدار مشخص‌شده جاری"
 
-#: templatedlg.cpp:85
+#: templatedlg.cpp:86
 #, kde-format
 msgctxt "@action:button"
 msgid "Copy"
 msgstr "&رونوشت‌"
 
-#: templatedlg.cpp:87
+#: templatedlg.cpp:88
 #, fuzzy, kde-format
 #| msgctxt "@info:whatsthis"
 #| msgid ""
@@ -9076,7 +9076,7 @@ msgctxt "@info:tooltip"
 msgid "Create a new alarm template based on the selected template"
 msgstr "ایجاد قالب هشدار جدیدی بر اساس رونوشتی از قالب مشخص‌شده جاری"
 
-#: templatedlg.cpp:88
+#: templatedlg.cpp:89
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -9084,7 +9084,7 @@ msgid ""
 "template"
 msgstr "ایجاد قالب هشدار جدیدی بر اساس رونوشتی از قالب مشخص‌شده جاری"
 
-#: templatedlg.cpp:93
+#: templatedlg.cpp:94
 #, fuzzy, kde-format
 #| msgctxt "@info:whatsthis"
 #| msgid "Delete the currently highlighted alarm template"
@@ -9092,7 +9092,7 @@ msgctxt "@info:tooltip"
 msgid "Delete the selected alarm templates"
 msgstr "حذف قالب هشدار مشخص‌شده جاری"
 
-#: templatedlg.cpp:94
+#: templatedlg.cpp:95
 #, fuzzy, kde-format
 #| msgctxt "@info:whatsthis"
 #| msgid "Delete the currently highlighted alarm template"
@@ -9100,14 +9100,14 @@ msgctxt "@info:whatsthis"
 msgid "Delete the currently highlighted alarm templates"
 msgstr "حذف قالب هشدار مشخص‌شده جاری"
 
-#: templatedlg.cpp:176
+#: templatedlg.cpp:177
 #, kde-format
 msgctxt "@info"
 msgid "Do you really want to delete the selected alarm template?"
 msgid_plural "Do you really want to delete the %1 selected alarm templates?"
 msgstr[0] "واقعاً می‌خواهید %1 قالب هشدار برگزیده را حذف کنید؟"
 
-#: templatedlg.cpp:178
+#: templatedlg.cpp:179
 #, kde-format
 msgctxt "@title:window"
 msgid "Delete Alarm Template"
