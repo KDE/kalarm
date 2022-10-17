@@ -266,12 +266,12 @@ msgstr "Autoria"
 #: autostart/autostart.cpp:58
 #, kde-format
 msgid "Application to run"
-msgstr "Aplicació a executar"
+msgstr "Aplicació que s'ha d'executar"
 
 #: autostart/autostart.cpp:59
 #, kde-format
 msgid "Command line arguments to pass to application"
-msgstr "Arguments de la línia d'ordres que es passaran a l'aplicació"
+msgstr "Arguments de la línia d'ordres que s'han de passar a l'aplicació"
 
 #: birthdaydlg.cpp:45
 #, kde-format
@@ -509,7 +509,7 @@ msgstr "Mostra el diàleg d'edició d'una alarma, inicialitzat amb una plantilla
 #: commandoptions.cpp:189
 #, kde-format
 msgid "File to display"
-msgstr "Fitxer que es mostrarà"
+msgstr "Fitxer que s'ha de mostrar"
 
 #: commandoptions.cpp:193
 #, kde-format
@@ -589,7 +589,7 @@ msgstr ""
 #: commandoptions.cpp:245
 #, kde-format
 msgid "Number of times to repeat alarm (including initial occasion)"
-msgstr "Nombre de vegades que es repetirà l'alarma (inclosa l'ocasió inicial)"
+msgstr "Nombre de vegades a repetir l'alarma (inclosa l'ocasió inicial)"
 
 #: commandoptions.cpp:250
 #, kde-format
@@ -640,7 +640,7 @@ msgstr "Volum al qual reproduir el fitxer d'àudio"
 #: commandoptions.cpp:290
 #, kde-format
 msgid "Message text to display"
-msgstr "Missatge de text a mostrar"
+msgstr "Missatge de text que s'ha de mostrar"
 
 #: commandoptions.cpp:454
 #, kde-kuit-format
@@ -1067,7 +1067,7 @@ msgstr ""
 msgctxt "@label"
 msgid "Number of alarms to show in system tray tooltip"
 msgstr ""
-"Nombre d'alarmes que es mostraran en el consell de la safata del sistema"
+"Nombre d'alarmes que s'han de mostrar en el consell de la safata del sistema"
 
 #. i18n: ectx: whatsthis, entry (TooltipAlarmCount), group (General)
 #: data/kalarmconfig.kcfg:169
@@ -1363,7 +1363,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label"
 msgid "Days to keep expired alarms"
-msgstr "Dies a mantindre les alarmes expirades"
+msgstr "Dies que s'han de mantindre les alarmes expirades"
 
 #. i18n: ectx: whatsthis, entry (ArchivedKeepDays), group (General)
 #: data/kalarmconfig.kcfg:262
@@ -1787,7 +1787,7 @@ msgstr "Acció de prealarma"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Default command to execute before displaying alarms."
-msgstr "Ordre predeterminada a executar abans de mostrar les alarmes."
+msgstr "Ordre predeterminada que s'executarà abans de mostrar les alarmes."
 
 #. i18n: ectx: label, entry (DefaultExecPreActionOnDeferral), group (Defaults)
 #: data/kalarmconfig.kcfg:405
@@ -1856,8 +1856,8 @@ msgstr "Acció de postalarma"
 msgctxt "@info:whatsthis"
 msgid "Default command to execute after alarm message windows are closed."
 msgstr ""
-"Ordre predeterminada a executar després de tancar les finestres del missatge "
-"de l'alarma."
+"Ordre predeterminada que s'executarà després de tancar les finestres del "
+"missatge de l'alarma."
 
 #. i18n: ectx: label, entry (Base_QuitWarn), group (Notification Messages)
 #: data/kalarmconfig.kcfg:427
@@ -1948,8 +1948,8 @@ msgid ""
 "Select dates to show in the alarm list. Only alarms due on these dates will "
 "be shown."
 msgstr ""
-"Seleccioneu les dates a mostrar en la llista d'alarmes. Només es mostraran "
-"les alarmes que vencen en estes dates."
+"Seleccioneu les dates que es mostraran en la llista d'alarmes. Només es "
+"mostraran les alarmes que vencen en estes dates."
 
 #: datepicker.cpp:37
 #, kde-format
@@ -2537,7 +2537,7 @@ msgstr "Mostra ara l'eixida de l'ordre"
 #, kde-format
 msgctxt "@title:window"
 msgid "Choose Text or Image File to Display"
-msgstr "Seleccioneu el fitxer de text o una imatge que es mostrarà"
+msgstr "Seleccioneu el fitxer de text o una imatge que s'haja de mostrar"
 
 #: editdlgtypes.cpp:799
 #, kde-format
@@ -2940,19 +2940,19 @@ msgstr ""
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter a shell command to execute."
-msgstr "Introduïu una ordre que s'ha d'executar en l'intèrpret d'ordres."
+msgstr "Introduïu una ordre que s'executarà en l'intèrpret d'ordres."
 
 #: editdlgtypes.cpp:1839
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the contents of a script to execute"
-msgstr "Introduïu el contingut d'un script que s'ha d'executar"
+msgstr "Introduïu el contingut d'un script que s'haja d'executar"
 
 #: editdlgtypes.cpp:1895
 #, kde-format
 msgctxt "@info"
 msgid "Please enter a command or script to execute"
-msgstr "Introduïu una ordre o script que s'ha d'executar"
+msgstr "Introduïu una ordre o script que s'haja d'executar"
 
 #: eventlistview.cpp:33
 #, kde-format
@@ -3186,7 +3186,7 @@ msgstr "Fitxers de calendari"
 #, kde-format
 msgctxt "@title:window"
 msgid "Choose Export Calendar"
-msgstr "Seleccioneu el calendari que s'exportarà"
+msgstr "Seleccioneu el calendari que s'ha d'exportar"
 
 #: functions.cpp:955
 #, kde-kuit-format
@@ -4224,13 +4224,13 @@ msgstr ""
 #, kde-format
 msgctxt "@info"
 msgid "Please select a file to display"
-msgstr "Seleccioneu un fitxer que es mostrarà"
+msgstr "Seleccioneu un fitxer que s'haja de mostrar"
 
 #: lib/file.cpp:109
 #, kde-format
 msgctxt "@info"
 msgid "Please select a file to play"
-msgstr "Seleccioneu un fitxer que s'ha de reproduir"
+msgstr "Seleccioneu un fitxer que s'haja de reproduir"
 
 #: lib/file.cpp:115
 #, kde-kuit-format
@@ -4563,7 +4563,7 @@ msgstr "Tipus d'alarma"
 #, kde-format
 msgctxt "@info"
 msgid "Choose alarm type to create:"
-msgstr "Escolliu el tipus d'alarma que es crearà:"
+msgstr "Escolliu el tipus d'alarma que s'ha de crear:"
 
 #: mainwindow.cpp:1680
 #, kde-format
@@ -5952,7 +5952,7 @@ msgstr ""
 #, kde-format
 msgctxt "@option:check"
 msgid "Maximum number of alarms to show:"
-msgstr "Nombre màxim d'alarmes que es mostraran:"
+msgstr "Nombre màxim d'alarmes que s'han de mostrar:"
 
 #: prefdlg.cpp:1823
 #, kde-format
@@ -6994,7 +6994,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Display name:"
-msgstr "Nom que es mostrarà:"
+msgstr "Nom que s'ha de mostrar:"
 
 #. i18n: ectx: property (text), widget (QLabel, label2)
 #: resources/migration/dirresourceimportdialog_intro.ui:47
@@ -7307,7 +7307,7 @@ msgid ""
 "email subject line"
 msgstr ""
 "El text del missatge de l'alarma, l'URL del fitxer de text que es mostrarà, "
-"l'ordre que s'ha d'executar o la línia de l'assumpte del correu electrònic"
+"l'ordre que s'haja d'executar o la línia de l'assumpte del correu electrònic"
 
 #: resources/resourcedatamodelbase.cpp:568
 #, kde-format
@@ -7354,7 +7354,7 @@ msgid ""
 "are configured to be kept."
 msgstr ""
 "No podeu desactivar el calendari predeterminat d'alarmes arxivades mentre "
-"que les alarmes expirades estiguen configurades a mantindre's."
+"que les alarmes expirades estiguen configurades per a mantindre's."
 
 #: resources/resourcemodel.cpp:338
 #, kde-format
@@ -7596,7 +7596,7 @@ msgstr "Plantilles d'alarma"
 #, kde-format
 msgctxt "@title:group"
 msgid "Display Name"
-msgstr "Nom que es mostrarà"
+msgstr "Nom que s'ha de mostrar"
 
 #. i18n: ectx: property (text), widget (QLabel, label_1)
 #: resources/singlefileresourceconfigdialog.ui:201
@@ -7670,7 +7670,7 @@ msgstr "Plantilles d'alarma"
 msgctxt "@info:whatsthis"
 msgid "Choose which type of data to show alarm calendars for"
 msgstr ""
-"Seleccioneu el tipus de dades que es mostraran pels calendaris d'alarma"
+"Seleccioneu el tipus de dades que s'ha de mostrar pels calendaris d'alarma"
 
 #: resourceselector.cpp:68
 #, kde-format
@@ -7752,7 +7752,7 @@ msgid ""
 "are configured to be kept."
 msgstr ""
 "No podeu eliminar el calendari predeterminat d'alarmes arxivades mentre que "
-"les alarmes expirades estiguen configurades a mantindre."
+"les alarmes expirades estiguen configurades per a mantindre's."
 
 #: resourceselector.cpp:253
 #, kde-kuit-format
@@ -7994,13 +7994,13 @@ msgstr "Reproduïx el fitxer de so seleccionat."
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the name or URL of a sound file to play."
-msgstr "Introduïu el nom o l'URL del fitxer de so que s'ha de reproduir."
+msgstr "Introduïu el nom o l'URL del fitxer de so que es reproduirà."
 
 #: sounddlg.cpp:185
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select a sound file to play."
-msgstr "Seleccioneu un fitxer de so que s'ha de reproduir."
+msgstr "Seleccioneu un fitxer de so que es reproduirà."
 
 #: sounddlg.cpp:207
 #, kde-format
@@ -8141,8 +8141,7 @@ msgstr "Configuració del fitxer de so"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Configure a sound file to play when the alarm is displayed."
-msgstr ""
-"Configura un fitxer de so que s'ha de reproduir quan es mostre l'alarma."
+msgstr "Configura un fitxer de so que es reproduirà quan es mostre l'alarma."
 
 #: soundpicker.cpp:259
 #, kde-format
@@ -8179,7 +8178,7 @@ msgstr "Establiu les ordres que s'han d'executar"
 msgctxt "@info:whatsthis"
 msgid "Specify actions to execute before and after the alarm is displayed."
 msgstr ""
-"Especifica les accions que s'han d'executar abans i després que es mostre "
+"Especifica les accions que s'executaran abans i després que es mostre "
 "l'alarma."
 
 #: specialactions.cpp:91
