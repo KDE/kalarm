@@ -52,6 +52,7 @@
 #include <QStandardPaths>
 #include <QSystemTrayIcon>
 #include <QCommandLineParser>
+#include <kwidgetsaddons_version.h>
 
 #include <stdlib.h>
 #include <ctype.h>
@@ -841,11 +842,19 @@ void KAlarmApp::doQuit(QWidget* parent)
         }
         switch (option)
         {
+#if KWIDGETSADDONS_VERSION >= QT_VERSION_CHECK(5, 100, 0)
+            case KMessageBox::ButtonCode::PrimaryAction:
+#else
             case KMessageBox::Yes:
+#endif
                 Preferences::setAutoStart(true);
                 Preferences::setNoAutoStart(false);
                 break;
+#if KWIDGETSADDONS_VERSION >= QT_VERSION_CHECK(5, 100, 0)
+            case KMessageBox::ButtonCode::SecondaryAction:
+#else
             case KMessageBox::No:
+#endif
                 Preferences::setNoAutoStart(true);
                 break;
             case KMessageBox::Cancel:

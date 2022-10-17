@@ -17,6 +17,7 @@
 #include <KLocalizedString>
 
 #include <QTimer>
+#include <kwidgetsaddons_version.h>
 
 using namespace KAlarmCal;
 
@@ -100,7 +101,11 @@ bool FileResourceCalendarUpdater::update(bool useTimer)
 bool FileResourceCalendarUpdater::prompt()
 {
     bool result = true;
+#if KWIDGETSADDONS_VERSION >= QT_VERSION_CHECK(5, 100, 0)
+    const bool convert = (KAMessageBox::warningYesNo(mPromptParent, mPromptMessage) == KMessageBox::ButtonCode::PrimaryAction);
+#else
     const bool convert = (KAMessageBox::warningYesNo(mPromptParent, mPromptMessage) == KMessageBox::Yes);
+#endif
     if (!convert)
         result = false;
     if (convert)

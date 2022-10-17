@@ -63,6 +63,7 @@ using namespace KHolidays;
 #endif
 #include <KWindowSystem>
 #include <KHelpClient>
+#include <kwidgetsaddons_version.h>
 
 #include <QLabel>
 #include <QCheckBox>
@@ -212,7 +213,11 @@ void KAlarmPrefDlg::slotApply()
     if (!errmsg.isEmpty())
     {
         setCurrentPage(mEmailPageItem);
+#if KWIDGETSADDONS_VERSION >= QT_VERSION_CHECK(5, 100, 0)
+        if (KAMessageBox::warningYesNo(this, errmsg) != KMessageBox::ButtonCode::PrimaryAction)
+#else
         if (KAMessageBox::warningYesNo(this, errmsg) != KMessageBox::Yes)
+#endif
         {
             mValid = false;
             return;
@@ -263,10 +268,18 @@ void KAlarmPrefDlg::slotDefault()
                          KGuiItem(i18nc("@action:button Reset ALL tabs", "&All")),
                          KGuiItem(i18nc("@action:button Reset the CURRENT tab", "C&urrent"))))
     {
+#if KWIDGETSADDONS_VERSION >= QT_VERSION_CHECK(5, 100, 0)
+        case KMessageBox::ButtonCode::PrimaryAction:
+#else
         case KMessageBox::Yes:
+#endif
             restore(true);   // restore all tabs
             break;
+#if KWIDGETSADDONS_VERSION >= QT_VERSION_CHECK(5, 100, 0)
+        case KMessageBox::ButtonCode::SecondaryAction:
+#else
         case KMessageBox::No:
+#endif
             Preferences::self()->useDefaults(true);
             static_cast<PrefsTabBase*>(currentPage()->widget())->restore(true, false);
             Preferences::self()->useDefaults(false);
@@ -2111,5 +2124,4 @@ void ViewPrefTab::slotWindowPosChanged(QAbstractButton* button)
 }
 #include "moc_prefdlg_p.cpp"
 #include "moc_prefdlg.cpp"
-
 // vim: et sw=4:
