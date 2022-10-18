@@ -663,7 +663,11 @@ void MiscPrefTab::slotAutostartClicked()
     &&  KAMessageBox::warningYesNo(topLayout()->parentWidget(),
                                    xi18nc("@info", "You should not uncheck this option unless you intend to discontinue use of <application>KAlarm</application>"),
                                    QString(), KStandardGuiItem::cont(), KStandardGuiItem::cancel()
+#if KWIDGETSADDONS_VERSION >= QT_VERSION_CHECK(5, 100, 0)
+                                  ) != KMessageBox::ButtonCode::PrimaryAction)
+#else
                                   ) != KMessageBox::Yes)
+#endif
         mAutoStart->setChecked(true);
 }
 

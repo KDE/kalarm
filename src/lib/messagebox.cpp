@@ -75,7 +75,11 @@ bool KAMessageBox::shouldBeShownContinue(const QString& dontShowAgainName)
         return KMessageBox::shouldBeShownContinue(dontShowAgainName);
     // Cancel is the default button, so we have to use a yes/no message box
     KMessageBox::ButtonCode b;
+#if KWIDGETSADDONS_VERSION >= QT_VERSION_CHECK(5, 100, 0)
+    return shouldBeShownTwoActions(dontShowAgainName, b);
+#else
     return shouldBeShownYesNo(dontShowAgainName, b);
+#endif
 }
 
 
@@ -86,7 +90,12 @@ bool KAMessageBox::shouldBeShownContinue(const QString& dontShowAgainName)
 */
 void KAMessageBox::saveDontShowAgainYesNo(const QString& dontShowAgainName, bool dontShow, KMessageBox::ButtonCode result)
 {
+#if KWIDGETSADDONS_VERSION >= QT_VERSION_CHECK(5, 100, 0)
+    saveDontShowAgain(dontShowAgainName, true, dontShow, (result == KMessageBox::ButtonCode::PrimaryAction ? "yes" : "no"));
+#else
     saveDontShowAgain(dontShowAgainName, true, dontShow, (result == KMessageBox::Yes ? "yes" : "no"));
+#endif
+
 }
 
 /******************************************************************************
@@ -100,7 +109,11 @@ void KAMessageBox::saveDontShowAgainYesNo(const QString& dontShowAgainName, bool
 void KAMessageBox::saveDontShowAgainContinue(const QString& dontShowAgainName, bool dontShow)
 {
     if (getContinueDefault(dontShowAgainName) == KMessageBox::Cancel)
+#if KWIDGETSADDONS_VERSION >= QT_VERSION_CHECK(5, 100, 0)
+        saveDontShowAgainYesNo(dontShowAgainName, dontShow, KMessageBox::ButtonCode::PrimaryAction);
+#else
         saveDontShowAgainYesNo(dontShowAgainName, dontShow, KMessageBox::Yes);
+#endif
     else
         saveDontShowAgain(dontShowAgainName, false, dontShow);
 }

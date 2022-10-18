@@ -831,13 +831,21 @@ void KAlarmApp::doQuit(QWidget* parent)
 #endif
     if (!Preferences::autoStart())
     {
+#if KWIDGETSADDONS_VERSION >= QT_VERSION_CHECK(5, 100, 0)
+        int option = KMessageBox::ButtonCode::SecondaryAction;
+#else
         int option = KMessageBox::No;
+#endif
         if (!Preferences::autoStartChangedByUser())
         {
             option = KAMessageBox::questionYesNoCancel(parent,
                                          xi18nc("@info", "Do you want to start KAlarm at login?<nl/>"
                                                         "(Note that alarms will be disabled if KAlarm is not started.)"),
+#if KWIDGETSADDONS_VERSION >= QT_VERSION_CHECK(5, 100, 0)
+                                         QString(), KGuiItem(i18n("Yes")), KGuiItem(i18n("No")),
+#else
                                          QString(), KStandardGuiItem::yes(), KStandardGuiItem::no(),
+#endif
                                          KStandardGuiItem::cancel(), Preferences::ASK_AUTO_START);
         }
         switch (option)
