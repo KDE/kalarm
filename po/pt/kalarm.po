@@ -3358,17 +3358,13 @@ msgstr ""
 
 #: kalarmapp.cpp:845 lib/messagebox.h:116 lib/messagebox.h:134
 #: lib/messagebox.h:181
-#, fuzzy, kde-format
-#| msgctxt "@info General purpose status indication: yes or no"
-#| msgid "Yes"
+#, kde-format
 msgid "Yes"
 msgstr "Sim"
 
 #: kalarmapp.cpp:845 lib/messagebox.h:117 lib/messagebox.h:135
 #: lib/messagebox.h:182
-#, fuzzy, kde-format
-#| msgctxt "@info General purpose status indication: yes or no"
-#| msgid "No"
+#, kde-format
 msgid "No"
 msgstr "Não"
 

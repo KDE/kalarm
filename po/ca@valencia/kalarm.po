@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-10-19 00:46+0000\n"
-"PO-Revision-Date: 2022-09-23 11:12+0200\n"
+"PO-Revision-Date: 2022-10-19 09:55+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -212,7 +212,7 @@ msgstr "Zona horària:"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select the time zone to use for this alarm."
-msgstr "Seleccioneu la zona horària a utilitzar per a esta alarma."
+msgstr "Seleccioneu la zona horària que s'utilitzarà per a esta alarma."
 
 #: alarmtimewidget.cpp:274 alarmtimewidget.cpp:301
 #, kde-format
@@ -514,7 +514,7 @@ msgstr "Fitxer que s'ha de mostrar"
 #: commandoptions.cpp:193
 #, kde-format
 msgid "KMail identity to use as sender of email"
-msgstr "Identitat de KMail a utilitzar com a remitent del correu"
+msgstr "Identitat de KMail que s'ha d'utilitzar com a remitent del correu"
 
 #: commandoptions.cpp:197
 #, kde-format
@@ -589,7 +589,8 @@ msgstr ""
 #: commandoptions.cpp:245
 #, kde-format
 msgid "Number of times to repeat alarm (including initial occasion)"
-msgstr "Nombre de vegades a repetir l'alarma (inclosa l'ocasió inicial)"
+msgstr ""
+"Nombre de vegades que s'ha de repetir l'alarma (inclosa l'ocasió inicial)"
 
 #: commandoptions.cpp:250
 #, kde-format
@@ -813,7 +814,7 @@ msgstr "Regió de dies festius"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select the holiday region to use."
-msgstr "Seleccioneu la regió a utilitzar de dies festius."
+msgstr "Seleccioneu la regió que s'utilitzarà de dies festius."
 
 #. i18n: ectx: label, entry (DefaultFgColour), group (General)
 #: data/kalarmconfig.kcfg:90 kalarmcalendar/kaeventformatter.cpp:92
@@ -3381,17 +3382,13 @@ msgstr ""
 
 #: kalarmapp.cpp:845 lib/messagebox.h:116 lib/messagebox.h:134
 #: lib/messagebox.h:181
-#, fuzzy, kde-format
-#| msgctxt "@info General purpose status indication: yes or no"
-#| msgid "Yes"
+#, kde-format
 msgid "Yes"
 msgstr "Sí"
 
 #: kalarmapp.cpp:845 lib/messagebox.h:117 lib/messagebox.h:135
 #: lib/messagebox.h:182
-#, fuzzy, kde-format
-#| msgctxt "@info General purpose status indication: yes or no"
-#| msgid "No"
+#, kde-format
 msgid "No"
 msgstr "No"
 

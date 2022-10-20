@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-10-19 00:46+0000\n"
-"PO-Revision-Date: 2022-08-19 14:34-0300\n"
+"PO-Revision-Date: 2022-10-19 15:45-0300\n"
 "Last-Translator: Luiz Fernando Ranghetti <elchevive@opensuse.org>\n"
 "Language-Team: Portuguese <kde-i18n-pt_BR@kde.org>\n"
 "Language: pt_BR\n"
@@ -3364,17 +3364,13 @@ msgstr ""
 
 #: kalarmapp.cpp:845 lib/messagebox.h:116 lib/messagebox.h:134
 #: lib/messagebox.h:181
-#, fuzzy, kde-format
-#| msgctxt "@info General purpose status indication: yes or no"
-#| msgid "Yes"
+#, kde-format
 msgid "Yes"
 msgstr "Sim"
 
 #: kalarmapp.cpp:845 lib/messagebox.h:117 lib/messagebox.h:135
 #: lib/messagebox.h:182
-#, fuzzy, kde-format
-#| msgctxt "@info General purpose status indication: yes or no"
-#| msgid "No"
+#, kde-format
 msgid "No"
 msgstr "Não"
 
