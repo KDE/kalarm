@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-10-19 00:46+0000\n"
-"PO-Revision-Date: 2022-04-07 21:42+0530\n"
+"PO-Revision-Date: 2022-10-20 21:43+0530\n"
 "Last-Translator: Kishore G <kishore96@gmail.com>\n"
 "Language-Team: Tamil <kde-i18n-doc@kde.org>\n"
 "Language: ta\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 22.03.80\n"
+"X-Generator: Lokalize 22.08.2\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -36,15 +36,12 @@ msgid "Your emails"
 msgstr "tamilpc@ambalam.com"
 
 #: akonadiplugin/sendakonadimail.cpp:54
-#, fuzzy, kde-kuit-format
-#| msgid ""
-#| "Cannot open audio file:\n"
-#| "%1"
+#, kde-kuit-format
 msgctxt "@info"
 msgid "No mail transport configured for email identity <resource>%1</resource>"
 msgstr ""
-"இசை கோப்பினை திறக்க முடியவில்லை:\n"
-"%1 "
+"<resource>%1</resource> எனும் மின்னஞ்சல் அடையாளத்திற்கான அஞ்சலனுப்பும் கணக்கு "
+"அமைக்கப்படவில்லை"
 
 #: akonadiplugin/sendakonadimail.cpp:105
 #, kde-format
@@ -735,17 +732,17 @@ msgstr "கேயலாரம் தற்போது பயன்படுத�
 
 #. i18n: ectx: label, entry (Backend), group (General)
 #: data/kalarmconfig.kcfg:69
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@option"
 msgid "KResources"
-msgstr "&மறுபடியும் தோன்றுதல்"
+msgstr "KResources"
 
 #. i18n: ectx: label, entry (Backend), group (General)
 #: data/kalarmconfig.kcfg:70
 #, kde-format
 msgctxt "@option"
 msgid "Akonadi"
-msgstr ""
+msgstr "Akonadi"
 
 #. i18n: ectx: label, entry (Backend), group (General)
 #: data/kalarmconfig.kcfg:71
@@ -759,7 +756,7 @@ msgstr "&மறுபடியும் தோன்றுதல்"
 #, kde-format
 msgctxt "@label"
 msgid "Enable Akonadi plugin"
-msgstr ""
+msgstr "Akonadi செருகுநிரலை இயக்கு"
 
 #. i18n: ectx: whatsthis, entry (UseAkonadiIfAvailable), group (General)
 #: data/kalarmconfig.kcfg:76
@@ -773,10 +770,10 @@ msgstr ""
 
 #. i18n: ectx: label, entry (Base_TimeZone), group (General)
 #: data/kalarmconfig.kcfg:80
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label"
 msgid "Time zone"
-msgstr "இதற்குச் செவிமடு"
+msgstr "நேர மண்டலம்"
 
 #. i18n: ectx: whatsthis, entry (Base_TimeZone), group (General)
 #: data/kalarmconfig.kcfg:81
@@ -792,7 +789,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label"
 msgid "Holiday region"
-msgstr ""
+msgstr "விடுமுறைகளுக்கான மண்டலம்"
 
 #. i18n: ectx: whatsthis, entry (Base_HolidayRegion), group (General)
 #: data/kalarmconfig.kcfg:86
@@ -803,11 +800,10 @@ msgstr "அலாரத்திற்கான நேரத்தை உள்�
 
 #. i18n: ectx: label, entry (DefaultFgColour), group (General)
 #: data/kalarmconfig.kcfg:90 kalarmcalendar/kaeventformatter.cpp:92
-#, fuzzy, kde-format
-#| msgid "&Foreground color:"
+#, kde-format
 msgctxt "@label"
 msgid "Foreground color"
-msgstr "&முன் வண்ணம்"
+msgstr "முன்புல நிறம்"
 
 #. i18n: ectx: whatsthis, entry (DefaultFgColour), group (General)
 #: data/kalarmconfig.kcfg:91
@@ -818,10 +814,10 @@ msgstr "அலார செய்தியின் பின்னணி நி
 
 #. i18n: ectx: label, entry (DefaultBgColour), group (General)
 #: data/kalarmconfig.kcfg:95 kalarmcalendar/kaeventformatter.cpp:94
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label"
 msgid "Background color"
-msgstr "&பின்னணி நிறம்:"
+msgstr "பின்புல நிறம்"
 
 #. i18n: ectx: whatsthis, entry (DefaultBgColour), group (General)
 #: data/kalarmconfig.kcfg:96
@@ -832,11 +828,10 @@ msgstr "அலார செய்தியின் பின்னணி நி
 
 #. i18n: ectx: label, entry (UseAlarmName), group (General)
 #: data/kalarmconfig.kcfg:100
-#, fuzzy, kde-format
-#| msgid "The alarm message"
+#, kde-format
 msgctxt "@label"
 msgid "Enable alarm names"
-msgstr "அலார செய்தி"
+msgstr "அலாரங்களுக்கு பெயரிட விடு"
 
 #. i18n: ectx: whatsthis, entry (UseAlarmName), group (General)
 #: data/kalarmconfig.kcfg:101
@@ -2223,10 +2218,10 @@ msgstr ""
 "இருக்கவேண்டும்."
 
 #: editdlg.cpp:1143
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info"
 msgid "You must select a calendar to save the alarm in"
-msgstr "புதிய அலாரத்தின் அடிப்படையில் மாதிரி உருவை தேர்ந்தெடுக்கவும்"
+msgstr "அலாரத்தை சேமிப்பதற்கான நாள்காட்டியை தேர்ந்தெடுக்க வேண்டும்"
 
 #: editdlg.cpp:1224
 #, kde-format
@@ -2342,11 +2337,10 @@ msgid ""
 msgstr ""
 
 #: editdlgtypes.cpp:175
-#, fuzzy, kde-format
-#| msgid "Enter the text of the alarm message. It may be multi-line."
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the text of the alarm message. It may be multi-line."
-msgstr "அலார தகவலின் உரையை உள்ளிடவும். அது பல வரி கொண்டதாக இருக்கலாம்"
+msgstr "அலார தகவலுக்கான உரையை உள்ளிடவும். அது பல வரிகளைக் கொண்டதாக இருக்கலாம்"
 
 #: editdlgtypes.cpp:188
 #, fuzzy, kde-format
@@ -2763,11 +2757,10 @@ msgid "Do you really want to send the email now to the specified recipient(s)?"
 msgstr "நீங்கள் குறிப்பிட்ட பெறுநர்களுக்கு இப்போதே உறுதியாக மின்னஞ்சலை அனுப்ப வேண்டுமா?"
 
 #: editdlgtypes.cpp:1466
-#, fuzzy, kde-format
-#| msgid "Confirm Email"
+#, kde-format
 msgctxt "@action:button"
 msgid "Confirm Email"
-msgstr "மின்னஞ்சலை உறுதி செய்"
+msgstr "மின்னஞ்சலை உறுதி செய்யவும்"
 
 #: editdlgtypes.cpp:1466
 #, kde-format
@@ -3281,17 +3274,13 @@ msgstr ""
 
 #: kalarmapp.cpp:845 lib/messagebox.h:116 lib/messagebox.h:134
 #: lib/messagebox.h:181
-#, fuzzy, kde-format
-#| msgctxt "@info Parameter in 'Default calendar: Yes/No'"
-#| msgid "Yes"
+#, kde-format
 msgid "Yes"
 msgstr "ஆம்"
 
 #: kalarmapp.cpp:845 lib/messagebox.h:117 lib/messagebox.h:135
 #: lib/messagebox.h:182
-#, fuzzy, kde-format
-#| msgctxt "@info Parameter in 'Default calendar: Yes/No'"
-#| msgid "No"
+#, kde-format
 msgid "No"
 msgstr "இல்லை"
 
@@ -3393,9 +3382,7 @@ msgid "Post-alarm action:"
 msgstr "அலாரத்திற்கு பிறகான செயல்:"
 
 #: kalarmcalendar/alarmtext.cpp:506
-#, fuzzy, kde-format
-#| msgctxt "@label:listbox 'From' email address"
-#| msgid "From:"
+#, kde-format
 msgctxt "@info 'From' email address"
 msgid "From:"
 msgstr "அனுப்புநர்:"
@@ -3410,11 +3397,10 @@ msgstr "பெறுநர்:"
 #, kde-format
 msgctxt "@info Copy-to in email headers"
 msgid "Cc:"
-msgstr ""
+msgstr "நகல்:"
 
 #: kalarmcalendar/alarmtext.cpp:509
-#, fuzzy, kde-format
-#| msgid "Date:"
+#, kde-format
 msgctxt "@info"
 msgid "Date:"
 msgstr "தேதி:"
@@ -3434,18 +3420,16 @@ msgid "To-do:"
 msgstr "பெறுநர்:"
 
 #: kalarmcalendar/alarmtext.cpp:513
-#, fuzzy, kde-format
-#| msgid "Action"
+#, kde-format
 msgctxt "@info Todo calendar item's location field"
 msgid "Location:"
-msgstr "செயல்"
+msgstr "இருப்பிடம்:"
 
 #: kalarmcalendar/alarmtext.cpp:514
-#, fuzzy, kde-format
-#| msgid "Date:"
+#, kde-format
 msgctxt "@info Todo calendar item's due date/time"
 msgid "Due:"
-msgstr "தேதி:"
+msgstr "உரிய நேரம்:"
 
 #: kalarmcalendar/kacalendar.cpp:135
 #, kde-format
@@ -3453,26 +3437,21 @@ msgid "KAlarm"
 msgstr "கேஅலாரம்"
 
 #: kalarmcalendar/kaevent.cpp:2922
-#, fuzzy, kde-format
-#| msgctxt "Brief form of 'At Login'"
-#| msgid "Login"
+#, kde-format
 msgctxt "@info Brief form of 'At Login'"
 msgid "Login"
-msgstr ""
-"விரிவாக்கம் 'At Login'\n"
-"உள்நுழை"
+msgstr "நுழைவு"
 
 #: kalarmcalendar/kaevent.cpp:2922
-#, fuzzy, kde-format
-#| msgid "At login"
+#, kde-format
 msgctxt "@info"
 msgid "At login"
-msgstr "நுழைவு"
+msgstr "அமர்வில் நுழையும்போது"
 
 #: kalarmcalendar/kaevent.cpp:2931 kalarmcalendar/kaevent.cpp:3018
 #: kalarmcalendar/kaeventformatter.cpp:428
 #: kalarmcalendar/kaeventformatter.cpp:442
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info"
 msgid "1 Minute"
 msgid_plural "%1 Minutes"
@@ -3481,32 +3460,30 @@ msgstr[1] "%1 நிமிடங்கள்"
 
 #: kalarmcalendar/kaevent.cpp:2933 kalarmcalendar/kaevent.cpp:3020
 #: kalarmcalendar/kaeventformatter.cpp:444
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info"
 msgid "1 Hour"
 msgid_plural "%1 Hours"
-msgstr[0] "1 மணி"
-msgstr[1] "%1 மணிகள்"
+msgstr[0] "1 மணிநேரம்"
+msgstr[1] "%1 மணிநேரம்"
 
 #: kalarmcalendar/kaevent.cpp:2935 kalarmcalendar/kaevent.cpp:3021
-#, fuzzy, kde-format
-#| msgctxt "Undo-action: message"
-#| msgid "%1: %2"
+#, kde-format
 msgctxt "@info Hours and minutes"
 msgid "%1h %2m"
-msgstr "%1: %2"
+msgstr "%1ம %2நி"
 
 #: kalarmcalendar/kaevent.cpp:2938 kalarmcalendar/kaevent.cpp:3025
 #: kalarmcalendar/kaeventformatter.cpp:446
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info"
 msgid "1 Day"
 msgid_plural "%1 Days"
-msgstr[0] "1 தினம்"
-msgstr[1] " %1 தினங்கள்"
+msgstr[0] "1 நாள்"
+msgstr[1] "%1 நாட்கள்"
 
 #: kalarmcalendar/kaevent.cpp:2940 kalarmcalendar/kaevent.cpp:3026
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info"
 msgid "1 Week"
 msgid_plural "%1 Weeks"
@@ -3514,7 +3491,7 @@ msgstr[0] "1 வாரம்"
 msgstr[1] "%1 வாரங்கள்"
 
 #: kalarmcalendar/kaevent.cpp:2942
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info"
 msgid "1 Month"
 msgid_plural "%1 Months"
@@ -3522,25 +3499,21 @@ msgstr[0] "1 மாதம்"
 msgstr[1] "%1 மாதங்கள்"
 
 #: kalarmcalendar/kaevent.cpp:2944
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info"
 msgid "1 Year"
 msgid_plural "%1 Years"
-msgstr[0] "1 வருடம்r"
-msgstr[1] "%1 வருடங்கள்"
+msgstr[0] "1 ஆண்டு"
+msgstr[1] "%1 ஆண்டுகள்"
 
 #: kalarmcalendar/kaevent.cpp:2950
-#, fuzzy, kde-format
-#| msgctxt "No holiday region"
-#| msgid "None"
+#, kde-format
 msgctxt "@info No recurrence"
 msgid "None"
 msgstr "ஏதுமில்லை"
 
 #: kalarmcalendar/kaevent.cpp:3028
-#, fuzzy, kde-format
-#| msgctxt "No holiday region"
-#| msgid "None"
+#, kde-format
 msgctxt "@info No repetition"
 msgid "None"
 msgstr "ஏதுமில்லை"
@@ -3552,51 +3525,40 @@ msgid "UID"
 msgstr ""
 
 #: kalarmcalendar/kaeventformatter.cpp:39
-#, fuzzy, kde-format
-#| msgctxt "@label:textbox"
-#| msgid "Alarm type:"
+#, kde-format
 msgctxt "@label"
 msgid "Alarm type"
 msgstr "அலார வகை:"
 
 #: kalarmcalendar/kaeventformatter.cpp:41
-#, fuzzy, kde-format
-#| msgid "Alarm Templates"
+#, kde-format
 msgctxt "@label"
 msgid "Alarm status"
-msgstr "அலார மாதிரி உருக்கள்"
+msgstr "அலாரத்தின் நிலை"
 
 #: kalarmcalendar/kaeventformatter.cpp:43
-#, fuzzy, kde-format
-#| msgctxt "@label:textbox"
-#| msgid "Alarm name:"
+#, kde-format
 msgctxt "@label"
 msgid "Alarm name"
-msgstr "அலாரத்தின் பெயர்:"
+msgstr "அலாரத்தின் பெயர்"
 
 #: kalarmcalendar/kaeventformatter.cpp:45
-#, fuzzy, kde-format
-#| msgid "Template name:"
+#, kde-format
 msgctxt "@label"
 msgid "Template name"
-msgstr "மாதிரி உரு பெயர்:"
+msgstr "வார்ப்புருவின் பெயர்"
 
 #: kalarmcalendar/kaeventformatter.cpp:47
-#, fuzzy, kde-format
-#| msgid "&Default time"
+#, kde-format
 msgctxt "@label"
 msgid "Creation time"
-msgstr "முன்னிருப்பு நேரம்"
+msgstr "உருவாக்கிய நேரம்"
 
 #: kalarmcalendar/kaeventformatter.cpp:49
-#, fuzzy, kde-format
-#| msgctxt "Date cannot be earlier than start date"
-#| msgid "start date"
+#, kde-format
 msgctxt "@label"
 msgid "Start time"
-msgstr ""
-"தேதி துவங்கும் தேதிக்கு முன்னால் வராது.\n"
-"துவக்க தேதி"
+msgstr "தொடக்க நேரம்"
 
 #: kalarmcalendar/kaeventformatter.cpp:51
 #, fuzzy, kde-format

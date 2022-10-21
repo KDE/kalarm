@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-10-19 00:46+0000\n"
-"PO-Revision-Date: 2022-09-12 20:05+0200\n"
+"PO-Revision-Date: 2022-10-20 06:27+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -166,7 +166,7 @@ msgstr ""
 #, kde-format
 msgctxt "@action:button"
 msgid "Time Zone..."
-msgstr ""
+msgstr "დროის სარტყელი..."
 
 #: alarmtimewidget.cpp:180
 #, kde-format
@@ -186,7 +186,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Time zone:"
-msgstr ""
+msgstr "დროის სარტყელი:"
 
 #: alarmtimewidget.cpp:202
 #, kde-format
@@ -198,7 +198,7 @@ msgstr ""
 #, kde-format
 msgctxt "@info"
 msgid "Invalid time"
-msgstr ""
+msgstr "არასწორი დრო"
 
 #: alarmtimewidget.cpp:294
 #, kde-format
@@ -236,7 +236,7 @@ msgstr ""
 #: autostart/autostart.cpp:52 main.cpp:47
 #, kde-format
 msgid "David Jarvie"
-msgstr ""
+msgstr "David Jarvie"
 
 #: autostart/autostart.cpp:52 main.cpp:47
 #, kde-format
@@ -246,7 +246,7 @@ msgstr "ავტორი"
 #: autostart/autostart.cpp:58
 #, kde-format
 msgid "Application to run"
-msgstr ""
+msgstr "გასაშვები აპლიკაცია"
 
 #: autostart/autostart.cpp:59
 #, kde-format
@@ -277,7 +277,7 @@ msgstr ""
 #, kde-format
 msgctxt "@info"
 msgid "Birthday: "
-msgstr ""
+msgstr "დაბადების დღე: "
 
 #: birthdaydlg.cpp:74
 #, kde-format
@@ -737,7 +737,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label"
 msgid "Holiday region"
-msgstr ""
+msgstr "დასვენების რეგიონი"
 
 #. i18n: ectx: whatsthis, entry (Base_HolidayRegion), group (General)
 #: data/kalarmconfig.kcfg:86
@@ -1355,7 +1355,7 @@ msgstr ""
 #, kde-format
 msgctxt "@option"
 msgid "Play File"
-msgstr ""
+msgstr "ფაილის დაკვრა"
 
 #. i18n: ectx: label, entry (DefaultSoundFile), group (Defaults)
 #: data/kalarmconfig.kcfg:327
@@ -2804,7 +2804,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Foreground color:"
-msgstr ""
+msgstr "წინა პლანის ფერი:"
 
 #: fontcolour.cpp:57
 #, kde-format
@@ -3084,9 +3084,7 @@ msgstr ""
 
 #: kalarmapp.cpp:845 lib/messagebox.h:116 lib/messagebox.h:134
 #: lib/messagebox.h:181
-#, fuzzy, kde-format
-#| msgctxt "@info General purpose status indication: yes or no"
-#| msgid "Yes"
+#, kde-format
 msgid "Yes"
 msgstr "კი"
 
@@ -3363,7 +3361,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label"
 msgid "Recurs"
-msgstr ""
+msgstr "რეკურს"
 
 #: kalarmcalendar/kaeventformatter.cpp:55
 #, kde-format
@@ -3717,7 +3715,7 @@ msgstr ""
 #, kde-format
 msgctxt "@info"
 msgid "Beep"
-msgstr ""
+msgstr "პიპინი"
 
 #: kalarmcalendar/kaeventformatter.cpp:384
 #: kalarmcalendar/kaeventformatter.cpp:388
@@ -4031,7 +4029,7 @@ msgstr ""
 #, kde-format
 msgctxt "@action"
 msgid "&Templates..."
-msgstr ""
+msgstr "&შაბლონები..."
 
 #: mainwindow.cpp:462
 #, kde-format
@@ -4514,7 +4512,7 @@ msgstr ""
 #, kde-format
 msgctxt "@action:button"
 msgid "Acknowledge"
-msgstr ""
+msgstr "დადასტურება"
 
 #: messagewindow.cpp:1133
 #, kde-kuit-format
@@ -4652,7 +4650,7 @@ msgstr "ნახვა"
 #, kde-format
 msgctxt "@title"
 msgid "View Settings"
-msgstr ""
+msgstr "ხედის მორგება"
 
 #: prefdlg.cpp:266
 #, kde-format
@@ -5113,13 +5111,13 @@ msgstr ""
 #, kde-format
 msgctxt "@title:group"
 msgid "Your Email Address"
-msgstr ""
+msgstr "თქვენი ელფოსტის მისამართი"
 
 #: prefdlg.cpp:1091
 #, kde-format
 msgctxt "@label 'From' email address"
 msgid "From:"
-msgstr ""
+msgstr "ვისგან:"
 
 #: prefdlg.cpp:1103
 #, kde-format
@@ -5164,7 +5162,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label 'Bcc' email address"
 msgid "Bcc:"
-msgstr ""
+msgstr "ფარულიასლი:"
 
 #: prefdlg.cpp:1138
 #, kde-kuit-format
@@ -5235,7 +5233,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title:tab"
 msgid "Font && Color"
-msgstr ""
+msgstr "ფონტის & ფერი"
 
 #: prefdlg.cpp:1319
 #, kde-format
@@ -5334,7 +5332,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Sound file:"
-msgstr ""
+msgstr "ხმის ფაილი:"
 
 #: prefdlg.cpp:1462
 #, kde-format
@@ -5397,7 +5395,7 @@ msgstr ""
 #, kde-format
 msgctxt "@option:check"
 msgid "Show in system tray"
-msgstr ""
+msgstr "სისტემის კუთხეში ჩვენება"
 
 #: prefdlg.cpp:1752
 #, kde-kuit-format
@@ -5890,13 +5888,13 @@ msgstr ""
 #, kde-format
 msgctxt "@label On: Tuesday"
 msgid "O&n:"
-msgstr ""
+msgstr "&დრო:"
 
 #: recurrenceedit.cpp:1235
 #, kde-format
 msgctxt "@info"
 msgid "No day selected"
-msgstr ""
+msgstr "დღე არ აგირჩევიათ"
 
 #: recurrenceedit.cpp:1264
 #, kde-format
@@ -6095,19 +6093,19 @@ msgstr ""
 #, kde-format
 msgctxt "@item:inlistbox No date"
 msgid "None"
-msgstr ""
+msgstr "არაფერი"
 
 #: recurrenceedit.cpp:1535
 #, kde-format
 msgctxt "@item:inlistbox 1st March (short form)"
 msgid "1 Mar"
-msgstr ""
+msgstr "1 მარტი"
 
 #: recurrenceedit.cpp:1536
 #, kde-format
 msgctxt "@item:inlistbox 28th February (short form)"
 msgid "28 Feb"
-msgstr ""
+msgstr "28 თებ"
 
 #: recurrenceedit.cpp:1542
 #, kde-format
@@ -6139,7 +6137,7 @@ msgstr ""
 #, kde-format
 msgctxt "@option:check"
 msgid "Reminder:"
-msgstr ""
+msgstr "შემხსენებელი:"
 
 #: reminder.cpp:47
 #, kde-format
@@ -6840,19 +6838,19 @@ msgstr "_ძებნა"
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "KAlarm Calendar File"
-msgstr ""
+msgstr "KAlarm -ის კალენდრის ფაილი"
 
 #: resources/resourcetype.cpp:359
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "KAlarm Calendar Directory"
-msgstr ""
+msgstr "KAlarm -ის კალენდრის საქაღალდე"
 
 #: resources/resourcetype.cpp:360
 #, kde-format
 msgctxt "@item:intext What a resource is stored in"
 msgid "File"
-msgstr ""
+msgstr "ფაილი"
 
 #: resources/resourcetype.cpp:361
 #, kde-format
@@ -6870,13 +6868,13 @@ msgstr "საქაღალდე"
 #, kde-format
 msgctxt "@info"
 msgid "A previous load is still in progress."
-msgstr ""
+msgstr "წინა ჩატვირთვა ჯერ კიდევ მიმდინარეობს."
 
 #: resources/singlefileresource.cpp:181 resources/singlefileresource.cpp:355
 #, kde-format
 msgctxt "@info"
 msgid "A previous save is still in progress."
-msgstr ""
+msgstr "წინა შენახვა ჯერ კიდევ მიმდინარეობს."
 
 #: resources/singlefileresource.cpp:230
 #, kde-kuit-format
@@ -6900,7 +6898,7 @@ msgstr ""
 #, kde-format
 msgctxt "@info"
 msgid "Calendar not open."
-msgstr ""
+msgstr "კალენდარი ღია არაა."
 
 #: resources/singlefileresource.cpp:645
 #, kde-kuit-format
@@ -6924,14 +6922,14 @@ msgstr ""
 #, kde-format
 msgctxt "@title:window"
 msgid "Configure Calendar"
-msgstr ""
+msgstr "კალენდრის მორგება"
 
 #. i18n: ectx: property (title), widget (QGroupBox, pathGroupBox)
 #: resources/singlefileresourceconfigdialog.ui:21
 #, kde-format
 msgctxt "@title:group"
 msgid "Calendar File"
-msgstr ""
+msgstr "კალენდრის ფაილი"
 
 #. i18n: ectx: property (html), widget (KTextEdit, pathDescription)
 #: resources/singlefileresourceconfigdialog.ui:68
@@ -7188,49 +7186,49 @@ msgstr ""
 #, kde-format
 msgctxt "@action Reload calendar"
 msgid "Re&load"
-msgstr ""
+msgstr "&თავიდან ჩატვირთვა"
 
 #: resourceselector.cpp:292
 #, kde-format
 msgctxt "@action"
 msgid "Show &Details"
-msgstr ""
+msgstr "&დეტალების ჩვენება"
 
 #: resourceselector.cpp:295
 #, kde-format
 msgctxt "@action"
 msgid "Set &Color..."
-msgstr ""
+msgstr "&ფერის დაყენება...."
 
 #: resourceselector.cpp:298
 #, kde-format
 msgctxt "@action"
 msgid "Clear C&olor"
-msgstr ""
+msgstr "&ფერის გასუფთავება"
 
 #: resourceselector.cpp:304
 #, kde-format
 msgctxt "@action"
 msgid "&Update Calendar Format"
-msgstr ""
+msgstr "კალენდრის ფორმატის &განახლება"
 
 #: resourceselector.cpp:307
 #, kde-format
 msgctxt "@action"
 msgid "&Remove"
-msgstr ""
+msgstr "&წაშლა"
 
 #: resourceselector.cpp:313
 #, kde-format
 msgctxt "@action"
 msgid "&Add..."
-msgstr ""
+msgstr "&დამატება.."
 
 #: resourceselector.cpp:316
 #, kde-format
 msgctxt "@action"
 msgid "Im&port..."
-msgstr ""
+msgstr "&შემოტანა..."
 
 #: resourceselector.cpp:372
 #, kde-format
@@ -7337,7 +7335,7 @@ msgstr "გამეორება"
 #, kde-format
 msgctxt "@option:check"
 msgid "Set volume"
-msgstr ""
+msgstr "ხმის დაყენება"
 
 #: sounddlg.cpp:53
 #, kde-format
@@ -7351,13 +7349,13 @@ msgstr ""
 #, kde-format
 msgctxt "@label"
 msgid "Sound file:"
-msgstr ""
+msgstr "ხმის ფაილი:"
 
 #: sounddlg.cpp:166 sounddlg.cpp:464
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Test the sound"
-msgstr ""
+msgstr "ხმის შემოწმება"
 
 #: sounddlg.cpp:167 sounddlg.cpp:465
 #, kde-format
@@ -7454,19 +7452,19 @@ msgstr ""
 #, kde-format
 msgctxt "@label:listbox Listbox providing audio options"
 msgid "Sound:"
-msgstr ""
+msgstr "ხმა:"
 
 #: soundpicker.cpp:44
 #, kde-format
 msgctxt "@item:inlistbox No sound"
 msgid "None"
-msgstr ""
+msgstr "არაფერი"
 
 #: soundpicker.cpp:45
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Beep"
-msgstr ""
+msgstr "პიპინი"
 
 #: soundpicker.cpp:46
 #, kde-format
@@ -7478,7 +7476,7 @@ msgstr ""
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Sound file"
-msgstr ""
+msgstr "ხმის ფაილი"
 
 #: soundpicker.cpp:77
 #, kde-kuit-format
@@ -7510,7 +7508,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title:window"
 msgid "Sound File"
-msgstr ""
+msgstr "ხმის ფაილი"
 
 #: soundpicker.cpp:318
 #, kde-format
@@ -7522,7 +7520,7 @@ msgstr "აუდიო ფაილები"
 #, kde-format
 msgctxt "@title:window"
 msgid "Choose Sound File"
-msgstr ""
+msgstr "აირჩიეთ ხმის ფაილი"
 
 #: specialactions.cpp:32
 #, kde-format
@@ -7794,7 +7792,7 @@ msgstr "უცნობი შეცდომა"
 #, kde-format
 msgctxt "@info Undo-action: message"
 msgid "%1: %2"
-msgstr ""
+msgstr "%1: %2"
 
 #: undo.cpp:662
 #, kde-format
@@ -7818,7 +7816,7 @@ msgstr ""
 #, kde-format
 msgctxt "@info Action to delete an alarm template"
 msgid "Delete template"
-msgstr ""
+msgstr "შაბლონის წაშლა"
 
 #: undo.cpp:671
 #, kde-format
