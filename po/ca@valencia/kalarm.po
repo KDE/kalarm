@@ -780,9 +780,9 @@ msgid ""
 msgstr ""
 "Seleccioneu si s'ha d'activar el connector Akonadi de KAlarm, que utilitza "
 "Akonadi per a proporcionar característiques que inclouen la importació "
-"d'aniversaris, algunes funcions de correu electrònic, la busca de llibretes "
-"d'adreces de correu electrònic i la migració de recursos d'Akonadi en la "
-"primera execució."
+"d'aniversaris, algunes característiques de correu electrònic, la busca de "
+"llibretes d'adreces de correu electrònic i la migració de recursos d'Akonadi "
+"en la primera execució."
 
 #. i18n: ectx: label, entry (Base_TimeZone), group (General)
 #: data/kalarmconfig.kcfg:80
@@ -5175,8 +5175,8 @@ msgid ""
 "some email functions, and email address book lookup."
 msgstr ""
 "Activa l'ús d'Akonadi per a proporcionar característiques que inclouen la "
-"importació d'aniversaris, algunes funcions de correu electrònic i la busca "
-"de llibretes d'adreces de correu electrònic."
+"importació d'aniversaris, algunes característiques de correu electrònic i la "
+"busca de llibretes d'adreces de correu electrònic."
 
 #: prefdlg.cpp:565
 #, kde-format
@@ -5186,8 +5186,8 @@ msgid ""
 "some email functions, and email address book lookup."
 msgstr ""
 "Activa l'ús d'Akonadi per a proporcionar característiques que inclouen la "
-"importació d'aniversaris, algunes funcions de correu electrònic i la busca "
-"de llibretes d'adreces de correu electrònic."
+"importació d'aniversaris, algunes característiques de correu electrònic i la "
+"busca de llibretes d'adreces de correu electrònic."
 
 #: prefdlg.cpp:612
 #, kde-kuit-format
@@ -6624,7 +6624,7 @@ msgstr "Seleccioneu els mesos de l'any en els quals repetir l'alarma"
 #, kde-format
 msgctxt "@label:listbox"
 msgid "February 2&9th alarm in non-leap years:"
-msgstr "Alarma el 2&9 de febrer als anys que no siguen de traspàs:"
+msgstr "Alarma el 2&9 de febrer en els anys que no siguen de traspàs:"
 
 #: recurrenceedit.cpp:1534
 #, kde-format
