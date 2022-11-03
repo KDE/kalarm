@@ -36,12 +36,10 @@
 #if ENABLE_X11
 #include <KWindowInfo>
 #include <netwm.h>
-#if QT_VERSION >= QT_VERSION_CHECK(6, 2, 0)
-#include <QGuiApplication>
-#elif QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
-#include <private/qtx11extras_p.h>
-#else
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 #include <QX11Info>
+#else
+#include <QGuiApplication>
 #endif
 #endif
 #include <QTextBrowser>

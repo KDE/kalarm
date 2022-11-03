@@ -137,7 +137,7 @@ if (NOT APPLE)
             if (QT_MAJOR_VERSION STREQUAL "5")
                 find_package(Qt5X11Extras ${QT_REQUIRED_VERSION} REQUIRED NO_MODULE)
             else()
-                find_package(Qt${QT_MAJOR_VERSION} ${QT_REQUIRED_VERSION} CONFIG REQUIRED Gui) # qtx11extras_p.h for Qt6 < 6.2
+                find_package(Qt${QT_MAJOR_VERSION} ${QT_REQUIRED_VERSION} CONFIG REQUIRED Gui)
             endif()
             add_feature_info(ENABLE_X11 ${ENABLE_X11} "Enable use of X11")
         endif()
