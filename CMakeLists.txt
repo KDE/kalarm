@@ -11,7 +11,7 @@ set(KALARM_VERSION "3.5.2")
 # If KALARM_VERSION has not changed since the last KDE release service release,
 # increment KALARM_RELEASE_SUB_VERSION (to "1", "2", ...) to ensure that KAlarm
 # always has a different version for every KDE release.
-set(KALARM_RELEASE_SUB_VERSION "")
+set(KALARM_RELEASE_SUB_VERSION "1")
 if (NOT ${KALARM_RELEASE_SUB_VERSION} EQUAL "")
     set(KALARM_VERSION "${KALARM_VERSION}.${KALARM_RELEASE_SUB_VERSION}")
 endif()
