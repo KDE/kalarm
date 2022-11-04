@@ -1388,7 +1388,7 @@ FullScreenType findFullScreenWindows(const QVector<QRect>& screenRects, QVector<
         using namespace QNativeInterface;
         auto* x11App = qGuiApp->nativeInterface<QX11Application>();
         if (!x11App)
-            return type;
+            return result;
         xcb_connection_t* connection = x11App->connection();
 #else
         xcb_connection_t* connection = QX11Info::connection();
