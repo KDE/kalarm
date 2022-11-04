@@ -17,7 +17,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-10-19 00:46+0000\n"
+"POT-Creation-Date: 2022-11-04 00:46+0000\n"
 "PO-Revision-Date: 2022-10-19 16:13+0200\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
@@ -4908,7 +4908,7 @@ msgid "Defer"
 msgstr "Achterstellen"
 
 # duidelijker?
-#: messagewindow.cpp:235
+#: messagewindow.cpp:233
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -4918,81 +4918,81 @@ msgstr ""
 "Het geplande tijdstip voor het bericht. (in tegenstelling tot de werkelijke "
 "tijd van weergave)."
 
-#: messagewindow.cpp:252
+#: messagewindow.cpp:250
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "The file whose contents are displayed below"
 msgstr "Het bestand waarvan de inhoud hieronder wordt getoond"
 
-#: messagewindow.cpp:286
+#: messagewindow.cpp:284
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "The contents of the file to be displayed"
 msgstr "De inhoud van het te tonen bestand"
 
-#: messagewindow.cpp:306
+#: messagewindow.cpp:304
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "The alarm message"
 msgstr "Het alarmbericht"
 
-#: messagewindow.cpp:333
+#: messagewindow.cpp:331
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "The output of the alarm's command"
 msgstr "De uitvoer van het commando-alarm"
 
-#: messagewindow.cpp:366
+#: messagewindow.cpp:364
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "The email to send"
 msgstr "Het te sturen e-mailbericht"
 
-#: messagewindow.cpp:416
+#: messagewindow.cpp:414
 #, kde-format
 msgctxt "@option:check"
 msgid "Do not display this error message again for this alarm"
 msgstr "Deze foutmelding voor dit alarm niet opnieuw tonen"
 
-#: messagewindow.cpp:433
+#: messagewindow.cpp:431
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Acknowledge the alarm"
 msgstr "Het alarm bevestigen"
 
-#: messagewindow.cpp:438
+#: messagewindow.cpp:436
 #, kde-format
 msgctxt "@action:button"
 msgid "&Edit..."
 msgstr "B&ewerken..."
 
-#: messagewindow.cpp:442
+#: messagewindow.cpp:440
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Edit the alarm"
 msgstr "Het alarm bewerken"
 
-#: messagewindow.cpp:443
+#: messagewindow.cpp:441
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Edit the alarm."
 msgstr "Alarm bewerken."
 
-#: messagewindow.cpp:447
+#: messagewindow.cpp:445
 #, kde-format
 msgctxt "@action:button"
 msgid "&Defer..."
 msgstr "Uit&stellen..."
 
 # beschrijvende tekst..
-#: messagewindow.cpp:451
+#: messagewindow.cpp:449
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Defer the alarm until later"
 msgstr "Stel het alarm uit tot later"
 
 # duidelijker, korter
-#: messagewindow.cpp:452
+#: messagewindow.cpp:450
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5002,61 +5002,61 @@ msgstr ""
 "<para>Stel het alarm tot later uit.</para><para>U wordt gevraagd om op te "
 "geven wanneer het alarm opnieuw moet worden getoond.</para>"
 
-#: messagewindow.cpp:466 sounddlg.cpp:451
+#: messagewindow.cpp:464 sounddlg.cpp:451
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Stop sound"
 msgstr "Geluid stoppen"
 
-#: messagewindow.cpp:467 sounddlg.cpp:452
+#: messagewindow.cpp:465 sounddlg.cpp:452
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Stop playing the sound"
 msgstr "Stopt het geluid"
 
-#: messagewindow.cpp:481
+#: messagewindow.cpp:479
 #, kde-kuit-format
 msgctxt "@info:tooltip Locate this email in KMail"
 msgid "Locate in <application>KMail</application>"
 msgstr "Opzoeken in <application>KMail</application>"
 
-#: messagewindow.cpp:482
+#: messagewindow.cpp:480
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid "Locate and highlight this email in <application>KMail</application>"
 msgstr "E-mail in <application>KMail</application> opzoeken en accentueren"
 
-#: messagewindow.cpp:490
+#: messagewindow.cpp:488
 #, kde-kuit-format
 msgctxt "@info:tooltip"
 msgid "Activate <application>KAlarm</application>"
 msgstr "<application> KAlarm</application> activeren"
 
-#: messagewindow.cpp:491
+#: messagewindow.cpp:489
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid "Activate <application>KAlarm</application>"
 msgstr "<application> KAlarm</application> activeren"
 
-#: messagewindow.cpp:1073
+#: messagewindow.cpp:1071
 #, kde-format
 msgctxt "@info"
 msgid "Do you really want to acknowledge this alarm?"
 msgstr "Wilt u dit alarm bevestigen?"
 
-#: messagewindow.cpp:1074
+#: messagewindow.cpp:1072
 #, kde-format
 msgctxt "@action:button"
 msgid "Acknowledge Alarm"
 msgstr "Alarm bevestigen"
 
-#: messagewindow.cpp:1074
+#: messagewindow.cpp:1072
 #, kde-format
 msgctxt "@action:button"
 msgid "Acknowledge"
 msgstr "Bevestigen"
 
-#: messagewindow.cpp:1133
+#: messagewindow.cpp:1131
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Unable to locate this email in <application>KMail</application>"

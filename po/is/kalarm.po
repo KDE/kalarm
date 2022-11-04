@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-10-19 00:46+0000\n"
+"POT-Creation-Date: 2022-11-04 00:46+0000\n"
 "PO-Revision-Date: 2005-12-29 22:18+0100\n"
 "Last-Translator: Arnar Leosson <leosson@frisurf.no>\n"
 "Language-Team: Icelandic <kde-isl@molar.is>\n"
@@ -4959,7 +4959,7 @@ msgctxt "@action:button"
 msgid "Defer"
 msgstr "Stöðva &frestun"
 
-#: messagewindow.cpp:235
+#: messagewindow.cpp:233
 #, fuzzy, kde-format
 #| msgid ""
 #| "The scheduled date/time for the message (as opposed to the actual time of "
@@ -4970,87 +4970,87 @@ msgid ""
 "display)."
 msgstr "Áætlaður dagur/tími skeytis (ekki birtingartími)."
 
-#: messagewindow.cpp:252
+#: messagewindow.cpp:250
 #, fuzzy, kde-format
 #| msgid "The file whose contents are displayed below"
 msgctxt "@info:whatsthis"
 msgid "The file whose contents are displayed below"
 msgstr "Skráin, hvurs innihald er birt hér að neðan"
 
-#: messagewindow.cpp:286
+#: messagewindow.cpp:284
 #, fuzzy, kde-format
 #| msgid "The contents of the file to be displayed"
 msgctxt "@info:whatsthis"
 msgid "The contents of the file to be displayed"
 msgstr "Innihald skráar sem á að birta"
 
-#: messagewindow.cpp:306
+#: messagewindow.cpp:304
 #, fuzzy, kde-format
 #| msgid "The alarm message"
 msgctxt "@info:whatsthis"
 msgid "The alarm message"
 msgstr "Uppkalls skeytið"
 
-#: messagewindow.cpp:333
+#: messagewindow.cpp:331
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "The output of the alarm's command"
 msgstr ""
 
-#: messagewindow.cpp:366
+#: messagewindow.cpp:364
 #, fuzzy, kde-format
 #| msgid "The email to send"
 msgctxt "@info:whatsthis"
 msgid "The email to send"
 msgstr "Póstinn sem skal senda"
 
-#: messagewindow.cpp:416
+#: messagewindow.cpp:414
 #, kde-format
 msgctxt "@option:check"
 msgid "Do not display this error message again for this alarm"
 msgstr ""
 
-#: messagewindow.cpp:433
+#: messagewindow.cpp:431
 #, fuzzy, kde-format
 #| msgid "Acknowledge the alarm"
 msgctxt "@info:whatsthis"
 msgid "Acknowledge the alarm"
 msgstr "Staðfesta uppkall"
 
-#: messagewindow.cpp:438
+#: messagewindow.cpp:436
 #, fuzzy, kde-format
 #| msgid "&Edit..."
 msgctxt "@action:button"
 msgid "&Edit..."
 msgstr "&Breyta..."
 
-#: messagewindow.cpp:442
+#: messagewindow.cpp:440
 #, fuzzy, kde-format
 msgctxt "@info:tooltip"
 msgid "Edit the alarm"
 msgstr "Breyta Uppkalli"
 
-#: messagewindow.cpp:443
+#: messagewindow.cpp:441
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid "Edit the alarm."
 msgstr "Breyta Uppkalli"
 
-#: messagewindow.cpp:447
+#: messagewindow.cpp:445
 #, fuzzy, kde-format
 #| msgid "&Defer..."
 msgctxt "@action:button"
 msgid "&Defer..."
 msgstr "&Fresta..."
 
-#: messagewindow.cpp:451
+#: messagewindow.cpp:449
 #, fuzzy, kde-format
 #| msgid "Defer the alarm until the specified time."
 msgctxt "@info:tooltip"
 msgid "Defer the alarm until later"
 msgstr "Fresta áminningu til skilgreinda tímans."
 
-#: messagewindow.cpp:452
+#: messagewindow.cpp:450
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "Defer the alarm until later.\n"
@@ -5063,70 +5063,70 @@ msgstr ""
 "Fresta uppkalli þar til síðar.\n"
 "Þú verður að skilgreina hvenær það skal gerast."
 
-#: messagewindow.cpp:466 sounddlg.cpp:451
+#: messagewindow.cpp:464 sounddlg.cpp:451
 #, fuzzy, kde-format
 #| msgid "Stop sound"
 msgctxt "@info:tooltip"
 msgid "Stop sound"
 msgstr "Stöða hljóð"
 
-#: messagewindow.cpp:467 sounddlg.cpp:452
+#: messagewindow.cpp:465 sounddlg.cpp:452
 #, fuzzy, kde-format
 #| msgid "Stop playing the sound"
 msgctxt "@info:whatsthis"
 msgid "Stop playing the sound"
 msgstr "Stöðva spilun hljóðs"
 
-#: messagewindow.cpp:481
+#: messagewindow.cpp:479
 #, fuzzy, kde-kuit-format
 #| msgid "An email has been queued to be sent by KMail"
 msgctxt "@info:tooltip Locate this email in KMail"
 msgid "Locate in <application>KMail</application>"
 msgstr "Póstur settur í biðröð til að senda með KMail"
 
-#: messagewindow.cpp:482
+#: messagewindow.cpp:480
 #, fuzzy, kde-kuit-format
 #| msgid "An email has been queued to be sent by KMail"
 msgctxt "@info:whatsthis"
 msgid "Locate and highlight this email in <application>KMail</application>"
 msgstr "Póstur settur í biðröð til að senda með KMail"
 
-#: messagewindow.cpp:490
+#: messagewindow.cpp:488
 #, fuzzy, kde-kuit-format
 #| msgid "An email has been queued to be sent by KMail"
 msgctxt "@info:tooltip"
 msgid "Activate <application>KAlarm</application>"
 msgstr "Póstur settur í biðröð til að senda með KMail"
 
-#: messagewindow.cpp:491
+#: messagewindow.cpp:489
 #, fuzzy, kde-kuit-format
 #| msgid "An email has been queued to be sent by KMail"
 msgctxt "@info:whatsthis"
 msgid "Activate <application>KAlarm</application>"
 msgstr "Póstur settur í biðröð til að senda með KMail"
 
-#: messagewindow.cpp:1073
+#: messagewindow.cpp:1071
 #, fuzzy, kde-format
 #| msgid "Do you really want to acknowledge this alarm?"
 msgctxt "@info"
 msgid "Do you really want to acknowledge this alarm?"
 msgstr "Viltu staðfesta þetta uppkall vaktara?"
 
-#: messagewindow.cpp:1074
+#: messagewindow.cpp:1072
 #, fuzzy, kde-format
 #| msgid "Acknowledge Alarm"
 msgctxt "@action:button"
 msgid "Acknowledge Alarm"
 msgstr "Staðfesta uppkall"
 
-#: messagewindow.cpp:1074
+#: messagewindow.cpp:1072
 #, fuzzy, kde-format
 #| msgid "&Acknowledge"
 msgctxt "@action:button"
 msgid "Acknowledge"
 msgstr "&Staðfesta"
 
-#: messagewindow.cpp:1133
+#: messagewindow.cpp:1131
 #, fuzzy, kde-kuit-format
 #| msgid "An email has been queued to be sent by KMail"
 msgctxt "@info"

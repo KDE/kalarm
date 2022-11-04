@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-10-19 00:46+0000\n"
+"POT-Creation-Date: 2022-11-04 00:46+0000\n"
 "PO-Revision-Date: 2011-08-14 14:09-0700\n"
 "Last-Translator: Fumiaki Okushi <okushi@kde.gr.jp>\n"
 "Language-Team: Japanese <kde-jp@kde.org>\n"
@@ -4844,7 +4844,7 @@ msgctxt "@action:button"
 msgid "Defer"
 msgstr "延期(&D)..."
 
-#: messagewindow.cpp:235
+#: messagewindow.cpp:233
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -4852,55 +4852,55 @@ msgid ""
 "display)."
 msgstr "予定されたメッセージの日付/時刻 (表示の実時刻とは別)"
 
-#: messagewindow.cpp:252
+#: messagewindow.cpp:250
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "The file whose contents are displayed below"
 msgstr "下に内容を表示するファイル"
 
-#: messagewindow.cpp:286
+#: messagewindow.cpp:284
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "The contents of the file to be displayed"
 msgstr "表示するファイルの内容"
 
-#: messagewindow.cpp:306
+#: messagewindow.cpp:304
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "The alarm message"
 msgstr "アラームメッセージ"
 
-#: messagewindow.cpp:333
+#: messagewindow.cpp:331
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "The output of the alarm's command"
 msgstr "コマンドアラームのコマンド出力"
 
-#: messagewindow.cpp:366
+#: messagewindow.cpp:364
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "The email to send"
 msgstr "送信するメール"
 
-#: messagewindow.cpp:416
+#: messagewindow.cpp:414
 #, kde-format
 msgctxt "@option:check"
 msgid "Do not display this error message again for this alarm"
 msgstr "このアラームには次回からこのエラーメッセージを表示しない"
 
-#: messagewindow.cpp:433
+#: messagewindow.cpp:431
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Acknowledge the alarm"
 msgstr "アラームを了解します。"
 
-#: messagewindow.cpp:438
+#: messagewindow.cpp:436
 #, kde-format
 msgctxt "@action:button"
 msgid "&Edit..."
 msgstr "編集(&E)..."
 
-#: messagewindow.cpp:442
+#: messagewindow.cpp:440
 #, fuzzy, kde-format
 #| msgctxt "@info:whatsthis"
 #| msgid "Edit the alarm."
@@ -4908,19 +4908,19 @@ msgctxt "@info:tooltip"
 msgid "Edit the alarm"
 msgstr "アラームを編集します。"
 
-#: messagewindow.cpp:443
+#: messagewindow.cpp:441
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Edit the alarm."
 msgstr "アラームを編集します。"
 
-#: messagewindow.cpp:447
+#: messagewindow.cpp:445
 #, kde-format
 msgctxt "@action:button"
 msgid "&Defer..."
 msgstr "延期(&D)..."
 
-#: messagewindow.cpp:451
+#: messagewindow.cpp:449
 #, fuzzy, kde-format
 #| msgctxt "@info:whatsthis"
 #| msgid "Defer the alarm until the specified time."
@@ -4928,7 +4928,7 @@ msgctxt "@info:tooltip"
 msgid "Defer the alarm until later"
 msgstr "指定された時刻までアラームを延期させます。"
 
-#: messagewindow.cpp:452
+#: messagewindow.cpp:450
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -4938,62 +4938,62 @@ msgstr ""
 "<para>アラームを延期します。</para><para>いつ再表示するかを指定できます。</"
 "para>"
 
-#: messagewindow.cpp:466 sounddlg.cpp:451
+#: messagewindow.cpp:464 sounddlg.cpp:451
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Stop sound"
 msgstr "サウンドを停止"
 
-#: messagewindow.cpp:467 sounddlg.cpp:452
+#: messagewindow.cpp:465 sounddlg.cpp:452
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Stop playing the sound"
 msgstr "サウンドの再生を停止します。"
 
-#: messagewindow.cpp:481
+#: messagewindow.cpp:479
 #, kde-kuit-format
 msgctxt "@info:tooltip Locate this email in KMail"
 msgid "Locate in <application>KMail</application>"
 msgstr "<application>KMail</application> に配置"
 
-#: messagewindow.cpp:482
+#: messagewindow.cpp:480
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid "Locate and highlight this email in <application>KMail</application>"
 msgstr ""
 "このメールを <application>KMail</application> に配置して強調表示します。"
 
-#: messagewindow.cpp:490
+#: messagewindow.cpp:488
 #, kde-kuit-format
 msgctxt "@info:tooltip"
 msgid "Activate <application>KAlarm</application>"
 msgstr "<application>KAlarm</application> を有効化"
 
-#: messagewindow.cpp:491
+#: messagewindow.cpp:489
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid "Activate <application>KAlarm</application>"
 msgstr "<application>KAlarm</application> を有効にします。"
 
-#: messagewindow.cpp:1073
+#: messagewindow.cpp:1071
 #, kde-format
 msgctxt "@info"
 msgid "Do you really want to acknowledge this alarm?"
 msgstr "本当にこのアラームを了解しましたか？"
 
-#: messagewindow.cpp:1074
+#: messagewindow.cpp:1072
 #, kde-format
 msgctxt "@action:button"
 msgid "Acknowledge Alarm"
 msgstr "アラームを了解"
 
-#: messagewindow.cpp:1074
+#: messagewindow.cpp:1072
 #, kde-format
 msgctxt "@action:button"
 msgid "Acknowledge"
 msgstr "了解"
 
-#: messagewindow.cpp:1133
+#: messagewindow.cpp:1131
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Unable to locate this email in <application>KMail</application>"

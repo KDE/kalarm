@@ -1,6 +1,6 @@
 # translation of kalarm.po to
 # translation of alarmdaemonctrl.po to
-# Version: $Revision: 1636360 $
+# Version: $Revision: 1637337 $
 #
 # Copyright (C) 2002, 2004, 2005, 2006, 2007, 2008, 2009 Free Software Foundation, Inc.
 # Krzysztof Lichota <lichota@mimuw.edu.pl>, 2002, 2004, 2005, 2006.
@@ -17,7 +17,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-10-19 00:46+0000\n"
+"POT-Creation-Date: 2022-11-04 00:46+0000\n"
 "PO-Revision-Date: 2022-04-30 20:44+0200\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
@@ -4689,7 +4689,7 @@ msgctxt "@action:button"
 msgid "Defer"
 msgstr "W dół"
 
-#: messagewindow.cpp:235
+#: messagewindow.cpp:233
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -4699,79 +4699,79 @@ msgstr ""
 "Zaplanowana data/czas dla wiadomości (w odróżnieniu od aktualnego czasu "
 "wyświetlania)."
 
-#: messagewindow.cpp:252
+#: messagewindow.cpp:250
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "The file whose contents are displayed below"
 msgstr "Plik, którego zawartość jest wyświetlana poniżej"
 
-#: messagewindow.cpp:286
+#: messagewindow.cpp:284
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "The contents of the file to be displayed"
 msgstr "Zawartość pliku do wyświetlenia"
 
-#: messagewindow.cpp:306
+#: messagewindow.cpp:304
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "The alarm message"
 msgstr "Wiadomość alarmu"
 
-#: messagewindow.cpp:333
+#: messagewindow.cpp:331
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "The output of the alarm's command"
 msgstr "Dany wyjściowe komendy alarmu"
 
-#: messagewindow.cpp:366
+#: messagewindow.cpp:364
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "The email to send"
 msgstr "Wiadomość do wysłania"
 
-#: messagewindow.cpp:416
+#: messagewindow.cpp:414
 #, kde-format
 msgctxt "@option:check"
 msgid "Do not display this error message again for this alarm"
 msgstr "Nie pokazuj więcej wiadomości błędu dla tego alarmu"
 
-#: messagewindow.cpp:433
+#: messagewindow.cpp:431
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Acknowledge the alarm"
 msgstr "Odnotuj alarm"
 
-#: messagewindow.cpp:438
+#: messagewindow.cpp:436
 #, kde-format
 msgctxt "@action:button"
 msgid "&Edit..."
 msgstr "&Zmień..."
 
-#: messagewindow.cpp:442
+#: messagewindow.cpp:440
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Edit the alarm"
 msgstr "Edytuj alarm"
 
-#: messagewindow.cpp:443
+#: messagewindow.cpp:441
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Edit the alarm."
 msgstr "Edytuj alarm."
 
-#: messagewindow.cpp:447
+#: messagewindow.cpp:445
 #, kde-format
 msgctxt "@action:button"
 msgid "&Defer..."
 msgstr "&Opóźnij..."
 
-#: messagewindow.cpp:451
+#: messagewindow.cpp:449
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Defer the alarm until later"
 msgstr "Opóźnij alarm do późniejszego czasu"
 
-#: messagewindow.cpp:452
+#: messagewindow.cpp:450
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -4781,25 +4781,25 @@ msgstr ""
 "<para>Przesuwa alarm na później.</para><para>Zostaniesz poproszony o podanie "
 "nowego czasu wyświetlenia alarmu.</para>"
 
-#: messagewindow.cpp:466 sounddlg.cpp:451
+#: messagewindow.cpp:464 sounddlg.cpp:451
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Stop sound"
 msgstr "Zatrzymaj dźwięk"
 
-#: messagewindow.cpp:467 sounddlg.cpp:452
+#: messagewindow.cpp:465 sounddlg.cpp:452
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Stop playing the sound"
 msgstr "Zatrzymaj odtwarzanie dźwięku"
 
-#: messagewindow.cpp:481
+#: messagewindow.cpp:479
 #, kde-kuit-format
 msgctxt "@info:tooltip Locate this email in KMail"
 msgid "Locate in <application>KMail</application>"
 msgstr "Znajdź w <application>KMail</application>"
 
-#: messagewindow.cpp:482
+#: messagewindow.cpp:480
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid "Locate and highlight this email in <application>KMail</application>"
@@ -4807,37 +4807,37 @@ msgstr ""
 "Wyszukuje i podświetla tę wiadomość pocztową w <application>KMail</"
 "application>"
 
-#: messagewindow.cpp:490
+#: messagewindow.cpp:488
 #, kde-kuit-format
 msgctxt "@info:tooltip"
 msgid "Activate <application>KAlarm</application>"
 msgstr "Otwórz <application>KAlarm</application>"
 
-#: messagewindow.cpp:491
+#: messagewindow.cpp:489
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid "Activate <application>KAlarm</application>"
 msgstr "Otwórz <application>KAlarm</application>"
 
-#: messagewindow.cpp:1073
+#: messagewindow.cpp:1071
 #, kde-format
 msgctxt "@info"
 msgid "Do you really want to acknowledge this alarm?"
 msgstr "Czy na pewno odnotować ten alarm?"
 
-#: messagewindow.cpp:1074
+#: messagewindow.cpp:1072
 #, kde-format
 msgctxt "@action:button"
 msgid "Acknowledge Alarm"
 msgstr "Odnotowywanie alarmu"
 
-#: messagewindow.cpp:1074
+#: messagewindow.cpp:1072
 #, kde-format
 msgctxt "@action:button"
 msgid "Acknowledge"
 msgstr "Odnotuj"
 
-#: messagewindow.cpp:1133
+#: messagewindow.cpp:1131
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Unable to locate this email in <application>KMail</application>"
