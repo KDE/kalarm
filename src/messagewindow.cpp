@@ -54,7 +54,6 @@
 #include <QHBoxLayout>
 #include <QResizeEvent>
 #include <QCloseEvent>
-#include <QDesktopWidget>
 #include <QScreen>
 #include <QStyle>
 
@@ -1251,7 +1250,7 @@ bool MessageWindow::getWorkAreaAndModal()
         // There are multiple screens.
         // Check for any full screen windows, even if they are not the active
         // window, and try not to show the alarm message their screens.
-        mScreenNumber = QApplication::desktop()->screenNumber(MainWindow::mainMainWindow());  // default = KAlarm's screen
+        mScreenNumber = screens.indexOf(MainWindow::mainMainWindow()->screen());  // default = KAlarm's screen
         if (QGuiApplication::primaryScreen()->virtualSiblings().size() > 1)
         {
             // The screens form a single virtual desktop.

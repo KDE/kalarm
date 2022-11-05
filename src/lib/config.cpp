@@ -11,8 +11,8 @@
 #include <KConfigGroup>
 #include <KSharedConfig>
 
-#include <QDesktopWidget>
 #include <QApplication>
+#include <QScreen>
 
 namespace Config
 {
@@ -26,14 +26,14 @@ namespace Config
 bool readWindowSize(const char* window, QSize& result, int* splitterWidth)
 {
     KConfigGroup config(KSharedConfig::openConfig(), window);
-    const QWidget* desktop = QApplication::desktop();
-    const QSize s = QSize(config.readEntry(QStringLiteral("Width %1").arg(desktop->width()), (int)0),
-                          config.readEntry(QStringLiteral("Height %1").arg(desktop->height()), (int)0));
+    const QSize desktopSize = QApplication::primaryScreen()->virtualSize();
+    const QSize s = QSize(config.readEntry(QStringLiteral("Width %1").arg(desktopSize.width()), (int)0),
+                          config.readEntry(QStringLiteral("Height %1").arg(desktopSize.height()), (int)0));
     if (s.isEmpty())
         return false;
     result = s;
     if (splitterWidth)
-        *splitterWidth = config.readEntry(QStringLiteral("Splitter %1").arg(desktop->width()), -1);
+        *splitterWidth = config.readEntry(QStringLiteral("Splitter %1").arg(desktopSize.width()), -1);
     return true;
 }
 
@@ -44,11 +44,11 @@ bool readWindowSize(const char* window, QSize& result, int* splitterWidth)
 void writeWindowSize(const char* window, const QSize& size, int splitterWidth)
 {
     KConfigGroup config(KSharedConfig::openConfig(), window);
-    const QWidget* desktop = QApplication::desktop();
-    config.writeEntry(QStringLiteral("Width %1").arg(desktop->width()), size.width());
-    config.writeEntry(QStringLiteral("Height %1").arg(desktop->height()), size.height());
+    const QSize desktopSize = QApplication::primaryScreen()->virtualSize();
+    config.writeEntry(QStringLiteral("Width %1").arg(desktopSize.width()), size.width());
+    config.writeEntry(QStringLiteral("Height %1").arg(desktopSize.height()), size.height());
     if (splitterWidth >= 0)
-        config.writeEntry(QStringLiteral("Splitter %1").arg(desktop->width()), splitterWidth);
+        config.writeEntry(QStringLiteral("Splitter %1").arg(desktopSize.width()), splitterWidth);
     config.sync();
 }
 
