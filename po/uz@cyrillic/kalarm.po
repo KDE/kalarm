@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-04 00:46+0000\n"
+"POT-Creation-Date: 2022-11-06 00:47+0000\n"
 "PO-Revision-Date: 2006-12-17 13:25+0000\n"
 "Last-Translator: Mashrab Kuvatov <kmashrab@uni-bremen.de>\n"
 "Language-Team: Uzbek <floss-uz-l10n@googlegroups.com>\n"
@@ -4836,7 +4836,7 @@ msgctxt "@action:button"
 msgid "Defer"
 msgstr "Бекор қилиш"
 
-#: messagewindow.cpp:233
+#: messagewindow.cpp:232
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -4844,87 +4844,87 @@ msgid ""
 "display)."
 msgstr ""
 
-#: messagewindow.cpp:250
+#: messagewindow.cpp:249
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "The file whose contents are displayed below"
 msgstr ""
 
-#: messagewindow.cpp:284
+#: messagewindow.cpp:283
 #, fuzzy, kde-format
 #| msgid "Select a text or image file to display."
 msgctxt "@info:whatsthis"
 msgid "The contents of the file to be displayed"
 msgstr "Кўрсатиш учун матн ёки расм файлини танланг."
 
-#: messagewindow.cpp:304
+#: messagewindow.cpp:303
 #, fuzzy, kde-format
 #| msgid "The alarm message"
 msgctxt "@info:whatsthis"
 msgid "The alarm message"
 msgstr "Огоҳлантириш хабари"
 
-#: messagewindow.cpp:331
+#: messagewindow.cpp:330
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "The output of the alarm's command"
 msgstr ""
 
-#: messagewindow.cpp:364
+#: messagewindow.cpp:363
 #, fuzzy, kde-format
 #| msgid "The email to send"
 msgctxt "@info:whatsthis"
 msgid "The email to send"
 msgstr "Жўнатиш учун электрон почта"
 
-#: messagewindow.cpp:414
+#: messagewindow.cpp:413
 #, kde-format
 msgctxt "@option:check"
 msgid "Do not display this error message again for this alarm"
 msgstr ""
 
-#: messagewindow.cpp:431
+#: messagewindow.cpp:430
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid "Acknowledge the alarm"
 msgstr "Огоҳлантиришни тасдиқлаш"
 
-#: messagewindow.cpp:436
+#: messagewindow.cpp:435
 #, fuzzy, kde-format
 #| msgid "&Edit..."
 msgctxt "@action:button"
 msgid "&Edit..."
 msgstr "&Таҳрирлаш"
 
-#: messagewindow.cpp:440
+#: messagewindow.cpp:439
 #, fuzzy, kde-format
 #| msgid "Edit the alarm."
 msgctxt "@info:tooltip"
 msgid "Edit the alarm"
 msgstr "Огоҳлантиришни таҳрирлаш."
 
-#: messagewindow.cpp:441
+#: messagewindow.cpp:440
 #, fuzzy, kde-format
 #| msgid "Edit the alarm."
 msgctxt "@info:whatsthis"
 msgid "Edit the alarm."
 msgstr "Огоҳлантиришни таҳрирлаш."
 
-#: messagewindow.cpp:445
+#: messagewindow.cpp:444
 #, fuzzy, kde-format
 #| msgid "&New..."
 msgctxt "@action:button"
 msgid "&Defer..."
 msgstr "Я&нги..."
 
-#: messagewindow.cpp:449
+#: messagewindow.cpp:448
 #, fuzzy, kde-format
 #| msgid "Schedule the alarm at the specified time."
 msgctxt "@info:tooltip"
 msgid "Defer the alarm until later"
 msgstr "Огоҳлантиришни кўрсатилган вақтда режалаштириш."
 
-#: messagewindow.cpp:450
+#: messagewindow.cpp:449
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -4932,67 +4932,67 @@ msgid ""
 "specify when the alarm should be redisplayed.</para>"
 msgstr ""
 
-#: messagewindow.cpp:464 sounddlg.cpp:451
+#: messagewindow.cpp:463 sounddlg.cpp:451
 #, fuzzy, kde-format
 #| msgid "Stop sound"
 msgctxt "@info:tooltip"
 msgid "Stop sound"
 msgstr "Товушни тўхтатиш"
 
-#: messagewindow.cpp:465 sounddlg.cpp:452
+#: messagewindow.cpp:464 sounddlg.cpp:452
 #, fuzzy, kde-format
 #| msgid "Stop playing the sound"
 msgctxt "@info:whatsthis"
 msgid "Stop playing the sound"
 msgstr "Товушни ўйнашни тўхтатиш"
 
-#: messagewindow.cpp:479
+#: messagewindow.cpp:478
 #, fuzzy, kde-kuit-format
 #| msgid "Use KMail &identities"
 msgctxt "@info:tooltip Locate this email in KMail"
 msgid "Locate in <application>KMail</application>"
 msgstr "KMail &шахсиятларидан фойдаланиш"
 
-#: messagewindow.cpp:480
+#: messagewindow.cpp:479
 #, fuzzy, kde-kuit-format
 #| msgid "Use KMail &identities"
 msgctxt "@info:whatsthis"
 msgid "Locate and highlight this email in <application>KMail</application>"
 msgstr "KMail &шахсиятларидан фойдаланиш"
 
-#: messagewindow.cpp:488
+#: messagewindow.cpp:487
 #, fuzzy, kde-kuit-format
 #| msgid "Use KMail &identities"
 msgctxt "@info:tooltip"
 msgid "Activate <application>KAlarm</application>"
 msgstr "KMail &шахсиятларидан фойдаланиш"
 
-#: messagewindow.cpp:489
+#: messagewindow.cpp:488
 #, fuzzy, kde-kuit-format
 #| msgid "Use KMail &identities"
 msgctxt "@info:whatsthis"
 msgid "Activate <application>KAlarm</application>"
 msgstr "KMail &шахсиятларидан фойдаланиш"
 
-#: messagewindow.cpp:1071
+#: messagewindow.cpp:1070
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Do you really want to acknowledge this alarm?"
 msgstr "Ростдан ҳам ушбу огоҳлантиришни тасдиқлайсизми?"
 
-#: messagewindow.cpp:1072
+#: messagewindow.cpp:1071
 #, fuzzy, kde-format
 msgctxt "@action:button"
 msgid "Acknowledge Alarm"
 msgstr "Огоҳлантиришни тасдиқлаш"
 
-#: messagewindow.cpp:1072
+#: messagewindow.cpp:1071
 #, fuzzy, kde-format
 msgctxt "@action:button"
 msgid "Acknowledge"
 msgstr "&Тасдиқлаш"
 
-#: messagewindow.cpp:1131
+#: messagewindow.cpp:1130
 #, fuzzy, kde-kuit-format
 #| msgid "Use KMail &identities"
 msgctxt "@info"
