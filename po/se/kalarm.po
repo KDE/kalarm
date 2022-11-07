@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-10-19 00:46+0000\n"
+"POT-Creation-Date: 2022-11-06 00:47+0000\n"
 "PO-Revision-Date: 2011-10-24 11:46+0200\n"
 "Last-Translator: Børre Gaup <boerre@skolelinux.no>\n"
 "Language-Team: Northern Sami <l10n-no@lister.huftis.org>\n"
@@ -1100,9 +1100,9 @@ msgctxt "@info:whatsthis"
 msgid ""
 "Your email address, used for blind copying email alarms to yourself. If you "
 "want blind copies to be sent to your account on the computer which KAlarm "
-"runs on, you can simply enter your user login name. Enter \"@SystemSettings"
-"\" to use the default email address set in KMail, or enter the actual email "
-"address otherwise."
+"runs on, you can simply enter your user login name. Enter "
+"\"@SystemSettings\" to use the default email address set in KMail, or enter "
+"the actual email address otherwise."
 msgstr ""
 
 #. i18n: ectx: label, entry (Base_CmdXTermCommand), group (General)
@@ -1319,8 +1319,8 @@ msgstr ""
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
-"Default setting in the alarm edit dialog for \"confirm alarm acknowledgement"
-"\"."
+"Default setting in the alarm edit dialog for \"confirm alarm "
+"acknowledgement\"."
 msgstr ""
 
 #. i18n: ectx: label, entry (DefaultCopyToKOrganizer), group (Defaults)
@@ -1973,8 +1973,8 @@ msgstr ""
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
-"<para>Enter the start time for alarms based on this template.</para><para>"
-"%1</para>"
+"<para>Enter the start time for alarms based on this template.</"
+"para><para>%1</para>"
 msgstr ""
 
 #: editdlg.cpp:329
@@ -2049,8 +2049,8 @@ msgstr ""
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
-"Reminder period must be less than the recurrence interval, unless <interface>"
-"%1</interface> is checked."
+"Reminder period must be less than the recurrence interval, unless "
+"<interface>%1</interface> is checked."
 msgstr ""
 
 #: editdlg.cpp:1105
@@ -4371,7 +4371,7 @@ msgctxt "@action:button"
 msgid "Defer"
 msgstr ""
 
-#: messagewindow.cpp:235
+#: messagewindow.cpp:232
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -4379,79 +4379,79 @@ msgid ""
 "display)."
 msgstr ""
 
-#: messagewindow.cpp:252
+#: messagewindow.cpp:249
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "The file whose contents are displayed below"
 msgstr ""
 
-#: messagewindow.cpp:286
+#: messagewindow.cpp:283
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "The contents of the file to be displayed"
 msgstr ""
 
-#: messagewindow.cpp:306
+#: messagewindow.cpp:303
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "The alarm message"
 msgstr ""
 
-#: messagewindow.cpp:333
+#: messagewindow.cpp:330
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "The output of the alarm's command"
 msgstr ""
 
-#: messagewindow.cpp:366
+#: messagewindow.cpp:363
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "The email to send"
 msgstr ""
 
-#: messagewindow.cpp:416
+#: messagewindow.cpp:413
 #, kde-format
 msgctxt "@option:check"
 msgid "Do not display this error message again for this alarm"
 msgstr ""
 
-#: messagewindow.cpp:433
+#: messagewindow.cpp:430
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Acknowledge the alarm"
 msgstr ""
 
-#: messagewindow.cpp:438
+#: messagewindow.cpp:435
 #, kde-format
 msgctxt "@action:button"
 msgid "&Edit..."
 msgstr ""
 
-#: messagewindow.cpp:442
+#: messagewindow.cpp:439
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Edit the alarm"
 msgstr ""
 
-#: messagewindow.cpp:443
+#: messagewindow.cpp:440
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Edit the alarm."
 msgstr ""
 
-#: messagewindow.cpp:447
+#: messagewindow.cpp:444
 #, kde-format
 msgctxt "@action:button"
 msgid "&Defer..."
 msgstr ""
 
-#: messagewindow.cpp:451
+#: messagewindow.cpp:448
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Defer the alarm until later"
 msgstr ""
 
-#: messagewindow.cpp:452
+#: messagewindow.cpp:449
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -4459,61 +4459,61 @@ msgid ""
 "specify when the alarm should be redisplayed.</para>"
 msgstr ""
 
-#: messagewindow.cpp:466 sounddlg.cpp:451
+#: messagewindow.cpp:463 sounddlg.cpp:451
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Stop sound"
 msgstr ""
 
-#: messagewindow.cpp:467 sounddlg.cpp:452
+#: messagewindow.cpp:464 sounddlg.cpp:452
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Stop playing the sound"
 msgstr ""
 
-#: messagewindow.cpp:481
+#: messagewindow.cpp:478
 #, kde-kuit-format
 msgctxt "@info:tooltip Locate this email in KMail"
 msgid "Locate in <application>KMail</application>"
 msgstr ""
 
-#: messagewindow.cpp:482
+#: messagewindow.cpp:479
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid "Locate and highlight this email in <application>KMail</application>"
 msgstr ""
 
-#: messagewindow.cpp:490
+#: messagewindow.cpp:487
 #, kde-kuit-format
 msgctxt "@info:tooltip"
 msgid "Activate <application>KAlarm</application>"
 msgstr ""
 
-#: messagewindow.cpp:491
+#: messagewindow.cpp:488
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid "Activate <application>KAlarm</application>"
 msgstr ""
 
-#: messagewindow.cpp:1073
+#: messagewindow.cpp:1070
 #, kde-format
 msgctxt "@info"
 msgid "Do you really want to acknowledge this alarm?"
 msgstr ""
 
-#: messagewindow.cpp:1074
+#: messagewindow.cpp:1071
 #, kde-format
 msgctxt "@action:button"
 msgid "Acknowledge Alarm"
 msgstr ""
 
-#: messagewindow.cpp:1074
+#: messagewindow.cpp:1071
 #, kde-format
 msgctxt "@action:button"
 msgid "Acknowledge"
 msgstr ""
 
-#: messagewindow.cpp:1133
+#: messagewindow.cpp:1130
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Unable to locate this email in <application>KMail</application>"
@@ -5068,10 +5068,11 @@ msgstr ""
 msgctxt "@info:whatsthis"
 msgid ""
 "<para>%1<list><item><interface>%2</interface>: The email is sent "
-"automatically via <application>KMail</application>.</item><item><interface>"
-"%3</interface>: The email is sent automatically. This option will only work "
-"if your system is configured to use <application>sendmail</application> or a "
-"sendmail compatible mail transport agent.</item></list></para>"
+"automatically via <application>KMail</application>.</"
+"item><item><interface>%3</interface>: The email is sent automatically. This "
+"option will only work if your system is configured to use "
+"<application>sendmail</application> or a sendmail compatible mail transport "
+"agent.</item></list></para>"
 msgstr ""
 
 #: prefdlg.cpp:1058
@@ -5748,8 +5749,8 @@ msgstr ""
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
-"<para>Enter the last time to repeat the alarm.</para><para>%1</para><para>"
-"%2</para>"
+"<para>Enter the last time to repeat the alarm.</para><para>%1</"
+"para><para>%2</para>"
 msgstr ""
 
 #: recurrenceedit.cpp:253
@@ -7153,8 +7154,8 @@ msgstr ""
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
-"<para><resource>%1</resource> is the default calendar for:%2</para>"
-"%3<para>Do you really want to remove it from all calendar lists?</para>"
+"<para><resource>%1</resource> is the default calendar for:%2</"
+"para>%3<para>Do you really want to remove it from all calendar lists?</para>"
 msgstr ""
 
 #: resourceselector.cpp:258

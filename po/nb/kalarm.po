@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-10-19 00:46+0000\n"
+"POT-Creation-Date: 2022-11-06 00:47+0000\n"
 "PO-Revision-Date: 2014-09-12 16:04+0200\n"
 "Last-Translator: Bjørn Steensrud <bjornst@skogkatt.homelinux.org>\n"
 "Language-Team: Norwegian Bokmål <l10n-no@lister.huftis.org>\n"
@@ -1188,9 +1188,9 @@ msgctxt "@info:whatsthis"
 msgid ""
 "Your email address, used for blind copying email alarms to yourself. If you "
 "want blind copies to be sent to your account on the computer which KAlarm "
-"runs on, you can simply enter your user login name. Enter \"@SystemSettings"
-"\" to use the default email address set in KMail, or enter the actual email "
-"address otherwise."
+"runs on, you can simply enter your user login name. Enter "
+"\"@SystemSettings\" to use the default email address set in KMail, or enter "
+"the actual email address otherwise."
 msgstr ""
 
 #. i18n: ectx: label, entry (Base_CmdXTermCommand), group (General)
@@ -1429,8 +1429,8 @@ msgstr "Bekreft mottakelsen"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
-"Default setting in the alarm edit dialog for \"confirm alarm acknowledgement"
-"\"."
+"Default setting in the alarm edit dialog for \"confirm alarm "
+"acknowledgement\"."
 msgstr ""
 "Standard-innstilling for \"Bekreft mottakelsen\" i dialogvinduet for "
 "varslingsredigering."
@@ -2126,11 +2126,11 @@ msgstr "Oppgi en starttid for varslinger basert på denne malen."
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
-"<para>Enter the start time for alarms based on this template.</para><para>"
-"%1</para>"
+"<para>Enter the start time for alarms based on this template.</"
+"para><para>%1</para>"
 msgstr ""
-"<para>Skriv inn starttiden for varslinger basert på denne malen.</para><para>"
-"%1</para>"
+"<para>Skriv inn starttiden for varslinger basert på denne malen.</"
+"para><para>%1</para>"
 
 #: editdlg.cpp:329
 #, kde-format
@@ -2212,8 +2212,8 @@ msgstr "Varslingen vil aldri skje i arbeidstiden"
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
-"Reminder period must be less than the recurrence interval, unless <interface>"
-"%1</interface> is checked."
+"Reminder period must be less than the recurrence interval, unless "
+"<interface>%1</interface> is checked."
 msgstr ""
 "Påminnelsesperioden må være mindre enn gjentakelsesintervallet hvis "
 "<interface>%1</interface>ikke er valgt."
@@ -4608,7 +4608,7 @@ msgctxt "@action:button"
 msgid "Defer"
 msgstr ""
 
-#: messagewindow.cpp:235
+#: messagewindow.cpp:232
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -4618,79 +4618,79 @@ msgstr ""
 "Den oppsatte dato/tid for beskjeden (i motsetning til tiden når den faktisk "
 "vises)."
 
-#: messagewindow.cpp:252
+#: messagewindow.cpp:249
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "The file whose contents are displayed below"
 msgstr "Fila med innhold blir vist nedenfor"
 
-#: messagewindow.cpp:286
+#: messagewindow.cpp:283
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "The contents of the file to be displayed"
 msgstr "Innholdet til fila som skal vises"
 
-#: messagewindow.cpp:306
+#: messagewindow.cpp:303
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "The alarm message"
 msgstr "Varslingsmeldinga"
 
-#: messagewindow.cpp:333
+#: messagewindow.cpp:330
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "The output of the alarm's command"
 msgstr "Utdata for varslingens kommando"
 
-#: messagewindow.cpp:366
+#: messagewindow.cpp:363
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "The email to send"
 msgstr "E-posten som skal sendes"
 
-#: messagewindow.cpp:416
+#: messagewindow.cpp:413
 #, kde-format
 msgctxt "@option:check"
 msgid "Do not display this error message again for this alarm"
 msgstr "Ikke vis denne feilmeldinga for denne varslinga"
 
-#: messagewindow.cpp:433
+#: messagewindow.cpp:430
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Acknowledge the alarm"
 msgstr "Kvitter for varslinga"
 
-#: messagewindow.cpp:438
+#: messagewindow.cpp:435
 #, kde-format
 msgctxt "@action:button"
 msgid "&Edit..."
 msgstr "&Rediger …"
 
-#: messagewindow.cpp:442
+#: messagewindow.cpp:439
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Edit the alarm"
 msgstr ""
 
-#: messagewindow.cpp:443
+#: messagewindow.cpp:440
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Edit the alarm."
 msgstr "Rediger varslinga."
 
-#: messagewindow.cpp:447
+#: messagewindow.cpp:444
 #, kde-format
 msgctxt "@action:button"
 msgid "&Defer..."
 msgstr "&Utsett …"
 
-#: messagewindow.cpp:451
+#: messagewindow.cpp:448
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Defer the alarm until later"
 msgstr ""
 
-#: messagewindow.cpp:452
+#: messagewindow.cpp:449
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -4700,61 +4700,61 @@ msgstr ""
 "<para>Utsett varslinga til senere.</para><para>Du vil bli bedt om å angi når "
 "varslinga skal vises igjen.</para>"
 
-#: messagewindow.cpp:466 sounddlg.cpp:451
+#: messagewindow.cpp:463 sounddlg.cpp:451
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Stop sound"
 msgstr "Stopp Lyd"
 
-#: messagewindow.cpp:467 sounddlg.cpp:452
+#: messagewindow.cpp:464 sounddlg.cpp:452
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Stop playing the sound"
 msgstr "Stopp lydavspilling"
 
-#: messagewindow.cpp:481
+#: messagewindow.cpp:478
 #, kde-kuit-format
 msgctxt "@info:tooltip Locate this email in KMail"
 msgid "Locate in <application>KMail</application>"
 msgstr "Finn denne i <application>KMail</application>"
 
-#: messagewindow.cpp:482
+#: messagewindow.cpp:479
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid "Locate and highlight this email in <application>KMail</application>"
 msgstr "Lokaliser og uthev denne e-posten i <application>KMail</application>"
 
-#: messagewindow.cpp:490
+#: messagewindow.cpp:487
 #, kde-kuit-format
 msgctxt "@info:tooltip"
 msgid "Activate <application>KAlarm</application>"
 msgstr "Skru på <application>KAlarm</application>"
 
-#: messagewindow.cpp:491
+#: messagewindow.cpp:488
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid "Activate <application>KAlarm</application>"
 msgstr "Skru på <application>KAlarm</application>"
 
-#: messagewindow.cpp:1073
+#: messagewindow.cpp:1070
 #, kde-format
 msgctxt "@info"
 msgid "Do you really want to acknowledge this alarm?"
 msgstr "Er du sikker på at du vil kvittere for denne varslinga?"
 
-#: messagewindow.cpp:1074
+#: messagewindow.cpp:1071
 #, kde-format
 msgctxt "@action:button"
 msgid "Acknowledge Alarm"
 msgstr "Kvitter for varslinga"
 
-#: messagewindow.cpp:1074
+#: messagewindow.cpp:1071
 #, kde-format
 msgctxt "@action:button"
 msgid "Acknowledge"
 msgstr "Kvitter"
 
-#: messagewindow.cpp:1133
+#: messagewindow.cpp:1130
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Unable to locate this email in <application>KMail</application>"
@@ -5354,10 +5354,11 @@ msgstr ""
 msgctxt "@info:whatsthis"
 msgid ""
 "<para>%1<list><item><interface>%2</interface>: The email is sent "
-"automatically via <application>KMail</application>.</item><item><interface>"
-"%3</interface>: The email is sent automatically. This option will only work "
-"if your system is configured to use <application>sendmail</application> or a "
-"sendmail compatible mail transport agent.</item></list></para>"
+"automatically via <application>KMail</application>.</"
+"item><item><interface>%3</interface>: The email is sent automatically. This "
+"option will only work if your system is configured to use "
+"<application>sendmail</application> or a sendmail compatible mail transport "
+"agent.</item></list></para>"
 msgstr ""
 
 #: prefdlg.cpp:1058
@@ -6104,8 +6105,8 @@ msgstr ""
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
-"<para>Enter the last time to repeat the alarm.</para><para>%1</para><para>"
-"%2</para>"
+"<para>Enter the last time to repeat the alarm.</para><para>%1</"
+"para><para>%2</para>"
 msgstr ""
 "<para>Skriv inn det siste tidspunktet for gjentaking av varslinga.</"
 "para><para>%1</para><para>%2</para>"
@@ -7546,8 +7547,8 @@ msgstr "<para>Den inneholder også: %1</para>"
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
-"<para><resource>%1</resource> is the default calendar for:%2</para>"
-"%3<para>Do you really want to remove it from all calendar lists?</para>"
+"<para><resource>%1</resource> is the default calendar for:%2</"
+"para>%3<para>Do you really want to remove it from all calendar lists?</para>"
 msgstr ""
 "<para><resource>%1</resource> er standard kalender for:%2</para>%3<para>Er "
 "du sikker på at du vil slette den fra alle kalenderlister?</para>"
@@ -7710,8 +7711,8 @@ msgid ""
 "<filename>%6</filename><nl/>Permissions: %7<nl/>Status: %8<nl/>Default "
 "calendar: %9</para>"
 msgstr ""
-"<title>%1</title> <para>ID: %2<nl/>Kalendertype: %3<nl/>Innhold: %4<nl/>"
-"%5<filename>%6</filename><nl/>Tillatelser: %7<nl/>Status: %8<nl/"
+"<title>%1</title> <para>ID: %2<nl/>Kalendertype: %3<nl/>Innhold: %4<nl/"
+">%5<filename>%6</filename><nl/>Tillatelser: %7<nl/>Status: %8<nl/"
 ">Standardkalender: %9</para>"
 
 #: rtcwakeaction.cpp:87
