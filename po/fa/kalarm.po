@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-04 00:46+0000\n"
+"POT-Creation-Date: 2022-11-06 00:47+0000\n"
 "PO-Revision-Date: 2007-08-22 18:39+0330\n"
 "Last-Translator: Nazanin Kazemi <kazemi@itland.ir>\n"
 "Language-Team: Persian <kde-i18n-fa@kde.org>\n"
@@ -5196,7 +5196,7 @@ msgctxt "@action:button"
 msgid "Defer"
 msgstr "لغو &تعویقی‌"
 
-#: messagewindow.cpp:233
+#: messagewindow.cpp:232
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5205,37 +5205,37 @@ msgid ""
 msgstr ""
 "تاریخ/زمان زمان‌بندی‌شده برای پیام )به عنوان مخالف بودن با زمان واقعی نمایش(."
 
-#: messagewindow.cpp:250
+#: messagewindow.cpp:249
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "The file whose contents are displayed below"
 msgstr "پرونده‌ای که محتویات آن در زیر نمایش داده می‌شود"
 
-#: messagewindow.cpp:284
+#: messagewindow.cpp:283
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "The contents of the file to be displayed"
 msgstr "محتوای پرونده‌ای که باید نمایش داده شود"
 
-#: messagewindow.cpp:304
+#: messagewindow.cpp:303
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "The alarm message"
 msgstr "پیام هشدار"
 
-#: messagewindow.cpp:331
+#: messagewindow.cpp:330
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "The output of the alarm's command"
 msgstr ""
 
-#: messagewindow.cpp:364
+#: messagewindow.cpp:363
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "The email to send"
 msgstr "رایانامه جهت ارسال"
 
-#: messagewindow.cpp:414
+#: messagewindow.cpp:413
 #, fuzzy, kde-format
 #| msgctxt "@option:check"
 #| msgid "Don't display this error message again for this alarm"
@@ -5243,19 +5243,19 @@ msgctxt "@option:check"
 msgid "Do not display this error message again for this alarm"
 msgstr "این پیام خطا را برای این هشدار دوباره نشان نده"
 
-#: messagewindow.cpp:431
+#: messagewindow.cpp:430
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Acknowledge the alarm"
 msgstr "تصدیق هشدار"
 
-#: messagewindow.cpp:436
+#: messagewindow.cpp:435
 #, kde-format
 msgctxt "@action:button"
 msgid "&Edit..."
 msgstr "&ویرایش...‌"
 
-#: messagewindow.cpp:440
+#: messagewindow.cpp:439
 #, fuzzy, kde-format
 #| msgctxt "@info:whatsthis"
 #| msgid "Edit the alarm."
@@ -5263,19 +5263,19 @@ msgctxt "@info:tooltip"
 msgid "Edit the alarm"
 msgstr "ویرایش هشدار."
 
-#: messagewindow.cpp:441
+#: messagewindow.cpp:440
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Edit the alarm."
 msgstr "ویرایش هشدار."
 
-#: messagewindow.cpp:445
+#: messagewindow.cpp:444
 #, kde-format
 msgctxt "@action:button"
 msgid "&Defer..."
 msgstr "&تعویق...‌"
 
-#: messagewindow.cpp:449
+#: messagewindow.cpp:448
 #, fuzzy, kde-format
 #| msgctxt "@info:whatsthis"
 #| msgid "Defer the alarm until the specified time."
@@ -5283,7 +5283,7 @@ msgctxt "@info:tooltip"
 msgid "Defer the alarm until later"
 msgstr "تعویق هشدار تا زمان مشخص."
 
-#: messagewindow.cpp:450
+#: messagewindow.cpp:449
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5293,19 +5293,19 @@ msgstr ""
 "تعویق هشدار تا بعد.\n"
 "به شما اعلان می‌شود، زمانی که هشدار باید مجدداً نمایش داده شود را مشخص کنید."
 
-#: messagewindow.cpp:464 sounddlg.cpp:451
+#: messagewindow.cpp:463 sounddlg.cpp:451
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Stop sound"
 msgstr "ایست در صوت"
 
-#: messagewindow.cpp:465 sounddlg.cpp:452
+#: messagewindow.cpp:464 sounddlg.cpp:452
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Stop playing the sound"
 msgstr "ایست در پخش صوت"
 
-#: messagewindow.cpp:479
+#: messagewindow.cpp:478
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info:tooltip Locate this email in KMail"
 #| msgid "Locate in <application>KMail<application>"
@@ -5313,13 +5313,13 @@ msgctxt "@info:tooltip Locate this email in KMail"
 msgid "Locate in <application>KMail</application>"
 msgstr "محل‌یابی در <application>KMail<application>"
 
-#: messagewindow.cpp:480
+#: messagewindow.cpp:479
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid "Locate and highlight this email in <application>KMail</application>"
 msgstr "محل‌یابی و مشخص کردن این رایانامه در <application>KMail</application>"
 
-#: messagewindow.cpp:488
+#: messagewindow.cpp:487
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info:tooltip Locate this email in KMail"
 #| msgid "Locate in <application>KMail<application>"
@@ -5327,7 +5327,7 @@ msgctxt "@info:tooltip"
 msgid "Activate <application>KAlarm</application>"
 msgstr "محل‌یابی در <application>KMail<application>"
 
-#: messagewindow.cpp:489
+#: messagewindow.cpp:488
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info:tooltip Locate this email in KMail"
 #| msgid "Locate in <application>KMail<application>"
@@ -5335,25 +5335,25 @@ msgctxt "@info:whatsthis"
 msgid "Activate <application>KAlarm</application>"
 msgstr "محل‌یابی در <application>KMail<application>"
 
-#: messagewindow.cpp:1071
+#: messagewindow.cpp:1070
 #, kde-format
 msgctxt "@info"
 msgid "Do you really want to acknowledge this alarm?"
 msgstr "واقعاً می‌خواهید این هشدار را تصدیق کنید؟"
 
-#: messagewindow.cpp:1072
+#: messagewindow.cpp:1071
 #, kde-format
 msgctxt "@action:button"
 msgid "Acknowledge Alarm"
 msgstr "تصدیق هشدار"
 
-#: messagewindow.cpp:1072
+#: messagewindow.cpp:1071
 #, kde-format
 msgctxt "@action:button"
 msgid "Acknowledge"
 msgstr "تصدیق"
 
-#: messagewindow.cpp:1131
+#: messagewindow.cpp:1130
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Unable to locate this email in <application>KMail</application>"
