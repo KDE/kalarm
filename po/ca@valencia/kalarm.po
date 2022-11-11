@@ -1189,7 +1189,8 @@ msgstr "KMail"
 #, kde-format
 msgctxt "@label"
 msgid "Whether to copy sent emails into KMail's Sent folder."
-msgstr "Per a copiar els correus enviats a la carpeta «enviats» de KMail."
+msgstr ""
+"Per a copiar els correus enviats a dins de la carpeta «enviats» de KMail."
 
 #. i18n: ectx: whatsthis, entry (Base_EmailCopyToKMail), group (General)
 #: data/kalarmconfig.kcfg:203
@@ -2927,7 +2928,7 @@ msgid ""
 "If checked, the sound file will be played repeatedly until %1 is clicked."
 msgstr ""
 "Si està marcada, el fitxer de so es reproduirà repetidament fins que es faça "
-"clic a %1."
+"clic en %1."
 
 #: editdlgtypes.cpp:1828
 #, kde-format
@@ -5519,7 +5520,7 @@ msgid ""
 "Copy sent emails into <application>KMail</application>'s <resource>%1</"
 "resource> folder"
 msgstr ""
-"Copia els correus enviats a la carpeta <resource>%1</resource> de "
+"Copia els correus enviats a dins de la carpeta <resource>%1</resource> de "
 "<application>KMail</application>"
 
 #: prefdlg.cpp:1069
