@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.16 FATAL_ERROR)
-set(PIM_VERSION "5.21.70")
+set(PIM_VERSION "5.21.90")
 set(PIM_VERSION ${PIM_VERSION})
 set(RELEASE_SERVICE_VERSION_MAJOR "22")
 set(RELEASE_SERVICE_VERSION_MINOR "11")
@@ -41,7 +41,7 @@ include(ECMQtDeclareLoggingCategory)
 include(ECMDeprecationSettings)
 
 # Do NOT add quote
-set(KDEPIM_DEV_VERSION alpha)
+set(KDEPIM_DEV_VERSION rc)
 
 # add an extra space
 if (DEFINED KDEPIM_DEV_VERSION)
