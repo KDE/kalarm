@@ -65,7 +65,6 @@ using namespace KCalendarCore;
 #include <QStandardPaths>
 #include <QPushButton>
 #include <QTemporaryFile>
-#include <kwidgetsaddons_version.h>
 
 //clazy:excludeall=non-pod-global-static
 
@@ -1611,11 +1610,7 @@ void outputAlarmWarnings(QWidget* parent, const KAEvent* event)
         if (KAMessageBox::warningYesNo(parent, xi18nc("@info", "<para>Alarms are currently disabled.</para><para>Do you want to enable alarms now?</para>"),
                                        QString(), KGuiItem(i18nc("@action:button", "Enable")), KGuiItem(i18nc("@action:button", "Keep Disabled")),
                                        QStringLiteral("EditEnableAlarms"))
-#if KWIDGETSADDONS_VERSION >= QT_VERSION_CHECK(5, 100, 0)
                         == KMessageBox::ButtonCode::PrimaryAction)
-#else
-                        == KMessageBox::Yes)
-#endif
             theApp()->setAlarmsEnabled(true);
     }
 }

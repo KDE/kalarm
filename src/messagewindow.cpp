@@ -1069,11 +1069,7 @@ bool MessageWindow::confirmAcknowledgement()
         // Ask for confirmation of acknowledgement. Use warningYesNo() because its default is No.
         if (KAMessageBox::warningYesNo(this, i18nc("@info", "Do you really want to acknowledge this alarm?"),
                                              i18nc("@action:button", "Acknowledge Alarm"), KGuiItem(i18nc("@action:button", "Acknowledge")), KStandardGuiItem::cancel())
-#if KWIDGETSADDONS_VERSION >= QT_VERSION_CHECK(5, 100, 0)
             != KMessageBox::ButtonCode::PrimaryAction)
-#else
-            != KMessageBox::Yes)
-#endif
         {
             return false;
         }

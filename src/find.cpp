@@ -26,7 +26,6 @@
 #include <QVBoxLayout>
 #include <QGridLayout>
 #include <QRegularExpression>
-#include <kwidgetsaddons_version.h>
 
 using namespace KAlarmCal;
 
@@ -378,11 +377,7 @@ void Find::findNext(bool forward, bool checkEnd, bool fromCurrent)
         {
             const QString msg = forward ? xi18nc("@info", "<para>End of alarm list reached.</para><para>Continue from the beginning?</para>")
                                         : xi18nc("@info", "<para>Beginning of alarm list reached.</para><para>Continue from the end?</para>");
-#if KWIDGETSADDONS_VERSION >= QT_VERSION_CHECK(5, 100, 0)
             if (KAMessageBox::questionYesNo(mListView, msg, QString(), KStandardGuiItem::cont(), KStandardGuiItem::cancel()) == KMessageBox::ButtonCode::PrimaryAction)
-#else
-            if (KAMessageBox::questionYesNo(mListView, msg, QString(), KStandardGuiItem::cont(), KStandardGuiItem::cancel()) == KMessageBox::Yes)
-#endif
             {
                 mNoCurrentItem = true;
                 findNext(forward, false, false);
