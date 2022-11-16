@@ -11,8 +11,8 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-11-06 00:47+0000\n"
-"PO-Revision-Date: 2022-10-26 08:41+0200\n"
-"Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
+"PO-Revision-Date: 2022-11-15 18:09+0100\n"
+"Last-Translator: Antoni Bella <antonibella5@yahoo.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
 "MIME-Version: 1.0\n"
@@ -862,7 +862,7 @@ msgid ""
 "help you to identify alarms."
 msgstr ""
 "Seleccioneu si es podrà donar un nom a les alarmes. Açò és molt pràctic per "
-"ajudar a identificar-les."
+"a ajudar a identificar-les."
 
 #. i18n: ectx: label, entry (MessageFont), group (General)
 #: data/kalarmconfig.kcfg:106
@@ -5086,7 +5086,7 @@ msgid ""
 "help you to identify alarms."
 msgstr ""
 "Activeu per a tindre l'opció de donar un nom a les alarmes. Açò és molt "
-"pràctic per ajudar a identificar-les."
+"pràctic per a ajudar a identificar-les."
 
 #: prefdlg.cpp:482
 #, kde-format
