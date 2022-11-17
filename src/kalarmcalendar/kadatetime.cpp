@@ -56,6 +56,8 @@ QString numString(int n, int width);
 
 int offsetAtZoneTime(const QTimeZone& tz, const QDateTime&, int* secondOffset = nullptr);
 QDateTime toZoneTime(const QTimeZone& tz, const QDateTime& utcDateTime, bool* secondOccurrence = nullptr);
+bool checkTzTransitionOccurrence(const QDateTime& dt, const QDateTime& utcDateTime);
+int  checkTzTransitionBackwards(QTimeZone::OffsetData& transition, const QTimeZone& tz, const QDateTime& utcDateTime, const QDateTime& tzDateTime = {});
 
 } // namespace
 
@@ -349,10 +351,10 @@ public:
         {
             case Qt::UTC:
                 specType = KADateTime::UTC;
-                break;
+                return;
             case Qt::OffsetFromUTC:
                 specType = KADateTime::OffsetFromUTC;
-                break;
+                return;
             case Qt::TimeZone:
                 specType = KADateTime::TimeZone;
                 break;
@@ -360,6 +362,15 @@ public:
                 specType = KADateTime::LocalZone;
                 mDt.setTimeZone(QTimeZone::systemTimeZone());
                 break;
+        }
+        // Evaluate m2ndOccurrence
+        QTimeZone::OffsetData transition;
+        int utcOffsetChange = checkTzTransitionBackwards(transition, mDt.timeZone(), utcDt(), mDt);
+        if (utcOffsetChange < 0)
+        {
+            if (mDt.isDaylightTime() != d.isDaylightTime())
+                mDt = mDt.addSecs(d.isDaylightTime() ? -utcOffsetChange : utcOffsetChange);
+            m2ndOccurrence = !d.isDaylightTime();
         }
     }
 
@@ -373,7 +384,11 @@ public:
     QDateTime dt() const
     {
         if (specType == KADateTime::LocalZone)
-            return QDateTime(mDt.date(), mDt.time(), Qt::LocalTime);
+        {
+            QDateTime dtl(mDt);
+            dtl.setTimeSpec(Qt::LocalTime);
+            return dtl;
+        }
         return mDt;
     }
     QDateTime updatedDt(QTimeZone& local) const;
@@ -386,9 +401,17 @@ public:
         return mDt.time();
     }
     KADateTime::Spec spec() const;
+    QDateTime utcDt() const
+    {
+        if (specType == KADateTime::UTC)
+            return mDt;
+        if (!utcCached)
+            setCachedUtc((specType == KADateTime::Invalid) ? QDateTime() : mDt.toUTC());
+        return ut;
+    }
     QDateTime cachedUtc() const
     {
-        return (specType != KADateTime::Invalid) ? QDateTime(ut.date, ut.time, Qt::UTC) : QDateTime();
+        return (specType != KADateTime::Invalid) ? ut : QDateTime();
     }
     bool dateOnly() const
     {
@@ -403,19 +426,17 @@ public:
     void setDtWithSpec(const QDateTime& dt)
     {
         mDt = dt;
-        utcCached = convertedCached = m2ndOccurrence = false;
+        utcCached = convertedCached = false;
+        setTzTransitionOccurrence();
     }
     // Set mDt and its time spec, without changing timeSpec.
     // Condition: 'dt' time spec must correspond to timeSpec.
-    // 'utcDt' is the UTC equivalent of dt.
-    void setDtWithSpec(const QDateTime& dt, const QDateTime& utcDt)
+    // 'utc' is the UTC equivalent of dt.
+    void setDtWithSpec(const QDateTime& dt, const QDateTime& utc)
     {
         mDt = dt;
-        ut.date = utcDt.date();
-        ut.time = utcDt.time();
-        utcCached = true;
-        convertedCached = false;
-        m2ndOccurrence = false;
+        setCachedUtc(utc);
+        setTzTransitionOccurrence();
     }
 
     void setDtSpec(const KADateTime::Spec& s);
@@ -423,12 +444,14 @@ public:
     void setDate(const QDate& d)
     {
         mDt.setDate(d);
-        utcCached = convertedCached = m2ndOccurrence = false;
+        utcCached = convertedCached = false;
+        setTzTransitionOccurrence(false);
     }
     void setTime(const QTime& t)
     {
         mDt.setTime(t);
-        utcCached = convertedCached = mDateOnly = m2ndOccurrence = false;
+        utcCached = convertedCached = mDateOnly = false;
+        setTzTransitionOccurrence(false);
     }
     void setSpec(const KADateTime::Spec&);
     void setDateOnly(bool d);
@@ -445,6 +468,8 @@ public:
     QDateTime toUtc(QTimeZone& local) const;
     QDateTime toZone(const QTimeZone& zone, QTimeZone& local) const;
     void newToZone(KADateTimePrivate* newd, const QTimeZone& zone, QTimeZone& local) const;
+    void setTzTransitionOccurrence();
+    bool setTzTransitionOccurrence(bool second);
     bool equalSpec(const KADateTimePrivate&) const;
     void clearCache()
     {
@@ -452,8 +477,7 @@ public:
     }
     void setCachedUtc(const QDateTime& dt) const
     {
-        ut.date = dt.date();
-        ut.time = dt.time();
+        ut = dt;
         utcCached = true;
         convertedCached = false;
     }
@@ -485,20 +509,11 @@ private:
     // daylight savings times.
     QDateTime             mDt;
 public:
-    mutable struct ut                  // cached UTC equivalent of 'mDt'. Saves space compared to storing QDateTime.
-    {
-        QDate             date;
-        QTime             time;
-    } ut;
+    mutable QDateTime     ut;          // cached UTC equivalent of 'mDt'
 private:
-    mutable struct converted           // cached conversion to another time zone (if 'tz' is valid)
-    {
-        QDate             date;
-        QTime             time;
-        QTimeZone         tz;
-    } converted;
+    mutable QDateTime     converted;   // cached conversion to another time zone (if 'tz' is valid)
 public:
-    KADateTime::SpecType   specType          : 4; // time spec type (N.B. need 3 bits + sign bit, since enums are signed on some platforms)
+    KADateTime::SpecType  specType          : 4; // time spec type (N.B. need 3 bits + sign bit, since enums are signed on some platforms)
     mutable bool          utcCached         : 1; // true if 'ut' is valid
     mutable bool          convertedCached   : 1; // true if 'converted' is valid
     mutable bool          m2ndOccurrence    : 1; // this is the second occurrence of a time zone time
@@ -548,8 +563,14 @@ void KADateTimePrivate::setDtSpec(const KADateTime::Spec& s)
             break;
         case KADateTime::Invalid:
         default:
-            break;
+            return;
     }
+    utcCached = convertedCached = m2ndOccurrence = false;
+
+    // It's a time zone. If the date/time is one which repeats before and after
+    // a DST -> standard time shift, ensure that it's set to the first occurrence.
+    // (Note that QDateTime provides no option to choose which occurrence to set.)
+    setTzTransitionOccurrence(false);
 }
 
 void KADateTimePrivate::setSpec(const KADateTime::Spec& other)
@@ -561,10 +582,13 @@ void KADateTimePrivate::setSpec(const KADateTime::Spec& other)
             case KADateTime::TimeZone:
             {
                 const QTimeZone tz = other.timeZone();
-                if (mDt.timeZone() == tz)
-                    return;
-                mDt.setTimeZone(tz);
-                break;
+                if (mDt.timeZone() != tz)
+                {
+                    mDt.setTimeZone(tz);
+                    utcCached = convertedCached = false;
+                    setTzTransitionOccurrence(false);
+                }
+                return;
             }
             case KADateTime::OffsetFromUTC:
             {
@@ -572,6 +596,7 @@ void KADateTimePrivate::setSpec(const KADateTime::Spec& other)
                 if (mDt.offsetFromUtc() == offset)
                     return;
                 mDt.setOffsetFromUtc(offset);
+                utcCached = convertedCached = false;
                 break;
             }
             default:
@@ -584,13 +609,12 @@ void KADateTimePrivate::setSpec(const KADateTime::Spec& other)
         setDtSpec(other);
         if (specType == KADateTime::Invalid)
         {
-            ut.date = QDate();   // cache an invalid UTC value
+            ut = QDateTime();   // cache an invalid UTC value
             utcCached = true;
             convertedCached = m2ndOccurrence = false;
             return;
         }
     }
-    utcCached = convertedCached = m2ndOccurrence = false;
 }
 
 bool KADateTimePrivate::equalSpec(const KADateTimePrivate& other) const
@@ -657,20 +681,16 @@ void KADateTimePrivate::setDateTime(const QDateTime& d)
                 case KADateTime::UTC:
                     mDt               = d.toUTC();
                     utcCached         = false;
-                    converted.date    = d.date();
-                    converted.time    = d.time();
-                    converted.tz      = d.timeZone();
+                    converted         = d;
+                    converted2ndOccur = checkTzTransitionOccurrence(d, mDt);
                     convertedCached   = true;
-                    converted2ndOccur = false;   // QDateTime::toUtc() returns the first occurrence
                     break;
                 case KADateTime::OffsetFromUTC:
                     mDt               = d.toOffsetFromUtc(mDt.offsetFromUtc());
                     utcCached         = false;
-                    converted.date    = d.date();
-                    converted.time    = d.time();
-                    converted.tz      = d.timeZone();
+                    converted         = d;
+                    converted2ndOccur = checkTzTransitionOccurrence(d, mDt.toUTC());
                     convertedCached   = true;
-                    converted2ndOccur = false;   // QDateTime::toUtc() returns the first occurrence
                     break;
                 case KADateTime::LocalZone:
                 case KADateTime::TimeZone:
@@ -684,11 +704,9 @@ void KADateTimePrivate::setDateTime(const QDateTime& d)
                     {
                         mDt               = d.toTimeZone(mDt.timeZone());
                         utcCached         = false;
-                        converted.date    = d.date();
-                        converted.time    = d.time();
-                        converted.tz      = d.timeZone();
+                        converted         = d;
+                        converted2ndOccur = checkTzTransitionOccurrence(d, mDt.toUTC());
                         convertedCached   = true;
-                        converted2ndOccur = false;   // QDateTime::toUtc() returns the first occurrence
                     }
                     break;
                 default:
@@ -709,13 +727,60 @@ void KADateTimePrivate::setDateOnly(bool dateOnly)
     {
         mDateOnly = dateOnly;
         if (dateOnly  &&  mDt.time() != sod)
-        {
             mDt.setTime(sod);
-            utcCached = false;
-            convertedCached = false;
-        }
-        m2ndOccurrence = false;
+        utcCached = convertedCached = false;
+        setTzTransitionOccurrence(false);
     }
+}
+
+/******************************************************************************
+* Check whether the local time occurs twice around a daylight savings time
+* shift, and if so, set it to either first or second occurrence according to
+* the daylight savings flag in mDt.
+*/
+void KADateTimePrivate::setTzTransitionOccurrence()
+{
+    m2ndOccurrence = checkTzTransitionOccurrence(mDt, utcDt());
+}
+
+/******************************************************************************
+* Check whether the local time occurs twice around a daylight savings time
+* shift, and if so, set it to either first or second occurrence.
+* The daylight savings flag in mDt is ignored - only the date, time and time
+* zone are used in the evaluation.
+*/
+bool KADateTimePrivate::setTzTransitionOccurrence(bool second)
+{
+    m2ndOccurrence = false;
+    if (mDt.timeSpec() != Qt::TimeZone)
+        return false;
+
+    // Convert to UTC. If the local time occurs twice around a time shift, this
+    // UTC time could be either the first or second occurrence.
+    const QDateTime utcDateTime = utcDt();
+    // Check if there is a daylight savings shift around utcDateTime.
+    QTimeZone::OffsetData transition;
+    int utcOffsetChange = checkTzTransitionBackwards(transition, mDt.timeZone(), utcDateTime, mDt);
+    if (utcOffsetChange < 0)
+    {
+        if (utcDateTime >= transition.atUtc)
+        {
+            if (second)
+                return true;
+            mDt = mDt.addSecs(utcOffsetChange);
+        }
+        else
+        {
+            if (!second)
+                return true;
+            mDt = mDt.addSecs(-utcOffsetChange);
+        }
+        utcCached = false;
+        convertedCached = false;
+        m2ndOccurrence = second;
+        return true;
+    }
+    return false;
 }
 
 /*
@@ -737,14 +802,17 @@ int KADateTimePrivate::timeZoneOffset(QTimeZone& local) const
     }
     int secondOffset;
     int offset = offsetAtZoneTime(mDt.timeZone(), mDt, &secondOffset);
+    // Keep m2ndOccurrence setting, but the time doesn't occur twice, cancel it.
     if (m2ndOccurrence)
     {
         m2ndOccurrence = (secondOffset != offset);   // cancel "second occurrence" flag if not applicable
         offset = secondOffset;
     }
+    if (m2ndOccurrence)
+        offset = secondOffset;
     if (offset == InvalidOffset)
     {
-        ut.date = QDate();   // cache an invalid UTC value
+        ut = QDateTime();   // cache an invalid UTC value
         utcCached = true;
         convertedCached = false;
     }
@@ -806,8 +874,7 @@ QDateTime KADateTimePrivate::toUtc(QTimeZone& local) const
         {
             if (!mDt.isValid())
                 break;
-            const QDateTime dt = mDt.toUTC();
-            setCachedUtc(dt);
+            const QDateTime dt = utcDt();
 //            qDebug() << "toUtc(): calculated -> " << dt << endl,
             return dt;
         }
@@ -823,7 +890,7 @@ QDateTime KADateTimePrivate::toUtc(QTimeZone& local) const
     }
 
     // Invalid - mark it cached to avoid having to process it again
-    ut.date = QDate();    // (invalid)
+    ut = QDateTime();    // (invalid)
     utcCached = true;
     convertedCached = false;
 //    qDebug() << "toUtc(): invalid";
@@ -841,25 +908,23 @@ QDateTime KADateTimePrivate::toUtc(QTimeZone& local) const
 QDateTime KADateTimePrivate::toZone(const QTimeZone& zone, QTimeZone& local) const
 {
     updatedDt(local);   // update the cache if it's LocalZone
-    if (convertedCached  &&  converted.tz == zone)
+    if (convertedCached  &&  converted.timeZone() == zone)
     {
         // Converted value is already cached
 #ifdef COMPILING_TESTS
 //        qDebug() << "KADateTimePrivate::toZone(" << zone->id() << "): " << mDt << " cached";
         ++KADateTime_zoneCacheHit;
 #endif
-        return QDateTime(converted.date, converted.time, zone);
+        return converted;
     }
     else
     {
         // Need to convert the value
         bool second;
         const QDateTime result = toZoneTime(zone, toUtc(local), &second);
-        converted.date    = result.date();
-        converted.time    = result.time();
-        converted.tz      = zone;
-        convertedCached   = true;
+        converted         = result;
         converted2ndOccur = second;
+        convertedCached   = true;
         return result;
     }
 }
@@ -883,17 +948,14 @@ void KADateTimePrivate::newToZone(KADateTimePrivate* newd, const QTimeZone& zone
     switch (specType)
     {
         case KADateTime::UTC:
-            newd->ut.date = mDt.date();   // cache the UTC value
-            newd->ut.time = mDt.time();
+            newd->ut = mDt;   // cache the UTC value
             break;
         case KADateTime::LocalZone:
         case KADateTime::TimeZone:
             // This instance is also type time zone, so cache its value in the new instance
-            newd->converted.date    = mDt.date();
-            newd->converted.time    = mDt.time();
-            newd->converted.tz      = mDt.timeZone();
-            newd->convertedCached   = true;
+            newd->converted         = mDt;
             newd->converted2ndOccur = m2ndOccurrence;
+            newd->convertedCached   = true;
             newd->ut                = ut;
             return;
         case KADateTime::OffsetFromUTC:
@@ -973,7 +1035,11 @@ bool KADateTime::isOffsetFromUtc() const
 }
 bool KADateTime::isSecondOccurrence() const
 {
-    return d->specType == TimeZone && d->secondOccurrence();
+    return (d->specType == TimeZone || d->specType == LocalZone) && d->secondOccurrence();
+}
+bool KADateTime::isDaylightTime() const
+{
+    return (d->specType == TimeZone || d->specType == LocalZone) && d->rawDt().isDaylightTime();
 }
 QDate KADateTime::date() const
 {
@@ -1203,17 +1269,10 @@ void KADateTime::setTimeSpec(const Spec& other)
 
 void KADateTime::setSecondOccurrence(bool second)
 {
-    if (d->specType == KADateTime::TimeZone  &&  second != d->m2ndOccurrence)
+    if ((d->specType == KADateTime::TimeZone  ||  d->specType == KADateTime::LocalZone)
+    &&  second != d->m2ndOccurrence)
     {
-        d->m2ndOccurrence = second;
-        d->clearCache();
-        if (second)
-        {
-            // Check whether a second occurrence is actually possible, and
-            // if not, reset m2ndOccurrence.
-            QTimeZone local;
-            d->timeZoneOffset(local);   // check, and cache UTC value
-        }
+        d->setTzTransitionOccurrence(second);
     }
 }
 
@@ -3280,35 +3339,18 @@ int offsetAtZoneTime(const QTimeZone& tz, const QDateTime& zoneDateTime, int* se
             *secondOffset = InvalidOffset;
         return InvalidOffset;
     }
-    int offset = tz.offsetFromUtc(zoneDateTime);
+    const int offset = tz.offsetFromUtc(zoneDateTime);
     if (secondOffset)
     {
         // Check if there is a daylight savings shift around zoneDateTime.
-        QDateTime utc1(zoneDateTime.date(), zoneDateTime.time(), Qt::UTC);
-        QDateTime utc = utc1.addSecs(-offset);
-        const QVector<QTimeZone::OffsetData> transitions = tz.transitions(utc.addSecs(-7200), utc.addSecs(7200));
-        if (!transitions.isEmpty())
+        const QDateTime utc = QDateTime(zoneDateTime.date(), zoneDateTime.time(), Qt::UTC).addSecs(-offset);
+        QTimeZone::OffsetData transition;
+        int step = checkTzTransitionBackwards(transition, tz, utc, zoneDateTime);
+        if (step < 0)
         {
-            // Assume that there will only be one transition in a 4 hour period.
-            const QTimeZone::OffsetData before = tz.previousTransition(transitions[0].atUtc);
-            if (before.atUtc.isValid()  &&  transitions[0].atUtc.isValid())
-            {
-                int step = before.offsetFromUtc - transitions[0].offsetFromUtc;
-                if (step > 0)
-                {
-                    // The transition steps the local time backwards, so check for
-                    // a second occurrence of the local time.
-                    // Find the local time when the transition occurs.
-                    const QDateTime changeStart = transitions[0].atUtc.addSecs(transitions[0].offsetFromUtc);
-                    const QDateTime changeEnd   = transitions[0].atUtc.addSecs(before.offsetFromUtc);
-                    if (utc1 >= changeStart  &&  utc1 < changeEnd)
-                    {
-                        // The local time occurs twice.
-                        *secondOffset = transitions[0].offsetFromUtc;
-                        return before.offsetFromUtc;
-                    }
-                }
-            }
+            // The local time occurs twice.
+            *secondOffset = transition.offsetFromUtc;
+            return transition.offsetFromUtc - step;
         }
         *secondOffset = offset;
     }
@@ -3325,36 +3367,79 @@ QDateTime toZoneTime(const QTimeZone& tz, const QDateTime& utcDateTime, bool* se
     const QDateTime dt = utcDateTime.toTimeZone(tz);
     if (secondOccurrence)
     {
-        // Check if there is a daylight savings shift around zoneDateTime.
-        const QVector<QTimeZone::OffsetData> transitions = tz.transitions(utcDateTime.addSecs(-7200), utcDateTime.addSecs(7200));
-        if (!transitions.isEmpty())
+        QTimeZone::OffsetData transition;
+        if (checkTzTransitionBackwards(transition, tz, utcDateTime, dt) < 0)
         {
-            // Assume that there will only be one transition in a 4 hour period.
-            const QTimeZone::OffsetData before = tz.previousTransition(transitions[0].atUtc);
-            if (before.atUtc.isValid()  &&  transitions[0].atUtc.isValid())
+            // The local time occurs twice.
+            *secondOccurrence = (utcDateTime >= transition.atUtc);
+        }
+        else
+            *secondOccurrence = false;
+    }
+    return dt;
+}
+
+/******************************************************************************
+* Check whether the local time occurs twice around a daylight savings time
+* shift, and if so, determine whether it is the first or second occurrence
+* according to the daylight savings flag in dt.
+*/
+bool checkTzTransitionOccurrence(const QDateTime& dt, const QDateTime& utcDateTime)
+{
+    if (dt.timeSpec() == Qt::TimeZone)
+    {
+        // Check if there is a daylight savings shift around utcDateTime.
+        // If the local time occurs twice around a time shift, the UTC time
+        // could be either the first or second occurrence.
+        QTimeZone::OffsetData transition;
+        if (checkTzTransitionBackwards(transition, dt.timeZone(), utcDateTime, dt) < 0)
+        {
+            // The local time occurs twice.
+            return (utcDateTime >= transition.atUtc);
+        }
+    }
+    return false;
+}
+
+/******************************************************************************
+* Check whether the local time corresponding to a UTC time occurs twice around
+* a daylight savings time shift.
+* Parameters:
+*   transition - receives the transition for the time shift, if reply < 0.
+*                transition.atUtc = UTC time of transition.
+* Reply = change in UTC offset from DST to standard time (< 0);
+*       = 0 if local time does not occur twice.
+*/
+int checkTzTransitionBackwards(QTimeZone::OffsetData& transition, const QTimeZone& tz, const QDateTime& utcDateTime, const QDateTime& tzDateTime)
+{
+    // Check if there is a daylight savings shift around utcDateTime.
+    const QVector<QTimeZone::OffsetData> transitions = tz.transitions(utcDateTime.addSecs(-10800), utcDateTime.addSecs(7200));
+    if (!transitions.isEmpty())
+    {
+        // Assume that there will only be one transition in a 4 hour period.
+        const QTimeZone::OffsetData before = tz.previousTransition(transitions[0].atUtc);
+        if (before.atUtc.isValid()  &&  transitions[0].atUtc.isValid())
+        {
+            const int step = before.offsetFromUtc - transitions[0].offsetFromUtc;
+            if (step > 0)
             {
-                int step = before.offsetFromUtc - transitions[0].offsetFromUtc;
-                if (step > 0)
+                // The transition steps the local time backwards, so check for
+                // a second occurrence of the local time.
+                // Find the local time when the transition occurs.
+                const QDateTime changeStart = transitions[0].atUtc.addSecs(transitions[0].offsetFromUtc);
+                const QDateTime changeEnd   = transitions[0].atUtc.addSecs(before.offsetFromUtc);
+                QDateTime dtTz = tzDateTime.isValid() ? tzDateTime : utcDateTime.toTimeZone(tz);
+                dtTz.setTimeSpec(Qt::UTC);
+                if (dtTz >= changeStart  &&  dtTz < changeEnd)
                 {
-                    // The transition steps the local time backwards, so check for
-                    // a second occurrence of the local time.
-                    // Find the local time when the transition occurs.
-                    const QDateTime changeStart = transitions[0].atUtc.addSecs(transitions[0].offsetFromUtc);
-                    const QDateTime changeEnd   = transitions[0].atUtc.addSecs(before.offsetFromUtc);
-                    QDateTime dtTz = dt;
-                    dtTz.setTimeSpec(Qt::UTC);
-                    if (dtTz >= changeStart  &&  dtTz < changeEnd)
-                    {
-                        // The local time occurs twice.
-                        *secondOccurrence = (utcDateTime >= transitions[0].atUtc);
-                        return dt;
-                    }
+                    // The local time occurs twice.
+                    transition = transitions[0];
+                    return -step;
                 }
             }
         }
-        *secondOccurrence = false;
     }
-    return dt;
+    return 0;
 }
 
 void initDayMonthNames()

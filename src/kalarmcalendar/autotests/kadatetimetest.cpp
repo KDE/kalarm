@@ -2,7 +2,7 @@
    This file is part of kalarmcal library, which provides access to KAlarm
    calendar data.
 
-   SPDX-FileCopyrightText: 2005-2021 David Jarvie <djarvie@kde.org>
+   SPDX-FileCopyrightText: 2005-2022 David Jarvie <djarvie@kde.org>
 
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
@@ -2572,39 +2572,49 @@ void KADateTimeTest::dstShifts()
     QDateTime qdt(QDate(2005, 10, 29), QTime(23, 59, 59), Qt::UTC);
     KADateTime dt(qdt, london);
     QVERIFY(!dt.isSecondOccurrence());
+    QVERIFY(dt.qDateTime().isDaylightTime());
     QCOMPARE(dt.date(), QDate(2005, 10, 30));
     QCOMPARE(dt.time(), QTime(0, 59, 59));
     dt = KADateTime(QDateTime(QDate(2005, 10, 30), QTime(0, 0, 0), Qt::UTC), london);
     QVERIFY(!dt.isSecondOccurrence());
+    QVERIFY(dt.qDateTime().isDaylightTime());
     QCOMPARE(dt.date(), QDate(2005, 10, 30));
     QCOMPARE(dt.time(), QTime(1, 0, 0));
     dt = KADateTime(QDateTime(QDate(2005, 10, 30), QTime(0, 59, 59), Qt::UTC), london);
     QVERIFY(!dt.isSecondOccurrence());
+    QVERIFY(dt.qDateTime().isDaylightTime());
     QCOMPARE(dt.date(), QDate(2005, 10, 30));
     QCOMPARE(dt.time(), QTime(1, 59, 59));
     dt = KADateTime(QDateTime(QDate(2005, 10, 30), QTime(1, 0, 0), Qt::UTC), london);
     QVERIFY(dt.isSecondOccurrence());
+    QVERIFY(!dt.qDateTime().isDaylightTime());
     QCOMPARE(dt.date(), QDate(2005, 10, 30));
     QCOMPARE(dt.time(), QTime(1, 0, 0));
     dt = KADateTime(QDateTime(QDate(2005, 10, 30), QTime(1, 59, 59), Qt::UTC), london);
     QVERIFY(dt.isSecondOccurrence());
+    QVERIFY(!dt.qDateTime().isDaylightTime());
     QCOMPARE(dt.date(), QDate(2005, 10, 30));
     QCOMPARE(dt.time(), QTime(1, 59, 59));
     dt = KADateTime(QDateTime(QDate(2005, 10, 30), QTime(2, 0, 0), Qt::UTC), london);
     QVERIFY(!dt.isSecondOccurrence());
+    QVERIFY(!dt.qDateTime().isDaylightTime());
     QCOMPARE(dt.date(), QDate(2005, 10, 30));
     QCOMPARE(dt.time(), QTime(2, 0, 0));
 
     dt = KADateTime(QDate(2005, 10, 30), QTime(0, 59, 59), london);
     dt.setSecondOccurrence(true);   // this has no effect
+    QVERIFY(dt.qDateTime().isDaylightTime());
     QCOMPARE(dt.toUtc().date(), QDate(2005, 10, 29));
     QCOMPARE(dt.toUtc().time(), QTime(23, 59, 59));
     dt = KADateTime(QDate(2005, 10, 30), QTime(1, 0, 0), london);
     QVERIFY(!dt.isSecondOccurrence());
+    QVERIFY(dt.qDateTime().isDaylightTime());
     QCOMPARE(dt.toUtc().date(), QDate(2005, 10, 30));
     QCOMPARE(dt.toUtc().time(), QTime(0, 0, 0));
+
     dt = KADateTime(QDate(2005, 10, 30), QTime(1, 59, 59), london);
     QVERIFY(!dt.isSecondOccurrence());
+    QVERIFY(dt.qDateTime().isDaylightTime());
     QCOMPARE(dt.toUtc().date(), QDate(2005, 10, 30));
     QCOMPARE(dt.toUtc().time(), QTime(0, 59, 59));
     dt = KADateTime(QDate(2005, 10, 30), QTime(1, 0, 0), london);
@@ -2612,33 +2622,169 @@ void KADateTimeTest::dstShifts()
     QCOMPARE(dt.toUtc().date(), QDate(2005, 10, 30));
     QCOMPARE(dt.toUtc().time(), QTime(1, 0, 0));
     QVERIFY(dt.isSecondOccurrence());
+    QVERIFY(!dt.qDateTime().isDaylightTime());
     dt = KADateTime(QDate(2005, 10, 30), QTime(1, 59, 59), london);
     dt.setSecondOccurrence(true);
     QCOMPARE(dt.toUtc().date(), QDate(2005, 10, 30));
     QCOMPARE(dt.toUtc().time(), QTime(1, 59, 59));
     QVERIFY(dt.isSecondOccurrence());
+    QVERIFY(!dt.qDateTime().isDaylightTime());
     dt = KADateTime(QDate(2005, 10, 30), QTime(2, 0, 0), london);
     dt.setSecondOccurrence(true);   // this has no effect
     QVERIFY(!dt.isSecondOccurrence());
+    QVERIFY(!dt.qDateTime().isDaylightTime());
     QCOMPARE(dt.toUtc().date(), QDate(2005, 10, 30));
     QCOMPARE(dt.toUtc().time(), QTime(2, 0, 0));
 
     dt = KADateTime(QDate(2005, 10, 30), QTime(0, 59, 59), london);
     KADateTime dt1 = dt.addSecs(1);   // local time 01:00:00
     QVERIFY(!dt1.isSecondOccurrence());
+    QVERIFY(dt1.qDateTime().isDaylightTime());
     dt1 = dt.addSecs(3600);   // local time 01:59:59
     QVERIFY(!dt1.isSecondOccurrence());
+    QVERIFY(dt1.qDateTime().isDaylightTime());
     dt1 = dt.addSecs(3601);   // local time 01:00:00
     QVERIFY(dt1.isSecondOccurrence());
+    QVERIFY(!dt1.qDateTime().isDaylightTime());
     dt1 = dt.addSecs(7200);   // local time 01:59:59
     QVERIFY(dt1.isSecondOccurrence());
+    QVERIFY(!dt1.qDateTime().isDaylightTime());
     dt1 = dt.addSecs(7201);   // local time 02:00:00
     QVERIFY(!dt1.isSecondOccurrence());
+    QVERIFY(!dt1.qDateTime().isDaylightTime());
 
     QVERIFY(KADateTime(QDate(2005, 10, 29), london) == KADateTime(QDate(2005, 10, 29), KADateTime::Spec::OffsetFromUTC(3600)));
     QVERIFY(KADateTime(QDate(2005, 10, 30), london) != KADateTime(QDate(2005, 10, 30), KADateTime::Spec::OffsetFromUTC(3600)));
     QVERIFY(KADateTime(QDate(2005, 10, 30), london) != KADateTime(QDate(2005, 10, 30), KADateTime::Spec::OffsetFromUTC(0)));
     QVERIFY(KADateTime(QDate(2005, 10, 31), london) == KADateTime(QDate(2005, 10, 31), KADateTime::Spec::OffsetFromUTC(0)));
+
+    // Constructor (QDateTime)
+    qdt = QDateTime(QDate(2005, 10, 30), QTime(0, 59, 59), london);
+    bool dst = qdt.isDaylightTime();
+    dt = KADateTime(qdt);
+    QVERIFY(!dt.isSecondOccurrence());
+    QCOMPARE(dt.qDateTime().isDaylightTime(), dst);
+    qdt = QDateTime(QDate(2005, 10, 30), QTime(1, 0, 0), london);
+    dst = qdt.isDaylightTime();
+    dt = KADateTime(qdt);
+    QCOMPARE(dt.isSecondOccurrence(), !dst);
+    QCOMPARE(dt.qDateTime().isDaylightTime(), dst);
+    qdt = QDateTime(QDate(2005, 10, 30), QTime(1, 59, 59), london);
+    dst = qdt.isDaylightTime();
+    dt = KADateTime(qdt);
+    QCOMPARE(dt.isSecondOccurrence(), !dst);
+    QCOMPARE(dt.qDateTime().isDaylightTime(), dst);
+    qdt = QDateTime(QDate(2005, 10, 30), QTime(2, 0, 0), london);
+    dst = qdt.isDaylightTime();
+    dt = KADateTime(qdt);
+    QVERIFY(!dt.isSecondOccurrence());
+    QCOMPARE(dt.qDateTime().isDaylightTime(), dst);
+
+    // Set local time to London
+    qputenv("TZ", ":Europe/London");
+    ::tzset();
+    qdt = QDateTime(QDate(2005, 10, 30), QTime(0, 59, 59), Qt::LocalTime);
+    dst = qdt.isDaylightTime();
+    dt = KADateTime(qdt);
+    QVERIFY(!dt.isSecondOccurrence());
+    QCOMPARE(dt.qDateTime().isDaylightTime(), dst);
+    qdt = QDateTime(QDate(2005, 10, 30), QTime(1, 0, 0), Qt::LocalTime);
+    dst = qdt.isDaylightTime();
+    dt = KADateTime(qdt);
+    QCOMPARE(dt.isSecondOccurrence(), !dst);
+    QCOMPARE(dt.qDateTime().isDaylightTime(), dst);
+    qdt = QDateTime(QDate(2005, 10, 30), QTime(1, 59, 59), Qt::LocalTime);
+    dst = qdt.isDaylightTime();
+    dt = KADateTime(qdt);
+    QCOMPARE(dt.isSecondOccurrence(), !dst);
+    QCOMPARE(dt.qDateTime().isDaylightTime(), dst);
+    qdt = QDateTime(QDate(2005, 10, 30), QTime(2, 0, 0), Qt::LocalTime);
+    dst = qdt.isDaylightTime();
+    dt = KADateTime(qdt);
+    QVERIFY(!dt.isSecondOccurrence());
+    QCOMPARE(dt.qDateTime().isDaylightTime(), dst);
+
+    // setDate()
+    dt = KADateTime(QDate(2005, 10, 29), QTime(1, 59, 59), london);
+    QVERIFY(!dt.isSecondOccurrence());
+    QVERIFY(dt.qDateTime().isDaylightTime());
+    dt.setDate(QDate(2005, 10, 30));
+    QVERIFY(!dt.isSecondOccurrence());
+    QVERIFY(dt.qDateTime().isDaylightTime());
+    dt = KADateTime(QDate(2005, 10, 30), QTime(1, 59, 59), london);
+    QVERIFY(!dt.isSecondOccurrence());
+    QVERIFY(dt.qDateTime().isDaylightTime());
+    dt.setDate(QDate(2005, 10, 31));
+    QVERIFY(!dt.isSecondOccurrence());
+    QVERIFY(!dt.qDateTime().isDaylightTime());
+    dt = KADateTime(QDate(2005, 10, 30), QTime(1, 59, 59), london);
+    dt.setSecondOccurrence(true);
+    QVERIFY(dt.isSecondOccurrence());
+    QVERIFY(!dt.qDateTime().isDaylightTime());
+    dt.setDate(QDate(2005, 10, 31));
+    QVERIFY(!dt.isSecondOccurrence());
+    QVERIFY(!dt.qDateTime().isDaylightTime());
+
+    // setTime()
+    dt = KADateTime(QDate(2005, 10, 29), QTime(1, 59, 59), london);
+    QVERIFY(!dt.isSecondOccurrence());
+    QVERIFY(dt.qDateTime().isDaylightTime());
+    dt.setTime(QTime(5, 30, 25));
+    QVERIFY(!dt.isSecondOccurrence());
+    QVERIFY(dt.qDateTime().isDaylightTime());
+    dt = KADateTime(QDate(2005, 10, 30), QTime(1, 59, 59), london);
+    QVERIFY(!dt.isSecondOccurrence());
+    QVERIFY(dt.qDateTime().isDaylightTime());
+    dt.setTime(QTime(1, 30, 25));
+    QVERIFY(!dt.isSecondOccurrence());
+    QVERIFY(dt.qDateTime().isDaylightTime());
+    dt = KADateTime(QDate(2005, 10, 30), QTime(1, 59, 59), london);
+    QVERIFY(!dt.isSecondOccurrence());
+    QVERIFY(dt.qDateTime().isDaylightTime());
+    dt.setTime(QTime(5, 30, 25));
+    QVERIFY(!dt.isSecondOccurrence());
+    QVERIFY(!dt.qDateTime().isDaylightTime());
+    dt = KADateTime(QDate(2005, 10, 30), QTime(1, 59, 59), london);
+    dt.setSecondOccurrence(true);
+    QVERIFY(dt.isSecondOccurrence());
+    QVERIFY(!dt.qDateTime().isDaylightTime());
+    dt.setTime(QTime(1, 30, 25));
+    QVERIFY(!dt.isSecondOccurrence());
+    QVERIFY(dt.qDateTime().isDaylightTime());
+    dt = KADateTime(QDate(2005, 10, 30), QTime(1, 59, 59), london);
+    dt.setSecondOccurrence(true);
+    QVERIFY(dt.isSecondOccurrence());
+    QVERIFY(!dt.qDateTime().isDaylightTime());
+    dt.setTime(QTime(5, 30, 25));
+    QVERIFY(!dt.isSecondOccurrence());
+    QVERIFY(!dt.qDateTime().isDaylightTime());
+
+    // setDateOnly()
+    dt = KADateTime(QDate(2005, 10, 29), QTime(1, 59, 59), london);
+    QVERIFY(!dt.isSecondOccurrence());
+    QVERIFY(dt.qDateTime().isDaylightTime());
+    dt.setDateOnly(true);
+    QVERIFY(!dt.isSecondOccurrence());
+    QVERIFY(dt.qDateTime().isDaylightTime());
+    dt = KADateTime(QDate(2005, 10, 30), QTime(1, 59, 59), london);
+    QVERIFY(!dt.isSecondOccurrence());
+    QVERIFY(dt.qDateTime().isDaylightTime());
+    dt.setDateOnly(true);
+    QVERIFY(!dt.isSecondOccurrence());
+    QVERIFY(dt.qDateTime().isDaylightTime());
+    dt = KADateTime(QDate(2005, 10, 30), QTime(1, 59, 59), london);
+    dt.setSecondOccurrence(true);
+    QVERIFY(dt.isSecondOccurrence());
+    QVERIFY(!dt.qDateTime().isDaylightTime());
+    dt.setDateOnly(true);
+    QVERIFY(!dt.isSecondOccurrence());
+    QVERIFY(dt.qDateTime().isDaylightTime());
+    dt = KADateTime(QDate(2005, 10, 30), london);
+    QVERIFY(!dt.isSecondOccurrence());
+    QVERIFY(dt.qDateTime().isDaylightTime());
+    dt.setDateOnly(false);
+    QVERIFY(!dt.isSecondOccurrence());
+    QVERIFY(dt.qDateTime().isDaylightTime());
 
     // Restore the original local time zone
     if (originalZone.isEmpty()) {
