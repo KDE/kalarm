@@ -686,6 +686,16 @@ public:
     bool isSecondOccurrence() const;
 
     /**
+     * Returns whether the date/time falls within daylight savings time in its
+     * time zone.
+     *
+     * @return @c true if daylight savings time applies;
+     *         @c false if standard time applies, or if timeSpec() is not
+     *                  TimeZone or LocalZone.
+     */
+    bool isDaylightTime() const;
+
+    /**
      * Returns the time converted to UTC. The converted time has a UTC offset
      * of zero.
      * If the instance is a date-only value, a date-only UTC value is returned,
@@ -789,6 +799,9 @@ public:
      * value. If its status is changed to date-only, its time is set to
      * 00:00:00.
      *
+     * If the resultant date/time occurs twice due to a daylight savings time
+     * shift, it is set to the first occurrence (before the time shift).
+     *
      * @param dateOnly @c true to set to date-only, @c false to set to date
      *                 and time.
      * @see isDateOnly(), setTime()
@@ -798,6 +811,9 @@ public:
     /**
      * Sets the date part of the date/time.
      *
+     * If the resultant date/time occurs twice due to a daylight savings time
+     * shift, it is set to the first occurrence (before the time shift).
+     *
      * @param date new date value
      * @see date(), setTime(), setTimeSpec(), setSecsSinceEpoch(), setDateOnly()
      */
@@ -806,6 +822,9 @@ public:
     /**
      * Sets the time part of the date/time. If the instance was date-only, it
      * is changed to being a date and time value.
+     *
+     * If the resultant date/time occurs twice due to a daylight savings time
+     * shift, it is set to the first occurrence (before the time shift).
      *
      * @param time new time value
      * @see time(), setDate(), setTimeSpec(), setSecsSinceEpoch()

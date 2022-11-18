@@ -1276,4 +1276,34 @@ void KAEventTest::toKCalEvent()
     }
 }
 
+void KAEventTest::setNextOccurrence()
+{
+    // Test setNextOccurrence() going from before to after a shift from daylight savings
+    // to standard time, for a daily recurrence at a clock time which occurs twice (once
+    // before the time shift, and once an hour later when the clock time repeats).
+    const KADateTime dt(QDate(2005, 10, 29), QTime(1, 30, 0), QTimeZone("Europe/London"));
+    KAEvent event(dt, QStringLiteral("name"), QStringLiteral("text"), Qt::black, Qt::white, QFont(), KAEvent::MESSAGE, 0, KAEvent::DEFAULT_FONT);
+    event.setRecurDaily(1, QBitArray(7, true), -1, QDate());
+    KAEvent::OccurType type = event.setNextOccurrence(dt);
+    const DateTime next1 = event.mainDateTime();
+    QCOMPARE(type, KAEvent::RECURRENCE_DATE_TIME);
+    QCOMPARE(next1.date(), QDate(2005, 10, 30));
+    QCOMPARE(next1.effectiveTime(), QTime(1, 30, 0));
+    KAEvent eventUTC = event;
+
+    const KADateTime dt1(QDate(2005, 10, 30), QTime(1, 30, 0), QTimeZone("Europe/London"));
+    type = event.setNextOccurrence(next1.kDateTime());
+    const DateTime next2 = event.mainDateTime();
+    QCOMPARE(type, KAEvent::RECURRENCE_DATE_TIME);
+    QCOMPARE(next2.date(), QDate(2005, 10, 31));
+    QCOMPARE(next2.effectiveTime(), QTime(1, 30, 0));
+
+    const KADateTime dt2(QDate(2005, 10, 30), QTime(1, 30, 0), KADateTime::UTC);
+    type = eventUTC.setNextOccurrence(dt2);
+    const DateTime next3 = eventUTC.mainDateTime();
+    QCOMPARE(type, KAEvent::RECURRENCE_DATE_TIME);
+    QCOMPARE(next3.date(), QDate(2005, 10, 31));
+    QVERIFY(!next3.isSecondOccurrence());
+}
+
 // vim: et sw=4:
