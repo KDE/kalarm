@@ -543,8 +543,10 @@ KADateTime::Spec KADateTimePrivate::spec() const
     }
 }
 
-// Set mDt to the appropriate time spec for a given KADateTime::Spec.
-// Its date and time components are not changed.
+/******************************************************************************
+* Set mDt to the appropriate time spec for a given KADateTime::Spec.
+* Its date and time components are not changed.
+*/
 void KADateTimePrivate::setDtSpec(const KADateTime::Spec& s)
 {
     switch (s.type())
@@ -626,11 +628,12 @@ bool KADateTimePrivate::equalSpec(const KADateTimePrivate& other) const
     return true;
 }
 
-/* Return mDt, updated to current system time zone if it's LocalZone.
- * Parameters:
- *   local - the local time zone if already known (if invalid, this function will
- *           fetch it if required)
- */
+/******************************************************************************
+* Return mDt, updated to current system time zone if it's LocalZone.
+* Parameters:
+*   local - the local time zone if already known (if invalid, this function will
+*           fetch it if required)
+*/
 QDateTime KADateTimePrivate::updatedDt(QTimeZone& local) const
 {
     if (specType == KADateTime::LocalZone)
@@ -645,8 +648,10 @@ QDateTime KADateTimePrivate::updatedDt(QTimeZone& local) const
     return mDt;
 }
 
-// Set the date/time without changing the time spec.
-// 'd' is converted to the current time spec.
+/******************************************************************************
+* Set the date/time without changing the time spec.
+* 'd' is converted to the current time spec.
+*/
 void KADateTimePrivate::setDateTime(const QDateTime& d)
 {
     switch (d.timeSpec())
@@ -783,13 +788,13 @@ bool KADateTimePrivate::setTzTransitionOccurrence(bool second)
     return false;
 }
 
-/*
- * Returns the UTC offset for the date/time, provided that it is a time zone type.
- * Calculates and caches the UTC value.
- * Parameters:
- *   local - the local time zone if already known (if invalid, this function will
- *           fetch it if required)
- */
+/******************************************************************************
+* Returns the UTC offset for the date/time, provided that it is a time zone type.
+* Calculates and caches the UTC value.
+* Parameters:
+*   local - the local time zone if already known (if invalid, this function will
+*           fetch it if required)
+*/
 int KADateTimePrivate::timeZoneOffset(QTimeZone& local) const
 {
     if (specType != KADateTime::TimeZone && specType != KADateTime::LocalZone)
@@ -826,13 +831,13 @@ int KADateTimePrivate::timeZoneOffset(QTimeZone& local) const
     return offset;
 }
 
-/*
- * Returns the date/time converted to UTC.
- * The calculated UTC value is cached, to save time in future conversions.
- * Parameters:
- *   local - the local time zone if already known (if invalid, this function will
- *           fetch it if required)
- */
+/******************************************************************************
+* Returns the date/time converted to UTC.
+* The calculated UTC value is cached, to save time in future conversions.
+* Parameters:
+*   local - the local time zone if already known (if invalid, this function will
+*           fetch it if required)
+*/
 QDateTime KADateTimePrivate::toUtc(QTimeZone& local) const
 {
     updatedDt(local);   // update the cache if it's LocalZone
@@ -897,14 +902,15 @@ QDateTime KADateTimePrivate::toUtc(QTimeZone& local) const
     return mDt;
 }
 
-/* Convert this value to another time zone.
- * The value is cached to save having to repeatedly calculate it.
- * The caller should check for an invalid date/time.
- * Parameters:
- *   zone  - the time zone to convert to
- *   local - the local time zone if already known (if invalid, this function will
- *           fetch it if required)
- */
+/******************************************************************************
+* Convert this value to another time zone.
+* The value is cached to save having to repeatedly calculate it.
+* The caller should check for an invalid date/time.
+* Parameters:
+*   zone  - the time zone to convert to
+*   local - the local time zone if already known (if invalid, this function will
+*           fetch it if required)
+*/
 QDateTime KADateTimePrivate::toZone(const QTimeZone& zone, QTimeZone& local) const
 {
     updatedDt(local);   // update the cache if it's LocalZone
@@ -929,15 +935,16 @@ QDateTime KADateTimePrivate::toZone(const QTimeZone& zone, QTimeZone& local) con
     }
 }
 
-/* Convert this value to another time zone, and write it into the specified instance.
- * The value is cached to save having to repeatedly calculate it.
- * The caller should check for an invalid date/time.
- * Parameters:
- *   newd  - the instance to set equal to the converted value
- *   zone  - the time zone to convert to
- *   local - the local time zone if already known (if invalid, this function will
- *           fetch it if required)
- */
+/******************************************************************************
+* Convert this value to another time zone, and write it into the specified instance.
+* The value is cached to save having to repeatedly calculate it.
+* The caller should check for an invalid date/time.
+* Parameters:
+*   newd  - the instance to set equal to the converted value
+*   zone  - the time zone to convert to
+*   local - the local time zone if already known (if invalid, this function will
+*           fetch it if required)
+*/
 void KADateTimePrivate::newToZone(KADateTimePrivate* newd, const QTimeZone& zone, QTimeZone& local) const
 {
     newd->mDt            = toZone(zone, local);
@@ -2751,12 +2758,12 @@ using KAlarmCal::KADateTime;
 namespace
 {
 
-/*
- * Extracts a QDateTime from a string, given a format string.
- * The date/time is set to Qt::UTC if a zero UTC offset is found,
- * otherwise it is Qt::LocalTime. If Qt::LocalTime is returned and
- * utcOffset == 0, that indicates that no UTC offset was found.
- */
+/******************************************************************************
+* Extracts a QDateTime from a string, given a format string.
+* The date/time is set to Qt::UTC if a zero UTC offset is found,
+* otherwise it is Qt::LocalTime. If Qt::LocalTime is returned and
+* utcOffset == 0, that indicates that no UTC offset was found.
+*/
 QDateTime fromStr(const QString& string, const QString& format, int& utcOffset,
                   QString& zoneName, QString& zoneAbbrev, bool& dateOnly)
 {
@@ -3113,11 +3120,11 @@ QDateTime fromStr(const QString& string, const QString& format, int& utcOffset,
     return dt;
 }
 
-/*
- * Find which day name matches the specified part of a string.
- * 'offset' is incremented by the length of the match.
- * Reply = day number (1 - 7), or <= 0 if no match.
- */
+/******************************************************************************
+* Find which day name matches the specified part of a string.
+* 'offset' is incremented by the length of the match.
+* Reply = day number (1 - 7), or <= 0 if no match.
+*/
 int matchDay(const QString& string, int& offset, bool localised)
 {
     int dayOfWeek;
@@ -3155,11 +3162,11 @@ int matchDay(const QString& string, int& offset, bool localised)
     return dayOfWeek;
 }
 
-/*
- * Find which month name matches the specified part of a string.
- * 'offset' is incremented by the length of the match.
- * Reply = month number (1 - 12), or <= 0 if no match.
- */
+/******************************************************************************
+* Find which month name matches the specified part of a string.
+* 'offset' is incremented by the length of the match.
+* Reply = month number (1 - 12), or <= 0 if no match.
+*/
 int matchMonth(const QString& string, int& offset, bool localised)
 {
     int month;
@@ -3196,9 +3203,9 @@ int matchMonth(const QString& string, int& offset, bool localised)
     return month;
 }
 
-/*
- * Read a UTC offset from the input string.
- */
+/******************************************************************************
+* Read a UTC offset from the input string.
+*/
 bool getUTCOffset(const QString& string, int& offset, bool colon, int& result)
 {
     int sign;
@@ -3239,11 +3246,11 @@ bool getUTCOffset(const QString& string, int& offset, bool colon, int& result)
     return true;
 }
 
-/*
- * Read an am/pm indicator from the input string.
- * 'offset' is incremented by the length of the match.
- * Reply = 1 (am), 2 (pm), or 0 if no match.
- */
+/******************************************************************************
+* Read an am/pm indicator from the input string.
+* 'offset' is incremented by the length of the match.
+* Reply = 1 (am), 2 (pm), or 0 if no match.
+*/
 int getAmPm(const QString& string, int& offset, bool localised)
 {
     QString part = string.mid(offset);
@@ -3281,10 +3288,11 @@ int getAmPm(const QString& string, int& offset, bool localised)
     return ap;
 }
 
-/* Convert part of 'string' to a number.
- * If converted number differs from any current value in 'result', the function fails.
- * Reply = true if successful.
- */
+/******************************************************************************
+* Convert part of 'string' to a number.
+* If converted number differs from any current value in 'result', the function fails.
+* Reply = true if successful.
+*/
 bool getNumber(const QString& string, int& offset, int mindigits, int maxdigits, int minval, int maxval, int& result)
 {
     int end = string.size();
