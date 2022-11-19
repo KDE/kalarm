@@ -288,6 +288,7 @@ qt_add_dbus_interfaces(kalarm_bin_SRCS data/org.kde.kmail.kmail.xml)
 
 qt_add_dbus_interface(kalarm_bin_SRCS data/org.freedesktop.Notifications.xml notifications_interface)
 qt_add_dbus_interface(kalarm_bin_SRCS data/org.freedesktop.DBus.Properties.xml dbusproperties)
+qt_add_dbus_interface(kalarm_bin_SRCS data/org.freedesktop.ScreenSaver.xml screensaver)
 
 kconfig_add_kcfg_files(kalarm_bin_SRCS GENERATE_MOC data/kalarmconfig.kcfgc)
 

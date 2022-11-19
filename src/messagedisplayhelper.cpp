@@ -19,6 +19,7 @@
 #include "lib/messagebox.h"
 #include "lib/pushbutton.h"
 #include "lib/synchtimer.h"
+#include "screensaver.h" // DBUS-generated
 #include "kalarm_debug.h"
 
 #include <kpimtextedit/kpimtextedit-texttospeech.h>
@@ -47,6 +48,12 @@
 #include <QRegularExpression>
 
 using namespace KAlarmCal;
+
+namespace
+{
+const char FDO_SCREENSAVER_SERVICE[] = "org.freedesktop.ScreenSaver";
+const char FDO_SCREENSAVER_PATH[]    = "/org/freedesktop/ScreenSaver";
+}
 
 // Error message bit masks
 enum
@@ -909,6 +916,26 @@ void MessageDisplayHelper::stopAudio()
     qCDebug(KALARM_LOG) << "MessageDisplayHelper::stopAudio";
     if (mAudioPlayer)
         mAudioPlayer->stop();
+}
+
+/******************************************************************************
+* Ensure that the screen wakes from sleep, in case the window manager doesn't
+* do this when the window is displayed.
+*/
+void MessageDisplayHelper::wakeScreen()
+{
+    qCDebug(KALARM_LOG) << "MessageDisplayHelper::wakeScreen";
+    // Note that this freedesktop D-Bus call to wake the screen may not work on
+    // all systems. It is known to work on X11.
+    QDBusConnection conn = QDBusConnection::sessionBus();
+    if (conn.interface()->isServiceRegistered(QString::fromLatin1(FDO_SCREENSAVER_SERVICE)))
+    {
+        OrgFreedesktopScreenSaverInterface ssiface(
+                QString::fromLatin1(FDO_SCREENSAVER_SERVICE),
+                QString::fromLatin1(FDO_SCREENSAVER_PATH),
+                conn);
+        ssiface.SimulateUserActivity();
+    }
 }
 
 /******************************************************************************

@@ -108,6 +108,7 @@ public:
     static MessageDisplay* findEvent(const EventId& eventId, MessageDisplay* exclude = nullptr);
     static bool         isAudioPlaying();
     static void         stopAudio();
+    static void         wakeScreen();
 
 Q_SIGNALS:
     /** Signal emitted when texts in the alarm message have changed.
