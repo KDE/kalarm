@@ -50,7 +50,7 @@ using namespace KHolidays;
 
 #include <kpimtextedit/kpimtextedit-texttospeech.h>
 #if KPIMTEXTEDIT_TEXT_TO_SPEECH
-#include <KPIMTextEdit/TextToSpeech>
+#include <KPIMTextEditTextToSpeech/TextToSpeech>
 #endif
 
 #include <KLocalizedString>
@@ -1418,7 +1418,7 @@ EditPrefTab::EditPrefTab(StackedScrollGroup* scrollGroup)
     mSound->addItem(SoundPicker::i18n_combo_Beep());         // index 1
     mSound->addItem(SoundPicker::i18n_combo_File());         // index 2
 #if KPIMTEXTEDIT_TEXT_TO_SPEECH
-    if (KPIMTextEdit::TextToSpeech::self()->isReady())
+    if (KPIMTextEditTextToSpeech::TextToSpeech::self()->isReady())
         mSound->addItem(SoundPicker::i18n_combo_Speak());    // index 3
 #endif
     mSound->setMinimumSize(mSound->sizeHint());

@@ -24,7 +24,7 @@
 
 #include <kpimtextedit/kpimtextedit-texttospeech.h>
 #if KPIMTEXTEDIT_TEXT_TO_SPEECH
-#include <KPIMTextEdit/TextToSpeech>
+#include <KPIMTextEditTextToSpeech/TextToSpeech>
 #endif
 
 #include <KLocalizedString>
@@ -843,7 +843,7 @@ void MessageDisplayHelper::playAudio()
 void MessageDisplayHelper::slotSpeak()
 {
 #if KPIMTEXTEDIT_TEXT_TO_SPEECH
-    KPIMTextEdit::TextToSpeech* tts = KPIMTextEdit::TextToSpeech::self();
+    KPIMTextEditTextToSpeech::TextToSpeech* tts = KPIMTextEditTextToSpeech::TextToSpeech::self();
     if (!tts->isReady())
     {
         KAMessageBox::detailedError(MainWindow::mainMainWindow(), i18nc("@info", "Unable to speak message"), i18nc("@info", "Text-to-speech subsystem is not available"));
