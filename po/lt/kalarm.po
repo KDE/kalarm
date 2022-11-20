@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-16 00:47+0000\n"
+"POT-Creation-Date: 2022-11-20 00:47+0000\n"
 "PO-Revision-Date: 2015-12-30 18:11+0200\n"
 "Last-Translator: Mindaugas Baranauskas <opensuse.lietuviu.kalba@gmail.com>\n"
 "Language-Team: lt <kde-i18n-lt@kde.org>\n"
@@ -3333,7 +3333,7 @@ msgctxt "@info 'From' email address"
 msgid "From:"
 msgstr "Nuo:"
 
-#: kalarmcalendar/alarmtext.cpp:507 messagedisplayhelper.cpp:331
+#: kalarmcalendar/alarmtext.cpp:507 messagedisplayhelper.cpp:338
 #, kde-format
 msgctxt "@info Email addressee"
 msgid "To:"
@@ -3351,7 +3351,7 @@ msgctxt "@info"
 msgid "Date:"
 msgstr ""
 
-#: kalarmcalendar/alarmtext.cpp:510 messagedisplayhelper.cpp:333
+#: kalarmcalendar/alarmtext.cpp:510 messagedisplayhelper.cpp:340
 #, kde-format
 msgctxt "@info Email subject"
 msgid "Subject:"
@@ -3960,7 +3960,7 @@ msgctxt "@info Using default font"
 msgid "Default"
 msgstr "Numatytas laikas"
 
-#: kalarmcalendar/kaeventformatter.cpp:365 messagedisplayhelper.cpp:212
+#: kalarmcalendar/kaeventformatter.cpp:365 messagedisplayhelper.cpp:219
 #, kde-format
 msgctxt "@info"
 msgid "Reminder"
@@ -4578,49 +4578,49 @@ msgid "<para>Cannot defer alarm:</para><para>Alarm not found.</para>"
 msgstr ""
 "<para>Pasiekta priminimų sąrašo pradžia.</para><para>Tęsti nuo galo?</para>"
 
-#: messagedisplayhelper.cpp:198
+#: messagedisplayhelper.cpp:205
 #, kde-format
 msgctxt "@title:window"
 msgid "Reminder"
 msgstr "Priminimas"
 
-#: messagedisplayhelper.cpp:199 messagedisplayhelper.cpp:403
+#: messagedisplayhelper.cpp:206 messagedisplayhelper.cpp:410
 #, kde-format
 msgctxt "@title:window"
 msgid "Message"
 msgstr "Pranešimas"
 
-#: messagedisplayhelper.cpp:290
+#: messagedisplayhelper.cpp:297
 #, kde-format
 msgctxt "@info"
 msgid "File is a folder"
 msgstr "Failas yra aplankas"
 
-#: messagedisplayhelper.cpp:290
+#: messagedisplayhelper.cpp:297
 #, kde-format
 msgctxt "@info"
 msgid "Failed to open file"
 msgstr "Nepavyko atidaryti failo"
 
-#: messagedisplayhelper.cpp:290
+#: messagedisplayhelper.cpp:297
 #, kde-format
 msgctxt "@info"
 msgid "File not found"
 msgstr "Failas nerastas"
 
-#: messagedisplayhelper.cpp:347
+#: messagedisplayhelper.cpp:354
 #, kde-format
 msgctxt "@title:window"
 msgid "Error"
 msgstr "Klaida"
 
-#: messagedisplayhelper.cpp:476
+#: messagedisplayhelper.cpp:483
 #, kde-format
 msgctxt "@info"
 msgid "Today"
 msgstr "Šiandien"
 
-#: messagedisplayhelper.cpp:478
+#: messagedisplayhelper.cpp:485
 #, kde-format
 msgctxt "@info"
 msgid "Tomorrow"
@@ -4630,7 +4630,7 @@ msgstr[1] ""
 msgstr[2] ""
 msgstr[3] ""
 
-#: messagedisplayhelper.cpp:480
+#: messagedisplayhelper.cpp:487
 #, kde-format
 msgctxt "@info"
 msgid "in 1 week's time"
@@ -4640,7 +4640,7 @@ msgstr[1] ""
 msgstr[2] ""
 msgstr[3] ""
 
-#: messagedisplayhelper.cpp:494
+#: messagedisplayhelper.cpp:501
 #, kde-format
 msgctxt "@info"
 msgid "in 1 minute's time"
@@ -4650,7 +4650,7 @@ msgstr[1] ""
 msgstr[2] ""
 msgstr[3] ""
 
-#: messagedisplayhelper.cpp:496
+#: messagedisplayhelper.cpp:503
 #, kde-format
 msgctxt "@info"
 msgid "in 1 hour's time"
@@ -4660,7 +4660,7 @@ msgstr[1] ""
 msgstr[2] ""
 msgstr[3] ""
 
-#: messagedisplayhelper.cpp:499
+#: messagedisplayhelper.cpp:506
 #, kde-format
 msgctxt "@item:intext inserted into 'in ... %1 minute's time' below"
 msgid "1 hour"
@@ -4670,7 +4670,7 @@ msgstr[1] "%1 valandos"
 msgstr[2] "%1 valandų"
 msgstr[3] "%1 valanda"
 
-#: messagedisplayhelper.cpp:500
+#: messagedisplayhelper.cpp:507
 #, kde-format
 msgctxt "@info '%2' is the previous message '1 hour'/'%1 hours'"
 msgid "in %2 1 minute's time"
@@ -4680,25 +4680,25 @@ msgstr[1] ""
 msgstr[2] ""
 msgstr[3] ""
 
-#: messagedisplayhelper.cpp:842
+#: messagedisplayhelper.cpp:849
 #, kde-format
 msgctxt "@info"
 msgid "Unable to speak message"
 msgstr ""
 
-#: messagedisplayhelper.cpp:842
+#: messagedisplayhelper.cpp:849
 #, kde-format
 msgctxt "@info"
 msgid "Text-to-speech subsystem is not available"
 msgstr ""
 
-#: messagedisplayhelper.cpp:1007
+#: messagedisplayhelper.cpp:1034
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot open audio file: <filename>%1</filename>"
 msgstr "Negalima atidaryti audio failo: <filename>%1</filename>"
 
-#: messagedisplayhelper.cpp:1135
+#: messagedisplayhelper.cpp:1162
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -4707,7 +4707,7 @@ msgstr ""
 "<para>Nepavyko paleisti audio failo: <filename>%1</filename></para><para>%2</"
 "para>"
 
-#: messagenotification.cpp:536
+#: messagenotification.cpp:535
 #, fuzzy, kde-format
 #| msgctxt "@title:tab"
 #| msgid "Edit"
@@ -4715,7 +4715,7 @@ msgctxt "@action:button"
 msgid "Edit"
 msgstr "Keisti"
 
-#: messagenotification.cpp:541
+#: messagenotification.cpp:540
 #, fuzzy, kde-format
 #| msgctxt "@title:window"
 #| msgid "Defer Alarm"
@@ -4723,7 +4723,7 @@ msgctxt "@action:button"
 msgid "Defer"
 msgstr "Priminimas atidėtas"
 
-#: messagewindow.cpp:232
+#: messagewindow.cpp:231
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -4731,55 +4731,55 @@ msgid ""
 "display)."
 msgstr ""
 
-#: messagewindow.cpp:249
+#: messagewindow.cpp:248
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "The file whose contents are displayed below"
 msgstr ""
 
-#: messagewindow.cpp:283
+#: messagewindow.cpp:282
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "The contents of the file to be displayed"
 msgstr "Rodytino failo turinys."
 
-#: messagewindow.cpp:303
+#: messagewindow.cpp:302
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "The alarm message"
 msgstr "Priminimo žinutė"
 
-#: messagewindow.cpp:330
+#: messagewindow.cpp:329
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "The output of the alarm's command"
 msgstr ""
 
-#: messagewindow.cpp:363
+#: messagewindow.cpp:362
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "The email to send"
 msgstr "El. laiškas išsiuntimui"
 
-#: messagewindow.cpp:413
+#: messagewindow.cpp:412
 #, kde-format
 msgctxt "@option:check"
 msgid "Do not display this error message again for this alarm"
 msgstr ""
 
-#: messagewindow.cpp:430
+#: messagewindow.cpp:429
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Acknowledge the alarm"
 msgstr ""
 
-#: messagewindow.cpp:435
+#: messagewindow.cpp:434
 #, kde-format
 msgctxt "@action:button"
 msgid "&Edit..."
 msgstr "&Keisti..."
 
-#: messagewindow.cpp:439
+#: messagewindow.cpp:438
 #, fuzzy, kde-format
 #| msgctxt "@info:whatsthis"
 #| msgid "Edit the alarm."
@@ -4787,19 +4787,19 @@ msgctxt "@info:tooltip"
 msgid "Edit the alarm"
 msgstr "Keisti priminimą."
 
-#: messagewindow.cpp:440
+#: messagewindow.cpp:439
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Edit the alarm."
 msgstr "Keisti priminimą."
 
-#: messagewindow.cpp:444
+#: messagewindow.cpp:443
 #, kde-format
 msgctxt "@action:button"
 msgid "&Defer..."
 msgstr ""
 
-#: messagewindow.cpp:448
+#: messagewindow.cpp:447
 #, fuzzy, kde-format
 #| msgctxt "@info:whatsthis"
 #| msgid "Defer the alarm until the specified time."
@@ -4807,7 +4807,7 @@ msgctxt "@info:tooltip"
 msgid "Defer the alarm until later"
 msgstr "Atidėti priminimą iki nurodyto laiko."
 
-#: messagewindow.cpp:449
+#: messagewindow.cpp:448
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -4815,19 +4815,19 @@ msgid ""
 "specify when the alarm should be redisplayed.</para>"
 msgstr ""
 
-#: messagewindow.cpp:463 sounddlg.cpp:451
+#: messagewindow.cpp:462 sounddlg.cpp:451
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Stop sound"
 msgstr "Sustabdyti garsą"
 
-#: messagewindow.cpp:464 sounddlg.cpp:452
+#: messagewindow.cpp:463 sounddlg.cpp:452
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Stop playing the sound"
 msgstr "Sustabdyti grojamą garsą"
 
-#: messagewindow.cpp:478
+#: messagewindow.cpp:477
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info"
 #| msgid "Unable to locate this email in <application>KMail</application>"
@@ -4836,7 +4836,7 @@ msgid "Locate in <application>KMail</application>"
 msgstr ""
 "Nepavyko pasiekti el. laiško programoje <application>KMail</application>"
 
-#: messagewindow.cpp:479
+#: messagewindow.cpp:478
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info"
 #| msgid "Unable to locate this email in <application>KMail</application>"
@@ -4845,7 +4845,7 @@ msgid "Locate and highlight this email in <application>KMail</application>"
 msgstr ""
 "Nepavyko pasiekti el. laiško programoje <application>KMail</application>"
 
-#: messagewindow.cpp:487
+#: messagewindow.cpp:486
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info"
 #| msgid "Unable to locate this email in <application>KMail</application>"
@@ -4854,7 +4854,7 @@ msgid "Activate <application>KAlarm</application>"
 msgstr ""
 "Nepavyko pasiekti el. laiško programoje <application>KMail</application>"
 
-#: messagewindow.cpp:488
+#: messagewindow.cpp:487
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info"
 #| msgid "Unable to locate this email in <application>KMail</application>"
@@ -4863,25 +4863,25 @@ msgid "Activate <application>KAlarm</application>"
 msgstr ""
 "Nepavyko pasiekti el. laiško programoje <application>KMail</application>"
 
-#: messagewindow.cpp:1070
+#: messagewindow.cpp:1069
 #, kde-format
 msgctxt "@info"
 msgid "Do you really want to acknowledge this alarm?"
 msgstr ""
 
-#: messagewindow.cpp:1071
+#: messagewindow.cpp:1070
 #, kde-format
 msgctxt "@action:button"
 msgid "Acknowledge Alarm"
 msgstr ""
 
-#: messagewindow.cpp:1071
+#: messagewindow.cpp:1070
 #, kde-format
 msgctxt "@action:button"
 msgid "Acknowledge"
 msgstr ""
 
-#: messagewindow.cpp:1126
+#: messagewindow.cpp:1125
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Unable to locate this email in <application>KMail</application>"
