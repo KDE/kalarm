@@ -10,7 +10,6 @@
 
 #include "lib/buttongroup.h"
 #include "lib/lineedit.h"
-#include "kalarm_debug.h"
 
 #include <QPushButton>
 #include <QTimer>

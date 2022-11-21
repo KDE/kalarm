@@ -10,7 +10,6 @@
 
 #include "fontcolour.h"
 #include "lib/autoqpointer.h"
-#include "kalarm_debug.h"
 
 #include <KLocalizedString>
 
