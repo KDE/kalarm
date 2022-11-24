@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-20 00:47+0000\n"
+"POT-Creation-Date: 2022-11-22 00:46+0000\n"
 "PO-Revision-Date: 2021-02-21 16:18+0100\n"
 "Last-Translator: Karl Ove Hufthammer <karl@huftis.org>\n"
 "Language-Team: Norwegian Nynorsk <l10n-no@lister.huftis.org>\n"
@@ -146,7 +146,7 @@ msgctxt "@option:radio"
 msgid "Defer for time interval:"
 msgstr "Utset så lenge:"
 
-#: alarmtimewidget.cpp:135 editdlg.cpp:338
+#: alarmtimewidget.cpp:135 editdlg.cpp:333
 #, kde-format
 msgctxt "@option:radio"
 msgid "Time from now:"
@@ -164,7 +164,7 @@ msgctxt "@info:whatsthis"
 msgid "Schedule the alarm after the specified time interval from now."
 msgstr "Endra alarmen etter det valde tidsintervallet frå no."
 
-#: alarmtimewidget.cpp:144 editdlg.cpp:349
+#: alarmtimewidget.cpp:144 editdlg.cpp:344
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid "<para>%1</para><para>%2</para>"
@@ -198,7 +198,7 @@ msgstr ""
 "Vel ei tidssone for alarmen som er ulik standard­tidssona i oppsett­vindauget "
 "til KAlarm."
 
-#: alarmtimewidget.cpp:196 prefdlg.cpp:679
+#: alarmtimewidget.cpp:196 prefdlg.cpp:677
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Time zone:"
@@ -275,13 +275,13 @@ msgctxt "@title:window"
 msgid "Import Birthdays From KAddressBook"
 msgstr "Importer fødselsdagar frå KDE-adresseboka"
 
-#: birthdaydlg.cpp:59 editdlg.cpp:254
+#: birthdaydlg.cpp:59 editdlg.cpp:249
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Alarm name:"
 msgstr "Alarmnamn:"
 
-#: birthdaydlg.cpp:64 editdlg.cpp:262
+#: birthdaydlg.cpp:64 editdlg.cpp:257
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -303,7 +303,7 @@ msgctxt "@title:group"
 msgid "Alarm Text"
 msgstr "Alarmtekst"
 
-#: birthdaydlg.cpp:77 prefdlg.cpp:1842
+#: birthdaydlg.cpp:77 prefdlg.cpp:1840
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Prefix:"
@@ -1059,7 +1059,7 @@ msgid "Show alarm times in system tray tooltip"
 msgstr "Vis alarmtidspunkt i systemtrauikonet"
 
 #. i18n: ectx: whatsthis, entry (ShowTooltipAlarmTime), group (General)
-#: data/kalarmconfig.kcfg:176 prefdlg.cpp:1830
+#: data/kalarmconfig.kcfg:176 prefdlg.cpp:1828
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1077,7 +1077,7 @@ msgid "Show time to alarms in system tray tooltip"
 msgstr "Vis tid til alarmutløysingar i hjelpebobla til systemtrauikonet"
 
 #. i18n: ectx: whatsthis, entry (ShowTooltipTimeToAlarm), group (General)
-#: data/kalarmconfig.kcfg:182 prefdlg.cpp:1836
+#: data/kalarmconfig.kcfg:182 prefdlg.cpp:1834
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1096,7 +1096,7 @@ msgstr ""
 "Prefiks for tida til alarmutløysingar i hjelpebobla til systemtrauikonet"
 
 #. i18n: ectx: whatsthis, entry (TooltipTimeToPrefix), group (General)
-#: data/kalarmconfig.kcfg:188 prefdlg.cpp:1847
+#: data/kalarmconfig.kcfg:188 prefdlg.cpp:1845
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1285,7 +1285,7 @@ msgid "Disabled alarm color"
 msgstr "Farge for avslåtte alarmar"
 
 #. i18n: ectx: whatsthis, entry (DisabledColour), group (General)
-#: data/kalarmconfig.kcfg:246 prefdlg.cpp:1869
+#: data/kalarmconfig.kcfg:246 prefdlg.cpp:1867
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Choose the text color in the alarm list for disabled alarms."
@@ -1299,7 +1299,7 @@ msgid "Archived alarm color"
 msgstr "Farge for arkiverte alarmar"
 
 #. i18n: ectx: whatsthis, entry (ArchivedColour), group (General)
-#: data/kalarmconfig.kcfg:252 prefdlg.cpp:1882
+#: data/kalarmconfig.kcfg:252 prefdlg.cpp:1880
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Choose the text color in the alarm list for archived alarms."
@@ -1617,7 +1617,7 @@ msgid "Recurrence period"
 msgstr "Gjentakingsperiode"
 
 #. i18n: ectx: whatsthis, entry (DefaultRecurPeriod), group (Defaults)
-#: data/kalarmconfig.kcfg:368 prefdlg.cpp:1339
+#: data/kalarmconfig.kcfg:368 prefdlg.cpp:1337
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "The default setting for the recurrence rule in the alarm edit dialog."
@@ -1646,7 +1646,7 @@ msgid "Hourly/minutely"
 msgstr "Kvar time / kvart minutt"
 
 #. i18n: ectx: label, entry (DefaultFeb29Type), group (Defaults)
-#: data/kalarmconfig.kcfg:381 prefdlg.cpp:1346
+#: data/kalarmconfig.kcfg:381 prefdlg.cpp:1344
 #, kde-format
 msgctxt "@label"
 msgid "In non-leap years, repeat yearly February 29th alarms on:"
@@ -1813,7 +1813,7 @@ msgid "Confirm alarm deletions"
 msgstr "Stadfest sletting av alarmar"
 
 #. i18n: ectx: whatsthis, entry (Base_ConfirmAlarmDeletion), group (Notification Messages)
-#: data/kalarmconfig.kcfg:433 prefdlg.cpp:471
+#: data/kalarmconfig.kcfg:433 prefdlg.cpp:469
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to be prompted for confirmation each time you delete an alarm."
@@ -1828,7 +1828,7 @@ msgid "Notify when remote emails are queued"
 msgstr "Gje melding når eksterne e-postar vert lagde i kø"
 
 #. i18n: ectx: whatsthis, entry (Base_EmailQueuedNotify), group (Notification Messages)
-#: data/kalarmconfig.kcfg:438 prefdlg.cpp:1062
+#: data/kalarmconfig.kcfg:438 prefdlg.cpp:1060
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1982,121 +1982,121 @@ msgctxt "@info"
 msgid "Failed to save calendar to <filename>%1</filename>"
 msgstr "Klarte ikkje lagra kalenderen i fila <filename>%1</filename>"
 
-#: editdlg.cpp:76
+#: editdlg.cpp:71
 #, kde-format
 msgctxt "@title:tab"
 msgid "Recurrence - [%1]"
 msgstr "Gjentaking – [%1]"
 
-#: editdlg.cpp:83
+#: editdlg.cpp:78
 #, kde-format
 msgctxt "@option:check"
 msgid "Show in KOrganizer"
 msgstr "Vis i KOrganizer"
 
-#: editdlg.cpp:179
+#: editdlg.cpp:174
 #, kde-format
 msgctxt "@title:window"
 msgid "Alarm Template [read-only]"
 msgstr "Alarmmal [skriveverna]"
 
-#: editdlg.cpp:180
+#: editdlg.cpp:175
 #, kde-format
 msgctxt "@title:window"
 msgid "Archived Alarm [read-only]"
 msgstr "Arkivert alarm [skriveverna]"
 
-#: editdlg.cpp:181
+#: editdlg.cpp:176
 #, kde-format
 msgctxt "@title:window"
 msgid "Alarm [read-only]"
 msgstr "Alarm [skriveverna]"
 
-#: editdlg.cpp:192 editdlg.cpp:199 editdlg.cpp:206
+#: editdlg.cpp:187 editdlg.cpp:194 editdlg.cpp:201
 #, kde-format
 msgctxt "@action:button"
 msgid "Try"
 msgstr "Prøv"
 
-#: editdlg.cpp:207
+#: editdlg.cpp:202
 #, kde-format
 msgctxt "@action:button"
 msgid "Load Template..."
 msgstr "Opna mal …"
 
-#: editdlg.cpp:209
+#: editdlg.cpp:204
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Select an alarm template to preset the alarm"
 msgstr "Vel alarmmal for førehands­innstillingar til alarmen"
 
-#: editdlg.cpp:216
+#: editdlg.cpp:211
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Schedule the alarm at the specified time."
 msgstr "Fastset alarmen til det oppgjevne tidspunktet."
 
-#: editdlg.cpp:224
+#: editdlg.cpp:219
 #, kde-format
 msgctxt "@title:tab"
 msgid "Alarm"
 msgstr "Alarm"
 
-#: editdlg.cpp:254
+#: editdlg.cpp:249
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Template name:"
 msgstr "Namn på mal:"
 
-#: editdlg.cpp:261
+#: editdlg.cpp:256
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the name of the alarm template"
 msgstr "Skriv inn namnet på alarmmalen"
 
-#: editdlg.cpp:267
+#: editdlg.cpp:262
 #, kde-format
 msgctxt "@title:group"
 msgid "Action"
 msgstr "Handling"
 
-#: editdlg.cpp:276
+#: editdlg.cpp:271
 #, kde-format
 msgctxt "@title:group"
 msgid "Deferred Alarm"
 msgstr "Utsett alarm"
 
-#: editdlg.cpp:279
+#: editdlg.cpp:274
 #, kde-format
 msgctxt "@label"
 msgid "Deferred to:"
 msgstr "Utsett til:"
 
-#: editdlg.cpp:284
+#: editdlg.cpp:279
 #, kde-format
 msgctxt "@action:button"
 msgid "Change..."
 msgstr "Endra …"
 
-#: editdlg.cpp:286
+#: editdlg.cpp:281
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Change the alarm's deferred time, or cancel the deferral"
 msgstr "Endra tidspunktet for ein utsett alarm, eller avbryt utsetjinga"
 
-#: editdlg.cpp:297 editdlg.cpp:358
+#: editdlg.cpp:292 editdlg.cpp:353
 #, kde-format
 msgctxt "@title:group"
 msgid "Time"
 msgstr "Klokkeslett"
 
-#: editdlg.cpp:304
+#: editdlg.cpp:299
 #, kde-format
 msgctxt "@option:radio"
 msgid "Default time"
 msgstr "Standardklokkeslett"
 
-#: editdlg.cpp:306
+#: editdlg.cpp:301
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2106,19 +2106,19 @@ msgstr ""
 "Ikkje vel startklokkeslett for alarmar baserte på denne malen, men bruk "
 "standard startklokkeslett."
 
-#: editdlg.cpp:314
+#: editdlg.cpp:309
 #, kde-format
 msgctxt "@option:radio"
 msgid "Time:"
 msgstr "Klokkeslett:"
 
-#: editdlg.cpp:316
+#: editdlg.cpp:311
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Specify a start time for alarms based on this template."
 msgstr "Vel startklokkeslett for alarmar baserte på denne malen."
 
-#: editdlg.cpp:322
+#: editdlg.cpp:317
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2128,13 +2128,13 @@ msgstr ""
 "<para>Skriv inn startklokkeslett for alarmar baserte på denne malen.</"
 "para><para>%1</para>"
 
-#: editdlg.cpp:329
+#: editdlg.cpp:324
 #, kde-format
 msgctxt "@option:radio"
 msgid "Date only"
 msgstr "Berre dato"
 
-#: editdlg.cpp:331
+#: editdlg.cpp:326
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2144,7 +2144,7 @@ msgstr ""
 "Bruk <interface>Når som helst</interface>-valet for alarmar baserte på denne "
 "malen."
 
-#: editdlg.cpp:341
+#: editdlg.cpp:336
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2154,25 +2154,25 @@ msgstr ""
 "Still inn alle alarmar som er baserte på denne malen til å starta ei viss "
 "tid frå når alarmen vert oppretta."
 
-#: editdlg.cpp:404
+#: editdlg.cpp:399
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to copy the alarm into KOrganizer's calendar"
 msgstr "Kryss av her for å kopiera alarmen til kalenderen i KOrganizer"
 
-#: editdlg.cpp:980
+#: editdlg.cpp:975
 #, kde-format
 msgctxt "@info"
 msgid "You must enter a name for the alarm template"
 msgstr "Du må skriva inn eit namn på alarmmalen"
 
-#: editdlg.cpp:984
+#: editdlg.cpp:979
 #, kde-format
 msgctxt "@info"
 msgid "Template name is already in use"
 msgstr "Dette malnamnet er alt i bruk"
 
-#: editdlg.cpp:1030
+#: editdlg.cpp:1025
 #, kde-format
 msgctxt "@info The parameter is a date value"
 msgid ""
@@ -2182,7 +2182,7 @@ msgstr ""
 "Startdatoen stemmer ikkje med gjentakings­mønsteret til alarmen. Han vert "
 "derfor endra til datoen for neste gjentaking (%1)."
 
-#: editdlg.cpp:1034
+#: editdlg.cpp:1029
 #, kde-format
 msgctxt "@info The parameter is a date/time value"
 msgid ""
@@ -2193,19 +2193,19 @@ msgstr ""
 "alarmen. Dei vert derfor endra til datoen/klokkeslettet for neste gjentaking "
 "(%1)."
 
-#: editdlg.cpp:1056
+#: editdlg.cpp:1051
 #, kde-format
 msgctxt "@info"
 msgid "Recurrence has already expired"
 msgstr "Gjentakingstidspunktet er alt forbi"
 
-#: editdlg.cpp:1061
+#: editdlg.cpp:1056
 #, kde-format
 msgctxt "@info"
 msgid "The alarm will never occur during working hours"
 msgstr "Alarmen vert aldri utløyst i arbeidstida"
 
-#: editdlg.cpp:1090
+#: editdlg.cpp:1085
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2215,7 +2215,7 @@ msgstr ""
 "Påminningsperioden må vera mindre enn gjentakings­intervallet, med mindre det "
 "er kryssa av for <interface>%1</interface>."
 
-#: editdlg.cpp:1105
+#: editdlg.cpp:1100
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -2225,7 +2225,7 @@ msgstr ""
 "Lengda på ei gjentaking inni ei gjentaking må vera mindre enn gjentakings­"
 "intervallet minus eventuell påminningstid."
 
-#: editdlg.cpp:1112
+#: editdlg.cpp:1107
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -2235,115 +2235,115 @@ msgstr ""
 "Perioden for gjentaking inni gjentaking må vera i dagar eller veker for ein "
 "datoalarm."
 
-#: editdlg.cpp:1143
+#: editdlg.cpp:1138
 #, kde-format
 msgctxt "@info"
 msgid "You must select a calendar to save the alarm in"
 msgstr "Du må velja ein kalender å lagra alarmen i."
 
-#: editdlg.cpp:1224
+#: editdlg.cpp:1219
 #, kde-format
 msgctxt "@action:Button"
 msgid "Fewer Options <<"
 msgstr "Færre val <<"
 
-#: editdlg.cpp:1225
+#: editdlg.cpp:1220
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show fewer options"
 msgstr "Vis færre val"
 
-#: editdlg.cpp:1230
+#: editdlg.cpp:1225
 #, kde-format
 msgctxt "@action:button"
 msgid "More Options >>"
 msgstr "Fleire val >>"
 
-#: editdlg.cpp:1231
+#: editdlg.cpp:1226
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show more options"
 msgstr "Vis fleire val"
 
-#: editdlgtypes.cpp:75
+#: editdlgtypes.cpp:73
 #, kde-format
 msgctxt "@title:window"
 msgid "Choose Log File"
 msgstr "Vel loggfil"
 
-#: editdlgtypes.cpp:88
+#: editdlgtypes.cpp:86
 #, kde-format
 msgctxt "@label:listbox How to display alarms"
 msgid "Display method:"
 msgstr "Visingsmetode:"
 
-#: editdlgtypes.cpp:89
+#: editdlgtypes.cpp:87
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Window"
 msgstr "Vindauge"
 
-#: editdlgtypes.cpp:90
+#: editdlgtypes.cpp:88
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Notification"
 msgstr "Varsling"
 
-#: editdlgtypes.cpp:91
+#: editdlgtypes.cpp:89
 #, kde-format
 msgctxt "@option:check"
 msgid "Confirm acknowledgment"
 msgstr "Stadfest kvitteringa"
 
-#: editdlgtypes.cpp:120
+#: editdlgtypes.cpp:118
 #, kde-format
 msgctxt "@title:window"
 msgid "New Display Alarm Template"
 msgstr "Ny mal for visingsalarmar"
 
-#: editdlgtypes.cpp:120
+#: editdlgtypes.cpp:118
 #, kde-format
 msgctxt "@title:window"
 msgid "Edit Display Alarm Template"
 msgstr "Rediger mal for visingsalarmar"
 
-#: editdlgtypes.cpp:121
+#: editdlgtypes.cpp:119
 #, kde-format
 msgctxt "@title:window"
 msgid "New Display Alarm"
 msgstr "Ny visingsalarm"
 
-#: editdlgtypes.cpp:121
+#: editdlgtypes.cpp:119
 #, kde-format
 msgctxt "@title:window"
 msgid "Edit Display Alarm"
 msgstr "Rediger visingsalarm"
 
-#: editdlgtypes.cpp:134
+#: editdlgtypes.cpp:132
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Display type:"
 msgstr "Visingstype:"
 
-#: editdlgtypes.cpp:138
+#: editdlgtypes.cpp:136
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Text message"
 msgstr "Tekstmelding"
 
-#: editdlgtypes.cpp:139
+#: editdlgtypes.cpp:137
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "File contents"
 msgstr "Filinnhald"
 
-#: editdlgtypes.cpp:140
+#: editdlgtypes.cpp:138
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Command output"
 msgstr "Kommandoresultat"
 
-#: editdlgtypes.cpp:160
+#: editdlgtypes.cpp:158
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2359,32 +2359,32 @@ msgstr ""
 "item><item><interface>%3</interface>: Alarmen vil visa resultatet av "
 "køyringa av ein kommando.</item></list></para>"
 
-#: editdlgtypes.cpp:175
+#: editdlgtypes.cpp:173
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the text of the alarm message. It may be multi-line."
 msgstr "Skriv inn teksten til alarmmeldinga. Han kan vera på fleire linjer."
 
-#: editdlgtypes.cpp:188
+#: editdlgtypes.cpp:186
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the name or URL of a text or image file to display."
 msgstr ""
 "Skriv inn namnet eller adressa til tekstfila eller biletfila du vil visa."
 
-#: editdlgtypes.cpp:195 editdlgtypes.cpp:884 sounddlg.cpp:184
+#: editdlgtypes.cpp:193 editdlgtypes.cpp:882 sounddlg.cpp:184
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Choose a file"
 msgstr "Vel fil"
 
-#: editdlgtypes.cpp:196
+#: editdlgtypes.cpp:194
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select a text or image file to display."
 msgstr "Vel tekstfila eller biletfila du vil visa."
 
-#: editdlgtypes.cpp:240
+#: editdlgtypes.cpp:238
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2392,7 +2392,7 @@ msgid ""
 "system."
 msgstr "Vel om alarmen skal visast i eit vindauge eller av varslings­tenesta."
 
-#: editdlgtypes.cpp:267
+#: editdlgtypes.cpp:265
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2400,7 +2400,7 @@ msgid ""
 "alarm time(s)."
 msgstr "Kryss av her for å visa ei påminning før eller etter hovudalarmen."
 
-#: editdlgtypes.cpp:268
+#: editdlgtypes.cpp:266
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2410,7 +2410,7 @@ msgstr ""
 "<para>Vel tid mellom vising av påminninga og vising av hovudalarmen.</"
 "para><para>%1</para>"
 
-#: editdlgtypes.cpp:269
+#: editdlgtypes.cpp:267
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2418,140 +2418,140 @@ msgid ""
 "alarm"
 msgstr "Vel om påminninga skal utløysast før eller etter hovudalarmen."
 
-#: editdlgtypes.cpp:279
+#: editdlgtypes.cpp:277
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to be prompted for confirmation when you acknowledge the alarm."
 msgstr ""
 "Kryss av her for å få eit spørsmål om stadfesting når du lukkar alarmen."
 
-#: editdlgtypes.cpp:288
+#: editdlgtypes.cpp:286
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Display the alarm now"
 msgstr "Vis alarmen no"
 
-#: editdlgtypes.cpp:670
+#: editdlgtypes.cpp:668
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Display the alarm message now"
 msgstr "Vis alarmmeldinga no"
 
-#: editdlgtypes.cpp:679
+#: editdlgtypes.cpp:677
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Display the file now"
 msgstr "Vis fila no."
 
-#: editdlgtypes.cpp:689
+#: editdlgtypes.cpp:687
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Display the command output now"
 msgstr "Vis resultatet av kommandoen no"
 
-#: editdlgtypes.cpp:721
+#: editdlgtypes.cpp:719
 #, kde-format
 msgctxt "@title:window"
 msgid "Choose Text or Image File to Display"
 msgstr "Vel kva tekst- eller biletfil du vil visa"
 
-#: editdlgtypes.cpp:799
+#: editdlgtypes.cpp:797
 #, kde-format
 msgctxt "@option:check"
 msgid "Enter a script"
 msgstr "Skriv inn eit skript"
 
-#: editdlgtypes.cpp:800
+#: editdlgtypes.cpp:798
 #, kde-format
 msgctxt "@option:radio"
 msgid "Execute in terminal window"
 msgstr "Køyr i eit terminalvindauge"
 
-#: editdlgtypes.cpp:801
+#: editdlgtypes.cpp:799
 #, kde-format
 msgctxt "@option:check"
 msgid "Execute in terminal window"
 msgstr "Køyr i eit terminalvindauge"
 
-#: editdlgtypes.cpp:831
+#: editdlgtypes.cpp:829
 #, kde-format
 msgctxt "@title:window"
 msgid "New Command Alarm Template"
 msgstr "Ny mal for kommandoalarmar"
 
-#: editdlgtypes.cpp:831
+#: editdlgtypes.cpp:829
 #, kde-format
 msgctxt "@title:window"
 msgid "Edit Command Alarm Template"
 msgstr "Rediger mal for kommandoalarmar"
 
-#: editdlgtypes.cpp:832
+#: editdlgtypes.cpp:830
 #, kde-format
 msgctxt "@title:window"
 msgid "New Command Alarm"
 msgstr "Ny kommandoalarm"
 
-#: editdlgtypes.cpp:832
+#: editdlgtypes.cpp:830
 #, kde-format
 msgctxt "@title:window"
 msgid "Edit Command Alarm"
 msgstr "Rediger kommandoalarm"
 
-#: editdlgtypes.cpp:840
+#: editdlgtypes.cpp:838
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Execute the specified command now"
 msgstr "Køyr den valde kommandoen no"
 
-#: editdlgtypes.cpp:841
+#: editdlgtypes.cpp:839
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Execute the specified command now"
 msgstr "Køyr den valde kommandoen no"
 
-#: editdlgtypes.cpp:848 specialactions.cpp:182
+#: editdlgtypes.cpp:846 specialactions.cpp:182
 #, kde-format
 msgctxt "@option:check"
 msgid "Do not notify errors"
 msgstr "Ikkje varsla om feil"
 
-#: editdlgtypes.cpp:849
+#: editdlgtypes.cpp:847
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Do not show error message if the command fails."
 msgstr "Ikkje vis feilmelding om kommandoen gjev feil."
 
-#: editdlgtypes.cpp:855
+#: editdlgtypes.cpp:853
 #, kde-format
 msgctxt "@title:group"
 msgid "Command Output"
 msgstr "Kommandoresultat"
 
-#: editdlgtypes.cpp:863
+#: editdlgtypes.cpp:861
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to execute the command in a terminal window"
 msgstr "Kryss av her for å køyra kommandoen i eit terminalvindauge."
 
-#: editdlgtypes.cpp:876
+#: editdlgtypes.cpp:874
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the name or path of the log file."
 msgstr "Skriv inn namnet eller adressa til loggfila."
 
-#: editdlgtypes.cpp:885
+#: editdlgtypes.cpp:883
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select a log file."
 msgstr "Vel ei loggfil."
 
-#: editdlgtypes.cpp:888
+#: editdlgtypes.cpp:886
 #, kde-format
 msgctxt "@option:radio"
 msgid "Log to file"
 msgstr "Loggfør til fil"
 
-#: editdlgtypes.cpp:889
+#: editdlgtypes.cpp:887
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2561,19 +2561,19 @@ msgstr ""
 "Kryss av her for å loggføra resultatet av kommandokøyringa til ei lokal fil. "
 "Teksten vert lagd til etter innhaldet i fila."
 
-#: editdlgtypes.cpp:896
+#: editdlgtypes.cpp:894
 #, kde-format
 msgctxt "@option:radio"
 msgid "Discard"
 msgstr "Forkast"
 
-#: editdlgtypes.cpp:897
+#: editdlgtypes.cpp:895
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to discard command output."
 msgstr "Kryss av her for å forkasta resultatet av kommandokøyringa."
 
-#: editdlgtypes.cpp:1059
+#: editdlgtypes.cpp:1057
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -2582,7 +2582,7 @@ msgstr ""
 "Loggfila må vera eit namn eller ei adresse til ei lokal fil du har "
 "skriveløyve til."
 
-#: editdlgtypes.cpp:1069
+#: editdlgtypes.cpp:1067
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2593,61 +2593,61 @@ msgstr ""
 "para><para>Vel dette i oppsettvindauget i <application>KAlarm</application>."
 "</para>"
 
-#: editdlgtypes.cpp:1089
+#: editdlgtypes.cpp:1087
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Command executed: <icode>%1</icode>"
 msgstr "Køyrd kommando: <icode>%1</icode>"
 
-#: editdlgtypes.cpp:1123
+#: editdlgtypes.cpp:1121
 #, kde-format
 msgctxt "@option:check"
 msgid "Copy email to self"
 msgstr "Send kopi av e-posten til deg sjølv"
 
-#: editdlgtypes.cpp:1153
+#: editdlgtypes.cpp:1151
 #, kde-format
 msgctxt "@title:window"
 msgid "New Email Alarm Template"
 msgstr "Ny mal for e-postalarmar"
 
-#: editdlgtypes.cpp:1153
+#: editdlgtypes.cpp:1151
 #, kde-format
 msgctxt "@title:window"
 msgid "Edit Email Alarm Template"
 msgstr "Rediger mal for e-postalarmar"
 
-#: editdlgtypes.cpp:1154
+#: editdlgtypes.cpp:1152
 #, kde-format
 msgctxt "@title:window"
 msgid "New Email Alarm"
 msgstr "Ny e-postalarm"
 
-#: editdlgtypes.cpp:1154
+#: editdlgtypes.cpp:1152
 #, kde-format
 msgctxt "@title:window"
 msgid "Edit Email Alarm"
 msgstr "Rediger e-postalarm"
 
-#: editdlgtypes.cpp:1162
+#: editdlgtypes.cpp:1160
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Send the email to the specified addressees now"
 msgstr "Send e-posten til dei oppgjevne adressene no"
 
-#: editdlgtypes.cpp:1163
+#: editdlgtypes.cpp:1161
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Send the email now"
 msgstr "Send e-posten no"
 
-#: editdlgtypes.cpp:1174
+#: editdlgtypes.cpp:1172
 #, kde-format
 msgctxt "@label:listbox 'From' email address"
 msgid "From:"
 msgstr "Frå:"
 
-#: editdlgtypes.cpp:1180
+#: editdlgtypes.cpp:1178
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2657,13 +2657,13 @@ msgstr ""
 "E-postidentiteten din, som vert brukt til å identifisera deg som avsendar "
 "ved sending av e-postalarmar."
 
-#: editdlgtypes.cpp:1186
+#: editdlgtypes.cpp:1184
 #, kde-format
 msgctxt "@label:textbox Email addressee"
 msgid "To:"
 msgstr "Til:"
 
-#: editdlgtypes.cpp:1191
+#: editdlgtypes.cpp:1189
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2673,196 +2673,196 @@ msgstr ""
 "Skriv inn adressene til e-postmottakarane. Skil adressene med komma eller "
 "semikolon."
 
-#: editdlgtypes.cpp:1202
+#: editdlgtypes.cpp:1200
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Open address book"
 msgstr "Opna adresseboka"
 
-#: editdlgtypes.cpp:1203
+#: editdlgtypes.cpp:1201
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select email addresses from your address book."
 msgstr "Vel e-postadresser frå adresseboka."
 
-#: editdlgtypes.cpp:1210
+#: editdlgtypes.cpp:1208
 #, kde-format
 msgctxt "@label:textbox Email subject"
 msgid "Subject:"
 msgstr "Emne:"
 
-#: editdlgtypes.cpp:1216
+#: editdlgtypes.cpp:1214
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the email subject."
 msgstr "Skriv inn e-postemnet."
 
-#: editdlgtypes.cpp:1222
+#: editdlgtypes.cpp:1220
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the email message."
 msgstr "Skriv e-postmeldinga."
 
-#: editdlgtypes.cpp:1230
+#: editdlgtypes.cpp:1228
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Attachments:"
 msgstr "Vedlegg:"
 
-#: editdlgtypes.cpp:1239
+#: editdlgtypes.cpp:1237
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Files to send as attachments to the email."
 msgstr "Filer som skal sendast som vedlegg til e-posten."
 
-#: editdlgtypes.cpp:1243 resourceselector.cpp:76
+#: editdlgtypes.cpp:1241 resourceselector.cpp:76
 #, kde-format
 msgctxt "@action:button"
 msgid "Add..."
 msgstr "Legg til …"
 
-#: editdlgtypes.cpp:1245
+#: editdlgtypes.cpp:1243
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Add an attachment to the email."
 msgstr "Legg eit vedlegg til e-posten."
 
-#: editdlgtypes.cpp:1248 resourceselector.cpp:78
+#: editdlgtypes.cpp:1246 resourceselector.cpp:78
 #, kde-format
 msgctxt "@action:button"
 msgid "Remove"
 msgstr "Fjern"
 
-#: editdlgtypes.cpp:1250
+#: editdlgtypes.cpp:1248
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Remove the highlighted attachment from the email."
 msgstr "Fjern det valde vedlegget frå e-posten."
 
-#: editdlgtypes.cpp:1255
+#: editdlgtypes.cpp:1253
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "If checked, the email will be blind copied to you."
 msgstr "Viss det er kryssa av her, vert det sendt ein blindkopi til deg sjølv."
 
-#: editdlgtypes.cpp:1437
+#: editdlgtypes.cpp:1435
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Invalid email address: <email>%1</email>"
 msgstr "Ugyldig e-postadresse: <email>%1</email>"
 
-#: editdlgtypes.cpp:1444
+#: editdlgtypes.cpp:1442
 #, kde-format
 msgctxt "@info"
 msgid "No email address specified"
 msgstr "Inga e-postadresse vald"
 
-#: editdlgtypes.cpp:1461
+#: editdlgtypes.cpp:1459
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Invalid email attachment: <filename>%1</filename>"
 msgstr "Ugyldig e-postvedlegg: <filename>%1</filename>"
 
-#: editdlgtypes.cpp:1465
+#: editdlgtypes.cpp:1463
 #, kde-format
 msgctxt "@info"
 msgid "Do you really want to send the email now to the specified recipient(s)?"
 msgstr ""
 "Er du sikker på at du vil senda e-posten til dei oppgjevne mottakarane no?"
 
-#: editdlgtypes.cpp:1466
+#: editdlgtypes.cpp:1464
 #, kde-format
 msgctxt "@action:button"
 msgid "Confirm Email"
 msgstr "Stadfest e-post"
 
-#: editdlgtypes.cpp:1466
+#: editdlgtypes.cpp:1464
 #, kde-format
 msgctxt "@action:button"
 msgid "Send"
 msgstr "Send"
 
-#: editdlgtypes.cpp:1492
+#: editdlgtypes.cpp:1490
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Email sent to:<nl/>%1<nl/>Bcc: <email>%2</email>"
 msgstr "E-post send til:<nl/>%1<nl/>Blindkopi: <email>%2</email>"
 
-#: editdlgtypes.cpp:1495
+#: editdlgtypes.cpp:1493
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Email sent to:<nl/>%1"
 msgstr "E-post send til:<nl/>%1"
 
-#: editdlgtypes.cpp:1524
+#: editdlgtypes.cpp:1522
 #, kde-format
 msgctxt "@title:window"
 msgid "Choose File to Attach"
 msgstr "Vel fila du vil leggja til"
 
-#: editdlgtypes.cpp:1607
+#: editdlgtypes.cpp:1605
 #, kde-format
 msgctxt "@title:window"
 msgid "New Audio Alarm Template"
 msgstr "Ny mal for lydalarmar"
 
-#: editdlgtypes.cpp:1607
+#: editdlgtypes.cpp:1605
 #, kde-format
 msgctxt "@title:window"
 msgid "Edit Audio Alarm Template"
 msgstr "Rediger mal for lydalarmar"
 
-#: editdlgtypes.cpp:1608
+#: editdlgtypes.cpp:1606
 #, kde-format
 msgctxt "@title:window"
 msgid "New Audio Alarm"
 msgstr "Ny lydalarm"
 
-#: editdlgtypes.cpp:1608
+#: editdlgtypes.cpp:1606
 #, kde-format
 msgctxt "@title:window"
 msgid "Edit Audio Alarm"
 msgstr "Rediger lydalarm"
 
-#: editdlgtypes.cpp:1616
+#: editdlgtypes.cpp:1614
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Play the audio file now"
 msgstr "Spel av lydfila no"
 
-#: editdlgtypes.cpp:1617
+#: editdlgtypes.cpp:1615
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Play the audio file now"
 msgstr "Spel av lydfila no"
 
-#: editdlgtypes.cpp:1619
+#: editdlgtypes.cpp:1617
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "If checked, the sound file will be played repeatedly until %1 is clicked."
 msgstr ""
 
-#: editdlgtypes.cpp:1828
+#: editdlgtypes.cpp:1826
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to enter the contents of a script instead of a shell command line"
 msgstr ""
 "Kryss av her for å skriva inn eit skript i staden for ei kommandolinje."
 
-#: editdlgtypes.cpp:1834
+#: editdlgtypes.cpp:1832
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter a shell command to execute."
 msgstr "Skriv inn kommandoen du vil køyra."
 
-#: editdlgtypes.cpp:1839
+#: editdlgtypes.cpp:1837
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the contents of a script to execute"
 msgstr "Skriv inn innhaldet i skriptet du vil køyra."
 
-#: editdlgtypes.cpp:1895
+#: editdlgtypes.cpp:1893
 #, kde-format
 msgctxt "@info"
 msgid "Please enter a command or script to execute"
@@ -3038,26 +3038,26 @@ msgstr ""
 msgid "Requested font"
 msgstr "Ønskt skrift"
 
-#: fontcolourbutton.cpp:28
+#: fontcolourbutton.cpp:27
 #, kde-format
 msgctxt "@action:button"
 msgid "Font && Color..."
 msgstr "Skrift og farge …"
 
-#: fontcolourbutton.cpp:31
+#: fontcolourbutton.cpp:30
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Set alarm message font and color"
 msgstr ""
 
-#: fontcolourbutton.cpp:32
+#: fontcolourbutton.cpp:31
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "Choose the font, and foreground and background color, for the alarm message."
 msgstr "Vel skrift, framgrunns- og bakgrunnsfarge for alarmmeldinga."
 
-#: fontcolourbutton.cpp:51
+#: fontcolourbutton.cpp:50
 #, kde-format
 msgctxt "@title:window"
 msgid "Choose Alarm Font & Color"
@@ -4830,85 +4830,85 @@ msgctxt "@action"
 msgid "New Alarm From &Template"
 msgstr "Ny alarm frå &mal"
 
-#: prefdlg.cpp:143
+#: prefdlg.cpp:141
 #, kde-format
 msgctxt "@title:window"
 msgid "Configure"
 msgstr "Set opp"
 
-#: prefdlg.cpp:153
+#: prefdlg.cpp:151
 #, kde-format
 msgctxt "@title:tab General preferences"
 msgid "General"
 msgstr "Generelt"
 
-#: prefdlg.cpp:154
+#: prefdlg.cpp:152
 #, kde-format
 msgctxt "@title General preferences"
 msgid "General"
 msgstr "Generelt"
 
-#: prefdlg.cpp:159
+#: prefdlg.cpp:157
 #, kde-format
 msgctxt "@title:tab"
 msgid "Time & Date"
 msgstr "Dato og klokkeslett"
 
-#: prefdlg.cpp:160
+#: prefdlg.cpp:158
 #, kde-format
 msgctxt "@title"
 msgid "Time and Date"
 msgstr "Dato og klokkeslett"
 
-#: prefdlg.cpp:165
+#: prefdlg.cpp:163
 #, kde-format
 msgctxt "@title:tab"
 msgid "Storage"
 msgstr "Lagring"
 
-#: prefdlg.cpp:166
+#: prefdlg.cpp:164
 #, kde-format
 msgctxt "@title"
 msgid "Alarm Storage"
 msgstr "Alarmlagring"
 
-#: prefdlg.cpp:171
+#: prefdlg.cpp:169
 #, kde-format
 msgctxt "@title:tab Email preferences"
 msgid "Email"
 msgstr "E-post"
 
-#: prefdlg.cpp:172
+#: prefdlg.cpp:170
 #, kde-format
 msgctxt "@title"
 msgid "Email Alarm Settings"
 msgstr "Innstillingar for e-postalarmar"
 
-#: prefdlg.cpp:177
+#: prefdlg.cpp:175
 #, kde-format
 msgctxt "@title:tab"
 msgid "Alarm Defaults"
 msgstr ""
 
-#: prefdlg.cpp:178
+#: prefdlg.cpp:176
 #, kde-format
 msgctxt "@title"
 msgid "Default Alarm Edit Settings"
 msgstr "Standard redigerings­innstillingar for alarmar"
 
-#: prefdlg.cpp:183
+#: prefdlg.cpp:181
 #, kde-format
 msgctxt "@title:tab"
 msgid "View"
 msgstr "Vising"
 
-#: prefdlg.cpp:184
+#: prefdlg.cpp:182
 #, kde-format
 msgctxt "@title"
 msgid "View Settings"
 msgstr "Visingsinnstillingar"
 
-#: prefdlg.cpp:261
+#: prefdlg.cpp:259
 #, kde-format
 msgctxt "@info"
 msgid "Reset all tabs to their default values, or only reset the current tab?"
@@ -4916,31 +4916,31 @@ msgstr ""
 "Vil du tilbakestilla alle fanene til standardverdiane, eller berre den "
 "gjeldande fana?"
 
-#: prefdlg.cpp:263
+#: prefdlg.cpp:261
 #, kde-format
 msgctxt "@action:button Reset ALL tabs"
 msgid "&All"
 msgstr "&Alle"
 
-#: prefdlg.cpp:264
+#: prefdlg.cpp:262
 #, kde-format
 msgctxt "@action:button Reset the CURRENT tab"
 msgid "C&urrent"
 msgstr "&Gjeldande"
 
-#: prefdlg.cpp:439
+#: prefdlg.cpp:437
 #, kde-format
 msgctxt "@title:group"
 msgid "Run Mode"
 msgstr "Køyremodus"
 
-#: prefdlg.cpp:444
+#: prefdlg.cpp:442
 #, kde-format
 msgctxt "@option:check"
 msgid "Start at login"
 msgstr "Start ved innlogging"
 
-#: prefdlg.cpp:447
+#: prefdlg.cpp:445
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -4952,13 +4952,13 @@ msgstr ""
 "para><para>Du bør alltid ha kryssa av for dette, med mindre du ikkje lenger "
 "vil bruka <application>KAlarm</application>.</para>"
 
-#: prefdlg.cpp:451
+#: prefdlg.cpp:449
 #, kde-format
 msgctxt "@option:check"
 msgid "Warn before quitting"
 msgstr "Åtvar før avslutting"
 
-#: prefdlg.cpp:452
+#: prefdlg.cpp:450
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -4968,13 +4968,13 @@ msgstr ""
 "Kryss av her for å gje ei åtvaring før avslutting av <application>KAlarm</"
 "application>."
 
-#: prefdlg.cpp:459
+#: prefdlg.cpp:457
 #, kde-format
 msgctxt "@option:check"
 msgid "Enable alarm names"
 msgstr ""
 
-#: prefdlg.cpp:461
+#: prefdlg.cpp:459
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -4982,19 +4982,19 @@ msgid ""
 "help you to identify alarms."
 msgstr ""
 
-#: prefdlg.cpp:469
+#: prefdlg.cpp:467
 #, kde-format
 msgctxt "@option:check"
 msgid "Confirm alarm deletions"
 msgstr "Stadfest sletting av alarmar"
 
-#: prefdlg.cpp:479
+#: prefdlg.cpp:477
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Default defer time interval:"
 msgstr "Standardutsetjing:"
 
-#: prefdlg.cpp:485
+#: prefdlg.cpp:483
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5004,13 +5004,13 @@ msgstr ""
 "Skriv inn standardutsetjinga for alarmar (i timar og minutt). Dette vert "
 "brukt av dialogvindauget for alarmutsetjing."
 
-#: prefdlg.cpp:490
+#: prefdlg.cpp:488
 #, kde-format
 msgctxt "@title:group"
 msgid "Terminal for Command Alarms"
 msgstr "Terminal for kommandoalarmar"
 
-#: prefdlg.cpp:491
+#: prefdlg.cpp:489
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5019,7 +5019,7 @@ msgid ""
 msgstr ""
 "Vel kva program du vil bruka til å køyra kommandoalarmar i terminalvindauge"
 
-#: prefdlg.cpp:516
+#: prefdlg.cpp:514
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5028,13 +5028,13 @@ msgstr ""
 "Kryss av her for å køyra kommandoen i eit terminalvindauge til <icode>%1</"
 "icode>"
 
-#: prefdlg.cpp:524
+#: prefdlg.cpp:522
 #, kde-format
 msgctxt "@option:radio Other terminal window command"
 msgid "Other:"
 msgstr "Anna:"
 
-#: prefdlg.cpp:534
+#: prefdlg.cpp:532
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5048,19 +5048,19 @@ msgstr ""
 "inn her. I <application>KAlarm</application>-handboka kan du lesa meir om "
 "korleis du kan tilpassa kommandolinja."
 
-#: prefdlg.cpp:543
+#: prefdlg.cpp:541
 #, kde-format
 msgctxt "@title:group"
 msgid "Plugins"
 msgstr ""
 
-#: prefdlg.cpp:548
+#: prefdlg.cpp:546
 #, kde-format
 msgctxt "@option:check"
 msgid "Enable Akonadi"
 msgstr ""
 
-#: prefdlg.cpp:550
+#: prefdlg.cpp:548
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -5068,7 +5068,7 @@ msgid ""
 "some email functions, and email address book lookup."
 msgstr ""
 
-#: prefdlg.cpp:552
+#: prefdlg.cpp:550
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5076,14 +5076,14 @@ msgid ""
 "some email functions, and email address book lookup."
 msgstr ""
 
-#: prefdlg.cpp:599
+#: prefdlg.cpp:597
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Command to invoke terminal window not found: <command>%1</command>"
 msgstr ""
 "Fann ikkje kommando for å starta terminalvindauge: <command>%1</command>"
 
-#: prefdlg.cpp:651
+#: prefdlg.cpp:649
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -5093,7 +5093,7 @@ msgstr ""
 "Du bør ikkje slå av dette valet, med mindre du ikkje lenger vil bruka "
 "<application>KAlarm</application>"
 
-#: prefdlg.cpp:686
+#: prefdlg.cpp:684
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5103,37 +5103,37 @@ msgstr ""
 "Vel tidssona som <application>KAlarm</application> skal bruka som standard "
 "for vising og innskriving av dato og klokkeslett."
 
-#: prefdlg.cpp:700
+#: prefdlg.cpp:698
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Holiday region:"
 msgstr "Område for fri- og høgtidsdagar:"
 
-#: prefdlg.cpp:709
+#: prefdlg.cpp:707
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select which holiday region to use"
 msgstr "Vel kva område for fri- og høgtidsdagar som skal brukast"
 
-#: prefdlg.cpp:717
+#: prefdlg.cpp:715
 #, kde-format
 msgctxt "Holiday region, region language"
 msgid "%1 (%2)"
 msgstr ""
 
-#: prefdlg.cpp:721
+#: prefdlg.cpp:719
 #, kde-format
 msgctxt "No holiday region"
 msgid "None"
 msgstr ""
 
-#: prefdlg.cpp:737
+#: prefdlg.cpp:735
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Start of day for date-only alarms:"
 msgstr "Start på dagen for datoalarmar:"
 
-#: prefdlg.cpp:744
+#: prefdlg.cpp:742
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5143,55 +5143,55 @@ msgstr ""
 "<para>Det tidlegaste klokkeslettet på dagen ein alarm utan oppgjeve "
 "klokkeslett vert løyst ut.</para><para>%1</para>"
 
-#: prefdlg.cpp:749
+#: prefdlg.cpp:747
 #, kde-format
 msgctxt "@title:group"
 msgid "Working Hours"
 msgstr "Arbeidstid"
 
-#: prefdlg.cpp:763
+#: prefdlg.cpp:761
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check the days in the week which are work days"
 msgstr "Vel kva dagar i veka som skal reknast som arbeidsdagar"
 
-#: prefdlg.cpp:773
+#: prefdlg.cpp:771
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Daily start time:"
 msgstr "Startklokkeslett:"
 
-#: prefdlg.cpp:780
+#: prefdlg.cpp:778
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid "<para>Enter the start time of the working day.</para><para>%1</para>"
 msgstr "<para>Vel kva klokkeslett arbeidsdagen startar.</para><para>%1</para>"
 
-#: prefdlg.cpp:792
+#: prefdlg.cpp:790
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Daily end time:"
 msgstr "Sluttklokkeslett:"
 
-#: prefdlg.cpp:799
+#: prefdlg.cpp:797
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid "<para>Enter the end time of the working day.</para><para>%1</para>"
 msgstr "<para>Vel kva klokkeslett arbeidsdagen sluttar.</para><para>%1</para>"
 
-#: prefdlg.cpp:804
+#: prefdlg.cpp:802
 #, kde-format
 msgctxt "@title:group"
 msgid "KOrganizer"
 msgstr "KOrganizer"
 
-#: prefdlg.cpp:812
+#: prefdlg.cpp:810
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "KOrganizer event duration:"
 msgstr "Lengd på KOrganizer-hending:"
 
-#: prefdlg.cpp:819
+#: prefdlg.cpp:817
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5201,19 +5201,19 @@ msgstr ""
 "<para>Skriv inn kor lenge hendinga varer, i timar og minutt, for alarmar som "
 "vert kopierte til KOrganizer.</para><para>%1</para>"
 
-#: prefdlg.cpp:880
+#: prefdlg.cpp:878
 #, kde-format
 msgctxt "@title:group"
 msgid "New Alarms && Templates"
 msgstr "Nye alarmar &og malar"
 
-#: prefdlg.cpp:885
+#: prefdlg.cpp:883
 #, kde-format
 msgctxt "@option:radio"
 msgid "Store in default calendar"
 msgstr "Lagra i standardkalender"
 
-#: prefdlg.cpp:887
+#: prefdlg.cpp:885
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5222,13 +5222,13 @@ msgid ""
 msgstr ""
 "Legg alle nye alarmar og alarmmalar til standardkalendrane utan å spørja."
 
-#: prefdlg.cpp:889
+#: prefdlg.cpp:887
 #, kde-format
 msgctxt "@option:radio"
 msgid "Prompt for which calendar to store in"
 msgstr "Spør kva kalender alarmar og alarmmalar skal lagrast i"
 
-#: prefdlg.cpp:892
+#: prefdlg.cpp:890
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5241,19 +5241,19 @@ msgstr ""
 "nye alarmar og alarmmalar i.</para><para>Merk at arkiverte alarmar alltid "
 "vert lagra i standardkalenderen for arkiverte alarmar.</para>"
 
-#: prefdlg.cpp:897
+#: prefdlg.cpp:895
 #, kde-format
 msgctxt "@title:group"
 msgid "Archived Alarms"
 msgstr "Arkiverte alarmar"
 
-#: prefdlg.cpp:902
+#: prefdlg.cpp:900
 #, kde-format
 msgctxt "@option:check"
 msgid "Keep alarms after expiry"
 msgstr "Ta vare på alarmar etter forelding"
 
-#: prefdlg.cpp:905
+#: prefdlg.cpp:903
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5263,19 +5263,19 @@ msgstr ""
 "Kryss av her for å lagra alarmar etter forelding eller sletting (med unntak "
 "av sletta alarmar som aldri vart utløyste)."
 
-#: prefdlg.cpp:911
+#: prefdlg.cpp:909
 #, kde-format
 msgctxt "@option:check"
 msgid "Discard archived alarms after:"
 msgstr "Forkast forfalne alarmar etter:"
 
-#: prefdlg.cpp:920
+#: prefdlg.cpp:918
 #, kde-format
 msgctxt "@label Time unit for user-entered number"
 msgid "days"
 msgstr "dagar"
 
-#: prefdlg.cpp:924
+#: prefdlg.cpp:922
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5285,19 +5285,19 @@ msgstr ""
 "Kryss av her for å velja kor lenge forfalne alarmar skal lagrast, eller "
 "fjern avkryssinga for å lagra alarmar i det uendelege."
 
-#: prefdlg.cpp:927
+#: prefdlg.cpp:925
 #, kde-format
 msgctxt "@action:button"
 msgid "Clear Archived Alarms"
 msgstr "Fjern arkiverte alarmar"
 
-#: prefdlg.cpp:930
+#: prefdlg.cpp:928
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Delete all existing archived alarms."
 msgstr "Slett alle arkiverte alarmar."
 
-#: prefdlg.cpp:931
+#: prefdlg.cpp:929
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5307,7 +5307,7 @@ msgstr ""
 "Slett alle arkiverte alarmar (berre frå standardkalender for arkiverte "
 "alarmar)."
 
-#: prefdlg.cpp:977
+#: prefdlg.cpp:975
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -5321,13 +5321,13 @@ msgstr ""
 "standardkalender for arkiverte alarmar dersom du ønskjer å ta vare på desse."
 "</para>"
 
-#: prefdlg.cpp:994
+#: prefdlg.cpp:992
 #, kde-format
 msgctxt "@info"
 msgid "Do you really want to delete all archived alarms?"
 msgstr "Er du sikker på at du vil sletta alle arkiverte alarmar?"
 
-#: prefdlg.cpp:995
+#: prefdlg.cpp:993
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -5337,31 +5337,31 @@ msgstr ""
 "Er du sikker på at du vil sletta alle arkiverte alarmar i standardkalenderen "
 "for arkiverte alarmar?"
 
-#: prefdlg.cpp:1013
+#: prefdlg.cpp:1011
 #, kde-format
 msgctxt "@label"
 msgid "Email client:"
 msgstr "E-postprogram:"
 
-#: prefdlg.cpp:1016
+#: prefdlg.cpp:1014
 #, kde-format
 msgctxt "@option:radio"
 msgid "KMail"
 msgstr "KMail"
 
-#: prefdlg.cpp:1017
+#: prefdlg.cpp:1015
 #, kde-format
 msgctxt "@option:radio"
 msgid "Sendmail"
 msgstr "sendmail"
 
-#: prefdlg.cpp:1030
+#: prefdlg.cpp:1028
 #, kde-format
 msgctxt "@info"
 msgid "Choose how to send email when an email alarm is triggered."
 msgstr ""
 
-#: prefdlg.cpp:1033
+#: prefdlg.cpp:1031
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5373,7 +5373,7 @@ msgid ""
 "agent.</item></list></para>"
 msgstr ""
 
-#: prefdlg.cpp:1041
+#: prefdlg.cpp:1039
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5383,7 +5383,7 @@ msgid ""
 "transport agent.</item></list></para>"
 msgstr ""
 
-#: prefdlg.cpp:1051
+#: prefdlg.cpp:1049
 #, kde-kuit-format
 msgctxt "@option:check"
 msgid ""
@@ -5393,7 +5393,7 @@ msgstr ""
 "Kopier sende e-postar til <resource>%1</resource>-mappa i "
 "<application>KMail</application>"
 
-#: prefdlg.cpp:1052
+#: prefdlg.cpp:1050
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5403,25 +5403,25 @@ msgstr ""
 "Lagra ein kopi i <application>KMail</application>-mappa <resource>%1</"
 "resource> etter sending av e-post"
 
-#: prefdlg.cpp:1060
+#: prefdlg.cpp:1058
 #, kde-format
 msgctxt "@option:check"
 msgid "Notify when remote emails are queued"
 msgstr "Gje melding når eksterne e-postar vert lagde i kø"
 
-#: prefdlg.cpp:1068
+#: prefdlg.cpp:1066
 #, kde-format
 msgctxt "@title:group"
 msgid "Your Email Address"
 msgstr "E-postadressa di"
 
-#: prefdlg.cpp:1074
+#: prefdlg.cpp:1072
 #, kde-format
 msgctxt "@label 'From' email address"
 msgid "From:"
 msgstr "Frå:"
 
-#: prefdlg.cpp:1086
+#: prefdlg.cpp:1084
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5431,13 +5431,13 @@ msgstr ""
 "E-postadressa di, som vert brukt til å identifisera deg som avsendar ved "
 "sending av e-postalarmar."
 
-#: prefdlg.cpp:1093 prefdlg.cpp:1129
+#: prefdlg.cpp:1091 prefdlg.cpp:1127
 #, kde-kuit-format
 msgctxt "@option:radio"
 msgid "Use default <application>KMail</application> identity"
 msgstr ""
 
-#: prefdlg.cpp:1096
+#: prefdlg.cpp:1094
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5445,13 +5445,13 @@ msgid ""
 "application>, to identify you as the sender when sending email alarms."
 msgstr ""
 
-#: prefdlg.cpp:1100
+#: prefdlg.cpp:1098
 #, kde-kuit-format
 msgctxt "@option:radio"
 msgid "Use <application>KMail</application> identities"
 msgstr "Bruk <application>KMail</application>-identitetar"
 
-#: prefdlg.cpp:1103
+#: prefdlg.cpp:1101
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5467,13 +5467,13 @@ msgstr ""
 "alarmar som alt er oppretta. For nye alarmar kan du sjølv velja kva for "
 "identitet du vil bruka."
 
-#: prefdlg.cpp:1110
+#: prefdlg.cpp:1108
 #, kde-format
 msgctxt "@label 'Bcc' email address"
 msgid "Bcc:"
 msgstr "Blindkopi til:"
 
-#: prefdlg.cpp:1121
+#: prefdlg.cpp:1119
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5487,7 +5487,7 @@ msgstr ""
 "<application>KAlarm</application> køyrer, treng du berre å skriva inn "
 "brukarnamnet ditt."
 
-#: prefdlg.cpp:1132
+#: prefdlg.cpp:1130
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5495,19 +5495,19 @@ msgid ""
 "application>, for blind copying email alarms to yourself."
 msgstr ""
 
-#: prefdlg.cpp:1234
+#: prefdlg.cpp:1232
 #, kde-format
 msgctxt "@info"
 msgid "No valid 'Bcc' email address is specified."
 msgstr ""
 
-#: prefdlg.cpp:1241
+#: prefdlg.cpp:1239
 #, kde-format
 msgctxt "@info"
 msgid "Are you sure you want to save your changes?"
 msgstr ""
 
-#: prefdlg.cpp:1247
+#: prefdlg.cpp:1245
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -5515,7 +5515,7 @@ msgid ""
 "application>.</para><para>%1</para><para>%2</para>"
 msgstr ""
 
-#: prefdlg.cpp:1252
+#: prefdlg.cpp:1250
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -5523,7 +5523,7 @@ msgid ""
 "para><para>%1</para><para>%2</para>"
 msgstr ""
 
-#: prefdlg.cpp:1270
+#: prefdlg.cpp:1268
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5532,25 +5532,25 @@ msgstr ""
 "Standardinnstillinga i redigeringsvindauget for alarmar for valet "
 "<interface>%1</interface>."
 
-#: prefdlg.cpp:1278 prefdlg.cpp:1726
+#: prefdlg.cpp:1276 prefdlg.cpp:1724
 #, kde-format
 msgctxt "@title:tab"
 msgid "General"
 msgstr "Generelt"
 
-#: prefdlg.cpp:1282
+#: prefdlg.cpp:1280
 #, kde-format
 msgctxt "@title:tab Settings specific to alarm type"
 msgid "Type Specific"
 msgstr ""
 
-#: prefdlg.cpp:1286
+#: prefdlg.cpp:1284
 #, kde-format
 msgctxt "@title:tab"
 msgid "Font && Color"
 msgstr "Skrift og farge"
 
-#: prefdlg.cpp:1302
+#: prefdlg.cpp:1300
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5560,32 +5560,32 @@ msgstr ""
 "Standardinnstilling i redigerings­vindauget for alarmar for "
 "alarmvisingsmetode."
 
-#: prefdlg.cpp:1326
+#: prefdlg.cpp:1324
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Recurrence:"
 msgstr "Gjentaking:"
 
-#: prefdlg.cpp:1359
+#: prefdlg.cpp:1357
 #, kde-format
 msgctxt "@option:radio"
 msgid "February 2&8th"
 msgstr "2&8. februar"
 
-#: prefdlg.cpp:1363
+#: prefdlg.cpp:1361
 #, kde-format
 msgctxt "@option:radio"
 msgid "March &1st"
 msgstr "&1. mars"
 
-#: prefdlg.cpp:1367
+#: prefdlg.cpp:1365
 #, kde-format
 msgctxt "@option:radio"
 msgid "Do not repeat"
 msgstr "Ikkje gjenta"
 
 # Taggen <note> legg til teksten «Merk:» (i kursiv), men har ikkje linjeskift framfor seg. Må derfor ha mellomrom før han.
-#: prefdlg.cpp:1372
+#: prefdlg.cpp:1370
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5598,31 +5598,31 @@ msgstr ""
 "utføring av alarmar som finst frå før, vert ikkje sjekka på nytt mot denne "
 "regelen etter at du har endra han.</note>"
 
-#: prefdlg.cpp:1378
+#: prefdlg.cpp:1376
 #, kde-format
 msgctxt "@title:group"
 msgid "Display Alarms"
 msgstr "Vis alarmar"
 
-#: prefdlg.cpp:1396
+#: prefdlg.cpp:1394
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Reminder units:"
 msgstr "Påminningseiningar:"
 
-#: prefdlg.cpp:1399
+#: prefdlg.cpp:1397
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Minutes"
 msgstr "Minutt"
 
-#: prefdlg.cpp:1400
+#: prefdlg.cpp:1398
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Hours/Minutes"
 msgstr "Timar/minutt"
 
-#: prefdlg.cpp:1403
+#: prefdlg.cpp:1401
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5632,19 +5632,19 @@ msgstr ""
 "Standardeiningar for påminning i redigerings­vindauget for alarmar (som snart "
 "vert utløyste)."
 
-#: prefdlg.cpp:1409
+#: prefdlg.cpp:1407
 #, kde-format
 msgctxt "@title:group Audio options group"
 msgid "Sound"
 msgstr "Lyd"
 
-#: prefdlg.cpp:1428
+#: prefdlg.cpp:1426
 #, kde-format
 msgctxt "@option:check"
 msgid "Repeat sound file"
 msgstr "Gjenta lydfil"
 
-#: prefdlg.cpp:1431
+#: prefdlg.cpp:1429
 #, kde-kuit-format
 msgctxt "@info:whatsthis sound file 'Repeat' checkbox"
 msgid ""
@@ -5654,56 +5654,56 @@ msgstr ""
 "Standardinnstilling i redigerings­vindauget for alarmar for lydfila "
 "<interface>%1</interface>."
 
-#: prefdlg.cpp:1437
+#: prefdlg.cpp:1435
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Sound file:"
 msgstr "Lydfil:"
 
-#: prefdlg.cpp:1445
+#: prefdlg.cpp:1443
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Choose a sound file"
 msgstr "Vel ei lydfil"
 
-#: prefdlg.cpp:1447
+#: prefdlg.cpp:1445
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the default sound file to use in the alarm edit dialog."
 msgstr "Skriv inn standard lydfil for redigeringsv­indauget for alarmar."
 
-#: prefdlg.cpp:1456
+#: prefdlg.cpp:1454
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "Select to set the default volume for sound files in the alarm edit dialog."
 msgstr "Vel standard lystyrke for lydfiler i redigerings­vindauget for alarmar."
 
-#: prefdlg.cpp:1460
+#: prefdlg.cpp:1458
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "The default volume for sound files in the alarm edit dialog."
 msgstr "Stanard lydstyrke for lydfiler i redigerings­vindauget for alarmar."
 
-#: prefdlg.cpp:1470
+#: prefdlg.cpp:1468
 #, kde-format
 msgctxt "@title:group"
 msgid "Command Alarms"
 msgstr "Kommandoalarmar"
 
-#: prefdlg.cpp:1489
+#: prefdlg.cpp:1487
 #, kde-format
 msgctxt "@title:group"
 msgid "Email Alarms"
 msgstr "E-postalarmar"
 
-#: prefdlg.cpp:1502
+#: prefdlg.cpp:1500
 #, kde-format
 msgctxt "@title:group"
 msgid "Message Font && Color"
 msgstr "Skrift og farge på &meldingar"
 
-#: prefdlg.cpp:1708
+#: prefdlg.cpp:1706
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -5713,19 +5713,19 @@ msgstr ""
 "Du må skriva inn ei lydfil når <interface>%1</interface> er vald som "
 "standard lydtype"
 
-#: prefdlg.cpp:1730
+#: prefdlg.cpp:1728
 #, kde-format
 msgctxt "@title:tab"
 msgid "Alarm Windows"
 msgstr "Alarmvindauge"
 
-#: prefdlg.cpp:1733
+#: prefdlg.cpp:1731
 #, kde-format
 msgctxt "@option:check"
 msgid "Show in system tray"
 msgstr "Vis i systemtrauet"
 
-#: prefdlg.cpp:1735
+#: prefdlg.cpp:1733
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5737,13 +5737,13 @@ msgstr ""
 "systemtrauet. Du får kjapt og enkelt tilgang til programmet frå dette "
 "ikonet, og kan sjå programstatusen.</para>"
 
-#: prefdlg.cpp:1764
+#: prefdlg.cpp:1762
 #, kde-format
 msgctxt "@option:radio Always show KAlarm icon"
 msgid "Always show"
 msgstr ""
 
-#: prefdlg.cpp:1768
+#: prefdlg.cpp:1766
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5751,13 +5751,13 @@ msgid ""
 "regardless of whether alarms are due."
 msgstr ""
 
-#: prefdlg.cpp:1772
+#: prefdlg.cpp:1770
 #, kde-format
 msgctxt "@option:radio"
 msgid "Automatically hide if no active alarms"
 msgstr ""
 
-#: prefdlg.cpp:1776
+#: prefdlg.cpp:1774
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5766,7 +5766,7 @@ msgid ""
 "be made visible by use of the system tray option to show hidden icons."
 msgstr ""
 
-#: prefdlg.cpp:1782
+#: prefdlg.cpp:1780
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5776,25 +5776,25 @@ msgid ""
 "to show hidden icons."
 msgstr ""
 
-#: prefdlg.cpp:1785
+#: prefdlg.cpp:1783
 #, kde-format
 msgctxt "@option:radio"
 msgid "Automatically hide if no alarm due within time period:"
 msgstr ""
 
-#: prefdlg.cpp:1797
+#: prefdlg.cpp:1795
 #, kde-format
 msgctxt "@title:group"
 msgid "System Tray Tooltip"
 msgstr "Hjelpeboble for systemtrauikonet"
 
-#: prefdlg.cpp:1804
+#: prefdlg.cpp:1802
 #, kde-format
 msgctxt "@option:check"
 msgid "Show next &24 hours' alarms"
 msgstr "Vis alarmar for dei neste &24 timane"
 
-#: prefdlg.cpp:1808
+#: prefdlg.cpp:1806
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5804,13 +5804,13 @@ msgstr ""
 "Vel om det skal visast ei liste over alarmar dei neste 24 timane i "
 "hjelpebobla for systemtrauikonet"
 
-#: prefdlg.cpp:1814
+#: prefdlg.cpp:1812
 #, kde-format
 msgctxt "@option:check"
 msgid "Maximum number of alarms to show:"
 msgstr "Høgste tal alarmar som skal visast:"
 
-#: prefdlg.cpp:1823
+#: prefdlg.cpp:1821
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5821,43 +5821,43 @@ msgstr ""
 "visast i systemtrauikonet for dei neste 24 timane. Ikkje kryss av viss du "
 "vil visa alle alarmane."
 
-#: prefdlg.cpp:1827
+#: prefdlg.cpp:1825
 #, kde-format
 msgctxt "@option:check"
 msgid "Show alarm time"
 msgstr "Vis alarmtidspunkt"
 
-#: prefdlg.cpp:1833
+#: prefdlg.cpp:1831
 #, kde-format
 msgctxt "@option:check"
 msgid "Show time until alarm"
 msgstr "Vis tid til alarmutløysing"
 
-#: prefdlg.cpp:1851
+#: prefdlg.cpp:1849
 #, kde-format
 msgctxt "@title:group"
 msgid "Alarm List"
 msgstr "Alarmliste"
 
-#: prefdlg.cpp:1863
+#: prefdlg.cpp:1861
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Disabled alarm color:"
 msgstr "Farge for avslåtte alarmar:"
 
-#: prefdlg.cpp:1876
+#: prefdlg.cpp:1874
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Archived alarm color:"
 msgstr "Farge for arkiverte alarmar:"
 
-#: prefdlg.cpp:1889
+#: prefdlg.cpp:1887
 #, kde-format
 msgctxt "@title:group"
 msgid "Alarm Message Windows"
 msgstr "Alarmmeldingsvindauge"
 
-#: prefdlg.cpp:1898
+#: prefdlg.cpp:1896
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5873,25 +5873,25 @@ msgstr ""
 "midten av skjermen, men gjer at knappane i vindauget ikkje kan brukast før "
 "det har gått ei stund.</item></list></para>"
 
-#: prefdlg.cpp:1901
+#: prefdlg.cpp:1899
 #, kde-format
 msgctxt "@option:radio"
 msgid "Position windows far from mouse cursor"
 msgstr "Plasser vindauga langt frå musepeikaren"
 
-#: prefdlg.cpp:1905
+#: prefdlg.cpp:1903
 #, kde-format
 msgctxt "@option:radio"
 msgid "Center windows, delay activating window buttons"
 msgstr "Plasser vindauga på midten av skjerm, men med uverksame knappar"
 
-#: prefdlg.cpp:1913
+#: prefdlg.cpp:1911
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Button activation delay (seconds):"
 msgstr "Tid før knappane vert verksame (i sekund):"
 
-#: prefdlg.cpp:1920
+#: prefdlg.cpp:1918
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5901,13 +5901,13 @@ msgstr ""
 "Skriv inn kor lenge knappane skal vera uverksame etter at alarmvindauget er "
 "vist."
 
-#: prefdlg.cpp:1928
+#: prefdlg.cpp:1926
 #, kde-format
 msgctxt "@option:check"
 msgid "Message windows have a title bar and take keyboard focus"
 msgstr "Meldingsvindauge har ei tittellinje og tek fokuset til tastaturet"
 
-#: prefdlg.cpp:1931
+#: prefdlg.cpp:1929
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
