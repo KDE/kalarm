@@ -8,7 +8,7 @@ Dependencies:
     'frameworks/kcalendarcore' : '@latest'
     'frameworks/kholidays' : '@latest'
     'frameworks/kcodecs' : '@latest'
-    'frameworks/kcompletions' : '@latest'
+    'frameworks/kcompletion' : '@latest'
     'frameworks/kconfig' : '@latest'
     'frameworks/kconfigwidgets' : '@latest'
     'frameworks/kcontacts' : '@latest'
