@@ -4,9 +4,8 @@
 # This builds the library kalarmcalendar, which provides access to KAlarm
 # calendar data. It used to be the public library kalarmcal.
 
-set(kalarmcal_common_SRCS)
-
-ecm_qt_declare_logging_category(kalarmcal_common_SRCS
+add_library(kalarmcalendar)
+ecm_qt_declare_logging_category(kalarmcalendar
                                 HEADER kalarmcal_debug.h
                                 IDENTIFIER KALARMCAL_LOG
                                 CATEGORY_NAME org.kde.pim.kalarm.kalarmcal
@@ -15,10 +14,7 @@ ecm_qt_declare_logging_category(kalarmcal_common_SRCS
                                 EXPORT KALARMCAL
                                 )
 
-add_library(kalarmcalendar)
-
 target_sources(kalarmcalendar PRIVATE
-    ${kalarmcal_common_SRCS}
     alarmtext.cpp
     datetime.cpp
     identities.cpp

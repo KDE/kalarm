@@ -2,12 +2,13 @@ include_directories( ../  )
 
 ########### next target ###############
 
-set(kalarmautostart_SRCS
+add_executable(kalarmautostart ${kalarmautostart_SRCS})
+target_sources(kalarmautostart PRIVATE
     autostart.cpp
     autostart.h
 )
 
-ecm_qt_declare_logging_category(kalarmautostart_SRCS
+ecm_qt_declare_logging_category(kalarmautostart
                                 HEADER kalarm_autostart_debug.h
                                 IDENTIFIER KALARMAUTOSTART_LOG
                                 CATEGORY_NAME org.kde.pim.autostart_kalarm
@@ -18,9 +19,8 @@ ecm_qt_declare_logging_category(kalarmautostart_SRCS
 
 
 file(GLOB ICONS_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/../appicons/*-apps-kalarm.png")
-ecm_add_app_icon(kalarmautostart_SRCS ICONS ${ICONS_SRCS})
+ecm_add_app_icon(kalarmautostart ICONS ${ICONS_SRCS})
 
-add_executable(kalarmautostart ${kalarmautostart_SRCS})
 
 target_link_libraries(kalarmautostart
     KF5::I18n

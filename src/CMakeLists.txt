@@ -13,20 +13,17 @@ add_subdirectory(autostart)
 
 ########### next target ###############
 
-set(kalarmpluginlib_common_SRCS)
 
-ecm_qt_declare_logging_category(kalarmpluginlib_common_SRCS
+add_library(kalarmplugin)
+
+ecm_qt_declare_logging_category(kalarmplugin
                                 HEADER kalarmpluginlib_debug.h
                                 IDENTIFIER KALARMPLUGINLIB_LOG
                                 CATEGORY_NAME org.kde.pim.kalarm.pluginlib
                                 DESCRIPTION "kalarm (pluginlib)"
                                 EXPORT KALARMPLUGINLIB
                                 )
-
-add_library(kalarmplugin)
-
 target_sources(kalarmplugin PRIVATE
-    ${kalarmpluginlib_common_SRCS}
     pluginbase.cpp
     pluginmanager.cpp
     pluginbase.h
