@@ -17,7 +17,6 @@
 #include <KLocalizedString>
 
 #include <QTimer>
-#include <kwidgetsaddons_version.h>
 
 using namespace KAlarmCal;
 
