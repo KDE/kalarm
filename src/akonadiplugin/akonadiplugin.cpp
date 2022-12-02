@@ -193,6 +193,8 @@ void AkonadiPlugin::deleteAkonadiResource(const QString& resourceName)
         akonadiMigrator->deleteAkonadiResource(resourceName);
 }
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 #include "akonadiplugin.moc"
+#endif
 
 // vim: et sw=4:
