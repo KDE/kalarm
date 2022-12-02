@@ -497,7 +497,7 @@ mSpinbox2->setAutoFillBackground(true);
 void SpinBox2p::getMetrics() const
 {
     QStyleOptionSpinBox option;
-    mSpinbox->initStyleOption(option);
+    mSpinbox->initStyleOption(&option);
     const QRect editRect = spinBoxEditFieldRect(mSpinbox);
     {
         // Check whether both mSpinbox spin buttons are on the same side of the control,
@@ -514,7 +514,7 @@ void SpinBox2p::getMetrics() const
     const QRect buttons2Rect = spinBoxButtonsRect(mSpinbox2, true);
     const QRect buttons2DrawRect = spinBoxButtonsRect(mSpinbox2, false);
     QStyle* udStyle = mSpinbox2->style();
-    mSpinbox2->initStyleOption(option);
+    mSpinbox2->initStyleOption(&option);
     const QRect frame2Rect = udStyle->subControlRect(QStyle::CC_SpinBox, &option, QStyle::SC_SpinBoxFrame);
     wFrameWidth = udStyle->pixelMetric(QStyle::PM_SpinBoxFrameWidth, &option);
     wBorderWidth = mRightToLeft ? buttons2Rect.left() : mSpinbox2->width() - buttons2Rect.right() - 1;
@@ -698,7 +698,7 @@ void SpinMirror::setFrameImage()
         // frame and edit field.
         QStyle* mainStyle = mMainSpinbox->style();
         QStyleOptionSpinBox option;
-        mMainSpinbox->initStyleOption(option);
+        mMainSpinbox->initStyleOption(&option);
         const int frameWidth = mainStyle->pixelMetric(QStyle::PM_SpinBoxFrameWidth, &option);  // offset to edit field
         const int editOffsetY = frameWidth;
         const int editOffsetX = 2;   // offset into edit field
@@ -908,7 +908,7 @@ bool isBaseBackground(const QStyle* style)
 QRect spinBoxEditFieldRect(const SpinBox* w)
 {
     QStyleOptionSpinBox option;
-    w->initStyleOption(option);
+    w->initStyleOption(&option);
     QRect r = w->style()->subControlRect(QStyle::CC_SpinBox, &option, QStyle::SC_SpinBoxEditField);
     return r;
 }
@@ -916,7 +916,7 @@ QRect spinBoxEditFieldRect(const SpinBox* w)
 QRect spinBoxButtonsRect(const SpinBox* w, bool includeBorders)
 {
     QStyleOptionSpinBox option;
-    w->initStyleOption(option);
+    w->initStyleOption(&option);
     QRect r = w->style()->subControlRect(QStyle::CC_SpinBox, &option, QStyle::SC_SpinBoxUp)
             | w->style()->subControlRect(QStyle::CC_SpinBox, &option, QStyle::SC_SpinBoxDown);
     if (w->style()->inherits("PlastikStyle"))

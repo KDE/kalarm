@@ -1,7 +1,7 @@
 /*
  *  spinbox.cpp  -  spin box with read-only option and shift-click step value
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2002-2021 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2002-2022 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -481,7 +481,7 @@ int SpinBox::shiftStepAdjustment(int oldValue, int shiftStep)
 int SpinBox::whichButton(const QPoint& pos)
 {
     QStyleOptionSpinBox option;
-    initStyleOption(option);
+    initStyleOption(&option);
     if (style()->subControlRect(QStyle::CC_SpinBox, &option, QStyle::SC_SpinBoxUp).contains(pos))
         return UP;
     if (style()->subControlRect(QStyle::CC_SpinBox, &option, QStyle::SC_SpinBoxDown).contains(pos))
@@ -492,21 +492,21 @@ int SpinBox::whichButton(const QPoint& pos)
 QRect SpinBox::upRect() const
 {
     QStyleOptionSpinBox option;
-    initStyleOption(option);
+    initStyleOption(&option);
     return style()->subControlRect(QStyle::CC_SpinBox, &option, QStyle::SC_SpinBoxUp);
 }
 
 QRect SpinBox::downRect() const
 {
     QStyleOptionSpinBox option;
-    initStyleOption(option);
+    initStyleOption(&option);
     return style()->subControlRect(QStyle::CC_SpinBox, &option, QStyle::SC_SpinBoxDown);
 }
 
 QRect SpinBox::upDownRect() const
 {
     QStyleOptionSpinBox option;
-    initStyleOption(option);
+    initStyleOption(&option);
     return style()->subControlRect(QStyle::CC_SpinBox, &option, QStyle::SC_SpinBoxUp)
          | style()->subControlRect(QStyle::CC_SpinBox, &option, QStyle::SC_SpinBoxDown);
 }
@@ -516,7 +516,7 @@ void SpinBox::paintEvent(QPaintEvent* pe)
     if (mUpDownOnly)
     {
         QStyleOptionSpinBox option;
-        initStyleOption(option);
+        initStyleOption(&option);
         QPainter painter(this);
         style()->drawComplexControl(QStyle::CC_SpinBox, &option, &painter, this);
     }
@@ -524,15 +524,15 @@ void SpinBox::paintEvent(QPaintEvent* pe)
         QSpinBox::paintEvent(pe);
 }
 
-void SpinBox::initStyleOption(QStyleOptionSpinBox& so) const
+void SpinBox::initStyleOption(QStyleOptionSpinBox* so) const
 {
-    so.initFrom(this);
-//    so.activeSubControls = ??;
-    so.subControls   = mUpDownOnly ? (QStyle::SC_SpinBoxUp | QStyle::SC_SpinBoxDown | QStyle::SC_SpinBoxFrame)
+    so->initFrom(this);
+//    so->activeSubControls = ??;
+    so->subControls   = mUpDownOnly ? (QStyle::SC_SpinBoxUp | QStyle::SC_SpinBoxDown | QStyle::SC_SpinBoxFrame)
                                    : (QStyle::SC_SpinBoxUp | QStyle::SC_SpinBoxDown | QStyle::SC_SpinBoxFrame | QStyle::SC_SpinBoxEditField);
-    so.buttonSymbols = buttonSymbols();
-    so.frame         = hasFrame();
-    so.stepEnabled   = stepEnabled();
+    so->buttonSymbols = buttonSymbols();
+    so->frame         = hasFrame();
+    so->stepEnabled   = stepEnabled();
 }
 
 /******************************************************************************

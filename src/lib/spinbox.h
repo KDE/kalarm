@@ -1,7 +1,7 @@
 /*
  *  spinbox.h  -  spin box with shift-click step value and read-only option
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2002-2021 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2002-2022 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -141,7 +141,11 @@ public:
     void         setUpDownOnly(bool only)              { mUpDownOnly = only; }
 
     /** Initialise a QStyleOptionSpinBox with this instance's details. */
-    void         initStyleOption(QStyleOptionSpinBox&) const;
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+    void         initStyleOption(QStyleOptionSpinBox*) const override;
+#else
+    void         initStyleOption(QStyleOptionSpinBox*) const;
+#endif
 
 Q_SIGNALS:
     /** Signal emitted when the spin box's value is stepped (by the shifted or unshifted increment).
