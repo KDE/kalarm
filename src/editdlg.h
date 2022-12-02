@@ -190,7 +190,7 @@ private:
     QString             mResourceEventId;      // if non-null, save alarm in resource containing this event ID
     Resource            mResource;             // resource to save event into, or invalid
     int                 mDeferGroupHeight {0}; // height added by deferred time widget
-    int                 mDesktop;              // desktop to display the dialog in
+    int                 mDesktop;              // virtual desktop to display the dialog in
     QString             mEventId;              // UID of event being edited, or blank for new event
     bool                mTemplate;             // editing an alarm template
     bool                mNewAlarm;             // editing a new alarm

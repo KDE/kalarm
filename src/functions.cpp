@@ -54,7 +54,14 @@ using namespace KCalendarCore;
 #include <KIO/StoredTransferJob>
 #include <KFileCustomDialog>
 #include <KWindowInfo>
-#include <KWindowSystem>
+#include <kwindowsystem_version.h>
+#if KWINDOWSYSTEM_VERSION >= QT_VERSION_CHECK(5, 101, 0)
+#if ENABLE_X11
+#include <KX11Extras>
+#endif
+#else
+#include <KWindowInfo>
+#endif
 
 #include <QAction>
 #include <QDBusConnectionInterface>
@@ -161,15 +168,29 @@ MainWindow* displayMainWindowSelected(const QString& eventId)
     else
     {
         // There is already a main window, so make it the active window
+#if KWINDOWSYSTEM_VERSION >= QT_VERSION_CHECK(5, 101, 0)
+#if ENABLE_X11
+        KWindowInfo wi(win->winId(), NET::WMDesktop);
+        if (!wi.valid()  ||  !wi.isOnDesktop(KX11Extras::currentDesktop()))
+        {
+            // The main window isn't on the current virtual desktop. Hide it
+            // first so that it will be shown on the current desktop when it is
+            // shown again. Note that this shifts the window's position, so
+            // don't hide it if it's already on the current desktop.
+            win->hide();
+        }
+#endif
+#else
         KWindowInfo wi(win->winId(), NET::WMDesktop);
         if (!wi.valid()  ||  !wi.isOnDesktop(KWindowSystem::currentDesktop()))
         {
-            // The main window isn't on the current desktop. Hide it first so
-            // that it will be shown on the current desktop when it is shown
-            // again. Note that this shifts the window's position, so don't
-            // hide it if it's already on the current desktop.
+            // The main window isn't on the current virtual desktop. Hide it
+            // first so that it will be shown on the current desktop when it is
+            // shown again. Note that this shifts the window's position, so
+            // don't hide it if it's already on the current desktop.
             win->hide();
         }
+#endif
         win->setWindowState(win->windowState() & ~Qt::WindowMinimized);
         win->show();
         win->raise();

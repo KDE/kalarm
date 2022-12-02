@@ -31,12 +31,20 @@
 #include "templatepickdlg.h"
 #include "lib/timeedit.h"
 #include "lib/timespinbox.h"
+#include "config-kalarm.h"
 #include "kalarm_debug.h"
 
 #include <KLocalizedString>
 #include <KConfig>
 #include <KSharedConfig>
-#include <KWindowSystem>
+#include <kwindowsystem_version.h>
+#if KWINDOWSYSTEM_VERSION >= QT_VERSION_CHECK(5, 101, 0)
+#if ENABLE_X11
+#include <KX11Extras>
+#endif
+#else
+#include <KWindowInfo>
+#endif
 
 #include <QLabel>
 #include <QGroupBox>
@@ -418,11 +426,17 @@ void EditAlarmDlg::init(const KAEvent& event)
         contentsChanged();    // enable/disable OK button
     }
 
-    // Note the current desktop so that the dialog can be shown on it.
+    // Note the current virtual desktop so that the dialog can be shown on it.
     // If a main window is visible, the dialog will by KDE default always appear on its
     // desktop. If the user invokes the dialog via the system tray on a different desktop,
     // that can cause confusion.
+#if KWINDOWSYSTEM_VERSION >= QT_VERSION_CHECK(5, 101, 0)
+#if ENABLE_X11
+    mDesktop = KX11Extras::currentDesktop();
+#endif
+#else
     mDesktop = KWindowSystem::currentDesktop();
+#endif
 
     if (theApp()->windowFocusBroken())
     {
@@ -841,7 +855,13 @@ void EditAlarmDlg::showEvent(QShowEvent* se)
         }
     }
     slotResize();
-    KWindowSystem::setOnDesktop(winId(), mDesktop);    // ensure it displays on the desktop expected by the user
+#if KWINDOWSYSTEM_VERSION >= QT_VERSION_CHECK(5, 101, 0)
+#if ENABLE_X11
+    KX11Extras::setOnDesktop(winId(), mDesktop);    // ensure it displays on the virtual desktop expected by the user
+#endif
+#else
+    KWindowSystem::setOnDesktop(winId(), mDesktop);    // ensure it displays on the virtual desktop expected by the user
+#endif
 
     if (theApp()->needWindowFocusFix())
     {

@@ -30,9 +30,13 @@
 #include <KLocalizedString>
 #include <KConfigGroup>
 #include <KTextEdit>
-#include <KWindowSystem>
 #include <KSqueezedTextLabel>
+#include <KWindowSystem>
 #if ENABLE_X11
+#include <kwindowsystem_version.h>
+#if KWINDOWSYSTEM_VERSION >= QT_VERSION_CHECK(5, 101, 0)
+#include <KX11Extras>
+#endif
 #include <KWindowInfo>
 #include <netwm.h>
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
@@ -517,7 +521,13 @@ void MessageWindow::setUpDisplay()
         wstate |= NET::Modal;
     WId winid = winId();
     KWindowSystem::setState(winid, wstate);
-    KWindowSystem::setOnAllDesktops(winid, true);
+#if KWINDOWSYSTEM_VERSION >= QT_VERSION_CHECK(5, 101, 0)
+#if ENABLE_X11
+    KX11Extras::setOnAllDesktops(winid, true);   // show on all virtual desktops
+#endif
+#else
+    KWindowSystem::setOnAllDesktops(winid, true);   // show on all virtual desktops
+#endif
 
     mInitialised = true;   // the window's widgets have been created
 }
@@ -1142,9 +1152,21 @@ void MessageWindow::slotEdit()
     if (!dlg)
         return;
     KWindowSystem::setMainWindow(dlg->windowHandle(), winId());
-    KWindowSystem::setOnAllDesktops(dlg->winId(), false);
+#if KWINDOWSYSTEM_VERSION >= QT_VERSION_CHECK(5, 101, 0)
+#if ENABLE_X11
+    KX11Extras::setOnAllDesktops(dlg->winId(), false);   // don't show on all virtual desktops
+#endif
+#else
+    KWindowSystem::setOnAllDesktops(dlg->winId(), false);   // don't show on all virtual desktops
+#endif
     setButtonsReadOnly(true);
+#if KWINDOWSYSTEM_VERSION >= QT_VERSION_CHECK(5, 101, 0)
+#if ENABLE_X11
+    connect(KX11Extras::self(), &KX11Extras::activeWindowChanged, this, &MessageWindow::activeWindowChanged);
+#endif
+#else
     connect(KWindowSystem::self(), &KWindowSystem::activeWindowChanged, this, &MessageWindow::activeWindowChanged);
+#endif
     mHelper->executeEdit();
 }
 
@@ -1164,8 +1186,17 @@ void MessageWindow::editDlgCancelled()
 */
 void MessageWindow::activeWindowChanged(WId win)
 {
+#if KWINDOWSYSTEM_VERSION >= QT_VERSION_CHECK(5, 101, 0)
+#if ENABLE_X11
+    // Note that the alarm edit dialog is not a QWindow, so we can't call
+    // QWindow::requestActivate().
+    if (mEditDlg()  &&  win == winId())
+        KX11Extras::activateWindow(mEditDlg()->winId());
+#endif
+#else
     if (mEditDlg()  &&  win == winId())
         KWindowSystem::activateWindow(mEditDlg()->winId());
+#endif
 }
 
 /******************************************************************************
@@ -1315,10 +1346,19 @@ bool MessageWindow::getWorkAreaAndModal()
     }
     if (modal)
     {
+#if KWINDOWSYSTEM_VERSION >= QT_VERSION_CHECK(5, 101, 0)
+#if ENABLE_X11
+        const WId activeId = KX11Extras::activeWindow();
+        const KWindowInfo wi = KWindowInfo(activeId, NET::WMState);
+        if (wi.valid()  &&  wi.hasState(NET::FullScreen))
+            return false;    // the active window is full screen.
+#endif
+#else
         const WId activeId = KWindowSystem::activeWindow();
         const KWindowInfo wi = KWindowInfo(activeId, NET::WMState);
         if (wi.valid()  &&  wi.hasState(NET::FullScreen))
             return false;    // the active window is full screen.
+#endif
     }
     return modal;
 }

@@ -1,7 +1,7 @@
 /*
  *  desktop.cpp  -  desktop functions
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2008-2020 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2008-2022 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -10,10 +10,7 @@
 
 #include "config-kalarm.h"
 
-#if ENABLE_X11
-#include <KWindowSystem>
-#endif
-#include <QGuiApplication>
+#include <QApplication>
 #include <QScreen>
 #include <QProcessEnvironment>
 
@@ -47,14 +44,17 @@ Type currentIdentity()
 */
 QRect workArea(int screen)
 {
-#if ENABLE_X11
+    QScreen* s;
     if (screen < 0)
-        return KWindowSystem::workArea();
-#endif
-    const QList<QScreen*> screens = QGuiApplication::screens();
-    if (screen < 0  ||  screen >= screens.count())
-        return {};
-    return screens[screen]->availableGeometry();
+        s = QApplication::primaryScreen();
+    else
+    {
+        const QList<QScreen*> screens = QGuiApplication::screens();
+        if (screen >= screens.count())
+            return {};
+        s = screens[screen];
+    }
+    return s->availableGeometry();
 }
 
 /******************************************************************************
