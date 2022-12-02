@@ -689,7 +689,7 @@ bool MessageDisplayHelper::readPropertyValues(const KConfigGroup& config)
     mDefaultDeferMinutes = config.readEntry("DeferMins", 0);
     mNoDefer             = config.readEntry("NoDefer", false);
     mNoPostAction        = config.readEntry("NoPostAction", true);
-    mEmailId             = config.readEntry("EmailId", QVariant(QVariant::LongLong)).toLongLong();
+    mEmailId             = config.readEntry("EmailId", KAEvent::EmailId(0));
     mCommandError        = KAEvent::CmdErrType(config.readEntry("CmdErr", static_cast<int>(KAEvent::CMD_NO_ERROR)));
     mDontShowAgain       = config.readEntry("DontShowAgain", QString());
     mShowEdit            = false;

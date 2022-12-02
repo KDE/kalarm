@@ -376,14 +376,22 @@ bool SpinBox2p::eventFilter(QObject* obj, QEvent* e)
             case QEvent::HoverEnter:
             {
                 auto* he = (QHoverEvent*)e;
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+                QApplication::postEvent(mSpinbox2, new QHoverEvent(e->type(), QPoint(1, he->position().toPoint().y()), he->oldPos()));
+#else
                 QApplication::postEvent(mSpinbox2, new QHoverEvent(e->type(), QPoint(1, he->pos().y()), he->oldPos()));
+#endif
                 updateButtons = true;
                 break;
             }
             case QEvent::HoverLeave:
             {
                 auto* he = (QHoverEvent*)e;
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+                QApplication::postEvent(mSpinbox2, new QHoverEvent(e->type(), he->position().toPoint(), QPoint(1, he->oldPos().y())));
+#else
                 QApplication::postEvent(mSpinbox2, new QHoverEvent(e->type(), he->pos(), QPoint(1, he->oldPos().y())));
+#endif
                 updateButtons = true;
                 break;
             }
@@ -841,7 +849,11 @@ bool SpinMirror::event(QEvent* e)
             Q_FALLTHROUGH();
         case QEvent::HoverEnter:
             he = (QHoverEvent*)e;
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+            QApplication::postEvent(mMainSpinbox, new QHoverEvent(e->type(), he->position().toPoint(), he->oldPos()));
+#else
             QApplication::postEvent(mMainSpinbox, new QHoverEvent(e->type(), he->pos(), he->oldPos()));
+#endif
             break;
         case QEvent::HoverMove:
             he = (QHoverEvent*)e;
@@ -855,7 +867,11 @@ bool SpinMirror::event(QEvent* e)
 
     if (he)
     {
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+        QApplication::postEvent(mSpinbox, new QHoverEvent(e->type(), spinboxPoint(he->position()), spinboxPoint(he->oldPosF())));
+#else
         QApplication::postEvent(mSpinbox, new QHoverEvent(e->type(), spinboxPoint(he->posF()), spinboxPoint(he->oldPosF())));
+#endif
         setButtonsImage();
     }
 
