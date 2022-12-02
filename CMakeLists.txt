@@ -6,13 +6,21 @@ set(RELEASE_SERVICE_VERSION_MINOR "12")
 set(RELEASE_SERVICE_VERSION_MICRO "0")
 set(RELEASE_SERVICE_VERSION "${RELEASE_SERVICE_VERSION_MAJOR}.${RELEASE_SERVICE_VERSION_MINOR}.${RELEASE_SERVICE_VERSION_MICRO}")
 
+# Whenever KALARM_VERSION changes, set the 3 variables below it to the first
+# KDE Release Service version which will contain that KAlarm release.
+# (This must be the full release version, not an alpha or beta release.)
 set(KALARM_VERSION "3.5.3")
-# Whenever KALARM_VERSION changes, set KALARM_RELEASE_SUB_VERSION to "".
-# If KALARM_VERSION has not changed since the last KDE release service release,
-# increment KALARM_RELEASE_SUB_VERSION (to "1", "2", ...) to ensure that KAlarm
-# always has a different version for every KDE release.
-set(KALARM_RELEASE_SUB_VERSION "")
-if (NOT ${KALARM_RELEASE_SUB_VERSION} EQUAL "")
+set(KALARM_VERSION_RELEASE_SERVICE_MAJOR "22")
+set(KALARM_VERSION_RELEASE_SERVICE_MINOR "12")
+set(KALARM_VERSION_RELEASE_SERVICE_MICRO "0")
+
+# If KAlarm's version has not changed since the last KDE Release Service version,
+# this code sets a sub-version x.x.x.N to avoid duplicate version numbers in
+# org.kde.kalarm.appdata.xml, which cause appstream to choke.
+math(EXPR LAST_RELEASE_MONTH "${KALARM_VERSION_RELEASE_SERVICE_MAJOR} * 12 + ${KALARM_VERSION_RELEASE_SERVICE_MINOR} + ${KALARM_VERSION_RELEASE_SERVICE_MICRO}")
+math(EXPR THIS_RELEASE_MONTH "${RELEASE_SERVICE_VERSION_MAJOR} * 12 + ${RELEASE_SERVICE_VERSION_MINOR} + ${RELEASE_SERVICE_VERSION_MICRO}")
+math(EXPR KALARM_RELEASE_SUB_VERSION "${THIS_RELEASE_MONTH} - ${LAST_RELEASE_MONTH}")
+if (${KALARM_RELEASE_SUB_VERSION} GREATER 0)
     set(KALARM_VERSION "${KALARM_VERSION}.${KALARM_RELEASE_SUB_VERSION}")
 endif()
 
