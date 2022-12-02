@@ -14,12 +14,20 @@
 #include "resources/eventmodel.h"
 #include "lib/messagebox.h"
 #include "kalarmcalendar/kaevent.h"
+#include "config-kalarm.h"
 
 #include <KFindDialog>
 #include <KFind>
 #include <KSeparator>
-#include <KWindowSystem>
 #include <KLocalizedString>
+#include <kwindowsystem_version.h>
+#if KWINDOWSYSTEM_VERSION >= QT_VERSION_CHECK(5, 101, 0)
+#if ENABLE_X11
+#include <KX11Extras>
+#endif
+#else
+#include <KWindowSystem>
+#endif
 
 #include <QGroupBox>
 #include <QCheckBox>
@@ -80,7 +88,15 @@ void Find::display()
         mOptions &= ~FIND_ARCHIVED;
 
     if (mDialog)
+    {
+#if KWINDOWSYSTEM_VERSION >= QT_VERSION_CHECK(5, 101, 0)
+#if ENABLE_X11
+        KX11Extras::activateWindow(mDialog->winId());
+#endif
+#else
         KWindowSystem::activateWindow(mDialog->winId());
+#endif
+    }
     else
     {
         mDialog = new KFindDialog(mListView, mOptions, mHistory, (mListView->selectionModel()->selectedRows().count() > 1));
