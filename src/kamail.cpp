@@ -34,7 +34,6 @@
 #include <KJobWidgets>
 #include <KEMailSettings>
 #include <KCodecs>
-#include <KCharsets>
 #include <KShell>
 
 #include <QUrl>
@@ -65,7 +64,6 @@ void                        initHeaders(KMime::Message&, JobData&);
 KMime::Types::Mailbox::List parseAddresses(const QString& text, QString& invalidItem);
 QString                     extractEmailAndNormalize(const QString& emailAddress);
 QByteArray                  autoDetectCharset(const QString& text);
-const QTextCodec*           codecForName(const QByteArray& str);
 }
 
 QString KAMail::i18n_NeedFromEmailAddress()
@@ -618,7 +616,7 @@ QByteArray autoDetectCharset(const QString& text)
         }
         else
         {
-            const QTextCodec* codec = codecForName(encoding);
+            const QTextCodec* codec = QTextCodec::codecForName(encoding.toLower());
             if (!codec)
                 qCDebug(KALARM_LOG) << "KAMail::autoDetectCharset: Something is wrong and I cannot get a codec. [" << encoding <<"]";
             else
@@ -629,16 +627,6 @@ QByteArray autoDetectCharset(const QString& text)
         }
     }
     return {};
-}
-
-//-----------------------------------------------------------------------------
-// Based on KMail KMMsgBase::codecForName().
-const QTextCodec* codecForName(const QByteArray& str)
-{
-    if (str.isEmpty())
-        return nullptr;
-    QByteArray codec = str.toLower();
-    return KCharsets::charsets()->codecForName(QLatin1String(codec));
 }
 
 /******************************************************************************
