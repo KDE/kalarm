@@ -1,6 +1,6 @@
 # translation of kalarm.po to
 # translation of alarmdaemonctrl.po to
-# Version: $Revision: 1639353 $
+# Version: $Revision: 1639482 $
 #
 # Copyright (C) 2002, 2004, 2005, 2006, 2007, 2008, 2009 Free Software Foundation, Inc.
 # Krzysztof Lichota <lichota@mimuw.edu.pl>, 2002, 2004, 2005, 2006.
@@ -17,7 +17,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-03 00:47+0000\n"
+"POT-Creation-Date: 2022-12-05 00:47+0000\n"
 "PO-Revision-Date: 2022-11-23 20:15+0100\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
@@ -4022,7 +4022,7 @@ msgctxt "@info General purpose status indication: yes or no"
 msgid "No"
 msgstr "Nie"
 
-#: kamail.cpp:72
+#: kamail.cpp:70
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -4031,14 +4031,14 @@ msgstr ""
 "Wysyłanie alarmów w postaci wiadomości pocztowej wymaga ustawienia adresu "
 "pocztowego nadawcy."
 
-#: kamail.cpp:75
+#: kamail.cpp:73
 #, kde-format
 msgctxt ""
 "@info KMail folder name: this should be translated the same as in kmail"
 msgid "sent-mail"
 msgstr "wysłane"
 
-#: kamail.cpp:105
+#: kamail.cpp:103
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -4048,7 +4048,7 @@ msgstr ""
 "Nieprawidłowy adres e-mail nadawcy.<nl/>Nie znaleziono tożsamości <resource>"
 "%1</resource>"
 
-#: kamail.cpp:111
+#: kamail.cpp:109
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -4058,7 +4058,7 @@ msgstr ""
 "Nieprawidłowy adres e-mail nadawcy.<nl/>Tożsamość <resource>%1</resource> "
 "nie posiada adresu e-mail"
 
-#: kamail.cpp:121
+#: kamail.cpp:119
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -4070,7 +4070,7 @@ msgstr ""
 "domyślnej).</para> <para>Proszę ustawić go w <application>KMail</"
 "application> lub w oknie ustawień <application>KAlarm</application>.</para>"
 
-#: kamail.cpp:125
+#: kamail.cpp:123
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -4082,7 +4082,7 @@ msgstr ""
 "domyślny adres w  go w <application>KMailu</application> lub oknie ustawień "
 "<application>KAlarmu</application>.</para>"
 
-#: kamail.cpp:130
+#: kamail.cpp:128
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -4092,37 +4092,37 @@ msgstr ""
 "<para>Nie ustawiono adresu e-mail nadawcy.</para><para>Proszę ustawić go w "
 "oknie ustawień <application>KAlarm</application>.</para>"
 
-#: kamail.cpp:160
+#: kamail.cpp:158
 #, kde-kuit-format
 msgctxt "@info"
 msgid "<command>%1</command> not found"
 msgstr "Nie znaleziono <command>%1</command>"
 
-#: kamail.cpp:287
+#: kamail.cpp:285
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Error attaching file: <filename>%1</filename>"
 msgstr "Błąd podczas załączania pliku: <filename>%1</filename>"
 
-#: kamail.cpp:297
+#: kamail.cpp:295
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Attachment not found: <filename>%1</filename>"
 msgstr "Nie znaleziono załącznika: <filename>%1</filename>"
 
-#: kamail.cpp:379
+#: kamail.cpp:377
 #, kde-format
 msgctxt "@info"
 msgid "An email has been queued to be sent"
 msgstr "Wiadomość została umieszczona w kolejce do wysłania"
 
-#: kamail.cpp:545
+#: kamail.cpp:543
 #, kde-format
 msgctxt "@info"
 msgid "Failed to send email"
 msgstr "Nie można wysłać wiadomości pocztowej"
 
-#: kamail.cpp:546
+#: kamail.cpp:544
 #, kde-format
 msgctxt "@info"
 msgid "Error sending email"

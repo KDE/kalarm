@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-03 00:47+0000\n"
+"POT-Creation-Date: 2022-12-05 00:47+0000\n"
 "PO-Revision-Date: 2013-07-07 03:28+0600\n"
 "Last-Translator: Sairan Kikkarin <sairan@computer.org>\n"
 "Language-Team: Kazakh <kde-i18n-doc@kde.org>\n"
@@ -4312,7 +4312,7 @@ msgctxt "@info General purpose status indication: yes or no"
 msgid "No"
 msgstr "Жоқ"
 
-#: kamail.cpp:72
+#: kamail.cpp:70
 #, fuzzy, kde-format
 #| msgctxt "@info/plain"
 #| msgid ""
@@ -4323,7 +4323,7 @@ msgid ""
 "A 'From' email address must be configured in order to execute email alarms."
 msgstr "Эл.пошта арқылы ескерту үшін 'Кімден' адресін баптау қажет."
 
-#: kamail.cpp:75
+#: kamail.cpp:73
 #, fuzzy, kde-format
 #| msgctxt ""
 #| "@info/plain KMail folder name: this should be translated the same as in "
@@ -4334,7 +4334,7 @@ msgctxt ""
 msgid "sent-mail"
 msgstr "жіберілген"
 
-#: kamail.cpp:105
+#: kamail.cpp:103
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -4344,7 +4344,7 @@ msgstr ""
 "'Кімден'  эл.пошта адресі дұрыс емес.<nl/><resource>%1</resource> деген эл."
 "пошта іс-әлпеті табылмады."
 
-#: kamail.cpp:111
+#: kamail.cpp:109
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -4354,7 +4354,7 @@ msgstr ""
 "'Кімден'  эл.пошта адресі дұрыс емес.<nl/><resource>%1</resource> деген эл."
 "пошта іс-әлпетінде эл.пошта адресі жоқ."
 
-#: kamail.cpp:121
+#: kamail.cpp:119
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -4366,7 +4366,7 @@ msgstr ""
 "табылмады)</para><para>Оны <application>KMail</application>-де немесе "
 "<application>KAlarm</application> баптау диалогында орнатыңыз. </para>"
 
-#: kamail.cpp:125
+#: kamail.cpp:123
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info"
 #| msgid ""
@@ -4383,7 +4383,7 @@ msgstr ""
 "параметрлерінде немесе <application>KAlarm</application> баптау диалогында "
 "орнатыңыз.</para>"
 
-#: kamail.cpp:130
+#: kamail.cpp:128
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -4393,7 +4393,7 @@ msgstr ""
 "<para>'Кімден' эл. пошта адресі бапталмаған.</para><para>Оны "
 "<application>KAlarm</application> баптау диалогында орнатыңыз. </para>"
 
-#: kamail.cpp:160
+#: kamail.cpp:158
 #, fuzzy, kde-kuit-format
 #| msgctxt "@text/plain"
 #| msgid "Could not run <command>%1</command> to set wake from suspend"
@@ -4401,31 +4401,31 @@ msgctxt "@info"
 msgid "<command>%1</command> not found"
 msgstr "Аялаудан оралуды орнатудағы <command>%1</command> командасы жегілмеді"
 
-#: kamail.cpp:287
+#: kamail.cpp:285
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Error attaching file: <filename>%1</filename>"
 msgstr "Келесі файлды тіркемелеу қатесі: <filename>%1</filename>"
 
-#: kamail.cpp:297
+#: kamail.cpp:295
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Attachment not found: <filename>%1</filename>"
 msgstr "Келесі тіркеме табылмады: <filename>%1</filename>"
 
-#: kamail.cpp:379
+#: kamail.cpp:377
 #, kde-format
 msgctxt "@info"
 msgid "An email has been queued to be sent"
 msgstr "Эл.пошта жіберу кезегіне қойылған"
 
-#: kamail.cpp:545
+#: kamail.cpp:543
 #, kde-format
 msgctxt "@info"
 msgid "Failed to send email"
 msgstr "Эл.поштаны жіберу жаңылысы"
 
-#: kamail.cpp:546
+#: kamail.cpp:544
 #, kde-format
 msgctxt "@info"
 msgid "Error sending email"

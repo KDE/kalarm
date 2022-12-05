@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdepim/kalarm.po\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-03 00:47+0000\n"
+"POT-Creation-Date: 2022-12-05 00:47+0000\n"
 "PO-Revision-Date: 2004-09-20 15:44+0200\n"
 "Last-Translator: Thierry Vignaud <tvignaud@mandriva.com>\n"
 "Language-Team: Breton <LL@li.org>\n"
@@ -4079,14 +4079,14 @@ msgctxt "@info General purpose status indication: yes or no"
 msgid "No"
 msgstr "Ebet"
 
-#: kamail.cpp:72
+#: kamail.cpp:70
 #, kde-format
 msgctxt "@info"
 msgid ""
 "A 'From' email address must be configured in order to execute email alarms."
 msgstr ""
 
-#: kamail.cpp:75
+#: kamail.cpp:73
 #, fuzzy, kde-format
 #| msgctxt "KMail folder name: this should be translated the same as in kmail"
 #| msgid "sent-mail"
@@ -4095,7 +4095,7 @@ msgctxt ""
 msgid "sent-mail"
 msgstr "Kemennadoù &kaset"
 
-#: kamail.cpp:105
+#: kamail.cpp:103
 #, fuzzy, kde-kuit-format
 #| msgid "Error copying sent email to KMail %1 folder"
 msgctxt "@info"
@@ -4104,7 +4104,7 @@ msgid ""
 "found"
 msgstr "Fazi en ur eilañ ar c'hemennadoù kaset d'ar renkell KMail %1"
 
-#: kamail.cpp:111
+#: kamail.cpp:109
 #, fuzzy, kde-kuit-format
 #| msgid "Error copying sent email to KMail %1 folder"
 msgctxt "@info"
@@ -4113,7 +4113,7 @@ msgid ""
 "no email address"
 msgstr "Fazi en ur eilañ ar c'hemennadoù kaset d'ar renkell KMail %1"
 
-#: kamail.cpp:121
+#: kamail.cpp:119
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -4122,7 +4122,7 @@ msgid ""
 "the <application>KAlarm</application> Configuration dialog.</para>"
 msgstr ""
 
-#: kamail.cpp:125
+#: kamail.cpp:123
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "%1\n"
@@ -4136,7 +4136,7 @@ msgstr ""
 "%1\n"
 "Mennout a rit skrivañ ho c'hemmoù ?"
 
-#: kamail.cpp:130
+#: kamail.cpp:128
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "%1\n"
@@ -4149,13 +4149,13 @@ msgstr ""
 "%1\n"
 "Mennout a rit skrivañ ho c'hemmoù ?"
 
-#: kamail.cpp:160
+#: kamail.cpp:158
 #, kde-kuit-format
 msgctxt "@info"
 msgid "<command>%1</command> not found"
 msgstr ""
 
-#: kamail.cpp:287
+#: kamail.cpp:285
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "Cannot open audio file:\n"
@@ -4166,7 +4166,7 @@ msgstr ""
 "N'hellan ket digeriñ ar rest klevet :\n"
 "%1"
 
-#: kamail.cpp:297
+#: kamail.cpp:295
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "Attachment not found:\n"
@@ -4177,20 +4177,20 @@ msgstr ""
 "N'eo ket bet kabet ar stagadennoù :\n"
 "%1"
 
-#: kamail.cpp:379
+#: kamail.cpp:377
 #, kde-format
 msgctxt "@info"
 msgid "An email has been queued to be sent"
 msgstr ""
 
-#: kamail.cpp:545
+#: kamail.cpp:543
 #, fuzzy, kde-format
 #| msgid "Failed to send email"
 msgctxt "@info"
 msgid "Failed to send email"
 msgstr "N'em eus ket gallet kas ar postel"
 
-#: kamail.cpp:546
+#: kamail.cpp:544
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Error sending email"

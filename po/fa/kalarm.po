@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-03 00:47+0000\n"
+"POT-Creation-Date: 2022-12-05 00:47+0000\n"
 "PO-Revision-Date: 2007-08-22 18:39+0330\n"
 "Last-Translator: Nazanin Kazemi <kazemi@itland.ir>\n"
 "Language-Team: Persian <kde-i18n-fa@kde.org>\n"
@@ -4424,7 +4424,7 @@ msgctxt "@info General purpose status indication: yes or no"
 msgid "No"
 msgstr "هیچ‌کدام"
 
-#: kamail.cpp:72
+#: kamail.cpp:70
 #, fuzzy, kde-format
 #| msgctxt "@info/plain"
 #| msgid ""
@@ -4437,7 +4437,7 @@ msgstr ""
 " یک نشانی رایانامه‌ای »از«، باید به منظور اجرای هشدارهای رایانامه‌ای پیکربندی "
 "شود."
 
-#: kamail.cpp:75
+#: kamail.cpp:73
 #, fuzzy, kde-format
 #| msgctxt ""
 #| "@info KMail folder name: this should be translated the same as in kmail"
@@ -4447,7 +4447,7 @@ msgctxt ""
 msgid "sent-mail"
 msgstr "نامه ارسال‌شده"
 
-#: kamail.cpp:105
+#: kamail.cpp:103
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info"
 #| msgid ""
@@ -4462,7 +4462,7 @@ msgstr ""
 "نشانی رایانامه نامعتبر »از«.\n"
 "شناسه <application>KMail</application> <resource>%1</resource> یافت نشد.."
 
-#: kamail.cpp:111
+#: kamail.cpp:109
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info"
 #| msgid ""
@@ -4477,7 +4477,7 @@ msgstr ""
 "نشانی رایانامه نامعتبر »از«.\n"
 "شناسه <application>KMail</application> <resource>%1</resource> یافت نشد.."
 
-#: kamail.cpp:121
+#: kamail.cpp:119
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info"
 #| msgid ""
@@ -4496,7 +4496,7 @@ msgstr ""
 "لطفاً، آن را در <application>KMail</application> یا در محاوره تنظیمات  "
 "<application>KMail</application> تنظیم کنید."
 
-#: kamail.cpp:125
+#: kamail.cpp:123
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info"
 #| msgid ""
@@ -4513,7 +4513,7 @@ msgstr ""
 "لطفاً، آن را در مرکز کنترل KDE یا در محاوره تنظیمات <application>KAlarm</"
 "application> تنظیم کنید."
 
-#: kamail.cpp:130
+#: kamail.cpp:128
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info"
 #| msgid ""
@@ -4527,7 +4527,7 @@ msgstr ""
 "هیچ نشانی رایانامه‌ای »از« پیکربندی نشده است.\n"
 "لطفاً، آن را در محاوره تنظیمات <application>KAlarm</application> تنظیم کنید."
 
-#: kamail.cpp:160
+#: kamail.cpp:158
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info"
 #| msgid "<command>%1</command> not found"
@@ -4535,7 +4535,7 @@ msgctxt "@info"
 msgid "<command>%1</command> not found"
 msgstr "<command>%1</command> یافت نشد"
 
-#: kamail.cpp:287
+#: kamail.cpp:285
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info"
 #| msgid ""
@@ -4547,7 +4547,7 @@ msgstr ""
 "خطای پیوستن پرونده:\n"
 "<filename>%1</filename>"
 
-#: kamail.cpp:297
+#: kamail.cpp:295
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info"
 #| msgid ""
@@ -4559,19 +4559,19 @@ msgstr ""
 "پیوست یافت نشد:\n"
 "<filename>%1</filename>"
 
-#: kamail.cpp:379
+#: kamail.cpp:377
 #, kde-format
 msgctxt "@info"
 msgid "An email has been queued to be sent"
 msgstr "یک رایانامه برای ارسال صف شده است"
 
-#: kamail.cpp:545
+#: kamail.cpp:543
 #, kde-format
 msgctxt "@info"
 msgid "Failed to send email"
 msgstr "خرابی در ارسال رایانامه"
 
-#: kamail.cpp:546
+#: kamail.cpp:544
 #, fuzzy, kde-format
 #| msgctxt "@info"
 #| msgid "Error saving alarm"

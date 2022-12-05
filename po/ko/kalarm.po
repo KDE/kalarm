@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-03 00:47+0000\n"
+"POT-Creation-Date: 2022-12-05 00:47+0000\n"
 "PO-Revision-Date: 2022-05-22 02:11+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -3920,21 +3920,21 @@ msgctxt "@info General purpose status indication: yes or no"
 msgid "No"
 msgstr "아니요"
 
-#: kamail.cpp:72
+#: kamail.cpp:70
 #, kde-format
 msgctxt "@info"
 msgid ""
 "A 'From' email address must be configured in order to execute email alarms."
 msgstr "이메일 알람을 실행하려면 '보낸 사람' 이메일 주소를 설정해야 합니다."
 
-#: kamail.cpp:75
+#: kamail.cpp:73
 #, kde-format
 msgctxt ""
 "@info KMail folder name: this should be translated the same as in kmail"
 msgid "sent-mail"
 msgstr "보낸 편지함"
 
-#: kamail.cpp:105
+#: kamail.cpp:103
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3944,7 +3944,7 @@ msgstr ""
 "'보낸 사람' 이메일 주소가 잘못되었습니다.<nl/><resource>%1</resource> 이메일 "
 "프로필을 찾을 수 없음"
 
-#: kamail.cpp:111
+#: kamail.cpp:109
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3954,7 +3954,7 @@ msgstr ""
 "'보낸 사람' 이메일 주소가 잘못되었습니다.<nl/><resource>%1</resource> 이메일 "
 "프로필에 이메일 주소가 없음"
 
-#: kamail.cpp:121
+#: kamail.cpp:119
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3966,7 +3966,7 @@ msgstr ""
 "없음)</para><para><application>KMail</application>이나 <application>KAlarm</"
 "application> 설정 대화 상자에서 설정하십시오.</para>"
 
-#: kamail.cpp:125
+#: kamail.cpp:123
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3978,7 +3978,7 @@ msgstr ""
 "para><para><application>KMail</application>이나 <application>KAlarm</"
 "application> 설정 대화 상자에서 기본 주소를 설정하십시오.</para>"
 
-#: kamail.cpp:130
+#: kamail.cpp:128
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3989,37 +3989,37 @@ msgstr ""
 "para><para><application>KAlarm</application> 설정 대화 상자에서 기본 주소를 "
 "설정하십시오.</para>"
 
-#: kamail.cpp:160
+#: kamail.cpp:158
 #, kde-kuit-format
 msgctxt "@info"
 msgid "<command>%1</command> not found"
 msgstr "<command>%1</command>을(를) 찾을 수 없음"
 
-#: kamail.cpp:287
+#: kamail.cpp:285
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Error attaching file: <filename>%1</filename>"
 msgstr "파일 첨부 오류: <filename>%1</filename>"
 
-#: kamail.cpp:297
+#: kamail.cpp:295
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Attachment not found: <filename>%1</filename>"
 msgstr "첨부 파일을 찾을 수 없음: <filename>%1</filename>"
 
-#: kamail.cpp:379
+#: kamail.cpp:377
 #, kde-format
 msgctxt "@info"
 msgid "An email has been queued to be sent"
 msgstr "이메일 전송 대기열에 추가됨"
 
-#: kamail.cpp:545
+#: kamail.cpp:543
 #, kde-format
 msgctxt "@info"
 msgid "Failed to send email"
 msgstr "이메일을 보낼 수 없음"
 
-#: kamail.cpp:546
+#: kamail.cpp:544
 #, kde-format
 msgctxt "@info"
 msgid "Error sending email"

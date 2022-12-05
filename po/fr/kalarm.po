@@ -25,7 +25,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-03 00:47+0000\n"
+"POT-Creation-Date: 2022-12-05 00:47+0000\n"
 "PO-Revision-Date: 2022-10-19 18:43+0200\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@neuf.fr>\n"
 "Language-Team: French <kde-francophone@kde.org>\n"
@@ -4193,7 +4193,7 @@ msgctxt "@info General purpose status indication: yes or no"
 msgid "No"
 msgstr "Non"
 
-#: kamail.cpp:72
+#: kamail.cpp:70
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -4202,14 +4202,14 @@ msgstr ""
 "Une adresse d'expéditeur doit être indiquée pour pouvoir exécuter les "
 "alarmes par courrier électronique."
 
-#: kamail.cpp:75
+#: kamail.cpp:73
 #, kde-format
 msgctxt ""
 "@info KMail folder name: this should be translated the same as in kmail"
 msgid "sent-mail"
 msgstr "Messages envoyés"
 
-#: kamail.cpp:105
+#: kamail.cpp:103
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -4219,7 +4219,7 @@ msgstr ""
 "Adresse électronique de l'expéditeur non valable.<nl /> Impossible de "
 "trouver l'identité <resource>%1</resource>."
 
-#: kamail.cpp:111
+#: kamail.cpp:109
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -4229,7 +4229,7 @@ msgstr ""
 "Adresse électronique de l'expéditeur non valable.<nl /> L'identité <resource>"
 "%1</resource> n'a pas d'adresse électronique."
 
-#: kamail.cpp:121
+#: kamail.cpp:119
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -4242,7 +4242,7 @@ msgstr ""
 "<application>KMail</application> ou dans la fenêtre configuration de "
 "<application>KAlarm</application>.</para>"
 
-#: kamail.cpp:125
+#: kamail.cpp:123
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -4255,7 +4255,7 @@ msgstr ""
 "boîte de dialogue de configuration de <application>KAlarm</application></"
 "para>."
 
-#: kamail.cpp:130
+#: kamail.cpp:128
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -4266,37 +4266,37 @@ msgstr ""
 "indiquer une dans la fenêtre de configuration de <application>KAlarm</"
 "application></para>."
 
-#: kamail.cpp:160
+#: kamail.cpp:158
 #, kde-kuit-format
 msgctxt "@info"
 msgid "<command>%1</command> not found"
 msgstr "Impossible de trouver la commande <command>%1</command>"
 
-#: kamail.cpp:287
+#: kamail.cpp:285
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Error attaching file: <filename>%1</filename>"
 msgstr "Erreur lors de l'attachement du fichier : <filename>%1</filename>"
 
-#: kamail.cpp:297
+#: kamail.cpp:295
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Attachment not found: <filename>%1</filename>"
 msgstr "Pièce jointe introuvable : <filename>%1</filename>"
 
-#: kamail.cpp:379
+#: kamail.cpp:377
 #, kde-format
 msgctxt "@info"
 msgid "An email has been queued to be sent"
 msgstr "Un courrier électronique a été mis dans la liste d'attente avant envoi"
 
-#: kamail.cpp:545
+#: kamail.cpp:543
 #, kde-format
 msgctxt "@info"
 msgid "Failed to send email"
 msgstr "L'envoi du courrier électronique a échoué"
 
-#: kamail.cpp:546
+#: kamail.cpp:544
 #, kde-format
 msgctxt "@info"
 msgid "Error sending email"

@@ -17,7 +17,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-03 00:47+0000\n"
+"POT-Creation-Date: 2022-12-05 00:47+0000\n"
 "PO-Revision-Date: 2022-10-19 16:13+0200\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
@@ -4219,7 +4219,7 @@ msgctxt "@info General purpose status indication: yes or no"
 msgid "No"
 msgstr "Nee"
 
-#: kamail.cpp:72
+#: kamail.cpp:70
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -4228,14 +4228,14 @@ msgstr ""
 "U dient een 'Van' e-mailadres op te geven om e-mailalarmen te kunnen "
 "versturen."
 
-#: kamail.cpp:75
+#: kamail.cpp:73
 #, kde-format
 msgctxt ""
 "@info KMail folder name: this should be translated the same as in kmail"
 msgid "sent-mail"
 msgstr "verzonden mail"
 
-#: kamail.cpp:105
+#: kamail.cpp:103
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -4245,7 +4245,7 @@ msgstr ""
 "Ongeldig 'Van'-adres.<nl/>E-mailidentiteit <resource>%1</resource> kon niet "
 "worden gevonden."
 
-#: kamail.cpp:111
+#: kamail.cpp:109
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -4257,7 +4257,7 @@ msgstr ""
 
 # geen 2x in achter elkaar
 # geen lange samengestelde woorden
-#: kamail.cpp:121
+#: kamail.cpp:119
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -4272,7 +4272,7 @@ msgstr ""
 
 # geen 2x in
 # geen lange samengestelde woorden
-#: kamail.cpp:125
+#: kamail.cpp:123
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -4284,7 +4284,7 @@ msgstr ""
 "e-mailadres in in <application>KMail</application> of de configuratiedialoog "
 "van <application>KAlarm</application>.</para>"
 
-#: kamail.cpp:130
+#: kamail.cpp:128
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -4295,37 +4295,37 @@ msgstr ""
 "mailadres in in de configuratiedialoog van <application>KAlarm</application>."
 "</para>"
 
-#: kamail.cpp:160
+#: kamail.cpp:158
 #, kde-kuit-format
 msgctxt "@info"
 msgid "<command>%1</command> not found"
 msgstr "<command>%1</command> niet gevonden"
 
-#: kamail.cpp:287
+#: kamail.cpp:285
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Error attaching file: <filename>%1</filename>"
 msgstr "Fout bij het bijvoegen van bestand: <filename>%1</filename>"
 
-#: kamail.cpp:297
+#: kamail.cpp:295
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Attachment not found: <filename>%1</filename>"
 msgstr "Bijlage niet gevonden: <filename>%1</filename>"
 
-#: kamail.cpp:379
+#: kamail.cpp:377
 #, kde-format
 msgctxt "@info"
 msgid "An email has been queued to be sent"
 msgstr "Er is een e-mailbericht klaargezet voor verzending"
 
-#: kamail.cpp:545
+#: kamail.cpp:543
 #, kde-format
 msgctxt "@info"
 msgid "Failed to send email"
 msgstr "Het verzenden van het e-mailbericht is mislukt"
 
-#: kamail.cpp:546
+#: kamail.cpp:544
 #, kde-format
 msgctxt "@info"
 msgid "Error sending email"

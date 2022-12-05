@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-03 00:47+0000\n"
+"POT-Creation-Date: 2022-12-05 00:47+0000\n"
 "PO-Revision-Date: 2022-09-15 23:00+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
@@ -3899,21 +3899,21 @@ msgctxt "@info General purpose status indication: yes or no"
 msgid "No"
 msgstr "لا"
 
-#: kamail.cpp:72
+#: kamail.cpp:70
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid ""
 "A 'From' email address must be configured in order to execute email alarms."
 msgstr "يجب ضبط عنوان بريد 'من' الإلكترونيّ لتنفيذ منبّهات البريد الإلكترونيّ."
 
-#: kamail.cpp:75
+#: kamail.cpp:73
 #, kde-format
 msgctxt ""
 "@info KMail folder name: this should be translated the same as in kmail"
 msgid "sent-mail"
 msgstr "البريد المُرسَل"
 
-#: kamail.cpp:105
+#: kamail.cpp:103
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3922,7 +3922,7 @@ msgid ""
 msgstr ""
 "عنوان بريد ”من“ غير صالح.<nl/>لم يُعثر على هويّة البريد <resource>%1</resource>"
 
-#: kamail.cpp:111
+#: kamail.cpp:109
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3932,7 +3932,7 @@ msgstr ""
 "عنوان بريد ”من“ غير صالح.<nl/>ليس لهويّة البريد <resource>%1</resource> عنوان "
 "بريد إلكتروني"
 
-#: kamail.cpp:121
+#: kamail.cpp:119
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3941,7 +3941,7 @@ msgid ""
 "the <application>KAlarm</application> Configuration dialog.</para>"
 msgstr ""
 
-#: kamail.cpp:125
+#: kamail.cpp:123
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3950,7 +3950,7 @@ msgid ""
 "<application>KAlarm</application> Configuration dialog.</para>"
 msgstr ""
 
-#: kamail.cpp:130
+#: kamail.cpp:128
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3958,37 +3958,37 @@ msgid ""
 "the <application>KAlarm</application> Configuration dialog.</para>"
 msgstr ""
 
-#: kamail.cpp:160
+#: kamail.cpp:158
 #, kde-kuit-format
 msgctxt "@info"
 msgid "<command>%1</command> not found"
 msgstr "لم يُعثر على <command>%1</command>"
 
-#: kamail.cpp:287
+#: kamail.cpp:285
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Error attaching file: <filename>%1</filename>"
 msgstr "خطأ في إرفاق الملف: <filename>%1</filename>"
 
-#: kamail.cpp:297
+#: kamail.cpp:295
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Attachment not found: <filename>%1</filename>"
 msgstr "لم يُعثر على المرفق: <filename>%1</filename>"
 
-#: kamail.cpp:379
+#: kamail.cpp:377
 #, kde-format
 msgctxt "@info"
 msgid "An email has been queued to be sent"
 msgstr ""
 
-#: kamail.cpp:545
+#: kamail.cpp:543
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Failed to send email"
 msgstr "فشل إرسال البريد الإلكتروني"
 
-#: kamail.cpp:546
+#: kamail.cpp:544
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Error sending email"

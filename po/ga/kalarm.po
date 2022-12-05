@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdepim/kalarm.po\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-03 00:47+0000\n"
+"POT-Creation-Date: 2022-12-05 00:47+0000\n"
 "PO-Revision-Date: 2004-12-03 14:52-0500\n"
 "Last-Translator: Kevin Scannell <kscanne@gmail.com>\n"
 "Language-Team: Irish <gaeilge-gnulinux@lists.sourceforge.net>\n"
@@ -3994,14 +3994,14 @@ msgctxt "@info General purpose status indication: yes or no"
 msgid "No"
 msgstr "Níl"
 
-#: kamail.cpp:72
+#: kamail.cpp:70
 #, kde-format
 msgctxt "@info"
 msgid ""
 "A 'From' email address must be configured in order to execute email alarms."
 msgstr ""
 
-#: kamail.cpp:75
+#: kamail.cpp:73
 #, fuzzy, kde-format
 #| msgctxt ""
 #| "@info/plain KMail folder name: this should be translated the same as in "
@@ -4012,7 +4012,7 @@ msgctxt ""
 msgid "sent-mail"
 msgstr "seolta"
 
-#: kamail.cpp:105
+#: kamail.cpp:103
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info:shell"
 #| msgid "%1: Event <resource>%2</resource> not found"
@@ -4022,7 +4022,7 @@ msgid ""
 "found"
 msgstr "%1: Imeacht <resource>%2</resource> gan aimsiú"
 
-#: kamail.cpp:111
+#: kamail.cpp:109
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -4030,7 +4030,7 @@ msgid ""
 "no email address"
 msgstr ""
 
-#: kamail.cpp:121
+#: kamail.cpp:119
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -4039,7 +4039,7 @@ msgid ""
 "the <application>KAlarm</application> Configuration dialog.</para>"
 msgstr ""
 
-#: kamail.cpp:125
+#: kamail.cpp:123
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info"
 #| msgid "<para>%1</para><para>%2</para>"
@@ -4050,7 +4050,7 @@ msgid ""
 "<application>KAlarm</application> Configuration dialog.</para>"
 msgstr "<para>%1</para><para>%2</para>"
 
-#: kamail.cpp:130
+#: kamail.cpp:128
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -4058,37 +4058,37 @@ msgid ""
 "the <application>KAlarm</application> Configuration dialog.</para>"
 msgstr ""
 
-#: kamail.cpp:160
+#: kamail.cpp:158
 #, kde-kuit-format
 msgctxt "@info"
 msgid "<command>%1</command> not found"
 msgstr ""
 
-#: kamail.cpp:287
+#: kamail.cpp:285
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Error attaching file: <filename>%1</filename>"
 msgstr "Earráid agus comhad á cheangal: <filename>%1</filename>"
 
-#: kamail.cpp:297
+#: kamail.cpp:295
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Attachment not found: <filename>%1</filename>"
 msgstr "Iatán gan aimsiú: <filename>%1</filename>"
 
-#: kamail.cpp:379
+#: kamail.cpp:377
 #, kde-format
 msgctxt "@info"
 msgid "An email has been queued to be sent"
 msgstr ""
 
-#: kamail.cpp:545
+#: kamail.cpp:543
 #, kde-format
 msgctxt "@info"
 msgid "Failed to send email"
 msgstr ""
 
-#: kamail.cpp:546
+#: kamail.cpp:544
 #, kde-format
 msgctxt "@info"
 msgid "Error sending email"

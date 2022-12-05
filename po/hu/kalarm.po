@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KDE 4.3\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-03 00:47+0000\n"
+"POT-Creation-Date: 2022-12-05 00:47+0000\n"
 "PO-Revision-Date: 2021-01-05 11:57+0100\n"
 "Last-Translator: Kristóf Kiszel <kiszel.kristof@gmail.com>\n"
 "Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
@@ -4283,7 +4283,7 @@ msgctxt "@info General purpose status indication: yes or no"
 msgid "No"
 msgstr "Nem"
 
-#: kamail.cpp:72
+#: kamail.cpp:70
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -4291,14 +4291,14 @@ msgid ""
 msgstr ""
 "A „Feladó” mezőt ki kell tölteni, ha levélben szeretne figyelmeztetőt kapni."
 
-#: kamail.cpp:75
+#: kamail.cpp:73
 #, kde-format
 msgctxt ""
 "@info KMail folder name: this should be translated the same as in kmail"
 msgid "sent-mail"
 msgstr "Elküldött üzenetek"
 
-#: kamail.cpp:105
+#: kamail.cpp:103
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -4308,7 +4308,7 @@ msgstr ""
 "Érvénytelen a feladó e-mail címe.<nl/>Nem található a(z) <resource>%1</"
 "resource> nevű levelezési identitás."
 
-#: kamail.cpp:111
+#: kamail.cpp:109
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -4318,7 +4318,7 @@ msgstr ""
 "Érvénytelen a feladó e-mail címe.<nl/>Nincs megadva e-mail cím a(z) "
 "<resource>%1</resource> levelezési identitásnél."
 
-#: kamail.cpp:121
+#: kamail.cpp:119
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -4331,7 +4331,7 @@ msgstr ""
 "application> vagy a <application>KAlarm</application> beállítóablakában "
 "lehet.</para>"
 
-#: kamail.cpp:125
+#: kamail.cpp:123
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info"
 #| msgid ""
@@ -4348,7 +4348,7 @@ msgstr ""
 "rendszerbeállításokban vagy a <application>KAlarm</application> "
 "beállítóablakában lehet.</para>"
 
-#: kamail.cpp:130
+#: kamail.cpp:128
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -4358,7 +4358,7 @@ msgstr ""
 "<para>Nincs beállítva a feladó e-mail címe.</para><para>Beállítani a "
 "<application>KAlarm</application> beállítóablakában lehet.</para>"
 
-#: kamail.cpp:160
+#: kamail.cpp:158
 #, fuzzy, kde-kuit-format
 #| msgctxt "@text/plain"
 #| msgid "Could not run <command>%1</command> to set wake from suspend"
@@ -4368,31 +4368,31 @@ msgstr ""
 "Nem sikerült futtatni a(z) <command>%1</command> parancsot a "
 "felfüggesztésből felébresztés beállítására"
 
-#: kamail.cpp:287
+#: kamail.cpp:285
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Error attaching file: <filename>%1</filename>"
 msgstr "Hiba történt a következő fájl csatolásakor: <filename>%1</filename>"
 
-#: kamail.cpp:297
+#: kamail.cpp:295
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Attachment not found: <filename>%1</filename>"
 msgstr "A következő melléklet nem található: <filename>%1</filename>"
 
-#: kamail.cpp:379
+#: kamail.cpp:377
 #, kde-format
 msgctxt "@info"
 msgid "An email has been queued to be sent"
 msgstr "Egy e-mail bekerült az elküldési sorba"
 
-#: kamail.cpp:545
+#: kamail.cpp:543
 #, kde-format
 msgctxt "@info"
 msgid "Failed to send email"
 msgstr "Nem sikerült elküldeni egy e-mailt"
 
-#: kamail.cpp:546
+#: kamail.cpp:544
 #, kde-format
 msgctxt "@info"
 msgid "Error sending email"

@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-03 00:47+0000\n"
+"POT-Creation-Date: 2022-12-05 00:47+0000\n"
 "PO-Revision-Date: 2019-09-29 12:31+0500\n"
 "Last-Translator: Victor Ibragimov <victor.ibragimov@gmail.com>\n"
 "Language-Team: English <kde-i18n-doc@kde.org>\n"
@@ -4300,7 +4300,7 @@ msgctxt "@info General purpose status indication: yes or no"
 msgid "No"
 msgstr "Нест"
 
-#: kamail.cpp:72
+#: kamail.cpp:70
 #, fuzzy, kde-format
 #| msgid ""
 #| "A 'From' email address must be configured in order to execute email "
@@ -4312,14 +4312,14 @@ msgstr ""
 "Адреси почтаи электронии шумост, ки барои идентификатсия кардани фиристанда "
 "ҳангоми фиристодани хотиррасонӣ бо почтаи электронӣ низ истифода мешавад."
 
-#: kamail.cpp:75
+#: kamail.cpp:73
 #, fuzzy, kde-format
 msgctxt ""
 "@info KMail folder name: this should be translated the same as in kmail"
 msgid "sent-mail"
 msgstr "&Sendmail"
 
-#: kamail.cpp:105
+#: kamail.cpp:103
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "Cannot enable alarms:\n"
@@ -4332,7 +4332,7 @@ msgstr ""
 "Наметавонам хотиррасониро фаъол созам:\n"
 "демони соати зангдори рӯимизиро ба кор сар додан имконпазир нест (%1)"
 
-#: kamail.cpp:111
+#: kamail.cpp:109
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "Cannot enable alarms:\n"
@@ -4345,7 +4345,7 @@ msgstr ""
 "Наметавонам хотиррасониро фаъол созам:\n"
 "демони соати зангдори рӯимизиро ба кор сар додан имконпазир нест (%1)"
 
-#: kamail.cpp:121
+#: kamail.cpp:119
 #, fuzzy, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -4356,7 +4356,7 @@ msgstr ""
 "Адреси фиристанда танзим нашудааст.\n"
 "Онро дар танзимоти %1 сабт кунед."
 
-#: kamail.cpp:125
+#: kamail.cpp:123
 #, fuzzy, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -4367,7 +4367,7 @@ msgstr ""
 "Фиристандаи танзимшудае нест.\n"
 "Онро дар маркази идоракунӣ ё дар танзимоти %1 ислоҳ кунед."
 
-#: kamail.cpp:130
+#: kamail.cpp:128
 #, fuzzy, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -4377,13 +4377,13 @@ msgstr ""
 "Адреси фиристанда танзим нашудааст.\n"
 "Онро дар танзимоти %1 сабт кунед."
 
-#: kamail.cpp:160
+#: kamail.cpp:158
 #, kde-kuit-format
 msgctxt "@info"
 msgid "<command>%1</command> not found"
 msgstr ""
 
-#: kamail.cpp:287
+#: kamail.cpp:285
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "Error attaching file:\n"
@@ -4394,7 +4394,7 @@ msgstr ""
 "Хатои замимаи файл:\n"
 "%1"
 
-#: kamail.cpp:297
+#: kamail.cpp:295
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "Attachment not found:\n"
@@ -4405,21 +4405,21 @@ msgstr ""
 "Файли замимот ёфт нашуд:\n"
 "%1"
 
-#: kamail.cpp:379
+#: kamail.cpp:377
 #, fuzzy, kde-format
 #| msgid "An email has been queued to be sent"
 msgctxt "@info"
 msgid "An email has been queued to be sent"
 msgstr "Мактуби электронӣ дар навбат барои фиристодан ҷойгир карда шудааст"
 
-#: kamail.cpp:545
+#: kamail.cpp:543
 #, fuzzy, kde-format
 #| msgid "Failed to send email"
 msgctxt "@info"
 msgid "Failed to send email"
 msgstr "Хатои фиристодани почтаи электорнӣ"
 
-#: kamail.cpp:546
+#: kamail.cpp:544
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Error sending email"

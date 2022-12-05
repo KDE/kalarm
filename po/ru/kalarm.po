@@ -19,7 +19,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-03 00:47+0000\n"
+"POT-Creation-Date: 2022-12-05 00:47+0000\n"
 "PO-Revision-Date: 2022-10-10 11:04+0300\n"
 "Last-Translator: Olesya Gerasimenko <translation-team@basealt.ru>\n"
 "Language-Team: Basealt Translation Team\n"
@@ -4039,7 +4039,7 @@ msgctxt "@info General purpose status indication: yes or no"
 msgid "No"
 msgstr "Нет"
 
-#: kamail.cpp:72
+#: kamail.cpp:70
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -4048,14 +4048,14 @@ msgstr ""
 "Адрес электронной почты, используемый для идентификации отправителя (поле "
 "«От кого») при отправке напоминаний электронной почтой."
 
-#: kamail.cpp:75
+#: kamail.cpp:73
 #, kde-format
 msgctxt ""
 "@info KMail folder name: this should be translated the same as in kmail"
 msgid "sent-mail"
 msgstr "Отправленные"
 
-#: kamail.cpp:105
+#: kamail.cpp:103
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -4065,7 +4065,7 @@ msgstr ""
 "Неправильный адрес электронной почты в поле «Отправитель».<nl/>Не найден "
 "профиль KMail <resource>%1</resource>."
 
-#: kamail.cpp:111
+#: kamail.cpp:109
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -4075,7 +4075,7 @@ msgstr ""
 "Неправильный адрес электронной почты в поле «Отправитель».<nl/>Профиль "
 "<resource>%1</resource> не содержит адреса электронной почты."
 
-#: kamail.cpp:121
+#: kamail.cpp:119
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -4087,7 +4087,7 @@ msgstr ""
 "para><para>Настройте <application>KMail</application> или укажите адрес "
 "вручную в диалоге настройки <application>KAlarm</application>.</para>"
 
-#: kamail.cpp:125
+#: kamail.cpp:123
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -4099,7 +4099,7 @@ msgstr ""
 "использоваться по умолчанию, в программе <application>KMail</application> "
 "или в диалоге настройки <application>KAlarm</application>.</para>"
 
-#: kamail.cpp:130
+#: kamail.cpp:128
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -4109,38 +4109,38 @@ msgstr ""
 "<para>Не указан отправитель.</para><para>Укажите его в диалоге настройки "
 "<application>KAlarm</application>.</para>"
 
-#: kamail.cpp:160
+#: kamail.cpp:158
 #, kde-kuit-format
 msgctxt "@info"
 msgid "<command>%1</command> not found"
 msgstr "Команда <command>%1</command> не найдена."
 
-#: kamail.cpp:287
+#: kamail.cpp:285
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Error attaching file: <filename>%1</filename>"
 msgstr "Ошибка вложения файла: <filename>%1</filename>"
 
-#: kamail.cpp:297
+#: kamail.cpp:295
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Attachment not found: <filename>%1</filename>"
 msgstr "Файл вложения не найден: <filename>%1</filename>"
 
-#: kamail.cpp:379
+#: kamail.cpp:377
 #, kde-format
 msgctxt "@info"
 msgid "An email has been queued to be sent"
 msgstr "Электронное письмо помещено в очередь для оправки"
 
 # BUGME: what is the different between SEND_FAIL and SEND_ERROR? --aspotashev
-#: kamail.cpp:545
+#: kamail.cpp:543
 #, kde-format
 msgctxt "@info"
 msgid "Failed to send email"
 msgstr "Не удалось отправить электронное письмо."
 
-#: kamail.cpp:546
+#: kamail.cpp:544
 #, kde-format
 msgctxt "@info"
 msgid "Error sending email"

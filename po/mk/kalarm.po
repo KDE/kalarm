@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-03 00:47+0000\n"
+"POT-Creation-Date: 2022-12-05 00:47+0000\n"
 "PO-Revision-Date: 2007-02-28 14:12+0100\n"
 "Last-Translator: Bozidar Proevski <bobibobi@freemail.com.mk>\n"
 "Language-Team: Macedonian <mkde-l10n@lists.sourceforge.net>\n"
@@ -4271,21 +4271,21 @@ msgctxt "@info General purpose status indication: yes or no"
 msgid "No"
 msgstr "Нема"
 
-#: kamail.cpp:72
+#: kamail.cpp:70
 #, kde-format
 msgctxt "@info"
 msgid ""
 "A 'From' email address must be configured in order to execute email alarms."
 msgstr ""
 
-#: kamail.cpp:75
+#: kamail.cpp:73
 #, fuzzy, kde-format
 msgctxt ""
 "@info KMail folder name: this should be translated the same as in kmail"
 msgid "sent-mail"
 msgstr "&Sendmail"
 
-#: kamail.cpp:105
+#: kamail.cpp:103
 #, fuzzy, kde-kuit-format
 #| msgid "Unable to locate this email in KMail"
 msgctxt "@info"
@@ -4294,7 +4294,7 @@ msgid ""
 "found"
 msgstr "Не можам да ја пронајдам е-пошт порака во КПошта."
 
-#: kamail.cpp:111
+#: kamail.cpp:109
 #, fuzzy, kde-kuit-format
 #| msgid "Unable to locate this email in KMail"
 msgctxt "@info"
@@ -4303,7 +4303,7 @@ msgid ""
 "no email address"
 msgstr "Не можам да ја пронајдам е-пошт порака во КПошта."
 
-#: kamail.cpp:121
+#: kamail.cpp:119
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -4312,7 +4312,7 @@ msgid ""
 "the <application>KAlarm</application> Configuration dialog.</para>"
 msgstr ""
 
-#: kamail.cpp:125
+#: kamail.cpp:123
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "%1\n"
@@ -4326,7 +4326,7 @@ msgstr ""
 "%1\n"
 "Дали навистина сакате да ги зачувате Вашите промени?"
 
-#: kamail.cpp:130
+#: kamail.cpp:128
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "%1\n"
@@ -4339,13 +4339,13 @@ msgstr ""
 "%1\n"
 "Дали навистина сакате да ги зачувате Вашите промени?"
 
-#: kamail.cpp:160
+#: kamail.cpp:158
 #, kde-kuit-format
 msgctxt "@info"
 msgid "<command>%1</command> not found"
 msgstr ""
 
-#: kamail.cpp:287
+#: kamail.cpp:285
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "Error attaching file:\n"
@@ -4356,7 +4356,7 @@ msgstr ""
 "Грешка при приложувањето на датотеката:\n"
 "%1"
 
-#: kamail.cpp:297
+#: kamail.cpp:295
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "Attachment not found:\n"
@@ -4367,21 +4367,21 @@ msgstr ""
 "Прилогот не е најден:\n"
 "%1"
 
-#: kamail.cpp:379
+#: kamail.cpp:377
 #, fuzzy, kde-format
 #| msgid "An email has been queued to be sent"
 msgctxt "@info"
 msgid "An email has been queued to be sent"
 msgstr "Е-пошт. порака беше ставена во редица за да биде испратена "
 
-#: kamail.cpp:545
+#: kamail.cpp:543
 #, fuzzy, kde-format
 #| msgid "Failed to send email"
 msgctxt "@info"
 msgid "Failed to send email"
 msgstr "Не успеав да испратам е-пошта"
 
-#: kamail.cpp:546
+#: kamail.cpp:544
 #, fuzzy, kde-format
 #| msgid "Error saving alarm"
 msgctxt "@info"

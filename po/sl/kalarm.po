@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-03 00:47+0000\n"
+"POT-Creation-Date: 2022-12-05 00:47+0000\n"
 "PO-Revision-Date: 2022-10-20 07:07+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -3996,7 +3996,7 @@ msgctxt "@info General purpose status indication: yes or no"
 msgid "No"
 msgstr "Ne"
 
-#: kamail.cpp:72
+#: kamail.cpp:70
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -4005,14 +4005,14 @@ msgstr ""
 "E-poštni naslov pošiljatelja mora biti nastavljen, če se naj izvedejo e-"
 "poštni alarmi."
 
-#: kamail.cpp:75
+#: kamail.cpp:73
 #, kde-format
 msgctxt ""
 "@info KMail folder name: this should be translated the same as in kmail"
 msgid "sent-mail"
 msgstr "poslano"
 
-#: kamail.cpp:105
+#: kamail.cpp:103
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -4022,7 +4022,7 @@ msgstr ""
 "Neveljaven e-poštni naslov pošiljatelja.<nl/>E-poštna istovetnost <resource>"
 "%1</resource> ni najdena"
 
-#: kamail.cpp:111
+#: kamail.cpp:109
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -4032,7 +4032,7 @@ msgstr ""
 "Neveljaven e-poštni naslov pošiljatelja.<nl/>E-poštna istovetnost <resource>"
 "%1</resource> nima e-poštnega naslova"
 
-#: kamail.cpp:121
+#: kamail.cpp:119
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -4045,7 +4045,7 @@ msgstr ""
 "<application>KMail</application> ali <application>KAlarm</application>.</"
 "para>"
 
-#: kamail.cpp:125
+#: kamail.cpp:123
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -4057,7 +4057,7 @@ msgstr ""
 "naslov lahko nastavite v aplikacijah <application>KMail</application> ali "
 "<application>KAlarm</application> v nastavitvah zanje.</para>"
 
-#: kamail.cpp:130
+#: kamail.cpp:128
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -4067,37 +4067,37 @@ msgstr ""
 "<para>E-poštni naslov pošiljatelja ni nastavljen.</para><para>Nastavite ga v "
 "nastavitvah za <application>KAlarm</application>.</para>"
 
-#: kamail.cpp:160
+#: kamail.cpp:158
 #, kde-kuit-format
 msgctxt "@info"
 msgid "<command>%1</command> not found"
 msgstr "Ukaz <command>%1</command> ni bil najden"
 
-#: kamail.cpp:287
+#: kamail.cpp:285
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Error attaching file: <filename>%1</filename>"
 msgstr "Napaka med prilaganjem datoteke: <filename>%1</filename>"
 
-#: kamail.cpp:297
+#: kamail.cpp:295
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Attachment not found: <filename>%1</filename>"
 msgstr "Priloge ni moč najti: <filename>%1</filename>"
 
-#: kamail.cpp:379
+#: kamail.cpp:377
 #, kde-format
 msgctxt "@info"
 msgid "An email has been queued to be sent"
 msgstr "E-sporočilo je bilo postavljeno v vrsto za pošiljanje"
 
-#: kamail.cpp:545
+#: kamail.cpp:543
 #, kde-format
 msgctxt "@info"
 msgid "Failed to send email"
 msgstr "Pošiljanje e-pošte ni uspelo"
 
-#: kamail.cpp:546
+#: kamail.cpp:544
 #, kde-format
 msgctxt "@info"
 msgid "Error sending email"

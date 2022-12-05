@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-03 00:47+0000\n"
+"POT-Creation-Date: 2022-12-05 00:47+0000\n"
 "PO-Revision-Date: 2015-01-08 09:03+0100\n"
 "Last-Translator: Samir Ribic <samir.ribic@etf.unsa.ba>\n"
 "Language-Team: bosanski <bs@li.org>\n"
@@ -4182,7 +4182,7 @@ msgctxt "@info General purpose status indication: yes or no"
 msgid "No"
 msgstr "Ne"
 
-#: kamail.cpp:72
+#: kamail.cpp:70
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid ""
@@ -4191,14 +4191,14 @@ msgstr ""
 "E-mail adresa pošiljaoca mora biti podešena kako bi se email alarmi mogli "
 "koristiti."
 
-#: kamail.cpp:75
+#: kamail.cpp:73
 #, fuzzy, kde-format
 msgctxt ""
 "@info KMail folder name: this should be translated the same as in kmail"
 msgid "sent-mail"
 msgstr "poslana-pošta"
 
-#: kamail.cpp:105
+#: kamail.cpp:103
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -4208,7 +4208,7 @@ msgstr ""
 "Neispravna email adresa pošiljaoca.<nl/>Email identitet <resource>%1</"
 "resource> nije pronađen"
 
-#: kamail.cpp:111
+#: kamail.cpp:109
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -4218,7 +4218,7 @@ msgstr ""
 "Neispravna email adresa pošiljaoca.<nl/>Email identitet <resource>%1</"
 "resource> nema email adresu"
 
-#: kamail.cpp:121
+#: kamail.cpp:119
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -4231,7 +4231,7 @@ msgstr ""
 "application> ili u <application>KAlarm</application> dijalogu za "
 "postavljanje.</para>"
 
-#: kamail.cpp:125
+#: kamail.cpp:123
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info"
 #| msgid ""
@@ -4248,7 +4248,7 @@ msgstr ""
 "postavite je u KDE postavkama sistema ili u  <application>KAlarm</"
 "application> dijalogu za postavljanje.</para>"
 
-#: kamail.cpp:130
+#: kamail.cpp:128
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -4259,7 +4259,7 @@ msgstr ""
 "postavite je u  <application>KAlarm</application> dijalogu za postavljanje.</"
 "para>"
 
-#: kamail.cpp:160
+#: kamail.cpp:158
 #, fuzzy, kde-kuit-format
 #| msgctxt "@text/plain"
 #| msgid "Could not run <command>%1</command> to set wake from suspend"
@@ -4268,31 +4268,31 @@ msgid "<command>%1</command> not found"
 msgstr ""
 "Ne mogu pokrenuti <command>%1</command> da se postavi buđenje iz suspenzije"
 
-#: kamail.cpp:287
+#: kamail.cpp:285
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Error attaching file: <filename>%1</filename>"
 msgstr "Greška pri dodavanju datoteke: <filename>%1</filename>"
 
-#: kamail.cpp:297
+#: kamail.cpp:295
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Attachment not found: <filename>%1</filename>"
 msgstr "Dodatak nije pronađen: <filename>%1</filename>"
 
-#: kamail.cpp:379
+#: kamail.cpp:377
 #, kde-format
 msgctxt "@info"
 msgid "An email has been queued to be sent"
 msgstr "Email čeka da bude poslan"
 
-#: kamail.cpp:545
+#: kamail.cpp:543
 #, kde-format
 msgctxt "@info"
 msgid "Failed to send email"
 msgstr "Neuspješno slanje emaila"
 
-#: kamail.cpp:546
+#: kamail.cpp:544
 #, kde-format
 msgctxt "@info"
 msgid "Error sending email"

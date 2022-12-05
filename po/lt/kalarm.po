@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-03 00:47+0000\n"
+"POT-Creation-Date: 2022-12-05 00:47+0000\n"
 "PO-Revision-Date: 2015-12-30 18:11+0200\n"
 "Last-Translator: Mindaugas Baranauskas <opensuse.lietuviu.kalba@gmail.com>\n"
 "Language-Team: lt <kde-i18n-lt@kde.org>\n"
@@ -4023,7 +4023,7 @@ msgctxt "@info General purpose status indication: yes or no"
 msgid "No"
 msgstr "Ne"
 
-#: kamail.cpp:72
+#: kamail.cpp:70
 #, fuzzy, kde-format
 #| msgctxt "@info/plain"
 #| msgid ""
@@ -4036,7 +4036,7 @@ msgstr ""
 "Norint naudoti priminimus el. paštu reikia nustatyti „Nuo:“ el. pašto adreso "
 "konfigūraciją."
 
-#: kamail.cpp:75
+#: kamail.cpp:73
 #, fuzzy, kde-format
 #| msgctxt ""
 #| "@info/plain KMail folder name: this should be translated the same as in "
@@ -4047,7 +4047,7 @@ msgctxt ""
 msgid "sent-mail"
 msgstr "išsiųsti laiškai"
 
-#: kamail.cpp:105
+#: kamail.cpp:103
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -4055,7 +4055,7 @@ msgid ""
 "found"
 msgstr ""
 
-#: kamail.cpp:111
+#: kamail.cpp:109
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -4063,7 +4063,7 @@ msgid ""
 "no email address"
 msgstr ""
 
-#: kamail.cpp:121
+#: kamail.cpp:119
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info"
 #| msgid ""
@@ -4079,7 +4079,7 @@ msgstr ""
 "Nėra suderinto „Nuo“ el. pašto adreso (nerasta numatytoji KMail tapatybė)\n"
 "Prašome nurodyti ją KMail programoje arba %1 Pasirinkčių dialoge."
 
-#: kamail.cpp:125
+#: kamail.cpp:123
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info"
 #| msgid ""
@@ -4095,7 +4095,7 @@ msgstr ""
 "Nėra suderinto „Nuo“ el. pašto adreso (nerasta numatytoji KMail tapatybė)\n"
 "Prašome nurodyti ją KMail programoje arba %1 Pasirinkčių dialoge."
 
-#: kamail.cpp:130
+#: kamail.cpp:128
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info"
 #| msgid ""
@@ -4110,37 +4110,37 @@ msgstr ""
 "Nėra suderinto „Nuo“ el. pašto adreso (nerasta numatytoji KMail tapatybė)\n"
 "Prašome nurodyti ją KMail programoje arba %1 Pasirinkčių dialoge."
 
-#: kamail.cpp:160
+#: kamail.cpp:158
 #, kde-kuit-format
 msgctxt "@info"
 msgid "<command>%1</command> not found"
 msgstr ""
 
-#: kamail.cpp:287
+#: kamail.cpp:285
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Error attaching file: <filename>%1</filename>"
 msgstr "Negalima prisegti failo: <filename>%1</filename>"
 
-#: kamail.cpp:297
+#: kamail.cpp:295
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Attachment not found: <filename>%1</filename>"
 msgstr "Prisegtas failas nerastas: <filename>%1</filename>"
 
-#: kamail.cpp:379
+#: kamail.cpp:377
 #, kde-format
 msgctxt "@info"
 msgid "An email has been queued to be sent"
 msgstr "El. laiškas yra išsiuntimo eilėje"
 
-#: kamail.cpp:545
+#: kamail.cpp:543
 #, kde-format
 msgctxt "@info"
 msgid "Failed to send email"
 msgstr "Nepavyko išsiųsti el. laiško"
 
-#: kamail.cpp:546
+#: kamail.cpp:544
 #, kde-format
 msgctxt "@info"
 msgid "Error sending email"

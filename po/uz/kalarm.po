@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-03 00:47+0000\n"
+"POT-Creation-Date: 2022-12-05 00:47+0000\n"
 "PO-Revision-Date: 2006-12-17 13:25+0000\n"
 "Last-Translator: Mashrab Kuvatov <kmashrab@uni-bremen.de>\n"
 "Language-Team: Uzbek <floss-uz-l10n@googlegroups.com>\n"
@@ -4110,7 +4110,7 @@ msgctxt "@info General purpose status indication: yes or no"
 msgid "No"
 msgstr "Yoʻq"
 
-#: kamail.cpp:72
+#: kamail.cpp:70
 #, fuzzy, kde-format
 #| msgid ""
 #| "Your email address, used to identify you as the sender when sending email "
@@ -4122,7 +4122,7 @@ msgstr ""
 "Ogohlantirish xati joʻnatilganda, joʻnatuvchi sifatida ishlatiladigan "
 "elektron pochta."
 
-#: kamail.cpp:75
+#: kamail.cpp:73
 #, fuzzy, kde-format
 #| msgctxt "KMail folder name: this should be translated the same as in kmail"
 #| msgid "sent-mail"
@@ -4131,7 +4131,7 @@ msgctxt ""
 msgid "sent-mail"
 msgstr "Joʻnatilgan"
 
-#: kamail.cpp:105
+#: kamail.cpp:103
 #, fuzzy, kde-kuit-format
 #| msgid "Co&py sent emails into KMail's %1 folder"
 msgctxt "@info"
@@ -4140,7 +4140,7 @@ msgid ""
 "found"
 msgstr "Joʻnatilgan xatlardan KMail %1 jildiga nusxa olish"
 
-#: kamail.cpp:111
+#: kamail.cpp:109
 #, fuzzy, kde-kuit-format
 #| msgid "Co&py sent emails into KMail's %1 folder"
 msgctxt "@info"
@@ -4149,7 +4149,7 @@ msgid ""
 "no email address"
 msgstr "Joʻnatilgan xatlardan KMail %1 jildiga nusxa olish"
 
-#: kamail.cpp:121
+#: kamail.cpp:119
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -4158,7 +4158,7 @@ msgid ""
 "the <application>KAlarm</application> Configuration dialog.</para>"
 msgstr ""
 
-#: kamail.cpp:125
+#: kamail.cpp:123
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "%1\n"
@@ -4172,7 +4172,7 @@ msgstr ""
 "%1\n"
 "Oʻzgarishlarni saqlashga ishonchingiz komilmi?"
 
-#: kamail.cpp:130
+#: kamail.cpp:128
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "%1\n"
@@ -4185,13 +4185,13 @@ msgstr ""
 "%1\n"
 "Oʻzgarishlarni saqlashga ishonchingiz komilmi?"
 
-#: kamail.cpp:160
+#: kamail.cpp:158
 #, kde-kuit-format
 msgctxt "@info"
 msgid "<command>%1</command> not found"
 msgstr ""
 
-#: kamail.cpp:287
+#: kamail.cpp:285
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "Error attaching file:\n"
@@ -4202,7 +4202,7 @@ msgstr ""
 "Faylni ilova qilish xatosi:\n"
 "%1"
 
-#: kamail.cpp:297
+#: kamail.cpp:295
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "Attachment not found:\n"
@@ -4213,21 +4213,21 @@ msgstr ""
 "Ilova topilmadi:\n"
 "%1"
 
-#: kamail.cpp:379
+#: kamail.cpp:377
 #, fuzzy, kde-format
 #| msgid "An email has been queued to be sent"
 msgctxt "@info"
 msgid "An email has been queued to be sent"
 msgstr "Xat joʻnatish uchun navbatga qoʻyildi"
 
-#: kamail.cpp:545
+#: kamail.cpp:543
 #, fuzzy, kde-format
 #| msgid "Failed to send email"
 msgctxt "@info"
 msgid "Failed to send email"
 msgstr "Xatni joʻnatish muvaffaqiyatsiz tugadi"
 
-#: kamail.cpp:546
+#: kamail.cpp:544
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Error sending email"

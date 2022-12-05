@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-03 00:47+0000\n"
+"POT-Creation-Date: 2022-12-05 00:47+0000\n"
 "PO-Revision-Date: 2012-12-26 10:26+0700\n"
 "Last-Translator: sutha <sutha@khmeros.info>\n"
 "Language-Team: Khmer <support@khmeros>\n"
@@ -4194,7 +4194,7 @@ msgctxt "@info General purpose status indication: yes or no"
 msgid "No"
 msgstr "ទេ"
 
-#: kamail.cpp:72
+#: kamail.cpp:70
 #, fuzzy, kde-format
 #| msgctxt "@info/plain"
 #| msgid ""
@@ -4205,7 +4205,7 @@ msgid ""
 "A 'From' email address must be configured in order to execute email alarms."
 msgstr "អាសយដ្ឋាន​អ៊ីមែល 'ពី' ត្រូវ​តែ​បាន​កំណត់​រចនាសម្ព័ន្ធ ដើម្បី​ប្រតិបត្តិការ​ជូនដំណឹង​​អ៊ីមែល ។"
 
-#: kamail.cpp:75
+#: kamail.cpp:73
 #, fuzzy, kde-format
 #| msgctxt ""
 #| "@info/plain KMail folder name: this should be translated the same as in "
@@ -4216,7 +4216,7 @@ msgctxt ""
 msgid "sent-mail"
 msgstr "សំបុត្រ​​បាន​ផ្ញើ"
 
-#: kamail.cpp:105
+#: kamail.cpp:103
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -4226,7 +4226,7 @@ msgstr ""
 "អាសយដ្ឋាន​អ៊ីមែល 'ពី' មិនត្រឹមត្រូវ ។<nl/>រក​មិន​ឃើញ​អត្តសញ្ញាណ​អ៊ីមែល <resource>%1</resource> "
 "ទេ"
 
-#: kamail.cpp:111
+#: kamail.cpp:109
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -4236,7 +4236,7 @@ msgstr ""
 "អាសយដ្ឋាន​អ៊ីមែល 'ពី' មិនត្រឹមត្រូវ ។<nl/>អត្តសញ្ញាណ <resource>%1</resource> មិន​មាន​"
 "អាសយដ្ឋាន​អ៊ីមែល​ទេ"
 
-#: kamail.cpp:121
+#: kamail.cpp:119
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -4248,7 +4248,7 @@ msgstr ""
 "បាន​រក​ឃើញ​​ទេ)</para><para>សូម​កំណត់​វា​នៅ​ក្នុង <application>KMail</application> ឬ​នៅ​ក្នុង​"
 "ប្រអប់​កំណត់​រចនាសម្ព័ន្ធ <application>KAlarm</application> ។</para>"
 
-#: kamail.cpp:125
+#: kamail.cpp:123
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info"
 #| msgid ""
@@ -4265,7 +4265,7 @@ msgstr ""
 "កំណត់​ប្រព័ន្ធ KDE ឬ​នៅ​ក្នុង​ប្រអប់​កំណត់​រចនាសម្ព័ន្ធ <application>KAlarm</application> ។</"
 "para>"
 
-#: kamail.cpp:130
+#: kamail.cpp:128
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -4275,7 +4275,7 @@ msgstr ""
 "<para>គ្មាន​អាសយដ្ឋាន​អ៊ីមែល​ 'ពី' ដែល​ត្រូវ​បាន​កំណត់​រចនាសម្ព័ន្ធ​ទេ ។</para><para>សូម​កំណត់​វា​នៅ​ក្នុង​"
 "ប្រអប់​កំណត់​រចនាសម្ព័ន្ធ <application>KAlarm</application> ។</para>"
 
-#: kamail.cpp:160
+#: kamail.cpp:158
 #, fuzzy, kde-kuit-format
 #| msgctxt "@text/plain"
 #| msgid "Could not run <command>%1</command> to set wake from suspend"
@@ -4283,31 +4283,31 @@ msgctxt "@info"
 msgid "<command>%1</command> not found"
 msgstr "មិន​អាច​ដំណើរការ <command>%1</command> ដើម្បី​កំណត់​ការ​ជូនដំណឹង​ពី​ការ​រោទ៍​ដែល​បាន​ផ្អាក​ទេ"
 
-#: kamail.cpp:287
+#: kamail.cpp:285
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Error attaching file: <filename>%1</filename>"
 msgstr "កំហុស​ក្នុង​ការ​ភ្ជាប់​ឯកសារ ៖ <filename>%1</filename>"
 
-#: kamail.cpp:297
+#: kamail.cpp:295
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Attachment not found: <filename>%1</filename>"
 msgstr "រក​មិន​ឃើញ​ឯកសារ​ភ្ជាប់ ៖ <filename>%1</filename>"
 
-#: kamail.cpp:379
+#: kamail.cpp:377
 #, kde-format
 msgctxt "@info"
 msgid "An email has been queued to be sent"
 msgstr "អ៊ីមែល​ត្រូវ​​បាន​ស្នើ​ឲ្យ​ផ្ញើ​ចេញ"
 
-#: kamail.cpp:545
+#: kamail.cpp:543
 #, kde-format
 msgctxt "@info"
 msgid "Failed to send email"
 msgstr "បរាជ័យ​ក្នុង​ការ​ផ្ញើ​អ៊ីមែល"
 
-#: kamail.cpp:546
+#: kamail.cpp:544
 #, kde-format
 msgctxt "@info"
 msgid "Error sending email"
