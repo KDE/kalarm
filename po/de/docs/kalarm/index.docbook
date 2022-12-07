@@ -131,7 +131,11 @@
 ><year
 >2019</year
 ><year
->2020</year>
+>2020</year
+><year
+>2021</year
+><year
+>2022</year>
 <holder
 >&David.Jarvie;</holder>
 </copyright>
@@ -142,9 +146,9 @@
 <!-- Don't change format of date and version of the documentation -->
 
 <date
->2020-10-28</date>
+>2022-5-2</date>
 <releaseinfo
->3.1.0 (Anwendungen 20.12)</releaseinfo>
+>3.5.0 (Anwendungen 22.08)</releaseinfo>
 
 <abstract>
 <para
@@ -370,6 +374,21 @@
 
 </sect2>
 
+<sect2 id="datepicker">
+<title
+>Erinnerungsliste nach Datum filtern</title>
+
+<para
+>Sie können die Erinnerungsliste auf Erinnerungen eingrenzen, die an einem bestimmten Datum ausgeführt werden sollen. Dies erreichen Sie durch die Auswahl des Erinnerungsdatums, welche mittels <menuchoice
+><guimenu
+>Ansicht</guimenu
+> <guimenuitem
+>Datumsauswahl anzeigen</guimenuitem
+> </menuchoice
+> ein- und ausgeblendet werden kann. Mit einem Klick wählen Sie ein Datum aus der Auswahl aus, mit einem zweiten Klick wählen Sie es wieder ab. Die Datumsauswahl zeigt einen einzelnen Monat an. Um einen anderen Monat anzuzeigen, benutzen Sie die Pfeile in der Datumsauswahl.</para>
+
+</sect2>
+
 <sect2 id="search">
 <title
 >Durchsuchen der Erinnerungsliste</title>
@@ -480,6 +499,17 @@
 >Alternativ können Sie neue vorkonfigurierte Erinnerungen aus folgenden Quellen anlegen:</para>
 
 <itemizedlist>
+<listitem>
+<para
+>Um das Datum einer Erinnerung im <link linkend="alarm-edit-dlg"
+>Bearbeitungsdialog</link
+> voreinzustellen, <mousebutton
+>rechtsklicken</mousebutton
+> Sie auf das gewünschte Datum im Auswahlfeld (siehe <link linkend="datepicker"
+>Erinnerungsliste nach Datum filtern</link
+>) und wählen Sie den passenden Erinnerungstyp aus dem Kontextmenü.</para>
+</listitem>
+
 <listitem>
 <para
 >Falls Sie für neue Erinnerungen eine Vorlage verwenden möchten, folgen Sie am besten den Hinweisen im Abschnitt <link linkend="templates"
@@ -1322,6 +1352,13 @@ mode.</para
 <title
 >Das Importieren von Geburtstagen aus &kaddressbook;</title>
 
+<note
+><para
+>Diese Funktion ist nur verfügbar, wenn &kalarm;s <link linkend="akonadi-plugin"
+>Akonadi-Modul</link
+> installiert und aktiviert ist.</para>
+</note>
+
 <para
 >Sie können Erinnerungen für Geburtstage, die in &kaddressbook; gespeichert sind, über <menuchoice
 ><guimenu
@@ -1373,7 +1410,6 @@ mode.</para
 > eingestellt haben, werden Erinnerungen zum Standard-Kalender für aktive Erinnerungen hinzugefügt. Ist im <link linkend="preferences-storage"
 >Einrichtungsdialog</link
 > die Nachfrage aktiviert, in welchem Kalender gespeichert werden soll, muss ein Kalender zur Speicherung angegeben werden.</para>
-
 </sect2>
 
 <sect2 id="undo">
@@ -1563,7 +1599,7 @@ mode.</para
 <para
 ><guilabel
 >Vorlesen</guilabel
->, um die Meldung nicht nur anzeigen, sondern auch vorlesen zu lassen. Diese Option ist nur verfügbar, wenn das &Qt;-Sprachausgabemodul installiert und eingerichtet ist.</para>
+>, um die Meldung nicht nur anzeigen, sondern auch vorlesen zu lassen. Diese Option ist nur verfügbar, wenn &kalarm; mit Sprachausgabe-Unterstützung erstellt wurde und das &Qt;-Sprachausgabemodul installiert und eingerichtet ist.</para>
 </listitem>
 
 <listitem>
@@ -1597,7 +1633,7 @@ mode.</para
 
 <listitem>
 <para
->Wenn Sie es wünschen, kann der Klang auch langsam eingeblendet werden. Das bedeutet, dass die Klangdatei zuerst leise angespielt wird und die Lautstärke dann Schritt für Schritt erhöht wird. Die endgültige Lautstärke ist die, die Sie mit dem Schieberegler für die <guilabel
+>Wenn das aktuell genutzte &phonon;-Audio-Backend es unterstützt, kann der Klang auch langsam eingeblendet werden. Das bedeutet, dass die Klangdatei zuerst leise angespielt wird und die Lautstärke dann Schritt für Schritt erhöht wird. Die endgültige Lautstärke ist die, die Sie mit dem Schieberegler für die <guilabel
 >Lautstärke</guilabel
 > festgelegt haben. Um diese Funktion zu aktivieren, machen Sie ein Häkchen bei <guilabel
 >Einblenden</guilabel
@@ -1845,7 +1881,9 @@ mode.</para
 >Mit E-Mail-Erinnerungen wird nur eine E-Mail versendet, es wird keine Nachricht für die Erinnerung angezeigt.</para>
 
 <para
->Geben Sie die Adressen der Empfänger, den Betreff und den Text der E-Mail in die entsprechenden Eingabefelder ein. Mit dem Knopf neben dem Eingabefeld für die Empfänger können Sie das Adressbuch von &kde; aufrufen und darin aufgeführte Empfänger auswählen. Anhänge können Sie über den Knopf <guibutton
+>Geben Sie die Adressen der Empfänger, den Betreff und den Text der E-Mail in die entsprechenden Eingabefelder ein. Mit dem Knopf neben dem Eingabefeld für die Empfänger können Sie das Adressbuch von &kde; aufrufen und darin aufgeführte Empfänger auswählen. (Der Knopf wird nur angezeigt, wenn &kalarm;s <link linkend="akonadi-plugin"
+>Akonadi-Modul</link
+> installiert und aktiviert ist.) Anhänge können Sie über den Knopf <guibutton
 >Hinzufügen ...</guibutton
 > auswählen. Beachten Sie, dass Anhänge bei Fälligkeit der Erinnerung noch vorhanden sein müssen. Es wird keine Kopie der betreffenden Datei angelegt, wenn die Erinnerung angelegt wird. Um einen Anhang zu entfernen, markieren Sie ihn in der Liste und drücken Sie den Knopf <guibutton
 >Entfernen</guibutton
@@ -1874,7 +1912,7 @@ mode.</para
 >Blindkopie an eigenes Postfach senden</guilabel
 >, wenn Sie bei Fälligkeit der Erinnerung eine Blindkopie der versendeten E-Mail erhalten wollen. Die E-Mail-Adresse, an die die Blindkopie verschickt wird, können Sie im <link linkend="preferences-email"
 >Einrichtungsdialog</link
-> festlegen. Als Vorgabe wird Ihre E-Mail-Adresse aus &kmail; oder den &systemsettings; verwendet.</para>
+> festlegen. Als Vorgabe wird Ihre E-Mail-Adresse aus &kmail; verwendet.</para>
 </listitem>
 </itemizedlist>
 
@@ -1916,7 +1954,7 @@ mode.</para
 
 <listitem>
 <para
->Wenn Sie es wünschen, kann der Klang auch langsam eingeblendet werden. Das bedeutet, dass die Klangdatei zuerst leise angespielt wird und die Lautstärke dann Schritt für Schritt erhöht wird. Die endgültige Lautstärke ist die, die Sie mit dem Schieberegler für die <guilabel
+>Wenn das aktuell genutzte &phonon;-Audio-Backend es unterstützt, kann der Klang auch langsam eingeblendet werden. Das bedeutet, dass die Klangdatei zuerst leise angespielt wird und die Lautstärke dann Schritt für Schritt erhöht wird. Die endgültige Lautstärke ist die, die Sie mit dem Schieberegler für die <guilabel
 >Lautstärke</guilabel
 > festgelegt haben. Um diese Funktion zu aktivieren, machen Sie ein Häkchen bei <guilabel
 >Einblenden</guilabel
@@ -2436,7 +2474,7 @@ mode.</para
 
 <listitem>
 <para
->Wenn Sie die Erinnerungsmeldung durch Ziehen und Ablegen einer E-Mail aus &kmail; heraus erzeugt haben, dann können Sie im Erinnerungsfenster auf das &kmail;-Symbol klicken und sofort öffnet sich &kmail; mit der entsprechenden E-Mail.</para>
+>Wenn Sie die Erinnerungsmeldung durch Ziehen und Ablegen einer E-Mail aus &kmail; heraus erzeugt haben, dann können Sie im Erinnerungsfenster auf das &kmail;-Symbol klicken und es öffnet sich &kmail; mit der entsprechenden E-Mail und dem Ordner, der sie enthält.</para>
 
 <warning
 ><para
@@ -3168,6 +3206,15 @@ mode.</para
 >Wenn die Befehls-Erinnerung ausgelöst wird, wird der Befehl in Anführungszeichen gestellt und erst dann in das Terminal-Fenster eingefügt.</para>
 </listitem>
 
+<listitem
+><para
+><guilabel
+>Akonadi aktivieren</guilabel
+>: Wählen Sie hier aus, ob &akonadi; benutzt werden soll, um Funktionen bereitstellen zu können, die davon abhängen. Siehe <link linkend="akonadi-plugin"
+>Akonadi-Modul</link
+> für mehr Details. Beachten Sie, dass diese Option nur angezeigt wird, wenn das Akonadi-Modul installiert ist.</para>
+</listitem>
+
 </itemizedlist>
 </sect1>
 
@@ -3321,6 +3368,13 @@ mode.</para
 >E-Mail</guilabel
 > bietet Einstellungen für den Versand und die Adressierung von E-Mail-Erinnerungen:</para>
 
+<note
+><para
+>Einstellungen, die von &kmail; abhängen, sind nur verfügbar, wenn &kalarm;s <link linkend="akonadi-plugin"
+>Akonadi-Modul</link
+> installiert und aktiviert ist.</para>
+</note>
+
 <itemizedlist>
 <listitem>
 <para
@@ -3333,7 +3387,7 @@ mode.</para
 ><para
 ><guilabel
 >KMail</guilabel
->: Wenn eine E-Mail-Erinnerung ausgelöst wird, so wird die E-Mail wie folgt mit &kmail; automatisch versandt , welches bei Bedarf gestartet wird:</para>
+>: Beim Auslösen einer E-Mail-Erinnerung wird die E-Mail automatisch mit &kmail; verschickt.</para>
 </listitem>
 
 <listitem
@@ -3383,8 +3437,8 @@ mode.</para
 <listitem
 ><para
 >Wählen Sie <guilabel
->Standardadresse aus KMail oder den Systemeinstellungen verwenden</guilabel
->, um die Adresse als Absender einzustellen, die in &kmail; oder den &systemsettings; eingerichtet ist.</para>
+>Standardidentität aus KMail verwenden</guilabel
+>, um die Standardadresse als Absender einzustellen, die in &kmail; eingerichtet ist.</para>
 </listitem>
 
 <listitem
@@ -3413,8 +3467,8 @@ mode.</para
 <listitem
 ><para
 >Wählen Sie <guilabel
->Standardadresse aus KMail oder den Systemeinstellungen verwenden</guilabel
->, um die Adresse als Absender einzustellen, die in &kmail; oder den &systemsettings; eingerichtet ist.</para>
+>Standardidentität aus KMail verwenden</guilabel
+>, um die Standardadresse als Absender einzustellen, die in &kmail; eingerichtet ist.</para>
 </listitem>
 </itemizedlist>
 </listitem>
@@ -4190,7 +4244,7 @@ mode.</para
 >--speak</option
 ></entry>
   <entry
->Die Nachricht wird vorgelesen, wenn sie angezeigt wird. Diese Einstellung erfordert, dass die Anwendung &jovie; sowie ein entsprechender Sprachsynthesizer installiert und eingerichtet ist. Diese Option kann nicht gemeinsam mit <option
+>Die Nachricht wird vorgelesen, wenn sie angezeigt wird. Diese Option erfordert, dass &kalarm; mit Sprachausgabe-Unterstützung erstellt wurde und das &Qt;-Sprachausgabemodul installiert und eingerichtet ist. Diese Option kann nicht gemeinsam mit <option
 >--beep</option
 >, <option
 >--play</option
@@ -6666,17 +6720,17 @@ mode.</para
 
 <itemizedlist>
 <listitem>
-<para
+<simpara
 ><filename
 >kalarmrc</filename
-> enthält Ihre Einstellungen für &kalarm;.</para>
+> enthält Ihre Einstellungen für &kalarm;.</simpara>
 </listitem>
 
 <listitem>
-<para
+<simpara
 ><filename
 >kalarmresources</filename
-> einhält eine Liste von aktuell benutzten Erinnerungskalendern.</para>
+> einhält eine Liste von aktuell benutzten Erinnerungskalendern.</simpara>
 </listitem>
 </itemizedlist>
 </answer>
@@ -6696,31 +6750,31 @@ mode.</para
 
 <itemizedlist>
 <listitem>
-<para
+<simpara
 ><filename
 >kalarm/calendar.ics</filename
->enthält die aktiven Erinnerungen.</para>
+>enthält die aktiven Erinnerungen.</simpara>
 </listitem>
 
 <listitem>
-<para
+<simpara
 ><filename
 >kalarm/expired.ics</filename
->enthält die abgelaufenen Erinnerungen.</para>
+>enthält die abgelaufenen Erinnerungen.</simpara>
 </listitem>
 
 <listitem>
-<para
+<simpara
 ><filename
 >kalarm/template.ics</filename
-> enthält die Erinnerungsvorlagen.</para>
+> enthält die Erinnerungsvorlagen.</simpara>
 </listitem>
 
 <listitem>
-<para
+<simpara
 ><filename
 >kalarm/displaying.ics</filename
-> ist eine spezielle Kalenderdatei mit den Details der aktuell angezeigten Erinnerungen. Damit kann &kalarm; beim Neustart alle beim Beenden angezeigten Erinnerungen wieder anzeigen.</para>
+> ist eine spezielle Kalenderdatei mit den Details der aktuell angezeigten Erinnerungen. Damit kann &kalarm; beim Neustart alle beim Beenden angezeigten Erinnerungen wieder anzeigen.</simpara>
 </listitem>
 </itemizedlist>
 
@@ -6738,11 +6792,50 @@ mode.</para
 </question>
 <answer>
 <para
->Die Kalenderdateien, in denen &kalarm; seine Erinnerungen speichert, sind Textdateien, deren Format durch <ulink url="http://www.w3.org/2002/12/cal/rfc2445.html"
+>Die Kalenderdateien, in denen &kalarm; die Erinnerungen speichert, sind Textdateien, deren Format durch <ulink url="http://www.w3.org/2002/12/cal/rfc2445.html"
 >RFC2445 - Internet Calendaring and Scheduling Core Object Specification (iCalendar)</ulink
 > festgelegt ist. Dies ist das Standardformat, das von allen Anwendungen in kdepim verwendet wird. &kalarm; verwendet, konform zu RFC 2445, bestimmte nicht-standardisierte Eigenschaften. Diese sind in der mit &kalarm; mitgelieferten <filename
->kalarmcal/DESIGN.html</filename
+>DESIGN-kalarmcalendar.html</filename
 > dokumentiert.</para>
+</answer>
+</qandaentry>
+
+<qandaentry id="akonadi-plugin">
+<question>
+<para
+>Was ist der Zweck von &kalarm;s Akonadi-Modul?</para>
+</question>
+<answer>
+<para
+>&kalarm; verwendet das Akonadi-Modul, um Funktionen bereitzustellen, die auf &akonadi; aufbauen (der &PIM;-Speicherdienst von &kde;). Wenn das Modul nicht installiert und aktiviert ist, fehlen die folgenden Funktionen in &kalarm;: <itemizedlist>
+<listitem>
+<simpara
+>Versenden von E-Mails via &kmail;, sodass &Sendmail; als einzige Option für den E-Mail-Versand verbleibt (siehe <link linkend="preferences-email"
+>E-mail-Einstellungen</link
+>).</simpara>
+</listitem>
+<listitem>
+<simpara
+>Ziehen und Ablegen von E-Mails.</simpara>
+</listitem>
+<listitem>
+<simpara
+>Auswählen von E-Mail-Adressen aus &kaddressbook;.</simpara>
+</listitem>
+<listitem>
+<simpara
+>Importieren von Geburtstagen aus &kaddressbook;.</simpara>
+</listitem>
+<listitem>
+<simpara
+>Migration von &akonadi;-Erinnerungskalender-Ressourcen beim ersten Ausführen einer neuen &kalarm;-Version.</simpara>
+</listitem>
+</itemizedlist>
+</para>
+<para
+>Wenn das Modul installiert ist, kann es in den Einstellungen unter <link linkend="preferences-general"
+>Allgemeinen</link
+> ein- und ausgeschaltet werden.</para>
 </answer>
 </qandaentry>
 
