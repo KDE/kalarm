@@ -2525,8 +2525,8 @@ KADateTime KADateTime::fromString(const QString& string, const QString& format,
             KADateTime kdt;
             for (const QTimeZone& tz : zoneList)
             {
-                if (zoneAbbrev == tz.displayName(QTimeZone::StandardTime, QTimeZone::ShortName, QString())
-                ||  zoneAbbrev == tz.displayName(QTimeZone::DaylightTime, QTimeZone::ShortName, QString()))
+                if (zoneAbbrev == tz.displayName(QTimeZone::StandardTime, QTimeZone::ShortName, QLocale::c())
+                ||  zoneAbbrev == tz.displayName(QTimeZone::DaylightTime, QTimeZone::ShortName, QLocale::c()))
                 {
                     // Found a time zone which uses this abbreviation.
                     // Check if it is valid at the date/time specified.
@@ -2630,8 +2630,8 @@ KADateTime KADateTime::fromString(const QString& string, const QString& format,
             for (const QByteArray& zoneId : zoneIds)
             {
                 const QTimeZone tz(zoneId);
-                if (zoneAbbrev == tz.displayName(QTimeZone::StandardTime, QTimeZone::ShortName, QString())
-                ||  zoneAbbrev == tz.displayName(QTimeZone::DaylightTime, QTimeZone::ShortName, QString()))
+                if (zoneAbbrev == tz.displayName(QTimeZone::StandardTime, QTimeZone::ShortName, QLocale::c())
+                ||  zoneAbbrev == tz.displayName(QTimeZone::DaylightTime, QTimeZone::ShortName, QLocale::c()))
                 {
                     // Found a time zone which uses this abbreviation.
                     // Check if it is valid at the date/time specified.
