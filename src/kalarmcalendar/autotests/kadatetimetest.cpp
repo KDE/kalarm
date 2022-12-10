@@ -3440,11 +3440,7 @@ void KADateTimeTest::strings_format()
     QTimeZone paris("Europe/Paris");
     QTimeZone berlin("Europe/Berlin");
     QTimeZone cairo("Africa/Cairo");
-    QList<QTimeZone> zones;
-    zones.append(london);
-    zones.append(paris);
-    zones.append(berlin);
-    zones.append(cairo);
+    QList<QTimeZone> zones{london, paris, berlin, cairo};
 
     // Ensure that local time is different from UTC and different from 'london'
     QByteArray originalZone = qgetenv("TZ");   // save the original local time zone
@@ -3585,6 +3581,25 @@ void KADateTimeTest::strings_format()
     QCOMPARE(dt.utcOffset(), 2 * 3600);
     dt = KADateTime::fromString(QStringLiteral("2005October051430 CEST"), QStringLiteral("%Y%:B%d%H%M%:S %Z"), &zones, false);
     QVERIFY(!dt.isValid());    // matches paris and berlin
+
+    // GMT is used by multiple time zones
+    dt = KADateTime::fromString(QStringLiteral("30 October 2005 1:30 GMT"), QStringLiteral("%d %:B %Y %k:%M %Z"));
+    QCOMPARE(dt.date(), QDate(2005, 10, 30));
+    QCOMPARE(dt.time(), QTime(1, 30, 0));
+    QCOMPARE(dt.timeType(), KADateTime::UTC);
+    QCOMPARE(dt.utcOffset(), 0);
+    dt = KADateTime::fromString(QStringLiteral("30 October 2005 1:30 GMT"), QStringLiteral("%d %:B %Y %k:%M %Z"), &zones);
+    QCOMPARE(dt.date(), QDate(2005, 10, 30));
+    QCOMPARE(dt.time(), QTime(1, 30, 0));
+    QCOMPARE(dt.timeType(), KADateTime::TimeZone);
+    QCOMPARE(dt.timeZone(), london);
+    QCOMPARE(dt.utcOffset(), 0);
+    dt = KADateTime::fromString(QStringLiteral("30 October 2005 1:30 BST"), QStringLiteral("%d %:B %Y %k:%M %Z"));
+    QCOMPARE(dt.date(), QDate(2005, 10, 30));
+    QCOMPARE(dt.time(), QTime(1, 30, 0));
+    QCOMPARE(dt.timeType(), KADateTime::TimeZone);
+    QCOMPARE(dt.timeZone(), london);
+    QCOMPARE(dt.utcOffset(), 1 * 3600);
 
     dt = KADateTime::fromString(QStringLiteral("pm05aboCtobeRt/   052/   20:12,03+0100"), QStringLiteral("%:P%yab%:bt/  %e2/%t%S:%l,%M %z"), &zones);
     QCOMPARE(dt.date(), QDate(2005, 10, 5));

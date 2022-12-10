@@ -2147,7 +2147,6 @@ KADateTime KADateTime::fromString(const QString& string, TimeFormat format, bool
                                 nonalpha = !isalpha(zone[j]);
                             if (nonalpha)
                                 break;
-                            // TODO: Attempt to recognize the time zone abbreviation?
                             negOffset = true;    // unknown time zone: RFC 2822 treats as '-0000'
                         }
                     }
@@ -2498,10 +2497,10 @@ KADateTime KADateTime::fromString(const QString& string, const QString& format,
         return {};
     if (zones)
     {
-        // Try to find a time zone match
+        // Try to find a time zone match from the supplied list of zones
         bool zname = false;
         const QList<QTimeZone>& zoneList = *zones;
-        QTimeZone zone;
+        QTimeZone zoneFound;
         if (!zoneName.isEmpty())
         {
             // A time zone name has been found.
@@ -2511,7 +2510,7 @@ KADateTime KADateTime::fromString(const QString& string, const QString& format,
             {
                 if (tz.id() == name)
                 {
-                    zone = tz;
+                    zoneFound = tz;
                     zname = true;
                     break;
                 }
@@ -2523,40 +2522,55 @@ KADateTime KADateTime::fromString(const QString& string, const QString& format,
             // Use the time zone which contains it, if any, provided that the
             // abbreviation applies at the specified date/time.
             bool useUtcOffset = false;
+            KADateTime kdt;
             for (const QTimeZone& tz : zoneList)
             {
-                qdt.setTimeZone(tz);
-                // TODO: This may not find abbreviations for second occurrence of
-                // the time zone time, after a daylight savings time shift.
-                if (tz.abbreviation(qdt) == zoneAbbrev)
+                if (zoneAbbrev == tz.displayName(QTimeZone::StandardTime, QTimeZone::ShortName, QString())
+                ||  zoneAbbrev == tz.displayName(QTimeZone::DaylightTime, QTimeZone::ShortName, QString()))
                 {
-                    int offset2;
-                    int offset = offsetAtZoneTime(tz, qdt, &offset2);
-                    if (offset == InvalidOffset)
-                        return {};
-                    // Found a time zone which uses this abbreviation at the specified date/time
-                    if (zone.isValid())
+                    // Found a time zone which uses this abbreviation.
+                    // Check if it is valid at the date/time specified.
+                    kdt = KADateTime(qdt.date(), qdt.time(), tz);
+                    bool matches = true;
+                    if (tz.abbreviation(kdt.qDateTime()) != zoneAbbrev)
                     {
-                        // Abbreviation is used by more than one time zone
-                        if (!offsetIfAmbiguous || offset != utcOffset)
-                            return {};
-                        useUtcOffset = true;
+                        kdt.setSecondOccurrence(true);
+                        if (tz.abbreviation(kdt.qDateTime()) != zoneAbbrev)
+                            matches = false;
                     }
-                    else
+                    if (matches)
                     {
-                        zone = tz;
-                        utcOffset = offset;
+                        // Found a time zone which uses this abbreviation at the specified date/time
+                        int offset = kdt.utcOffset();
+                        if (zoneFound.isValid())
+                        {
+                            // Abbreviation is used by more than one time zone
+                            if (!offsetIfAmbiguous || offset != utcOffset)
+                                return {};
+                            useUtcOffset = true;
+                        }
+                        else
+                        {
+                            zoneFound = tz;
+                            utcOffset = offset;
+                        }
                     }
                 }
             }
             if (useUtcOffset)
             {
-                zone = QTimeZone();
+                zoneFound = QTimeZone();
                 if (!utcOffset)
                     qdt.setTimeSpec(Qt::UTC);
             }
+            else if (zoneFound.isValid())
+            {
+                if (dateOnly)
+                    kdt.setDateOnly(true);
+                return kdt;
+            }
             else
-                zname = true;
+                return {};   // an unknown zone name or abbreviation was found
         }
         else if (utcOffset  ||  qdt.timeSpec() == Qt::UTC)
         {
@@ -2571,7 +2585,7 @@ KADateTime KADateTime::fromString(const QString& string, const QString& format,
                 if (tz.offsetFromUtc(dtUTC) == utcOffset)
                 {
                     // Found a time zone which uses this offset at the specified time
-                    if (zone.isValid()  ||  !utcOffset)
+                    if (zoneFound.isValid()  ||  !utcOffset)
                     {
                         // UTC offset is used by more than one time zone
                         if (!offsetIfAmbiguous)
@@ -2580,29 +2594,29 @@ KADateTime KADateTime::fromString(const QString& string, const QString& format,
                             return KADateTime(qdt.date(), Spec(OffsetFromUTC, utcOffset));
                         return KADateTime(qdt.date(), qdt.time(), Spec(OffsetFromUTC, utcOffset));
                     }
-                    zone = tz;
+                    zoneFound = tz;
                 }
             }
         }
-        if (!zone.isValid() && zname)
+        if (!zoneFound.isValid() && zname)
             return {};   // an unknown zone name or abbreviation was found
-        if (zone.isValid())
+        if (zoneFound.isValid())
         {
             if (dateOnly)
-                return KADateTime(qdt.date(), Spec(zone));
-            return KADateTime(qdt.date(), qdt.time(), Spec(zone));
+                return KADateTime(qdt.date(), Spec(zoneFound));
+            return KADateTime(qdt.date(), qdt.time(), Spec(zoneFound));
         }
     }
     else
     {
-        // Try to find a time zone match
+        // Try to find a time zone match with the system zones
         bool zname = false;
-        QTimeZone zone;
+        QTimeZone zoneFound;
         if (!zoneName.isEmpty())
         {
             // A time zone name has been found.
             // Use the time zone with that name.
-            zone = QTimeZone(zoneName.toLatin1());
+            zoneFound = QTimeZone(zoneName.toLatin1());
             zname = true;
         }
         else if (!zoneAbbrev.isEmpty())
@@ -2611,42 +2625,57 @@ KADateTime KADateTime::fromString(const QString& string, const QString& format,
             // Use the time zone which contains it, if any, provided that the
             // abbreviation applies at the specified date/time.
             bool useUtcOffset = false;
+            KADateTime kdt;
             const QList<QByteArray> zoneIds = QTimeZone::availableTimeZoneIds();
             for (const QByteArray& zoneId : zoneIds)
             {
-                const QTimeZone z(zoneId);
-                qdt.setTimeZone(z);
-                if (z.abbreviation(qdt) == zoneAbbrev)
+                const QTimeZone tz(zoneId);
+                if (zoneAbbrev == tz.displayName(QTimeZone::StandardTime, QTimeZone::ShortName, QString())
+                ||  zoneAbbrev == tz.displayName(QTimeZone::DaylightTime, QTimeZone::ShortName, QString()))
                 {
-                    // TODO: This may not find abbreviations for second occurrence of
-                    // the time zone time, after a daylight savings time shift.
-                    int offset2;
-                    int offset = offsetAtZoneTime(z, qdt, &offset2);
-                    if (offset == InvalidOffset)
-                        return {};
-                    // Found a time zone which uses this abbreviation at the specified date/time
-                    if (zone.isValid())
+                    // Found a time zone which uses this abbreviation.
+                    // Check if it is valid at the date/time specified.
+                    kdt = KADateTime(qdt.date(), qdt.time(), tz);
+                    bool matches = true;
+                    if (tz.abbreviation(kdt.qDateTime()) != zoneAbbrev)
                     {
-                        // Abbreviation is used by more than one time zone
-                        if (!offsetIfAmbiguous || offset != utcOffset)
-                            return {};
-                        useUtcOffset = true;
+                        kdt.setSecondOccurrence(true);
+                        if (tz.abbreviation(kdt.qDateTime()) != zoneAbbrev)
+                            matches = false;
                     }
-                    else
+                    if (matches)
                     {
-                        zone = z;
-                        utcOffset = offset;
+                        // Found a time zone which uses this abbreviation at the specified date/time
+                        int offset = kdt.utcOffset();
+                        if (zoneFound.isValid())
+                        {
+                            // Abbreviation is used by more than one time zone
+                            if (!offsetIfAmbiguous || offset != utcOffset)
+                                return {};
+                            useUtcOffset = true;
+                        }
+                        else
+                        {
+                            zoneFound = tz;
+                            utcOffset = offset;
+                        }
                     }
                 }
             }
             if (useUtcOffset)
             {
-                zone = QTimeZone();
+                zoneFound = QTimeZone();
                 if (!utcOffset)
                     qdt.setTimeSpec(Qt::UTC);
             }
+            else if (zoneFound.isValid())
+            {
+                if (dateOnly)
+                    kdt.setDateOnly(true);
+                return kdt;
+            }
             else
-                zname = true;
+                return {};   // an unknown zone name or abbreviation was found
         }
         else if (utcOffset  ||  qdt.timeSpec() == Qt::UTC)
         {
@@ -2663,7 +2692,7 @@ KADateTime KADateTime::fromString(const QString& string, const QString& format,
                 if (z.offsetFromUtc(dtUTC) == utcOffset)
                 {
                     // Found a time zone which uses this offset at the specified time
-                    if (zone.isValid()  ||  !utcOffset)
+                    if (zoneFound.isValid()  ||  !utcOffset)
                     {
                         // UTC offset is used by more than one time zone
                         if (!offsetIfAmbiguous)
@@ -2672,17 +2701,17 @@ KADateTime KADateTime::fromString(const QString& string, const QString& format,
                             return KADateTime(qdt.date(), Spec(OffsetFromUTC, utcOffset));
                         return KADateTime(qdt.date(), qdt.time(), Spec(OffsetFromUTC, utcOffset));
                     }
-                    zone = z;
+                    zoneFound = z;
                 }
             }
         }
-        if (!zone.isValid() && zname)
+        if (!zoneFound.isValid() && zname)
             return {};   // an unknown zone name or abbreviation was found
-        if (zone.isValid())
+        if (zoneFound.isValid())
         {
             if (dateOnly)
-                return KADateTime(qdt.date(), Spec(zone));
-            return KADateTime(qdt.date(), qdt.time(), Spec(zone));
+                return KADateTime(qdt.date(), Spec(zoneFound));
+            return KADateTime(qdt.date(), qdt.time(), Spec(zoneFound));
         }
     }
 

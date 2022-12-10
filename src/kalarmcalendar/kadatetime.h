@@ -503,6 +503,10 @@ public:
      * - @c LocalZone     : @p date and @p time are local times in whatever the
      *                      system time zone is currently.
      *
+     * If @p spec is @c TimeZone or @c LocalZone and the resultant date/time
+     * occurs twice due to a daylight savings time shift, it is set to the first
+     * occurrence (before the time shift).
+     *
      * @param date date in the time zone indicated by @p spec
      * @param time time in the time zone indicated by @p spec
      * @param spec time specification
