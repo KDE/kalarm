@@ -8,7 +8,7 @@
  *
  *  SPDX-FileCopyrightText: 2003 Cornelius Schumacher <schumacher@kde.org>
  *  SPDX-FileCopyrightText: 2003-2004 Reinhold Kainhofer <reinhold@kainhofer.com>
- *  SPDX-FileCopyrightText: 2021 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2021-2022 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later WITH Qt-Commercial-exception-1.0
 */
@@ -67,6 +67,7 @@ DayMatrix::DayMatrix(QWidget* parent)
     Resources* resources = Resources::instance();
     connect(resources, &Resources::resourceAdded, this, &DayMatrix::resourceUpdated);
     connect(resources, &Resources::resourceRemoved, this, &DayMatrix::resourceRemoved);
+    connect(resources, &Resources::settingsChanged, this, &DayMatrix::resourceSettingsChanged);
     connect(resources, &Resources::eventsAdded, this, &DayMatrix::resourceUpdated);
     connect(resources, &Resources::eventUpdated, this, &DayMatrix::resourceUpdated);
     connect(resources, &Resources::eventsRemoved, this, &DayMatrix::resourceUpdated);
@@ -180,7 +181,7 @@ void DayMatrix::setStartDate(const QDate& startDate)
 * If changes are pending, recalculate which days in the matrix have alarms
 * occurring, and which are holidays/non-work days. Repaint the matrix.
 */
-void DayMatrix::updateView()
+void DayMatrix::updateView(const Resource& resource)
 {
     if (!mStartDate.isValid())
         return;
@@ -188,7 +189,7 @@ void DayMatrix::updateView()
     // TODO_Recurrence: If we just change the selection, but not the data,
     // there's no need to update the whole list of alarms... This is just a
     // waste of computational power
-    updateEvents();
+    updateEvents(resource);
 
     // Find which holidays occur for the dates in the matrix.
     const KHolidays::HolidayRegion &region = Preferences::holidays();
@@ -212,56 +213,69 @@ void DayMatrix::updateView()
 }
 
 /******************************************************************************
-* Find which days currently displayed have alarms scheduled.
+* Find which days currently displayed have alarms scheduled, for all active
+* resources.
 */
-void DayMatrix::updateEvents()
+void DayMatrix::updateEvents(const Resource& resource)
 {
-    const KADateTime::Spec timeSpec = Preferences::timeSpec();
     const QDate startDate = (mTodayIndex <= 0) ? mStartDate : mStartDate.addDays(mTodayIndex);
-    const KADateTime before = KADateTime(startDate, QTime(0,0,0), timeSpec).addSecs(-60);
-    const KADateTime to(mStartDate.addDays(NUMDAYS-1), QTime(23,59,0), timeSpec);
+    const KADateTime before = KADateTime(startDate, QTime(0,0,0), Preferences::timeSpec()).addSecs(-60);
+    const KADateTime to(mStartDate.addDays(NUMDAYS-1), QTime(23,59,0), Preferences::timeSpec());
 
     mEventDates.clear();
     const QVector<Resource> resources = Resources::enabledResources(CalEvent::ACTIVE);
-    for (const Resource& resource : resources)
+    for (const Resource& res : resources)
     {
-        const QList<KAEvent> events = resource.events();
-        const CalEvent::Types types = resource.enabledTypes() & CalEvent::ACTIVE;
-        for (const KAEvent& event : events)
-        {
-            if (event.enabled()  &&  (event.category() & types))
-            {
-                // The event has an enabled alarm type.
-                // Find all its recurrences/repetitions within the time period.
-                DateTime nextDt;
-                for (KADateTime from = before;  ;  )
-                {
-                    event.nextOccurrence(from, nextDt, KAEvent::RETURN_REPETITION);
-                    if (!nextDt.isValid())
-                        break;
-                    from = nextDt.effectiveKDateTime().toTimeSpec(timeSpec);
-                    if (from > to)
-                        break;
-                    if (!event.excludedByWorkTimeOrHoliday(from))
-                    {
-                        mEventDates += from.date();
-                        if (mEventDates.count() >= NUMDAYS)
-                            break;   // all days have alarms due
-                    }
-
-                    // If the alarm recurs more than once per day, don't waste
-                    // time checking any more occurrences for the same day.
-                    from.setTime(QTime(23,59,0));
-                }
-                if (mEventDates.count() >= NUMDAYS)
-                    break;   // all days have alarms due
-            }
-        }
-        if (mEventDates.count() >= NUMDAYS)
-            break;   // all days have alarms due
+        if (!resource.isValid()  ||  res.id() == resource.id())
+            updateEvents(res, before, to);
+        if (mEventDates.count() < NUMDAYS)
+            mEventDates |= mResourceEventDates[res.id()];
     }
 
     mPendingChanges = false;
+}
+
+/******************************************************************************
+* Find which days currently displayed have alarms scheduled for a resource.
+*/
+void DayMatrix::updateEvents(const Resource& resource, const KADateTime& before, const KADateTime& to)
+{
+    ResourceId id = resource.id();
+    const KADateTime::Spec timeSpec = Preferences::timeSpec();
+
+    mResourceEventDates[id].clear();
+    const QList<KAEvent> events = resource.events();
+    const CalEvent::Types types = resource.enabledTypes() & CalEvent::ACTIVE;
+    for (const KAEvent& event : events)
+    {
+        if (event.enabled()  &&  (event.category() & types))
+        {
+            // The event has an enabled alarm type.
+            // Find all its recurrences/repetitions within the time period.
+            DateTime nextDt;
+            for (KADateTime from = before;  ;  )
+            {
+                event.nextOccurrence(from, nextDt, KAEvent::RETURN_REPETITION);
+                if (!nextDt.isValid())
+                    break;
+                from = nextDt.effectiveKDateTime().toTimeSpec(timeSpec);
+                if (from > to)
+                    break;
+                if (!event.excludedByWorkTimeOrHoliday(from))
+                {
+                    mResourceEventDates[id] += from.date();
+                    if (mResourceEventDates[id].count() >= NUMDAYS)
+                        break;   // all days have alarms due
+                }
+
+                // If the alarm recurs more than once per day, don't waste
+                // time checking any more occurrences for the same day.
+                from.setTime(QTime(23,59,0));
+            }
+            if (mResourceEventDates[id].count() >= NUMDAYS)
+                break;   // all days have alarms due
+        }
+    }
 }
 
 /******************************************************************************
@@ -302,20 +316,38 @@ void DayMatrix::setRowHeight(int rowHeight)
 * Called when the events in a resource have been updated.
 * Re-evaluate all events in the resource.
 */
-void DayMatrix::resourceUpdated(Resource&)
+void DayMatrix::resourceUpdated(Resource& resource)
 {
     mPendingChanges = true;
-    updateView();    //TODO: only update this resource's events
+    updateView(resource);
 }
 
 /******************************************************************************
 * Called when a resource has been removed.
 * Remove all its events from the view.
 */
-void DayMatrix::resourceRemoved(ResourceId)
+void DayMatrix::resourceRemoved(ResourceId id)
 {
     mPendingChanges = true;
-    updateView();    //TODO: only remove this resource's events
+    updateView(Resources::resource(id));
+}
+
+/******************************************************************************
+* Called when a resource's settings have been changed.
+* If it has been disabled, remove all its events from the view.
+*/
+void DayMatrix::resourceSettingsChanged(Resource& resource, ResourceType::Changes changes)
+{
+    if (changes == ResourceType::Enabled)
+    {
+        if (!resource.isEnabled(CalEvent::ACTIVE))
+        {
+            // Active events are now disabled for the resource.
+            mPendingChanges = true;
+            updateView(resource);
+        }
+        // else if active events are now enabled, they will be added by eventsAdded()
+    }
 }
 
 /******************************************************************************
