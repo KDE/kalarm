@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-06 00:47+0000\n"
+"POT-Creation-Date: 2022-12-11 02:43+0000\n"
 "PO-Revision-Date: 2021-08-21 16:25+0530\n"
 "Last-Translator: Raghavendra Kamath <raghu@raghukamath.com>\n"
 "Language-Team: kde-hindi\n"
@@ -1888,7 +1888,7 @@ msgctxt "@info:tooltip"
 msgid "Show the next month"
 msgstr ""
 
-#: daymatrix.cpp:206
+#: daymatrix.cpp:207
 #, kde-format
 msgctxt "delimiter for joining holiday names"
 msgid ","
