@@ -12,10 +12,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-05 00:47+0000\n"
-"PO-Revision-Date: 2022-11-26 18:21+0100\n"
+"POT-Creation-Date: 2022-12-11 00:48+0000\n"
+"PO-Revision-Date: 2022-12-10 09:59+0100\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
-"Language-Team: Basque <kde-i18n-eu@kde.org>\n"
+"Language-Team: Basque\n"
 "Language: eu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1048,7 +1048,7 @@ msgstr ""
 
 #. i18n: ectx: whatsthis, entry (TooltipAlarmCount), group (General)
 #: data/kalarmconfig.kcfg:169
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "<p>How many alarms due in the next 24 hours to show in the system tray "
@@ -1058,8 +1058,12 @@ msgid ""
 "        <li>>0 to set a limit.</li></ul></p>\n"
 "      "
 msgstr ""
-"Hautatu hau iraungitako edo ezabatutako (inoiz exekutatu ez ziren "
-"ezabatutako alarmak ezik) alarmak gordetzeko."
+"<p>Epe-muga hurrengo 24 orduetan beteko duten alarmetako zenbat erakutsi "
+"behar dira sistema-erretiluko argibideetan:\n"
+"        <ul><li>0 batere ez azaltzeko</li>\n"
+"        <li>-1 guztiak azaltzeko</li>\n"
+"        <li>>0 muga bat ezartzeko.</li></ul></p>\n"
+"      "
 
 #. i18n: ectx: label, entry (ShowTooltipAlarmTime), group (General)
 #: data/kalarmconfig.kcfg:175
@@ -1946,7 +1950,7 @@ msgctxt "@info:tooltip"
 msgid "Show the next month"
 msgstr "Erakutsi hurrengo hilabetea"
 
-#: daymatrix.cpp:206
+#: daymatrix.cpp:207
 #, kde-format
 msgctxt "delimiter for joining holiday names"
 msgid ","
@@ -3674,7 +3678,7 @@ msgstr "Errepikapenak:"
 #| msgid "Sub-Repetition"
 msgctxt "@label"
 msgid "Sub-repetition"
-msgstr "Errepikapen sinplea"
+msgstr "Azpi-errepikapena"
 
 #: kalarmcalendar/kaeventformatter.cpp:59
 #, fuzzy, kde-format
@@ -3754,7 +3758,7 @@ msgstr "Gaituta"
 #| msgid "Read-only"
 msgctxt "@label"
 msgid "Read-only"
-msgstr "Irakurtzeko soilik"
+msgstr "Soilik irakurtzeko"
 
 #: kalarmcalendar/kaeventformatter.cpp:81
 #, fuzzy, kde-format
@@ -3798,7 +3802,7 @@ msgstr "Letra-tipoa"
 #, fuzzy, kde-format
 msgctxt "@label Shell command to execute before alarm"
 msgid "Pre-alarm action"
-msgstr "Alarmaren aurreko ekintza:"
+msgstr "Alarmaren aurreko ekintza"
 
 #: kalarmcalendar/kaeventformatter.cpp:100
 #, fuzzy, kde-format
@@ -3816,7 +3820,7 @@ msgstr "Alarmaren aurreko ekintza:"
 #, fuzzy, kde-format
 msgctxt "@label Shell command to execute after alarm"
 msgid "Post-alarm action"
-msgstr "Alarmaren ondorengo ekintza:"
+msgstr "Alarmaren ondorengo ekintza"
 
 #: kalarmcalendar/kaeventformatter.cpp:108
 #, fuzzy, kde-format
@@ -4013,7 +4017,7 @@ msgstr "Audioa"
 #| msgid "Active"
 msgctxt "@info Alarm type"
 msgid "Active"
-msgstr "Aktiboa"
+msgstr "Aktibo"
 
 #: kalarmcalendar/kaeventformatter.cpp:275
 #, fuzzy, kde-format
@@ -4058,7 +4062,7 @@ msgstr "Lehenetsia"
 #| msgid "Reminder"
 msgctxt "@info"
 msgid "Reminder"
-msgstr "Oroigarria"
+msgstr "Öroigarria"
 
 #: kalarmcalendar/kaeventformatter.cpp:378
 #, fuzzy, kde-format
@@ -4093,7 +4097,7 @@ msgctxt "@info"
 msgid "1 Second"
 msgid_plural "%1 Seconds"
 msgstr[0] " segundo"
-msgstr[1] " segundo"
+msgstr[1] "%1 segundo"
 
 #: kalarmcalendar/kaeventformatter.cpp:417
 #, fuzzy, kde-format
@@ -4448,9 +4452,9 @@ msgid "Personal alarm message, command and email scheduler by KDE"
 msgstr "KDE-ren alarma-mezu, agindu eta posta elektroniko programatzailea"
 
 #: main.cpp:46
-#, kde-format
+#, fuzzy, kde-format
 msgid "Copyright © 2001-%1, David Jarvie"
-msgstr ""
+msgstr "Copyright 2001-%1, David Jarvie"
 
 #: mainwindow.cpp:438
 #, fuzzy, kde-kuit-format
@@ -5072,7 +5076,7 @@ msgstr "Editatu alarma plantila"
 #| msgid "Email Alarms"
 msgctxt "@action"
 msgid "New Email Alarm"
-msgstr "E-posta alarma berria"
+msgstr "E-posta alarmak"
 
 #: newalarmaction.cpp:54
 #, fuzzy, kde-format
@@ -5165,7 +5169,7 @@ msgstr "Alarmak editatzeko ezarpen lehenetsiak"
 #, fuzzy, kde-format
 msgctxt "@title:tab"
 msgid "View"
-msgstr "Ikusi"
+msgstr "Ikuspegia"
 
 #: prefdlg.cpp:196
 #, kde-format
@@ -5244,7 +5248,7 @@ msgstr ""
 #| msgid "The alarm message"
 msgctxt "@option:check"
 msgid "Enable alarm names"
-msgstr "Alarmaren mezua"
+msgstr "Gaitu alarma-izenak"
 
 #: prefdlg.cpp:473
 #, kde-format
@@ -5374,12 +5378,14 @@ msgstr ""
 "nahi ez baduzu"
 
 #: prefdlg.cpp:698
-#, kde-kuit-format
+#, fuzzy, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
 "Select the time zone which <application>KAlarm</application> should use as "
 "its default for displaying and entering dates and times."
 msgstr ""
+"Hautatu KAlarm-ek datak eta orduak azaltzeko eta sartzeko erabili beharko "
+"lukeen ordu-eremu lehenetsia."
 
 #: prefdlg.cpp:712
 #, fuzzy, kde-format
@@ -6067,19 +6073,22 @@ msgid "Show in system tray"
 msgstr "Erakutsi sistemaren erretiluan"
 
 #: prefdlg.cpp:1747
-#, kde-kuit-format
+#, fuzzy, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
 "<para>Check to show <application>KAlarm</application>'s icon in the system "
 "tray. Showing it in the system tray provides easy access and a status "
 "indication.</para>"
 msgstr ""
+"<p>Markatu KAlarm-en ikonoa sistema-erretiluan erakusteko. Hura sistema-"
+"erretiluan erakusteak sarbide erraza eta egoeraren adierazle bat ematen ditu."
+"</p>"
 
 #: prefdlg.cpp:1776
 #, fuzzy, kde-format
 msgctxt "@option:radio Always show KAlarm icon"
 msgid "Always show"
-msgstr "Erakutsi beti"
+msgstr "Beti erakutsi"
 
 #: prefdlg.cpp:1780
 #, kde-kuit-format
@@ -6967,15 +6976,10 @@ msgid "Enter the length of time to repeat the alarm"
 msgstr "Sartu alarma errepikatzeko denbora-tartea"
 
 #: resources/calendarfunctions.cpp:53 resources/calendarfunctions.cpp:84
-#, fuzzy, kde-kuit-format
-#| msgid ""
-#| "Cannot open audio file:\n"
-#| "%1"
+#, kde-kuit-format
 msgctxt "@info"
 msgid "Could not load calendar <filename>%1</filename>."
-msgstr ""
-"Ezin da audio fitxategia ireki:\n"
-"%1"
+msgstr "Ezin izan du <filename>%1</filename> egutegia zamatu."
 
 #: resources/calendarfunctions.cpp:64
 #, kde-kuit-format
@@ -7012,69 +7016,53 @@ msgid ""
 msgstr ""
 
 #: resources/fileresource.cpp:325 resources/fileresource.cpp:455
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info"
 msgid "Resource is not configured."
-msgstr "Baliabidea ez dago konfiguratuta"
+msgstr "Baliabidea ez dago konfiguratuta."
 
 #: resources/fileresource.cpp:354 resources/fileresource.cpp:372
-#, fuzzy, kde-kuit-format
-#| msgid ""
-#| "Cannot open audio file:\n"
-#| "%1"
+#, kde-kuit-format
 msgctxt "@info"
 msgid "Error loading calendar <resource>%1</resource>."
-msgstr "Errorea egutegia zamatzean."
+msgstr "Errorea egutegia zamatzean <resource>%1</resource>."
 
 #: resources/fileresource.cpp:432 resources/fileresource.cpp:472
 #: resources/fileresource.cpp:482
-#, fuzzy, kde-kuit-format
-#| msgid ""
-#| "Cannot open audio file:\n"
-#| "%1"
+#, kde-kuit-format
 msgctxt "@info"
 msgid "Error saving calendar <resource>%1</resource>."
-msgstr ""
-"Ezin da audio fitxategia ireki:\n"
-"%1"
+msgstr "Errorea <resource>%1</resource> egutegia gordetzean."
 
 #: resources/fileresource.cpp:462
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info"
 msgid "Resource is read-only."
-msgstr "Baliabidea irakurtzeko soilik da"
+msgstr "Baliabidea soilik irakurtzeko da."
 
 #: resources/fileresource.cpp:467
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid "%1: invalid calendar file name: <filename>%2</filename>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid "Calendar file is in wrong format: <filename>%1</filename>."
-msgstr "%1: egutegi fitxategi-izen baliogabea: <filename>%2</filename>"
+msgstr "Egutegi-fitxategia formatu okerrean dago: <filename>%1</filename>."
 
 #: resources/fileresourcecalendarupdater.cpp:113
-#, fuzzy, kde-kuit-format
-#| msgid ""
-#| "Cannot open audio file:\n"
-#| "%1"
+#, kde-kuit-format
 msgctxt "@info"
 msgid "Failed to update format of calendar <resource>%1</resource>"
-msgstr ""
-"Ezin da audio fitxategia ireki:\n"
-"%1"
+msgstr "<resource>%1</resource> egutegiaren formatu eguneratzea huts egin du"
 
 #: resources/fileresourcecreator.cpp:54
-#, fuzzy, kde-format
-#| msgid "Alarm Configuration"
+#, kde-format
 msgctxt "@title:window"
 msgid "Calendar Configuration"
-msgstr "Alarmaren konfigurazioa"
+msgstr "Egutegiaren konfigurazioa"
 
 #: resources/fileresourcecreator.cpp:55
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Select storage type of new calendar:"
-msgstr ""
+msgstr "Gorde egutegi berriaren biltegiratze mota:"
 
 #: resources/fileresourcecreator.cpp:137
 #, kde-kuit-format
@@ -7083,113 +7071,103 @@ msgid ""
 "Error!  The file <filename>%1</filename> is already used by an existing "
 "resource."
 msgstr ""
+"Errorea! <filename>%1</filename> fitxategia dagoeneko erabiltzen du "
+"existitzen den baliabide batek."
 
 #: resources/migration/dirresourceimportdialog.cpp:34
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title:window"
 msgid "Import Directory Resource"
-msgstr "Egutegi fitxategiaren URL-a"
+msgstr "Inportatu direktorio baliabidea"
 
 #: resources/migration/dirresourceimportdialog.cpp:39
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title:tab"
 msgid "Import Calendar Directory Resource"
-msgstr "Egutegi fitxategiaren URL-a"
+msgstr "Inportatu egutegi direktorio baliabidea"
 
 #: resources/migration/dirresourceimportdialog.cpp:46
-#, fuzzy, kde-format
-#| msgctxt "@info/plain"
-#| msgid "Active Alarms"
+#, kde-format
 msgctxt "@title:tab"
 msgid "Import Active Alarms"
-msgstr "Alarma aktiboak"
+msgstr "Inportatu alarma aktiboak"
 
 #: resources/migration/dirresourceimportdialog.cpp:55
-#, fuzzy, kde-format
-#| msgctxt "@title:group"
-#| msgid "Archived Alarms"
+#, kde-format
 msgctxt "@title:tab"
 msgid "Import Archived Alarms"
-msgstr "Artxibatutako alarmak"
+msgstr "Inportatu artxibatutako alarmak"
 
 #: resources/migration/dirresourceimportdialog.cpp:64
-#, fuzzy, kde-format
-#| msgctxt "@info/plain"
-#| msgid "Alarm Templates"
+#, kde-format
 msgctxt "@title:tab"
 msgid "Import Alarm Templates"
-msgstr "Alarma txantiloiak"
+msgstr "Inportatu alarma-txantiloiak"
 
 #: resources/migration/dirresourceimportdialog.cpp:191
-#, fuzzy, kde-format
-#| msgctxt "@info/plain"
-#| msgid "Active alarms"
+#, kde-format
 msgctxt "@item:intext"
 msgid "Active alarms"
 msgstr "Alarma aktiboak"
 
 #: resources/migration/dirresourceimportdialog.cpp:193
-#, fuzzy, kde-format
-#| msgctxt "@info/plain"
-#| msgid "Archived alarms"
+#, kde-format
 msgctxt "@item:intext"
 msgid "Archived alarms"
 msgstr "Artxibatutako alarmak"
 
 #: resources/migration/dirresourceimportdialog.cpp:195
-#, fuzzy, kde-format
-#| msgctxt "@info/plain"
-#| msgid "Alarm templates"
+#, kde-format
 msgctxt "@item:intext"
 msgid "Alarm templates"
 msgstr "Alarma-txantiloiak"
 
 #: resources/migration/dirresourceimportdialog.cpp:251
 #: resources/singlefileresourceconfigdialog.cpp:39
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@item:inlistbox File type selection filter"
 msgid "Calendar files"
-msgstr "Egutegi fitxategiaren URL-a"
+msgstr "Egutegi-fitxategiak"
 
 #: resources/migration/dirresourceimportdialog.cpp:397
 #: resources/singlefileresourceconfigdialog.cpp:212
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:status"
 msgid "Checking file information..."
-msgstr "Fitxategi-informazioa ikuskatzen..."
+msgstr "Fitxategiaren informazioa ikuskatzen..."
 
 #: resources/migration/dirresourceimportdialog.cpp:405
 #: resources/migration/dirresourceimportdialog.cpp:453
 #, kde-format
 msgctxt "@info:status"
 msgid "Error! File already exists."
-msgstr ""
+msgstr "Errorea! Fitxategia badago lehendik ere."
 
 #: resources/migration/dirresourceimportdialog.cpp:411
 #: resources/migration/dirresourceimportdialog.cpp:462
 #, kde-format
 msgctxt "@info:status"
 msgid "Error! Cannot create file (directory does not exist)."
-msgstr ""
+msgstr "Errorea! Ezin du fitxategia sortu (direktorioa ez da existitzen)."
 
 #: resources/migration/dirresourceimportdialog.cpp:416
 #: resources/migration/dirresourceimportdialog.cpp:464
 #, kde-format
 msgctxt "@info:status"
 msgid "Error! Cannot create file (directory is not writable)."
-msgstr ""
+msgstr "Errorea! Ezin du fitxategia sortu (direktorioa ez da idazgarria)."
 
 #: resources/migration/dirresourceimportdialog.cpp:470
 #, kde-format
 msgctxt "@info"
 msgid "Error! Cannot create file (directory does not exist)."
-msgstr ""
+msgstr "Errorea! Ezin du fitxategia sortu (direktorioa ez da existitzen)."
 
 #: resources/migration/dirresourceimportdialog.cpp:472
 #, kde-format
 msgctxt "@info"
 msgid "Error! Cannot create file (directory is not writable)."
-msgstr ""
+msgstr "Errorea! Ezin du fitxategia sortu (direktorioa ez da idazgarria)."
 
 #. i18n: ectx: property (text), widget (QLabel, warning1)
 #: resources/migration/dirresourceimportdialog_intro.ui:16
@@ -7215,26 +7193,24 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QLabel, nameLabel)
 #: resources/migration/dirresourceimportdialog_intro.ui:33
 #: resources/migration/dirresourceimportdialog_type.ui:99
-#, fuzzy, kde-format
-#| msgid "Display Alarms"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Display name:"
-msgstr "Bistaratzeko izena:"
+msgstr "Azaltzeko izena:"
 
 #. i18n: ectx: property (text), widget (QLabel, label2)
 #: resources/migration/dirresourceimportdialog_intro.ui:47
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Calendar directory:"
-msgstr "Egutegi fitxategiaren URL-a"
+msgstr "Egutegien direktorioa:"
 
 #. i18n: ectx: property (text), widget (QLabel, label3)
 #: resources/migration/dirresourceimportdialog_intro.ui:61
-#, fuzzy, kde-format
-#| msgid "Alarm Type"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Alarm types:"
-msgstr "Alarma motak"
+msgstr "Alarma motak:"
 
 #. i18n: ectx: property (text), widget (QLabel, note)
 #: resources/migration/dirresourceimportdialog_intro.ui:78
@@ -7264,17 +7240,15 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QRadioButton, newRadio)
 #: resources/migration/dirresourceimportdialog_type.ui:49
-#, fuzzy, kde-format
-#| msgctxt "@info"
-#| msgid "Failed to send email"
+#, kde-format
 msgctxt "@option:radio"
 msgid "Import into new calendar file resource"
-msgstr "Errorea e-posta bidaltzean"
+msgstr "Inportatu egutegi berriaren fitxategi-baliabidera"
 
 #. i18n: ectx: property (text), widget (QLabel, pathLabel)
 #: resources/migration/dirresourceimportdialog_type.ui:64
 #: resources/singlefileresourceconfigdialog.ui:29
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Filename:"
 msgstr "Fitxategi-izena:"
@@ -7286,6 +7260,8 @@ msgctxt "@info:tooltip"
 msgid ""
 "Select the file to contain this resource. The file must not already exist."
 msgstr ""
+"Aukeratu baliabide hau edukitzeko fitxategia. Fitxategia ez da aurretik "
+"existitu behar."
 
 #. i18n: ectx: property (whatsThis), widget (KUrlRequester, pathRequester)
 #: resources/migration/dirresourceimportdialog_type.ui:79
@@ -7297,112 +7273,95 @@ msgid ""
 "Note that if the URL of a remote file is specified, monitoring for file "
 "changes will not work."
 msgstr ""
+"Aukeratu baliabide hau edukitzeko fitxategia.\n"
+"Fitxategia ez da aurretik existitu behar.\n"
+"Kontuan izan urruneko fitxategi baten URLa zehazten bada, fitxategien "
+"aldaketak gainbegiratzea ez dela ibiliko."
 
 #. i18n: ectx: property (toolTip), widget (KLineEdit, nameText)
 #: resources/migration/dirresourceimportdialog_type.ui:109
-#, fuzzy, kde-format
-#| msgctxt "@info:whatsthis"
-#| msgid "Enter the name or URL of a text or image file to display."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Enter the name used to identify this resource in displays."
-msgstr "Sartu bistaratzeko testu edo irudi fitxategiaren URL-a edo izena."
+msgstr "Sartu baliabide hau pantailetan identifikatzeko erabilitako izena."
 
 #. i18n: ectx: property (whatsThis), widget (KLineEdit, nameText)
 #: resources/migration/dirresourceimportdialog_type.ui:112
-#, fuzzy, kde-format
-#| msgctxt "@info:whatsthis"
-#| msgid "Enter the name or URL of a text or image file to display."
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the name used to identify this resource in displays."
-msgstr "Sartu bistaratzeko testu edo irudi fitxategiaren URL-a edo izena."
+msgstr "Sartu baliabide hau pantailetan identifikatzeko erabilitako izena."
 
 #. i18n: ectx: property (text), widget (QRadioButton, noRadio)
 #: resources/migration/dirresourceimportdialog_type.ui:137
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@option:radio"
 msgid "Do not import"
 msgstr "Ez inportatu"
 
 #: resources/migration/fileresourcemigrator.cpp:368
-#, fuzzy, kde-format
-#| msgctxt "@info/plain"
-#| msgid "Active Alarms"
+#, kde-format
 msgctxt "@info/plain Name of a calendar"
 msgid "Active Alarms"
 msgstr "Alarma aktiboak"
 
 #: resources/migration/fileresourcemigrator.cpp:370
-#, fuzzy, kde-format
-#| msgctxt "@title:group"
-#| msgid "Archived Alarms"
+#, kde-format
 msgctxt "@info/plain Name of a calendar"
 msgid "Archived Alarms"
 msgstr "Artxibatutako alarmak"
 
 #: resources/migration/fileresourcemigrator.cpp:372
-#, fuzzy, kde-format
-#| msgctxt "@info/plain"
-#| msgid "Alarm Templates"
+#, kde-format
 msgctxt "@info/plain Name of a calendar"
 msgid "Alarm Templates"
-msgstr "Alarma txantioloiak"
+msgstr "Alarma-txantiloiak"
 
 #: resources/migration/fileresourcemigrator.cpp:392
-#, fuzzy, kde-kuit-format
-#| msgid ""
-#| "Cannot open audio file:\n"
-#| "%1"
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "<para>Failed to create default calendar <resource>%1</resource></"
 "para><para>Location: <filename>%2</filename></para>"
 msgstr ""
-"Ezin da audio fitxategia ireki:\n"
-"%1"
+"<para>Lehenetsitako <resource>%1</resource> egutegia sortzea huts egin du</"
+"para><para>Kokalekua: <filename>%2</filename></para>"
 
 #: resources/resourcedatamodelbase.cpp:65
-#, fuzzy, kde-format
-#| msgctxt "@info/plain"
-#| msgid "Active Alarms"
+#, kde-format
 msgctxt "@item:intext"
 msgid "Active Alarms"
 msgstr "Alarma aktiboak"
 
 #: resources/resourcedatamodelbase.cpp:67
-#, fuzzy, kde-format
-#| msgctxt "@title:group"
-#| msgid "Archived Alarms"
+#, kde-format
 msgctxt "@item:intext"
 msgid "Archived Alarms"
 msgstr "Artxibatutako alarmak"
 
 #: resources/resourcedatamodelbase.cpp:69
-#, fuzzy, kde-format
-#| msgctxt "@info/plain"
-#| msgid "Alarm Templates"
+#, kde-format
 msgctxt "@item:intext"
 msgid "Alarm Templates"
-msgstr "Alarma txantioloiak"
+msgstr "Alarma-txantiloiak"
 
 #: resources/resourcedatamodelbase.cpp:85
-#, fuzzy, kde-format
-#| msgctxt "@info/plain"
-#| msgid "Read-only"
+#, kde-format
 msgctxt "@item:intext Calendar status"
 msgid "Read-only"
-msgstr "Irakurtzeko soilik"
+msgstr "Soilik irakurtzeko"
 
 #: resources/resourcedatamodelbase.cpp:88
 #, kde-format
 msgctxt "@item:intext Calendar status"
 msgid "Read-only (old format)"
-msgstr ""
+msgstr "Solik irakurtzeko (formatu zaharra)"
 
 #: resources/resourcedatamodelbase.cpp:91
 #, kde-format
 msgctxt "@item:intext Calendar status"
 msgid "Read-only (other format)"
-msgstr ""
+msgstr "Solik irakurtzeko (beste formatu bat)"
 
 #: resources/resourcedatamodelbase.cpp:113
 #, kde-format
@@ -7423,21 +7382,19 @@ msgid "Repeat"
 msgstr "Errepikapena"
 
 #: resources/resourcedatamodelbase.cpp:119
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title:column"
 msgid "Color"
 msgstr "Kolorea"
 
 #: resources/resourcedatamodelbase.cpp:121
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title:column"
 msgid "Type"
 msgstr "Mota"
 
 #: resources/resourcedatamodelbase.cpp:123
-#, fuzzy, kde-format
-#| msgctxt "@title:column Template name"
-#| msgid "Name"
+#, kde-format
 msgctxt "@title:column"
 msgid "Name"
 msgstr "Izena"
@@ -7455,9 +7412,7 @@ msgid "Name"
 msgstr "Izena"
 
 #: resources/resourcedatamodelbase.cpp:139
-#, fuzzy, kde-format
-#| msgctxt "@title:group"
-#| msgid "Calendars"
+#, kde-format
 msgctxt "@title:column"
 msgid "Calendars"
 msgstr "Egutegiak"
@@ -7472,49 +7427,37 @@ msgstr "Komandoa exekutatzeak huts egin du"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Pre-alarm action execution failed"
-msgstr "Alarmaren aurreko ekintza exekutatzeak huts egin du"
+msgstr "Alarmaren aurreko ekintza exekutatzea huts egin du"
 
 #: resources/resourcedatamodelbase.cpp:452
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Post-alarm action execution failed"
-msgstr "Alarmaren ondorengo ekintza exekutatzeak huts egin du"
+msgstr "Alarma ondoko ekintza exekutatzea huts egin du"
 
 #: resources/resourcedatamodelbase.cpp:454
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Pre- and post-alarm action execution failed"
-msgstr ""
+msgstr "Alarmaren aurre eta ondoko ekintzak exekutatzea huts egin du"
 
 #: resources/resourcedatamodelbase.cpp:485
-#, fuzzy, kde-format
-#| msgctxt "@info/plain"
-#| msgid "Disabled"
+#, kde-format
 msgctxt "@item:intext Calendar status"
 msgid "Disabled"
 msgstr "Ezgaituta"
 
 #: resources/resourcedatamodelbase.cpp:488
-#, fuzzy, kde-kuit-format
-#| msgid ""
-#| "Error attaching file:\n"
-#| "%1"
+#, kde-kuit-format
 msgctxt "@info:tooltip"
 msgid "%1<nl/>%2: <filename>%3</filename><nl/>%4"
-msgstr ""
-"Errorea fitxategia eranstean:\n"
-"%1"
+msgstr "%1<nl/>%2: <filename>%3</filename><nl/>%4"
 
 #: resources/resourcedatamodelbase.cpp:493
-#, fuzzy, kde-kuit-format
-#| msgid ""
-#| "Error attaching file:\n"
-#| "%1"
+#, kde-kuit-format
 msgctxt "@info:tooltip"
 msgid "%1<nl/>%2: <filename>%3</filename>"
-msgstr ""
-"Errorea fitxategia eranstean:\n"
-"%1"
+msgstr "%1<nl/>%2: <filename>%3</filename>"
 
 #: resources/resourcedatamodelbase.cpp:554
 #, kde-format
@@ -7550,7 +7493,7 @@ msgstr "Alarma mota (mezua, fitxategia, komandoa edo posta)"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Alarm name, or alarm text if name is blank"
-msgstr ""
+msgstr "Alarmaren izena, edo alarmaren testua izena hutsik badago"
 
 #: resources/resourcedatamodelbase.cpp:566
 #, kde-format
@@ -7563,68 +7506,63 @@ msgstr ""
 "exekutatuko den komandoa, edo e-postaren gaia"
 
 #: resources/resourcedatamodelbase.cpp:568
-#, fuzzy, kde-format
-#| msgid "Name of the alarm template"
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Name of the alarm template"
-msgstr "Alarma plantilaren izena"
+msgstr "Alarma-txantiloiaren izena"
 
 #: resources/resourcedatamodelbase.cpp:660
 #: resources/resourcedatamodelbase.cpp:760
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info Alarm never occurs"
 msgid "Never"
 msgstr "Inoiz ez"
 
 #: resources/resourcedatamodelbase.cpp:766
-#, fuzzy, no-c-format, kde-format
-#| msgctxt "@info/plain n days"
-#| msgid "%1d"
+#, no-c-format, kde-format
 msgctxt "@info n days"
 msgid "%1d"
 msgstr "%1e"
 
 #: resources/resourcedatamodelbase.cpp:776
-#, fuzzy, kde-format
-#| msgctxt "@info/plain hours:minutes"
-#| msgid "%1:%2"
+#, kde-format
 msgctxt "@info hours:minutes"
 msgid "%1:%2"
-msgstr "%1: %2"
+msgstr "%1:%2"
 
 #: resources/resourcedatamodelbase.cpp:783
-#, fuzzy, kde-format
-#| msgctxt "@info/plain days hours:minutes"
-#| msgid "%1d %2:%3"
+#, kde-format
 msgctxt "@info days hours:minutes"
 msgid "%1d %2:%3"
 msgstr " %1e %2:%3 "
 
 #: resources/resourcemodel.cpp:328
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info"
 msgid "You cannot disable your default active alarm calendar."
-msgstr "Ziur zaude hautatutako alarma ezabatu nahi duzula?"
+msgstr "Ezin duzu zure artxibatutako alarmen egutegi lehenetsia ezgaitu."
 
 #: resources/resourcemodel.cpp:334
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info"
 msgid ""
 "You cannot disable your default archived alarm calendar while expired alarms "
 "are configured to be kept."
-msgstr "Ziur zaude hautatutako alarma ezabatu nahi duzula?"
+msgstr ""
+"Ezin duzu zure artxibatutako alarmen egutegi lehenetsia ezgaitu, iraungitako "
+"alarmak gordetzeko konfiguratuta dauden bitartean."
 
 #: resources/resourcemodel.cpp:338
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info"
 msgid "Do you really want to disable your default calendar?"
-msgstr "Ziur zaude hautatutako alarma ezabatu nahi duzula?"
+msgstr "Benetan ezgaitu nahi duzu zure egutegi lehenetsia?"
 
 #: resources/resources.cpp:289
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title:window"
 msgid "Choose Calendar"
-msgstr "Egutegi fitxategiaren URL-a"
+msgstr "Aukeratu egutegia"
 
 #: resources/resources.cpp:490
 #, kde-kuit-format
@@ -7633,6 +7571,8 @@ msgid ""
 "The calendar <resource>%1</resource> has been made read-only. This was the "
 "default calendar for active alarms."
 msgstr ""
+"<resource>%1</resource> egutegia soilik irakurtzeko egin da. Hau zen alarma "
+"aktiboetarako egutegi lehenetsia."
 
 #: resources/resources.cpp:495
 #, kde-kuit-format
@@ -7641,6 +7581,8 @@ msgid ""
 "The calendar <resource>%1</resource> has been made read-only. This was the "
 "default calendar for archived alarms."
 msgstr ""
+"<resource>%1</resource> egutegia soilik irakurtzeko egin da. Hau zen "
+"artxibatutako alarmetarako egutegi lehenetsia."
 
 #: resources/resources.cpp:500
 #, kde-kuit-format
@@ -7649,6 +7591,8 @@ msgid ""
 "The calendar <resource>%1</resource> has been made read-only. This was the "
 "default calendar for alarm templates."
 msgstr ""
+"<resource>%1</resource> egutegia soilik irakurtzeko egin da. Hau zen alarma "
+"txantiloietarako egutegi lehenetsia."
 
 #: resources/resources.cpp:505
 #, kde-kuit-format
@@ -7658,51 +7602,50 @@ msgid ""
 "the default calendar for:%2</para><para>Please select new default calendars."
 "</para>"
 msgstr ""
+"<para><resource>%1</resource> egutegia soilik irakurtzeko egin da. Hau zen "
+"honetarako egutegi lehenetsia: %2</para><para>Mesedez, aukeratu "
+"lehenetsitako egutegi berri bat.</para>"
 
 #: resources/resources.cpp:513
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info Please set the 'From' email address..."
-#| msgid ""
-#| "<para>%1</para><para>Please set it in the Configuration dialog.</para>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid "<para>%1</para><para>Please select a new default calendar.</para>"
-msgstr "<para>%1</para><para>Ezarri konfigurazio elkarrizketan.</para>"
+msgstr ""
+"<para>%1</para><para>Mesedez, aukeratu lehenetsitako egutegi berri bat.</"
+"para>"
 
 #: resources/resourceselectdialog.cpp:36
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info A prompt for user to enter what to search for"
 msgid "Search"
 msgstr "Bilatu"
 
 #: resources/resourcetype.cpp:359
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "KAlarm Calendar File"
-msgstr "Egutegi fitxategiaren URL-a"
+msgstr "KAlarm egutegi-fitxategia"
 
 #: resources/resourcetype.cpp:359
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "KAlarm Calendar Directory"
-msgstr "Egutegi fitxategiaren URL-a"
+msgstr "KAlarm egutegien direktorioa"
 
 #: resources/resourcetype.cpp:360
-#, fuzzy, kde-format
-#| msgctxt "@option:check Alarm action = file display"
-#| msgid "File"
+#, kde-format
 msgctxt "@item:intext What a resource is stored in"
 msgid "File"
 msgstr "Fitxategia"
 
 #: resources/resourcetype.cpp:361
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@item:intext What a resource is stored in"
 msgid "URL"
 msgstr "URLa"
 
 #: resources/resourcetype.cpp:362
-#, fuzzy, kde-format
-#| msgid "Display Alarms"
+#, kde-format
 msgctxt "@item:intext What a resource is stored in (directory in filesystem)"
 msgid "Directory"
 msgstr "Direktorioa"
@@ -7711,44 +7654,32 @@ msgstr "Direktorioa"
 #, kde-format
 msgctxt "@info"
 msgid "A previous load is still in progress."
-msgstr ""
+msgstr "Oraindik aurreko zama eragiketa bat egiten ari da."
 
 #: resources/singlefileresource.cpp:181 resources/singlefileresource.cpp:355
 #, kde-format
 msgctxt "@info"
 msgid "A previous save is still in progress."
-msgstr ""
+msgstr "Oraindik aurreko gordetze eragiketa bat egiten ari da."
 
 #: resources/singlefileresource.cpp:230
-#, fuzzy, kde-kuit-format
-#| msgid ""
-#| "Cannot open audio file:\n"
-#| "%1"
+#, kde-kuit-format
 msgctxt "@info"
 msgid "Could not create calendar file <filename>%1</filename>."
-msgstr ""
-"Ezin da audio fitxategia ireki:\n"
-"%1"
+msgstr "Ezin izan du egutegiaren <filename>%1</filename> fitxategia sortu."
 
 #: resources/singlefileresource.cpp:245
-#, fuzzy, kde-kuit-format
-#| msgid ""
-#| "Cannot open audio file:\n"
-#| "%1"
+#, kde-kuit-format
 msgctxt "@info"
 msgid "Could not create writable calendar file <filename>%1</filename>."
 msgstr ""
-"Ezin da audio fitxategia ireki:\n"
-"%1"
+"Ezin izan du egutegi idazgarriaren <filename>%1</filename> fitxategia sortu."
 
 #: resources/singlefileresource.cpp:600
-#, fuzzy, kde-kuit-format
-#| msgid ""
-#| "Cannot open audio file:\n"
-#| "%1"
+#, kde-kuit-format
 msgctxt "@info"
 msgid "Could not load file <filename>%1</filename>."
-msgstr "Ezin da fitxategia kargatu."
+msgstr "Ezin izan du <filename>%1</filename> fitxategia zamatu."
 
 #: resources/singlefileresource.cpp:632
 #, kde-format
@@ -7796,6 +7727,10 @@ msgid ""
 "also be specified, but note that monitoring for file changes will not work "
 "in this case."
 msgstr ""
+"Aukeratu baliabide honek ordezkatu beharko lukeen edukia duen fitxategia. "
+"Fitxategia ez bada existitzen, sortu egingo da. Urrutiko fitxategi baten "
+"URLa ere zehaztu daiteke, baina kontuan izan kasu horretan fitxategiaren "
+"aldaketak gainbegiratzea ez dela ibiliko."
 
 #. i18n: ectx: property (text), widget (QRadioButton, activeRadio)
 #: resources/singlefileresourceconfigdialog.ui:86
@@ -7868,11 +7803,9 @@ msgstr "&Izena:"
 
 #. i18n: ectx: property (html), widget (KTextEdit, nameDescription)
 #: resources/singlefileresourceconfigdialog.ui:222
-#, fuzzy, kde-format
-#| msgctxt "@info:whatsthis"
-#| msgid "Enter the name or URL of a text or image file to display."
+#, kde-format
 msgid "Enter the name used to identify this resource in displays."
-msgstr "Sartu bistaratzeko testu edo irudi fitxategiaren URL-a edo izena."
+msgstr "Sartu baliabide hau pantailetan identifikatzeko erabilitako izena."
 
 #. i18n: ectx: property (title), widget (QGroupBox, readOnlyGroupBox)
 #: resources/singlefileresourceconfigdialog.ui:232
@@ -7897,6 +7830,10 @@ msgid ""
 "have write access to the file or the file is on a remote server that does "
 "not support write access."
 msgstr ""
+"Soilik irakurtzeko modua gaituta badago, goian hautatutako fitxategian ez "
+"dira aldaketak idatziko. Soilik irakurtzeko modua automatikoki gaituko da "
+"fitxategian idazteko sarbiderik ez baduzu edo fitxategia irakurtzeko "
+"sarbiderik ez duen urrutiko zerbitzari batean badago."
 
 #: resourceselector.cpp:50
 #, kde-format
@@ -7926,7 +7863,7 @@ msgstr "Alarma txantioloiak"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Choose which type of data to show alarm calendars for"
-msgstr ""
+msgstr "Aukeratu zein datu-motatarako erakutsi behar diren alarma-egutegiak"
 
 #: resourceselector.cpp:68
 #, kde-format
@@ -7936,6 +7873,9 @@ msgid ""
 "whether a calendar is enabled (checked) or disabled (unchecked). The default "
 "calendar is shown in bold."
 msgstr ""
+"Hautatutako motako egutegi erabilgarrien zerrenda. Markaren egoerak "
+"erakusten du egutegi bat gaituta (markatuta) edo ezgaituta (markatzeke) "
+"dagoen. Egutegi lehenetsia letra lodiekin erakusten da."
 
 #: resourceselector.cpp:77 templatedlg.cpp:80
 #, kde-format
@@ -7969,6 +7909,9 @@ msgid ""
 "calendar itself is left intact, and may subsequently be reinstated in the "
 "list if desired.</para>"
 msgstr ""
+"<para>Kendu nabarmendutako egutegia zerrendatik.</para><para> Egutegia "
+"aldaketarik gabe uzten da, eta nahi izanez gero, berriz zerrendan sartu ahal "
+"izango da.</para>"
 
 #: resourceselector.cpp:111
 #, kde-format
@@ -8397,9 +8340,7 @@ msgid "Sound File"
 msgstr "Soinu-fitxategia"
 
 #: soundpicker.cpp:318
-#, fuzzy, kde-format
-#| msgctxt "@item:inlistbox"
-#| msgid "Sound file"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "Audio files"
 msgstr "Audio fitxategiak"
@@ -8417,12 +8358,10 @@ msgid "Special Actions..."
 msgstr "Ekintza bereziak..."
 
 #: specialactions.cpp:39
-#, fuzzy, kde-format
-#| msgctxt "@info:whatsthis"
-#| msgid "Enter a shell command to execute."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Set commands to execute"
-msgstr "Sartu exekutatuko den shell komando bat."
+msgstr "Ezarri exekutatu beharreko komandoak"
 
 #: specialactions.cpp:40
 #, kde-format
@@ -8450,10 +8389,7 @@ msgid "Command:"
 msgstr "Komandoa:"
 
 #: specialactions.cpp:167
-#, fuzzy, kde-kuit-format
-#| msgid ""
-#| "Enter a shell command to execute before the alarm is displayed. N.B. "
-#| "KAlarm will wait for the command to complete before displaying the alarm."
+#, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
 "<para>Enter a shell command to execute before the alarm is displayed.</"
@@ -8462,8 +8398,11 @@ msgid ""
 "will wait for the command to complete before displaying the alarm.</note></"
 "para>"
 msgstr ""
-"Sartu alarma bistaratu aurretik exekutatuko den shell agindu bat. Oharra: "
-"KAlarm-ek aginduaren amaiera itxarongo du alarma bistaratu baina lehen."
+"<para>Sartu, alarma azaldu aurretik exekutatu beharreko oskoleko agindu bat."
+"</para><para>Kontuan izan, benetako alarma azaltzen denean bakarrik "
+"exekutatuko dela, ez oroigarri edo geroratutako alarma azaltzen denean.</"
+"para><para><note>KAlarm-ek komandoa osatu arte itxoingo du alarma azaltzeko."
+"</note></para>"
 
 #: specialactions.cpp:173
 #, kde-format
@@ -8479,6 +8418,9 @@ msgid ""
 "displayed.</para><para>If checked, the pre-alarm command is also executed "
 "before a deferred alarm is displayed.</para>"
 msgstr ""
+"<para>Markatu gabe badago, komandoa, benetako alarma azaldu aurretik "
+"bakarrik exekutatuko da.</para><para>Markatuta badago, alarma-aurreko "
+"komandoa geroratutako alarma bat azaldu aurretik ere exekutatuko da.</para>"
 
 #: specialactions.cpp:178
 #, kde-format
