@@ -85,6 +85,7 @@ protected:
 private Q_SLOTS:
     void resourceUpdated(Resource&);
     void resourceRemoved(KAlarmCal::ResourceId);
+    void resourceSettingsChanged(Resource&, ResourceType::Changes);
     void slotUpdateView();
 
 private:
@@ -96,8 +97,9 @@ private:
 
     // If changes are pending, recalculates which days in the matrix have
     // alarms occurring, and which are holidays/non-work days, and repaints.
-    void updateView();
-    void updateEvents();
+    void updateView(const Resource& = Resource());
+    void updateEvents(const Resource& = Resource());
+    void updateEvents(const Resource&, const KADateTime& before, const KADateTime& to);
     void colourBackground(QPainter&, const QColor&, int start, int end);
     QColor textColour(const TextColours&, const QPalette&, int dayIndex, bool workDay) const;
 
@@ -106,7 +108,8 @@ private:
 
     QVector<QString> mDayLabels;  // array of day labels, to optimize drawing performance
 
-    QSet<QDate> mEventDates;   // days on which alarms occur
+    QSet<QDate> mEventDates;   // days on which alarms occur, for any resource
+    QHash<ResourceId, QSet<QDate>> mResourceEventDates;  // for each resource, days on which alarms occur
 
     QStringList mHolidays;     // holiday names, indexed by day index
 

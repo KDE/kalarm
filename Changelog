@@ -1,5 +1,8 @@
 KAlarm Change Log
 
+=== Version 3.5.4 (KDE Gear 22.12.1) --- 11 December 2022 ===
+* Update date picker display when a resource becomes disabled.
+
 === Version 3.5.3 (KDE Gear 22.12) --- 18 November 2022 ===
 * Provide build option to disable use of X11, even if it is available.
 * Fix daily alarms continually triggering just before end of daylight savings time [KDE Bug 461713]
