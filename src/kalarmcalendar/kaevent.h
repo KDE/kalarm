@@ -965,6 +965,7 @@ public:
 
     /** Check whether a date/time conflicts with working hours and/or holiday
      *  restrictions for the alarm.
+     *  @param dt  the date/time to check.
      *  @return true if the alarm is disabled from occurring at time @p dt
      *               because @p dt is outside working hours (if the alarm is
      *               working time only) or is during a holiday (if the alarm is
@@ -976,12 +977,13 @@ public:
     bool excludedByWorkTimeOrHoliday(const KADateTime& dt) const;
 
     /** Set working days and times, to be used by all KAEvent instances.
-     *  @param days   bits set to 1 for each working day. Array element 0 = Monday ... 6 = Sunday.
-     *  @param start  start time in working day.
-     *  @param end    end time in working day.
+     *  @param days      bits set to 1 for each working day. Array element 0 = Monday ... 6 = Sunday.
+     *  @param start     start time in working day.
+     *  @param end       end time in working day.
+     *  @param timeSpec  time spec to be used for evaluating the start and end of the working day.
      *  @see setWorkTimeOnly(), excludedByWorkTimeOrHoliday()
      */
-    static void setWorkTime(const QBitArray& days, const QTime& start, const QTime& end);
+    static void setWorkTime(const QBitArray& days, const QTime& start, const QTime& end, const KADateTime::Spec& timeSpec);
 
     /** Clear the event's recurrence and sub-repetition data.
      *  @see setRecurrence(), recurs()

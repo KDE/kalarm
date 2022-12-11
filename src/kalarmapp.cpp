@@ -166,7 +166,7 @@ void KAlarmApp::initialise()
     slotFeb29TypeChanged(Preferences::defaultFeb29Type());
 
     KAEvent::setStartOfDay(Preferences::startOfDay());
-    KAEvent::setWorkTime(Preferences::workDays(), Preferences::workDayStart(), Preferences::workDayEnd());
+    KAEvent::setWorkTime(Preferences::workDays(), Preferences::workDayStart(), Preferences::workDayEnd(), Preferences::timeSpec());
     KAEvent::setHolidays(Preferences::holidays());
     KAEvent::setDefaultFont(Preferences::messageFont());
 
@@ -1343,7 +1343,7 @@ void KAlarmApp::slotMessageFontChanged(const QFont& font)
 */
 void KAlarmApp::slotWorkTimeChanged(const QTime& start, const QTime& end, const QBitArray& days)
 {
-    KAEvent::setWorkTime(days, start, end);
+    KAEvent::setWorkTime(days, start, end, Preferences::timeSpec());
 }
 
 /******************************************************************************
