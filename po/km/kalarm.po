@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-11 00:48+0000\n"
+"POT-Creation-Date: 2022-12-12 00:48+0000\n"
 "PO-Revision-Date: 2012-12-26 10:26+0700\n"
 "Last-Translator: sutha <sutha@khmeros.info>\n"
 "Language-Team: Khmer <support@khmeros>\n"
@@ -3548,7 +3548,7 @@ msgstr ""
 msgid "KAlarm"
 msgstr "KAlarmm"
 
-#: kalarmcalendar/kaevent.cpp:2922
+#: kalarmcalendar/kaevent.cpp:2927
 #, fuzzy, kde-format
 #| msgctxt "@item:inlistbox Recurrence type"
 #| msgid "At Login"
@@ -3556,7 +3556,7 @@ msgctxt "@info Brief form of 'At Login'"
 msgid "Login"
 msgstr "ពេល​ចូល"
 
-#: kalarmcalendar/kaevent.cpp:2922
+#: kalarmcalendar/kaevent.cpp:2927
 #, fuzzy, kde-format
 #| msgctxt "@option"
 #| msgid "At login"
@@ -3564,7 +3564,7 @@ msgctxt "@info"
 msgid "At login"
 msgstr "ពេល​ចូល"
 
-#: kalarmcalendar/kaevent.cpp:2931 kalarmcalendar/kaevent.cpp:3018
+#: kalarmcalendar/kaevent.cpp:2936 kalarmcalendar/kaevent.cpp:3023
 #: kalarmcalendar/kaeventformatter.cpp:428
 #: kalarmcalendar/kaeventformatter.cpp:442
 #, fuzzy, kde-format
@@ -3575,7 +3575,7 @@ msgid "1 Minute"
 msgid_plural "%1 Minutes"
 msgstr[0] "នាទី"
 
-#: kalarmcalendar/kaevent.cpp:2933 kalarmcalendar/kaevent.cpp:3020
+#: kalarmcalendar/kaevent.cpp:2938 kalarmcalendar/kaevent.cpp:3025
 #: kalarmcalendar/kaeventformatter.cpp:444
 #, kde-format
 msgctxt "@info"
@@ -3583,13 +3583,13 @@ msgid "1 Hour"
 msgid_plural "%1 Hours"
 msgstr[0] ""
 
-#: kalarmcalendar/kaevent.cpp:2935 kalarmcalendar/kaevent.cpp:3021
+#: kalarmcalendar/kaevent.cpp:2940 kalarmcalendar/kaevent.cpp:3026
 #, kde-format
 msgctxt "@info Hours and minutes"
 msgid "%1h %2m"
 msgstr ""
 
-#: kalarmcalendar/kaevent.cpp:2938 kalarmcalendar/kaevent.cpp:3025
+#: kalarmcalendar/kaevent.cpp:2943 kalarmcalendar/kaevent.cpp:3030
 #: kalarmcalendar/kaeventformatter.cpp:446
 #, kde-format
 msgctxt "@info"
@@ -3597,7 +3597,7 @@ msgid "1 Day"
 msgid_plural "%1 Days"
 msgstr[0] ""
 
-#: kalarmcalendar/kaevent.cpp:2940 kalarmcalendar/kaevent.cpp:3026
+#: kalarmcalendar/kaevent.cpp:2945 kalarmcalendar/kaevent.cpp:3031
 #, fuzzy, kde-format
 #| msgctxt "@item:inlistbox Recurrence type"
 #| msgid "Weekly"
@@ -3606,7 +3606,7 @@ msgid "1 Week"
 msgid_plural "%1 Weeks"
 msgstr[0] "រាល់​សប្ដាហ៍"
 
-#: kalarmcalendar/kaevent.cpp:2942
+#: kalarmcalendar/kaevent.cpp:2947
 #, fuzzy, kde-format
 #| msgctxt "@item:inlistbox Recurrence type"
 #| msgid "Monthly"
@@ -3615,7 +3615,7 @@ msgid "1 Month"
 msgid_plural "%1 Months"
 msgstr[0] "រាល់​ខែ"
 
-#: kalarmcalendar/kaevent.cpp:2944
+#: kalarmcalendar/kaevent.cpp:2949
 #, fuzzy, kde-format
 #| msgctxt "@item:inlistbox Recurrence type"
 #| msgid "Yearly"
@@ -3624,7 +3624,7 @@ msgid "1 Year"
 msgid_plural "%1 Years"
 msgstr[0] "រាល់ឆ្នាំ"
 
-#: kalarmcalendar/kaevent.cpp:2950
+#: kalarmcalendar/kaevent.cpp:2955
 #, fuzzy, kde-format
 #| msgctxt "No holiday region"
 #| msgid "None"
@@ -3632,7 +3632,7 @@ msgctxt "@info No recurrence"
 msgid "None"
 msgstr "គ្មាន"
 
-#: kalarmcalendar/kaevent.cpp:3028
+#: kalarmcalendar/kaevent.cpp:3033
 #, fuzzy, kde-format
 #| msgctxt "No holiday region"
 #| msgid "None"

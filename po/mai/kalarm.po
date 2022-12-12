@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-11 00:48+0000\n"
+"POT-Creation-Date: 2022-12-12 00:48+0000\n"
 "PO-Revision-Date: 2010-09-24 16:33+0530\n"
 "Last-Translator: Rajesh Ranjan <rajesh672@gmail.com>\n"
 "Language-Team: Maithili <bhashaghar@googlegroups.com>\n"
@@ -3262,7 +3262,7 @@ msgstr "शेष:"
 msgid "KAlarm"
 msgstr "प्रदर्शन प्रकार:"
 
-#: kalarmcalendar/kaevent.cpp:2922
+#: kalarmcalendar/kaevent.cpp:2927
 #, fuzzy, kde-format
 #| msgctxt "@info/plain Brief form of 'At Login'"
 #| msgid "Login"
@@ -3270,7 +3270,7 @@ msgctxt "@info Brief form of 'At Login'"
 msgid "Login"
 msgstr "लॉगिन"
 
-#: kalarmcalendar/kaevent.cpp:2922
+#: kalarmcalendar/kaevent.cpp:2927
 #, fuzzy, kde-format
 #| msgctxt "@info/plain Brief form of 'At Login'"
 #| msgid "Login"
@@ -3278,7 +3278,7 @@ msgctxt "@info"
 msgid "At login"
 msgstr "लॉगिन"
 
-#: kalarmcalendar/kaevent.cpp:2931 kalarmcalendar/kaevent.cpp:3018
+#: kalarmcalendar/kaevent.cpp:2936 kalarmcalendar/kaevent.cpp:3023
 #: kalarmcalendar/kaeventformatter.cpp:428
 #: kalarmcalendar/kaeventformatter.cpp:442
 #, fuzzy, kde-format
@@ -3290,7 +3290,7 @@ msgid_plural "%1 Minutes"
 msgstr[0] "मिनट"
 msgstr[1] "मिनट"
 
-#: kalarmcalendar/kaevent.cpp:2933 kalarmcalendar/kaevent.cpp:3020
+#: kalarmcalendar/kaevent.cpp:2938 kalarmcalendar/kaevent.cpp:3025
 #: kalarmcalendar/kaeventformatter.cpp:444
 #, kde-format
 msgctxt "@info"
@@ -3299,13 +3299,13 @@ msgid_plural "%1 Hours"
 msgstr[0] ""
 msgstr[1] ""
 
-#: kalarmcalendar/kaevent.cpp:2935 kalarmcalendar/kaevent.cpp:3021
+#: kalarmcalendar/kaevent.cpp:2940 kalarmcalendar/kaevent.cpp:3026
 #, kde-format
 msgctxt "@info Hours and minutes"
 msgid "%1h %2m"
 msgstr ""
 
-#: kalarmcalendar/kaevent.cpp:2938 kalarmcalendar/kaevent.cpp:3025
+#: kalarmcalendar/kaevent.cpp:2943 kalarmcalendar/kaevent.cpp:3030
 #: kalarmcalendar/kaeventformatter.cpp:446
 #, kde-format
 msgctxt "@info"
@@ -3314,7 +3314,7 @@ msgid_plural "%1 Days"
 msgstr[0] ""
 msgstr[1] ""
 
-#: kalarmcalendar/kaevent.cpp:2940 kalarmcalendar/kaevent.cpp:3026
+#: kalarmcalendar/kaevent.cpp:2945 kalarmcalendar/kaevent.cpp:3031
 #, fuzzy, kde-format
 #| msgctxt "@item:inlistbox Recurrence type"
 #| msgid "Weekly"
@@ -3324,7 +3324,7 @@ msgid_plural "%1 Weeks"
 msgstr[0] "साप्ताहिक"
 msgstr[1] "साप्ताहिक"
 
-#: kalarmcalendar/kaevent.cpp:2942
+#: kalarmcalendar/kaevent.cpp:2947
 #, fuzzy, kde-format
 #| msgctxt "@item:inlistbox Recurrence type"
 #| msgid "Monthly"
@@ -3334,7 +3334,7 @@ msgid_plural "%1 Months"
 msgstr[0] "मासिक"
 msgstr[1] "मासिक"
 
-#: kalarmcalendar/kaevent.cpp:2944
+#: kalarmcalendar/kaevent.cpp:2949
 #, fuzzy, kde-format
 #| msgctxt "@item:inlistbox Recurrence type"
 #| msgid "Yearly"
@@ -3344,7 +3344,7 @@ msgid_plural "%1 Years"
 msgstr[0] "वार्षिक"
 msgstr[1] "वार्षिक"
 
-#: kalarmcalendar/kaevent.cpp:2950
+#: kalarmcalendar/kaevent.cpp:2955
 #, fuzzy, kde-format
 #| msgctxt "No holiday region"
 #| msgid "None"
@@ -3352,7 +3352,7 @@ msgctxt "@info No recurrence"
 msgid "None"
 msgstr "किछु नहि"
 
-#: kalarmcalendar/kaevent.cpp:3028
+#: kalarmcalendar/kaevent.cpp:3033
 #, fuzzy, kde-format
 #| msgctxt "No holiday region"
 #| msgid "None"

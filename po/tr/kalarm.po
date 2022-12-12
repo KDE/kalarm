@@ -16,8 +16,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdepim-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-11 00:48+0000\n"
-"PO-Revision-Date: 2022-11-24 17:01+0300\n"
+"POT-Creation-Date: 2022-12-12 00:48+0000\n"
+"PO-Revision-Date: 2022-12-11 19:59+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -25,7 +25,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 22.08.3\n"
+"X-Generator: Lokalize 22.12.0\n"
 "(http: //www.transifex.com/projects/p/kdepim-k-tr/language/tr/)\n"
 "X-POOTLE-MTIME: 1413131629.000000\n"
 
@@ -943,9 +943,9 @@ msgid ""
 "<p>Automatically start KAlarm whenever you start KDE.</p><p>This option "
 "should always be checked unless you intend to discontinue use of KAlarm.</p>"
 msgstr ""
-"<p>Ne zaman KDE'yi başlatırsan, KAlarm'ı da otomatik olarak başlatır.</"
-"p><p>Bu seçenek, KAlarm'ı kullanmaya devam etmek istemediğin zamana kadar, "
-"her zaman seçili olmalı.</p>"
+"<p>Ne zaman KDE'yi başlatırsanız KAlarm'ı da otomatik olarak başlatır.</"
+"p><p>Bu seçenek, KAlarm'ı kullanmayı sürdürmek istemediğiniz zamana kadar "
+"sürekli seçili olmalı.</p>"
 
 #. i18n: ectx: label, entry (Base_NoAutoStart), group (General)
 #: data/kalarmconfig.kcfg:134
@@ -3015,7 +3015,7 @@ msgid ""
 "<para>End of alarm list reached.</para><para>Continue from the beginning?</"
 "para>"
 msgstr ""
-"<para>Alarm listesinin sonuna gelindi.</para><para>Baştan devam edilsin mi?</"
+"<para>Alarm listesinin sonuna gelindi.</para><para>Baştan sürdürülsün mü?</"
 "para>"
 
 #: find.cpp:395
@@ -3025,7 +3025,7 @@ msgid ""
 "<para>Beginning of alarm list reached.</para><para>Continue from the end?</"
 "para>"
 msgstr ""
-"<para>Alarm listesinin başına gelindi.</para><para>Sondan devam edilsin mi?</"
+"<para>Alarm listesinin başına gelindi.</para><para>Sondan sürdürülsün mi?</"
 "para>"
 
 #: fontcolour.cpp:50
@@ -3478,19 +3478,19 @@ msgstr "Süre bitimi:"
 msgid "KAlarm"
 msgstr "KAlarm"
 
-#: kalarmcalendar/kaevent.cpp:2922
+#: kalarmcalendar/kaevent.cpp:2927
 #, kde-format
 msgctxt "@info Brief form of 'At Login'"
 msgid "Login"
 msgstr "Oturum aç"
 
-#: kalarmcalendar/kaevent.cpp:2922
+#: kalarmcalendar/kaevent.cpp:2927
 #, kde-format
 msgctxt "@info"
 msgid "At login"
 msgstr "Girişte"
 
-#: kalarmcalendar/kaevent.cpp:2931 kalarmcalendar/kaevent.cpp:3018
+#: kalarmcalendar/kaevent.cpp:2936 kalarmcalendar/kaevent.cpp:3023
 #: kalarmcalendar/kaeventformatter.cpp:428
 #: kalarmcalendar/kaeventformatter.cpp:442
 #, kde-format
@@ -3500,7 +3500,7 @@ msgid_plural "%1 Minutes"
 msgstr[0] "1 Dakika"
 msgstr[1] "%1 Dakika"
 
-#: kalarmcalendar/kaevent.cpp:2933 kalarmcalendar/kaevent.cpp:3020
+#: kalarmcalendar/kaevent.cpp:2938 kalarmcalendar/kaevent.cpp:3025
 #: kalarmcalendar/kaeventformatter.cpp:444
 #, kde-format
 msgctxt "@info"
@@ -3509,13 +3509,13 @@ msgid_plural "%1 Hours"
 msgstr[0] "1 Saat"
 msgstr[1] "%1 Saat"
 
-#: kalarmcalendar/kaevent.cpp:2935 kalarmcalendar/kaevent.cpp:3021
+#: kalarmcalendar/kaevent.cpp:2940 kalarmcalendar/kaevent.cpp:3026
 #, kde-format
 msgctxt "@info Hours and minutes"
 msgid "%1h %2m"
 msgstr "%1sa %2dk"
 
-#: kalarmcalendar/kaevent.cpp:2938 kalarmcalendar/kaevent.cpp:3025
+#: kalarmcalendar/kaevent.cpp:2943 kalarmcalendar/kaevent.cpp:3030
 #: kalarmcalendar/kaeventformatter.cpp:446
 #, kde-format
 msgctxt "@info"
@@ -3524,7 +3524,7 @@ msgid_plural "%1 Days"
 msgstr[0] "1 Gün"
 msgstr[1] "%1 Gün"
 
-#: kalarmcalendar/kaevent.cpp:2940 kalarmcalendar/kaevent.cpp:3026
+#: kalarmcalendar/kaevent.cpp:2945 kalarmcalendar/kaevent.cpp:3031
 #, kde-format
 msgctxt "@info"
 msgid "1 Week"
@@ -3532,7 +3532,7 @@ msgid_plural "%1 Weeks"
 msgstr[0] "1 Hafta"
 msgstr[1] "%1 Hafta"
 
-#: kalarmcalendar/kaevent.cpp:2942
+#: kalarmcalendar/kaevent.cpp:2947
 #, kde-format
 msgctxt "@info"
 msgid "1 Month"
@@ -3540,7 +3540,7 @@ msgid_plural "%1 Months"
 msgstr[0] "1 Ay"
 msgstr[1] "%1 Ay"
 
-#: kalarmcalendar/kaevent.cpp:2944
+#: kalarmcalendar/kaevent.cpp:2949
 #, kde-format
 msgctxt "@info"
 msgid "1 Year"
@@ -3548,13 +3548,13 @@ msgid_plural "%1 Years"
 msgstr[0] "1 Yıl"
 msgstr[1] "%1 Yıl"
 
-#: kalarmcalendar/kaevent.cpp:2950
+#: kalarmcalendar/kaevent.cpp:2955
 #, kde-format
 msgctxt "@info No recurrence"
 msgid "None"
 msgstr "Hiçbiri"
 
-#: kalarmcalendar/kaevent.cpp:3028
+#: kalarmcalendar/kaevent.cpp:3033
 #, kde-format
 msgctxt "@info No repetition"
 msgid "None"
