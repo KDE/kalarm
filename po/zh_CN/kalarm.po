@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-12-12 00:48+0000\n"
-"PO-Revision-Date: 2022-12-01 06:51\n"
+"PO-Revision-Date: 2022-12-13 12:20\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -718,7 +718,7 @@ msgstr "文件资源"
 #, kde-format
 msgctxt "@label"
 msgid "Enable Akonadi plugin"
-msgstr ""
+msgstr "启用 Akonadi 插件"
 
 #. i18n: ectx: whatsthis, entry (UseAkonadiIfAvailable), group (General)
 #: data/kalarmconfig.kcfg:76
@@ -729,6 +729,8 @@ msgid ""
 "provide features including birthday import, some email functions, email "
 "address book lookup, and Akonadi resource migration on first run."
 msgstr ""
+"选择是否启用 KAlarm的 Akonadi 插件，它使用 Akonadi 提供包括生日导入在内的功"
+"能 一些电子邮件功能、电子邮件地址簿查找和 Akonadi 资源在首次使用时迁移。"
 
 #. i18n: ectx: label, entry (Base_TimeZone), group (General)
 #: data/kalarmconfig.kcfg:80
@@ -1072,6 +1074,9 @@ msgid ""
 "automatically. This option will only work if your system is configured to "
 "use sendmail or a sendmail compatible mail transport agent.</li></ul></p>"
 msgstr ""
+"<p>在触发电子邮件提醒时如何发送电子邮件。<ul><li>KMail: 电子邮件是通过 KMail "
+"自动发送的。</li><li>发送电子邮件是自动的。 只有当您的系统被配置为使用 "
+"sendmail 或 sendmail 兼容的邮件传送代理时，此选项才启用。</li></ul></p>"
 
 #. i18n: ectx: label, entry (Base_EmailClient), group (General)
 #: data/kalarmconfig.kcfg:196
@@ -1122,6 +1127,9 @@ msgid ""
 "KMail, \"@KMail\" to allow choice of KMail identities, or enter the actual "
 "email address otherwise."
 msgstr ""
+"您的电子邮件地址，用在发送邮件闹钟中将您识别为发件人。输入“@SystemSettings”可"
+"使用 KMail 设置或系统设置里设定的默认邮件地址，输入“@KMail”可从 KMail 身份中"
+"选择地址，也可以直接输入电子邮件地址。"
 
 #. i18n: ectx: label, entry (Base_EmailBccAddress), group (General)
 #: data/kalarmconfig.kcfg:212
@@ -1141,6 +1149,9 @@ msgid ""
 "\" to use the default email address set in KMail, or enter the actual email "
 "address otherwise."
 msgstr ""
+"您的电子邮件地址，用于闹钟中将邮件密送给自己。如果您想密送到运行 KAlarm 电脑"
+"上的账户中，可直接输入用户登录名。输入“@SystemSettings”可使用 KMail 设置或系"
+"统设置里设定的默认电子邮件地址，也可以直接输入电子邮件地址。"
 
 #. i18n: ectx: label, entry (Base_CmdXTermCommand), group (General)
 #: data/kalarmconfig.kcfg:217
@@ -3868,6 +3879,8 @@ msgid ""
 "default address in <application>KMail</application> or in the "
 "<application>KAlarm</application> Configuration dialog.</para>"
 msgstr ""
+"<para>未配置发件人的电子邮件地址。</para><para>请在<application>KMail</"
+"application>、<application>KAlarm</application> 配置对话框中进行设置。</para>"
 
 #: kamail.cpp:128
 #, kde-kuit-format
@@ -4190,7 +4203,7 @@ msgstr "导入闹钟(&A)..."
 #, kde-format
 msgctxt "@action"
 msgid "Import Birthdays..."
-msgstr ""
+msgstr "导入生日..."
 
 #: mainwindow.cpp:545
 #, kde-format
@@ -4856,13 +4869,13 @@ msgstr ""
 #, kde-format
 msgctxt "@title:group"
 msgid "Plugins"
-msgstr ""
+msgstr "插件"
 
 #: prefdlg.cpp:560
 #, kde-format
 msgctxt "@option:check"
 msgid "Enable Akonadi"
-msgstr ""
+msgstr "启用 Akonadi"
 
 #: prefdlg.cpp:562
 #, kde-format
@@ -4871,6 +4884,7 @@ msgid ""
 "Enable the use of Akonadi to provide features including birthday import, "
 "some email functions, and email address book lookup."
 msgstr ""
+"启用 Akonadi 提供功能，包括生日导入、一些电子邮件功能和电子邮件地址簿查找。"
 
 #: prefdlg.cpp:564
 #, kde-format
@@ -4879,6 +4893,7 @@ msgid ""
 "Enable the use of Akonadi to provide features including birthday import, "
 "some email functions, and email address book lookup."
 msgstr ""
+"启用 Akonadi 提供功能，包括生日导入、一些电子邮件功能和电子邮件地址簿查找。"
 
 #: prefdlg.cpp:611
 #, kde-kuit-format
@@ -5146,7 +5161,7 @@ msgstr "Sendmail"
 #, kde-format
 msgctxt "@info"
 msgid "Choose how to send email when an email alarm is triggered."
-msgstr ""
+msgstr "选择如何在触发电子邮件闹钟时发送电子邮件。"
 
 #: prefdlg.cpp:1045
 #, kde-kuit-format
@@ -5158,6 +5173,11 @@ msgid ""
 "if your system is configured to use <application>sendmail</application> or a "
 "sendmail compatible mail transport agent.</item></list></para>"
 msgstr ""
+"<para>%1<list><item><interface>%2</interface>: 电子邮件是通过 "
+"<application>KMail</application>自动发送的。</item><item><interface>%3</"
+"interface>：电子邮件是自动发送的。 只有当您的系统被配置为使用 "
+"<application>sendmail</application> 或一个兼容的邮件传送代理时，此选项才能启"
+"用。</item></list></para>"
 
 #: prefdlg.cpp:1053
 #, kde-kuit-format
@@ -5168,6 +5188,9 @@ msgid ""
 "use <application>sendmail</application> or a sendmail compatible mail "
 "transport agent.</item></list></para>"
 msgstr ""
+"<para>%1<list><item><interface>%2</interface>: 电子邮件是自动发送的。 只有当"
+"您的系统被配置为使用 <application>sendmail</application> 或一个兼容的邮件传送"
+"代理时，此选项才能启用。</item></list></para>"
 
 #: prefdlg.cpp:1063
 #, kde-kuit-format
@@ -5219,7 +5242,7 @@ msgstr "您的电子邮件地址，用在发送邮件闹钟中将您识别为发
 #, kde-kuit-format
 msgctxt "@option:radio"
 msgid "Use default <application>KMail</application> identity"
-msgstr ""
+msgstr "使用默认 <application>KMail</application> 标识"
 
 #: prefdlg.cpp:1108
 #, kde-kuit-format
@@ -5228,6 +5251,8 @@ msgid ""
 "Check to use the default email address set in <application>KMail</"
 "application>, to identify you as the sender when sending email alarms."
 msgstr ""
+"勾选后，将使用 <application>KMail</application> 设置中设定的电子邮件地址，用"
+"在发送邮件闹钟中将您标识为发件人。"
 
 #: prefdlg.cpp:1112
 #, kde-kuit-format
@@ -5275,6 +5300,8 @@ msgid ""
 "Check to use the default email address set in <application>KMail</"
 "application>, for blind copying email alarms to yourself."
 msgstr ""
+"勾选后，将使用 <application>KMail</application> 设置中设定的电子邮件地址，用"
+"于闹钟中将邮件密送给自己。"
 
 #: prefdlg.cpp:1246
 #, kde-format
@@ -5286,7 +5313,7 @@ msgstr "未指定有效的密送电子邮件地址。"
 #, kde-format
 msgctxt "@info"
 msgid "Are you sure you want to save your changes?"
-msgstr ""
+msgstr "确定要保存编辑吗？"
 
 #: prefdlg.cpp:1259
 #, kde-kuit-format
@@ -5295,6 +5322,8 @@ msgid ""
 "<para>No default email address is currently set in <application>KMail</"
 "application>.</para><para>%1</para><para>%2</para>"
 msgstr ""
+"<para>目前在 <application>KMail</application>中没有设置默认的电子邮件地址。</"
+"para><para>%1</para><para>%2</para>"
 
 #: prefdlg.cpp:1264
 #, kde-kuit-format
@@ -5303,6 +5332,8 @@ msgid ""
 "<para>No <application>KMail</application> identities currently exist.</"
 "para><para>%1</para><para>%2</para>"
 msgstr ""
+"<para>目前没有 <application>KMail</application> 标识。</para><para>%1</"
+"para><para>%2</para>"
 
 #: prefdlg.cpp:1282
 #, kde-kuit-format
