@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: kdepim-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-12-12 03:00+0000\n"
-"PO-Revision-Date: 2022-12-11 19:59+0300\n"
+"PO-Revision-Date: 2022-12-17 18:57+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -284,7 +284,7 @@ msgstr "Uygulamaya geçirilecek komut satırı argümanları"
 #, kde-format
 msgctxt "@title:window"
 msgid "Import Birthdays From KAddressBook"
-msgstr "Doğum günlerini KAdresDefteri Uygulamasından İçeriye Aktar"
+msgstr "Doğum günlerini KAdresDefteri Uygulamasından İçe Aktar"
 
 #: birthdaydlg.cpp:59 editdlg.cpp:254
 #, kde-format
@@ -4452,7 +4452,7 @@ msgstr "Arşivlenmiş Alarmları Göster"
 #, kde-format
 msgctxt "@info"
 msgid "Import birthdays"
-msgstr "Doğum günlerini içeriye aktar"
+msgstr "Doğum günlerini içe aktar"
 
 #: mainwindow.cpp:1231
 #, kde-format
@@ -7744,7 +7744,7 @@ msgstr "&Ekle..."
 #, kde-format
 msgctxt "@action"
 msgid "Im&port..."
-msgstr "&İçeriye Aktar..."
+msgstr "&İçe Aktar..."
 
 #: resourceselector.cpp:372
 #, kde-format
