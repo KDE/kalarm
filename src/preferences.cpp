@@ -570,11 +570,9 @@ QString translateXTermPath(const QString& cmdline, bool write)
     // Strip any leading quote
     const QChar quote = cmdline[0];
     const char q = quote.toLatin1();
-    const bool quoted = (q == '"' || q == '\'');
-    if (quoted)
-        cmd = cmdline.mid(1);
+    bool quoted = (q == '"' || q == '\'');
     // Split the command at the first non-escaped space
-    for (int i = 0, count = cmd.length();  i < count;  ++i)
+    for (int i = quoted ? 1 : 0, count = cmd.length();  i < count;  ++i)
     {
         switch (cmd.at(i).toLatin1())
         {
@@ -583,13 +581,15 @@ QString translateXTermPath(const QString& cmdline, bool write)
                 continue;
             case '"':
             case '\'':
-                if (cmd.at(i) != quote)
-                    continue;
-                // fall through to ' '
-                Q_FALLTHROUGH();
+                if (quoted  &&  cmd.at(i) == quote)
+                    quoted = false;
+                continue;
             case ' ':
-                params = cmd.mid(i);
-                cmd.truncate(i);
+                if (!quoted)
+                {
+                    params = cmd.mid(i);
+                    cmd.truncate(i);
+                }
                 break;
             default:
                 continue;
