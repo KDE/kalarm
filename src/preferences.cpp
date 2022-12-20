@@ -589,8 +589,9 @@ QString translateXTermPath(const QString& cmdline, bool write)
                 {
                     params = cmd.mid(i);
                     cmd.truncate(i);
+                    break;
                 }
-                break;
+                continue;
             default:
                 continue;
         }
