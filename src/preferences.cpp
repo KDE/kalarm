@@ -13,6 +13,7 @@
 #include "pluginmanager.h"
 #include "lib/desktop.h"
 #include "lib/messagebox.h"
+#include "lib/shellprocess.h"
 #include "kalarmcalendar/identities.h"
 #include "kalarm_debug.h"
 
@@ -563,39 +564,9 @@ bool Preferences::notifying(const QString& messageID)
 */
 QString translateXTermPath(const QString& cmdline, bool write)
 {
-    QString params;
-    QString cmd = cmdline;
-    if (cmdline.isEmpty())
-        return cmdline;
-    // Strip any leading quote
-    const QChar quote = cmdline[0];
-    const char q = quote.toLatin1();
-    bool quoted = (q == '"' || q == '\'');
-    // Split the command at the first non-escaped space
-    for (int i = quoted ? 1 : 0, count = cmd.length();  i < count;  ++i)
-    {
-        switch (cmd.at(i).toLatin1())
-        {
-            case '\\':
-                ++i;
-                continue;
-            case '"':
-            case '\'':
-                if (quoted  &&  cmd.at(i) == quote)
-                    quoted = false;
-                continue;
-            case ' ':
-                if (!quoted)
-                {
-                    params = cmd.mid(i);
-                    cmd.truncate(i);
-                }
-                break;
-            default:
-                continue;
-        }
-        break;
-    }
+    QString params = cmdline;
+    QString cmd = ShellProcess::splitCommandLine(params);
+
     // Translate any home directory specification at the start of the
     // executable's path.
     KConfigGroup group(KSharedConfig::openConfig(), GENERAL_SECTION);
@@ -610,10 +581,7 @@ QString translateXTermPath(const QString& cmdline, bool write)
         cmd = group.readPathEntry(TEMP, QString());
     }
     group.deleteEntry(TEMP);
-    if (quoted)
-        return quote + cmd + params;
-    else
-        return cmd + params;
+    return cmd + params;
 }
 
 // vim: et sw=4:

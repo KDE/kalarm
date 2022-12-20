@@ -1870,25 +1870,29 @@ void CommandEdit::setText(const AlarmText& alarmText)
 
 /******************************************************************************
 * Return the widget's text.
-*/
-QString CommandEdit::text() const
-{
-    QString result;
-    if (mTypeScript->isChecked())
-        result = mScriptEdit->toPlainText();
-    else
-        result = mCommandEdit->text();
-    return result.trimmed();
-}
-
-/******************************************************************************
-* Return the alarm text.
+* If it's a command line, it must not start with environment variable
+* specifications.
 * If 'showErrorMessage' is true and the text is empty, an error message is
 * displayed.
+* Reply = text, or empty if a command line starting with environment vars.
 */
 QString CommandEdit::text(EditAlarmDlg* dlg, bool showErrorMessage) const
 {
-    const QString result = text();
+    QString result;
+    if (mTypeScript->isChecked())
+        result = mScriptEdit->toPlainText().trimmed();
+    else
+    {
+        result = mCommandEdit->text().trimmed();
+        QString params = result;
+        const QString cmd = ShellProcess::splitCommandLine(params);
+        if (cmd.contains(QLatin1Char('=')))
+        {
+            if (showErrorMessage)
+                KAMessageBox::error(dlg, xi18nc("@info", "<para>The command cannot set environment variables:</para><para><icode>%1</icode></para>", cmd));
+            return {};
+        }
+    }
     if (showErrorMessage  &&  result.isEmpty())
         KAMessageBox::error(dlg, i18nc("@info", "Please enter a command or script to execute"));
     return result;

@@ -209,4 +209,45 @@ bool ShellProcess::authorised()
     return mAuthorised;
 }
 
+/******************************************************************************
+* Splits a command line at the first non-escaped space character.
+*/
+QString ShellProcess::splitCommandLine(QString& cmdline)
+{
+    if (cmdline.isEmpty())
+        return cmdline;
+    QString cmd = cmdline;
+    // Check for a leading quote
+    const QChar quote = cmdline[0];
+    const char q = quote.toLatin1();
+    bool quoted = (q == '"' || q == '\'');
+    // Split the command at the first non-escaped space
+    for (int i = quoted ? 1 : 0, count = cmd.length();  i < count;  ++i)
+    {
+        switch (cmd.at(i).toLatin1())
+        {
+            case '\\':
+                ++i;
+                break;
+            case '"':
+            case '\'':
+                if (quoted  &&  cmd.at(i) == quote)
+                    quoted = false;
+                break;
+            case ' ':
+                if (!quoted)
+                {
+                    cmdline = cmd.mid(i);  // command arguments
+                    cmd.truncate(i);
+                    return cmd;
+                }
+                break;
+            default:
+                break;
+        }
+    }
+    cmdline.clear();
+    return cmd;
+}
+
 // vim: et sw=4:

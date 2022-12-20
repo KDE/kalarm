@@ -1,7 +1,7 @@
 /*
  *  shellprocess.h  -  execute a process through the shell
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2004-2020 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2004-2022 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -102,6 +102,14 @@ public:
      *  @return path name of shell.
      */
     static const QByteArray& shellPath();
+
+    /** Splits a command line at the first non-escaped space character.
+     *  If the command line STARTS with a quote, any spaces before the closing
+     *  quote are ignored.
+     *  @param cmdline  Updated to contain the command parameters, starting with a space.
+     *  @return command line up to but not including the first space.
+     */
+    static QString splitCommandLine(QString& cmdline);
 
 Q_SIGNALS:
     /** Signal emitted when the shell process execution completes. It is not emitted
