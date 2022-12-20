@@ -56,7 +56,6 @@ using namespace KHolidays;
 #include <KAboutData>
 #include <KStandardGuiItem>
 #include <QIcon>
-#include <kwindowsystem_version.h>
 #if ENABLE_X11
 #include <KX11Extras>
 #endif
