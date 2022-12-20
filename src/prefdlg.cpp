@@ -57,12 +57,8 @@ using namespace KHolidays;
 #include <KStandardGuiItem>
 #include <QIcon>
 #include <kwindowsystem_version.h>
-#if KWINDOWSYSTEM_VERSION >= QT_VERSION_CHECK(5, 101, 0)
 #if ENABLE_X11
 #include <KX11Extras>
-#endif
-#else
-#include <KWindowInfo>
 #endif
 #include <KWindowSystem>
 #include <KHelpClient>
@@ -132,14 +128,9 @@ void KAlarmPrefDlg::display()
     {
         mInstance->restoreTab();
         // Switch to the virtual desktop which the dialog is in
-#if KWINDOWSYSTEM_VERSION >= QT_VERSION_CHECK(5, 101, 0)
 #if ENABLE_X11
         KWindowInfo info = KWindowInfo(mInstance->winId(), NET::WMGeometry | NET::WMDesktop);
         KX11Extras::setCurrentDesktop(info.desktop());
-#endif
-#else
-        KWindowInfo info = KWindowInfo(mInstance->winId(), NET::WMGeometry | NET::WMDesktop);
-        KWindowSystem::setCurrentDesktop(info.desktop());
 #endif
         mInstance->setWindowState(mInstance->windowState() & ~Qt::WindowMinimized); // un-minimize it if necessary
         mInstance->raise();

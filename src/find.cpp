@@ -20,13 +20,8 @@
 #include <KFind>
 #include <KSeparator>
 #include <KLocalizedString>
-#include <kwindowsystem_version.h>
-#if KWINDOWSYSTEM_VERSION >= QT_VERSION_CHECK(5, 101, 0)
 #if ENABLE_X11
 #include <KX11Extras>
-#endif
-#else
-#include <KWindowSystem>
 #endif
 
 #include <QGroupBox>
@@ -89,12 +84,8 @@ void Find::display()
 
     if (mDialog)
     {
-#if KWINDOWSYSTEM_VERSION >= QT_VERSION_CHECK(5, 101, 0)
 #if ENABLE_X11
         KX11Extras::activateWindow(mDialog->winId());
-#endif
-#else
-        KWindowSystem::activateWindow(mDialog->winId());
 #endif
     }
     else
