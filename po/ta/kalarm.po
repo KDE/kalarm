@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-12-21 00:47+0000\n"
-"PO-Revision-Date: 2022-10-20 21:43+0530\n"
+"PO-Revision-Date: 2022-12-22 19:48+0530\n"
 "Last-Translator: Kishore G <kishore96@gmail.com>\n"
 "Language-Team: Tamil <kde-i18n-doc@kde.org>\n"
 "Language: ta\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 22.08.2\n"
+"X-Generator: Lokalize 22.12.0\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -2571,14 +2571,14 @@ msgid ""
 msgstr "எழுதக்கூடிய உள்ளமை கோப்பின் பெயராக அல்லது பாதையாக பதிவுக்கோப்பு இருக்க வேண்டும்."
 
 #: editdlgtypes.cpp:1067
-#, fuzzy, kde-kuit-format
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "<para>No terminal is selected for command alarms.</para><para>Please set it "
 "in the <application>KAlarm</application> Configuration dialog.</para>"
 msgstr ""
-"அனுப்புநர் இல்லாமல் மின்னஞ்சல் முகவரி கட்டமைக்கப்பட்டுள்ளது.\n"
-"%1 விருப்பங்கள் உரையாடலில் அமைக்கவும்.\""
+"<para>கட்டளை அலாரங்களுக்கான முனையச்செயலி தேரந்தெடுக்கப்படவில்லை.</para><para>அதை "
+"<application>கேயலாரத்தின்</application> அமைப்புகள் சாளரத்தில் அமையுங்கள்.</para>"
 
 #: editdlgtypes.cpp:1087
 #, kde-kuit-format
@@ -2857,6 +2857,8 @@ msgid ""
 "<para>The command cannot set environment variables:</para><para><icode>%1</"
 "icode></para>"
 msgstr ""
+"<para>சூழல் மாறிகளை கட்டளையால் அமைக்க முடியவில்லை:</para><para><icode>%1</icode></"
+"para>"
 
 #: editdlgtypes.cpp:1897
 #, kde-format
@@ -3420,12 +3422,10 @@ msgid "Subject:"
 msgstr "தலைப்பு:"
 
 #: kalarmcalendar/alarmtext.cpp:512
-#, fuzzy, kde-format
-#| msgctxt "Email addressee"
-#| msgid "To:"
+#, kde-format
 msgctxt "@info Todo calendar item's title field"
 msgid "To-do:"
-msgstr "பெறுநர்:"
+msgstr "செய்யவேண்டியது:"
 
 #: kalarmcalendar/alarmtext.cpp:513
 #, kde-format
