@@ -526,8 +526,20 @@ void Preferences::setEmailBccAddress(bool useSystemSettings, const QString& addr
 
 QString Preferences::cmdXTermCommand()
 {
-    //TODO: Implement a default terminal choice?
-    return translateXTermPath(self()->mBase_CmdXTermCommand, false);
+    QString cmd = translateXTermPath(self()->mBase_CmdXTermCommand, false);
+    if (cmd.isEmpty())
+    {
+        // No terminal command is specified. If there is only one standard
+        // terminal executable installed, set it as the default.
+        const auto cmds = cmdXTermStandardCommands();
+        if (cmds.size() == 1)
+        {
+            cmd = cmds.constBegin().value();
+            self()->setBase_CmdXTermCommand(translateXTermPath(cmd, true));
+            self()->save();
+        }
+    }
+    return cmd;
 }
 
 std::pair<int, QString> Preferences::cmdXTermCommandIndex()

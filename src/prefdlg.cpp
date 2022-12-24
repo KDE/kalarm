@@ -584,10 +584,26 @@ bool MiscPrefTab::apply(bool syncToDisc)
         if (cmd.isEmpty())
         {
             mXtermCommand->setFocus();
-            if (KAMessageBox::warningContinueCancel(topLayout()->parentWidget(), xi18nc("@info", "No command is specified to invoke terminal window"))
-                            != KMessageBox::Continue)
-                return false;
-            xtermID = -1;
+            const QList<QAbstractButton*> buttons = mXtermType->buttons();
+            if (buttons.count() == 2)
+            {
+                // There are only radio buttons for one standard command, plus 'Other'
+                const int id = mXtermType->id(buttons[0]);
+                cmd = Preferences::cmdXTermStandardCommand(id);
+                const QStringList args = KShell::splitArgs(cmd);
+                if (KAMessageBox::warningContinueCancel(topLayout()->parentWidget(), xi18nc("@info", "<para>No command is specified to invoke a terminal window.</para><para>The default command (<command>%1</command>) will be used.</para>", args[0]))
+                                != KMessageBox::Continue)
+                    return false;
+                xtermID = id;
+                mXtermType->setButton(id);
+            }
+            else
+            {
+                if (KAMessageBox::warningContinueCancel(topLayout()->parentWidget(), xi18nc("@info", "No command is specified to invoke a terminal window"))
+                                != KMessageBox::Continue)
+                    return false;
+                xtermID = -1;
+            }
         }
         else
         {
