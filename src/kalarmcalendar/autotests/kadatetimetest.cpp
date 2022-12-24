@@ -3574,12 +3574,12 @@ void KADateTimeTest::strings_format()
     dt = KADateTime::fromString(QStringLiteral("200509031430:01.3+0200"), QStringLiteral("%Y%m%d%H%M%:S%:s%z"), &zones, false);
     QVERIFY(!dt.isValid());    // matches paris and berlin
 
-    dt = KADateTime::fromString(QStringLiteral("2005October051430 CEST"), QStringLiteral("%Y%:B%d%H%M%:S %Z"), &zones, true);
+    dt = KADateTime::fromString(QStringLiteral("2005October 051430 CEST"), QStringLiteral("%Y%:B %d%H%M%:S %Z"), &zones, true);
     QCOMPARE(dt.date(), QDate(2005, 10, 5));
     QCOMPARE(dt.time(), QTime(14, 30, 0));
     QCOMPARE(dt.timeType(), KADateTime::OffsetFromUTC);
     QCOMPARE(dt.utcOffset(), 2 * 3600);
-    dt = KADateTime::fromString(QStringLiteral("2005October051430 CEST"), QStringLiteral("%Y%:B%d%H%M%:S %Z"), &zones, false);
+    dt = KADateTime::fromString(QStringLiteral("2005October 051430 CEST"), QStringLiteral("%Y%:B %d%H%M%:S %Z"), &zones, false);
     QVERIFY(!dt.isValid());    // matches paris and berlin
 
     // GMT is used by multiple time zones
