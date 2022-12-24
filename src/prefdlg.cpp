@@ -84,23 +84,6 @@ using namespace KAlarmCal;
 
 static const char PREF_DIALOG_NAME[] = "PrefDialog";
 
-// Command strings for executing commands in different types of terminal windows.
-// %t = window title parameter
-// %c = command to execute in terminal
-// %w = command to execute in terminal, with 'sleep 86400' appended
-// %C = temporary command file to execute in terminal
-// %W = temporary command file to execute in terminal, with 'sleep 86400' appended
-static QString xtermCommands[] = {
-    QStringLiteral("xterm -sb -hold -title %t -e %c"),
-    QStringLiteral("konsole --noclose -p tabtitle=%t -e ${SHELL:-sh} -c %c"),
-    QStringLiteral("gnome-terminal -t %t -e %W"),
-    QStringLiteral("eterm --pause -T %t -e %C"),    // some systems use eterm...
-    QStringLiteral("Eterm --pause -T %t -e %C"),    // while some use Eterm
-    QStringLiteral("rxvt -title %t -e ${SHELL:-sh} -c %w"),
-    QStringLiteral("xfce4-terminal -T %t -H -e %c"),
-    QString()       // end of list indicator - don't change!
-};
-
 
 /*=============================================================================
 = Class KAlarmPrefDlg
@@ -186,12 +169,14 @@ KAlarmPrefDlg::KAlarmPrefDlg()
     mViewPageItem->setHeader(i18nc("@title", "View Settings"));
     mViewPageItem->setIcon(QIcon::fromTheme(QStringLiteral("preferences-desktop-theme")));
     addPage(mViewPageItem);
+
     connect(button(QDialogButtonBox::Ok), &QAbstractButton::clicked, this, &KAlarmPrefDlg::slotOk);
     connect(button(QDialogButtonBox::Cancel), &QAbstractButton::clicked, this, &KAlarmPrefDlg::slotCancel);
     connect(button(QDialogButtonBox::Apply), &QAbstractButton::clicked, this, &KAlarmPrefDlg::slotApply);
     connect(button(QDialogButtonBox::RestoreDefaults), &QAbstractButton::clicked, this, &KAlarmPrefDlg::slotDefault);
     connect(button(QDialogButtonBox::Help), &QAbstractButton::clicked, this, &KAlarmPrefDlg::slotHelp);
     connect(this, &KPageDialog::currentPageChanged, this, &KAlarmPrefDlg::slotTabChanged);
+
     restore(false);
     adjustSize();
 }
@@ -510,18 +495,14 @@ MiscPrefTab::MiscPrefTab(StackedScrollGroup* scrollGroup)
 
     mXtermType = new ButtonGroup(group);
     int index = 0;
-    mXtermFirst = -1;
-    for (mXtermCount = 0;  !xtermCommands[mXtermCount].isNull();  ++mXtermCount)
+    const auto xtermCommands = Preferences::cmdXTermStandardCommands();
+    for (auto it = xtermCommands.constBegin();  it != xtermCommands.constEnd();  ++it, ++index)
     {
-        QString cmd = xtermCommands[mXtermCount];
+        QString cmd = it.value();
         const QStringList args = KShell::splitArgs(cmd);
-        if (args.isEmpty()  ||  QStandardPaths::findExecutable(args[0]).isEmpty())
-            continue;
         auto radio = new QRadioButton(args[0], group);
         radio->setMinimumSize(radio->sizeHint());
-        mXtermType->addButton(radio, mXtermCount);
-        if (mXtermFirst < 0)
-            mXtermFirst = mXtermCount;   // note the id of the first button
+        mXtermType->addButton(radio, it.key());
         cmd.replace(QStringLiteral("%t"), KAboutData::applicationData().displayName());
         cmd.replace(QStringLiteral("%c"), QStringLiteral("<command>"));
         cmd.replace(QStringLiteral("%w"), QStringLiteral("<command; sleep>"));
@@ -530,7 +511,6 @@ MiscPrefTab::MiscPrefTab(StackedScrollGroup* scrollGroup)
         radio->setWhatsThis(
                 xi18nc("@info:whatsthis", "Check to execute command alarms in a terminal window by <icode>%1</icode>", cmd));
         grid->addWidget(radio, (row = index/3), index % 3, Qt::AlignLeft);
-        ++index;
     }
 
     // QHBox used here doesn't allow the QLineEdit to expand!?
@@ -539,9 +519,8 @@ MiscPrefTab::MiscPrefTab(StackedScrollGroup* scrollGroup)
     QRadioButton* radio = new QRadioButton(i18nc("@option:radio Other terminal window command", "Other:"), group);
     hlayout->addWidget(radio);
     connect(radio, &QAbstractButton::toggled, this, &MiscPrefTab::slotOtherTerminalToggled);
-    mXtermType->addButton(radio, mXtermCount);
-    if (mXtermFirst < 0)
-        mXtermFirst = mXtermCount;   // note the id of the first button
+    mXtermType->addButton(radio, 0);
+
     mXtermCommand = new QLineEdit(group);
     mXtermCommand->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Minimum);
     hlayout->addWidget(mXtermCommand);
@@ -578,19 +557,18 @@ void MiscPrefTab::restore(bool defaults, bool)
     mUseAlarmNames->setChecked(Preferences::useAlarmName());
     mConfirmAlarmDeletion->setChecked(Preferences::confirmAlarmDeletion());
     mDefaultDeferTime->setValue(Preferences::defaultDeferTime());
-    QString xtermCmd = Preferences::cmdXTermCommand();
-    int id = mXtermFirst;
-    if (!xtermCmd.isEmpty())
+    const auto xtermCmd = Preferences::cmdXTermCommandIndex();
+    int id = xtermCmd.first;
+    if (id > 0  &&  !mXtermType->find(id))
     {
-        for ( ;  id < mXtermCount;  ++id)
-        {
-            if (mXtermType->find(id)  &&  xtermCmd == xtermCommands[id])
-                break;
-        }
+        // The command is a standard command, but there is no button for it
+        // (because the executable doesn't exist on this system). So set it
+        // into the 'Other' option.
+        id = 0;
     }
     mXtermType->setButton(id);
-    mXtermCommand->setEnabled(id == mXtermCount);
-    mXtermCommand->setText(id == mXtermCount ? xtermCmd : QString());
+    mXtermCommand->setEnabled(id == 0);
+    mXtermCommand->setText(id == 0 ? xtermCmd.second : QString());
     if (mUseAkonadi)
         mUseAkonadi->setChecked(Preferences::useAkonadi());
 }
@@ -599,11 +577,18 @@ bool MiscPrefTab::apply(bool syncToDisc)
 {
     // First validate anything entered in Other X-terminal command
     int xtermID = mXtermType->selectedId();
-    if (xtermID >= mXtermCount)
+    if (!xtermID)
     {
+        // 'Other' is selected.
         QString cmd = mXtermCommand->text();
         if (cmd.isEmpty())
-            xtermID = -1;       // 'Other' is only acceptable if it's non-blank
+        {
+            mXtermCommand->setFocus();
+            if (KAMessageBox::warningContinueCancel(topLayout()->parentWidget(), xi18nc("@info", "No command is specified to invoke terminal window"))
+                            != KMessageBox::Continue)
+                return false;
+            xtermID = -1;
+        }
         else
         {
             const QStringList args = KShell::splitArgs(cmd);
@@ -616,11 +601,6 @@ bool MiscPrefTab::apply(bool syncToDisc)
                     return false;
             }
         }
-    }
-    if (xtermID < 0)
-    {
-        xtermID = mXtermFirst;
-        mXtermType->setButton(mXtermFirst);
     }
 
     if (mQuitWarn->isEnabled())
@@ -647,9 +627,14 @@ bool MiscPrefTab::apply(bool syncToDisc)
     int i = mDefaultDeferTime->value();
     if (i != Preferences::defaultDeferTime())
         Preferences::setDefaultDeferTime(i);
-    QString text = (xtermID < mXtermCount) ? xtermCommands[xtermID] : mXtermCommand->text();
-    if (text != Preferences::cmdXTermCommand())
-        Preferences::setCmdXTermCommand(text);
+    const auto xtermCmd = Preferences::cmdXTermCommandIndex();
+    if (xtermID != xtermCmd.first  ||  (!xtermID && mXtermCommand->text() != xtermCmd.second))
+    {
+        if (xtermID > 0)
+            Preferences::setCmdXTermCommand(xtermID);
+        else
+            Preferences::setCmdXTermSpecialCommand(mXtermCommand->text());
+    }
     if (mUseAkonadi)
     {
         b = mUseAkonadi->isChecked();

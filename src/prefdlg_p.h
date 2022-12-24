@@ -90,8 +90,6 @@ private:
     TimeSpinBox*  mDefaultDeferTime;
     ButtonGroup*  mXtermType;
     QLineEdit*    mXtermCommand;
-    int           mXtermFirst;              // id of first terminal window radio button
-    int           mXtermCount;              // number of terminal window types
 };
 
 

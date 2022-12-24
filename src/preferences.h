@@ -97,7 +97,40 @@ public:
     static void             setEmailBccAddress(bool useSystemSettings, const QString& address);
     static bool             emailBccUseSystemSettings();
     static QString          cmdXTermCommand();
-    static void             setCmdXTermCommand(const QString& cmd);
+
+    /** Set a non-standard command line to open a terminal window for running command
+     *  alarms in.
+     */
+    static void setCmdXTermSpecialCommand(const QString& cmd);
+
+    /** Set a standard command line to open a terminal window for running command
+     *  alarms in.
+     */
+    static void setCmdXTermCommand(int index);
+
+    /** Return the currently configured command line to open a terminal window for
+     *  running command alarms in, together with its index.
+     *  @return  0 if user-defined command line,
+     *          -1 if empty command line,
+     *         > 0 if a standard command line.
+     */
+    static std::pair<int, QString> cmdXTermCommandIndex();
+
+    /** Return the standard command line to open a terminal window for running
+     *  command alarms in, as represented by the index returned by cmdXTermCommandIndex().
+     *  @param index  Index to the command line. Must be > 0.
+     *  @return  the command line, or empty if @p index does not refer to a program
+     *           which is available on this system.
+     */
+    static QString cmdXTermStandardCommand(int index);
+
+    /** Return all standard command lines to open terminal windows for running command
+     *  alarms in. Only those command lines which invoke programs which exist on this
+     *  system will be returned.
+     *  @return  command lines, indexed by their index number.
+     */
+    static QHash<int, QString> cmdXTermStandardCommands();
+
     static SoundType        defaultSoundType();
     static void             setDefaultSoundType(SoundType);
     static float            defaultSoundVolume()             { int vol = self()->mBase_DefaultSoundVolume; return (vol < 0) ? -1 : static_cast<float>(vol) / 100; }

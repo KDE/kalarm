@@ -26,6 +26,7 @@
 #include <KConfigGroup>
 #include <KMessageBox>
 #include <KWindowSystem>
+#include <KShell>
 
 #include <QFile>
 #include <QSaveFile>
@@ -39,17 +40,42 @@ using namespace KAlarmCal;
 
 //clazy:excludeall=non-pod-global-static
 
+namespace
+{
+
 // Config file entry names
-static const char* GENERAL_SECTION  = "General";
+const char* GENERAL_SECTION  = "General";
 
 // Config file entry name for temporary use
-static const char* TEMP = "Temp";
+const char* TEMP = "Temp";
 
-static const QString AUTOSTART_FILE(QStringLiteral("kalarm.autostart.desktop"));
+const QString AUTOSTART_FILE(QStringLiteral("kalarm.autostart.desktop"));
 
 // Values for EmailFrom entry
-static const QString FROM_SYS_SETTINGS(QStringLiteral("@SystemSettings"));
-static const QString FROM_KMAIL(QStringLiteral("@KMail"));
+const QString FROM_SYS_SETTINGS(QStringLiteral("@SystemSettings"));
+const QString FROM_KMAIL(QStringLiteral("@KMail"));
+
+// Command strings for executing commands in different types of terminal windows.
+// %t = window title parameter
+// %c = command to execute in terminal
+// %w = command to execute in terminal, with 'sleep 86400' appended
+// %C = temporary command file to execute in terminal
+// %W = temporary command file to execute in terminal, with 'sleep 86400' appended
+const QVector<QString> xtermCommands {
+    QStringLiteral("xterm -sb -hold -title %t -e %c"),
+    QStringLiteral("konsole --noclose -p tabtitle=%t -e ${SHELL:-sh} -c %c"),
+    QStringLiteral("gnome-terminal -t %t -e %W"),
+    QStringLiteral("eterm --pause -T %t -e %C"),    // some systems use eterm...
+    QStringLiteral("Eterm --pause -T %t -e %C"),    // while some use Eterm
+    QStringLiteral("rxvt -title %t -e ${SHELL:-sh} -c %w"),
+    QStringLiteral("xfce4-terminal -T %t -H -e %c")
+};
+
+QVector<QString> xtermCommandExes;   // initialised to hold executables in xtermCommands
+
+void splitXTermCommands();
+
+} // namespace
 
 // Config file entry names for notification messages
 const QLatin1String Preferences::QUIT_WARN("QuitWarn");
@@ -500,12 +526,76 @@ void Preferences::setEmailBccAddress(bool useSystemSettings, const QString& addr
 
 QString Preferences::cmdXTermCommand()
 {
+    //TODO: Implement a default terminal choice?
     return translateXTermPath(self()->mBase_CmdXTermCommand, false);
 }
 
-void Preferences::setCmdXTermCommand(const QString& cmd)
+std::pair<int, QString> Preferences::cmdXTermCommandIndex()
+{
+    const QString xtermCmd = cmdXTermCommand();
+    if (xtermCmd.isEmpty())
+        return std::make_pair(-1, QString());
+    int id = 0;
+    for (const QString& cmd : xtermCommands)
+    {
+        ++id;
+        if (xtermCmd == cmd)
+            return std::make_pair(id, xtermCmd);   // index is 1 greater than the index into xtermCommands
+    }
+    return std::make_pair(0, xtermCmd);
+}
+
+void Preferences::setCmdXTermSpecialCommand(const QString& cmd)
 {
     self()->setBase_CmdXTermCommand(translateXTermPath(cmd, true));
+}
+
+void Preferences::setCmdXTermCommand(int index)
+{
+    --index;   // convert to an index into xtermCommands
+    if (index >= 0  &&  index < xtermCommands.size())
+        setCmdXTermSpecialCommand(xtermCommands[index]);
+}
+
+QString Preferences::cmdXTermStandardCommand(int index)
+{
+    --index;   // convert to an index into xtermCommands
+    if (index >= 0  &&  index < xtermCommands.size())
+    {
+        splitXTermCommands();
+        const QString exe = xtermCommandExes.at(index);
+        if (!exe.isEmpty()  &&  !QStandardPaths::findExecutable(exe).isEmpty())
+            return xtermCommands[index];
+    }
+    return {};
+}
+
+QHash<int, QString> Preferences::cmdXTermStandardCommands()
+{
+    QHash<int, QString> result;
+    splitXTermCommands();
+    for (int i = 0, count = xtermCommands.count();  i < count;  ++i)
+    {
+        const QString exe = xtermCommandExes.at(i);
+        if (!exe.isEmpty()  &&  !QStandardPaths::findExecutable(exe).isEmpty())
+            result[i + 1] = xtermCommands[i];   // index is 1 greater than the index into xtermCommands
+    }
+    return result;
+}
+
+namespace
+{
+void splitXTermCommands()
+{
+    if (xtermCommandExes.isEmpty())
+    {
+        for (const QString& cmd : xtermCommands)
+        {
+            const QStringList args = KShell::splitArgs(cmd);
+            xtermCommandExes.append(args.isEmpty() ? QString() : args[0]);
+        }
+    }
+}
 }
 
 Preferences::SoundType Preferences::defaultSoundType()
