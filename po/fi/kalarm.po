@@ -22,7 +22,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-21 00:47+0000\n"
+"POT-Creation-Date: 2022-12-24 00:50+0000\n"
 "PO-Revision-Date: 2022-07-29 22:44+0300\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -214,7 +214,7 @@ msgstr ""
 "Valitse tälle hälytykselle aikavyöhyke, joka poikkeaa KAlarmin "
 "asetusikkunassa määritetystä oletuksesta."
 
-#: alarmtimewidget.cpp:196 prefdlg.cpp:681
+#: alarmtimewidget.cpp:196 prefdlg.cpp:679
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Time zone:"
@@ -319,7 +319,7 @@ msgctxt "@title:group"
 msgid "Alarm Text"
 msgstr "Hälytysteksti"
 
-#: birthdaydlg.cpp:77 prefdlg.cpp:1844
+#: birthdaydlg.cpp:77 prefdlg.cpp:1842
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Prefix:"
@@ -1076,7 +1076,7 @@ msgid "Show alarm times in system tray tooltip"
 msgstr "Näytä ilmoitusalueen työkaluvihjeessä hälytysten määrä"
 
 #. i18n: ectx: whatsthis, entry (ShowTooltipAlarmTime), group (General)
-#: data/kalarmconfig.kcfg:176 prefdlg.cpp:1832
+#: data/kalarmconfig.kcfg:176 prefdlg.cpp:1830
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1095,7 +1095,7 @@ msgstr ""
 "Käynnistä ilmoitusaluekuvake automaattisesti sisäänkirjautumisen yhteydessä"
 
 #. i18n: ectx: whatsthis, entry (ShowTooltipTimeToAlarm), group (General)
-#: data/kalarmconfig.kcfg:182 prefdlg.cpp:1838
+#: data/kalarmconfig.kcfg:182 prefdlg.cpp:1836
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1113,7 +1113,7 @@ msgid "Time-to-alarm prefix in system tray tooltip"
 msgstr "Ilmoitusalueen työkaluvihjeen Aikaa hälytykseen -etuliite"
 
 #. i18n: ectx: whatsthis, entry (TooltipTimeToPrefix), group (General)
-#: data/kalarmconfig.kcfg:188 prefdlg.cpp:1849
+#: data/kalarmconfig.kcfg:188 prefdlg.cpp:1847
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1310,7 +1310,7 @@ msgid "Disabled alarm color"
 msgstr "Estetyn hälytyksen väri"
 
 #. i18n: ectx: whatsthis, entry (DisabledColour), group (General)
-#: data/kalarmconfig.kcfg:246 prefdlg.cpp:1871
+#: data/kalarmconfig.kcfg:246 prefdlg.cpp:1869
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Choose the text color in the alarm list for disabled alarms."
@@ -1324,7 +1324,7 @@ msgid "Archived alarm color"
 msgstr "Arkistoitujen hälytysten väri"
 
 #. i18n: ectx: whatsthis, entry (ArchivedColour), group (General)
-#: data/kalarmconfig.kcfg:252 prefdlg.cpp:1884
+#: data/kalarmconfig.kcfg:252 prefdlg.cpp:1882
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Choose the text color in the alarm list for archived alarms."
@@ -1640,7 +1640,7 @@ msgid "Recurrence period"
 msgstr "Toiston aika"
 
 #. i18n: ectx: whatsthis, entry (DefaultRecurPeriod), group (Defaults)
-#: data/kalarmconfig.kcfg:368 prefdlg.cpp:1341
+#: data/kalarmconfig.kcfg:368 prefdlg.cpp:1339
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "The default setting for the recurrence rule in the alarm edit dialog."
@@ -1668,7 +1668,7 @@ msgid "Hourly/minutely"
 msgstr "Tunneittain/minuuteittain"
 
 #. i18n: ectx: label, entry (DefaultFeb29Type), group (Defaults)
-#: data/kalarmconfig.kcfg:381 prefdlg.cpp:1348
+#: data/kalarmconfig.kcfg:381 prefdlg.cpp:1346
 #, kde-format
 msgctxt "@label"
 msgid "In non-leap years, repeat yearly February 29th alarms on:"
@@ -1836,7 +1836,7 @@ msgid "Confirm alarm deletions"
 msgstr "Vahvista hälytysten poisto"
 
 #. i18n: ectx: whatsthis, entry (Base_ConfirmAlarmDeletion), group (Notification Messages)
-#: data/kalarmconfig.kcfg:433 prefdlg.cpp:473
+#: data/kalarmconfig.kcfg:433 prefdlg.cpp:471
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to be prompted for confirmation each time you delete an alarm."
@@ -1850,7 +1850,7 @@ msgid "Notify when remote emails are queued"
 msgstr "Ilmoita kun sähköposti on viety jonoon"
 
 #. i18n: ectx: whatsthis, entry (Base_EmailQueuedNotify), group (Notification Messages)
-#: data/kalarmconfig.kcfg:438 prefdlg.cpp:1064
+#: data/kalarmconfig.kcfg:438 prefdlg.cpp:1062
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -4859,85 +4859,85 @@ msgctxt "@action"
 msgid "New Alarm From &Template"
 msgstr "Uusi &malliin perustuva hälytys"
 
-#: prefdlg.cpp:145
+#: prefdlg.cpp:128
 #, kde-format
 msgctxt "@title:window"
 msgid "Configure"
 msgstr "Asetukset"
 
-#: prefdlg.cpp:155
+#: prefdlg.cpp:138
 #, kde-format
 msgctxt "@title:tab General preferences"
 msgid "General"
 msgstr "Yleiset"
 
-#: prefdlg.cpp:156
+#: prefdlg.cpp:139
 #, kde-format
 msgctxt "@title General preferences"
 msgid "General"
 msgstr "Yleiset"
 
-#: prefdlg.cpp:161
+#: prefdlg.cpp:144
 #, kde-format
 msgctxt "@title:tab"
 msgid "Time & Date"
 msgstr "Aika ja päivämäärä"
 
-#: prefdlg.cpp:162
+#: prefdlg.cpp:145
 #, kde-format
 msgctxt "@title"
 msgid "Time and Date"
 msgstr "Aika ja päivämäärä"
 
-#: prefdlg.cpp:167
+#: prefdlg.cpp:150
 #, kde-format
 msgctxt "@title:tab"
 msgid "Storage"
 msgstr "Talletuspaikka"
 
-#: prefdlg.cpp:168
+#: prefdlg.cpp:151
 #, kde-format
 msgctxt "@title"
 msgid "Alarm Storage"
 msgstr "Hälytysten talletuspaikka"
 
-#: prefdlg.cpp:173
+#: prefdlg.cpp:156
 #, kde-format
 msgctxt "@title:tab Email preferences"
 msgid "Email"
 msgstr "Sähköposti"
 
-#: prefdlg.cpp:174
+#: prefdlg.cpp:157
 #, kde-format
 msgctxt "@title"
 msgid "Email Alarm Settings"
 msgstr "Sähköpostihälytysten asetukset "
 
-#: prefdlg.cpp:179
+#: prefdlg.cpp:162
 #, kde-format
 msgctxt "@title:tab"
 msgid "Alarm Defaults"
 msgstr "Hälytysoletukset"
 
-#: prefdlg.cpp:180
+#: prefdlg.cpp:163
 #, kde-format
 msgctxt "@title"
 msgid "Default Alarm Edit Settings"
 msgstr "Hälytysten muokkausasetukset"
 
-#: prefdlg.cpp:185
+#: prefdlg.cpp:168
 #, kde-format
 msgctxt "@title:tab"
 msgid "View"
 msgstr "Näkymä"
 
-#: prefdlg.cpp:186
+#: prefdlg.cpp:169
 #, kde-format
 msgctxt "@title"
 msgid "View Settings"
 msgstr "Näkymäasetukset "
 
-#: prefdlg.cpp:263
+#: prefdlg.cpp:260
 #, kde-format
 msgctxt "@info"
 msgid "Reset all tabs to their default values, or only reset the current tab?"
@@ -4945,31 +4945,31 @@ msgstr ""
 "Palautetaanko kaikki välilehdet oletusasetuksiinsa vai vain nykyinen "
 "välilehti?"
 
-#: prefdlg.cpp:265
+#: prefdlg.cpp:262
 #, kde-format
 msgctxt "@action:button Reset ALL tabs"
 msgid "&All"
 msgstr "&Kaikki"
 
-#: prefdlg.cpp:266
+#: prefdlg.cpp:263
 #, kde-format
 msgctxt "@action:button Reset the CURRENT tab"
 msgid "C&urrent"
 msgstr "&Nykyinen"
 
-#: prefdlg.cpp:441
+#: prefdlg.cpp:439
 #, kde-format
 msgctxt "@title:group"
 msgid "Run Mode"
 msgstr "Ajotila"
 
-#: prefdlg.cpp:446
+#: prefdlg.cpp:444
 #, kde-format
 msgctxt "@option:check"
 msgid "Start at login"
 msgstr "Käynnistä kirjauduttaessa"
 
-#: prefdlg.cpp:449
+#: prefdlg.cpp:447
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -4981,13 +4981,13 @@ msgstr ""
 "käynnistyessä.</para><para>Tulisi aina olla valittuna, ellet aio lopettaa "
 "<application>KAlarm</application>in käyttämistä.</para> "
 
-#: prefdlg.cpp:453
+#: prefdlg.cpp:451
 #, kde-format
 msgctxt "@option:check"
 msgid "Warn before quitting"
 msgstr "Varoita ennen lopettamista"
 
-#: prefdlg.cpp:454
+#: prefdlg.cpp:452
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -4997,13 +4997,13 @@ msgstr ""
 "Ohjelman <application>KAlarm</application> lopettaminen vahvistetaan "
 "varmistuskysymyksellä."
 
-#: prefdlg.cpp:461
+#: prefdlg.cpp:459
 #, kde-format
 msgctxt "@option:check"
 msgid "Enable alarm names"
 msgstr "Käytä hälytyksille nimiä"
 
-#: prefdlg.cpp:463
+#: prefdlg.cpp:461
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5013,19 +5013,19 @@ msgstr ""
 "Valitse, halutaanko hälytyksille antaa nimet. Tämä on vain mukavuuden vuoksi "
 "hälytysten tunnistamiseksi."
 
-#: prefdlg.cpp:471
+#: prefdlg.cpp:469
 #, kde-format
 msgctxt "@option:check"
 msgid "Confirm alarm deletions"
 msgstr "Vahvista hälytysten poisto"
 
-#: prefdlg.cpp:481
+#: prefdlg.cpp:479
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Default defer time interval:"
 msgstr "Oletusviivästysaika:"
 
-#: prefdlg.cpp:487
+#: prefdlg.cpp:485
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5035,13 +5035,13 @@ msgstr ""
 "Anna hälytysten oletusviivästys (tunneissa ja minuuteissa); arvoa käytetään "
 "Viivästä hälytystä -ikkunassa."
 
-#: prefdlg.cpp:492
+#: prefdlg.cpp:490
 #, kde-format
 msgctxt "@title:group"
 msgid "Terminal for Command Alarms"
 msgstr "Pääte hälytyskomennoille"
 
-#: prefdlg.cpp:493
+#: prefdlg.cpp:491
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5051,7 +5051,7 @@ msgstr ""
 "Valitse sovellus, jota käytetään komentohälytysten antamiseksi "
 "pääteikkunassa."
 
-#: prefdlg.cpp:518
+#: prefdlg.cpp:512
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5060,13 +5060,13 @@ msgstr ""
 "Valitsemalla tämä suoritetaan komentohälytykset pääteikkunassa <icode>%1</"
 "icode>"
 
-#: prefdlg.cpp:526
+#: prefdlg.cpp:519
 #, kde-format
 msgctxt "@option:radio Other terminal window command"
 msgid "Other:"
 msgstr "Muu:"
 
-#: prefdlg.cpp:536
+#: prefdlg.cpp:528
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5079,19 +5079,19 @@ msgstr ""
 "Oletuksena hälytyksen komentoteksti lisätään tämän tekstin perään. Katso "
 "KAlarmin käsikirjasta komentorivin parametrien yksityiskohtia."
 
-#: prefdlg.cpp:545
+#: prefdlg.cpp:537
 #, kde-format
 msgctxt "@title:group"
 msgid "Plugins"
 msgstr "Liitännäiset"
 
-#: prefdlg.cpp:550
+#: prefdlg.cpp:542
 #, kde-format
 msgctxt "@option:check"
 msgid "Enable Akonadi"
 msgstr "Ota Akonadi käyttöön"
 
-#: prefdlg.cpp:552
+#: prefdlg.cpp:544
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -5101,7 +5101,7 @@ msgstr ""
 "Ota käyttöön Akonadi esim. syntymäpäivätukeen, joihinkin "
 "sähköpostitoimintoihin ja sähköpostiosoitehakuun."
 
-#: prefdlg.cpp:554
+#: prefdlg.cpp:546
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5111,13 +5111,19 @@ msgstr ""
 "Ota käyttöön Akonadi esim. syntymäpäivätukeen, joihinkin "
 "sähköpostitoimintoihin ja sähköpostiosoitehakuun."
 
-#: prefdlg.cpp:601
+#: prefdlg.cpp:587
+#, kde-kuit-format
+msgctxt "@info"
+msgid "No command is specified to invoke terminal window"
+msgstr ""
+
+#: prefdlg.cpp:599
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Command to invoke terminal window not found: <command>%1</command>"
 msgstr "Pääteikkunan avaavaa komentoa ei löydy: <command>%1</command>"
 
-#: prefdlg.cpp:653
+#: prefdlg.cpp:651
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -5127,7 +5133,7 @@ msgstr ""
 "Älä poista valintaa, ellet aio lopettaa <application>KAlarmin</application> "
 "käyttöä"
 
-#: prefdlg.cpp:688
+#: prefdlg.cpp:686
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5137,37 +5143,37 @@ msgstr ""
 "Valitse aikavyöhyke, jota <application>KAlarm</application> käyttää "
 "oletusvyöhykkeenä päivämäärien ja aikojen näyttämiseksi ja syöttämiseksi."
 
-#: prefdlg.cpp:702
+#: prefdlg.cpp:700
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Holiday region:"
 msgstr "Vapaapäiväalue:"
 
-#: prefdlg.cpp:711
+#: prefdlg.cpp:709
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select which holiday region to use"
 msgstr "Valitse käytettävät vapaapäivät."
 
-#: prefdlg.cpp:719
+#: prefdlg.cpp:717
 #, kde-format
 msgctxt "Holiday region, region language"
 msgid "%1 (%2)"
 msgstr "%1 (%2)"
 
-#: prefdlg.cpp:723
+#: prefdlg.cpp:721
 #, kde-format
 msgctxt "No holiday region"
 msgid "None"
 msgstr "Ei mitään"
 
-#: prefdlg.cpp:739
+#: prefdlg.cpp:737
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Start of day for date-only alarms:"
 msgstr "Päivän alkuaika päivämäärään pohjautuville hälytyksille:"
 
-#: prefdlg.cpp:746
+#: prefdlg.cpp:744
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5177,55 +5183,55 @@ msgstr ""
 "<para>Varhaisin aika, jolloin päivämäärään perustuva hälytys suoritetaan</"
 "para><para>%1</para>"
 
-#: prefdlg.cpp:751
+#: prefdlg.cpp:749
 #, kde-format
 msgctxt "@title:group"
 msgid "Working Hours"
 msgstr "Työaika"
 
-#: prefdlg.cpp:765
+#: prefdlg.cpp:763
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check the days in the week which are work days"
 msgstr "Valitse viikon päivät, jolloin hälytys toistetaan"
 
-#: prefdlg.cpp:775
+#: prefdlg.cpp:773
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Daily start time:"
 msgstr "Päivittäinen aloitusaika:"
 
-#: prefdlg.cpp:782
+#: prefdlg.cpp:780
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid "<para>Enter the start time of the working day.</para><para>%1</para>"
 msgstr "<para>Anna työpäivän alkuaika.</para><para>%1</para>"
 
-#: prefdlg.cpp:794
+#: prefdlg.cpp:792
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Daily end time:"
 msgstr "Päivän päättymisaika:"
 
-#: prefdlg.cpp:801
+#: prefdlg.cpp:799
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid "<para>Enter the end time of the working day.</para><para>%1</para>"
 msgstr "<para>Anna työpäivän päättymisaika.</para><para>%1</para>"
 
-#: prefdlg.cpp:806
+#: prefdlg.cpp:804
 #, kde-format
 msgctxt "@title:group"
 msgid "KOrganizer"
 msgstr "KOrganizer"
 
-#: prefdlg.cpp:814
+#: prefdlg.cpp:812
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "KOrganizer event duration:"
 msgstr "KOrganizer-tapahtuman kesto:"
 
-#: prefdlg.cpp:821
+#: prefdlg.cpp:819
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5235,19 +5241,19 @@ msgstr ""
 "<para>Anna tapahtuman kesto tunneissa ja minuuteissa KOrganizeriin "
 "kopioitaville hälytyksille.</para><para>%1</para>"
 
-#: prefdlg.cpp:882
+#: prefdlg.cpp:880
 #, kde-format
 msgctxt "@title:group"
 msgid "New Alarms && Templates"
 msgstr "Uudet hälytykset ja hälytysmallit"
 
-#: prefdlg.cpp:887
+#: prefdlg.cpp:885
 #, kde-format
 msgctxt "@option:radio"
 msgid "Store in default calendar"
 msgstr "Tallenna oletuskalenteriin"
 
-#: prefdlg.cpp:889
+#: prefdlg.cpp:887
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5256,13 +5262,13 @@ msgid ""
 msgstr ""
 "Lisää kaikki uudet hälytykset ja hälytysmallit oletuskalenteriin kysymättä."
 
-#: prefdlg.cpp:891
+#: prefdlg.cpp:889
 #, kde-format
 msgctxt "@option:radio"
 msgid "Prompt for which calendar to store in"
 msgstr "Kysy, mihin kalenteriin tallennetaan"
 
-#: prefdlg.cpp:894
+#: prefdlg.cpp:892
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5276,19 +5282,19 @@ msgstr ""
 "para><para>Huomaa, että arkistoidut hälytykset tallennetaan aina "
 "arkistoitujen hälytysten oletuskalenteriin.</para>"
 
-#: prefdlg.cpp:899
+#: prefdlg.cpp:897
 #, kde-format
 msgctxt "@title:group"
 msgid "Archived Alarms"
 msgstr "Arkistoidut hälytykset"
 
-#: prefdlg.cpp:904
+#: prefdlg.cpp:902
 #, kde-format
 msgctxt "@option:check"
 msgid "Keep alarms after expiry"
 msgstr "Säilytä vanhentuneet hälytykset"
 
-#: prefdlg.cpp:907
+#: prefdlg.cpp:905
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5298,19 +5304,19 @@ msgstr ""
 "Jos valittu, arkistoidaan vanhentuneet tai poistetut hälytykset (lukuun "
 "ottamatta poistettuja hälytyksiä, joita ei koskaan annettu)."
 
-#: prefdlg.cpp:913
+#: prefdlg.cpp:911
 #, kde-format
 msgctxt "@option:check"
 msgid "Discard archived alarms after:"
 msgstr "Hylkää vanhentuneet hälytykset jälkeen:"
 
-#: prefdlg.cpp:922
+#: prefdlg.cpp:920
 #, kde-format
 msgctxt "@label Time unit for user-entered number"
 msgid "days"
 msgstr "päivää"
 
-#: prefdlg.cpp:926
+#: prefdlg.cpp:924
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5320,19 +5326,19 @@ msgstr ""
 "Jos valittuna, anna arkistoitujen hälytysten säilyttämisaika. Jos ei "
 "valittuna, arkistoidaan hälytykset ilman määräaikaa."
 
-#: prefdlg.cpp:929
+#: prefdlg.cpp:927
 #, kde-format
 msgctxt "@action:button"
 msgid "Clear Archived Alarms"
 msgstr "Tyhjennä arkistoidut hälytykset"
 
-#: prefdlg.cpp:932
+#: prefdlg.cpp:930
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Delete all existing archived alarms."
 msgstr "Poista kaikki arkistoidut hälytykset."
 
-#: prefdlg.cpp:933
+#: prefdlg.cpp:931
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5342,7 +5348,7 @@ msgstr ""
 "Poista kaikki arkistoidut hälytykset (vain arkistoitujen hälytysten "
 "oletuskalenterista)."
 
-#: prefdlg.cpp:979
+#: prefdlg.cpp:977
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -5356,13 +5362,13 @@ msgstr ""
 "hälytykset, valitse ensin kalenterinäkymästä arkistoitujen hälytysten "
 "oletuskalenteri.</para>"
 
-#: prefdlg.cpp:996
+#: prefdlg.cpp:994
 #, kde-format
 msgctxt "@info"
 msgid "Do you really want to delete all archived alarms?"
 msgstr "Haluatko varmasti poistaa kaikki arkistoidut hälytykset?"
 
-#: prefdlg.cpp:997
+#: prefdlg.cpp:995
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -5372,31 +5378,31 @@ msgstr ""
 "Haluatko varmasti poistaa kaikki hälytykset arkistoitujen hälytysten "
 "oletuskalenterista?"
 
-#: prefdlg.cpp:1015
+#: prefdlg.cpp:1013
 #, kde-format
 msgctxt "@label"
 msgid "Email client:"
 msgstr "Sähköpostiohjelma:"
 
-#: prefdlg.cpp:1018
+#: prefdlg.cpp:1016
 #, kde-format
 msgctxt "@option:radio"
 msgid "KMail"
 msgstr "KMail"
 
-#: prefdlg.cpp:1019
+#: prefdlg.cpp:1017
 #, kde-format
 msgctxt "@option:radio"
 msgid "Sendmail"
 msgstr "Sendmail"
 
-#: prefdlg.cpp:1032
+#: prefdlg.cpp:1030
 #, kde-format
 msgctxt "@info"
 msgid "Choose how to send email when an email alarm is triggered."
 msgstr "Valitse, miten sähköpostihälytyksen sattuessa sähköpostia lähetetään."
 
-#: prefdlg.cpp:1035
+#: prefdlg.cpp:1033
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5413,7 +5419,7 @@ msgstr ""
 "application>ia tai sendmail-yhteensopivaa sähköpostinvälitysohjelmaa.</"
 "item></list></para>"
 
-#: prefdlg.cpp:1043
+#: prefdlg.cpp:1041
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5427,7 +5433,7 @@ msgstr ""
 "käyttämään <application>sendmail</application>ia tai sendmail-yhteensopivaa "
 "postinvälitysohjelmaa.</item></list></para>"
 
-#: prefdlg.cpp:1053
+#: prefdlg.cpp:1051
 #, kde-kuit-format
 msgctxt "@option:check"
 msgid ""
@@ -5437,7 +5443,7 @@ msgstr ""
 "Kopioi lähetetyt sählöpostit <application>KMail</application>-ohjelman "
 "kansioon <resource>%1</resource>"
 
-#: prefdlg.cpp:1054
+#: prefdlg.cpp:1052
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5447,25 +5453,25 @@ msgstr ""
 "Sähköpostin lähettämisen jälkeen tallenna kopio <application>KMail</"
 "application>-ohjelman<resource>%1</resource> -kansioon."
 
-#: prefdlg.cpp:1062
+#: prefdlg.cpp:1060
 #, kde-format
 msgctxt "@option:check"
 msgid "Notify when remote emails are queued"
 msgstr "Ilmoita kun etämaili on viety jonoon"
 
-#: prefdlg.cpp:1070
+#: prefdlg.cpp:1068
 #, kde-format
 msgctxt "@title:group"
 msgid "Your Email Address"
 msgstr "Sähköpostiosoitteesi"
 
-#: prefdlg.cpp:1076
+#: prefdlg.cpp:1074
 #, kde-format
 msgctxt "@label 'From' email address"
 msgid "From:"
 msgstr "Lähettäjä:"
 
-#: prefdlg.cpp:1088
+#: prefdlg.cpp:1086
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5475,13 +5481,13 @@ msgstr ""
 "Sähköpostiosoitteesi, jota käytetään ilmaisemaan sinut sähköpostihälytyksen "
 "lähettäjäksi."
 
-#: prefdlg.cpp:1095 prefdlg.cpp:1131
+#: prefdlg.cpp:1093 prefdlg.cpp:1129
 #, kde-kuit-format
 msgctxt "@option:radio"
 msgid "Use default <application>KMail</application> identity"
 msgstr "Käytä <application>KMail</application>in oletushenkilöyttä"
 
-#: prefdlg.cpp:1098
+#: prefdlg.cpp:1096
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5492,13 +5498,13 @@ msgstr ""
 "sähköpostiosoitetta käytetään tunnistamaan sinut lähettäjäksi "
 "sähköpostihälytyksiä lähetettäessä."
 
-#: prefdlg.cpp:1102
+#: prefdlg.cpp:1100
 #, kde-kuit-format
 msgctxt "@option:radio"
 msgid "Use <application>KMail</application> identities"
 msgstr "Käytä ohjelman <application>KMail</application> henkilötietoja."
 
-#: prefdlg.cpp:1105
+#: prefdlg.cpp:1103
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5513,13 +5519,13 @@ msgstr ""
 "<application>KMail</application>in oletushenkilöyttä. Uusille hälytyksille "
 "voi valita käytettävän <application>KMail</application>-henkilöyden."
 
-#: prefdlg.cpp:1112
+#: prefdlg.cpp:1110
 #, kde-format
 msgctxt "@label 'Bcc' email address"
 msgid "Bcc:"
 msgstr "Piilokopio:"
 
-#: prefdlg.cpp:1123
+#: prefdlg.cpp:1121
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5533,7 +5539,7 @@ msgstr ""
 "application> on käynnissä, riittää antaa käyttäjätunnus."
 
 # Kaksinkertainen finaalinen lauseenvastike: ei kiva :/
-#: prefdlg.cpp:1134
+#: prefdlg.cpp:1132
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5543,7 +5549,7 @@ msgstr ""
 "Valitse tämä, niin sähköpostihälytyksistä lähetetään piilokopio itsellesi "
 "<application>KMail</application>issa annettuun osoitteeseen."
 
-#: prefdlg.cpp:1236
+#: prefdlg.cpp:1234
 #, kde-format
 msgctxt "@info"
 msgid "No valid 'Bcc' email address is specified."
@@ -5551,13 +5557,13 @@ msgstr ""
 "Yhtään oikeanlaista sähköpostiosoitetta ei ole määritelty piilokopioita "
 "varten."
 
-#: prefdlg.cpp:1243
+#: prefdlg.cpp:1241
 #, kde-format
 msgctxt "@info"
 msgid "Are you sure you want to save your changes?"
 msgstr "Haluatko varmasti tallentaa muutokset?"
 
-#: prefdlg.cpp:1249
+#: prefdlg.cpp:1247
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -5567,7 +5573,7 @@ msgstr ""
 "<para><application>KMail</application>issa ei ole määritetty "
 "sähköpostiosoitteita.</para><para>%1</para><para>%2</para>"
 
-#: prefdlg.cpp:1254
+#: prefdlg.cpp:1252
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -5578,7 +5584,7 @@ msgstr ""
 "olemassa.</para><para>%1</para><para>%2</para>"
 
 # %1 on asetuksen nimi, esim. ”Show in KOrganizer” (mutta suomennettuna). Tätä samaa tekstiä käytetään monelle ikkunassa näkyvälle asetukselle
-#: prefdlg.cpp:1272
+#: prefdlg.cpp:1270
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5587,25 +5593,25 @@ msgstr ""
 "Oletusasetus asetukselle <interface>%1</interface> hälytyksen "
 "muokkausikkunassa."
 
-#: prefdlg.cpp:1280 prefdlg.cpp:1728
+#: prefdlg.cpp:1278 prefdlg.cpp:1726
 #, kde-format
 msgctxt "@title:tab"
 msgid "General"
 msgstr "Yleiset"
 
-#: prefdlg.cpp:1284
+#: prefdlg.cpp:1282
 #, kde-format
 msgctxt "@title:tab Settings specific to alarm type"
 msgid "Type Specific"
 msgstr "Tyyppikohtainen"
 
-#: prefdlg.cpp:1288
+#: prefdlg.cpp:1286
 #, kde-format
 msgctxt "@title:tab"
 msgid "Font && Color"
 msgstr "Fontti ja väri"
 
-#: prefdlg.cpp:1304
+#: prefdlg.cpp:1302
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5613,31 +5619,31 @@ msgid ""
 "dialog."
 msgstr "Oletusarvo hälytyksen näyttämistavalle hälytyksen muokkausikkunassa."
 
-#: prefdlg.cpp:1328
+#: prefdlg.cpp:1326
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Recurrence:"
 msgstr "Toisto:"
 
-#: prefdlg.cpp:1361
+#: prefdlg.cpp:1359
 #, kde-format
 msgctxt "@option:radio"
 msgid "February 2&8th"
 msgstr "&28. helmikuuta"
 
-#: prefdlg.cpp:1365
+#: prefdlg.cpp:1363
 #, kde-format
 msgctxt "@option:radio"
 msgid "March &1st"
 msgstr "&1. maaliskuuta"
 
-#: prefdlg.cpp:1369
+#: prefdlg.cpp:1367
 #, kde-format
 msgctxt "@option:radio"
 msgid "Do not repeat"
 msgstr "Älä toista"
 
-#: prefdlg.cpp:1374
+#: prefdlg.cpp:1372
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5651,31 +5657,31 @@ msgstr ""
 "muutat tätä asetusta.</note>"
 
 # ”Näyttöhälytykset”, ei ”Näytä hälytykset”
-#: prefdlg.cpp:1380
+#: prefdlg.cpp:1378
 #, kde-format
 msgctxt "@title:group"
 msgid "Display Alarms"
 msgstr "Näyttöhälytykset"
 
-#: prefdlg.cpp:1398
+#: prefdlg.cpp:1396
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Reminder units:"
 msgstr "Muistutusten yksikkö:"
 
-#: prefdlg.cpp:1401
+#: prefdlg.cpp:1399
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Minutes"
 msgstr "Minuuttia"
 
-#: prefdlg.cpp:1402
+#: prefdlg.cpp:1400
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Hours/Minutes"
 msgstr "Tuntia/Minuuttia"
 
-#: prefdlg.cpp:1405
+#: prefdlg.cpp:1403
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5685,19 +5691,19 @@ msgstr ""
 "Muistutuksen oletusyksiköt hälytyksen muokkausikkunassa pian tuleville "
 "hälytyksille"
 
-#: prefdlg.cpp:1411
+#: prefdlg.cpp:1409
 #, kde-format
 msgctxt "@title:group Audio options group"
 msgid "Sound"
 msgstr "Ääni"
 
-#: prefdlg.cpp:1430
+#: prefdlg.cpp:1428
 #, kde-format
 msgctxt "@option:check"
 msgid "Repeat sound file"
 msgstr "Toista äänitiedosto"
 
-#: prefdlg.cpp:1433
+#: prefdlg.cpp:1431
 #, kde-kuit-format
 msgctxt "@info:whatsthis sound file 'Repeat' checkbox"
 msgid ""
@@ -5705,25 +5711,25 @@ msgid ""
 "edit dialog."
 msgstr "Oletusarvo äänitiedostolle \"%1\" hälytyksen muokkausikkunassa."
 
-#: prefdlg.cpp:1439
+#: prefdlg.cpp:1437
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Sound file:"
 msgstr "Äänitiedosto:"
 
-#: prefdlg.cpp:1447
+#: prefdlg.cpp:1445
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Choose a sound file"
 msgstr "Valitse äänitiedosto"
 
-#: prefdlg.cpp:1449
+#: prefdlg.cpp:1447
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the default sound file to use in the alarm edit dialog."
 msgstr "Anna oletusäänitiedosto käytettäväksi hälytysten määrittelyssä."
 
-#: prefdlg.cpp:1458
+#: prefdlg.cpp:1456
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5732,31 +5738,31 @@ msgstr ""
 "Aseta äänitiedostojen oletusäänenvoimakkuus hälytysmuokkaimessa valitsemalla "
 "tämä."
 
-#: prefdlg.cpp:1462
+#: prefdlg.cpp:1460
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "The default volume for sound files in the alarm edit dialog."
 msgstr "Äänitiedostojen oletusäänenvoimakkuus hälytysmuokkaimessa."
 
-#: prefdlg.cpp:1472
+#: prefdlg.cpp:1470
 #, kde-format
 msgctxt "@title:group"
 msgid "Command Alarms"
 msgstr "Komentohälytykset"
 
-#: prefdlg.cpp:1491
+#: prefdlg.cpp:1489
 #, kde-format
 msgctxt "@title:group"
 msgid "Email Alarms"
 msgstr "Sähköpostihälytykset"
 
-#: prefdlg.cpp:1504
+#: prefdlg.cpp:1502
 #, kde-format
 msgctxt "@title:group"
 msgid "Message Font && Color"
 msgstr "Viestin fontti ja väri"
 
-#: prefdlg.cpp:1710
+#: prefdlg.cpp:1708
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -5764,19 +5770,19 @@ msgid ""
 "the default sound type"
 msgstr "Sinun tulee antaa äänitiedosto, kun %1 on valittu oletusäänityypiksi"
 
-#: prefdlg.cpp:1732
+#: prefdlg.cpp:1730
 #, kde-format
 msgctxt "@title:tab"
 msgid "Alarm Windows"
 msgstr "Hälytysikkunat"
 
-#: prefdlg.cpp:1735
+#: prefdlg.cpp:1733
 #, kde-format
 msgctxt "@option:check"
 msgid "Show in system tray"
 msgstr "Näytä ilmoitusalueella"
 
-#: prefdlg.cpp:1737
+#: prefdlg.cpp:1735
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5788,13 +5794,13 @@ msgstr ""
 "application>in kuvake. Se tarjoaa helpon pääsyn ohjelmaan sekä tilatietoja.</"
 "para>"
 
-#: prefdlg.cpp:1766
+#: prefdlg.cpp:1764
 #, kde-format
 msgctxt "@option:radio Always show KAlarm icon"
 msgid "Always show"
 msgstr "Näytä aina"
 
-#: prefdlg.cpp:1770
+#: prefdlg.cpp:1768
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5804,13 +5810,13 @@ msgstr ""
 "Valitsemalla tämä näytetään ilmoitusalueella <application>KAlarm</"
 "application>in kuvake, vaikkei hälytyksiä olisi tiedossa."
 
-#: prefdlg.cpp:1774
+#: prefdlg.cpp:1772
 #, kde-format
 msgctxt "@option:radio"
 msgid "Automatically hide if no active alarms"
 msgstr "Piilota automaattisesti, ellei aktiivisia hälytyksiä ole"
 
-#: prefdlg.cpp:1778
+#: prefdlg.cpp:1776
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5823,7 +5829,7 @@ msgstr ""
 "Piilotetun kuvakkeen saa aina näkyviin ilmoitusalueen piilotettujen "
 "kuvakkeiden näyttöasetuksista."
 
-#: prefdlg.cpp:1784
+#: prefdlg.cpp:1782
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5837,25 +5843,25 @@ msgstr ""
 "ajassa. Piilotetun kuvakkeen saa aina näkyviin ilmoitusalueen piilotettujen "
 "kuvakkeiden näyttöasetuksista."
 
-#: prefdlg.cpp:1787
+#: prefdlg.cpp:1785
 #, kde-format
 msgctxt "@option:radio"
 msgid "Automatically hide if no alarm due within time period:"
 msgstr "Piilota automaattisesti, ellei aktiivisia hälytyksiä ole ajassa:"
 
-#: prefdlg.cpp:1799
+#: prefdlg.cpp:1797
 #, kde-format
 msgctxt "@title:group"
 msgid "System Tray Tooltip"
 msgstr "Ilmoitusalueen työkaluvihje"
 
-#: prefdlg.cpp:1806
+#: prefdlg.cpp:1804
 #, kde-format
 msgctxt "@option:check"
 msgid "Show next &24 hours' alarms"
 msgstr "Näytä &seuraavien 24 tunnin hälytykset"
 
-#: prefdlg.cpp:1810
+#: prefdlg.cpp:1808
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5865,13 +5871,13 @@ msgstr ""
 "Määrittele, näytetäänkö ilmoitusalueen työkaluvihjeessä yhteenveto lähimmän "
 "24 tunnin hälytyksistä"
 
-#: prefdlg.cpp:1816
+#: prefdlg.cpp:1814
 #, kde-format
 msgctxt "@option:check"
 msgid "Maximum number of alarms to show:"
 msgstr "Hälytyksiä näytetään korkeintaan:"
 
-#: prefdlg.cpp:1825
+#: prefdlg.cpp:1823
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5882,43 +5888,43 @@ msgstr ""
 "näytetään ilmoitusalueen työkaluvihjeessä. Valitsemalla voi antaa "
 "näytettävien hälytysten ylärajan."
 
-#: prefdlg.cpp:1829
+#: prefdlg.cpp:1827
 #, kde-format
 msgctxt "@option:check"
 msgid "Show alarm time"
 msgstr "Näytä hälytysaika"
 
-#: prefdlg.cpp:1835
+#: prefdlg.cpp:1833
 #, kde-format
 msgctxt "@option:check"
 msgid "Show time until alarm"
 msgstr "Näytä aika hälytykseen"
 
-#: prefdlg.cpp:1853
+#: prefdlg.cpp:1851
 #, kde-format
 msgctxt "@title:group"
 msgid "Alarm List"
 msgstr "Hälytysten luettelo"
 
-#: prefdlg.cpp:1865
+#: prefdlg.cpp:1863
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Disabled alarm color:"
 msgstr "Estetyn hälytyksen väri:"
 
-#: prefdlg.cpp:1878
+#: prefdlg.cpp:1876
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Archived alarm color:"
 msgstr "Arkistoidun hälytyksen väri:"
 
-#: prefdlg.cpp:1891
+#: prefdlg.cpp:1889
 #, kde-format
 msgctxt "@title:group"
 msgid "Alarm Message Windows"
 msgstr "Hälytysten viesti-ikkunat"
 
-#: prefdlg.cpp:1900
+#: prefdlg.cpp:1898
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5934,25 +5940,25 @@ msgstr ""
 "viesti-ikkuna ruudun keskelle mutta poista painikkeet hetkeksi käytöstä "
 "ikkunan ilmestymisestä.</item></list></para>"
 
-#: prefdlg.cpp:1903
+#: prefdlg.cpp:1901
 #, kde-format
 msgctxt "@option:radio"
 msgid "Position windows far from mouse cursor"
 msgstr "Sijoita ikkuna kauas hiirikohdistimesta"
 
-#: prefdlg.cpp:1907
+#: prefdlg.cpp:1905
 #, kde-format
 msgctxt "@option:radio"
 msgid "Center windows, delay activating window buttons"
 msgstr "Keskitä ikkuna mutta viivytä ikkunapainikkeiden aktivointia"
 
-#: prefdlg.cpp:1915
+#: prefdlg.cpp:1913
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Button activation delay (seconds):"
 msgstr "Painikkeiden aktivointiviive (sekunneissa):"
 
-#: prefdlg.cpp:1922
+#: prefdlg.cpp:1920
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5962,13 +5968,13 @@ msgstr ""
 "Määritä, kauanko painikkeiden tulisi pysyä passiivisina hälytyksen viesti-"
 "ikkunan ilmestyttyä."
 
-#: prefdlg.cpp:1930
+#: prefdlg.cpp:1928
 #, kde-format
 msgctxt "@option:check"
 msgid "Message windows have a title bar and take keyboard focus"
 msgstr "Viesti-ikkunalla on otsikko ja näppäimistö kohdistuu siihen"
 
-#: prefdlg.cpp:1933
+#: prefdlg.cpp:1931
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
