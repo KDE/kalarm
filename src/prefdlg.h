@@ -1,7 +1,7 @@
 /*
  *  prefdlg.h  -  program preferences dialog
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2001-2020 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2001-2022 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -27,6 +27,7 @@ public:
     static void display();
     ~KAlarmPrefDlg() override;
     QSize minimumSizeHint() const override;
+    void accept() override;
 
 protected:
     void showEvent(QShowEvent*) override;
@@ -42,6 +43,7 @@ protected Q_SLOTS:
 
 private:
     KAlarmPrefDlg();
+    void apply();
     void restore(bool defaults);
     void restoreTab();
 

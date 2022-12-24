@@ -210,6 +210,13 @@ void KAlarmPrefDlg::slotHelp()
 void KAlarmPrefDlg::slotApply()
 {
     qCDebug(KALARM_LOG) << "KAlarmPrefDlg::slotApply";
+    mValid = true;
+    apply();
+}
+
+// Apply the preferences that are currently selected
+void KAlarmPrefDlg::apply()
+{
     QString errmsg = mEmailPage->validate();
     if (!errmsg.isEmpty())
     {
@@ -228,13 +235,12 @@ void KAlarmPrefDlg::slotApply()
         mValid = false;
         return;
     }
-    mValid = true;
-    mEmailPage->apply(false);
-    mViewPage->apply(false);
-    mEditPage->apply(false);
-    mStorePage->apply(false);
-    mTimePage->apply(false);
-    mMiscPage->apply(false);
+    mValid = mEmailPage->apply(false) && mValid;
+    mValid = mViewPage->apply(false)  && mValid;
+    mValid = mEditPage->apply(false)  && mValid;
+    mValid = mStorePage->apply(false) && mValid;
+    mValid = mTimePage->apply(false)  && mValid;
+    mValid = mMiscPage->apply(false)  && mValid;
     Preferences::self()->save();
 }
 
@@ -243,9 +249,15 @@ void KAlarmPrefDlg::slotOk()
 {
     qCDebug(KALARM_LOG) << "KAlarmPrefDlg::slotOk";
     mValid = true;
-    slotApply();
+    apply();
     if (mValid)
         QDialog::accept();
+}
+
+void KAlarmPrefDlg::accept()
+{
+    // accept() is called automatically by KPageDialog when OK button is clicked.
+    // Don't accept and close the dialog until slotOk() has finished processing.
 }
 
 // Discard the current preferences and close the dialog
@@ -393,10 +405,11 @@ PrefsTabBase::PrefsTabBase(StackedScrollGroup* scrollGroup)
     }
 }
 
-void PrefsTabBase::apply(bool syncToDisc)
+bool PrefsTabBase::apply(bool syncToDisc)
 {
     if (syncToDisc)
         Preferences::self()->save();
+    return true;
 }
 
 void PrefsTabBase::addAlignedLabel(QLabel* label)
@@ -582,7 +595,7 @@ void MiscPrefTab::restore(bool defaults, bool)
         mUseAkonadi->setChecked(Preferences::useAkonadi());
 }
 
-void MiscPrefTab::apply(bool syncToDisc)
+bool MiscPrefTab::apply(bool syncToDisc)
 {
     // First validate anything entered in Other X-terminal command
     int xtermID = mXtermType->selectedId();
@@ -600,7 +613,7 @@ void MiscPrefTab::apply(bool syncToDisc)
                 mXtermCommand->setFocus();
                 if (KAMessageBox::warningContinueCancel(topLayout()->parentWidget(), xi18nc("@info", "Command to invoke terminal window not found: <command>%1</command>", cmd))
                                 != KMessageBox::Continue)
-                    return;
+                    return false;
             }
         }
     }
@@ -643,7 +656,7 @@ void MiscPrefTab::apply(bool syncToDisc)
         if (b != Preferences::useAkonadi())
             Preferences::setUseAkonadi(b);
     }
-    PrefsTabBase::apply(syncToDisc);
+    return PrefsTabBase::apply(syncToDisc);
 }
 
 void MiscPrefTab::slotAutostartClicked()
@@ -844,7 +857,7 @@ void TimePrefTab::restore(bool, bool)
     mKOrgEventDuration->setValue(Preferences::kOrgEventDuration());
 }
 
-void TimePrefTab::apply(bool syncToDisc)
+bool TimePrefTab::apply(bool syncToDisc)
 {
     Preferences::setTimeSpec(mTimeZone->timeZone());
     const QString hol = mHolidays->itemData(mHolidays->currentIndex()).toString();
@@ -867,7 +880,7 @@ void TimePrefTab::apply(bool syncToDisc)
     t = mKOrgEventDuration->value();
     if (t != Preferences::kOrgEventDuration())
         Preferences::setKOrgEventDuration(t);
-    PrefsTabBase::apply(syncToDisc);
+    return PrefsTabBase::apply(syncToDisc);
 }
 
 
@@ -950,7 +963,7 @@ void StorePrefTab::restore(bool defaults, bool)
     mCheckKeepChanges = true;
 }
 
-void StorePrefTab::apply(bool syncToDisc)
+bool StorePrefTab::apply(bool syncToDisc)
 {
     const bool b = mAskResource->isChecked();
     if (b != Preferences::askResource())
@@ -958,7 +971,7 @@ void StorePrefTab::apply(bool syncToDisc)
     const int days = !mKeepArchived->isChecked() ? 0 : mPurgeArchived->isChecked() ? mPurgeAfter->value() : -1;
     if (days != Preferences::archivedKeepDays())
         Preferences::setArchivedKeepDays(days);
-    PrefsTabBase::apply(syncToDisc);
+    return PrefsTabBase::apply(syncToDisc);
 }
 
 void StorePrefTab::setArchivedControls(int purgeDays)
@@ -1149,7 +1162,7 @@ void EmailPrefTab::restore(bool defaults, bool)
         mAddressChanged = mBccAddressChanged = false;
 }
 
-void EmailPrefTab::apply(bool syncToDisc)
+bool EmailPrefTab::apply(bool syncToDisc)
 {
     const int client = mEmailClient->selectedId();
     if (client >= 0  &&  static_cast<Preferences::MailClient>(client) != Preferences::emailClient())
@@ -1173,7 +1186,7 @@ void EmailPrefTab::apply(bool syncToDisc)
     b = mEmailQueuedNotify->isChecked();
     if (b != Preferences::emailQueuedNotify())
         Preferences::setEmailQueuedNotify(mEmailQueuedNotify->isChecked());
-    PrefsTabBase::apply(syncToDisc);
+    return PrefsTabBase::apply(syncToDisc);
 }
 
 void EmailPrefTab::showEvent(QShowEvent* e)
@@ -1567,7 +1580,7 @@ void EditPrefTab::restore(bool, bool allTabs)
     }
 }
 
-void EditPrefTab::apply(bool syncToDisc)
+bool EditPrefTab::apply(bool syncToDisc)
 {
     bool b = mAutoClose->isChecked();
     if (b != Preferences::defaultAutoClose())
@@ -1674,7 +1687,7 @@ void EditPrefTab::apply(bool syncToDisc)
     const QFont font = mFontChooser->font();
     if (font != Preferences::messageFont())
         Preferences::setMessageFont(font);
-    PrefsTabBase::apply(syncToDisc);
+    return PrefsTabBase::apply(syncToDisc);
 }
 
 void EditPrefTab::slotBrowseSoundFile()
@@ -1989,7 +2002,7 @@ void ViewPrefTab::restore(bool, bool allTabs)
     }
 }
 
-void ViewPrefTab::apply(bool syncToDisc)
+bool ViewPrefTab::apply(bool syncToDisc)
 {
     QColor colour = mDisabledColour->color();
     if (colour != Preferences::disabledColour())
@@ -2038,7 +2051,7 @@ void ViewPrefTab::apply(bool syncToDisc)
         if (b != Preferences::modalMessages())
             Preferences::setModalMessages(b);
     }
-    PrefsTabBase::apply(syncToDisc);
+    return PrefsTabBase::apply(syncToDisc);
 }
 
 void ViewPrefTab::setTooltip(int maxAlarms, bool time, bool timeTo, const QString& prefix)

@@ -47,7 +47,7 @@ public:
 
     void         setPreferences();
     virtual void restore(bool defaults, bool allTabs) = 0;
-    virtual void apply(bool syncToDisc) = 0;
+    virtual bool apply(bool syncToDisc) = 0;
     void         addAlignedLabel(QLabel*);
     QVBoxLayout* topLayout() const  { return mTopLayout; }
     static int   indentWidth()      { return mIndentWidth; }
@@ -73,7 +73,7 @@ public:
     explicit MiscPrefTab(StackedScrollGroup*);
 
     void restore(bool defaults, bool allTabs) override;
-    void apply(bool syncToDisc) override;
+    bool apply(bool syncToDisc) override;
 
 private Q_SLOTS:
     void         slotAutostartClicked();
@@ -103,7 +103,7 @@ public:
     explicit TimePrefTab(StackedScrollGroup*);
 
     void restore(bool defaults, bool allTabs) override;
-    void apply(bool syncToDisc) override;
+    bool apply(bool syncToDisc) override;
 
 private:
     void         setWorkDays(const QBitArray& days);
@@ -127,7 +127,7 @@ public:
     explicit StorePrefTab(StackedScrollGroup*);
 
     void restore(bool defaults, bool allTabs) override;
-    void apply(bool syncToDisc) override;
+    bool apply(bool syncToDisc) override;
 
 private Q_SLOTS:
     void         slotArchivedToggled(bool);
@@ -157,7 +157,7 @@ public:
 
     QString      validate();
     void restore(bool defaults, bool allTabs) override;
-    void apply(bool syncToDisc) override;
+    bool apply(bool syncToDisc) override;
 
 protected:
     void showEvent(QShowEvent*) override;
@@ -201,7 +201,7 @@ public:
 
     QString      validate();
     void restore(bool defaults, bool allTabs) override;
-    void apply(bool syncToDisc) override;
+    bool apply(bool syncToDisc) override;
 
 private Q_SLOTS:
     void         slotBrowseSoundFile();
@@ -244,7 +244,7 @@ public:
     explicit ViewPrefTab(StackedScrollGroup*);
 
     void restore(bool defaults, bool allTabs) override;
-    void apply(bool syncToDisc) override;
+    bool apply(bool syncToDisc) override;
 
 private Q_SLOTS:
     void         slotTooltipAlarmsToggled(bool);
