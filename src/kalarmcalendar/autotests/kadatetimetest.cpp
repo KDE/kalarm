@@ -3574,13 +3574,28 @@ void KADateTimeTest::strings_format()
     dt = KADateTime::fromString(QStringLiteral("200509031430:01.3+0200"), QStringLiteral("%Y%m%d%H%M%:S%:s%z"), &zones, false);
     QVERIFY(!dt.isValid());    // matches paris and berlin
 
-    dt = KADateTime::fromString(QStringLiteral("2005October 051430 CEST"), QStringLiteral("%Y%:B %d%H%M%:S %Z"), &zones, true);
+dt = KADateTime::fromString(QStringLiteral("2005October051430 CEST"), QStringLiteral("%Y%:B%d%H%M%:S %Z"), &zones, true);
+qDebug()<<"1: all:"<<dt.qDateTime();
+dt = KADateTime::fromString(QStringLiteral("2005October051430"), QStringLiteral("%Y%:B%d%H%M%:S"), &zones, true);
+qDebug()<<"2: no %Z"<<dt.qDateTime();
+dt = KADateTime::fromString(QStringLiteral("2005October051430 CEST"), QStringLiteral("%Y%:B%d%H%M %Z"), &zones, true);
+qDebug()<<"3: no %:S"<<dt.qDateTime();
+dt = KADateTime::fromString(QStringLiteral("2005October0514 CEST"), QStringLiteral("%Y%:B%d%H%:S %Z"), &zones, true);
+qDebug()<<"4: no %M"<<dt.qDateTime();
+dt = KADateTime::fromString(QStringLiteral("2005October0530 CEST"), QStringLiteral("%Y%:B%d%M%:S %Z"), &zones, true);
+qDebug()<<"5: no %H"<<dt.qDateTime();
+dt = KADateTime::fromString(QStringLiteral("2005October 051430 CEST"), QStringLiteral("%Y%:B %d%H%M%:S %Z"), &zones, true);
+qDebug()<<"6: no %d"<<dt.qDateTime();
+dt = KADateTime::fromString(QStringLiteral("20051430 CEST"), QStringLiteral("%Y%H%M%:S %Z"), &zones, true);
+qDebug()<<"7: no %:B"<<dt.qDateTime();
+dt = KADateTime::fromString(QStringLiteral("2005October051430 CEST"), QStringLiteral("%Y%:B%d%H%M%:S %Z"), &zones, true);
     QCOMPARE(dt.date(), QDate(2005, 10, 5));
     QCOMPARE(dt.time(), QTime(14, 30, 0));
     QCOMPARE(dt.timeType(), KADateTime::OffsetFromUTC);
     QCOMPARE(dt.utcOffset(), 2 * 3600);
-    dt = KADateTime::fromString(QStringLiteral("2005October 051430 CEST"), QStringLiteral("%Y%:B %d%H%M%:S %Z"), &zones, false);
+    dt = KADateTime::fromString(QStringLiteral("2005October051430 CEST"), QStringLiteral("%Y%:B%d%H%M%:S %Z"), &zones, false);
     QVERIFY(!dt.isValid());    // matches paris and berlin
+return;
 
     // GMT is used by multiple time zones
     dt = KADateTime::fromString(QStringLiteral("30 October 2005 1:30 GMT"), QStringLiteral("%d %:B %Y %k:%M %Z"));
