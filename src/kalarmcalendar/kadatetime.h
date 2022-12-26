@@ -1275,9 +1275,10 @@ public:
      *   Warning: To avoid unacceptable processing loads, searches for a time
      *            zone abbreviation are done using QTimeZone::displayName()
      *            instead of QTimeZone::abbreviation(). However, the two
-     *            methods can return different results, so for this reason as
-     *            well as the fact that time zone abbreviations are not unique,
-     *            the use of time zone abbreviations is strongly advised against.
+     *            methods can return different results, and if this happens, no
+     *            match will be found. For this reason as well as the fact that
+     *            time zone abbreviations are not unique, the use of time zone
+     *            abbreviations is strongly advised against.
      * - If a time zone name does not match any time zone in @p zones, an
      *   invalid KADateTime is returned.
      * - If the time zone UTC offset does not match any time zone in @p zones,

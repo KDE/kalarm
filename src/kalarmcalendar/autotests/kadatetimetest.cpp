@@ -3574,6 +3574,9 @@ void KADateTimeTest::strings_format()
     dt = KADateTime::fromString(QStringLiteral("200509031430:01.3+0200"), QStringLiteral("%Y%m%d%H%M%:S%:s%z"), &zones, false);
     QVERIFY(!dt.isValid());    // matches paris and berlin
 
+#if 0
+    // If QTimeZone::abbreviation() and QTimeZone::displayName() return different values
+    // (which can actually happen), no match will be found. So omit from test.
     const QString abbrev = paris.displayName(QTimeZone::DaylightTime, QTimeZone::ShortName, QLocale::c());
     dt = KADateTime::fromString(QStringLiteral("2005October051430 ")+abbrev, QStringLiteral("%Y%:B%d%H%M%:S %Z"), &zones, true);
     QCOMPARE(dt.date(), QDate(2005, 10, 5));
@@ -3582,6 +3585,7 @@ void KADateTimeTest::strings_format()
     QCOMPARE(dt.utcOffset(), 2 * 3600);
     dt = KADateTime::fromString(QStringLiteral("2005October051430 ")+abbrev, QStringLiteral("%Y%:B%d%H%M%:S %Z"), &zones, false);
     QVERIFY(!dt.isValid());    // matches paris and berlin
+#endif
 
     // GMT is used by multiple time zones
     dt = KADateTime::fromString(QStringLiteral("30 October 2005 1:30 GMT"), QStringLiteral("%d %:B %Y %k:%M %Z"));
