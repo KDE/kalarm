@@ -1237,7 +1237,8 @@ public:
      * -  %:z  UTC offset of the time zone in hours and minutes, colon separated,
      *         e.g. +02:00.
      * - \%Z   time zone abbreviation, consisting of alphanumeric characters,
-     *         e.g. UTC, EDT, GMT.
+     *         e.g. UTC, EDT, GMT. Use of time zone abbreviations is strongly
+     *         advised against, for reasons given below.
      * -  %:Z  time zone name, e.g. Europe/London. The name may contain any
      *         characters and is delimited by the following character in the
      *         @p format string. It will not work if you follow %:Z with another
@@ -1271,6 +1272,12 @@ public:
      * - If a time zone abbreviation does not match any time zone in @p zones,
      *   or the abbreviation does not apply at the parsed date/time, an
      *   invalid KADateTime is returned.
+     *   Warning: To avoid unacceptable processing loads, searches for a time
+     *            zone abbreviation are done using QTimeZone::displayName()
+     *            instead of QTimeZone::abbreviation(). However, the two
+     *            methods can return different results, so for this reason as
+     *            well as the fact that time zone abbreviations are not unique,
+     *            the use of time zone abbreviations is strongly advised against.
      * - If a time zone name does not match any time zone in @p zones, an
      *   invalid KADateTime is returned.
      * - If the time zone UTC offset does not match any time zone in @p zones,
