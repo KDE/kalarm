@@ -3574,6 +3574,10 @@ void KADateTimeTest::strings_format()
     dt = KADateTime::fromString(QStringLiteral("200509031430:01.3+0200"), QStringLiteral("%Y%m%d%H%M%:S%:s%z"), &zones, false);
     QVERIFY(!dt.isValid());    // matches paris and berlin
 
+qDebug()<<"Paris:"<< paris.abbreviation(QDateTime(QDate(2005,10,5), QTime(14,30,0)))
+<<"c:"<<paris.displayName(QTimeZone::StandardTime, QTimeZone::ShortName, QLocale::c())<<paris.displayName(QTimeZone::DaylightTime, QTimeZone::ShortName, QLocale::c());
+qDebug()<<"Berlin:"<< berlin.abbreviation(QDateTime(QDate(2005,10,5), QTime(14,30,0)))
+<<"c:"<<berlin.displayName(QTimeZone::StandardTime, QTimeZone::ShortName, QLocale::c())<<berlin.displayName(QTimeZone::DaylightTime, QTimeZone::ShortName, QLocale::c());
 dt = KADateTime::fromString(QStringLiteral("2005October051430 CEST"), QStringLiteral("%Y%:B%d%H%M%:S %Z"), &zones, true);
 qDebug()<<"1: all:"<<dt.qDateTime();
 dt = KADateTime::fromString(QStringLiteral("2005October051430"), QStringLiteral("%Y%:B%d%H%M%:S"), &zones, true);
