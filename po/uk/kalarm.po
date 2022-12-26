@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-12-25 00:50+0000\n"
-"PO-Revision-Date: 2022-12-24 08:45+0200\n"
+"PO-Revision-Date: 2022-12-25 08:46+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
 "Language: uk\n"
@@ -5178,11 +5178,11 @@ msgid ""
 "<para>No command is specified to invoke a terminal window.</para><para>The "
 "default command (<command>%1</command>) will be used.</para>"
 msgstr ""
+"<para>Не вказано команди для виклику вікна термінала.</para><para>Буде "
+"використано типову команду (<command>%1</command>).</para>"
 
 #: prefdlg.cpp:602
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid "No command is specified to invoke terminal window"
+#, kde-kuit-format
 msgctxt "@info"
 msgid "No command is specified to invoke a terminal window"
 msgstr "Не вказано команди для виклику вікна термінала"

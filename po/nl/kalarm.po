@@ -18,7 +18,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-12-25 00:50+0000\n"
-"PO-Revision-Date: 2022-12-24 15:13+0100\n"
+"PO-Revision-Date: 2022-12-25 13:49+0100\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -5388,14 +5388,16 @@ msgid ""
 "<para>No command is specified to invoke a terminal window.</para><para>The "
 "default command (<command>%1</command>) will be used.</para>"
 msgstr ""
+"<para>Er is geen commando gespecificeerd om een terminalvenster op te "
+"starten.</para><para>Het standaard commando (<command>%1</command>) zal "
+"gebruikt worden.</para>"
 
 #: prefdlg.cpp:602
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid "No command is specified to invoke terminal window"
+#, kde-kuit-format
 msgctxt "@info"
 msgid "No command is specified to invoke a terminal window"
-msgstr "Er is geen commando opgegeven om het terminalvenster op te starten"
+msgstr ""
+"Er is geen commando gespecificeerd om een terminalvenster op te starten"
 
 #: prefdlg.cpp:615
 #, kde-kuit-format

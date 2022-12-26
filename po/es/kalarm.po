@@ -19,7 +19,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-12-25 00:50+0000\n"
-"PO-Revision-Date: 2022-12-24 20:59+0100\n"
+"PO-Revision-Date: 2022-12-25 21:56+0100\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -5202,15 +5202,16 @@ msgid ""
 "<para>No command is specified to invoke a terminal window.</para><para>The "
 "default command (<command>%1</command>) will be used.</para>"
 msgstr ""
+"<para>No se ha especificado ninguna orden para mostrar una ventana de "
+"terminal.</para><para>Se usará la orden predeterminada (<command>%1</"
+"command>).</para>"
 
 #: prefdlg.cpp:602
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid "No command is specified to invoke terminal window"
+#, kde-kuit-format
 msgctxt "@info"
 msgid "No command is specified to invoke a terminal window"
 msgstr ""
-"No se ha especificado ninguna orden para invocar la ventana de terminal"
+"No se ha especificado ninguna orden para mostrar una ventana de terminal"
 
 #: prefdlg.cpp:615
 #, kde-kuit-format
