@@ -10,8 +10,6 @@
 
 #include "karecurrence.h"
 
-#include "kalarmcal_debug.h"
-
 #include <KCalendarCore/Recurrence>
 #include <KCalendarCore/ICalFormat>
 
