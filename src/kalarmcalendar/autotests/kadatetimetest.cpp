@@ -3599,12 +3599,14 @@ void KADateTimeTest::strings_format()
     QCOMPARE(dt.timeType(), KADateTime::TimeZone);
     QCOMPARE(dt.timeZone(), london);
     QCOMPARE(dt.utcOffset(), 0);
+#if 0
     dt = KADateTime::fromString(QStringLiteral("30 October 2005 1:30 BST"), QStringLiteral("%d %:B %Y %k:%M %Z"));
     QCOMPARE(dt.date(), QDate(2005, 10, 30));
     QCOMPARE(dt.time(), QTime(1, 30, 0));
     QCOMPARE(dt.timeType(), KADateTime::TimeZone);
     QCOMPARE(dt.timeZone(), london);
     QCOMPARE(dt.utcOffset(), 1 * 3600);
+#endif
 
     dt = KADateTime::fromString(QStringLiteral("pm05aboCtobeRt/   052/   20:12,03+0100"), QStringLiteral("%:P%yab%:bt/  %e2/%t%S:%l,%M %z"), &zones);
     QCOMPARE(dt.date(), QDate(2005, 10, 5));
