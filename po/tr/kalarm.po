@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: kdepim-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-12-25 00:50+0000\n"
-"PO-Revision-Date: 2022-12-23 20:43+0300\n"
+"PO-Revision-Date: 2022-12-26 21:58+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -403,13 +403,13 @@ msgstr "Anımsatıcının doğum gününden önce mi sonra mı tetikleneceğini 
 #, kde-format
 msgctxt "@action:button"
 msgid "Sub-Repetition"
-msgstr "Alt-Tekrarlama"
+msgstr "Alt Yineleme"
 
 #: birthdaydlg.cpp:193
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Set up an additional alarm repetition"
-msgstr "Ek alarm tekrarlaması ayarla"
+msgstr "Ek alarm yinelemesi ayarla"
 
 #: commandoptions.cpp:127
 #, kde-format
@@ -419,7 +419,7 @@ msgstr "Alarm bildiriminde onaylama iste"
 #: commandoptions.cpp:130
 #, kde-format
 msgid "Attach file to email (repeat as needed)"
-msgstr "E-Postaya dosya ekle (gerekirse tekrarla)"
+msgstr "E-postaya dosya ekle (gerekirse yinele)"
 
 #: commandoptions.cpp:134
 #, kde-format
@@ -515,7 +515,7 @@ msgstr "E-postanın göndericisi olarak kullanılacak kimlik"
 #: commandoptions.cpp:197
 #, kde-format
 msgid "Interval between alarm repetitions"
-msgstr "Uyarı tekrarlanmaları arasındaki süre"
+msgstr "Uyarı yinelemeleri arasındaki süre"
 
 #: commandoptions.cpp:201
 #, kde-format
@@ -535,12 +535,12 @@ msgstr "Standart çıktıya programlanmış alarmların çıktı listesi"
 #: commandoptions.cpp:212
 #, kde-format
 msgid "Repeat alarm at every login"
-msgstr "Her girişte uyarıyı tekrarla"
+msgstr "Her girişte uyarıyı yinele"
 
 #: commandoptions.cpp:215
 #, kde-format
 msgid "Send an email to the given address (repeat as needed)"
-msgstr "Verilen adrese e-posta yolla (gerekiyorsa tekrarla)"
+msgstr "Verilen adrese e-posta yolla (gerekiyorsa yinele)"
 
 #: commandoptions.cpp:219
 #, kde-format
@@ -560,12 +560,12 @@ msgstr "Çalınacak ses dosyası"
 #: commandoptions.cpp:229
 #, kde-format
 msgid "Audio file to play repeatedly"
-msgstr "Tekrarlanarak çalınacak ses dosyası"
+msgstr "Yinelenerek çalınacak ses dosyası"
 
 #: commandoptions.cpp:233
 #, kde-format
 msgid "Specify alarm recurrence using iCalendar syntax"
-msgstr "Uyarı tekrarını iCalenrar söz dizimi kullanarak belirt"
+msgstr "Uyarı yinelemesini iCalendar sözdizimi kullanarak belirt"
 
 #: commandoptions.cpp:237
 #, kde-format
@@ -575,14 +575,13 @@ msgstr "Alarmdan önce ya da sonra anımsatıcıyı göster"
 #: commandoptions.cpp:241
 #, kde-format
 msgid "Display reminder once, before or after first alarm recurrence"
-msgstr "İlk alarm tekrarından önce ya da sonra hatırlatıyıcıyı bir kez göster"
+msgstr "İlk alarm yinelemesinden önce veya sonra anımsatıcıyı bir kez göster"
 
 #: commandoptions.cpp:245
 #, kde-format
 msgid "Number of times to repeat alarm (including initial occasion)"
 msgstr ""
-"İlk görüntülenmesinden sonra uyarının kaç kez tekrar edeceği (ilk sefer "
-"dahil)"
+"İlk görüntülenmesinden sonra uyarının kaç kez yineleneceği (ilk kez dahil)"
 
 #: commandoptions.cpp:250
 #, kde-format
@@ -620,7 +619,7 @@ msgstr "Uyarıyı belirtilen olay ile çalıştır"
 #: commandoptions.cpp:275
 #, kde-format
 msgid "Repeat until time [[[yyyy-]mm-]dd-]hh:mm [TZ], or date yyyy-mm-dd [TZ]"
-msgstr "Tekrarlama sonu [[[yyyy-]aa-]gg-]ss:dd [ZD], veya gün yyyy-aa-gg [ZD]"
+msgstr "Yineleme sonu [[[yyyy-]aa-]gg-]ss:dd [ZD], veya gün yyyy-aa-gg [ZD]"
 
 #: commandoptions.cpp:279
 #, kde-format
@@ -658,7 +657,7 @@ msgid ""
 "Invalid <icode>%1</icode> and <icode>%2</icode> parameters: repetition is "
 "longer than <icode>%3</icode> interval"
 msgstr ""
-"Geçersiz <icode>%1</icode> ve <icode>%2</icode> parametreleri: tekrarlama "
+"Geçersiz <icode>%1</icode> ve <icode>%2</icode> parametreleri: Yineleme "
 "zamanı <icode>%3</icode> aralığından uzun"
 
 #: commandoptions.cpp:785
@@ -1549,14 +1548,14 @@ msgstr ""
 #, kde-format
 msgctxt "@label"
 msgid "Repeat sound file"
-msgstr "Ses dosyasını tekrarla"
+msgstr "Ses dosyasını yinele"
 
 #. i18n: ectx: whatsthis, entry (DefaultSoundRepeat), group (Defaults)
 #: data/kalarmconfig.kcfg:339
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Default setting in the alarm edit dialog for sound repetition."
-msgstr "Alarm düzenleme penceresinde ses tekrarlaması için öntanımlı ayar."
+msgstr "Alarm düzenleme penceresinde ses yinelemesi için öntanımlı ayar."
 
 #. i18n: ectx: label, entry (DefaultCmdScript), group (Defaults)
 #: data/kalarmconfig.kcfg:343
@@ -1649,21 +1648,21 @@ msgstr ""
 #, kde-format
 msgctxt "@label"
 msgid "Recurrence period"
-msgstr "Tekrarlama dönemi"
+msgstr "Yineleme dönemi"
 
 #. i18n: ectx: whatsthis, entry (DefaultRecurPeriod), group (Defaults)
 #: data/kalarmconfig.kcfg:368 prefdlg.cpp:1355
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "The default setting for the recurrence rule in the alarm edit dialog."
-msgstr "Alarm düzenleme penceresinde tekrarlama kuralı için öntanımlı ayar."
+msgstr "Alarm düzenleme penceresinde yineleme kuralı için öntanımlı ayar."
 
 #. i18n: ectx: label, entry (DefaultRecurPeriod), group (Defaults)
 #: data/kalarmconfig.kcfg:370
 #, kde-format
 msgctxt "@option"
 msgid "No recurrence"
-msgstr "Tekrarlanma yok"
+msgstr "Yineleme yok"
 
 #. i18n: ectx: label, entry (DefaultRecurPeriod), group (Defaults)
 #: data/kalarmconfig.kcfg:371
@@ -1684,7 +1683,7 @@ msgstr "Saatlik/Dakikalık"
 #, kde-format
 msgctxt "@label"
 msgid "In non-leap years, repeat yearly February 29th alarms on:"
-msgstr "Artık olmayan yıllarda, 29 Şubat alarmlarını şu tarihte tekrarla:"
+msgstr "Artık olmayan yıllarda, 29 Şubat alarmlarını şu tarihte yinele:"
 
 #. i18n: ectx: whatsthis, entry (DefaultFeb29Type), group (Defaults)
 #: data/kalarmconfig.kcfg:382
@@ -1696,9 +1695,9 @@ msgid ""
 "occurrence of existing alarms is not re-evaluated when you change this "
 "setting."
 msgstr ""
-"Yıllık tekrarlar için, artık yıl olmayan yıllarda 29 Şubat alarmlarının "
+"Yıllık yinelemeler için, artık yıl olmayan yıllarda 29 Şubat alarmlarının "
 "hangi tarihte uygulanacağını seçin.<i>Not</i>: Bu ayarı değiştirdiğinizde "
-"mevcut planlanmış alarmların gösterimi yeniden hesaplanmayacaktır."
+"var olan planlanmış alarmların gösterimi yeniden hesaplanmayacaktır."
 
 #. i18n: ectx: label, entry (DefaultFeb29Type), group (Defaults)
 #: data/kalarmconfig.kcfg:384
@@ -1997,7 +1996,7 @@ msgstr "Geçmiş alarmın sonraki anımsatıcıları ertelenemez (şu anda %1)"
 #, kde-format
 msgctxt "@info"
 msgid "Cannot defer reminder past the main alarm time (%1)"
-msgstr "Ana alarm süresi (%1) geçmiş hatırlatma ertelenemez"
+msgstr "Ana alarm süresi (%1) geçmiş anımsatma ertelenemez"
 
 #: displaycalendar.cpp:127
 #, kde-kuit-format
@@ -2244,8 +2243,8 @@ msgid ""
 "Reminder period must be less than the recurrence interval, unless <interface>"
 "%1</interface> is checked."
 msgstr ""
-"<interface>%1</interface> kontrol edilmediği sürece, hatırlatma süresi "
-"tekrarlama aralığından daha kısa olmalıdır."
+"<interface>%1</interface> denetlenmediği sürece, anımsatma süresi yineleme "
+"aralığından daha kısa olmalıdır."
 
 #: editdlg.cpp:1107
 #, kde-format
@@ -5135,12 +5134,14 @@ msgid ""
 "<para>No command is specified to invoke a terminal window.</para><para>The "
 "default command (<command>%1</command>) will be used.</para>"
 msgstr ""
+"<para>Bir uçbirim penceresi çağırmak için bir komut belirtilmemiş.</"
+"para><para>Öntanımlı komut (<command>%1</command>) kullanılacak.</para>"
 
 #: prefdlg.cpp:602
 #, kde-kuit-format
 msgctxt "@info"
 msgid "No command is specified to invoke a terminal window"
-msgstr ""
+msgstr "Bir uçbirim penceresi çağırmak için bir komut belirtilmemiş"
 
 #: prefdlg.cpp:615
 #, kde-kuit-format
@@ -6131,7 +6132,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title:group"
 msgid "Recurrence End"
-msgstr "Tekrarlama Sonu"
+msgstr "Yineleme Sonu"
 
 #: recurrenceedit.cpp:200
 #, kde-format
@@ -6167,7 +6168,7 @@ msgstr "Alarmın toplam kaç kere çalıştırılacağını girin"
 #, kde-format
 msgctxt "@label"
 msgid "occurrence(s)"
-msgstr "tekrarlamalar"
+msgstr "oluş(lar)"
 
 #: recurrenceedit.cpp:233
 #, kde-format
