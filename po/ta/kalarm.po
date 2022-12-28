@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-12-25 00:50+0000\n"
-"PO-Revision-Date: 2022-12-22 19:48+0530\n"
+"PO-Revision-Date: 2022-12-27 21:36+0530\n"
 "Last-Translator: Kishore G <kishore96@gmail.com>\n"
 "Language-Team: Tamil <kde-i18n-doc@kde.org>\n"
 "Language: ta\n"
@@ -746,10 +746,10 @@ msgstr "Akonadi"
 
 #. i18n: ectx: label, entry (Backend), group (General)
 #: data/kalarmconfig.kcfg:71
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@option"
 msgid "File Resources"
-msgstr "&மறுபடியும் தோன்றுதல்"
+msgstr "கோப்பு உருப்படிகள்"
 
 #. i18n: ectx: label, entry (UseAkonadiIfAvailable), group (General)
 #: data/kalarmconfig.kcfg:75
@@ -793,10 +793,10 @@ msgstr "விடுமுறைகளுக்கான மண்டலம்"
 
 #. i18n: ectx: whatsthis, entry (Base_HolidayRegion), group (General)
 #: data/kalarmconfig.kcfg:86
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select the holiday region to use."
-msgstr "அலாரத்திற்கான நேரத்தை உள்ளிடவும்"
+msgstr "விடுமுறைகளுக்கு பயன்படுத்த வேண்டிய மண்டலத்தை தேர்ந்தெடுங்கள்."
 
 #. i18n: ectx: label, entry (DefaultFgColour), group (General)
 #: data/kalarmconfig.kcfg:90 kalarmcalendar/kaeventformatter.cpp:92
@@ -844,10 +844,10 @@ msgstr ""
 
 #. i18n: ectx: label, entry (MessageFont), group (General)
 #: data/kalarmconfig.kcfg:106
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label"
 msgid "Message font"
-msgstr "செய்தி"
+msgstr "தகவலுக்கான எழுத்துரு"
 
 #. i18n: ectx: whatsthis, entry (MessageFont), group (General)
 #: data/kalarmconfig.kcfg:107
@@ -858,11 +858,10 @@ msgstr "அலார செய்தியின் பின்னணி நி
 
 #. i18n: ectx: label, entry (ShowInSystemTray), group (General)
 #: data/kalarmconfig.kcfg:112
-#, fuzzy, kde-format
-#| msgid "Show in System &Tray"
+#, kde-format
 msgctxt "@label"
 msgid "Show in system tray"
-msgstr "அமைப்பு தட்டில் காட்டு  "
+msgstr "கணினித் தட்டில் காட்டு"
 
 #. i18n: ectx: whatsthis, entry (ShowInSystemTray), group (General)
 #: data/kalarmconfig.kcfg:113
@@ -879,6 +878,7 @@ msgstr ""
 msgctxt "@label"
 msgid "Auto-hide in system tray if no alarms due within period"
 msgstr ""
+"குறிப்பிட்ட நேரத்திற்குள் அலாரமேதும் தூண்டப்படவிருக்கவில்லையெனில் கணினித் தட்டில் மறை"
 
 #. i18n: ectx: whatsthis, entry (Base_AutoHideSystemTray), group (General)
 #: data/kalarmconfig.kcfg:119
@@ -896,7 +896,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label"
 msgid "Desktops without auto-hide in system tray"
-msgstr ""
+msgstr "கணினித் தட்டிலுள்ளவற்றை மறைக்க விடாத இயங்குதளங்கள்"
 
 #. i18n: ectx: whatsthis, entry (NoAutoHideSystemTrayDesktops), group (General)
 #: data/kalarmconfig.kcfg:125
