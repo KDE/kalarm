@@ -119,6 +119,7 @@ void SpinBox2p::init()
     setFocusProxy(mSpinbox);
     mSpinbox2->setFocusPolicy(Qt::NoFocus);
     mSpinMirror = new SpinMirror(mSpinbox2, mSpinbox, this);
+    mSpinMirror->setFocusPolicy(Qt::NoFocus);
     mSpinbox->installEventFilter(this);
     mSpinbox2->installEventFilter(this);
     connect(mSpinbox, &QSpinBox::valueChanged, this, &SpinBox2p::valueChange);

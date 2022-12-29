@@ -1,15 +1,16 @@
 KAlarm Change Log
 
-=== Version 3.5.5 (KDE Gear 23.04) --- 24 December 2022 ===
+=== Version 3.5.5 (KDE Gear 23.04) --- 29 December 2022 ===
 * Disallow setting environment variables in command alarm command line.
 * In Preferences dialog, if OK shows warning message, don't close dialog until user responds.
 * Allow setting null command line for invoking terminal to run command alarms in.
 * If only one standard command is available to invoke terminal to run command alarms in, use it as default.
 
-=== Version 3.5.4 (KDE Gear 22.12.1) --- 19 December 2022 ===
+=== Version 3.5.4 (KDE Gear 22.12.1) --- 29 December 2022 ===
 * Update date picker display when a resource becomes disabled.
 * Evaluate trigger times for working time alarms in KAlarm's default time zone.
 * Fix handling of quoted path if configured for the terminal for command alarms.
+* Allow AM/PM control in Edit Alarm dialogue to be tabbed into [KDE Bug 463310]
 
 === Version 3.5.3 (KDE Gear 22.12) --- 18 November 2022 ===
 * Provide build option to disable use of X11, even if it is available.
