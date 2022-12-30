@@ -1,7 +1,7 @@
 /*
  *  timeedit.cpp  -  time-of-day edit widget, with AM/PM shown depending on locale
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2001-2021 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2001-2022 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -32,6 +32,7 @@ TimeEdit::TimeEdit(QWidget* parent)
     mSpinBox = new TimeSpinBox(!use12hour, this);
     connect(mSpinBox, &TimeSpinBox::valueChanged, this, &TimeEdit::slotValueChanged);
     layout->addWidget(mSpinBox);
+    setFocusProxy(mSpinBox);
     if (use12hour)
     {
         mAmPm = new ComboBox(this);
