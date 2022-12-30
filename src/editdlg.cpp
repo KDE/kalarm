@@ -994,8 +994,9 @@ bool EditAlarmDlg::validate()
     }
     else if (mTimeWidget)
     {
+        int timeFromNow;
         QWidget* errWidget;
-        mAlarmDateTime = mTimeWidget->getDateTime(nullptr, !timedRecurrence, false, &errWidget);
+        mAlarmDateTime = mTimeWidget->getDateTime(&timeFromNow, !timedRecurrence, false, &errWidget);
         if (errWidget)
         {
             // It's more than just an existing deferral being changed, so the time matters
@@ -1003,6 +1004,15 @@ bool EditAlarmDlg::validate()
             errWidget->setFocus();
             mTimeWidget->getDateTime();   // display the error message now
             return false;
+        }
+        if (timeFromNow < 10)
+        {
+            if (KAMessageBox::warningContinueCancel(this, xi18nc("@info", "<para>KAlarm does not provide high accuracy alarms.</para><para> The alarm will trigger at the minute boundary before the specified time from now.</para>"), QString(), KStandardGuiItem::cont(), KStandardGuiItem::cancel(), QStringLiteral("HighAccuracy"))
+                    != KMessageBox::Continue)
+            {
+                mTimeWidget->setFocus();
+                return false;
+            }
         }
     }
     if (!type_validate(false))

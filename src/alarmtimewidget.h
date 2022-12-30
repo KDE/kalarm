@@ -46,11 +46,13 @@ public:
     void              setReadOnly(bool);
     bool              anyTime() const               { return mAnyTime; }
     void              enableAnyTime(bool enable);
+
     /** Select/deselect 'Time from now' option.
      *  @param minutes  Value to set in 'Time from now', or
      *                  if < 0, select 'At date/time' option.
      */
     void              selectTimeFromNow(int minutes = 0);
+    void              focusTimeFromNow();
     void              showMoreOptions(bool);
     QSize             sizeHint() const override              { return minimumSizeHint(); }
 

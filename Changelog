@@ -1,10 +1,11 @@
 KAlarm Change Log
 
-=== Version 3.5.5 (KDE Gear 23.04) --- 29 December 2022 ===
+=== Version 3.5.5 (KDE Gear 23.04) --- 30 December 2022 ===
 * Disallow setting environment variables in command alarm command line.
 * In Preferences dialog, if OK shows warning message, don't close dialog until user responds.
 * Allow setting null command line for invoking terminal to run command alarms in.
 * If only one standard command is available to invoke terminal to run command alarms in, use it as default.
+* Show accuracy warning if short time-from-now specified in Edit Alarm dialogue [KDE Bug 463278]
 
 === Version 3.5.4 (KDE Gear 22.12.1) --- 29 December 2022 ===
 * Update date picker display when a resource becomes disabled.
