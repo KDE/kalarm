@@ -2,7 +2,7 @@ KAlarm Change Log
 
 === Version 3.5.4 (KDE Gear 22.12.1) --- 29 December 2022 ===
 * Update date picker display when a resource becomes disabled.
-* Evaluate trigger times for working time alarms in KAlarm's default time zone.
+* Use KAlarm's default time zone to evaluate trigger times for working time alarms.
 * Fix handling of quoted path if configured for the terminal for command alarms.
 * Allow AM/PM control in Edit Alarm dialogue to be tabbed into [KDE Bug 463310]
 
