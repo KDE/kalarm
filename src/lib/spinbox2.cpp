@@ -84,6 +84,7 @@ void SpinBox2::init()
     setLayout(layout);
     layout->addWidget(mSpinbox2);
     connect(mSpinbox2, &SpinBox2p::valueChanged, this, &SpinBox2::valueChanged);
+    setFocusProxy(mSpinbox2);
 }
 
 /*===========================================================================*/
