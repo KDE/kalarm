@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-25 00:50+0000\n"
+"POT-Creation-Date: 2022-12-31 00:52+0000\n"
 "PO-Revision-Date: 2021-05-15 16:59+0100\n"
 "Last-Translator: Sergiu Bivol <sergiu@cip.md>\n"
 "Language-Team: Romanian\n"
@@ -2295,7 +2295,16 @@ msgctxt "@info"
 msgid "Template name is already in use"
 msgstr "Denumirea de șablon e folosită deja"
 
-#: editdlg.cpp:1032
+#: editdlg.cpp:1010
+#, kde-kuit-format
+msgctxt "@info"
+msgid ""
+"<para>KAlarm does not provide high accuracy alarms.</para><para> The alarm "
+"will trigger at the minute boundary before the specified time from now.</"
+"para>"
+msgstr ""
+
+#: editdlg.cpp:1042
 #, kde-format
 msgctxt "@info The parameter is a date value"
 msgid ""
@@ -2305,7 +2314,7 @@ msgstr ""
 "Ora de inceput nu se potriveste cu modelul de repetare al alarmei,asa ca va "
 "trebui reglata pentru data viitoarei  repetari (%1)."
 
-#: editdlg.cpp:1036
+#: editdlg.cpp:1046
 #, kde-format
 msgctxt "@info The parameter is a date/time value"
 msgid ""
@@ -2315,19 +2324,19 @@ msgstr ""
 "Ora de inceput/Data de inceput nu se potrivesc cu modelul de repetare al "
 "alarmei,asa ca va trebui reglata dupa data/ora urmatoarei repetari (%1)."
 
-#: editdlg.cpp:1058
+#: editdlg.cpp:1068
 #, kde-format
 msgctxt "@info"
 msgid "Recurrence has already expired"
 msgstr "Recurența a expirat deja"
 
-#: editdlg.cpp:1063
+#: editdlg.cpp:1073
 #, kde-format
 msgctxt "@info"
 msgid "The alarm will never occur during working hours"
 msgstr "Alarma nu va interveni niciodată în orele de lucru"
 
-#: editdlg.cpp:1092
+#: editdlg.cpp:1102
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2337,7 +2346,7 @@ msgstr ""
 "Perioada de reamintire trebuie sa fie mai mica decat intervalul repetarilor, "
 "numai daca <interface>%1</interface> este verificat."
 
-#: editdlg.cpp:1107
+#: editdlg.cpp:1117
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -2345,7 +2354,7 @@ msgid ""
 "recurrence interval minus any reminder period"
 msgstr "DUrata unei repetitii"
 
-#: editdlg.cpp:1114
+#: editdlg.cpp:1124
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -2355,13 +2364,13 @@ msgstr ""
 "Pentru o repetitie în cadrul recurentei, perioada acesteia trebuie sa fie în "
 "unitati de zile sau saptamani pentru o alarma numai cu data."
 
-#: editdlg.cpp:1145
+#: editdlg.cpp:1155
 #, kde-format
 msgctxt "@info"
 msgid "You must select a calendar to save the alarm in"
 msgstr "Trebuie să alegeți un calendar în care salvați alarma"
 
-#: editdlg.cpp:1226
+#: editdlg.cpp:1236
 #, fuzzy, kde-format
 #| msgctxt "@action:button"
 #| msgid "Less Options <<"
@@ -2369,7 +2378,7 @@ msgctxt "@action:Button"
 msgid "Fewer Options <<"
 msgstr "Mai puține opțiuni <<"
 
-#: editdlg.cpp:1227
+#: editdlg.cpp:1237
 #, fuzzy, kde-format
 #| msgctxt "@action:button"
 #| msgid "Less Options <<"
@@ -2377,13 +2386,13 @@ msgctxt "@info:tooltip"
 msgid "Show fewer options"
 msgstr "Mai puține opțiuni <<"
 
-#: editdlg.cpp:1232
+#: editdlg.cpp:1242
 #, kde-format
 msgctxt "@action:button"
 msgid "More Options >>"
 msgstr "Mai multe opțiuni >>"
 
-#: editdlg.cpp:1233
+#: editdlg.cpp:1243
 #, fuzzy, kde-format
 #| msgctxt "@action:button"
 #| msgid "More Options >>"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-25 00:50+0000\n"
+"POT-Creation-Date: 2022-12-31 00:52+0000\n"
 "PO-Revision-Date: 2009-01-18 16:28+0530\n"
 "Last-Translator: A S Alam <aalam@users.sf.net>\n"
 "Language-Team: Punjabi <punjabi-l10n@users.sf.net>\n"
@@ -2063,7 +2063,16 @@ msgctxt "@info"
 msgid "Template name is already in use"
 msgstr ""
 
-#: editdlg.cpp:1032
+#: editdlg.cpp:1010
+#, kde-kuit-format
+msgctxt "@info"
+msgid ""
+"<para>KAlarm does not provide high accuracy alarms.</para><para> The alarm "
+"will trigger at the minute boundary before the specified time from now.</"
+"para>"
+msgstr ""
+
+#: editdlg.cpp:1042
 #, kde-format
 msgctxt "@info The parameter is a date value"
 msgid ""
@@ -2071,7 +2080,7 @@ msgid ""
 "adjusted to the date of the next recurrence (%1)."
 msgstr ""
 
-#: editdlg.cpp:1036
+#: editdlg.cpp:1046
 #, kde-format
 msgctxt "@info The parameter is a date/time value"
 msgid ""
@@ -2079,19 +2088,19 @@ msgid ""
 "will be adjusted to the date/time of the next recurrence (%1)."
 msgstr ""
 
-#: editdlg.cpp:1058
+#: editdlg.cpp:1068
 #, kde-format
 msgctxt "@info"
 msgid "Recurrence has already expired"
 msgstr ""
 
-#: editdlg.cpp:1063
+#: editdlg.cpp:1073
 #, kde-format
 msgctxt "@info"
 msgid "The alarm will never occur during working hours"
 msgstr ""
 
-#: editdlg.cpp:1092
+#: editdlg.cpp:1102
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2099,7 +2108,7 @@ msgid ""
 "%1</interface> is checked."
 msgstr ""
 
-#: editdlg.cpp:1107
+#: editdlg.cpp:1117
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -2107,7 +2116,7 @@ msgid ""
 "recurrence interval minus any reminder period"
 msgstr ""
 
-#: editdlg.cpp:1114
+#: editdlg.cpp:1124
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -2115,13 +2124,13 @@ msgid ""
 "or weeks for a date-only alarm"
 msgstr ""
 
-#: editdlg.cpp:1145
+#: editdlg.cpp:1155
 #, kde-format
 msgctxt "@info"
 msgid "You must select a calendar to save the alarm in"
 msgstr ""
 
-#: editdlg.cpp:1226
+#: editdlg.cpp:1236
 #, fuzzy, kde-format
 #| msgctxt "@action:button"
 #| msgid "Less Options <<"
@@ -2129,7 +2138,7 @@ msgctxt "@action:Button"
 msgid "Fewer Options <<"
 msgstr "ਘੱਟ ਚੋਣਾਂ<<"
 
-#: editdlg.cpp:1227
+#: editdlg.cpp:1237
 #, fuzzy, kde-format
 #| msgctxt "@action:button"
 #| msgid "Less Options <<"
@@ -2137,13 +2146,13 @@ msgctxt "@info:tooltip"
 msgid "Show fewer options"
 msgstr "ਘੱਟ ਚੋਣਾਂ<<"
 
-#: editdlg.cpp:1232
+#: editdlg.cpp:1242
 #, kde-format
 msgctxt "@action:button"
 msgid "More Options >>"
 msgstr "ਹੋਰ ਚੋਣਾਂ >>"
 
-#: editdlg.cpp:1233
+#: editdlg.cpp:1243
 #, fuzzy, kde-format
 #| msgctxt "@action:button"
 #| msgid "More Options >>"

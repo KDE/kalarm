@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-25 00:50+0000\n"
+"POT-Creation-Date: 2022-12-31 00:52+0000\n"
 "PO-Revision-Date: 2016-08-15 16:35+0100\n"
 "Last-Translator: Martin Schlander <mschlander@opensuse.org>\n"
 "Language-Team: Danish <kde-i18n-doc@kde.org>\n"
@@ -2215,7 +2215,16 @@ msgctxt "@info"
 msgid "Template name is already in use"
 msgstr "Skabelonnavn er allerede i brug"
 
-#: editdlg.cpp:1032
+#: editdlg.cpp:1010
+#, kde-kuit-format
+msgctxt "@info"
+msgid ""
+"<para>KAlarm does not provide high accuracy alarms.</para><para> The alarm "
+"will trigger at the minute boundary before the specified time from now.</"
+"para>"
+msgstr ""
+
+#: editdlg.cpp:1042
 #, kde-format
 msgctxt "@info The parameter is a date value"
 msgid ""
@@ -2225,7 +2234,7 @@ msgstr ""
 "Startdatoen matcher ikke alarmens gentagelsesmønster, så den vil blive "
 "justeret til datoen for den næste gentagelse (%1)."
 
-#: editdlg.cpp:1036
+#: editdlg.cpp:1046
 #, kde-format
 msgctxt "@info The parameter is a date/time value"
 msgid ""
@@ -2235,19 +2244,19 @@ msgstr ""
 "Startdatoen/-klokkeslættet matcher ikke alarmens gentagelsesmønster, så der "
 "vil blive justeret til datoen/klokkeslættet for den næste gentagelse (%1)."
 
-#: editdlg.cpp:1058
+#: editdlg.cpp:1068
 #, kde-format
 msgctxt "@info"
 msgid "Recurrence has already expired"
 msgstr "Gentagelse er allerede udløbet"
 
-#: editdlg.cpp:1063
+#: editdlg.cpp:1073
 #, kde-format
 msgctxt "@info"
 msgid "The alarm will never occur during working hours"
 msgstr "Alarmen vil aldrig forekomme i arbejdstimerne"
 
-#: editdlg.cpp:1092
+#: editdlg.cpp:1102
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2257,7 +2266,7 @@ msgstr ""
 "Påmindelsesperiode skal være mindre end gentagelsesintervallet, med mindre "
 "<interface>%1</interface> er markeret."
 
-#: editdlg.cpp:1107
+#: editdlg.cpp:1117
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -2267,7 +2276,7 @@ msgstr ""
 "Varigheden af en repetition skal være mindre end gentagelsesintervallet "
 "minus eventuel påmindelsesperiode."
 
-#: editdlg.cpp:1114
+#: editdlg.cpp:1124
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -2277,13 +2286,13 @@ msgstr ""
 "For repetition indenfor gentagelsen, skal dens periode være i enheder af "
 "dage eller uger for en alarm som kun er pr. dato"
 
-#: editdlg.cpp:1145
+#: editdlg.cpp:1155
 #, kde-format
 msgctxt "@info"
 msgid "You must select a calendar to save the alarm in"
 msgstr "Du skal vælge en kalender at gemme alarmen i"
 
-#: editdlg.cpp:1226
+#: editdlg.cpp:1236
 #, fuzzy, kde-format
 #| msgctxt "@action:Button"
 #| msgid "Less Options <<"
@@ -2291,7 +2300,7 @@ msgctxt "@action:Button"
 msgid "Fewer Options <<"
 msgstr "Færre indstillinger <<"
 
-#: editdlg.cpp:1227
+#: editdlg.cpp:1237
 #, fuzzy, kde-format
 #| msgctxt "@action:Button"
 #| msgid "Less Options <<"
@@ -2299,13 +2308,13 @@ msgctxt "@info:tooltip"
 msgid "Show fewer options"
 msgstr "Færre indstillinger <<"
 
-#: editdlg.cpp:1232
+#: editdlg.cpp:1242
 #, kde-format
 msgctxt "@action:button"
 msgid "More Options >>"
 msgstr "Flere indstillinger >>"
 
-#: editdlg.cpp:1233
+#: editdlg.cpp:1243
 #, fuzzy, kde-format
 #| msgctxt "@action:button"
 #| msgid "More Options >>"

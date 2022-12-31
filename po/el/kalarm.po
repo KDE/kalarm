@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-25 00:50+0000\n"
+"POT-Creation-Date: 2022-12-31 00:52+0000\n"
 "PO-Revision-Date: 2021-09-02 09:49+0300\n"
 "Last-Translator: Stelios <sstavra@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
@@ -2288,7 +2288,16 @@ msgctxt "@info"
 msgid "Template name is already in use"
 msgstr "Το όνομα προτύπου χρησιμοποιείται ήδη"
 
-#: editdlg.cpp:1032
+#: editdlg.cpp:1010
+#, kde-kuit-format
+msgctxt "@info"
+msgid ""
+"<para>KAlarm does not provide high accuracy alarms.</para><para> The alarm "
+"will trigger at the minute boundary before the specified time from now.</"
+"para>"
+msgstr ""
+
+#: editdlg.cpp:1042
 #, kde-format
 msgctxt "@info The parameter is a date value"
 msgid ""
@@ -2299,7 +2308,7 @@ msgstr ""
 "συναγερμού. Για αυτό θα ρυθμιστεί στην ημερομηνία της επόμενης επανάληψης "
 "(%1)."
 
-#: editdlg.cpp:1036
+#: editdlg.cpp:1046
 #, kde-format
 msgctxt "@info The parameter is a date/time value"
 msgid ""
@@ -2310,19 +2319,19 @@ msgstr ""
 "συναγερμού. Για αυτό θα ρυθμιστεί στην ημερομηνία της επόμενης επανάληψης "
 "(%1)."
 
-#: editdlg.cpp:1058
+#: editdlg.cpp:1068
 #, kde-format
 msgctxt "@info"
 msgid "Recurrence has already expired"
 msgstr "Η επανεμφάνιση έχει ήδη λήξει"
 
-#: editdlg.cpp:1063
+#: editdlg.cpp:1073
 #, kde-format
 msgctxt "@info"
 msgid "The alarm will never occur during working hours"
 msgstr "Ο συναγερμός δε θα εμφανίζεται κατά τις ώρες εργασίας"
 
-#: editdlg.cpp:1092
+#: editdlg.cpp:1102
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2332,7 +2341,7 @@ msgstr ""
 "Η περίοδος της υπενθύμισης πρέπει να είναι μικρότερη από το διάστημα της "
 "επανεμφάνισης, εκτός και αν το <interface>%1</interface> είναι επιλεγμένο."
 
-#: editdlg.cpp:1107
+#: editdlg.cpp:1117
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -2342,7 +2351,7 @@ msgstr ""
 "Η διάρκεια της απλής επανάληψης συναγερμού πρέπει να είναι μικρότερη από το "
 "διάστημα επανεμφάνισης μείον οποιαδήποτε περίοδο υπενθύμισης"
 
-#: editdlg.cpp:1114
+#: editdlg.cpp:1124
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -2352,32 +2361,32 @@ msgstr ""
 "Η περίοδος της απλής επανάληψης συναγερμού πρέπει να είναι σε μονάδες ημερών "
 "ή εβδομάδων για έναν μόνο συναγερμό ημέρας"
 
-#: editdlg.cpp:1145
+#: editdlg.cpp:1155
 #, kde-format
 msgctxt "@info"
 msgid "You must select a calendar to save the alarm in"
 msgstr ""
 "Πρέπει να επιλέξτε ένα ημερολόγιο στο οποίο θα αποθηκευτεί ο συναγερμός"
 
-#: editdlg.cpp:1226
+#: editdlg.cpp:1236
 #, kde-format
 msgctxt "@action:Button"
 msgid "Fewer Options <<"
 msgstr "Λιγότερες επιλογές <<"
 
-#: editdlg.cpp:1227
+#: editdlg.cpp:1237
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show fewer options"
 msgstr "Εμφάνιση λιγότερων επιλογών"
 
-#: editdlg.cpp:1232
+#: editdlg.cpp:1242
 #, kde-format
 msgctxt "@action:button"
 msgid "More Options >>"
 msgstr "Περισσότερες επιλογές >>"
 
-#: editdlg.cpp:1233
+#: editdlg.cpp:1243
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show more options"

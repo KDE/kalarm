@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-25 00:50+0000\n"
+"POT-Creation-Date: 2022-12-31 00:52+0000\n"
 "PO-Revision-Date: 2014-09-18 17:01+0200\n"
 "Last-Translator: Sönke Dibbern <s_dibbern@web.de>\n"
 "Language-Team: Low Saxon <kde-i18n-nds@kde.org>\n"
@@ -2233,7 +2233,16 @@ msgctxt "@info"
 msgid "Template name is already in use"
 msgstr "Disse Vörlaagnaam warrt al bruukt"
 
-#: editdlg.cpp:1032
+#: editdlg.cpp:1010
+#, kde-kuit-format
+msgctxt "@info"
+msgid ""
+"<para>KAlarm does not provide high accuracy alarms.</para><para> The alarm "
+"will trigger at the minute boundary before the specified time from now.</"
+"para>"
+msgstr ""
+
+#: editdlg.cpp:1042
 #, kde-format
 msgctxt "@info The parameter is a date value"
 msgid ""
@@ -2243,7 +2252,7 @@ msgstr ""
 "Dat Anfangdatum passt nich to den Alarm sien Wedderhaalmuster, dat warrt "
 "op't Datum vun de nakamen Wedderhalen (%1) sett."
 
-#: editdlg.cpp:1036
+#: editdlg.cpp:1046
 #, kde-format
 msgctxt "@info The parameter is a date/time value"
 msgid ""
@@ -2253,19 +2262,19 @@ msgstr ""
 "Anfangdatum un -tiet passt nich to den Alarm sien Wedderhaalmuster, dat "
 "warrt op't Datum un de Tiet vun de nakamen Wedderhalen (%1) sett."
 
-#: editdlg.cpp:1058
+#: editdlg.cpp:1068
 #, kde-format
 msgctxt "@info"
 msgid "Recurrence has already expired"
 msgstr "Perioodsche Wedderhalen is al aflopen"
 
-#: editdlg.cpp:1063
+#: editdlg.cpp:1073
 #, kde-format
 msgctxt "@info"
 msgid "The alarm will never occur during working hours"
 msgstr "De Alarm warrt nienich över de Arbeittiet-Stünnen utlööst"
 
-#: editdlg.cpp:1092
+#: editdlg.cpp:1102
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2275,7 +2284,7 @@ msgstr ""
 "De Vöraftiet vun den Vöranstoot mutt körter wesen as de Wedderhalenperiood, "
 "tominnst wenn <interface>%1</interface> nich anmaakt is."
 
-#: editdlg.cpp:1107
+#: editdlg.cpp:1117
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -2285,7 +2294,7 @@ msgstr ""
 "De Tiet för de Wedderhalen mutt körter wesen as de Wedderhaalperiood minus "
 "de Vöraftiet vun en vörhannen Vöranstoot."
 
-#: editdlg.cpp:1114
+#: editdlg.cpp:1124
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -2295,13 +2304,13 @@ msgstr ""
 "Du muttst de Tiet för Wedderhalen binnen de Wedderhaalperiood in Daag oder "
 "Weken angeven, wenn för den Alarm bloots en Datum angeven is."
 
-#: editdlg.cpp:1145
+#: editdlg.cpp:1155
 #, kde-format
 msgctxt "@info"
 msgid "You must select a calendar to save the alarm in"
 msgstr "Du muttst en Kalenner utsöken, binnen den Du den Alarm sekern wullt"
 
-#: editdlg.cpp:1226
+#: editdlg.cpp:1236
 #, fuzzy, kde-format
 #| msgctxt "@action:button"
 #| msgid "Less Options <<"
@@ -2309,7 +2318,7 @@ msgctxt "@action:Button"
 msgid "Fewer Options <<"
 msgstr "Weniger Optschonen <<"
 
-#: editdlg.cpp:1227
+#: editdlg.cpp:1237
 #, fuzzy, kde-format
 #| msgctxt "@action:button"
 #| msgid "Less Options <<"
@@ -2317,13 +2326,13 @@ msgctxt "@info:tooltip"
 msgid "Show fewer options"
 msgstr "Weniger Optschonen <<"
 
-#: editdlg.cpp:1232
+#: editdlg.cpp:1242
 #, kde-format
 msgctxt "@action:button"
 msgid "More Options >>"
 msgstr "Mehr Optschonen >>"
 
-#: editdlg.cpp:1233
+#: editdlg.cpp:1243
 #, fuzzy, kde-format
 #| msgctxt "@action:button"
 #| msgid "More Options >>"
