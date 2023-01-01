@@ -11,14 +11,14 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-12-31 00:52+0000\n"
-"PO-Revision-Date: 2022-12-25 09:35+0100\n"
-"Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
+"PO-Revision-Date: 2022-12-31 23:20+0100\n"
+"Last-Translator: Antoni Bella <antonibella5@yahoo.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 20.12.0\n"
+"X-Generator: Kate 22.08.3\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Accelerator-Marker: &\n"
 
@@ -2255,6 +2255,9 @@ msgid ""
 "will trigger at the minute boundary before the specified time from now.</"
 "para>"
 msgstr ""
+"<para>El KAlarm no proporciona alarmes d'alta precisió.</para><para> "
+"L'alarma s'activarà en el límit del minut anterior a l'hora especificada des "
+"d'ara.</para>"
 
 #: editdlg.cpp:1042
 #, kde-format
@@ -6330,8 +6333,8 @@ msgid ""
 "Enter a date to insert in the exceptions list. Use in conjunction with the "
 "Add or Change button below."
 msgstr ""
-"Introduïu una data a afegir a la llista d'excepcions. Useu-ho conjuntament "
-"amb els botons Afegeix o Canvia que hi ha a sota."
+"Introduïu una data que s'inserirà a la llista d'excepcions. Useu-ho "
+"conjuntament amb els botons Afegeix o Canvia que hi ha a sota."
 
 #: recurrenceedit.cpp:307
 #, kde-format

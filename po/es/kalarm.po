@@ -19,7 +19,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-12-31 00:52+0000\n"
-"PO-Revision-Date: 2022-12-25 21:56+0100\n"
+"PO-Revision-Date: 2022-12-31 10:52+0100\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -2258,6 +2258,9 @@ msgid ""
 "will trigger at the minute boundary before the specified time from now.</"
 "para>"
 msgstr ""
+"<para>KAlarm no proporciona alarmas de alta precisión.</para><para>La alarma "
+"se activará en el límite de minutos antes del tiempo especificado a partir "
+"de ahora.</para>"
 
 #: editdlg.cpp:1042
 #, kde-format
