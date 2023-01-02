@@ -6306,7 +6306,7 @@ msgid ""
 "Enter a date to insert in the exceptions list. Use in conjunction with the "
 "Add or Change button below."
 msgstr ""
-"Introduïu una data que s'afegirà en la llista d'excepcions. Utilitzeu-ho "
+"Introduïu una data que s'afegirà a la llista d'excepcions. Utilitzeu-ho "
 "conjuntament amb els botons Afig o Canvia que hi ha davall."
 
 #: recurrenceedit.cpp:307
