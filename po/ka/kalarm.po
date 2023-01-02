@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-12-31 00:52+0000\n"
-"PO-Revision-Date: 2022-11-22 07:01+0100\n"
+"PO-Revision-Date: 2023-01-01 07:35+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.2\n"
+"X-Generator: Poedit 3.2.2\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -669,7 +669,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label"
 msgid "Data storage backend"
-msgstr ""
+msgstr "მონაცემების შენახვის უკანაბოლო"
 
 #. i18n: ectx: whatsthis, entry (Backend), group (General)
 #: data/kalarmconfig.kcfg:67
@@ -704,7 +704,7 @@ msgstr "ფაილის რესურსები"
 #, kde-format
 msgctxt "@label"
 msgid "Enable Akonadi plugin"
-msgstr ""
+msgstr "Akonadi -ის დამატების ჩართვა"
 
 #. i18n: ectx: whatsthis, entry (UseAkonadiIfAvailable), group (General)
 #: data/kalarmconfig.kcfg:76
@@ -1420,7 +1420,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label"
 msgid "Command output"
-msgstr ""
+msgstr "ბრძანების გამონატანი"
 
 #. i18n: ectx: whatsthis, entry (DefaultCmdLogType), group (Defaults)
 #: data/kalarmconfig.kcfg:349
@@ -1874,7 +1874,7 @@ msgstr "ცდა"
 #, kde-format
 msgctxt "@action:button"
 msgid "Load Template..."
-msgstr ""
+msgstr "ნიმუშის ჩატვირთვა..."
 
 #: editdlg.cpp:207
 #, kde-format
@@ -4208,6 +4208,8 @@ msgid ""
 "<qt>This will hide the menu bar completely. You can show it again by typing "
 "%1.</qt>"
 msgstr ""
+"<qt>მენიუს ზოლი მთლიანად დაიმალება. მისი თავიდან საჩვენებლად დააწექით: %1.</"
+"qt>"
 
 #: mainwindow.cpp:1300
 #, kde-format
@@ -4387,7 +4389,7 @@ msgstr "ჩასწორება"
 #, kde-format
 msgctxt "@action:button"
 msgid "Defer"
-msgstr ""
+msgstr "გადადება"
 
 #: messagewindow.cpp:232
 #, kde-format
@@ -4697,7 +4699,7 @@ msgstr "გაშვების რეჟიმი"
 #, kde-format
 msgctxt "@option:check"
 msgid "Start at login"
-msgstr ""
+msgstr "შესვლისას გაშვება"
 
 #: prefdlg.cpp:447
 #, kde-kuit-format
@@ -4726,7 +4728,7 @@ msgstr ""
 #, kde-format
 msgctxt "@option:check"
 msgid "Enable alarm names"
-msgstr ""
+msgstr "განგაშის სახელების ჩართვა"
 
 #: prefdlg.cpp:461
 #, kde-format
@@ -4899,7 +4901,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title:group"
 msgid "Working Hours"
-msgstr ""
+msgstr "სამუშაო საათები"
 
 #: prefdlg.cpp:779
 #, kde-format
@@ -5329,7 +5331,7 @@ msgstr "წუთი"
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Hours/Minutes"
-msgstr ""
+msgstr "საათები/წუთები"
 
 #: prefdlg.cpp:1419
 #, kde-format
@@ -5349,7 +5351,7 @@ msgstr "ხმა"
 #, kde-format
 msgctxt "@option:check"
 msgid "Repeat sound file"
-msgstr ""
+msgstr "ხმის ფაილის გამეორება"
 
 #: prefdlg.cpp:1447
 #, kde-kuit-format
@@ -5854,7 +5856,7 @@ msgstr ""
 #, kde-format
 msgctxt "@option:check"
 msgid "Exclude holidays"
-msgstr ""
+msgstr "დასვენებს დღეების გამორიცხვა"
 
 #: recurrenceedit.cpp:329
 #, kde-kuit-format
@@ -6106,7 +6108,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label List of months to select"
 msgid "Months:"
-msgstr ""
+msgstr "თვეები:"
 
 #: recurrenceedit.cpp:1521
 #, kde-format
@@ -7501,7 +7503,7 @@ msgstr "პიპინი"
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Speak"
-msgstr ""
+msgstr "ლაპარაკი"
 
 #: soundpicker.cpp:47
 #, kde-format
@@ -7841,7 +7843,7 @@ msgstr ""
 #, kde-format
 msgctxt "@info Action to create a new alarm template"
 msgid "New template"
-msgstr ""
+msgstr "ახალი ნიმუში"
 
 #: undo.cpp:669
 #, kde-format
@@ -7871,7 +7873,7 @@ msgstr ""
 #, kde-format
 msgctxt "@info Action to edit an alarm template"
 msgid "Edit template"
-msgstr ""
+msgstr "ნიმუშის რედაქტირება"
 
 #: undo.cpp:1259
 #, kde-format
