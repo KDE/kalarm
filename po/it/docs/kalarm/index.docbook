@@ -2914,7 +2914,7 @@ mode.</para
 </itemizedlist>
 
 <para
->Gli avvisi possono essere disabilitati permanentemente impedendo a &kalarm; di partire all'avvio usando la scheda <link linkend="preferences-general"
+>Gli avvisi possono essere disabilitati definitivamente, impedendo così a &kalarm; di partire all'avvio, usando la scheda <link linkend="preferences-general"
 >Generale</link
 > della finestra di configurazione.</para>
 
