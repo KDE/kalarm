@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-12-31 00:52+0000\n"
-"PO-Revision-Date: 2023-01-01 07:35+0100\n"
+"PO-Revision-Date: 2023-01-02 04:57+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -590,7 +590,7 @@ msgstr "საჩვენებელი ტექსტი"
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "<icode>%1</icode>: invalid email address"
-msgstr ""
+msgstr "<icode>%1</icode>: ელფოსტის არასწორი მისამართი"
 
 #: commandoptions.cpp:578 commandoptions.cpp:593 commandoptions.cpp:672
 #, kde-kuit-format
@@ -630,25 +630,25 @@ msgstr ""
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "<icode>%1</icode> requires <icode>%2</icode>"
-msgstr ""
+msgstr "<icode>%1</icode> მოითხოვს <icode>%2</icode>"
 
 #: commandoptions.cpp:853
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "<icode>%1</icode> requires <icode>%2</icode> or <icode>%3</icode>"
-msgstr ""
+msgstr "<icode>%1</icode> მოითხოვს <icode>%2</icode> ან <icode>%3</icode>"
 
 #: commandoptions.cpp:858
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "Invalid <icode>%1</icode> parameter"
-msgstr ""
+msgstr "არასწორი <icode>%1</icode> პარამეტრი"
 
 #: commandoptions.cpp:863
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "<icode>%1</icode> incompatible with <icode>%2</icode>"
-msgstr ""
+msgstr "<icode>%1</icode> შეუთავსებელია <icode>%2</icode>"
 
 #. i18n: ectx: label, entry (Version), group (General)
 #: data/kalarmconfig.kcfg:62
@@ -1139,28 +1139,28 @@ msgstr ""
 #, kde-format
 msgctxt "@label"
 msgid "Start time of working day"
-msgstr ""
+msgstr "სამუშაო დღის დასაწყისის დრო"
 
 #. i18n: ectx: whatsthis, entry (Base_WorkDayStart), group (General)
 #: data/kalarmconfig.kcfg:228
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "The start time of the working day."
-msgstr ""
+msgstr "სამუშაო დღის დასაწყისის დრო"
 
 #. i18n: ectx: label, entry (Base_WorkDayEnd), group (General)
 #: data/kalarmconfig.kcfg:233
 #, kde-format
 msgctxt "@label"
 msgid "End time of working day"
-msgstr ""
+msgstr "სამუშაო დღის დასასრულის დრო"
 
 #. i18n: ectx: whatsthis, entry (Base_WorkDayEnd), group (General)
 #: data/kalarmconfig.kcfg:234
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "The end time of the working day."
-msgstr ""
+msgstr "სამუშაო დღის დასასრულის დრო"
 
 #. i18n: ectx: label, entry (Base_WorkDays), group (General)
 #: data/kalarmconfig.kcfg:239
@@ -1183,7 +1183,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label"
 msgid "Disabled alarm color"
-msgstr ""
+msgstr "გათიშული განგაშის ფერი"
 
 #. i18n: ectx: whatsthis, entry (DisabledColour), group (General)
 #: data/kalarmconfig.kcfg:246 prefdlg.cpp:1885
@@ -1197,7 +1197,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label"
 msgid "Archived alarm color"
-msgstr ""
+msgstr "დაარქივებული განგაშის ფერი"
 
 #. i18n: ectx: whatsthis, entry (ArchivedColour), group (General)
 #: data/kalarmconfig.kcfg:252 prefdlg.cpp:1898
@@ -1436,7 +1436,7 @@ msgstr ""
 #, kde-format
 msgctxt "@option"
 msgid "Discard Output"
-msgstr ""
+msgstr "გამოტანის მოცილება"
 
 #. i18n: ectx: label, entry (DefaultCmdLogType), group (Defaults)
 #: data/kalarmconfig.kcfg:352
@@ -1450,7 +1450,7 @@ msgstr "ჟურნალის ფაილში ჩაწერა"
 #, kde-format
 msgctxt "@option"
 msgid "Execute in terminal window"
-msgstr ""
+msgstr "ტერმინალის ფანჯარაში გაშვება"
 
 #. i18n: ectx: label, entry (DefaultCmdLogFile), group (Defaults)
 #: data/kalarmconfig.kcfg:358 kalarmcalendar/kaeventformatter.cpp:137
@@ -1471,7 +1471,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label"
 msgid "Copy email to self"
-msgstr ""
+msgstr "ელფოსტის საკუთარ თავში კოპირება"
 
 #. i18n: ectx: whatsthis, entry (DefaultEmailBcc), group (Defaults)
 #: data/kalarmconfig.kcfg:363
@@ -1486,7 +1486,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label"
 msgid "Recurrence period"
-msgstr ""
+msgstr "გამეორების პერიოდი"
 
 #. i18n: ectx: whatsthis, entry (DefaultRecurPeriod), group (Defaults)
 #: data/kalarmconfig.kcfg:368 prefdlg.cpp:1355
@@ -1500,7 +1500,7 @@ msgstr ""
 #, kde-format
 msgctxt "@option"
 msgid "No recurrence"
-msgstr ""
+msgstr "არ მეორდება"
 
 #. i18n: ectx: label, entry (DefaultRecurPeriod), group (Defaults)
 #: data/kalarmconfig.kcfg:371
