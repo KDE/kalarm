@@ -9,13 +9,13 @@
 #
 # Ambalam <tamilpc@ambalam.com>, 2004.
 # root <root@localhost.localdomain>, 2004.
-# Kishore G <kishore96@gmail.com>, 2021, 2022.
+# Kishore G <kishore96@gmail.com>, 2021, 2022, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-12-12 03:00+0000\n"
-"PO-Revision-Date: 2022-12-27 21:36+0530\n"
+"PO-Revision-Date: 2023-01-03 19:35+0530\n"
 "Last-Translator: Kishore G <kishore96@gmail.com>\n"
 "Language-Team: Tamil <kde-i18n-doc@kde.org>\n"
 "Language: ta\n"
@@ -807,10 +807,10 @@ msgstr "முன்புல நிறம்"
 
 #. i18n: ectx: whatsthis, entry (DefaultFgColour), group (General)
 #: data/kalarmconfig.kcfg:91
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Default foreground color for alarm message windows."
-msgstr "அலார செய்தியின் பின்னணி நிறத்தைத் தேர்வுச் செய்"
+msgstr "அலார தகவல் சாளரங்களுக்கான இயல்பிருப்பு முன்புல நிறம்."
 
 #. i18n: ectx: label, entry (DefaultBgColour), group (General)
 #: data/kalarmconfig.kcfg:95 kalarmcalendar/kaeventformatter.cpp:94
@@ -821,10 +821,10 @@ msgstr "பின்புல நிறம்"
 
 #. i18n: ectx: whatsthis, entry (DefaultBgColour), group (General)
 #: data/kalarmconfig.kcfg:96
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Default background color for alarm message windows."
-msgstr "அலார செய்தியின் பின்னணி நிறத்தைத் தேர்வுச் செய்"
+msgstr "அலார தகவல் சாளரங்களுக்கான இயல்பிருப்பு பின்புல நிறம்."
 
 #. i18n: ectx: label, entry (UseAlarmName), group (General)
 #: data/kalarmconfig.kcfg:100
@@ -952,7 +952,7 @@ msgstr "அலார தொகுப்பு உரையாடலில் ம
 #, kde-format
 msgctxt "@label"
 msgid "Prompt for which calendar to store in"
-msgstr ""
+msgstr "எந்த நாள்காட்டியில் சேமிக்க வேண்டுமென கேள்"
 
 #. i18n: ectx: whatsthis, entry (AskResource), group (General)
 #: data/kalarmconfig.kcfg:144
@@ -966,10 +966,10 @@ msgstr ""
 
 #. i18n: ectx: label, entry (Base_ModalMessages), group (General)
 #: data/kalarmconfig.kcfg:148
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label"
 msgid "Message windows have a title bar and take keyboard focus"
-msgstr "செய்தி &சாளரம் தலைப்பு பட்டையை கொண்டுள்ளது மற்றும் விசைபலகையில் காண்பிக்கவும்"
+msgstr "தகவல் சாளரங்கள் தலைப்புப்பட்டையை பெறும், மேலும் விசைப்பலகை குவியத்தை பிடுங்கும்"
 
 #. i18n: ectx: whatsthis, entry (Base_ModalMessages), group (General)
 #: data/kalarmconfig.kcfg:149
@@ -999,7 +999,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label"
 msgid "Delay before message window buttons are enabled"
-msgstr ""
+msgstr "அலார தகவல் சாளரங்களிலுள்ள பட்டன்களை இயக்குவதற்கான தாமதம்"
 
 #. i18n: ectx: whatsthis, entry (MessageButtonDelay), group (General)
 #: data/kalarmconfig.kcfg:158
@@ -1022,7 +1022,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label"
 msgid "Number of alarms to show in system tray tooltip"
-msgstr ""
+msgstr "கணினித் தட்டு கருவித் துப்பில் எத்தனை அலாரங்களைக் காட்ட வேண்டும்"
 
 #. i18n: ectx: whatsthis, entry (TooltipAlarmCount), group (General)
 #: data/kalarmconfig.kcfg:169
@@ -1042,7 +1042,7 @@ msgstr "முடிவுகளிலும் அல்லது நீக்�
 #, kde-format
 msgctxt "@label"
 msgid "Show alarm times in system tray tooltip"
-msgstr ""
+msgstr "கணினித் தட்டு கருவித் துப்பில் அலாரங்களின் நேரத்தைக் காட்டு"
 
 #. i18n: ectx: whatsthis, entry (ShowTooltipAlarmTime), group (General)
 #: data/kalarmconfig.kcfg:176 prefdlg.cpp:1847
