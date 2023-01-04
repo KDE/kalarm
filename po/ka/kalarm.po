@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-12-31 00:52+0000\n"
-"PO-Revision-Date: 2023-01-02 04:57+0100\n"
+"PO-Revision-Date: 2023-01-03 07:44+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -231,7 +231,7 @@ msgstr "KAlarm-ის ავტომატური გაშვება ს�
 #: autostart/autostart.cpp:51
 #, kde-format
 msgid "Copyright 2001-%1, David Jarvie"
-msgstr ""
+msgstr "Copyright 2001-%1, David Jarvie"
 
 #: autostart/autostart.cpp:52 main.cpp:47
 #, kde-format
@@ -257,7 +257,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title:window"
 msgid "Import Birthdays From KAddressBook"
-msgstr ""
+msgstr "დაბადებს დღეების შემოტანა KAddressBook-დან"
 
 #: birthdaydlg.cpp:59 editdlg.cpp:252
 #, kde-format
@@ -1146,7 +1146,7 @@ msgstr "სამუშაო დღის დასაწყისის დრ
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "The start time of the working day."
-msgstr "სამუშაო დღის დასაწყისის დრო"
+msgstr "სამუშაო დღის დასაწყისის დრო."
 
 #. i18n: ectx: label, entry (Base_WorkDayEnd), group (General)
 #: data/kalarmconfig.kcfg:233
@@ -1160,7 +1160,7 @@ msgstr "სამუშაო დღის დასასრულის დრ
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "The end time of the working day."
-msgstr "სამუშაო დღის დასასრულის დრო"
+msgstr "სამუშაო დღის დასასრულის დრო."
 
 #. i18n: ectx: label, entry (Base_WorkDays), group (General)
 #: data/kalarmconfig.kcfg:239
@@ -2295,16 +2295,16 @@ msgid "Enter a script"
 msgstr ""
 
 #: editdlgtypes.cpp:798
-#, kde-format
+#, fuzzy, kde-format
 msgctxt "@option:radio"
 msgid "Execute in terminal window"
-msgstr ""
+msgstr "ტერმინალის ფანჯარაში გაშვება"
 
 #: editdlgtypes.cpp:799
-#, kde-format
+#, fuzzy, kde-format
 msgctxt "@option:check"
 msgid "Execute in terminal window"
-msgstr ""
+msgstr "ტერმინალის ფანჯარაში გაშვება"
 
 #: editdlgtypes.cpp:829
 #, kde-format
@@ -2426,10 +2426,10 @@ msgid "Command executed: <icode>%1</icode>"
 msgstr ""
 
 #: editdlgtypes.cpp:1121
-#, kde-format
+#, fuzzy, kde-format
 msgctxt "@option:check"
 msgid "Copy email to self"
-msgstr ""
+msgstr "ელფოსტის საკუთარ თავში კოპირება"
 
 #: editdlgtypes.cpp:1151
 #, kde-format
@@ -3925,25 +3925,25 @@ msgstr ""
 #, kde-kuit-format
 msgctxt "@info"
 msgid "<filename>%1</filename> is a folder"
-msgstr ""
+msgstr "<filename>%1</filename> საქაღალდეა"
 
 #: lib/file.cpp:117
 #, kde-kuit-format
 msgctxt "@info"
 msgid "<filename>%1</filename> not found"
-msgstr ""
+msgstr "<filename>%1</filename> ვერ ვიპოვე"
 
 #: lib/file.cpp:118
 #, kde-kuit-format
 msgctxt "@info"
 msgid "<filename>%1</filename> is not readable"
-msgstr ""
+msgstr "<filename>%1</filename> ვერ წავიკითხე"
 
 #: lib/file.cpp:119
 #, kde-kuit-format
 msgctxt "@info"
 msgid "<filename>%1</filename> appears not to be a text or image file"
-msgstr ""
+msgstr "<filename>%1</filename> არ ჰგავს ტექსტურ ან სურათის ფაილს"
 
 #: lib/file.cpp:178
 #, kde-format
@@ -3955,7 +3955,7 @@ msgstr "ყველა ფაილი"
 #, kde-format
 msgctxt "@option:check"
 msgid "Append to existing file"
-msgstr ""
+msgstr "არსებული ფაილის ბოლოში მიწერა"
 
 #: lib/shellprocess.cpp:143
 #, kde-format
@@ -3967,7 +3967,7 @@ msgstr ""
 #, kde-format
 msgctxt "@info"
 msgid "Failed to execute command"
-msgstr ""
+msgstr "ბრძანების შესრულების შეცდომა"
 
 #: lib/shellprocess.cpp:147
 #, kde-format
@@ -3979,13 +3979,13 @@ msgstr ""
 #, kde-format
 msgctxt "@info"
 msgid "Command execution error"
-msgstr ""
+msgstr "ბრძანების შესრულების შეცდომა"
 
 #: lib/shellprocess.cpp:152
 #, kde-format
 msgctxt "@info"
 msgid "Command exit code: %1"
-msgstr ""
+msgstr "ბრძანების დასრულების კოდი: %1"
 
 #: lib/timeperiod.cpp:24
 #, kde-format
@@ -3997,7 +3997,7 @@ msgstr "წუთი"
 #, kde-format
 msgctxt "@item:inlistbox Time units"
 msgid "hours/minutes"
-msgstr ""
+msgstr "საათი/წუთი"
 
 #: lib/timeperiod.cpp:26
 #, kde-format
