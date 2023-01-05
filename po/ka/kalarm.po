@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-12-31 00:52+0000\n"
-"PO-Revision-Date: 2023-01-03 07:44+0100\n"
+"PO-Revision-Date: 2023-01-04 07:54+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -154,13 +154,13 @@ msgstr ""
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid "<para>%1</para><para>%2</para>"
-msgstr ""
+msgstr "<para>%1</para><para>%2</para>"
 
 #: alarmtimewidget.cpp:145
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid "<para>%1</para><para>%2</para><para>%3</para>"
-msgstr ""
+msgstr "<para>%1</para><para>%2</para><para>%3</para>"
 
 #: alarmtimewidget.cpp:178
 #, kde-format
@@ -2295,13 +2295,13 @@ msgid "Enter a script"
 msgstr ""
 
 #: editdlgtypes.cpp:798
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@option:radio"
 msgid "Execute in terminal window"
 msgstr "ტერმინალის ფანჯარაში გაშვება"
 
 #: editdlgtypes.cpp:799
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@option:check"
 msgid "Execute in terminal window"
 msgstr "ტერმინალის ფანჯარაში გაშვება"
@@ -2426,7 +2426,7 @@ msgid "Command executed: <icode>%1</icode>"
 msgstr ""
 
 #: editdlgtypes.cpp:1121
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@option:check"
 msgid "Copy email to self"
 msgstr "ელფოსტის საკუთარ თავში კოპირება"
@@ -3034,49 +3034,49 @@ msgstr ""
 #, kde-format
 msgctxt "@info"
 msgid "Error saving alarms"
-msgstr ""
+msgstr "განგაშების შენახვის შეცდომა"
 
 #: functions.cpp:1986
 #, kde-format
 msgctxt "@info"
 msgid "Error saving alarm"
-msgstr ""
+msgstr "განგაშის შენახვის შეცდომა"
 
 #: functions.cpp:1989
 #, kde-format
 msgctxt "@info"
 msgid "Error deleting alarms"
-msgstr ""
+msgstr "განგაშების წაშლის შეცდომა"
 
 #: functions.cpp:1990
 #, kde-format
 msgctxt "@info"
 msgid "Error deleting alarm"
-msgstr ""
+msgstr "განგაშის წაშლის შეცდომა"
 
 #: functions.cpp:1993
 #, kde-format
 msgctxt "@info"
 msgid "Error saving reactivated alarms"
-msgstr ""
+msgstr "თავიდან აქტივირებული განგაშების წაშლის შეცდომა"
 
 #: functions.cpp:1994
 #, kde-format
 msgctxt "@info"
 msgid "Error saving reactivated alarm"
-msgstr ""
+msgstr "თავიდან აქტივირებული განგაშის წაშლის შეცდომა"
 
 #: functions.cpp:1997
 #, kde-format
 msgctxt "@info"
 msgid "Error saving alarm templates"
-msgstr ""
+msgstr "განგაშის ნიმუშების შენახვის შეცდომა"
 
 #: functions.cpp:1998
 #, kde-format
 msgctxt "@info"
 msgid "Error saving alarm template"
-msgstr ""
+msgstr "განგაშის ნიმუშის შენახვის შეცდომა"
 
 #: kalarmapp.cpp:814
 #, kde-format
