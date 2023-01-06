@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-12-31 00:52+0000\n"
-"PO-Revision-Date: 2023-01-04 07:54+0100\n"
+"PO-Revision-Date: 2023-01-05 05:49+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -513,12 +513,12 @@ msgstr ""
 #: commandoptions.cpp:225
 #, kde-format
 msgid "Audio file to play once"
-msgstr ""
+msgstr "აუდიო ფაილი ერთხელ დასაკრავად"
 
 #: commandoptions.cpp:229
 #, kde-format
 msgid "Audio file to play repeatedly"
-msgstr ""
+msgstr "აუდიო ფაილი ბევრჯერ დასაკრავად"
 
 #: commandoptions.cpp:233
 #, kde-format
