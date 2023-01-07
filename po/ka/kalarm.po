@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-12-31 00:52+0000\n"
-"PO-Revision-Date: 2023-01-05 05:49+0100\n"
+"PO-Revision-Date: 2023-01-06 07:43+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -1327,7 +1327,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label"
 msgid "Show in KOrganizer"
-msgstr ""
+msgstr "KOrganizer-ში ჩვენება"
 
 #. i18n: ectx: whatsthis, entry (DefaultCopyToKOrganizer), group (Defaults)
 #: data/kalarmconfig.kcfg:312
@@ -1746,25 +1746,25 @@ msgstr ""
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show the previous year"
-msgstr ""
+msgstr "წინა წლის ჩვენება"
 
 #: datepicker.cpp:65
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show the previous month"
-msgstr ""
+msgstr "წინა თვის ჩვენება"
 
 #: datepicker.cpp:66
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show the next year"
-msgstr ""
+msgstr "შემდეგი წლის ჩვენება"
 
 #: datepicker.cpp:67
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show the next month"
-msgstr ""
+msgstr "შემდეგი თვის ჩვენება"
 
 #: daymatrix.cpp:207
 #, kde-format
@@ -1844,7 +1844,7 @@ msgstr ""
 #, kde-format
 msgctxt "@option:check"
 msgid "Show in KOrganizer"
-msgstr ""
+msgstr "KOrganizer-ში ჩვენება"
 
 #: editdlg.cpp:177
 #, kde-format
