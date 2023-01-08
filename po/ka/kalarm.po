@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-12-31 00:52+0000\n"
-"PO-Revision-Date: 2023-01-06 07:43+0100\n"
+"PO-Revision-Date: 2023-01-07 08:26+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -251,7 +251,7 @@ msgstr "გასაშვები აპლიკაცია"
 #: autostart/autostart.cpp:59
 #, kde-format
 msgid "Command line arguments to pass to application"
-msgstr ""
+msgstr "აპლიკაციისთვის გადასაცემი ბრძანების სტრიქონის პარამეტრები"
 
 #: birthdaydlg.cpp:45
 #, kde-format
@@ -473,7 +473,7 @@ msgstr ""
 #: commandoptions.cpp:197
 #, kde-format
 msgid "Interval between alarm repetitions"
-msgstr ""
+msgstr "ინტერვალი განგაშის გამეორებებს შორის"
 
 #: commandoptions.cpp:201
 #, kde-format

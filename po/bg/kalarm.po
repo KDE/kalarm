@@ -3,13 +3,13 @@
 #
 # Zlatko Popov <zlatkopopov@fsa-bg.org>, 2006, 2007, 2008.
 # Krasimir Aranudov <krasi.arnaudov@gmail.com>, 2007.
-# Mincho Kondarev <mkondarev@yahoo.de>, 2022.
+# Mincho Kondarev <mkondarev@yahoo.de>, 2022, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-12-31 00:52+0000\n"
-"PO-Revision-Date: 2022-12-26 21:32+0100\n"
+"PO-Revision-Date: 2023-01-07 17:37+0100\n"
 "Last-Translator: Mincho Kondarev <mkondarev@yahoo.de>\n"
 "Language-Team: Bulgarian <kde-i18n-doc@kde.org>\n"
 "Language: bg\n"
@@ -2216,6 +2216,8 @@ msgid ""
 "will trigger at the minute boundary before the specified time from now.</"
 "para>"
 msgstr ""
+"<para>KAlarm не осигурява аларми с висока точност.</para><para> Алармата ще "
+"се задейства на границата на минутата преди посоченото време от сега.</para>"
 
 #: editdlg.cpp:1042
 #, kde-format
