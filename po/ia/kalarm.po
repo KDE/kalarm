@@ -1,13 +1,13 @@
 # Copyright (C) YEAR This_file_is_part_of_KDE
 # This file is distributed under the same license as the PACKAGE package.
 #
-# g.sora <g.sora@tiscali.it>, 2011, 2012, 2013, 2014, 2020, 2021, 2022.
+# g.sora <g.sora@tiscali.it>, 2011, 2012, 2013, 2014, 2020, 2021, 2022, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-12-31 00:52+0000\n"
-"PO-Revision-Date: 2022-11-03 15:34+0100\n"
+"PO-Revision-Date: 2023-01-10 15:58+0100\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
 "Language: ia\n"
@@ -2230,6 +2230,8 @@ msgid ""
 "will trigger at the minute boundary before the specified time from now.</"
 "para>"
 msgstr ""
+"<para>KAlarm non forni alarmas de alte precision.</para><para>Le alarma se "
+"discatenera al limite del minuta ante le specificate tempore ab nunc.</para>"
 
 #: editdlg.cpp:1042
 #, kde-format
@@ -2934,6 +2936,8 @@ msgid ""
 "<para>The command cannot set environment variables:</para><para><icode>%1</"
 "icode></para>"
 msgstr ""
+"<para>Le commando nonpote fixar variabiles de ambiente :</para><para><icode>"
+"%1</icode></para>"
 
 #: editdlgtypes.cpp:1897
 #, kde-format
@@ -5170,12 +5174,15 @@ msgid ""
 "<para>No command is specified to invoke a terminal window.</para><para>The "
 "default command (<command>%1</command>) will be used.</para>"
 msgstr ""
+"<para>Necun commando es  specificate per invocar un fenestra de terminal.</"
+"para><para>Le commando predefinite (<command>%1</command>) essera usate.</"
+"para>"
 
 #: prefdlg.cpp:602
 #, kde-kuit-format
 msgctxt "@info"
 msgid "No command is specified to invoke a terminal window"
-msgstr ""
+msgstr "Necun commando es  specificate per invocar un fenestra de terminal"
 
 #: prefdlg.cpp:615
 #, kde-kuit-format

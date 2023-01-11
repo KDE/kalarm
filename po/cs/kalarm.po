@@ -3,7 +3,7 @@
 # This file is distributed under the same license as the PACKAGE package.
 # Klára Cihlářová <koty@seznam.cz>, 2007.
 # Vit Pelcak <vit@pelcak.org>, 2009, 2021, 2022.
-# Vít Pelčák <vit@pelcak.org>, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020.
+# Vít Pelčák <vit@pelcak.org>, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2023.
 # Zdeněk Pech <dom.toretto@seznam.cz>, 2009, 2010.
 # Lukáš Tinkl <ltinkl@redhat.com>, 2010.
 # Tomáš Chvátal <tomas.chvatal@gmail.com>, 2012, 2013.
@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-12-31 00:52+0000\n"
-"PO-Revision-Date: 2022-03-04 10:55+0100\n"
+"PO-Revision-Date: 2023-01-05 11:33+0100\n"
 "Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
 "Language: cs\n"
@@ -21,7 +21,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Lokalize 21.12.2\n"
+"X-Generator: Lokalize 22.12.0\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -76,7 +76,7 @@ msgstr ""
 msgctxt "@info"
 msgid "This uses KAlarm's default time zone, set in the Configuration dialog."
 msgstr ""
-"Zde je používána výchozí časová zóna aplikace KAlarm zvolená v dialogu pro "
+"Zde je používána výchozí časové pásmo aplikace KAlarm zvolené v dialogu pro "
 "nastavení."
 
 #: alarmtimewidget.cpp:90
@@ -181,7 +181,7 @@ msgstr "<para>%1</para><para>%2</para><para>%3</para>"
 #, kde-format
 msgctxt "@action:button"
 msgid "Time Zone..."
-msgstr "Časová zóna..."
+msgstr "Časové pásmo..."
 
 #: alarmtimewidget.cpp:180
 #, kde-format
@@ -203,13 +203,13 @@ msgstr ""
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Time zone:"
-msgstr "Časová zóna:"
+msgstr "Časové pásmo:"
 
 #: alarmtimewidget.cpp:202
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select the time zone to use for this alarm."
-msgstr "Vybrat časovou zónu použitou v této upomínce."
+msgstr "Vybrat časové pásmo použité v této upomínce."
 
 #: alarmtimewidget.cpp:274 alarmtimewidget.cpp:301
 #, kde-format
@@ -758,7 +758,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label"
 msgid "Time zone"
-msgstr "Časová zóna"
+msgstr "Časové pásmo"
 
 #. i18n: ectx: whatsthis, entry (Base_TimeZone), group (General)
 #: data/kalarmconfig.kcfg:81
@@ -768,7 +768,7 @@ msgid ""
 "Select the time zone which KAlarm should use as its default for displaying "
 "and entering dates and times."
 msgstr ""
-"Vyberte časovou zónu, kterou bude KAlarm používat jako výchozí pro "
+"Vyberte časové pásmo, které bude KAlarm používat jako výchozí pro "
 "zobrazování a zadávání data a časů."
 
 #. i18n: ectx: label, entry (Base_HolidayRegion), group (General)
@@ -5109,7 +5109,7 @@ msgid ""
 "Select the time zone which <application>KAlarm</application> should use as "
 "its default for displaying and entering dates and times."
 msgstr ""
-"Vyberte časovou zónu, kterou bude <application>KAlarm</application> používat "
+"Vyberte časové pásmo, které bude <application>KAlarm</application> používat "
 "jako výchozí pro zobrazování a zadávání data a časů."
 
 #: prefdlg.cpp:716
@@ -6102,7 +6102,7 @@ msgstr ""
 #, kde-format
 msgctxt "@info"
 msgid "This uses the same time zone as the start time."
-msgstr "Použije stejnou časovou zónu, jako v době spuštění."
+msgstr "Použije stejnou časové pásmo, jako v době spuštění."
 
 #: recurrenceedit.cpp:243
 #, kde-kuit-format
