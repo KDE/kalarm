@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-12-12 03:00+0000\n"
-"PO-Revision-Date: 2022-10-20 06:27+0200\n"
+"PO-Revision-Date: 2023-01-12 08:13+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.1.1\n"
+"X-Generator: Poedit 3.2.2\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -38,7 +38,7 @@ msgstr ""
 #, kde-format
 msgctxt "@info"
 msgid "Emails may not have been sent"
-msgstr ""
+msgstr "ზოგიერთი ელფოსტა შეიძლება, არც გაგზავნილა"
 
 #: akonadiplugin/sendakonadimail.cpp:106 undo.cpp:408
 #, kde-format
@@ -78,7 +78,7 @@ msgstr ""
 #, kde-format
 msgctxt "@option:radio"
 msgid "At date/time:"
-msgstr ""
+msgstr "მოვლენის დრო/თარიღი:"
 
 #: alarmtimewidget.cpp:91
 #, kde-format
@@ -136,7 +136,7 @@ msgstr ""
 #, kde-format
 msgctxt "@option:radio"
 msgid "Time from now:"
-msgstr ""
+msgstr "დრო ამ მომენტიდან:"
 
 #: alarmtimewidget.cpp:136
 #, kde-format
@@ -154,13 +154,13 @@ msgstr ""
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid "<para>%1</para><para>%2</para>"
-msgstr ""
+msgstr "<para>%1</para><para>%2</para>"
 
 #: alarmtimewidget.cpp:145
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid "<para>%1</para><para>%2</para><para>%3</para>"
-msgstr ""
+msgstr "<para>%1</para><para>%2</para><para>%3</para>"
 
 #: alarmtimewidget.cpp:178
 #, kde-format
@@ -172,7 +172,7 @@ msgstr "დროის სარტყელი..."
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Choose a time zone for this alarm"
-msgstr ""
+msgstr "ამ განგაშის დროის სარტყლის არჩევა"
 
 #: alarmtimewidget.cpp:182
 #, kde-format
@@ -210,18 +210,18 @@ msgstr "არასწორი თარიღი"
 #, kde-format
 msgctxt "@info"
 msgid "Alarm date has already expired"
-msgstr ""
+msgstr "განგაშის თარიღი უკვე ამოიწურა"
 
 #: alarmtimewidget.cpp:327
 #, kde-format
 msgctxt "@info"
 msgid "Alarm time has already expired"
-msgstr ""
+msgstr "განგაშის დრო უკვე ამოიწურა"
 
 #: autostart/autostart.cpp:48
 #, kde-format
 msgid "KAlarm Autostart"
-msgstr ""
+msgstr "KAlarm -ის ავტომატური გაშვება"
 
 #: autostart/autostart.cpp:49
 #, kde-format
@@ -231,7 +231,7 @@ msgstr "KAlarm-ის ავტომატური გაშვება ს�
 #: autostart/autostart.cpp:51
 #, kde-format
 msgid "Copyright 2001-%1, David Jarvie"
-msgstr ""
+msgstr "Copyright 2001-%1, David Jarvie"
 
 #: autostart/autostart.cpp:52 main.cpp:47
 #, kde-format
@@ -251,19 +251,19 @@ msgstr "გასაშვები აპლიკაცია"
 #: autostart/autostart.cpp:59
 #, kde-format
 msgid "Command line arguments to pass to application"
-msgstr ""
+msgstr "აპლიკაციისთვის გადასაცემი ბრძანების სტრიქონის პარამეტრები"
 
 #: birthdaydlg.cpp:45
 #, kde-format
 msgctxt "@title:window"
 msgid "Import Birthdays From KAddressBook"
-msgstr ""
+msgstr "დაბადებს დღეების შემოტანა KAddressBook-დან"
 
 #: birthdaydlg.cpp:59 editdlg.cpp:254
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Alarm name:"
-msgstr ""
+msgstr "განგაშის სახელი:"
 
 #: birthdaydlg.cpp:64 editdlg.cpp:262
 #, kde-format
@@ -283,7 +283,7 @@ msgstr "დაბადების დღე: "
 #, kde-format
 msgctxt "@title:group"
 msgid "Alarm Text"
-msgstr ""
+msgstr "განგაშის ტექსტი"
 
 #: birthdaydlg.cpp:77 prefdlg.cpp:1859
 #, kde-format
@@ -317,7 +317,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title:group"
 msgid "Select Birthdays"
-msgstr ""
+msgstr "აირჩიეთ დაბადების დღეები"
 
 #: birthdaydlg.cpp:129
 #, kde-kuit-format
@@ -334,7 +334,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title:group"
 msgid "Alarm Configuration"
-msgstr ""
+msgstr "განგაშის მორგება"
 
 #: birthdaydlg.cpp:155
 #, kde-format
@@ -413,22 +413,22 @@ msgstr ""
 #: commandoptions.cpp:155
 #, kde-format
 msgid "Disable the alarm"
-msgstr ""
+msgstr "განგაშის გათიშვა"
 
 #: commandoptions.cpp:158
 #, kde-format
 msgid "Disable monitoring of all alarms"
-msgstr ""
+msgstr "ყველა განგაშის თვალყურის დევნების გამორთვა"
 
 #: commandoptions.cpp:161
 #, kde-format
 msgid "Execute a shell command line"
-msgstr ""
+msgstr "გარსის ბრძანების შერულება"
 
 #: commandoptions.cpp:165
 #, kde-format
 msgid "Command line to generate alarm message text"
-msgstr ""
+msgstr "ბრძანების სტრიქონი განგაშის შეტყობინების ტექსტის მისაღებად"
 
 #: commandoptions.cpp:169
 #, kde-format
@@ -463,7 +463,7 @@ msgstr ""
 #: commandoptions.cpp:189
 #, kde-format
 msgid "File to display"
-msgstr ""
+msgstr "საჩვენებელი ფაილი"
 
 #: commandoptions.cpp:193
 #, kde-format
@@ -473,7 +473,7 @@ msgstr ""
 #: commandoptions.cpp:197
 #, kde-format
 msgid "Interval between alarm repetitions"
-msgstr ""
+msgstr "ინტერვალი განგაშის გამეორებებს შორის"
 
 #: commandoptions.cpp:201
 #, kde-format
@@ -503,7 +503,7 @@ msgstr ""
 #: commandoptions.cpp:219
 #, kde-format
 msgid "Name of alarm"
-msgstr ""
+msgstr "განგაშის სახელი"
 
 #: commandoptions.cpp:222
 #, kde-format
@@ -513,12 +513,12 @@ msgstr ""
 #: commandoptions.cpp:225
 #, kde-format
 msgid "Audio file to play once"
-msgstr ""
+msgstr "აუდიო ფაილი ერთხელ დასაკრავად"
 
 #: commandoptions.cpp:229
 #, kde-format
 msgid "Audio file to play repeatedly"
-msgstr ""
+msgstr "აუდიო ფაილი ბევრჯერ დასაკრავად"
 
 #: commandoptions.cpp:233
 #, kde-format
@@ -548,7 +548,7 @@ msgstr ""
 #: commandoptions.cpp:254
 #, kde-format
 msgid "Email subject line"
-msgstr ""
+msgstr "ელფოსტის საგნის ველი"
 
 #: commandoptions.cpp:259
 #, kde-format
@@ -584,13 +584,13 @@ msgstr ""
 #: commandoptions.cpp:290
 #, kde-format
 msgid "Message text to display"
-msgstr ""
+msgstr "საჩვენებელი ტექსტი"
 
 #: commandoptions.cpp:454
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "<icode>%1</icode>: invalid email address"
-msgstr ""
+msgstr "<icode>%1</icode>: ელფოსტის არასწორი მისამართი"
 
 #: commandoptions.cpp:578 commandoptions.cpp:593 commandoptions.cpp:672
 #, kde-kuit-format
@@ -630,32 +630,32 @@ msgstr ""
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "<icode>%1</icode> requires <icode>%2</icode>"
-msgstr ""
+msgstr "<icode>%1</icode> მოითხოვს <icode>%2</icode>"
 
 #: commandoptions.cpp:853
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "<icode>%1</icode> requires <icode>%2</icode> or <icode>%3</icode>"
-msgstr ""
+msgstr "<icode>%1</icode> მოითხოვს <icode>%2</icode> ან <icode>%3</icode>"
 
 #: commandoptions.cpp:858
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "Invalid <icode>%1</icode> parameter"
-msgstr ""
+msgstr "არასწორი <icode>%1</icode> პარამეტრი"
 
 #: commandoptions.cpp:863
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "<icode>%1</icode> incompatible with <icode>%2</icode>"
-msgstr ""
+msgstr "<icode>%1</icode> შეუთავსებელია <icode>%2</icode>"
 
 #. i18n: ectx: label, entry (Version), group (General)
 #: data/kalarmconfig.kcfg:62
 #, kde-format
 msgctxt "@label"
 msgid "KAlarm version"
-msgstr ""
+msgstr "KAlarm -ის ვერსია"
 
 #. i18n: ectx: whatsthis, entry (Version), group (General)
 #: data/kalarmconfig.kcfg:63
@@ -669,7 +669,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label"
 msgid "Data storage backend"
-msgstr ""
+msgstr "მონაცემების შენახვის უკანაბოლო"
 
 #. i18n: ectx: whatsthis, entry (Backend), group (General)
 #: data/kalarmconfig.kcfg:67
@@ -697,14 +697,14 @@ msgstr "Akonadi"
 #, kde-format
 msgctxt "@option"
 msgid "File Resources"
-msgstr ""
+msgstr "ფაილის რესურსები"
 
 #. i18n: ectx: label, entry (UseAkonadiIfAvailable), group (General)
 #: data/kalarmconfig.kcfg:75
 #, kde-format
 msgctxt "@label"
 msgid "Enable Akonadi plugin"
-msgstr ""
+msgstr "Akonadi -ის დამატების ჩართვა"
 
 #. i18n: ectx: whatsthis, entry (UseAkonadiIfAvailable), group (General)
 #: data/kalarmconfig.kcfg:76
@@ -779,7 +779,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label"
 msgid "Enable alarm names"
-msgstr ""
+msgstr "განგაშის სახელების ჩართვა"
 
 #. i18n: ectx: whatsthis, entry (UseAlarmName), group (General)
 #: data/kalarmconfig.kcfg:101
@@ -795,7 +795,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label"
 msgid "Message font"
-msgstr ""
+msgstr "შეტყობინების ფონტი"
 
 #. i18n: ectx: whatsthis, entry (MessageFont), group (General)
 #: data/kalarmconfig.kcfg:107
@@ -809,7 +809,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label"
 msgid "Show in system tray"
-msgstr ""
+msgstr "სისტემის კუთხეში ჩვენება"
 
 #. i18n: ectx: whatsthis, entry (ShowInSystemTray), group (General)
 #: data/kalarmconfig.kcfg:113
@@ -858,7 +858,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label"
 msgid "Start at login"
-msgstr ""
+msgstr "შესვლისას გაშვება"
 
 #. i18n: ectx: whatsthis, entry (AutoStart), group (General)
 #: data/kalarmconfig.kcfg:130
@@ -874,7 +874,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label"
 msgid "Suppress autostart at login"
-msgstr ""
+msgstr "შესვლისას გაშვების გაუქმება"
 
 #. i18n: ectx: label, entry (DefaultDeferTime), group (General)
 #: data/kalarmconfig.kcfg:138
@@ -1024,7 +1024,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label"
 msgid "Email client"
-msgstr ""
+msgstr "ელფოსტის კლიენტი"
 
 #. i18n: ectx: whatsthis, entry (Base_EmailClient), group (General)
 #: data/kalarmconfig.kcfg:194
@@ -1072,7 +1072,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label"
 msgid "'From' email address"
-msgstr ""
+msgstr "'ვისგან' ელფოსტის მისამართი"
 
 #. i18n: ectx: whatsthis, entry (Base_EmailFrom), group (General)
 #: data/kalarmconfig.kcfg:208
@@ -1090,7 +1090,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label"
 msgid "'Bcc' email address"
-msgstr ""
+msgstr "'ბრმა ასლი' ელფოსტის მისამართი"
 
 #. i18n: ectx: whatsthis, entry (Base_EmailBccAddress), group (General)
 #: data/kalarmconfig.kcfg:213
@@ -1139,35 +1139,35 @@ msgstr ""
 #, kde-format
 msgctxt "@label"
 msgid "Start time of working day"
-msgstr ""
+msgstr "სამუშაო დღის დასაწყისის დრო"
 
 #. i18n: ectx: whatsthis, entry (Base_WorkDayStart), group (General)
 #: data/kalarmconfig.kcfg:228
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "The start time of the working day."
-msgstr ""
+msgstr "სამუშაო დღის დასაწყისის დრო."
 
 #. i18n: ectx: label, entry (Base_WorkDayEnd), group (General)
 #: data/kalarmconfig.kcfg:233
 #, kde-format
 msgctxt "@label"
 msgid "End time of working day"
-msgstr ""
+msgstr "სამუშაო დღის დასასრულის დრო"
 
 #. i18n: ectx: whatsthis, entry (Base_WorkDayEnd), group (General)
 #: data/kalarmconfig.kcfg:234
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "The end time of the working day."
-msgstr ""
+msgstr "სამუშაო დღის დასასრულის დრო."
 
 #. i18n: ectx: label, entry (Base_WorkDays), group (General)
 #: data/kalarmconfig.kcfg:239
 #, kde-format
 msgctxt "@label"
 msgid "Working days"
-msgstr ""
+msgstr "სამუშაო დღეები"
 
 #. i18n: ectx: whatsthis, entry (Base_WorkDays), group (General)
 #: data/kalarmconfig.kcfg:240
@@ -1183,7 +1183,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label"
 msgid "Disabled alarm color"
-msgstr ""
+msgstr "გათიშული განგაშის ფერი"
 
 #. i18n: ectx: whatsthis, entry (DisabledColour), group (General)
 #: data/kalarmconfig.kcfg:246 prefdlg.cpp:1886
@@ -1197,7 +1197,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label"
 msgid "Archived alarm color"
-msgstr ""
+msgstr "დაარქივებული განგაშის ფერი"
 
 #. i18n: ectx: whatsthis, entry (ArchivedColour), group (General)
 #: data/kalarmconfig.kcfg:252 prefdlg.cpp:1899
@@ -1327,7 +1327,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label"
 msgid "Show in KOrganizer"
-msgstr ""
+msgstr "KOrganizer-ში ჩვენება"
 
 #. i18n: ectx: whatsthis, entry (DefaultCopyToKOrganizer), group (Defaults)
 #: data/kalarmconfig.kcfg:312
@@ -1362,7 +1362,7 @@ msgstr "ფაილის დაკვრა"
 #, kde-format
 msgctxt "@label"
 msgid "Sound file"
-msgstr ""
+msgstr "ხმის ფაილი"
 
 #. i18n: ectx: whatsthis, entry (DefaultSoundFile), group (Defaults)
 #: data/kalarmconfig.kcfg:328
@@ -1376,7 +1376,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label"
 msgid "Sound volume"
-msgstr ""
+msgstr "ხმა"
 
 #. i18n: ectx: whatsthis, entry (Base_DefaultSoundVolume), group (Defaults)
 #: data/kalarmconfig.kcfg:332
@@ -1392,7 +1392,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label"
 msgid "Repeat sound file"
-msgstr ""
+msgstr "ხმის ფაილის გამეორება"
 
 #. i18n: ectx: whatsthis, entry (DefaultSoundRepeat), group (Defaults)
 #: data/kalarmconfig.kcfg:339
@@ -1406,7 +1406,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label"
 msgid "Enter script"
-msgstr ""
+msgstr "შეიყვანეთ სკრიპტი"
 
 #. i18n: ectx: whatsthis, entry (DefaultCmdScript), group (Defaults)
 #: data/kalarmconfig.kcfg:344
@@ -1420,7 +1420,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label"
 msgid "Command output"
-msgstr ""
+msgstr "ბრძანების გამონატანი"
 
 #. i18n: ectx: whatsthis, entry (DefaultCmdLogType), group (Defaults)
 #: data/kalarmconfig.kcfg:349
@@ -1436,28 +1436,28 @@ msgstr ""
 #, kde-format
 msgctxt "@option"
 msgid "Discard Output"
-msgstr ""
+msgstr "გამოტანის მოცილება"
 
 #. i18n: ectx: label, entry (DefaultCmdLogType), group (Defaults)
 #: data/kalarmconfig.kcfg:352
 #, kde-format
 msgctxt "@option"
 msgid "Log To File"
-msgstr ""
+msgstr "ჟურნალის ფაილში ჩაწერა"
 
 #. i18n: ectx: label, entry (DefaultCmdLogType), group (Defaults)
 #: data/kalarmconfig.kcfg:353
 #, kde-format
 msgctxt "@option"
 msgid "Execute in terminal window"
-msgstr ""
+msgstr "ტერმინალის ფანჯარაში გაშვება"
 
 #. i18n: ectx: label, entry (DefaultCmdLogFile), group (Defaults)
 #: data/kalarmconfig.kcfg:358 kalarmcalendar/kaeventformatter.cpp:137
 #, kde-format
 msgctxt "@label"
 msgid "Log file"
-msgstr ""
+msgstr "ჟურნალის ფაილი"
 
 #. i18n: ectx: whatsthis, entry (DefaultCmdLogFile), group (Defaults)
 #: data/kalarmconfig.kcfg:359
@@ -1471,7 +1471,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label"
 msgid "Copy email to self"
-msgstr ""
+msgstr "ელფოსტის საკუთარ თავში კოპირება"
 
 #. i18n: ectx: whatsthis, entry (DefaultEmailBcc), group (Defaults)
 #: data/kalarmconfig.kcfg:363
@@ -1486,7 +1486,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label"
 msgid "Recurrence period"
-msgstr ""
+msgstr "გამეორების პერიოდი"
 
 #. i18n: ectx: whatsthis, entry (DefaultRecurPeriod), group (Defaults)
 #: data/kalarmconfig.kcfg:368 prefdlg.cpp:1356
@@ -1500,7 +1500,7 @@ msgstr ""
 #, kde-format
 msgctxt "@option"
 msgid "No recurrence"
-msgstr ""
+msgstr "არ მეორდება"
 
 #. i18n: ectx: label, entry (DefaultRecurPeriod), group (Defaults)
 #: data/kalarmconfig.kcfg:371
@@ -1539,21 +1539,21 @@ msgstr ""
 #, kde-format
 msgctxt "@option"
 msgid "February 28th"
-msgstr ""
+msgstr "28 თებერვალი"
 
 #. i18n: ectx: label, entry (DefaultFeb29Type), group (Defaults)
 #: data/kalarmconfig.kcfg:385
 #, kde-format
 msgctxt "@option"
 msgid "March 1st"
-msgstr ""
+msgstr "1 მარტი"
 
 #. i18n: ectx: label, entry (DefaultFeb29Type), group (Defaults)
 #: data/kalarmconfig.kcfg:386
 #, kde-format
 msgctxt "@option"
 msgid "Do not repeat"
-msgstr ""
+msgstr "არ გაიმეორო"
 
 #. i18n: ectx: label, entry (DefaultReminderUnits), group (Defaults)
 #: data/kalarmconfig.kcfg:392
@@ -1574,7 +1574,7 @@ msgstr ""
 #, kde-format
 msgctxt "@option"
 msgid "Hours/Minutes"
-msgstr ""
+msgstr "საათები/წუთები"
 
 #. i18n: ectx: label, entry (DefaultPreAction), group (Defaults)
 #: data/kalarmconfig.kcfg:401
@@ -1746,25 +1746,25 @@ msgstr ""
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show the previous year"
-msgstr ""
+msgstr "წინა წლის ჩვენება"
 
 #: datepicker.cpp:65
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show the previous month"
-msgstr ""
+msgstr "წინა თვის ჩვენება"
 
 #: datepicker.cpp:66
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show the next year"
-msgstr ""
+msgstr "შემდეგი წლის ჩვენება"
 
 #: datepicker.cpp:67
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show the next month"
-msgstr ""
+msgstr "შემდეგი თვის ჩვენება"
 
 #: daymatrix.cpp:207
 #, kde-format
@@ -1844,7 +1844,7 @@ msgstr ""
 #, kde-format
 msgctxt "@option:check"
 msgid "Show in KOrganizer"
-msgstr ""
+msgstr "KOrganizer-ში ჩვენება"
 
 #: editdlg.cpp:179
 #, kde-format
@@ -1874,7 +1874,7 @@ msgstr "ცდა"
 #, kde-format
 msgctxt "@action:button"
 msgid "Load Template..."
-msgstr ""
+msgstr "ნიმუშის ჩატვირთვა..."
 
 #: editdlg.cpp:209
 #, kde-format
@@ -1898,7 +1898,7 @@ msgstr "KAlarm"
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Template name:"
-msgstr ""
+msgstr "შაბლონის სახელი:"
 
 #: editdlg.cpp:261
 #, kde-format
@@ -1946,7 +1946,7 @@ msgstr "დრო"
 #, kde-format
 msgctxt "@option:radio"
 msgid "Default time"
-msgstr ""
+msgstr "ნაგულისხმები დრო"
 
 #: editdlg.cpp:306
 #, kde-format
@@ -2078,37 +2078,37 @@ msgstr ""
 #, kde-format
 msgctxt "@action:Button"
 msgid "Fewer Options <<"
-msgstr ""
+msgstr "ნაკლები პარამეტრი <<"
 
 #: editdlg.cpp:1225
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show fewer options"
-msgstr ""
+msgstr "ნაკლები პარამეტრის ჩვენება"
 
 #: editdlg.cpp:1230
 #, kde-format
 msgctxt "@action:button"
 msgid "More Options >>"
-msgstr ""
+msgstr "მეტი პარამეტრი >>"
 
 #: editdlg.cpp:1231
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show more options"
-msgstr ""
+msgstr "მეტი პარამეტრის ჩვენება"
 
 #: editdlgtypes.cpp:75
 #, kde-format
 msgctxt "@title:window"
 msgid "Choose Log File"
-msgstr ""
+msgstr "აირჩიეთ ჟურნალის ფაილი"
 
 #: editdlgtypes.cpp:88
 #, kde-format
 msgctxt "@label:listbox How to display alarms"
 msgid "Display method:"
-msgstr ""
+msgstr "ჩვენების მეთოდი:"
 
 #: editdlgtypes.cpp:89
 #, kde-format
@@ -2156,13 +2156,13 @@ msgstr ""
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Display type:"
-msgstr ""
+msgstr "ჩვენების ტიპი:"
 
 #: editdlgtypes.cpp:138
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Text message"
-msgstr ""
+msgstr "ტექსტური შეტყობინება"
 
 #: editdlgtypes.cpp:139
 #, kde-format
@@ -2174,7 +2174,7 @@ msgstr "ფაილის შემცველობა"
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Command output"
-msgstr ""
+msgstr "ბრძანების გამონატანი"
 
 #: editdlgtypes.cpp:160
 #, kde-kuit-format
@@ -2289,13 +2289,13 @@ msgstr ""
 #, kde-format
 msgctxt "@option:radio"
 msgid "Execute in terminal window"
-msgstr ""
+msgstr "ტერმინალის ფანჯარაში გაშვება"
 
 #: editdlgtypes.cpp:801
 #, kde-format
 msgctxt "@option:check"
 msgid "Execute in terminal window"
-msgstr ""
+msgstr "ტერმინალის ფანჯარაში გაშვება"
 
 #: editdlgtypes.cpp:831
 #, kde-format
@@ -2367,13 +2367,13 @@ msgstr ""
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select a log file."
-msgstr ""
+msgstr "აირჩიეთ ჟურნალის ფაილი."
 
 #: editdlgtypes.cpp:888
 #, kde-format
 msgctxt "@option:radio"
 msgid "Log to file"
-msgstr ""
+msgstr "ჟურნალის ფაილში ჩაწერა"
 
 #: editdlgtypes.cpp:889
 #, kde-format
@@ -2420,7 +2420,7 @@ msgstr ""
 #, kde-format
 msgctxt "@option:check"
 msgid "Copy email to self"
-msgstr ""
+msgstr "ელფოსტის საკუთარ თავში კოპირება"
 
 #: editdlgtypes.cpp:1153
 #, kde-format
@@ -2586,7 +2586,7 @@ msgstr ""
 #, kde-format
 msgctxt "@action:button"
 msgid "Confirm Email"
-msgstr ""
+msgstr "ელფოსტის დადასტურება"
 
 #: editdlgtypes.cpp:1466
 #, kde-format
@@ -2690,7 +2690,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title:group"
 msgid "Alarm Type"
-msgstr ""
+msgstr "განგაშის ტიპი"
 
 #: find.cpp:102
 #, kde-format
@@ -2846,7 +2846,7 @@ msgstr ""
 #, kde-format
 msgctxt "@action:button"
 msgid "Font && Color..."
-msgstr ""
+msgstr "ფონტი და ფერი..."
 
 #: fontcolourbutton.cpp:31
 #, kde-format
@@ -2871,7 +2871,7 @@ msgstr ""
 #, kde-format
 msgctxt "@action"
 msgid "Stop Play"
-msgstr ""
+msgstr "დაკვრის შეწყვეტა"
 
 #: functions.cpp:189
 #, kde-format
@@ -2895,7 +2895,7 @@ msgstr ""
 #, kde-format
 msgctxt "@item:inlistbox File type selection filter"
 msgid "Calendar Files"
-msgstr ""
+msgstr "კალენდარის ფაილები"
 
 #: functions.cpp:931
 #, kde-format
@@ -3017,49 +3017,49 @@ msgstr ""
 #, kde-format
 msgctxt "@info"
 msgid "Error saving alarms"
-msgstr ""
+msgstr "განგაშების შენახვის შეცდომა"
 
 #: functions.cpp:1987
 #, kde-format
 msgctxt "@info"
 msgid "Error saving alarm"
-msgstr ""
+msgstr "განგაშის შენახვის შეცდომა"
 
 #: functions.cpp:1990
 #, kde-format
 msgctxt "@info"
 msgid "Error deleting alarms"
-msgstr ""
+msgstr "განგაშების წაშლის შეცდომა"
 
 #: functions.cpp:1991
 #, kde-format
 msgctxt "@info"
 msgid "Error deleting alarm"
-msgstr ""
+msgstr "განგაშის წაშლის შეცდომა"
 
 #: functions.cpp:1994
 #, kde-format
 msgctxt "@info"
 msgid "Error saving reactivated alarms"
-msgstr ""
+msgstr "თავიდან აქტივირებული განგაშების წაშლის შეცდომა"
 
 #: functions.cpp:1995
 #, kde-format
 msgctxt "@info"
 msgid "Error saving reactivated alarm"
-msgstr ""
+msgstr "თავიდან აქტივირებული განგაშის წაშლის შეცდომა"
 
 #: functions.cpp:1998
 #, kde-format
 msgctxt "@info"
 msgid "Error saving alarm templates"
-msgstr ""
+msgstr "განგაშის ნიმუშების შენახვის შეცდომა"
 
 #: functions.cpp:1999
 #, kde-format
 msgctxt "@info"
 msgid "Error saving alarm template"
-msgstr ""
+msgstr "განგაშის ნიმუშის შენახვის შეცდომა"
 
 #: kalarmapp.cpp:815
 #, kde-format
@@ -3319,19 +3319,19 @@ msgstr "UID"
 #, kde-format
 msgctxt "@label"
 msgid "Alarm type"
-msgstr ""
+msgstr "განგაშის ტიპი"
 
 #: kalarmcalendar/kaeventformatter.cpp:41
 #, kde-format
 msgctxt "@label"
 msgid "Alarm status"
-msgstr ""
+msgstr "განგაშის სტატუსი"
 
 #: kalarmcalendar/kaeventformatter.cpp:43
 #, kde-format
 msgctxt "@label"
 msgid "Alarm name"
-msgstr ""
+msgstr "განგაშის სახელი"
 
 #: kalarmcalendar/kaeventformatter.cpp:45
 #, kde-format
@@ -3421,7 +3421,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label Automatically close window"
 msgid "Auto close"
-msgstr ""
+msgstr "ავტომატური დახურვა"
 
 #: kalarmcalendar/kaeventformatter.cpp:75
 #, kde-format
@@ -3463,13 +3463,13 @@ msgstr ""
 #, kde-format
 msgctxt "@label"
 msgid "Message text"
-msgstr ""
+msgstr "შეტყობინების ტექსტი"
 
 #: kalarmcalendar/kaeventformatter.cpp:90
 #, kde-format
 msgctxt "@label File to provide text for message"
 msgid "Message file"
-msgstr ""
+msgstr "შეტყობინების ფაილი"
 
 #: kalarmcalendar/kaeventformatter.cpp:96
 #, kde-format
@@ -3709,7 +3709,7 @@ msgstr "შემხსენებელი"
 #, kde-format
 msgctxt "@info"
 msgid "Speak"
-msgstr ""
+msgstr "ლაპარაკი"
 
 #: kalarmcalendar/kaeventformatter.cpp:379
 #, kde-format
@@ -3908,25 +3908,25 @@ msgstr ""
 #, kde-kuit-format
 msgctxt "@info"
 msgid "<filename>%1</filename> is a folder"
-msgstr ""
+msgstr "<filename>%1</filename> საქაღალდეა"
 
 #: lib/file.cpp:117
 #, kde-kuit-format
 msgctxt "@info"
 msgid "<filename>%1</filename> not found"
-msgstr ""
+msgstr "<filename>%1</filename> ვერ ვიპოვე"
 
 #: lib/file.cpp:118
 #, kde-kuit-format
 msgctxt "@info"
 msgid "<filename>%1</filename> is not readable"
-msgstr ""
+msgstr "<filename>%1</filename> ვერ წავიკითხე"
 
 #: lib/file.cpp:119
 #, kde-kuit-format
 msgctxt "@info"
 msgid "<filename>%1</filename> appears not to be a text or image file"
-msgstr ""
+msgstr "<filename>%1</filename> არ ჰგავს ტექსტურ ან სურათის ფაილს"
 
 #: lib/file.cpp:178
 #, kde-format
@@ -3938,7 +3938,7 @@ msgstr "ყველა ფაილი"
 #, kde-format
 msgctxt "@option:check"
 msgid "Append to existing file"
-msgstr ""
+msgstr "არსებული ფაილის ბოლოში მიწერა"
 
 #: lib/shellprocess.cpp:143
 #, kde-format
@@ -3950,7 +3950,7 @@ msgstr ""
 #, kde-format
 msgctxt "@info"
 msgid "Failed to execute command"
-msgstr ""
+msgstr "ბრძანების შესრულების შეცდომა"
 
 #: lib/shellprocess.cpp:147
 #, kde-format
@@ -3962,13 +3962,13 @@ msgstr ""
 #, kde-format
 msgctxt "@info"
 msgid "Command execution error"
-msgstr ""
+msgstr "ბრძანების შესრულების შეცდომა"
 
 #: lib/shellprocess.cpp:152
 #, kde-format
 msgctxt "@info"
 msgid "Command exit code: %1"
-msgstr ""
+msgstr "ბრძანების დასრულების კოდი: %1"
 
 #: lib/timeperiod.cpp:24
 #, kde-format
@@ -3980,7 +3980,7 @@ msgstr "წუთი"
 #, kde-format
 msgctxt "@item:inlistbox Time units"
 msgid "hours/minutes"
-msgstr ""
+msgstr "საათი/წუთი"
 
 #: lib/timeperiod.cpp:26
 #, kde-format
@@ -4041,7 +4041,7 @@ msgstr ""
 #, kde-format
 msgctxt "@action"
 msgid "Create Tem&plate..."
-msgstr ""
+msgstr "&შაბლონის შექმნა..."
 
 #: mainwindow.cpp:472
 #, kde-format
@@ -4053,7 +4053,7 @@ msgstr ""
 #, kde-format
 msgctxt "@action"
 msgid "&Edit..."
-msgstr ""
+msgstr "რ&ედაქტირება..."
 
 #: mainwindow.cpp:482
 #, kde-format
@@ -4065,13 +4065,13 @@ msgstr ""
 #, kde-format
 msgctxt "@action"
 msgid "Delete Without Confirmation"
-msgstr ""
+msgstr "წაშლა დადასტურების გარეშე"
 
 #: mainwindow.cpp:493
 #, kde-format
 msgctxt "@action"
 msgid "Reac&tivate"
-msgstr ""
+msgstr "&რეაქტივაცია"
 
 #: mainwindow.cpp:504
 #, kde-format
@@ -4159,19 +4159,19 @@ msgstr ""
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Hide Archived Alarms"
-msgstr ""
+msgstr "არქივირებული განგაშების დამალვა"
 
 #: mainwindow.cpp:903
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show Archived Alarms"
-msgstr ""
+msgstr "არქივირებული განგაშების ჩვენება"
 
 #: mainwindow.cpp:979
 #, kde-format
 msgctxt "@info"
 msgid "Import birthdays"
-msgstr ""
+msgstr "დაბადებს დღეების შემოტანა"
 
 #: mainwindow.cpp:1231
 #, kde-format
@@ -4191,6 +4191,8 @@ msgid ""
 "<qt>This will hide the menu bar completely. You can show it again by typing "
 "%1.</qt>"
 msgstr ""
+"<qt>მენიუს ზოლი მთლიანად დაიმალება. მისი თავიდან საჩვენებლად დააწექით: %1.</"
+"qt>"
 
 #: mainwindow.cpp:1300
 #, kde-format
@@ -4201,7 +4203,7 @@ msgstr "მენიუს ზოლის დამალვა"
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Display Alarm"
-msgstr ""
+msgstr "განგაშის ჩვენება"
 
 #: mainwindow.cpp:1542
 #, kde-format
@@ -4219,7 +4221,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title:window"
 msgid "Alarm Type"
-msgstr ""
+msgstr "განგაშის ტიპი"
 
 #: mainwindow.cpp:1547
 #, kde-format
@@ -4231,13 +4233,13 @@ msgstr ""
 #, kde-format
 msgctxt "@action"
 msgid "Ena&ble"
-msgstr ""
+msgstr "&ჩართვა"
 
 #: mainwindow.cpp:1680
 #, kde-format
 msgctxt "@action"
 msgid "Disa&ble"
-msgstr ""
+msgstr "&გამორთვა"
 
 #: messagedisplay.cpp:271
 #, kde-kuit-format
@@ -4261,7 +4263,7 @@ msgstr "შეტყობინება"
 #, kde-format
 msgctxt "@info"
 msgid "File is a folder"
-msgstr ""
+msgstr "ფაილი საქაღალდეა"
 
 #: messagedisplayhelper.cpp:290
 #, kde-format
@@ -4370,7 +4372,7 @@ msgstr "ჩასწორება"
 #, kde-format
 msgctxt "@action:button"
 msgid "Defer"
-msgstr ""
+msgstr "გადადება"
 
 #: messagewindow.cpp:232
 #, kde-format
@@ -4426,13 +4428,13 @@ msgstr ""
 #, kde-format
 msgctxt "@action:button"
 msgid "&Edit..."
-msgstr ""
+msgstr "რ&ედაქტირება..."
 
 #: messagewindow.cpp:439
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Edit the alarm"
-msgstr ""
+msgstr "განგაშის ჩასწორება"
 
 #: messagewindow.cpp:440
 #, kde-format
@@ -4596,7 +4598,7 @@ msgstr "ზოგადი"
 #, kde-format
 msgctxt "@title:tab"
 msgid "Time & Date"
-msgstr ""
+msgstr "დრო და თარიღი"
 
 #: prefdlg.cpp:161
 #, kde-format
@@ -4668,19 +4670,19 @@ msgstr "&ყველა"
 #, kde-format
 msgctxt "@action:button Reset the CURRENT tab"
 msgid "C&urrent"
-msgstr ""
+msgstr "&მიმდინარე"
 
 #: prefdlg.cpp:452
 #, kde-format
 msgctxt "@title:group"
 msgid "Run Mode"
-msgstr ""
+msgstr "გაშვების რეჟიმი"
 
 #: prefdlg.cpp:457
 #, kde-format
 msgctxt "@option:check"
 msgid "Start at login"
-msgstr ""
+msgstr "შესვლისას გაშვება"
 
 #: prefdlg.cpp:460
 #, kde-kuit-format
@@ -4709,7 +4711,7 @@ msgstr ""
 #, kde-format
 msgctxt "@option:check"
 msgid "Enable alarm names"
-msgstr ""
+msgstr "განგაშის სახელების ჩართვა"
 
 #: prefdlg.cpp:474
 #, kde-format
@@ -4868,7 +4870,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title:group"
 msgid "Working Hours"
-msgstr ""
+msgstr "სამუშაო საათები"
 
 #: prefdlg.cpp:780
 #, kde-format
@@ -5253,19 +5255,19 @@ msgstr ""
 #, kde-format
 msgctxt "@option:radio"
 msgid "February 2&8th"
-msgstr ""
+msgstr "&28 თებერვალი"
 
 #: prefdlg.cpp:1380
 #, kde-format
 msgctxt "@option:radio"
 msgid "March &1st"
-msgstr ""
+msgstr "&1 მარტი"
 
 #: prefdlg.cpp:1384
 #, kde-format
 msgctxt "@option:radio"
 msgid "Do not repeat"
-msgstr ""
+msgstr "არ გაიმეორო"
 
 #: prefdlg.cpp:1389
 #, kde-kuit-format
@@ -5298,7 +5300,7 @@ msgstr "წუთი"
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Hours/Minutes"
-msgstr ""
+msgstr "საათები/წუთები"
 
 #: prefdlg.cpp:1420
 #, kde-format
@@ -5318,7 +5320,7 @@ msgstr "ხმა"
 #, kde-format
 msgctxt "@option:check"
 msgid "Repeat sound file"
-msgstr ""
+msgstr "ხმის ფაილის გამეორება"
 
 #: prefdlg.cpp:1448
 #, kde-kuit-format
@@ -5823,7 +5825,7 @@ msgstr ""
 #, kde-format
 msgctxt "@option:check"
 msgid "Exclude holidays"
-msgstr ""
+msgstr "დასვენებს დღეების გამორიცხვა"
 
 #: recurrenceedit.cpp:329
 #, kde-kuit-format
@@ -6033,7 +6035,7 @@ msgstr ""
 #, kde-format
 msgctxt "@item:inlistbox Every (Monday...) in month"
 msgid "Every"
-msgstr ""
+msgstr "ყოველ"
 
 #: recurrenceedit.cpp:1347
 #, kde-format
@@ -6075,7 +6077,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label List of months to select"
 msgid "Months:"
-msgstr ""
+msgstr "თვეები:"
 
 #: recurrenceedit.cpp:1521
 #, kde-format
@@ -7470,7 +7472,7 @@ msgstr "პიპინი"
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Speak"
-msgstr ""
+msgstr "ლაპარაკი"
 
 #: soundpicker.cpp:47
 #, kde-format
@@ -7810,7 +7812,7 @@ msgstr ""
 #, kde-format
 msgctxt "@info Action to create a new alarm template"
 msgid "New template"
-msgstr ""
+msgstr "ახალი ნიმუში"
 
 #: undo.cpp:669
 #, kde-format
@@ -7840,7 +7842,7 @@ msgstr ""
 #, kde-format
 msgctxt "@info Action to edit an alarm template"
 msgid "Edit template"
-msgstr ""
+msgstr "ნიმუშის რედაქტირება"
 
 #: undo.cpp:1259
 #, kde-format
