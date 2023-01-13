@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-12-31 00:52+0000\n"
-"PO-Revision-Date: 2023-01-05 11:33+0100\n"
+"PO-Revision-Date: 2023-01-11 17:07+0100\n"
 "Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
 "Language: cs\n"
@@ -21,7 +21,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Lokalize 22.12.0\n"
+"X-Generator: Lokalize 22.12.1\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -741,7 +741,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label"
 msgid "Enable Akonadi plugin"
-msgstr ""
+msgstr "Povolit modul Akonadi"
 
 #. i18n: ectx: whatsthis, entry (UseAkonadiIfAvailable), group (General)
 #: data/kalarmconfig.kcfg:76
@@ -818,7 +818,7 @@ msgstr "Výchozí barva pozadí pro okno zprávy upomínky."
 #, kde-format
 msgctxt "@label"
 msgid "Enable alarm names"
-msgstr ""
+msgstr "Povolit názvy upomínek"
 
 #. i18n: ectx: whatsthis, entry (UseAlarmName), group (General)
 #: data/kalarmconfig.kcfg:101
@@ -4348,7 +4348,7 @@ msgstr "Importovat u&pomínky..."
 #, kde-format
 msgctxt "@action"
 msgid "Import Birthdays..."
-msgstr ""
+msgstr "Importovat narozeniny..."
 
 #: mainwindow.cpp:545
 #, kde-format
@@ -4884,7 +4884,7 @@ msgstr "Nastavení Poštovní upomínky"
 #, kde-format
 msgctxt "@title:tab"
 msgid "Alarm Defaults"
-msgstr ""
+msgstr "Výchozí nastavení upomínek"
 
 #: prefdlg.cpp:163
 #, kde-format
@@ -5047,13 +5047,13 @@ msgstr ""
 #, kde-format
 msgctxt "@title:group"
 msgid "Plugins"
-msgstr ""
+msgstr "Moduly"
 
 #: prefdlg.cpp:542
 #, kde-format
 msgctxt "@option:check"
 msgid "Enable Akonadi"
-msgstr ""
+msgstr "Povolit Akonadi"
 
 #: prefdlg.cpp:544
 #, kde-format
@@ -5442,7 +5442,7 @@ msgstr ""
 #, kde-kuit-format
 msgctxt "@option:radio"
 msgid "Use default <application>KMail</application> identity"
-msgstr ""
+msgstr "Použít výchozí identitu aplikace  <application>KMail</application>"
 
 #: prefdlg.cpp:1112
 #, kde-kuit-format
@@ -5513,7 +5513,7 @@ msgstr "Byla zadána neplatná adresa pro 'Skrytou kopii'."
 #, kde-format
 msgctxt "@info"
 msgid "Are you sure you want to save your changes?"
-msgstr ""
+msgstr "Opravdu si přejete uložit změny?"
 
 #: prefdlg.cpp:1263
 #, kde-kuit-format
@@ -5550,7 +5550,7 @@ msgstr "Obecné"
 #, kde-format
 msgctxt "@title:tab Settings specific to alarm type"
 msgid "Type Specific"
-msgstr ""
+msgstr "Podle typu"
 
 #: prefdlg.cpp:1302
 #, kde-format
