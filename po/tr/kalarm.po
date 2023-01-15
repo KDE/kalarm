@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: kdepim-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-12-31 00:52+0000\n"
-"PO-Revision-Date: 2023-01-10 22:08+0300\n"
+"PO-Revision-Date: 2023-01-14 22:09+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -25,7 +25,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 22.12.0\n"
+"X-Generator: Lokalize 22.12.1\n"
 "(http: //www.transifex.com/projects/p/kdepim-k-tr/language/tr/)\n"
 "X-POOTLE-MTIME: 1413131629.000000\n"
 
@@ -4649,7 +4649,7 @@ msgstr "İleti okunamıyor"
 #, kde-format
 msgctxt "@info"
 msgid "Text-to-speech subsystem is not available"
-msgstr "Metin okuma alt sistemi kullanılabilir değil"
+msgstr "Konuşma alt sistemi kullanılabilir değil"
 
 #: messagedisplayhelper.cpp:1034
 #, kde-kuit-format
@@ -8057,7 +8057,7 @@ msgstr ""
 "Bir ses dosyası çalınır. Dosyayı seçmeniz ve seçeneklerini ayarlamanız "
 "istenecektir. (Bildirim kullanılıyorsa seçenek kullanılamaz.)</"
 "item><item><interface>%4</interface>: İleti metni konuşulur. (Seçenek, "
-"çalışan bir Qt metinden seslendir kurulumu gerektirir.)</item></list></para>"
+"çalışan bir Qt Konuşma kurulumu gerektirir.)</item></list></para>"
 
 #: soundpicker.cpp:89
 #, kde-format
