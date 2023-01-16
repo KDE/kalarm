@@ -39,6 +39,7 @@ target_link_libraries(akonadiplugin
     kalarmcalendar
     KF5::CalendarCore
     KF5::I18n
+    KF5::Codecs
     KF5::Mime
     KF5::AkonadiCore
     KF5::AkonadiMime
