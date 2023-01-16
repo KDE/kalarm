@@ -5,14 +5,14 @@
 # Andrea Rizzi <rizzi@kde.org>, 2004.
 # Giovanni Venturi <jumpyj@tiscali.it>, 2006.
 # Federico Zenith <federico.zenith@member.fsf.org>, 2008, 2012, 2013, 2014.
-# Vincenzo Reale <smart2128vr@gmail.com>, 2014, 2018, 2019, 2020, 2021, 2022.
+# Vincenzo Reale <smart2128vr@gmail.com>, 2014, 2018, 2019, 2020, 2021, 2022, 2023.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-12-31 00:52+0000\n"
-"PO-Revision-Date: 2022-12-25 15:34+0100\n"
+"PO-Revision-Date: 2023-01-01 22:55+0100\n"
 "Last-Translator: Vincenzo Reale <smart2128vr@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
@@ -2250,6 +2250,8 @@ msgid ""
 "will trigger at the minute boundary before the specified time from now.</"
 "para>"
 msgstr ""
+"<para>KAlarm non fornisce avvisi ad alta precisione.</para ><para>L'avviso "
+"si attiverà al limite dei minuti prima dell'ora specificata da adesso.</para>"
 
 #: editdlg.cpp:1042
 #, kde-format
