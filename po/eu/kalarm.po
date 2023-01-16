@@ -13,14 +13,14 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-12-12 03:00+0000\n"
-"PO-Revision-Date: 2023-01-02 12:48+0100\n"
+"PO-Revision-Date: 2023-01-15 19:58+0100\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
 "Language: eu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 22.12.0\n"
+"X-Generator: Lokalize 22.12.1\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #, kde-format
@@ -6851,6 +6851,9 @@ msgid ""
 "application> version %2), and will be read-only unless you choose to update "
 "it to the current format."
 msgstr ""
+"<resource>%1</resource> egutegia formatu zahar batean dago "
+"(<application>KAlarm</application> %2 bertsioa), eta irakurtzeko soilik "
+"izango da baldin eta egungo formatura eguneratzea aukeratzen ez baduzu."
 
 #: resources/calendarupdater.cpp:88
 #, kde-kuit-format
@@ -6860,6 +6863,10 @@ msgid ""
 "<application>KAlarm</application> format, and will be read-only unless you "
 "choose to update them to the current format."
 msgstr ""
+"<resource>%1</resource> egutegiko alarma batzuk, edo guztiak "
+"<application>KAlarm</application>eren formatu zahar batean daude, eta "
+"irakurtzeko soilik izango dira, baldin eta egungo formatura eguneratzea "
+"aukeratzen ez baduzu."
 
 #: resources/calendarupdater.cpp:91
 #, kde-kuit-format
@@ -6870,6 +6877,10 @@ msgid ""
 "computer). If you do so, the calendar may become unusable there.</warning></"
 "para><para>Do you wish to update the calendar?</para>"
 msgstr ""
+"<para>%1</para><para><warning>Ez eguneratu egutegia <application>KAlarm</"
+"application>eren bertsio zaharrago batekin ere erabiltzen bada (adib. beste "
+"ordenagailu batean). Hala egiten baduzu, egutegia beste hartan erabilezin "
+"gera liteke.</warning></para><para>Egutegia eguneratu nahi duzu?</para>"
 
 #: resources/fileresource.cpp:325 resources/fileresource.cpp:455
 #, kde-format
@@ -7034,6 +7045,9 @@ msgid ""
 "using the contents of the directory resource below, you must import it into "
 "a KAlarm calendar file resource."
 msgstr ""
+"«KAlarm»ek jada ez ditu egutegi direktorio baliabideak onartzen. Beheko "
+"direktorio baliabidearen edukia erabiltzen jarraitzeko, KAlarm egutegi "
+"fitxategi baliabide batera inportatu behar duzu."
 
 #. i18n: ectx: property (text), widget (QLabel, warning2)
 #: resources/migration/dirresourceimportdialog_intro.ui:26
@@ -7044,6 +7058,9 @@ msgid ""
 "using the contents of the directory resource below, you must import each of "
 "its alarm types into separate KAlarm calendar file resources."
 msgstr ""
+"«KAlarm»ek jada ez ditu egutegi direktorio baliabideak onartzen. Beheko "
+"direktorio baliabidearen edukia erabiltzen jarraitzeko, bere alarma-mota "
+"bakoitza Kalarm egutegi fitxategi baliabide bereizian inportatu behar duzu."
 
 #. i18n: ectx: property (text), widget (QLabel, label1)
 #. i18n: ectx: property (text), widget (QLabel, nameLabel)
@@ -7077,6 +7094,9 @@ msgid ""
 "using the Import Alarms menu option to import the calendar files contained "
 "within it."
 msgstr ""
+"Nahiago baduzu, egutegi direktorio baliabide hau beranduago inportatu "
+"dezakezu, bere barruan dauden egutegi fitxategiak inportatzeko «Inportatu "
+"alarmak» menu aukera erabiliz."
 
 #. i18n: ectx: property (text), widget (QRadioButton, mergeRadio)
 #: resources/migration/dirresourceimportdialog_type.ui:13
