@@ -37,6 +37,7 @@ Dependencies:
     'pim/kmailtransport' : '@same'
     'pim/kmime' : '@same'
     'pim/kpimtextedit' : '@same'
+    'libraries/ktextaddons': '@stable'
 
 Options:
     cppcheck-arguments: '--enable=warning,style,performance --inline-suppr'
