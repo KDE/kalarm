@@ -366,7 +366,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title:group"
 msgid "Alarm Configuration"
-msgstr "Configuració de l'alarma"
+msgstr "Configureu l'alarma"
 
 #: birthdaydlg.cpp:155
 #, kde-format
@@ -2399,7 +2399,7 @@ msgstr "Plantilla nova d'alarma visual"
 #, kde-format
 msgctxt "@title:window"
 msgid "Edit Display Alarm Template"
-msgstr "Edició d'una plantilla d'alarma visual"
+msgstr "Editeu una plantilla d'alarma visual"
 
 #: editdlgtypes.cpp:119
 #, kde-format
@@ -2411,7 +2411,7 @@ msgstr "Alarma visual nova"
 #, kde-format
 msgctxt "@title:window"
 msgid "Edit Display Alarm"
-msgstr "Edició d'una alarma visual"
+msgstr "Editeu una alarma visual"
 
 #: editdlgtypes.cpp:132
 #, kde-format
@@ -2581,7 +2581,7 @@ msgstr "Plantilla nova d'alarma d'ordre"
 #, kde-format
 msgctxt "@title:window"
 msgid "Edit Command Alarm Template"
-msgstr "Edició d'una plantilla d'alarma d'ordre"
+msgstr "Editeu una plantilla d'alarma d'ordre"
 
 #: editdlgtypes.cpp:830
 #, kde-format
@@ -2593,7 +2593,7 @@ msgstr "Alarma d'ordre nova"
 #, kde-format
 msgctxt "@title:window"
 msgid "Edit Command Alarm"
-msgstr "Edició d'una alarma d'ordre"
+msgstr "Editeu una alarma d'ordre"
 
 #: editdlgtypes.cpp:838
 #, kde-format
@@ -2713,7 +2713,7 @@ msgstr "Plantilla nova d'alarma de correu"
 #, kde-format
 msgctxt "@title:window"
 msgid "Edit Email Alarm Template"
-msgstr "Edició d'una plantilla d'alarma de correu"
+msgstr "Editeu una plantilla d'alarma de correu"
 
 #: editdlgtypes.cpp:1152
 #, kde-format
@@ -2725,7 +2725,7 @@ msgstr "Alarma de correu nova"
 #, kde-format
 msgctxt "@title:window"
 msgid "Edit Email Alarm"
-msgstr "Edició d'una alarma de correu"
+msgstr "Editeu una alarma de correu"
 
 #: editdlgtypes.cpp:1160
 #, kde-format
@@ -2907,7 +2907,7 @@ msgstr "Plantilla nova d'alarma d'àudio"
 #, kde-format
 msgctxt "@title:window"
 msgid "Edit Audio Alarm Template"
-msgstr "Edició d'una plantilla d'alarma d'àudio"
+msgstr "Editeu una plantilla d'alarma d'àudio"
 
 #: editdlgtypes.cpp:1606
 #, kde-format
@@ -2919,7 +2919,7 @@ msgstr "Alarma d'àudio nova"
 #, kde-format
 msgctxt "@title:window"
 msgid "Edit Audio Alarm"
-msgstr "Edició d'una alarma d'àudio"
+msgstr "Editeu una alarma d'àudio"
 
 #: editdlgtypes.cpp:1614
 #, kde-format
@@ -3298,7 +3298,8 @@ msgstr "S'ha produït un error en obtindre l'autorització (%1)"
 #, kde-format
 msgctxt "@info"
 msgid "You must enable a template calendar to save the template in"
-msgstr "Heu d'activar una plantilla de calendari per a guardar-hi la plantilla"
+msgstr ""
+"Heu d'activar una plantilla de calendari per que es guardarà-hi la plantilla"
 
 #: functions.cpp:1610
 #, kde-kuit-format
@@ -8188,7 +8189,7 @@ msgstr ""
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Configure sound file"
-msgstr "Configuració del fitxer de so"
+msgstr "Configureu el fitxer de so"
 
 #: soundpicker.cpp:90
 #, kde-format
