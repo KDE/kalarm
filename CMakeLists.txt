@@ -76,6 +76,10 @@ endif()
 find_package(Qt${QT_MAJOR_VERSION} ${QT_REQUIRED_VERSION} CONFIG REQUIRED DBus Gui Network Widgets)
 set(CALENDARUTILS_LIB_VERSION "5.22.40")
 
+option(USE_KTEXTADDONS_LIB "Use ktextaddons lib (experimental)" OFF)
+set(KTEXTADDONS_MIN_VERSION "1.0.0")
+
+
 option(ENABLE_AKONADI_PLUGIN "Build the Akonadi plugin" ON)
 add_feature_info(AKONADI_PLUGIN ${ENABLE_AKONADI_PLUGIN} "Provides features dependent on Akonadi (including birthday import,
                    email functions, email address book, first run resource migration)")
@@ -126,7 +130,15 @@ find_package(KF5CalendarUtils ${CALENDARUTILS_LIB_VERSION} CONFIG REQUIRED)
 find_package(KF5IdentityManagement ${IDENTITYMANAGEMENT_LIB_VERSION} CONFIG REQUIRED)
 find_package(KF5Mime ${KMIME_LIB_VERSION} CONFIG REQUIRED)
 find_package(KF5PimTextEdit ${KPIMTEXTEDIT_LIB_VERSION} CONFIG REQUIRED)
-find_package(KF5PimTextEditTextToSpeech ${KPIMTEXTEDIT_LIB_VERSION} CONFIG REQUIRED)
+
+if (USE_KTEXTADDONS_LIB)
+    find_package(KF5TextEditTextToSpeech ${KTEXTADDONS_MIN_VERSION} CONFIG REQUIRED)
+    add_definitions(-DHAVE_TEXT_TO_SPEECH_SUPPORT)
+else()
+    find_package(KF5PimTextEditTextToSpeech ${KPIMTEXTEDIT_LIB_VERSION} CONFIG REQUIRED)
+endif()
+
+
 if (ENABLE_AKONADI_PLUGIN)
     find_package(KF5Akonadi ${AKONADI_VERSION} CONFIG REQUIRED)
     find_package(KF5AkonadiContact ${AKONADI_CONTACT_VERSION} CONFIG REQUIRED)
