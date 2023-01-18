@@ -14,9 +14,13 @@
 #include "lib/file.h"
 #include "lib/pushbutton.h"
 
+#ifndef HAVE_TEXT_TO_SPEECH_SUPPORT
 #include <kpimtextedit/kpimtextedit-texttospeech.h>
 #if KPIMTEXTEDIT_TEXT_TO_SPEECH
 #include <KPIMTextEditTextToSpeech/TextToSpeech>
+#endif
+#else
+#include <TextEditTextToSpeech/TextToSpeech>
 #endif
 
 #include <KLocalizedString>
@@ -131,8 +135,12 @@ void SoundPicker::showFile(bool show)
 */
 void SoundPicker::showSpeak(bool show)
 {
+#ifndef HAVE_TEXT_TO_SPEECH_SUPPORT
 #if KPIMTEXTEDIT_TEXT_TO_SPEECH
     if (!KPIMTextEditTextToSpeech::TextToSpeech::self()->isReady())
+#endif
+#else
+    if (!TextEditTextToSpeech::TextToSpeech::self()->isReady())
 #endif
         show = false;    // speech capability is not installed or configured
     if (show != mSpeakShowing)
@@ -157,9 +165,11 @@ Preferences::SoundType SoundPicker::sound() const
 {
     if (mTypeCombo->currentIndex() < 0)
         return Preferences::Sound_None;
+#ifndef HAVE_TEXT_TO_SPEECH_SUPPORT
 #if !KPIMTEXTEDIT_TEXT_TO_SPEECH
     if (mTypeCombo->currentData().toInt() == Preferences::Sound_Speak)
         return Preferences::Sound_None;
+#endif
 #endif
     return static_cast<Preferences::SoundType>(mTypeCombo->currentData().toInt());
 }

@@ -46,9 +46,13 @@
 #include <KHolidays/HolidayRegion>
 using namespace KHolidays;
 
+#ifndef HAVE_TEXT_TO_SPEECH_SUPPORT
 #include <kpimtextedit/kpimtextedit-texttospeech.h>
 #if KPIMTEXTEDIT_TEXT_TO_SPEECH
 #include <KPIMTextEditTextToSpeech/TextToSpeech>
+#endif
+#else
+#include <TextEditTextToSpeech/TextToSpeech>
 #endif
 
 #include <KLocalizedString>
@@ -1433,8 +1437,13 @@ EditPrefTab::EditPrefTab(StackedScrollGroup* scrollGroup)
     mSound->addItem(SoundPicker::i18n_combo_None());         // index 0
     mSound->addItem(SoundPicker::i18n_combo_Beep());         // index 1
     mSound->addItem(SoundPicker::i18n_combo_File());         // index 2
+#ifndef HAVE_TEXT_TO_SPEECH_SUPPORT
 #if KPIMTEXTEDIT_TEXT_TO_SPEECH
     if (KPIMTextEditTextToSpeech::TextToSpeech::self()->isReady())
+        mSound->addItem(SoundPicker::i18n_combo_Speak());    // index 3
+#endif
+#else
+    if (TextEditTextToSpeech::TextToSpeech::self()->isReady())
         mSound->addItem(SoundPicker::i18n_combo_Speak());    // index 3
 #endif
     mSound->setMinimumSize(mSound->sizeHint());
@@ -1619,8 +1628,12 @@ bool EditPrefTab::apply(bool syncToDisc)
     Preferences::SoundType snd;
     switch (mSound->currentIndex())
     {
+#ifndef HAVE_TEXT_TO_SPEECH_SUPPORT
 #if KPIMTEXTEDIT_TEXT_TO_SPEECH
         case 3:  snd = Preferences::Sound_Speak; break;
+#endif
+#else
+    case 3:  snd = Preferences::Sound_Speak; break;
 #endif
         case 2:  snd = Preferences::Sound_File;  break;
         case 1:  snd = Preferences::Sound_Beep;  break;
@@ -1706,8 +1719,12 @@ int EditPrefTab::soundIndex(Preferences::SoundType type)
 {
     switch (type)
     {
+#ifndef HAVE_TEXT_TO_SPEECH_SUPPORT
 #if KPIMTEXTEDIT_TEXT_TO_SPEECH
         case Preferences::Sound_Speak: return 3;
+#endif
+#else
+    case Preferences::Sound_Speak: return 3;
 #endif
         case Preferences::Sound_File:  return 2;
         case Preferences::Sound_Beep:  return 1;
