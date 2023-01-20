@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-12-12 03:00+0000\n"
-"PO-Revision-Date: 2023-01-12 08:13+0100\n"
+"PO-Revision-Date: 2023-01-19 16:14+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -564,7 +564,7 @@ msgstr ""
 #: commandoptions.cpp:268
 #, kde-format
 msgid "Display system tray icon"
-msgstr ""
+msgstr "სისტემის კუთხეში ხატულის ჩართვა"
 
 #: commandoptions.cpp:271
 #, kde-format
@@ -1708,7 +1708,7 @@ msgstr ""
 #: data/kalarmui.rc:31
 #, kde-format
 msgid "&Edit"
-msgstr ""
+msgstr "&ჩასწორება"
 
 #. i18n: ectx: Menu (view)
 #: data/kalarmui.rc:46
@@ -4047,7 +4047,7 @@ msgstr "&შაბლონის შექმნა..."
 #, kde-format
 msgctxt "@action"
 msgid "&Copy..."
-msgstr ""
+msgstr "&კოპირება..."
 
 #: mainwindow.cpp:477 resourceselector.cpp:301
 #, kde-format
