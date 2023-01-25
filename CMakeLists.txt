@@ -76,7 +76,7 @@ endif()
 find_package(Qt${QT_MAJOR_VERSION} ${QT_REQUIRED_VERSION} CONFIG REQUIRED DBus Gui Network Widgets)
 set(CALENDARUTILS_LIB_VERSION "5.22.40")
 
-option(USE_KTEXTADDONS_LIB "Use ktextaddons lib (experimental)" OFF)
+option(USE_KTEXTADDONS_LIB "Use ktextaddons lib (experimental)" ON)
 set(KTEXTADDONS_MIN_VERSION "1.0.0")
 
 
