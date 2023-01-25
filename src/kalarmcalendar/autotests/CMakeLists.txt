@@ -11,8 +11,8 @@ macro(macro_unit_tests)
     add_test(NAME ${_testname} COMMAND ${_testname})
     ecm_mark_as_test(${_testname})
     target_link_libraries(${_testname}
-        KF5::CalendarCore
-        KF5::Holidays
+        KF${KF_MAJOR_VERSION}::CalendarCore
+        KF${KF_MAJOR_VERSION}::Holidays
         kalarmcalendar
         Qt::DBus
         Qt::Test)

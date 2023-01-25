@@ -33,8 +33,8 @@ generate_export_header(kalarmplugin BASE_NAME kalarmpluginlib)
 
 target_link_libraries(kalarmplugin PRIVATE
     kalarmcalendar
-    KF5::CoreAddons
-    KF5::CalendarCore
+    KF${KF_MAJOR_VERSION}::CoreAddons
+    KF${KF_MAJOR_VERSION}::CalendarCore
     KF5::Mime
 )
 
@@ -305,27 +305,27 @@ target_compile_definitions(kalarm_bin PRIVATE -DVERSION="${KALARM_VERSION}")
 target_link_libraries(kalarm_bin
     kalarmcalendar
     kalarmplugin
-    KF5::Codecs
-    KF5::ConfigCore
-    KF5::Completion
-    KF5::DBusAddons
-    KF5::GlobalAccel
-    KF5::GuiAddons
-    KF5::Holidays
-    KF5::IdleTime
-    KF5::ItemModels
-    KF5::KIOWidgets
-    KF5::Notifications
-    KF5::NotifyConfig
-    KF5::TextWidgets
-    KF5::WindowSystem
-    KF5::XmlGui
-    KF5::KIOFileWidgets
-    KF5::Crash
+    KF${KF_MAJOR_VERSION}::Codecs
+    KF${KF_MAJOR_VERSION}::ConfigCore
+    KF${KF_MAJOR_VERSION}::Completion
+    KF${KF_MAJOR_VERSION}::DBusAddons
+    KF${KF_MAJOR_VERSION}::GlobalAccel
+    KF${KF_MAJOR_VERSION}::GuiAddons
+    KF${KF_MAJOR_VERSION}::Holidays
+    KF${KF_MAJOR_VERSION}::IdleTime
+    KF${KF_MAJOR_VERSION}::ItemModels
+    KF${KF_MAJOR_VERSION}::KIOWidgets
+    KF${KF_MAJOR_VERSION}::Notifications
+    KF${KF_MAJOR_VERSION}::NotifyConfig
+    KF${KF_MAJOR_VERSION}::TextWidgets
+    KF${KF_MAJOR_VERSION}::WindowSystem
+    KF${KF_MAJOR_VERSION}::XmlGui
+    KF${KF_MAJOR_VERSION}::KIOFileWidgets
+    KF${KF_MAJOR_VERSION}::Crash
     Phonon::phonon4qt${QT_MAJOR_VERSION}
-    KF5::CalendarCore
+    KF${KF_MAJOR_VERSION}::CalendarCore
     KF5::CalendarUtils
-    KF5::Contacts
+    KF${KF_MAJOR_VERSION}::Contacts
     KF5::IdentityManagementWidgets
     KF5::PimTextEdit
     KF5::Mime
@@ -366,7 +366,7 @@ install(FILES data/kalarm.notifyrc DESTINATION ${KDE_INSTALL_KNOTIFYRCDIR})
 
 if (ENABLE_WAKE_FROM_SUSPEND)
     add_executable(kalarm_helper rtcwakeaction.cpp rtcwakeaction.h ${libkalarm_common_SRCS})
-    target_link_libraries(kalarm_helper KF5::AuthCore KF5::I18n)
+    target_link_libraries(kalarm_helper KF5::AuthCore KF${KF_MAJOR_VERSION}::I18n)
     install(TARGETS kalarm_helper DESTINATION ${KAUTH_HELPER_INSTALL_DIR})
     kauth_install_helper_files(kalarm_helper org.kde.kalarm.rtcwake root)
     kauth_install_actions(org.kde.kalarm.rtcwake data/org.kde.kalarm.rtcwake.actions)

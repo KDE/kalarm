@@ -47,12 +47,12 @@ if (BUILD_TESTING)
 endif()
 
 target_link_libraries(kalarmcalendar PRIVATE
-    KF5::ConfigCore
-    KF5::I18n
-    KF5::Holidays
+    KF${KF_MAJOR_VERSION}::ConfigCore
+    KF${KF_MAJOR_VERSION}::I18n
+    KF${KF_MAJOR_VERSION}::Holidays
     KF5::IdentityManagement
-    KF5::CoreAddons
-    KF5::CalendarCore
+    KF${KF_MAJOR_VERSION}::CoreAddons
+    KF${KF_MAJOR_VERSION}::CalendarCore
     )
 
 if (QT_MAJOR_VERSION STREQUAL "6")

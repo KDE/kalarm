@@ -37,9 +37,9 @@ generate_export_header(akonadiplugin BASE_NAME akonadiplugin)
 target_link_libraries(akonadiplugin
     kalarmplugin
     kalarmcalendar
-    KF5::CalendarCore
-    KF5::I18n
-    KF5::Codecs
+    KF${KF_MAJOR_VERSION}::CalendarCore
+    KF${KF_MAJOR_VERSION}::I18n
+    KF${KF_MAJOR_VERSION}::Codecs
     KF5::Mime
     KF5::AkonadiCore
     KF5::AkonadiMime

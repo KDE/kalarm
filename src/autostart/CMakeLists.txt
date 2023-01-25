@@ -23,8 +23,8 @@ ecm_add_app_icon(kalarmautostart ICONS ${ICONS_SRCS})
 
 
 target_link_libraries(kalarmautostart
-    KF5::I18n
-    KF5::CoreAddons
+    KF${KF_MAJOR_VERSION}::I18n
+    KF${KF_MAJOR_VERSION}::CoreAddons
     Qt::Widgets
     Qt::DBus)
 
