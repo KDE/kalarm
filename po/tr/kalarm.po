@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: kdepim-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-01-19 00:58+0000\n"
-"PO-Revision-Date: 2023-01-19 22:30+0300\n"
+"PO-Revision-Date: 2023-01-26 21:42+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -1596,7 +1596,7 @@ msgstr ""
 #, kde-format
 msgctxt "@option"
 msgid "Discard Output"
-msgstr "Çıktıyı Görmezden Gel"
+msgstr "Çıktıyı At"
 
 #. i18n: ectx: label, entry (DefaultCmdLogType), group (Defaults)
 #: data/kalarmconfig.kcfg:352
@@ -2616,7 +2616,7 @@ msgstr "Vazgeç"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to discard command output."
-msgstr "Komut çıktısını görmezden gelmek için bunu işaretleyin."
+msgstr "Komut çıktısını atmak için bunu işaretleyin."
 
 #: editdlgtypes.cpp:1057
 #, kde-format
