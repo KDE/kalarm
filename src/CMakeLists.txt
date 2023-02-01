@@ -330,9 +330,7 @@ target_link_libraries(kalarm_bin
     KF5::PimTextEdit
     KF5::Mime
 )
-if (USE_KTEXTADDONS_LIB)
-    target_link_libraries(kalarm_bin KF${KF_MAJOR_VERSION}::TextEditTextToSpeech)
-endif()
+target_link_libraries(kalarm_bin KF${KF_MAJOR_VERSION}::TextEditTextToSpeech)
 
 if (ENABLE_WAKE_FROM_SUSPEND)
 	target_link_libraries(kalarm_bin KF5::AuthCore)
