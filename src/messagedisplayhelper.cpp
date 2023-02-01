@@ -22,15 +22,7 @@
 #include "screensaver.h" // DBUS-generated
 #include "kalarm_debug.h"
 
-
-#ifndef HAVE_TEXT_TO_SPEECH_SUPPORT
-#include <kpimtextedit/kpimtextedit-texttospeech.h>
-#if KPIMTEXTEDIT_TEXT_TO_SPEECH
-#include <KPIMTextEditTextToSpeech/TextToSpeech>
-#endif
-#else
 #include <TextEditTextToSpeech/TextToSpeech>
-#endif
 
 #include <KLocalizedString>
 #include <KConfig>
@@ -847,19 +839,6 @@ void MessageDisplayHelper::playAudio()
 */
 void MessageDisplayHelper::slotSpeak()
 {
-#ifndef HAVE_TEXT_TO_SPEECH_SUPPORT
-#if KPIMTEXTEDIT_TEXT_TO_SPEECH
-    KPIMTextEditTextToSpeech::TextToSpeech* tts = KPIMTextEditTextToSpeech::TextToSpeech::self();
-    if (!tts->isReady())
-    {
-        KAMessageBox::detailedError(MainWindow::mainMainWindow(), i18nc("@info", "Unable to speak message"), i18nc("@info", "Text-to-speech subsystem is not available"));
-        clearErrorMessage(ErrMsg_Speak);
-        return;
-    }
-
-    tts->say(mMessage);
-#endif
-#else
     TextEditTextToSpeech::TextToSpeech* tts = TextEditTextToSpeech::TextToSpeech::self();
     if (!tts->isReady())
     {
@@ -869,7 +848,6 @@ void MessageDisplayHelper::slotSpeak()
     }
 
     tts->say(mMessage);
-#endif
 }
 
 /******************************************************************************
