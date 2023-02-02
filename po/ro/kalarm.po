@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-19 00:58+0000\n"
+"POT-Creation-Date: 2023-02-02 00:59+0000\n"
 "PO-Revision-Date: 2021-05-15 16:59+0100\n"
 "Last-Translator: Sergiu Bivol <sergiu@cip.md>\n"
 "Language-Team: Romanian\n"
@@ -211,7 +211,7 @@ msgstr ""
 "Alegeți un fus orar pentru această alarmă care este diferit de fusul orar "
 "prestabilit în câmpul de configurare al KAlarm."
 
-#: alarmtimewidget.cpp:196 prefdlg.cpp:699
+#: alarmtimewidget.cpp:196 prefdlg.cpp:692
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Time zone:"
@@ -322,7 +322,7 @@ msgctxt "@title:group"
 msgid "Alarm Text"
 msgstr "Text alarmă"
 
-#: birthdaydlg.cpp:77 prefdlg.cpp:1875
+#: birthdaydlg.cpp:77 prefdlg.cpp:1849
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Prefix:"
@@ -1142,7 +1142,7 @@ msgid "Show alarm times in system tray tooltip"
 msgstr "Afișează orele alarmei în tabloul de sistem"
 
 #. i18n: ectx: whatsthis, entry (ShowTooltipAlarmTime), group (General)
-#: data/kalarmconfig.kcfg:176 prefdlg.cpp:1863
+#: data/kalarmconfig.kcfg:176 prefdlg.cpp:1837
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1158,7 +1158,7 @@ msgid "Show time to alarms in system tray tooltip"
 msgstr "&Afișează alarmele expirate"
 
 #. i18n: ectx: whatsthis, entry (ShowTooltipTimeToAlarm), group (General)
-#: data/kalarmconfig.kcfg:182 prefdlg.cpp:1869
+#: data/kalarmconfig.kcfg:182 prefdlg.cpp:1843
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1174,7 +1174,7 @@ msgid "Time-to-alarm prefix in system tray tooltip"
 msgstr "Time-la-alarma prefix în tava sistemului tooltip"
 
 #. i18n: ectx: whatsthis, entry (TooltipTimeToPrefix), group (General)
-#: data/kalarmconfig.kcfg:188 prefdlg.cpp:1880
+#: data/kalarmconfig.kcfg:188 prefdlg.cpp:1854
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1401,7 +1401,7 @@ msgid "Disabled alarm color"
 msgstr "Culoare alarme dezactivate"
 
 #. i18n: ectx: whatsthis, entry (DisabledColour), group (General)
-#: data/kalarmconfig.kcfg:246 prefdlg.cpp:1902
+#: data/kalarmconfig.kcfg:246 prefdlg.cpp:1876
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid "Choose the text color in the alarm list for disabled alarms."
@@ -1415,7 +1415,7 @@ msgid "Archived alarm color"
 msgstr "Culoare alarme expirate"
 
 #. i18n: ectx: whatsthis, entry (ArchivedColour), group (General)
-#: data/kalarmconfig.kcfg:252 prefdlg.cpp:1915
+#: data/kalarmconfig.kcfg:252 prefdlg.cpp:1889
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid "Choose the text color in the alarm list for archived alarms."
@@ -1729,7 +1729,7 @@ msgid "Recurrence period"
 msgstr "Perioadă de recurență"
 
 #. i18n: ectx: whatsthis, entry (DefaultRecurPeriod), group (Defaults)
-#: data/kalarmconfig.kcfg:368 prefdlg.cpp:1359
+#: data/kalarmconfig.kcfg:368 prefdlg.cpp:1352
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "The default setting for the recurrence rule in the alarm edit dialog."
@@ -1758,7 +1758,7 @@ msgid "Hourly/minutely"
 msgstr "Pe oră / Pe minut"
 
 #. i18n: ectx: label, entry (DefaultFeb29Type), group (Defaults)
-#: data/kalarmconfig.kcfg:381 prefdlg.cpp:1366
+#: data/kalarmconfig.kcfg:381 prefdlg.cpp:1359
 #, kde-format
 msgctxt "@label"
 msgid "In non-leap years, repeat yearly February 29th alarms on:"
@@ -1926,7 +1926,7 @@ msgid "Confirm alarm deletions"
 msgstr "Confirmă ștergerea alarmelor"
 
 #. i18n: ectx: whatsthis, entry (Base_ConfirmAlarmDeletion), group (Notification Messages)
-#: data/kalarmconfig.kcfg:433 prefdlg.cpp:475
+#: data/kalarmconfig.kcfg:433 prefdlg.cpp:468
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to be prompted for confirmation each time you delete an alarm."
@@ -1942,7 +1942,7 @@ msgid "Notify when remote emails are queued"
 msgstr "Anunță când mesajele îndepărtate sunt puse în așteptare"
 
 #. i18n: ectx: whatsthis, entry (Base_EmailQueuedNotify), group (Notification Messages)
-#: data/kalarmconfig.kcfg:438 prefdlg.cpp:1082
+#: data/kalarmconfig.kcfg:438 prefdlg.cpp:1075
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -3602,7 +3602,7 @@ msgctxt "@info 'From' email address"
 msgid "From:"
 msgstr "De la:"
 
-#: kalarmcalendar/alarmtext.cpp:507 messagedisplayhelper.cpp:343
+#: kalarmcalendar/alarmtext.cpp:507 messagedisplayhelper.cpp:335
 #, kde-format
 msgctxt "@info Email addressee"
 msgid "To:"
@@ -3624,7 +3624,7 @@ msgctxt "@info"
 msgid "Date:"
 msgstr "Dată:"
 
-#: kalarmcalendar/alarmtext.cpp:510 messagedisplayhelper.cpp:345
+#: kalarmcalendar/alarmtext.cpp:510 messagedisplayhelper.cpp:337
 #, kde-format
 msgctxt "@info Email subject"
 msgid "Subject:"
@@ -4204,7 +4204,7 @@ msgctxt "@info Using default font"
 msgid "Default"
 msgstr "Utilizează fontul &implicit"
 
-#: kalarmcalendar/kaeventformatter.cpp:365 messagedisplayhelper.cpp:224
+#: kalarmcalendar/kaeventformatter.cpp:365 messagedisplayhelper.cpp:216
 #, kde-format
 msgctxt "@info"
 msgid "Reminder"
@@ -4822,49 +4822,49 @@ msgid "<para>Cannot defer alarm:</para><para>Alarm not found.</para>"
 msgstr ""
 "<para>Nu se poate amâna alarma:</para><para>Alarma nu a fost găsită.</para>"
 
-#: messagedisplayhelper.cpp:210
+#: messagedisplayhelper.cpp:202
 #, kde-format
 msgctxt "@title:window"
 msgid "Reminder"
 msgstr "Memento"
 
-#: messagedisplayhelper.cpp:211 messagedisplayhelper.cpp:415
+#: messagedisplayhelper.cpp:203 messagedisplayhelper.cpp:407
 #, kde-format
 msgctxt "@title:window"
 msgid "Message"
 msgstr "Mesaj"
 
-#: messagedisplayhelper.cpp:302
+#: messagedisplayhelper.cpp:294
 #, kde-format
 msgctxt "@info"
 msgid "File is a folder"
 msgstr "Fișierul este un dosar"
 
-#: messagedisplayhelper.cpp:302
+#: messagedisplayhelper.cpp:294
 #, kde-format
 msgctxt "@info"
 msgid "Failed to open file"
 msgstr "Eroare la deschiderea fișierului"
 
-#: messagedisplayhelper.cpp:302
+#: messagedisplayhelper.cpp:294
 #, kde-format
 msgctxt "@info"
 msgid "File not found"
 msgstr "Fișierul nu a fost găsit"
 
-#: messagedisplayhelper.cpp:359
+#: messagedisplayhelper.cpp:351
 #, kde-format
 msgctxt "@title:window"
 msgid "Error"
 msgstr "Eroare"
 
-#: messagedisplayhelper.cpp:488
+#: messagedisplayhelper.cpp:480
 #, kde-format
 msgctxt "@info"
 msgid "Today"
 msgstr "Azi"
 
-#: messagedisplayhelper.cpp:490
+#: messagedisplayhelper.cpp:482
 #, kde-format
 msgctxt "@info"
 msgid "Tomorrow"
@@ -4873,7 +4873,7 @@ msgstr[0] "Mâine"
 msgstr[1] "în decurs de %1 zile"
 msgstr[2] "în decurs de %1 de zile"
 
-#: messagedisplayhelper.cpp:492
+#: messagedisplayhelper.cpp:484
 #, kde-format
 msgctxt "@info"
 msgid "in 1 week's time"
@@ -4882,7 +4882,7 @@ msgstr[0] "în decurs de 1 săptămână"
 msgstr[1] "în decurs de %1 săptămâni"
 msgstr[2] "în decurs de %1 de săptămâni"
 
-#: messagedisplayhelper.cpp:506
+#: messagedisplayhelper.cpp:498
 #, kde-format
 msgctxt "@info"
 msgid "in 1 minute's time"
@@ -4891,7 +4891,7 @@ msgstr[0] "în decurs de 1 minut"
 msgstr[1] "în decurs de %1 minute"
 msgstr[2] "în decurs de %1 de minute"
 
-#: messagedisplayhelper.cpp:508
+#: messagedisplayhelper.cpp:500
 #, kde-format
 msgctxt "@info"
 msgid "in 1 hour's time"
@@ -4900,7 +4900,7 @@ msgstr[0] "în decurs de 1 oră"
 msgstr[1] "în decurs de %1 ore"
 msgstr[2] "în decurs de %1 de ore"
 
-#: messagedisplayhelper.cpp:511
+#: messagedisplayhelper.cpp:503
 #, kde-format
 msgctxt "@item:intext inserted into 'in ... %1 minute's time' below"
 msgid "1 hour"
@@ -4909,7 +4909,7 @@ msgstr[0] "1 oră"
 msgstr[1] "%1 ore"
 msgstr[2] "%1 de ore"
 
-#: messagedisplayhelper.cpp:512
+#: messagedisplayhelper.cpp:504
 #, kde-format
 msgctxt "@info '%2' is the previous message '1 hour'/'%1 hours'"
 msgid "in %2 1 minute's time"
@@ -4918,19 +4918,19 @@ msgstr[0] "in %2 %1 minute"
 msgstr[1] "in %2 %1 minute"
 msgstr[2] "in %2 %1 minute"
 
-#: messagedisplayhelper.cpp:855 messagedisplayhelper.cpp:866
+#: messagedisplayhelper.cpp:845
 #, kde-format
 msgctxt "@info"
 msgid "Unable to speak message"
 msgstr "Mesajul nu poate fi vorbit"
 
-#: messagedisplayhelper.cpp:855 messagedisplayhelper.cpp:866
+#: messagedisplayhelper.cpp:845
 #, kde-format
 msgctxt "@info"
 msgid "Text-to-speech subsystem is not available"
 msgstr ""
 
-#: messagedisplayhelper.cpp:1051
+#: messagedisplayhelper.cpp:1029
 #, fuzzy, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot open audio file: <filename>%1</filename>"
@@ -4938,7 +4938,7 @@ msgstr ""
 "Nu pot deschide calendarul:\n"
 "%1"
 
-#: messagedisplayhelper.cpp:1179
+#: messagedisplayhelper.cpp:1157
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info"
 #| msgid "Error attaching file: <filename>%1</filename>"
@@ -5177,85 +5177,85 @@ msgctxt "@action"
 msgid "New Alarm From &Template"
 msgstr "Alarmă nouă din șa&blon"
 
-#: prefdlg.cpp:132
+#: prefdlg.cpp:125
 #, kde-format
 msgctxt "@title:window"
 msgid "Configure"
 msgstr "Configurează"
 
-#: prefdlg.cpp:142
+#: prefdlg.cpp:135
 #, kde-format
 msgctxt "@title:tab General preferences"
 msgid "General"
 msgstr "General"
 
-#: prefdlg.cpp:143
+#: prefdlg.cpp:136
 #, kde-format
 msgctxt "@title General preferences"
 msgid "General"
 msgstr "General"
 
-#: prefdlg.cpp:148
+#: prefdlg.cpp:141
 #, kde-format
 msgctxt "@title:tab"
 msgid "Time & Date"
 msgstr "Oră și dată"
 
-#: prefdlg.cpp:149
+#: prefdlg.cpp:142
 #, kde-format
 msgctxt "@title"
 msgid "Time and Date"
 msgstr "Oră și dată"
 
-#: prefdlg.cpp:154
+#: prefdlg.cpp:147
 #, kde-format
 msgctxt "@title:tab"
 msgid "Storage"
 msgstr "Stocare"
 
-#: prefdlg.cpp:155
+#: prefdlg.cpp:148
 #, fuzzy, kde-format
 msgctxt "@title"
 msgid "Alarm Storage"
 msgstr "Lista de alarme"
 
-#: prefdlg.cpp:160
+#: prefdlg.cpp:153
 #, kde-format
 msgctxt "@title:tab Email preferences"
 msgid "Email"
 msgstr "Poștă"
 
-#: prefdlg.cpp:161
+#: prefdlg.cpp:154
 #, fuzzy, kde-format
 msgctxt "@title"
 msgid "Email Alarm Settings"
 msgstr "&Activează alarmele"
 
-#: prefdlg.cpp:166
+#: prefdlg.cpp:159
 #, fuzzy, kde-format
 msgctxt "@title:tab"
 msgid "Alarm Defaults"
 msgstr "Utilizează fontul &implicit"
 
-#: prefdlg.cpp:167
+#: prefdlg.cpp:160
 #, kde-format
 msgctxt "@title"
 msgid "Default Alarm Edit Settings"
 msgstr "Editează setările implicite ale alarmei"
 
-#: prefdlg.cpp:172
+#: prefdlg.cpp:165
 #, kde-format
 msgctxt "@title:tab"
 msgid "View"
 msgstr "Vizualizare"
 
-#: prefdlg.cpp:173
+#: prefdlg.cpp:166
 #, kde-format
 msgctxt "@title"
 msgid "View Settings"
 msgstr "Configurări vizualizare"
 
-#: prefdlg.cpp:264
+#: prefdlg.cpp:257
 #, kde-format
 msgctxt "@info"
 msgid "Reset all tabs to their default values, or only reset the current tab?"
@@ -5263,31 +5263,31 @@ msgstr ""
 "Resetează toate filele la valorile lor implicite sau resetează numai fila "
 "curentă?"
 
-#: prefdlg.cpp:266
+#: prefdlg.cpp:259
 #, kde-format
 msgctxt "@action:button Reset ALL tabs"
 msgid "&All"
 msgstr "To&ate"
 
-#: prefdlg.cpp:267
+#: prefdlg.cpp:260
 #, kde-format
 msgctxt "@action:button Reset the CURRENT tab"
 msgid "C&urrent"
 msgstr "C&urentă"
 
-#: prefdlg.cpp:443
+#: prefdlg.cpp:436
 #, kde-format
 msgctxt "@title:group"
 msgid "Run Mode"
 msgstr "Regim execuție"
 
-#: prefdlg.cpp:448
+#: prefdlg.cpp:441
 #, kde-format
 msgctxt "@option:check"
 msgid "Start at login"
 msgstr "Pornește la autentificare"
 
-#: prefdlg.cpp:451
+#: prefdlg.cpp:444
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info:whatsthis"
 #| msgid ""
@@ -5305,13 +5305,13 @@ msgstr ""
 "verificată dacă nu intenționați să întrerupeți utilizarea "
 "<application>KAlarm</application>.</para>"
 
-#: prefdlg.cpp:455
+#: prefdlg.cpp:448
 #, kde-format
 msgctxt "@option:check"
 msgid "Warn before quitting"
 msgstr "Avertizează înainte de ieșire"
 
-#: prefdlg.cpp:456
+#: prefdlg.cpp:449
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5321,7 +5321,7 @@ msgstr ""
 "Verificați pentru a afișa un mesaj de avertizare înainte de ieșire "
 "<application>KAlarm</application>."
 
-#: prefdlg.cpp:463
+#: prefdlg.cpp:456
 #, fuzzy, kde-format
 #| msgctxt "@info:whatsthis"
 #| msgid "The alarm message"
@@ -5329,7 +5329,7 @@ msgctxt "@option:check"
 msgid "Enable alarm names"
 msgstr "Mesajul alarmei"
 
-#: prefdlg.cpp:465
+#: prefdlg.cpp:458
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5337,19 +5337,19 @@ msgid ""
 "help you to identify alarms."
 msgstr ""
 
-#: prefdlg.cpp:473
+#: prefdlg.cpp:466
 #, kde-format
 msgctxt "@option:check"
 msgid "Confirm alarm deletions"
 msgstr "Confirmă ștergerea alarmelor"
 
-#: prefdlg.cpp:483
+#: prefdlg.cpp:476
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Default defer time interval:"
 msgstr "Intervalul de timp de amânare implicit:"
 
-#: prefdlg.cpp:489
+#: prefdlg.cpp:482
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5359,13 +5359,13 @@ msgstr ""
 "Introduceți intervalul de timp implicit (ore & minute) pentru a amâna "
 "alarmele, folosite de câmpul de amânare a alarmei."
 
-#: prefdlg.cpp:494
+#: prefdlg.cpp:487
 #, fuzzy, kde-format
 msgctxt "@title:group"
 msgid "Terminal for Command Alarms"
 msgstr "Co&mandă"
 
-#: prefdlg.cpp:495
+#: prefdlg.cpp:488
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5375,7 +5375,7 @@ msgstr ""
 "Alegeți ce aplicație să fie folosită atunci când o comandă de alarmă este "
 "executată într-o fereastră terminal"
 
-#: prefdlg.cpp:516
+#: prefdlg.cpp:509
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5384,13 +5384,13 @@ msgstr ""
 "Verificați pentru a executa comenzile de alarme într-o fereastră terminal de "
 "<icode>%1</icode>"
 
-#: prefdlg.cpp:523
+#: prefdlg.cpp:516
 #, kde-format
 msgctxt "@option:radio Other terminal window command"
 msgid "Other:"
 msgstr "Alta:"
 
-#: prefdlg.cpp:532
+#: prefdlg.cpp:525
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5405,19 +5405,19 @@ msgstr ""
 "application> pentru detalii de coduri speciale pentru a ajusta linia de "
 "comandă."
 
-#: prefdlg.cpp:541
+#: prefdlg.cpp:534
 #, kde-format
 msgctxt "@title:group"
 msgid "Plugins"
 msgstr ""
 
-#: prefdlg.cpp:546
+#: prefdlg.cpp:539
 #, fuzzy, kde-format
 msgctxt "@option:check"
 msgid "Enable Akonadi"
 msgstr "Activate"
 
-#: prefdlg.cpp:548
+#: prefdlg.cpp:541
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -5425,7 +5425,7 @@ msgid ""
 "some email functions, and email address book lookup."
 msgstr ""
 
-#: prefdlg.cpp:550
+#: prefdlg.cpp:543
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5433,7 +5433,7 @@ msgid ""
 "some email functions, and email address book lookup."
 msgstr ""
 
-#: prefdlg.cpp:598
+#: prefdlg.cpp:591
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -5441,13 +5441,13 @@ msgid ""
 "default command (<command>%1</command>) will be used.</para>"
 msgstr ""
 
-#: prefdlg.cpp:606
+#: prefdlg.cpp:599
 #, kde-kuit-format
 msgctxt "@info"
 msgid "No command is specified to invoke a terminal window"
 msgstr ""
 
-#: prefdlg.cpp:619
+#: prefdlg.cpp:612
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Command to invoke terminal window not found: <command>%1</command>"
@@ -5455,7 +5455,7 @@ msgstr ""
 "Comanda pentru a invoca fereastra terminal nu a fost găsită: <command>%1</"
 "command>"
 
-#: prefdlg.cpp:671
+#: prefdlg.cpp:664
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -5465,7 +5465,7 @@ msgstr ""
 "Nu ar trebui să debifați această opțiune dacă nu intenționați să întrerupeți "
 "utilizarea <application>KAlarm</application>"
 
-#: prefdlg.cpp:706
+#: prefdlg.cpp:699
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info:whatsthis"
 #| msgid ""
@@ -5480,37 +5480,37 @@ msgstr ""
 "l folosească ca și implicit pentru afișarea și introducerea datelor și a "
 "orelor."
 
-#: prefdlg.cpp:720
+#: prefdlg.cpp:713
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Holiday region:"
 msgstr "Regiune de sărbători:"
 
-#: prefdlg.cpp:729
+#: prefdlg.cpp:722
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select which holiday region to use"
 msgstr "Selectați regiunea de vacanță pentru folosire"
 
-#: prefdlg.cpp:737
+#: prefdlg.cpp:730
 #, kde-format
 msgctxt "Holiday region, region language"
 msgid "%1 (%2)"
 msgstr "%1 (%2)"
 
-#: prefdlg.cpp:741
+#: prefdlg.cpp:734
 #, kde-format
 msgctxt "No holiday region"
 msgid "None"
 msgstr "Niciuna"
 
-#: prefdlg.cpp:757
+#: prefdlg.cpp:750
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Start of day for date-only alarms:"
 msgstr "începutul de zi pentru alarmele numai cu dată:"
 
-#: prefdlg.cpp:764
+#: prefdlg.cpp:757
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5520,57 +5520,57 @@ msgstr ""
 "<para>Cea mai devreme oră a zilei la care o alarmă numai cu dată va fi "
 "declanșată</para><para>%1</para>"
 
-#: prefdlg.cpp:769
+#: prefdlg.cpp:762
 #, kde-format
 msgctxt "@title:group"
 msgid "Working Hours"
 msgstr "Ore de lucru"
 
-#: prefdlg.cpp:783
+#: prefdlg.cpp:776
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check the days in the week which are work days"
 msgstr "Bifați zilele lucrătoare ale săptămânii"
 
-#: prefdlg.cpp:793
+#: prefdlg.cpp:786
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Daily start time:"
 msgstr "Ora de start zilnică:"
 
-#: prefdlg.cpp:800
+#: prefdlg.cpp:793
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid "<para>Enter the start time of the working day.</para><para>%1</para>"
 msgstr ""
 "<para>Introduceți ora de început a zilei lucrătoare.</para><para>%1</para>"
 
-#: prefdlg.cpp:812
+#: prefdlg.cpp:805
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Daily end time:"
 msgstr "Ora de sfârșit zilnică:"
 
-#: prefdlg.cpp:819
+#: prefdlg.cpp:812
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid "<para>Enter the end time of the working day.</para><para>%1</para>"
 msgstr ""
 "<para>Introduceți ora de sfârșit a unei zile de lucru.</para><para>%1</para>"
 
-#: prefdlg.cpp:824
+#: prefdlg.cpp:817
 #, kde-format
 msgctxt "@title:group"
 msgid "KOrganizer"
 msgstr "Organizator"
 
-#: prefdlg.cpp:832
+#: prefdlg.cpp:825
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "KOrganizer event duration:"
 msgstr "Durata unui eveniment KOrganizer:"
 
-#: prefdlg.cpp:839
+#: prefdlg.cpp:832
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5580,19 +5580,19 @@ msgstr ""
 "<para>Introduceți durata evenimentului în ore și minue pentru alarme care "
 "sunt copiate în KOrganizer.</para><para>%1</para>"
 
-#: prefdlg.cpp:900
+#: prefdlg.cpp:893
 #, kde-format
 msgctxt "@title:group"
 msgid "New Alarms && Templates"
 msgstr "Alarme și șabloane noi"
 
-#: prefdlg.cpp:905
+#: prefdlg.cpp:898
 #, kde-format
 msgctxt "@option:radio"
 msgid "Store in default calendar"
 msgstr "Stochează în calendarul implicit"
 
-#: prefdlg.cpp:907
+#: prefdlg.cpp:900
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5602,13 +5602,13 @@ msgstr ""
 "Adaugă toate alarmele noi și șabloanele de alarmă la calendarele implicite "
 "fără a mai întreba."
 
-#: prefdlg.cpp:909
+#: prefdlg.cpp:902
 #, kde-format
 msgctxt "@option:radio"
 msgid "Prompt for which calendar to store in"
 msgstr "întreabă pentru ce calendar se va stoca"
 
-#: prefdlg.cpp:912
+#: prefdlg.cpp:905
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info:whatsthis"
 #| msgid ""
@@ -5628,19 +5628,19 @@ msgstr ""
 "para><para>Rețineți că alarmele arhivate sunt întotdeauna stocate în "
 "calendarul de alarmă arhivat implicit.</para>"
 
-#: prefdlg.cpp:917
+#: prefdlg.cpp:910
 #, kde-format
 msgctxt "@title:group"
 msgid "Archived Alarms"
 msgstr "Alarme arhivate"
 
-#: prefdlg.cpp:922
+#: prefdlg.cpp:915
 #, kde-format
 msgctxt "@option:check"
 msgid "Keep alarms after expiry"
 msgstr "Păstrează alarmele după expirare"
 
-#: prefdlg.cpp:925
+#: prefdlg.cpp:918
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5650,19 +5650,19 @@ msgstr ""
 "Bifați pentru a arhiva alarmele după expirare sau ștergere (cu excepția "
 "alarmelor șterse care nu s-au declanșat niciodată)."
 
-#: prefdlg.cpp:931
+#: prefdlg.cpp:924
 #, fuzzy, kde-format
 msgctxt "@option:check"
 msgid "Discard archived alarms after:"
 msgstr "Culoare alarme e&xpirate:"
 
-#: prefdlg.cpp:940
+#: prefdlg.cpp:933
 #, kde-format
 msgctxt "@label Time unit for user-entered number"
 msgid "days"
 msgstr "zile"
 
-#: prefdlg.cpp:944
+#: prefdlg.cpp:937
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5672,19 +5672,19 @@ msgstr ""
 "Debifează pentru a stoca alarmele arhivate pe termen nelimitat. Bifează "
 "pentru a introduce cât de mult ar trebui alarmele arhivate să fie stocate."
 
-#: prefdlg.cpp:947
+#: prefdlg.cpp:940
 #, kde-format
 msgctxt "@action:button"
 msgid "Clear Archived Alarms"
 msgstr "Curăță alarmele arhivate"
 
-#: prefdlg.cpp:950
+#: prefdlg.cpp:943
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Delete all existing archived alarms."
 msgstr "Șterge toate alarmele arhivate existente."
 
-#: prefdlg.cpp:951
+#: prefdlg.cpp:944
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5692,7 +5692,7 @@ msgid ""
 "calendar only)."
 msgstr "Șterge toate alarmele existente expirate."
 
-#: prefdlg.cpp:997
+#: prefdlg.cpp:990
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -5706,13 +5706,13 @@ msgstr ""
 "va rugam in primul rand sa utilizati vizualizarea calendarelor pentru a "
 "selecta calendarul implicit al alarmei arhivate.</para>"
 
-#: prefdlg.cpp:1014
+#: prefdlg.cpp:1007
 #, kde-format
 msgctxt "@info"
 msgid "Do you really want to delete all archived alarms?"
 msgstr "Sigur ștergeți toate alarmele arhivate?"
 
-#: prefdlg.cpp:1015
+#: prefdlg.cpp:1008
 #, fuzzy, kde-format
 #| msgctxt "@info"
 #| msgid "Do you really want to delete all archived alarms?"
@@ -5722,31 +5722,31 @@ msgid ""
 "calendar?"
 msgstr "Sigur ștergeți toate alarmele arhivate?"
 
-#: prefdlg.cpp:1033
+#: prefdlg.cpp:1026
 #, kde-format
 msgctxt "@label"
 msgid "Email client:"
 msgstr "Client de poștă:"
 
-#: prefdlg.cpp:1036
+#: prefdlg.cpp:1029
 #, kde-format
 msgctxt "@option:radio"
 msgid "KMail"
 msgstr "KMail"
 
-#: prefdlg.cpp:1037
+#: prefdlg.cpp:1030
 #, kde-format
 msgctxt "@option:radio"
 msgid "Sendmail"
 msgstr "Sendmail"
 
-#: prefdlg.cpp:1050
+#: prefdlg.cpp:1043
 #, kde-format
 msgctxt "@info"
 msgid "Choose how to send email when an email alarm is triggered."
 msgstr ""
 
-#: prefdlg.cpp:1053
+#: prefdlg.cpp:1046
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info:whatsthis"
 #| msgid ""
@@ -5773,7 +5773,7 @@ msgstr ""
 "este setat sa foloseasca <application>sendmail</application>sau comanda "
 "sendmail  combatibil cu agentul de transportat mail.</item></list></para>"
 
-#: prefdlg.cpp:1061
+#: prefdlg.cpp:1054
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info:whatsthis"
 #| msgid ""
@@ -5799,7 +5799,7 @@ msgstr ""
 "este setat sa foloseasca <application>sendmail</application>sau comanda "
 "sendmail  combatibil cu agentul de transportat mail.</item></list></para>"
 
-#: prefdlg.cpp:1071
+#: prefdlg.cpp:1064
 #, kde-kuit-format
 msgctxt "@option:check"
 msgid ""
@@ -5809,7 +5809,7 @@ msgstr ""
 "Copiază email-urile trimise în <resource>%1</resource> directorul "
 "<application>KMail</application>"
 
-#: prefdlg.cpp:1072
+#: prefdlg.cpp:1065
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5819,25 +5819,25 @@ msgstr ""
 "După ce se trimite un email, stochează o copie în directorul "
 "<application>KMail</application> <resource>%1</resource>"
 
-#: prefdlg.cpp:1080
+#: prefdlg.cpp:1073
 #, kde-format
 msgctxt "@option:check"
 msgid "Notify when remote emails are queued"
 msgstr "Anunță când email-urile îndepărtate sunt puse în așteptare"
 
-#: prefdlg.cpp:1088
+#: prefdlg.cpp:1081
 #, kde-format
 msgctxt "@title:group"
 msgid "Your Email Address"
 msgstr "Adresa dumneavoastră de email"
 
-#: prefdlg.cpp:1094
+#: prefdlg.cpp:1087
 #, kde-format
 msgctxt "@label 'From' email address"
 msgid "From:"
 msgstr "De la:"
 
-#: prefdlg.cpp:1106
+#: prefdlg.cpp:1099
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5847,7 +5847,7 @@ msgstr ""
 "Adresa dumneavoastră de email, folosită pentru identificarea dumneavoastră "
 "ca și expeditor când se trimit alarme de tip email"
 
-#: prefdlg.cpp:1113 prefdlg.cpp:1149
+#: prefdlg.cpp:1106 prefdlg.cpp:1142
 #, fuzzy, kde-kuit-format
 #| msgctxt "@option:radio"
 #| msgid "Use <application>KMail</application> identities"
@@ -5855,7 +5855,7 @@ msgctxt "@option:radio"
 msgid "Use default <application>KMail</application> identity"
 msgstr "Utilizează identități <application>KMail</application>"
 
-#: prefdlg.cpp:1116
+#: prefdlg.cpp:1109
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info:whatsthis"
 #| msgid ""
@@ -5870,13 +5870,13 @@ msgstr ""
 "pentru a fi identificați ca și expeditor când se trimite o alarmă de tip "
 "email."
 
-#: prefdlg.cpp:1120
+#: prefdlg.cpp:1113
 #, kde-kuit-format
 msgctxt "@option:radio"
 msgid "Use <application>KMail</application> identities"
 msgstr "Utilizează identități <application>KMail</application>"
 
-#: prefdlg.cpp:1123
+#: prefdlg.cpp:1116
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5892,13 +5892,13 @@ msgstr ""
 "implicita va fi folosita.Pentru alarme de email noi,vei putea alege caref "
 "<application>KMail</application>dintre identitati sa folosesti."
 
-#: prefdlg.cpp:1130
+#: prefdlg.cpp:1123
 #, kde-format
 msgctxt "@label 'Bcc' email address"
 msgid "Bcc:"
 msgstr "Bcc:"
 
-#: prefdlg.cpp:1141
+#: prefdlg.cpp:1134
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5912,7 +5912,7 @@ msgstr ""
 "contul tau pe computer  care<application>KAlarm</application>e pornit,poti "
 "sa introduci numele de autentificare."
 
-#: prefdlg.cpp:1152
+#: prefdlg.cpp:1145
 #, fuzzy, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5920,13 +5920,13 @@ msgid ""
 "application>, for blind copying email alarms to yourself."
 msgstr "Afișează mesajul alarmei acum"
 
-#: prefdlg.cpp:1254
+#: prefdlg.cpp:1247
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "No valid 'Bcc' email address is specified."
 msgstr "Nu ați specificat o adresă de e-mail"
 
-#: prefdlg.cpp:1261
+#: prefdlg.cpp:1254
 #, fuzzy, kde-format
 #| msgctxt "@info"
 #| msgid ""
@@ -5936,7 +5936,7 @@ msgid "Are you sure you want to save your changes?"
 msgstr ""
 "<para>%1</para><para>Sunteți sigur că doriți să salvați modificările?</para>"
 
-#: prefdlg.cpp:1267
+#: prefdlg.cpp:1260
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info"
 #| msgid "No email address is currently set in KDE System Settings. %1"
@@ -5947,7 +5947,7 @@ msgid ""
 msgstr ""
 "Nicio adresă email nu este în prezent sedată în sistemul de setări KDE. %1"
 
-#: prefdlg.cpp:1272
+#: prefdlg.cpp:1265
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info"
 #| msgid "No <application>KMail</application> identities currently exist. %1"
@@ -5958,26 +5958,26 @@ msgid ""
 msgstr ""
 "Nicio identitate <application>KMail</application> nu există în prezent. %1"
 
-#: prefdlg.cpp:1290
+#: prefdlg.cpp:1283
 #, fuzzy, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
 "The default setting for <interface>%1</interface> in the alarm edit dialog."
 msgstr "Afișează mesajul alarmei acum"
 
-#: prefdlg.cpp:1298 prefdlg.cpp:1759
+#: prefdlg.cpp:1291 prefdlg.cpp:1733
 #, kde-format
 msgctxt "@title:tab"
 msgid "General"
 msgstr "General"
 
-#: prefdlg.cpp:1302
+#: prefdlg.cpp:1295
 #, kde-format
 msgctxt "@title:tab Settings specific to alarm type"
 msgid "Type Specific"
 msgstr ""
 
-#: prefdlg.cpp:1306
+#: prefdlg.cpp:1299
 #, fuzzy, kde-format
 #| msgctxt "@title:tab"
 #| msgid "Font & Color"
@@ -5985,7 +5985,7 @@ msgctxt "@title:tab"
 msgid "Font && Color"
 msgstr "Font și culoare"
 
-#: prefdlg.cpp:1322
+#: prefdlg.cpp:1315
 #, fuzzy, kde-format
 #| msgctxt "@info:whatsthis"
 #| msgid ""
@@ -5997,31 +5997,31 @@ msgid ""
 msgstr ""
 "Setarea implicită pentru regula repetiției din câmpul de editare al alarmei."
 
-#: prefdlg.cpp:1346
+#: prefdlg.cpp:1339
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Recurrence:"
 msgstr "Repetiție:"
 
-#: prefdlg.cpp:1379
+#: prefdlg.cpp:1372
 #, kde-format
 msgctxt "@option:radio"
 msgid "February 2&8th"
 msgstr "28 februarie"
 
-#: prefdlg.cpp:1383
+#: prefdlg.cpp:1376
 #, kde-format
 msgctxt "@option:radio"
 msgid "March &1st"
 msgstr "1 martie"
 
-#: prefdlg.cpp:1387
+#: prefdlg.cpp:1380
 #, kde-format
 msgctxt "@option:radio"
 msgid "Do not repeat"
 msgstr "Nu repeta"
 
-#: prefdlg.cpp:1392
+#: prefdlg.cpp:1385
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info:whatsthis"
 #| msgid ""
@@ -6040,32 +6040,32 @@ msgstr ""
 "programata a alarmei existente nu este reevaluata cand schimbi aceasta "
 "setare.</note>"
 
-#: prefdlg.cpp:1398
+#: prefdlg.cpp:1391
 #, fuzzy, kde-format
 msgctxt "@title:group"
 msgid "Display Alarms"
 msgstr "Afișează mesajul alarmei acum"
 
-#: prefdlg.cpp:1416
+#: prefdlg.cpp:1409
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Reminder units:"
 msgstr "Unități de memento:"
 
-#: prefdlg.cpp:1419
+#: prefdlg.cpp:1412
 #, fuzzy, kde-format
 msgctxt "@item:inlistbox"
 msgid "Minutes"
 msgstr "Minute"
 
-#: prefdlg.cpp:1420
+#: prefdlg.cpp:1413
 #, fuzzy, kde-format
 #| msgid "Hours/Minutes"
 msgctxt "@item:inlistbox"
 msgid "Hours/Minutes"
 msgstr "ore/minute"
 
-#: prefdlg.cpp:1423
+#: prefdlg.cpp:1416
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -6073,19 +6073,19 @@ msgid ""
 "soon."
 msgstr "Afișează mesajul alarmei acum"
 
-#: prefdlg.cpp:1429
+#: prefdlg.cpp:1422
 #, kde-format
 msgctxt "@title:group Audio options group"
 msgid "Sound"
 msgstr "Sunet"
 
-#: prefdlg.cpp:1453
+#: prefdlg.cpp:1439
 #, fuzzy, kde-format
 msgctxt "@option:check"
 msgid "Repeat sound file"
 msgstr "Alegeți un fișier de sunet"
 
-#: prefdlg.cpp:1456
+#: prefdlg.cpp:1442
 #, kde-kuit-format
 msgctxt "@info:whatsthis sound file 'Repeat' checkbox"
 msgid ""
@@ -6095,21 +6095,21 @@ msgstr ""
 "Setarea implicită pentru fișierul de sunet <interface>%1</interface> din "
 "câmpul de editare a alarmei."
 
-#: prefdlg.cpp:1462
+#: prefdlg.cpp:1448
 #, fuzzy, kde-format
 #| msgid "Sound &file:"
 msgctxt "@label:textbox"
 msgid "Sound file:"
 msgstr "Fișier de &sunet:"
 
-#: prefdlg.cpp:1470
+#: prefdlg.cpp:1456
 #, fuzzy, kde-format
 #| msgid "Choose a sound file"
 msgctxt "@info:tooltip"
 msgid "Choose a sound file"
 msgstr "Alegeți un fișier de sunet"
 
-#: prefdlg.cpp:1472
+#: prefdlg.cpp:1458
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the default sound file to use in the alarm edit dialog."
@@ -6117,7 +6117,7 @@ msgstr ""
 "Introduceți fișierul sunet implicit pentru folosire în câmpul de editare a "
 "alarmei."
 
-#: prefdlg.cpp:1481
+#: prefdlg.cpp:1467
 #, fuzzy, kde-format
 #| msgctxt "@info:whatsthis"
 #| msgid "Enter the default sound file to use in the alarm edit dialog."
@@ -6128,7 +6128,7 @@ msgstr ""
 "Introduceți fișierul sunet implicit pentru folosire în câmpul de editare a "
 "alarmei."
 
-#: prefdlg.cpp:1485
+#: prefdlg.cpp:1471
 #, fuzzy, kde-format
 #| msgctxt "@info:whatsthis"
 #| msgid "Enter the default sound file to use in the alarm edit dialog."
@@ -6138,25 +6138,25 @@ msgstr ""
 "Introduceți fișierul sunet implicit pentru folosire în câmpul de editare a "
 "alarmei."
 
-#: prefdlg.cpp:1495
+#: prefdlg.cpp:1481
 #, fuzzy, kde-format
 msgctxt "@title:group"
 msgid "Command Alarms"
 msgstr "Co&mandă"
 
-#: prefdlg.cpp:1514
+#: prefdlg.cpp:1500
 #, fuzzy, kde-format
 msgctxt "@title:group"
 msgid "Email Alarms"
 msgstr "&Activează alarmele"
 
-#: prefdlg.cpp:1527
+#: prefdlg.cpp:1513
 #, fuzzy, kde-format
 msgctxt "@title:group"
 msgid "Message Font && Color"
 msgstr "Font și culoare"
 
-#: prefdlg.cpp:1741
+#: prefdlg.cpp:1715
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -6166,20 +6166,20 @@ msgstr ""
 "Trebuie să introduceți un fișier de sunet când <interface>%1</interface> "
 "este selectat ca tip de sunet implicit"
 
-#: prefdlg.cpp:1763
+#: prefdlg.cpp:1737
 #, fuzzy, kde-format
 #| msgid "Alarm List"
 msgctxt "@title:tab"
 msgid "Alarm Windows"
 msgstr "Lista de alarme"
 
-#: prefdlg.cpp:1766
+#: prefdlg.cpp:1740
 #, fuzzy, kde-format
 msgctxt "@option:check"
 msgid "Show in system tray"
 msgstr "&Afișează alarmele expirate"
 
-#: prefdlg.cpp:1768
+#: prefdlg.cpp:1742
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info:whatsthis"
 #| msgid ""
@@ -6196,13 +6196,13 @@ msgstr ""
 "tabla de sistem. Apariția sa în tabloul de sistem oferă acces ușor și o "
 "indicație de stare.</para>"
 
-#: prefdlg.cpp:1797
+#: prefdlg.cpp:1771
 #, kde-format
 msgctxt "@option:radio Always show KAlarm icon"
 msgid "Always show"
 msgstr ""
 
-#: prefdlg.cpp:1801
+#: prefdlg.cpp:1775
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info:whatsthis"
 #| msgid ""
@@ -6218,13 +6218,13 @@ msgstr ""
 "tabla de sistem. Apariția sa în tabloul de sistem oferă acces ușor și o "
 "indicație de stare.</para>"
 
-#: prefdlg.cpp:1805
+#: prefdlg.cpp:1779
 #, kde-format
 msgctxt "@option:radio"
 msgid "Automatically hide if no active alarms"
 msgstr ""
 
-#: prefdlg.cpp:1809
+#: prefdlg.cpp:1783
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -6233,7 +6233,7 @@ msgid ""
 "be made visible by use of the system tray option to show hidden icons."
 msgstr ""
 
-#: prefdlg.cpp:1815
+#: prefdlg.cpp:1789
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -6243,25 +6243,25 @@ msgid ""
 "to show hidden icons."
 msgstr ""
 
-#: prefdlg.cpp:1818
+#: prefdlg.cpp:1792
 #, kde-format
 msgctxt "@option:radio"
 msgid "Automatically hide if no alarm due within time period:"
 msgstr ""
 
-#: prefdlg.cpp:1830
+#: prefdlg.cpp:1804
 #, kde-format
 msgctxt "@title:group"
 msgid "System Tray Tooltip"
 msgstr "System Tray Tooltip"
 
-#: prefdlg.cpp:1837
+#: prefdlg.cpp:1811
 #, fuzzy, kde-format
 msgctxt "@option:check"
 msgid "Show next &24 hours' alarms"
 msgstr "&Afișează alarmele expirate"
 
-#: prefdlg.cpp:1841
+#: prefdlg.cpp:1815
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -6269,13 +6269,13 @@ msgid ""
 "due in the next 24 hours."
 msgstr "Alegeți culoarea de fundal pentru mesajul alarmei."
 
-#: prefdlg.cpp:1847
+#: prefdlg.cpp:1821
 #, kde-format
 msgctxt "@option:check"
 msgid "Maximum number of alarms to show:"
 msgstr "Numărul maxim de alarme de afișat:"
 
-#: prefdlg.cpp:1856
+#: prefdlg.cpp:1830
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -6286,44 +6286,44 @@ msgstr ""
 "de sistem. Bifați pentru a introduce o limită superioară pentru numărul ce "
 "urmează să fie afișat."
 
-#: prefdlg.cpp:1860
+#: prefdlg.cpp:1834
 #, kde-format
 msgctxt "@option:check"
 msgid "Show alarm time"
 msgstr "Arată ora alarmei"
 
-#: prefdlg.cpp:1866
+#: prefdlg.cpp:1840
 #, kde-format
 msgctxt "@option:check"
 msgid "Show time until alarm"
 msgstr "Arată ora până la alarmă"
 
-#: prefdlg.cpp:1884
+#: prefdlg.cpp:1858
 #, fuzzy, kde-format
 #| msgid "Alarm List"
 msgctxt "@title:group"
 msgid "Alarm List"
 msgstr "Lista de alarme"
 
-#: prefdlg.cpp:1896
+#: prefdlg.cpp:1870
 #, fuzzy, kde-format
 msgctxt "@label:listbox"
 msgid "Disabled alarm color:"
 msgstr "Culoare alarme e&xpirate:"
 
-#: prefdlg.cpp:1909
+#: prefdlg.cpp:1883
 #, fuzzy, kde-format
 msgctxt "@label:listbox"
 msgid "Archived alarm color:"
 msgstr "Culoare alarme e&xpirate:"
 
-#: prefdlg.cpp:1922
+#: prefdlg.cpp:1896
 #, kde-format
 msgctxt "@title:group"
 msgid "Alarm Message Windows"
 msgstr "Ferestrele alarmei de tip mesaj"
 
-#: prefdlg.cpp:1931
+#: prefdlg.cpp:1905
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -6340,25 +6340,25 @@ msgstr ""
 "dezactiveaza butoanele pentru o scurta perioada de timp dupa ce fereastra "
 "este afisata.</item></list></para>"
 
-#: prefdlg.cpp:1934
+#: prefdlg.cpp:1908
 #, kde-format
 msgctxt "@option:radio"
 msgid "Position windows far from mouse cursor"
 msgstr "Poziționează ferestrele departe de cursor"
 
-#: prefdlg.cpp:1938
+#: prefdlg.cpp:1912
 #, kde-format
 msgctxt "@option:radio"
 msgid "Center windows, delay activating window buttons"
 msgstr "Centrează ferestrele, întârzie activarea butoanelor de fereastră"
 
-#: prefdlg.cpp:1946
+#: prefdlg.cpp:1920
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Button activation delay (seconds):"
 msgstr "Activarea întârzierii butonului (secunde):"
 
-#: prefdlg.cpp:1953
+#: prefdlg.cpp:1927
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -6368,13 +6368,13 @@ msgstr ""
 "Introduceți cât de mult trebuie să rămână dezactivate butoanele lui după ce "
 "este afișată fereastra alarmei de tip mesaj."
 
-#: prefdlg.cpp:1961
+#: prefdlg.cpp:1935
 #, kde-format
 msgctxt "@option:check"
 msgid "Message windows have a title bar and take keyboard focus"
 msgstr "Ferestrele de mesaj au o bară de titlu și se concentrează pe tastatură"
 
-#: prefdlg.cpp:1964
+#: prefdlg.cpp:1938
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info:whatsthis"
 #| msgid ""
@@ -8502,37 +8502,37 @@ msgctxt "@info:whatsthis"
 msgid "Choose the initial volume for playing the sound file."
 msgstr "Alegeți volumul inițial pentru redarea fișierului de sunet."
 
-#: soundpicker.cpp:47
+#: soundpicker.cpp:40
 #, kde-format
 msgctxt "@label:listbox Listbox providing audio options"
 msgid "Sound:"
 msgstr "Sunet:"
 
-#: soundpicker.cpp:48
+#: soundpicker.cpp:41
 #, kde-format
 msgctxt "@item:inlistbox No sound"
 msgid "None"
 msgstr "Niciunul"
 
-#: soundpicker.cpp:49
+#: soundpicker.cpp:42
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Beep"
 msgstr "Bip"
 
-#: soundpicker.cpp:50
+#: soundpicker.cpp:43
 #, fuzzy, kde-format
 msgctxt "@item:inlistbox"
 msgid "Speak"
 msgstr "&Vorbește"
 
-#: soundpicker.cpp:51
+#: soundpicker.cpp:44
 #, fuzzy, kde-format
 msgctxt "@item:inlistbox"
 msgid "Sound file"
 msgstr "Fișier de &sunet:"
 
-#: soundpicker.cpp:81
+#: soundpicker.cpp:74
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -8546,32 +8546,32 @@ msgid ""
 "list></para>"
 msgstr ""
 
-#: soundpicker.cpp:93
+#: soundpicker.cpp:86
 #, fuzzy, kde-format
 msgctxt "@info:tooltip"
 msgid "Configure sound file"
 msgstr "Alegeți un fișier de sunet"
 
-#: soundpicker.cpp:94
+#: soundpicker.cpp:87
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Configure a sound file to play when the alarm is displayed."
 msgstr ""
 "Configurați un fișier de sunet pentru a fi redat când alarma este afișată."
 
-#: soundpicker.cpp:269
+#: soundpicker.cpp:250
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Sound File"
 msgstr "Fișier de &sunet:"
 
-#: soundpicker.cpp:328
+#: soundpicker.cpp:309
 #, fuzzy, kde-format
 msgctxt "@item:inlistbox"
 msgid "Audio files"
 msgstr "Fișier de &sunet:"
 
-#: soundpicker.cpp:352
+#: soundpicker.cpp:333
 #, fuzzy, kde-format
 #| msgid "Choose Sound File"
 msgctxt "@title:window"
