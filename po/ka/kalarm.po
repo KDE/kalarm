@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-02-02 00:59+0000\n"
-"PO-Revision-Date: 2023-01-07 08:26+0100\n"
+"PO-Revision-Date: 2023-02-02 08:39+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -564,7 +564,7 @@ msgstr ""
 #: commandoptions.cpp:268
 #, kde-format
 msgid "Display system tray icon"
-msgstr ""
+msgstr "სისტემის კუთხეში ხატულის ჩართვა"
 
 #: commandoptions.cpp:271
 #, kde-format
@@ -2845,7 +2845,7 @@ msgstr ""
 #, kde-format
 msgctxt "@option:check"
 msgid "Use default font"
-msgstr ""
+msgstr "ნაგულისხმები ფონტის გამოყენება"
 
 #: fontcolour.cpp:83
 #, kde-format
@@ -5719,7 +5719,7 @@ msgstr ""
 #, kde-format
 msgctxt "@option:radio"
 msgid "No end"
-msgstr ""
+msgstr "დასრულების გარეშე"
 
 #: recurrenceedit.cpp:202
 #, kde-format

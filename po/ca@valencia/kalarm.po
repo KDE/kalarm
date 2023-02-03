@@ -3298,8 +3298,7 @@ msgstr "S'ha produït un error en obtindre l'autorització (%1)"
 #, kde-format
 msgctxt "@info"
 msgid "You must enable a template calendar to save the template in"
-msgstr ""
-"Heu d'activar una plantilla de calendari per que es guardarà-hi la plantilla"
+msgstr "Heu d'activar una plantilla de calendari per a guardar-hi la plantilla"
 
 #: functions.cpp:1610
 #, kde-kuit-format
