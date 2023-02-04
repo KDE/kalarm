@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-02-02 00:59+0000\n"
-"PO-Revision-Date: 2023-01-11 17:07+0100\n"
+"PO-Revision-Date: 2023-02-03 14:04+0100\n"
 "Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
 "Language: cs\n"
@@ -1110,6 +1110,11 @@ msgid ""
 "automatically. This option will only work if your system is configured to "
 "use sendmail or a sendmail compatible mail transport agent.</li></ul></p>"
 msgstr ""
+"<p>Jak odeslat poštu při spuštění Poštovní upomínky.<ul><li>KMail: E-mail "
+"odešle automaticky aplikace KMail.</li><li>Sendmail: E-mail je odeslán "
+"automaticky. Tato volby bude fungovat pouze, pokud je váš systém nastaven, "
+"aby používal sendmail, nebo nebo s ním kompatibilního zprostředkovatele pro "
+"zasílání zpráv.</li></ul></p>"
 
 #. i18n: ectx: label, entry (Base_EmailClient), group (General)
 #: data/kalarmconfig.kcfg:196
@@ -1163,6 +1168,10 @@ msgid ""
 "KMail, \"@KMail\" to allow choice of KMail identities, or enter the actual "
 "email address otherwise."
 msgstr ""
+"Vaše e-mailová adresa používaná k vaší identifikaci jako odesílatele "
+"Poštovní upomínky. Zadáním \"@SystemSettings\" bude použita výchozí adresa z "
+"KMailu, \"@KMail\" vám umožní vybrat z identit KMail, nebo můžete přímo "
+"zapsat platnou e-mailovou adresu."
 
 #. i18n: ectx: label, entry (Base_EmailBccAddress), group (General)
 #: data/kalarmconfig.kcfg:212
@@ -1182,6 +1191,11 @@ msgid ""
 "\" to use the default email address set in KMail, or enter the actual email "
 "address otherwise."
 msgstr ""
+"Vaše e-mailová adresa používaná pro odesílání skryté kopie Poštovní upomínky "
+"sobě. Pokud si přejete skrytou kopii poslat na váš účet na počítači, kde "
+"běží KAlarm, stačí zadat jednoduše vaše uživatelské jméno. Při zadání "
+"\"@SystemSettings\" bude použita adresa z KMailu, nebo můžete přímo zapsat "
+"platnou e-mailovou adresu."
 
 #. i18n: ectx: label, entry (Base_CmdXTermCommand), group (General)
 #: data/kalarmconfig.kcfg:217
@@ -3627,7 +3641,7 @@ msgstr "Následující opakování"
 #, kde-format
 msgctxt "@label"
 msgid "Late cancel"
-msgstr ""
+msgstr "Pozdní zrušení"
 
 #: kalarmcalendar/kaeventformatter.cpp:73
 #, kde-format
@@ -4018,6 +4032,9 @@ msgid ""
 "default address in <application>KMail</application> or in the "
 "<application>KAlarm</application> Configuration dialog.</para>"
 msgstr ""
+"<para>Adresa 'Od' není nastavena.</para><para>Prosím, nastavte výchozí "
+"adresu v <application>KMail</application> nebo v dialogu pro nastavení v "
+"aplikaci <application>KAlarm</application>.</para>"
 
 #: kamail.cpp:128
 #, kde-kuit-format
@@ -5367,7 +5384,7 @@ msgstr "Sendmail"
 #, kde-format
 msgctxt "@info"
 msgid "Choose how to send email when an email alarm is triggered."
-msgstr ""
+msgstr "Vyberte jak zaslat e-mail pokud je spuštěna upomínka e-mailem."
 
 #: prefdlg.cpp:1046
 #, kde-kuit-format
@@ -5379,6 +5396,12 @@ msgid ""
 "if your system is configured to use <application>sendmail</application> or a "
 "sendmail compatible mail transport agent.</item></list></para>"
 msgstr ""
+"<para>%1<list><item><interface>%2</interface>: Zpráva je odeslána "
+"automaticky pomocí aplikace <application>KMail</application>.</"
+"item><item><interface>%3</interface>: Zpráva bude odeslána automaticky. Tato "
+"volba bude fungovat pouze, pokud je váš systém nastaven, aby používal  "
+"<application>sendmail</application>, nebo s ním kompatibilního "
+"zprostředkovatele pro zasílání zpráv. </item></list></para>"
 
 #: prefdlg.cpp:1054
 #, kde-kuit-format
@@ -5389,6 +5412,10 @@ msgid ""
 "use <application>sendmail</application> or a sendmail compatible mail "
 "transport agent.</item></list></para>"
 msgstr ""
+"<para>%1<list><item><interface>%2</interface>: Zpráva je odeslána "
+"automaticky: Tato volby bude fungovat pouze, pokud je váš systém nastaven, "
+"aby používal <application>sendmail </application>, nebo  nebo s ním "
+"kompatibilního zprostředkovatele pro zasílání zpráv.</item></list></para>"
 
 #: prefdlg.cpp:1064
 #, kde-kuit-format
@@ -5451,6 +5478,8 @@ msgid ""
 "Check to use the default email address set in <application>KMail</"
 "application>, to identify you as the sender when sending email alarms."
 msgstr ""
+"Zkontrolujte, že je výchozí e-mailová adresa v aplikaci <application>KMail</"
+"application> nastavena abyste byli označeni za odesílatele Poštovní upomínky."
 
 #: prefdlg.cpp:1113
 #, kde-kuit-format
@@ -5502,6 +5531,8 @@ msgid ""
 "Check to use the default email address set in <application>KMail</"
 "application>, for blind copying email alarms to yourself."
 msgstr ""
+"Zkontrolujte, že je výchozí e-mailová adresa v aplikaci <application>KMail</"
+"application> nastavena pro kopírování Poštovních upomínek sobě."
 
 #: prefdlg.cpp:1247
 #, kde-format
@@ -5522,6 +5553,9 @@ msgid ""
 "<para>No default email address is currently set in <application>KMail</"
 "application>.</para><para>%1</para><para>%2</para>"
 msgstr ""
+"<para>V <application>KMail</application> nebo v Nastavení Systému KDE není "
+"momentálně nastavena žádná výchozí e-mailová adresa.</para><para>%1</"
+"para><para>%2</para>"
 
 #: prefdlg.cpp:1265
 #, kde-kuit-format
@@ -5530,6 +5564,8 @@ msgid ""
 "<para>No <application>KMail</application> identities currently exist.</"
 "para><para>%1</para><para>%2</para>"
 msgstr ""
+"<para>V současnosti neexistují žádné identity v aplikaci <application>KMail "
+"</application>.</para><para>%1</para><para>%2</para>"
 
 #: prefdlg.cpp:1283
 #, kde-kuit-format
