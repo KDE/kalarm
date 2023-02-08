@@ -159,7 +159,7 @@ MessageNotification::MessageNotification(const KAEvent& event, const KAAlarm& al
     if (!(flags & NoInitView))
         MessageNotification::setUpDisplay();    // avoid calling virtual method from constructor
 
-    connect(this, qOverload<unsigned int>(&KNotification::activated), this, &MessageNotification::buttonActivated);
+    connect(this, &KNotification::activated, this, &MessageNotification::buttonActivated);
     connect(this, &KNotification::closed, this, &MessageNotification::slotClosed);
     connect(mHelper, &MessageDisplayHelper::textsChanged, this, &MessageNotification::textsChanged);
     connect(mHelper, &MessageDisplayHelper::commandExited, this, &MessageNotification::commandCompleted);
@@ -182,7 +182,7 @@ MessageNotification::MessageNotification(const KAEvent& event, const DateTime& a
     setWidget(MainWindow::mainMainWindow());
     MessageNotification::setUpDisplay();    // avoid calling virtual method from constructor
 
-    connect(this, qOverload<unsigned int>(&KNotification::activated), this, &MessageNotification::buttonActivated);
+    connect(this, &KNotification::activated, this, &MessageNotification::buttonActivated);
     connect(this, &KNotification::closed, this, &MessageNotification::slotClosed);
     connect(mHelper, &MessageDisplayHelper::textsChanged, this, &MessageNotification::textsChanged);
 
@@ -202,7 +202,7 @@ MessageNotification::MessageNotification(const QString& eventId, MessageDisplayH
     MNSessionManager::create();
     setWidget(MainWindow::mainMainWindow());
 
-    connect(this, qOverload<unsigned int>(&KNotification::activated), this, &MessageNotification::buttonActivated);
+    connect(this, &KNotification::activated, this, &MessageNotification::buttonActivated);
     connect(this, &KNotification::closed, this, &MessageNotification::slotClosed);
     connect(mHelper, &MessageDisplayHelper::textsChanged, this, &MessageNotification::textsChanged);
     connect(mHelper, &MessageDisplayHelper::commandExited, this, &MessageNotification::commandCompleted);
