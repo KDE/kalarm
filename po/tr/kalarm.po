@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: kdepim-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-12-12 03:00+0000\n"
-"PO-Revision-Date: 2023-02-05 12:02+0300\n"
+"PO-Revision-Date: 2023-02-08 19:14+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -535,7 +535,7 @@ msgstr "Standart çıktıya programlanmış alarmların çıktı listesi"
 #: commandoptions.cpp:212
 #, kde-format
 msgid "Repeat alarm at every login"
-msgstr "Her girişte uyarıyı yinele"
+msgstr "Her oturum açılışında uyarıyı yinele"
 
 #: commandoptions.cpp:215
 #, kde-format
@@ -932,7 +932,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label"
 msgid "Start at login"
-msgstr "Girişte başla"
+msgstr "Oturum açılışında başlat"
 
 #. i18n: ectx: whatsthis, entry (AutoStart), group (General)
 #: data/kalarmconfig.kcfg:130
@@ -951,7 +951,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label"
 msgid "Suppress autostart at login"
-msgstr "Açılışta otomatik başlatmayı durdur"
+msgstr "Oturum açılışında otomatik başlatmayı engelle"
 
 #. i18n: ectx: label, entry (DefaultDeferTime), group (General)
 #: data/kalarmconfig.kcfg:138
@@ -1670,7 +1670,7 @@ msgstr "Yineleme yok"
 #, kde-format
 msgctxt "@option"
 msgid "At login"
-msgstr "Girişte"
+msgstr "Oturum açılışında"
 
 #. i18n: ectx: label, entry (DefaultRecurPeriod), group (Defaults)
 #: data/kalarmconfig.kcfg:372
@@ -3488,7 +3488,7 @@ msgstr "Oturum aç"
 #, kde-format
 msgctxt "@info"
 msgid "At login"
-msgstr "Girişte"
+msgstr "Oturum açılışında"
 
 #: kalarmcalendar/kaevent.cpp:2936 kalarmcalendar/kaevent.cpp:3023
 #: kalarmcalendar/kaeventformatter.cpp:428
@@ -3936,7 +3936,7 @@ msgstr "Şablon"
 #, kde-format
 msgctxt "@info Repeat at login"
 msgid "At login until %1"
-msgstr "%1 saatine kadar girişte"
+msgstr "Şu tarihe/saate kadar oturum açılışında: %1"
 
 #: kalarmcalendar/kaeventformatter.cpp:337
 #, kde-format
@@ -4971,7 +4971,7 @@ msgstr "Çalışma Kipi"
 #, kde-format
 msgctxt "@option:check"
 msgid "Start at login"
-msgstr "Girişte otomatik başla"
+msgstr "Oturum açılışında otomatik başlat"
 
 #: prefdlg.cpp:460
 #, kde-kuit-format
@@ -6007,7 +6007,7 @@ msgstr "Tekrarlanma Yok"
 #, kde-format
 msgctxt "@item:inlistbox Recurrence type"
 msgid "At Login"
-msgstr "Girişte"
+msgstr "Oturum Açılışında"
 
 #: recurrenceedit.cpp:58
 #, kde-format
