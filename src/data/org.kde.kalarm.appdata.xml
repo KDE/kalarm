@@ -280,7 +280,7 @@
       <li xml:lang="sr-ijekavian">Понављајући аларм, на сат/минут, дневно, седмично, месечно или годишње, као и при сваком пријављивању корисника.</li>
       <li xml:lang="sr-ijekavianlatin">Ponavljajući alarm, na sat/minut, dnevno, sedmično, mesečno ili godišnje, kao i pri svakom prijavljivanju korisnika.</li>
       <li xml:lang="sv">Upprepade alarm baserat på timmar/minuter, dagar, veckor, månader eller år, samt inställning för att aktivera det vid varje inloggning.</li>
-      <li xml:lang="tr">Saatlik/dakikalık, günlük, haftalık, aylık veya yıllıl tekrar eden alarmlar, veya her giriş yaptığınızda tetiklenecek şekilde ayarlayın.</li>
+      <li xml:lang="tr">Saatlik/dakikalık, günlük, haftalık, aylık veya yıllık yineleyen alarmlar veya her oturum açtığınızda tetiklenecek biçimde ayarlayın.</li>
       <li xml:lang="uk">повторення нагадування із вказаним інтервалом у годинах, хвилинах, щодня, щомісяця, щорічно або можливість налаштовування нагадування, яке буде показано під час реєстрації у системі;</li>
       <li xml:lang="x-test">xxRecurring alarm on an hours/minutes, daily, weekly, monthly or annual basis, or set it to trigger every time you log in.xx</li>
       <li xml:lang="zh-CN">按小时/分钟、天、星期、月、年或以每次登录重复响铃的闹钟。</li>
