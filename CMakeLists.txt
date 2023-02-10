@@ -91,7 +91,7 @@ add_feature_info(AKONADI_PLUGIN ${ENABLE_AKONADI_PLUGIN} "Provides features depe
 option(ENABLE_WAKE_FROM_SUSPEND "Enable wake-from-suspend alarms (requires KAuth)" ON)
 if (ENABLE_WAKE_FROM_SUSPEND)
     find_package(KF5Auth ${KF_MIN_VERSION})
-    if (NOT KF5Auth_FOUND)
+    if (NOT KF${KF_MAJOR_VERSION}Auth_FOUND)
         set(ENABLE_WAKE_FROM_SUSPEND OFF)
     endif()
 endif()
@@ -187,7 +187,7 @@ ecm_qt_install_logging_categories(
     DESTINATION ${KDE_INSTALL_LOGGINGCATEGORIESDIR}
     )
 
-if (KF5DocTools_FOUND)
+if (KF${KF_MAJOR_VERSION}DocTools_FOUND)
     kdoctools_install(po)
     add_subdirectory(doc)
 endif()
