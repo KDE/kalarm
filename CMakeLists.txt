@@ -135,7 +135,15 @@ find_package(KF5IdentityManagement ${IDENTITYMANAGEMENT_LIB_VERSION} CONFIG REQU
 find_package(KF5Mime ${KMIME_LIB_VERSION} CONFIG REQUIRED)
 find_package(KF5PimTextEdit ${KPIMTEXTEDIT_LIB_VERSION} CONFIG REQUIRED)
 
-find_package(KF${KF_MAJOR_VERSION}TextEditTextToSpeech ${KTEXTADDONS_MIN_VERSION} CONFIG REQUIRED)
+find_package(KF${KF_MAJOR_VERSION}TextEditTextToSpeech ${KTEXTADDONS_MIN_VERSION} CONFIG)
+set_package_properties(KF${KF_MAJOR_VERSION}TextEditTextToSpeech PROPERTIES DESCRIPTION
+    "Add support for text to speech"
+    TYPE OPTIONAL
+)
+
+if (TARGET KF${KF_MAJOR_VERSION}::TextEditTextToSpeech)
+    add_definitions(-DHAVE_TEXT_TO_SPEECH_SUPPORT)
+endif()
 
 if (ENABLE_AKONADI_PLUGIN)
     find_package(KF5Akonadi ${AKONADI_VERSION} CONFIG REQUIRED)

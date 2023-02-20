@@ -20,7 +20,6 @@
 #include <KIdentityManagement/Identity>
 #include <KIdentityManagement/IdentityManager>
 #include <KHolidays/HolidayRegion>
-#include <kpimtextedit/kpimtextedit-texttospeech.h>
 
 #include <KSharedConfig>
 #include <KConfigGroup>
@@ -612,7 +611,7 @@ void splitXTermCommands()
 
 Preferences::SoundType Preferences::defaultSoundType()
 {
-#if KPIMTEXTEDIT_TEXT_TO_SPEECH
+#ifdef HAVE_TEXT_TO_SPEECH_SUPPORT
     return self()->base_DefaultSoundType();
 #else
     SoundType type = self()->base_DefaultSoundType();
@@ -622,7 +621,7 @@ Preferences::SoundType Preferences::defaultSoundType()
 
 void Preferences::setDefaultSoundType(SoundType type)
 {
-#if !KPIMTEXTEDIT_TEXT_TO_SPEECH
+#ifndef HAVE_TEXT_TO_SPEECH_SUPPORT
     if (type == Sound_Speak)
         return;
 #endif
