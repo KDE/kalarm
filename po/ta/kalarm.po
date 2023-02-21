@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-02 00:59+0000\n"
+"POT-Creation-Date: 2023-02-21 01:00+0000\n"
 "PO-Revision-Date: 2023-01-03 19:35+0530\n"
 "Last-Translator: Kishore G <kishore96@gmail.com>\n"
 "Language-Team: Tamil <kde-i18n-doc@kde.org>\n"
@@ -410,193 +410,193 @@ msgctxt "@info:whatsthis"
 msgid "Set up an additional alarm repetition"
 msgstr "கூடுதலான அலார மறுநிகழ்வை அமைக்க உதவும்"
 
-#: commandoptions.cpp:127
+#: commandoptions.cpp:126
 #, kde-format
 msgid "Prompt for confirmation when alarm is acknowledged"
 msgstr "அலாரத்தை பார்த்ததாக ஒப்புக்கொள்வதை உறுதிசெய்"
 
-#: commandoptions.cpp:130
+#: commandoptions.cpp:129
 #, kde-format
 msgid "Attach file to email (repeat as needed)"
 msgstr "கோப்பை மின்னஞ்சலுடன் இணை (தேவைப்பட்டால் பலமுறை பயன்படுத்தலாம்)"
 
-#: commandoptions.cpp:134
+#: commandoptions.cpp:133
 #, kde-format
 msgid "Auto-close alarm window after --late-cancel period"
 msgstr "--late-cancel நேரத்திற்குப் பிறகு அலார சாளரத்தை தானாக மூடு"
 
-#: commandoptions.cpp:137
+#: commandoptions.cpp:136
 #, kde-format
 msgid "Blind copy email to self"
 msgstr "அஞ்சலை தனக்கு மறைநகலாய் அனுப்பு"
 
-#: commandoptions.cpp:140
+#: commandoptions.cpp:139
 #, kde-format
 msgid "Beep when message is displayed"
 msgstr "தகவலை காட்டும்போது ஒலியெழுப்பு"
 
-#: commandoptions.cpp:143
+#: commandoptions.cpp:142
 #, kde-format
 msgid "Message background color (name or hex 0xRRGGBB)"
 msgstr "தகவலின் பின்னணி நிறம் (பெயர் அல்லது hex 0xRRGGBB)"
 
-#: commandoptions.cpp:147
+#: commandoptions.cpp:146
 #, kde-format
 msgid "Message foreground color (name or hex 0xRRGGBB)"
 msgstr "தகவலின் முன்னணி நிறம் (பெயர் அல்லது hex 0xRRGGBB)"
 
-#: commandoptions.cpp:151
+#: commandoptions.cpp:150
 #, kde-format
 msgid "Cancel alarm with the specified event ID"
 msgstr "குறிப்பிட்ட அடையாள எண்ணை கொண்ட அலாரத்தை ரத்து செய்"
 
-#: commandoptions.cpp:155
+#: commandoptions.cpp:154
 #, kde-format
 msgid "Disable the alarm"
 msgstr "அலாரத்தை முடக்கு"
 
-#: commandoptions.cpp:158
+#: commandoptions.cpp:157
 #, kde-format
 msgid "Disable monitoring of all alarms"
 msgstr "அலாரங்களை நிர்வகிப்பதை முடக்கு"
 
-#: commandoptions.cpp:161
+#: commandoptions.cpp:160
 #, kde-format
 msgid "Execute a shell command line"
 msgstr "முனைய கட்டளையை செயல்படுத்து"
 
-#: commandoptions.cpp:165
+#: commandoptions.cpp:164
 #, kde-format
 msgid "Command line to generate alarm message text"
 msgstr "அலார தகவலுக்கான உரையை வெளியிடும் கட்டளை"
 
-#: commandoptions.cpp:169
+#: commandoptions.cpp:168
 #, kde-format
 msgid "Display the alarm edit dialog to edit the specified alarm"
 msgstr "குறிப்பிட்ட அலாரத்தை திருத்துவதற்கான சாளரத்தை காட்டு"
 
-#: commandoptions.cpp:173
+#: commandoptions.cpp:172
 #, kde-format
 msgid "Display the alarm edit dialog to edit a new display alarm"
 msgstr "புதிய காட்சி அலாரத்தை உருவாக்குவதற்கான சாளரத்தை காட்டு"
 
-#: commandoptions.cpp:176
+#: commandoptions.cpp:175
 #, kde-format
 msgid "Display the alarm edit dialog to edit a new command alarm"
 msgstr "புதிய கட்டளை அலாரத்தை உருவாக்குவதற்கான சாளரத்தை காட்டு"
 
-#: commandoptions.cpp:179
+#: commandoptions.cpp:178
 #, kde-format
 msgid "Display the alarm edit dialog to edit a new email alarm"
 msgstr "புதிய மின்னஞ்சல் அலாரத்தை உருவாக்குவதற்கான சாளரத்தை காட்டு"
 
-#: commandoptions.cpp:182
+#: commandoptions.cpp:181
 #, kde-format
 msgid "Display the alarm edit dialog to edit a new audio alarm"
 msgstr "புதிய ஒலி அலாரத்தை உருவாக்குவதற்கான சாளரத்தை காட்டு"
 
-#: commandoptions.cpp:185
+#: commandoptions.cpp:184
 #, kde-format
 msgid "Display the alarm edit dialog, preset with a template"
 msgstr "ஓர் வார்ப்புருவை அடிப்படையாக கொண்ட அலார திருத்த சாளரத்தை காட்டு"
 
-#: commandoptions.cpp:189
+#: commandoptions.cpp:188
 #, kde-format
 msgid "File to display"
 msgstr "காட்ட வேண்டிய கோப்பு"
 
-#: commandoptions.cpp:193
+#: commandoptions.cpp:192
 #, kde-format
 msgid "KMail identity to use as sender of email"
 msgstr "மின்னஞ்சலை அனுப்ப பயன்படுத்த வேண்டிய கேமெயில் அடையாளம்"
 
-#: commandoptions.cpp:197
+#: commandoptions.cpp:196
 #, kde-format
 msgid "Interval between alarm repetitions"
 msgstr "அலார மறுதோன்றல்களுக்கு இடையேயான இடைவெளி"
 
-#: commandoptions.cpp:201
+#: commandoptions.cpp:200
 #, kde-format
 msgid "Show alarm as an event in KOrganizer"
 msgstr "அலாரத்தை கேயார்கனைசரில் நிகழ்வாக காட்டு"
 
-#: commandoptions.cpp:204
+#: commandoptions.cpp:203
 #, kde-format
 msgid "Cancel alarm if more than 'period' late when triggered"
 msgstr "தூண்டப்படும்போதே 'period'-அளவுக்கு மேல் தாமதமாக இருந்தால் அலாரத்தை ரத்து செய்"
 
-#: commandoptions.cpp:209
+#: commandoptions.cpp:208
 #, kde-format
 msgid "Output list of scheduled alarms to stdout"
 msgstr "வரவிருக்கும் அலாரங்களின் பட்டியலை stdout-இல் வெளியிடும்"
 
-#: commandoptions.cpp:212
+#: commandoptions.cpp:211
 #, kde-format
 msgid "Repeat alarm at every login"
 msgstr "ஒவ்வொரு முறையும் அமர்வுக்குள் நுழையும் போது அலாரத்தை ஒலிக்க செய்"
 
-#: commandoptions.cpp:215
+#: commandoptions.cpp:214
 #, kde-format
 msgid "Send an email to the given address (repeat as needed)"
 msgstr "கொடுக்கப்படும் முகவரிக்கு அஞ்சலனுப்பும் (தேவைப்பட்டால் பலமுறை பயன்படுத்தலாம்)"
 
-#: commandoptions.cpp:219
+#: commandoptions.cpp:218
 #, kde-format
 msgid "Name of alarm"
 msgstr "அலாரத்தின் பெயர்"
 
-#: commandoptions.cpp:222
+#: commandoptions.cpp:221
 #, kde-format
 msgid "Display alarm message as a notification"
 msgstr "அலார தகவலை அறிவிப்பாக காட்டு"
 
-#: commandoptions.cpp:225
+#: commandoptions.cpp:224
 #, kde-format
 msgid "Audio file to play once"
 msgstr "ஒரு முறை இயக்க வேண்டிய ஒலிக்கோப்பு"
 
-#: commandoptions.cpp:229
+#: commandoptions.cpp:228
 #, kde-format
 msgid "Audio file to play repeatedly"
 msgstr "தொடர்ந்து இயக்க வேண்டிய ஒலிக்கோப்பு"
 
-#: commandoptions.cpp:233
+#: commandoptions.cpp:232
 #, kde-format
 msgid "Specify alarm recurrence using iCalendar syntax"
 msgstr "iCalendar பாங்கில் அலார மறுநிகழ்வை குறிப்பிடு"
 
-#: commandoptions.cpp:237
+#: commandoptions.cpp:236
 #, kde-format
 msgid "Display reminder before or after alarm"
 msgstr "அலாரத்துக்கு முன்னர் அல்லது பின்னர் நினைவூட்டலை காட்டு"
 
-#: commandoptions.cpp:241
+#: commandoptions.cpp:240
 #, kde-format
 msgid "Display reminder once, before or after first alarm recurrence"
 msgstr "அலாரத்தின் முதல் மறுநிகழ்வுக்கு முன்னோ பின்னோ ஒருமுறை நினைவூட்டலை காட்டு"
 
-#: commandoptions.cpp:245
+#: commandoptions.cpp:244
 #, kde-format
 msgid "Number of times to repeat alarm (including initial occasion)"
 msgstr "அலாரத்தை எத்தனை முறை மீளத்தூண்ட வேண்டும் (முதல் நிகழ்வு உட்பட)"
 
-#: commandoptions.cpp:250
+#: commandoptions.cpp:249
 #, kde-format
 msgid "Speak the message when it is displayed"
 msgstr "தகவலை காட்டும்போது பேச்சாக்கு"
 
-#: commandoptions.cpp:254
+#: commandoptions.cpp:253
 #, kde-format
 msgid "Email subject line"
 msgstr "மின்னஞ்சலின் தலைப்பு"
 
-#: commandoptions.cpp:259
+#: commandoptions.cpp:258
 #, kde-format
 msgid "Simulate system time [[[yyyy-]mm-]dd-]hh:mm [TZ] (debug mode)"
 msgstr ""
 "[[[yyyy-]mm-]dd-]hh:mm [TZ] என்ற கணினி நேரத்தை பயன்படுத்து (பிழைநீக்க பயன்முறை)"
 
-#: commandoptions.cpp:264
+#: commandoptions.cpp:263
 #, kde-format
 msgid ""
 "Trigger alarm at time [[[yyyy-]mm-]dd-]hh:mm [TZ], or date yyyy-mm-dd [TZ]"
@@ -604,53 +604,53 @@ msgstr ""
 "[[[yyyy-]mm-]dd-]hh:mm [TZ] என்ற நேரத்திலோ, yyyy-mm-dd [TZ] என்ற தேதியிலோ உள்ள "
 "அலாரத்தை தூண்டு"
 
-#: commandoptions.cpp:268
+#: commandoptions.cpp:267
 #, kde-format
 msgid "Display system tray icon"
 msgstr "கணினித் தட்டில் சின்னத்தை காட்டு"
 
-#: commandoptions.cpp:271
+#: commandoptions.cpp:270
 #, kde-format
 msgid "Trigger alarm with the specified event ID"
 msgstr "குறிப்பிட்ட அடையாள எண்ணை கொண்ட அலாரத்தை தூண்டு"
 
-#: commandoptions.cpp:275
+#: commandoptions.cpp:274
 #, kde-format
 msgid "Repeat until time [[[yyyy-]mm-]dd-]hh:mm [TZ], or date yyyy-mm-dd [TZ]"
 msgstr ""
 "[[[yyyy-]mm-]dd-]hh:mm [TZ] என்ற நேரம் வரை மீளத்தூண்டு, அல்லது yyyy-mm-dd [TZ] என்ற "
 "தேதி வரை"
 
-#: commandoptions.cpp:279
+#: commandoptions.cpp:278
 #, kde-format
 msgid "Volume to play audio file"
 msgstr "ஒலிக்கோப்புக்கான ஒலியளவு"
 
-#: commandoptions.cpp:290
+#: commandoptions.cpp:289
 #, kde-format
 msgid "Message text to display"
 msgstr "காட்ட வேண்டிய உரை"
 
-#: commandoptions.cpp:454
+#: commandoptions.cpp:453
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "<icode>%1</icode>: invalid email address"
 msgstr "<icode>%1</icode>: செல்லுபடியாகாத மின்னஞ்சல் முகவரி"
 
-#: commandoptions.cpp:578 commandoptions.cpp:593 commandoptions.cpp:672
+#: commandoptions.cpp:577 commandoptions.cpp:592 commandoptions.cpp:671
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "Invalid <icode>%1</icode> parameter for date-only alarm"
 msgstr ""
 "தேதி மட்டும் கொண்ட அலாரத்திற்கான இம்மதிப்பு செல்லுபடியாகாத‍து: <icode>%1</icode>"
 
-#: commandoptions.cpp:582
+#: commandoptions.cpp:581
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "<icode>%1</icode> earlier than <icode>%2</icode>"
 msgstr "<icode>%1</icode> இதைவிட முந்தையது: <icode>%2</icode>"
 
-#: commandoptions.cpp:604
+#: commandoptions.cpp:603
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid ""
@@ -660,13 +660,13 @@ msgstr ""
 "<icode>%1</icode> மற்றும் <icode>%2</icode> என்ற மதிப்புகள் செல்லுபடியாதன: <icode>"
 "%3</icode> என்ற இடைவெளியைவிட நீட்டமான மறுநிகழ்வு இடைவெளி."
 
-#: commandoptions.cpp:785
+#: commandoptions.cpp:784
 #, kde-format
 msgctxt "@info:shell"
 msgid ": option(s) only valid with an appropriate action option or message"
 msgstr ": உரிய செயலுடனோ தகவலுடனோ மட்டும்தான் இம்மதிப்புகளை பயன்படுத்த முடியும்"
 
-#: commandoptions.cpp:806 commandoptions.cpp:823
+#: commandoptions.cpp:805 commandoptions.cpp:822
 #, kde-format
 msgctxt "@info:shell"
 msgid ""
@@ -676,13 +676,13 @@ msgstr ""
 "\n"
 "பயன்படுத்தக்கூடிய முனையவரி விருப்பங்களை பற்றி அறிய --help என்பதை பயன்படுத்துங்கள்.\n"
 
-#: commandoptions.cpp:851
+#: commandoptions.cpp:850
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "<icode>%1</icode> requires <icode>%2</icode>"
 msgstr "<icode>%1</icode> என்பதற்கு இது தேவை: <icode>%2</icode>"
 
-#: commandoptions.cpp:853
+#: commandoptions.cpp:852
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "<icode>%1</icode> requires <icode>%2</icode> or <icode>%3</icode>"
@@ -690,13 +690,13 @@ msgstr ""
 "<icode>%1</icode> என்பதற்கு இவற்றில் ஒன்று தேவை: <icode>%2</icode> அல்லது <icode>"
 "%3</icode>"
 
-#: commandoptions.cpp:858
+#: commandoptions.cpp:857
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "Invalid <icode>%1</icode> parameter"
 msgstr "செல்லுபடியாகாத மதிப்பு <icode>%1</icode>"
 
-#: commandoptions.cpp:863
+#: commandoptions.cpp:862
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "<icode>%1</icode> incompatible with <icode>%2</icode>"

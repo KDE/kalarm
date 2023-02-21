@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-02 00:59+0000\n"
+"POT-Creation-Date: 2023-02-21 01:00+0000\n"
 "PO-Revision-Date: 2022-12-31 09:04+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
@@ -403,247 +403,247 @@ msgctxt "@info:whatsthis"
 msgid "Set up an additional alarm repetition"
 msgstr "Встановити додаткове повторення нагадування"
 
-#: commandoptions.cpp:127
+#: commandoptions.cpp:126
 #, kde-format
 msgid "Prompt for confirmation when alarm is acknowledged"
 msgstr "Вимагати підтвердження про ознайомлення з нагадуванням"
 
-#: commandoptions.cpp:130
+#: commandoptions.cpp:129
 #, kde-format
 msgid "Attach file to email (repeat as needed)"
 msgstr "Долучити файл до електронної пошти (повторювати при потребі)"
 
-#: commandoptions.cpp:134
+#: commandoptions.cpp:133
 #, kde-format
 msgid "Auto-close alarm window after --late-cancel period"
 msgstr "Автоматично закривати вікно після закінчення періоду спізнення"
 
-#: commandoptions.cpp:137
+#: commandoptions.cpp:136
 #, kde-format
 msgid "Blind copy email to self"
 msgstr "Надіслати приховану копію собі"
 
-#: commandoptions.cpp:140
+#: commandoptions.cpp:139
 #, kde-format
 msgid "Beep when message is displayed"
 msgstr "Давати гудок при показі повідомлення"
 
-#: commandoptions.cpp:143
+#: commandoptions.cpp:142
 #, kde-format
 msgid "Message background color (name or hex 0xRRGGBB)"
 msgstr "Колір тла повідомлення (назва або шіст. 0xRRGGBB)"
 
-#: commandoptions.cpp:147
+#: commandoptions.cpp:146
 #, kde-format
 msgid "Message foreground color (name or hex 0xRRGGBB)"
 msgstr "Колір тексту повідомлення (назва або шіст. 0xRRGGBB)"
 
-#: commandoptions.cpp:151
+#: commandoptions.cpp:150
 #, kde-format
 msgid "Cancel alarm with the specified event ID"
 msgstr "Скасувати нагадування з вказаним ІД події"
 
-#: commandoptions.cpp:155
+#: commandoptions.cpp:154
 #, kde-format
 msgid "Disable the alarm"
 msgstr "Вимкнути нагадування"
 
-#: commandoptions.cpp:158
+#: commandoptions.cpp:157
 #, kde-format
 msgid "Disable monitoring of all alarms"
 msgstr "Вимкнути спостереження за всіма нагадуваннями"
 
-#: commandoptions.cpp:161
+#: commandoptions.cpp:160
 #, kde-format
 msgid "Execute a shell command line"
 msgstr "Виконати команду оболонки"
 
-#: commandoptions.cpp:165
+#: commandoptions.cpp:164
 #, kde-format
 msgid "Command line to generate alarm message text"
 msgstr "Командний рядок для створення тексту повідомлення нагадування"
 
-#: commandoptions.cpp:169
+#: commandoptions.cpp:168
 #, kde-format
 msgid "Display the alarm edit dialog to edit the specified alarm"
 msgstr "Показати вікно для редагування вказаного нагадування"
 
-#: commandoptions.cpp:173
+#: commandoptions.cpp:172
 #, kde-format
 msgid "Display the alarm edit dialog to edit a new display alarm"
 msgstr "Показати вікно для редагування нового візуального нагадування"
 
-#: commandoptions.cpp:176
+#: commandoptions.cpp:175
 #, kde-format
 msgid "Display the alarm edit dialog to edit a new command alarm"
 msgstr "Показати вікно для редагування нового нагадування"
 
-#: commandoptions.cpp:179
+#: commandoptions.cpp:178
 #, kde-format
 msgid "Display the alarm edit dialog to edit a new email alarm"
 msgstr "Показати вікно для редагування нового нагадування електронним листом"
 
-#: commandoptions.cpp:182
+#: commandoptions.cpp:181
 #, kde-format
 msgid "Display the alarm edit dialog to edit a new audio alarm"
 msgstr "Показати вікно для редагування нового звукового нагадування"
 
-#: commandoptions.cpp:185
+#: commandoptions.cpp:184
 #, kde-format
 msgid "Display the alarm edit dialog, preset with a template"
 msgstr "Показати вікно для редагування нагадування за шаблоном"
 
-#: commandoptions.cpp:189
+#: commandoptions.cpp:188
 #, kde-format
 msgid "File to display"
 msgstr "Показати файл"
 
-#: commandoptions.cpp:193
+#: commandoptions.cpp:192
 #, kde-format
 msgid "KMail identity to use as sender of email"
 msgstr "Профіль KMail, який використовується як відправник листа"
 
-#: commandoptions.cpp:197
+#: commandoptions.cpp:196
 #, kde-format
 msgid "Interval between alarm repetitions"
 msgstr "Інтервал між повтореннями нагадування"
 
-#: commandoptions.cpp:201
+#: commandoptions.cpp:200
 #, kde-format
 msgid "Show alarm as an event in KOrganizer"
 msgstr "Показати нагадування як подію в KOrganizer"
 
-#: commandoptions.cpp:204
+#: commandoptions.cpp:203
 #, kde-format
 msgid "Cancel alarm if more than 'period' late when triggered"
 msgstr ""
 "Скасувати нагадування, якщо воно більше, ніж на «період» спізнилось, коли "
 "спрацювало"
 
-#: commandoptions.cpp:209
+#: commandoptions.cpp:208
 #, kde-format
 msgid "Output list of scheduled alarms to stdout"
 msgstr "Вивести список запланованих нагадувань до стандартного виведення"
 
-#: commandoptions.cpp:212
+#: commandoptions.cpp:211
 #, kde-format
 msgid "Repeat alarm at every login"
 msgstr "Повторювати нагадування при кожному вході в систему"
 
-#: commandoptions.cpp:215
+#: commandoptions.cpp:214
 #, kde-format
 msgid "Send an email to the given address (repeat as needed)"
 msgstr "Відіслати ел. пошту на дані адреси (повторювати за потреби)"
 
-#: commandoptions.cpp:219
+#: commandoptions.cpp:218
 #, kde-format
 msgid "Name of alarm"
 msgstr "Назва нагадування"
 
-#: commandoptions.cpp:222
+#: commandoptions.cpp:221
 #, kde-format
 msgid "Display alarm message as a notification"
 msgstr "Показати повідомлення нагадування як сповіщення"
 
-#: commandoptions.cpp:225
+#: commandoptions.cpp:224
 #, kde-format
 msgid "Audio file to play once"
 msgstr "Відтворити аудіофайл один раз"
 
-#: commandoptions.cpp:229
+#: commandoptions.cpp:228
 #, kde-format
 msgid "Audio file to play repeatedly"
 msgstr "Відтворювати аудіофайл безперервно"
 
-#: commandoptions.cpp:233
+#: commandoptions.cpp:232
 #, kde-format
 msgid "Specify alarm recurrence using iCalendar syntax"
 msgstr ""
 "Вказати частоту повторення нагадування використовуючи синтаксис iCalendar"
 
-#: commandoptions.cpp:237
+#: commandoptions.cpp:236
 #, kde-format
 msgid "Display reminder before or after alarm"
 msgstr "Показувати завчасне нагадування до чи після основного нагадування"
 
-#: commandoptions.cpp:241
+#: commandoptions.cpp:240
 #, kde-format
 msgid "Display reminder once, before or after first alarm recurrence"
 msgstr "Показувати завчасне нагадування тільки до чи після першого повторення"
 
-#: commandoptions.cpp:245
+#: commandoptions.cpp:244
 #, kde-format
 msgid "Number of times to repeat alarm (including initial occasion)"
 msgstr "Кількість разів повторення нагадування (включно з першим разом)"
 
-#: commandoptions.cpp:250
+#: commandoptions.cpp:249
 #, kde-format
 msgid "Speak the message when it is displayed"
 msgstr "Декламувати повідомлення, коли його показано"
 
-#: commandoptions.cpp:254
+#: commandoptions.cpp:253
 #, kde-format
 msgid "Email subject line"
 msgstr "Рядок теми ел. пошти"
 
-#: commandoptions.cpp:259
+#: commandoptions.cpp:258
 #, kde-format
 msgid "Simulate system time [[[yyyy-]mm-]dd-]hh:mm [TZ] (debug mode)"
 msgstr ""
 "Імітувати системний час [[[yyyy-]mm-]dd-]hh:mm [TZ] (режим усування вад)"
 
-#: commandoptions.cpp:264
+#: commandoptions.cpp:263
 #, kde-format
 msgid ""
 "Trigger alarm at time [[[yyyy-]mm-]dd-]hh:mm [TZ], or date yyyy-mm-dd [TZ]"
 msgstr ""
 "Час [[[yyyy-]mm-]dd-]hh:mm [TZ], або дата yyyy-mm-dd [TZ] приведення в дію"
 
-#: commandoptions.cpp:268
+#: commandoptions.cpp:267
 #, kde-format
 msgid "Display system tray icon"
 msgstr "Показувати піктограму системного лотка"
 
-#: commandoptions.cpp:271
+#: commandoptions.cpp:270
 #, kde-format
 msgid "Trigger alarm with the specified event ID"
 msgstr "Привести нагадування в дію з вказаним ІД події"
 
-#: commandoptions.cpp:275
+#: commandoptions.cpp:274
 #, kde-format
 msgid "Repeat until time [[[yyyy-]mm-]dd-]hh:mm [TZ], or date yyyy-mm-dd [TZ]"
 msgstr ""
 "Повторювати до часу [[[yyyy-]mm-]dd-]hh:mm [TZ], або дати yyyy-mm-dd [TZ]"
 
-#: commandoptions.cpp:279
+#: commandoptions.cpp:278
 #, kde-format
 msgid "Volume to play audio file"
 msgstr "Гучність відтворення звукового файла"
 
-#: commandoptions.cpp:290
+#: commandoptions.cpp:289
 #, kde-format
 msgid "Message text to display"
 msgstr "Текст повідомлення, що буде показано"
 
-#: commandoptions.cpp:454
+#: commandoptions.cpp:453
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "<icode>%1</icode>: invalid email address"
 msgstr "<icode>%1</icode>: неправильна адреса електронної пошти"
 
-#: commandoptions.cpp:578 commandoptions.cpp:593 commandoptions.cpp:672
+#: commandoptions.cpp:577 commandoptions.cpp:592 commandoptions.cpp:671
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "Invalid <icode>%1</icode> parameter for date-only alarm"
 msgstr "Неправильний <icode>%1</icode> параметр для нагадування дати"
 
-#: commandoptions.cpp:582
+#: commandoptions.cpp:581
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "<icode>%1</icode> earlier than <icode>%2</icode>"
 msgstr "<icode>%1</icode> скоріше, ніж <icode>%2</icode>"
 
-#: commandoptions.cpp:604
+#: commandoptions.cpp:603
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid ""
@@ -653,7 +653,7 @@ msgstr ""
 "Некоректні параметри <icode>%1</icode> та <icode>%2</icode>: повторення "
 "перевищують інтервал <icode>%3</icode>"
 
-#: commandoptions.cpp:785
+#: commandoptions.cpp:784
 #, kde-format
 msgctxt "@info:shell"
 msgid ": option(s) only valid with an appropriate action option or message"
@@ -661,7 +661,7 @@ msgstr ""
 ": параметр(и) можна використовувати лише з визначенням відповідного варіанта "
 "дії або повідомлення"
 
-#: commandoptions.cpp:806 commandoptions.cpp:823
+#: commandoptions.cpp:805 commandoptions.cpp:822
 #, kde-format
 msgctxt "@info:shell"
 msgid ""
@@ -672,25 +672,25 @@ msgstr ""
 "Скористайтеся параметром --help для отримання списку можливих параметрів "
 "командного рядка.\n"
 
-#: commandoptions.cpp:851
+#: commandoptions.cpp:850
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "<icode>%1</icode> requires <icode>%2</icode>"
 msgstr "<icode>%1</icode> потребує <icode>%2</icode>"
 
-#: commandoptions.cpp:853
+#: commandoptions.cpp:852
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "<icode>%1</icode> requires <icode>%2</icode> or <icode>%3</icode>"
 msgstr "<icode>%1</icode> потребує <icode>%2</icode> або <icode>%3</icode>"
 
-#: commandoptions.cpp:858
+#: commandoptions.cpp:857
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "Invalid <icode>%1</icode> parameter"
 msgstr "Неправильний параметр <icode>%1</icode>"
 
-#: commandoptions.cpp:863
+#: commandoptions.cpp:862
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "<icode>%1</icode> incompatible with <icode>%2</icode>"

@@ -22,7 +22,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-02 00:59+0000\n"
+"POT-Creation-Date: 2023-02-21 01:00+0000\n"
 "PO-Revision-Date: 2022-07-29 22:44+0300\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -415,247 +415,247 @@ msgctxt "@info:whatsthis"
 msgid "Set up an additional alarm repetition"
 msgstr "Hälytyksen toistoväli"
 
-#: commandoptions.cpp:127
+#: commandoptions.cpp:126
 #, kde-format
 msgid "Prompt for confirmation when alarm is acknowledged"
 msgstr "Kysy vahvistus hälytystä kuitattaessa"
 
-#: commandoptions.cpp:130
+#: commandoptions.cpp:129
 #, kde-format
 msgid "Attach file to email (repeat as needed)"
 msgstr "Liitä tiedosto sähköpostiviestiin (toista tarvittaessa)"
 
-#: commandoptions.cpp:134
+#: commandoptions.cpp:133
 #, kde-format
 msgid "Auto-close alarm window after --late-cancel period"
 msgstr "Sulje hälytysikkuna automaattisesti --late-cancel -ajan kuluttua"
 
-#: commandoptions.cpp:137
+#: commandoptions.cpp:136
 #, kde-format
 msgid "Blind copy email to self"
 msgstr "Kopioi sähköpostiviesti itselle"
 
-#: commandoptions.cpp:140
+#: commandoptions.cpp:139
 #, kde-format
 msgid "Beep when message is displayed"
 msgstr "Äänimerkki viestiä näytettäessä"
 
-#: commandoptions.cpp:143
+#: commandoptions.cpp:142
 #, kde-format
 msgid "Message background color (name or hex 0xRRGGBB)"
 msgstr "Viestin taustan väri (nimi tai hex 0xRRGGBB)"
 
-#: commandoptions.cpp:147
+#: commandoptions.cpp:146
 #, kde-format
 msgid "Message foreground color (name or hex 0xRRGGBB)"
 msgstr "Viestin edustaväri (nimi tai hex 0xRRGGBB)"
 
-#: commandoptions.cpp:151
+#: commandoptions.cpp:150
 #, kde-format
 msgid "Cancel alarm with the specified event ID"
 msgstr "Peru hälytys, jolla on annettu tapahtumatunniste"
 
-#: commandoptions.cpp:155
+#: commandoptions.cpp:154
 #, kde-format
 msgid "Disable the alarm"
 msgstr "Poista hälytys käytöstä"
 
-#: commandoptions.cpp:158
+#: commandoptions.cpp:157
 #, kde-format
 msgid "Disable monitoring of all alarms"
 msgstr "Poista käytöstä kaikkien hälytysten valvonta"
 
-#: commandoptions.cpp:161
+#: commandoptions.cpp:160
 #, kde-format
 msgid "Execute a shell command line"
 msgstr "Suorita järjestelmäkomento"
 
-#: commandoptions.cpp:165
+#: commandoptions.cpp:164
 #, kde-format
 msgid "Command line to generate alarm message text"
 msgstr "Komentorivikomento, jolla luodaan hälytysteksti"
 
-#: commandoptions.cpp:169
+#: commandoptions.cpp:168
 #, kde-format
 msgid "Display the alarm edit dialog to edit the specified alarm"
 msgstr "Näytä hälytyksen muokkausikkuna tietyn hälytyksen muokkaamiseksi"
 
-#: commandoptions.cpp:173
+#: commandoptions.cpp:172
 #, kde-format
 msgid "Display the alarm edit dialog to edit a new display alarm"
 msgstr "Näytä hälytyksen muokkausikkuna uuden näyttöhälytyksen muokkaamisseksi"
 
-#: commandoptions.cpp:176
+#: commandoptions.cpp:175
 #, kde-format
 msgid "Display the alarm edit dialog to edit a new command alarm"
 msgstr ""
 "Näytä hälytyksen muokkausikkuna uuden komentorivihälytyksen muokkaamiseksi"
 
-#: commandoptions.cpp:179
+#: commandoptions.cpp:178
 #, kde-format
 msgid "Display the alarm edit dialog to edit a new email alarm"
 msgstr ""
 "Näytä hälytyksen muokkausikkuna uuden sähköpostihälytyksen muokkaamiseksi"
 
-#: commandoptions.cpp:182
+#: commandoptions.cpp:181
 #, kde-format
 msgid "Display the alarm edit dialog to edit a new audio alarm"
 msgstr "Näytä hälytyksen muokkausikkuna uuden äänihälytyksen muokkaamiseksi"
 
-#: commandoptions.cpp:185
+#: commandoptions.cpp:184
 #, kde-format
 msgid "Display the alarm edit dialog, preset with a template"
 msgstr "Näytä hälytyksen muokkausikkuna, joka on esitäytetty mallin mukaisesti"
 
-#: commandoptions.cpp:189
+#: commandoptions.cpp:188
 #, kde-format
 msgid "File to display"
 msgstr "Näytettävä tiedosto"
 
-#: commandoptions.cpp:193
+#: commandoptions.cpp:192
 #, kde-format
 msgid "KMail identity to use as sender of email"
 msgstr "KMail-henkilö, jota käytetään sähköpostin lähettäjänä"
 
-#: commandoptions.cpp:197
+#: commandoptions.cpp:196
 #, kde-format
 msgid "Interval between alarm repetitions"
 msgstr "Hälytyksen toistoväli"
 
-#: commandoptions.cpp:201
+#: commandoptions.cpp:200
 #, kde-format
 msgid "Show alarm as an event in KOrganizer"
 msgstr "Näytä hälytys tapahtumana KOrganizerissa"
 
-#: commandoptions.cpp:204
+#: commandoptions.cpp:203
 #, kde-format
 msgid "Cancel alarm if more than 'period' late when triggered"
 msgstr "Peru hälytys, jos sitä ei voida suorittaa ajallaan"
 
-#: commandoptions.cpp:209
+#: commandoptions.cpp:208
 #, kde-format
 msgid "Output list of scheduled alarms to stdout"
 msgstr "Tulosta ajastettujen hälytysten luettelo vakiotulosvirtaan"
 
-#: commandoptions.cpp:212
+#: commandoptions.cpp:211
 #, kde-format
 msgid "Repeat alarm at every login"
 msgstr "Toista hälytys aina sisäänkirjauduttaessa"
 
-#: commandoptions.cpp:215
+#: commandoptions.cpp:214
 #, kde-format
 msgid "Send an email to the given address (repeat as needed)"
 msgstr ""
 "Lähetä sähköpostiviesti määriteltyyn osoitteeseen (toista tarvittaessa)"
 
-#: commandoptions.cpp:219
+#: commandoptions.cpp:218
 #, kde-format
 msgid "Name of alarm"
 msgstr "Hälytyksen nimi"
 
-#: commandoptions.cpp:222
+#: commandoptions.cpp:221
 #, kde-format
 msgid "Display alarm message as a notification"
 msgstr "Näytä hälytysviesti ilmoituksena"
 
-#: commandoptions.cpp:225
+#: commandoptions.cpp:224
 #, kde-format
 msgid "Audio file to play once"
 msgstr "Yhden kerran soitettava audiotiedosto"
 
-#: commandoptions.cpp:229
+#: commandoptions.cpp:228
 #, kde-format
 msgid "Audio file to play repeatedly"
 msgstr "Soitettava audiotiedosto toistossa"
 
-#: commandoptions.cpp:233
+#: commandoptions.cpp:232
 #, kde-format
 msgid "Specify alarm recurrence using iCalendar syntax"
 msgstr "Määrittele hälytyksen toisto käyttämällä iCalendar-muotoa"
 
-#: commandoptions.cpp:237
+#: commandoptions.cpp:236
 #, kde-format
 msgid "Display reminder before or after alarm"
 msgstr "Näytä muistutus ennen tai jälkeen hälytyksen"
 
-#: commandoptions.cpp:241
+#: commandoptions.cpp:240
 #, kde-format
 msgid "Display reminder once, before or after first alarm recurrence"
 msgstr "Näytä muistutus kerran, ennen tai jälkeen ensimmäisen toiston"
 
-#: commandoptions.cpp:245
+#: commandoptions.cpp:244
 #, kde-format
 msgid "Number of times to repeat alarm (including initial occasion)"
 msgstr "Hälytyksen toistomäärä (ensimmäisen kerta mukaan lukien)"
 
-#: commandoptions.cpp:250
+#: commandoptions.cpp:249
 #, kde-format
 msgid "Speak the message when it is displayed"
 msgstr "Puhu viesti puheena kun se näytetään"
 
-#: commandoptions.cpp:254
+#: commandoptions.cpp:253
 #, kde-format
 msgid "Email subject line"
 msgstr "Sähköpostin aiherivi"
 
 # *** AV ei ole hyvä (”AikaVyöhyke”), mutta VV ja YY eivät myöskään käy
-#: commandoptions.cpp:259
+#: commandoptions.cpp:258
 #, kde-format
 msgid "Simulate system time [[[yyyy-]mm-]dd-]hh:mm [TZ] (debug mode)"
 msgstr ""
 "Jäljittele järjestelmän aikaa [[[vvvv-]kk-]pv-]tt:mm [AV] "
 "(virheenpaikannustila)"
 
-#: commandoptions.cpp:264
+#: commandoptions.cpp:263
 #, kde-format
 msgid ""
 "Trigger alarm at time [[[yyyy-]mm-]dd-]hh:mm [TZ], or date yyyy-mm-dd [TZ]"
 msgstr "Laukaise hälytys [[vvvv-]kk-]pv-]tt:mm [AV], tai pvm vvvv-kk-pv [AV]"
 
-#: commandoptions.cpp:268
+#: commandoptions.cpp:267
 #, kde-format
 msgid "Display system tray icon"
 msgstr "Näytä ilmoitusalueen kuvake"
 
-#: commandoptions.cpp:271
+#: commandoptions.cpp:270
 #, kde-format
 msgid "Trigger alarm with the specified event ID"
 msgstr "Käynnistä hälytys määritellyllä tapahtuma ID:llä"
 
-#: commandoptions.cpp:275
+#: commandoptions.cpp:274
 #, kde-format
 msgid "Repeat until time [[[yyyy-]mm-]dd-]hh:mm [TZ], or date yyyy-mm-dd [TZ]"
 msgstr "Toista kunnes [[[vvvv-]kk-]pv-]tt:mm [AV], tai pvm vvvv-kk-pv [AV]"
 
-#: commandoptions.cpp:279
+#: commandoptions.cpp:278
 #, kde-format
 msgid "Volume to play audio file"
 msgstr "Äänitiedoston soittovoimakkuus"
 
-#: commandoptions.cpp:290
+#: commandoptions.cpp:289
 #, kde-format
 msgid "Message text to display"
 msgstr "Näytettävä viesti"
 
-#: commandoptions.cpp:454
+#: commandoptions.cpp:453
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "<icode>%1</icode>: invalid email address"
 msgstr "<icode>%1</icode>: virheellinen sähköpostiosoite"
 
-#: commandoptions.cpp:578 commandoptions.cpp:593 commandoptions.cpp:672
+#: commandoptions.cpp:577 commandoptions.cpp:592 commandoptions.cpp:671
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "Invalid <icode>%1</icode> parameter for date-only alarm"
 msgstr "Parametri <icode>%1</icode> on virheellinen päivittäishälytyksiin"
 
-#: commandoptions.cpp:582
+#: commandoptions.cpp:581
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "<icode>%1</icode> earlier than <icode>%2</icode>"
 msgstr "<icode>%1</icode> on aikaisempi kuin <icode>%2</icode>"
 
-#: commandoptions.cpp:604
+#: commandoptions.cpp:603
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid ""
@@ -665,13 +665,13 @@ msgstr ""
 "Parametrit <icode>%1</icode> ja <icode>%2</icode> virheellisiä: toisto on "
 "pidempikuin intervalli <icode>%3</icode>"
 
-#: commandoptions.cpp:785
+#: commandoptions.cpp:784
 #, kde-format
 msgctxt "@info:shell"
 msgid ": option(s) only valid with an appropriate action option or message"
 msgstr ": vaihtoehdot pätevät vain joihinkin toimintoihin tai viesteihin"
 
-#: commandoptions.cpp:806 commandoptions.cpp:823
+#: commandoptions.cpp:805 commandoptions.cpp:822
 #, kde-format
 msgctxt "@info:shell"
 msgid ""
@@ -681,25 +681,25 @@ msgstr ""
 "\n"
 "Saat luettelon komentoriviparametreista valitsimella --help.\n"
 
-#: commandoptions.cpp:851
+#: commandoptions.cpp:850
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "<icode>%1</icode> requires <icode>%2</icode>"
 msgstr "<icode>%1</icode> edellyttää <icode>%2</icode>"
 
-#: commandoptions.cpp:853
+#: commandoptions.cpp:852
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "<icode>%1</icode> requires <icode>%2</icode> or <icode>%3</icode>"
 msgstr "<icode>%1</icode> edellyttää <icode>%2</icode> tai <icode>%3</icode>"
 
-#: commandoptions.cpp:858
+#: commandoptions.cpp:857
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "Invalid <icode>%1</icode> parameter"
 msgstr "Virheellinen <icode>%1</icode> parametri"
 
-#: commandoptions.cpp:863
+#: commandoptions.cpp:862
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "<icode>%1</icode> incompatible with <icode>%2</icode>"

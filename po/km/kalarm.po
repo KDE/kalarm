@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-02 00:59+0000\n"
+"POT-Creation-Date: 2023-02-21 01:00+0000\n"
 "PO-Revision-Date: 2012-12-26 10:26+0700\n"
 "Last-Translator: sutha <sutha@khmeros.info>\n"
 "Language-Team: Khmer <support@khmeros>\n"
@@ -414,245 +414,245 @@ msgctxt "@info:whatsthis"
 msgid "Set up an additional alarm repetition"
 msgstr "រៀបចំ​ការ​ធ្វើ​ការ​ជូនដំណឹង​បន្ថែម"
 
-#: commandoptions.cpp:127
+#: commandoptions.cpp:126
 #, kde-format
 msgid "Prompt for confirmation when alarm is acknowledged"
 msgstr "សួររក​ការអះអាង ពេលការជូនដំណឹង​​ត្រូវ​បាន​ទទួល​ស្គាល់"
 
-#: commandoptions.cpp:130
+#: commandoptions.cpp:129
 #, kde-format
 msgid "Attach file to email (repeat as needed)"
 msgstr "ភ្ជាប់​ឯកសារ​ទៅ​អ៊ីមែល (ធ្វើឡើងវិញ តាម​តម្រូវការ)"
 
-#: commandoptions.cpp:134
+#: commandoptions.cpp:133
 #, kde-format
 msgid "Auto-close alarm window after --late-cancel period"
 msgstr "បិទ​បង្អួច​ការជូនដំណឹង​ដោយ​ស្វ័យប្រវត្តិ បន្ទាប់ពី​កំឡុងពេល --late-cancel"
 
-#: commandoptions.cpp:137
+#: commandoptions.cpp:136
 #, kde-format
 msgid "Blind copy email to self"
 msgstr "ចម្លង​អ៊ីមែល​ជា​សម្ងាត់​ទៅ​ខ្លួនឯង"
 
-#: commandoptions.cpp:140
+#: commandoptions.cpp:139
 #, kde-format
 msgid "Beep when message is displayed"
 msgstr "បន្លឺសម្លេង​​ប៊ីប ពេល​សារ​ត្រូវបាន​បង្ហាញ"
 
-#: commandoptions.cpp:143
+#: commandoptions.cpp:142
 #, kde-format
 msgid "Message background color (name or hex 0xRRGGBB)"
 msgstr "ពណ៌​ផ្ទៃ​ខាងក្រោយ​របស់​សារ (ឈ្មោះ ឬ hex 0xRRGGBB)"
 
-#: commandoptions.cpp:147
+#: commandoptions.cpp:146
 #, kde-format
 msgid "Message foreground color (name or hex 0xRRGGBB)"
 msgstr "ពណ៌​ផ្ទៃ​ខាង​មុខ​របស់​សារ (ឈ្មោះ​ ឬ hex 0xRRGGBB)"
 
-#: commandoptions.cpp:151
+#: commandoptions.cpp:150
 #, kde-format
 msgid "Cancel alarm with the specified event ID"
 msgstr "បោះបង់​ការជូនដំណឹង​ដែល​មាន​លេខ​សម្គាល់​ព្រឹត្តិការណ៍​ដែល​បាន​បញ្ជាក់"
 
-#: commandoptions.cpp:155
+#: commandoptions.cpp:154
 #, kde-format
 msgid "Disable the alarm"
 msgstr "បិទ​ការ​ជូនដំណឹង"
 
-#: commandoptions.cpp:158
+#: commandoptions.cpp:157
 #, kde-format
 msgid "Disable monitoring of all alarms"
 msgstr "បិទ​ការ​ត្រួតពិនិត្យ​ម៉ោង​រោទ៍​ទាំងអស់"
 
-#: commandoptions.cpp:161
+#: commandoptions.cpp:160
 #, kde-format
 msgid "Execute a shell command line"
 msgstr "ប្រតិបត្តិ​បន្ទាត់​ពាក្យ​បញ្ជាសែល​មួយ"
 
-#: commandoptions.cpp:165
+#: commandoptions.cpp:164
 #, kde-format
 msgid "Command line to generate alarm message text"
 msgstr "បន្ទាត់​ពាក្យ​បញ្ជា​ដែលត្រូវ​បង្កើត​អត្ថបទ​សារ​ជូនដំណឹង"
 
-#: commandoptions.cpp:169
+#: commandoptions.cpp:168
 #, kde-format
 msgid "Display the alarm edit dialog to edit the specified alarm"
 msgstr "បង្ហាញ​ប្រអប់​កែសម្រួល​ការ​ជូនដំណឹង ដើម្បី​កែសម្រួល​ការ​ជូនដំណឹង​ដែល​បាន​បញ្ជាក់"
 
-#: commandoptions.cpp:173
+#: commandoptions.cpp:172
 #, kde-format
 msgid "Display the alarm edit dialog to edit a new display alarm"
 msgstr "បង្ហាញ​ប្រអប់​កែសម្រួល​ការ​ជូនដំណឹង ដើម្បី​កែសម្រួល​ការ​ជូនដំណឹង​បង្ហាញ​ថ្មី"
 
-#: commandoptions.cpp:176
+#: commandoptions.cpp:175
 #, kde-format
 msgid "Display the alarm edit dialog to edit a new command alarm"
 msgstr "បង្ហាញ​ប្រអប់​កែសម្រួល​ការ​ជូនដំណឹង ដើម្បី​កែសម្រួល​ការ​ជូនដំណឹង​ពាក្យ​បញ្ជា​ថ្មី"
 
-#: commandoptions.cpp:179
+#: commandoptions.cpp:178
 #, kde-format
 msgid "Display the alarm edit dialog to edit a new email alarm"
 msgstr "បង្ហាញ​ប្រអប់​កែសម្រួល​ការ​ជូនដំណឹង ដើម្បី​កែសម្រួល​ការ​ជូនដំណឹង​អ៊ីមែល​ថ្មី"
 
-#: commandoptions.cpp:182
+#: commandoptions.cpp:181
 #, kde-format
 msgid "Display the alarm edit dialog to edit a new audio alarm"
 msgstr "បង្ហាញ​ប្រអប់​កែសម្រួល​ការ​ជូនដំណឹង​ ដើម្បីកែសម្រួល​កា​រជូនដំណឹង​អូឌីយ៉ូ​ថ្មី"
 
-#: commandoptions.cpp:185
+#: commandoptions.cpp:184
 #, kde-format
 msgid "Display the alarm edit dialog, preset with a template"
 msgstr "បង្ហាញ​ប្រអប់​កែសម្រួល​ការ​ជូនដំណឹង ដោយកំណត់​ជា​មុន​ជាមួយ​ពុម្ព​មួយ"
 
-#: commandoptions.cpp:189
+#: commandoptions.cpp:188
 #, kde-format
 msgid "File to display"
 msgstr "ឯកសារ​ដែល​ត្រូវ​បង្ហាញ"
 
-#: commandoptions.cpp:193
+#: commandoptions.cpp:192
 #, kde-format
 msgid "KMail identity to use as sender of email"
 msgstr "អត្តសញ្ញាណ KMail ដែល​ត្រូវ​ប្រើ​ជា​អ្នក​ផ្ញើ​អ៊ីម៉ែល"
 
-#: commandoptions.cpp:197
+#: commandoptions.cpp:196
 #, kde-format
 msgid "Interval between alarm repetitions"
 msgstr "ចន្លោះពេល​រវាង​ការ​ធ្វើ​ការ​ជូន​ដំណឹង​ឡើងវិញ"
 
-#: commandoptions.cpp:201
+#: commandoptions.cpp:200
 #, kde-format
 msgid "Show alarm as an event in KOrganizer"
 msgstr "បង្ហាញ​ការជូនដំណឹង​ជា​ព្រឹត្តការណ៍​ក្នុង KOrganizer"
 
-#: commandoptions.cpp:204
+#: commandoptions.cpp:203
 #, kde-format
 msgid "Cancel alarm if more than 'period' late when triggered"
 msgstr "បោះបង់​ការ​ជូនដំណឹង នៅពេល​ដែល​​ច្រើជាង 'កំឡុង​ពេល​' យឺត នៅពេល​កេះ"
 
-#: commandoptions.cpp:209
+#: commandoptions.cpp:208
 #, kde-format
 msgid "Output list of scheduled alarms to stdout"
 msgstr "រាយ​បញ្ជី​លទ្ធផល​ដែល​ត្រូវ​កំណត់​ពេលវេលា​ជូនដំណឹង​ចំពោះ stdout"
 
-#: commandoptions.cpp:212
+#: commandoptions.cpp:211
 #, kde-format
 msgid "Repeat alarm at every login"
 msgstr "ធ្វើការ​ជូនដំណឹង​នៅរាល់​ពេល​ដែល​ចូល"
 
-#: commandoptions.cpp:215
+#: commandoptions.cpp:214
 #, kde-format
 msgid "Send an email to the given address (repeat as needed)"
 msgstr "ផ្ញើ​អ៊ីមែល​ទៅអាសយដ្ឋាន​ដែល​បាន​ផ្ដល់ (ធ្វើ​ឡើងវិញ​នៅពេល​ត្រូវការ)"
 
-#: commandoptions.cpp:219
+#: commandoptions.cpp:218
 #, fuzzy, kde-format
 #| msgctxt "@info/plain Action to create a new alarm"
 #| msgid "New alarm"
 msgid "Name of alarm"
 msgstr "ការ​ជូន​ដំណឹង​ថ្មី"
 
-#: commandoptions.cpp:222
+#: commandoptions.cpp:221
 #, fuzzy, kde-format
 #| msgctxt "@info:whatsthis"
 #| msgid "Display the alarm message now"
 msgid "Display alarm message as a notification"
 msgstr "បង្ហាញ​សារ​ជូនដំណឹង​ឥឡូវនេះ"
 
-#: commandoptions.cpp:225
+#: commandoptions.cpp:224
 #, kde-format
 msgid "Audio file to play once"
 msgstr "ឯកសារ​អូឌីយ៉ូ​ដែល​ត្រូវ​ចាក់​ម្ដង"
 
-#: commandoptions.cpp:229
+#: commandoptions.cpp:228
 #, kde-format
 msgid "Audio file to play repeatedly"
 msgstr "ឯកសារ​អូឌីយ៉ូ​ដែល​ត្រូវ​ចាក់ឡើងវិញ"
 
-#: commandoptions.cpp:233
+#: commandoptions.cpp:232
 #, kde-format
 msgid "Specify alarm recurrence using iCalendar syntax"
 msgstr "បញ្ជាក់​ការ​កើតឡើង​ការ​ជូនដំណឹង​ ដោយប្រើ​វាក្យ​សម្ព័ន្ធ iCalendar"
 
-#: commandoptions.cpp:237
+#: commandoptions.cpp:236
 #, kde-format
 msgid "Display reminder before or after alarm"
 msgstr "បង្ហាញ​កម្មវិធី​រំលឹក​មុន ឬ​ក្រោយ​សំឡេង​រោទ៍"
 
-#: commandoptions.cpp:241
+#: commandoptions.cpp:240
 #, kde-format
 msgid "Display reminder once, before or after first alarm recurrence"
 msgstr "បង្ហាញ​កម្មវិធី​រំលឹក​ម្ដង មុន ឬ​ក្រោយ​ការ​កើតឡើង​វិញ​នៃ​​ការ​រោទ៍​ដំបួង"
 
-#: commandoptions.cpp:245
+#: commandoptions.cpp:244
 #, kde-format
 msgid "Number of times to repeat alarm (including initial occasion)"
 msgstr "ចំនួន​ដង​ដែល​ត្រូវ​ធ្វើ​​ការជូនដំណឹង​ឡើងវិញ (រួមទាំង​ឱកាស​ដំបូង)"
 
-#: commandoptions.cpp:250
+#: commandoptions.cpp:249
 #, kde-format
 msgid "Speak the message when it is displayed"
 msgstr "អាន​សារ​ពេល​វា​ត្រូវបាន​បង្ហាញ"
 
-#: commandoptions.cpp:254
+#: commandoptions.cpp:253
 #, kde-format
 msgid "Email subject line"
 msgstr "បន្ទាត់​ប្រធានបទ​អ៊ីមែល"
 
-#: commandoptions.cpp:259
+#: commandoptions.cpp:258
 #, kde-format
 msgid "Simulate system time [[[yyyy-]mm-]dd-]hh:mm [TZ] (debug mode)"
 msgstr "ត្រាប់តាម​ពេលវេលា​ប្រព័ន្ធ [[[yyyy-]mm-]dd-]hh:mm [TZ] (របៀប​បំបាត់​កំហុស)"
 
-#: commandoptions.cpp:264
+#: commandoptions.cpp:263
 #, kde-format
 msgid ""
 "Trigger alarm at time [[[yyyy-]mm-]dd-]hh:mm [TZ], or date yyyy-mm-dd [TZ]"
 msgstr "កេះ​ការជូនដំណឹង ​នៅម៉ោង [[[yyyy-]mm-]dd-]hh:mm ឬ​កាលបរិច្ឆេទ yyyy-mm-dd"
 
-#: commandoptions.cpp:268
+#: commandoptions.cpp:267
 #, kde-format
 msgid "Display system tray icon"
 msgstr "បង្ហាញ​រូបតំណាង​ថាស​ប្រព័ន្ធ"
 
-#: commandoptions.cpp:271
+#: commandoptions.cpp:270
 #, kde-format
 msgid "Trigger alarm with the specified event ID"
 msgstr "ធ្វើ​ការជូនដំណឹង​ដោយ​លេខសម្គាល់​ព្រឹត្តិការណ៍​ជាក់លាក់"
 
-#: commandoptions.cpp:275
+#: commandoptions.cpp:274
 #, kde-format
 msgid "Repeat until time [[[yyyy-]mm-]dd-]hh:mm [TZ], or date yyyy-mm-dd [TZ]"
 msgstr "ធ្វើ​​ឡើង​វិញ​រហូតដល់​ម៉ោង [[[yyyy-]mm-]dd-]hh:mm ឬ​កាលបរិច្ឆេទ yyyy-mm-dd"
 
-#: commandoptions.cpp:279
+#: commandoptions.cpp:278
 #, kde-format
 msgid "Volume to play audio file"
 msgstr "កម្រិត​សំឡេងដែល​ត្រូវ​ចាក់​ឯកសារ​អូឌីយ៉ូ"
 
-#: commandoptions.cpp:290
+#: commandoptions.cpp:289
 #, kde-format
 msgid "Message text to display"
 msgstr "អត្ថបទ​សារដែល​​ត្រូវ​បង្ហាញ"
 
-#: commandoptions.cpp:454
+#: commandoptions.cpp:453
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "<icode>%1</icode>: invalid email address"
 msgstr "<icode>%1</icode> ៖ អាសយដ្ឋាន​អ៊ីមែល​មិនត្រឹមត្រូវ"
 
-#: commandoptions.cpp:578 commandoptions.cpp:593 commandoptions.cpp:672
+#: commandoptions.cpp:577 commandoptions.cpp:592 commandoptions.cpp:671
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "Invalid <icode>%1</icode> parameter for date-only alarm"
 msgstr "ប៉ារ៉ាម៉ែត្រ <icode>%1</icode> មិន​ត្រឹមត្រូវ​សម្រាប់​តែ​ការ​ជូន​ដំណឹង​កាលបរិច្ឆេទ"
 
-#: commandoptions.cpp:582
+#: commandoptions.cpp:581
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "<icode>%1</icode> earlier than <icode>%2</icode>"
 msgstr "<icode>%1</icode> មុន <icode>%2</icode>"
 
-#: commandoptions.cpp:604
+#: commandoptions.cpp:603
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid ""
@@ -662,13 +662,13 @@ msgstr ""
 "ប៉ារ៉ាម៉ែត្រ​មិន <icode>%1</icode> និង <icode>%2</icode> មិនត្រឹមត្រូវ ៖ ការ​ធ្វើ​ឡើងវិញ​គឺ​"
 "មិនយូរជាង​ចន្លោះពេល <icode>%3</icode> ទេ"
 
-#: commandoptions.cpp:785
+#: commandoptions.cpp:784
 #, kde-format
 msgctxt "@info:shell"
 msgid ": option(s) only valid with an appropriate action option or message"
 msgstr "៖ ជម្រើស​ត្រឹមត្រូវ​តែ​ជា​មួយ​ជម្រើស​សកម្មភាព​ដែល​សមស្រម ឬ​សារ​ប៉ុណ្ណោះ"
 
-#: commandoptions.cpp:806 commandoptions.cpp:823
+#: commandoptions.cpp:805 commandoptions.cpp:822
 #, kde-format
 msgctxt "@info:shell"
 msgid ""
@@ -678,25 +678,25 @@ msgstr ""
 "\n"
 "ប្រើ --help ដើម្បី​យក​បញ្ជី​ជម្រើស​បន្ទាត់​ពាក្យ​បញ្ជា​ដែល​មាន ។\n"
 
-#: commandoptions.cpp:851
+#: commandoptions.cpp:850
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "<icode>%1</icode> requires <icode>%2</icode>"
 msgstr "<icode>%1</icode> ត្រូវការ <icode>%2</icode>"
 
-#: commandoptions.cpp:853
+#: commandoptions.cpp:852
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "<icode>%1</icode> requires <icode>%2</icode> or <icode>%3</icode>"
 msgstr "<icode>%1</icode> ត្រូវការ <icode>%2</icode> ឬ <icode>%3</icode>"
 
-#: commandoptions.cpp:858
+#: commandoptions.cpp:857
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "Invalid <icode>%1</icode> parameter"
 msgstr "ប៉ារ៉ាម៉ែត្រ <icode>%1</icode> មិនត្រឹមត្រូវ"
 
-#: commandoptions.cpp:863
+#: commandoptions.cpp:862
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "<icode>%1</icode> incompatible with <icode>%2</icode>"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-02 00:59+0000\n"
+"POT-Creation-Date: 2023-02-21 01:00+0000\n"
 "PO-Revision-Date: 2009-02-27 17:53+0530\n"
 "Last-Translator: Ravishankar Shrivastava <raviratlami@aol.in>\n"
 "Language-Team: Hindi <kde-i18n-doc@lists.kde.org>\n"
@@ -390,197 +390,197 @@ msgctxt "@info:whatsthis"
 msgid "Set up an additional alarm repetition"
 msgstr "अतिरिक्त अलार्म दोहराना सेटअप करव"
 
-#: commandoptions.cpp:127
+#: commandoptions.cpp:126
 #, kde-format
 msgid "Prompt for confirmation when alarm is acknowledged"
 msgstr "जब अलार्म के पावती मिले तहां पुस्टि बर पूछव"
 
-#: commandoptions.cpp:130
+#: commandoptions.cpp:129
 #, kde-format
 msgid "Attach file to email (repeat as needed)"
 msgstr "फाइल ल ई-मेल मं संलग्न करव (जब जरूरी होथे दुहराव)"
 
-#: commandoptions.cpp:134
+#: commandoptions.cpp:133
 #, kde-format
 msgid "Auto-close alarm window after --late-cancel period"
 msgstr "लेट कैंसल काल के बाद अलार्म विंडो ल अपने अपन बन्द करव"
 
-#: commandoptions.cpp:137
+#: commandoptions.cpp:136
 #, kde-format
 msgid "Blind copy email to self"
 msgstr "स्वयं ल ई-मेल के नकल"
 
-#: commandoptions.cpp:140
+#: commandoptions.cpp:139
 #, kde-format
 msgid "Beep when message is displayed"
 msgstr "जब संदेस प्रदर्सित करे जाए, बीप बजाव"
 
-#: commandoptions.cpp:143
+#: commandoptions.cpp:142
 #, kde-format
 msgid "Message background color (name or hex 0xRRGGBB)"
 msgstr "संदेस के पिछोत अंगना रंग (नाम या हेक्स 0xRRGGBB)"
 
-#: commandoptions.cpp:147
+#: commandoptions.cpp:146
 #, kde-format
 msgid "Message foreground color (name or hex 0xRRGGBB)"
 msgstr "संदेस के आगू तरफ रंग (नाम या हेक्स 0xRRGGBB)"
 
-#: commandoptions.cpp:151
+#: commandoptions.cpp:150
 #, kde-format
 msgid "Cancel alarm with the specified event ID"
 msgstr "निरधारित घटना आईडी के साथ अलार्म को खारिज करव"
 
-#: commandoptions.cpp:155
+#: commandoptions.cpp:154
 #, kde-format
 msgid "Disable the alarm"
 msgstr "अलार्म अक्छम करव"
 
-#: commandoptions.cpp:158
+#: commandoptions.cpp:157
 #, fuzzy, kde-format
 #| msgid "Disable the alarm"
 msgid "Disable monitoring of all alarms"
 msgstr "अलार्म अक्छम करव"
 
-#: commandoptions.cpp:161
+#: commandoptions.cpp:160
 #, kde-format
 msgid "Execute a shell command line"
 msgstr "एक सेल कमांड लकीर चलाव"
 
-#: commandoptions.cpp:165
+#: commandoptions.cpp:164
 #, kde-format
 msgid "Command line to generate alarm message text"
 msgstr ""
 
-#: commandoptions.cpp:169
+#: commandoptions.cpp:168
 #, kde-format
 msgid "Display the alarm edit dialog to edit the specified alarm"
 msgstr "निरधारित अलार्म ल संपादित करे बर अलार्म संपादन गोठ देखाव"
 
-#: commandoptions.cpp:173
+#: commandoptions.cpp:172
 #, kde-format
 msgid "Display the alarm edit dialog to edit a new display alarm"
 msgstr "नवा डिस्प्ले अलार्म ल संपादित करे बर अलार्म संपादन गोठ देखाव"
 
-#: commandoptions.cpp:176
+#: commandoptions.cpp:175
 #, kde-format
 msgid "Display the alarm edit dialog to edit a new command alarm"
 msgstr "नवा कमांड अलार्म ल संपादित करे बर अलार्म संपादन गोठ देखाव"
 
-#: commandoptions.cpp:179
+#: commandoptions.cpp:178
 #, kde-format
 msgid "Display the alarm edit dialog to edit a new email alarm"
 msgstr "नवा ईमेल अलार्म ल संपादित करे बर अलार्म संपादन गोठ देखाव"
 
-#: commandoptions.cpp:182
+#: commandoptions.cpp:181
 #, fuzzy, kde-format
 #| msgid "Display the alarm edit dialog to edit a new email alarm"
 msgid "Display the alarm edit dialog to edit a new audio alarm"
 msgstr "नवा ईमेल अलार्म ल संपादित करे बर अलार्म संपादन गोठ देखाव"
 
-#: commandoptions.cpp:185
+#: commandoptions.cpp:184
 #, kde-format
 msgid "Display the alarm edit dialog, preset with a template"
 msgstr "टैम्प्लेट के साथ प्रीसेट सहित अलार्म संपादन गोठ देखाव"
 
-#: commandoptions.cpp:189
+#: commandoptions.cpp:188
 #, kde-format
 msgid "File to display"
 msgstr "प्रदर्सन बर फाइल"
 
-#: commandoptions.cpp:193
+#: commandoptions.cpp:192
 #, kde-format
 msgid "KMail identity to use as sender of email"
 msgstr "ईमेल प्रेसक के रूप उपयोग करे जाय वाला के-मेल पहिचान"
 
-#: commandoptions.cpp:197
+#: commandoptions.cpp:196
 #, kde-format
 msgid "Interval between alarm repetitions"
 msgstr "अलार्म दोहराव के बीच अंतराल"
 
-#: commandoptions.cpp:201
+#: commandoptions.cpp:200
 #, kde-format
 msgid "Show alarm as an event in KOrganizer"
 msgstr "अलार्म ल केओर्गनाइजर मं एक घटना के रूप मं देखाव"
 
-#: commandoptions.cpp:204
+#: commandoptions.cpp:203
 #, kde-format
 msgid "Cancel alarm if more than 'period' late when triggered"
 msgstr "जब ट्रिगर होही तहां अलार्म कोखारिज करव यदि 'पीरियड' देरी अधिक हो जाए"
 
-#: commandoptions.cpp:209
+#: commandoptions.cpp:208
 #, fuzzy, kde-format
 #| msgctxt "@info:whatsthis"
 #| msgid "List of scheduled alarms"
 msgid "Output list of scheduled alarms to stdout"
 msgstr "नियत अलार्म के सूची"
 
-#: commandoptions.cpp:212
+#: commandoptions.cpp:211
 #, kde-format
 msgid "Repeat alarm at every login"
 msgstr "हर एक लागिन मं अलार्म ल दुहराव"
 
-#: commandoptions.cpp:215
+#: commandoptions.cpp:214
 #, kde-format
 msgid "Send an email to the given address (repeat as needed)"
 msgstr "दे गे पते मं एक ई-मेल भेजव (जब जरूरी होथे, दुहराव)"
 
-#: commandoptions.cpp:219
+#: commandoptions.cpp:218
 #, fuzzy, kde-format
 #| msgctxt "@info/plain Action to create a new alarm"
 #| msgid "New alarm"
 msgid "Name of alarm"
 msgstr "नवा अलार्म"
 
-#: commandoptions.cpp:222
+#: commandoptions.cpp:221
 #, fuzzy, kde-format
 #| msgctxt "@info:whatsthis"
 #| msgid "Display the alarm message now"
 msgid "Display alarm message as a notification"
 msgstr "अलार्म संदेस अभी देखाव"
 
-#: commandoptions.cpp:225
+#: commandoptions.cpp:224
 #, kde-format
 msgid "Audio file to play once"
 msgstr "एक बार बजाय बर अवाज फाइल"
 
-#: commandoptions.cpp:229
+#: commandoptions.cpp:228
 #, kde-format
 msgid "Audio file to play repeatedly"
 msgstr "बारंबार बजाय बर अवाज फाइल"
 
-#: commandoptions.cpp:233
+#: commandoptions.cpp:232
 #, kde-format
 msgid "Specify alarm recurrence using iCalendar syntax"
 msgstr "आई-कलेन्डर सिंटेक्स के उपयोग से अलार्म आवृत्ति निरधारित करव"
 
-#: commandoptions.cpp:237
+#: commandoptions.cpp:236
 #, fuzzy, kde-format
 #| msgid "Display reminder in advance of alarm"
 msgid "Display reminder before or after alarm"
 msgstr "अलार्म से पहिली ही स्मरन देखाव"
 
-#: commandoptions.cpp:241
+#: commandoptions.cpp:240
 #, fuzzy, kde-format
 #| msgid "Display reminder once, before first alarm recurrence"
 msgid "Display reminder once, before or after first alarm recurrence"
 msgstr "पहली दफा अलार्म चले से पहिली स्मरन देखाव"
 
-#: commandoptions.cpp:245
+#: commandoptions.cpp:244
 #, kde-format
 msgid "Number of times to repeat alarm (including initial occasion)"
 msgstr "अलार्म ल दोहराने के संख्या (सुरू के अवसर सहित)"
 
-#: commandoptions.cpp:250
+#: commandoptions.cpp:249
 #, kde-format
 msgid "Speak the message when it is displayed"
 msgstr "जब संदेस प्रदर्सित होही तहां ओला बोलव"
 
-#: commandoptions.cpp:254
+#: commandoptions.cpp:253
 #, kde-format
 msgid "Email subject line"
 msgstr "ईमेल विसय पंक्ति"
 
-#: commandoptions.cpp:259
+#: commandoptions.cpp:258
 #, fuzzy, kde-format
 #| msgid ""
 #| "Repeat until time [[[yyyy-]mm-]dd-]hh:mm [TZ], or date yyyy-mm-dd [TZ]"
@@ -588,58 +588,58 @@ msgid "Simulate system time [[[yyyy-]mm-]dd-]hh:mm [TZ] (debug mode)"
 msgstr ""
 "ये समय तक [[[yyyy-]mm-]dd-]hh:mm [TZ], या तारीक yyyy-mm-dd [TZ] तक दुहराव"
 
-#: commandoptions.cpp:264
+#: commandoptions.cpp:263
 #, kde-format
 msgid ""
 "Trigger alarm at time [[[yyyy-]mm-]dd-]hh:mm [TZ], or date yyyy-mm-dd [TZ]"
 msgstr ""
 "अलार्म ल ए समय ट्रिगर करव [[[yyyy-]mm-]dd-]hh:mm [TZ], या तारीक yyyy-mm-dd [TZ]"
 
-#: commandoptions.cpp:268
+#: commandoptions.cpp:267
 #, kde-format
 msgid "Display system tray icon"
 msgstr "तंत्र तस्तरी चिनहा देखाव"
 
-#: commandoptions.cpp:271
+#: commandoptions.cpp:270
 #, kde-format
 msgid "Trigger alarm with the specified event ID"
 msgstr "निरधारित घटना आईडी के साथ अलार्म ल ट्रिगर करव"
 
-#: commandoptions.cpp:275
+#: commandoptions.cpp:274
 #, kde-format
 msgid "Repeat until time [[[yyyy-]mm-]dd-]hh:mm [TZ], or date yyyy-mm-dd [TZ]"
 msgstr ""
 "ये समय तक [[[yyyy-]mm-]dd-]hh:mm [TZ], या तारीक yyyy-mm-dd [TZ] तक दुहराव"
 
-#: commandoptions.cpp:279
+#: commandoptions.cpp:278
 #, kde-format
 msgid "Volume to play audio file"
 msgstr "आडियो फाइल बजाय बर अवाज स्तर"
 
-#: commandoptions.cpp:290
+#: commandoptions.cpp:289
 #, kde-format
 msgid "Message text to display"
 msgstr "प्रदर्सन बर पाठ संदेस"
 
-#: commandoptions.cpp:454
+#: commandoptions.cpp:453
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "<icode>%1</icode>: invalid email address"
 msgstr "<icode>%1</icode>: अवैध ईमेल पता"
 
-#: commandoptions.cpp:578 commandoptions.cpp:593 commandoptions.cpp:672
+#: commandoptions.cpp:577 commandoptions.cpp:592 commandoptions.cpp:671
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "Invalid <icode>%1</icode> parameter for date-only alarm"
 msgstr "सिरिफ तारीक अलार्म बर अवैध <icode>%1</icode> पैरामीटर"
 
-#: commandoptions.cpp:582
+#: commandoptions.cpp:581
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "<icode>%1</icode> earlier than <icode>%2</icode>"
 msgstr "<icode>%2</icode> से पहिली <icode>%1</icode>"
 
-#: commandoptions.cpp:604
+#: commandoptions.cpp:603
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid ""
@@ -649,7 +649,7 @@ msgstr ""
 "अवैध <icode>%1</icode> अउ <icode>%2</icode> पैरामीटर: बारंबारता <icode>%3</"
 "icode> अंतराल से अधिक हे"
 
-#: commandoptions.cpp:785
+#: commandoptions.cpp:784
 #, fuzzy, kde-format
 #| msgctxt "@info:shell"
 #| msgid ""
@@ -658,7 +658,7 @@ msgctxt "@info:shell"
 msgid ": option(s) only valid with an appropriate action option or message"
 msgstr ": विकल्प सिरिफ एक संदेस के साथ वैध हे/<icode>%1</icode>/<icode>%2</icode>"
 
-#: commandoptions.cpp:806 commandoptions.cpp:823
+#: commandoptions.cpp:805 commandoptions.cpp:822
 #, kde-format
 msgctxt "@info:shell"
 msgid ""
@@ -668,25 +668,25 @@ msgstr ""
 "\n"
 "--help  के उपयोग करव मिलत कमांड लकीर विकल्प मन के सूची प्राप्त करे बर.\n"
 
-#: commandoptions.cpp:851
+#: commandoptions.cpp:850
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "<icode>%1</icode> requires <icode>%2</icode>"
 msgstr "<icode>%1</icode> ल जरूरी हे <icode>%2</icode>"
 
-#: commandoptions.cpp:853
+#: commandoptions.cpp:852
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "<icode>%1</icode> requires <icode>%2</icode> or <icode>%3</icode>"
 msgstr "<icode>%1</icode> ल चाही <icode>%2</icode> या <icode>%3</icode>"
 
-#: commandoptions.cpp:858
+#: commandoptions.cpp:857
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "Invalid <icode>%1</icode> parameter"
 msgstr "अवैध <icode>%1</icode> पैरामीटर"
 
-#: commandoptions.cpp:863
+#: commandoptions.cpp:862
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "<icode>%1</icode> incompatible with <icode>%2</icode>"
