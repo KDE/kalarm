@@ -40,12 +40,12 @@ target_link_libraries(akonadiplugin
     KF${KF_MAJOR_VERSION}::CalendarCore
     KF${KF_MAJOR_VERSION}::I18n
     KF${KF_MAJOR_VERSION}::Codecs
-    KF5::Mime
+    KPim${KF_MAJOR_VERSION}::Mime
     KF5::AkonadiCore
     KF5::AkonadiMime
     KF5::AkonadiContact
     KF5::AkonadiWidgets
-    KF5::IdentityManagement
+    KPim${KF_MAJOR_VERSION}::IdentityManagement
     KF5::MailTransportAkonadi
     KF5::MailTransport
 )

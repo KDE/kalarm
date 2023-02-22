@@ -35,7 +35,7 @@ target_link_libraries(kalarmplugin PRIVATE
     kalarmcalendar
     KF${KF_MAJOR_VERSION}::CoreAddons
     KF${KF_MAJOR_VERSION}::CalendarCore
-    KF5::Mime
+    KPim${KF_MAJOR_VERSION}::Mime
 )
 
 target_include_directories(kalarmplugin PUBLIC "$<BUILD_INTERFACE:${kalarm_SOURCE_DIR}/src/kalarmcalendar;${kalarm_BINARY_DIR}/src/kalarmcalendar>")
@@ -324,11 +324,11 @@ target_link_libraries(kalarm_bin
     KF${KF_MAJOR_VERSION}::Crash
     Phonon::phonon4qt${QT_MAJOR_VERSION}
     KF${KF_MAJOR_VERSION}::CalendarCore
-    KF5::CalendarUtils
+    KPim${KF_MAJOR_VERSION}::CalendarUtils
     KF${KF_MAJOR_VERSION}::Contacts
-    KF5::IdentityManagementWidgets
+    KPim${KF_MAJOR_VERSION}::IdentityManagementWidgets
     KF5::PimTextEdit
-    KF5::Mime
+    KPim${KF_MAJOR_VERSION}::Mime
 )
 target_link_libraries(kalarm_bin KF${KF_MAJOR_VERSION}::TextEditTextToSpeech)
 
