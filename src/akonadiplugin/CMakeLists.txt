@@ -42,10 +42,10 @@ target_link_libraries(akonadiplugin
     KF${KF_MAJOR_VERSION}::Codecs
     KPim${KF_MAJOR_VERSION}::Mime
     KF5::AkonadiCore
-    KF5::AkonadiMime
+    KPim${KF_MAJOR_VERSION}::AkonadiMime
     KF5::AkonadiContact
     KF5::AkonadiWidgets
     KPim${KF_MAJOR_VERSION}::IdentityManagement
-    KF5::MailTransportAkonadi
-    KF5::MailTransport
+    KPim${KF_MAJOR_VERSION}::MailTransportAkonadi
+    KPim${KF_MAJOR_VERSION}::MailTransport
 )
