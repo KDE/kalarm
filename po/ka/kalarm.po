@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-02-21 01:00+0000\n"
-"PO-Revision-Date: 2023-02-02 08:39+0100\n"
+"PO-Revision-Date: 2023-02-21 05:35+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -1980,7 +1980,7 @@ msgstr ""
 #, kde-format
 msgctxt "@option:radio"
 msgid "Date only"
-msgstr ""
+msgstr "მხოლოდ თარიღი"
 
 #: editdlg.cpp:329
 #, kde-kuit-format
@@ -2292,7 +2292,7 @@ msgstr ""
 #, kde-format
 msgctxt "@option:check"
 msgid "Enter a script"
-msgstr ""
+msgstr "შეიყვანეთ სკრიპტი"
 
 #: editdlgtypes.cpp:798
 #, kde-format
@@ -5280,7 +5280,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Recurrence:"
-msgstr ""
+msgstr "გამეორებადობა:"
 
 #: prefdlg.cpp:1372
 #, kde-format
@@ -5951,7 +5951,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label Time unit for user-entered number"
 msgid "week(s)"
-msgstr ""
+msgstr "კვირა"
 
 #: recurrenceedit.cpp:1278
 #, kde-format
@@ -6042,25 +6042,25 @@ msgstr "ბოლო"
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "2nd Last"
-msgstr ""
+msgstr "ბოლო მეორე"
 
 #: recurrenceedit.cpp:1339
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "3rd Last"
-msgstr ""
+msgstr "ბოლო მესამე"
 
 #: recurrenceedit.cpp:1340
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "4th Last"
-msgstr ""
+msgstr "ბოლო მეოთხე"
 
 #: recurrenceedit.cpp:1341
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "5th Last"
-msgstr ""
+msgstr "ბოლო მეხუთე"
 
 #: recurrenceedit.cpp:1344
 #, kde-format
@@ -6084,7 +6084,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label Time unit for user-entered number"
 msgid "month(s)"
-msgstr ""
+msgstr "თვე"
 
 #: recurrenceedit.cpp:1484
 #, kde-format
@@ -6096,7 +6096,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label Time unit for user-entered number"
 msgid "year(s)"
-msgstr ""
+msgstr "წელი"
 
 #: recurrenceedit.cpp:1496
 #, kde-format
