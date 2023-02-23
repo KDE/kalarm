@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-02-21 01:00+0000\n"
-"PO-Revision-Date: 2023-02-03 14:04+0100\n"
+"PO-Revision-Date: 2023-02-22 16:42+0100\n"
 "Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
 "Language: cs\n"
@@ -21,7 +21,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Lokalize 22.12.1\n"
+"X-Generator: Lokalize 22.12.2\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -4265,7 +4265,7 @@ msgstr "Osobní plánovač upomínek, příkazů a e-mailů od KDE"
 #: main.cpp:46
 #, kde-format
 msgid "Copyright © 2001-%1, David Jarvie"
-msgstr "Copyright © 2001-%1, David Jarvie"
+msgstr "Autorská práva © 2001-%1, David Jarvie"
 
 #: mainwindow.cpp:438
 #, kde-kuit-format
