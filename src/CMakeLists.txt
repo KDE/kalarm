@@ -330,6 +330,9 @@ target_link_libraries(kalarm_bin
     KF5::PimTextEdit
     KPim${KF_MAJOR_VERSION}::Mime
 )
+if (QT_MAJOR_VERSION STREQUAL "6")
+    target_link_libraries(kalarm_bin Qt6::Core5Compat)
+endif()
 target_link_libraries(kalarm_bin KF${KF_MAJOR_VERSION}::TextEditTextToSpeech)
 
 if (ENABLE_WAKE_FROM_SUSPEND)
