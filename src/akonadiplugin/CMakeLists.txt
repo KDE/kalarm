@@ -43,7 +43,7 @@ target_link_libraries(akonadiplugin
     KPim${KF_MAJOR_VERSION}::Mime
     KF5::AkonadiCore
     KPim${KF_MAJOR_VERSION}::AkonadiMime
-    KF5::AkonadiContact
+    KPim${KF_MAJOR_VERSION}::AkonadiContact
     KF5::AkonadiWidgets
     KPim${KF_MAJOR_VERSION}::IdentityManagement
     KPim${KF_MAJOR_VERSION}::MailTransportAkonadi
