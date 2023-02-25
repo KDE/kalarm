@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-02-21 01:00+0000\n"
-"PO-Revision-Date: 2023-02-22 16:42+0100\n"
+"PO-Revision-Date: 2023-02-24 11:07+0100\n"
 "Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
 "Language: cs\n"
@@ -248,7 +248,7 @@ msgstr "Automaticky spustit KAlarm při přihlášení"
 #: autostart/autostart.cpp:51
 #, kde-format
 msgid "Copyright 2001-%1, David Jarvie"
-msgstr "Copyright 2001-%1, David Jarvie"
+msgstr "Autorská práva 2001-%1, David Jarvie"
 
 #: autostart/autostart.cpp:52 main.cpp:47
 #, kde-format
