@@ -327,7 +327,7 @@ target_link_libraries(kalarm_bin
     KPim${KF_MAJOR_VERSION}::CalendarUtils
     KF${KF_MAJOR_VERSION}::Contacts
     KPim${KF_MAJOR_VERSION}::IdentityManagementWidgets
-    KF5::PimTextEdit
+    KPim${KF_MAJOR_VERSION}::PimTextEdit
     KPim${KF_MAJOR_VERSION}::Mime
 )
 if (QT_MAJOR_VERSION STREQUAL "6")
