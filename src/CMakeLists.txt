@@ -336,7 +336,7 @@ endif()
 target_link_libraries(kalarm_bin KF${KF_MAJOR_VERSION}::TextEditTextToSpeech)
 
 if (ENABLE_WAKE_FROM_SUSPEND)
-	target_link_libraries(kalarm_bin KF5::AuthCore)
+        target_link_libraries(kalarm_bin KF${KF_MAJOR_VERSION}::AuthCore)
 endif()
 
 if (ENABLE_X11)
@@ -367,7 +367,7 @@ install(FILES data/kalarm.notifyrc DESTINATION ${KDE_INSTALL_KNOTIFYRCDIR})
 
 if (ENABLE_WAKE_FROM_SUSPEND)
     add_executable(kalarm_helper rtcwakeaction.cpp rtcwakeaction.h ${libkalarm_common_SRCS})
-    target_link_libraries(kalarm_helper KF5::AuthCore KF${KF_MAJOR_VERSION}::I18n)
+    target_link_libraries(kalarm_helper KF${KF_MAJOR_VERSION}::AuthCore KF${KF_MAJOR_VERSION}::I18n)
     install(TARGETS kalarm_helper DESTINATION ${KAUTH_HELPER_INSTALL_DIR})
     kauth_install_helper_files(kalarm_helper org.kde.kalarm.rtcwake root)
     kauth_install_actions(org.kde.kalarm.rtcwake data/org.kde.kalarm.rtcwake.actions)

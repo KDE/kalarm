@@ -95,7 +95,7 @@ add_feature_info(AKONADI_PLUGIN ${ENABLE_AKONADI_PLUGIN} "Provides features depe
 
 option(ENABLE_WAKE_FROM_SUSPEND "Enable wake-from-suspend alarms (requires KAuth)" ON)
 if (ENABLE_WAKE_FROM_SUSPEND)
-    find_package(KF5Auth ${KF_MIN_VERSION})
+    find_package(KF${KF_MAJOR_VERSION}Auth ${KF_MIN_VERSION})
     if (NOT KF${KF_MAJOR_VERSION}Auth_FOUND)
         set(ENABLE_WAKE_FROM_SUSPEND OFF)
     endif()
