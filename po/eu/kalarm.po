@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-12-12 03:00+0000\n"
-"PO-Revision-Date: 2023-02-11 16:49+0100\n"
+"PO-Revision-Date: 2023-03-01 00:07+0100\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
 "Language: eu\n"
@@ -419,7 +419,7 @@ msgstr "Itxi alarmaren leihoa automatikoki «--late-cancel» aldia igarotakoan"
 #: commandoptions.cpp:137
 #, kde-format
 msgid "Blind copy email to self"
-msgstr "Bidali e-posta kopia itsua (BCC) zeure buruari"
+msgstr "Bidali ezkutuko e-posta kopia (EKK) zeure buruari"
 
 #: commandoptions.cpp:140
 #, kde-format
@@ -1215,7 +1215,7 @@ msgstr "'Bcc' e-posta helbidea"
 
 #. i18n: ectx: whatsthis, entry (Base_EmailBccAddress), group (General)
 #: data/kalarmconfig.kcfg:213
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "Your email address, used for blind copying email alarms to yourself. If you "
@@ -1224,9 +1224,11 @@ msgid ""
 "\" to use the default email address set in KMail, or enter the actual email "
 "address otherwise."
 msgstr ""
-"Zure e-posta helbidea, e-posta alarmen kopia itsuak zure buruari bidaltzeko "
-"erabiliko dena. KAlarm exekutatzen den konputaguko zure kontura kopia itsuak "
-"bidaltzea nahi baduzu, sartu hemen zure erabiltzaile izena."
+"Zure e-posta helbidea, e-posta alarmen ezkutuko kopia zeure buruari "
+"bidaltzeko erabilia. Ezkutuko kopiak KAlarm dabilen ordenagailuko zure "
+"kontura bidali daitezen nahi baduzu, zure saio-hasteko izena sartu besterik "
+"ez duzu egin behar. «KMail»en ezarritako e-posta helbide lehenetsia "
+"erabiltzeko, sartu \"@SystemSettings\", edo helbidea bera."
 
 #. i18n: ectx: label, entry (Base_CmdXTermCommand), group (General)
 #: data/kalarmconfig.kcfg:217
@@ -1303,6 +1305,8 @@ msgid ""
 "OR'ed bits indicating which days of the week are work days, 1 = Monday ... "
 "64 = Sunday."
 msgstr ""
+"EDO bidez asteko zein egun lanegunak diren adierazteko bitak, 1 = "
+"astelehena ... 64 = igandea."
 
 #. i18n: ectx: label, entry (DisabledColour), group (General)
 #: data/kalarmconfig.kcfg:245
@@ -1345,7 +1349,7 @@ msgstr "Iraungitako alarmak mantentzeko egun kopurua"
 
 #. i18n: ectx: whatsthis, entry (ArchivedKeepDays), group (General)
 #: data/kalarmconfig.kcfg:262
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "<p>Specify how many days to keep alarms after they expire or are deleted "
@@ -1355,8 +1359,12 @@ msgid ""
 "        <li>>0 number of days to keep.</li></ul></p>\n"
 "      "
 msgstr ""
-"Hautatu hau iraungitako edo ezabatutako (inoiz exekutatu ez ziren "
-"ezabatutako alarmak ezik) alarmak gordetzeko."
+"<p>Zehaztu, iraungi edo ezabatu ondoren alarmak zenbat egunez mantendu behar "
+"diren (inoiz eragin gabeko ezabatutako alarmak salbu):\n"
+"        <ul><li>0 ez mantentzeko</li>\n"
+"        <li>-1 mugagabe mantentzeko</li>\n"
+"        <li>>0 mantendu beharreko egun kopurua.</li></ul></p>\n"
+"      "
 
 #. i18n: ectx: label, entry (KOrgEventDuration), group (General)
 #: data/kalarmconfig.kcfg:268
@@ -1412,6 +1420,9 @@ msgid ""
 "determine whether to display alarm messages in windows or in system "
 "notifications."
 msgstr ""
+"Alarma editatzeko elkarrizketa-koadroan, alarma-mezuak leihoetan edo "
+"sistemaren jakinarazpenetan azaldu behar diren zehazteko, \"azaltzeko metodoa"
+"\" aukerarako ezarpen lehenetsia."
 
 #. i18n: ectx: label, entry (DefaultLateCancel), group (Defaults)
 #: data/kalarmconfig.kcfg:295
@@ -1438,12 +1449,12 @@ msgstr "Auto-itxi lehioa ezeztatze-denbora pasa ondoren"
 
 #. i18n: ectx: whatsthis, entry (DefaultAutoClose), group (Defaults)
 #: data/kalarmconfig.kcfg:302
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Default setting in the alarm edit dialog for \"auto close if late\"."
 msgstr ""
-"Alarmak editatzeko elkarrizketa-koadroan \"%1\"-(e)k izango duen balio "
-"lehenetsia."
+"Alarma editatzeko elkarrizketa-koadroan, \"berandu bada automatikoki itxi\" "
+"aukerarako ezarpen lehenetsia."
 
 #. i18n: ectx: label, entry (DefaultConfirmAck), group (Defaults)
 #: data/kalarmconfig.kcfg:306 kalarmcalendar/kaeventformatter.cpp:106
@@ -1460,7 +1471,7 @@ msgid ""
 "Default setting in the alarm edit dialog for \"confirm alarm acknowledgement"
 "\"."
 msgstr ""
-"Alarma editatzeko elkarrizketa-koadroan \"Berretsi jaso izanaren adierazpena"
+"Alarma editatzeko elkarrizketa-koadroan, \"Berretsi jaso izanaren adierazpena"
 "\" aukerarako ezarpen lehenetsia."
 
 #. i18n: ectx: label, entry (DefaultCopyToKOrganizer), group (Defaults)
@@ -1476,7 +1487,7 @@ msgstr "Erakutsi KOrganizer-en"
 msgctxt "@info:whatsthis"
 msgid "Default setting in the alarm edit dialog for \"show in KOrganizer\"."
 msgstr ""
-"Alarmak editatzeko elkarrizketa-koadroan, \"Erakutsi KOrganizer-en\" "
+"Alarma editatzeko elkarrizketa-koadroan, \"Erakutsi KOrganizer-en\" "
 "aukerarako ezarpen lehenetsia."
 
 #. i18n: ectx: label, entry (Base_DefaultSoundType), group (Defaults)
@@ -1630,13 +1641,13 @@ msgstr "Kopia e-posta bidez bidali norbere buruari"
 
 #. i18n: ectx: whatsthis, entry (DefaultEmailBcc), group (Defaults)
 #: data/kalarmconfig.kcfg:363
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "Default setting in the alarm edit dialog for blind copying emails to self."
 msgstr ""
-"Alarmak editatzeko elkarrizketa-koadroan \"%1\"-(e)k izango duen balio "
-"lehenetsia."
+"Alarma editatzeko elkarrizketa-koadroan, norbere buruari e-posten ezkutuko "
+"kopia bidaltzeko ezarpen lehenetsia."
 
 #. i18n: ectx: label, entry (DefaultRecurPeriod), group (Defaults)
 #: data/kalarmconfig.kcfg:367
@@ -2813,7 +2824,7 @@ msgstr "Kendu nabarmendutako eranskina e-postatik."
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "If checked, the email will be blind copied to you."
-msgstr "Hautatuta badago, e-postak zuri kopia itsua (BCC) bidaliko dizu."
+msgstr "Markatuta badago, e-postaren ezkutuko kopia bidaliko dizu."
 
 #: editdlgtypes.cpp:1437
 #, kde-kuit-format
@@ -5624,11 +5635,7 @@ msgid "Bcc:"
 msgstr "Bcc:"
 
 #: prefdlg.cpp:1138
-#, fuzzy, kde-kuit-format
-#| msgid ""
-#| "Your email address, used for blind copying email alarms to yourself. If "
-#| "you want blind copies to be sent to your account on the computer which "
-#| "KAlarm runs on, you can simply enter your user login name."
+#, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
 "Your email address, used for blind copying email alarms to yourself. If you "
@@ -5636,22 +5643,21 @@ msgid ""
 "<application>KAlarm</application> runs on, you can simply enter your user "
 "login name."
 msgstr ""
-"Zure e-posta helbidea, e-posta alarmen kopia itsuak zure buruari bidaltzeko "
-"erabiliko dena. KAlarm exekutatzen den konputaguko zure kontura kopia itsuak "
-"bidaltzea nahi baduzu, sartu hemen zure erabiltzaile izena."
+"Zure e-posta helbidea, e-posta alarmen ezkutuko kopia zeure buruari "
+"bidaltzeko erabilia. Ezkutuko kopiak <application>KAlarm</application> "
+"dabilen ordenagailuko zure kontura bidali daitezen nahi baduzu, zure saio-"
+"hasteko izena sartu besterik ez duzu egin behar."
 
 #: prefdlg.cpp:1149
-#, fuzzy, kde-kuit-format
-#| msgid ""
-#| "Check to use the email address set in the KDE Control Center, for blind "
-#| "copying email alarms to yourself."
+#, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
 "Check to use the default email address set in <application>KMail</"
 "application>, for blind copying email alarms to yourself."
 msgstr ""
-"Hautatu hau e-posta alarmen zure bururako kopia itsuak bidaltzeko KDE "
-"kontrol zentruan ezarritako e-posta helbidea erabiltzeko."
+"Markatu, zeure buruari ezkutuko e-posta alarmen kopiak bidaltzeko, "
+"<application>KMail</application>en ezarritako e-posta helbide lehenetsia "
+"erabiltzeko."
 
 #: prefdlg.cpp:1251
 #, kde-format
