@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-12-12 03:00+0000\n"
-"PO-Revision-Date: 2023-03-01 00:07+0100\n"
+"PO-Revision-Date: 2023-03-01 23:56+0100\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
 "Language: eu\n"
@@ -471,8 +471,7 @@ msgstr ""
 #, kde-format
 msgid "Display the alarm edit dialog to edit a new display alarm"
 msgstr ""
-"Azaldu, bistaratze-alarma berri bat editatzeko, alarma editatzeko "
-"elkarrizketa-koadroa"
+"Azaldu alarma editatzeko elkarrizketa-koadroa, ikus-alarma bat editatzeko"
 
 #: commandoptions.cpp:176
 #, kde-format
@@ -2349,7 +2348,7 @@ msgstr "Hautatu egunkari-fitxategia"
 #, kde-format
 msgctxt "@label:listbox How to display alarms"
 msgid "Display method:"
-msgstr "Azaldu metodoa:"
+msgstr "Azaltzeko metodoa:"
 
 #: editdlgtypes.cpp:89
 #, kde-format
@@ -2373,27 +2372,25 @@ msgstr "Berretsi aitorpena"
 #, kde-format
 msgctxt "@title:window"
 msgid "New Display Alarm Template"
-msgstr "Alarma txantiloi berria"
+msgstr "Ikus-alarma txantiloi berria"
 
 #: editdlgtypes.cpp:120
 #, kde-format
 msgctxt "@title:window"
 msgid "Edit Display Alarm Template"
-msgstr "Editatu alarma txantiloia"
+msgstr "Editatu ikus-alarma txantiloia"
 
 #: editdlgtypes.cpp:121
-#, fuzzy, kde-format
-#| msgid "Display Alarms"
+#, kde-format
 msgctxt "@title:window"
 msgid "New Display Alarm"
-msgstr "Bistaratu alarmak"
+msgstr "Ikus-alarma berria"
 
 #: editdlgtypes.cpp:121
-#, fuzzy, kde-format
-#| msgid "Display Alarms"
+#, kde-format
 msgctxt "@title:window"
 msgid "Edit Display Alarm"
-msgstr "Bistaratu alarmak"
+msgstr "Editatu ikus-alarma"
 
 #: editdlgtypes.cpp:134
 #, fuzzy, kde-format
@@ -4561,11 +4558,10 @@ msgid "Hide menu bar"
 msgstr "Ezkutatu menu-barra"
 
 #: mainwindow.cpp:1540
-#, fuzzy, kde-format
-#| msgid "Display Alarms"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "Display Alarm"
-msgstr "Bistaratu alarmak"
+msgstr "Ikus-alarma"
 
 #: mainwindow.cpp:1542
 #, kde-format
@@ -4901,19 +4897,16 @@ msgid "Unable to locate this email in <application>KMail</application>"
 msgstr "Edin du e-posta hau <application>KMail</application>en aurkitu"
 
 #: newalarmaction.cpp:45
-#, fuzzy, kde-format
-#| msgid "Delete Alarm Template"
-#| msgid_plural "Delete Alarm Templates"
+#, kde-format
 msgctxt "@item:inmenu"
 msgid "&Display Alarm Template"
-msgstr "Ezabatu alarma plantila"
+msgstr "&Ikus-alarma txantiloia"
 
 #: newalarmaction.cpp:45
-#, fuzzy, kde-format
-#| msgid "Display Alarms"
+#, kde-format
 msgctxt "@action"
 msgid "New Display Alarm"
-msgstr "Bistaratu alarmak"
+msgstr "Ikus-alarma berria"
 
 #: newalarmaction.cpp:48
 #, kde-format
@@ -5067,24 +5060,17 @@ msgid "Start at login"
 msgstr "Auto-abiatu saioa hastean"
 
 #: prefdlg.cpp:460
-#, fuzzy, kde-kuit-format
-#| msgid ""
-#| "Automatically start alarm monitoring whenever you start KDE, by running "
-#| "the alarm daemon (%1).\n"
-#| "\n"
-#| "This option should always be checked unless you intend to discontinue use "
-#| "of KAlarm."
+#, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
 "<para>Automatically start <application>KAlarm</application> whenever you "
 "start KDE.</para><para>This option should always be checked unless you "
 "intend to discontinue use of <application>KAlarm</application>.</para>"
 msgstr ""
-"KDE hasten duzunean, automatikoki alarmen monitorizazioa hasi, alarma "
-"deabrua exekutatuz (%1).\n"
-"\n"
-"Aukera hau beti gaituta egon beharko litzateke KAlarm-en erabilera bertan "
-"behera utzi nahi ez baduzu."
+"<para>Abiatu <application>KAlarm</application> automatikoki KDE abiatzen "
+"duzun bakoitzean.</para><para>Aukera hau beti egon beharko litzateke "
+"markatuta <application>KAlarm</application>en erabilera eteteko asmorik ez "
+"baduzu behintzat.</para>"
 
 #: prefdlg.cpp:464
 #, kde-format
@@ -5538,22 +5524,24 @@ msgstr ""
 "erabiltzeko konfiguratuta badago bakarrik funtzionatuko du."
 
 #: prefdlg.cpp:1068
-#, fuzzy, kde-kuit-format
-#| msgid "Co&py sent emails into KMail's %1 folder"
+#, kde-kuit-format
 msgctxt "@option:check"
 msgid ""
 "Copy sent emails into <application>KMail</application>'s <resource>%1</"
 "resource> folder"
-msgstr "Ko&piatu bidalitako poastak KMail-en %1 karpetara"
+msgstr ""
+"Kopiatu bidalitako e-postak <application>KMail</application>en <resource>%1</"
+"resource> karpetara"
 
 #: prefdlg.cpp:1069
-#, fuzzy, kde-kuit-format
-#| msgid "After sending an email, store a copy in KMail's %1 folder"
+#, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
 "After sending an email, store a copy in <application>KMail</application>'s "
 "<resource>%1</resource> folder"
-msgstr "E-posta bidali ondoren, gorde kopia bat KMail-en %1 karpetan"
+msgstr ""
+"E-posta bat bidali ondoren, gorde haren kopia bat <application>KMail</"
+"application>en <resource>%1</resource> karpetan"
 
 #: prefdlg.cpp:1077
 #, kde-format
@@ -5692,15 +5680,13 @@ msgstr ""
 "para><para>%1</para><para>%2</para>"
 
 #: prefdlg.cpp:1287
-#, fuzzy, kde-kuit-format
-#| msgid ""
-#| "The default setting for the recurrence rule in the alarm edit dialog."
+#, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
 "The default setting for <interface>%1</interface> in the alarm edit dialog."
 msgstr ""
-"Alarmak editatzeko elkarrizketa-koadroko periodikotasun arauaren ezarpen "
-"lehenetsia."
+"Alarmak editatzeko elkarrizketa-koadroko <interface>%1</interface>(a)ren "
+"ezarpen lehenetsia."
 
 #: prefdlg.cpp:1295 prefdlg.cpp:1743
 #, kde-format
@@ -5778,7 +5764,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title:group"
 msgid "Display Alarms"
-msgstr "Bistaratu alarmak"
+msgstr "Azaldu alarmak"
 
 #: prefdlg.cpp:1413
 #, kde-format
@@ -5978,17 +5964,14 @@ msgid "Show next &24 hours' alarms"
 msgstr "Erakutsi hurrengo &24 orduetako alarmak"
 
 #: prefdlg.cpp:1825
-#, fuzzy, kde-format
-#| msgid ""
-#| "Specify whether to include in the system tray tooltip, a summary of "
-#| "alarms due in the next 24 hours"
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "Specify whether to include in the system tray tooltip, a summary of alarms "
 "due in the next 24 hours."
 msgstr ""
-"Zehaztu sistemaren bandejako argibidean, hurrengo 24 ordutan gertatuko diren "
-"alarmen laburpena agertuko den ala ez"
+"Zehaztu sistema-erretiluko tresna-argibidean hurrengo 24 orduetan beteko "
+"diren alarmen laburpen bat erantsi behar den edo ez."
 
 #: prefdlg.cpp:1831
 #, kde-format
@@ -5997,17 +5980,14 @@ msgid "Maximum number of alarms to show:"
 msgstr "Gehienez erakutsi beharreko alarma kopurua:"
 
 #: prefdlg.cpp:1840
-#, fuzzy, kde-format
-#| msgid ""
-#| "Uncheck to display all of the next 24 hours' alarms in the system tray "
-#| "tooltip. Check to enter an upper limit on the number to be displayed."
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "Uncheck to display all of the next 24 hours' alarms in the system tray "
 "tooltip. Check to enter an upper limit on the number to be displayed."
 msgstr ""
-"Deshautatu hau sistemaren bandejako argibidean hurrengo 24 ordutako alarma "
-"guztiak bistaratzeko. Hautatu bistaratuko diren kopuru maximoa ezartzeko."
+"Kendu marka, hurrengo 24 orduetako alarma guztiak sistema-erretiluko tresna-"
+"argibidean azaltzeko. Markatu, azaldutako kopuruan gain-muga bat ezartzeko."
 
 #: prefdlg.cpp:1844
 #, kde-format
@@ -6091,13 +6071,7 @@ msgid "Message windows have a title bar and take keyboard focus"
 msgstr "Mezu-leihoek titulu-barra bat dute eta teklatuaren fokua hartzen dute"
 
 #: prefdlg.cpp:1948
-#, fuzzy, kde-kuit-format
-#| msgid ""
-#| "Specify the characteristics of alarm message windows:\n"
-#| "- If checked, the window is a normal window with a title bar, which grabs "
-#| "keyboard input when it is displayed.\n"
-#| "- If unchecked, the window does not interfere with your typing when it is "
-#| "displayed, but it has no title bar and cannot be moved or resized."
+#, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
 "<para>Specify the characteristics of alarm message windows:<list><item>If "
@@ -6106,12 +6080,11 @@ msgid ""
 "does not interfere with your typing when it is displayed, but it has no "
 "title bar and cannot be moved or resized.</item></list></para>"
 msgstr ""
-"Zehaztu alarmen mezu-lehioen ezaugarriak:\n"
-"- Hautatuta badago, lehioa izenburu barradun lehio arrunta da, bistaratzean "
-"teklatuaren sarrera hartzen duena.\n"
-"- Deshautatuta badago, lehioak ez du zure teklatuaren sarrerarik hartuko "
-"bistaratzean, baina ez du izenburu berrarik izango eta ezingo duzu mugitu "
-"edo tamaina aldatu."
+"<para>Zehaztu alarmen mezu-leihoen ezaugarriak:<list><item>Markatuta badago, "
+"leihoa titulu-barradun leiho arrunta da, erakusten denean teklatuaren "
+"sarrera hartzen duena.</item><item>Markatu gabe badago,leihoa azaltzen "
+"denean ez du zure teklatuaren sarrerarik hartuko, baina ez dutitulu-barrarik "
+"eta ezin da mugitu edo bere neurria aldatu.</item></list></para>"
 
 #: recurrenceedit.cpp:56
 #, kde-format
