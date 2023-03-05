@@ -885,7 +885,7 @@ msgid ""
 "<p>Automatically start KAlarm whenever you start KDE.</p><p>This option "
 "should always be checked unless you intend to discontinue use of KAlarm.</p>"
 msgstr ""
-"<para>ابدأ <application>«منبّهك»</application> آليًا عند بدء «كدي».</"
+"<para>ابدأ <application>«منبّهك»</application> آليًا عند بدء «كِيدِي».</"
 "para><para>هذا الخيار يجب أن يكون مؤشّرًا دائمًا إلّا إن أردت التّوقف عن استخدام "
 "<application>«منبّهك»</application>.</para>"
 
@@ -4883,7 +4883,7 @@ msgid ""
 "start KDE.</para><para>This option should always be checked unless you "
 "intend to discontinue use of <application>KAlarm</application>.</para>"
 msgstr ""
-"<para>ابدأ <application>«منبّهك»</application> آليًا عند بدء «كدي».</"
+"<para>ابدأ <application>«منبّهك»</application> آليًا عند بدء «كِيدِي».</"
 "para><para>هذا الخيار يجب أن يكون مؤشّرًا دائمًا إلّا إن أردت التّوقف عن استخدام "
 "<application>«منبّهك»</application>.</para>"
 
@@ -5400,7 +5400,7 @@ msgid ""
 "application>, for blind copying email alarms to yourself."
 msgstr ""
 "لم يُضبط عنوان بريد إلكتروني مبدئي في <application>«بريدك»</application> أو "
-"في إعدادات نظام كدي. %1"
+"في إعدادات نظام كِيدِي. %1"
 
 #: prefdlg.cpp:1251
 #, kde-format
@@ -5429,7 +5429,7 @@ msgid ""
 "application>.</para><para>%1</para><para>%2</para>"
 msgstr ""
 "لم يُضبط عنوان بريد إلكتروني مبدئي في <application>«بريدك»</application> أو "
-"في إعدادات نظام كدي. %1"
+"في إعدادات نظام كِيدِي. %1"
 
 #: prefdlg.cpp:1269
 #, fuzzy, kde-kuit-format
