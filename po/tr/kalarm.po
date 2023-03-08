@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: kdepim-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-12-12 03:00+0000\n"
-"PO-Revision-Date: 2023-02-08 19:14+0300\n"
+"PO-Revision-Date: 2023-03-07 20:21+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -25,7 +25,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 22.12.2\n"
+"X-Generator: Lokalize 22.12.3\n"
 "(http: //www.transifex.com/projects/p/kdepim-k-tr/language/tr/)\n"
 "X-POOTLE-MTIME: 1413131629.000000\n"
 
@@ -2401,7 +2401,7 @@ msgstr "Alarm iletisini buraya yazın. İleti birden fazla satırdan oluşabilir
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the name or URL of a text or image file to display."
-msgstr "Görüntülenecek metin veya görsel dosyasının adresini buraya girin."
+msgstr "Görüntülenecek metin veya görsel dosyasının URL'sini buraya girin."
 
 #: editdlgtypes.cpp:195 editdlgtypes.cpp:884 sounddlg.cpp:184
 #, kde-format
@@ -7211,7 +7211,7 @@ msgid ""
 "Alarm message text, URL of text file to display, command to execute, or "
 "email subject line"
 msgstr ""
-"Alarm iletisinin metni, gösterilecek metin dosyasının adresi veya e-posta "
+"Alarm iletisinin metni, gösterilecek metin dosyasının URL'si veya e-posta "
 "konu satırı"
 
 #: resources/resourcedatamodelbase.cpp:568
@@ -7890,7 +7890,7 @@ msgstr "Seçilen ses dosyasını oynat."
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the name or URL of a sound file to play."
-msgstr "Çalınacak ses dosyasının adını veya adresini girin."
+msgstr "Çalınacak ses dosyasının adını veya URL'sini girin."
 
 #: sounddlg.cpp:185
 #, kde-format
