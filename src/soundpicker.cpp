@@ -14,8 +14,9 @@
 #include "lib/file.h"
 #include "lib/pushbutton.h"
 
+#ifdef HAVE_TEXT_TO_SPEECH_SUPPORT
 #include <TextEditTextToSpeech/TextToSpeech>
-
+#endif
 #include <KLocalizedString>
 #include <phonon/backendcapabilities.h>
 
@@ -128,6 +129,7 @@ void SoundPicker::showFile(bool show)
 */
 void SoundPicker::showSpeak(bool show)
 {
+#ifdef HAVE_TEXT_TO_SPEECH_SUPPORT
     if (!TextEditTextToSpeech::TextToSpeech::self()->isReady())
         show = false;    // speech capability is not installed or configured
     if (show != mSpeakShowing)
@@ -143,6 +145,7 @@ void SoundPicker::showSpeak(bool show)
         }
         mSpeakShowing = show;
     }
+#endif
 }
 
 /******************************************************************************

@@ -46,7 +46,9 @@
 #include <KHolidays/HolidayRegion>
 using namespace KHolidays;
 
+#ifdef HAVE_TEXT_TO_SPEECH_SUPPORT
 #include <TextEditTextToSpeech/TextToSpeech>
+#endif
 
 #include <KLocalizedString>
 #include <KShell>
@@ -1430,8 +1432,10 @@ EditPrefTab::EditPrefTab(StackedScrollGroup* scrollGroup)
     mSound->addItem(SoundPicker::i18n_combo_None());         // index 0
     mSound->addItem(SoundPicker::i18n_combo_Beep());         // index 1
     mSound->addItem(SoundPicker::i18n_combo_File());         // index 2
+#ifdef HAVE_TEXT_TO_SPEECH_SUPPORT
     if (TextEditTextToSpeech::TextToSpeech::self()->isReady())
         mSound->addItem(SoundPicker::i18n_combo_Speak());    // index 3
+#endif
     mSound->setMinimumSize(mSound->sizeHint());
     mSound->setWhatsThis(defsetting.subs(SoundPicker::i18n_label_Sound()).toString());
     hlayout->addWidget(mSound);
