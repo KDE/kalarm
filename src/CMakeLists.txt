@@ -333,7 +333,9 @@ target_link_libraries(kalarm_bin
 if (QT_MAJOR_VERSION STREQUAL "6")
     target_link_libraries(kalarm_bin Qt6::Core5Compat)
 endif()
-target_link_libraries(kalarm_bin KF${KF_MAJOR_VERSION}::TextEditTextToSpeech)
+if (TARGET KF${KF_MAJOR_VERSION}::TextEditTextToSpeech)
+    target_link_libraries(kalarm_bin KF${KF_MAJOR_VERSION}::TextEditTextToSpeech)
+endif()
 
 if (ENABLE_WAKE_FROM_SUSPEND)
         target_link_libraries(kalarm_bin KF${KF_MAJOR_VERSION}::AuthCore)
