@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-02-21 01:00+0000\n"
+"POT-Creation-Date: 2023-03-10 00:49+0000\n"
 "PO-Revision-Date: 2012-12-26 10:26+0700\n"
 "Last-Translator: sutha <sutha@khmeros.info>\n"
 "Language-Team: Khmer <support@khmeros>\n"
@@ -210,7 +210,7 @@ msgstr ""
 "ជ្រើស​តំបន់​ពេលវេលា​សម្រាប់ការ​ជូនដំណឹង​នេះ ដែល​ខុស​ពី​តំបន់ពេលវេលា​លំនាំដើម បានកំណត់ក្នុង​ប្រអប់កំណត់​"
 "រចនាសម្ព័ន្ធ KAlarm ។"
 
-#: alarmtimewidget.cpp:196 prefdlg.cpp:692
+#: alarmtimewidget.cpp:196 prefdlg.cpp:694
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Time zone:"
@@ -319,7 +319,7 @@ msgctxt "@title:group"
 msgid "Alarm Text"
 msgstr "អត្ថបទ​ការ​ជូនដំណឹង"
 
-#: birthdaydlg.cpp:77 prefdlg.cpp:1849
+#: birthdaydlg.cpp:77 prefdlg.cpp:1853
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Prefix:"
@@ -1124,7 +1124,7 @@ msgid "Show alarm times in system tray tooltip"
 msgstr "បង្ហាញ​ពេលវេលា​ការ​ជូនដំណឹង​ក្នុង​ព័ត៌មាន​ជំនួយ​ថាស​ប្រព័ន្ធ"
 
 #. i18n: ectx: whatsthis, entry (ShowTooltipAlarmTime), group (General)
-#: data/kalarmconfig.kcfg:176 prefdlg.cpp:1837
+#: data/kalarmconfig.kcfg:176 prefdlg.cpp:1841
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1141,7 +1141,7 @@ msgid "Show time to alarms in system tray tooltip"
 msgstr "បង្ហាញ​ពេលវេលា​ដែលត្រូវជូន​ដំណឹង​ក្នុង​ព័ត៌មាន​ជំនួយ​ថាសប្រព័ន្ធ"
 
 #. i18n: ectx: whatsthis, entry (ShowTooltipTimeToAlarm), group (General)
-#: data/kalarmconfig.kcfg:182 prefdlg.cpp:1843
+#: data/kalarmconfig.kcfg:182 prefdlg.cpp:1847
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1158,7 +1158,7 @@ msgid "Time-to-alarm prefix in system tray tooltip"
 msgstr "បុព្វបទ​ពេលវេលា​ដែលត្រូវ​ជូនដំណឹង ក្នុង​ព័ត៌មាន​ជំនួយ​ថាស​ប្រព័ន្ធ"
 
 #. i18n: ectx: whatsthis, entry (TooltipTimeToPrefix), group (General)
-#: data/kalarmconfig.kcfg:188 prefdlg.cpp:1854
+#: data/kalarmconfig.kcfg:188 prefdlg.cpp:1858
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1374,7 +1374,7 @@ msgid "Disabled alarm color"
 msgstr "បិទ​ពណ៌​ការ​ជូនដំណឹង"
 
 #. i18n: ectx: whatsthis, entry (DisabledColour), group (General)
-#: data/kalarmconfig.kcfg:246 prefdlg.cpp:1876
+#: data/kalarmconfig.kcfg:246 prefdlg.cpp:1880
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Choose the text color in the alarm list for disabled alarms."
@@ -1388,7 +1388,7 @@ msgid "Archived alarm color"
 msgstr "ពណ៌​ការ​ជូនដំណឹង​ដែលបាន​ដាក់​ក្នុង​ប័ណ្ណសារ"
 
 #. i18n: ectx: whatsthis, entry (ArchivedColour), group (General)
-#: data/kalarmconfig.kcfg:252 prefdlg.cpp:1889
+#: data/kalarmconfig.kcfg:252 prefdlg.cpp:1893
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Choose the text color in the alarm list for archived alarms."
@@ -1698,7 +1698,7 @@ msgid "Recurrence period"
 msgstr "អំឡុងពេល​កើតឡើង​ឡើងវិញ"
 
 #. i18n: ectx: whatsthis, entry (DefaultRecurPeriod), group (Defaults)
-#: data/kalarmconfig.kcfg:368 prefdlg.cpp:1352
+#: data/kalarmconfig.kcfg:368 prefdlg.cpp:1354
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "The default setting for the recurrence rule in the alarm edit dialog."
@@ -1726,7 +1726,7 @@ msgid "Hourly/minutely"
 msgstr "រាល់​ម៉ោង/នាទី"
 
 #. i18n: ectx: label, entry (DefaultFeb29Type), group (Defaults)
-#: data/kalarmconfig.kcfg:381 prefdlg.cpp:1359
+#: data/kalarmconfig.kcfg:381 prefdlg.cpp:1361
 #, kde-format
 msgctxt "@label"
 msgid "In non-leap years, repeat yearly February 29th alarms on:"
@@ -1897,7 +1897,7 @@ msgid "Confirm alarm deletions"
 msgstr "អះអាង​ការលុប​ការជូនដំណឹង"
 
 #. i18n: ectx: whatsthis, entry (Base_ConfirmAlarmDeletion), group (Notification Messages)
-#: data/kalarmconfig.kcfg:433 prefdlg.cpp:468
+#: data/kalarmconfig.kcfg:433 prefdlg.cpp:470
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to be prompted for confirmation each time you delete an alarm."
@@ -1911,7 +1911,7 @@ msgid "Notify when remote emails are queued"
 msgstr "ជូនដំណឹង ពេល​អ៊ីមែល​ពី​ចម្ងាយ​ត្រូវ​បាន​ដាក់​ក្នុង​ជួរ"
 
 #. i18n: ectx: whatsthis, entry (Base_EmailQueuedNotify), group (Notification Messages)
-#: data/kalarmconfig.kcfg:438 prefdlg.cpp:1075
+#: data/kalarmconfig.kcfg:438 prefdlg.cpp:1077
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -3516,7 +3516,7 @@ msgctxt "@info 'From' email address"
 msgid "From:"
 msgstr "ពី ៖"
 
-#: kalarmcalendar/alarmtext.cpp:507 messagedisplayhelper.cpp:335
+#: kalarmcalendar/alarmtext.cpp:507 messagedisplayhelper.cpp:337
 #, kde-format
 msgctxt "@info Email addressee"
 msgid "To:"
@@ -3534,7 +3534,7 @@ msgctxt "@info"
 msgid "Date:"
 msgstr ""
 
-#: kalarmcalendar/alarmtext.cpp:510 messagedisplayhelper.cpp:337
+#: kalarmcalendar/alarmtext.cpp:510 messagedisplayhelper.cpp:339
 #, kde-format
 msgctxt "@info Email subject"
 msgid "Subject:"
@@ -4149,7 +4149,7 @@ msgctxt "@info Using default font"
 msgid "Default"
 msgstr "ពេល​​វេលា​​លំនាំ​​ដើម​"
 
-#: kalarmcalendar/kaeventformatter.cpp:365 messagedisplayhelper.cpp:216
+#: kalarmcalendar/kaeventformatter.cpp:365 messagedisplayhelper.cpp:218
 #, kde-format
 msgctxt "@info"
 msgid "Reminder"
@@ -4748,109 +4748,109 @@ msgctxt "@info"
 msgid "<para>Cannot defer alarm:</para><para>Alarm not found.</para>"
 msgstr "<para>មិនអាច​ពន្យារ​ពេល​ការ​ជូនដំណឹង ៖</para><para>រក​ការ​ជូនដំណឹង​មិនឃើញ ។</para>"
 
-#: messagedisplayhelper.cpp:202
+#: messagedisplayhelper.cpp:204
 #, kde-format
 msgctxt "@title:window"
 msgid "Reminder"
 msgstr "កម្មវិធី​រំលឹក"
 
-#: messagedisplayhelper.cpp:203 messagedisplayhelper.cpp:407
+#: messagedisplayhelper.cpp:205 messagedisplayhelper.cpp:409
 #, kde-format
 msgctxt "@title:window"
 msgid "Message"
 msgstr "សារ"
 
-#: messagedisplayhelper.cpp:294
+#: messagedisplayhelper.cpp:296
 #, kde-format
 msgctxt "@info"
 msgid "File is a folder"
 msgstr "ឯកសារគឺ​​ជា​ថត"
 
-#: messagedisplayhelper.cpp:294
+#: messagedisplayhelper.cpp:296
 #, kde-format
 msgctxt "@info"
 msgid "Failed to open file"
 msgstr "បរាជ័យ​ក្នុង​ការបើក​ឯកសារ"
 
-#: messagedisplayhelper.cpp:294
+#: messagedisplayhelper.cpp:296
 #, kde-format
 msgctxt "@info"
 msgid "File not found"
 msgstr "រក​មិន​ឃើញ​ឯកសារ"
 
-#: messagedisplayhelper.cpp:351
+#: messagedisplayhelper.cpp:353
 #, kde-format
 msgctxt "@title:window"
 msgid "Error"
 msgstr "កំហុស"
 
-#: messagedisplayhelper.cpp:480
+#: messagedisplayhelper.cpp:482
 #, kde-format
 msgctxt "@info"
 msgid "Today"
 msgstr "ថ្ងៃ​នេះ"
 
-#: messagedisplayhelper.cpp:482
+#: messagedisplayhelper.cpp:484
 #, kde-format
 msgctxt "@info"
 msgid "Tomorrow"
 msgid_plural "in %1 days' time"
 msgstr[0] "ក្នុង​​រយៈពេល %1 ថ្ងៃ"
 
-#: messagedisplayhelper.cpp:484
+#: messagedisplayhelper.cpp:486
 #, kde-format
 msgctxt "@info"
 msgid "in 1 week's time"
 msgid_plural "in %1 weeks' time"
 msgstr[0] "ក្នុង​រយៈ​ពេល​ %1 សប្ដាហ៍"
 
-#: messagedisplayhelper.cpp:498
+#: messagedisplayhelper.cpp:500
 #, kde-format
 msgctxt "@info"
 msgid "in 1 minute's time"
 msgid_plural "in %1 minutes' time"
 msgstr[0] "ក្នុង​រយៈពេល %1 នាទី"
 
-#: messagedisplayhelper.cpp:500
+#: messagedisplayhelper.cpp:502
 #, kde-format
 msgctxt "@info"
 msgid "in 1 hour's time"
 msgid_plural "in %1 hours' time"
 msgstr[0] "ក្នុង​រយៈពេល %1 ម៉ោង"
 
-#: messagedisplayhelper.cpp:503
+#: messagedisplayhelper.cpp:505
 #, kde-format
 msgctxt "@item:intext inserted into 'in ... %1 minute's time' below"
 msgid "1 hour"
 msgid_plural "%1 hours"
 msgstr[0] "%1 ម៉ោង​"
 
-#: messagedisplayhelper.cpp:504
+#: messagedisplayhelper.cpp:506
 #, kde-format
 msgctxt "@info '%2' is the previous message '1 hour'/'%1 hours'"
 msgid "in %2 1 minute's time"
 msgid_plural "in %2 %1 minutes' time"
 msgstr[0] "ក្នុង​រយៈ​ពេល​ %2 %1 នាទី​"
 
-#: messagedisplayhelper.cpp:845
+#: messagedisplayhelper.cpp:848
 #, kde-format
 msgctxt "@info"
 msgid "Unable to speak message"
 msgstr "មិន​អាច​និយាយ​សារ​បានឡើយ"
 
-#: messagedisplayhelper.cpp:845
+#: messagedisplayhelper.cpp:848
 #, kde-format
 msgctxt "@info"
 msgid "Text-to-speech subsystem is not available"
 msgstr ""
 
-#: messagedisplayhelper.cpp:1029
+#: messagedisplayhelper.cpp:1033
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot open audio file: <filename>%1</filename>"
 msgstr "មិនអាច​បើក​ឯកសារ​អូឌីយ៉ូ ៖ <filename>%1</filename>"
 
-#: messagedisplayhelper.cpp:1157
+#: messagedisplayhelper.cpp:1161
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -5083,61 +5083,61 @@ msgctxt "@action"
 msgid "New Alarm From &Template"
 msgstr "ការជូនដំណឹង​ថ្មី​ពី​ពុម្ព"
 
-#: prefdlg.cpp:125
+#: prefdlg.cpp:127
 #, kde-format
 msgctxt "@title:window"
 msgid "Configure"
 msgstr "កំណត់​រចនា​សម្ព័ន្ធ"
 
-#: prefdlg.cpp:135
+#: prefdlg.cpp:137
 #, kde-format
 msgctxt "@title:tab General preferences"
 msgid "General"
 msgstr "ទូទៅ"
 
-#: prefdlg.cpp:136
+#: prefdlg.cpp:138
 #, kde-format
 msgctxt "@title General preferences"
 msgid "General"
 msgstr "ទូទៅ"
 
-#: prefdlg.cpp:141
+#: prefdlg.cpp:143
 #, kde-format
 msgctxt "@title:tab"
 msgid "Time & Date"
 msgstr "ពេលវេលា និង​កាលបរិច្ឆេទ"
 
-#: prefdlg.cpp:142
+#: prefdlg.cpp:144
 #, kde-format
 msgctxt "@title"
 msgid "Time and Date"
 msgstr "ពេលវេលា និង​កាលបរិច្ឆេទ"
 
-#: prefdlg.cpp:147
+#: prefdlg.cpp:149
 #, kde-format
 msgctxt "@title:tab"
 msgid "Storage"
 msgstr "ការ​ផ្ទុក"
 
-#: prefdlg.cpp:148
+#: prefdlg.cpp:150
 #, kde-format
 msgctxt "@title"
 msgid "Alarm Storage"
 msgstr "ការ​ផ្ទុក​ការ​ជូន​ដំណឹង"
 
-#: prefdlg.cpp:153
+#: prefdlg.cpp:155
 #, kde-format
 msgctxt "@title:tab Email preferences"
 msgid "Email"
 msgstr "អ៊ីមែល"
 
-#: prefdlg.cpp:154
+#: prefdlg.cpp:156
 #, kde-format
 msgctxt "@title"
 msgid "Email Alarm Settings"
 msgstr "ការកំណត់​ការជូនដំណឹង​អ៊ីមែល"
 
-#: prefdlg.cpp:159
+#: prefdlg.cpp:161
 #, fuzzy, kde-format
 #| msgctxt "@option:radio"
 #| msgid "Default time"
@@ -5145,55 +5145,55 @@ msgctxt "@title:tab"
 msgid "Alarm Defaults"
 msgstr "ពេល​​វេលា​​លំនាំ​​ដើម​"
 
-#: prefdlg.cpp:160
+#: prefdlg.cpp:162
 #, kde-format
 msgctxt "@title"
 msgid "Default Alarm Edit Settings"
 msgstr "ការ​កំណត់​ការ​កែសម្រួល​​ការជូនដំណឹង​លំនាំដើម"
 
-#: prefdlg.cpp:165
+#: prefdlg.cpp:167
 #, kde-format
 msgctxt "@title:tab"
 msgid "View"
 msgstr "ទិដ្ឋភាព"
 
-#: prefdlg.cpp:166
+#: prefdlg.cpp:168
 #, kde-format
 msgctxt "@title"
 msgid "View Settings"
 msgstr "ការ​កំណត់​ទិដ្ឋភាព"
 
-#: prefdlg.cpp:257
+#: prefdlg.cpp:259
 #, kde-format
 msgctxt "@info"
 msgid "Reset all tabs to their default values, or only reset the current tab?"
 msgstr "កំណត់​ផ្ទាំង​ទាំងអស់​ទៅ​តម្លៃលំនាំដើមរបស់​ពួកវា​ឡើង​វិញ ឬ​កំណត់​តែ​ផ្ទាំង​បច្ចុប្បន្ន ?"
 
-#: prefdlg.cpp:259
+#: prefdlg.cpp:261
 #, kde-format
 msgctxt "@action:button Reset ALL tabs"
 msgid "&All"
 msgstr "ទាំងអស់"
 
-#: prefdlg.cpp:260
+#: prefdlg.cpp:262
 #, kde-format
 msgctxt "@action:button Reset the CURRENT tab"
 msgid "C&urrent"
 msgstr "បច្ចុប្បន្ន"
 
-#: prefdlg.cpp:436
+#: prefdlg.cpp:438
 #, kde-format
 msgctxt "@title:group"
 msgid "Run Mode"
 msgstr "របៀប​រត់"
 
-#: prefdlg.cpp:441
+#: prefdlg.cpp:443
 #, kde-format
 msgctxt "@option:check"
 msgid "Start at login"
 msgstr "ចាប់ផ្ដើម​នៅ​ពេល​ចូល"
 
-#: prefdlg.cpp:444
+#: prefdlg.cpp:446
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info:whatsthis"
 #| msgid ""
@@ -5210,13 +5210,13 @@ msgstr ""
 "ចាប់ផ្ដើម KDE ។</para><para>ជម្រើស​នេះ​គួរតែ​ធីក​ជា​និច្ច លុះត្រា​តែ​អ្នក​លែង​ប្រើ "
 "<application>KAlarm</application> ។</para>"
 
-#: prefdlg.cpp:448
+#: prefdlg.cpp:450
 #, kde-format
 msgctxt "@option:check"
 msgid "Warn before quitting"
 msgstr "ព្រមាន​មុន​នឹង​ចេញ"
 
-#: prefdlg.cpp:449
+#: prefdlg.cpp:451
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5224,7 +5224,7 @@ msgid ""
 "application>."
 msgstr "ធីក ដើម្បី​បង្ហាញ​ការព្រមាន មុនពេល​ចេញ​ពី <application>KAlarm</application> ។"
 
-#: prefdlg.cpp:456
+#: prefdlg.cpp:458
 #, fuzzy, kde-format
 #| msgctxt "@info:whatsthis"
 #| msgid "The alarm message"
@@ -5232,7 +5232,7 @@ msgctxt "@option:check"
 msgid "Enable alarm names"
 msgstr "សារ​ការជូនដំណឹង"
 
-#: prefdlg.cpp:458
+#: prefdlg.cpp:460
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5240,19 +5240,19 @@ msgid ""
 "help you to identify alarms."
 msgstr ""
 
-#: prefdlg.cpp:466
+#: prefdlg.cpp:468
 #, kde-format
 msgctxt "@option:check"
 msgid "Confirm alarm deletions"
 msgstr "អះអាង​ការលុប​ការជូនដំណឹង"
 
-#: prefdlg.cpp:476
+#: prefdlg.cpp:478
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Default defer time interval:"
 msgstr "ចន្លោះ​ពេល​នៃ​ការ​ព្យា​លំនាំដើម ៖"
 
-#: prefdlg.cpp:482
+#: prefdlg.cpp:484
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5262,13 +5262,13 @@ msgstr ""
 "បញ្ចូល​ចន្លោះ​ពេលលំនាំដើម (ម៉ោង និង​នាទី) ដើម្បី​ពន្យាពេល​ការ​ជូន​ដំណឹង ដែល​បាន​ប្រើ​ដោយ​ប្រអប់​ពន្យាពេល​ការ​"
 "ជូន​ដំណឹង ។"
 
-#: prefdlg.cpp:487
+#: prefdlg.cpp:489
 #, kde-format
 msgctxt "@title:group"
 msgid "Terminal for Command Alarms"
 msgstr "ស្ថានីយ​សម្រាប់​ការជូនដំណឹង​របស់​ពាក្យ​បញ្ជា"
 
-#: prefdlg.cpp:488
+#: prefdlg.cpp:490
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5276,20 +5276,20 @@ msgid ""
 "terminal window"
 msgstr "ជ្រើស​កម្មវិធី​ណាមួយ​​ដែល​ត្រូវ​ប្រើ ពេល​ការ​ជូនដំណឹង​របស់​ពាក្យ​បញ្ជា​​ត្រូវ​បាន​ប្រតិបត្តិ ក្នុុង​បង្អួច​ស្ថានីយ"
 
-#: prefdlg.cpp:509
+#: prefdlg.cpp:511
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
 "Check to execute command alarms in a terminal window by <icode>%1</icode>"
 msgstr "ធីក ដើម្បី​ប្រតិបត្តិ​ការជូន​ដំណឹង​របស់​ពាក្យ​បញ្ជា នៅ​ក្នុង​បង្អួច​ស្ថានីយ​ដោយ <icode>%1</icode>"
 
-#: prefdlg.cpp:516
+#: prefdlg.cpp:518
 #, kde-format
 msgctxt "@option:radio Other terminal window command"
 msgid "Other:"
 msgstr "ផ្សេងៗ ៖"
 
-#: prefdlg.cpp:525
+#: prefdlg.cpp:527
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5303,13 +5303,13 @@ msgstr ""
 "ទីនេះ ។ សូម​មើល​សៀវភៅ​ដៃ <application>KAlarm</application> សម្រាប់​សេចក្ដី​លម្អិត​អំពី​កូដពិសេស​"
 "ដើម្បី​បន្ថែម​បន្ថយ​បន្ទាត់​ពាក្យ​បញ្ជា ។"
 
-#: prefdlg.cpp:534
+#: prefdlg.cpp:536
 #, kde-format
 msgctxt "@title:group"
 msgid "Plugins"
 msgstr ""
 
-#: prefdlg.cpp:539
+#: prefdlg.cpp:541
 #, fuzzy, kde-format
 #| msgctxt "@option"
 #| msgid "Akonadi"
@@ -5317,7 +5317,7 @@ msgctxt "@option:check"
 msgid "Enable Akonadi"
 msgstr "Akonadi"
 
-#: prefdlg.cpp:541
+#: prefdlg.cpp:543
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -5325,7 +5325,7 @@ msgid ""
 "some email functions, and email address book lookup."
 msgstr ""
 
-#: prefdlg.cpp:543
+#: prefdlg.cpp:545
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5333,7 +5333,7 @@ msgid ""
 "some email functions, and email address book lookup."
 msgstr ""
 
-#: prefdlg.cpp:591
+#: prefdlg.cpp:593
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -5341,19 +5341,19 @@ msgid ""
 "default command (<command>%1</command>) will be used.</para>"
 msgstr ""
 
-#: prefdlg.cpp:599
+#: prefdlg.cpp:601
 #, kde-kuit-format
 msgctxt "@info"
 msgid "No command is specified to invoke a terminal window"
 msgstr ""
 
-#: prefdlg.cpp:612
+#: prefdlg.cpp:614
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Command to invoke terminal window not found: <command>%1</command>"
 msgstr "រក​មិនឃើញ​ពាក្យ​បញ្ជា​ដើម្បី​ហៅ​បង្អួច​ស្ថានីយ​មកប្រើ​ទេ ៖ <command>%1</command>"
 
-#: prefdlg.cpp:664
+#: prefdlg.cpp:666
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -5363,7 +5363,7 @@ msgstr ""
 "អ្នក​មិនគួរ​ដោះធីក​ជម្រើស​នេះ​ទេ លុះត្រា​តែ​អ្នក​លែងចង់​ប្រើ <application>KAlarm</application> "
 "ទៀត"
 
-#: prefdlg.cpp:699
+#: prefdlg.cpp:701
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info:whatsthis"
 #| msgid ""
@@ -5377,37 +5377,37 @@ msgstr ""
 "ជ្រើស​តំបន់​ពេលវេលា​ដែល <application>KAlarm</application> គួរប្រើ​លំនាំដើម​របស់វា​សម្រាប់​ការ​"
 "បង្ហាញ និង​ការ​បញ្ចូល​កាលបរិច្ឆេទ និង​ពេលវេលា ។"
 
-#: prefdlg.cpp:713
+#: prefdlg.cpp:715
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Holiday region:"
 msgstr "តំបន់​ថ្ងៃ​ឈប់​សម្រាក ៖"
 
-#: prefdlg.cpp:722
+#: prefdlg.cpp:724
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select which holiday region to use"
 msgstr "ជ្រើស​តំបន់​ថ្ងៃ​ឈប់សម្រាក​ណាមួយ​ត្រូវ​ប្រើ"
 
-#: prefdlg.cpp:730
+#: prefdlg.cpp:732
 #, kde-format
 msgctxt "Holiday region, region language"
 msgid "%1 (%2)"
 msgstr "%1 (%2)"
 
-#: prefdlg.cpp:734
+#: prefdlg.cpp:736
 #, kde-format
 msgctxt "No holiday region"
 msgid "None"
 msgstr "គ្មាន"
 
-#: prefdlg.cpp:750
+#: prefdlg.cpp:752
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Start of day for date-only alarms:"
 msgstr "ការចាប់ផ្ដើម​នៃ​ថ្ងៃ​សម្រាប់​តែការជូនដំណឹង​ដែល​បាន​កំណត់​ពេល ៖"
 
-#: prefdlg.cpp:757
+#: prefdlg.cpp:759
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5417,55 +5417,55 @@ msgstr ""
 "<para>ពេល​ចាប់ផ្ដើម​នៃ​ថ្ងៃ ដែល​ការ​ជូនដំណឹង​ដែលបាន​កំណត់​ពេល​នឹងត្រូវបាន​កពកៀវ ។</para><para>%1</"
 "para>"
 
-#: prefdlg.cpp:762
+#: prefdlg.cpp:764
 #, kde-format
 msgctxt "@title:group"
 msgid "Working Hours"
 msgstr "ម៉ោង​ធ្វើការ"
 
-#: prefdlg.cpp:776
+#: prefdlg.cpp:778
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check the days in the week which are work days"
 msgstr "ធីក​ថ្ងៃ​ក្នុង​សប្ដាហ៍​ដែល​ជា​ថ្ងៃ​ធ្វើការ"
 
-#: prefdlg.cpp:786
+#: prefdlg.cpp:788
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Daily start time:"
 msgstr "ពេលវេលា​ចាប់ផ្ដើម​ប្រចាំ​ថ្ងៃ ៖"
 
-#: prefdlg.cpp:793
+#: prefdlg.cpp:795
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid "<para>Enter the start time of the working day.</para><para>%1</para>"
 msgstr "<para>បញ្ចូល​ពេលវេលា​ចាប់ផ្ដើម​នៃ​ថ្ងៃ​ធ្វើការ ។</para><para>%1</para>"
 
-#: prefdlg.cpp:805
+#: prefdlg.cpp:807
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Daily end time:"
 msgstr "ពេលវេលា​បញ្ចប់​ប្រចាំថ្ងៃ ៖"
 
-#: prefdlg.cpp:812
+#: prefdlg.cpp:814
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid "<para>Enter the end time of the working day.</para><para>%1</para>"
 msgstr "<para>បញ្ចូល​ពេលវេលា​បញ្ចប់​នៃ​ថ្ងៃ​ធ្វើការ ។</para><para>%1</para>"
 
-#: prefdlg.cpp:817
+#: prefdlg.cpp:819
 #, kde-format
 msgctxt "@title:group"
 msgid "KOrganizer"
 msgstr "KOrganizer"
 
-#: prefdlg.cpp:825
+#: prefdlg.cpp:827
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "KOrganizer event duration:"
 msgstr "ថិរវេលា​ព្រឹត្តិការណ៍​របស់ KOrganizer ៖"
 
-#: prefdlg.cpp:832
+#: prefdlg.cpp:834
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5475,19 +5475,19 @@ msgstr ""
 "<para>បញ្ចូល​ថិរវេលា​ព្រឹត្តិការណ៍​គិត​ជា​ម៉ោង និង​នាទី សម្រាប់​ការ​ជូនដំណឹង​ដែល​ត្រូវបាន​ចម្លង​ទៅ "
 "KOrganizer ។</para><para>%1</para>"
 
-#: prefdlg.cpp:893
+#: prefdlg.cpp:895
 #, kde-format
 msgctxt "@title:group"
 msgid "New Alarms && Templates"
 msgstr "ការ​ជូនដំណឹង និង​ពុម្ព​ថ្មី"
 
-#: prefdlg.cpp:898
+#: prefdlg.cpp:900
 #, kde-format
 msgctxt "@option:radio"
 msgid "Store in default calendar"
 msgstr "ទុក​នៅ​ក្នុង​ប្រតិទិន​លំនាំដើម"
 
-#: prefdlg.cpp:900
+#: prefdlg.cpp:902
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5495,13 +5495,13 @@ msgid ""
 "prompting."
 msgstr "បន្ថែម​ការ​ជូនដំណឹង​ថ្មី និង​ពុម្ព​ការ​ជូនដំណឹង​ទៅ​ប្រតិទិន​លំនាំដើម ដោយ​មិនចាំបាច់​សួរ ។"
 
-#: prefdlg.cpp:902
+#: prefdlg.cpp:904
 #, kde-format
 msgctxt "@option:radio"
 msgid "Prompt for which calendar to store in"
 msgstr "សួរ​រក​ប្រតិទិន​ណាមួយ​ដែល​ត្រូវ​រក្សាទុក"
 
-#: prefdlg.cpp:905
+#: prefdlg.cpp:907
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info:whatsthis"
 #| msgid ""
@@ -5520,19 +5520,19 @@ msgstr ""
 "សកម្ម​ច្រើន ។</para><para>ចំណាំថា ការជូន​ដំណឹង​ដែល​បាន​ដាក់​ក្នុង​ប័ណ្ណសារ​គឺ​ត្រូវ​ទុក​នៅ​ក្នុង​ប្រតិទិន​ការ​"
 "ជូនដំណឹង​ដែលបាន​ទុក​ក្នុង​ប័ណ្ណសារ​លំនាំដើម ។</para>"
 
-#: prefdlg.cpp:910
+#: prefdlg.cpp:912
 #, kde-format
 msgctxt "@title:group"
 msgid "Archived Alarms"
 msgstr "ការជូន​ដំណឹង​ដែលបាន​ដាក់​ក្នុង​ប័ណ្ណសារ"
 
-#: prefdlg.cpp:915
+#: prefdlg.cpp:917
 #, kde-format
 msgctxt "@option:check"
 msgid "Keep alarms after expiry"
 msgstr "រក្សាទុក​ការជូនដំណឹង បន្ទាប់​ពី​ផុតកំណត់"
 
-#: prefdlg.cpp:918
+#: prefdlg.cpp:920
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5542,19 +5542,19 @@ msgstr ""
 "ធីក ដើម្បី​ដាក់​ការជូន​ដំណឹង​ទៅ​ប័ណ្ណសារ បន្ទាប់​ពី​ផុត​កំណត់ ឬការ​លុប (រំពឹងការ​ជូនដំណឹង​ដែលបាន​លុប ដែល​"
 "មិនដែលត្រូវបាន​កេះកៀវ) ។"
 
-#: prefdlg.cpp:924
+#: prefdlg.cpp:926
 #, kde-format
 msgctxt "@option:check"
 msgid "Discard archived alarms after:"
 msgstr "បោះបង់​ការ​ជូនដំណឹង​ដែល​បានទុក​ក្នុង​ប័ណ្ណសារ ៖"
 
-#: prefdlg.cpp:933
+#: prefdlg.cpp:935
 #, kde-format
 msgctxt "@label Time unit for user-entered number"
 msgid "days"
 msgstr "ថ្ងៃ"
 
-#: prefdlg.cpp:937
+#: prefdlg.cpp:939
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5564,19 +5564,19 @@ msgstr ""
 "ដោះធីក ដើម្បី​រក្សាទុក​ការជូនដំណឹង​​ដែល​ផុត​កំណត់​ដោយ​មិន​កំណត់ ។ ធីក ដើម្បី​បញ្ចូល​រយៈពេល​ដែលការជូនដំណឹង​​ផុត​កំណត់ "
 "គួរ​ត្រូវ​បាន​រក្សាទុក ។"
 
-#: prefdlg.cpp:940
+#: prefdlg.cpp:942
 #, kde-format
 msgctxt "@action:button"
 msgid "Clear Archived Alarms"
 msgstr "សម្អាត​​ការ​ជូនដំណឹង​ដែល​បាន​ដាក់​ក្នុង​ប័ណ្ណសារ"
 
-#: prefdlg.cpp:943
+#: prefdlg.cpp:945
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Delete all existing archived alarms."
 msgstr "លុប​ការ​ជូនដំណឹង​ដែល​បាន​ដាក់​ក្នុង​ប័ណ្ណសារ​ដែល​មាន​ទាំងអស់"
 
-#: prefdlg.cpp:944
+#: prefdlg.cpp:946
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5586,7 +5586,7 @@ msgstr ""
 "លុប​ការ​ជូនដំណឹង​ដែល​បាន​ដាក់​ក្នុង​ប័ណ្ណសារ​ដែល​មាន​ទាំងអស់ (តែ​ពី​ប្រតិទិន​ការ​ជូនដំណឹង​ដែល​បាន​ដាក់​ក្នុង​ប័ណ្ណសារ​"
 "លំនាំដើម​ប៉ុណ្ណោះ) ។"
 
-#: prefdlg.cpp:990
+#: prefdlg.cpp:992
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -5599,13 +5599,13 @@ msgstr ""
 "para><para>ប្រសិន​បើ​អ្នក​ចង់​ទុក​​ការ​ជូនដំណឹង​ដែល​ផុត​កំណត់ ដំបូង​សូម​ប្រើ​ទិដ្ឋភាព​ប្រតិទិន ដើម្បី​ជ្រើស​ប្រតិទិន​ការ​"
 "ជូនដំណឹង​ដែល​បាន​ទុក​ក្នុង​ប័ណ្ណសារ​លំនាំដើម ។</para>"
 
-#: prefdlg.cpp:1007
+#: prefdlg.cpp:1009
 #, kde-format
 msgctxt "@info"
 msgid "Do you really want to delete all archived alarms?"
 msgstr "តើអ្នក​ពិតជាចង់​លុប​ការ​ជូនដំណឹង​ដែលបាន​ដាក់​ក្នុង​ប័ណ្ណសារ​ទាំងអស់​ឬ ?"
 
-#: prefdlg.cpp:1008
+#: prefdlg.cpp:1010
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -5614,31 +5614,31 @@ msgid ""
 msgstr ""
 "តើ​អ្នក​ពិតជា​ចង់​លុប​ការ​ជូនដំណឹង​ទាំងអស់​នៅ​ក្នុង​ប្រតិទិន​ការ​ជូនដំណឹង​ដែលបាន​ទុកក្នុង​ប័ណ្ណសារ​លំនាំដើម​ទាំងអស់​ឬ ?"
 
-#: prefdlg.cpp:1026
+#: prefdlg.cpp:1028
 #, kde-format
 msgctxt "@label"
 msgid "Email client:"
 msgstr "កម្មវិធី​​អ៊ីមែល ៖"
 
-#: prefdlg.cpp:1029
+#: prefdlg.cpp:1031
 #, kde-format
 msgctxt "@option:radio"
 msgid "KMail"
 msgstr "KMail"
 
-#: prefdlg.cpp:1030
+#: prefdlg.cpp:1032
 #, kde-format
 msgctxt "@option:radio"
 msgid "Sendmail"
 msgstr "Sendmail"
 
-#: prefdlg.cpp:1043
+#: prefdlg.cpp:1045
 #, kde-format
 msgctxt "@info"
 msgid "Choose how to send email when an email alarm is triggered."
 msgstr ""
 
-#: prefdlg.cpp:1046
+#: prefdlg.cpp:1048
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info:whatsthis"
 #| msgid ""
@@ -5665,7 +5665,7 @@ msgstr ""
 "ឲ្យប្រើ <application>sendmail</application> ឬ sendmail ដែល​ឆបគ្នា​នឹង​ភ្នាក់ងារ​ដឹក​ជញ្ជូន​"
 "សំបុត្រ​តែ​ប៉ុណ្ណោះ ។</item></list></para>"
 
-#: prefdlg.cpp:1054
+#: prefdlg.cpp:1056
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info:whatsthis"
 #| msgid ""
@@ -5691,7 +5691,7 @@ msgstr ""
 "ឲ្យប្រើ <application>sendmail</application> ឬ sendmail ដែល​ឆបគ្នា​នឹង​ភ្នាក់ងារ​ដឹក​ជញ្ជូន​"
 "សំបុត្រ​តែ​ប៉ុណ្ណោះ ។</item></list></para>"
 
-#: prefdlg.cpp:1064
+#: prefdlg.cpp:1066
 #, kde-kuit-format
 msgctxt "@option:check"
 msgid ""
@@ -5701,7 +5701,7 @@ msgstr ""
 "ចម្លង​អ៊ីមែល​ដែល​បាន​ផ្ញើចេញ ទៅ​ក្នុង​ថត <resource>%1</resource> របស់ <application>KMail</"
 "application>"
 
-#: prefdlg.cpp:1065
+#: prefdlg.cpp:1067
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5711,25 +5711,25 @@ msgstr ""
 "បន្ទាប់​ពី​ផ្ញើ​អ៊ីមែលរួច ទុក​ច្បាប់​ចម្លង​នៅ​ក្នុង​ថត <resource>%1</resource> របស់ "
 "<application>KMail</application>"
 
-#: prefdlg.cpp:1073
+#: prefdlg.cpp:1075
 #, kde-format
 msgctxt "@option:check"
 msgid "Notify when remote emails are queued"
 msgstr "ជូនដំណឹង ពេល​អ៊ីមែល​ពីចម្ងាយ​ត្រូវ​បាន​ដាក់​ជាជួរ"
 
-#: prefdlg.cpp:1081
+#: prefdlg.cpp:1083
 #, kde-format
 msgctxt "@title:group"
 msgid "Your Email Address"
 msgstr "អាសយដ្ឋាន​អ៊ីមែល​របស់​អ្នក"
 
-#: prefdlg.cpp:1087
+#: prefdlg.cpp:1089
 #, kde-format
 msgctxt "@label 'From' email address"
 msgid "From:"
 msgstr "ពី ៖"
 
-#: prefdlg.cpp:1099
+#: prefdlg.cpp:1101
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5739,7 +5739,7 @@ msgstr ""
 "អាសយដ្ឋាន​អ៊ីមែល​របស់​អ្នក ដែល​បាន​ប្រើ​ដើម្បី​កំណត់​អត្តសញ្ញាណ​ខ្លួន​អ្នក​ជា​អ្នកផ្ញើ នៅពេល​ផ្ញើ​ការ​ជូនដំណឹង​"
 "អ៊ីមែល ។"
 
-#: prefdlg.cpp:1106 prefdlg.cpp:1142
+#: prefdlg.cpp:1108 prefdlg.cpp:1144
 #, fuzzy, kde-kuit-format
 #| msgctxt "@option:radio"
 #| msgid "Use <application>KMail</application> identities"
@@ -5747,7 +5747,7 @@ msgctxt "@option:radio"
 msgid "Use default <application>KMail</application> identity"
 msgstr "ប្រើ​អត្តសញ្ញាណ <application>KMail</application>"
 
-#: prefdlg.cpp:1109
+#: prefdlg.cpp:1111
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info:whatsthis"
 #| msgid ""
@@ -5761,13 +5761,13 @@ msgstr ""
 "គូស​ធីក​ដើម្បី​ប្រើ​អាសយដ្ឋាន​អ៊ីមែ​ល​ដែល​បានកំណត់​នៅ​ក្នុងការ​កំណត់​ប្រព័ន្ធ​របស់ KDE ដើម្បី​បញ្ជាក់​អត្តសញ្ញាន​អ្នក​"
 "ថា​ជា​អ្នក​ផ្ញើ​នៅពេល​ផ្ញើ​ការ​ជូន​ដំណឹង​អ៊ីមែល ។"
 
-#: prefdlg.cpp:1113
+#: prefdlg.cpp:1115
 #, kde-kuit-format
 msgctxt "@option:radio"
 msgid "Use <application>KMail</application> identities"
 msgstr "ប្រើ​អត្តសញ្ញាណ <application>KMail</application>"
 
-#: prefdlg.cpp:1116
+#: prefdlg.cpp:1118
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5782,13 +5782,13 @@ msgstr ""
 "របស់ <application>KMail</application> នឹងត្រូវបាន​ប្រើ ។ ចំពោះ​ការ​ជូនដំណឹង​អ៊ីមែល​ថ្មី អ្នក​"
 "នឹងអាច​ជ្រើស​អត្តសញ្ញាណ​របស់ <application>KMail</application> ណាមួយ​ដែលត្រូវប្រើ​បាន ។"
 
-#: prefdlg.cpp:1123
+#: prefdlg.cpp:1125
 #, kde-format
 msgctxt "@label 'Bcc' email address"
 msgid "Bcc:"
 msgstr "ចម្លង​ជាសម្ងាត់​ជូន ៖"
 
-#: prefdlg.cpp:1134
+#: prefdlg.cpp:1136
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5801,7 +5801,7 @@ msgstr ""
 "អ្នក​ចង់ឲ្យ​​ច្បាប់​ចម្លងជា​សម្ងាត់​ផ្ញើ​ទៅ​គណនី​របស់​​អ្នក​លើ​កុំព្យូទ័រ​ដែល​មាន KAlarm រត់ អ្នក​អាច​គ្រាន់​តែ​បញ្ចូល​"
 "ឈ្មោះ​អ្នក​ប្រើ​ចូល​របស់​អ្នក ។"
 
-#: prefdlg.cpp:1145
+#: prefdlg.cpp:1147
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info:whatsthis"
 #| msgid ""
@@ -5815,7 +5815,7 @@ msgstr ""
 "គូស​ធីក​ ដើម្បីប្រើ​អាសយដ្ឋាន​អ៊ីមែល​ដែល​បានកំណត់នៅ​ក្នុង​ការ​កំណត់​ប្រព័ន្ធរបស់ KDE សម្រាប់​ការ​ជូនដំណឹង​អ៊ីមែល​"
 "ចម្លងជូន​ជា​សម្ងាត់​ទៅ​ខ្លួន​អ្នក​ផ្ទាល់ ។"
 
-#: prefdlg.cpp:1247
+#: prefdlg.cpp:1249
 #, fuzzy, kde-format
 #| msgctxt "@info/plain"
 #| msgid "No valid 'Bcc' email address is specified."
@@ -5823,7 +5823,7 @@ msgctxt "@info"
 msgid "No valid 'Bcc' email address is specified."
 msgstr "គ្មាន​អាសយដ្ឋាន​អ៊ីមែល​ 'ចម្លង​ជា​សម្ងាត់​ជូន' ត្រឹមត្រូវ ត្រូវ​បាន​បញ្ជាក់ទេ ។"
 
-#: prefdlg.cpp:1254
+#: prefdlg.cpp:1256
 #, fuzzy, kde-format
 #| msgctxt "@info"
 #| msgid ""
@@ -5832,7 +5832,7 @@ msgctxt "@info"
 msgid "Are you sure you want to save your changes?"
 msgstr "<para>%1</para><para>តើ​អ្នក​ពិតជា​ចង់​រក្សាទុក​ការ​ផ្លាស់ប្ដូរ​របស់​អ្នក​ឬ ?</para>"
 
-#: prefdlg.cpp:1260
+#: prefdlg.cpp:1262
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info"
 #| msgid "No email address is currently set in KDE System Settings. %1"
@@ -5842,7 +5842,7 @@ msgid ""
 "application>.</para><para>%1</para><para>%2</para>"
 msgstr "គ្មាន​អាសយដ្ឋាន​អ៊ីមែល​ត្រូវ​បាន​កំណត់​បច្ចុប្បន្ន​នៅ​ក្នុង​ការ​កំណត់​ប្រព័ន្ធរបស់ KDE ។ %1"
 
-#: prefdlg.cpp:1265
+#: prefdlg.cpp:1267
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info"
 #| msgid "No <application>KMail</application> identities currently exist. %1"
@@ -5852,32 +5852,32 @@ msgid ""
 "para><para>%1</para><para>%2</para>"
 msgstr "បច្ចុប្បន្ន មិនមាន​អត្តសញ្ញាណបណ្ណ <application>KMail</application> ទេ ។ %1"
 
-#: prefdlg.cpp:1283
+#: prefdlg.cpp:1285
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
 "The default setting for <interface>%1</interface> in the alarm edit dialog."
 msgstr "ការ​កំណត់​លំនាំដើម​សម្រាប់ <interface>%1</interface> នៅ​ក្នុង​ប្រអប់​កែសម្រួល​ការ​ជូន​ដំណឹង ។"
 
-#: prefdlg.cpp:1291 prefdlg.cpp:1733
+#: prefdlg.cpp:1293 prefdlg.cpp:1737
 #, kde-format
 msgctxt "@title:tab"
 msgid "General"
 msgstr "ទូទៅ"
 
-#: prefdlg.cpp:1295
+#: prefdlg.cpp:1297
 #, kde-format
 msgctxt "@title:tab Settings specific to alarm type"
 msgid "Type Specific"
 msgstr ""
 
-#: prefdlg.cpp:1299
+#: prefdlg.cpp:1301
 #, kde-format
 msgctxt "@title:tab"
 msgid "Font && Color"
 msgstr "ពុម្ពអក្សរ និង​ពណ៌"
 
-#: prefdlg.cpp:1315
+#: prefdlg.cpp:1317
 #, fuzzy, kde-format
 #| msgctxt "@info:whatsthis"
 #| msgid ""
@@ -5888,31 +5888,31 @@ msgid ""
 "dialog."
 msgstr "ការកំណត់​លំនាំដើម​សម្រាប់​ច្បាប់​កើតឡើង​ដដែលៗ ក្នុង​ប្រអប់​កែសម្រួល​ការជូនដំណឹង ។"
 
-#: prefdlg.cpp:1339
+#: prefdlg.cpp:1341
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Recurrence:"
 msgstr "ការកើតឡើង​ដដែលៗ ៖"
 
-#: prefdlg.cpp:1372
+#: prefdlg.cpp:1374
 #, kde-format
 msgctxt "@option:radio"
 msgid "February 2&8th"
 msgstr "ថ្ងៃ​ទី ២៨ ខែ កុម្ភៈ"
 
-#: prefdlg.cpp:1376
+#: prefdlg.cpp:1378
 #, kde-format
 msgctxt "@option:radio"
 msgid "March &1st"
 msgstr "ថ្ងៃ​ទី​ ១ ខែ មីនា"
 
-#: prefdlg.cpp:1380
+#: prefdlg.cpp:1382
 #, kde-format
 msgctxt "@option:radio"
 msgid "Do not repeat"
 msgstr "កុំ​ធ្វើ​ម្ដង​ទៀត"
 
-#: prefdlg.cpp:1385
+#: prefdlg.cpp:1387
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info:whatsthis"
 #| msgid ""
@@ -5930,31 +5930,31 @@ msgstr ""
 "គួរ​តែ​កើតឡើង​នៅ​​ក្នុង​ឆ្នាំ​ដែល​មិន​រំលង ។<note>ការ​កើតឡើង​នៃ​ការ​ជូន​ដំណឹង​ដែល​មាន​ដែល​បាន​កំណត់​ពេល​ទុក​"
 "បន្ទាប់​គឺ​មិនអាច​ត្រូវ​បាន​វាយតម្លៃ​ម្ដងទៀត​នៅពេល​ដែល​អ្នក​ផ្លាស់ប្ដូរ​ការ​កំណត់​នេះ​ទេ ។</note>"
 
-#: prefdlg.cpp:1391
+#: prefdlg.cpp:1393
 #, kde-format
 msgctxt "@title:group"
 msgid "Display Alarms"
 msgstr "បង្ហាញ​ការជូនដំណឹង"
 
-#: prefdlg.cpp:1409
+#: prefdlg.cpp:1411
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Reminder units:"
 msgstr "ឯកតា​កម្មវិធី​រំលឹក ៖"
 
-#: prefdlg.cpp:1412
+#: prefdlg.cpp:1414
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Minutes"
 msgstr "នាទី"
 
-#: prefdlg.cpp:1413
+#: prefdlg.cpp:1415
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Hours/Minutes"
 msgstr "ម៉ោង/នាទី"
 
-#: prefdlg.cpp:1416
+#: prefdlg.cpp:1418
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5963,19 +5963,19 @@ msgid ""
 msgstr ""
 "ឯកតា​លំនាំដើម​សម្រាប់​កម្មវិធី​រំលឹក​នៅ​ក្នុង​ប្រអប់​កែសម្រួល​ការ​ជូន​ដំណឹង សម្រាប់​ការ​ជូន​ដំណឹង​ក្នុង​ពេល​ឆាប់ៗ ។"
 
-#: prefdlg.cpp:1422
+#: prefdlg.cpp:1424
 #, kde-format
 msgctxt "@title:group Audio options group"
 msgid "Sound"
 msgstr "សំឡេង"
 
-#: prefdlg.cpp:1439
+#: prefdlg.cpp:1443
 #, kde-format
 msgctxt "@option:check"
 msgid "Repeat sound file"
 msgstr "ចាក់​ឯកសារ​សំឡេង​ឡើងវិញ"
 
-#: prefdlg.cpp:1442
+#: prefdlg.cpp:1446
 #, kde-kuit-format
 msgctxt "@info:whatsthis sound file 'Repeat' checkbox"
 msgid ""
@@ -5984,25 +5984,25 @@ msgid ""
 msgstr ""
 "ការ​កំណត់​លំនាំដើម​សម្រាប់​ឯកសារ​សំឡេង <interface>%1</interface> ក្នុង​ប្រអប់​កែសម្រួល​ការ​ជូន​ដំណឹង ។"
 
-#: prefdlg.cpp:1448
+#: prefdlg.cpp:1452
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Sound file:"
 msgstr "ឯកសារ​សំឡេង ៖"
 
-#: prefdlg.cpp:1456
+#: prefdlg.cpp:1460
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Choose a sound file"
 msgstr "ជ្រើស​ឯកសារ​សំឡេង​មួយ"
 
-#: prefdlg.cpp:1458
+#: prefdlg.cpp:1462
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the default sound file to use in the alarm edit dialog."
 msgstr "បញ្ចូល​ឯកសារ​សំឡេង​ដែលត្រូវ​ប្រើ​នៅ​ក្នុង​ប្រអប់​កែសម្រួល​ការ​ជូនដំណឹង ។"
 
-#: prefdlg.cpp:1467
+#: prefdlg.cpp:1471
 #, fuzzy, kde-format
 #| msgctxt "@info:whatsthis"
 #| msgid "Enter the default sound file to use in the alarm edit dialog."
@@ -6011,7 +6011,7 @@ msgid ""
 "Select to set the default volume for sound files in the alarm edit dialog."
 msgstr "បញ្ចូល​ឯកសារ​សំឡេង​ដែលត្រូវ​ប្រើ​នៅ​ក្នុង​ប្រអប់​កែសម្រួល​ការ​ជូនដំណឹង ។"
 
-#: prefdlg.cpp:1471
+#: prefdlg.cpp:1475
 #, fuzzy, kde-format
 #| msgctxt "@info:whatsthis"
 #| msgid "Enter the default sound file to use in the alarm edit dialog."
@@ -6019,25 +6019,25 @@ msgctxt "@info:whatsthis"
 msgid "The default volume for sound files in the alarm edit dialog."
 msgstr "បញ្ចូល​ឯកសារ​សំឡេង​ដែលត្រូវ​ប្រើ​នៅ​ក្នុង​ប្រអប់​កែសម្រួល​ការ​ជូនដំណឹង ។"
 
-#: prefdlg.cpp:1481
+#: prefdlg.cpp:1485
 #, kde-format
 msgctxt "@title:group"
 msgid "Command Alarms"
 msgstr "ការជូនដំណឹង​ពាក្យបញ្ជា"
 
-#: prefdlg.cpp:1500
+#: prefdlg.cpp:1504
 #, kde-format
 msgctxt "@title:group"
 msgid "Email Alarms"
 msgstr "ការជូនដំណឹង​អ៊ីមែល"
 
-#: prefdlg.cpp:1513
+#: prefdlg.cpp:1517
 #, kde-format
 msgctxt "@title:group"
 msgid "Message Font && Color"
 msgstr "ពណ៌​ និង​​ពុម្ព​អក្សរ​របស់​សារ"
 
-#: prefdlg.cpp:1715
+#: prefdlg.cpp:1719
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -6047,19 +6047,19 @@ msgstr ""
 "អ្នក​ត្រូវតែ​បញ្ចូល​ឯកសារ​សំឡេង នៅពេល​ដែល​បាន​ជ្រើស <interface>%1</interface> ជា​ប្រភេទ​សំឡង​"
 "លំនាំដើម"
 
-#: prefdlg.cpp:1737
+#: prefdlg.cpp:1741
 #, kde-format
 msgctxt "@title:tab"
 msgid "Alarm Windows"
 msgstr "បង្អួច​​ជូនដំណឹង"
 
-#: prefdlg.cpp:1740
+#: prefdlg.cpp:1744
 #, kde-format
 msgctxt "@option:check"
 msgid "Show in system tray"
 msgstr "បង្ហាញ​ក្នុង​ថាស​ប្រព័ន្ធ"
 
-#: prefdlg.cpp:1742
+#: prefdlg.cpp:1746
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info:whatsthis"
 #| msgid ""
@@ -6076,13 +6076,13 @@ msgstr ""
 "ប្រព័ន្ធ ។ ការ​បង្ហាញ​វា​នៅ​ក្នុង​ថាសប្រព័ន្ធ គឺ​ផ្ដល់​ភាព​ងាយស្រួល​ក្នុងការ​ចូល​ដំណើរការ និង​ការ​ចង្អុល​បង្ហាញ​"
 "ស្ថានភាព ។</para>"
 
-#: prefdlg.cpp:1771
+#: prefdlg.cpp:1775
 #, kde-format
 msgctxt "@option:radio Always show KAlarm icon"
 msgid "Always show"
 msgstr "បង្ហាញ​ជានិច្ច"
 
-#: prefdlg.cpp:1775
+#: prefdlg.cpp:1779
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -6092,13 +6092,13 @@ msgstr ""
 "ធីក​ដើម្បី​បង្ហាញ​រូបតំណាង​របស់ <application>KAlarm</application> នៅ​ក្នុង​ថាស​ប្រព័ន្ធ​ទោះបីជា​មាន​"
 "ការ​ជូនដំណឹង​ត្រូវ​ដល់​ពេល​រោទ៍​ក៏ដោយ ។"
 
-#: prefdlg.cpp:1779
+#: prefdlg.cpp:1783
 #, kde-format
 msgctxt "@option:radio"
 msgid "Automatically hide if no active alarms"
 msgstr "លាក់​ដោយ​ស្វ័យប្រវត្តិ​ប្រសិនបើ​គ្មាន​ការ​ជូនដំណឹង​សកម្ម"
 
-#: prefdlg.cpp:1783
+#: prefdlg.cpp:1787
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -6110,7 +6110,7 @@ msgstr ""
 "ប្រព័ន្ធ ប្រសិនបើ​គ្មាន​ការ​ជូនដំណឹង​សកម្ម ។ ពេល​លាក់ រូបតំណាង​អាច​ត្រូវ​បាន​ធ្វើឲ្យ​មើល​ឃើញ​ជានិច្ច​ដោយ​ប្រើ​"
 "ជម្រើស​ថាស​ប្រព័ន្ធ ។"
 
-#: prefdlg.cpp:1789
+#: prefdlg.cpp:1793
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -6123,25 +6123,25 @@ msgstr ""
 "ប្រព័ន្ធ ប្រសិនបើ​គ្មាន​ការ​ជូនដំណឹង​ណាមួយ​​ត្រូវ​ដល់​ពេល​រោទ៍​តាម​ពេល​ពេលវេលា​ដែល​បាន​បញ្ជាក់ ។ ពេល​លាក់ "
 "រូបតំណាង​អាច​ត្រូវ​បាន​ធ្វើឲ្យ​មើល​ឃើញ​ជានិច្ច​ដោយ​ប្រើ​ជម្រើស​ថាស​ប្រព័ន្ធ ។"
 
-#: prefdlg.cpp:1792
+#: prefdlg.cpp:1796
 #, kde-format
 msgctxt "@option:radio"
 msgid "Automatically hide if no alarm due within time period:"
 msgstr "លាក់​ដោយ​ស្វ័យប្រវត្តិ​ប្រសិនបើ​គ្មាន​ការ​ជូនដំណឹង​ណាមួយ​ត្រូវ​ដល់​ពេល​រោទ៍​ទេ ៖"
 
-#: prefdlg.cpp:1804
+#: prefdlg.cpp:1808
 #, kde-format
 msgctxt "@title:group"
 msgid "System Tray Tooltip"
 msgstr "ព័ត៌មាន​ជំនួយ​ថាស​ប្រព័ន្ធ"
 
-#: prefdlg.cpp:1811
+#: prefdlg.cpp:1815
 #, kde-format
 msgctxt "@option:check"
 msgid "Show next &24 hours' alarms"
 msgstr "បង្ហាញ​ការជូនដំណឹង ២៤ ម៉ោង​បន្ទាប់"
 
-#: prefdlg.cpp:1815
+#: prefdlg.cpp:1819
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -6151,13 +6151,13 @@ msgstr ""
 "បញ្ជាក់​​ថាតើ​ត្រូវរួម​​បញ្ចូលជា​​ព័ត៌មាន​ជំនួយ​ថាស​ប្រព័ន្ធ ដែល​សេចក្តី​សង្ខេប​ការ ជូនដំណឹង​​ត្រូវ​ផុត​កំណត់​ក្នុង ២៤ ម៉ោង​"
 "ក្រោយ ។"
 
-#: prefdlg.cpp:1821
+#: prefdlg.cpp:1825
 #, kde-format
 msgctxt "@option:check"
 msgid "Maximum number of alarms to show:"
 msgstr "ចំនួន​ការ​ជូនដំណឹង​អតិបរមា​ដែល​ត្រូវ​បង្ហាញ ៖"
 
-#: prefdlg.cpp:1830
+#: prefdlg.cpp:1834
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -6167,43 +6167,43 @@ msgstr ""
 "ដោះធីក ដើម្បី​បង្ហាញ​ការជូនដំណឹង ២៤ ម៉ោង​ក្រោយ​ទាំងអស់ ជា​ព័ត៌មាន​ជំនួយ​ថាស​ប្រព័ន្ធ ។ សូម​ធីក ​ដើម្បី​បញ្ចូល​"
 "ដែនកំណត់លើ លើលេខ​ដែល​ត្រូវ​បង្ហាញ ។"
 
-#: prefdlg.cpp:1834
+#: prefdlg.cpp:1838
 #, kde-format
 msgctxt "@option:check"
 msgid "Show alarm time"
 msgstr "បង្ហាញ​ពេលវេលា​ការ​ជូនដំណឹង"
 
-#: prefdlg.cpp:1840
+#: prefdlg.cpp:1844
 #, kde-format
 msgctxt "@option:check"
 msgid "Show time until alarm"
 msgstr "បង្ហាញ​ពេលវេលា​រហូត​ដល់​ការ​ជូនដំណឹង"
 
-#: prefdlg.cpp:1858
+#: prefdlg.cpp:1862
 #, kde-format
 msgctxt "@title:group"
 msgid "Alarm List"
 msgstr "បញ្ជី​​​ជូនដំណឹង"
 
-#: prefdlg.cpp:1870
+#: prefdlg.cpp:1874
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Disabled alarm color:"
 msgstr "បិទ​ពណ៌​ការ​ជូនដំណឹង ៖"
 
-#: prefdlg.cpp:1883
+#: prefdlg.cpp:1887
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Archived alarm color:"
 msgstr "ដាក់​ពណ៌​ការជូន​ដំណឹង​ក្នុង​ប័ណ្ណសារ ៖"
 
-#: prefdlg.cpp:1896
+#: prefdlg.cpp:1900
 #, kde-format
 msgctxt "@title:group"
 msgid "Alarm Message Windows"
 msgstr "បង្អួច​សារ​ជូនដំណឹង"
 
-#: prefdlg.cpp:1905
+#: prefdlg.cpp:1909
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -6217,25 +6217,25 @@ msgstr ""
 "ជូនដំណឹង​ឲ្យ​កាន់តែ​ឆ្ងាយ​ពី​ទីតាំង​ទស្សន៍ទ្រនិច​កណ្ដុរ​បច្ចុប្បន្ន ឬ</item><item>ដាក់​បង្អួច​សារ​ជូន​ដំណឹង​នៅ​ចំ​"
 "កណ្ដាល​អេក្រង់ ប៉ុន្តែ​​បិទ​ប៊ូតុង​មួយ​រយៈ បន្ទាប់​ពី​បង្ហាញ​បង្អួច ។</item></list></para>"
 
-#: prefdlg.cpp:1908
+#: prefdlg.cpp:1912
 #, kde-format
 msgctxt "@option:radio"
 msgid "Position windows far from mouse cursor"
 msgstr "ដាក់​បង្អួច​ឲ្យ​នៅ​ឆ្ងាយពី​ទស្សន៍ទ្រនិច​កណ្ដុរ"
 
-#: prefdlg.cpp:1912
+#: prefdlg.cpp:1916
 #, kde-format
 msgctxt "@option:radio"
 msgid "Center windows, delay activating window buttons"
 msgstr "ដាក់​បង្អួច​នៅ​កណ្ដាល ប៊ូតុង​បង្អួច​ពន្យាពេល​ធ្វើ​ឲ្យ​សកម្ម"
 
-#: prefdlg.cpp:1920
+#: prefdlg.cpp:1924
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Button activation delay (seconds):"
 msgstr "ការ​ពន្យាពាល​ការ​ធ្វើ​ឲ្យ​ប៊ូតុង​សកម្ម (វិនាទី) ៖"
 
-#: prefdlg.cpp:1927
+#: prefdlg.cpp:1931
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -6243,13 +6243,13 @@ msgid ""
 "window is shown."
 msgstr "បញ្ចូល​រយៈពេល​ដែល​ប៊ូតុង​របស់​វា​គួរ​នៅ​បិទ បន្ទាប់​ពី​បង្ហាញ​បង្អួច​សារ​ជូន​ដំណឹង ។"
 
-#: prefdlg.cpp:1935
+#: prefdlg.cpp:1939
 #, kde-format
 msgctxt "@option:check"
 msgid "Message windows have a title bar and take keyboard focus"
 msgstr "បង្អួច​សារ​មាន​របារ​ចំណងមួយ និង​​ទទួល​ការ​ផ្ដោត​អារម្មណ៍​ពី​ក្ដារចុច ។"
 
-#: prefdlg.cpp:1938
+#: prefdlg.cpp:1942
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info:whatsthis"
 #| msgid ""
@@ -8376,37 +8376,37 @@ msgctxt "@info:whatsthis"
 msgid "Choose the initial volume for playing the sound file."
 msgstr "ជ្រើស​កម្រិត​សំឡេង​ដើម សម្រាប់​ការ​ចាក់​ឯកសារ​សំឡេង ។"
 
-#: soundpicker.cpp:40
+#: soundpicker.cpp:41
 #, kde-format
 msgctxt "@label:listbox Listbox providing audio options"
 msgid "Sound:"
 msgstr "សំឡេង ៖"
 
-#: soundpicker.cpp:41
+#: soundpicker.cpp:42
 #, kde-format
 msgctxt "@item:inlistbox No sound"
 msgid "None"
 msgstr "គ្មាន"
 
-#: soundpicker.cpp:42
+#: soundpicker.cpp:43
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Beep"
 msgstr "សំឡេង​ក្រ​លួច​​"
 
-#: soundpicker.cpp:43
+#: soundpicker.cpp:44
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Speak"
 msgstr "និយាយ"
 
-#: soundpicker.cpp:44
+#: soundpicker.cpp:45
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Sound file"
 msgstr "ឯកសារ​សំឡេង"
 
-#: soundpicker.cpp:74
+#: soundpicker.cpp:75
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -8420,25 +8420,25 @@ msgid ""
 "list></para>"
 msgstr ""
 
-#: soundpicker.cpp:86
+#: soundpicker.cpp:87
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Configure sound file"
 msgstr "កំណត់​រចនាសម្ព័ន្ធ​ឯកសារ​សំឡេង"
 
-#: soundpicker.cpp:87
+#: soundpicker.cpp:88
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Configure a sound file to play when the alarm is displayed."
 msgstr "កំណត់​រចនាសម្ព័ន្ធ​ឯកសារ​សំឡេង ដែល​ត្រូវ​ចាក់​នៅ​ពេល​បង្ហាញ​ការ​ជូនដំណឹង ។"
 
-#: soundpicker.cpp:250
+#: soundpicker.cpp:253
 #, kde-format
 msgctxt "@title:window"
 msgid "Sound File"
 msgstr "ឯកសារ​សំឡេង"
 
-#: soundpicker.cpp:309
+#: soundpicker.cpp:312
 #, fuzzy, kde-format
 #| msgctxt "@item:inlistbox"
 #| msgid "Sound file"
@@ -8446,7 +8446,7 @@ msgctxt "@item:inlistbox"
 msgid "Audio files"
 msgstr "ឯកសារ​សំឡេង"
 
-#: soundpicker.cpp:333
+#: soundpicker.cpp:336
 #, kde-format
 msgctxt "@title:window"
 msgid "Choose Sound File"
