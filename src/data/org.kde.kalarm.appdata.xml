@@ -43,7 +43,7 @@
   <name xml:lang="sr-ijekavian">К‑аларм</name>
   <name xml:lang="sr-ijekavianlatin">K‑alarm</name>
   <name xml:lang="sv">Kalarm</name>
-  <name xml:lang="tr">K Alarm</name>
+  <name xml:lang="tr">KAlarm</name>
   <name xml:lang="uk">KAlarm</name>
   <name xml:lang="x-test">xxKAlarmxx</name>
   <name xml:lang="zh-CN">KAlarm</name>
@@ -119,7 +119,7 @@
     <p xml:lang="sk">KAlarm je aplikácia osobného budíku, príkazového a e-mailového plánovača od KDE</p>
     <p xml:lang="sl">Kalarm je osebni planer alarmov, ukazov in e-pošte izdelan v skupnosti KDE</p>
     <p xml:lang="sv">Kalarm är ett schemaläggningsprogram av personliga alarmmeddelanden, kommandon och e-post av KDE</p>
-    <p xml:lang="tr">K Alarm, KDE tarafından yapılan bir kişisel alarm iletisi, komut ve e-posta zamanlayıcısıdır</p>
+    <p xml:lang="tr">KAlarm, KDE tarafından yapılan bir kişisel alarm iletisi, komut ve e-posta zamanlayıcısıdır</p>
     <p xml:lang="uk">KAlarm — інструмент від KDE для складання розкладу повідомлень, команд і поштових повідомлень для нагадування.</p>
     <p xml:lang="x-test">xxKAlarm is a personal alarm message, command and email scheduler application by KDExx</p>
     <p xml:lang="zh-CN">KAlarm 是由 KDE 打造的个人消息、命令闹钟和电子邮件计划程序</p>
@@ -397,7 +397,7 @@
       <caption xml:lang="sk">Konfiguračné okno KAlarm s testovacou správou alarmu</caption>
       <caption xml:lang="sl">Okno za nastavitev alarma s tesnim sporočilom ob alarmu</caption>
       <caption xml:lang="sv">Inställningsfönstret i Kalarm med test av ett meddelandealarm</caption>
-      <caption xml:lang="tr">Bir sınama ileti alarmlı K Alarm yapılandırma penceresi</caption>
+      <caption xml:lang="tr">Bir sınama ileti alarmlı KAlarm yapılandırma penceresi</caption>
       <caption xml:lang="uk">Вікно налаштовування KAlarm із тестовим нагадуванням у форматі повідомлення</caption>
       <caption xml:lang="x-test">xxKAlarm configuration window with a testing message alarmxx</caption>
       <caption xml:lang="zh-CN">KAlarm 配置窗口，同时展示了一个测试闹钟</caption>
