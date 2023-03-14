@@ -1218,11 +1218,11 @@ msgid ""
 "use sendmail or a sendmail compatible mail transport agent.</li></ul></p>"
 msgstr ""
 "<p>Comment envoyer un courriel lorsqu'une alarme de courriel est déclenchée."
-"<ul> <li>KMail : le courriel est automatiquement envoyé via "
-"<application>KMail</application>.<li>SendMail : le courriel est envoyé "
-"automatiquement. Cette option ne fonctionnera que si votre système est "
-"configuré pour utiliser <application>« sendmail »</application> ou un agent "
-"de transport de courriel compatible avec « sendmail ».</li></ul></p>"
+"<ul> <li>KMail : le courriel est automatiquement envoyé via KMail.</"
+"li><li>SendMail : le courriel est envoyé automatiquement. Cette option ne "
+"fonctionnera que si votre système est configuré pour utiliser « sendmail » "
+"ou un agent de transport de courriel compatible avec « sendmail ».</li></"
+"ul></p>"
 
 #. i18n: ectx: label, entry (Base_EmailClient), group (General)
 #: data/kalarmconfig.kcfg:196
