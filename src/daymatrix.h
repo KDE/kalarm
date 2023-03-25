@@ -89,7 +89,6 @@ private Q_SLOTS:
     void slotUpdateView();
 
 private:
-    bool recalculateToday();
     QString getHolidayLabel(int offset) const;
     void setMouseSelection(int start, int end, bool emitSignal);
     void popupMenu(const QPoint&);     // pop up a context menu for creating a new alarm

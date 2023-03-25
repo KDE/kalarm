@@ -24,9 +24,6 @@ public:
     static TemplateDlg*  create(QWidget* parent = nullptr);
     ~TemplateDlg() override;
 
-Q_SIGNALS:
-    void          emptyToggled(bool notEmpty);
-
 protected:
     void          resizeEvent(QResizeEvent*) override;
 

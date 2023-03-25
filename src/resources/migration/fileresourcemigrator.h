@@ -45,7 +45,6 @@ private Q_SLOTS:
 private:
     explicit FileResourceMigrator(QObject* parent = nullptr);
 
-    void migrateAkonadiResources();
     void migrateKResources();
     void createDefaultResources();
     void migrateFileResource(const QString& resourceName,
