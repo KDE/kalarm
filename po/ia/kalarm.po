@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-03-10 00:49+0000\n"
-"PO-Revision-Date: 2023-01-10 15:58+0100\n"
+"PO-Revision-Date: 2023-03-27 15:33+0200\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
 "Language: ia\n"
@@ -753,7 +753,7 @@ msgstr "Ressources de file"
 #, kde-format
 msgctxt "@label"
 msgid "Enable Akonadi plugin"
-msgstr "Habilita pliugin de Akonadi"
+msgstr "Habilita plugin de Akonadi"
 
 #. i18n: ectx: whatsthis, entry (UseAkonadiIfAvailable), group (General)
 #: data/kalarmconfig.kcfg:76
