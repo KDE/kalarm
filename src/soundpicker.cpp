@@ -131,6 +131,7 @@ void SoundPicker::showSpeak(bool show)
 {
 #ifdef HAVE_TEXT_TO_SPEECH_SUPPORT
     if (!TextEditTextToSpeech::TextToSpeech::self()->isReady())
+#endif
         show = false;    // speech capability is not installed or configured
     if (show != mSpeakShowing)
     {
@@ -145,7 +146,6 @@ void SoundPicker::showSpeak(bool show)
         }
         mSpeakShowing = show;
     }
-#endif
 }
 
 /******************************************************************************
@@ -155,6 +155,10 @@ Preferences::SoundType SoundPicker::sound() const
 {
     if (mTypeCombo->currentIndex() < 0)
         return Preferences::Sound_None;
+#ifndef HAVE_TEXT_TO_SPEECH_SUPPORT
+    if (mTypeCombo->currentData().toInt() == Preferences::Sound_Speak)
+        return Preferences::Sound_None;
+#endif
     return static_cast<Preferences::SoundType>(mTypeCombo->currentData().toInt());
 }
 
