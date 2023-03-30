@@ -1618,7 +1618,9 @@ bool EditPrefTab::apply(bool syncToDisc)
     Preferences::SoundType snd;
     switch (mSound->currentIndex())
     {
+#ifdef HAVE_TEXT_TO_SPEECH_SUPPORT
         case 3:  snd = Preferences::Sound_Speak; break;
+#endif
         case 2:  snd = Preferences::Sound_File;  break;
         case 1:  snd = Preferences::Sound_Beep;  break;
         case 0:
@@ -1703,7 +1705,9 @@ int EditPrefTab::soundIndex(Preferences::SoundType type)
 {
     switch (type)
     {
+#ifdef HAVE_TEXT_TO_SPEECH_SUPPORT
         case Preferences::Sound_Speak: return 3;
+#endif
         case Preferences::Sound_File:  return 2;
         case Preferences::Sound_Beep:  return 1;
         case Preferences::Sound_None:
