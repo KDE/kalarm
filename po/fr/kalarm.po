@@ -26,7 +26,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-10 00:49+0000\n"
+"POT-Creation-Date: 2023-03-31 02:50+0000\n"
 "PO-Revision-Date: 2023-01-01 11:05+0100\n"
 "Last-Translator: Xavier BESNARD <xavier.besnard]neuf.fr>\n"
 "Language-Team: fr\n"
@@ -349,7 +349,7 @@ msgctxt "@title:group"
 msgid "Alarm Text"
 msgstr "Texte de l'alarme"
 
-#: birthdaydlg.cpp:77 prefdlg.cpp:1853
+#: birthdaydlg.cpp:77 prefdlg.cpp:1857
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Prefix:"
@@ -1152,7 +1152,7 @@ msgid "Show alarm times in system tray tooltip"
 msgstr "Afficher les moments d'alarme dans la boîte à miniatures"
 
 #. i18n: ectx: whatsthis, entry (ShowTooltipAlarmTime), group (General)
-#: data/kalarmconfig.kcfg:176 prefdlg.cpp:1841
+#: data/kalarmconfig.kcfg:176 prefdlg.cpp:1845
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1170,7 +1170,7 @@ msgid "Show time to alarms in system tray tooltip"
 msgstr "Afficher le temps restant avant les alarmes dans la boîte à miniatures"
 
 #. i18n: ectx: whatsthis, entry (ShowTooltipTimeToAlarm), group (General)
-#: data/kalarmconfig.kcfg:182 prefdlg.cpp:1847
+#: data/kalarmconfig.kcfg:182 prefdlg.cpp:1851
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1190,7 +1190,7 @@ msgstr ""
 "la boîte à miniatures"
 
 #. i18n: ectx: whatsthis, entry (TooltipTimeToPrefix), group (General)
-#: data/kalarmconfig.kcfg:188 prefdlg.cpp:1858
+#: data/kalarmconfig.kcfg:188 prefdlg.cpp:1862
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1393,7 +1393,7 @@ msgid "Disabled alarm color"
 msgstr "Couleur d'alarme désactivée"
 
 #. i18n: ectx: whatsthis, entry (DisabledColour), group (General)
-#: data/kalarmconfig.kcfg:246 prefdlg.cpp:1880
+#: data/kalarmconfig.kcfg:246 prefdlg.cpp:1884
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Choose the text color in the alarm list for disabled alarms."
@@ -1409,7 +1409,7 @@ msgid "Archived alarm color"
 msgstr "Couleur d'alarme archivée"
 
 #. i18n: ectx: whatsthis, entry (ArchivedColour), group (General)
-#: data/kalarmconfig.kcfg:252 prefdlg.cpp:1893
+#: data/kalarmconfig.kcfg:252 prefdlg.cpp:1897
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Choose the text color in the alarm list for archived alarms."
@@ -5890,7 +5890,7 @@ msgstr ""
 "La configuration par défaut de <interface>%1</interface> dans la boîte de "
 "dialogue pour la modification de l'alarme."
 
-#: prefdlg.cpp:1293 prefdlg.cpp:1737
+#: prefdlg.cpp:1293 prefdlg.cpp:1741
 #, kde-format
 msgctxt "@title:tab"
 msgid "General"
@@ -6066,7 +6066,7 @@ msgctxt "@title:group"
 msgid "Message Font && Color"
 msgstr "Police et couleur du message"
 
-#: prefdlg.cpp:1719
+#: prefdlg.cpp:1723
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -6076,20 +6076,20 @@ msgstr ""
 "Vous devez saisir un fichier sonore lorsque <interface>%1</interface> est "
 "sélectionné comme le type de son par défaut"
 
-#: prefdlg.cpp:1741
+#: prefdlg.cpp:1745
 #, kde-format
 msgctxt "@title:tab"
 msgid "Alarm Windows"
 msgstr "Fenêtres d'alarme"
 
 # unreviewed-context
-#: prefdlg.cpp:1744
+#: prefdlg.cpp:1748
 #, kde-format
 msgctxt "@option:check"
 msgid "Show in system tray"
 msgstr "Afficher une icône dans la boî&te à miniatures"
 
-#: prefdlg.cpp:1746
+#: prefdlg.cpp:1750
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -6102,13 +6102,13 @@ msgstr ""
 "permet un accès aisé à <application>KAlarm</application> et une indication "
 "sur son état.</para>"
 
-#: prefdlg.cpp:1775
+#: prefdlg.cpp:1779
 #, kde-format
 msgctxt "@option:radio Always show KAlarm icon"
 msgid "Always show"
 msgstr "Toujours afficher"
 
-#: prefdlg.cpp:1779
+#: prefdlg.cpp:1783
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -6118,13 +6118,13 @@ msgstr ""
 "Cochez cette case pour afficher l'icône <application>KAlarm</application> "
 "dans la boîte à miniatures, peu importe les alarmes prévues."
 
-#: prefdlg.cpp:1783
+#: prefdlg.cpp:1787
 #, kde-format
 msgctxt "@option:radio"
 msgid "Automatically hide if no active alarms"
 msgstr "Masquer automatiquement s'il n'y a pas d'alarme active."
 
-#: prefdlg.cpp:1787
+#: prefdlg.cpp:1791
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -6137,7 +6137,7 @@ msgstr ""
 "Quand elle est cachée, l'icône peut toujours être ré-affichée en utilisant "
 "l'option pour afficher les icônes masquées de la boîte à miniatures."
 
-#: prefdlg.cpp:1793
+#: prefdlg.cpp:1797
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -6152,26 +6152,26 @@ msgstr ""
 "ré-affichée en utilisant l'option pour afficher les icônes masquées de la "
 "boîte à miniatures."
 
-#: prefdlg.cpp:1796
+#: prefdlg.cpp:1800
 #, kde-format
 msgctxt "@option:radio"
 msgid "Automatically hide if no alarm due within time period:"
 msgstr ""
 "Masquer automatiquement s'il n'y a pas d'alarme prévue dans la période :"
 
-#: prefdlg.cpp:1808
+#: prefdlg.cpp:1812
 #, kde-format
 msgctxt "@title:group"
 msgid "System Tray Tooltip"
 msgstr "Bulle d'aide de la boîte à miniatures"
 
-#: prefdlg.cpp:1815
+#: prefdlg.cpp:1819
 #, kde-format
 msgctxt "@option:check"
 msgid "Show next &24 hours' alarms"
 msgstr "Afficher les alarmes des prochaines &24 heures"
 
-#: prefdlg.cpp:1819
+#: prefdlg.cpp:1823
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -6181,13 +6181,13 @@ msgstr ""
 "Définir s'il faut inclure dans la bulle d'aide de la boîte à miniatures un "
 "résumé des alarmes qui se déclencheront dans les 24 heures suivantes."
 
-#: prefdlg.cpp:1825
+#: prefdlg.cpp:1829
 #, kde-format
 msgctxt "@option:check"
 msgid "Maximum number of alarms to show:"
 msgstr "Nombre maximum d'alarmes à afficher :"
 
-#: prefdlg.cpp:1834
+#: prefdlg.cpp:1838
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -6198,44 +6198,44 @@ msgstr ""
 "dans la bulle d'aide de la boîte à miniatures. Cochez la pour saisir un "
 "nombre maximum d'alarmes à afficher."
 
-#: prefdlg.cpp:1838
+#: prefdlg.cpp:1842
 #, kde-format
 msgctxt "@option:check"
 msgid "Show alarm time"
 msgstr "Afficher l'heure de l'alarme"
 
-#: prefdlg.cpp:1844
+#: prefdlg.cpp:1848
 #, kde-format
 msgctxt "@option:check"
 msgid "Show time until alarm"
 msgstr "Afficher le temps restant avant l'alarme"
 
 # unreviewed-context
-#: prefdlg.cpp:1862
+#: prefdlg.cpp:1866
 #, kde-format
 msgctxt "@title:group"
 msgid "Alarm List"
 msgstr "Liste d'alarmes"
 
-#: prefdlg.cpp:1874
+#: prefdlg.cpp:1878
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Disabled alarm color:"
 msgstr "Couleur des alarmes désactivées :"
 
-#: prefdlg.cpp:1887
+#: prefdlg.cpp:1891
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Archived alarm color:"
 msgstr "Couleur des alarmes archivées :"
 
-#: prefdlg.cpp:1900
+#: prefdlg.cpp:1904
 #, kde-format
 msgctxt "@title:group"
 msgid "Alarm Message Windows"
 msgstr "Fenêtres de message d'alarme"
 
-#: prefdlg.cpp:1909
+#: prefdlg.cpp:1913
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -6253,25 +6253,25 @@ msgstr ""
 "boutons pendant une courte durée après que la fenêtre est affichée.</item> </"
 "list></para>"
 
-#: prefdlg.cpp:1912
+#: prefdlg.cpp:1916
 #, kde-format
 msgctxt "@option:radio"
 msgid "Position windows far from mouse cursor"
 msgstr "Positionner les fenêtres loin du pointeur de la souris"
 
-#: prefdlg.cpp:1916
+#: prefdlg.cpp:1920
 #, kde-format
 msgctxt "@option:radio"
 msgid "Center windows, delay activating window buttons"
 msgstr "Centrer les fenêtres, retarder l'activation des boutons de la fenêtre"
 
-#: prefdlg.cpp:1924
+#: prefdlg.cpp:1928
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Button activation delay (seconds):"
 msgstr "Durée de rétention de l'activation des boutons (seconde) :"
 
-#: prefdlg.cpp:1931
+#: prefdlg.cpp:1935
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -6281,13 +6281,13 @@ msgstr ""
 "Saisissez le nombre de secondes que les boutons resteront désactivés après "
 "qu'une fenêtre de message d'alarme est affichée."
 
-#: prefdlg.cpp:1939
+#: prefdlg.cpp:1943
 #, kde-format
 msgctxt "@option:check"
 msgid "Message windows have a title bar and take keyboard focus"
 msgstr "Les fenêtres de messages ont une barre de titre et prennent le focus"
 
-#: prefdlg.cpp:1942
+#: prefdlg.cpp:1946
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -8436,21 +8436,21 @@ msgid "Configure a sound file to play when the alarm is displayed."
 msgstr "Configurer le son à jouer lorsque l'alarme s'affichera."
 
 # unreviewed-context
-#: soundpicker.cpp:253
+#: soundpicker.cpp:257
 #, kde-format
 msgctxt "@title:window"
 msgid "Sound File"
 msgstr "Fichier son"
 
 # unreviewed-context
-#: soundpicker.cpp:312
+#: soundpicker.cpp:316
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Audio files"
 msgstr "Fichiers audio"
 
 # unreviewed-context
-#: soundpicker.cpp:336
+#: soundpicker.cpp:340
 #, kde-format
 msgctxt "@title:window"
 msgid "Choose Sound File"
