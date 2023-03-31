@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdepim-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-10 00:49+0000\n"
+"POT-Creation-Date: 2023-03-31 00:48+0000\n"
 "PO-Revision-Date: 2023-03-23 14:37+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -314,7 +314,7 @@ msgctxt "@title:group"
 msgid "Alarm Text"
 msgstr "Alarm Metni"
 
-#: birthdaydlg.cpp:77 prefdlg.cpp:1853
+#: birthdaydlg.cpp:77 prefdlg.cpp:1857
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Prefix:"
@@ -1082,7 +1082,7 @@ msgid "Show alarm times in system tray tooltip"
 msgstr "Alarm sürelerini sistem tepsisi ipucunda göster"
 
 #. i18n: ectx: whatsthis, entry (ShowTooltipAlarmTime), group (General)
-#: data/kalarmconfig.kcfg:176 prefdlg.cpp:1841
+#: data/kalarmconfig.kcfg:176 prefdlg.cpp:1845
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1100,7 +1100,7 @@ msgid "Show time to alarms in system tray tooltip"
 msgstr "Alarm sürelerini sistem tepsisi ipucunda göster"
 
 #. i18n: ectx: whatsthis, entry (ShowTooltipTimeToAlarm), group (General)
-#: data/kalarmconfig.kcfg:182 prefdlg.cpp:1847
+#: data/kalarmconfig.kcfg:182 prefdlg.cpp:1851
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1118,7 +1118,7 @@ msgid "Time-to-alarm prefix in system tray tooltip"
 msgstr "Sistem tepsisinde alarma olan zaman öneki"
 
 #. i18n: ectx: whatsthis, entry (TooltipTimeToPrefix), group (General)
-#: data/kalarmconfig.kcfg:188 prefdlg.cpp:1858
+#: data/kalarmconfig.kcfg:188 prefdlg.cpp:1862
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1320,7 +1320,7 @@ msgid "Disabled alarm color"
 msgstr "Devre Dışı alarm rengi"
 
 #. i18n: ectx: whatsthis, entry (DisabledColour), group (General)
-#: data/kalarmconfig.kcfg:246 prefdlg.cpp:1880
+#: data/kalarmconfig.kcfg:246 prefdlg.cpp:1884
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Choose the text color in the alarm list for disabled alarms."
@@ -1334,7 +1334,7 @@ msgid "Archived alarm color"
 msgstr "Arşivlenmiş alarm rengi"
 
 #. i18n: ectx: whatsthis, entry (ArchivedColour), group (General)
-#: data/kalarmconfig.kcfg:252 prefdlg.cpp:1893
+#: data/kalarmconfig.kcfg:252 prefdlg.cpp:1897
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Choose the text color in the alarm list for archived alarms."
@@ -5631,7 +5631,7 @@ msgid ""
 msgstr ""
 "Alarm düzenleme penceresinde <interface>%1</interface> için öntanımlı ayar."
 
-#: prefdlg.cpp:1293 prefdlg.cpp:1737
+#: prefdlg.cpp:1293 prefdlg.cpp:1741
 #, kde-format
 msgctxt "@title:tab"
 msgid "General"
@@ -5805,7 +5805,7 @@ msgctxt "@title:group"
 msgid "Message Font && Color"
 msgstr "İleti Yazıtipi ve Rengi"
 
-#: prefdlg.cpp:1719
+#: prefdlg.cpp:1723
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -5815,19 +5815,19 @@ msgstr ""
 "Öntanımlı ses türü olarak <interface>%1</interface> seçildiğinden, bir ses "
 "dosyası girmelisiniz"
 
-#: prefdlg.cpp:1741
+#: prefdlg.cpp:1745
 #, kde-format
 msgctxt "@title:tab"
 msgid "Alarm Windows"
 msgstr "Alarm Pencereleri"
 
-#: prefdlg.cpp:1744
+#: prefdlg.cpp:1748
 #, kde-format
 msgctxt "@option:check"
 msgid "Show in system tray"
 msgstr "Sistem tepsisinde göster"
 
-#: prefdlg.cpp:1746
+#: prefdlg.cpp:1750
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5839,13 +5839,13 @@ msgstr ""
 "simgesini göstermek için işaretleyin. Simgeyi sistem çubuğunda göstermek "
 "kolay erişim ve durum göstergesi sağlar.</para>"
 
-#: prefdlg.cpp:1775
+#: prefdlg.cpp:1779
 #, kde-format
 msgctxt "@option:radio Always show KAlarm icon"
 msgid "Always show"
 msgstr "Her zaman göster"
 
-#: prefdlg.cpp:1779
+#: prefdlg.cpp:1783
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5855,13 +5855,13 @@ msgstr ""
 "Zamanı dolan alarmların olup olmadığını gözetmeksizin <application>K Alarm</"
 "application>'ın simgesini sistem çubuğunda göstermek için işaretleyin."
 
-#: prefdlg.cpp:1783
+#: prefdlg.cpp:1787
 #, kde-format
 msgctxt "@option:radio"
 msgid "Automatically hide if no active alarms"
 msgstr "Etkin alarm yoksa otomatik olarak gizle"
 
-#: prefdlg.cpp:1787
+#: prefdlg.cpp:1791
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5874,7 +5874,7 @@ msgstr ""
 "simgeleri göstermek için sistem tepsisi seçeneğini kullanarak simgeyi her "
 "zaman görünebilir yapabilirsiniz."
 
-#: prefdlg.cpp:1793
+#: prefdlg.cpp:1797
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5888,26 +5888,26 @@ msgstr ""
 "gizlemek için işaretleyin. Gizlendiğinde, simge her zaman, sistem çubuğu "
 "gizli simgeleri göster seçeneği kullanılarak görünür yapılabilir."
 
-#: prefdlg.cpp:1796
+#: prefdlg.cpp:1800
 #, kde-format
 msgctxt "@option:radio"
 msgid "Automatically hide if no alarm due within time period:"
 msgstr ""
 "Zaman periyodu içerisinde süresi dolmuş alarm yoksa otomatik olarak gizle:"
 
-#: prefdlg.cpp:1808
+#: prefdlg.cpp:1812
 #, kde-format
 msgctxt "@title:group"
 msgid "System Tray Tooltip"
 msgstr "Sistem Tepsisi Araç İpucu"
 
-#: prefdlg.cpp:1815
+#: prefdlg.cpp:1819
 #, kde-format
 msgctxt "@option:check"
 msgid "Show next &24 hours' alarms"
 msgstr "Gelecek &24 saat içerisindeki alarmları göster"
 
-#: prefdlg.cpp:1819
+#: prefdlg.cpp:1823
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5917,13 +5917,13 @@ msgstr ""
 "Sonraki 24 saatteki alarmların özetinin sistem tepsisinde gösterip "
 "gösterilmeyeceğini belirtin."
 
-#: prefdlg.cpp:1825
+#: prefdlg.cpp:1829
 #, kde-format
 msgctxt "@option:check"
 msgid "Maximum number of alarms to show:"
 msgstr "Gösterilecek en fazla alarm sayısı:"
 
-#: prefdlg.cpp:1834
+#: prefdlg.cpp:1838
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5934,43 +5934,43 @@ msgstr ""
 "tepsisinde görüntülenecektir. Görüntülenecek sayıyı sınırlayacak bir değer "
 "girmek için işaretleyin."
 
-#: prefdlg.cpp:1838
+#: prefdlg.cpp:1842
 #, kde-format
 msgctxt "@option:check"
 msgid "Show alarm time"
 msgstr "Alarm &zamanını göster"
 
-#: prefdlg.cpp:1844
+#: prefdlg.cpp:1848
 #, kde-format
 msgctxt "@option:check"
 msgid "Show time until alarm"
 msgstr "Alarma kalan zamanı göster"
 
-#: prefdlg.cpp:1862
+#: prefdlg.cpp:1866
 #, kde-format
 msgctxt "@title:group"
 msgid "Alarm List"
 msgstr "Uyarı Listesi"
 
-#: prefdlg.cpp:1874
+#: prefdlg.cpp:1878
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Disabled alarm color:"
 msgstr "Devre dışı alarm rengi:"
 
-#: prefdlg.cpp:1887
+#: prefdlg.cpp:1891
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Archived alarm color:"
 msgstr "Arşivlenmiş alarm rengi:"
 
-#: prefdlg.cpp:1900
+#: prefdlg.cpp:1904
 #, kde-format
 msgctxt "@title:group"
 msgid "Alarm Message Windows"
 msgstr "Alarm İletisi Pencereleri"
 
-#: prefdlg.cpp:1909
+#: prefdlg.cpp:1913
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5986,25 +5986,25 @@ msgstr ""
 "göründükten kısa bir süre sonra düğmeler devre dışı olsun.<item></item></"
 "list></para>"
 
-#: prefdlg.cpp:1912
+#: prefdlg.cpp:1916
 #, kde-format
 msgctxt "@option:radio"
 msgid "Position windows far from mouse cursor"
 msgstr "Pencereyi fare imlecinden uzakta konumlandır"
 
-#: prefdlg.cpp:1916
+#: prefdlg.cpp:1920
 #, kde-format
 msgctxt "@option:radio"
 msgid "Center windows, delay activating window buttons"
 msgstr "Pencereyi ortala, pencere düğmelerini etkinleştirmeyi geciktir"
 
-#: prefdlg.cpp:1924
+#: prefdlg.cpp:1928
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Button activation delay (seconds):"
 msgstr "Düğme etkinleştirme gecikmesi (saniye):"
 
-#: prefdlg.cpp:1931
+#: prefdlg.cpp:1935
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -6014,13 +6014,13 @@ msgstr ""
 "Alarm ileti penceresi gösterildikten sonra düğmelerinin ne kadar süre kapalı "
 "kalması gerektiğini girin."
 
-#: prefdlg.cpp:1939
+#: prefdlg.cpp:1943
 #, kde-format
 msgctxt "@option:check"
 msgid "Message windows have a title bar and take keyboard focus"
 msgstr "İleti pencerelerinin başlık çubukları vardır ve klavye odağını alırlar"
 
-#: prefdlg.cpp:1942
+#: prefdlg.cpp:1946
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -8073,19 +8073,19 @@ msgctxt "@info:whatsthis"
 msgid "Configure a sound file to play when the alarm is displayed."
 msgstr "Alarm gösterilirken çalınacak bir ses dosyası ayarla."
 
-#: soundpicker.cpp:253
+#: soundpicker.cpp:257
 #, kde-format
 msgctxt "@title:window"
 msgid "Sound File"
 msgstr "Ses Dosyası"
 
-#: soundpicker.cpp:312
+#: soundpicker.cpp:316
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Audio files"
 msgstr "Ses dosyaları"
 
-#: soundpicker.cpp:336
+#: soundpicker.cpp:340
 #, kde-format
 msgctxt "@title:window"
 msgid "Choose Sound File"

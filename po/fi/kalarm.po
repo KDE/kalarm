@@ -22,7 +22,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-10 00:49+0000\n"
+"POT-Creation-Date: 2023-03-31 00:48+0000\n"
 "PO-Revision-Date: 2022-07-29 22:44+0300\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -319,7 +319,7 @@ msgctxt "@title:group"
 msgid "Alarm Text"
 msgstr "Hälytysteksti"
 
-#: birthdaydlg.cpp:77 prefdlg.cpp:1853
+#: birthdaydlg.cpp:77 prefdlg.cpp:1857
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Prefix:"
@@ -1076,7 +1076,7 @@ msgid "Show alarm times in system tray tooltip"
 msgstr "Näytä ilmoitusalueen työkaluvihjeessä hälytysten määrä"
 
 #. i18n: ectx: whatsthis, entry (ShowTooltipAlarmTime), group (General)
-#: data/kalarmconfig.kcfg:176 prefdlg.cpp:1841
+#: data/kalarmconfig.kcfg:176 prefdlg.cpp:1845
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1095,7 +1095,7 @@ msgstr ""
 "Käynnistä ilmoitusaluekuvake automaattisesti sisäänkirjautumisen yhteydessä"
 
 #. i18n: ectx: whatsthis, entry (ShowTooltipTimeToAlarm), group (General)
-#: data/kalarmconfig.kcfg:182 prefdlg.cpp:1847
+#: data/kalarmconfig.kcfg:182 prefdlg.cpp:1851
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1113,7 +1113,7 @@ msgid "Time-to-alarm prefix in system tray tooltip"
 msgstr "Ilmoitusalueen työkaluvihjeen Aikaa hälytykseen -etuliite"
 
 #. i18n: ectx: whatsthis, entry (TooltipTimeToPrefix), group (General)
-#: data/kalarmconfig.kcfg:188 prefdlg.cpp:1858
+#: data/kalarmconfig.kcfg:188 prefdlg.cpp:1862
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1310,7 +1310,7 @@ msgid "Disabled alarm color"
 msgstr "Estetyn hälytyksen väri"
 
 #. i18n: ectx: whatsthis, entry (DisabledColour), group (General)
-#: data/kalarmconfig.kcfg:246 prefdlg.cpp:1880
+#: data/kalarmconfig.kcfg:246 prefdlg.cpp:1884
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Choose the text color in the alarm list for disabled alarms."
@@ -1324,7 +1324,7 @@ msgid "Archived alarm color"
 msgstr "Arkistoitujen hälytysten väri"
 
 #. i18n: ectx: whatsthis, entry (ArchivedColour), group (General)
-#: data/kalarmconfig.kcfg:252 prefdlg.cpp:1893
+#: data/kalarmconfig.kcfg:252 prefdlg.cpp:1897
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Choose the text color in the alarm list for archived alarms."
@@ -5610,7 +5610,7 @@ msgstr ""
 "Oletusasetus asetukselle <interface>%1</interface> hälytyksen "
 "muokkausikkunassa."
 
-#: prefdlg.cpp:1293 prefdlg.cpp:1737
+#: prefdlg.cpp:1293 prefdlg.cpp:1741
 #, kde-format
 msgctxt "@title:tab"
 msgid "General"
@@ -5779,7 +5779,7 @@ msgctxt "@title:group"
 msgid "Message Font && Color"
 msgstr "Viestin fontti ja väri"
 
-#: prefdlg.cpp:1719
+#: prefdlg.cpp:1723
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -5787,19 +5787,19 @@ msgid ""
 "the default sound type"
 msgstr "Sinun tulee antaa äänitiedosto, kun %1 on valittu oletusäänityypiksi"
 
-#: prefdlg.cpp:1741
+#: prefdlg.cpp:1745
 #, kde-format
 msgctxt "@title:tab"
 msgid "Alarm Windows"
 msgstr "Hälytysikkunat"
 
-#: prefdlg.cpp:1744
+#: prefdlg.cpp:1748
 #, kde-format
 msgctxt "@option:check"
 msgid "Show in system tray"
 msgstr "Näytä ilmoitusalueella"
 
-#: prefdlg.cpp:1746
+#: prefdlg.cpp:1750
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5811,13 +5811,13 @@ msgstr ""
 "application>in kuvake. Se tarjoaa helpon pääsyn ohjelmaan sekä tilatietoja.</"
 "para>"
 
-#: prefdlg.cpp:1775
+#: prefdlg.cpp:1779
 #, kde-format
 msgctxt "@option:radio Always show KAlarm icon"
 msgid "Always show"
 msgstr "Näytä aina"
 
-#: prefdlg.cpp:1779
+#: prefdlg.cpp:1783
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5827,13 +5827,13 @@ msgstr ""
 "Valitsemalla tämä näytetään ilmoitusalueella <application>KAlarm</"
 "application>in kuvake, vaikkei hälytyksiä olisi tiedossa."
 
-#: prefdlg.cpp:1783
+#: prefdlg.cpp:1787
 #, kde-format
 msgctxt "@option:radio"
 msgid "Automatically hide if no active alarms"
 msgstr "Piilota automaattisesti, ellei aktiivisia hälytyksiä ole"
 
-#: prefdlg.cpp:1787
+#: prefdlg.cpp:1791
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5846,7 +5846,7 @@ msgstr ""
 "Piilotetun kuvakkeen saa aina näkyviin ilmoitusalueen piilotettujen "
 "kuvakkeiden näyttöasetuksista."
 
-#: prefdlg.cpp:1793
+#: prefdlg.cpp:1797
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5860,25 +5860,25 @@ msgstr ""
 "ajassa. Piilotetun kuvakkeen saa aina näkyviin ilmoitusalueen piilotettujen "
 "kuvakkeiden näyttöasetuksista."
 
-#: prefdlg.cpp:1796
+#: prefdlg.cpp:1800
 #, kde-format
 msgctxt "@option:radio"
 msgid "Automatically hide if no alarm due within time period:"
 msgstr "Piilota automaattisesti, ellei aktiivisia hälytyksiä ole ajassa:"
 
-#: prefdlg.cpp:1808
+#: prefdlg.cpp:1812
 #, kde-format
 msgctxt "@title:group"
 msgid "System Tray Tooltip"
 msgstr "Ilmoitusalueen työkaluvihje"
 
-#: prefdlg.cpp:1815
+#: prefdlg.cpp:1819
 #, kde-format
 msgctxt "@option:check"
 msgid "Show next &24 hours' alarms"
 msgstr "Näytä &seuraavien 24 tunnin hälytykset"
 
-#: prefdlg.cpp:1819
+#: prefdlg.cpp:1823
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5888,13 +5888,13 @@ msgstr ""
 "Määrittele, näytetäänkö ilmoitusalueen työkaluvihjeessä yhteenveto lähimmän "
 "24 tunnin hälytyksistä"
 
-#: prefdlg.cpp:1825
+#: prefdlg.cpp:1829
 #, kde-format
 msgctxt "@option:check"
 msgid "Maximum number of alarms to show:"
 msgstr "Hälytyksiä näytetään korkeintaan:"
 
-#: prefdlg.cpp:1834
+#: prefdlg.cpp:1838
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5905,43 +5905,43 @@ msgstr ""
 "näytetään ilmoitusalueen työkaluvihjeessä. Valitsemalla voi antaa "
 "näytettävien hälytysten ylärajan."
 
-#: prefdlg.cpp:1838
+#: prefdlg.cpp:1842
 #, kde-format
 msgctxt "@option:check"
 msgid "Show alarm time"
 msgstr "Näytä hälytysaika"
 
-#: prefdlg.cpp:1844
+#: prefdlg.cpp:1848
 #, kde-format
 msgctxt "@option:check"
 msgid "Show time until alarm"
 msgstr "Näytä aika hälytykseen"
 
-#: prefdlg.cpp:1862
+#: prefdlg.cpp:1866
 #, kde-format
 msgctxt "@title:group"
 msgid "Alarm List"
 msgstr "Hälytysten luettelo"
 
-#: prefdlg.cpp:1874
+#: prefdlg.cpp:1878
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Disabled alarm color:"
 msgstr "Estetyn hälytyksen väri:"
 
-#: prefdlg.cpp:1887
+#: prefdlg.cpp:1891
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Archived alarm color:"
 msgstr "Arkistoidun hälytyksen väri:"
 
-#: prefdlg.cpp:1900
+#: prefdlg.cpp:1904
 #, kde-format
 msgctxt "@title:group"
 msgid "Alarm Message Windows"
 msgstr "Hälytysten viesti-ikkunat"
 
-#: prefdlg.cpp:1909
+#: prefdlg.cpp:1913
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5957,25 +5957,25 @@ msgstr ""
 "viesti-ikkuna ruudun keskelle mutta poista painikkeet hetkeksi käytöstä "
 "ikkunan ilmestymisestä.</item></list></para>"
 
-#: prefdlg.cpp:1912
+#: prefdlg.cpp:1916
 #, kde-format
 msgctxt "@option:radio"
 msgid "Position windows far from mouse cursor"
 msgstr "Sijoita ikkuna kauas hiirikohdistimesta"
 
-#: prefdlg.cpp:1916
+#: prefdlg.cpp:1920
 #, kde-format
 msgctxt "@option:radio"
 msgid "Center windows, delay activating window buttons"
 msgstr "Keskitä ikkuna mutta viivytä ikkunapainikkeiden aktivointia"
 
-#: prefdlg.cpp:1924
+#: prefdlg.cpp:1928
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Button activation delay (seconds):"
 msgstr "Painikkeiden aktivointiviive (sekunneissa):"
 
-#: prefdlg.cpp:1931
+#: prefdlg.cpp:1935
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5985,13 +5985,13 @@ msgstr ""
 "Määritä, kauanko painikkeiden tulisi pysyä passiivisina hälytyksen viesti-"
 "ikkunan ilmestyttyä."
 
-#: prefdlg.cpp:1939
+#: prefdlg.cpp:1943
 #, kde-format
 msgctxt "@option:check"
 msgid "Message windows have a title bar and take keyboard focus"
 msgstr "Viesti-ikkunalla on otsikko ja näppäimistö kohdistuu siihen"
 
-#: prefdlg.cpp:1942
+#: prefdlg.cpp:1946
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -8043,19 +8043,19 @@ msgctxt "@info:whatsthis"
 msgid "Configure a sound file to play when the alarm is displayed."
 msgstr "Määrittele hälytyksen näyttämisen yhteydessä soitettava äänitiedosto."
 
-#: soundpicker.cpp:253
+#: soundpicker.cpp:257
 #, kde-format
 msgctxt "@title:window"
 msgid "Sound File"
 msgstr "Äänitiedosto"
 
-#: soundpicker.cpp:312
+#: soundpicker.cpp:316
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Audio files"
 msgstr "Äänitiedostot"
 
-#: soundpicker.cpp:336
+#: soundpicker.cpp:340
 #, kde-format
 msgctxt "@title:window"
 msgid "Choose Sound File"

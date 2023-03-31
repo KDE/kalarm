@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-10 00:49+0000\n"
+"POT-Creation-Date: 2023-03-31 00:48+0000\n"
 "PO-Revision-Date: 2021-08-21 16:25+0530\n"
 "Last-Translator: Raghavendra Kamath <raghu@raghukamath.com>\n"
 "Language-Team: kde-hindi\n"
@@ -311,7 +311,7 @@ msgctxt "@title:group"
 msgid "Alarm Text"
 msgstr "अलार्म पाठ"
 
-#: birthdaydlg.cpp:77 prefdlg.cpp:1853
+#: birthdaydlg.cpp:77 prefdlg.cpp:1857
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Prefix:"
@@ -1064,7 +1064,7 @@ msgid "Show alarm times in system tray tooltip"
 msgstr "तंत्र तश्तरी औजारयुक्ति में अलार्म समय दिखाएँ"
 
 #. i18n: ectx: whatsthis, entry (ShowTooltipAlarmTime), group (General)
-#: data/kalarmconfig.kcfg:176 prefdlg.cpp:1841
+#: data/kalarmconfig.kcfg:176 prefdlg.cpp:1845
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1080,7 +1080,7 @@ msgid "Show time to alarms in system tray tooltip"
 msgstr "तंत्र तश्तरी औजार युक्ति में अलार्म के लिए समय दिखाएँ"
 
 #. i18n: ectx: whatsthis, entry (ShowTooltipTimeToAlarm), group (General)
-#: data/kalarmconfig.kcfg:182 prefdlg.cpp:1847
+#: data/kalarmconfig.kcfg:182 prefdlg.cpp:1851
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1096,7 +1096,7 @@ msgid "Time-to-alarm prefix in system tray tooltip"
 msgstr "तंत्र तश्तरी औजार युक्ति में अलार्म-के-लिए-समय प्रीफ़िक्स"
 
 #. i18n: ectx: whatsthis, entry (TooltipTimeToPrefix), group (General)
-#: data/kalarmconfig.kcfg:188 prefdlg.cpp:1858
+#: data/kalarmconfig.kcfg:188 prefdlg.cpp:1862
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1271,7 +1271,7 @@ msgid "Disabled alarm color"
 msgstr "अलार्म रंग अक्षम करें"
 
 #. i18n: ectx: whatsthis, entry (DisabledColour), group (General)
-#: data/kalarmconfig.kcfg:246 prefdlg.cpp:1880
+#: data/kalarmconfig.kcfg:246 prefdlg.cpp:1884
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Choose the text color in the alarm list for disabled alarms."
@@ -1285,7 +1285,7 @@ msgid "Archived alarm color"
 msgstr "अभिलेखित अलार्म रंग"
 
 #. i18n: ectx: whatsthis, entry (ArchivedColour), group (General)
-#: data/kalarmconfig.kcfg:252 prefdlg.cpp:1893
+#: data/kalarmconfig.kcfg:252 prefdlg.cpp:1897
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Choose the text color in the alarm list for archived alarms."
@@ -5746,7 +5746,7 @@ msgid ""
 msgstr ""
 "अलार्म संपादन संवाद में ध्वनि फ़ाइल <interface>%1</interface> के लिए डिफ़ॉल्ट विन्यास."
 
-#: prefdlg.cpp:1293 prefdlg.cpp:1737
+#: prefdlg.cpp:1293 prefdlg.cpp:1741
 #, fuzzy, kde-format
 msgctxt "@title:tab"
 msgid "General"
@@ -5918,7 +5918,7 @@ msgctxt "@title:group"
 msgid "Message Font && Color"
 msgstr "संदेश फ़ॉन्ट व रंग"
 
-#: prefdlg.cpp:1719
+#: prefdlg.cpp:1723
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info:whatsthis sound file 'Repeat' checkbox"
 #| msgid ""
@@ -5931,7 +5931,7 @@ msgid ""
 msgstr ""
 "अलार्म संपादन संवाद में ध्वनि फ़ाइल <interface>%1</interface> के लिए डिफ़ॉल्ट विन्यास."
 
-#: prefdlg.cpp:1741
+#: prefdlg.cpp:1745
 #, fuzzy, kde-format
 #| msgctxt "@title:group"
 #| msgid "Alarm List"
@@ -5939,7 +5939,7 @@ msgctxt "@title:tab"
 msgid "Alarm Windows"
 msgstr "अलार्म सूची"
 
-#: prefdlg.cpp:1744
+#: prefdlg.cpp:1748
 #, fuzzy, kde-format
 #| msgctxt "@action"
 #| msgid "Show in System &Tray"
@@ -5947,7 +5947,7 @@ msgctxt "@option:check"
 msgid "Show in system tray"
 msgstr "तंत्र तश्तरी में दिखाएँ (&T)"
 
-#: prefdlg.cpp:1746
+#: prefdlg.cpp:1750
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info:whatsthis"
 #| msgid ""
@@ -5960,13 +5960,13 @@ msgid ""
 msgstr ""
 "जब आप केडीई प्रारंभ करते हैं तो <application>केअलार्म</application> चलाने के लिए चुनें."
 
-#: prefdlg.cpp:1775
+#: prefdlg.cpp:1779
 #, kde-format
 msgctxt "@option:radio Always show KAlarm icon"
 msgid "Always show"
 msgstr ""
 
-#: prefdlg.cpp:1779
+#: prefdlg.cpp:1783
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info:whatsthis"
 #| msgid ""
@@ -5978,13 +5978,13 @@ msgid ""
 msgstr ""
 "जब आप केडीई प्रारंभ करते हैं तो <application>केअलार्म</application> चलाने के लिए चुनें."
 
-#: prefdlg.cpp:1783
+#: prefdlg.cpp:1787
 #, kde-format
 msgctxt "@option:radio"
 msgid "Automatically hide if no active alarms"
 msgstr ""
 
-#: prefdlg.cpp:1787
+#: prefdlg.cpp:1791
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5993,7 +5993,7 @@ msgid ""
 "be made visible by use of the system tray option to show hidden icons."
 msgstr ""
 
-#: prefdlg.cpp:1793
+#: prefdlg.cpp:1797
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -6003,25 +6003,25 @@ msgid ""
 "to show hidden icons."
 msgstr ""
 
-#: prefdlg.cpp:1796
+#: prefdlg.cpp:1800
 #, kde-format
 msgctxt "@option:radio"
 msgid "Automatically hide if no alarm due within time period:"
 msgstr ""
 
-#: prefdlg.cpp:1808
+#: prefdlg.cpp:1812
 #, kde-format
 msgctxt "@title:group"
 msgid "System Tray Tooltip"
 msgstr "तंत्र तश्तरी औज़ार-नुस्ख़ा"
 
-#: prefdlg.cpp:1815
+#: prefdlg.cpp:1819
 #, kde-format
 msgctxt "@option:check"
 msgid "Show next &24 hours' alarms"
 msgstr "अगले 24 घंटे का अलार्म दिखाएँ (&2)"
 
-#: prefdlg.cpp:1819
+#: prefdlg.cpp:1823
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -6029,13 +6029,13 @@ msgid ""
 "due in the next 24 hours."
 msgstr ""
 
-#: prefdlg.cpp:1825
+#: prefdlg.cpp:1829
 #, kde-format
 msgctxt "@option:check"
 msgid "Maximum number of alarms to show:"
 msgstr "दिखाए जाने वाले अलार्म की अधिकतम संख्या:"
 
-#: prefdlg.cpp:1834
+#: prefdlg.cpp:1838
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -6043,43 +6043,43 @@ msgid ""
 "tooltip. Check to enter an upper limit on the number to be displayed."
 msgstr ""
 
-#: prefdlg.cpp:1838
+#: prefdlg.cpp:1842
 #, kde-format
 msgctxt "@option:check"
 msgid "Show alarm time"
 msgstr "अलार्म समय दिखाएँ"
 
-#: prefdlg.cpp:1844
+#: prefdlg.cpp:1848
 #, kde-format
 msgctxt "@option:check"
 msgid "Show time until alarm"
 msgstr "अगले अलार्म का बचा समय दिखाएँ"
 
-#: prefdlg.cpp:1862
+#: prefdlg.cpp:1866
 #, kde-format
 msgctxt "@title:group"
 msgid "Alarm List"
 msgstr "अलार्म सूची"
 
-#: prefdlg.cpp:1874
+#: prefdlg.cpp:1878
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Disabled alarm color:"
 msgstr "अलार्म रंग अक्षम करें:"
 
-#: prefdlg.cpp:1887
+#: prefdlg.cpp:1891
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Archived alarm color:"
 msgstr "अभिलेखित अलार्म रंगः"
 
-#: prefdlg.cpp:1900
+#: prefdlg.cpp:1904
 #, kde-format
 msgctxt "@title:group"
 msgid "Alarm Message Windows"
 msgstr ""
 
-#: prefdlg.cpp:1909
+#: prefdlg.cpp:1913
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -6090,25 +6090,25 @@ msgid ""
 "time after the window is displayed.</item></list></para>"
 msgstr ""
 
-#: prefdlg.cpp:1912
+#: prefdlg.cpp:1916
 #, kde-format
 msgctxt "@option:radio"
 msgid "Position windows far from mouse cursor"
 msgstr ""
 
-#: prefdlg.cpp:1916
+#: prefdlg.cpp:1920
 #, kde-format
 msgctxt "@option:radio"
 msgid "Center windows, delay activating window buttons"
 msgstr ""
 
-#: prefdlg.cpp:1924
+#: prefdlg.cpp:1928
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Button activation delay (seconds):"
 msgstr ""
 
-#: prefdlg.cpp:1931
+#: prefdlg.cpp:1935
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -6116,13 +6116,13 @@ msgid ""
 "window is shown."
 msgstr ""
 
-#: prefdlg.cpp:1939
+#: prefdlg.cpp:1943
 #, kde-format
 msgctxt "@option:check"
 msgid "Message windows have a title bar and take keyboard focus"
 msgstr "संदेश विंडो में शीर्षक पट्टी हो तथा कुंजीपट फोकस प्राप्त करे"
 
-#: prefdlg.cpp:1942
+#: prefdlg.cpp:1946
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -8276,13 +8276,13 @@ msgctxt "@info:whatsthis"
 msgid "Configure a sound file to play when the alarm is displayed."
 msgstr "जब अलार्म प्रदर्शित होगा तो बजाने वाले ध्वनि फ़ाइल को कॉन्फ़िगर करें."
 
-#: soundpicker.cpp:253
+#: soundpicker.cpp:257
 #, kde-format
 msgctxt "@title:window"
 msgid "Sound File"
 msgstr "ध्वनि फ़ाइल"
 
-#: soundpicker.cpp:312
+#: soundpicker.cpp:316
 #, fuzzy, kde-format
 #| msgctxt "@item:inlistbox"
 #| msgid "Sound file"
@@ -8290,7 +8290,7 @@ msgctxt "@item:inlistbox"
 msgid "Audio files"
 msgstr "ध्वनि फ़ाइल"
 
-#: soundpicker.cpp:336
+#: soundpicker.cpp:340
 #, kde-format
 msgctxt "@title:window"
 msgid "Choose Sound File"

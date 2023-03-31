@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Mimos\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-10 00:49+0000\n"
+"POT-Creation-Date: 2023-03-31 00:48+0000\n"
 "PO-Revision-Date: 2005-10-06 11:21+0800\n"
 "Last-Translator: junetazawawi <junetazawawi@yahoo.com>\n"
 "Language-Team: Malay <kedidiemas@yahoogroups.com>\n"
@@ -339,7 +339,7 @@ msgctxt "@title:group"
 msgid "Alarm Text"
 msgstr "Teks Penggera"
 
-#: birthdaydlg.cpp:77 prefdlg.cpp:1853
+#: birthdaydlg.cpp:77 prefdlg.cpp:1857
 #, fuzzy, kde-format
 #| msgid "Pre&fix:"
 msgctxt "@label:textbox"
@@ -1115,7 +1115,7 @@ msgid "Show alarm times in system tray tooltip"
 msgstr ""
 
 #. i18n: ectx: whatsthis, entry (ShowTooltipAlarmTime), group (General)
-#: data/kalarmconfig.kcfg:176 prefdlg.cpp:1841
+#: data/kalarmconfig.kcfg:176 prefdlg.cpp:1845
 #, fuzzy, kde-format
 #| msgid ""
 #| "Specify whether to show in the system tray tooltip, the time at which "
@@ -1136,7 +1136,7 @@ msgid "Show time to alarms in system tray tooltip"
 msgstr "Automulakan &ikon dulang sistem semasa log masuk"
 
 #. i18n: ectx: whatsthis, entry (ShowTooltipTimeToAlarm), group (General)
-#: data/kalarmconfig.kcfg:182 prefdlg.cpp:1847
+#: data/kalarmconfig.kcfg:182 prefdlg.cpp:1851
 #, fuzzy, kde-format
 #| msgid ""
 #| "Specify whether to show in the system tray tooltip, how long until each "
@@ -1157,7 +1157,7 @@ msgid "Time-to-alarm prefix in system tray tooltip"
 msgstr ""
 
 #. i18n: ectx: whatsthis, entry (TooltipTimeToPrefix), group (General)
-#: data/kalarmconfig.kcfg:188 prefdlg.cpp:1858
+#: data/kalarmconfig.kcfg:188 prefdlg.cpp:1862
 #, fuzzy, kde-format
 #| msgid ""
 #| "Enter the text to be displayed in front of the time until the alarm, in "
@@ -1359,7 +1359,7 @@ msgid "Disabled alarm color"
 msgstr "&Nyahaktifkan warna penggera:"
 
 #. i18n: ectx: whatsthis, entry (DisabledColour), group (General)
-#: data/kalarmconfig.kcfg:246 prefdlg.cpp:1880
+#: data/kalarmconfig.kcfg:246 prefdlg.cpp:1884
 #, fuzzy, kde-format
 #| msgid "Choose the text color in the alarm list for disabled alarms."
 msgctxt "@info:whatsthis"
@@ -1374,7 +1374,7 @@ msgid "Archived alarm color"
 msgstr "Warna penggera &luput:"
 
 #. i18n: ectx: whatsthis, entry (ArchivedColour), group (General)
-#: data/kalarmconfig.kcfg:252 prefdlg.cpp:1893
+#: data/kalarmconfig.kcfg:252 prefdlg.cpp:1897
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid "Choose the text color in the alarm list for archived alarms."
@@ -6148,7 +6148,7 @@ msgid ""
 "The default setting for <interface>%1</interface> in the alarm edit dialog."
 msgstr "Seting piawai untuk peraturan pengulangan dalam dialog edit penggera."
 
-#: prefdlg.cpp:1293 prefdlg.cpp:1737
+#: prefdlg.cpp:1293 prefdlg.cpp:1741
 #, fuzzy, kde-format
 #| msgid "General"
 msgctxt "@title:tab"
@@ -6338,7 +6338,7 @@ msgctxt "@title:group"
 msgid "Message Font && Color"
 msgstr "Fon && Warna Mesej"
 
-#: prefdlg.cpp:1719
+#: prefdlg.cpp:1723
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "You must enter a sound file when %1 is selected as the default sound type"
@@ -6349,21 +6349,21 @@ msgid ""
 msgstr ""
 "Anda mesti masukkan fail bunyi apabila %1 dipilih sebagai jenis bunyi piawai"
 
-#: prefdlg.cpp:1741
+#: prefdlg.cpp:1745
 #, fuzzy, kde-format
 #| msgid "Alarm List"
 msgctxt "@title:tab"
 msgid "Alarm Windows"
 msgstr "Senarai penggera"
 
-#: prefdlg.cpp:1744
+#: prefdlg.cpp:1748
 #, fuzzy, kde-format
 #| msgid "Show in System &Tray"
 msgctxt "@option:check"
 msgid "Show in system tray"
 msgstr "Papar dalam &Dulang Sistem"
 
-#: prefdlg.cpp:1746
+#: prefdlg.cpp:1750
 #, fuzzy, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -6372,13 +6372,13 @@ msgid ""
 "indication.</para>"
 msgstr "Semak untuk menjalankan %1 apabila anda memulakan KDE."
 
-#: prefdlg.cpp:1775
+#: prefdlg.cpp:1779
 #, kde-format
 msgctxt "@option:radio Always show KAlarm icon"
 msgid "Always show"
 msgstr ""
 
-#: prefdlg.cpp:1779
+#: prefdlg.cpp:1783
 #, fuzzy, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -6386,13 +6386,13 @@ msgid ""
 "regardless of whether alarms are due."
 msgstr "Semak untuk menjalankan %1 apabila anda memulakan KDE."
 
-#: prefdlg.cpp:1783
+#: prefdlg.cpp:1787
 #, kde-format
 msgctxt "@option:radio"
 msgid "Automatically hide if no active alarms"
 msgstr ""
 
-#: prefdlg.cpp:1787
+#: prefdlg.cpp:1791
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -6401,7 +6401,7 @@ msgid ""
 "be made visible by use of the system tray option to show hidden icons."
 msgstr ""
 
-#: prefdlg.cpp:1793
+#: prefdlg.cpp:1797
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -6411,27 +6411,27 @@ msgid ""
 "to show hidden icons."
 msgstr ""
 
-#: prefdlg.cpp:1796
+#: prefdlg.cpp:1800
 #, kde-format
 msgctxt "@option:radio"
 msgid "Automatically hide if no alarm due within time period:"
 msgstr ""
 
-#: prefdlg.cpp:1808
+#: prefdlg.cpp:1812
 #, fuzzy, kde-format
 #| msgid "System Tray Tooltip"
 msgctxt "@title:group"
 msgid "System Tray Tooltip"
 msgstr "Tooltip Dulang Sistem"
 
-#: prefdlg.cpp:1815
+#: prefdlg.cpp:1819
 #, fuzzy, kde-format
 #| msgid "Show next &24 hours' alarms"
 msgctxt "@option:check"
 msgid "Show next &24 hours' alarms"
 msgstr "Paparkan penggera untuk &24 jam seterusnya"
 
-#: prefdlg.cpp:1819
+#: prefdlg.cpp:1823
 #, fuzzy, kde-format
 #| msgid ""
 #| "Specify whether to include in the system tray tooltip, a summary of "
@@ -6444,14 +6444,14 @@ msgstr ""
 "Nyatakan sama ada hendak memasukkan ringkasan penggera yang dijangka 24 jam "
 "seterusnya dalam tooltip sistem."
 
-#: prefdlg.cpp:1825
+#: prefdlg.cpp:1829
 #, fuzzy, kde-format
 #| msgid "Ma&ximum number of alarms to show:"
 msgctxt "@option:check"
 msgid "Maximum number of alarms to show:"
 msgstr "Bilangan ma&ksimum penggera untuk dipapar:"
 
-#: prefdlg.cpp:1834
+#: prefdlg.cpp:1838
 #, fuzzy, kde-format
 #| msgid ""
 #| "Uncheck to display all of the next 24 hours' alarms in the system tray "
@@ -6464,46 +6464,46 @@ msgstr ""
 "Nyahsemak untuk papar semua penggera 24 jam seterusnya dalam tooltip dulang "
 "sistem. Semak untuk memasukkan had atas bilangan yang hendak dipaparkan."
 
-#: prefdlg.cpp:1838
+#: prefdlg.cpp:1842
 #, fuzzy, kde-format
 msgctxt "@option:check"
 msgid "Show alarm time"
 msgstr "Papar &waktu penggera"
 
-#: prefdlg.cpp:1844
+#: prefdlg.cpp:1848
 #, fuzzy, kde-format
 #| msgid "Show time u&ntil alarm"
 msgctxt "@option:check"
 msgid "Show time until alarm"
 msgstr "Papar waktu sehi&ngga penggera"
 
-#: prefdlg.cpp:1862
+#: prefdlg.cpp:1866
 #, fuzzy, kde-format
 #| msgid "Alarm List"
 msgctxt "@title:group"
 msgid "Alarm List"
 msgstr "Senarai penggera"
 
-#: prefdlg.cpp:1874
+#: prefdlg.cpp:1878
 #, fuzzy, kde-format
 #| msgid "Di&sabled alarm color:"
 msgctxt "@label:listbox"
 msgid "Disabled alarm color:"
 msgstr "&Nyahaktifkan warna penggera:"
 
-#: prefdlg.cpp:1887
+#: prefdlg.cpp:1891
 #, fuzzy, kde-format
 msgctxt "@label:listbox"
 msgid "Archived alarm color:"
 msgstr "&Nyahaktifkan warna penggera:"
 
-#: prefdlg.cpp:1900
+#: prefdlg.cpp:1904
 #, kde-format
 msgctxt "@title:group"
 msgid "Alarm Message Windows"
 msgstr ""
 
-#: prefdlg.cpp:1909
+#: prefdlg.cpp:1913
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -6514,25 +6514,25 @@ msgid ""
 "time after the window is displayed.</item></list></para>"
 msgstr ""
 
-#: prefdlg.cpp:1912
+#: prefdlg.cpp:1916
 #, kde-format
 msgctxt "@option:radio"
 msgid "Position windows far from mouse cursor"
 msgstr ""
 
-#: prefdlg.cpp:1916
+#: prefdlg.cpp:1920
 #, kde-format
 msgctxt "@option:radio"
 msgid "Center windows, delay activating window buttons"
 msgstr ""
 
-#: prefdlg.cpp:1924
+#: prefdlg.cpp:1928
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Button activation delay (seconds):"
 msgstr ""
 
-#: prefdlg.cpp:1931
+#: prefdlg.cpp:1935
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -6540,13 +6540,13 @@ msgid ""
 "window is shown."
 msgstr ""
 
-#: prefdlg.cpp:1939
+#: prefdlg.cpp:1943
 #, fuzzy, kde-format
 msgctxt "@option:check"
 msgid "Message windows have a title bar and take keyboard focus"
 msgstr "&Tetingkap mesej mempunyai bar tajuk dan mengambil fokus papan kekunci"
 
-#: prefdlg.cpp:1942
+#: prefdlg.cpp:1946
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "Specify the characteristics of alarm message windows:\n"
@@ -8799,20 +8799,20 @@ msgctxt "@info:whatsthis"
 msgid "Configure a sound file to play when the alarm is displayed."
 msgstr "Konfigurkan fail bunyi untuk disiarkan apabila penggera dipaparkan."
 
-#: soundpicker.cpp:253
+#: soundpicker.cpp:257
 #, fuzzy, kde-format
 #| msgid "Sound File"
 msgctxt "@title:window"
 msgid "Sound File"
 msgstr "Fail Bunyi"
 
-#: soundpicker.cpp:312
+#: soundpicker.cpp:316
 #, fuzzy, kde-format
 msgctxt "@item:inlistbox"
 msgid "Audio files"
 msgstr "&Fail bunyi:"
 
-#: soundpicker.cpp:336
+#: soundpicker.cpp:340
 #, fuzzy, kde-format
 #| msgid "Choose Sound File"
 msgctxt "@title:window"
