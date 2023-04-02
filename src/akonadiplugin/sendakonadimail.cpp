@@ -13,7 +13,7 @@
 #include <KIdentityManagement/Identity>
 #include <MailTransport/TransportManager>
 #include <MailTransport/Transport>
-#include <MailTransportAkonadi/MessageQueueJob>
+#include <Akonadi/MessageQueueJob>
 
 #include <KEmailAddress>
 #include <KLocalizedString>
@@ -26,7 +26,7 @@ QStringList extractEmailsAndNormalize(const QString& emailAddresses);
 }
 
 SendAkonadiMail*                              SendAkonadiMail::mInstance = nullptr;   // used only to enable signals/slots to work
-QQueue<MailTransport::MessageQueueJob*> SendAkonadiMail::mJobs;
+QQueue<Akonadi::MessageQueueJob*> SendAkonadiMail::mJobs;
 QQueue<JobData>                         SendAkonadiMail::mJobData;
 
 SendAkonadiMail* SendAkonadiMail::instance()
@@ -55,7 +55,7 @@ QString SendAkonadiMail::send(KMime::Message::Ptr message, const KIdentityManage
     }
     qCDebug(AKONADIPLUGIN_LOG) << "SendAkonadiMail::send: Using transport" << transport->name() << ", id=" << transport->id();
 
-    auto mailjob = new MailTransport::MessageQueueJob(qApp);
+    auto mailjob = new Akonadi::MessageQueueJob(qApp);
     mailjob->setMessage(message);
     mailjob->transportAttribute().setTransportId(transport->id());
     // MessageQueueJob email addresses must be pure, i.e. without display name. Note
@@ -64,9 +64,9 @@ QString SendAkonadiMail::send(KMime::Message::Ptr message, const KIdentityManage
     mailjob->addressAttribute().setTo(extractEmailsAndNormalize(jobdata.event.emailAddresses(QStringLiteral(","))));
     if (!jobdata.bcc.isEmpty())
         mailjob->addressAttribute().setBcc(extractEmailsAndNormalize(jobdata.bcc));
-    MailTransport::SentBehaviourAttribute::SentBehaviour sentAction =
-                         keepSentMail ? MailTransport::SentBehaviourAttribute::MoveToDefaultSentCollection
-                                      : MailTransport::SentBehaviourAttribute::Delete;
+    Akonadi::SentBehaviourAttribute::SentBehaviour sentAction =
+                         keepSentMail ? Akonadi::SentBehaviourAttribute::MoveToDefaultSentCollection
+                                      : Akonadi::SentBehaviourAttribute::Delete;
     mailjob->sentBehaviourAttribute().setSentBehaviour(sentAction);
     mJobs.enqueue(mailjob);
     mJobData.enqueue(jobdata);

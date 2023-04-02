@@ -18,7 +18,7 @@
 
 class KJob;
 namespace KIdentityManagement { class Identity; }
-namespace MailTransport  { class MessageQueueJob; }
+namespace Akonadi { class MessageQueueJob; }
 namespace KAlarmCal { class KAEvent; }
 
 class SendAkonadiMail : public QObject
@@ -47,7 +47,7 @@ private:
     SendAkonadiMail() = default;
 
     static SendAkonadiMail*                        mInstance;
-    static QQueue<MailTransport::MessageQueueJob*> mJobs;
+    static QQueue<Akonadi::MessageQueueJob*>       mJobs;
     static QQueue<MailSend::JobData>               mJobData;
 };
 

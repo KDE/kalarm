@@ -46,6 +46,5 @@ target_link_libraries(akonadiplugin
     KPim${KF_MAJOR_VERSION}::AkonadiContact
     KPim${KF_MAJOR_VERSION}::AkonadiWidgets
     KPim${KF_MAJOR_VERSION}::IdentityManagement
-    KPim${KF_MAJOR_VERSION}::MailTransportAkonadi
     KPim${KF_MAJOR_VERSION}::MailTransport
 )
