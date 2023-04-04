@@ -2,8 +2,8 @@
 # SPDX-FileCopyrightText: none
 include(ECMMarkAsTest)
 
-find_package(Qt${QT_MAJOR_VERSION}DBus CONFIG REQUIRED)
-find_package(Qt${QT_MAJOR_VERSION}Test CONFIG REQUIRED)
+find_package(Qt6DBus CONFIG REQUIRED)
+find_package(Qt6Test CONFIG REQUIRED)
 
 macro(macro_unit_tests)
   foreach(_testname ${ARGN})
@@ -11,8 +11,8 @@ macro(macro_unit_tests)
     add_test(NAME ${_testname} COMMAND ${_testname})
     ecm_mark_as_test(${_testname})
     target_link_libraries(${_testname}
-        KF${KF_MAJOR_VERSION}::CalendarCore
-        KF${KF_MAJOR_VERSION}::Holidays
+        KF6::CalendarCore
+        KF6::Holidays
         kalarmcalendar
         Qt::DBus
         Qt::Test)

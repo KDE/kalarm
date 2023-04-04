@@ -33,9 +33,9 @@ generate_export_header(kalarmplugin BASE_NAME kalarmpluginlib)
 
 target_link_libraries(kalarmplugin PRIVATE
     kalarmcalendar
-    KF${KF_MAJOR_VERSION}::CoreAddons
-    KF${KF_MAJOR_VERSION}::CalendarCore
-    KPim${KF_MAJOR_VERSION}::Mime
+    KF6::CoreAddons
+    KF6::CalendarCore
+    KPim6::Mime
 )
 
 target_include_directories(kalarmplugin PUBLIC "$<BUILD_INTERFACE:${kalarm_SOURCE_DIR}/src/kalarmcalendar;${kalarm_BINARY_DIR}/src/kalarmcalendar>")
@@ -305,40 +305,40 @@ target_compile_definitions(kalarm_bin PRIVATE -DVERSION="${KALARM_VERSION}")
 target_link_libraries(kalarm_bin
     kalarmcalendar
     kalarmplugin
-    KF${KF_MAJOR_VERSION}::Codecs
-    KF${KF_MAJOR_VERSION}::ConfigCore
-    KF${KF_MAJOR_VERSION}::Completion
-    KF${KF_MAJOR_VERSION}::DBusAddons
-    KF${KF_MAJOR_VERSION}::GlobalAccel
-    KF${KF_MAJOR_VERSION}::GuiAddons
-    KF${KF_MAJOR_VERSION}::Holidays
-    KF${KF_MAJOR_VERSION}::IdleTime
-    KF${KF_MAJOR_VERSION}::ItemModels
-    KF${KF_MAJOR_VERSION}::KIOWidgets
-    KF${KF_MAJOR_VERSION}::Notifications
-    KF${KF_MAJOR_VERSION}::NotifyConfig
-    KF${KF_MAJOR_VERSION}::TextWidgets
-    KF${KF_MAJOR_VERSION}::WindowSystem
-    KF${KF_MAJOR_VERSION}::XmlGui
-    KF${KF_MAJOR_VERSION}::KIOFileWidgets
-    KF${KF_MAJOR_VERSION}::Crash
+    KF6::Codecs
+    KF6::ConfigCore
+    KF6::Completion
+    KF6::DBusAddons
+    KF6::GlobalAccel
+    KF6::GuiAddons
+    KF6::Holidays
+    KF6::IdleTime
+    KF6::ItemModels
+    KF6::KIOWidgets
+    KF6::Notifications
+    KF6::NotifyConfig
+    KF6::TextWidgets
+    KF6::WindowSystem
+    KF6::XmlGui
+    KF6::KIOFileWidgets
+    KF6::Crash
     Phonon::phonon4qt${QT_MAJOR_VERSION}
-    KF${KF_MAJOR_VERSION}::CalendarCore
-    KPim${KF_MAJOR_VERSION}::CalendarUtils
-    KF${KF_MAJOR_VERSION}::Contacts
-    KPim${KF_MAJOR_VERSION}::IdentityManagementWidgets
-    KPim${KF_MAJOR_VERSION}::PimTextEdit
-    KPim${KF_MAJOR_VERSION}::Mime
+    KF6::CalendarCore
+    KPim6::CalendarUtils
+    KF6::Contacts
+    KPim6::IdentityManagementWidgets
+    KPim6::PimTextEdit
+    KPim6::Mime
 )
 if (QT_MAJOR_VERSION STREQUAL "6")
     target_link_libraries(kalarm_bin Qt6::Core5Compat)
 endif()
-if (TARGET KF${KF_MAJOR_VERSION}::TextEditTextToSpeech)
-    target_link_libraries(kalarm_bin KF${KF_MAJOR_VERSION}::TextEditTextToSpeech)
+if (TARGET KF6::TextEditTextToSpeech)
+    target_link_libraries(kalarm_bin KF6::TextEditTextToSpeech)
 endif()
 
 if (ENABLE_WAKE_FROM_SUSPEND)
-        target_link_libraries(kalarm_bin KF${KF_MAJOR_VERSION}::AuthCore)
+        target_link_libraries(kalarm_bin KF6::AuthCore)
 endif()
 
 if (ENABLE_X11)
@@ -369,7 +369,7 @@ install(FILES data/kalarm.notifyrc DESTINATION ${KDE_INSTALL_KNOTIFYRCDIR})
 
 if (ENABLE_WAKE_FROM_SUSPEND)
     add_executable(kalarm_helper rtcwakeaction.cpp rtcwakeaction.h ${libkalarm_common_SRCS})
-    target_link_libraries(kalarm_helper KF${KF_MAJOR_VERSION}::AuthCore KF${KF_MAJOR_VERSION}::I18n)
+    target_link_libraries(kalarm_helper KF6::AuthCore KF6::I18n)
     install(TARGETS kalarm_helper DESTINATION ${KAUTH_HELPER_INSTALL_DIR})
     kauth_install_helper_files(kalarm_helper org.kde.kalarm.rtcwake root)
     kauth_install_actions(org.kde.kalarm.rtcwake data/org.kde.kalarm.rtcwake.actions)

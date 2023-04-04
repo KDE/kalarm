@@ -37,14 +37,14 @@ generate_export_header(akonadiplugin BASE_NAME akonadiplugin)
 target_link_libraries(akonadiplugin
     kalarmplugin
     kalarmcalendar
-    KF${KF_MAJOR_VERSION}::CalendarCore
-    KF${KF_MAJOR_VERSION}::I18n
-    KF${KF_MAJOR_VERSION}::Codecs
-    KPim${KF_MAJOR_VERSION}::Mime
-    KPim${KF_MAJOR_VERSION}::AkonadiCore
-    KPim${KF_MAJOR_VERSION}::AkonadiMime
-    KPim${KF_MAJOR_VERSION}::AkonadiContact
-    KPim${KF_MAJOR_VERSION}::AkonadiWidgets
-    KPim${KF_MAJOR_VERSION}::IdentityManagement
-    KPim${KF_MAJOR_VERSION}::MailTransport
+    KF6::CalendarCore
+    KF6::I18n
+    KF6::Codecs
+    KPim6::Mime
+    KPim6::AkonadiCore
+    KPim6::AkonadiMime
+    KPim6::AkonadiContact
+    KPim6::AkonadiWidgets
+    KPim6::IdentityManagement
+    KPim6::MailTransport
 )

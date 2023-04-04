@@ -2,43 +2,6 @@
 # SPDX-License-Identifier: CC0-1.0
 
 Dependencies:
-- 'on': ['Linux/Qt5', 'FreeBSD/Qt5', 'Windows/Qt5']
-  'require':
-    'frameworks/extra-cmake-modules': '@latest'
-    'frameworks/kcalendarcore' : '@latest'
-    'frameworks/kholidays' : '@latest'
-    'frameworks/kcodecs' : '@latest'
-    'frameworks/kcompletion' : '@latest'
-    'frameworks/kconfig' : '@latest'
-    'frameworks/kconfigwidgets' : '@latest'
-    'frameworks/kcontacts' : '@latest'
-    'frameworks/kcrash' : '@latest'
-    'frameworks/kdbusaddons': '@latest'
-    'frameworks/kglobalaccel': '@latest'
-    'frameworks/kguiaddons': '@latest'
-    'frameworks/ki18n': '@latest'
-    'frameworks/kidletime': '@latest'
-    'frameworks/kitemmodels': '@latest'
-    'frameworks/kjobwidgets': '@latest'
-    'frameworks/kcmutils': '@latest'
-    'frameworks/kio': '@latest'
-    'frameworks/knotifications': '@latest'
-    'frameworks/knotifyconfig': '@latest'
-    'frameworks/kservice': '@latest'
-    'frameworks/kwidgetsaddons': '@latest'
-    'frameworks/kwindowsystem': '@latest'
-    'frameworks/kxmlgui': '@latest'
-    'libraries/phonon': '@latest'
-    'pim/akonadi' : '@same'
-    'pim/akonadi-contacts' : '@same'
-    'pim/akonadi-mime' : '@same'
-    'pim/kcalutils' : '@same'
-    'pim/kidentitymanagement' : '@same'
-    'pim/kmailtransport' : '@same'
-    'pim/kmime' : '@same'
-    'pim/kpimtextedit' : '@same'
-    'libraries/ktextaddons': '@stable'
-
 - 'on': ['Linux/Qt6', 'FreeBSD/Qt6', 'Windows/Qt6']
   'require':
     'frameworks/extra-cmake-modules': '@latest-kf6'
