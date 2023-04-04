@@ -28,6 +28,7 @@
 #include "akonadiplugin/akonadiplugin.h"
 #include "kalarm_debug.h"
 
+#include <kcalendarcore_version.h>
 #include <KCalendarCore/Event>
 #include <KCalendarCore/ICalFormat>
 #include <KCalendarCore/Person>
@@ -1014,7 +1015,9 @@ bool exportAlarms(const QVector<KAEvent>& events, QWidget* parent)
         }
         delete tempFile;
     }
+#if KCALENDARCORE_VERSION < QT_VERSION_CHECK(5, 240, 0)
     calendar->close();
+#endif
     return success;
 }
 
