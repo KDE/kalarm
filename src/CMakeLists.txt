@@ -322,7 +322,7 @@ target_link_libraries(kalarm_bin
     KF6::XmlGui
     KF6::KIOFileWidgets
     KF6::Crash
-    Phonon::phonon4qt${QT_MAJOR_VERSION}
+    Phonon::phonon4qt6
     KF6::CalendarCore
     KPim6::CalendarUtils
     KF6::Contacts
