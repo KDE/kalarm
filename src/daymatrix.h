@@ -57,7 +57,7 @@ public:
     void updateToday(const QDate& newDate);
 
     /** Returns all selected dates, in date order. */
-    QVector<QDate> selectedDates() const;
+    QList<QDate> selectedDates() const;
 
     /** Clear all selections. */
     void clearSelection();
@@ -69,10 +69,10 @@ Q_SIGNALS:
      *
      *  @param dates  The dates selected, in date order, or empty if none.
      */
-    void selected(const QVector<QDate>& dates);
+  void selected(const QList<QDate> &dates);
 
-    void newAlarm(EditAlarmDlg::Type);
-    void newAlarmFromTemplate(const KAlarmCal::KAEvent&);
+  void newAlarm(EditAlarmDlg::Type);
+  void newAlarmFromTemplate(const KAlarmCal::KAEvent &);
 
 protected:
     bool event(QEvent*) override;
@@ -105,7 +105,8 @@ private:
     int     mRowHeight {1};    // height of each row
     QDate   mStartDate;        // starting date of the matrix
 
-    QVector<QString> mDayLabels;  // array of day labels, to optimize drawing performance
+    QList<QString>
+        mDayLabels; // array of day labels, to optimize drawing performance
 
     QSet<QDate> mEventDates;   // days on which alarms occur, for any resource
     QHash<ResourceId, QSet<QDate>> mResourceEventDates;  // for each resource, days on which alarms occur
@@ -119,7 +120,7 @@ private:
     int    mSelInit;           // index of day where dragged selection was initiated
     int    mSelStart;          // index of the first selected day
     int    mSelEnd;            // index of the last selected day
-    QVector<QDate> mLastSelectedDates; // last dates emitted in selected() signal
+    QList<QDate> mLastSelectedDates; // last dates emitted in selected() signal
 
     QRectF mDaySize;                  // the geometric size of each day in the matrix
 

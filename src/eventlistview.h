@@ -30,7 +30,7 @@ public:
     void              select(const QModelIndex&, bool scrollToIndex = false);
     QModelIndex       selectedIndex() const;
     KAEvent           selectedEvent() const;
-    QVector<KAEvent>  selectedEvents() const;
+    QList<KAEvent> selectedEvents() const;
     void              setEditOnSingleClick(bool e) { mEditOnSingleClick = e; }
     bool              editOnSingleClick() const    { return mEditOnSingleClick; }
 

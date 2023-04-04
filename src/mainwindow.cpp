@@ -365,8 +365,7 @@ void MainWindow::resizeEvent(QResizeEvent* re)
 /******************************************************************************
 * Emitted when the date selection changes in the date picker.
 */
-void MainWindow::datesSelected(const QVector<QDate>& dates)
-{
+void MainWindow::datesSelected(const QList<QDate> &dates) {
     mListFilterModel->setDateFilter(dates);
 }
 
@@ -798,7 +797,7 @@ void MainWindow::slotModify()
 */
 void MainWindow::slotDelete(bool force)
 {
-    QVector<KAEvent> events = mListView->selectedEvents();
+    QList<KAEvent> events = mListView->selectedEvents();
     if (!force  &&  Preferences::confirmAlarmDeletion())
     {
         int n = events.count();
@@ -846,12 +845,12 @@ void MainWindow::slotDelete(bool force)
 */
 void MainWindow::slotReactivate()
 {
-    QVector<KAEvent> events = mListView->selectedEvents();
+    QList<KAEvent> events = mListView->selectedEvents();
     mListView->clearSelection();
 
     // Add the alarms to the displayed lists and to the calendar file
     Resource resource;   // active alarms resource which alarms are restored to
-    QVector<int> ineligibleIndexes;
+    QList<int> ineligibleIndexes;
     const KAlarm::UpdateResult status = KAlarm::reactivateEvents(events, ineligibleIndexes, resource, this);
     if (status.status < KAlarm::UPDATE_FAILED)
     {
@@ -873,8 +872,8 @@ void MainWindow::slotReactivate()
 void MainWindow::slotEnable()
 {
     bool enable = mActionEnableEnable;    // save since changed in response to KAlarm::enableEvent()
-    const QVector<KAEvent> events = mListView->selectedEvents();
-    QVector<KAEvent> eventCopies;
+    const QList<KAEvent> events = mListView->selectedEvents();
+    QList<KAEvent> eventCopies;
     eventCopies.reserve(events.count());
     for (const KAEvent& event : events)
         eventCopies += event;
@@ -943,7 +942,7 @@ void MainWindow::slotImportAlarms()
 */
 void MainWindow::slotExportAlarms()
 {
-    const QVector<KAEvent> events = mListView->selectedEvents();
+    const QList<KAEvent> events = mListView->selectedEvents();
     if (!events.isEmpty())
         KAlarm::exportAlarms(events, this);
 }
@@ -962,7 +961,7 @@ void MainWindow::slotBirthdays()
         AutoQPointer<BirthdayDlg> dlg = new BirthdayDlg(this);
         if (dlg->exec() == QDialog::Accepted)
         {
-            QVector<KAEvent> events = dlg->events();
+            QList<KAEvent> events = dlg->events();
             if (!events.isEmpty())
             {
                 mListView->clearSelection();
@@ -1222,7 +1221,7 @@ void MainWindow::initUndoMenu(QMenu* menu, Undo::Type type)
     menu->clear();
     mUndoMenuIds.clear();
     const QString& action = (type == Undo::UNDO) ? undoTextStripped : redoTextStripped;
-    const QVector<int> ids = Undo::ids(type);
+    const QList<int> ids = Undo::ids(type);
     for (const int id : ids)
     {
         const QString actText = Undo::actionText(type, id);
@@ -1582,7 +1581,7 @@ void MainWindow::slotCalendarStatusChanged()
 void MainWindow::slotSelection()
 {
     // Find which events have been selected
-    QVector<KAEvent> events = mListView->selectedEvents();
+    QList<KAEvent> events = mListView->selectedEvents();
     int count = events.count();
     if (!count)
     {

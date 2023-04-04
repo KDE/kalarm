@@ -48,9 +48,10 @@ public:
     using QObject::event;
     static KAEvent          event(const EventId& uniqueId, bool findUniqueId = false);
     static KAEvent          templateEvent(const QString& templateName);
-    static QVector<KAEvent> events(const QString& uniqueId);
-    static QVector<KAEvent> events(const Resource&, CalEvent::Types = CalEvent::EMPTY);
-    static QVector<KAEvent> events(CalEvent::Types s = CalEvent::EMPTY);
+    static QList<KAEvent> events(const QString &uniqueId);
+    static QList<KAEvent> events(const Resource &,
+                                 CalEvent::Types = CalEvent::EMPTY);
+    static QList<KAEvent> events(CalEvent::Types s = CalEvent::EMPTY);
 
     /** Options for addEvent(). May be OR'ed together. */
     enum AddEventOption
@@ -65,7 +66,7 @@ public:
     static bool             modifyEvent(const EventId& oldEventId, KAEvent& newEvent);
     static KAEvent          updateEvent(const KAEvent&, bool saveIfReadOnly = true);
     static bool             deleteEvent(const KAEvent&, Resource&, bool save = false);
-    static void             purgeEvents(const QVector<KAlarmCal::KAEvent>&);
+    static void purgeEvents(const QList<KAlarmCal::KAEvent> &);
     static ResourcesCalendar* instance()     { return mInstance; }
 
 Q_SIGNALS:
@@ -87,11 +88,12 @@ private:
                                               bool deleteFromResource = true);
     void                  removeKAEvents(ResourceId, bool closing = false,
                                          CalEvent::Types = CalEvent::ACTIVE | CalEvent::ARCHIVED | CalEvent::TEMPLATE);
-    static QVector<KAEvent> events(CalEvent::Types, const Resource&);
+    static QList<KAEvent> events(CalEvent::Types, const Resource &);
     void                  findEarliestAlarm(const Resource&);
     void                  checkForDisabledAlarms();
     void                  checkForDisabledAlarms(bool oldEnabled, bool newEnabled);
-    static QVector<KAEvent> eventsForResource(const Resource&, const QSet<QString>& eventIds);
+    static QList<KAEvent> eventsForResource(const Resource &,
+                                            const QSet<QString> &eventIds);
 
     static ResourcesCalendar* mInstance;   // the unique instance
 

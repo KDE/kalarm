@@ -137,7 +137,7 @@ public:
     /** Set a filter to include only alarms which are due on specified dates.
      *  @param dates  Dates for inclusion, in date order, or empty to remove filter.
      */
-    void setDateFilter(const QVector<QDate>& dates);
+    void setDateFilter(const QList<QDate> &dates);
 
     /** Set whether to replace a blank alarm name with the alarm text. */
     void setReplaceBlankName(bool replace)   { mReplaceBlankName = replace; }
@@ -161,7 +161,8 @@ private Q_SLOTS:
 private:
     static AlarmListModel* mAllInstance;
     CalEvent::Types mFilterTypes;    // types of events contained in this model
-    QVector<std::pair<KADateTime, KADateTime>> mFilterDates;  // date/time ranges to include in filter
+    QList<std::pair<KADateTime, KADateTime>>
+        mFilterDates; // date/time ranges to include in filter
     mutable QHash<ResourceId, QHash<QString, KADateTime>> mDateFilterCache;  // if date filter, whether events are included in filter
     bool mReplaceBlankName {false};  // replace Name with Text for Qt::DisplayRole if Name is blank
 };

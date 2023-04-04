@@ -21,7 +21,7 @@
 = currently uses an old KAlarm storage format.
 =============================================================================*/
 
-QVector<CalendarUpdater*> CalendarUpdater::mInstances;
+QList<CalendarUpdater *> CalendarUpdater::mInstances;
 
 CalendarUpdater::CalendarUpdater(ResourceId resourceId, bool ignoreKeepFormat, QObject* parent, QWidget* promptParent)
     : QObject(parent)

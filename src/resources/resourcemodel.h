@@ -207,7 +207,7 @@ private:
     explicit ResourceFilterCheckListModel(QObject* parent);
     void init();
 
-    static QVector<ResourceFilterCheckListModel*> mInstances;
+    static QList<ResourceFilterCheckListModel *> mInstances;
     ResourceCheckListModel* mActiveModel {nullptr};
     ResourceCheckListModel* mArchivedModel {nullptr};
     ResourceCheckListModel* mTemplateModel {nullptr};

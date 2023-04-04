@@ -127,7 +127,7 @@ QString validateFileUrl(const QUrl& url)
 {
     // Ensure that the new resource doesn't use the same file or directory as
     // an existing file resource, to avoid duplicate processing.
-    const QVector<Resource> resources = Resources::allResources<FileResource>();
+    const QList<Resource> resources = Resources::allResources<FileResource>();
     for (const Resource& res : resources)
     {
         if (res.location() == url)

@@ -276,8 +276,9 @@ UpdateResult addEvent(KAEvent& event, Resource& resource, QWidget* msgParent, in
 * Add a list of new active (non-archived) alarms, and save them in the resource.
 * The events are updated with their actual event IDs.
 */
-UpdateResult addEvents(QVector<KAEvent>& events, Resource& resource, QWidget* msgParent, bool allowKOrgUpdate, bool showKOrgErr)
-{
+UpdateResult addEvents(QList<KAEvent> &events, Resource &resource,
+                       QWidget *msgParent, bool allowKOrgUpdate,
+                       bool showKOrgErr) {
     qCDebug(KALARM_LOG) << "KAlarm::addEvents:" << events.count();
     if (events.isEmpty())
         return UpdateResult(UPDATE_OK);
@@ -474,12 +475,12 @@ UpdateResult updateTemplate(KAEvent& event, QWidget* msgParent)
 */
 UpdateResult deleteEvent(KAEvent& event, Resource& resource, bool archive, QWidget* msgParent, bool showKOrgErr)
 {
-    QVector<KAEvent> events(1, event);
+    QList<KAEvent> events(1, event);
     return deleteEvents(events, resource, archive, msgParent, showKOrgErr);
 }
 
-UpdateResult deleteEvents(QVector<KAEvent>& events, Resource& resource, bool archive, QWidget* msgParent, bool showKOrgErr)
-{
+UpdateResult deleteEvents(QList<KAEvent> &events, Resource &resource,
+                          bool archive, QWidget *msgParent, bool showKOrgErr) {
     qCDebug(KALARM_LOG) << "KAlarm::deleteEvents:" << events.count();
     if (events.isEmpty())
         return UpdateResult(UPDATE_OK);
@@ -617,13 +618,14 @@ void deleteDisplayEvent(const QString& eventID)
 */
 UpdateResult reactivateEvent(KAEvent& event, Resource& resource, QWidget* msgParent, bool showKOrgErr)
 {
-    QVector<int> ids;
-    QVector<KAEvent> events(1, event);
+    QList<int> ids;
+    QList<KAEvent> events(1, event);
     return reactivateEvents(events, ids, resource, msgParent, showKOrgErr);
 }
 
-UpdateResult reactivateEvents(QVector<KAEvent>& events, QVector<int>& ineligibleIndexes, Resource& resource, QWidget* msgParent, bool showKOrgErr)
-{
+UpdateResult reactivateEvents(QList<KAEvent> &events,
+                              QList<int> &ineligibleIndexes, Resource &resource,
+                              QWidget *msgParent, bool showKOrgErr) {
     qCDebug(KALARM_LOG) << "KAlarm::reactivateEvents:" << events.count();
     ineligibleIndexes.clear();
     if (events.isEmpty())
@@ -640,7 +642,7 @@ UpdateResult reactivateEvents(QVector<KAEvent>& events, QVector<int>& ineligible
     {
         int count = 0;
         const KADateTime now = KADateTime::currentUtcDateTime();
-        QVector<KAEvent> eventsToDelete;
+        QList<KAEvent> eventsToDelete;
         for (int i = 0, end = events.count();  i < end;  ++i)
         {
             // Delete the event from the archived resource
@@ -710,8 +712,8 @@ UpdateResult reactivateEvents(QVector<KAEvent>& events, QVector<int>& ineligible
 * Enable or disable alarms.
 * The new events will have the same event IDs as the old ones.
 */
-UpdateResult enableEvents(QVector<KAEvent>& events, bool enable, QWidget* msgParent)
-{
+UpdateResult enableEvents(QList<KAEvent> &events, bool enable,
+                          QWidget *msgParent) {
     qCDebug(KALARM_LOG) << "KAlarm::enableEvents:" << events.count();
     if (events.isEmpty())
         return UpdateResult(UPDATE_OK);
@@ -802,7 +804,7 @@ void purgeArchive(int purgeDays)
     const Resource resource = Resources::getStandard(CalEvent::ARCHIVED, true);
     if (!resource.isValid())
         return;
-    QVector<KAEvent> events = ResourcesCalendar::events(resource);
+    QList<KAEvent> events = ResourcesCalendar::events(resource);
     for (int i = 0;  i < events.count();  )
     {
         if (purgeDays  &&  events.at(i).createdDateTime().date() >= cutoff)
@@ -830,8 +832,7 @@ bool eventReadOnly(const QString& eventId)
 * If 'model' is non-null, the AlarmListModel* which it points to is used; if
 * that is null, it is created.
 */
-QVector<KAEvent> getSortedActiveEvents(QObject* parent, AlarmListModel** model)
-{
+QList<KAEvent> getSortedActiveEvents(QObject *parent, AlarmListModel **model) {
     AlarmListModel* mdl = nullptr;
     if (!model)
         model = &mdl;
@@ -842,7 +843,7 @@ QVector<KAEvent> getSortedActiveEvents(QObject* parent, AlarmListModel** model)
         (*model)->sort(AlarmListModel::TimeColumn);
     }
     int count = (*model)->rowCount();
-    QVector<KAEvent> result;
+    QList<KAEvent> result;
     result.reserve(count);
     for (int i = 0;  i < count;  ++i)
     {
@@ -887,7 +888,7 @@ bool importAlarms(Resource& resource, QWidget* parent)
     const CalEvent::Types alarmTypes = resource.isValid() ? resource.alarmTypes() : CalEvent::ACTIVE | CalEvent::ARCHIVED | CalEvent::TEMPLATE;
 
     // Read all the selected calendar files and extract their alarms.
-    QHash<CalEvent::Type, QVector<KAEvent>> events;
+    QHash<CalEvent::Type, QList<KAEvent>> events;
     for (const QUrl& url : urls)
     {
         if (!url.isValid())
@@ -927,8 +928,7 @@ bool importAlarms(Resource& resource, QWidget* parent)
 * Reply = true if all alarms in the calendar were successfully exported
 *       = false if any alarms failed to be exported.
 */
-bool exportAlarms(const QVector<KAEvent>& events, QWidget* parent)
-{
+bool exportAlarms(const QList<KAEvent> &events, QWidget *parent) {
     bool append;
     QString file = FileDialog::getSaveFileName(lastExportUrl,
                                                QStringLiteral("*.ics|%1").arg(i18nc("@item:inlistbox File type selection filter", "Calendar Files")),
@@ -1587,11 +1587,10 @@ void updateEditedAlarm(EditAlarmDlg* editDlg, KAEvent& event, Resource& resource
 * Returns a list of all alarm templates.
 * If shell commands are disabled, command alarm templates are omitted.
 */
-QVector<KAEvent> templateList()
-{
-    QVector<KAEvent> templates;
+QList<KAEvent> templateList() {
+    QList<KAEvent> templates;
     const bool includeCmdAlarms = ShellProcess::authorised();
-    const QVector<KAEvent> events = ResourcesCalendar::events(CalEvent::TEMPLATE);
+    const QList<KAEvent> events = ResourcesCalendar::events(CalEvent::TEMPLATE);
     for (const KAEvent& event : events)
     {
         if (includeCmdAlarms  ||  !(event.actionTypes() & KAEvent::ACT_COMMAND))
@@ -1646,12 +1645,13 @@ void refreshAlarmsIfQueued()
     if (refreshAlarmsQueued)
     {
         qCDebug(KALARM_LOG) << "KAlarm::refreshAlarmsIfQueued";
-        QVector<Resource> resources = Resources::enabledResources();
+        QList<Resource> resources = Resources::enabledResources();
         for (Resource& resource : resources)
             resource.reload();
 
         // Close any message displays for alarms which are now disabled
-        const QVector<KAEvent> events = ResourcesCalendar::events(CalEvent::ACTIVE);
+        const QList<KAEvent> events =
+            ResourcesCalendar::events(CalEvent::ACTIVE);
         for (const KAEvent& event : events)
         {
             if (!event.enabled()  &&  (event.actionTypes() & KAEvent::ACT_DISPLAY))

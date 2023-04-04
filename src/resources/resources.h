@@ -63,13 +63,17 @@ public:
      *  @param  sorting    Sorting criteria to use.
      */
     template <class RType = ResourceType>
-    static QVector<Resource> allResources(CalEvent::Type alarmType = CalEvent::EMPTY, Sorting sorting = NoSort);
+    static QList<Resource>
+    allResources(CalEvent::Type alarmType = CalEvent::EMPTY,
+                 Sorting sorting = NoSort);
 
     /** Return the enabled resources which contain a specified alarm type.
      *  @param type      Alarm type to check for, or CalEvent::EMPTY for any type.
      *  @param writable  If true, only writable resources are included.
      */
-    static QVector<Resource> enabledResources(CalEvent::Type type = CalEvent::EMPTY, bool writable = false);
+    static QList<Resource>
+    enabledResources(CalEvent::Type type = CalEvent::EMPTY,
+                     bool writable = false);
 
     /** Return the standard resource for an alarm type. This is the resource
      *  which can be set as the default to add new alarms to.
@@ -322,13 +326,12 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(Resources::DestOptions)
 *============================================================================*/
 
 template <class RType>
-QVector<Resource> Resources::allResources(CalEvent::Type type, Sorting sorting)
-{
+QList<Resource> Resources::allResources(CalEvent::Type type, Sorting sorting) {
     const CalEvent::Types types = (type == CalEvent::EMPTY)
                                 ? CalEvent::ACTIVE | CalEvent::ARCHIVED | CalEvent::TEMPLATE
                                 : type;
 
-    QVector<Resource> result;
+    QList<Resource> result;
     Resource std;
     if ((sorting & DefaultFirst)  &&  type != CalEvent::EMPTY)
     {

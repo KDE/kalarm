@@ -12,7 +12,7 @@
 #include <KLineEdit>
 
 #include <QDialog>
-#include <QVector>
+#include <QList>
 
 class QFocusEvent;
 class QTreeView;
@@ -34,9 +34,9 @@ class BirthdayDlg : public QDialog
     Q_OBJECT
 public:
     explicit BirthdayDlg(QWidget* parent = nullptr);
-    QVector<KAEvent> events() const;
+    QList<KAEvent> events() const;
 
-protected Q_SLOTS:
+  protected Q_SLOTS:
     virtual void   slotOk();
 
 private Q_SLOTS:

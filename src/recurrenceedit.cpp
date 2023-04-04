@@ -934,20 +934,20 @@ void RecurrenceEdit::updateEvent(KAEvent& event, bool adjustStart)
             pos.days.fill(false);
             pos.days.setBit(mMonthlyRule->dayOfWeek() - 1);
             pos.weeknum = mMonthlyRule->week();
-            QVector<KAEvent::MonthPos> poses(1, pos);
+            QList<KAEvent::MonthPos> poses(1, pos);
             event.setRecurMonthlyByPos(frequency, poses, repeatCount, endDate);
         }
         else
         {
             // It's by day
             const int daynum = mMonthlyRule->date();
-            QVector<int> daynums(1, daynum);
+            QList<int> daynums(1, daynum);
             event.setRecurMonthlyByDate(frequency, daynums, repeatCount, endDate);
         }
     }
     else if (button == mYearlyButton)
     {
-        const QVector<int> months = mYearlyRule->months();
+        const QList<int> months = mYearlyRule->months();
         if (mYearlyRule->type() == YearlyRule::POS)
         {
             // It's by position
@@ -955,7 +955,7 @@ void RecurrenceEdit::updateEvent(KAEvent& event, bool adjustStart)
             pos.days.fill(false);
             pos.days.setBit(mYearlyRule->dayOfWeek() - 1);
             pos.weeknum = mYearlyRule->week();
-            QVector<KAEvent::MonthPos> poses(1, pos);
+            QList<KAEvent::MonthPos> poses(1, pos);
             event.setRecurAnnualByPos(frequency, poses, months, repeatCount, endDate);
         }
         else
@@ -1556,9 +1556,8 @@ void YearlyRule::setDefaultValues(int dayOfMonth, int dayOfWeek, int month)
 * Fetch which months have been checked (1 - 12).
 * Reply = true if February has been checked.
 */
-QVector<int> YearlyRule::months() const
-{
-    QVector<int> mnths;
+QList<int> YearlyRule::months() const {
+    QList<int> mnths;
     for (int i = 0;  i < 12;  ++i)
         if (mMonthBox[i]->isChecked()  &&  mMonthBox[i]->isEnabled())
             mnths.append(i + 1);

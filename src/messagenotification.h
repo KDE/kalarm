@@ -61,7 +61,8 @@ private:
     void                setNotificationText();
     void                setNotificationButtons();
 
-    static QVector<MessageNotification*> mNotificationList;   // list of notification instances
+    static QList<MessageNotification *>
+        mNotificationList; // list of notification instances
     // Miscellaneous
     QString             mTimeText;                // trigger time text
     QString             mMessageText;             // alarm message text

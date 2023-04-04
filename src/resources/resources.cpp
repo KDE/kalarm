@@ -71,13 +71,13 @@ Resource Resources::resourceFromDisplayId(ResourceId id)
 * Return the resources which are enabled for a specified alarm type.
 * If 'writable' is true, only writable resources are included.
 */
-QVector<Resource> Resources::enabledResources(CalEvent::Type type, bool writable)
-{
+QList<Resource> Resources::enabledResources(CalEvent::Type type,
+                                            bool writable) {
     const CalEvent::Types types = (type == CalEvent::EMPTY)
                                 ? CalEvent::ACTIVE | CalEvent::ARCHIVED | CalEvent::TEMPLATE
                                 : type;
 
-    QVector<Resource> result;
+    QList<Resource> result;
     for (auto it = mResources.constBegin();  it != mResources.constEnd();  ++it)
     {
         const Resource& res = it.value();

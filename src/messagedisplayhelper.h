@@ -147,7 +147,8 @@ private:
     void    clearErrorMessage(unsigned msg) const;
     void    redisplayAlarm();
 
-    static QVector<MessageDisplayHelper*> mInstanceList;  // list of existing message displays
+    static QList<MessageDisplayHelper *>
+        mInstanceList; // list of existing message displays
     static QHash<EventId, unsigned> mErrorMessages; // error messages currently displayed, by event ID
     // Sound file playing
     static QPointer<QThread>     mAudioThread;    // container of thread to play audio file in

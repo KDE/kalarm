@@ -497,9 +497,8 @@ QString Undo::description(Undo::Type type, int id)
 * listed, to force dependent undos to be executed in their correct order.
 * If 'ids' is non-null, also returns a list of their corresponding IDs.
 */
-QVector<int> Undo::ids(Undo::Type type)
-{
-    QVector<int> ids;
+QList<int> Undo::ids(Undo::Type type) {
+    QList<int> ids;
     QStringList ignoreIDs;
 //int n=0;
     const List* const list = (type == UNDO) ? &mUndoList : (type == REDO) ? &mRedoList : nullptr;

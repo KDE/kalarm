@@ -60,17 +60,17 @@ const QString FROM_KMAIL(QStringLiteral("@KMail"));
 // %w = command to execute in terminal, with 'sleep 86400' appended
 // %C = temporary command file to execute in terminal
 // %W = temporary command file to execute in terminal, with 'sleep 86400' appended
-const QVector<QString> xtermCommands {
+const QList<QString> xtermCommands{
     QStringLiteral("xterm -sb -hold -title %t -e %c"),
     QStringLiteral("konsole --noclose -p tabtitle=%t -e ${SHELL:-sh} -c %c"),
     QStringLiteral("gnome-terminal -t %t -e %W"),
-    QStringLiteral("eterm --pause -T %t -e %C"),    // some systems use eterm...
-    QStringLiteral("Eterm --pause -T %t -e %C"),    // while some use Eterm
+    QStringLiteral("eterm --pause -T %t -e %C"), // some systems use eterm...
+    QStringLiteral("Eterm --pause -T %t -e %C"), // while some use Eterm
     QStringLiteral("rxvt -title %t -e ${SHELL:-sh} -c %w"),
-    QStringLiteral("xfce4-terminal -T %t -H -e %c")
-};
+    QStringLiteral("xfce4-terminal -T %t -H -e %c")};
 
-QVector<QString> xtermCommandExes;   // initialised to hold executables in xtermCommands
+QList<QString>
+    xtermCommandExes; // initialised to hold executables in xtermCommands
 
 void splitXTermCommands();
 

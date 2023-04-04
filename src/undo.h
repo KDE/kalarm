@@ -36,10 +36,11 @@ public:
         mutable Resource resource;
         QStringList      dontShowErrors;
     };
-    class EventList : public QVector<Event>
-    {
-    public:
-        void append(const KAEvent& e, const Resource& res)  { QVector<Event>::append(Event(e, res)); }
+    class EventList : public QList<Event> {
+      public:
+        void append(const KAEvent &e, const Resource &res) {
+          QList<Event>::append(Event(e, res));
+        }
     };
 
     static Undo*       instance();
@@ -64,7 +65,7 @@ public:
     static QString     actionText(Type);
     static QString     actionText(Type, int id);
     static QString     description(Type, int id);
-    static QVector<int> ids(Type);
+    static QList<int> ids(Type);
     static void        emitChanged();
     static void        dumpDebug(Type, int count);
 

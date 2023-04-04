@@ -61,7 +61,7 @@ protected:
 
     static QString conversionPrompt(const QString& calendarName, const QString& calendarVersion, bool whole);
 
-    static QVector<CalendarUpdater*> mInstances;
+    static QList<CalendarUpdater *> mInstances;
     ResourceId mResourceId;
     QObject*   mParent;
     QWidget*   mPromptParent;

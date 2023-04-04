@@ -253,7 +253,7 @@ QModelIndex FileResourceDataModel::eventIndex(const QString& eventId) const
         Resource resource = node->parent();
         if (resource.isValid())
         {
-            const QVector<Node*> nodes = mResourceNodes.value(resource);
+            const QList<Node *> nodes = mResourceNodes.value(resource);
             int row = nodes.indexOf(node);
             if (row >= 0)
                 return createIndex(row, 0, node);
@@ -440,7 +440,7 @@ void FileResourceDataModel::slotResourceSettingsChanged(Resource& res, ResourceT
     if (changes & ResourceType::BackgroundColour)
     {
         qCDebug(KALARM_LOG) << "FileResourceDataModel::slotResourceSettingsChanged: Colour" << res.displayName();
-        const QVector<Node*>& eventNodes = mResourceNodes.value(res);
+        const QList<Node *> &eventNodes = mResourceNodes.value(res);
         const int lastRow = eventNodes.count() - 1;
         if (lastRow >= 0)
             Q_EMIT dataChanged(createIndex(0, 0, eventNodes[0]), createIndex(lastRow, ColumnCount - 1, eventNodes[lastRow]));
@@ -485,7 +485,7 @@ void FileResourceDataModel::slotEventsAdded(Resource& resource, const QList<KAEv
 
         if (!eventsToAdd.isEmpty())
         {
-            QVector<Node*>& resourceEventNodes = mResourceNodes[resource];
+            QList<Node *> &resourceEventNodes = mResourceNodes[resource];
             int row = resourceEventNodes.count();
             resourceEventNodes.reserve(row + eventsToAdd.count());
             const QModelIndex resourceIx = resourceIndex(resource);
@@ -521,7 +521,7 @@ void FileResourceDataModel::slotEventUpdated(Resource& resource, const KAEvent& 
             {
                 *oldEvent = event;
 
-                const QVector<Node*> eventNodes = mResourceNodes.value(resource);
+                const QList<Node *> eventNodes = mResourceNodes.value(resource);
                 int row = eventNodes.indexOf(node);
                 if (row >= 0)
                 {
@@ -545,10 +545,10 @@ bool FileResourceDataModel::deleteEvents(Resource& resource, const QList<KAEvent
     auto it = mResourceNodes.find(resource);
     if (it == mResourceNodes.end())
         return false;
-    QVector<Node*>& eventNodes = it.value();
+    QList<Node *> &eventNodes = it.value();
 
     // Find the row numbers of the events to delete.
-    QVector<int> rowsToDelete;
+    QList<int> rowsToDelete;
     rowsToDelete.reserve(events.count());
     for (const KAEvent& event : events)
     {
@@ -608,17 +608,17 @@ void FileResourceDataModel::addResource(Resource& resource)
     else
     {
         // Add the new resource to the model
-        QVector<Node*>& resourceNodes = mResourceNodes[Resource()];
+        QList<Node *> &resourceNodes = mResourceNodes[Resource()];
         int row = resourceNodes.count();
         beginInsertRows(QModelIndex(), row, row);
         mResources += resource;
         resourceNodes += new Node(resource);
-        mResourceNodes.insert(resource, QVector<Node*>());
+        mResourceNodes.insert(resource, QList<Node *>());
     }
 
     if (!events.isEmpty())
     {
-        QVector<Node*>& resourceEventNodes = mResourceNodes[resource];
+        QList<Node *> &resourceEventNodes = mResourceNodes[resource];
         resourceEventNodes.reserve(resourceEventNodes.count() + events.count());
         for (const KAEvent& event : events)
         {
@@ -652,7 +652,7 @@ void FileResourceDataModel::removeResource(Resource& resource)
     int count = 0;
     beginRemoveRows(QModelIndex(), row, row);
     mResources.removeAt(row);
-    QVector<Node*>& resourceNodes = mResourceNodes[Resource()];
+    QList<Node *> &resourceNodes = mResourceNodes[Resource()];
     delete resourceNodes.at(row);
     resourceNodes.removeAt(row);
     auto it = mResourceNodes.find(r);
@@ -680,7 +680,7 @@ void FileResourceDataModel::removeResourceEvents(Resource& resource, bool setHav
     if (resourceIx.isValid())
     {
         // The resource already exists: remove its existing events from the model.
-        QVector<Node*>& eventNodes = mResourceNodes[resource];
+        QList<Node *> &eventNodes = mResourceNodes[resource];
         if (!eventNodes.isEmpty())
         {
             beginRemoveRows(resourceIx, 0, eventNodes.count() - 1);
@@ -702,8 +702,7 @@ void FileResourceDataModel::removeResourceEvents(Resource& resource, bool setHav
 * from this method as a parameter.
 * Return - number of events which have been removed.
 */
-int FileResourceDataModel::removeResourceEvents(QVector<Node*>& eventNodes)
-{
+int FileResourceDataModel::removeResourceEvents(QList<Node *> &eventNodes) {
     qCDebug(KALARM_LOG) << "FileResourceDataModel::removeResourceEvents";
     int count = 0;
     for (Node* node : eventNodes)
@@ -834,7 +833,7 @@ QModelIndex FileResourceDataModel::index(int row, int column, const QModelIndex&
         {
             if (!column)
             {
-                const QVector<Node*>& nodes = mResourceNodes.value(Resource());
+                const QList<Node *> &nodes = mResourceNodes.value(Resource());
                 if (row < nodes.count())
                     return createIndex(row, column, nodes[row]);
             }
@@ -849,7 +848,8 @@ QModelIndex FileResourceDataModel::index(int row, int column, const QModelIndex&
                     Resource resource = node->resource();
                     if (resource.isValid())
                     {
-                        const QVector<Node*>& nodes = mResourceNodes.value(resource);
+                        const QList<Node *> &nodes =
+                            mResourceNodes.value(resource);
                         if (row < nodes.count())
                             return createIndex(row, column, nodes[row]);
                     }

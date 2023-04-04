@@ -36,7 +36,8 @@ using namespace KAlarmCal;
 
 namespace
 {
-bool readDirectoryResource(const QString& dirPath, CalEvent::Types alarmTypes, QHash<CalEvent::Type, QVector<KAEvent>>& events);
+bool readDirectoryResource(const QString &dirPath, CalEvent::Types alarmTypes,
+                           QHash<CalEvent::Type, QList<KAEvent>> &events);
 }
 
 FileResourceMigrator* FileResourceMigrator::mInstance = nullptr;
@@ -65,7 +66,8 @@ FileResourceMigrator* FileResourceMigrator::instance()
     {
         // Check whether migration or default resource creation is actually needed.
         CalEvent::Types needed = CalEvent::ACTIVE | CalEvent::ARCHIVED | CalEvent::TEMPLATE;
-        const QVector<Resource> resources = Resources::allResources<FileResource>();
+        const QList<Resource> resources =
+            Resources::allResources<FileResource>();
         for (const Resource& resource : resources)
         {
             needed &= ~resource.alarmTypes();
@@ -97,7 +99,7 @@ void FileResourceMigrator::start()
 
     // First, check whether any file system resources already exist, and if so,
     // find their alarm types.
-    const QVector<Resource> resources = Resources::allResources<FileResource>();
+    const QList<Resource> resources = Resources::allResources<FileResource>();
     for (const Resource& resource : resources)
         mExistingAlarmTypes |= resource.alarmTypes();
 
@@ -177,7 +179,7 @@ void FileResourceMigrator::migrateDirResource(const QString& resourceName,
         if (dlg)
         {
             bool converted = false;
-            QHash<CalEvent::Type, QVector<KAEvent>> events;
+            QHash<CalEvent::Type, QList<KAEvent>> events;
             readDirectoryResource(path, alarmTypes, events);
 
             for (auto it = events.constBegin();  it != events.constEnd();  ++it)
@@ -409,8 +411,8 @@ namespace
 /******************************************************************************
 * Load and parse events from each file in a calendar directory.
 */
-bool readDirectoryResource(const QString& dirPath, CalEvent::Types alarmTypes, QHash<CalEvent::Type, QVector<KAEvent>>& events)
-{
+bool readDirectoryResource(const QString &dirPath, CalEvent::Types alarmTypes,
+                           QHash<CalEvent::Type, QList<KAEvent>> &events) {
     if (dirPath.isEmpty())
         return false;
     qCDebug(KALARM_LOG) << "FileResourceMigrator::readDirectoryResource:" << dirPath;
@@ -438,7 +440,6 @@ bool readDirectoryResource(const QString& dirPath, CalEvent::Types alarmTypes, Q
     }
     return true;
 }
-
 }
 
 // vim: et sw=4:

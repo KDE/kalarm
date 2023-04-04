@@ -172,7 +172,7 @@ void TemplateDlg::slotEdit()
 */
 void TemplateDlg::slotDelete()
 {
-    QVector<KAEvent> events = mListView->selectedEvents();
+    QList<KAEvent> events = mListView->selectedEvents();
     int n = events.count();
     if (KAMessageBox::warningContinueCancel(this, i18ncp("@info", "Do you really want to delete the selected alarm template?",
                                                          "Do you really want to delete the %1 selected alarm templates?", n),
@@ -202,7 +202,7 @@ void TemplateDlg::slotDelete()
 */
 void TemplateDlg::slotSelectionChanged()
 {
-    QVector<KAEvent> events = mListView->selectedEvents();
+    QList<KAEvent> events = mListView->selectedEvents();
     int count = events.count();
     bool readOnly = false;
     for (int i = 0;  i < count;  ++i)

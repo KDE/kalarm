@@ -232,7 +232,8 @@ DirResourceImportTypeWidget::DirResourceImportTypeWidget(CalEvent::Type alarmTyp
     mUi = new Ui_DirResourceImportTypeWidget;
     mUi->setupUi(this);
 
-    const QVector<Resource> resources = Resources::allResources<FileResource>(alarmType, Resources::DefaultFirst | Resources::DisplayName);
+    const QList<Resource> resources = Resources::allResources<FileResource>(
+        alarmType, Resources::DefaultFirst | Resources::DisplayName);
     if (resources.isEmpty())
     {
         mUi->mergeRadio->setVisible(false);

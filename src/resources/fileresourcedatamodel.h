@@ -145,17 +145,17 @@ private:
     /** Remove a resource's events. */
     void removeResourceEvents(Resource&, bool setHaveEvents = true);
 
-    int  removeResourceEvents(QVector<Node*>& eventNodes);
+    int removeResourceEvents(QList<Node *> &eventNodes);
 
     void updateHaveEvents(bool have)        { mHaveEvents = have;  Q_EMIT haveEventsStatus(have); }
 
     static bool mInstanceIsOurs;        // mInstance is a FileResourceDataModel instance
     // Resource nodes for model root [Resource = Resource()], and
     // Event nodes for each resource.
-    QHash<Resource, QVector<Node*>> mResourceNodes;
+    QHash<Resource, QList<Node *>> mResourceNodes;
     // Resources in the order in which they are held in the model.
     // This must be the same order as in mResourceNodes[nullptr].
-    QVector<Resource>     mResources;
+    QList<Resource> mResources;
     QHash<QString, Node*> mEventNodes;  // each event ID, mapped to its node.
     bool                  mHaveEvents;  // there are events in this model
 };

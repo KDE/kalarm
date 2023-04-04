@@ -82,9 +82,8 @@ DayMatrix::~DayMatrix()
 /******************************************************************************
 * Return all selected dates from mSelStart to mSelEnd, in date order.
 */
-QVector<QDate> DayMatrix::selectedDates() const
-{
-    QVector<QDate> selDays;
+QList<QDate> DayMatrix::selectedDates() const {
+    QList<QDate> selDays;
     if (mSelStart != NO_SELECTION)
     {
         selDays.reserve(mSelEnd - mSelStart + 1);
@@ -223,7 +222,8 @@ void DayMatrix::updateEvents(const Resource& resource)
     const KADateTime to(mStartDate.addDays(NUMDAYS-1), QTime(23,59,0), Preferences::timeSpec());
 
     mEventDates.clear();
-    const QVector<Resource> resources = Resources::enabledResources(CalEvent::ACTIVE);
+    const QList<Resource> resources =
+        Resources::enabledResources(CalEvent::ACTIVE);
     for (const Resource& res : resources)
     {
         if (!resource.isValid()  ||  res.id() == resource.id())
@@ -468,7 +468,7 @@ void DayMatrix::setMouseSelection(int start, int end, bool emitSignal)
 
     if (emitSignal)
     {
-        const QVector<QDate> dates = selectedDates();
+        const QList<QDate> dates = selectedDates();
         if (dates != mLastSelectedDates)
         {
             mLastSelectedDates = dates;

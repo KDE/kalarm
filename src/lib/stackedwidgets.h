@@ -8,9 +8,9 @@
 
 #pragma once
 
-#include <QStackedWidget>
-#include <QVector>
+#include <QList>
 #include <QScrollArea>
+#include <QStackedWidget>
 class QDialog;
 
 /**
@@ -91,7 +91,7 @@ public:
     virtual QSize minimumSizeHint() const;
 
 protected:
-    QVector<StackedGroupWidgetT<T>*> mWidgets;
+  QList<StackedGroupWidgetT<T> *> mWidgets;
 };
 
 template <class T>

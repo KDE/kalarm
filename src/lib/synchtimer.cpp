@@ -114,7 +114,7 @@ void MinuteTimer::slotTimer()
 =  Application-wide timer synchronized to midnight.
 =============================================================================*/
 
-QVector<DailyTimer*> DailyTimer::mFixedTimers;
+QList<DailyTimer *> DailyTimer::mFixedTimers;
 
 DailyTimer::DailyTimer(const QTime& timeOfDay, bool fixed)
     : mTime(timeOfDay)

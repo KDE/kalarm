@@ -30,7 +30,7 @@ public:
     ~DatePicker() override;
 
     /** Return the currently selected dates, if any. */
-    QVector<QDate> selectedDates() const;
+    QList<QDate> selectedDates() const;
 
     /** Deselect all dates. */
     void clearSelection();
@@ -40,7 +40,7 @@ Q_SIGNALS:
       *
       *  @param dates  The dates selected, in date order, or empty if none.
       */
-    void datesSelected(const QVector<QDate>& dates);
+  void datesSelected(const QList<QDate> &dates);
 
 protected:
     void showEvent(QShowEvent*) override;

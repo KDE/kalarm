@@ -1641,7 +1641,7 @@ void KAlarmApp::slotFDOPropertiesChanged(const QString& interface,
 QStringList KAlarmApp::scheduledAlarmList()
 {
     QStringList alarms;
-    const QVector<KAEvent> events = KAlarm::getSortedActiveEvents(this);
+    const QList<KAEvent> events = KAlarm::getSortedActiveEvents(this);
     for (const KAEvent& event : events)
     {
         const KADateTime dateTime = event.nextTrigger(KAEvent::DISPLAY_TRIGGER).effectiveKDateTime().toLocalZone();

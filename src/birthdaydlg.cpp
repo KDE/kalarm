@@ -239,9 +239,8 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
 /******************************************************************************
 * Return a list of events for birthdays chosen.
 */
-QVector<KAEvent> BirthdayDlg::events() const
-{
-    QVector<KAEvent> list;
+QList<KAEvent> BirthdayDlg::events() const {
+    QList<KAEvent> list;
     const QModelIndexList indexes = mListView->selectionModel()->selectedRows();     //clazy:exclude=inefficient-qlist
     const int count = indexes.count();
     if (!count)
@@ -271,7 +270,7 @@ QVector<KAEvent> BirthdayDlg::events() const
         const float volume = mSoundPicker->volume(fadeVolume, fadeSecs);
         const int   repeatPause = mSoundPicker->repeatPause();
         event.setAudioFile(mSoundPicker->file().toDisplayString(), volume, fadeVolume, fadeSecs, repeatPause);
-        const QVector<int> months(1, date.month());
+        const QList<int> months(1, date.month());
         event.setRecurAnnualByDate(1, months, 0, KARecurrence::defaultFeb29Type(), -1, QDate());
         event.setRepetition(mSubRepetition->repetition());
         event.setNextOccurrence(todayStart);
@@ -365,7 +364,8 @@ void BirthdayDlg::setSortModelSelectionList()
         return;
 
     QStringList alarmMessageList;
-    const QVector<KAEvent> activeEvents = ResourcesCalendar::events(CalEvent::ACTIVE);
+    const QList<KAEvent> activeEvents =
+        ResourcesCalendar::events(CalEvent::ACTIVE);
     for (const KAEvent& event : activeEvents)
     {
         if (event.actionSubType() == KAEvent::MESSAGE

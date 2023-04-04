@@ -11,7 +11,7 @@
 #include "kalarmcalendar/kaevent.h"
 
 #include <QHash>
-#include <QVector>
+#include <QList>
 
 using namespace KAlarmCal;
 
@@ -31,7 +31,9 @@ namespace KAlarm
  *  @param events     imported alarms are appended to this list
  *  @return  true if the calendar file was read successfully.
  */
-bool importCalendarFile(const QUrl& url, CalEvent::Types alarmTypes, bool newId, QWidget* parent, QHash<CalEvent::Type, QVector<KAEvent>>& events);
+bool importCalendarFile(const QUrl &url, CalEvent::Types alarmTypes, bool newId,
+                        QWidget *parent,
+                        QHash<CalEvent::Type, QList<KAEvent>> &events);
 
 } // namespace KAlarm
 

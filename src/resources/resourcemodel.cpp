@@ -447,7 +447,7 @@ QByteArray ResourceCheckListModel::debugType(const char* func) const
 = Proxy model providing a checkable resource list, filtered to contain only one
 = alarm type. The selected alarm type may be changed as desired.
 =============================================================================*/
-QVector<ResourceFilterCheckListModel*> ResourceFilterCheckListModel::mInstances;
+QList<ResourceFilterCheckListModel *> ResourceFilterCheckListModel::mInstances;
 
 ResourceFilterCheckListModel::ResourceFilterCheckListModel(QObject* parent)
     : QSortFilterProxyModel(parent)

@@ -66,7 +66,8 @@ namespace
 
 enum FullScreenType { NoFullScreen = 0, FullScreen = 1, FullScreenActive = 2 };
 FullScreenType haveFullScreenWindow(int screen);
-FullScreenType findFullScreenWindows(const QVector<QRect>& screenRects, QVector<FullScreenType>& screenTypes);
+FullScreenType findFullScreenWindows(const QList<QRect> &screenRects,
+                                     QList<FullScreenType> &screenTypes);
 
 const QLatin1String KMAIL_DBUS_SERVICE("org.kde.kmail");
 const QLatin1String KMAIL_DBUS_PATH("/KMail");
@@ -111,8 +112,7 @@ public:
     }
 };
 
-
-QVector<MessageWindow*> MessageWindow::mWindowList;
+QList<MessageWindow *> MessageWindow::mWindowList;
 
 /******************************************************************************
 * Construct the message window for the specified alarm.
@@ -1261,8 +1261,8 @@ bool MessageWindow::getWorkAreaAndModal()
         {
             // The screens form a single virtual desktop.
             // Xinerama, for example, uses this scheme.
-            QVector<FullScreenType> screenTypes(numScreens);
-            QVector<QRect> screenRects(numScreens);
+            QList<FullScreenType> screenTypes(numScreens);
+            QList<QRect> screenRects(numScreens);
             for (int s = 0;  s < numScreens;  ++s)
                 screenRects[s] = screens[s]->geometry();
             const FullScreenType full = findFullScreenWindows(screenRects, screenTypes);
@@ -1384,8 +1384,8 @@ FullScreenType haveFullScreenWindow(int screen)
 * In a multi-screen setup (single virtual desktop, e.g. Xinerama), find which
 * screens have full screen windows on them.
 */
-FullScreenType findFullScreenWindows(const QVector<QRect>& screenRects, QVector<FullScreenType>& screenTypes)
-{
+FullScreenType findFullScreenWindows(const QList<QRect> &screenRects,
+                                     QList<FullScreenType> &screenTypes) {
     FullScreenType result = NoFullScreen;
     screenTypes.fill(NoFullScreen);
 //TODO: implement on Wayland

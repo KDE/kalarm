@@ -10,11 +10,11 @@
 
 /* @file synchtimer.h - timers which synchronize to time boundaries */
 
-#include <QObject>
-#include <QVector>
 #include <QByteArray>
-#include <QTime>
 #include <QDate>
+#include <QList>
+#include <QObject>
+#include <QTime>
 class QTimer;
 
 /** SynchTimer is a virtual base class for application-wide timers synchronized
@@ -55,7 +55,7 @@ private Q_SLOTS:
     void                slotReceiverGone(QObject* r)  { disconnecT(r); }
 
 private:
-    QVector<Connection> mConnections;  // list of current clients
+  QList<Connection> mConnections; // list of current clients
 };
 
 
@@ -165,10 +165,11 @@ protected Q_SLOTS:
     void slotTimer() override;
 
 private:
-    static QVector<DailyTimer*> mFixedTimers;  // list of timers whose trigger time is fixed
-    QTime  mTime;
-    QDate  mLastDate;  // the date on which the timer was last triggered
-    bool   mFixed;     // the time at which the timer triggers cannot be changed
+  static QList<DailyTimer *>
+      mFixedTimers; // list of timers whose trigger time is fixed
+  QTime mTime;
+  QDate mLastDate; // the date on which the timer was last triggered
+  bool mFixed;     // the time at which the timer triggers cannot be changed
 };
 
 

@@ -35,7 +35,7 @@ void TemplateMenuAction::slotInitMenu()
 
     // Compile a sorted list of template names
     QStringList sorted;
-    const QVector<KAEvent> templates = KAlarm::templateList();
+    const QList<KAEvent> templates = KAlarm::templateList();
     for (const KAEvent& templ : templates)
     {
         const QString name = templ.name();

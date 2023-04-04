@@ -81,7 +81,7 @@ private:
 
     static CommandOptions* mFirstInstance;       // the first instance
     QCommandLineParser* mParser {nullptr};
-    QVector<QCommandLineOption*> mOptions;       // all possible command line options
+    QList<QCommandLineOption *> mOptions; // all possible command line options
     QStringList         mNonExecArguments;       // arguments except for --exec or --exec-display parameters
     QStringList         mExecArguments;          // arguments for --exec or --exec-display
     QString             mError;                  // error message
