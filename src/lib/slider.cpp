@@ -64,11 +64,7 @@ void Slider::setValueLabel(QLabel* label, const QString& format, bool hideIfDisa
                     mValueFormat.insert(++i, QLatin1Char('L'));
                     continue;
                 }
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-                mValueFormat[i] = QLocale().percent();
-#else
                 mValueFormat.replace(i, 1, QLocale().percent());
-#endif
             }
         }
     }

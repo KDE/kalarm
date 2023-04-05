@@ -44,8 +44,7 @@ void PluginManager::loadPlugins()
 
     // Load plugins which are available
     const QList<KPluginMetaData> plugins = KPluginMetaData::findPlugins(
-        QStringLiteral("pim" QT_STRINGIFY(QT_VERSION_MAJOR)) +
-        QStringLiteral("/kalarm"));
+        QStringLiteral("pim6/kalarm"));
 
     for (const auto& metaData : plugins)
     {

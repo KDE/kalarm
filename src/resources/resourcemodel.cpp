@@ -713,13 +713,9 @@ bool ResourceView::viewportEvent(QEvent* e)
 
 QStyleOptionViewItem ResourceView::listViewOptions() const
 {
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-    return QListView::viewOptions();
-#else
     QStyleOptionViewItem option;
     initViewItemOption(&option);
     return option;
-#endif
 }
 
 // vim: et sw=4:

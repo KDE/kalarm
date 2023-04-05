@@ -205,13 +205,9 @@ void EventListView::contextMenuEvent(QContextMenuEvent* e)
 
 QStyleOptionViewItem EventListView::listViewOptions() const
 {
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-    return QTreeView::viewOptions();
-#else
     QStyleOptionViewItem option;
     initViewItemOption(&option);
     return option;
-#endif
 }
 
 

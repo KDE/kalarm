@@ -214,7 +214,6 @@ set(kalarm_bin_SRCS ${libkalarm_SRCS} ${resources_SRCS}
     templatepickdlg.cpp
     templatedlg.cpp
     templatemenuaction.cpp
-    migratekde4files.cpp
     birthdaydlg.h
     editdlg.h
     editdlgtypes.h
@@ -263,7 +262,6 @@ set(kalarm_bin_SRCS ${libkalarm_SRCS} ${resources_SRCS}
     templatepickdlg.h
     templatedlg.h
     templatemenuaction.h
-    migratekde4files.h
 )
 if (ENABLE_WAKE_FROM_SUSPEND)
     set(kalarm_bin_SRCS ${kalarm_bin_SRCS}

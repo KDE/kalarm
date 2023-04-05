@@ -22,9 +22,6 @@
 #include <KLocalizedString>
 #include <KConfig>
 #include <KConfigGroup>
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-#include <Kdelibs4Migration>
-#endif
 
 #include <QStandardPaths>
 #include <QDirIterator>

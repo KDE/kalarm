@@ -2295,14 +2295,7 @@ KADateTime KADateTime::fromString(const QString& string, TimeFormat format, bool
                 }
             }
             QStringList parts1 = match.capturedTexts();
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-            // Append any missing empty texts
-            const int n = dateOnly ? 4 : 12;
-            while (parts1.size() < n)
-                parts1.append(QString());
-#else
             parts1.resize(dateOnly ? 4 : 12);   // append any missing empty texts
-#endif
             const QStringList parts = parts1;
             bool ok;
             bool ok1;

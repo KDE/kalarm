@@ -393,11 +393,7 @@ void DayMatrix::mousePressEvent(QMouseEvent* e)
     {
         if (i < mSelStart  ||  i > mSelEnd)
             setMouseSelection(i, i, true);
-#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
         popupMenu(e->globalPosition().toPoint());
-#else
-        popupMenu(e->globalPos());
-#endif
     }
     else if (e->button() == Qt::LeftButton)
     {

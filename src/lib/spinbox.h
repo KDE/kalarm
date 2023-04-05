@@ -141,11 +141,7 @@ public:
     void         setUpDownOnly(bool only)              { mUpDownOnly = only; }
 
     /** Initialise a QStyleOptionSpinBox with this instance's details. */
-#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
     void         initStyleOption(QStyleOptionSpinBox*) const override;
-#else
-    void         initStyleOption(QStyleOptionSpinBox*) const;
-#endif
 
 Q_SIGNALS:
     /** Signal emitted when the spin box's value is stepped (by the shifted or unshifted increment).

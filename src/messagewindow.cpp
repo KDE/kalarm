@@ -36,11 +36,7 @@
 #include <KX11Extras>
 #include <KWindowInfo>
 #include <netwm.h>
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-#include <QX11Info>
-#else
 #include <QGuiApplication>
-#endif
 #endif
 #include <QTextBrowser>
 #include <QScrollBar>
@@ -1350,15 +1346,11 @@ FullScreenType haveFullScreenWindow(int screen)
 #if ENABLE_X11
     if (KWindowSystem::isPlatformX11())
     {
-#if QT_VERSION >= QT_VERSION_CHECK(6, 2, 0)
         using namespace QNativeInterface;
         auto* x11App = qGuiApp->nativeInterface<QX11Application>();
         if (!x11App)
             return type;
         xcb_connection_t* connection = x11App->connection();
-#else
-        xcb_connection_t* connection = QX11Info::connection();
-#endif
         const NETRootInfo rootInfo(connection, NET::ClientList | NET::ActiveWindow, NET::Properties2(), screen);
         const xcb_window_t rootWindow   = rootInfo.rootWindow();
         const xcb_window_t activeWindow = rootInfo.activeWindow();
@@ -1392,15 +1384,11 @@ FullScreenType findFullScreenWindows(const QList<QRect> &screenRects,
 #if ENABLE_X11
     if (KWindowSystem::isPlatformX11())
     {
-#if QT_VERSION >= QT_VERSION_CHECK(6, 2, 0)
         using namespace QNativeInterface;
         auto* x11App = qGuiApp->nativeInterface<QX11Application>();
         if (!x11App)
             return result;
         xcb_connection_t* connection = x11App->connection();
-#else
-        xcb_connection_t* connection = QX11Info::connection();
-#endif
         const NETRootInfo rootInfo(connection, NET::ClientList | NET::ActiveWindow, NET::Properties2());
         const xcb_window_t rootWindow   = rootInfo.rootWindow();
         const xcb_window_t activeWindow = rootInfo.activeWindow();

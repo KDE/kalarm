@@ -28,9 +28,6 @@
 #include "lib/messagebox.h"
 #include "notifications_interface.h" // DBUS-generated
 #include "dbusproperties.h"          // DBUS-generated
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-#include "migratekde4files.h"
-#endif
 #include "kalarmcalendar/datetime.h"
 #include "kalarmcalendar/karecurrence.h"
 #include "kalarm_debug.h"
@@ -137,11 +134,6 @@ KAlarmApp* KAlarmApp::create(int& argc, char** argv)
 */
 void KAlarmApp::initialise()
 {
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-    // Migrate config and data files from KDE4 locations.
-    MigrateKde4Files::migrate();
-#endif
-
 #ifndef NDEBUG
     KAlarm::setTestModeConditions();
 #endif
