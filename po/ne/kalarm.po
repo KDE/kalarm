@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-31 00:48+0000\n"
+"POT-Creation-Date: 2023-04-06 00:48+0000\n"
 "PO-Revision-Date: 2007-09-07 11:50+0545\n"
 "Last-Translator: Nabin Gautam <nabin@mpp.org.np>\n"
 "Language-Team: Nepali <info@mpp.org.np>\n"
@@ -2209,7 +2209,7 @@ msgctxt "@info"
 msgid "Cannot defer reminder past the main alarm time (%1)"
 msgstr "पहिलाको मुख्य संसूचक समय (%1) को सचेतक सार्न सकिँदैन"
 
-#: displaycalendar.cpp:127
+#: displaycalendar.cpp:128
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "Error loading calendar:\n"
@@ -2226,7 +2226,7 @@ msgstr ""
 "\n"
 "कृपया फाइल किटान गर्नुहोस् वा मेट्नुहोस् ।"
 
-#: displaycalendar.cpp:172
+#: displaycalendar.cpp:175
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "Failed to save calendar to\n"
@@ -3518,47 +3518,47 @@ msgctxt "@title:window"
 msgid "Choose Alarm Font & Color"
 msgstr "संसूचक फन्ट र रङ रोज्नुहोस्"
 
-#: functions.cpp:145
+#: functions.cpp:146
 #, kde-format
 msgctxt "@action"
 msgid "Stop Play"
 msgstr ""
 
-#: functions.cpp:192
+#: functions.cpp:193
 #, fuzzy, kde-format
 #| msgid "Enable &Alarms"
 msgctxt "@action"
 msgid "Enable &Alarms"
 msgstr "संसूचक सक्षम पार्नुहोस्"
 
-#: functions.cpp:218
+#: functions.cpp:219
 #, fuzzy, kde-format
 #| msgid "Alarm List"
 msgctxt "@action"
 msgid "Spread Windows"
 msgstr "संसूचक सूची"
 
-#: functions.cpp:872
+#: functions.cpp:873
 #, fuzzy, kde-format
 #| msgid "Calendar Files"
 msgctxt "@title:window"
 msgid "Import Calendar Files"
 msgstr "क्यालेन्डर फाइल"
 
-#: functions.cpp:933
+#: functions.cpp:934
 #, fuzzy, kde-format
 #| msgid "Calendar Files"
 msgctxt "@item:inlistbox File type selection filter"
 msgid "Calendar Files"
 msgstr "क्यालेन्डर फाइल"
 
-#: functions.cpp:934
+#: functions.cpp:935
 #, kde-format
 msgctxt "@title:window"
 msgid "Choose Export Calendar"
 msgstr ""
 
-#: functions.cpp:959
+#: functions.cpp:960
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "Cannot upload calendar to\n"
@@ -3569,7 +3569,7 @@ msgstr ""
 "'%1'\n"
 "मा क्यालेन्डर अनलोड गर्न सकिँदैन"
 
-#: functions.cpp:998
+#: functions.cpp:999
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "Failed to save calendar to\n"
@@ -3580,7 +3580,7 @@ msgstr ""
 "'%1' मा\n"
 "क्यालेन्डर बचत गर्न असफल"
 
-#: functions.cpp:1011
+#: functions.cpp:1012
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "Cannot upload calendar to\n"
@@ -3591,42 +3591,42 @@ msgstr ""
 "'%1'\n"
 "मा क्यालेन्डर अनलोड गर्न सकिँदैन"
 
-#: functions.cpp:1031
+#: functions.cpp:1034
 #, fuzzy, kde-format
 #| msgid "Unable to show alarms in KOrganizer"
 msgctxt "@info"
 msgid "Unable to show alarms in KOrganizer"
 msgstr "केडीई आयोजकमा संसूचक देखाउन असमर्थ"
 
-#: functions.cpp:1032
+#: functions.cpp:1035
 #, fuzzy, kde-format
 #| msgid "Unable to show alarm in KOrganizer"
 msgctxt "@info"
 msgid "Unable to show alarm in KOrganizer"
 msgstr "केडीई आयोजकमा संसूचक देखाउन असमर्थ"
 
-#: functions.cpp:1035
+#: functions.cpp:1038
 #, fuzzy, kde-format
 #| msgid "Unable to update alarm in KOrganizer"
 msgctxt "@info"
 msgid "Unable to update alarm in KOrganizer"
 msgstr "केडीई आयोजकमा संसूचक अद्यावधिक गर्न असमर्थ"
 
-#: functions.cpp:1038
+#: functions.cpp:1041
 #, fuzzy, kde-format
 #| msgid "Unable to delete alarms from KOrganizer"
 msgctxt "@info"
 msgid "Unable to delete alarms from KOrganizer"
 msgstr "केडीई आयोजकबाट संसूचक मेट्न असमर्थ"
 
-#: functions.cpp:1039
+#: functions.cpp:1042
 #, fuzzy, kde-format
 #| msgid "Unable to delete alarm from KOrganizer"
 msgctxt "@info"
 msgid "Unable to delete alarm from KOrganizer"
 msgstr "केडीई आयोजकबाट संसूचक मेट्न असमर्थ"
 
-#: functions.cpp:1049
+#: functions.cpp:1052
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "%1\n"
@@ -3637,7 +3637,7 @@ msgstr ""
 "%1\n"
 "तपाईँ परिवर्तन बचत गर्ने चाहानामा निश्चित हुनुहुन्छ ?"
 
-#: functions.cpp:1052
+#: functions.cpp:1055
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "%1\n"
@@ -3648,7 +3648,7 @@ msgstr ""
 "%1\n"
 "तपाईँ परिवर्तन बचत गर्ने चाहानामा निश्चित हुनुहुन्छ ?"
 
-#: functions.cpp:1055
+#: functions.cpp:1058
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "%1\n"
@@ -3659,26 +3659,26 @@ msgstr ""
 "%1\n"
 "तपाईँ परिवर्तन बचत गर्ने चाहानामा निश्चित हुनुहुन्छ ?"
 
-#: functions.cpp:1305
+#: functions.cpp:1308
 #, kde-format
 msgctxt "info"
 msgid "The scheduled Wake from Suspend has been cancelled."
 msgstr ""
 
-#: functions.cpp:1338
+#: functions.cpp:1341
 #, kde-format
 msgctxt "@info"
 msgid "Error obtaining authorization (%1)"
 msgstr ""
 
-#: functions.cpp:1387
+#: functions.cpp:1390
 #, fuzzy, kde-format
 #| msgid "You must select a resource to save the alarm in"
 msgctxt "@info"
 msgid "You must enable a template calendar to save the template in"
 msgstr "तपाईँले संसूचकलाई बचत गर्न संसाधन चयन गर्नुपर्दछ"
 
-#: functions.cpp:1610
+#: functions.cpp:1613
 #, fuzzy, kde-kuit-format
 #| msgctxt "Please set the 'From' email address..."
 #| msgid ""
@@ -3690,7 +3690,7 @@ msgstr ""
 "%1\n"
 "कृपया यसलाई प्राथमिकता संवादमा सेट गर्नुहोस् ।"
 
-#: functions.cpp:1614
+#: functions.cpp:1617
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "Alarms are currently disabled.\n"
@@ -3703,70 +3703,70 @@ msgstr ""
 "संसूचक हालै अक्षम पारिएका छन् ।\n"
 "तपाईँ संसूचक अहिले सक्षम पार्न चाहनुहुन्छ ?"
 
-#: functions.cpp:1615
+#: functions.cpp:1618
 #, fuzzy, kde-format
 #| msgid "Enable"
 msgctxt "@action:button"
 msgid "Enable"
 msgstr "सक्षम पार्नुहोस्"
 
-#: functions.cpp:1615
+#: functions.cpp:1618
 #, fuzzy, kde-format
 #| msgid "Keep Disabled"
 msgctxt "@action:button"
 msgid "Keep Disabled"
 msgstr "अक्षम राख्नुहोस्"
 
-#: functions.cpp:1985
+#: functions.cpp:1988
 #, fuzzy, kde-format
 #| msgid "Error saving alarms"
 msgctxt "@info"
 msgid "Error saving alarms"
 msgstr "संसूचक बचत गर्दा त्रुटि"
 
-#: functions.cpp:1986
+#: functions.cpp:1989
 #, fuzzy, kde-format
 #| msgid "Error saving alarm"
 msgctxt "@info"
 msgid "Error saving alarm"
 msgstr "संसूचक बचत गर्दा त्रुटि"
 
-#: functions.cpp:1989
+#: functions.cpp:1992
 #, fuzzy, kde-format
 #| msgid "Error deleting alarms"
 msgctxt "@info"
 msgid "Error deleting alarms"
 msgstr "संसूचक मेट्दा त्रुटि"
 
-#: functions.cpp:1990
+#: functions.cpp:1993
 #, fuzzy, kde-format
 #| msgid "Error deleting alarm"
 msgctxt "@info"
 msgid "Error deleting alarm"
 msgstr "संसूचक मेट्दा त्रुटि"
 
-#: functions.cpp:1993
+#: functions.cpp:1996
 #, fuzzy, kde-format
 #| msgid "Error saving reactivated alarms"
 msgctxt "@info"
 msgid "Error saving reactivated alarms"
 msgstr "पुन: सक्रिय पारिएका संसूचक बचत गर्दा त्रुटि"
 
-#: functions.cpp:1994
+#: functions.cpp:1997
 #, fuzzy, kde-format
 #| msgid "Error saving reactivated alarm"
 msgctxt "@info"
 msgid "Error saving reactivated alarm"
 msgstr "पुन: सक्रिय पारिएका संसूचक बचत गर्दा त्रुटि"
 
-#: functions.cpp:1997
+#: functions.cpp:2000
 #, fuzzy, kde-format
 #| msgid "Error saving alarm templates"
 msgctxt "@info"
 msgid "Error saving alarm templates"
 msgstr "संसूचक टेम्प्लेट बचत गर्दा त्रुटि"
 
-#: functions.cpp:1998
+#: functions.cpp:2001
 #, fuzzy, kde-format
 #| msgid "Error saving alarm template"
 msgctxt "@info"

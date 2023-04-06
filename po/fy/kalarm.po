@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-31 00:48+0000\n"
+"POT-Creation-Date: 2023-04-06 00:48+0000\n"
 "PO-Revision-Date: 2007-04-24 00:52+0200\n"
 "Last-Translator: Rinse de Vries <rinsedevries@kde.nl>\n"
 "Language-Team: Frysk <kde-i18n-fry@kde.org>\n"
@@ -2199,7 +2199,7 @@ msgctxt "@info"
 msgid "Cannot defer reminder past the main alarm time (%1)"
 msgstr "Kin it omtinken net ynstelle oant nei it alaarm (%1) sels"
 
-#: displaycalendar.cpp:127
+#: displaycalendar.cpp:128
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "Error loading calendar:\n"
@@ -2216,7 +2216,7 @@ msgstr ""
 "\n"
 "Reparearje of wiskje de triem."
 
-#: displaycalendar.cpp:172
+#: displaycalendar.cpp:175
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "Failed to save calendar to\n"
@@ -3535,47 +3535,47 @@ msgctxt "@title:window"
 msgid "Choose Alarm Font & Color"
 msgstr "Kies lettertype && kleur fan alaarm"
 
-#: functions.cpp:145
+#: functions.cpp:146
 #, kde-format
 msgctxt "@action"
 msgid "Stop Play"
 msgstr ""
 
-#: functions.cpp:192
+#: functions.cpp:193
 #, fuzzy, kde-format
 #| msgid "Enable &Alarms"
 msgctxt "@action"
 msgid "Enable &Alarms"
 msgstr "Alaarms ynske&akelje"
 
-#: functions.cpp:218
+#: functions.cpp:219
 #, fuzzy, kde-format
 #| msgid "Alarm List"
 msgctxt "@action"
 msgid "Spread Windows"
 msgstr "Alaarmlist"
 
-#: functions.cpp:872
+#: functions.cpp:873
 #, fuzzy, kde-format
 #| msgid "Calendar Files"
 msgctxt "@title:window"
 msgid "Import Calendar Files"
 msgstr "Agindatriemmen"
 
-#: functions.cpp:933
+#: functions.cpp:934
 #, fuzzy, kde-format
 #| msgid "Calendar Files"
 msgctxt "@item:inlistbox File type selection filter"
 msgid "Calendar Files"
 msgstr "Agindatriemmen"
 
-#: functions.cpp:934
+#: functions.cpp:935
 #, kde-format
 msgctxt "@title:window"
 msgid "Choose Export Calendar"
 msgstr ""
 
-#: functions.cpp:959
+#: functions.cpp:960
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "Cannot open audio file:\n"
@@ -3586,7 +3586,7 @@ msgstr ""
 "Dit lûdstriem kin net iepene wurde:\n"
 "%1"
 
-#: functions.cpp:998
+#: functions.cpp:999
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "Failed to save calendar to\n"
@@ -3597,7 +3597,7 @@ msgstr ""
 "De aginda kin net opslein wurde yn\n"
 "'%1'"
 
-#: functions.cpp:1011
+#: functions.cpp:1012
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "Cannot open audio file:\n"
@@ -3608,42 +3608,42 @@ msgstr ""
 "Dit lûdstriem kin net iepene wurde:\n"
 "%1"
 
-#: functions.cpp:1031
+#: functions.cpp:1034
 #, fuzzy, kde-format
 #| msgid "Unable to show alarms in KOrganizer"
 msgctxt "@info"
 msgid "Unable to show alarms in KOrganizer"
 msgstr "Koe gjin alaarms yn KOrganizer toane"
 
-#: functions.cpp:1032
+#: functions.cpp:1035
 #, fuzzy, kde-format
 #| msgid "Unable to show alarm in KOrganizer"
 msgctxt "@info"
 msgid "Unable to show alarm in KOrganizer"
 msgstr "Koe gjin alaarms yn KOrganizer toane"
 
-#: functions.cpp:1035
+#: functions.cpp:1038
 #, fuzzy, kde-format
 #| msgid "Unable to update alarm in KOrganizer"
 msgctxt "@info"
 msgid "Unable to update alarm in KOrganizer"
 msgstr "Koe it alaarm yn KOrganizer net bywurkje"
 
-#: functions.cpp:1038
+#: functions.cpp:1041
 #, fuzzy, kde-format
 #| msgid "Unable to delete alarms from KOrganizer"
 msgctxt "@info"
 msgid "Unable to delete alarms from KOrganizer"
 msgstr "Koe dit alaarm yn KOrganizer net wiskje"
 
-#: functions.cpp:1039
+#: functions.cpp:1042
 #, fuzzy, kde-format
 #| msgid "Unable to delete alarm from KOrganizer"
 msgctxt "@info"
 msgid "Unable to delete alarm from KOrganizer"
 msgstr "Koe it alaarm yn KOrganizer net wiskje"
 
-#: functions.cpp:1049
+#: functions.cpp:1052
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "%1\n"
@@ -3654,7 +3654,7 @@ msgstr ""
 "%1\n"
 "Wolle jo de feroarings opslaan?"
 
-#: functions.cpp:1052
+#: functions.cpp:1055
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "%1\n"
@@ -3665,7 +3665,7 @@ msgstr ""
 "%1\n"
 "Wolle jo de feroarings opslaan?"
 
-#: functions.cpp:1055
+#: functions.cpp:1058
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "%1\n"
@@ -3676,26 +3676,26 @@ msgstr ""
 "%1\n"
 "Wolle jo de feroarings opslaan?"
 
-#: functions.cpp:1305
+#: functions.cpp:1308
 #, kde-format
 msgctxt "info"
 msgid "The scheduled Wake from Suspend has been cancelled."
 msgstr ""
 
-#: functions.cpp:1338
+#: functions.cpp:1341
 #, kde-format
 msgctxt "@info"
 msgid "Error obtaining authorization (%1)"
 msgstr ""
 
-#: functions.cpp:1387
+#: functions.cpp:1390
 #, fuzzy, kde-format
 #| msgid "Select a template to base the new alarm on."
 msgctxt "@info"
 msgid "You must enable a template calendar to save the template in"
 msgstr "Selektearje in sjabloan wêrop't jo it nije alaarm basearje wolle."
 
-#: functions.cpp:1610
+#: functions.cpp:1613
 #, fuzzy, kde-kuit-format
 #| msgctxt "Please set the 'From' email address..."
 #| msgid ""
@@ -3707,7 +3707,7 @@ msgstr ""
 "%1\n"
 "Jou 'Fan'-adres op yn it dialoochfinster 'Foarkarren'."
 
-#: functions.cpp:1614
+#: functions.cpp:1617
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "Alarms are currently disabled.\n"
@@ -3720,70 +3720,70 @@ msgstr ""
 "De alaarms steane no út.\n"
 "Wolle jo dizze no ynskeakelje?"
 
-#: functions.cpp:1615
+#: functions.cpp:1618
 #, fuzzy, kde-format
 #| msgid "Enable"
 msgctxt "@action:button"
 msgid "Enable"
 msgstr "Ynskeakelje"
 
-#: functions.cpp:1615
+#: functions.cpp:1618
 #, fuzzy, kde-format
 #| msgid "Keep Disabled"
 msgctxt "@action:button"
 msgid "Keep Disabled"
 msgstr "Útskeakele litte"
 
-#: functions.cpp:1985
+#: functions.cpp:1988
 #, fuzzy, kde-format
 #| msgid "Error saving alarms"
 msgctxt "@info"
 msgid "Error saving alarms"
 msgstr "Fout by it opslaan fan de alaarms"
 
-#: functions.cpp:1986
+#: functions.cpp:1989
 #, fuzzy, kde-format
 #| msgid "Error saving alarm"
 msgctxt "@info"
 msgid "Error saving alarm"
 msgstr "Fout by it opslaan fan it alaarm"
 
-#: functions.cpp:1989
+#: functions.cpp:1992
 #, fuzzy, kde-format
 #| msgid "Error deleting alarms"
 msgctxt "@info"
 msgid "Error deleting alarms"
 msgstr "Fout by it wiskjen fan alaarms"
 
-#: functions.cpp:1990
+#: functions.cpp:1993
 #, fuzzy, kde-format
 #| msgid "Error deleting alarm"
 msgctxt "@info"
 msgid "Error deleting alarm"
 msgstr "Fout by it wiskjen fan it alaarm"
 
-#: functions.cpp:1993
+#: functions.cpp:1996
 #, fuzzy, kde-format
 #| msgid "Error saving reactivated alarms"
 msgctxt "@info"
 msgid "Error saving reactivated alarms"
 msgstr "Fout by it opslaan fan de opnij aktivearre alaarms"
 
-#: functions.cpp:1994
+#: functions.cpp:1997
 #, fuzzy, kde-format
 #| msgid "Error saving reactivated alarm"
 msgctxt "@info"
 msgid "Error saving reactivated alarm"
 msgstr "Fout by it opslaan fan it opnij aktivearre alaarm"
 
-#: functions.cpp:1997
+#: functions.cpp:2000
 #, fuzzy, kde-format
 #| msgid "Error saving alarm template"
 msgctxt "@info"
 msgid "Error saving alarm templates"
 msgstr "Fout by it opslaan fan it alaarmsjabloan"
 
-#: functions.cpp:1998
+#: functions.cpp:2001
 #, fuzzy, kde-format
 #| msgid "Error saving alarm template"
 msgctxt "@info"

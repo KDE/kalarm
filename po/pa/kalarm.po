@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-31 00:48+0000\n"
+"POT-Creation-Date: 2023-04-06 00:48+0000\n"
 "PO-Revision-Date: 2009-01-18 16:28+0530\n"
 "Last-Translator: A S Alam <aalam@users.sf.net>\n"
 "Language-Team: Punjabi <punjabi-l10n@users.sf.net>\n"
@@ -1862,7 +1862,7 @@ msgctxt "@info"
 msgid "Cannot defer reminder past the main alarm time (%1)"
 msgstr ""
 
-#: displaycalendar.cpp:127
+#: displaycalendar.cpp:128
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info"
 #| msgid "Invalid email attachment: <filename>%1</filename>"
@@ -1872,7 +1872,7 @@ msgid ""
 "para><para>Please fix or delete the file.</para>"
 msgstr "ਗਲਤ ਈਮੇਲ ਅਟੈਚਮੈਂਟ: <filename>%1</filename>"
 
-#: displaycalendar.cpp:172
+#: displaycalendar.cpp:175
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info"
 #| msgid "Invalid email attachment: <filename>%1</filename>"
@@ -2965,25 +2965,25 @@ msgctxt "@title:window"
 msgid "Choose Alarm Font & Color"
 msgstr ""
 
-#: functions.cpp:145
+#: functions.cpp:146
 #, kde-format
 msgctxt "@action"
 msgid "Stop Play"
 msgstr ""
 
-#: functions.cpp:192
+#: functions.cpp:193
 #, kde-format
 msgctxt "@action"
 msgid "Enable &Alarms"
 msgstr ""
 
-#: functions.cpp:218
+#: functions.cpp:219
 #, kde-format
 msgctxt "@action"
 msgid "Spread Windows"
 msgstr ""
 
-#: functions.cpp:872
+#: functions.cpp:873
 #, fuzzy, kde-format
 #| msgctxt "@info/plain"
 #| msgid "Calendar Files"
@@ -2991,7 +2991,7 @@ msgctxt "@title:window"
 msgid "Import Calendar Files"
 msgstr "ਕੈਲੰਡਰ ਫਾਇਲਾਂ"
 
-#: functions.cpp:933
+#: functions.cpp:934
 #, fuzzy, kde-format
 #| msgctxt "@info/plain"
 #| msgid "Calendar Files"
@@ -2999,13 +2999,13 @@ msgctxt "@item:inlistbox File type selection filter"
 msgid "Calendar Files"
 msgstr "ਕੈਲੰਡਰ ਫਾਇਲਾਂ"
 
-#: functions.cpp:934
+#: functions.cpp:935
 #, kde-format
 msgctxt "@title:window"
 msgid "Choose Export Calendar"
 msgstr ""
 
-#: functions.cpp:959
+#: functions.cpp:960
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info"
 #| msgid "Invalid email attachment: <filename>%1</filename>"
@@ -3013,7 +3013,7 @@ msgctxt "@info"
 msgid "Error loading calendar to append to:<nl/><filename>%1</filename>"
 msgstr "ਗਲਤ ਈਮੇਲ ਅਟੈਚਮੈਂਟ: <filename>%1</filename>"
 
-#: functions.cpp:998
+#: functions.cpp:999
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info"
 #| msgid "Invalid email attachment: <filename>%1</filename>"
@@ -3021,7 +3021,7 @@ msgctxt "@info"
 msgid "Failed to save new calendar to:<nl/><filename>%1</filename>"
 msgstr "ਗਲਤ ਈਮੇਲ ਅਟੈਚਮੈਂਟ: <filename>%1</filename>"
 
-#: functions.cpp:1011
+#: functions.cpp:1012
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info"
 #| msgid "Invalid email attachment: <filename>%1</filename>"
@@ -3029,37 +3029,37 @@ msgctxt "@info"
 msgid "Cannot upload new calendar to:<nl/><filename>%1</filename>"
 msgstr "ਗਲਤ ਈਮੇਲ ਅਟੈਚਮੈਂਟ: <filename>%1</filename>"
 
-#: functions.cpp:1031
+#: functions.cpp:1034
 #, kde-format
 msgctxt "@info"
 msgid "Unable to show alarms in KOrganizer"
 msgstr ""
 
-#: functions.cpp:1032
+#: functions.cpp:1035
 #, kde-format
 msgctxt "@info"
 msgid "Unable to show alarm in KOrganizer"
 msgstr ""
 
-#: functions.cpp:1035
+#: functions.cpp:1038
 #, kde-format
 msgctxt "@info"
 msgid "Unable to update alarm in KOrganizer"
 msgstr ""
 
-#: functions.cpp:1038
+#: functions.cpp:1041
 #, kde-format
 msgctxt "@info"
 msgid "Unable to delete alarms from KOrganizer"
 msgstr ""
 
-#: functions.cpp:1039
+#: functions.cpp:1042
 #, kde-format
 msgctxt "@info"
 msgid "Unable to delete alarm from KOrganizer"
 msgstr ""
 
-#: functions.cpp:1049
+#: functions.cpp:1052
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info:whatsthis"
 #| msgid "<para>%1</para><para>%2</para>"
@@ -3067,7 +3067,7 @@ msgctxt "@info"
 msgid "<para>%1</para><para>(Could not start KOrganizer)</para>"
 msgstr "<para>%1</para><para>%2</para>"
 
-#: functions.cpp:1052
+#: functions.cpp:1055
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info:whatsthis"
 #| msgid "<para>%1</para><para>%2</para>"
@@ -3075,7 +3075,7 @@ msgctxt "@info"
 msgid "<para>%1</para><para>(KOrganizer not fully started)</para>"
 msgstr "<para>%1</para><para>%2</para>"
 
-#: functions.cpp:1055
+#: functions.cpp:1058
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info:whatsthis"
 #| msgid "<para>%1</para><para>%2</para>"
@@ -3083,25 +3083,25 @@ msgctxt "@info"
 msgid "<para>%1</para><para>(Error communicating with KOrganizer)</para>"
 msgstr "<para>%1</para><para>%2</para>"
 
-#: functions.cpp:1305
+#: functions.cpp:1308
 #, kde-format
 msgctxt "info"
 msgid "The scheduled Wake from Suspend has been cancelled."
 msgstr ""
 
-#: functions.cpp:1338
+#: functions.cpp:1341
 #, kde-format
 msgctxt "@info"
 msgid "Error obtaining authorization (%1)"
 msgstr ""
 
-#: functions.cpp:1387
+#: functions.cpp:1390
 #, kde-format
 msgctxt "@info"
 msgid "You must enable a template calendar to save the template in"
 msgstr ""
 
-#: functions.cpp:1610
+#: functions.cpp:1613
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info:whatsthis"
 #| msgid "<para>%1</para><para>%2</para>"
@@ -3109,7 +3109,7 @@ msgctxt "@info Please set the 'From' email address..."
 msgid "<para>%1</para><para>Please set it in the Configuration dialog.</para>"
 msgstr "<para>%1</para><para>%2</para>"
 
-#: functions.cpp:1614
+#: functions.cpp:1617
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3117,62 +3117,62 @@ msgid ""
 "alarms now?</para>"
 msgstr ""
 
-#: functions.cpp:1615
+#: functions.cpp:1618
 #, kde-format
 msgctxt "@action:button"
 msgid "Enable"
 msgstr "ਯੋਗ"
 
-#: functions.cpp:1615
+#: functions.cpp:1618
 #, kde-format
 msgctxt "@action:button"
 msgid "Keep Disabled"
 msgstr ""
 
-#: functions.cpp:1985
+#: functions.cpp:1988
 #, kde-format
 msgctxt "@info"
 msgid "Error saving alarms"
 msgstr ""
 
-#: functions.cpp:1986
+#: functions.cpp:1989
 #, kde-format
 msgctxt "@info"
 msgid "Error saving alarm"
 msgstr ""
 
-#: functions.cpp:1989
+#: functions.cpp:1992
 #, kde-format
 msgctxt "@info"
 msgid "Error deleting alarms"
 msgstr ""
 
-#: functions.cpp:1990
+#: functions.cpp:1993
 #, kde-format
 msgctxt "@info"
 msgid "Error deleting alarm"
 msgstr ""
 
-#: functions.cpp:1993
+#: functions.cpp:1996
 #, kde-format
 msgctxt "@info"
 msgid "Error saving reactivated alarms"
 msgstr ""
 
-#: functions.cpp:1994
+#: functions.cpp:1997
 #, kde-format
 msgctxt "@info"
 msgid "Error saving reactivated alarm"
 msgstr ""
 
-#: functions.cpp:1997
+#: functions.cpp:2000
 #, fuzzy, kde-format
 #| msgid "&Templates..."
 msgctxt "@info"
 msgid "Error saving alarm templates"
 msgstr "ਨਮੂਨੇ(&T)..."
 
-#: functions.cpp:1998
+#: functions.cpp:2001
 #, kde-format
 msgctxt "@info"
 msgid "Error saving alarm template"

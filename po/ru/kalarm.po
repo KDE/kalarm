@@ -20,7 +20,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-31 00:48+0000\n"
+"POT-Creation-Date: 2023-04-06 00:48+0000\n"
 "PO-Revision-Date: 2023-02-19 17:11+0300\n"
 "Last-Translator: Alexander Yavorsky <kekcuha@gmail.com>\n"
 "Language-Team: Russian <kde-russian@lists.kde.ru>\n"
@@ -2019,7 +2019,7 @@ msgctxt "@info"
 msgid "Cannot defer reminder past the main alarm time (%1)"
 msgstr "Не удалось отложить основное напоминание в прошлое (текущее %1)"
 
-#: displaycalendar.cpp:127
+#: displaycalendar.cpp:128
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2029,7 +2029,7 @@ msgstr ""
 "<para>Ошибка загрузки календаря</para><para><filename>%1</filename></"
 "para><para>Исправьте или удалите файл календаря.</para>"
 
-#: displaycalendar.cpp:172
+#: displaycalendar.cpp:175
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Failed to save calendar to <filename>%1</filename>"
@@ -3131,43 +3131,43 @@ msgctxt "@title:window"
 msgid "Choose Alarm Font & Color"
 msgstr "Выбор шрифта и цвета напоминания"
 
-#: functions.cpp:145
+#: functions.cpp:146
 #, kde-format
 msgctxt "@action"
 msgid "Stop Play"
 msgstr "Остановить воспроизведение"
 
-#: functions.cpp:192
+#: functions.cpp:193
 #, kde-format
 msgctxt "@action"
 msgid "Enable &Alarms"
 msgstr "Активировать &напоминания"
 
-#: functions.cpp:218
+#: functions.cpp:219
 #, kde-format
 msgctxt "@action"
 msgid "Spread Windows"
 msgstr "Разбрасывать окна"
 
-#: functions.cpp:872
+#: functions.cpp:873
 #, kde-format
 msgctxt "@title:window"
 msgid "Import Calendar Files"
 msgstr "Импорт файлов календарей"
 
-#: functions.cpp:933
+#: functions.cpp:934
 #, kde-format
 msgctxt "@item:inlistbox File type selection filter"
 msgid "Calendar Files"
 msgstr "Файлы календарей"
 
-#: functions.cpp:934
+#: functions.cpp:935
 #, kde-format
 msgctxt "@title:window"
 msgid "Choose Export Calendar"
 msgstr "Экспорт в календарь"
 
-#: functions.cpp:959
+#: functions.cpp:960
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Error loading calendar to append to:<nl/><filename>%1</filename>"
@@ -3175,93 +3175,93 @@ msgstr ""
 "Не удалось прочитать календарь для последующего дописывания в него:<nl/"
 "><filename>%1</filename>"
 
-#: functions.cpp:998
+#: functions.cpp:999
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Failed to save new calendar to:<nl/><filename>%1</filename>"
 msgstr ""
 "Не удалось сохранить новый календарь в файл:<nl/><filename>%1</filename>"
 
-#: functions.cpp:1011
+#: functions.cpp:1012
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot upload new calendar to:<nl/><filename>%1</filename>"
 msgstr ""
 "Не удалось передать новый календарь на сервер:<nl/><filename>%1</filename>"
 
-#: functions.cpp:1031
+#: functions.cpp:1034
 #, kde-format
 msgctxt "@info"
 msgid "Unable to show alarms in KOrganizer"
 msgstr "Невозможно показать напоминания в KOrganizer"
 
-#: functions.cpp:1032
+#: functions.cpp:1035
 #, kde-format
 msgctxt "@info"
 msgid "Unable to show alarm in KOrganizer"
 msgstr "Невозможно показать напоминание в KOrganizer"
 
-#: functions.cpp:1035
+#: functions.cpp:1038
 #, kde-format
 msgctxt "@info"
 msgid "Unable to update alarm in KOrganizer"
 msgstr "Невозможно обновить напоминание в KOrganizer"
 
-#: functions.cpp:1038
+#: functions.cpp:1041
 #, kde-format
 msgctxt "@info"
 msgid "Unable to delete alarms from KOrganizer"
 msgstr "Невозможно удалить напоминания из KOrganizer"
 
-#: functions.cpp:1039
+#: functions.cpp:1042
 #, kde-format
 msgctxt "@info"
 msgid "Unable to delete alarm from KOrganizer"
 msgstr "Невозможно удалить напоминание из KOrganizer"
 
-#: functions.cpp:1049
+#: functions.cpp:1052
 #, kde-kuit-format
 msgctxt "@info"
 msgid "<para>%1</para><para>(Could not start KOrganizer)</para>"
 msgstr "<para>%1</para><para>(Не удалось запустить KOrganizer)</para>"
 
-#: functions.cpp:1052
+#: functions.cpp:1055
 #, kde-kuit-format
 msgctxt "@info"
 msgid "<para>%1</para><para>(KOrganizer not fully started)</para>"
 msgstr "<para>%1</para><para>(KOrganizer запустился не до конца)</para>"
 
-#: functions.cpp:1055
+#: functions.cpp:1058
 #, kde-kuit-format
 msgctxt "@info"
 msgid "<para>%1</para><para>(Error communicating with KOrganizer)</para>"
 msgstr "<para>%1</para><para>(Ошибка соединения с KOrganizer)</para>"
 
-#: functions.cpp:1305
+#: functions.cpp:1308
 #, kde-format
 msgctxt "info"
 msgid "The scheduled Wake from Suspend has been cancelled."
 msgstr "Запланированный сигнал «разбудить систему» был отменён."
 
-#: functions.cpp:1338
+#: functions.cpp:1341
 #, kde-format
 msgctxt "@info"
 msgid "Error obtaining authorization (%1)"
 msgstr "Ошибка получения авторизации (%1)"
 
-#: functions.cpp:1387
+#: functions.cpp:1390
 #, kde-format
 msgctxt "@info"
 msgid "You must enable a template calendar to save the template in"
 msgstr "Включите календарь шаблонов, чтобы сохранить в нём шаблон"
 
-#: functions.cpp:1610
+#: functions.cpp:1613
 #, kde-kuit-format
 msgctxt "@info Please set the 'From' email address..."
 msgid "<para>%1</para><para>Please set it in the Configuration dialog.</para>"
 msgstr "<para>%1</para><para>Укажите его в параметрах настройки.</para>"
 
-#: functions.cpp:1614
+#: functions.cpp:1617
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3271,61 +3271,61 @@ msgstr ""
 "<para>В настоящее время показ напоминаний отключён.</para><para> "
 "Активировать показ напоминаний?</para>"
 
-#: functions.cpp:1615
+#: functions.cpp:1618
 #, kde-format
 msgctxt "@action:button"
 msgid "Enable"
 msgstr "Включить"
 
-#: functions.cpp:1615
+#: functions.cpp:1618
 #, kde-format
 msgctxt "@action:button"
 msgid "Keep Disabled"
 msgstr "Отключить"
 
-#: functions.cpp:1985
+#: functions.cpp:1988
 #, kde-format
 msgctxt "@info"
 msgid "Error saving alarms"
 msgstr "Ошибка сохранения напоминаний"
 
-#: functions.cpp:1986
+#: functions.cpp:1989
 #, kde-format
 msgctxt "@info"
 msgid "Error saving alarm"
 msgstr "Ошибка сохранения напоминания"
 
-#: functions.cpp:1989
+#: functions.cpp:1992
 #, kde-format
 msgctxt "@info"
 msgid "Error deleting alarms"
 msgstr "Ошибка удаления напоминаний"
 
-#: functions.cpp:1990
+#: functions.cpp:1993
 #, kde-format
 msgctxt "@info"
 msgid "Error deleting alarm"
 msgstr "Ошибка удаления напоминания"
 
-#: functions.cpp:1993
+#: functions.cpp:1996
 #, kde-format
 msgctxt "@info"
 msgid "Error saving reactivated alarms"
 msgstr "Ошибка сохранения прошедших напоминаний"
 
-#: functions.cpp:1994
+#: functions.cpp:1997
 #, kde-format
 msgctxt "@info"
 msgid "Error saving reactivated alarm"
 msgstr "Ошибка сохранения прошедшего напоминания"
 
-#: functions.cpp:1997
+#: functions.cpp:2000
 #, kde-format
 msgctxt "@info"
 msgid "Error saving alarm templates"
 msgstr "Ошибка сохранения шаблонов напоминания"
 
-#: functions.cpp:1998
+#: functions.cpp:2001
 #, kde-format
 msgctxt "@info"
 msgid "Error saving alarm template"
