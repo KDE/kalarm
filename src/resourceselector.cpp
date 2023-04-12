@@ -286,37 +286,37 @@ void ResourceSelector::initActions(KActionCollection* actions)
 {
     if (mActionReload)
         return;   // this function can only be called once
-    mActionReload      = new QAction(QIcon::fromTheme(QStringLiteral("view-refresh")), i18nc("@action Reload calendar", "Re&load"), this);
+    mActionReload      = new QAction(QIcon::fromTheme(QStringLiteral("view-refresh")), i18nc("@action Reload calendar", "Reload"), this);
     actions->addAction(QStringLiteral("resReload"), mActionReload);
     connect(mActionReload, &QAction::triggered, this, &ResourceSelector::reloadResource);
-    mActionShowDetails = new QAction(QIcon::fromTheme(QStringLiteral("help-about")), i18nc("@action", "Show &Details"), this);
+    mActionShowDetails = new QAction(QIcon::fromTheme(QStringLiteral("help-about")), i18nc("@action", "Show Details"), this);
     actions->addAction(QStringLiteral("resDetails"), mActionShowDetails);
     connect(mActionShowDetails, &QAction::triggered, this, &ResourceSelector::showInfo);
-    mActionSetColour   = new QAction(QIcon::fromTheme(QStringLiteral("color-picker")), i18nc("@action", "Set &Color..."), this);
+    mActionSetColour   = new QAction(QIcon::fromTheme(QStringLiteral("color-picker")), i18nc("@action", "Set Color..."), this);
     actions->addAction(QStringLiteral("resSetColour"), mActionSetColour);
     connect(mActionSetColour, &QAction::triggered, this, &ResourceSelector::setColour);
-    mActionClearColour   = new QAction(i18nc("@action", "Clear C&olor"), this);
+    mActionClearColour   = new QAction(i18nc("@action", "Clear Color"), this);
     actions->addAction(QStringLiteral("resClearColour"), mActionClearColour);
     connect(mActionClearColour, &QAction::triggered, this, &ResourceSelector::clearColour);
-    mActionEdit        = new QAction(QIcon::fromTheme(QStringLiteral("document-properties")), i18nc("@action", "&Edit..."), this);
+    mActionEdit        = new QAction(QIcon::fromTheme(QStringLiteral("document-properties")), i18nc("@action", "Edit..."), this);
     actions->addAction(QStringLiteral("resEdit"), mActionEdit);
     connect(mActionEdit, &QAction::triggered, this, &ResourceSelector::editResource);
-    mActionUpdate      = new QAction(i18nc("@action", "&Update Calendar Format"), this);
+    mActionUpdate      = new QAction(i18nc("@action", "Update Calendar Format"), this);
     actions->addAction(QStringLiteral("resUpdate"), mActionUpdate);
     connect(mActionUpdate, &QAction::triggered, this, &ResourceSelector::updateResource);
-    mActionRemove      = new QAction(QIcon::fromTheme(QStringLiteral("edit-delete")), i18nc("@action", "&Remove"), this);
+    mActionRemove      = new QAction(QIcon::fromTheme(QStringLiteral("edit-delete")), i18nc("@action", "Remove"), this);
     actions->addAction(QStringLiteral("resRemove"), mActionRemove);
     connect(mActionRemove, &QAction::triggered, this, &ResourceSelector::removeResource);
     mActionSetDefault  = new KToggleAction(this);
     actions->addAction(QStringLiteral("resDefault"), mActionSetDefault);
     connect(mActionSetDefault, &KToggleAction::triggered, this, &ResourceSelector::setStandard);
-    QAction* action    = new QAction(QIcon::fromTheme(QStringLiteral("document-new")), i18nc("@action", "&Add..."), this);
+    QAction* action    = new QAction(QIcon::fromTheme(QStringLiteral("document-new")), i18nc("@action", "Add..."), this);
     actions->addAction(QStringLiteral("resAdd"), action);
     connect(action, &QAction::triggered, this, &ResourceSelector::addResource);
-    mActionImport      = new QAction(i18nc("@action", "Im&port..."), this);
+    mActionImport      = new QAction(i18nc("@action", "Import..."), this);
     actions->addAction(QStringLiteral("resImport"), mActionImport);
     connect(mActionImport, &QAction::triggered, this, &ResourceSelector::importCalendar);
-    mActionExport      = new QAction(i18nc("@action", "E&xport..."), this);
+    mActionExport      = new QAction(i18nc("@action", "Export..."), this);
     actions->addAction(QStringLiteral("resExport"), mActionExport);
     connect(mActionExport, &QAction::triggered, this, &ResourceSelector::exportCalendar);
 }
@@ -369,9 +369,9 @@ void ResourceSelector::contextMenuRequested(const QPoint& viewportPos)
     QString text;
     switch (type)
     {
-        case CalEvent::ACTIVE:   text = i18nc("@action", "Use as &Default for Active Alarms");  break;
-        case CalEvent::ARCHIVED: text = i18nc("@action", "Use as &Default for Archived Alarms");  break;
-        case CalEvent::TEMPLATE: text = i18nc("@action", "Use as &Default for Alarm Templates");  break;
+        case CalEvent::ACTIVE:   text = i18nc("@action", "Use as Default for Active Alarms");  break;
+        case CalEvent::ARCHIVED: text = i18nc("@action", "Use as Default for Archived Alarms");  break;
+        case CalEvent::TEMPLATE: text = i18nc("@action", "Use as Default for Alarm Templates");  break;
         default:  break;
     }
     mActionSetDefault->setText(text);

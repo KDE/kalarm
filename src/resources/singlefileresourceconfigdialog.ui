@@ -83,7 +83,7 @@
         <item>
          <widget class="QRadioButton" name="activeRadio">
           <property name="text">
-           <string comment="@option:radio">Acti&amp;ve Alarms</string>
+           <string comment="@option:radio">Active Alarms</string>
           </property>
           <property name="checked">
            <bool>false</bool>
@@ -109,7 +109,7 @@
         <item>
          <widget class="QRadioButton" name="templateRadio">
           <property name="text">
-           <string comment="@option:radio">Alarm &amp;Templates</string>
+           <string comment="@option:radio">Alarm Templates</string>
           </property>
           <property name="checked">
            <bool>false</bool>
@@ -198,7 +198,7 @@
         <item>
          <widget class="QLabel" name="label_1">
           <property name="text">
-           <string comment="@label:textbox">&amp;Name:</string>
+           <string comment="@label:textbox">Name:</string>
           </property>
           <property name="buddy">
            <cstring>displayNameText</cstring>

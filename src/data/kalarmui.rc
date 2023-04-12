@@ -16,7 +16,7 @@
  </ToolBar>
  <MenuBar>
   <Menu name="file" >
-   <text>&amp;File</text>
+   <text>File</text>
    <Action name="new" />
    <Action name="copy" />
    <Separator/>
@@ -28,7 +28,7 @@
    <Action name="exportAlarms" />
   </Menu>
   <Menu noMerge="1" name="edit" >
-   <text>&amp;Edit</text>
+   <text>Edit</text>
    <Action name="edit_undo" />
    <Action name="edit_redo" />
    <Separator/>
@@ -43,7 +43,7 @@
    <Action name="edit_find_prev" />
   </Menu>
   <Menu name="view" >
-   <text>&amp;View</text>
+   <text>View</text>
    <Action name="showArchivedAlarms" />
    <Action name="showInSystemTray" />
    <Separator/>
@@ -53,7 +53,7 @@
    <Action name="spread" />
   </Menu>
   <Menu name="actions" >
-   <text>&amp;Actions</text>
+   <text>Actions</text>
    <Action name="undelete" />
    <Action name="disable" />
    <Separator/>
@@ -65,7 +65,7 @@
    <Action name="stopAudio" />
   </Menu>
   <Menu noMerge="1" name="settings" >
-   <text>&amp;Settings</text>
+   <text>Settings</text>
    <Action name="options_show_menubar"/>
    <Merge name="StandardToolBarMenuHandler" />
    <Separator/>

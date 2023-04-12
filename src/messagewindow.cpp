@@ -427,7 +427,7 @@ void MessageWindow::setUpDisplay()
     if (mShowEdit())
     {
         // Edit button
-        mEditButton = new PushButton(i18nc("@action:button", "&Edit..."), topWidget);
+        mEditButton = new PushButton(i18nc("@action:button", "Edit..."), topWidget);
         mEditButton->setFocusPolicy(Qt::ClickFocus);    // don't allow keyboard selection
         connect(mEditButton, &QAbstractButton::clicked, this, &MessageWindow::slotEdit);
         grid->addWidget(mEditButton, 0, gridIndex++, Qt::AlignHCenter);
@@ -436,7 +436,7 @@ void MessageWindow::setUpDisplay()
     }
 
     // Defer button
-    mDeferButton = new PushButton(i18nc("@action:button", "&Defer..."), topWidget);
+    mDeferButton = new PushButton(i18nc("@action:button", "Defer..."), topWidget);
     mDeferButton->setFocusPolicy(Qt::ClickFocus);    // don't allow keyboard selection
     connect(mDeferButton, &QAbstractButton::clicked, this, &MessageWindow::slotDefer);
     grid->addWidget(mDeferButton, 0, gridIndex++, Qt::AlignHCenter);

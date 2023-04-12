@@ -65,7 +65,7 @@ TrayWindow::TrayWindow(MainWindow* parent)
     connect(theApp(), &KAlarmApp::alarmEnabledToggled, this, &TrayWindow::setEnabledStatus);
     contextMenu()->addSeparator();
 
-    mActionNew = new NewAlarmAction(false, i18nc("@action", "&New Alarm"), this);
+    mActionNew = new NewAlarmAction(false, i18nc("@action", "New Alarm"), this);
     addAction(QStringLiteral("tNew"), mActionNew);
     contextMenu()->addAction(mActionNew);
     connect(mActionNew, &NewAlarmAction::selected, this, &TrayWindow::slotNewAlarm);

@@ -1061,7 +1061,7 @@ Rule::Rule(const QString& freqText, const QString& freqWhatsThis, bool time, boo
     auto boxLayout = new QHBoxLayout(box);
     boxLayout->setContentsMargins(0, 0, 0, 0);
 
-    QLabel* label = new QLabel(i18nc("@label:spinbox", "Recur e&very"), box);
+    QLabel* label = new QLabel(i18nc("@label:spinbox", "Recur every"), box);
     boxLayout->addWidget(label, 0, Qt::AlignLeft);
     if (time)
     {
@@ -1149,7 +1149,7 @@ DayWeekRule::DayWeekRule(const QString& freqText, const QString& freqWhatsThis, 
     grid->setRowStretch(0, 1);
     layout()->addLayout(grid);
 
-    QLabel* label = new QLabel(i18nc("@label On: Tuesday", "O&n:"), this);
+    QLabel* label = new QLabel(i18nc("@label On: Tuesday", "On:"), this);
     grid->addWidget(label, 0, 0, Qt::AlignRight | Qt::AlignTop);
     grid->setColumnMinimumWidth(1, style()->pixelMetric(QStyle::PM_LayoutHorizontalSpacing));
 
@@ -1298,7 +1298,7 @@ MonthYearRule::MonthYearRule(const QString& freqText, const QString& freqWhatsTh
     boxLayout->setContentsMargins(0, 0, 0, 0);
     layout()->addLayout(boxLayout);
 
-    mDayButton = new RadioButton(i18nc("@option:radio On day number in the month", "O&n day"), this);
+    mDayButton = new RadioButton(i18nc("@option:radio On day number in the month", "On day"), this);
     mDayButton->setFixedSize(mDayButton->sizeHint());
     mDayButton->setReadOnly(readOnly);
     mButtonGroup->addButton(mDayButton);
@@ -1320,7 +1320,7 @@ MonthYearRule::MonthYearRule(const QString& freqText, const QString& freqWhatsTh
     boxLayout->addWidget(mDayCombo, 0, 1, 1, 2, Qt::AlignLeft);
 
     // Month position selector
-    mPosButton = new RadioButton(i18nc("@option:radio On the 1st Tuesday", "On t&he"), this);
+    mPosButton = new RadioButton(i18nc("@option:radio On the 1st Tuesday", "On the"), this);
     mPosButton->setFixedSize(mPosButton->sizeHint());
     mPosButton->setReadOnly(readOnly);
     mButtonGroup->addButton(mPosButton);
@@ -1527,7 +1527,7 @@ YearlyRule::YearlyRule(bool readOnly, QWidget* parent)
     f29box->addWidget(w, 0, Qt::AlignLeft);
     auto boxLayout = new QHBoxLayout(w);
     boxLayout->setContentsMargins(0, 0, 0, 0);
-    mFeb29Label = new QLabel(i18nc("@label:listbox", "February 2&9th alarm in non-leap years:"));
+    mFeb29Label = new QLabel(i18nc("@label:listbox", "February 29th alarm in non-leap years:"));
     boxLayout->addWidget(mFeb29Label);
     mFeb29Combo = new ComboBox();
     mFeb29Combo->setEditable(false);

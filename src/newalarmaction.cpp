@@ -42,16 +42,16 @@ NewAlarmAction::NewAlarmAction(bool templates, const QString& label, QObject* pa
     : KActionMenu(QIcon::fromTheme(QStringLiteral("document-new")), label, parent)
     , mActionCollection(collection)
 {
-    mDisplayAction = new QAction(QIcon::fromTheme(DISP_ICON), (templates ? i18nc("@item:inmenu", "&Display Alarm Template") : i18nc("@action", "New Display Alarm")), parent);
+    mDisplayAction = new QAction(QIcon::fromTheme(DISP_ICON), (templates ? i18nc("@item:inmenu", "Display Alarm Template") : i18nc("@action", "New Display Alarm")), parent);
     menu()->addAction(mDisplayAction);
     mTypes[mDisplayAction] = EditAlarmDlg::DISPLAY;
-    mCommandAction = new QAction(QIcon::fromTheme(CMD_ICON), (templates ? i18nc("@item:inmenu", "&Command Alarm Template") : i18nc("@action", "New Command Alarm")), parent);
+    mCommandAction = new QAction(QIcon::fromTheme(CMD_ICON), (templates ? i18nc("@item:inmenu", "Command Alarm Template") : i18nc("@action", "New Command Alarm")), parent);
     menu()->addAction(mCommandAction);
     mTypes[mCommandAction] = EditAlarmDlg::COMMAND;
-    mEmailAction = new QAction(QIcon::fromTheme(MAIL_ICON), (templates ? i18nc("@item:inmenu", "&Email Alarm Template") : i18nc("@action", "New Email Alarm")), parent);
+    mEmailAction = new QAction(QIcon::fromTheme(MAIL_ICON), (templates ? i18nc("@item:inmenu", "Email Alarm Template") : i18nc("@action", "New Email Alarm")), parent);
     menu()->addAction(mEmailAction);
     mTypes[mEmailAction] = EditAlarmDlg::EMAIL;
-    mAudioAction = new QAction(QIcon::fromTheme(AUDIO_ICON), (templates ? i18nc("@item:inmenu", "&Audio Alarm Template") : i18nc("@action", "New Audio Alarm")), parent);
+    mAudioAction = new QAction(QIcon::fromTheme(AUDIO_ICON), (templates ? i18nc("@item:inmenu", "Audio Alarm Template") : i18nc("@action", "New Audio Alarm")), parent);
     menu()->addAction(mAudioAction);
     mTypes[mAudioAction] = EditAlarmDlg::AUDIO;
     if (!templates)
@@ -66,7 +66,7 @@ NewAlarmAction::NewAlarmAction(bool templates, const QString& label, QObject* pa
         }
 
         // Include New From Template only in non-template menu
-        mTemplateAction = new TemplateMenuAction(QIcon::fromTheme(TEMPLATE_ICON), i18nc("@action", "New Alarm From &Template"), parent);
+        mTemplateAction = new TemplateMenuAction(QIcon::fromTheme(TEMPLATE_ICON), i18nc("@action", "New Alarm From Template"), parent);
         menu()->addAction(mTemplateAction);
         connect(mTemplateAction, &TemplateMenuAction::selected, this, &NewAlarmAction::selectedTemplate);
         connect(Resources::instance(), &Resources::settingsChanged, this, &NewAlarmAction::slotCalendarStatusChanged);

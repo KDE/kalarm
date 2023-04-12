@@ -455,31 +455,31 @@ void MainWindow::initActions()
 {
     KActionCollection* actions = actionCollection();
 
-    mActionTemplates = new QAction(i18nc("@action", "&Templates..."), this);
+    mActionTemplates = new QAction(i18nc("@action", "Templates..."), this);
     actions->addAction(QStringLiteral("templates"), mActionTemplates);
     connect(mActionTemplates, &QAction::triggered, this, &MainWindow::slotTemplates);
 
-    mActionNew = new NewAlarmAction(false, i18nc("@action", "&New"), this, actions);
+    mActionNew = new NewAlarmAction(false, i18nc("@action", "New"), this, actions);
     mActionNew->setActionNames(QStringLiteral("newDisplay"), QStringLiteral("newCommand"), QStringLiteral("newEmail"), QStringLiteral("newAudio"), QStringLiteral("newFromTemplate"));
     actions->addAction(QStringLiteral("new"), mActionNew);
     connect(mActionNew, &NewAlarmAction::selected, this, &MainWindow::slotNew);
     connect(mActionNew, &NewAlarmAction::selectedTemplate, this, &MainWindow::slotNewFromTemplate);
 
-    mActionCreateTemplate = new QAction(i18nc("@action", "Create Tem&plate..."), this);
+    mActionCreateTemplate = new QAction(i18nc("@action", "Create Template..."), this);
     actions->addAction(QStringLiteral("createTemplate"), mActionCreateTemplate);
     connect(mActionCreateTemplate, &QAction::triggered, this, &MainWindow::slotNewTemplate);
 
-    mActionCopy = new QAction(QIcon::fromTheme(QStringLiteral("edit-copy")), i18nc("@action", "&Copy..."), this);
+    mActionCopy = new QAction(QIcon::fromTheme(QStringLiteral("edit-copy")), i18nc("@action", "Copy..."), this);
     actions->addAction(QStringLiteral("copy"), mActionCopy);
     actions->setDefaultShortcut(mActionCopy, QKeySequence(Qt::SHIFT | Qt::Key_Insert));
     connect(mActionCopy, &QAction::triggered, this, &MainWindow::slotCopy);
 
-    mActionModify = new QAction(QIcon::fromTheme(QStringLiteral("document-properties")), i18nc("@action", "&Edit..."), this);
+    mActionModify = new QAction(QIcon::fromTheme(QStringLiteral("document-properties")), i18nc("@action", "Edit..."), this);
     actions->addAction(QStringLiteral("modify"), mActionModify);
     actions->setDefaultShortcut(mActionModify, QKeySequence(Qt::CTRL | Qt::Key_E));
     connect(mActionModify, &QAction::triggered, this, &MainWindow::slotModify);
 
-    mActionDelete = new QAction(QIcon::fromTheme(QStringLiteral("edit-delete")), i18nc("@action", "&Delete"), this);
+    mActionDelete = new QAction(QIcon::fromTheme(QStringLiteral("edit-delete")), i18nc("@action", "Delete"), this);
     actions->addAction(QStringLiteral("delete"), mActionDelete);
     actions->setDefaultShortcut(mActionDelete, QKeySequence::Delete);
     connect(mActionDelete, &QAction::triggered, this, &MainWindow::slotDeleteIf);
@@ -490,7 +490,7 @@ void MainWindow::initActions()
     actions->setDefaultShortcut(mActionDeleteForce, QKeySequence::Delete | Qt::SHIFT);
     connect(mActionDeleteForce, &QAction::triggered, this, &MainWindow::slotDeleteForce);
 
-    mActionReactivate = new QAction(i18nc("@action", "Reac&tivate"), this);
+    mActionReactivate = new QAction(i18nc("@action", "Reactivate"), this);
     actions->addAction(QStringLiteral("undelete"), mActionReactivate);
     actions->setDefaultShortcut(mActionReactivate, QKeySequence(Qt::CTRL | Qt::Key_R));
     connect(mActionReactivate, &QAction::triggered, this, &MainWindow::slotReactivate);
@@ -510,16 +510,16 @@ void MainWindow::initActions()
     actions->addAction(QStringLiteral("stopAudio"), action);
     KGlobalAccel::setGlobalShortcut(action, QList<QKeySequence>());  // allow user to set a global shortcut
 
-    mActionShowArchived = new KToggleAction(i18nc("@action", "Show Archi&ved Alarms"), this);
+    mActionShowArchived = new KToggleAction(i18nc("@action", "Show Archived Alarms"), this);
     actions->addAction(QStringLiteral("showArchivedAlarms"), mActionShowArchived);
     actions->setDefaultShortcut(mActionShowArchived, QKeySequence(Qt::CTRL | Qt::Key_P));
     connect(mActionShowArchived, &KToggleAction::triggered, this, &MainWindow::slotShowArchived);
 
-    mActionToggleTrayIcon = new KToggleAction(i18nc("@action", "Show in System &Tray"), this);
+    mActionToggleTrayIcon = new KToggleAction(i18nc("@action", "Show in System Tray"), this);
     actions->addAction(QStringLiteral("showInSystemTray"), mActionToggleTrayIcon);
     connect(mActionToggleTrayIcon, &KToggleAction::triggered, this, &MainWindow::slotToggleTrayIcon);
 
-    mActionToggleResourceSel = new KToggleAction(QIcon::fromTheme(QStringLiteral("view-choose")), i18nc("@action", "Show &Calendars"), this);
+    mActionToggleResourceSel = new KToggleAction(QIcon::fromTheme(QStringLiteral("view-choose")), i18nc("@action", "Show Calendars"), this);
     actions->addAction(QStringLiteral("showResources"), mActionToggleResourceSel);
     connect(mActionToggleResourceSel, &KToggleAction::triggered, this, &MainWindow::slotToggleResourceSelector);
 
@@ -531,7 +531,7 @@ void MainWindow::initActions()
     actions->addAction(QStringLiteral("spread"), mActionSpreadWindows);
     KGlobalAccel::setGlobalShortcut(mActionSpreadWindows, QList<QKeySequence>());  // allow user to set a global shortcut
 
-    mActionImportAlarms = new QAction(i18nc("@action", "Import &Alarms..."), this);
+    mActionImportAlarms = new QAction(i18nc("@action", "Import Alarms..."), this);
     actions->addAction(QStringLiteral("importAlarms"), mActionImportAlarms);
     connect(mActionImportAlarms, &QAction::triggered, this, &MainWindow::slotImportAlarms);
 
@@ -542,15 +542,15 @@ void MainWindow::initActions()
         connect(mActionImportBirthdays, &QAction::triggered, this, &MainWindow::slotBirthdays);
     }
 
-    mActionExportAlarms = new QAction(i18nc("@action", "E&xport Selected Alarms..."), this);
+    mActionExportAlarms = new QAction(i18nc("@action", "Export Selected Alarms..."), this);
     actions->addAction(QStringLiteral("exportAlarms"), mActionExportAlarms);
     connect(mActionExportAlarms, &QAction::triggered, this, &MainWindow::slotExportAlarms);
 
-    mActionExport = new QAction(i18nc("@action", "E&xport..."), this);
+    mActionExport = new QAction(i18nc("@action", "Export..."), this);
     actions->addAction(QStringLiteral("export"), mActionExport);
     connect(mActionExport, &QAction::triggered, this, &MainWindow::slotExportAlarms);
 
-    action = new QAction(QIcon::fromTheme(QStringLiteral("view-refresh")), i18nc("@action", "&Refresh Alarms"), this);
+    action = new QAction(QIcon::fromTheme(QStringLiteral("view-refresh")), i18nc("@action", "Refresh Alarms"), this);
     actions->addAction(QStringLiteral("refreshAlarms"), action);
     connect(action, &QAction::triggered, this, &MainWindow::slotRefreshAlarms);
 
@@ -805,7 +805,7 @@ void MainWindow::slotDelete(bool force)
         if (KAMessageBox::warningContinueCancel(this, i18ncp("@info", "Do you really want to delete the selected alarm?",
                                                              "Do you really want to delete the %1 selected alarms?", n),
                                                 i18ncp("@title:window", "Delete Alarm", "Delete Alarms", n),
-                                                KGuiItem(i18nc("@action:button", "&Delete"), QStringLiteral("edit-delete")),
+                                                KGuiItem(i18nc("@action:button", "Delete"), QStringLiteral("edit-delete")),
                                                 KStandardGuiItem::cancel(),
                                                 Preferences::CONFIRM_ALARM_DELETION)
             != KMessageBox::Continue)
@@ -1677,7 +1677,7 @@ void MainWindow::selectionCleared()
 void MainWindow::setEnableText(bool enable)
 {
     mActionEnableEnable = enable;
-    mActionEnable->setText(enable ? i18nc("@action", "Ena&ble") : i18nc("@action", "Disa&ble"));
+    mActionEnable->setText(enable ? i18nc("@action", "Enable") : i18nc("@action", "Disable"));
 }
 
 /******************************************************************************

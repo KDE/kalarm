@@ -258,8 +258,8 @@ void KAlarmPrefDlg::slotDefault()
     switch (KAMessageBox::questionYesNoCancel(this,
                          i18nc("@info", "Reset all tabs to their default values, or only reset the current tab?"),
                          QString(),
-                         KGuiItem(i18nc("@action:button Reset ALL tabs", "&All")),
-                         KGuiItem(i18nc("@action:button Reset the CURRENT tab", "C&urrent"))))
+                         KGuiItem(i18nc("@action:button Reset ALL tabs", "All")),
+                         KGuiItem(i18nc("@action:button Reset the CURRENT tab", "Current"))))
     {
         case KMessageBox::ButtonCode::PrimaryAction:
             restore(true);   // restore all tabs
@@ -1371,11 +1371,11 @@ EditPrefTab::EditPrefTab(StackedScrollGroup* scrollGroup)
     widget = new QWidget();
     widget->setFixedWidth(3 * style()->pixelMetric(QStyle::PM_LayoutHorizontalSpacing));
     box->addWidget(widget);
-    QRadioButton* radio = new QRadioButton(i18nc("@option:radio", "February 2&8th"));
+    QRadioButton* radio = new QRadioButton(i18nc("@option:radio", "February 28th"));
     radio->setMinimumSize(radio->sizeHint());
     box->addWidget(radio);
     mFeb29->addButton(radio, Preferences::Feb29_Feb28);
-    radio = new QRadioButton(i18nc("@option:radio", "March &1st"));
+    radio = new QRadioButton(i18nc("@option:radio", "March 1st"));
     radio->setMinimumSize(radio->sizeHint());
     box->addWidget(radio);
     mFeb29->addButton(radio, Preferences::Feb29_Mar1);
@@ -1816,7 +1816,7 @@ ViewPrefTab::ViewPrefTab(StackedScrollGroup* scrollGroup)
     grid->setColumnMinimumWidth(0, gridIndentWidth());
     grid->setColumnMinimumWidth(1, gridIndentWidth());
 
-    mTooltipShowAlarms = new QCheckBox(i18nc("@option:check", "Show next &24 hours' alarms"), group);
+    mTooltipShowAlarms = new QCheckBox(i18nc("@option:check", "Show next 24 hours' alarms"), group);
     mTooltipShowAlarms->setMinimumSize(mTooltipShowAlarms->sizeHint());
     connect(mTooltipShowAlarms, &QAbstractButton::toggled, this, &ViewPrefTab::slotTooltipAlarmsToggled);
     mTooltipShowAlarms->setWhatsThis(
