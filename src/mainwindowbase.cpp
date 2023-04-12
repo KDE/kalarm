@@ -24,7 +24,7 @@ MainWindowBase::MainWindowBase(QWidget* parent, Qt::WindowFlags f)
 * keyboard focus properly between Edit Alarm Dialog windows and MessageWindow
 * windows.
 */
-void MainWindowBase::enterEvent(QEnterEvent *e)
+void MainWindowBase::enterEvent(QEnterEvent* e)
 {
     if (theApp()->needWindowFocusFix())
         QApplication::setActiveWindow(this);

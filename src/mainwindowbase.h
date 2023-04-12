@@ -25,7 +25,7 @@ public:
     explicit MainWindowBase(QWidget* parent = nullptr, Qt::WindowFlags f = Qt::Window);
 
 protected:
-    void enterEvent(QEnterEvent *) override;
+    void enterEvent(QEnterEvent*) override;
 };
 
 // vim: et sw=4:

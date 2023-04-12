@@ -15,8 +15,9 @@
 class QMouseEvent;
 class QKeyEvent;
 
-class EmailIdCombo : public KIdentityManagementWidgets::IdentityCombo {
-  Q_OBJECT
+class EmailIdCombo : public KIdentityManagementWidgets::IdentityCombo
+{
+    Q_OBJECT
 public:
     explicit EmailIdCombo(KIdentityManagement::IdentityManager*, QWidget* parent = nullptr);
     void setReadOnly(bool ro)    { mReadOnly = ro; }
