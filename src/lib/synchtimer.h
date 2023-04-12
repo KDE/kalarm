@@ -41,21 +41,21 @@ public:
     };
 protected:
     SynchTimer();
-    virtual void        start() = 0;
-    void                connecT(QObject* receiver, const char* member);
-    virtual void        disconnecT(QObject* receiver, const char* member = nullptr);
-    bool                hasConnections() const   { return !mConnections.isEmpty(); }
+    virtual void      start() = 0;
+    void              connecT(QObject* receiver, const char* member);
+    virtual void      disconnecT(QObject* receiver, const char* member = nullptr);
+    bool              hasConnections() const   { return !mConnections.isEmpty(); }
 
-    QTimer*             mTimer;
+    QTimer*           mTimer;
 
 protected Q_SLOTS:
-    virtual void        slotTimer() = 0;
+    virtual void      slotTimer() = 0;
 
 private Q_SLOTS:
-    void                slotReceiverGone(QObject* r)  { disconnecT(r); }
+    void              slotReceiverGone(QObject* r)  { disconnecT(r); }
 
 private:
-  QList<Connection> mConnections; // list of current clients
+    QList<Connection> mConnections; // list of current clients
 };
 
 
@@ -165,11 +165,10 @@ protected Q_SLOTS:
     void slotTimer() override;
 
 private:
-  static QList<DailyTimer *>
-      mFixedTimers; // list of timers whose trigger time is fixed
-  QTime mTime;
-  QDate mLastDate; // the date on which the timer was last triggered
-  bool mFixed;     // the time at which the timer triggers cannot be changed
+    static QList<DailyTimer*> mFixedTimers;  // list of timers whose trigger time is fixed
+    QTime mTime;
+    QDate mLastDate;  // the date on which the timer was last triggered
+    bool  mFixed;     // the time at which the timer triggers cannot be changed
 };
 
 

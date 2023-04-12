@@ -52,10 +52,10 @@ public:
 
     static int iconWidth();
 
-    bool hasChildren(const QModelIndex &parent = QModelIndex()) const override;
-    bool canFetchMore(const QModelIndex &parent) const override;
-    QModelIndexList match(const QModelIndex &start, int role, const QVariant &value, int hits = 1, Qt::MatchFlags flags = Qt::MatchFlags(Qt::MatchStartsWith | Qt::MatchWrap)) const override;
-    int columnCount(const QModelIndex &parent = QModelIndex()) const override;
+    bool hasChildren(const QModelIndex& parent = QModelIndex()) const override;
+    bool canFetchMore(const QModelIndex& parent) const override;
+    QModelIndexList match(const QModelIndex& start, int role, const QVariant& value, int hits = 1, Qt::MatchFlags flags = Qt::MatchFlags(Qt::MatchStartsWith | Qt::MatchWrap)) const override;
+    int columnCount(const QModelIndex& parent = QModelIndex()) const override;
     QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
 
 Q_SIGNALS:
@@ -81,8 +81,8 @@ protected:
     /** Return the event for a given source model row. */
     KAEvent eventForSourceRow(int sourceRow) const;
 
-    bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const override;
-    bool filterAcceptsColumn(int sourceColumn, const QModelIndex &sourceParent) const override;
+    bool filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const override;
+    bool filterAcceptsColumn(int sourceColumn, const QModelIndex& sourceParent) const override;
 
 private Q_SLOTS:
     void slotResourcePopulated(Resource&);
@@ -137,7 +137,7 @@ public:
     /** Set a filter to include only alarms which are due on specified dates.
      *  @param dates  Dates for inclusion, in date order, or empty to remove filter.
      */
-    void setDateFilter(const QList<QDate> &dates);
+    void setDateFilter(const QList<QDate>& dates);
 
     /** Set whether to replace a blank alarm name with the alarm text. */
     void setReplaceBlankName(bool replace)   { mReplaceBlankName = replace; }
@@ -161,8 +161,7 @@ private Q_SLOTS:
 private:
     static AlarmListModel* mAllInstance;
     CalEvent::Types mFilterTypes;    // types of events contained in this model
-    QList<std::pair<KADateTime, KADateTime>>
-        mFilterDates; // date/time ranges to include in filter
+    QList<std::pair<KADateTime, KADateTime>> mFilterDates; // date/time ranges to include in filter
     mutable QHash<ResourceId, QHash<QString, KADateTime>> mDateFilterCache;  // if date filter, whether events are included in filter
     bool mReplaceBlankName {false};  // replace Name with Text for Qt::DisplayRole if Name is blank
 };

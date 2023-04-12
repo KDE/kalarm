@@ -190,7 +190,7 @@ MainWindow* displayMainWindowSelected(const QString& eventId)
 */
 KToggleAction* createAlarmEnableAction(QObject* parent)
 {
-    KToggleAction* action = new KToggleAction(i18nc("@action", "Enable &Alarms"), parent);
+    KToggleAction* action = new KToggleAction(i18nc("@action", "Enable Alarms"), parent);
     action->setChecked(theApp()->alarmsEnabled());
     QObject::connect(action, &QAction::toggled, theApp(), &KAlarmApp::setAlarmsEnabled);
     // The following line ensures that all instances are kept in the same state
@@ -276,9 +276,9 @@ UpdateResult addEvent(KAEvent& event, Resource& resource, QWidget* msgParent, in
 * Add a list of new active (non-archived) alarms, and save them in the resource.
 * The events are updated with their actual event IDs.
 */
-UpdateResult addEvents(QList<KAEvent> &events, Resource &resource,
-                       QWidget *msgParent, bool allowKOrgUpdate,
-                       bool showKOrgErr) {
+UpdateResult addEvents(QList<KAEvent>& events, Resource& resource, QWidget* msgParent,
+                       bool allowKOrgUpdate, bool showKOrgErr)
+{
     qCDebug(KALARM_LOG) << "KAlarm::addEvents:" << events.count();
     if (events.isEmpty())
         return UpdateResult(UPDATE_OK);
@@ -479,8 +479,8 @@ UpdateResult deleteEvent(KAEvent& event, Resource& resource, bool archive, QWidg
     return deleteEvents(events, resource, archive, msgParent, showKOrgErr);
 }
 
-UpdateResult deleteEvents(QList<KAEvent> &events, Resource &resource,
-                          bool archive, QWidget *msgParent, bool showKOrgErr) {
+UpdateResult deleteEvents(QList<KAEvent>& events, Resource& resource, bool archive, QWidget* msgParent, bool showKOrgErr)
+{
     qCDebug(KALARM_LOG) << "KAlarm::deleteEvents:" << events.count();
     if (events.isEmpty())
         return UpdateResult(UPDATE_OK);
@@ -623,9 +623,9 @@ UpdateResult reactivateEvent(KAEvent& event, Resource& resource, QWidget* msgPar
     return reactivateEvents(events, ids, resource, msgParent, showKOrgErr);
 }
 
-UpdateResult reactivateEvents(QList<KAEvent> &events,
-                              QList<int> &ineligibleIndexes, Resource &resource,
-                              QWidget *msgParent, bool showKOrgErr) {
+UpdateResult reactivateEvents(QList<KAEvent>& events, QList<int>& ineligibleIndexes,
+                              Resource& resource, QWidget* msgParent, bool showKOrgErr)
+{
     qCDebug(KALARM_LOG) << "KAlarm::reactivateEvents:" << events.count();
     ineligibleIndexes.clear();
     if (events.isEmpty())
@@ -712,8 +712,8 @@ UpdateResult reactivateEvents(QList<KAEvent> &events,
 * Enable or disable alarms.
 * The new events will have the same event IDs as the old ones.
 */
-UpdateResult enableEvents(QList<KAEvent> &events, bool enable,
-                          QWidget *msgParent) {
+UpdateResult enableEvents(QList<KAEvent>& events, bool enable, QWidget* msgParent)
+{
     qCDebug(KALARM_LOG) << "KAlarm::enableEvents:" << events.count();
     if (events.isEmpty())
         return UpdateResult(UPDATE_OK);
@@ -832,7 +832,8 @@ bool eventReadOnly(const QString& eventId)
 * If 'model' is non-null, the AlarmListModel* which it points to is used; if
 * that is null, it is created.
 */
-QList<KAEvent> getSortedActiveEvents(QObject *parent, AlarmListModel **model) {
+QList<KAEvent> getSortedActiveEvents(QObject* parent, AlarmListModel** model)
+{
     AlarmListModel* mdl = nullptr;
     if (!model)
         model = &mdl;
@@ -928,7 +929,8 @@ bool importAlarms(Resource& resource, QWidget* parent)
 * Reply = true if all alarms in the calendar were successfully exported
 *       = false if any alarms failed to be exported.
 */
-bool exportAlarms(const QList<KAEvent> &events, QWidget *parent) {
+bool exportAlarms(const QList<KAEvent>& events, QWidget* parent)
+{
     bool append;
     QString file = FileDialog::getSaveFileName(lastExportUrl,
                                                QStringLiteral("*.ics|%1").arg(i18nc("@item:inlistbox File type selection filter", "Calendar Files")),
@@ -1584,7 +1586,8 @@ void updateEditedAlarm(EditAlarmDlg* editDlg, KAEvent& event, Resource& resource
 * Returns a list of all alarm templates.
 * If shell commands are disabled, command alarm templates are omitted.
 */
-QList<KAEvent> templateList() {
+QList<KAEvent> templateList()
+{
     QList<KAEvent> templates;
     const bool includeCmdAlarms = ShellProcess::authorised();
     const QList<KAEvent> events = ResourcesCalendar::events(CalEvent::TEMPLATE);
@@ -1647,8 +1650,7 @@ void refreshAlarmsIfQueued()
             resource.reload();
 
         // Close any message displays for alarms which are now disabled
-        const QList<KAEvent> events =
-            ResourcesCalendar::events(CalEvent::ACTIVE);
+        const QList<KAEvent> events = ResourcesCalendar::events(CalEvent::ACTIVE);
         for (const KAEvent& event : events)
         {
             if (!event.enabled()  &&  (event.actionTypes() & KAEvent::ACT_DISPLAY))

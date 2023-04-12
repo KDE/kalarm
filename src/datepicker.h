@@ -36,11 +36,11 @@ public:
     void clearSelection();
 
 Q_SIGNALS:
-     /** Emitted when the user selects or deselects dates.
-      *
-      *  @param dates  The dates selected, in date order, or empty if none.
-      */
-  void datesSelected(const QList<QDate> &dates);
+    /** Emitted when the user selects or deselects dates.
+     *
+     *  @param dates  The dates selected, in date order, or empty if none.
+     */
+    void datesSelected(const QList<QDate>& dates);
 
 protected:
     void showEvent(QShowEvent*) override;

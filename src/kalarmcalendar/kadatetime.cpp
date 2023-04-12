@@ -3443,8 +3443,7 @@ bool checkTzTransitionOccurrence(const QDateTime& dt, const QDateTime& utcDateTi
 int checkTzTransitionBackwards(QTimeZone::OffsetData& transition, const QTimeZone& tz, const QDateTime& utcDateTime, const QDateTime& tzDateTime)
 {
     // Check if there is a daylight savings shift around utcDateTime.
-    const QList<QTimeZone::OffsetData> transitions =
-        tz.transitions(utcDateTime.addSecs(-10800), utcDateTime.addSecs(7200));
+    const QList<QTimeZone::OffsetData> transitions = tz.transitions(utcDateTime.addSecs(-10800), utcDateTime.addSecs(7200));
     if (!transitions.isEmpty())
     {
         // Assume that there will only be one transition in a 4 hour period.

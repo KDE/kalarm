@@ -82,7 +82,8 @@ DayMatrix::~DayMatrix()
 /******************************************************************************
 * Return all selected dates from mSelStart to mSelEnd, in date order.
 */
-QList<QDate> DayMatrix::selectedDates() const {
+QList<QDate> DayMatrix::selectedDates() const
+{
     QList<QDate> selDays;
     if (mSelStart != NO_SELECTION)
     {
@@ -222,8 +223,7 @@ void DayMatrix::updateEvents(const Resource& resource)
     const KADateTime to(mStartDate.addDays(NUMDAYS-1), QTime(23,59,0), Preferences::timeSpec());
 
     mEventDates.clear();
-    const QList<Resource> resources =
-        Resources::enabledResources(CalEvent::ACTIVE);
+    const QList<Resource> resources = Resources::enabledResources(CalEvent::ACTIVE);
     for (const Resource& res : resources)
     {
         if (!resource.isValid()  ||  res.id() == resource.id())

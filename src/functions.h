@@ -96,7 +96,7 @@ KToggleAction*      createSpreadWindowsAction(QObject* parent);
 /** Returns a list of all alarm templates.
  *  If shell commands are disabled, command alarm templates are omitted.
  */
-QList<KAEvent> templateList();
+QList<KAEvent>      templateList();
 void                outputAlarmWarnings(QWidget* parent, const KAEvent* = nullptr);
 void                refreshAlarms();
 void                refreshAlarmsIfQueued();    // must only be called from KAlarmApp::processQueue()
@@ -134,8 +134,7 @@ UpdateResult addEvent(KAEvent& event, Resource& resource, QWidget* msgParent = n
  *                    message.
  *  @return  Success status; if >= UPDATE_FAILED, all new alarms have been discarded.
  */
-UpdateResult addEvents(QList<KAEvent> &events, Resource &resource,
-                       QWidget *msgParent = nullptr,
+UpdateResult addEvents(QList<KAEvent>& events, Resource& resource, QWidget* msgParent = nullptr,
                        bool allowKOrgUpdate = true, bool showKOrgErr = true);
 
 /** Save the event in the archived calendar.
@@ -209,7 +208,7 @@ UpdateResult deleteEvent(KAEvent& event, Resource& resource, bool archive = true
 
 /** Delete alarms from the resources.
  *  If the events are archived, the events' IDs are changed to archived IDs if necessary.
- *  @param event      Event to delete.
+ *  @param events     Events to delete.
  *  @param resource   Resource to delete event from. If invalid, and all events
  *                    are found in the same resource, this is updated to the
  *                    resource which contained the events.
@@ -217,9 +216,8 @@ UpdateResult deleteEvent(KAEvent& event, Resource& resource, bool archive = true
  *                    message.
  *  @return  Success status; if >= UPDATE_FAILED, all deletions have been discarded.
  */
-UpdateResult deleteEvents(QList<KAEvent> &, Resource &resource,
-                          bool archive = true, QWidget *msgParent = nullptr,
-                          bool showKOrgErr = true);
+UpdateResult deleteEvents(QList<KAEvent>& events, Resource& resource, bool archive = true,
+                          QWidget* msgParent = nullptr, bool showKOrgErr = true);
 
 /** Delete templates from the resources.
  *  @param event      Event to delete.
@@ -258,10 +256,8 @@ UpdateResult reactivateEvent(KAEvent& event, Resource& resource, QWidget* msgPar
  *                    message.
  *  @return  Success status; if >= UPDATE_FAILED, all reactivated events have been discarded.
  */
-UpdateResult reactivateEvents(QList<KAEvent> &events,
-                              QList<int> &ineligibleIndexes, Resource &resource,
-                              QWidget *msgParent = nullptr,
-                              bool showKOrgErr = true);
+UpdateResult reactivateEvents(QList<KAEvent>& events, QList<int>& ineligibleIndexes,
+                              Resource& resource, QWidget* msgParent = nullptr, bool showKOrgErr = true);
 
 /** Enable or disable alarms.
  *  The new events will have the same event IDs as the old ones.
@@ -275,17 +271,15 @@ UpdateResult reactivateEvents(QList<KAEvent> &events,
  *           least one event has been successfully changed, but will be lost
  *           when its resource is reloaded.
  */
-UpdateResult enableEvents(QList<KAEvent> &events, bool enable,
-                          QWidget *msgParent = nullptr);
+UpdateResult enableEvents(QList<KAEvent>& events, bool enable, QWidget* msgParent = nullptr);
 
 /** Return whether an event is read-only.
  *  This depends on whether the event or its resource is read-only.
  */
 bool eventReadOnly(const QString& eventId);
 
-QList<KAEvent> getSortedActiveEvents(QObject *parent,
-                                     AlarmListModel **model = nullptr);
-void                purgeArchive(int purgeDays);    // must only be called from KAlarmApp::processQueue()
+QList<KAEvent> getSortedActiveEvents(QObject* parent, AlarmListModel** model = nullptr);
+void           purgeArchive(int purgeDays);    // must only be called from KAlarmApp::processQueue()
 
 /** Prompt the user for an external calendar file to import alarms from,
  *  and merge them into a resource. If the resource is invalid, the events
@@ -308,7 +302,7 @@ bool importAlarms(Resource& resource, QWidget* parent);
  *  @return  true if all alarms in the calendar were successfully exported;
  *           false if any alarms failed to be exported.
  */
-bool exportAlarms(const QList<KAEvent> &events, QWidget *parent);
+bool exportAlarms(const QList<KAEvent>& events, QWidget* parent);
 
 void                displayKOrgUpdateError(QWidget* parent, UpdateError, const UpdateResult& korgError, int nAlarms = 0);
 #if ENABLE_WAKE_FROM_SUSPEND

@@ -61,14 +61,14 @@ public:
 
     QModelIndex resourceIndex(const Resource&) const;
 
-    bool hasChildren(const QModelIndex &parent = QModelIndex()) const override;
-    bool canFetchMore(const QModelIndex &parent) const override;
-    QModelIndexList match(const QModelIndex &start, int role, const QVariant &value, int hits = 1, Qt::MatchFlags flags = Qt::MatchFlags(Qt::MatchStartsWith | Qt::MatchWrap)) const override;
-    int columnCount(const QModelIndex &parent = QModelIndex()) const override;
+    bool hasChildren(const QModelIndex& parent = QModelIndex()) const override;
+    bool canFetchMore(const QModelIndex& parent) const override;
+    QModelIndexList match(const QModelIndex& start, int role, const QVariant& value, int hits = 1, Qt::MatchFlags flags = Qt::MatchFlags(Qt::MatchStartsWith | Qt::MatchWrap)) const override;
+    int columnCount(const QModelIndex& parent = QModelIndex()) const override;
 
 protected:
-    bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const override;
-    bool filterAcceptsColumn(int sourceColumn, const QModelIndex &sourceParent) const override;
+    bool filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const override;
+    bool filterAcceptsColumn(int sourceColumn, const QModelIndex& sourceParent) const override;
 
 private:
     explicit ResourceFilterModel(QObject* parent);
@@ -207,7 +207,7 @@ private:
     explicit ResourceFilterCheckListModel(QObject* parent);
     void init();
 
-    static QList<ResourceFilterCheckListModel *> mInstances;
+    static QList<ResourceFilterCheckListModel*> mInstances;
     ResourceCheckListModel* mActiveModel {nullptr};
     ResourceCheckListModel* mArchivedModel {nullptr};
     ResourceCheckListModel* mTemplateModel {nullptr};

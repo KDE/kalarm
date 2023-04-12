@@ -2706,8 +2706,8 @@ bool KAEvent::setRecurWeekly(int freq, const QBitArray& days, int count, QDate e
 *    end   = end date (invalid to use 'count' instead).
 * Reply = false if no recurrence was set up.
 */
-bool KAEvent::setRecurMonthlyByDate(int freq, const QList<int> &days, int count,
-                                    QDate end) {
+bool KAEvent::setRecurMonthlyByDate(int freq, const QList<int>& days, int count, QDate end)
+{
     const bool success = d->setRecur(RecurrenceRule::rMonthly, freq, count, end);
     if (success)
     {
@@ -2730,8 +2730,8 @@ bool KAEvent::setRecurMonthlyByDate(int freq, const QList<int> &days, int count,
 *    end   = end date (invalid to use 'count' instead).
 * Reply = false if no recurrence was set up.
 */
-bool KAEvent::setRecurMonthlyByPos(int freq, const QList<MonthPos> &posns,
-                                   int count, QDate end) {
+bool KAEvent::setRecurMonthlyByPos(int freq, const QList<MonthPos>& posns, int count, QDate end)
+{
     const bool success = d->setRecur(RecurrenceRule::rMonthly, freq, count, end);
     if (success)
     {
@@ -2756,9 +2756,9 @@ bool KAEvent::setRecurMonthlyByPos(int freq, const QList<MonthPos> &posns,
 *    end    = end date (invalid to use 'count' instead).
 * Reply = false if no recurrence was set up.
 */
-bool KAEvent::setRecurAnnualByDate(int freq, const QList<int> &months, int day,
-                                   KARecurrence::Feb29Type feb29, int count,
-                                   QDate end) {
+bool KAEvent::setRecurAnnualByDate(int freq, const QList<int>& months, int day,
+                                   KARecurrence::Feb29Type feb29, int count, QDate end)
+{
     const bool success = d->setRecur(RecurrenceRule::rYearly, freq, count, end, feb29);
     if (success)
     {
@@ -2784,9 +2784,9 @@ bool KAEvent::setRecurAnnualByDate(int freq, const QList<int> &months, int day,
 *    end    = end date (invalid to use 'count' instead).
 * Reply = false if no recurrence was set up.
 */
-bool KAEvent::setRecurAnnualByPos(int freq, const QList<MonthPos> &posns,
-                                  const QList<int> &months, int count,
-                                  QDate end) {
+bool KAEvent::setRecurAnnualByPos(int freq, const QList<MonthPos>& posns,
+                                  const QList<int>& months, int count, QDate end)
+{
     const bool success = d->setRecur(RecurrenceRule::rYearly, freq, count, end);
     if (success)
     {
@@ -3805,7 +3805,8 @@ void KAEventPrivate::endChanges()
 /******************************************************************************
 * Return a list of pointers to KAEvent objects.
 */
-KAEvent::List KAEvent::ptrList(QList<KAEvent> &objList) {
+KAEvent::List KAEvent::ptrList(QList<KAEvent>& objList)
+{
     KAEvent::List ptrs;
     const int count = objList.count();
     ptrs.reserve(count);

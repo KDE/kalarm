@@ -61,7 +61,7 @@ enum
     ErrMsg_AudioFile = 0x02
 };
 
-QList<MessageDisplayHelper *> MessageDisplayHelper::mInstanceList;
+QList<MessageDisplayHelper*>   MessageDisplayHelper::mInstanceList;
 QHash<EventId, unsigned>       MessageDisplayHelper::mErrorMessages;
 // There can only be one audio thread at a time: trying to play multiple
 // sound files simultaneously would result in a cacophony, and besides

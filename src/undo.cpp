@@ -497,7 +497,8 @@ QString Undo::description(Undo::Type type, int id)
 * listed, to force dependent undos to be executed in their correct order.
 * If 'ids' is non-null, also returns a list of their corresponding IDs.
 */
-QList<int> Undo::ids(Undo::Type type) {
+QList<int> Undo::ids(Undo::Type type)
+{
     QList<int> ids;
     QStringList ignoreIDs;
 //int n=0;

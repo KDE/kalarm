@@ -104,7 +104,8 @@ KAEvent EventListView::selectedEvent() const
 /******************************************************************************
 * Return the selected events.
 */
-QList<KAEvent> EventListView::selectedEvents() const {
+QList<KAEvent> EventListView::selectedEvents() const
+{
     QList<KAEvent> elist;
     const QModelIndexList ixlist = selectionModel()->selectedRows();      //clazy:exclude=inefficient-qlist
     int count = ixlist.count();

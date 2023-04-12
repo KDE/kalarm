@@ -267,9 +267,9 @@ void AlarmListModel::setEventTypeFilter(CalEvent::Types types)
 * Only show alarms which are due on specified dates, or show all alarms.
 * The default is to show all alarms.
 */
-void AlarmListModel::setDateFilter(const QList<QDate> &dates) {
-    const QList<std::pair<KADateTime, KADateTime>> oldFilterDates =
-        mFilterDates;
+void AlarmListModel::setDateFilter(const QList<QDate>& dates)
+{
+    const QList<std::pair<KADateTime, KADateTime>> oldFilterDates = mFilterDates;
     mFilterDates.clear();
     if (!dates.isEmpty())
     {

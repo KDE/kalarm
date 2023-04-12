@@ -91,7 +91,7 @@ public:
     virtual QSize minimumSizeHint() const;
 
 protected:
-  QList<StackedGroupWidgetT<T> *> mWidgets;
+    QList<StackedGroupWidgetT<T>*> mWidgets;
 };
 
 template <class T>

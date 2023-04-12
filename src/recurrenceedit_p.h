@@ -173,7 +173,7 @@ class YearlyRule : public MonthYearRule
     Q_OBJECT
 public:
     YearlyRule(bool readOnly, QWidget* parent);
-    QList<int> months() const;
+    QList<int>       months() const;
     void             setMonths(const QList<int>& months);
     void             setDefaultValues(int dayOfMonth, int dayOfWeek, int month);
     KARecurrence::Feb29Type feb29Type() const;
@@ -196,7 +196,7 @@ private:
     QLabel*          mFeb29Label;
     ComboBox*        mFeb29Combo;
     // Saved state of all controls
-    QList<int> mSavedMonths;             // ticked months for yearly rule
+    QList<int>       mSavedMonths;       // ticked months for yearly rule
     int              mSavedFeb29Type;    // February 29th recurrence type
 };
 

@@ -136,7 +136,8 @@ DatePicker::~DatePicker()
     delete[] mDayNames;
 }
 
-QList<QDate> DatePicker::selectedDates() const {
+QList<QDate> DatePicker::selectedDates() const
+{
     return mDayMatrix->selectedDates();
 }
 

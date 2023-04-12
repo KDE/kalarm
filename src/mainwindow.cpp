@@ -365,7 +365,8 @@ void MainWindow::resizeEvent(QResizeEvent* re)
 /******************************************************************************
 * Emitted when the date selection changes in the date picker.
 */
-void MainWindow::datesSelected(const QList<QDate> &dates) {
+void MainWindow::datesSelected(const QList<QDate>& dates)
+{
     mListFilterModel->setDateFilter(dates);
 }
 

@@ -109,7 +109,7 @@ private:
 
 MNSessionManager* MNSessionManager::mInstance = nullptr;
 
-QList<MessageNotification *> MessageNotification::mNotificationList;
+QList<MessageNotification*> MessageNotification::mNotificationList;
 
 /******************************************************************************
 * Restore MessageNotification instances saved at session shutdown.

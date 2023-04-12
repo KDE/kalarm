@@ -68,7 +68,7 @@ public:
     int            columnCount(const QModelIndex& parent = QModelIndex()) const override;
     QModelIndex    index(int row, int column, const QModelIndex& parent = QModelIndex()) const override;
     QModelIndex    parent(const QModelIndex& index) const override;
-    QModelIndexList match(const QModelIndex &start, int role, const QVariant &value, int hits = 1, Qt::MatchFlags flags = Qt::MatchFlags(Qt::MatchStartsWith | Qt::MatchWrap)) const override;
+    QModelIndexList match(const QModelIndex& start, int role, const QVariant& value, int hits = 1, Qt::MatchFlags flags = Qt::MatchFlags(Qt::MatchStartsWith | Qt::MatchWrap)) const override;
     QVariant       data(const QModelIndex&, int role = Qt::DisplayRole) const override;
     bool           setData(const QModelIndex&, const QVariant& value, int role = Qt::EditRole) override;
     QVariant       headerData(int section, Qt::Orientation, int role = Qt::DisplayRole) const override;
@@ -145,17 +145,17 @@ private:
     /** Remove a resource's events. */
     void removeResourceEvents(Resource&, bool setHaveEvents = true);
 
-    int removeResourceEvents(QList<Node *> &eventNodes);
+    int removeResourceEvents(QList<Node*>& eventNodes);
 
     void updateHaveEvents(bool have)        { mHaveEvents = have;  Q_EMIT haveEventsStatus(have); }
 
     static bool mInstanceIsOurs;        // mInstance is a FileResourceDataModel instance
     // Resource nodes for model root [Resource = Resource()], and
     // Event nodes for each resource.
-    QHash<Resource, QList<Node *>> mResourceNodes;
+    QHash<Resource, QList<Node*>> mResourceNodes;
     // Resources in the order in which they are held in the model.
     // This must be the same order as in mResourceNodes[nullptr].
-    QList<Resource> mResources;
+    QList<Resource>       mResources;
     QHash<QString, Node*> mEventNodes;  // each event ID, mapped to its node.
     bool                  mHaveEvents;  // there are events in this model
 };

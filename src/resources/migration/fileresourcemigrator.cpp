@@ -33,8 +33,7 @@ using namespace KAlarmCal;
 
 namespace
 {
-bool readDirectoryResource(const QString &dirPath, CalEvent::Types alarmTypes,
-                           QHash<CalEvent::Type, QList<KAEvent>> &events);
+bool readDirectoryResource(const QString& dirPath, CalEvent::Types alarmTypes, QHash<CalEvent::Type, QList<KAEvent>>& events);
 }
 
 FileResourceMigrator* FileResourceMigrator::mInstance = nullptr;
@@ -63,8 +62,7 @@ FileResourceMigrator* FileResourceMigrator::instance()
     {
         // Check whether migration or default resource creation is actually needed.
         CalEvent::Types needed = CalEvent::ACTIVE | CalEvent::ARCHIVED | CalEvent::TEMPLATE;
-        const QList<Resource> resources =
-            Resources::allResources<FileResource>();
+        const QList<Resource> resources = Resources::allResources<FileResource>();
         for (const Resource& resource : resources)
         {
             needed &= ~resource.alarmTypes();
@@ -408,8 +406,9 @@ namespace
 /******************************************************************************
 * Load and parse events from each file in a calendar directory.
 */
-bool readDirectoryResource(const QString &dirPath, CalEvent::Types alarmTypes,
-                           QHash<CalEvent::Type, QList<KAEvent>> &events) {
+bool readDirectoryResource(const QString& dirPath, CalEvent::Types alarmTypes,
+                           QHash<CalEvent::Type, QList<KAEvent>>& events)
+{
     if (dirPath.isEmpty())
         return false;
     qCDebug(KALARM_LOG) << "FileResourceMigrator::readDirectoryResource:" << dirPath;
@@ -437,6 +436,7 @@ bool readDirectoryResource(const QString &dirPath, CalEvent::Types alarmTypes,
     }
     return true;
 }
+
 }
 
 // vim: et sw=4:

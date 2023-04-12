@@ -69,10 +69,10 @@ Q_SIGNALS:
      *
      *  @param dates  The dates selected, in date order, or empty if none.
      */
-  void selected(const QList<QDate> &dates);
+    void selected(const QList<QDate>& dates);
 
-  void newAlarm(EditAlarmDlg::Type);
-  void newAlarmFromTemplate(const KAlarmCal::KAEvent &);
+    void newAlarm(EditAlarmDlg::Type);
+    void newAlarmFromTemplate(const KAlarmCal::KAEvent&);
 
 protected:
     bool event(QEvent*) override;
@@ -105,8 +105,7 @@ private:
     int     mRowHeight {1};    // height of each row
     QDate   mStartDate;        // starting date of the matrix
 
-    QList<QString>
-        mDayLabels; // array of day labels, to optimize drawing performance
+    QList<QString> mDayLabels; // array of day labels, to optimize drawing performance
 
     QSet<QDate> mEventDates;   // days on which alarms occur, for any resource
     QHash<ResourceId, QSet<QDate>> mResourceEventDates;  // for each resource, days on which alarms occur

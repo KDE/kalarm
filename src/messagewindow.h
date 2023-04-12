@@ -101,8 +101,7 @@ private:
     static bool         isSpread(const QPoint& topLeft);
     void show();   // ensure that display() is called instead of show() on a MessageWindow object
 
-    static QList<MessageWindow *>
-        mWindowList; // list of message window instances
+    static QList<MessageWindow*> mWindowList;     // list of message window instances
     // Properties needed by readProperties()
     int                 mRestoreHeight;
     // Miscellaneous

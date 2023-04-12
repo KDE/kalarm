@@ -239,7 +239,8 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
 /******************************************************************************
 * Return a list of events for birthdays chosen.
 */
-QList<KAEvent> BirthdayDlg::events() const {
+QList<KAEvent> BirthdayDlg::events() const
+{
     QList<KAEvent> list;
     const QModelIndexList indexes = mListView->selectionModel()->selectedRows();     //clazy:exclude=inefficient-qlist
     const int count = indexes.count();
@@ -364,8 +365,7 @@ void BirthdayDlg::setSortModelSelectionList()
         return;
 
     QStringList alarmMessageList;
-    const QList<KAEvent> activeEvents =
-        ResourcesCalendar::events(CalEvent::ACTIVE);
+    const QList<KAEvent> activeEvents = ResourcesCalendar::events(CalEvent::ACTIVE);
     for (const KAEvent& event : activeEvents)
     {
         if (event.actionSubType() == KAEvent::MESSAGE

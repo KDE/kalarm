@@ -36,7 +36,7 @@ public:
     explicit BirthdayDlg(QWidget* parent = nullptr);
     QList<KAEvent> events() const;
 
-  protected Q_SLOTS:
+protected Q_SLOTS:
     virtual void   slotOk();
 
 private Q_SLOTS:

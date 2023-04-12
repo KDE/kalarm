@@ -1556,7 +1556,8 @@ void YearlyRule::setDefaultValues(int dayOfMonth, int dayOfWeek, int month)
 * Fetch which months have been checked (1 - 12).
 * Reply = true if February has been checked.
 */
-QList<int> YearlyRule::months() const {
+QList<int> YearlyRule::months() const
+{
     QList<int> mnths;
     for (int i = 0;  i < 12;  ++i)
         if (mMonthBox[i]->isChecked()  &&  mMonthBox[i]->isEnabled())

@@ -130,7 +130,7 @@ private Q_SLOTS:
     void           slotToggleDateNavigator();
     void           slotCalendarStatusChanged();
     void           slotAlarmListColumnsChanged();
-    void datesSelected(const QList<QDate> &dates);
+    void datesSelected(const QList<QDate>& dates);
     void           resourcesResized();
     void           showMenuErrorMessage();
     void           showErrorMessage(const QString&);
@@ -140,74 +140,70 @@ private Q_SLOTS:
     void           deferAlarmDlgDeleted(QObject* obj)  { processDeferAlarmDlg(obj, QDialog::Rejected); }
 
 private:
-  using WindowList = QList<MainWindow *>;
+    using WindowList = QList<MainWindow*>;
 
-  explicit MainWindow(bool restored);
-  void initActions();
-  void selectionCleared();
-  void setEnableText(bool enable);
-  void arrangePanel();
-  void setSplitterSizes();
-  void initUndoMenu(QMenu *, Undo::Type);
-  void slotDelete(bool force);
-  void processDeferAlarmDlg(QObject *, int result);
-  static void enableTemplateMenuItem(bool);
+    explicit MainWindow(bool restored);
+    void            initActions();
+    void            selectionCleared();
+    void            setEnableText(bool enable);
+    void            arrangePanel();
+    void            setSplitterSizes();
+    void            initUndoMenu(QMenu*, Undo::Type);
+    void            slotDelete(bool force);
+    void            processDeferAlarmDlg(QObject*, int result);
+    static void     enableTemplateMenuItem(bool);
 
-  static WindowList mWindowList;    // active main windows
-  static TemplateDlg *mTemplateDlg; // the one and only template dialog
+    static WindowList    mWindowList;    // active main windows
+    static TemplateDlg*  mTemplateDlg;   // the one and only template dialog
 
-  AlarmListModel *mListFilterModel;
-  AlarmListView *mListView;
-  ResourceSelector *mResourceSelector; // resource selector widget
-  DatePicker *mDatePicker;             // date navigator widget
-  QSplitter *mSplitter; // splits window into list and resource selector
-  QScrollArea
-      *mPanel; // side panel containing resource selector & date navigator
-  QVBoxLayout *mPanelLayout; // layout for side panel contents
-  QFrame *mPanelDivider{nullptr};
-  QMap<EditAlarmDlg *, KAEvent>
-      mEditAlarmMap; // edit alarm dialogs to be handled by this window
-  QMap<DeferAlarmDlg *, MessageDisplay::DeferDlgData *>
-      mDeferAlarmMap; // defer alarm dialogs to be handled by this window
-  KToggleAction *mActionShowMenuBar;
-  KToggleAction *mActionToggleResourceSel;
-  KToggleAction *mActionToggleDateNavigator;
-  QAction *mActionImportAlarms;
-  QAction *mActionExportAlarms;
-  QAction *mActionExport;
-  QAction *mActionImportBirthdays{nullptr};
-  QAction *mActionTemplates;
-  NewAlarmAction *mActionNew;
-  QAction *mActionCreateTemplate;
-  QAction *mActionCopy;
-  QAction *mActionModify;
-  QAction *mActionDelete;
-  QAction *mActionDeleteForce;
-  QAction *mActionReactivate;
-  QAction *mActionEnable;
-  QAction *mActionFindNext;
-  QAction *mActionFindPrev;
-  KToolBarPopupAction *mActionUndo;
-  KToolBarPopupAction *mActionRedo;
-  KToggleAction *mActionToggleTrayIcon;
-  KToggleAction *mActionShowArchived;
-  KToggleAction *mActionSpreadWindows;
-  KHamburgerMenu *mHamburgerMenu;
-  QPointer<QMenu> mContextMenu;
-  QPointer<QMenu> mResourceContextMenu;
-  QMap<QAction *, int>
-      mUndoMenuIds; // items in the undo/redo menu, in order of appearance
-  int mResourcesWidth{-1};       // width of resource selector widget
-  int mPanelScrollBarWidth{0};   // width of side panel vertical scroll bar
-  bool mHiddenTrayParent{false}; // on session restoration, hide this window
-  bool mShowResources;           // show resource selector
-  bool mShowDateNavigator;       // show date navigator
-  bool mDateNavigatorTop{true};  // date navigator is at top of panel
-  bool mShowArchived;       // include archived alarms in the displayed list
-  bool mShown{false};       // true once the window has been displayed
-  bool mActionEnableEnable; // Enable/Disable action is set to "Enable"
-  bool mMenuError; // error occurred creating menus: need to show error message
-  bool mResizing{false}; // window resize is in progress
+    AlarmListModel*      mListFilterModel;
+    AlarmListView*       mListView;
+    ResourceSelector*    mResourceSelector;   // resource selector widget
+    DatePicker*          mDatePicker;         // date navigator widget
+    QSplitter*           mSplitter;           // splits window into list and resource selector
+    QScrollArea*         mPanel;              // side panel containing resource selector & date navigator
+    QVBoxLayout*         mPanelLayout;        // layout for side panel contents
+    QFrame*              mPanelDivider{nullptr};
+    QMap<EditAlarmDlg*, KAEvent> mEditAlarmMap; // edit alarm dialogs to be handled by this window
+    QMap<DeferAlarmDlg*, MessageDisplay::DeferDlgData*> mDeferAlarmMap; // defer alarm dialogs to be handled by this window
+    KToggleAction*       mActionShowMenuBar;
+    KToggleAction*       mActionToggleResourceSel;
+    KToggleAction*       mActionToggleDateNavigator;
+    QAction*             mActionImportAlarms;
+    QAction*             mActionExportAlarms;
+    QAction*             mActionExport;
+    QAction*             mActionImportBirthdays{nullptr};
+    QAction*             mActionTemplates;
+    NewAlarmAction*      mActionNew;
+    QAction*             mActionCreateTemplate;
+    QAction*             mActionCopy;
+    QAction*             mActionModify;
+    QAction*             mActionDelete;
+    QAction*             mActionDeleteForce;
+    QAction*             mActionReactivate;
+    QAction*             mActionEnable;
+    QAction*             mActionFindNext;
+    QAction*             mActionFindPrev;
+    KToolBarPopupAction* mActionUndo;
+    KToolBarPopupAction* mActionRedo;
+    KToggleAction*       mActionToggleTrayIcon;
+    KToggleAction*       mActionShowArchived;
+    KToggleAction*       mActionSpreadWindows;
+    KHamburgerMenu*      mHamburgerMenu;
+    QPointer<QMenu>      mContextMenu;
+    QPointer<QMenu>      mResourceContextMenu;
+    QMap<QAction*, int>  mUndoMenuIds;             // items in the undo/redo menu, in order of appearance
+    int                  mResourcesWidth{-1};      // width of resource selector widget
+    int                  mPanelScrollBarWidth{0};  // width of side panel vertical scroll bar
+    bool                 mHiddenTrayParent{false}; // on session restoration, hide this window
+    bool                 mShowResources;           // show resource selector
+    bool                 mShowDateNavigator;       // show date navigator
+    bool                 mDateNavigatorTop{true};  // date navigator is at top of panel
+    bool                 mShowArchived;            // include archived alarms in the displayed list
+    bool                 mShown{false};            // true once the window has been displayed
+    bool                 mActionEnableEnable;      // Enable/Disable action is set to "Enable"
+    bool                 mMenuError;               // error occurred creating menus: need to show error message
+    bool                 mResizing{false};         // window resize is in progress
 };
 
 // vim: et sw=4:

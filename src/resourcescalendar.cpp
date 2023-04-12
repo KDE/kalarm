@@ -259,7 +259,8 @@ void ResourcesCalendar::slotEventsToBeRemoved(Resource& resource, const QList<KA
 *
 * Purge a list of archived events from the calendar.
 */
-void ResourcesCalendar::purgeEvents(const QList<KAEvent> &events) {
+void ResourcesCalendar::purgeEvents(const QList<KAEvent>& events)
+{
     for (const KAEvent& event : events)
     {
         Resource resource = Resources::resource(event.resourceId());
@@ -525,7 +526,8 @@ KAEvent ResourcesCalendar::templateEvent(const QString& templateName)
 /******************************************************************************
 * Return all events with the specified ID, from all calendars.
 */
-QList<KAEvent> ResourcesCalendar::events(const QString &uniqueId) {
+QList<KAEvent> ResourcesCalendar::events(const QString& uniqueId)
+{
     QList<KAEvent> list;
     for (ResourceMap::ConstIterator rit = mResourceMap.constBegin();  rit != mResourceMap.constEnd();  ++rit)
     {
@@ -535,18 +537,19 @@ QList<KAEvent> ResourcesCalendar::events(const QString &uniqueId) {
     return list;
 }
 
-QList<KAEvent> ResourcesCalendar::events(const Resource &resource,
-                                         CalEvent::Types type) {
+QList<KAEvent> ResourcesCalendar::events(const Resource& resource, CalEvent::Types type)
+{
     return events(type, resource);
 }
 
-QList<KAEvent> ResourcesCalendar::events(CalEvent::Types type) {
+QList<KAEvent> ResourcesCalendar::events(CalEvent::Types type)
+{
     Resource resource;
     return events(type, resource);
 }
 
-QList<KAEvent> ResourcesCalendar::events(CalEvent::Types type,
-                                         const Resource &resource) {
+QList<KAEvent> ResourcesCalendar::events(CalEvent::Types type, const Resource& resource)
+{
     QList<KAEvent> list;
     if (resource.isValid())
     {
@@ -749,9 +752,8 @@ void ResourcesCalendar::setAlarmPending(const KAEvent& event, bool pending)
 /******************************************************************************
 * Get the events for a list of event IDs.
 */
-QList<KAEvent>
-ResourcesCalendar::eventsForResource(const Resource &resource,
-                                     const QSet<QString> &eventIds) {
+QList<KAEvent> ResourcesCalendar::eventsForResource(const Resource& resource, const QSet<QString>& eventIds)
+{
     QList<KAEvent> events;
     events.reserve(eventIds.count());
     for (const QString& eventId : eventIds)

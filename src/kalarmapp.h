@@ -275,13 +275,10 @@ private:
     QColor             mPrefsArchivedColour;    // archived alarms text colour
     int                mArchivedPurgeDays {-1}; // how long to keep archived alarms, 0 = don't keep, -1 = keep indefinitely
     int                mPurgeDaysQueued {-1};   // >= 0 to purge the archive calendar from KAlarmApp::processLoop()
-    QList<ResourceId> mPendingPurges; // new resources which may need to be
-                                      // purged when populated
-    QList<ProcData *>
-        mCommandProcesses; // currently active command alarm processes
+    QList<ResourceId>  mPendingPurges;          // new resources which may need to be purged when populated
+    QList<ProcData*>   mCommandProcesses;       // currently active command alarm processes
     QQueue<ActionQEntry> mActionQueue;          // queued commands and actions
-    QList<MessageWindow *> mRestoredWindows;    // message windows restored at
-                                             // startup, waiting to be displayed
+    QList<MessageWindow*> mRestoredWindows;     // message windows restored at startup, waiting to be displayed
     int                mEditingCmdLineAlarm {0}; // whether currently editing alarm specified on command line
     int                mPendingQuitCode;        // exit code for a pending quit
     bool               mPendingQuit {false};    // quit once the D-Bus command and shell command queues have been processed
