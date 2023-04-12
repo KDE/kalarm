@@ -153,7 +153,7 @@ public:
 private:
     //@cond PRIVATE
     class Private;
-    Private *const d;
+    Private* const d;
     //@endcond
 
     friend class KAEvent;
