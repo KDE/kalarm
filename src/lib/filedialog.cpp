@@ -21,7 +21,7 @@
 QCheckBox* FileDialog::mAppendCheck = nullptr;
 
 
-FileDialog::FileDialog(const QUrl &startDir, const QString &filter, QWidget *parent)
+FileDialog::FileDialog(const QUrl& startDir, const QString& filter, QWidget* parent)
     : KFileCustomDialog(parent)
 {
     fileWidget()->setFilter(filter);
