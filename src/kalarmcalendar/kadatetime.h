@@ -360,7 +360,7 @@ public:
         static Spec LocalZone();
 
     private:
-        KADateTimeSpecPrivate *const d;
+        KADateTimeSpecPrivate* const d;
     };
 
     /** Format for strings representing date/time values. */
@@ -449,23 +449,23 @@ public:
                          *   i.e. s1 > e2.
                          */
         Equal = AtStart | Inside | AtEnd,
-        /**< Simultaneous, i.e. s1 = s2 && e1 = e2.
-         */
+                        /**< Simultaneous, i.e. s1 = s2 && e1 = e2.
+                         */
         Outside = Before | AtStart | Inside | AtEnd | After,
-        /**< This KADateTime starts before the start of the other,
-         *   and ends after the end of the other,
-         *   i.e. s1 < s2, e1 > e2.
-         */
+                        /**< This KADateTime starts before the start of the other,
+                         *   and ends after the end of the other,
+                         *   i.e. s1 < s2, e1 > e2.
+                         */
         StartsAt = AtStart | Inside | AtEnd | After,
-        /**< This KADateTime starts at the same time as the other,
-         *   and ends after the end of the other,
-         *   i.e. s1 = s2, e1 > e2.
-         */
+                        /**< This KADateTime starts at the same time as the other,
+                         *   and ends after the end of the other,
+                         *   i.e. s1 = s2, e1 > e2.
+                         */
         EndsAt = Before | AtStart | Inside | AtEnd
-                 /**< This KADateTime starts before the start of the other,
-                  *   and ends at the same time as the other,
-                  *   i.e. s1 < s2, e1 = e2.
-                  */
+                        /**< This KADateTime starts before the start of the other,
+                         *   and ends at the same time as the other,
+                         *   i.e. s1 < s2, e1 = e2.
+                         */
     };
 
     /**
@@ -1167,7 +1167,7 @@ public:
      * @return KADateTime value, or an invalid KADateTime if either parameter is invalid
      * @see setFromStringDefault(), toString(), QString::fromString()
      */
-    static KADateTime fromString(const QString& string, TimeFormat format = ISODate, bool *negZero = nullptr);
+    static KADateTime fromString(const QString& string, TimeFormat format = ISODate, bool* negZero = nullptr);
 
     /**
      * Returns the KADateTime represented by @p string, using the @p format

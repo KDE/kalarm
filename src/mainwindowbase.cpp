@@ -25,9 +25,9 @@ MainWindowBase::MainWindowBase(QWidget* parent, Qt::WindowFlags f)
 * windows.
 */
 #if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
-void MainWindowBase::enterEvent(QEnterEvent *e)
+void MainWindowBase::enterEvent(QEnterEvent* e)
 #else
-void MainWindowBase::enterEvent(QEvent *e)
+void MainWindowBase::enterEvent(QEvent* e)
 #endif
 {
     if (theApp()->needWindowFocusFix())
