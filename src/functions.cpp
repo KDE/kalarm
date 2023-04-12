@@ -1015,9 +1015,6 @@ bool exportAlarms(const QList<KAEvent> &events, QWidget *parent) {
         }
         delete tempFile;
     }
-#if KCALENDARCORE_VERSION < QT_VERSION_CHECK(5, 240, 0)
-    calendar->close();
-#endif
     return success;
 }
 

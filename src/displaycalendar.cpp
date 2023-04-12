@@ -127,9 +127,6 @@ int DisplayCalendar::load()
         KAMessageBox::error(MainWindow::mainMainWindow(),
                             xi18nc("@info", "<para>Error loading calendar:</para><para><filename>%1</filename></para><para>Please fix or delete the file.</para>", mDisplayCalPath));
         // load() could have partially populated the calendar, so clear it out
-#if KCALENDARCORE_VERSION < QT_VERSION_CHECK(5, 240, 0)
-        mCalendarStorage->calendar()->close();
-#endif
         mCalendarStorage->calendar().clear();
         mCalendarStorage.clear();
         mOpen = false;
@@ -192,9 +189,6 @@ void DisplayCalendar::close()
 {
     if (mCalendarStorage)
     {
-#if KCALENDARCORE_VERSION < QT_VERSION_CHECK(5, 240, 0)
-        mCalendarStorage->calendar()->close();
-#endif
         mCalendarStorage->calendar().clear();
         mCalendarStorage.clear();
     }
