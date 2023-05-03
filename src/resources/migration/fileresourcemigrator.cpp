@@ -268,18 +268,6 @@ void FileResourceMigrator::migrateKResources()
         // calendars from pre-Akonadi versions of KAlarm.
         const QString kresConfFile = QStringLiteral("kresources/alarms/stdrc");
         QString configFile = QStandardPaths::locate(QStandardPaths::ConfigLocation, kresConfFile);
-        if (configFile.isEmpty())
-        {
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-            Kdelibs4Migration kde4;
-            if (!kde4.kdeHomeFound())
-                return;    // can't find $KDEHOME
-            configFile = kde4.locateLocal("config", kresConfFile);
-            if (configFile.isEmpty())
-                return;    // can't find KResources config file
-
-#endif
-        }
         qCDebug(KALARM_LOG) << "FileResourceMigrator::migrateKResources";
         const KConfig config(configFile, KConfig::SimpleConfig);
 
