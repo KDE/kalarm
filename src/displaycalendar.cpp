@@ -13,7 +13,6 @@
 #include "lib/messagebox.h"
 #include "kalarm_debug.h"
 
-#include <kcalendarcore_version.h>
 #include <KCalendarCore/MemoryCalendar>
 #include <KCalendarCore/ICalFormat>
 
