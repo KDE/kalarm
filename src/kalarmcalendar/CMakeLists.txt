@@ -55,9 +55,7 @@ target_link_libraries(kalarmcalendar PRIVATE
     KF6::CalendarCore
     )
 
-if (QT_MAJOR_VERSION STREQUAL "6")
     target_link_libraries(kalarmcalendar PRIVATE Qt6::Core5Compat)
-endif()
 
 target_include_directories(kalarmcalendar PUBLIC "$<BUILD_INTERFACE:${kalarm_SOURCE_DIR}/src/kalarmcalendar;${kalarm_BINARY_DIR}/src/kalarmcalendar>")
 

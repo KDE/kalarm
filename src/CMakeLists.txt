@@ -328,9 +328,7 @@ target_link_libraries(kalarm_bin
     KPim6::PimTextEdit
     KPim6::Mime
 )
-if (QT_MAJOR_VERSION STREQUAL "6")
     target_link_libraries(kalarm_bin Qt6::Core5Compat)
-endif()
 if (TARGET KF6::TextEditTextToSpeech)
     target_link_libraries(kalarm_bin KF6::TextEditTextToSpeech)
 endif()
@@ -340,9 +338,7 @@ if (ENABLE_WAKE_FROM_SUSPEND)
 endif()
 
 if (ENABLE_X11)
-    if (QT_MAJOR_VERSION STREQUAL "5")
-        target_link_libraries(kalarm_bin Qt::X11Extras ${X11_X11_LIB})
-    elseif (Qt6_VERSION_MINOR LESS 2)
+    if (Qt6_VERSION_MINOR LESS 2)
         target_link_libraries(kalarm_bin Qt6::GuiPrivate ${X11_X11_LIB})
     else()
         target_link_libraries(kalarm_bin ${X11_X11_LIB})
