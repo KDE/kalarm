@@ -334,15 +334,11 @@ if (TARGET KF6::TextEditTextToSpeech)
 endif()
 
 if (ENABLE_WAKE_FROM_SUSPEND)
-        target_link_libraries(kalarm_bin KF6::AuthCore)
+    target_link_libraries(kalarm_bin KF6::AuthCore)
 endif()
 
 if (ENABLE_X11)
-    if (Qt6_VERSION_MINOR LESS 2)
-        target_link_libraries(kalarm_bin Qt6::GuiPrivate ${X11_X11_LIB})
-    else()
-        target_link_libraries(kalarm_bin ${X11_X11_LIB})
-    endif()
+    target_link_libraries(kalarm_bin ${X11_X11_LIB})
 endif()
 
 install(TARGETS kalarm_bin ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
