@@ -1,7 +1,7 @@
 /*
  *  fileresourcemigrator.cpp  -  migrates or creates KAlarm file system resources
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2011-2022 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2011-2023 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -20,8 +20,6 @@
 #include "kalarm_debug.h"
 
 #include <KLocalizedString>
-#include <KConfig>
-#include <KConfigGroup>
 
 #include <QStandardPaths>
 #include <QDirIterator>
@@ -79,8 +77,7 @@ FileResourceMigrator* FileResourceMigrator::instance()
 }
 
 /******************************************************************************
-* Migrate old Akonadi or KResource calendars, and create default file system
-* resources.
+* Migrate old Akonadi calendars, and create default file system resources.
 */
 void FileResourceMigrator::start()
 {
@@ -102,15 +99,14 @@ void FileResourceMigrator::start()
     {
         // Some file system resources already exist, so no migration is
         // required. Create any missing default file system resources.
-        mMigrateKResources = false;   // ignore KResources
-        akonadiMigrationComplete(false);
+        akonadiMigrationComplete();
     }
     else
     {
         // There are no file system resources, so migrate any Akonadi resources.
         mAkonadiPlugin = Preferences::akonadiPlugin();
         if (!mAkonadiPlugin)
-            akonadiMigrationComplete(false);   // Akonadi plugin is not available
+            akonadiMigrationComplete();   // Akonadi plugin is not available
         else
         {
             connect(mAkonadiPlugin, &AkonadiPlugin::akonadiMigrationComplete, this, &FileResourceMigrator::akonadiMigrationComplete);
@@ -118,8 +114,7 @@ void FileResourceMigrator::start()
             connect(mAkonadiPlugin, &AkonadiPlugin::migrateDirResource, this, &FileResourceMigrator::migrateDirResource);
             mAkonadiPlugin->initiateAkonadiResourceMigration();
             // Migration of Akonadi collections has now been initiated. On
-            // completion, either KResource calendars will be migrated, or
-            // any missing default resources will be created.
+            // completion, any missing default resources will be created.
         }
     }
 }
@@ -227,17 +222,8 @@ void FileResourceMigrator::migrateDirResource(const QString& resourceName,
 /******************************************************************************
 * Called when Akonadi migration is complete or is known not to be possible.
 */
-void FileResourceMigrator::akonadiMigrationComplete(bool migrated)
+void FileResourceMigrator::akonadiMigrationComplete()
 {
-    if (migrated)
-        mMigrateKResources = false;
-    else
-    {
-        // There are no Akonadi resources, so migrate any KResources alarm
-        // calendars from pre-Akonadi versions of KAlarm.
-        migrateKResources();
-    }
-
     // Create any necessary additional default file system resources.
     createDefaultResources();
 
@@ -253,90 +239,6 @@ void FileResourceMigrator::checkIfComplete()
 {
     if (mCompleted  &&  !FileResourceCalendarUpdater::pending())
         deleteLater();
-}
-
-/******************************************************************************
-* Migrate old KResource calendars, and create default file system resources.
-*/
-void FileResourceMigrator::migrateKResources()
-{
-    if (!mMigrateKResources)
-        return;
-    if (mExistingAlarmTypes == CalEvent::EMPTY)
-    {
-        // There are no file system resources, so migrate any KResources alarm
-        // calendars from pre-Akonadi versions of KAlarm.
-        const QString kresConfFile = QStringLiteral("kresources/alarms/stdrc");
-        QString configFile = QStandardPaths::locate(QStandardPaths::ConfigLocation, kresConfFile);
-        qCDebug(KALARM_LOG) << "FileResourceMigrator::migrateKResources";
-        const KConfig config(configFile, KConfig::SimpleConfig);
-
-        // Fetch all the KResource identifiers which are actually in use
-        const KConfigGroup group = config.group("General");
-        const QStringList keys = group.readEntry("ResourceKeys", QStringList())
-                               + group.readEntry("PassiveResourceKeys", QStringList());
-
-        // Create a file system resource for each KResource id
-        for (const QString& id : keys)
-        {
-            // Read the resource configuration parameters from the config
-            const KConfigGroup configGroup = config.group(QLatin1String("Resource_") + id);
-            const QString resourceType = configGroup.readEntry("ResourceType", QString());
-            const char* pathKey = nullptr;
-            FileResourceSettings::StorageType storageType;
-            if (resourceType == QLatin1String("file"))
-            {
-                storageType = FileResourceSettings::File;
-                pathKey = "CalendarURL";
-            }
-            else if (resourceType == QLatin1String("dir"))
-            {
-                storageType = FileResourceSettings::Directory;
-                pathKey = "CalendarURL";
-            }
-            else if (resourceType == QLatin1String("remote"))
-            {
-                storageType = FileResourceSettings::File;
-                pathKey = "DownloadUrl";
-            }
-            else
-            {
-                qCWarning(KALARM_LOG) << "CalendarCreator: Invalid resource type:" << resourceType;
-                continue;   // unknown resource type - can't convert
-            }
-
-            const QUrl url = QUrl::fromUserInput(configGroup.readPathEntry(pathKey, QString()));
-            CalEvent::Type alarmType = CalEvent::EMPTY;
-            switch (configGroup.readEntry("AlarmType", (int)0))
-            {
-                case 1:  alarmType = CalEvent::ACTIVE;    break;
-                case 2:  alarmType = CalEvent::ARCHIVED;  break;
-                case 4:  alarmType = CalEvent::TEMPLATE;  break;
-                default:
-                    qCWarning(KALARM_LOG) << "FileResourceMigrator::migrateKResources: Invalid alarm type for resource";
-                    continue;
-            }
-            const QString name  = configGroup.readEntry("ResourceName", QString());
-            const bool enabled  = configGroup.readEntry("ResourceIsActive", false);
-            const bool standard = configGroup.readEntry("Standard", false);
-            qCDebug(KALARM_LOG) << "FileResourceMigrator::migrateKResources: Migrating:" << name << ", type=" << alarmType << ", path=" << url.toString();
-            FileResourceSettings::Ptr settings(new FileResourceSettings(
-                          storageType, url, alarmType, name,
-                          configGroup.readEntry("Color", QColor()),
-                          (enabled ? alarmType : CalEvent::EMPTY),
-                          (standard ? alarmType : CalEvent::EMPTY),
-                          configGroup.readEntry("ResourceIsReadOnly", true)));
-            Resource resource = FileResourceConfigManager::addResource(settings);
-
-            // Update the calendar to the current KAlarm format if necessary,
-            // and if the user agrees.
-            auto updater = new FileResourceCalendarUpdater(resource, true, this);
-            connect(updater, &QObject::destroyed, this, &FileResourceMigrator::checkIfComplete);
-            updater->update();   // note that 'updater' will auto-delete when finished
-
-            mExistingAlarmTypes |= alarmType;
-        }
-    }
 }
 
 /******************************************************************************

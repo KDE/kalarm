@@ -1,7 +1,7 @@
 /*
  *  fileresourcemigrator.h  -  migrates or creates KAlarm file system resources
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2020-2022 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2020-2023 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -13,8 +13,8 @@
 class AkonadiPlugin;
 
 /**
- * Class to migrate Akonadi or KResources alarm calendars from previous
- * versions of KAlarm, and to create default calendar resources if none exist.
+ * Class to migrate Akonadi alarm calendars from previous versions of KAlarm,
+ * and to create default calendar resources if none exist.
  */
 class FileResourceMigrator : public QObject
 {
@@ -45,7 +45,6 @@ private Q_SLOTS:
 private:
     explicit FileResourceMigrator(QObject* parent = nullptr);
 
-    void migrateKResources();
     void createDefaultResources();
     void migrateFileResource(const QString& resourceName,
                              const QUrl& location, KAlarmCal::CalEvent::Types alarmTypes,
@@ -62,7 +61,6 @@ private:
     static FileResourceMigrator* mInstance;
     AkonadiPlugin* mAkonadiPlugin {nullptr};
     KAlarmCal::CalEvent::Types mExistingAlarmTypes {KAlarmCal::CalEvent::EMPTY};  // alarm types provided by existing non-Akonadi resources
-    bool            mMigrateKResources {true};  // need to migrate KResource resources
     static bool     mCompleted;                 // execute() has completed
 };
 
