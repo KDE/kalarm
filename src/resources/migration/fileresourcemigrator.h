@@ -39,7 +39,7 @@ public:
     static bool completed()    { return mCompleted; }
 
 private Q_SLOTS:
-    void akonadiMigrationComplete(bool migrated);
+    void akonadiMigrationComplete();
     void checkIfComplete();
 
 private:
