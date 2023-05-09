@@ -208,8 +208,8 @@ int SingleFileResource::doLoad(QHash<QString, KAEvent>& newEvents, bool readThro
             // never be reached!
             qCWarning(KALARM_LOG) << "SingleFileResource::load:" << displayId() << "Error? File location changed to" << localFileName;
             setLoadFailure(true, Status::NotConfigured);
-            mFileStorage.clear();
-            mCalendar.clear();
+            mFileStorage.reset();
+            mCalendar.reset();
             mLoadedEvents.clear();
         }
 
@@ -430,8 +430,8 @@ void SingleFileResource::close()
 
     if (mSettings  &&  mSettings->url().isLocalFile())
         KDirWatch::self()->removeFile(mSettings->url().toLocalFile());
-    mCalendar.clear();
-    mFileStorage.clear();
+    mCalendar.reset();
+    mFileStorage.reset();
     setStatus(Status::Closed);
 }
 

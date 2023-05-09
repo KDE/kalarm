@@ -95,8 +95,8 @@ bool DisplayCalendar::open()
 
     if (!mOpen)
     {
-        mCalendarStorage->calendar().clear();
-        mCalendarStorage.clear();
+        mCalendarStorage->calendar().reset();
+        mCalendarStorage.reset();
     }
     return mOpen;
 }
@@ -126,8 +126,8 @@ int DisplayCalendar::load()
         KAMessageBox::error(MainWindow::mainMainWindow(),
                             xi18nc("@info", "<para>Error loading calendar:</para><para><filename>%1</filename></para><para>Please fix or delete the file.</para>", mDisplayCalPath));
         // load() could have partially populated the calendar, so clear it out
-        mCalendarStorage->calendar().clear();
-        mCalendarStorage.clear();
+        mCalendarStorage->calendar().reset();
+        mCalendarStorage.reset();
         mOpen = false;
         return -1;
     }
@@ -188,8 +188,8 @@ void DisplayCalendar::close()
 {
     if (mCalendarStorage)
     {
-        mCalendarStorage->calendar().clear();
-        mCalendarStorage.clear();
+        mCalendarStorage->calendar().reset();
+        mCalendarStorage.reset();
     }
 
     // Flag as closed now to prevent removeKAEvents() doing silly things

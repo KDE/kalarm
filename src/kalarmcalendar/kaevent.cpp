@@ -5726,13 +5726,13 @@ bool KAEventPrivate::convertStartOfDay(const Event::Ptr& event)
                 {
                     // Found a timed deferral alarm, so adjust the offset
                     deferralOffset = data.alarm->startOffset().asSeconds();
-                    const_cast<Alarm*>(data.alarm.data())->setStartOffset(deferralOffset - adjustment);
+                    const_cast<Alarm*>(data.alarm.get())->setStartOffset(deferralOffset - adjustment);
                 }
                 else if (data.type == AUDIO_ALARM
                      &&  data.alarm->startOffset().asSeconds() == deferralOffset)
                 {
                     // Audio alarm is set for the same time as the above deferral alarm
-                    const_cast<Alarm*>(data.alarm.data())->setStartOffset(deferralOffset - adjustment);
+                    const_cast<Alarm*>(data.alarm.get())->setStartOffset(deferralOffset - adjustment);
                 }
             }
             changed = true;
@@ -5760,7 +5760,7 @@ bool KAEventPrivate::convertStartOfDay(const Event::Ptr& event)
                 altime.setTime(midnight);
                 deferralOffset = data.alarm->startOffset().asSeconds();
                 newDeferralOffset = event->dtStart().secsTo(altime);
-                const_cast<Alarm*>(data.alarm.data())->setStartOffset(newDeferralOffset);
+                const_cast<Alarm*>(data.alarm.get())->setStartOffset(newDeferralOffset);
                 foundDeferral = true;
                 changed = true;
             }
@@ -5769,7 +5769,7 @@ bool KAEventPrivate::convertStartOfDay(const Event::Ptr& event)
                  &&  data.alarm->startOffset().asSeconds() == deferralOffset)
             {
                 // Audio alarm is set for the same time as the above deferral alarm
-                const_cast<Alarm*>(data.alarm.data())->setStartOffset(newDeferralOffset);
+                const_cast<Alarm*>(data.alarm.get())->setStartOffset(newDeferralOffset);
                 changed = true;
             }
         }
