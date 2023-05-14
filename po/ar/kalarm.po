@@ -3,7 +3,7 @@
 # Ahmad M. Zawawi <azawawi@emirates.net.ae>, 2004.
 # Ahmad M. Zawawi <zawawi@arabeyes.org>, 2004.
 # Youssef Chahibi <chahibi@gmail.com>, 2007.
-# Safa Alfulaij <safa1996alfulaij@gmail.com>, ٢٠١٥, 2018.
+# Safa Alfulaij <safa1996alfulaij@gmail.com>, 2015, 2018.
 # Zayed Al-Saidi <zayed.alsaidi@gmail.com>, 2021, 2022.
 msgid ""
 msgstr ""
@@ -237,7 +237,7 @@ msgstr "بدء «منبّهك» الآلي عند الولوج"
 #: autostart/autostart.cpp:51
 #, kde-format
 msgid "Copyright 2001-%1, David Jarvie"
-msgstr "الحقوق محفوظة ٢٠٠١-%1، لِ‍ David Jarvie"
+msgstr "الحقوق محفوظة 2001-%1، لِ‍ David Jarvie"
 
 #: autostart/autostart.cpp:52 main.cpp:47
 #, kde-format
@@ -4185,7 +4185,7 @@ msgstr "مجدوِل رسائل وأوامر وبُرد إلكترونيّة ش�
 #: main.cpp:46
 #, kde-format
 msgid "Copyright © 2001-%1, David Jarvie"
-msgstr "الحقوق محفوظة © ٢٠٠١-%1، لِ‍ ديفيد جارفي"
+msgstr "الحقوق محفوظة © 2001-%1، لِ‍ ديفيد جارفي"
 
 #: mainwindow.cpp:438
 #, kde-kuit-format
@@ -6369,13 +6369,13 @@ msgstr "بلا"
 #, kde-format
 msgctxt "@item:inlistbox 1st March (short form)"
 msgid "1 Mar"
-msgstr "١ مارس"
+msgstr "1 مارس"
 
 #: recurrenceedit.cpp:1536
 #, kde-format
 msgctxt "@item:inlistbox 28th February (short form)"
 msgid "28 Feb"
-msgstr "٢٨ فبراير"
+msgstr "28 فبراير"
 
 #: recurrenceedit.cpp:1542
 #, fuzzy, kde-format
