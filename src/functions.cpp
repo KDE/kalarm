@@ -950,7 +950,7 @@ bool exportAlarms(const QList<KAEvent>& events, QWidget* parent)
     FileStorage::Ptr calStorage(new FileStorage(calendar, file));
     if (append  &&  !calStorage->load())
     {
-        auto statJob = KIO::statDetails(url, KIO::StatJob::SourceSide, KIO::StatDetail::StatDefaultDetails);
+        auto statJob = KIO::stat(url, KIO::StatJob::SourceSide, KIO::StatDetail::StatDefaultDetails);
         KJobWidgets::setWindow(statJob, parent);
         statJob->exec();
         KFileItem fi(statJob->statResult(), url);

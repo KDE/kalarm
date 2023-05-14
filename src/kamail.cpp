@@ -287,7 +287,7 @@ QString KAMail::appendBodyAttachments(KMime::Message& message, JobData& data)
             bool atterror = false;
             if (!url.isLocalFile())
             {
-                auto statJob = KIO::statDetails(url, KIO::StatJob::SourceSide, KIO::StatDetail::StatDefaultDetails);
+                auto statJob = KIO::stat(url, KIO::StatJob::SourceSide, KIO::StatDetail::StatDefaultDetails);
                 KJobWidgets::setWindow(statJob, MainWindow::mainMainWindow());
                 if (!statJob->exec())
                 {

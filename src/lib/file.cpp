@@ -73,7 +73,7 @@ FileErr checkFileExists(QString& filename, QUrl& url, QWidget* messageParent)
     else
     {
         filename = url.toDisplayString();
-        auto statJob = KIO::statDetails(url, KIO::StatJob::SourceSide, KIO::StatDetail::StatDefaultDetails);
+        auto statJob = KIO::stat(url, KIO::StatJob::SourceSide, KIO::StatDetail::StatDefaultDetails);
         KJobWidgets::setWindow(statJob, messageParent);
         if (!statJob->exec())
             err = FileErr::Nonexistent;

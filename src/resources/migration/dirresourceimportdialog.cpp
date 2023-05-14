@@ -390,7 +390,7 @@ void DirResourceImportTypeWidget::validate()
         if (mStatJob)
             mStatJob->kill();
         mCheckingDir = false;
-        mStatJob = KIO::statDetails(currentUrl, KIO::StatJob::SourceSide, KIO::StatDetail::StatNoDetails, KIO::HideProgressInfo);
+        mStatJob = KIO::stat(currentUrl, KIO::StatJob::SourceSide, KIO::StatDetail::StatNoDetails, KIO::HideProgressInfo);
         connect(mStatJob, &KIO::StatJob::result, this, &DirResourceImportTypeWidget::slotStatJobResult);
 
         // Disable the OK button until the file's status is determined.
@@ -443,7 +443,7 @@ void DirResourceImportTypeWidget::slotStatJobResult(KJob* job)
             // The file doesn't exist (as expected), so check that the file's
             // directory is writable.
             mCheckingDir = true;
-            mStatJob = KIO::statDetails(KIO::upUrl(mUi->pathRequester->url()),
+            mStatJob = KIO::stat(KIO::upUrl(mUi->pathRequester->url()),
                                         KIO::StatJob::SourceSide,
                                         KIO::StatDetail::StatDefaultDetails,
                                         KIO::HideProgressInfo);

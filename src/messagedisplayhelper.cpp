@@ -236,7 +236,7 @@ void MessageDisplayHelper::initTexts()
                 // Display contents of file
                 const QUrl url = QUrl::fromUserInput(mMessage, QString(), QUrl::AssumeLocalFile);
 
-                auto statJob = KIO::statDetails(url, KIO::StatJob::SourceSide, KIO::StatBasic, KIO::HideProgressInfo);
+                auto statJob = KIO::stat(url, KIO::StatJob::SourceSide, KIO::StatBasic, KIO::HideProgressInfo);
                 const bool exists = statJob->exec();
                 const bool isDir = statJob->statResult().isDir();
 
