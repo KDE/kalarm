@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: kdepim-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-03-31 02:50+0000\n"
-"PO-Revision-Date: 2023-04-02 17:25+0300\n"
+"PO-Revision-Date: 2023-05-15 21:53+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -25,7 +25,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 22.12.3\n"
+"X-Generator: Lokalize 23.03.70\n"
 "(http: //www.transifex.com/projects/p/kdepim-k-tr/language/tr/)\n"
 "X-POOTLE-MTIME: 1413131629.000000\n"
 
@@ -419,7 +419,7 @@ msgstr "Alarm bildiriminde onaylama iste"
 #: commandoptions.cpp:129
 #, kde-format
 msgid "Attach file to email (repeat as needed)"
-msgstr "E-postaya dosya ekle (gerekirse yinele)"
+msgstr "E-postaya dosya iliştir (gerekirse yinele)"
 
 #: commandoptions.cpp:133
 #, kde-format
@@ -2751,13 +2751,13 @@ msgstr "E-posta iletisini girin."
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Attachments:"
-msgstr "Eklentiler:"
+msgstr "Ekler:"
 
 #: editdlgtypes.cpp:1237
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Files to send as attachments to the email."
-msgstr "E-posta ile gönderilecek eklentiler."
+msgstr "E-posta ile gönderilecek ekler."
 
 #: editdlgtypes.cpp:1241 resourceselector.cpp:76
 #, kde-format
@@ -2769,7 +2769,7 @@ msgstr "Ekle..."
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Add an attachment to the email."
-msgstr "E-postaya bir eklenti ekle."
+msgstr "E-postaya bir ek ekle."
 
 #: editdlgtypes.cpp:1246 resourceselector.cpp:78
 #, kde-format
@@ -2781,7 +2781,7 @@ msgstr "Kaldır"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Remove the highlighted attachment from the email."
-msgstr "Vurgulanan eklentiyi e-postadan kaldır."
+msgstr "Vurgulanan eki e-postadan kaldır."
 
 #: editdlgtypes.cpp:1253
 #, kde-format
@@ -2807,7 +2807,7 @@ msgstr "Hiç e-posta adresi belirtilmedi"
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Invalid email attachment: <filename>%1</filename>"
-msgstr "Geçersiz e-posta eklentisi: <filename>%1</filename>"
+msgstr "Geçersiz e-posta eki: <filename>%1</filename>"
 
 #: editdlgtypes.cpp:1463
 #, kde-format
@@ -2843,7 +2843,7 @@ msgstr "E-posta bu kişye gönderildi:<nl/>%1"
 #, kde-format
 msgctxt "@title:window"
 msgid "Choose File to Attach"
-msgstr "Eklenecek Olan Dosyayı Seçin"
+msgstr "Eklenecek Dosyayı Seç"
 
 #: editdlgtypes.cpp:1605
 #, kde-format
@@ -4112,7 +4112,7 @@ msgstr "Dosya ekleme hatası: <filename>%1</filename>"
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Attachment not found: <filename>%1</filename>"
-msgstr "Eklenti bulunamadı: <filename>%1</filename>"
+msgstr "Ek bulunamadı: <filename>%1</filename>"
 
 #: kamail.cpp:377
 #, kde-format
