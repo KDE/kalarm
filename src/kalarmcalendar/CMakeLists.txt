@@ -50,7 +50,7 @@ target_link_libraries(kalarmcalendar PRIVATE
     KF6::ConfigCore
     KF6::I18n
     KF6::Holidays
-    KPim6::IdentityManagement
+    KPim6::IdentityManagementCore
     KF6::CoreAddons
     KF6::CalendarCore
     )

@@ -19,8 +19,8 @@
 
 #include "kmailinterface.h"
 
-#include <KIdentityManagement/IdentityManager>
-#include <KIdentityManagement/Identity>
+#include <KIdentityManagementCore/IdentityManager>
+#include <KIdentityManagementCore/Identity>
 #include <KMime/HeaderParsing>
 #include <KMime/Headers>
 #include <KMime/Message>
@@ -91,7 +91,7 @@ KAMail* KAMail::instance()
 int KAMail::send(JobData& jobdata, QStringList& errmsgs)
 {
     QString err;
-    KIdentityManagement::Identity identity;
+    KIdentityManagementCore::Identity identity;
     jobdata.from = Preferences::emailAddress();
     if (jobdata.event.emailFromId()
     &&  Preferences::emailFrom() == Preferences::MAIL_FROM_KMAIL)

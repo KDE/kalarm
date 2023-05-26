@@ -34,7 +34,7 @@ public:
     /** Send an email using PIM libraries.
      *  @return  empty string if sending initiated successfully, else error message.
      */
-    QString sendMail(KMime::Message::Ptr message, const KIdentityManagement::Identity& identity,
+    QString sendMail(KMime::Message::Ptr message, const KIdentityManagementCore::Identity& identity,
                      const QString& normalizedFrom, bool keepSentMail, MailSend::JobData& jobdata) override;
 
     /** Extract dragged and dropped Akonadi RFC822 message data.

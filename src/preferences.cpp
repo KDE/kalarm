@@ -17,8 +17,8 @@
 #include "kalarmcalendar/identities.h"
 #include "kalarm_debug.h"
 
-#include <KIdentityManagement/Identity>
-#include <KIdentityManagement/IdentityManager>
+#include <KIdentityManagementCore/Identity>
+#include <KIdentityManagementCore/IdentityManager>
 #include <KHolidays/HolidayRegion>
 
 #include <KSharedConfig>

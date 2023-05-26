@@ -10,20 +10,20 @@
 
 #include "identities.h"
 
-#include <KIdentityManagement/IdentityManager>
-#include <KIdentityManagement/Identity>
+#include <KIdentityManagementCore/IdentityManager>
+#include <KIdentityManagementCore/Identity>
 
 namespace KAlarmCal
 {
 namespace Identities
 {
 
-KIdentityManagement::IdentityManager* identityManager()
+KIdentityManagementCore::IdentityManager* identityManager()
 {
-    static KIdentityManagement::IdentityManager* manager = nullptr;
+    static KIdentityManagementCore::IdentityManager* manager = nullptr;
 
     if (!manager)
-        manager = new KIdentityManagement::IdentityManager(true);   // create a read-only kmail identity manager
+        manager = new KIdentityManagementCore::IdentityManager(true);   // create a read-only kmail identity manager
     return manager;
 }
 
@@ -32,7 +32,7 @@ KIdentityManagement::IdentityManager* identityManager()
 */
 bool identitiesExist()
 {
-    KIdentityManagement::IdentityManager* manager = identityManager();   // create identity manager if not already done
+    KIdentityManagementCore::IdentityManager* manager = identityManager();   // create identity manager if not already done
     return manager->begin() != manager->end();
 }
 
@@ -45,8 +45,8 @@ uint identityUoid(const QString& identityUoidOrName)
     uint id = identityUoidOrName.toUInt(&ok);
     if (!ok  ||  identityManager()->identityForUoid(id).isNull())
     {
-        KIdentityManagement::IdentityManager* manager = identityManager();  // fetch it if not already done
-        for (KIdentityManagement::IdentityManager::ConstIterator it = manager->begin();
+        KIdentityManagementCore::IdentityManager* manager = identityManager();  // fetch it if not already done
+        for (KIdentityManagementCore::IdentityManager::ConstIterator it = manager->begin();
              it != manager->end();  ++it)
         {
             if ((*it).identityName() == identityUoidOrName)

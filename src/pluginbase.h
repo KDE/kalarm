@@ -19,7 +19,7 @@ class QUrl;
 class QColor;
 namespace KMime { class Content; }
 namespace KCalendarCore { class Person; }
-namespace KIdentityManagement { class Identity; }
+namespace KIdentityManagementCore { class Identity; }
 namespace KAlarmCal { class KAEvent; }
 namespace MailSend { struct JobData; }
 class QSortFilterProxyModel;
@@ -46,7 +46,7 @@ public:
     /** Send an email using PIM libraries.
      *  @return  empty string if sending initiated successfully, else error message.
      */
-    virtual QString sendMail(KMime::Message::Ptr message, const KIdentityManagement::Identity& identity,
+    virtual QString sendMail(KMime::Message::Ptr message, const KIdentityManagementCore::Identity& identity,
                              const QString& normalizedFrom, bool keepSentMail, MailSend::JobData& jobdata) = 0;
 
     /** Extract dragged and dropped Akonadi RFC822 message data. */

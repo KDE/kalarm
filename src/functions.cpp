@@ -34,8 +34,8 @@
 #include <KCalendarCore/Duration>
 #include <KCalendarCore/MemoryCalendar>
 using namespace KCalendarCore;
-#include <KIdentityManagement/IdentityManager>
-#include <KIdentityManagement/Identity>
+#include <KIdentityManagementCore/IdentityManager>
+#include <KIdentityManagementCore/Identity>
 #include <KHolidays/HolidayRegion>
 
 #include <KConfigGroup>

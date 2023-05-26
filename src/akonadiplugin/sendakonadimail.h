@@ -17,7 +17,7 @@
 #include <QStringList>
 
 class KJob;
-namespace KIdentityManagement { class Identity; }
+namespace KIdentityManagementCore { class Identity; }
 namespace Akonadi { class MessageQueueJob; }
 namespace KAlarmCal { class KAEvent; }
 
@@ -26,7 +26,7 @@ class SendAkonadiMail : public QObject
     Q_OBJECT
 public:
     static SendAkonadiMail* instance();
-    static QString send(KMime::Message::Ptr message, const KIdentityManagement::Identity& identity,
+    static QString send(KMime::Message::Ptr message, const KIdentityManagementCore::Identity& identity,
                         const QString& normalizedFrom, bool keepSentMail, MailSend::JobData& jobdata);
 
 Q_SIGNALS:

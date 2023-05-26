@@ -11,7 +11,7 @@
 #include <QMouseEvent>
 #include <QKeyEvent>
 
-EmailIdCombo::EmailIdCombo(KIdentityManagement::IdentityManager* manager, QWidget* parent)
+EmailIdCombo::EmailIdCombo(KIdentityManagementCore::IdentityManager* manager, QWidget* parent)
     : KIdentityManagementWidgets::IdentityCombo(manager, parent)
 {}
 

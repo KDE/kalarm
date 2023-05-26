@@ -10,7 +10,7 @@
 
 #include "akonadiplugin_debug.h"
 
-#include <KIdentityManagement/Identity>
+#include <KIdentityManagementCore/Identity>
 #include <MailTransport/TransportManager>
 #include <MailTransport/Transport>
 #include <Akonadi/MessageQueueJob>
@@ -41,7 +41,7 @@ SendAkonadiMail* SendAkonadiMail::instance()
 * Reply = empty string if the message is queued for sending,
 *       = error message if the message was not sent.
 */
-QString SendAkonadiMail::send(KMime::Message::Ptr message, const KIdentityManagement::Identity& identity,
+QString SendAkonadiMail::send(KMime::Message::Ptr message, const KIdentityManagementCore::Identity& identity,
                         const QString& normalizedFrom, bool keepSentMail, JobData& jobdata)
 {
     qCDebug(AKONADIPLUGIN_LOG) << "SendAkonadiMail::send: Sending via KDE";

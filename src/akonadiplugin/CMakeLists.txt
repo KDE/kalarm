@@ -45,6 +45,6 @@ target_link_libraries(akonadiplugin
     KPim6::AkonadiMime
     KPim6::AkonadiContact
     KPim6::AkonadiWidgets
-    KPim6::IdentityManagement
+    KPim6::IdentityManagementCore
     KPim6::MailTransport
 )

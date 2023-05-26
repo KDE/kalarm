@@ -16,7 +16,7 @@
 
 class QString;
 
-namespace KIdentityManagement
+namespace KIdentityManagementCore
 {
 class IdentityManager;
 }
@@ -32,7 +32,7 @@ namespace KAlarmCal
 namespace Identities
 {
 /** Return the unique identity manager instance. It is created if it does not already exist. */
-KALARMCAL_EXPORT KIdentityManagement::IdentityManager* identityManager();
+KALARMCAL_EXPORT KIdentityManagementCore::IdentityManager* identityManager();
 
 /** Return whether any identities exist. */
 KALARMCAL_EXPORT bool identitiesExist();
