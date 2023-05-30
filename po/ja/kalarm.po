@@ -17,7 +17,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
 "X-Accelerator-Marker: &\n"
 "X-Text-Markup: kde4\n"
 
@@ -3609,7 +3609,6 @@ msgctxt "@info"
 msgid "1 Minute"
 msgid_plural "%1 Minutes"
 msgstr[0] "分"
-msgstr[1] "分"
 
 #: kalarmcalendar/kaevent.cpp:2938 kalarmcalendar/kaevent.cpp:3025
 #: kalarmcalendar/kaeventformatter.cpp:444
@@ -3618,7 +3617,6 @@ msgctxt "@info"
 msgid "1 Hour"
 msgid_plural "%1 Hours"
 msgstr[0] ""
-msgstr[1] ""
 
 #: kalarmcalendar/kaevent.cpp:2940 kalarmcalendar/kaevent.cpp:3026
 #, kde-format
@@ -3633,7 +3631,6 @@ msgctxt "@info"
 msgid "1 Day"
 msgid_plural "%1 Days"
 msgstr[0] ""
-msgstr[1] ""
 
 #: kalarmcalendar/kaevent.cpp:2945 kalarmcalendar/kaevent.cpp:3031
 #, fuzzy, kde-format
@@ -3643,7 +3640,6 @@ msgctxt "@info"
 msgid "1 Week"
 msgid_plural "%1 Weeks"
 msgstr[0] "週単位"
-msgstr[1] "週単位"
 
 #: kalarmcalendar/kaevent.cpp:2947
 #, fuzzy, kde-format
@@ -3653,7 +3649,6 @@ msgctxt "@info"
 msgid "1 Month"
 msgid_plural "%1 Months"
 msgstr[0] "月単位"
-msgstr[1] "月単位"
 
 #: kalarmcalendar/kaevent.cpp:2949
 #, fuzzy, kde-format
@@ -3663,7 +3658,6 @@ msgctxt "@info"
 msgid "1 Year"
 msgid_plural "%1 Years"
 msgstr[0] "年単位"
-msgstr[1] "年単位"
 
 #: kalarmcalendar/kaevent.cpp:2955
 #, fuzzy, kde-format
@@ -4156,7 +4150,6 @@ msgctxt "@info"
 msgid "1 Second"
 msgid_plural "%1 Seconds"
 msgstr[0] "秒"
-msgstr[1] "秒"
 
 #: kalarmcalendar/kaeventformatter.cpp:417
 #, fuzzy, kde-format
@@ -4618,8 +4611,7 @@ msgstr "アラームを更新(&R)"
 msgctxt "@info"
 msgid "Do you really want to delete the selected alarm?"
 msgid_plural "Do you really want to delete the %1 selected alarms?"
-msgstr[0] "本当に選択したアラームを削除しますか？"
-msgstr[1] "本当に選択した %1 個のアラームを削除しますか？"
+msgstr[0] "本当に選択した %1 個のアラームを削除しますか？"
 
 #: mainwindow.cpp:807
 #, kde-format
@@ -4627,7 +4619,6 @@ msgctxt "@title:window"
 msgid "Delete Alarm"
 msgid_plural "Delete Alarms"
 msgstr[0] "アラームの削除"
-msgstr[1] "アラームの削除"
 
 #: mainwindow.cpp:808 templatedlg.cpp:180
 #, kde-format
@@ -4773,40 +4764,35 @@ msgstr "今日"
 msgctxt "@info"
 msgid "Tomorrow"
 msgid_plural "in %1 days' time"
-msgstr[0] "明日"
-msgstr[1] "%1 日後"
+msgstr[0] "%1 日後"
 
 #: messagedisplayhelper.cpp:486
 #, kde-format
 msgctxt "@info"
 msgid "in 1 week's time"
 msgid_plural "in %1 weeks' time"
-msgstr[0] "1 週間後"
-msgstr[1] "%1 週間後"
+msgstr[0] "%1 週間後"
 
 #: messagedisplayhelper.cpp:500
 #, kde-format
 msgctxt "@info"
 msgid "in 1 minute's time"
 msgid_plural "in %1 minutes' time"
-msgstr[0] "1 分後"
-msgstr[1] "%1 分後"
+msgstr[0] "%1 分後"
 
 #: messagedisplayhelper.cpp:502
 #, kde-format
 msgctxt "@info"
 msgid "in 1 hour's time"
 msgid_plural "in %1 hours' time"
-msgstr[0] "1 時間後"
-msgstr[1] "%1 時間後"
+msgstr[0] "%1 時間後"
 
 #: messagedisplayhelper.cpp:505
 #, kde-format
 msgctxt "@item:intext inserted into 'in ... %1 minute's time' below"
 msgid "1 hour"
 msgid_plural "%1 hours"
-msgstr[0] "1 時間"
-msgstr[1] "%1 時間"
+msgstr[0] "%1 時間"
 
 #: messagedisplayhelper.cpp:506
 #, fuzzy, kde-format
@@ -4816,8 +4802,7 @@ msgstr[1] "%1 時間"
 msgctxt "@info '%2' is the previous message '1 hour'/'%1 hours'"
 msgid "in %2 1 minute's time"
 msgid_plural "in %2 %1 minutes' time"
-msgstr[0] "1 分後"
-msgstr[1] "%1 分後"
+msgstr[0] "%1 分後"
 
 #: messagedisplayhelper.cpp:848
 #, kde-format
@@ -8587,8 +8572,7 @@ msgstr "現在選択されているアラームテンプレートを削除しま
 msgctxt "@info"
 msgid "Do you really want to delete the selected alarm template?"
 msgid_plural "Do you really want to delete the %1 selected alarm templates?"
-msgstr[0] "本当に選択したアラームテンプレートを削除しますか？"
-msgstr[1] "本当に選択した %1 個のアラームテンプレートを削除しますか？"
+msgstr[0] "本当に選択した %1 個のアラームテンプレートを削除しますか？"
 
 #: templatedlg.cpp:179
 #, kde-format
@@ -8596,7 +8580,6 @@ msgctxt "@title:window"
 msgid "Delete Alarm Template"
 msgid_plural "Delete Alarm Templates"
 msgstr[0] "アラームテンプレートの削除"
-msgstr[1] "アラームテンプレートの削除"
 
 #: templatepickdlg.cpp:34
 #, kde-format
