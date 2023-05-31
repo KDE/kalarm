@@ -131,6 +131,7 @@ Description[da]=Angiv RTC-opvågningstidspunkt fra suspendering
 Description[de]=Den Zeitpunkt zum Aufwachen aus dem Ruhezustand gemäß der Echtzeituhr setzen
 Description[el]=Ρύθμιση της ώρας RTC «ξύπνημα από αναστολή»
 Description[en_GB]=Set RTC wake-from-suspend time
+Description[eo]=Meti RTC vekiĝ-el-suspendan tempon
 Description[es]=Establecer hora despertar-desde-suspendido RTC
 Description[et]=RTC uneseisundist ärkamise aja määramine
 Description[eu]=Ezarri esekitzetik-esnatzeko RTC ordua
