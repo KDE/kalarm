@@ -1,5 +1,8 @@
 KAlarm Change Log
 
+=== Version 3.5.6 (KDE Gear 23.04.3) --- 6 June 2022 ===
+* Fix memory leak every time an alarm is displayed [KDE Bug 468640]
+
 === Version 3.5.5 (KDE Gear 23.04) --- 30 December 2022 ===
 * Disallow setting environment variables in command alarm command line.
 * In Preferences dialog, if OK shows warning message, don't close dialog until user responds.
