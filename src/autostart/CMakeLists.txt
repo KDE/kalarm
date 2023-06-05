@@ -18,7 +18,7 @@ ecm_qt_declare_logging_category(kalarmautostart
                                 )
 
 
-file(GLOB ICONS_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/../appicons/*-apps-kalarm.png")
+file(GLOB ICONS_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/../icons/hicolor/*-apps-kalarm.png")
 ecm_add_app_icon(kalarmautostart ICONS ${ICONS_SRCS})
 
 

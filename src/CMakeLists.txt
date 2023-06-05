@@ -7,8 +7,7 @@ add_subdirectory(kalarmcalendar)
 if (ENABLE_AKONADI_PLUGIN)
     add_subdirectory(akonadiplugin)
 endif()
-add_subdirectory(appicons)
-add_subdirectory(pixmaps)
+add_subdirectory(icons)
 add_subdirectory(autostart)
 
 ########### next target ###############
@@ -288,7 +287,7 @@ qt_add_dbus_interface(kalarm_bin_SRCS data/org.freedesktop.ScreenSaver.xml scree
 kconfig_add_kcfg_files(kalarm_bin_SRCS GENERATE_MOC data/kalarmconfig.kcfgc)
 
 #if (UNIX)
-file(GLOB ICONS_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/appicons/*-apps-kalarm.png")
+file(GLOB ICONS_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/icons/hicolor/*-apps-kalarm.png")
 ecm_add_app_icon(kalarm_bin_SRCS ICONS ${ICONS_SRCS})
 add_executable(kalarm_bin ${kalarm_bin_SRCS})
 
