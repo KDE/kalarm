@@ -1,7 +1,7 @@
 /*
  *  datepicker.h  -  date chooser widget
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2021 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2021-2023 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -13,7 +13,7 @@
 #include <QWidget>
 #include <QDate>
 
-class QToolButton;
+class DPToolButton;
 class QLabel;
 class DayMatrix;
 
@@ -50,6 +50,7 @@ private Q_SLOTS:
     void prevMonthClicked();
     void nextYearClicked();
     void nextMonthClicked();
+    void todayClicked();
     void updateToday();
     void slotNewAlarm(EditAlarmDlg::Type);
     void slotNewAlarmFromTemplate(const KAEvent&);
@@ -57,17 +58,18 @@ private Q_SLOTS:
 private:
     void newMonthShown();
     void updateDisplay();
-    QToolButton* createArrowButton(const QString& iconId);
+    DPToolButton* createArrowButton(const QString& iconId);
 
-    QToolButton* mPrevYear;
-    QToolButton* mPrevMonth;
-    QToolButton* mNextYear;
-    QToolButton* mNextMonth;
-    QLabel*      mMonthYear;
-    QLabel*      mDayNames;
-    DayMatrix*   mDayMatrix;
-    QDate        mMonthShown;     // 1st of month currently displayed
-    QDate        mStartDate;      // earliest date currently displayed
+    DPToolButton* mPrevYear;
+    DPToolButton* mPrevMonth;
+    DPToolButton* mNextYear;
+    DPToolButton* mNextMonth;
+    DPToolButton* mToday;
+    QLabel*       mMonthYear;
+    QLabel*       mDayNames;
+    DayMatrix*    mDayMatrix;
+    QDate         mMonthShown;     // 1st of month currently displayed
+    QDate         mStartDate;      // earliest date currently displayed
 };
 
 // vim: et sw=4:
