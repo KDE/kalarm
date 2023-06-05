@@ -1,7 +1,7 @@
 /*
  *  displaycalendar.cpp  -  KAlarm display calendar file access
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2001-2020 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2001-2023 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -333,6 +333,17 @@ bool DisplayCalendar::deleteEvent(const QString& eventID, bool saveit)
         {
             status = CalEvent::status(kcalEvent);
             mCalendarStorage->calendar()->deleteEvent(kcalEvent);
+            if (mCalendarStorage->calendar()->rawEvents().isEmpty())
+            {
+                // Workaround for memory leak in KF5 KCalendarCore !!!
+                // All events deleted from the calendar are stored until the
+                // calendar is closed (the function to disable this,
+                // Calendar::setDeletionTracking(), is protected!). The only
+                // way to clear this memory leak is to close the calendar
+                // whenever it is empty.
+                // Note that calling close() leaves the calendar open and usable!
+                mCalendarStorage->calendar()->close();
+            }
         }
 
         if (status != CalEvent::EMPTY)
