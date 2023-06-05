@@ -1,7 +1,7 @@
 /*
  *  datepicker.cpp  -  date chooser widget
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2021-2022 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2021-2023 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -25,6 +25,24 @@
 #include <QLocale>
 #include <QApplication>
 
+class DPToolButton : public QToolButton
+{
+    Q_OBJECT
+public:
+    DPToolButton(QWidget* parent) : QToolButton(parent) {}
+    QSize sizeHint() const override
+    {
+        QSize s = QToolButton::sizeHint();
+        return QSize(s.width() * 4 / 5, s.height());
+    }
+    QSize minimumSizeHint() const override
+    {
+        QSize s = QToolButton::minimumSizeHint();
+        return QSize(s.width() * 4 / 5, s.height());
+    }
+};
+
+
 DatePicker::DatePicker(QWidget* parent)
     : QWidget(parent)
 {
@@ -46,14 +64,16 @@ DatePicker::DatePicker(QWidget* parent)
     hlayout->setContentsMargins(0, 0, 0, 0);
     topLayout->addLayout(hlayout);
 
-    QToolButton* leftYear   = createArrowButton(QStringLiteral("arrow-left-double"));
-    QToolButton* leftMonth  = createArrowButton(QStringLiteral("arrow-left"));
-    QToolButton* rightMonth = createArrowButton(QStringLiteral("arrow-right"));
-    QToolButton* rightYear  = createArrowButton(QStringLiteral("arrow-right-double"));
+    DPToolButton* leftYear   = createArrowButton(QStringLiteral("arrow-left-double"));
+    DPToolButton* leftMonth  = createArrowButton(QStringLiteral("arrow-left"));
+    DPToolButton* rightMonth = createArrowButton(QStringLiteral("arrow-right"));
+    DPToolButton* rightYear  = createArrowButton(QStringLiteral("arrow-right-double"));
+    DPToolButton* today      = createArrowButton(QStringLiteral("show-today"));
     mPrevYear  = leftYear;
     mPrevMonth = leftMonth;
     mNextYear  = rightYear;
     mNextMonth = rightMonth;
+    mToday     = today;
     if (QApplication::isRightToLeft())
     {
         mPrevYear  = rightYear;
@@ -65,10 +85,12 @@ DatePicker::DatePicker(QWidget* parent)
     mPrevMonth->setToolTip(i18nc("@info:tooltip", "Show the previous month"));
     mNextYear->setToolTip(i18nc("@info:tooltip", "Show the next year"));
     mNextMonth->setToolTip(i18nc("@info:tooltip", "Show the next month"));
+    mToday->setToolTip(i18nc("@info:tooltip", "Show today"));
     connect(mPrevYear, &QToolButton::clicked, this, &DatePicker::prevYearClicked);
     connect(mPrevMonth, &QToolButton::clicked, this, &DatePicker::prevMonthClicked);
     connect(mNextYear, &QToolButton::clicked, this, &DatePicker::nextYearClicked);
     connect(mNextMonth, &QToolButton::clicked, this, &DatePicker::nextMonthClicked);
+    connect(mToday, &QToolButton::clicked, this, &DatePicker::todayClicked);
 
     const QDate currentDate = KADateTime::currentDateTime(Preferences::timeSpec()).date();
     mMonthYear = new QLabel(this);
@@ -84,6 +106,8 @@ DatePicker::DatePicker(QWidget* parent)
     }
     mMonthYear->setMinimumWidth(maxWidth);
 
+    if (QApplication::isRightToLeft())
+        hlayout->addWidget(mToday);
     hlayout->addWidget(mPrevYear);
     hlayout->addWidget(mPrevMonth);
     hlayout->addStretch();
@@ -91,6 +115,8 @@ DatePicker::DatePicker(QWidget* parent)
     hlayout->addStretch();
     hlayout->addWidget(mNextMonth);
     hlayout->addWidget(mNextYear);
+    if (!QApplication::isRightToLeft())
+        hlayout->addWidget(mToday);
 
     // Set up the day name headings.
     // These start at the user's start day of the week.
@@ -204,6 +230,21 @@ void DatePicker::nextMonthClicked()
 }
 
 /******************************************************************************
+* Called when the today button has been clicked.
+*/
+void DatePicker::todayClicked()
+{
+    const QDate currentDate = KADateTime::currentDateTime(Preferences::timeSpec()).date();
+    const QDate monthToShow(currentDate.year(), currentDate.month(), 1);
+    if (monthToShow != mMonthShown)
+    {
+        mMonthShown = monthToShow;
+        newMonthShown();
+        updateDisplay();
+    }
+}
+
+/******************************************************************************
 * Called at midnight. If the month has changed, update the view.
 */
 void DatePicker::updateToday()
@@ -269,13 +310,15 @@ void DatePicker::updateDisplay()
 /******************************************************************************
 * Create an arrow button for moving backwards or forwards.
 */
-QToolButton* DatePicker::createArrowButton(const QString& iconId)
+DPToolButton* DatePicker::createArrowButton(const QString& iconId)
 {
-    QToolButton* button = new QToolButton(this);
+    DPToolButton* button = new DPToolButton(this);
     button->setIcon(QIcon::fromTheme(iconId));
     button->setToolButtonStyle(Qt::ToolButtonIconOnly);
     button->setAutoRaise(true);
     return button;
 }
+
+#include "datepicker.moc"
 
 // vim: et sw=4:

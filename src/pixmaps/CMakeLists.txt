@@ -9,5 +9,21 @@ ecm_install_icons(
     22-actions-document-new-from-template.png
     22-actions-kalarm-partdisabled.png
     22-actions-new-audio-alarm.png
+    16-actions-show-today.svg
+    22-actions-show-today.svg
     DESTINATION ${KDE_INSTALL_DATADIR}/kalarm/icons
     THEME oxygen)
+
+ecm_install_icons(
+    ICONS
+    16-actions-show-today.svg
+    22-actions-show-today.svg
+    DESTINATION ${KDE_INSTALL_ICONDIR}
+    THEME breeze)
+
+ecm_install_icons(
+    ICONS
+    dark/16-actions-show-today.svg
+    dark/22-actions-show-today.svg
+    DESTINATION ${KDE_INSTALL_ICONDIR}
+    THEME breeze-dark)
