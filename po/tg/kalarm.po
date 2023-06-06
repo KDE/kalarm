@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-04-06 00:48+0000\n"
+"POT-Creation-Date: 2023-06-06 00:47+0000\n"
 "PO-Revision-Date: 2019-09-29 12:31+0500\n"
 "Last-Translator: Victor Ibragimov <victor.ibragimov@gmail.com>\n"
 "Language-Team: English <kde-i18n-doc@kde.org>\n"
@@ -1972,7 +1972,7 @@ msgstr "&Амалиёт"
 msgid "&Settings"
 msgstr "Намоиши танзимот"
 
-#: datepicker.cpp:31
+#: datepicker.cpp:49
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1980,36 +1980,43 @@ msgid ""
 "be shown."
 msgstr ""
 
-#: datepicker.cpp:37
+#: datepicker.cpp:55
 #, fuzzy, kde-format
 msgctxt "@title:group"
 msgid "Alarm Date Selector"
 msgstr "Адреси файли тақвимӣ"
 
-#: datepicker.cpp:64
+#: datepicker.cpp:84
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show the previous year"
 msgstr ""
 
-#: datepicker.cpp:65
+#: datepicker.cpp:85
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show the previous month"
 msgstr ""
 
-#: datepicker.cpp:66
+#: datepicker.cpp:86
 #, fuzzy, kde-format
 #| msgid "Show time u&ntil alarm"
 msgctxt "@info:tooltip"
 msgid "Show the next year"
 msgstr "Намоиши муддат &то хотиррасонӣ"
 
-#: datepicker.cpp:67
+#: datepicker.cpp:87
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show the next month"
 msgstr ""
+
+#: datepicker.cpp:88
+#, fuzzy, kde-format
+#| msgid "today"
+msgctxt "@info:tooltip"
+msgid "Show today"
+msgstr "имрӯз"
 
 #: daymatrix.cpp:207
 #, kde-format
@@ -9902,12 +9909,6 @@ msgstr ""
 #~ msgctxt "@info"
 #~ msgid "Date cannot be later than %1"
 #~ msgstr "Сана набояд беш аз %1 бошад"
-
-#, fuzzy
-#~| msgid "today"
-#~ msgctxt "@info/plain"
-#~ msgid "today"
-#~ msgstr "имрӯз"
 
 #, fuzzy
 #~| msgid "in 1 hour 1 minute's time"

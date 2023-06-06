@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-04-06 00:48+0000\n"
+"POT-Creation-Date: 2023-06-06 00:47+0000\n"
 "PO-Revision-Date: 2002-10-12 14:57+0200\n"
 "Last-Translator: Thelma Lungcuzo <thelma@translate.org.za>\n"
 "Language-Team: Xhosa <xhosa@translate.org.za>\n"
@@ -1816,7 +1816,7 @@ msgstr "&Iintshukumo"
 msgid "&Settings"
 msgstr "&Iintshukumo"
 
-#: datepicker.cpp:31
+#: datepicker.cpp:49
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1824,35 +1824,42 @@ msgid ""
 "be shown."
 msgstr ""
 
-#: datepicker.cpp:37
+#: datepicker.cpp:55
 #, fuzzy, kde-format
 msgctxt "@title:group"
 msgid "Alarm Date Selector"
 msgstr "URL ye fayile ye calendar"
 
-#: datepicker.cpp:64
+#: datepicker.cpp:84
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show the previous year"
 msgstr ""
 
-#: datepicker.cpp:65
+#: datepicker.cpp:85
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show the previous month"
 msgstr ""
 
-#: datepicker.cpp:66
+#: datepicker.cpp:86
 #, fuzzy, kde-format
 msgctxt "@info:tooltip"
 msgid "Show the next year"
 msgstr "Hlela i Alarm"
 
-#: datepicker.cpp:67
+#: datepicker.cpp:87
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show the next month"
 msgstr ""
+
+#: datepicker.cpp:88
+#, fuzzy, kde-format
+#| msgid "today"
+msgctxt "@info:tooltip"
+msgid "Show today"
+msgstr "namhlanje"
 
 #: daymatrix.cpp:207
 #, kde-format
@@ -8970,12 +8977,6 @@ msgstr ""
 #~ msgctxt "@info"
 #~ msgid "Date cannot be later than %1"
 #~ msgstr "Umhla akakwazi ukuba ngaphambili kuno %1"
-
-#, fuzzy
-#~| msgid "today"
-#~ msgctxt "@info/plain"
-#~ msgid "today"
-#~ msgstr "namhlanje"
 
 #, fuzzy
 #~ msgctxt "@info"

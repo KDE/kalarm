@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-04-06 00:48+0000\n"
+"POT-Creation-Date: 2023-06-06 00:47+0000\n"
 "PO-Revision-Date: 2023-01-06 03:12+0000\n"
 "Last-Translator: José Nuno Pires <zepires@gmail.com>\n"
 "Language-Team: pt <kde-i18n-pt@kde.org>\n"
@@ -1922,7 +1922,7 @@ msgstr "&Acções"
 msgid "&Settings"
 msgstr "&Configuração"
 
-#: datepicker.cpp:31
+#: datepicker.cpp:49
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1932,35 +1932,43 @@ msgstr ""
 "Seleccione as datas a apresentar na lista de alarmes. Só serão apresentados "
 "os alarmes que terminam nessas datas."
 
-#: datepicker.cpp:37
+#: datepicker.cpp:55
 #, kde-format
 msgctxt "@title:group"
 msgid "Alarm Date Selector"
 msgstr "Selector de Datas dos Alarmes"
 
-#: datepicker.cpp:64
+#: datepicker.cpp:84
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show the previous year"
 msgstr "Mostrar o ano anterior"
 
-#: datepicker.cpp:65
+#: datepicker.cpp:85
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show the previous month"
 msgstr "Mostrar o mês anterior"
 
-#: datepicker.cpp:66
+#: datepicker.cpp:86
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show the next year"
 msgstr "Mostrar o ano seguinte"
 
-#: datepicker.cpp:67
+#: datepicker.cpp:87
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show the next month"
 msgstr "Mostrar o mês seguinte"
+
+#: datepicker.cpp:88
+#, fuzzy, kde-format
+#| msgctxt "@action"
+#| msgid "Show &Details"
+msgctxt "@info:tooltip"
+msgid "Show today"
+msgstr "Mostrar os &Detalhes"
 
 #: daymatrix.cpp:207
 #, kde-format

@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-04-06 00:48+0000\n"
+"POT-Creation-Date: 2023-06-06 00:47+0000\n"
 "PO-Revision-Date: 2020-05-15 08:19+0300\n"
 "Last-Translator: Marek Laane <qiilaq69@gmail.com>\n"
 "Language-Team: Estonian <kde-et@lists.linux.ee>\n"
@@ -1892,7 +1892,7 @@ msgstr "&Toimingud"
 msgid "&Settings"
 msgstr "&Seadistused"
 
-#: datepicker.cpp:31
+#: datepicker.cpp:49
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1900,7 +1900,7 @@ msgid ""
 "be shown."
 msgstr ""
 
-#: datepicker.cpp:37
+#: datepicker.cpp:55
 #, fuzzy, kde-format
 #| msgctxt "@item:inlistbox"
 #| msgid "KAlarm Calendar Directory"
@@ -1908,19 +1908,19 @@ msgctxt "@title:group"
 msgid "Alarm Date Selector"
 msgstr "KAlarmi kalendrikaust"
 
-#: datepicker.cpp:64
+#: datepicker.cpp:84
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show the previous year"
 msgstr ""
 
-#: datepicker.cpp:65
+#: datepicker.cpp:85
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show the previous month"
 msgstr ""
 
-#: datepicker.cpp:66
+#: datepicker.cpp:86
 #, fuzzy, kde-format
 #| msgctxt "@option:check"
 #| msgid "Show time until alarm"
@@ -1928,11 +1928,19 @@ msgctxt "@info:tooltip"
 msgid "Show the next year"
 msgstr "Häireni jäänud aja näitamine"
 
-#: datepicker.cpp:67
+#: datepicker.cpp:87
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show the next month"
 msgstr ""
+
+#: datepicker.cpp:88
+#, fuzzy, kde-format
+#| msgctxt "@info/plain"
+#| msgid "today"
+msgctxt "@info:tooltip"
+msgid "Show today"
+msgstr "täna"
 
 #: daymatrix.cpp:207
 #, fuzzy, kde-format
@@ -9504,10 +9512,6 @@ msgstr "Minutit arv enne häiret uneseisundist ärkamiseks"
 #~ msgctxt "@info"
 #~ msgid "Date cannot be later than %1"
 #~ msgstr "Kuupäev ei saa olla hilisem kui %1"
-
-#~ msgctxt "@info/plain"
-#~ msgid "today"
-#~ msgstr "täna"
 
 #~ msgctxt "@info"
 #~ msgid "in 1 hour 1 minute's time"

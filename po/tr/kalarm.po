@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdepim-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-04-06 00:48+0000\n"
+"POT-Creation-Date: 2023-06-06 00:47+0000\n"
 "PO-Revision-Date: 2023-06-04 02:02+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -1906,7 +1906,7 @@ msgstr "&Eylemler"
 msgid "&Settings"
 msgstr "Ayar&lar"
 
-#: datepicker.cpp:31
+#: datepicker.cpp:49
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1916,35 +1916,43 @@ msgstr ""
 "Alarm listesinde görüntülenecek tarihleri seçin. Yalnızca bu tarihlerde "
 "süresi dolan alarmlar gösterilecektir."
 
-#: datepicker.cpp:37
+#: datepicker.cpp:55
 #, kde-format
 msgctxt "@title:group"
 msgid "Alarm Date Selector"
 msgstr "Alarm Tarih Seçici"
 
-#: datepicker.cpp:64
+#: datepicker.cpp:84
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show the previous year"
 msgstr "Bir önceki yılı göster"
 
-#: datepicker.cpp:65
+#: datepicker.cpp:85
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show the previous month"
 msgstr "Bir önceki ayı göster"
 
-#: datepicker.cpp:66
+#: datepicker.cpp:86
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show the next year"
 msgstr "Sonraki yılı göster"
 
-#: datepicker.cpp:67
+#: datepicker.cpp:87
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show the next month"
 msgstr "Bir sonraki ayı göster"
+
+#: datepicker.cpp:88
+#, fuzzy, kde-format
+#| msgctxt "@action"
+#| msgid "Show &Details"
+msgctxt "@info:tooltip"
+msgid "Show today"
+msgstr "&Ayrıntıları Göster"
 
 #: daymatrix.cpp:207
 #, kde-format

@@ -1,6 +1,6 @@
 # translation of kalarm.po to
 # translation of alarmdaemonctrl.po to
-# Version: $Revision: 1648868 $
+# Version: $Revision: 1653264 $
 #
 # Copyright (C) 2002, 2004, 2005, 2006, 2007, 2008, 2009 Free Software Foundation, Inc.
 # Krzysztof Lichota <lichota@mimuw.edu.pl>, 2002, 2004, 2005, 2006.
@@ -17,7 +17,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-04-06 00:48+0000\n"
+"POT-Creation-Date: 2023-06-06 00:47+0000\n"
 "PO-Revision-Date: 2023-02-12 09:44+0100\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
@@ -1900,7 +1900,7 @@ msgstr "Dzi&ałania"
 msgid "&Settings"
 msgstr "&Ustawienia"
 
-#: datepicker.cpp:31
+#: datepicker.cpp:49
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1910,35 +1910,43 @@ msgstr ""
 "Wybierz daty do pokazania na liście alarmów. Pokazywane będą tylko alarmy, "
 "które przypadają na te daty."
 
-#: datepicker.cpp:37
+#: datepicker.cpp:55
 #, kde-format
 msgctxt "@title:group"
 msgid "Alarm Date Selector"
 msgstr "Wybierak daty alarmu"
 
-#: datepicker.cpp:64
+#: datepicker.cpp:84
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show the previous year"
 msgstr "Pokaż poprzedni rok"
 
-#: datepicker.cpp:65
+#: datepicker.cpp:85
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show the previous month"
 msgstr "Pokaż poprzedni miesiąc"
 
-#: datepicker.cpp:66
+#: datepicker.cpp:86
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show the next year"
 msgstr "Pokaż następny rok"
 
-#: datepicker.cpp:67
+#: datepicker.cpp:87
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show the next month"
 msgstr "Pokaż następny miesiąc"
+
+#: datepicker.cpp:88
+#, fuzzy, kde-format
+#| msgctxt "@info/plain"
+#| msgid "today"
+msgctxt "@info:tooltip"
+msgid "Show today"
+msgstr "dzisiaj"
 
 #: daymatrix.cpp:207
 #, kde-format
@@ -9404,10 +9412,6 @@ msgstr "Liczba minut przed alarmem do obudzenia z uśpienia"
 #~ msgctxt "@info"
 #~ msgid "Date cannot be later than %1"
 #~ msgstr "Data nie może być późniejsza niż %1"
-
-#~ msgctxt "@info/plain"
-#~ msgid "today"
-#~ msgstr "dzisiaj"
 
 #~ msgctxt "@info"
 #~ msgid "Cannot load system tray icon."

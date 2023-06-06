@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-04-06 00:48+0000\n"
+"POT-Creation-Date: 2023-06-06 00:47+0000\n"
 "PO-Revision-Date: 2009-01-18 16:28+0530\n"
 "Last-Translator: A S Alam <aalam@users.sf.net>\n"
 "Language-Team: Punjabi <punjabi-l10n@users.sf.net>\n"
@@ -1766,7 +1766,7 @@ msgstr "ਐਕਸ਼ਨ(&A)"
 msgid "&Settings"
 msgstr "ਸੈਟਿੰਗ(&S)"
 
-#: datepicker.cpp:31
+#: datepicker.cpp:49
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1774,7 +1774,7 @@ msgid ""
 "be shown."
 msgstr ""
 
-#: datepicker.cpp:37
+#: datepicker.cpp:55
 #, fuzzy, kde-format
 #| msgctxt "@info/plain"
 #| msgid "Calendar Files"
@@ -1782,19 +1782,19 @@ msgctxt "@title:group"
 msgid "Alarm Date Selector"
 msgstr "ਕੈਲੰਡਰ ਫਾਇਲਾਂ"
 
-#: datepicker.cpp:64
+#: datepicker.cpp:84
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show the previous year"
 msgstr ""
 
-#: datepicker.cpp:65
+#: datepicker.cpp:85
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show the previous month"
 msgstr ""
 
-#: datepicker.cpp:66
+#: datepicker.cpp:86
 #, fuzzy, kde-format
 #| msgctxt "@item:inlistbox"
 #| msgid "Archived Alarms"
@@ -1802,11 +1802,19 @@ msgctxt "@info:tooltip"
 msgid "Show the next year"
 msgstr "ਅਕਾਇਵ ਅਲਾਰਮ"
 
-#: datepicker.cpp:67
+#: datepicker.cpp:87
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show the next month"
 msgstr ""
+
+#: datepicker.cpp:88
+#, fuzzy, kde-format
+#| msgctxt "@info/plain"
+#| msgid "today"
+msgctxt "@info:tooltip"
+msgid "Show today"
+msgstr "ਅੱਜ"
 
 #: daymatrix.cpp:207
 #, kde-format
@@ -9158,10 +9166,6 @@ msgstr ""
 #~ msgctxt "@info"
 #~ msgid "Date cannot be later than %1"
 #~ msgstr "ਮਿਤੀ %1 ਤੋਂ ਬਾਅਦ ਨਹੀਂ ਹੋ ਸਕਦੀ"
-
-#~ msgctxt "@info/plain"
-#~ msgid "today"
-#~ msgstr "ਅੱਜ"
 
 #~ msgctxt "@info"
 #~ msgid "Cannot load system tray icon."

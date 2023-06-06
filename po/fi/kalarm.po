@@ -22,7 +22,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-04-06 00:48+0000\n"
+"POT-Creation-Date: 2023-06-06 00:47+0000\n"
 "PO-Revision-Date: 2023-03-14 21:46+0200\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -1893,7 +1893,7 @@ msgstr "T&oiminnot"
 msgid "&Settings"
 msgstr "A&setukset"
 
-#: datepicker.cpp:31
+#: datepicker.cpp:49
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1903,35 +1903,43 @@ msgstr ""
 "Valitse hälytysluettelossa näytettävät päivät. Vain näiden päivien "
 "hälytykset näytetään."
 
-#: datepicker.cpp:37
+#: datepicker.cpp:55
 #, kde-format
 msgctxt "@title:group"
 msgid "Alarm Date Selector"
 msgstr "Hälytyksen päivävalitsin"
 
-#: datepicker.cpp:64
+#: datepicker.cpp:84
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show the previous year"
 msgstr "Näytä edellinen vuosi"
 
-#: datepicker.cpp:65
+#: datepicker.cpp:85
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show the previous month"
 msgstr "Näytä edellinen kuu"
 
-#: datepicker.cpp:66
+#: datepicker.cpp:86
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show the next year"
 msgstr "Näytä seuraava vuosi"
 
-#: datepicker.cpp:67
+#: datepicker.cpp:87
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show the next month"
 msgstr "Näytä seuraava kuu"
+
+#: datepicker.cpp:88
+#, fuzzy, kde-format
+#| msgctxt "@info/plain"
+#| msgid "today"
+msgctxt "@info:tooltip"
+msgid "Show today"
+msgstr "tänään"
 
 #: daymatrix.cpp:207
 #, kde-format
@@ -9323,10 +9331,6 @@ msgstr "Montako minuuttia ennen hälytystä herätään keskeytyksistä"
 #~ msgctxt "@info"
 #~ msgid "Date cannot be later than %1"
 #~ msgstr "Päivä ei voi olla myöhemmin kuin %1"
-
-#~ msgctxt "@info/plain"
-#~ msgid "today"
-#~ msgstr "tänään"
 
 #~ msgctxt "@info"
 #~ msgid "Cannot load system tray icon."
