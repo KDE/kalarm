@@ -1,7 +1,7 @@
 /*
  *  repetitionbutton.cpp  -  pushbutton and dialog to specify alarm repetition
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2004-2021 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2004-2023 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -174,7 +174,7 @@ RepetitionDlg::RepetitionDlg(const QString& caption, bool readOnly, QWidget* par
     mDurationButton->setWhatsThis(i18nc("@info:whatsthis", "Check to specify how long the alarm is to be repeated"));
     mButtonGroup->addButton(mDurationButton);
     layout->addWidget(mDurationButton);
-    mDuration = new TimePeriod(true, mButtonBox);
+    mDuration = new TimePeriod(TimePeriod::ShowMinutes, mButtonBox);
     connect(mDuration, &TimePeriod::valueChanged, this, &RepetitionDlg::durationChanged);
     mDuration->setWhatsThis(i18nc("@info:whatsthis", "Enter the length of time to repeat the alarm"));
     layout->addWidget(mDuration);

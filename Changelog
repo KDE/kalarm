@@ -3,8 +3,9 @@ KAlarm Change Log
 === Version (Qt6) --- 4 May 2023 ===
 * Remove migration of pre-Akonadi KResources calendar configuration.
 
-=== Version 3.6.0 (KDE Gear 23.08) --- 5 June 2023 ===
+=== Version 3.6.0 (KDE Gear 23.08) --- 7 June 2023 ===
 * Add a 'show today' control in the date picker [KDE Bug 470451]
+* Improve Defer dialogue, provide dropdown for common delay intervals [KDE Bug 470451]
 
 === Version 3.5.5 (KDE Gear 23.04) --- 30 December 2022 ===
 * Disallow setting environment variables in command alarm command line.

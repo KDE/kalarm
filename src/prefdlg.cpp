@@ -1,7 +1,7 @@
 /*
  *  prefdlg.cpp  -  program preferences dialog
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2001-2022 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2001-2023 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -1801,7 +1801,7 @@ ViewPrefTab::ViewPrefTab(StackedScrollGroup* scrollGroup)
         radio->setWhatsThis(text);
         mAutoHideSystemTray->addButton(radio, 2);
         grid->addWidget(radio, 2, 0, 1, 2, Qt::AlignLeft);
-        mAutoHideSystemTrayPeriod = new TimePeriod(true, mShowInSystemTrayGroup);
+        mAutoHideSystemTrayPeriod = new TimePeriod(TimePeriod::ShowMinutes, mShowInSystemTrayGroup);
         mAutoHideSystemTrayPeriod->setWhatsThis(text);
         mAutoHideSystemTrayPeriod->setMaximumWidth(mAutoHideSystemTrayPeriod->sizeHint().width());
         grid->addWidget(mAutoHideSystemTrayPeriod, 3, 1, 1, 1, Qt::AlignLeft);
