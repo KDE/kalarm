@@ -18,14 +18,14 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-06-06 00:47+0000\n"
-"PO-Revision-Date: 2023-01-15 15:14+0100\n"
+"PO-Revision-Date: 2023-06-06 10:50+0200\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 22.12.1\n"
+"X-Generator: Lokalize 23.04.1\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #, kde-format
@@ -34,7 +34,7 @@ msgid "Your names"
 msgstr ""
 "Otto Bruggeman - 2001,Rinse de Vries - 2001 t/m 2008,Wilbert Berendsen - "
 "2003,Bram Schoenmakers - 2004 t/m 2007,Tom Albers - 2004,Marout Yasuo Borms "
-"- 2005,Kristof Bal - 2008,Freek de Kruijf - 2008 t/m 2022"
+"- 2005,Kristof Bal - 2008,Freek de Kruijf - 2008 t/m 2023"
 
 # vertaalinfo:
 # adressen van otto en marout bestaan niet meer, vervangen door komma's om de opmaak te behouden.
@@ -2027,12 +2027,10 @@ msgid "Show the next month"
 msgstr "De volgende maand tonen"
 
 #: datepicker.cpp:88
-#, fuzzy, kde-format
-#| msgctxt "@info/plain"
-#| msgid "today"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Show today"
-msgstr "vandaag"
+msgstr "Vandaag tonen"
 
 #: daymatrix.cpp:207
 #, kde-format

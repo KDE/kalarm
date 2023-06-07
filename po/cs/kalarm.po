@@ -1907,12 +1907,10 @@ msgid "Show the next month"
 msgstr "Zobrazit následující měsíc"
 
 #: datepicker.cpp:88
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "Show &Details"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Show today"
-msgstr "Zobrazit po&drobnosti"
+msgstr ""
 
 #: daymatrix.cpp:207
 #, kde-format
