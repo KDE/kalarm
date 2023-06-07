@@ -1,7 +1,7 @@
 /*
  *  alarmtimewidget.cpp  -  alarm date/time entry widget
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2001-2022 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2001-2023 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -16,6 +16,7 @@
 #include "lib/radiobutton.h"
 #include "lib/synchtimer.h"
 #include "lib/timeedit.h"
+#include "lib/timeperiod.h"
 #include "lib/timespinbox.h"
 #include "lib/timezonecombo.h"
 
@@ -27,6 +28,7 @@
 #include <QGridLayout>
 #include <QLabel>
 #include <QHBoxLayout>
+#include <QStandardItemModel>
 
 //clazy:excludeall=non-pod-global-static
 
@@ -87,7 +89,7 @@ void AlarmTimeWidget::init(Mode mode, const QString& title)
         topLayout->setContentsMargins(0, 0, 0, 0);
 
     // At time radio button/label
-    mAtTimeRadio = new RadioButton((mDeferring ? i18nc("@option:radio", "Defer to date/time:") : i18nc("@option:radio", "At date/time:")), topWidget);
+    mAtTimeRadio = new RadioButton((mDeferring ? i18nc("@option:radio", "Defer until:") : i18nc("@option:radio", "At date/time:")), topWidget);
     mAtTimeRadio->setWhatsThis(mDeferring ? i18nc("@info:whatsthis", "Reschedule the alarm to the specified date and time.")
                                           : i18nc("@info:whatsthis", "Specify the date, or date and time, to schedule the alarm."));
     mButtonGroup->addButton(mAtTimeRadio);
@@ -132,48 +134,76 @@ void AlarmTimeWidget::init(Mode mode, const QString& title)
     }
 
     // 'Time from now' radio button/label
-    mAfterTimeRadio = new RadioButton((mDeferring ? i18nc("@option:radio", "Defer for time interval:") : i18nc("@option:radio", "Time from now:")), topWidget);
+    mAfterTimeRadio = new RadioButton((mDeferring ? i18nc("@option:radio Defer for time interval", "Defer for:") : i18nc("@option:radio", "Time from now:")), topWidget);
     mAfterTimeRadio->setWhatsThis(mDeferring ? i18nc("@info:whatsthis", "Reschedule the alarm for the specified time interval after now.")
                                              : i18nc("@info:whatsthis", "Schedule the alarm after the specified time interval from now."));
     mButtonGroup->addButton(mAfterTimeRadio);
 
-    // Delay time spin box
-    mDelayTimeEdit = new TimeSpinBox(1, maxDelayTime, topWidget);
-    mDelayTimeEdit->setValue(1439);
-    connect(mDelayTimeEdit, &TimeSpinBox::valueChanged, this, &AlarmTimeWidget::delayTimeChanged);
-    mDelayTimeEdit->setWhatsThis(mDeferring ? xi18nc("@info:whatsthis", "<para>%1</para><para>%2</para>", i18n_TimeAfterPeriod(), TimeSpinBox::shiftWhatsThis())
-                                            : xi18nc("@info:whatsthis", "<para>%1</para><para>%2</para><para>%3</para>", i18n_TimeAfterPeriod(), recurText, TimeSpinBox::shiftWhatsThis()));
-    mAfterTimeRadio->setFocusWidget(mDelayTimeEdit);
-
-    // Set up the layout, either narrow or wide
-    auto grid = new QGridLayout();
-    grid->setContentsMargins(0, 0, 0, 0);
-    topLayout->addLayout(grid);
     if (mDeferring)
     {
-        grid->addWidget(mAtTimeRadio, 0, 0);
-        grid->addWidget(mDateEdit, 0, 1, Qt::AlignLeft);
-        grid->addWidget(timeBox, 1, 1, Qt::AlignLeft);
-        grid->setColumnStretch(2, 1);
-        topLayout->addStretch();
-        auto layout = new QHBoxLayout();
-        topLayout->addLayout(layout);
-        layout->addWidget(mAfterTimeRadio);
-        layout->addWidget(mDelayTimeEdit);
-        layout->addStretch();
+        // Delay time period
+        mDelayTimePeriod = new TimePeriod(TimePeriod::ShowMinutes, topWidget);
+        mDelayTimePeriod->setPeriod(0, false, TimePeriod::HoursMinutes);
+        connect(mDelayTimePeriod, &TimePeriod::valueChanged,
+                this, [this](const KCalendarCore::Duration& period) { delayTimeChanged(period.asSeconds()/60); });
+        mDelayTimePeriod->setWhatsThis(xi18nc("@info:whatsthis", "<para>%1</para><para>%2</para>", i18n_TimeAfterPeriod(), TimeSpinBox::shiftWhatsThis()));
+        mAfterTimeRadio->setFocusWidget(mDelayTimePeriod);
+
+        // Delay presets
+        mPresetsCombo = new ComboBox(topWidget);
+        mPresetsCombo->setEditable(false);
+        mPresetsCombo->setPlaceholderText(i18nc("@item:inlistbox", "Preset"));
+        const KLocalizedString minutesText = ki18ncp("@item:inlistbox", "1 minute", "%1 minutes");
+        const KLocalizedString hoursText   = ki18ncp("@item:inlistbox", "1 hour", "%1 hours");
+        mPresetsCombo->addItem(minutesText.subs(5).toString(),   5);
+        mPresetsCombo->addItem(minutesText.subs(10).toString(), 10);
+        mPresetsCombo->addItem(minutesText.subs(15).toString(), 15);
+        mPresetsCombo->addItem(minutesText.subs(30).toString(), 30);
+        mPresetsCombo->addItem(minutesText.subs(45).toString(), 45);
+        mPresetsCombo->addItem(hoursText.subs(1).toString(),    60);
+        mPresetsCombo->addItem(hoursText.subs(3).toString(),   180);
+        mPresetsCombo->addItem(i18nc("@item:inlistbox", "1 day"), 1440);
+        mPresetsCombo->addItem(i18nc("@item:inlistbox", "1 week"), 7*1440);
+        mPresetsCombo->setCurrentIndex(-1);
+        connect(mPresetsCombo, &ComboBox::activated, this, &AlarmTimeWidget::slotPresetSelected);
     }
     else
     {
-        grid->addWidget(mAtTimeRadio, 0, 0, Qt::AlignLeft);
-        auto hLayout = new QHBoxLayout;
-        hLayout->addWidget(mDateEdit);
-        hLayout->addSpacing(2 * style()->pixelMetric(QStyle::PM_LayoutHorizontalSpacing));
-        hLayout->addWidget(timeBox);
-        grid->addLayout(hLayout, 0, 1, Qt::AlignLeft);
-        grid->setRowStretch(1, 1);
-        grid->addWidget(mAfterTimeRadio, 2, 0, Qt::AlignLeft);
-        grid->addWidget(mDelayTimeEdit, 2, 1, Qt::AlignLeft);
+        // Delay time spin box
+        mDelayTimeEdit = new TimeSpinBox(1, maxDelayTime, topWidget);
+        mDelayTimeEdit->setValue(1439);
+        connect(mDelayTimeEdit, &TimeSpinBox::valueChanged, this, &AlarmTimeWidget::delayTimeChanged);
+        mDelayTimeEdit->setWhatsThis(xi18nc("@info:whatsthis", "<para>%1</para><para>%2</para><para>%3</para>", i18n_TimeAfterPeriod(), recurText, TimeSpinBox::shiftWhatsThis()));
+        mAfterTimeRadio->setFocusWidget(mDelayTimeEdit);
+    }
 
+    // Set up the layout
+    auto grid = new QGridLayout();
+    grid->setContentsMargins(0, 0, 0, 0);
+    topLayout->addLayout(grid);
+    const int atRow    = mDeferring ? 2 : 0;
+    const int afterRow = mDeferring ? 0 : 2;
+    grid->addWidget(mAtTimeRadio, atRow, 0, Qt::AlignLeft);
+    auto hLayout = new QHBoxLayout;
+    hLayout->addWidget(mDateEdit);
+    hLayout->addSpacing(style()->pixelMetric(QStyle::PM_LayoutHorizontalSpacing));
+    hLayout->addWidget(timeBox);
+    grid->addLayout(hLayout, atRow, 1, Qt::AlignLeft);
+    grid->setRowStretch(1, 1);
+    grid->addWidget(mAfterTimeRadio, afterRow, 0, Qt::AlignLeft);
+    if (mDelayTimeEdit)
+        grid->addWidget(mDelayTimeEdit, 2, 1, Qt::AlignLeft);
+    else
+    {
+        hLayout = new QHBoxLayout;
+        hLayout->addWidget(mDelayTimePeriod);
+        hLayout->addSpacing(2 * style()->pixelMetric(QStyle::PM_LayoutHorizontalSpacing));
+        hLayout->addWidget(mPresetsCombo);
+        grid->addLayout(hLayout, 0, 1, Qt::AlignLeft);
+    }
+
+    if (!mDeferring)
+    {
         // Time zone selection push button
         mTimeZoneButton = new PushButton(i18nc("@action:button", "Time Zone..."), topWidget);
         connect(mTimeZoneButton, &PushButton::clicked, this, &AlarmTimeWidget::showTimeZoneSelector);
@@ -229,7 +259,10 @@ void AlarmTimeWidget::setReadOnly(bool ro)
     mAfterTimeRadio->setReadOnly(ro);
     if (!mDeferring)
         mTimeZone->setReadOnly(ro);
-    mDelayTimeEdit->setReadOnly(ro);
+    if (mDelayTimeEdit)
+        mDelayTimeEdit->setReadOnly(ro);
+    else
+        mDelayTimePeriod->setReadOnly(ro);
 }
 
 /******************************************************************************
@@ -242,7 +275,12 @@ void AlarmTimeWidget::selectTimeFromNow(int minutes)
     {
         mAfterTimeRadio->setChecked(true);
         if (minutes > 0)
-            mDelayTimeEdit->setValue(minutes);
+        {
+            if (mDelayTimeEdit)
+                mDelayTimeEdit->setValue(minutes);
+            else
+                mDelayTimePeriod->setMinutes(minutes);
+        }
     }
     else
         mAtTimeRadio->setChecked(true);
@@ -268,15 +306,16 @@ KADateTime AlarmTimeWidget::getDateTime(int* minsFromNow, bool checkExpired, boo
     if (!mAtTimeRadio->isChecked())
     {
         // A relative time has been entered.
-        if (!mDelayTimeEdit->isValid())
+        if ((mDelayTimeEdit  &&  !mDelayTimeEdit->isValid())
+        ||  (mDelayTimePeriod  &&  !mDelayTimePeriod->isValid()))
         {
             if (showErrorMessage)
                 KAMessageBox::error(const_cast<AlarmTimeWidget*>(this), i18nc("@info", "Invalid time"));
             if (errorWidget)
-                *errorWidget = mDelayTimeEdit;
+                *errorWidget = mDelayTimeEdit ? (QWidget*)mDelayTimeEdit : (QWidget*)mDelayTimePeriod;
             return {};
         }
-        const int delayMins = mDelayTimeEdit->value();
+        const int delayMins = mDelayTimeEdit ? mDelayTimeEdit->value() : mDelayTimePeriod->minutes();
         if (minsFromNow)
             *minsFromNow = delayMins;
         return now.addSecs(delayMins * 60).toTimeSpec(mTimeSpec);
@@ -359,7 +398,10 @@ void AlarmTimeWidget::setDateTime(const DateTime& dt)
     {
         mTimeEdit->setValid(false);
         mDateEdit->setDate(QDate());
-        mDelayTimeEdit->setValid(false);
+        if (mDelayTimeEdit)
+            mDelayTimeEdit->setValid(false);
+        else
+            mDelayTimePeriod->setValid(false);
     }
     if (mAnyTimeCheckBox)
     {
@@ -463,7 +505,22 @@ void AlarmTimeWidget::setMaxDelayTime(const KADateTime& now)
                 maxVal = maxDelayTime;
         }
     }
-    mDelayTimeEdit->setMaximum(maxVal);
+    if (mDelayTimeEdit)
+        mDelayTimeEdit->setMaximum(maxVal);
+    else
+    {
+        mDelayTimePeriod->setMaxMinutes(maxVal);
+        // Disable all presets greater than the maximum delay minutes
+        auto* model = qobject_cast<QStandardItemModel*>(mPresetsCombo->model());
+        if (model)
+        {
+            for (int i = 0, count = mPresetsCombo->count();  i < count;  ++i)
+            {
+                const int minutes = mPresetsCombo->itemData(i).toInt();
+                model->item(i)->setEnabled(minutes <= maxVal);
+            }
+        }
+    }
 }
 
 /******************************************************************************
@@ -499,7 +556,12 @@ void AlarmTimeWidget::enableAnyTime(bool enable)
 void AlarmTimeWidget::focusTimeFromNow()
 {
     if (!mAtTimeRadio->isChecked())
-        mDelayTimeEdit->setFocus();
+    {
+        if (mDelayTimeEdit)
+            mDelayTimeEdit->setFocus();
+        else
+            mDelayTimePeriod->setFocus();
+    }
 }
 
 /******************************************************************************
@@ -545,7 +607,12 @@ void AlarmTimeWidget::updateTimes()
     if (mAtTimeRadio->isChecked())
         dateTimeChanged();
     else
-        delayTimeChanged(mDelayTimeEdit->value());
+    {
+        if (mDelayTimeEdit)
+            delayTimeChanged(mDelayTimeEdit->value());
+        else
+            delayTimeChanged(mDelayTimePeriod->minutes());
+    }
 }
 
 
@@ -563,9 +630,22 @@ void AlarmTimeWidget::slotButtonSet(QAbstractButton*)
     // Ensure that the value of the delay edit box is > 0.
     const KADateTime att(mDateEdit->date(), mTimeEdit->time(), mTimeSpec);
     const int minutes = (KADateTime::currentUtcDateTime().secsTo(att) + 59) / 60;
-    if (minutes <= 0)
-        mDelayTimeEdit->setValid(true);
-    mDelayTimeEdit->setEnabled(!at);
+    if (mDelayTimeEdit)
+    {
+        if (minutes <= 0)
+            mDelayTimeEdit->setValid(true);
+        mDelayTimeEdit->setEnabled(!at);
+    }
+    else
+    {
+        if (minutes <= 0)
+            mDelayTimePeriod->setValid(true);
+        mDelayTimePeriod->setEnabled(!at);
+        mPresetsCombo->setEnabled(!at);
+        QPalette pal = mPresetsCombo->palette();
+        pal.setColor(QPalette::PlaceholderText, pal.color(at ? QPalette::Disabled : QPalette::Active, QPalette::Text));
+        mPresetsCombo->setPalette(pal);
+    }
     setAnyTime();
 }
 
@@ -634,13 +714,26 @@ void AlarmTimeWidget::dateTimeChanged()
 {
     const KADateTime dt(mDateEdit->date(), mTimeEdit->time(), mTimeSpec);
     const int minutes = (KADateTime::currentUtcDateTime().secsTo(dt) + 59) / 60;
-    const bool blocked = mDelayTimeEdit->signalsBlocked();
-    mDelayTimeEdit->blockSignals(true);     // prevent infinite recursion between here and delayTimeChanged()
-    if (minutes <= 0  ||  minutes > mDelayTimeEdit->maximum())
-        mDelayTimeEdit->setValid(false);
+    if (mDelayTimeEdit)
+    {
+        const bool blocked = mDelayTimeEdit->signalsBlocked();
+        mDelayTimeEdit->blockSignals(true);     // prevent infinite recursion between here and delayTimeChanged()
+        if (minutes <= 0  ||  minutes > mDelayTimeEdit->maximum())
+            mDelayTimeEdit->setValid(false);
+        else
+            mDelayTimeEdit->setValue(minutes);
+        mDelayTimeEdit->blockSignals(blocked);
+    }
     else
-        mDelayTimeEdit->setValue(minutes);
-    mDelayTimeEdit->blockSignals(blocked);
+    {
+        const bool blocked = mDelayTimePeriod->signalsBlocked();
+        mDelayTimePeriod->blockSignals(true);     // prevent infinite recursion between here and delayTimeChanged()
+        if (minutes <= 0  ||  minutes > mDelayTimePeriod->maxMinutes())
+            mDelayTimePeriod->setValid(false);
+        else
+            mDelayTimePeriod->setMinutes(minutes);
+        mDelayTimePeriod->blockSignals(blocked);
+    }
     if (mAnyTimeAllowed && mAnyTimeCheckBox && mAnyTimeCheckBox->isChecked())
         Q_EMIT changed(KADateTime(dt.date(), mTimeSpec));
     else
@@ -653,7 +746,8 @@ void AlarmTimeWidget::dateTimeChanged()
 */
 void AlarmTimeWidget::delayTimeChanged(int minutes)
 {
-    if (mDelayTimeEdit->isValid())
+    if ((mDelayTimeEdit  &&  mDelayTimeEdit->isValid())
+    ||  (mDelayTimePeriod  &&  mDelayTimePeriod->isValid()))
     {
         QDateTime dt = KADateTime::currentUtcDateTime().addSecs(minutes * 60).toTimeSpec(mTimeSpec).qDateTime();
         const bool blockedT = mTimeEdit->signalsBlocked();
@@ -666,6 +760,37 @@ void AlarmTimeWidget::delayTimeChanged(int minutes)
         mDateEdit->blockSignals(blockedD);
         Q_EMIT changed(KADateTime(dt.date(), dt.time(), mTimeSpec));
     }
+}
+
+/******************************************************************************
+* Called when a new item is selected in the presets combo box.
+*/
+void AlarmTimeWidget::slotPresetSelected(int index)
+{
+    const int minutes = mPresetsCombo->itemData(index).toInt();
+    if (minutes > 0)
+    {
+        switch (mDelayTimePeriod->units())
+        {
+            case TimePeriod::Minutes:
+            case TimePeriod::HoursMinutes:
+                if (minutes < 1440)
+                    mDelayTimePeriod->setMinutes(minutes);
+                else
+                    mDelayTimePeriod->setMinutes(minutes, TimePeriod::Days);
+                break;
+            case TimePeriod::Days:
+            case TimePeriod::Weeks:
+                if (minutes >= 1440)
+                    mDelayTimePeriod->setMinutes(minutes);
+                else
+                    mDelayTimePeriod->setMinutes(minutes, TimePeriod::HoursMinutes);
+                break;
+        }
+    }
+    mPresetsCombo->blockSignals(true);
+    mPresetsCombo->setCurrentIndex(-1);
+    mPresetsCombo->blockSignals(false);
 }
 
 // vim: et sw=4:

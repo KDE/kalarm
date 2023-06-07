@@ -1,7 +1,7 @@
 /*
  *  alarmtimewidget.h  -  alarm date/time entry widget
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2001-2022 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2001-2023 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -15,10 +15,12 @@
 class QAbstractButton;
 class KDateComboBox;
 class ButtonGroup;
+class ComboBox;
 class RadioButton;
 class CheckBox;
 class PushButton;
 class TimeEdit;
+class TimePeriod;
 class TimeSpinBox;
 class TimeZoneCombo;
 
@@ -69,6 +71,7 @@ private Q_SLOTS:
     void              slotButtonSet(QAbstractButton*);
     void              dateTimeChanged();
     void              delayTimeChanged(int);
+    void              slotPresetSelected(int);
     void              slotAnyTimeToggled(bool);
     void              slotTimeZoneChanged();
     void              showTimeZoneSelector();
@@ -85,7 +88,9 @@ private:
     CheckBox*         mAnyTimeCheckBox;
     KDateComboBox*    mDateEdit;
     TimeEdit*         mTimeEdit;
-    TimeSpinBox*      mDelayTimeEdit;
+    TimeSpinBox*      mDelayTimeEdit{nullptr};
+    TimePeriod*       mDelayTimePeriod{nullptr};
+    ComboBox*         mPresetsCombo{nullptr};
     PushButton*       mTimeZoneButton;
     QWidget*          mTimeZoneBox;           // contains label and time zone combo box
     TimeZoneCombo*    mTimeZone;

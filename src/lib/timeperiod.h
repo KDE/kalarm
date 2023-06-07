@@ -1,7 +1,7 @@
 /*
  *  timeperiod.cpp  -  time period data entry widget
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2003-2019 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2003-2023 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -39,6 +39,13 @@ class TimePeriod : public QWidget
 {
     Q_OBJECT
 public:
+    /** Mode values for constructor. */
+    enum Mode
+    {
+        NoMinutes     = 0x00,  // do not show minutes or hours/minutes options
+        ShowMinutes   = 0x01   // show minutes and hours/minutes options
+    };
+
     /** Units for the time period.
      *  @li Minutes - the time period is entered as a number of minutes.
      *  @li HoursMinutes - the time period is entered as an hours/minutes value.
@@ -48,13 +55,24 @@ public:
     enum Units { Minutes, HoursMinutes, Days, Weeks };
 
     /** Constructor.
-     *  @param allowMinute Set false to prevent hours/minutes or minutes from
+     *  @param mode Set false to prevent hours/minutes or minutes from
      *         being allowed as units; only days and weeks can ever be used,
      *         regardless of other method calls. Set true to allow minutes,
      *         hours/minutes, days or weeks as units.
      *  @param parent The parent object of this widget.
      */
-    TimePeriod(bool allowMinute, QWidget* parent);
+    TimePeriod(Mode mode, QWidget* parent);
+
+    /** Returns true if the widget holds a valid value.
+     *  An invalid value is displayed as asterisks.
+     */
+    bool isValid() const;
+
+    /** Sets the spin box as holding a valid or invalid value.
+     *  If newly invalid, the value is displayed as asterisks.
+     *  If newly valid, the value is set to the minimum value.
+     */
+    void setValid(bool);
 
     /** Returns true if the widget is read only. */
     bool isReadOnly() const             { return mReadOnly; }
@@ -84,6 +102,19 @@ public:
      */
     void setPeriod(const KCalendarCore::Duration& period, bool dateOnly, Units defaultUnits);
 
+    /** Gets the entered time period in minutes. */
+    int minutes() const;
+
+    /** Changes the already initialised time period value.
+     *  @param minutes The value of the time period to set, in minutes
+     */
+    void setMinutes(int minutes);
+
+    /** Changes the already initialised time period value, and sets the units.
+     *  @param minutes The value of the time period to set, in minutes
+     */
+    void setMinutes(int minutes, Units units);
+
     /** Returns true if minutes and hours/minutes units are disabled. */
     bool isDateOnly() const             { return mDateOnlyOffset; }
 
@@ -99,6 +130,16 @@ public:
      *  Set @p hourmin = 0 to leave the minutes and hours/minutes maximum unchanged.
      */
     void setMaximum(int hourmin, int days);
+
+    /** Returns the maximum of the maximum values of the minutes and hours/minutes,
+     *  and days/weeks spin boxes.
+     */
+    int maxMinutes() const;
+
+    /** Sets the maximum values for the minutes and hours/minutes, and days/weeks
+     *  spin boxes.
+     */
+    void setMaxMinutes(int minutes);
 
     /** Sets whether the editor text is to be selected whenever spin buttons are
      *  clicked. The default is to select it.
@@ -142,6 +183,7 @@ private:
     int             mMaxDays {9999};     // maximum day count
     int             mDateOnlyOffset;     // for mUnitsCombo: 2 if minutes & hours/minutes is disabled, else 0
     Units           mMaxUnitShown;       // for mUnitsCombo: maximum units shown
+    Units           mUnitShown;          // units currently shown in mUnitsCombo
     bool            mNoHourMinute;       // hours/minutes cannot be displayed, ever
     bool            mReadOnly {false};   // the widget is read only
     bool            mHourMinuteRaised;   // hours:minutes spinbox is currently displayed
