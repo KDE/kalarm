@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-06-06 00:47+0000\n"
+"POT-Creation-Date: 2023-06-08 00:47+0000\n"
 "PO-Revision-Date: 2021-08-21 16:25+0530\n"
 "Last-Translator: Raghavendra Kamath <raghu@raghukamath.com>\n"
 "Language-Team: kde-hindi\n"
@@ -49,7 +49,7 @@ msgctxt "@info"
 msgid "Program error"
 msgstr "प्रोग्राम त्रुटि"
 
-#: alarmtimewidget.cpp:40
+#: alarmtimewidget.cpp:42
 #, fuzzy, kde-format
 #| msgctxt "@info:whatsthis"
 #| msgid ""
@@ -60,7 +60,7 @@ msgid ""
 "schedule the alarm."
 msgstr "जिन घन्टों और मिनटों के बीच अलार्म को दोहराना है वह संख्या भरें"
 
-#: alarmtimewidget.cpp:66
+#: alarmtimewidget.cpp:68
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -68,7 +68,7 @@ msgid ""
 "first recurrence on or after the entered date/time."
 msgstr ""
 
-#: alarmtimewidget.cpp:69
+#: alarmtimewidget.cpp:71
 #, fuzzy, kde-format
 #| msgctxt "@info/plain"
 #| msgid "This uses KAlarm's default time zone, set in the Preferences dialog."
@@ -76,37 +76,39 @@ msgctxt "@info"
 msgid "This uses KAlarm's default time zone, set in the Configuration dialog."
 msgstr "यह केअलार्म का डिफ़ॉल्ट समय क्षेत्र प्रयोग करता है, वरीयता संवाद में सेट."
 
-#: alarmtimewidget.cpp:90
-#, kde-format
+#: alarmtimewidget.cpp:92
+#, fuzzy, kde-format
+#| msgctxt "@label"
+#| msgid "Deferred to:"
 msgctxt "@option:radio"
-msgid "Defer to date/time:"
-msgstr "तारीख़/समय के लिए टालें:"
+msgid "Defer until:"
+msgstr "तक टालें:"
 
-#: alarmtimewidget.cpp:90
+#: alarmtimewidget.cpp:92
 #, fuzzy, kde-format
 msgctxt "@option:radio"
 msgid "At date/time:"
 msgstr "तारीख़/समय के लिए टालें:"
 
-#: alarmtimewidget.cpp:91
+#: alarmtimewidget.cpp:93
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Reschedule the alarm to the specified date and time."
 msgstr "विशिष्ट समय तथा तारीख़ के लिए अलार्म फिर से नियत करें."
 
-#: alarmtimewidget.cpp:92
+#: alarmtimewidget.cpp:94
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid "Specify the date, or date and time, to schedule the alarm."
 msgstr "अलार्म की अगली नियत तारीख़ या समय"
 
-#: alarmtimewidget.cpp:101
+#: alarmtimewidget.cpp:103
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid "<para>Enter the date to schedule the alarm.</para><para>%1</para>"
 msgstr "<para>अलार्म शेड्यूल करने के लिए तारीख भरें.</para><para>%1</para>"
 
-#: alarmtimewidget.cpp:113
+#: alarmtimewidget.cpp:115
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -115,13 +117,13 @@ msgid ""
 msgstr ""
 "<para>अलार्म शेड्यूल करने के लिए समय भरें.</para><para>%1</para><para>%2</para>"
 
-#: alarmtimewidget.cpp:126 recurrenceedit.cpp:251
+#: alarmtimewidget.cpp:128 recurrenceedit.cpp:251
 #, kde-format
 msgctxt "@option:check"
 msgid "Any time"
 msgstr "किसी भी समय"
 
-#: alarmtimewidget.cpp:129
+#: alarmtimewidget.cpp:131
 #, fuzzy, kde-format
 #| msgctxt "@info:whatsthis"
 #| msgid "Next scheduled date and time of the alarm"
@@ -129,7 +131,7 @@ msgctxt "@info:tooltip"
 msgid "Set only a date (without a time) for the alarm"
 msgstr "अलार्म की अगली नियत तारीख़ या समय"
 
-#: alarmtimewidget.cpp:131
+#: alarmtimewidget.cpp:133
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -137,43 +139,87 @@ msgid ""
 "trigger at the first opportunity on the selected date."
 msgstr ""
 
-#: alarmtimewidget.cpp:135
-#, kde-format
-msgctxt "@option:radio"
-msgid "Defer for time interval:"
-msgstr "समय अंतराल तक के लिए टालें:"
+#: alarmtimewidget.cpp:137
+#, fuzzy, kde-format
+#| msgctxt "@label"
+#| msgid "Deferred to:"
+msgctxt "@option:radio Defer for time interval"
+msgid "Defer for:"
+msgstr "तक टालें:"
 
-#: alarmtimewidget.cpp:135 editdlg.cpp:336
+#: alarmtimewidget.cpp:137 editdlg.cpp:336
 #, kde-format
 msgctxt "@option:radio"
 msgid "Time from now:"
 msgstr "अब से लेकर समय:"
 
-#: alarmtimewidget.cpp:136
+#: alarmtimewidget.cpp:138
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Reschedule the alarm for the specified time interval after now."
 msgstr "अब से लेकर निर्धारित समय अंतराल के लिए अलार्म को फिर से शेड्यूल करें."
 
-#: alarmtimewidget.cpp:137
+#: alarmtimewidget.cpp:139
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Schedule the alarm after the specified time interval from now."
 msgstr "अब से लेकर निर्धारित समय अंतराल के बाद अलार्म को शेड्यूल करें."
 
-#: alarmtimewidget.cpp:144 editdlg.cpp:347
+#: alarmtimewidget.cpp:149 editdlg.cpp:347
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid "<para>%1</para><para>%2</para>"
 msgstr "<para>%1</para><para>%2</para>"
 
-#: alarmtimewidget.cpp:145
+#: alarmtimewidget.cpp:155
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "Preset"
+msgstr ""
+
+#: alarmtimewidget.cpp:156
+#, fuzzy, kde-format
+#| msgctxt "@info/plain"
+#| msgid "1 Minute"
+#| msgid_plural "%1 Minutes"
+msgctxt "@item:inlistbox"
+msgid "1 minute"
+msgid_plural "%1 minutes"
+msgstr[0] "1 मिनट"
+msgstr[1] "%1 मिनट"
+
+#: alarmtimewidget.cpp:157
+#, fuzzy, kde-format
+#| msgctxt "@info/plain"
+#| msgid "1 Hour"
+#| msgid_plural "%1 Hours"
+msgctxt "@item:inlistbox"
+msgid "1 hour"
+msgid_plural "%1 hours"
+msgstr[0] "1 घंटा"
+msgstr[1] "%1 घंटे"
+
+#: alarmtimewidget.cpp:165
+#, fuzzy, kde-format
+#| msgctxt "@option:radio On day number in the month"
+#| msgid "O&n day"
+msgctxt "@item:inlistbox"
+msgid "1 day"
+msgstr "चालू करने का दिन (&n)"
+
+#: alarmtimewidget.cpp:166
+#, fuzzy, kde-format
+msgctxt "@item:inlistbox"
+msgid "1 week"
+msgstr "सप्ताह"
+
+#: alarmtimewidget.cpp:176
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid "<para>%1</para><para>%2</para><para>%3</para>"
 msgstr "<para>%1</para><para>%2</para><para>%3</para>"
 
-#: alarmtimewidget.cpp:178
+#: alarmtimewidget.cpp:208
 #, fuzzy, kde-format
 #| msgctxt "@label"
 #| msgid "Time zone"
@@ -181,7 +227,7 @@ msgctxt "@action:button"
 msgid "Time Zone..."
 msgstr "समय क्षेत्र"
 
-#: alarmtimewidget.cpp:180
+#: alarmtimewidget.cpp:210
 #, fuzzy, kde-format
 #| msgctxt "@info:whatsthis"
 #| msgid "Select the time zone to use for this alarm."
@@ -189,7 +235,7 @@ msgctxt "@info:tooltip"
 msgid "Choose a time zone for this alarm"
 msgstr "इस अलार्म का प्रयोग करने पर समय क्षेत्र चुनें."
 
-#: alarmtimewidget.cpp:182
+#: alarmtimewidget.cpp:212
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -197,37 +243,37 @@ msgid ""
 "zone set in KAlarm's configuration dialog."
 msgstr ""
 
-#: alarmtimewidget.cpp:196 prefdlg.cpp:694
+#: alarmtimewidget.cpp:226 prefdlg.cpp:694
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Time zone:"
 msgstr "समय क्षेत्र:"
 
-#: alarmtimewidget.cpp:202
+#: alarmtimewidget.cpp:232
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select the time zone to use for this alarm."
 msgstr "इस अलार्म का प्रयोग करने पर समय क्षेत्र चुनें."
 
-#: alarmtimewidget.cpp:274 alarmtimewidget.cpp:301
+#: alarmtimewidget.cpp:313 alarmtimewidget.cpp:340
 #, kde-format
 msgctxt "@info"
 msgid "Invalid time"
 msgstr "अवैध समय"
 
-#: alarmtimewidget.cpp:294
+#: alarmtimewidget.cpp:333
 #, kde-format
 msgctxt "@info"
 msgid "Invalid date"
 msgstr "अवैध तारीख़"
 
-#: alarmtimewidget.cpp:315
+#: alarmtimewidget.cpp:354
 #, kde-format
 msgctxt "@info"
 msgid "Alarm date has already expired"
 msgstr "अलार्म तारीख़ की मियाद पहले ही बीत चुकी है"
 
-#: alarmtimewidget.cpp:327
+#: alarmtimewidget.cpp:366
 #, kde-format
 msgctxt "@info"
 msgid "Alarm time has already expired"
@@ -8827,6 +8873,14 @@ msgstr ""
 msgid "Number of minutes before alarm to wake from suspend"
 msgstr ""
 
+#~ msgctxt "@option:radio"
+#~ msgid "Defer to date/time:"
+#~ msgstr "तारीख़/समय के लिए टालें:"
+
+#~ msgctxt "@option:radio"
+#~ msgid "Defer for time interval:"
+#~ msgstr "समय अंतराल तक के लिए टालें:"
+
 #, fuzzy
 #~| msgctxt "@option:radio"
 #~| msgid "Use <application>KMail</application> identities"
@@ -9544,16 +9598,6 @@ msgstr ""
 #~ msgctxt "@info/plain Alarm type"
 #~ msgid "Command display"
 #~ msgstr "कमांड अलार्म"
-
-#, fuzzy
-#~| msgctxt "@info/plain"
-#~| msgid "1 Minute"
-#~| msgid_plural "%1 Minutes"
-#~ msgctxt "@info/plain"
-#~ msgid "1 minute"
-#~ msgid_plural "%1 minutes"
-#~ msgstr[0] "1 मिनट"
-#~ msgstr[1] "%1 मिनट"
 
 #, fuzzy
 #~ msgctxt "@info"

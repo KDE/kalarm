@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-06-06 00:47+0000\n"
+"POT-Creation-Date: 2023-06-08 00:47+0000\n"
 "PO-Revision-Date: 2007-08-22 18:39+0330\n"
 "Last-Translator: Nazanin Kazemi <kazemi@itland.ir>\n"
 "Language-Team: Persian <kde-i18n-fa@kde.org>\n"
@@ -48,7 +48,7 @@ msgctxt "@info"
 msgid "Program error"
 msgstr "خطای برنامه"
 
-#: alarmtimewidget.cpp:40
+#: alarmtimewidget.cpp:42
 #, fuzzy, kde-format
 #| msgctxt "@info/plain"
 #| msgid ""
@@ -61,7 +61,7 @@ msgid ""
 msgstr ""
 "برای زمان‌بندی هشدار، طول زمان )به ساعت و دقیقه( را پس از زمان جاری وارد کنید."
 
-#: alarmtimewidget.cpp:66
+#: alarmtimewidget.cpp:68
 #, fuzzy, kde-format
 #| msgctxt "@info/plain"
 #| msgid ""
@@ -76,7 +76,7 @@ msgstr ""
 "اگر تکرار پیکربندی شده است، تاریخ/زمان آغاز بر حسب اولین تکرار یا پس از "
 "تاریخ/زمان واردشده میزان می‌شود."
 
-#: alarmtimewidget.cpp:69
+#: alarmtimewidget.cpp:71
 #, fuzzy, kde-format
 #| msgctxt "@info/plain"
 #| msgid "This uses KAlarm's default time zone, set in the Preferences dialog."
@@ -86,13 +86,15 @@ msgstr ""
 "این از ناحیه زمانی پیش‌فرض <application>KAlarm</application>استفاده می‌کند، در "
 "محاوره تنظیمات، تنظیم کنید."
 
-#: alarmtimewidget.cpp:90
-#, kde-format
+#: alarmtimewidget.cpp:92
+#, fuzzy, kde-format
+#| msgctxt "@label"
+#| msgid "Deferred to:"
 msgctxt "@option:radio"
-msgid "Defer to date/time:"
-msgstr "&تعویق به تاریخ/زمان‌:"
+msgid "Defer until:"
+msgstr "تعویقی به:"
 
-#: alarmtimewidget.cpp:90
+#: alarmtimewidget.cpp:92
 #, fuzzy, kde-format
 #| msgctxt "@option:radio"
 #| msgid "Defer to date/time:"
@@ -100,13 +102,13 @@ msgctxt "@option:radio"
 msgid "At date/time:"
 msgstr "&تعویق به تاریخ/زمان‌:"
 
-#: alarmtimewidget.cpp:91
+#: alarmtimewidget.cpp:93
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Reschedule the alarm to the specified date and time."
 msgstr "زمان‌بندی دوباره هشدار در تاریخ و زمان مشخص."
 
-#: alarmtimewidget.cpp:92
+#: alarmtimewidget.cpp:94
 #, fuzzy, kde-format
 #| msgctxt "@info:whatsthis"
 #| msgid "Next scheduled date and time of the alarm"
@@ -114,13 +116,13 @@ msgctxt "@info:whatsthis"
 msgid "Specify the date, or date and time, to schedule the alarm."
 msgstr "تاریخ و زمان زمان‌بندی‌شده بعدی هشدار"
 
-#: alarmtimewidget.cpp:101
+#: alarmtimewidget.cpp:103
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid "<para>Enter the date to schedule the alarm.</para><para>%1</para>"
 msgstr "<para>وارد کردن تاریخ به منظور زمان‌بندی هشدار.</para><para>%1</para>"
 
-#: alarmtimewidget.cpp:113
+#: alarmtimewidget.cpp:115
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -130,13 +132,13 @@ msgstr ""
 "<para>وارد کردن زمان به منظور زمان‌بندی هشدار.</para><para>%1</para><para>%2</"
 "para>"
 
-#: alarmtimewidget.cpp:126 recurrenceedit.cpp:251
+#: alarmtimewidget.cpp:128 recurrenceedit.cpp:251
 #, kde-format
 msgctxt "@option:check"
 msgid "Any time"
 msgstr "هر زمان"
 
-#: alarmtimewidget.cpp:129
+#: alarmtimewidget.cpp:131
 #, fuzzy, kde-format
 #| msgctxt "@info:whatsthis"
 #| msgid "Next scheduled date and time of the alarm"
@@ -144,7 +146,7 @@ msgctxt "@info:tooltip"
 msgid "Set only a date (without a time) for the alarm"
 msgstr "تاریخ و زمان زمان‌بندی‌شده بعدی هشدار"
 
-#: alarmtimewidget.cpp:131
+#: alarmtimewidget.cpp:133
 #, fuzzy, kde-format
 #| msgctxt "@info:whatsthis"
 #| msgid ""
@@ -156,31 +158,33 @@ msgid ""
 "trigger at the first opportunity on the selected date."
 msgstr "ایست تکرار هشدار پس از اولین ورود شما یا پس از تاریخ پایان مشخص‌شده"
 
-#: alarmtimewidget.cpp:135
-#, kde-format
-msgctxt "@option:radio"
-msgid "Defer for time interval:"
-msgstr "تعویق برای &فاصله زمانی‌:"
+#: alarmtimewidget.cpp:137
+#, fuzzy, kde-format
+#| msgctxt "@label"
+#| msgid "Deferred to:"
+msgctxt "@option:radio Defer for time interval"
+msgid "Defer for:"
+msgstr "تعویقی به:"
 
-#: alarmtimewidget.cpp:135 editdlg.cpp:336
+#: alarmtimewidget.cpp:137 editdlg.cpp:336
 #, kde-format
 msgctxt "@option:radio"
 msgid "Time from now:"
 msgstr "زمان از هم‌ اکنون:"
 
-#: alarmtimewidget.cpp:136
+#: alarmtimewidget.cpp:138
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Reschedule the alarm for the specified time interval after now."
 msgstr "زمان‌بندی مجدد هشدار برای فاصله زمانی مشخص پس از حالا."
 
-#: alarmtimewidget.cpp:137
+#: alarmtimewidget.cpp:139
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Schedule the alarm after the specified time interval from now."
 msgstr "زمان‌بندی هشدار پس از فاصله زمانی مشخص از حالا."
 
-#: alarmtimewidget.cpp:144 editdlg.cpp:347
+#: alarmtimewidget.cpp:149 editdlg.cpp:347
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info"
 #| msgid ""
@@ -191,7 +195,49 @@ msgstr ""
 "%1\n"
 "مطمئنید که می‌خواهید تغییرات خود را ذخیره کنید؟"
 
-#: alarmtimewidget.cpp:145
+#: alarmtimewidget.cpp:155
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "Preset"
+msgstr ""
+
+#: alarmtimewidget.cpp:156
+#, fuzzy, kde-format
+#| msgctxt "@info/plain"
+#| msgid "1 Minute"
+#| msgid_plural "%1 Minutes"
+msgctxt "@item:inlistbox"
+msgid "1 minute"
+msgid_plural "%1 minutes"
+msgstr[0] "%1 دقیقه"
+
+#: alarmtimewidget.cpp:157
+#, fuzzy, kde-format
+#| msgctxt "@info/plain"
+#| msgid "1 Hour"
+#| msgid_plural "%1 Hours"
+msgctxt "@item:inlistbox"
+msgid "1 hour"
+msgid_plural "%1 hours"
+msgstr[0] "%1 ساعت"
+
+#: alarmtimewidget.cpp:165
+#, fuzzy, kde-format
+#| msgctxt "@option:radio On day number in the month"
+#| msgid "O&n day"
+msgctxt "@item:inlistbox"
+msgid "1 day"
+msgstr "&در روز‌"
+
+#: alarmtimewidget.cpp:166
+#, fuzzy, kde-format
+#| msgctxt "@item:inlistbox"
+#| msgid "weeks"
+msgctxt "@item:inlistbox"
+msgid "1 week"
+msgstr "هفته"
+
+#: alarmtimewidget.cpp:176
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info"
 #| msgid ""
@@ -202,14 +248,14 @@ msgstr ""
 "%1\n"
 "مطمئنید که می‌خواهید تغییرات خود را ذخیره کنید؟"
 
-#: alarmtimewidget.cpp:178
+#: alarmtimewidget.cpp:208
 #, fuzzy, kde-format
 #| msgid "Time zone"
 msgctxt "@action:button"
 msgid "Time Zone..."
 msgstr "ناحیه زمان"
 
-#: alarmtimewidget.cpp:180
+#: alarmtimewidget.cpp:210
 #, fuzzy, kde-format
 #| msgctxt "@info:whatsthis"
 #| msgid "Select the time zone to use for this alarm."
@@ -217,7 +263,7 @@ msgctxt "@info:tooltip"
 msgid "Choose a time zone for this alarm"
 msgstr "برگزیدن ناحیه زمانی به منظور استفاده برای این هشدار."
 
-#: alarmtimewidget.cpp:182
+#: alarmtimewidget.cpp:212
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -225,37 +271,37 @@ msgid ""
 "zone set in KAlarm's configuration dialog."
 msgstr ""
 
-#: alarmtimewidget.cpp:196 prefdlg.cpp:694
+#: alarmtimewidget.cpp:226 prefdlg.cpp:694
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Time zone:"
 msgstr "&ناحیه زمان:‌"
 
-#: alarmtimewidget.cpp:202
+#: alarmtimewidget.cpp:232
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select the time zone to use for this alarm."
 msgstr "برگزیدن ناحیه زمانی به منظور استفاده برای این هشدار."
 
-#: alarmtimewidget.cpp:274 alarmtimewidget.cpp:301
+#: alarmtimewidget.cpp:313 alarmtimewidget.cpp:340
 #, kde-format
 msgctxt "@info"
 msgid "Invalid time"
 msgstr "زمان نامعتبر"
 
-#: alarmtimewidget.cpp:294
+#: alarmtimewidget.cpp:333
 #, kde-format
 msgctxt "@info"
 msgid "Invalid date"
 msgstr "تاریخ نامعتبر"
 
-#: alarmtimewidget.cpp:315
+#: alarmtimewidget.cpp:354
 #, kde-format
 msgctxt "@info"
 msgid "Alarm date has already expired"
 msgstr "تاریخ هشدار از قبل انقضا یافته است"
 
-#: alarmtimewidget.cpp:327
+#: alarmtimewidget.cpp:366
 #, kde-format
 msgctxt "@info"
 msgid "Alarm time has already expired"
@@ -9475,6 +9521,14 @@ msgstr ""
 msgid "Number of minutes before alarm to wake from suspend"
 msgstr ""
 
+#~ msgctxt "@option:radio"
+#~ msgid "Defer to date/time:"
+#~ msgstr "&تعویق به تاریخ/زمان‌:"
+
+#~ msgctxt "@option:radio"
+#~ msgid "Defer for time interval:"
+#~ msgstr "تعویق برای &فاصله زمانی‌:"
+
 #, fuzzy
 #~| msgctxt "@option:radio"
 #~| msgid "Use <application>KMail</application> identities"
@@ -10239,15 +10293,6 @@ msgstr ""
 #~ msgctxt "@info/plain Alarm type"
 #~ msgid "Command display"
 #~ msgstr "هشدار فرمان"
-
-#, fuzzy
-#~| msgctxt "@info/plain"
-#~| msgid "1 Minute"
-#~| msgid_plural "%1 Minutes"
-#~ msgctxt "@info/plain"
-#~ msgid "1 minute"
-#~ msgid_plural "%1 minutes"
-#~ msgstr[0] "%1 دقیقه"
 
 #, fuzzy
 #~| msgid "Date cannot be later than %1"

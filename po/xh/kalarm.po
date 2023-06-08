@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-06-06 00:47+0000\n"
+"POT-Creation-Date: 2023-06-08 00:47+0000\n"
 "PO-Revision-Date: 2002-10-12 14:57+0200\n"
 "Last-Translator: Thelma Lungcuzo <thelma@translate.org.za>\n"
 "Language-Team: Xhosa <xhosa@translate.org.za>\n"
@@ -53,7 +53,7 @@ msgctxt "@info"
 msgid "Program error"
 msgstr ""
 
-#: alarmtimewidget.cpp:40
+#: alarmtimewidget.cpp:42
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid ""
@@ -63,7 +63,7 @@ msgstr ""
 "Ngenisa ubude bexesha (ibeziyure nemizuzu) emva kwexesha langoku xa ufuna "
 "ukucwangcisa umyalezo we alarm."
 
-#: alarmtimewidget.cpp:66
+#: alarmtimewidget.cpp:68
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -71,48 +71,48 @@ msgid ""
 "first recurrence on or after the entered date/time."
 msgstr ""
 
-#: alarmtimewidget.cpp:69
+#: alarmtimewidget.cpp:71
 #, kde-format
 msgctxt "@info"
 msgid "This uses KAlarm's default time zone, set in the Configuration dialog."
 msgstr ""
 
-#: alarmtimewidget.cpp:90
+#: alarmtimewidget.cpp:92
 #, fuzzy, kde-format
-#| msgid "&Defer to date/time:"
+#| msgid "Deferred to:"
 msgctxt "@option:radio"
-msgid "Defer to date/time:"
-msgstr "&Libazisa kuhla/ixesha:"
+msgid "Defer until:"
+msgstr "Lizaku kucinywa kwi:"
 
-#: alarmtimewidget.cpp:90
+#: alarmtimewidget.cpp:92
 #, fuzzy, kde-format
 #| msgid "&Defer to date/time:"
 msgctxt "@option:radio"
 msgid "At date/time:"
 msgstr "&Libazisa kuhla/ixesha:"
 
-#: alarmtimewidget.cpp:91
+#: alarmtimewidget.cpp:93
 #, fuzzy, kde-format
 #| msgid "Reschedule the alarm to the specified date and time."
 msgctxt "@info:whatsthis"
 msgid "Reschedule the alarm to the specified date and time."
 msgstr "Cwangcisa i alarm kwimini nexesha elicaziweyo."
 
-#: alarmtimewidget.cpp:92
+#: alarmtimewidget.cpp:94
 #, fuzzy, kde-format
 #| msgid "Next scheduled date and time of the alarm"
 msgctxt "@info:whatsthis"
 msgid "Specify the date, or date and time, to schedule the alarm."
 msgstr "Elandelayo imini nexesha lwe alatrm"
 
-#: alarmtimewidget.cpp:101
+#: alarmtimewidget.cpp:103
 #, fuzzy, kde-kuit-format
 #| msgid "Enter the date to schedule the alarm."
 msgctxt "@info:whatsthis"
 msgid "<para>Enter the date to schedule the alarm.</para><para>%1</para>"
 msgstr "Faka umhla wokucwangcisa i alarm."
 
-#: alarmtimewidget.cpp:113
+#: alarmtimewidget.cpp:115
 #, fuzzy, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -120,20 +120,20 @@ msgid ""
 "para>"
 msgstr "Ngenisa ixesha lokucwangcisa i alarm."
 
-#: alarmtimewidget.cpp:126 recurrenceedit.cpp:251
+#: alarmtimewidget.cpp:128 recurrenceedit.cpp:251
 #, fuzzy, kde-format
 msgctxt "@option:check"
 msgid "Any time"
 msgstr "Na&liphi ixesha"
 
-#: alarmtimewidget.cpp:129
+#: alarmtimewidget.cpp:131
 #, fuzzy, kde-format
 #| msgid "Next scheduled date and time of the alarm"
 msgctxt "@info:tooltip"
 msgid "Set only a date (without a time) for the alarm"
 msgstr "Elandelayo imini nexesha lwe alatrm"
 
-#: alarmtimewidget.cpp:131
+#: alarmtimewidget.cpp:133
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -141,21 +141,21 @@ msgid ""
 "trigger at the first opportunity on the selected date."
 msgstr ""
 
-#: alarmtimewidget.cpp:135
+#: alarmtimewidget.cpp:137
 #, fuzzy, kde-format
-#| msgid "Defer for time &interval:"
-msgctxt "@option:radio"
-msgid "Defer for time interval:"
-msgstr "Libazisela ixesha lethubana &elifutshane:"
+#| msgid "Deferred to:"
+msgctxt "@option:radio Defer for time interval"
+msgid "Defer for:"
+msgstr "Lizaku kucinywa kwi:"
 
-#: alarmtimewidget.cpp:135 editdlg.cpp:336
+#: alarmtimewidget.cpp:137 editdlg.cpp:336
 #, fuzzy, kde-format
 #| msgid "Time from no&w:"
 msgctxt "@option:radio"
 msgid "Time from now:"
 msgstr "Ixesha elisuka ng&oku:"
 
-#: alarmtimewidget.cpp:136
+#: alarmtimewidget.cpp:138
 #, fuzzy, kde-format
 #| msgid "Reschedule the alarm for the specified time interval after now."
 msgctxt "@info:whatsthis"
@@ -164,7 +164,7 @@ msgstr ""
 "Cwangcisa kwakhona i alarm yexesha lethuba elifutshane elicaziweyo emva "
 "kwangoku."
 
-#: alarmtimewidget.cpp:137
+#: alarmtimewidget.cpp:139
 #, fuzzy, kde-format
 #| msgid "Schedule the alarm after the specified time interval from now."
 msgctxt "@info:whatsthis"
@@ -173,31 +173,65 @@ msgstr ""
 "Cwangcisa i alarm emva kwexesha elicaziweyo lesithuba esifutshane ukusuka "
 "ngoku."
 
-#: alarmtimewidget.cpp:144 editdlg.cpp:347
+#: alarmtimewidget.cpp:149 editdlg.cpp:347
 #, fuzzy, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid "<para>%1</para><para>%2</para>"
 msgstr "Ufuna ngokwenene ukucima i alarm ekhetiweyo?"
 
-#: alarmtimewidget.cpp:145
+#: alarmtimewidget.cpp:155
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "Preset"
+msgstr ""
+
+#: alarmtimewidget.cpp:156
+#, fuzzy, kde-format
+msgctxt "@item:inlistbox"
+msgid "1 minute"
+msgid_plural "%1 minutes"
+msgstr[0] "1 Umzuzu"
+msgstr[1] "%1 Imizuzu"
+
+#: alarmtimewidget.cpp:157
+#, fuzzy, kde-format
+msgctxt "@item:inlistbox"
+msgid "1 hour"
+msgid_plural "%1 hours"
+msgstr[0] "1 Iyure"
+msgstr[1] "%1 Iiyure"
+
+#: alarmtimewidget.cpp:165
+#, fuzzy, kde-format
+msgctxt "@item:inlistbox"
+msgid "1 day"
+msgstr "namhlanje"
+
+#: alarmtimewidget.cpp:166
+#, fuzzy, kde-format
+msgctxt "@item:inlistbox"
+msgid "1 week"
+msgstr "Iiveki"
+
+#: alarmtimewidget.cpp:176
 #, fuzzy, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid "<para>%1</para><para>%2</para><para>%3</para>"
 msgstr "Ufuna ngokwenene ukucima i alarm ekhetiweyo?"
 
-#: alarmtimewidget.cpp:178
+#: alarmtimewidget.cpp:208
 #, fuzzy, kde-format
 msgctxt "@action:button"
 msgid "Time Zone..."
 msgstr "Ixesha"
 
-#: alarmtimewidget.cpp:180
+#: alarmtimewidget.cpp:210
 #, fuzzy, kde-format
 msgctxt "@info:tooltip"
 msgid "Choose a time zone for this alarm"
 msgstr "Ngenisa ixesha lokucwangcisa i alarm."
 
-#: alarmtimewidget.cpp:182
+#: alarmtimewidget.cpp:212
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -205,38 +239,38 @@ msgid ""
 "zone set in KAlarm's configuration dialog."
 msgstr ""
 
-#: alarmtimewidget.cpp:196 prefdlg.cpp:694
+#: alarmtimewidget.cpp:226 prefdlg.cpp:694
 #, fuzzy, kde-format
 msgctxt "@label:listbox"
 msgid "Time zone:"
 msgstr "Ixesha"
 
-#: alarmtimewidget.cpp:202
+#: alarmtimewidget.cpp:232
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select the time zone to use for this alarm."
 msgstr "Ngenisa ixesha lokucwangcisa i alarm."
 
-#: alarmtimewidget.cpp:274 alarmtimewidget.cpp:301
+#: alarmtimewidget.cpp:313 alarmtimewidget.cpp:340
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Invalid time"
 msgstr "Ayisebenzi %1 parameter"
 
-#: alarmtimewidget.cpp:294
+#: alarmtimewidget.cpp:333
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Invalid date"
 msgstr "Ayisebenzi %1 parameter"
 
-#: alarmtimewidget.cpp:315
+#: alarmtimewidget.cpp:354
 #, fuzzy, kde-format
 #| msgid "Alarm date has already expired"
 msgctxt "@info"
 msgid "Alarm date has already expired"
 msgstr "Ixesha le alarm seliphelelwe lixesha"
 
-#: alarmtimewidget.cpp:327
+#: alarmtimewidget.cpp:366
 #, fuzzy, kde-format
 #| msgid "Alarm time has already expired"
 msgctxt "@info"
@@ -8452,6 +8486,18 @@ msgid "Number of minutes before alarm to wake from suspend"
 msgstr ""
 
 #, fuzzy
+#~| msgid "&Defer to date/time:"
+#~ msgctxt "@option:radio"
+#~ msgid "Defer to date/time:"
+#~ msgstr "&Libazisa kuhla/ixesha:"
+
+#, fuzzy
+#~| msgid "Defer for time &interval:"
+#~ msgctxt "@option:radio"
+#~ msgid "Defer for time interval:"
+#~ msgstr "Libazisela ixesha lethubana &elifutshane:"
+
+#, fuzzy
 #~ msgctxt "@option:radio"
 #~ msgid "Use default address from <application>KMail</application>"
 #~ msgstr "Jonga ukubalekisa %1 xa uqala i KDE."
@@ -8965,13 +9011,6 @@ msgstr ""
 #~ msgctxt "@info/plain Alarm type"
 #~ msgid "Command display"
 #~ msgstr "Um&yalelo"
-
-#, fuzzy
-#~ msgctxt "@info/plain"
-#~ msgid "1 minute"
-#~ msgid_plural "%1 minutes"
-#~ msgstr[0] "1 Umzuzu"
-#~ msgstr[1] "%1 Imizuzu"
 
 #, fuzzy
 #~ msgctxt "@info"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm 0\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-06-06 00:47+0000\n"
+"POT-Creation-Date: 2023-06-08 00:47+0000\n"
 "PO-Revision-Date: 2011-03-28 17:53+0200\n"
 "Last-Translator: Marko Dimjašević <marko@dimjasevic.net>\n"
 "Language-Team: Croatian <kde-croatia-list@lists.sourceforge.net>\n"
@@ -55,7 +55,7 @@ msgctxt "@info"
 msgid "Program error"
 msgstr ""
 
-#: alarmtimewidget.cpp:40
+#: alarmtimewidget.cpp:42
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid ""
@@ -65,7 +65,7 @@ msgstr ""
 "Unesite vremenski period (u časovima i minutima) od sadašnjeg trenutka za "
 "koji želite da zakažete alarm."
 
-#: alarmtimewidget.cpp:66
+#: alarmtimewidget.cpp:68
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid ""
@@ -75,7 +75,7 @@ msgstr ""
 "Ako je zadato ponavljanje, početni datum/vrijeme će biti podešen na prvo "
 "ponavljanje unesenog vremena/datuma ili poslije njega."
 
-#: alarmtimewidget.cpp:69
+#: alarmtimewidget.cpp:71
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "This uses KAlarm's default time zone, set in the Configuration dialog."
@@ -83,37 +83,37 @@ msgstr ""
 "Vaša e-adresa, koristi se za sljepo kopiranje alarmne e-pošte poruke vama "
 "samima."
 
-#: alarmtimewidget.cpp:90
+#: alarmtimewidget.cpp:92
 #, fuzzy, kde-format
 msgctxt "@option:radio"
-msgid "Defer to date/time:"
-msgstr "&Odloži za datum/vrijeme:"
+msgid "Defer until:"
+msgstr "Odložen za:"
 
-#: alarmtimewidget.cpp:90
+#: alarmtimewidget.cpp:92
 #, fuzzy, kde-format
 msgctxt "@option:radio"
 msgid "At date/time:"
 msgstr "&Odloži za datum/vrijeme:"
 
-#: alarmtimewidget.cpp:91
+#: alarmtimewidget.cpp:93
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid "Reschedule the alarm to the specified date and time."
 msgstr "Pomakni alarm za navedeni datum i vrijeme."
 
-#: alarmtimewidget.cpp:92
+#: alarmtimewidget.cpp:94
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid "Specify the date, or date and time, to schedule the alarm."
 msgstr "Sljedeći planirani datum i vrijeme alarma"
 
-#: alarmtimewidget.cpp:101
+#: alarmtimewidget.cpp:103
 #, fuzzy, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid "<para>Enter the date to schedule the alarm.</para><para>%1</para>"
 msgstr "Unesite datum za koji želite da zakažete alarm."
 
-#: alarmtimewidget.cpp:113
+#: alarmtimewidget.cpp:115
 #, fuzzy, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -121,20 +121,20 @@ msgid ""
 "para>"
 msgstr "Unesite vrijeme za koje želite da zakažete alarm."
 
-#: alarmtimewidget.cpp:126 recurrenceedit.cpp:251
+#: alarmtimewidget.cpp:128 recurrenceedit.cpp:251
 #, fuzzy, kde-format
 #| msgid "Any time"
 msgctxt "@option:check"
 msgid "Any time"
 msgstr "Bilo koje vrijeme"
 
-#: alarmtimewidget.cpp:129
+#: alarmtimewidget.cpp:131
 #, fuzzy, kde-format
 msgctxt "@info:tooltip"
 msgid "Set only a date (without a time) for the alarm"
 msgstr "Sljedeći planirani datum i vrijeme alarma"
 
-#: alarmtimewidget.cpp:131
+#: alarmtimewidget.cpp:133
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -144,55 +144,92 @@ msgstr ""
 "Alarm će prestati da se ponavlja po vašem prvom prijavljivanju poslije "
 "navedenog krajnjeg datuma"
 
-#: alarmtimewidget.cpp:135
+#: alarmtimewidget.cpp:137
 #, fuzzy, kde-format
-msgctxt "@option:radio"
-msgid "Defer for time interval:"
-msgstr "Odloži za vremenski &period:"
+msgctxt "@option:radio Defer for time interval"
+msgid "Defer for:"
+msgstr "Odložen za:"
 
-#: alarmtimewidget.cpp:135 editdlg.cpp:336
+#: alarmtimewidget.cpp:137 editdlg.cpp:336
 #, fuzzy, kde-format
 msgctxt "@option:radio"
 msgid "Time from now:"
 msgstr "Vrijeme od ovog &trenutka:"
 
-#: alarmtimewidget.cpp:136
+#: alarmtimewidget.cpp:138
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid "Reschedule the alarm for the specified time interval after now."
 msgstr "Pomakni alarm za navedeni vremenski interval od ovog trenutka."
 
-#: alarmtimewidget.cpp:137
+#: alarmtimewidget.cpp:139
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid "Schedule the alarm after the specified time interval from now."
 msgstr "Zakaži alarm za navedeni vremenski period od ovog trenutka."
 
-#: alarmtimewidget.cpp:144 editdlg.cpp:347
+#: alarmtimewidget.cpp:149 editdlg.cpp:347
 #, fuzzy, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid "<para>%1</para><para>%2</para>"
 msgstr "Želite li zaista da obrišete %1 odabrani alarm?"
 
-#: alarmtimewidget.cpp:145
+#: alarmtimewidget.cpp:155
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "Preset"
+msgstr ""
+
+#: alarmtimewidget.cpp:156
+#, fuzzy, kde-format
+msgctxt "@item:inlistbox"
+msgid "1 minute"
+msgid_plural "%1 minutes"
+msgstr[0] "%1 minut"
+msgstr[1] "%1 minuta"
+msgstr[2] "%1 minuta"
+
+#: alarmtimewidget.cpp:157
+#, fuzzy, kde-format
+msgctxt "@item:inlistbox"
+msgid "1 hour"
+msgid_plural "%1 hours"
+msgstr[0] "%1 čas"
+msgstr[1] "%1 časa"
+msgstr[2] "%1 časova"
+
+#: alarmtimewidget.cpp:165
+#, fuzzy, kde-format
+msgctxt "@item:inlistbox"
+msgid "1 day"
+msgstr "Danas"
+
+#: alarmtimewidget.cpp:166
+#, fuzzy, kde-format
+#| msgid "weeks"
+msgctxt "@item:inlistbox"
+msgid "1 week"
+msgstr "tjedni"
+
+#: alarmtimewidget.cpp:176
 #, fuzzy, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid "<para>%1</para><para>%2</para><para>%3</para>"
 msgstr "Želite li zaista da obrišete %1 odabrani alarm?"
 
-#: alarmtimewidget.cpp:178
+#: alarmtimewidget.cpp:208
 #, fuzzy, kde-format
 msgctxt "@action:button"
 msgid "Time Zone..."
 msgstr "Vrijeme do"
 
-#: alarmtimewidget.cpp:180
+#: alarmtimewidget.cpp:210
 #, fuzzy, kde-format
 msgctxt "@info:tooltip"
 msgid "Choose a time zone for this alarm"
 msgstr "Unesite vrijeme za koje želite da zakažete alarm."
 
-#: alarmtimewidget.cpp:182
+#: alarmtimewidget.cpp:212
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -200,38 +237,38 @@ msgid ""
 "zone set in KAlarm's configuration dialog."
 msgstr ""
 
-#: alarmtimewidget.cpp:196 prefdlg.cpp:694
+#: alarmtimewidget.cpp:226 prefdlg.cpp:694
 #, fuzzy, kde-format
 msgctxt "@label:listbox"
 msgid "Time zone:"
 msgstr "Vrijeme do"
 
-#: alarmtimewidget.cpp:202
+#: alarmtimewidget.cpp:232
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select the time zone to use for this alarm."
 msgstr "Unesite vrijeme za koje želite da zakažete alarm."
 
-#: alarmtimewidget.cpp:274 alarmtimewidget.cpp:301
+#: alarmtimewidget.cpp:313 alarmtimewidget.cpp:340
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Invalid time"
 msgstr "Neispravno vrijeme"
 
-#: alarmtimewidget.cpp:294
+#: alarmtimewidget.cpp:333
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Invalid date"
 msgstr "Neispravan datum"
 
-#: alarmtimewidget.cpp:315
+#: alarmtimewidget.cpp:354
 #, fuzzy, kde-format
 #| msgid "Alarm date has already expired"
 msgctxt "@info"
 msgid "Alarm date has already expired"
 msgstr "Datum alarma je već prošao¸"
 
-#: alarmtimewidget.cpp:327
+#: alarmtimewidget.cpp:366
 #, fuzzy, kde-format
 #| msgid "Alarm time has already expired"
 msgctxt "@info"
@@ -8503,6 +8540,16 @@ msgid "Number of minutes before alarm to wake from suspend"
 msgstr ""
 
 #, fuzzy
+#~ msgctxt "@option:radio"
+#~ msgid "Defer to date/time:"
+#~ msgstr "&Odloži za datum/vrijeme:"
+
+#, fuzzy
+#~ msgctxt "@option:radio"
+#~ msgid "Defer for time interval:"
+#~ msgstr "Odloži za vremenski &period:"
+
+#, fuzzy
 #~| msgid "An email has been queued to be sent by KMail"
 #~ msgctxt "@option:radio"
 #~ msgid "Use default address from <application>KMail</application>"
@@ -9047,14 +9094,6 @@ msgstr ""
 #~ msgctxt "@info/plain Alarm type"
 #~ msgid "Command display"
 #~ msgstr "&Naredba"
-
-#, fuzzy
-#~ msgctxt "@info/plain"
-#~ msgid "1 minute"
-#~ msgid_plural "%1 minutes"
-#~ msgstr[0] "%1 minut"
-#~ msgstr[1] "%1 minuta"
-#~ msgstr[2] "%1 minuta"
 
 #, fuzzy
 #~ msgctxt "@info"

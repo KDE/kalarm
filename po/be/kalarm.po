@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-06-06 00:47+0000\n"
+"POT-Creation-Date: 2023-06-08 00:47+0000\n"
 "PO-Revision-Date: 2007-10-28 14:03+0200\n"
 "Last-Translator: Darafei Praliaskouski <komzpa@licei2.com>\n"
 "Language-Team: Belarusian <i18n@mova.org>\n"
@@ -47,7 +47,7 @@ msgctxt "@info"
 msgid "Program error"
 msgstr "Памылка праграмы"
 
-#: alarmtimewidget.cpp:40
+#: alarmtimewidget.cpp:42
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid ""
@@ -56,7 +56,7 @@ msgid ""
 msgstr ""
 "Увядзіце час (у гадзінах і хвілінах), праз якое трэба паказаць напамінак."
 
-#: alarmtimewidget.cpp:66
+#: alarmtimewidget.cpp:68
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid ""
@@ -68,7 +68,7 @@ msgstr ""
 "Калі паўтор наладжана, дата/час пачатку будзе ўсталявана на першы паўтор на/"
 "пасля паказанай даты/часу."
 
-#: alarmtimewidget.cpp:69
+#: alarmtimewidget.cpp:71
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "This uses KAlarm's default time zone, set in the Configuration dialog."
@@ -77,37 +77,37 @@ msgstr ""
 "\n"
 "Пакажыце яго ў наладах."
 
-#: alarmtimewidget.cpp:90
+#: alarmtimewidget.cpp:92
 #, fuzzy, kde-format
 msgctxt "@option:radio"
-msgid "Defer to date/time:"
-msgstr "Адкласці на дату/час:"
+msgid "Defer until:"
+msgstr "Перанос на:"
 
-#: alarmtimewidget.cpp:90
+#: alarmtimewidget.cpp:92
 #, fuzzy, kde-format
 msgctxt "@option:radio"
 msgid "At date/time:"
 msgstr "Адкласці на дату/час:"
 
-#: alarmtimewidget.cpp:91
+#: alarmtimewidget.cpp:93
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid "Reschedule the alarm to the specified date and time."
 msgstr "Адкласці напамінак на іншую дату/час."
 
-#: alarmtimewidget.cpp:92
+#: alarmtimewidget.cpp:94
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid "Specify the date, or date and time, to schedule the alarm."
 msgstr "Наступная дата і час напамінку"
 
-#: alarmtimewidget.cpp:101
+#: alarmtimewidget.cpp:103
 #, fuzzy, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid "<para>Enter the date to schedule the alarm.</para><para>%1</para>"
 msgstr "Увядзіце дату напамінку."
 
-#: alarmtimewidget.cpp:113
+#: alarmtimewidget.cpp:115
 #, fuzzy, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -115,19 +115,19 @@ msgid ""
 "para>"
 msgstr "Увядзіце час напамінку."
 
-#: alarmtimewidget.cpp:126 recurrenceedit.cpp:251
+#: alarmtimewidget.cpp:128 recurrenceedit.cpp:251
 #, fuzzy, kde-format
 msgctxt "@option:check"
 msgid "Any time"
 msgstr "Час не паказана"
 
-#: alarmtimewidget.cpp:129
+#: alarmtimewidget.cpp:131
 #, fuzzy, kde-format
 msgctxt "@info:tooltip"
 msgid "Set only a date (without a time) for the alarm"
 msgstr "Наступная дата і час напамінку"
 
-#: alarmtimewidget.cpp:131
+#: alarmtimewidget.cpp:133
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -137,31 +137,31 @@ msgstr ""
 "Не паказваць напамінак пасля першага паказу пры рэгістрацыі ў сістэме або "
 "пасля паказанай даты канчатка паўтору"
 
-#: alarmtimewidget.cpp:135
+#: alarmtimewidget.cpp:137
 #, fuzzy, kde-format
-msgctxt "@option:radio"
-msgid "Defer for time interval:"
-msgstr "Адкласці на вызначаны тэрмін:"
+msgctxt "@option:radio Defer for time interval"
+msgid "Defer for:"
+msgstr "Перанос на:"
 
-#: alarmtimewidget.cpp:135 editdlg.cpp:336
+#: alarmtimewidget.cpp:137 editdlg.cpp:336
 #, fuzzy, kde-format
 msgctxt "@option:radio"
 msgid "Time from now:"
 msgstr "Праз:"
 
-#: alarmtimewidget.cpp:136
+#: alarmtimewidget.cpp:138
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid "Reschedule the alarm for the specified time interval after now."
 msgstr "Адкласці напамінак на паказаны часовы інтэрвал."
 
-#: alarmtimewidget.cpp:137
+#: alarmtimewidget.cpp:139
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid "Schedule the alarm after the specified time interval from now."
 msgstr "Прызначыць напамінак праз паказаны часовы інтэрвал."
 
-#: alarmtimewidget.cpp:144 editdlg.cpp:347
+#: alarmtimewidget.cpp:149 editdlg.cpp:347
 #, fuzzy, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid "<para>%1</para><para>%2</para>"
@@ -170,7 +170,47 @@ msgstr ""
 "\n"
 "Захаваць змены?"
 
-#: alarmtimewidget.cpp:145
+#: alarmtimewidget.cpp:155
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "Preset"
+msgstr ""
+
+#: alarmtimewidget.cpp:156
+#, fuzzy, kde-format
+#| msgid "Monthly"
+msgctxt "@item:inlistbox"
+msgid "1 minute"
+msgid_plural "%1 minutes"
+msgstr[0] "Штомесяц"
+msgstr[1] "Штомесяц"
+msgstr[2] "Штомесяц"
+
+#: alarmtimewidget.cpp:157
+#, kde-format
+msgctxt "@item:inlistbox"
+msgid "1 hour"
+msgid_plural "%1 hours"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+
+#: alarmtimewidget.cpp:165
+#, fuzzy, kde-format
+#| msgid "Today"
+msgctxt "@item:inlistbox"
+msgid "1 day"
+msgstr "Панядзелак"
+
+#: alarmtimewidget.cpp:166
+#, fuzzy, kde-format
+#| msgid "weeks"
+msgctxt "@item:inlistbox"
+msgid "1 week"
+msgstr "тыднеў"
+
+#: alarmtimewidget.cpp:176
 #, fuzzy, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid "<para>%1</para><para>%2</para><para>%3</para>"
@@ -179,19 +219,19 @@ msgstr ""
 "\n"
 "Захаваць змены?"
 
-#: alarmtimewidget.cpp:178
+#: alarmtimewidget.cpp:208
 #, fuzzy, kde-format
 msgctxt "@action:button"
 msgid "Time Zone..."
 msgstr "Час да"
 
-#: alarmtimewidget.cpp:180
+#: alarmtimewidget.cpp:210
 #, fuzzy, kde-format
 msgctxt "@info:tooltip"
 msgid "Choose a time zone for this alarm"
 msgstr "Увядзіце час напамінку."
 
-#: alarmtimewidget.cpp:182
+#: alarmtimewidget.cpp:212
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -199,37 +239,37 @@ msgid ""
 "zone set in KAlarm's configuration dialog."
 msgstr ""
 
-#: alarmtimewidget.cpp:196 prefdlg.cpp:694
+#: alarmtimewidget.cpp:226 prefdlg.cpp:694
 #, fuzzy, kde-format
 msgctxt "@label:listbox"
 msgid "Time zone:"
 msgstr "Час да"
 
-#: alarmtimewidget.cpp:202
+#: alarmtimewidget.cpp:232
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select the time zone to use for this alarm."
 msgstr "Увядзіце час напамінку."
 
-#: alarmtimewidget.cpp:274 alarmtimewidget.cpp:301
+#: alarmtimewidget.cpp:313 alarmtimewidget.cpp:340
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Invalid time"
 msgstr "Няслушны час"
 
-#: alarmtimewidget.cpp:294
+#: alarmtimewidget.cpp:333
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Invalid date"
 msgstr "Няслушная дата"
 
-#: alarmtimewidget.cpp:315
+#: alarmtimewidget.cpp:354
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Alarm date has already expired"
 msgstr "Дата напамінку ўжо прайшла"
 
-#: alarmtimewidget.cpp:327
+#: alarmtimewidget.cpp:366
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Alarm time has already expired"
@@ -8625,6 +8665,16 @@ msgstr ""
 
 #, fuzzy
 #~ msgctxt "@option:radio"
+#~ msgid "Defer to date/time:"
+#~ msgstr "Адкласці на дату/час:"
+
+#, fuzzy
+#~ msgctxt "@option:radio"
+#~ msgid "Defer for time interval:"
+#~ msgstr "Адкласці на вызначаны тэрмін:"
+
+#, fuzzy
+#~ msgctxt "@option:radio"
 #~ msgid "Use default address from <application>KMail</application>"
 #~ msgstr "Выкарыстаць профіль KMail"
 
@@ -9202,15 +9252,6 @@ msgstr ""
 #~ msgctxt "@info/plain Alarm type"
 #~ msgid "Command display"
 #~ msgstr "Напамінкі, якія запускаюць каманды"
-
-#, fuzzy
-#~| msgid "Monthly"
-#~ msgctxt "@info/plain"
-#~ msgid "1 minute"
-#~ msgid_plural "%1 minutes"
-#~ msgstr[0] "Штомесяц"
-#~ msgstr[1] "Штомесяц"
-#~ msgstr[2] "Штомесяц"
 
 #, fuzzy
 #~ msgctxt "@info"
