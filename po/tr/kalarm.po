@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: kdepim-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-06-08 00:47+0000\n"
-"PO-Revision-Date: 2023-06-06 05:17+0300\n"
+"PO-Revision-Date: 2023-06-08 11:57+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -89,12 +89,10 @@ msgstr ""
 "pencerisinden ayarlayın."
 
 #: alarmtimewidget.cpp:92
-#, fuzzy, kde-format
-#| msgctxt "@label"
-#| msgid "Deferred to:"
+#, kde-format
 msgctxt "@option:radio"
 msgid "Defer until:"
-msgstr "Ertelendiği zaman:"
+msgstr "Şuna kadar ertele:"
 
 #: alarmtimewidget.cpp:92
 #, kde-format
@@ -153,12 +151,10 @@ msgstr ""
 "seçilen tarihte ilk fırsatta tetikleyecek."
 
 #: alarmtimewidget.cpp:137
-#, fuzzy, kde-format
-#| msgctxt "@label"
-#| msgid "Deferred to:"
+#, kde-format
 msgctxt "@option:radio Defer for time interval"
 msgid "Defer for:"
-msgstr "Ertelendiği zaman:"
+msgstr "Şu kadar ertele:"
 
 #: alarmtimewidget.cpp:137 editdlg.cpp:336
 #, kde-format
@@ -189,24 +185,18 @@ msgstr "<para>%1</para><para>%2</para>"
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Preset"
-msgstr ""
+msgstr "Önayar"
 
 #: alarmtimewidget.cpp:156
-#, fuzzy, kde-format
-#| msgctxt "@info"
-#| msgid "1 Minute"
-#| msgid_plural "%1 Minutes"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "1 minute"
 msgid_plural "%1 minutes"
-msgstr[0] "1 Dakika"
-msgstr[1] "%1 Dakika"
+msgstr[0] "1 dakika"
+msgstr[1] "%1 dakika"
 
 #: alarmtimewidget.cpp:157
-#, fuzzy, kde-format
-#| msgctxt "@item:intext inserted into 'in ... %1 minute's time' below"
-#| msgid "1 hour"
-#| msgid_plural "%1 hours"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "1 hour"
 msgid_plural "%1 hours"
@@ -214,20 +204,16 @@ msgstr[0] "1 saat"
 msgstr[1] "%1 saat"
 
 #: alarmtimewidget.cpp:165
-#, fuzzy, kde-format
-#| msgctxt "@option:radio On day number in the month"
-#| msgid "O&n day"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "1 day"
-msgstr "&Bu günde"
+msgstr "1 gün"
 
 #: alarmtimewidget.cpp:166
-#, fuzzy, kde-format
-#| msgctxt "@item:inlistbox Time units"
-#| msgid "weeks"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "1 week"
-msgstr "hafta"
+msgstr "1 hafta"
 
 #: alarmtimewidget.cpp:176
 #, kde-kuit-format

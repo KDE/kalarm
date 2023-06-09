@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-06-08 00:47+0000\n"
-"PO-Revision-Date: 2023-01-07 17:37+0100\n"
+"PO-Revision-Date: 2023-06-08 22:01+0200\n"
 "Last-Translator: Mincho Kondarev <mkondarev@yahoo.de>\n"
 "Language-Team: Bulgarian <kde-i18n-doc@kde.org>\n"
 "Language: bg\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 22.12.0\n"
+"X-Generator: Lokalize 23.04.1\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -75,9 +75,7 @@ msgstr ""
 "Използва времевата зона по подразбиране на KAlarm, зададена в настройките."
 
 #: alarmtimewidget.cpp:92
-#, fuzzy, kde-format
-#| msgctxt "@label"
-#| msgid "Deferred to:"
+#, kde-format
 msgctxt "@option:radio"
 msgid "Defer until:"
 msgstr "Отлагане до:"
@@ -139,12 +137,10 @@ msgstr ""
 "посочената крайна дата."
 
 #: alarmtimewidget.cpp:137
-#, fuzzy, kde-format
-#| msgctxt "@label"
-#| msgid "Deferred to:"
+#, kde-format
 msgctxt "@option:radio Defer for time interval"
 msgid "Defer for:"
-msgstr "Отлагане до:"
+msgstr "Отлагане за:"
 
 #: alarmtimewidget.cpp:137 editdlg.cpp:336
 #, kde-format
@@ -177,13 +173,10 @@ msgstr "<para>%1</para><para>%2</para>"
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Preset"
-msgstr ""
+msgstr "Предварителни настройки"
 
 #: alarmtimewidget.cpp:156
-#, fuzzy, kde-format
-#| msgctxt "@info"
-#| msgid "1 Minute"
-#| msgid_plural "%1 Minutes"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "1 minute"
 msgid_plural "%1 minutes"
@@ -191,10 +184,7 @@ msgstr[0] "1 минута"
 msgstr[1] "%1 минути"
 
 #: alarmtimewidget.cpp:157
-#, fuzzy, kde-format
-#| msgctxt "@item:intext inserted into 'in ... %1 minute's time' below"
-#| msgid "1 hour"
-#| msgid_plural "%1 hours"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "1 hour"
 msgid_plural "%1 hours"
@@ -202,20 +192,16 @@ msgstr[0] "1 час"
 msgstr[1] "%1 часа"
 
 #: alarmtimewidget.cpp:165
-#, fuzzy, kde-format
-#| msgctxt "@option:radio On day number in the month"
-#| msgid "O&n day"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "1 day"
-msgstr "н&а"
+msgstr "1 ден"
 
 #: alarmtimewidget.cpp:166
-#, fuzzy, kde-format
-#| msgctxt "@item:inlistbox Time units"
-#| msgid "weeks"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "1 week"
-msgstr "седмици"
+msgstr "1 седмица"
 
 #: alarmtimewidget.cpp:176
 #, kde-kuit-format
@@ -1991,12 +1977,10 @@ msgid "Show the next month"
 msgstr "Показване на следващия месец"
 
 #: datepicker.cpp:88
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "Show &Details"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Show today"
-msgstr "Показване на &подробности"
+msgstr "Показване на днешна дата"
 
 #: daymatrix.cpp:207
 #, kde-format

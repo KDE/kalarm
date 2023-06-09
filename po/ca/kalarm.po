@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-06-08 00:47+0000\n"
-"PO-Revision-Date: 2023-06-06 08:42+0200\n"
+"PO-Revision-Date: 2023-06-08 08:21+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -81,12 +81,10 @@ msgstr ""
 "configuració."
 
 #: alarmtimewidget.cpp:92
-#, fuzzy, kde-format
-#| msgctxt "@label"
-#| msgid "Deferred to:"
+#, kde-format
 msgctxt "@option:radio"
 msgid "Defer until:"
-msgstr "Ajornada a:"
+msgstr "Ajorna fins a:"
 
 #: alarmtimewidget.cpp:92
 #, kde-format
@@ -146,12 +144,10 @@ msgstr ""
 "L'alarma es dispararà a la primera oportunitat en la data seleccionada."
 
 #: alarmtimewidget.cpp:137
-#, fuzzy, kde-format
-#| msgctxt "@label"
-#| msgid "Deferred to:"
+#, kde-format
 msgctxt "@option:radio Defer for time interval"
 msgid "Defer for:"
-msgstr "Ajornada a:"
+msgstr "Ajorna durant:"
 
 #: alarmtimewidget.cpp:137 editdlg.cpp:336
 #, kde-format
@@ -182,13 +178,10 @@ msgstr "<para>%1</para><para>%2</para>"
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Preset"
-msgstr ""
+msgstr "Predefinit"
 
 #: alarmtimewidget.cpp:156
-#, fuzzy, kde-format
-#| msgctxt "@info"
-#| msgid "1 Minute"
-#| msgid_plural "%1 Minutes"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "1 minute"
 msgid_plural "%1 minutes"
@@ -196,10 +189,7 @@ msgstr[0] "1 minut"
 msgstr[1] "%1 minuts"
 
 #: alarmtimewidget.cpp:157
-#, fuzzy, kde-format
-#| msgctxt "@item:intext inserted into 'in ... %1 minute's time' below"
-#| msgid "1 hour"
-#| msgid_plural "%1 hours"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "1 hour"
 msgid_plural "%1 hours"
@@ -207,20 +197,16 @@ msgstr[0] "1 hora"
 msgstr[1] "%1 hores"
 
 #: alarmtimewidget.cpp:165
-#, fuzzy, kde-format
-#| msgctxt "@option:radio On day number in the month"
-#| msgid "O&n day"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "1 day"
-msgstr "E&n el dia"
+msgstr "1 dia"
 
 #: alarmtimewidget.cpp:166
-#, fuzzy, kde-format
-#| msgctxt "@item:inlistbox Time units"
-#| msgid "weeks"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "1 week"
-msgstr "setmanes"
+msgstr "1 setmana"
 
 #: alarmtimewidget.cpp:176
 #, kde-kuit-format
@@ -8746,11 +8732,3 @@ msgstr ""
 #, kde-format
 msgid "Number of minutes before alarm to wake from suspend"
 msgstr "Nombre de minuts abans de l'alarma per a activar des de la suspensió"
-
-#~ msgctxt "@option:radio"
-#~ msgid "Defer to date/time:"
-#~ msgstr "Ajorna fins a la data i hora:"
-
-#~ msgctxt "@option:radio"
-#~ msgid "Defer for time interval:"
-#~ msgstr "Ajorna durant un interval de temps:"
