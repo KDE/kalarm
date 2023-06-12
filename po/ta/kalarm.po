@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-06-08 00:47+0000\n"
-"PO-Revision-Date: 2023-01-03 19:35+0530\n"
+"PO-Revision-Date: 2023-06-11 16:50+0530\n"
 "Last-Translator: Kishore G <kishore96@gmail.com>\n"
 "Language-Team: Tamil <kde-i18n-doc@kde.org>\n"
 "Language: ta\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 22.12.0\n"
+"X-Generator: Lokalize 23.04.2\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -84,12 +84,10 @@ msgstr ""
 "பயன்படுத்தும்."
 
 #: alarmtimewidget.cpp:92
-#, fuzzy, kde-format
-#| msgctxt "@label"
-#| msgid "Deferred to:"
+#, kde-format
 msgctxt "@option:radio"
 msgid "Defer until:"
-msgstr "இதற்கு ஒத்திவைக்கப்பட்டது:"
+msgstr "இதுவரை ஒத்திவை:"
 
 #: alarmtimewidget.cpp:92
 #, kde-format
@@ -150,12 +148,10 @@ msgstr ""
 "தேதியில் கிடைக்கும் முதல் வாய்ப்பில் அலாரம் தூண்டப்படும்."
 
 #: alarmtimewidget.cpp:137
-#, fuzzy, kde-format
-#| msgctxt "@label"
-#| msgid "Deferred to:"
+#, kde-format
 msgctxt "@option:radio Defer for time interval"
 msgid "Defer for:"
-msgstr "இதற்கு ஒத்திவைக்கப்பட்டது:"
+msgstr "இவ்வளவு நேரத்திற்கு ஒத்திவை:"
 
 #: alarmtimewidget.cpp:137 editdlg.cpp:336
 #, kde-format
@@ -187,21 +183,18 @@ msgstr "<para>%1</para><para>%2</para>"
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Preset"
-msgstr ""
+msgstr "முன்னமைக்கப்பட்டவை"
 
 #: alarmtimewidget.cpp:156
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "1 minute"
 msgid_plural "%1 minutes"
 msgstr[0] "1 நிமிடம்"
-msgstr[1] "%1 நிமிடங்கள்"
+msgstr[1] "%1 நிமிடம்"
 
 #: alarmtimewidget.cpp:157
-#, fuzzy, kde-format
-#| msgctxt "@item:intext inserted into 'in ... %1 minute's time' below"
-#| msgid "1 hour"
-#| msgid_plural "%1 hours"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "1 hour"
 msgid_plural "%1 hours"
@@ -209,20 +202,16 @@ msgstr[0] "1 மணிநேரம்"
 msgstr[1] "%1 மணிநேரம்"
 
 #: alarmtimewidget.cpp:165
-#, fuzzy, kde-format
-#| msgctxt "@option:radio On day number in the month"
-#| msgid "O&n day"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "1 day"
-msgstr "இ&த்தேதியில்:"
+msgstr "1 நாள்"
 
 #: alarmtimewidget.cpp:166
-#, fuzzy, kde-format
-#| msgctxt "@item:inlistbox Time units"
-#| msgid "weeks"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "1 week"
-msgstr "வாரங்கள்"
+msgstr "1 வாரம்"
 
 #: alarmtimewidget.cpp:176
 #, kde-kuit-format
@@ -896,10 +885,10 @@ msgstr "தகவலுக்கான எழுத்துரு"
 
 #. i18n: ectx: whatsthis, entry (MessageFont), group (General)
 #: data/kalarmconfig.kcfg:107
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Default font for displaying alarm messages."
-msgstr "அலார செய்தியின் பின்னணி நிறத்தைத் தேர்வுச் செய்"
+msgstr "அலார செய்திகளுக்கான இயல்பிருப்பு எழுத்துரு."
 
 #. i18n: ectx: label, entry (ShowInSystemTray), group (General)
 #: data/kalarmconfig.kcfg:112
@@ -916,6 +905,8 @@ msgid ""
 "<p>Check to show KAlarm's icon in the system tray. Showing it in the system "
 "tray provides easy access and a status indication.</p>"
 msgstr ""
+"<p>கேயலாரத்தின் சின்னத்தை கணினித் தட்டில் காட்ட இதை குறிக்கவும். இச்சின்னம், கேயலாரத்தை "
+"எளிதில் திறக்க விடுவதுடன் அதன் நிலையைக் காட்டும்.</p>"
 
 #. i18n: ectx: label, entry (Base_AutoHideSystemTray), group (General)
 #: data/kalarmconfig.kcfg:118
@@ -953,10 +944,10 @@ msgstr ""
 
 #. i18n: ectx: label, entry (AutoStart), group (General)
 #: data/kalarmconfig.kcfg:129
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label"
 msgid "Start at login"
-msgstr "உள்நுழையும் போது தானே துவங்கு. "
+msgstr "உள்நுழையும் போது துவங்கு"
 
 #. i18n: ectx: whatsthis, entry (AutoStart), group (General)
 #: data/kalarmconfig.kcfg:130
@@ -969,18 +960,17 @@ msgstr ""
 
 #. i18n: ectx: label, entry (Base_NoAutoStart), group (General)
 #: data/kalarmconfig.kcfg:134
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label"
 msgid "Suppress autostart at login"
-msgstr "உள்நுழையும் போது தானே துவங்கு. "
+msgstr "உள்நுழையும் போது தானாக துவங்காதே"
 
 #. i18n: ectx: label, entry (DefaultDeferTime), group (General)
 #: data/kalarmconfig.kcfg:138
-#, fuzzy, kde-format
-#| msgid "Defer for time &interval:"
+#, kde-format
 msgctxt "@label"
 msgid "Default defer time interval"
-msgstr "நேரம் & இடைவெளிக்கு ஏற்ப தள்ளி வை"
+msgstr "இயல்பாக ஒத்திவைக்கும் இடைவெளி"
 
 #. i18n: ectx: whatsthis, entry (DefaultDeferTime), group (General)
 #: data/kalarmconfig.kcfg:139
@@ -1103,10 +1093,10 @@ msgstr "அலார கெடு நேரத்தை, அமைப்பு �
 
 #. i18n: ectx: label, entry (ShowTooltipTimeToAlarm), group (General)
 #: data/kalarmconfig.kcfg:181
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label"
 msgid "Show time to alarms in system tray tooltip"
-msgstr "உள்நுழையும் போது அமைப்பு தட்டு தானே துவங்கும்"
+msgstr "கணினித் தட்டு கருவித் துப்பில் அலாரங்களுக்கு எவ்வளவு நேரம் மீதமென காட்டு"
 
 #. i18n: ectx: whatsthis, entry (ShowTooltipTimeToAlarm), group (General)
 #: data/kalarmconfig.kcfg:182 prefdlg.cpp:1851
@@ -1143,10 +1133,10 @@ msgstr ""
 
 #. i18n: ectx: label, entry (Base_EmailClient), group (General)
 #: data/kalarmconfig.kcfg:193
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label"
 msgid "Email client"
-msgstr "மின்னஞ்சல் பயனர்:"
+msgstr "மின்னஞ்சல் செயலி"
 
 #. i18n: ectx: whatsthis, entry (Base_EmailClient), group (General)
 #: data/kalarmconfig.kcfg:194
@@ -1167,17 +1157,17 @@ msgstr ""
 
 #. i18n: ectx: label, entry (Base_EmailClient), group (General)
 #: data/kalarmconfig.kcfg:196
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@option"
 msgid "Sendmail"
-msgstr "&அஞ்சலை அனுப்பு."
+msgstr ""
 
 #. i18n: ectx: label, entry (Base_EmailClient), group (General)
 #: data/kalarmconfig.kcfg:197
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@option"
 msgid "KMail"
-msgstr "&கேமின்னஞ்சல்"
+msgstr "கேமெயில்"
 
 #. i18n: ectx: label, entry (Base_EmailCopyToKMail), group (General)
 #: data/kalarmconfig.kcfg:202
@@ -1197,10 +1187,10 @@ msgstr ""
 
 #. i18n: ectx: label, entry (Base_EmailFrom), group (General)
 #: data/kalarmconfig.kcfg:207
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label"
 msgid "'From' email address"
-msgstr "உங்களுடைய மின்னஞ்சல் முகவரி"
+msgstr "அனுப்புநரின் மின்னஞ்சல் முகவரி"
 
 #. i18n: ectx: whatsthis, entry (Base_EmailFrom), group (General)
 #: data/kalarmconfig.kcfg:208
@@ -1215,10 +1205,10 @@ msgstr "உங்கள் மின்னஞ்சலின் முகவர�
 
 #. i18n: ectx: label, entry (Base_EmailBccAddress), group (General)
 #: data/kalarmconfig.kcfg:212
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label"
 msgid "'Bcc' email address"
-msgstr "உங்களுடைய மின்னஞ்சல் முகவரி"
+msgstr "மறைநகல் மின்னஞ்சல் முகவரி"
 
 #. i18n: ectx: whatsthis, entry (Base_EmailBccAddress), group (General)
 #: data/kalarmconfig.kcfg:213
@@ -1234,10 +1224,10 @@ msgstr "உங்கள் மின்னஞ்சலின் முகவர�
 
 #. i18n: ectx: label, entry (Base_CmdXTermCommand), group (General)
 #: data/kalarmconfig.kcfg:217
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label"
 msgid "Terminal for command alarms"
-msgstr "கட்டளை அலாரங்களுக்கு முனையம்"
+msgstr "கட்டளை அலாரங்களுக்கான முனையம்"
 
 #. i18n: ectx: whatsthis, entry (Base_CmdXTermCommand), group (General)
 #: data/kalarmconfig.kcfg:218
@@ -1252,10 +1242,10 @@ msgstr "'%1'ஆல் முனைய சாளரத்தில் கட்�
 
 #. i18n: ectx: label, entry (Base_StartOfDay), group (General)
 #: data/kalarmconfig.kcfg:221
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label"
 msgid "Start of day for date-only alarms"
-msgstr "&தேதிமட்டும் உள்ள அலார துவக்க நாள்"
+msgstr "தேதிமட்டும் உள்ள அலாரங்கள் தூண்டப்படும் நேரம்"
 
 #. i18n: ectx: whatsthis, entry (Base_StartOfDay), group (General)
 #: data/kalarmconfig.kcfg:222
@@ -1271,7 +1261,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label"
 msgid "Start time of working day"
-msgstr ""
+msgstr "வேலைநாள் துவங்கும் நேரம்"
 
 #. i18n: ectx: whatsthis, entry (Base_WorkDayStart), group (General)
 #: data/kalarmconfig.kcfg:228
@@ -1285,7 +1275,7 @@ msgstr "காட்டுவதற்கு ஒரு ஒலிக்கோப�
 #, kde-format
 msgctxt "@label"
 msgid "End time of working day"
-msgstr ""
+msgstr "வேலைநாள் முடியும் நேரம்"
 
 #. i18n: ectx: whatsthis, entry (Base_WorkDayEnd), group (General)
 #: data/kalarmconfig.kcfg:234
@@ -1300,7 +1290,7 @@ msgstr "அலார மாதிரி உருவின் பெயரை �
 #, kde-format
 msgctxt "@label"
 msgid "Working days"
-msgstr ""
+msgstr "வேலைநாட்கள்"
 
 #. i18n: ectx: whatsthis, entry (Base_WorkDays), group (General)
 #: data/kalarmconfig.kcfg:240
@@ -1313,10 +1303,10 @@ msgstr ""
 
 #. i18n: ectx: label, entry (DisabledColour), group (General)
 #: data/kalarmconfig.kcfg:245
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label"
 msgid "Disabled alarm color"
-msgstr "செயலிழக்க செய்த அலாரத்தின் வண்ணம்:"
+msgstr "முடக்கப்பட்டுள்ள அலாரங்களின் நிறம்"
 
 #. i18n: ectx: whatsthis, entry (DisabledColour), group (General)
 #: data/kalarmconfig.kcfg:246 prefdlg.cpp:1884
@@ -1328,10 +1318,10 @@ msgstr "செயலிழந்த அலாரங்களுக்கு அ�
 
 #. i18n: ectx: label, entry (ArchivedColour), group (General)
 #: data/kalarmconfig.kcfg:251
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label"
 msgid "Archived alarm color"
-msgstr "காலம் கடந்த அலாரத்தின் வண்ணம்"
+msgstr "காப்பகப்படுத்தப்பட்டுள்ள அலாரங்களின் நிறம்"
 
 #. i18n: ectx: whatsthis, entry (ArchivedColour), group (General)
 #: data/kalarmconfig.kcfg:252 prefdlg.cpp:1897
@@ -1342,10 +1332,10 @@ msgstr "காலம் கடந்த அலாரங்களுக்கு,
 
 #. i18n: ectx: label, entry (ArchivedKeepDays), group (General)
 #: data/kalarmconfig.kcfg:257
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label"
 msgid "Days to keep expired alarms"
-msgstr "காலாவதியான அலாரத்தை நீக்கு"
+msgstr "அலாரங்கள் காலாவதியானபின் எத்தனை நாட்களுக்கு வைத்திருக்க வேண்டும்"
 
 #. i18n: ectx: whatsthis, entry (ArchivedKeepDays), group (General)
 #: data/kalarmconfig.kcfg:262
@@ -1365,7 +1355,7 @@ msgstr "முடிவுகளிலும் அல்லது நீக்�
 #, kde-format
 msgctxt "@label"
 msgid "KOrganizer event duration"
-msgstr ""
+msgstr "கேயார்கனைசரில் நிகழ்வு நீடிக்கும் காலம்"
 
 #. i18n: ectx: whatsthis, entry (KOrgEventDuration), group (General)
 #: data/kalarmconfig.kcfg:269
@@ -1381,7 +1371,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label"
 msgid "Number of minutes before alarm to wake from suspend"
-msgstr ""
+msgstr "அலாரத்திற்கு எத்தனை நிமிடங்களுக்கு முன்பு உறக்கத்திலிருந்து கணினி எழ வேண்டும்"
 
 #. i18n: ectx: whatsthis, entry (WakeFromSuspendAdvance), group (General)
 #: data/kalarmconfig.kcfg:274
@@ -1395,11 +1385,10 @@ msgstr ""
 
 #. i18n: ectx: label, entry (DefaultDisplayMethod), group (Defaults)
 #: data/kalarmconfig.kcfg:286
-#, fuzzy, kde-format
-#| msgid "Beep when message is displayed"
+#, kde-format
 msgctxt "@label"
 msgid "Alarm message display method"
-msgstr "செய்தி வரும் பொழுது ஒலியெழுப்பு"
+msgstr "அலார செய்தியை காட்டும் விதம்"
 
 #. i18n: ectx: whatsthis, entry (DefaultDisplayMethod), group (Defaults)
 #: data/kalarmconfig.kcfg:287
