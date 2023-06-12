@@ -14,6 +14,7 @@
   <name xml:lang="de">KAlarm</name>
   <name xml:lang="el">KAlarm</name>
   <name xml:lang="en-GB">KAlarm</name>
+  <name xml:lang="eo">KAlarm</name>
   <name xml:lang="es">KAlarm</name>
   <name xml:lang="et">KAlarm</name>
   <name xml:lang="eu">KAlarm</name>
@@ -58,6 +59,7 @@
   <summary xml:lang="de">Persönliche Termin-Erinnerung</summary>
   <summary xml:lang="el">Προσωπικός χρονοπρογραμματιστής συναγερμών</summary>
   <summary xml:lang="en-GB">Personal Alarm Scheduler</summary>
+  <summary xml:lang="eo">Persona Alarmplanilo</summary>
   <summary xml:lang="es">Planificador de alarmas personal</summary>
   <summary xml:lang="et">Meeldetuletuste ajastaja</summary>
   <summary xml:lang="eu">Alarma pertsonalen programatzailea</summary>
@@ -135,6 +137,7 @@
     <p xml:lang="de">Funktionen:</p>
     <p xml:lang="el">Χαρακτηριστικά:</p>
     <p xml:lang="en-GB">Features:</p>
+    <p xml:lang="eo">Trajtoj:</p>
     <p xml:lang="es">Características:</p>
     <p xml:lang="et">Omadused:</p>
     <p xml:lang="eu">Ezaugarriak:</p>
@@ -216,6 +219,7 @@
       <li xml:lang="de">Akustische Erinnerung mit einer Audiodatei</li>
       <li xml:lang="el">Ηχητικός συναγερμός με χρήση αρχείου ήχου</li>
       <li xml:lang="en-GB">Audible alarm using a sound file</li>
+      <li xml:lang="eo">Aŭdebla alarmo uzante sondosieron</li>
       <li xml:lang="es">Alarmas sonoras usando un archivo de sonido</li>
       <li xml:lang="et">Kuuldavad häired helifaili abil</li>
       <li xml:lang="eu">Alarma entzungarria soinu-fitxategi bat erabiliz</li>
@@ -293,6 +297,7 @@
       <li xml:lang="de">Anpassung der Farben und Schriften für Erinnerungen</li>
       <li xml:lang="el">Εμφάνιση προσαρμογής χρώματος και γραμματοσειράς συναγερμών</li>
       <li xml:lang="en-GB">Display alarms colour and font customisation</li>
+      <li xml:lang="eo">Montri alarmkoloron kaj tiparan tajloradon</li>
       <li xml:lang="es">Muestra la personalización de colores y tipos de letra de la alarma</li>
       <li xml:lang="et">Nähtavate häirete värvi ja kirja kohandamine</li>
       <li xml:lang="eu">Azaldutako alarmen koloreak eta letra-tipoak norbere nahietara egokitzea</li>
@@ -378,6 +383,7 @@
       <caption xml:lang="de">Der Einrichtungsdialog von KAlarm mit dem Test einer Erinnerungsnachricht</caption>
       <caption xml:lang="el">Παράθυρο διαμόρφωσης KAlarm με ένα δοκιμαστικό μήνυμα συναγερμού.</caption>
       <caption xml:lang="en-GB">KAlarm configuration window with a testing message alarm</caption>
+      <caption xml:lang="eo">Agorda fenestro de KAlarm kun testmesaĝa alarmo</caption>
       <caption xml:lang="es">Ventana de configuración de KAlarm con un mensaje de prueba de alarma</caption>
       <caption xml:lang="et">KAlarmi seadistustedialoog sõnumihäire testimisega</caption>
       <caption xml:lang="eu">KAlarm konfiguratzeko leihoa, probako alarma-mezu batekin</caption>
