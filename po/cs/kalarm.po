@@ -80,12 +80,10 @@ msgstr ""
 "nastavení."
 
 #: alarmtimewidget.cpp:92
-#, fuzzy, kde-format
-#| msgctxt "@label"
-#| msgid "Deferred to:"
+#, kde-format
 msgctxt "@option:radio"
 msgid "Defer until:"
-msgstr "Pozdržet do:"
+msgstr ""
 
 #: alarmtimewidget.cpp:92
 #, kde-format
@@ -144,12 +142,10 @@ msgstr ""
 "Upomínka bude spuštěna při první příležitosti ve vybraném datu."
 
 #: alarmtimewidget.cpp:137
-#, fuzzy, kde-format
-#| msgctxt "@label"
-#| msgid "Deferred to:"
+#, kde-format
 msgctxt "@option:radio Defer for time interval"
 msgid "Defer for:"
-msgstr "Pozdržet do:"
+msgstr ""
 
 #: alarmtimewidget.cpp:137 editdlg.cpp:336
 #, kde-format
@@ -182,44 +178,34 @@ msgid "Preset"
 msgstr ""
 
 #: alarmtimewidget.cpp:156
-#, fuzzy, kde-format
-#| msgctxt "@info"
-#| msgid "1 Minute"
-#| msgid_plural "%1 Minutes"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "1 minute"
 msgid_plural "%1 minutes"
-msgstr[0] "1 minuta"
-msgstr[1] "%1 minuty"
-msgstr[2] "%1 minut"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
 
 #: alarmtimewidget.cpp:157
-#, fuzzy, kde-format
-#| msgctxt "@item:intext inserted into 'in ... %1 minute's time' below"
-#| msgid "1 hour"
-#| msgid_plural "%1 hours"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "1 hour"
 msgid_plural "%1 hours"
-msgstr[0] "1 hodina"
-msgstr[1] "%1 hodiny"
-msgstr[2] "%1 hodin"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
 
 #: alarmtimewidget.cpp:165
-#, fuzzy, kde-format
-#| msgctxt "@option:radio On day number in the month"
-#| msgid "O&n day"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "1 day"
-msgstr "Kolikátého"
+msgstr ""
 
 #: alarmtimewidget.cpp:166
-#, fuzzy, kde-format
-#| msgctxt "@item:inlistbox Time units"
-#| msgid "weeks"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "1 week"
-msgstr "týdny"
+msgstr ""
 
 #: alarmtimewidget.cpp:176
 #, kde-kuit-format
@@ -8500,11 +8486,3 @@ msgstr ""
 #, kde-format
 msgid "Number of minutes before alarm to wake from suspend"
 msgstr "Počet minut před upomínkou pro probrání z uspání"
-
-#~ msgctxt "@option:radio"
-#~ msgid "Defer to date/time:"
-#~ msgstr "Odložit do data / času:"
-
-#~ msgctxt "@option:radio"
-#~ msgid "Defer for time interval:"
-#~ msgstr "Odložit o časový interval:"
