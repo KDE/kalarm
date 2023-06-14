@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-06-08 00:47+0000\n"
-"PO-Revision-Date: 2023-06-07 12:02+0200\n"
+"PO-Revision-Date: 2023-06-12 17:13+0200\n"
 "Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
 "Language: cs\n"
@@ -21,7 +21,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Lokalize 23.04.1\n"
+"X-Generator: Lokalize 23.04.2\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -83,7 +83,7 @@ msgstr ""
 #, kde-format
 msgctxt "@option:radio"
 msgid "Defer until:"
-msgstr ""
+msgstr "Pozdržet do:"
 
 #: alarmtimewidget.cpp:92
 #, kde-format
@@ -145,7 +145,7 @@ msgstr ""
 #, kde-format
 msgctxt "@option:radio Defer for time interval"
 msgid "Defer for:"
-msgstr ""
+msgstr "Pozdržet po:"
 
 #: alarmtimewidget.cpp:137 editdlg.cpp:336
 #, kde-format
@@ -175,37 +175,37 @@ msgstr "<para>%1</para><para>%2</para>"
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Preset"
-msgstr ""
+msgstr "Přednastavení"
 
 #: alarmtimewidget.cpp:156
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "1 minute"
 msgid_plural "%1 minutes"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "1 minuta"
+msgstr[1] "%1 minuty"
+msgstr[2] "%1 minut"
 
 #: alarmtimewidget.cpp:157
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "1 hour"
 msgid_plural "%1 hours"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "1 hodina"
+msgstr[1] "%1 hodiny"
+msgstr[2] "%1 hodin"
 
 #: alarmtimewidget.cpp:165
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "1 day"
-msgstr ""
+msgstr "1 den"
 
 #: alarmtimewidget.cpp:166
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "1 week"
-msgstr ""
+msgstr "1 týden"
 
 #: alarmtimewidget.cpp:176
 #, kde-kuit-format
