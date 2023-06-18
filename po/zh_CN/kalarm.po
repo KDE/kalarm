@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-06-08 00:47+0000\n"
-"PO-Revision-Date: 2023-05-22 14:00\n"
+"PO-Revision-Date: 2023-06-17 04:11\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -72,12 +72,10 @@ msgid "This uses KAlarm's default time zone, set in the Configuration dialog."
 msgstr "将使用 KAlarm 的默认时区作为时区，可在配置对话框中进行设置。"
 
 #: alarmtimewidget.cpp:92
-#, fuzzy, kde-format
-#| msgctxt "@label"
-#| msgid "Deferred to:"
+#, kde-format
 msgctxt "@option:radio"
 msgid "Defer until:"
-msgstr "已推迟到："
+msgstr ""
 
 #: alarmtimewidget.cpp:92
 #, kde-format
@@ -132,12 +130,10 @@ msgid ""
 msgstr "勾选后可仅指定闹钟日期 (不指定时间)，闹钟将在所选日期的第一时间响铃。"
 
 #: alarmtimewidget.cpp:137
-#, fuzzy, kde-format
-#| msgctxt "@label"
-#| msgid "Deferred to:"
+#, kde-format
 msgctxt "@option:radio Defer for time interval"
 msgid "Defer for:"
-msgstr "已推迟到："
+msgstr ""
 
 #: alarmtimewidget.cpp:137 editdlg.cpp:336
 #, kde-format
@@ -170,40 +166,30 @@ msgid "Preset"
 msgstr ""
 
 #: alarmtimewidget.cpp:156
-#, fuzzy, kde-format
-#| msgctxt "@info"
-#| msgid "1 Minute"
-#| msgid_plural "%1 Minutes"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "1 minute"
 msgid_plural "%1 minutes"
-msgstr[0] "%1 分钟"
+msgstr[0] ""
 
 #: alarmtimewidget.cpp:157
-#, fuzzy, kde-format
-#| msgctxt "@item:intext inserted into 'in ... %1 minute's time' below"
-#| msgid "1 hour"
-#| msgid_plural "%1 hours"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "1 hour"
 msgid_plural "%1 hours"
 msgstr[0] "%1 小时"
 
 #: alarmtimewidget.cpp:165
-#, fuzzy, kde-format
-#| msgctxt "@option:radio On day number in the month"
-#| msgid "O&n day"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "1 day"
-msgstr "提醒日(&N)"
+msgstr ""
 
 #: alarmtimewidget.cpp:166
-#, fuzzy, kde-format
-#| msgctxt "@item:inlistbox Time units"
-#| msgid "weeks"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "1 week"
-msgstr "周"
+msgstr ""
 
 #: alarmtimewidget.cpp:176
 #, kde-kuit-format
@@ -1875,12 +1861,10 @@ msgid "Show the next month"
 msgstr "显示下个月的闹钟"
 
 #: datepicker.cpp:88
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "Show &Details"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Show today"
-msgstr "显示详情(&D)"
+msgstr ""
 
 #: daymatrix.cpp:207
 #, kde-format
@@ -8272,11 +8256,3 @@ msgstr "输入闹钟响铃前唤醒系统的分钟数，此项可确保系统在
 #, kde-format
 msgid "Number of minutes before alarm to wake from suspend"
 msgstr "闹钟唤醒睡眠前的分钟数"
-
-#~ msgctxt "@option:radio"
-#~ msgid "Defer to date/time:"
-#~ msgstr "推迟到以下时间及日期："
-
-#~ msgctxt "@option:radio"
-#~ msgid "Defer for time interval:"
-#~ msgstr "推迟时长："
