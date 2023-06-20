@@ -328,7 +328,7 @@ msgid ""
 "Enter text to appear before the person's name in the alarm message, "
 "including any necessary trailing spaces."
 msgstr ""
-"Insira o texto que se ha mostrar antes do nome da persoa na mensaxe de "
+"Insira o texto que se ha amosar antes do nome da persoa na mensaxe de "
 "alarma, incluíndo calquera espazo final que sexa preciso."
 
 #: birthdaydlg.cpp:88
@@ -344,7 +344,7 @@ msgid ""
 "Enter text to appear after the person's name in the alarm message, including "
 "any necessary leading spaces."
 msgstr ""
-"Insira o texto que se ha mostrar despois do nome da persoa na mensaxe de "
+"Insira o texto que se ha amosar despois do nome da persoa na mensaxe de "
 "alarma, incluíndo calquera espazo inicial que sexa preciso."
 
 #: birthdaydlg.cpp:99
@@ -379,7 +379,7 @@ msgstr "Configuración da alarma"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to display a reminder in advance of or after the birthday."
-msgstr "Márqueo para mostrar unha lembranza antes ou despois do aniversario."
+msgstr "Márqueo para amosar unha lembranza antes ou despois do aniversario."
 
 #: birthdaydlg.cpp:156
 #, kde-format
@@ -389,8 +389,8 @@ msgid ""
 "reminder. This is in addition to the alarm which is displayed on the "
 "birthday."
 msgstr ""
-"Insira o número de días antes ou despois de cada aniversario no que mostrar "
-"a lembranza. Isto vai a maiores da alarma que se mostre no aniversario."
+"Insira o número de días antes ou despois de cada aniversario no que amosar a "
+"lembranza. Isto vai a maiores da alarma que se amose no aniversario."
 
 #: birthdaydlg.cpp:158
 #, kde-format
@@ -410,7 +410,7 @@ msgstr "Sub-repetición"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Set up an additional alarm repetition"
-msgstr "Estabelecer unha repetición adicional da alarma"
+msgstr "Definir unha repetición adicional da alarma"
 
 #: commandoptions.cpp:126
 #, kde-format
@@ -436,7 +436,7 @@ msgstr "Copia agochada do correo electrónico a si mesmo"
 #: commandoptions.cpp:139
 #, kde-format
 msgid "Beep when message is displayed"
-msgstr "Badalada cando se mostre a mensaxe"
+msgstr "Badalada cando se amose a mensaxe"
 
 #: commandoptions.cpp:142
 #, kde-format
@@ -476,49 +476,48 @@ msgstr "Liña de ordes para xerar o texto da mensaxe de alarma"
 #: commandoptions.cpp:168
 #, kde-format
 msgid "Display the alarm edit dialog to edit the specified alarm"
-msgstr "Mostrar o diálogo de edición de alarmas para editar a alarma indicada"
+msgstr "Amosar o diálogo de edición de alarmas para editar a alarma indicada"
 
 #: commandoptions.cpp:172
 #, kde-format
 msgid "Display the alarm edit dialog to edit a new display alarm"
 msgstr ""
-"Mostrar o diálogo de edición de alarmas para editar unha nova alarma visual"
+"Amosar o diálogo de edición de alarmas para editar unha nova alarma visual"
 
 #: commandoptions.cpp:175
 #, kde-format
 msgid "Display the alarm edit dialog to edit a new command alarm"
 msgstr ""
-"Mostrar o diálogo de edición de alarmas para editar unha nova alarma con "
-"ordes"
+"Amosar o diálogo de edición de alarmas para editar unha nova alarma con ordes"
 
 #: commandoptions.cpp:178
 #, kde-format
 msgid "Display the alarm edit dialog to edit a new email alarm"
 msgstr ""
-"Mostrar o diálogo de edición de alarma ou editar unha nova alarma con correo "
+"Amosar o diálogo de edición de alarma ou editar unha nova alarma con correo "
 "electrónico"
 
 #: commandoptions.cpp:181
 #, kde-format
 msgid "Display the alarm edit dialog to edit a new audio alarm"
 msgstr ""
-"Mostrar o diálogo de edición de alarmas para editar unha alarma nova con son"
+"Amosar o diálogo de edición de alarmas para editar unha alarma nova con son"
 
 #: commandoptions.cpp:184
 #, kde-format
 msgid "Display the alarm edit dialog, preset with a template"
-msgstr "Mostrar o diálogo de edición de alarmas, preconfigurado cun modelo."
+msgstr "Amosar o diálogo de edición de alarmas, preconfigurado cun modelo."
 
 #: commandoptions.cpp:188
 #, kde-format
 msgid "File to display"
-msgstr "Ficheiro que desexa mostrar"
+msgstr "Ficheiro que desexa amosar"
 
 #: commandoptions.cpp:192
 #, kde-format
 msgid "KMail identity to use as sender of email"
 msgstr ""
-"Identidade de KMail que quere empregar como remitente de correo electrónico"
+"Identidade de KMail que quere usar como remitente de correo electrónico"
 
 #: commandoptions.cpp:196
 #, kde-format
@@ -528,7 +527,7 @@ msgstr "Intervalo entre as repeticións da alarma"
 #: commandoptions.cpp:200
 #, kde-format
 msgid "Show alarm as an event in KOrganizer"
-msgstr "Mostrar a alarma como un evento en KOrganizer"
+msgstr "Amosar a alarma como un evento en KOrganizer"
 
 #: commandoptions.cpp:203
 #, kde-format
@@ -578,18 +577,18 @@ msgstr "Ficheiro de son que quere repetir"
 #: commandoptions.cpp:232
 #, kde-format
 msgid "Specify alarm recurrence using iCalendar syntax"
-msgstr "Indicar a repetición da alarma empregando a sintaxe de iCalendar"
+msgstr "Indicar a repetición da alarma usando a sintaxe de iCalendar"
 
 #: commandoptions.cpp:236
 #, kde-format
 msgid "Display reminder before or after alarm"
-msgstr "Mostrar a lembranza antes ou despois da alarma"
+msgstr "Amosar a lembranza antes ou despois da alarma"
 
 #: commandoptions.cpp:240
 #, kde-format
 msgid "Display reminder once, before or after first alarm recurrence"
 msgstr ""
-"Mostrar a lembranza unha vez, antes ou despois da primeira repetición da "
+"Amosar a lembranza unha vez, antes ou despois da primeira repetición da "
 "alarma"
 
 #: commandoptions.cpp:244
@@ -600,7 +599,7 @@ msgstr "Número de veces que se ha repetir a alarma (incluída a primeira vez)"
 #: commandoptions.cpp:249
 #, kde-format
 msgid "Speak the message when it is displayed"
-msgstr "Ler a mensaxe cando se mostre"
+msgstr "Ler a mensaxe cando se amose"
 
 #: commandoptions.cpp:253
 #, kde-format
@@ -624,7 +623,7 @@ msgstr ""
 #: commandoptions.cpp:267
 #, kde-format
 msgid "Display system tray icon"
-msgstr "Mostrar a icona na bandexa do sistema"
+msgstr "Amosar a icona na bandexa do sistema"
 
 #: commandoptions.cpp:270
 #, kde-format
@@ -645,7 +644,7 @@ msgstr "Volume ao que reproducir o ficheiro de son"
 #: commandoptions.cpp:289
 #, kde-format
 msgid "Message text to display"
-msgstr "Mensaxe de texto que quere mostrar"
+msgstr "Mensaxe de texto que quere amosar"
 
 #: commandoptions.cpp:453
 #, kde-kuit-format
@@ -800,8 +799,8 @@ msgid ""
 "Select the time zone which KAlarm should use as its default for displaying "
 "and entering dates and times."
 msgstr ""
-"Escolla o fuso horario que queira que empregue KAlarm de maneira "
-"predeterminada para mostrar e inserir as datas e as horas."
+"Escolla o fuso horario que queira que use KAlarm de maneira predeterminada "
+"para amosar e inserir as datas e as horas."
 
 #. i18n: ectx: label, entry (Base_HolidayRegion), group (General)
 #: data/kalarmconfig.kcfg:85
@@ -876,14 +875,14 @@ msgstr "Fonte da mensaxe"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Default font for displaying alarm messages."
-msgstr "Fonte predeterminada para mostrar as mensaxes de alarma."
+msgstr "Fonte predeterminada para amosar as mensaxes de alarma."
 
 #. i18n: ectx: label, entry (ShowInSystemTray), group (General)
 #: data/kalarmconfig.kcfg:112
 #, kde-format
 msgctxt "@label"
 msgid "Show in system tray"
-msgstr "Mostrar na bandexa do sistema"
+msgstr "Amosar na bandexa do sistema"
 
 #. i18n: ectx: whatsthis, entry (ShowInSystemTray), group (General)
 #: data/kalarmconfig.kcfg:113
@@ -893,9 +892,9 @@ msgid ""
 "<p>Check to show KAlarm's icon in the system tray. Showing it in the system "
 "tray provides easy access and a status indication.</p>"
 msgstr ""
-"<p>Marque isto para mostrar a icona de KAlarm na bandexa do sistema. "
-"Mostrala na bandexa do sistema fornece un acceso fácil e unha indicación do "
-"estado.</p>"
+"<p>Marque isto para amosar a icona de KAlarm na bandexa do sistema. Amosala "
+"na bandexa do sistema fornece un acceso fácil e unha indicación do estado.</"
+"p>"
 
 #. i18n: ectx: label, entry (Base_AutoHideSystemTray), group (General)
 #: data/kalarmconfig.kcfg:118
@@ -920,7 +919,7 @@ msgstr ""
 "sistema cando non haxa alarmas activas.</p><p>Para agochar automaticamente a "
 "icona da bandexa do sistema cando non haxa alarmas que venzan nun período de "
 "tempo indicado, insira ese período de tempo en minutos.</p><p>Insira 0 para "
-"que se mostre sempre a icona da bandexa do sistema.</p>"
+"que se amose sempre a icona da bandexa do sistema.</p>"
 
 #. i18n: ectx: label, entry (NoAutoHideSystemTrayDesktops), group (General)
 #: data/kalarmconfig.kcfg:124
@@ -980,7 +979,7 @@ msgid ""
 "Defer Alarm dialog."
 msgstr ""
 "Insira o intervalo temporal predeterminado (en minutos) para adiar as "
-"alarmas; emprégao o diálogo Adiar a alarma."
+"alarmas; úsao o diálogo Adiar a alarma."
 
 #. i18n: ectx: label, entry (AskResource), group (General)
 #: data/kalarmconfig.kcfg:143
@@ -1051,7 +1050,7 @@ msgid ""
 "      "
 msgstr ""
 "<p>Indique a posición das xanelas de mensaxes de alarma e a demora, en "
-"segundos desde que se mostre unha xanela ata que se activen os botóns.\n"
+"segundos desde que se amose unha xanela ata que se activen os botóns.\n"
 "        <ul><li>0 para colocar as xanelas de mensaxes tan lonxe como for "
 "posíbel do cursos e sen activar a demora.</li>\n"
 "        <li>> 0 para colocalas no centro da pantalla e indicar unha demora "
@@ -1066,7 +1065,7 @@ msgstr ""
 msgctxt "@label"
 msgid "Number of alarms to show in system tray tooltip"
 msgstr ""
-"Número de alarmas que se poden mostrar na notificación da bandexa do sistema"
+"Número de alarmas que se poden amosar na notificación da bandexa do sistema"
 
 #. i18n: ectx: whatsthis, entry (TooltipAlarmCount), group (General)
 #: data/kalarmconfig.kcfg:169
@@ -1080,10 +1079,10 @@ msgid ""
 "        <li>>0 to set a limit.</li></ul></p>\n"
 "      "
 msgstr ""
-"<p>Cantas alarmas previstas para as vindeiras 24 horas se han de mostrar na "
+"<p>Cantas alarmas previstas para as vindeiras 24 horas se han de amosar na "
 "notificación da bandexa do sistema:\n"
-"        <ul><li>0 para non mostrar ningunha</li>\n"
-"        <li>-1 para mostralas todas</li>\n"
+"        <ul><li>0 para non amosar ningunha</li>\n"
+"        <li>-1 para amosalas todas</li>\n"
 "        <li>>0 para indicar un límite.</li></ul></p>\n"
 "      "
 
@@ -1092,7 +1091,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label"
 msgid "Show alarm times in system tray tooltip"
-msgstr "Mostrar as horas das alarmas na notificación da bandexa do sistema"
+msgstr "Amosar as horas das alarmas na notificación da bandexa do sistema"
 
 #. i18n: ectx: whatsthis, entry (ShowTooltipAlarmTime), group (General)
 #: data/kalarmconfig.kcfg:176 prefdlg.cpp:1845
@@ -1111,7 +1110,7 @@ msgstr ""
 msgctxt "@label"
 msgid "Show time to alarms in system tray tooltip"
 msgstr ""
-"Mostrar o tempo que falta para cada alarma na notificación da bandexa do "
+"Amosar o tempo que falta para cada alarma na notificación da bandexa do "
 "sistema"
 
 #. i18n: ectx: whatsthis, entry (ShowTooltipTimeToAlarm), group (General)
@@ -1122,8 +1121,8 @@ msgid ""
 "Specify whether to show in the system tray tooltip, how long until each "
 "alarm is due."
 msgstr ""
-"Indique se mostrar ou non canto queda ata a vindeira alarma na información "
-"da bandexa do sistema."
+"Indique se amosar ou non canto queda ata a vindeira alarma na información da "
+"bandexa do sistema."
 
 #. i18n: ectx: label, entry (TooltipTimeToPrefix), group (General)
 #: data/kalarmconfig.kcfg:187
@@ -1140,7 +1139,7 @@ msgid ""
 "Enter the text to be displayed in front of the time until the alarm, in the "
 "system tray tooltip."
 msgstr ""
-"Insira o texto a mostrar diante da hora ata que soe a alarma, no menú "
+"Insira o texto a amosar diante da hora ata que soe a alarma, no menú "
 "emerxente da bandexa do sistema."
 
 #. i18n: ectx: label, entry (Base_EmailClient), group (General)
@@ -1518,7 +1517,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label"
 msgid "Show in KOrganizer"
-msgstr "Mostrar en KOrganizer"
+msgstr "Amosar en KOrganizer"
 
 #. i18n: ectx: whatsthis, entry (DefaultCopyToKOrganizer), group (Defaults)
 #: data/kalarmconfig.kcfg:312
@@ -1526,8 +1525,8 @@ msgstr "Mostrar en KOrganizer"
 msgctxt "@info:whatsthis"
 msgid "Default setting in the alarm edit dialog for \"show in KOrganizer\"."
 msgstr ""
-"A opción predeterminada para «mostrar en KOrganizer» no diálogo de edición "
-"de alarmas."
+"A opción predeterminada para «amosar en KOrganizer» no diálogo de edición de "
+"alarmas."
 
 #. i18n: ectx: label, entry (Base_DefaultSoundType), group (Defaults)
 #: data/kalarmconfig.kcfg:316
@@ -1802,7 +1801,7 @@ msgstr "Acción previa á alarma"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Default command to execute before displaying alarms."
-msgstr "Orde predeterminada para executar antes de mostrar alarmas."
+msgstr "Orde predeterminada para executar antes de amosar alarmas."
 
 #. i18n: ectx: label, entry (DefaultExecPreActionOnDeferral), group (Defaults)
 #: data/kalarmconfig.kcfg:405
@@ -1855,7 +1854,7 @@ msgid ""
 "Default setting for whether to show no error status or error message if the "
 "pre-alarm action command fails."
 msgstr ""
-"A opción predeterminada para que non se mostre un estado de erro nin unha "
+"A opción predeterminada para que non se amose un estado de erro nin unha "
 "mensaxe de erro se falla a orde de acción previa á alarma."
 
 #. i18n: ectx: label, entry (DefaultPostAction), group (Defaults)
@@ -1921,7 +1920,7 @@ msgid ""
 "have a dial-up connection, so that you can then ensure that the email is "
 "actually transmitted."
 msgstr ""
-"Mostrar unha mensaxe de notificación cando se poña na lista de espera unha "
+"Amosar unha mensaxe de notificación cando se poña na lista de espera unha "
 "alarma con correo electrónico a un sistema remoto. Isto podería ser útil se, "
 "por exemplo, ten unha conexión por módem, de xeito que poida asegurarse que "
 "a mensaxe se envía de verdade."
@@ -2081,7 +2080,7 @@ msgstr "Repetición - [%1]"
 #, kde-format
 msgctxt "@option:check"
 msgid "Show in KOrganizer"
-msgstr "Mostrar en KOrganizer"
+msgstr "Amosar en KOrganizer"
 
 #: editdlg.cpp:177
 #, kde-format
@@ -2194,8 +2193,8 @@ msgid ""
 "Do not specify a start time for alarms based on this template. The normal "
 "default start time will be used."
 msgstr ""
-"Non indicar unha hora de inicio das alarmas neste modelo. Emprégase a hora "
-"de inicio predeterminada."
+"Non indicar unha hora de inicio das alarmas neste modelo. Úsase a hora de "
+"inicio predeterminada."
 
 #: editdlg.cpp:312
 #, kde-format
@@ -2461,7 +2460,7 @@ msgid ""
 "a text or image file.</item><item><interface>%3</interface>: the alarm will "
 "display the output from a command.</item></list></para>"
 msgstr ""
-"<para>Escolla o que ha de mostrar a alarma:<list><item><interface>%1</"
+"<para>Escolla o que ha de amosar a alarma:<list><item><interface>%1</"
 "interface>: a alarma mostra a mensaxe de texto que vostede queira.</"
 "item><item><interface>%2</interface>: a alarma mostra o contido dun ficheiro "
 "de texto ou imaxe.</item><item><interface>%3</interface>: a alarma mostra a "
@@ -2478,7 +2477,7 @@ msgstr "Insira o texto da mensaxe de alarma. Pode ocupar varias liñas."
 msgctxt "@info:whatsthis"
 msgid "Enter the name or URL of a text or image file to display."
 msgstr ""
-"Insira o nome ou o URL dun ficheiro de imaxe ou de texto que queira mostrar."
+"Insira o nome ou o URL dun ficheiro de imaxe ou de texto que queira amosar."
 
 #: editdlgtypes.cpp:193 editdlgtypes.cpp:882 sounddlg.cpp:184
 #, kde-format
@@ -2490,7 +2489,7 @@ msgstr "Escolla o ficheiro"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select a text or image file to display."
-msgstr "Seleccione un ficheiro de texto ou de imaxe para mostrar."
+msgstr "Seleccione un ficheiro de texto ou de imaxe para amosar."
 
 #: editdlgtypes.cpp:238
 #, kde-format
@@ -2507,8 +2506,8 @@ msgid ""
 "Check to additionally display a reminder in advance of or after the main "
 "alarm time(s)."
 msgstr ""
-"Marque isto para mostrar a maiores unha lembranza antes ou despois da hora "
-"da alarma principal."
+"Marque isto para amosar a maiores unha lembranza antes ou despois da hora da "
+"alarma principal."
 
 #: editdlgtypes.cpp:266
 #, kde-kuit-format
@@ -2518,7 +2517,7 @@ msgid ""
 "reminder alarm.</para><para>%1</para>"
 msgstr ""
 "<para>Insira canto tempo antes ou despois da alarma principal desexa que se "
-"mostre a lembranza.</para><para>%1</para>"
+"amose a lembranza.</para><para>%1</para>"
 
 #: editdlgtypes.cpp:267
 #, kde-format
@@ -2548,25 +2547,25 @@ msgstr "Mostrar agora a mensaxe de alarma"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Display the alarm message now"
-msgstr "Mostrar agora a mensaxe de alarma"
+msgstr "Amosar agora a mensaxe de alarma"
 
 #: editdlgtypes.cpp:677
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Display the file now"
-msgstr "Mostrar agora o ficheiro"
+msgstr "Amosar agora o ficheiro"
 
 #: editdlgtypes.cpp:687
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Display the command output now"
-msgstr "Mostrar agora a saída da orde"
+msgstr "Amosar agora a saída da orde"
 
 #: editdlgtypes.cpp:719
 #, kde-format
 msgctxt "@title:window"
 msgid "Choose Text or Image File to Display"
-msgstr "Escolla o ficheiro de imaxe ou de texto que queira mostrar"
+msgstr "Escolla o ficheiro de imaxe ou de texto que queira amosar"
 
 #: editdlgtypes.cpp:797
 #, kde-format
@@ -2710,7 +2709,7 @@ msgid ""
 "in the <application>KAlarm</application> Configuration dialog.</para>"
 msgstr ""
 "<para>Non hai ningún terminal seleccionado para alarmas de orde.</"
-"para><para>Estabelézao no diálogo de configuración de <application>KAlarm</"
+"para><para>Defínao no diálogo de configuración de <application>KAlarm</"
 "application>.</para>"
 
 #: editdlgtypes.cpp:1087
@@ -3048,7 +3047,7 @@ msgid ""
 "available if archived alarms are currently being displayed."
 msgstr ""
 "Marque isto para incluír as alarmas arquivadas na busca. Esta opción está só "
-"dispoñíbel se se están a mostrar actualmente as alarmas activadas."
+"dispoñíbel se se están a amosar actualmente as alarmas activadas."
 
 #: find.cpp:121
 #, kde-format
@@ -3172,7 +3171,7 @@ msgctxt "@info:whatsthis"
 msgid ""
 "Check to use the default font current at the time the alarm is displayed."
 msgstr ""
-"Marque isto para usar a fonte predeterminada na hora na que se mostre a "
+"Marque isto para usar a fonte predeterminada na hora na que se amose a "
 "alarma."
 
 #: fontcolour.h:26
@@ -3273,13 +3272,13 @@ msgstr "Non se pode enviar o calendario novo a:<nl/><filename>%1</filename>"
 #, kde-format
 msgctxt "@info"
 msgid "Unable to show alarms in KOrganizer"
-msgstr "Non se poden mostrar as alarmas en KOrganizer"
+msgstr "Non se poden amosar as alarmas en KOrganizer"
 
 #: functions.cpp:1032
 #, kde-format
 msgctxt "@info"
 msgid "Unable to show alarm in KOrganizer"
-msgstr "Non se pode mostrar a alarma en KOrganizer"
+msgstr "Non se pode amosar a alarma en KOrganizer"
 
 #: functions.cpp:1035
 #, kde-format
@@ -3482,8 +3481,8 @@ msgid ""
 "Calendars</interface> to check or change calendar statuses."
 msgstr ""
 "Non se pode crear ou actualizar alarmas porque non hai ningún calendario de "
-"alarmas activo que permita escritura.<nl/><nl/>Para arranxar isto, empregue "
-"<interface>Vista | Mostrar os calendarios</interface> para comprobar ou "
+"alarmas activo que permita escritura.<nl/><nl/>Para arranxar isto, use "
+"<interface>Vista | Amosar os calendarios</interface> para comprobar ou "
 "cambiar os estados dos calendarios."
 
 #: kalarmapp.cpp:1489
@@ -4448,7 +4447,7 @@ msgstr ""
 #, kde-format
 msgctxt "@info"
 msgid "Please select a file to display"
-msgstr "Escolla o ficheiro que desexe mostrar"
+msgstr "Escolla o ficheiro que desexe amosar"
 
 #: lib/file.cpp:109
 #, kde-format
@@ -4651,19 +4650,19 @@ msgstr "Recuperar da suspensión…"
 #, kde-format
 msgctxt "@action"
 msgid "Show Archi&ved Alarms"
-msgstr "Mostrar as alarmas arqui&vadas"
+msgstr "Amosar as alarmas arqui&vadas"
 
 #: mainwindow.cpp:518
 #, kde-format
 msgctxt "@action"
 msgid "Show in System &Tray"
-msgstr "Mostrar na bandexa do sis&tema"
+msgstr "Amosar na bandexa do sis&tema"
 
 #: mainwindow.cpp:522
 #, kde-format
 msgctxt "@action"
 msgid "Show &Calendars"
-msgstr "Mostrar os &calendarios"
+msgstr "Amosar os &calendarios"
 
 #: mainwindow.cpp:526
 #, kde-format
@@ -4735,7 +4734,7 @@ msgstr "Agochar as alarmas arquivadas"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show Archived Alarms"
-msgstr "Mostrar as alarmas arquivadas"
+msgstr "Amosar as alarmas arquivadas"
 
 #: mainwindow.cpp:979
 #, kde-format
@@ -4962,13 +4961,13 @@ msgstr ""
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "The file whose contents are displayed below"
-msgstr "O ficheiro cuxos contidos se mostran embaixo"
+msgstr "O ficheiro cuxos contidos se amosan embaixo"
 
 #: messagewindow.cpp:283
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "The contents of the file to be displayed"
-msgstr "O contido do ficheiro que se ha de mostrar"
+msgstr "O contido do ficheiro que se ha de amosar"
 
 #: messagewindow.cpp:303
 #, kde-format
@@ -4992,7 +4991,7 @@ msgstr "O correo electrónico que enviar"
 #, kde-format
 msgctxt "@option:check"
 msgid "Do not display this error message again for this alarm"
-msgstr "Non mostrar máis esta mensaxe de erro para esta alarma"
+msgstr "Non amosar máis esta mensaxe de erro para esta alarma"
 
 #: messagewindow.cpp:430
 #, kde-format
@@ -5042,7 +5041,7 @@ msgid ""
 "specify when the alarm should be redisplayed.</para>"
 msgstr ""
 "<para>Adiar a alarma para máis tarde.</para><para>Solicitaráselle que "
-"indique cando quere que se mostre de novo a alarma.</para>"
+"indique cando quere que se amose de novo a alarma.</para>"
 
 #: messagewindow.cpp:463 sounddlg.cpp:451
 #, kde-format
@@ -5296,7 +5295,7 @@ msgid ""
 "Check to display a warning prompt before quitting <application>KAlarm</"
 "application>."
 msgstr ""
-"Márqueo para mostrar unha advertencia antes de saír de <application>KAlarm</"
+"Márqueo para amosar unha advertencia antes de saír de <application>KAlarm</"
 "application>."
 
 #: prefdlg.cpp:458
@@ -5335,7 +5334,7 @@ msgid ""
 "the Defer Alarm dialog."
 msgstr ""
 "Insira o intervalo temporal predeterminado (horas e minutos) para adiar as "
-"alarmas; emprégao o diálogo Adiar a Alarma."
+"alarmas; úsao o diálogo Adiar a Alarma."
 
 #: prefdlg.cpp:489
 #, kde-format
@@ -5452,7 +5451,7 @@ msgid ""
 "its default for displaying and entering dates and times."
 msgstr ""
 "Escolla o fuso horario que queira que <application>KAlarm</application> use "
-"de maneira predeterminada para mostrar e inserir as datas e as horas."
+"de maneira predeterminada para amosar e inserir as datas e as horas."
 
 #: prefdlg.cpp:715
 #, kde-format
@@ -5672,8 +5671,8 @@ msgid ""
 msgstr ""
 "<para>Requírese un calendario predeterminado para poder arquivar as alarmas, "
 "pero agora mesmo non hai ningún activado.</para><para>Se quixer manter as "
-"alarmas expiradas, empregue primeiro a vista de calendarios para seleccionar "
-"un calendario predeterminado de alarmas arquivadas.</para>"
+"alarmas expiradas, use primeiro a vista de calendarios para seleccionar un "
+"calendario predeterminado de alarmas arquivadas.</para>"
 
 #: prefdlg.cpp:1009
 #, kde-format
@@ -5866,7 +5865,7 @@ msgstr ""
 "electrónico existentes, usarase a identidade predeterminada de "
 "<application>KMail</application>. Para as novas alarmas por correo "
 "electrónico, será quen de escoller cal das identidades de "
-"<application>KMail</application> empregar."
+"<application>KMail</application> usar."
 
 #: prefdlg.cpp:1125
 #, kde-format
@@ -6161,7 +6160,7 @@ msgstr "Xanelas das mensaxes de alarma"
 #, kde-format
 msgctxt "@option:check"
 msgid "Show in system tray"
-msgstr "Mostrar na bandexa do sistema"
+msgstr "Amosar na bandexa do sistema"
 
 #: prefdlg.cpp:1750
 #, kde-kuit-format
@@ -6171,15 +6170,15 @@ msgid ""
 "tray. Showing it in the system tray provides easy access and a status "
 "indication.</para>"
 msgstr ""
-"<para>Marque isto para mostrar a icona de <application>KAlarm</application> "
-"na bandexa do sistema. Mostrala na bandexa do sistema fornece un acceso "
-"fácil e unha indicación do estado.</para>"
+"<para>Marque isto para amosar a icona de <application>KAlarm</application> "
+"na bandexa do sistema. Amosala na bandexa do sistema fornece un acceso fácil "
+"e unha indicación do estado.</para>"
 
 #: prefdlg.cpp:1779
 #, kde-format
 msgctxt "@option:radio Always show KAlarm icon"
 msgid "Always show"
-msgstr "Mostrar sempre"
+msgstr "Amosar sempre"
 
 #: prefdlg.cpp:1783
 #, kde-kuit-format
@@ -6188,7 +6187,7 @@ msgid ""
 "Check to show <application>KAlarm</application>'s icon in the system tray "
 "regardless of whether alarms are due."
 msgstr ""
-"Marque isto para mostrar a icona de <application>KAlarm</application> na "
+"Marque isto para amosar a icona de <application>KAlarm</application> na "
 "bandexa do sistema independentemente de se hai alarmas que venzan."
 
 #: prefdlg.cpp:1787
@@ -6208,7 +6207,7 @@ msgstr ""
 "Marque isto para agochar automaticamente a icona de <application>KAlarm</"
 "application> na bandexa do sistema se non hai alarmas activas. Cando está "
 "agochada, a icona pódese sempre facer visíbel coa opción da bandexa do "
-"sistema de mostrar as iconas agochadas."
+"sistema de amosar as iconas agochadas."
 
 #: prefdlg.cpp:1797
 #, kde-kuit-format
@@ -6222,7 +6221,7 @@ msgstr ""
 "Marque isto para agochar automaticamente a icona de <application>KAlarm</"
 "application> na bandexa do sistema se non hai alarmas que venzan no período "
 "de tempo indicado. Cando está agochada, a icona pódese sempre facer visíbel "
-"coa opción da bandexa do sistema de mostrar as iconas agochadas."
+"coa opción da bandexa do sistema de amosar as iconas agochadas."
 
 #: prefdlg.cpp:1800
 #, kde-format
@@ -6240,7 +6239,7 @@ msgstr "Información na Bandexa do sistema"
 #, kde-format
 msgctxt "@option:check"
 msgid "Show next &24 hours' alarms"
-msgstr "Mostrar as alarmas das vindeiras &24 horas"
+msgstr "Amosar as alarmas das vindeiras &24 horas"
 
 #: prefdlg.cpp:1823
 #, kde-format
@@ -6256,7 +6255,7 @@ msgstr ""
 #, kde-format
 msgctxt "@option:check"
 msgid "Maximum number of alarms to show:"
-msgstr "Número máximo de alarmas que se mostran:"
+msgstr "Número máximo de alarmas que se amosan:"
 
 #: prefdlg.cpp:1838
 #, kde-format
@@ -6265,21 +6264,21 @@ msgid ""
 "Uncheck to display all of the next 24 hours' alarms in the system tray "
 "tooltip. Check to enter an upper limit on the number to be displayed."
 msgstr ""
-"Desactive isto para mostrar todas as alarmas das vindeiras 24 horas na "
+"Desactive isto para amosar todas as alarmas das vindeiras 24 horas na "
 "información da bandexa do sistema. Márqueo para inserir un límite máximo do "
-"número de alarmas a mostrar."
+"número de alarmas a amosar."
 
 #: prefdlg.cpp:1842
 #, kde-format
 msgctxt "@option:check"
 msgid "Show alarm time"
-msgstr "Mostrar a hora da alarma"
+msgstr "Amosar a hora da alarma"
 
 #: prefdlg.cpp:1848
 #, kde-format
 msgctxt "@option:check"
 msgid "Show time until alarm"
-msgstr "Mostrar o tempo ata a alarma"
+msgstr "Amosar o tempo ata a alarma"
 
 #: prefdlg.cpp:1866
 #, kde-format
@@ -6347,8 +6346,8 @@ msgid ""
 "Enter how long its buttons should remain disabled after the alarm message "
 "window is shown."
 msgstr ""
-"Insira o tempo que han de demorar desactivados os botóns despois de mostrar "
-"a xanela de mensaxe de alarma."
+"Insira o tempo que han de demorar desactivados os botóns despois de amosar a "
+"xanela de mensaxe de alarma."
 
 #: prefdlg.cpp:1943
 #, kde-format
@@ -6545,7 +6544,7 @@ msgstr ""
 #, kde-format
 msgctxt "@info"
 msgid "This uses the same time zone as the start time."
-msgstr "Isto fai que se empregue o mesmo fuso horario como hora de inicio."
+msgstr "Isto fai que se use o mesmo fuso horario como hora de inicio."
 
 #: recurrenceedit.cpp:243
 #, kde-kuit-format
@@ -6974,7 +6973,7 @@ msgstr "despois"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Display the reminder only for the first time the alarm is scheduled"
-msgstr "Mostrar a lembranza só a primeira vez que se programe a alarma"
+msgstr "Amosar a lembranza só a primeira vez que se programe a alarma"
 
 #: repetitionbutton.cpp:66
 #, kde-format
@@ -7647,7 +7646,7 @@ msgid ""
 "Alarm message text, URL of text file to display, command to execute, or "
 "email subject line"
 msgstr ""
-"O texto da mensaxe de alarma, URL ou ficheiro de texto que mostrar, orde que "
+"O texto da mensaxe de alarma, URL ou ficheiro de texto que amosar, orde que "
 "executar, ou liña de asunto do correo electrónico"
 
 #: resources/resourcedatamodelbase.cpp:568
@@ -8046,7 +8045,7 @@ msgstr "Modelos de alarma"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Choose which type of data to show alarm calendars for"
-msgstr "Escolla o tipo de datas para o que mostrar os calendarios de alarmas"
+msgstr "Escolla o tipo de datas para o que amosar os calendarios de alarmas"
 
 #: resourceselector.cpp:68
 #, kde-format
@@ -8058,7 +8057,7 @@ msgid ""
 msgstr ""
 "Lista de calendarios dispoñíbeis do tipo seleccionado. O estado seleccionado "
 "mostra se un calendario está activado (marcado) ou desactivado (sen marcar). "
-"O calendario predeterminado móstrase en letra grosa."
+"O calendario predeterminado amósase en letra grosa."
 
 #: resourceselector.cpp:77 templatedlg.cpp:80
 #, kde-format
@@ -8191,7 +8190,7 @@ msgstr "Re&cargar"
 #, kde-format
 msgctxt "@action"
 msgid "Show &Details"
-msgstr "Mostrar os &detalles"
+msgstr "Amosar os &detalles"
 
 #: resourceselector.cpp:295
 #, kde-format
@@ -8351,7 +8350,7 @@ msgid ""
 "message is displayed."
 msgstr ""
 "Se está marcado, o ficheiro de son reproducirase repetidamente mentres se "
-"mostre a mensaxe."
+"amose a mensaxe."
 
 #: sounddlg.cpp:149
 #, kde-format
@@ -8516,7 +8515,7 @@ msgstr "Configurar un ficheiro de son"
 msgctxt "@info:whatsthis"
 msgid "Configure a sound file to play when the alarm is displayed."
 msgstr ""
-"Configure un ficheiro de son para que se reproduza cando se mostre a alarma."
+"Configure un ficheiro de son para que se reproduza cando se amose a alarma."
 
 #: soundpicker.cpp:257
 #, kde-format
@@ -8557,7 +8556,7 @@ msgstr "Insira a orde do intérprete de ordes que quere executar."
 msgctxt "@info:whatsthis"
 msgid "Specify actions to execute before and after the alarm is displayed."
 msgstr ""
-"Indicar as accións que se han executar antes e despois de que se mostre a "
+"Indicar as accións que se han executar antes e despois de que se amose a "
 "alarma."
 
 #: specialactions.cpp:91
@@ -8589,10 +8588,10 @@ msgid ""
 "para>"
 msgstr ""
 "<para>Insira unha orde do intérprete de ordes para executar antes de que se "
-"mostre a alarma.</para><para>Teña en conta que se executa só cando a alarma "
+"amose a alarma.</para><para>Teña en conta que se executa só cando a alarma "
 "se mostra axeitadamente, non cando se mostra unha lembranza ou unha alarma "
 "adiada.</para><para> <note>KAlarm agarda a que se complete a orde antes de "
-"mostrar a alarma.</note></para>"
+"amosar a alarma.</note></para>"
 
 #: specialactions.cpp:173
 #, kde-format
@@ -8625,7 +8624,7 @@ msgid ""
 "Cancel the alarm if the pre-alarm command fails, i.e. do not display the "
 "alarm or execute any post-alarm action command."
 msgstr ""
-"Cancelar a alarma se falla a orde previa á alarma, é dicir, non mostrar a "
+"Cancelar a alarma se falla a orde previa á alarma, é dicir, non amosar a "
 "alarma ou executar ningunha orde posterior á alarma."
 
 #: specialactions.cpp:183
@@ -8634,7 +8633,7 @@ msgctxt "@info:whatsthis"
 msgid ""
 "Do not show error status or error message if the pre-alarm command fails."
 msgstr ""
-"Non mostrar un estado de erro nin unha mensaxe de erro se falla a orde de "
+"Non amosar un estado de erro nin unha mensaxe de erro se falla a orde de "
 "acción previa á alarma."
 
 #: specialactions.cpp:187
@@ -8653,7 +8652,7 @@ msgid ""
 "acknowledged or closed.</para>"
 msgstr ""
 "<para>Insira unha orde do intérprete de ordes para executar antes de que se "
-"mostre a alarma.</para><para>Teña en conta que non se executa despois de "
+"amose a alarma.</para><para>Teña en conta que non se executa despois de "
 "pechar unha xanela de lembranza. Se fai que a alarma se demore, non se "
 "executa ata que finalmente se recoñeza ou peche a alarma.</para>"
 
@@ -8965,7 +8964,7 @@ msgstr "Alarma Recuperar da suspensión"
 #: wakedlg.ui:42
 #, kde-format
 msgid "Show current wake-from-suspend alarm"
-msgstr "Mostrar a alarma de \"recuperar da suspensión\" actual"
+msgstr "Amosar a alarma de \"recuperar da suspensión\" actual"
 
 #. i18n: ectx: property (whatsThis), widget (QPushButton, showWakeButton)
 #: wakedlg.ui:45
@@ -8982,7 +8981,7 @@ msgstr ""
 #: wakedlg.ui:48
 #, kde-format
 msgid "Show current alarm"
-msgstr "Mostrar a alarma actual"
+msgstr "Amosar a alarma actual"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, useWakeButton)
 #: wakedlg.ui:55
@@ -9005,7 +9004,7 @@ msgstr ""
 #: wakedlg.ui:61
 #, kde-format
 msgid "Use highlighted alarm"
-msgstr "Empregar a alarma realzada"
+msgstr "Usar a alarma realzada"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, cancelWakeButton)
 #: wakedlg.ui:74
