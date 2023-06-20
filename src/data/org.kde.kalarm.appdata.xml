@@ -186,7 +186,7 @@
       <li xml:lang="eu">Azaldu alarmak zure testu-mezuak, komando batek sortutako testua, edo testu- edo irudi-fitxategi bat erabiliz.</li>
       <li xml:lang="fi">Näyttöhälytykset itse kirjoitettuina, komennon tuottamina viesteinä tai teksti- tai kuvatiedostona.</li>
       <li xml:lang="fr">Affiche des alarmes avec votre propre texte de message, un texte généré par une commande, ou un fichier texte ou image.</li>
-      <li xml:lang="gl">Mostre alarmas coas súas propias mensaxes de texto, texto xerado cunha orde, ou un ficheiro de texto ou imaxe.</li>
+      <li xml:lang="gl">Amose alarmas coas súas propias mensaxes de texto, texto xerado cunha orde, ou un ficheiro de texto ou imaxe.</li>
       <li xml:lang="hu">Emlékeztetők megjelenítése saját szöveges üzenet, egy parancs által generált szöveg, vagy egy szöveg- vagy képfájl használatával.</li>
       <li xml:lang="ia">Monstra alarmas usante tu proprie message de texto, le texto generate per un commando o un file de texto o imagine.</li>
       <li xml:lang="id">Displai alarm menggunakan perpesanan teks milikmu, teks yang dihasilkan oleh perintah atau teks atau file citra.</li>
@@ -303,7 +303,7 @@
       <li xml:lang="eu">Azaldutako alarmen koloreak eta letra-tipoak norbere nahietara egokitzea</li>
       <li xml:lang="fi">Näyttöhälytysten värien ja fonttien mukautus</li>
       <li xml:lang="fr">Personnalisation de la police et de la couleur des alarmes visuelles</li>
-      <li xml:lang="gl">Personalice a cor e a fonte das alarmas que se mostran</li>
+      <li xml:lang="gl">Personalice a cor e a fonte das alarmas que se amosan</li>
       <li xml:lang="hu">Emlékeztetők színének és betűtípusának testre szabása.</li>
       <li xml:lang="ia">Monstra personalisation de font e color de alarmas</li>
       <li xml:lang="id">Warna dan font displai alarm yang dapat dikustomisasi</li>
