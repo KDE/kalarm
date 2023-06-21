@@ -762,3 +762,5 @@ QList<KAEvent> ResourcesCalendar::eventsForResource(const Resource& resource, co
 }
 
 // vim: et sw=4:
+
+#include "moc_resourcescalendar.cpp"

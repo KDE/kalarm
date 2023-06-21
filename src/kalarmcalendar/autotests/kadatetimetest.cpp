@@ -3844,3 +3844,5 @@ void KADateTimeTest::misc()
 }
 
 // vim: et sw=4:
+
+#include "moc_kadatetimetest.cpp"

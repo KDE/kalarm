@@ -182,3 +182,5 @@ void WakeFromSuspendDlg::cancelWakeClicked()
 }
 
 // vim: et sw=4:
+
+#include "moc_wakedlg.cpp"

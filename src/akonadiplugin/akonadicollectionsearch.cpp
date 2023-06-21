@@ -191,3 +191,5 @@ void AkonadiCollectionSearch::finish()
 }
 
 // vim: et sw=4:
+
+#include "moc_akonadicollectionsearch.cpp"

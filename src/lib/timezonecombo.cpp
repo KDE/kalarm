@@ -44,3 +44,5 @@ void TimeZoneCombo::setTimeZone(const QTimeZone& tz)
 }
 
 // vim: et sw=4:
+
+#include "moc_timezonecombo.cpp"

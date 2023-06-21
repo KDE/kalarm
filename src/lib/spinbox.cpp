@@ -691,3 +691,7 @@ int SpinBoxStyle::layoutSpacing(QSizePolicy::ControlType control1,
 }
 
 // vim: et sw=4:
+
+#include "moc_spinbox.cpp"
+
+#include "moc_spinbox_p.cpp"

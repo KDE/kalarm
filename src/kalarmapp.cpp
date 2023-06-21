@@ -2916,3 +2916,5 @@ KAlarmApp::ProcData::~ProcData()
 }
 
 // vim: et sw=4:
+
+#include "moc_kalarmapp.cpp"

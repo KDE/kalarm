@@ -1801,3 +1801,5 @@ void MainWindow::processDeferAlarmDlg(QObject* obj, int result)
 }
 
 // vim: et sw=4:
+
+#include "moc_mainwindow.cpp"

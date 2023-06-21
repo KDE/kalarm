@@ -677,3 +677,5 @@ bool DBusHandler::convertRecurrence(KARecurrence& recurrence, const KADateTime& 
 }
 
 // vim: et sw=4:
+
+#include "moc_dbushandler.cpp"

@@ -58,3 +58,5 @@ void ColourButton::keyReleaseEvent(QKeyEvent* e)
 }
 
 // vim: et sw=4:
+
+#include "moc_colourbutton.cpp"

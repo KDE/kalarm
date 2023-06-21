@@ -143,3 +143,5 @@ void NewAlarmAction::slotCalendarStatusChanged()
 }
 
 // vim: et sw=4:
+
+#include "moc_newalarmaction.cpp"

@@ -45,3 +45,5 @@ void TemplateListDelegate::edit(KAEvent& event, EventListView* view)
 }
 
 // vim: et sw=4:
+
+#include "moc_templatelistview.cpp"

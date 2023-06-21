@@ -628,3 +628,5 @@ Qt::ItemFlags TemplateListModel::flags(const QModelIndex& index) const
 }
 
 // vim: et sw=4:
+
+#include "moc_eventmodel.cpp"

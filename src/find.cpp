@@ -419,3 +419,5 @@ QModelIndex Find::nextItem(const QModelIndex& index, bool forward) const
 }
 
 // vim: et sw=4:
+
+#include "moc_find.cpp"

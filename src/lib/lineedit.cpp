@@ -182,3 +182,5 @@ void LineEdit::dropEvent(QDropEvent* e)
 }
 
 // vim: et sw=4:
+
+#include "moc_lineedit.cpp"

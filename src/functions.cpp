@@ -2146,3 +2146,5 @@ bool caseInsensitiveLessThan(const QString& s1, const QString& s2)
 }
 
 // vim: et sw=4:
+
+#include "moc_functions_p.cpp"

@@ -112,3 +112,5 @@ void TemplatePickDlg::resizeEvent(QResizeEvent* re)
 }
 
 // vim: et sw=4:
+
+#include "moc_templatepickdlg.cpp"

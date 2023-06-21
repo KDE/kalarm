@@ -1682,3 +1682,7 @@ bool YearlyRule::stateChanged() const
 }
 
 // vim: et sw=4:
+
+#include "moc_recurrenceedit.cpp"
+
+#include "moc_recurrenceedit_p.cpp"

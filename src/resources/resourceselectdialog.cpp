@@ -91,3 +91,5 @@ void ResourceSelectDialog::slotSelectionChanged()
 }
 
 // vim: et sw=4:
+
+#include "moc_resourceselectdialog.cpp"

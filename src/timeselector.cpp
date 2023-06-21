@@ -152,3 +152,5 @@ void TimeSelector::periodChanged(const Duration& period)
 }
 
 // vim: et sw=4:
+
+#include "moc_timeselector.cpp"

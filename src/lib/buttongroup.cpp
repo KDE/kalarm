@@ -85,3 +85,5 @@ void ButtonGroup::slotButtonToggled(bool)
 }
 
 // vim: et sw=4:
+
+#include "moc_buttongroup.cpp"

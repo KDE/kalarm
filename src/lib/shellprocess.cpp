@@ -251,3 +251,5 @@ QString ShellProcess::splitCommandLine(QString& cmdline)
 }
 
 // vim: et sw=4:
+
+#include "moc_shellprocess.cpp"

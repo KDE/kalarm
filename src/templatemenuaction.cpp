@@ -68,3 +68,5 @@ void TemplateMenuAction::slotSelected(QAction* action)
 }
 
 // vim: et sw=4:
+
+#include "moc_templatemenuaction.cpp"

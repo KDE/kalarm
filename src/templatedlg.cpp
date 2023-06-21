@@ -231,3 +231,5 @@ void TemplateDlg::resizeEvent(QResizeEvent* re)
 }
 
 // vim: et sw=4:
+
+#include "moc_templatedlg.cpp"

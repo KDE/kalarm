@@ -29,3 +29,5 @@ void ResourceCreator::createResource()
 }
 
 // vim: et sw=4:
+
+#include "moc_resourcecreator.cpp"

@@ -112,3 +112,5 @@ bool PushButton::event(QEvent* e)
 }
 
 // vim: et sw=4:
+
+#include "moc_pushbutton.cpp"

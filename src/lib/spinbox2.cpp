@@ -919,3 +919,7 @@ QRect spinBoxButtonsRect(const SpinBox* w, bool includeBorders)
 }
 
 // vim: et sw=4:
+
+#include "moc_spinbox2_p.cpp"
+
+#include "moc_spinbox2.cpp"

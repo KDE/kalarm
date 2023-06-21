@@ -861,3 +861,5 @@ bool parseAddress(const char* & scursor, const char* const send, Address& result
 } // namespace HeaderParsing
 
 // vim: et sw=4:
+
+#include "moc_kamail.cpp"

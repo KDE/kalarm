@@ -256,3 +256,5 @@ bool EventListDelegate::editorEvent(QEvent* e, QAbstractItemModel* model, const 
 }
 
 // vim: et sw=4:
+
+#include "moc_eventlistview.cpp"

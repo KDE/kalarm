@@ -651,3 +651,5 @@ bool Resources::isPopulated(ResourceId id)
 #endif
 
 // vim: et sw=4:
+
+#include "moc_resources.cpp"

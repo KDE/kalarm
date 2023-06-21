@@ -95,3 +95,5 @@ QString CalendarUpdater::conversionPrompt(const QString& calendarName, const QSt
 }
 
 // vim: et sw=4:
+
+#include "moc_calendarupdater.cpp"

@@ -16,3 +16,5 @@ PluginBase::PluginBase(QObject* parent, const QList<QVariant>&)
 PluginBase::~PluginBase() = default;
 
 // vim: et sw=4:
+
+#include "moc_pluginbase.cpp"

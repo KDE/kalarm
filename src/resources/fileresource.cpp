@@ -723,3 +723,5 @@ void FileResource::setStatus(Status newStatus)
 }
 
 // vim: et sw=4:
+
+#include "moc_fileresource.cpp"

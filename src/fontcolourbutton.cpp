@@ -113,3 +113,5 @@ void FontColourDlg::setReadOnly(bool ro)
 }
 
 // vim: et sw=4:
+
+#include "moc_fontcolourbutton.cpp"

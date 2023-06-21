@@ -1432,3 +1432,5 @@ Undo::Event::Event(const KAEvent& e, const Resource& r)
 }
 
 // vim: et sw=4:
+
+#include "moc_undo.cpp"

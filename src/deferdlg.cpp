@@ -168,3 +168,5 @@ void DeferAlarmDlg::slotCancelDeferral()
 }
 
 // vim: et sw=4:
+
+#include "moc_deferdlg.cpp"

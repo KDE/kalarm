@@ -79,3 +79,5 @@ void GroupBox::keyReleaseEvent(QKeyEvent* e)
 }
 
 // vim: et sw=4:
+
+#include "moc_groupbox.cpp"

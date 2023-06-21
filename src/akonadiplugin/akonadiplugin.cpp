@@ -196,3 +196,5 @@ void AkonadiPlugin::deleteAkonadiResource(const QString& resourceName)
 #include "akonadiplugin.moc"
 
 // vim: et sw=4:
+
+#include "moc_akonadiplugin.cpp"

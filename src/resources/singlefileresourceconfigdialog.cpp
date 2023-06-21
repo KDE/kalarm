@@ -307,3 +307,5 @@ void setTextEditHeight(KTextEdit* textEdit, QGroupBox* groupBox)
 }
 
 // vim: et sw=4:
+
+#include "moc_singlefileresourceconfigdialog.cpp"

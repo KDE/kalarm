@@ -400,3 +400,5 @@ void TrayWindow::removeWindow(MainWindow* win)
 }
 
 // vim: et sw=4:
+
+#include "moc_traywindow.cpp"

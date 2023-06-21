@@ -143,3 +143,5 @@ QString validateFileUrl(const QUrl& url)
 }
 
 // vim: et sw=4:
+
+#include "moc_fileresourcecreator.cpp"

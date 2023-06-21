@@ -352,3 +352,5 @@ void SoundPicker::selectType(Preferences::SoundType type)
 }
 
 // vim: et sw=4:
+
+#include "moc_soundpicker.cpp"

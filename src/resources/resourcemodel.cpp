@@ -719,3 +719,5 @@ QStyleOptionViewItem ResourceView::listViewOptions() const
 }
 
 // vim: et sw=4:
+
+#include "moc_resourcemodel.cpp"

@@ -680,3 +680,5 @@ QColor TextColours::getShadedColour(const QColor& colour, bool enabled) const
 }
 
 // vim: et sw=4:
+
+#include "moc_daymatrix.cpp"

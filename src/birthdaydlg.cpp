@@ -377,3 +377,5 @@ void BirthdayDlg::setSortModelSelectionList()
 }
 
 // vim: et sw=4:
+
+#include "moc_birthdaydlg.cpp"

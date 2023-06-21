@@ -78,3 +78,5 @@ void FileDialog::appendToggled(bool ticked)
 }
 
 // vim: et sw=4:
+
+#include "moc_filedialog.cpp"

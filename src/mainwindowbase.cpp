@@ -32,3 +32,5 @@ void MainWindowBase::enterEvent(QEnterEvent* e)
 }
 
 // vim: et sw=4:
+
+#include "moc_mainwindowbase.cpp"

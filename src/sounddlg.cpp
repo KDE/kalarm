@@ -557,3 +557,5 @@ void SoundWidget::slotFadeToggled(bool on)
 }
 
 // vim: et sw=4:
+
+#include "moc_sounddlg.cpp"

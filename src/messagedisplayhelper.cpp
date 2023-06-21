@@ -1374,3 +1374,5 @@ void MessageDisplayHelper::clearErrorMessage(unsigned msg) const
 #include "moc_messagedisplayhelper_p.cpp"
 
 // vim: et sw=4:
+
+#include "moc_messagedisplayhelper.cpp"

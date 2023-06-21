@@ -573,3 +573,5 @@ void ResourceSelector::resizeEvent(QResizeEvent* re)
 }
 
 // vim: et sw=4:
+
+#include "moc_resourceselector.cpp"
