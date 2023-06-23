@@ -351,6 +351,6 @@ void SoundPicker::selectType(Preferences::SoundType type)
         mTypeCombo->setCurrentIndex(i);
 }
 
-// vim: et sw=4:
-
 #include "moc_soundpicker.cpp"
+
+// vim: et sw=4:

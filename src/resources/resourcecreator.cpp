@@ -28,6 +28,6 @@ void ResourceCreator::createResource()
     QTimer::singleShot(0, this, &ResourceCreator::doCreateResource);   //NOLINT(clang-analyzer-cplusplus.NewDeleteLeaks)
 }
 
-// vim: et sw=4:
-
 #include "moc_resourcecreator.cpp"
+
+// vim: et sw=4:

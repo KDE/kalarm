@@ -157,6 +157,6 @@ void LateCancelSelector::slotToggled(bool on)
     mAutoClose->setEnabled(on);
 }
 
-// vim: et sw=4:
-
 #include "moc_latecancel.cpp"
+
+// vim: et sw=4:

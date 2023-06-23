@@ -94,6 +94,6 @@ QString CalendarUpdater::conversionPrompt(const QString& calendarName, const QSt
                  "<para>Do you wish to update the calendar?</para>", msg);
 }
 
-// vim: et sw=4:
-
 #include "moc_calendarupdater.cpp"
+
+// vim: et sw=4:

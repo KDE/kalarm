@@ -572,6 +572,6 @@ void ResourceSelector::resizeEvent(QResizeEvent* re)
     Q_EMIT resized(re->oldSize(), re->size());
 }
 
-// vim: et sw=4:
-
 #include "moc_resourceselector.cpp"
+
+// vim: et sw=4:

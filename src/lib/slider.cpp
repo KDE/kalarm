@@ -157,6 +157,6 @@ void Slider::keyReleaseEvent(QKeyEvent* e)
         QSlider::keyReleaseEvent(e);
 }
 
-// vim: et sw=4:
-
 #include "moc_slider.cpp"
+
+// vim: et sw=4:

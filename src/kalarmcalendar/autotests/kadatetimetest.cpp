@@ -3843,6 +3843,6 @@ void KADateTimeTest::misc()
     ::tzset();
 }
 
-// vim: et sw=4:
-
 #include "moc_kadatetimetest.cpp"
+
+// vim: et sw=4:

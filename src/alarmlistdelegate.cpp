@@ -122,6 +122,6 @@ QRect AlarmListDelegate::textRect(const QString& text, QPainter* painter, const 
     return displayRect;
 }
 
-// vim: et sw=4:
-
 #include "moc_alarmlistdelegate.cpp"
+
+// vim: et sw=4:

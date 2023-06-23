@@ -181,6 +181,6 @@ void WakeFromSuspendDlg::cancelWakeClicked()
     enableDisableUseButton();
 }
 
-// vim: et sw=4:
-
 #include "moc_wakedlg.cpp"
+
+// vim: et sw=4:

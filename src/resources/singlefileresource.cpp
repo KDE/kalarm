@@ -832,6 +832,6 @@ void SingleFileResource::handleSettingsChange(Changes& changes)
     FileResource::handleSettingsChange(changes);
 }
 
-// vim: et sw=4:
-
 #include "moc_singlefileresource.cpp"
+
+// vim: et sw=4:

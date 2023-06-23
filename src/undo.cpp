@@ -1431,6 +1431,6 @@ Undo::Event::Event(const KAEvent& e, const Resource& r)
         dontShowErrors = KAlarm::dontShowErrors(EventId(e));
 }
 
-// vim: et sw=4:
-
 #include "moc_undo.cpp"
+
+// vim: et sw=4:

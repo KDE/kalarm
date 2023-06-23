@@ -101,6 +101,6 @@ void LabelFocusWidget::focusInEvent(QFocusEvent*)
 
 }
 
-// vim: et sw=4:
-
 #include "moc_label.cpp"
+
+// vim: et sw=4:

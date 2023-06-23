@@ -494,8 +494,7 @@ void DirResourceImportTypeWidget::setStatus(bool ok, const QString& errorMessage
     Q_EMIT status(ok);
 }
 
-// vim: et sw=4:
-
 #include "moc_dirresourceimportdialog_p.cpp"
-
 #include "moc_dirresourceimportdialog.cpp"
+
+// vim: et sw=4:

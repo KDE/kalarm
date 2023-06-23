@@ -69,6 +69,6 @@ AkonadiPlugin* PluginManager::akonadiPlugin() const
     return mAkonadiPlugin;
 }
 
-// vim: et sw=4:
-
 #include "moc_pluginmanager.cpp"
+
+// vim: et sw=4:

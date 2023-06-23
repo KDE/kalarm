@@ -316,6 +316,6 @@ CollectionProperties::CollectionProperties(const Akonadi::Collection& collection
 
 }
 
-// vim: et sw=4:
-
 #include "moc_akonadiresourcemigrator.cpp"
+
+// vim: et sw=4:

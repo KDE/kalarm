@@ -1432,6 +1432,6 @@ FullScreenType findFullScreenWindows(const QList<QRect>& screenRects, QList<Full
 
 } // namespace
 
-// vim: et sw=4:
-
 #include "moc_messagewindow.cpp"
+
+// vim: et sw=4:

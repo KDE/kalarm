@@ -1681,8 +1681,7 @@ bool YearlyRule::stateChanged() const
         ||  mSavedFeb29Type != feb29Type());
 }
 
-// vim: et sw=4:
-
+#include "moc_recurrenceedit_p.cpp"
 #include "moc_recurrenceedit.cpp"
 
-#include "moc_recurrenceedit_p.cpp"
+// vim: et sw=4:

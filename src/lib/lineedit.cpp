@@ -181,6 +181,6 @@ void LineEdit::dropEvent(QDropEvent* e)
         insert(newText);
 }
 
-// vim: et sw=4:
-
 #include "moc_lineedit.cpp"
+
+// vim: et sw=4:

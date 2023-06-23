@@ -50,6 +50,6 @@ void EmailIdCombo::keyReleaseEvent(QKeyEvent* e)
         KIdentityManagementWidgets::IdentityCombo::keyReleaseEvent(e);
 }
 
-// vim: et sw=4:
-
 #include "moc_emailidcombo.cpp"
+
+// vim: et sw=4:

@@ -1800,6 +1800,6 @@ void MainWindow::processDeferAlarmDlg(QObject* obj, int result)
     MessageDisplay::processDeferDlg(data, result);
 }
 
-// vim: et sw=4:
-
 #include "moc_mainwindow.cpp"
+
+// vim: et sw=4:

@@ -230,6 +230,6 @@ void TemplateDlg::resizeEvent(QResizeEvent* re)
     QDialog::resizeEvent(re);
 }
 
-// vim: et sw=4:
-
 #include "moc_templatedlg.cpp"
+
+// vim: et sw=4:

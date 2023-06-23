@@ -373,6 +373,6 @@ const ResourceType* ResourceType::data(const Resource& resource)
     return resource.mResource.data();
 }
 
-// vim: et sw=4:
-
 #include "moc_resourcetype.cpp"
+
+// vim: et sw=4:

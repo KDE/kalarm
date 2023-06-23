@@ -213,6 +213,6 @@ bool use12HourClock()
 
 }
 
-// vim: et sw=4:
-
 #include "moc_timeedit.cpp"
+
+// vim: et sw=4:

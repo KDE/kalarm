@@ -1028,6 +1028,6 @@ void FileResourceDataModel::slotResourceMessage(ResourceType::MessageType type, 
     handleResourceMessage(type, message, details);
 }
 
-// vim: et sw=4:
-
 #include "moc_fileresourcedatamodel.cpp"
+
+// vim: et sw=4:

@@ -679,6 +679,6 @@ QColor TextColours::getShadedColour(const QColor& colour, bool enabled) const
     return shaded;
 }
 
-// vim: et sw=4:
-
 #include "moc_daymatrix.cpp"
+
+// vim: et sw=4:

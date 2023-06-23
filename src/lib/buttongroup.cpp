@@ -84,6 +84,6 @@ void ButtonGroup::slotButtonToggled(bool)
     Q_EMIT buttonSet(checkedButton());
 }
 
-// vim: et sw=4:
-
 #include "moc_buttongroup.cpp"
+
+// vim: et sw=4:

@@ -120,6 +120,6 @@ bool FileResourceCalendarUpdater::prompt()
     return result;
 }
 
-// vim: et sw=4:
-
 #include "moc_fileresourcecalendarupdater.cpp"
+
+// vim: et sw=4:

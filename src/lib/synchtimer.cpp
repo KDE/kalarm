@@ -234,6 +234,6 @@ void DailyTimer::slotTimer()
     qCDebug(KALARM_LOG) << "DailyTimer::slotTimer: at" << mTime.hour() << ":" << mTime.minute() << ": interval =" << interval/3600 << ":" << (interval/60)%60 << ":" << interval%60;
 }
 
-// vim: et sw=4:
-
 #include "moc_synchtimer.cpp"
+
+// vim: et sw=4:

@@ -329,6 +329,6 @@ bool readDirectoryResource(const QString& dirPath, CalEvent::Types alarmTypes,
 
 }
 
-// vim: et sw=4:
-
 #include "moc_fileresourcemigrator.cpp"
+
+// vim: et sw=4:

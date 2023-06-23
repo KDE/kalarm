@@ -399,6 +399,6 @@ void TrayWindow::removeWindow(MainWindow* win)
         mAssocMainWindow = nullptr;
 }
 
-// vim: et sw=4:
-
 #include "moc_traywindow.cpp"
+
+// vim: et sw=4:

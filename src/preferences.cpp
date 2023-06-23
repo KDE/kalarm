@@ -679,6 +679,6 @@ QString translateXTermPath(const QString& cmdline, bool write)
     return cmd + params;
 }
 
-// vim: et sw=4:
-
 #include "moc_preferences.cpp"
+
+// vim: et sw=4:

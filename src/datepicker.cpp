@@ -320,7 +320,6 @@ DPToolButton* DatePicker::createArrowButton(const QString& iconId)
 }
 
 #include "datepicker.moc"
+#include "moc_datepicker.cpp"
 
 // vim: et sw=4:
-
-#include "moc_datepicker.cpp"

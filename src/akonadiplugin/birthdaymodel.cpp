@@ -102,6 +102,6 @@ bool BirthdaySortModel::filterAcceptsRow(int sourceRow, const QModelIndex& sourc
     return true;
 }
 
-// vim: et sw=4:
-
 #include "moc_birthdaymodel.cpp"
+
+// vim: et sw=4:

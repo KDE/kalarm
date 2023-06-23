@@ -418,6 +418,6 @@ QModelIndex Find::nextItem(const QModelIndex& index, bool forward) const
         return mListView->indexAbove(index);
 }
 
-// vim: et sw=4:
-
 #include "moc_find.cpp"
+
+// vim: et sw=4:

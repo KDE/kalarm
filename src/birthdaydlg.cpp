@@ -376,6 +376,6 @@ void BirthdayDlg::setSortModelSelectionList()
     akonadiPlugin->setPrefixSuffix(mBirthdaySortModel, mPrefixText, mSuffixText, alarmMessageList);
 }
 
-// vim: et sw=4:
-
 #include "moc_birthdaydlg.cpp"
+
+// vim: et sw=4:

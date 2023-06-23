@@ -90,6 +90,6 @@ void ResourceSelectDialog::slotSelectionChanged()
     mButtonBox->button(QDialogButtonBox::Ok)->setEnabled(!mResourceList->selectionModel()->selectedIndexes().isEmpty());
 }
 
-// vim: et sw=4:
-
 #include "moc_resourceselectdialog.cpp"
+
+// vim: et sw=4:

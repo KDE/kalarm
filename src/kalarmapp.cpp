@@ -2915,6 +2915,6 @@ KAlarmApp::ProcData::~ProcData()
     delete alarm;
 }
 
-// vim: et sw=4:
-
 #include "moc_kalarmapp.cpp"
+
+// vim: et sw=4:

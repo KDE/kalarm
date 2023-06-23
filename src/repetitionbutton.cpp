@@ -335,6 +335,6 @@ void RepetitionDlg::typeClicked()
     }
 }
 
-// vim: et sw=4:
-
 #include "moc_repetitionbutton.cpp"
+
+// vim: et sw=4:

@@ -255,6 +255,6 @@ bool EventListDelegate::editorEvent(QEvent* e, QAbstractItemModel* model, const 
     return false;   // indicate that the event has not been handled
 }
 
-// vim: et sw=4:
-
 #include "moc_eventlistview.cpp"
+
+// vim: et sw=4:

@@ -151,6 +151,6 @@ void TimeSelector::periodChanged(const Duration& period)
         Q_EMIT valueChanged(period);
 }
 
-// vim: et sw=4:
-
 #include "moc_timeselector.cpp"
+
+// vim: et sw=4:

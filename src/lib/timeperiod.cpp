@@ -488,6 +488,6 @@ void TimePeriod::setWhatsThises(const QString& units, const QString& dayWeek, co
     mTimeSpinBox->setWhatsThis(hourMin.isNull() ? dayWeek : hourMin);
 }
 
-// vim: et sw=4:
-
 #include "moc_timeperiod.cpp"
+
+// vim: et sw=4:

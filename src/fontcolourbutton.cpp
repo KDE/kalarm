@@ -112,6 +112,6 @@ void FontColourDlg::setReadOnly(bool ro)
     mChooser->setReadOnly(mReadOnly);
 }
 
-// vim: et sw=4:
-
 #include "moc_fontcolourbutton.cpp"
+
+// vim: et sw=4:

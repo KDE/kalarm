@@ -690,8 +690,7 @@ int SpinBoxStyle::layoutSpacing(QSizePolicy::ControlType control1,
     return QApplication::style()->layoutSpacing(control1, control2, orientation, option, widget);
 }
 
-// vim: et sw=4:
-
+#include "moc_spinbox_p.cpp"
 #include "moc_spinbox.cpp"
 
-#include "moc_spinbox_p.cpp"
+// vim: et sw=4:

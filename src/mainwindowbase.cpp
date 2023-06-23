@@ -31,6 +31,6 @@ void MainWindowBase::enterEvent(QEnterEvent* e)
     KXmlGuiWindow::enterEvent(e);
 }
 
-// vim: et sw=4:
-
 #include "moc_mainwindowbase.cpp"
+
+// vim: et sw=4:

@@ -231,6 +231,6 @@ void AlarmListView::enableTimeColumns(QMenu* menu)
     }
 }
 
-// vim: et sw=4:
-
 #include "moc_alarmlistview.cpp"
+
+// vim: et sw=4:

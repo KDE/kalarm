@@ -1306,6 +1306,6 @@ void KAEventTest::setNextOccurrence()
     QVERIFY(!next3.isSecondOccurrence());
 }
 
-// vim: et sw=4:
-
 #include "moc_kaeventtest.cpp"
+
+// vim: et sw=4:

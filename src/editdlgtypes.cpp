@@ -2029,6 +2029,6 @@ void TextEdit::dropEvent(QDropEvent* e)
     KTextEdit::dropEvent(e);
 }
 
-// vim: et sw=4:
-
 #include "moc_editdlgtypes.cpp"
+
+// vim: et sw=4:

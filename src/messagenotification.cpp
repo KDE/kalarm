@@ -608,7 +608,6 @@ void MessageNotification::slotClosed()
 }
 
 #include "messagenotification.moc"
+#include "moc_messagenotification.cpp"
 
 // vim: et sw=4:
-
-#include "moc_messagenotification.cpp"

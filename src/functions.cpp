@@ -2145,6 +2145,6 @@ bool caseInsensitiveLessThan(const QString& s1, const QString& s2)
     return s1.toLower() < s2.toLower();
 }
 
-// vim: et sw=4:
-
 #include "moc_functions_p.cpp"
+
+// vim: et sw=4:
