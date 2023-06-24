@@ -1603,7 +1603,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label"
 msgid "Enter script"
-msgstr "Insira un script"
+msgstr "Insira un guión"
 
 #. i18n: ectx: whatsthis, entry (DefaultCmdScript), group (Defaults)
 #: data/kalarmconfig.kcfg:344
@@ -1611,7 +1611,7 @@ msgstr "Insira un script"
 msgctxt "@info:whatsthis"
 msgid "Default setting in the alarm edit dialog for command script entry."
 msgstr ""
-"A opción predeterminada para a entrada de scripts de ordes no diálogo de "
+"A opción predeterminada para a entrada de guións de ordes no diálogo de "
 "edición de alarmas."
 
 #. i18n: ectx: label, entry (DefaultCmdLogType), group (Defaults)
@@ -2571,7 +2571,7 @@ msgstr "Escolla o ficheiro de imaxe ou de texto que queira amosar"
 #, kde-format
 msgctxt "@option:check"
 msgid "Enter a script"
-msgstr "Insira un script"
+msgstr "Insira un guión"
 
 #: editdlgtypes.cpp:798
 #, kde-format
@@ -2992,7 +2992,7 @@ msgstr "Insira a orde do intérprete de ordes que quere executar."
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the contents of a script to execute"
-msgstr "Insira o contido do script que quere executar"
+msgstr "Insira o contido do guión que quere executar"
 
 #: editdlgtypes.cpp:1892
 #, kde-kuit-format
@@ -3544,7 +3544,7 @@ msgstr ""
 #, kde-format
 msgctxt "@info"
 msgid "Error creating temporary script file"
-msgstr "Produciuse un erro ao crear un ficheiro de script temporal"
+msgstr "Produciuse un erro ao crear un ficheiro de guión temporal"
 
 #: kalarmapp.cpp:2747
 #, kde-format
