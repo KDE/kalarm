@@ -248,7 +248,7 @@ DirResourceImportTypeWidget::DirResourceImportTypeWidget(CalEvent::Type alarmTyp
     connect(mUi->optionGroup, &QButtonGroup::idToggled, this, &DirResourceImportTypeWidget::importTypeSelected);
 
     mUi->pathRequester->setMode(KFile::File);
-    mUi->pathRequester->setNameFilters({QStringLiteral("*.ics|%1").arg(i18nc("@item:inlistbox File type selection filter", "Calendar files"))});
+    mUi->pathRequester->setNameFilters({QStringLiteral("%1 (*.ics)").arg(i18nc("@item:inlistbox File type selection filter", "Calendar files"))});
     mUi->statusLabel->setText(QString());
     mUi->pathRequester->setFocus();
     mUi->pathRequester->installEventFilter(this);

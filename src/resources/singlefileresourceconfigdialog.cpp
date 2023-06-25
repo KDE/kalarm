@@ -36,7 +36,7 @@ SingleFileResourceConfigDialog::SingleFileResourceConfigDialog(bool create, QWid
         mUi->alarmTypeLabel->setVisible(false);
 
         mUi->pathRequester->setMode(KFile::File);
-        mUi->pathRequester->setNameFilters({QStringLiteral("*.ics|%1").arg(i18nc("@item:inlistbox File type selection filter", "Calendar files"))});
+        mUi->pathRequester->setNameFilters({QStringLiteral("%1 (*.ics)").arg(i18nc("@item:inlistbox File type selection filter", "Calendar files"))});
         mUi->pathRequester->setFocus();
         mUi->statusLabel->setText(QString());
         connect(mUi->pathRequester, &KUrlRequester::textChanged, this, &SingleFileResourceConfigDialog::validate);
