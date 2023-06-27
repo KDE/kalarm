@@ -1,7 +1,7 @@
 /*
  *  alarmlistview.cpp  -  widget showing list of alarms
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2007-2020 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2007-2023 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -18,6 +18,19 @@
 #include <QMenu>
 #include <QAction>
 #include <QApplication>
+#include <QStyledItemDelegate>
+#include <QPainter>
+
+/*=============================================================================
+* Item delegate to draw an icon centered in the column.
+=============================================================================*/
+class CentreDelegate : public QStyledItemDelegate
+{
+    Q_OBJECT
+public:
+    CentreDelegate(QWidget* parent = nullptr) : QStyledItemDelegate(parent) {}
+    void paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const override;
+};
 
 
 AlarmListView::AlarmListView(const QByteArray& configGroup, QWidget* parent)
@@ -25,6 +38,7 @@ AlarmListView::AlarmListView(const QByteArray& configGroup, QWidget* parent)
     , mConfigGroup(configGroup)
 {
     setEditOnSingleClick(true);
+    setItemDelegateForColumn(AlarmListModel::TypeColumn, new CentreDelegate(this));
     connect(header(), &QHeaderView::sectionMoved, this, &AlarmListView::saveColumnsState);
     header()->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(header(), &QWidget::customContextMenuRequested, this, &AlarmListView::headerContextMenuRequested);
@@ -231,6 +245,26 @@ void AlarmListView::enableTimeColumns(QMenu* menu)
     }
 }
 
+
+/******************************************************************************
+* Draw the alarm's icon centered in the column.
+*/
+void CentreDelegate::paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const
+{
+    // Draw the item background without any icon
+    QStyleOptionViewItem opt = option;
+    initStyleOption(&opt, index);
+    opt.icon = QIcon();
+    QApplication::style()->drawControl(QStyle::CE_ItemViewItem, &opt, painter, nullptr);
+
+    // Draw the icon centered within item
+    const QPixmap icon = qvariant_cast<QPixmap>(index.data(Qt::DecorationRole));
+    const QRect r = option.rect;
+    const QPoint p = QPoint((r.width() - icon.width())/2, (r.height() - icon.height())/2);
+    painter->drawPixmap(r.topLeft() + p, icon);
+}
+
+#include "alarmlistview.moc"
 #include "moc_alarmlistview.cpp"
 
 // vim: et sw=4:
