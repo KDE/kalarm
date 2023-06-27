@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-03-31 02:50+0000\n"
-"PO-Revision-Date: 2023-05-31 13:49-0300\n"
+"PO-Revision-Date: 2023-06-26 16:52-0300\n"
 "Last-Translator: Luiz Fernando Ranghetti <elchevive@opensuse.org>\n"
 "Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
 "Language: pt_BR\n"
@@ -24,19 +24,21 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 21.12.3\n"
+"X-Generator: Lokalize 22.12.3\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
 msgstr ""
 "André Marcelo Alvarenga, Luiz Fernando Ranghetti, Frederico Gonçalves "
-"Guimarães"
+"Guimarães, Geraldo Simião"
 
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
-msgstr "alvarenga@kde.org, elchevive@opensuse.org, frederico@teia.bio.br"
+msgstr ""
+"alvarenga@kde.org, elchevive@opensuse.org, frederico@teia.bio.br, "
+"geraldosimiao@fedoraproject.org"
 
 #: akonadiplugin/sendakonadimail.cpp:54
 #, kde-kuit-format
