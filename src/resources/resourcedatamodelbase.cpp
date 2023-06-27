@@ -357,6 +357,8 @@ QVariant ResourceDataModelBase::eventData(int role, int column, const KAEvent& e
                         if (event.commandError() != KAEvent::CMD_NO_ERROR)
                             return QLatin1String("!");
                         break;
+                    case Qt::TextAlignmentRole:
+                        return Qt::AlignCenter;
                     case SortRole:
                     {
                         const unsigned i = (event.actionTypes() == KAEvent::ACT_DISPLAY)
