@@ -1,7 +1,7 @@
 /*
  *  resourcedatamodelbase.cpp  -  base for models containing calendars and events
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2007-2022 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2007-2023 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -357,6 +357,8 @@ QVariant ResourceDataModelBase::eventData(int role, int column, const KAEvent& e
                         if (event.commandError() != KAEvent::CMD_NO_ERROR)
                             return QLatin1String("!");
                         break;
+                    case Qt::TextAlignmentRole:
+                        return Qt::AlignCenter;
                     case SortRole:
                     {
                         const unsigned i = (event.actionTypes() == KAEvent::ACT_DISPLAY)
