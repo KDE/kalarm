@@ -31,7 +31,7 @@
 </authorgroup>
 
 <copyright>
-<year>2001</year><year>2002</year><year>2003</year><year>2004</year><year>2005</year><year>2006</year><year>2007</year><year>2008</year><year>2009</year><year>2010</year><year>2011</year><year>2012</year><year>2013</year><year>2016</year><year>2018</year><year>2019</year><year>2020</year><year>2021</year><year>2022</year>
+<year>2001</year><year>2002</year><year>2003</year><year>2004</year><year>2005</year><year>2006</year><year>2007</year><year>2008</year><year>2009</year><year>2010</year><year>2011</year><year>2012</year><year>2013</year><year>2016</year><year>2018</year><year>2019</year><year>2020</year><year>2021</year><year>2022</year><year>2023</year>
 <holder>&David.Jarvie;</holder>
 </copyright>
 
@@ -39,8 +39,8 @@
 
 <!-- Don't change format of date and version of the documentation -->
 
-<date>2022-5-2</date>
-<releaseinfo>3.5.0 (KDE Gear 22.08)</releaseinfo>
+<date>2023-6-27</date>
+<releaseinfo>3.6.0 (KDE Gear 23.08)</releaseinfo>
 
 <abstract>
 <para>&kalarm; is a personal alarm message, command and email scheduler by &kde;.</para>
@@ -2033,10 +2033,11 @@ button. This displays the
 <listitem>
 <para>Display options to defer the alarm until later by clicking the
 <guibutton>Defer...</guibutton> button. Then select
-<guilabel>Defer to date/time</guilabel> to enter the date and time
-when the message is to be redisplayed, or select <guilabel>Defer for
-time interval</guilabel> to enter how long after now (in hours and
-minutes) the message should be redisplayed. Then click
+<guilabel>Defer for</guilabel> to enter how long after now the
+message should be redisplayed (the <guilabel>Preset</guilabel>
+button lets you select from a list of common time intervals), or
+select <guilabel>Defer until</guilabel> to enter the date and time
+when the message is to be redisplayed. Then click
 <guibutton>OK</guibutton> to defer the alarm message and close its
 window.</para>
 
@@ -5139,11 +5140,11 @@ detailed instructions are contained in the
 &kalarm;
 </para>
 <para>
-Program copyright 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 &David.Jarvie; &David.Jarvie.mail;
+Program copyright 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023 &David.Jarvie; &David.Jarvie.mail;
 </para>
 
 <para>
-Documentation copyright 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2016, 2018, 2019, 2020 &David.Jarvie; &David.Jarvie.mail;
+Documentation copyright 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2016, 2018, 2019, 2020, 2021, 2022, 2023 &David.Jarvie; &David.Jarvie.mail;
 </para>
 
 <!-- TRANS:CREDIT_FOR_TRANSLATORS -->
