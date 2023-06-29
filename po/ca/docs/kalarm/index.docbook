@@ -79,7 +79,9 @@
 ><year
 >2021</year
 ><year
->2022</year>
+>2022</year
+><year
+>2023</year>
 <holder
 >&David.Jarvie;</holder>
 </copyright>
@@ -90,9 +92,9 @@
 <!-- Don't change format of date and version of the documentation -->
 
 <date
->2 de maig de 2022</date>
+>27 de juny de 2023</date>
 <releaseinfo
->3.5.0 (KDE Gear 22.08)</releaseinfo>
+>3.6.0 (KDE Gear 23.08)</releaseinfo>
 
 <abstract>
 <para
@@ -2413,10 +2415,12 @@ mode.</para
 >Mostrar les opcions d'ajornar l'alarma fins més tard fent clic al botó <guibutton
 >Ajorna...</guibutton
 >. Llavors seleccioneu <guilabel
->Ajorna fins a la data i hora</guilabel
-> per a introduir la data i hora en què el missatge es tornarà a mostrar, o seleccioneu <guilabel
->Ajorna durant un interval de temps</guilabel
-> per a introduir quant temps després d'ara (en hores i minuts) s'haurà de mostrar de nou el missatge. Feu clic a <guibutton
+>Ajorna durant</guilabel
+> per a introduir quant temps a partir d'ara s'haurà de mostrar de nou el missatge (el botó <guilabel
+>Predefinit</guilabel
+> permet seleccionar d'una llista d'intervals de temps habituals), o seleccioneu <guilabel
+>Ajorna fins</guilabel
+> per a introduir la data i hora quan s'haurà de mostrar de nou el missatge. Feu clic a <guibutton
 >D'acord</guibutton
 > per a ajornar-la i tancar la seva finestra.</para>
 
@@ -6881,10 +6885,10 @@ mode.</para
 <para
 >&kalarm; </para>
 <para
->Copyright del programa 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 &David.Jarvie; &David.Jarvie.mail; </para>
+>Copyright del programa 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023 &David.Jarvie; &David.Jarvie.mail; </para>
 
 <para
->Copyright de la documentació 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2016, 2018, 2019, 2020 &David.Jarvie; &David.Jarvie.mail; </para>
+>Copyright de la documentació  2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2016, 2018, 2019, 2020, 2021, 2022, 2023 &David.Jarvie; &David.Jarvie.mail; </para>
 
 <para
 >Traductor/Revisor de la documentació: &credits.Antoni.Bella;</para
