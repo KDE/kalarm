@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-03-31 02:50+0000\n"
-"PO-Revision-Date: 2023-02-24 11:07+0100\n"
+"PO-Revision-Date: 2023-06-29 13:59+0200\n"
 "Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
 "Language: cs\n"
@@ -538,7 +538,7 @@ msgstr "Název upomínky"
 #: commandoptions.cpp:221
 #, kde-format
 msgid "Display alarm message as a notification"
-msgstr ""
+msgstr "Zobrazit zprávu upomínky jako upozornění"
 
 #: commandoptions.cpp:224
 #, kde-format
@@ -558,7 +558,7 @@ msgstr "Určit opakování upomínky použitím syntaxe iCalendar"
 #: commandoptions.cpp:236
 #, kde-format
 msgid "Display reminder before or after alarm"
-msgstr ""
+msgstr "Zobrazit připomenutí před a po upomínce"
 
 #: commandoptions.cpp:240
 #, kde-format
@@ -1934,7 +1934,7 @@ msgstr "Zrušit odložení"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Cancel the deferred alarm. This does not affect future recurrences."
-msgstr "Zrušit odloženou upomínku.  Nastávající opakování nebude ovlivněno."
+msgstr "Zrušit odložené upozornění. Následující opakování nebude ovlivněno."
 
 #: deferdlg.cpp:95
 #, kde-format
@@ -2254,7 +2254,7 @@ msgstr "Méně možností <<"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show fewer options"
-msgstr ""
+msgstr "Zobrazit méně možností"
 
 #: editdlg.cpp:1242
 #, kde-format
@@ -2266,7 +2266,7 @@ msgstr "Více možností >>"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show more options"
-msgstr ""
+msgstr "Zobrazit více možností"
 
 #: editdlgtypes.cpp:73
 #, kde-format
@@ -2278,7 +2278,7 @@ msgstr "Vybrat soubor pro záznam"
 #, kde-format
 msgctxt "@label:listbox How to display alarms"
 msgid "Display method:"
-msgstr ""
+msgstr "Způsob zobrazení:"
 
 #: editdlgtypes.cpp:87
 #, kde-format
@@ -7395,7 +7395,7 @@ msgstr "Šablony upomíne&k"
 #: resources/singlefileresourceconfigdialog.ui:133
 #, kde-format
 msgid "Select which alarm type this resource should contain."
-msgstr "Zvolte, který typ alarmu tento zdroj má obsahovat."
+msgstr "Zvolte, který typ upomínky tento zdroj má obsahovat."
 
 #. i18n: ectx: property (text), widget (QLabel, alarmTypeLabel)
 #: resources/singlefileresourceconfigdialog.ui:142
