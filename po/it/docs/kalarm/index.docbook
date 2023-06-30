@@ -115,7 +115,9 @@
 ><year
 >2021</year
 ><year
->2022</year>
+>2022</year
+><year
+>2023</year>
 <holder
 >&David.Jarvie;</holder>
 </copyright>
@@ -126,9 +128,9 @@
 <!-- Don't change format of date and version of the documentation -->
 
 <date
->2022-5-2</date>
+>2023-6-27</date>
 <releaseinfo
->3.5.0 (KDE Gear 22.08)</releaseinfo>
+>3.6.0 (KDE Gear 23.08)</releaseinfo>
 
 <abstract>
 <para
@@ -2433,12 +2435,14 @@ mode.</para
 <listitem>
 <para
 >Visualizza le opzioni di rinvio dell'avviso a più tardi facendo clic sul pulsante <guibutton
->Rinvia</guibutton
+>Rinvia...</guibutton
 >. Seleziona <guilabel
->Rinvia a data e ora</guilabel
-> per inserire una data e un'ora per riattivare il messaggio, o seleziona <guilabel
->Rinvia di un certo tempo</guilabel
-> per inserire quanto tempo dopo (in ore e minuti) far riattivare il messaggio. Fai quindi clic su <guibutton
+>Rinvia per</guilabel
+> per inserire l'intervallo dopo il quale il messaggio va riattivato (il pulsante <guilabel
+>Preimpostazione</guilabel
+> ti permette di selezionare da un elenco di intervalli di tempo di uso comune), o seleziona <guilabel
+>Rinvia fino a</guilabel
+> per inserire la data e l'ora in cui il messaggio va riattivato. Fai quindi clic su <guibutton
 >OK</guibutton
 > per rinviare il messaggio di avviso e chiuderne la finestra.</para>
 
@@ -6947,10 +6951,10 @@ mode.</para
 <para
 >&kalarm; </para>
 <para
->Copyright del programma 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 &David.Jarvie; &David.Jarvie.mail; </para>
+>Copyright del programma 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023 &David.Jarvie; &David.Jarvie.mail; </para>
 
 <para
->Copyright della documentazione 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2016, 2018, 2019, 2020 &David.Jarvie; &David.Jarvie.mail; </para>
+>Copyright della documentazione 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2016, 2018, 2019, 2020, 2021, 2022, 2023 &David.Jarvie; &David.Jarvie.mail; </para>
 
 <para
 >Traduzione in italiano di Federico Zenith <email
