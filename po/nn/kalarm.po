@@ -8175,7 +8175,7 @@ msgstr "Vel ein mal som alarmen skal baserast på."
 #, kde-format
 msgctxt "@action"
 msgid "&New Alarm"
-msgstr "&Ny Alarm"
+msgstr "&Ny alarm"
 
 #: traywindow.cpp:300
 #, kde-format
