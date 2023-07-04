@@ -43,7 +43,7 @@ target_link_libraries(akonadiplugin
     KPim6::Mime
     KPim6::AkonadiCore
     KPim6::AkonadiMime
-    KPim6::AkonadiContact
+    KPim6::AkonadiContactWidgets
     KPim6::AkonadiWidgets
     KPim6::IdentityManagementCore
     KPim6::MailTransport
