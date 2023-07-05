@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: KBabel 1.11.4\n"
-"Plural-Forms: nplurals=1; plural=0;\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -3819,6 +3819,7 @@ msgctxt "@info"
 msgid "1 Minute"
 msgid_plural "%1 Minutes"
 msgstr[0] "%1 دقیقه"
+msgstr[1] ""
 
 #: kalarmcalendar/kaevent.cpp:2938 kalarmcalendar/kaevent.cpp:3025
 #: kalarmcalendar/kaeventformatter.cpp:444
@@ -3830,6 +3831,7 @@ msgctxt "@info"
 msgid "1 Hour"
 msgid_plural "%1 Hours"
 msgstr[0] "%1 ساعت"
+msgstr[1] ""
 
 #: kalarmcalendar/kaevent.cpp:2940 kalarmcalendar/kaevent.cpp:3026
 #, fuzzy, kde-format
@@ -3849,6 +3851,7 @@ msgctxt "@info"
 msgid "1 Day"
 msgid_plural "%1 Days"
 msgstr[0] "%1 روز"
+msgstr[1] ""
 
 #: kalarmcalendar/kaevent.cpp:2945 kalarmcalendar/kaevent.cpp:3031
 #, fuzzy, kde-format
@@ -3859,6 +3862,7 @@ msgctxt "@info"
 msgid "1 Week"
 msgid_plural "%1 Weeks"
 msgstr[0] "%1 هفته"
+msgstr[1] ""
 
 #: kalarmcalendar/kaevent.cpp:2947
 #, fuzzy, kde-format
@@ -3869,6 +3873,7 @@ msgctxt "@info"
 msgid "1 Month"
 msgid_plural "%1 Months"
 msgstr[0] "%1 ماه"
+msgstr[1] ""
 
 #: kalarmcalendar/kaevent.cpp:2949
 #, fuzzy, kde-format
@@ -3879,6 +3884,7 @@ msgctxt "@info"
 msgid "1 Year"
 msgid_plural "%1 Years"
 msgstr[0] "%1 سال"
+msgstr[1] ""
 
 #: kalarmcalendar/kaevent.cpp:2955
 #, fuzzy, kde-format
@@ -4418,6 +4424,7 @@ msgctxt "@info"
 msgid "1 Second"
 msgid_plural "%1 Seconds"
 msgstr[0] "ثانیه"
+msgstr[1] ""
 
 #: kalarmcalendar/kaeventformatter.cpp:417
 #, fuzzy, kde-format
@@ -4957,18 +4964,20 @@ msgid "&Refresh Alarms"
 msgstr "&بازآوری هشدارها‌"
 
 #: mainwindow.cpp:805
-#, kde-format
+#, fuzzy, kde-format
 msgctxt "@info"
 msgid "Do you really want to delete the selected alarm?"
 msgid_plural "Do you really want to delete the %1 selected alarms?"
 msgstr[0] "واقعاً می‌خواهید %1 هشدار برگزیده را حذف کنید؟"
+msgstr[1] ""
 
 #: mainwindow.cpp:807
-#, kde-format
+#, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Delete Alarm"
 msgid_plural "Delete Alarms"
 msgstr[0] "حذف هشدار"
+msgstr[1] ""
 
 #: mainwindow.cpp:808 templatedlg.cpp:180
 #, kde-format
@@ -5117,32 +5126,36 @@ msgid "Today"
 msgstr "امروز"
 
 #: messagedisplayhelper.cpp:484
-#, kde-format
+#, fuzzy, kde-format
 msgctxt "@info"
 msgid "Tomorrow"
 msgid_plural "in %1 days' time"
 msgstr[0] "در مدت %1 روز"
+msgstr[1] ""
 
 #: messagedisplayhelper.cpp:486
-#, kde-format
+#, fuzzy, kde-format
 msgctxt "@info"
 msgid "in 1 week's time"
 msgid_plural "in %1 weeks' time"
 msgstr[0] "در مدت %1 هفته"
+msgstr[1] ""
 
 #: messagedisplayhelper.cpp:500
-#, kde-format
+#, fuzzy, kde-format
 msgctxt "@info"
 msgid "in 1 minute's time"
 msgid_plural "in %1 minutes' time"
 msgstr[0] "در مدت %1 دقیقه"
+msgstr[1] ""
 
 #: messagedisplayhelper.cpp:502
-#, kde-format
+#, fuzzy, kde-format
 msgctxt "@info"
 msgid "in 1 hour's time"
 msgid_plural "in %1 hours' time"
 msgstr[0] "در مدت %1 ساعت"
+msgstr[1] ""
 
 #: messagedisplayhelper.cpp:505
 #, fuzzy, kde-format
@@ -5153,6 +5166,7 @@ msgctxt "@item:intext inserted into 'in ... %1 minute's time' below"
 msgid "1 hour"
 msgid_plural "%1 hours"
 msgstr[0] "%1 ساعت"
+msgstr[1] ""
 
 #: messagedisplayhelper.cpp:506
 #, fuzzy, kde-format
@@ -5163,6 +5177,7 @@ msgctxt "@info '%2' is the previous message '1 hour'/'%1 hours'"
 msgid "in %2 1 minute's time"
 msgid_plural "in %2 %1 minutes' time"
 msgstr[0] "در مدت %1 دقیقه"
+msgstr[1] ""
 
 #: messagedisplayhelper.cpp:848
 #, kde-format
@@ -9146,18 +9161,20 @@ msgid "Delete the currently highlighted alarm templates"
 msgstr "حذف قالب هشدار مشخص‌شده جاری"
 
 #: templatedlg.cpp:177
-#, kde-format
+#, fuzzy, kde-format
 msgctxt "@info"
 msgid "Do you really want to delete the selected alarm template?"
 msgid_plural "Do you really want to delete the %1 selected alarm templates?"
 msgstr[0] "واقعاً می‌خواهید %1 قالب هشدار برگزیده را حذف کنید؟"
+msgstr[1] ""
 
 #: templatedlg.cpp:179
-#, kde-format
+#, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Delete Alarm Template"
 msgid_plural "Delete Alarm Templates"
 msgstr[0] "حذف قالبهای هشدار"
+msgstr[1] ""
 
 #: templatepickdlg.cpp:34
 #, kde-format
