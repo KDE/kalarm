@@ -1,6 +1,6 @@
 /*
  *  kaevent.h  -  represents KAlarm calendar events
- *  This file is part of kalarmprivate library, which provides access to KAlarm
+ *  This file is part of kalarmcalendar library, which provides access to KAlarm
  *  calendar data.
  *  Program:  kalarm
  *  SPDX-FileCopyrightText: 2001-2022 David Jarvie <djarvie@kde.org>

@@ -1,6 +1,6 @@
 /*
  *  kacalendar.h  -  KAlarm kcal library calendar and event categorisation
- *  This file is part of kalarmprivate library, which provides access to KAlarm
+ *  This file is part of kalarmcalendar library, which provides access to KAlarm
  *  calendar data.
  *  Program:  kalarm
  *  SPDX-FileCopyrightText: 2005-2022 David Jarvie <djarvie@kde.org>
