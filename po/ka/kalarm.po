@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-06-28 00:49+0000\n"
-"PO-Revision-Date: 2023-06-09 06:05+0200\n"
+"PO-Revision-Date: 2023-07-10 07:07+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.3.1\n"
+"X-Generator: Poedit 3.3.2\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -1145,7 +1145,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label"
 msgid "Terminal for command alarms"
-msgstr ""
+msgstr "ტერმინალი ბრძანების განაგშისთვის"
 
 #. i18n: ectx: whatsthis, entry (Base_CmdXTermCommand), group (General)
 #: data/kalarmconfig.kcfg:218
@@ -2679,13 +2679,13 @@ msgstr ""
 #, kde-format
 msgctxt "@title:window"
 msgid "New Audio Alarm"
-msgstr ""
+msgstr "ახალი ხმოვანი განგაში"
 
 #: editdlgtypes.cpp:1606
 #, kde-format
 msgctxt "@title:window"
 msgid "Edit Audio Alarm"
-msgstr ""
+msgstr "ხმოვანი განგაშის ჩასწორება"
 
 #: editdlgtypes.cpp:1614
 #, kde-format
