@@ -1,7 +1,7 @@
 /*
  *  resourcemodel.cpp  -  models containing flat list of resources
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2007-2022 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2007-2023 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -641,9 +641,8 @@ Resource ResourceView::resource(const QModelIndex& index) const
 QSize ResourceView::sizeHint() const
 {
     const QRect lastItem = visualRect(model()->index(model()->rowCount() - 1, 0));
-    const int border = height() - viewport()->height();
     QSize sz = QListView::sizeHint();
-    const int itemsHeight = lastItem.bottom() + lastItem.height() + border;
+    const int itemsHeight = lastItem.bottom() + lastItem.height();   // allow 1 empty row
     if (itemsHeight < sz.height())
         sz.setHeight(itemsHeight);
     return sz;
