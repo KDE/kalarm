@@ -45,6 +45,7 @@ Q_SIGNALS:
 
 protected:
     void showEvent(QShowEvent*) override;
+    bool eventFilter(QObject*, QEvent*) override;
 
 private Q_SLOTS:
     void prevYearClicked();
