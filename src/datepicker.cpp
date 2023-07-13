@@ -23,6 +23,7 @@
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QLocale>
+#include <QWheelEvent>
 #include <QApplication>
 
 class DPToolButton : public QToolButton
@@ -145,6 +146,7 @@ DatePicker::DatePicker(QWidget* parent)
     mDayMatrix = new DayMatrix(widget);
     mDayMatrix->setWhatsThis(whatsThis);
     vlayout->addWidget(mDayMatrix);
+    mDayMatrix->installEventFilter(this);
     connect(mDayMatrix, &DayMatrix::selected, this, &DatePicker::datesSelected);
     connect(mDayMatrix, &DayMatrix::newAlarm, this, &DatePicker::slotNewAlarm);
     connect(mDayMatrix, &DayMatrix::newAlarmFromTemplate, this, &DatePicker::slotNewAlarmFromTemplate);
@@ -179,6 +181,27 @@ void DatePicker::showEvent(QShowEvent* e)
 {
     mDayMatrix->setRowHeight(mDayNames[0].height());
     QWidget::showEvent(e);
+}
+
+/******************************************************************************
+* Receives events destined for the day matrix.
+*/
+bool DatePicker::eventFilter(QObject* obj, QEvent* e)
+{
+    if (obj == mDayMatrix)
+    {
+        if (e->type() == QEvent::Wheel)
+        {
+            auto* we = (QWheelEvent*)e;
+            if (we->angleDelta().y() > 0)
+                prevMonthClicked();
+            else
+                nextMonthClicked();
+            return true;
+        }
+        return false;
+    }
+    return QWidget::eventFilter(obj, e);
 }
 
 /******************************************************************************

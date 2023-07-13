@@ -3,6 +3,7 @@ KAlarm Change Log
 === Version 3.6.0 (KDE Gear 23.08) --- 13 July 2023 ===
 * Add a 'show today' control in the date picker [KDE Bug 470451]
 * Improve Defer dialogue, provide dropdown for common delay intervals [KDE Bug 470451]
+* Use mouse wheel to increment/decrement the displayed month in date picker.
 * Update alarm list for date picker selection when holiday region or work days are changed.
 * Refactor access to holiday data.
 
