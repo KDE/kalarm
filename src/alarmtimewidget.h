@@ -103,7 +103,6 @@ private:
     bool              mMinDateTimeIsNow {false}; // earliest allowed date/time is the current time
     bool              mPastMax {false};       // current time is past the maximum date/time
     bool              mMinMaxTimeSet {false}; // limits have been set for the time edit control
-    bool              mTimerSyncing;          // mTimer is not yet synchronized to the minute boundary
 };
 
 // vim: et sw=4:
