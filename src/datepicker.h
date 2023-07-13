@@ -38,9 +38,10 @@ public:
 Q_SIGNALS:
      /** Emitted when the user selects or deselects dates.
       *
-      *  @param dates  The dates selected, in date order, or empty if none.
-      */
-    void datesSelected(const QVector<QDate>& dates);
+     *  @param dates       The dates selected, in date order, or empty if none.
+     *  @param workChange  The holiday region or work days have changed.
+     */
+    void datesSelected(const QVector<QDate>& dates, bool workChange);
 
 protected:
     void showEvent(QShowEvent*) override;

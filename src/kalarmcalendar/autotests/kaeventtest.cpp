@@ -2,7 +2,7 @@
    This file is part of kalarmcal library, which provides access to KAlarm
    calendar data.
 
-   SPDX-FileCopyrightText: 2018-2022 David Jarvie <djarvie@kde.org>
+   SPDX-FileCopyrightText: 2018-2023 David Jarvie <djarvie@kde.org>
 
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
@@ -10,14 +10,12 @@
 #include "kaeventtest.h"
 
 #include "kaevent.h"
+#include "holidays.h"
 using namespace KAlarmCal;
 
 #include <KCalendarCore/Event>
 #include <KCalendarCore/Alarm>
 using namespace KCalendarCore;
-
-#include <KHolidays/HolidayRegion>
-using namespace KHolidays;
 
 #include <QTest>
 
@@ -423,7 +421,8 @@ void KAEventTest::flags()
         QVERIFY(!event.emailBcc());
     }
     {
-        KAEvent::setHolidays(KHolidays::HolidayRegion());
+        static Holidays holidays;
+        KAEvent::setHolidays(holidays);
         const KAEvent::Flags flags(KAEvent::AUTO_CLOSE | KAEvent::EXCL_HOLIDAYS | KAEvent::REPEAT_SOUND);
         KAEvent event(dt, name, text, bgColour, fgColour, font, KAEvent::MESSAGE, 3, flags);
         QVERIFY(!event.startDateTime().isDateOnly());

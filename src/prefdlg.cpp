@@ -39,6 +39,7 @@
 #include "lib/timeedit.h"
 #include "lib/timespinbox.h"
 #include "lib/timezonecombo.h"
+#include "kalarmcalendar/holidays.h"
 #include "kalarmcalendar/identities.h"
 #include "config-kalarm.h"
 #include "kalarm_debug.h"

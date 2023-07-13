@@ -1,7 +1,7 @@
 /*
  *  mainwindow.cpp  -  main application window
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2001-2022 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2001-2023 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -365,9 +365,9 @@ void MainWindow::resizeEvent(QResizeEvent* re)
 /******************************************************************************
 * Emitted when the date selection changes in the date picker.
 */
-void MainWindow::datesSelected(const QVector<QDate>& dates)
+void MainWindow::datesSelected(const QVector<QDate>& dates, bool workChange)
 {
-    mListFilterModel->setDateFilter(dates);
+    mListFilterModel->setDateFilter(dates, workChange);
 }
 
 /******************************************************************************

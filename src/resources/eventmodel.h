@@ -1,7 +1,7 @@
 /*
  *  eventmodel.h  -  model containing flat list of events
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2010-2022 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2010-2023 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -136,8 +136,9 @@ public:
 
     /** Set a filter to include only alarms which are due on specified dates.
      *  @param dates  Dates for inclusion, in date order, or empty to remove filter.
+     *  @param force  Force update even if dates have not changed.
      */
-    void setDateFilter(const QVector<QDate>& dates);
+    void setDateFilter(const QVector<QDate>& dates, bool force);
 
     /** Set whether to replace a blank alarm name with the alarm text. */
     void setReplaceBlankName(bool replace)   { mReplaceBlankName = replace; }

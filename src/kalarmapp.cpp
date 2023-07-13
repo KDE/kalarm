@@ -1,7 +1,7 @@
 /*
  *  kalarmapp.cpp  -  the KAlarm application object
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2001-2022 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2001-2023 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -1350,7 +1350,7 @@ void KAlarmApp::slotWorkTimeChanged(const QTime& start, const QTime& end, const 
 * Called when the holiday region preference setting has changed.
 * Notify KAEvent.
 */
-void KAlarmApp::slotHolidaysChanged(const KHolidays::HolidayRegion& holidays)
+void KAlarmApp::slotHolidaysChanged(const KAlarmCal::Holidays& holidays)
 {
     KAEvent::setHolidays(holidays);
 }
