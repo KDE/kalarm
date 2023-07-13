@@ -17,6 +17,7 @@ ecm_qt_declare_logging_category(kalarmcalendar
 target_sources(kalarmcalendar PRIVATE
     alarmtext.cpp
     datetime.cpp
+    holidays.cpp
     identities.cpp
     kacalendar.cpp
     kaevent.cpp
@@ -27,6 +28,7 @@ target_sources(kalarmcalendar PRIVATE
 
     alarmtext.h
     datetime.h
+    holidays.h
     identities.h
     kacalendar.h
     kaevent.h

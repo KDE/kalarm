@@ -1,7 +1,7 @@
 /*
  *  preferences.cpp  -  program preference settings
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2001-2022 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2001-2023 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -14,12 +14,12 @@
 #include "lib/desktop.h"
 #include "lib/messagebox.h"
 #include "lib/shellprocess.h"
+#include "kalarmcalendar/holidays.h"
 #include "kalarmcalendar/identities.h"
 #include "kalarm_debug.h"
 
 #include <KIdentityManagementCore/Identity>
 #include <KIdentityManagementCore/IdentityManager>
-#include <KHolidays/HolidayRegion>
 
 #include <KSharedConfig>
 #include <KConfigGroup>
@@ -34,7 +34,6 @@
 
 #include <time.h>
 
-using namespace KHolidays;
 using namespace KAlarmCal;
 
 //clazy:excludeall=non-pod-global-static
@@ -88,10 +87,10 @@ const bool  default_confirmAlarmDeletion = true;
 static QString translateXTermPath(const QString& cmdline, bool write);
 
 
-Preferences*   Preferences::mInstance = nullptr;
-bool           Preferences::mUsingDefaults = false;
-HolidayRegion* Preferences::mHolidays = nullptr;   // always non-null after Preferences initialisation
-QString        Preferences::mPreviousVersion;
+Preferences*         Preferences::mInstance = nullptr;
+bool                 Preferences::mUsingDefaults = false;
+Holidays*            Preferences::mHolidays = nullptr;   // always non-null after Preferences initialisation
+QString              Preferences::mPreviousVersion;
 Preferences::Backend Preferences::mPreviousBackend;
 // Change tracking
 bool           Preferences::mAutoStartChangedByUser = false;
@@ -353,14 +352,13 @@ void Preferences::timeZoneChange(const QString& zone)
     Q_EMIT mInstance->timeZoneChanged(timeSpec());
 }
 
-const HolidayRegion& Preferences::holidays()
+const Holidays& Preferences::holidays()
 {
-    QString regionCode = self()->mBase_HolidayRegion;
-    if (!mHolidays  ||  mHolidays->regionCode() != regionCode)
-    {
-        delete mHolidays;
-        mHolidays = new HolidayRegion(regionCode);
-    }
+    const QString regionCode = self()->mBase_HolidayRegion;
+    if (!mHolidays)
+        mHolidays = new Holidays(regionCode);
+    else if (mHolidays->regionCode() != regionCode)
+        mHolidays->setRegion(regionCode);
     return *mHolidays;
 }
 

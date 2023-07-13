@@ -8,7 +8,7 @@
  *
  *  SPDX-FileCopyrightText: 2003 Cornelius Schumacher <schumacher@kde.org>
  *  SPDX-FileCopyrightText: 2003-2004 Reinhold Kainhofer <reinhold@kainhofer.com>
- *  SPDX-FileCopyrightText: 2021-2022 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2021-2023 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later WITH Qt-Commercial-exception-1.0
 */
@@ -18,8 +18,8 @@
 #include "newalarmaction.h"
 #include "preferences.h"
 #include "resources/resources.h"
+#include "kalarmcalendar/holidays.h"
 
-#include <KHolidays/HolidayRegion>
 #include <KLocalizedString>
 
 #include <QMenu>
@@ -192,19 +192,12 @@ void DayMatrix::updateView(const Resource& resource)
     updateEvents(resource);
 
     // Find which holidays occur for the dates in the matrix.
-    const KHolidays::HolidayRegion &region = Preferences::holidays();
-    const KHolidays::Holiday::List list = region.rawHolidaysWithAstroSeasons(
-        mStartDate, mStartDate.addDays(NUMDAYS - 1));
-
-    QHash<QDate, QStringList> holidaysByDate;
-    for (const KHolidays::Holiday& holiday : list)
-        if (!holiday.name().isEmpty())
-            holidaysByDate[holiday.observedStartDate()].append(holiday.name());
+    const KAlarmCal::Holidays& holidays = Preferences::holidays();
     for (int i = 0; i < NUMDAYS; ++i)
     {
-        const QStringList holidays = holidaysByDate[mStartDate.addDays(i)];
-        if (!holidays.isEmpty())
-            mHolidays[i] = holidays.join(i18nc("delimiter for joining holiday names", ","));
+        const QStringList names = holidays.holidayNames(mStartDate.addDays(i));
+        if (!names.isEmpty())
+            mHolidays[i] = names.join(i18nc("delimiter for joining holiday names", ","));
         else
             mHolidays[i].clear();
     }
@@ -358,6 +351,7 @@ void DayMatrix::slotUpdateView()
 {
     mPendingChanges = true;
     updateView();
+    Q_EMIT selected(mLastSelectedDates, true);
 }
 
 // ----------------------------------------------------------------------------
@@ -468,7 +462,7 @@ void DayMatrix::setMouseSelection(int start, int end, bool emitSignal)
         if (dates != mLastSelectedDates)
         {
             mLastSelectedDates = dates;
-            Q_EMIT selected(dates);
+            Q_EMIT selected(dates, false);
         }
     }
 }
@@ -512,12 +506,13 @@ void DayMatrix::paintEvent(QPaintEvent*)
     // Find holidays which are non-work days.
     QSet<QDate> nonWorkHolidays;
     {
-      const KHolidays::HolidayRegion &region = Preferences::holidays();
-      const KHolidays::Holiday::List list = region.rawHolidaysWithAstroSeasons(
-          mStartDate, mStartDate.addDays(NUMDAYS - 1));
-      for (const KHolidays::Holiday &holiday : list)
-        if (holiday.dayType() == KHolidays::Holiday::NonWorkday)
-          nonWorkHolidays += holiday.observedStartDate();
+        const KAlarmCal::Holidays& holidays = Preferences::holidays();
+        for (int i = 0; i < NUMDAYS; ++i)
+        {
+            const QDate date = mStartDate.addDays(i);
+            if (holidays.isHoliday(date))
+                nonWorkHolidays += date;
+        }
     }
     const QBitArray workDays = Preferences::workDays();
 

@@ -1,7 +1,7 @@
 /*
  *  kalarmapp.h  -  the KAlarm application object
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2001-2022 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2001-2023 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -138,7 +138,7 @@ private Q_SLOTS:
     void               slotShowInSystemTrayChanged();
     void               changeStartOfDay();
     void               slotWorkTimeChanged(const QTime& start, const QTime& end, const QBitArray& days);
-    void               slotHolidaysChanged(const KHolidays::HolidayRegion&);
+    void               slotHolidaysChanged(const KAlarmCal::Holidays&);
     void               slotFeb29TypeChanged(KAlarmApp::Feb29Type);
     void               slotResourcesTimeout();
     void               slotResourcesCreated();

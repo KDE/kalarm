@@ -3,7 +3,7 @@
  *  This file is part of kalarmprivate library, which provides access to KAlarm
  *  calendar data.
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2001-2022 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2001-2023 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -27,13 +27,9 @@
 #include <QSharedDataPointer>
 #include <QMetaType>
 
-namespace KHolidays
-{
-class HolidayRegion;
-}
-
 namespace KAlarmCal
 {
+class Holidays;
 
 /**
  * @short KAAlarm represents individual alarms within a KAEvent.
@@ -939,17 +935,17 @@ public:
      */
     bool holidaysExcluded() const;
 
-    /** Set the holiday region to be used by all KAEvent instances.
+    /** Set the holiday data to be used by all KAEvent instances, or notify that
+     *  the holiday data has changed.
      *  Alarms which exclude holidays record the pointer to the holiday definition
      *  at the time their next trigger times were last calculated. The change in
-     *  holiday definition pointer will cause their next trigger times to be
-     *  recalculated.
-     *  @param region  the holiday region data. The data object must persist for
-     *                 the lifetime of the application, since this class just
-     *                 stores a pointer to @p region.
+     *  holiday definition will cause their next trigger times to be recalculated.
+     *  @param holidays  the holiday data. The data object must persist for
+     *                   the lifetime of the application, since this class just
+     *                   stores a pointer to @p holidays.
      *  @see setExcludeHolidays()
      */
-    static void setHolidays(const KHolidays::HolidayRegion& region);
+    static void setHolidays(const Holidays& holidays);
 
     /** Enable or disable the alarm on non-working days and outside working hours.
      *  Note that this option only has any effect for recurring alarms.

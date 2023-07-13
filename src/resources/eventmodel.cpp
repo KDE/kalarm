@@ -1,7 +1,7 @@
 /*
  *  eventmodel.cpp  -  model containing flat list of events
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2007-2021 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2007-2023 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -267,7 +267,7 @@ void AlarmListModel::setEventTypeFilter(CalEvent::Types types)
 * Only show alarms which are due on specified dates, or show all alarms.
 * The default is to show all alarms.
 */
-void AlarmListModel::setDateFilter(const QList<QDate>& dates)
+void AlarmListModel::setDateFilter(const QList<QDate>& dates, bool force)
 {
     const QList<std::pair<KADateTime, KADateTime>> oldFilterDates = mFilterDates;
     mFilterDates.clear();
@@ -293,7 +293,7 @@ void AlarmListModel::setDateFilter(const QList<QDate>& dates)
         }
     }
 
-    if (mFilterDates != oldFilterDates)
+    if (force  ||  mFilterDates != oldFilterDates)
     {
         mDateFilterCache.clear();   // clear cache of date filter statuses
         // Cause the view to refresh. Note that because date/time values

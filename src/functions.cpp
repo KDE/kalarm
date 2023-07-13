@@ -36,7 +36,6 @@
 using namespace KCalendarCore;
 #include <KIdentityManagementCore/IdentityManager>
 #include <KIdentityManagementCore/Identity>
-#include <KHolidays/HolidayRegion>
 
 #include <KConfigGroup>
 #include <KSharedConfig>

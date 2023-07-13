@@ -1,7 +1,7 @@
 /*
  *  preferences.h  -  program preference settings
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2001-2022 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2001-2023 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -15,9 +15,7 @@
 #include <QDateTime>
 #include <QTimeZone>
 
-using namespace KAlarmCal;
-
-namespace KHolidays { class HolidayRegion; }
+namespace KAlarmCal { class Holidays; }
 class AkonadiPlugin;
 
 
@@ -66,10 +64,10 @@ public:
     static void             setNoAutoStart(bool yes);
     static bool             modalMessages();
     static void             setModalMessages(bool yes);
-    static KADateTime::Spec timeSpec();
+    static KAlarmCal::KADateTime::Spec timeSpec();
     static QTimeZone        timeSpecAsZone();
-    static void             setTimeSpec(const KADateTime::Spec&);
-    static const KHolidays::HolidayRegion& holidays();
+    static void             setTimeSpec(const KAlarmCal::KADateTime::Spec&);
+    static const KAlarmCal::Holidays& holidays();
     static void             setHolidayRegion(const QString& regionCode);
     static QTime            startOfDay()                     { return self()->mBase_StartOfDay.time(); }
     static void             setStartOfDay(const QTime&);
@@ -145,8 +143,8 @@ public:
     bool                    useDefaults(bool def) override   { mUsingDefaults = def;  return PreferencesBase::useDefaults(def); }
 
 Q_SIGNALS:
-    void                    timeZoneChanged(const KADateTime::Spec& newTz);
-    void                    holidaysChanged(const KHolidays::HolidayRegion& newHolidays);
+    void                    timeZoneChanged(const KAlarmCal::KADateTime::Spec& newTz);
+    void                    holidaysChanged(const KAlarmCal::Holidays& newHolidays);
     void                    startOfDayChanged(const QTime& newStartOfDay);
     void                    workTimeChanged(const QTime& startTime, const QTime& endTime, const QBitArray& workDays);
 
@@ -163,7 +161,7 @@ private:
 
     static Preferences*     mInstance;
     static bool             mUsingDefaults;
-    static KHolidays::HolidayRegion* mHolidays;
+    static KAlarmCal::Holidays* mHolidays;
     static QString          mPreviousVersion;  // last KAlarm version which wrote the config file
     static Backend          mPreviousBackend;  // backend used by last used version of KAlarm
 

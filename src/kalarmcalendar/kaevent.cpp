@@ -11,17 +11,14 @@
 #include "kaevent.h"
 
 #include "alarmtext.h"
+#include "holidays.h"
 #include "identities.h"
 #include "version.h"
 #include "kalarmcal_debug.h"
 
-#include <KHolidays/Holiday>
-#include <KHolidays/HolidayRegion>
-
 #include <KLocalizedString>
 
 using namespace KCalendarCore;
-using namespace KHolidays;
 
 namespace KAlarmCal
 {
@@ -211,7 +208,7 @@ public:
     static DateTime    readDateTime(const KCalendarCore::Event::Ptr&, bool localZone, bool dateOnly, DateTime& start);
     static void        readAlarms(const KCalendarCore::Event::Ptr&, AlarmMap*, bool cmdDisplay = false);
     static void        readAlarm(const KCalendarCore::Alarm::Ptr&, AlarmData&, bool audioMain, bool cmdDisplay = false);
-    static QSharedPointer<const HolidayRegion> holidays();
+
 private:
     void               copy(const KAEventPrivate&);
     bool               mayOccurDailyDuringWork(const KADateTime&) const;
@@ -228,7 +225,8 @@ private:
 
 public:
     static QFont       mDefaultFont;       // default alarm message font
-    static QSharedPointer<const HolidayRegion> mHolidays;  // holiday region to use
+    static const Holidays  mDummyHolidays; // empty holiday data to avoid initial mHolidays null pointer
+    static const Holidays* mHolidays;      // holiday data to use
     static QBitArray   mWorkDays;          // working days of the week
     static QTime       mWorkDayStart;      // start time of the working day
     static QTime       mWorkDayEnd;        // end time of the working day
@@ -285,7 +283,7 @@ public:
     int                mRepeatSoundPause{-1};  // seconds to pause between sound file repetitions, or -1 if no repetition
     int                mLateCancel{0};         // how many minutes late will cancel the alarm, or 0 for no cancellation
     bool               mExcludeHolidays{false}; // don't trigger alarms on holidays
-    mutable QSharedPointer<const HolidayRegion> mExcludeHolidayRegion; // holiday region used to exclude alarms on holidays (= mHolidays when trigger calculated)
+    mutable QString    mExcludeHolidayRegion;   // holiday region code used to exclude alarms on holidays (= mHolidays region when trigger calculated)
     mutable int        mWorkTimeOnly{0};         // non-zero to trigger alarm only during working hours (= mWorkTimeIndex when trigger calculated)
     KAEvent::SubAction mActionSubType;           // sub-action type for the event's main alarm
     CalEvent::Type     mCategory{CalEvent::EMPTY};   // event category (active, archived, template, ...)
@@ -446,13 +444,14 @@ const QString    KAEventPrivate::CMD_ERROR_POST_VALUE = QStringLiteral("POST");
 
 const QString    KAEventPrivate::SC = QStringLiteral(";");
 
-QFont                               KAEventPrivate::mDefaultFont;
-QSharedPointer<const HolidayRegion> KAEventPrivate::mHolidays;
-QBitArray                           KAEventPrivate::mWorkDays(7);
-QTime                               KAEventPrivate::mWorkDayStart(9, 0, 0);
-QTime                               KAEventPrivate::mWorkDayEnd(17, 0, 0);
-KADateTime::Spec                    KAEventPrivate::mWorkDayTimeSpec(KADateTime::LocalZone);
-int                                 KAEventPrivate::mWorkTimeIndex = 1;
+QFont            KAEventPrivate::mDefaultFont;
+const Holidays   KAEventPrivate::mDummyHolidays;
+const Holidays*  KAEventPrivate::mHolidays{&mDummyHolidays};
+QBitArray        KAEventPrivate::mWorkDays(7);
+QTime            KAEventPrivate::mWorkDayStart(9, 0, 0);
+QTime            KAEventPrivate::mWorkDayEnd(17, 0, 0);
+KADateTime::Spec KAEventPrivate::mWorkDayTimeSpec(KADateTime::LocalZone);
+int              KAEventPrivate::mWorkTimeIndex = 1;
 
 static void setProcedureAlarm(const Alarm::Ptr&, const QString& commandLine);
 static QString reminderToString(int minutes);
@@ -539,7 +538,7 @@ KAEventPrivate::KAEventPrivate(const KADateTime& dateTime, const QString& name, 
     mCommandHideError       = flags & KAEvent::DONT_SHOW_ERROR;
     mCopyToKOrganizer       = flags & KAEvent::COPY_KORGANIZER;
     mExcludeHolidays        = flags & KAEvent::EXCL_HOLIDAYS;
-    mExcludeHolidayRegion   = holidays();
+    mExcludeHolidayRegion   = mHolidays->regionCode();
     mWorkTimeOnly           = flags & KAEvent::WORK_TIME_ONLY;
     mEmailBcc               = flags & KAEvent::EMAIL_BCC;
     mEnabled                = !(flags & KAEvent::DISABLED);
@@ -634,7 +633,7 @@ KAEventPrivate::KAEventPrivate(const KCalendarCore::Event::Ptr& event)
         else if (flag == EXCLUDE_HOLIDAYS_FLAG)
         {
             mExcludeHolidays      = true;
-            mExcludeHolidayRegion = holidays();
+            mExcludeHolidayRegion = mHolidays->regionCode();
         }
         else if (flag == WORK_TIME_ONLY_FLAG)
             mWorkTimeOnly = 1;
@@ -2507,7 +2506,7 @@ bool KAEvent::repeatAtLogin(bool includeArchived) const
 void KAEvent::setExcludeHolidays(bool ex)
 {
     d->mExcludeHolidays      = ex;
-    d->mExcludeHolidayRegion = KAEventPrivate::holidays();
+    d->mExcludeHolidayRegion = KAEventPrivate::mHolidays->regionCode();
     // Option only affects recurring alarms
     d->mTriggerChanged = (d->checkRecur() != KARecurrence::NO_RECUR);
 }
@@ -2524,9 +2523,9 @@ bool KAEvent::holidaysExcluded() const
 * holiday definition pointer will cause their next trigger times to be
 * recalculated.
 */
-void KAEvent::setHolidays(const HolidayRegion& h)
+void KAEvent::setHolidays(const Holidays& h)
 {
-    KAEventPrivate::mHolidays.reset(new HolidayRegion(h.regionCode()));
+    KAEventPrivate::mHolidays = &h;
 }
 
 void KAEvent::setWorkTimeOnly(bool wto)
@@ -2552,7 +2551,7 @@ bool KAEvent::excludedByWorkTimeOrHoliday(const KADateTime& dt) const
 
 bool KAEventPrivate::excludedByWorkTimeOrHoliday(const KADateTime& dt) const
 {
-    if (mExcludeHolidays  &&  holidays()->isHoliday(dt.date()))
+    if (mExcludeHolidays  &&  mHolidays->isHoliday(dt.date()))
         return true;
     if (!mWorkTimeOnly)
         return false;
@@ -4260,13 +4259,6 @@ void KAEventPrivate::readAlarm(const Alarm::Ptr& alarm, AlarmData& data, bool au
 //qCDebug(KALARMCAL_LOG)<<"text="<<alarm->text()<<", time="<<alarm->time().toString()<<", valid time="<<alarm->time().isValid();
 }
 
-QSharedPointer<const HolidayRegion> KAEventPrivate::holidays()
-{
-    if (!mHolidays)
-        mHolidays.reset(new HolidayRegion());
-    return mHolidays;
-}
-
 inline void KAEventPrivate::set_deferral(DeferType type)
 {
     if (type)
@@ -4298,10 +4290,9 @@ void KAEventPrivate::calcTriggerTimes() const
     if (mChangeCount)
         return;
 #pragma message("May need to set date-only alarms to after start-of-day time in working-time checks")
-    holidays();   // initialise mHolidays if necessary
     bool recurs = (checkRecur() != KARecurrence::NO_RECUR);
     if ((recurs  &&  mWorkTimeOnly  &&  mWorkTimeOnly != mWorkTimeIndex)
-    ||  (recurs  &&  mExcludeHolidays  &&  mExcludeHolidayRegion->regionCode() != mHolidays->regionCode()))
+    ||  (recurs  &&  mExcludeHolidays  &&  mExcludeHolidayRegion != mHolidays->regionCode()))
     {
         // It's a work time alarm, and work days/times have changed, or
         // it excludes holidays, and the holidays definition has changed.
@@ -4313,8 +4304,8 @@ void KAEventPrivate::calcTriggerTimes() const
     if (recurs  &&  mWorkTimeOnly)
         mWorkTimeOnly = mWorkTimeIndex;    // note which work time definition was used in calculation
     if (recurs  &&  mExcludeHolidays)
-        mExcludeHolidayRegion = mHolidays;    // note which holiday definition was used in calculation
-    bool excludeHolidays = mExcludeHolidays && mExcludeHolidayRegion->isValid();
+        mExcludeHolidayRegion = mHolidays->regionCode();  // note which holiday definition was used in calculation
+    bool excludeHolidays = mExcludeHolidays && !mExcludeHolidayRegion.isEmpty();
 
     if (mCategory == CalEvent::ARCHIVED  ||  mCategory == CalEvent::TEMPLATE)
     {

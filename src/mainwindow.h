@@ -1,7 +1,7 @@
 /*
  *  mainwindow.h  -  main application window
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2001-2022 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2001-2023 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -130,7 +130,7 @@ private Q_SLOTS:
     void           slotToggleDateNavigator();
     void           slotCalendarStatusChanged();
     void           slotAlarmListColumnsChanged();
-    void datesSelected(const QList<QDate>& dates);
+    void           datesSelected(const QList<QDate>& dates, bool workChange);
     void           resourcesResized();
     void           showMenuErrorMessage();
     void           showErrorMessage(const QString&);

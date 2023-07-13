@@ -6,7 +6,7 @@
  *  SPDX-FileCopyrightText: 2001 Eitzenberger Thomas <thomas.eitzenberger@siemens.at>
  *  SPDX-FileCopyrightText: 2003 Cornelius Schumacher <schumacher@kde.org>
  *  SPDX-FileCopyrightText: 2003-2004 Reinhold Kainhofer <reinhold@kainhofer.com>
- *  SPDX-FileCopyrightText: 2021-2022 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2021-2023 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later WITH Qt-Commercial-exception-1.0
 */
@@ -67,9 +67,10 @@ public:
 Q_SIGNALS:
     /** Emitted when the user selects or deselects dates.
      *
-     *  @param dates  The dates selected, in date order, or empty if none.
+     *  @param dates       The dates selected, in date order, or empty if none.
+     *  @param workChange  The holiday region or work days have changed.
      */
-    void selected(const QList<QDate>& dates);
+    void selected(const QList<QDate>& dates, bool workChange);
 
     void newAlarm(EditAlarmDlg::Type);
     void newAlarmFromTemplate(const KAlarmCal::KAEvent&);
