@@ -92,7 +92,7 @@
 <!-- Don't change format of date and version of the documentation -->
 
 <date
->27 de juny de 2023</date>
+>13 de juliol de 2023</date>
 <releaseinfo
 >3.6.0 (KDE Gear 23.08)</releaseinfo>
 
@@ -333,7 +333,7 @@
 > <guimenuitem
 >Mostra el selector de dates</guimenuitem
 ></menuchoice
->. Seleccioneu una data fent clic sobre seu en el selector de dates, o anul·leu la selecció fent clic de nou sobre seu. El selector de dates mostra un sol mes. Per a mostrar un mes diferent, utilitzeu els controls de fletxa que hi ha.</para>
+>. Seleccioneu una data fent clic sobre seu en el selector de dates, o anul·leu la selecció fent clic de nou sobre seu. El selector de dates mostra un sol mes. Per a mostrar un mes diferent, utilitzeu els controls de fletxa que hi ha, o la roda del ratolí.</para>
 
 </sect2>
 
