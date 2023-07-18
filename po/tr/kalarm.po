@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: kdepim-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-07-14 00:48+0000\n"
-"PO-Revision-Date: 2023-07-04 00:51+0300\n"
+"PO-Revision-Date: 2023-07-17 15:20+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -1423,7 +1423,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label"
 msgid "Number of minutes before alarm to wake from suspend"
-msgstr "Alarmın bekletme durumundan uyandırmaya geçeceği dakika sayısı"
+msgstr "Alarmın askıya alma durumundan uyanmasına kadar geçen dakika sayısı"
 
 #. i18n: ectx: whatsthis, entry (WakeFromSuspendAdvance), group (General)
 #: data/kalarmconfig.kcfg:274
@@ -1434,9 +1434,9 @@ msgid ""
 "suspend. This can be used to ensure that the system is fully restored by the "
 "time the alarm triggers."
 msgstr ""
-"Sistemin askıdan uyandırılmasından kaç dakika önce alarmın tetikleneceğini "
-"girin. Bu alarmın tetiklendiği zamanda sistemin tamamen yeniden "
-"yüklendiğinden emin olmak için kullanılabilir."
+"Sistemi askıya almaktan uyandırmak için alarm tetikleme zamanından kaç "
+"dakika önce girin. Bu, alarm tetiklendiğinde sistemin tamamen geri "
+"yüklenmesini sağlamak için kullanılabilir."
 
 #. i18n: ectx: label, entry (DefaultDisplayMethod), group (Defaults)
 #: data/kalarmconfig.kcfg:286
@@ -2643,8 +2643,8 @@ msgid ""
 "Check to log the command output to a local file. The output will be appended "
 "to any existing contents of the file."
 msgstr ""
-"Komutun çıktısının yerel bir dosyaya yazıldığını kontrol edin. Çıktı, "
-"herhangi bir dosyanın içeriğine eklenecektir."
+"Komut çıktısını yerel bir dosyaya kaydetmek için işaretleyin. Çıktı, "
+"dosyanın var olan tüm içeriğine eklenecektir."
 
 #: editdlgtypes.cpp:894
 #, kde-format
@@ -3199,7 +3199,7 @@ msgstr "Dışa Aktarma Takvimini Seç"
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Error loading calendar to append to:<nl/><filename>%1</filename>"
-msgstr "Takvim dosyaya eklenirken hata:<nl/><filename>%1</filename>"
+msgstr "İliştirilecek takvim yüklenirken hata:<nl/><filename>%1</filename>"
 
 #: functions.cpp:998
 #, kde-kuit-format
@@ -3265,7 +3265,7 @@ msgstr "<para>%1</para><para>(K Organizatör ile iletişim kurulamadı)</para>"
 #, kde-format
 msgctxt "info"
 msgid "The scheduled Wake from Suspend has been cancelled."
-msgstr "Planlanmış Askıya Alma'dan Uyandırma iptal edildi."
+msgstr "Planlanan Askıdan Uyandır iptal edildi."
 
 #: functions.cpp:1340
 #, kde-format
@@ -3370,7 +3370,7 @@ msgstr ""
 #, kde-format
 msgctxt "@info"
 msgid "Quitting will cancel the scheduled Wake from Suspend."
-msgstr "Çıkmak Askıya Almaktan Uyandırmayı iptal edecektir."
+msgstr "Çıkmak, planlanan Askıdan Uyandır işlemini iptal eder."
 
 #: kalarmapp.cpp:837
 #, kde-kuit-format
@@ -4277,7 +4277,7 @@ msgstr "Tüm dosyalar"
 #, kde-format
 msgctxt "@option:check"
 msgid "Append to existing file"
-msgstr "Varolan bir dosyaya ekle"
+msgstr "Var olan dosyaya iliştir"
 
 #: lib/shellprocess.cpp:143
 #, kde-format
@@ -4421,7 +4421,7 @@ msgstr "Yeniden E&tkinleştir"
 #, kde-format
 msgctxt "@action"
 msgid "Wake From Suspend..."
-msgstr "Beklemeden Uyandırma..."
+msgstr "Askıdan Uyandır..."
 
 #: mainwindow.cpp:513
 #, kde-format
@@ -5143,11 +5143,10 @@ msgid ""
 "what you enter here. See the <application>KAlarm</application> Handbook for "
 "details of special codes to tailor the command line."
 msgstr ""
-"Seçilen uçbirim penceresinde bir komut yürütmek için gerekli tam komut "
-"satırını girin. Öntanımlı olarak buraya girdiğiniz komut dizisi alarmın "
-"komut dizisine eklenecektir. Komut satırına adapte etmek için özel kodların "
-"ayrıntılarına <application>K Alarm</application> uygulaması El Kitabı'ndan "
-"bakın."
+"Seçtiğiniz uçbirim penceresinde bir komutu yürütmek için gereken tam komut "
+"satırını girin. Öntanımlı olarak, alarmın komut dizisi buraya girdiğiniz "
+"şeyin sonuna eklenir. Komut satırını özelleştirmek üzere özel kodların "
+"ayrıntıları için <application>K Alarm</application> El Kitabı'na bakın."
 
 #: prefdlg.cpp:537
 #, kde-format
@@ -7914,7 +7913,7 @@ msgstr ""
 msgctxt "@text/plain"
 msgid "Could not run <command>%1</command> to set wake from suspend"
 msgstr ""
-"Beklemeden uyandırmaya ayarlamak için <command>%1</command> çalıştırılamadı"
+"Askıdan Uyandır'ı ayarlamak için <command>%1</command> komutu çalıştırılamadı"
 
 #: rtcwakeaction.cpp:90
 #, kde-kuit-format
@@ -7923,8 +7922,8 @@ msgid ""
 "Error setting wake from suspend.<nl/>Command was: <command>%1 %2</"
 "command><nl/>Error code: %3."
 msgstr ""
-"Beklemeden uyandırma için hata.<nl/>Komut:<command>%1 %2</command><nl/>Hata "
-"kodu: %3."
+"Askıdan Uyandır'ı ayarlarken hata.<nl/>Komut: <command>%1 %2</command><nl/"
+">Hata kodu: %3."
 
 #: sounddlg.cpp:42
 #, kde-format
@@ -8502,7 +8501,7 @@ msgstr "Birden fazla alarmı yeniden etkinleştir"
 #, kde-format
 msgctxt "@title:window"
 msgid "Wake From Suspend"
-msgstr "Beklemeden Uyandırma"
+msgstr "Askıdan Uyandır"
 
 #: wakedlg.cpp:146
 #, kde-format
@@ -8521,25 +8520,25 @@ msgid ""
 "computers only support setting a wakeup time up to 24 hours ahead. You may "
 "wish to set up a test alarm to check your system's capability.</para>"
 msgstr ""
-"<para>Bu uyandırma K Alarm ya da diğer uygulamalar ile ayarlanmış varolan "
-"uyandırmayı iptal edecek çünkü bilgisayarınız yalnızca tek bir uyandırma "
-"zamanına planlayabilir.</para><para><b>Not:</b>Beklemeden Uyandırma bazı "
+"<para>Bu uyandırma K Alarm veya diğer uygulamalar ile ayarlanmış var olan "
+"uyandırmayı iptal eder; çünkü bilgisayarınız yalnızca tek bir uyandırma "
+"zamanını planlayabilir.</para><para><b>Not:</b>Askıdan Uyandır bazı "
 "bilgisayarlarda desteklenmez, özellikle daha eski olanlarında ve bazı "
 "bilgisayarlar yalnızca 24 saate kadar bir uyandırma ayarını destekler. "
-"Sisteminizin yeteneğini kontrol etmek için bir test alarmı ayarlamak "
+"Sisteminizin yeteneğini denetlemek için bir sınama alarmı ayarlamak "
 "isteyebilirsiniz.</para>"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: wakedlg.ui:21
 #, kde-format
 msgid "Wake From Suspend Alarm"
-msgstr "Bekletmeden Uyanma Alarmı"
+msgstr "Askıdan Uyandır Alarmı"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, showWakeButton)
 #: wakedlg.ui:42
 #, kde-format
 msgid "Show current wake-from-suspend alarm"
-msgstr "Mevcut bekletmeden-uyandırma alarmını göster"
+msgstr "Geçerli Askıdan Uyandır alarmını göster"
 
 #. i18n: ectx: property (whatsThis), widget (QPushButton, showWakeButton)
 #: wakedlg.ui:45
@@ -8548,8 +8547,8 @@ msgid ""
 "Highlight the current wake-from-suspend alarm in the alarm list. This button "
 "is disabled if no wake-from-suspend alarm is configured."
 msgstr ""
-"Mevcut bekletmeden-uyandır alarmını alarm listesinde vurgula. Eğer hiç "
-"bekletmeden-uyandır alarmı yapılandırılmamışsa bu düğme kullanılamayacaktır."
+"Alarm listesindeki geçerli Askıdan Uyandır alarmını vurgulayın. Askıdan "
+"Uyandır alarmı yapılandırılmadıysa bu düğme devre dışı bırakılır."
 
 #. i18n: ectx: property (text), widget (QPushButton, showWakeButton)
 #: wakedlg.ui:48
@@ -8561,7 +8560,7 @@ msgstr "Şu anki alarmı göster"
 #: wakedlg.ui:55
 #, kde-format
 msgid "Set highlighted alarm as the wake-from-suspend alarm"
-msgstr "Vurgulanan alarmı beklemeden-uyandır alarmı olarak ayarla"
+msgstr "Vurgulanan alarmı Askıdan Uyandır alarmı olarak ayarla"
 
 #. i18n: ectx: property (whatsThis), widget (QPushButton, useWakeButton)
 #: wakedlg.ui:58
@@ -8570,8 +8569,8 @@ msgid ""
 "Set the alarm highlighted in the alarm list to wake-from-suspend. This "
 "replaces any existing wake-from-suspend alarm."
 msgstr ""
-"Alarm listesinde vurgulanan alarmı bekletmeden-uyandır alarmı olarak ayarla. "
-"Bu mevcut beklemeden-uyandır alarmının üzerine yazacaktır."
+"Alarm listesinde vurgulanan alarmı Askıdan Uyandır alarmı olarak ayarlayın. "
+"Bu, var olan herhangi bir Askıdan Uyandır alarmının yerine geçer."
 
 #. i18n: ectx: property (text), widget (QPushButton, useWakeButton)
 #: wakedlg.ui:61
@@ -8583,7 +8582,7 @@ msgstr "Vurgulanmış alarm kullan"
 #: wakedlg.ui:74
 #, kde-format
 msgid "Cancel the current wake-from-suspend"
-msgstr "Mevcut beklemeden-uyandır alarmını iptal et"
+msgstr "Geçerli Askıdan Uyandır'ı iptal et"
 
 #. i18n: ectx: property (whatsThis), widget (QPushButton, cancelWakeButton)
 #: wakedlg.ui:77
@@ -8593,16 +8592,16 @@ msgid ""
 "cancel the alarm itself, which will still trigger in the normal way. This "
 "button is disabled if no wake-from-suspend alarm is configured."
 msgstr ""
-"Mevcut yapılandırılmış beklemeden-uyandır alarmını iptal et. Bunun alarmın "
-"kendisini iptal etmediğini unutmayın, o normal yolla tetiklenecektir. Eğer "
-"hiç beklemeden-uyandır alarmı yapılandırılmamışsa bu düğme "
-"kullanılamayacaktır."
+"Halihazırda yapılandırılmış Askıdan Uyandır'ı iptal edin. Bunun, normal "
+"şekilde tetiklenmeyi sürdürecek olan alarmın kendisini iptal etmediğini "
+"unutmayın. Askıdan Uyandır alarmı yapılandırılmadıysa bu düğme devre dışı "
+"bırakılır."
 
 #. i18n: ectx: property (text), widget (QPushButton, cancelWakeButton)
 #: wakedlg.ui:80
 #, kde-format
 msgid "Cancel wake from suspend"
-msgstr "Beklemeden uyandırmayı iptal et"
+msgstr "Askıdan Uyandır'ı iptal et"
 
 #. i18n: ectx: property (whatsThis), widget (QSpinBox, advanceWakeTime)
 #: wakedlg.ui:113
@@ -8612,15 +8611,15 @@ msgid ""
 "suspend. This can be used to ensure that the system is fully restored by the "
 "time the alarm triggers."
 msgstr ""
-"Sistemin bekletme konumundan alarmın tetiklenmesinden kaç dakika önce "
-"uyandırılacağını girin. Bu alarmın tetikleneceği zaman sistemin tamamen "
-"yeniden yüklenmesinden emin olmanızı sağlaması için kullanılabilir."
+"Sistemin alarm tetikleme zamanından kaç dakika önce Askıdan Uyandır "
+"yapılacağını girin. Bu, alarm tetiklendiğinde sistemin tümüyle geri "
+"yüklendiğinden emin olmak için kullanılabilir."
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: wakedlg.ui:123
 #, kde-format
 msgid "Number of minutes before alarm to wake from suspend"
-msgstr "Beklemeden uyandırmadan önceki dakika sayısı"
+msgstr "Sistemin alarm için kaç dakika önce Askıdan Uyandır yapılacağı"
 
 #~ msgctxt "@option:radio"
 #~ msgid "Defer to date/time:"
