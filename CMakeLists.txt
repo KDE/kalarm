@@ -47,7 +47,7 @@ include(KDECompilerSettings NO_POLICY_SCOPE)
 include(ECMAddAppIcon)
 include(ECMQtDeclareLoggingCategory)
 include(ECMDeprecationSettings)
-set(QT_REQUIRED_VERSION "6.4.0")
+set(QT_REQUIRED_VERSION "6.5.0")
 set(KTEXTADDONS_MIN_VERSION "1.3.41")
 # Do NOT add quote
 set(KDEPIM_DEV_VERSION alpha)
