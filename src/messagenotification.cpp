@@ -471,9 +471,6 @@ void MessageNotification::textsChanged(MessageDisplayHelper::DisplayTexts::TextI
 
     if (textChanged)
         setNotificationText();
-
-    // Update the notification. Note that this does nothing if no changes have occurred.
-    update();
 }
 
 /******************************************************************************
