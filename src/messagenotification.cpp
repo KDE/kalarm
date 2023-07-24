@@ -514,7 +514,6 @@ void MessageNotification::setNotificationTitle(const QString& text)
 void MessageNotification::setNotificationText()
 {
     setText(mMessageText + NL + mTimeText + NL + QStringLiteral("<i>") + mRemainingText + QStringLiteral("</i>"));
-update();
 }
 
 /******************************************************************************
