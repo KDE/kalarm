@@ -1,7 +1,7 @@
 # Translation of kalarm to Korean.
 # Copyright (C) 2008 This_file_is_part_of_KDE
 # This file is distributed under the same license as the kdepim package.
-# Shinjo Park <kde@peremen.name>, 2008, 2015, 2019, 2020, 2021, 2022.
+# Shinjo Park <kde@peremen.name>, 2008, 2015, 2019, 2020, 2021, 2022, 2023.
 # Jung Hee Lee <daemul72@gmail.com>, 2019.
 #
 msgid ""
@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-07-14 00:48+0000\n"
-"PO-Revision-Date: 2022-05-22 02:11+0200\n"
+"PO-Revision-Date: 2023-07-23 23:20+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
 "Language: ko\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Lokalize 21.12.3\n"
+"X-Generator: Lokalize 22.12.3\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -300,12 +300,12 @@ msgstr "작성자"
 #: autostart/autostart.cpp:58
 #, kde-format
 msgid "Application to run"
-msgstr "실행할 프로그램"
+msgstr "실행할 앱"
 
 #: autostart/autostart.cpp:59
 #, kde-format
 msgid "Command line arguments to pass to application"
-msgstr "프로그램에 전달할 명령행 인자"
+msgstr "앱에 전달할 명령행 인자"
 
 #: birthdaydlg.cpp:45
 #, kde-format
@@ -1003,7 +1003,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label"
 msgid "Message windows have a title bar and take keyboard focus"
-msgstr "메시지 창에 제목 표시줄이 있고 키보드 초점을 받음"
+msgstr "메시지 창에 제목 표시줄이 있고 키보드 포커스를 받음"
 
 #. i18n: ectx: whatsthis, entry (Base_ModalMessages), group (General)
 #: data/kalarmconfig.kcfg:149
@@ -5842,7 +5842,7 @@ msgstr ""
 #, kde-format
 msgctxt "@option:check"
 msgid "Message windows have a title bar and take keyboard focus"
-msgstr "메시지 창에 제목 표시줄이 있고 키보드 초점을 받음"
+msgstr "메시지 창에 제목 표시줄이 있고 키보드 포커스를 받음"
 
 #: prefdlg.cpp:1947
 #, kde-kuit-format
@@ -8258,11 +8258,11 @@ msgid ""
 "wish to set up a test alarm to check your system's capability.</para>"
 msgstr ""
 "<para>이 절전 모드 해제는 컴퓨터가 단일 절전 모드 해제 시간만 예약할 수 있기 "
-"때문에 KAlarm 또는 다른 응용 프로그램에서 설정한 기존 절전 모드 해제를 취소하"
-"십시오.</para><para><b>참고:</b> 절전 모드에서 깨우기 기능은 일부 컴퓨터, 특"
-"히 오래된 컴퓨터에서는 전혀 지원되지 않으며 일부 컴퓨터에서는 최대 24시간 전"
-"에 깨우기 시간 설정만 지원하십시오. 테스트 알람을 설정하여 시스템의 기능을 확"
-"인할 수 있습니다.</para>"
+"때문에 KAlarm 또는 다른 앱에서 설정한 기존 절전 모드 해제를 취소하십시오.</"
+"para><para><b>참고:</b> 절전 모드에서 깨우기 기능은 일부 컴퓨터, 특히 오래된 "
+"컴퓨터에서는 전혀 지원되지 않으며 일부 컴퓨터에서는 최대 24시간 전에 깨우기 "
+"시간 설정만 지원하십시오. 테스트 알람을 설정하여 시스템의 기능을 확인할 수 있"
+"습니다.</para>"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: wakedlg.ui:21
