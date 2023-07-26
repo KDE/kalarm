@@ -88,7 +88,7 @@ private:
 };
 
 // Declare as a movable type (note that QString is movable).
-Q_DECLARE_TYPEINFO(EventId, Q_MOVABLE_TYPE);
+Q_DECLARE_TYPEINFO(EventId, Q_RELOCATABLE_TYPE);
 
 inline uint qHash(const EventId& eid, uint seed)
 {
