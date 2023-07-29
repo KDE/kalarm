@@ -93,7 +93,9 @@
 ><year
 >2021</year
 ><year
->2022</year>
+>2022</year
+><year
+>2023</year>
 <holder
 >&David.Jarvie;</holder>
 </copyright>
@@ -104,9 +106,9 @@
 <!-- Don't change format of date and version of the documentation -->
 
 <date
->2022-05-02</date>
+>2023-7-13</date>
 <releaseinfo
->3.5.0 (KDE Gear 22.08)</releaseinfo>
+>3.6.0 (KDE Gear 23.08)</releaseinfo>
 
 <abstract>
 <para
@@ -345,7 +347,7 @@
 > <guimenuitem
 >Visa datumväljare</guimenuitem
 ></menuchoice
->. Välj ett datum genom att klicka på datumväljaren, eller välj bort det genom att klicka på den igen. Datumväljaren visar en enda månad. Använd pilknapparna i datumväljaren för att visa en annan månad.</para>
+>. Välj ett datum genom att klicka på datumväljaren, eller välj bort det genom att klicka på den igen. Datumväljaren visar en enda månad. Använd pilknapparna i datumväljaren eller mushjulet för att visa en annan månad.</para>
 
 </sect2>
 
@@ -2426,9 +2428,11 @@ mode.</para
 >Skjut upp...</guibutton
 >. Välj sedan <guilabel
 >Skjut upp till datum/tid</guilabel
-> för att skriva in datum och tid när meddelandet ska visas igen, eller välj <guilabel
+> för att skriva in datum och tid när meddelandet ska visas igen (knappen <guilabel
+>Förinställning</guilabel
+> låter dig välja i en lista med vanliga tidsintervall), eller välj <guilabel
 >Skjut upp under tidsintervall</guilabel
-> för att skriva in hur mycket senare (i timmar och minuter) som meddelandet ska visas igen. Klicka sedan på <guibutton
+> för att skriva in datum och tid som meddelandet ska visas igen. Klicka sedan på <guibutton
 >Ok</guibutton
 > för att skjuta upp alarmmeddelandet och stänga dess fönster.</para>
 
@@ -6897,10 +6901,10 @@ mode.</para
 <para
 >&kalarm; </para>
 <para
->Program copyright 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 &David.Jarvie; &David.Jarvie.mail; </para>
+>Program copyright 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023 &David.Jarvie; &David.Jarvie.mail; </para>
 
 <para
->Dokumentation copyright 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 &David.Jarvie; &David.Jarvie.mail; </para>
+>Documentation copyright 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2016, 2018, 2019, 2020, 2021, 2022, 2023 &David.Jarvie; &David.Jarvie.mail; </para>
 
 <para
 >Översättning Stefan Asserhäll <email
