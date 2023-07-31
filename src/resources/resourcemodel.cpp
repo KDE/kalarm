@@ -649,6 +649,17 @@ QSize ResourceView::sizeHint() const
 }
 
 /******************************************************************************
+* Return the minimum size hint reduced to show a maximum of one empty line.
+*/
+QSize ResourceView::minimumSizeHint() const
+{
+    const QRect lastItem = visualRect(model()->index(model()->rowCount() - 1, 0));
+    QSize sz = QListView::minimumSizeHint();
+    sz.setHeight(lastItem.height() * 2);
+    return sz;
+}
+
+/******************************************************************************
 * Called when a mouse button is released.
 * Any currently selected resource is deselected.
 */
