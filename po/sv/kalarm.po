@@ -5,14 +5,14 @@
 #
 # Mattias Newzella <newzella@linux.nu>, 2002,2003.
 # Stefan Asserhäll <stefan.asserhall@bredband.net>, 2004, 2005, 2006, 2007, 2008, 2009, 2010.
-# Stefan Asserhall <stefan.asserhall@bredband.net>, 2005, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022.
+# Stefan Asserhall <stefan.asserhall@bredband.net>, 2005, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023.
 # Arve Eriksson <031299870@telia.com>, 2011.
 msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-07-14 00:48+0000\n"
-"PO-Revision-Date: 2022-04-26 20:00+0200\n"
+"PO-Revision-Date: 2023-07-25 11:13+0200\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@bredband.net>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
 "Language: sv\n"
@@ -81,12 +81,10 @@ msgstr ""
 "inställningsdialogrutan."
 
 #: alarmtimewidget.cpp:92
-#, fuzzy, kde-format
-#| msgctxt "@label"
-#| msgid "Deferred to:"
+#, kde-format
 msgctxt "@option:radio"
 msgid "Defer until:"
-msgstr "Uppskjutet till:"
+msgstr "Skjut upp till:"
 
 #: alarmtimewidget.cpp:92
 #, kde-format
@@ -145,12 +143,10 @@ msgstr ""
 "aktiveras vid första möjliga tillfälle på det angivna datumet."
 
 #: alarmtimewidget.cpp:137
-#, fuzzy, kde-format
-#| msgctxt "@label"
-#| msgid "Deferred to:"
+#, kde-format
 msgctxt "@option:radio Defer for time interval"
 msgid "Defer for:"
-msgstr "Uppskjutet till:"
+msgstr "Skjut upp:"
 
 #: alarmtimewidget.cpp:137 editdlg.cpp:336
 #, kde-format
@@ -182,13 +178,10 @@ msgstr "<para>%1</para><para>%2</para>"
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Preset"
-msgstr ""
+msgstr "Förinställning"
 
 #: alarmtimewidget.cpp:156
-#, fuzzy, kde-format
-#| msgctxt "@info/plain"
-#| msgid "1 minute"
-#| msgid_plural "%1 minutes"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "1 minute"
 msgid_plural "%1 minutes"
@@ -196,10 +189,7 @@ msgstr[0] "1 minut"
 msgstr[1] "%1 minuter"
 
 #: alarmtimewidget.cpp:157
-#, fuzzy, kde-format
-#| msgctxt "@item:intext inserted into 'in ... %1 minute's time' below"
-#| msgid "1 hour"
-#| msgid_plural "%1 hours"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "1 hour"
 msgid_plural "%1 hours"
@@ -207,20 +197,16 @@ msgstr[0] "1 timma"
 msgstr[1] "%1 timmar"
 
 #: alarmtimewidget.cpp:165
-#, fuzzy, kde-format
-#| msgctxt "@option:radio On day number in the month"
-#| msgid "O&n day"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "1 day"
-msgstr "&På dag"
+msgstr "1 dag"
 
 #: alarmtimewidget.cpp:166
-#, fuzzy, kde-format
-#| msgctxt "@item:inlistbox Time units"
-#| msgid "weeks"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "1 week"
-msgstr "veckor"
+msgstr "1 vecka"
 
 #: alarmtimewidget.cpp:176
 #, kde-kuit-format
@@ -1986,12 +1972,10 @@ msgid "Show the next month"
 msgstr "Visa nästa månad"
 
 #: datepicker.cpp:89
-#, fuzzy, kde-format
-#| msgctxt "@info/plain"
-#| msgid "today"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Show today"
-msgstr "i dag"
+msgstr "Visa dagens datum"
 
 #: daymatrix.cpp:200
 #, kde-format
@@ -2265,6 +2249,8 @@ msgid ""
 "will trigger at the minute boundary before the specified time from now.</"
 "para>"
 msgstr ""
+"<para>Kalarm erbjuder inte alarm med hög noggrannhet.</para><para>Alarmet "
+"utlöses för närvarande på minutgränsen innan den angivna tiden.</para>"
 
 #: editdlg.cpp:1042
 #, kde-format
@@ -2960,6 +2946,8 @@ msgid ""
 "<para>The command cannot set environment variables:</para><para><icode>%1</"
 "icode></para>"
 msgstr ""
+"<para>Kommandot kan inte ställa in miljövariabler.</para><para><icode>%1</"
+"icode></para>"
 
 #: editdlgtypes.cpp:1897
 #, kde-format
@@ -3386,17 +3374,13 @@ msgstr ""
 
 #: kalarmapp.cpp:839 lib/messagebox.h:110 lib/messagebox.h:119
 #: lib/messagebox.h:156
-#, fuzzy, kde-format
-#| msgctxt "@info General purpose status indication: yes or no"
-#| msgid "Yes"
+#, kde-format
 msgid "Yes"
 msgstr "Ja"
 
 #: kalarmapp.cpp:839 lib/messagebox.h:111 lib/messagebox.h:120
 #: lib/messagebox.h:157
-#, fuzzy, kde-format
-#| msgctxt "@info General purpose status indication: yes or no"
-#| msgid "No"
+#, kde-format
 msgid "No"
 msgstr "Nej"
 
@@ -5191,12 +5175,15 @@ msgid ""
 "<para>No command is specified to invoke a terminal window.</para><para>The "
 "default command (<command>%1</command>) will be used.</para>"
 msgstr ""
+"<para>Inget kommando är angivet för att starta ett terminalfönster</"
+"para><para>Standardkommandot (<command>%1</command>) kommer att användas.</"
+"para>"
 
 #: prefdlg.cpp:602
 #, kde-kuit-format
 msgctxt "@info"
 msgid "No command is specified to invoke a terminal window"
-msgstr ""
+msgstr "Inget kommando är angivet för att starta ett terminalfönster"
 
 #: prefdlg.cpp:615
 #, kde-kuit-format
