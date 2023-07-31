@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-07-14 00:48+0000\n"
-"PO-Revision-Date: 2023-07-23 12:30\n"
+"PO-Revision-Date: 2023-07-30 07:12\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -75,7 +75,7 @@ msgstr "将使用 KAlarm 的默认时区作为时区，可在配置对话框中�
 #, kde-format
 msgctxt "@option:radio"
 msgid "Defer until:"
-msgstr ""
+msgstr "推迟到:"
 
 #: alarmtimewidget.cpp:92
 #, kde-format
@@ -133,7 +133,7 @@ msgstr "勾选后可仅指定闹钟日期 (不指定时间)，闹钟将在所选
 #, kde-format
 msgctxt "@option:radio Defer for time interval"
 msgid "Defer for:"
-msgstr ""
+msgstr "推迟:"
 
 #: alarmtimewidget.cpp:137 editdlg.cpp:336
 #, kde-format
@@ -163,14 +163,14 @@ msgstr "<para>%1</para><para>%2</para>"
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Preset"
-msgstr ""
+msgstr "预设"
 
 #: alarmtimewidget.cpp:156
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "1 minute"
 msgid_plural "%1 minutes"
-msgstr[0] ""
+msgstr[0] "%1分钟"
 
 #: alarmtimewidget.cpp:157
 #, kde-format
@@ -183,13 +183,13 @@ msgstr[0] "%1 小时"
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "1 day"
-msgstr ""
+msgstr "1天"
 
 #: alarmtimewidget.cpp:166
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "1 week"
-msgstr ""
+msgstr "1星期"
 
 #: alarmtimewidget.cpp:176
 #, kde-kuit-format
