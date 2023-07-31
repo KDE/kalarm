@@ -10,6 +10,7 @@
 
 #include "eventid.h"
 #include "resources/resources.h"
+#include "kernelalarm.h"
 #include "kalarm_debug.h"
 
 #include <KCalendarCore/CalFormat>
@@ -24,6 +25,7 @@ ResourcesCalendar::EarliestMap ResourcesCalendar::mEarliestNonDispAlarm;
 QSet<QString>                  ResourcesCalendar::mPendingAlarms;
 bool                           ResourcesCalendar::mIgnoreAtLogin {false};
 bool                           ResourcesCalendar::mHaveDisabledAlarms {false};
+QHash<ResourceId, QHash<QString, KernelAlarm>> ResourcesCalendar::mWakeSystemMap;
 
 
 /******************************************************************************
@@ -193,6 +195,14 @@ void ResourcesCalendar::slotEventUpdated(Resource& resource, const KAEvent& even
     if ((resource.alarmTypes() & CalEvent::ACTIVE)
     &&  event.category() == CalEvent::ACTIVE)
     {
+        // Set wake system timer if needed
+        // TODO: update UI and `KAEvent`
+        //if (event.wakeSystem()) {
+        if (true) {
+            if (!mWakeSystemMap[key].contains(event.id()))
+                mWakeSystemMap[key].insert(event.id(), KernelAlarm()); // `QHash::emplace` supported only in Qt6
+            mWakeSystemMap[key][event.id()].arm(event.mainDateTime().effectiveDateTime());
+        }
         // Update the earliest alarm to trigger
         const QString earliestId        = mEarliestAlarm.value(key);
         const QString earliestNonDispId = mEarliestNonDispAlarm.value(key);
@@ -459,7 +469,12 @@ CalEvent::Type ResourcesCalendar::deleteEventInternal(const KAEvent& event, Reso
 
 CalEvent::Type ResourcesCalendar::deleteEventInternal(const QString& eventID, const KAEvent& event, Resource& resource, bool deleteFromResource)
 {
+
     const ResourceId key = resource.id();
+
+    if (mWakeSystemMap.contains(key))
+        mWakeSystemMap[key].remove(eventID);
+
     mResourceMap[key].remove(eventID);
     if (mEarliestAlarm.value(key)        == eventID
     ||  mEarliestNonDispAlarm.value(key) == eventID)
