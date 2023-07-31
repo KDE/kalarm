@@ -200,6 +200,7 @@ set(kalarm_bin_SRCS ${libkalarm_SRCS} ${resources_SRCS}
     alarmlistview.cpp
     templatelistview.cpp
     kamail.cpp
+    kernelalarm.cpp
     timeselector.cpp
     latecancel.cpp
     repetitionbutton.cpp
@@ -248,6 +249,7 @@ set(kalarm_bin_SRCS ${libkalarm_SRCS} ${resources_SRCS}
     alarmlistview.h
     templatelistview.h
     kamail.h
+    kernelalarm.h
     timeselector.h
     latecancel.h
     repetitionbutton.h

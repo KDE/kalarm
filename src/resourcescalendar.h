@@ -10,6 +10,7 @@
 
 #include "resources/resource.h"
 #include "kalarmcalendar/kaevent.h"
+#include "kernelalarm.h"
 
 #include <QHash>
 #include <QObject>
@@ -104,6 +105,7 @@ private:
     static QSet<QString>  mPendingAlarms;      // IDs of alarms which are currently being processed after triggering
     static bool           mIgnoreAtLogin;      // ignore new/updated repeat-at-login alarms
     static bool           mHaveDisabledAlarms; // there is at least one individually disabled alarm
+    static QHash<ResourceId, QHash<QString, KernelAlarm>> mWakeSystemMap;
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(ResourcesCalendar::AddEventOptions)
