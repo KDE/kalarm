@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-07-14 00:48+0000\n"
-"PO-Revision-Date: 2023-07-30 07:09\n"
+"PO-Revision-Date: 2023-08-02 12:40\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -1864,7 +1864,7 @@ msgstr "显示下个月的闹钟"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show today"
-msgstr ""
+msgstr "显示今天"
 
 #: daymatrix.cpp:200
 #, kde-format
@@ -2126,6 +2126,8 @@ msgid ""
 "will trigger at the minute boundary before the specified time from now.</"
 "para>"
 msgstr ""
+"<para>KAlarm不提供高精度闹钟</para><para>闹钟将会在指定时刻前一分钟的末尾触发"
+"</para>"
 
 #: editdlg.cpp:1042
 #, kde-format
@@ -2799,7 +2801,7 @@ msgctxt "@info"
 msgid ""
 "<para>The command cannot set environment variables:</para><para><icode>%1</"
 "icode></para>"
-msgstr ""
+msgstr "<para>命令不能设置环境变量:</para><para><icode>%1</icode></para>"
 
 #: editdlgtypes.cpp:1897
 #, kde-format
@@ -4957,12 +4959,14 @@ msgid ""
 "<para>No command is specified to invoke a terminal window.</para><para>The "
 "default command (<command>%1</command>) will be used.</para>"
 msgstr ""
+"<para>没有指定调用终端窗口的命令。</para><para>将会使用默认命令（<command>"
+"%1</command>）</para>"
 
 #: prefdlg.cpp:602
 #, kde-kuit-format
 msgctxt "@info"
 msgid "No command is specified to invoke a terminal window"
-msgstr ""
+msgstr "没有指定调用终端窗口的命令"
 
 #: prefdlg.cpp:615
 #, kde-kuit-format
