@@ -3,5 +3,5 @@
 /* Define to 1 if building with Xlib */
 #cmakedefine01 ENABLE_X11
 
-/* Define to 1 if wake-from-suspend is enabled */
-#cmakedefine01 ENABLE_WAKE_FROM_SUSPEND
+/* Define to 1 if RTC wake-from-suspend is enabled */
+#cmakedefine01 ENABLE_RTC_WAKE_FROM_SUSPEND

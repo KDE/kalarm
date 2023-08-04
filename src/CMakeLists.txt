@@ -200,7 +200,7 @@ set(kalarm_bin_SRCS ${libkalarm_SRCS} ${resources_SRCS}
     alarmlistview.cpp
     templatelistview.cpp
     kamail.cpp
-    kernelalarm.cpp
+    kernelwakealarm.cpp
     timeselector.cpp
     latecancel.cpp
     repetitionbutton.cpp
@@ -250,7 +250,7 @@ set(kalarm_bin_SRCS ${libkalarm_SRCS} ${resources_SRCS}
     alarmlistview.h
     templatelistview.h
     kamail.h
-    kernelalarm.h
+    kernelwakealarm.h
     timeselector.h
     latecancel.h
     repetitionbutton.h
@@ -267,7 +267,7 @@ set(kalarm_bin_SRCS ${libkalarm_SRCS} ${resources_SRCS}
     templatemenuaction.h
     migratekde4files.h
 )
-if (ENABLE_WAKE_FROM_SUSPEND)
+if (ENABLE_RTC_WAKE_FROM_SUSPEND)
     set(kalarm_bin_SRCS ${kalarm_bin_SRCS}
         wakedlg.cpp
         wakedlg.h
@@ -339,8 +339,8 @@ if (TARGET KF${KF_MAJOR_VERSION}::TextEditTextToSpeech)
     target_link_libraries(kalarm_bin KF${KF_MAJOR_VERSION}::TextEditTextToSpeech)
 endif()
 
-if (ENABLE_WAKE_FROM_SUSPEND)
-        target_link_libraries(kalarm_bin KF${KF_MAJOR_VERSION}::AuthCore)
+if (ENABLE_RTC_WAKE_FROM_SUSPEND)
+    target_link_libraries(kalarm_bin KF${KF_MAJOR_VERSION}::AuthCore)
 endif()
 
 if (ENABLE_X11)
@@ -369,7 +369,7 @@ install(FILES data/kalarm.notifyrc DESTINATION ${KDE_INSTALL_KNOTIFYRCDIR})
 
 ########### KAuth helper ###############
 
-if (ENABLE_WAKE_FROM_SUSPEND)
+if (ENABLE_RTC_WAKE_FROM_SUSPEND)
     add_executable(kalarm_helper rtcwakeaction.cpp rtcwakeaction.h ${libkalarm_common_SRCS})
     target_link_libraries(kalarm_helper KF${KF_MAJOR_VERSION}::AuthCore KF${KF_MAJOR_VERSION}::I18n)
     install(TARGETS kalarm_helper DESTINATION ${KAUTH_HELPER_INSTALL_DIR})

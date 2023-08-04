@@ -1,7 +1,7 @@
 /*
  *  functions.cpp  -  miscellaneous functions
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2001-2022 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2001-2023 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -43,7 +43,7 @@ using namespace KCalendarCore;
 #include <KToggleAction>
 #include <KLocalizedString>
 
-#if ENABLE_WAKE_FROM_SUSPEND
+#if ENABLE_RTC_WAKE_FROM_SUSPEND
 #include <KAuth/ActionReply>
 #include <KAuth/ExecuteJob>
 #endif
@@ -483,7 +483,7 @@ UpdateResult deleteEvents(QVector<KAEvent>& events, Resource& resource, bool arc
     if (events.isEmpty())
         return UpdateResult(UPDATE_OK);
     UpdateStatusData status;
-#if ENABLE_WAKE_FROM_SUSPEND
+#if ENABLE_RTC_WAKE_FROM_SUSPEND
     bool deleteWakeFromSuspendAlarm = false;
     const QString wakeFromSuspendId = checkRtcWakeConfig().value(0);
 #endif
@@ -518,7 +518,7 @@ UpdateResult deleteEvents(QVector<KAEvent>& events, Resource& resource, bool arc
         else
             status.appendFailed(i);
 
-#if ENABLE_WAKE_FROM_SUSPEND
+#if ENABLE_RTC_WAKE_FROM_SUSPEND
         if (id == wakeFromSuspendId)
             deleteWakeFromSuspendAlarm = true;
 #endif
@@ -545,7 +545,7 @@ UpdateResult deleteEvents(QVector<KAEvent>& events, Resource& resource, bool arc
     if (status.status != UPDATE_OK  &&  msgParent)
         displayUpdateError(msgParent, ERR_DELETE, status, showKOrgErr);
 
-#if ENABLE_WAKE_FROM_SUSPEND
+#if ENABLE_RTC_WAKE_FROM_SUSPEND
     // Remove any wake-from-suspend scheduled for a deleted alarm
     if (deleteWakeFromSuspendAlarm  &&  !wakeFromSuspendId.isEmpty())
         cancelRtcWake(msgParent, wakeFromSuspendId);
@@ -715,7 +715,7 @@ UpdateResult enableEvents(QVector<KAEvent>& events, bool enable, QWidget* msgPar
     if (events.isEmpty())
         return UpdateResult(UPDATE_OK);
     UpdateStatusData status;
-#if ENABLE_WAKE_FROM_SUSPEND
+#if ENABLE_RTC_WAKE_FROM_SUSPEND
     bool deleteWakeFromSuspendAlarm = false;
     const QString wakeFromSuspendId = checkRtcWakeConfig().value(0);
 #endif
@@ -728,7 +728,7 @@ UpdateResult enableEvents(QVector<KAEvent>& events, bool enable, QWidget* msgPar
         {
             event->setEnabled(enable);
 
-#if ENABLE_WAKE_FROM_SUSPEND
+#if ENABLE_RTC_WAKE_FROM_SUSPEND
             if (!enable  &&  event->id() == wakeFromSuspendId)
                 deleteWakeFromSuspendAlarm = true;
 #endif
@@ -775,7 +775,7 @@ UpdateResult enableEvents(QVector<KAEvent>& events, bool enable, QWidget* msgPar
     if (status.status != UPDATE_OK  &&  msgParent)
         displayUpdateError(msgParent, ERR_ADD, status);
 
-#if ENABLE_WAKE_FROM_SUSPEND
+#if ENABLE_RTC_WAKE_FROM_SUSPEND
     // Remove any wake-from-suspend scheduled for a disabled alarm
     if (deleteWakeFromSuspendAlarm  &&  !wakeFromSuspendId.isEmpty())
         cancelRtcWake(msgParent, wakeFromSuspendId);
@@ -1240,7 +1240,7 @@ void editNewTemplate(const KAEvent& preset, QWidget* parent)
     ::editNewTemplate(EditAlarmDlg::Type(0), preset, parent);
 }
 
-#if ENABLE_WAKE_FROM_SUSPEND
+#if ENABLE_RTC_WAKE_FROM_SUSPEND
 /******************************************************************************
 * Check the config as to whether there is a wake-on-suspend alarm pending, and
 * if so, delete it from the config if it has expired.
@@ -1344,7 +1344,7 @@ bool setRtcWakeTime(unsigned triggerTime, QWidget* parent)
     }
     return true;
 }
-#endif // ENABLE_WAKE_FROM_SUSPEND
+#endif // ENABLE_RTC_WAKE_FROM_SUSPEND
 
 } // namespace KAlarm
 namespace

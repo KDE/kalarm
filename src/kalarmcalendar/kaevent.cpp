@@ -71,13 +71,13 @@ public:
     //       that these values don't overlap them.
     enum
     {
-        REMINDER        = 0x100000,
-        DEFERRAL        = 0x200000,
-        TIMED_FLAG      = 0x400000,
+        REMINDER        = 0x200000,
+        DEFERRAL        = 0x400000,
+        TIMED_FLAG      = 0x800000,
         DATE_DEFERRAL   = DEFERRAL,
         TIME_DEFERRAL   = DEFERRAL | TIMED_FLAG,
-        DISPLAYING_     = 0x800000,
-        READ_ONLY_FLAGS = 0xF00000  //!< mask for all read-only internal values
+        DISPLAYING_     = 0x1000000,
+        READ_ONLY_FLAGS = 0x1E00000  //!< mask for all read-only internal values
     };
     enum ReminderType   // current active state of reminder
     {
@@ -282,6 +282,7 @@ public:
     int                mFadeSeconds{0};        // fade time (seconds) for sound file, or 0 if none
     int                mRepeatSoundPause{-1};  // seconds to pause between sound file repetitions, or -1 if no repetition
     int                mLateCancel{0};         // how many minutes late will cancel the alarm, or 0 for no cancellation
+    bool               mWakeFromSuspend{false}; // wake system from suspend when alarm is due
     bool               mExcludeHolidays{false}; // don't trigger alarms on holidays
     mutable QString    mExcludeHolidayRegion;   // holiday region code used to exclude alarms on holidays (= mHolidays region when trigger calculated)
     mutable int        mWorkTimeOnly{0};         // non-zero to trigger alarm only during working hours (= mWorkTimeIndex when trigger calculated)
@@ -319,6 +320,7 @@ public:
     static const QString EMAIL_BCC_FLAG;
     static const QString CONFIRM_ACK_FLAG;
     static const QString KORGANIZER_FLAG;
+    static const QString WAKE_SUSPEND_FLAG;
     static const QString EXCLUDE_HOLIDAYS_FLAG;
     static const QString WORK_TIME_ONLY_FLAG;
     static const QString REMINDER_ONCE_FLAG;
@@ -388,6 +390,7 @@ const QString    KAEventPrivate::LOCAL_ZONE_FLAG       = QStringLiteral("LOCAL")
 const QString    KAEventPrivate::EMAIL_BCC_FLAG        = QStringLiteral("BCC");
 const QString    KAEventPrivate::CONFIRM_ACK_FLAG      = QStringLiteral("ACKCONF");
 const QString    KAEventPrivate::KORGANIZER_FLAG       = QStringLiteral("KORG");
+const QString    KAEventPrivate::WAKE_SUSPEND_FLAG     = QStringLiteral("WAKESUSPEND");
 const QString    KAEventPrivate::EXCLUDE_HOLIDAYS_FLAG = QStringLiteral("EXHOLIDAYS");
 const QString    KAEventPrivate::WORK_TIME_ONLY_FLAG   = QStringLiteral("WORKTIME");
 const QString    KAEventPrivate::REMINDER_ONCE_FLAG    = QStringLiteral("ONCE");
@@ -537,6 +540,7 @@ KAEventPrivate::KAEventPrivate(const KADateTime& dateTime, const QString& name, 
     mCommandDisplay         = flags & KAEvent::DISPLAY_COMMAND;
     mCommandHideError       = flags & KAEvent::DONT_SHOW_ERROR;
     mCopyToKOrganizer       = flags & KAEvent::COPY_KORGANIZER;
+    mWakeFromSuspend        = flags & KAEvent::WAKE_SUSPEND;
     mExcludeHolidays        = flags & KAEvent::EXCL_HOLIDAYS;
     mExcludeHolidayRegion   = mHolidays->regionCode();
     mWorkTimeOnly           = flags & KAEvent::WORK_TIME_ONLY;
@@ -630,6 +634,8 @@ KAEventPrivate::KAEventPrivate(const KCalendarCore::Event::Ptr& event)
             mEmailBcc = true;
         else if (flag == KORGANIZER_FLAG)
             mCopyToKOrganizer = true;
+        else if (flag == WAKE_SUSPEND_FLAG)
+            mWakeFromSuspend = true;
         else if (flag == EXCLUDE_HOLIDAYS_FLAG)
         {
             mExcludeHolidays      = true;
@@ -1049,6 +1055,7 @@ void KAEventPrivate::copy(const KAEventPrivate& event)
     mFadeSeconds             = event.mFadeSeconds;
     mRepeatSoundPause        = event.mRepeatSoundPause;
     mLateCancel              = event.mLateCancel;
+    mWakeFromSuspend         = event.mWakeFromSuspend;
     mExcludeHolidays         = event.mExcludeHolidays;
     mExcludeHolidayRegion    = event.mExcludeHolidayRegion;
     mWorkTimeOnly            = event.mWorkTimeOnly;
@@ -1150,6 +1157,8 @@ bool KAEventPrivate::updateKCalEvent(const Event::Ptr& ev, KAEvent::UidAction ui
         flags += EMAIL_BCC_FLAG;
     if (mCopyToKOrganizer)
         flags += KORGANIZER_FLAG;
+    if (mWakeFromSuspend)
+        flags += WAKE_SUSPEND_FLAG;
     if (mExcludeHolidays)
         flags += EXCLUDE_HOLIDAYS_FLAG;
     if (mWorkTimeOnly)
@@ -1612,6 +1621,8 @@ KAEvent::Flags KAEventPrivate::flags() const
         result |= KAEvent::DONT_SHOW_ERROR;
     if (mCopyToKOrganizer)
         result |= KAEvent::COPY_KORGANIZER;
+    if (mWakeFromSuspend)
+        result |= KAEvent::WAKE_SUSPEND;
     if (mExcludeHolidays)
         result |= KAEvent::EXCL_HOLIDAYS;
     if (mWorkTimeOnly)
@@ -2501,6 +2512,19 @@ void KAEventPrivate::setRepeatAtLoginTrue(bool clearReminder)
 bool KAEvent::repeatAtLogin(bool includeArchived) const
 {
     return d->mRepeatAtLogin || (includeArchived && d->mArchiveRepeatAtLogin);
+}
+
+/******************************************************************************
+* Enable or disable wake-from-suspend when the alarm is due.
+*/
+void KAEvent::setWakeFromSuspend(bool wake)
+{
+    d->mWakeFromSuspend = wake;
+}
+
+bool KAEvent::wakeFromSuspend() const
+{
+    return d->mWakeFromSuspend;
 }
 
 void KAEvent::setExcludeHolidays(bool ex)
@@ -3635,6 +3659,7 @@ bool KAEventPrivate::compare(const KAEventPrivate& other, KAEvent::Comparison co
     ||  mStartDateTime    != other.mStartDateTime
     ||  mLateCancel       != other.mLateCancel
     ||  mCopyToKOrganizer != other.mCopyToKOrganizer
+    ||  mWakeFromSuspend  != other.mWakeFromSuspend
     ||  mCompatibility    != other.mCompatibility
     ||  mEnabled          != other.mEnabled
     ||  mReadOnly         != other.mReadOnly)
@@ -3896,6 +3921,7 @@ void KAEventPrivate::dumpDebug() const
     }
     qCDebug(KALARMCAL_LOG) << "-- mEmailId:" << mEmailId;
     qCDebug(KALARMCAL_LOG) << "-- mCopyToKOrganizer:" << mCopyToKOrganizer;
+    qCDebug(KALARMCAL_LOG) << "-- mWakeFromSuspend:" << mWakeFromSuspend;
     qCDebug(KALARMCAL_LOG) << "-- mExcludeHolidays:" << mExcludeHolidays;
     qCDebug(KALARMCAL_LOG) << "-- mWorkTimeOnly:" << mWorkTimeOnly;
     qCDebug(KALARMCAL_LOG) << "-- mStartDateTime:" << mStartDateTime.toString();

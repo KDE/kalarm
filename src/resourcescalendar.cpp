@@ -1,7 +1,7 @@
 /*
  *  resourcescalendar.cpp  -  KAlarm calendar resources access
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2001-2022 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2001-2023 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -9,8 +9,8 @@
 #include "resourcescalendar.h"
 
 #include "eventid.h"
+#include "kalarmapp.h"
 #include "resources/resources.h"
-#include "kernelalarm.h"
 #include "kalarm_debug.h"
 
 #include <KCalendarCore/CalFormat>
@@ -25,7 +25,7 @@ ResourcesCalendar::EarliestMap ResourcesCalendar::mEarliestNonDispAlarm;
 QSet<QString>                  ResourcesCalendar::mPendingAlarms;
 bool                           ResourcesCalendar::mIgnoreAtLogin {false};
 bool                           ResourcesCalendar::mHaveDisabledAlarms {false};
-QHash<ResourceId, QHash<QString, KernelAlarm>> ResourcesCalendar::mWakeSystemMap;
+QHash<ResourceId, QHash<QString, KernelWakeAlarm>> ResourcesCalendar::mWakeSuspendTimers;
 
 
 /******************************************************************************
@@ -63,6 +63,7 @@ ResourcesCalendar::ResourcesCalendar()
     connect(resources, &Resources::eventUpdated, this, &ResourcesCalendar::slotEventUpdated);
     connect(resources, &Resources::resourcesPopulated, this, &ResourcesCalendar::slotResourcesPopulated);
     connect(resources, &Resources::settingsChanged, this, &ResourcesCalendar::slotResourceSettingsChanged);
+    connect(theApp(), &KAlarmApp::alarmEnabledToggled, this, &ResourcesCalendar::slotAlarmsEnabledToggled);
 
     // Fetch events from all resources which already exist.
     QVector<Resource> allResources = Resources::enabledResources();
@@ -195,14 +196,9 @@ void ResourcesCalendar::slotEventUpdated(Resource& resource, const KAEvent& even
     if ((resource.alarmTypes() & CalEvent::ACTIVE)
     &&  event.category() == CalEvent::ACTIVE)
     {
-        // Set wake system timer if needed
-        // TODO: update UI and `KAEvent`
-        //if (event.wakeSystem()) {
-        if (true) {
-            if (!mWakeSystemMap[key].contains(event.id()))
-                mWakeSystemMap[key].insert(event.id(), KernelAlarm()); // `QHash::emplace` supported only in Qt6
-            mWakeSystemMap[key][event.id()].arm(event.mainDateTime().effectiveDateTime());
-        }
+        // Set/clear wake from suspend timer if needed
+        checkKernelWakeSuspend(key, event);
+
         // Update the earliest alarm to trigger
         const QString earliestId        = mEarliestAlarm.value(key);
         const QString earliestNonDispId = mEarliestNonDispAlarm.value(key);
@@ -260,6 +256,42 @@ void ResourcesCalendar::slotEventsToBeRemoved(Resource& resource, const QList<KA
     {
         if (mResourceMap.value(key).contains(event.id()))
             deleteEventInternal(event, resource, false);
+    }
+}
+
+/******************************************************************************
+* Called when alarm monitoring has been enabled or disabled (for all alarms).
+* Arm or disarm kernel wake alarms for all events which use them.
+*/
+void ResourcesCalendar::slotAlarmsEnabledToggled(bool enabled)
+{
+    if (!KernelWakeAlarm::isAvailable())
+        return;
+
+    if (enabled)
+    {
+        // Set kernel wake timers for all events which require them.
+        for (auto itr = mWakeSuspendTimers.begin(), endr = mWakeSuspendTimers.end();  itr != endr;  ++itr)
+        {
+            const ResourceId resourceId = itr.key();
+            Resource resource = Resources::resource(resourceId);
+            auto& resourceHash = itr.value();
+            for (auto it = resourceHash.begin(), end = resourceHash.end();  it != end;  ++it)
+            {
+                const KAEvent event = resource.event(it.key());
+                checkKernelWakeSuspend(resourceId, event);
+            }
+        }
+    }
+    else
+    {
+        // Disarm all kernel wake timers (but don't delete them).
+        for (auto itr = mWakeSuspendTimers.begin(), endr = mWakeSuspendTimers.end();  itr != endr;  ++itr)
+        {
+            auto& resourceHash = itr.value();
+            for (auto it = resourceHash.begin(), end = resourceHash.end();  it != end;  ++it)
+                it.value().disarm();
+        }
     }
 }
 
@@ -413,7 +445,11 @@ KAEvent ResourcesCalendar::updateEvent(const KAEvent& evnt, bool saveIfReadOnly)
     {
         Resource resource = Resources::resource(evnt.resourceId());
         if (resource.updateEvent(evnt, saveIfReadOnly))
+        {
+            // Set/clear wake from suspend timer if needed
+            checkKernelWakeSuspend(resource.id(), evnt);
             return evnt;
+        }
     }
     qCDebug(KALARM_LOG) << "ResourcesCalendar::updateEvent: error" << evnt.id();
     return {};
@@ -469,11 +505,10 @@ CalEvent::Type ResourcesCalendar::deleteEventInternal(const KAEvent& event, Reso
 
 CalEvent::Type ResourcesCalendar::deleteEventInternal(const QString& eventID, const KAEvent& event, Resource& resource, bool deleteFromResource)
 {
-
     const ResourceId key = resource.id();
 
-    if (mWakeSystemMap.contains(key))
-        mWakeSystemMap[key].remove(eventID);
+    if (mWakeSuspendTimers.contains(key))
+        mWakeSuspendTimers[key].remove(eventID);   // this cancels the timer
 
     mResourceMap[key].remove(eventID);
     if (mEarliestAlarm.value(key)        == eventID
@@ -647,6 +682,31 @@ void ResourcesCalendar::checkForDisabledAlarms()
     {
         mHaveDisabledAlarms = disabled;
         Q_EMIT haveDisabledAlarmsChanged(disabled);
+    }
+}
+
+/******************************************************************************
+* Set or clear any kernel wake alarm associated with an event.
+*/
+void ResourcesCalendar::checkKernelWakeSuspend(ResourceId key, const KAEvent& event)
+{
+    if (KernelWakeAlarm::isAvailable()  &&  event.enabled()  &&  event.wakeFromSuspend())
+    {
+        //TODO: mainDateTime() doesn't take account of holidays/work days
+        const KADateTime dt = event.mainDateTime().kDateTime();
+        if (!dt.isDateOnly())   // can't determine a wakeup time for date-only events
+        {
+            KernelWakeAlarm& kernelAlarm = mWakeSuspendTimers[key][event.id()];
+            if (theApp()->alarmsEnabled())
+                kernelAlarm.arm(dt);
+            else
+                kernelAlarm.disarm();
+        }
+    }
+    else
+    {
+        if (mWakeSuspendTimers.contains(key))
+            mWakeSuspendTimers[key].remove(event.id());   // this cancels the timer
     }
 }
 

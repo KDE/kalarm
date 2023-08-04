@@ -15,6 +15,7 @@
 #include "deferdlg.h"
 #include "functions.h"
 #include "kalarmapp.h"
+#include "kernelwakealarm.h"
 #include "newalarmaction.h"
 #include "prefdlg.h"
 #include "preferences.h"
@@ -500,10 +501,14 @@ void MainWindow::initActions()
     actions->setDefaultShortcut(mActionEnable, QKeySequence(Qt::CTRL | Qt::Key_B));
     connect(mActionEnable, &QAction::triggered, this, &MainWindow::slotEnable);
 
-#if ENABLE_WAKE_FROM_SUSPEND
-    QAction* waction = new QAction(i18nc("@action", "Wake From Suspend..."), this);
-    actions->addAction(QStringLiteral("wakeSuspend"), waction);
-    connect(waction, &QAction::triggered, this, &MainWindow::slotWakeFromSuspend);
+#if ENABLE_RTC_WAKE_FROM_SUSPEND
+    if (!KernelWakeAlarm::isAvailable())
+    {
+        // Only enable RTC wake from suspend if kernel wake alarms are not available
+        QAction* waction = new QAction(i18nc("@action", "Wake From Suspend..."), this);
+        actions->addAction(QStringLiteral("wakeSuspend"), waction);
+        connect(waction, &QAction::triggered, this, &MainWindow::slotWakeFromSuspend);
+    }
 #endif
 
     QAction* action = KAlarm::createStopPlayAction(this);
@@ -922,7 +927,7 @@ void MainWindow::slotSpreadWindowsShortcut()
 */
 void MainWindow::slotWakeFromSuspend()
 {
-#if ENABLE_WAKE_FROM_SUSPEND
+#if ENABLE_RTC_WAKE_FROM_SUSPEND
     (WakeFromSuspendDlg::create(this))->show();
 #endif
 }
