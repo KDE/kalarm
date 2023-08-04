@@ -126,10 +126,10 @@ void KernelWakeAlarm::disarm()
 #else // not Q_OS_LINUX
 
 KernelWakeAlarm::KernelWakeAlarm() {}
-KernelWakeAlarm::KernelWakeAlarm(const KernelWakeAlarm& other) {}
+KernelWakeAlarm::KernelWakeAlarm(const KernelWakeAlarm&) {}
 KernelWakeAlarm::~KernelWakeAlarm() {}
-KernelWakeAlarm& KernelWakeAlarm::operator=(const KernelWakeAlarm& other) { return *this; }
-bool KernelWakeAlarm::arm(QDateTime)  { return false; }
+KernelWakeAlarm& KernelWakeAlarm::operator=(const KernelWakeAlarm&) { return *this; }
+bool KernelWakeAlarm::arm(const KAlarmCal::KADateTime&)  { return false; }
 void KernelWakeAlarm::disarm() {}
 bool KernelWakeAlarm::isValid() const { return false; }
 bool KernelWakeAlarm::isAvailable()   { return false; }
