@@ -32,7 +32,7 @@ public:
 
     QWidget* mMsgParent;
 
-#if ENABLE_WAKE_FROM_SUSPEND
+#if ENABLE_RTC_WAKE_FROM_SUSPEND
 public Q_SLOTS:
     void cancelRtcWake();
 #endif

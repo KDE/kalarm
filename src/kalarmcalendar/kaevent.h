@@ -209,7 +209,8 @@ public:
         DISPLAY_COMMAND = 0x10000, //!< display command output in the alarm window
         REMINDER_ONCE   = 0x20000, //!< only trigger the reminder on the first recurrence
         DONT_SHOW_ERROR = 0x40000, //!< do not notify command alarm errors to user
-        NOTIFY          = 0x80000  //!< use the standard notification system instead of alarm message window
+        NOTIFY          = 0x80000, //!< use the standard notification system instead of alarm message window
+        WAKE_SUSPEND    = 0x100000 //!< use kernel timer (not RTC) to wake-from-suspend when alarm due
 
                           // IMPORTANT: if any values are added to this list, ensure that the
                           //            additional enum values in KAEventPrivate are also adjusted.
@@ -920,6 +921,20 @@ public:
      *  @see setRepeatAtLogin()
      */
     bool repeatAtLogin(bool includeArchived = false) const;
+
+    /** Enable or disable wake-from-suspend when the alarm is due.
+     *  (Note that this option is used for kernel timer wake-from-suspend, not
+     *   for RTC wake-from-suspend, since the latter can only be set for one
+     *   alarm at any one time.)
+     *  @param wake  true to wake-from-suspend, false to not wake-from-suspend.
+     *  @see wakeFromSuspend()
+     */
+    void setWakeFromSuspend(bool wake);
+
+    /** Return whether wake-from-suspend is enabled for the alarm.
+     *  @see setWakeFromSuspend()
+     */
+    bool wakeFromSuspend() const;
 
     /** Enable or disable the alarm on holiday dates. The currently selected
      *  holiday region determines which dates are holidays.

@@ -79,14 +79,14 @@ option(ENABLE_AKONADI_PLUGIN "Build the Akonadi plugin" ON)
 add_feature_info(AKONADI_PLUGIN ${ENABLE_AKONADI_PLUGIN} "Provides features dependent on Akonadi (including birthday import,
                    email functions, email address book, first run resource migration)")
 
-option(ENABLE_WAKE_FROM_SUSPEND "Enable wake-from-suspend alarms (requires KAuth)" ON)
-if (ENABLE_WAKE_FROM_SUSPEND)
+option(ENABLE_RTC_WAKE_FROM_SUSPEND "Enable RTC wake-from-suspend alarms (requires KAuth)" ON)
+if (ENABLE_RTC_WAKE_FROM_SUSPEND)
     find_package(KF6Auth ${KF_MIN_VERSION})
     if (NOT KF6Auth_FOUND)
-        set(ENABLE_WAKE_FROM_SUSPEND OFF)
+        set(ENABLE_RTC_WAKE_FROM_SUSPEND OFF)
     endif()
 endif()
-add_feature_info(WAKE_FROM_SUSPEND ${ENABLE_WAKE_FROM_SUSPEND} "Wake-from-suspend alarms")
+add_feature_info(RTC_WAKE_FROM_SUSPEND ${ENABLE_RTC_WAKE_FROM_SUSPEND} "If kernel timers are not available, use RTC for wake-from-suspend alarms")
 
 # Find KF6 packages
 find_package(KF6CalendarCore ${KF_MIN_VERSION} CONFIG REQUIRED)

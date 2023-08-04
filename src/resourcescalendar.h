@@ -1,16 +1,16 @@
 /*
  *  resourcescalendar.h  -  KAlarm calendar resources access
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2001-2022 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2001-2023 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #pragma once
 
+#include "kernelwakealarm.h"
 #include "resources/resource.h"
 #include "kalarmcalendar/kaevent.h"
-#include "kernelalarm.h"
 
 #include <QHash>
 #include <QObject>
@@ -81,6 +81,7 @@ private Q_SLOTS:
     void                  slotEventsAdded(Resource&, const QList<KAlarmCal::KAEvent>&);
     void                  slotEventsToBeRemoved(Resource&, const QList<KAlarmCal::KAEvent>&);
     void                  slotEventUpdated(Resource&, const KAlarmCal::KAEvent&);
+    void                  slotAlarmsEnabledToggled(bool enabled);
 private:
     ResourcesCalendar();
     static CalEvent::Type deleteEventInternal(const KAlarmCal::KAEvent&, Resource&, bool deleteFromResource = true);
@@ -93,6 +94,7 @@ private:
     void                  checkForDisabledAlarms();
     void                  checkForDisabledAlarms(bool oldEnabled, bool newEnabled);
     static QList<KAEvent> eventsForResource(const Resource&, const QSet<QString>& eventIds);
+    static void           checkKernelWakeSuspend(ResourceId, const KAlarmCal::KAEvent&);
 
     static ResourcesCalendar* mInstance;   // the unique instance
 
@@ -105,7 +107,10 @@ private:
     static QSet<QString>  mPendingAlarms;      // IDs of alarms which are currently being processed after triggering
     static bool           mIgnoreAtLogin;      // ignore new/updated repeat-at-login alarms
     static bool           mHaveDisabledAlarms; // there is at least one individually disabled alarm
-    static QHash<ResourceId, QHash<QString, KernelAlarm>> mWakeSystemMap;
+    // Wake from suspend kernel timers: indexed by resource and event ID.
+    // There is an entry for every enabled alarm with kernel wake from suspend specified.
+    // If alarms are disabled (for all alarms), the entries still exist with kernel timers disarmed.
+    static QHash<ResourceId, QHash<QString, KernelWakeAlarm>> mWakeSuspendTimers;
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(ResourcesCalendar::AddEventOptions)

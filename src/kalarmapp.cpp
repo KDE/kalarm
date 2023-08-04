@@ -776,9 +776,10 @@ bool KAlarmApp::quitIf(int exitCode, bool force)
     //       KAlarm is started again before application exit completes!
     qCDebug(KALARM_LOG) << "KAlarmApp::quitIf:" << exitCode << ": quitting";
     MessageDisplay::stopAudio();
-#if ENABLE_WAKE_FROM_SUSPEND
+#if ENABLE_RTC_WAKE_FROM_SUSPEND
     if (mCancelRtcWake)
     {
+        // Just in case, cancel RTC wake even if kernel wake alarms are available
         KAlarm::setRtcWakeTime(0, nullptr);
         KAlarm::deleteRtcWakeConfig();
     }
@@ -808,7 +809,7 @@ void KAlarmApp::doQuit(QWidget* parent)
                                             KStandardGuiItem::cancel(), Preferences::QUIT_WARN
                                            ) != KMessageBox::Continue)
         return;
-#if ENABLE_WAKE_FROM_SUSPEND
+#if ENABLE_RTC_WAKE_FROM_SUSPEND
     if (!KAlarm::checkRtcWakeConfig(true).isEmpty())
     {
         // A wake-on-suspend alarm is set
@@ -1657,7 +1658,7 @@ void KAlarmApp::setAlarmsEnabled(bool enabled)
         mAlarmsEnabled = enabled;
         Q_EMIT alarmEnabledToggled(enabled);
         if (!enabled)
-#if ENABLE_WAKE_FROM_SUSPEND
+#if ENABLE_RTC_WAKE_FROM_SUSPEND
             KAlarm::cancelRtcWake(nullptr);
 #else
             ;
@@ -1816,7 +1817,7 @@ int KAlarmApp::handleEvent(const EventId& id, QueuedAction action, bool findUniq
 {
     Q_ASSERT(!(int(action) & ~int(QueuedAction::ActionMask)));
 
-#if ENABLE_WAKE_FROM_SUSPEND
+#if ENABLE_RTC_WAKE_FROM_SUSPEND
     // Delete any expired wake-on-suspend config data
     KAlarm::checkRtcWakeConfig();
 #endif

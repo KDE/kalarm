@@ -305,7 +305,7 @@ bool importAlarms(Resource& resource, QWidget* parent);
 bool exportAlarms(const QList<KAEvent>& events, QWidget* parent);
 
 void                displayKOrgUpdateError(QWidget* parent, UpdateError, const UpdateResult& korgError, int nAlarms = 0);
-#if ENABLE_WAKE_FROM_SUSPEND
+#if ENABLE_RTC_WAKE_FROM_SUSPEND
 QStringList         checkRtcWakeConfig(bool checkEventExists = false);
 void                deleteRtcWakeConfig();
 void                cancelRtcWake(QWidget* msgParent, const QString& eventId = QString());
