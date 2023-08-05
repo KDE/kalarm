@@ -1316,7 +1316,8 @@ bool setRtcWakeTime(unsigned triggerTime, QWidget* parent)
     args[QStringLiteral("time")] = triggerTime;
     KAuth::Action action(QStringLiteral("org.kde.kalarm.rtcwake.settimer"));
     action.setHelperId(QStringLiteral("org.kde.kalarm.rtcwake"));
-    action.setParentWidget(parent);
+    parent->window()->winId();
+    action.setParentWindow(parent->window()->windowHandle());
     action.setArguments(args);
     KAuth::ExecuteJob* job = action.execute();
     if (!job->exec())
