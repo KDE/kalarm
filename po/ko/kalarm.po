@@ -768,7 +768,7 @@ msgstr "Akonadi"
 #, kde-format
 msgctxt "@option"
 msgid "File Resources"
-msgstr "파일 자원"
+msgstr "파일 리소스"
 
 #. i18n: ectx: label, entry (UseAkonadiIfAvailable), group (General)
 #: data/kalarmconfig.kcfg:75
@@ -787,8 +787,8 @@ msgid ""
 "address book lookup, and Akonadi resource migration on first run."
 msgstr ""
 "KAlarm의 Akonadi 플러그인을 활성화할지 설정합니다. Akonadi를 사용하면 생일 가"
-"져오기, 이메일 기능, 이메일 주소록 찾아보기, 첫 실행 시 Akonadi 자원 이전 등 "
-"기능을 사용할 수 있습니다."
+"져오기, 이메일 기능, 이메일 주소록 찾아보기, 첫 실행 시 Akonadi 리소스 이전 "
+"등 기능을 사용할 수 있습니다."
 
 #. i18n: ectx: label, entry (Base_TimeZone), group (General)
 #: data/kalarmconfig.kcfg:80
@@ -7301,7 +7301,7 @@ msgstr "알람 템플릿(&T)"
 #: resources/singlefileresourceconfigdialog.ui:133
 #, kde-format
 msgid "Select which alarm type this resource should contain."
-msgstr "이 자원에 포함될 알람 종류를 선택하십시오."
+msgstr "이 리소스에 포함될 알람 종류를 선택하십시오."
 
 #. i18n: ectx: property (text), widget (QLabel, alarmTypeLabel)
 #: resources/singlefileresourceconfigdialog.ui:142
