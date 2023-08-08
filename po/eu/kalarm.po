@@ -13,14 +13,14 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-08-04 00:47+0000\n"
-"PO-Revision-Date: 2023-08-06 13:06+0200\n"
+"PO-Revision-Date: 2023-08-07 19:08+0200\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
 "Language: eu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 23.04.0\n"
+"X-Generator: Lokalize 23.04.3\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #, kde-format
@@ -69,8 +69,8 @@ msgid ""
 "If a recurrence is configured, the start date/time will be adjusted to the "
 "first recurrence on or after the entered date/time."
 msgstr ""
-"Errepikapen bat konfiguratzen bada, hasteko data/ordua sartutako data/ordura "
-"edo ondorengo aurreneko errepikapenera doituko da."
+"Errepikatze bat konfiguratzen bada, hasteko data/ordua sartutako data/ordura "
+"edo ondorengo aurreneko errepikara doituko da."
 
 #: alarmtimewidget.cpp:71
 #, kde-format
@@ -598,7 +598,7 @@ msgstr "Behin eta berriz jotzeko audio-fitxategia"
 #: commandoptions.cpp:232
 #, kde-format
 msgid "Specify alarm recurrence using iCalendar syntax"
-msgstr "Zehaztu alarmaren errepikakortasuna iCalendar-ren sintaxia erabiliz"
+msgstr "Zehaztu alarma errepikatzea iCalendar-ren sintaxia erabiliz"
 
 #: commandoptions.cpp:236
 #, kde-format
@@ -609,8 +609,7 @@ msgstr "Azaldu oroigarria alarmaren aurretik edo ondoren"
 #, kde-format
 msgid "Display reminder once, before or after first alarm recurrence"
 msgstr ""
-"Azaldu oroigarria behin, alarmaren aurreneko errepikapenaren aurretik edo "
-"ondoren"
+"Azaldu oroigarria behin, alarmaren aurreneko errepika aurretik edo ondoren"
 
 #: commandoptions.cpp:244
 #, kde-format
@@ -1690,7 +1689,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label"
 msgid "Recurrence period"
-msgstr "Errepikakortasun aldia"
+msgstr "Errepikatze aldia"
 
 #. i18n: ectx: whatsthis, entry (DefaultRecurPeriod), group (Defaults)
 #: data/kalarmconfig.kcfg:368 prefdlg.cpp:1355
@@ -1698,7 +1697,7 @@ msgstr "Errepikakortasun aldia"
 msgctxt "@info:whatsthis"
 msgid "The default setting for the recurrence rule in the alarm edit dialog."
 msgstr ""
-"Alarma editatzeko elkarrizketa-koadroko errepikapen-arauaren ezarpen "
+"Alarma editatzeko elkarrizketa-koadroko errepikatze-arauaren ezarpen "
 "lehenetsia."
 
 #. i18n: ectx: label, entry (DefaultRecurPeriod), group (Defaults)
@@ -1706,7 +1705,7 @@ msgstr ""
 #, kde-format
 msgctxt "@option"
 msgid "No recurrence"
-msgstr "Errepikapenik ez"
+msgstr "Errepikatzerik ez"
 
 #. i18n: ectx: label, entry (DefaultRecurPeriod), group (Defaults)
 #: data/kalarmconfig.kcfg:371
@@ -1741,7 +1740,7 @@ msgid ""
 "occurrence of existing alarms is not re-evaluated when you change this "
 "setting."
 msgstr ""
-"Urteroko errepikapenerako, bisurteak ez direnetan, hautatu zein egunetan "
+"Urteroko errepikatzeetarako, bisurteak ez direnetan, hautatu zein egunetan "
 "gertatu behar den, otsailaren 29an gertatu beharreko alarmak. <i>Oharra</i>: "
 "Ezarpen hau aldatzen duzunean, dauden alarmetan programatutako hurrengo "
 "agerraldia ez da berriz ebaluatuko."
@@ -2030,8 +2029,7 @@ msgstr "Ezeztatu geroratzea"
 msgctxt "@info:whatsthis"
 msgid "Cancel the deferred alarm. This does not affect future recurrences."
 msgstr ""
-"Ezeztatu geroratutako alarma. Honek ez du etorkizuneko errepikapenetan "
-"eraginik."
+"Ezeztatu geroratutako alarma. Honek ez du eraginik etorkizuneko errepiketan."
 
 #: deferdlg.cpp:95
 #, kde-format
@@ -2046,7 +2044,7 @@ msgstr ""
 msgctxt "@info"
 msgid "Cannot defer past the alarm's next recurrence (currently %1)"
 msgstr ""
-"Ezin da geroratu alarmaren hurrengo errepikapenetik aitzina (une honetan %1)"
+"Ezin da geroratu alarmaren hurrengo errepikatik aitzina (une honetan %1)"
 
 #: deferdlg.cpp:103
 #, kde-format
@@ -2081,7 +2079,7 @@ msgstr "Egutegia <filename>%1</filename>(e)an gordetzea huts egin du"
 #, kde-format
 msgctxt "@title:tab"
 msgid "Recurrence - [%1]"
-msgstr "Errepikapena - [%1]"
+msgstr "Errepikatzea - [%1]"
 
 #: editdlg.cpp:81
 #, kde-format
@@ -2286,8 +2284,8 @@ msgid ""
 "The start date does not match the alarm's recurrence pattern, so it will be "
 "adjusted to the date of the next recurrence (%1)."
 msgstr ""
-"Hasierako data ez dator bat alarmaren errepikapen ereduarekin, beraz, "
-"hurrengo errepikapenaren datara egokituko da (%1)."
+"Hasierako data ez dator bat alarmaren errepikatze ereduarekin, beraz, "
+"hurrengo errepikaren datara egokituko da (%1)."
 
 #: editdlg.cpp:1046
 #, kde-format
@@ -2296,14 +2294,14 @@ msgid ""
 "The start date/time does not match the alarm's recurrence pattern, so it "
 "will be adjusted to the date/time of the next recurrence (%1)."
 msgstr ""
-"Hasierako data/ordua ez dator bat alarmaren errepikapen ereduarekin, beraz, "
-"hurrengo errepikapenaren data/ordura egokituko da (%1)."
+"Hasierako data/ordua ez dator bat alarmaren errepikatze ereduarekin, beraz, "
+"hurrengo errepikaren data/ordura egokituko da (%1)."
 
 #: editdlg.cpp:1068
 #, kde-format
 msgctxt "@info"
 msgid "Recurrence has already expired"
-msgstr "Errepikapenak dagoeneko iraungi dira"
+msgstr "Errepikatzea iraungi da dagoeneko"
 
 #: editdlg.cpp:1073
 #, kde-format
@@ -2312,43 +2310,34 @@ msgid "The alarm will never occur during working hours"
 msgstr "Alarma ez da sekula lanorduetan gertatuko"
 
 #: editdlg.cpp:1102
-#, fuzzy, kde-kuit-format
-#| msgid ""
-#| "Reminder period must be less than the recurrence interval, unless '%1' is "
-#| "checked."
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "Reminder period must be less than the recurrence interval, unless <interface>"
 "%1</interface> is checked."
 msgstr ""
-"Oroigarriaren aurrerapen tarteak errepikapenaren periodoa baina txikiagoa "
-"izan behar du, '%1' sakatzen ez bada."
+"Oroigarriaren aldia errepikatze bitartea baino txikiagoa izan behar da, "
+"<interface>%1</interface> markatuta dagoenean izan ezik."
 
 #: editdlg.cpp:1117
-#, fuzzy, kde-format
-#| msgid ""
-#| "Simple alarm repetition duration must be less than the recurrence "
-#| "interval minus any reminder period"
+#, kde-format
 msgctxt "@info"
 msgid ""
 "The duration of a repetition within the recurrence must be less than the "
 "recurrence interval minus any reminder period"
 msgstr ""
-"Alarma sinplearen errepikapenaren iraupenak errepikapenaren denbora-tartea "
-"ken oroigarri denbora-tartea baina txikiagoa izan behar du"
+"Errepikatze barruko errepikapen baten iraupena, errepikatze bitartea ken "
+"oroigarri aldiak baino txikiagoa izan behar du"
 
 #: editdlg.cpp:1124
-#, fuzzy, kde-format
-#| msgid ""
-#| "Simple alarm repetition period must be in units of days or weeks for a "
-#| "date-only alarm"
+#, kde-format
 msgctxt "@info"
 msgid ""
 "For a repetition within the recurrence, its period must be in units of days "
 "or weeks for a date-only alarm"
 msgstr ""
-"Data bakarrik duen alarma baten kasuan, alarma errepikapen sinplearen tartea "
-"egunetan edo asteetan izan behar du"
+"Data bakarrik duen alarma batek, errepikatze barruko errepikapen baten "
+"aldiaren unitatea egun edo asteetakoa izan behar du"
 
 #: editdlg.cpp:1155
 #, kde-format
@@ -2468,6 +2457,11 @@ msgid ""
 "a text or image file.</item><item><interface>%3</interface>: the alarm will "
 "display the output from a command.</item></list></para>"
 msgstr ""
+"<para>Aukeratu alarmak zer erakutsi behar duen:<list><item><interface>%1</"
+"interface>: alarman tekleatzen duzun testu mezua azalduko du.</"
+"item><item><interface>%2</interface>: alarmak testu- edo irudi-fitxategi "
+"baten edukia azalduko du.</item><item><interface>%3</interface>: alarmak "
+"komando baten irteera erakutsiko du.</item></list></para>"
 
 #: editdlgtypes.cpp:173
 #, kde-format
@@ -2504,27 +2498,24 @@ msgstr ""
 "den."
 
 #: editdlgtypes.cpp:265
-#, fuzzy, kde-format
-#| msgid ""
-#| "Check to additionally display a reminder in advance of the main alarm "
-#| "time(s)."
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "Check to additionally display a reminder in advance of or after the main "
 "alarm time(s)."
-msgstr "Hautatu alarma nagusiaren aurretik oroigarri bat bistaratzeko."
+msgstr ""
+"Markatu osagarri gisa, alarma nagusiaren ordu(ar)en aurretik edo ondoren "
+"oroigarri bat bistaratzeko."
 
 #: editdlgtypes.cpp:266
-#, fuzzy, kde-kuit-format
-#| msgid ""
-#| "Enter how long in advance of the main alarm to display a reminder alarm."
+#, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
 "<para>Enter how long in advance of or after the main alarm to display a "
 "reminder alarm.</para><para>%1</para>"
 msgstr ""
-"Sartu alarmaren oroigarria alarmaren aurretik zenbat denbora lehenenago "
-"bistaratuko den."
+"<para>Sartu alarma nagusia baino zenbat denbora aurretik edo ondoren azaldu "
+"behar den oroigarria alarma bat.</para><para>%1</para>"
 
 #: editdlgtypes.cpp:267
 #, kde-format
@@ -2536,13 +2527,10 @@ msgstr ""
 "Hautatu oroigarria alarma nagusia baino lehenago edo ondoren eragin behar den"
 
 #: editdlgtypes.cpp:277
-#, fuzzy, kde-format
-#| msgid ""
-#| "Check to be prompted for confirmation when you acknowledge the alarm."
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to be prompted for confirmation when you acknowledge the alarm."
-msgstr ""
-"Hautatu hau alarma bat aitortzen duzunean berrespen galdera bat agertzeko."
+msgstr "Markatu, alarma bat aitortzen duzunean berrespena eska dakizun."
 
 #: editdlgtypes.cpp:286
 #, kde-format
@@ -2702,17 +2690,15 @@ msgstr ""
 "du, idazteko baimenarekin."
 
 #: editdlgtypes.cpp:1067
-#, fuzzy, kde-kuit-format
-#| msgid ""
-#| "No 'From' email address is configured.\n"
-#| "Please set it in the KAlarm Preferences dialog."
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "<para>No terminal is selected for command alarms.</para><para>Please set it "
 "in the <application>KAlarm</application> Configuration dialog.</para>"
 msgstr ""
-"Ez da \"Nork\" e-posta helbiderik konfiguratu.\n"
-"Ezarri ezazu KAlarm-en Hobespenak elkarrizketa-koadroan."
+"<para>Ez da komando-alarmetarako terminalik aukeratu.</para><para>Mesedez, "
+"ezarri ezazu <application>KAlarm</application> konfiguratzeko elkarrizketa- "
+"koadroan.</para>"
 
 #: editdlgtypes.cpp:1087
 #, kde-kuit-format
@@ -3235,15 +3221,11 @@ msgid "Choose Export Calendar"
 msgstr "Hautatu esportatzeko egutegiak"
 
 #: functions.cpp:959
-#, fuzzy, kde-kuit-format
-#| msgid ""
-#| "Cannot open audio file:\n"
-#| "%1"
+#, kde-kuit-format
 msgctxt "@info"
 msgid "Error loading calendar to append to:<nl/><filename>%1</filename>"
 msgstr ""
-"Ezin da audio fitxategia ireki:\n"
-"%1"
+"Hartara eransteko egutegia zamatzeko errorea:<nl/><filename>%1</filename>"
 
 #: functions.cpp:998
 #, kde-kuit-format
@@ -3483,6 +3465,10 @@ msgid ""
 "<interface>View | Show Calendars</interface> to check or change calendar "
 "statuses."
 msgstr ""
+"Alarmak artxibatzeko konfiguratu dira, baina ezin da egin ez dagoelako "
+"gaitutako artxibatutako alarma egutegi idazgarririk.<nl/><nl/>Hori "
+"konpontzeko, erabili <interface>Ikuspegia | Erakutsi egutegiak</interface> "
+"egutegien egoerak markatu edo aldatzeko."
 
 #: kalarmapp.cpp:1526
 #, kde-kuit-format
@@ -3494,6 +3480,11 @@ msgid ""
 "calendar, and check <interface>Use as Default for Archived Alarms</"
 "interface>."
 msgstr ""
+"Alarmak artxibatzeko konfiguratu dira, baina ezin da egin ez delako "
+"artxibatutako alarma egutegi lehenetsirik ezarri.<nl/><nl/>Hori konpontzeko, "
+"erabili <interface>Ikuspegia | Erakutsi egutegiak</interface>, hautatu "
+"artxibatutako alarmen egutegi bat, eta markatu <interface>Erabili "
+"lehenetsitako gisa artxibatutako alarmetarako</interface>."
 
 #: kalarmapp.cpp:2499
 #, kde-format
@@ -3758,7 +3749,7 @@ msgstr "Jaiegunak salbu"
 #, kde-format
 msgctxt "@label"
 msgid "Next recurrence"
-msgstr "Hurrengo errepikapena"
+msgstr "Hurrengo errepika"
 
 #: kalarmcalendar/kaeventformatter.cpp:71
 #, kde-format
@@ -4136,19 +4127,17 @@ msgstr ""
 "nortasunak ez dauka e-posta helbiderik."
 
 #: kamail.cpp:119
-#, fuzzy, kde-kuit-format
-#| msgid ""
-#| "No 'From' email address is configured (no default KMail identity found)\n"
-#| "Please set it in KMail or in the KAlarm Preferences dialog."
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "<para>No 'From' email address is configured (no default email identity "
 "found)</para><para>Please set it in <application>KMail</application> or in "
 "the <application>KAlarm</application> Configuration dialog.</para>"
 msgstr ""
-"Ez da \"Nork\" e-posta helbiderik konfiguratu (ez da KMail-en identitate "
-"lehenetsirik aurkitu)\n"
-"Ezarri ezazu KMail-en edo KAlarm-en Hobespenak elkarrizketa-koadroan."
+"<para>Ez da \"Nork\" e-posta helbiderik konfiguratu (ez da lehenetsitako e-"
+"posta nortasunik aurkitu)</para><para>Mesedez, ezar ezazu "
+"<application>KMail</application>en edo <application>KAlarm</application> "
+"konfiguratzeko elkarrizketa-koadroan.</para>"
 
 #: kamail.cpp:123
 #, kde-kuit-format
@@ -5742,7 +5731,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Recurrence:"
-msgstr "Errepikapenak:"
+msgstr "Errepikatzea:"
 
 #: prefdlg.cpp:1375
 #, kde-format
@@ -5770,9 +5759,9 @@ msgid ""
 "29th should occur in non-leap years.<note>The next scheduled occurrence of "
 "existing alarms is not re-evaluated when you change this setting.</note>"
 msgstr ""
-"Urteroko errepikapenerako, hautatu zein datatan, egotekotan, gertatu behar "
+"Urteroko errepikatzeetarako, hautatu zein datatan, egotekotan, gertatu behar "
 "diren bisurteak ez diren urteetan otsailaren 29an eragin beharreko alarmak."
-"<note>Aurretik dauden alarmetan, programatutako hurrengo errepikapena ez da "
+"<note>Aurretik dauden alarmetan, programatutako hurrengo errepikatzea ez da "
 "berriz kalkulatzen ezarpen hau aldatzen duzunean.</note>"
 
 #: prefdlg.cpp:1394
@@ -6058,6 +6047,11 @@ msgid ""
 "message windows in the center of the screen, but disable buttons for a short "
 "time after the window is displayed.</item></list></para>"
 msgstr ""
+"<para>Aukeratu alarmei ustekabean aitortza emateko aukera nola murriztu:"
+"<list><item>Kokatu alarma mezuaren leihoa sagu-kurtsorearen kokalekutik ahal "
+"den urrutien, edo </item><item>Kokatu alarma mezuaren leihoa pantailaren "
+"erdian, baina ezgaitu botoiak denbora labur batez, leihoa azaldu ondoren.</"
+"item></list></para>"
 
 #: prefdlg.cpp:1917
 #, kde-format
@@ -6113,7 +6107,7 @@ msgstr ""
 #, kde-format
 msgctxt "@item:inlistbox Recurrence type"
 msgid "No Recurrence"
-msgstr "Errepikapenik ez"
+msgstr "Errepikatzerik ez"
 
 #: recurrenceedit.cpp:57
 #, kde-format
@@ -6155,13 +6149,13 @@ msgstr "Urtero"
 #, kde-format
 msgctxt "@title:group"
 msgid "Recurrence Rule"
-msgstr "Periodikotasun araua"
+msgstr "Errepikatze araua"
 
 #: recurrenceedit.cpp:98
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Do not repeat the alarm"
-msgstr "Ez errepikatu alarma"
+msgstr "Alarma ez errepikatu"
 
 #: recurrenceedit.cpp:105
 #, kde-kuit-format
@@ -6180,7 +6174,7 @@ msgstr ""
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Repeat the alarm at hourly/minutely intervals"
-msgstr "Errepikatu alarma orduro/minuturo"
+msgstr "Errepikatu alarma orduero/minutuero"
 
 #: recurrenceedit.cpp:118
 #, kde-format
@@ -6213,14 +6207,14 @@ msgid ""
 "Set up a repetition within the recurrence, to trigger the alarm multiple "
 "times each time the recurrence is due."
 msgstr ""
-"Alarma sinplearen errepikapenaren iraupenak errepikapenaren denbora-tartea "
-"ken oroigarri denbora-tartea baino txikiagoa izan behar du"
+"Ezarri errepikapen bat errepikatzearen barruan, alarma epemuga betetzen den "
+"bakoitzean alarma behin baina gehiagotan eragin dadin."
 
 #: recurrenceedit.cpp:193
 #, kde-format
 msgctxt "@title:group"
 msgid "Recurrence End"
-msgstr "Periodikotasunaren amaiera"
+msgstr "Errepikatze amaiera"
 
 #: recurrenceedit.cpp:200
 #, kde-format
@@ -6273,8 +6267,8 @@ msgid ""
 "which will occur regardless after the last main recurrence.</note></para>"
 msgstr ""
 "<para>Alarma errepikatu zehaztutako data/ordura arte.</para><para><note>Hori "
-"errepikapen nagusiari bakarrik aplikatzen zaio. Ez du mugatzen lehenengo "
-"errepikapenaren ondoren gertatzen den beste azpi-errepikapenik.</note></para>"
+"errepika nagusiari bakarrik aplikatzen zaio. Ez du mugatzen azken errepika "
+"ondoren gertatuko den azpi-errepikapenik.</note></para>"
 
 #: recurrenceedit.cpp:241
 #, kde-format
@@ -6319,8 +6313,8 @@ msgstr "Salbuespenak"
 msgctxt "@info:whatsthis"
 msgid "The list of exceptions, i.e. dates/times excluded from the recurrence"
 msgstr ""
-"Salbuespenen zerrenda, hau da, periodikotasunetik kanpo geldituko diren "
-"datak/orduak"
+"Salbuespenen zerrenda, hau da, errepikatzetik kanpo geldituko diren datak/"
+"orduak"
 
 #: recurrenceedit.cpp:300
 #, kde-format
@@ -6428,7 +6422,7 @@ msgstr "Data ezin da hasierako data aurrekoa izan"
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Recur e&very"
-msgstr "&Periodoa"
+msgstr "Errepika hain&bestero"
 
 #: recurrenceedit.cpp:1131
 #, kde-format
@@ -6464,7 +6458,7 @@ msgstr "egun"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the number of days between repetitions of the alarm"
-msgstr "Sartu alarmen errepikapenen arteko egun kopurua"
+msgstr "Sartu alarma errepikapenen arteko egun kopurua"
 
 #: recurrenceedit.cpp:1266
 #, kde-format
@@ -6482,13 +6476,13 @@ msgstr "aste"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the number of weeks between repetitions of the alarm"
-msgstr "Sartu alarmen errepikapenen arteko aste kopurua"
+msgstr "Sartu alarma errepikapenen arteko aste kopurua"
 
 #: recurrenceedit.cpp:1279
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select the days of the week on which to repeat the alarm"
-msgstr "Hautatu alarma errepikatuko den egun kopurua"
+msgstr "Hautatu alarma errepikatzeko asteko egunak"
 
 #: recurrenceedit.cpp:1301
 #, kde-format
@@ -6500,7 +6494,7 @@ msgstr "Egun honeta&n"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Repeat the alarm on the selected day of the month"
-msgstr "Errepikatu alarma hautatutako hilabeteko egunean"
+msgstr "Errepikatu alarma hilaren hautatutako egunean"
 
 #: recurrenceedit.cpp:1314
 #, kde-format
@@ -6512,26 +6506,26 @@ msgstr "Azken"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select the day of the month on which to repeat the alarm"
-msgstr "Hautatu alarmaren errepikapenen hilabeteko eguna"
+msgstr "Hautatu alarma errepikatzeko hileko eguna"
 
 #: recurrenceedit.cpp:1323
 #, kde-format
 msgctxt "@option:radio On the 1st Tuesday"
 msgid "On t&he"
-msgstr "As&teko eguna"
+msgstr "Honet&an"
 
 #: recurrenceedit.cpp:1327
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "Repeat the alarm on one day of the week, in the selected week of the month"
-msgstr "Errepikatu alarma astean behin, hautatutako hilabetearen astean"
+msgstr "Errepikatu alarma asteko egun batean, hilaren hautatutako astean"
 
 #: recurrenceedit.cpp:1332
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "1st"
-msgstr "1.go"
+msgstr "1."
 
 #: recurrenceedit.cpp:1333
 #, kde-format
@@ -6567,7 +6561,7 @@ msgstr "Azkena"
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "2nd Last"
-msgstr "Azken-aurrena"
+msgstr "Azken-aurrekoa"
 
 #: recurrenceedit.cpp:1339
 #, kde-format
@@ -6591,13 +6585,13 @@ msgstr "Azken-bosgarrena"
 #, kde-format
 msgctxt "@item:inlistbox Every (Monday...) in month"
 msgid "Every"
-msgstr "Hainbatero"
+msgstr "Hainbestero"
 
 #: recurrenceedit.cpp:1347
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select the week of the month in which to repeat the alarm"
-msgstr "Hautatu alarma errepikatzeko hilabeteko astea"
+msgstr "Hautatu alarma errepikatzeko hilaren astea"
 
 #: recurrenceedit.cpp:1361
 #, kde-format
@@ -6615,7 +6609,7 @@ msgstr "hilabete"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the number of months between repetitions of the alarm"
-msgstr "Sartu alarmen errepikapenen arteko hilabete kopurua"
+msgstr "Sartu alarma errepikapenen arteko hilabete kopurua"
 
 #: recurrenceedit.cpp:1495
 #, kde-format
@@ -6627,7 +6621,7 @@ msgstr "urte"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the number of years between repetitions of the alarm"
-msgstr "Sartu alarmen errepikapenen arteko urte kopurua"
+msgstr "Sartu alarma errepikapenen arteko urte kopurua"
 
 #: recurrenceedit.cpp:1503
 #, kde-format
@@ -6639,13 +6633,13 @@ msgstr "Hilabete:"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select the months of the year in which to repeat the alarm"
-msgstr "Hautatu alarmen errepikapenen urteko hilabeteak"
+msgstr "Hautatu alarma errepikatzeko urtearen hilabeteak"
 
 #: recurrenceedit.cpp:1530
 #, kde-format
 msgctxt "@label:listbox"
 msgid "February 2&9th alarm in non-leap years:"
-msgstr "Otsailak 2&9-ko alarma urte ez-bisustutan:"
+msgstr "Otsailak 2&9ko alarma urte ez-bisusteetan:"
 
 #: recurrenceedit.cpp:1534
 #, kde-format
@@ -6672,8 +6666,8 @@ msgid ""
 "Select which date, if any, the February 29th alarm should trigger in non-"
 "leap years"
 msgstr ""
-"Hautatu zein datatan, hala nahi baduzu, agertuko den Otsailak 29-ko data "
-"duen alarma, urte ez-bisustutan"
+"Hautatu zein datatan, egotekotan, eragin behar den otsailaren 29ko alarma "
+"bisurteak ez diren urteetan"
 
 #: recurrenceedit.cpp:1624
 #, kde-format
@@ -6685,7 +6679,7 @@ msgstr "Ez da hilabeterik hautatu"
 #, kde-format
 msgctxt "@option:check"
 msgid "Reminder for first recurrence only"
-msgstr "Oroigarria lehenengo errepikapenean bakarrik"
+msgstr "Oroigarria lehenengo errepikan bakarrik"
 
 #: reminder.cpp:31
 #, kde-format
@@ -6731,8 +6725,8 @@ msgid ""
 "Instead of the alarm triggering just once at each recurrence, checking this "
 "option makes the alarm trigger multiple times at each recurrence."
 msgstr ""
-"Errepikapen bakoitzean alarma behin eragin ordez, aukera hau markatuz gero, "
-"errepikapen bakoitzean alarma hainbat aldiz eragingo da."
+"Errepika bakoitzean alarma behin bakarrik eragin ordez, aukera hau "
+"markatuta, errepika bakoitzean alarma hainbat aldiz eragingo da."
 
 #: repetitionbutton.cpp:142
 #, kde-format
@@ -6753,8 +6747,8 @@ msgid ""
 "Check to specify the number of times the alarm should repeat after each "
 "recurrence"
 msgstr ""
-"Markatu, errepikapen bakoitzaren ondoren alarma zenbat aldiz errepikatu "
-"behar den zehazteko"
+"Markatu, errepika bakoitzaren ondoren alarma zenbat aldiz errepikatu behar "
+"den zehazteko"
 
 #: repetitionbutton.cpp:165
 #, kde-format
