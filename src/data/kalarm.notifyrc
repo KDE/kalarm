@@ -105,7 +105,7 @@ Name[uk]=Повідомлення нагадування з гудком
 Name[x-test]=xxAlarm message with beepxx
 Name[zh_CN]=闹钟消息 (带声音提示)
 Action=Popup|Sound
-Sound=Oxygen-Sys-App-Message.ogg
+Sound=bell-window-system
 
 [Event/MessageSpeak]
 Name=Spoken alarm message
@@ -178,4 +178,4 @@ Name[uk]=Повідомлення помилки нагадування
 Name[x-test]=xxAlarm error messagexx
 Name[zh_CN]=闹钟错误消息
 Action=Popup|Sound
-Sound=Oxygen-Sys-App-Error.ogg
+Sound=dialog-error
