@@ -320,6 +320,7 @@ target_link_libraries(kalarm_bin
     KF6::XmlGui
     KF6::KIOFileWidgets
     KF6::Crash
+    KF6::StatusNotifierItem
     Phonon::phonon4qt6
     KF6::CalendarCore
     KPim6::CalendarUtils

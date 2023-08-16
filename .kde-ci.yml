@@ -28,6 +28,7 @@ Dependencies:
     'frameworks/kwidgetsaddons': '@latest-kf6'
     'frameworks/kwindowsystem': '@latest-kf6'
     'frameworks/kxmlgui': '@latest-kf6'
+    'frameworks/kstatusnotifieritem': '@latest-kf6'
     'libraries/phonon': '@latest-kf6'
     'pim/akonadi' : '@latest-kf6'
     'pim/akonadi-contacts' : '@latest-kf6'
