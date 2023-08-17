@@ -53,6 +53,7 @@ using namespace KCalendarCore;
 #include <KIO/StoredTransferJob>
 #include <KFileCustomDialog>
 #include <KWindowInfo>
+#include <KWindowSystem>
 #if ENABLE_X11
 #include <KX11Extras>
 #endif
@@ -176,7 +177,7 @@ MainWindow* displayMainWindowSelected(const QString& eventId)
         win->setWindowState(win->windowState() & ~Qt::WindowMinimized);
         win->show();
         win->raise();
-        win->activateWindow();
+        KWindowSystem::activateWindow(win->windowHandle());
     }
     if (win)
         win->selectEvent(eventId);

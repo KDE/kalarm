@@ -16,6 +16,7 @@
 
 #include <KAboutData>
 #include <KLocalizedString>
+#include <KWindowSystem>
 #ifdef RESTORE_NOTIFICATIONS
 #include <KConfigGroup>
 #include <KConfigGui>
@@ -155,6 +156,7 @@ MessageNotification::MessageNotification(const KAEvent& event, const KAAlarm& al
         MessageNotification::setUpDisplay();    // avoid calling virtual method from constructor
 
     connect(this, &KNotification::activated, this, &MessageNotification::buttonActivated);
+    connect(this, &KNotification::defaultActivated, this, &MessageNotification::slotDefaultActivated);
     connect(this, &KNotification::closed, this, &MessageNotification::slotClosed);
     connect(mHelper, &MessageDisplayHelper::textsChanged, this, &MessageNotification::textsChanged);
     connect(mHelper, &MessageDisplayHelper::commandExited, this, &MessageNotification::commandCompleted);
@@ -177,6 +179,7 @@ MessageNotification::MessageNotification(const KAEvent& event, const DateTime& a
     MessageNotification::setUpDisplay();    // avoid calling virtual method from constructor
 
     connect(this, &KNotification::activated, this, &MessageNotification::buttonActivated);
+    connect(this, &KNotification::defaultActivated, this, &MessageNotification::slotDefaultActivated);
     connect(this, &KNotification::closed, this, &MessageNotification::slotClosed);
     connect(mHelper, &MessageDisplayHelper::textsChanged, this, &MessageNotification::textsChanged);
 
@@ -569,11 +572,7 @@ void MessageNotification::saveProperties(KConfigGroup& config)
 void MessageNotification::buttonActivated(unsigned int index)
 {
     int i = static_cast<int>(index);
-    if (i == 0)
-    {
-        displayMainWindow();
-    }
-    else if (i == mEditButtonIndex + 1)
+    if (i == mEditButtonIndex + 1)
     {
         if (mHelper->createEdit())
             mHelper->executeEdit();
@@ -584,6 +583,13 @@ void MessageNotification::buttonActivated(unsigned int index)
         executeDeferDlg(data);
     }
 }
+
+void MessageNotification::slotDefaultActivated()
+{
+    KWindowSystem::setCurrentXdgActivationToken(xdgActivationToken());
+    displayMainWindow();
+}
+
 
 /******************************************************************************
 * Called when the notification has closed, either by user action of by timeout.

@@ -52,6 +52,7 @@ protected:
 
 private Q_SLOTS:
     void buttonActivated(unsigned int index);
+    void slotDefaultActivated();
     void commandCompleted(bool success);
     void slotClosed();
 
