@@ -37,9 +37,6 @@ const QString BeepId    = QStringLiteral("MessageBeep");
 const QString SpeakId   = QStringLiteral("MessageSpeak");
 const QString ErrorId   = QStringLiteral("MessageError");
 
-// Flags for the notification
-const KNotification::NotificationFlags NFLAGS = KNotification::RaiseWidgetOnActivation;
-
 const QString NL = QStringLiteral("\n");
 const QString SP = QStringLiteral(" ");
 
@@ -149,7 +146,7 @@ void MessageNotification::sessionRestore()
 * displayed.
 */
 MessageNotification::MessageNotification(const KAEvent& event, const KAAlarm& alarm, int flags)
-    : KNotification(getNotifyEventId(event), NFLAGS)
+    : KNotification(getNotifyEventId(event))
     , MessageDisplay(event, alarm, flags)
 {
     qCDebug(KALARM_LOG) << "MessageNotification():" << mEventId();
@@ -173,7 +170,7 @@ MessageNotification::MessageNotification(const KAEvent& event, const KAAlarm& al
 */
 MessageNotification::MessageNotification(const KAEvent& event, const DateTime& alarmDateTime,
                        const QStringList& errmsgs, const QString& dontShowAgain)
-    : KNotification(ErrorId, NFLAGS)
+    : KNotification(ErrorId)
     , MessageDisplay(event, alarmDateTime, errmsgs, dontShowAgain)
 {
     qCDebug(KALARM_LOG) << "MessageNotification(errmsg)";
@@ -194,7 +191,7 @@ MessageNotification::MessageNotification(const KAEvent& event, const DateTime& a
 * Ownership of the helper is taken by the new instance.
 */
 MessageNotification::MessageNotification(const QString& eventId, MessageDisplayHelper* helper)
-    : KNotification(eventId, NFLAGS)
+    : KNotification(eventId)
     , MessageDisplay(helper)
 {
     qCDebug(KALARM_LOG) << "MessageNotification(helper):" << mEventId();
