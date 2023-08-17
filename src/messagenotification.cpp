@@ -151,7 +151,6 @@ MessageNotification::MessageNotification(const KAEvent& event, const KAAlarm& al
 {
     qCDebug(KALARM_LOG) << "MessageNotification():" << mEventId();
     MNSessionManager::create();
-    setWidget(MainWindow::mainMainWindow());
     if (!(flags & NoInitView))
         MessageNotification::setUpDisplay();    // avoid calling virtual method from constructor
 
@@ -175,7 +174,6 @@ MessageNotification::MessageNotification(const KAEvent& event, const DateTime& a
 {
     qCDebug(KALARM_LOG) << "MessageNotification(errmsg)";
     MNSessionManager::create();
-    setWidget(MainWindow::mainMainWindow());
     MessageNotification::setUpDisplay();    // avoid calling virtual method from constructor
 
     connect(this, &KNotification::activated, this, &MessageNotification::buttonActivated);
@@ -196,7 +194,6 @@ MessageNotification::MessageNotification(const QString& eventId, MessageDisplayH
 {
     qCDebug(KALARM_LOG) << "MessageNotification(helper):" << mEventId();
     MNSessionManager::create();
-    setWidget(MainWindow::mainMainWindow());
 
     connect(this, &KNotification::activated, this, &MessageNotification::buttonActivated);
     connect(this, &KNotification::closed, this, &MessageNotification::slotClosed);
@@ -331,7 +328,7 @@ int MessageNotification::notificationCount()
 */
 QWidget* MessageNotification::displayParent()
 {
-    return widget();
+    return MainWindow::mainMainWindow();
 }
 
 void MessageNotification::closeDisplay()
