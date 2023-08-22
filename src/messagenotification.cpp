@@ -155,8 +155,6 @@ MessageNotification::MessageNotification(const KAEvent& event, const KAAlarm& al
     if (!(flags & NoInitView))
         MessageNotification::setUpDisplay();    // avoid calling virtual method from constructor
 
-    connect(this, &KNotification::activated, this, &MessageNotification::buttonActivated);
-    connect(this, &KNotification::defaultActivated, this, &MessageNotification::slotDefaultActivated);
     connect(this, &KNotification::closed, this, &MessageNotification::slotClosed);
     connect(mHelper, &MessageDisplayHelper::textsChanged, this, &MessageNotification::textsChanged);
     connect(mHelper, &MessageDisplayHelper::commandExited, this, &MessageNotification::commandCompleted);
@@ -178,8 +176,6 @@ MessageNotification::MessageNotification(const KAEvent& event, const DateTime& a
     MNSessionManager::create();
     MessageNotification::setUpDisplay();    // avoid calling virtual method from constructor
 
-    connect(this, &KNotification::activated, this, &MessageNotification::buttonActivated);
-    connect(this, &KNotification::defaultActivated, this, &MessageNotification::slotDefaultActivated);
     connect(this, &KNotification::closed, this, &MessageNotification::slotClosed);
     connect(mHelper, &MessageDisplayHelper::textsChanged, this, &MessageNotification::textsChanged);
 
@@ -198,7 +194,6 @@ MessageNotification::MessageNotification(const QString& eventId, MessageDisplayH
     qCDebug(KALARM_LOG) << "MessageNotification(helper):" << mEventId();
     MNSessionManager::create();
 
-    connect(this, &KNotification::activated, this, &MessageNotification::buttonActivated);
     connect(this, &KNotification::closed, this, &MessageNotification::slotClosed);
     connect(mHelper, &MessageDisplayHelper::textsChanged, this, &MessageNotification::textsChanged);
     connect(mHelper, &MessageDisplayHelper::commandExited, this, &MessageNotification::commandCompleted);
@@ -518,21 +513,26 @@ void MessageNotification::setNotificationText()
 */
 void MessageNotification::setNotificationButtons()
 {
-    mEditButtonIndex = -1;
-    mDeferButtonIndex = -1;
-    QStringList buttons;
     if (mEnableEdit)
     {
-        mEditButtonIndex = 0;
-        buttons += i18nc("@action:button", "Edit");
+        auto editAction = addAction(i18nc("@action:button", "Edit"));
+        connect(editAction, &KNotificationAction::activated, this, [this] {
+            if (mHelper->createEdit())
+                mHelper->executeEdit();
+        });
     }
+
     if (mEnableDefer)
     {
-        mDeferButtonIndex = buttons.count();
-        buttons += i18nc("@action:button", "Defer");
+        auto deferAction = addAction(i18nc("@action:button", "Defer"));
+        connect(deferAction, &KNotificationAction::activated, this, [this] {
+            DeferDlgData* data = createDeferDlg(this, true);
+            executeDeferDlg(data);
+        });
     }
-    setActions(buttons);
-    setDefaultAction(KAboutData::applicationData().displayName());
+
+    auto defaultAction = addDefaultAction(KAboutData::applicationData().displayName());
+    connect(defaultAction, &KNotificationAction::activated, this, &MessageNotification::slotDefaultActivated);
 }
 
 bool MessageNotification::isDeferButtonEnabled() const
@@ -566,30 +566,14 @@ void MessageNotification::saveProperties(KConfigGroup& config)
 }
 
 /******************************************************************************
-* Called when a button in the notification has been pressed.
-* Button indexes start at 1.
+* Called when the default action in the notification has been pressed, to show
+* the main window.
 */
-void MessageNotification::buttonActivated(unsigned int index)
-{
-    int i = static_cast<int>(index);
-    if (i == mEditButtonIndex + 1)
-    {
-        if (mHelper->createEdit())
-            mHelper->executeEdit();
-    }
-    else if (i == mDeferButtonIndex + 1)
-    {
-        DeferDlgData* data = createDeferDlg(this, true);
-        executeDeferDlg(data);
-    }
-}
-
 void MessageNotification::slotDefaultActivated()
 {
     KWindowSystem::setCurrentXdgActivationToken(xdgActivationToken());
     displayMainWindow();
 }
-
 
 /******************************************************************************
 * Called when the notification has closed, either by user action of by timeout.

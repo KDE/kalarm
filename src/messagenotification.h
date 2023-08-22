@@ -51,7 +51,6 @@ protected:
     void saveProperties(KConfigGroup&);
 
 private Q_SLOTS:
-    void buttonActivated(unsigned int index);
     void slotDefaultActivated();
     void commandCompleted(bool success);
     void slotClosed();
@@ -67,8 +66,6 @@ private:
     QString             mTimeText;                // trigger time text
     QString             mMessageText;             // alarm message text
     QString             mRemainingText;           // remaining time text
-    int                 mEditButtonIndex {-1};    // edit button's action index
-    int                 mDeferButtonIndex {-1};   // defer button's action index
     bool                mEnableDefer {false};     // whether to show a Defer button
     bool                mEnableEdit {false};      // whether to show an Edit button
     bool                mInitialised {false};     // setUpDisplay() has been called to create the window's widgets
