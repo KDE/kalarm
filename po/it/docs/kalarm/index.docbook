@@ -128,7 +128,7 @@
 <!-- Don't change format of date and version of the documentation -->
 
 <date
->2023-6-27</date>
+>2023-7-13</date>
 <releaseinfo
 >3.6.0 (KDE Gear 23.08)</releaseinfo>
 
@@ -369,7 +369,7 @@
 > <guimenuitem
 >Mostra il selettore delle date</guimenuitem
 > </menuchoice
->. Seleziona una data facendo clic su di essa nel selettore di data, o deselezionala facendovi nuovamente clic. Il selettore di data mostra un singolo mese. Per mostrare un mese diverso usa i controlli freccia nel selettore stesso.</para>
+>. Seleziona una data facendo clic su di essa nel selettore di data, o deselezionala facendovi nuovamente clic. Il selettore di data mostra un singolo mese. Per mostrare un mese diverso usa i controlli freccia nel selettore stesso, o la rotellina del mouse.</para>
 
 </sect2>
 
