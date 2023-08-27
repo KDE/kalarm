@@ -52,9 +52,7 @@ private:
     ResourceListModel* mModel;
     QListView*         mResourceList {nullptr};
     QDialogButtonBox*  mButtonBox {nullptr};
-    ResourceId         mDefaultId {-1};
     CalEvent::Types    mAlarmTypes {CalEvent::EMPTY};
-    bool               mWritable {false};
 };
 
 // vim: et sw=4:

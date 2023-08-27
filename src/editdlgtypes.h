@@ -110,7 +110,6 @@ private:
     // Initial state of all controls
     int                 mSavedType;             // mTypeCombo index
     Preferences::SoundType mSavedSoundType;     // mSoundPicker sound type
-    bool                mSavedSound;            // mSoundPicker sound status
     int                 mSavedRepeatPause;      // mSoundPicker repeat pause
     QUrl                mSavedSoundFile;        // mSoundPicker sound file
     float               mSavedSoundVolume;      // mSoundPicker volume
