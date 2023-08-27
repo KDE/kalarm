@@ -1,5 +1,8 @@
 KAlarm Change Log
 
+=== Version 3.6.1 (KDE Gear 23.08.1) --- 28 August 2023 ===
+* Don't warn about not providing high accuracy alarms if alarm >10 minutes from now [KDE Bug 473792]
+
 === Version 3.6.0 (KDE Gear 23.08) --- 31 July 2023 ===
 * Add a 'show today' control in the date picker [KDE Bug 470451]
 * Improve Defer dialogue, provide dropdown for common delay intervals [KDE Bug 470451]
