@@ -38,7 +38,10 @@ public:
     };
     AlarmTimeWidget(const QString& groupBoxTitle, Mode, QWidget* parent = nullptr);
     explicit AlarmTimeWidget(Mode, QWidget* parent = nullptr);
-    KADateTime        getDateTime(int* minsFromNow = nullptr, bool checkExpired = true, bool showErrorMessage = true, QWidget** errorWidget = nullptr) const;
+    KADateTime        getDateTime(bool checkExpired = true, bool showErrorMessage = true, QWidget** errorWidget = nullptr) const
+                      { return getDateTime(nullptr, checkExpired, showErrorMessage, errorWidget); }
+    KADateTime        getDateTime(int* minsFromNow) const
+                      { return getDateTime(minsFromNow, true, true, nullptr); }
     void              setDateTime(const DateTime&);
     void              setMinDateTimeIsCurrent();
     void              setMinDateTime(const KADateTime& = KADateTime());
@@ -78,6 +81,7 @@ private Q_SLOTS:
 
 private:
     void              init(Mode, const QString& groupBoxTitle = QString());
+    KADateTime        getDateTime(int* minsFromNow, bool checkExpired, bool showErrorMessage, QWidget** errorWidget) const;
     void              setAnyTime();
     void              setMaxDelayTime(const KADateTime& now);
     void              setMaxMinTimeIf(const KADateTime& now);
