@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-04 00:47+0000\n"
+"POT-Creation-Date: 2023-08-28 00:48+0000\n"
 "PO-Revision-Date: 2023-06-29 13:59+0200\n"
 "Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
@@ -2209,7 +2209,7 @@ msgctxt "@info"
 msgid "Template name is already in use"
 msgstr "Název šablony je již používán"
 
-#: editdlg.cpp:1010
+#: editdlg.cpp:1009
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2218,7 +2218,7 @@ msgid ""
 "para>"
 msgstr ""
 
-#: editdlg.cpp:1042
+#: editdlg.cpp:1041
 #, kde-format
 msgctxt "@info The parameter is a date value"
 msgid ""
@@ -2228,7 +2228,7 @@ msgstr ""
 "Datum spuštění neodpovídá vzorci pro opakování upomínky, takže bude "
 "nastaveno na datum následujícího opakování (%1)."
 
-#: editdlg.cpp:1046
+#: editdlg.cpp:1045
 #, kde-format
 msgctxt "@info The parameter is a date/time value"
 msgid ""
@@ -2238,19 +2238,19 @@ msgstr ""
 "Datum / čas spuštění neodpovídá vzorci pro opakování upomínky, takže bude "
 "nastaveno na datum / čas následujícího opakování (%1)."
 
-#: editdlg.cpp:1068
+#: editdlg.cpp:1067
 #, kde-format
 msgctxt "@info"
 msgid "Recurrence has already expired"
 msgstr "Čas opakování již uplynul"
 
-#: editdlg.cpp:1073
+#: editdlg.cpp:1072
 #, kde-format
 msgctxt "@info"
 msgid "The alarm will never occur during working hours"
 msgstr "Upomínka nebude kvůli pracovní době nikdy zobrazena"
 
-#: editdlg.cpp:1102
+#: editdlg.cpp:1101
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2260,7 +2260,7 @@ msgstr ""
 "Perioda připomenutí musí být menší než interval opakování vyjma situace, kdy "
 "je označeno <interface>%1</interface>."
 
-#: editdlg.cpp:1117
+#: editdlg.cpp:1116
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -2270,7 +2270,7 @@ msgstr ""
 "Délka vnořeného opakování musí být menší než interval hlavního opakování "
 "mínus perioda připomenutí"
 
-#: editdlg.cpp:1124
+#: editdlg.cpp:1123
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -2280,31 +2280,31 @@ msgstr ""
 "Perioda vnořeného opakování pro upomínky s datem musí být zadána v "
 "jednotkách dnů nebo týdnů"
 
-#: editdlg.cpp:1155
+#: editdlg.cpp:1154
 #, kde-format
 msgctxt "@info"
 msgid "You must select a calendar to save the alarm in"
 msgstr "Musíte zvolit kalendář do kterého bude upomínka uložena"
 
-#: editdlg.cpp:1236
+#: editdlg.cpp:1235
 #, kde-format
 msgctxt "@action:Button"
 msgid "Fewer Options <<"
 msgstr "Méně možností <<"
 
-#: editdlg.cpp:1237
+#: editdlg.cpp:1236
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show fewer options"
 msgstr "Zobrazit méně možností"
 
-#: editdlg.cpp:1242
+#: editdlg.cpp:1241
 #, kde-format
 msgctxt "@action:button"
 msgid "More Options >>"
 msgstr "Více možností >>"
 
-#: editdlg.cpp:1243
+#: editdlg.cpp:1242
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show more options"

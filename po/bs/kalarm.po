@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-04 00:47+0000\n"
+"POT-Creation-Date: 2023-08-28 00:48+0000\n"
 "PO-Revision-Date: 2015-01-08 09:03+0100\n"
 "Last-Translator: Samir Ribic <samir.ribic@etf.unsa.ba>\n"
 "Language-Team: bosanski <bs@li.org>\n"
@@ -2271,7 +2271,7 @@ msgctxt "@info"
 msgid "Template name is already in use"
 msgstr "Ime šablona se već koristi"
 
-#: editdlg.cpp:1010
+#: editdlg.cpp:1009
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2280,7 +2280,7 @@ msgid ""
 "para>"
 msgstr ""
 
-#: editdlg.cpp:1042
+#: editdlg.cpp:1041
 #, kde-format
 msgctxt "@info The parameter is a date value"
 msgid ""
@@ -2290,7 +2290,7 @@ msgstr ""
 "Početni datum se ne slaže sa  uzorkom ponavljanja alarma, tako da će biti "
 "prilagođen na datum sljedećeg ponavljanja (%1)."
 
-#: editdlg.cpp:1046
+#: editdlg.cpp:1045
 #, kde-format
 msgctxt "@info The parameter is a date/time value"
 msgid ""
@@ -2300,19 +2300,19 @@ msgstr ""
 "Početni datum/vrijeme se ne slažu sa  uzorkom ponavljanja alarma, tako da će "
 "biti prilagođeni na datum/vrijeme sljedećeg ponavljanja (%1)."
 
-#: editdlg.cpp:1068
+#: editdlg.cpp:1067
 #, kde-format
 msgctxt "@info"
 msgid "Recurrence has already expired"
 msgstr "Vrijeme alarma je već prošlo"
 
-#: editdlg.cpp:1073
+#: editdlg.cpp:1072
 #, kde-format
 msgctxt "@info"
 msgid "The alarm will never occur during working hours"
 msgstr "Alarm se nikad neće pojaviti tokom radnih sati"
 
-#: editdlg.cpp:1102
+#: editdlg.cpp:1101
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2322,7 +2322,7 @@ msgstr ""
 "Period podsjetnika mora biti manji od intervala ponavljanja, osim ako "
 "<interface>%1</interface> je označeno."
 
-#: editdlg.cpp:1117
+#: editdlg.cpp:1116
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -2332,7 +2332,7 @@ msgstr ""
 "Trajanje ponavljanja u okviru ponavljanja mora biti manje od intervala "
 "ponavljanja minus period podesećanja"
 
-#: editdlg.cpp:1124
+#: editdlg.cpp:1123
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -2342,13 +2342,13 @@ msgstr ""
 "Za ponavljanje unutar ponavljanja, period mora biti u jedinicama dana ili "
 "sedmica za alarme samo sa datumom"
 
-#: editdlg.cpp:1155
+#: editdlg.cpp:1154
 #, kde-format
 msgctxt "@info"
 msgid "You must select a calendar to save the alarm in"
 msgstr "Morate izabrati kalendar u koji želite sačuvati alarm"
 
-#: editdlg.cpp:1236
+#: editdlg.cpp:1235
 #, fuzzy, kde-format
 #| msgctxt "@action:button"
 #| msgid "Less Options <<"
@@ -2356,7 +2356,7 @@ msgctxt "@action:Button"
 msgid "Fewer Options <<"
 msgstr "Manje opcija<<"
 
-#: editdlg.cpp:1237
+#: editdlg.cpp:1236
 #, fuzzy, kde-format
 #| msgctxt "@action:button"
 #| msgid "Less Options <<"
@@ -2364,13 +2364,13 @@ msgctxt "@info:tooltip"
 msgid "Show fewer options"
 msgstr "Manje opcija<<"
 
-#: editdlg.cpp:1242
+#: editdlg.cpp:1241
 #, kde-format
 msgctxt "@action:button"
 msgid "More Options >>"
 msgstr "Više opcija>>"
 
-#: editdlg.cpp:1243
+#: editdlg.cpp:1242
 #, fuzzy, kde-format
 #| msgctxt "@action:button"
 #| msgid "More Options >>"
