@@ -741,6 +741,30 @@ TimePrefTab::TimePrefTab(StackedScrollGroup* scrollGroup)
         mHolidays->addItem(it.key(), it.value());
     }
 
+    if (KernelWakeAlarm::isAvailable())
+    {
+        // Wake from suspend in advance of alarm time
+        itemBox = new QHBoxLayout();
+        itemBox->setContentsMargins(0, 0, 0, 0);
+        topLayout()->addLayout(itemBox);
+
+        widget = new QWidget;   // this is to control the QWhatsThis text display area
+        itemBox->addWidget(widget);
+        box = new QHBoxLayout(widget);
+        box->setContentsMargins(0, 0, 0, 0);
+        label = new QLabel(i18nc("@label:spinbox How long before alarm to wake system from suspend", "Wake from suspend before alarm:"));
+        addAlignedLabel(label);
+        box->addWidget(label);
+        mPreWakeSuspend = new SpinBox;
+        box->addWidget(mPreWakeSuspend);
+        label->setBuddy(mPreWakeSuspend);
+        widget->setWhatsThis(i18nc("@info:whatsthis",
+              "Enter how many minutes before the alarm trigger time to wake the system, for alarms set to wake from suspend. This can be used to ensure that the system is fully restored by the time the alarm triggers."));
+        label = new QLabel(i18nc("@label Time unit for user entered number", "minutes"));
+        box->addWidget(label);
+        itemBox->addStretch();
+    }
+
     // Start-of-day time
     itemBox = new QHBoxLayout();
     itemBox->setContentsMargins(0, 0, 0, 0);
@@ -846,6 +870,8 @@ void TimePrefTab::restore(bool, bool)
     mTimeZone->setTimeZone(timeSpec.type() == KADateTime::TimeZone ? timeSpec.timeZone() : QTimeZone());
     const int ix = Preferences::holidays().isValid() ? mHolidays->findData(Preferences::holidays().regionCode()) : 0;
     mHolidays->setCurrentIndex(ix);
+    if (mPreWakeSuspend)
+        mPreWakeSuspend->setValue(Preferences::wakeFromSuspendAdvance());
     mStartOfDay->setValue(Preferences::startOfDay());
     mWorkStart->setValue(Preferences::workDayStart());
     mWorkEnd->setValue(Preferences::workDayEnd());
@@ -864,6 +890,12 @@ bool TimePrefTab::apply(bool syncToDisc)
     const QString hol = mHolidays->itemData(mHolidays->currentIndex()).toString();
     if (hol != Preferences::holidays().regionCode())
         Preferences::setHolidayRegion(hol);
+    if (mPreWakeSuspend)
+    {
+        int t = mPreWakeSuspend->value();
+        if (t != Preferences::wakeFromSuspendAdvance())
+            Preferences::setWakeFromSuspendAdvance(t);
+    }
     int t = mStartOfDay->value();
     const QTime sodt(t/60, t%60, 0);
     if (sodt != Preferences::startOfDay())
@@ -928,7 +960,7 @@ StorePrefTab::StorePrefTab(StackedScrollGroup* scrollGroup)
     mPurgeArchived->setMinimumSize(mPurgeArchived->sizeHint());
     box->addWidget(mPurgeArchived);
     connect(mPurgeArchived, &QAbstractButton::toggled, this, &StorePrefTab::slotArchivedToggled);
-    mPurgeAfter = new SpinBox();
+    mPurgeAfter = new SpinBox;
     mPurgeAfter->setMinimum(1);
     mPurgeAfter->setSingleShiftStep(10);
     mPurgeAfter->setMinimumSize(mPurgeAfter->sizeHint());

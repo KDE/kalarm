@@ -379,12 +379,24 @@ void EditAlarmDlg::init(const KAEvent& event)
     // Late cancel selector - default = allow late display
     mLateCancel = new LateCancelSelector(true, mMoreOptions);
     connect(mLateCancel, &LateCancelSelector::changed, this, &EditAlarmDlg::contentsChanged);
-    moreLayout->addWidget(mLateCancel, 0, Qt::AlignLeft);
+    auto layout = new QHBoxLayout;
+    layout->setContentsMargins(0, 0, 0, 0);
+    layout->addWidget(mLateCancel, 1);
+    moreLayout->addLayout(layout);
 
     PackedLayout* playout = new PackedLayout(Qt::AlignJustify);
     playout->setHorizontalSpacing(2 * style()->pixelMetric(QStyle::PM_LayoutHorizontalSpacing));
     playout->setVerticalSpacing(2 * style()->pixelMetric(QStyle::PM_LayoutVerticalSpacing));
     moreLayout->addLayout(playout);
+
+    if (KernelWakeAlarm::isAvailable())
+    {
+        // Wake from suspend checkbox
+        mWakeFromSuspend = new CheckBox(i18nc("@option:check", "Wake from suspend"), mMoreOptions);
+        connect(mWakeFromSuspend, &CheckBox::toggled, this, &EditAlarmDlg::contentsChanged);
+        mWakeFromSuspend->setWhatsThis(i18nc("@info:whatsthis", "Check to wake the system if the alarm triggers while the system is suspended"));
+        playout->addWidget(mWakeFromSuspend);
+    }
 
     // Acknowledgement confirmation required - default = no confirmation
     CheckBox* confirmAck = type_createConfirmAckCheckbox(mMoreOptions);
@@ -400,7 +412,10 @@ void EditAlarmDlg::init(const KAEvent& event)
         mShowInKorganizer = new CheckBox(i18n_chk_ShowInKOrganizer(), mMoreOptions);
         connect(mShowInKorganizer, &CheckBox::toggled, this, &EditAlarmDlg::contentsChanged);
         mShowInKorganizer->setWhatsThis(i18nc("@info:whatsthis", "Check to copy the alarm into KOrganizer's calendar"));
-        playout->addWidget(mShowInKorganizer);
+        if (!confirmAck  ||  !mWakeFromSuspend)
+            playout->addWidget(mShowInKorganizer);
+        else
+            mLateCancel->addWidget(mShowInKorganizer);
     }
 
     mainLayout->addWidget(mButtonBox);
@@ -535,6 +550,8 @@ void EditAlarmDlg::initValues(const KAEvent& event)
 
         mLateCancel->setMinutes(event.lateCancel(), event.startDateTime().isDateOnly(),
                                 TimePeriod::HoursMinutes);
+        if (mWakeFromSuspend)
+            mWakeFromSuspend->setChecked(event.wakeFromSuspend());
         if (mShowInKorganizer)
             mShowInKorganizer->setChecked(event.copyToKOrganizer());
         type_initValues(event);
@@ -554,6 +571,8 @@ void EditAlarmDlg::initValues(const KAEvent& event)
         else
             mTimeWidget->setDateTime(defaultTime);
         mLateCancel->setMinutes((Preferences::defaultLateCancel() ? 1 : 0), false, TimePeriod::HoursMinutes);
+        if (mWakeFromSuspend)
+            mWakeFromSuspend->setChecked(false);
         if (mShowInKorganizer)
             mShowInKorganizer->setChecked(Preferences::defaultCopyToKOrganizer());
         type_initValues(KAEvent());
@@ -605,9 +624,15 @@ void EditAlarmDlg::setLateCancel(int minutes)
     mLateCancel->setMinutes(minutes, mTimeWidget->getDateTime(false, false).isDateOnly(),
                             TimePeriod::HoursMinutes);
 }
+void EditAlarmDlg::setWakeFromSuspend(bool wake)
+{
+    if (mWakeFromSuspend)
+        mWakeFromSuspend->setChecked(wake);
+}
 void EditAlarmDlg::setShowInKOrganizer(bool show)
 {
-    mShowInKorganizer->setChecked(show);
+    if (mShowInKorganizer)
+        mShowInKorganizer->setChecked(show);
 }
 
 /******************************************************************************
@@ -627,6 +652,8 @@ void EditAlarmDlg::setReadOnly(bool readOnly)
         else
             mDeferChangeButton->show();
     }
+    if (mWakeFromSuspend)
+        mWakeFromSuspend->setReadOnly(readOnly);
     if (mShowInKorganizer)
         mShowInKorganizer->setReadOnly(readOnly);
 }
@@ -652,6 +679,8 @@ void EditAlarmDlg::saveState(const KAEvent* event)
     if (mTimeWidget)
         mSavedDateTime = mTimeWidget->getDateTime(false, false);
     mSavedLateCancel       = mLateCancel->minutes();
+    if (mWakeFromSuspend)
+        mSavedWakeFromSuspend = mWakeFromSuspend->isChecked();
     if (mShowInKorganizer)
         mSavedShowInKorganizer = mShowInKorganizer->isChecked();
     mSavedRecurrenceType   = mRecurrenceEdit->repeatType();
@@ -689,6 +718,7 @@ bool EditAlarmDlg::stateChanged() const
             return true;
     }
     if (mSavedLateCancel       != mLateCancel->minutes()
+    ||  (mWakeFromSuspend && mSavedWakeFromSuspend != mWakeFromSuspend->isChecked())
     ||  (mShowInKorganizer && mSavedShowInKorganizer != mShowInKorganizer->isChecked())
     ||  textFileCommandMessage != mSavedTextFileCommandMessage
     ||  mSavedRecurrenceType   != mRecurrenceEdit->repeatType())
@@ -761,7 +791,7 @@ void EditAlarmDlg::setEvent(KAEvent& event, const QString& text, bool trial)
             dt = KADateTime(QDate(2000,1,1), mTemplateTime->time());
     }
 
-    int lateCancel = (trial || !mLateCancel->isEnabled()) ? 0 : mLateCancel->minutes();
+    const int lateCancel = (trial || !mLateCancel->isEnabled()) ? 0 : mLateCancel->minutes();
     type_setEvent(event, dt, (mName ? mName->text() : QString()), text, lateCancel, trial);
 
     if (!trial)
@@ -814,6 +844,8 @@ void EditAlarmDlg::setEvent(KAEvent& event, const QString& text, bool trial)
 KAEvent::Flags EditAlarmDlg::getAlarmFlags() const
 {
     KAEvent::Flags flags{};
+    if (mWakeFromSuspend && mWakeFromSuspend->isEnabled() && mWakeFromSuspend->isChecked())
+        flags |= KAEvent::WAKE_SUSPEND;
     if (mShowInKorganizer && mShowInKorganizer->isEnabled() && mShowInKorganizer->isChecked())
         flags |= KAEvent::COPY_KORGANIZER;
     if (mRecurrenceEdit->repeatType() == RecurrenceEdit::AT_LOGIN)
@@ -1391,6 +1423,8 @@ void EditAlarmDlg::slotRecurTypeChange(int repeatType)
     if (mReminder)
         mReminder->setAfterOnly(atLogin);
     mLateCancel->setEnabled(!atLogin);
+    if (mWakeFromSuspend)
+        mWakeFromSuspend->setEnabled(!atLogin);
     if (mShowInKorganizer)
         mShowInKorganizer->setEnabled(!atLogin);
     slotRecurFrequencyChange();

@@ -1,7 +1,7 @@
 /*
  *  latecancel.cpp  -  widget to specify cancellation if late
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2004-2021 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2004-2023 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -63,18 +63,18 @@ LateCancelSelector::LateCancelSelector(bool allowHourMinute, QWidget* parent)
     connect(mTimeSelector, &TimeSelector::valueChanged, this, &LateCancelSelector::changed);
     hlayout->addWidget(mTimeSelector, 0, Qt::AlignLeft);
 
-    hlayout = new QHBoxLayout();
+    mAutoCloseLayout = new QHBoxLayout();
     const int indent = CheckBox::textIndent(mCheckbox);
     if (layoutDirection() == Qt::LeftToRight)
-        hlayout->setContentsMargins(indent, 0, 0, 0);
+        mAutoCloseLayout->setContentsMargins(indent, 0, 0, 0);
     else
-        hlayout->setContentsMargins(0, 0, indent, 0);
-    topLayout->addLayout(hlayout);
+        mAutoCloseLayout->setContentsMargins(0, 0, indent, 0);
+    topLayout->addLayout(mAutoCloseLayout);
     mAutoClose = new CheckBox(i18n_chk_AutoCloseWin(), this);
     connect(mAutoClose, &CheckBox::toggled, this, &LateCancelSelector::changed);
     mAutoClose->setWhatsThis(i18nc("@info:whatsthis", "Automatically close the alarm window after the expiry of the late-cancellation period"));
-    hlayout->addWidget(mAutoClose);
-    hlayout->addStretch();
+    mAutoCloseLayout->addWidget(mAutoClose);
+    mAutoCloseLayout->addStretch();
 
     mAutoClose->hide();
     mAutoClose->setEnabled(false);
@@ -92,6 +92,14 @@ void LateCancelSelector::setReadOnly(bool ro)
         mTimeSelector->setReadOnly(mReadOnly);
         mAutoClose->setReadOnly(mReadOnly);
     }
+}
+
+/******************************************************************************
+* Add a widget to the layout, right adjusted, beside Auto-close checkbox.
+*/
+void LateCancelSelector::addWidget(QWidget* widget)
+{
+    mAutoCloseLayout->addWidget(widget);
 }
 
 int LateCancelSelector::minutes() const

@@ -1,7 +1,7 @@
 /*
  *  editdlg.h  -  dialog to create or modify an alarm or alarm template
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2001-2022 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2001-2023 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -74,6 +74,7 @@ public:
     void            setRepeatAtLogin();
     virtual void    setAction(KAEvent::SubAction, const AlarmText& = AlarmText()) = 0;
     void            setLateCancel(int minutes);
+    void            setWakeFromSuspend(bool);
     void            setShowInKOrganizer(bool);
 
     QSize           sizeHint() const override    { return minimumSizeHint(); }
@@ -177,6 +178,7 @@ private:
     AlarmTimeWidget*    mTimeWidget {nullptr};
     LateCancelSelector* mLateCancel;
     Reminder*           mReminder;             // null except for display alarms
+    CheckBox*           mWakeFromSuspend {nullptr};
     CheckBox*           mShowInKorganizer {nullptr};
 
     QFrame*             mMoreOptions;          // contains options hidden by default
@@ -212,6 +214,7 @@ private:
     KADateTime          mSavedDeferTime;        // mDeferDateTime value
     int                 mSavedRecurrenceType;   // RecurrenceEdit::RepeatType value
     int                 mSavedLateCancel;       // mLateCancel value
+    bool                mSavedWakeFromSuspend;  // mWakeFromSuspend status
     bool                mSavedShowInKorganizer; // mShowInKorganizer status
 };
 
