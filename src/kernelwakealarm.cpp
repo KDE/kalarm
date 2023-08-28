@@ -102,6 +102,8 @@ bool KernelWakeAlarm::arm(time_t triggerSeconds)
 {
     if (!mTimerFd)
         return false;
+    if (triggerSeconds <= ::time(nullptr))
+        return false;    // already expired
     struct itimerspec time = {};
     time.it_value.tv_sec = triggerSeconds;
 

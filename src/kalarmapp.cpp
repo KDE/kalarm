@@ -525,6 +525,8 @@ int KAlarmApp::activateInstance(const QStringList& args, const QString& workingD
                     editDlg->setAction(options->editAction(), AlarmText(options->text()));
                     if (options->lateCancel())
                         editDlg->setLateCancel(options->lateCancel());
+                    if (options->flags() & KAEvent::WAKE_SUSPEND)
+                        editDlg->setWakeFromSuspend(true);
                     if (options->flags() & KAEvent::COPY_KORGANIZER)
                         editDlg->setShowInKOrganizer(true);
                     switch (options->editType())

@@ -272,7 +272,7 @@ SPDX-License-Identifier: GPL-2.0-or-later
     <entry name="WakeFromSuspendAdvance" type="Int">
       <label context="@label">Number of minutes before alarm to wake from suspend</label>
       <whatsthis context="@info:whatsthis">Enter how many minutes before the alarm trigger time to wake the system from suspend. This can be used to ensure that the system is fully restored by the time the alarm triggers.</whatsthis>
-      <default>2</default>
+      <default>1</default>
     </entry>
     <entry name="ShowMenuBar" type="Bool">
       <default>true</default>

@@ -38,7 +38,14 @@ public:
     /** Return whether this instance was constructed successfully and can be used. */
     bool isValid() const;
 
+    /** Set the kernel alarm timer.
+     *  @return true if successful;
+     *          false if invalid instance, @p triggerTime has already expired,
+     *                or error calling timerfd_settime().
+     */
     bool arm(const KAlarmCal::KADateTime& triggerTime);
+
+    /** Cancel the kernel alarm timer if already set. */
     void disarm();
 
     /** Determine whether kernel alarms can be set. */
