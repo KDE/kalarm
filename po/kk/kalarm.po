@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-07-14 00:48+0000\n"
+"POT-Creation-Date: 2023-08-28 03:11+0000\n"
 "PO-Revision-Date: 2013-07-07 03:28+0600\n"
 "Last-Translator: Sairan Kikkarin <sairan@computer.org>\n"
 "Language-Team: Kazakh <kde-i18n-doc@kde.org>\n"
@@ -2357,7 +2357,7 @@ msgctxt "@info"
 msgid "Template name is already in use"
 msgstr "Былай аталған үлгі бар екен"
 
-#: editdlg.cpp:1010
+#: editdlg.cpp:1009
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2366,7 +2366,7 @@ msgid ""
 "para>"
 msgstr ""
 
-#: editdlg.cpp:1042
+#: editdlg.cpp:1041
 #, kde-format
 msgctxt "@info The parameter is a date value"
 msgid ""
@@ -2376,7 +2376,7 @@ msgstr ""
 "Бастау күні ескерту қайталануының қалыпына сәйкес келмейді, сондықтан ол "
 "келесі қайталану күнімен (%1) сәйкестіріледі."
 
-#: editdlg.cpp:1046
+#: editdlg.cpp:1045
 #, kde-format
 msgctxt "@info The parameter is a date/time value"
 msgid ""
@@ -2386,19 +2386,19 @@ msgstr ""
 "Бастау күн/уақыты ескерту қайталануының қалыпына сәйкес келмейді, сондықтан "
 "ол келесі қайталану күн/уақытымен (%1) сәйкестіріледі."
 
-#: editdlg.cpp:1068
+#: editdlg.cpp:1067
 #, kde-format
 msgctxt "@info"
 msgid "Recurrence has already expired"
 msgstr "Қайталану уақыты өткен ғой "
 
-#: editdlg.cpp:1073
+#: editdlg.cpp:1072
 #, kde-format
 msgctxt "@info"
 msgid "The alarm will never occur during working hours"
 msgstr "Енді ескерту ешқашанда жұмыс уақытында жасалмайды"
 
-#: editdlg.cpp:1102
+#: editdlg.cpp:1101
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2408,7 +2408,7 @@ msgstr ""
 "Егер <interface>%1</interface> белгісі тұрса, алдын-ала еске салу мерзімі "
 "қайталану аралығынан қысқа болу керек."
 
-#: editdlg.cpp:1117
+#: editdlg.cpp:1116
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -2418,7 +2418,7 @@ msgstr ""
 "Жай қайталау мерзімі, ескертулерді қайталанудың аралығынан еске салу "
 "мерзімін алып тастағанан қысқа болуы керек"
 
-#: editdlg.cpp:1124
+#: editdlg.cpp:1123
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -2428,13 +2428,13 @@ msgstr ""
 "Тек күні ғана белгілеген ескерту үшін қайталау аралығы күн немесе апта "
 "түрінде болу керек"
 
-#: editdlg.cpp:1155
+#: editdlg.cpp:1154
 #, kde-format
 msgctxt "@info"
 msgid "You must select a calendar to save the alarm in"
 msgstr "Ескертуді сақтайтын күнтізбені таңдау керек"
 
-#: editdlg.cpp:1236
+#: editdlg.cpp:1235
 #, fuzzy, kde-format
 #| msgctxt "@action:button"
 #| msgid "Less Options <<"
@@ -2442,7 +2442,7 @@ msgctxt "@action:Button"
 msgid "Fewer Options <<"
 msgstr "Параметрлерін азайту <<"
 
-#: editdlg.cpp:1237
+#: editdlg.cpp:1236
 #, fuzzy, kde-format
 #| msgctxt "@action:button"
 #| msgid "Less Options <<"
@@ -2450,13 +2450,13 @@ msgctxt "@info:tooltip"
 msgid "Show fewer options"
 msgstr "Параметрлерін азайту <<"
 
-#: editdlg.cpp:1242
+#: editdlg.cpp:1241
 #, kde-format
 msgctxt "@action:button"
 msgid "More Options >>"
 msgstr "Параметрлерін көбейту >>"
 
-#: editdlg.cpp:1243
+#: editdlg.cpp:1242
 #, fuzzy, kde-format
 #| msgctxt "@action:button"
 #| msgid "More Options >>"

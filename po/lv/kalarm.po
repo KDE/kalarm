@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-07-14 00:48+0000\n"
+"POT-Creation-Date: 2023-08-28 03:11+0000\n"
 "PO-Revision-Date: 2012-07-05 12:56+0300\n"
 "Last-Translator: Maris Nartiss <maris.kde@gmail.com>\n"
 "Language-Team: Latvian\n"
@@ -2392,7 +2392,7 @@ msgctxt "@info"
 msgid "Template name is already in use"
 msgstr "Sagataves nosaukums jau ir aizņemts"
 
-#: editdlg.cpp:1010
+#: editdlg.cpp:1009
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2401,7 +2401,7 @@ msgid ""
 "para>"
 msgstr ""
 
-#: editdlg.cpp:1042
+#: editdlg.cpp:1041
 #, kde-format
 msgctxt "@info The parameter is a date value"
 msgid ""
@@ -2411,7 +2411,7 @@ msgstr ""
 "Sākuma datums nesakrīt ar atgādinājuma atkārtošanās shēmu, tādēļ tas tiks "
 "iestatīts uz nākamo atkārtošanās datumu (%1)."
 
-#: editdlg.cpp:1046
+#: editdlg.cpp:1045
 #, kde-format
 msgctxt "@info The parameter is a date/time value"
 msgid ""
@@ -2421,19 +2421,19 @@ msgstr ""
 "Sākuma datums/laiks nesakrīt ar atgādinājuma atkārtošanās shēmu, tādēļ tas "
 "tiks iestatīts uz nākamo atkārtošanās datumu/laiku (%1)."
 
-#: editdlg.cpp:1068
+#: editdlg.cpp:1067
 #, kde-format
 msgctxt "@info"
 msgid "Recurrence has already expired"
 msgstr "Atkārtošanās termiņš jau ir beidzies"
 
-#: editdlg.cpp:1073
+#: editdlg.cpp:1072
 #, kde-format
 msgctxt "@info"
 msgid "The alarm will never occur during working hours"
 msgstr "Atgādinājums netiks palaists darba laikā"
 
-#: editdlg.cpp:1102
+#: editdlg.cpp:1101
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2443,7 +2443,7 @@ msgstr ""
 "Papildu atgādinājuma periodam jābūt īsākam par atkārtošanās intervālu, ja "
 "vien nav atzīmēts <interface>%1</interface>."
 
-#: editdlg.cpp:1117
+#: editdlg.cpp:1116
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -2453,7 +2453,7 @@ msgstr ""
 "Atkārtošanās iekš atkārtošanās ilgumam jābūt mazākam nekā atkārtošanās "
 "intervāls mīnus jebkurš papildu atgādinājums"
 
-#: editdlg.cpp:1124
+#: editdlg.cpp:1123
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -2463,13 +2463,13 @@ msgstr ""
 "Atkārtošanās iekš atkārtošanās periodam kā ilguma vienībām jābūt dienām vai "
 "nedēļām ('tikai datums' atgādinājumiem)"
 
-#: editdlg.cpp:1155
+#: editdlg.cpp:1154
 #, kde-format
 msgctxt "@info"
 msgid "You must select a calendar to save the alarm in"
 msgstr "Jums jāizvēlas kalendārs, kurā saglabāt atgādinājumu"
 
-#: editdlg.cpp:1236
+#: editdlg.cpp:1235
 #, fuzzy, kde-format
 #| msgctxt "@action:button"
 #| msgid "Less Options <<"
@@ -2477,7 +2477,7 @@ msgctxt "@action:Button"
 msgid "Fewer Options <<"
 msgstr "Mazāk opciju <<"
 
-#: editdlg.cpp:1237
+#: editdlg.cpp:1236
 #, fuzzy, kde-format
 #| msgctxt "@action:button"
 #| msgid "Less Options <<"
@@ -2485,13 +2485,13 @@ msgctxt "@info:tooltip"
 msgid "Show fewer options"
 msgstr "Mazāk opciju <<"
 
-#: editdlg.cpp:1242
+#: editdlg.cpp:1241
 #, kde-format
 msgctxt "@action:button"
 msgid "More Options >>"
 msgstr "Vairāk opciju >>"
 
-#: editdlg.cpp:1243
+#: editdlg.cpp:1242
 #, fuzzy, kde-format
 #| msgctxt "@action:button"
 #| msgid "More Options >>"

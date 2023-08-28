@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-07-14 00:48+0000\n"
-"PO-Revision-Date: 2023-08-02 12:43\n"
+"POT-Creation-Date: 2023-08-28 03:11+0000\n"
+"PO-Revision-Date: 2023-08-27 03:43\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -2118,7 +2118,7 @@ msgctxt "@info"
 msgid "Template name is already in use"
 msgstr "模板名称已被使用"
 
-#: editdlg.cpp:1010
+#: editdlg.cpp:1009
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2129,7 +2129,7 @@ msgstr ""
 "<para>KAlarm不提供高精度闹钟</para><para>闹钟将会在指定时刻前一分钟的末尾触发"
 "</para>"
 
-#: editdlg.cpp:1042
+#: editdlg.cpp:1041
 #, kde-format
 msgctxt "@info The parameter is a date value"
 msgid ""
@@ -2137,7 +2137,7 @@ msgid ""
 "adjusted to the date of the next recurrence (%1)."
 msgstr "该开始日期与闹钟的重复规则不匹配，已将其调整到下次重复的日期 (%1)。"
 
-#: editdlg.cpp:1046
+#: editdlg.cpp:1045
 #, kde-format
 msgctxt "@info The parameter is a date/time value"
 msgid ""
@@ -2147,19 +2147,19 @@ msgstr ""
 "该开始时间或日期与闹钟的重复规则不匹配，已将其调整到下次重复的时间及日期 "
 "(%1)。"
 
-#: editdlg.cpp:1068
+#: editdlg.cpp:1067
 #, kde-format
 msgctxt "@info"
 msgid "Recurrence has already expired"
 msgstr "重复已过期"
 
-#: editdlg.cpp:1073
+#: editdlg.cpp:1072
 #, kde-format
 msgctxt "@info"
 msgid "The alarm will never occur during working hours"
 msgstr "闹钟不会在工作时间响铃"
 
-#: editdlg.cpp:1102
+#: editdlg.cpp:1101
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2167,7 +2167,7 @@ msgid ""
 "%1</interface> is checked."
 msgstr "提示时段必须小于重复间隔，除非已勾选了<interface>%1</interface>。"
 
-#: editdlg.cpp:1117
+#: editdlg.cpp:1116
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -2175,7 +2175,7 @@ msgid ""
 "recurrence interval minus any reminder period"
 msgstr "重复周期内子重复的重复时间必须小于重复间隔减去提醒时长的差"
 
-#: editdlg.cpp:1124
+#: editdlg.cpp:1123
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -2183,31 +2183,31 @@ msgid ""
 "or weeks for a date-only alarm"
 msgstr "仅日期闹钟重复周期内子重复的时间单位必须为日或周"
 
-#: editdlg.cpp:1155
+#: editdlg.cpp:1154
 #, kde-format
 msgctxt "@info"
 msgid "You must select a calendar to save the alarm in"
 msgstr "您必须选择一个用于保存闹钟的日历"
 
-#: editdlg.cpp:1236
+#: editdlg.cpp:1235
 #, kde-format
 msgctxt "@action:Button"
 msgid "Fewer Options <<"
 msgstr "更少选项 <<"
 
-#: editdlg.cpp:1237
+#: editdlg.cpp:1236
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show fewer options"
 msgstr "显示更少选项"
 
-#: editdlg.cpp:1242
+#: editdlg.cpp:1241
 #, kde-format
 msgctxt "@action:button"
 msgid "More Options >>"
 msgstr "更多选项 >>"
 
-#: editdlg.cpp:1243
+#: editdlg.cpp:1242
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show more options"

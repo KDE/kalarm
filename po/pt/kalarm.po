@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-07-14 00:48+0000\n"
+"POT-Creation-Date: 2023-08-28 03:11+0000\n"
 "PO-Revision-Date: 2023-06-09 03:05+0100\n"
 "Last-Translator: José Nuno Pires <zepires@gmail.com>\n"
 "Language-Team: pt <kde-i18n-pt@kde.org>\n"
@@ -2270,7 +2270,7 @@ msgctxt "@info"
 msgid "Template name is already in use"
 msgstr "O nome do modelo já está a ser utilizado"
 
-#: editdlg.cpp:1010
+#: editdlg.cpp:1009
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2282,7 +2282,7 @@ msgstr ""
 "irá actuar no período em minutos antes da hora indicada a partir de agora.</"
 "para>"
 
-#: editdlg.cpp:1042
+#: editdlg.cpp:1041
 #, kde-format
 msgctxt "@info The parameter is a date value"
 msgid ""
@@ -2292,7 +2292,7 @@ msgstr ""
 "A data de início não corresponde ao padrão de recorrência do alarme, pelo "
 "que será ajustado para a data da próxima recorrência (%1)."
 
-#: editdlg.cpp:1046
+#: editdlg.cpp:1045
 #, kde-format
 msgctxt "@info The parameter is a date/time value"
 msgid ""
@@ -2302,19 +2302,19 @@ msgstr ""
 "A data/hora de início não corresponde ao padrão de recorrência do alarme, "
 "pelo que será ajustado para a data/hora da próxima recorrência (%1)."
 
-#: editdlg.cpp:1068
+#: editdlg.cpp:1067
 #, kde-format
 msgctxt "@info"
 msgid "Recurrence has already expired"
 msgstr "A recorrência já expirou"
 
-#: editdlg.cpp:1073
+#: editdlg.cpp:1072
 #, kde-format
 msgctxt "@info"
 msgid "The alarm will never occur during working hours"
 msgstr "O alarme nunca irá decorrer durante o horário de trabalho"
 
-#: editdlg.cpp:1102
+#: editdlg.cpp:1101
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2324,7 +2324,7 @@ msgstr ""
 "O período da chamada de atenção deverá ser inferior ao intervalo de "
 "repetição, a menos que a opção <interface>%1</interface> esteja assinalada."
 
-#: editdlg.cpp:1117
+#: editdlg.cpp:1116
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -2334,7 +2334,7 @@ msgstr ""
 "A duração de repetição dentro da recorrência deverá ser menor que o "
 "intervalo de recorrência menos qualquer período restante"
 
-#: editdlg.cpp:1124
+#: editdlg.cpp:1123
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -2344,31 +2344,31 @@ msgstr ""
 "Para uma repetição dentro da recorrência, o seu período deverá estar em "
 "unidades de dias ou semanas para uma alarme apenas de datas"
 
-#: editdlg.cpp:1155
+#: editdlg.cpp:1154
 #, kde-format
 msgctxt "@info"
 msgid "You must select a calendar to save the alarm in"
 msgstr "Tem de seleccionar o calendário onde deseja gravar o alarme"
 
-#: editdlg.cpp:1236
+#: editdlg.cpp:1235
 #, kde-format
 msgctxt "@action:Button"
 msgid "Fewer Options <<"
 msgstr "Menos Opções <<"
 
-#: editdlg.cpp:1237
+#: editdlg.cpp:1236
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show fewer options"
 msgstr "Mostrar menos opções"
 
-#: editdlg.cpp:1242
+#: editdlg.cpp:1241
 #, kde-format
 msgctxt "@action:button"
 msgid "More Options >>"
 msgstr "Mais Opções >>"
 
-#: editdlg.cpp:1243
+#: editdlg.cpp:1242
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show more options"
