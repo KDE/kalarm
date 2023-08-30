@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: kdepim-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-08-29 00:46+0000\n"
-"PO-Revision-Date: 2023-08-22 23:03+0300\n"
+"PO-Revision-Date: 2023-08-29 05:34+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -147,8 +147,8 @@ msgid ""
 "Check to specify only a date (without a time) for the alarm. The alarm will "
 "trigger at the first opportunity on the selected date."
 msgstr ""
-"Alarm için yalnızca tarih belirtimini (zaman olmadan) kontrol edin. Alarm "
-"seçilen tarihte ilk fırsatta tetikleyecek."
+"Alarm için yalnızca bir tarih (saat olmadan) belirtmek için işaretleyin. "
+"Alarm seçilen tarihte ilk fırsatta tetiklenecektir."
 
 #: alarmtimewidget.cpp:137
 #, kde-format
@@ -2229,12 +2229,10 @@ msgstr ""
 "için bu şablonun üstünde ayarlayın."
 
 #: editdlg.cpp:395
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Wake From Suspend"
+#, kde-format
 msgctxt "@option:check"
 msgid "Wake from suspend"
-msgstr "Askıdan Uyandır"
+msgstr "Askıdan uyandır"
 
 #: editdlg.cpp:397
 #, kde-format
@@ -2242,12 +2240,13 @@ msgctxt "@info:whatsthis"
 msgid ""
 "Check to wake the system if the alarm triggers while the system is suspended"
 msgstr ""
+"Sistem askıya alınmışken alarm tetiklenirse sistemi uyandırmak için işaretle"
 
 #: editdlg.cpp:414
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to copy the alarm into KOrganizer's calendar"
-msgstr "K Organizatör takvimi içindeki alarmın kopyasını denetle"
+msgstr "Alarmı K Organizatör'ün takvimine kopyalamak için işaretleyin"
 
 #: editdlg.cpp:1014
 #, kde-format
@@ -2497,8 +2496,8 @@ msgid ""
 "Check to additionally display a reminder in advance of or after the main "
 "alarm time(s)."
 msgstr ""
-"Ana alarm zaman(lar)ından önce veya sonra ilave anımsatıcı görüntülemek için "
-"seçin."
+"Ana alarm zaman(lar)ından önce veya sonra ek anımsatıcı görüntülemek için "
+"işaretleyin."
 
 #: editdlgtypes.cpp:266
 #, kde-kuit-format
@@ -2671,7 +2670,7 @@ msgstr "Vazgeç"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to discard command output."
-msgstr "Komut çıktısını atmak için bunu işaretleyin."
+msgstr "Komut çıktısını atmak için işaretleyin."
 
 #: editdlgtypes.cpp:1057
 #, kde-format
@@ -2842,9 +2841,7 @@ msgstr "Vurgulanan eki e-postadan kaldır."
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "If checked, the email will be blind copied to you."
-msgstr ""
-"Eğer bu işaretlenirse e-postanın bir kopyası gizli karbon kopya ile size de "
-"gönderilir."
+msgstr "İşaretliyse e-posta size gizli olarak kopyalanır."
 
 #: editdlgtypes.cpp:1435
 #, kde-kuit-format
@@ -2941,14 +2938,15 @@ msgstr "Ses dosyasını şimdi çal"
 msgctxt "@info:whatsthis"
 msgid ""
 "If checked, the sound file will be played repeatedly until %1 is clicked."
-msgstr "İmliyse ses dosyası %1 tıklanana kadar yineleyerek çalar."
+msgstr "İşaretliyse ses dosyası %1 tıklanana kadar yinelenerek çalınır."
 
 #: editdlgtypes.cpp:1826
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to enter the contents of a script instead of a shell command line"
 msgstr ""
-"Bir kabuk komutu yerine çalıştırılacak olan betik dosyasının içeriğini girin"
+"Bir kabuk komutu yerine çalıştırılacak olan betik dosyasının içeriğini "
+"girmek için işaretleyin"
 
 #: editdlgtypes.cpp:1832
 #, kde-format
@@ -3016,8 +3014,8 @@ msgid ""
 "Check to include archived alarms in the search. This option is only "
 "available if archived alarms are currently being displayed."
 msgstr ""
-"Aramanın arşivlenmiş alarmlar içerdiğini kontrol edin. Bu seçenek yalnızca "
-"arşivlenmiş alarmlar şu anda gösteriliyorsa kullanılabilir."
+"Aramada arşivlenmiş alarmları içermek için işaretleyin. Bu seçenek yalnızca "
+"arşivlenmiş alarmlar şu anda görüntüleniyorsa kullanılabilir."
 
 #: find.cpp:121
 #, kde-format
@@ -3029,7 +3027,7 @@ msgstr "Metin"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to include text message alarms in the search."
-msgstr "Aramanın metin iletisi alarmlarını içermesi için işaretleyin."
+msgstr "Aramada metin iletisi alarmlarını içermek için işaretleyin."
 
 #: find.cpp:125
 #, kde-format
@@ -3041,7 +3039,7 @@ msgstr "Dosya"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to include file alarms in the search."
-msgstr "Aramanın dosya alarmlarını içermesi için işaretleyin."
+msgstr "Aramada dosya alarmlarını içermek için işaretleyin."
 
 #: find.cpp:129
 #, kde-format
@@ -3053,7 +3051,7 @@ msgstr "Komut"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to include command alarms in the search."
-msgstr "Aramanın komut alarmlarını içermesi için işaretleyin."
+msgstr "Aramada komut alarmlarını içermek için işaretleyin."
 
 #: find.cpp:133
 #, kde-format
@@ -3065,7 +3063,7 @@ msgstr "E-posta"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to include email alarms in the search."
-msgstr "Aramanın e-posta alarmlarını içermesi için işaretleyin."
+msgstr "Aramada e-posta alarmlarını içermek için işaretleyin."
 
 #: find.cpp:137
 #, kde-format
@@ -3077,7 +3075,7 @@ msgstr "Ses"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to include audio alarms in the search."
-msgstr "Aramanın sesli alarmları içerdiğini kontrol edin."
+msgstr "Aramada alarmları içermek için işaretleyin."
 
 #: find.cpp:236
 #, kde-format
@@ -5078,7 +5076,7 @@ msgid ""
 "application>."
 msgstr ""
 "<application>K Alarm</application> uygulamasından çıkmadan önce uyarı "
-"iletisi göster."
+"iletisi görüntülemek için işaretleyin."
 
 #: prefdlg.cpp:459
 #, kde-format
@@ -5093,7 +5091,7 @@ msgid ""
 "Check to have the option to give alarms a name. This is a convenience to "
 "help you to identify alarms."
 msgstr ""
-"Alarmları adlandırma seçeneğine sahip olmak için imleyin. Bu, alarmları "
+"Alarmları adlandırma seçeneğine sahip olmak için işaretleyin. Bu, alarmları "
 "tanımanızı kolaylaştırmak için yardımcı bir özelliktir."
 
 #: prefdlg.cpp:469
@@ -5263,33 +5261,25 @@ msgid "None"
 msgstr "Hiçbiri"
 
 #: prefdlg.cpp:755
-#, fuzzy, kde-format
-#| msgid "Wake From Suspend Alarm"
+#, kde-format
 msgctxt "@label:spinbox How long before alarm to wake system from suspend"
 msgid "Wake from suspend before alarm:"
-msgstr "Askıdan Uyandır Alarmı"
+msgstr "Alarmdan önce askıdan uyandır:"
 
 #: prefdlg.cpp:762
-#, fuzzy, kde-format
-#| msgctxt "@info:whatsthis"
-#| msgid ""
-#| "Enter how many minutes before the alarm trigger time to wake the system "
-#| "from suspend. This can be used to ensure that the system is fully "
-#| "restored by the time the alarm triggers."
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "Enter how many minutes before the alarm trigger time to wake the system, for "
 "alarms set to wake from suspend. This can be used to ensure that the system "
 "is fully restored by the time the alarm triggers."
 msgstr ""
-"Sistemi askıya almaktan uyandırmak için alarm tetikleme zamanından kaç "
-"dakika önce girin. Bu, alarm tetiklendiğinde sistemin tamamen geri "
-"yüklenmesini sağlamak için kullanılabilir."
+"Askıya almadan uyandıracak alarmlar için, alarm tetikleme süresinden kaç "
+"dakika önce sistemin uyandırılacağını girin. Bu, alarm tetiklendiğinde "
+"sistemin tamamen geri yüklendiğinden emin olmak için kullanılabilir."
 
 #: prefdlg.cpp:763
-#, fuzzy, kde-format
-#| msgctxt "@item:inlistbox Time units"
-#| msgid "minutes"
+#, kde-format
 msgctxt "@label Time unit for user entered number"
 msgid "minutes"
 msgstr "dakika"
@@ -5326,7 +5316,7 @@ msgstr "Haftanın hangi günlerinin çalışma günü olduğunu işaretleyin"
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Daily start time:"
-msgstr "Hergün başlama saati:"
+msgstr "Günlük başlama saati:"
 
 #: prefdlg.cpp:820
 #, kde-kuit-format
@@ -5338,7 +5328,7 @@ msgstr "<para>Çalışma gününün başlama saatini girin.</para><para>%1</para
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Daily end time:"
-msgstr "Hergün bitiş saati:"
+msgstr "Günlük bitiş saati:"
 
 #: prefdlg.cpp:839
 #, kde-kuit-format
@@ -5419,7 +5409,7 @@ msgstr "Arşivlenmiş Alarmlar"
 #, kde-format
 msgctxt "@option:check"
 msgid "Keep alarms after expiry"
-msgstr "Alarmları zamanı geçtikten sonra da sakla"
+msgstr "Alarmları süreleri geçtikten sonra tut"
 
 #: prefdlg.cpp:953
 #, kde-format
@@ -5955,10 +5945,10 @@ msgid ""
 "system tray if there are no active alarms. When hidden, the icon can always "
 "be made visible by use of the system tray option to show hidden icons."
 msgstr ""
-"Etkin alarmlar yok ise <application>Kalarm</application> simgesinin sistem "
-"tepsisinde otomatik olarak gizlenmesini seçin. Gizli olduğunda, gizli "
+"Etkin alarmlar yok ise <application>K Alarm</application> simgesinin sistem "
+"tepsisinde otomatik olarak gizlemek için işaretleyin. Gizliyken, gizli "
 "simgeleri göstermek için sistem tepsisi seçeneğini kullanarak simgeyi her "
-"zaman görünebilir yapabilirsiniz."
+"zaman görünür yapabilirsiniz."
 
 #: prefdlg.cpp:1830
 #, kde-kuit-format
@@ -5971,8 +5961,8 @@ msgid ""
 msgstr ""
 "Eğer belirtilen süre içinde zamanı gelen alarm yoksa <application>K Alarm</"
 "application> uygulamasının simgesini sistem çubuğunda otomatik olarak "
-"gizlemek için işaretleyin. Gizlendiğinde, simge her zaman, sistem çubuğu "
-"gizli simgeleri göster seçeneği kullanılarak görünür yapılabilir."
+"gizlemek için işaretleyin. Gizliyken, gizli simgeleri göstermek için sistem "
+"tepsisi seçeneğini kullanarak simgeyi her zaman görünür yapabilirsiniz."
 
 #: prefdlg.cpp:1833
 #, kde-format
@@ -6198,25 +6188,25 @@ msgstr "Alarmı saatlik/dakikalık aralıklarla tekrarla"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Repeat the alarm at daily intervals"
-msgstr "Alarmı günlük olarak tekrarla"
+msgstr "Alarmı günlük olarak yinele"
 
 #: recurrenceedit.cpp:124
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Repeat the alarm at weekly intervals"
-msgstr "Alarmı haftalık olarak tekrarla"
+msgstr "Alarmı haftalık olarak yinele"
 
 #: recurrenceedit.cpp:130
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Repeat the alarm at monthly intervals"
-msgstr "Alarmı aylık olarak tekrarla"
+msgstr "Alarmı aylık olarak yinele"
 
 #: recurrenceedit.cpp:136
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Repeat the alarm at annual intervals"
-msgstr "Alarmı yıllık olarak tekrarla"
+msgstr "Alarmı yıllık olarak yinele"
 
 #: recurrenceedit.cpp:145
 #, kde-format
@@ -6244,7 +6234,7 @@ msgstr "Son yok"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Repeat the alarm indefinitely"
-msgstr "Alarmı sınırsız olarak tekrarla"
+msgstr "Alarmı sınırsız olarak yinele"
 
 #: recurrenceedit.cpp:210
 #, kde-format
@@ -6256,7 +6246,7 @@ msgstr "Sonra bitir:"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Repeat the alarm for the number of times specified"
-msgstr "Alarmı belirtilen bir sayı kadar tekrarla"
+msgstr "Alarmı belirtilen bir sayı kadar yinele"
 
 #: recurrenceedit.cpp:218
 #, kde-format
@@ -6284,9 +6274,9 @@ msgid ""
 "applies to the main recurrence only. It does not limit any sub-repetition "
 "which will occur regardless after the last main recurrence.</note></para>"
 msgstr ""
-"<para>Belirtilen tarih/zaman için alarmı tekrarla.</para><para><note>Bu "
-"yalnızca ana tekrarlama içindir. Bu son ana tekrarlanma sonrası herhangi bir "
-"alt tekrarlamalar için değildir.</note></para>"
+"<para>Belirtilen tarih/zaman için alarmı yineleyin.</para><para><note>Bu "
+"yalnızca ana yineleme içindir. Bu son ana yineleme sonrası herhangi bir alt "
+"yinelemeler için değildir.</note></para>"
 
 #: recurrenceedit.cpp:241
 #, kde-format
@@ -6298,7 +6288,7 @@ msgstr "Bu, başlama zamanında olduğu gibi aynı  zaman bölgesini kullanır."
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid "<para>Enter the last date to repeat the alarm.</para><para>%1</para>"
-msgstr "<para>Alarmın tekrarlanacağı son tarihi girin.</para><para>%1</para>"
+msgstr "<para>Alarmın yineleceği son tarihi girin.</para><para>%1</para>"
 
 #: recurrenceedit.cpp:249
 #, kde-kuit-format
@@ -6307,8 +6297,8 @@ msgid ""
 "<para>Enter the last time to repeat the alarm.</para><para>%1</para><para>"
 "%2</para>"
 msgstr ""
-"<para>Alarmın tekrarlanacağı son tarihi girin.</para><para>%1</para><para>"
-"%2</para>"
+"<para>Alarmın yineleceği son tarihi girin.</para><para>%1</para><para>%2</"
+"para>"
 
 #: recurrenceedit.cpp:253
 #, kde-format
@@ -6317,8 +6307,8 @@ msgid ""
 "Stop repeating the alarm after your first login on or after the specified "
 "end date"
 msgstr ""
-"İlk oturum açmanızdan sonra ya da belirtilen sonlanma tarihinden sonra alarm "
-"tekrarlamasını durdur"
+"İlk oturum açmanızdan sonra veya belirtilen sonlanma tarihinden sonra alarm "
+"yinelemesini durdur"
 
 #: recurrenceedit.cpp:272
 #, kde-format
@@ -6498,7 +6488,7 @@ msgstr "Alarmın kaç haftada bir tekrarlanacağını girin"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select the days of the week on which to repeat the alarm"
-msgstr "Alarmın haftanın hangi günlerinde tekrarlanacağını girin"
+msgstr "Alarmın haftanın hangi günlerinde yineleceğini girin"
 
 #: recurrenceedit.cpp:1301
 #, kde-format
@@ -6510,7 +6500,7 @@ msgstr "&Bu günde"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Repeat the alarm on the selected day of the month"
-msgstr "Alarmı ayın seçilen gününde tekrarla"
+msgstr "Alarmı ayın seçili gününde yinele"
 
 #: recurrenceedit.cpp:1314
 #, kde-format
@@ -6522,7 +6512,7 @@ msgstr "Son"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select the day of the month on which to repeat the alarm"
-msgstr "Alarmın ayın hangi gününde tekrarlanacağını seçin"
+msgstr "Alarmın ayın hangi gününde yineleneceğini seçin"
 
 #: recurrenceedit.cpp:1323
 #, kde-format
@@ -6536,7 +6526,7 @@ msgctxt "@info:whatsthis"
 msgid ""
 "Repeat the alarm on one day of the week, in the selected week of the month"
 msgstr ""
-"Alarmı ayın seçilen bir haftasında, o haftanın seçilen bir gününde tekrarla"
+"Alarmı ayın seçilen bir haftasında, o haftanın seçilen bir gününde yinele"
 
 #: recurrenceedit.cpp:1332
 #, kde-format
@@ -6608,13 +6598,13 @@ msgstr "Her"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select the week of the month in which to repeat the alarm"
-msgstr "Alarmın ayın hangi haftasında tekrarlanacağını seçin"
+msgstr "Alarmın ayın hangi haftasında yineleneceğini seçin"
 
 #: recurrenceedit.cpp:1361
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select the day of the week on which to repeat the alarm"
-msgstr "Alarmın haftanın hangi günü tekrarlanacağını seçin"
+msgstr "Alarmın haftanın hangi günü yineleneceğini seçin"
 
 #: recurrenceedit.cpp:1483
 #, kde-format
@@ -6650,7 +6640,7 @@ msgstr "Aylar:"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select the months of the year in which to repeat the alarm"
-msgstr "Alarmın yılın hangi aylarında tekrarlanacağını seçin"
+msgstr "Alarmın yılın hangi aylarında yineleneceğini seçin"
 
 #: recurrenceedit.cpp:1530
 #, kde-format
@@ -6732,7 +6722,7 @@ msgstr "Alarm Alt-Tekrarı"
 #, kde-format
 msgctxt "@option:check Repeat every 10 minutes"
 msgid "Repeat every"
-msgstr "Tekrarlama aralığı"
+msgstr "Yineleme aralığı"
 
 #: repetitionbutton.cpp:140
 #, kde-format
@@ -6741,8 +6731,8 @@ msgid ""
 "Instead of the alarm triggering just once at each recurrence, checking this "
 "option makes the alarm trigger multiple times at each recurrence."
 msgstr ""
-"Her tekrarda alarmın yalnızca bir kez tetiklemesi yerine, bu seçeneği "
-"işaretle ve alarmın her tekrarda birçok kez tetiklemesini sağla"
+"Alarmın her yinelemede yalnızca bir kez tetiklenmesi yerine, bu seçeneğin "
+"işaretlenmesi alarmın her yinelemede birden çok kez tetiklenmesini sağlar."
 
 #: repetitionbutton.cpp:142
 #, kde-format
@@ -6763,8 +6753,8 @@ msgid ""
 "Check to specify the number of times the alarm should repeat after each "
 "recurrence"
 msgstr ""
-"Her başa dönüşten sonra alarmın kaç kez tekrarlanacağını belirtmek için "
-"tıklayın"
+"Her başa dönüşten sonra alarmın kaç kez yineleneceğini belirtmek için "
+"işaretleyin"
 
 #: repetitionbutton.cpp:165
 #, kde-format
@@ -6783,13 +6773,13 @@ msgstr "Süre: "
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to specify how long the alarm is to be repeated"
-msgstr "Alarmın ne kadar süre tekrarlanacağını belirtmek için işaretleyin"
+msgstr "Alarmın ne kadar süre yineleneceğini belirtmek için işaretleyin"
 
 #: repetitionbutton.cpp:179
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the length of time to repeat the alarm"
-msgstr "Alarmın tekrarlanacağı süreyi girin"
+msgstr "Alarmın yineleneceği süreyi girin"
 
 #: resources/calendarfunctions.cpp:53 resources/calendarfunctions.cpp:84
 #, kde-kuit-format
@@ -7213,7 +7203,7 @@ msgstr "Zaman"
 #, kde-format
 msgctxt "@title:column"
 msgid "Repeat"
-msgstr "Tekrarla"
+msgstr "Yinele"
 
 #: resources/resourcedatamodelbase.cpp:119
 #, kde-format
@@ -7703,9 +7693,9 @@ msgid ""
 "whether a calendar is enabled (checked) or disabled (unchecked). The default "
 "calendar is shown in bold."
 msgstr ""
-"Seçilen tipteki kullanılabilir takvimlerin listesi. İşaretlenme durumu "
-"takvimin etkin (işaretli) veya kapalı (işaretlenmemiş) olduğunu gösterir. "
-"Öntanımlı takvim koyu ile gösterilir."
+"Seçili türdeki kullanılabilir takvimlerin listesi. İşaretli durum, bir "
+"takvimin etkin mi (işaretli) yoksa devre dışı mı (işaretsiz) olduğunu "
+"gösterir. Öntanımlı takvim kalın harflerle gösterilmiştir."
 
 #: resourceselector.cpp:77 templatedlg.cpp:80
 #, kde-format
@@ -7976,7 +7966,7 @@ msgstr ""
 #, kde-format
 msgctxt "@option:check"
 msgid "Repeat"
-msgstr "Tekrarla"
+msgstr "Yinele"
 
 #: sounddlg.cpp:43
 #, kde-format
@@ -7991,7 +7981,7 @@ msgid ""
 "If checked, the sound file will be played repeatedly for as long as the "
 "message is displayed."
 msgstr ""
-"Seçilirse ileti görüntülendiği sürece ses dosyası tekrarlanarak çalınacaktır."
+"İşaretliyse ileti görüntülendiği sürece ses dosyası yinelenerek çalınır."
 
 #: sounddlg.cpp:149
 #, kde-format

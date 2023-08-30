@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-08-29 00:46+0000\n"
-"PO-Revision-Date: 2023-08-07 19:08+0200\n"
+"PO-Revision-Date: 2023-08-29 08:25+0200\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
 "Language: eu\n"
@@ -2248,9 +2248,7 @@ msgstr ""
 "denbora tartean hasteko ezarri."
 
 #: editdlg.cpp:395
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Wake From Suspend"
+#, kde-format
 msgctxt "@option:check"
 msgid "Wake from suspend"
 msgstr "Esnatu esekitzetik"
@@ -2261,6 +2259,8 @@ msgctxt "@info:whatsthis"
 msgid ""
 "Check to wake the system if the alarm triggers while the system is suspended"
 msgstr ""
+"Egiaztatu, sistema esekita dagoen bitartean alarma eragiten bada sistema "
+"esnatzeko"
 
 #: editdlg.cpp:414
 #, kde-format
@@ -5290,33 +5290,25 @@ msgid "None"
 msgstr "Bat ere ez"
 
 #: prefdlg.cpp:755
-#, fuzzy, kde-format
-#| msgid "Wake From Suspend Alarm"
+#, kde-format
 msgctxt "@label:spinbox How long before alarm to wake system from suspend"
 msgid "Wake from suspend before alarm:"
-msgstr "«Esnatu esekitzetik» alarma"
+msgstr "Esnatu esekitzetik alarma baino lehen:"
 
 #: prefdlg.cpp:762
-#, fuzzy, kde-format
-#| msgctxt "@info:whatsthis"
-#| msgid ""
-#| "Enter how many minutes before the alarm trigger time to wake the system "
-#| "from suspend. This can be used to ensure that the system is fully "
-#| "restored by the time the alarm triggers."
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "Enter how many minutes before the alarm trigger time to wake the system, for "
 "alarms set to wake from suspend. This can be used to ensure that the system "
 "is fully restored by the time the alarm triggers."
 msgstr ""
-"Sartu alarma eragin aurretik sistema esekitzetik esnatzeko minutu kopurua. "
-"Hau, alarma eragiten den ordurako sistema erabat lehengoratuta dagoela "
-"ziurtatzeko erabil daiteke."
+"Sartu alarma eragin aurretik sistema esekitzetik esnatzeko minutu kopurua, "
+"esekitzetik esnatzeko ezarritako alarmetarako. Hau, alarma eragiten den "
+"ordurako sistema erabat lehengoratuta dagoela ziurtatzeko erabil daiteke."
 
 #: prefdlg.cpp:763
-#, fuzzy, kde-format
-#| msgctxt "@item:inlistbox Time units"
-#| msgid "minutes"
+#, kde-format
 msgctxt "@label Time unit for user entered number"
 msgid "minutes"
 msgstr "minutu"
