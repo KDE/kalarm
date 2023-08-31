@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-08-29 00:46+0000\n"
-"PO-Revision-Date: 2023-08-08 16:55+0200\n"
+"PO-Revision-Date: 2023-08-29 15:11+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -2277,9 +2277,7 @@ msgstr ""
 "l'interval de temps indicat a partir de quan s'ha creat l'alarma."
 
 #: editdlg.cpp:395
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Wake From Suspend"
+#, kde-format
 msgctxt "@option:check"
 msgid "Wake from suspend"
 msgstr "Activa després de la suspensió"
@@ -2290,6 +2288,8 @@ msgctxt "@info:whatsthis"
 msgid ""
 "Check to wake the system if the alarm triggers while the system is suspended"
 msgstr ""
+"Marqueu-la per a activar el sistema si l'alarma es dispara mentre el sistema "
+"està en suspensió"
 
 #: editdlg.cpp:414
 #, kde-format
@@ -5339,19 +5339,13 @@ msgid "None"
 msgstr "Cap"
 
 #: prefdlg.cpp:755
-#, fuzzy, kde-format
-#| msgid "Wake From Suspend Alarm"
+#, kde-format
 msgctxt "@label:spinbox How long before alarm to wake system from suspend"
 msgid "Wake from suspend before alarm:"
-msgstr "Alarma d'activació des de la suspensió"
+msgstr "Activa des de la suspensió abans de l'alarma:"
 
 #: prefdlg.cpp:762
-#, fuzzy, kde-format
-#| msgctxt "@info:whatsthis"
-#| msgid ""
-#| "Enter how many minutes before the alarm trigger time to wake the system "
-#| "from suspend. This can be used to ensure that the system is fully "
-#| "restored by the time the alarm triggers."
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "Enter how many minutes before the alarm trigger time to wake the system, for "
@@ -5359,13 +5353,12 @@ msgid ""
 "is fully restored by the time the alarm triggers."
 msgstr ""
 "Introduïu el nombre de minuts abans de l'hora d'activació de l'alarma per a "
-"activar el sistema des de la suspensió. Açò es pot utilitzar per a assegurar "
-"que el sistema està completament restaurat a l'hora d'activar l'alarma."
+"activar el sistema, per a les alarmes definides per a activar des de la "
+"suspensió. Açò es pot utilitzar per a assegurar que el sistema està "
+"completament restaurat a l'hora d'activar l'alarma."
 
 #: prefdlg.cpp:763
-#, fuzzy, kde-format
-#| msgctxt "@item:inlistbox Time units"
-#| msgid "minutes"
+#, kde-format
 msgctxt "@label Time unit for user entered number"
 msgid "minutes"
 msgstr "minuts"
@@ -6424,7 +6417,7 @@ msgstr "Excepcions"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "The list of exceptions, i.e. dates/times excluded from the recurrence"
-msgstr "La llista d'excepcions, p. ex. dates/hores excloses de la recurrència"
+msgstr "La llista d'excepcions, p. ex., dates/hores excloses de la recurrència"
 
 #: recurrenceedit.cpp:300
 #, kde-format
@@ -6938,7 +6931,7 @@ msgid ""
 msgstr ""
 "<para>%1</para><para><warning>No actualitzeu el calendari si està compartit "
 "amb altres usuaris que executen una versió antiga de <application>KAlarm</"
-"application> (p. ex. en un altre ordinador). Si ho feu, el calendari allà "
+"application> (p. ex., en un altre ordinador). Si ho feu, el calendari allà "
 "podria tornar-se inservible.</warning></para><para>Segur que voleu "
 "actualitzar el calendari?</para>"
 
@@ -8387,7 +8380,7 @@ msgid ""
 "Cancel the alarm if the pre-alarm command fails, i.e. do not display the "
 "alarm or execute any post-alarm action command."
 msgstr ""
-"Cancel·la l'alarma si l'ordre de prealarma falla, p. ex. no mostra l'alarma "
+"Cancel·la l'alarma si l'ordre de prealarma falla, p. ex., no mostra l'alarma "
 "o executa qualsevol ordre d'acció de postalarma."
 
 #: specialactions.cpp:183

@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-08-29 00:46+0000\n"
-"PO-Revision-Date: 2023-07-10 07:07+0200\n"
+"PO-Revision-Date: 2023-08-30 07:43+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -2041,9 +2041,7 @@ msgid ""
 msgstr ""
 
 #: editdlg.cpp:395
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Wake From Suspend"
+#, kde-format
 msgctxt "@option:check"
 msgid "Wake from suspend"
 msgstr "პროგრამული ძილიდან გაღვიძება"
@@ -4642,7 +4640,7 @@ msgstr ""
 #, kde-format
 msgctxt "@action"
 msgid "New Audio Alarm"
-msgstr ""
+msgstr "ახალი ხმოვანი განგაში"
 
 #: newalarmaction.cpp:69
 #, kde-format
@@ -4941,12 +4939,10 @@ msgid "None"
 msgstr "არაფერი"
 
 #: prefdlg.cpp:755
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Wake From Suspend"
+#, kde-format
 msgctxt "@label:spinbox How long before alarm to wake system from suspend"
 msgid "Wake from suspend before alarm:"
-msgstr "პროგრამული ძილიდან გაღვიძება"
+msgstr "პროგრამული ძილიდან გაღვიძება განგაშამდე:"
 
 #: prefdlg.cpp:762
 #, kde-format
@@ -4958,9 +4954,7 @@ msgid ""
 msgstr ""
 
 #: prefdlg.cpp:763
-#, fuzzy, kde-format
-#| msgctxt "@item:inlistbox Time units"
-#| msgid "minutes"
+#, kde-format
 msgctxt "@label Time unit for user entered number"
 msgid "minutes"
 msgstr "წუთი"

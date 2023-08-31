@@ -19,7 +19,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-08-29 00:46+0000\n"
-"PO-Revision-Date: 2023-06-09 01:00+0200\n"
+"PO-Revision-Date: 2023-08-30 11:21+0200\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -27,7 +27,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "First-Translator: Miguel Revilla <yo@miguelrevilla.com>\n"
-"X-Generator: Lokalize 23.04.1\n"
+"X-Generator: Lokalize 23.04.3\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #, kde-format
@@ -2273,12 +2273,10 @@ msgstr ""
 "de transcurrido el intervalo de tiempo desde el que se creó la alarma."
 
 #: editdlg.cpp:395
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Wake From Suspend"
+#, kde-format
 msgctxt "@option:check"
 msgid "Wake from suspend"
-msgstr "Despertar de suspendido"
+msgstr "Despertar de suspensión"
 
 #: editdlg.cpp:397
 #, kde-format
@@ -2286,6 +2284,8 @@ msgctxt "@info:whatsthis"
 msgid ""
 "Check to wake the system if the alarm triggers while the system is suspended"
 msgstr ""
+"Marque para despertar el sistema si se activan alarmas cuando el sistema "
+"está suspendido"
 
 #: editdlg.cpp:414
 #, kde-format
@@ -5333,34 +5333,26 @@ msgid "None"
 msgstr "Ninguna"
 
 #: prefdlg.cpp:755
-#, fuzzy, kde-format
-#| msgid "Wake From Suspend Alarm"
+#, kde-format
 msgctxt "@label:spinbox How long before alarm to wake system from suspend"
 msgid "Wake from suspend before alarm:"
-msgstr "Despertar desde alarma de suspensión"
+msgstr "Despertar de suspensión antes de alarma:"
 
 #: prefdlg.cpp:762
-#, fuzzy, kde-format
-#| msgctxt "@info:whatsthis"
-#| msgid ""
-#| "Enter how many minutes before the alarm trigger time to wake the system "
-#| "from suspend. This can be used to ensure that the system is fully "
-#| "restored by the time the alarm triggers."
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "Enter how many minutes before the alarm trigger time to wake the system, for "
 "alarms set to wake from suspend. This can be used to ensure that the system "
 "is fully restored by the time the alarm triggers."
 msgstr ""
-"Introduzca cuantos minutos antes de la activación de la alarma se debe "
-"despertar el sistema de desde suspendido. Esto puede usarse para asegurarse "
-"de que el sistema está completamente restaurado para la hora en la que se "
-"active la alarma."
+"Introduzca cuántos minutos antes de la activación de la alarma se debe "
+"despertar el sistema (para las alarmas que pueden despertar de suspensión). "
+"Esto se puede usar para asegurarse de que el sistema está completamente "
+"restaurado cuando se active la alarma."
 
 #: prefdlg.cpp:763
-#, fuzzy, kde-format
-#| msgctxt "@item:inlistbox Time units"
-#| msgid "minutes"
+#, kde-format
 msgctxt "@label Time unit for user entered number"
 msgid "minutes"
 msgstr "minutos"
