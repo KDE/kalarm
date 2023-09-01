@@ -55,7 +55,10 @@ KernelWakeAlarm::KernelWakeAlarm(const KernelWakeAlarm& other)
     : KernelWakeAlarm()
 {
     if (other.mTriggerTime > 0)
-        arm(other.mTriggerTime);
+    {
+        if (arm(other.mTriggerTime))
+            mTriggerTime = other.mTriggerTime;
+    }
 }
 
 KernelWakeAlarm::~KernelWakeAlarm()
@@ -67,7 +70,10 @@ KernelWakeAlarm::~KernelWakeAlarm()
 KernelWakeAlarm& KernelWakeAlarm::operator=(const KernelWakeAlarm& other)
 {
     if (other.mTriggerTime > 0)
-        arm(other.mTriggerTime);
+    {
+        if (arm(other.mTriggerTime))
+            mTriggerTime = other.mTriggerTime;
+    }
     return *this;
 }
 
@@ -102,7 +108,7 @@ bool KernelWakeAlarm::arm(time_t triggerSeconds)
 {
     if (!mTimerFd)
         return false;
-    if (triggerSeconds <= ::time(nullptr))
+    if (triggerSeconds  &&  triggerSeconds <= ::time(nullptr))
         return false;    // already expired
     struct itimerspec time = {};
     time.it_value.tv_sec = triggerSeconds;

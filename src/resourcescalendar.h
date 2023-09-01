@@ -82,6 +82,7 @@ private Q_SLOTS:
     void                  slotEventsToBeRemoved(Resource&, const QList<KAlarmCal::KAEvent>&);
     void                  slotEventUpdated(Resource&, const KAlarmCal::KAEvent&);
     void                  slotAlarmsEnabledToggled(bool enabled);
+    void                  slotWakeFromSuspendAdvanceChanged(unsigned advance);
 private:
     ResourcesCalendar();
     static CalEvent::Type deleteEventInternal(const KAlarmCal::KAEvent&, Resource&, bool deleteFromResource = true);
@@ -94,6 +95,7 @@ private:
     void                  checkForDisabledAlarms();
     void                  checkForDisabledAlarms(bool oldEnabled, bool newEnabled);
     static QVector<KAEvent> eventsForResource(const Resource&, const QSet<QString>& eventIds);
+    void                  setKernelWakeSuspend();
     static void           checkKernelWakeSuspend(ResourceId, const KAlarmCal::KAEvent&);
 
     static ResourcesCalendar* mInstance;   // the unique instance

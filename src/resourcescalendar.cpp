@@ -64,6 +64,7 @@ ResourcesCalendar::ResourcesCalendar()
     connect(resources, &Resources::resourcesPopulated, this, &ResourcesCalendar::slotResourcesPopulated);
     connect(resources, &Resources::settingsChanged, this, &ResourcesCalendar::slotResourceSettingsChanged);
     connect(theApp(), &KAlarmApp::alarmEnabledToggled, this, &ResourcesCalendar::slotAlarmsEnabledToggled);
+    Preferences::connect(&Preferences::wakeFromSuspendAdvanceChanged, this, &ResourcesCalendar::slotWakeFromSuspendAdvanceChanged);
 
     // Fetch events from all resources which already exist.
     QVector<Resource> allResources = Resources::enabledResources();
@@ -271,17 +272,7 @@ void ResourcesCalendar::slotAlarmsEnabledToggled(bool enabled)
     if (enabled)
     {
         // Set kernel wake timers for all events which require them.
-        for (auto itr = mWakeSuspendTimers.begin(), endr = mWakeSuspendTimers.end();  itr != endr;  ++itr)
-        {
-            const ResourceId resourceId = itr.key();
-            Resource resource = Resources::resource(resourceId);
-            auto& resourceHash = itr.value();
-            for (auto it = resourceHash.begin(), end = resourceHash.end();  it != end;  ++it)
-            {
-                const KAEvent event = resource.event(it.key());
-                checkKernelWakeSuspend(resourceId, event);
-            }
-        }
+        setKernelWakeSuspend();
     }
     else
     {
@@ -293,6 +284,21 @@ void ResourcesCalendar::slotAlarmsEnabledToggled(bool enabled)
                 it.value().disarm();
         }
     }
+}
+
+/******************************************************************************
+* Called when the wake-from-suspend wakeup advance interval has changed.
+* Revise all kernel wake alarm times.
+* Note that the user only has the option to change the wakeup advance if kernel
+* wake alarms are used, and not if the RTC wake timer is used.
+*/
+void ResourcesCalendar::slotWakeFromSuspendAdvanceChanged(unsigned advance)
+{
+    if (!KernelWakeAlarm::isAvailable()  ||  !theApp()->alarmsEnabled())
+        return;
+
+    qCDebug(KALARM_LOG) << "ResourcesCalendar::slotWakeFromSuspendAdvanceChanged:" << advance;
+    setKernelWakeSuspend();
 }
 
 /******************************************************************************
@@ -682,6 +688,24 @@ void ResourcesCalendar::checkForDisabledAlarms()
     {
         mHaveDisabledAlarms = disabled;
         Q_EMIT haveDisabledAlarmsChanged(disabled);
+    }
+}
+
+/******************************************************************************
+* Set kernel wake alarm timers for all events which require them.
+*/
+void ResourcesCalendar::setKernelWakeSuspend()
+{
+    for (auto itr = mWakeSuspendTimers.begin(), endr = mWakeSuspendTimers.end();  itr != endr;  ++itr)
+    {
+        const ResourceId resourceId = itr.key();
+        Resource resource = Resources::resource(resourceId);
+        auto& resourceHash = itr.value();
+        for (auto it = resourceHash.begin(), end = resourceHash.end();  it != end;  ++it)
+        {
+            const KAEvent event = resource.event(it.key());
+            checkKernelWakeSuspend(resourceId, event);
+        }
     }
 }
 

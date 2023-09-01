@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-SPDX-FileCopyrightText: 2007-2022 David Jarvie <djarvie@kde.org>
+SPDX-FileCopyrightText: 2007-2023 David Jarvie <djarvie@kde.org>
 SPDX-License-Identifier: GPL-2.0-or-later
 -->
 <kcfg xmlns="http://www.kde.org/standards/kcfg/1.0"
@@ -51,6 +51,9 @@ SPDX-License-Identifier: GPL-2.0-or-later
   </signal>
   <signal name="archivedKeepDaysChanged">
     <argument type="Int">ArchivedKeepDays</argument>
+  </signal>
+  <signal name="wakeFromSuspendAdvanceChanged">
+    <argument type="UInt">WakeFromSuspendAdvance</argument>
   </signal>
   <signal name="feb29TypeChanged">
     <argument type="Enum">DefaultFeb29Type</argument>
@@ -269,10 +272,11 @@ SPDX-License-Identifier: GPL-2.0-or-later
       <whatsthis context="@info:whatsthis">Enter the event duration in minutes, for alarms which are copied to KOrganizer.</whatsthis>
       <default>0</default>
     </entry>
-    <entry name="WakeFromSuspendAdvance" type="Int">
+    <entry name="WakeFromSuspendAdvance" type="UInt">
       <label context="@label">Number of minutes before alarm to wake from suspend</label>
       <whatsthis context="@info:whatsthis">Enter how many minutes before the alarm trigger time to wake the system from suspend. This can be used to ensure that the system is fully restored by the time the alarm triggers.</whatsthis>
-      <default>1</default>
+      <default>2</default>
+      <emit signal="wakeFromSuspendAdvanceChanged"/>
     </entry>
     <entry name="ShowMenuBar" type="Bool">
       <default>true</default>
