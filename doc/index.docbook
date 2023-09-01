@@ -39,8 +39,8 @@
 
 <!-- Don't change format of date and version of the documentation -->
 
-<date>2023-7-13</date>
-<releaseinfo>3.6.0 (KDE Gear 23.08)</releaseinfo>
+<date>2023-9-2</date>
+<releaseinfo>3.7.0 (KDE Gear 23.12)</releaseinfo>
 
 <abstract>
 <para>&kalarm; is a personal alarm message, command and email scheduler by &kde;.</para>
@@ -1939,6 +1939,13 @@ cancelled.</para></note>
 <sect2>
 <title>Other Controls</title>
 
+<para>If the system configuration allows multiple alarms to wake the
+system from suspension, you can select
+<guilabel>Wake from suspend</guilabel> to wake the system if it is
+currently suspended when the alarm becomes due. See 
+<link linkend="wake-suspend">Wake From Suspend</link> for more
+information.</para>
+
 <para>For display alarms, the
 <guilabel>Confirm acknowledgment</guilabel> check box lets you specify
 whether you will be prompted for confirmation when you close the alarm
@@ -2490,14 +2497,41 @@ from the context menu.</para>
 <sect1 id="wake-suspend">
 <title>Wake From Suspend</title>
 
-<para>It is possible to configure a selected alarm to wake your
-computer from hibernation or suspension when the alarm triggers, so
-that the alarm action can occur even when the system was shut down.
-This function is controlled by a dialog which is accessed by selecting
+<para>Alarms can be configured to wake your computer from hibernation
+or suspension when the alarm triggers, so that the alarm action can
+occur even when the system is shut down. The mechanism used by
+&kalarm; to wake the system, and the user interface to control it,
+depend on the type of system and user permissions. There are two
+possibilities:</para>
+
+<sect2>
+<title>Linux Kernel Timer Wake From Suspend</title>
+
+<para>On Linux systems, if the user has kernel alarm timer
+(<literal>cap_wake_alarm</literal>) capability, any number of alarms
+can be set to wake from suspend. In this case, wake from suspend is
+configured for each individual alarm in the
+<link linkend="alarm-edit-dlg">Alarm Edit dialog</link> using its
+<guilabel>Wake from suspend</guilabel> option.</para>
+
+<para>You can configure how long before the alarm to wake from suspend,
+to ensure that the system has time to fully restore itself before the
+alarm triggers, in the 
+<link linkend="preferences-time">Configuration dialog</link>.</para>
+
+</sect2>
+
+<sect2>
+<title>RTC Wake From Suspend</title>
+
+<para>On non-Linux systems, or on Linux systems where the user does not
+have <literal>cap_wake_alarm</literal> capability, the real time clock
+(<acronym>RTC</acronym>) alarm is used. This can only be set for one
+alarm at a time. In this case, a special Wake From Suspend dialog is
+used to configure it. The dialog allows the Wake From Suspend alarm to
+be set, cancelled or displayed. To access the dialog, select
 <menuchoice><guimenu>Actions</guimenu>
-<guimenuitem>Wake From Suspend</guimenuitem></menuchoice>. The dialog
-allows the Wake From Suspend alarm to be set, cancelled or
-displayed.</para>
+<guimenuitem>Wake From Suspend</guimenuitem></menuchoice>.</para>
 
 <para>Use of the Wake From Suspend function requires
 administrative privileges. You will be prompted for the root password
@@ -2553,6 +2587,7 @@ that the alarm can trigger at the correct time.</para>
 </listitem>
 </itemizedlist>
 
+</sect2>
 </sect1>
 
 <sect1 id="quitting">
@@ -2706,6 +2741,17 @@ for individual alarms.</para>
 <listitem><para><guilabel>Holiday region</guilabel>: Select which
 country's or region's holidays to use. This affects recurring alarms
 for which the option to exclude holidays is selected.</para>
+</listitem>
+
+<listitem><para><guilabel>Wake from suspend before alarm</guilabel>:
+Enter the number of minutes before the alarm trigger time to wake the
+system, for alarms set to wake from suspend. This allows you to ensure
+that the system has time to fully restore itself before the alarm
+triggers, so that the alarm can trigger at the correct time. This
+option is only shown if the system configuration allows multiple alarms
+to wake the system from suspension. See 
+<link linkend="wake-suspend">Wake From Suspend</link> for more
+information.</para>
 </listitem>
 
 <listitem><para><guilabel>Start of day for date-only
