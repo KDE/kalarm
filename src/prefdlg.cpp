@@ -756,6 +756,7 @@ TimePrefTab::TimePrefTab(StackedScrollGroup* scrollGroup)
         addAlignedLabel(label);
         box->addWidget(label);
         mPreWakeSuspend = new SpinBox;
+        mPreWakeSuspend->setMaximum(10);   // 10 minutes maximum
         box->addWidget(mPreWakeSuspend);
         label->setBuddy(mPreWakeSuspend);
         widget->setWhatsThis(i18nc("@info:whatsthis",
@@ -892,7 +893,7 @@ bool TimePrefTab::apply(bool syncToDisc)
         Preferences::setHolidayRegion(hol);
     if (mPreWakeSuspend)
     {
-        int t = mPreWakeSuspend->value();
+        unsigned t = static_cast<unsigned>(mPreWakeSuspend->value());
         if (t != Preferences::wakeFromSuspendAdvance())
             Preferences::setWakeFromSuspendAdvance(t);
     }

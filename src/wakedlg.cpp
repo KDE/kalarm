@@ -163,7 +163,7 @@ void WakeFromSuspendDlg::useWakeClicked()
         KConfigGroup config(KSharedConfig::openConfig(), "General");
         config.writeEntry("RtcWake", param);
         config.sync();
-        Preferences::setWakeFromSuspendAdvance(advance);
+        Preferences::setWakeFromSuspendAdvance(static_cast<unsigned>(advance));
         close();
     }
 }
