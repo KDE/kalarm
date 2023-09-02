@@ -11,6 +11,7 @@
 
 #include <QtGlobal>
 
+#include <ctime>
 #include <optional>
 
 namespace KAlarmCal
