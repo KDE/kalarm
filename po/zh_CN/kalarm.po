@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-08-28 03:11+0000\n"
-"PO-Revision-Date: 2023-08-27 03:43\n"
+"PO-Revision-Date: 2023-09-02 02:59\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -75,7 +75,7 @@ msgstr "将使用 KAlarm 的默认时区作为时区，可在配置对话框中�
 #, kde-format
 msgctxt "@option:radio"
 msgid "Defer until:"
-msgstr "推迟到:"
+msgstr "推迟到："
 
 #: alarmtimewidget.cpp:92
 #, kde-format
@@ -133,7 +133,7 @@ msgstr "勾选后可仅指定闹钟日期 (不指定时间)，闹钟将在所选
 #, kde-format
 msgctxt "@option:radio Defer for time interval"
 msgid "Defer for:"
-msgstr "推迟:"
+msgstr "推迟："
 
 #: alarmtimewidget.cpp:137 editdlg.cpp:336
 #, kde-format
@@ -1106,7 +1106,7 @@ msgid ""
 "automatically. This option will only work if your system is configured to "
 "use sendmail or a sendmail compatible mail transport agent.</li></ul></p>"
 msgstr ""
-"<p>在触发电子邮件提醒时如何发送电子邮件。<ul><li>KMail: 电子邮件是通过 KMail "
+"<p>在触发电子邮件提醒时如何发送电子邮件。<ul><li>KMail：电子邮件是通过 KMail "
 "自动发送的。</li><li>发送电子邮件是自动的。 只有当您的系统被配置为使用 "
 "sendmail 或 sendmail 兼容的邮件传送代理时，此选项才启用。</li></ul></p>"
 
@@ -2801,7 +2801,7 @@ msgctxt "@info"
 msgid ""
 "<para>The command cannot set environment variables:</para><para><icode>%1</"
 "icode></para>"
-msgstr "<para>命令不能设置环境变量:</para><para><icode>%1</icode></para>"
+msgstr "<para>命令不能设置环境变量：</para><para><icode>%1</icode></para>"
 
 #: editdlgtypes.cpp:1897
 #, kde-format
@@ -5246,7 +5246,7 @@ msgid ""
 "if your system is configured to use <application>sendmail</application> or a "
 "sendmail compatible mail transport agent.</item></list></para>"
 msgstr ""
-"<para>%1<list><item><interface>%2</interface>: 电子邮件是通过 "
+"<para>%1<list><item><interface>%2</interface>：电子邮件是通过 "
 "<application>KMail</application>自动发送的。</item><item><interface>%3</"
 "interface>：电子邮件是自动发送的。 只有当您的系统被配置为使用 "
 "<application>sendmail</application> 或一个兼容的邮件传送代理时，此选项才能启"
@@ -5261,7 +5261,7 @@ msgid ""
 "use <application>sendmail</application> or a sendmail compatible mail "
 "transport agent.</item></list></para>"
 msgstr ""
-"<para>%1<list><item><interface>%2</interface>: 电子邮件是自动发送的。 只有当"
+"<para>%1<list><item><interface>%2</interface>：电子邮件是自动发送的。 只有当"
 "您的系统被配置为使用 <application>sendmail</application> 或一个兼容的邮件传送"
 "代理时，此选项才能启用。</item></list></para>"
 
