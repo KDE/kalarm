@@ -106,9 +106,9 @@
 <!-- Don't change format of date and version of the documentation -->
 
 <date
->2023-07-13</date>
+>2023-09-02</date>
 <releaseinfo
->3.6.0 (KDE Gear 23.08)</releaseinfo>
+>3.7.0 (KDE Gear 23.12)</releaseinfo>
 
 <abstract>
 <para
@@ -2331,6 +2331,13 @@ mode.</para
 >Övriga åtgärder</title>
 
 <para
+>Om systeminställningen tillåter flera alarm att väcka systemet från avstängning, kan du välja <guilabel 
+>Vakna från viloläge</guilabel 
+> för att väcka systemet om det för närvarande är i viloläge när alarmet går ut. Se <link linkend="wake-suspend"
+>Vakna från viloläge</link
+> för mer information.</para>
+
+<para
 >Kryssrutan <guilabel
 >Bekräfta meddelande</guilabel
 > låter dig ange om du vill bli tillfrågad om bekräftelse när du stänger alarmmeddelandets fönster för visade alarm. Det kan användas som en säkerhetsåtgärd för att undvika att bekräfta alarm av misstag.</para>
@@ -2990,13 +2997,44 @@ mode.</para
 >Vakna från viloläge</title>
 
 <para
->Det är möjligt att anpassa ett valt alarm att väcka datorn från viloläge eller dvala när alarmet inträffar, så att alarmets åtgärd kan utföras även när systemet är avstängt. Funktionen styrs av en dialogruta som kan kommas åt genom att välja <menuchoice
-><guimenu
->Åtgärder</guimenu
-> <guimenuitem
+>Alarm kan konfigureras för att väcka din dator från dvala eller viloläge när alarmet utlöses, så att alarmet kan inträffa även när systemet stängs av. Mekanismen som används av &kalarm; för att väcka systemet, och användargränssnittet för att styra det, beror på typen av system och användarbehörigheter. Det finns två möjligheter:</para>
+
+<sect2>
+<title
+>Vakna från viloläge med tidtagning i Linux kärna</title>
+
+<para
+>På Linux-system, om användaren har möjlighet att använda kärnans alarmtidtagning (<literal
+>cap_wake_alarm</literal
+>), kan valfritt antal alarm ställas in för att vakna från viloläge. I det här fallet ställs vakna från viloläge in för varje enskilt larm i <link linkend="alarm-edit-dlg"
+>dialogrutan för alarmredigering</link
+> med alternativet <guilabel 
+>Vakna från viloläge</guilabel 
+>.</para>
+
+<para
+>Du kan ställa in hur lång tid innan alarmet ska vakna från viloläge, för att säkerställa att systemet hinner återställa sig helt innan alarmet utlöses, i <link linkend="preferences-time"
+>Inställningsdialogrutan</link
+>.</para>
+
+</sect2>
+
+<sect2>
+<title
+>Vakna från viloläge med realtidsklocka</title>
+
+<para
+>På andra system än Linux, eller på Linux där användaren inte har tillgång till <literal
+>cap_wake_alarm</literal
+>, används realtidsklockan (<acronym
+>RTC</acronym
+>). Det kan bara ställas in för ett alarm åt gången. I det här fallet används en speciell dialogruta för Vakna från viloläge för att ställa in det. Dialogrutan gör att alarmet för vakna från viloläge kan ställas in, avbrytas eller visas. För att komma åt dialogrutan, välj <menuchoice
+><guimenu 
+>Åtgärder</guimenu 
+> <guimenuitem 
 >Vakna från viloläge</guimenuitem
-></menuchoice
->. Dialogrutan tillåter att alarmet för att vakna från viloläge att ställas in, avbrytas eller visas.</para>
+></menuchoice 
+>.</para>
 
 <para
 >Användning av funktionen Vakna från viloläge kräver administratörsrättigheter. Du kommer att bli tillfrågad om administratörens lösenord när du ställer in eller avbryter ett alarm för att vakna från viloläge.</para>
@@ -3044,6 +3082,7 @@ mode.</para
 </listitem>
 </itemizedlist>
 
+</sect2>
 </sect1>
 
 <sect1 id="quitting">
@@ -3244,6 +3283,15 @@ mode.</para
 ><guilabel
 >Helgområde</guilabel
 >: Välj vilket lands eller regions helger som ska användas. Det påverkar upprepade alarm där alternativet att undanta helger är valt.</para>
+</listitem>
+
+<listitem
+><para
+><guilabel
+>Vakna från viloläge innan alarm</guilabel
+>: Ange antalet minuter innan alarmet utlöses för att väcka systemet, för alarm som är inställda på att vakna från viloläge. Det gör att du kan säkerställa att systemet hinner återställa sig helt innan alarmet utlöses, så att alarmet kan utlösas vid rätt tidpunkt. Alternativet visas endast om systeminställningen tillåter flera alarm att väcka systemet från viloläge. Se <link linkend="wake-suspend"
+>Vakna från viloläge</link
+> för mer information.</para>
 </listitem>
 
 <listitem

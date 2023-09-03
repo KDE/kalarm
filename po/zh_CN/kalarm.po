@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-09-02 00:47+0000\n"
-"PO-Revision-Date: 2023-08-27 03:40\n"
+"PO-Revision-Date: 2023-09-02 02:56\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -75,7 +75,7 @@ msgstr "将使用 KAlarm 的默认时区作为时区，可在配置对话框中�
 #, kde-format
 msgctxt "@option:radio"
 msgid "Defer until:"
-msgstr "推迟到:"
+msgstr "推迟到："
 
 #: alarmtimewidget.cpp:92
 #, kde-format
@@ -133,7 +133,7 @@ msgstr "勾选后可仅指定闹钟日期 (不指定时间)，闹钟将在所选
 #, kde-format
 msgctxt "@option:radio Defer for time interval"
 msgid "Defer for:"
-msgstr "推迟:"
+msgstr "推迟："
 
 #: alarmtimewidget.cpp:137 editdlg.cpp:336
 #, kde-format
@@ -1106,7 +1106,7 @@ msgid ""
 "automatically. This option will only work if your system is configured to "
 "use sendmail or a sendmail compatible mail transport agent.</li></ul></p>"
 msgstr ""
-"<p>在触发电子邮件提醒时如何发送电子邮件。<ul><li>KMail: 电子邮件是通过 KMail "
+"<p>在触发电子邮件提醒时如何发送电子邮件。<ul><li>KMail：电子邮件是通过 KMail "
 "自动发送的。</li><li>发送电子邮件是自动的。 只有当您的系统被配置为使用 "
 "sendmail 或 sendmail 兼容的邮件传送代理时，此选项才启用。</li></ul></p>"
 
@@ -2101,9 +2101,7 @@ msgid ""
 msgstr "设定一段时间，基于此模板的闹钟会在创建后再过这段时间时启动。"
 
 #: editdlg.cpp:395
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Wake From Suspend"
+#, kde-format
 msgctxt "@option:check"
 msgid "Wake from suspend"
 msgstr "从睡眠中唤醒"
@@ -2113,7 +2111,7 @@ msgstr "从睡眠中唤醒"
 msgctxt "@info:whatsthis"
 msgid ""
 "Check to wake the system if the alarm triggers while the system is suspended"
-msgstr ""
+msgstr "勾选后，当系统处于睡眠状态时，闹钟响铃将唤醒系统"
 
 #: editdlg.cpp:414
 #, kde-format
@@ -2816,7 +2814,7 @@ msgctxt "@info"
 msgid ""
 "<para>The command cannot set environment variables:</para><para><icode>%1</"
 "icode></para>"
-msgstr "<para>命令不能设置环境变量:</para><para><icode>%1</icode></para>"
+msgstr "<para>命令不能设置环境变量：</para><para><icode>%1</icode></para>"
 
 #: editdlgtypes.cpp:1897
 #, kde-format
@@ -5032,30 +5030,24 @@ msgid "None"
 msgstr "无"
 
 #: prefdlg.cpp:755
-#, fuzzy, kde-format
-#| msgid "Wake From Suspend Alarm"
+#, kde-format
 msgctxt "@label:spinbox How long before alarm to wake system from suspend"
 msgid "Wake from suspend before alarm:"
-msgstr "从睡眠中唤醒的闹钟"
+msgstr "从睡眠中提前于闹钟唤醒"
 
 #: prefdlg.cpp:763
-#, fuzzy, kde-format
-#| msgctxt "@info:whatsthis"
-#| msgid ""
-#| "Enter how many minutes before the alarm trigger time to wake the system "
-#| "from suspend. This can be used to ensure that the system is fully "
-#| "restored by the time the alarm triggers."
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "Enter how many minutes before the alarm trigger time to wake the system, for "
 "alarms set to wake from suspend. This can be used to ensure that the system "
 "is fully restored by the time the alarm triggers."
-msgstr "输入闹钟响铃前唤醒系统的分钟数，此项可确保系统在闹钟响铃前完全启动。"
+msgstr ""
+"输入闹钟响铃之前多少分钟就要提前唤醒系统。这可以确保系统能够在闹钟响铃前完全"
+"恢复。"
 
 #: prefdlg.cpp:764
-#, fuzzy, kde-format
-#| msgctxt "@item:inlistbox Time units"
-#| msgid "minutes"
+#, kde-format
 msgctxt "@label Time unit for user entered number"
 msgid "minutes"
 msgstr "分钟"
@@ -5290,7 +5282,7 @@ msgid ""
 "if your system is configured to use <application>sendmail</application> or a "
 "sendmail compatible mail transport agent.</item></list></para>"
 msgstr ""
-"<para>%1<list><item><interface>%2</interface>: 电子邮件是通过 "
+"<para>%1<list><item><interface>%2</interface>：电子邮件是通过 "
 "<application>KMail</application>自动发送的。</item><item><interface>%3</"
 "interface>：电子邮件是自动发送的。 只有当您的系统被配置为使用 "
 "<application>sendmail</application> 或一个兼容的邮件传送代理时，此选项才能启"
@@ -5305,7 +5297,7 @@ msgid ""
 "use <application>sendmail</application> or a sendmail compatible mail "
 "transport agent.</item></list></para>"
 msgstr ""
-"<para>%1<list><item><interface>%2</interface>: 电子邮件是自动发送的。 只有当"
+"<para>%1<list><item><interface>%2</interface>：电子邮件是自动发送的。 只有当"
 "您的系统被配置为使用 <application>sendmail</application> 或一个兼容的邮件传送"
 "代理时，此选项才能启用。</item></list></para>"
 

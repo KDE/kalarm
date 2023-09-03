@@ -92,9 +92,9 @@
 <!-- Don't change format of date and version of the documentation -->
 
 <date
->13 de juliol de 2023</date>
+>2 de setembre de 2023</date>
 <releaseinfo
->3.6.0 (KDE Gear 23.08)</releaseinfo>
+>3.7.0 (KDE Gear 23.12)</releaseinfo>
 
 <abstract>
 <para
@@ -2319,6 +2319,13 @@ mode.</para
 >Altres controls</title>
 
 <para
+>Si la configuració del sistema permet que diverses alarmes despertin el sistema des de la suspensió, podeu seleccionar <guilabel
+>Activa des de la suspensió</guilabel
+> per activar el sistema si actualment està suspès quan venç l'alarma. Vegeu <link linkend="wake-suspend"
+>Activa des de la suspensió</link
+> per a més informació.</para>
+
+<para
 >Per a les alarmes visuals, la casella de selecció <guilabel
 >Confirma l'acceptació</guilabel
 > permet especificar si se us demanarà confirmació en tancar la finestra del missatge de l'alarma. Això es pot utilitzar com a salvaguarda contra el reconeixement accidental de les alarmes.</para>
@@ -2980,13 +2987,44 @@ mode.</para
 >Despertar de l'estat de suspensió</title>
 
 <para
->És possible configurar una alarma seleccionada perquè quan s'activi, desperti el vostre ordinador des de la hibernació o suspensió, de manera que l'acció de l'alarma pot ocórrer fins i tot quan el sistema està apagat. Aquesta funció és controlada per un diàleg al qual s'accedeix seleccionant <menuchoice
+>Les alarmes es poden configurar perquè quan s'activin, despertin l'ordinador des de la hibernació o suspensió, de manera que l'acció de l'alarma pot ocórrer fins i tot quan el sistema està inactiu. El mecanisme que fa servir el &kalarm; per a despertar el sistema, i que es controla amb la interfície d'usuari, depèn del tipus de sistema i dels permisos de l'usuari. Hi ha dues possibilitats:</para>
+
+<sect2>
+<title
+>Despertar de l'estat de suspensió del temporitzador del nucli Linux</title>
+
+<para
+>En els sistemes Linux, si l'usuari té la capacitat de temporitzador d'alarma del nucli (<literal
+>cap_wake_alarm</literal
+>), es pot configurar qualsevol nombre d'alarmes per activar-se des de la suspensió. En aquest cas, l'activació des de la suspensió es configura per a cada alarma individual en el <link linkend="alarm-edit-dlg"
+>diàleg d'edició d'alarma</link
+> utilitzant l'opció <guilabel
+>Activa des de la suspensió</guilabel
+>.</para>
+
+<para
+>Podeu configurar el període de temps anterior a l'alarma que l'ordinador es desperti de la suspensió, per a assegurar que el sistema té temps de restaurar-se completament abans que s'activi l'alarma, en el <link linkend="preferences-time"
+>diàleg de configuració</link
+>.</para>
+
+</sect2>
+
+<sect2>
+<title
+>Despertar de l'estat de suspensió de l'RTC</title>
+
+<para
+>En sistemes no Linux, o en sistemes Linux on l'usuari no té la capacitat <literal
+>cap_wake_alarm</literal
+>, s'utilitza l'alarma del rellotge en temps real (<acronym
+>RTC</acronym
+>). Això només es pot establir per a una alarma cada vegada. En aquest cas, per a configurar-ho s'utilitza un diàleg especial d'activació des de la suspensió. El diàleg permet establir, cancel·lar o mostrar l'alarma d'activació des de la suspensió. Per accedir al diàleg, seleccioneu <menuchoice
 ><guimenu
 >Accions</guimenu
 > <guimenuitem
->Activa després de la suspensió</guimenuitem
+>Activa des de la suspensió</guimenuitem
 ></menuchoice
->. El diàleg permet establir, cancel·lar o mostrar l'alarma Activa després de la suspensió.</para>
+>.</para>
 
 <para
 >L'ús de la funció per a despertar de la suspensió requereix privilegis administratius. Se us demanarà la contrasenya de l'usuari root quan establiu o cancel·leu una alarma d'aquest tipus.</para>
@@ -3034,6 +3072,7 @@ mode.</para
 </listitem>
 </itemizedlist>
 
+</sect2>
 </sect1>
 
 <sect1 id="quitting">
@@ -3234,6 +3273,15 @@ mode.</para
 ><guilabel
 >Regió per als dies festius</guilabel
 >: Seleccioneu quin país o regió utilitzar per als dies festius. Això afectarà les alarmes recurrents que tenen activada l'opció d'excloure els festius.</para>
+</listitem>
+
+<listitem
+><para
+><guilabel
+>Activa des de la suspensió abans de l'alarma</guilabel
+>: Introduïu el nombre de minuts abans de l'hora d'activació de l'alarma per a despertar el sistema, per a les alarmes configurades per despertar des de la suspensió. Permet assegurar que el sistema té temps per a restaurar-se completament abans que s'activi l'alarma, de manera que l'alarma pugui activar-se en el moment correcte. Aquesta opció només es mostra si la configuració del sistema permet que diverses alarmes despertin el sistema des de la suspensió. Vegeu <link linkend="wake-suspend"
+>Activa des de la suspensió abans de l'alarma</link
+> per a més informació.</para>
 </listitem>
 
 <listitem
