@@ -2681,24 +2681,25 @@ void KADateTimeTest::dstShifts()
     QCOMPARE(dt.qDateTime().isDaylightTime(), dst);
 
     // Set local time to London
+    // Shift from DST to standard time for the UK in 2022 was at 2022-10-30 01:00 UTC.
     qputenv("TZ", ":Europe/London");
     ::tzset();
-    qdt = QDateTime(QDate(2005, 10, 30), QTime(0, 59, 59), Qt::LocalTime);
+    qdt = QDateTime(QDate(2022, 10, 30), QTime(0, 59, 59), Qt::LocalTime);
     dst = qdt.isDaylightTime();
     dt = KADateTime(qdt);
     QVERIFY(!dt.isSecondOccurrence());
     QCOMPARE(dt.qDateTime().isDaylightTime(), dst);
-    qdt = QDateTime(QDate(2005, 10, 30), QTime(1, 0, 0), Qt::LocalTime);
+    qdt = QDateTime(QDate(2022, 10, 30), QTime(1, 0, 0), Qt::LocalTime);
     dst = qdt.isDaylightTime();
     dt = KADateTime(qdt);
     QCOMPARE(dt.isSecondOccurrence(), !dst);
     QCOMPARE(dt.qDateTime().isDaylightTime(), dst);
-    qdt = QDateTime(QDate(2005, 10, 30), QTime(1, 59, 59), Qt::LocalTime);
+    qdt = QDateTime(QDate(2022, 10, 30), QTime(1, 59, 59), Qt::LocalTime);
     dst = qdt.isDaylightTime();
     dt = KADateTime(qdt);
     QCOMPARE(dt.isSecondOccurrence(), !dst);
     QCOMPARE(dt.qDateTime().isDaylightTime(), dst);
-    qdt = QDateTime(QDate(2005, 10, 30), QTime(2, 0, 0), Qt::LocalTime);
+    qdt = QDateTime(QDate(2022, 10, 30), QTime(2, 0, 0), Qt::LocalTime);
     dst = qdt.isDaylightTime();
     dt = KADateTime(qdt);
     QVERIFY(!dt.isSecondOccurrence());
