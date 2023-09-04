@@ -722,7 +722,7 @@ void ResourcesCalendar::checkKernelWakeSuspend(ResourceId key, const KAEvent& ev
         {
             KernelWakeAlarm& kernelAlarm = mWakeSuspendTimers[key][event.id()];
             if (theApp()->alarmsEnabled())
-                kernelAlarm.arm(dt.addSecs(-Preferences::wakeFromSuspendAdvance() * 60));
+                kernelAlarm.arm(dt.addSecs(static_cast<int>(Preferences::wakeFromSuspendAdvance()) * -60));
             else
                 kernelAlarm.disarm();
         }
