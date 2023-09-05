@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-09-02 00:47+0000\n"
-"PO-Revision-Date: 2023-06-11 22:09+0200\n"
+"PO-Revision-Date: 2023-09-04 10:29+0200\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
 "Language: ia\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 23.04.2\n"
+"X-Generator: Lokalize 22.12.3\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -2245,9 +2245,7 @@ msgstr ""
 "intervallo de tempore ab quando le alarma es create."
 
 #: editdlg.cpp:395
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Wake From Suspend"
+#, kde-format
 msgctxt "@option:check"
 msgid "Wake from suspend"
 msgstr "Evelia ex suspende"
@@ -2258,6 +2256,8 @@ msgctxt "@info:whatsthis"
 msgid ""
 "Check to wake the system if the alarm triggers while the system is suspended"
 msgstr ""
+"Marca pro eveliar le systema si le alarma es discatenate durante que le "
+"systema es suspendite."
 
 #: editdlg.cpp:414
 #, kde-format
@@ -5291,19 +5291,13 @@ msgid "None"
 msgstr "Necun"
 
 #: prefdlg.cpp:755
-#, fuzzy, kde-format
-#| msgid "Wake From Suspend Alarm"
+#, kde-format
 msgctxt "@label:spinbox How long before alarm to wake system from suspend"
 msgid "Wake from suspend before alarm:"
-msgstr "Alarma de evelia ex suspende"
+msgstr "Evelia ex suspende ante alarma:"
 
 #: prefdlg.cpp:763
-#, fuzzy, kde-format
-#| msgctxt "@info:whatsthis"
-#| msgid ""
-#| "Enter how many minutes before the alarm trigger time to wake the system "
-#| "from suspend. This can be used to ensure that the system is fully "
-#| "restored by the time the alarm triggers."
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "Enter how many minutes before the alarm trigger time to wake the system, for "
@@ -5311,13 +5305,12 @@ msgid ""
 "is fully restored by the time the alarm triggers."
 msgstr ""
 "Inserta quante minutas ante le tempore de discatenar de alarma evelia le "
-"systema ex suspende. Isto pote esser usate pro assecurar que le systema es "
-"completemente restabilite per le tempore que le alarma disbloca se."
+"systema per alarmas fixate a eveliar ex suspende. Isto pote esser usate pro "
+"assecurar que le systema es completemente restabilite per le  tempore que le "
+"alarma disbloca se."
 
 #: prefdlg.cpp:764
-#, fuzzy, kde-format
-#| msgctxt "@item:inlistbox Time units"
-#| msgid "minutes"
+#, kde-format
 msgctxt "@label Time unit for user entered number"
 msgid "minutes"
 msgstr "minutas"
