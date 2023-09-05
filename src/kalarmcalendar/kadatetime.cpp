@@ -5,7 +5,7 @@
  *  calendar data.
  *  It is the Qt5 version of KDE 4 kdelibs/kdecore/date/kdatetime.cpp.
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2005-2022 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2005-2023 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: LGPL-2.0-or-later
 */
@@ -369,7 +369,22 @@ public:
         if (utcOffsetChange < 0)
         {
             if (mDt.isDaylightTime() != d.isDaylightTime())
-                mDt = mDt.addSecs(d.isDaylightTime() ? -utcOffsetChange : utcOffsetChange);
+            {
+                if (d.isDaylightTime())
+                {
+                    // d is DST but mDt isn't, i.e. mDt is an hour later than it should be
+                    // (assuming transition offset is -1 hour). Add the transition offset
+                    // to change mDt to DST at the correct time.
+                    mDt = mDt.addSecs(utcOffsetChange);
+                }
+                else
+                {
+                    // d is not DST but mDt is, i.e. mDt is an hour earlier than it should
+                    // be (assuming transition offset is -1 hour). Subtract the transition
+                    // offset to change mDt to non-DST at the correct time.
+                    mDt = mDt.addSecs(-utcOffsetChange);
+                }
+            }
             m2ndOccurrence = !d.isDaylightTime();
         }
     }
