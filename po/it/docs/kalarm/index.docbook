@@ -128,9 +128,9 @@
 <!-- Don't change format of date and version of the documentation -->
 
 <date
->2023-7-13</date>
+>2023-9-2</date>
 <releaseinfo
->3.6.0 (KDE Gear 23.08)</releaseinfo>
+>3.7.0 (KDE Gear 23.12)</releaseinfo>
 
 <abstract>
 <para
@@ -2341,6 +2341,13 @@ mode.</para
 >Altri controlli</title>
 
 <para
+>Se la configurazione del sistema permette ad avvisi diversi di svegliare il sistema dalla sospensione, puoi selezionare <guilabel
+>Risveglia</guilabel
+> per risvegliare il sistema se è sospeso quando l'avviso scade. Consulta <link linkend="wake-suspend"
+>Risveglia</link
+> per maggiori informazioni.</para>
+
+<para
 >Per gli avvisi visivi, la casella <guilabel
 >Conferma l'accettazione</guilabel
 > permette di specificare se ti sarà chiesta conferma quando chiudi la finestra del messaggio di avviso. Si potrebbe usare come misura di sicurezza per evitare di accettare avvisi per sbaglio.</para>
@@ -2986,13 +2993,44 @@ mode.</para
 >Risveglio</title>
 
 <para
->È possibile configurare un avviso selezionato in modo che risvegli il computer dalla sospensione in memoria o su disco all'attivazione dell'avviso, in modo che la sua azione possa avvenire anche se il sistema è stato disattivato. Questa funzione è controllata da una finestra cui si accede selezionando <menuchoice
+>Gli avvisi possono essere configurati per risvegliare il computer dalla sospensione in memoria o su disco all'attivazione dell'avviso, in modo che la sua azione possa avvenire anche se il sistema è disattivato. Il meccanismo usato da &kalarm; per svegliare il sistema, e l'interfaccia utente per controllarlo, dipende dal tipo di sistema e dai permessi dell'utente. Ci sono due possibilità:</para>
+
+<sect2>
+<title
+>Risveglio con timer del kernel Linux</title>
+
+<para
+>Nei sistemi Linux, se l'utente ha i permessi (capability) per i timer degli avvisi del kernel (<literal
+>cap wake alarm</literal
+>), può essere impostato un totale a piacere di avvisi per svegliare il sistema. In questo caso, il risveglio è configurato per ogni avviso nella <link linkend="alarm-edit-dlg"
+>finestra di modifica dell'avviso</link
+> tramite l'opzione <guilabel
+>Risveglio</guilabel
+>.</para>
+
+<para
+>Puoi configurare quanto tempo prima dell'avviso debba essere risvegliato il sistema dalla sospensione, per assicurarsi che il sistema abbia tempo di ripristinarsi interamente prima che gli avvisi si attivino, nella <link linkend="preferences-time"
+>finestra di configurazione</link
+>.</para>
+
+</sect2>
+
+<sect2>
+<title
+>Risveglio RTC</title>
+
+<para
+>Nei sistemi non Linux, o nei sistemi Linux in cui l'utente non dispone del permesso (capability) <literal
+>cap_wake_alarm</literal
+>, è usato l'avviso dell'orologio in tempo reale (<acronym
+>RTC</acronym
+>). Esso può essere impostato per un avviso alla volta. In questo caso, una finestra speciale Risveglia è usata per configurarlo. La finestra permette di impostare, annullare o mostrare l'allarme del risveglio. Per accedere alla finestra, seleziona <menuchoice
 ><guimenu
 >Azioni</guimenu
-><guimenuitem
->Risveglio</guimenuitem
+> <guimenuitem
+>Risveglia</guimenuitem
 ></menuchoice
->. La finestra permette di impostare, annullare o visualizzare l'avviso con risveglio.</para>
+>.</para>
 
 <para
 >L'uso della funzione di risveglio richiede i privilegi amministrativi. Verrà richiesta la password di root all'impostazione o all'annullamento di un avviso con risveglio.</para>
@@ -3040,6 +3078,7 @@ mode.</para
 </listitem>
 </itemizedlist>
 
+</sect2>
 </sect1>
 
 <sect1 id="quitting">
@@ -3240,6 +3279,15 @@ mode.</para
 ><guilabel
 >Regione delle festività</guilabel
 >: seleziona le festività di quale paese o regione usare. Ciò ha effetto sugli avvisi ricorrenti per i quali è selezionata l'opzione di escludere le festività.</para>
+</listitem>
+
+<listitem
+><para
+><guilabel
+>Riattivazione dalla sospensione prima dell'avviso:</guilabel
+>: inserisci il numero di minuti prima dell'orario in cui l'avviso scatta per attivare il sistema, per avvisi impostati per riattivare dalla sospensione. Questo permette di assicurarti che il sistema ha tempo per ripristinarsi interamente prima che gli avvisi scattino, in modo che gli avvisi possano scattare all'orario corretto. Questa opzione viene mostrata solo se la configurazione di sistema consente che più allarmi riattivino il sistema dalla sospensione. Consultare <link linkend="wake-suspend"
+>Risveglio</link
+> per ulteriori informazioni.</para>
 </listitem>
 
 <listitem

@@ -9,13 +9,13 @@
 #
 # Ambalam <tamilpc@ambalam.com>, 2004.
 # root <root@localhost.localdomain>, 2004.
-# Kishore G <kishore96@gmail.com>, 2021, 2022, 2023.
+# SPDX-FileCopyrightText: 2021, 2022, 2023 Kishore G <kishore96@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-09-02 00:47+0000\n"
-"PO-Revision-Date: 2023-06-11 16:50+0530\n"
+"PO-Revision-Date: 2023-09-10 17:21+0530\n"
 "Last-Translator: Kishore G <kishore96@gmail.com>\n"
 "Language-Team: Tamil <kde-i18n-doc@kde.org>\n"
 "Language: ta\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 23.04.2\n"
+"X-Generator: Lokalize 23.08.0\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -1115,7 +1115,7 @@ msgstr "அலார கெடு எவ்வளவு நேரம் என�
 #, kde-format
 msgctxt "@label"
 msgid "Time-to-alarm prefix in system tray tooltip"
-msgstr ""
+msgstr "கணினித் தட்டில் அலாரம் வரைக்குமான நேரத்திற்கான முன்னொட்டு"
 
 #. i18n: ectx: whatsthis, entry (TooltipTimeToPrefix), group (General)
 #: data/kalarmconfig.kcfg:191 prefdlg.cpp:1896
@@ -1171,10 +1171,10 @@ msgstr "கேமெயில்"
 
 #. i18n: ectx: label, entry (Base_EmailCopyToKMail), group (General)
 #: data/kalarmconfig.kcfg:205
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label"
 msgid "Whether to copy sent emails into KMail's Sent folder."
-msgstr "அனுப்பிய மின்னஞ்சல்களை கேஅஞ்சலின் %1 அடைவுக்கும் நகல் எடு"
+msgstr "அனுப்பும் மின்னஞ்சல்களை கேமெயிலின் அனுப்பிய அஞ்சல்கள் அடைவிற்கு நகலெடுக்க வேண்டுமா."
 
 #. i18n: ectx: whatsthis, entry (Base_EmailCopyToKMail), group (General)
 #: data/kalarmconfig.kcfg:206
@@ -1402,10 +1402,10 @@ msgstr ""
 
 #. i18n: ectx: label, entry (DefaultLateCancel), group (Defaults)
 #: data/kalarmconfig.kcfg:299
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label"
 msgid "Cancel if late (minutes)"
-msgstr "தாமதம் ஆனால் ரத்து செய்"
+msgstr "தாமதமானால் ரத்து செய் (நிமிடங்களில்)"
 
 #. i18n: ectx: whatsthis, entry (DefaultLateCancel), group (Defaults)
 #: data/kalarmconfig.kcfg:300
@@ -1418,10 +1418,10 @@ msgstr ""
 
 #. i18n: ectx: label, entry (DefaultAutoClose), group (Defaults)
 #: data/kalarmconfig.kcfg:305
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label"
 msgid "Auto-close window after late-cancellation time"
-msgstr "தாமத ரத்தான நேரத்திற்குப் பின் தானாக மூடும் சாளரம்"
+msgstr "தாமதமாகி ரத்து செய்தபின் சாளரத்தை தானாக மூடு"
 
 #. i18n: ectx: whatsthis, entry (DefaultAutoClose), group (Defaults)
 #: data/kalarmconfig.kcfg:306
@@ -1432,10 +1432,10 @@ msgstr "\"%1\" அலாரத்தை தொகுப்பு உரையா
 
 #. i18n: ectx: label, entry (DefaultConfirmAck), group (Defaults)
 #: data/kalarmconfig.kcfg:310 kalarmcalendar/kaeventformatter.cpp:106
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label"
 msgid "Confirm acknowledgement"
-msgstr "ஒப்புக்கொள்ளலை நிச்சயபடுத்து"
+msgstr "ஒப்புக்கொள்ளலை நிச்சயப்படுத்து"
 
 #. i18n: ectx: whatsthis, entry (DefaultConfirmAck), group (Defaults)
 #: data/kalarmconfig.kcfg:311
@@ -1448,10 +1448,10 @@ msgstr "\"%1\" அலாரத்தை தொகுப்பு உரையா
 
 #. i18n: ectx: label, entry (DefaultCopyToKOrganizer), group (Defaults)
 #: data/kalarmconfig.kcfg:315
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label"
 msgid "Show in KOrganizer"
-msgstr "எவ்வளவு நேரம் அலாரம் திரும்ப திரும்ப வரவேண்டும் என்பதைக் குறிப்பிட இதை தேர்ந்தெடு."
+msgstr "கேயார்கனைசரில் காட்டு"
 
 #. i18n: ectx: whatsthis, entry (DefaultCopyToKOrganizer), group (Defaults)
 #: data/kalarmconfig.kcfg:316
@@ -1462,7 +1462,7 @@ msgstr "\"%1\" அலாரத்தை தொகுப்பு உரையா
 
 #. i18n: ectx: label, entry (Base_DefaultSoundType), group (Defaults)
 #: data/kalarmconfig.kcfg:320
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label Label for audio options"
 msgid "Sound"
 msgstr "ஒலி"
@@ -1476,17 +1476,17 @@ msgstr "அலார தொகுப்பு உரையாடலில் ம
 
 #. i18n: ectx: label, entry (Base_DefaultSoundType), group (Defaults)
 #: data/kalarmconfig.kcfg:325
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@option"
 msgid "Play File"
-msgstr "அனைத்து கோப்புகள்"
+msgstr "கோப்பை வாசி"
 
 #. i18n: ectx: label, entry (DefaultSoundFile), group (Defaults)
 #: data/kalarmconfig.kcfg:331
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label"
 msgid "Sound file"
-msgstr "ஒலி கோப்பு"
+msgstr "ஒலிக்கோப்பு"
 
 #. i18n: ectx: whatsthis, entry (DefaultSoundFile), group (Defaults)
 #: data/kalarmconfig.kcfg:332
@@ -1497,10 +1497,10 @@ msgstr "அலார தொகுப்பு உரையாடலில் ம
 
 #. i18n: ectx: label, entry (Base_DefaultSoundVolume), group (Defaults)
 #: data/kalarmconfig.kcfg:335 kalarmcalendar/kaeventformatter.cpp:114
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label"
 msgid "Sound volume"
-msgstr "ஒலியளவை அமை"
+msgstr "ஒலியளவு"
 
 #. i18n: ectx: whatsthis, entry (Base_DefaultSoundVolume), group (Defaults)
 #: data/kalarmconfig.kcfg:336
@@ -1513,10 +1513,10 @@ msgstr "அலார தொகுப்பு உரையாடலில் ம
 
 #. i18n: ectx: label, entry (DefaultSoundRepeat), group (Defaults)
 #: data/kalarmconfig.kcfg:342
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label"
 msgid "Repeat sound file"
-msgstr "ஒலி கோப்பினை திரும்பச் செய"
+msgstr "ஒலிக்கோப்பை திரும்பத்திரும்ப இயக்கு"
 
 #. i18n: ectx: whatsthis, entry (DefaultSoundRepeat), group (Defaults)
 #: data/kalarmconfig.kcfg:343
@@ -1527,10 +1527,10 @@ msgstr "\"%1\" அலாரத்தை தொகுப்பு உரையா
 
 #. i18n: ectx: label, entry (DefaultCmdScript), group (Defaults)
 #: data/kalarmconfig.kcfg:347
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label"
 msgid "Enter script"
-msgstr "ஒரு எழுத்தாக்கத்தை உள்ளிடு"
+msgstr "சிறுநிரலை உள்ளிடவும்"
 
 #. i18n: ectx: whatsthis, entry (DefaultCmdScript), group (Defaults)
 #: data/kalarmconfig.kcfg:348
@@ -1541,10 +1541,10 @@ msgstr "\"%1\" அலாரத்தை தொகுப்பு உரையா
 
 #. i18n: ectx: label, entry (DefaultCmdLogType), group (Defaults)
 #: data/kalarmconfig.kcfg:352
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label"
 msgid "Command output"
-msgstr "&ஆணை"
+msgstr "கட்டளை வெளியிடும் உரை"
 
 #. i18n: ectx: whatsthis, entry (DefaultCmdLogType), group (Defaults)
 #: data/kalarmconfig.kcfg:353
@@ -1557,32 +1557,31 @@ msgstr "அலாரம் செய்தியை இப்போது கா
 
 #. i18n: ectx: label, entry (DefaultCmdLogType), group (Defaults)
 #: data/kalarmconfig.kcfg:355
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@option"
 msgid "Discard Output"
-msgstr "&ஆணை"
+msgstr "வெளியீட்டை பொருட்படுத்தாதே"
 
 #. i18n: ectx: label, entry (DefaultCmdLogType), group (Defaults)
 #: data/kalarmconfig.kcfg:356
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@option"
 msgid "Log To File"
-msgstr "ஒலி கோப்பினைத் தேர்வுச் செய்"
+msgstr "கோப்பினுள் பதிவிடு"
 
 #. i18n: ectx: label, entry (DefaultCmdLogType), group (Defaults)
 #: data/kalarmconfig.kcfg:357
-#, fuzzy, kde-format
-#| msgid "Execute in terminal window"
+#, kde-format
 msgctxt "@option"
 msgid "Execute in terminal window"
-msgstr "முனைய சாளரத்தில் செயல்படு"
+msgstr "முனைய சாளரத்தில் செயல்படுத்து"
 
 #. i18n: ectx: label, entry (DefaultCmdLogFile), group (Defaults)
 #: data/kalarmconfig.kcfg:362 kalarmcalendar/kaeventformatter.cpp:137
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label"
 msgid "Log file"
-msgstr "ஒலி கோப்பு"
+msgstr "பதிவுக்கோப்பு"
 
 #. i18n: ectx: whatsthis, entry (DefaultCmdLogFile), group (Defaults)
 #: data/kalarmconfig.kcfg:363
@@ -1593,11 +1592,10 @@ msgstr "The default units for the reminder in the alarm edit dialog."
 
 #. i18n: ectx: label, entry (DefaultEmailBcc), group (Defaults)
 #: data/kalarmconfig.kcfg:366
-#, fuzzy, kde-format
-#| msgid "Copy email to self"
+#, kde-format
 msgctxt "@label"
 msgid "Copy email to self"
-msgstr "மின்னஞ்சல் தானாக நகலெடு"
+msgstr "எனக்கு மின்னஞ்சலின் நகலனுப்பு"
 
 #. i18n: ectx: whatsthis, entry (DefaultEmailBcc), group (Defaults)
 #: data/kalarmconfig.kcfg:367
@@ -1919,11 +1917,10 @@ msgid "Show the next month"
 msgstr "அடுத்த மாத‍த்தை காட்டு"
 
 #: datepicker.cpp:89
-#, fuzzy, kde-format
-#| msgid "today"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Show today"
-msgstr "இன்று"
+msgstr "இன்றையதை காட்டும்"
 
 #: daymatrix.cpp:200
 #, kde-format
@@ -2175,12 +2172,10 @@ msgstr ""
 "தூண்டப்படும்படி அமை."
 
 #: editdlg.cpp:395
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Wake From Suspend"
+#, kde-format
 msgctxt "@option:check"
 msgid "Wake from suspend"
-msgstr "கணினியை உறக்கத்திலிருந்து எழுப்புவது"
+msgstr "கணினியை உறக்கத்திலிருந்து எழுப்பு"
 
 #: editdlg.cpp:397
 #, kde-format
@@ -2188,6 +2183,7 @@ msgctxt "@info:whatsthis"
 msgid ""
 "Check to wake the system if the alarm triggers while the system is suspended"
 msgstr ""
+"கணினி உறக்கத்தில் இருக்கும்போது அலாரம் தூண்டப்பட்டால் கணினியை எழுப்ப இதைத் தேர்ந்தெடுக்கவும்"
 
 #: editdlg.cpp:414
 #, kde-format
@@ -2215,6 +2211,8 @@ msgid ""
 "will trigger at the minute boundary before the specified time from now.</"
 "para>"
 msgstr ""
+"<para>அதிதுல்லியமான அலாரங்களை கேயலாரம் ஆதரிக்காது.</para><para> அமைக்கப்பட்டுள்ள "
+"நேரத்துக்கு முந்தைய ஒரு நிமிடத்திற்குள் அலாரம் தூண்டப்படும்.</para>"
 
 #: editdlg.cpp:1073
 #, kde-format
@@ -2400,6 +2398,11 @@ msgid ""
 "a text or image file.</item><item><interface>%3</interface>: the alarm will "
 "display the output from a command.</item></list></para>"
 msgstr ""
+"<para>அலாரம் எதைக் காட்ட வேண்டுமென்பதைத் தேர்ந்தெடுக்கவும்:<list><item><interface>%1</"
+"interface>: நீங்கள் உள்ளிடும் உரையை அலாரம் காட்டும்.</item><item><interface>%2</"
+"interface>: உரைக்கோப்பின் அல்லது படக்கோப்பின் உள்ளடக்கத்தை அலாரம் காட்டும்.</"
+"item><item><interface>%3</interface>: ஓர் கட்டளையின் விளைவை அலாரம் காட்டும்.</"
+"item></list></para>"
 
 #: editdlgtypes.cpp:173
 #, kde-format
@@ -2408,11 +2411,10 @@ msgid "Enter the text of the alarm message. It may be multi-line."
 msgstr "அலார தகவலுக்கான உரையை உள்ளிடவும். அது பல வரிகளைக் கொண்டதாக இருக்கலாம்"
 
 #: editdlgtypes.cpp:186
-#, fuzzy, kde-format
-#| msgid "Enter the name or URL of a text or image file to display."
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the name or URL of a text or image file to display."
-msgstr "உரை அல்லது படக் கோப்பின் பெயர் அல்லது URL ஐ காட்ட உள்ளிடவும்"
+msgstr "காட்ட வேண்டிய உரைக்கோப்பின் அல்லது படக்கோப்பின் பெயரையோ முகவரியையோ உள்ளிடவும்."
 
 #: editdlgtypes.cpp:193 editdlgtypes.cpp:882 sounddlg.cpp:184
 #, kde-format
@@ -2421,11 +2423,10 @@ msgid "Choose a file"
 msgstr "கோப்பை தேர்ந்தெடுங்கள்"
 
 #: editdlgtypes.cpp:194
-#, fuzzy, kde-format
-#| msgid "Select a text or image file to display."
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select a text or image file to display."
-msgstr "உரை அல்லது படக் கோப்பினை காட்ட தேர்ந்தெடு"
+msgstr "காட்ட வேண்டிய உரைக்கோப்பை அல்லது படக்கோப்பை தேர்ந்தெடுக்கவும்."
 
 #: editdlgtypes.cpp:238
 #, kde-format
@@ -2471,14 +2472,10 @@ msgstr ""
 "என்பதை தேர்ந்தெடுங்கள்"
 
 #: editdlgtypes.cpp:277
-#, fuzzy, kde-format
-#| msgid ""
-#| "Check to be prompted for confirmation when you acknowledge the alarm."
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to be prompted for confirmation when you acknowledge the alarm."
-msgstr ""
-"அலார செய்தி கிடைத்ததைத் தெரிவிக்கும்போது அதை உறுதிபடுத்திக் கொள்ள நினைவூட்ட வேண்டுமா "
-"என சோதி"
+msgstr "அலாரத்தை ஒப்புக்கொண்டதை உறுதிப்படுத்துமாறு கேட்க வேண்டுமெனில் இதைக் குறிக்கவும்."
 
 #: editdlgtypes.cpp:286
 #, kde-format
