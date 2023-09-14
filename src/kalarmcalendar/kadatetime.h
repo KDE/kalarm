@@ -1036,7 +1036,6 @@ public:
      *
      * @return current date
      * @see currentLocalDateTime(), currentLocalTime()
-     * @since 4.3
      */
     static QDate currentLocalDate();
 
@@ -1046,7 +1045,6 @@ public:
      *
      * @return current date
      * @see currentLocalDateTime(), currentLocalDate()
-     * @since 4.3
      */
     static QTime currentLocalTime();
 
@@ -1445,7 +1443,6 @@ public:
      *
      * @see currentDateTime(), currentLocalDateTime(), currentUtcDateTime(),
      *      currentLocalDate(), currentLocalTime()
-     * @since 4.3
      */
     static void setSimulatedSystemTime(const KADateTime& newTime);
 
@@ -1464,7 +1461,6 @@ public:
      *          #endif
      *          \endcode
      *
-     * @since 4.3
      */
     static KADateTime realCurrentLocalDateTime();
 

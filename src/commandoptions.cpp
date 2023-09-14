@@ -1,7 +1,7 @@
 /*
  *  commandoptions.cpp  -  extract command line options
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2001-2022 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2001-2023 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -362,14 +362,14 @@ void CommandOptions::process()
     if (d->checkCommand(OptFILE, NEW))
     {
         mEditType      = EditAlarmDlg::DISPLAY;
-        mEditAction    = KAEvent::FILE;
+        mEditAction    = KAEvent::SubAction::File;
         mEditActionSet = true;
         mText          = mParser->value(*mOptions.at(d->mCommandOpt));
     }
     if (d->checkCommand(EXEC_DISPLAY, NEW))
     {
         mEditType      = EditAlarmDlg::DISPLAY;
-        mEditAction    = KAEvent::COMMAND;
+        mEditAction    = KAEvent::SubAction::Command;
         mEditActionSet = true;
         mFlags        |= KAEvent::DISPLAY_COMMAND;
         mText          = mParser->value(*mOptions.at(d->mCommandOpt)) + QLatin1String(" ") + mExecArguments.join(QLatin1Char(' '));
@@ -377,22 +377,22 @@ void CommandOptions::process()
     if (d->checkCommand(EXEC, NEW))
     {
         mEditType      = EditAlarmDlg::COMMAND;
-        mEditAction    = KAEvent::COMMAND;
+        mEditAction    = KAEvent::SubAction::Command;
         mEditActionSet = true;
         mText          = mParser->value(*mOptions.at(d->mCommandOpt)) + QLatin1String(" ") + mExecArguments.join(QLatin1Char(' '));
     }
     if (d->checkCommand(MAIL, NEW))
     {
         mEditType      = EditAlarmDlg::EMAIL;
-        mEditAction    = KAEvent::EMAIL;
+        mEditAction    = KAEvent::SubAction::Email;
         mEditActionSet = true;
     }
     if (d->checkCommand(EDIT_NEW_DISPLAY, EDIT_NEW, EditAlarmDlg::DISPLAY))
     {
         mEditType = EditAlarmDlg::DISPLAY;
-        if (!mEditActionSet  ||  (mEditAction != KAEvent::COMMAND && mEditAction != KAEvent::FILE))
+        if (!mEditActionSet  ||  (mEditAction != KAEvent::SubAction::Command && mEditAction != KAEvent::SubAction::File))
         {
-            mEditAction    = KAEvent::MESSAGE;
+            mEditAction    = KAEvent::SubAction::Message;
             mEditActionSet = true;
         }
         const QStringList args = mParser->positionalArguments();
@@ -402,19 +402,19 @@ void CommandOptions::process()
     if (d->checkCommand(EDIT_NEW_COMMAND, EDIT_NEW))
     {
         mEditType      = EditAlarmDlg::COMMAND;
-        mEditAction    = KAEvent::COMMAND;
+        mEditAction    = KAEvent::SubAction::Command;
         mEditActionSet = true;
     }
     if (d->checkCommand(EDIT_NEW_EMAIL, EDIT_NEW, EditAlarmDlg::EMAIL))
     {
         mEditType      = EditAlarmDlg::EMAIL;
-        mEditAction    = KAEvent::EMAIL;
+        mEditAction    = KAEvent::SubAction::Email;
         mEditActionSet = true;
     }
     if (d->checkCommand(EDIT_NEW_AUDIO, EDIT_NEW, EditAlarmDlg::AUDIO))
     {
         mEditType      = EditAlarmDlg::AUDIO;
-        mEditAction    = KAEvent::AUDIO;
+        mEditAction    = KAEvent::SubAction::Audio;
         mEditActionSet = true;
     }
     if (mError.isEmpty()  &&  mCommand == NONE)
@@ -424,7 +424,7 @@ void CommandOptions::process()
             if (d->checkCommand(PLAY, NEW) || d->checkCommand(PLAY_REPEAT, NEW))
             {
                 mEditType      = EditAlarmDlg::AUDIO;
-                mEditAction    = KAEvent::AUDIO;
+                mEditAction    = KAEvent::SubAction::Audio;
                 mEditActionSet = true;
             }
         }
@@ -434,12 +434,12 @@ void CommandOptions::process()
             mCommand       = NEW;
             d->mCommandOpt = Opt_Message;
             mEditType      = EditAlarmDlg::DISPLAY;
-            mEditAction    = KAEvent::MESSAGE;
+            mEditAction    = KAEvent::SubAction::Message;
             mEditActionSet = true;
             mText          = arg(0);
         }
     }
-    if (mEditActionSet  &&  mEditAction == KAEvent::EMAIL)
+    if (mEditActionSet  &&  mEditAction == KAEvent::SubAction::Email)
     {
         if (mParser->isSet(*mOptions.at(SUBJECT)))
             mSubject = mParser->value(*mOptions.at(SUBJECT));

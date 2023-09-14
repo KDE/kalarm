@@ -1,7 +1,7 @@
 /*
  *  editdlgtypes.cpp  -  dialogs to create or edit alarm or alarm template types
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2001-2022 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2001-2023 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -96,7 +96,7 @@ QString EditDisplayAlarmDlg::i18n_chk_ConfirmAck()    { return i18nc("@option:ch
 *   event   != to initialise the dialog to show the specified event's data.
 */
 EditDisplayAlarmDlg::EditDisplayAlarmDlg(bool Template, QWidget* parent, GetResourceType getResource)
-    : EditAlarmDlg(Template, KAEvent::MESSAGE, parent, getResource)
+    : EditAlarmDlg(Template, KAEvent::SubAction::Message, parent, getResource)
 {
     qCDebug(KALARM_LOG) << "EditDisplayAlarmDlg: New";
     init(KAEvent());
@@ -288,7 +288,7 @@ void EditDisplayAlarmDlg::type_initValues(const KAEvent& event)
     lateCancel()->showAutoClose(true);
     if (event.isValid())
     {
-        if (mAlarmType == KAEvent::MESSAGE  &&  event.emailId()
+        if (mAlarmType == KAEvent::SubAction::Message  &&  event.emailId()
         &&  AlarmText::checkIfEmail(event.cleanText()))
             mEmailId = event.emailId();
         lateCancel()->setAutoClose(event.autoClose());
@@ -424,16 +424,16 @@ void EditDisplayAlarmDlg::setAction(KAEvent::SubAction action, const AlarmText& 
     const QString text = alarmText.displayText();
     switch (action)
     {
-        case KAEvent::MESSAGE:
+        case KAEvent::SubAction::Message:
             mTypeCombo->setCurrentIndex(tTEXT);
             mTextMessageEdit->setPlainText(text);
             mEmailId = alarmText.isEmail() ? alarmText.emailId() : -1;
             break;
-        case KAEvent::FILE:
+        case KAEvent::SubAction::File:
             mTypeCombo->setCurrentIndex(tFILE);
             mFileMessageEdit->setText(text);
             break;
-        case KAEvent::COMMAND:
+        case KAEvent::SubAction::Command:
             mTypeCombo->setCurrentIndex(tCOMMAND);
             mCmdEdit->setText(alarmText);
             break;
@@ -588,10 +588,10 @@ void EditDisplayAlarmDlg::type_setEvent(KAEvent& event, const KADateTime& dt, co
     KAEvent::SubAction type;
     switch (mTypeCombo->currentIndex())
     {
-        case tFILE:     type = KAEvent::FILE; break;
-        case tCOMMAND:  type = KAEvent::COMMAND; break;
+        case tFILE:     type = KAEvent::SubAction::File; break;
+        case tCOMMAND:  type = KAEvent::SubAction::Command; break;
         default:
-        case tTEXT:     type = KAEvent::MESSAGE; break;
+        case tTEXT:     type = KAEvent::SubAction::Message; break;
     }
     QColor fgColour, bgColour;
     QFont font;
@@ -607,7 +607,7 @@ void EditDisplayAlarmDlg::type_setEvent(KAEvent& event, const KADateTime& dt, co
         font     = mFontColourButton->font();
     }
     event = KAEvent(dt, name, text, bgColour, fgColour, font, type, lateCancel, getAlarmFlags());
-    if (type == KAEvent::MESSAGE)
+    if (type == KAEvent::SubAction::Message)
     {
         if (AlarmText::checkIfEmail(text))
             event.setEmailId(mEmailId);
@@ -807,7 +807,7 @@ QString EditCommandAlarmDlg::i18n_chk_ExecInTermWindow()   { return i18nc("@opti
 *   event   != to initialise the dialog to show the specified event's data.
 */
 EditCommandAlarmDlg::EditCommandAlarmDlg(bool Template, QWidget* parent, GetResourceType getResource)
-    : EditAlarmDlg(Template, KAEvent::COMMAND, parent, getResource)
+    : EditAlarmDlg(Template, KAEvent::SubAction::Command, parent, getResource)
 {
     qCDebug(KALARM_LOG) << "EditCommandAlarmDlg: New";
     init(KAEvent());
@@ -950,7 +950,7 @@ void EditCommandAlarmDlg::type_showOptions(bool more)
 void EditCommandAlarmDlg::setAction(KAEvent::SubAction action, const AlarmText& alarmText)
 {
     Q_UNUSED(action);
-    Q_ASSERT(action == KAEvent::COMMAND);
+    Q_ASSERT(action == KAEvent::SubAction::Command);
     mCmdEdit->setText(alarmText);
 }
 
@@ -1008,7 +1008,7 @@ bool EditCommandAlarmDlg::type_stateChanged() const
 void EditCommandAlarmDlg::type_setEvent(KAEvent& event, const KADateTime& dt, const QString& name, const QString& text, int lateCancel, bool trial)
 {
     Q_UNUSED(trial);
-    event = KAEvent(dt, name, text, QColor(), QColor(), QFont(), KAEvent::COMMAND, lateCancel, getAlarmFlags());
+    event = KAEvent(dt, name, text, QColor(), QColor(), QFont(), KAEvent::SubAction::Command, lateCancel, getAlarmFlags());
     if (mCmdOutputGroup->checkedButton() == mCmdLogToFile)
         event.setLogFile(mCmdLogFileEdit->text());
 }
@@ -1129,7 +1129,7 @@ QString EditEmailAlarmDlg::i18n_chk_CopyEmailToSelf()    { return i18nc("@option
 *   event   != to initialise the dialog to show the specified event's data.
 */
 EditEmailAlarmDlg::EditEmailAlarmDlg(bool Template, QWidget* parent, GetResourceType getResource)
-    : EditAlarmDlg(Template, KAEvent::EMAIL, parent, getResource)
+    : EditAlarmDlg(Template, KAEvent::SubAction::Email, parent, getResource)
 {
     qCDebug(KALARM_LOG) << "EditEmailAlarmDlg: New";
     init(KAEvent());
@@ -1295,7 +1295,7 @@ void EditEmailAlarmDlg::attachmentEnable()
 void EditEmailAlarmDlg::setAction(KAEvent::SubAction action, const AlarmText& alarmText)
 {
     Q_UNUSED(action);
-    Q_ASSERT(action == KAEvent::EMAIL);
+    Q_ASSERT(action == KAEvent::SubAction::Email);
     if (alarmText.isEmail())
     {
         mEmailToEdit->setText(alarmText.to());
@@ -1402,7 +1402,7 @@ bool EditEmailAlarmDlg::type_stateChanged() const
 void EditEmailAlarmDlg::type_setEvent(KAEvent& event, const KADateTime& dt, const QString& name, const QString& text, int lateCancel, bool trial)
 {
     Q_UNUSED(trial);
-    event = KAEvent(dt, name, text, QColor(), QColor(), QFont(), KAEvent::EMAIL, lateCancel, getAlarmFlags());
+    event = KAEvent(dt, name, text, QColor(), QColor(), QFont(), KAEvent::SubAction::Email, lateCancel, getAlarmFlags());
     const uint from = mEmailFromList ? mEmailFromList->currentIdentity() : 0;
     event.setEmail(from, mEmailAddresses, mEmailSubjectEdit->text(), mEmailAttachments);
 }
@@ -1575,7 +1575,7 @@ bool EditEmailAlarmDlg::checkText(QString& result, bool showErrorMessage) const
 *   event   != to initialise the dialog to show the specified event's data.
 */
 EditAudioAlarmDlg::EditAudioAlarmDlg(bool Template, QWidget* parent, GetResourceType getResource)
-    : EditAlarmDlg(Template, KAEvent::AUDIO, parent, getResource)
+    : EditAlarmDlg(Template, KAEvent::SubAction::Audio, parent, getResource)
 {
     qCDebug(KALARM_LOG) << "EditAudioAlarmDlg: New";
     init(KAEvent());
@@ -1662,7 +1662,7 @@ void EditAudioAlarmDlg::setAudio(const QString& file, float volume)
 void EditAudioAlarmDlg::setAction(KAEvent::SubAction action, const AlarmText& alarmText)
 {
     Q_UNUSED(action);
-    Q_ASSERT(action == KAEvent::AUDIO);
+    Q_ASSERT(action == KAEvent::SubAction::Audio);
     mSoundConfig->set(alarmText.displayText(), Preferences::defaultSoundVolume());
 }
 
@@ -1718,7 +1718,7 @@ void EditAudioAlarmDlg::type_setEvent(KAEvent& event, const KADateTime& dt, cons
 {
     Q_UNUSED(text);
     Q_UNUSED(trial);
-    event = KAEvent(dt, name, QString(), QColor(), QColor(), QFont(), KAEvent::AUDIO, lateCancel, getAlarmFlags());
+    event = KAEvent(dt, name, QString(), QColor(), QColor(), QFont(), KAEvent::SubAction::Audio, lateCancel, getAlarmFlags());
     float volume, fadeVolume;
     int   fadeSecs;
     mSoundConfig->getVolume(volume, fadeVolume, fadeSecs);

@@ -1,7 +1,7 @@
 /*
  *  alarmlistdelegate.cpp  -  handles editing and display of alarm list
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2007-2022 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2007-2023 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -68,9 +68,9 @@ void AlarmListDelegate::paint(QPainter* painter, const QStyleOptionViewItem& opt
                 const KAEvent event = static_cast<const EventListModel*>(index.model())->event(index);
                 if (event.isValid())
                 {
-                    if (event.commandError() == KAEvent::CMD_NO_ERROR)
+                    if (event.commandError() == KAEvent::CmdErr::None)
                     {
-                        if (event.actionTypes() & KAEvent::ACT_DISPLAY)
+                        if (event.actionTypes() & KAEvent::Action::Display)
                             opt.palette.setColor(QPalette::Highlight, event.bgColour());
                     }
                     else

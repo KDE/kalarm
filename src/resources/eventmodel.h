@@ -192,16 +192,16 @@ public:
     static TemplateListModel* all();
 
     /** Set which alarm action types should be included in the model. */
-    void setAlarmActionFilter(KAEvent::Actions);
+    void setAlarmActionFilter(KAEvent::Action);
 
     /** Return which alarm action types are included in the model. */
-    KAEvent::Actions alarmActionFilter() const  { return mActionsFilter; }
+    KAEvent::Action alarmActionFilter() const  { return mActionsFilter; }
 
     /** Set which alarm types should be shown as disabled in the model. */
-    void setAlarmActionsEnabled(KAEvent::Actions);
+    void setAlarmActionsEnabled(KAEvent::Action);
 
     /** Set which alarm types should be shown as disabled in the model. */
-    KAEvent::Actions setAlarmActionsEnabled() const  { return mActionsEnabled; }
+    KAEvent::Action setAlarmActionsEnabled() const  { return mActionsEnabled; }
 
     int  columnCount(const QModelIndex& = QModelIndex()) const override  { return ColumnCount; }
     QVariant headerData(int section, Qt::Orientation, int role = Qt::DisplayRole) const override;
@@ -216,8 +216,8 @@ protected:
 private:
     static TemplateListModel* mAllInstance;
 
-    KAEvent::Actions mActionsEnabled;  // disable types not in this mask
-    KAEvent::Actions mActionsFilter;   // hide types not in this mask
+    KAEvent::Action mActionsEnabled;  // disable types not in this mask
+    KAEvent::Action mActionsFilter;   // hide types not in this mask
 };
 
 

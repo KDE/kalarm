@@ -1,7 +1,7 @@
 /*
  *  deferdlg.cpp  -  dialog to defer an alarm
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2002-2022 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2002-2023 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -71,7 +71,7 @@ void DeferAlarmDlg::slotOk()
     mAlarmDateTime = mTimeWidget->getDateTime(&mDeferMinutes);
     if (!mAlarmDateTime.isValid())
         return;
-    KAEvent::DeferLimitType limitType = KAEvent::LIMIT_NONE;
+    KAEvent::DeferLimit limitType = KAEvent::DeferLimit::None;
     DateTime endTime;
     if (!mLimitEventId.isEmpty())
     {
@@ -84,30 +84,30 @@ void DeferAlarmDlg::slotOk()
     else
     {
         endTime = mLimitDateTime;
-        limitType = mLimitDateTime.isValid() ? KAEvent::LIMIT_MAIN : KAEvent::LIMIT_NONE;
+        limitType = mLimitDateTime.isValid() ? KAEvent::DeferLimit::Main : KAEvent::DeferLimit::None;
     }
     if (endTime.isValid()  &&  mAlarmDateTime > endTime)
     {
         QString text;
         switch (limitType)
         {
-            case KAEvent::LIMIT_REPETITION:
+            case KAEvent::DeferLimit::Repetition:
                 text = i18nc("@info", "Cannot defer past the alarm's next sub-repetition (currently %1)",
                              endTime.formatLocale());
                 break;
-            case KAEvent::LIMIT_RECURRENCE:
+            case KAEvent::DeferLimit::Recurrence:
                 text = i18nc("@info", "Cannot defer past the alarm's next recurrence (currently %1)",
                              endTime.formatLocale());
                 break;
-            case KAEvent::LIMIT_REMINDER:
+            case KAEvent::DeferLimit::Reminder:
                 text = i18nc("@info", "Cannot defer past the alarm's next reminder (currently %1)",
                             endTime.formatLocale());
                 break;
-            case KAEvent::LIMIT_MAIN:
+            case KAEvent::DeferLimit::Main:
                 text = i18nc("@info", "Cannot defer reminder past the main alarm time (%1)",
                             endTime.formatLocale());
                 break;
-            case KAEvent::LIMIT_NONE:
+            case KAEvent::DeferLimit::None:
                 break;   // can't happen with a valid endTime
         }
         KAMessageBox::error(this, text);

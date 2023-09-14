@@ -207,24 +207,24 @@ void ResourcesCalendar::slotEventUpdated(Resource& resource, const KAEvent& even
             findEarliestAlarm(resource);
         else
         {
-            const KADateTime dt = event.nextTrigger(KAEvent::ALL_TRIGGER).effectiveKDateTime();
+            const KADateTime dt = event.nextTrigger(KAEvent::Trigger::All).effectiveKDateTime();
             if (dt.isValid())
             {
                 bool changed = false;
                 DateTime next;
                 if (!earliestId.isEmpty())
-                    next = resource.event(earliestId).nextTrigger(KAEvent::ALL_TRIGGER);
+                    next = resource.event(earliestId).nextTrigger(KAEvent::Trigger::All);
                 if (earliestId.isEmpty()  ||  dt < next)
                 {
                     mEarliestAlarm[key] = event.id();
                     changed = true;
                 }
-                if (!(event.actionTypes() & KAEvent::ACT_DISPLAY))
+                if (!(event.actionTypes() & KAEvent::Action::Display))
                 {
                     // It is not a display event.
                     DateTime nextNonDisp;
                     if (!earliestNonDispId.isEmpty())
-                        nextNonDisp = (earliestId == earliestNonDispId) ? next : resource.event(earliestNonDispId).nextTrigger(KAEvent::ALL_TRIGGER);
+                        nextNonDisp = (earliestId == earliestNonDispId) ? next : resource.event(earliestNonDispId).nextTrigger(KAEvent::Trigger::All);
                     if (earliestNonDispId.isEmpty()  ||  dt < nextNonDisp)
                     {
                         mEarliestNonDispAlarm[key] = event.id();
@@ -765,7 +765,7 @@ void ResourcesCalendar::findEarliestAlarm(const Resource& resource)
         if (event.category() != CalEvent::ACTIVE
         ||  mPendingAlarms.contains(event.id()))
             continue;
-        const KADateTime dt = event.nextTrigger(KAEvent::ALL_TRIGGER).effectiveKDateTime();
+        const KADateTime dt = event.nextTrigger(KAEvent::Trigger::All).effectiveKDateTime();
         if (dt.isValid())
         {
             if (!earliest.isValid() || dt < earliestTime)
@@ -773,7 +773,7 @@ void ResourcesCalendar::findEarliestAlarm(const Resource& resource)
                 earliestTime = dt;
                 earliest = event;
             }
-            if (!(event.actionTypes() & KAEvent::ACT_DISPLAY))
+            if (!(event.actionTypes() & KAEvent::Action::Display))
             {
                 if (!earliestNonDisp.isValid() || dt < earliestNonDispTime)
                 {
@@ -812,7 +812,7 @@ KAEvent ResourcesCalendar::earliestAlarm(KADateTime& nextTriggerTime, bool exclu
             return earliestAlarm(nextTriggerTime, excludeDisplayAlarms);
         }
 //TODO: use next trigger calculated in findEarliestAlarm() (allowing for it being out of date)?
-        const KADateTime dt = event.nextTrigger(KAEvent::ALL_TRIGGER).effectiveKDateTime();
+        const KADateTime dt = event.nextTrigger(KAEvent::Trigger::All).effectiveKDateTime();
         if (dt.isValid()  &&  (!earliest.isValid() || dt < earliestTime))
         {
             earliestTime = dt;

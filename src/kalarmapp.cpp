@@ -1639,7 +1639,7 @@ QStringList KAlarmApp::scheduledAlarmList()
     const QList<KAEvent> events = KAlarm::getSortedActiveEvents(this);
     for (const KAEvent& event : events)
     {
-        const KADateTime dateTime = event.nextTrigger(KAEvent::DISPLAY_TRIGGER).effectiveKDateTime().toLocalZone();
+        const KADateTime dateTime = event.nextTrigger(KAEvent::Trigger::Display).effectiveKDateTime().toLocalZone();
         const Resource resource = Resources::resource(event.resourceId());
         QString text(resource.configName() + QLatin1String(":"));
         text += event.id() + QLatin1Char(' ')
@@ -1763,7 +1763,7 @@ bool KAlarmApp::scheduleEvent(QueuedAction queuedActionFlags,
             mActionQueue.enqueue(ActionQEntry(event, QueuedAction::Trigger));
         // If it's a recurring alarm, reschedule it for its next occurrence
         if (!event.recurs()
-        ||  event.setNextOccurrence(now) == KAEvent::NO_OCCURRENCE)
+        ||  event.setNextOccurrence(now) == KAEvent::OccurType::None)
             return true;
         // It has recurrences in the future
     }
@@ -1923,23 +1923,23 @@ int KAlarmApp::handleEvent(const EventId& id, QueuedAction action, bool findUniq
                             // Find the last previous occurrence of the alarm.
                             DateTime next;
                             const KAEvent::OccurType type = event.previousOccurrence(now, next, true);
-                            switch (type & ~KAEvent::OCCURRENCE_REPEAT)
+                            switch (static_cast<KAEvent::OccurType>(type & ~KAEvent::OccurType::Repeat))
                             {
-                                case KAEvent::FIRST_OR_ONLY_OCCURRENCE:
-                                case KAEvent::RECURRENCE_DATE:
-                                case KAEvent::RECURRENCE_DATE_TIME:
-                                case KAEvent::LAST_RECURRENCE:
+                                case KAEvent::OccurType::FirstOrOnly:
+                                case KAEvent::OccurType::RecurDate:
+                                case KAEvent::OccurType::RecurDateTime:
+                                case KAEvent::OccurType::LastRecur:
                                     limit.setDate(next.date().addDays(maxlate + 1));
                                     if (now >= limit)
                                     {
-                                        if (type == KAEvent::LAST_RECURRENCE
-                                        ||  (type == KAEvent::FIRST_OR_ONLY_OCCURRENCE && !event.recurs()))
+                                        if (type == KAEvent::OccurType::LastRecur
+                                        ||  (type == KAEvent::OccurType::FirstOrOnly && !event.recurs()))
                                             cancel = true;   // last occurrence (and there are no repetitions)
                                         else
                                             reschedule = true;
                                     }
                                     break;
-                                case KAEvent::NO_OCCURRENCE:
+                                case KAEvent::OccurType::None:
                                 default:
                                     reschedule = true;
                                     break;
@@ -1956,22 +1956,22 @@ int KAlarmApp::handleEvent(const EventId& id, QueuedAction action, bool findUniq
                             // Find the most recent occurrence of the alarm.
                             DateTime next;
                             const KAEvent::OccurType type = event.previousOccurrence(now, next, true);
-                            switch (type & ~KAEvent::OCCURRENCE_REPEAT)
+                            switch (static_cast<KAEvent::OccurType>(type & ~KAEvent::OccurType::Repeat))
                             {
-                                case KAEvent::FIRST_OR_ONLY_OCCURRENCE:
-                                case KAEvent::RECURRENCE_DATE:
-                                case KAEvent::RECURRENCE_DATE_TIME:
-                                case KAEvent::LAST_RECURRENCE:
+                                case KAEvent::OccurType::FirstOrOnly:
+                                case KAEvent::OccurType::RecurDate:
+                                case KAEvent::OccurType::RecurDateTime:
+                                case KAEvent::OccurType::LastRecur:
                                     if (next.effectiveKDateTime().secsTo(now) > maxlate)
                                     {
-                                        if (type == KAEvent::LAST_RECURRENCE
-                                        ||  (type == KAEvent::FIRST_OR_ONLY_OCCURRENCE && !event.recurs()))
+                                        if (type == KAEvent::OccurType::LastRecur
+                                        ||  (type == KAEvent::OccurType::FirstOrOnly && !event.recurs()))
                                             cancel = true;   // last occurrence (and there are no repetitions)
                                         else
                                             reschedule = true;
                                     }
                                     break;
-                                case KAEvent::NO_OCCURRENCE:
+                                case KAEvent::OccurType::None:
                                 default:
                                     reschedule = true;
                                     break;
@@ -2118,11 +2118,11 @@ int KAlarmApp::rescheduleAlarm(KAEvent& event, const KAAlarm& alarm, bool update
             const KAEvent::OccurType type = event.setNextOccurrence(next ? next_dt : now);
             switch (type)
             {
-                case KAEvent::NO_OCCURRENCE:
+                case KAEvent::OccurType::None:
                     // All repetitions are finished, so cancel the event
                     qCDebug(KALARM_LOG) << "KAlarmApp::rescheduleAlarm: No occurrence";
                     if (event.reminderMinutes() < 0  &&  last.isValid()
-                    &&  alarm.type() != KAAlarm::AT_LOGIN_ALARM  &&  !event.mainExpired())
+                    &&  alarm.type() != KAAlarm::Type::AtLogin  &&  !event.mainExpired())
                     {
                         // Set the reminder which is now due after the last main alarm trigger.
                         // Note that at-login reminders are scheduled in execAlarm().
@@ -2133,18 +2133,18 @@ int KAlarmApp::rescheduleAlarm(KAEvent& event, const KAAlarm& alarm, bool update
                         return -1;
                     break;
                 default:
-                    if (!(type & KAEvent::OCCURRENCE_REPEAT))
+                    if (!(type & KAEvent::OccurType::Repeat))
                         break;
                     // Next occurrence is a repeat, so fall through to recurrence handling
                     Q_FALLTHROUGH();
-                case KAEvent::RECURRENCE_DATE:
-                case KAEvent::RECURRENCE_DATE_TIME:
-                case KAEvent::LAST_RECURRENCE:
+                case KAEvent::OccurType::RecurDate:
+                case KAEvent::OccurType::RecurDateTime:
+                case KAEvent::OccurType::LastRecur:
                     // The event is due by now and repetitions still remain, so rewrite the event
                     if (updateCalAndDisplay)
                         update = true;
                     break;
-                case KAEvent::FIRST_OR_ONLY_OCCURRENCE:
+                case KAEvent::OccurType::FirstOrOnly:
                     // The first occurrence is still due?!?, so don't do anything
                     break;
             }
@@ -2153,7 +2153,7 @@ int KAlarmApp::rescheduleAlarm(KAEvent& event, const KAAlarm& alarm, bool update
             if (event.deferred())
             {
                 // Just in case there's also a deferred alarm, ensure it's removed
-                event.removeExpiredAlarm(KAAlarm::DEFERRED_ALARM);
+                event.removeExpiredAlarm(KAAlarm::Type::Deferred);
                 update = true;
             }
             if (next)
@@ -2174,7 +2174,7 @@ int KAlarmApp::rescheduleAlarm(KAEvent& event, const KAAlarm& alarm, bool update
         reply = (!cancelled && next_dt.isValid() && (next_dt <= now)) ? 1 : 0;
 
         if (event.reminderMinutes() < 0  &&  last.isValid()
-        &&  alarm.type() != KAAlarm::AT_LOGIN_ALARM)
+        &&  alarm.type() != KAAlarm::Type::AtLogin)
         {
             // Set the reminder which is now due after the last main alarm trigger.
             // Note that at-login reminders are scheduled in execAlarm().
@@ -2195,7 +2195,7 @@ int KAlarmApp::rescheduleAlarm(KAEvent& event, const KAAlarm& alarm, bool update
 bool KAlarmApp::cancelAlarm(KAEvent& event, KAAlarm::Type alarmType, bool updateCalAndDisplay)
 {
     qCDebug(KALARM_LOG) << "KAlarmApp::cancelAlarm";
-    if (alarmType == KAAlarm::MAIN_ALARM  &&  !event.displaying()  &&  event.toBeArchived())
+    if (alarmType == KAAlarm::Type::Main  &&  !event.displaying()  &&  event.toBeArchived())
     {
         // The event is being deleted. Save it in the archived resource first.
         Resource resource;
@@ -2229,9 +2229,9 @@ bool KAlarmApp::cancelAlarm(KAEvent& event, KAAlarm::Type alarmType, bool update
 */
 bool KAlarmApp::cancelReminderAndDeferral(KAEvent& event)
 {
-    return cancelAlarm(event, KAAlarm::REMINDER_ALARM, false)
-       ||  cancelAlarm(event, KAAlarm::DEFERRED_REMINDER_ALARM, false)
-       ||  cancelAlarm(event, KAAlarm::DEFERRED_ALARM, true);
+    return cancelAlarm(event, KAAlarm::Type::Reminder, false)
+       ||  cancelAlarm(event, KAAlarm::Type::DeferredReminder, false)
+       ||  cancelAlarm(event, KAAlarm::Type::Deferred, true);
 }
 
 /******************************************************************************
@@ -2255,7 +2255,7 @@ void* KAlarmApp::execAlarm(KAEvent& event, const KAAlarm& alarm, ExecAlarmFlags 
     }
 
     if (mNotificationsInhibited  &&  !(flags & NoNotifyInhibit)
-    &&  (event.actionTypes() & KAEvent::ACT_DISPLAY))
+    &&  (event.actionTypes() & KAEvent::Action::Display))
     {
         // It's a display event and notifications are inhibited.
         qCDebug(KALARM_LOG) << "KAlarmApp::execAlarm:" << event.id() << ": notifications inhibited";
@@ -2267,7 +2267,7 @@ void* KAlarmApp::execAlarm(KAEvent& event, const KAAlarm& alarm, ExecAlarmFlags 
 
     switch (alarm.action())
     {
-        case KAAlarm::COMMAND:
+        case KAAlarm::Action::Command:
             if (!event.commandDisplay())
             {
                 // execCommandAlarm() will error if the user is not authorised
@@ -2277,16 +2277,16 @@ void* KAlarmApp::execAlarm(KAEvent& event, const KAAlarm& alarm, ExecAlarmFlags 
                     rescheduleAlarm(event, alarm, true);
                 break;
             }
-            Q_FALLTHROUGH();   // fall through to MESSAGE
-        case KAAlarm::MESSAGE:
-        case KAAlarm::FILE:
+            Q_FALLTHROUGH();   // fall through to Message
+        case KAAlarm::Action::Message:
+        case KAAlarm::Action::File:
         {
             // Display a message, file or command output, provided that the same event
             // isn't already being displayed
             MessageDisplay* disp = MessageDisplay::findEvent(EventId(event));
             // Find if we're changing a reminder message to the real message
-            const bool reminder = (alarm.type() & KAAlarm::REMINDER_ALARM);
-            const bool replaceReminder = !reminder && disp && (disp->alarmType() & KAAlarm::REMINDER_ALARM);
+            const bool reminder = (alarm.type() & KAAlarm::Type::Reminder);
+            const bool replaceReminder = !reminder && disp && (disp->alarmType() & KAAlarm::Type::Reminder);
             if (!reminder
             &&  (!event.deferred() || (event.extraActionOptions() & KAEvent::ExecPreActOnDeferral))
             &&  (replaceReminder || !disp)  &&  !(flags & NoPreAction)
@@ -2363,7 +2363,7 @@ void* KAlarmApp::execAlarm(KAEvent& event, const KAAlarm& alarm, ExecAlarmFlags 
             }
             break;
         }
-        case KAAlarm::EMAIL:
+        case KAAlarm::Action::Email:
         {
             qCDebug(KALARM_LOG) << "KAlarmApp::execAlarm: EMAIL to:" << event.emailAddresses(QStringLiteral(","));
             QStringList errmsgs;
@@ -2386,7 +2386,7 @@ void* KAlarmApp::execAlarm(KAEvent& event, const KAAlarm& alarm, ExecAlarmFlags 
                 rescheduleAlarm(event, alarm, true);
             break;
         }
-        case KAAlarm::AUDIO:
+        case KAAlarm::Action::Audio:
         {
             // Play the sound, provided that the same event
             // isn't already playing
@@ -2448,7 +2448,7 @@ ShellProcess* KAlarmApp::execCommandAlarm(const KAEvent& event, const KAAlarm& a
         const QString tmpfile = createTempScriptFile(command, false, event, alarm);
         if (tmpfile.isEmpty())
         {
-            setEventCommandError(event, KAEvent::CMD_ERROR);
+            setEventCommandError(event, KAEvent::CmdErr::Fail);
             return nullptr;
         }
         return doShellCommand(tmpfile, event, &alarm, (flags | ProcData::TEMP_FILE), receiver, slotOutput, methodExited);
@@ -2666,9 +2666,9 @@ void KAlarmApp::slotCommandExited(ShellProcess* proc)
             if (status == ShellProcess::SUCCESS  &&  !proc->exitCode())
             {
                 qCDebug(KALARM_LOG) << "KAlarmApp::slotCommandExited:" << pd->event->id() << ": SUCCESS";
-                clearEventCommandError(*pd->event, pd->preAction() ? KAEvent::CMD_ERROR_PRE
-                                                 : pd->postAction() ? KAEvent::CMD_ERROR_POST
-                                                 : KAEvent::CMD_ERROR);
+                clearEventCommandError(*pd->event, pd->preAction() ? KAEvent::CmdErr::Pre
+                                                 : pd->postAction() ? KAEvent::CmdErr::Post
+                                                 : KAEvent::CmdErr::Fail);
             }
             else
             {
@@ -2683,9 +2683,9 @@ void KAlarmApp::slotCommandExited(ShellProcess* proc)
                     const QList<QDialog*> dialogs = pd->messageBoxParent->findChildren<QDialog*>();
                     if (!dialogs.isEmpty())
                         delete dialogs[0];
-                    setEventCommandError(*pd->event, pd->preAction() ? KAEvent::CMD_ERROR_PRE
-                                                   : pd->postAction() ? KAEvent::CMD_ERROR_POST
-                                                   : KAEvent::CMD_ERROR);
+                    setEventCommandError(*pd->event, pd->preAction() ? KAEvent::CmdErr::Pre
+                                                   : pd->postAction() ? KAEvent::CmdErr::Post
+                                                   : KAEvent::CmdErr::Fail);
                     if (!pd->tempFile())
                     {
                         errmsg += QLatin1Char('\n');
@@ -2732,7 +2732,7 @@ void KAlarmApp::slotCommandExited(ShellProcess* proc)
 */
 void KAlarmApp::commandErrorMsg(const ShellProcess* proc, const KAEvent& event, const KAAlarm* alarm, int flags, const QStringList& errors)
 {
-    KAEvent::CmdErrType cmderr;
+    KAEvent::CmdErr cmderr;
     QString dontShowAgain;
     QStringList errmsgs = errors;
     if (flags & ProcData::PRE_ACTION)
@@ -2741,20 +2741,20 @@ void KAlarmApp::commandErrorMsg(const ShellProcess* proc, const KAEvent& event, 
             return;   // don't notify user of any errors for the alarm
         errmsgs += i18nc("@info", "Pre-alarm action:");
         dontShowAgain = QStringLiteral("Pre");
-        cmderr = KAEvent::CMD_ERROR_PRE;
+        cmderr = KAEvent::CmdErr::Pre;
     }
     else if (flags & ProcData::POST_ACTION)
     {
         errmsgs += i18nc("@info", "Post-alarm action:");
         dontShowAgain = QStringLiteral("Post");
-        cmderr = (event.commandError() == KAEvent::CMD_ERROR_PRE)
-               ? KAEvent::CMD_ERROR_PRE_POST : KAEvent::CMD_ERROR_POST;
+        cmderr = (event.commandError() == KAEvent::CmdErr::Pre)
+               ? KAEvent::CmdErr::PrePost : KAEvent::CmdErr::Post;
     }
     else
     {
         if (!event.commandHideError())
             dontShowAgain = QStringLiteral("Exec");
-        cmderr = KAEvent::CMD_ERROR;
+        cmderr = KAEvent::CmdErr::Fail;
     }
 
     // Record the alarm's error status
@@ -2842,14 +2842,14 @@ void KAlarmApp::stopAudio()
 /******************************************************************************
 * Set the command error for the specified alarm.
 */
-void KAlarmApp::setEventCommandError(const KAEvent& event, KAEvent::CmdErrType err) const
+void KAlarmApp::setEventCommandError(const KAEvent& event, KAEvent::CmdErr err) const
 {
     ProcData* pd = findCommandProcess(event.id());
     if (pd && pd->eventDeleted)
         return;   // the alarm has been deleted, so can't set error status
 
-    if (err == KAEvent::CMD_ERROR_POST  &&  event.commandError() == KAEvent::CMD_ERROR_PRE)
-        err = KAEvent::CMD_ERROR_PRE_POST;
+    if (err == KAEvent::CmdErr::Post  &&  event.commandError() == KAEvent::CmdErr::Pre)
+        err = KAEvent::CmdErr::PrePost;
     event.setCommandError(err);
     KAEvent ev = ResourcesCalendar::event(EventId(event));
     if (ev.isValid()  &&  ev.commandError() != err)
@@ -2864,18 +2864,18 @@ void KAlarmApp::setEventCommandError(const KAEvent& event, KAEvent::CmdErrType e
 /******************************************************************************
 * Clear the command error for the specified alarm.
 */
-void KAlarmApp::clearEventCommandError(const KAEvent& event, KAEvent::CmdErrType err) const
+void KAlarmApp::clearEventCommandError(const KAEvent& event, KAEvent::CmdErr err) const
 {
     ProcData* pd = findCommandProcess(event.id());
     if (pd && pd->eventDeleted)
         return;   // the alarm has been deleted, so can't set error status
 
-    auto newerr = static_cast<KAEvent::CmdErrType>(event.commandError() & ~err);
+    auto newerr = static_cast<KAEvent::CmdErr>(event.commandError() & ~err);
     event.setCommandError(newerr);
     KAEvent ev = ResourcesCalendar::event(EventId(event));
     if (ev.isValid())
     {
-        newerr = static_cast<KAEvent::CmdErrType>(ev.commandError() & ~err);
+        newerr = static_cast<KAEvent::CmdErr>(ev.commandError() & ~err);
         ev.setCommandError(newerr);
         ResourcesCalendar::updateEvent(ev);
     }

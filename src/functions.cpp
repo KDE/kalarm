@@ -748,7 +748,7 @@ UpdateResult enableEvents(QList<KAEvent>& events, bool enable, QWidget* msgParen
                 ResourcesCalendar::disabledChanged(newev);
 
                 // If we're disabling a display alarm, close any message display
-                if (!enable  &&  (event->actionTypes() & KAEvent::ACT_DISPLAY))
+                if (!enable  &&  (event->actionTypes() & KAEvent::Action::Display))
                 {
                     MessageDisplay* win = MessageDisplay::findEvent(EventId(*event));
                     delete win;
@@ -973,7 +973,7 @@ bool exportAlarms(const QList<KAEvent>& events, QWidget* parent)
         const CalEvent::Type type = event.category();
         const QString id = CalEvent::uid(kcalEvent->uid(), type);
         kcalEvent->setUid(id);
-        event.updateKCalEvent(kcalEvent, KAEvent::UID_IGNORE);
+        event.updateKCalEvent(kcalEvent, KAEvent::UidAction::Ignore);
         if (calendar->addEvent(kcalEvent))
             exported = true;
         else
@@ -1089,18 +1089,18 @@ void editNewAlarm(KAEvent::SubAction action, QWidget* parent, const AlarmText* t
     EditAlarmDlg::Type type;
     switch (action)
     {
-        case KAEvent::MESSAGE:
-        case KAEvent::FILE:
+        case KAEvent::SubAction::Message:
+        case KAEvent::SubAction::File:
             type = EditAlarmDlg::DISPLAY;
             setAction = true;
             break;
-        case KAEvent::COMMAND:
+        case KAEvent::SubAction::Command:
             type = EditAlarmDlg::COMMAND;
             break;
-        case KAEvent::EMAIL:
+        case KAEvent::SubAction::Email:
             type = EditAlarmDlg::EMAIL;
             break;
-        case KAEvent::AUDIO:
+        case KAEvent::SubAction::Audio:
             type = EditAlarmDlg::AUDIO;
             break;
         default:
@@ -1593,7 +1593,7 @@ QList<KAEvent> templateList()
     const QList<KAEvent> events = ResourcesCalendar::events(CalEvent::TEMPLATE);
     for (const KAEvent& event : events)
     {
-        if (includeCmdAlarms  ||  !(event.actionTypes() & KAEvent::ACT_COMMAND))
+        if (includeCmdAlarms  ||  !(event.actionTypes() & KAEvent::Action::Command))
             templates.append(event);
     }
     return templates;
@@ -1606,7 +1606,7 @@ QList<KAEvent> templateList()
 */
 void outputAlarmWarnings(QWidget* parent, const KAEvent* event)
 {
-    if (event  &&  event->actionTypes() == KAEvent::ACT_EMAIL
+    if (event  &&  event->actionTypes() == KAEvent::Action::Email
     &&  Preferences::emailAddress().isEmpty())
         KAMessageBox::information(parent, xi18nc("@info Please set the 'From' email address...",
                                                 "<para>%1</para><para>Please set it in the Configuration dialog.</para>", KAMail::i18n_NeedFromEmailAddress()));
@@ -1653,7 +1653,7 @@ void refreshAlarmsIfQueued()
         const QList<KAEvent> events = ResourcesCalendar::events(CalEvent::ACTIVE);
         for (const KAEvent& event : events)
         {
-            if (!event.enabled()  &&  (event.actionTypes() & KAEvent::ACT_DISPLAY))
+            if (!event.enabled()  &&  (event.actionTypes() & KAEvent::Action::Display))
             {
                 MessageDisplay* win = MessageDisplay::findEvent(EventId(event));
                 delete win;
@@ -2017,7 +2017,7 @@ void displayUpdateError(QWidget* parent, KAlarm::UpdateError code, const UpdateS
 KAlarm::UpdateResult sendToKOrganizer(const KAEvent& event)
 {
     Event::Ptr kcalEvent(new KCalendarCore::Event);
-    event.updateKCalEvent(kcalEvent, KAEvent::UID_IGNORE);
+    event.updateKCalEvent(kcalEvent, KAEvent::UidAction::Ignore);
     // Change the event ID to avoid duplicating the same unique ID as the original event
     const QString uid = uidKOrganizer(event.id());
     kcalEvent->setUid(uid);
@@ -2025,13 +2025,13 @@ KAlarm::UpdateResult sendToKOrganizer(const KAEvent& event)
     QString userEmail;
     switch (event.actionTypes())
     {
-        case KAEvent::ACT_DISPLAY:
-        case KAEvent::ACT_COMMAND:
-        case KAEvent::ACT_DISPLAY_COMMAND:
+        case KAEvent::Action::Display:
+        case KAEvent::Action::Command:
+        case KAEvent::Action::DisplayCommand:
             kcalEvent->setSummary(event.cleanText());
             userEmail = Preferences::emailAddress();
             break;
-        case KAEvent::ACT_EMAIL:
+        case KAEvent::Action::Email:
         {
             const QString from = event.emailFromId()
                                ? Identities::identityManager()->identityForUoid(event.emailFromId()).fullEmailAddr()
@@ -2042,7 +2042,7 @@ KAlarm::UpdateResult sendToKOrganizer(const KAEvent& event)
             userEmail = from;
             break;
         }
-        case KAEvent::ACT_AUDIO:
+        case KAEvent::Action::Audio:
             kcalEvent->setSummary(event.audioFile());
             break;
         default:

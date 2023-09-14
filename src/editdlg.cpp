@@ -100,11 +100,11 @@ EditAlarmDlg* EditAlarmDlg::create(bool Template, const KAEvent& event, bool new
 {
     switch (event.actionTypes())
     {
-        case KAEvent::ACT_COMMAND:  return new EditCommandAlarmDlg(Template, event, newAlarm, parent, getResource, readOnly);
-        case KAEvent::ACT_DISPLAY_COMMAND:
-        case KAEvent::ACT_DISPLAY:  return new EditDisplayAlarmDlg(Template, event, newAlarm, parent, getResource, readOnly);
-        case KAEvent::ACT_EMAIL:    return new EditEmailAlarmDlg(Template, event, newAlarm, parent, getResource, readOnly);
-        case KAEvent::ACT_AUDIO:    return new EditAudioAlarmDlg(Template, event, newAlarm, parent, getResource, readOnly);
+        case KAEvent::Action::Command:  return new EditCommandAlarmDlg(Template, event, newAlarm, parent, getResource, readOnly);
+        case KAEvent::Action::DisplayCommand:
+        case KAEvent::Action::Display:  return new EditDisplayAlarmDlg(Template, event, newAlarm, parent, getResource, readOnly);
+        case KAEvent::Action::Email:    return new EditEmailAlarmDlg(Template, event, newAlarm, parent, getResource, readOnly);
+        case KAEvent::Action::Audio:    return new EditAudioAlarmDlg(Template, event, newAlarm, parent, getResource, readOnly);
         default:
             break;
     }
@@ -1066,7 +1066,7 @@ bool EditAlarmDlg::validate()
             else
                 pre = pre.addSecs(-1);
             DateTime next;
-            event.nextOccurrence(pre, next, KAEvent::IGNORE_REPETITION);
+            event.nextOccurrence(pre, next, KAEvent::Repeats::Ignore);
             if (next != dt)
             {
                 QString prompt = dateOnly ? i18nc("@info The parameter is a date value",
@@ -1094,12 +1094,12 @@ bool EditAlarmDlg::validate()
             {
                 // A timed recurrence has an entered start date which
                 // has already expired, so we must adjust it.
-                if (event.nextOccurrence(now, mAlarmDateTime, KAEvent::ALLOW_FOR_REPETITION) == KAEvent::NO_OCCURRENCE)
+                if (event.nextOccurrence(now, mAlarmDateTime, KAEvent::Repeats::AllowFor) == KAEvent::OccurType::None)
                 {
                     KAMessageBox::error(this, i18nc("@info", "Recurrence has already expired"));
                     return false;
                 }
-                if (event.workTimeOnly()  &&  !event.nextTrigger(KAEvent::DISPLAY_TRIGGER).isValid())
+                if (event.workTimeOnly()  &&  !event.nextTrigger(KAEvent::Trigger::Display).isValid())
                 {
                     if (KAMessageBox::warningContinueCancel(this, i18nc("@info", "The alarm will never occur during working hours"))
                         != KMessageBox::Continue)
@@ -1221,14 +1221,14 @@ void EditAlarmDlg::slotTry()
 */
 void EditAlarmDlg::slotHelp()
 {
-    KAEvent::Actions type;
+    KAEvent::Action type;
     switch (mAlarmType)
     {
-        case KAEvent::FILE:
-        case KAEvent::MESSAGE:  type = KAEvent::ACT_DISPLAY;  break;
-        case KAEvent::COMMAND:  type = KAEvent::ACT_COMMAND;  break;
-        case KAEvent::EMAIL:    type = KAEvent::ACT_EMAIL;  break;
-        case KAEvent::AUDIO:    type = KAEvent::ACT_AUDIO;  break;
+        case KAEvent::SubAction::File:
+        case KAEvent::SubAction::Message:  type = KAEvent::Action::Display;  break;
+        case KAEvent::SubAction::Command:  type = KAEvent::Action::Command;  break;
+        case KAEvent::SubAction::Email:    type = KAEvent::Action::Email;  break;
+        case KAEvent::SubAction::Audio:    type = KAEvent::Action::Audio;  break;
         default:
             return;
     }

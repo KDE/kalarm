@@ -1,7 +1,7 @@
 /*
  *  messagedisplayhelper.cpp  -  helper class to display an alarm or error message
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2001-2022 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2001-2023 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -100,14 +100,14 @@ MessageDisplayHelper::MessageDisplayHelper(MessageDisplay* parent, const KAEvent
     , mOriginalEvent(event)
     , mResource(Resources::resourceForEvent(mEventId.eventId()))
     , mAlwaysHide(flags & MessageDisplay::AlwaysHide)
-    , mNoPostAction(alarm.type() & KAAlarm::REMINDER_ALARM)
+    , mNoPostAction(alarm.type() & KAAlarm::Type::Reminder)
     , mBeep(event.beep())
     , mSpeak(event.speak())
     , mNoRecordCmdError(flags & MessageDisplay::NoRecordCmdError)
     , mRescheduleEvent(!(flags & MessageDisplay::NoReschedule))
 {
     qCDebug(KALARM_LOG) << "MessageDisplayHelper():" << mEventId;
-    if (alarm.type() & KAAlarm::REMINDER_ALARM)
+    if (alarm.type() & KAAlarm::Type::Reminder)
     {
         if (event.reminderMinutes() < 0)
         {
@@ -143,10 +143,10 @@ MessageDisplayHelper::MessageDisplayHelper(MessageDisplay* parent, const KAEvent
     , mMessage(event.cleanText())
     , mDateTime(alarmDateTime)
     , mEventId(event)
-    , mAlarmType(KAAlarm::MAIN_ALARM)
+    , mAlarmType(KAAlarm::Type::Main)
     , mAction(event.actionSubType())
     , mEmailId(-1)
-    , mCommandError(KAEvent::CMD_NO_ERROR)
+    , mCommandError(KAEvent::CmdErr::None)
     , mErrorMsgs(errmsgs)
     , mDontShowAgain(dontShowAgain)
     , mConfirmAck(false)
@@ -199,8 +199,8 @@ MessageDisplayHelper::~MessageDisplayHelper()
 */
 void MessageDisplayHelper::initTexts()
 {
-    const bool reminder = (!mErrorWindow  &&  (mAlarmType & KAAlarm::REMINDER_ALARM));
-    mTexts.title = (mAlarmType & KAAlarm::REMINDER_ALARM) ? i18nc("@title:window", "Reminder")
+    const bool reminder = (!mErrorWindow  &&  (mAlarmType & KAAlarm::Type::Reminder));
+    mTexts.title = (mAlarmType & KAAlarm::Type::Reminder) ? i18nc("@title:window", "Reminder")
                                                           : i18nc("@title:window", "Message");
 
     // Show the alarm date/time, together with a reminder text where appropriate.
@@ -228,7 +228,7 @@ void MessageDisplayHelper::initTexts()
         // It's a normal alarm message display
         switch (mAction)
         {
-            case KAEvent::FILE:
+            case KAEvent::SubAction::File:
             {
                 // Display the file name
                 mTexts.fileName = mMessage;
@@ -296,16 +296,16 @@ void MessageDisplayHelper::initTexts()
                 }
                 break;
             }
-            case KAEvent::MESSAGE:
+            case KAEvent::SubAction::Message:
                 mTexts.message = mMessage;
                 break;
 
-            case KAEvent::COMMAND:
+            case KAEvent::SubAction::Command:
                 theApp()->execCommandAlarm(mEvent, mEvent.alarm(mAlarmType), mNoRecordCmdError,
                                            this, SLOT(readProcessOutput(ShellProcess*)), "commandCompleted");
                 break;
 
-            case KAEvent::EMAIL:
+            case KAEvent::SubAction::Email:
             default:
                 break;
         }
@@ -330,7 +330,7 @@ void MessageDisplayHelper::initTexts()
         // It's an error message
         switch (mAction)
         {
-            case KAEvent::EMAIL:
+            case KAEvent::SubAction::Email:
             {
                 // Display the email addresses and subject.
                 mTexts.errorEmail[0] = i18nc("@info Email addressee", "To:");
@@ -339,9 +339,9 @@ void MessageDisplayHelper::initTexts()
                 mTexts.errorEmail[3] = mEvent.emailSubject();
                 break;
             }
-            case KAEvent::COMMAND:
-            case KAEvent::FILE:
-            case KAEvent::MESSAGE:
+            case KAEvent::SubAction::Command:
+            case KAEvent::SubAction::File:
+            case KAEvent::SubAction::Message:
             default:
                 // Just display the error message strings
                 break;
@@ -419,7 +419,7 @@ bool MessageDisplayHelper::cancelReminder(const KAEvent& event, const KAAlarm& a
 */
 bool MessageDisplayHelper::updateDateTime(const KAEvent& event, const KAAlarm& alarm)
 {
-    mDateTime = (alarm.type() & KAAlarm::REMINDER_ALARM) ? event.mainDateTime(true) : alarm.dateTime(true);
+    mDateTime = (alarm.type() & KAAlarm::Type::Reminder) ? event.mainDateTime(true) : alarm.dateTime(true);
     if (!mDateTime.isValid())
         return false;
     mTexts.time = mTexts.timeFull = dateTimeToDisplay();
@@ -567,7 +567,7 @@ bool MessageDisplayHelper::saveProperties(KConfigGroup& config)
         config.writeEntry("EventID", mEventId.eventId());
         config.writeEntry("CollectionID", mResource.id());
         config.writeEntry("AlarmType", static_cast<int>(mAlarmType));
-        if (mAlarmType == KAAlarm::INVALID_ALARM)
+        if (mAlarmType == KAAlarm::Type::Invalid)
             qCCritical(KALARM_LOG) << "MessageDisplayHelper::saveProperties: Invalid alarm: id=" << mEventId << ", alarm count=" << mEvent.alarmCount();
         config.writeEntry("Message", mMessage);
         config.writeEntry("Type", static_cast<int>(mAction));
@@ -647,7 +647,7 @@ bool MessageDisplayHelper::readPropertyValues(const KConfigGroup& config)
     const ResourceId resourceId = config.readEntry("CollectionID", ResourceId(-1));
     mInvalid             = config.readEntry("Invalid", false);
     mAlarmType           = static_cast<KAAlarm::Type>(config.readEntry("AlarmType", 0));
-    if (mAlarmType == KAAlarm::INVALID_ALARM)
+    if (mAlarmType == KAAlarm::Type::Invalid)
     {
         mInvalid = true;
         qCCritical(KALARM_LOG) << "MessageDisplayHelper::readProperties: Invalid alarm: id=" << eventId;
@@ -688,13 +688,13 @@ bool MessageDisplayHelper::readPropertyValues(const KConfigGroup& config)
     mNoDefer             = config.readEntry("NoDefer", false);
     mNoPostAction        = config.readEntry("NoPostAction", true);
     mEmailId             = config.readEntry("EmailId", KAEvent::EmailId(0));
-    mCommandError        = KAEvent::CmdErrType(config.readEntry("CmdErr", static_cast<int>(KAEvent::CMD_NO_ERROR)));
+    mCommandError        = KAEvent::CmdErr(config.readEntry("CmdErr", static_cast<int>(KAEvent::CmdErr::None)));
     mDontShowAgain       = config.readEntry("DontShowAgain", QString());
     mShowEdit            = false;
     // Temporarily initialise mResource and mEventId - they will be set by redisplayAlarm()
     mResource            = Resources::resource(resourceId);
     mEventId             = EventId(resourceId, eventId);
-    if (mAlarmType == KAAlarm::INVALID_ALARM)
+    if (mAlarmType == KAAlarm::Type::Invalid)
         return false;
     qCDebug(KALARM_LOG) << "MessageDisplayHelper::readProperties:" << eventId;
     return true;

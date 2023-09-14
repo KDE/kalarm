@@ -1,7 +1,7 @@
 /*
  *  messagedisplay.h  -  base class to display an alarm or error message
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2001-2022 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2001-2023 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -114,12 +114,12 @@ public:
     // is opened.
     struct DeferDlgData
     {
-        DeferAlarmDlg*      dlg;
-        QPointer<QObject>   displayObj {nullptr};
-        MessageDisplay*     display;
-        EventId             eventId;
-        KAAlarm::Type       alarmType;
-        KAEvent::CmdErrType commandError;
+        DeferAlarmDlg*    dlg;
+        QPointer<QObject> displayObj {nullptr};
+        MessageDisplay*   display;
+        EventId           eventId;
+        KAAlarm::Type     alarmType;
+        KAEvent::CmdErr   commandError;
 
         DeferDlgData(MessageDisplay* m, DeferAlarmDlg* d) : dlg(d), display(m) {}
         ~DeferDlgData();
@@ -170,7 +170,7 @@ protected:
     float               mFadeVolume() const      { return mHelper->mFadeVolume; }
     int                 mDefaultDeferMinutes() const  { return mHelper->mDefaultDeferMinutes; }
     KAEvent::EmailId    mEmailId() const         { return mHelper->mEmailId; }
-    KAEvent::CmdErrType mCommandError() const    { return mHelper->mCommandError; }
+    KAEvent::CmdErr     mCommandError() const    { return mHelper->mCommandError; }
     bool&               mNoPostAction()          { return mHelper->mNoPostAction; }
 
     const DateTime&     mDateTime() const        { return mHelper->mDateTime; }

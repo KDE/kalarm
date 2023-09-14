@@ -379,7 +379,7 @@ void FileResource::loaded(bool success, QHash<QString, KAEvent>& newEvents, cons
         // These are stored in the KAlarm config file, not the alarm
         // calendar, since they are specific to the user's local system.
         bool changed = false;
-        QHash<QString, KAEvent::CmdErrType> cmdErrors = mSettings->commandErrors();
+        QHash<QString, KAEvent::CmdErr> cmdErrors = mSettings->commandErrors();
         for (auto errit = cmdErrors.begin();  errit != cmdErrors.end();  )
         {
             auto evit = newEvents.find(errit.key());
@@ -503,9 +503,9 @@ bool FileResource::addEvent(const KAEvent& event)
         {
             // Add this event's command error to the settings.
             if (event.category() == CalEvent::ACTIVE
-            &&  event.commandError() != KAEvent::CMD_NO_ERROR)
+            &&  event.commandError() != KAEvent::CmdErr::None)
             {
-                QHash<QString, KAEvent::CmdErrType> cmdErrors = mSettings->commandErrors();
+                QHash<QString, KAEvent::CmdErr> cmdErrors = mSettings->commandErrors();
                 cmdErrors[event.id()] = event.commandError();
                 mSettings->setCommandErrors(cmdErrors);
             }
@@ -577,7 +577,7 @@ bool FileResource::deleteEvent(const KAEvent& event)
 
         if (mSettings  &&  mSettings->isEnabled(CalEvent::ACTIVE))
         {
-            QHash<QString, KAEvent::CmdErrType> cmdErrors = mSettings->commandErrors();
+            QHash<QString, KAEvent::CmdErr> cmdErrors = mSettings->commandErrors();
             if (cmdErrors.remove(event.id()))
                 mSettings->setCommandErrors(cmdErrors);
         }
@@ -597,9 +597,9 @@ void FileResource::handleCommandErrorChange(const KAEvent& event)
         return;
     // Update command errors held in the settings, if appropriate.
     bool changed = false;
-    QHash<QString, KAEvent::CmdErrType> cmdErrors = mSettings->commandErrors();
+    QHash<QString, KAEvent::CmdErr> cmdErrors = mSettings->commandErrors();
     if (event.category() != CalEvent::ACTIVE
-    ||  event.commandError() == KAEvent::CMD_NO_ERROR)
+    ||  event.commandError() == KAEvent::CmdErr::None)
     {
         if (cmdErrors.remove(event.id()))
             changed = true;

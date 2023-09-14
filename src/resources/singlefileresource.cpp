@@ -2,7 +2,7 @@
  *  singlefileresource.cpp  -  calendar resource held in a single file
  *  Program:  kalarm
  *  Partly based on ICalResourceBase and SingleFileResource in kdepim-runtime.
- *  SPDX-FileCopyrightText: 2009-2022 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2009-2023 David Jarvie <djarvie@kde.org>
  *  SPDX-FileCopyrightText: 2008 Bertjan Broeksema <broeksema@kde.org>
  *  SPDX-FileCopyrightText: 2008 Volker Krause <vkrause@kde.org>
  *  SPDX-FileCopyrightText: 2006 Till Adam <adam@kde.org>
@@ -457,7 +457,7 @@ bool SingleFileResource::doAddEvent(const KAEvent& event)
     }
 
     KCalendarCore::Event::Ptr kcalEvent(new KCalendarCore::Event);
-    event.updateKCalEvent(kcalEvent, KAEvent::UID_SET);
+    event.updateKCalEvent(kcalEvent, KAEvent::UidAction::Set);
     if (!mCalendar->addEvent(kcalEvent))
     {
         qCCritical(KALARM_LOG) << "SingleFileResource::addEvent:" << displayId() << "Error adding event with id" << event.id();
@@ -513,7 +513,7 @@ bool SingleFileResource::doUpdateEvent(const KAEvent& event)
 
     // Update the event in place.
     mCalendar->deleteEventInstances(calEvent);
-    event.updateKCalEvent(calEvent, KAEvent::UID_SET);
+    event.updateKCalEvent(calEvent, KAEvent::UidAction::Set);
     mCalendar->setModified(true);
     return true;
 }

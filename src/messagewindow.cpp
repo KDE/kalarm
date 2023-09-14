@@ -1,7 +1,7 @@
 /*
  *  messagewindow.cpp  -  displays an alarm message in a window
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2001-2022 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2001-2023 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -201,7 +201,7 @@ void MessageWindow::setUpDisplay()
     mHelper->initTexts();
     MessageDisplayHelper::DisplayTexts texts = mHelper->texts();
 
-    const bool reminder = (!mErrorWindow()  &&  (mAlarmType() & KAAlarm::REMINDER_ALARM));
+    const bool reminder = (!mErrorWindow()  &&  (mAlarmType() & KAAlarm::Type::Reminder));
     const int leading = fontMetrics().leading();
     setCaption(texts.title);
     QWidget* topWidget = new QWidget(this);
@@ -233,7 +233,7 @@ void MessageWindow::setUpDisplay()
         // It's a normal alarm message window
         switch (mAction())
         {
-            case KAEvent::FILE:
+            case KAEvent::SubAction::File:
             {
                 // Display the file name
                 auto label = new KSqueezedTextLabel(texts.fileName, topWidget);
@@ -279,7 +279,7 @@ void MessageWindow::setUpDisplay()
                 }
                 break;
             }
-            case KAEvent::MESSAGE:
+            case KAEvent::SubAction::Message:
             {
                 // Message label
                 // Using MessageText instead of QLabel allows scrolling and mouse copying
@@ -315,7 +315,7 @@ void MessageWindow::setUpDisplay()
                     topLayout->addStretch();
                 break;
             }
-            case KAEvent::COMMAND:
+            case KAEvent::SubAction::Command:
             {
                 mCommandText = new MessageText(topWidget);
                 mCommandText->setBackgroundColour(mBgColour());
@@ -326,7 +326,7 @@ void MessageWindow::setUpDisplay()
                 mCommandText->setPlainText(texts.message);
                 break;
             }
-            case KAEvent::EMAIL:
+            case KAEvent::SubAction::Email:
             default:
                 break;
         }
@@ -350,7 +350,7 @@ void MessageWindow::setUpDisplay()
         // It's an error message
         switch (mAction())
         {
-            case KAEvent::EMAIL:
+            case KAEvent::SubAction::Email:
             {
                 // Display the email addresses and subject.
                 QFrame* frame = new QFrame(topWidget);
@@ -370,9 +370,9 @@ void MessageWindow::setUpDisplay()
                 grid->addWidget(label, 1, 1, Qt::AlignLeft);
                 break;
             }
-            case KAEvent::COMMAND:
-            case KAEvent::FILE:
-            case KAEvent::MESSAGE:
+            case KAEvent::SubAction::Command:
+            case KAEvent::SubAction::File:
+            case KAEvent::SubAction::Message:
             default:
                 // Just display the error message strings
                 break;
@@ -828,10 +828,10 @@ QSize MessageWindow::sizeHint() const
     QSize desired;
     switch (mAction())
     {
-        case KAEvent::MESSAGE:
+        case KAEvent::SubAction::Message:
             desired = MainWindowBase::sizeHint();
             break;
-        case KAEvent::COMMAND:
+        case KAEvent::SubAction::Command:
             if (mShown)
             {
                 // For command output, expand the window to accommodate the text
@@ -866,7 +866,7 @@ void MessageWindow::showEvent(QShowEvent* se)
     MainWindowBase::showEvent(se);
     if (mShown  ||  !mInitialised)
         return;
-    if (mErrorWindow()  ||  mAlarmType() == KAAlarm::INVALID_ALARM)
+    if (mErrorWindow()  ||  mAlarmType() == KAAlarm::Type::Invalid)
     {
         // Don't bother repositioning error messages,
         // and invalid alarms should be deleted anyway.
@@ -881,7 +881,7 @@ void MessageWindow::showEvent(QShowEvent* se)
          */
         bool execComplete = true;
         QSize s = sizeHint();     // fit the window round the message
-        if (mAction() == KAEvent::FILE  &&  mErrorMsgs().isEmpty())
+        if (mAction() == KAEvent::SubAction::File  &&  mErrorMsgs().isEmpty())
             Config::readWindowSize("FileMessage", s);
         resize(s);
 
@@ -974,7 +974,7 @@ void MessageWindow::moveEvent(QMoveEvent* e)
 */
 void MessageWindow::frameDrawn()
 {
-    if (!mErrorWindow()  &&  mAction() == KAEvent::MESSAGE)
+    if (!mErrorWindow()  &&  mAction() == KAEvent::SubAction::Message)
     {
         const QSize s = sizeHint();
         if (width() > s.width()  ||  height() > s.height())
@@ -1035,7 +1035,7 @@ void MessageWindow::resizeEvent(QResizeEvent* re)
     }
     else
     {
-        if (mShown  &&  mAction() == KAEvent::FILE  &&  mErrorMsgs().isEmpty())
+        if (mShown  &&  mAction() == KAEvent::SubAction::File  &&  mErrorMsgs().isEmpty())
             Config::writeWindowSize("FileMessage", re->size());
         MainWindowBase::resizeEvent(re);
     }

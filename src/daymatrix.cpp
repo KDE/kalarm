@@ -248,7 +248,7 @@ void DayMatrix::updateEvents(const Resource& resource, const KADateTime& before,
             DateTime nextDt;
             for (KADateTime from = before;  ;  )
             {
-                event.nextOccurrence(from, nextDt, KAEvent::RETURN_REPETITION);
+                event.nextOccurrence(from, nextDt, KAEvent::Repeats::Return);
                 if (!nextDt.isValid())
                     break;
                 from = nextDt.effectiveKDateTime().toTimeSpec(timeSpec);

@@ -1,7 +1,7 @@
 /*
  *  find.cpp  -  search facility
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2005-2022 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2005-2023 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -183,18 +183,18 @@ void Find::display()
             live = true;
         switch (event->actionTypes())
         {
-            case KAEvent::ACT_EMAIL:    email   = true;  break;
-            case KAEvent::ACT_AUDIO:    audio   = true;  break;
-            case KAEvent::ACT_COMMAND:  command = true;  break;
-            case KAEvent::ACT_DISPLAY:
-                if (event->actionSubType() == KAEvent::FILE)
+            case KAEvent::Action::Email:    email   = true;  break;
+            case KAEvent::Action::Audio:    audio   = true;  break;
+            case KAEvent::Action::Command:  command = true;  break;
+            case KAEvent::Action::Display:
+                if (event->actionSubType() == KAEvent::SubAction::File)
                 {
                     file = true;
                     break;
                 }
-                // fall through to ACT_DISPLAY_COMMAND
+                // fall through to DisplayCommand
                 Q_FALLTHROUGH();
-            case KAEvent::ACT_DISPLAY_COMMAND:
+            case KAEvent::Action::DisplayCommand:
             default:
                 text = true;
                 break;
@@ -309,7 +309,7 @@ void Find::findNext(bool forward, bool checkEnd, bool fromCurrent)
             continue;     // we're not searching this type of alarm
         switch (event->actionTypes())
         {
-            case KAEvent::ACT_EMAIL:
+            case KAEvent::Action::Email:
                 if (!(mOptions & FIND_EMAIL))
                     break;
                 mFind->setData(event->emailAddresses(QStringLiteral(", ")));
@@ -328,22 +328,22 @@ void Find::findNext(bool forward, bool checkEnd, bool fromCurrent)
                 found = (mFind->find() == KFind::Match);
                 break;
 
-            case KAEvent::ACT_AUDIO:
+            case KAEvent::Action::Audio:
                 if (!(mOptions & FIND_AUDIO))
                     break;
                 mFind->setData(event->audioFile());
                 found = (mFind->find() == KFind::Match);
                 break;
 
-            case KAEvent::ACT_COMMAND:
+            case KAEvent::Action::Command:
                 if (!(mOptions & FIND_COMMAND))
                     break;
                 mFind->setData(event->cleanText());
                 found = (mFind->find() == KFind::Match);
                 break;
 
-            case KAEvent::ACT_DISPLAY:
-                if (event->actionSubType() == KAEvent::FILE)
+            case KAEvent::Action::Display:
+                if (event->actionSubType() == KAEvent::SubAction::File)
                 {
                     if (!(mOptions & FIND_FILE))
                         break;
@@ -351,9 +351,9 @@ void Find::findNext(bool forward, bool checkEnd, bool fromCurrent)
                     found = (mFind->find() == KFind::Match);
                     break;
                 }
-                // fall through to ACT_DISPLAY_COMMAND
+                // fall through to DisplayCommand
                 Q_FALLTHROUGH();
-            case KAEvent::ACT_DISPLAY_COMMAND:
+            case KAEvent::Action::DisplayCommand:
                 if (!(mOptions & FIND_MESSAGE))
                     break;
                 mFind->setData(event->cleanText());

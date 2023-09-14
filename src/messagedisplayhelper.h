@@ -1,7 +1,7 @@
 /*
  *  messagedisplayhelper.h  -  helper class to display an alarm or error message
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2001-2022 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2001-2023 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -171,7 +171,7 @@ public:
     KAAlarm::Type       mAlarmType;
     KAEvent::SubAction  mAction;
     KAEvent::EmailId    mEmailId;                 // if email text, message's Akonadi Item ID, else -1
-    KAEvent::CmdErrType mCommandError;
+    KAEvent::CmdErr     mCommandError;
     QStringList         mErrorMsgs;
     QString             mDontShowAgain;           // non-null for don't-show-again option with error message
     int                 mAudioRepeatPause;
