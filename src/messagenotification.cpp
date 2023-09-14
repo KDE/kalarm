@@ -1,7 +1,7 @@
 /*
  *  messagenotification.cpp  -  displays an alarm message in a system notification
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2020-2022 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2020-2023 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -242,7 +242,7 @@ void MessageNotification::setUpDisplay()
         // It's a normal alarm message notification
         switch (mAction())
         {
-            case KAEvent::FILE:
+            case KAEvent::SubAction::File:
                 // Display the file name
                 mMessageText = texts.fileName + NL;
 
@@ -261,16 +261,16 @@ void MessageNotification::setUpDisplay()
                 }
                 break;
 
-            case KAEvent::MESSAGE:
+            case KAEvent::SubAction::Message:
                 mMessageText = texts.message;
                 break;
 
-            case KAEvent::COMMAND:
+            case KAEvent::SubAction::Command:
                 mMessageText = texts.message;
                 mCommandInhibit = true;
                 break;
 
-            case KAEvent::EMAIL:
+            case KAEvent::SubAction::Email:
             default:
                 break;
         }
@@ -286,16 +286,16 @@ void MessageNotification::setUpDisplay()
         // It's an error message
         switch (mAction())
         {
-            case KAEvent::EMAIL:
+            case KAEvent::SubAction::Email:
             {
                 // Display the email addresses and subject.
                 mMessageText = texts.errorEmail[0] + SP + texts.errorEmail[1] + NL
                              + texts.errorEmail[2] + SP + texts.errorEmail[3] + NL;
                 break;
             }
-            case KAEvent::COMMAND:
-            case KAEvent::FILE:
-            case KAEvent::MESSAGE:
+            case KAEvent::SubAction::Command:
+            case KAEvent::SubAction::File:
+            case KAEvent::SubAction::Message:
             default:
                 // Just display the error message strings
                 break;
@@ -361,7 +361,7 @@ void MessageNotification::showDisplay()
             // doesn't do this when the notification is displayed.
             mHelper->wakeScreen();
         }
-        if (!mDisplayComplete  &&  !mErrorWindow()  &&  mAlarmType() != KAAlarm::INVALID_ALARM)
+        if (!mDisplayComplete  &&  !mErrorWindow()  &&  mAlarmType() != KAAlarm::Type::Invalid)
             mHelper->displayComplete(false);   // reschedule
         mDisplayComplete = true;
     }

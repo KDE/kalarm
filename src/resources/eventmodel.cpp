@@ -342,7 +342,7 @@ bool AlarmListModel::filterAcceptsRow(int sourceRow, const QModelIndex& sourcePa
                 while (!occurs.isValid())
                 {
                     DateTime nextDt;
-                    ev.nextOccurrence(from, nextDt, KAEvent::RETURN_REPETITION);
+                    ev.nextOccurrence(from, nextDt, KAEvent::Repeats::Return);
                     if (!nextDt.isValid())
                     {
                         resourceHash[ev.id()] = KADateTime();
@@ -549,8 +549,8 @@ TemplateListModel* TemplateListModel::mAllInstance = nullptr;
 
 TemplateListModel::TemplateListModel(QObject* parent)
     : EventListModel(CalEvent::TEMPLATE, parent)
-    , mActionsEnabled(KAEvent::ACT_ALL)
-    , mActionsFilter(KAEvent::ACT_ALL)
+    , mActionsEnabled(KAEvent::Action::All)
+    , mActionsFilter(KAEvent::Action::All)
 {
 }
 
@@ -560,7 +560,7 @@ TemplateListModel::~TemplateListModel()
         mAllInstance = nullptr;
 }
 
-void TemplateListModel::setAlarmActionFilter(KAEvent::Actions types)
+void TemplateListModel::setAlarmActionFilter(KAEvent::Action types)
 {
     // Ensure that the filter isn't applied to the 'all' instance.
     if (this != mAllInstance  &&  types != mActionsFilter)
@@ -570,7 +570,7 @@ void TemplateListModel::setAlarmActionFilter(KAEvent::Actions types)
     }
 }
 
-void TemplateListModel::setAlarmActionsEnabled(KAEvent::Actions types)
+void TemplateListModel::setAlarmActionsEnabled(KAEvent::Action types)
 {
     // Ensure that the setting isn't applied to the 'all' instance.
     if (this != mAllInstance  &&  types != mActionsEnabled)
@@ -584,10 +584,10 @@ bool TemplateListModel::filterAcceptsRow(int sourceRow, const QModelIndex& sourc
 {
     if (!EventListModel::filterAcceptsRow(sourceRow, sourceParent))
         return false;
-    if (mActionsFilter == KAEvent::ACT_ALL)
+    if (mActionsFilter == KAEvent::Action::All)
         return true;
     const QModelIndex sourceIndex = sourceModel()->index(sourceRow, 0, sourceParent);
-    const KAEvent::Actions actions = static_cast<KAEvent::Actions>(sourceModel()->data(sourceIndex, ResourceDataModelBase::AlarmActionsRole).toInt());
+    const KAEvent::Action actions = static_cast<KAEvent::Action>(sourceModel()->data(sourceIndex, ResourceDataModelBase::AlarmActionsRole).toInt());
     return actions & mActionsFilter;
 }
 
@@ -619,9 +619,9 @@ QVariant TemplateListModel::headerData(int section, Qt::Orientation orientation,
 Qt::ItemFlags TemplateListModel::flags(const QModelIndex& index) const
 {
     Qt::ItemFlags f = sourceModel()->flags(mapToSource(index));
-    if (mActionsEnabled == KAEvent::ACT_ALL)
+    if (mActionsEnabled == KAEvent::Action::All)
         return f;
-    const KAEvent::Actions actions = static_cast<KAEvent::Actions>(EventListModel::data(index, ResourceDataModelBase::AlarmActionsRole).toInt());
+    const KAEvent::Action actions = static_cast<KAEvent::Action>(EventListModel::data(index, ResourceDataModelBase::AlarmActionsRole).toInt());
     if (!(actions & mActionsEnabled))
         f = static_cast<Qt::ItemFlags>(f & ~(Qt::ItemIsEnabled | Qt::ItemIsSelectable));
     return f;

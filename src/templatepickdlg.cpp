@@ -1,7 +1,7 @@
 /*
  *  templatepickdlg.cpp  -  dialog to choose an alarm template
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2004-2020 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2004-2023 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -24,7 +24,7 @@
 static const char TMPL_PICK_DIALOG_NAME[] = "TemplatePickDialog";
 
 
-TemplatePickDlg::TemplatePickDlg(KAEvent::Actions type, QWidget* parent)
+TemplatePickDlg::TemplatePickDlg(KAEvent::Action type, QWidget* parent)
     : QDialog(parent)
 {
     QWidget* topWidget = new QWidget(this);
@@ -43,11 +43,11 @@ TemplatePickDlg::TemplatePickDlg(KAEvent::Actions type, QWidget* parent)
     topLayout->setContentsMargins(0, 0, 0, 0);
 
     // Display the list of templates, but exclude command alarms if in kiosk mode.
-    KAEvent::Actions shown = KAEvent::ACT_ALL;
+    KAEvent::Action shown = KAEvent::Action::All;
     if (!ShellProcess::authorised())
     {
-        type = static_cast<KAEvent::Actions>(type & ~KAEvent::ACT_COMMAND);
-        shown = static_cast<KAEvent::Actions>(shown & ~KAEvent::ACT_COMMAND);
+        type = static_cast<KAEvent::Action>(type & ~KAEvent::Action::Command);
+        shown = static_cast<KAEvent::Action>(shown & ~KAEvent::Action::Command);
     }
     mListFilterModel = DataModel::createTemplateListModel(this);
     mListFilterModel->setAlarmActionsEnabled(type);

@@ -1,7 +1,7 @@
 /*
  *  birthdaydlg.cpp  -  dialog to pick birthdays from address book
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2002-2022 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2002-2023 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -264,7 +264,7 @@ QVector<KAEvent> BirthdayDlg::events() const
                       (mName ? mName->text() : QString()),
                       mPrefix->text() + name + mSuffix->text(),
                       mFontColourButton->bgColour(), mFontColourButton->fgColour(),
-                      mFontColourButton->font(), KAEvent::MESSAGE, mLateCancel->minutes(),
+                      mFontColourButton->font(), KAEvent::SubAction::Message, mLateCancel->minutes(),
                       mFlags, true);
         float fadeVolume;
         int   fadeSecs;
@@ -368,7 +368,7 @@ void BirthdayDlg::setSortModelSelectionList()
     const QVector<KAEvent> activeEvents = ResourcesCalendar::events(CalEvent::ACTIVE);
     for (const KAEvent& event : activeEvents)
     {
-        if (event.actionSubType() == KAEvent::MESSAGE
+        if (event.actionSubType() == KAEvent::SubAction::Message
         &&  event.recurType() == KARecurrence::ANNUAL_DATE
         &&  (mPrefixText.isEmpty()  ||  event.message().startsWith(mPrefixText)))
             alarmMessageList.append(event.message());

@@ -271,7 +271,7 @@ bool DisplayCalendar::addEvent(KAEvent& evnt)
     id = CalEvent::uid(id, type);   // include the alarm type tag in the ID
     kcalEvent->setUid(id);
     event->setEventId(id);
-    event->updateKCalEvent(kcalEvent, KAEvent::UID_IGNORE);
+    event->updateKCalEvent(kcalEvent, KAEvent::UidAction::Ignore);
 
     bool ok = false;
     bool remove = false;

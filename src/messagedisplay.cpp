@@ -1,7 +1,7 @@
 /*
  *  messagedisplay.cpp  -  base class to display an alarm or error message
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2001-2022 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2001-2023 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -118,7 +118,7 @@ void MessageDisplay::redisplayAlarms()
             {
                 // This event should be displayed, but currently isn't being
                 const KAAlarm alarm = event.convertDisplayingAlarm();
-                if (alarm.type() == KAAlarm::INVALID_ALARM)
+                if (alarm.type() == KAAlarm::Type::Invalid)
                 {
                     qCCritical(KALARM_LOG) << "MessageDisplay::redisplayAlarms: Invalid alarm: id=" << eventId;
                     continue;
@@ -248,7 +248,7 @@ void MessageDisplay::processDeferDlg(DeferDlgData* data, int result)
             // The event still exists in the active calendar
             qCDebug(KALARM_LOG) << "MessageDisplay::executeDeferDlg: Deferring event" << data->eventId;
             KAEvent newev(event);
-            newev.defer(dateTime, (data->alarmType & KAAlarm::REMINDER_ALARM), true);
+            newev.defer(dateTime, (static_cast<int>(data->alarmType) & static_cast<int>(KAAlarm::Type::Reminder)), true);
             newev.setDeferDefaultMinutes(delayMins);
             KAlarm::updateEvent(newev, data->dlg, true);
             if (display)
@@ -279,7 +279,7 @@ void MessageDisplay::processDeferDlg(DeferDlgData* data, int result)
                 return;
             }
             qCDebug(KALARM_LOG) << "MessageDisplay::executeDeferDlg: Deferring retrieved event" << data->eventId;
-            event2.defer(dateTime, (data->alarmType & KAAlarm::REMINDER_ALARM), true);
+            event2.defer(dateTime, (static_cast<int>(data->alarmType) & static_cast<int>(KAAlarm::Type::Reminder)), true);
             event2.setDeferDefaultMinutes(delayMins);
             event2.setCommandError(data->commandError);
             // Add the event back into the calendar file, retaining its ID

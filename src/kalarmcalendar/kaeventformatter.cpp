@@ -1,6 +1,6 @@
 /*
  *  kaeventformatter.cpp  -  converts KAlarmCal::KAEvent properties to text
- *  SPDX-FileCopyrightText: 2010-2022 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2010-2023 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -192,9 +192,9 @@ bool KAEventFormatter::isApplicable(Parameter param) const
             return mEvent.lateCancel();
 
         case MessageText:
-            return mEvent.actionSubType() == KAEvent::MESSAGE;
+            return mEvent.actionSubType() == KAEvent::SubAction::Message;
         case MessageFile:
-            return mEvent.actionSubType() == KAEvent::FILE;
+            return mEvent.actionSubType() == KAEvent::SubAction::File;
         case FgColour:
         case BgColour:
         case Font:
@@ -217,7 +217,7 @@ bool KAEventFormatter::isApplicable(Parameter param) const
         case PreActionNoError:
             return !mEvent.preAction().isEmpty();
         case Sound:
-            return mEvent.actionSubType() == KAEvent::MESSAGE || mEvent.actionSubType() == KAEvent::AUDIO;
+            return mEvent.actionSubType() == KAEvent::SubAction::Message || mEvent.actionSubType() == KAEvent::SubAction::Audio;
         case SoundRepeat:
             return !mEvent.audioFile().isEmpty();
         case SoundVolume:
@@ -230,7 +230,7 @@ bool KAEventFormatter::isApplicable(Parameter param) const
         case LogFile:
         case CommandXTerm:
         case CommandHideError:
-            return mEvent.actionSubType() == KAEvent::COMMAND;
+            return mEvent.actionSubType() == KAEvent::SubAction::Command;
 
         case EmailSubject:
         case EmailFromId:
@@ -238,7 +238,7 @@ bool KAEventFormatter::isApplicable(Parameter param) const
         case EmailBcc:
         case EmailBody:
         case EmailAttachments:
-            return mEvent.actionSubType() == KAEvent::EMAIL;
+            return mEvent.actionSubType() == KAEvent::SubAction::Email;
     }
     return false;
 }
@@ -252,17 +252,17 @@ QString KAEventFormatter::value(Parameter param) const
         case AlarmType:
             switch (mEvent.actionSubType())
             {
-                case KAEvent::MESSAGE:
+                case KAEvent::SubAction::Message:
                     return i18nc("@info Alarm type", "Display (text)");
-                case KAEvent::FILE:
+                case KAEvent::SubAction::File:
                     return i18nc("@info Alarm type", "Display (file)");
-                case KAEvent::COMMAND:
+                case KAEvent::SubAction::Command:
                     return mEvent.commandDisplay()
                            ? i18nc("@info Alarm type", "Display (command)")
                            : i18nc("@info Alarm type", "Command");
-                case KAEvent::EMAIL:
+                case KAEvent::SubAction::Email:
                     return i18nc("@info Alarm type", "Email");
-                case KAEvent::AUDIO:
+                case KAEvent::SubAction::Audio:
                     return i18nc("@info Alarm type", "Audio");
             }
             break;
@@ -295,7 +295,7 @@ QString KAEventFormatter::value(Parameter param) const
             if (mEvent.repeatAtLogin(true))
                 return i18nc("@info Repeat at login", "At login until %1", dateTime(mEvent.mainDateTime().kDateTime()));
             KCalendarCore::Event::Ptr eptr(new KCalendarCore::Event);
-            mEvent.updateKCalEvent(eptr, KAEvent::UID_SET);
+            mEvent.updateKCalEvent(eptr, KAEvent::UidAction::Set);
             return KCalUtils::IncidenceFormatter::recurrenceString(eptr);
         }
         case NextRecurrence:
@@ -338,9 +338,9 @@ QString KAEventFormatter::value(Parameter param) const
         }
 
         case MessageText:
-            return (mEvent.actionSubType() == KAEvent::MESSAGE) ? mEvent.cleanText() : QString();
+            return (mEvent.actionSubType() == KAEvent::SubAction::Message) ? mEvent.cleanText() : QString();
         case MessageFile:
-            return (mEvent.actionSubType() == KAEvent::FILE) ? mEvent.cleanText() : QString();
+            return (mEvent.actionSubType() == KAEvent::SubAction::File) ? mEvent.cleanText() : QString();
         case FgColour:
             return mEvent.fgColour().name();
         case BgColour:
@@ -393,7 +393,7 @@ QString KAEventFormatter::value(Parameter param) const
                    : mUnspecifiedValue;
 
         case Command:
-            return (mEvent.actionSubType() == KAEvent::COMMAND) ? mEvent.cleanText() : QString();
+            return (mEvent.actionSubType() == KAEvent::SubAction::Command) ? mEvent.cleanText() : QString();
         case LogFile:
             return mEvent.logFile();
         case CommandXTerm:
@@ -404,7 +404,7 @@ QString KAEventFormatter::value(Parameter param) const
         case EmailSubject:
             return mEvent.emailSubject();
         case EmailFromId:
-            return (mEvent.actionSubType() == KAEvent::EMAIL) ? QLocale().toString(mEvent.emailFromId()) : QString();
+            return (mEvent.actionSubType() == KAEvent::SubAction::Email) ? QLocale().toString(mEvent.emailFromId()) : QString();
         case EmailTo:
             return mEvent.emailAddresses(QStringLiteral(", "));
         case EmailBcc:

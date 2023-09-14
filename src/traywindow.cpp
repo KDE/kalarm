@@ -1,7 +1,7 @@
 /*
  *  traywindow.cpp  -  the KDE system tray applet
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2002-2022 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2002-2023 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -335,10 +335,10 @@ QString TrayWindow::tooltipAlarmText() const
     for (i = 0, iend = events.count();  i < iend;  ++i)
     {
         KAEvent* event = &events[i];
-        if (event->actionSubType() == KAEvent::MESSAGE)
+        if (event->actionSubType() == KAEvent::SubAction::Message)
         {
             TipItem item;
-            QDateTime dateTime = event->nextTrigger(KAEvent::DISPLAY_TRIGGER).effectiveKDateTime().toLocalZone().qDateTime();
+            QDateTime dateTime = event->nextTrigger(KAEvent::Trigger::Display).effectiveKDateTime().toLocalZone().qDateTime();
             if (dateTime > tomorrow.qDateTime())
                 break;   // ignore alarms after tomorrow at the current clock time
             item.dateTime = dateTime;

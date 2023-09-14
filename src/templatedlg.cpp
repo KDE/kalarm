@@ -1,7 +1,7 @@
 /*
  *  templatedlg.cpp  -  dialog to create, edit and delete alarm templates
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2004-2021 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2004-2023 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -57,7 +57,7 @@ TemplateDlg::TemplateDlg(QWidget* parent)
     hlayout->addLayout(layout);
     mListFilterModel = DataModel::createTemplateListModel(this);
     if (!ShellProcess::authorised())
-        mListFilterModel->setAlarmActionFilter(static_cast<KAEvent::Actions>(KAEvent::ACT_ALL & ~KAEvent::ACT_COMMAND));
+        mListFilterModel->setAlarmActionFilter(static_cast<KAEvent::Action>(KAEvent::Action::All & ~KAEvent::Action::Command));
     mListView = new TemplateListView(this);
     mListView->setModel(mListFilterModel);
     mListView->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding));

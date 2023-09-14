@@ -48,30 +48,30 @@ class KALARMCAL_EXPORT KAAlarm
 {
 public:
     /** The basic KAAlarm action types. */
-    enum Action
+    enum class Action
     {
-        MESSAGE,   //!< KCal::Alarm::Display type: display a text message
-        FILE,      //!< KCal::Alarm::Display type: display a file (URL given by the alarm text)
-        COMMAND,   //!< KCal::Alarm::Procedure type: execute a shell command
-        EMAIL,     //!< KCal::Alarm::Email type: send an email
-        AUDIO      //!< KCal::Alarm::Audio type: play a sound file
+        Message,   //!< KCal::Alarm::Display type: display a text message
+        File,      //!< KCal::Alarm::Display type: display a file (URL given by the alarm text)
+        Command,   //!< KCal::Alarm::Procedure type: execute a shell command
+        Email,     //!< KCal::Alarm::Email type: send an email
+        Audio      //!< KCal::Alarm::Audio type: play a sound file
     };
 
     /** Alarm types.
      *  KAAlarm's of different types may be contained in a KAEvent,
      *  each KAAlarm defining a different component of the overall alarm.
      */
-    enum Type
+    enum class Type
     {
-        INVALID_ALARM       = 0,     //!< Not an alarm
-        MAIN_ALARM          = 1,     //!< THE real alarm. Must be the first in the enumeration.
-        REMINDER_ALARM      = 0x02,  //!< Reminder in advance of/after the main alarm
-        DEFERRED_ALARM      = 0x04,  //!< Deferred alarm
-        DEFERRED_REMINDER_ALARM = REMINDER_ALARM | DEFERRED_ALARM,  //!< Deferred reminder alarm
+        Invalid          = 0,     //!< Not an alarm
+        Main             = 0x01,  //!< THE real alarm. Must be the first in the enumeration.
+        Reminder         = 0x02,  //!< Reminder in advance of/after the main alarm
+        Deferred         = 0x04,  //!< Deferred alarm
+        DeferredReminder = Reminder | Deferred,  //!< Deferred reminder alarm
         // The following values must be greater than the preceding ones, to
         // ensure that in ordered processing they are processed afterwards.
-        AT_LOGIN_ALARM      = 0x10,  //!< Additional repeat-at-login trigger
-        DISPLAYING_ALARM    = 0x20   //!< Copy of the alarm currently being displayed
+        AtLogin          = 0x10,  //!< Additional repeat-at-login trigger
+        Displaying       = 0x20   //!< Copy of the alarm currently being displayed
 
                               // IMPORTANT: if any values are added to this list, ensure that the
                               //            KAEventPrivate::AlarmType enum is adjusted similarly.
@@ -156,6 +156,12 @@ private:
     friend class KAEventPrivate;
 };
 
+inline int operator&(KAAlarm::Type t1, KAAlarm::Type t2)
+{ return static_cast<int>(t1) & static_cast<int>(t2); }
+
+inline QDebug operator<<(QDebug s, KAAlarm::Type type)
+{ s << static_cast<int>(type); return s; }
+
 class KAEventPrivate;
 
 /**
@@ -219,101 +225,99 @@ public:
 
     /** The basic action type(s) for the event's main alarm.
      *  Values may be combined by OR'ing them together. */
-    enum Actions
+    enum class Action
     {
-        ACT_NONE            = 0,      //!< invalid
-        ACT_DISPLAY         = 0x01,   //!< the alarm displays something
-        ACT_COMMAND         = 0x02,   //!< the alarm executes a command
-        ACT_EMAIL           = 0x04,   //!< the alarm sends an email
-        ACT_AUDIO           = 0x08,   //!< the alarm plays an audio file (without any display)
-        ACT_DISPLAY_COMMAND = ACT_DISPLAY | ACT_COMMAND,  //!< the alarm displays command output
-        ACT_ALL             = ACT_DISPLAY | ACT_COMMAND | ACT_EMAIL | ACT_AUDIO   //!< all types mask
+        None           = 0,      //!< invalid
+        Display        = 0x01,   //!< the alarm displays something
+        Command        = 0x02,   //!< the alarm executes a command
+        Email          = 0x04,   //!< the alarm sends an email
+        Audio          = 0x08,   //!< the alarm plays an audio file (without any display)
+        DisplayCommand = Display | Command,  //!< the alarm displays command output
+        All            = Display | Command | Email | Audio   //!< all types mask
     };
 
     /** The sub-action type for the event's main alarm. */
-    enum SubAction
+    enum class SubAction
     {
-        MESSAGE = KAAlarm::MESSAGE,    //!< display a message text
-        FILE    = KAAlarm::FILE,       //!< display the contents of a file
-        COMMAND = KAAlarm::COMMAND,    //!< execute a command
-        EMAIL   = KAAlarm::EMAIL,      //!< send an email
-        AUDIO   = KAAlarm::AUDIO       //!< play an audio file
+        Message = static_cast<int>(KAAlarm::Action::Message),  //!< display a message text
+        File    = static_cast<int>(KAAlarm::Action::File),     //!< display the contents of a file
+        Command = static_cast<int>(KAAlarm::Action::Command),  //!< execute a command
+        Email   = static_cast<int>(KAAlarm::Action::Email),    //!< send an email
+        Audio   = static_cast<int>(KAAlarm::Action::Audio)     //!< play an audio file
     };
 
     /** What type of occurrence is due. */
-    enum OccurType
+    enum class OccurType
     {
-        NO_OCCURRENCE            = 0,      //!< no occurrence is due
-        FIRST_OR_ONLY_OCCURRENCE = 0x01,   //!< the first occurrence (takes precedence over LAST_RECURRENCE)
-        RECURRENCE_DATE          = 0x02,   //!< a recurrence with only a date, not a time
-        RECURRENCE_DATE_TIME     = 0x03,   //!< a recurrence with a date and time
-        LAST_RECURRENCE          = 0x04,   //!< the last recurrence
-        OCCURRENCE_REPEAT        = 0x10,   //!< (bitmask for a sub-repetition of an occurrence)
-        FIRST_OR_ONLY_OCCURRENCE_REPEAT = OCCURRENCE_REPEAT | FIRST_OR_ONLY_OCCURRENCE, //!< a sub-repetition of the first occurrence
-        RECURRENCE_DATE_REPEAT          = OCCURRENCE_REPEAT | RECURRENCE_DATE,          //!< a sub-repetition of a date-only recurrence
-        RECURRENCE_DATE_TIME_REPEAT     = OCCURRENCE_REPEAT | RECURRENCE_DATE_TIME,     //!< a sub-repetition of a date/time recurrence
-        LAST_RECURRENCE_REPEAT          = OCCURRENCE_REPEAT | LAST_RECURRENCE           //!< a sub-repetition of the last recurrence
+        None                = 0,      //!< no occurrence is due
+        FirstOrOnly         = 0x01,   //!< the first occurrence (takes precedence over LastRecur)
+        RecurDate           = 0x02,   //!< a recurrence with only a date, not a time
+        RecurDateTime       = 0x03,   //!< a recurrence with a date and time
+        LastRecur           = 0x04,   //!< the last recurrence
+        Repeat              = 0x10,   //!< (bitmask for a sub-repetition of an occurrence)
+        FirstOrOnlyRepeat   = Repeat | FirstOrOnly,   //!< a sub-repetition of the first occurrence
+        RecurDateRepeat     = Repeat | RecurDate,     //!< a sub-repetition of a date-only recurrence
+        RecurDateTimeRepeat = Repeat | RecurDateTime, //!< a sub-repetition of a date/time recurrence
+        LastRecurRepeat     = Repeat | LastRecur      //!< a sub-repetition of the last recurrence
     };
 
     /** How to treat sub-repetitions in nextOccurrence(). */
-    enum OccurOption
+    enum class Repeats
     {
-        IGNORE_REPETITION,    //!< check for recurrences only, ignore sub-repetitions
-        RETURN_REPETITION,    //!< return a sub-repetition if it's the next occurrence
-        ALLOW_FOR_REPETITION  //!< if a sub-repetition is the next occurrence, return the previous recurrence, not the sub-repetition
+        Ignore = 0,    //!< check for recurrences only, ignore sub-repetitions
+        Return,        //!< return a sub-repetition if it's the next occurrence
+        AllowFor       //!< if a sub-repetition is the next occurrence, return the previous recurrence, not the sub-repetition
     };
 
     /** What type of occurrence currently limits how long the alarm can be deferred. */
-    enum DeferLimitType
+    enum class DeferLimit
     {
-        LIMIT_NONE,        //!< there is no limit
-        LIMIT_MAIN,        //!< the main alarm
-        LIMIT_RECURRENCE,  //!< a recurrence
-        LIMIT_REPETITION,  //!< a sub-repetition
-        LIMIT_REMINDER     //!< a reminder
+        None,        //!< there is no limit
+        Main,        //!< the main alarm
+        Recurrence,  //!< a recurrence
+        Repetition,  //!< a sub-repetition
+        Reminder     //!< a reminder
     };
 
     /** Next trigger type for an alarm. */
-    enum TriggerType
+    enum class Trigger
     {
 
         /** Next trigger, including reminders. No account is taken of any
          *  working hours or holiday restrictions when evaluating this. */
-        ALL_TRIGGER,
+        All,
 
         /** Next trigger of the main alarm, i.e. excluding reminders. No
          *  account is taken of any working hours or holiday restrictions when
          *  evaluating this. */
-        MAIN_TRIGGER,
+        Main,
 
         /** Next trigger of the main alarm, i.e. excluding reminders, taking
          *  account of any working hours or holiday restrictions. If the event
          *  has no working hours or holiday restrictions, this is equivalent to
-         *  MAIN_TRIGGER. */
-        WORK_TRIGGER,
+         *  Main. */
+        Work,
 
         /** Next trigger, including reminders, taking account of any working
          *  hours or holiday restrictions. If the event has no working hours or
-         *  holiday restrictions, this is equivalent to ALL_TRIGGER. */
-        ALL_WORK_TRIGGER,
+         *  holiday restrictions, this is equivalent to All. */
+        AllWork,
 
         /** Next trigger time for display purposes (i.e. excluding reminders). */
-        DISPLAY_TRIGGER
+        Display
     };
 
     /** Command execution error type for last time the alarm was triggered. */
-    enum CmdErrType
+    enum class CmdErr
     {
-        CMD_NO_ERROR   = 0,      //!< no error
-        CMD_ERROR      = 0x01,   //!< command alarm execution failed
-        CMD_ERROR_PRE  = 0x02,   //!< pre-alarm command execution failed
-        CMD_ERROR_POST = 0x04,   //!< post-alarm command execution failed
-        CMD_ERROR_PRE_POST = CMD_ERROR_PRE | CMD_ERROR_POST
+        None    = 0,      //!< no error
+        Fail    = 0x01,   //!< command alarm execution failed
+        Pre     = 0x02,   //!< pre-alarm command execution failed
+        Post    = 0x04,   //!< post-alarm command execution failed
+        PrePost = Pre | Post
     };
 
-    /** Options for pre- or post-alarm actions. These may be OR'ed together.
-     *  @since 4.9
-     */
+    /** Options for pre- or post-alarm actions. These may be OR'ed together. */
     enum ExtraActionOption
     {
         CancelOnPreActError  = 0x01,   //!< cancel alarm on pre-alarm action error
@@ -323,11 +327,11 @@ public:
     Q_DECLARE_FLAGS(ExtraActionOptions, ExtraActionOption)
 
     /** How to deal with the event UID in updateKCalEvent(). */
-    enum UidAction
+    enum class UidAction
     {
-        UID_IGNORE,        //!< leave KCal::Event UID unchanged
-        UID_CHECK,         //!< verify that the KCal::Event UID is already the same as the KAEvent ID, if the latter is non-empty
-        UID_SET            //!< set the KCal::Event UID to the KAEvent ID
+        Ignore,        //!< leave KCal::Event UID unchanged
+        Check,         //!< verify that the KCal::Event UID is already the same as the KAEvent ID, if the latter is non-empty
+        Set            //!< set the KCal::Event UID to the KAEvent ID
     };
 
     /** Default constructor which creates an invalid event. */
@@ -337,11 +341,11 @@ public:
      *  @param dt    start date/time. If @p dt is date-only, or if #ANY_TIME flag
      *               is specified, the event will be date-only.
      *  @param name  name of the alarm.
-     *  @param text  alarm message (@p action = #MESSAGE);
-     *               file to display (@p action = #FILE);
-     *               command to execute (@p action = #COMMAND);
-     *               email body (@p action = #EMAIL);
-     *               audio file (@p action = #AUDIO).
+     *  @param text  alarm message (@p action = #Message);
+     *               file to display (@p action = #File);
+     *               command to execute (@p action = #Command);
+     *               email body (@p action = #Email);
+     *               audio file (@p action = #Audio).
      *  @param bg    background color (for display alarms, ignored otherwise).
      *  @param fg    foreground color (for display alarms, ignored otherwise).
      *  @param font  font (for display alarms, ignored otherwise). Ignored if
@@ -453,19 +457,19 @@ public:
     QMap<QByteArray, QString> customProperties() const;
 
     /** Return the action sub-type of the event's main alarm. For display alarms,
-     *  this is MESSAGE or FILE, while other types of alarm simply return the
-     *  basic action type (COMMAND, EMAIL, AUDIO).
+     *  this is Message or File, while other types of alarm simply return the
+     *  basic action type (Command, Email, Audio).
      *  Note that for a display alarm whose text is generated by a command, the
-     *  returned type is COMMAND.
+     *  returned type is Command.
      */
     SubAction actionSubType() const;
 
     /** Return the OR of the basic action types of the event's main alarm (display,
      *  command, email, audio).
      *  Note that for a display alarm whose text is generated by a command, the
-     *  returned type is @c ACT_DISPLAY|ACT_COMMAND.
+     *  returned type is @c Action::Display|Action::Command.
      */
-    Actions actionTypes() const;
+    Action actionTypes() const;
 
     /** Set or clear the late-cancel option. This determines whether the alarm
      *  will be cancelled if it is late in triggering.
@@ -575,14 +579,12 @@ public:
     bool commandDisplay() const;
 
     /** Set or clear the command execution error for the last time the alarm triggered. */
-    void setCommandError(CmdErrType error) const;
+    void setCommandError(CmdErr error) const;
 
     /** Return the command execution error for the last time the alarm triggered. */
-    CmdErrType commandError() const;
+    CmdErr commandError() const;
 
-    /** Return whether execution errors for the command should not to be shown to the user.
-     *  @since 20.08
-     */
+    /** Return whether execution errors for the command should not to be shown to the user. */
     bool commandHideError() const;
 
     /** Set the log file to write command alarm output to.
@@ -732,7 +734,6 @@ public:
      *  @param post shell command to execute after the alarm is acknowledged
      *  @param preOptions options for pre-alarm actions
      *  @see preAction(), postAction(), extraActionOptions()
-     *  @since 4.9
      */
     void setActions(const QString& pre, const QString& post, ExtraActionOptions preOptions);
 
@@ -746,7 +747,6 @@ public:
 
     /** Return the pre-alarm action options.
      *  @see preAction(), setActions()
-     *  @since 4.9
      */
     ExtraActionOptions extraActionOptions() const;
 
@@ -827,7 +827,7 @@ public:
      *                    the type of occurrence which currently limits the deferral.
      *  @return deferral limit, or invalid if no limit
      */
-    DateTime deferralLimit(DeferLimitType* limitType = nullptr) const;
+    DateTime deferralLimit(DeferLimit* limitType = nullptr) const;
 
     /** Return the default deferral interval used in the deferral dialog.
      *  @see setDeferDefaultMinutes()
@@ -896,7 +896,7 @@ public:
      *  @param type specifies whether to ignore reminders, working time
      *              restrictions, etc.
      */
-    DateTime nextTrigger(TriggerType type) const;
+    DateTime nextTrigger(Trigger type) const;
 
     /** Set the date/time the event was created, or saved in the archive calendar.
      *  @see createdDateTime()
@@ -1201,7 +1201,7 @@ public:
      *  @param option      how/whether to make allowance for sub-repetitions.
      *  @see nextRepetition(), setNextOccurrence(), previousOccurrence(), occursAfter()
      */
-    OccurType nextOccurrence(const KADateTime& preDateTime, DateTime& result, OccurOption option = IGNORE_REPETITION) const;
+    OccurType nextOccurrence(const KADateTime& preDateTime, DateTime& result, Repeats option = Repeats::Ignore) const;
 
     /** Get the date/time of the last previous occurrence of the event,
      *  strictly before the specified date/time. Reminders are ignored.
@@ -1227,7 +1227,7 @@ public:
      *  @param event      the event to copy
      *  @param type       the alarm type (main, reminder, deferred etc.)
      *  @param colId      the ID of the calendar resource which originally contained the event
-     *  @param repeatAtLoginTime repeat-at-login time if @p type == AT_LOGIN_ALARM, else ignored
+     *  @param repeatAtLoginTime repeat-at-login time if @p type == AtLogin, else ignored
      *  @param showEdit   whether the Edit button was displayed
      *  @param showDefer  whether the Defer button was displayed
      *  @return @c true if successful, @c false if alarm was not copied.
@@ -1370,6 +1370,33 @@ public:
 private:
     QSharedDataPointer<KAEventPrivate> d;
 };
+
+inline int operator&(KAEvent::Action a1, KAEvent::Action a2)
+{ return static_cast<int>(a1) & static_cast<int>(a2); }
+
+inline KAEvent::Action operator~(KAEvent::Action act)
+{ return static_cast<KAEvent::Action>(~static_cast<int>(act)); }
+
+inline QDebug operator<<(QDebug s, KAEvent::Action act)
+{ s << static_cast<int>(act); return s; }
+
+inline int operator&(KAEvent::OccurType t1, KAEvent::OccurType t2)
+{ return static_cast<int>(t1) & static_cast<int>(t2); }
+
+inline KAEvent::OccurType operator|(KAEvent::OccurType t1, KAEvent::OccurType t2)
+{ return static_cast<KAEvent::OccurType>(static_cast<int>(t1) | static_cast<int>(t2)); }
+
+inline KAEvent::OccurType operator~(KAEvent::OccurType type)
+{ return static_cast<KAEvent::OccurType>(~static_cast<int>(type)); }
+
+inline int operator&(KAEvent::CmdErr e1, KAEvent::CmdErr e2)
+{ return static_cast<int>(e1) & static_cast<int>(e2); }
+
+inline KAEvent::CmdErr operator~(KAEvent::CmdErr err)
+{ return static_cast<KAEvent::CmdErr>(~static_cast<int>(err)); }
+
+inline QDebug operator<<(QDebug s, KAEvent::CmdErr err)
+{ s << static_cast<int>(err); return s; }
 
 } // namespace KAlarmCal
 

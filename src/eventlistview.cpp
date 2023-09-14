@@ -1,7 +1,7 @@
 /*
  *  eventlistview.cpp  -  base class for widget showing list of alarms
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2007-2021 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2007-2023 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -175,7 +175,7 @@ bool EventListView::viewportEvent(QEvent* e)
                 auto m = qobject_cast<EventListModel*>(model());
                 if (index.column() == ResourceDataModelBase::TextColumn
                 ||  index.column() == ResourceDataModelBase::NameColumn
-                ||  !m  ||  m->event(index).commandError() == KAEvent::CMD_NO_ERROR)
+                ||  !m  ||  m->event(index).commandError() == KAEvent::CmdErr::None)
                 {
                     // Single line tooltip. Only display it if the text column
                     // is truncated in the view display.

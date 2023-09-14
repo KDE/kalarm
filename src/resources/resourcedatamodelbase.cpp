@@ -247,11 +247,11 @@ QVariant ResourceDataModelBase::eventData(int role, int column, const KAEvent& e
             case StatusRole:
                 return event.category();
             case AlarmActionsRole:
-                return event.actionTypes();
+                return static_cast<int>(event.actionTypes());
             case AlarmSubActionRole:
-                return event.actionSubType();
+                return static_cast<int>(event.actionSubType());
             case CommandErrorRole:
-                return event.commandError();
+                return static_cast<int>(event.commandError());
             default:
                 break;
         }
@@ -266,11 +266,11 @@ QVariant ResourceDataModelBase::eventData(int role, int column, const KAEvent& e
                     case Qt::DisplayRole:
                         if (event.expired())
                             return alarmTimeText(event.startDateTime(), '0');
-                        return alarmTimeText(event.nextTrigger(KAEvent::DISPLAY_TRIGGER), '0');
+                        return alarmTimeText(event.nextTrigger(KAEvent::Trigger::Display), '0');
                     case TimeDisplayRole:
                         if (event.expired())
                             return alarmTimeText(event.startDateTime(), '~');
-                        return alarmTimeText(event.nextTrigger(KAEvent::DISPLAY_TRIGGER), '~');
+                        return alarmTimeText(event.nextTrigger(KAEvent::Trigger::Display), '~');
                     case Qt::TextAlignmentRole:
                         return Qt::AlignLeft;
                     case SortRole:
@@ -279,7 +279,7 @@ QVariant ResourceDataModelBase::eventData(int role, int column, const KAEvent& e
                         if (event.expired())
                             due = event.startDateTime();
                         else
-                            due = event.nextTrigger(KAEvent::DISPLAY_TRIGGER);
+                            due = event.nextTrigger(KAEvent::Trigger::Display);
                         return due.isValid() ? due.effectiveKDateTime().toUtc().qDateTime()
                                              : QDateTime(QDate(9999,12,31), QTime(0,0,0));
                     }
@@ -296,14 +296,14 @@ QVariant ResourceDataModelBase::eventData(int role, int column, const KAEvent& e
                     case Qt::DisplayRole:
                         if (event.expired())
                             return QString();
-                        return timeToAlarmText(event.nextTrigger(KAEvent::DISPLAY_TRIGGER));
+                        return timeToAlarmText(event.nextTrigger(KAEvent::Trigger::Display));
                     case Qt::TextAlignmentRole:
                         return Qt::AlignRight;
                     case SortRole:
                     {
                         if (event.expired())
                             return -1;
-                        const DateTime due = event.nextTrigger(KAEvent::DISPLAY_TRIGGER);
+                        const DateTime due = event.nextTrigger(KAEvent::Trigger::Display);
                         const KADateTime now = KADateTime::currentUtcDateTime();
                         if (due.isDateOnly())
                             return now.date().daysTo(due.date()) * 1440;
@@ -330,20 +330,20 @@ QVariant ResourceDataModelBase::eventData(int role, int column, const KAEvent& e
                 {
                     case Qt::BackgroundRole:
                     {
-                        const KAEvent::Actions type = event.actionTypes();
-                        if (type & KAEvent::ACT_DISPLAY)
+                        const KAEvent::Action type = event.actionTypes();
+                        if (type & KAEvent::Action::Display)
                             return event.bgColour();
-                        if (type == KAEvent::ACT_COMMAND)
+                        if (type == KAEvent::Action::Command)
                         {
-                            if (event.commandError() != KAEvent::CMD_NO_ERROR)
+                            if (event.commandError() != KAEvent::CmdErr::None)
                                 return QColor(Qt::red);
                         }
                         break;
                     }
                     case Qt::ForegroundRole:
-                        if (event.commandError() != KAEvent::CMD_NO_ERROR)
+                        if (event.commandError() != KAEvent::CmdErr::None)
                         {
-                            if (event.actionTypes() == KAEvent::ACT_COMMAND)
+                            if (event.actionTypes() == KAEvent::Action::Command)
                                 return QColor(Qt::white);
                             QColor colour = Qt::red;
                             int r, g, b;
@@ -354,14 +354,14 @@ QVariant ResourceDataModelBase::eventData(int role, int column, const KAEvent& e
                         }
                         break;
                     case Qt::DisplayRole:
-                        if (event.commandError() != KAEvent::CMD_NO_ERROR)
+                        if (event.commandError() != KAEvent::CmdErr::None)
                             return QLatin1String("!");
                         break;
                     case Qt::TextAlignmentRole:
                         return Qt::AlignCenter;
                     case SortRole:
                     {
-                        const unsigned i = (event.actionTypes() == KAEvent::ACT_DISPLAY)
+                        const unsigned i = (event.actionTypes() == KAEvent::Action::Display)
                                            ? event.bgColour().rgb() : 0;
                         return QStringLiteral("%1").arg(i, 6, 10, QLatin1Char('0'));
                     }
@@ -391,7 +391,7 @@ QVariant ResourceDataModelBase::eventData(int role, int column, const KAEvent& e
                     case ValueRole:
                         return static_cast<int>(event.actionSubType());
                     case SortRole:
-                        return QStringLiteral("%1").arg(event.actionSubType(), 2, 10, QLatin1Char('0'));
+                        return QStringLiteral("%1").arg(static_cast<int>(event.actionSubType()), 2, 10, QLatin1Char('0'));
                 }
                 break;
             case NameColumn:
@@ -446,16 +446,16 @@ QVariant ResourceDataModelBase::eventData(int role, int column, const KAEvent& e
                 // Show the last command execution error message
                 switch (event.commandError())
                 {
-                    case KAEvent::CMD_ERROR:
+                    case KAEvent::CmdErr::Fail:
                         return i18nc("@info:tooltip", "Command execution failed");
-                    case KAEvent::CMD_ERROR_PRE:
+                    case KAEvent::CmdErr::Pre:
                         return i18nc("@info:tooltip", "Pre-alarm action execution failed");
-                    case KAEvent::CMD_ERROR_POST:
+                    case KAEvent::CmdErr::Post:
                         return i18nc("@info:tooltip", "Post-alarm action execution failed");
-                    case KAEvent::CMD_ERROR_PRE_POST:
+                    case KAEvent::CmdErr::PrePost:
                         return i18nc("@info:tooltip", "Pre- and post-alarm action execution failed");
                     default:
-                    case KAEvent::CMD_NO_ERROR:
+                    case KAEvent::CmdErr::None:
                         // Return empty string to cancel any previous tooltip -
                         // returning QVariant() leaves tooltip unchanged.
                         return QString();
@@ -580,17 +580,17 @@ QPixmap* ResourceDataModelBase::eventIcon(const KAEvent& event)
 {
     switch (event.actionTypes())
     {
-        case KAEvent::ACT_EMAIL:
+        case KAEvent::Action::Email:
             return mEmailIcon;
-        case KAEvent::ACT_AUDIO:
+        case KAEvent::Action::Audio:
             return mAudioIcon;
-        case KAEvent::ACT_COMMAND:
+        case KAEvent::Action::Command:
             return mCommandIcon;
-        case KAEvent::ACT_DISPLAY:
-            if (event.actionSubType() == KAEvent::FILE)
+        case KAEvent::Action::Display:
+            if (event.actionSubType() == KAEvent::SubAction::File)
                 return mFileIcon;
-            Q_FALLTHROUGH();    // fall through to ACT_DISPLAY_COMMAND
-        case KAEvent::ACT_DISPLAY_COMMAND:
+            Q_FALLTHROUGH();    // fall through to DisplayCommand
+        case KAEvent::Action::DisplayCommand:
         default:
             return mTextIcon;
     }

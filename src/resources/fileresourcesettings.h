@@ -1,7 +1,7 @@
 /*
  *  fileresourcesettings.h  -  settings for calendar resource accessed via file system
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2020-2022 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2020-2023 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -33,8 +33,8 @@ public:
 
     struct CommandError
     {
-        QString             id;
-        KAEvent::CmdErrType error;
+        QString         id;
+        KAEvent::CmdErr error;
     };
 
     FileResourceSettings() = default;
@@ -266,14 +266,14 @@ public:
      *  command errors.
      *  @return command error types, indexed by event ID.
      */
-    QHash<QString, KAEvent::CmdErrType> commandErrors() const;
+    QHash<QString, KAEvent::CmdErr> commandErrors() const;
 
     /** Set the command error data for all events in the resource which have
      *  command errors.
      *  @param cmdErrors  command error types, indexed by event ID.
      *  @param save       whether to save the config
      */
-    void setCommandErrors(const QHash<QString, KAEvent::CmdErrType>& cmdErrors, bool save = true);
+    void setCommandErrors(const QHash<QString, KAEvent::CmdErr>& cmdErrors, bool save = true);
 
 protected:
     /** Set the resource's unique ID.
@@ -308,7 +308,7 @@ private:
     QString           mDisplayLocation;  // displayable location of file or directory
     QString           mDisplayName;      // name for user display
     QByteArray        mHash;             // hash of the calendar file contents
-    QHash<QString, KAEvent::CmdErrType> mCommandErrors;  // event IDs and their command error types
+    QHash<QString, KAEvent::CmdErr> mCommandErrors;  // event IDs and their command error types
     QColor            mBackgroundColour; // background colour to display the resource and its alarms
     StorageType       mStorageType {NoStorage};      // how the calendar is stored
     CalEvent::Types   mAlarmTypes {CalEvent::EMPTY}; // alarm types which the resource contains

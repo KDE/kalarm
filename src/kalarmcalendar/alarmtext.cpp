@@ -306,7 +306,7 @@ QString AlarmText::summary(const KAEvent& event, int maxLines, bool* truncated)
     QString text;
     switch (event.actionSubType())
     {
-        case KAEvent::AUDIO:
+        case KAEvent::SubAction::Audio:
         {
             text = event.audioFile();
             const QRegularExpressionMatch match = re.match(text);
@@ -314,10 +314,10 @@ QString AlarmText::summary(const KAEvent& event, int maxLines, bool* truncated)
                 text = text.mid(match.capturedEnd(0) - 1);
             break;
         }
-        case KAEvent::EMAIL:
+        case KAEvent::SubAction::Email:
             text = event.emailSubject();
             break;
-        case KAEvent::COMMAND:
+        case KAEvent::SubAction::Command:
         {
             text = event.cleanText();
             const QRegularExpressionMatch match = re.match(text);
@@ -325,10 +325,10 @@ QString AlarmText::summary(const KAEvent& event, int maxLines, bool* truncated)
                 text = text.mid(match.capturedEnd(0) - 1);
             break;
         }
-        case KAEvent::FILE:
+        case KAEvent::SubAction::File:
             text = event.cleanText();
             break;
-        case KAEvent::MESSAGE:
+        case KAEvent::SubAction::Message:
         {
             text = event.cleanText();
             // If the message is the text of an email, return its headers or just subject line

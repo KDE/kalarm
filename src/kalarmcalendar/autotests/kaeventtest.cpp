@@ -41,7 +41,7 @@ void KAEventTest::constructors()
     const KAEvent::Flags flags(KAEvent::CONFIRM_ACK | KAEvent::AUTO_CLOSE);
     {
         // Display alarm
-        KAEvent event(dt, name, text, bgColour, fgColour, font, KAEvent::MESSAGE, 3, flags);
+        KAEvent event(dt, name, text, bgColour, fgColour, font, KAEvent::SubAction::Message, 3, flags);
         QCOMPARE(event.startDateTime(), DateTime(dt));
         QCOMPARE(event.cleanText(), text);
         QCOMPARE(event.name(), name);
@@ -55,14 +55,14 @@ void KAEventTest::constructors()
         QCOMPARE(event.fgColour(), fgColour);
         QCOMPARE(event.font(), font);
         QCOMPARE(event.flags(), flags);
-        QCOMPARE(event.actionTypes(), KAEvent::ACT_DISPLAY);
-        QCOMPARE(event.actionSubType(), KAEvent::MESSAGE);
+        QCOMPARE(event.actionTypes(), KAEvent::Action::Display);
+        QCOMPARE(event.actionSubType(), KAEvent::SubAction::Message);
         QCOMPARE(event.lateCancel(), 3);
         QVERIFY(!event.isReadOnly());
     }
     {
         // Display file alarm
-        KAEvent event(dt, name, text, bgColour, fgColour, font, KAEvent::FILE, 3, flags);
+        KAEvent event(dt, name, text, bgColour, fgColour, font, KAEvent::SubAction::File, 3, flags);
         QCOMPARE(event.startDateTime(), DateTime(dt));
         QCOMPARE(event.cleanText(), text);
         QCOMPARE(event.name(), name);
@@ -76,14 +76,14 @@ void KAEventTest::constructors()
         QCOMPARE(event.fgColour(), fgColour);
         QCOMPARE(event.font(), font);
         QCOMPARE(event.flags(), flags);
-        QCOMPARE(event.actionTypes(), KAEvent::ACT_DISPLAY);
-        QCOMPARE(event.actionSubType(), KAEvent::FILE);
+        QCOMPARE(event.actionTypes(), KAEvent::Action::Display);
+        QCOMPARE(event.actionSubType(), KAEvent::SubAction::File);
         QCOMPARE(event.lateCancel(), 3);
         QVERIFY(!event.isReadOnly());
     }
     {
         // Command alarm
-        KAEvent event(dt, name, text, bgColour, fgColour, font, KAEvent::COMMAND, 3, flags);
+        KAEvent event(dt, name, text, bgColour, fgColour, font, KAEvent::SubAction::Command, 3, flags);
         QCOMPARE(event.startDateTime(), DateTime(dt));
         QCOMPARE(event.cleanText(), text);
         QCOMPARE(event.name(), name);
@@ -94,14 +94,14 @@ void KAEventTest::constructors()
         QVERIFY(event.emailMessage().isEmpty());
         QVERIFY(event.audioFile().isEmpty());
         QCOMPARE(event.flags(), flags);
-        QCOMPARE(event.actionTypes(), KAEvent::ACT_COMMAND);
-        QCOMPARE(event.actionSubType(), KAEvent::COMMAND);
+        QCOMPARE(event.actionTypes(), KAEvent::Action::Command);
+        QCOMPARE(event.actionSubType(), KAEvent::SubAction::Command);
         QCOMPARE(event.lateCancel(), 3);
         QVERIFY(!event.isReadOnly());
     }
     {
         // Email alarm
-        KAEvent event(dt, name, text, bgColour, fgColour, font, KAEvent::EMAIL, 3, flags);
+        KAEvent event(dt, name, text, bgColour, fgColour, font, KAEvent::SubAction::Email, 3, flags);
         QCOMPARE(event.startDateTime(), DateTime(dt));
         QCOMPARE(event.cleanText(), text);
         QCOMPARE(event.name(), name);
@@ -112,14 +112,14 @@ void KAEventTest::constructors()
         QCOMPARE(event.emailMessage(), text);
         QVERIFY(event.audioFile().isEmpty());
         QCOMPARE(event.flags(), flags);
-        QCOMPARE(event.actionTypes(), KAEvent::ACT_EMAIL);
-        QCOMPARE(event.actionSubType(), KAEvent::EMAIL);
+        QCOMPARE(event.actionTypes(), KAEvent::Action::Email);
+        QCOMPARE(event.actionSubType(), KAEvent::SubAction::Email);
         QCOMPARE(event.lateCancel(), 3);
         QVERIFY(!event.isReadOnly());
     }
     {
         // Audio alarm
-        KAEvent event(dt, name, text, bgColour, fgColour, font, KAEvent::AUDIO, 3, flags);
+        KAEvent event(dt, name, text, bgColour, fgColour, font, KAEvent::SubAction::Audio, 3, flags);
         QCOMPARE(event.startDateTime(), DateTime(dt));
         QVERIFY(event.cleanText().isEmpty());
         QCOMPARE(event.name(), name);
@@ -130,8 +130,8 @@ void KAEventTest::constructors()
         QVERIFY(event.emailMessage().isEmpty());
         QCOMPARE(event.audioFile(), text);
         QCOMPARE(event.flags(), flags);
-        QCOMPARE(event.actionTypes(), KAEvent::ACT_AUDIO);
-        QCOMPARE(event.actionSubType(), KAEvent::AUDIO);
+        QCOMPARE(event.actionTypes(), KAEvent::Action::Audio);
+        QCOMPARE(event.actionSubType(), KAEvent::SubAction::Audio);
         QCOMPARE(event.lateCancel(), 3);
         QVERIFY(!event.isReadOnly());
     }
@@ -164,8 +164,8 @@ void KAEventTest::constructors()
         QVERIFY(event.command().isEmpty());
         QVERIFY(event.emailMessage().isEmpty());
         QVERIFY(event.audioFile().isEmpty());
-        QCOMPARE(event.actionTypes(), KAEvent::ACT_DISPLAY);
-        QCOMPARE(event.actionSubType(), KAEvent::MESSAGE);
+        QCOMPARE(event.actionTypes(), KAEvent::Action::Display);
+        QCOMPARE(event.actionSubType(), KAEvent::SubAction::Message);
         QVERIFY(!event.isReadOnly());
         QCOMPARE(event.id(), uid);
         QCOMPARE(event.revision(), 12);
@@ -195,8 +195,8 @@ void KAEventTest::constructors()
         QVERIFY(event.command().isEmpty());
         QVERIFY(event.emailMessage().isEmpty());
         QVERIFY(event.audioFile().isEmpty());
-        QCOMPARE(event.actionTypes(), KAEvent::ACT_DISPLAY);
-        QCOMPARE(event.actionSubType(), KAEvent::FILE);
+        QCOMPARE(event.actionTypes(), KAEvent::Action::Display);
+        QCOMPARE(event.actionSubType(), KAEvent::SubAction::File);
         QVERIFY(!event.isReadOnly());
         QCOMPARE(event.id(), uid);
         QCOMPARE(event.revision(), 12);
@@ -227,8 +227,8 @@ void KAEventTest::constructors()
         QCOMPARE(event.command(), cmdline);
         QVERIFY(event.emailMessage().isEmpty());
         QVERIFY(event.audioFile().isEmpty());
-        QCOMPARE(event.actionTypes(), KAEvent::ACT_COMMAND);
-        QCOMPARE(event.actionSubType(), KAEvent::COMMAND);
+        QCOMPARE(event.actionTypes(), KAEvent::Action::Command);
+        QCOMPARE(event.actionSubType(), KAEvent::SubAction::Command);
         QVERIFY(!event.isReadOnly());
         QCOMPARE(event.id(), uid);
         QCOMPARE(event.revision(), 12);
@@ -261,8 +261,8 @@ void KAEventTest::constructors()
         QVERIFY(event.command().isEmpty());
         QCOMPARE(event.emailMessage(), text);
         QVERIFY(event.audioFile().isEmpty());
-        QCOMPARE(event.actionTypes(), KAEvent::ACT_EMAIL);
-        QCOMPARE(event.actionSubType(), KAEvent::EMAIL);
+        QCOMPARE(event.actionTypes(), KAEvent::Action::Email);
+        QCOMPARE(event.actionSubType(), KAEvent::SubAction::Email);
         QVERIFY(!event.isReadOnly());
         QCOMPARE(event.id(), uid);
         QCOMPARE(event.revision(), 12);
@@ -293,8 +293,8 @@ void KAEventTest::constructors()
         QVERIFY(event.command().isEmpty());
         QVERIFY(event.emailMessage().isEmpty());
         QCOMPARE(event.audioFile(), text);
-        QCOMPARE(event.actionTypes(), KAEvent::ACT_AUDIO);
-        QCOMPARE(event.actionSubType(), KAEvent::AUDIO);
+        QCOMPARE(event.actionTypes(), KAEvent::Action::Audio);
+        QCOMPARE(event.actionSubType(), KAEvent::SubAction::Audio);
         QVERIFY(event.isReadOnly());
         QCOMPARE(event.id(), uid);
         QCOMPARE(event.revision(), 12);
@@ -311,7 +311,7 @@ void KAEventTest::flags()
     const QFont  font(QStringLiteral("Helvetica"), 10, QFont::Bold, true);
     {
         const KAEvent::Flags flags(KAEvent::BEEP | KAEvent::DEFAULT_FONT);
-        KAEvent event(dt, name, text, bgColour, fgColour, font, KAEvent::MESSAGE, 3, flags);
+        KAEvent event(dt, name, text, bgColour, fgColour, font, KAEvent::SubAction::Message, 3, flags);
         QCOMPARE(event.flags(), flags);
         QVERIFY(!event.startDateTime().isDateOnly());
         QVERIFY(!event.repeatAtLogin());
@@ -333,7 +333,7 @@ void KAEventTest::flags()
     }
     {
         const KAEvent::Flags flags(KAEvent::REPEAT_AT_LOGIN | KAEvent::DISABLED);
-        KAEvent event(dt, name, text, bgColour, fgColour, font, KAEvent::MESSAGE, 3, flags);
+        KAEvent event(dt, name, text, bgColour, fgColour, font, KAEvent::SubAction::Message, 3, flags);
         QVERIFY(!event.startDateTime().isDateOnly());
         QCOMPARE(event.flags(), flags);
         QVERIFY(event.repeatAtLogin());
@@ -356,7 +356,7 @@ void KAEventTest::flags()
     {
         const KADateTime dtDateOnly(QDate(2010,5,13), QTimeZone("Europe/London"));
         const KAEvent::Flags flags(KAEvent::REPEAT_AT_LOGIN | KAEvent::DISABLED);
-        KAEvent event(dtDateOnly, name, text, bgColour, fgColour, font, KAEvent::MESSAGE, 3, flags);
+        KAEvent event(dtDateOnly, name, text, bgColour, fgColour, font, KAEvent::SubAction::Message, 3, flags);
         QVERIFY(event.startDateTime().isDateOnly());
         QCOMPARE(event.flags(), flags | KAEvent::ANY_TIME);
         QVERIFY(event.repeatAtLogin());
@@ -378,7 +378,7 @@ void KAEventTest::flags()
     }
     {
         const KAEvent::Flags flags(KAEvent::REPEAT_AT_LOGIN | KAEvent::DISABLED);
-        KAEvent event(dt, name, text, bgColour, fgColour, font, KAEvent::MESSAGE, 3, flags | KAEvent::ANY_TIME);
+        KAEvent event(dt, name, text, bgColour, fgColour, font, KAEvent::SubAction::Message, 3, flags | KAEvent::ANY_TIME);
         QVERIFY(event.startDateTime().isDateOnly());
         QCOMPARE(event.flags(), flags | KAEvent::ANY_TIME);
         QVERIFY(event.repeatAtLogin());
@@ -400,7 +400,7 @@ void KAEventTest::flags()
     }
     {
         const KAEvent::Flags flags(KAEvent::CONFIRM_ACK | KAEvent::SPEAK | KAEvent::EXCL_HOLIDAYS);
-        KAEvent event(dt, name, text, bgColour, fgColour, font, KAEvent::MESSAGE, 3, flags);
+        KAEvent event(dt, name, text, bgColour, fgColour, font, KAEvent::SubAction::Message, 3, flags);
         QVERIFY(!event.startDateTime().isDateOnly());
         QCOMPARE(event.flags(), flags);
         QVERIFY(!event.repeatAtLogin());
@@ -424,7 +424,7 @@ void KAEventTest::flags()
         static Holidays holidays;
         KAEvent::setHolidays(holidays);
         const KAEvent::Flags flags(KAEvent::AUTO_CLOSE | KAEvent::EXCL_HOLIDAYS | KAEvent::REPEAT_SOUND);
-        KAEvent event(dt, name, text, bgColour, fgColour, font, KAEvent::MESSAGE, 3, flags);
+        KAEvent event(dt, name, text, bgColour, fgColour, font, KAEvent::SubAction::Message, 3, flags);
         QVERIFY(!event.startDateTime().isDateOnly());
         QCOMPARE(event.flags(), flags);
         QVERIFY(!event.repeatAtLogin());
@@ -446,7 +446,7 @@ void KAEventTest::flags()
     }
     {
         const KAEvent::Flags flags(KAEvent::COPY_KORGANIZER | KAEvent::WORK_TIME_ONLY);
-        KAEvent event(dt, name, text, bgColour, fgColour, font, KAEvent::MESSAGE, 3, flags);
+        KAEvent event(dt, name, text, bgColour, fgColour, font, KAEvent::SubAction::Message, 3, flags);
         QVERIFY(!event.startDateTime().isDateOnly());
         QCOMPARE(event.flags(), flags);
         QVERIFY(!event.repeatAtLogin());
@@ -468,7 +468,7 @@ void KAEventTest::flags()
     }
     {
         const KAEvent::Flags flags(KAEvent::SCRIPT | KAEvent::EXEC_IN_XTERM);
-        KAEvent event(dt, name, text, bgColour, fgColour, font, KAEvent::COMMAND, 3, flags);
+        KAEvent event(dt, name, text, bgColour, fgColour, font, KAEvent::SubAction::Command, 3, flags);
         QVERIFY(!event.startDateTime().isDateOnly());
         QCOMPARE(event.flags(), flags);
         QVERIFY(!event.repeatAtLogin());
@@ -490,7 +490,7 @@ void KAEventTest::flags()
     }
     {
         const KAEvent::Flags flags(KAEvent::DISPLAY_COMMAND | KAEvent::REMINDER_ONCE);
-        KAEvent event(dt, name, text, bgColour, fgColour, font, KAEvent::COMMAND, 3, flags);
+        KAEvent event(dt, name, text, bgColour, fgColour, font, KAEvent::SubAction::Command, 3, flags);
         QVERIFY(!event.startDateTime().isDateOnly());
         QCOMPARE(event.flags(), flags);
         QVERIFY(!event.repeatAtLogin());
@@ -512,7 +512,7 @@ void KAEventTest::flags()
     }
     {
         const KAEvent::Flags flags(KAEvent::EMAIL_BCC);
-        KAEvent event(dt, name, text, bgColour, fgColour, font, KAEvent::EMAIL, 3, flags);
+        KAEvent event(dt, name, text, bgColour, fgColour, font, KAEvent::SubAction::Email, 3, flags);
         QVERIFY(!event.startDateTime().isDateOnly());
         QCOMPARE(event.flags(), flags);
         QVERIFY(!event.repeatAtLogin());
@@ -887,7 +887,7 @@ void KAEventTest::fromKCalEvent()
         kcalalarm->setCustomProperty("KALARM", "TYPE", QStringLiteral("FILE"));
         kcalalarm->setStartOffset(5*60);
         KAEvent event(kcalevent);
-        QCOMPARE(event.actionSubType(), KAEvent::FILE);
+        QCOMPARE(event.actionSubType(), KAEvent::SubAction::File);
     }
     {
         Alarm::Ptr kcalalarm;
@@ -895,7 +895,7 @@ void KAEventTest::fromKCalEvent()
         kcalalarm->setCustomProperty("KALARM", "TYPE", QStringLiteral("DEFERRAL"));
         kcalalarm->setStartOffset(5*60);
         KAEvent event(kcalevent);
-        QCOMPARE(event.actionSubType(), KAEvent::MESSAGE);
+        QCOMPARE(event.actionSubType(), KAEvent::SubAction::Message);
         QVERIFY(event.mainExpired());
     }
     {
@@ -1227,14 +1227,14 @@ void KAEventTest::toKCalEvent()
 
     {
         // Event category, UID, revision, start time using time zone, created time
-        KAEvent event(dt, name, text, bgColour, fgColour, font, KAEvent::MESSAGE, 3, KAEvent::CONFIRM_ACK);
+        KAEvent event(dt, name, text, bgColour, fgColour, font, KAEvent::SubAction::Message, 3, KAEvent::CONFIRM_ACK);
         event.setEventId(uid);
         event.incrementRevision();
         event.incrementRevision();
         event.setCategory(CalEvent::ACTIVE);
         event.setCreatedDateTime(createdDt);
         Event::Ptr kcalevent(new Event);
-        QVERIFY(event.updateKCalEvent(kcalevent, KAEvent::UID_SET, true));
+        QVERIFY(event.updateKCalEvent(kcalevent, KAEvent::UidAction::Set, true));
         QCOMPARE(kcalevent->uid(), uid);
         QCOMPARE(kcalevent->revision(), 2);
         QCOMPARE(kcalevent->customProperty("KALARM", "TYPE"), QStringLiteral("ACTIVE"));
@@ -1256,13 +1256,13 @@ void KAEventTest::toKCalEvent()
     {
         // Start time using LocalZone
         const KADateTime dtl(QDate(2010,5,13), QTime(3, 45, 0), KADateTime::LocalZone);
-        KAEvent event(dtl, name, text, bgColour, fgColour, font, KAEvent::MESSAGE, 3, KAEvent::CONFIRM_ACK);
+        KAEvent event(dtl, name, text, bgColour, fgColour, font, KAEvent::SubAction::Message, 3, KAEvent::CONFIRM_ACK);
         event.setEventId(uid);
         event.incrementRevision();
         event.setCategory(CalEvent::ACTIVE);
         event.setCreatedDateTime(createdDt);
         Event::Ptr kcalevent(new Event);
-        QVERIFY(event.updateKCalEvent(kcalevent, KAEvent::UID_SET, true));
+        QVERIFY(event.updateKCalEvent(kcalevent, KAEvent::UidAction::Set, true));
         QCOMPARE(kcalevent->uid(), uid);
         QCOMPARE(kcalevent->revision(), 1);
         QCOMPARE(kcalevent->customProperty("KALARM", "TYPE"), QStringLiteral("ACTIVE"));
@@ -1281,11 +1281,11 @@ void KAEventTest::setNextOccurrence()
     // to standard time, for a daily recurrence at a clock time which occurs twice (once
     // before the time shift, and once an hour later when the clock time repeats).
     const KADateTime dt(QDate(2005, 10, 29), QTime(1, 30, 0), QTimeZone("Europe/London"));
-    KAEvent event(dt, QStringLiteral("name"), QStringLiteral("text"), Qt::black, Qt::white, QFont(), KAEvent::MESSAGE, 0, KAEvent::DEFAULT_FONT);
+    KAEvent event(dt, QStringLiteral("name"), QStringLiteral("text"), Qt::black, Qt::white, QFont(), KAEvent::SubAction::Message, 0, KAEvent::DEFAULT_FONT);
     event.setRecurDaily(1, QBitArray(7, true), -1, QDate());
     KAEvent::OccurType type = event.setNextOccurrence(dt);
     const DateTime next1 = event.mainDateTime();
-    QCOMPARE(type, KAEvent::RECURRENCE_DATE_TIME);
+    QCOMPARE(type, KAEvent::OccurType::RecurDateTime);
     QCOMPARE(next1.date(), QDate(2005, 10, 30));
     QCOMPARE(next1.effectiveTime(), QTime(1, 30, 0));
     KAEvent eventUTC = event;
@@ -1293,14 +1293,14 @@ void KAEventTest::setNextOccurrence()
     const KADateTime dt1(QDate(2005, 10, 30), QTime(1, 30, 0), QTimeZone("Europe/London"));
     type = event.setNextOccurrence(next1.kDateTime());
     const DateTime next2 = event.mainDateTime();
-    QCOMPARE(type, KAEvent::RECURRENCE_DATE_TIME);
+    QCOMPARE(type, KAEvent::OccurType::RecurDateTime);
     QCOMPARE(next2.date(), QDate(2005, 10, 31));
     QCOMPARE(next2.effectiveTime(), QTime(1, 30, 0));
 
     const KADateTime dt2(QDate(2005, 10, 30), QTime(1, 30, 0), KADateTime::UTC);
     type = eventUTC.setNextOccurrence(dt2);
     const DateTime next3 = eventUTC.mainDateTime();
-    QCOMPARE(type, KAEvent::RECURRENCE_DATE_TIME);
+    QCOMPARE(type, KAEvent::OccurType::RecurDateTime);
     QCOMPARE(next3.date(), QDate(2005, 10, 31));
     QVERIFY(!next3.isSecondOccurrence());
 }

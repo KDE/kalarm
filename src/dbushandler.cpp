@@ -1,7 +1,7 @@
 /*
  *  dbushandler.cpp  -  handler for D-Bus calls by other applications
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2002-2022 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2002-2023 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -389,7 +389,7 @@ bool DBusHandler::scheduleMessage(const QString& name, const QString& message, c
                                   const KCalendarCore::Duration& subRepeatDuration, int subRepeatCount)
 {
     KAEvent::Flags kaEventFlags = convertStartFlags(start, flags);
-    const KAEvent::SubAction action = (kaEventFlags & KAEvent::DISPLAY_COMMAND) ? KAEvent::COMMAND : KAEvent::MESSAGE;
+    const KAEvent::SubAction action = (kaEventFlags & KAEvent::DISPLAY_COMMAND) ? KAEvent::SubAction::Command : KAEvent::SubAction::Message;
     const QColor bg = convertBgColour(bgColor);
     if (!bg.isValid())
         return false;
@@ -432,7 +432,7 @@ bool DBusHandler::scheduleFile(const QString& name, const QUrl& file,
     const QColor bg = convertBgColour(bgColor);
     if (!bg.isValid())
         return false;
-    return theApp()->scheduleEvent(KAEvent::FILE, name, file.toString(), start, lateCancel, kaEventFlags, bg, Qt::black, QFont(),
+    return theApp()->scheduleEvent(KAEvent::SubAction::File, name, file.toString(), start, lateCancel, kaEventFlags, bg, Qt::black, QFont(),
                                    audioFile.toString(), -1, reminderMins, recurrence, subRepeatDuration, subRepeatCount);
 }
 
@@ -444,7 +444,7 @@ bool DBusHandler::scheduleCommand(const QString& name, const QString& commandLin
                                   const KARecurrence& recurrence, const KCalendarCore::Duration& subRepeatDuration, int subRepeatCount)
 {
     const KAEvent::Flags kaEventFlags = convertStartFlags(start, flags);
-    return theApp()->scheduleEvent(KAEvent::COMMAND, name, commandLine, start, lateCancel, kaEventFlags, Qt::black, Qt::black, QFont(),
+    return theApp()->scheduleEvent(KAEvent::SubAction::Command, name, commandLine, start, lateCancel, kaEventFlags, Qt::black, Qt::black, QFont(),
                                    QString(), -1, 0, recurrence, subRepeatDuration, subRepeatCount);
 }
 
@@ -486,7 +486,7 @@ bool DBusHandler::scheduleEmail(const QString& name, const QString& fromID, cons
         qCCritical(KALARM_LOG) << "D-Bus call scheduleEmail(): invalid email attachment:" << bad;
         return false;
     }
-    return theApp()->scheduleEvent(KAEvent::EMAIL, name, message, start, lateCancel, kaEventFlags, Qt::black, Qt::black, QFont(),
+    return theApp()->scheduleEvent(KAEvent::SubAction::Email, name, message, start, lateCancel, kaEventFlags, Qt::black, Qt::black, QFont(),
                                    QString(), -1, 0, recurrence, subRepeatDuration, subRepeatCount, senderId, addrs, subject, atts);
 }
 
@@ -499,7 +499,7 @@ bool DBusHandler::scheduleAudio(const QString& name, const QString& audioUrl, in
 {
     const KAEvent::Flags kaEventFlags = convertStartFlags(start, flags);
     const float volume = (volumePercent >= 0) ? volumePercent / 100.0f : -1;
-    return theApp()->scheduleEvent(KAEvent::AUDIO, name, QString(), start, lateCancel, kaEventFlags, Qt::black, Qt::black, QFont(),
+    return theApp()->scheduleEvent(KAEvent::SubAction::Audio, name, QString(), start, lateCancel, kaEventFlags, Qt::black, Qt::black, QFont(),
                                    audioUrl, volume, 0, recurrence, subRepeatDuration, subRepeatCount);
 }
 

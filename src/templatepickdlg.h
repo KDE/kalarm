@@ -1,7 +1,7 @@
 /*
  *  templatepickdlg.h  -  dialog to choose an alarm template
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2004-2022 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2004-2023 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -21,7 +21,7 @@ class TemplatePickDlg : public QDialog
 {
     Q_OBJECT
 public:
-    explicit TemplatePickDlg(KAEvent::Actions, QWidget* parent = nullptr);
+    explicit TemplatePickDlg(KAEvent::Action, QWidget* parent = nullptr);
     KAEvent selectedTemplate() const;
 protected:
     void    resizeEvent(QResizeEvent*) override;

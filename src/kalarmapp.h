@@ -255,8 +255,8 @@ private:
     void               commandErrorMsg(const ShellProcess*, const KAEvent&, const KAAlarm*, int flags = 0, const QStringList& errmsgs = QStringList());
     void               purge(int daysToKeep);
     QStringList        scheduledAlarmList();
-    void               setEventCommandError(const KAEvent&, KAEvent::CmdErrType) const;
-    void               clearEventCommandError(const KAEvent&, KAEvent::CmdErrType) const;
+    void               setEventCommandError(const KAEvent&, KAEvent::CmdErr) const;
+    void               clearEventCommandError(const KAEvent&, KAEvent::CmdErr) const;
     ProcData*          findCommandProcess(const QString& eventId) const;
 
     static KAlarmApp*  mInstance;               // the one and only KAlarmApp instance

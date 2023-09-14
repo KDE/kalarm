@@ -51,7 +51,7 @@ public:
     Private();
 
     Action      mActionType;           // alarm action type
-    Type        mType{INVALID_ALARM};  // alarm type
+    Type        mType{Type::Invalid};  // alarm type
     DateTime    mNextMainDateTime;     // next time to display the alarm, excluding repetitions
     Repetition  mRepetition;           // sub-repetition count and interval
     int         mNextRepeat{0};        // repetition count of next due sub-repetition
@@ -185,12 +185,12 @@ public:
     {
         return mRepetition ? DateTime(mRepetition.duration().end(mNextMainDateTime.qDateTime())) : mNextMainDateTime;
     }
-    DateTime           deferralLimit(KAEvent::DeferLimitType* = nullptr) const;
+    DateTime           deferralLimit(KAEvent::DeferLimit* = nullptr) const;
     KAEvent::Flags     flags() const;
     bool               excludedByWorkTimeOrHoliday(const KADateTime& dt) const;
     bool               setRepetition(const Repetition&);
     bool               occursAfter(const KADateTime& preDateTime, bool includeRepetitions) const;
-    KAEvent::OccurType nextOccurrence(const KADateTime& preDateTime, DateTime& result, KAEvent::OccurOption = KAEvent::IGNORE_REPETITION) const;
+    KAEvent::OccurType nextOccurrence(const KADateTime& preDateTime, DateTime& result, KAEvent::Repeats = KAEvent::Repeats::Ignore) const;
     KAEvent::OccurType previousOccurrence(const KADateTime& afterDateTime, DateTime& result, bool includeRepetitions = false) const;
     void               setRecurrence(const KARecurrence&);
     bool               setRecur(KCalendarCore::RecurrenceRule::PeriodType, int freq, int count, QDate end, KARecurrence::Feb29Type = KARecurrence::Feb29_None);
@@ -236,7 +236,7 @@ public:
     mutable DateTime   mMainTrigger;       // next trigger time, ignoring reminders and working hours
     mutable DateTime   mAllWorkTrigger;    // next trigger time, taking account of reminders and working hours
     mutable DateTime   mMainWorkTrigger;   // next trigger time, ignoring reminders but taking account of working hours
-    mutable KAEvent::CmdErrType mCommandError{KAEvent::CMD_NO_ERROR}; // command execution error last time the alarm triggered
+    mutable KAEvent::CmdErr mCommandError{KAEvent::CmdErr::None}; // command execution error last time the alarm triggered
 
     QString            mEventID;           // UID: KCalendarCore::Event unique ID
     QMap<QByteArray, QString> mCustomProperties; // KCalendarCore::Event's non-KAlarm custom properties
@@ -517,20 +517,20 @@ KAEventPrivate::KAEventPrivate(const KADateTime& dateTime, const QString& name, 
     mNextMainDateTime = mStartDateTime;
     switch (action)
     {
-        case KAEvent::MESSAGE:
-        case KAEvent::FILE:
-        case KAEvent::COMMAND:
-        case KAEvent::EMAIL:
-        case KAEvent::AUDIO:
+        case KAEvent::SubAction::Message:
+        case KAEvent::SubAction::File:
+        case KAEvent::SubAction::Command:
+        case KAEvent::SubAction::Email:
+        case KAEvent::SubAction::Audio:
             mActionSubType = static_cast<KAEvent::SubAction>(action);
             break;
         default:
-            mActionSubType = KAEvent::MESSAGE;
+            mActionSubType = KAEvent::SubAction::Message;
             break;
     }
-    mText                   = (mActionSubType == KAEvent::COMMAND) ? text.trimmed()
-                            : (mActionSubType == KAEvent::AUDIO)   ? QString() : text;
-    mAudioFile              = (mActionSubType == KAEvent::AUDIO) ? text : QString();
+    mText                   = (mActionSubType == KAEvent::SubAction::Command) ? text.trimmed()
+                            : (mActionSubType == KAEvent::SubAction::Audio)   ? QString() : text;
+    mAudioFile              = (mActionSubType == KAEvent::SubAction::Audio) ? text : QString();
     set_deferral((flags & DEFERRAL) ? NORMAL_DEFERRAL : NO_DEFERRAL);
     mRepeatAtLogin          = flags & KAEvent::REPEAT_AT_LOGIN;
     mConfirmAck             = flags & KAEvent::CONFIRM_ACK;
@@ -551,8 +551,8 @@ KAEventPrivate::KAEventPrivate(const KADateTime& dateTime, const QString& name, 
     mAutoClose              = (flags & KAEvent::AUTO_CLOSE) && mLateCancel;
     mNotify                 = flags & KAEvent::NOTIFY;
     mRepeatSoundPause       = (flags & KAEvent::REPEAT_SOUND) ? 0 : -1;
-    mSpeak                  = (flags & KAEvent::SPEAK) && action != KAEvent::AUDIO;
-    mBeep                   = (flags & KAEvent::BEEP) && action != KAEvent::AUDIO && !mSpeak;
+    mSpeak                  = (flags & KAEvent::SPEAK) && action != KAEvent::SubAction::Audio;
+    mBeep                   = (flags & KAEvent::BEEP) && action != KAEvent::SubAction::Audio && !mSpeak;
     if (mRepeatAtLogin)
     {              // do this after setting other flags
         ++mAlarmCount;
@@ -754,7 +754,7 @@ KAEventPrivate::KAEventPrivate(const KCalendarCore::Event::Ptr& event)
 
     // Extract status from the event's alarms.
     // First set up defaults.
-    mActionSubType = KAEvent::MESSAGE;
+    mActionSubType = KAEvent::SubAction::Message;
     mMainExpired   = true;
 
     // Extract data from all the event's alarms and index the alarms by sequence number
@@ -784,7 +784,7 @@ KAEventPrivate::KAEventPrivate(const KCalendarCore::Event::Ptr& event)
                     mRepetition.set(data.alarm->snoozeTime(), data.alarm->repeatCount());   // values may be adjusted in setRecurrence()
                     mNextRepeat = data.nextRepeat;
                 }
-                if (data.action != KAAlarm::AUDIO)
+                if (data.action != KAAlarm::Action::Audio)
                     break;
                 Q_FALLTHROUGH(); // Fall through to AUDIO_ALARM
             case AUDIO_ALARM:
@@ -880,33 +880,33 @@ KAEventPrivate::KAEventPrivate(const KCalendarCore::Event::Ptr& event)
                 if (!set)
                 {
                     mActionSubType = static_cast<KAEvent::SubAction>(data.action);
-                    mText = (mActionSubType == KAEvent::COMMAND) ? data.cleanText.trimmed() : data.cleanText;
+                    mText = (mActionSubType == KAEvent::SubAction::Command) ? data.cleanText.trimmed() : data.cleanText;
                     switch (data.action)
                     {
-                        case KAAlarm::COMMAND:
+                        case KAAlarm::Action::Command:
                             mCommandScript = data.commandScript;
                             if (data.extraActionOptions & KAEvent::DontShowPreActError)
                                 mCommandHideError = true;
                             if (!mCommandDisplay)
                                 break;
                             Q_FALLTHROUGH(); // fall through to MESSAGE
-                        case KAAlarm::MESSAGE:
+                        case KAAlarm::Action::Message:
                             mFont           = data.font;
                             mUseDefaultFont = data.defaultFont;
                             if (data.isEmailText)
                                 isEmailText = true;
-                            Q_FALLTHROUGH(); // fall through to FILE
-                        case KAAlarm::FILE:
+                            Q_FALLTHROUGH(); // fall through to File
+                        case KAAlarm::Action::File:
                             mBgColour = data.bgColour;
                             mFgColour = data.fgColour;
                             break;
-                        case KAAlarm::EMAIL:
+                        case KAAlarm::Action::Email:
                             mEmailFromIdentity = data.emailFromId;
                             mEmailAddresses    = data.alarm->mailAddresses();
                             mEmailSubject      = data.alarm->mailSubject();
                             mEmailAttachments  = data.alarm->mailAttachments();
                             break;
-                        case KAAlarm::AUDIO:
+                        case KAAlarm::Action::Audio:
                             // Already mostly handled above
                             mRepeatSoundPause = data.repeatSoundPause;
                             break;
@@ -915,8 +915,8 @@ KAEventPrivate::KAEventPrivate(const KCalendarCore::Event::Ptr& event)
                     }
                     set = true;
                 }
-                if (data.action == KAAlarm::FILE  &&  mActionSubType == KAEvent::MESSAGE)
-                    mActionSubType = KAEvent::FILE;
+                if (data.action == KAAlarm::Action::File  &&  mActionSubType == KAEvent::SubAction::Message)
+                    mActionSubType = KAEvent::SubAction::File;
                 ++mAlarmCount;
                 break;
             case AUDIO_ALARM:
@@ -1113,14 +1113,14 @@ bool KAEventPrivate::updateKCalEvent(const Event::Ptr& ev, KAEvent::UidAction ui
     const bool archived = (mCategory == CalEvent::ARCHIVED);
 
     if (!ev
-    ||  (uidact == KAEvent::UID_CHECK  &&  !mEventID.isEmpty()  &&  mEventID != ev->uid())
+    ||  (uidact == KAEvent::UidAction::Check  &&  !mEventID.isEmpty()  &&  mEventID != ev->uid())
     ||  (!mAlarmCount  && (!archived || !mMainExpired)))
         return false;
 
     ev->startUpdates();   // prevent multiple update notifications
     checkRecur();         // ensure recurrence/repetition data is consistent
     const bool readOnly = ev->isReadOnly();
-    if (uidact == KAEvent::UID_SET)
+    if (uidact == KAEvent::UidAction::Set)
         ev->setUid(mEventID);
     ev->setReadOnly(mReadOnly);
     ev->setTransparency(Event::Transparent);
@@ -1355,7 +1355,7 @@ bool KAEventPrivate::updateKCalEvent(const Event::Ptr& ev, KAEvent::UidAction ui
             ancillaryType = 1;
         }
     }
-    if ((mBeep  ||  mSpeak  ||  !mAudioFile.isEmpty())  &&  mActionSubType != KAEvent::AUDIO)
+    if ((mBeep  ||  mSpeak  ||  !mAudioFile.isEmpty())  &&  mActionSubType != KAEvent::SubAction::Audio)
     {
         // A sound is specified
         if (ancillaryType == 2)
@@ -1464,14 +1464,14 @@ Alarm::Ptr KAEventPrivate::initKCalAlarm(const KCalendarCore::Event::Ptr& event,
             bool display = false;
             switch (mActionSubType)
             {
-                case KAEvent::FILE:
+                case KAEvent::SubAction::File:
                     alltypes += FILE_TYPE;
-                    Q_FALLTHROUGH(); // fall through to MESSAGE
-                case KAEvent::MESSAGE:
+                    Q_FALLTHROUGH(); // fall through to Message
+                case KAEvent::SubAction::Message:
                     alarm->setDisplayAlarm(AlarmText::toCalendarText(mText));
                     display = true;
                     break;
-                case KAEvent::COMMAND:
+                case KAEvent::SubAction::Command:
                     if (mCommandScript)
                         alarm->setProcedureAlarm(QString(), mText);
                     else
@@ -1480,12 +1480,12 @@ Alarm::Ptr KAEventPrivate::initKCalAlarm(const KCalendarCore::Event::Ptr& event,
                     if (mCommandHideError)
                         flags += DONT_SHOW_ERROR_FLAG;
                     break;
-                case KAEvent::EMAIL:
+                case KAEvent::SubAction::Email:
                     alarm->setEmailAlarm(mEmailSubject, mText, mEmailAddresses, mEmailAttachments);
                     if (mEmailFromIdentity)
                         flags << KAEventPrivate::EMAIL_ID_FLAG << QString::number(mEmailFromIdentity);
                     break;
-                case KAEvent::AUDIO:
+                case KAEvent::SubAction::Audio:
                     setAudioAlarm(alarm);
                     if (mRepeatSoundPause >= 0  &&  type == MAIN_ALARM)
                     {
@@ -1713,16 +1713,16 @@ KAEvent::SubAction KAEvent::actionSubType() const
     return d->mActionSubType;
 }
 
-KAEvent::Actions KAEvent::actionTypes() const
+KAEvent::Action KAEvent::actionTypes() const
 {
     switch (d->mActionSubType)
     {
-        case MESSAGE:
-        case FILE:     return ACT_DISPLAY;
-        case COMMAND:  return d->mCommandDisplay ? ACT_DISPLAY_COMMAND : ACT_COMMAND;
-        case EMAIL:    return ACT_EMAIL;
-        case AUDIO:    return ACT_AUDIO;
-        default:       return ACT_NONE;
+        case SubAction::Message:
+        case SubAction::File:     return Action::Display;
+        case SubAction::Command:  return d->mCommandDisplay ? Action::DisplayCommand : Action::Command;
+        case SubAction::Email:    return Action::Email;
+        case SubAction::Audio:    return Action::Audio;
+        default:                  return Action::None;
     }
 }
 
@@ -1787,18 +1787,18 @@ QString KAEvent::cleanText() const
 
 QString KAEvent::message() const
 {
-    return (d->mActionSubType == MESSAGE
-        ||  d->mActionSubType == EMAIL) ? d->mText : QString();
+    return (d->mActionSubType == SubAction::Message
+        ||  d->mActionSubType == SubAction::Email) ? d->mText : QString();
 }
 
 QString KAEvent::displayMessage() const
 {
-    return (d->mActionSubType == MESSAGE) ? d->mText : QString();
+    return (d->mActionSubType == SubAction::Message) ? d->mText : QString();
 }
 
 QString KAEvent::fileName() const
 {
-    return (d->mActionSubType == FILE) ? d->mText : QString();
+    return (d->mActionSubType == SubAction::File) ? d->mText : QString();
 }
 
 QColor KAEvent::bgColour() const
@@ -1828,7 +1828,7 @@ QFont KAEvent::font() const
 
 QString KAEvent::command() const
 {
-    return (d->mActionSubType == COMMAND) ? d->mText : QString();
+    return (d->mActionSubType == SubAction::Command) ? d->mText : QString();
 }
 
 bool KAEvent::commandScript() const
@@ -1846,12 +1846,12 @@ bool KAEvent::commandDisplay() const
     return d->mCommandDisplay;
 }
 
-void KAEvent::setCommandError(CmdErrType t) const
+void KAEvent::setCommandError(CmdErr t) const
 {
     d->mCommandError = t;
 }
 
-KAEvent::CmdErrType KAEvent::commandError() const
+KAEvent::CmdErr KAEvent::commandError() const
 {
     return d->mCommandError;
 }
@@ -1894,7 +1894,7 @@ void KAEvent::setEmail(uint from, const KCalendarCore::Person::List& addresses, 
 
 QString KAEvent::emailMessage() const
 {
-    return (d->mActionSubType == EMAIL) ? d->mText : QString();
+    return (d->mActionSubType == SubAction::Email) ? d->mText : QString();
 }
 
 uint KAEvent::emailFromId() const
@@ -2013,8 +2013,8 @@ bool KAEvent::beep() const
 
 bool KAEvent::speak() const
 {
-    return (d->mActionSubType == MESSAGE
-        || (d->mActionSubType == COMMAND && d->mCommandDisplay))
+    return (d->mActionSubType == SubAction::Message
+        || (d->mActionSubType == SubAction::Command && d->mCommandDisplay))
        &&  d->mSpeak;
 }
 
@@ -2114,7 +2114,7 @@ void KAEventPrivate::activateReminderAfter(const DateTime& mainAlarmTime)
         DateTime next;
         //???? For some unknown reason, addSecs(-1) returns the recurrence after the next,
         //???? so addSecs(-60) is used instead.
-        if (nextRecurrence(mainAlarmTime.addSecs(-60).effectiveKDateTime(), next) == KAEvent::NO_OCCURRENCE
+        if (nextRecurrence(mainAlarmTime.addSecs(-60).effectiveKDateTime(), next) == KAEvent::OccurType::None
         ||  mainAlarmTime != next)
             return;
     }
@@ -2127,7 +2127,7 @@ void KAEventPrivate::activateReminderAfter(const DateTime& mainAlarmTime)
 
     const DateTime reminderTime = mainAlarmTime.addMins(-mReminderMinutes);
     DateTime next;
-    if (nextOccurrence(mainAlarmTime.effectiveKDateTime(), next, KAEvent::RETURN_REPETITION) != KAEvent::NO_OCCURRENCE
+    if (nextOccurrence(mainAlarmTime.effectiveKDateTime(), next, KAEvent::Repeats::Return) != KAEvent::OccurType::None
     &&  reminderTime >= next)
         return;    // the reminder time is after the next occurrence of the main alarm
 
@@ -2260,7 +2260,7 @@ void KAEventPrivate::defer(const DateTime& dateTime, bool reminder, bool adjustR
             {
                 // The last repetition (if any) of the current recurrence has already passed.
                 // Adjust to the next scheduled recurrence after now.
-                if (!mMainExpired  &&  setNextOccurrence(now) == KAEvent::NO_OCCURRENCE)
+                if (!mMainExpired  &&  setNextOccurrence(now) == KAEvent::OccurType::None)
                 {
                     mMainExpired = true;
                     --mAlarmCount;
@@ -2330,14 +2330,14 @@ DateTime KAEvent::deferDateTime() const
 /******************************************************************************
 * Find the latest time which the alarm can currently be deferred to.
 */
-DateTime KAEvent::deferralLimit(DeferLimitType* limitType) const
+DateTime KAEvent::deferralLimit(DeferLimit* limitType) const
 {
     return d->deferralLimit(limitType);
 }
 
-DateTime KAEventPrivate::deferralLimit(KAEvent::DeferLimitType* limitType) const
+DateTime KAEventPrivate::deferralLimit(KAEvent::DeferLimit* limitType) const
 {
-    KAEvent::DeferLimitType ltype = KAEvent::LIMIT_NONE;
+    KAEvent::DeferLimit ltype = KAEvent::DeferLimit::None;
     DateTime endTime;
     if (checkRecur() != KARecurrence::NO_RECUR)
     {
@@ -2346,19 +2346,19 @@ DateTime KAEventPrivate::deferralLimit(KAEvent::DeferLimitType* limitType) const
         // or any advance reminder before that.
         DateTime reminderTime;
         const KADateTime now = KADateTime::currentUtcDateTime();
-        const KAEvent::OccurType type = nextOccurrence(now, endTime, KAEvent::RETURN_REPETITION);
-        if (type & KAEvent::OCCURRENCE_REPEAT)
-            ltype = KAEvent::LIMIT_REPETITION;
-        else if (type == KAEvent::NO_OCCURRENCE)
-            ltype = KAEvent::LIMIT_NONE;
+        const KAEvent::OccurType type = nextOccurrence(now, endTime, KAEvent::Repeats::Return);
+        if (type & KAEvent::OccurType::Repeat)
+            ltype = KAEvent::DeferLimit::Repetition;
+        else if (type == KAEvent::OccurType::None)
+            ltype = KAEvent::DeferLimit::None;
         else if (mReminderActive == ACTIVE_REMINDER  &&  mReminderMinutes > 0
              &&  (now < (reminderTime = endTime.addMins(-mReminderMinutes))))
         {
             endTime = reminderTime;
-            ltype = KAEvent::LIMIT_REMINDER;
+            ltype = KAEvent::DeferLimit::Reminder;
         }
         else
-            ltype = KAEvent::LIMIT_RECURRENCE;
+            ltype = KAEvent::DeferLimit::Recurrence;
     }
     else if (mReminderMinutes < 0)
     {
@@ -2367,7 +2367,7 @@ DateTime KAEventPrivate::deferralLimit(KAEvent::DeferLimitType* limitType) const
         if (KADateTime::currentUtcDateTime() < mNextMainDateTime.effectiveKDateTime())
         {
             endTime = mNextMainDateTime;
-            ltype = KAEvent::LIMIT_MAIN;
+            ltype = KAEvent::DeferLimit::Main;
         }
     }
     else if (mReminderMinutes > 0
@@ -2376,9 +2376,9 @@ DateTime KAEventPrivate::deferralLimit(KAEvent::DeferLimitType* limitType) const
         // It's a reminder BEFORE the main alarm.
         // Don't allow it to be deferred past its main alarm time.
         endTime = mNextMainDateTime;
-        ltype = KAEvent::LIMIT_MAIN;
+        ltype = KAEvent::DeferLimit::Main;
     }
-    if (ltype != KAEvent::LIMIT_NONE)
+    if (ltype != KAEvent::DeferLimit::None)
         endTime = endTime.addMins(-1);
     if (limitType)
         *limitType = ltype;
@@ -2445,16 +2445,16 @@ void KAEvent::adjustStartOfDay(const KAEvent::List& events)
     }
 }
 
-DateTime KAEvent::nextTrigger(TriggerType type) const
+DateTime KAEvent::nextTrigger(Trigger type) const
 {
     d->calcTriggerTimes();
     switch (type)
     {
-        case ALL_TRIGGER:       return d->mAllTrigger;
-        case MAIN_TRIGGER:      return d->mMainTrigger;
-        case ALL_WORK_TRIGGER:  return d->mAllWorkTrigger;
-        case WORK_TRIGGER:      return d->mMainWorkTrigger;
-        case DISPLAY_TRIGGER:
+        case Trigger::All:      return d->mAllTrigger;
+        case Trigger::Main:     return d->mMainTrigger;
+        case Trigger::AllWork:  return d->mAllWorkTrigger;
+        case Trigger::Work:     return d->mMainWorkTrigger;
+        case Trigger::Display:
         {
             const bool reminderAfter = d->mMainExpired && d->mReminderActive && d->mReminderMinutes < 0;
             return d->checkRecur() != KARecurrence::NO_RECUR  && (d->mWorkTimeOnly || d->mExcludeHolidays)
@@ -3112,7 +3112,7 @@ KAEvent::OccurType KAEvent::setNextOccurrence(const KADateTime& preDateTime)
 KAEvent::OccurType KAEventPrivate::setNextOccurrence(const KADateTime& preDateTime)
 {
     if (preDateTime < mNextMainDateTime.effectiveKDateTime())
-        return KAEvent::FIRST_OR_ONLY_OCCURRENCE;    // it might not be the first recurrence - tant pis
+        return KAEvent::OccurType::FirstOrOnly;    // it might not be the first recurrence - tant pis
     KADateTime pre = preDateTime;
     // If there are repetitions, adjust the comparison date/time so that
     // we find the earliest recurrence which has a repetition falling after
@@ -3125,14 +3125,14 @@ KAEvent::OccurType KAEventPrivate::setNextOccurrence(const KADateTime& preDateTi
     if (pre < mNextMainDateTime.effectiveKDateTime())
     {
         afterPre = mNextMainDateTime;
-        type = KAEvent::FIRST_OR_ONLY_OCCURRENCE;   // may not actually be the first occurrence
+        type = KAEvent::OccurType::FirstOrOnly;   // may not actually be the first occurrence
     }
     else if (checkRecur() != KARecurrence::NO_RECUR)
     {
         type = nextRecurrence(pre, afterPre);
-        if (type == KAEvent::NO_OCCURRENCE)
-            return KAEvent::NO_OCCURRENCE;
-        if (type != KAEvent::FIRST_OR_ONLY_OCCURRENCE  &&  afterPre != mNextMainDateTime)
+        if (type == KAEvent::OccurType::None)
+            return KAEvent::OccurType::None;
+        if (type != KAEvent::OccurType::FirstOrOnly  &&  afterPre != mNextMainDateTime)
         {
             // Need to reschedule the next trigger date/time
             mNextMainDateTime = afterPre;
@@ -3148,14 +3148,14 @@ KAEvent::OccurType KAEventPrivate::setNextOccurrence(const KADateTime& preDateTi
         }
     }
     else
-        return KAEvent::NO_OCCURRENCE;
+        return KAEvent::OccurType::None;
 
     if (mRepetition)
     {
         if (afterPre <= preDateTime)
         {
             // The next occurrence is a sub-repetition.
-            type = static_cast<KAEvent::OccurType>(type | KAEvent::OCCURRENCE_REPEAT);
+            type = type | KAEvent::OccurType::Repeat;
             mNextRepeat = mRepetition.nextRepeatCount(afterPre.effectiveKDateTime(), preDateTime);
             // Repetitions can't have a reminder, so remove any.
             activate_reminder(false);
@@ -3178,20 +3178,20 @@ KAEvent::OccurType KAEventPrivate::setNextOccurrence(const KADateTime& preDateTi
 * date/time.
 * 'result' = date/time of next occurrence, or invalid date/time if none.
 */
-KAEvent::OccurType KAEvent::nextOccurrence(const KADateTime& preDateTime, DateTime& result, OccurOption o) const
+KAEvent::OccurType KAEvent::nextOccurrence(const KADateTime& preDateTime, DateTime& result, Repeats o) const
 {
     return d->nextOccurrence(preDateTime, result, o);
 }
 
 KAEvent::OccurType KAEventPrivate::nextOccurrence(const KADateTime& preDateTime, DateTime& result,
-        KAEvent::OccurOption includeRepetitions) const
+        KAEvent::Repeats includeRepetitions) const
 {
     KADateTime pre = preDateTime;
-    if (includeRepetitions != KAEvent::IGNORE_REPETITION)
+    if (includeRepetitions != KAEvent::Repeats::Ignore)
     {
-        // RETURN_REPETITION or ALLOW_FOR_REPETITION
+        // Repeats::Return or Repeats::AllowFor
         if (!mRepetition)
-            includeRepetitions = KAEvent::IGNORE_REPETITION;
+            includeRepetitions = KAEvent::Repeats::Ignore;
         else
             pre = KADateTime(mRepetition.duration(-mRepetition.count()).end(preDateTime.qDateTime()));
     }
@@ -3203,17 +3203,17 @@ KAEvent::OccurType KAEventPrivate::nextOccurrence(const KADateTime& preDateTime,
     else if (pre < mNextMainDateTime.effectiveKDateTime())
     {
         result = mNextMainDateTime;
-        type = KAEvent::FIRST_OR_ONLY_OCCURRENCE;
+        type = KAEvent::OccurType::FirstOrOnly;
     }
     else
     {
         result = DateTime();
-        type = KAEvent::NO_OCCURRENCE;
+        type = KAEvent::OccurType::None;
     }
 
-    if (type != KAEvent::NO_OCCURRENCE  &&  result <= preDateTime  &&  includeRepetitions != KAEvent::IGNORE_REPETITION)
+    if (type != KAEvent::OccurType::None  &&  result <= preDateTime  &&  includeRepetitions != KAEvent::Repeats::Ignore)
     {
-        // RETURN_REPETITION or ALLOW_FOR_REPETITION
+        // Repeats::Return or Repeats::AllowFor
         // The next occurrence is a sub-repetition
         int repetition = mRepetition.nextRepeatCount(result.kDateTime(), preDateTime);
         const DateTime repeatDT(mRepetition.duration(repetition).end(result.qDateTime()));
@@ -3229,21 +3229,21 @@ KAEvent::OccurType KAEventPrivate::nextOccurrence(const KADateTime& preDateTime,
             {
                 type = newType;
                 result = dt;
-                if (includeRepetitions == KAEvent::RETURN_REPETITION  &&  result <= preDateTime)
+                if (includeRepetitions == KAEvent::Repeats::Return  &&  result <= preDateTime)
                 {
                     // The next occurrence is a sub-repetition
                     repetition = mRepetition.nextRepeatCount(result.kDateTime(), preDateTime);
                     result = DateTime(mRepetition.duration(repetition).end(result.qDateTime()));
-                    type = static_cast<KAEvent::OccurType>(type | KAEvent::OCCURRENCE_REPEAT);
+                    type = type | KAEvent::OccurType::Repeat;
                 }
                 return type;
             }
         }
-        if (includeRepetitions == KAEvent::RETURN_REPETITION)
+        if (includeRepetitions == KAEvent::Repeats::Return)
         {
             // The next occurrence is a sub-repetition
             result = repeatDT;
-            type = static_cast<KAEvent::OccurType>(type | KAEvent::OCCURRENCE_REPEAT);
+            type = type | KAEvent::OccurType::Repeat;
         }
     }
     return type;
@@ -3268,7 +3268,7 @@ KAEvent::OccurType KAEventPrivate::previousOccurrence(const KADateTime& afterDat
     if (mStartDateTime >= afterDateTime)
     {
         result = KADateTime();
-        return KAEvent::NO_OCCURRENCE;     // the event starts after the specified date/time
+        return KAEvent::OccurType::None;     // the event starts after the specified date/time
     }
 
     // Find the latest recurrence of the event
@@ -3276,7 +3276,7 @@ KAEvent::OccurType KAEventPrivate::previousOccurrence(const KADateTime& afterDat
     if (checkRecur() == KARecurrence::NO_RECUR)
     {
         result = mStartDateTime;
-        type = KAEvent::FIRST_OR_ONLY_OCCURRENCE;
+        type = KAEvent::OccurType::FirstOrOnly;
     }
     else
     {
@@ -3288,13 +3288,13 @@ KAEvent::OccurType KAEventPrivate::previousOccurrence(const KADateTime& afterDat
         result = dt;
         result.setDateOnly(mStartDateTime.isDateOnly());
         if (!dt.isValid())
-            return KAEvent::NO_OCCURRENCE;
+            return KAEvent::OccurType::None;
         if (dt == recurStart)
-            type = KAEvent::FIRST_OR_ONLY_OCCURRENCE;
+            type = KAEvent::OccurType::FirstOrOnly;
         else if (mRecurrence->getNextDateTime(dt).isValid())
-            type = result.isDateOnly() ? KAEvent::RECURRENCE_DATE : KAEvent::RECURRENCE_DATE_TIME;
+            type = result.isDateOnly() ? KAEvent::OccurType::RecurDate : KAEvent::OccurType::RecurDateTime;
         else
-            type = KAEvent::LAST_RECURRENCE;
+            type = KAEvent::OccurType::LastRecur;
     }
 
     if (includeRepetitions  &&  mRepetition)
@@ -3304,7 +3304,7 @@ KAEvent::OccurType KAEventPrivate::previousOccurrence(const KADateTime& afterDat
         if (repetition > 0)
         {
             result = DateTime(mRepetition.duration(qMin(repetition, mRepetition.count())).end(result.qDateTime()));
-            return static_cast<KAEvent::OccurType>(type | KAEvent::OCCURRENCE_REPEAT);
+            return type | KAEvent::OccurType::Repeat;
         }
     }
     return type;
@@ -3328,13 +3328,13 @@ bool KAEventPrivate::setDisplaying(const KAEventPrivate& event, KAAlarm::Type al
                                    const KADateTime& repeatAtLoginTime, bool showEdit, bool showDefer)
 {
     if (!mDisplaying
-    &&  (alarmType == KAAlarm::MAIN_ALARM
-      || alarmType == KAAlarm::REMINDER_ALARM
-      || alarmType == KAAlarm::DEFERRED_REMINDER_ALARM
-      || alarmType == KAAlarm::DEFERRED_ALARM
-      || alarmType == KAAlarm::AT_LOGIN_ALARM))
+    &&  (alarmType == KAAlarm::Type::Main
+      || alarmType == KAAlarm::Type::Reminder
+      || alarmType == KAAlarm::Type::DeferredReminder
+      || alarmType == KAAlarm::Type::Deferred
+      || alarmType == KAAlarm::Type::AtLogin))
     {
-//qCDebug(KALARMCAL_LOG)<<event.id()<<","<<(alarmType==KAAlarm::MAIN_ALARM?"MAIN":alarmType==KAAlarm::REMINDER_ALARM?"REMINDER":alarmType==KAAlarm::DEFERRED_REMINDER_ALARM?"REMINDER_DEFERRAL":alarmType==KAAlarm::DEFERRED_ALARM?"DEFERRAL":"LOGIN")<<"): time="<<repeatAtLoginTime.toString();
+//qCDebug(KALARMCAL_LOG)<<event.id()<<","<<(alarmType==KAAlarm::Type::Main?"MAIN":alarmType==KAAlarm::Type::Reminder?"REMINDER":alarmType==KAAlarm::Type::DeferredReminder?"REMINDER_DEFERRAL":alarmType==KAAlarm::Type::Deferred?"DEFERRAL":"LOGIN")<<"): time="<<repeatAtLoginTime.toString();
         KAAlarm al = event.alarm(alarmType);
         if (al.isValid())
         {
@@ -3345,13 +3345,13 @@ bool KAEventPrivate::setDisplaying(const KAEventPrivate& event, KAAlarm::Type al
             mDisplayingDefer    = showDefer;
             mDisplayingEdit     = showEdit;
             mDisplaying         = true;
-            mDisplayingTime     = (alarmType == KAAlarm::AT_LOGIN_ALARM) ? repeatAtLoginTime : al.dateTime().kDateTime();
+            mDisplayingTime     = (alarmType == KAAlarm::Type::AtLogin) ? repeatAtLoginTime : al.dateTime().kDateTime();
             switch (al.type())
             {
-                case KAAlarm::AT_LOGIN_ALARM:           mDisplayingFlags = KAEvent::REPEAT_AT_LOGIN;  break;
-                case KAAlarm::REMINDER_ALARM:           mDisplayingFlags = REMINDER;  break;
-                case KAAlarm::DEFERRED_REMINDER_ALARM:  mDisplayingFlags = al.timedDeferral() ? (REMINDER | TIME_DEFERRAL) : (REMINDER | DATE_DEFERRAL);  break;
-                case KAAlarm::DEFERRED_ALARM:           mDisplayingFlags = al.timedDeferral() ? TIME_DEFERRAL : DATE_DEFERRAL;  break;
+                case KAAlarm::Type::AtLogin:            mDisplayingFlags = KAEvent::REPEAT_AT_LOGIN;  break;
+                case KAAlarm::Type::Reminder:           mDisplayingFlags = REMINDER;  break;
+                case KAAlarm::Type::DeferredReminder:   mDisplayingFlags = al.timedDeferral() ? (REMINDER | TIME_DEFERRAL) : (REMINDER | DATE_DEFERRAL);  break;
+                case KAAlarm::Type::Deferred:           mDisplayingFlags = al.timedDeferral() ? TIME_DEFERRAL : DATE_DEFERRAL;  break;
                 default:                                mDisplayingFlags = 0;  break;
             }
             ++mAlarmCount;
@@ -3393,24 +3393,24 @@ void KAEventPrivate::reinstateFromDisplaying(const Event::Ptr& kcalEvent, Resour
 */
 KAAlarm KAEvent::convertDisplayingAlarm() const
 {
-    KAAlarm al = alarm(KAAlarm::DISPLAYING_ALARM);
+    KAAlarm al = alarm(KAAlarm::Type::Displaying);
     KAAlarm::Private* const al_d = al.d;
     const int displayingFlags = d->mDisplayingFlags;
     if (displayingFlags & REPEAT_AT_LOGIN)
     {
         al_d->mRepeatAtLogin = true;
-        al_d->mType = KAAlarm::AT_LOGIN_ALARM;
+        al_d->mType = KAAlarm::Type::AtLogin;
     }
     else if (displayingFlags & KAEventPrivate::DEFERRAL)
     {
         al_d->mDeferred = true;
         al_d->mTimedDeferral = (displayingFlags & KAEventPrivate::TIMED_FLAG);
-        al_d->mType = (displayingFlags & KAEventPrivate::REMINDER) ? KAAlarm::DEFERRED_REMINDER_ALARM : KAAlarm::DEFERRED_ALARM;
+        al_d->mType = (displayingFlags & KAEventPrivate::REMINDER) ? KAAlarm::Type::DeferredReminder : KAAlarm::Type::Deferred;
     }
     else if (displayingFlags & KAEventPrivate::REMINDER)
-        al_d->mType = KAAlarm::REMINDER_ALARM;
+        al_d->mType = KAAlarm::Type::Reminder;
     else
-        al_d->mType = KAAlarm::MAIN_ALARM;
+        al_d->mType = KAAlarm::Type::Main;
     return al;
 }
 
@@ -3430,7 +3430,7 @@ KAAlarm KAEvent::alarm(KAAlarm::Type t) const
 KAAlarm KAEventPrivate::alarm(KAAlarm::Type type) const
 {
     checkRecur();     // ensure recurrence/repetition data is consistent
-    KAAlarm al;       // this sets type to INVALID_ALARM
+    KAAlarm al;       // this sets type to Type::Invalid
     KAAlarm::Private* const al_d = al.d;
     if (mAlarmCount)
     {
@@ -3439,19 +3439,19 @@ KAAlarm KAEventPrivate::alarm(KAAlarm::Type type) const
         al_d->mDeferred      = false;
         switch (type)
         {
-            case KAAlarm::MAIN_ALARM:
+            case KAAlarm::Type::Main:
                 if (!mMainExpired)
                 {
-                    al_d->mType             = KAAlarm::MAIN_ALARM;
+                    al_d->mType             = KAAlarm::Type::Main;
                     al_d->mNextMainDateTime = mNextMainDateTime;
                     al_d->mRepetition       = mRepetition;
                     al_d->mNextRepeat       = mNextRepeat;
                 }
                 break;
-            case KAAlarm::REMINDER_ALARM:
+            case KAAlarm::Type::Reminder:
                 if (mReminderActive == ACTIVE_REMINDER)
                 {
-                    al_d->mType = KAAlarm::REMINDER_ALARM;
+                    al_d->mType = KAAlarm::Type::Reminder;
                     if (mReminderMinutes < 0)
                         al_d->mNextMainDateTime = mReminderAfterTime;
                     else if (mReminderOnceOnly)
@@ -3460,35 +3460,35 @@ KAAlarm KAEventPrivate::alarm(KAAlarm::Type type) const
                         al_d->mNextMainDateTime = mNextMainDateTime.addMins(-mReminderMinutes);
                 }
                 break;
-            case KAAlarm::DEFERRED_REMINDER_ALARM:
+            case KAAlarm::Type::DeferredReminder:
                 if (mDeferral != REMINDER_DEFERRAL)
                     break;
-                Q_FALLTHROUGH(); // fall through to DEFERRED_ALARM
-            case KAAlarm::DEFERRED_ALARM:
+                Q_FALLTHROUGH(); // fall through to Deferred
+            case KAAlarm::Type::Deferred:
                 if (mDeferral != NO_DEFERRAL)
                 {
-                    al_d->mType             = (mDeferral == REMINDER_DEFERRAL) ? KAAlarm::DEFERRED_REMINDER_ALARM : KAAlarm::DEFERRED_ALARM;
+                    al_d->mType             = (mDeferral == REMINDER_DEFERRAL) ? KAAlarm::Type::DeferredReminder : KAAlarm::Type::Deferred;
                     al_d->mNextMainDateTime = mDeferralTime;
                     al_d->mDeferred         = true;
                     al_d->mTimedDeferral    = !mDeferralTime.isDateOnly();
                 }
                 break;
-            case KAAlarm::AT_LOGIN_ALARM:
+            case KAAlarm::Type::AtLogin:
                 if (mRepeatAtLogin)
                 {
-                    al_d->mType             = KAAlarm::AT_LOGIN_ALARM;
+                    al_d->mType             = KAAlarm::Type::AtLogin;
                     al_d->mNextMainDateTime = mAtLoginDateTime;
                     al_d->mRepeatAtLogin    = true;
                 }
                 break;
-            case KAAlarm::DISPLAYING_ALARM:
+            case KAAlarm::Type::Displaying:
                 if (mDisplaying)
                 {
-                    al_d->mType             = KAAlarm::DISPLAYING_ALARM;
+                    al_d->mType             = KAAlarm::Type::Displaying;
                     al_d->mNextMainDateTime = mDisplayingTime;
                 }
                 break;
-            case KAAlarm::INVALID_ALARM:
+            case KAAlarm::Type::Invalid:
             default:
                 break;
         }
@@ -3513,8 +3513,8 @@ KAAlarm KAEventPrivate::firstAlarm() const
     if (mAlarmCount)
     {
         if (!mMainExpired)
-            return alarm(KAAlarm::MAIN_ALARM);
-        return nextAlarm(KAAlarm::MAIN_ALARM);
+            return alarm(KAAlarm::Type::Main);
+        return nextAlarm(KAAlarm::Type::Main);
     }
     return {};
 }
@@ -3538,28 +3538,28 @@ KAAlarm KAEventPrivate::nextAlarm(KAAlarm::Type previousType) const
 {
     switch (previousType)
     {
-        case KAAlarm::MAIN_ALARM:
+        case KAAlarm::Type::Main:
             if (mReminderActive == ACTIVE_REMINDER)
-                return alarm(KAAlarm::REMINDER_ALARM);
-            Q_FALLTHROUGH(); // fall through to REMINDER_ALARM
-        case KAAlarm::REMINDER_ALARM:
+                return alarm(KAAlarm::Type::Reminder);
+            Q_FALLTHROUGH(); // fall through to Reminder
+        case KAAlarm::Type::Reminder:
             // There can only be one deferral alarm
             if (mDeferral == REMINDER_DEFERRAL)
-                return alarm(KAAlarm::DEFERRED_REMINDER_ALARM);
+                return alarm(KAAlarm::Type::DeferredReminder);
             if (mDeferral == NORMAL_DEFERRAL)
-                return alarm(KAAlarm::DEFERRED_ALARM);
-            Q_FALLTHROUGH(); // fall through to DEFERRED_ALARM
-        case KAAlarm::DEFERRED_REMINDER_ALARM:
-        case KAAlarm::DEFERRED_ALARM:
+                return alarm(KAAlarm::Type::Deferred);
+            Q_FALLTHROUGH(); // fall through to Deferred
+        case KAAlarm::Type::DeferredReminder:
+        case KAAlarm::Type::Deferred:
             if (mRepeatAtLogin)
-                return alarm(KAAlarm::AT_LOGIN_ALARM);
-            Q_FALLTHROUGH(); // fall through to AT_LOGIN_ALARM
-        case KAAlarm::AT_LOGIN_ALARM:
+                return alarm(KAAlarm::Type::AtLogin);
+            Q_FALLTHROUGH(); // fall through to AtLogin
+        case KAAlarm::Type::AtLogin:
             if (mDisplaying)
-                return alarm(KAAlarm::DISPLAYING_ALARM);
-            Q_FALLTHROUGH(); // fall through to DISPLAYING_ALARM
-        case KAAlarm::DISPLAYING_ALARM:
-        case KAAlarm::INVALID_ALARM:
+                return alarm(KAAlarm::Type::Displaying);
+            Q_FALLTHROUGH(); // fall through to Displaying
+        case KAAlarm::Type::Displaying:
+        case KAAlarm::Type::Invalid:
             // fall through to default
         default:
             break;
@@ -3587,7 +3587,7 @@ void KAEventPrivate::removeExpiredAlarm(KAAlarm::Type type)
     const int count = mAlarmCount;
     switch (type)
     {
-        case KAAlarm::MAIN_ALARM:
+        case KAAlarm::Type::Main:
             if (!mReminderActive  ||  mReminderMinutes > 0)
             {
                 mAlarmCount = 0;    // removing main alarm - also remove subsidiary alarms
@@ -3603,8 +3603,8 @@ void KAEventPrivate::removeExpiredAlarm(KAAlarm::Type type)
                 mDisplaying = false;
                 --mAlarmCount;
             }
-            Q_FALLTHROUGH(); // fall through to AT_LOGIN_ALARM
-        case KAAlarm::AT_LOGIN_ALARM:
+            Q_FALLTHROUGH(); // fall through to AtLogin
+        case KAAlarm::Type::AtLogin:
             if (mRepeatAtLogin)
             {
                 // Remove the at-login alarm, but keep a note of it for archiving purposes
@@ -3613,23 +3613,23 @@ void KAEventPrivate::removeExpiredAlarm(KAAlarm::Type type)
                 --mAlarmCount;
             }
             break;
-        case KAAlarm::REMINDER_ALARM:
+        case KAAlarm::Type::Reminder:
             // Remove any reminder alarm, but keep a note of it for archiving purposes
             // and for restoration after the next recurrence.
             activate_reminder(false);
             break;
-        case KAAlarm::DEFERRED_REMINDER_ALARM:
-        case KAAlarm::DEFERRED_ALARM:
+        case KAAlarm::Type::DeferredReminder:
+        case KAAlarm::Type::Deferred:
             set_deferral(NO_DEFERRAL);
             break;
-        case KAAlarm::DISPLAYING_ALARM:
+        case KAAlarm::Type::Displaying:
             if (mDisplaying)
             {
                 mDisplaying = false;
                 --mAlarmCount;
             }
             break;
-        case KAAlarm::INVALID_ALARM:
+        case KAAlarm::Type::Invalid:
         default:
             break;
     }
@@ -3724,15 +3724,15 @@ bool KAEventPrivate::compare(const KAEventPrivate& other, KAEvent::Comparison co
 
     switch (mActionSubType)
     {
-        case KAEvent::COMMAND:
+        case KAEvent::SubAction::Command:
             if (mCommandScript != other.mCommandScript || mCommandXterm != other.mCommandXterm || mCommandDisplay != other.mCommandDisplay
             ||  mCommandError != other.mCommandError || mCommandHideError != other.mCommandHideError || mLogFile != other.mLogFile)
                 return false;
             if (!mCommandDisplay)
                 break;
-            Q_FALLTHROUGH(); // fall through to MESSAGE
-        case KAEvent::FILE:
-        case KAEvent::MESSAGE:
+            Q_FALLTHROUGH(); // fall through to Message
+        case KAEvent::SubAction::File:
+        case KAEvent::SubAction::Message:
             if (mReminderMinutes      != other.mReminderMinutes
             ||  mBgColour             != other.mBgColour
             ||  mFgColour             != other.mFgColour
@@ -3772,8 +3772,8 @@ bool KAEventPrivate::compare(const KAEventPrivate& other, KAEvent::Comparison co
             }
             if (mAudioFile.isEmpty())
                 break;
-            Q_FALLTHROUGH(); // fall through to AUDIO
-        case KAEvent::AUDIO:
+            Q_FALLTHROUGH(); // fall through to Audio
+        case KAEvent::SubAction::Audio:
             if (mRepeatSoundPause != other.mRepeatSoundPause)
                 return false;
             if (mSoundVolume >= 0)
@@ -3792,7 +3792,7 @@ bool KAEventPrivate::compare(const KAEventPrivate& other, KAEvent::Comparison co
             else if (other.mSoundVolume >= 0)
                 return false;
             break;
-        case KAEvent::EMAIL:
+        case KAEvent::SubAction::Email:
             if (mEmailFromIdentity != other.mEmailFromIdentity
             ||  mEmailAddresses    != other.mEmailAddresses
             ||  mEmailSubject      != other.mEmailSubject
@@ -3849,7 +3849,7 @@ void KAEventPrivate::dumpDebug() const
 {
     qCDebug(KALARMCAL_LOG) << "KAEvent dump:";
     qCDebug(KALARMCAL_LOG) << "-- mEventID:" << mEventID;
-    qCDebug(KALARMCAL_LOG) << "-- mActionSubType:" << (mActionSubType == KAEvent::MESSAGE ? "MESSAGE" : mActionSubType == KAEvent::FILE ? "FILE" : mActionSubType == KAEvent::COMMAND ? "COMMAND" : mActionSubType == KAEvent::EMAIL ? "EMAIL" : mActionSubType == KAEvent::AUDIO ? "AUDIO" : "??");
+    qCDebug(KALARMCAL_LOG) << "-- mActionSubType:" << (mActionSubType == KAEvent::SubAction::Message ? "MESSAGE" : mActionSubType == KAEvent::SubAction::File ? "FILE" : mActionSubType == KAEvent::SubAction::Command ? "COMMAND" : mActionSubType == KAEvent::SubAction::Email ? "EMAIL" : mActionSubType == KAEvent::SubAction::Audio ? "AUDIO" : "??");
     qCDebug(KALARMCAL_LOG) << "-- mNextMainDateTime:" << mNextMainDateTime.toString();
     qCDebug(KALARMCAL_LOG) << "-- mCommandError:" << mCommandError;
     qCDebug(KALARMCAL_LOG) << "-- mAllTrigger:" << mAllTrigger.toString();
@@ -3861,9 +3861,9 @@ void KAEventPrivate::dumpDebug() const
     if (mCategory == CalEvent::TEMPLATE)
         qCDebug(KALARMCAL_LOG) << "-- mTemplateAfterTime:" << mTemplateAfterTime;
     qCDebug(KALARMCAL_LOG) << "-- mText:" << mText;
-    if (mActionSubType == KAEvent::MESSAGE
-    ||  mActionSubType == KAEvent::FILE
-    ||  (mActionSubType == KAEvent::COMMAND && mCommandDisplay))
+    if (mActionSubType == KAEvent::SubAction::Message
+    ||  mActionSubType == KAEvent::SubAction::File
+    ||  (mActionSubType == KAEvent::SubAction::Command && mCommandDisplay))
     {
         if (mCommandDisplay)
             qCDebug(KALARMCAL_LOG) << "-- mCommandScript:" << mCommandScript;
@@ -3883,7 +3883,7 @@ void KAEventPrivate::dumpDebug() const
         qCDebug(KALARMCAL_LOG) << "-- mAutoClose:" << mAutoClose;
         qCDebug(KALARMCAL_LOG) << "-- mNotify:" << mNotify;
     }
-    else if (mActionSubType == KAEvent::COMMAND)
+    else if (mActionSubType == KAEvent::SubAction::Command)
     {
         qCDebug(KALARMCAL_LOG) << "-- mCommandScript:" << mCommandScript;
         qCDebug(KALARMCAL_LOG) << "-- mCommandXterm:" << mCommandXterm;
@@ -3891,7 +3891,7 @@ void KAEventPrivate::dumpDebug() const
         qCDebug(KALARMCAL_LOG) << "-- mCommandHideError:" << mCommandHideError;
         qCDebug(KALARMCAL_LOG) << "-- mLogFile:" << mLogFile;
     }
-    else if (mActionSubType == KAEvent::EMAIL)
+    else if (mActionSubType == KAEvent::SubAction::Email)
     {
         qCDebug(KALARMCAL_LOG) << "-- mEmail: FromKMail:" << mEmailFromIdentity;
         qCDebug(KALARMCAL_LOG) << "--         Addresses:" << mEmailAddresses.join(QStringLiteral(","));
@@ -3899,10 +3899,10 @@ void KAEventPrivate::dumpDebug() const
         qCDebug(KALARMCAL_LOG) << "--         Attachments:" << mEmailAttachments.join(QLatin1Char(','));
         qCDebug(KALARMCAL_LOG) << "--         Bcc:" << mEmailBcc;
     }
-    else if (mActionSubType == KAEvent::AUDIO)
+    else if (mActionSubType == KAEvent::SubAction::Audio)
         qCDebug(KALARMCAL_LOG) << "-- mAudioFile:" << mAudioFile;
     qCDebug(KALARMCAL_LOG) << "-- mBeep:" << mBeep;
-    if (mActionSubType == KAEvent::AUDIO  ||  !mAudioFile.isEmpty())
+    if (mActionSubType == KAEvent::SubAction::Audio  ||  !mAudioFile.isEmpty())
     {
         if (mSoundVolume >= 0)
         {
@@ -4100,7 +4100,7 @@ void KAEventPrivate::readAlarm(const Alarm::Ptr& alarm, AlarmData& data, bool au
     switch (alarm->type())
     {
         case Alarm::Procedure:
-            data.action        = KAAlarm::COMMAND;
+            data.action        = KAAlarm::Action::Command;
             data.cleanText     = alarm->programFile();
             data.commandScript = data.cleanText.isEmpty();   // blank command indicates a script
             if (!alarm->programArguments().isEmpty())
@@ -4123,7 +4123,7 @@ void KAEventPrivate::readAlarm(const Alarm::Ptr& alarm, AlarmData& data, bool au
         {
             if (alarm->type() == Alarm::Display)
             {
-                data.action    = KAAlarm::MESSAGE;
+                data.action    = KAAlarm::Action::Message;
                 data.cleanText = AlarmText::fromCalendarText(alarm->text(), data.isEmailText);
             }
             const QString prop = alarm->customProperty(KACalendar::APPNAME, KAEventPrivate::FONT_COLOUR_PROPERTY);
@@ -4153,7 +4153,7 @@ void KAEventPrivate::readAlarm(const Alarm::Ptr& alarm, AlarmData& data, bool au
         }
         case Alarm::Email:
         {
-            data.action    = KAAlarm::EMAIL;
+            data.action    = KAAlarm::Action::Email;
             data.cleanText = alarm->mailText();
             const int i = flags.indexOf(KAEventPrivate::EMAIL_ID_FLAG);
             data.emailFromId = (i >= 0  &&  i + 1 < flags.count()) ? flags[i + 1].toUInt() : 0;
@@ -4161,7 +4161,7 @@ void KAEventPrivate::readAlarm(const Alarm::Ptr& alarm, AlarmData& data, bool au
         }
         case Alarm::Audio:
         {
-            data.action      = KAAlarm::AUDIO;
+            data.action      = KAAlarm::Action::Audio;
             data.cleanText   = alarm->audioFile();
             data.repeatSoundPause = (alarm->repeatCount() == -2) ? alarm->snoozeTime().asSeconds()
                                   : (alarm->repeatCount() == -1) ? 0 : -1;
@@ -4215,8 +4215,8 @@ void KAEventPrivate::readAlarm(const Alarm::Ptr& alarm, AlarmData& data, bool au
         const QString type = types[i];
         if (type == KAEventPrivate::AT_LOGIN_TYPE)
             atLogin = true;
-        else if (type == KAEventPrivate::FILE_TYPE  &&  data.action == KAAlarm::MESSAGE)
-            data.action = KAAlarm::FILE;
+        else if (type == KAEventPrivate::FILE_TYPE  &&  data.action == KAAlarm::Action::Message)
+            data.action = KAAlarm::Action::File;
         else if (type == KAEventPrivate::REMINDER_TYPE)
             reminder = true;
         else if (type == KAEventPrivate::TIME_DEFERRAL_TYPE)
@@ -4225,11 +4225,11 @@ void KAEventPrivate::readAlarm(const Alarm::Ptr& alarm, AlarmData& data, bool au
             dateDeferral = deferral = true;
         else if (type == KAEventPrivate::DISPLAYING_TYPE)
             data.type = DISPLAYING_ALARM;
-        else if (type == KAEventPrivate::PRE_ACTION_TYPE  &&  data.action == KAAlarm::COMMAND)
+        else if (type == KAEventPrivate::PRE_ACTION_TYPE  &&  data.action == KAAlarm::Action::Command)
             data.type = PRE_ACTION_ALARM;
-        else if (type == KAEventPrivate::POST_ACTION_TYPE  &&  data.action == KAAlarm::COMMAND)
+        else if (type == KAEventPrivate::POST_ACTION_TYPE  &&  data.action == KAAlarm::Action::Command)
             data.type = POST_ACTION_ALARM;
-        else if (type == KAEventPrivate::SOUND_REPEAT_TYPE  &&  data.action == KAAlarm::AUDIO)
+        else if (type == KAEventPrivate::SOUND_REPEAT_TYPE  &&  data.action == KAAlarm::Action::Audio)
         {
             repeatSound = true;
             if (i + 1 < end)
@@ -4383,14 +4383,14 @@ void KAEventPrivate::calcTriggerTimes() const
                         return;    // found a non-holiday occurrence
                     kdt = mMainWorkTrigger.effectiveKDateTime();
                     kdt.setTime(QTime(23, 59, 59));
-                    const KAEvent::OccurType type = nextOccurrence(kdt, nextTrigger, KAEvent::RETURN_REPETITION);
+                    const KAEvent::OccurType type = nextOccurrence(kdt, nextTrigger, KAEvent::Repeats::Return);
                     if (!nextTrigger.isValid())
                         break;
                     if (!excludedByWorkTimeOrHoliday(nextTrigger.kDateTime()))
                     {
                         const int reminder = (mReminderMinutes > 0) ? mReminderMinutes : 0;   // only interested in reminders BEFORE the alarm
                         mMainWorkTrigger = nextTrigger;
-                        mAllWorkTrigger = (type & KAEvent::OCCURRENCE_REPEAT) ? mMainWorkTrigger : mMainWorkTrigger.addMins(-reminder);
+                        mAllWorkTrigger = (type & KAEvent::OccurType::Repeat) ? mMainWorkTrigger : mMainWorkTrigger.addMins(-reminder);
                         return;   // found a non-holiday occurrence
                     }
                 }
@@ -4406,14 +4406,14 @@ void KAEventPrivate::calcTriggerTimes() const
             {
                 kdt = nextTrigger.effectiveKDateTime();
                 kdt.setTime(QTime(23, 59, 59));
-                const KAEvent::OccurType type = nextOccurrence(kdt, nextTrigger, KAEvent::RETURN_REPETITION);
+                const KAEvent::OccurType type = nextOccurrence(kdt, nextTrigger, KAEvent::Repeats::Return);
                 if (!nextTrigger.isValid())
                     break;
                 if (!mHolidays->isHoliday(nextTrigger.date()))
                 {
                     const int reminder = (mReminderMinutes > 0) ? mReminderMinutes : 0;   // only interested in reminders BEFORE the alarm
                     mMainWorkTrigger = nextTrigger;
-                    mAllWorkTrigger = (type & KAEvent::OCCURRENCE_REPEAT) ? mMainWorkTrigger : mMainWorkTrigger.addMins(-reminder);
+                    mAllWorkTrigger = (type & KAEvent::OccurType::Repeat) ? mMainWorkTrigger : mMainWorkTrigger.addMins(-reminder);
                     return;   // found a non-holiday occurrence
                 }
             }
@@ -4502,7 +4502,7 @@ void KAEventPrivate::calcNextWorkingTime(const DateTime& nextTrigger) const
                     break;
                 if (!repeatNum)
                 {
-                    nextOccurrence(newdt.kDateTime(), newdt, KAEvent::IGNORE_REPETITION);
+                    nextOccurrence(newdt.kDateTime(), newdt, KAEvent::Repeats::Ignore);
                     if (mWorkDays.testBit(day))
                     {
                         newdt = newdt.toTimeSpec(nextTrigger.timeSpec());
@@ -4536,7 +4536,7 @@ void KAEventPrivate::calcNextWorkingTime(const DateTime& nextTrigger) const
             for (; ;)
             {
                 kdt.setTime(QTime(23, 59, 59));
-                nextOccurrence(kdt, newdt, KAEvent::IGNORE_REPETITION);
+                nextOccurrence(kdt, newdt, KAEvent::Repeats::Ignore);
                 if (!newdt.isValid())
                     return;
                 kdt = newdt.toTimeSpec(mWorkDayTimeSpec).effectiveKDateTime();
@@ -4583,7 +4583,7 @@ void KAEventPrivate::calcNextWorkingTime(const DateTime& nextTrigger) const
                     return;    // found an occurrence on every possible day of the week!?!
                 days |= 1 << day;
             }
-            nextOccurrence(kdt, newdt, KAEvent::IGNORE_REPETITION);
+            nextOccurrence(kdt, newdt, KAEvent::Repeats::Ignore);
             if (!newdt.isValid())
                 return;
             kdt = newdt.toTimeSpec(mWorkDayTimeSpec).effectiveKDateTime();
@@ -4628,10 +4628,10 @@ void KAEventPrivate::calcNextWorkingTime(const DateTime& nextTrigger) const
         unsigned days = 0;
         for (; ;)
         {
-            const KAEvent::OccurType type = nextOccurrence(kdt, newdt, KAEvent::RETURN_REPETITION);
+            const KAEvent::OccurType type = nextOccurrence(kdt, newdt, KAEvent::Repeats::Return);
             if (!newdt.isValid())
                 return;
-            repetition = (type & KAEvent::OCCURRENCE_REPEAT);
+            repetition = (type & KAEvent::OccurType::Repeat);
             kdt = newdt.toTimeSpec(mWorkDayTimeSpec).effectiveKDateTime();
             const int day = kdt.date().dayOfWeek() - 1;
             if (mWorkDays.testBit(day))
@@ -4734,7 +4734,7 @@ void KAEventPrivate::calcNextWorkingTime(const DateTime& nextTrigger) const
                 }
                 repeatNum = 0;
             }
-            nextOccurrence(kdtRecur, newdt, KAEvent::IGNORE_REPETITION);
+            nextOccurrence(kdtRecur, newdt, KAEvent::Repeats::Ignore);
             if (!newdt.isValid())
                 return;
             kdtRecur = newdt.toTimeSpec(mWorkDayTimeSpec).effectiveKDateTime();
@@ -4767,7 +4767,7 @@ void KAEventPrivate::calcNextWorkingTime(const DateTime& nextTrigger) const
                     transitionIndex = i;
                 if (++transitionIndex >= tzTransitions.count())
                     return;
-                previousOccurrence(KADateTime(tzTransitions[transitionIndex].atUtc), newdt, KAEvent::IGNORE_REPETITION);
+                previousOccurrence(KADateTime(tzTransitions[transitionIndex].atUtc), newdt, false);
                 kdtRecur = newdt.toTimeSpec(mWorkDayTimeSpec).effectiveKDateTime();
                 if (finalDate.daysTo(kdtRecur.date()) > 365)
                     return;
@@ -4817,7 +4817,7 @@ void KAEventPrivate::calcNextWorkingTime(const DateTime& nextTrigger) const
             // be defined which is longer than the recurrence interval in short months.
             // In these cases, the sub-repetition is truncated by the following
             // recurrence.
-            nextOccurrence(kdtRecur, newdt, KAEvent::IGNORE_REPETITION);
+            nextOccurrence(kdtRecur, newdt, KAEvent::Repeats::Ignore);
             KADateTime kdtNextRecur = newdt.toTimeSpec(mWorkDayTimeSpec).effectiveKDateTime();
 
             int repeatsToCheck = mRepetition.count();
@@ -4875,7 +4875,7 @@ void KAEventPrivate::calcNextWorkingTime(const DateTime& nextTrigger) const
                 if (checkTimeChangeOnly  || (days & allDaysMask) == allDaysMask)
                     break;    // found a recurrence on every possible day of the week!?!
                 kdtRecur = kdtNextRecur;
-                nextOccurrence(kdtRecur, newdt, KAEvent::IGNORE_REPETITION);
+                nextOccurrence(kdtRecur, newdt, KAEvent::Repeats::Ignore);
                 kdtNextRecur = newdt.toTimeSpec(mWorkDayTimeSpec).effectiveKDateTime();
                 dateRecur = kdtRecur.date();
                 const int dayRecur = dateRecur.dayOfWeek() - 1;   // Monday = 0
@@ -4901,7 +4901,7 @@ void KAEventPrivate::calcNextWorkingTime(const DateTime& nextTrigger) const
             if (++transitionIndex >= tzTransitions.count())
                 return;
             kdt = KADateTime(tzTransitions[transitionIndex].atUtc);
-            previousOccurrence(kdt, newdt, KAEvent::IGNORE_REPETITION);
+            previousOccurrence(kdt, newdt, false);
             kdt = kdt.toTimeSpec(mWorkDayTimeSpec);
             kdtRecur = newdt.toTimeSpec(mWorkDayTimeSpec).effectiveKDateTime();
         }
@@ -5003,12 +5003,12 @@ KAEvent::OccurType KAEventPrivate::nextRecurrence(const KADateTime& preDateTime,
     result = dt;
     result.setDateOnly(mStartDateTime.isDateOnly());
     if (!dt.isValid())
-        return KAEvent::NO_OCCURRENCE;
+        return KAEvent::OccurType::None;
     if (dt == recurStart)
-        return KAEvent::FIRST_OR_ONLY_OCCURRENCE;
+        return KAEvent::OccurType::FirstOrOnly;
     if (mRecurrence->duration() >= 0  &&  dt == mRecurrence->endDateTime())
-        return KAEvent::LAST_RECURRENCE;
-    return result.isDateOnly() ? KAEvent::RECURRENCE_DATE : KAEvent::RECURRENCE_DATE_TIME;
+        return KAEvent::OccurType::LastRecur;
+    return result.isDateOnly() ? KAEvent::OccurType::RecurDate : KAEvent::OccurType::RecurDateTime;
 }
 
 /******************************************************************************
@@ -5173,7 +5173,7 @@ bool KAEvent::convertKCalEvents(const Calendar::Ptr& calendar, int calendarVersi
                 bool atLogin    = false;
                 bool deferral   = false;
                 bool lateCancel = false;
-                KAAlarm::Action action = KAAlarm::MESSAGE;
+                KAAlarm::Action action = KAAlarm::Action::Message;
                 const QString txt = alarm->text();
                 const int length = txt.length();
                 int i = 0;
@@ -5202,12 +5202,12 @@ bool KAEvent::convertKCalEvents(const Calendar::Ptr& calendar, int calendarVersi
                     i += TEXT_PREFIX.length();
                 else if (txt.indexOf(FILE_PREFIX, i) == i)
                 {
-                    action = KAAlarm::FILE;
+                    action = KAAlarm::Action::File;
                     i += FILE_PREFIX.length();
                 }
                 else if (txt.indexOf(COMMAND_PREFIX, i) == i)
                 {
-                    action = KAAlarm::COMMAND;
+                    action = KAAlarm::Action::Command;
                     i += COMMAND_PREFIX.length();
                 }
                 else
@@ -5217,17 +5217,17 @@ bool KAEvent::convertKCalEvents(const Calendar::Ptr& calendar, int calendarVersi
                 QStringList types;
                 switch (action)
                 {
-                    case KAAlarm::FILE:
+                    case KAAlarm::Action::File:
                         types += KAEventPrivate::FILE_TYPE;
-                        Q_FALLTHROUGH(); // fall through to MESSAGE
-                    case KAAlarm::MESSAGE:
+                        Q_FALLTHROUGH(); // fall through to Message
+                    case KAAlarm::Action::Message:
                         alarm->setDisplayAlarm(altxt);
                         break;
-                    case KAAlarm::COMMAND:
+                    case KAAlarm::Action::Command:
                         setProcedureAlarm(alarm, altxt);
                         break;
-                    case KAAlarm::EMAIL:     // email alarms were introduced in KAlarm 0.9
-                    case KAAlarm::AUDIO:     // audio alarms (with no display) were introduced in KAlarm 2.3.2
+                    case KAAlarm::Action::Email:     // email alarms were introduced in KAlarm 0.9
+                    case KAAlarm::Action::Audio:     // audio alarms (with no display) were introduced in KAlarm 2.3.2
                         break;
                 }
                 if (atLogin)
@@ -5875,7 +5875,7 @@ KAAlarm::Action KAAlarm::action() const
 
 bool KAAlarm::isValid() const
 {
-    return d->mType != INVALID_ALARM;
+    return d->mType != Type::Invalid;
 }
 
 KAAlarm::Type KAAlarm::type() const
@@ -5907,7 +5907,7 @@ bool KAAlarm::repeatAtLogin() const
 
 bool KAAlarm::isReminder() const
 {
-    return d->mType == REMINDER_ALARM;
+    return d->mType == Type::Reminder;
 }
 
 bool KAAlarm::deferred() const
@@ -5940,13 +5940,13 @@ const char* KAAlarm::debugType(Type type)
 {
     switch (type)
     {
-        case MAIN_ALARM:               return "MAIN";
-        case REMINDER_ALARM:           return "REMINDER";
-        case DEFERRED_ALARM:           return "DEFERRED";
-        case DEFERRED_REMINDER_ALARM:  return "DEFERRED_REMINDER";
-        case AT_LOGIN_ALARM:           return "LOGIN";
-        case DISPLAYING_ALARM:         return "DISPLAYING";
-        default:                       return "INVALID";
+        case Type::Main:              return "MAIN";
+        case Type::Reminder:          return "REMINDER";
+        case Type::Deferred:          return "DEFERRED";
+        case Type::DeferredReminder:  return "DEFERRED_REMINDER";
+        case Type::AtLogin:           return "LOGIN";
+        case Type::Displaying:        return "DISPLAYING";
+        default:                      return "INVALID";
     }
 }
 #endif

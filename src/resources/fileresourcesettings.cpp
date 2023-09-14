@@ -1,7 +1,7 @@
 /*
  *  fileresourcesettings.cpp  -  settings for calendar resource accessed via file system
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2020 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2020-2023 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -132,16 +132,16 @@ bool FileResourceSettings::readConfig()
             int i = cmdErr.indexOf(CMD_ERROR_SEPARATOR);
             if (i > 0  &&  i < cmdErr.size() - 1)
             {
-                KAEvent::CmdErrType type;
+                KAEvent::CmdErr type;
                 const QString typeStr = cmdErr.mid(i + 1);
                 if (typeStr == CMD_ERROR_VALUE)
-                    type = KAEvent::CMD_ERROR;
+                    type = KAEvent::CmdErr::Fail;
                 else if (typeStr == CMD_ERROR_PRE_VALUE)
-                    type = KAEvent::CMD_ERROR_PRE;
+                    type = KAEvent::CmdErr::Pre;
                 else if (typeStr == CMD_ERROR_POST_VALUE)
-                    type = KAEvent::CMD_ERROR_POST;
+                    type = KAEvent::CmdErr::Post;
                 else if (typeStr == CMD_ERROR_PRE_POST_VALUE)
-                    type = KAEvent::CMD_ERROR_PRE_POST;
+                    type = KAEvent::CmdErr::PrePost;
                 else
                     continue;
                 mCommandErrors[cmdErr.left(i)] = type;
@@ -471,12 +471,12 @@ void FileResourceSettings::setHash(const QByteArray& hash, bool sync)
     }
 }
 
-QHash<QString, KAEvent::CmdErrType> FileResourceSettings::commandErrors() const
+QHash<QString, KAEvent::CmdErr> FileResourceSettings::commandErrors() const
 {
     return mCommandErrors;
 }
 
-void FileResourceSettings::setCommandErrors(const QHash<QString, KAEvent::CmdErrType>& cmdErrors, bool sync)
+void FileResourceSettings::setCommandErrors(const QHash<QString, KAEvent::CmdErr>& cmdErrors, bool sync)
 {
     if (cmdErrors != mCommandErrors)
     {
@@ -616,10 +616,10 @@ void FileResourceSettings::writeConfigCommandErrors(bool sync)
         QString type;
         switch (it.value())
         {
-            case KAEvent::CMD_ERROR:          type = CMD_ERROR_VALUE;           break;
-            case KAEvent::CMD_ERROR_PRE:      type = CMD_ERROR_PRE_VALUE;       break;
-            case KAEvent::CMD_ERROR_POST:     type = CMD_ERROR_POST_VALUE;      break;
-            case KAEvent::CMD_ERROR_PRE_POST: type = CMD_ERROR_PRE_POST_VALUE;  break;
+            case KAEvent::CmdErr::Fail:     type = CMD_ERROR_VALUE;           break;
+            case KAEvent::CmdErr::Pre:      type = CMD_ERROR_PRE_VALUE;       break;
+            case KAEvent::CmdErr::Post:     type = CMD_ERROR_POST_VALUE;      break;
+            case KAEvent::CmdErr::PrePost:  type = CMD_ERROR_PRE_POST_VALUE;  break;
             default:
                 continue;
         }
