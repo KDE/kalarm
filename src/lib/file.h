@@ -1,7 +1,7 @@
 /*
  *  lib/file.h  -  functions to handle files
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2005-2021 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2005-2023 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -18,14 +18,14 @@ namespace File
 {
 
 /** Return codes from fileType() */
-enum FileType { Unknown, TextPlain, TextFormatted, TextApplication, Image };
+enum class Type { Unknown, TextPlain, TextFormatted, TextApplication, Image };
 
 /** Check from its mime type whether a file appears to be a text or image file.
  *  If a text file, its type is distinguished.
  */
-FileType fileType(const QMimeType& mimetype);
+Type fileType(const QMimeType& mimetype);
 
-enum class FileErr
+enum class Error
 {
     None = 0,
     Blank,           // generic blank error
@@ -40,9 +40,9 @@ enum class FileErr
  *  @param url            Updated to the file's URL.
  *  @param messageParent  Parent widget for error messages etc.
  */
-FileErr checkFileExists(QString& filename, QUrl& url, QWidget* messageParent);
+Error checkFileExists(QString& filename, QUrl& url, QWidget* messageParent);
 
-bool showFileErrMessage(const QString& filename, FileErr, FileErr blankError, QWidget* errmsgParent);
+bool showFileErrMessage(const QString& filename, Error, Error blankError, QWidget* errmsgParent);
 
 /** If a url string is a local file, strip off the 'file:/' prefix. */
 QString pathOrUrl(const QString& url);

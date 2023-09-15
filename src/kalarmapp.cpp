@@ -173,7 +173,7 @@ void KAlarmApp::initialise()
     mKOrganizerEnabled = !QStandardPaths::findExecutable(korg).isEmpty();
     if (!mKOrganizerEnabled) { qCDebug(KALARM_LOG) << "KAlarmApp: KOrganizer options disabled (KOrganizer not found)"; }
     // Check if the window manager can't handle keyboard focus transfer between windows
-    mWindowFocusBroken = (Desktop::currentIdentity() == Desktop::Unity);
+    mWindowFocusBroken = (Desktop::currentIdentity() == Desktop::Type::Unity);
     if (mWindowFocusBroken) { qCDebug(KALARM_LOG) << "KAlarmApp: Window keyboard focus broken"; }
 
     Resources* resources = Resources::instance();
@@ -2663,7 +2663,7 @@ void KAlarmApp::slotCommandExited(ShellProcess* proc)
             // Found the command. Check its exit status.
             bool executeAlarm = pd->preAction();
             const ShellProcess::Status status = proc->status();
-            if (status == ShellProcess::SUCCESS  &&  !proc->exitCode())
+            if (status == ShellProcess::Status::Success  &&  !proc->exitCode())
             {
                 qCDebug(KALARM_LOG) << "KAlarmApp::slotCommandExited:" << pd->event->id() << ": SUCCESS";
                 clearEventCommandError(*pd->event, pd->preAction() ? KAEvent::CmdErr::Pre
@@ -2673,7 +2673,7 @@ void KAlarmApp::slotCommandExited(ShellProcess* proc)
             else
             {
                 QString errmsg = proc->errorMessage();
-                if (status == ShellProcess::SUCCESS  ||  status == ShellProcess::NOT_FOUND)
+                if (status == ShellProcess::Status::Success  ||  status == ShellProcess::Status::NotFound)
                     qCWarning(KALARM_LOG) << "KAlarmApp::slotCommandExited:" << pd->event->id() << ":" << errmsg << "exit status =" << status << ", code =" << proc->exitCode();
                 else
                     qCWarning(KALARM_LOG) << "KAlarmApp::slotCommandExited:" << pd->event->id() << ":" << errmsg << "exit status =" << status;
@@ -2769,7 +2769,7 @@ void KAlarmApp::commandErrorMsg(const ShellProcess* proc, const KAEvent& event, 
             errmsgs += proc->errorMessage();
             if (!(flags & ProcData::TEMP_FILE))
                 errmsgs += proc->command();
-            dontShowAgain += QString::number(proc->status());
+            dontShowAgain += QString::number(static_cast<int>(proc->status()));
         }
         MessageDisplay::showError(event, (alarm ? alarm->dateTime() : DateTime()), errmsgs, dontShowAgain);
     }

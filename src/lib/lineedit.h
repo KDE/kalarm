@@ -47,7 +47,7 @@ public:
      *               or vcard data (e.g. from KAddressBook). If multiple emails
      *               are dropped, only the first is used; the rest are ignored.
      */
-    enum Type { Text, Url, Emails };
+    enum class Type { Text, Url, Emails };
 
     /** Constructor.
      *  @param type The content type for the line edit.

@@ -1,7 +1,7 @@
 /*
  *  messagebox.h  -  enhanced KMessageBox class
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2004-2019 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2004-2023 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -25,27 +25,19 @@
 class KAMessageBox
 {
 public:
-    /** KAMessageBox types.
-     *  @li CONT_CANCEL_DEF_CONT - Continue/Cancel, with Continue as the default button.
-     *  @li CONT_CANCEL_DEF_CANCEL - Continue/Cancel, with Cancel as the default button.
-     *  @li YES_NO_DEF_NO - Yes/No, with No as the default button.
-     */
-    enum AskType {      // KAMessageBox types
-        CONT_CANCEL_DEF_CONT,    // Continue/Cancel, with default = Continue
-        CONT_CANCEL_DEF_CANCEL,  // Continue/Cancel, with default = Cancel
-        YES_NO_DEF_NO            // Yes/No, with default = No
-    };
     /** Gets the default button for the Continue/Cancel message box with the specified
      * "don't ask again" name.
      *  @param dontAskAgainName The identifier controlling whether the message box is suppressed.
      */
     static KMessageBox::ButtonCode getContinueDefault(const QString& dontAskAgainName);
+
     /** Sets the default button for the Continue/Cancel message box with the specified
      * "don't ask again" name.
      *  @param dontAskAgainName The identifier controlling whether the message box is suppressed.
      *  @param defaultButton The default button for the message box. Valid values are Continue or Cancel.
      */
     static void setContinueDefault(const QString& dontAskAgainName, KMessageBox::ButtonCode defaultButton);
+
     /** If there is no current setting for whether a non-Yes/No message box should be
      *  shown, sets it to @p defaultShow.
      *  If a Continue/Cancel message box has Cancel as the default button, either
@@ -54,6 +46,7 @@ public:
      *  @return true if @p defaultShow was written.
      */
     static bool setDefaultShouldBeShownContinue(const QString& dontShowAgainName, bool defaultShow);
+
     /** Returns whether a non-Yes/No message box should be shown.
      *  If the message box has Cancel as the default button, either setContinueDefault()
      *  or warningContinueCancel() must have been called previously to set this for the
@@ -61,12 +54,14 @@ public:
      *  @param dontShowAgainName The identifier controlling whether the message box is suppressed.
      */
     static bool shouldBeShownContinue(const QString& dontShowAgainName);
+
     /** Stores whether the Yes/No message box should or should not be shown again.
      *  @param dontShowAgainName The identifier controlling whether the message box is suppressed.
      *  @param dontShow If true, the message box will be suppressed and will return @p result.
      *  @param result The button code to return if the message box is suppressed.
      */
     static void saveDontShowAgainYesNo(const QString& dontShowAgainName, bool dontShow = true, KMessageBox::ButtonCode result = KMessageBox::ButtonCode::SecondaryAction);
+
     /** Stores whether a non-Yes/No message box should or should not be shown again.
      *  If the message box has Cancel as the default button, either setContinueDefault()
      *  or warningContinueCancel() must have been called previously to set this for the

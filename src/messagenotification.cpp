@@ -247,9 +247,9 @@ void MessageNotification::setUpDisplay()
                     // Display contents of file
                     switch (texts.fileType)
                     {
-                        case File::Image:
+                        case File::Type::Image:
                             break;   // can't display an image
-                        case File::TextFormatted:
+                        case File::Type::TextFormatted:
                         default:
                             mMessageText += texts.message;
                             break;

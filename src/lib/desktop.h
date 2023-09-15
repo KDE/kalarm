@@ -1,7 +1,7 @@
 /*
  *  desktop.h  -  desktop functions
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2008-2020 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2008-2023 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -15,7 +15,7 @@ namespace Desktop
 {
 
 /** Desktop identity, obtained from XDG_CURRENT_DESKTOP. */
-enum Type
+enum class Type
 {
     Kde,      //!< KDE (KDE 4 and Plasma both identify as "KDE")
     Unity,    //!< Unity

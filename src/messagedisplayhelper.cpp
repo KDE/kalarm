@@ -257,8 +257,8 @@ void MessageDisplayHelper::initTexts()
                         mTexts.fileType = File::fileType(mime);
                         switch (mTexts.fileType)
                         {
-                            case File::Image:
-                            case File::TextFormatted:
+                            case File::Type::Image:
+                            case File::Type::TextFormatted:
                                 delete mTempFile;
                                 mTempFile = new QTemporaryFile;
                                 mTempFile->open();
@@ -270,11 +270,11 @@ void MessageDisplayHelper::initTexts()
 
                         switch (mTexts.fileType)
                         {
-                            case File::Image:
+                            case File::Type::Image:
                                 mTexts.message = QLatin1String(R"(<div align="center"><img src=")") + mTempFile->fileName() + QLatin1String(R"("></div>)");
                                 mTempFile->close();   // keep the file available to be displayed
                                 break;
-                            case File::TextFormatted:
+                            case File::Type::TextFormatted:
                             {
                                 QTextBrowser browser;
                                 browser.setSource(QUrl::fromLocalFile(mTempFile->fileName()));
@@ -540,15 +540,15 @@ void MessageDisplayHelper::commandCompleted(ShellProcess::Status status)
     bool failed;
     switch (status)
     {
-        case ShellProcess::SUCCESS:
-        case ShellProcess::DIED:
+        case ShellProcess::Status::Success:
+        case ShellProcess::Status::Died:
             failed = false;
             break;
 
-        case ShellProcess::UNAUTHORISED:
-        case ShellProcess::NOT_FOUND:
-        case ShellProcess::START_FAIL:
-        case ShellProcess::INACTIVE:
+        case ShellProcess::Status::Unauthorised:
+        case ShellProcess::Status::NotFound:
+        case ShellProcess::Status::StartFail:
+        case ShellProcess::Status::Inactive:
         default:
             failed = true;
             break;

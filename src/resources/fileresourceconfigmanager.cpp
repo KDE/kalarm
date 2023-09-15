@@ -1,7 +1,7 @@
 /*
  *  fileresourceconfigmanager.cpp  -  config manager for resources accessed via file system
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2020-2022 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2020-2023 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -209,10 +209,10 @@ bool FileResourceConfigManager::removeResource(Resource& resource)
 /******************************************************************************
 * Return the available file system resource types handled by the manager.
 */
-QList<ResourceType::StorageType> FileResourceConfigManager::storageTypes()
+QList<ResourceType::Storage> FileResourceConfigManager::storageTypes()
 {
-    return { ResourceType::File
-//           , ResourceType::Directory   // not currently intended to be implemented
+    return { ResourceType::Storage::File
+//           , ResourceType::Storage::Directory   // not currently intended to be implemented
            };
 }
 

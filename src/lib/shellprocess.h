@@ -1,7 +1,7 @@
 /*
  *  shellprocess.h  -  execute a process through the shell
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2004-2022 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2004-2023 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -13,7 +13,7 @@
 #include <KProcess>
 #include <QQueue>
 #include <QByteArray>
-
+#include <QDebug>
 
 /**
  *  @short Enhanced KProcess to run a shell command.
@@ -41,15 +41,15 @@ class ShellProcess : public KProcess
     Q_OBJECT
 public:
     /** Current status of the shell process. */
-    enum Status
+    enum class Status
     {
-        INACTIVE,     //!< start() has not yet been called to run the command
-        RUNNING,      //!< command is currently running
-        SUCCESS,      //!< command appears to have exited successfully
-        UNAUTHORISED, //!< shell commands are not authorised for this user
-        DIED,         //!< command didn't exit cleanly, i.e. was killed or died
-        NOT_FOUND,    //!< command either not found or not executable
-        START_FAIL    //!< command couldn't be started for other reasons
+        Inactive,     //!< start() has not yet been called to run the command
+        Running,      //!< command is currently running
+        Success,      //!< command appears to have exited successfully
+        Unauthorised, //!< shell commands are not authorised for this user
+        Died,         //!< command didn't exit cleanly, i.e. was killed or died
+        NotFound,     //!< command either not found or not executable
+        StartFail     //!< command couldn't be started for other reasons
     };
 
     /** Constructor.
@@ -71,7 +71,7 @@ public:
     /** Returns whether the command was run successfully.
      *  @return True if the command has been run and appears to have exited successfully.
      */
-    bool            normalExit() const   { return mStatus == SUCCESS; }
+    bool            normalExit() const   { return mStatus == Status::Success; }
 
     /** Returns the command configured to be run. */
     const QString&  command() const      { return mCommand; }
@@ -142,8 +142,11 @@ private:
     QQueue<QByteArray> mStdinQueue;        // queued strings to send to STDIN
     qint64             mStdinBytes {0};    // bytes still to be written from first queued string
     int                mExitCode;          // shell exit value (if mStatus == SUCCESS or NOT_FOUND)
-    Status             mStatus {INACTIVE}; // current execution status
+    Status             mStatus {Status::Inactive}; // current execution status
     bool               mStdinExit {false}; // exit once STDIN queue has been written
 };
+
+inline QDebug operator<<(QDebug s, ShellProcess::Status status)
+{ s << static_cast<int>(status); return s; }
 
 // vim: et sw=4:

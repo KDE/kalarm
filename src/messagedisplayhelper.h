@@ -63,7 +63,7 @@ public:
         QString message;          // the alarm message
         QString remainingTime;    // if advance reminder, the remaining time until the actual alarm
         QString errorEmail[4];    // if email alarm error message, the 'To' and 'Subject' contents
-        File::FileType fileType;  // if message is a file's contents, the file type
+        File::Type fileType;      // if message is a file's contents, the file type
         bool    newLine {false};  // 'message' has a newline stripped from the end
     };
 

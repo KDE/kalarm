@@ -1,7 +1,7 @@
 /*
  *  spinbox.cpp  -  spin box with read-only option and shift-click step value
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2002-2022 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2002-2023 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -63,7 +63,7 @@ void SpinBox::setReadOnly(bool ro)
         mReadOnly = ro;
         lineEdit()->setReadOnly(ro);
         if (ro)
-            setShiftStepping(NoModifier, mCurrentButton);
+            setShiftStepping(Modifier::None, mCurrentButton);
     }
 }
 
@@ -89,14 +89,14 @@ void SpinBox::setMaximum(int val)
 void SpinBox::setSingleStep(int step)
 {
     mLineStep = step;
-    if (mMouseKey == NoModifier)
+    if (mMouseKey == Modifier::None)
         QSpinBox::setSingleStep(step);
 }
 
 void SpinBox::setSingleShiftStep(int step)
 {
     mLineShiftStep = step;
-    if (mMouseKey == ShiftModifier)
+    if (mMouseKey == Modifier::Shift)
         QSpinBox::setSingleStep(step);
 }
 
@@ -106,7 +106,7 @@ void SpinBox::setSingleControlStep(int step, bool mod)
     {
         mLineControlStep = step;
         mModControlStep  = step && mod;
-        if (mMouseKey == ControlModifier)
+        if (mMouseKey == Modifier::Control)
             QSpinBox::setSingleStep(mLineControlStep ? mLineControlStep : mLineStep);
         if (mLineControlStep  &&  !mControlStyle)
             mControlStyle = new SpinBoxStyle;
@@ -216,8 +216,8 @@ bool SpinBox::eventFilter(QObject* obj, QEvent* e)
                 return true;    // discard up/down arrow keys
             auto* ie = (QInputEvent*)e;
             const Modifier modifier = getModifier(ie->modifiers());
-            const int lineStep = (modifier == ShiftModifier) ? mLineShiftStep : (modifier == ControlModifier && mLineControlStep) ? mLineControlStep : mLineStep;
-            if (modifier == ShiftModifier  ||  (modifier == ControlModifier && mModControlStep))
+            const int lineStep = (modifier == Modifier::Shift) ? mLineShiftStep : (modifier == Modifier::Control && mLineControlStep) ? mLineControlStep : mLineStep;
+            if (modifier == Modifier::Shift  ||  (modifier == Modifier::Control && mModControlStep))
             {
                 // Shift/control stepping, to a multiple of the step
                 const int val = value();
@@ -293,8 +293,8 @@ void SpinBox::wheelEvent(QWheelEvent* e)
 
 void SpinBox::mouseReleaseEvent(QMouseEvent* e)
 {
-    if (e->button() == Qt::LeftButton  &&  mMouseKey != NoModifier)
-        setShiftStepping(NoModifier, mCurrentButton);    // cancel shift stepping
+    if (e->button() == Qt::LeftButton  &&  mMouseKey != Modifier::None)
+        setShiftStepping(Modifier::None, mCurrentButton);    // cancel shift stepping
     QSpinBox::mouseReleaseEvent(e);
 }
 
@@ -363,10 +363,10 @@ bool SpinBox::keyEvent(QKeyEvent* e)
 bool SpinBox::setShiftStepping(Modifier modifier, int currentButton)
 {
     if (currentButton == NO_BUTTON)
-        modifier = NoModifier;
-    if (modifier == ControlModifier  &&  !mLineControlStep)
-        modifier = NoModifier;    // Qt automatically handles Control key modifier
-    if (modifier != NoModifier  &&  modifier != mMouseKey)
+        modifier = Modifier::None;
+    if (modifier == Modifier::Control  &&  !mLineControlStep)
+        modifier = Modifier::None;    // Qt automatically handles Control key modifier
+    if (modifier != Modifier::None  &&  modifier != mMouseKey)
     {
         /* The value is to be stepped to a multiple of the shift or control increment.
          * Adjust the value so that after the spin widget steps it, it will be correct.
@@ -374,9 +374,9 @@ bool SpinBox::setShiftStepping(Modifier modifier, int currentButton)
          * step by the shift amount.
          */
         const int val = value();
-        const int lineStep = (modifier == ShiftModifier) ? mLineShiftStep : mLineControlStep;
+        const int lineStep = (modifier == Modifier::Shift) ? mLineShiftStep : mLineControlStep;
         const int step = (currentButton == UP) ? lineStep : (currentButton == DOWN) ? -lineStep : 0;
-        const int adjust = (modifier == ShiftModifier || mModControlStep) ? shiftStepAdjustment(val, step) : 0;
+        const int adjust = (modifier == Modifier::Shift || mModControlStep) ? shiftStepAdjustment(val, step) : 0;
         mMouseKey = modifier;
         if (adjust)
         {
@@ -431,14 +431,14 @@ bool SpinBox::setShiftStepping(Modifier modifier, int currentButton)
         }
         QSpinBox::setSingleStep(lineStep);
     }
-    else if (modifier == NoModifier  &&  mMouseKey != NoModifier)
+    else if (modifier == Modifier::None  &&  mMouseKey != Modifier::None)
     {
         // Reinstate to normal (non-shift) stepping
         QSpinBox::setSingleStep(mLineStep);
         QSpinBox::setMinimum(mMinValue);
         QSpinBox::setMaximum(mMaxValue);
         mShiftMinBound = mShiftMaxBound = false;
-        mMouseKey = NoModifier;
+        mMouseKey = Modifier::None;
     }
     return false;
 }
@@ -541,9 +541,9 @@ void SpinBox::initStyleOption(QStyleOptionSpinBox* so) const
 SpinBox::Modifier SpinBox::getModifier(Qt::KeyboardModifiers modifiers)
 {
     const int state = modifiers & (Qt::ShiftModifier | Qt::ControlModifier | Qt::AltModifier);
-    return (state == Qt::ShiftModifier) ? ShiftModifier
-         : (state == Qt::ControlModifier) ? ControlModifier
-         : NoModifier;
+    return (state == Qt::ShiftModifier) ? Modifier::Shift
+         : (state == Qt::ControlModifier) ? Modifier::Control
+         : Modifier::None;
 }
 
 

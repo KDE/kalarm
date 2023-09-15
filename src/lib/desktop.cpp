@@ -1,7 +1,7 @@
 /*
  *  desktop.cpp  -  desktop functions
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2008-2022 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2008-2023 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -33,9 +33,9 @@ QString currentIdentityName()
 Type currentIdentity()
 {
     const QString desktop = currentIdentityName();
-    if (desktop == QLatin1String("KDE"))    return Kde;
-    if (desktop == QLatin1String("Unity"))  return Unity;
-    return Other;
+    if (desktop == QLatin1String("KDE"))    return Type::Kde;
+    if (desktop == QLatin1String("Unity"))  return Type::Unity;
+    return Type::Other;
 }
 
 /******************************************************************************

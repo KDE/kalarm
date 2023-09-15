@@ -180,7 +180,7 @@ void EditDisplayAlarmDlg::type_init(QWidget* parent, QVBoxLayout* frameLayout)
     auto fileBoxHLayout = new QHBoxLayout(mFileBox);
     fileBoxHLayout->setContentsMargins(0, 0, 0, 0);
     fileBoxHLayout->setSpacing(0);
-    mFileMessageEdit = new LineEdit(LineEdit::Url, mFileBox);
+    mFileMessageEdit = new LineEdit(LineEdit::Type::Url, mFileBox);
     fileBoxHLayout->addWidget(mFileMessageEdit);
     mFileMessageEdit->setAcceptDrops(true);
     mFileMessageEdit->setWhatsThis(i18nc("@info:whatsthis", "Enter the name or URL of a text or image file to display."));
@@ -754,26 +754,26 @@ bool EditDisplayAlarmDlg::checkText(QString& result, bool showErrorMessage) cons
         {
             QString fileName = mFileMessageEdit->text().trimmed();
             QUrl url;
-            File::FileErr err = File::checkFileExists(fileName, url, MainWindow::mainMainWindow());
-            if (err == File::FileErr::None)
+            File::Error err = File::checkFileExists(fileName, url, MainWindow::mainMainWindow());
+            if (err == File::Error::None)
             {
                 KFileItem fi(url);
                 switch (File::fileType(fi.currentMimeType()))
                 {
-                    case File::TextFormatted:
-                    case File::TextPlain:
-                    case File::TextApplication:
-                    case File::Image:
+                    case File::Type::TextFormatted:
+                    case File::Type::TextPlain:
+                    case File::Type::TextApplication:
+                    case File::Type::Image:
                         break;
                     default:
-                        err = File::FileErr::NotTextImage;
+                        err = File::Error::NotTextImage;
                         break;
                 }
             }
-            if (err != File::FileErr::None  &&  showErrorMessage)
+            if (err != File::Error::None  &&  showErrorMessage)
             {
                 mFileMessageEdit->setFocus();
-                if (!File::showFileErrMessage(fileName, err, File::FileErr::BlankDisplay, const_cast<EditDisplayAlarmDlg*>(this)))
+                if (!File::showFileErrMessage(fileName, err, File::Error::BlankDisplay, const_cast<EditDisplayAlarmDlg*>(this)))
                     return false;
             }
             result = fileName;
@@ -868,7 +868,7 @@ void EditCommandAlarmDlg::type_init(QWidget* parent, QVBoxLayout* frameLayout)
     boxHLayout->setContentsMargins(0, 0, 0, 0);
     boxHLayout->setSpacing(0);
     (new QWidget(box))->setFixedWidth(mCmdExecInTerm->style()->pixelMetric(QStyle::PM_ExclusiveIndicatorWidth));   // indent the edit box
-    mCmdLogFileEdit = new LineEdit(LineEdit::Url, box);
+    mCmdLogFileEdit = new LineEdit(LineEdit::Type::Url, box);
     boxHLayout->addWidget(mCmdLogFileEdit);
     mCmdLogFileEdit->setAcceptDrops(true);
     mCmdLogFileEdit->setWhatsThis(i18nc("@info:whatsthis", "Enter the name or path of the log file."));
@@ -1184,7 +1184,7 @@ void EditEmailAlarmDlg::type_init(QWidget* parent, QVBoxLayout* frameLayout)
     QLabel* label = new QLabel(i18nc("@label:textbox Email addressee", "To:"), parent);
     grid->addWidget(label, 1, 0);
 
-    mEmailToEdit = new LineEdit(LineEdit::Emails, parent);
+    mEmailToEdit = new LineEdit(LineEdit::Type::Emails, parent);
     mEmailToEdit->setMinimumSize(mEmailToEdit->sizeHint());
     mEmailToEdit->setWhatsThis(i18nc("@info:whatsthis", "Enter the addresses of the email recipients. Separate multiple addresses by "
                                     "commas or semicolons."));
@@ -1828,7 +1828,7 @@ CommandEdit::CommandEdit(QWidget* parent)
     connect(mTypeScript, &CheckBox::toggled, this, &CommandEdit::changed);
     vlayout->addWidget(mTypeScript, 0, Qt::AlignLeft);
 
-    mCommandEdit = new LineEdit(LineEdit::Url, this);
+    mCommandEdit = new LineEdit(LineEdit::Type::Url, this);
     mCommandEdit->setWhatsThis(i18nc("@info:whatsthis", "Enter a shell command to execute."));
     connect(mCommandEdit, &LineEdit::textChanged, this, &CommandEdit::changed);
     vlayout->addWidget(mCommandEdit);

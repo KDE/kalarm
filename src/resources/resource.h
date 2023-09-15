@@ -1,7 +1,7 @@
 /*
  *  resource.h  -  generic class containing an alarm calendar resource
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2019-2021 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2019-2023 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -22,11 +22,11 @@ class Resource
 {
 public:
     /** The type of storage used by a resource. */
-    enum StorageType
+    enum class Storage
     {
-        NoStorage  = ResourceType::NoStorage,
-        File       = ResourceType::File,
-        Directory  = ResourceType::Directory
+        None       = static_cast<int>(ResourceType::Storage::None),
+        File       = static_cast<int>(ResourceType::Storage::File),
+        Directory  = static_cast<int>(ResourceType::Storage::Directory)
     };
 
     Resource();
@@ -69,7 +69,7 @@ public:
     ResourceId displayId() const;
 
     /** Return the type of storage used by the resource. */
-    StorageType storageType() const;
+    Storage storageType() const;
 
     /** Return the type of the resource (file, remote file, etc.)
      *  for display purposes.
@@ -81,7 +81,7 @@ public:
     /** Return the type description of a resource (file, remote file, etc.)
      *  for display purposes. This is equivalent to storageTypeString(true).
      */
-    static QString storageTypeString(ResourceType::StorageType);
+    static QString storageTypeString(ResourceType::Storage);
 
     /** Return the location(s) of the resource (URL, file path, etc.) */
     QUrl location() const;

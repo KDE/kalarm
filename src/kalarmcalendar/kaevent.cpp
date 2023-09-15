@@ -79,17 +79,17 @@ public:
         DISPLAYING_     = 0x1000000,
         READ_ONLY_FLAGS = 0x1E00000  //!< mask for all read-only internal values
     };
-    enum ReminderType   // current active state of reminder
+    enum class ReminderType   // current active state of reminder
     {
-        NO_REMINDER,       // reminder is not due
-        ACTIVE_REMINDER,   // reminder is due
-        HIDDEN_REMINDER    // reminder-after is disabled due to main alarm being deferred past it
+        None,     // reminder is not due
+        Active,   // reminder is due
+        Hidden    // reminder-after is disabled due to main alarm being deferred past it
     };
-    enum DeferType
+    enum class DeferType
     {
-        NO_DEFERRAL = 0,   // there is no deferred alarm
-        NORMAL_DEFERRAL,   // the main alarm, a recurrence or a repeat is deferred
-        REMINDER_DEFERRAL  // a reminder alarm is deferred
+        None = 0,   // there is no deferred alarm
+        Normal,     // the main alarm, a recurrence or a repeat is deferred
+        Reminder    // a reminder alarm is deferred
     };
     // Alarm types.
     // This uses the same scheme as KAAlarm::Type, with some extra values.
@@ -256,7 +256,7 @@ public:
     int                mDisplayingFlags;   // type of alarm which is currently being displayed (for display alarm)
     int                mReminderMinutes{0};// how long in advance reminder is to be, or 0 if none (<0 for reminder AFTER the alarm)
     DateTime           mReminderAfterTime; // if mReminderActive true, time to trigger reminder AFTER the main alarm, or invalid if not pending
-    ReminderType       mReminderActive{NO_REMINDER}; // whether a reminder is due (before next, or after last, main alarm/recurrence)
+    ReminderType       mReminderActive{ReminderType::None}; // whether a reminder is due (before next, or after last, main alarm/recurrence)
     int                mDeferDefaultMinutes{0}; // default number of minutes for deferral dialog, or 0 to select time control
     bool               mDeferDefaultDateOnly{false}; // select date-only by default in deferral dialog
     int                mRevision{0};           // SEQUENCE: revision number of the original alarm, or 0
@@ -264,7 +264,7 @@ public:
     Repetition         mRepetition;            // sub-repetition count and interval
     int                mNextRepeat{0};         // repetition count of next due sub-repetition
     int                mAlarmCount{0};         // number of alarms: count of !mMainExpired, mRepeatAtLogin, mDeferral, mReminderActive, mDisplaying
-    DeferType          mDeferral{NO_DEFERRAL}; // whether the alarm is an extra deferred/deferred-reminder alarm
+    DeferType          mDeferral{DeferType::None}; // whether the alarm is an extra deferred/deferred-reminder alarm
     KAEvent::EmailId   mEmailId{-1};           // if email text, message's Akonadi item ID
     int                mTemplateAfterTime{-1}; // time not specified: use n minutes after default time, or -1 (applies to templates only)
     QColor             mBgColour;              // background colour of alarm message
@@ -466,15 +466,15 @@ static QString reminderToString(int minutes);
 
 inline void KAEventPrivate::activate_reminder(bool activate)
 {
-    if (activate  &&  mReminderActive != ACTIVE_REMINDER  &&  mReminderMinutes)
+    if (activate  &&  mReminderActive != ReminderType::Active  &&  mReminderMinutes)
     {
-        if (mReminderActive == NO_REMINDER)
+        if (mReminderActive == ReminderType::None)
             ++mAlarmCount;
-        mReminderActive = ACTIVE_REMINDER;
+        mReminderActive = ReminderType::Active;
     }
-    else if (!activate  &&  mReminderActive != NO_REMINDER)
+    else if (!activate  &&  mReminderActive != ReminderType::None)
     {
-        mReminderActive = NO_REMINDER;
+        mReminderActive = ReminderType::None;
         mReminderAfterTime = DateTime();
         --mAlarmCount;
     }
@@ -531,7 +531,7 @@ KAEventPrivate::KAEventPrivate(const KADateTime& dateTime, const QString& name, 
     mText                   = (mActionSubType == KAEvent::SubAction::Command) ? text.trimmed()
                             : (mActionSubType == KAEvent::SubAction::Audio)   ? QString() : text;
     mAudioFile              = (mActionSubType == KAEvent::SubAction::Audio) ? text : QString();
-    set_deferral((flags & DEFERRAL) ? NORMAL_DEFERRAL : NO_DEFERRAL);
+    set_deferral((flags & DEFERRAL) ? DeferType::Normal : DeferType::None);
     mRepeatAtLogin          = flags & KAEvent::REPEAT_AT_LOGIN;
     mConfirmAck             = flags & KAEvent::CONFIRM_ACK;
     mUseDefaultFont         = flags & KAEvent::DEFAULT_FONT;
@@ -806,19 +806,19 @@ KAEventPrivate::KAEventPrivate(const KCalendarCore::Event::Ptr& event)
                 // N.B. there can be a start offset but no valid date/time (e.g. in template)
                 if (data.alarm->startOffset().asSeconds() / 60)
                 {
-                    mReminderActive = ACTIVE_REMINDER;
+                    mReminderActive = ReminderType::Active;
                     if (mReminderMinutes < 0)
                     {
                         mReminderAfterTime = dateTime;   // the reminder is AFTER the main alarm
                         mReminderAfterTime.setDateOnly(dateOnly);
                         if (data.hiddenReminder)
-                            mReminderActive = HIDDEN_REMINDER;
+                            mReminderActive = ReminderType::Hidden;
                     }
                 }
                 break;
             case DEFERRED_REMINDER_ALARM:
             case DEFERRED_ALARM:
-                mDeferral = (data.type == DEFERRED_REMINDER_ALARM) ? REMINDER_DEFERRAL : NORMAL_DEFERRAL;
+                mDeferral = (data.type == DEFERRED_REMINDER_ALARM) ? DeferType::Reminder : DeferType::Normal;
                 if (data.timedDeferral)
                 {
                     // Don't use start-of-day time for applying timed deferral alarm offset
@@ -955,13 +955,13 @@ KAEventPrivate::KAEventPrivate(const KCalendarCore::Event::Ptr& event)
         if (mReminderMinutes > 0)
         {
             mReminderMinutes = 0;      // pre-alarm reminder not allowed for at-login alarm
-            mReminderActive  = NO_REMINDER;
+            mReminderActive  = ReminderType::None;
         }
         setRepeatAtLoginTrue(false);   // clear other incompatible statuses
     }
 
     // Adjust the alarm count if there is an active reminder alarm.
-    if (mReminderActive != NO_REMINDER)
+    if (mReminderActive != ReminderType::None)
         ++mAlarmCount;
 
     if (mMainExpired  &&  !deferralOffset.isNull()  &&  checkRecur() != KARecurrence::NO_RECUR)
@@ -978,7 +978,7 @@ KAEventPrivate::KAEventPrivate(const KCalendarCore::Event::Ptr& event)
         else
             mDeferralTime = DateTime(deferralOffset.end(dt.effectiveDateTime()));
     }
-    if (mDeferral != NO_DEFERRAL)
+    if (mDeferral != DeferType::None)
     {
         if (setDeferralTime)
             mNextMainDateTime = mDeferralTime;
@@ -1290,10 +1290,10 @@ bool KAEventPrivate::updateKCalEvent(const Event::Ptr& ev, KAEvent::UidAction ui
         }
     }
 
-    if (mReminderMinutes  && (mReminderActive != NO_REMINDER || archived))
+    if (mReminderMinutes  && (mReminderActive != ReminderType::None || archived))
     {
         int startOffset;
-        if (mReminderMinutes < 0  &&  mReminderActive != NO_REMINDER)
+        if (mReminderMinutes < 0  &&  mReminderActive != ReminderType::None)
         {
             // A reminder AFTER the main alarm is active or disabled
             startOffset = nextDateTime.calendarKDateTime().secsTo(mReminderAfterTime.calendarKDateTime());
@@ -1305,13 +1305,13 @@ bool KAEventPrivate::updateKCalEvent(const Event::Ptr& ev, KAEvent::UidAction ui
         }
         initKCalAlarm(ev, startOffset, QStringList(REMINDER_TYPE));
         // Don't set ancillary time if the reminder AFTER is hidden by a deferral
-        if (!ancillaryType  && (mReminderActive == ACTIVE_REMINDER || archived))
+        if (!ancillaryType  && (mReminderActive == ReminderType::Active || archived))
         {
             ancillaryOffset = startOffset;
             ancillaryType = 2;
         }
     }
-    if (mDeferral != NO_DEFERRAL)
+    if (mDeferral != DeferType::None)
     {
         int startOffset;
         QStringList list;
@@ -1325,7 +1325,7 @@ bool KAEventPrivate::updateKCalEvent(const Event::Ptr& ev, KAEvent::UidAction ui
             startOffset = nextDateTime.calendarKDateTime().secsTo(mDeferralTime.calendarKDateTime());
             list += TIME_DEFERRAL_TYPE;
         }
-        if (mDeferral == REMINDER_DEFERRAL)
+        if (mDeferral == DeferType::Reminder)
             list += REMINDER_TYPE;
         initKCalAlarm(ev, startOffset, list);
         if (!ancillaryType  &&  mDeferralTime.isValid())
@@ -1455,7 +1455,7 @@ Alarm::Ptr KAEventPrivate::initKCalAlarm(const KCalendarCore::Event::Ptr& event,
         case INVALID_ALARM:
         {
             if (types == QStringList(REMINDER_TYPE)
-            &&  mReminderMinutes < 0  &&  mReminderActive == HIDDEN_REMINDER)
+            &&  mReminderMinutes < 0  &&  mReminderActive == ReminderType::Hidden)
             {
                 // It's a reminder AFTER the alarm which is currently disabled
                 // due to the main alarm being deferred past it.
@@ -2079,16 +2079,16 @@ void KAEventPrivate::setReminder(int minutes, bool onceOnly)
 {
     if (minutes > 0  &&  mRepeatAtLogin)
         minutes = 0;
-    if (minutes != mReminderMinutes  || (minutes && mReminderActive != ACTIVE_REMINDER))
+    if (minutes != mReminderMinutes  || (minutes && mReminderActive != ReminderType::Active))
     {
         const ReminderType oldReminderActive = mReminderActive;
         mReminderMinutes   = minutes;
-        mReminderActive    = minutes > 0 ? ACTIVE_REMINDER : NO_REMINDER;
+        mReminderActive    = minutes > 0 ? ReminderType::Active : ReminderType::None;
         mReminderOnceOnly  = onceOnly;
         mReminderAfterTime = DateTime();
-        if (mReminderActive != NO_REMINDER  &&  oldReminderActive == NO_REMINDER)
+        if (mReminderActive != ReminderType::None  &&  oldReminderActive == ReminderType::None)
             ++mAlarmCount;
-        else if (mReminderActive == NO_REMINDER  &&  oldReminderActive != NO_REMINDER)
+        else if (mReminderActive == ReminderType::None  &&  oldReminderActive != ReminderType::None)
             --mAlarmCount;
         mTriggerChanged = true;
     }
@@ -2105,7 +2105,7 @@ void KAEvent::activateReminderAfter(const DateTime& mainAlarmTime)
 
 void KAEventPrivate::activateReminderAfter(const DateTime& mainAlarmTime)
 {
-    if (mReminderMinutes >= 0  ||  mReminderActive == ACTIVE_REMINDER  ||  !mainAlarmTime.isValid())
+    if (mReminderMinutes >= 0  ||  mReminderActive == ReminderType::Active  ||  !mainAlarmTime.isValid())
         return;
     // There is a reminder AFTER the main alarm.
     if (checkRecur() != KARecurrence::NO_RECUR)
@@ -2143,7 +2143,7 @@ int KAEvent::reminderMinutes() const
 
 bool KAEvent::reminderActive() const
 {
-    return d->mReminderActive == KAEventPrivate::ACTIVE_REMINDER;
+    return d->mReminderActive == KAEventPrivate::ReminderType::Active;
 }
 
 bool KAEvent::reminderOnceOnly() const
@@ -2153,7 +2153,7 @@ bool KAEvent::reminderOnceOnly() const
 
 bool KAEvent::reminderDeferral() const
 {
-    return d->mDeferral == KAEventPrivate::REMINDER_DEFERRAL;
+    return d->mDeferral == KAEventPrivate::DeferType::Reminder;
 }
 
 /******************************************************************************
@@ -2184,10 +2184,10 @@ void KAEventPrivate::defer(const DateTime& dateTime, bool reminder, bool adjustR
                 // There's a reminder BEFORE the main alarm
                 if (dateTime < mNextMainDateTime.effectiveKDateTime())
                     deferReminder = true;
-                else if (mReminderActive == ACTIVE_REMINDER  ||  mDeferral == REMINDER_DEFERRAL)
+                else if (mReminderActive == ReminderType::Active  ||  mDeferral == DeferType::Reminder)
                 {
                     // Deferring past the main alarm time, so adjust any existing deferral
-                    set_deferral(NO_DEFERRAL);
+                    set_deferral(DeferType::None);
                     mTriggerChanged = true;
                 }
             }
@@ -2195,22 +2195,22 @@ void KAEventPrivate::defer(const DateTime& dateTime, bool reminder, bool adjustR
                 deferReminder = true;    // deferring a reminder AFTER the main alarm
             if (deferReminder)
             {
-                set_deferral(REMINDER_DEFERRAL);   // defer reminder alarm
+                set_deferral(DeferType::Reminder);   // defer reminder alarm
                 mDeferralTime = dateTime;
                 mTriggerChanged = true;
             }
-            if (mReminderActive == ACTIVE_REMINDER)
+            if (mReminderActive == ReminderType::Active)
             {
                 activate_reminder(false);
                 mTriggerChanged = true;
             }
         }
-        if (mDeferral != REMINDER_DEFERRAL)
+        if (mDeferral != DeferType::Reminder)
         {
             // We're deferring the main alarm.
             // Main alarm has now expired.
             mNextMainDateTime = mDeferralTime = dateTime;
-            set_deferral(NORMAL_DEFERRAL);
+            set_deferral(DeferType::Normal);
             mTriggerChanged = true;
             checkReminderAfter = true;
             if (!mMainExpired)
@@ -2235,11 +2235,11 @@ void KAEventPrivate::defer(const DateTime& dateTime, bool reminder, bool adjustR
         {
             // Trying to defer it past the next main alarm (regardless of whether
             // the reminder triggered before or after the main alarm).
-            set_deferral(NO_DEFERRAL);    // (error)
+            set_deferral(DeferType::None);    // (error)
         }
         else
         {
-            set_deferral(REMINDER_DEFERRAL);
+            set_deferral(DeferType::Reminder);
             mDeferralTime = dateTime;
             checkRepetition = true;
         }
@@ -2249,8 +2249,8 @@ void KAEventPrivate::defer(const DateTime& dateTime, bool reminder, bool adjustR
     {
         // Deferring a recurring alarm
         mDeferralTime = dateTime;
-        if (mDeferral == NO_DEFERRAL)
-            set_deferral(NORMAL_DEFERRAL);
+        if (mDeferral == DeferType::None)
+            set_deferral(DeferType::Normal);
         mTriggerChanged = true;
         checkReminderAfter = true;
         if (adjustRecurrence)
@@ -2272,11 +2272,11 @@ void KAEventPrivate::defer(const DateTime& dateTime, bool reminder, bool adjustR
         else
             checkRepetition = true;
     }
-    if (checkReminderAfter  &&  mReminderMinutes < 0  &&  mReminderActive != NO_REMINDER)
+    if (checkReminderAfter  &&  mReminderMinutes < 0  &&  mReminderActive != ReminderType::None)
     {
         // Enable/disable the active reminder AFTER the main alarm,
         // depending on whether the deferral is before or after the reminder.
-        mReminderActive = (mDeferralTime < mReminderAfterTime) ? ACTIVE_REMINDER : HIDDEN_REMINDER;
+        mReminderActive = (mDeferralTime < mReminderAfterTime) ? ReminderType::Active : ReminderType::Hidden;
     }
     if (checkRepetition)
         setNextRepetition = (mRepetition  &&  mDeferralTime < mainEndRepeatTime());
@@ -2303,10 +2303,10 @@ void KAEvent::cancelDefer()
 
 void KAEventPrivate::cancelDefer()
 {
-    if (mDeferral != NO_DEFERRAL)
+    if (mDeferral != DeferType::None)
     {
         mDeferralTime = DateTime();
-        set_deferral(NO_DEFERRAL);
+        set_deferral(DeferType::None);
         mTriggerChanged = true;
     }
 }
@@ -2319,7 +2319,7 @@ void KAEvent::setDeferDefaultMinutes(int minutes, bool dateOnly)
 
 bool KAEvent::deferred() const
 {
-    return d->mDeferral != KAEventPrivate::NO_DEFERRAL;
+    return d->mDeferral != KAEventPrivate::DeferType::None;
 }
 
 DateTime KAEvent::deferDateTime() const
@@ -2351,7 +2351,7 @@ DateTime KAEventPrivate::deferralLimit(KAEvent::DeferLimit* limitType) const
             ltype = KAEvent::DeferLimit::Repetition;
         else if (type == KAEvent::OccurType::None)
             ltype = KAEvent::DeferLimit::None;
-        else if (mReminderActive == ACTIVE_REMINDER  &&  mReminderMinutes > 0
+        else if (mReminderActive == ReminderType::Active  &&  mReminderMinutes > 0
              &&  (now < (reminderTime = endTime.addMins(-mReminderMinutes))))
         {
             endTime = reminderTime;
@@ -2456,7 +2456,7 @@ DateTime KAEvent::nextTrigger(Trigger type) const
         case Trigger::Work:     return d->mMainWorkTrigger;
         case Trigger::Display:
         {
-            const bool reminderAfter = d->mMainExpired && d->mReminderActive && d->mReminderMinutes < 0;
+            const bool reminderAfter = d->mMainExpired && d->mReminderActive != KAEventPrivate::ReminderType::None && d->mReminderMinutes < 0;
             return d->checkRecur() != KARecurrence::NO_RECUR  && (d->mWorkTimeOnly || d->mExcludeHolidays)
                    ? (reminderAfter ? d->mAllWorkTrigger : d->mMainWorkTrigger)
                    : (reminderAfter ? d->mAllTrigger : d->mMainTrigger);
@@ -3138,14 +3138,14 @@ KAEvent::OccurType KAEventPrivate::setNextOccurrence(const KADateTime& preDateTi
         {
             // Need to reschedule the next trigger date/time
             mNextMainDateTime = afterPre;
-            if (mReminderMinutes > 0  && (mDeferral == REMINDER_DEFERRAL || mReminderActive != ACTIVE_REMINDER))
+            if (mReminderMinutes > 0  && (mDeferral == DeferType::Reminder || mReminderActive != ReminderType::Active))
             {
                 // Reinstate the advance reminder for the rescheduled recurrence.
                 // Note that a reminder AFTER the main alarm will be left active.
                 activate_reminder(!mReminderOnceOnly);
             }
-            if (mDeferral == REMINDER_DEFERRAL)
-                set_deferral(NO_DEFERRAL);
+            if (mDeferral == DeferType::Reminder)
+                set_deferral(DeferType::None);
             mTriggerChanged = true;
         }
     }
@@ -3161,8 +3161,8 @@ KAEvent::OccurType KAEventPrivate::setNextOccurrence(const KADateTime& preDateTi
             mNextRepeat = mRepetition.nextRepeatCount(afterPre.effectiveKDateTime(), preDateTime);
             // Repetitions can't have a reminder, so remove any.
             activate_reminder(false);
-            if (mDeferral == REMINDER_DEFERRAL)
-                set_deferral(NO_DEFERRAL);
+            if (mDeferral == DeferType::Reminder)
+                set_deferral(DeferType::None);
             mTriggerChanged = true;
         }
         else if (mNextRepeat)
@@ -3336,7 +3336,7 @@ bool KAEventPrivate::setDisplaying(const KAEventPrivate& event, KAAlarm::Type al
       || alarmType == KAAlarm::Type::Deferred
       || alarmType == KAAlarm::Type::AtLogin))
     {
-//qCDebug(KALARMCAL_LOG)<<event.id()<<","<<(alarmType==KAAlarm::Type::Main?"MAIN":alarmType==KAAlarm::Type::Reminder?"REMINDER":alarmType==KAAlarm::Type::DeferredReminder?"REMINDER_DEFERRAL":alarmType==KAAlarm::Type::Deferred?"DEFERRAL":"LOGIN")<<"): time="<<repeatAtLoginTime.toString();
+//qCDebug(KALARMCAL_LOG)<<event.id()<<","<<(alarmType==KAAlarm::Type::Main?"MAIN":alarmType==KAAlarm::Type::Reminder?"REMINDER":alarmType==KAAlarm::Type::DeferredReminder?"DeferType::Reminder":alarmType==KAAlarm::Type::Deferred?"DEFERRAL":"LOGIN")<<"): time="<<repeatAtLoginTime.toString();
         KAAlarm al = event.alarm(alarmType);
         if (al.isValid())
         {
@@ -3451,7 +3451,7 @@ KAAlarm KAEventPrivate::alarm(KAAlarm::Type type) const
                 }
                 break;
             case KAAlarm::Type::Reminder:
-                if (mReminderActive == ACTIVE_REMINDER)
+                if (mReminderActive == ReminderType::Active)
                 {
                     al_d->mType = KAAlarm::Type::Reminder;
                     if (mReminderMinutes < 0)
@@ -3463,13 +3463,13 @@ KAAlarm KAEventPrivate::alarm(KAAlarm::Type type) const
                 }
                 break;
             case KAAlarm::Type::DeferredReminder:
-                if (mDeferral != REMINDER_DEFERRAL)
+                if (mDeferral != DeferType::Reminder)
                     break;
                 Q_FALLTHROUGH(); // fall through to Deferred
             case KAAlarm::Type::Deferred:
-                if (mDeferral != NO_DEFERRAL)
+                if (mDeferral != DeferType::None)
                 {
-                    al_d->mType             = (mDeferral == REMINDER_DEFERRAL) ? KAAlarm::Type::DeferredReminder : KAAlarm::Type::Deferred;
+                    al_d->mType             = (mDeferral == DeferType::Reminder) ? KAAlarm::Type::DeferredReminder : KAAlarm::Type::Deferred;
                     al_d->mNextMainDateTime = mDeferralTime;
                     al_d->mDeferred         = true;
                     al_d->mTimedDeferral    = !mDeferralTime.isDateOnly();
@@ -3541,14 +3541,14 @@ KAAlarm KAEventPrivate::nextAlarm(KAAlarm::Type previousType) const
     switch (previousType)
     {
         case KAAlarm::Type::Main:
-            if (mReminderActive == ACTIVE_REMINDER)
+            if (mReminderActive == ReminderType::Active)
                 return alarm(KAAlarm::Type::Reminder);
             Q_FALLTHROUGH(); // fall through to Reminder
         case KAAlarm::Type::Reminder:
             // There can only be one deferral alarm
-            if (mDeferral == REMINDER_DEFERRAL)
+            if (mDeferral == DeferType::Reminder)
                 return alarm(KAAlarm::Type::DeferredReminder);
-            if (mDeferral == NORMAL_DEFERRAL)
+            if (mDeferral == DeferType::Normal)
                 return alarm(KAAlarm::Type::Deferred);
             Q_FALLTHROUGH(); // fall through to Deferred
         case KAAlarm::Type::DeferredReminder:
@@ -3590,7 +3590,7 @@ void KAEventPrivate::removeExpiredAlarm(KAAlarm::Type type)
     switch (type)
     {
         case KAAlarm::Type::Main:
-            if (!mReminderActive  ||  mReminderMinutes > 0)
+            if (mReminderActive == ReminderType::None  ||  mReminderMinutes > 0)
             {
                 mAlarmCount = 0;    // removing main alarm - also remove subsidiary alarms
                 break;
@@ -3599,7 +3599,7 @@ void KAEventPrivate::removeExpiredAlarm(KAAlarm::Type type)
             // reminder and remove other subsidiary alarms.
             mMainExpired = true;    // mark the alarm as expired now
             --mAlarmCount;
-            set_deferral(NO_DEFERRAL);
+            set_deferral(DeferType::None);
             if (mDisplaying)
             {
                 mDisplaying = false;
@@ -3622,7 +3622,7 @@ void KAEventPrivate::removeExpiredAlarm(KAAlarm::Type type)
             break;
         case KAAlarm::Type::DeferredReminder:
         case KAAlarm::Type::Deferred:
-            set_deferral(NO_DEFERRAL);
+            set_deferral(DeferType::None);
             break;
         case KAAlarm::Type::Displaying:
             if (mDisplaying)
@@ -3762,14 +3762,14 @@ bool KAEventPrivate::compare(const KAEventPrivate& other, KAEvent::Comparison co
                 if (comparison & KAEvent::Compare::CurrentState)
                 {
                     if (mReminderActive != other.mReminderActive
-                    ||  (mReminderActive  &&  mReminderAfterTime != other.mReminderAfterTime))
+                    ||  (mReminderActive != ReminderType::None  &&  mReminderAfterTime != other.mReminderAfterTime))
                         return false;
                 }
             }
             if (comparison & KAEvent::Compare::CurrentState)
             {
                 if (mDeferral != other.mDeferral
-                ||  (mDeferral != NO_DEFERRAL  &&  mDeferralTime != other.mDeferralTime))
+                ||  (mDeferral != DeferType::None  &&  mDeferralTime != other.mDeferralTime))
                     return false;
             }
             if (mAudioFile.isEmpty())
@@ -3940,12 +3940,12 @@ void KAEventPrivate::dumpDebug() const
     if (mReminderMinutes)
     {
         qCDebug(KALARMCAL_LOG) << "-- mReminderMinutes:" << mReminderMinutes;
-        qCDebug(KALARMCAL_LOG) << "-- mReminderActive:" << (mReminderActive == ACTIVE_REMINDER ? "active" : mReminderActive == HIDDEN_REMINDER ? "hidden" : "no");
+        qCDebug(KALARMCAL_LOG) << "-- mReminderActive:" << (mReminderActive == ReminderType::Active ? "active" : mReminderActive == ReminderType::Hidden ? "hidden" : "no");
         qCDebug(KALARMCAL_LOG) << "-- mReminderOnceOnly:" << mReminderOnceOnly;
     }
-    if (mDeferral != NO_DEFERRAL)
+    if (mDeferral != DeferType::None)
     {
-        qCDebug(KALARMCAL_LOG) << "-- mDeferral:" << (mDeferral == NORMAL_DEFERRAL ? "normal" : "reminder");
+        qCDebug(KALARMCAL_LOG) << "-- mDeferral:" << (mDeferral == DeferType::Normal ? "normal" : "reminder");
         qCDebug(KALARMCAL_LOG) << "-- mDeferralTime:" << mDeferralTime.toString();
     }
     qCDebug(KALARMCAL_LOG) << "-- mDeferDefaultMinutes:" << mDeferDefaultMinutes;
@@ -4287,14 +4287,14 @@ void KAEventPrivate::readAlarm(const Alarm::Ptr& alarm, AlarmData& data, bool au
 
 inline void KAEventPrivate::set_deferral(DeferType type)
 {
-    if (type)
+    if (type != DeferType::None)
     {
-        if (mDeferral == NO_DEFERRAL)
+        if (mDeferral == DeferType::None)
             ++mAlarmCount;
     }
     else
     {
-        if (mDeferral != NO_DEFERRAL)
+        if (mDeferral != DeferType::None)
             --mAlarmCount;
     }
     mDeferral = type;
@@ -4338,7 +4338,7 @@ void KAEventPrivate::calcTriggerTimes() const
         // It's a template or archived
         mAllTrigger = mMainTrigger = mAllWorkTrigger = mMainWorkTrigger = KADateTime();
     }
-    else if (mDeferral == NORMAL_DEFERRAL)
+    else if (mDeferral == DeferType::Normal)
     {
         // For a deferred alarm, working time setting is ignored
         mAllTrigger = mMainTrigger = mAllWorkTrigger = mMainWorkTrigger = mDeferralTime;
@@ -4346,10 +4346,10 @@ void KAEventPrivate::calcTriggerTimes() const
     else
     {
         mMainTrigger = mainDateTime(true);   // next recurrence or sub-repetition
-        mAllTrigger = (mDeferral == REMINDER_DEFERRAL)     ? mDeferralTime
-                    : (mReminderActive != ACTIVE_REMINDER) ? mMainTrigger
-                    : (mReminderMinutes < 0)               ? mReminderAfterTime
-                    :                                        mMainTrigger.addMins(-mReminderMinutes);
+        mAllTrigger = (mDeferral == DeferType::Reminder)        ? mDeferralTime
+                    : (mReminderActive != ReminderType::Active) ? mMainTrigger
+                    : (mReminderMinutes < 0)                    ? mReminderAfterTime
+                    :                                             mMainTrigger.addMins(-mReminderMinutes);
         // It's not deferred.
         // If only-during-working-time is set and it recurs, it won't actually trigger
         // unless it falls during working hours.
