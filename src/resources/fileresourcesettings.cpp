@@ -54,11 +54,11 @@ FileResourceSettings::FileResourceSettings(KConfig* config, const QString& resou
 /******************************************************************************
 * Constructor, to initialise with manual settings.
 */
-FileResourceSettings::FileResourceSettings(StorageType storageType,
-                                                 const QUrl& location, CalEvent::Types alarmTypes,
-                                                 const QString& displayName, const QColor& backgroundColour,
-                                                 CalEvent::Types enabledTypes, CalEvent::Types standardTypes,
-                                                 bool readOnly)
+FileResourceSettings::FileResourceSettings(Storage storageType,
+                                           const QUrl& location, CalEvent::Types alarmTypes,
+                                           const QString& displayName, const QColor& backgroundColour,
+                                           CalEvent::Types enabledTypes, CalEvent::Types standardTypes,
+                                           bool readOnly)
     : mId(-1)
     , mUrl(location)
     , mDisplayName(displayName)
@@ -106,7 +106,7 @@ bool FileResourceSettings::readConfig()
         mStorageType = Directory;
     else
     {
-        mStorageType = NoStorage;
+        mStorageType = Storage::None;
         return false;
     }
     if (!validate())   // validate and amend settings to be consistent
@@ -197,7 +197,7 @@ void FileResourceSettings::save() const
 
 bool FileResourceSettings::isValid() const
 {
-    return (mId >= 0) && (mStorageType != NoStorage) && mUrl.isValid();
+    return (mId >= 0) && (mStorageType != Storage::None) && mUrl.isValid();
 }
 
 ResourceId FileResourceSettings::id() const
@@ -221,7 +221,7 @@ QString FileResourceSettings::displayLocation() const
     return mDisplayLocation;
 }
 
-FileResourceSettings::StorageType FileResourceSettings::storageType() const
+FileResourceSettings::Storage FileResourceSettings::storageType() const
 {
     return mStorageType;
 }
@@ -500,7 +500,7 @@ bool FileResourceSettings::validate()
         mCommandErrors.clear();
     if (storageType(mUrl) != mStorageType)
     {
-        mStorageType = NoStorage;
+        mStorageType = Storage::None;
         return false;
     }
     return true;
@@ -534,12 +534,12 @@ QString FileResourceSettings::alarmTypesString(CalEvent::Types alarmTypes)
     return types.join(QLatin1Char(','));
 }
 
-FileResourceSettings::StorageType FileResourceSettings::storageType(const QUrl& url)
+FileResourceSettings::Storage FileResourceSettings::storageType(const QUrl& url)
 {
     if (url.isLocalFile())
     {
         QFileInfo fi(url.toLocalFile());
-        return (fi.exists() && fi.isDir()) ? Directory : File;
+        return (fi.exists() && fi.isDir()) ? Storage::Directory : Storage::File;
     }
     else
         return File;   // directory type not allowed if not a local file

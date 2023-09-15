@@ -1,7 +1,7 @@
 /*
  *  fileresource.cpp  -  base class for calendar resource accessed via file system
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2006-2022 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2006-2023 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -258,7 +258,7 @@ void FileResource::editResource(QWidget* dialogParent)
 {
     switch (storageType())
     {
-        case File:
+        case Storage::File:
         {
             // Use AutoQPointer to guard against crash on application exit while
             // the dialogue is still open. It prevents double deletion (both on
@@ -289,7 +289,7 @@ void FileResource::editResource(QWidget* dialogParent)
             }
             break;
         }
-        case Directory:
+        case Storage::Directory:
             // Not currently intended to be implemented.
             break;
 

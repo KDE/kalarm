@@ -1,7 +1,7 @@
 /*
  *  fileresourcemigrator.cpp  -  migrates or creates KAlarm file system resources
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2011-2022 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2011-2023 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -298,20 +298,20 @@ void FileResourceMigrator::migrateKResources()
             const KConfigGroup configGroup = config.group(QLatin1String("Resource_") + id);
             const QString resourceType = configGroup.readEntry("ResourceType", QString());
             const char* pathKey = nullptr;
-            FileResourceSettings::StorageType storageType;
+            FileResourceSettings::Storage storageType;
             if (resourceType == QLatin1String("file"))
             {
-                storageType = FileResourceSettings::File;
+                storageType = FileResourceSettings::Storage::File;
                 pathKey = "CalendarURL";
             }
             else if (resourceType == QLatin1String("dir"))
             {
-                storageType = FileResourceSettings::Directory;
+                storageType = FileResourceSettings::Storage::Directory;
                 pathKey = "CalendarURL";
             }
             else if (resourceType == QLatin1String("remote"))
             {
-                storageType = FileResourceSettings::File;
+                storageType = FileResourceSettings::Storage::File;
                 pathKey = "DownloadUrl";
             }
             else

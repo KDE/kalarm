@@ -1,7 +1,7 @@
 /*
  *  lineedit.cpp  -  Line edit widget with extra drag and drop options
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2003-2020 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2003-2023 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -39,14 +39,14 @@ LineEdit::LineEdit(Type type, QWidget* parent)
 
 LineEdit::LineEdit(QWidget* parent)
     : KLineEdit(parent)
-    , mType(Text)
+    , mType(Type::Text)
 {
     init();
 }
 
 void LineEdit::init()
 {
-    if (mType == Url)
+    if (mType == Type::Url)
     {
         setCompletionMode(KCompletion::CompletionShell);
         auto comp = new KUrlCompletion(KUrlCompletion::FileCompletion);
@@ -71,7 +71,7 @@ void LineEdit::focusInEvent(QFocusEvent* e)
 
 QString LineEdit::text() const
 {
-    if (mType == Url)
+    if (mType == Type::Url)
         return KShell::tildeExpand(KLineEdit::text());
     return KLineEdit::text();
 }
@@ -91,7 +91,7 @@ void LineEdit::dragEnterEvent(QDragEnterEvent* e)
     else
         ok = (data->hasText()
            || data->hasUrls()
-           || (mType == Emails && KContacts::VCardDrag::canDecode(data)));
+           || (mType == Type::Emails && KContacts::VCardDrag::canDecode(data)));
     if (ok)
         e->acceptProposedAction();
     else
@@ -107,7 +107,7 @@ void LineEdit::dropEvent(QDropEvent* e)
     QList<QUrl>           files;
     KContacts::Addressee::List addrList;
 
-    if (mType == Emails
+    if (mType == Type::Emails
     &&  KContacts::VCardDrag::canDecode(data)  &&  KContacts::VCardDrag::fromMimeData(data, addrList))
     {
         // KAddressBook entries
@@ -123,11 +123,11 @@ void LineEdit::dropEvent(QDropEvent* e)
         // URL(s)
         switch (mType)
         {
-            case Url:
+            case Type::Url:
                 // URL entry field - ignore all but the first dropped URL
                 setText(files.first().toDisplayString());    // replace any existing text
                 break;
-            case Emails:
+            case Type::Emails:
             {
                 // Email entry field - ignore all but mailto: URLs
                 const QString mailto = QStringLiteral("mailto");
@@ -138,7 +138,7 @@ void LineEdit::dropEvent(QDropEvent* e)
                 }
                 break;
             }
-            case Text:
+            case Type::Text:
                 newText = files.first().toDisplayString();
                 break;
         }
@@ -146,7 +146,7 @@ void LineEdit::dropEvent(QDropEvent* e)
     else if (DragDrop::dropPlainText(data, txt))
     {
         // Plain text
-        if (mType == Emails)
+        if (mType == Type::Emails)
         {
             // Remove newlines from a list of email addresses, and allow an eventual mailto: scheme
             const QString mailto = QStringLiteral("mailto:");

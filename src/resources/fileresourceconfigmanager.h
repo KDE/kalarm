@@ -1,7 +1,7 @@
 /*
  *  fileresourceconfigmanager.h  -  config manager for resources accessed via file system
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2020-2022 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2020-2023 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -64,7 +64,7 @@ public:
     static bool removeResource(Resource&);
 
     /** Return the available file system resource types handled by the manager. */
-    static QList<ResourceType::StorageType> storageTypes();
+    static QList<ResourceType::Storage> storageTypes();
 
 private:
     FileResourceConfigManager();

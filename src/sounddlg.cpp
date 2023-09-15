@@ -1,7 +1,7 @@
 /*
  *  sounddlg.cpp  -  sound file selection and configuration dialog and widget
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2005-2022 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2005-2023 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -168,7 +168,7 @@ SoundWidget::SoundWidget(bool showPlay, const QString& repeatWhatsThis, QWidget*
     }
 
     // File name edit box
-    mFileEdit = new LineEdit(LineEdit::Url, box);
+    mFileEdit = new LineEdit(LineEdit::Type::Url, box);
     boxHLayout->addWidget(mFileEdit);
     mFileEdit->setAcceptDrops(true);
     mFileEdit->setWhatsThis(i18nc("@info:whatsthis", "Enter the name or URL of a sound file to play."));
@@ -479,10 +479,10 @@ bool SoundWidget::validate(bool showErrorMessage) const
         mUrl.clear();
         return true;
     }
-    File::FileErr err = File::checkFileExists(file, mUrl, MainWindow::mainMainWindow());
-    if (err == File::FileErr::None)
+    File::Error err = File::checkFileExists(file, mUrl, MainWindow::mainMainWindow());
+    if (err == File::Error::None)
         return true;
-    if (err == File::FileErr::Nonexistent)
+    if (err == File::Error::Nonexistent)
     {
         if (mUrl.isLocalFile()  &&  !file.startsWith(QLatin1Char('/')))
         {
@@ -500,9 +500,9 @@ bool SoundWidget::validate(bool showErrorMessage) const
                     {
                         QString f = soundDirs[i] + QLatin1Char('/') + file;
                         err = File::checkFileExists(f, mUrl, MainWindow::mainMainWindow());
-                        if (err == File::FileErr::None)
+                        if (err == File::Error::None)
                             return true;
-                        if (err != File::FileErr::Nonexistent)
+                        if (err != File::Error::Nonexistent)
                         {
                             file = f;   // for inclusion in error message
                             break;
@@ -510,20 +510,20 @@ bool SoundWidget::validate(bool showErrorMessage) const
                     }
                 }
             }
-            if (err == File::FileErr::Nonexistent)
+            if (err == File::Error::Nonexistent)
             {
                 QString f = QDir::homePath() + QLatin1Char('/') + file;
                 err = File::checkFileExists(f, mUrl, MainWindow::mainMainWindow());
-                if (err == File::FileErr::None)
+                if (err == File::Error::None)
                     return true;
-                if (err != File::FileErr::Nonexistent)
+                if (err != File::Error::Nonexistent)
                     file = f;   // for inclusion in error message
             }
         }
     }
     mFileEdit->setFocus();
     if (showErrorMessage
-    &&  File::showFileErrMessage(file, err, File::FileErr::BlankPlay, const_cast<SoundWidget*>(this)))
+    &&  File::showFileErrMessage(file, err, File::Error::BlankPlay, const_cast<SoundWidget*>(this)))
         return true;
     mValidatedFile.clear();
     mUrl.clear();

@@ -29,7 +29,7 @@ public:
     /** A shared pointer to a FileResourceSettings object. */
     using Ptr = QSharedPointer<FileResourceSettings>;
 
-    enum StorageType { NoStorage, File, Directory };
+    enum Storage { None, File, Directory };
 
     struct CommandError
     {
@@ -45,7 +45,7 @@ public:
     /** Initialises the settings. This should only be used by the
      *  ResourceMigrator.
      */
-    FileResourceSettings(StorageType, const QUrl& location, CalEvent::Types alarmTypes,
+    FileResourceSettings(Storage, const QUrl& location, CalEvent::Types alarmTypes,
                          const QString& displayName, const QColor& backgroundColour,
                          CalEvent::Types enabledTypes, CalEvent::Types standardTypes,
                          bool readOnly);
@@ -85,7 +85,7 @@ public:
     QString displayLocation() const;
 
     /** Return the resource's storage type. */
-    StorageType storageType() const;
+    Storage storageType() const;
 
     /** Return the resource's display name. */
     QString displayName() const;
@@ -287,7 +287,7 @@ private:
     bool                  validate();
     CalEvent::Types       readAlarmTypes(const char* key) const;
     static QString        alarmTypesString(CalEvent::Types alarmTypes);
-    static StorageType    storageType(const QUrl& url);
+    static Storage        storageType(const QUrl& url);
     ResourceType::Changes handleEnabledChange(CalEvent::Types oldEnabled, CalEvent::Types oldStandard, bool typesChanged, bool save);
     ResourceType::Changes handleStandardChange(CalEvent::Types oldStandard, bool sync);
     void writeConfigDisplayName(bool save);
@@ -310,7 +310,7 @@ private:
     QByteArray        mHash;             // hash of the calendar file contents
     QHash<QString, KAEvent::CmdErr> mCommandErrors;  // event IDs and their command error types
     QColor            mBackgroundColour; // background colour to display the resource and its alarms
-    StorageType       mStorageType {NoStorage};      // how the calendar is stored
+    Storage           mStorageType {Storage::None};  // how the calendar is stored
     CalEvent::Types   mAlarmTypes {CalEvent::EMPTY}; // alarm types which the resource contains
     CalEvent::Types   mEnabled {CalEvent::EMPTY};    // alarm types for which the resource is enabled
     CalEvent::Types   mStandard {CalEvent::EMPTY};   // alarm types for which the resource is the standard resource

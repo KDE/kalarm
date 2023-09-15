@@ -1,7 +1,7 @@
 /*
  *  shellprocess.cpp  -  execute a shell process
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2004-2022 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2004-2023 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -36,7 +36,7 @@ bool ShellProcess::start(OpenMode openMode)
 {
     if (!authorised())
     {
-        mStatus = UNAUTHORISED;
+        mStatus = Status::Unauthorised;
         return false;
     }
     connect(this, &QIODevice::bytesWritten, this, &ShellProcess::writtenStdin);
@@ -47,10 +47,10 @@ bool ShellProcess::start(OpenMode openMode)
     QProcess::start(QLatin1String(shellPath()), args, openMode);
     if (!waitForStarted())
     {
-        mStatus = START_FAIL;
+        mStatus = Status::StartFail;
         return false;
     }
-    mStatus = RUNNING;
+    mStatus = Status::Running;
     return true;
 }
 
@@ -63,12 +63,12 @@ void ShellProcess::slotExited(int exitCode, QProcess::ExitStatus exitStatus)
 {
     qCDebug(KALARM_LOG) << "ShellProcess::slotExited:" << exitCode << "," << exitStatus;
     mStdinQueue.clear();
-    mStatus = SUCCESS;
+    mStatus = Status::Success;
     mExitCode = exitCode;
     if (exitStatus != NormalExit)
     {
         qCWarning(KALARM_LOG) << "ShellProcess::slotExited:" << mCommand << ":" << mShellName << ": crashed/killed";
-        mStatus = DIED;
+        mStatus = Status::Died;
     }
     else
     {
@@ -77,7 +77,7 @@ void ShellProcess::slotExited(int exitCode, QProcess::ExitStatus exitStatus)
         ||  (mShellName == "ksh"  &&  exitCode == 127))
         {
             qCWarning(KALARM_LOG) << "ShellProcess::slotExited:" << mCommand << ":" << mShellName << ": not found or not executable";
-            mStatus = NOT_FOUND;
+            mStatus = Status::NotFound;
         }
     }
     Q_EMIT shellExited(this);
@@ -139,21 +139,21 @@ QString ShellProcess::errorMessage() const
 {
     switch (mStatus)
     {
-        case UNAUTHORISED:
+        case Status::Unauthorised:
             return i18nc("@info", "Failed to execute command (shell access not authorized)");
-        case START_FAIL:
+        case Status::StartFail:
             return i18nc("@info", "Failed to execute command");
-        case NOT_FOUND:
+        case Status::NotFound:
             return i18nc("@info", "Failed to execute command (not found or not executable)");
-        case DIED:
+        case Status::Died:
             return i18nc("@info", "Command execution error");
-        case SUCCESS:
+        case Status::Success:
             if (mExitCode)
                 return i18nc("@info", "Command exit code: %1", mExitCode);
-            // Fall through to INACTIVE
+            // Fall through to Inactive
             Q_FALLTHROUGH();
-        case INACTIVE:
-        case RUNNING:
+        case Status::Inactive:
+        case Status::Running:
         default:
             return {};
     }

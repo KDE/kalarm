@@ -263,8 +263,8 @@ void MessageWindow::setUpDisplay()
 
                     switch (texts.fileType)
                     {
-                        case File::Image:
-                        case File::TextFormatted:
+                        case File::Type::Image:
+                        case File::Type::TextFormatted:
                             view->setHtml(texts.message);
                             break;
                         default:

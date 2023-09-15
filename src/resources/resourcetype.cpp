@@ -1,7 +1,7 @@
 /*
  *  resourcetype.cpp  -  base class for an alarm calendar resource type
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2019-2022 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2019-2023 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -341,13 +341,13 @@ void ResourceType::setError(bool error)
     mInError = error;
 }
 
-QString ResourceType::storageTypeString(StorageType type)
+QString ResourceType::storageTypeString(Storage type)
 {
     switch (type)
     {
-        case File:
-        case Directory:
-            return storageTypeStr(true, (type == File), true);
+        case Storage::File:
+        case Storage::Directory:
+            return storageTypeStr(true, (type == Storage::File), true);
         default:
             return {};
     }

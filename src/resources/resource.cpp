@@ -1,7 +1,7 @@
 /*
  *  resource.cpp  -  generic class containing an alarm calendar resource
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2019-2021 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2019-2023 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -69,9 +69,9 @@ ResourceId Resource::displayId() const
     return mResource.isNull() ? -1 : mResource->displayId();
 }
 
-Resource::StorageType Resource::storageType() const
+Resource::Storage Resource::storageType() const
 {
-    return mResource.isNull() ? NoStorage : static_cast<StorageType>(mResource->storageType());
+    return mResource.isNull() ? Storage::None : static_cast<Storage>(mResource->storageType());
 }
 
 QString Resource::storageTypeString(bool description) const
@@ -79,7 +79,7 @@ QString Resource::storageTypeString(bool description) const
     return mResource.isNull() ? QString() : mResource->storageTypeString(description);
 }
 
-QString Resource::storageTypeString(ResourceType::StorageType type)
+QString Resource::storageTypeString(ResourceType::Storage type)
 {
     return ResourceType::storageTypeString(type);
 }

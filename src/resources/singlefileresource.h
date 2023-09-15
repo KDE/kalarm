@@ -1,7 +1,7 @@
 /*
  *  singlefileresource.h  -  calendar resource held in a single file
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2020-2021 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2020-2023 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -46,7 +46,7 @@ public:
     ~SingleFileResource() override;
 
     /** Return the type of storage used by the resource. */
-    StorageType storageType() const override   { return File; }
+    Storage storageType() const override   { return Storage::File; }
 
     /** Return whether the resource is configured as read-only or is
      *  read-only on disc.

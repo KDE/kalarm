@@ -1,7 +1,7 @@
 /*
  *  spinbox.h  -  spin box with shift-click step value and read-only option
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2002-2022 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2002-2023 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -185,7 +185,7 @@ private Q_SLOTS:
     void         textEdited();
     void         valueChange();
 private:
-    enum Modifier { NoModifier, ShiftModifier, ControlModifier };
+    enum class Modifier { None, Shift, Control };
 
     void         init();
     void         addValue(int change, bool current);
@@ -203,7 +203,7 @@ private:
     int          mLineShiftStep;             // step when spin arrows are pressed with shift key
     int          mLineControlStep {0};       // step when spin arrows are pressed with control key
     int          mCurrentButton {NO_BUTTON}; // current spin widget button
-    Modifier     mMouseKey {NoModifier};     // which modifier key applies while left button is being held down
+    Modifier     mMouseKey {Modifier::None}; // which modifier key applies while left button is being held down
     QStyle*      mControlStyle {nullptr};    // style to prevent Qt multiplying control step by 10
     bool         mShiftMinBound {false};     // true if a temporary minimum bound has been set during shift stepping
     bool         mShiftMaxBound {false};     // true if a temporary maximum bound has been set during shift stepping

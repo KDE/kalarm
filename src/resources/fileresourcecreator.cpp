@@ -1,7 +1,7 @@
 /*
  *  fileresourcecreator.cpp  -  interactively create a file system resource
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2020 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2020-2023 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -38,13 +38,13 @@ FileResourceCreator::FileResourceCreator(CalEvent::Type defaultType, QWidget* pa
 void FileResourceCreator::doCreateResource()
 {
     qCDebug(KALARM_LOG) << "FileResourceCreator::doCreateResource: Type:" << mDefaultType;
-    const QList<ResourceType::StorageType> types = FileResourceConfigManager::storageTypes();
+    const QList<ResourceType::Storage> types = FileResourceConfigManager::storageTypes();
     if (!types.isEmpty())
     {
         QStringList typeDescs;
-        for (ResourceType::StorageType t : types)
+        for (ResourceType::Storage t : types)
             typeDescs += Resource::storageTypeString(t);   //clazy:exclude=reserve-candidates  There are very few types
-        ResourceType::StorageType type = types[0];
+        ResourceType::Storage type = types[0];
         if (types.count() > 1)
         {
             // Use AutoQPointer to guard against crash on application exit while
@@ -76,11 +76,11 @@ void FileResourceCreator::doCreateResource()
 
         switch (type)
         {
-            case ResourceType::File:
+            case ResourceType::Storage::File:
                 if (createSingleFileResource())
                     return;
                 break;
-            case ResourceType::Directory:   // not currently intended to be implemented
+            case ResourceType::Storage::Directory:   // not currently intended to be implemented
             default:
                 break;
         }

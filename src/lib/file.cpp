@@ -1,7 +1,7 @@
 /*
  *  lib/file.cpp  -  functions to handle files
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2005-2022 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2005-2023 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -28,17 +28,17 @@ namespace File
 * If a text file, its type is distinguished.
 * Reply = file type.
 */
-FileType fileType(const QMimeType& mimetype)
+Type fileType(const QMimeType& mimetype)
 {
     if (mimetype.inherits(QStringLiteral("text/html")))
-        return TextFormatted;
+        return Type::TextFormatted;
     if (mimetype.inherits(QStringLiteral("application/x-executable")))
-        return TextApplication;
+        return Type::TextApplication;
     if (mimetype.inherits(QStringLiteral("text/plain")))
-        return TextPlain;
+        return Type::TextPlain;
     if (mimetype.name().startsWith(QLatin1String("image/")))
-        return Image;
-    return Unknown;
+        return Type::Image;
+    return Type::Unknown;
 }
 
 /******************************************************************************
@@ -47,28 +47,28 @@ FileType fileType(const QMimeType& mimetype)
 * be needed subsequently by showFileErrMessage().
 * 'filename' is in user input format and may be a local file path or URL.
 */
-FileErr checkFileExists(QString& filename, QUrl& url, QWidget* messageParent)
+Error checkFileExists(QString& filename, QUrl& url, QWidget* messageParent)
 {
     // Convert any relative file path to absolute
     // (using home directory as the default).
     // This also supports absolute paths and absolute urls.
-    FileErr err = FileErr::None;
+    Error err = Error::None;
     url = QUrl::fromUserInput(filename, QDir::homePath(), QUrl::AssumeLocalFile);
     if (filename.isEmpty())
     {
         url = QUrl();
-        err = FileErr::Blank;    // blank file name
+        err = Error::Blank;    // blank file name
     }
     else if (!url.isValid())
-        err = FileErr::Nonexistent;
+        err = Error::Nonexistent;
     else if (url.isLocalFile())
     {
         // It's a local file
         filename = url.toLocalFile();
         QFileInfo info(filename);
-        if      (info.isDir())        err = FileErr::Directory;
-        else if (!info.exists())      err = FileErr::Nonexistent;
-        else if (!info.isReadable())  err = FileErr::Unreadable;
+        if      (info.isDir())        err = Error::Directory;
+        else if (!info.exists())      err = Error::Nonexistent;
+        else if (!info.isReadable())  err = Error::Unreadable;
     }
     else
     {
@@ -76,12 +76,12 @@ FileErr checkFileExists(QString& filename, QUrl& url, QWidget* messageParent)
         auto statJob = KIO::statDetails(url, KIO::StatJob::SourceSide, KIO::StatDetail::StatDefaultDetails);
         KJobWidgets::setWindow(statJob, messageParent);
         if (!statJob->exec())
-            err = FileErr::Nonexistent;
+            err = Error::Nonexistent;
         else
         {
             KFileItem fi(statJob->statResult(), url);
-            if (fi.isDir())             err = FileErr::Directory;
-            else if (!fi.isReadable())  err = FileErr::Unreadable;
+            if (fi.isDir())             err = Error::Directory;
+            else if (!fi.isReadable())  err = Error::Unreadable;
         }
     }
     return err;
@@ -92,9 +92,9 @@ FileErr checkFileExists(QString& filename, QUrl& url, QWidget* messageParent)
 * Display a Continue/Cancel error message if 'errmsgParent' non-null.
 * Reply = true to continue, false to cancel.
 */
-bool showFileErrMessage(const QString& filename, FileErr err, FileErr blankError, QWidget* errmsgParent)
+bool showFileErrMessage(const QString& filename, Error err, Error blankError, QWidget* errmsgParent)
 {
-    if (err != FileErr::None)
+    if (err != Error::None)
     {
         // If file is a local file, remove "file://" from name
         const QString file = pathOrUrl(filename);
@@ -102,21 +102,21 @@ bool showFileErrMessage(const QString& filename, FileErr err, FileErr blankError
         QString errmsg;
         switch (err)
         {
-            case FileErr::Blank:
-                if (blankError == FileErr::BlankDisplay)
+            case Error::Blank:
+                if (blankError == Error::BlankDisplay)
                     errmsg = i18nc("@info", "Please select a file to display");
-                else if (blankError == FileErr::BlankPlay)
+                else if (blankError == Error::BlankPlay)
                     errmsg = i18nc("@info", "Please select a file to play");
                 else
                     qFatal("showFileErrMessage: Program error");
                 KAMessageBox::error(errmsgParent, errmsg);
                 return false;
-            case FileErr::Directory:
+            case Error::Directory:
                 KAMessageBox::error(errmsgParent, xi18nc("@info", "<filename>%1</filename> is a folder", file));
                 return false;
-            case FileErr::Nonexistent:   errmsg = xi18nc("@info", "<filename>%1</filename> not found", file);  break;
-            case FileErr::Unreadable:    errmsg = xi18nc("@info", "<filename>%1</filename> is not readable", file);  break;
-            case FileErr::NotTextImage:  errmsg = xi18nc("@info", "<filename>%1</filename> appears not to be a text or image file", file);  break;
+            case Error::Nonexistent:   errmsg = xi18nc("@info", "<filename>%1</filename> not found", file);  break;
+            case Error::Unreadable:    errmsg = xi18nc("@info", "<filename>%1</filename> is not readable", file);  break;
+            case Error::NotTextImage:  errmsg = xi18nc("@info", "<filename>%1</filename> appears not to be a text or image file", file);  break;
             default:
                 break;
         }
