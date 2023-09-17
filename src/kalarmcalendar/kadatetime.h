@@ -1,5 +1,5 @@
 /*
- *  This file is part of kalarmprivate library, which provides access to KAlarm
+ *  This file is part of kalarmcalendar library, which provides access to KAlarm
  *  calendar data.
  *  This is the Qt5 version of KDE 4 kdelibs/kdecore/date/kdatetime.h.
  *  Program:  kalarm

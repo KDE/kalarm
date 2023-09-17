@@ -79,7 +79,9 @@
 ><year
 >2021</year
 ><year
->2022</year>
+>2022</year
+><year
+>2023</year>
 <holder
 >&David.Jarvie;</holder>
 </copyright>
@@ -90,9 +92,9 @@
 <!-- Don't change format of date and version of the documentation -->
 
 <date
->2022-5-2</date>
+>2023-9-2</date>
 <releaseinfo
->3.5.0 (KDE Gear 22.08)</releaseinfo>
+>3.7.0 (KDE Gear 23.12)</releaseinfo>
 
 <abstract>
 <para
@@ -323,7 +325,7 @@
 > <guimenuitem
 >Datumselectie tonen</guimenuitem
 > </menuchoice
->. Selecteer een datum door erop te klikken in de datumselectie of maak dat ongedaan door er nogmaals op te klikken. De datumselectie toont een enkele maand. Om een andere maand te tonen, gebruik de pijltjes in de datumselectie.</para>
+>. Selecteer een datum door erop te klikken in de datumselectie of maak dat ongedaan door er nogmaals op te klikken. De datumselectie toont een enkele maand. Om een andere maand te tonen, gebruik de pijltjes in de datumselectie of het muiswiel.</para>
 
 </sect2>
 
@@ -2309,6 +2311,13 @@ mode.</para
 >Andere besturing</title>
 
 <para
+>Als de systeemconfiguratie meerdere alarmen toestaat om het systeem uit een onderbreking te laten ontwaken, dan kunt u <guilabel
+>Ontwaken uit onderbreking</guilabel
+> selecteren om het systeem te laten ontwaken als het is onderbroken wanneer het alarm afgaat. Zie <link linkend="wake-suspend"
+>Ontwaken uit onderbreking</link
+> voor meer informatie.</para>
+
+<para
 >Voor alarmen die worden getoond laat het keuzevakje <guilabel
 >Om bevestiging vragen</guilabel
 > u specificeren of u om bevestiging moet worden gevraagd wanneer u het berichtenvenster sluit of niet. Dit kan worden gebruikt als beveiliging tegen het per ongeluk bevestigen van alarmen.</para>
@@ -2405,10 +2414,12 @@ mode.</para
 >Toon opties, om het alarm naar later te verschuiven, door op de knop <guibutton
 >Verschuiven...</guibutton
 > te klikken. Selecteer daarna <guilabel
->Naar datum/tijd verschuiven</guilabel
-> om de datum en tijd wanneer het bericht weer moet worden getoond of selecteer <guilabel
->Met een tijdsinterval vertragen</guilabel
-> om in te voeren hoelang na nu (in uren en minuten) het bericht opnieuw moet worden getoond. Klik daarna op <guibutton
+>Verschuiven naar</guilabel
+> om in te voeren hoelang na nu het bericht opnieuw getoond moet worden (de knop <guilabel
+>Voorinstelling</guilabel
+> laat u kiezen uit een lijst van algemene tijdsintervallen) of selecteer <guilabel
+>Verschuiven tot</guilabel
+> om de datum en tijd in te wanneer het bericht opnieuw moet worden getoond. Klik daarna op <guibutton
 >OK</guibutton
 > om het alarmbericht te verschuiven en sluit zijn venster.</para>
 
@@ -2964,13 +2975,44 @@ mode.</para
 >Ontwaken uit slaapstand</title>
 
 <para
->Het is mogelijk om een geselecteerd alarm uw computer uit een slaapstand, al of niet op schijf, te laten ontwaken wanneer het alarm afloopt, zodat de actie bij het alarm kan gebeuren zelfs wanneer het systeem was afgesloten. Deze functie wordt bestuurt door een dialoog die  wordt geactiveerd door <menuchoice
+>Alarmen kunnen geconfigureerd worden om uw computer te laten ontwaken uit slaapstand of onderbreking wanneer het alarm afgaat, zodat de alarmactie gedaan kan worden zelfs wanneer het systeem is afgesloten. Het mechanisme dat wordt gebruikt door &kalarm; om het systeem te laten ontwaken, en het gebruikersinterface om het te besturen, hangt af van het type systeem en de rechten van de gebruiker. Er zijn twee mogelijkheden:</para>
+
+<sect2>
+<title
+>Ontwaken uit slaapstand door de Linux kernel</title>
+
+<para
+>Op Linux systemen, als de gebruiker de mogelijkheid heeft van de alarmtimer van de kernel (<literal
+>cap_wake_alarm</literal
+>), dan kan elk aantal alarmen ingesteld worden om uit onderbreking te ontwaken. In dat geval, wordt ontwaken uit onderbreking geconfigureerd voor elk individueel alarm in de <link linkend="alarm-edit-dlg"
+>Dialoog voor bewerken van alarmen</link
+> met de optie <guilabel
+>Ontwaken uit onderbreking</guilabel
+>.</para>
+
+<para
+>U kunt configureren hoe lang van voor het alarm te ontwaken uit onderbreking, om er zeker van te zijn dat het systeem tijd heeft om zichzelf volledig te herstellen voordat het alarm afgaat, in de <link linkend="preferences-time"
+>Configuratiedialoog</link
+>.</para>
+
+</sect2>
+
+<sect2>
+<title
+>RTC Ontwaken uit slaapstand</title>
+
+<para
+>Op niet-Linux systemen, of op Linux systemen waar de gebruiker geen <literal
+>cap_wake_alarm</literal
+> mogelijkheid heeft, wordt de real time clock (<acronym
+>RTC</acronym
+>) gebruikt. Dit kan alleen ingesteld worden voor één alarm tegelijk. In dat geval wordt een speciale dialoog Ontwaken-uit-onderbreking gebruikt om het te configureren. De dialoog biedt het alarm Ontwaken uit onderbreking om te worden ingesteld, geannuleerd of getoond. Voor toegang tot de dialoog, selecteer <menuchoice
 ><guimenu
 >Acties</guimenu
 > <guimenuitem
->Ontwaken uit slaapstand</guimenuitem
+>Ontwaken uit onderbreking</guimenuitem
 ></menuchoice
-> te selecteren. De dialoog staat toe het alarm Ontwaken uit slaapstand in te stellen, te annuleren of te tonen.</para>
+>.</para>
 
 <para
 >Gebruik van de functie Ontwaken uit slaapstand vereist de rechten van de systeembeheerder. U zult gevraagd worden naar het wachtwoord van root wanneer u een alarm Ontwaken uit slaapstand instelt of annuleert.</para>
@@ -3018,6 +3060,7 @@ mode.</para
 </listitem>
 </itemizedlist>
 
+</sect2>
 </sect1>
 
 <sect1 id="quitting">
@@ -3218,6 +3261,15 @@ mode.</para
 ><guilabel
 >Vakantieregio</guilabel
 >: Selecteer uit welk land of regio de vakanties moeten worden gebruikt. Dit heeft betrekking op alarmen waarvoor de optie om vakantiedagen uit te sluiten is geselecteerd.</para>
+</listitem>
+
+<listitem
+><para
+><guilabel
+>Ontwaken uit onderbreking voor het alarm</guilabel
+>: voer het aantal minuten in voordat het alarm afgaat om het systeem te laten ontwaken, voor alarmen ingesteld om te ontwaken uit onderbreking. Dit biedt u de verzekering dat het systeem tijd heeft om zichzelf volledig te herstellen voordat het alarm afgaat, zodat het alarm af kan gaan op de juiste tijd. Deze optie wordt alleen getoond als de systeemconfiguratie meerder alarmen biedt om het systeem te laten ontwaken uit onderbreking. Zie <link linkend="wake-suspend"
+>Ontwaken uit onderbreking</link
+> voor meer informatie.</para>
 </listitem>
 
 <listitem
@@ -6874,10 +6926,10 @@ mode.</para
 <para
 >&kalarm; </para>
 <para
->Programma copyright 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 &David.Jarvie; &David.Jarvie.mail; </para>
+>Programma copyright 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023 &David.Jarvie; &David.Jarvie.mail; </para>
 
 <para
->Documentatie copyright 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 &David.Jarvie; &David.Jarvie.mail; </para>
+>Documentatie copyright 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2016, 2018, 2019, 2020, 2021, 2022, 2023 &David.Jarvie; &David.Jarvie.mail; </para>
 
 &meld.fouten;&vertaling.niels;&vertaling.freek; &underFDL; &underGPL; <para
 >Dank aan de auteur van de &kde; 1 KAlarm applicatie, Stefan Nikolaus <email

@@ -1,7 +1,7 @@
 //#define SIMULATION
 /*
  *  kadatetime.cpp  -  represents a date and optional time with a time zone
- *  This file is part of kalarmprivate library, which provides access to KAlarm
+ *  This file is part of kalarmcalendar library, which provides access to KAlarm
  *  calendar data.
  *  It is the Qt5/Qt6 version of KDE 4 kdelibs/kdecore/date/kdatetime.cpp.
  *  Program:  kalarm
