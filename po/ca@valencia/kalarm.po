@@ -394,7 +394,7 @@ msgstr ""
 "<application>KAddressBook</application>, a excepció d'aquelles per a les que "
 "ja hi ha una alarma.</para><para>Podeu seleccionar múltiples dates de "
 "naixement d'una sola vegada arrossegant el ratolí sobre la llista o clicant "
-"el ratolí mentre premeu Ctrl o Majúscules.</para>"
+"el ratolí mentre premeu «Ctrl» o «Majúscules».</para>"
 
 #: birthdaydlg.cpp:135
 #, kde-format
