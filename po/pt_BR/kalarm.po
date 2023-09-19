@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-08-28 03:11+0000\n"
-"PO-Revision-Date: 2023-06-26 16:52-0300\n"
+"PO-Revision-Date: 2023-09-18 09:52-0300\n"
 "Last-Translator: Luiz Fernando Ranghetti <elchevive@opensuse.org>\n"
 "Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
 "Language: pt_BR\n"
@@ -568,7 +568,7 @@ msgstr "Exibir o alarme como um evento no KOrganizer"
 #, kde-format
 msgid "Cancel alarm if more than 'period' late when triggered"
 msgstr ""
-"Cancelar o alarme se atrasado por mais do que o 'período', quando ativado"
+"Cancelar o alarme se atrasado por mais do que o 'período', quando acionado"
 
 #: commandoptions.cpp:208
 #, kde-format
@@ -1310,7 +1310,7 @@ msgstr "Início do dia para os alarmes por datas"
 msgctxt "@info:whatsthis"
 msgid "The earliest time of day at which a date-only alarm will be triggered."
 msgstr ""
-"A primeira hora do dia, na qual um alarme relacionado somente por data será "
+"A primeira hora do dia na qual um alarme relacionado somente por data será "
 "acionado."
 
 #. i18n: ectx: label, entry (Base_WorkDayStart), group (General)
