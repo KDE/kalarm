@@ -716,8 +716,7 @@ void ResourcesCalendar::checkKernelWakeSuspend(ResourceId key, const KAEvent& ev
 {
     if (KernelWakeAlarm::isAvailable()  &&  event.enabled()  &&  event.wakeFromSuspend())
     {
-        //TODO: mainDateTime() doesn't take account of holidays/work days
-        const KADateTime dt = event.mainDateTime().kDateTime();
+        const KADateTime dt = event.nextDateTime(KAEvent::NextWorkHoliday).kDateTime();
         if (!dt.isDateOnly())   // can't determine a wakeup time for date-only events
         {
             KernelWakeAlarm& kernelAlarm = mWakeSuspendTimers[key][event.id()];

@@ -266,7 +266,7 @@ public:
     {
         Ignore = 0,    //!< check for recurrences only, ignore sub-repetitions
         Return,        //!< return a sub-repetition if it's the next occurrence
-        AllowFor       //!< if a sub-repetition is the next occurrence, return the previous recurrence, not the sub-repetition
+        RecurBefore    //!< if a sub-repetition is the next occurrence, return the previous recurrence, not the sub-repetition
     };
 
     /** What type of occurrence currently limits how long the alarm can be deferred. */
@@ -278,6 +278,22 @@ public:
         Repetition,  //!< a sub-repetition
         Reminder     //!< a reminder
     };
+
+    /** What to check for in nextDateTime() when evaluating the next event display or occurrence.
+     *  If the event (not a reminder) has been deferred, the deferral time is returned regardless
+     *  of NextType.
+     *  Reminders are never returned if the recurrence to which they relate is excluded by working
+     *  hours or holiday restrictions, regardless of whether or not NextWorkHoliday is specified.
+     */
+    enum NextType
+    {
+        NextRecur       = 0,      //!< (always done) check for only occurrence or next recurrence
+        NextRepeat      = 0x01,   //!< check for sub-repetitions
+        NextReminder    = 0x02,   //!< check for reminders
+        NextWorkHoliday = 0x04,   //!< take account of any working hours or holiday restrictions
+        NextDeferral    = 0x08    //!< return the event deferral time, or reminder deferral time if NextReminder set
+    };
+    Q_DECLARE_FLAGS(NextTypes, NextType)
 
     /** Next trigger type for an alarm. */
     enum class Trigger
@@ -853,6 +869,27 @@ public:
      */
     void setTime(const KADateTime& dt);
 
+    /** Return the next time the event will trigger or be displayed. The evaluation
+     *  depends on @p type:
+     * - @p type == NextRecur:             returns the next recurrence or only occurrence.
+     * - @p type contains NextRepeat:      returns the only occurrence or next
+     *                                     recurrence/sub-repetition.
+     * - @p type contains NextReminder:    as above but if a reminder occurs first, it will
+     *                                     be returned. N.B. Reminders are not displayed for
+     *                                     sub-repetitions.
+     * - @p type contains NextWorkHoliday: as above but the search continues until a
+     *                                     recurrence is found which occurs during working
+     *                                     hours and not on a holiday.
+     * - @p type contains NextDeferral:    if the event (not a reminder) has been deferred,
+     *                                     returns the deferral time.
+     *                                     If a reminder has been deferred AND @p type
+     *                                     contains NextReminder, returns the deferral time.
+     *
+     *  @param type  what to check for when evaluating the next occurrence or display.
+     *  @see startDateTime(), setTime()
+     */
+    DateTime nextDateTime(NextTypes type) const;
+
     /** Return the next time the main alarm will trigger.
      *  @note No account is taken of any working hours or holiday restrictions.
      *        when determining the next trigger date/time.
@@ -976,6 +1013,8 @@ public:
 
     /** Check whether a date/time conflicts with working hours and/or holiday
      *  restrictions for the alarm.
+     *  @note If @p dt is date-only, only holidays and/or working days are
+     *        taken account of; working hours are ignored.
      *  @param dt  the date/time to check.
      *  @return true if the alarm is disabled from occurring at time @p dt
      *               because @p dt is outside working hours (if the alarm is
@@ -1169,6 +1208,8 @@ public:
      *  date/time. Reminders are ignored.
      *  @note No account is taken of any working hours or holiday restrictions
      *        when determining event occurrences.
+     *  @note If the event is date-only, its occurrences are considered to occur
+     *        at the start-of-day time when comparing with @p preDateTime.
      *
      *  @param preDateTime        the specified date/time.
      *  @param includeRepetitions if true and the alarm has a sub-repetition, the
@@ -1186,6 +1227,8 @@ public:
      *  set as the next occurrence.
      *  @note No account is taken of any working hours or holiday restrictions
      *        when determining and setting the next occurrence date/time.
+     *  @note If the event is date-only, its occurrences are considered to occur
+     *        at the start-of-day time when comparing with @p preDateTime.
      *
      *  @see nextOccurrence()
      */
@@ -1195,6 +1238,8 @@ public:
      *  the specified date/time. Reminders are ignored.
      *  @note No account is taken of any working hours or holiday restrictions
      *        when determining the next event occurrence.
+     *  @note If the event is date-only, its occurrences are considered to occur
+     *        at the start-of-day time when comparing with @p preDateTime.
      *
      *  @param preDateTime the specified date/time.
      *  @param result      date/time of next occurrence, or invalid date/time if none.
@@ -1207,6 +1252,8 @@ public:
      *  strictly before the specified date/time. Reminders are ignored.
      *  @note No account is taken of any working hours or holiday restrictions
      *        when determining the previous event occurrence.
+     *  @note If the event is date-only, its occurrences are considered to occur
+     *        at the start-of-day time when comparing with @p preDateTime.
      *
      *  @param afterDateTime       the specified date/time.
      *  @param result              date/time of previous occurrence, or invalid
@@ -1402,6 +1449,7 @@ inline QDebug operator<<(QDebug s, KAEvent::CmdErr err)
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(KAlarmCal::KAEvent::Flags)
 Q_DECLARE_OPERATORS_FOR_FLAGS(KAlarmCal::KAEvent::Comparison)
+Q_DECLARE_OPERATORS_FOR_FLAGS(KAlarmCal::KAEvent::NextTypes)
 Q_DECLARE_METATYPE(KAlarmCal::KAEvent)
 
 // vim: et sw=4:

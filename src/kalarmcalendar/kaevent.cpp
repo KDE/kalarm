@@ -3,7 +3,7 @@
  *  This file is part of kalarmprivate library, which provides access to KAlarm
  *  calendar data.
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2001-2022 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2001-2023 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -189,6 +189,7 @@ public:
     KAEvent::Flags     flags() const;
     bool               excludedByWorkTimeOrHoliday(const KADateTime& dt) const;
     bool               setRepetition(const Repetition&);
+    DateTime           nextDateTime(KAEvent::NextTypes) const;
     bool               occursAfter(const KADateTime& preDateTime, bool includeRepetitions) const;
     KAEvent::OccurType nextOccurrence(const KADateTime& preDateTime, DateTime& result, KAEvent::Repeats = KAEvent::Repeats::Ignore) const;
     KAEvent::OccurType previousOccurrence(const KADateTime& afterDateTime, DateTime& result, bool includeRepetitions = false) const;
@@ -274,6 +275,7 @@ public:
     EmailAddressList   mEmailAddresses;        // ATTENDEE: addresses to send email to
     QString            mEmailSubject;          // SUMMARY: subject line of email
     QStringList        mEmailAttachments;      // ATTACH: email attachment file names
+    mutable QTime      mTriggerStartOfDay;     // start of day time used by calcTriggerTimes()
     mutable int        mChangeCount{0};        // >0 = inhibit calling calcTriggerTimes()
     mutable bool       mTriggerChanged{false}; // true if need to recalculate trigger times
     QString            mLogFile;               // alarm output is to be logged to this URL
@@ -2406,6 +2408,129 @@ void KAEvent::setTime(const KADateTime& dt)
     d->mTriggerChanged = true;
 }
 
+/******************************************************************************
+*/
+DateTime KAEvent::nextDateTime(NextTypes type) const
+{
+    return d->nextDateTime(type);
+}
+DateTime KAEventPrivate::nextDateTime(KAEvent::NextTypes type) const
+{
+    // Remove flags from 'type' which are inapplicable to this alarm.
+    if (!mRepetition)
+        type &= ~KAEvent::NextRepeat;    // the alarm doesn't repeat
+    if (!mReminderMinutes)
+        type &= ~KAEvent::NextReminder;   // the alarm doesn't have a reminder
+    if (checkRecur() == KARecurrence::NO_RECUR
+    ||  (!mWorkTimeOnly  &&  (!mExcludeHolidays || !mHolidays->isValid())))
+        type &= ~KAEvent::NextWorkHoliday;   // this alarm isn't affected by work time/holidays
+
+    // Deferral time overrides anything else if NextDeferral is set.
+    if (type & KAEvent::NextDeferral)
+    {
+        if (mDeferral == DeferType::Normal
+        ||  (mDeferral == DeferType::Reminder  &&  (type & KAEvent::NextReminder)))
+            return mDeferralTime;
+    }
+    type &= ~KAEvent::NextDeferral;
+
+    // Find the next recurrence (not sub-repetition) after now.
+    // If looking for reminders AFTER the alarm, start from now - reminder period.
+    // If looking for repetitions, start from now - total repetition duration.
+    const KADateTime now = KADateTime::currentUtcDateTime();
+    const int repDuration = mRepetition.duration().asSeconds();
+    int preAdjust = 0;
+    if ((type & KAEvent::NextReminder)  &&  mReminderMinutes < 0)   // if reminder AFTER the alarm
+        preAdjust = mReminderMinutes * 60;
+    if (type & KAEvent::NextRepeat)
+    {
+        const int adjustment = -repDuration;
+        if (adjustment < preAdjust)
+            preAdjust = adjustment;
+    }
+    KADateTime pre = preAdjust ? now.addSecs(preAdjust) : now;
+    DateTime nextRecur;
+    if (nextOccurrence(pre, nextRecur, KAEvent::Repeats::Ignore) == KAEvent::OccurType::None)
+        return DateTime();
+    const int offsetToRecur = now.secsTo(nextRecur.effectiveKDateTime());
+
+    // If desired, check for the first sub-repetition after now.
+    DateTime result;
+    if (type & KAEvent::NextRepeat)
+    {
+        // If the recurrence is before now, find the first sub-repetition after now.
+        if (offsetToRecur <= 0)
+        {
+            const int repInterval = mRepetition.intervalSeconds();
+            const int count = -offsetToRecur / repInterval + 1;   // first sub-repetition AFTER now
+            if (count <= mRepetition.count())
+            {
+                const DateTime nextRep = nextRecur.addSecs(repInterval * count);
+                if (!(type & KAEvent::NextWorkHoliday)
+                ||  !excludedByWorkTimeOrHoliday(nextRep.effectiveKDateTime()))
+                    result = nextRep;
+            }
+        }
+    }
+
+    bool checkedWorkHol = false;   // whether nextRecur has been checked for working time/holiday
+    bool excludeWorkHol = false;   // whether nextRecur is excluded by working time/holiday
+
+    // If desired, check for the first reminder after now.
+    DateTime resultReminder;
+    if (type & KAEvent::NextReminder)
+    {
+        excludeWorkHol = excludedByWorkTimeOrHoliday(nextRecur.effectiveKDateTime());
+        checkedWorkHol = true;
+        if (!excludeWorkHol)
+        {
+            // Reminders are never returned if the recurrence which they relate to
+            // is excluded by working time/holiday restrictions, regardless of
+            // whether or not NextWorkHoliday is specified.
+            const int reminderSecs = mReminderMinutes * 60;
+            if (mReminderMinutes > 0)
+            {
+                // Reminder is before the alarm. If the recurrence is after now,
+                // check if its reminder occurs after now.
+                if (offsetToRecur > 0  &&  offsetToRecur > reminderSecs)
+                    resultReminder = nextRecur.addSecs(-reminderSecs);
+            }
+            else
+            {
+                // Reminder is after the alarm. If the recurrence is before now,
+                // check if its reminder occurs after now.
+                if (offsetToRecur < 0  &&  -offsetToRecur < reminderSecs)
+                    resultReminder = nextRecur.addSecs(reminderSecs);
+            }
+
+            if (resultReminder.isValid())
+            {
+                // Find the earliest of the next sub-repetition or the reminder.
+                if (!result.isValid()  ||  resultReminder < result)
+                    result = resultReminder;
+            }
+        }
+    }
+
+    if (result.isValid())
+        return result;    // return the sub-repetition or reminder time
+    if (type & KAEvent::NextWorkHoliday)
+    {
+        if (!checkedWorkHol)
+            excludeWorkHol = excludedByWorkTimeOrHoliday(nextRecur.effectiveKDateTime());
+        if (excludeWorkHol)
+        {
+            // Find first recurrence/repetition which complies with working time/
+            // holiday restrictions.
+            // The next recurrence found is excluded by work time or holidays.
+            // Find a subsequent sub-repetition or recurrence which is not excluded.
+            calcTriggerTimes();
+            return (type & KAEvent::NextReminder) ? mAllWorkTrigger : mMainWorkTrigger;
+        }
+    }
+    return nextRecur;  // return the recurrence, which must be after now
+}
+
 DateTime KAEvent::mainDateTime(bool withRepeats) const
 {
     return d->mainDateTime(withRepeats);
@@ -2427,7 +2552,6 @@ DateTime KAEvent::mainEndRepeatTime() const
 void KAEvent::setStartOfDay(const QTime& startOfDay)
 {
     DateTime::setStartOfDay(startOfDay);
-#pragma message("Does this need all trigger times for date-only alarms to be recalculated?")
 }
 
 /******************************************************************************
@@ -2447,6 +2571,11 @@ void KAEvent::adjustStartOfDay(const KAEvent::List& events)
 
 DateTime KAEvent::nextTrigger(Trigger type) const
 {
+    if (d->mCategory == CalEvent::ARCHIVED  ||  d->mCategory == CalEvent::TEMPLATE)
+        return {};   // it's a template or archived
+    if (d->mDeferral == KAEventPrivate::DeferType::Normal)
+        return d->mDeferralTime;   // for a deferred alarm, working time setting is ignored
+
     d->calcTriggerTimes();
     switch (type)
     {
@@ -2459,7 +2588,7 @@ DateTime KAEvent::nextTrigger(Trigger type) const
             const bool reminderAfter = d->mMainExpired && d->mReminderActive != KAEventPrivate::ReminderType::None && d->mReminderMinutes < 0;
             return d->checkRecur() != KARecurrence::NO_RECUR  && (d->mWorkTimeOnly || d->mExcludeHolidays)
                    ? (reminderAfter ? d->mAllWorkTrigger : d->mMainWorkTrigger)
-                   : (reminderAfter ? d->mAllTrigger : d->mMainTrigger);
+                   : (reminderAfter ? d->mAllTrigger     : d->mMainTrigger);
         }
         default:                return {};
     }
@@ -3191,7 +3320,7 @@ KAEvent::OccurType KAEventPrivate::nextOccurrence(const KADateTime& preDateTime,
     KADateTime pre = preDateTime;
     if (includeRepetitions != KAEvent::Repeats::Ignore)
     {
-        // Repeats::Return or Repeats::AllowFor
+        // Repeats::Return or Repeats::RecurBefore
         if (!mRepetition)
             includeRepetitions = KAEvent::Repeats::Ignore;
         else
@@ -3215,7 +3344,7 @@ KAEvent::OccurType KAEventPrivate::nextOccurrence(const KADateTime& preDateTime,
 
     if (type != KAEvent::OccurType::None  &&  result <= preDateTime  &&  includeRepetitions != KAEvent::Repeats::Ignore)
     {
-        // Repeats::Return or Repeats::AllowFor
+        // Repeats::Return or Repeats::RecurBefore
         // The next occurrence is a sub-repetition
         int repetition = mRepetition.nextRepeatCount(result.kDateTime(), preDateTime);
         const DateTime repeatDT(mRepetition.duration(repetition).end(result.qDateTime()));
@@ -4304,9 +4433,9 @@ inline void KAEventPrivate::set_deferral(DeferType type)
 * Calculate the next trigger times of the alarm.
 * This should only be called when changes have actually occurred which might
 * affect the event's trigger times.
-* mMainTrigger is set to the next scheduled recurrence/sub-repetition, or the
-*              deferral time if a deferral is pending.
-* mAllTrigger is the same as mMainTrigger, but takes account of reminders.
+* mMainTrigger is set to the next scheduled recurrence/sub-repetition
+* mAllTrigger is the same as mMainTrigger, but takes account of reminders and
+*             deferred reminders.
 * mMainWorkTrigger is set to the next scheduled recurrence/sub-repetition
 *                  which occurs in working hours, if working-time-only is set.
 * mAllWorkTrigger is the same as mMainWorkTrigger, but takes account of reminders.
@@ -4318,7 +4447,8 @@ void KAEventPrivate::calcTriggerTimes() const
 #pragma message("May need to set date-only alarms to after start-of-day time in working-time checks")
     bool recurs = (checkRecur() != KARecurrence::NO_RECUR);
     if ((recurs  &&  mWorkTimeOnly  &&  mWorkTimeOnly != mWorkTimeIndex)
-    ||  (recurs  &&  mExcludeHolidays  &&  mExcludeHolidayRegion != mHolidays->regionCode()))
+    ||  (recurs  &&  mExcludeHolidays  &&  mExcludeHolidayRegion != mHolidays->regionCode())
+    ||  (mStartDateTime.isDateOnly()  &&  mTriggerStartOfDay != DateTime::startOfDay()))
     {
         // It's a work time alarm, and work days/times have changed, or
         // it excludes holidays, and the holidays definition has changed.
@@ -4326,92 +4456,58 @@ void KAEventPrivate::calcTriggerTimes() const
     }
     else if (!mTriggerChanged)
         return;
+
     mTriggerChanged = false;
+    mTriggerStartOfDay = DateTime::startOfDay();   // note start of day time used in calculation
     if (recurs  &&  mWorkTimeOnly)
         mWorkTimeOnly = mWorkTimeIndex;    // note which work time definition was used in calculation
     if (recurs  &&  mExcludeHolidays)
         mExcludeHolidayRegion = mHolidays->regionCode();  // note which holiday definition was used in calculation
     bool excludeHolidays = mExcludeHolidays && !mExcludeHolidayRegion.isEmpty();
 
-    if (mCategory == CalEvent::ARCHIVED  ||  mCategory == CalEvent::TEMPLATE)
+    mMainTrigger = mainDateTime(true);   // next recurrence or sub-repetition
+    mAllTrigger = (mDeferral == DeferType::Reminder)        ? mDeferralTime
+                : (mReminderActive != ReminderType::Active) ? mMainTrigger
+                : (mReminderMinutes < 0)                    ? mReminderAfterTime
+                :                                             mMainTrigger.addMins(-mReminderMinutes);
+    // If only-during-working-time is set and it recurs, it won't actually trigger
+    // unless it falls during working hours.
+    if ((!mWorkTimeOnly && !excludeHolidays)
+    ||  !recurs
+    ||  !excludedByWorkTimeOrHoliday(mMainTrigger.kDateTime()))
     {
-        // It's a template or archived
-        mAllTrigger = mMainTrigger = mAllWorkTrigger = mMainWorkTrigger = KADateTime();
+        // It only occurs once, or it complies with any working hours/holiday
+        // restrictions.
+        mMainWorkTrigger = mMainTrigger;
+        mAllWorkTrigger  = mAllTrigger;
     }
-    else if (mDeferral == DeferType::Normal)
+    else if (mWorkTimeOnly)
     {
-        // For a deferred alarm, working time setting is ignored
-        mAllTrigger = mMainTrigger = mAllWorkTrigger = mMainWorkTrigger = mDeferralTime;
-    }
-    else
-    {
-        mMainTrigger = mainDateTime(true);   // next recurrence or sub-repetition
-        mAllTrigger = (mDeferral == DeferType::Reminder)        ? mDeferralTime
-                    : (mReminderActive != ReminderType::Active) ? mMainTrigger
-                    : (mReminderMinutes < 0)                    ? mReminderAfterTime
-                    :                                             mMainTrigger.addMins(-mReminderMinutes);
-        // It's not deferred.
-        // If only-during-working-time is set and it recurs, it won't actually trigger
-        // unless it falls during working hours.
-        if ((!mWorkTimeOnly && !excludeHolidays)
-        ||  !recurs
-        ||  !excludedByWorkTimeOrHoliday(mMainTrigger.kDateTime()))
+        // The alarm is restricted to working hours.
+        // Finding the next occurrence during working hours can sometimes take a long time,
+        // so mark the next actual trigger as invalid until the calculation completes.
+        // Note that reminders are only triggered if the main alarm is during working time.
+        if (!excludeHolidays)
         {
-            // It only occurs once, or it complies with any working hours/holiday
-            // restrictions.
-            mMainWorkTrigger = mMainTrigger;
-            mAllWorkTrigger  = mAllTrigger;
+            // There are no holiday restrictions.
+            calcNextWorkingTime(mMainTrigger);
         }
-        else if (mWorkTimeOnly)
-        {
-            // The alarm is restricted to working hours.
-            // Finding the next occurrence during working hours can sometimes take a long time,
-            // so mark the next actual trigger as invalid until the calculation completes.
-            // Note that reminders are only triggered if the main alarm is during working time.
-            if (!excludeHolidays)
-            {
-                // There are no holiday restrictions.
-                calcNextWorkingTime(mMainTrigger);
-            }
-            else if (mHolidays->isValid())
-            {
-                // Holidays are excluded.
-                DateTime nextTrigger = mMainTrigger;
-                KADateTime kdt;
-                for (int i = 0;  i < 20;  ++i)
-                {
-                    calcNextWorkingTime(nextTrigger);
-                    if (!mHolidays->isHoliday(mMainWorkTrigger.date()))
-                        return;    // found a non-holiday occurrence
-                    kdt = mMainWorkTrigger.effectiveKDateTime();
-                    kdt.setTime(QTime(23, 59, 59));
-                    const KAEvent::OccurType type = nextOccurrence(kdt, nextTrigger, KAEvent::Repeats::Return);
-                    if (!nextTrigger.isValid())
-                        break;
-                    if (!excludedByWorkTimeOrHoliday(nextTrigger.kDateTime()))
-                    {
-                        const int reminder = (mReminderMinutes > 0) ? mReminderMinutes : 0;   // only interested in reminders BEFORE the alarm
-                        mMainWorkTrigger = nextTrigger;
-                        mAllWorkTrigger = (type & KAEvent::OccurType::Repeat) ? mMainWorkTrigger : mMainWorkTrigger.addMins(-reminder);
-                        return;   // found a non-holiday occurrence
-                    }
-                }
-                mMainWorkTrigger = mAllWorkTrigger = DateTime();
-            }
-        }
-        else if (excludeHolidays  &&  mHolidays->isValid())
+        else if (mHolidays->isValid())
         {
             // Holidays are excluded.
             DateTime nextTrigger = mMainTrigger;
             KADateTime kdt;
             for (int i = 0;  i < 20;  ++i)
             {
-                kdt = nextTrigger.effectiveKDateTime();
+                calcNextWorkingTime(nextTrigger);
+                if (!mHolidays->isHoliday(mMainWorkTrigger.date()))
+                    return;    // found a non-holiday occurrence
+                kdt = mMainWorkTrigger.effectiveKDateTime();
                 kdt.setTime(QTime(23, 59, 59));
                 const KAEvent::OccurType type = nextOccurrence(kdt, nextTrigger, KAEvent::Repeats::Return);
                 if (!nextTrigger.isValid())
                     break;
-                if (!mHolidays->isHoliday(nextTrigger.date()))
+                if (!excludedByWorkTimeOrHoliday(nextTrigger.kDateTime()))
                 {
                     const int reminder = (mReminderMinutes > 0) ? mReminderMinutes : 0;   // only interested in reminders BEFORE the alarm
                     mMainWorkTrigger = nextTrigger;
@@ -4421,6 +4517,28 @@ void KAEventPrivate::calcTriggerTimes() const
             }
             mMainWorkTrigger = mAllWorkTrigger = DateTime();
         }
+    }
+    else if (excludeHolidays  &&  mHolidays->isValid())
+    {
+        // Holidays are excluded.
+        DateTime nextTrigger = mMainTrigger;
+        KADateTime kdt;
+        for (int i = 0;  i < 20;  ++i)
+        {
+            kdt = nextTrigger.effectiveKDateTime();
+            kdt.setTime(QTime(23, 59, 59));
+            const KAEvent::OccurType type = nextOccurrence(kdt, nextTrigger, KAEvent::Repeats::Return);
+            if (!nextTrigger.isValid())
+                break;
+            if (!mHolidays->isHoliday(nextTrigger.date()))
+            {
+                const int reminder = (mReminderMinutes > 0) ? mReminderMinutes : 0;   // only interested in reminders BEFORE the alarm
+                mMainWorkTrigger = nextTrigger;
+                mAllWorkTrigger = (type & KAEvent::OccurType::Repeat) ? mMainWorkTrigger : mMainWorkTrigger.addMins(-reminder);
+                return;   // found a non-holiday occurrence
+            }
+        }
+        mMainWorkTrigger = mAllWorkTrigger = DateTime();
     }
 }
 
