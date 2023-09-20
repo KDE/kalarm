@@ -39,7 +39,7 @@
 
 <!-- Don't change format of date and version of the documentation -->
 
-<date>2023-9-2</date>
+<date>2023-9-20</date>
 <releaseinfo>3.7.0 (KDE Gear 23.12)</releaseinfo>
 
 <abstract>
@@ -1942,7 +1942,8 @@ cancelled.</para></note>
 <para>If the system configuration allows multiple alarms to wake the
 system from suspension, you can select
 <guilabel>Wake from suspend</guilabel> to wake the system if it is
-currently suspended when the alarm becomes due. See 
+currently suspended when the alarm becomes due. This function is not
+available for date-only alarms because their time is not defined. See 
 <link linkend="wake-suspend">Wake From Suspend</link> for more
 information.</para>
 
