@@ -794,4 +794,5 @@ void AlarmTimeWidget::slotPresetSelected(int index)
 }
 
 #include "moc_alarmtimewidget.cpp"
+
 // vim: et sw=4:

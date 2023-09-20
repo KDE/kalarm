@@ -243,10 +243,9 @@ void SingleFileResourceConfigDialog::slotStatJobResult(KJob* job)
 */
 void SingleFileResourceConfigDialog::initiateUrlStatusCheck(const QUrl& url)
 {
-    mStatJob = KIO::stat(url,
-                                KIO::StatJob::SourceSide,
-                                KIO::StatDetail::StatDefaultDetails,
-                                KIO::HideProgressInfo);
+    mStatJob = KIO::stat(url, KIO::StatJob::SourceSide,
+                              KIO::StatDetail::StatDefaultDetails,
+                              KIO::HideProgressInfo);
     connect(mStatJob, &KIO::StatJob::result, this, &SingleFileResourceConfigDialog::slotStatJobResult);
 }
 

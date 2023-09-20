@@ -2062,7 +2062,7 @@ KAlarm::UpdateResult sendToKOrganizer(const KAEvent& event)
     if (status != KAlarm::UPDATE_OK)
         return status;
     QDBusInterface korgInterface(KORG_DBUS_SERVICE, QStringLiteral(KORG_DBUS_PATH), KORG_DBUS_IFACE);
-    const QList<QVariant> args{iCal};             //clazy:exclude=inefficient-qlist
+    const QList<QVariant> args{iCal};
     QDBusReply<bool> reply = korgInterface.callWithArgumentList(QDBus::Block, QStringLiteral("addIncidence"), args);
     if (!reply.isValid())
     {

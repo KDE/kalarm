@@ -82,7 +82,7 @@ void EventListView::select(const QModelIndex& index, bool scrollToIndex)
 */
 QModelIndex EventListView::selectedIndex() const
 {
-    const QModelIndexList list = selectionModel()->selectedRows();      //clazy:exclude=inefficient-qlist
+    const QModelIndexList list = selectionModel()->selectedRows();
     if (list.count() != 1)
         return {};
     return list[0];
@@ -94,7 +94,7 @@ QModelIndex EventListView::selectedIndex() const
 */
 KAEvent EventListView::selectedEvent() const
 {
-    const QModelIndexList list = selectionModel()->selectedRows();      //clazy:exclude=inefficient-qlist
+    const QModelIndexList list = selectionModel()->selectedRows();
     if (list.count() != 1)
         return {};
     const auto model = static_cast<const EventListModel*>(list[0].model());
@@ -107,7 +107,7 @@ KAEvent EventListView::selectedEvent() const
 QList<KAEvent> EventListView::selectedEvents() const
 {
     QList<KAEvent> elist;
-    const QModelIndexList ixlist = selectionModel()->selectedRows();      //clazy:exclude=inefficient-qlist
+    const QModelIndexList ixlist = selectionModel()->selectedRows();
     int count = ixlist.count();
     if (count)
     {

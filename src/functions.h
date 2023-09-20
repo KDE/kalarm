@@ -55,7 +55,7 @@ struct UpdateResult
 {
     UpdateStatus  status;   // status code
     QString       message;  // error message if any
-    QList<int> failed;      // indexes to events whose update failed
+    QList<int>    failed;   // indexes to events whose update failed
 
     UpdateResult() : status(UPDATE_OK) {}
     explicit UpdateResult(UpdateStatus s, const QString& m = QString()) : status(s), message(m) {}
@@ -73,39 +73,39 @@ struct UpdateResult
 QString i18n_act_StopPlay();      // text of Stop Play action
 
 /** Display a main window with the specified event selected */
-MainWindow*         displayMainWindowSelected(const QString& eventId);
+MainWindow*    displayMainWindowSelected(const QString& eventId);
 
-bool                editNewAlarm(const QString& templateName, QWidget* parent = nullptr);
-void                editNewAlarm(EditAlarmDlg::Type, QWidget* parent = nullptr);
-void                editNewAlarm(EditAlarmDlg::Type, const QDate& startDate, QWidget* parent = nullptr);
-void                editNewAlarm(KAEvent::SubAction, QWidget* parent = nullptr, const AlarmText* = nullptr);
-void                editNewAlarm(const KAEvent& preset, QWidget* parent = nullptr);
-void                editNewAlarm(const KAEvent& preset, const QDate& startDate, QWidget* parent = nullptr);
-void                editAlarm(KAEvent&, QWidget* parent = nullptr);
-bool                editAlarmById(const EventId& eventID, QWidget* parent = nullptr);
-void                updateEditedAlarm(EditAlarmDlg*, KAEvent&, Resource&);
-void                viewAlarm(const KAEvent&, QWidget* parent = nullptr);
-void                editNewTemplate(EditAlarmDlg::Type, QWidget* parent = nullptr);
-void                editNewTemplate(const KAEvent& preset, QWidget* parent = nullptr);
-void                editTemplate(const KAEvent&, QWidget* parent = nullptr);
-void                execNewAlarmDlg(EditAlarmDlg*, const QDate& startDate = QDate());
+bool           editNewAlarm(const QString& templateName, QWidget* parent = nullptr);
+void           editNewAlarm(EditAlarmDlg::Type, QWidget* parent = nullptr);
+void           editNewAlarm(EditAlarmDlg::Type, const QDate& startDate, QWidget* parent = nullptr);
+void           editNewAlarm(KAEvent::SubAction, QWidget* parent = nullptr, const AlarmText* = nullptr);
+void           editNewAlarm(const KAEvent& preset, QWidget* parent = nullptr);
+void           editNewAlarm(const KAEvent& preset, const QDate& startDate, QWidget* parent = nullptr);
+void           editAlarm(KAEvent&, QWidget* parent = nullptr);
+bool           editAlarmById(const EventId& eventID, QWidget* parent = nullptr);
+void           updateEditedAlarm(EditAlarmDlg*, KAEvent&, Resource&);
+void           viewAlarm(const KAEvent&, QWidget* parent = nullptr);
+void           editNewTemplate(EditAlarmDlg::Type, QWidget* parent = nullptr);
+void           editNewTemplate(const KAEvent& preset, QWidget* parent = nullptr);
+void           editTemplate(const KAEvent&, QWidget* parent = nullptr);
+void           execNewAlarmDlg(EditAlarmDlg*, const QDate& startDate = QDate());
 /** Create a "New From Template" QAction */
-KToggleAction*      createAlarmEnableAction(QObject* parent);
-QAction*            createStopPlayAction(QObject* parent);
-KToggleAction*      createSpreadWindowsAction(QObject* parent);
+KToggleAction* createAlarmEnableAction(QObject* parent);
+QAction*       createStopPlayAction(QObject* parent);
+KToggleAction* createSpreadWindowsAction(QObject* parent);
 /** Returns a list of all alarm templates.
  *  If shell commands are disabled, command alarm templates are omitted.
  */
-QList<KAEvent>      templateList();
-void                outputAlarmWarnings(QWidget* parent, const KAEvent* = nullptr);
-void                refreshAlarms();
-void                refreshAlarmsIfQueued();    // must only be called from KAlarmApp::processQueue()
+QList<KAEvent> templateList();
+void           outputAlarmWarnings(QWidget* parent, const KAEvent* = nullptr);
+void           refreshAlarms();
+void           refreshAlarmsIfQueued();    // must only be called from KAlarmApp::processQueue()
 
-QStringList         dontShowErrors(const EventId&);
-bool                dontShowErrors(const EventId&, const QString& tag);
-void                setDontShowErrors(const EventId&, const QStringList& tags = QStringList());
-void                setDontShowErrors(const EventId&, const QString& tag);
-void                setDontShowErrors(const QString& eventId, const QString& tag);
+QStringList    dontShowErrors(const EventId&);
+bool           dontShowErrors(const EventId&, const QString& tag);
+void           setDontShowErrors(const EventId&, const QStringList& tags = QStringList());
+void           setDontShowErrors(const EventId&, const QString& tag);
+void           setDontShowErrors(const QString& eventId, const QString& tag);
 
 enum         // 'options' parameter values for addEvent(). May be OR'ed together.
 {
@@ -304,12 +304,12 @@ bool importAlarms(Resource& resource, QWidget* parent);
  */
 bool exportAlarms(const QList<KAEvent>& events, QWidget* parent);
 
-void                displayKOrgUpdateError(QWidget* parent, UpdateError, const UpdateResult& korgError, int nAlarms = 0);
+void        displayKOrgUpdateError(QWidget* parent, UpdateError, const UpdateResult& korgError, int nAlarms = 0);
 #if ENABLE_RTC_WAKE_FROM_SUSPEND
-QStringList         checkRtcWakeConfig(bool checkEventExists = false);
-void                deleteRtcWakeConfig();
-void                cancelRtcWake(QWidget* msgParent, const QString& eventId = QString());
-bool                setRtcWakeTime(unsigned triggerTime, QWidget* parent);
+QStringList checkRtcWakeConfig(bool checkEventExists = false);
+void        deleteRtcWakeConfig();
+void        cancelRtcWake(QWidget* msgParent, const QString& eventId = QString());
+bool        setRtcWakeTime(unsigned triggerTime, QWidget* parent);
 #endif
 
 /** Extract dragged and dropped Akonadi RFC822 message data.
@@ -323,14 +323,14 @@ bool                setRtcWakeTime(unsigned triggerTime, QWidget* parent);
  */
 bool dropAkonadiEmail(const QMimeData* data, QUrl& url, AlarmText& alarmText);
 
-bool                convertTimeString(const QByteArray& timeString, KADateTime& dateTime,
-                                  const KADateTime& defaultDt = KADateTime(), bool allowTZ = true);
-KADateTime          applyTimeZone(const QString& tzstring, const QDate& date, const QTime& time,
-                                   bool haveTime, const KADateTime& defaultDt = KADateTime());
+bool        convertTimeString(const QByteArray& timeString, KADateTime& dateTime,
+                              const KADateTime& defaultDt = KADateTime(), bool allowTZ = true);
+KADateTime  applyTimeZone(const QString& tzstring, const QDate& date, const QTime& time,
+                          bool haveTime, const KADateTime& defaultDt = KADateTime());
 
 #ifndef NDEBUG
-void                setTestModeConditions();
-void                setSimulatedSystemTime(const KADateTime&);
+void        setTestModeConditions();
+void        setSimulatedSystemTime(const KADateTime&);
 #endif
 
 } // namespace KAlarm
