@@ -535,7 +535,15 @@ void AlarmTimeWidget::setAnyTime()
 }
 
 /******************************************************************************
-* Enable/disable the "date only" radio button.
+* Return whether the "date only" checkbox is selected.
+*/
+bool AlarmTimeWidget::anyTimeSelected() const
+{
+    return mAnyTimeCheckBox && mAnyTimeCheckBox->isChecked();
+}
+
+/******************************************************************************
+* Enable/disable the "date only" checkbox.
 */
 void AlarmTimeWidget::enableAnyTime(bool enable)
 {

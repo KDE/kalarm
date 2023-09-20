@@ -1094,7 +1094,7 @@ bool EditAlarmDlg::validate()
             {
                 // A timed recurrence has an entered start date which
                 // has already expired, so we must adjust it.
-                if (event.nextOccurrence(now, mAlarmDateTime, KAEvent::Repeats::AllowFor) == KAEvent::OccurType::None)
+                if (event.nextOccurrence(now, mAlarmDateTime, KAEvent::Repeats::RecurBefore) == KAEvent::OccurType::None)
                 {
                     KAMessageBox::error(this, i18nc("@info", "Recurrence has already expired"));
                     return false;
@@ -1423,8 +1423,7 @@ void EditAlarmDlg::slotRecurTypeChange(int repeatType)
     if (mReminder)
         mReminder->setAfterOnly(atLogin);
     mLateCancel->setEnabled(!atLogin);
-    if (mWakeFromSuspend)
-        mWakeFromSuspend->setEnabled(!atLogin);
+    setWakeFromSuspendEnabledStatus();
     if (mShowInKorganizer)
         mShowInKorganizer->setEnabled(!atLogin);
     slotRecurFrequencyChange();
@@ -1465,6 +1464,7 @@ void EditAlarmDlg::slotTemplateTimeType(QAbstractButton*)
 {
     mTemplateTime->setEnabled(mTemplateUseTime->isChecked());
     mTemplateTimeAfter->setEnabled(mTemplateUseTimeAfter->isChecked());
+    slotAnyTimeToggled(mTemplateAnyTime && mTemplateAnyTime->isChecked());
 }
 
 /******************************************************************************
@@ -1473,9 +1473,24 @@ void EditAlarmDlg::slotTemplateTimeType(QAbstractButton*)
 */
 void EditAlarmDlg::slotAnyTimeToggled(bool anyTime)
 {
-    if (mReminder  &&  mReminder->isReminder())
+    if (mReminder)
         mReminder->setDateOnly(anyTime);
     mLateCancel->setDateOnly(anyTime);
+    setWakeFromSuspendEnabledStatus();
+}
+
+/******************************************************************************
+* Enable or disable the wake-from-suspend checkbox as appropriate.
+*/
+void EditAlarmDlg::setWakeFromSuspendEnabledStatus()
+{
+    if (mWakeFromSuspend)
+    {
+        bool atLogin = (mRecurrenceEdit->repeatType() == RecurrenceEdit::AT_LOGIN);
+        bool anyTime = (mTimeWidget && mTimeWidget->anyTimeSelected())
+                   ||  (mTemplateAnyTime && mTemplateAnyTime->isChecked());
+        mWakeFromSuspend->setEnabled(!atLogin && !anyTime);
+    }
 }
 
 bool EditAlarmDlg::dateOnly() const

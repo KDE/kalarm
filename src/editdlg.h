@@ -143,6 +143,7 @@ private:
     bool            validate();
     virtual bool    stateChanged() const;
     void            showOptions(bool more);
+    void            setWakeFromSuspendEnabledStatus();
 
 protected:
     KAEvent::SubAction  mAlarmType;           // actual alarm type

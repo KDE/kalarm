@@ -50,6 +50,7 @@ public:
     KADateTime::Spec  timeSpec() const              { return mTimeSpec; }
     void              setReadOnly(bool);
     bool              anyTime() const               { return mAnyTime; }
+    bool              anyTimeSelected() const;
     void              enableAnyTime(bool enable);
 
     /** Select/deselect 'Time from now' option.
