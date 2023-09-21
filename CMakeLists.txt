@@ -48,7 +48,7 @@ include(ECMAddAppIcon)
 include(ECMQtDeclareLoggingCategory)
 include(ECMDeprecationSettings)
 set(QT_REQUIRED_VERSION "6.5.0")
-set(KTEXTADDONS_MIN_VERSION "1.4.0")
+set(KTEXTADDONS_MIN_VERSION "1.5.1")
 # Do NOT add quote
 set(KDEPIM_DEV_VERSION alpha)
 
