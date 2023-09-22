@@ -1,7 +1,7 @@
 # Translation for kalarm.po to Euskara/Basque (eu).
 # Copyright (C) 2003-2023 This file is copyright:
 # This file is distributed under the same license as the kalarm package.
-# KDE euskaratzeko proiektuko arduraduna <xalba@ni.eus>.
+# SPDX-FileCopyrightText: 2023 KDE euskaratzeko proiektuko arduraduna <xalba@ni.eus>
 #
 # Translators:
 # Marcos  <marcos@euskalgnu.org>, 2003, 2005, 2006.
@@ -13,14 +13,14 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-09-21 00:45+0000\n"
-"PO-Revision-Date: 2023-08-29 08:25+0200\n"
+"PO-Revision-Date: 2023-09-21 23:01+0200\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
 "Language: eu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 23.04.3\n"
+"X-Generator: Lokalize 23.08.1\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #, kde-format
@@ -1926,41 +1926,33 @@ msgstr ""
 
 #. i18n: ectx: Menu (file)
 #: data/kalarmui.rc:19
-#, fuzzy, kde-format
-#| msgctxt "@option:check Alarm action = file display"
-#| msgid "File"
+#, kde-format
 msgid "File"
 msgstr "Fitxategia"
 
 #. i18n: ectx: Menu (edit)
 #: data/kalarmui.rc:31
-#, fuzzy, kde-format
-#| msgctxt "@action:button"
-#| msgid "Edit"
+#, kde-format
 msgid "Edit"
 msgstr "Editatu"
 
 #. i18n: ectx: Menu (view)
 #: data/kalarmui.rc:46
-#, fuzzy, kde-format
-#| msgctxt "@title:tab"
-#| msgid "View"
+#, kde-format
 msgid "View"
 msgstr "Ikuspegia"
 
 #. i18n: ectx: Menu (actions)
 #: data/kalarmui.rc:56
-#, fuzzy, kde-format
-#| msgid "&Actions"
+#, kde-format
 msgid "Actions"
-msgstr "&Ekintzak"
+msgstr "Ekintzak"
 
 #. i18n: ectx: Menu (settings)
 #: data/kalarmui.rc:68
-#, fuzzy, kde-format
-#| msgid "&Settings"
+#, kde-format
 msgid "Settings"
-msgstr "E&zarpenak"
+msgstr "Ezarpenak"
 
 #: datepicker.cpp:50
 #, kde-format
@@ -3214,12 +3206,10 @@ msgid "Stop Play"
 msgstr "Jotzeari utzi"
 
 #: functions.cpp:192
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "Enable &Alarms"
+#, kde-format
 msgctxt "@action"
 msgid "Enable Alarms"
-msgstr "Gaitu &alarmak"
+msgstr "Gaitu alarmak"
 
 #: functions.cpp:218
 #, kde-format
@@ -4420,12 +4410,10 @@ msgstr ""
 "hondatuta dago)"
 
 #: mainwindow.cpp:459
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "&Templates..."
+#, kde-format
 msgctxt "@action"
 msgid "Templates..."
-msgstr "&Txantiloiak..."
+msgstr "Txantiloiak..."
 
 #: mainwindow.cpp:463 templatedlg.cpp:73
 #, kde-format
@@ -4434,33 +4422,25 @@ msgid "New"
 msgstr "Berria"
 
 #: mainwindow.cpp:469
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "Create Tem&plate..."
+#, kde-format
 msgctxt "@action"
 msgid "Create Template..."
-msgstr "Sortu t&xantiloia..."
+msgstr "Sortu txantiloia..."
 
 #: mainwindow.cpp:473
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "&Copy..."
+#, kde-format
 msgctxt "@action"
 msgid "Copy..."
-msgstr "&Kopiatu..."
+msgstr "Kopiatu..."
 
 #: mainwindow.cpp:478 resourceselector.cpp:301
-#, fuzzy, kde-format
-#| msgctxt "@action:button"
-#| msgid "Edit..."
+#, kde-format
 msgctxt "@action"
 msgid "Edit..."
 msgstr "Editatu..."
 
 #: mainwindow.cpp:483
-#, fuzzy, kde-format
-#| msgctxt "@action:button"
-#| msgid "Delete"
+#, kde-format
 msgctxt "@action"
 msgid "Delete"
 msgstr "Ezabatu"
@@ -4472,12 +4452,10 @@ msgid "Delete Without Confirmation"
 msgstr "Ezabatu berrespenik gabe"
 
 #: mainwindow.cpp:494
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "Reac&tivate"
+#, kde-format
 msgctxt "@action"
 msgid "Reactivate"
-msgstr "Birrak&tibatu"
+msgstr "Berraktibatu"
 
 #: mainwindow.cpp:508
 #, kde-format
@@ -4486,28 +4464,22 @@ msgid "Wake From Suspend..."
 msgstr "Esnatu esekitzetik..."
 
 #: mainwindow.cpp:518
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Show Archived Alarms"
+#, kde-format
 msgctxt "@action"
 msgid "Show Archived Alarms"
 msgstr "Erakutsi artxibatutako alarmak"
 
 #: mainwindow.cpp:523
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "Show in System &Tray"
+#, kde-format
 msgctxt "@action"
 msgid "Show in System Tray"
-msgstr "Erakutsi sistema-erre&tiluan"
+msgstr "Erakutsi sistemaren erretiluan"
 
 #: mainwindow.cpp:527
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "Show &Calendars"
+#, kde-format
 msgctxt "@action"
 msgid "Show Calendars"
-msgstr "Erakutsi e&gutegiak"
+msgstr "Erakutsi egutegiak"
 
 #: mainwindow.cpp:531
 #, kde-format
@@ -4516,12 +4488,10 @@ msgid "Show Date Selector"
 msgstr "Erakutsi data hautatzailea"
 
 #: mainwindow.cpp:539
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "Import &Alarms..."
+#, kde-format
 msgctxt "@action"
 msgid "Import Alarms..."
-msgstr "Inportatu &alarmak..."
+msgstr "Inportatu alarmak..."
 
 #: mainwindow.cpp:545
 #, kde-format
@@ -4530,28 +4500,22 @@ msgid "Import Birthdays..."
 msgstr "Inportatu urtebetetzeak..."
 
 #: mainwindow.cpp:550
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "E&xport Selected Alarms..."
+#, kde-format
 msgctxt "@action"
 msgid "Export Selected Alarms..."
-msgstr "E&sportatu hautatutako alarmak..."
+msgstr "Esportatu hautatutako alarmak..."
 
 #: mainwindow.cpp:554 resourceselector.cpp:319
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "E&xport..."
+#, kde-format
 msgctxt "@action"
 msgid "Export..."
-msgstr "E&sportatu..."
+msgstr "Esportatu..."
 
 #: mainwindow.cpp:558
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "&Refresh Alarms"
+#, kde-format
 msgctxt "@action"
 msgid "Refresh Alarms"
-msgstr "F&reskatu alarmak"
+msgstr "Freskatu alarmak"
 
 #: mainwindow.cpp:810
 #, kde-format
@@ -4650,16 +4614,13 @@ msgid "Choose alarm type to create:"
 msgstr "Hautatu sortu beharreko alarma mota:"
 
 #: mainwindow.cpp:1685
-#, fuzzy, kde-format
-#| msgctxt "@action:button"
-#| msgid "Enable"
+#, kde-format
 msgctxt "@action"
 msgid "Enable"
 msgstr "Gaitu"
 
 #: mainwindow.cpp:1685
-#, fuzzy, kde-format
-#| msgid "Disabled"
+#, kde-format
 msgctxt "@action"
 msgid "Disable"
 msgstr "Ezgaituta"
@@ -4871,12 +4832,10 @@ msgid "Edit the alarm."
 msgstr "Editatu alarma."
 
 #: messagewindow.cpp:439
-#, fuzzy, kde-format
-#| msgctxt "@action:button"
-#| msgid "&Defer..."
+#, kde-format
 msgctxt "@action:button"
 msgid "Defer..."
-msgstr "&Geroratu..."
+msgstr "Geroratu..."
 
 #: messagewindow.cpp:443
 #, kde-format
@@ -4955,12 +4914,10 @@ msgid "Unable to locate this email in <application>KMail</application>"
 msgstr "Edin du e-posta hau <application>KMail</application>en aurkitu"
 
 #: newalarmaction.cpp:45
-#, fuzzy, kde-format
-#| msgctxt "@item:inmenu"
-#| msgid "&Display Alarm Template"
+#, kde-format
 msgctxt "@item:inmenu"
 msgid "Display Alarm Template"
-msgstr "&Ikus-alarma txantiloia"
+msgstr "Ikus-alarmaren txantiloia"
 
 #: newalarmaction.cpp:45
 #, kde-format
@@ -4969,12 +4926,10 @@ msgid "New Display Alarm"
 msgstr "Ikus-alarma berria"
 
 #: newalarmaction.cpp:48
-#, fuzzy, kde-format
-#| msgctxt "@item:inmenu"
-#| msgid "&Command Alarm Template"
+#, kde-format
 msgctxt "@item:inmenu"
 msgid "Command Alarm Template"
-msgstr "Komando-alarma txantiloia"
+msgstr "Komando-alarmaren txantiloia"
 
 #: newalarmaction.cpp:48
 #, kde-format
@@ -4983,12 +4938,10 @@ msgid "New Command Alarm"
 msgstr "Komando alarma beria"
 
 #: newalarmaction.cpp:51
-#, fuzzy, kde-format
-#| msgctxt "@item:inmenu"
-#| msgid "&Email Alarm Template"
+#, kde-format
 msgctxt "@item:inmenu"
 msgid "Email Alarm Template"
-msgstr "E-posta-alarma txantiloia"
+msgstr "E-posta-alarmaren txantiloia"
 
 #: newalarmaction.cpp:51
 #, kde-format
@@ -4997,12 +4950,10 @@ msgid "New Email Alarm"
 msgstr "E-posta alarma berria"
 
 #: newalarmaction.cpp:54
-#, fuzzy, kde-format
-#| msgctxt "@item:inmenu"
-#| msgid "&Audio Alarm Template"
+#, kde-format
 msgctxt "@item:inmenu"
 msgid "Audio Alarm Template"
-msgstr "&Audio-alarma txantiloia"
+msgstr "Audio-alarmaren txantiloia"
 
 #: newalarmaction.cpp:54
 #, kde-format
@@ -5011,12 +4962,10 @@ msgid "New Audio Alarm"
 msgstr "Audio-alarma berria"
 
 #: newalarmaction.cpp:69
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "New Alarm From &Template"
+#, kde-format
 msgctxt "@action"
 msgid "New Alarm From Template"
-msgstr "Alarma berria &txantiloitik"
+msgstr "Alarma berria txantiloitik"
 
 #: prefdlg.cpp:128
 #, kde-format
@@ -5104,20 +5053,16 @@ msgstr ""
 "Berrezarri fitxa guztiak haien balio lehenetsietara edo bakarrik uneko fitxa?"
 
 #: prefdlg.cpp:262
-#, fuzzy, kde-format
-#| msgctxt "@action:button Reset ALL tabs"
-#| msgid "&All"
+#, kde-format
 msgctxt "@action:button Reset ALL tabs"
 msgid "All"
-msgstr "Den&a"
+msgstr "Dena"
 
 #: prefdlg.cpp:263
-#, fuzzy, kde-format
-#| msgctxt "@action:button Reset the CURRENT tab"
-#| msgid "C&urrent"
+#, kde-format
 msgctxt "@action:button Reset the CURRENT tab"
 msgid "Current"
-msgstr "&Unekoa"
+msgstr "Unekoa"
 
 #: prefdlg.cpp:439
 #, kde-format
@@ -5828,17 +5773,13 @@ msgid "Recurrence:"
 msgstr "Errepikatzea:"
 
 #: prefdlg.cpp:1408
-#, fuzzy, kde-format
-#| msgctxt "@option"
-#| msgid "February 28th"
+#, kde-format
 msgctxt "@option:radio"
 msgid "February 28th"
 msgstr "Otsailak 28"
 
 #: prefdlg.cpp:1412
-#, fuzzy, kde-format
-#| msgctxt "@option"
-#| msgid "March 1st"
+#, kde-format
 msgctxt "@option:radio"
 msgid "March 1st"
 msgstr "Martxoak 1"
@@ -6068,12 +6009,10 @@ msgid "System Tray Tooltip"
 msgstr "Sistemaren erretiluko aholkua"
 
 #: prefdlg.cpp:1853
-#, fuzzy, kde-format
-#| msgctxt "@option:check"
-#| msgid "Show next &24 hours' alarms"
+#, kde-format
 msgctxt "@option:check"
 msgid "Show next 24 hours' alarms"
-msgstr "Erakutsi hurrengo &24 orduetako alarmak"
+msgstr "Erakutsi hurrengo 24 orduetako alarmak"
 
 #: prefdlg.cpp:1857
 #, kde-format
@@ -6513,12 +6452,10 @@ msgid "Date cannot be earlier than start date"
 msgstr "Data ezin da hasierako data aurrekoa izan"
 
 #: recurrenceedit.cpp:1064
-#, fuzzy, kde-format
-#| msgctxt "@label:spinbox"
-#| msgid "Recur e&very"
+#, kde-format
 msgctxt "@label:spinbox"
 msgid "Recur every"
-msgstr "Errepika hain&bestero"
+msgstr "Errepika hainbestero"
 
 #: recurrenceedit.cpp:1131
 #, kde-format
@@ -6533,12 +6470,10 @@ msgid "Enter the number of hours and minutes between repetitions of the alarm"
 msgstr "Sartu alarmaren errepikapen arteko ordu eta minutu kopurua"
 
 #: recurrenceedit.cpp:1152
-#, fuzzy, kde-format
-#| msgctxt "@label On: Tuesday"
-#| msgid "O&n:"
+#, kde-format
 msgctxt "@label On: Tuesday"
 msgid "On:"
-msgstr "&Noiz:"
+msgstr "Noiz:"
 
 #: recurrenceedit.cpp:1235
 #, kde-format
@@ -6583,12 +6518,10 @@ msgid "Select the days of the week on which to repeat the alarm"
 msgstr "Hautatu alarma errepikatzeko asteko egunak"
 
 #: recurrenceedit.cpp:1301
-#, fuzzy, kde-format
-#| msgctxt "@option:radio On day number in the month"
-#| msgid "O&n day"
+#, kde-format
 msgctxt "@option:radio On day number in the month"
 msgid "On day"
-msgstr "Egun honeta&n"
+msgstr "Egun honetan"
 
 #: recurrenceedit.cpp:1305
 #, kde-format
@@ -6609,12 +6542,10 @@ msgid "Select the day of the month on which to repeat the alarm"
 msgstr "Hautatu alarma errepikatzeko hileko eguna"
 
 #: recurrenceedit.cpp:1323
-#, fuzzy, kde-format
-#| msgctxt "@option:radio On the 1st Tuesday"
-#| msgid "On t&he"
+#, kde-format
 msgctxt "@option:radio On the 1st Tuesday"
 msgid "On the"
-msgstr "Honet&an"
+msgstr "Honetan,"
 
 #: recurrenceedit.cpp:1327
 #, kde-format
@@ -6738,12 +6669,10 @@ msgid "Select the months of the year in which to repeat the alarm"
 msgstr "Hautatu alarma errepikatzeko urtearen hilabeteak"
 
 #: recurrenceedit.cpp:1530
-#, fuzzy, kde-format
-#| msgctxt "@label:listbox"
-#| msgid "February 2&9th alarm in non-leap years:"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "February 29th alarm in non-leap years:"
-msgstr "Otsailak 2&9ko alarma urte ez-bisusteetan:"
+msgstr "Otsailak 29ko alarma bisurte ez diren urteetan:"
 
 #: recurrenceedit.cpp:1534
 #, kde-format
@@ -7656,9 +7585,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QRadioButton, activeRadio)
 #: resources/singlefileresourceconfigdialog.ui:86
-#, fuzzy, kde-format
-#| msgctxt "@info/plain Name of a calendar"
-#| msgid "Active Alarms"
+#, kde-format
 msgctxt "@option:radio"
 msgid "Active Alarms"
 msgstr "Alarma aktiboak"
@@ -7672,9 +7599,7 @@ msgstr "Artxibatutako alarmak"
 
 #. i18n: ectx: property (text), widget (QRadioButton, templateRadio)
 #: resources/singlefileresourceconfigdialog.ui:112
-#, fuzzy, kde-format
-#| msgctxt "@info/plain Name of a calendar"
-#| msgid "Alarm Templates"
+#, kde-format
 msgctxt "@option:radio"
 msgid "Alarm Templates"
 msgstr "Alarma-txantiloiak"
@@ -7722,10 +7647,10 @@ msgstr "Azaltzeko izena"
 
 #. i18n: ectx: property (text), widget (QLabel, label_1)
 #: resources/singlefileresourceconfigdialog.ui:201
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Name:"
-msgstr "Izena"
+msgstr "Izena:"
 
 #. i18n: ectx: property (html), widget (KTextEdit, nameDescription)
 #: resources/singlefileresourceconfigdialog.ui:222
@@ -7912,92 +7837,70 @@ msgid ""
 msgstr "Benetan kendu nahi duzu <resource>%1</resource> egutegia zerrendatik?"
 
 #: resourceselector.cpp:289
-#, fuzzy, kde-format
-#| msgctxt "@action Reload calendar"
-#| msgid "Re&load"
+#, kde-format
 msgctxt "@action Reload calendar"
 msgid "Reload"
-msgstr "&Birzamatu"
+msgstr "Birzamatu"
 
 #: resourceselector.cpp:292
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "Show &Details"
+#, kde-format
 msgctxt "@action"
 msgid "Show Details"
-msgstr "Erakutsi &zehaztasunak"
+msgstr "Erakutsi xehetasunak"
 
 #: resourceselector.cpp:295
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "Set &Color..."
+#, kde-format
 msgctxt "@action"
 msgid "Set Color..."
-msgstr "Ezarri &kolorea..."
+msgstr "Ezarri kolorea..."
 
 #: resourceselector.cpp:298
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "Clear C&olor"
+#, kde-format
 msgctxt "@action"
 msgid "Clear Color"
-msgstr "Kendu k&olorea"
+msgstr "Kendu kolorea"
 
 #: resourceselector.cpp:304
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "&Update Calendar Format"
+#, kde-format
 msgctxt "@action"
 msgid "Update Calendar Format"
-msgstr "Eg&uneratu egutegi-formatua"
+msgstr "Eguneratu egutegi-formatua"
 
 #: resourceselector.cpp:307
-#, fuzzy, kde-format
-#| msgctxt "@action:button"
-#| msgid "Remove"
+#, kde-format
 msgctxt "@action"
 msgid "Remove"
 msgstr "Kendu"
 
 #: resourceselector.cpp:313
-#, fuzzy, kde-format
-#| msgctxt "@action:button"
-#| msgid "Add..."
+#, kde-format
 msgctxt "@action"
 msgid "Add..."
 msgstr "Gehitu..."
 
 #: resourceselector.cpp:316
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "Im&port..."
+#, kde-format
 msgctxt "@action"
 msgid "Import..."
-msgstr "In&portatu..."
+msgstr "Inportatu..."
 
 #: resourceselector.cpp:372
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "Use as &Default for Active Alarms"
+#, kde-format
 msgctxt "@action"
 msgid "Use as Default for Active Alarms"
-msgstr "Erabili &lehenetsitako gisa alarma aktiboetarako"
+msgstr "Erabili lehenetsitako gisa alarma aktiboetarako"
 
 #: resourceselector.cpp:373
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "Use as &Default for Archived Alarms"
+#, kde-format
 msgctxt "@action"
 msgid "Use as Default for Archived Alarms"
-msgstr "Erabili &lehenetsitako gisa artxibatutako alarmetarako"
+msgstr "Erabili lehenetsitako gisa artxibatutako alarmetarako"
 
 #: resourceselector.cpp:374
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "Use as &Default for Alarm Templates"
+#, kde-format
 msgctxt "@action"
 msgid "Use as Default for Alarm Templates"
-msgstr "Erabili &lehenetsitako gisa alarma-txantiloietarako"
+msgstr "Erabili lehenetsitako gisa alarma-txantiloietarako"
 
 #: resourceselector.cpp:503
 #, kde-format
@@ -8521,12 +8424,10 @@ msgid "Select a template to base the new alarm on."
 msgstr "Hautatu alarma berriaren oinarri izango den txantiloi bat."
 
 #: traywindow.cpp:68
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "&New Alarm"
+#, kde-format
 msgctxt "@action"
 msgid "New Alarm"
-msgstr "Alarma &berria"
+msgstr "Alarma berria"
 
 #: traywindow.cpp:300
 #, kde-format

@@ -92,7 +92,7 @@
 <!-- Don't change format of date and version of the documentation -->
 
 <date
->2023-9-2</date>
+>2023-9-20</date>
 <releaseinfo
 >3.7.0 (KDE Gear 23.12)</releaseinfo>
 
@@ -2313,7 +2313,7 @@ mode.</para
 <para
 >Als de systeemconfiguratie meerdere alarmen toestaat om het systeem uit een onderbreking te laten ontwaken, dan kunt u <guilabel
 >Ontwaken uit onderbreking</guilabel
-> selecteren om het systeem te laten ontwaken als het is onderbroken wanneer het alarm afgaat. Zie <link linkend="wake-suspend"
+> selecteren om het systeem te laten ontwaken als het is onderbroken wanneer het alarm afgaat. Deze functie is niet beschikbaar voor alarmen met alleen een datum omdat hun tijd niet gedefinieerd is. Zie <link linkend="wake-suspend"
 >Ontwaken uit onderbreking</link
 > voor meer informatie.</para>
 

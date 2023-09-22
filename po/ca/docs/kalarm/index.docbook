@@ -92,9 +92,9 @@
 <!-- Don't change format of date and version of the documentation -->
 
 <date
->2 de setembre de 2023</date>
+>2023-6-27</date>
 <releaseinfo
->3.7.0 (KDE Gear 23.12)</releaseinfo>
+>3.6.0 (KDE Gear 23.08)</releaseinfo>
 
 <abstract>
 <para
@@ -327,13 +327,13 @@
 >Filtrar la llista d'alarmes per data</title>
 
 <para
->Podeu restringir la llista d'alarmes per a només mostrar les alarmes que estan planificades per a ocórrer en una data seleccionada. Això s'aconsegueix mitjançant el selector de la data d'alarma, el qual es pot mostrar o ocultar amb l'element de menú <menuchoice
+>You can restrict the alarm list to show only alarms which are scheduled to occur on a selected date. This is achieved by means of the alarm date selector, which can be displayed or hidden by <menuchoice
 ><guimenu
->Visualitza</guimenu
+>View</guimenu
 > <guimenuitem
->Mostra el selector de dates</guimenuitem
-></menuchoice
->. Seleccioneu una data fent clic sobre seu en el selector de dates, o anul·leu la selecció fent clic de nou sobre seu. El selector de dates mostra un sol mes. Per a mostrar un mes diferent, utilitzeu els controls de fletxa que hi ha, o la roda del ratolí.</para>
+>Show Date Selector</guimenuitem
+> </menuchoice
+>. Select a date by clicking on it in the date selector, or deselect it by clicking on it again. The date selector displays a single month. To display a different month, use the arrow controls in the date selector.</para>
 
 </sect2>
 
@@ -1614,14 +1614,14 @@ mode.</para
 <listitem>
 <para
 >Utilitzeu el botó <guibutton
->Tipus de lletra i color...</guibutton
-> per a seleccionar un tipus de lletra, i els colors del frontal i de fons, per al missatge d'alarma. En el diàleg <guilabel
->Escolliu el tipus de lletra i color de l'alarma</guilabel
+>Lletra i color...</guibutton
+> per a seleccionar una lletra, i els colors de primer pla i de fons, per al missatge d'alarma. En el diàleg <guilabel
+>Escolliu la lletra i color de l'alarma</guilabel
 >, marqueu <guilabel
->Usa el tipus de lletra predeterminada</guilabel
-> per a mostrar el missatge en qualsevol tipus de lletra configurat com a predeterminat en el moment en què es mostri el missatge. Per a escollir un tipus de lletra específic per al missatge, desmarqueu <guilabel
->Usa el tipus de lletra predeterminada</guilabel
->. (El tipus de lletra predeterminat i els colors es poden establir en el <link linkend="preferences-edit"
+>Usa la lletra predeterminada</guilabel
+> per a mostrar el missatge en qualsevol lletra configurada com a predeterminada en el moment en què es mostri el missatge. Per a escollir una lletra específica per al missatge, desmarqueu <guilabel
+>Usa la lletra predeterminada</guilabel
+>. (La lletra predeterminada i els colors es poden establir en el <link linkend="preferences-edit"
 >diàleg de configuració</link
 >).</para>
 
@@ -1647,7 +1647,7 @@ mode.</para
 <para
 ><guilabel
 >Notificació</guilabel
-> per a utilitzar el sistema de notificació estàndard per a mostrar el missatge de l'alarma. A causa de les limitacions del sistema de notificació, les següents opcions de configuració de l'alarma no es poden utilitzar amb les notificacions: establir el tipus de lletra i color, establir un fitxer d'àudio perquè es reprodueixi quan es mostra l'alarma, confirmació del reconeixement de l'alarma, tancament automàtic de la pantalla en expirar el temps de cancel·lació.</para>
+> per a utilitzar el sistema de notificació estàndard per a mostrar el missatge de l'alarma. A causa de les limitacions del sistema de notificació, les següents opcions de configuració de l'alarma no es poden utilitzar amb les notificacions: establir la lletra i color, establir un fitxer d'àudio perquè es reprodueixi quan es mostra l'alarma, confirmació del reconeixement de l'alarma, tancament automàtic de la pantalla en expirar el temps de cancel·lació.</para>
 </listitem>
 </itemizedlist>
 
@@ -2319,13 +2319,6 @@ mode.</para
 >Altres controls</title>
 
 <para
->Si la configuració del sistema permet que diverses alarmes despertin el sistema des de la suspensió, podeu seleccionar <guilabel
->Activa des de la suspensió</guilabel
-> per activar el sistema si actualment està suspès quan venç l'alarma. Vegeu <link linkend="wake-suspend"
->Activa des de la suspensió</link
-> per a més informació.</para>
-
-<para
 >Per a les alarmes visuals, la casella de selecció <guilabel
 >Confirma l'acceptació</guilabel
 > permet especificar si se us demanarà confirmació en tancar la finestra del missatge de l'alarma. Això es pot utilitzar com a salvaguarda contra el reconeixement accidental de les alarmes.</para>
@@ -2987,44 +2980,13 @@ mode.</para
 >Despertar de l'estat de suspensió</title>
 
 <para
->Les alarmes es poden configurar perquè quan s'activin, despertin l'ordinador des de la hibernació o suspensió, de manera que l'acció de l'alarma pot ocórrer fins i tot quan el sistema està inactiu. El mecanisme que fa servir el &kalarm; per a despertar el sistema, i que es controla amb la interfície d'usuari, depèn del tipus de sistema i dels permisos de l'usuari. Hi ha dues possibilitats:</para>
-
-<sect2>
-<title
->Despertar de l'estat de suspensió del temporitzador del nucli Linux</title>
-
-<para
->En els sistemes Linux, si l'usuari té la capacitat de temporitzador d'alarma del nucli (<literal
->cap_wake_alarm</literal
->), es pot configurar qualsevol nombre d'alarmes per activar-se des de la suspensió. En aquest cas, l'activació des de la suspensió es configura per a cada alarma individual en el <link linkend="alarm-edit-dlg"
->diàleg d'edició d'alarma</link
-> utilitzant l'opció <guilabel
->Activa des de la suspensió</guilabel
->.</para>
-
-<para
->Podeu configurar el període de temps anterior a l'alarma que l'ordinador es desperti de la suspensió, per a assegurar que el sistema té temps de restaurar-se completament abans que s'activi l'alarma, en el <link linkend="preferences-time"
->diàleg de configuració</link
->.</para>
-
-</sect2>
-
-<sect2>
-<title
->Despertar de l'estat de suspensió de l'RTC</title>
-
-<para
->En sistemes no Linux, o en sistemes Linux on l'usuari no té la capacitat <literal
->cap_wake_alarm</literal
->, s'utilitza l'alarma del rellotge en temps real (<acronym
->RTC</acronym
->). Això només es pot establir per a una alarma cada vegada. En aquest cas, per a configurar-ho s'utilitza un diàleg especial d'activació des de la suspensió. El diàleg permet establir, cancel·lar o mostrar l'alarma d'activació des de la suspensió. Per accedir al diàleg, seleccioneu <menuchoice
+>It is possible to configure a selected alarm to wake your computer from hibernation or suspension when the alarm triggers, so that the alarm action can occur even when the system was shut down. This function is controlled by a dialog which is accessed by selecting <menuchoice
 ><guimenu
->Accions</guimenu
+>Actions</guimenu
 > <guimenuitem
->Activa des de la suspensió</guimenuitem
+>Wake From Suspend</guimenuitem
 ></menuchoice
->.</para>
+>. The dialog allows the Wake From Suspend alarm to be set, cancelled or displayed.</para>
 
 <para
 >L'ús de la funció per a despertar de la suspensió requereix privilegis administratius. Se us demanarà la contrasenya de l'usuari root quan establiu o cancel·leu una alarma d'aquest tipus.</para>
@@ -3072,7 +3034,6 @@ mode.</para
 </listitem>
 </itemizedlist>
 
-</sect2>
 </sect1>
 
 <sect1 id="quitting">
@@ -3273,15 +3234,6 @@ mode.</para
 ><guilabel
 >Regió per als dies festius</guilabel
 >: Seleccioneu quin país o regió utilitzar per als dies festius. Això afectarà les alarmes recurrents que tenen activada l'opció d'excloure els festius.</para>
-</listitem>
-
-<listitem
-><para
-><guilabel
->Activa des de la suspensió abans de l'alarma</guilabel
->: Introduïu el nombre de minuts abans de l'hora d'activació de l'alarma per a despertar el sistema, per a les alarmes configurades per despertar des de la suspensió. Permet assegurar que el sistema té temps per a restaurar-se completament abans que s'activi l'alarma, de manera que l'alarma pugui activar-se en el moment correcte. Aquesta opció només es mostra si la configuració del sistema permet que diverses alarmes despertin el sistema des de la suspensió. Vegeu <link linkend="wake-suspend"
->Activa des de la suspensió abans de l'alarma</link
-> per a més informació.</para>
 </listitem>
 
 <listitem
@@ -3778,8 +3730,8 @@ mode.</para
 <listitem
 ><para
 >La pestanya <guilabel
->Tipus de lletra i color</guilabel
-> permet establir l'aparença predeterminada dels missatges d'alarma. Seleccioneu el vostre tipus de lletra predeterminat, i els colors de primer pla i de fons.</para>
+>Lletra i color</guilabel
+> permet establir l'aparença predeterminada dels missatges d'alarma. Seleccioneu la vostra lletra predeterminada, i els colors de primer pla i de fons.</para>
 </listitem>
 </itemizedlist>
 </sect1>
@@ -4980,9 +4932,9 @@ mode.</para
 ></term>
 <listitem>
 <para
->Especifica el tipus de lletra per a mostrar el missatge. El format de la cadena és la sortida de <methodname
+>Especifica la lletra per a mostrar el missatge. El format de la cadena és la sortida de <methodname
 >QFont::toString()</methodname
->. Establiu la cadena a «null» per a utilitzar el tipus de lletra predeterminat per al missatge actual quan es mostri aquest.</para>
+>. Establiu la cadena a «null» per a utilitzar la lletra predeterminada per al missatge actual quan es mostri aquest.</para>
 </listitem>
 </varlistentry>
 
@@ -5470,7 +5422,7 @@ mode.</para
 <para
 ><function
 >scheduleFile()</function
-> és una crida de &DBus; per a programar el text o fitxer d'imatge especificat per a mostrar-lo a la data i hora especificats. A part d'especificar un camí o &URL; de fitxer i ometent el color de fons i el tipus de lletra, el seu ús és idèntic al de <link linkend="scheduleMessage-descrip"
+> és una crida de &DBus; per a programar el text o fitxer d'imatge especificat per a mostrar-lo a la data i hora especificats. A part d'especificar un camí o &URL; de fitxer i ometent el color de fons i la lletra, el seu ús és idèntic al de <link linkend="scheduleMessage-descrip"
 ><function
 >scheduleMessage</function
 ></link
@@ -5760,7 +5712,7 @@ mode.</para
 <para
 ><function
 >scheduleCommand()</function
-> és una crida de &DBus; per a programar la línia d'ordres especificada, o scripts d'ordres, per a executar a la data i hora especificats. A part d'especificar una ordre i ometent els paràmetres del color de fons, el tipus de lletra i el fitxer d'àudio, el seu ús és idèntic al de <link linkend="scheduleMessage-descrip"
+> és una crida de &DBus; per a programar la línia d'ordres especificada, o scripts d'ordres, per a executar a la data i hora especificats. A part d'especificar una ordre i ometent els paràmetres del color de fons, la lletra i el fitxer d'àudio, el seu ús és idèntic al de <link linkend="scheduleMessage-descrip"
 ><function
 >scheduleMessage</function
 ></link
@@ -6130,7 +6082,7 @@ mode.</para
 <para
 ><function
 >scheduleEmail()</function
-> és una crida de &DBus; per a programar el correu especificat per a enviar a la data i hora especificats. A part d'especificar una capçalera i contingut i ometent els paràmetres de color del missatge, el tipus de lletra i el fitxer d'àudio, el seu ús és idèntic al de <link linkend="scheduleMessage-descrip"
+> és una crida de &DBus; per a programar el correu especificat per a enviar a la data i hora especificats. A part d'especificar una capçalera i contingut i ometent els paràmetres de color del missatge, la lletra i el fitxer d'àudio, el seu ús és idèntic al de <link linkend="scheduleMessage-descrip"
 ><function
 >scheduleMessage</function
 ></link
@@ -6438,7 +6390,7 @@ mode.</para
 <para
 ><function
 >scheduleAudio()</function
-> és una crida de &DBus; per a programar el fitxer d'àudio especificat a reproduir a la data i hora especificats. A part d'especificar un volum i ometent els paràmetres de color del missatge i el tipus de lletra, el seu ús és idèntic al de <link linkend="scheduleMessage-descrip"
+> és una crida de &DBus; per a programar el fitxer d'àudio especificat a reproduir a la data i hora especificats. A part d'especificar un volum i ometent els paràmetres de color del missatge i la lletra, el seu ús és idèntic al de <link linkend="scheduleMessage-descrip"
 ><function
 >scheduleMessage</function
 ></link
