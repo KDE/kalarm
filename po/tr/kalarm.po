@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: kdepim-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-09-21 00:45+0000\n"
-"PO-Revision-Date: 2023-08-29 05:34+0300\n"
+"PO-Revision-Date: 2023-09-21 05:00+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -1754,7 +1754,7 @@ msgstr "1 Mart"
 #, kde-format
 msgctxt "@option"
 msgid "Do not repeat"
-msgstr "Tekrarlama"
+msgstr "Yineleme"
 
 #. i18n: ectx: label, entry (DefaultReminderUnits), group (Defaults)
 #: data/kalarmconfig.kcfg:396
@@ -1912,41 +1912,33 @@ msgstr ""
 
 #. i18n: ectx: Menu (file)
 #: data/kalarmui.rc:19
-#, fuzzy, kde-format
-#| msgctxt "@option:check Alarm action = file display"
-#| msgid "File"
+#, kde-format
 msgid "File"
 msgstr "Dosya"
 
 #. i18n: ectx: Menu (edit)
 #: data/kalarmui.rc:31
-#, fuzzy, kde-format
-#| msgctxt "@action:button"
-#| msgid "Edit"
+#, kde-format
 msgid "Edit"
 msgstr "Düzen"
 
 #. i18n: ectx: Menu (view)
 #: data/kalarmui.rc:46
-#, fuzzy, kde-format
-#| msgctxt "@title:tab"
-#| msgid "View"
+#, kde-format
 msgid "View"
 msgstr "Görünüm"
 
 #. i18n: ectx: Menu (actions)
 #: data/kalarmui.rc:56
-#, fuzzy, kde-format
-#| msgid "&Actions"
+#, kde-format
 msgid "Actions"
-msgstr "&Eylemler"
+msgstr "Eylemler"
 
 #. i18n: ectx: Menu (settings)
 #: data/kalarmui.rc:68
-#, fuzzy, kde-format
-#| msgid "&Settings"
+#, kde-format
 msgid "Settings"
-msgstr "Ayar&lar"
+msgstr "Ayarlar"
 
 #: datepicker.cpp:50
 #, kde-format
@@ -2022,19 +2014,20 @@ msgstr "Ertelemeyi İptal Et"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Cancel the deferred alarm. This does not affect future recurrences."
-msgstr "Ertelenen alarmı iptal et. Bundan sonraki tekrarlara bir etkisi olmaz."
+msgstr ""
+"Ertelenen alarmı iptal edin. Bundan sonraki yinelemelere bir etkisi olmaz."
 
 #: deferdlg.cpp:95
 #, kde-format
 msgctxt "@info"
 msgid "Cannot defer past the alarm's next sub-repetition (currently %1)"
-msgstr "Geçmiş alarmın sonraki alt tekrarları ertelenemez (şu anki %1)"
+msgstr "Geçmiş alarmın sonraki alt yinelemeleri ertelenemez (şu anki %1)"
 
 #: deferdlg.cpp:99
 #, kde-format
 msgctxt "@info"
 msgid "Cannot defer past the alarm's next recurrence (currently %1)"
-msgstr "Geçmiş alarmın sonraki tekrarları ertelenemez (şu anda %1)"
+msgstr "Geçmiş alarmın sonraki yinelemeleri ertelenemez (şu anda %1)"
 
 #: deferdlg.cpp:103
 #, kde-format
@@ -2068,7 +2061,7 @@ msgstr "Takvim buraya kaydedilemedi <filename>%1</filename>"
 #, kde-format
 msgctxt "@title:tab"
 msgid "Recurrence - [%1]"
-msgstr "Tekrarlanma - [%1]"
+msgstr "Yinelenme - [%1]"
 
 #: editdlg.cpp:81
 #, kde-format
@@ -2286,8 +2279,8 @@ msgid ""
 "The start date does not match the alarm's recurrence pattern, so it will be "
 "adjusted to the date of the next recurrence (%1)."
 msgstr ""
-"Başlangıç tarihi bu alarmın tekrarlama deseniyle eşleşmiyor, bu yüzden alarm "
-"bir sonraki tekrarlama tarihine (%1) göre düzenlenecek."
+"Başlangıç tarihi bu alarmın yineleme örüntüsüyle eşleşmiyor, bu yüzden alarm "
+"bir sonraki yineleme tarihine (%1) göre düzenlenecek."
 
 #: editdlg.cpp:1077
 #, kde-format
@@ -2296,14 +2289,14 @@ msgid ""
 "The start date/time does not match the alarm's recurrence pattern, so it "
 "will be adjusted to the date/time of the next recurrence (%1)."
 msgstr ""
-"Başlangıç tarihi/zamanı alarmın tekrar şablonu ile eşleşmiyor, bu yüzden "
-"başlangıç tarihi sonraki tekrarın (%1) zamanında/tarihinde düzenlenecek."
+"Başlangıç tarihi/zamanı alarmın yineleme şablonu ile eşleşmiyor, bu yüzden "
+"başlangıç tarihi sonraki yinelemenin (%1) zamanında/tarihinde düzenlenecek."
 
 #: editdlg.cpp:1099
 #, kde-format
 msgctxt "@info"
 msgid "Recurrence has already expired"
-msgstr "Tekrar zamanı geçmiş"
+msgstr "Yineleme zamanı geçmiş"
 
 #: editdlg.cpp:1104
 #, kde-format
@@ -2328,8 +2321,8 @@ msgid ""
 "The duration of a repetition within the recurrence must be less than the "
 "recurrence interval minus any reminder period"
 msgstr ""
-"Tekrarlanma içindeki bir yinelenme süresi, tekrarlanma aralığı eksi "
-"anımsatıcı döneminden daha kısa olmalıdır"
+"Yinelenme içindeki bir yinelenme süresi, yinelenme aralığı eksi anımsatıcı "
+"döneminden daha kısa olmalıdır"
 
 #: editdlg.cpp:1155
 #, kde-format
@@ -2338,8 +2331,8 @@ msgid ""
 "For a repetition within the recurrence, its period must be in units of days "
 "or weeks for a date-only alarm"
 msgstr ""
-"Tekrarlanma içindeki bir yineleme için, yalnızca-günlük bir alarm için "
-"periyot birimi gün veya hafta olmalıdır"
+"Yinelenme içindeki bir yineleme için yalnızca-günlük bir alarm için periyot "
+"birimi gün veya hafta olmalıdır"
 
 #: editdlg.cpp:1186
 #, kde-format
@@ -3187,12 +3180,10 @@ msgid "Stop Play"
 msgstr "Çalmayı Durdur"
 
 #: functions.cpp:192
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "Enable &Alarms"
+#, kde-format
 msgctxt "@action"
 msgid "Enable Alarms"
-msgstr "&Alarmları Etkinleştir"
+msgstr "Alarmları Etkinleştir"
 
 #: functions.cpp:218
 #, kde-format
@@ -4393,12 +4384,10 @@ msgstr ""
 "Menü oluşturmada hata (Belki <filename>%1</filename> kayıp ya da bozuk)"
 
 #: mainwindow.cpp:459
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "&Templates..."
+#, kde-format
 msgctxt "@action"
 msgid "Templates..."
-msgstr "&Şablonlar..."
+msgstr "Şablonlar..."
 
 #: mainwindow.cpp:463 templatedlg.cpp:73
 #, kde-format
@@ -4407,33 +4396,25 @@ msgid "New"
 msgstr "Yeni"
 
 #: mainwindow.cpp:469
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "Create Tem&plate..."
+#, kde-format
 msgctxt "@action"
 msgid "Create Template..."
-msgstr "Şablo&n Oluştur..."
+msgstr "Şablon Oluştur..."
 
 #: mainwindow.cpp:473
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "&Copy..."
+#, kde-format
 msgctxt "@action"
 msgid "Copy..."
-msgstr "Ko&pyala..."
+msgstr "Kopyala..."
 
 #: mainwindow.cpp:478 resourceselector.cpp:301
-#, fuzzy, kde-format
-#| msgctxt "@action:button"
-#| msgid "Edit..."
+#, kde-format
 msgctxt "@action"
 msgid "Edit..."
 msgstr "Düzenle..."
 
 #: mainwindow.cpp:483
-#, fuzzy, kde-format
-#| msgctxt "@action:button"
-#| msgid "Delete"
+#, kde-format
 msgctxt "@action"
 msgid "Delete"
 msgstr "Sil"
@@ -4445,12 +4426,10 @@ msgid "Delete Without Confirmation"
 msgstr "Onaylama Olmaksızın Sil"
 
 #: mainwindow.cpp:494
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "Reac&tivate"
+#, kde-format
 msgctxt "@action"
 msgid "Reactivate"
-msgstr "Yeniden E&tkinleştir"
+msgstr "Yeniden Etkinleştir"
 
 #: mainwindow.cpp:508
 #, kde-format
@@ -4459,28 +4438,22 @@ msgid "Wake From Suspend..."
 msgstr "Askıdan Uyandır..."
 
 #: mainwindow.cpp:518
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Show Archived Alarms"
+#, kde-format
 msgctxt "@action"
 msgid "Show Archived Alarms"
-msgstr "Arşivlenmiş Alarmları Göster"
+msgstr "Arşivlenen Alarmları Göster"
 
 #: mainwindow.cpp:523
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "Show in System &Tray"
+#, kde-format
 msgctxt "@action"
 msgid "Show in System Tray"
-msgstr "Sistem &Tepsisinde Göster"
+msgstr "Sistem Tepsisinde Göster"
 
 #: mainwindow.cpp:527
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "Show &Calendars"
+#, kde-format
 msgctxt "@action"
 msgid "Show Calendars"
-msgstr "&Takvimleri Göster"
+msgstr "Takvimleri Göster"
 
 #: mainwindow.cpp:531
 #, kde-format
@@ -4489,42 +4462,34 @@ msgid "Show Date Selector"
 msgstr "Tarih Seçicisini Göster"
 
 #: mainwindow.cpp:539
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "Import &Alarms..."
+#, kde-format
 msgctxt "@action"
 msgid "Import Alarms..."
-msgstr "&Alarmları İçe Aktar..."
+msgstr "Alarmlar İçe Aktar..."
 
 #: mainwindow.cpp:545
 #, kde-format
 msgctxt "@action"
 msgid "Import Birthdays..."
-msgstr "Doğum Günlerini İçe Aktar..."
+msgstr "Doğum Günleri İçe Aktar..."
 
 #: mainwindow.cpp:550
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "E&xport Selected Alarms..."
+#, kde-format
 msgctxt "@action"
 msgid "Export Selected Alarms..."
-msgstr "Seçili &Alarmları Dışa Aktar..."
+msgstr "Seçili Alarmları Dışa Aktar..."
 
 #: mainwindow.cpp:554 resourceselector.cpp:319
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "E&xport..."
+#, kde-format
 msgctxt "@action"
 msgid "Export..."
-msgstr "&Dışa Aktar..."
+msgstr "Dışa Aktar..."
 
 #: mainwindow.cpp:558
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "&Refresh Alarms"
+#, kde-format
 msgctxt "@action"
 msgid "Refresh Alarms"
-msgstr "A&larmları Yenile"
+msgstr "Alarmları Yenile"
 
 #: mainwindow.cpp:810
 #, kde-format
@@ -4623,19 +4588,16 @@ msgid "Choose alarm type to create:"
 msgstr "Oluşturulacak alarm türünü seçin:"
 
 #: mainwindow.cpp:1685
-#, fuzzy, kde-format
-#| msgctxt "@action:button"
-#| msgid "Enable"
+#, kde-format
 msgctxt "@action"
 msgid "Enable"
 msgstr "Etkinleştir"
 
 #: mainwindow.cpp:1685
-#, fuzzy, kde-format
-#| msgid "Disabled"
+#, kde-format
 msgctxt "@action"
 msgid "Disable"
-msgstr "Devre dışı"
+msgstr "Devre Dışı Bırak"
 
 #: messagedisplay.cpp:271
 #, kde-kuit-format
@@ -4815,7 +4777,7 @@ msgstr "Gönderilecek e-posta"
 #, kde-format
 msgctxt "@option:check"
 msgid "Do not display this error message again for this alarm"
-msgstr "Bu alarm için bu hata iletisini tekrar gösterme"
+msgstr "Bu alarm için bu hata iletisini yeniden gösterme"
 
 #: messagewindow.cpp:425
 #, kde-format
@@ -4842,12 +4804,10 @@ msgid "Edit the alarm."
 msgstr "Alarmı düzenle."
 
 #: messagewindow.cpp:439
-#, fuzzy, kde-format
-#| msgctxt "@action:button"
-#| msgid "&Defer..."
+#, kde-format
 msgctxt "@action:button"
 msgid "Defer..."
-msgstr "&Ertele..."
+msgstr "Ertele..."
 
 #: messagewindow.cpp:443
 #, kde-format
@@ -4862,7 +4822,7 @@ msgid ""
 "<para>Defer the alarm until later.</para><para>You will be prompted to "
 "specify when the alarm should be redisplayed.</para>"
 msgstr ""
-"<para>Alarmı sonrakine ertele.</para><para>Eğer alarm tekrar "
+"<para>Alarmı sonrakine ertele.</para><para>Eğer alarm yeniden "
 "görüntülenmeliyse belirtmeniz istenir.</para>"
 
 #: messagewindow.cpp:458 sounddlg.cpp:451
@@ -4927,12 +4887,10 @@ msgid "Unable to locate this email in <application>KMail</application>"
 msgstr "Bu e-posta <application>K Posta</application> içerisinde bulunamadı"
 
 #: newalarmaction.cpp:45
-#, fuzzy, kde-format
-#| msgctxt "@item:inmenu"
-#| msgid "&Display Alarm Template"
+#, kde-format
 msgctxt "@item:inmenu"
 msgid "Display Alarm Template"
-msgstr "&Alarm Şablonlarını Göster"
+msgstr "Alarm Şablonunu Görüntüle"
 
 #: newalarmaction.cpp:45
 #, kde-format
@@ -4941,12 +4899,10 @@ msgid "New Display Alarm"
 msgstr "Yeni Ekran Alarmı"
 
 #: newalarmaction.cpp:48
-#, fuzzy, kde-format
-#| msgctxt "@item:inmenu"
-#| msgid "&Command Alarm Template"
+#, kde-format
 msgctxt "@item:inmenu"
 msgid "Command Alarm Template"
-msgstr "&Komut Alarmı Şablonu"
+msgstr "Komut Alarmı Şablonu"
 
 #: newalarmaction.cpp:48
 #, kde-format
@@ -4955,12 +4911,10 @@ msgid "New Command Alarm"
 msgstr "Yeni Komut Alarmı"
 
 #: newalarmaction.cpp:51
-#, fuzzy, kde-format
-#| msgctxt "@item:inmenu"
-#| msgid "&Email Alarm Template"
+#, kde-format
 msgctxt "@item:inmenu"
 msgid "Email Alarm Template"
-msgstr "E-posta Alarm Şablonunu"
+msgstr "E-posta Alarmı Şablonu"
 
 #: newalarmaction.cpp:51
 #, kde-format
@@ -4969,12 +4923,10 @@ msgid "New Email Alarm"
 msgstr "Yeni E-posta Alarmı"
 
 #: newalarmaction.cpp:54
-#, fuzzy, kde-format
-#| msgctxt "@item:inmenu"
-#| msgid "&Audio Alarm Template"
+#, kde-format
 msgctxt "@item:inmenu"
 msgid "Audio Alarm Template"
-msgstr "&Ses Alarmı Şablonunu"
+msgstr "Ses Alarmı Şablonu"
 
 #: newalarmaction.cpp:54
 #, kde-format
@@ -4983,12 +4935,10 @@ msgid "New Audio Alarm"
 msgstr "Yeni Ses Alarmı"
 
 #: newalarmaction.cpp:69
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "New Alarm From &Template"
+#, kde-format
 msgctxt "@action"
 msgid "New Alarm From Template"
-msgstr "Şa&blondan Yeni Alarm"
+msgstr "Şablondan Yeni Alarm"
 
 #: prefdlg.cpp:128
 #, kde-format
@@ -5077,20 +5027,16 @@ msgstr ""
 "sekmeyi sıfırla?"
 
 #: prefdlg.cpp:262
-#, fuzzy, kde-format
-#| msgctxt "@action:button Reset ALL tabs"
-#| msgid "&All"
+#, kde-format
 msgctxt "@action:button Reset ALL tabs"
 msgid "All"
-msgstr "&Tümü"
+msgstr "Tümünü"
 
 #: prefdlg.cpp:263
-#, fuzzy, kde-format
-#| msgctxt "@action:button Reset the CURRENT tab"
-#| msgid "C&urrent"
+#, kde-format
 msgctxt "@action:button Reset the CURRENT tab"
 msgid "Current"
-msgstr "&Geçerli"
+msgstr "Geçerliyi"
 
 #: prefdlg.cpp:439
 #, kde-format
@@ -5794,20 +5740,16 @@ msgstr ""
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Recurrence:"
-msgstr "Tekrarlanma:"
+msgstr "Yinelenme:"
 
 #: prefdlg.cpp:1408
-#, fuzzy, kde-format
-#| msgctxt "@option"
-#| msgid "February 28th"
+#, kde-format
 msgctxt "@option:radio"
 msgid "February 28th"
 msgstr "28 Şubat"
 
 #: prefdlg.cpp:1412
-#, fuzzy, kde-format
-#| msgctxt "@option"
-#| msgid "March 1st"
+#, kde-format
 msgctxt "@option:radio"
 msgid "March 1st"
 msgstr "1 Mart"
@@ -5816,7 +5758,7 @@ msgstr "1 Mart"
 #, kde-format
 msgctxt "@option:radio"
 msgid "Do not repeat"
-msgstr "Tekrarlama"
+msgstr "Yineleme"
 
 #: prefdlg.cpp:1421
 #, kde-kuit-format
@@ -5826,9 +5768,9 @@ msgid ""
 "29th should occur in non-leap years.<note>The next scheduled occurrence of "
 "existing alarms is not re-evaluated when you change this setting.</note>"
 msgstr ""
-"Yıllık tekrarlar için, artık yıl olmayan yıllarda 29 Şubat alarmlarının "
-"hangi tarihte uygulanacağını seçin.<note> Bu ayarı değiştirdiğinizde mevcut "
-"planlanmış alarmların gösterimi yeniden hesaplanmayacaktır.</note>"
+"Yıllık yinelemeler için artık yıl olmayan yıllarda 29 Şubat alarmlarının "
+"hangi tarihte uygulanacağını seçin.<note> Bu ayarı değiştirdiğinizde var "
+"olan planlanmış alarmların gösterimi yeniden hesaplanmayacaktır.</note>"
 
 #: prefdlg.cpp:1427
 #, kde-format
@@ -5874,7 +5816,7 @@ msgstr "Ses"
 #, kde-format
 msgctxt "@option:check"
 msgid "Repeat sound file"
-msgstr "Ses dosyasını tekrarla"
+msgstr "Ses dosyasını yinele"
 
 #: prefdlg.cpp:1480
 #, kde-kuit-format
@@ -6037,12 +5979,10 @@ msgid "System Tray Tooltip"
 msgstr "Sistem Tepsisi Araç İpucu"
 
 #: prefdlg.cpp:1853
-#, fuzzy, kde-format
-#| msgctxt "@option:check"
-#| msgid "Show next &24 hours' alarms"
+#, kde-format
 msgctxt "@option:check"
 msgid "Show next 24 hours' alarms"
-msgstr "Gelecek &24 saat içerisindeki alarmları göster"
+msgstr "Gelecek 24 saatin alarmlarını göster"
 
 #: prefdlg.cpp:1857
 #, kde-format
@@ -6058,7 +5998,7 @@ msgstr ""
 #, kde-format
 msgctxt "@option:check"
 msgid "Maximum number of alarms to show:"
-msgstr "Gösterilecek en fazla alarm sayısı:"
+msgstr "Gösterilecek en çok alarm sayısı:"
 
 #: prefdlg.cpp:1872
 #, kde-format
@@ -6075,7 +6015,7 @@ msgstr ""
 #, kde-format
 msgctxt "@option:check"
 msgid "Show alarm time"
-msgstr "Alarm &zamanını göster"
+msgstr "Alarm zamanını göster"
 
 #: prefdlg.cpp:1882
 #, kde-format
@@ -6177,7 +6117,7 @@ msgstr ""
 #, kde-format
 msgctxt "@item:inlistbox Recurrence type"
 msgid "No Recurrence"
-msgstr "Tekrarlanma Yok"
+msgstr "Yinelenme Yok"
 
 #: recurrenceedit.cpp:57
 #, kde-format
@@ -6219,13 +6159,13 @@ msgstr "Yıllık"
 #, kde-format
 msgctxt "@title:group"
 msgid "Recurrence Rule"
-msgstr "Tekrarlanma Kuralı"
+msgstr "Yinelenme Kuralı"
 
 #: recurrenceedit.cpp:98
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Do not repeat the alarm"
-msgstr "Alarmı tekrarlama"
+msgstr "Alarmı yineleme"
 
 #: recurrenceedit.cpp:105
 #, kde-kuit-format
@@ -6243,7 +6183,7 @@ msgstr ""
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Repeat the alarm at hourly/minutely intervals"
-msgstr "Alarmı saatlik/dakikalık aralıklarla tekrarla"
+msgstr "Alarmı saatlik/dakikalık aralıklarla yinele"
 
 #: recurrenceedit.cpp:118
 #, kde-format
@@ -6276,8 +6216,8 @@ msgid ""
 "Set up a repetition within the recurrence, to trigger the alarm multiple "
 "times each time the recurrence is due."
 msgstr ""
-"Her bir tekrarlanma içinde alarmı bir den çok tetiklemek için tekrarlanma "
-"içinde bir yineleme ayarlayın."
+"Her bir yinelenme içinde alarmı bir den çok tetiklemek için yinelenme içinde "
+"bir yineleme ayarlayın."
 
 #: recurrenceedit.cpp:193
 #, kde-format
@@ -6381,7 +6321,7 @@ msgstr "İstisnalar"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "The list of exceptions, i.e. dates/times excluded from the recurrence"
-msgstr "İstisnalar listesi, örneğin, tekrarlanmayacak tarihler/saatler"
+msgstr "İstisnalar listesi; örneğin, yinelenmeyecek tarihler/saatler"
 
 #: recurrenceedit.cpp:300
 #, kde-format
@@ -6480,12 +6420,10 @@ msgid "Date cannot be earlier than start date"
 msgstr "Tarih başlangıç tarihinden erken olamaz"
 
 #: recurrenceedit.cpp:1064
-#, fuzzy, kde-format
-#| msgctxt "@label:spinbox"
-#| msgid "Recur e&very"
+#, kde-format
 msgctxt "@label:spinbox"
 msgid "Recur every"
-msgstr "&Tekrarlama sıklığı"
+msgstr "Yinelenme sıklığı"
 
 #: recurrenceedit.cpp:1131
 #, kde-format
@@ -6497,15 +6435,13 @@ msgstr "saat:dakika"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the number of hours and minutes between repetitions of the alarm"
-msgstr "Alarmın kaç saatte ve dakikada bir tekrarlanacağını girin"
+msgstr "Alarmın kaç saatte ve dakikada bir yineleneceğini girin"
 
 #: recurrenceedit.cpp:1152
-#, fuzzy, kde-format
-#| msgctxt "@label On: Tuesday"
-#| msgid "O&n:"
+#, kde-format
 msgctxt "@label On: Tuesday"
 msgid "On:"
-msgstr "Üzeri&nde:"
+msgstr "Haftanın şu gününde:"
 
 #: recurrenceedit.cpp:1235
 #, kde-format
@@ -6523,7 +6459,7 @@ msgstr "gün(ler)"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the number of days between repetitions of the alarm"
-msgstr "Alarmın kaç günde bir tekrarlanacağını girin"
+msgstr "Alarmın kaç günde bir yineleneceğini girin"
 
 #: recurrenceedit.cpp:1266
 #, kde-format
@@ -6541,7 +6477,7 @@ msgstr "hafta(lar)"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the number of weeks between repetitions of the alarm"
-msgstr "Alarmın kaç haftada bir tekrarlanacağını girin"
+msgstr "Alarmın kaç haftada bir yineleneceğini girin"
 
 #: recurrenceedit.cpp:1279
 #, kde-format
@@ -6550,12 +6486,10 @@ msgid "Select the days of the week on which to repeat the alarm"
 msgstr "Alarmın haftanın hangi günlerinde yineleceğini girin"
 
 #: recurrenceedit.cpp:1301
-#, fuzzy, kde-format
-#| msgctxt "@option:radio On day number in the month"
-#| msgid "O&n day"
+#, kde-format
 msgctxt "@option:radio On day number in the month"
 msgid "On day"
-msgstr "&Bu günde"
+msgstr "Şu günde"
 
 #: recurrenceedit.cpp:1305
 #, kde-format
@@ -6576,12 +6510,10 @@ msgid "Select the day of the month on which to repeat the alarm"
 msgstr "Alarmın ayın hangi gününde yineleneceğini seçin"
 
 #: recurrenceedit.cpp:1323
-#, fuzzy, kde-format
-#| msgctxt "@option:radio On the 1st Tuesday"
-#| msgid "On t&he"
+#, kde-format
 msgctxt "@option:radio On the 1st Tuesday"
 msgid "On the"
-msgstr "&Gün"
+msgstr "Şu günde"
 
 #: recurrenceedit.cpp:1327
 #, kde-format
@@ -6679,7 +6611,7 @@ msgstr "ay(lar)"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the number of months between repetitions of the alarm"
-msgstr "Alarmın kaç ayda bir tekrarlanacağını girin"
+msgstr "Alarmın kaç ayda bir yineleneceğini girin"
 
 #: recurrenceedit.cpp:1495
 #, kde-format
@@ -6691,7 +6623,7 @@ msgstr "yıl(lar)"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the number of years between repetitions of the alarm"
-msgstr "Alarmın tekrarları arasındaki yıl sayısını girin"
+msgstr "Alarmın yinelemeleri arasındaki yıl sayısını girin"
 
 #: recurrenceedit.cpp:1503
 #, kde-format
@@ -6706,18 +6638,16 @@ msgid "Select the months of the year in which to repeat the alarm"
 msgstr "Alarmın yılın hangi aylarında yineleneceğini seçin"
 
 #: recurrenceedit.cpp:1530
-#, fuzzy, kde-format
-#| msgctxt "@label:listbox"
-#| msgid "February 2&9th alarm in non-leap years:"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "February 29th alarm in non-leap years:"
-msgstr "Artık olmayan yıllarda 2&9 Şubat alarmları:"
+msgstr "Artık olmayan yıllardaki 29 Şubat alarmları:"
 
 #: recurrenceedit.cpp:1534
 #, kde-format
 msgctxt "@item:inlistbox No date"
 msgid "None"
-msgstr "Hiçbiri"
+msgstr "Yok"
 
 #: recurrenceedit.cpp:1535
 #, kde-format
@@ -6751,7 +6681,7 @@ msgstr "Ay seçilmedi"
 #, kde-format
 msgctxt "@option:check"
 msgid "Reminder for first recurrence only"
-msgstr "Yalnızca ilk tekrarlama için anımsatıcı"
+msgstr "Yalnızca ilk yineleme için anımsatıcı"
 
 #: reminder.cpp:31
 #, kde-format
@@ -6781,7 +6711,7 @@ msgstr "Anımsatıcıyı yalnızca alarmın ilk programlandığında göster"
 #, kde-format
 msgctxt "@title:window"
 msgid "Alarm Sub-Repetition"
-msgstr "Alarm Alt-Tekrarı"
+msgstr "Alarm Alt Yinelenmesi"
 
 #: repetitionbutton.cpp:139
 #, kde-format
@@ -6803,13 +6733,13 @@ msgstr ""
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the time between repetitions of the alarm"
-msgstr "Alarm tekrarları arasındaki süreyi girin"
+msgstr "Alarm yinelemeleri arasındaki süreyi girin"
 
 #: repetitionbutton.cpp:157
 #, kde-format
 msgctxt "@option:radio"
 msgid "Number of repetitions:"
-msgstr "Tekrarlama sayısı:"
+msgstr "Yinelenme sayısı:"
 
 #: repetitionbutton.cpp:158
 #, kde-format
@@ -7364,7 +7294,7 @@ msgstr "Alarmın bir daha görüntülenmesi için geçmesi gereken zaman"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "How often the alarm recurs"
-msgstr "Alarmların tekrarlanma aralığı"
+msgstr "Alarmların yinelenme aralığı"
 
 #: resources/resourcedatamodelbase.cpp:562
 #, kde-format
@@ -7619,9 +7549,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QRadioButton, activeRadio)
 #: resources/singlefileresourceconfigdialog.ui:86
-#, fuzzy, kde-format
-#| msgctxt "@info/plain Name of a calendar"
-#| msgid "Active Alarms"
+#, kde-format
 msgctxt "@option:radio"
 msgid "Active Alarms"
 msgstr "Etkin Alarmlar"
@@ -7635,9 +7563,7 @@ msgstr "Arşivlenmiş Alarmlar"
 
 #. i18n: ectx: property (text), widget (QRadioButton, templateRadio)
 #: resources/singlefileresourceconfigdialog.ui:112
-#, fuzzy, kde-format
-#| msgctxt "@info/plain Name of a calendar"
-#| msgid "Alarm Templates"
+#, kde-format
 msgctxt "@option:radio"
 msgid "Alarm Templates"
 msgstr "Alarm Şablonları"
@@ -7685,12 +7611,10 @@ msgstr "Görüntüleme Adı"
 
 #. i18n: ectx: property (text), widget (QLabel, label_1)
 #: resources/singlefileresourceconfigdialog.ui:201
-#, fuzzy, kde-format
-#| msgctxt "@label:textbox"
-#| msgid "&Name:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Name:"
-msgstr "&Ad:"
+msgstr "Ad:"
 
 #. i18n: ectx: property (html), widget (KTextEdit, nameDescription)
 #: resources/singlefileresourceconfigdialog.ui:222
@@ -7879,92 +7803,70 @@ msgstr ""
 "musunuz?"
 
 #: resourceselector.cpp:289
-#, fuzzy, kde-format
-#| msgctxt "@action Reload calendar"
-#| msgid "Re&load"
+#, kde-format
 msgctxt "@action Reload calendar"
 msgid "Reload"
-msgstr "Yeniden Yük&le"
+msgstr "Yeniden Yükle"
 
 #: resourceselector.cpp:292
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "Show &Details"
+#, kde-format
 msgctxt "@action"
 msgid "Show Details"
-msgstr "&Ayrıntıları Göster"
+msgstr "Ayrıntıları Göster"
 
 #: resourceselector.cpp:295
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "Set &Color..."
+#, kde-format
 msgctxt "@action"
 msgid "Set Color..."
-msgstr "&Rengi Ayarla..."
+msgstr "Rengi Ayarla..."
 
 #: resourceselector.cpp:298
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "Clear C&olor"
+#, kde-format
 msgctxt "@action"
 msgid "Clear Color"
-msgstr "Rengi &Temizle"
+msgstr "Rengi Temizle"
 
 #: resourceselector.cpp:304
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "&Update Calendar Format"
+#, kde-format
 msgctxt "@action"
 msgid "Update Calendar Format"
-msgstr "Takvim Biçimini &Güncelle"
+msgstr "Takvim Biçimini Güncelle"
 
 #: resourceselector.cpp:307
-#, fuzzy, kde-format
-#| msgctxt "@action:button"
-#| msgid "Remove"
+#, kde-format
 msgctxt "@action"
 msgid "Remove"
 msgstr "Kaldır"
 
 #: resourceselector.cpp:313
-#, fuzzy, kde-format
-#| msgctxt "@action:button"
-#| msgid "Add..."
+#, kde-format
 msgctxt "@action"
 msgid "Add..."
 msgstr "Ekle..."
 
 #: resourceselector.cpp:316
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "Im&port..."
+#, kde-format
 msgctxt "@action"
 msgid "Import..."
-msgstr "&İçe Aktar..."
+msgstr "İçe Aktar..."
 
 #: resourceselector.cpp:372
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "Use as &Default for Active Alarms"
+#, kde-format
 msgctxt "@action"
 msgid "Use as Default for Active Alarms"
-msgstr "Etkin Alarmlar için &Öntanımlı Olarak Kullan"
+msgstr "Etkin Alarmlar için Öntanımlı Olarak Kullan"
 
 #: resourceselector.cpp:373
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "Use as &Default for Archived Alarms"
+#, kde-format
 msgctxt "@action"
 msgid "Use as Default for Archived Alarms"
-msgstr "&Arşivlenmiş Alarmlar için Öntanımlı Olarak Kullan"
+msgstr "Arşivlenen Alarmlar için Öntanımlı Olarak Kullan"
 
 #: resourceselector.cpp:374
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "Use as &Default for Alarm Templates"
+#, kde-format
 msgctxt "@action"
 msgid "Use as Default for Alarm Templates"
-msgstr "Alarm &Şablonları için Öntanımlı Olarak Kullan"
+msgstr "Alarm Şablonları için Öntanımlı Olarak Kullan"
 
 #: resourceselector.cpp:503
 #, kde-format
@@ -8104,7 +8006,7 @@ msgstr "Çalmak için bir ses dosyasını seçin."
 #, kde-format
 msgctxt "@label:spinbox Length of time to pause between repetitions"
 msgid "Pause between repetitions:"
-msgstr "Tekrarlar arasında duraklat:"
+msgstr "Yinelemeler arasında duraklat:"
 
 #: sounddlg.cpp:214 sounddlg.cpp:271
 #, kde-format
@@ -8116,7 +8018,7 @@ msgstr "saniye"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter how many seconds to pause between repetitions."
-msgstr "Tekrarlar arasında duraklatmak için ne kadar saniye olacağını girin."
+msgstr "Yinelemeler arasında kaç saniye duraklatılacağını girin."
 
 #: sounddlg.cpp:219
 #, kde-format
@@ -8479,12 +8381,10 @@ msgid "Select a template to base the new alarm on."
 msgstr "Yeni alarmın baz alacağı bir şablon seçin."
 
 #: traywindow.cpp:68
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "&New Alarm"
+#, kde-format
 msgctxt "@action"
 msgid "New Alarm"
-msgstr "&Yeni Alarm"
+msgstr "Yeni Alarm"
 
 #: traywindow.cpp:300
 #, kde-format
@@ -8746,72 +8646,3 @@ msgstr ""
 #, kde-format
 msgid "Number of minutes before alarm to wake from suspend"
 msgstr "Sistemin alarm için kaç dakika önce Askıdan Uyandır yapılacağı"
-
-#~ msgid "&File"
-#~ msgstr "&Dosya"
-
-#~ msgid "&Edit"
-#~ msgstr "Dü&zen"
-
-#~ msgid "&View"
-#~ msgstr "&Görünüm"
-
-#~ msgctxt "@action"
-#~ msgid "&New"
-#~ msgstr "&Yeni"
-
-#~ msgctxt "@action"
-#~ msgid "&Edit..."
-#~ msgstr "Dü&zenle..."
-
-#~ msgctxt "@action"
-#~ msgid "&Delete"
-#~ msgstr "&Sil"
-
-#~ msgctxt "@action"
-#~ msgid "Show Archi&ved Alarms"
-#~ msgstr "&Arşivlenmiş Alarmları Göster"
-
-#~ msgctxt "@action"
-#~ msgid "Ena&ble"
-#~ msgstr "Et&kinleştir"
-
-#~ msgctxt "@action"
-#~ msgid "Disa&ble"
-#~ msgstr "&Devre Dışı Bırak"
-
-#~ msgctxt "@action:button"
-#~ msgid "&Edit..."
-#~ msgstr "Dü&zenle..."
-
-#~ msgctxt "@option:radio"
-#~ msgid "February 2&8th"
-#~ msgstr "28 Ş&ubat"
-
-#~ msgctxt "@option:radio"
-#~ msgid "March &1st"
-#~ msgstr "1 &Mart"
-
-#~ msgctxt "@option:radio"
-#~ msgid "Acti&ve Alarms"
-#~ msgstr "Etki&n Alarmlar"
-
-#~ msgctxt "@option:radio"
-#~ msgid "Alarm &Templates"
-#~ msgstr "Alarm Şa&blonları"
-
-#~ msgctxt "@action"
-#~ msgid "&Remove"
-#~ msgstr "&Kaldır"
-
-#~ msgctxt "@action"
-#~ msgid "&Add..."
-#~ msgstr "&Ekle..."
-
-#~ msgctxt "@option:radio"
-#~ msgid "Defer to date/time:"
-#~ msgstr "Bu tarihe/saate ertele:"
-
-#~ msgctxt "@option:radio"
-#~ msgid "Defer for time interval:"
-#~ msgstr "Bu süre aralığında ertele:"
