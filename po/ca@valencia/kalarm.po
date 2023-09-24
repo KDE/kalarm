@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-09-21 00:45+0000\n"
-"PO-Revision-Date: 2023-09-21 16:40+0200\n"
+"PO-Revision-Date: 2023-09-22 11:18+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -903,14 +903,14 @@ msgstr ""
 #, kde-format
 msgctxt "@label"
 msgid "Message font"
-msgstr "Tipus de lletra del missatge"
+msgstr "Lletra del missatge"
 
 #. i18n: ectx: whatsthis, entry (MessageFont), group (General)
 #: data/kalarmconfig.kcfg:110
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Default font for displaying alarm messages."
-msgstr "Tipus de lletra predeterminada per a mostrar els missatges d'alarma."
+msgstr "Lletra predeterminada per a mostrar els missatges d'alarma."
 
 #. i18n: ectx: label, entry (ShowInSystemTray), group (General)
 #: data/kalarmconfig.kcfg:115
@@ -3188,7 +3188,7 @@ msgstr "Selecciona el color de fons del missatge de l'alarma"
 #, kde-format
 msgctxt "@option:check"
 msgid "Use default font"
-msgstr "Utilitza el tipus de lletra predeterminada"
+msgstr "Utilitza la lletra predeterminada"
 
 #: fontcolour.cpp:83
 #, kde-format
@@ -3196,25 +3196,25 @@ msgctxt "@info:whatsthis"
 msgid ""
 "Check to use the default font current at the time the alarm is displayed."
 msgstr ""
-"Marqueu-la per a utilitzar el tipus de lletra predeterminada actual en el "
-"moment que es mostre l'alarma."
+"Marqueu-la per a utilitzar la lletra predeterminada actual en el moment que "
+"es mostre l'alarma."
 
 #: fontcolour.h:26
 #, kde-format
 msgid "Requested font"
-msgstr "Tipus de lletra requerit"
+msgstr "Lletra requerida"
 
 #: fontcolourbutton.cpp:27
 #, kde-format
 msgctxt "@action:button"
 msgid "Font && Color..."
-msgstr "Tipus de lletra i color..."
+msgstr "Lletra i color..."
 
 #: fontcolourbutton.cpp:30
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Set alarm message font and color"
-msgstr "Establiu el tipus de lletra i color del missatge d'alarma"
+msgstr "Establiu la lletra i el color del missatge d'alarma"
 
 #: fontcolourbutton.cpp:31
 #, kde-format
@@ -3222,14 +3222,14 @@ msgctxt "@info:whatsthis"
 msgid ""
 "Choose the font, and foreground and background color, for the alarm message."
 msgstr ""
-"Escolliu el tipus de lletra i el color de fons i primer pla per al missatge "
-"de l'alarma."
+"Escolliu la lletra i el color de fons i primer pla per al missatge de "
+"l'alarma."
 
 #: fontcolourbutton.cpp:50
 #, kde-format
 msgctxt "@title:window"
 msgid "Choose Alarm Font & Color"
-msgstr "Escolliu el tipus de lletra i color de l'alarma"
+msgstr "Escolliu la lletra i el color de l'alarma"
 
 #: functions.cpp:145
 #, kde-format
@@ -3871,7 +3871,7 @@ msgstr "Fitxer del missatge"
 #, kde-format
 msgctxt "@label"
 msgid "Font"
-msgstr "Tipus de lletra"
+msgstr "Lletra"
 
 #: kalarmcalendar/kaeventformatter.cpp:98
 #, kde-format
@@ -5810,7 +5810,7 @@ msgstr "Tipus específic"
 #, kde-format
 msgctxt "@title:tab"
 msgid "Font && Color"
-msgstr "Tipus de lletra i color"
+msgstr "Lletra i color"
 
 #: prefdlg.cpp:1351
 #, kde-format
@@ -5968,7 +5968,7 @@ msgstr "Alarmes de correu"
 #, kde-format
 msgctxt "@title:group"
 msgid "Message Font && Color"
-msgstr "Tipus de lletra i color del missatge"
+msgstr "Lletra i color del missatge"
 
 #: prefdlg.cpp:1757
 #, kde-kuit-format

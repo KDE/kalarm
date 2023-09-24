@@ -229,7 +229,7 @@
 >Llista d'alarmes</title>
 
 <para
->La finestra principal del &kalarm; mostra la llista actual d'alarmes pendents, mostrant els seus temps, els intervals de repetició, colors, noms i text dels missatges, els noms dels fitxers a reproduir o mostrar, executar ordres o els assumptes del correu electrònic. (Per a una alarma que es repeteix, l'hora que es mostrarà serà la de la propera activació. Per a una alarma amb un recordatori, l'hora que es mostrarà serà la de la mateixa alarma, no la del recordatori). Una icona a la part esquerra de cada text d'alarma/fitxer/ordre/assumpte del correu electrònic indicarà el tipus d'alarma.</para>
+>La finestra principal del &kalarm; mostra la llista actual d'alarmes pendents, mostrant els seus temps, els intervals de repetició, colors, noms i text dels missatges, els noms dels fitxers a reproduir o mostrar, executar ordres o els assumptes del correu electrònic. (Per a una alarma que es repeteix, l'hora que es mostrarà serà la de la pròxima activació. Per a una alarma amb un recordatori, l'hora que es mostrarà serà la de la mateixa alarma, no la del recordatori). Una icona a la part esquerra de cada text d'alarma/fitxer/ordre/assumpte del correu electrònic indicarà el tipus d'alarma.</para>
 
 <para
 >Cal tenir en compte que la columna <guilabel
@@ -253,7 +253,7 @@
 </screenshot>
 
 <para
->Per a una alarma repetida, la llista mostra la seva propera hora d'activació programada i el seu interval de repetició bàsic (&pex;, <quote
+>Per a una alarma repetida, la llista mostra la seva pròxima hora d'activació programada i el seu interval de repetició bàsic (&pex;, <quote
 >1 dia</quote
 > per a una repetició diària, <quote
 >3 setmanes</quote
@@ -2321,7 +2321,7 @@ mode.</para
 <para
 >Si la configuració del sistema permet que diverses alarmes despertin el sistema des de la suspensió, podeu seleccionar <guilabel
 >Activa des de la suspensió</guilabel
-> per activar el sistema si actualment està suspès quan venç l'alarma. Aquesta funció no és disponible per a les alarmes de només data perquè la seva hora no està definida. Vegeu <link linkend="wake-suspend"
+> per a activar el sistema si actualment està suspès quan venç l'alarma. Aquesta funció no és disponible per a les alarmes de només data perquè la seva hora no està definida. Vegeu <link linkend="wake-suspend"
 >Activa des de la suspensió</link
 > per a més informació.</para>
 
@@ -2433,11 +2433,11 @@ mode.</para
 
 <note
 ><para
->L'hora a la qual s'ajorni l'alarma haurà de ser anterior a la propera activació programada o següent recordatori avançat. Per aquesta raó, el ​botó <guibutton
+>L'hora a la qual s'ajorni l'alarma haurà de ser anterior a la pròxima activació programada o següent recordatori avançat. Per aquesta raó, el ​botó <guibutton
 >​Ajorna...</guibutton
 > a la finestra del missatge de l'alarma i el botó <guibutton
 >D'acord</guibutton
-> en el diàleg d'ajornament s'inhabiliten un minut abans de la propera activació o recordatori avançat.</para>
+> en el diàleg d'ajornament s'inhabiliten un minut abans de la pròxima activació o recordatori avançat.</para>
 <para
 >Cal tenir en compte que si es configura un recordatori <emphasis
 >després</emphasis
@@ -2598,12 +2598,12 @@ mode.</para
 >De manera predeterminada, el &kalarm; mostra una icona a la safata del sistema. La icona proporciona control i una indicació d'estat per al monitoratge de les alarmes. Una icona normal del &kalarm; indica que les alarmes s'estan monitorant, mentre que dues icones modificades diferents indiquen que algunes alarmes, o totes les alarmes, no s'estan monitorant. Les modificacions de la icona depenen del tema de la icona que s'estigui utilitzant.</para>
 
 <para
->La icona de la safata del sistema del &kalarm; restarà oculta automàticament de manera predeterminada sempre que no hi hagi alarmes vençudes en les properes 24 hores. Podeu canviar el límit de temps d'ocultació automàtica, o mostrar sempre la icona de la safata del sistema, utilitzant el <link linkend="preferences-view"
+>La icona de la safata del sistema del &kalarm; restarà oculta automàticament de manera predeterminada sempre que no hi hagi alarmes vençudes en les pròximes 24 hores. Podeu canviar el límit de temps d'ocultació automàtica, o mostrar sempre la icona de la safata del sistema, utilitzant el <link linkend="preferences-view"
 >diàleg de configuració</link
 >. Per a mostrar la icona quan està oculta, feu clic a la fletxa de la safata del sistema per a mostrar les icones ocultes.</para>
 
 <para
->Si passeu el cursor del ratolí sobre la icona de la safata del sistema, es mostrarà un resum de les primeres alarmes de missatge que vencen en les properes 24 hores com un consell d'eina. Podeu desactivar aquesta característica, o configurar el nombre d'alarmes a mostrar i el seu format, en el <link linkend="preferences-view"
+>Si passeu el cursor del ratolí sobre la icona de la safata del sistema, es mostrarà un resum de les primeres alarmes de missatge que vencen en les pròximes 24 hores com un consell d'eina. Podeu desactivar aquesta característica, o configurar el nombre d'alarmes a mostrar i el seu format, en el <link linkend="preferences-view"
 >diàleg de configuració</link
 >.</para>
 
@@ -2874,7 +2874,7 @@ mode.</para
 >Inhabilitar el monitoratge d'alarmes</title>
 
 <para
->Podeu inhabilitar temporalment el monitoratge d'alarmes, el qual evitarà que el &kalarm; torni a mostrar cap alarma fins que les torneu a habilitar, o -si s'assumeix que el &kalarm; està configurat per a executar-se en iniciar la sessió- fins a la propera vegada que inicieu la sessió.</para>
+>Podeu inhabilitar temporalment el monitoratge d'alarmes, el qual evitarà que el &kalarm; torni a mostrar cap alarma fins que les torneu a habilitar, o -si s'assumeix que el &kalarm; està configurat per a executar-se en iniciar la sessió- fins a la pròxima vegada que inicieu la sessió.</para>
 
 <itemizedlist>
 <listitem>
@@ -2996,7 +2996,7 @@ mode.</para
 <para
 >En els sistemes Linux, si l'usuari té la capacitat de temporitzador d'alarma del nucli (<literal
 >cap_wake_alarm</literal
->), es pot configurar qualsevol nombre d'alarmes per activar-se des de la suspensió. En aquest cas, l'activació des de la suspensió es configura per a cada alarma individual en el <link linkend="alarm-edit-dlg"
+>), es pot configurar qualsevol nombre d'alarmes per a activar-se des de la suspensió. En aquest cas, l'activació des de la suspensió es configura per a cada alarma individual en el <link linkend="alarm-edit-dlg"
 >diàleg d'edició d'alarma</link
 > utilitzant l'opció <guilabel
 >Activa des de la suspensió</guilabel
@@ -3018,7 +3018,7 @@ mode.</para
 >cap_wake_alarm</literal
 >, s'utilitza l'alarma del rellotge en temps real (<acronym
 >RTC</acronym
->). Això només es pot establir per a una alarma cada vegada. En aquest cas, per a configurar-ho s'utilitza un diàleg especial d'activació des de la suspensió. El diàleg permet establir, cancel·lar o mostrar l'alarma d'activació des de la suspensió. Per accedir al diàleg, seleccioneu <menuchoice
+>). Això només es pot establir per a una alarma cada vegada. En aquest cas, per a configurar-ho s'utilitza un diàleg especial d'activació des de la suspensió. El diàleg permet establir, cancel·lar o mostrar l'alarma d'activació des de la suspensió. Per a accedir al diàleg, seleccioneu <menuchoice
 ><guimenu
 >Accions</guimenu
 > <guimenuitem
@@ -3265,7 +3265,7 @@ mode.</para
 ><para
 ><guilabel
 >Zona horària</guilabel
->: Seleccioneu la zona horària. El &kalarm; l'utilitza per tot, excepte quan l'anul·leu per a les alarmes individuals.</para>
+>: Seleccioneu la zona horària. El &kalarm; l'utilitza per a tot, excepte quan l'anul·leu per a les alarmes individuals.</para>
 </listitem>
 
 <listitem
@@ -3279,7 +3279,7 @@ mode.</para
 ><para
 ><guilabel
 >Activa des de la suspensió abans de l'alarma</guilabel
->: Introduïu el nombre de minuts abans de l'hora d'activació de l'alarma per a despertar el sistema, per a les alarmes configurades per despertar des de la suspensió. Permet assegurar que el sistema té temps per a restaurar-se completament abans que s'activi l'alarma, de manera que l'alarma pugui activar-se en el moment correcte. Aquesta opció només es mostra si la configuració del sistema permet que diverses alarmes despertin el sistema des de la suspensió. Vegeu <link linkend="wake-suspend"
+>: Introduïu el nombre de minuts abans de l'hora d'activació de l'alarma per a despertar el sistema, per a les alarmes configurades per a despertar des de la suspensió. Permet assegurar que el sistema té temps per a restaurar-se completament abans que s'activi l'alarma, de manera que l'alarma pugui activar-se en el moment correcte. Aquesta opció només es mostra si la configuració del sistema permet que diverses alarmes despertin el sistema des de la suspensió. Vegeu <link linkend="wake-suspend"
 >Activa des de la suspensió abans de l'alarma</link
 > per a més informació.</para>
 </listitem>
@@ -3581,15 +3581,15 @@ mode.</para
 <listitem>
 <para
 ><guilabel
->Mostra les alarmes de les properes 24 hores</guilabel
->: Quan se selecciona, es mostrarà un resum de les alarmes que vencin en les properes 24 hores.</para>
+>Mostra les alarmes de les pròximes 24 hores</guilabel
+>: Quan se selecciona, es mostrarà un resum de les alarmes que vencin en les pròximes 24 hores.</para>
 </listitem>
 
 <listitem>
 <para
 ><guilabel
 >Nombre màxim d'alarmes a mostrar</guilabel
->: Desseleccioneu aquesta opció per a mostrar totes les alarmes de les properes 24 hores. Seleccioneu-la per a establir el nombre màxim d'alarmes que es mostraran.</para>
+>: Desseleccioneu aquesta opció per a mostrar totes les alarmes de les pròximes 24 hores. Seleccioneu-la per a establir el nombre màxim d'alarmes que es mostraran.</para>
 </listitem>
 
 <listitem>
@@ -4710,7 +4710,7 @@ mode.</para
 > és una crida de &DBus; per a activar la visualització immediata o l'execució de l'alarma especificada (sense importar l'hora a la qual està programada). El &kalarm; recuperarà l'alarma del calendari i després la mostra o executa.</para>
 
 <para
->Si l'alarma ja ha vençut, llavors el &kalarm; eliminarà totes les aparicions programades de l'alarma fins a l'hora actual, i si no romandrà la repetició de l'alarma, l'alarma s'eliminarà del calendari. Si l'alarma no ha vençut, les seves aparicions programades no es modificaran.</para>
+>Si l'alarma ja ha vençut, llavors el &kalarm; eliminarà totes les aparicions programades de l'alarma fins a l'hora actual, i si no roman la repetició de l'alarma, l'alarma s'eliminarà del calendari. Si l'alarma no ha vençut, les seves aparicions programades no es modificaran.</para>
 
 </refsect1>
 </refentry>
@@ -6899,7 +6899,7 @@ mode.</para
 > és un petit programa d'ajuda en la funció d'inici automàtic del &kalarm; en iniciar la sessió.</para>
 
 <para
->El &kalarm; sol ser restaurat pel gestor de sessions a l'inici de la sessió (per a tornar a mostrar les seves finestres en el mateix estat en què estaven quan es va tancar la sessió). Però si no s'estava executant, no s'iniciarà i per tant serà iniciat automàticament. El problema és que quan una aplicació és alhora restaurada pel gestor de sessions i iniciada automàticament, no hi ha cap garantia del que succeirà primer. Si s'inicia automàticament en primer lloc, impedirà que el gestor de sessions restauri l'estat de l'aplicació.</para>
+>El &kalarm; sol ser restaurat pel gestor de sessions a l'inici de la sessió (per a tornar a mostrar les seves finestres en el mateix estat en què estaven quan es va tancar la sessió). Però si no s'estava executant, no s'iniciarà i, per tant, serà iniciat automàticament. El problema és que quan una aplicació és alhora restaurada pel gestor de sessions i iniciada automàticament, no hi ha cap garantia del que succeirà primer. Si s'inicia automàticament en primer lloc, impedirà que el gestor de sessions restauri l'estat de l'aplicació.</para>
 
 <para
 >Per a evitar aquest problema, <application
