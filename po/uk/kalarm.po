@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-08-28 03:11+0000\n"
-"PO-Revision-Date: 2023-06-08 08:58+0300\n"
+"PO-Revision-Date: 2023-09-21 13:45+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
 "Language: uk\n"
@@ -219,7 +219,7 @@ msgstr "<para>%1</para><para>%2</para><para>%3</para>"
 #, kde-format
 msgctxt "@action:button"
 msgid "Time Zone..."
-msgstr "Часовий пояс..."
+msgstr "Часовий пояс…"
 
 #: alarmtimewidget.cpp:210
 #, kde-format
@@ -1335,8 +1335,8 @@ msgid ""
 "OR'ed bits indicating which days of the week are work days, 1 = Monday ... "
 "64 = Sunday."
 msgstr ""
-"Біти, що додаються і вказують, які дні тижня є робочими, 1 = Понеділок ... "
-"64 = Неділя."
+"Біти, що додаються і вказують, які дні тижня є робочими, 1 = Понеділок … 64 "
+"= Неділя."
 
 #. i18n: ectx: label, entry (DisabledColour), group (General)
 #: data/kalarmconfig.kcfg:245
@@ -2101,7 +2101,7 @@ msgstr "Спробувати"
 #, kde-format
 msgctxt "@action:button"
 msgid "Load Template..."
-msgstr "Завантажити шаблон..."
+msgstr "Завантажити шаблон…"
 
 #: editdlg.cpp:207
 #, kde-format
@@ -2155,7 +2155,7 @@ msgstr "Відкладено до:"
 #, kde-format
 msgctxt "@action:button"
 msgid "Change..."
-msgstr "Змінити..."
+msgstr "Змінити…"
 
 #: editdlg.cpp:284
 #, kde-format
@@ -2813,7 +2813,7 @@ msgstr "Файли, які відіслати по електронній пош
 #, kde-format
 msgctxt "@action:button"
 msgid "Add..."
-msgstr "Додати..."
+msgstr "Додати…"
 
 #: editdlgtypes.cpp:1243
 #, kde-format
@@ -3147,7 +3147,7 @@ msgstr "Запитаний шрифт"
 #, kde-format
 msgctxt "@action:button"
 msgid "Font && Color..."
-msgstr "Шрифт і колір..."
+msgstr "Шрифт і колір…"
 
 #: fontcolourbutton.cpp:30
 #, kde-format
@@ -4485,7 +4485,7 @@ msgstr "Імпортувати на&гадування..."
 #, kde-format
 msgctxt "@action"
 msgid "Import Birthdays..."
-msgstr "Імпортувати дні народження..."
+msgstr "Імпортувати дні народження…"
 
 #: mainwindow.cpp:545
 #, kde-format
@@ -7721,7 +7721,7 @@ msgstr ""
 #, kde-format
 msgctxt "@action:button"
 msgid "Edit..."
-msgstr "Змінити..."
+msgstr "Змінити…"
 
 #: resourceselector.cpp:82
 #, kde-format
@@ -8197,7 +8197,7 @@ msgstr "Виберіть звуковий файл"
 #, kde-format
 msgctxt "@action:button"
 msgid "Special Actions..."
-msgstr "Спеціальні дії..."
+msgstr "Спеціальні дії…"
 
 #: specialactions.cpp:39
 #, kde-format
