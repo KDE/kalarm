@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-09-21 00:45+0000\n"
-"PO-Revision-Date: 2023-09-24 20:00+0200\n"
+"PO-Revision-Date: 2023-09-25 16:00+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -414,7 +414,7 @@ msgstr ""
 #: commandoptions.cpp:129
 #, kde-format
 msgid "Attach file to email (repeat as needed)"
-msgstr ""
+msgstr "ფაილის მიმაგრება ელფოსტაზე"
 
 #: commandoptions.cpp:133
 #, kde-format
@@ -444,7 +444,7 @@ msgstr ""
 #: commandoptions.cpp:150
 #, kde-format
 msgid "Cancel alarm with the specified event ID"
-msgstr ""
+msgstr "მითითებული მოვლენის ID-ის მქონე განგაშის გაუქმება"
 
 #: commandoptions.cpp:154
 #, kde-format
@@ -469,27 +469,27 @@ msgstr "ბრძანების სტრიქონი განგაშ�
 #: commandoptions.cpp:168
 #, kde-format
 msgid "Display the alarm edit dialog to edit the specified alarm"
-msgstr ""
+msgstr "მითითებული განგაშის ჩასასწორებელი ფანჯრის გამოტანა"
 
 #: commandoptions.cpp:172
 #, kde-format
 msgid "Display the alarm edit dialog to edit a new display alarm"
-msgstr ""
+msgstr "ახალი საჩვენებელი განგაშის ჩასწორების ფანჯრის ჩვენება"
 
 #: commandoptions.cpp:175
 #, kde-format
 msgid "Display the alarm edit dialog to edit a new command alarm"
-msgstr ""
+msgstr "ახალი ბრძანების განგაშის ჩასწორების ფანჯრის ჩვენება"
 
 #: commandoptions.cpp:178
 #, kde-format
 msgid "Display the alarm edit dialog to edit a new email alarm"
-msgstr ""
+msgstr "ახალი ელფოსტის განგაშის ჩასწორების ფანჯრის ჩვენება"
 
 #: commandoptions.cpp:181
 #, kde-format
 msgid "Display the alarm edit dialog to edit a new audio alarm"
-msgstr ""
+msgstr "ახალი ხმოვანი განგაშის ჩასწორების ფანჯრის ჩვენება"
 
 #: commandoptions.cpp:184
 #, kde-format
@@ -504,7 +504,7 @@ msgstr "საჩვენებელი ფაილი"
 #: commandoptions.cpp:192
 #, kde-format
 msgid "KMail identity to use as sender of email"
-msgstr ""
+msgstr "KMail-ის იდენტიფიკატორი ელფოსტის გამგზავნად გამოსაყენებლად"
 
 #: commandoptions.cpp:196
 #, kde-format
@@ -564,7 +564,7 @@ msgstr ""
 #: commandoptions.cpp:236
 #, kde-format
 msgid "Display reminder before or after alarm"
-msgstr ""
+msgstr "შემხსენებლის ჩვენება განგაშამდე ან მის შემდეგ"
 
 #: commandoptions.cpp:240
 #, kde-format
@@ -638,7 +638,7 @@ msgstr ""
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "<icode>%1</icode> earlier than <icode>%2</icode>"
-msgstr ""
+msgstr "<icode>%1</icode> ადრე, ვიდრე <icode>%2</icode>"
 
 #: commandoptions.cpp:603
 #, kde-kuit-format
@@ -780,7 +780,7 @@ msgstr "დასვენების რეგიონი"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select the holiday region to use."
-msgstr ""
+msgstr "აირჩიეთ დასვენების რეგიონი."
 
 #. i18n: ectx: label, entry (DefaultFgColour), group (General)
 #: data/kalarmconfig.kcfg:93 kalarmcalendar/kaeventformatter.cpp:92
@@ -1870,6 +1870,8 @@ msgid ""
 "<para>Error loading calendar:</para><para><filename>%1</filename></"
 "para><para>Please fix or delete the file.</para>"
 msgstr ""
+"<para>კალენდრის ჩატვირთვის შეცდომა:</para><para><filename>%1</filename></"
+"para><para>გაასწორეთ ან წაშალეთ ფაილი.</para>"
 
 #: displaycalendar.cpp:171
 #, kde-kuit-format
