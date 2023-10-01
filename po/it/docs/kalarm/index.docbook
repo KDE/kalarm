@@ -128,7 +128,7 @@
 <!-- Don't change format of date and version of the documentation -->
 
 <date
->2023-9-2</date>
+>2023-9-20</date>
 <releaseinfo
 >3.7.0 (KDE Gear 23.12)</releaseinfo>
 
@@ -2343,7 +2343,7 @@ mode.</para
 <para
 >Se la configurazione del sistema permette ad avvisi diversi di svegliare il sistema dalla sospensione, puoi selezionare <guilabel
 >Risveglia</guilabel
-> per risvegliare il sistema se è sospeso quando l'avviso scade. Consulta <link linkend="wake-suspend"
+> per risvegliare il sistema se è sospeso quando l'avviso scade. Questa funzione non è disponibile per avvisi con la sola data perché l'orario non è definito. Consulta <link linkend="wake-suspend"
 >Risveglia</link
 > per maggiori informazioni.</para>
 

@@ -670,7 +670,7 @@ msgstr ""
 #: commandoptions.cpp:267
 #, kde-format
 msgid "Display system tray icon"
-msgstr "Amosar a icona na bandexa do sistema"
+msgstr "Amosar a icona na área de notificación"
 
 #: commandoptions.cpp:270
 #, kde-format
@@ -929,7 +929,7 @@ msgstr "Fonte predeterminada para amosar as mensaxes de alarma."
 #, kde-format
 msgctxt "@label"
 msgid "Show in system tray"
-msgstr "Amosar na bandexa do sistema"
+msgstr "Amosar na área de notificación"
 
 #. i18n: ectx: whatsthis, entry (ShowInSystemTray), group (General)
 #: data/kalarmconfig.kcfg:116
@@ -939,9 +939,9 @@ msgid ""
 "<p>Check to show KAlarm's icon in the system tray. Showing it in the system "
 "tray provides easy access and a status indication.</p>"
 msgstr ""
-"<p>Marque isto para amosar a icona de KAlarm na bandexa do sistema. Amosala "
-"na bandexa do sistema fornece un acceso fácil e unha indicación do estado.</"
-"p>"
+"<p>Marque isto para amosar a icona de KAlarm na área de notificación. "
+"Amosala na área de notificación fornece un acceso fácil e unha indicación do "
+"estado.</p>"
 
 #. i18n: ectx: label, entry (Base_AutoHideSystemTray), group (General)
 #: data/kalarmconfig.kcfg:121
@@ -949,7 +949,7 @@ msgstr ""
 msgctxt "@label"
 msgid "Auto-hide in system tray if no alarms due within period"
 msgstr ""
-"Agochar automaticamente na bandexa do sistema de non haber alarmas que "
+"Agochar automaticamente na área de notificación de non haber alarmas que "
 "venzan no período"
 
 #. i18n: ectx: whatsthis, entry (Base_AutoHideSystemTray), group (General)
@@ -962,11 +962,11 @@ msgid ""
 "alarms due within a set period of time, enter the time period in minutes.</"
 "p><p>Enter 0 to always show the system tray icon.</p>"
 msgstr ""
-"<p>Insira -1 para agochar automaticamente a icona de KAlarm na bandexa do "
-"sistema cando non haxa alarmas activas.</p><p>Para agochar automaticamente a "
-"icona da bandexa do sistema cando non haxa alarmas que venzan nun período de "
-"tempo indicado, insira ese período de tempo en minutos.</p><p>Insira 0 para "
-"que se amose sempre a icona da bandexa do sistema.</p>"
+"<p>Insira -1 para agochar automaticamente a icona de KAlarm na área de "
+"notificación cando non haxa alarmas activas.</p><p>Para agochar "
+"automaticamente a icona da área de notificación cando non haxa alarmas que "
+"venzan nun período de tempo indicado, insira ese período de tempo en minutos."
+"</p><p>Insira 0 para que se amose sempre a icona da área de notificación.</p>"
 
 #. i18n: ectx: label, entry (NoAutoHideSystemTrayDesktops), group (General)
 #: data/kalarmconfig.kcfg:127
@@ -1112,7 +1112,7 @@ msgstr ""
 msgctxt "@label"
 msgid "Number of alarms to show in system tray tooltip"
 msgstr ""
-"Número de alarmas que se poden amosar na notificación da bandexa do sistema"
+"Número de alarmas que se poden amosar na notificación da área de notificación"
 
 #. i18n: ectx: whatsthis, entry (TooltipAlarmCount), group (General)
 #: data/kalarmconfig.kcfg:172
@@ -1127,7 +1127,7 @@ msgid ""
 "      "
 msgstr ""
 "<p>Cantas alarmas previstas para as vindeiras 24 horas se han de amosar na "
-"notificación da bandexa do sistema:\n"
+"notificación da área de notificación:\n"
 "        <ul><li>0 para non amosar ningunha</li>\n"
 "        <li>-1 para amosalas todas</li>\n"
 "        <li>>0 para indicar un límite.</li></ul></p>\n"
@@ -1138,7 +1138,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label"
 msgid "Show alarm times in system tray tooltip"
-msgstr "Amosar as horas das alarmas na notificación da bandexa do sistema"
+msgstr "Amosar as horas das alarmas na notificación da área de notificación"
 
 #. i18n: ectx: whatsthis, entry (ShowTooltipAlarmTime), group (General)
 #: data/kalarmconfig.kcfg:179 prefdlg.cpp:1879
@@ -1148,7 +1148,7 @@ msgid ""
 "Specify whether to show in the system tray tooltip, the time at which each "
 "alarm is due."
 msgstr ""
-"Indique se se mostra na información da bandexa do sistema a hora á que se "
+"Indique se se mostra na información da área de notificación a hora á que se "
 "programou cada alarma."
 
 #. i18n: ectx: label, entry (ShowTooltipTimeToAlarm), group (General)
@@ -1157,8 +1157,8 @@ msgstr ""
 msgctxt "@label"
 msgid "Show time to alarms in system tray tooltip"
 msgstr ""
-"Amosar o tempo que falta para cada alarma na notificación da bandexa do "
-"sistema"
+"Amosar o tempo que falta para cada alarma na notificación da área de "
+"notificación"
 
 #. i18n: ectx: whatsthis, entry (ShowTooltipTimeToAlarm), group (General)
 #: data/kalarmconfig.kcfg:185 prefdlg.cpp:1885
@@ -1169,14 +1169,14 @@ msgid ""
 "alarm is due."
 msgstr ""
 "Indique se amosar ou non canto queda ata a vindeira alarma na información da "
-"bandexa do sistema."
+"área de notificación."
 
 #. i18n: ectx: label, entry (TooltipTimeToPrefix), group (General)
 #: data/kalarmconfig.kcfg:190
 #, kde-format
 msgctxt "@label"
 msgid "Time-to-alarm prefix in system tray tooltip"
-msgstr "Prefixo para o tempo que falta na notificación da bandexa do sistema"
+msgstr "Prefixo para o tempo que falta na notificación da área de notificación"
 
 #. i18n: ectx: whatsthis, entry (TooltipTimeToPrefix), group (General)
 #: data/kalarmconfig.kcfg:191 prefdlg.cpp:1896
@@ -1187,7 +1187,7 @@ msgid ""
 "system tray tooltip."
 msgstr ""
 "Insira o texto a amosar diante da hora ata que soe a alarma, no menú "
-"emerxente da bandexa do sistema."
+"emerxente da área de notificación."
 
 #. i18n: ectx: label, entry (Base_EmailClient), group (General)
 #: data/kalarmconfig.kcfg:196
@@ -1485,8 +1485,8 @@ msgid ""
 "time the alarm triggers."
 msgstr ""
 "Insira o número de minutos antes da hora de activación da alarma para "
-"recuperar o sistema da suspensión. Isto pódese utilizar para asegurarse de "
-"que o sistema está recuperado completamente cando se dispare a alarma."
+"recuperar o sistema da suspensión. Isto pódese usar para asegurarse de que o "
+"sistema está recuperado completamente cando se dispare a alarma."
 
 #. i18n: ectx: label, entry (DefaultDisplayMethod), group (Defaults)
 #: data/kalarmconfig.kcfg:290
@@ -2096,26 +2096,27 @@ msgstr "Cancelar a alarma adiada. Isto non afecta futuras repeticións."
 #, kde-format
 msgctxt "@info"
 msgid "Cannot defer past the alarm's next sub-repetition (currently %1)"
-msgstr "Non se pode adiar a vindeira repetición da alarma (actualmente %1)"
+msgstr "Non é posíbel adiar a vindeira repetición da alarma (actualmente %1)"
 
 #: deferdlg.cpp:99
 #, kde-format
 msgctxt "@info"
 msgid "Cannot defer past the alarm's next recurrence (currently %1)"
-msgstr "Non se pode adiar a vindeira repetición da alarma (actualmente %1)"
+msgstr "Non é posíbel adiar a vindeira repetición da alarma (actualmente %1)"
 
 #: deferdlg.cpp:103
 #, kde-format
 msgctxt "@info"
 msgid "Cannot defer past the alarm's next reminder (currently %1)"
-msgstr "Non se pode adiar a vindeira lembranza da alarma (actualmente %1)"
+msgstr "Non é posíbel adiar a vindeira lembranza da alarma (actualmente %1)"
 
 #: deferdlg.cpp:107
 #, kde-format
 msgctxt "@info"
 msgid "Cannot defer reminder past the main alarm time (%1)"
 msgstr ""
-"Non se pode adiar a lembranza da alarma posteriormente á hora da alarma (%1)"
+"Non é posíbel adiar a lembranza da alarma posteriormente á hora da alarma "
+"(%1)"
 
 #: displaycalendar.cpp:127
 #, kde-kuit-format
@@ -2131,7 +2132,7 @@ msgstr ""
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Failed to save calendar to <filename>%1</filename>"
-msgstr "Non se puido gardar o calendario en <filename>%1</filename>"
+msgstr "Non foi posíbel gardar o calendario en <filename>%1</filename>"
 
 #: editdlg.cpp:74
 #, kde-format
@@ -3340,43 +3341,44 @@ msgstr ""
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Failed to save new calendar to:<nl/><filename>%1</filename>"
-msgstr "Non se puido gardar o calendario novo en:<nl/><filename>%1</filename>"
+msgstr ""
+"Non foi posíbel gardar o calendario novo en:<nl/><filename>%1</filename>"
 
 #: functions.cpp:1013
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot upload new calendar to:<nl/><filename>%1</filename>"
-msgstr "Non se pode enviar o calendario novo a:<nl/><filename>%1</filename>"
+msgstr "Non é posíbel enviar o calendario novo a:<nl/><filename>%1</filename>"
 
 #: functions.cpp:1032
 #, kde-format
 msgctxt "@info"
 msgid "Unable to show alarms in KOrganizer"
-msgstr "Non se poden amosar as alarmas en KOrganizer"
+msgstr "Non é posíbel amosar as alarmas en KOrganizer"
 
 #: functions.cpp:1033
 #, kde-format
 msgctxt "@info"
 msgid "Unable to show alarm in KOrganizer"
-msgstr "Non se pode amosar a alarma en KOrganizer"
+msgstr "Non é posíbel amosar a alarma en KOrganizer"
 
 #: functions.cpp:1036
 #, kde-format
 msgctxt "@info"
 msgid "Unable to update alarm in KOrganizer"
-msgstr "Non se pode actualizar a alarma en KOrganizer"
+msgstr "Non é posíbel actualizar a alarma en KOrganizer"
 
 #: functions.cpp:1039
 #, kde-format
 msgctxt "@info"
 msgid "Unable to delete alarms from KOrganizer"
-msgstr "Non se poden eliminar as alarmas de KOrganizer"
+msgstr "Non é posíbel eliminar as alarmas de KOrganizer"
 
 #: functions.cpp:1040
 #, kde-format
 msgctxt "@info"
 msgid "Unable to delete alarm from KOrganizer"
-msgstr "Non se pode eliminar a alarma de KOrganizer"
+msgstr "Non é posíbel eliminar a alarma de KOrganizer"
 
 #: functions.cpp:1050
 #, kde-kuit-format
@@ -3560,8 +3562,8 @@ msgid ""
 "calendar is enabled.<nl/><nl/>To fix this, use <interface>View | Show "
 "Calendars</interface> to check or change calendar statuses."
 msgstr ""
-"Non se pode crear ou actualizar alarmas porque non hai ningún calendario de "
-"alarmas activo que permita escritura.<nl/><nl/>Para arranxar isto, use "
+"Non é posíbel crear ou actualizar alarmas porque non hai ningún calendario "
+"de alarmas activo que permita escritura.<nl/><nl/>Para arranxar isto, use "
 "<interface>Vista | Amosar os calendarios</interface> para comprobar ou "
 "cambiar os estados dos calendarios."
 
@@ -4456,7 +4458,7 @@ msgstr "Enviouse unha mensaxe á lista de envíos en espera"
 #, kde-format
 msgctxt "@info"
 msgid "Failed to send email"
-msgstr "Non se puido enviar a mensaxe de correo electrónico"
+msgstr "Non foi posíbel enviar a mensaxe de correo electrónico"
 
 #: kamail.cpp:544
 #, kde-format
@@ -4579,14 +4581,14 @@ msgstr "Amecer a un ficheiro existente"
 msgctxt "@info"
 msgid "Failed to execute command (shell access not authorized)"
 msgstr ""
-"Non se puido executar a orde (non se autoriza o acceso ao intérprete de "
+"Non foi posíbel executar a orde (non se autoriza o acceso ao intérprete de "
 "ordes)."
 
 #: lib/shellprocess.cpp:145
 #, kde-format
 msgctxt "@info"
 msgid "Failed to execute command"
-msgstr "Non se puido executar a orde"
+msgstr "Non foi posíbel executar a orde"
 
 #: lib/shellprocess.cpp:147
 #, fuzzy, kde-format
@@ -4946,7 +4948,7 @@ msgstr "O ficheiro é un cartafol"
 #, kde-format
 msgctxt "@info"
 msgid "Failed to open file"
-msgstr "Non se puido abrir o ficheiro"
+msgstr "Non foi posíbel abrir o ficheiro"
 
 #: messagedisplayhelper.cpp:295
 #, kde-format
@@ -5018,7 +5020,7 @@ msgstr[1] "dentro de %2 e %1 minutos"
 #, kde-format
 msgctxt "@info"
 msgid "Unable to speak message"
-msgstr "Non se pode ler a mensaxe"
+msgstr "Non é posíbel ler a mensaxe"
 
 #: messagedisplayhelper.cpp:847
 #, kde-format
@@ -5030,7 +5032,7 @@ msgstr "O subsistema de texto-para-voz non está dispoñíbel."
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot open audio file: <filename>%1</filename>"
-msgstr "Non se pode abrir o ficheiro de son: <filename>%1</filename>"
+msgstr "Non é posíbel abrir o ficheiro de son: <filename>%1</filename>"
 
 #: messagedisplayhelper.cpp:1160
 #, kde-kuit-format
@@ -5213,7 +5215,7 @@ msgstr "Recoñecer"
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Unable to locate this email in <application>KMail</application>"
-msgstr "Non se pode atopar este correo en <application>KMail</application>"
+msgstr "Non é posíbel atopar este correo en <application>KMail</application>"
 
 #: newalarmaction.cpp:45
 #, fuzzy, kde-format
@@ -6321,7 +6323,7 @@ msgstr "Xanelas das mensaxes de alarma"
 #, kde-format
 msgctxt "@option:check"
 msgid "Show in system tray"
-msgstr "Amosar na bandexa do sistema"
+msgstr "Amosar na área de notificación"
 
 #: prefdlg.cpp:1784
 #, kde-kuit-format
@@ -6332,8 +6334,8 @@ msgid ""
 "indication.</para>"
 msgstr ""
 "<para>Marque isto para amosar a icona de <application>KAlarm</application> "
-"na bandexa do sistema. Amosala na bandexa do sistema fornece un acceso fácil "
-"e unha indicación do estado.</para>"
+"na área de notificación. Amosala na área de notificación fornece un acceso "
+"fácil e unha indicación do estado.</para>"
 
 #: prefdlg.cpp:1813
 #, kde-format
@@ -6348,8 +6350,8 @@ msgid ""
 "Check to show <application>KAlarm</application>'s icon in the system tray "
 "regardless of whether alarms are due."
 msgstr ""
-"Marque isto para amosar a icona de <application>KAlarm</application> na "
-"bandexa do sistema independentemente de se hai alarmas que venzan."
+"Marque isto para amosar a icona de <application>KAlarm</application> na área "
+"de notificación independentemente de se hai alarmas que venzan."
 
 #: prefdlg.cpp:1821
 #, kde-format
@@ -6366,9 +6368,9 @@ msgid ""
 "be made visible by use of the system tray option to show hidden icons."
 msgstr ""
 "Marque isto para agochar automaticamente a icona de <application>KAlarm</"
-"application> na bandexa do sistema se non hai alarmas activas. Cando está "
-"agochada, a icona pódese sempre facer visíbel coa opción da bandexa do "
-"sistema de amosar as iconas agochadas."
+"application> na área de notificación se non hai alarmas activas. Cando está "
+"agochada, a icona pódese sempre facer visíbel coa opción da área de "
+"notificación de amosar as iconas agochadas."
 
 #: prefdlg.cpp:1831
 #, kde-kuit-format
@@ -6380,9 +6382,9 @@ msgid ""
 "to show hidden icons."
 msgstr ""
 "Marque isto para agochar automaticamente a icona de <application>KAlarm</"
-"application> na bandexa do sistema se non hai alarmas que venzan no período "
-"de tempo indicado. Cando está agochada, a icona pódese sempre facer visíbel "
-"coa opción da bandexa do sistema de amosar as iconas agochadas."
+"application> na área de notificación se non hai alarmas que venzan no "
+"período de tempo indicado. Cando está agochada, a icona pódese sempre facer "
+"visíbel coa opción da área de notificación de amosar as iconas agochadas."
 
 #: prefdlg.cpp:1834
 #, kde-format
@@ -6394,7 +6396,7 @@ msgstr "Agochar automaticamente de non haber alarmas que venzan no período:"
 #, kde-format
 msgctxt "@title:group"
 msgid "System Tray Tooltip"
-msgstr "Información na Bandexa do sistema"
+msgstr "Información na Área de notificación"
 
 #: prefdlg.cpp:1853
 #, fuzzy, kde-format
@@ -6411,7 +6413,7 @@ msgid ""
 "Specify whether to include in the system tray tooltip, a summary of alarms "
 "due in the next 24 hours."
 msgstr ""
-"Indique se se inclúe na información da bandexa do sistema unha lista das "
+"Indique se se inclúe na información da área de notificación unha lista das "
 "alarmas programadas para as vindeiras 24 horas."
 
 #: prefdlg.cpp:1863
@@ -6428,8 +6430,8 @@ msgid ""
 "tooltip. Check to enter an upper limit on the number to be displayed."
 msgstr ""
 "Desactive isto para amosar todas as alarmas das vindeiras 24 horas na "
-"información da bandexa do sistema. Márqueo para inserir un límite máximo do "
-"número de alarmas a amosar."
+"información da área de notificación. Márqueo para inserir un límite máximo "
+"do número de alarmas a amosar."
 
 #: prefdlg.cpp:1876
 #, kde-format
@@ -7217,13 +7219,13 @@ msgstr "Insira o intervalo de tempo durante o que se ha repetir a alarma"
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Could not load calendar <filename>%1</filename>."
-msgstr "Non se puido cargar o calendario <filename>%1</filename>."
+msgstr "Non foi posíbel cargar o calendario <filename>%1</filename>."
 
 #: resources/calendarfunctions.cpp:64
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot download calendar: <filename>%1</filename>"
-msgstr "Non se pode descargar o calendario: <filename>%1</filename>"
+msgstr "Non é posíbel descargar o calendario: <filename>%1</filename>"
 
 #: resources/calendarupdater.cpp:85
 #, kde-kuit-format
@@ -7260,7 +7262,7 @@ msgid ""
 msgstr ""
 "<para>%1</para><para><warning>Non actualice o calendario se tamén se usa "
 "cunha versión antiga de <application>KAlarm</application> (p.ex., noutro "
-"computador). Se o fai, pode que tampouco se poida utilizar nel.</warning></"
+"computador). Se o fai, pode que tampouco se poida usar nel.</warning></"
 "para><para>Desexa actualizar o calendario?</para>"
 
 #: resources/fileresource.cpp:325 resources/fileresource.cpp:455
@@ -7851,7 +7853,8 @@ msgstr "%1d %2:%3"
 #, kde-format
 msgctxt "@info"
 msgid "You cannot disable your default active alarm calendar."
-msgstr "Non se pode desactivar o calendario predeterminado de alarmas activas."
+msgstr ""
+"Non é posíbel desactivar o calendario predeterminado de alarmas activas."
 
 #: resources/resourcemodel.cpp:334
 #, kde-format
@@ -7860,8 +7863,8 @@ msgid ""
 "You cannot disable your default archived alarm calendar while expired alarms "
 "are configured to be kept."
 msgstr ""
-"Non se pode desactivar o calendario predeterminado de alarmas arquivadas se "
-"as alarmas caducadas estiveren configuradas para conservárense."
+"Non é posíbel desactivar o calendario predeterminado de alarmas arquivadas "
+"se as alarmas caducadas estiveren configuradas para conservárense."
 
 #: resources/resourcemodel.cpp:338
 #, kde-format
@@ -8284,7 +8287,7 @@ msgstr "Engadir un calendario novo de modelos de alarmas"
 #, kde-format
 msgctxt "@info"
 msgid "You cannot remove your default active alarm calendar."
-msgstr "Non se pode retirar o calendario predeterminado de alarmas activas."
+msgstr "Non é posíbel retirar o calendario predeterminado de alarmas activas."
 
 #: resourceselector.cpp:238
 #, kde-format
@@ -8293,7 +8296,7 @@ msgid ""
 "You cannot remove your default archived alarm calendar while expired alarms "
 "are configured to be kept."
 msgstr ""
-"Non se pode retirar o calendario predeterminado de alarmas arquivadas "
+"Non é posíbel retirar o calendario predeterminado de alarmas arquivadas "
 "mentres as alarmas caducadas estean configuradas para que se manteñan."
 
 #: resourceselector.cpp:253
@@ -8500,7 +8503,7 @@ msgstr ""
 msgctxt "@text/plain"
 msgid "Could not run <command>%1</command> to set wake from suspend"
 msgstr ""
-"Non se puido executar <command>%1</command> para configurar o espertar da "
+"Non foi posíbel executar <command>%1</command> para configurar o espertar da "
 "suspensión"
 
 #: rtcwakeaction.cpp:90
@@ -9016,7 +9019,7 @@ msgstr "Erro ao recrear o modelo de alarma"
 #, kde-format
 msgctxt "@info"
 msgid "Cannot reactivate archived alarm"
-msgstr "Non se pode reactivar unha alarma xa arquivada"
+msgstr "Non é posíbel reactivar unha alarma xa arquivada"
 
 #: undo.cpp:409
 #, kde-format
@@ -9118,7 +9121,7 @@ msgstr "Recuperar da suspensión"
 #, kde-format
 msgctxt "@info"
 msgid "Cannot schedule wakeup time for a date-only alarm"
-msgstr "Non se pode programar a hora de recuperación nunha alarma só de data"
+msgstr "Non é posíbel programar a hora de recuperación nunha alarma só de data"
 
 #: wakedlg.cpp:150
 #, kde-kuit-format
@@ -9225,8 +9228,8 @@ msgid ""
 "time the alarm triggers."
 msgstr ""
 "Insira o número de minutos antes da hora de activación da alarma para "
-"recuperar o sistema da suspensión. Isto pódese utilizar para asegurarse de "
-"que o sistema está recuperado completamente cando se dispare a alarma."
+"recuperar o sistema da suspensión. Isto pódese usar para asegurarse de que o "
+"sistema está recuperado completamente cando se dispare a alarma."
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: wakedlg.ui:123
