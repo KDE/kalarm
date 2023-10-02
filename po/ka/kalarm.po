@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-09-21 00:45+0000\n"
-"PO-Revision-Date: 2023-09-30 07:15+0200\n"
+"PO-Revision-Date: 2023-10-01 15:33+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -644,7 +644,7 @@ msgstr "<icode>%1</icode>: ელფოსტის არასწორი მ
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "Invalid <icode>%1</icode> parameter for date-only alarm"
-msgstr ""
+msgstr "არასწორი <icode>%1</icode> პარამეტრი მხოლოდ-თარიღის განგაშისთვის"
 
 #: commandoptions.cpp:581
 #, kde-kuit-format
