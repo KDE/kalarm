@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-09-21 00:45+0000\n"
-"PO-Revision-Date: 2023-10-01 15:33+0200\n"
+"PO-Revision-Date: 2023-10-03 14:30+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.3.2\n"
+"X-Generator: Poedit 3.4\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -1645,7 +1645,7 @@ msgstr "განგაშისწინა ქმედება"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Default command to execute before displaying alarms."
-msgstr ""
+msgstr "განგაშის ჩვენებამდე გაშვებული ნაგულისხმევი ბრძანება."
 
 #. i18n: ectx: label, entry (DefaultExecPreActionOnDeferral), group (Defaults)
 #: data/kalarmconfig.kcfg:409
@@ -1945,7 +1945,7 @@ msgstr "ნიმუშის ჩატვირთვა..."
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Select an alarm template to preset the alarm"
-msgstr ""
+msgstr "განგაშის წინასწარ-დასაყენებლად აირჩიეთ განგაშის ნიმუში"
 
 #: editdlg.cpp:214
 #, kde-format
@@ -2031,7 +2031,7 @@ msgstr "დრო:"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Specify a start time for alarms based on this template."
-msgstr ""
+msgstr "განგაშების დაწყების დროის მითითება ამ ნიმუშის მიხედვით."
 
 #: editdlg.cpp:320
 #, kde-kuit-format
