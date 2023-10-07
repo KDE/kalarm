@@ -292,9 +292,9 @@ void MessageDisplay::processDeferDlg(DeferDlgData* data, int result)
             }
             // Finally delete it from the archived calendar now that it has
             // been reactivated.
-            event2.setCategory(CalEvent::ARCHIVED);
-            Resource res;
-            KAlarm::deleteEvent(event2, res, false);
+            KAEvent eventX;
+            Resource res = Resources::resourceForEvent(CalEvent::uid(event2.id(), CalEvent::ARCHIVED), eventX);
+            KAlarm::deleteEvent(eventX, res, false);
         }
         if (theApp()->wantShowInSystemTray())
         {
