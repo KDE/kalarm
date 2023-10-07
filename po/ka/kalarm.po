@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-09-21 00:45+0000\n"
-"PO-Revision-Date: 2023-10-04 18:11+0200\n"
+"PO-Revision-Date: 2023-10-06 08:53+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -2790,6 +2790,7 @@ msgctxt "@info:whatsthis"
 msgid ""
 "If checked, the sound file will be played repeatedly until %1 is clicked."
 msgstr ""
+"თუ ჩართულია, ხმის ფაილი გამეორდება მანამდე, სანამ %1-ს არ დააწკაპუნებთ."
 
 #: editdlgtypes.cpp:1826
 #, kde-format
@@ -2865,6 +2866,8 @@ msgid ""
 "Check to include archived alarms in the search. This option is only "
 "available if archived alarms are currently being displayed."
 msgstr ""
+"დასვით ეს თოლია ძებნაში დაარქივებული ელემენტების ჩასასმელად. ეს პარამეტრი, "
+"მხოლოდ, მაშინაა ხელმისაწვდომი, თუ დაარქივებული განგაშები ამჟამად ნაჩვენებია."
 
 #: find.cpp:121
 #, kde-format
@@ -2987,6 +2990,7 @@ msgctxt "@info:whatsthis"
 msgid ""
 "Check to use the default font current at the time the alarm is displayed."
 msgstr ""
+"დასვით ეს თოლია განგაშის ჩვენებისას ნაგულისხმევი ფონტის გამოსაყენებლად."
 
 #: fontcolour.h:26
 #, kde-format
@@ -3221,12 +3225,14 @@ msgctxt "@info"
 msgid ""
 "Quitting will disable alarms (once any alarm message windows are closed)."
 msgstr ""
+"გასვლა განგაშებს გამორთავს (როცა ყველა განგაშის შეტყობინებს ფანჯარას "
+"დახურავთ)."
 
 #: kalarmapp.cpp:819
 #, kde-format
 msgctxt "@info"
 msgid "Quitting will cancel the scheduled Wake from Suspend."
-msgstr ""
+msgstr "გასვლა დაგეგმილ ძილიდან გაღვიძებას გააუქმებს."
 
 #: kalarmapp.cpp:832
 #, kde-kuit-format
@@ -3235,6 +3241,8 @@ msgid ""
 "Do you want to start KAlarm at login?<nl/>(Note that alarms will be disabled "
 "if KAlarm is not started.)"
 msgstr ""
+"გნებავთ, KAlarm სისტემაში შესვლისას გაეშვას? <nl/>(დაიმახსოვრეთ, რომ "
+"განგაშები გათიშულია, თუ KAlarm გაშვებული არაა.)"
 
 #: kalarmapp.cpp:834 lib/messagebox.h:105 lib/messagebox.h:114
 #: lib/messagebox.h:151
@@ -3309,6 +3317,8 @@ msgid ""
 "Failed to execute command\n"
 "(no terminal selected for command alarms)"
 msgstr ""
+"ბრძანების შესრულება ჩავარდა\n"
+"(ბრძანების განგაშებისთვის ტერმინალი არჩეული არაა)"
 
 #: kalarmapp.cpp:2646
 #, kde-format
@@ -3910,6 +3920,8 @@ msgctxt "@info"
 msgid ""
 "A 'From' email address must be configured in order to execute email alarms."
 msgstr ""
+"ელფოსტის განგაშების შესასრულებალად 'ვისგან' ელფოსტის მისამართის მითითება "
+"აუცილებელია."
 
 #: kamail.cpp:73
 #, kde-format
