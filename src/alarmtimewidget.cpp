@@ -166,6 +166,7 @@ void AlarmTimeWidget::init(Mode mode, const QString& title)
         mPresetsCombo->addItem(i18nc("@item:inlistbox", "1 week"), 7*1440);
         mPresetsCombo->setCurrentIndex(-1);
         connect(mPresetsCombo, &ComboBox::activated, this, &AlarmTimeWidget::slotPresetSelected);
+        mPresetsCombo->setToolTip(i18nc("@info:tooltip", "Select time delay from a list of preset values"));
     }
     else
     {
