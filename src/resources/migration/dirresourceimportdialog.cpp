@@ -21,6 +21,8 @@
 
 #include <QTimer>
 
+#include <kwidgetsaddons_version.h>
+
 using namespace KAlarmCal;
 
 
@@ -248,7 +250,11 @@ DirResourceImportTypeWidget::DirResourceImportTypeWidget(CalEvent::Type alarmTyp
     connect(mUi->optionGroup, &QButtonGroup::idToggled, this, &DirResourceImportTypeWidget::importTypeSelected);
 
     mUi->pathRequester->setMode(KFile::File);
+#if KWIDGETSADDONS_VERSION >= QT_VERSION_CHECK(5, 108, 0)
+    mUi->pathRequester->setNameFilters({QStringLiteral("%1 (*.ics)").arg(i18nc("@item:inlistbox File type selection filter", "Calendar files"))});
+#else
     mUi->pathRequester->setFilter(QStringLiteral("*.ics|%1").arg(i18nc("@item:inlistbox File type selection filter", "Calendar files")));
+#endif
     mUi->statusLabel->setText(QString());
     mUi->pathRequester->setFocus();
     mUi->pathRequester->installEventFilter(this);

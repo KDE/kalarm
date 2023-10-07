@@ -15,6 +15,8 @@
 
 #include <QTimer>
 
+#include <kwidgetsaddons_version.h>
+
 using namespace KAlarmCal;
 
 namespace
@@ -36,7 +38,11 @@ SingleFileResourceConfigDialog::SingleFileResourceConfigDialog(bool create, QWid
         mUi->alarmTypeLabel->setVisible(false);
 
         mUi->pathRequester->setMode(KFile::File);
+#if KWIDGETSADDONS_VERSION >= QT_VERSION_CHECK(5, 108, 0)
+        mUi->pathRequester->setNameFilters({QStringLiteral("%1 (*.ics)").arg(i18nc("@item:inlistbox File type selection filter", "Calendar files"))});
+#else
         mUi->pathRequester->setFilter(QStringLiteral("*.ics|%1").arg(i18nc("@item:inlistbox File type selection filter", "Calendar files")));
+#endif
         mUi->pathRequester->setFocus();
         mUi->statusLabel->setText(QString());
         connect(mUi->pathRequester, &KUrlRequester::textChanged, this, &SingleFileResourceConfigDialog::validate);
