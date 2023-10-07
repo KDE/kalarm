@@ -1,16 +1,16 @@
-ecm_install_icons(
-    ICONS
-    16-actions-show-today.svg
-    22-actions-show-today.svg
-    DESTINATION ${KDE_INSTALL_ICONDIR}
-    THEME breeze)
+install(FILES breeze/16-actions-show-today.svg
+        DESTINATION ${KDE_INSTALL_ICONDIR}/breeze/actions/16
+        RENAME show-today.svg)
+install(FILES breeze/22-actions-show-today.svg
+        DESTINATION ${KDE_INSTALL_ICONDIR}/breeze/actions/22
+        RENAME show-today.svg)
 
-ecm_install_icons(
-    ICONS
-    dark/16-actions-show-today.svg
-    dark/22-actions-show-today.svg
-    DESTINATION ${KDE_INSTALL_ICONDIR}
-    THEME breeze-dark)
+install(FILES breeze-dark/16-actions-show-today.svg
+        DESTINATION ${KDE_INSTALL_ICONDIR}/breeze-dark/actions/16
+        RENAME show-today.svg)
+install(FILES breeze-dark/22-actions-show-today.svg
+        DESTINATION ${KDE_INSTALL_ICONDIR}/breeze-dark/actions/22
+        RENAME show-today.svg)
 
 ecm_install_icons(
     ICONS
