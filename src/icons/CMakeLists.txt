@@ -23,8 +23,8 @@ ecm_install_icons(
     oxygen/22-actions-document-new-from-template.png
     oxygen/22-actions-kalarm-partdisabled.png
     oxygen/22-actions-new-audio-alarm.png
-    16-actions-show-today.svg
-    22-actions-show-today.svg
+    breeze/16-actions-show-today.svg
+    breeze/22-actions-show-today.svg
     DESTINATION ${KDE_INSTALL_DATADIR}/kalarm/icons
     THEME oxygen)
 
