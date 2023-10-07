@@ -38,10 +38,10 @@ KernelWakeAlarm::KernelWakeAlarm()
         switch (errno)
         {
             case EPERM:
-                qCWarning(KALARM_LOG) << "KernelWakeAlarm: Error: CAP_WAKE_ALARM is not set";
+                qCWarning(KALARM_LOG) << "Kernel alarm timers not available (no CAP_WAKE_ALARM capability)";
                 break;
             case EINVAL:
-                qCWarning(KALARM_LOG) << "KernelWakeAlarm: Error: CLOCK_REALTIME_ALARM is not supported";
+                qCWarning(KALARM_LOG) << "Kernel alarm timers not available (CLOCK_REALTIME_ALARM not supported)";
                 break;
             default:
                 qCWarning(KALARM_LOG) << "KernelWakeAlarm: Error creating kernel timer:" << strerror(errno);
