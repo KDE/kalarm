@@ -616,10 +616,10 @@ void MainWindow::initActions()
     mContextMenu = static_cast<QMenu*>(factory()->container(QStringLiteral("listContext"), this));
     QMenu* actionsMenu = static_cast<QMenu*>(factory()->container(QStringLiteral("actions"), this));
     mMenuError = (!mContextMenu  ||  !actionsMenu  ||  !resourceContextMenu());
-    connect(mActionUndo->menu(), &QMenu::aboutToShow, this, &MainWindow::slotInitUndoMenu);
-    connect(mActionUndo->menu(), &QMenu::triggered, this, &MainWindow::slotUndoItem);
-    connect(mActionRedo->menu(), &QMenu::aboutToShow, this, &MainWindow::slotInitRedoMenu);
-    connect(mActionRedo->menu(), &QMenu::triggered, this, &MainWindow::slotRedoItem);
+    connect(mActionUndo->popupMenu(), &QMenu::aboutToShow, this, &MainWindow::slotInitUndoMenu);
+    connect(mActionUndo->popupMenu(), &QMenu::triggered, this, &MainWindow::slotUndoItem);
+    connect(mActionRedo->popupMenu(), &QMenu::aboutToShow, this, &MainWindow::slotInitRedoMenu);
+    connect(mActionRedo->popupMenu(), &QMenu::triggered, this, &MainWindow::slotRedoItem);
     connect(Undo::instance(), &Undo::changed, this, &MainWindow::slotUndoStatus);
     connect(mListView, &AlarmListView::findActive, this, &MainWindow::slotFindActive);
     Preferences::connect(&Preferences::archivedKeepDaysChanged, this, &MainWindow::updateKeepArchived);
@@ -1207,7 +1207,7 @@ void MainWindow::slotRedoItem(QAction* action)
 */
 void MainWindow::slotInitUndoMenu()
 {
-    initUndoMenu(mActionUndo->menu(), Undo::UNDO);
+    initUndoMenu(mActionUndo->popupMenu(), Undo::UNDO);
 }
 
 /******************************************************************************
@@ -1216,7 +1216,7 @@ void MainWindow::slotInitUndoMenu()
 */
 void MainWindow::slotInitRedoMenu()
 {
-    initUndoMenu(mActionRedo->menu(), Undo::REDO);
+    initUndoMenu(mActionRedo->popupMenu(), Undo::REDO);
 }
 
 /******************************************************************************
