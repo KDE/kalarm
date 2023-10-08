@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-28 03:11+0000\n"
+"POT-Creation-Date: 2023-10-08 02:24+0000\n"
 "PO-Revision-Date: 2021-09-02 09:49+0300\n"
 "Last-Translator: Stelios <sstavra@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
@@ -7152,97 +7152,99 @@ msgstr ""
 "Σφάλμα!  Το αρχείο <filename>%1</filename> χρησιμοποιείται ήδη από "
 "υφιστάμενο πόρο."
 
-#: resources/migration/dirresourceimportdialog.cpp:34
+#: resources/migration/dirresourceimportdialog.cpp:36
 #, kde-format
 msgctxt "@title:window"
 msgid "Import Directory Resource"
 msgstr "Εισαγωγή πόρου καταλόγου"
 
-#: resources/migration/dirresourceimportdialog.cpp:39
+#: resources/migration/dirresourceimportdialog.cpp:41
 #, kde-format
 msgctxt "@title:tab"
 msgid "Import Calendar Directory Resource"
 msgstr "Εισαγωγή πόρου καταλόγου ημερολογίου"
 
-#: resources/migration/dirresourceimportdialog.cpp:46
+#: resources/migration/dirresourceimportdialog.cpp:48
 #, kde-format
 msgctxt "@title:tab"
 msgid "Import Active Alarms"
 msgstr "Εισαγωγή ενεργών συναγερμών"
 
-#: resources/migration/dirresourceimportdialog.cpp:55
+#: resources/migration/dirresourceimportdialog.cpp:57
 #, kde-format
 msgctxt "@title:tab"
 msgid "Import Archived Alarms"
 msgstr "Εισαγωγή αρχειοθετημένων συναγερμών"
 
-#: resources/migration/dirresourceimportdialog.cpp:64
+#: resources/migration/dirresourceimportdialog.cpp:66
 #, kde-format
 msgctxt "@title:tab"
 msgid "Import Alarm Templates"
 msgstr "Εισαγωγή προτύπων συναγερμών"
 
-#: resources/migration/dirresourceimportdialog.cpp:191
+#: resources/migration/dirresourceimportdialog.cpp:193
 #, kde-format
 msgctxt "@item:intext"
 msgid "Active alarms"
 msgstr "Ενεργοί συναγερμοί"
 
-#: resources/migration/dirresourceimportdialog.cpp:193
+#: resources/migration/dirresourceimportdialog.cpp:195
 #, kde-format
 msgctxt "@item:intext"
 msgid "Archived alarms"
 msgstr "Αρχειοθετημένοι συναγερμοί"
 
-#: resources/migration/dirresourceimportdialog.cpp:195
+#: resources/migration/dirresourceimportdialog.cpp:197
 #, kde-format
 msgctxt "@item:intext"
 msgid "Alarm templates"
 msgstr "Πρότυπα συναγερμών"
 
-#: resources/migration/dirresourceimportdialog.cpp:251
-#: resources/singlefileresourceconfigdialog.cpp:39
+#: resources/migration/dirresourceimportdialog.cpp:254
+#: resources/migration/dirresourceimportdialog.cpp:256
+#: resources/singlefileresourceconfigdialog.cpp:42
+#: resources/singlefileresourceconfigdialog.cpp:44
 #, kde-format
 msgctxt "@item:inlistbox File type selection filter"
 msgid "Calendar files"
 msgstr "Αρχεία ημερολογίου"
 
-#: resources/migration/dirresourceimportdialog.cpp:397
-#: resources/singlefileresourceconfigdialog.cpp:212
+#: resources/migration/dirresourceimportdialog.cpp:403
+#: resources/singlefileresourceconfigdialog.cpp:218
 #, kde-format
 msgctxt "@info:status"
 msgid "Checking file information..."
 msgstr "Έλεγχος πληροφοριών αρχείου..."
 
-#: resources/migration/dirresourceimportdialog.cpp:405
-#: resources/migration/dirresourceimportdialog.cpp:453
+#: resources/migration/dirresourceimportdialog.cpp:411
+#: resources/migration/dirresourceimportdialog.cpp:459
 #, kde-format
 msgctxt "@info:status"
 msgid "Error! File already exists."
 msgstr "Σφάλμα! Το αρχείο υπάρχει ήδη."
 
-#: resources/migration/dirresourceimportdialog.cpp:411
-#: resources/migration/dirresourceimportdialog.cpp:462
+#: resources/migration/dirresourceimportdialog.cpp:417
+#: resources/migration/dirresourceimportdialog.cpp:468
 #, kde-format
 msgctxt "@info:status"
 msgid "Error! Cannot create file (directory does not exist)."
 msgstr "Σφάλμα! Αδυναμία δημιουργίας αρχείου (ο κατάλογος δεν υπάρχει)."
 
-#: resources/migration/dirresourceimportdialog.cpp:416
-#: resources/migration/dirresourceimportdialog.cpp:464
+#: resources/migration/dirresourceimportdialog.cpp:422
+#: resources/migration/dirresourceimportdialog.cpp:470
 #, kde-format
 msgctxt "@info:status"
 msgid "Error! Cannot create file (directory is not writable)."
 msgstr ""
 "Σφάλμα! Αδυναμία δημιουργίας αρχείου (ο κατάλογος δεν είναι εγγράψιμος)."
 
-#: resources/migration/dirresourceimportdialog.cpp:470
+#: resources/migration/dirresourceimportdialog.cpp:476
 #, kde-format
 msgctxt "@info"
 msgid "Error! Cannot create file (directory does not exist)."
 msgstr "Σφάλμα! Αδυναμία δημιουργίας αρχείου (ο κατάλογος δεν υπάρχει)."
 
-#: resources/migration/dirresourceimportdialog.cpp:472
+#: resources/migration/dirresourceimportdialog.cpp:478
 #, kde-format
 msgctxt "@info"
 msgid "Error! Cannot create file (directory is not writable)."
@@ -7801,7 +7803,7 @@ msgctxt "@info"
 msgid "Could not save file <filename>%1</filename>. (%2)"
 msgstr "Αδυναμία αποθήκευσης αρχείου <filename>%1</filename>. (%2)"
 
-#: resources/singlefileresourceconfigdialog.cpp:32
+#: resources/singlefileresourceconfigdialog.cpp:34
 #, kde-format
 msgctxt "@title:window"
 msgid "Configure Calendar"

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-28 03:11+0000\n"
+"POT-Creation-Date: 2023-10-08 02:24+0000\n"
 "PO-Revision-Date: 2023-06-09 03:05+0100\n"
 "Last-Translator: José Nuno Pires <zepires@gmail.com>\n"
 "Language-Team: pt <kde-i18n-pt@kde.org>\n"
@@ -6918,97 +6918,99 @@ msgstr ""
 "Erro! O ficheiro <filename>%1</filename> já está a ser usado por um recurso "
 "existente."
 
-#: resources/migration/dirresourceimportdialog.cpp:34
+#: resources/migration/dirresourceimportdialog.cpp:36
 #, kde-format
 msgctxt "@title:window"
 msgid "Import Directory Resource"
 msgstr "Importar um Recurso de Pasta"
 
-#: resources/migration/dirresourceimportdialog.cpp:39
+#: resources/migration/dirresourceimportdialog.cpp:41
 #, kde-format
 msgctxt "@title:tab"
 msgid "Import Calendar Directory Resource"
 msgstr "Importar um Recurso de Pasta de Calendários"
 
-#: resources/migration/dirresourceimportdialog.cpp:46
+#: resources/migration/dirresourceimportdialog.cpp:48
 #, kde-format
 msgctxt "@title:tab"
 msgid "Import Active Alarms"
 msgstr "Importar os Alarmes Activos"
 
-#: resources/migration/dirresourceimportdialog.cpp:55
+#: resources/migration/dirresourceimportdialog.cpp:57
 #, kde-format
 msgctxt "@title:tab"
 msgid "Import Archived Alarms"
 msgstr "Importar os Alarmes Arquivados"
 
-#: resources/migration/dirresourceimportdialog.cpp:64
+#: resources/migration/dirresourceimportdialog.cpp:66
 #, kde-format
 msgctxt "@title:tab"
 msgid "Import Alarm Templates"
 msgstr "Importar os Modelos de Alarme"
 
-#: resources/migration/dirresourceimportdialog.cpp:191
+#: resources/migration/dirresourceimportdialog.cpp:193
 #, kde-format
 msgctxt "@item:intext"
 msgid "Active alarms"
 msgstr "Alarmes activos"
 
-#: resources/migration/dirresourceimportdialog.cpp:193
+#: resources/migration/dirresourceimportdialog.cpp:195
 #, kde-format
 msgctxt "@item:intext"
 msgid "Archived alarms"
 msgstr "Alarmes arquivados"
 
-#: resources/migration/dirresourceimportdialog.cpp:195
+#: resources/migration/dirresourceimportdialog.cpp:197
 #, kde-format
 msgctxt "@item:intext"
 msgid "Alarm templates"
 msgstr "Modelos de alarme"
 
-#: resources/migration/dirresourceimportdialog.cpp:251
-#: resources/singlefileresourceconfigdialog.cpp:39
+#: resources/migration/dirresourceimportdialog.cpp:254
+#: resources/migration/dirresourceimportdialog.cpp:256
+#: resources/singlefileresourceconfigdialog.cpp:42
+#: resources/singlefileresourceconfigdialog.cpp:44
 #, kde-format
 msgctxt "@item:inlistbox File type selection filter"
 msgid "Calendar files"
 msgstr "Ficheiros de calendário"
 
-#: resources/migration/dirresourceimportdialog.cpp:397
-#: resources/singlefileresourceconfigdialog.cpp:212
+#: resources/migration/dirresourceimportdialog.cpp:403
+#: resources/singlefileresourceconfigdialog.cpp:218
 #, kde-format
 msgctxt "@info:status"
 msgid "Checking file information..."
 msgstr "A verificar a informação do ficheiro..."
 
-#: resources/migration/dirresourceimportdialog.cpp:405
-#: resources/migration/dirresourceimportdialog.cpp:453
+#: resources/migration/dirresourceimportdialog.cpp:411
+#: resources/migration/dirresourceimportdialog.cpp:459
 #, kde-format
 msgctxt "@info:status"
 msgid "Error! File already exists."
 msgstr "Erro! O ficheiro já existe."
 
-#: resources/migration/dirresourceimportdialog.cpp:411
-#: resources/migration/dirresourceimportdialog.cpp:462
+#: resources/migration/dirresourceimportdialog.cpp:417
+#: resources/migration/dirresourceimportdialog.cpp:468
 #, kde-format
 msgctxt "@info:status"
 msgid "Error! Cannot create file (directory does not exist)."
 msgstr "Erro! Não é possível criar o ficheiro (a pasta não existe)."
 
-#: resources/migration/dirresourceimportdialog.cpp:416
-#: resources/migration/dirresourceimportdialog.cpp:464
+#: resources/migration/dirresourceimportdialog.cpp:422
+#: resources/migration/dirresourceimportdialog.cpp:470
 #, kde-format
 msgctxt "@info:status"
 msgid "Error! Cannot create file (directory is not writable)."
 msgstr ""
 "Erro! Não é possível criar o ficheiro (não é possível escrever na pasta)."
 
-#: resources/migration/dirresourceimportdialog.cpp:470
+#: resources/migration/dirresourceimportdialog.cpp:476
 #, kde-format
 msgctxt "@info"
 msgid "Error! Cannot create file (directory does not exist)."
 msgstr "Erro! Não é possível criar o ficheiro (a pasta não existe)."
 
-#: resources/migration/dirresourceimportdialog.cpp:472
+#: resources/migration/dirresourceimportdialog.cpp:478
 #, kde-format
 msgctxt "@info"
 msgid "Error! Cannot create file (directory is not writable)."
@@ -7561,7 +7563,7 @@ msgctxt "@info"
 msgid "Could not save file <filename>%1</filename>. (%2)"
 msgstr "Não foi possível gravar o ficheiro <filename>%1</filename>. (%2)"
 
-#: resources/singlefileresourceconfigdialog.cpp:32
+#: resources/singlefileresourceconfigdialog.cpp:34
 #, kde-format
 msgctxt "@title:window"
 msgid "Configure Calendar"

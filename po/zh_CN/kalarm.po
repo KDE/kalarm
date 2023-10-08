@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-28 03:11+0000\n"
+"POT-Creation-Date: 2023-10-08 02:24+0000\n"
 "PO-Revision-Date: 2023-09-16 10:11\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -6545,96 +6545,98 @@ msgid ""
 "resource."
 msgstr "错误！文件 <filename>%1</filename> 已被其他资源使用。"
 
-#: resources/migration/dirresourceimportdialog.cpp:34
+#: resources/migration/dirresourceimportdialog.cpp:36
 #, kde-format
 msgctxt "@title:window"
 msgid "Import Directory Resource"
 msgstr "导入目录资源"
 
-#: resources/migration/dirresourceimportdialog.cpp:39
+#: resources/migration/dirresourceimportdialog.cpp:41
 #, kde-format
 msgctxt "@title:tab"
 msgid "Import Calendar Directory Resource"
 msgstr "导入日历目录资源"
 
-#: resources/migration/dirresourceimportdialog.cpp:46
+#: resources/migration/dirresourceimportdialog.cpp:48
 #, kde-format
 msgctxt "@title:tab"
 msgid "Import Active Alarms"
 msgstr "导入活动闹钟"
 
-#: resources/migration/dirresourceimportdialog.cpp:55
+#: resources/migration/dirresourceimportdialog.cpp:57
 #, kde-format
 msgctxt "@title:tab"
 msgid "Import Archived Alarms"
 msgstr "导入已归档闹钟"
 
-#: resources/migration/dirresourceimportdialog.cpp:64
+#: resources/migration/dirresourceimportdialog.cpp:66
 #, kde-format
 msgctxt "@title:tab"
 msgid "Import Alarm Templates"
 msgstr "导入闹钟模板"
 
-#: resources/migration/dirresourceimportdialog.cpp:191
+#: resources/migration/dirresourceimportdialog.cpp:193
 #, kde-format
 msgctxt "@item:intext"
 msgid "Active alarms"
 msgstr "活动闹钟"
 
-#: resources/migration/dirresourceimportdialog.cpp:193
+#: resources/migration/dirresourceimportdialog.cpp:195
 #, kde-format
 msgctxt "@item:intext"
 msgid "Archived alarms"
 msgstr "已归档闹钟"
 
-#: resources/migration/dirresourceimportdialog.cpp:195
+#: resources/migration/dirresourceimportdialog.cpp:197
 #, kde-format
 msgctxt "@item:intext"
 msgid "Alarm templates"
 msgstr "闹钟模板"
 
-#: resources/migration/dirresourceimportdialog.cpp:251
-#: resources/singlefileresourceconfigdialog.cpp:39
+#: resources/migration/dirresourceimportdialog.cpp:254
+#: resources/migration/dirresourceimportdialog.cpp:256
+#: resources/singlefileresourceconfigdialog.cpp:42
+#: resources/singlefileresourceconfigdialog.cpp:44
 #, kde-format
 msgctxt "@item:inlistbox File type selection filter"
 msgid "Calendar files"
 msgstr "日历文件"
 
-#: resources/migration/dirresourceimportdialog.cpp:397
-#: resources/singlefileresourceconfigdialog.cpp:212
+#: resources/migration/dirresourceimportdialog.cpp:403
+#: resources/singlefileresourceconfigdialog.cpp:218
 #, kde-format
 msgctxt "@info:status"
 msgid "Checking file information..."
 msgstr "正在检查文件信息..."
 
-#: resources/migration/dirresourceimportdialog.cpp:405
-#: resources/migration/dirresourceimportdialog.cpp:453
+#: resources/migration/dirresourceimportdialog.cpp:411
+#: resources/migration/dirresourceimportdialog.cpp:459
 #, kde-format
 msgctxt "@info:status"
 msgid "Error! File already exists."
 msgstr "错误！文件已存在。"
 
-#: resources/migration/dirresourceimportdialog.cpp:411
-#: resources/migration/dirresourceimportdialog.cpp:462
+#: resources/migration/dirresourceimportdialog.cpp:417
+#: resources/migration/dirresourceimportdialog.cpp:468
 #, kde-format
 msgctxt "@info:status"
 msgid "Error! Cannot create file (directory does not exist)."
 msgstr "错误！无法创建文件 (目录不存在)。"
 
-#: resources/migration/dirresourceimportdialog.cpp:416
-#: resources/migration/dirresourceimportdialog.cpp:464
+#: resources/migration/dirresourceimportdialog.cpp:422
+#: resources/migration/dirresourceimportdialog.cpp:470
 #, kde-format
 msgctxt "@info:status"
 msgid "Error! Cannot create file (directory is not writable)."
 msgstr "错误！无法创建文件 (无法写入目录)。"
 
-#: resources/migration/dirresourceimportdialog.cpp:470
+#: resources/migration/dirresourceimportdialog.cpp:476
 #, kde-format
 msgctxt "@info"
 msgid "Error! Cannot create file (directory does not exist)."
 msgstr "错误！无法创建文件 (目录不存在)。"
 
-#: resources/migration/dirresourceimportdialog.cpp:472
+#: resources/migration/dirresourceimportdialog.cpp:478
 #, kde-format
 msgctxt "@info"
 msgid "Error! Cannot create file (directory is not writable)."
@@ -7164,7 +7166,7 @@ msgctxt "@info"
 msgid "Could not save file <filename>%1</filename>. (%2)"
 msgstr "无法保存文件 <filename>%1</filename>。(%2)"
 
-#: resources/singlefileresourceconfigdialog.cpp:32
+#: resources/singlefileresourceconfigdialog.cpp:34
 #, kde-format
 msgctxt "@title:window"
 msgid "Configure Calendar"

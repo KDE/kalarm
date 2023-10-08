@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-28 03:11+0000\n"
+"POT-Creation-Date: 2023-10-08 02:24+0000\n"
 "PO-Revision-Date: 2016-08-15 16:35+0100\n"
 "Last-Translator: Martin Schlander <mschlander@opensuse.org>\n"
 "Language-Team: Danish <kde-i18n-doc@kde.org>\n"
@@ -7172,7 +7172,7 @@ msgid ""
 "resource."
 msgstr ""
 
-#: resources/migration/dirresourceimportdialog.cpp:34
+#: resources/migration/dirresourceimportdialog.cpp:36
 #, fuzzy, kde-format
 #| msgctxt "@info"
 #| msgid "Calendar Files"
@@ -7180,7 +7180,7 @@ msgctxt "@title:window"
 msgid "Import Directory Resource"
 msgstr "Kalenderfiler"
 
-#: resources/migration/dirresourceimportdialog.cpp:39
+#: resources/migration/dirresourceimportdialog.cpp:41
 #, fuzzy, kde-format
 #| msgctxt "@info"
 #| msgid "Calendar Files"
@@ -7188,7 +7188,7 @@ msgctxt "@title:tab"
 msgid "Import Calendar Directory Resource"
 msgstr "Kalenderfiler"
 
-#: resources/migration/dirresourceimportdialog.cpp:46
+#: resources/migration/dirresourceimportdialog.cpp:48
 #, fuzzy, kde-format
 #| msgctxt "@info"
 #| msgid "Active Alarms"
@@ -7196,7 +7196,7 @@ msgctxt "@title:tab"
 msgid "Import Active Alarms"
 msgstr "Aktive alarmer"
 
-#: resources/migration/dirresourceimportdialog.cpp:55
+#: resources/migration/dirresourceimportdialog.cpp:57
 #, fuzzy, kde-format
 #| msgctxt "@title:group"
 #| msgid "Archived Alarms"
@@ -7204,7 +7204,7 @@ msgctxt "@title:tab"
 msgid "Import Archived Alarms"
 msgstr "Arkiverede alarmer"
 
-#: resources/migration/dirresourceimportdialog.cpp:64
+#: resources/migration/dirresourceimportdialog.cpp:66
 #, fuzzy, kde-format
 #| msgctxt "@info"
 #| msgid "Alarm Templates"
@@ -7212,7 +7212,7 @@ msgctxt "@title:tab"
 msgid "Import Alarm Templates"
 msgstr "Alarmskabeloner"
 
-#: resources/migration/dirresourceimportdialog.cpp:191
+#: resources/migration/dirresourceimportdialog.cpp:193
 #, fuzzy, kde-format
 #| msgctxt "@info"
 #| msgid "Active alarms"
@@ -7220,7 +7220,7 @@ msgctxt "@item:intext"
 msgid "Active alarms"
 msgstr "Aktive alarmer"
 
-#: resources/migration/dirresourceimportdialog.cpp:193
+#: resources/migration/dirresourceimportdialog.cpp:195
 #, fuzzy, kde-format
 #| msgctxt "@info"
 #| msgid "Archived alarms"
@@ -7228,7 +7228,7 @@ msgctxt "@item:intext"
 msgid "Archived alarms"
 msgstr "Arkiverede alarmer"
 
-#: resources/migration/dirresourceimportdialog.cpp:195
+#: resources/migration/dirresourceimportdialog.cpp:197
 #, fuzzy, kde-format
 #| msgctxt "@info"
 #| msgid "Alarm templates"
@@ -7236,8 +7236,10 @@ msgctxt "@item:intext"
 msgid "Alarm templates"
 msgstr "Alarmskabeloner"
 
-#: resources/migration/dirresourceimportdialog.cpp:251
-#: resources/singlefileresourceconfigdialog.cpp:39
+#: resources/migration/dirresourceimportdialog.cpp:254
+#: resources/migration/dirresourceimportdialog.cpp:256
+#: resources/singlefileresourceconfigdialog.cpp:42
+#: resources/singlefileresourceconfigdialog.cpp:44
 #, fuzzy, kde-format
 #| msgctxt "@info"
 #| msgid "Calendar Files"
@@ -7245,41 +7247,41 @@ msgctxt "@item:inlistbox File type selection filter"
 msgid "Calendar files"
 msgstr "Kalenderfiler"
 
-#: resources/migration/dirresourceimportdialog.cpp:397
-#: resources/singlefileresourceconfigdialog.cpp:212
+#: resources/migration/dirresourceimportdialog.cpp:403
+#: resources/singlefileresourceconfigdialog.cpp:218
 #, kde-format
 msgctxt "@info:status"
 msgid "Checking file information..."
 msgstr ""
 
-#: resources/migration/dirresourceimportdialog.cpp:405
-#: resources/migration/dirresourceimportdialog.cpp:453
+#: resources/migration/dirresourceimportdialog.cpp:411
+#: resources/migration/dirresourceimportdialog.cpp:459
 #, kde-format
 msgctxt "@info:status"
 msgid "Error! File already exists."
 msgstr ""
 
-#: resources/migration/dirresourceimportdialog.cpp:411
-#: resources/migration/dirresourceimportdialog.cpp:462
+#: resources/migration/dirresourceimportdialog.cpp:417
+#: resources/migration/dirresourceimportdialog.cpp:468
 #, kde-format
 msgctxt "@info:status"
 msgid "Error! Cannot create file (directory does not exist)."
 msgstr ""
 
-#: resources/migration/dirresourceimportdialog.cpp:416
-#: resources/migration/dirresourceimportdialog.cpp:464
+#: resources/migration/dirresourceimportdialog.cpp:422
+#: resources/migration/dirresourceimportdialog.cpp:470
 #, kde-format
 msgctxt "@info:status"
 msgid "Error! Cannot create file (directory is not writable)."
 msgstr ""
 
-#: resources/migration/dirresourceimportdialog.cpp:470
+#: resources/migration/dirresourceimportdialog.cpp:476
 #, kde-format
 msgctxt "@info"
 msgid "Error! Cannot create file (directory does not exist)."
 msgstr ""
 
-#: resources/migration/dirresourceimportdialog.cpp:472
+#: resources/migration/dirresourceimportdialog.cpp:478
 #, kde-format
 msgctxt "@info"
 msgid "Error! Cannot create file (directory is not writable)."
@@ -7904,7 +7906,7 @@ msgctxt "@info"
 msgid "Could not save file <filename>%1</filename>. (%2)"
 msgstr "Kunne ikke indlæse kalenderen <filename>%1</filename>."
 
-#: resources/singlefileresourceconfigdialog.cpp:32
+#: resources/singlefileresourceconfigdialog.cpp:34
 #, fuzzy, kde-format
 #| msgctxt "@title:window"
 #| msgid "Choose Calendar"
