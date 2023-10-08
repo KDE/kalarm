@@ -683,9 +683,13 @@ void MiscPrefTab::slotOtherTerminalToggled(bool on)
 TimePrefTab::TimePrefTab(StackedScrollGroup* scrollGroup)
     : PrefsTabBase(scrollGroup)
 {
+    const int marLeft  = style()->pixelMetric(QStyle::PM_LayoutLeftMargin);
+    const int marRight = style()->pixelMetric(QStyle::PM_LayoutRightMargin);
+    const int marTop   = style()->pixelMetric(QStyle::PM_LayoutTopMargin);
+
     // Default time zone
     auto itemBox = new QHBoxLayout();
-    itemBox->setContentsMargins(0, 0, 0, 0);
+    itemBox->setContentsMargins(marLeft, marTop, marRight, 0);
     topLayout()->addLayout(itemBox);
 
     QWidget* widget = new QWidget; // this is to control the QWhatsThis text display area
@@ -706,7 +710,7 @@ TimePrefTab::TimePrefTab(StackedScrollGroup* scrollGroup)
 
     // Holiday region
     itemBox = new QHBoxLayout();
-    itemBox->setContentsMargins(0, 0, 0, 0);
+    itemBox->setContentsMargins(marLeft, 0, marRight, 0);
     topLayout()->addLayout(itemBox);
 
     widget = new QWidget;    // this is to control the QWhatsThis text display area
@@ -745,7 +749,7 @@ TimePrefTab::TimePrefTab(StackedScrollGroup* scrollGroup)
     {
         // Wake from suspend in advance of alarm time
         itemBox = new QHBoxLayout();
-        itemBox->setContentsMargins(0, 0, 0, 0);
+        itemBox->setContentsMargins(marLeft, 0, marRight, 0);
         topLayout()->addLayout(itemBox);
 
         widget = new QWidget;   // this is to control the QWhatsThis text display area
@@ -768,7 +772,7 @@ TimePrefTab::TimePrefTab(StackedScrollGroup* scrollGroup)
 
     // Start-of-day time
     itemBox = new QHBoxLayout();
-    itemBox->setContentsMargins(0, 0, 0, 0);
+    itemBox->setContentsMargins(marLeft, 0, marRight, 0);
     topLayout()->addLayout(itemBox);
 
     widget = new QWidget;   // this is to control the QWhatsThis text display area
