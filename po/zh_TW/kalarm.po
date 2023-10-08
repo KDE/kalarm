@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-21 00:45+0000\n"
+"POT-Creation-Date: 2023-10-08 01:39+0000\n"
 "PO-Revision-Date: 2018-05-19 11:56+0800\n"
 "Last-Translator: pan93412 <pan93412@gmail.com>\n"
 "Language-Team: Chinese <zh-l10n@lists.linux.org.tw>\n"
@@ -211,19 +211,27 @@ msgctxt "@item:inlistbox"
 msgid "1 week"
 msgstr "週"
 
-#: alarmtimewidget.cpp:176
+#: alarmtimewidget.cpp:169
+#, fuzzy, kde-format
+#| msgctxt "@info:whatsthis"
+#| msgid "Select a template to base the new alarm on."
+msgctxt "@info:tooltip"
+msgid "Select time delay from a list of preset values"
+msgstr "選擇樣本以產生新的鬧鐘。"
+
+#: alarmtimewidget.cpp:177
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid "<para>%1</para><para>%2</para><para>%3</para>"
 msgstr "<para>%1</para> <para>%2</para> <para>%3</para>"
 
-#: alarmtimewidget.cpp:208
+#: alarmtimewidget.cpp:209
 #, kde-format
 msgctxt "@action:button"
 msgid "Time Zone..."
 msgstr "時區..."
 
-#: alarmtimewidget.cpp:210
+#: alarmtimewidget.cpp:211
 #, fuzzy, kde-format
 #| msgctxt "@info:whatsthis"
 #| msgid "Select the time zone to use for this alarm."
@@ -231,7 +239,7 @@ msgctxt "@info:tooltip"
 msgid "Choose a time zone for this alarm"
 msgstr "請輸入時區。"
 
-#: alarmtimewidget.cpp:212
+#: alarmtimewidget.cpp:213
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -240,37 +248,37 @@ msgid ""
 msgstr ""
 "若是此鬧鐘使用的時區與設定對話框中的預設時區不同，可以在這裡選取使用的時區。"
 
-#: alarmtimewidget.cpp:226 prefdlg.cpp:695
+#: alarmtimewidget.cpp:227 prefdlg.cpp:695
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Time zone:"
 msgstr "時區："
 
-#: alarmtimewidget.cpp:232
+#: alarmtimewidget.cpp:233
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select the time zone to use for this alarm."
 msgstr "請輸入時區。"
 
-#: alarmtimewidget.cpp:313 alarmtimewidget.cpp:340
+#: alarmtimewidget.cpp:314 alarmtimewidget.cpp:341
 #, kde-format
 msgctxt "@info"
 msgid "Invalid time"
 msgstr "無效的時間"
 
-#: alarmtimewidget.cpp:333
+#: alarmtimewidget.cpp:334
 #, kde-format
 msgctxt "@info"
 msgid "Invalid date"
 msgstr "無效的日期"
 
-#: alarmtimewidget.cpp:354
+#: alarmtimewidget.cpp:355
 #, kde-format
 msgctxt "@info"
 msgid "Alarm date has already expired"
 msgstr "鬧鐘日期已過"
 
-#: alarmtimewidget.cpp:366
+#: alarmtimewidget.cpp:367
 #, kde-format
 msgctxt "@info"
 msgid "Alarm time has already expired"

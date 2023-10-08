@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-21 00:45+0000\n"
+"POT-Creation-Date: 2023-10-08 01:39+0000\n"
 "PO-Revision-Date: 2007-09-07 11:50+0545\n"
 "Last-Translator: Nabin Gautam <nabin@mpp.org.np>\n"
 "Language-Team: Nepali <info@mpp.org.np>\n"
@@ -233,7 +233,14 @@ msgctxt "@item:inlistbox"
 msgid "1 week"
 msgstr "हप्ता"
 
-#: alarmtimewidget.cpp:176
+#: alarmtimewidget.cpp:169
+#, fuzzy, kde-format
+#| msgid "Select a template to base the new alarm on."
+msgctxt "@info:tooltip"
+msgid "Select time delay from a list of preset values"
+msgstr "नयाँ संसूचकमा आधारलाई टेम्प्लेट चयन गर्नुहोस् ।"
+
+#: alarmtimewidget.cpp:177
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "%1\n"
@@ -244,21 +251,21 @@ msgstr ""
 "%1\n"
 "तपाईँ परिवर्तन बचत गर्ने चाहानामा निश्चित हुनुहुन्छ ?"
 
-#: alarmtimewidget.cpp:208
+#: alarmtimewidget.cpp:209
 #, fuzzy, kde-format
 #| msgid "Time zone"
 msgctxt "@action:button"
 msgid "Time Zone..."
 msgstr "समय क्षेत्र"
 
-#: alarmtimewidget.cpp:210
+#: alarmtimewidget.cpp:211
 #, fuzzy, kde-format
 #| msgid "Select the time zone to use for this alarm."
 msgctxt "@info:tooltip"
 msgid "Choose a time zone for this alarm"
 msgstr "यो संसूचकका लागि प्रयोग गरिने समय क्षेत्र चयन गर्नुहोस् ।"
 
-#: alarmtimewidget.cpp:212
+#: alarmtimewidget.cpp:213
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -266,42 +273,42 @@ msgid ""
 "zone set in KAlarm's configuration dialog."
 msgstr ""
 
-#: alarmtimewidget.cpp:226 prefdlg.cpp:695
+#: alarmtimewidget.cpp:227 prefdlg.cpp:695
 #, fuzzy, kde-format
 #| msgid "Time &zone:"
 msgctxt "@label:listbox"
 msgid "Time zone:"
 msgstr "समय क्षेत्र:"
 
-#: alarmtimewidget.cpp:232
+#: alarmtimewidget.cpp:233
 #, fuzzy, kde-format
 #| msgid "Select the time zone to use for this alarm."
 msgctxt "@info:whatsthis"
 msgid "Select the time zone to use for this alarm."
 msgstr "यो संसूचकका लागि प्रयोग गरिने समय क्षेत्र चयन गर्नुहोस् ।"
 
-#: alarmtimewidget.cpp:313 alarmtimewidget.cpp:340
+#: alarmtimewidget.cpp:314 alarmtimewidget.cpp:341
 #, fuzzy, kde-format
 #| msgid "Invalid time"
 msgctxt "@info"
 msgid "Invalid time"
 msgstr "अवैध समय"
 
-#: alarmtimewidget.cpp:333
+#: alarmtimewidget.cpp:334
 #, fuzzy, kde-format
 #| msgid "Invalid date"
 msgctxt "@info"
 msgid "Invalid date"
 msgstr "अवैध मिति"
 
-#: alarmtimewidget.cpp:354
+#: alarmtimewidget.cpp:355
 #, fuzzy, kde-format
 #| msgid "Alarm date has already expired"
 msgctxt "@info"
 msgid "Alarm date has already expired"
 msgstr "संसूचक मिति पहिले नै बितिसकेको छ"
 
-#: alarmtimewidget.cpp:366
+#: alarmtimewidget.cpp:367
 #, fuzzy, kde-format
 #| msgid "Alarm time has already expired"
 msgctxt "@info"

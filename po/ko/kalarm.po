@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-21 00:45+0000\n"
+"POT-Creation-Date: 2023-10-08 01:39+0000\n"
 "PO-Revision-Date: 2023-07-23 23:20+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -208,25 +208,33 @@ msgctxt "@item:inlistbox"
 msgid "1 week"
 msgstr "주"
 
-#: alarmtimewidget.cpp:176
+#: alarmtimewidget.cpp:169
+#, fuzzy, kde-format
+#| msgctxt "@info:tooltip"
+#| msgid "Select an alarm template to preset the alarm"
+msgctxt "@info:tooltip"
+msgid "Select time delay from a list of preset values"
+msgstr "알람을 사전 설정하는 알람 템플릿 선택"
+
+#: alarmtimewidget.cpp:177
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid "<para>%1</para><para>%2</para><para>%3</para>"
 msgstr "<para>%1</para><para>%2</para><para>%3</para>"
 
-#: alarmtimewidget.cpp:208
+#: alarmtimewidget.cpp:209
 #, kde-format
 msgctxt "@action:button"
 msgid "Time Zone..."
 msgstr "시간대..."
 
-#: alarmtimewidget.cpp:210
+#: alarmtimewidget.cpp:211
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Choose a time zone for this alarm"
 msgstr "이 알람의 시간대를 선택하십시오"
 
-#: alarmtimewidget.cpp:212
+#: alarmtimewidget.cpp:213
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -236,37 +244,37 @@ msgstr ""
 "KAlarm 설정 대화 상자에서 설정한 기본 시간대와 다른 시간대에 알람을 사용하려"
 "면 시간대를 선택하십시오."
 
-#: alarmtimewidget.cpp:226 prefdlg.cpp:695
+#: alarmtimewidget.cpp:227 prefdlg.cpp:695
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Time zone:"
 msgstr "시간대:"
 
-#: alarmtimewidget.cpp:232
+#: alarmtimewidget.cpp:233
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select the time zone to use for this alarm."
 msgstr "이 알람에 사용할 시간대를 선택하십시오."
 
-#: alarmtimewidget.cpp:313 alarmtimewidget.cpp:340
+#: alarmtimewidget.cpp:314 alarmtimewidget.cpp:341
 #, kde-format
 msgctxt "@info"
 msgid "Invalid time"
 msgstr "잘못된 시간"
 
-#: alarmtimewidget.cpp:333
+#: alarmtimewidget.cpp:334
 #, kde-format
 msgctxt "@info"
 msgid "Invalid date"
 msgstr "잘못된 날짜"
 
-#: alarmtimewidget.cpp:354
+#: alarmtimewidget.cpp:355
 #, kde-format
 msgctxt "@info"
 msgid "Alarm date has already expired"
 msgstr "알람 날짜가 이미 만료됨"
 
-#: alarmtimewidget.cpp:366
+#: alarmtimewidget.cpp:367
 #, kde-format
 msgctxt "@info"
 msgid "Alarm time has already expired"

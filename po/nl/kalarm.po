@@ -17,7 +17,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-21 00:45+0000\n"
+"POT-Creation-Date: 2023-10-08 01:39+0000\n"
 "PO-Revision-Date: 2023-09-21 18:16+0200\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
@@ -232,25 +232,33 @@ msgctxt "@item:inlistbox"
 msgid "1 week"
 msgstr "1 week"
 
-#: alarmtimewidget.cpp:176
+#: alarmtimewidget.cpp:169
+#, fuzzy, kde-format
+#| msgctxt "@info:tooltip"
+#| msgid "Select an alarm template to preset the alarm"
+msgctxt "@info:tooltip"
+msgid "Select time delay from a list of preset values"
+msgstr "Selecteer een alarmsjabloon waarop u het nieuwe alarm wilt baseren"
+
+#: alarmtimewidget.cpp:177
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid "<para>%1</para><para>%2</para><para>%3</para>"
 msgstr "<para>%1</para><para>%2</para><para>%3</para>"
 
-#: alarmtimewidget.cpp:208
+#: alarmtimewidget.cpp:209
 #, kde-format
 msgctxt "@action:button"
 msgid "Time Zone..."
 msgstr "Tijdzone..."
 
-#: alarmtimewidget.cpp:210
+#: alarmtimewidget.cpp:211
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Choose a time zone for this alarm"
 msgstr "Een tijdzone voor dit alarm kiezen"
 
-#: alarmtimewidget.cpp:212
+#: alarmtimewidget.cpp:213
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -260,25 +268,25 @@ msgstr ""
 "Kies een tijdzone voor dit alarm, die afwijkt van de standaardtijdzone die "
 "ingesteld is in het configuratievenster van KAlarm."
 
-#: alarmtimewidget.cpp:226 prefdlg.cpp:695
+#: alarmtimewidget.cpp:227 prefdlg.cpp:695
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Time zone:"
 msgstr "Tijdzone:"
 
-#: alarmtimewidget.cpp:232
+#: alarmtimewidget.cpp:233
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select the time zone to use for this alarm."
 msgstr "Selecteer de tijdzone die dit alarm zal gebruiken."
 
-#: alarmtimewidget.cpp:313 alarmtimewidget.cpp:340
+#: alarmtimewidget.cpp:314 alarmtimewidget.cpp:341
 #, kde-format
 msgctxt "@info"
 msgid "Invalid time"
 msgstr "Ongeldige tijd"
 
-#: alarmtimewidget.cpp:333
+#: alarmtimewidget.cpp:334
 #, kde-format
 msgctxt "@info"
 msgid "Invalid date"
@@ -286,7 +294,7 @@ msgstr "Ongeldige datum"
 
 # moeilijk samengezteld woord, duidelijker
 # (de datum van de herinnering is onderwerp. Hierop ligt nu het accent in de mededeling)
-#: alarmtimewidget.cpp:354
+#: alarmtimewidget.cpp:355
 #, kde-format
 msgctxt "@info"
 msgid "Alarm date has already expired"
@@ -294,7 +302,7 @@ msgstr "Datum alarm is al voorbij"
 
 # moeilijk samengezteld woord, duidelijker
 # (de tijd van de herinnering is fout. Hierop ligt nu het accent in de mededeling)
-#: alarmtimewidget.cpp:366
+#: alarmtimewidget.cpp:367
 #, kde-format
 msgctxt "@info"
 msgid "Alarm time has already expired"

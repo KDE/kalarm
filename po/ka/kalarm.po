@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-21 00:45+0000\n"
-"PO-Revision-Date: 2023-10-06 08:53+0200\n"
+"POT-Creation-Date: 2023-10-08 01:39+0000\n"
+"PO-Revision-Date: 2023-10-07 23:26+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -202,25 +202,33 @@ msgctxt "@item:inlistbox"
 msgid "1 week"
 msgstr "1 კვირა"
 
-#: alarmtimewidget.cpp:176
+#: alarmtimewidget.cpp:169
+#, fuzzy, kde-format
+#| msgctxt "@info:tooltip"
+#| msgid "Select an alarm template to preset the alarm"
+msgctxt "@info:tooltip"
+msgid "Select time delay from a list of preset values"
+msgstr "განგაშის წინასწარ-დასაყენებლად აირჩიეთ განგაშის ნიმუში"
+
+#: alarmtimewidget.cpp:177
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid "<para>%1</para><para>%2</para><para>%3</para>"
 msgstr "<para>%1</para><para>%2</para><para>%3</para>"
 
-#: alarmtimewidget.cpp:208
+#: alarmtimewidget.cpp:209
 #, kde-format
 msgctxt "@action:button"
 msgid "Time Zone..."
 msgstr "დროის სარტყელი..."
 
-#: alarmtimewidget.cpp:210
+#: alarmtimewidget.cpp:211
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Choose a time zone for this alarm"
 msgstr "ამ განგაშის დროის სარტყლის არჩევა"
 
-#: alarmtimewidget.cpp:212
+#: alarmtimewidget.cpp:213
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -230,37 +238,37 @@ msgstr ""
 "აირჩიეთ დროის სარტყელი ამ განგაშისთვის, რომელიც განსხვავდება ნაგულისხმევი "
 "დროის სარტყლისგან, რომელიც KAlarm-ის მორგების ფანჯარაში მიუთითეთ."
 
-#: alarmtimewidget.cpp:226 prefdlg.cpp:695
+#: alarmtimewidget.cpp:227 prefdlg.cpp:695
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Time zone:"
 msgstr "დროის სარტყელი:"
 
-#: alarmtimewidget.cpp:232
+#: alarmtimewidget.cpp:233
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select the time zone to use for this alarm."
 msgstr "აირჩიეთ დროის სარტყელი ამ განგაშითვის გამოსაყენებლად."
 
-#: alarmtimewidget.cpp:313 alarmtimewidget.cpp:340
+#: alarmtimewidget.cpp:314 alarmtimewidget.cpp:341
 #, kde-format
 msgctxt "@info"
 msgid "Invalid time"
 msgstr "არასწორი დრო"
 
-#: alarmtimewidget.cpp:333
+#: alarmtimewidget.cpp:334
 #, kde-format
 msgctxt "@info"
 msgid "Invalid date"
 msgstr "არასწორი თარიღი"
 
-#: alarmtimewidget.cpp:354
+#: alarmtimewidget.cpp:355
 #, kde-format
 msgctxt "@info"
 msgid "Alarm date has already expired"
 msgstr "განგაშის თარიღი უკვე ამოიწურა"
 
-#: alarmtimewidget.cpp:366
+#: alarmtimewidget.cpp:367
 #, kde-format
 msgctxt "@info"
 msgid "Alarm time has already expired"
@@ -5575,7 +5583,7 @@ msgstr "აირჩიეთ ხმის ფაილი"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the default sound file to use in the alarm edit dialog."
-msgstr ""
+msgstr "ნაგულისხმევი ხმის ფაილის ბილიკი განგაშის ჩასწორების ფანჯარაში."
 
 #: prefdlg.cpp:1505
 #, kde-format
@@ -5583,12 +5591,14 @@ msgctxt "@info:whatsthis"
 msgid ""
 "Select to set the default volume for sound files in the alarm edit dialog."
 msgstr ""
+"აირჩიეთ, რომ დააყენოთ ნაგულისხმევი ხმის დონე ხმის ფაილებისთვის განგაშის "
+"მორგების ფანჯარაში."
 
 #: prefdlg.cpp:1509
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "The default volume for sound files in the alarm edit dialog."
-msgstr ""
+msgstr "ნაგულისხმევი ხმის დონე ხმის ფაილებისთვის განგაშის მორგების ფანჯარაში."
 
 #: prefdlg.cpp:1519
 #, kde-format
@@ -5615,6 +5625,8 @@ msgid ""
 "You must enter a sound file when <interface>%1</interface> is selected as "
 "the default sound type"
 msgstr ""
+"ხმის ფაილი უნდა შეიყვანოთ, როცა ნაგულისხმევი ხმის ტიპად არჩეულია <interface>"
+"%1</interface>"
 
 #: prefdlg.cpp:1779
 #, kde-format
@@ -5976,6 +5988,7 @@ msgstr "იყენებს იგივე დროის სარტყე
 msgctxt "@info:whatsthis"
 msgid "<para>Enter the last date to repeat the alarm.</para><para>%1</para>"
 msgstr ""
+"<para>შეიყვანეთ განგაშის გამეორების უკანასკნელი თარიღი.</para><para>%1</para>"
 
 #: recurrenceedit.cpp:249
 #, kde-kuit-format
@@ -5984,6 +5997,8 @@ msgid ""
 "<para>Enter the last time to repeat the alarm.</para><para>%1</para><para>"
 "%2</para>"
 msgstr ""
+"<para>შეიყვანეთ განგაშის გამეორების უკანასკნელი თარიღი.</para><para>%1</"
+"para><para>%2</para>"
 
 #: recurrenceedit.cpp:253
 #, kde-format
@@ -6023,7 +6038,7 @@ msgstr "დამატება"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Add the date entered above to the exceptions list"
-msgstr ""
+msgstr "ზემოთ შეყვანილი თარიღის გამონაკლისების სიაშ შეყვანა"
 
 #: recurrenceedit.cpp:312
 #, kde-format
@@ -6726,6 +6741,7 @@ msgctxt "@info:tooltip"
 msgid ""
 "Select the file to contain this resource. The file must not already exist."
 msgstr ""
+"აირჩიეთ ფაილი, რომ ეს რესურსი ჩავწერო. ფაილი, უკვე, არ უნდა არსებობდეს."
 
 #. i18n: ectx: property (whatsThis), widget (KUrlRequester, pathRequester)
 #: resources/migration/dirresourceimportdialog_type.ui:79
@@ -6788,6 +6804,8 @@ msgid ""
 "<para>Failed to create default calendar <resource>%1</resource></"
 "para><para>Location: <filename>%2</filename></para>"
 msgstr ""
+"<para>ჩავარდა შექმნა ნაგულისხმები კალენდრისთვის <resource>%1</resource></"
+"para><para>მდებარეობა: <filename>%2</filename></para>"
 
 #: resources/resourcedatamodelbase.cpp:65
 #, kde-format
@@ -7000,7 +7018,7 @@ msgstr "%1d %2:%3"
 #, kde-format
 msgctxt "@info"
 msgid "You cannot disable your default active alarm calendar."
-msgstr ""
+msgstr "თქვენს ნაგულისხმევ აქტიურ განგაშის კალენდარს ვერ გამორთავთ."
 
 #: resources/resourcemodel.cpp:334
 #, kde-format
