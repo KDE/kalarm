@@ -322,7 +322,7 @@ bool FileResource::load(bool readThroughCache)
     if (!mSettings  ||  !mSettings->isValid())
     {
         qCWarning(KALARM_LOG) << "FileResource::load: Resource not configured!" << displayName();
-        errorMessage = i18nc("@info", "Resource is not configured.");
+        errorMessage = i18nc("@info", "Calendar is not configured.");
     }
     else if (mStatus == Status::Closed)
         qCWarning(KALARM_LOG) << "FileResource::load: Resource closed!" << displayName();
@@ -452,14 +452,14 @@ bool FileResource::checkSave()
     if (!mSettings  ||  !mSettings->isValid())
     {
         qCWarning(KALARM_LOG) << "FileResource::checkSave: FileResource not configured!" << displayName();
-        errorMessage = i18nc("@info", "Resource is not configured.");
+        errorMessage = i18nc("@info", "Calendar is not configured.");
     }
     else if (!isValid()  ||  !mSettings->enabledTypes())
         return false;
     else if (readOnly())
     {
         qCWarning(KALARM_LOG) << "FileResource::checkSave: Read-only resource!" << displayName();
-        errorMessage = i18nc("@info", "Resource is read-only.");
+        errorMessage = i18nc("@info", "Calendar is read-only.");
     }
     else if (mCompatibility != KACalendar::Current)
     {
