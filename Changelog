@@ -1,7 +1,8 @@
 KAlarm Change Log
 
-=== Version 3.6.2 (KDE Gear 23.08.2) --- 7 October 2023 ===
+=== Version 3.6.2 (KDE Gear 23.08.2) --- 8 October 2023 ===
 * When an alarm is deferred, ensure it's deleted from the archived alarm calendar.
+* Fix 'show today' button not showing in date picker when using Breeze icon theme.
 
 === Version 3.6.1 (KDE Gear 23.08.1) --- 28 August 2023 ===
 * Don't warn about not providing high accuracy alarms if alarm >10 minutes from now [KDE Bug 473792]
