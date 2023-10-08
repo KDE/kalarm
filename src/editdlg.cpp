@@ -184,34 +184,21 @@ void EditAlarmDlg::init(const KAEvent& event)
     // Create button box now so that types can work with it, but don't insert
     // it into layout just yet
     mButtonBox = new QDialogButtonBox(this);
-    if (mReadOnly)
+    if (!mReadOnly)
     {
-        mButtonBox->addButton(QDialogButtonBox::Cancel);
-        mTryButton = mButtonBox->addButton(i18nc("@action:button", "Try"), QDialogButtonBox::ActionRole);
-        mMoreLessButton = mButtonBox->addButton(QDialogButtonBox::RestoreDefaults);
+        QPushButton* b = mButtonBox->addButton(QDialogButtonBox::Ok);
+        b->setWhatsThis(i18nc("@info:whatsthis", "Schedule the alarm at the specified time."));
+        if (!mTemplate)
+        {
+            mLoadTemplateButton = mButtonBox->addButton(i18nc("@action:button", "Load Template..."),
+                                                        QDialogButtonBox::HelpRole);
+            mLoadTemplateButton->setToolTip(i18nc("@info:tooltip", "Select an alarm template to preset the alarm"));
+        }
     }
-    else if (mTemplate)
-    {
-        mButtonBox->addButton(QDialogButtonBox::Ok);
-        mButtonBox->addButton(QDialogButtonBox::Cancel);
-        mTryButton = mButtonBox->addButton(i18nc("@action:button", "Try"), QDialogButtonBox::ActionRole);
-        mMoreLessButton = mButtonBox->addButton(QDialogButtonBox::RestoreDefaults);
-    }
-    else
-    {
-        mButtonBox->addButton(QDialogButtonBox::Ok);
-        mButtonBox->addButton(QDialogButtonBox::Cancel);
-        mTryButton = mButtonBox->addButton(i18nc("@action:button", "Try"), QDialogButtonBox::ActionRole);
-        mLoadTemplateButton = mButtonBox->addButton(i18nc("@action:button", "Load Template..."),
-                                                    QDialogButtonBox::HelpRole);
-        mLoadTemplateButton->setToolTip(i18nc("@info:tooltip", "Select an alarm template to preset the alarm"));
-        mMoreLessButton = mButtonBox->addButton(QDialogButtonBox::RestoreDefaults);
-    }
-    connect(mButtonBox, &QDialogButtonBox::clicked,
-            this, &EditAlarmDlg::slotButtonClicked);
-
-    if (mButtonBox->button(QDialogButtonBox::Ok))
-        mButtonBox->button(QDialogButtonBox::Ok)->setWhatsThis(i18nc("@info:whatsthis", "Schedule the alarm at the specified time."));
+    mButtonBox->addButton(QDialogButtonBox::Cancel);
+    mTryButton = mButtonBox->addButton(i18nc("@action:button", "Try"), QDialogButtonBox::ActionRole);
+    mMoreLessButton = mButtonBox->addButton(QString(), QDialogButtonBox::ResetRole);
+    connect(mButtonBox, &QDialogButtonBox::clicked, this, &EditAlarmDlg::slotButtonClicked);
 
     auto mainLayout = new QVBoxLayout(this);
     mTabs = new QTabWidget(this);
