@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-08 02:24+0000\n"
+"POT-Creation-Date: 2023-10-09 02:40+0000\n"
 "PO-Revision-Date: 2021-08-21 16:25+0530\n"
 "Last-Translator: Raghavendra Kamath <raghu@raghukamath.com>\n"
 "Language-Team: kde-hindi\n"
@@ -147,7 +147,7 @@ msgctxt "@option:radio Defer for time interval"
 msgid "Defer for:"
 msgstr "तक टालें:"
 
-#: alarmtimewidget.cpp:137 editdlg.cpp:336
+#: alarmtimewidget.cpp:137 editdlg.cpp:323
 #, kde-format
 msgctxt "@option:radio"
 msgid "Time from now:"
@@ -165,7 +165,7 @@ msgctxt "@info:whatsthis"
 msgid "Schedule the alarm after the specified time interval from now."
 msgstr "अब से लेकर निर्धारित समय अंतराल के बाद अलार्म को शेड्यूल करें."
 
-#: alarmtimewidget.cpp:149 editdlg.cpp:347
+#: alarmtimewidget.cpp:149 editdlg.cpp:334
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid "<para>%1</para><para>%2</para>"
@@ -327,7 +327,7 @@ msgctxt "@title:window"
 msgid "Import Birthdays From KAddressBook"
 msgstr "के-एड्रेस-बुक से जन्मतिथि आयात करें"
 
-#: birthdaydlg.cpp:59 editdlg.cpp:252
+#: birthdaydlg.cpp:59 editdlg.cpp:239
 #, fuzzy, kde-format
 #| msgctxt "@title:window"
 #| msgid "Alarm Type"
@@ -335,7 +335,7 @@ msgctxt "@label:textbox"
 msgid "Alarm name:"
 msgstr "अलार्म क़िस्म"
 
-#: birthdaydlg.cpp:64 editdlg.cpp:260
+#: birthdaydlg.cpp:64 editdlg.cpp:247
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2040,19 +2040,19 @@ msgctxt "@title:window"
 msgid "Alarm [read-only]"
 msgstr "अभिलेखित अलार्म [सिर्फ पढ़ने योग्य]"
 
-#: editdlg.cpp:190 editdlg.cpp:197 editdlg.cpp:204
+#: editdlg.cpp:190
 #, kde-format
-msgctxt "@action:button"
-msgid "Try"
-msgstr ""
+msgctxt "@info:whatsthis"
+msgid "Schedule the alarm at the specified time."
+msgstr "उल्लेखित समय के लिए अलार्म नियत करें"
 
-#: editdlg.cpp:205
+#: editdlg.cpp:193
 #, kde-format
 msgctxt "@action:button"
 msgid "Load Template..."
 msgstr "टैम्प्लेट लोड करें..."
 
-#: editdlg.cpp:207
+#: editdlg.cpp:195
 #, fuzzy, kde-format
 #| msgctxt "@info:whatsthis"
 #| msgid "Select a template to base the new alarm on."
@@ -2060,73 +2060,73 @@ msgctxt "@info:tooltip"
 msgid "Select an alarm template to preset the alarm"
 msgstr "उस टैम्प्लेट को चुनें जिसमें कि आप नए अलार्म को आधार बनाना चाहते हैं."
 
-#: editdlg.cpp:214
+#: editdlg.cpp:199
 #, kde-format
-msgctxt "@info:whatsthis"
-msgid "Schedule the alarm at the specified time."
-msgstr "उल्लेखित समय के लिए अलार्म नियत करें"
+msgctxt "@action:button"
+msgid "Try"
+msgstr ""
 
-#: editdlg.cpp:222
+#: editdlg.cpp:209
 #, fuzzy, kde-format
 msgctxt "@title:tab"
 msgid "Alarm"
 msgstr "अलार्म (&A)"
 
-#: editdlg.cpp:252
+#: editdlg.cpp:239
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Template name:"
 msgstr "टैम्प्लेट नाम:"
 
-#: editdlg.cpp:259
+#: editdlg.cpp:246
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the name of the alarm template"
 msgstr "अलार्म टैम्प्लेट के लिए कृपया एक नाम भरें"
 
-#: editdlg.cpp:265
+#: editdlg.cpp:252
 #, kde-format
 msgctxt "@title:group"
 msgid "Action"
 msgstr "क्रिया"
 
-#: editdlg.cpp:274
+#: editdlg.cpp:261
 #, kde-format
 msgctxt "@title:group"
 msgid "Deferred Alarm"
 msgstr "टाला गया अलार्म"
 
-#: editdlg.cpp:277
+#: editdlg.cpp:264
 #, kde-format
 msgctxt "@label"
 msgid "Deferred to:"
 msgstr "तक टालें:"
 
-#: editdlg.cpp:282
+#: editdlg.cpp:269
 #, kde-format
 msgctxt "@action:button"
 msgid "Change..."
 msgstr "बदलें..."
 
-#: editdlg.cpp:284
+#: editdlg.cpp:271
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Change the alarm's deferred time, or cancel the deferral"
 msgstr "अलार्म के टाले हुए समय (डेफर्ड समय) को बदलें या टालना रद्द करें"
 
-#: editdlg.cpp:295 editdlg.cpp:356
+#: editdlg.cpp:282 editdlg.cpp:343
 #, kde-format
 msgctxt "@title:group"
 msgid "Time"
 msgstr "समय"
 
-#: editdlg.cpp:302
+#: editdlg.cpp:289
 #, kde-format
 msgctxt "@option:radio"
 msgid "Default time"
 msgstr "डिफ़ॉल्ट समय"
 
-#: editdlg.cpp:304
+#: editdlg.cpp:291
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2134,19 +2134,19 @@ msgid ""
 "default start time will be used."
 msgstr ""
 
-#: editdlg.cpp:312
+#: editdlg.cpp:299
 #, kde-format
 msgctxt "@option:radio"
 msgid "Time:"
 msgstr "समय:"
 
-#: editdlg.cpp:314
+#: editdlg.cpp:301
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Specify a start time for alarms based on this template."
 msgstr "इस टैम्प्लेट पर आधारित अलार्म के प्रारंभ समय को निर्दिष्ट करें."
 
-#: editdlg.cpp:320
+#: editdlg.cpp:307
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info:whatsthis"
 #| msgid "<para>Enter the start time of the working day.</para><para>%1</para>"
@@ -2156,13 +2156,13 @@ msgid ""
 "%1</para>"
 msgstr "<para>कार्य के दिन का प्रारंभ समय भरें.</para><para>%1</para>"
 
-#: editdlg.cpp:327
+#: editdlg.cpp:314
 #, kde-format
 msgctxt "@option:radio"
 msgid "Date only"
 msgstr "सिर्फ-तारीख़"
 
-#: editdlg.cpp:329
+#: editdlg.cpp:316
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info:whatsthis"
 #| msgid ""
@@ -2174,7 +2174,7 @@ msgid ""
 "template."
 msgstr "इस टैम्प्लेट पर आधारित अलार्म के <interface>तारीख</interface> विकल्प को सेट करें"
 
-#: editdlg.cpp:339
+#: editdlg.cpp:326
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2182,25 +2182,25 @@ msgid ""
 "from when the alarm is created."
 msgstr ""
 
-#: editdlg.cpp:402
+#: editdlg.cpp:389
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to copy the alarm into KOrganizer's calendar"
 msgstr "केऑर्गेनाइजर कैलेन्डर में अलार्म को नक़ल करने के लिए चुनें"
 
-#: editdlg.cpp:982
+#: editdlg.cpp:969
 #, kde-format
 msgctxt "@info"
 msgid "You must enter a name for the alarm template"
 msgstr "अलार्म टैम्प्लेट के लिए आपको नाम भरना होगा."
 
-#: editdlg.cpp:986
+#: editdlg.cpp:973
 #, kde-format
 msgctxt "@info"
 msgid "Template name is already in use"
 msgstr "टैम्प्लेट नाम पहले से ही उपयोग में है"
 
-#: editdlg.cpp:1009
+#: editdlg.cpp:996
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2209,7 +2209,7 @@ msgid ""
 "para>"
 msgstr ""
 
-#: editdlg.cpp:1041
+#: editdlg.cpp:1028
 #, kde-format
 msgctxt "@info The parameter is a date value"
 msgid ""
@@ -2217,7 +2217,7 @@ msgid ""
 "adjusted to the date of the next recurrence (%1)."
 msgstr ""
 
-#: editdlg.cpp:1045
+#: editdlg.cpp:1032
 #, kde-format
 msgctxt "@info The parameter is a date/time value"
 msgid ""
@@ -2225,19 +2225,19 @@ msgid ""
 "will be adjusted to the date/time of the next recurrence (%1)."
 msgstr ""
 
-#: editdlg.cpp:1067
+#: editdlg.cpp:1054
 #, kde-format
 msgctxt "@info"
 msgid "Recurrence has already expired"
 msgstr "आवृत्ति पहले ही बीत चुकी"
 
-#: editdlg.cpp:1072
+#: editdlg.cpp:1059
 #, kde-format
 msgctxt "@info"
 msgid "The alarm will never occur during working hours"
 msgstr "अलार्म कभी भी कार्य घंटों में नहीं चलेगा"
 
-#: editdlg.cpp:1101
+#: editdlg.cpp:1088
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2245,7 +2245,7 @@ msgid ""
 "%1</interface> is checked."
 msgstr ""
 
-#: editdlg.cpp:1116
+#: editdlg.cpp:1103
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -2253,7 +2253,7 @@ msgid ""
 "recurrence interval minus any reminder period"
 msgstr ""
 
-#: editdlg.cpp:1123
+#: editdlg.cpp:1110
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -2261,7 +2261,7 @@ msgid ""
 "or weeks for a date-only alarm"
 msgstr ""
 
-#: editdlg.cpp:1154
+#: editdlg.cpp:1141
 #, fuzzy, kde-format
 #| msgctxt "@info"
 #| msgid "You must select a resource to save the alarm in"
@@ -2269,25 +2269,25 @@ msgctxt "@info"
 msgid "You must select a calendar to save the alarm in"
 msgstr "जिस संसाधन में अलार्म को सहेजना है उसे आपको चुनना होगा"
 
-#: editdlg.cpp:1235
+#: editdlg.cpp:1222
 #, kde-format
 msgctxt "@action:Button"
 msgid "Fewer Options <<"
 msgstr ""
 
-#: editdlg.cpp:1236
+#: editdlg.cpp:1223
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show fewer options"
 msgstr ""
 
-#: editdlg.cpp:1241
+#: editdlg.cpp:1228
 #, kde-format
 msgctxt "@action:button"
 msgid "More Options >>"
 msgstr ""
 
-#: editdlg.cpp:1242
+#: editdlg.cpp:1229
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show more options"

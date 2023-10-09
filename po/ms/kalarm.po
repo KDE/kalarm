@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Mimos\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-08 02:24+0000\n"
+"POT-Creation-Date: 2023-10-09 02:40+0000\n"
 "PO-Revision-Date: 2005-10-06 11:21+0800\n"
 "Last-Translator: junetazawawi <junetazawawi@yahoo.com>\n"
 "Language-Team: Malay <kedidiemas@yahoogroups.com>\n"
@@ -163,7 +163,7 @@ msgctxt "@option:radio Defer for time interval"
 msgid "Defer for:"
 msgstr "Ditunda ke:"
 
-#: alarmtimewidget.cpp:137 editdlg.cpp:336
+#: alarmtimewidget.cpp:137 editdlg.cpp:323
 #, fuzzy, kde-format
 #| msgid "Time from no&w:"
 msgctxt "@option:radio"
@@ -185,7 +185,7 @@ msgid "Schedule the alarm after the specified time interval from now."
 msgstr ""
 "Jadualkan penggera dari sekarang hingga selepas sela masa yang dinyatakan."
 
-#: alarmtimewidget.cpp:149 editdlg.cpp:347
+#: alarmtimewidget.cpp:149 editdlg.cpp:334
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "%1\n"
@@ -345,14 +345,14 @@ msgctxt "@title:window"
 msgid "Import Birthdays From KAddressBook"
 msgstr "Import Tarikh Lahir dari KAddressBook"
 
-#: birthdaydlg.cpp:59 editdlg.cpp:252
+#: birthdaydlg.cpp:59 editdlg.cpp:239
 #, fuzzy, kde-format
 #| msgid "Alarm Type"
 msgctxt "@label:textbox"
 msgid "Alarm name:"
 msgstr "Jenis penggera"
 
-#: birthdaydlg.cpp:64 editdlg.cpp:260
+#: birthdaydlg.cpp:64 editdlg.cpp:247
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2152,104 +2152,104 @@ msgctxt "@title:window"
 msgid "Alarm [read-only]"
 msgstr "Aktifkan semula penggera"
 
-#: editdlg.cpp:190 editdlg.cpp:197 editdlg.cpp:204
-#, kde-format
-msgctxt "@action:button"
-msgid "Try"
-msgstr ""
-
-#: editdlg.cpp:205
-#, fuzzy, kde-format
-#| msgid "Load Template..."
-msgctxt "@action:button"
-msgid "Load Template..."
-msgstr "Muatkan templat..."
-
-#: editdlg.cpp:207
-#, fuzzy, kde-format
-#| msgid "Select a template to base the new alarm on."
-msgctxt "@info:tooltip"
-msgid "Select an alarm template to preset the alarm"
-msgstr "Pilih templat untuk mendasari penggera baru."
-
-#: editdlg.cpp:214
+#: editdlg.cpp:190
 #, fuzzy, kde-format
 #| msgid "Schedule the alarm at the specified time."
 msgctxt "@info:whatsthis"
 msgid "Schedule the alarm at the specified time."
 msgstr "Jadualkan penggera pada waktu yang dinyatakan"
 
-#: editdlg.cpp:222
+#: editdlg.cpp:193
+#, fuzzy, kde-format
+#| msgid "Load Template..."
+msgctxt "@action:button"
+msgid "Load Template..."
+msgstr "Muatkan templat..."
+
+#: editdlg.cpp:195
+#, fuzzy, kde-format
+#| msgid "Select a template to base the new alarm on."
+msgctxt "@info:tooltip"
+msgid "Select an alarm template to preset the alarm"
+msgstr "Pilih templat untuk mendasari penggera baru."
+
+#: editdlg.cpp:199
+#, kde-format
+msgctxt "@action:button"
+msgid "Try"
+msgstr ""
+
+#: editdlg.cpp:209
 #, fuzzy, kde-format
 #| msgid "&Alarm"
 msgctxt "@title:tab"
 msgid "Alarm"
 msgstr "&Penggera"
 
-#: editdlg.cpp:252
+#: editdlg.cpp:239
 #, fuzzy, kde-format
 #| msgid "Template name:"
 msgctxt "@label:textbox"
 msgid "Template name:"
 msgstr "Nama templat:"
 
-#: editdlg.cpp:259
+#: editdlg.cpp:246
 #, fuzzy, kde-format
 #| msgid "Enter the name of the alarm template"
 msgctxt "@info:whatsthis"
 msgid "Enter the name of the alarm template"
 msgstr "Masukkan nama templat penggera"
 
-#: editdlg.cpp:265
+#: editdlg.cpp:252
 #, fuzzy, kde-format
 #| msgid "Action"
 msgctxt "@title:group"
 msgid "Action"
 msgstr "Tindakan"
 
-#: editdlg.cpp:274
+#: editdlg.cpp:261
 #, fuzzy, kde-format
 #| msgid "Deferred Alarm"
 msgctxt "@title:group"
 msgid "Deferred Alarm"
 msgstr "Penggera tertunda"
 
-#: editdlg.cpp:277
+#: editdlg.cpp:264
 #, fuzzy, kde-format
 #| msgid "Deferred to:"
 msgctxt "@label"
 msgid "Deferred to:"
 msgstr "Ditunda ke:"
 
-#: editdlg.cpp:282
+#: editdlg.cpp:269
 #, fuzzy, kde-format
 #| msgid "C&hange..."
 msgctxt "@action:button"
 msgid "Change..."
 msgstr "&Ubah..."
 
-#: editdlg.cpp:284
+#: editdlg.cpp:271
 #, fuzzy, kde-format
 #| msgid "Change the alarm's deferred time, or cancel the deferral"
 msgctxt "@info:whatsthis"
 msgid "Change the alarm's deferred time, or cancel the deferral"
 msgstr "Ubah waktu tunda penggera, atau batalkan tundaan"
 
-#: editdlg.cpp:295 editdlg.cpp:356
+#: editdlg.cpp:282 editdlg.cpp:343
 #, fuzzy, kde-format
 #| msgid "Time"
 msgctxt "@title:group"
 msgid "Time"
 msgstr "Waktu"
 
-#: editdlg.cpp:302
+#: editdlg.cpp:289
 #, fuzzy, kde-format
 #| msgid "&Default time"
 msgctxt "@option:radio"
 msgid "Default time"
 msgstr "Waktu &piawai"
 
-#: editdlg.cpp:304
+#: editdlg.cpp:291
 #, fuzzy, kde-format
 #| msgid ""
 #| "Do not specify a start time for alarms based on this template. The normal "
@@ -2262,21 +2262,21 @@ msgstr ""
 "Jangan nyatakan waktu mula untuk penggera berdasarkan templat ini. Waktu "
 "mula piawai normal akan digunakan."
 
-#: editdlg.cpp:312
+#: editdlg.cpp:299
 #, fuzzy, kde-format
 #| msgid "Time:"
 msgctxt "@option:radio"
 msgid "Time:"
 msgstr "Waktu:"
 
-#: editdlg.cpp:314
+#: editdlg.cpp:301
 #, fuzzy, kde-format
 #| msgid "Specify a start time for alarms based on this template."
 msgctxt "@info:whatsthis"
 msgid "Specify a start time for alarms based on this template."
 msgstr "Nyatakan waktu mula untuk penggera berasaskan templat ini."
 
-#: editdlg.cpp:320
+#: editdlg.cpp:307
 #, fuzzy, kde-kuit-format
 #| msgid "Enter the start time for alarms based on this template."
 msgctxt "@info:whatsthis"
@@ -2285,13 +2285,13 @@ msgid ""
 "%1</para>"
 msgstr "Masukkan waktu mula untuk penggera berasaskan templat ini."
 
-#: editdlg.cpp:327
+#: editdlg.cpp:314
 #, fuzzy, kde-format
 msgctxt "@option:radio"
 msgid "Date only"
 msgstr "Tarikh:"
 
-#: editdlg.cpp:329
+#: editdlg.cpp:316
 #, fuzzy, kde-kuit-format
 #| msgid "Set the '%1' option for alarms based on this template."
 msgctxt "@info:whatsthis"
@@ -2300,7 +2300,7 @@ msgid ""
 "template."
 msgstr "Setkan opsyen '%1' untuk penggera berdasarkan templat ini."
 
-#: editdlg.cpp:339
+#: editdlg.cpp:326
 #, fuzzy, kde-format
 #| msgid ""
 #| "Set alarms based on this template to start after the specified time "
@@ -2313,27 +2313,27 @@ msgstr ""
 "Setkan penggera berdasarkan templat ini untuk mula selepas sela masa yang "
 "dinyatakan sejak penggera dicipta."
 
-#: editdlg.cpp:402
+#: editdlg.cpp:389
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to copy the alarm into KOrganizer's calendar"
 msgstr "Semak untuk menyatakan berapa lama masa untuk mengulang penggera"
 
-#: editdlg.cpp:982
+#: editdlg.cpp:969
 #, fuzzy, kde-format
 #| msgid "You must enter a name for the alarm template"
 msgctxt "@info"
 msgid "You must enter a name for the alarm template"
 msgstr "Anda mesti masukkan nama fail untuk templat penggera"
 
-#: editdlg.cpp:986
+#: editdlg.cpp:973
 #, fuzzy, kde-format
 #| msgid "Template name is already in use"
 msgctxt "@info"
 msgid "Template name is already in use"
 msgstr "Nama template sudah digunakan"
 
-#: editdlg.cpp:1009
+#: editdlg.cpp:996
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2342,7 +2342,7 @@ msgid ""
 "para>"
 msgstr ""
 
-#: editdlg.cpp:1041
+#: editdlg.cpp:1028
 #, kde-format
 msgctxt "@info The parameter is a date value"
 msgid ""
@@ -2350,7 +2350,7 @@ msgid ""
 "adjusted to the date of the next recurrence (%1)."
 msgstr ""
 
-#: editdlg.cpp:1045
+#: editdlg.cpp:1032
 #, kde-format
 msgctxt "@info The parameter is a date/time value"
 msgid ""
@@ -2358,20 +2358,20 @@ msgid ""
 "will be adjusted to the date/time of the next recurrence (%1)."
 msgstr ""
 
-#: editdlg.cpp:1067
+#: editdlg.cpp:1054
 #, fuzzy, kde-format
 #| msgid "Recurrence has already expired"
 msgctxt "@info"
 msgid "Recurrence has already expired"
 msgstr "Pengulangan telah luput "
 
-#: editdlg.cpp:1072
+#: editdlg.cpp:1059
 #, kde-format
 msgctxt "@info"
 msgid "The alarm will never occur during working hours"
 msgstr ""
 
-#: editdlg.cpp:1101
+#: editdlg.cpp:1088
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "Reminder period must be less than the recurrence interval, unless '%1' is "
@@ -2384,7 +2384,7 @@ msgstr ""
 "Tempoh peringatan mesti kurang daripada sela masa pengulangan, kecuali '%1' "
 "disemak"
 
-#: editdlg.cpp:1116
+#: editdlg.cpp:1103
 #, fuzzy, kde-format
 #| msgid ""
 #| "Simple alarm repetition duration must be less than the recurrence "
@@ -2397,7 +2397,7 @@ msgstr ""
 "Tempoh pengulangan penggera ringkas mesti kurang daripada sela masa ulangan "
 "tolak jangka masa sebarang peringatan"
 
-#: editdlg.cpp:1123
+#: editdlg.cpp:1110
 #, fuzzy, kde-format
 #| msgid ""
 #| "Simple alarm repetition period must be in units of days or weeks for a "
@@ -2410,31 +2410,31 @@ msgstr ""
 "Tempoh jangka masa pengulangan penggera mesti dalam unit hari atau minggu "
 "atau penggera  tarikh sahaja"
 
-#: editdlg.cpp:1154
+#: editdlg.cpp:1141
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "You must select a calendar to save the alarm in"
 msgstr "Pilih templat untuk mendasari penggera baru."
 
-#: editdlg.cpp:1235
+#: editdlg.cpp:1222
 #, kde-format
 msgctxt "@action:Button"
 msgid "Fewer Options <<"
 msgstr ""
 
-#: editdlg.cpp:1236
+#: editdlg.cpp:1223
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show fewer options"
 msgstr ""
 
-#: editdlg.cpp:1241
+#: editdlg.cpp:1228
 #, kde-format
 msgctxt "@action:button"
 msgid "More Options >>"
 msgstr ""
 
-#: editdlg.cpp:1242
+#: editdlg.cpp:1229
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show more options"

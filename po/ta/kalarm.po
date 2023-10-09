@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-08 02:24+0000\n"
+"POT-Creation-Date: 2023-10-09 02:40+0000\n"
 "PO-Revision-Date: 2023-09-10 17:21+0530\n"
 "Last-Translator: Kishore G <kishore96@gmail.com>\n"
 "Language-Team: Tamil <kde-i18n-doc@kde.org>\n"
@@ -153,7 +153,7 @@ msgctxt "@option:radio Defer for time interval"
 msgid "Defer for:"
 msgstr "இவ்வளவு நேரத்திற்கு ஒத்திவை:"
 
-#: alarmtimewidget.cpp:137 editdlg.cpp:336
+#: alarmtimewidget.cpp:137 editdlg.cpp:323
 #, kde-format
 msgctxt "@option:radio"
 msgid "Time from now:"
@@ -173,7 +173,7 @@ msgctxt "@info:whatsthis"
 msgid "Schedule the alarm after the specified time interval from now."
 msgstr "இப்போதிலிருந்து குறிப்பிட்ட இடைவெளிக்கு பிறகு அலாரம் தூண்டப்படுமாறு அமைக்கும்."
 
-#: alarmtimewidget.cpp:149 editdlg.cpp:347
+#: alarmtimewidget.cpp:149 editdlg.cpp:334
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid "<para>%1</para><para>%2</para>"
@@ -318,13 +318,13 @@ msgctxt "@title:window"
 msgid "Import Birthdays From KAddressBook"
 msgstr "KAddressBook-இலிருந்து பிறந்தநாட்களை இறக்குமதி செய்வது"
 
-#: birthdaydlg.cpp:59 editdlg.cpp:252
+#: birthdaydlg.cpp:59 editdlg.cpp:239
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Alarm name:"
 msgstr "அலாரத்தின் பெயர்:"
 
-#: birthdaydlg.cpp:64 editdlg.cpp:260
+#: birthdaydlg.cpp:64 editdlg.cpp:247
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2027,91 +2027,91 @@ msgctxt "@title:window"
 msgid "Alarm [read-only]"
 msgstr "அலாரம் [படித்தல் மட்டும்]"
 
-#: editdlg.cpp:190 editdlg.cpp:197 editdlg.cpp:204
-#, kde-format
-msgctxt "@action:button"
-msgid "Try"
-msgstr "சோதி"
-
-#: editdlg.cpp:205
-#, kde-format
-msgctxt "@action:button"
-msgid "Load Template..."
-msgstr "வார்ப்புருவை ஏற்று..."
-
-#: editdlg.cpp:207
-#, kde-format
-msgctxt "@info:tooltip"
-msgid "Select an alarm template to preset the alarm"
-msgstr "அலாரத்திற்கு பயன்படுத்த வேண்டிய வார்ப்புருவை தேர்ந்தெடுங்கள்"
-
-#: editdlg.cpp:214
+#: editdlg.cpp:190
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Schedule the alarm at the specified time."
 msgstr "அலாரத்தை குறிப்பிட்ட நேரத்திற்கு அமைக்கும்."
 
-#: editdlg.cpp:222
+#: editdlg.cpp:193
+#, kde-format
+msgctxt "@action:button"
+msgid "Load Template..."
+msgstr "வார்ப்புருவை ஏற்று..."
+
+#: editdlg.cpp:195
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Select an alarm template to preset the alarm"
+msgstr "அலாரத்திற்கு பயன்படுத்த வேண்டிய வார்ப்புருவை தேர்ந்தெடுங்கள்"
+
+#: editdlg.cpp:199
+#, kde-format
+msgctxt "@action:button"
+msgid "Try"
+msgstr "சோதி"
+
+#: editdlg.cpp:209
 #, kde-format
 msgctxt "@title:tab"
 msgid "Alarm"
 msgstr "அலாரம்"
 
-#: editdlg.cpp:252
+#: editdlg.cpp:239
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Template name:"
 msgstr "வார்ப்புருவின் பெயர்:"
 
-#: editdlg.cpp:259
+#: editdlg.cpp:246
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the name of the alarm template"
 msgstr "அலார வார்ப்புருவின் பெயரை உள்ளிடுங்கள்"
 
-#: editdlg.cpp:265
+#: editdlg.cpp:252
 #, kde-format
 msgctxt "@title:group"
 msgid "Action"
 msgstr "செயல்"
 
-#: editdlg.cpp:274
+#: editdlg.cpp:261
 #, kde-format
 msgctxt "@title:group"
 msgid "Deferred Alarm"
 msgstr "ஒத்திவைத்த அலாரம்"
 
-#: editdlg.cpp:277
+#: editdlg.cpp:264
 #, kde-format
 msgctxt "@label"
 msgid "Deferred to:"
 msgstr "இதற்கு ஒத்திவைக்கப்பட்டது:"
 
-#: editdlg.cpp:282
+#: editdlg.cpp:269
 #, kde-format
 msgctxt "@action:button"
 msgid "Change..."
 msgstr "மாற்று..."
 
-#: editdlg.cpp:284
+#: editdlg.cpp:271
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Change the alarm's deferred time, or cancel the deferral"
 msgstr "அலாரம் ஒத்திவைக்கப்பட்ட நேரத்தை மாற்றுங்கள், அல்லது ஒத்திவைத்ததை ரத்து செய்யுங்கள்"
 
-#: editdlg.cpp:295 editdlg.cpp:356
+#: editdlg.cpp:282 editdlg.cpp:343
 #, kde-format
 msgctxt "@title:group"
 msgid "Time"
 msgstr "நேரம்"
 
-#: editdlg.cpp:302
+#: editdlg.cpp:289
 #, kde-format
 msgctxt "@option:radio"
 msgid "Default time"
 msgstr "இயல்பிருப்பு நேரம்"
 
-#: editdlg.cpp:304
+#: editdlg.cpp:291
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2121,13 +2121,13 @@ msgstr ""
 "இவ்வார்ப்புருவின் அடிப்படையில் உருவாக்கப்படும் அலாரங்களுக்கு துவக்க நேரத்தை குறிப்பிட "
 "வேண்டாம். இயல்பிருப்பான துவக்க நேரமே பயன்படுத்தப்படும்."
 
-#: editdlg.cpp:312
+#: editdlg.cpp:299
 #, kde-format
 msgctxt "@option:radio"
 msgid "Time:"
 msgstr "நேரம்:"
 
-#: editdlg.cpp:314
+#: editdlg.cpp:301
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Specify a start time for alarms based on this template."
@@ -2135,7 +2135,7 @@ msgstr ""
 "இவ்வார்ப்புருவின் அடிப்படையில் உருவாக்கப்படும் அலாரங்களுக்கான துவக்க நேரத்தை குறிப்பிட "
 "விடும்."
 
-#: editdlg.cpp:320
+#: editdlg.cpp:307
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2145,13 +2145,13 @@ msgstr ""
 "<para>இவ்வார்ப்புருவை பயன்படுத்தும் அலாரங்கள் தொடங்கும் நேரத்தை உள்ளிடுங்கள்.</para><para>"
 "%1</para>"
 
-#: editdlg.cpp:327
+#: editdlg.cpp:314
 #, kde-format
 msgctxt "@option:radio"
 msgid "Date only"
 msgstr "தேதி மட்டும்"
 
-#: editdlg.cpp:329
+#: editdlg.cpp:316
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2161,7 +2161,7 @@ msgstr ""
 "இவ்வார்ப்புருவின் அடிப்படையில் உருவாக்கப்படும் அலாரங்களுக்கு <interface>எந்த நேரமும்</"
 "interface> என்ற விருப்பத்தை இயக்கு."
 
-#: editdlg.cpp:339
+#: editdlg.cpp:326
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2171,25 +2171,25 @@ msgstr ""
 "இவ்வார்ப்புருவின் அடிப்படையில் உருவாக்கப்படும் அலாரங்களை குறிப்பிட்ட இடைவெளிக்கு பிறகு "
 "தூண்டப்படும்படி அமை."
 
-#: editdlg.cpp:402
+#: editdlg.cpp:389
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to copy the alarm into KOrganizer's calendar"
 msgstr "கேயார்கனைசரின் நாள்காட்டியில் அலாரத்தை நகலெடுக்க இதை குறியுங்கள்"
 
-#: editdlg.cpp:982
+#: editdlg.cpp:969
 #, kde-format
 msgctxt "@info"
 msgid "You must enter a name for the alarm template"
 msgstr "அலார வார்ப்புருக்கு பெயரை உள்ளிட வேண்டும்"
 
-#: editdlg.cpp:986
+#: editdlg.cpp:973
 #, kde-format
 msgctxt "@info"
 msgid "Template name is already in use"
 msgstr "இப்பெயரில் ஏற்கனவே ஒரு வார்ப்புரு உள்ளது"
 
-#: editdlg.cpp:1009
+#: editdlg.cpp:996
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2200,7 +2200,7 @@ msgstr ""
 "<para>அதிதுல்லியமான அலாரங்களை கேயலாரம் ஆதரிக்காது.</para><para> அமைக்கப்பட்டுள்ள "
 "நேரத்துக்கு முந்தைய ஒரு நிமிடத்திற்குள் அலாரம் தூண்டப்படும்.</para>"
 
-#: editdlg.cpp:1041
+#: editdlg.cpp:1028
 #, kde-format
 msgctxt "@info The parameter is a date value"
 msgid ""
@@ -2210,7 +2210,7 @@ msgstr ""
 "அலாரத்தின் மறுநிகழ்வு பாங்குக்கு துவக்க தேதி பொருந்தாத‍தால், அடுத்த மறுநிகழ்வுக்கு (%1) "
 "மாற்றப்படும்."
 
-#: editdlg.cpp:1045
+#: editdlg.cpp:1032
 #, kde-format
 msgctxt "@info The parameter is a date/time value"
 msgid ""
@@ -2220,19 +2220,19 @@ msgstr ""
 "அலாரத்தின் மறுநிகழ்வு பாங்குக்கு துவக்க தேதி/நேரம் பொருந்தாத‍தால், அடுத்த மறுநிகழ்வுக்கு "
 "(%1) மாற்றப்படும்."
 
-#: editdlg.cpp:1067
+#: editdlg.cpp:1054
 #, kde-format
 msgctxt "@info"
 msgid "Recurrence has already expired"
 msgstr "மறுநிகழ்வு ஏற்கனவே முடிந்துவிட்டது"
 
-#: editdlg.cpp:1072
+#: editdlg.cpp:1059
 #, kde-format
 msgctxt "@info"
 msgid "The alarm will never occur during working hours"
 msgstr "வேலை நேரத்தில் அலாரம் தூண்டப்படாது"
 
-#: editdlg.cpp:1101
+#: editdlg.cpp:1088
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2242,7 +2242,7 @@ msgstr ""
 "<interface>%1</interface> குறிக்கப்படாத பட்சத்தில், நினைவூட்டல்களுக்கான இடைவெளி "
 "மறுநிகழ்வுகளுக்கான இடைவெளியைவிட சிறியதாக இருக்க வேண்டும்."
 
-#: editdlg.cpp:1116
+#: editdlg.cpp:1103
 #, fuzzy, kde-format
 #| msgid ""
 #| "Simple alarm repetition duration must be less than the recurrence "
@@ -2253,7 +2253,7 @@ msgid ""
 "recurrence interval minus any reminder period"
 msgstr "மீதமுள்ள நேரம் மறுதோன்றல் இடைவெளியை விட குறைவானதாக இருக்க வேண்டும்"
 
-#: editdlg.cpp:1123
+#: editdlg.cpp:1110
 #, fuzzy, kde-format
 #| msgid ""
 #| "Simple alarm repetition period must be in units of days or weeks for a "
@@ -2266,31 +2266,31 @@ msgstr ""
 "தேதி-மட்டும் அலாரத்திற்கு திரும்ப திரும்ப நிகழும் அலாரம் நாட்களீல் அல்லது வாரங்களில் "
 "இருக்கவேண்டும்."
 
-#: editdlg.cpp:1154
+#: editdlg.cpp:1141
 #, kde-format
 msgctxt "@info"
 msgid "You must select a calendar to save the alarm in"
 msgstr "அலாரத்தை சேமிப்பதற்கான நாள்காட்டியை தேர்ந்தெடுக்க வேண்டும்"
 
-#: editdlg.cpp:1235
+#: editdlg.cpp:1222
 #, kde-format
 msgctxt "@action:Button"
 msgid "Fewer Options <<"
 msgstr "குறைவான விருப்பங்கள் <<"
 
-#: editdlg.cpp:1236
+#: editdlg.cpp:1223
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show fewer options"
 msgstr "குறைவான விருப்பங்களையே காட்டு"
 
-#: editdlg.cpp:1241
+#: editdlg.cpp:1228
 #, kde-format
 msgctxt "@action:button"
 msgid "More Options >>"
 msgstr "மேலும் விருப்பங்கள் >>"
 
-#: editdlg.cpp:1242
+#: editdlg.cpp:1229
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show more options"

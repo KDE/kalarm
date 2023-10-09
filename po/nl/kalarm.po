@@ -17,7 +17,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-08 02:24+0000\n"
+"POT-Creation-Date: 2023-10-09 02:40+0000\n"
 "PO-Revision-Date: 2023-06-08 11:36+0200\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
@@ -171,7 +171,7 @@ msgctxt "@option:radio Defer for time interval"
 msgid "Defer for:"
 msgstr "Uitstellen voor:"
 
-#: alarmtimewidget.cpp:137 editdlg.cpp:336
+#: alarmtimewidget.cpp:137 editdlg.cpp:323
 #, kde-format
 msgctxt "@option:radio"
 msgid "Time from now:"
@@ -191,7 +191,7 @@ msgctxt "@info:whatsthis"
 msgid "Schedule the alarm after the specified time interval from now."
 msgstr "Alarm plannen na het opgegeven tijdsinterval."
 
-#: alarmtimewidget.cpp:149 editdlg.cpp:347
+#: alarmtimewidget.cpp:149 editdlg.cpp:334
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid "<para>%1</para><para>%2</para>"
@@ -342,13 +342,13 @@ msgid "Import Birthdays From KAddressBook"
 msgstr "Verjaardagen uit KAddressBook importeren"
 
 # samenstelling, onderwerp benadrukken
-#: birthdaydlg.cpp:59 editdlg.cpp:252
+#: birthdaydlg.cpp:59 editdlg.cpp:239
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Alarm name:"
 msgstr "Alarmnaam:"
 
-#: birthdaydlg.cpp:64 editdlg.cpp:260
+#: birthdaydlg.cpp:64 editdlg.cpp:247
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2182,96 +2182,96 @@ msgctxt "@title:window"
 msgid "Alarm [read-only]"
 msgstr "Alarm [alleen-lezen]"
 
-#: editdlg.cpp:190 editdlg.cpp:197 editdlg.cpp:204
-#, kde-format
-msgctxt "@action:button"
-msgid "Try"
-msgstr "Proberen"
-
-#: editdlg.cpp:205
-#, kde-format
-msgctxt "@action:button"
-msgid "Load Template..."
-msgstr "Sjabloon laden..."
-
-#: editdlg.cpp:207
-#, kde-format
-msgctxt "@info:tooltip"
-msgid "Select an alarm template to preset the alarm"
-msgstr "Selecteer een alarmsjabloon waarop u het nieuwe alarm wilt baseren"
-
-#: editdlg.cpp:214
+#: editdlg.cpp:190
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Schedule the alarm at the specified time."
 msgstr "Plan het alarm op de opgegeven tijd."
 
-#: editdlg.cpp:222
+#: editdlg.cpp:193
+#, kde-format
+msgctxt "@action:button"
+msgid "Load Template..."
+msgstr "Sjabloon laden..."
+
+#: editdlg.cpp:195
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Select an alarm template to preset the alarm"
+msgstr "Selecteer een alarmsjabloon waarop u het nieuwe alarm wilt baseren"
+
+#: editdlg.cpp:199
+#, kde-format
+msgctxt "@action:button"
+msgid "Try"
+msgstr "Proberen"
+
+#: editdlg.cpp:209
 #, kde-format
 msgctxt "@title:tab"
 msgid "Alarm"
 msgstr "Alarm"
 
 # onduidelijk, naam is onderwerp
-#: editdlg.cpp:252
+#: editdlg.cpp:239
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Template name:"
 msgstr "Naam sjabloon:"
 
-#: editdlg.cpp:259
+#: editdlg.cpp:246
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the name of the alarm template"
 msgstr "Voer de naam van het alarmsjabloon"
 
-#: editdlg.cpp:265
+#: editdlg.cpp:252
 #, kde-format
 msgctxt "@title:group"
 msgid "Action"
 msgstr "Handeling"
 
-#: editdlg.cpp:274
+#: editdlg.cpp:261
 #, kde-format
 msgctxt "@title:group"
 msgid "Deferred Alarm"
 msgstr "Uitgesteld alarm"
 
 # letterlijke vertaling
-#: editdlg.cpp:277
+#: editdlg.cpp:264
 #, kde-format
 msgctxt "@label"
 msgid "Deferred to:"
 msgstr "Uitgesteld tot:"
 
-#: editdlg.cpp:282
+#: editdlg.cpp:269
 #, kde-format
 msgctxt "@action:button"
 msgid "Change..."
 msgstr "Wijzigen..."
 
 # standaard was geloof ik dat hier een infinitief vertaald moest worden?
-#: editdlg.cpp:284
+#: editdlg.cpp:271
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Change the alarm's deferred time, or cancel the deferral"
 msgstr ""
 "De tijd voor uitstel van het alarm wijzigen, of het uitstellen annuleren"
 
-#: editdlg.cpp:295 editdlg.cpp:356
+#: editdlg.cpp:282 editdlg.cpp:343
 #, kde-format
 msgctxt "@title:group"
 msgid "Time"
 msgstr "Tijd"
 
-#: editdlg.cpp:302
+#: editdlg.cpp:289
 #, kde-format
 msgctxt "@option:radio"
 msgid "Default time"
 msgstr "Standaard tijd"
 
 # inconsequente zin, start, begin..
-#: editdlg.cpp:304
+#: editdlg.cpp:291
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2281,21 +2281,21 @@ msgstr ""
 "Geef geen begintijd op voor alarmen die gebaseerd zijn op dit sjabloon. De "
 "normale begintijd zal gebruikt worden."
 
-#: editdlg.cpp:312
+#: editdlg.cpp:299
 #, kde-format
 msgctxt "@option:radio"
 msgid "Time:"
 msgstr "Tijd:"
 
 # korter, consequentie
-#: editdlg.cpp:314
+#: editdlg.cpp:301
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Specify a start time for alarms based on this template."
 msgstr "Een begintijd opgeven voor alarmen, gebaseerd op dit sjabloon."
 
 # kort, consequent
-#: editdlg.cpp:320
+#: editdlg.cpp:307
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2305,14 +2305,14 @@ msgstr ""
 "<para>Voer een begintijd in voor alarmen, gebaseerd op dit sjabloon.</"
 "para><para>%1</para>"
 
-#: editdlg.cpp:327
+#: editdlg.cpp:314
 #, kde-format
 msgctxt "@option:radio"
 msgid "Date only"
 msgstr "Alleen datum"
 
 # korter, duidelijk
-#: editdlg.cpp:329
+#: editdlg.cpp:316
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2323,7 +2323,7 @@ msgstr ""
 "dit sjabloon."
 
 # tijdstip waarop
-#: editdlg.cpp:339
+#: editdlg.cpp:326
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2333,7 +2333,7 @@ msgstr ""
 "Laat alarmen, gebaseerd op dit sjabloon, beginnen na het opgegeven "
 "tijdsinterval vanaf het tijdstip waarop het alarm is aangemaakt."
 
-#: editdlg.cpp:402
+#: editdlg.cpp:389
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to copy the alarm into KOrganizer's calendar"
@@ -2342,20 +2342,20 @@ msgstr "Selecteer dit om het alarm naar KOrganizer te kopiëren"
 # dienen als gebiedende wijs is wel netjes maar redelijk antiek....
 # ik denk dat u moet, de noodzaak wat dsuidelijker weergeeft
 # Klopt, maar beide komen nogal agresief over bij de gebruiker. Deze oplossing vind ik netter..
-#: editdlg.cpp:982
+#: editdlg.cpp:969
 #, kde-format
 msgctxt "@info"
 msgid "You must enter a name for the alarm template"
 msgstr "Voer een naam in voor het alarmsjabloon"
 
 # samenstellingen
-#: editdlg.cpp:986
+#: editdlg.cpp:973
 #, kde-format
 msgctxt "@info"
 msgid "Template name is already in use"
 msgstr "Naam sjabloon wordt al gebruikt"
 
-#: editdlg.cpp:1009
+#: editdlg.cpp:996
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2367,7 +2367,7 @@ msgstr ""
 "alarm zal starten op de minutengrens voor de gespecificeerde tijd vanaf nu.</"
 "para>"
 
-#: editdlg.cpp:1041
+#: editdlg.cpp:1028
 #, kde-format
 msgctxt "@info The parameter is a date value"
 msgid ""
@@ -2377,7 +2377,7 @@ msgstr ""
 "De startdatum klopt niet met het herhalingspatroon van het alarm, het wordt "
 "dus aangepast tot de datum van de eerstvolgende herhaling (%1)."
 
-#: editdlg.cpp:1045
+#: editdlg.cpp:1032
 #, kde-format
 msgctxt "@info The parameter is a date/time value"
 msgid ""
@@ -2387,13 +2387,13 @@ msgstr ""
 "De startdatum/tijd klopt niet met het herhalingspatroon van het alarm, het "
 "wordt dus aangepast tot de datum/tijd van de eerstvolgende herhaling (%1)."
 
-#: editdlg.cpp:1067
+#: editdlg.cpp:1054
 #, kde-format
 msgctxt "@info"
 msgid "Recurrence has already expired"
 msgstr "Herhaling is reeds verlopen"
 
-#: editdlg.cpp:1072
+#: editdlg.cpp:1059
 #, kde-format
 msgctxt "@info"
 msgid "The alarm will never occur during working hours"
@@ -2401,7 +2401,7 @@ msgstr "Het alarm zal niet tijdens werkuren tevoorschijn komen"
 
 # reminder was die tenenkrommende voorherinnering, dus nu herinnering vooraf
 # duidelijker omschrijving probleemsituatie
-#: editdlg.cpp:1101
+#: editdlg.cpp:1088
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2413,7 +2413,7 @@ msgstr ""
 
 # z moet kleiner zijn dan x - y ? dat kan je toch geen gebruiker verkopen?
 # bugreport
-#: editdlg.cpp:1116
+#: editdlg.cpp:1103
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -2423,7 +2423,7 @@ msgstr ""
 "De duur van een deelherhaling dient kleiner te zijn dan de duur van de "
 "hoofdherhaling minus de tijd voor het alarm vooraf"
 
-#: editdlg.cpp:1123
+#: editdlg.cpp:1110
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -2433,31 +2433,31 @@ msgstr ""
 "Het interval van een deelherhaling moet in dagen of weken worden opgegeven "
 "voor een alarm met alleen een datum"
 
-#: editdlg.cpp:1154
+#: editdlg.cpp:1141
 #, kde-format
 msgctxt "@info"
 msgid "You must select a calendar to save the alarm in"
 msgstr "Selecteer een agenda om het alarm in op te slaan"
 
-#: editdlg.cpp:1235
+#: editdlg.cpp:1222
 #, kde-format
 msgctxt "@action:Button"
 msgid "Fewer Options <<"
 msgstr "Minder opties <<"
 
-#: editdlg.cpp:1236
+#: editdlg.cpp:1223
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show fewer options"
 msgstr "Minder opties tonen"
 
-#: editdlg.cpp:1241
+#: editdlg.cpp:1228
 #, kde-format
 msgctxt "@action:button"
 msgid "More Options >>"
 msgstr "Meer opties >>"
 
-#: editdlg.cpp:1242
+#: editdlg.cpp:1229
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show more options"

@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdepim/kalarm.po\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-08 02:24+0000\n"
+"POT-Creation-Date: 2023-10-09 02:40+0000\n"
 "PO-Revision-Date: 2004-09-20 15:44+0200\n"
 "Last-Translator: Thierry Vignaud <tvignaud@mandriva.com>\n"
 "Language-Team: Breton <LL@li.org>\n"
@@ -138,7 +138,7 @@ msgctxt "@option:radio Defer for time interval"
 msgid "Defer for:"
 msgstr "Lemel an dihunerioù"
 
-#: alarmtimewidget.cpp:137 editdlg.cpp:336
+#: alarmtimewidget.cpp:137 editdlg.cpp:323
 #, fuzzy, kde-format
 #| msgid "Time from no&w:"
 msgctxt "@option:radio"
@@ -157,7 +157,7 @@ msgctxt "@info:whatsthis"
 msgid "Schedule the alarm after the specified time interval from now."
 msgstr ""
 
-#: alarmtimewidget.cpp:149 editdlg.cpp:347
+#: alarmtimewidget.cpp:149 editdlg.cpp:334
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "%1\n"
@@ -321,14 +321,14 @@ msgctxt "@title:window"
 msgid "Import Birthdays From KAddressBook"
 msgstr "Enporzh an deizioù-ha-bloazioù eus KAddressBook"
 
-#: birthdaydlg.cpp:59 editdlg.cpp:252
+#: birthdaydlg.cpp:59 editdlg.cpp:239
 #, fuzzy, kde-format
 #| msgid "Alarm Type"
 msgctxt "@label:textbox"
 msgid "Alarm name:"
 msgstr "Seurt an dihuner"
 
-#: birthdaydlg.cpp:64 editdlg.cpp:260
+#: birthdaydlg.cpp:64 editdlg.cpp:247
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2001,60 +2001,60 @@ msgctxt "@title:window"
 msgid "Alarm [read-only]"
 msgstr "Bevaat KAlarm"
 
-#: editdlg.cpp:190 editdlg.cpp:197 editdlg.cpp:204
+#: editdlg.cpp:190
 #, kde-format
-msgctxt "@action:button"
-msgid "Try"
+msgctxt "@info:whatsthis"
+msgid "Schedule the alarm at the specified time."
 msgstr ""
 
-#: editdlg.cpp:205
+#: editdlg.cpp:193
 #, fuzzy, kde-format
 #| msgid "Load Template..."
 msgctxt "@action:button"
 msgid "Load Template..."
 msgstr "Kargañ ar patrom ..."
 
-#: editdlg.cpp:207
+#: editdlg.cpp:195
 #, fuzzy, kde-format
 msgctxt "@info:tooltip"
 msgid "Select an alarm template to preset the alarm"
 msgstr "Ret eo deoc'h reiñ un anv evit ar patrom dihuner"
 
-#: editdlg.cpp:214
+#: editdlg.cpp:199
 #, kde-format
-msgctxt "@info:whatsthis"
-msgid "Schedule the alarm at the specified time."
+msgctxt "@action:button"
+msgid "Try"
 msgstr ""
 
-#: editdlg.cpp:222
+#: editdlg.cpp:209
 #, fuzzy, kde-format
 #| msgid "&Alarm"
 msgctxt "@title:tab"
 msgid "Alarm"
 msgstr "&Dihuner"
 
-#: editdlg.cpp:252
+#: editdlg.cpp:239
 #, fuzzy, kde-format
 #| msgid "Template name:"
 msgctxt "@label:textbox"
 msgid "Template name:"
 msgstr "Anv ar patrom :"
 
-#: editdlg.cpp:259
+#: editdlg.cpp:246
 #, fuzzy, kde-format
 #| msgid "Enter the name of the alarm template"
 msgctxt "@info:whatsthis"
 msgid "Enter the name of the alarm template"
 msgstr "Roit anv ar patrom dihuner"
 
-#: editdlg.cpp:265
+#: editdlg.cpp:252
 #, fuzzy, kde-format
 #| msgid "Action"
 msgctxt "@title:group"
 msgid "Action"
 msgstr "Gwezhiad"
 
-#: editdlg.cpp:274
+#: editdlg.cpp:261
 #, fuzzy, kde-format
 #| msgid "Delete Alarm"
 #| msgid_plural "Delete Alarms"
@@ -2062,40 +2062,40 @@ msgctxt "@title:group"
 msgid "Deferred Alarm"
 msgstr "Lemel an dihunerioù"
 
-#: editdlg.cpp:277
+#: editdlg.cpp:264
 #, kde-format
 msgctxt "@label"
 msgid "Deferred to:"
 msgstr ""
 
-#: editdlg.cpp:282
+#: editdlg.cpp:269
 #, fuzzy, kde-format
 #| msgid "C&hange..."
 msgctxt "@action:button"
 msgid "Change..."
 msgstr "&Kemmañ ..."
 
-#: editdlg.cpp:284
+#: editdlg.cpp:271
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Change the alarm's deferred time, or cancel the deferral"
 msgstr ""
 
-#: editdlg.cpp:295 editdlg.cpp:356
+#: editdlg.cpp:282 editdlg.cpp:343
 #, fuzzy, kde-format
 #| msgid "Time"
 msgctxt "@title:group"
 msgid "Time"
 msgstr "Eur"
 
-#: editdlg.cpp:302
+#: editdlg.cpp:289
 #, fuzzy, kde-format
 #| msgid "&Default time"
 msgctxt "@option:radio"
 msgid "Default time"
 msgstr "Eur dre &ziouer"
 
-#: editdlg.cpp:304
+#: editdlg.cpp:291
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2103,20 +2103,20 @@ msgid ""
 "default start time will be used."
 msgstr ""
 
-#: editdlg.cpp:312
+#: editdlg.cpp:299
 #, fuzzy, kde-format
 #| msgid "Time:"
 msgctxt "@option:radio"
 msgid "Time:"
 msgstr "Eur :"
 
-#: editdlg.cpp:314
+#: editdlg.cpp:301
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Specify a start time for alarms based on this template."
 msgstr ""
 
-#: editdlg.cpp:320
+#: editdlg.cpp:307
 #, fuzzy, kde-kuit-format
 #| msgid "Enter the name of the alarm template"
 msgctxt "@info:whatsthis"
@@ -2125,14 +2125,14 @@ msgid ""
 "%1</para>"
 msgstr "Roit anv ar patrom dihuner"
 
-#: editdlg.cpp:327
+#: editdlg.cpp:314
 #, fuzzy, kde-format
 #| msgid "Date"
 msgctxt "@option:radio"
 msgid "Date only"
 msgstr "Deiziad"
 
-#: editdlg.cpp:329
+#: editdlg.cpp:316
 #, fuzzy, kde-kuit-format
 #| msgid "Enter the name of the alarm template"
 msgctxt "@info:whatsthis"
@@ -2141,7 +2141,7 @@ msgid ""
 "template."
 msgstr "Roit anv ar patrom dihuner"
 
-#: editdlg.cpp:339
+#: editdlg.cpp:326
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2149,27 +2149,27 @@ msgid ""
 "from when the alarm is created."
 msgstr ""
 
-#: editdlg.cpp:402
+#: editdlg.cpp:389
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to copy the alarm into KOrganizer's calendar"
 msgstr "Diskouez e KOrganizer"
 
-#: editdlg.cpp:982
+#: editdlg.cpp:969
 #, fuzzy, kde-format
 #| msgid "You must enter a name for the alarm template"
 msgctxt "@info"
 msgid "You must enter a name for the alarm template"
 msgstr "Ret eo deoc'h reiñ un anv evit ar patrom dihuner"
 
-#: editdlg.cpp:986
+#: editdlg.cpp:973
 #, fuzzy, kde-format
 #| msgid "Template name is already in use"
 msgctxt "@info"
 msgid "Template name is already in use"
 msgstr "Implijet eo anv ar patrom dija"
 
-#: editdlg.cpp:1009
+#: editdlg.cpp:996
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2178,7 +2178,7 @@ msgid ""
 "para>"
 msgstr ""
 
-#: editdlg.cpp:1041
+#: editdlg.cpp:1028
 #, kde-format
 msgctxt "@info The parameter is a date value"
 msgid ""
@@ -2186,7 +2186,7 @@ msgid ""
 "adjusted to the date of the next recurrence (%1)."
 msgstr ""
 
-#: editdlg.cpp:1045
+#: editdlg.cpp:1032
 #, kde-format
 msgctxt "@info The parameter is a date/time value"
 msgid ""
@@ -2194,19 +2194,19 @@ msgid ""
 "will be adjusted to the date/time of the next recurrence (%1)."
 msgstr ""
 
-#: editdlg.cpp:1067
+#: editdlg.cpp:1054
 #, kde-format
 msgctxt "@info"
 msgid "Recurrence has already expired"
 msgstr ""
 
-#: editdlg.cpp:1072
+#: editdlg.cpp:1059
 #, kde-format
 msgctxt "@info"
 msgid "The alarm will never occur during working hours"
 msgstr ""
 
-#: editdlg.cpp:1101
+#: editdlg.cpp:1088
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2214,7 +2214,7 @@ msgid ""
 "%1</interface> is checked."
 msgstr ""
 
-#: editdlg.cpp:1116
+#: editdlg.cpp:1103
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -2222,7 +2222,7 @@ msgid ""
 "recurrence interval minus any reminder period"
 msgstr ""
 
-#: editdlg.cpp:1123
+#: editdlg.cpp:1110
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -2230,31 +2230,31 @@ msgid ""
 "or weeks for a date-only alarm"
 msgstr ""
 
-#: editdlg.cpp:1154
+#: editdlg.cpp:1141
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "You must select a calendar to save the alarm in"
 msgstr "Ret eo deoc'h reiñ un anv evit ar patrom dihuner"
 
-#: editdlg.cpp:1235
+#: editdlg.cpp:1222
 #, kde-format
 msgctxt "@action:Button"
 msgid "Fewer Options <<"
 msgstr ""
 
-#: editdlg.cpp:1236
+#: editdlg.cpp:1223
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show fewer options"
 msgstr ""
 
-#: editdlg.cpp:1241
+#: editdlg.cpp:1228
 #, kde-format
 msgctxt "@action:button"
 msgid "More Options >>"
 msgstr ""
 
-#: editdlg.cpp:1242
+#: editdlg.cpp:1229
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show more options"

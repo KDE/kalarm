@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-08 02:24+0000\n"
+"POT-Creation-Date: 2023-10-09 02:40+0000\n"
 "PO-Revision-Date: 2021-05-15 16:59+0100\n"
 "Last-Translator: Sergiu Bivol <sergiu@cip.md>\n"
 "Language-Team: Romanian\n"
@@ -159,7 +159,7 @@ msgctxt "@option:radio Defer for time interval"
 msgid "Defer for:"
 msgstr "Amânată pentru:"
 
-#: alarmtimewidget.cpp:137 editdlg.cpp:336
+#: alarmtimewidget.cpp:137 editdlg.cpp:323
 #, fuzzy, kde-format
 msgctxt "@option:radio"
 msgid "Time from now:"
@@ -179,7 +179,7 @@ msgctxt "@info:whatsthis"
 msgid "Schedule the alarm after the specified time interval from now."
 msgstr "Programați alarma după intervalul de timp specificat începând de acum."
 
-#: alarmtimewidget.cpp:149 editdlg.cpp:347
+#: alarmtimewidget.cpp:149 editdlg.cpp:334
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid "<para>%1</para><para>%2</para>"
@@ -342,13 +342,13 @@ msgctxt "@title:window"
 msgid "Import Birthdays From KAddressBook"
 msgstr "Importați zilele de naștere din agenda K"
 
-#: birthdaydlg.cpp:59 editdlg.cpp:252
+#: birthdaydlg.cpp:59 editdlg.cpp:239
 #, fuzzy, kde-format
 msgctxt "@label:textbox"
 msgid "Alarm name:"
 msgstr "Lista de alarme"
 
-#: birthdaydlg.cpp:64 editdlg.cpp:260
+#: birthdaydlg.cpp:64 editdlg.cpp:247
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2187,19 +2187,19 @@ msgctxt "@title:window"
 msgid "Alarm [read-only]"
 msgstr "Activează %1"
 
-#: editdlg.cpp:190 editdlg.cpp:197 editdlg.cpp:204
+#: editdlg.cpp:190
 #, kde-format
-msgctxt "@action:button"
-msgid "Try"
-msgstr ""
+msgctxt "@info:whatsthis"
+msgid "Schedule the alarm at the specified time."
+msgstr "Programează alarma la ora specificată."
 
-#: editdlg.cpp:205
+#: editdlg.cpp:193
 #, fuzzy, kde-format
 msgctxt "@action:button"
 msgid "Load Template..."
 msgstr "Text alarmă"
 
-#: editdlg.cpp:207
+#: editdlg.cpp:195
 #, fuzzy, kde-format
 #| msgctxt "@info:whatsthis"
 #| msgid "Select a template to base the new alarm on."
@@ -2207,75 +2207,75 @@ msgctxt "@info:tooltip"
 msgid "Select an alarm template to preset the alarm"
 msgstr "Selectați un șablon pe care să se bazeze noua alarmă."
 
-#: editdlg.cpp:214
+#: editdlg.cpp:199
 #, kde-format
-msgctxt "@info:whatsthis"
-msgid "Schedule the alarm at the specified time."
-msgstr "Programează alarma la ora specificată."
+msgctxt "@action:button"
+msgid "Try"
+msgstr ""
 
-#: editdlg.cpp:222
+#: editdlg.cpp:209
 #, kde-format
 msgctxt "@title:tab"
 msgid "Alarm"
 msgstr "Alarmă"
 
-#: editdlg.cpp:252
+#: editdlg.cpp:239
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Template name:"
 msgstr "Numele șablonului:"
 
-#: editdlg.cpp:259
+#: editdlg.cpp:246
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the name of the alarm template"
 msgstr "Eroare la citirea cărții de adrese"
 
-#: editdlg.cpp:265
+#: editdlg.cpp:252
 #, kde-format
 msgctxt "@title:group"
 msgid "Action"
 msgstr "Acțiune"
 
-#: editdlg.cpp:274
+#: editdlg.cpp:261
 #, fuzzy, kde-format
 #| msgid "New Alarm"
 msgctxt "@title:group"
 msgid "Deferred Alarm"
 msgstr "Alarmă nouă"
 
-#: editdlg.cpp:277
+#: editdlg.cpp:264
 #, kde-format
 msgctxt "@label"
 msgid "Deferred to:"
 msgstr "Amânată pentru:"
 
-#: editdlg.cpp:282
+#: editdlg.cpp:269
 #, fuzzy, kde-format
 msgctxt "@action:button"
 msgid "Change..."
 msgstr "Schimbare..."
 
-#: editdlg.cpp:284
+#: editdlg.cpp:271
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Change the alarm's deferred time, or cancel the deferral"
 msgstr "Schimba ora de amanare a alarmei,sau anuleaza amanarea ei."
 
-#: editdlg.cpp:295 editdlg.cpp:356
+#: editdlg.cpp:282 editdlg.cpp:343
 #, fuzzy, kde-format
 #| msgid "Time"
 msgctxt "@title:group"
 msgid "Time"
 msgstr "Ora"
 
-#: editdlg.cpp:302
+#: editdlg.cpp:289
 #, fuzzy, kde-format
 msgctxt "@option:radio"
 msgid "Default time"
 msgstr "Utilizează fontul &implicit"
 
-#: editdlg.cpp:304
+#: editdlg.cpp:291
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2285,19 +2285,19 @@ msgstr ""
 "Nu specifica ora de inceput pentru alarmele bazate pe acest sablon.Va fi "
 "folostita ora de inceput implicita."
 
-#: editdlg.cpp:312
+#: editdlg.cpp:299
 #, kde-format
 msgctxt "@option:radio"
 msgid "Time:"
 msgstr "Ora:"
 
-#: editdlg.cpp:314
+#: editdlg.cpp:301
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Specify a start time for alarms based on this template."
 msgstr "Indica ora de inceput pentru alarmele bazate pe acest sablon"
 
-#: editdlg.cpp:320
+#: editdlg.cpp:307
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2307,13 +2307,13 @@ msgstr ""
 "<para>Introduceti ora de inceput pentru alarmele bazate pe acest sablon.</"
 "para><para>%1</para>"
 
-#: editdlg.cpp:327
+#: editdlg.cpp:314
 #, kde-format
 msgctxt "@option:radio"
 msgid "Date only"
 msgstr "Doar data"
 
-#: editdlg.cpp:329
+#: editdlg.cpp:316
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2323,7 +2323,7 @@ msgstr ""
 "Seteaza optiunea <interface>oricand</interface> pentru alarmele bazate pe "
 "acest sablon"
 
-#: editdlg.cpp:339
+#: editdlg.cpp:326
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2333,25 +2333,25 @@ msgstr ""
 "Seteaza alarma bazata pe acest sablon pentru a incepe dupa intervalul de "
 "timp specificat de cand alarma a fost creata."
 
-#: editdlg.cpp:402
+#: editdlg.cpp:389
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to copy the alarm into KOrganizer's calendar"
 msgstr "Verifica pentru a copia alarma in calendarul KOrganizer's"
 
-#: editdlg.cpp:982
+#: editdlg.cpp:969
 #, kde-format
 msgctxt "@info"
 msgid "You must enter a name for the alarm template"
 msgstr "Trebuie să introduceți o denumire pentru șablonul de alarmă"
 
-#: editdlg.cpp:986
+#: editdlg.cpp:973
 #, kde-format
 msgctxt "@info"
 msgid "Template name is already in use"
 msgstr "Denumirea de șablon e folosită deja"
 
-#: editdlg.cpp:1009
+#: editdlg.cpp:996
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2360,7 +2360,7 @@ msgid ""
 "para>"
 msgstr ""
 
-#: editdlg.cpp:1041
+#: editdlg.cpp:1028
 #, kde-format
 msgctxt "@info The parameter is a date value"
 msgid ""
@@ -2370,7 +2370,7 @@ msgstr ""
 "Ora de inceput nu se potriveste cu modelul de repetare al alarmei,asa ca va "
 "trebui reglata pentru data viitoarei  repetari (%1)."
 
-#: editdlg.cpp:1045
+#: editdlg.cpp:1032
 #, kde-format
 msgctxt "@info The parameter is a date/time value"
 msgid ""
@@ -2380,19 +2380,19 @@ msgstr ""
 "Ora de inceput/Data de inceput nu se potrivesc cu modelul de repetare al "
 "alarmei,asa ca va trebui reglata dupa data/ora urmatoarei repetari (%1)."
 
-#: editdlg.cpp:1067
+#: editdlg.cpp:1054
 #, kde-format
 msgctxt "@info"
 msgid "Recurrence has already expired"
 msgstr "Recurența a expirat deja"
 
-#: editdlg.cpp:1072
+#: editdlg.cpp:1059
 #, kde-format
 msgctxt "@info"
 msgid "The alarm will never occur during working hours"
 msgstr "Alarma nu va interveni niciodată în orele de lucru"
 
-#: editdlg.cpp:1101
+#: editdlg.cpp:1088
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2402,7 +2402,7 @@ msgstr ""
 "Perioada de reamintire trebuie sa fie mai mica decat intervalul repetarilor, "
 "numai daca <interface>%1</interface> este verificat."
 
-#: editdlg.cpp:1116
+#: editdlg.cpp:1103
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -2410,7 +2410,7 @@ msgid ""
 "recurrence interval minus any reminder period"
 msgstr "DUrata unei repetitii"
 
-#: editdlg.cpp:1123
+#: editdlg.cpp:1110
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -2420,13 +2420,13 @@ msgstr ""
 "Pentru o repetitie în cadrul recurentei, perioada acesteia trebuie sa fie în "
 "unitati de zile sau saptamani pentru o alarma numai cu data."
 
-#: editdlg.cpp:1154
+#: editdlg.cpp:1141
 #, kde-format
 msgctxt "@info"
 msgid "You must select a calendar to save the alarm in"
 msgstr "Trebuie să alegeți un calendar în care salvați alarma"
 
-#: editdlg.cpp:1235
+#: editdlg.cpp:1222
 #, fuzzy, kde-format
 #| msgctxt "@action:button"
 #| msgid "Less Options <<"
@@ -2434,7 +2434,7 @@ msgctxt "@action:Button"
 msgid "Fewer Options <<"
 msgstr "Mai puține opțiuni <<"
 
-#: editdlg.cpp:1236
+#: editdlg.cpp:1223
 #, fuzzy, kde-format
 #| msgctxt "@action:button"
 #| msgid "Less Options <<"
@@ -2442,13 +2442,13 @@ msgctxt "@info:tooltip"
 msgid "Show fewer options"
 msgstr "Mai puține opțiuni <<"
 
-#: editdlg.cpp:1241
+#: editdlg.cpp:1228
 #, kde-format
 msgctxt "@action:button"
 msgid "More Options >>"
 msgstr "Mai multe opțiuni >>"
 
-#: editdlg.cpp:1242
+#: editdlg.cpp:1229
 #, fuzzy, kde-format
 #| msgctxt "@action:button"
 #| msgid "More Options >>"

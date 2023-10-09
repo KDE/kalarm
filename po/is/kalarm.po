@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-08 02:24+0000\n"
+"POT-Creation-Date: 2023-10-09 02:40+0000\n"
 "PO-Revision-Date: 2005-12-29 22:18+0100\n"
 "Last-Translator: Arnar Leosson <leosson@frisurf.no>\n"
 "Language-Team: Icelandic <kde-isl@molar.is>\n"
@@ -170,7 +170,7 @@ msgctxt "@option:radio Defer for time interval"
 msgid "Defer for:"
 msgstr "Frestað til:"
 
-#: alarmtimewidget.cpp:137 editdlg.cpp:336
+#: alarmtimewidget.cpp:137 editdlg.cpp:323
 #, fuzzy, kde-format
 #| msgid "Time from no&w:"
 msgctxt "@option:radio"
@@ -191,7 +191,7 @@ msgctxt "@info:whatsthis"
 msgid "Schedule the alarm after the specified time interval from now."
 msgstr "Næsta áminning eftir uppgefinn tíma héðan í frá."
 
-#: alarmtimewidget.cpp:149 editdlg.cpp:347
+#: alarmtimewidget.cpp:149 editdlg.cpp:334
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "%1\n"
@@ -350,13 +350,13 @@ msgctxt "@title:window"
 msgid "Import Birthdays From KAddressBook"
 msgstr "Flytja inn afmælisdaga úr KAddressBook"
 
-#: birthdaydlg.cpp:59 editdlg.cpp:252
+#: birthdaydlg.cpp:59 editdlg.cpp:239
 #, fuzzy, kde-format
 msgctxt "@label:textbox"
 msgid "Alarm name:"
 msgstr "Texti í áminnigu"
 
-#: birthdaydlg.cpp:64 editdlg.cpp:260
+#: birthdaydlg.cpp:64 editdlg.cpp:247
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2130,103 +2130,103 @@ msgctxt "@title:window"
 msgid "Alarm [read-only]"
 msgstr "Virkja %1"
 
-#: editdlg.cpp:190 editdlg.cpp:197 editdlg.cpp:204
-#, kde-format
-msgctxt "@action:button"
-msgid "Try"
-msgstr ""
-
-#: editdlg.cpp:205
-#, fuzzy, kde-format
-#| msgid "Load Template..."
-msgctxt "@action:button"
-msgid "Load Template..."
-msgstr "Hlaða inn sniðmáti..."
-
-#: editdlg.cpp:207
-#, fuzzy, kde-format
-msgctxt "@info:tooltip"
-msgid "Select an alarm template to preset the alarm"
-msgstr "Tími sem skal framkvæma áminningu á."
-
-#: editdlg.cpp:214
+#: editdlg.cpp:190
 #, fuzzy, kde-format
 #| msgid "Schedule the alarm at the specified time."
 msgctxt "@info:whatsthis"
 msgid "Schedule the alarm at the specified time."
 msgstr "Vöktun á tilteknum tíma"
 
-#: editdlg.cpp:222
+#: editdlg.cpp:193
+#, fuzzy, kde-format
+#| msgid "Load Template..."
+msgctxt "@action:button"
+msgid "Load Template..."
+msgstr "Hlaða inn sniðmáti..."
+
+#: editdlg.cpp:195
+#, fuzzy, kde-format
+msgctxt "@info:tooltip"
+msgid "Select an alarm template to preset the alarm"
+msgstr "Tími sem skal framkvæma áminningu á."
+
+#: editdlg.cpp:199
+#, kde-format
+msgctxt "@action:button"
+msgid "Try"
+msgstr ""
+
+#: editdlg.cpp:209
 #, fuzzy, kde-format
 #| msgid "&Alarm"
 msgctxt "@title:tab"
 msgid "Alarm"
 msgstr "Á&minning"
 
-#: editdlg.cpp:252
+#: editdlg.cpp:239
 #, fuzzy, kde-format
 #| msgid "Template name:"
 msgctxt "@label:textbox"
 msgid "Template name:"
 msgstr "Nafn sniðmáts:"
 
-#: editdlg.cpp:259
+#: editdlg.cpp:246
 #, fuzzy, kde-format
 #| msgid "Enter the name of the alarm template"
 msgctxt "@info:whatsthis"
 msgid "Enter the name of the alarm template"
 msgstr "Skrifaðu inn nafnið á áminningarsniðinu"
 
-#: editdlg.cpp:265
+#: editdlg.cpp:252
 #, fuzzy, kde-format
 #| msgid "Action"
 msgctxt "@title:group"
 msgid "Action"
 msgstr "Aðgerð"
 
-#: editdlg.cpp:274
+#: editdlg.cpp:261
 #, fuzzy, kde-format
 #| msgid "Deferred Alarm"
 msgctxt "@title:group"
 msgid "Deferred Alarm"
 msgstr "Frestuð áminning"
 
-#: editdlg.cpp:277
+#: editdlg.cpp:264
 #, fuzzy, kde-format
 #| msgid "Deferred to:"
 msgctxt "@label"
 msgid "Deferred to:"
 msgstr "Frestað til:"
 
-#: editdlg.cpp:282
+#: editdlg.cpp:269
 #, fuzzy, kde-format
 #| msgid "C&hange..."
 msgctxt "@action:button"
 msgid "Change..."
 msgstr "B&reyta..."
 
-#: editdlg.cpp:284
+#: editdlg.cpp:271
 #, fuzzy, kde-format
 #| msgid "Change the alarm's deferred time, or cancel the deferral"
 msgctxt "@info:whatsthis"
 msgid "Change the alarm's deferred time, or cancel the deferral"
 msgstr "Breyta frestunartíma eða hætta við frestun."
 
-#: editdlg.cpp:295 editdlg.cpp:356
+#: editdlg.cpp:282 editdlg.cpp:343
 #, fuzzy, kde-format
 #| msgid "Time"
 msgctxt "@title:group"
 msgid "Time"
 msgstr "Tími"
 
-#: editdlg.cpp:302
+#: editdlg.cpp:289
 #, fuzzy, kde-format
 #| msgid "&Default time"
 msgctxt "@option:radio"
 msgid "Default time"
 msgstr "S&jálfgefinn tími"
 
-#: editdlg.cpp:304
+#: editdlg.cpp:291
 #, fuzzy, kde-format
 #| msgid ""
 #| "Do not specify a start time for alarms based on this template. The normal "
@@ -2239,14 +2239,14 @@ msgstr ""
 "Ekki skilgreina upphafstíma fyrir áminningar sem eru byggðar á þessu sniði. "
 "Sjálfgefni upphafstíminn verður notaður."
 
-#: editdlg.cpp:312
+#: editdlg.cpp:299
 #, fuzzy, kde-format
 #| msgid "Time:"
 msgctxt "@option:radio"
 msgid "Time:"
 msgstr "Tími:"
 
-#: editdlg.cpp:314
+#: editdlg.cpp:301
 #, fuzzy, kde-format
 #| msgid "Specify a start time for alarms based on this template."
 msgctxt "@info:whatsthis"
@@ -2254,7 +2254,7 @@ msgid "Specify a start time for alarms based on this template."
 msgstr ""
 "Skilgreindu upphafstíma fyrir áminningar sem eru byggðar á þessu sniði."
 
-#: editdlg.cpp:320
+#: editdlg.cpp:307
 #, fuzzy, kde-kuit-format
 #| msgid "Enter the start time for alarms based on this template."
 msgctxt "@info:whatsthis"
@@ -2263,13 +2263,13 @@ msgid ""
 "%1</para>"
 msgstr "Sláðu inn upphafstíma fyrir áminningar sem eru byggðar á þessu sniði."
 
-#: editdlg.cpp:327
+#: editdlg.cpp:314
 #, fuzzy, kde-format
 msgctxt "@option:radio"
 msgid "Date only"
 msgstr "Dags:"
 
-#: editdlg.cpp:329
+#: editdlg.cpp:316
 #, fuzzy, kde-kuit-format
 #| msgid "Set the '%1' option for alarms based on this template."
 msgctxt "@info:whatsthis"
@@ -2278,7 +2278,7 @@ msgid ""
 "template."
 msgstr "Settu '%1' valkostinn fyrir áminngar sem eru byggðar á þessu sniði."
 
-#: editdlg.cpp:339
+#: editdlg.cpp:326
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2286,27 +2286,27 @@ msgid ""
 "from when the alarm is created."
 msgstr "Næsta uppkall eftir gefinn tíma héðan í frá"
 
-#: editdlg.cpp:402
+#: editdlg.cpp:389
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to copy the alarm into KOrganizer's calendar"
 msgstr "Sýna í KOrganizer"
 
-#: editdlg.cpp:982
+#: editdlg.cpp:969
 #, fuzzy, kde-format
 #| msgid "Enter the name of the alarm template"
 msgctxt "@info"
 msgid "You must enter a name for the alarm template"
 msgstr "Skrifaðu inn nafnið á áminningarsniðinu"
 
-#: editdlg.cpp:986
+#: editdlg.cpp:973
 #, fuzzy, kde-format
 #| msgid "Template name is already in use"
 msgctxt "@info"
 msgid "Template name is already in use"
 msgstr "Nafn sniðmáts er nú þegar í notkun"
 
-#: editdlg.cpp:1009
+#: editdlg.cpp:996
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2315,7 +2315,7 @@ msgid ""
 "para>"
 msgstr ""
 
-#: editdlg.cpp:1041
+#: editdlg.cpp:1028
 #, kde-format
 msgctxt "@info The parameter is a date value"
 msgid ""
@@ -2323,7 +2323,7 @@ msgid ""
 "adjusted to the date of the next recurrence (%1)."
 msgstr ""
 
-#: editdlg.cpp:1045
+#: editdlg.cpp:1032
 #, kde-format
 msgctxt "@info The parameter is a date/time value"
 msgid ""
@@ -2331,20 +2331,20 @@ msgid ""
 "will be adjusted to the date/time of the next recurrence (%1)."
 msgstr ""
 
-#: editdlg.cpp:1067
+#: editdlg.cpp:1054
 #, fuzzy, kde-format
 #| msgid "Recurrence has already expired"
 msgctxt "@info"
 msgid "Recurrence has already expired"
 msgstr "Áminning er þegar útrunnin"
 
-#: editdlg.cpp:1072
+#: editdlg.cpp:1059
 #, kde-format
 msgctxt "@info"
 msgid "The alarm will never occur during working hours"
 msgstr ""
 
-#: editdlg.cpp:1101
+#: editdlg.cpp:1088
 #, fuzzy, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2352,7 +2352,7 @@ msgid ""
 "%1</interface> is checked."
 msgstr "Áminngartími verður að vera minni tíðni endurtekninga"
 
-#: editdlg.cpp:1116
+#: editdlg.cpp:1103
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid ""
@@ -2360,7 +2360,7 @@ msgid ""
 "recurrence interval minus any reminder period"
 msgstr "Áminngartími verður að vera minni tíðni endurtekninga"
 
-#: editdlg.cpp:1123
+#: editdlg.cpp:1110
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -2368,32 +2368,32 @@ msgid ""
 "or weeks for a date-only alarm"
 msgstr ""
 
-#: editdlg.cpp:1154
+#: editdlg.cpp:1141
 #, fuzzy, kde-format
 #| msgid "Enter the name of the alarm template"
 msgctxt "@info"
 msgid "You must select a calendar to save the alarm in"
 msgstr "Skrifaðu inn nafnið á áminningarsniðinu"
 
-#: editdlg.cpp:1235
+#: editdlg.cpp:1222
 #, kde-format
 msgctxt "@action:Button"
 msgid "Fewer Options <<"
 msgstr ""
 
-#: editdlg.cpp:1236
+#: editdlg.cpp:1223
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show fewer options"
 msgstr ""
 
-#: editdlg.cpp:1241
+#: editdlg.cpp:1228
 #, kde-format
 msgctxt "@action:button"
 msgid "More Options >>"
 msgstr ""
 
-#: editdlg.cpp:1242
+#: editdlg.cpp:1229
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show more options"
