@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-10-09 01:45+0000\n"
-"PO-Revision-Date: 2023-10-08 07:59+0100\n"
+"PO-Revision-Date: 2023-10-09 07:22+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -6788,12 +6788,10 @@ msgstr ""
 "warning></para><para>Ĉu vi volas ĝisdatigi la kalendaron?</para>"
 
 #: resources/fileresource.cpp:325 resources/fileresource.cpp:455
-#, fuzzy, kde-format
-#| msgctxt "@info"
-#| msgid "Resource is not configured."
+#, kde-format
 msgctxt "@info"
 msgid "Calendar is not configured."
-msgstr "Rimedo ne estas agordita."
+msgstr "Kalendaro ne estas agordita."
 
 #: resources/fileresource.cpp:354 resources/fileresource.cpp:372
 #, kde-kuit-format
@@ -6809,12 +6807,10 @@ msgid "Error saving calendar <resource>%1</resource>."
 msgstr "Eraro dum konservado de kalendaro <resource>%1</resource>."
 
 #: resources/fileresource.cpp:462
-#, fuzzy, kde-format
-#| msgctxt "@info"
-#| msgid "Resource is read-only."
+#, kde-format
 msgctxt "@info"
 msgid "Calendar is read-only."
-msgstr "Rimedo estas nurlegebla."
+msgstr "Kalendaro estas nurlegebla."
 
 #: resources/fileresource.cpp:467
 #, kde-kuit-format
@@ -6841,18 +6837,14 @@ msgid "Select storage type of new calendar:"
 msgstr "Elektu konservan tipon de nova kalendaro:"
 
 #: resources/fileresourcecreator.cpp:137
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid ""
-#| "Error!  The file <filename>%1</filename> is already used by an existing "
-#| "resource."
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "Error!  The file <filename>%1</filename> is already used by an existing "
 "calendar."
 msgstr ""
 "Eraro! La dosiero <filename>%1</filename> jam estas uzata de ekzistanta "
-"rimedo."
+"kalendaro."
 
 #: resources/migration/dirresourceimportdialog.cpp:34
 #, kde-format
@@ -7504,21 +7496,15 @@ msgstr "Kalendara Dosiero"
 
 #. i18n: ectx: property (html), widget (KTextEdit, pathDescription)
 #: resources/singlefileresourceconfigdialog.ui:68
-#, fuzzy, kde-format
-#| msgid ""
-#| "Select the file whose contents should be represented by this resource. If "
-#| "the file does not exist, it will be created. The URL of a remote file can "
-#| "also be specified, but note that monitoring for file changes will not "
-#| "work in this case."
+#, kde-format
 msgid ""
 "Select the file to hold this calendar. If the file does not exist, it will "
 "be created. The URL of a remote file can also be specified, but note that "
 "monitoring for file changes will not work in this case."
 msgstr ""
-"Elektu la dosieron, kies enhavo devus esti reprezentita per ĉi tiu rimedo. "
-"Se la dosiero ne ekzistas, ĝi estos kreita. La URL de fora dosiero ankaŭ "
-"povas esti specifita, sed notu, ke monitorado por dosierŝanĝoj ne funkcios "
-"en ĉi tiu kazo."
+"Elektu la dosieron por enteni ĉi kalendaron. Se la dosiero ne ekzistas, ĝi "
+"estos kreita. La URL de fora dosiero ankaŭ povas esti specifita, sed notu, "
+"ke monitorado por dosierŝanĝoj ne funkcios en ĉi tiu kazo."
 
 #. i18n: ectx: property (text), widget (QRadioButton, activeRadio)
 #: resources/singlefileresourceconfigdialog.ui:86
@@ -7543,10 +7529,9 @@ msgstr "Alarmaj Ŝablonoj"
 
 #. i18n: ectx: property (html), widget (KTextEdit, alarmTypeDescription)
 #: resources/singlefileresourceconfigdialog.ui:133
-#, fuzzy, kde-format
-#| msgid "Select which alarm type this resource should contain."
+#, kde-format
 msgid "Select which alarm type this calendar should contain."
-msgstr "Elektu kiun alarmtipon ĉi tiu rimedo devus enhavi."
+msgstr "Elektu kiun alarmtipon ĉi tiu kalendaro devus enhavi."
 
 #. i18n: ectx: property (text), widget (QLabel, alarmTypeLabel)
 #: resources/singlefileresourceconfigdialog.ui:142
@@ -7592,10 +7577,9 @@ msgstr "Nomo:"
 
 #. i18n: ectx: property (html), widget (KTextEdit, nameDescription)
 #: resources/singlefileresourceconfigdialog.ui:222
-#, fuzzy, kde-format
-#| msgid "Enter the name used to identify this resource in displays."
+#, kde-format
 msgid "Enter the display name used to identify this calendar."
-msgstr "Enigu la nomon uzatan por identigi ĉi tiun rimedon en ekranoj."
+msgstr "Enigu la montratan nomon uzatan por identigi ĉi tiun kalendaron."
 
 #. i18n: ectx: property (title), widget (QGroupBox, readOnlyGroupBox)
 #: resources/singlefileresourceconfigdialog.ui:232
@@ -7613,12 +7597,7 @@ msgstr "Nurlegebla"
 
 #. i18n: ectx: property (html), widget (KTextEdit, readOnlyDescription)
 #: resources/singlefileresourceconfigdialog.ui:254
-#, fuzzy, kde-format
-#| msgid ""
-#| "If read-only mode is enabled, no changes will be written to the file "
-#| "selected above. Read-only mode will be automatically enabled if you do "
-#| "not have write access to the file or the file is on a remote server that "
-#| "does not support write access."
+#, kde-format
 msgid ""
 "If read-only mode is enabled, no changes will be written to the file. Read-"
 "only mode will be automatically enabled if you do not have write access to "

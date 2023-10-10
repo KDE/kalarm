@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: kdepim-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-10-09 01:45+0000\n"
-"PO-Revision-Date: 2023-10-08 12:44+0300\n"
+"PO-Revision-Date: 2023-10-09 12:02+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -6834,12 +6834,10 @@ msgstr ""
 "istiyor musunuz?</para>"
 
 #: resources/fileresource.cpp:325 resources/fileresource.cpp:455
-#, fuzzy, kde-format
-#| msgctxt "@info"
-#| msgid "Resource is not configured."
+#, kde-format
 msgctxt "@info"
 msgid "Calendar is not configured."
-msgstr "Özkaynak yapılandırılmamış."
+msgstr "Takvim yapılandırılmadı."
 
 #: resources/fileresource.cpp:354 resources/fileresource.cpp:372
 #, kde-kuit-format
@@ -6855,12 +6853,10 @@ msgid "Error saving calendar <resource>%1</resource>."
 msgstr "<resource>%1</resource> takvimi kaydedilirken hata."
 
 #: resources/fileresource.cpp:462
-#, fuzzy, kde-format
-#| msgctxt "@info"
-#| msgid "Resource is read-only."
+#, kde-format
 msgctxt "@info"
 msgid "Calendar is read-only."
-msgstr "Özkaynak saltokunur."
+msgstr "Takvim saltokunur."
 
 #: resources/fileresource.cpp:467
 #, kde-kuit-format
@@ -6887,17 +6883,13 @@ msgid "Select storage type of new calendar:"
 msgstr "Yeni takvimin depolama türünü seçin:"
 
 #: resources/fileresourcecreator.cpp:137
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid ""
-#| "Error!  The file <filename>%1</filename> is already used by an existing "
-#| "resource."
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "Error!  The file <filename>%1</filename> is already used by an existing "
 "calendar."
 msgstr ""
-"Hata! <filename>%1</filename> dosyası halihazırda var olan bir özkaynak "
+"Hata! <filename>%1</filename> dosyası halihazırda var olan bir takvim "
 "tarafından kullanılıyor."
 
 #: resources/migration/dirresourceimportdialog.cpp:34
@@ -7550,20 +7542,15 @@ msgstr "Takvim Dosyası"
 
 #. i18n: ectx: property (html), widget (KTextEdit, pathDescription)
 #: resources/singlefileresourceconfigdialog.ui:68
-#, fuzzy, kde-format
-#| msgid ""
-#| "Select the file whose contents should be represented by this resource. If "
-#| "the file does not exist, it will be created. The URL of a remote file can "
-#| "also be specified, but note that monitoring for file changes will not "
-#| "work in this case."
+#, kde-format
 msgid ""
 "Select the file to hold this calendar. If the file does not exist, it will "
 "be created. The URL of a remote file can also be specified, but note that "
 "monitoring for file changes will not work in this case."
 msgstr ""
-"İçeriği bu özkaynak tarafından temsil edilecek dosyayı seçin. Dosya mevcut "
-"değilse oluşturulur. Uzak konumdaki bir dosya URL'si belirtilebilir; ancak "
-"dosya değişikliklerini izleme çalışmayacaktır."
+"Bu takvimi tutacak dosyayı seçin. Dosya yoksa oluşturulur. Uzak konumdaki "
+"bir dosya URL'si belirtilebilir; ancak dosya değişikliklerini izleme "
+"çalışmayacaktır."
 
 #. i18n: ectx: property (text), widget (QRadioButton, activeRadio)
 #: resources/singlefileresourceconfigdialog.ui:86
@@ -7588,10 +7575,9 @@ msgstr "Alarm Şablonları"
 
 #. i18n: ectx: property (html), widget (KTextEdit, alarmTypeDescription)
 #: resources/singlefileresourceconfigdialog.ui:133
-#, fuzzy, kde-format
-#| msgid "Select which alarm type this resource should contain."
+#, kde-format
 msgid "Select which alarm type this calendar should contain."
-msgstr "Bu özkaynağın içermesi gereken alarm türünü seçin."
+msgstr "Bu takvimin içermesi gereken alarm türünü seçin."
 
 #. i18n: ectx: property (text), widget (QLabel, alarmTypeLabel)
 #: resources/singlefileresourceconfigdialog.ui:142
@@ -7637,10 +7623,9 @@ msgstr "Ad:"
 
 #. i18n: ectx: property (html), widget (KTextEdit, nameDescription)
 #: resources/singlefileresourceconfigdialog.ui:222
-#, fuzzy, kde-format
-#| msgid "Enter the name used to identify this resource in displays."
+#, kde-format
 msgid "Enter the display name used to identify this calendar."
-msgstr "Görüntülerken bu özkaynağı tanımlamak için kullanılan adı girin."
+msgstr "Görüntülerken bu takvimi tanımlamak için kullanılan adı girin."
 
 #. i18n: ectx: property (title), widget (QGroupBox, readOnlyGroupBox)
 #: resources/singlefileresourceconfigdialog.ui:232
@@ -7658,22 +7643,16 @@ msgstr "Saltokunur"
 
 #. i18n: ectx: property (html), widget (KTextEdit, readOnlyDescription)
 #: resources/singlefileresourceconfigdialog.ui:254
-#, fuzzy, kde-format
-#| msgid ""
-#| "If read-only mode is enabled, no changes will be written to the file "
-#| "selected above. Read-only mode will be automatically enabled if you do "
-#| "not have write access to the file or the file is on a remote server that "
-#| "does not support write access."
+#, kde-format
 msgid ""
 "If read-only mode is enabled, no changes will be written to the file. Read-"
 "only mode will be automatically enabled if you do not have write access to "
 "the file or the file is on a remote server that does not support write "
 "access."
 msgstr ""
-"Saltokunur kip etkinleştirilirse yukarıda seçili dosyaya değişiklikler "
-"yazılmayacaktır. Dosyaya erişim hakkınız yoksa veya dosya yazma erişimini "
-"desteklemeyen bir uzak sunucudaysa saltokunur kip kendiğilinden "
-"etkinleştirilir."
+"Saltokunur kip etkinleştirilirse dosyaya değişiklikler yazılmayacaktır. "
+"Dosyaya erişim hakkınız yoksa veya dosya yazma erişimini desteklemeyen bir "
+"uzak sunucudaysa saltokunur kip kendiğilinden etkinleştirilir."
 
 #: resourceselector.cpp:50
 #, kde-format

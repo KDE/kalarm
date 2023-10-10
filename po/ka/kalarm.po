@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-10-09 01:45+0000\n"
-"PO-Revision-Date: 2023-10-07 23:26+0200\n"
+"PO-Revision-Date: 2023-10-09 14:47+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -203,12 +203,10 @@ msgid "1 week"
 msgstr "1 კვირა"
 
 #: alarmtimewidget.cpp:169
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Select an alarm template to preset the alarm"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Select time delay from a list of preset values"
-msgstr "განგაშის წინასწარ-დასაყენებლად აირჩიეთ განგაშის ნიმუში"
+msgstr "აირჩიეთ დაყოვნების დრო წინასწარ დაყენებული მნიშვნელობების სიიდან"
 
 #: alarmtimewidget.cpp:177
 #, kde-kuit-format
@@ -6499,12 +6497,10 @@ msgid ""
 msgstr ""
 
 #: resources/fileresource.cpp:325 resources/fileresource.cpp:455
-#, fuzzy, kde-format
-#| msgctxt "@info"
-#| msgid "Resource is not configured."
+#, kde-format
 msgctxt "@info"
 msgid "Calendar is not configured."
-msgstr "რესურსი მორგებული არაა."
+msgstr "კალენდარი მორგებული არაა."
 
 #: resources/fileresource.cpp:354 resources/fileresource.cpp:372
 #, kde-kuit-format
@@ -6520,12 +6516,10 @@ msgid "Error saving calendar <resource>%1</resource>."
 msgstr "კალენდრის <resource>%1</resource> შენახვის შეცდომა."
 
 #: resources/fileresource.cpp:462
-#, fuzzy, kde-format
-#| msgctxt "@info"
-#| msgid "Resource is read-only."
+#, kde-format
 msgctxt "@info"
 msgid "Calendar is read-only."
-msgstr "რესურსი მხოლოდ-კითხვადია."
+msgstr "კალენდარი მხოლოდ-კითხვადია."
 
 #: resources/fileresource.cpp:467
 #, kde-kuit-format
@@ -6552,17 +6546,13 @@ msgid "Select storage type of new calendar:"
 msgstr "აირჩიეთ ახალი კალენდრის საცავის ტიპი:"
 
 #: resources/fileresourcecreator.cpp:137
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid ""
-#| "Error!  The file <filename>%1</filename> is already used by an existing "
-#| "resource."
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "Error!  The file <filename>%1</filename> is already used by an existing "
 "calendar."
 msgstr ""
-"შეცდომა!  ფაილი <filename>%1</filename> უკვე გამოიყენება არსებული რესურსის "
+"შეცდომა!  ფაილი <filename>%1</filename> უკვე გამოიყენება არსებული კალენდრის "
 "მიერ."
 
 #: resources/migration/dirresourceimportdialog.cpp:34
@@ -7222,10 +7212,9 @@ msgstr "განგაშის შაბლონები"
 
 #. i18n: ectx: property (html), widget (KTextEdit, alarmTypeDescription)
 #: resources/singlefileresourceconfigdialog.ui:133
-#, fuzzy, kde-format
-#| msgid "Select which alarm type this resource should contain."
+#, kde-format
 msgid "Select which alarm type this calendar should contain."
-msgstr "აირჩიეთ, რომელი განგაშის ტიპს უნდა შეიცავდეს ეს რესურსი."
+msgstr "აირჩიეთ, რომელი განგაშის ტიპს უნდა შეიცავდეს ეს კალენარი."
 
 #. i18n: ectx: property (text), widget (QLabel, alarmTypeLabel)
 #: resources/singlefileresourceconfigdialog.ui:142
@@ -7271,11 +7260,10 @@ msgstr "სახელი:"
 
 #. i18n: ectx: property (html), widget (KTextEdit, nameDescription)
 #: resources/singlefileresourceconfigdialog.ui:222
-#, fuzzy, kde-format
-#| msgid "Enter the name used to identify this resource in displays."
+#, kde-format
 msgid "Enter the display name used to identify this calendar."
 msgstr ""
-"შეიყვანეთ სახელი, რომელიც ჩვენებისას ამ რესურსის იდენტიფიცირებისთვის "
+"შეიყვანეთ სახელი, რომელიც ჩვენებისას ამ კალენდრის იდენტიფიცირებისთვის "
 "გამოიყენება."
 
 #. i18n: ectx: property (title), widget (QGroupBox, readOnlyGroupBox)

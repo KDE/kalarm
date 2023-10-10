@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-10-09 01:45+0000\n"
-"PO-Revision-Date: 2023-10-08 08:09+0200\n"
+"PO-Revision-Date: 2023-10-09 07:28+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -6829,12 +6829,10 @@ msgstr ""
 "neuporaben.</warning></para><para>Ali želite posodobiti koledar?</para>"
 
 #: resources/fileresource.cpp:325 resources/fileresource.cpp:455
-#, fuzzy, kde-format
-#| msgctxt "@info"
-#| msgid "Resource is not configured."
+#, kde-format
 msgctxt "@info"
 msgid "Calendar is not configured."
-msgstr "Vir ni nastavljen."
+msgstr "Koledar ni konfiguriran."
 
 #: resources/fileresource.cpp:354 resources/fileresource.cpp:372
 #, kde-kuit-format
@@ -6850,12 +6848,10 @@ msgid "Error saving calendar <resource>%1</resource>."
 msgstr "Napaka pri shranjevanju koledarja <resource>%1</resource>."
 
 #: resources/fileresource.cpp:462
-#, fuzzy, kde-format
-#| msgctxt "@info"
-#| msgid "Resource is read-only."
+#, kde-format
 msgctxt "@info"
 msgid "Calendar is read-only."
-msgstr "Vir je dovoljen samo za branje."
+msgstr "Koledar je dovoljeno samo za brati."
 
 #: resources/fileresource.cpp:467
 #, kde-kuit-format
@@ -6882,17 +6878,14 @@ msgid "Select storage type of new calendar:"
 msgstr "Izberite vrsto hrambe za shranjevanje novega koledarja:"
 
 #: resources/fileresourcecreator.cpp:137
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid ""
-#| "Error!  The file <filename>%1</filename> is already used by an existing "
-#| "resource."
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "Error!  The file <filename>%1</filename> is already used by an existing "
 "calendar."
 msgstr ""
-"Napaka!  Datoteka <filename>%1</filename> je že v uporabi pri nekem viru."
+"Napaka!  Datoteka <filename>%1</filename> je že v uporabi pri obstoječem "
+"koledarju."
 
 #: resources/migration/dirresourceimportdialog.cpp:34
 #, kde-format
@@ -7543,21 +7536,15 @@ msgstr "Koledarska datoteka"
 
 #. i18n: ectx: property (html), widget (KTextEdit, pathDescription)
 #: resources/singlefileresourceconfigdialog.ui:68
-#, fuzzy, kde-format
-#| msgid ""
-#| "Select the file whose contents should be represented by this resource. If "
-#| "the file does not exist, it will be created. The URL of a remote file can "
-#| "also be specified, but note that monitoring for file changes will not "
-#| "work in this case."
+#, kde-format
 msgid ""
 "Select the file to hold this calendar. If the file does not exist, it will "
 "be created. The URL of a remote file can also be specified, but note that "
 "monitoring for file changes will not work in this case."
 msgstr ""
-"Izberite datoteko, katere vsebino naj predstavlja ta vir. Če datoteka ne "
-"obstaja, bo ustvarjena. Lahko določite tudi naslov oddaljene datoteke, "
-"vendar upoštevajte, da spremljanje sprememb datotek v tem primeru ne bo "
-"delovalo."
+"Izberite datoteko, ki vsebuje koledar. Če datoteka ne obstaja, bo "
+"ustvarjena. Lahko določite tudi naslov oddaljene datoteke, vendar "
+"upoštevajte, da spremljanje sprememb datotek v tem primeru ne bo delovalo."
 
 #. i18n: ectx: property (text), widget (QRadioButton, activeRadio)
 #: resources/singlefileresourceconfigdialog.ui:86
@@ -7582,10 +7569,9 @@ msgstr "Predloge alarmov"
 
 #. i18n: ectx: property (html), widget (KTextEdit, alarmTypeDescription)
 #: resources/singlefileresourceconfigdialog.ui:133
-#, fuzzy, kde-format
-#| msgid "Select which alarm type this resource should contain."
+#, kde-format
 msgid "Select which alarm type this calendar should contain."
-msgstr "Izberite, kateri tip alarma mora vsebovati ta vir."
+msgstr "Izberite, kateri tip alarma mora vsebovati takoledar."
 
 #. i18n: ectx: property (text), widget (QLabel, alarmTypeLabel)
 #: resources/singlefileresourceconfigdialog.ui:142
@@ -7631,10 +7617,9 @@ msgstr "Ime:"
 
 #. i18n: ectx: property (html), widget (KTextEdit, nameDescription)
 #: resources/singlefileresourceconfigdialog.ui:222
-#, fuzzy, kde-format
-#| msgid "Enter the name used to identify this resource in displays."
+#, kde-format
 msgid "Enter the display name used to identify this calendar."
-msgstr "Vnesite ime za identifikacijo tega vira v prikazovalnikih."
+msgstr "Vnesite ime za identifikacijo tega koledarja v prikazovalnikih."
 
 #. i18n: ectx: property (title), widget (QGroupBox, readOnlyGroupBox)
 #: resources/singlefileresourceconfigdialog.ui:232
@@ -7652,12 +7637,7 @@ msgstr "Samo za branje"
 
 #. i18n: ectx: property (html), widget (KTextEdit, readOnlyDescription)
 #: resources/singlefileresourceconfigdialog.ui:254
-#, fuzzy, kde-format
-#| msgid ""
-#| "If read-only mode is enabled, no changes will be written to the file "
-#| "selected above. Read-only mode will be automatically enabled if you do "
-#| "not have write access to the file or the file is on a remote server that "
-#| "does not support write access."
+#, kde-format
 msgid ""
 "If read-only mode is enabled, no changes will be written to the file. Read-"
 "only mode will be automatically enabled if you do not have write access to "
@@ -7666,7 +7646,7 @@ msgid ""
 msgstr ""
 "Če je omogočen način samo za branje, v datoteko ne bo zapisana nobena "
 "sprememba izbrana zgoraj. Način samo za branje bo samodejno omogočen, če "
-"tega nimate pravic za pisanje te datoteke ali pa je datoteka na oddaljenem "
+"nimate pravic za pisanje na tej datoteki ali pa je datoteka na oddaljenem "
 "strežniku, ki ne podpira dostopa do pisanja."
 
 #: resourceselector.cpp:50
