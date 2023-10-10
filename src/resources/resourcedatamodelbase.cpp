@@ -589,7 +589,7 @@ QPixmap* ResourceDataModelBase::eventIcon(const KAEvent& event)
         case KAEvent::Action::Display:
             if (event.actionSubType() == KAEvent::SubAction::File)
                 return mFileIcon;
-            Q_FALLTHROUGH();    // fall through to DisplayCommand
+            [[fallthrough]];    // fall through to DisplayCommand
         case KAEvent::Action::DisplayCommand:
         default:
             return mTextIcon;

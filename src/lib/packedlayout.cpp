@@ -163,7 +163,7 @@ int PackedLayout::arrange(const QRect& rect, bool set) const
                     case Qt::AlignHCenter:
                         free /= 2;
                         // fall through to AlignRight
-                        Q_FALLTHROUGH();
+                        [[fallthrough]];
                     case Qt::AlignRight:
                         for ( ;  i < last;  ++i)
                             items[i]->setGeometry(alignRect(rect, QRect(QPoint(posn[i].x() + free, y), posn[i].size())));

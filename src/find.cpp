@@ -193,7 +193,7 @@ void Find::display()
                     break;
                 }
                 // fall through to DisplayCommand
-                Q_FALLTHROUGH();
+                [[fallthrough]];
             case KAEvent::Action::DisplayCommand:
             default:
                 text = true;
@@ -352,7 +352,7 @@ void Find::findNext(bool forward, bool checkEnd, bool fromCurrent)
                     break;
                 }
                 // fall through to DisplayCommand
-                Q_FALLTHROUGH();
+                [[fallthrough]];
             case KAEvent::Action::DisplayCommand:
                 if (!(mOptions & FIND_MESSAGE))
                     break;

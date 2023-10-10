@@ -156,7 +156,7 @@ void EditAlarmDlg::init(const KAEvent& event, GetResourceType getResource)
                 mUseResourceEventId = true;
                 break;
             }
-            Q_FALLTHROUGH();   // fall through to RES_PROMPT
+            [[fallthrough]];   // fall through to RES_PROMPT
         case RES_PROMPT:
             mResourceEventId.clear();
             mUseResourceEventId = true;

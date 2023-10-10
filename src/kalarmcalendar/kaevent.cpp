@@ -788,7 +788,7 @@ KAEventPrivate::KAEventPrivate(const KCalendarCore::Event::Ptr& event)
                 }
                 if (data.action != KAAlarm::Action::Audio)
                     break;
-                Q_FALLTHROUGH(); // Fall through to AUDIO_ALARM
+                [[fallthrough]]; // Fall through to AUDIO_ALARM
             case AUDIO_ALARM:
                 mAudioFile   = data.cleanText;
                 mSpeak       = data.speak  &&  mAudioFile.isEmpty();
@@ -869,13 +869,13 @@ KAEventPrivate::KAEventPrivate(const KCalendarCore::Event::Ptr& event)
                     setDeferralTime = true;
                     noSetNextTime = true;
                 }
-                Q_FALLTHROUGH(); // fall through to REMINDER_ALARM
+                [[fallthrough]]; // fall through to REMINDER_ALARM
             case REMINDER_ALARM:
             case AT_LOGIN_ALARM:
             case DISPLAYING_ALARM:
                 if (!set  &&  !noSetNextTime)
                     mNextMainDateTime = alTime;
-                Q_FALLTHROUGH(); // fall through to MAIN_ALARM
+                [[fallthrough]]; // fall through to MAIN_ALARM
             case MAIN_ALARM:
                 // Ensure that the basic fields are set up even if there is no main
                 // alarm in the event (if it has expired and then been deferred)
@@ -891,13 +891,13 @@ KAEventPrivate::KAEventPrivate(const KCalendarCore::Event::Ptr& event)
                                 mCommandHideError = true;
                             if (!mCommandDisplay)
                                 break;
-                            Q_FALLTHROUGH(); // fall through to MESSAGE
+                            [[fallthrough]]; // fall through to MESSAGE
                         case KAAlarm::Action::Message:
                             mFont           = data.font;
                             mUseDefaultFont = data.defaultFont;
                             if (data.isEmailText)
                                 isEmailText = true;
-                            Q_FALLTHROUGH(); // fall through to File
+                            [[fallthrough]]; // fall through to File
                         case KAAlarm::Action::File:
                             mBgColour = data.bgColour;
                             mFgColour = data.fgColour;
@@ -1452,7 +1452,7 @@ Alarm::Ptr KAEventPrivate::initKCalAlarm(const KCalendarCore::Event::Ptr& event,
             if (mRepetition)
                 alarm->setCustomProperty(KACalendar::APPNAME, NEXT_REPEAT_PROPERTY,
                                          QString::number(mNextRepeat));
-            Q_FALLTHROUGH(); // fall through to INVALID_ALARM
+            [[fallthrough]]; // fall through to INVALID_ALARM
         case REMINDER_ALARM:
         case INVALID_ALARM:
         {
@@ -1468,7 +1468,7 @@ Alarm::Ptr KAEventPrivate::initKCalAlarm(const KCalendarCore::Event::Ptr& event,
             {
                 case KAEvent::SubAction::File:
                     alltypes += FILE_TYPE;
-                    Q_FALLTHROUGH(); // fall through to Message
+                    [[fallthrough]]; // fall through to Message
                 case KAEvent::SubAction::Message:
                     alarm->setDisplayAlarm(AlarmText::toCalendarText(mText));
                     display = true;
@@ -3594,7 +3594,7 @@ KAAlarm KAEventPrivate::alarm(KAAlarm::Type type) const
             case KAAlarm::Type::DeferredReminder:
                 if (mDeferral != DeferType::Reminder)
                     break;
-                Q_FALLTHROUGH(); // fall through to Deferred
+                [[fallthrough]]; // fall through to Deferred
             case KAAlarm::Type::Deferred:
                 if (mDeferral != DeferType::None)
                 {
@@ -3672,23 +3672,23 @@ KAAlarm KAEventPrivate::nextAlarm(KAAlarm::Type previousType) const
         case KAAlarm::Type::Main:
             if (mReminderActive == ReminderType::Active)
                 return alarm(KAAlarm::Type::Reminder);
-            Q_FALLTHROUGH(); // fall through to Reminder
+            [[fallthrough]]; // fall through to Reminder
         case KAAlarm::Type::Reminder:
             // There can only be one deferral alarm
             if (mDeferral == DeferType::Reminder)
                 return alarm(KAAlarm::Type::DeferredReminder);
             if (mDeferral == DeferType::Normal)
                 return alarm(KAAlarm::Type::Deferred);
-            Q_FALLTHROUGH(); // fall through to Deferred
+            [[fallthrough]]; // fall through to Deferred
         case KAAlarm::Type::DeferredReminder:
         case KAAlarm::Type::Deferred:
             if (mRepeatAtLogin)
                 return alarm(KAAlarm::Type::AtLogin);
-            Q_FALLTHROUGH(); // fall through to AtLogin
+            [[fallthrough]]; // fall through to AtLogin
         case KAAlarm::Type::AtLogin:
             if (mDisplaying)
                 return alarm(KAAlarm::Type::Displaying);
-            Q_FALLTHROUGH(); // fall through to Displaying
+            [[fallthrough]]; // fall through to Displaying
         case KAAlarm::Type::Displaying:
         case KAAlarm::Type::Invalid:
             // fall through to default
@@ -3734,7 +3734,7 @@ void KAEventPrivate::removeExpiredAlarm(KAAlarm::Type type)
                 mDisplaying = false;
                 --mAlarmCount;
             }
-            Q_FALLTHROUGH(); // fall through to AtLogin
+            [[fallthrough]]; // fall through to AtLogin
         case KAAlarm::Type::AtLogin:
             if (mRepeatAtLogin)
             {
@@ -3861,7 +3861,7 @@ bool KAEventPrivate::compare(const KAEventPrivate& other, KAEvent::Comparison co
                 return false;
             if (!mCommandDisplay)
                 break;
-            Q_FALLTHROUGH(); // fall through to Message
+            [[fallthrough]]; // fall through to Message
         case KAEvent::SubAction::File:
         case KAEvent::SubAction::Message:
             if (mReminderMinutes      != other.mReminderMinutes
@@ -3903,7 +3903,7 @@ bool KAEventPrivate::compare(const KAEventPrivate& other, KAEvent::Comparison co
             }
             if (mAudioFile.isEmpty())
                 break;
-            Q_FALLTHROUGH(); // fall through to Audio
+            [[fallthrough]]; // fall through to Audio
         case KAEvent::SubAction::Audio:
             if (mRepeatSoundPause != other.mRepeatSoundPause)
                 return false;
@@ -4249,7 +4249,7 @@ void KAEventPrivate::readAlarm(const Alarm::Ptr& alarm, AlarmData& data, bool au
                 data.extraActionOptions |= KAEvent::DontShowPreActError;
             if (!cmdDisplay)
                 break;
-            Q_FALLTHROUGH(); // fall through to Display
+            [[fallthrough]]; // fall through to Display
         case Alarm::Display:
         {
             if (alarm->type() == Alarm::Display)
@@ -5339,7 +5339,7 @@ bool KAEvent::convertKCalEvents(const Calendar::Ptr& calendar, int calendarVersi
                 {
                     case KAAlarm::Action::File:
                         types += KAEventPrivate::FILE_TYPE;
-                        Q_FALLTHROUGH(); // fall through to Message
+                        [[fallthrough]]; // fall through to Message
                     case KAAlarm::Action::Message:
                         alarm->setDisplayAlarm(altxt);
                         break;
@@ -6239,7 +6239,7 @@ static void setProcedureAlarm(const Alarm::Ptr& alarm, const QString& commandLin
                         quoteChar = ch;
                         break;
                     }
-                    Q_FALLTHROUGH(); // fall through to default
+                    [[fallthrough]]; // fall through to default
                 default:
                     command += ch;
                     break;

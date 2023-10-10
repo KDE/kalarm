@@ -423,7 +423,7 @@ QVariant AlarmListModel::data(const QModelIndex& ix, int role) const
         {
             case TimeColumn:
                 timeCol = true;
-                Q_FALLTHROUGH();
+                [[fallthrough]];
             case TimeToColumn:
             {
                 switch (role)

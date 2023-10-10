@@ -128,7 +128,7 @@ void KADateTime::Spec::setType(SpecType type, int utcOffset)
     {
         case KADateTime::OffsetFromUTC:
             d->utcOffset = utcOffset;
-            Q_FALLTHROUGH(); // fall through to UTC
+            [[fallthrough]]; // fall through to UTC
         case KADateTime::UTC:
             d->type = type;
             break;
@@ -1455,7 +1455,7 @@ KADateTime KADateTime::currentDateTime(const Spec& spec)
         case TimeZone:
             if (spec.timeZone() != QTimeZone::systemTimeZone())
                 break;
-            Q_FALLTHROUGH(); // fall through to LocalZone
+            [[fallthrough]]; // fall through to LocalZone
         case LocalZone:
             return currentLocalDateTime();
         default:
@@ -1684,7 +1684,7 @@ QString KADateTime::toString(const QString& format) const
                     break;
                 case 'd':     // day of month, 01 - 31
                     numLength = 2;
-                    Q_FALLTHROUGH(); // fall through to 'e'
+                    [[fallthrough]]; // fall through to 'e'
                 case 'e':     // day of month, 1 - 31
                     num = d->date().day();
                     break;
@@ -1696,13 +1696,13 @@ QString KADateTime::toString(const QString& format) const
                     break;
                 case 'H':     // hour, 00 - 23
                     numLength = 2;
-                    Q_FALLTHROUGH(); // fall through to 'k'
+                    [[fallthrough]]; // fall through to 'k'
                 case 'k':     // hour, 0 - 23
                     num = d->time().hour();
                     break;
                 case 'I':     // hour, 01 - 12
                     numLength = 2;
-                    Q_FALLTHROUGH(); // fall through to 'l'
+                    [[fallthrough]]; // fall through to 'l'
                 case 'l':     // hour, 1 - 12
                     num = (d->time().hour() + 11) % 12 + 1;
                     break;
@@ -1844,7 +1844,7 @@ QString KADateTime::toString(const QString& format) const
                         default:
                             break;
                     }
-                    Q_FALLTHROUGH(); // fall through to OffsetFromUTC
+                    [[fallthrough]]; // fall through to OffsetFromUTC
                 case OffsetFromUTC:
                 {
                     QTimeZone local;
@@ -1906,7 +1906,7 @@ QString KADateTime::toString(TimeFormat format) const
         case RFCDateDay:
             result += shortDay(d->date().dayOfWeek());
             result += QLatin1String(", ");
-            Q_FALLTHROUGH(); // fall through to RFCDate
+            [[fallthrough]]; // fall through to RFCDate
         case RFCDate:
         {
             QString seconds;

@@ -649,7 +649,7 @@ int KAlarmApp::activateInstance(const QStringList& args, const QString& workingD
                     }
                     break;
                 }
-                Q_FALLTHROUGH();   // fall through to NONE
+                [[fallthrough]];   // fall through to NONE
             case CommandOptions::NONE:
                 // No arguments - run interactively & display the main window
 #ifndef NDEBUG
@@ -881,7 +881,7 @@ void KAlarmApp::quitFatal()
             mFatalError = 2;
             KMessageBox::error(nullptr, mFatalMessage);   // this is an application modal window
             mFatalError = 3;
-            Q_FALLTHROUGH();   // fall through to '3'
+            [[fallthrough]];   // fall through to '3'
         case 3:
             if (mInstance)
                 mInstance->quitIf(1, true);
@@ -2136,7 +2136,7 @@ int KAlarmApp::rescheduleAlarm(KAEvent& event, const KAAlarm& alarm, bool update
                     if (!(type & KAEvent::OccurType::Repeat))
                         break;
                     // Next occurrence is a repeat, so fall through to recurrence handling
-                    Q_FALLTHROUGH();
+                    [[fallthrough]];
                 case KAEvent::OccurType::RecurDate:
                 case KAEvent::OccurType::RecurDateTime:
                 case KAEvent::OccurType::LastRecur:
@@ -2277,7 +2277,7 @@ void* KAlarmApp::execAlarm(KAEvent& event, const KAAlarm& alarm, ExecAlarmFlags 
                     rescheduleAlarm(event, alarm, true);
                 break;
             }
-            Q_FALLTHROUGH();   // fall through to Message
+            [[fallthrough]];   // fall through to Message
         case KAAlarm::Action::Message:
         case KAAlarm::Action::File:
         {

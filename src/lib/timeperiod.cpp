@@ -168,7 +168,7 @@ Duration TimePeriod::period() const
         case Weeks:
             factor = 7;
             // fall through to DAYS
-            Q_FALLTHROUGH();
+            [[fallthrough]];
         case Days:
             return Duration(mSpinBox->value() * factor, Duration::Days);
     }
@@ -261,7 +261,7 @@ void TimePeriod::setMinutes(int minutes)
         case Weeks:
             minutes /= 7;
             // fall through to DAYS
-            Q_FALLTHROUGH();
+            [[fallthrough]];
         case Days:
             mSpinBox->setValue(minutes / 1440);
             break;
@@ -372,7 +372,7 @@ void TimePeriod::setUnitRange()
             mUnitShown = Days;
             mUnitsCombo->setCurrentIndex(Days - mDateOnlyOffset);
             // fall through to Days
-            Q_FALLTHROUGH();
+            [[fallthrough]];
         case Days:
             maxval = mMaxDays ? mMaxDays : 1;
             break;

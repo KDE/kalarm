@@ -1018,7 +1018,7 @@ UndoItem* UndoEdit::restore()
                     if (status.status > mRestoreWarningKorg.status)
                         mRestoreWarningKorg = status;
                     // fall through to default
-                    Q_FALLTHROUGH();
+                    [[fallthrough]];
                 default:
                     KAlarm::setDontShowErrors(EventId(*mOldEvent), mDontShowErrors);
                     break;
