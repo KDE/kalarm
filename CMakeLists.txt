@@ -143,7 +143,7 @@ if (ENABLE_AKONADI_PLUGIN)
     find_package(KPim6MailTransport ${KMAILTRANSPORT_LIB_VERSION} CONFIG REQUIRED)
 endif()
 
-configure_file(kalarm-version-string.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/kalarm-version-string.h @ONLY)
+configure_file(kalarm-version-string.h.in ${CMAKE_CURRENT_BINARY_DIR}/kalarm-version-string.h @ONLY)
 
 if (NOT APPLE)
     option(WITHOUT_X11 "Build without X11 integration (skips finding X11)" OFF)
@@ -160,7 +160,7 @@ endif()
 
 set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH})
 
-configure_file(src/config-kalarm.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-kalarm.h)
+configure_file(src/config-kalarm.h.in ${CMAKE_CURRENT_BINARY_DIR}/config-kalarm.h)
 
 include_directories(${kalarm_SOURCE_DIR} ${kalarm_BINARY_DIR})
 
