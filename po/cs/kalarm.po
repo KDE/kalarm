@@ -6758,12 +6758,10 @@ msgstr ""
 "para><para>Opravdu si přejete kalendář aktualizovat?</para>"
 
 #: resources/fileresource.cpp:325 resources/fileresource.cpp:455
-#, fuzzy, kde-format
-#| msgctxt "@info"
-#| msgid "Resource is not configured."
+#, kde-format
 msgctxt "@info"
 msgid "Calendar is not configured."
-msgstr "Zdroj není nastaven."
+msgstr ""
 
 #: resources/fileresource.cpp:354 resources/fileresource.cpp:372
 #, kde-kuit-format
@@ -6779,12 +6777,10 @@ msgid "Error saving calendar <resource>%1</resource>."
 msgstr ""
 
 #: resources/fileresource.cpp:462
-#, fuzzy, kde-format
-#| msgctxt "@label:textbox"
-#| msgid "Calendar directory:"
+#, kde-format
 msgctxt "@info"
 msgid "Calendar is read-only."
-msgstr "Adresář kalendáře:"
+msgstr ""
 
 #: resources/fileresource.cpp:467
 #, kde-kuit-format
@@ -7472,10 +7468,9 @@ msgstr ""
 
 #. i18n: ectx: property (html), widget (KTextEdit, alarmTypeDescription)
 #: resources/singlefileresourceconfigdialog.ui:133
-#, fuzzy, kde-format
-#| msgid "Select which alarm type this resource should contain."
+#, kde-format
 msgid "Select which alarm type this calendar should contain."
-msgstr "Zvolte, který typ upomínky tento zdroj má obsahovat."
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, alarmTypeLabel)
 #: resources/singlefileresourceconfigdialog.ui:142

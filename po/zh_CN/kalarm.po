@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-10-09 01:45+0000\n"
-"PO-Revision-Date: 2023-09-16 10:08\n"
+"PO-Revision-Date: 2023-10-10 14:25\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -14,8 +14,8 @@ msgstr ""
 "X-Crowdin-Project: kdeorg\n"
 "X-Crowdin-Project-ID: 269464\n"
 "X-Crowdin-Language: zh-CN\n"
-"X-Crowdin-File: /kf5-trunk/messages/kalarm/kalarm.pot\n"
-"X-Crowdin-File-ID: 3778\n"
+"X-Crowdin-File: /kf6-trunk/messages/kalarm/kalarm.pot\n"
+"X-Crowdin-File-ID: 45419\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -192,12 +192,10 @@ msgid "1 week"
 msgstr "1星期"
 
 #: alarmtimewidget.cpp:169
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Select an alarm template to preset the alarm"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Select time delay from a list of preset values"
-msgstr "选择闹钟模板以加载预设"
+msgstr ""
 
 #: alarmtimewidget.cpp:177
 #, kde-kuit-format
@@ -1802,41 +1800,33 @@ msgstr ""
 
 #. i18n: ectx: Menu (file)
 #: data/kalarmui.rc:19
-#, fuzzy, kde-format
-#| msgctxt "@option:check Alarm action = file display"
-#| msgid "File"
+#, kde-format
 msgid "File"
 msgstr "文件"
 
 #. i18n: ectx: Menu (edit)
 #: data/kalarmui.rc:31
-#, fuzzy, kde-format
-#| msgctxt "@action:button"
-#| msgid "Edit"
+#, kde-format
 msgid "Edit"
 msgstr "编辑"
 
 #. i18n: ectx: Menu (view)
 #: data/kalarmui.rc:46
-#, fuzzy, kde-format
-#| msgctxt "@title:tab"
-#| msgid "View"
+#, kde-format
 msgid "View"
 msgstr "视图"
 
 #. i18n: ectx: Menu (actions)
 #: data/kalarmui.rc:56
-#, fuzzy, kde-format
-#| msgid "&Actions"
+#, kde-format
 msgid "Actions"
-msgstr "操作(&A)"
+msgstr "操作"
 
 #. i18n: ectx: Menu (settings)
 #: data/kalarmui.rc:68
-#, fuzzy, kde-format
-#| msgid "&Settings"
+#, kde-format
 msgid "Settings"
-msgstr "设置(&S)"
+msgstr "设置"
 
 #: datepicker.cpp:50
 #, kde-format
@@ -3033,12 +3023,10 @@ msgid "Stop Play"
 msgstr "停止播放"
 
 #: functions.cpp:192
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "Enable &Alarms"
+#, kde-format
 msgctxt "@action"
 msgid "Enable Alarms"
-msgstr "启用闹钟(&A)"
+msgstr "启用闹钟"
 
 #: functions.cpp:218
 #, kde-format
@@ -4204,12 +4192,10 @@ msgid ""
 msgstr "菜单创建失败 (可能缺失文件 <filename>%1</filename> 或者该文件已损坏)"
 
 #: mainwindow.cpp:459
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "&Templates..."
+#, kde-format
 msgctxt "@action"
 msgid "Templates..."
-msgstr "模板(&T)..."
+msgstr "模板..."
 
 #: mainwindow.cpp:463 templatedlg.cpp:73
 #, kde-format
@@ -4218,33 +4204,25 @@ msgid "New"
 msgstr "新建"
 
 #: mainwindow.cpp:469
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "Create Tem&plate..."
+#, kde-format
 msgctxt "@action"
 msgid "Create Template..."
-msgstr "新建模板(&P)..."
+msgstr "新建模板..."
 
 #: mainwindow.cpp:473
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "&Copy..."
+#, kde-format
 msgctxt "@action"
 msgid "Copy..."
-msgstr "复制(&C)..."
+msgstr "复制..."
 
 #: mainwindow.cpp:478 resourceselector.cpp:301
-#, fuzzy, kde-format
-#| msgctxt "@action:button"
-#| msgid "Edit..."
+#, kde-format
 msgctxt "@action"
 msgid "Edit..."
 msgstr "编辑..."
 
 #: mainwindow.cpp:483
-#, fuzzy, kde-format
-#| msgctxt "@action:button"
-#| msgid "Delete"
+#, kde-format
 msgctxt "@action"
 msgid "Delete"
 msgstr "删除"
@@ -4256,12 +4234,10 @@ msgid "Delete Without Confirmation"
 msgstr "删除时无需确认"
 
 #: mainwindow.cpp:494
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "Reac&tivate"
+#, kde-format
 msgctxt "@action"
 msgid "Reactivate"
-msgstr "重新激活(&T)"
+msgstr "激活"
 
 #: mainwindow.cpp:508
 #, kde-format
@@ -4270,28 +4246,22 @@ msgid "Wake From Suspend..."
 msgstr "从睡眠中唤醒..."
 
 #: mainwindow.cpp:518
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Show Archived Alarms"
+#, kde-format
 msgctxt "@action"
 msgid "Show Archived Alarms"
 msgstr "显示已归档闹钟"
 
 #: mainwindow.cpp:523
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "Show in System &Tray"
+#, kde-format
 msgctxt "@action"
 msgid "Show in System Tray"
-msgstr "在系统托盘中显示(&T)"
+msgstr "在系统托盘中显示"
 
 #: mainwindow.cpp:527
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "Show &Calendars"
+#, kde-format
 msgctxt "@action"
 msgid "Show Calendars"
-msgstr "显示日历(&C)"
+msgstr "显示日历"
 
 #: mainwindow.cpp:531
 #, kde-format
@@ -4300,12 +4270,10 @@ msgid "Show Date Selector"
 msgstr "显示日期选择器"
 
 #: mainwindow.cpp:539
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "Import &Alarms..."
+#, kde-format
 msgctxt "@action"
 msgid "Import Alarms..."
-msgstr "导入闹钟(&A)..."
+msgstr "导入闹钟..."
 
 #: mainwindow.cpp:545
 #, kde-format
@@ -4314,28 +4282,22 @@ msgid "Import Birthdays..."
 msgstr "导入生日..."
 
 #: mainwindow.cpp:550
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "E&xport Selected Alarms..."
+#, kde-format
 msgctxt "@action"
 msgid "Export Selected Alarms..."
-msgstr "导出所选提醒(&X)..."
+msgstr "导出所选闹钟..."
 
 #: mainwindow.cpp:554 resourceselector.cpp:319
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "E&xport..."
+#, kde-format
 msgctxt "@action"
 msgid "Export..."
-msgstr "导出(&X)..."
+msgstr "导出..."
 
 #: mainwindow.cpp:558
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "&Refresh Alarms"
+#, kde-format
 msgctxt "@action"
 msgid "Refresh Alarms"
-msgstr "刷新闹钟(&R)"
+msgstr "刷新闹钟"
 
 #: mainwindow.cpp:810
 #, kde-format
@@ -4430,16 +4392,13 @@ msgid "Choose alarm type to create:"
 msgstr "选择要创建的闹钟类型："
 
 #: mainwindow.cpp:1685
-#, fuzzy, kde-format
-#| msgctxt "@action:button"
-#| msgid "Enable"
+#, kde-format
 msgctxt "@action"
 msgid "Enable"
 msgstr "启用"
 
 #: mainwindow.cpp:1685
-#, fuzzy, kde-format
-#| msgid "Disabled"
+#, kde-format
 msgctxt "@action"
 msgid "Disable"
 msgstr "禁用"
@@ -4641,12 +4600,10 @@ msgid "Edit the alarm."
 msgstr "编辑闹钟。"
 
 #: messagewindow.cpp:439
-#, fuzzy, kde-format
-#| msgctxt "@action:button"
-#| msgid "&Defer..."
+#, kde-format
 msgctxt "@action:button"
 msgid "Defer..."
-msgstr "推迟(&D)..."
+msgstr "推迟..."
 
 #: messagewindow.cpp:443
 #, kde-format
@@ -4723,12 +4680,10 @@ msgid "Unable to locate this email in <application>KMail</application>"
 msgstr "无法在 <application>KMail</application> 中显示此电子邮件"
 
 #: newalarmaction.cpp:45
-#, fuzzy, kde-format
-#| msgctxt "@item:inmenu"
-#| msgid "&Display Alarm Template"
+#, kde-format
 msgctxt "@item:inmenu"
 msgid "Display Alarm Template"
-msgstr "显示闹钟模板(&D)"
+msgstr "显示闹钟模板"
 
 #: newalarmaction.cpp:45
 #, kde-format
@@ -4737,12 +4692,10 @@ msgid "New Display Alarm"
 msgstr "新建显示闹钟"
 
 #: newalarmaction.cpp:48
-#, fuzzy, kde-format
-#| msgctxt "@item:inmenu"
-#| msgid "&Command Alarm Template"
+#, kde-format
 msgctxt "@item:inmenu"
 msgid "Command Alarm Template"
-msgstr "命令闹钟模板(&C)"
+msgstr "命令闹钟模板"
 
 #: newalarmaction.cpp:48
 #, kde-format
@@ -4751,12 +4704,10 @@ msgid "New Command Alarm"
 msgstr "新建命令闹钟"
 
 #: newalarmaction.cpp:51
-#, fuzzy, kde-format
-#| msgctxt "@item:inmenu"
-#| msgid "&Email Alarm Template"
+#, kde-format
 msgctxt "@item:inmenu"
 msgid "Email Alarm Template"
-msgstr "电子邮件闹钟模板(&E)"
+msgstr "电子邮件闹钟模板"
 
 #: newalarmaction.cpp:51
 #, kde-format
@@ -4765,12 +4716,10 @@ msgid "New Email Alarm"
 msgstr "新建邮件闹钟"
 
 #: newalarmaction.cpp:54
-#, fuzzy, kde-format
-#| msgctxt "@item:inmenu"
-#| msgid "&Audio Alarm Template"
+#, kde-format
 msgctxt "@item:inmenu"
 msgid "Audio Alarm Template"
-msgstr "音频闹钟模板(&A)"
+msgstr "音频闹钟模板"
 
 #: newalarmaction.cpp:54
 #, kde-format
@@ -4779,12 +4728,10 @@ msgid "New Audio Alarm"
 msgstr "新建音频闹钟"
 
 #: newalarmaction.cpp:69
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "New Alarm From &Template"
+#, kde-format
 msgctxt "@action"
 msgid "New Alarm From Template"
-msgstr "按模板新建闹钟(&T)"
+msgstr "从模板新建闹钟"
 
 #: prefdlg.cpp:128
 #, kde-format
@@ -4871,20 +4818,16 @@ msgid "Reset all tabs to their default values, or only reset the current tab?"
 msgstr "您要将所有标签页重置为默认值，还是想只重置当前标签页？"
 
 #: prefdlg.cpp:262
-#, fuzzy, kde-format
-#| msgctxt "@action:button Reset ALL tabs"
-#| msgid "&All"
+#, kde-format
 msgctxt "@action:button Reset ALL tabs"
 msgid "All"
-msgstr "全部(&A)"
+msgstr "全部"
 
 #: prefdlg.cpp:263
-#, fuzzy, kde-format
-#| msgctxt "@action:button Reset the CURRENT tab"
-#| msgid "C&urrent"
+#, kde-format
 msgctxt "@action:button Reset the CURRENT tab"
 msgid "Current"
-msgstr "当前(&U)"
+msgstr "当前"
 
 #: prefdlg.cpp:439
 #, kde-format
@@ -5547,17 +5490,13 @@ msgid "Recurrence:"
 msgstr "重复："
 
 #: prefdlg.cpp:1412
-#, fuzzy, kde-format
-#| msgctxt "@option"
-#| msgid "February 28th"
+#, kde-format
 msgctxt "@option:radio"
 msgid "February 28th"
 msgstr "2月28日"
 
 #: prefdlg.cpp:1416
-#, fuzzy, kde-format
-#| msgctxt "@option"
-#| msgid "March 1st"
+#, kde-format
 msgctxt "@option:radio"
 msgid "March 1st"
 msgstr "3月1日"
@@ -5770,12 +5709,10 @@ msgid "System Tray Tooltip"
 msgstr "系统托盘提示"
 
 #: prefdlg.cpp:1857
-#, fuzzy, kde-format
-#| msgctxt "@option:check"
-#| msgid "Show next &24 hours' alarms"
+#, kde-format
 msgctxt "@option:check"
 msgid "Show next 24 hours' alarms"
-msgstr "显示 &24 小时以内的闹钟"
+msgstr "显示 24 小时以内的闹钟"
 
 #: prefdlg.cpp:1861
 #, kde-format
@@ -6191,12 +6128,10 @@ msgid "Date cannot be earlier than start date"
 msgstr "该日期不能早于开始日期"
 
 #: recurrenceedit.cpp:1064
-#, fuzzy, kde-format
-#| msgctxt "@label:spinbox"
-#| msgid "Recur e&very"
+#, kde-format
 msgctxt "@label:spinbox"
 msgid "Recur every"
-msgstr "每隔(&V)"
+msgstr "重复"
 
 #: recurrenceedit.cpp:1131
 #, kde-format
@@ -6211,12 +6146,10 @@ msgid "Enter the number of hours and minutes between repetitions of the alarm"
 msgstr "输入闹钟各个重复之间的时间 (小时和分钟)"
 
 #: recurrenceedit.cpp:1152
-#, fuzzy, kde-format
-#| msgctxt "@label On: Tuesday"
-#| msgid "O&n:"
+#, kde-format
 msgctxt "@label On: Tuesday"
 msgid "On:"
-msgstr "于(&N)："
+msgstr "在:"
 
 #: recurrenceedit.cpp:1235
 #, kde-format
@@ -6261,12 +6194,10 @@ msgid "Select the days of the week on which to repeat the alarm"
 msgstr "选择一周内要重复闹钟的日期"
 
 #: recurrenceedit.cpp:1301
-#, fuzzy, kde-format
-#| msgctxt "@option:radio On day number in the month"
-#| msgid "O&n day"
+#, kde-format
 msgctxt "@option:radio On day number in the month"
 msgid "On day"
-msgstr "提醒日(&N)"
+msgstr "1 天"
 
 #: recurrenceedit.cpp:1305
 #, kde-format
@@ -6287,12 +6218,10 @@ msgid "Select the day of the month on which to repeat the alarm"
 msgstr "选择一个月内要重复闹钟的日期"
 
 #: recurrenceedit.cpp:1323
-#, fuzzy, kde-format
-#| msgctxt "@option:radio On the 1st Tuesday"
-#| msgid "On t&he"
+#, kde-format
 msgctxt "@option:radio On the 1st Tuesday"
 msgid "On the"
-msgstr "于(&H)"
+msgstr "在"
 
 #: recurrenceedit.cpp:1327
 #, kde-format
@@ -6416,12 +6345,10 @@ msgid "Select the months of the year in which to repeat the alarm"
 msgstr "选择一年中重复闹钟的月份"
 
 #: recurrenceedit.cpp:1530
-#, fuzzy, kde-format
-#| msgctxt "@label:listbox"
-#| msgid "February 2&9th alarm in non-leap years:"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "February 29th alarm in non-leap years:"
-msgstr "非闰年中2月2&9日的闹钟："
+msgstr "非闰年中二月二十九日的提醒："
 
 #: recurrenceedit.cpp:1534
 #, kde-format
@@ -6598,12 +6525,10 @@ msgstr ""
 "para><para>您确定要更新日历吗？</para>"
 
 #: resources/fileresource.cpp:325 resources/fileresource.cpp:455
-#, fuzzy, kde-format
-#| msgctxt "@info"
-#| msgid "Resource is not configured."
+#, kde-format
 msgctxt "@info"
 msgid "Calendar is not configured."
-msgstr "资源尚未配置。"
+msgstr ""
 
 #: resources/fileresource.cpp:354 resources/fileresource.cpp:372
 #, kde-kuit-format
@@ -6619,12 +6544,10 @@ msgid "Error saving calendar <resource>%1</resource>."
 msgstr "保存日历 <resource>%1</resource> 时出错。"
 
 #: resources/fileresource.cpp:462
-#, fuzzy, kde-format
-#| msgctxt "@info"
-#| msgid "Resource is read-only."
+#, kde-format
 msgctxt "@info"
 msgid "Calendar is read-only."
-msgstr "资源为只读文件。"
+msgstr ""
 
 #: resources/fileresource.cpp:467
 #, kde-kuit-format
@@ -6651,16 +6574,12 @@ msgid "Select storage type of new calendar:"
 msgstr "选择新日历的存储类型："
 
 #: resources/fileresourcecreator.cpp:137
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid ""
-#| "Error!  The file <filename>%1</filename> is already used by an existing "
-#| "resource."
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "Error!  The file <filename>%1</filename> is already used by an existing "
 "calendar."
-msgstr "错误！文件 <filename>%1</filename> 已被其他资源使用。"
+msgstr ""
 
 #: resources/migration/dirresourceimportdialog.cpp:34
 #, kde-format
@@ -7296,25 +7215,16 @@ msgstr "日历文件"
 
 #. i18n: ectx: property (html), widget (KTextEdit, pathDescription)
 #: resources/singlefileresourceconfigdialog.ui:68
-#, fuzzy, kde-format
-#| msgid ""
-#| "Select the file whose contents should be represented by this resource. If "
-#| "the file does not exist, it will be created. The URL of a remote file can "
-#| "also be specified, but note that monitoring for file changes will not "
-#| "work in this case."
+#, kde-format
 msgid ""
 "Select the file to hold this calendar. If the file does not exist, it will "
 "be created. The URL of a remote file can also be specified, but note that "
 "monitoring for file changes will not work in this case."
 msgstr ""
-"选择可代表此资源的文件内容。若文件不存在，则会自动创建文件。您也可指定远程文"
-"件的 URL，但需注意 KAlarm 无法监视远程文件。"
 
 #. i18n: ectx: property (text), widget (QRadioButton, activeRadio)
 #: resources/singlefileresourceconfigdialog.ui:86
-#, fuzzy, kde-format
-#| msgctxt "@info/plain Name of a calendar"
-#| msgid "Active Alarms"
+#, kde-format
 msgctxt "@option:radio"
 msgid "Active Alarms"
 msgstr "活动闹钟"
@@ -7328,19 +7238,16 @@ msgstr "已归档闹钟"
 
 #. i18n: ectx: property (text), widget (QRadioButton, templateRadio)
 #: resources/singlefileresourceconfigdialog.ui:112
-#, fuzzy, kde-format
-#| msgctxt "@info/plain Name of a calendar"
-#| msgid "Alarm Templates"
+#, kde-format
 msgctxt "@option:radio"
 msgid "Alarm Templates"
 msgstr "闹钟模板"
 
 #. i18n: ectx: property (html), widget (KTextEdit, alarmTypeDescription)
 #: resources/singlefileresourceconfigdialog.ui:133
-#, fuzzy, kde-format
-#| msgid "Select which alarm type this resource should contain."
+#, kde-format
 msgid "Select which alarm type this calendar should contain."
-msgstr "选择此资源应包含的闹钟类型。"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, alarmTypeLabel)
 #: resources/singlefileresourceconfigdialog.ui:142
@@ -7379,19 +7286,16 @@ msgstr "显示名称"
 
 #. i18n: ectx: property (text), widget (QLabel, label_1)
 #: resources/singlefileresourceconfigdialog.ui:201
-#, fuzzy, kde-format
-#| msgctxt "@label:textbox"
-#| msgid "&Name:"
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Name:"
-msgstr "名称(&N)："
+msgstr "名称："
 
 #. i18n: ectx: property (html), widget (KTextEdit, nameDescription)
 #: resources/singlefileresourceconfigdialog.ui:222
-#, fuzzy, kde-format
-#| msgid "Enter the name used to identify this resource in displays."
+#, kde-format
 msgid "Enter the display name used to identify this calendar."
-msgstr "输入用于在界面中区分此资源的名字。"
+msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, readOnlyGroupBox)
 #: resources/singlefileresourceconfigdialog.ui:232
@@ -7409,20 +7313,13 @@ msgstr "只读"
 
 #. i18n: ectx: property (html), widget (KTextEdit, readOnlyDescription)
 #: resources/singlefileresourceconfigdialog.ui:254
-#, fuzzy, kde-format
-#| msgid ""
-#| "If read-only mode is enabled, no changes will be written to the file "
-#| "selected above. Read-only mode will be automatically enabled if you do "
-#| "not have write access to the file or the file is on a remote server that "
-#| "does not support write access."
+#, kde-format
 msgid ""
 "If read-only mode is enabled, no changes will be written to the file. Read-"
 "only mode will be automatically enabled if you do not have write access to "
 "the file or the file is on a remote server that does not support write "
 "access."
 msgstr ""
-"启用只读模式时，将不会对上述文件写入任何改动。若您没有文件的写入权限或远程服"
-"务器上的文件不支持写入时，会自动启用对该文件只读模式。"
 
 #: resourceselector.cpp:50
 #, kde-format
@@ -7569,92 +7466,70 @@ msgid ""
 msgstr "您确定要从列表中删除日历 <resource>%1</resource> 吗？"
 
 #: resourceselector.cpp:289
-#, fuzzy, kde-format
-#| msgctxt "@action Reload calendar"
-#| msgid "Re&load"
+#, kde-format
 msgctxt "@action Reload calendar"
 msgid "Reload"
-msgstr "重新加载(&L)"
+msgstr "重新加载"
 
 #: resourceselector.cpp:292
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "Show &Details"
+#, kde-format
 msgctxt "@action"
 msgid "Show Details"
-msgstr "显示详情(&D)"
+msgstr "显示详细信息"
 
 #: resourceselector.cpp:295
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "Set &Color..."
+#, kde-format
 msgctxt "@action"
 msgid "Set Color..."
-msgstr "设定颜色(&C)..."
+msgstr "设置颜色..."
 
 #: resourceselector.cpp:298
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "Clear C&olor"
+#, kde-format
 msgctxt "@action"
 msgid "Clear Color"
-msgstr "清除颜色(&O)"
+msgstr "清除颜色"
 
 #: resourceselector.cpp:304
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "&Update Calendar Format"
+#, kde-format
 msgctxt "@action"
 msgid "Update Calendar Format"
-msgstr "更新日历格式(&U)"
+msgstr "更新日历格式"
 
 #: resourceselector.cpp:307
-#, fuzzy, kde-format
-#| msgctxt "@action:button"
-#| msgid "Remove"
+#, kde-format
 msgctxt "@action"
 msgid "Remove"
 msgstr "删除"
 
 #: resourceselector.cpp:313
-#, fuzzy, kde-format
-#| msgctxt "@action:button"
-#| msgid "Add..."
+#, kde-format
 msgctxt "@action"
 msgid "Add..."
 msgstr "添加..."
 
 #: resourceselector.cpp:316
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "Im&port..."
+#, kde-format
 msgctxt "@action"
 msgid "Import..."
-msgstr "导入(&P)..."
+msgstr "导入"
 
 #: resourceselector.cpp:372
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "Use as &Default for Active Alarms"
+#, kde-format
 msgctxt "@action"
 msgid "Use as Default for Active Alarms"
-msgstr "用作活动闹钟的默认值(&D)"
+msgstr "用作活动闹钟的默认值"
 
 #: resourceselector.cpp:373
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "Use as &Default for Archived Alarms"
+#, kde-format
 msgctxt "@action"
 msgid "Use as Default for Archived Alarms"
-msgstr "用作已归档闹钟的默认值(&D)"
+msgstr "用作已归档闹钟的默认值"
 
 #: resourceselector.cpp:374
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "Use as &Default for Alarm Templates"
+#, kde-format
 msgctxt "@action"
 msgid "Use as Default for Alarm Templates"
-msgstr "用作闹钟模板的默认值(&D)"
+msgstr "用作闹钟模板的默认值"
 
 #: resourceselector.cpp:503
 #, kde-format
@@ -8154,12 +8029,10 @@ msgid "Select a template to base the new alarm on."
 msgstr "选择用来创建新闹钟的模板。"
 
 #: traywindow.cpp:68
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "&New Alarm"
+#, kde-format
 msgctxt "@action"
 msgid "New Alarm"
-msgstr "新建闹钟(&N)"
+msgstr "新建闹钟"
 
 #: traywindow.cpp:300
 #, kde-format
@@ -8412,64 +8285,3 @@ msgstr "输入闹钟响铃前唤醒系统的分钟数，此项可确保系统在
 #, kde-format
 msgid "Number of minutes before alarm to wake from suspend"
 msgstr "闹钟唤醒睡眠前的分钟数"
-
-#~ msgid "&File"
-#~ msgstr "文件(&F)"
-
-#~ msgid "&Edit"
-#~ msgstr "编辑(&E)"
-
-#~ msgid "&View"
-#~ msgstr "视图(&V)"
-
-#~ msgctxt "@action"
-#~ msgid "&New"
-#~ msgstr "新建(&N)"
-
-#~ msgctxt "@action"
-#~ msgid "&Edit..."
-#~ msgstr "编辑(&E)..."
-
-#~ msgctxt "@action"
-#~ msgid "&Delete"
-#~ msgstr "删除(&D)"
-
-#~ msgctxt "@action"
-#~ msgid "Show Archi&ved Alarms"
-#~ msgstr "显示已归档闹钟(&V)"
-
-#~ msgctxt "@action"
-#~ msgid "Ena&ble"
-#~ msgstr "启用(&B)"
-
-#~ msgctxt "@action"
-#~ msgid "Disa&ble"
-#~ msgstr "禁用(&B)"
-
-#~ msgctxt "@action:button"
-#~ msgid "&Edit..."
-#~ msgstr "编辑(&E)..."
-
-#~ msgctxt "@option:radio"
-#~ msgid "February 2&8th"
-#~ msgstr "2月2&8日"
-
-#~ msgctxt "@option:radio"
-#~ msgid "March &1st"
-#~ msgstr "3月&1日"
-
-#~ msgctxt "@option:radio"
-#~ msgid "Acti&ve Alarms"
-#~ msgstr "活动闹钟(&V)"
-
-#~ msgctxt "@option:radio"
-#~ msgid "Alarm &Templates"
-#~ msgstr "闹钟模板(&T)"
-
-#~ msgctxt "@action"
-#~ msgid "&Remove"
-#~ msgstr "删除(&R)"
-
-#~ msgctxt "@action"
-#~ msgid "&Add..."
-#~ msgstr "添加(&A)..."
