@@ -5943,7 +5943,7 @@ msgstr ""
 "alarmas por correo electrónico a un mesmo. Se quere que as copias agochadas "
 "se lle envíen á súa conta no computador no que se executa "
 "<application>KAlarm</application>, pode sinxelamente inserir o seu nome de "
-"usuario."
+"usuaria."
 
 #: prefdlg.cpp:1148
 #, fuzzy, kde-kuit-format
