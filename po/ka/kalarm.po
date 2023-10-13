@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-10-09 01:45+0000\n"
-"PO-Revision-Date: 2023-10-09 14:47+0200\n"
+"PO-Revision-Date: 2023-10-12 08:02+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -974,6 +974,8 @@ msgid ""
 "Enter the default time interval (in minutes) to defer alarms, used by the "
 "Defer Alarm dialog."
 msgstr ""
+"შეიყვანეთ ნაგულისხმევი დროის ინტერვალი (წუთებში) განგაშებს გადასადებად, "
+"რომელიც განგაშის გადადების დიალოგის მიერ გამოიყენება."
 
 #. i18n: ectx: label, entry (AskResource), group (General)
 #: data/kalarmconfig.kcfg:146
@@ -991,6 +993,10 @@ msgid ""
 "store it in, if there is more than one active calendar.</p><p>Note that "
 "archived alarms are always stored in the default archived alarm calendar.</p>"
 msgstr ""
+"<p>ახალი განგაშის ან განგაშის ნიმუშის შენახვისას კითხვა, რომელ კალენდარში "
+"შევინახო, თუ ერთზე მეტი კალენდარი გაქვთ.</p><p>დაიმახსოვრეთ, რომ "
+"დაარქივებული განგაშები ყოველთვის ნაგულისხმევ განგაშების კალენდარში ინახება.</"
+"p>"
 
 #. i18n: ectx: label, entry (Base_ModalMessages), group (General)
 #: data/kalarmconfig.kcfg:151
@@ -1566,6 +1572,8 @@ msgstr "ჟურნალის ფაილი"
 msgctxt "@info:whatsthis"
 msgid "Default log file path for command alarms in the alarm edit dialog."
 msgstr ""
+"ნაგულისხმევი ჟურნალის ფაილი ბრძანების განგაშებისთვის განგაშის ჩასწორების "
+"ფანჯარაში."
 
 #. i18n: ectx: label, entry (DefaultEmailBcc), group (Defaults)
 #: data/kalarmconfig.kcfg:366
@@ -1581,6 +1589,8 @@ msgctxt "@info:whatsthis"
 msgid ""
 "Default setting in the alarm edit dialog for blind copying emails to self."
 msgstr ""
+"ნაგულისხმევი პარამეტრი განგაშის ჩასწორების ფანჯარაში ელფოსტების ბრმა ასლის "
+"საკუთარი თავისთვის გასაგზავნად."
 
 #. i18n: ectx: label, entry (DefaultRecurPeriod), group (Defaults)
 #: data/kalarmconfig.kcfg:371
@@ -1595,6 +1605,8 @@ msgstr "გამეორების პერიოდი"
 msgctxt "@info:whatsthis"
 msgid "The default setting for the recurrence rule in the alarm edit dialog."
 msgstr ""
+"ნაგულისხმევი მნიშვნელობა განგაშის ჩასწორების ფანჯარაში პარამეტრისთვის "
+"\"გამეორების წესი\"."
 
 #. i18n: ectx: label, entry (DefaultRecurPeriod), group (Defaults)
 #: data/kalarmconfig.kcfg:374
@@ -1707,6 +1719,8 @@ msgid ""
 "Default setting for whether to execute the pre-alarm action before deferred "
 "alarms trigger."
 msgstr ""
+"ნაგულისხმევი პარამეტრი, როდის შევასრულო განგაშამდელი ქმედება, სანამ, "
+"გადადებული განგაშები დატრიგერდება."
 
 #. i18n: ectx: label, entry (DefaultCancelOnPreActionError), group (Defaults)
 #: data/kalarmconfig.kcfg:414
@@ -1723,6 +1737,8 @@ msgid ""
 "Default setting for whether to cancel the alarm if the pre-alarm action "
 "command fails."
 msgstr ""
+"ნაგულისხმევი პარამეტრი, გავაუქმო თუ არა განგაში, თუ განგაშისწინა ქმედების "
+"ბრძანება ჩავარდება."
 
 #. i18n: ectx: label, entry (DefaultDontShowPreActionError), group (Defaults)
 #: data/kalarmconfig.kcfg:419
@@ -1739,6 +1755,8 @@ msgid ""
 "Default setting for whether to show no error status or error message if the "
 "pre-alarm action command fails."
 msgstr ""
+"ნაგულისხმევი პარამეტრი, ვაჩვენო თუ არა შეცდომის სტატუსი ან შეტყობინება, თუ "
+"განგაშისწინა ქმედების ბრძანება ჩავარდება."
 
 #. i18n: ectx: label, entry (DefaultPostAction), group (Defaults)
 #: data/kalarmconfig.kcfg:424
@@ -1782,7 +1800,7 @@ msgstr "განგაშის წაშლის დადასტურე�
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to be prompted for confirmation each time you delete an alarm."
-msgstr ""
+msgstr "გკითხავთ ყოველ ჯერზე, რამდენჯერაც განგაშის წაშლას დააპირებთ."
 
 #. i18n: ectx: label, entry (Base_EmailQueuedNotify), group (Notification Messages)
 #: data/kalarmconfig.kcfg:441
@@ -1839,6 +1857,8 @@ msgid ""
 "Select dates to show in the alarm list. Only alarms due on these dates will "
 "be shown."
 msgstr ""
+"აირჩიეთ თარიღები განგაშების სიაში საჩვენებლად. ნაჩვენები იქნება, მხოლოდ, "
+"განგაშები, რომლის დროც ამ თარიღებზე დგება."
 
 #: datepicker.cpp:56
 #, kde-format
@@ -1904,31 +1924,31 @@ msgstr "გადადების გაუქმება"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Cancel the deferred alarm. This does not affect future recurrences."
-msgstr ""
+msgstr "გადადებული განგაშის გაუქმება. ეს არ ეხება მომავალში გამეორებებს."
 
 #: deferdlg.cpp:95
 #, kde-format
 msgctxt "@info"
 msgid "Cannot defer past the alarm's next sub-repetition (currently %1)"
-msgstr ""
+msgstr "განგაშის შემდეგ ქვეგამეორებას წარსულში ვერ გადავდებ (მიმდინარე %1)"
 
 #: deferdlg.cpp:99
 #, kde-format
 msgctxt "@info"
 msgid "Cannot defer past the alarm's next recurrence (currently %1)"
-msgstr ""
+msgstr "განგაშის შემდეგ გამეორებას წარსულში ვერ გადავდებ (მიმდინარე %1)"
 
 #: deferdlg.cpp:103
 #, kde-format
 msgctxt "@info"
 msgid "Cannot defer past the alarm's next reminder (currently %1)"
-msgstr ""
+msgstr "განგაშის შემდეგ შემხსენებელს წარსულში ვერ გადავდებ (მიმდინარე %1)"
 
 #: deferdlg.cpp:107
 #, kde-format
 msgctxt "@info"
 msgid "Cannot defer reminder past the main alarm time (%1)"
-msgstr ""
+msgstr "წარსულ მთავარი განგაშის დროს (%1) ვერ გადავდებ"
 
 #: displaycalendar.cpp:127
 #, kde-kuit-format
@@ -2191,6 +2211,8 @@ msgid ""
 "Reminder period must be less than the recurrence interval, unless <interface>"
 "%1</interface> is checked."
 msgstr ""
+"შეხსენების პერიოდი გამეორების ინტერვალზე მცირე უნდა იყოს, თუ <interface>%1</"
+"interface> ჩართული არაა."
 
 #: editdlg.cpp:1135
 #, kde-format
@@ -2199,6 +2221,8 @@ msgid ""
 "The duration of a repetition within the recurrence must be less than the "
 "recurrence interval minus any reminder period"
 msgstr ""
+"გამეორების ხანგრძლივობა გამეორების შიგნით გამეორების ინტერვალს გამოკლებული "
+"ნებისიერ შეხსენების პერიოდზე ნაკლები უნდა იყოს"
 
 #: editdlg.cpp:1142
 #, kde-format
@@ -4995,6 +5019,9 @@ msgid ""
 "<para>No command is specified to invoke a terminal window.</para><para>The "
 "default command (<command>%1</command>) will be used.</para>"
 msgstr ""
+"<para>ტერმინალის ფანჯრის გასაშვები ბრძანება მითითებული არაა.</"
+"para><para>გამოყენებული იქნება ნაგულისხმევი ბრძანება (<command>%1</command>)."
+"</para>"
 
 #: prefdlg.cpp:602
 #, kde-kuit-format
@@ -5015,6 +5042,8 @@ msgid ""
 "You should not uncheck this option unless you intend to discontinue use of "
 "<application>KAlarm</application>"
 msgstr ""
+"არ გამორთოთ ეს პარამეტრი, თუ <application>KAlarm</application>-ის "
+"გამოყენებას კიდევ აპირებთ"
 
 #: prefdlg.cpp:706
 #, kde-kuit-format
@@ -5023,6 +5052,8 @@ msgid ""
 "Select the time zone which <application>KAlarm</application> should use as "
 "its default for displaying and entering dates and times."
 msgstr ""
+"აირჩიეთ დროის სარტყელი, რომელიც <application>KAlarm</application>-მა "
+"ნაგულისხმევად უნდა გამოიყენოს, თარიღებისა და დროის საჩვენებლად და შესაყვანად."
 
 #: prefdlg.cpp:720
 #, kde-format
@@ -5438,6 +5469,8 @@ msgid ""
 "<para>No default email address is currently set in <application>KMail</"
 "application>.</para><para>%1</para><para>%2</para>"
 msgstr ""
+"<para><application>KMail</application>-ში ამჟამად ნაგულისხმევი ელფოსტის "
+"მისამართი დაყენებული არაა.</para><para>%1</para><para>%2</para>"
 
 #: prefdlg.cpp:1305
 #, kde-kuit-format
@@ -5446,6 +5479,8 @@ msgid ""
 "<para>No <application>KMail</application> identities currently exist.</"
 "para><para>%1</para><para>%2</para>"
 msgstr ""
+"<para>ამჟამად <application>KMail</application>-ის იდენტიფიკატორები არ "
+"არსებობს.</para><para>%1</para><para>%2</para>"
 
 #: prefdlg.cpp:1323
 #, kde-kuit-format
@@ -5453,6 +5488,8 @@ msgctxt "@info:whatsthis"
 msgid ""
 "The default setting for <interface>%1</interface> in the alarm edit dialog."
 msgstr ""
+"ნაგულისხმევი მნიშვნელობა <interface>%1</interface>-სთვის განგაშის ჩასწორების "
+"დიალოგში."
 
 #: prefdlg.cpp:1331 prefdlg.cpp:1779
 #, kde-format
@@ -5479,6 +5516,8 @@ msgid ""
 "The default setting for the alarm message display method in the alarm edit "
 "dialog."
 msgstr ""
+"ნაგულისხმევი პარამეტრი განგაშის შეტყობინების ჩვენების მეთოდისთვის განგაშის "
+"ჩასწორების ფანჯარაში."
 
 #: prefdlg.cpp:1379
 #, kde-format
@@ -5564,6 +5603,8 @@ msgid ""
 "The default setting for sound file <interface>%1</interface> in the alarm "
 "edit dialog."
 msgstr ""
+"ნაგულისხმევი მნიშვნელობა ხმის ფაილისთვის <interface>%1</interface>-სთვის "
+"განგაშის ჩასწორების დიალოგში."
 
 #: prefdlg.cpp:1490
 #, kde-format
@@ -6016,7 +6057,7 @@ msgstr "გამონაკლისები"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "The list of exceptions, i.e. dates/times excluded from the recurrence"
-msgstr ""
+msgstr "გამონაკლისების სია. ანუ, გამეორებიდან ამოღებული თარიღი/დრო"
 
 #: recurrenceedit.cpp:300
 #, kde-format
@@ -6388,7 +6429,7 @@ msgstr "შემდეგ"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Display the reminder only for the first time the alarm is scheduled"
-msgstr ""
+msgstr "შემხსენებელი ნაჩვენები, მხოლოდ, განგაშის პირველი დაგეგმვისას იქნება"
 
 #: repetitionbutton.cpp:66
 #, kde-format
