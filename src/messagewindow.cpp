@@ -512,14 +512,17 @@ void MessageWindow::setUpDisplay()
     topLayout->activate();
     setMinimumSize(QSize(grid->sizeHint().width() + dcmLeft + dcmRight,
                          sizeHint().height()));
-    const bool modal = !(windowFlags() & Qt::X11BypassWindowManagerHint);
-    NET::States wstate = NET::Sticky | NET::KeepAbove;
-    if (modal)
-        wstate |= NET::Modal;
-    WId winid = winId();
-    KWindowSystem::setState(winid, wstate);
 #if ENABLE_X11
-    KX11Extras::setOnAllDesktops(winid, true);   // show on all virtual desktops
+    if (KWindowSystem::isPlatformX11())
+    {
+        const bool modal = !(windowFlags() & Qt::X11BypassWindowManagerHint);
+        NET::States wstate = NET::Sticky | NET::KeepAbove;
+        if (modal)
+            wstate |= NET::Modal;
+        WId winid = winId();
+        KX11Extras::setState(winid, wstate);
+        KX11Extras::setOnAllDesktops(winid, true);   // show on all virtual desktops
+    }
 #endif
 
     mInitialised = true;   // the window's widgets have been created
