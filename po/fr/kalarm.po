@@ -27,7 +27,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-10-09 01:45+0000\n"
-"PO-Revision-Date: 2023-10-10 12:46+0200\n"
+"PO-Revision-Date: 2023-10-12 09:03+0200\n"
 "Last-Translator: Xavier BESNARD <xavier.besnard@neuf.fr>\n"
 "Language-Team: fr\n"
 "Language: fr\n"
@@ -247,7 +247,7 @@ msgstr "Une semaine"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Select time delay from a list of preset values"
-msgstr "Sélectionnez une durée à partir d'une liste de valeurs pré-définies."
+msgstr "Sélectionnez une durée à partir d'une liste de valeurs prédéfinies."
 
 #: alarmtimewidget.cpp:177
 #, kde-kuit-format
@@ -2371,7 +2371,7 @@ msgctxt "@info:whatsthis"
 msgid ""
 "Check to wake the system if the alarm triggers while the system is suspended"
 msgstr ""
-"Vérifier que le système se réveille si l’alarme se déclenche durant la "
+"Vérifier que le système se réveille si l'alarme se déclenche durant la "
 "suspension du système."
 
 #: editdlg.cpp:401
@@ -5796,8 +5796,8 @@ msgstr ""
 "automatiquement par <application>KMail</application>. </"
 "item><item><interface>%3</interface> : le courriel est envoyé "
 "automatiquement. Cette option ne fonctionnera que si votre système est "
-"configuré pour utiliser <application>« sendmail »</application> ou un "
-"logiciel de messagerie compatible avec « sendmail ».</item></list></para>"
+"configuré pour utiliser <application>sendmail</application> ou un logiciel "
+"de messagerie compatible avec « sendmail ».</item></list></para>"
 
 #: prefdlg.cpp:1094
 #, kde-kuit-format
@@ -5810,8 +5810,8 @@ msgid ""
 msgstr ""
 "<para>%1<list> <item><interface>%2</interface> : le courriel est envoyé "
 "automatiquement. Cette option ne fonctionnera que si votre système est "
-"configuré pour utiliser <application>« sendmail »</application> ou un agent "
-"de transport de courriel compatible avec « sendmail ». </item></list> </para>"
+"configuré pour utiliser <application>sendmail</application> ou un agent de "
+"transport de courriel compatible avec « sendmail ». </item></list> </para>"
 
 #: prefdlg.cpp:1104
 #, kde-kuit-format
