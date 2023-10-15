@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-10-09 01:45+0000\n"
-"PO-Revision-Date: 2023-10-12 08:02+0200\n"
+"PO-Revision-Date: 2023-10-14 16:46+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -389,6 +389,12 @@ msgid ""
 "dragging the mouse over the list, or by clicking the mouse while pressing "
 "Ctrl or Shift.</para>"
 msgstr ""
+"<para>აირჩეთ დაბადების დღეები, რომლებისთვისაც გნებავთ, განგაშები ააყენოთ.<nl/"
+">ეს სია აჩვენებს ყველა დაბადების დღეს <application>KAddressBook</"
+"application>-ში მათ გარდა, რომლებისთვისაც განგაშები უკვე არსებობს.</"
+"para><para>შეგიძლიათ, ერთდროულად ბევრი დაბადების დღე მონიშნოთ, თაგუნათი "
+"სიაზე გადათრევით, ან მათზე დაწკაპუნებით მაშინ, როცა Ctrl ან Shift ღილაკი "
+"გიჭირავთ.</para>"
 
 #: birthdaydlg.cpp:135
 #, kde-format
@@ -919,6 +925,11 @@ msgid ""
 "alarms due within a set period of time, enter the time period in minutes.</"
 "p><p>Enter 0 to always show the system tray icon.</p>"
 msgstr ""
+"<p>შეიყვანეთ -1, რათა KAlarm-ის ხატულა სისტემის საათთან დაიმალოს, როცა "
+"აქტიური განგაშები არ არსებობს.</p><p>სისტემის საათთან არსებული ხატულის "
+"ავტომატურად დასამალავად მაშინ, როცა განგაშები დაყენებული დროის განმავლობაში "
+"არაა, შეიყვანეთ დროის შუალედი წუთებში.</p><p>შეიყვანეთ 0, თუ გნებავთ, "
+"საათთან ხატულა სულ გამოჩნდეს.</p>"
 
 #. i18n: ectx: label, entry (NoAutoHideSystemTrayDesktops), group (General)
 #: data/kalarmconfig.kcfg:127
@@ -951,6 +962,9 @@ msgid ""
 "<p>Automatically start KAlarm whenever you start KDE.</p><p>This option "
 "should always be checked unless you intend to discontinue use of KAlarm.</p>"
 msgstr ""
+"<p>KAlarm-ის ავტომატური გაშვება KDE-სთან ერთად.</p><p>ეს პარამეტრი ყოველთვის "
+"ჩართული უნდა იყოს იმ შემთხვევის გარდა, თუ აპირებთ, KAlarm-ის გამოყენება აღარ "
+"გააგრძელოთ.<p>"
 
 #. i18n: ectx: label, entry (Base_NoAutoStart), group (General)
 #: data/kalarmconfig.kcfg:137
@@ -1017,6 +1031,11 @@ msgid ""
 "with your typing when it is displayed, but it has no title bar and cannot be "
 "moved or resized.</li></ul></p>"
 msgstr ""
+"<p>მიუთიეთ განგაშის შეტყობინების ფანჯრის მახასიათებლები:<ul><li>თუ ჩართულია, "
+"ფანჯარა ნორმალური ფანჯარაა პატარა პანელით, რომელი კლავიატური შეყვანას "
+"ჩაიჭერს, როცა ნაჩვენებია.</li><li>თუ ჩართული არაა, ფანჯარა მიმდინარე კრეფაში "
+"არ ჩაერევა, მაგრამ მას სათაურის ზოლი არ გააჩნია და მისი გადატანა ან ზომის "
+"შეცვლა შეუძლებელია.</li></ul></p>"
 
 #. i18n: ectx: label, entry (MessageButtonDelay), group (General)
 #: data/kalarmconfig.kcfg:156
@@ -1078,6 +1097,8 @@ msgid ""
 "Specify whether to show in the system tray tooltip, the time at which each "
 "alarm is due."
 msgstr ""
+"მიუთითეთ რათა სისტემურ საათთან არსებული ხატულის მინიშნებაში თითოეული "
+"განგაშის დროის დადგომა გაჩვენოთ."
 
 #. i18n: ectx: label, entry (ShowTooltipTimeToAlarm), group (General)
 #: data/kalarmconfig.kcfg:184
@@ -1095,6 +1116,8 @@ msgid ""
 "Specify whether to show in the system tray tooltip, how long until each "
 "alarm is due."
 msgstr ""
+"მიუთეთ, გაჩვენოთ თუ არა სისტემურ საათთან მყოფი ხატულის მინიშნებაში, რამდენი "
+"ხანია დარჩენილი განგაშის დროის დადგომამდე."
 
 #. i18n: ectx: label, entry (TooltipTimeToPrefix), group (General)
 #: data/kalarmconfig.kcfg:190
@@ -1111,6 +1134,8 @@ msgid ""
 "Enter the text to be displayed in front of the time until the alarm, in the "
 "system tray tooltip."
 msgstr ""
+"შეიყვანეთ ტექსტი, რომელიც სისტემურ საათთან არსებული ხატულის მინიშნებაში "
+"განგაშამდე დარჩენილი დროის წინ გამოჩნდება."
 
 #. i18n: ectx: label, entry (Base_EmailClient), group (General)
 #: data/kalarmconfig.kcfg:196
@@ -1161,6 +1186,8 @@ msgid ""
 "Whether after sending an email to store a copy in KMail's sent-mail folder. "
 "Only applies when sendmail is selected as the email client."
 msgstr ""
+"კოპირდება თუ არა ელფოსტა გაგზავნის შემდეგ KMail-ის გაგზავნილი ელფოსტების "
+"საქაღალდეში. მუშაობს მხოლოდ მაშინ, თუ ელფოსტის კლიენტად sendmail-ს აირჩევთ."
 
 #. i18n: ectx: label, entry (Base_EmailFrom), group (General)
 #: data/kalarmconfig.kcfg:210
@@ -1214,6 +1241,9 @@ msgid ""
 "Command line to execute command alarms in a terminal window, including "
 "special codes described in the KAlarm handbook."
 msgstr ""
+"ბრძანების სტრიქონი ტერმინალის ფანჯარაში ბრძანების განგაშების გასაშვებად, "
+"სპეციალური კოდების ჩათვლით, რომელიც KAlarm-ის დოკუმენტაციაში შეგიძლიათ "
+"იპოვოთ."
 
 #. i18n: ectx: label, entry (Base_StartOfDay), group (General)
 #: data/kalarmconfig.kcfg:224
@@ -1227,7 +1257,7 @@ msgstr "მხოლოდ თარიღის მქონე განგა
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "The earliest time of day at which a date-only alarm will be triggered."
-msgstr ""
+msgstr "უადრესი დღის დრო, როცა მხოლოდ-თარიღის მქონე განგაში უნდა დატრიგერდეს."
 
 #. i18n: ectx: label, entry (Base_WorkDayStart), group (General)
 #: data/kalarmconfig.kcfg:230
@@ -1336,6 +1366,8 @@ msgid ""
 "Enter the event duration in minutes, for alarms which are copied to "
 "KOrganizer."
 msgstr ""
+"შეიყვანეთ მოვლენის ხანგრძლივობა წუთებში განგაშებისთვის, რომლებიც KOrganizer-"
+"ში კოპირდება."
 
 #. i18n: ectx: label, entry (WakeFromSuspendAdvance), group (General)
 #: data/kalarmconfig.kcfg:276
@@ -2087,6 +2119,8 @@ msgid ""
 "Do not specify a start time for alarms based on this template. The normal "
 "default start time will be used."
 msgstr ""
+"არ მიუთითოთ დაწყების დრო განგაშებისთვის, რომლებიც ამ ნიმუშს ეყრდნობა. "
+"გამოყენებული იქნება ნორმალური ნაგულისხმევი დაწყების დრო."
 
 #: editdlg.cpp:299
 #, kde-format
@@ -2121,6 +2155,8 @@ msgid ""
 "Set the <interface>Any time</interface> option for alarms based on this "
 "template."
 msgstr ""
+"დააყენეთ <interface>ნებისმიერი დროის</interface> პარამეტრი განგაშებზე, "
+"რომლებიც ამ ნიმუშს ეყრდნობა."
 
 #: editdlg.cpp:326
 #, kde-format
@@ -2383,6 +2419,7 @@ msgid ""
 "Select whether to display the alarm in a window or by the notification "
 "system."
 msgstr ""
+"აირჩიეთ, განგაში ფანჯარაში იქნება ნაჩვენები, თუ გაფრთხილების სისტემის მიერ."
 
 #: editdlgtypes.cpp:265
 #, kde-format
@@ -2412,7 +2449,7 @@ msgstr ""
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to be prompted for confirmation when you acknowledge the alarm."
-msgstr ""
+msgstr "ჩართეთ, რომ გკითხოთ ყოველ ჯერზე, რამდენჯერაც განგაშს დაადასტურებთ."
 
 #: editdlgtypes.cpp:286
 #, kde-format
@@ -2547,6 +2584,8 @@ msgid ""
 "Check to log the command output to a local file. The output will be appended "
 "to any existing contents of the file."
 msgstr ""
+"აირჩიეთ ბრძანების გამოტანილი ინფორმაციის ლოკალურ ფაილში შესანახად. "
+"გამოტანილი ინფორმაცია ფაილის შემცველობის ბოლოში მიეწერება."
 
 #: editdlgtypes.cpp:894
 #, kde-format
@@ -2575,6 +2614,8 @@ msgid ""
 "<para>No terminal is selected for command alarms.</para><para>Please set it "
 "in the <application>KAlarm</application> Configuration dialog.</para>"
 msgstr ""
+"<para>ბრძანების განგაშებისთვის ტერმინალი არჩეული არაა.</para><para>დააყენეთ "
+"ის <application>KAlarm</application>მორგების ფანჯარაში.</para>"
 
 #: editdlgtypes.cpp:1087
 #, kde-kuit-format
@@ -2637,6 +2678,8 @@ msgid ""
 "Your email identity, used to identify you as the sender when sending email "
 "alarms."
 msgstr ""
+"თქვენი ელფოსტის იდენტიფიკატორი, რომელიც თქვენი იდენტიფიკაციისთვის "
+"გამოიყენება განგაშის ელფოსტების გაგზავნისას."
 
 #: editdlgtypes.cpp:1184
 #, kde-format
@@ -2651,6 +2694,8 @@ msgid ""
 "Enter the addresses of the email recipients. Separate multiple addresses by "
 "commas or semicolons."
 msgstr ""
+"შეიყვანეთ ელფოსტის მიმღების მისამართები. ერთზე მეტი ელფოსტის მისამართი "
+"მძიმეებით ან წერტილმძიმეებით გამოჰყავით."
 
 #: editdlgtypes.cpp:1200
 #, kde-format
@@ -3312,6 +3357,9 @@ msgid ""
 "calendar is enabled.<nl/><nl/>To fix this, use <interface>View | Show "
 "Calendars</interface> to check or change calendar statuses."
 msgstr ""
+"განგაშების შექმნა და განახლება შეუძლებელია, რადგან ჩაწერადი აქტიური "
+"კალენდარი ჩართული არაა.<nl/><nl/>ამის გასასწორებლად გამოიყენეთ "
+"<interface>ხედი|კალენდრების ჩვენება</interface>."
 
 #: kalarmapp.cpp:1484
 #, kde-kuit-format
@@ -3328,6 +3376,10 @@ msgid ""
 "<interface>View | Show Calendars</interface> to check or change calendar "
 "statuses."
 msgstr ""
+"განგაშები, მითითებულია, რომ დაარქივდეს, მაგრამ ეს შეუძლებელია, რადგან "
+"ჩაწერადი არქივის განგაშის კალენდარი ჩართული არაა.<nl/><nl/>ამის "
+"გასასწორებლად გამოიყენეთ <interface>ხედი|კალენდრების ჩვენება</interface>, "
+"რომ კალენდრის სტატუსები შეცვალოთ."
 
 #: kalarmapp.cpp:1520
 #, kde-kuit-format
@@ -4091,6 +4143,8 @@ msgid ""
 "Automatically close the alarm window after the expiry of the late-"
 "cancellation period"
 msgstr ""
+"განგაშის ფანჯრის ავტომატური დახურვა დაგვიანებული-გაუქმების ვადის ამოწურვის "
+"შემდეგ"
 
 #: lib/file.cpp:107
 #, kde-format
@@ -4587,6 +4641,7 @@ msgid ""
 "The scheduled date/time for the message (as opposed to the actual time of "
 "display)."
 msgstr ""
+"შეტყობინების დაგეგმილი დრო/თარიღი (ჩვენების მიმდინარე დროის საპირისპირო)."
 
 #: messagewindow.cpp:244
 #, kde-format
