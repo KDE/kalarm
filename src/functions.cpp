@@ -62,7 +62,6 @@ using namespace KCalendarCore;
 #include <QDBusConnectionInterface>
 #include <QDBusInterface>
 #include <QTimer>
-#include <QtGlobal>
 #include <QMimeData>
 #include <QStandardPaths>
 #include <QPushButton>

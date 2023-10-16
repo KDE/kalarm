@@ -12,8 +12,7 @@
 
 #include "kalarmcal_export.h"
 
-#include <QtGlobal>
-
+#include <QtTypes>
 class QString;
 
 namespace KIdentityManagementCore
