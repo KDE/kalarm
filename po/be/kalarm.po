@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-09 01:45+0000\n"
+"POT-Creation-Date: 2023-10-17 01:39+0000\n"
 "PO-Revision-Date: 2007-10-28 14:03+0200\n"
 "Last-Translator: Darafei Praliaskouski <komzpa@licei2.com>\n"
 "Language-Team: Belarusian <i18n@mova.org>\n"
@@ -3123,43 +3123,43 @@ msgctxt "@title:window"
 msgid "Choose Alarm Font & Color"
 msgstr "Выбар шрыфта і колеры напамінку"
 
-#: functions.cpp:145
+#: functions.cpp:144
 #, kde-format
 msgctxt "@action"
 msgid "Stop Play"
 msgstr ""
 
-#: functions.cpp:192
+#: functions.cpp:191
 #, fuzzy, kde-format
 msgctxt "@action"
 msgid "Enable Alarms"
 msgstr "Актываваць напамінкі"
 
-#: functions.cpp:218
+#: functions.cpp:217
 #, fuzzy, kde-format
 msgctxt "@action"
 msgid "Spread Windows"
 msgstr "Спіс напамінкаў"
 
-#: functions.cpp:874
+#: functions.cpp:873
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Import Calendar Files"
 msgstr "Адрас файла каляндара"
 
-#: functions.cpp:935
+#: functions.cpp:934
 #, fuzzy, kde-format
 msgctxt "@item:inlistbox File type selection filter"
 msgid "Calendar Files"
 msgstr "Адрас файла каляндара"
 
-#: functions.cpp:936
+#: functions.cpp:935
 #, kde-format
 msgctxt "@title:window"
 msgid "Choose Export Calendar"
 msgstr ""
 
-#: functions.cpp:961
+#: functions.cpp:960
 #, fuzzy, kde-kuit-format
 msgctxt "@info"
 msgid "Error loading calendar to append to:<nl/><filename>%1</filename>"
@@ -3168,7 +3168,7 @@ msgstr ""
 "\n"
 "%1"
 
-#: functions.cpp:1000
+#: functions.cpp:999
 #, fuzzy, kde-kuit-format
 msgctxt "@info"
 msgid "Failed to save new calendar to:<nl/><filename>%1</filename>"
@@ -3177,7 +3177,7 @@ msgstr ""
 "\n"
 "'%1'"
 
-#: functions.cpp:1013
+#: functions.cpp:1012
 #, fuzzy, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot upload new calendar to:<nl/><filename>%1</filename>"
@@ -3186,37 +3186,37 @@ msgstr ""
 "\n"
 "%1"
 
-#: functions.cpp:1032
+#: functions.cpp:1031
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Unable to show alarms in KOrganizer"
 msgstr "Немагчыма паказаць напамінкі ў KOrganizer"
 
-#: functions.cpp:1033
+#: functions.cpp:1032
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Unable to show alarm in KOrganizer"
 msgstr "Немагчыма паказаць напамінак у KOrganizer"
 
-#: functions.cpp:1036
+#: functions.cpp:1035
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Unable to update alarm in KOrganizer"
 msgstr "Немагчыма абнавіць напамінак у KOrganizer"
 
-#: functions.cpp:1039
+#: functions.cpp:1038
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Unable to delete alarms from KOrganizer"
 msgstr "Немагчыма выдаліць напамінкі з KOrganizer"
 
-#: functions.cpp:1040
+#: functions.cpp:1039
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Unable to delete alarm from KOrganizer"
 msgstr "Немагчыма выдаліць напамінак з KOrganizer"
 
-#: functions.cpp:1050
+#: functions.cpp:1049
 #, fuzzy, kde-kuit-format
 msgctxt "@info"
 msgid "<para>%1</para><para>(Could not start KOrganizer)</para>"
@@ -3225,7 +3225,7 @@ msgstr ""
 "\n"
 "Захаваць змены?"
 
-#: functions.cpp:1053
+#: functions.cpp:1052
 #, fuzzy, kde-kuit-format
 msgctxt "@info"
 msgid "<para>%1</para><para>(KOrganizer not fully started)</para>"
@@ -3234,7 +3234,7 @@ msgstr ""
 "\n"
 "Захаваць змены?"
 
-#: functions.cpp:1056
+#: functions.cpp:1055
 #, fuzzy, kde-kuit-format
 msgctxt "@info"
 msgid "<para>%1</para><para>(Error communicating with KOrganizer)</para>"
@@ -3243,25 +3243,25 @@ msgstr ""
 "\n"
 "Захаваць змены?"
 
-#: functions.cpp:1306
+#: functions.cpp:1305
 #, kde-format
 msgctxt "info"
 msgid "The scheduled Wake from Suspend has been cancelled."
 msgstr ""
 
-#: functions.cpp:1340
+#: functions.cpp:1339
 #, kde-format
 msgctxt "@info"
 msgid "Error obtaining authorization (%1)"
 msgstr ""
 
-#: functions.cpp:1389
+#: functions.cpp:1388
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "You must enable a template calendar to save the template in"
 msgstr "Вылучыце шаблон для новага напамінку."
 
-#: functions.cpp:1612
+#: functions.cpp:1611
 #, fuzzy, kde-kuit-format
 msgctxt "@info Please set the 'From' email address..."
 msgid "<para>%1</para><para>Please set it in the Configuration dialog.</para>"
@@ -3270,7 +3270,7 @@ msgstr ""
 "\n"
 "Пакажыце яго ў наладах."
 
-#: functions.cpp:1616
+#: functions.cpp:1615
 #, fuzzy, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3281,61 +3281,61 @@ msgstr ""
 "\n"
 "Вы жадаеце актываваць напамінкі?"
 
-#: functions.cpp:1617
+#: functions.cpp:1616
 #, fuzzy, kde-format
 msgctxt "@action:button"
 msgid "Enable"
 msgstr "Уключаны"
 
-#: functions.cpp:1617
+#: functions.cpp:1616
 #, fuzzy, kde-format
 msgctxt "@action:button"
 msgid "Keep Disabled"
 msgstr "Адключыць"
 
-#: functions.cpp:1987
+#: functions.cpp:1986
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Error saving alarms"
 msgstr "Памылка паўторнага стварэння напамінку"
 
-#: functions.cpp:1988
+#: functions.cpp:1987
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Error saving alarm"
 msgstr "Памылка паўторнага стварэння напамінку"
 
-#: functions.cpp:1991
+#: functions.cpp:1990
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Error deleting alarms"
 msgstr "Памылка паўторнага стварэння напамінку"
 
-#: functions.cpp:1992
+#: functions.cpp:1991
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Error deleting alarm"
 msgstr "Памылка паўторнага стварэння напамінку"
 
-#: functions.cpp:1995
+#: functions.cpp:1994
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Error saving reactivated alarms"
 msgstr "Немагчыма актываваць мінулы напамінак"
 
-#: functions.cpp:1996
+#: functions.cpp:1995
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Error saving reactivated alarm"
 msgstr "Немагчыма актываваць мінулы напамінак"
 
-#: functions.cpp:1999
+#: functions.cpp:1998
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Error saving alarm templates"
 msgstr "Стварыць новы шаблон напамінку"
 
-#: functions.cpp:2000
+#: functions.cpp:1999
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Error saving alarm template"

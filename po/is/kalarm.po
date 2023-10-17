@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-09 01:45+0000\n"
+"POT-Creation-Date: 2023-10-17 01:39+0000\n"
 "PO-Revision-Date: 2005-12-29 22:18+0100\n"
 "Last-Translator: Arnar Leosson <leosson@frisurf.no>\n"
 "Language-Team: Icelandic <kde-isl@molar.is>\n"
@@ -3304,45 +3304,45 @@ msgctxt "@title:window"
 msgid "Choose Alarm Font & Color"
 msgstr "Velja Letur og liti vakningar"
 
-#: functions.cpp:145
+#: functions.cpp:144
 #, kde-format
 msgctxt "@action"
 msgid "Stop Play"
 msgstr ""
 
-#: functions.cpp:192
+#: functions.cpp:191
 #, fuzzy, kde-format
 #| msgid "Enable &Alarms"
 msgctxt "@action"
 msgid "Enable Alarms"
 msgstr "&Virkja áminningar"
 
-#: functions.cpp:218
+#: functions.cpp:217
 #, fuzzy, kde-format
 #| msgid "Alarm List"
 msgctxt "@action"
 msgid "Spread Windows"
 msgstr "Vöktunalisti"
 
-#: functions.cpp:874
+#: functions.cpp:873
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Import Calendar Files"
 msgstr "Dagbókarslóð"
 
-#: functions.cpp:935
+#: functions.cpp:934
 #, fuzzy, kde-format
 msgctxt "@item:inlistbox File type selection filter"
 msgid "Calendar Files"
 msgstr "Dagbókarslóð"
 
-#: functions.cpp:936
+#: functions.cpp:935
 #, kde-format
 msgctxt "@title:window"
 msgid "Choose Export Calendar"
 msgstr ""
 
-#: functions.cpp:961
+#: functions.cpp:960
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "Cannot open audio file:\n"
@@ -3353,7 +3353,7 @@ msgstr ""
 "Get ekki opnað hljóðskrá:\n"
 "%1"
 
-#: functions.cpp:1000
+#: functions.cpp:999
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "Failed to save calendar to\n"
@@ -3364,7 +3364,7 @@ msgstr ""
 "Get ekki vistað dagbók í\n"
 "'%1'"
 
-#: functions.cpp:1013
+#: functions.cpp:1012
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "Cannot open audio file:\n"
@@ -3375,37 +3375,37 @@ msgstr ""
 "Get ekki opnað hljóðskrá:\n"
 "%1"
 
-#: functions.cpp:1032
+#: functions.cpp:1031
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Unable to show alarms in KOrganizer"
 msgstr "Sýna í KOrganizer"
 
-#: functions.cpp:1033
+#: functions.cpp:1032
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Unable to show alarm in KOrganizer"
 msgstr "Sýna í KOrganizer"
 
-#: functions.cpp:1036
+#: functions.cpp:1035
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Unable to update alarm in KOrganizer"
 msgstr "Sýna í KOrganizer"
 
-#: functions.cpp:1039
+#: functions.cpp:1038
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Unable to delete alarms from KOrganizer"
 msgstr "Sýna í KOrganizer"
 
-#: functions.cpp:1040
+#: functions.cpp:1039
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Unable to delete alarm from KOrganizer"
 msgstr "Sýna í KOrganizer"
 
-#: functions.cpp:1050
+#: functions.cpp:1049
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "%1\n"
@@ -3416,7 +3416,7 @@ msgstr ""
 "%1\n"
 "Ertu viss um að þú viljir vista breytingarnar?"
 
-#: functions.cpp:1053
+#: functions.cpp:1052
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "%1\n"
@@ -3427,7 +3427,7 @@ msgstr ""
 "%1\n"
 "Ertu viss um að þú viljir vista breytingarnar?"
 
-#: functions.cpp:1056
+#: functions.cpp:1055
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "%1\n"
@@ -3438,26 +3438,26 @@ msgstr ""
 "%1\n"
 "Ertu viss um að þú viljir vista breytingarnar?"
 
-#: functions.cpp:1306
+#: functions.cpp:1305
 #, kde-format
 msgctxt "info"
 msgid "The scheduled Wake from Suspend has been cancelled."
 msgstr ""
 
-#: functions.cpp:1340
+#: functions.cpp:1339
 #, kde-format
 msgctxt "@info"
 msgid "Error obtaining authorization (%1)"
 msgstr ""
 
-#: functions.cpp:1389
+#: functions.cpp:1388
 #, fuzzy, kde-format
 #| msgid "Enter the name of the alarm template"
 msgctxt "@info"
 msgid "You must enable a template calendar to save the template in"
 msgstr "Skrifaðu inn nafnið á áminningarsniðinu"
 
-#: functions.cpp:1612
+#: functions.cpp:1611
 #, fuzzy, kde-kuit-format
 #| msgctxt "Please set the 'From' email address..."
 #| msgid ""
@@ -3469,7 +3469,7 @@ msgstr ""
 "%1\n"
 "Vinsamlegast stilltu það í stillingaglugganum."
 
-#: functions.cpp:1616
+#: functions.cpp:1615
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3477,61 +3477,61 @@ msgid ""
 "alarms now?</para>"
 msgstr ""
 
-#: functions.cpp:1617
+#: functions.cpp:1616
 #, fuzzy, kde-format
 msgctxt "@action:button"
 msgid "Enable"
 msgstr "&Virkja"
 
-#: functions.cpp:1617
+#: functions.cpp:1616
 #, fuzzy, kde-format
 msgctxt "@action:button"
 msgid "Keep Disabled"
 msgstr "S&lökkva"
 
-#: functions.cpp:1987
+#: functions.cpp:1986
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Error saving alarms"
 msgstr "Gat ekki kallað á KMail"
 
-#: functions.cpp:1988
+#: functions.cpp:1987
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Error saving alarm"
 msgstr "Gat ekki kallað á KMail"
 
-#: functions.cpp:1991
+#: functions.cpp:1990
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Error deleting alarms"
 msgstr "Gat ekki kallað á KMail"
 
-#: functions.cpp:1992
+#: functions.cpp:1991
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Error deleting alarm"
 msgstr "Gat ekki kallað á KMail"
 
-#: functions.cpp:1995
+#: functions.cpp:1994
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Error saving reactivated alarms"
 msgstr "Henda öllum útrunnum vökturum sem til eru."
 
-#: functions.cpp:1996
+#: functions.cpp:1995
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Error saving reactivated alarm"
 msgstr "Henda öllum útrunnum vökturum sem til eru."
 
-#: functions.cpp:1999
+#: functions.cpp:1998
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Error saving alarm templates"
 msgstr "Gat ekki kallað á KMail"
 
-#: functions.cpp:2000
+#: functions.cpp:1999
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Error saving alarm template"

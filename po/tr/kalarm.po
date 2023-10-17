@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdepim-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-09 01:45+0000\n"
+"POT-Creation-Date: 2023-10-17 01:39+0000\n"
 "PO-Revision-Date: 2023-10-09 12:02+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -3179,135 +3179,135 @@ msgctxt "@title:window"
 msgid "Choose Alarm Font & Color"
 msgstr "Alarm Yazıtipi ve Rengi"
 
-#: functions.cpp:145
+#: functions.cpp:144
 #, kde-format
 msgctxt "@action"
 msgid "Stop Play"
 msgstr "Çalmayı Durdur"
 
-#: functions.cpp:192
+#: functions.cpp:191
 #, kde-format
 msgctxt "@action"
 msgid "Enable Alarms"
 msgstr "Alarmları Etkinleştir"
 
-#: functions.cpp:218
+#: functions.cpp:217
 #, kde-format
 msgctxt "@action"
 msgid "Spread Windows"
 msgstr "Pencereleri Ayır"
 
-#: functions.cpp:874
+#: functions.cpp:873
 #, kde-format
 msgctxt "@title:window"
 msgid "Import Calendar Files"
 msgstr "Takvim Dosyalarını İçe Aktar"
 
-#: functions.cpp:935
+#: functions.cpp:934
 #, kde-format
 msgctxt "@item:inlistbox File type selection filter"
 msgid "Calendar Files"
 msgstr "Takvim Dosyaları"
 
-#: functions.cpp:936
+#: functions.cpp:935
 #, kde-format
 msgctxt "@title:window"
 msgid "Choose Export Calendar"
 msgstr "Dışa Aktarma Takvimini Seç"
 
-#: functions.cpp:961
+#: functions.cpp:960
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Error loading calendar to append to:<nl/><filename>%1</filename>"
 msgstr "İliştirilecek takvim yüklenirken hata:<nl/><filename>%1</filename>"
 
-#: functions.cpp:1000
+#: functions.cpp:999
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Failed to save new calendar to:<nl/><filename>%1</filename>"
 msgstr "Yeni takvim buraya kaydedilemedi:<nl/><filename>%1</filename>"
 
-#: functions.cpp:1013
+#: functions.cpp:1012
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot upload new calendar to:<nl/><filename>%1</filename>"
 msgstr "Takvim buraya gönderilemedi:<nl/><filename>%1</filename>"
 
-#: functions.cpp:1032
+#: functions.cpp:1031
 #, kde-format
 msgctxt "@info"
 msgid "Unable to show alarms in KOrganizer"
 msgstr "Alarmlar K Organizatör içinde gösterilemiyor"
 
-#: functions.cpp:1033
+#: functions.cpp:1032
 #, kde-format
 msgctxt "@info"
 msgid "Unable to show alarm in KOrganizer"
 msgstr "Alarm K Organizatör içinde gösterilemiyor"
 
-#: functions.cpp:1036
+#: functions.cpp:1035
 #, kde-format
 msgctxt "@info"
 msgid "Unable to update alarm in KOrganizer"
 msgstr "K Organizatör içindeki alarm güncellenemiyor"
 
-#: functions.cpp:1039
+#: functions.cpp:1038
 #, kde-format
 msgctxt "@info"
 msgid "Unable to delete alarms from KOrganizer"
 msgstr "K Organizatör içindeki alarm silinemiyor"
 
-#: functions.cpp:1040
+#: functions.cpp:1039
 #, kde-format
 msgctxt "@info"
 msgid "Unable to delete alarm from KOrganizer"
 msgstr "K Organizatör içindeki alarm silinemiyor"
 
-#: functions.cpp:1050
+#: functions.cpp:1049
 #, kde-kuit-format
 msgctxt "@info"
 msgid "<para>%1</para><para>(Could not start KOrganizer)</para>"
 msgstr "<para>%1</para><para>(K Organizatör başlatılamadı)</para>"
 
-#: functions.cpp:1053
+#: functions.cpp:1052
 #, kde-kuit-format
 msgctxt "@info"
 msgid "<para>%1</para><para>(KOrganizer not fully started)</para>"
 msgstr "<para>%1</para><para>(K Organizatör tam olarak başlatılmadı)</para>"
 
-#: functions.cpp:1056
+#: functions.cpp:1055
 #, kde-kuit-format
 msgctxt "@info"
 msgid "<para>%1</para><para>(Error communicating with KOrganizer)</para>"
 msgstr "<para>%1</para><para>(K Organizatör ile iletişim kurulamadı)</para>"
 
-#: functions.cpp:1306
+#: functions.cpp:1305
 #, kde-format
 msgctxt "info"
 msgid "The scheduled Wake from Suspend has been cancelled."
 msgstr "Planlanan Askıdan Uyandır iptal edildi."
 
-#: functions.cpp:1340
+#: functions.cpp:1339
 #, kde-format
 msgctxt "@info"
 msgid "Error obtaining authorization (%1)"
 msgstr "Yetkilendirmenin elde edilmesinde hata(%1)"
 
-#: functions.cpp:1389
+#: functions.cpp:1388
 #, kde-format
 msgctxt "@info"
 msgid "You must enable a template calendar to save the template in"
 msgstr ""
 "Şablonu içerisine kaydetmek için bir şablon takvimi etkinleştirmelisiniz"
 
-#: functions.cpp:1612
+#: functions.cpp:1611
 #, kde-kuit-format
 msgctxt "@info Please set the 'From' email address..."
 msgid "<para>%1</para><para>Please set it in the Configuration dialog.</para>"
 msgstr ""
 "<para>%1</para><para>Lütfen Yapılandırma penceresinden ayarlayın.</para>"
 
-#: functions.cpp:1616
+#: functions.cpp:1615
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3317,61 +3317,61 @@ msgstr ""
 "<para>Alarmlar şu anda devre dışı durumda.</para><para>Alarmları şimdi "
 "etkinleştirmek ister misiniz?</para>"
 
-#: functions.cpp:1617
+#: functions.cpp:1616
 #, kde-format
 msgctxt "@action:button"
 msgid "Enable"
 msgstr "Etkinleştir"
 
-#: functions.cpp:1617
+#: functions.cpp:1616
 #, kde-format
 msgctxt "@action:button"
 msgid "Keep Disabled"
 msgstr "Devre Dışı Bırak"
 
-#: functions.cpp:1987
+#: functions.cpp:1986
 #, kde-format
 msgctxt "@info"
 msgid "Error saving alarms"
 msgstr "Alarmlar kaydedilirken hata oluştu"
 
-#: functions.cpp:1988
+#: functions.cpp:1987
 #, kde-format
 msgctxt "@info"
 msgid "Error saving alarm"
 msgstr "Alarm kaydetme hatası"
 
-#: functions.cpp:1991
+#: functions.cpp:1990
 #, kde-format
 msgctxt "@info"
 msgid "Error deleting alarms"
 msgstr "Alarmlar silinirken hata oluştu"
 
-#: functions.cpp:1992
+#: functions.cpp:1991
 #, kde-format
 msgctxt "@info"
 msgid "Error deleting alarm"
 msgstr "Alarm silme hatası"
 
-#: functions.cpp:1995
+#: functions.cpp:1994
 #, kde-format
 msgctxt "@info"
 msgid "Error saving reactivated alarms"
 msgstr "Yeniden etkinleştirilen alarmlar kaydedilirken hata oluştu"
 
-#: functions.cpp:1996
+#: functions.cpp:1995
 #, kde-format
 msgctxt "@info"
 msgid "Error saving reactivated alarm"
 msgstr "Yeniden etkinleştirilen alarm kaydetme hatası"
 
-#: functions.cpp:1999
+#: functions.cpp:1998
 #, kde-format
 msgctxt "@info"
 msgid "Error saving alarm templates"
 msgstr "Alarm şablonları kaydedilirken hata oluştu"
 
-#: functions.cpp:2000
+#: functions.cpp:1999
 #, kde-format
 msgctxt "@info"
 msgid "Error saving alarm template"

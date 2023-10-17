@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdepim/kalarm.po\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-09 01:45+0000\n"
+"POT-Creation-Date: 2023-10-17 01:39+0000\n"
 "PO-Revision-Date: 2004-09-20 15:44+0200\n"
 "Last-Translator: Thierry Vignaud <tvignaud@mandriva.com>\n"
 "Language-Team: Breton <LL@li.org>\n"
@@ -3164,45 +3164,45 @@ msgctxt "@title:window"
 msgid "Choose Alarm Font & Color"
 msgstr "Dibabit nodrezh & liv an dihuner"
 
-#: functions.cpp:145
+#: functions.cpp:144
 #, kde-format
 msgctxt "@action"
 msgid "Stop Play"
 msgstr ""
 
-#: functions.cpp:192
+#: functions.cpp:191
 #, fuzzy, kde-format
 #| msgid "Enable &Alarms"
 msgctxt "@action"
 msgid "Enable Alarms"
 msgstr "Bevaat an &dihunerioù"
 
-#: functions.cpp:218
+#: functions.cpp:217
 #, fuzzy, kde-format
 #| msgid "Alarm List"
 msgctxt "@action"
 msgid "Spread Windows"
 msgstr "Roll an dihunerioù"
 
-#: functions.cpp:874
+#: functions.cpp:873
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Import Calendar Files"
 msgstr "URL restr an deiziadur"
 
-#: functions.cpp:935
+#: functions.cpp:934
 #, fuzzy, kde-format
 msgctxt "@item:inlistbox File type selection filter"
 msgid "Calendar Files"
 msgstr "URL restr an deiziadur"
 
-#: functions.cpp:936
+#: functions.cpp:935
 #, kde-format
 msgctxt "@title:window"
 msgid "Choose Export Calendar"
 msgstr ""
 
-#: functions.cpp:961
+#: functions.cpp:960
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "Cannot open audio file:\n"
@@ -3213,7 +3213,7 @@ msgstr ""
 "N'hellan ket digeriñ ar rest klevet :\n"
 "%1"
 
-#: functions.cpp:1000
+#: functions.cpp:999
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "Failed to save calendar to\n"
@@ -3224,7 +3224,7 @@ msgstr ""
 "N'hellan ket enrollañ an deiziadur e\n"
 "'%1'"
 
-#: functions.cpp:1013
+#: functions.cpp:1012
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "Cannot open audio file:\n"
@@ -3235,37 +3235,37 @@ msgstr ""
 "N'hellan ket digeriñ ar rest klevet :\n"
 "%1"
 
-#: functions.cpp:1032
+#: functions.cpp:1031
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Unable to show alarms in KOrganizer"
 msgstr "Diskouez e KOrganizer"
 
-#: functions.cpp:1033
+#: functions.cpp:1032
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Unable to show alarm in KOrganizer"
 msgstr "Diskouez e KOrganizer"
 
-#: functions.cpp:1036
+#: functions.cpp:1035
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Unable to update alarm in KOrganizer"
 msgstr "Diskouez e KOrganizer"
 
-#: functions.cpp:1039
+#: functions.cpp:1038
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Unable to delete alarms from KOrganizer"
 msgstr "Diskouez e KOrganizer"
 
-#: functions.cpp:1040
+#: functions.cpp:1039
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Unable to delete alarm from KOrganizer"
 msgstr "Diskouez e KOrganizer"
 
-#: functions.cpp:1050
+#: functions.cpp:1049
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "%1\n"
@@ -3276,7 +3276,7 @@ msgstr ""
 "%1\n"
 "Mennout a rit skrivañ ho c'hemmoù ?"
 
-#: functions.cpp:1053
+#: functions.cpp:1052
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "%1\n"
@@ -3287,7 +3287,7 @@ msgstr ""
 "%1\n"
 "Mennout a rit skrivañ ho c'hemmoù ?"
 
-#: functions.cpp:1056
+#: functions.cpp:1055
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "%1\n"
@@ -3298,25 +3298,25 @@ msgstr ""
 "%1\n"
 "Mennout a rit skrivañ ho c'hemmoù ?"
 
-#: functions.cpp:1306
+#: functions.cpp:1305
 #, kde-format
 msgctxt "info"
 msgid "The scheduled Wake from Suspend has been cancelled."
 msgstr ""
 
-#: functions.cpp:1340
+#: functions.cpp:1339
 #, kde-format
 msgctxt "@info"
 msgid "Error obtaining authorization (%1)"
 msgstr ""
 
-#: functions.cpp:1389
+#: functions.cpp:1388
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "You must enable a template calendar to save the template in"
 msgstr "Ret eo deoc'h reiñ un anv evit ar patrom dihuner"
 
-#: functions.cpp:1612
+#: functions.cpp:1611
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "%1\n"
@@ -3327,7 +3327,7 @@ msgstr ""
 "%1\n"
 "Mennout a rit skrivañ ho c'hemmoù ?"
 
-#: functions.cpp:1616
+#: functions.cpp:1615
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3335,63 +3335,63 @@ msgid ""
 "alarms now?</para>"
 msgstr ""
 
-#: functions.cpp:1617
+#: functions.cpp:1616
 #, fuzzy, kde-format
 #| msgid "Enable"
 msgctxt "@action:button"
 msgid "Enable"
 msgstr "Bevaat"
 
-#: functions.cpp:1617
+#: functions.cpp:1616
 #, fuzzy, kde-format
 #| msgid "Keep Disabled"
 msgctxt "@action:button"
 msgid "Keep Disabled"
 msgstr "aat "
 
-#: functions.cpp:1987
+#: functions.cpp:1986
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Error saving alarms"
 msgstr "Fazi en ur galv KMail"
 
-#: functions.cpp:1988
+#: functions.cpp:1987
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Error saving alarm"
 msgstr "Fazi en ur galv KMail"
 
-#: functions.cpp:1991
+#: functions.cpp:1990
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Error deleting alarms"
 msgstr "Fazi en ur galv KMail"
 
-#: functions.cpp:1992
+#: functions.cpp:1991
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Error deleting alarm"
 msgstr "Fazi en ur galv KMail"
 
-#: functions.cpp:1995
+#: functions.cpp:1994
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Error saving reactivated alarms"
 msgstr "Adbevaat an dihuner"
 
-#: functions.cpp:1996
+#: functions.cpp:1995
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Error saving reactivated alarm"
 msgstr "Adbevaat an dihuner"
 
-#: functions.cpp:1999
+#: functions.cpp:1998
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Error saving alarm templates"
 msgstr "Krouiñ ur patrom dihuner"
 
-#: functions.cpp:2000
+#: functions.cpp:1999
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Error saving alarm template"
