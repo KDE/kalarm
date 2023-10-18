@@ -165,6 +165,7 @@ configure_file(src/config-kalarm.h.in ${CMAKE_CURRENT_BINARY_DIR}/config-kalarm.
 include_directories(${kalarm_SOURCE_DIR} ${kalarm_BINARY_DIR})
 
 add_definitions(-DQT_MESSAGELOGCONTEXT)
+add_definitions(-DQT_NO_CONTEXTLESS_CONNECT)
 ecm_set_disabled_deprecation_versions(QT 5.15.2  KF 5.240.0)
 
 option(USE_UNITY_CMAKE_SUPPORT "Use UNITY cmake support (speedup compile time)" OFF)
