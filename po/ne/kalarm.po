@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-17 01:39+0000\n"
+"POT-Creation-Date: 2023-10-18 01:42+0000\n"
 "PO-Revision-Date: 2007-09-07 11:50+0545\n"
 "Last-Translator: Nabin Gautam <nabin@mpp.org.np>\n"
 "Language-Team: Nepali <info@mpp.org.np>\n"
@@ -5603,28 +5603,28 @@ msgctxt "@info:whatsthis"
 msgid "Activate <application>KAlarm</application>"
 msgstr "केडीई मेलमा यो इमेल स्थापना गर्न असमर्थ"
 
-#: messagewindow.cpp:1067
+#: messagewindow.cpp:1069
 #, fuzzy, kde-format
 #| msgid "Do you really want to acknowledge this alarm?"
 msgctxt "@info"
 msgid "Do you really want to acknowledge this alarm?"
 msgstr "तपाईँ वास्तवमै यो संसूचकलाई स्वीकार गर्न चाहनुहुन्छ ?"
 
-#: messagewindow.cpp:1068
+#: messagewindow.cpp:1070
 #, fuzzy, kde-format
 #| msgid "Acknowledge Alarm"
 msgctxt "@action:button"
 msgid "Acknowledge Alarm"
 msgstr "स्वीकृत संसूचक"
 
-#: messagewindow.cpp:1068
+#: messagewindow.cpp:1070
 #, fuzzy, kde-format
 #| msgid "&Acknowledge"
 msgctxt "@action:button"
 msgid "Acknowledge"
 msgstr "स्वीकृत"
 
-#: messagewindow.cpp:1123
+#: messagewindow.cpp:1125
 #, fuzzy, kde-kuit-format
 #| msgid "Unable to locate this email in KMail"
 msgctxt "@info"

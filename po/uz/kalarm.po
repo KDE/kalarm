@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-17 01:39+0000\n"
+"POT-Creation-Date: 2023-10-18 01:42+0000\n"
 "PO-Revision-Date: 2006-12-17 13:25+0000\n"
 "Last-Translator: Mashrab Kuvatov <kmashrab@uni-bremen.de>\n"
 "Language-Team: Uzbek <floss-uz-l10n@googlegroups.com>\n"
@@ -5060,25 +5060,25 @@ msgctxt "@info:whatsthis"
 msgid "Activate <application>KAlarm</application>"
 msgstr "KMail &shaxsiyatlaridan foydalanish"
 
-#: messagewindow.cpp:1067
+#: messagewindow.cpp:1069
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Do you really want to acknowledge this alarm?"
 msgstr "Rostdan ham ushbu ogohlantirishni tasdiqlaysizmi?"
 
-#: messagewindow.cpp:1068
+#: messagewindow.cpp:1070
 #, fuzzy, kde-format
 msgctxt "@action:button"
 msgid "Acknowledge Alarm"
 msgstr "Ogohlantirishni tasdiqlash"
 
-#: messagewindow.cpp:1068
+#: messagewindow.cpp:1070
 #, fuzzy, kde-format
 msgctxt "@action:button"
 msgid "Acknowledge"
 msgstr "&Tasdiqlash"
 
-#: messagewindow.cpp:1123
+#: messagewindow.cpp:1125
 #, fuzzy, kde-kuit-format
 #| msgid "Use KMail &identities"
 msgctxt "@info"

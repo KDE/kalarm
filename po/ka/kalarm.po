@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-17 01:39+0000\n"
-"PO-Revision-Date: 2023-10-15 13:39+0200\n"
+"POT-Creation-Date: 2023-10-18 01:42+0000\n"
+"PO-Revision-Date: 2023-10-17 12:06+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -1059,6 +1059,16 @@ msgid ""
 "p>\n"
 "      "
 msgstr ""
+"<p>მიუთითეთ განგაშის შეტყობინების ფანჯრის მდებარეობები და დაყოვნება წამებში, "
+"რომლის გავლის შემდეგაც, მას შემდეგ, რაც ფანჯარა გამოჩნდება, ჩაირთვება "
+"ღილაკები.\n"
+"        <ul><li>0 - რომ ფანჯრის მდებარეობა კურსორიდან რაც შეიძლება შორის "
+"იყოს და ჩართვის დაყოვნებაც არ იქნება.</li>\n"
+"        <li>0 - რომ ფანჯარა მოთავსდეს ეკრანის ცენტრში და მიუთითოთ დაყოვნება "
+"ღილაკების ჩართვამდე.</li>\n"
+"        <li>-1 - მდებარეობის მითითების და ღილაკების ჩართვის დაყოვნების "
+"გარეშე.</li></ul></p>\n"
+"     "
 
 #. i18n: ectx: label, entry (TooltipAlarmCount), group (General)
 #: data/kalarmconfig.kcfg:167
@@ -1080,6 +1090,12 @@ msgid ""
 "        <li>>0 to set a limit.</li></ul></p>\n"
 "      "
 msgstr ""
+"<p>რამდენი განგაში, რომლის დროც შემდეგ 24 საათში დგება, იქნება ნაჩვენები "
+"სისტემურ საათთან ხატულის მინიშნებაში:\n"
+"        <ul><li>0, რომ არც ერთი</li>\n"
+"        <li>-1, რომ ყველა</li>\n"
+"        <li>>0, რომ ლიმიტი დააყენოთ.</li><ul><p>\n"
+"     "
 
 #. i18n: ectx: label, entry (ShowTooltipAlarmTime), group (General)
 #: data/kalarmconfig.kcfg:178
@@ -1154,6 +1170,11 @@ msgid ""
 "automatically. This option will only work if your system is configured to "
 "use sendmail or a sendmail compatible mail transport agent.</li></ul></p>"
 msgstr ""
+"<p>როგორ გავაგზავნო ელფოსტა, როცა ელფოსტის განგაში დატრიგერდება."
+"<ul><li>KMail: ელფოსტა ავტომატურად, KMail-ით გაიგზავნება.</li><li>Sendmail: "
+"ელფოსტა ავტომატურად გაიგზავნება. ეს პარამეტრი, მხოლოდ, მაშინ იმუშავებს, როცა "
+"sendmail-ის ან მასთან თავსებად ელფოსტის ტრანსპორტის აგენტს იყენებთ.</"
+"li><ul></p>"
 
 #. i18n: ectx: label, entry (Base_EmailClient), group (General)
 #: data/kalarmconfig.kcfg:199
@@ -1362,6 +1383,12 @@ msgid ""
 "        <li>>0 number of days to keep.</li></ul></p>\n"
 "      "
 msgstr ""
+"<p>მიუთითეთ, რამდენი დღით შევინახო განგაშები, როცა ისინი მოძველდება ან "
+"წაიშლება (იმ წაშლილი განგაშების გამოკლებით, რომლებიც არ დატრიგერებულან):\n"
+"       <ul><li>0 - რომ არ შევინახო<li>\n"
+"       <li>-1 - რომ სამუდამოდ შევინახო\n"
+"       <li>>0 - რამდენი დღე შევინახო<li></ul></p>\n"
+"      "
 
 #. i18n: ectx: label, entry (KOrgEventDuration), group (General)
 #: data/kalarmconfig.kcfg:271
@@ -1877,6 +1904,10 @@ msgid ""
 "have a dial-up connection, so that you can then ensure that the email is "
 "actually transmitted."
 msgstr ""
+"გაფრთხილების ჩვენება ყოველთვის, როცა არსებობს ელფოსტის განგაში, რომელიც "
+"დაშორებულ სისტემაზე გასაგზავნად მზადაა. ეს შეიძლება სასარგებლო იყოს, თუ, "
+"მაგალითად ინტერნეტთან სატელეფონო ხაზით ხართ მიერთებული და გინდათ, იცოდეთ, "
+"ელფოსტა როდის გაიგზავნება."
 
 #. i18n: ectx: Menu (file)
 #: data/kalarmui.rc:19
@@ -2420,6 +2451,11 @@ msgid ""
 "a text or image file.</item><item><interface>%3</interface>: the alarm will "
 "display the output from a command.</item></list></para>"
 msgstr ""
+"<para>აირჩიეთ, რა უნდა აჩვენოს განგაშმა:<list><item><interface>%1</"
+"interface>: განგაში აჩვენებს ტექსტურ შეტყობინებას, რომელიც თქვენ შეიყვანეთ.</"
+"item><item><interface>%2</interface>: განგაში ტექსტური ფაილს ან სურათს "
+"გამოიტანს.</item><item><interface>%3</interface>: განგაში ბრძანების "
+"გამოტანილ ინფორმაცის გაჩვენებთ.</item></list></para>"
 
 #: editdlgtypes.cpp:173
 #, kde-format
@@ -4175,6 +4211,12 @@ msgid ""
 "alarm will be triggered at the first opportunity after its scheduled time, "
 "regardless of how late it is.</para>"
 msgstr ""
+"<para>თუ ჩართულია, განგაში გაუქმდება, თუ დაგეგმილი დროის შემდეგ მითითებულ "
+"დროის შუალედში მისი დატრიგერება შეუძლებელია. დაუტრიგერებლობის შესაძლო მიზეზი "
+"შეიძლება იყოს: გახვედით სისტემიდან, X გაშვებული არაა, ან "
+"<application>KAlarm</application> გაშვებული არაა.</para><para>თუ ჩართული "
+"არაა, განგაში გაეშვება დაგეგმილი დროის შემდეგ, პირველივე შანსისთანავე, იმის "
+"მიუხედავად, რამდენად გვიანია.</para>"
 
 #: latecancel.cpp:59
 #, kde-format
@@ -4815,25 +4857,25 @@ msgctxt "@info:whatsthis"
 msgid "Activate <application>KAlarm</application>"
 msgstr "<application>KAlarm</application>-ის აქტვაცია"
 
-#: messagewindow.cpp:1067
+#: messagewindow.cpp:1069
 #, kde-format
 msgctxt "@info"
 msgid "Do you really want to acknowledge this alarm?"
 msgstr "მართლა გნებავთ ამ განგაშის დადასტურება?"
 
-#: messagewindow.cpp:1068
+#: messagewindow.cpp:1070
 #, kde-format
 msgctxt "@action:button"
 msgid "Acknowledge Alarm"
 msgstr "განგაშის დადასტურება"
 
-#: messagewindow.cpp:1068
+#: messagewindow.cpp:1070
 #, kde-format
 msgctxt "@action:button"
 msgid "Acknowledge"
 msgstr "დადასტურება"
 
-#: messagewindow.cpp:1123
+#: messagewindow.cpp:1125
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Unable to locate this email in <application>KMail</application>"
@@ -5108,6 +5150,11 @@ msgid ""
 "what you enter here. See the <application>KAlarm</application> Handbook for "
 "details of special codes to tailor the command line."
 msgstr ""
+"შეიყვანეთ სრული ბრძანების სტრიქონი, რომელიც თქვენს არჩეულ ტერმინალის "
+"ფანჯარაში ბრძანების შესასრულებლადაა საჭირო. ნაგულისხმევად, განგაშის "
+"ბრძანების სტრიქონი ბოლოში მიეწერება იმას, რასაც აქ შეიყვანთ. ბრძანების "
+"სტრიქონი სამართავად სპეციალური კოდების დეტალებისთვის იხილეთ "
+"<application>KAlarm</application>-ის დოკუმენტაცია."
 
 #: prefdlg.cpp:537
 #, kde-format
@@ -5224,6 +5271,9 @@ msgid ""
 "alarms set to wake from suspend. This can be used to ensure that the system "
 "is fully restored by the time the alarm triggers."
 msgstr ""
+"შეიყვანეთ, განგაშის ტრიგერამდე რამდენი ხნით ადრე გავაღვიძო სისტემა "
+"განგაშებისთვის, რომელიც სისტემას აღვიძებენ. პარამეტრი შეგიძლიათ გამოიყენოთ, "
+"რომ დარწმუნდეთ, რომ განგაშის ტრიგერისას სისტემა სრულიად ფხიზელია."
 
 #: prefdlg.cpp:768
 #, kde-format
@@ -5342,6 +5392,10 @@ msgid ""
 "that archived alarms are always stored in the default archived alarm "
 "calendar.</para>"
 msgstr ""
+"<para>ახალი განგაშის ან განგაშის ნიმუშს შენახვისას, კითხვა, რომელ კალენდარში "
+"დავიმახსოვრო, თუ აქტიურია ერთზე მეტი.</para><para>დაიმახსოვრეთ, რომ "
+"დაარქივებული განგაშები, ყოველთვის, ნაგულისხმევი დაარქივებული განგაშების "
+"კალენდარში ინახება.</para>"
 
 #: prefdlg.cpp:950
 #, kde-format
@@ -5574,6 +5628,12 @@ msgid ""
 "email alarms, you will be able to pick which of <application>KMail</"
 "application>'s identities to use."
 msgstr ""
+"ჩართეთ <application>KMail</application>-ის ელფოსტის ანგარიშების თქვენი "
+"იდენტიფიკაციისთვის გამოსაყენებლად, როცა ელფოსტის განგაშებს აგზავნით. "
+"არსებული ელფოსტის განგაშებისთვის <application>KMail</application>-ის "
+"ნაგულისხმევი იდენტიფიკატორი იქნება გამოყენებული. ახალი ელფოსტის "
+"განგაშებისთვის, საშუალება გექნებათ, აირჩიოთ, გაგზავნა <application>KMail</"
+"application>-ის რომელი იდენტიფიკატორით მოხდება."
 
 #: prefdlg.cpp:1163
 #, kde-format
@@ -5602,6 +5662,9 @@ msgid ""
 "Check to use the default email address set in <application>KMail</"
 "application>, for blind copying email alarms to yourself."
 msgstr ""
+"გამოვიყენო თუ არა <application>KMail</application>-ში დაყენებული "
+"ნაგულისხმევი ელფოსტის მისამართი საკუთარი თავისთვის ელფოსტის ბრმა ასლების "
+"გასაგზავნად."
 
 #: prefdlg.cpp:1287
 #, kde-format
@@ -5846,6 +5909,9 @@ msgid ""
 "tray. Showing it in the system tray provides easy access and a status "
 "indication.</para>"
 msgstr ""
+"<para>ჩართეთ <application>KAlarm</application>-ის სისტემის საათთან ხატულის "
+"საჩვენებლად. ხატულის ჩვენება პროგრამაზე წვდომას აიოლებს და სტატუსის "
+"მაჩვენებლებს გამოიტანს.</para>"
 
 #: prefdlg.cpp:1817
 #, kde-format
@@ -5877,6 +5943,10 @@ msgid ""
 "system tray if there are no active alarms. When hidden, the icon can always "
 "be made visible by use of the system tray option to show hidden icons."
 msgstr ""
+"ჩართეთ, რათა <application>KAlarm</application>-ს სისტემურ საათთან მდებარე "
+"ხატულა დაიმალოს, როცა აქტიური განგაშები არ გაქვთ. როცა დამალულია, მისი "
+"გამოჩენა ყოველთვის შეგიძლიათ საათთან არსებული პანელის პარამეტრიდან 'დამალული "
+"ხატულების ჩვენება'."
 
 #: prefdlg.cpp:1835
 #, kde-kuit-format
@@ -5887,6 +5957,10 @@ msgid ""
 "hidden, the icon can always be made visible by use of the system tray option "
 "to show hidden icons."
 msgstr ""
+"ჩართეთ, რათა <application>KAlarm</application>-ს სისტემურ საათთან მდებარე "
+"ხატულა ავტომატურად დაიმალოს, როცა მითითებულ დროის პერიოდში განგაშების დრო არ "
+"დგება. როცა დამალულია, მისი გამოჩენა ყოველთვის შეგიძლიათ საათთან არსებული "
+"პანელის პარამეტრიდან 'დამალული ხატულების ჩვენება'."
 
 #: prefdlg.cpp:1838
 #, kde-format
@@ -5913,6 +5987,8 @@ msgid ""
 "Specify whether to include in the system tray tooltip, a summary of alarms "
 "due in the next 24 hours."
 msgstr ""
+"ჩართეთ, რათა სისტემურ საათთან ხატულის მინიშნებაში შემდეგ 24 საათში მათი "
+"დროის დადგომის განგაშების მიმოხილვა იყოს ნაჩვენები."
 
 #: prefdlg.cpp:1867
 #, kde-format
@@ -5927,6 +6003,9 @@ msgid ""
 "Uncheck to display all of the next 24 hours' alarms in the system tray "
 "tooltip. Check to enter an upper limit on the number to be displayed."
 msgstr ""
+"გამორთეთ სისტემურ საათთან არსებული ხატულის მინიშნებაში ყველა შემდეგი 24 "
+"საათის განგაშების საჩვენებლად. დააწკაპუნეთ, რომ ნაჩვენები განგაშების ზედა "
+"ზღვრის მნიშვნელობა შეიყვანოთ."
 
 #: prefdlg.cpp:1880
 #, kde-format
@@ -5974,6 +6053,11 @@ msgid ""
 "message windows in the center of the screen, but disable buttons for a short "
 "time after the window is displayed.</item></list></para>"
 msgstr ""
+"<para>აირჩიეთ, როგორ შევამციროთ შანსი, რომ განგაშის შეტყობინებები შემთხვევით "
+"დაადასტუროთ:<list><item>განგაშის ფანჯრის თაგუნას კურსორის მიმდინარე "
+"მდებარეობიდან რაც შეიძლება შორს მოთავსება, ან</item><item>განგაშის "
+"შეტყობინების ფანჯრის ეკრანის შუაში მოთავსება, მაგრამ ფანჯრის ჩვენებიდან ცოტა "
+"ხნით ღილაკების გამორთვა.</item></list></para>"
 
 #: prefdlg.cpp:1954
 #, kde-format
@@ -6000,6 +6084,8 @@ msgid ""
 "Enter how long its buttons should remain disabled after the alarm message "
 "window is shown."
 msgstr ""
+"შეიყვანეთ, რამდენ ხანს იქნება ღილაკები გამორთული, როცა განგაშის შეტყობინების "
+"ფანჯარას გაჩვენებთ."
 
 #: prefdlg.cpp:1981
 #, kde-format
@@ -6018,6 +6104,11 @@ msgid ""
 "does not interfere with your typing when it is displayed, but it has no "
 "title bar and cannot be moved or resized.</item></list></para>"
 msgstr ""
+"<para>მიუთითეთ განგაშის ფანჯრის მახასიათებლები:<list><item>თუ ჩართულია, "
+"ფანჯარა ნორმალური ფანჯარაა, სათაურის ზოლით, რომელიც კლავიატურის ფოკუსს "
+"იღებს, როცა მას ვაჩვენებთ.</item><item>თუ გამორთულია, ფანჯარა არ ჩაერევა "
+"თქვენი კრეფის პროცესში, როცა მას გაჩვენებთ, მაგრამ არც სათაურის ზოლი აქვს და "
+"მისი არც გადაადგილება შეგეძლებათ, არც ზომის შეცვლა.</item></list></para>"
 
 #: recurrenceedit.cpp:56
 #, kde-format
@@ -6081,6 +6172,9 @@ msgid ""
 "then.</para><para>Note that it will also be triggered any time "
 "<application>KAlarm</application> is restarted.</para>"
 msgstr ""
+"<para>განგაშის მითითებულ დრო/თარიღზე და მანამდე ყოველი სისტემაში შესვლის "
+"დროს გაშვება.</para><para>დაიმახსოვრეთ, რომ ის ასევე დატრიგერდება ყოველ "
+"ჯერზე, როცა <application>KAlarm</application>-ს თავიდან გაუშვებთ.</para>"
 
 #: recurrenceedit.cpp:112
 #, kde-format
@@ -6119,6 +6213,8 @@ msgid ""
 "Set up a repetition within the recurrence, to trigger the alarm multiple "
 "times each time the recurrence is due."
 msgstr ""
+"აირჩიეთ მოხდენების სერიაში გამეორებების რაოდენობა, რათა განგაში მრავალჯერ "
+"დატრიგერდეს, რამდენჯერაც გამეორების დროა."
 
 #: recurrenceedit.cpp:193
 #, kde-format
@@ -6176,6 +6272,9 @@ msgid ""
 "applies to the main recurrence only. It does not limit any sub-repetition "
 "which will occur regardless after the last main recurrence.</note></para>"
 msgstr ""
+"<para>განგაშის გამეორება მითითებულ თარიღამდე/დრომდე.</para><para><note>ეს "
+"მხოლოდ მთავარ გამეორებებს ეხება. ის არ ზღუდავს ქვეგამეორებებს, რომლებიც "
+"მთავარი გამეორებისგან დამოუკიდებლად სრულდება.</note></para>"
 
 #: recurrenceedit.cpp:241
 #, kde-format
@@ -6229,6 +6328,8 @@ msgid ""
 "Enter a date to insert in the exceptions list. Use in conjunction with the "
 "Add or Change button below."
 msgstr ""
+"შეიყვანეთ გამონაკლისების სიაში ჩასასმელი თარიღი. გამოიყენეთ დამატების და "
+"შეცვლის ღილაკებთან ერთად."
 
 #: recurrenceedit.cpp:307
 #, kde-format
@@ -6619,6 +6720,8 @@ msgid ""
 "Instead of the alarm triggering just once at each recurrence, checking this "
 "option makes the alarm trigger multiple times at each recurrence."
 msgstr ""
+"იმის მაგიერ, რომ თითოეული მოხდენისას განგაში მხოლოდ ერთხელ დატრიგერდეს, ამ "
+"პარამეტრის ჩართვით განგაში, თითოეულ მოხდენაზე, ბევრჯერ დატრიგერდება."
 
 #: repetitionbutton.cpp:142
 #, kde-format
@@ -7584,6 +7687,9 @@ msgid ""
 "whether a calendar is enabled (checked) or disabled (unchecked). The default "
 "calendar is shown in bold."
 msgstr ""
+"მონიშნული ტიპის მქონე ხელმისაწვდომი კალენდრების სია. ჩართული მდგომარეობა "
+"აჩვენებს, ჩართულია (დასმული თოლია) ან გამორთული (თოლია დასმული არაა). "
+"ნაგულისხმევი კალენდარი სქელი ფონტითაა ნაჩვენები."
 
 #: resourceselector.cpp:82
 #, kde-format
@@ -7611,6 +7717,8 @@ msgid ""
 "calendar itself is left intact, and may subsequently be reinstated in the "
 "list if desired.</para>"
 msgstr ""
+"<para>გამოკვეთილი კალენდრის წაშლა სიიდან.</para><para>კალენდარი თვითონ "
+"ხელშეუხებელი დარჩება და შეგიძლიათ, სურვილის შემთხვევაში, ჩაამატოთ ის.</para>"
 
 #: resourceselector.cpp:111
 #, kde-format
@@ -8006,6 +8114,15 @@ msgid ""
 "is spoken. (Option requires working Qt text-to-speech installation.)</item></"
 "list></para>"
 msgstr ""
+"<para>აირჩიეთ ხმა, რომელიც შეტყობინების ჩვენებისას დაიკვრება."
+"<list><item><interface>%1</interface> : შეტყობინება ჩუმად იქნება ნაჩვენები.</"
+"item><item><interface>%2</interface>: გაიგებთ უბრალო პიპინს.</"
+"item><item><interface>%3</interface>: დავუკრავ აუდიო ფაილს. გაჩვენებთ "
+"ფანჯარას, სადაც ფაილს და მისი დაკვრის პარამეტრებს აირჩევთ. (არჩევანი "
+"ხელმისაწვდომი არაა, თუ გაფრთხილებას იყენებთ).</item><item><interface>%4</"
+"interface> მოხდება შეტყობინების ტექსტის წაკითხვა. (პარამეტრი მუშაობს, "
+"მხოლოდ, მაშინ, როცა დაყენებულია Qt-ის ტექსტის-წარმოთქმის ბიბლიოთეკა).</"
+"item></list></para>"
 
 #: soundpicker.cpp:87
 #, kde-format
@@ -8085,6 +8202,11 @@ msgid ""
 "will wait for the command to complete before displaying the alarm.</note></"
 "para>"
 msgstr ""
+"<para>შეიყვანეთ გარსის ბრძანება, რომელიც განგაშის ჩვენებამდე გაეშვება.</"
+"para><para>დაიმახსოვრეთ, რომ ის შესრულდება, მხოლოდ, მაშინ, როცა განგაში "
+"სწორადაა ნაჩვენები და არა მაშინ, როცა ეს შემხსენებელი ან გადადებული განგაშია."
+"</para><para><note>KAlarm-ი დაელოდება პროგრამის შესრულებას და მხოლოდ შემდეგ "
+"გაჩვენებთ განგაშს.</note></para>"
 
 #: specialactions.cpp:173
 #, kde-format
@@ -8100,6 +8222,10 @@ msgid ""
 "displayed.</para><para>If checked, the pre-alarm command is also executed "
 "before a deferred alarm is displayed.</para>"
 msgstr ""
+"<para>თუ გამორთულია, ბრძან\n"
+"ება, მხოლოდ, განგაშის ბოლომდე გამოტანის შემდეგ შესრულდება.</para><para>თუ "
+"ჩართულია, გადადებული განგაშის ჩვენებამდე განგაშამდელი ბრძანებაც შესრულდება.</"
+"para>"
 
 #: specialactions.cpp:178
 #, kde-format
