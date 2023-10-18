@@ -52,9 +52,9 @@ using namespace KCalendarCore;
 #include <KIO/StatJob>
 #include <KIO/StoredTransferJob>
 #include <KFileCustomDialog>
-#include <KWindowInfo>
 #include <KWindowSystem>
 #if ENABLE_X11
+#include <KWindowInfo>
 #include <KX11Extras>
 #endif
 
