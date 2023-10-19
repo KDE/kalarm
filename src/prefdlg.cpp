@@ -58,6 +58,7 @@ using namespace KHolidays;
 #include <QIcon>
 #if ENABLE_X11
 #include <KX11Extras>
+#include <KWindowInfo>
 #endif
 #include <KWindowSystem>
 #include <KHelpClient>
