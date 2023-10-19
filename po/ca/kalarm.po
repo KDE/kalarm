@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-10-18 01:42+0000\n"
-"PO-Revision-Date: 2023-10-09 09:18+0200\n"
+"PO-Revision-Date: 2023-10-18 20:28+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -6379,8 +6379,8 @@ msgstr "Usa la mateixa zona horària que l'hora d'inici."
 msgctxt "@info:whatsthis"
 msgid "<para>Enter the last date to repeat the alarm.</para><para>%1</para>"
 msgstr ""
-"<para>Introduïu l'última data fins la qual es repetirà l'alarma.</para><para>"
-"%1</para>"
+"<para>Introduïu l'última data fins a la qual es repetirà l'alarma.</"
+"para><para>%1</para>"
 
 #: recurrenceedit.cpp:249
 #, kde-kuit-format
@@ -6389,8 +6389,8 @@ msgid ""
 "<para>Enter the last time to repeat the alarm.</para><para>%1</para><para>"
 "%2</para>"
 msgstr ""
-"<para>Introduir l'última hora fins la qual es repetirà l'alarma.</para><para>"
-"%1</para><para>%2</para>"
+"<para>Introduir l'última hora fins a la qual es repetirà l'alarma.</"
+"para><para>%1</para><para>%2</para>"
 
 #: recurrenceedit.cpp:253
 #, kde-format
