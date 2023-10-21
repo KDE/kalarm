@@ -24,7 +24,8 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Zanata 3.9.6\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"Plural-Forms: nplurals=4; plural=(n == 1) ? 0 : ((n == 2) ? 1 : ((n > 10 && "
+"n % 10 == 0) ? 2 : 3));\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -180,6 +181,8 @@ msgid "1 minute"
 msgid_plural "%1 minutes"
 msgstr[0] "דקה אחת"
 msgstr[1] "דקה אחת"
+msgstr[2] ""
+msgstr[3] ""
 
 #: alarmtimewidget.cpp:157
 #, fuzzy, kde-format
@@ -188,6 +191,8 @@ msgid "1 hour"
 msgid_plural "%1 hours"
 msgstr[0] "שעה אחת"
 msgstr[1] "%1 שעות"
+msgstr[2] ""
+msgstr[3] ""
 
 #: alarmtimewidget.cpp:165
 #, fuzzy, kde-format
@@ -3383,6 +3388,8 @@ msgid "1 Minute"
 msgid_plural "%1 Minutes"
 msgstr[0] "דקה אחת"
 msgstr[1] "דקה אחת"
+msgstr[2] ""
+msgstr[3] ""
 
 #: kalarmcalendar/kaevent.cpp:3092 kalarmcalendar/kaevent.cpp:3179
 #: kalarmcalendar/kaeventformatter.cpp:444
@@ -3392,6 +3399,8 @@ msgid "1 Hour"
 msgid_plural "%1 Hours"
 msgstr[0] ""
 msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
 
 #: kalarmcalendar/kaevent.cpp:3094 kalarmcalendar/kaevent.cpp:3180
 #, kde-format
@@ -3407,6 +3416,8 @@ msgid "1 Day"
 msgid_plural "%1 Days"
 msgstr[0] ""
 msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
 
 #: kalarmcalendar/kaevent.cpp:3099 kalarmcalendar/kaevent.cpp:3185
 #, fuzzy, kde-format
@@ -3415,6 +3426,8 @@ msgid "1 Week"
 msgid_plural "%1 Weeks"
 msgstr[0] "שבועות"
 msgstr[1] "שבועות"
+msgstr[2] ""
+msgstr[3] ""
 
 #: kalarmcalendar/kaevent.cpp:3101
 #, fuzzy, kde-format
@@ -3423,6 +3436,8 @@ msgid "1 Month"
 msgid_plural "%1 Months"
 msgstr[0] "חודשים"
 msgstr[1] "חודשים"
+msgstr[2] ""
+msgstr[3] ""
 
 #: kalarmcalendar/kaevent.cpp:3103
 #, fuzzy, kde-format
@@ -3431,6 +3446,8 @@ msgid "1 Year"
 msgid_plural "%1 Years"
 msgstr[0] "שנים"
 msgstr[1] "שנים"
+msgstr[2] ""
+msgstr[3] ""
 
 #: kalarmcalendar/kaevent.cpp:3109
 #, fuzzy, kde-format
@@ -3868,6 +3885,8 @@ msgid "1 Second"
 msgid_plural "%1 Seconds"
 msgstr[0] "שניות"
 msgstr[1] "שניות"
+msgstr[2] ""
+msgstr[3] ""
 
 #: kalarmcalendar/kaeventformatter.cpp:417
 #, kde-format
@@ -4299,6 +4318,8 @@ msgid "Do you really want to delete the selected alarm?"
 msgid_plural "Do you really want to delete the %1 selected alarms?"
 msgstr[0] "האם אתה בטוח שברצונך למחוק את התזכורת הנבחרת?"
 msgstr[1] "האם אתה בטוח שברצונך למחוק את %1 התזכורות הנבחרות?"
+msgstr[2] ""
+msgstr[3] ""
 
 #: mainwindow.cpp:812
 #, fuzzy, kde-format
@@ -4307,6 +4328,8 @@ msgid "Delete Alarm"
 msgid_plural "Delete Alarms"
 msgstr[0] "מחיקת תזכורת"
 msgstr[1] "מחיקת תזכורות"
+msgstr[2] ""
+msgstr[3] ""
 
 #: mainwindow.cpp:813 recurrenceedit.cpp:318 templatedlg.cpp:92
 #, fuzzy, kde-format
@@ -4453,6 +4476,8 @@ msgid "Tomorrow"
 msgid_plural "in %1 days' time"
 msgstr[0] ""
 msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
 
 #: messagedisplayhelper.cpp:485
 #, fuzzy, kde-format
@@ -4461,6 +4486,8 @@ msgid "in 1 week's time"
 msgid_plural "in %1 weeks' time"
 msgstr[0] "דקה אחת"
 msgstr[1] "%1 דקות"
+msgstr[2] ""
+msgstr[3] ""
 
 #: messagedisplayhelper.cpp:499
 #, fuzzy, kde-format
@@ -4469,6 +4496,8 @@ msgid "in 1 minute's time"
 msgid_plural "in %1 minutes' time"
 msgstr[0] "דקה אחת"
 msgstr[1] "%1 דקות"
+msgstr[2] ""
+msgstr[3] ""
 
 #: messagedisplayhelper.cpp:501
 #, fuzzy, kde-format
@@ -4477,6 +4506,8 @@ msgid "in 1 hour's time"
 msgid_plural "in %1 hours' time"
 msgstr[0] "דקה אחת"
 msgstr[1] "%1 דקות"
+msgstr[2] ""
+msgstr[3] ""
 
 #: messagedisplayhelper.cpp:504
 #, fuzzy, kde-format
@@ -4485,6 +4516,8 @@ msgid "1 hour"
 msgid_plural "%1 hours"
 msgstr[0] "שעה אחת"
 msgstr[1] "%1 שעות"
+msgstr[2] ""
+msgstr[3] ""
 
 #: messagedisplayhelper.cpp:505
 #, fuzzy, kde-format
@@ -4493,6 +4526,8 @@ msgid "in %2 1 minute's time"
 msgid_plural "in %2 %1 minutes' time"
 msgstr[0] "דקה אחת"
 msgstr[1] "%1 דקות"
+msgstr[2] ""
+msgstr[3] ""
 
 #: messagedisplayhelper.cpp:847
 #, fuzzy, kde-format
@@ -7941,6 +7976,8 @@ msgid "Do you really want to delete the selected alarm template?"
 msgid_plural "Do you really want to delete the %1 selected alarm templates?"
 msgstr[0] "האם אתה בטוח שברצונך למחוק את התזכורת הנבחרת?"
 msgstr[1] "האם אתה בטוח שברצונך למחוק את %1 התזכורות הנבחרות?"
+msgstr[2] ""
+msgstr[3] ""
 
 #: templatedlg.cpp:179
 #, fuzzy, kde-format
@@ -7949,6 +7986,8 @@ msgid "Delete Alarm Template"
 msgid_plural "Delete Alarm Templates"
 msgstr[0] "מחיקת תזכורת"
 msgstr[1] "מחיקת תזכורות"
+msgstr[2] ""
+msgstr[3] ""
 
 #: templatedlg.cpp:180
 #, fuzzy, kde-format
