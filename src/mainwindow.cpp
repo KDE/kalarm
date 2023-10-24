@@ -671,7 +671,7 @@ void MainWindow::slotInitHamburgerMenu()
     menu->addAction(actions->action(QStringLiteral("showArchivedAlarms")));
     menu->addAction(actions->action(QStringLiteral("showDateSelector")));
     menu->addSeparator();
-    menu->addAction(actions->action(QLatin1String(KStandardAction::name(KStandardAction::Quit))));
+    menu->addAction(actions->action(KStandardAction::name(KStandardAction::Quit)));
     mHamburgerMenu->setMenu(menu);
 }
 
