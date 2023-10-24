@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-10-20 01:38+0000\n"
-"PO-Revision-Date: 2023-09-22 01:47+0200\n"
+"PO-Revision-Date: 2023-10-09 14:51+0200\n"
 "Last-Translator: Vincenzo Reale <smart2128vr@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
@@ -207,12 +207,10 @@ msgid "1 week"
 msgstr "1 settimana"
 
 #: alarmtimewidget.cpp:169
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Select an alarm template to preset the alarm"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Select time delay from a list of preset values"
-msgstr "Seleziona un modello per preimpostare l'avviso."
+msgstr "Seleziona il ritardo temporale da un elenco di valori preimpostati"
 
 #: alarmtimewidget.cpp:177
 #, kde-kuit-format
@@ -6918,12 +6916,10 @@ msgstr ""
 "calendario?</para>"
 
 #: resources/fileresource.cpp:325 resources/fileresource.cpp:455
-#, fuzzy, kde-format
-#| msgctxt "@info"
-#| msgid "Resource is not configured."
+#, kde-format
 msgctxt "@info"
 msgid "Calendar is not configured."
-msgstr "La risorsa non è configurata."
+msgstr "Il calendario non è configurato."
 
 #: resources/fileresource.cpp:354 resources/fileresource.cpp:372
 #, kde-kuit-format
@@ -6939,12 +6935,10 @@ msgid "Error saving calendar <resource>%1</resource>."
 msgstr "Errore durante il salvataggio del calendario <resource>%1</resource>."
 
 #: resources/fileresource.cpp:462
-#, fuzzy, kde-format
-#| msgctxt "@info"
-#| msgid "Resource is read-only."
+#, kde-format
 msgctxt "@info"
 msgid "Calendar is read-only."
-msgstr "La risorsa è in sola lettura."
+msgstr "Il calendario è in sola lettura."
 
 #: resources/fileresource.cpp:467
 #, kde-kuit-format
@@ -6972,17 +6966,13 @@ msgid "Select storage type of new calendar:"
 msgstr "Seleziona il tipo di archiviazione del nuovo calendario:"
 
 #: resources/fileresourcecreator.cpp:137
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid ""
-#| "Error!  The file <filename>%1</filename> is already used by an existing "
-#| "resource."
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "Error!  The file <filename>%1</filename> is already used by an existing "
 "calendar."
 msgstr ""
-"Errore! Il file <filename>%1</filename> è già utilizzato da una risorsa "
+"Errore! Il file <filename>%1</filename> è già utilizzato da un calendario "
 "esistente."
 
 #: resources/migration/dirresourceimportdialog.cpp:34
@@ -7642,21 +7632,16 @@ msgstr "File di calendario"
 
 #. i18n: ectx: property (html), widget (KTextEdit, pathDescription)
 #: resources/singlefileresourceconfigdialog.ui:68
-#, fuzzy, kde-format
-#| msgid ""
-#| "Select the file whose contents should be represented by this resource. If "
-#| "the file does not exist, it will be created. The URL of a remote file can "
-#| "also be specified, but note that monitoring for file changes will not "
-#| "work in this case."
+#, kde-format
 msgid ""
 "Select the file to hold this calendar. If the file does not exist, it will "
 "be created. The URL of a remote file can also be specified, but note that "
 "monitoring for file changes will not work in this case."
 msgstr ""
-"Seleziona il file il cui contenuto deve essere rappresentato da questa "
-"risorsa. Se il file non esiste, Sarà creato. L'URL di un file remoto può "
-"essere inoltre specificato, ma in questo caso il controllo delle modifiche "
-"ai file non funzionerà."
+"Seleziona il file che conterrà questo calendario. Se il file non esiste, "
+"sarà creato. È anche possibile specificare l'URL di un file remoto, ma tieni "
+"presente che in questo caso il controllo delle modifiche al file non "
+"funzionerà."
 
 #. i18n: ectx: property (text), widget (QRadioButton, activeRadio)
 #: resources/singlefileresourceconfigdialog.ui:86
@@ -7681,10 +7666,9 @@ msgstr "Modelli di avviso"
 
 #. i18n: ectx: property (html), widget (KTextEdit, alarmTypeDescription)
 #: resources/singlefileresourceconfigdialog.ui:133
-#, fuzzy, kde-format
-#| msgid "Select which alarm type this resource should contain."
+#, kde-format
 msgid "Select which alarm type this calendar should contain."
-msgstr "Seleziona quale tipo di avvisi dovrebbe contenere questa risorsa."
+msgstr "Seleziona il tipo di avviso che questo calendario deve contenere."
 
 #. i18n: ectx: property (text), widget (QLabel, alarmTypeLabel)
 #: resources/singlefileresourceconfigdialog.ui:142
@@ -7730,12 +7714,10 @@ msgstr "Nome:"
 
 #. i18n: ectx: property (html), widget (KTextEdit, nameDescription)
 #: resources/singlefileresourceconfigdialog.ui:222
-#, fuzzy, kde-format
-#| msgid "Enter the name used to identify this resource in displays."
+#, kde-format
 msgid "Enter the display name used to identify this calendar."
 msgstr ""
-"Digita il nome utilizzato per identificare questa risorsa nelle "
-"visualizzazioni."
+"Digita il nome visualizzato utilizzato per identificare questo calendario."
 
 #. i18n: ectx: property (title), widget (QGroupBox, readOnlyGroupBox)
 #: resources/singlefileresourceconfigdialog.ui:232
@@ -7753,12 +7735,7 @@ msgstr "Sola lettura"
 
 #. i18n: ectx: property (html), widget (KTextEdit, readOnlyDescription)
 #: resources/singlefileresourceconfigdialog.ui:254
-#, fuzzy, kde-format
-#| msgid ""
-#| "If read-only mode is enabled, no changes will be written to the file "
-#| "selected above. Read-only mode will be automatically enabled if you do "
-#| "not have write access to the file or the file is on a remote server that "
-#| "does not support write access."
+#, kde-format
 msgid ""
 "If read-only mode is enabled, no changes will be written to the file. Read-"
 "only mode will be automatically enabled if you do not have write access to "
@@ -7766,9 +7743,9 @@ msgid ""
 "access."
 msgstr ""
 "Se la modalità di sola lettura è abilitata, nessuna modifica sarà scritta "
-"nel file selezionato sopra. La modalità di sola lettura sarà abilitata "
-"automaticamente se non si dispone dell'accesso in scrittura al file o se il "
-"file si trova su un server remoto che non supporta l'accesso in scrittura."
+"nel file. La modalità di sola lettura sarà abilitata automaticamente se non "
+"disponi dell'accesso in scrittura al file o se il file si trova su un server "
+"remoto che non supporta l'accesso in scrittura."
 
 #: resourceselector.cpp:50
 #, kde-format
