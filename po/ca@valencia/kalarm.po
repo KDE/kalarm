@@ -8190,8 +8190,8 @@ msgctxt "@info:whatsthis"
 msgid ""
 "Enter how many seconds to fade the sound before reaching the set volume."
 msgstr ""
-"Introduïu la quantitat de segons d'esvaïment del so fins a arribar al volum "
-"establit."
+"Introduïu la quantitat de segons d'esvaïment del so per a arribar fins al "
+"volum establit."
 
 #: sounddlg.cpp:280
 #, kde-format
