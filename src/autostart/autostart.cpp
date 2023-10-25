@@ -44,7 +44,7 @@ int main(int argc, char *argv[])
 
     AutostartApp app(ourArgc, argv);
 
-    KLocalizedString::setApplicationDomain("kalarm");
+    KLocalizedString::setApplicationDomain(QByteArrayLiteral("kalarm"));
     KAboutData aboutData(QStringLiteral(PROGRAM_NAME), i18n("KAlarm Autostart"),
                          QStringLiteral(PROGRAM_VERSION), i18n("KAlarm autostart at login"),
                          KAboutLicense::GPL,

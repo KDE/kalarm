@@ -33,7 +33,7 @@ int main(int argc, char* argv[])
     const QStringList args = app->arguments();
     KCrash::initialize();
 
-    KLocalizedString::setApplicationDomain("kalarm");
+    KLocalizedString::setApplicationDomain(QByteArrayLiteral("kalarm"));
     KAboutData aboutData(QStringLiteral(PROGRAM_NAME), i18n(KALARM_NAME),
                          QStringLiteral(KALARM_VERSION " (KDE Gear " RELEASE_SERVICE_VERSION ")"),
                          i18n("Personal alarm message, command and email scheduler by KDE"),

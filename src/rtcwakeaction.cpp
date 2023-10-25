@@ -23,7 +23,7 @@
 
 RtcWakeAction::RtcWakeAction()
 {
-    KLocalizedString::setApplicationDomain("kalarm");
+    KLocalizedString::setApplicationDomain(QByteArrayLiteral("kalarm"));
 }
 
 ActionReply RtcWakeAction::settimer(const QVariantMap& args)
