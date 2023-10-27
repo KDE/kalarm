@@ -253,13 +253,7 @@
 </screenshot>
 
 <para
->Per a una alarma repetida, la llista mostra la seva pròxima hora d'activació programada i el seu interval de repetició bàsic (&pex;, <quote
->1 dia</quote
-> per a una repetició diària, <quote
->3 setmanes</quote
-> per a una repetició que s'activarà el dilluns i dimecres cada tres setmanes, <quote
->En entrar</quote
-> per a una repetició d'alarma a cada inici de sessió).</para>
+>Per a una alarma repetida, la llista mostra la seva pròxima hora d'activació programada i el seu interval de repetició bàsic (&pex;, «1 dia» per a una repetició diària, «3 setmanes» per a una repetició que s'activarà el dilluns i dimecres cada tres setmanes, «En entrar» per a una repetició d'alarma a cada inici de sessió).</para>
 
 <para
 >Si va succeir un error d'execució l'última vegada que es va activar una alarma d'ordre, o l'última vegada que es va executar una ordre de pre o postalarma d'una alarma visual, es mostrarà una indicació d'error en el color de la columna, tal com s'ha descrit anteriorment a <link linkend="errors"
@@ -509,9 +503,7 @@
 
 <listitem>
 <para
->Per a crear una alarma d'ordre nova arrossegueu el text d'un script que comenci amb <quote
->#!</quote
-> cap a la finestra principal del &kalarm;. A continuació, seleccioneu l'opció <guilabel
+>Per a crear una alarma d'ordre nova arrossegueu el text d'un script que comenci amb «#!» cap a la finestra principal del &kalarm;. A continuació, seleccioneu l'opció <guilabel
 >Alarma d'ordre</guilabel
 >. Això obrirà el <link linkend="alarm-edit-dlg"
 >diàleg d'edició de l'alarma</link
@@ -899,9 +891,7 @@
 >Calendaris d'alarmes</title>
 
 <para
->Si només feu servir un ordinador i treballeu de forma independent, potser no us farà res que el &kalarm; emmagatzemi les alarmes. Però si necessiteu accedir a les alarmes en més d'un ordinador, o en més d'una ubicació des de l'ordinador local, podeu definir <quote
->calendaris d'alarmes</quote
-> per a indicar-li al &kalarm; que utilitzi altres calendaris d'alarmes addicionals per a, o en substitució del/s predeterminat/s.</para>
+>Si només feu servir un ordinador i treballeu de forma independent, potser no us farà res que el &kalarm; emmagatzemi les alarmes. Però si necessiteu accedir a les alarmes en més d'un ordinador, o en més d'una ubicació des de l'ordinador local, podeu definir «calendaris d'alarmes» per a indicar-li al &kalarm; que utilitzi altres calendaris d'alarmes addicionals per a, o en substitució del/s predeterminat/s.</para>
 
 <para
 >Podeu veure i gestionar els calendaris a través de la llista de calendaris, els quals es poden mostrar juntament amb la llista d'alarmes a la finestra principal del &kalarm;. Les alarmes de tots els calendaris d'alarmes es mostraran fusionades a la llista d'alarmes. Quan es desa una alarma nova, podeu definir una opció de configuració per a determinar si s'ha de desar automàticament en el calendari predeterminat, o si se us ha de demanar que seleccioneu un calendari. Quan s'edita una alarma existent, aquesta es desarà automàticament de nou en el seu calendari d'alarmes original.</para>
@@ -951,9 +941,7 @@
 ><para
 >Fitxer local: Les alarmes s'emmagatzemen en un únic fitxer local en format iCalendar. De manera predeterminada, el &kalarm; utilitza calendaris de fitxer local (vegeu <link linkend="faq"
 >Preguntes i respostes</link
-> per a més detalls). <quote
->Fitxers locals</quote
->, a més dels fitxers en l'equip local, poden incloure els calendaris d'alarmes a la xarxa local, així com la seva ubicació es pot representar per un nom de camí que comenci per <literal
+> per a més detalls). «Fitxers locals», a més dels fitxers en l'equip local, poden incloure els calendaris d'alarmes a la xarxa local, així com la seva ubicació es pot representar per un nom de camí que comenci per <literal
 >/</literal
 >.</para>
 </listitem>
@@ -2384,9 +2372,7 @@ mode.</para
 >Els missatges d'alarma que es mostren a les finestres proporcionen la màxima funcionalitat.</para>
 
 <para
->Quan venç un missatge d'alarma, es mostrarà a cada escriptori per a assegurar que no us el perdeu. La finestra de missatges mostrarà el temps durant el qual s'ha programat l'alarma, de manera que podeu veure quan va sorgir si éreu fora de l'ordinador en aquell moment. Si el temps programat de l'alarma es troba en una zona horària diferent de la configuració del vostre ordinador local, també es mostrarà la zona horària. (Per als missatges de recordatori, la data/hora mostrada serà la prevista per a l'alarma principal o la seva recurrència, no la del missatge de recordatori, i el títol de la finestra serà <quote
->Recordatori</quote
->).</para>
+>Quan venç un missatge d'alarma, es mostrarà a cada escriptori per a assegurar que no us el perdeu. La finestra de missatges mostrarà el temps durant el qual s'ha programat l'alarma, de manera que podeu veure quan va sorgir si éreu fora de l'ordinador en aquell moment. Si el temps programat de l'alarma es troba en una zona horària diferent de la configuració del vostre ordinador local, també es mostrarà la zona horària. (Per als missatges de recordatori, la data/hora mostrada serà la prevista per a l'alarma principal o la seva recurrència, no la del missatge de recordatori, i el títol de la finestra serà «Recordatori»).</para>
 
 <para
 >Les finestres dels missatges d'alarma romandran visibles fins que es reconeguin, llevat que <guilabel
@@ -2458,9 +2444,7 @@ mode.</para
 
 <listitem>
 <para
->Aturar la reproducció dels fitxers de so de l'alarma fent clic al botó que mostra el símbol <quote
->atura la reproducció</quote
->.</para>
+>Aturar la reproducció dels fitxers de so de l'alarma fent clic al botó que mostra el símbol «atura la reproducció».</para>
 </listitem>
 
 <listitem>
@@ -2544,9 +2528,7 @@ mode.</para
 >Els missatges d'alarma que es mostren com a notificacions ofereixen menys funcionalitat que els que es mostren en finestres.</para>
 
 <para
->Quan venç un missatge d'alarma, es mostrarà com a una notificació. La notificació mostrarà el temps en el qual s'ha programat l'alarma. Si el temps programat de l'alarma es troba en una zona horària diferent de la configuració del vostre ordinador local, també es mostrarà la zona horària. (Per als missatges de recordatori, la data/hora mostrada serà la prevista per a l'alarma principal o la seva recurrència, no la del missatge de recordatori, i es mostrarà una capçalera <quote
->Recordatori</quote
->).</para>
+>Quan venç un missatge d'alarma, es mostrarà com a una notificació. La notificació mostrarà el temps en el qual s'ha programat l'alarma. Si el temps programat de l'alarma es troba en una zona horària diferent de la configuració del vostre ordinador local, també es mostrarà la zona horària. (Per als missatges de recordatori, la data/hora mostrada serà la prevista per a l'alarma principal o la seva recurrència, no la del missatge de recordatori, i es mostrarà una capçalera «Recordatori»).</para>
 
 <para
 >La notificació es tancarà automàticament després d'un breu temps d'espera. (Cal tenir en compte que el temps d'espera és comú per a totes les aplicacions, es pot canviar a l'&systemsettings;). Una vegada s'esgoti el temps d'espera d'una notificació, encara es podrà veure a l'historial de notificacions fins que l'elimineu o tanqueu la sessió. A causa que les aplicacions no tenen manera d'accedir a l'historial de notificacions, el &kalarm; no pot eliminar ni substituir les notificacions en l'historial com ho faria amb les finestres d'alarma. Per tant, l'historial pot contenir múltiples notificacions per a la mateixa alarma, inclosos els recordatoris i recurrències.</para>
@@ -2804,9 +2786,7 @@ mode.</para
 <itemizedlist>
 <listitem>
 <para
->El <quote
->monitoratge d'alarmes</quote
-> s'aplica a les alarmes en conjunt. Mentre que el monitoratge d'alarmes està inhabilitat, cap alarma serà activada. Mentre que el monitoratge d'alarmes està habilitat (la situació normal), totes les alarmes que no estiguin inhabilitades individualment seran activades en el moment apropiat.</para>
+>El «monitoratge d'alarmes» s'aplica a les alarmes en conjunt. Mentre que el monitoratge d'alarmes està inhabilitat, cap alarma serà activada. Mentre que el monitoratge d'alarmes està habilitat (la situació normal), totes les alarmes que no estiguin inhabilitades individualment seran activades en el moment apropiat.</para>
 
 <para
 >Quan es torni a habilitar el monitoratge d'alarmes, les que s'han activat mentre estaven inhabilitades s'activaran ara (a menys que qualsevol de les opcions de cancel·lació retardada ho impedeixi). En altres paraules, inhabilitar el monitoratge d'alarmes té el mateix efecte que aturar el &kalarm; -les alarmes es posposen fins que es torni a habilitar-.</para>
@@ -4208,9 +4188,7 @@ mode.</para
   <entry
 >Estableix l'alarma a repetir. Especifiqueu la repetició utilitzant la sintaxi d'iCalendar (definida en el <ulink url="http://www.w3.org/2002/12/cal/rfc2445.html"
 >RFC2445</ulink
->), &pex;, <quote
->FREQ=MONTHLY;COUNT=4;INTERVAL=3;BYDAY=-1MO</quote
->. Amb aquesta opció no es pot especificar <option
+>), &pex;, «FREQ=MONTHLY;COUNT=4;INTERVAL=3;BYDAY=-1MO». Amb aquesta opció no es pot especificar <option
 >--until</option
 >.</entry>
 </row>
@@ -4946,17 +4924,11 @@ mode.</para
 ></term>
 <listitem>
 <para
->Especifica el color de fons per a mostrar el missatge. La cadena pot estar en el format <quote
->#RRGGBB</quote
-> (com és retornat per <methodname
+>Especifica el color de fons per a mostrar el missatge. La cadena pot estar en el format «#RRGGBB» (com és retornat per <methodname
 >QColor::name()</methodname
 > on RR, GG i BB són dos dígits hexadecimals per als colors vermell, verd i blau. Com a alternativa, la cadena pot estar en qualsevol dels formats acceptats per <methodname
 >QColor::setNamedColor()</methodname
->, com un nom en la base de dades de color de X (&pex; <quote
->red</quote
-> o <quote
->steelblue</quote
->). Establiu la cadena a «null» per a especificar el color predeterminat per al fons actual.</para>
+>, com un nom en la base de dades de color de X (&pex; «red» o «steelblue»). Establiu la cadena a «null» per a especificar el color predeterminat per al fons actual.</para>
 </listitem>
 </varlistentry>
 
@@ -5017,9 +4989,7 @@ mode.</para
 <para
 >Especifica una recurrència regular de l'alarma, utilitzant la sintaxi d'iCalendar tal com es defineix en la <ulink url="http://www.w3.org/2002/12/cal/rfc2445.html"
 >RFC2445</ulink
->. Per exemple, <quote
->FREQ=MONTHLY;COUNT=4;INTERVAL=3;BYDAY=-1MO</quote
-> especificaria 4 repeticions a intervals de 3 mesos l'últim dilluns de cada mes. Per a una alarma no recurrent, especifiqueu una cadena buida.</para>
+>. Per exemple, «FREQ=MONTHLY;COUNT=4;INTERVAL=3;BYDAY=-1MO» especificaria 4 repeticions a intervals de 3 mesos l'últim dilluns de cada mes. Per a una alarma no recurrent, especifiqueu una cadena buida.</para>
 </listitem>
 </varlistentry>
 
@@ -5330,17 +5300,11 @@ mode.</para
 ></term>
 <listitem>
 <para
->Especifica el color de fons per a mostrar el fitxer. La cadena pot estar en el format <quote
->#RRGGBB</quote
-> (com és retornat per <methodname
+>Especifica el color de fons per a mostrar el fitxer. La cadena pot estar en el format «#RRGGBB» (com és retornat per <methodname
 >QColor::name()</methodname
 > on RR, GG i BB són dos dígits hexadecimals per als colors vermell, verd i blau. Com a alternativa, la cadena pot estar en qualsevol dels formats acceptats per <methodname
 >QColor::setNamedColor()</methodname
->, com un nom en la base de dades de color de X (&pex; <quote
->red</quote
-> o <quote
->steelblue</quote
->). Establiu la cadena a «null» per a especificar el color predeterminat per al fons actual.</para>
+>, com un nom en la base de dades de color de X (&pex; «red» o «steelblue»). Establiu la cadena a «null» per a especificar el color predeterminat per al fons actual.</para>
 </listitem>
 </varlistentry>
 
@@ -5375,9 +5339,7 @@ mode.</para
 <para
 >Especifica una recurrència regular de l'alarma, utilitzant la sintaxi d'iCalendar tal com es defineix en la <ulink url="http://www.w3.org/2002/12/cal/rfc2445.html"
 >RFC2445</ulink
->. Per exemple, <quote
->FREQ=MONTHLY;COUNT=4;INTERVAL=3;BYDAY=-1MO</quote
-> especificaria 4 repeticions a intervals de 3 mesos l'últim dilluns de cada mes. Per a una alarma no recurrent, especifiqueu una cadena buida.</para>
+>. Per exemple, «FREQ=MONTHLY;COUNT=4;INTERVAL=3;BYDAY=-1MO» especificaria 4 repeticions a intervals de 3 mesos l'últim dilluns de cada mes. Per a una alarma no recurrent, especifiqueu una cadena buida.</para>
 </listitem>
 </varlistentry>
 
@@ -5665,9 +5627,7 @@ mode.</para
 <para
 >Especifica una recurrència regular de l'alarma, utilitzant la sintaxi d'iCalendar tal com es defineix en la <ulink url="http://www.w3.org/2002/12/cal/rfc2445.html"
 >RFC2445</ulink
->. Per exemple, <quote
->FREQ=MONTHLY;COUNT=4;INTERVAL=3;BYDAY=-1MO</quote
-> especificaria 4 repeticions a intervals de 3 mesos l'últim dilluns de cada mes. Per a una alarma no recurrent, especifiqueu una cadena buida.</para>
+>. Per exemple, «FREQ=MONTHLY;COUNT=4;INTERVAL=3;BYDAY=-1MO» especificaria 4 repeticions a intervals de 3 mesos l'últim dilluns de cada mes. Per a una alarma no recurrent, especifiqueu una cadena buida.</para>
 </listitem>
 </varlistentry>
 
@@ -6035,9 +5995,7 @@ mode.</para
 <para
 >Especifica una recurrència regular de l'alarma, utilitzant la sintaxi d'iCalendar tal com es defineix en la <ulink url="http://www.w3.org/2002/12/cal/rfc2445.html"
 >RFC2445</ulink
->. Per exemple, <quote
->FREQ=MONTHLY;COUNT=4;INTERVAL=3;BYDAY=-1MO</quote
-> especificaria 4 repeticions a intervals de 3 mesos l'últim dilluns de cada mes. Per a una alarma no recurrent, especifiqueu una cadena buida.</para>
+>. Per exemple, «FREQ=MONTHLY;COUNT=4;INTERVAL=3;BYDAY=-1MO» especificaria 4 repeticions a intervals de 3 mesos l'últim dilluns de cada mes. Per a una alarma no recurrent, especifiqueu una cadena buida.</para>
 </listitem>
 </varlistentry>
 
@@ -6343,9 +6301,7 @@ mode.</para
 <para
 >Especifica una recurrència regular de l'alarma, utilitzant la sintaxi d'iCalendar tal com es defineix en la <ulink url="http://www.w3.org/2002/12/cal/rfc2445.html"
 >RFC2445</ulink
->. Per exemple, <quote
->FREQ=MONTHLY;COUNT=4;INTERVAL=3;BYDAY=-1MO</quote
-> especificaria 4 repeticions a intervals de 3 mesos l'últim dilluns de cada mes. Per a una alarma no recurrent, especifiqueu una cadena buida.</para>
+>. Per exemple, «FREQ=MONTHLY;COUNT=4;INTERVAL=3;BYDAY=-1MO» especificaria 4 repeticions a intervals de 3 mesos l'últim dilluns de cada mes. Per a una alarma no recurrent, especifiqueu una cadena buida.</para>
 </listitem>
 </varlistentry>
 
