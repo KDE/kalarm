@@ -16,8 +16,8 @@ class FileDialog : public KFileCustomDialog
 {
     Q_OBJECT
 public:
-    FileDialog(const QUrl& startDir, const QString& filter, QWidget* parent = nullptr);
-    static QString getSaveFileName(const QUrl& dir = QUrl(), const QString& filter = QString(),
+    FileDialog(const QUrl& startDir, const QList<KFileFilter>& filters, QWidget* parent = nullptr);
+    static QString getSaveFileName(const QUrl& dir = QUrl(), const QList<KFileFilter>& filters = {},
                                    QWidget* parent = nullptr, const QString& caption = QString(), bool* append = nullptr);
 
 private Q_SLOTS:

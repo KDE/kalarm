@@ -874,7 +874,7 @@ bool importAlarms(Resource& resource, QWidget* parent)
     KFileWidget* widget = dlg->fileWidget();
     widget->setOperationMode(KFileWidget::Opening);
     widget->setMode(KFile::Files | KFile::ExistingOnly);
-    widget->setMimeFilter({QStringLiteral("text/calendar")});
+    widget->setFilters({KFileFilter::fromMimeType(QStringLiteral("text/calendar"))});
     dlg->setWindowModality(Qt::WindowModal);
     dlg->exec();
     if (!dlg)
@@ -931,7 +931,7 @@ bool exportAlarms(const QList<KAEvent>& events, QWidget* parent)
 {
     bool append;
     QString file = FileDialog::getSaveFileName(lastExportUrl,
-                                               QStringLiteral("*.ics|%1").arg(i18nc("@item:inlistbox File type selection filter", "Calendar Files")),
+                                               {KFileFilter(i18nc("@item:inlistbox File type selection filter", "Calendar Files"), {QStringLiteral("*.ics")}, {})},
                                                parent, i18nc("@title:window", "Choose Export Calendar"),
                                                &append);
     if (file.isEmpty())
