@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-20 01:38+0000\n"
+"POT-Creation-Date: 2023-11-04 16:52+0000\n"
 "PO-Revision-Date: 2014-09-12 16:04+0200\n"
 "Last-Translator: Bjørn Steensrud <bjornst@skogkatt.homelinux.org>\n"
 "Language-Team: Norwegian Bokmål <l10n-no@lister.huftis.org>\n"
@@ -4710,13 +4710,13 @@ msgstr ""
 "<para>Feil ved spilling av lydfil:<filename>%1</filename></para><para> %2</"
 "para>"
 
-#: messagenotification.cpp:527
+#: messagenotification.cpp:518
 #, kde-format
 msgctxt "@action:button"
 msgid "Edit"
 msgstr ""
 
-#: messagenotification.cpp:532
+#: messagenotification.cpp:527
 #, kde-format
 msgctxt "@action:button"
 msgid "Defer"

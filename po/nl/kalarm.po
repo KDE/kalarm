@@ -17,7 +17,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-20 01:38+0000\n"
+"POT-Creation-Date: 2023-11-04 16:52+0000\n"
 "PO-Revision-Date: 2023-10-09 11:24+0200\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
@@ -4980,14 +4980,14 @@ msgstr ""
 "<para>Fout bij het afspelen van audio-bestand: <filename>%1</filename></"
 "para><para>%2</para>"
 
-#: messagenotification.cpp:527
+#: messagenotification.cpp:518
 #, kde-format
 msgctxt "@action:button"
 msgid "Edit"
 msgstr "Bewerken"
 
 # ik begrijp dat hier bedoeld wordt dat je het uitstel annuleert, niet de herinnering zelf
-#: messagenotification.cpp:532
+#: messagenotification.cpp:527
 #, kde-format
 msgctxt "@action:button"
 msgid "Defer"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-20 01:38+0000\n"
+"POT-Creation-Date: 2023-11-04 16:52+0000\n"
 "PO-Revision-Date: 2023-07-23 23:20+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -4674,14 +4674,14 @@ msgid ""
 "<para>Error playing audio file: <filename>%1</filename></para><para>%2</para>"
 msgstr ""
 
-#: messagenotification.cpp:527
+#: messagenotification.cpp:518
 #, fuzzy, kde-format
 #| msgid "&Edit"
 msgctxt "@action:button"
 msgid "Edit"
 msgstr "편집(&E)"
 
-#: messagenotification.cpp:532
+#: messagenotification.cpp:527
 #, kde-format
 msgctxt "@action:button"
 msgid "Defer"

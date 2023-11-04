@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm VERSION\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-20 01:38+0000\n"
+"POT-Creation-Date: 2023-11-04 16:52+0000\n"
 "PO-Revision-Date: 2002-11-07 11:37+0200\n"
 "Last-Translator: WEB-Translator <http://kde.af.org.za>\n"
 "Language-Team: AFRIKAANS <AF@lia.org.za>\n"
@@ -4635,13 +4635,13 @@ msgstr ""
 "Kan nie open kalender:\n"
 "%1"
 
-#: messagenotification.cpp:527
+#: messagenotification.cpp:518
 #, fuzzy, kde-format
 msgctxt "@action:button"
 msgid "Edit"
 msgstr "Verander..."
 
-#: messagenotification.cpp:532
+#: messagenotification.cpp:527
 #, fuzzy, kde-format
 msgctxt "@action:button"
 msgid "Defer"

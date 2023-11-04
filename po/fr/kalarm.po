@@ -26,7 +26,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-20 01:38+0000\n"
+"POT-Creation-Date: 2023-11-04 16:52+0000\n"
 "PO-Revision-Date: 2023-10-12 09:03+0200\n"
 "Last-Translator: Xavier BESNARD <xavier.besnard@neuf.fr>\n"
 "Language-Team: fr\n"
@@ -4951,14 +4951,14 @@ msgstr ""
 "<para>Erreur à la lecture du fichier audio : <filename>%1</filename></"
 "para><para>%2</para>"
 
-#: messagenotification.cpp:527
+#: messagenotification.cpp:518
 #, kde-format
 msgctxt "@action:button"
 msgid "Edit"
 msgstr "Modifier"
 
 # unreviewed-context
-#: messagenotification.cpp:532
+#: messagenotification.cpp:527
 #, kde-format
 msgctxt "@action:button"
 msgid "Defer"

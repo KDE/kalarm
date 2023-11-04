@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-20 01:38+0000\n"
+"POT-Creation-Date: 2023-11-04 16:52+0000\n"
 "PO-Revision-Date: 2023-10-09 07:28+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -4737,13 +4737,13 @@ msgstr ""
 "<para>Napaka predvajanja zvočne datoteke: <filename>%1</filename></"
 "para><para>%2</para>"
 
-#: messagenotification.cpp:527
+#: messagenotification.cpp:518
 #, kde-format
 msgctxt "@action:button"
 msgid "Edit"
 msgstr "Uredi"
 
-#: messagenotification.cpp:532
+#: messagenotification.cpp:527
 #, kde-format
 msgctxt "@action:button"
 msgid "Defer"
