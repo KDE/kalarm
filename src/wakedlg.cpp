@@ -160,7 +160,7 @@ void WakeFromSuspendDlg::useWakeClicked()
     if (KAlarm::setRtcWakeTime(triggerTime, this))
     {
         const QStringList param{QString::number(event.resourceId()), event.id(), QString::number(triggerTime)};
-        KConfigGroup config(KSharedConfig::openConfig(), QLatin1String("General"));
+        KConfigGroup config(KSharedConfig::openConfig(), QStringLiteral("General"));
         config.writeEntry("RtcWake", param);
         config.sync();
         Preferences::setWakeFromSuspendAdvance(static_cast<unsigned>(advance));

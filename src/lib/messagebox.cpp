@@ -54,7 +54,7 @@ bool KAMessageBox::setDefaultShouldBeShownContinue(const QString& dontShowAgainN
     if (dontShowAgainName.isEmpty())
         return false;
     // First check whether there is an existing setting
-    KConfigGroup config(KSharedConfig::openConfig(), QLatin1String("Notification Messages"));
+    KConfigGroup config(KSharedConfig::openConfig(), QStringLiteral("Notification Messages"));
     if (config.hasKey(dontShowAgainName))
         return false;
 
@@ -112,7 +112,7 @@ void KAMessageBox::saveDontShowAgain(const QString& dontShowAgainName, bool yesn
 {
     if (dontShowAgainName.isEmpty())
         return;
-    KConfigGroup config(KSharedConfig::openConfig(), QLatin1String("Notification Messages"));
+    KConfigGroup config(KSharedConfig::openConfig(), QStringLiteral("Notification Messages"));
     KConfig::WriteConfigFlags flags = (dontShowAgainName[0] == QLatin1Char(':')) ? KConfig::Global | KConfig::Persistent : KConfig::Persistent;
     if (yesno)
         config.writeEntry(dontShowAgainName, QString::fromLatin1(dontShow ? yesnoResult : ""), flags);

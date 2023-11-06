@@ -1251,7 +1251,7 @@ void editNewTemplate(const KAEvent& preset, QWidget* parent)
 */
 QStringList checkRtcWakeConfig(bool checkEventExists)
 {
-    KConfigGroup config(KSharedConfig::openConfig(), QLatin1String("General"));
+    KConfigGroup config(KSharedConfig::openConfig(), QStringLiteral("General"));
     const QStringList params = config.readEntry("RtcWake", QStringList());
     if (params.count() == 3  &&  params[2].toLongLong() > KADateTime::currentUtcDateTime().toSecsSinceEpoch())
     {
@@ -1276,7 +1276,7 @@ QStringList checkRtcWakeConfig(bool checkEventExists)
 */
 void deleteRtcWakeConfig()
 {
-    KConfigGroup config(KSharedConfig::openConfig(), QLatin1String("General"));
+    KConfigGroup config(KSharedConfig::openConfig(), QStringLiteral("General"));
     config.deleteEntry("RtcWake");
     config.sync();
 }

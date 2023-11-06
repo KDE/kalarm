@@ -96,7 +96,7 @@ private Q_SLOTS:
             KConfigGroup cg(config, QLatin1String(group.constData()));
             notif->saveProperties(cg);
         }
-        KConfigGroup cg(config, QLatin1String("Number"));
+        KConfigGroup cg(config, QStringLiteral("Number"));
         cg.writeEntry("NumberOfNotifications", MessageNotification::mNotificationList.count());
     }
 #endif
@@ -118,7 +118,7 @@ void MessageNotification::sessionRestore()
     KConfig* config = KConfigGui::sessionConfig();
     if (config)
     {
-        KConfigGroup cg(config, QLatin1String("Number"));
+        KConfigGroup cg(config, QStringLiteral("Number"));
         const int count = cg.readEntry("NumberOfNotifications", 0);
         for (int n = 1;  n <= count;  ++n)
         {

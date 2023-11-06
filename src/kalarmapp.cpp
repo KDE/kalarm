@@ -190,7 +190,7 @@ void KAlarmApp::initialise()
 
     initialiseTimerResources();   // initialise calendars and alarm timer
 
-    KConfigGroup config(KSharedConfig::openConfig(), QLatin1String("General"));
+    KConfigGroup config(KSharedConfig::openConfig(), QStringLiteral("General"));
     mNoSystemTray        = config.readEntry("NoSystemTray", false);
     mOldShowInSystemTray = wantShowInSystemTray();
     DateTime::setStartOfDay(Preferences::startOfDay());
@@ -1255,7 +1255,7 @@ bool KAlarmApp::checkSystemTray()
 
         // Store the new setting in the config file, so that if KAlarm exits it will
         // restart with the correct default.
-        KConfigGroup config(KSharedConfig::openConfig(), QLatin1String("General"));
+        KConfigGroup config(KSharedConfig::openConfig(), QStringLiteral("General"));
         config.writeEntry("NoSystemTray", mNoSystemTray);
         config.sync();
 
