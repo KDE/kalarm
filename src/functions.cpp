@@ -1251,7 +1251,7 @@ void editNewTemplate(const KAEvent& preset, QWidget* parent)
 */
 QStringList checkRtcWakeConfig(bool checkEventExists)
 {
-    KConfigGroup config(KSharedConfig::openConfig(), "General");
+    KConfigGroup config(KSharedConfig::openConfig(), QLatin1String("General"));
     const QStringList params = config.readEntry("RtcWake", QStringList());
     if (params.count() == 3  &&  params[2].toLongLong() > KADateTime::currentUtcDateTime().toSecsSinceEpoch())
     {
@@ -1276,7 +1276,7 @@ QStringList checkRtcWakeConfig(bool checkEventExists)
 */
 void deleteRtcWakeConfig()
 {
-    KConfigGroup config(KSharedConfig::openConfig(), "General");
+    KConfigGroup config(KSharedConfig::openConfig(), QLatin1String("General"));
     config.deleteEntry("RtcWake");
     config.sync();
 }
@@ -1679,7 +1679,7 @@ QStringList dontShowErrors(const EventId& eventId)
     if (eventId.isEmpty())
         return {};
     KConfig config(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + QLatin1Char('/') + ALARM_OPTS_FILE);
-    KConfigGroup group(&config, DONT_SHOW_ERRORS_GROUP);
+    KConfigGroup group(&config, QLatin1String(DONT_SHOW_ERRORS_GROUP));
     const QString id = QStringLiteral("%1:%2").arg(eventId.resourceId()).arg(eventId.eventId());
     return group.readEntry(id, QStringList());
 }
@@ -1705,7 +1705,7 @@ void setDontShowErrors(const EventId& eventId, const QStringList& tags)
     if (eventId.isEmpty())
         return;
     KConfig config(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + QLatin1Char('/') + ALARM_OPTS_FILE);
-    KConfigGroup group(&config, DONT_SHOW_ERRORS_GROUP);
+    KConfigGroup group(&config, QLatin1String(DONT_SHOW_ERRORS_GROUP));
     const QString id = QStringLiteral("%1:%2").arg(eventId.resourceId()).arg(eventId.eventId());
     if (tags.isEmpty())
         group.deleteEntry(id);
@@ -1723,7 +1723,7 @@ void setDontShowErrors(const EventId& eventId, const QString& tag)
     if (eventId.isEmpty()  ||  tag.isEmpty())
         return;
     KConfig config(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + QLatin1Char('/') + ALARM_OPTS_FILE);
-    KConfigGroup group(&config, DONT_SHOW_ERRORS_GROUP);
+    KConfigGroup group(&config, QLatin1String(DONT_SHOW_ERRORS_GROUP));
     const QString id = QStringLiteral("%1:%2").arg(eventId.resourceId()).arg(eventId.eventId());
     QStringList tags = group.readEntry(id, QStringList());
     if (tags.indexOf(tag) < 0)

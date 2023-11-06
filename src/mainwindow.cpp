@@ -127,7 +127,7 @@ MainWindow::MainWindow(bool restored)
     setWindowModality(Qt::WindowModal);
     setObjectName(QStringLiteral("MainWin"));    // used by LikeBack
     setPlainCaption(KAboutData::applicationData().displayName());
-    KConfigGroup config(KSharedConfig::openConfig(), VIEW_GROUP);
+    KConfigGroup config(KSharedConfig::openConfig(), QLatin1String(VIEW_GROUP));
     mShowResources     = config.readEntry(SHOW_RESOURCES_KEY, false);
     mShowDateNavigator = config.readEntry(SHOW_DATE_NAVIGATOR, false);
     mDateNavigatorTop  = config.readEntry(DATE_NAVIGATOR_TOP, true);
@@ -389,7 +389,7 @@ void MainWindow::resourcesResized()
             mResourcesWidth = 0;
         else if (mainMainWindow() == this)
         {
-            KConfigGroup config(KSharedConfig::openConfig(), VIEW_GROUP);
+            KConfigGroup config(KSharedConfig::openConfig(), QLatin1String(VIEW_GROUP));
             config.writeEntry(SHOW_RESOURCES_KEY, mShowResources);
             if (mShowResources)
                 config.writeEntry(RESOURCES_WIDTH_KEY, mResourcesWidth);
@@ -611,7 +611,7 @@ void MainWindow::initActions()
     setStandardToolBarMenuEnabled(true);
     createGUI(UI_FILE);
     // Load menu and toolbar settings
-    applyMainWindowSettings(KSharedConfig::openConfig()->group(WINDOW_NAME));
+    applyMainWindowSettings(KSharedConfig::openConfig()->group(QLatin1String(WINDOW_NAME)));
 
     mContextMenu = static_cast<QMenu*>(factory()->container(QStringLiteral("listContext"), this));
     QMenu* actionsMenu = static_cast<QMenu*>(factory()->container(QStringLiteral("actions"), this));
@@ -892,7 +892,7 @@ void MainWindow::slotEnable()
 */
 void MainWindow::slotAlarmListColumnsChanged()
 {
-    KConfigGroup config(KSharedConfig::openConfig(), VIEW_GROUP);
+    KConfigGroup config(KSharedConfig::openConfig(), QLatin1String(VIEW_GROUP));
     config.writeEntry(SHOW_COLUMNS, mListView->columnsVisible());
     config.sync();
 }
@@ -908,7 +908,7 @@ void MainWindow::slotShowArchived()
                                                   : i18nc("@info:tooltip", "Show Archived Alarms"));
     mListFilterModel->setEventTypeFilter(mShowArchived ? CalEvent::ACTIVE | CalEvent::ARCHIVED : CalEvent::ACTIVE);
     mListView->reset();
-    KConfigGroup config(KSharedConfig::openConfig(), VIEW_GROUP);
+    KConfigGroup config(KSharedConfig::openConfig(), QLatin1String(VIEW_GROUP));
     config.writeEntry(SHOW_ARCHIVED_KEY, mShowArchived);
     config.sync();
 }
@@ -1043,7 +1043,7 @@ void MainWindow::slotToggleResourceSelector()
         mResourceSelector->hide();
     arrangePanel();
 
-    KConfigGroup config(KSharedConfig::openConfig(), VIEW_GROUP);
+    KConfigGroup config(KSharedConfig::openConfig(), QLatin1String(VIEW_GROUP));
     config.writeEntry(SHOW_RESOURCES_KEY, mShowResources);
     if (mShowResources)
         config.writeEntry(RESOURCES_WIDTH_KEY, mResourcesWidth);
@@ -1071,7 +1071,7 @@ void MainWindow::slotToggleDateNavigator()
     }
     arrangePanel();
 
-    KConfigGroup config(KSharedConfig::openConfig(), VIEW_GROUP);
+    KConfigGroup config(KSharedConfig::openConfig(), QLatin1String(VIEW_GROUP));
     config.writeEntry(SHOW_DATE_NAVIGATOR, mShowDateNavigator);
     config.writeEntry(DATE_NAVIGATOR_TOP, mDateNavigatorTop);
     config.sync();
@@ -1332,7 +1332,7 @@ void MainWindow::slotConfigureNotifications()
 */
 void MainWindow::slotConfigureToolbar()
 {
-    KConfigGroup grp(KSharedConfig::openConfig()->group(WINDOW_NAME));
+    KConfigGroup grp(KSharedConfig::openConfig()->group(QLatin1String(WINDOW_NAME)));
     saveMainWindowSettings(grp);
     KEditToolBar dlg(factory());
     connect(&dlg, &KEditToolBar::newToolBarConfig, this, &MainWindow::slotNewToolbarConfig);
@@ -1346,7 +1346,7 @@ void MainWindow::slotConfigureToolbar()
 void MainWindow::slotNewToolbarConfig()
 {
     createGUI(UI_FILE);
-    applyMainWindowSettings(KSharedConfig::openConfig()->group(WINDOW_NAME));
+    applyMainWindowSettings(KSharedConfig::openConfig()->group(QLatin1String(WINDOW_NAME)));
 }
 
 /******************************************************************************

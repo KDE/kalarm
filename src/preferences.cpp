@@ -662,7 +662,7 @@ QString translateXTermPath(const QString& cmdline, bool write)
 
     // Translate any home directory specification at the start of the
     // executable's path.
-    KConfigGroup group(KSharedConfig::openConfig(), GENERAL_SECTION);
+    KConfigGroup group(KSharedConfig::openConfig(), QLatin1String(GENERAL_SECTION));
     if (write)
     {
         group.writePathEntry(TEMP, cmd);

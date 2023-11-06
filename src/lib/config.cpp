@@ -25,7 +25,7 @@ namespace Config
 */
 bool readWindowSize(const char* window, QSize& result, int* splitterWidth)
 {
-    KConfigGroup config(KSharedConfig::openConfig(), window);
+    KConfigGroup config(KSharedConfig::openConfig(), QLatin1String(window));
     const QSize desktopSize = QApplication::primaryScreen()->virtualSize();
     const QSize s = QSize(config.readEntry(QStringLiteral("Width %1").arg(desktopSize.width()), (int)0),
                           config.readEntry(QStringLiteral("Height %1").arg(desktopSize.height()), (int)0));
@@ -43,7 +43,7 @@ bool readWindowSize(const char* window, QSize& result, int* splitterWidth)
 */
 void writeWindowSize(const char* window, const QSize& size, int splitterWidth)
 {
-    KConfigGroup config(KSharedConfig::openConfig(), window);
+    KConfigGroup config(KSharedConfig::openConfig(), QLatin1String(window));
     const QSize desktopSize = QApplication::primaryScreen()->virtualSize();
     config.writeEntry(QStringLiteral("Width %1").arg(desktopSize.width()), size.width());
     config.writeEntry(QStringLiteral("Height %1").arg(desktopSize.height()), size.height());

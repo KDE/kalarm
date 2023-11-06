@@ -93,10 +93,10 @@ private Q_SLOTS:
         for (MessageNotification* notif : std::as_const(MessageNotification::mNotificationList))
         {
             const QByteArray group = "Notification_" + QByteArray::number(++n);
-            KConfigGroup cg(config, group.constData());
+            KConfigGroup cg(config, QLatin1String(group.constData()));
             notif->saveProperties(cg);
         }
-        KConfigGroup cg(config, "Number");
+        KConfigGroup cg(config, QLatin1String("Number"));
         cg.writeEntry("NumberOfNotifications", MessageNotification::mNotificationList.count());
     }
 #endif
@@ -118,7 +118,7 @@ void MessageNotification::sessionRestore()
     KConfig* config = KConfigGui::sessionConfig();
     if (config)
     {
-        KConfigGroup cg(config, "Number");
+        KConfigGroup cg(config, QLatin1String("Number"));
         const int count = cg.readEntry("NumberOfNotifications", 0);
         for (int n = 1;  n <= count;  ++n)
         {

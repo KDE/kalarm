@@ -65,7 +65,7 @@ void FileResourceConfigManager::createResources(QObject* parent)
                       return QStringView(g1).mid(9).toInt() < QStringView(g2).mid(9).toInt();
                   });
 
-        KConfigGroup general(manager->mConfig, GROUP_GENERAL);
+        KConfigGroup general(manager->mConfig, QLatin1String(GROUP_GENERAL));
         manager->mLastId = general.readEntry(KEY_LASTID, 0) | ResourceType::IdFlag;
 
         for (const QString& resourceGroup : std::as_const(resourceGroups))
@@ -169,7 +169,7 @@ Resource FileResourceConfigManager::addResource(FileResourceSettings::Ptr& setti
     const int id = ++manager->mLastId;
     settings->setId(id);
     // Save the new last-used ID, but strip out IdFlag to make it more legible.
-    KConfigGroup general(manager->mConfig, GROUP_GENERAL);
+    KConfigGroup general(manager->mConfig, QLatin1String(GROUP_GENERAL));
     general.writeEntry(KEY_LASTID, id & ~ResourceType::IdFlag);
 
     const QString configGroup = groupName(groupIndex);

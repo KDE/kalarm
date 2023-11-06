@@ -408,7 +408,7 @@ void EditAlarmDlg::init(const KAEvent& event)
     mainLayout->addWidget(mButtonBox);
 
     // Hide optional controls
-    KConfigGroup config(KSharedConfig::openConfig(), EDIT_MORE_GROUP);
+    KConfigGroup config(KSharedConfig::openConfig(), QLatin1String(EDIT_MORE_GROUP));
     showOptions(config.readEntry(EDIT_MORE_KEY, false));
 
     // Initialise the state of all controls according to the specified event, if any
@@ -1238,7 +1238,7 @@ void EditAlarmDlg::slotHelp()
 void EditAlarmDlg::slotDefault()
 {
     showOptions(!mShowingMore);
-    KConfigGroup config(KSharedConfig::openConfig(), EDIT_MORE_GROUP);
+    KConfigGroup config(KSharedConfig::openConfig(), QLatin1String(EDIT_MORE_GROUP));
     config.writeEntry(EDIT_MORE_KEY, mShowingMore);
 }
 
