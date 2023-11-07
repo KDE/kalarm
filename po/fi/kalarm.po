@@ -23,7 +23,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-10-09 02:40+0000\n"
-"PO-Revision-Date: 2023-03-14 21:46+0200\n"
+"PO-Revision-Date: 2023-09-27 18:09+0300\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
 "Language: fi\n"
@@ -94,12 +94,10 @@ msgstr ""
 "asetusikkunassa."
 
 #: alarmtimewidget.cpp:92
-#, fuzzy, kde-format
-#| msgctxt "@label"
-#| msgid "Deferred to:"
+#, kde-format
 msgctxt "@option:radio"
 msgid "Defer until:"
-msgstr "Viivästetty:"
+msgstr "Viivästä:"
 
 #: alarmtimewidget.cpp:92
 #, kde-format
@@ -159,12 +157,10 @@ msgstr ""
 "suoritetaan annettuna päivänä heti kun mahdollista."
 
 #: alarmtimewidget.cpp:137
-#, fuzzy, kde-format
-#| msgctxt "@label"
-#| msgid "Deferred to:"
+#, kde-format
 msgctxt "@option:radio Defer for time interval"
 msgid "Defer for:"
-msgstr "Viivästetty:"
+msgstr "Viivästä:"
 
 #: alarmtimewidget.cpp:137 editdlg.cpp:323
 #, kde-format
@@ -194,13 +190,10 @@ msgstr "<para>%1</para><para>%2</para>"
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Preset"
-msgstr ""
+msgstr "Esiasetus"
 
 #: alarmtimewidget.cpp:156
-#, fuzzy, kde-format
-#| msgctxt "@info/plain"
-#| msgid "1 Minute"
-#| msgid_plural "%1 Minutes"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "1 minute"
 msgid_plural "%1 minutes"
@@ -208,31 +201,24 @@ msgstr[0] "1 minuutti"
 msgstr[1] "%1 minuuttia"
 
 #: alarmtimewidget.cpp:157
-#, fuzzy, kde-format
-#| msgctxt "@item:intext inserted into 'in ... %1 minute's time' below"
-#| msgid "1 hour"
-#| msgid_plural "%1 hours"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "1 hour"
 msgid_plural "%1 hours"
-msgstr[0] "1 tunnin"
-msgstr[1] "%1 tunnin"
+msgstr[0] "1 tunti"
+msgstr[1] "%1 tuntia"
 
 #: alarmtimewidget.cpp:165
-#, fuzzy, kde-format
-#| msgctxt "@option:radio On day number in the month"
-#| msgid "O&n day"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "1 day"
-msgstr "Päivä&nä"
+msgstr "1 päivä"
 
 #: alarmtimewidget.cpp:166
-#, fuzzy, kde-format
-#| msgctxt "@item:inlistbox Time units"
-#| msgid "weeks"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "1 week"
-msgstr "viikkoa"
+msgstr "1 viikko"
 
 #: alarmtimewidget.cpp:176
 #, kde-kuit-format
@@ -1982,12 +1968,10 @@ msgid "Show the next month"
 msgstr "Näytä seuraava kuu"
 
 #: datepicker.cpp:89
-#, fuzzy, kde-format
-#| msgctxt "@info/plain"
-#| msgid "today"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Show today"
-msgstr "tänään"
+msgstr "Näytä tänäinen"
 
 #: daymatrix.cpp:200
 #, kde-format
