@@ -58,11 +58,14 @@
 using namespace KCal;
 using namespace KAlarmCal;
 
-static const char EDIT_DIALOG_NAME[] = "EditDialog";
-static const char TEMPLATE_DIALOG_NAME[] = "EditTemplateDialog";
-static const char EDIT_MORE_GROUP[] = "ShowOpts";
-static const char EDIT_MORE_KEY[]   = "EditMore";
-static const int  maxDelayTime = 99*60 + 59;    // < 100 hours
+namespace
+{
+const char EDIT_DIALOG_NAME[] = "EditDialog";
+const char TEMPLATE_DIALOG_NAME[] = "EditTemplateDialog";
+const char EDIT_MORE_KEY[]   = "EditMore";
+const QLatin1String EDIT_MORE_GROUP("ShowOpts");
+const int  maxDelayTime = 99*60 + 59;    // < 100 hours
+}
 
 inline QString recurText(const KAEvent& event)
 {
@@ -408,7 +411,7 @@ void EditAlarmDlg::init(const KAEvent& event)
     mainLayout->addWidget(mButtonBox);
 
     // Hide optional controls
-    KConfigGroup config(KSharedConfig::openConfig(), QLatin1String(EDIT_MORE_GROUP));
+    KConfigGroup config(KSharedConfig::openConfig(), EDIT_MORE_GROUP);
     showOptions(config.readEntry(EDIT_MORE_KEY, false));
 
     // Initialise the state of all controls according to the specified event, if any
@@ -1238,7 +1241,7 @@ void EditAlarmDlg::slotHelp()
 void EditAlarmDlg::slotDefault()
 {
     showOptions(!mShowingMore);
-    KConfigGroup config(KSharedConfig::openConfig(), QLatin1String(EDIT_MORE_GROUP));
+    KConfigGroup config(KSharedConfig::openConfig(), EDIT_MORE_GROUP);
     config.writeEntry(EDIT_MORE_KEY, mShowingMore);
 }
 

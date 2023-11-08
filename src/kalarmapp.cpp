@@ -62,6 +62,8 @@ const int RESOURCES_TIMEOUT = 30;   // timeout (seconds) for resources to be pop
 const char FDO_NOTIFICATIONS_SERVICE[] = "org.freedesktop.Notifications";
 const char FDO_NOTIFICATIONS_PATH[]    = "/org/freedesktop/Notifications";
 
+const QLatin1String GENERAL_GROUP("General");
+
 /******************************************************************************
 * Find the maximum number of seconds late which a late-cancel alarm is allowed
 * to be. This is calculated as the late cancel interval, plus a few seconds
@@ -190,7 +192,7 @@ void KAlarmApp::initialise()
 
     initialiseTimerResources();   // initialise calendars and alarm timer
 
-    KConfigGroup config(KSharedConfig::openConfig(), QStringLiteral("General"));
+    KConfigGroup config(KSharedConfig::openConfig(), GENERAL_GROUP);
     mNoSystemTray        = config.readEntry("NoSystemTray", false);
     mOldShowInSystemTray = wantShowInSystemTray();
     DateTime::setStartOfDay(Preferences::startOfDay());
@@ -1255,7 +1257,7 @@ bool KAlarmApp::checkSystemTray()
 
         // Store the new setting in the config file, so that if KAlarm exits it will
         // restart with the correct default.
-        KConfigGroup config(KSharedConfig::openConfig(), QStringLiteral("General"));
+        KConfigGroup config(KSharedConfig::openConfig(), GENERAL_GROUP);
         config.writeEntry("NoSystemTray", mNoSystemTray);
         config.sync();
 

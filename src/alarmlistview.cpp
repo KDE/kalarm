@@ -33,7 +33,7 @@ public:
 };
 
 
-AlarmListView::AlarmListView(const QByteArray& configGroup, QWidget* parent)
+AlarmListView::AlarmListView(const QString& configGroup, QWidget* parent)
     : EventListView(parent)
     , mConfigGroup(configGroup)
 {
@@ -97,7 +97,7 @@ void AlarmListView::setColumnsVisible(const QList<bool>& show)
 */
 void AlarmListView::initSections()
 {
-    KConfigGroup config(KSharedConfig::openConfig(), QLatin1String(mConfigGroup.constData()));
+    KConfigGroup config(KSharedConfig::openConfig(), mConfigGroup);
     const QByteArray settings = config.readEntry("ListHead", QByteArray());
     if (!settings.isEmpty())
     {
@@ -132,7 +132,7 @@ void AlarmListView::initSections()
 */
 void AlarmListView::saveColumnsState()
 {
-    KConfigGroup config(KSharedConfig::openConfig(), QLatin1String(mConfigGroup.constData()));
+    KConfigGroup config(KSharedConfig::openConfig(), mConfigGroup);
     config.writeEntry("ListHead", header()->saveState());
     config.sync();
 }

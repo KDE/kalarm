@@ -37,6 +37,10 @@
 #include <QDialogButtonBox>
 #include <QSortFilterProxyModel>
 
+namespace
+{
+const QLatin1String GENERAL_GROUP("General");
+}
 
 BirthdayDlg::BirthdayDlg(QWidget* parent)
     : QDialog(parent)
@@ -67,7 +71,7 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
 
     // Prefix and suffix to the name in the alarm text
     // Get default prefix and suffix texts from config file
-    KConfigGroup config(KSharedConfig::openConfig(), QStringLiteral("General"));
+    KConfigGroup config(KSharedConfig::openConfig(), GENERAL_GROUP);
     mPrefixText = config.readEntry("BirthdayPrefix", i18nc("@info", "Birthday: "));
     mSuffixText = config.readEntry("BirthdaySuffix");
 
@@ -293,7 +297,7 @@ QList<KAEvent> BirthdayDlg::events() const
 void BirthdayDlg::slotOk()
 {
     // Save prefix and suffix texts to use as future defaults
-    KConfigGroup config(KSharedConfig::openConfig(), QStringLiteral("General"));
+    KConfigGroup config(KSharedConfig::openConfig(), GENERAL_GROUP);
     config.writeEntry("BirthdayPrefix", mPrefix->text());
     config.writeEntry("BirthdaySuffix", mSuffix->text());
     config.sync();

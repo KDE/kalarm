@@ -42,7 +42,7 @@ namespace
 {
 
 // Config file entry names
-const char* GENERAL_SECTION  = "General";
+const QLatin1String GENERAL_GROUP("General");
 
 // Config file entry name for temporary use
 const char* TEMP = "Temp";
@@ -662,7 +662,7 @@ QString translateXTermPath(const QString& cmdline, bool write)
 
     // Translate any home directory specification at the start of the
     // executable's path.
-    KConfigGroup group(KSharedConfig::openConfig(), QLatin1String(GENERAL_SECTION));
+    KConfigGroup group(KSharedConfig::openConfig(), GENERAL_GROUP);
     if (write)
     {
         group.writePathEntry(TEMP, cmd);
