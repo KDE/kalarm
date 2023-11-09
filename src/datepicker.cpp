@@ -65,11 +65,14 @@ DatePicker::DatePicker(QWidget* parent)
     hlayout->setContentsMargins(0, 0, 0, 0);
     topLayout->addLayout(hlayout);
 
-    DPToolButton* leftYear   = createArrowButton(QStringLiteral("arrow-left-double"));
-    DPToolButton* leftMonth  = createArrowButton(QStringLiteral("arrow-left"));
-    DPToolButton* rightMonth = createArrowButton(QStringLiteral("arrow-right"));
-    DPToolButton* rightYear  = createArrowButton(QStringLiteral("arrow-right-double"));
-    DPToolButton* today      = createArrowButton(QStringLiteral("show-today"));
+    // Use Breeze icon names if possible, otherwise default to Oxygen names.
+    const bool useArrows = !QIcon::hasThemeIcon(QStringLiteral("go-next-skip"));
+    DPToolButton* leftYear   = createArrowButton(useArrows, QStringLiteral("go-previous-skip"), QStringLiteral("arrow-left-double"));
+    DPToolButton* leftMonth  = createArrowButton(useArrows, QStringLiteral("go-previous"),      QStringLiteral("arrow-left"));
+    DPToolButton* rightMonth = createArrowButton(useArrows, QStringLiteral("go-next"),          QStringLiteral("arrow-right"));
+    DPToolButton* rightYear  = createArrowButton(useArrows, QStringLiteral("go-next-skip"),     QStringLiteral("arrow-right-double"));
+    DPToolButton* today      = createArrowButton(QStringLiteral("go-jump-today"));
+
     mPrevYear  = leftYear;
     mPrevMonth = leftMonth;
     mNextYear  = rightYear;
@@ -335,8 +338,12 @@ void DatePicker::updateDisplay()
 */
 DPToolButton* DatePicker::createArrowButton(const QString& iconId)
 {
+    return createArrowButton(false, iconId);
+}
+DPToolButton* DatePicker::createArrowButton(bool useArrows, const QString& iconId, const QString& arrowIconId)
+{
     DPToolButton* button = new DPToolButton(this);
-    button->setIcon(QIcon::fromTheme(iconId));
+    button->setIcon(QIcon::fromTheme(useArrows ? arrowIconId : iconId));
     button->setToolButtonStyle(Qt::ToolButtonIconOnly);
     button->setAutoRaise(true);
     return button;

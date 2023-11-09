@@ -60,6 +60,7 @@ private Q_SLOTS:
 private:
     void newMonthShown();
     void updateDisplay();
+    DPToolButton* createArrowButton(bool useArrows, const QString& iconId, const QString& arrowIconId = {});
     DPToolButton* createArrowButton(const QString& iconId);
 
     DPToolButton* mPrevYear;
