@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KDE 4.3\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-04 16:52+0000\n"
+"POT-Creation-Date: 2023-11-09 01:38+0000\n"
 "PO-Revision-Date: 2021-01-05 11:57+0100\n"
 "Last-Translator: Kristóf Kiszel <kiszel.kristof@gmail.com>\n"
 "Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
@@ -149,7 +149,7 @@ msgctxt "@option:radio Defer for time interval"
 msgid "Defer for:"
 msgstr "Új idő:"
 
-#: alarmtimewidget.cpp:137 editdlg.cpp:323
+#: alarmtimewidget.cpp:137 editdlg.cpp:326
 #, kde-format
 msgctxt "@option:radio"
 msgid "Time from now:"
@@ -167,7 +167,7 @@ msgctxt "@info:whatsthis"
 msgid "Schedule the alarm after the specified time interval from now."
 msgstr "A riasztás beállítása egy adott idővel későbbre."
 
-#: alarmtimewidget.cpp:149 editdlg.cpp:334
+#: alarmtimewidget.cpp:149 editdlg.cpp:337
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid "<para>%1</para><para>%2</para>"
@@ -326,19 +326,19 @@ msgstr "Indítandó alkalmazás"
 msgid "Command line arguments to pass to application"
 msgstr "Az alkalmazásnak átadandó parancssori argumentumok"
 
-#: birthdaydlg.cpp:45
+#: birthdaydlg.cpp:49
 #, kde-format
 msgctxt "@title:window"
 msgid "Import Birthdays From KAddressBook"
 msgstr "A születésnapok importálása a KDE címjegyzékből"
 
-#: birthdaydlg.cpp:59 editdlg.cpp:239
+#: birthdaydlg.cpp:63 editdlg.cpp:242
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Alarm name:"
 msgstr "Riasztás neve:"
 
-#: birthdaydlg.cpp:64 editdlg.cpp:247
+#: birthdaydlg.cpp:68 editdlg.cpp:250
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -348,25 +348,25 @@ msgstr ""
 "Adjon meg egy nevet, amely segít a riasztás azonosításában. Ez opcionális, "
 "és nem kell egyedinek lennie."
 
-#: birthdaydlg.cpp:71
+#: birthdaydlg.cpp:75
 #, kde-format
 msgctxt "@info"
 msgid "Birthday: "
 msgstr "Születésnap: "
 
-#: birthdaydlg.cpp:74
+#: birthdaydlg.cpp:78
 #, kde-format
 msgctxt "@title:group"
 msgid "Alarm Text"
 msgstr "A riasztás szövege"
 
-#: birthdaydlg.cpp:77 prefdlg.cpp:1896
+#: birthdaydlg.cpp:81 prefdlg.cpp:1896
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Prefix:"
 msgstr "Előtag:"
 
-#: birthdaydlg.cpp:84
+#: birthdaydlg.cpp:88
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -376,13 +376,13 @@ msgstr ""
 "Ez a szöveg fog megjelenni az illető neve előtt a riasztás szövegében. A "
 "szükséges lezáró szóközöket is bele kell venni."
 
-#: birthdaydlg.cpp:88
+#: birthdaydlg.cpp:92
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Suffix:"
 msgstr "Utótag:"
 
-#: birthdaydlg.cpp:95
+#: birthdaydlg.cpp:99
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -392,13 +392,13 @@ msgstr ""
 "Ez a szöveg fog megjelenni az illető neve után a riasztás szövegében. A "
 "szükséges kezdő szóközöket is bele kell venni."
 
-#: birthdaydlg.cpp:99
+#: birthdaydlg.cpp:103
 #, kde-format
 msgctxt "@title:group"
 msgid "Select Birthdays"
 msgstr "Születésnapok kiválasztása"
 
-#: birthdaydlg.cpp:129
+#: birthdaydlg.cpp:133
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -415,13 +415,13 @@ msgstr ""
 "ejtéssel, vagy a Ctrl ill. Shift lenyomva tartása mellett az elemekre "
 "kattintva.</para>"
 
-#: birthdaydlg.cpp:135
+#: birthdaydlg.cpp:139
 #, kde-format
 msgctxt "@title:group"
 msgid "Alarm Configuration"
 msgstr "A riasztás beállításai"
 
-#: birthdaydlg.cpp:155
+#: birthdaydlg.cpp:159
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to display a reminder in advance of or after the birthday."
@@ -429,7 +429,7 @@ msgstr ""
 "Jelölje be ezt, ha szeretne emlékeztetőt megjeleníteni a születésnap előtt "
 "vagy után."
 
-#: birthdaydlg.cpp:156
+#: birthdaydlg.cpp:160
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -440,7 +440,7 @@ msgstr ""
 "Adja meg a napok számát, amennyivel a születésnap előtt vagy után jelenjen "
 "meg egy emlékeztető. Ez a születésnapkor megjelenő riasztás kiegészítése."
 
-#: birthdaydlg.cpp:158
+#: birthdaydlg.cpp:162
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -448,13 +448,13 @@ msgid ""
 msgstr ""
 "Válassza ki hogy az emlékeztető a születésnap előtt vagy után jelenjen-e meg."
 
-#: birthdaydlg.cpp:191 recurrenceedit.cpp:142
+#: birthdaydlg.cpp:195 recurrenceedit.cpp:142
 #, kde-format
 msgctxt "@action:button"
 msgid "Sub-Repetition"
 msgstr "Részismétlődés"
 
-#: birthdaydlg.cpp:193
+#: birthdaydlg.cpp:197
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Set up an additional alarm repetition"
@@ -2014,19 +2014,19 @@ msgctxt "@title:group"
 msgid "Alarm Date Selector"
 msgstr "Naptárfájlok"
 
-#: datepicker.cpp:85
+#: datepicker.cpp:88
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show the previous year"
 msgstr ""
 
-#: datepicker.cpp:86
+#: datepicker.cpp:89
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show the previous month"
 msgstr ""
 
-#: datepicker.cpp:87
+#: datepicker.cpp:90
 #, fuzzy, kde-format
 #| msgctxt "@option:check"
 #| msgid "Show time until alarm"
@@ -2034,13 +2034,13 @@ msgctxt "@info:tooltip"
 msgid "Show the next year"
 msgstr "A figyelmeztetőig hátralevő idő megjelenítése"
 
-#: datepicker.cpp:88
+#: datepicker.cpp:91
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show the next month"
 msgstr ""
 
-#: datepicker.cpp:89
+#: datepicker.cpp:92
 #, fuzzy, kde-format
 #| msgctxt "@info/plain"
 #| msgid "today"
@@ -2129,49 +2129,49 @@ msgctxt "@info"
 msgid "Failed to save calendar to <filename>%1</filename>"
 msgstr "Nem sikerült elmenteni ezt a naptárt: <filename>%1</filename>"
 
-#: editdlg.cpp:74
+#: editdlg.cpp:77
 #, kde-format
 msgctxt "@title:tab"
 msgid "Recurrence - [%1]"
 msgstr "Ismétlődés - [%1]"
 
-#: editdlg.cpp:81
+#: editdlg.cpp:84
 #, kde-format
 msgctxt "@option:check"
 msgid "Show in KOrganizer"
 msgstr "Megjelenítés a KOrganizerrel"
 
-#: editdlg.cpp:177
+#: editdlg.cpp:180
 #, kde-format
 msgctxt "@title:window"
 msgid "Alarm Template [read-only]"
 msgstr "Figyelmeztetősablon [csak olvasható]"
 
-#: editdlg.cpp:178
+#: editdlg.cpp:181
 #, kde-format
 msgctxt "@title:window"
 msgid "Archived Alarm [read-only]"
 msgstr "Archivált figyelmeztető [csak olvasható]"
 
-#: editdlg.cpp:179
+#: editdlg.cpp:182
 #, kde-format
 msgctxt "@title:window"
 msgid "Alarm [read-only]"
 msgstr "Figyelmeztető [csak olvasható]"
 
-#: editdlg.cpp:190
+#: editdlg.cpp:193
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Schedule the alarm at the specified time."
 msgstr "A figyelmeztető beállítása adott dátumra és időpontra."
 
-#: editdlg.cpp:193
+#: editdlg.cpp:196
 #, kde-format
 msgctxt "@action:button"
 msgid "Load Template..."
 msgstr "Sablon betöltése..."
 
-#: editdlg.cpp:195
+#: editdlg.cpp:198
 #, fuzzy, kde-format
 #| msgctxt "@info:whatsthis"
 #| msgid "Select a template to base the new alarm on."
@@ -2179,55 +2179,55 @@ msgctxt "@info:tooltip"
 msgid "Select an alarm template to preset the alarm"
 msgstr "Válassza ki az új figyelmeztető kiinduló sablonját."
 
-#: editdlg.cpp:199
+#: editdlg.cpp:202
 #, kde-format
 msgctxt "@action:button"
 msgid "Try"
 msgstr ""
 
-#: editdlg.cpp:209
+#: editdlg.cpp:212
 #, kde-format
 msgctxt "@title:tab"
 msgid "Alarm"
 msgstr "Figyelmeztető"
 
-#: editdlg.cpp:239
+#: editdlg.cpp:242
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Template name:"
 msgstr "Sablonnév:"
 
-#: editdlg.cpp:246
+#: editdlg.cpp:249
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the name of the alarm template"
 msgstr "Adja meg a figyelmeztetősablon nevét"
 
-#: editdlg.cpp:252
+#: editdlg.cpp:255
 #, kde-format
 msgctxt "@title:group"
 msgid "Action"
 msgstr "Művelet"
 
-#: editdlg.cpp:261
+#: editdlg.cpp:264
 #, kde-format
 msgctxt "@title:group"
 msgid "Deferred Alarm"
 msgstr "Elhalasztott figyelmeztető"
 
-#: editdlg.cpp:264
+#: editdlg.cpp:267
 #, kde-format
 msgctxt "@label"
 msgid "Deferred to:"
 msgstr "Új idő:"
 
-#: editdlg.cpp:269
+#: editdlg.cpp:272
 #, kde-format
 msgctxt "@action:button"
 msgid "Change..."
 msgstr "Módosítás..."
 
-#: editdlg.cpp:271
+#: editdlg.cpp:274
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Change the alarm's deferred time, or cancel the deferral"
@@ -2235,19 +2235,19 @@ msgstr ""
 "Itt lehet megadni elhalasztás esetén az új időt, vagy meg lehet szüntetni az "
 "elhalasztást."
 
-#: editdlg.cpp:282 editdlg.cpp:343
+#: editdlg.cpp:285 editdlg.cpp:346
 #, kde-format
 msgctxt "@title:group"
 msgid "Time"
 msgstr "Idő"
 
-#: editdlg.cpp:289
+#: editdlg.cpp:292
 #, kde-format
 msgctxt "@option:radio"
 msgid "Default time"
 msgstr "Alapértelmezett idő"
 
-#: editdlg.cpp:291
+#: editdlg.cpp:294
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2257,19 +2257,19 @@ msgstr ""
 "Nem kell kezdési időpontot beállítani az ebből a sablonból készített "
 "figyelmeztetőknél. A normál kezdési időpont lesz érvényes."
 
-#: editdlg.cpp:299
+#: editdlg.cpp:302
 #, kde-format
 msgctxt "@option:radio"
 msgid "Time:"
 msgstr "Idő:"
 
-#: editdlg.cpp:301
+#: editdlg.cpp:304
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Specify a start time for alarms based on this template."
 msgstr "Adja meg a sablon alapján készült figyelmeztetők kezdési időpontját."
 
-#: editdlg.cpp:307
+#: editdlg.cpp:310
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2279,13 +2279,13 @@ msgstr ""
 "<para>Adja meg a sablon alapján készült figyelmeztetők kezdési időpontját.</"
 "para><para>%1</para>"
 
-#: editdlg.cpp:314
+#: editdlg.cpp:317
 #, kde-format
 msgctxt "@option:radio"
 msgid "Date only"
 msgstr "Időpont nélkül"
 
-#: editdlg.cpp:316
+#: editdlg.cpp:319
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2295,7 +2295,7 @@ msgstr ""
 "Az <interface>Időpont nélkül</interface> opció beállítása az ezen sablonból "
 "készített figyelmeztetőknél."
 
-#: editdlg.cpp:326
+#: editdlg.cpp:329
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2305,7 +2305,7 @@ msgstr ""
 "Figyelmeztető létrehozása sablon alapján, úgy, hogy az a létrehozás után "
 "megadott idővel következzen be."
 
-#: editdlg.cpp:382
+#: editdlg.cpp:385
 #, fuzzy, kde-format
 #| msgctxt "@title:window"
 #| msgid "Wake From Suspend"
@@ -2313,14 +2313,14 @@ msgctxt "@option:check"
 msgid "Wake from suspend"
 msgstr "Felébresztés felfüggesztésből"
 
-#: editdlg.cpp:384
+#: editdlg.cpp:387
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "Check to wake the system if the alarm triggers while the system is suspended"
 msgstr ""
 
-#: editdlg.cpp:401
+#: editdlg.cpp:404
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to copy the alarm into KOrganizer's calendar"
@@ -2328,19 +2328,19 @@ msgstr ""
 "Jelölje be ezt, ha át szeretné másolni a figyelmeztetőt a KOrganizer "
 "naptárába"
 
-#: editdlg.cpp:1001
+#: editdlg.cpp:1004
 #, kde-format
 msgctxt "@info"
 msgid "You must enter a name for the alarm template"
 msgstr "Nevet kell adni a figyelmeztetősablonnak"
 
-#: editdlg.cpp:1005
+#: editdlg.cpp:1008
 #, kde-format
 msgctxt "@info"
 msgid "Template name is already in use"
 msgstr "A megadott sablonnév már foglalt"
 
-#: editdlg.cpp:1028
+#: editdlg.cpp:1031
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2349,7 +2349,7 @@ msgid ""
 "para>"
 msgstr ""
 
-#: editdlg.cpp:1060
+#: editdlg.cpp:1063
 #, kde-format
 msgctxt "@info The parameter is a date value"
 msgid ""
@@ -2359,7 +2359,7 @@ msgstr ""
 "A kezdő dátum nem illeszkedik a figyelmeztetés ismétlődési mintájára, emiatt "
 "a következő ismétlődés dátumához lesz igazítva (%1)."
 
-#: editdlg.cpp:1064
+#: editdlg.cpp:1067
 #, kde-format
 msgctxt "@info The parameter is a date/time value"
 msgid ""
@@ -2369,19 +2369,19 @@ msgstr ""
 "A kezdő dátum/idő nem illeszkedik a figyelmeztetés ismétlődési mintájára, "
 "emiatt a következő ismétlődés dátumához/idejéhez lesz igazítva (%1)."
 
-#: editdlg.cpp:1086
+#: editdlg.cpp:1089
 #, kde-format
 msgctxt "@info"
 msgid "Recurrence has already expired"
 msgstr "Az ismétlődési periódus már lejárt"
 
-#: editdlg.cpp:1091
+#: editdlg.cpp:1094
 #, kde-format
 msgctxt "@info"
 msgid "The alarm will never occur during working hours"
 msgstr "A figyelmeztető nem jelenik meg munkaidő alatt"
 
-#: editdlg.cpp:1120
+#: editdlg.cpp:1123
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2391,7 +2391,7 @@ msgstr ""
 "Az emlékeztetők időtartományának kisebbnek kell lennie az ismétlődési "
 "periódusnál, hacsak nincs bejelölve ez: <interface>%1</interface>"
 
-#: editdlg.cpp:1135
+#: editdlg.cpp:1138
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -2401,7 +2401,7 @@ msgstr ""
 "Az emlékeztetők ismétlődési időtartamának kisebbnek kell lennie az "
 "ismétlődési időköznél mínusz az emlékeztetési időnek"
 
-#: editdlg.cpp:1142
+#: editdlg.cpp:1145
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -2411,13 +2411,13 @@ msgstr ""
 "A figyelmeztetők ismétlődési időközét napban vagy hétben kell megadni "
 "időpont nélküli figyelmeztető esetén"
 
-#: editdlg.cpp:1173
+#: editdlg.cpp:1176
 #, kde-format
 msgctxt "@info"
 msgid "You must select a calendar to save the alarm in"
 msgstr "Ki kell választani, melyik naptárba legyen elmentve a figyelmeztető"
 
-#: editdlg.cpp:1254
+#: editdlg.cpp:1257
 #, fuzzy, kde-format
 #| msgctxt "@action:button"
 #| msgid "Less Options <<"
@@ -2425,7 +2425,7 @@ msgctxt "@action:Button"
 msgid "Fewer Options <<"
 msgstr "Kevesebb részlet <<"
 
-#: editdlg.cpp:1255
+#: editdlg.cpp:1258
 #, fuzzy, kde-format
 #| msgctxt "@action:button"
 #| msgid "Less Options <<"
@@ -2433,13 +2433,13 @@ msgctxt "@info:tooltip"
 msgid "Show fewer options"
 msgstr "Kevesebb részlet <<"
 
-#: editdlg.cpp:1260
+#: editdlg.cpp:1263
 #, kde-format
 msgctxt "@action:button"
 msgid "More Options >>"
 msgstr "Több részlet >>"
 
-#: editdlg.cpp:1261
+#: editdlg.cpp:1264
 #, fuzzy, kde-format
 #| msgctxt "@action:button"
 #| msgid "More Options >>"
@@ -3292,13 +3292,13 @@ msgctxt "@title:window"
 msgid "Choose Alarm Font & Color"
 msgstr "Figyelmeztetési betűtípus és szín"
 
-#: functions.cpp:144
+#: functions.cpp:146
 #, kde-format
 msgctxt "@action"
 msgid "Stop Play"
 msgstr "Lejátszás leállítása"
 
-#: functions.cpp:191
+#: functions.cpp:193
 #, fuzzy, kde-format
 #| msgctxt "@action"
 #| msgid "Enable &Alarms"
@@ -3306,13 +3306,13 @@ msgctxt "@action"
 msgid "Enable Alarms"
 msgstr "A figy&elmeztetők engedélyezése"
 
-#: functions.cpp:217
+#: functions.cpp:219
 #, kde-format
 msgctxt "@action"
 msgid "Spread Windows"
 msgstr "Emlékeztető ablakok"
 
-#: functions.cpp:873
+#: functions.cpp:875
 #, fuzzy, kde-format
 #| msgctxt "@info"
 #| msgid "Calendar Files"
@@ -3320,7 +3320,7 @@ msgctxt "@title:window"
 msgid "Import Calendar Files"
 msgstr "Naptárfájlok"
 
-#: functions.cpp:934
+#: functions.cpp:936
 #, fuzzy, kde-format
 #| msgctxt "@info"
 #| msgid "Calendar Files"
@@ -3328,106 +3328,106 @@ msgctxt "@item:inlistbox File type selection filter"
 msgid "Calendar Files"
 msgstr "Naptárfájlok"
 
-#: functions.cpp:935
+#: functions.cpp:937
 #, kde-format
 msgctxt "@title:window"
 msgid "Choose Export Calendar"
 msgstr "Exportálási naptár kiválasztása"
 
-#: functions.cpp:960
+#: functions.cpp:962
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Error loading calendar to append to:<nl/><filename>%1</filename>"
 msgstr ""
 "Nem sikerült betölteni a hozzáfűzési naptárt:<nl/><filename>%1</filename>"
 
-#: functions.cpp:999
+#: functions.cpp:1001
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Failed to save new calendar to:<nl/><filename>%1</filename>"
 msgstr "Nem sikerült elmenteni az új naptárt ide:<nl/><filename>%1</filename>"
 
-#: functions.cpp:1012
+#: functions.cpp:1014
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot upload new calendar to:<nl/><filename>%1</filename>"
 msgstr "Nem sikerült feltölteni az új naptárt ide:<nl/><filename>%1</filename>"
 
-#: functions.cpp:1031
+#: functions.cpp:1033
 #, kde-format
 msgctxt "@info"
 msgid "Unable to show alarms in KOrganizer"
 msgstr "Nem sikerült megjeleníteni a figyelmeztetőket a KOrganizerben"
 
-#: functions.cpp:1032
+#: functions.cpp:1034
 #, kde-format
 msgctxt "@info"
 msgid "Unable to show alarm in KOrganizer"
 msgstr "Nem sikerült megjeleníteni a figyelmeztetőt a KOrganizerben"
 
-#: functions.cpp:1035
+#: functions.cpp:1037
 #, kde-format
 msgctxt "@info"
 msgid "Unable to update alarm in KOrganizer"
 msgstr "Nem sikerült frissíteni a figyelmeztetőt a KOrganizerben"
 
-#: functions.cpp:1038
+#: functions.cpp:1040
 #, kde-format
 msgctxt "@info"
 msgid "Unable to delete alarms from KOrganizer"
 msgstr "Nem sikerült törölni a figyelmeztetőket a KOrganizerből"
 
-#: functions.cpp:1039
+#: functions.cpp:1041
 #, kde-format
 msgctxt "@info"
 msgid "Unable to delete alarm from KOrganizer"
 msgstr "Nem sikerült törölni a figyelmeztetőt a KOrganizerből"
 
-#: functions.cpp:1049
+#: functions.cpp:1051
 #, kde-kuit-format
 msgctxt "@info"
 msgid "<para>%1</para><para>(Could not start KOrganizer)</para>"
 msgstr "<para>%1</para><para>(A KOrganizert nem sikerült elindítani.)</para>"
 
-#: functions.cpp:1052
+#: functions.cpp:1054
 #, kde-kuit-format
 msgctxt "@info"
 msgid "<para>%1</para><para>(KOrganizer not fully started)</para>"
 msgstr ""
 "<para>%1</para><para>(A KOrganizer indulása még nem fejeződött be)</para>"
 
-#: functions.cpp:1055
+#: functions.cpp:1057
 #, kde-kuit-format
 msgctxt "@info"
 msgid "<para>%1</para><para>(Error communicating with KOrganizer)</para>"
 msgstr "<para>%1</para><para>(Kommunikációs hiba a KOrganizerrel)</para>"
 
-#: functions.cpp:1305
+#: functions.cpp:1307
 #, kde-format
 msgctxt "info"
 msgid "The scheduled Wake from Suspend has been cancelled."
 msgstr "Az ütemezett felébresztés felfüggesztésből megszakítva."
 
-#: functions.cpp:1339
+#: functions.cpp:1341
 #, kde-format
 msgctxt "@info"
 msgid "Error obtaining authorization (%1)"
 msgstr "Hiba a felhatalmazás megszerzésekor (%1)"
 
-#: functions.cpp:1388
+#: functions.cpp:1390
 #, kde-format
 msgctxt "@info"
 msgid "You must enable a template calendar to save the template in"
 msgstr "Engedélyezni kell egy sablonnaptárat, amelybe a sablon elmenthető"
 
-#: functions.cpp:1611
+#: functions.cpp:1613
 #, kde-kuit-format
 msgctxt "@info Please set the 'From' email address..."
 msgid "<para>%1</para><para>Please set it in the Configuration dialog.</para>"
 msgstr ""
 "<para>%1</para><para>Állítsa be a Beállítások párbeszédablakban.</para>"
 
-#: functions.cpp:1615
+#: functions.cpp:1617
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3437,67 +3437,67 @@ msgstr ""
 "<para>A figyelmeztetők jelenleg le vannak tiltva.</para><para>Engedélyezni "
 "szeretné őket?</para>"
 
-#: functions.cpp:1616
+#: functions.cpp:1618
 #, kde-format
 msgctxt "@action:button"
 msgid "Enable"
 msgstr "Bekapcsolás"
 
-#: functions.cpp:1616
+#: functions.cpp:1618
 #, kde-format
 msgctxt "@action:button"
 msgid "Keep Disabled"
 msgstr "Maradjon letiltva"
 
-#: functions.cpp:1986
+#: functions.cpp:1988
 #, kde-format
 msgctxt "@info"
 msgid "Error saving alarms"
 msgstr "Hiba történt a figyelmeztetők mentésekor"
 
-#: functions.cpp:1987
+#: functions.cpp:1989
 #, kde-format
 msgctxt "@info"
 msgid "Error saving alarm"
 msgstr "Hiba történt a figyelmeztető mentésekor"
 
-#: functions.cpp:1990
+#: functions.cpp:1992
 #, kde-format
 msgctxt "@info"
 msgid "Error deleting alarms"
 msgstr "Hiba történt a figyelmeztetők törlésekor"
 
-#: functions.cpp:1991
+#: functions.cpp:1993
 #, kde-format
 msgctxt "@info"
 msgid "Error deleting alarm"
 msgstr "Hiba történt a figyelmeztető törlésekor"
 
-#: functions.cpp:1994
+#: functions.cpp:1996
 #, kde-format
 msgctxt "@info"
 msgid "Error saving reactivated alarms"
 msgstr "Hiba történt az újból aktivált figyelmeztetők mentésekor"
 
-#: functions.cpp:1995
+#: functions.cpp:1997
 #, kde-format
 msgctxt "@info"
 msgid "Error saving reactivated alarm"
 msgstr "Hiba történt az újból aktivált figyelmeztető mentésekor"
 
-#: functions.cpp:1998
+#: functions.cpp:2000
 #, kde-format
 msgctxt "@info"
 msgid "Error saving alarm templates"
 msgstr "Hiba történt a figyelmeztetősablonok mentésekor"
 
-#: functions.cpp:1999
+#: functions.cpp:2001
 #, kde-format
 msgctxt "@info"
 msgid "Error saving alarm template"
 msgstr "Hiba történt a figyelmeztetősablon mentésekor"
 
-#: kalarmapp.cpp:809
+#: kalarmapp.cpp:811
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -3506,14 +3506,14 @@ msgstr ""
 "Kilépés esetén le lesznek tiltva a figyelmeztetők (a már megnyitott "
 "üzenetablakok bezárása után)."
 
-#: kalarmapp.cpp:819
+#: kalarmapp.cpp:821
 #, kde-format
 msgctxt "@info"
 msgid "Quitting will cancel the scheduled Wake from Suspend."
 msgstr ""
 "Kilépés esetén megszakadnak az ütemezett felfüggesztésből felébresztések."
 
-#: kalarmapp.cpp:832
+#: kalarmapp.cpp:834
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3523,7 +3523,7 @@ msgstr ""
 "El akarja indítani a KAlarmot bejelentkezéskor?<nl/> (Ne feledje, hogy a "
 "figyelmeztetések ki lesznek kapcsolva, ha a KAlarm nincs elindítva.)"
 
-#: kalarmapp.cpp:834 lib/messagebox.h:105 lib/messagebox.h:114
+#: kalarmapp.cpp:836 lib/messagebox.h:105 lib/messagebox.h:114
 #: lib/messagebox.h:151
 #, fuzzy, kde-format
 #| msgctxt "@info Parameter in 'Default calendar: Yes/No'"
@@ -3531,7 +3531,7 @@ msgstr ""
 msgid "Yes"
 msgstr "Igen"
 
-#: kalarmapp.cpp:834 lib/messagebox.h:106 lib/messagebox.h:115
+#: kalarmapp.cpp:836 lib/messagebox.h:106 lib/messagebox.h:115
 #: lib/messagebox.h:152
 #, fuzzy, kde-format
 #| msgctxt "@info Parameter in 'Default calendar: Yes/No'"
@@ -3539,13 +3539,13 @@ msgstr "Igen"
 msgid "No"
 msgstr "Nem"
 
-#: kalarmapp.cpp:1062
+#: kalarmapp.cpp:1064
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "Cannot create alarm: No default calendar is defined"
 msgstr ""
 
-#: kalarmapp.cpp:1076
+#: kalarmapp.cpp:1078
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info"
 #| msgid "Error recreating alarm"
@@ -3553,13 +3553,13 @@ msgctxt "@info:shell"
 msgid "Error creating alarm"
 msgstr "Hiba történt a figyelmeztető újralétrehozásakor"
 
-#: kalarmapp.cpp:1132
+#: kalarmapp.cpp:1134
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "%1: Event <resource>%2</resource> not found, or not unique"
 msgstr "%1: a(z) <resource>%2</resource> esemény nem található vagy nem egyedi"
 
-#: kalarmapp.cpp:1444
+#: kalarmapp.cpp:1446
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3572,14 +3572,14 @@ msgstr ""
 "használja a <interface>Nézet | Naptárak megjelenítése</interface> menüpontot "
 "a naptárállapotok ellenőrzéséhez vagy megváltoztatásához."
 
-#: kalarmapp.cpp:1484
+#: kalarmapp.cpp:1486
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "%1: Event <resource>%2</resource> not found, or not editable"
 msgstr ""
 "%1: a(z) <resource>%2</resource> esemény nem található vagy nem szerkeszthető"
 
-#: kalarmapp.cpp:1512
+#: kalarmapp.cpp:1514
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info"
 #| msgid ""
@@ -3598,7 +3598,7 @@ msgstr ""
 "használja a <interface>Nézet | Naptárak megjelenítése</interface> menüpontot "
 "a naptárállapotok ellenőrzéséhez vagy megváltoztatásához."
 
-#: kalarmapp.cpp:1520
+#: kalarmapp.cpp:1522
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info"
 #| msgid ""
@@ -3618,7 +3618,7 @@ msgstr ""
 "használja a <interface>Nézet | Naptárak megjelenítése</interface> menüpontot "
 "a naptárállapotok ellenőrzéséhez vagy megváltoztatásához."
 
-#: kalarmapp.cpp:2493
+#: kalarmapp.cpp:2495
 #, fuzzy, kde-format
 #| msgctxt "@info"
 #| msgid "Failed to execute command (shell access not authorized)"
@@ -3630,19 +3630,19 @@ msgstr ""
 "Nem sikerült végrehajtani a parancsot (nincs megfelelő hozzáférés a "
 "parancsértelmezőhöz):"
 
-#: kalarmapp.cpp:2646
+#: kalarmapp.cpp:2648
 #, kde-format
 msgctxt "@info"
 msgid "Error creating temporary script file"
 msgstr "Nem sikerült létrehozni egy ideiglenes szkriptet"
 
-#: kalarmapp.cpp:2742
+#: kalarmapp.cpp:2744
 #, kde-format
 msgctxt "@info"
 msgid "Pre-alarm action:"
 msgstr "Művelet a figyelmeztető előtt:"
 
-#: kalarmapp.cpp:2748
+#: kalarmapp.cpp:2750
 #, kde-format
 msgctxt "@info"
 msgid "Post-alarm action:"
