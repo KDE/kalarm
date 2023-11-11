@@ -2,7 +2,7 @@
 # Copyright (C) YEAR This_file_is_part_of_KDE
 # This file is distributed under the same license as the PACKAGE package.
 # Klára Cihlářová <koty@seznam.cz>, 2007.
-# Vit Pelcak <vit@pelcak.org>, 2009, 2021, 2022.
+# SPDX-FileCopyrightText: 2009, 2021, 2022, 2023 Vit Pelcak <vit@pelcak.org>
 # Vít Pelčák <vit@pelcak.org>, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2023.
 # Zdeněk Pech <dom.toretto@seznam.cz>, 2009, 2010.
 # Lukáš Tinkl <ltinkl@redhat.com>, 2010.
@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-09 01:38+0000\n"
-"PO-Revision-Date: 2023-06-29 13:59+0200\n"
+"PO-Revision-Date: 2023-11-09 16:28+0100\n"
 "Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
 "Language: cs\n"
@@ -21,7 +21,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Lokalize 23.04.2\n"
+"X-Generator: Lokalize 23.08.2\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -2201,7 +2201,7 @@ msgstr ""
 #, kde-format
 msgctxt "@option:check"
 msgid "Wake from suspend"
-msgstr ""
+msgstr "Probudit z uspání"
 
 #: editdlg.cpp:387
 #, kde-format
@@ -3148,7 +3148,7 @@ msgstr "Zastavit přehrávání"
 #, kde-format
 msgctxt "@action"
 msgid "Enable Alarms"
-msgstr ""
+msgstr "Povolit upomínky"
 
 #: functions.cpp:219
 #, kde-format
@@ -4342,7 +4342,7 @@ msgstr ""
 #, kde-format
 msgctxt "@action"
 msgid "Templates..."
-msgstr ""
+msgstr "Šablony..."
 
 #: mainwindow.cpp:463 templatedlg.cpp:73
 #, kde-format
@@ -4354,13 +4354,13 @@ msgstr "Nový"
 #, kde-format
 msgctxt "@action"
 msgid "Create Template..."
-msgstr ""
+msgstr "Vytvořit šablonu..."
 
 #: mainwindow.cpp:473
 #, kde-format
 msgctxt "@action"
 msgid "Copy..."
-msgstr ""
+msgstr "Kopírovat..."
 
 #: mainwindow.cpp:478 resourceselector.cpp:301
 #, kde-format
@@ -4384,7 +4384,7 @@ msgstr "Smazat bez potvrzení"
 #, kde-format
 msgctxt "@action"
 msgid "Reactivate"
-msgstr ""
+msgstr "Znovu aktivovat"
 
 #: mainwindow.cpp:508
 #, kde-format
@@ -4396,19 +4396,19 @@ msgstr "Probudit z uspání..."
 #, kde-format
 msgctxt "@action"
 msgid "Show Archived Alarms"
-msgstr ""
+msgstr "Zobrazit archivované upomínky"
 
 #: mainwindow.cpp:523
 #, kde-format
 msgctxt "@action"
 msgid "Show in System Tray"
-msgstr ""
+msgstr "Zobrazit v systémovém panelu"
 
 #: mainwindow.cpp:527
 #, kde-format
 msgctxt "@action"
 msgid "Show Calendars"
-msgstr ""
+msgstr "Zobrazit kalendáře"
 
 #: mainwindow.cpp:531
 #, kde-format
@@ -4420,7 +4420,7 @@ msgstr "Zobrazit výběr data"
 #, kde-format
 msgctxt "@action"
 msgid "Import Alarms..."
-msgstr ""
+msgstr "Importovat upomínky..."
 
 #: mainwindow.cpp:545
 #, kde-format
@@ -4432,7 +4432,7 @@ msgstr "Importovat narozeniny..."
 #, kde-format
 msgctxt "@action"
 msgid "Export Selected Alarms..."
-msgstr ""
+msgstr "Exportovat vybrané upomínky..."
 
 #: mainwindow.cpp:554 resourceselector.cpp:319
 #, kde-format
@@ -4444,7 +4444,7 @@ msgstr "Exportovat..."
 #, kde-format
 msgctxt "@action"
 msgid "Refresh Alarms"
-msgstr ""
+msgstr "Aktualizovat upomínky"
 
 #: mainwindow.cpp:810
 #, kde-format
@@ -4554,7 +4554,7 @@ msgstr "Povolit"
 #, kde-format
 msgctxt "@action"
 msgid "Disable"
-msgstr ""
+msgstr "Zakázat"
 
 #: messagedisplay.cpp:271
 #, kde-kuit-format
@@ -4696,7 +4696,7 @@ msgstr "Úpravy"
 #, kde-format
 msgctxt "@action:button"
 msgid "Defer"
-msgstr "Nepreferovat"
+msgstr "Odložit"
 
 #: messagewindow.cpp:227
 #, kde-format
@@ -4770,7 +4770,7 @@ msgstr "Upravit upomínku."
 #, kde-format
 msgctxt "@action:button"
 msgid "Defer..."
-msgstr ""
+msgstr "Odložit..."
 
 #: messagewindow.cpp:443
 #, kde-format
@@ -4854,7 +4854,7 @@ msgstr ""
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "Display Alarm Template"
-msgstr ""
+msgstr "Zobrazit šablonu upomínky"
 
 #: newalarmaction.cpp:45
 #, kde-format
@@ -4866,7 +4866,7 @@ msgstr "Nová Upomínka zobrazením"
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "Command Alarm Template"
-msgstr ""
+msgstr "Šablona Upomínky s příkazem"
 
 #: newalarmaction.cpp:48
 #, kde-format
@@ -4878,7 +4878,7 @@ msgstr "Nová Upomínka s příkazem"
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "Email Alarm Template"
-msgstr ""
+msgstr "Šablona Poštovní upomínky"
 
 #: newalarmaction.cpp:51
 #, kde-format
@@ -4890,7 +4890,7 @@ msgstr "Nová Poštovní upomínka"
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "Audio Alarm Template"
-msgstr ""
+msgstr "Šablona Zvukové upomínky"
 
 #: newalarmaction.cpp:54
 #, kde-format
@@ -4902,7 +4902,7 @@ msgstr "Nová Zvuková upomínka"
 #, kde-format
 msgctxt "@action"
 msgid "New Alarm From Template"
-msgstr ""
+msgstr "Nová upomínka ze šablony"
 
 #: prefdlg.cpp:129
 #, kde-format
@@ -4992,13 +4992,13 @@ msgstr "Obnovit výchozí nastavení všech karet, nebo pouze aktuální karty?"
 #, kde-format
 msgctxt "@action:button Reset ALL tabs"
 msgid "All"
-msgstr ""
+msgstr "Vše"
 
 #: prefdlg.cpp:264
 #, kde-format
 msgctxt "@action:button Reset the CURRENT tab"
 msgid "Current"
-msgstr ""
+msgstr "Současný"
 
 #: prefdlg.cpp:440
 #, kde-format
@@ -5218,7 +5218,7 @@ msgstr "Žádné"
 #, kde-format
 msgctxt "@label:spinbox How long before alarm to wake system from suspend"
 msgid "Wake from suspend before alarm:"
-msgstr ""
+msgstr "Před upomínkou probudit z uspání:"
 
 #: prefdlg.cpp:768
 #, kde-format
@@ -5228,12 +5228,15 @@ msgid ""
 "alarms set to wake from suspend. This can be used to ensure that the system "
 "is fully restored by the time the alarm triggers."
 msgstr ""
+"Zadejte, kolik minut před spuštěním upomínky se má systém probrat z uspání "
+"pro upomínky nastavené k probuzení z uspání. Tím můžete zajistit, že systém "
+"je plně probuzen před spuštěním upomínky."
 
 #: prefdlg.cpp:769
 #, kde-format
 msgctxt "@label Time unit for user entered number"
 msgid "minutes"
-msgstr ""
+msgstr "minut"
 
 #: prefdlg.cpp:783
 #, kde-format
@@ -5694,13 +5697,13 @@ msgstr "Opakování:"
 #, kde-format
 msgctxt "@option:radio"
 msgid "February 28th"
-msgstr ""
+msgstr "28. února"
 
 #: prefdlg.cpp:1417
 #, kde-format
 msgctxt "@option:radio"
 msgid "March 1st"
-msgstr ""
+msgstr "1. března"
 
 #: prefdlg.cpp:1421
 #, kde-format
@@ -5916,7 +5919,7 @@ msgstr "Nastavit ikonu v systémové části panelu"
 #, kde-format
 msgctxt "@option:check"
 msgid "Show next 24 hours' alarms"
-msgstr ""
+msgstr "Zobrazit upomínky pro příštích 24 hodin"
 
 #: prefdlg.cpp:1862
 #, kde-format
@@ -6358,7 +6361,7 @@ msgstr "Datum nemůže být dřív než počáteční datum"
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Recur every"
-msgstr ""
+msgstr "Opakovat každých"
 
 #: recurrenceedit.cpp:1131
 #, kde-format
@@ -6376,7 +6379,7 @@ msgstr "Zadejte čas (v hodinách a minutách) mezi opakováními upomínky"
 #, kde-format
 msgctxt "@label On: Tuesday"
 msgid "On:"
-msgstr ""
+msgstr "Zapnuto:"
 
 #: recurrenceedit.cpp:1235
 #, kde-format
@@ -6424,7 +6427,7 @@ msgstr "Vyberte dny v týdnu, kdy se má upomínka opakovat"
 #, kde-format
 msgctxt "@option:radio On day number in the month"
 msgid "On day"
-msgstr ""
+msgstr "Kolikátého"
 
 #: recurrenceedit.cpp:1305
 #, kde-format
@@ -6575,7 +6578,7 @@ msgstr "Vyberte měsíc v roce, kdy se má upomínka opakovat"
 #, kde-format
 msgctxt "@label:listbox"
 msgid "February 29th alarm in non-leap years:"
-msgstr ""
+msgstr "Upomínky 29. února v nepřestupných rocích:"
 
 #: recurrenceedit.cpp:1534
 #, kde-format
@@ -6761,7 +6764,7 @@ msgstr ""
 #, kde-format
 msgctxt "@info"
 msgid "Calendar is not configured."
-msgstr ""
+msgstr "Kalendář není nastaven."
 
 #: resources/fileresource.cpp:354 resources/fileresource.cpp:372
 #, kde-kuit-format
@@ -6780,7 +6783,7 @@ msgstr ""
 #, kde-format
 msgctxt "@info"
 msgid "Calendar is read-only."
-msgstr ""
+msgstr "Kalendář je pouze ke čtení."
 
 #: resources/fileresource.cpp:467
 #, kde-kuit-format
@@ -6813,6 +6816,7 @@ msgid ""
 "Error!  The file <filename>%1</filename> is already used by an existing "
 "calendar."
 msgstr ""
+"Chyba. Soubor <filename>%1</filename> je již použit pro existující kalendář."
 
 #: resources/migration/dirresourceimportdialog.cpp:34
 #, kde-format
@@ -7450,7 +7454,7 @@ msgstr ""
 #, kde-format
 msgctxt "@option:radio"
 msgid "Active Alarms"
-msgstr ""
+msgstr "Aktivní upomínky"
 
 #. i18n: ectx: property (text), widget (QRadioButton, archivedRadio)
 #: resources/singlefileresourceconfigdialog.ui:99
@@ -7464,13 +7468,13 @@ msgstr "Archivované upomínky"
 #, kde-format
 msgctxt "@option:radio"
 msgid "Alarm Templates"
-msgstr ""
+msgstr "Šablony upomínek"
 
 #. i18n: ectx: property (html), widget (KTextEdit, alarmTypeDescription)
 #: resources/singlefileresourceconfigdialog.ui:133
 #, kde-format
 msgid "Select which alarm type this calendar should contain."
-msgstr ""
+msgstr "Zvolte, který typ upomínky má tento kalendář obsahovat."
 
 #. i18n: ectx: property (text), widget (QLabel, alarmTypeLabel)
 #: resources/singlefileresourceconfigdialog.ui:142
@@ -7543,6 +7547,10 @@ msgid ""
 "the file or the file is on a remote server that does not support write "
 "access."
 msgstr ""
+"Pokud je zapnut režim pouze ke čtení, do souboru nebudou zapisovány změny. "
+"Režim pouze pro čtení bude automaticky zapnut, pokud nemáte práva k zápisu "
+"do tohoto souboru nebo soubor je na vzdáleném serveru, který nepodporuje "
+"zápis."
 
 #: resourceselector.cpp:50
 #, kde-format
@@ -7695,31 +7703,31 @@ msgstr ""
 #, kde-format
 msgctxt "@action Reload calendar"
 msgid "Reload"
-msgstr ""
+msgstr "Obnovit"
 
 #: resourceselector.cpp:292
 #, kde-format
 msgctxt "@action"
 msgid "Show Details"
-msgstr ""
+msgstr "Zobrazit podrobnosti"
 
 #: resourceselector.cpp:295
 #, kde-format
 msgctxt "@action"
 msgid "Set Color..."
-msgstr ""
+msgstr "Nastavit barvu..."
 
 #: resourceselector.cpp:298
 #, kde-format
 msgctxt "@action"
 msgid "Clear Color"
-msgstr ""
+msgstr "Smazat barvu"
 
 #: resourceselector.cpp:304
 #, kde-format
 msgctxt "@action"
 msgid "Update Calendar Format"
-msgstr ""
+msgstr "Aktualizovat formát kalendáře"
 
 #: resourceselector.cpp:307
 #, kde-format
@@ -7731,31 +7739,31 @@ msgstr "Odstranit"
 #, kde-format
 msgctxt "@action"
 msgid "Add..."
-msgstr ""
+msgstr "Přidat..."
 
 #: resourceselector.cpp:316
 #, kde-format
 msgctxt "@action"
 msgid "Import..."
-msgstr ""
+msgstr "Importovat..."
 
 #: resourceselector.cpp:372
 #, kde-format
 msgctxt "@action"
 msgid "Use as Default for Active Alarms"
-msgstr ""
+msgstr "Použít jako výchozí pro aktivní upomínky"
 
 #: resourceselector.cpp:373
 #, kde-format
 msgctxt "@action"
 msgid "Use as Default for Archived Alarms"
-msgstr ""
+msgstr "Použít jako výchozí pro archivované upomínky"
 
 #: resourceselector.cpp:374
 #, kde-format
 msgctxt "@action"
 msgid "Use as Default for Alarm Templates"
-msgstr ""
+msgstr "Použít jako výchozí pro šablony upomínek"
 
 #: resourceselector.cpp:503
 #, kde-format
@@ -8262,7 +8270,7 @@ msgstr "Vyberte šablonu, na které bude založena nová upomínka."
 #, kde-format
 msgctxt "@action"
 msgid "New Alarm"
-msgstr ""
+msgstr "Nová upomínka"
 
 #: traywindow.cpp:300
 #, kde-format
