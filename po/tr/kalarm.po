@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: kdepim-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-10-09 02:40+0000\n"
-"PO-Revision-Date: 2023-10-23 12:59+0300\n"
+"PO-Revision-Date: 2023-11-11 23:27+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -282,7 +282,7 @@ msgstr "Alarm zamanı halihazırda geçmiş"
 #: autostart/autostart.cpp:48
 #, kde-format
 msgid "KAlarm Autostart"
-msgstr "K Alarm Otomatik Başla"
+msgstr "K Alarm Kendiliğinden Başlat"
 
 #: autostart/autostart.cpp:49
 #, kde-format
@@ -986,7 +986,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label"
 msgid "Suppress autostart at login"
-msgstr "Oturum açılışında otomatik başlatmayı engelle"
+msgstr "Oturum açılışında kendiliğinden başlatmayı engelle"
 
 #. i18n: ectx: label, entry (DefaultDeferTime), group (General)
 #: data/kalarmconfig.kcfg:138
@@ -5034,7 +5034,7 @@ msgstr "Çalışma Kipi"
 #, kde-format
 msgctxt "@option:check"
 msgid "Start at login"
-msgstr "Oturum açılışında otomatik başlat"
+msgstr "Oturum açılışında kendiliğinden başlat"
 
 #: prefdlg.cpp:447
 #, kde-kuit-format
@@ -5045,9 +5045,9 @@ msgid ""
 "intend to discontinue use of <application>KAlarm</application>.</para>"
 msgstr ""
 "<para>KDE'yi her başlattığınızda <application>K Alarm</application> "
-"uygulamasını otomatik başlatır.</para><para>Bu şeçenek <application>K Alarm</"
-"application> uygulamasının kullanımını durdurma niyetinde olmadığınız sürece "
-"her zaman seçili olmalıdır.</para>"
+"uygulamasını kendiliğinden başlatır.</para><para>Bu şeçenek <application>K "
+"Alarm</application> uygulamasının kullanımını durdurma niyetinde olmadığınız "
+"sürece her zaman seçili olmalıdır.</para>"
 
 #: prefdlg.cpp:451
 #, kde-format
