@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: kdepim-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-09 01:38+0000\n"
-"PO-Revision-Date: 2023-10-23 12:59+0300\n"
+"PO-Revision-Date: 2023-11-11 23:31+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -288,7 +288,7 @@ msgstr "Alarm zamanı halihazırda geçmiş"
 #: autostart/autostart.cpp:48
 #, kde-format
 msgid "KAlarm Autostart"
-msgstr "K Alarm Otomatik Başla"
+msgstr "K Alarm Kendiliğinden Başlat"
 
 #: autostart/autostart.cpp:49
 #, kde-format
@@ -464,7 +464,7 @@ msgstr "E-postaya dosya iliştir (gerekirse yinele)"
 #: commandoptions.cpp:133
 #, kde-format
 msgid "Auto-close alarm window after --late-cancel period"
-msgstr "--late-cancel döneminden sonra alarm penceresini otomatik olarak kapat"
+msgstr "--late-cancel döneminden sonra alarm penceresini kendiliğinden kapat"
 
 #: commandoptions.cpp:136
 #, kde-format
@@ -983,7 +983,7 @@ msgid ""
 "<p>Automatically start KAlarm whenever you start KDE.</p><p>This option "
 "should always be checked unless you intend to discontinue use of KAlarm.</p>"
 msgstr ""
-"<p>Ne zaman KDE'yi başlatırsanız K Alarm'ı da otomatik olarak başlatır.</"
+"<p>Ne zaman KDE'yi başlatırsanız K Alarm'ı da kendiliğinden başlatır.</"
 "p><p>Bu seçenek, K Alarm'ı kullanmayı sürdürmek istemediğiniz zamana kadar "
 "sürekli seçili olmalı.</p>"
 
@@ -992,7 +992,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label"
 msgid "Suppress autostart at login"
-msgstr "Oturum açılışında otomatik başlatmayı engelle"
+msgstr "Oturum açılışında kendiliğinden başlatmayı engelle"
 
 #. i18n: ectx: label, entry (DefaultDeferTime), group (General)
 #: data/kalarmconfig.kcfg:141
@@ -1186,10 +1186,10 @@ msgid ""
 "use sendmail or a sendmail compatible mail transport agent.</li></ul></p>"
 msgstr ""
 "<p>E-posta alarmı tetiklendiğinde e-posta nasıl gönderilir<ul><li>K Posta: E-"
-"posta otomatik olarak K Posta üzerinden gönderilir.</li><li>Sendmail: E-"
-"posta, otomatik olarak gönderilir. Bu seçenek yalnızca sistemin Sendmail ya "
-"da Sendmail uyumlu bir posta taşıma aracıyla yapılandırıldıysa çalışır.</"
-"li></ul></p>"
+"posta kendiliğinden K Posta üzerinden gönderilir.</li><li>Sendmail: E-posta, "
+"kendiliğinden gönderilir. Bu seçenek yalnızca sistemin Sendmail ya da "
+"Sendmail uyumlu bir posta taşıma aracıyla yapılandırıldıysa çalışır.</li></"
+"ul></p>"
 
 #. i18n: ectx: label, entry (Base_EmailClient), group (General)
 #: data/kalarmconfig.kcfg:199
@@ -4202,7 +4202,7 @@ msgstr "Geç kalmışsa iptal et"
 #, kde-format
 msgctxt "@option:check"
 msgid "Auto-close window after this time"
-msgstr "Bu süreden sonra pencereyi otomatik olarak kapat"
+msgstr "Bu süreden sonra pencereyi kendiliğinden kapat"
 
 #: latecancel.cpp:27
 #, kde-format
@@ -4246,8 +4246,7 @@ msgctxt "@info:whatsthis"
 msgid ""
 "Automatically close the alarm window after the expiry of the late-"
 "cancellation period"
-msgstr ""
-"Geç iptal zamanı geçtikten sonra alarm penceresini otomatik olarak kapat"
+msgstr "Geç iptal zamanı geçtikten sonra alarm penceresini kendiliğinden kapat"
 
 #: lib/file.cpp:107
 #, kde-format
@@ -5054,7 +5053,7 @@ msgstr "Çalışma Kipi"
 #, kde-format
 msgctxt "@option:check"
 msgid "Start at login"
-msgstr "Oturum açılışında otomatik başlat"
+msgstr "Oturum açılışında kendiliğinden başlat"
 
 #: prefdlg.cpp:448
 #, kde-kuit-format
@@ -5065,9 +5064,9 @@ msgid ""
 "intend to discontinue use of <application>KAlarm</application>.</para>"
 msgstr ""
 "<para>KDE'yi her başlattığınızda <application>K Alarm</application> "
-"uygulamasını otomatik başlatır.</para><para>Bu şeçenek <application>K Alarm</"
-"application> uygulamasının kullanımını durdurma niyetinde olmadığınız sürece "
-"her zaman seçili olmalıdır.</para>"
+"uygulamasını kendiliğinden başlatır.</para><para>Bu şeçenek <application>K "
+"Alarm</application> uygulamasının kullanımını durdurma niyetinde olmadığınız "
+"sürece her zaman seçili olmalıdır.</para>"
 
 #: prefdlg.cpp:452
 #, kde-format
@@ -5537,8 +5536,8 @@ msgid ""
 "sendmail compatible mail transport agent.</item></list></para>"
 msgstr ""
 "<para>%1<list><item><interface>%2</interface>: E-posta, <application>K "
-"Posta</application> ile otomatik olarak gönderilir.</item><item><interface>"
-"%3</interface>: E-posta, otomatik olarak gönderilir. Bu seçenek, sisteminiz "
+"Posta</application> ile kendiliğinden gönderilir.</item><item><interface>%3</"
+"interface>: E-posta, kendiliğinden gönderilir. Bu seçenek, sisteminiz "
 "<application>sendmail</application> veya sendmail uyumlu bir posta taşıma "
 "aracısı kullanmak için yapılandırılmışsa çalışır.</item></list></para>"
 
@@ -5551,7 +5550,7 @@ msgid ""
 "use <application>sendmail</application> or a sendmail compatible mail "
 "transport agent.</item></list></para>"
 msgstr ""
-"<para>%1<list><item><interface>%2</interface>: E-posta, otomatik olarak "
+"<para>%1<list><item><interface>%2</interface>: E-posta, kendiliğinden "
 "gönderilir. Bu seçenek, sisteminiz <application>sendmail</application> veya "
 "sendmail uyumlu bir posta taşıma aracısı kullanmak için yapılandırılmışsa "
 "çalışır.</item></list></para>"
@@ -5942,7 +5941,7 @@ msgstr ""
 #, kde-format
 msgctxt "@option:radio"
 msgid "Automatically hide if no active alarms"
-msgstr "Etkin alarm yoksa otomatik olarak gizle"
+msgstr "Etkin alarm yoksa kendiliğinden gizle"
 
 #: prefdlg.cpp:1830
 #, kde-kuit-format
@@ -5953,7 +5952,7 @@ msgid ""
 "be made visible by use of the system tray option to show hidden icons."
 msgstr ""
 "Etkin alarmlar yok ise <application>K Alarm</application> simgesinin sistem "
-"tepsisinde otomatik olarak gizlemek için işaretleyin. Gizliyken, gizli "
+"tepsisinde kendiliğinden gizlemek için işaretleyin. Gizliyken, gizli "
 "simgeleri göstermek için sistem tepsisi seçeneğini kullanarak simgeyi her "
 "zaman görünür yapabilirsiniz."
 
@@ -5967,16 +5966,16 @@ msgid ""
 "to show hidden icons."
 msgstr ""
 "Eğer belirtilen süre içinde zamanı gelen alarm yoksa <application>K Alarm</"
-"application> uygulamasının simgesini sistem çubuğunda otomatik olarak "
-"gizlemek için işaretleyin. Gizliyken, gizli simgeleri göstermek için sistem "
-"tepsisi seçeneğini kullanarak simgeyi her zaman görünür yapabilirsiniz."
+"application> uygulamasının simgesini sistem çubuğunda kendiliğinden gizlemek "
+"için işaretleyin. Gizliyken, gizli simgeleri göstermek için sistem tepsisi "
+"seçeneğini kullanarak simgeyi her zaman görünür yapabilirsiniz."
 
 #: prefdlg.cpp:1839
 #, kde-format
 msgctxt "@option:radio"
 msgid "Automatically hide if no alarm due within time period:"
 msgstr ""
-"Zaman periyodu içerisinde süresi dolmuş alarm yoksa otomatik olarak gizle:"
+"Zaman periyodu içerisinde süresi dolmuş alarm yoksa kendiliğinden gizle:"
 
 #: prefdlg.cpp:1851
 #, kde-format
