@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-09 01:38+0000\n"
-"PO-Revision-Date: 2023-10-09 07:22+0100\n"
+"PO-Revision-Date: 2023-11-12 16:39+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -1258,7 +1258,7 @@ msgid ""
 "Command line to execute command alarms in a terminal window, including "
 "special codes described in the KAlarm handbook."
 msgstr ""
-"Komandlinio por ekzekuti komandalarmojn en fina fenestro, inkluzive de "
+"Komandlinio por plenumi komandalarmojn en terminala fenestro, inkluzive de "
 "specialaj kodoj priskribitaj en la KAlarm-manlibro."
 
 #. i18n: ectx: label, entry (Base_StartOfDay), group (General)
@@ -1762,7 +1762,7 @@ msgstr "Antaŭalarmo ago"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Default command to execute before displaying alarms."
-msgstr "Defaŭlta komando por ekzekuti antaŭ montri alarmojn."
+msgstr "Defaŭlta komando por plenumi antaŭ montri alarmojn."
 
 #. i18n: ectx: label, entry (DefaultExecPreActionOnDeferral), group (Defaults)
 #: data/kalarmconfig.kcfg:409
@@ -4054,7 +4054,7 @@ msgctxt "@info"
 msgid ""
 "A 'From' email address must be configured in order to execute email alarms."
 msgstr ""
-"Retpoŝtadreso 'De' devas esti agordita por ekzekuti retpoŝtajn alarmojn."
+"Retpoŝtadreso 'De' devas esti agordita por plenumi retpoŝtajn alarmojn."
 
 #: kamail.cpp:73
 #, kde-format
@@ -4270,7 +4270,7 @@ msgstr "Malsukcesis efektivigi komandon (ŝela aliro ne rajtigita)"
 #, kde-format
 msgctxt "@info"
 msgid "Failed to execute command"
-msgstr "Malsukcesis ekzekuti komandon"
+msgstr "Malsukcesis plenumi komandon"
 
 #: lib/shellprocess.cpp:147
 #, kde-format
@@ -4282,7 +4282,7 @@ msgstr "Malsukcesis efektivigi komandon (ne trovita aŭ ne efektivigebla)"
 #, kde-format
 msgctxt "@info"
 msgid "Command execution error"
-msgstr "Eraro pri ekzekuto de komando"
+msgstr "Eraro pri plenumo de komando"
 
 #: lib/shellprocess.cpp:152
 #, kde-format
@@ -5095,7 +5095,7 @@ msgid ""
 "Choose which application to use when a command alarm is executed in a "
 "terminal window"
 msgstr ""
-"Elektu kiun aplikaĵon uzi kiam komanda alarmo estas ekzekutita en fina "
+"Elektu kiun aplikaĵon uzi kiam komanda alarmo estas plenumita en fina "
 "fenestro"
 
 #: prefdlg.cpp:513
@@ -5104,7 +5104,7 @@ msgctxt "@info:whatsthis"
 msgid ""
 "Check to execute command alarms in a terminal window by <icode>%1</icode>"
 msgstr ""
-"Marku por ekzekuti komandalarmojn en fina fenestro per <icode>%1</icode>"
+"Marku por plenumi komandalarmojn en fina fenestro per <icode>%1</icode>"
 
 #: prefdlg.cpp:520
 #, kde-format
@@ -5121,7 +5121,7 @@ msgid ""
 "what you enter here. See the <application>KAlarm</application> Handbook for "
 "details of special codes to tailor the command line."
 msgstr ""
-"Enigu la plenan komandlinion necesan por ekzekuti komandon en via elektita "
+"Enigu la plenan komandlinion necesan por plenumi komandon en via elektita "
 "fina fenestro. Defaŭlte la komandĉeno de la alarmo estos almetita al tio, "
 "kion vi enigas ĉi tie. Vidu la <application>KAlarm</application> Manlibron "
 "por detaloj pri specialaj kodoj por adapti la komandlinion."
@@ -5923,7 +5923,7 @@ msgid ""
 "to show hidden icons."
 msgstr ""
 "Marku por aŭtomate kaŝi la piktogramon de <application>KAlarm</application> "
-"en la sistempleto se neniuj alarmoj estas pagendaj en la specifita "
+"en la sistempleto se neniuj alarmoj estas plenumendaj en la specifita "
 "tempoperiodo. Kiam estas kaŝita, la piktogramo ĉiam povas esti videbla per "
 "uzo de la opcio de la sistempleto por montri kaŝitajn piktogramojn."
 
@@ -7200,25 +7200,25 @@ msgstr "Kalendaroj"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Command execution failed"
-msgstr "Komanda ekzekuto malsukcesis"
+msgstr "Komanda plenumo malsukcesis"
 
 #: resources/resourcedatamodelbase.cpp:452
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Pre-alarm action execution failed"
-msgstr "Antaŭalarm-ago-ekzekuto malsukcesis"
+msgstr "Antaŭalarm-ago-plenumo malsukcesis"
 
 #: resources/resourcedatamodelbase.cpp:454
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Post-alarm action execution failed"
-msgstr "Post-alarma ago-ekzekuto malsukcesis"
+msgstr "Post-alarma ago-plenumo malsukcesis"
 
 #: resources/resourcedatamodelbase.cpp:456
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Pre- and post-alarm action execution failed"
-msgstr "Antaŭ- kaj post-alarma ago-ekzekuto malsukcesis"
+msgstr "Antaŭ- kaj post-alarma ago-plenumo malsukcesis"
 
 #: resources/resourcedatamodelbase.cpp:487
 #, kde-format
@@ -7281,7 +7281,7 @@ msgid ""
 "Alarm message text, URL of text file to display, command to execute, or "
 "email subject line"
 msgstr ""
-"Teksto de alarmmesaĝo, URL de tekstdosiero por montri, komando por ekzekuti "
+"Teksto de alarmmesaĝo, URL de tekstdosiero por montri, komando por plenumi "
 "aŭ retpoŝta temlinio"
 
 #: resources/resourcedatamodelbase.cpp:570
@@ -8162,7 +8162,7 @@ msgid ""
 "para>"
 msgstr ""
 "<para>Enigu ŝelan komandon por plenumi antaŭ ol la alarmo montriĝas.</"
-"para><para>Rimarku, ke ĝi estas ekzekutita nur kiam la alarmo propra estas "
+"para><para>Rimarku, ke ĝi estas plenumita nur kiam la alarmo propra estas "
 "montrata, ne kiam memorigilo aŭ prokrastita alarmo estas montrata.</"
 "para><para><note>KAlarm atendos la finiĝon de la komando antaŭ ol montri la "
 "alarmon.</note></para>"
@@ -8181,9 +8181,9 @@ msgid ""
 "displayed.</para><para>If checked, the pre-alarm command is also executed "
 "before a deferred alarm is displayed.</para>"
 msgstr ""
-"<para>Se nemarkite, la komando estas ekzekutita nur antaŭ ol la alarmo "
-"propra estas montrata.</para><para>Se markite, la antaŭalarmkomando ankaŭ "
-"estas ekzekutita antaŭ ol prokrastita alarmo estas montrata.</para>"
+"<para>Se nemarkite, la komando estas plenumita nur antaŭ ol la alarmo propra "
+"estas montrata.</para><para>Se markite, la antaŭalarmkomando ankaŭ estas "
+"plenumita antaŭ ol prokrastita alarmo estas montrata.</para>"
 
 #: specialactions.cpp:178
 #, kde-format
