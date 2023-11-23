@@ -12,13 +12,13 @@
 
 #include "kadatetime.h"
 
-#include <QTimeZone>
-#include <QRegularExpression>
-#include <QStringList>
-#include <QSharedData>
 #include <QDataStream>
-#include <QLocale>
 #include <QDebug>
+#include <QLocale>
+#include <QRegularExpression>
+#include <QSharedData>
+#include <QStringList>
+#include <QTimeZone>
 
 #include <limits>
 
@@ -567,8 +567,8 @@ void KADateTimePrivate::setDtSpec(const KADateTime::Spec& s)
     switch (s.type())
     {
         case KADateTime::UTC:
-            mDt.setTimeSpec(Qt::UTC);
-            break;
+          mDt.setTimeZone(QTimeZone::utc());
+          break;
         case KADateTime::OffsetFromUTC:
             mDt.setOffsetFromUtc(s.utcOffset());
             break;
@@ -817,8 +817,8 @@ int KADateTimePrivate::timeZoneOffset(QTimeZone& local) const
     QDateTime dt = updatedDt(local);   // update the cache if it's LocalZone
     if (utcCached)
     {
-        dt.setTimeSpec(Qt::UTC);
-        return cachedUtc().secsTo(dt);
+      dt.setTimeZone(QTimeZone::utc());
+      return cachedUtc().secsTo(dt);
     }
     int secondOffset;
     int offset = offsetAtZoneTime(mDt.timeZone(), mDt, &secondOffset);
@@ -840,7 +840,7 @@ int KADateTimePrivate::timeZoneOffset(QTimeZone& local) const
     {
         // Calculate the UTC time from the offset and cache it
         QDateTime utcdt = mDt;
-        utcdt.setTimeSpec(Qt::UTC);
+        utcdt.setTimeZone(QTimeZone::utc());
         setCachedUtc(utcdt.addSecs(-offset));
     }
     return offset;
@@ -1262,7 +1262,8 @@ qint64 KADateTime::toSecsSinceEpoch() const
 void KADateTime::setSecsSinceEpoch(qint64 seconds)
 {
     QDateTime dt;
-    dt.setTimeSpec(Qt::UTC);   // prevent QDateTime::setMSecsSinceEpoch() converting to local time
+    dt.setTimeZone(QTimeZone::utc()); // prevent QDateTime::setMSecsSinceEpoch()
+                                      // converting to local time
     dt.setMSecsSinceEpoch(seconds * 1000);
     d->specType = UTC;
     d->setDateOnly(false);
@@ -2569,7 +2570,7 @@ KADateTime KADateTime::fromString(const QString& string, const QString& format,
             {
                 zoneFound = QTimeZone();
                 if (!utcOffset)
-                    qdt.setTimeSpec(Qt::UTC);
+                  qdt.setTimeZone(QTimeZone::utc());
             }
             else if (zoneFound.isValid())
             {
@@ -2586,7 +2587,7 @@ KADateTime KADateTime::fromString(const QString& string, const QString& format,
             // Use the time zone which contains it, if any.
             // For a date-only value, use the start of the day.
             QDateTime dtUTC = qdt;
-            dtUTC.setTimeSpec(Qt::UTC);
+            dtUTC.setTimeZone(QTimeZone::utc());
             dtUTC = dtUTC.addSecs(-utcOffset);
             for (const QTimeZone& tz : zoneList)
             {
@@ -2674,7 +2675,7 @@ KADateTime KADateTime::fromString(const QString& string, const QString& format,
             {
                 zoneFound = QTimeZone();
                 if (!utcOffset)
-                    qdt.setTimeSpec(Qt::UTC);
+                  qdt.setTimeZone(QTimeZone::utc());
             }
             else if (zoneFound.isValid())
             {
@@ -2691,7 +2692,7 @@ KADateTime KADateTime::fromString(const QString& string, const QString& format,
             // Use the time zone which contains it, if any.
             // For a date-only value, use the start of the day.
             QDateTime dtUTC = qdt;
-            dtUTC.setTimeSpec(Qt::UTC);
+            dtUTC.setTimeZone(QTimeZone::utc());
             dtUTC = dtUTC.addSecs(-utcOffset);
             const QList<QByteArray> zoneIds = QTimeZone::availableTimeZoneIds();
             for (const QByteArray& zoneId : zoneIds)
@@ -3474,7 +3475,7 @@ int checkTzTransitionBackwards(QTimeZone::OffsetData& transition, const QTimeZon
                 const QDateTime changeStart = transitions[0].atUtc.addSecs(transitions[0].offsetFromUtc);
                 const QDateTime changeEnd   = transitions[0].atUtc.addSecs(before.offsetFromUtc);
                 QDateTime dtTz = tzDateTime.isValid() ? tzDateTime : utcDateTime.toTimeZone(tz);
-                dtTz.setTimeSpec(Qt::UTC);
+                dtTz.setTimeZone(QTimeZone::utc());
                 if (dtTz >= changeStart  &&  dtTz < changeEnd)
                 {
                     // The local time occurs twice.

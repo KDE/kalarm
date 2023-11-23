@@ -36,15 +36,16 @@
 #include <phonon/AudioOutput>
 #include <phonon/VolumeFaderEffect>
 
-#include <QLocale>
-#include <QTimer>
-#include <QThread>
 #include <QByteArray>
+#include <QLocale>
 #include <QMimeDatabase>
-#include <QUrl>
-#include <QTextBrowser>
-#include <QTemporaryFile>
 #include <QRegularExpression>
+#include <QTemporaryFile>
+#include <QTextBrowser>
+#include <QThread>
+#include <QTimeZone>
+#include <QTimer>
+#include <QUrl>
 
 using namespace KAlarmCal;
 
@@ -675,7 +676,7 @@ bool MessageDisplayHelper::readPropertyValues(const KConfigGroup& config)
     if (dateOnly)
         mDateTime.setDateOnly(true);
     mCloseTime           = config.readEntry("Expiry", invalidDateTime);
-    mCloseTime.setTimeSpec(Qt::UTC);
+    mCloseTime.setTimeZone(QTimeZone::utc());
     mAudioFile           = config.readPathEntry("AudioFile", QString());
     mVolume              = static_cast<float>(config.readEntry("Volume", 0)) / 100;
     mFadeVolume          = -1;
