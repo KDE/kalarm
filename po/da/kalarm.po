@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-09 01:38+0000\n"
+"POT-Creation-Date: 2023-11-24 01:34+0000\n"
 "PO-Revision-Date: 2016-08-15 16:35+0100\n"
 "Last-Translator: Martin Schlander <mschlander@opensuse.org>\n"
 "Language-Team: Danish <kde-i18n-doc@kde.org>\n"
@@ -3605,7 +3605,7 @@ msgctxt "@info 'From' email address"
 msgid "From:"
 msgstr "Fra:"
 
-#: kalarmcalendar/alarmtext.cpp:507 messagedisplayhelper.cpp:336
+#: kalarmcalendar/alarmtext.cpp:507 messagedisplayhelper.cpp:337
 #, kde-format
 msgctxt "@info Email addressee"
 msgid "To:"
@@ -3627,7 +3627,7 @@ msgctxt "@info"
 msgid "Date:"
 msgstr "Dato:"
 
-#: kalarmcalendar/alarmtext.cpp:510 messagedisplayhelper.cpp:338
+#: kalarmcalendar/alarmtext.cpp:510 messagedisplayhelper.cpp:339
 #, kde-format
 msgctxt "@info Email subject"
 msgid "Subject:"
@@ -4272,7 +4272,7 @@ msgctxt "@info Using default font"
 msgid "Default"
 msgstr "Standardtid"
 
-#: kalarmcalendar/kaeventformatter.cpp:365 messagedisplayhelper.cpp:217
+#: kalarmcalendar/kaeventformatter.cpp:365 messagedisplayhelper.cpp:218
 #, kde-format
 msgctxt "@info"
 msgid "Reminder"
@@ -4903,49 +4903,49 @@ msgctxt "@info"
 msgid "<para>Cannot defer alarm:</para><para>Alarm not found.</para>"
 msgstr "<para>Kan ikke udsætte alarm:</para><para>Alarm ikke fundet.</para>"
 
-#: messagedisplayhelper.cpp:203
+#: messagedisplayhelper.cpp:204
 #, kde-format
 msgctxt "@title:window"
 msgid "Reminder"
 msgstr "Påmindelse"
 
-#: messagedisplayhelper.cpp:204 messagedisplayhelper.cpp:408
+#: messagedisplayhelper.cpp:205 messagedisplayhelper.cpp:409
 #, kde-format
 msgctxt "@title:window"
 msgid "Message"
 msgstr "Besked"
 
-#: messagedisplayhelper.cpp:295
+#: messagedisplayhelper.cpp:296
 #, kde-format
 msgctxt "@info"
 msgid "File is a folder"
 msgstr "Filen er en mappe"
 
-#: messagedisplayhelper.cpp:295
+#: messagedisplayhelper.cpp:296
 #, kde-format
 msgctxt "@info"
 msgid "Failed to open file"
 msgstr "Mislykkedes at åbne fil"
 
-#: messagedisplayhelper.cpp:295
+#: messagedisplayhelper.cpp:296
 #, kde-format
 msgctxt "@info"
 msgid "File not found"
 msgstr "Fil ikke fundet"
 
-#: messagedisplayhelper.cpp:352
+#: messagedisplayhelper.cpp:353
 #, kde-format
 msgctxt "@title:window"
 msgid "Error"
 msgstr "Fejl"
 
-#: messagedisplayhelper.cpp:481
+#: messagedisplayhelper.cpp:482
 #, kde-format
 msgctxt "@info"
 msgid "Today"
 msgstr "I dag"
 
-#: messagedisplayhelper.cpp:483
+#: messagedisplayhelper.cpp:484
 #, kde-format
 msgctxt "@info"
 msgid "Tomorrow"
@@ -4953,7 +4953,7 @@ msgid_plural "in %1 days' time"
 msgstr[0] "I morgen"
 msgstr[1] "om %1 dages tid"
 
-#: messagedisplayhelper.cpp:485
+#: messagedisplayhelper.cpp:486
 #, kde-format
 msgctxt "@info"
 msgid "in 1 week's time"
@@ -4961,7 +4961,7 @@ msgid_plural "in %1 weeks' time"
 msgstr[0] "om 1 uges tid"
 msgstr[1] "om %1 ugers tid"
 
-#: messagedisplayhelper.cpp:499
+#: messagedisplayhelper.cpp:500
 #, kde-format
 msgctxt "@info"
 msgid "in 1 minute's time"
@@ -4969,7 +4969,7 @@ msgid_plural "in %1 minutes' time"
 msgstr[0] "om 1 minuts tid"
 msgstr[1] "om %1 minutters tid"
 
-#: messagedisplayhelper.cpp:501
+#: messagedisplayhelper.cpp:502
 #, kde-format
 msgctxt "@info"
 msgid "in 1 hour's time"
@@ -4977,7 +4977,7 @@ msgid_plural "in %1 hours' time"
 msgstr[0] "om 1 times tid"
 msgstr[1] "om %1 timers tid"
 
-#: messagedisplayhelper.cpp:504
+#: messagedisplayhelper.cpp:505
 #, kde-format
 msgctxt "@item:intext inserted into 'in ... %1 minute's time' below"
 msgid "1 hour"
@@ -4985,7 +4985,7 @@ msgid_plural "%1 hours"
 msgstr[0] "1 time"
 msgstr[1] "%1 timer"
 
-#: messagedisplayhelper.cpp:505
+#: messagedisplayhelper.cpp:506
 #, kde-format
 msgctxt "@info '%2' is the previous message '1 hour'/'%1 hours'"
 msgid "in %2 1 minute's time"
@@ -4993,25 +4993,25 @@ msgid_plural "in %2 %1 minutes' time"
 msgstr[0] "om %2 og 1 minuts tid"
 msgstr[1] "om %2 og %1 minutters tid"
 
-#: messagedisplayhelper.cpp:847
+#: messagedisplayhelper.cpp:848
 #, kde-format
 msgctxt "@info"
 msgid "Unable to speak message"
 msgstr "Kan ikke læse meddelelsen op"
 
-#: messagedisplayhelper.cpp:847
+#: messagedisplayhelper.cpp:848
 #, kde-format
 msgctxt "@info"
 msgid "Text-to-speech subsystem is not available"
 msgstr "Tekst-til-tale-undersystemet er ikke tilgængeligt"
 
-#: messagedisplayhelper.cpp:1032
+#: messagedisplayhelper.cpp:1033
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot open audio file: <filename>%1</filename>"
 msgstr "Kan ikke åbne lydfil: <filename>%1</filename>"
 
-#: messagedisplayhelper.cpp:1160
+#: messagedisplayhelper.cpp:1161
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-09 01:38+0000\n"
+"POT-Creation-Date: 2023-11-24 01:34+0000\n"
 "PO-Revision-Date: 2017-09-28 18:00+0200\n"
 "Last-Translator: Chusslove Illich <caslav.ilic@gmx.net>\n"
 "Language-Team: Serbian <kde-i18n-sr@kde.org>\n"
@@ -3611,7 +3611,7 @@ msgctxt "@info 'From' email address"
 msgid "From:"
 msgstr "Od:"
 
-#: kalarmcalendar/alarmtext.cpp:507 messagedisplayhelper.cpp:336
+#: kalarmcalendar/alarmtext.cpp:507 messagedisplayhelper.cpp:337
 #, kde-format
 msgctxt "@info Email addressee"
 msgid "To:"
@@ -3629,7 +3629,7 @@ msgctxt "@info"
 msgid "Date:"
 msgstr ""
 
-#: kalarmcalendar/alarmtext.cpp:510 messagedisplayhelper.cpp:338
+#: kalarmcalendar/alarmtext.cpp:510 messagedisplayhelper.cpp:339
 #, kde-format
 msgctxt "@info Email subject"
 msgid "Subject:"
@@ -4269,7 +4269,7 @@ msgctxt "@info Using default font"
 msgid "Default"
 msgstr "Podrazumevano vreme"
 
-#: kalarmcalendar/kaeventformatter.cpp:365 messagedisplayhelper.cpp:217
+#: kalarmcalendar/kaeventformatter.cpp:365 messagedisplayhelper.cpp:218
 #, kde-format
 msgctxt "@info"
 msgid "Reminder"
@@ -4906,49 +4906,49 @@ msgctxt "@info"
 msgid "<para>Cannot defer alarm:</para><para>Alarm not found.</para>"
 msgstr "<para>Ne mogu da odložim alarm:</para><para>alarm nije nađen.</para>"
 
-#: messagedisplayhelper.cpp:203
+#: messagedisplayhelper.cpp:204
 #, kde-format
 msgctxt "@title:window"
 msgid "Reminder"
 msgstr "Podsetnik"
 
-#: messagedisplayhelper.cpp:204 messagedisplayhelper.cpp:408
+#: messagedisplayhelper.cpp:205 messagedisplayhelper.cpp:409
 #, kde-format
 msgctxt "@title:window"
 msgid "Message"
 msgstr "Poruka"
 
-#: messagedisplayhelper.cpp:295
+#: messagedisplayhelper.cpp:296
 #, kde-format
 msgctxt "@info"
 msgid "File is a folder"
 msgstr "Fajl je fascikla"
 
-#: messagedisplayhelper.cpp:295
+#: messagedisplayhelper.cpp:296
 #, kde-format
 msgctxt "@info"
 msgid "Failed to open file"
 msgstr "Ne mogu da otvorim fajl"
 
-#: messagedisplayhelper.cpp:295
+#: messagedisplayhelper.cpp:296
 #, kde-format
 msgctxt "@info"
 msgid "File not found"
 msgstr "Fajl nije nađen"
 
-#: messagedisplayhelper.cpp:352
+#: messagedisplayhelper.cpp:353
 #, kde-format
 msgctxt "@title:window"
 msgid "Error"
 msgstr "Greška"
 
-#: messagedisplayhelper.cpp:481
+#: messagedisplayhelper.cpp:482
 #, kde-format
 msgctxt "@info"
 msgid "Today"
 msgstr "danas"
 
-#: messagedisplayhelper.cpp:483
+#: messagedisplayhelper.cpp:484
 #, kde-format
 msgctxt "@info"
 msgid "Tomorrow"
@@ -4958,7 +4958,7 @@ msgstr[1] "za %1 dana"
 msgstr[2] "za %1 dana"
 msgstr[3] "sutra"
 
-#: messagedisplayhelper.cpp:485
+#: messagedisplayhelper.cpp:486
 #, kde-format
 msgctxt "@info"
 msgid "in 1 week's time"
@@ -4968,7 +4968,7 @@ msgstr[1] "za %1 sedmice"
 msgstr[2] "za %1 sedmica"
 msgstr[3] "za sedmicu"
 
-#: messagedisplayhelper.cpp:499
+#: messagedisplayhelper.cpp:500
 #, kde-format
 msgctxt "@info"
 msgid "in 1 minute's time"
@@ -4978,7 +4978,7 @@ msgstr[1] "za %1 minuta"
 msgstr[2] "za %1 minuta"
 msgstr[3] "za minut"
 
-#: messagedisplayhelper.cpp:501
+#: messagedisplayhelper.cpp:502
 #, kde-format
 msgctxt "@info"
 msgid "in 1 hour's time"
@@ -4988,7 +4988,7 @@ msgstr[1] "za %1 sata"
 msgstr[2] "za %1 sati"
 msgstr[3] "za sat"
 
-#: messagedisplayhelper.cpp:504
+#: messagedisplayhelper.cpp:505
 #, kde-format
 msgctxt "@item:intext inserted into 'in ... %1 minute's time' below"
 msgid "1 hour"
@@ -4998,7 +4998,7 @@ msgstr[1] "%1 sata"
 msgstr[2] "%1 sati"
 msgstr[3] "%1 sat"
 
-#: messagedisplayhelper.cpp:505
+#: messagedisplayhelper.cpp:506
 #, kde-format
 msgctxt "@info '%2' is the previous message '1 hour'/'%1 hours'"
 msgid "in %2 1 minute's time"
@@ -5008,25 +5008,25 @@ msgstr[1] "za %2 i %1 minuta"
 msgstr[2] "za %2 i %1 minuta"
 msgstr[3] "za %2 i %1 minut"
 
-#: messagedisplayhelper.cpp:847
+#: messagedisplayhelper.cpp:848
 #, kde-format
 msgctxt "@info"
 msgid "Unable to speak message"
 msgstr "Ne mogu da izgovorim poruku"
 
-#: messagedisplayhelper.cpp:847
+#: messagedisplayhelper.cpp:848
 #, kde-format
 msgctxt "@info"
 msgid "Text-to-speech subsystem is not available"
 msgstr "Podsistem za tekst‑u‑govor nije dostupan"
 
-#: messagedisplayhelper.cpp:1032
+#: messagedisplayhelper.cpp:1033
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot open audio file: <filename>%1</filename>"
 msgstr "Ne mogu da otvorim audio fajl: <filename>%1</filename>"
 
-#: messagedisplayhelper.cpp:1160
+#: messagedisplayhelper.cpp:1161
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""

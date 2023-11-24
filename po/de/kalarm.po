@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-09 01:38+0000\n"
+"POT-Creation-Date: 2023-11-24 01:34+0000\n"
 "PO-Revision-Date: 2023-08-14 22:01+0200\n"
 "Last-Translator: Frederik Schwarzer <schwarzer@kde.org>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
@@ -3654,7 +3654,7 @@ msgctxt "@info 'From' email address"
 msgid "From:"
 msgstr "Von:"
 
-#: kalarmcalendar/alarmtext.cpp:507 messagedisplayhelper.cpp:336
+#: kalarmcalendar/alarmtext.cpp:507 messagedisplayhelper.cpp:337
 #, kde-format
 msgctxt "@info Email addressee"
 msgid "To:"
@@ -3672,7 +3672,7 @@ msgctxt "@info"
 msgid "Date:"
 msgstr "Datum:"
 
-#: kalarmcalendar/alarmtext.cpp:510 messagedisplayhelper.cpp:338
+#: kalarmcalendar/alarmtext.cpp:510 messagedisplayhelper.cpp:339
 #, kde-format
 msgctxt "@info Email subject"
 msgid "Subject:"
@@ -4173,7 +4173,7 @@ msgctxt "@info Using default font"
 msgid "Default"
 msgstr "Standard"
 
-#: kalarmcalendar/kaeventformatter.cpp:365 messagedisplayhelper.cpp:217
+#: kalarmcalendar/kaeventformatter.cpp:365 messagedisplayhelper.cpp:218
 #, kde-format
 msgctxt "@info"
 msgid "Reminder"
@@ -4784,49 +4784,49 @@ msgstr ""
 "<para>Erinnerung kann nicht verschoben werden:</para><para>Erinnerung nicht "
 "gefunden.</para>"
 
-#: messagedisplayhelper.cpp:203
+#: messagedisplayhelper.cpp:204
 #, kde-format
 msgctxt "@title:window"
 msgid "Reminder"
 msgstr "Voraberinnerung"
 
-#: messagedisplayhelper.cpp:204 messagedisplayhelper.cpp:408
+#: messagedisplayhelper.cpp:205 messagedisplayhelper.cpp:409
 #, kde-format
 msgctxt "@title:window"
 msgid "Message"
 msgstr "Nachricht"
 
-#: messagedisplayhelper.cpp:295
+#: messagedisplayhelper.cpp:296
 #, kde-format
 msgctxt "@info"
 msgid "File is a folder"
 msgstr "Die Datei ist ein Ordner"
 
-#: messagedisplayhelper.cpp:295
+#: messagedisplayhelper.cpp:296
 #, kde-format
 msgctxt "@info"
 msgid "Failed to open file"
 msgstr "Die Datei kann nicht geöffnet werden"
 
-#: messagedisplayhelper.cpp:295
+#: messagedisplayhelper.cpp:296
 #, kde-format
 msgctxt "@info"
 msgid "File not found"
 msgstr "Die Datei wurde nicht gefunden"
 
-#: messagedisplayhelper.cpp:352
+#: messagedisplayhelper.cpp:353
 #, kde-format
 msgctxt "@title:window"
 msgid "Error"
 msgstr "Fehler"
 
-#: messagedisplayhelper.cpp:481
+#: messagedisplayhelper.cpp:482
 #, kde-format
 msgctxt "@info"
 msgid "Today"
 msgstr "Heute"
 
-#: messagedisplayhelper.cpp:483
+#: messagedisplayhelper.cpp:484
 #, kde-format
 msgctxt "@info"
 msgid "Tomorrow"
@@ -4834,7 +4834,7 @@ msgid_plural "in %1 days' time"
 msgstr[0] "Morgen"
 msgstr[1] "in %1 Tagen"
 
-#: messagedisplayhelper.cpp:485
+#: messagedisplayhelper.cpp:486
 #, kde-format
 msgctxt "@info"
 msgid "in 1 week's time"
@@ -4842,7 +4842,7 @@ msgid_plural "in %1 weeks' time"
 msgstr[0] "in 1 Woche"
 msgstr[1] "in %1 Wochen"
 
-#: messagedisplayhelper.cpp:499
+#: messagedisplayhelper.cpp:500
 #, kde-format
 msgctxt "@info"
 msgid "in 1 minute's time"
@@ -4850,7 +4850,7 @@ msgid_plural "in %1 minutes' time"
 msgstr[0] "in 1 Minute"
 msgstr[1] "in %1 Minuten"
 
-#: messagedisplayhelper.cpp:501
+#: messagedisplayhelper.cpp:502
 #, kde-format
 msgctxt "@info"
 msgid "in 1 hour's time"
@@ -4859,7 +4859,7 @@ msgstr[0] "in 1 Stunde"
 msgstr[1] "in %1 Stunden"
 
 # Achtung: Kettensatz; siehe Kontext an nächstem String
-#: messagedisplayhelper.cpp:504
+#: messagedisplayhelper.cpp:505
 #, kde-format
 msgctxt "@item:intext inserted into 'in ... %1 minute's time' below"
 msgid "1 hour"
@@ -4867,7 +4867,7 @@ msgid_plural "%1 hours"
 msgstr[0] "1 Stunde und"
 msgstr[1] "%1 Stunden und"
 
-#: messagedisplayhelper.cpp:505
+#: messagedisplayhelper.cpp:506
 #, kde-format
 msgctxt "@info '%2' is the previous message '1 hour'/'%1 hours'"
 msgid "in %2 1 minute's time"
@@ -4875,25 +4875,25 @@ msgid_plural "in %2 %1 minutes' time"
 msgstr[0] "in %2 1 Minute"
 msgstr[1] "in %2 %1 Minuten"
 
-#: messagedisplayhelper.cpp:847
+#: messagedisplayhelper.cpp:848
 #, kde-format
 msgctxt "@info"
 msgid "Unable to speak message"
 msgstr "Nachricht kann nicht vorgelesen werden"
 
-#: messagedisplayhelper.cpp:847
+#: messagedisplayhelper.cpp:848
 #, kde-format
 msgctxt "@info"
 msgid "Text-to-speech subsystem is not available"
 msgstr "Es ist kein Sprachausgabesystem verfügbar"
 
-#: messagedisplayhelper.cpp:1032
+#: messagedisplayhelper.cpp:1033
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot open audio file: <filename>%1</filename>"
 msgstr "Klangdatei lässt sich nicht öffnen: <filename>%1</filename>"
 
-#: messagedisplayhelper.cpp:1160
+#: messagedisplayhelper.cpp:1161
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
