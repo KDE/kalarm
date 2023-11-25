@@ -312,7 +312,6 @@ target_link_libraries(kalarm_bin
     KF6::GlobalAccel
     KF6::GuiAddons
     KF6::Holidays
-    KF6::IdleTime
     KF6::ItemModels
     KF6::KIOWidgets
     KF6::Notifications
