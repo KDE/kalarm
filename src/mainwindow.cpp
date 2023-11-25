@@ -125,7 +125,7 @@ MainWindow::MainWindow(bool restored)
     qCDebug(KALARM_LOG) << "MainWindow:";
     setAttribute(Qt::WA_DeleteOnClose);
     setWindowModality(Qt::WindowModal);
-    setObjectName(QStringLiteral("MainWin"));    // used by LikeBack
+    setObjectName(QLatin1StringView("MainWin"));    // used by LikeBack
     setPlainCaption(KAboutData::applicationData().displayName());
     KConfigGroup config(KSharedConfig::openConfig(), VIEW_GROUP);
     mShowResources     = config.readEntry(SHOW_RESOURCES_KEY, false);

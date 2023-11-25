@@ -123,7 +123,7 @@ MessageWindow::MessageWindow(const KAEvent& event, const KAAlarm& alarm, int fla
     qCDebug(KALARM_LOG) << "MessageWindow():" << mEventId();
     setAttribute(static_cast<Qt::WidgetAttribute>(WidgetFlags));
     setWindowModality(Qt::WindowModal);
-    setObjectName(QStringLiteral("MessageWindow"));    // used by LikeBack
+    setObjectName(QLatin1StringView("MessageWindow"));    // used by LikeBack
     if (!(flags & (NoInitView | AlwaysHide)))
         MessageWindow::setUpDisplay();   // avoid calling virtual method from constructor
 
@@ -155,7 +155,7 @@ MessageWindow::MessageWindow(const KAEvent& event, const DateTime& alarmDateTime
     qCDebug(KALARM_LOG) << "MessageWindow(errmsg)";
     setAttribute(static_cast<Qt::WidgetAttribute>(WidgetFlags));
     setWindowModality(Qt::WindowModal);
-    setObjectName(QStringLiteral("ErrorWin"));    // used by LikeBack
+    setObjectName(QLatin1StringView("ErrorWin"));    // used by LikeBack
     getWorkAreaAndModal();
     MessageWindow::setUpDisplay();   // avoid calling virtual method from constructor
 
@@ -175,7 +175,7 @@ MessageWindow::MessageWindow()
     qCDebug(KALARM_LOG) << "MessageWindow(): restore";
     setAttribute(WidgetFlags);
     setWindowModality(Qt::WindowModal);
-    setObjectName(QStringLiteral("RestoredMsgWin"));    // used by LikeBack
+    setObjectName(QLatin1StringView("RestoredMsgWin"));    // used by LikeBack
     getWorkAreaAndModal();
 
     connect(mHelper, &MessageDisplayHelper::textsChanged, this, &MessageWindow::textsChanged);

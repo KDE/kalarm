@@ -208,7 +208,7 @@ MessageDisplay::DeferDlgData::~DeferDlgData()
 MessageDisplay::DeferDlgData* MessageDisplay::createDeferDlg(QObject* thisObject, bool displayClosing)
 {
     DeferAlarmDlg* dlg = new DeferAlarmDlg(KADateTime::currentDateTime(Preferences::timeSpec()).addSecs(60), mDateTime().isDateOnly(), false, MainWindow::mainMainWindow());
-    dlg->setObjectName(QStringLiteral("DeferDlg"));    // used by LikeBack
+    dlg->setObjectName(QLatin1StringView("DeferDlg"));    // used by LikeBack
     dlg->setDeferMinutes(mDefaultDeferMinutes() > 0 ? mDefaultDeferMinutes() : Preferences::defaultDeferTime());
     dlg->setLimit(mEvent());
     auto data = new DeferDlgData(this, dlg);

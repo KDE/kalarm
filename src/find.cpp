@@ -92,7 +92,7 @@ void Find::display()
     {
         mDialog = new KFindDialog(mListView, mOptions, mHistory, (mListView->selectionModel()->selectedRows().count() > 1));
         mDialog->setModal(false);
-        mDialog->setObjectName(QStringLiteral("FindDlg"));
+        mDialog->setObjectName(QLatin1StringView("FindDlg"));
         mDialog->setHasSelection(false);
         QWidget* kalarmWidgets = mDialog->findExtension();
 

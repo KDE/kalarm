@@ -125,7 +125,7 @@ KAlarmPrefDlg::KAlarmPrefDlg()
     : KPageDialog()
 {
     setAttribute(Qt::WA_DeleteOnClose);
-    setObjectName(QStringLiteral("PrefDlg"));    // used by LikeBack
+    setObjectName(QLatin1StringView("PrefDlg"));    // used by LikeBack
     setWindowTitle(i18nc("@title:window", "Configure"));
     setStandardButtons(QDialogButtonBox::Ok | QDialogButtonBox::Cancel | QDialogButtonBox::Help | QDialogButtonBox::RestoreDefaults | QDialogButtonBox::Apply);
     button(QDialogButtonBox::Ok)->setDefault(true);

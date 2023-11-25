@@ -45,7 +45,7 @@ const QLatin1String GENERAL_GROUP("General");
 BirthdayDlg::BirthdayDlg(QWidget* parent)
     : QDialog(parent)
 {
-    setObjectName(QStringLiteral("BirthdayDlg"));    // used by LikeBack
+    setObjectName(QLatin1StringView("BirthdayDlg"));    // used by LikeBack
     setWindowTitle(i18nc("@title:window", "Import Birthdays From KAddressBook"));
 
     auto mainLayout = new QVBoxLayout(this);
