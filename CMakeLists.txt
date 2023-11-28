@@ -10,8 +10,8 @@ set(RELEASE_SERVICE_VERSION "${RELEASE_SERVICE_VERSION_MAJOR}.${RELEASE_SERVICE_
 # KDE Release Service version which will contain that KAlarm release.
 # (This must be the full release version, not an alpha or beta release.)
 set(KALARM_VERSION "3.7.0")
-set(KALARM_VERSION_RELEASE_SERVICE_MAJOR "23")
-set(KALARM_VERSION_RELEASE_SERVICE_MINOR "12")
+set(KALARM_VERSION_RELEASE_SERVICE_MAJOR "24")
+set(KALARM_VERSION_RELEASE_SERVICE_MINOR "02")
 set(KALARM_VERSION_RELEASE_SERVICE_MICRO "0")
 
 # If KAlarm's version has not changed since the last KDE Release Service version,

@@ -1,7 +1,7 @@
 KAlarm Change Log
 
-=== Version 3.7.0 (KDE Gear 23.12) --- 20 September 2023 ===
-* Convert to Qt6.
+=== Version 3.7.0 (KDE Gear 24.02) --- 28 November 2023 ===
+* Convert to Qt6 / KDE Frameworks 6.
 * Enable wake-from-suspend for multiple alarms if user kernel alarm timers supported (Linux).
 * Set units for reminder and late-cancel depending on date-only selection in Edit Alarm Template dialogue.
 * Remove migration of pre-Akonadi KResources calendar configuration.
