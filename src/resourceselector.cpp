@@ -218,7 +218,7 @@ void ResourceSelector::removeResource()
     if (!resource.isValid())
         return;
     qCDebug(KALARM_LOG) << "ResourceSelector::removeResource:" << resource.displayName();
-    const QString name = resource.configName();
+    const QString name = resource.displayName();
     // Check if it's the standard or only resource for at least one type.
     const CalEvent::Types allTypes      = resource.alarmTypes();
     const CalEvent::Types standardTypes = Resources::standardTypes(resource, true);
