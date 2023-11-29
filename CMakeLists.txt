@@ -110,6 +110,7 @@ find_package(KF6Service ${KF_MIN_VERSION} CONFIG REQUIRED)
 find_package(KF6WidgetsAddons ${KF_MIN_VERSION} CONFIG REQUIRED)
 find_package(KF6WindowSystem ${KF_MIN_VERSION} CONFIG REQUIRED)
 find_package(KF6XmlGui ${KF_MIN_VERSION} CONFIG REQUIRED)
+find_package(KF6TextWidgets ${KF_MIN_VERSION} CONFIG REQUIRED)
 find_package(KF6StatusNotifierItem ${KF_MIN_VERSION} CONFIG REQUIRED)
 find_package(Phonon4Qt6 CONFIG REQUIRED)
 
