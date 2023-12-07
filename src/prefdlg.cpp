@@ -382,9 +382,9 @@ PrefsTabBase::PrefsTabBase(StackedScrollGroup* scrollGroup)
     QFrame* topWidget = new QFrame(this);
     setWidget(topWidget);
     mTopLayout = new QVBoxLayout(topWidget);
-    mTopLayout->setContentsMargins(0, 0, 0, 0);
-    if (!mIndentWidth)
-    {
+    mTopLayout->setContentsMargins({});
+
+    if (!mIndentWidth) {
         QCheckBox cb(this);
         mIndentWidth = CheckBox::textIndent(&cb);
         mGridIndentWidth = mIndentWidth - style()->pixelMetric(QStyle::PM_LayoutHorizontalSpacing);
@@ -439,6 +439,11 @@ MiscPrefTab::MiscPrefTab(StackedScrollGroup* scrollGroup)
 {
     QGroupBox* group = new QGroupBox(i18nc("@title:group", "Run Mode"));
     topLayout()->addWidget(group);
+    topLayout()->setContentsMargins(
+        style()->pixelMetric(QStyle::PM_LayoutLeftMargin),
+        style()->pixelMetric(QStyle::PM_LayoutTopMargin),
+        style()->pixelMetric(QStyle::PM_LayoutRightMargin),
+        style()->pixelMetric(QStyle::PM_LayoutBottomMargin));
     auto vlayout = new QVBoxLayout(group);
 
     // Start at login
@@ -684,6 +689,12 @@ void MiscPrefTab::slotOtherTerminalToggled(bool on)
 TimePrefTab::TimePrefTab(StackedScrollGroup* scrollGroup)
     : PrefsTabBase(scrollGroup)
 {
+    topLayout()->setContentsMargins(
+        style()->pixelMetric(QStyle::PM_LayoutLeftMargin),
+        style()->pixelMetric(QStyle::PM_LayoutTopMargin),
+        style()->pixelMetric(QStyle::PM_LayoutRightMargin),
+        style()->pixelMetric(QStyle::PM_LayoutBottomMargin));
+
     const int marLeft  = style()->pixelMetric(QStyle::PM_LayoutLeftMargin);
     const int marRight = style()->pixelMetric(QStyle::PM_LayoutRightMargin);
     const int marTop   = style()->pixelMetric(QStyle::PM_LayoutTopMargin);
@@ -930,6 +941,12 @@ bool TimePrefTab::apply(bool syncToDisc)
 StorePrefTab::StorePrefTab(StackedScrollGroup* scrollGroup)
     : PrefsTabBase(scrollGroup)
 {
+    topLayout()->setContentsMargins(
+        style()->pixelMetric(QStyle::PM_LayoutLeftMargin),
+        style()->pixelMetric(QStyle::PM_LayoutTopMargin),
+        style()->pixelMetric(QStyle::PM_LayoutRightMargin),
+        style()->pixelMetric(QStyle::PM_LayoutBottomMargin));
+
     // Which resource to save to
     QGroupBox* group = new QGroupBox(i18nc("@title:group", "New Alarms && Templates"));
     topLayout()->addWidget(group);
@@ -1060,6 +1077,12 @@ void StorePrefTab::slotClearArchived()
 EmailPrefTab::EmailPrefTab(StackedScrollGroup* scrollGroup)
     : PrefsTabBase(scrollGroup)
 {
+    topLayout()->setContentsMargins(
+        style()->pixelMetric(QStyle::PM_LayoutLeftMargin),
+        style()->pixelMetric(QStyle::PM_LayoutTopMargin),
+        style()->pixelMetric(QStyle::PM_LayoutRightMargin),
+        style()->pixelMetric(QStyle::PM_LayoutBottomMargin));
+
     QWidget* widget = new QWidget;
     topLayout()->addWidget(widget);
     auto box = new QHBoxLayout(widget);
@@ -1324,6 +1347,7 @@ EditPrefTab::EditPrefTab(StackedScrollGroup* scrollGroup)
     KLocalizedString defsetting = kxi18nc("@info:whatsthis", "The default setting for <interface>%1</interface> in the alarm edit dialog.");
 
     mTabs = new QTabWidget();
+    mTabs->setDocumentMode(true);
     topLayout()->addWidget(mTabs);
     auto tabgroup = new StackedGroup(mTabs);
 
@@ -1773,6 +1797,7 @@ ViewPrefTab::ViewPrefTab(StackedScrollGroup* scrollGroup)
     : PrefsTabBase(scrollGroup)
 {
     mTabs = new QTabWidget();
+    mTabs->setDocumentMode(true);
     topLayout()->addWidget(mTabs);
 
     QWidget* widget = new QWidget;
