@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-12-08 01:35+0000\n"
-"PO-Revision-Date: 2023-11-12 16:39+0100\n"
+"PO-Revision-Date: 2023-12-16 23:54+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -4971,13 +4971,13 @@ msgstr "Defaŭltoj de alarmo"
 #, kde-format
 msgctxt "@title"
 msgid "Default Alarm Edit Settings"
-msgstr "Defaŭlta Alarmo Redakti Agordojn"
+msgstr "Defaŭltaj Alarmredaktaj Agordoj"
 
 #: prefdlg.cpp:169
 #, kde-format
 msgctxt "@title:tab"
 msgid "View"
-msgstr "Vido"
+msgstr "Rigardi"
 
 #: prefdlg.cpp:170
 #, kde-format
@@ -5223,7 +5223,7 @@ msgstr "%1 (%2)"
 #, kde-format
 msgctxt "No holiday region"
 msgid "None"
-msgstr "Neniun"
+msgstr "Neniu"
 
 #: prefdlg.cpp:771
 #, kde-format
@@ -5677,7 +5677,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title:tab"
 msgid "General"
-msgstr "Ĝenerale"
+msgstr "Ĝenerala"
 
 #: prefdlg.cpp:1360
 #, kde-format
