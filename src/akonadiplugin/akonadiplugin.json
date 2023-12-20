@@ -30,6 +30,7 @@
         "Description[uk]": "Функції, які потребують Akonadi",
         "Description[x-test]": "xxFunctions which require Akonadixx",
         "Description[zh_CN]": "需要 Akonadi 的功能",
+        "Description[zh_TW]": "需要 Akonadi 的功能",
         "Name": "Akonadi Functions",
         "Name[ar]": "وظائف أكونادي",
         "Name[ast]": "Funciones d'Akonadi",
@@ -61,6 +62,7 @@
         "Name[uk]": "Функції Akonadi",
         "Name[x-test]": "xxAkonadi Functionsxx",
         "Name[zh_CN]": "Akonadi 功能",
+        "Name[zh_TW]": "Akonadi 功能",
         "Version": "1.0"
     }
 }

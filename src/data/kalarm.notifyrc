@@ -35,6 +35,7 @@ Comment[tr]=K Alarm
 Comment[uk]=KAlarm
 Comment[x-test]=xxKAlarmxx
 Comment[zh_CN]=KAlarm
+Comment[zh_TW]=KAlarm 鬧鐘
 
 [Event/Message]
 Name=Alarm message
@@ -71,6 +72,7 @@ Name[tr]=Alarm iletisi
 Name[uk]=Повідомлення нагадування
 Name[x-test]=xxAlarm messagexx
 Name[zh_CN]=闹钟消息
+Name[zh_TW]=鬧鐘訊息
 Action=Popup
 
 [Event/MessageBeep]
@@ -108,6 +110,7 @@ Name[tr]=Bipli alarm iletisi
 Name[uk]=Повідомлення нагадування з гудком
 Name[x-test]=xxAlarm message with beepxx
 Name[zh_CN]=闹钟消息 (带声音提示)
+Name[zh_TW]=有響鈴的鬧鐘訊息
 Action=Popup|Sound
 Sound=bell-window-system
 
@@ -146,6 +149,7 @@ Name[tr]=Konuşulan alarm iletisi
 Name[uk]=Повідомлення нагадування з виголошенням тексту
 Name[x-test]=xxSpoken alarm messagexx
 Name[zh_CN]=语音播报闹钟消息
+Name[zh_TW]=說出來的鬧鐘訊息
 Action=Popup|TTS
 TTS=%s
 
@@ -184,5 +188,6 @@ Name[tr]=Alarm hata iletişi
 Name[uk]=Повідомлення помилки нагадування
 Name[x-test]=xxAlarm error messagexx
 Name[zh_CN]=闹钟错误消息
+Name[zh_TW]=鬧鐘錯誤訊息
 Action=Popup|Sound
 Sound=dialog-error
