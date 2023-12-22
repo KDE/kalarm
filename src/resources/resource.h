@@ -380,7 +380,7 @@ private:
     ResourceType::Ptr mResource;
 
     friend class ResourceType;   // needs access to resource()
-    friend uint qHash(const Resource& resource, uint seed);
+    friend size_t qHash(const Resource& resource, size_t seed);
 };
 
 inline bool operator==(const ResourceType* a, const Resource& b)  { return b == a; }
@@ -388,7 +388,7 @@ inline bool operator!=(const Resource& a, const Resource& b)      { return !(a =
 inline bool operator!=(const Resource& a, const ResourceType* b)  { return !(a == b); }
 inline bool operator!=(const ResourceType* a, const Resource& b)  { return !(b == a); }
 
-inline uint qHash(const Resource& resource, uint seed)
+inline size_t qHash(const Resource& resource, size_t seed)
 {
     return qHash(resource.mResource.data(), seed);
 }
