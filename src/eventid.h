@@ -90,10 +90,10 @@ private:
 // Declare as a movable type (note that QString is movable).
 Q_DECLARE_TYPEINFO(EventId, Q_RELOCATABLE_TYPE);
 
-inline uint qHash(const EventId& eid, uint seed)
+inline size_t qHash(const EventId& eid, size_t seed = 0)
 {
-    uint h1 = qHash(eid.eventId(), seed);
-    uint h2 = qHash(eid.resourceId(), seed);
+    size_t h1 = qHash(eid.eventId(), seed);
+    size_t h2 = qHash(eid.resourceId(), seed);
     return ((h1 << 16) | (h1 >> 16)) ^ h2 ^ seed;
 }
 
