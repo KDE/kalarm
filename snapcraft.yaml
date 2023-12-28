@@ -1,4 +1,3 @@
-
 # SPDX-FileCopyrightText: 2023 Scarlett Moore <sgmoore@kde.org>
 #
 # SPDX-License-Identifier: CC0-1.0
@@ -8,7 +7,6 @@ confinement: strict
 grade: stable
 base: core22
 adopt-info: kalarm
-version: '23.08.3'
 apps:
     kalarm:
         # extensions:
@@ -26,6 +24,7 @@ apps:
         - unity7
         - network
         - network-bind
+        - akonadi-svc
         command-chain:
         - snap/command-chain/desktop-launch
 assumes:
@@ -42,11 +41,15 @@ plugs:
         interface: content
         target: $SNAP/data-dir/sounds
         default-provider: gtk-common-themes
-    kf5-5-111-qt-5-15-11-core22:
-        content: kf5-5-111-qt-5-15-11-core22-all
+    kf5-5-113-qt-5-15-11-core22:
+        content: kf5-5-113-qt-5-15-11-core22-all
         interface: content
-        default-provider: kf5-5-111-qt-5-15-11-core22
+        default-provider: kf5-5-113-qt-5-15-11-core22
         target: $SNAP/kf5
+    akonadi-svc:
+        bus: system
+        interface: dbus
+        name: org.freedesktop.Akonadi
 environment:
     SNAP_DESKTOP_RUNTIME: $SNAP/kf5
     GST_PLUGIN_PATH: "$SNAP/usr/lib/$CRAFT_ARCH_TRIPLET/gstreamer-1.0"
@@ -86,18 +89,18 @@ parts:
         source-type: local
         plugin: make
         make-parameters:
-        - PLATFORM_PLUG=kf5-5-111-qt-5-15-11-core22
+        - PLATFORM_PLUG=kf5-5-113-qt-5-15-11-core22
         build-snaps:
-        - kf5-5-111-qt-5-15-11-core22-sdk
+        - kf5-5-113-qt-5-15-11-core22-sdk
         build-environment:
         - &id001
-            PATH: /snap/kf5-5-111-qt-5-15-11-core22-sdk/current/usr/bin${PATH:+:$PATH}
+            PATH: /snap/kf5-5-113-qt-5-15-11-core22-sdk/current/usr/bin${PATH:+:$PATH}
         - &id002
-            XDG_DATA_DIRS: $CRAFT_STAGE/usr/share:/snap/kf5-5-111-qt-5-15-11-core22-sdk/current/usr/share:/usr/share${XDG_DATA_DIRS:+:$XDG_DATA_DIRS}
+            XDG_DATA_DIRS: $CRAFT_STAGE/usr/share:/snap/kf5-5-113-qt-5-15-11-core22-sdk/current/usr/share:/usr/share${XDG_DATA_DIRS:+:$XDG_DATA_DIRS}
         - &id003
-            XDG_CONFIG_HOME: $CRAFT_STAGE/etc/xdg:/snap/kf5-5-111-qt-5-15-11-core22-sdk/current/etc/xdg:/etc/xdg${XDG_CONFIG_HOME:+:$XDG_CONFIG_HOME}
+            XDG_CONFIG_HOME: $CRAFT_STAGE/etc/xdg:/snap/kf5-5-113-qt-5-15-11-core22-sdk/current/etc/xdg:/etc/xdg${XDG_CONFIG_HOME:+:$XDG_CONFIG_HOME}
         - &id004
-            CRAFT_CMAKE_ARGS: -DCMAKE_FIND_ROOT_PATH=/snap/kf5-5-111-qt-5-15-11-core22-sdk/current${CRAFT_CMAKE_ARGS:+:$CRAFT_CMAKE_ARGS}
+            CRAFT_CMAKE_ARGS: -DCMAKE_FIND_ROOT_PATH=/snap/kf5-5-113-qt-5-15-11-core22-sdk/current${CRAFT_CMAKE_ARGS:+:$CRAFT_CMAKE_ARGS}
     kalarm:
         after:
         - kde-neon
@@ -109,41 +112,17 @@ parts:
         - libassuan-dev
         - libboost-dev
         - libboost-graph-dev
-        - libkf5akonadi-dev
-        - libkf5akonadicontact-dev
-        - libkf5akonadimime-dev
-        - kmailtransport-akonadi
-        - libkf5mailtransport-dev
-        - libkf5calendarcore-dev
-        - libkf5calendarutils-dev
-        - libkf5contacts-dev
-        - libkf5holidays-dev
-        - libkf5identitymanagement-dev
-        - libkf5mime-dev
         - libphonon4qt5-dev
         - libphonon4qt5experimental-dev
-        - libkf5pimtextedit-dev
         - pkg-config
         - xsltproc
         - zlib1g-dev
-        - libkf5pimtextedittexttospeech-dev
-        - libkf5texteditor-dev
-        - libkf5ktextaddons-dev
+        build-snaps:
+        - akonadi-sdk/edge
         stage-packages:
         - libasound2
         - libasound2-data
         - libasound2-plugins
-        - libkf5akonadicontact5
-        - libkf5akonadimime5
-        - libkf5mailtransport-data
-        - libkf5mailtransport5
-        - libkf5mailtransportakonadi5
-        - libkf5calendarcore5
-        - libkf5calendarutils5
-        - libkf5contacts5
-        - libkf5holidays5
-        - libkf5identitymanagement5
-        - libkf5mime5
         - phonon4qt5
         - libphonon4qt5experimental4
         - gstreamer1.0-alsa
@@ -159,13 +138,11 @@ parts:
         - pkg-config
         - xsltproc
         - zlib1g
-        - libkf5pimtextedit5
-        - libkf5pimtextedit-plugins
-        - libkf5pimtextedit-data
-        - libkf5textedittexttospeech1
         stage-snaps:
         - khelpcenter
-        source: http://download.kde.org/stable/release-service/23.04.3/src/kalarm-23.04.3.tar.xz
+        - akonadi/edge
+        source: .
+        source-type: local
         cmake-parameters:
         - "-DKDE_INSTALL_USE_QT_SYS_PATHS=FALSE"
         - "-DCMAKE_INSTALL_PREFIX=/usr"
@@ -173,7 +150,7 @@ parts:
         - "-DENABLE_TESTING=OFF"
         - "-DBUILD_TESTING=OFF"
         - "-DKDE_SKIP_TEST_SETTINGS=ON"
-        - "-DCMAKE_FIND_ROOT_PATH=/usr\\;$CRAFT_STAGE\\;/snap/kf5-5-111-qt-5-15-11-core22-sdk/current"
+        - "-DCMAKE_FIND_ROOT_PATH=$CRAFT_STAGE\\;/snap/kf5-5-113-qt-5-15-11-core22-sdk/current\\;/snap/akonadi-sdk/current"
         - "-DKDE_INSTALL_PLUGINDIR=/usr/lib/$CRAFT_ARCH_TRIPLET/qt5/plugins/"
         prime:
         - "-usr/lib/*/cmake/*"
@@ -190,7 +167,7 @@ parts:
         - *id002
         - *id003
         - *id004
-        - QML2_IMPORT_PATH: $CRAFT_STAGE/usr/lib/$CRAFT_ARCH_TRIPLET/qt5/qml:/snap/kf5-5-111-qt-5-15-11-core22-sdk/current/usr/lib/$CRAFT_ARCH_TRIPLET/qt5/qml
+        - QML2_IMPORT_PATH: $CRAFT_STAGE/usr/lib/$CRAFT_ARCH_TRIPLET/qt5/qml:/snap/kf5-5-113-qt-5-15-11-core22-sdk/current/usr/lib/$CRAFT_ARCH_TRIPLET/qt5/qml
     cleanup:
         after:
         - kalarm
