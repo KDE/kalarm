@@ -1,7 +1,7 @@
 /*
  *  fontcolour.cpp  -  font and colour chooser widget
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2001-2022 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2001-2023 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -18,6 +18,7 @@
 #include <QLabel>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
+#include <QStyle>
 
 
 FontColourChooser::FontColourChooser(QWidget* parent, const QStringList& fontList,
@@ -28,6 +29,8 @@ FontColourChooser::FontColourChooser(QWidget* parent, const QStringList& fontLis
     QWidget* page = this;
     if (!frameLabel.isNull())
     {
+        topLayout->setContentsMargins(0, style()->pixelMetric(QStyle::PM_LayoutTopMargin),
+                                      0, style()->pixelMetric(QStyle::PM_LayoutBottomMargin));
         page = new QGroupBox(frameLabel, this);
         topLayout->addWidget(page);
         topLayout = new QVBoxLayout(page);

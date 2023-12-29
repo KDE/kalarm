@@ -382,9 +382,14 @@ PrefsTabBase::PrefsTabBase(StackedScrollGroup* scrollGroup)
     QFrame* topWidget = new QFrame(this);
     setWidget(topWidget);
     mTopLayout = new QVBoxLayout(topWidget);
-    mTopLayout->setContentsMargins({});
+    mTopLayout->setContentsMargins(
+        style()->pixelMetric(QStyle::PM_LayoutLeftMargin),
+        style()->pixelMetric(QStyle::PM_LayoutTopMargin),
+        style()->pixelMetric(QStyle::PM_LayoutRightMargin),
+        style()->pixelMetric(QStyle::PM_LayoutBottomMargin));
 
-    if (!mIndentWidth) {
+    if (!mIndentWidth)
+    {
         QCheckBox cb(this);
         mIndentWidth = CheckBox::textIndent(&cb);
         mGridIndentWidth = mIndentWidth - style()->pixelMetric(QStyle::PM_LayoutHorizontalSpacing);
@@ -439,11 +444,6 @@ MiscPrefTab::MiscPrefTab(StackedScrollGroup* scrollGroup)
 {
     QGroupBox* group = new QGroupBox(i18nc("@title:group", "Run Mode"));
     topLayout()->addWidget(group);
-    topLayout()->setContentsMargins(
-        style()->pixelMetric(QStyle::PM_LayoutLeftMargin),
-        style()->pixelMetric(QStyle::PM_LayoutTopMargin),
-        style()->pixelMetric(QStyle::PM_LayoutRightMargin),
-        style()->pixelMetric(QStyle::PM_LayoutBottomMargin));
     auto vlayout = new QVBoxLayout(group);
 
     // Start at login
@@ -689,12 +689,6 @@ void MiscPrefTab::slotOtherTerminalToggled(bool on)
 TimePrefTab::TimePrefTab(StackedScrollGroup* scrollGroup)
     : PrefsTabBase(scrollGroup)
 {
-    topLayout()->setContentsMargins(
-        style()->pixelMetric(QStyle::PM_LayoutLeftMargin),
-        style()->pixelMetric(QStyle::PM_LayoutTopMargin),
-        style()->pixelMetric(QStyle::PM_LayoutRightMargin),
-        style()->pixelMetric(QStyle::PM_LayoutBottomMargin));
-
     const int marLeft  = style()->pixelMetric(QStyle::PM_LayoutLeftMargin);
     const int marRight = style()->pixelMetric(QStyle::PM_LayoutRightMargin);
     const int marTop   = style()->pixelMetric(QStyle::PM_LayoutTopMargin);
@@ -810,6 +804,7 @@ TimePrefTab::TimePrefTab(StackedScrollGroup* scrollGroup)
     QWidget* daybox = new QWidget(group);   // this is to control the QWhatsThis text display area
     layout->addWidget(daybox);
     auto wgrid = new QGridLayout(daybox);
+    wgrid->setContentsMargins(0, 0, 0, 0);
     const QLocale locale;
     for (int i = 0;  i < 7;  ++i)
     {
@@ -941,12 +936,6 @@ bool TimePrefTab::apply(bool syncToDisc)
 StorePrefTab::StorePrefTab(StackedScrollGroup* scrollGroup)
     : PrefsTabBase(scrollGroup)
 {
-    topLayout()->setContentsMargins(
-        style()->pixelMetric(QStyle::PM_LayoutLeftMargin),
-        style()->pixelMetric(QStyle::PM_LayoutTopMargin),
-        style()->pixelMetric(QStyle::PM_LayoutRightMargin),
-        style()->pixelMetric(QStyle::PM_LayoutBottomMargin));
-
     // Which resource to save to
     QGroupBox* group = new QGroupBox(i18nc("@title:group", "New Alarms && Templates"));
     topLayout()->addWidget(group);
@@ -1077,12 +1066,6 @@ void StorePrefTab::slotClearArchived()
 EmailPrefTab::EmailPrefTab(StackedScrollGroup* scrollGroup)
     : PrefsTabBase(scrollGroup)
 {
-    topLayout()->setContentsMargins(
-        style()->pixelMetric(QStyle::PM_LayoutLeftMargin),
-        style()->pixelMetric(QStyle::PM_LayoutTopMargin),
-        style()->pixelMetric(QStyle::PM_LayoutRightMargin),
-        style()->pixelMetric(QStyle::PM_LayoutBottomMargin));
-
     QWidget* widget = new QWidget;
     topLayout()->addWidget(widget);
     auto box = new QHBoxLayout(widget);
@@ -1357,10 +1340,14 @@ EditPrefTab::EditPrefTab(StackedScrollGroup* scrollGroup)
 
     auto topTypes = new StackedGroupWidget(tabgroup);
     auto ttLayout = new QVBoxLayout(topTypes);
+    ttLayout->setContentsMargins(0, style()->pixelMetric(QStyle::PM_LayoutTopMargin),
+                                 0, style()->pixelMetric(QStyle::PM_LayoutBottomMargin));
     mTabTypes = mTabs->addTab(topTypes, i18nc("@title:tab Settings specific to alarm type", "Type Specific"));
 
     auto topFontColour = new StackedGroupWidget(tabgroup);
     auto tfLayout = new QVBoxLayout(topFontColour);
+    tfLayout->setContentsMargins(0, style()->pixelMetric(QStyle::PM_LayoutTopMargin),
+                                 0, style()->pixelMetric(QStyle::PM_LayoutBottomMargin));
     mTabFontColour = mTabs->addTab(topFontColour, i18nc("@title:tab", "Font && Color"));
 
     // MISCELLANEOUS
@@ -1802,10 +1789,14 @@ ViewPrefTab::ViewPrefTab(StackedScrollGroup* scrollGroup)
 
     QWidget* widget = new QWidget;
     auto topGeneral = new QVBoxLayout(widget);
+    topGeneral->setContentsMargins(0, style()->pixelMetric(QStyle::PM_LayoutTopMargin),
+                                   0, style()->pixelMetric(QStyle::PM_LayoutBottomMargin));
     mTabGeneral = mTabs->addTab(widget, i18nc("@title:tab", "General"));
 
     widget =  new QWidget;
     auto topWindows = new QVBoxLayout(widget);
+    topWindows->setContentsMargins(0, style()->pixelMetric(QStyle::PM_LayoutTopMargin),
+                                   0, style()->pixelMetric(QStyle::PM_LayoutBottomMargin));
     mTabWindows = mTabs->addTab(widget, i18nc("@title:tab", "Alarm Windows"));
 
     // Run-in-system-tray check box or group.
