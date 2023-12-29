@@ -567,8 +567,8 @@ void KADateTimePrivate::setDtSpec(const KADateTime::Spec& s)
     switch (s.type())
     {
         case KADateTime::UTC:
-          mDt.setTimeZone(QTimeZone::utc());
-          break;
+            mDt.setTimeZone(QTimeZone::utc());
+            break;
         case KADateTime::OffsetFromUTC:
             mDt.setOffsetFromUtc(s.utcOffset());
             break;
@@ -817,8 +817,8 @@ int KADateTimePrivate::timeZoneOffset(QTimeZone& local) const
     QDateTime dt = updatedDt(local);   // update the cache if it's LocalZone
     if (utcCached)
     {
-      dt.setTimeZone(QTimeZone::utc());
-      return cachedUtc().secsTo(dt);
+        dt.setTimeZone(QTimeZone::utc());
+        return cachedUtc().secsTo(dt);
     }
     int secondOffset;
     int offset = offsetAtZoneTime(mDt.timeZone(), mDt, &secondOffset);
@@ -2570,7 +2570,7 @@ KADateTime KADateTime::fromString(const QString& string, const QString& format,
             {
                 zoneFound = QTimeZone();
                 if (!utcOffset)
-                  qdt.setTimeZone(QTimeZone::utc());
+                    qdt.setTimeZone(QTimeZone::utc());
             }
             else if (zoneFound.isValid())
             {
@@ -2675,7 +2675,7 @@ KADateTime KADateTime::fromString(const QString& string, const QString& format,
             {
                 zoneFound = QTimeZone();
                 if (!utcOffset)
-                  qdt.setTimeZone(QTimeZone::utc());
+                    qdt.setTimeZone(QTimeZone::utc());
             }
             else if (zoneFound.isValid())
             {
