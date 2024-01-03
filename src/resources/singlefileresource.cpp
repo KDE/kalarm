@@ -20,6 +20,7 @@
 #include <KCalendarCore/ICalFormat>
 
 #include <KIO/Job>
+#include <KIO/FileCopyJob>
 #include <KDirWatch>
 #include <KLocalizedString>
 

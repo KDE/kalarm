@@ -12,6 +12,7 @@
 #include <KColorScheme>
 #include <KLocalizedString>
 #include <KIO/Job>
+#include <KIO/StatJob>
 
 #include <QTimer>
 
