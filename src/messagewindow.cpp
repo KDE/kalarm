@@ -520,7 +520,7 @@ void MessageWindow::setUpDisplay()
         if (modal)
             wstate |= NET::Modal;
         WId winid = winId();
-        KX11Extras::setState(winid, wstate);
+        KWindowSystem::setState(winid, wstate);
         KX11Extras::setOnAllDesktops(winid, true);   // show on all virtual desktops
     }
 #endif
