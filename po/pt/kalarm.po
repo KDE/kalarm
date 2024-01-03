@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-12-30 01:38+0000\n"
+"POT-Creation-Date: 2024-01-03 01:36+0000\n"
 "PO-Revision-Date: 2023-06-09 03:05+0100\n"
 "Last-Translator: José Nuno Pires <zepires@gmail.com>\n"
 "Language-Team: pt <kde-i18n-pt@kde.org>\n"
@@ -7095,14 +7095,14 @@ msgid "Alarm templates"
 msgstr "Modelos de alarme"
 
 #: resources/migration/dirresourceimportdialog.cpp:251
-#: resources/singlefileresourceconfigdialog.cpp:39
+#: resources/singlefileresourceconfigdialog.cpp:40
 #, kde-format
 msgctxt "@item:inlistbox File type selection filter"
 msgid "Calendar files"
 msgstr "Ficheiros de calendário"
 
 #: resources/migration/dirresourceimportdialog.cpp:397
-#: resources/singlefileresourceconfigdialog.cpp:212
+#: resources/singlefileresourceconfigdialog.cpp:213
 #, kde-format
 msgctxt "@info:status"
 msgid "Checking file information..."
@@ -7633,25 +7633,25 @@ msgctxt "@item:intext What a resource is stored in (directory in filesystem)"
 msgid "Directory"
 msgstr "Pasta"
 
-#: resources/singlefileresource.cpp:175 resources/singlefileresource.cpp:349
+#: resources/singlefileresource.cpp:176 resources/singlefileresource.cpp:350
 #, kde-format
 msgctxt "@info"
 msgid "A previous load is still in progress."
 msgstr "Está um carregamento anterior ainda em curso."
 
-#: resources/singlefileresource.cpp:181 resources/singlefileresource.cpp:355
+#: resources/singlefileresource.cpp:182 resources/singlefileresource.cpp:356
 #, kde-format
 msgctxt "@info"
 msgid "A previous save is still in progress."
 msgstr "Está uma gravação anterior ainda em curso."
 
-#: resources/singlefileresource.cpp:230
+#: resources/singlefileresource.cpp:231
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Could not create calendar file <filename>%1</filename>."
 msgstr "Não foi possível carregar o calendário em <filename>%1</filename>."
 
-#: resources/singlefileresource.cpp:245
+#: resources/singlefileresource.cpp:246
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Could not create writable calendar file <filename>%1</filename>."
@@ -7659,37 +7659,37 @@ msgstr ""
 "Não foi possível criar um calendário com permissões de escrita em <filename>"
 "%1</filename>."
 
-#: resources/singlefileresource.cpp:600
+#: resources/singlefileresource.cpp:601
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Could not load file <filename>%1</filename>."
 msgstr "Não foi possível carregar o calendário em <filename>%1</filename>."
 
-#: resources/singlefileresource.cpp:632
+#: resources/singlefileresource.cpp:633
 #, kde-format
 msgctxt "@info"
 msgid "Calendar not open."
 msgstr "O calendário não está aberto."
 
-#: resources/singlefileresource.cpp:645
+#: resources/singlefileresource.cpp:646
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Could not save file <filename>%1</filename>."
 msgstr "Não foi possível gravar o ficheiro <filename>%1</filename>."
 
-#: resources/singlefileresource.cpp:737
+#: resources/singlefileresource.cpp:738
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Could not load file <filename>%1</filename>. (%2)"
 msgstr "Não foi possível carregar o ficheiro <filename>%1</filename>. (%2)"
 
-#: resources/singlefileresource.cpp:774
+#: resources/singlefileresource.cpp:775
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Could not save file <filename>%1</filename>. (%2)"
 msgstr "Não foi possível gravar o ficheiro <filename>%1</filename>. (%2)"
 
-#: resources/singlefileresourceconfigdialog.cpp:32
+#: resources/singlefileresourceconfigdialog.cpp:33
 #, kde-format
 msgctxt "@title:window"
 msgid "Configure Calendar"

@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-12-30 01:38+0000\n"
+"POT-Creation-Date: 2024-01-03 01:36+0000\n"
 "PO-Revision-Date: 2019-09-29 12:31+0500\n"
 "Last-Translator: Victor Ibragimov <victor.ibragimov@gmail.com>\n"
 "Language-Team: English <kde-i18n-doc@kde.org>\n"
@@ -7544,14 +7544,14 @@ msgid "Alarm templates"
 msgstr "Қолибҳои хотиррасонӣ"
 
 #: resources/migration/dirresourceimportdialog.cpp:251
-#: resources/singlefileresourceconfigdialog.cpp:39
+#: resources/singlefileresourceconfigdialog.cpp:40
 #, fuzzy, kde-format
 msgctxt "@item:inlistbox File type selection filter"
 msgid "Calendar files"
 msgstr "Адреси файли тақвимӣ"
 
 #: resources/migration/dirresourceimportdialog.cpp:397
-#: resources/singlefileresourceconfigdialog.cpp:212
+#: resources/singlefileresourceconfigdialog.cpp:213
 #, kde-format
 msgctxt "@info:status"
 msgid "Checking file information..."
@@ -8100,19 +8100,19 @@ msgctxt "@item:intext What a resource is stored in (directory in filesystem)"
 msgid "Directory"
 msgstr "Амали махсуси намоиши хотиррасонӣ"
 
-#: resources/singlefileresource.cpp:175 resources/singlefileresource.cpp:349
+#: resources/singlefileresource.cpp:176 resources/singlefileresource.cpp:350
 #, kde-format
 msgctxt "@info"
 msgid "A previous load is still in progress."
 msgstr ""
 
-#: resources/singlefileresource.cpp:181 resources/singlefileresource.cpp:355
+#: resources/singlefileresource.cpp:182 resources/singlefileresource.cpp:356
 #, kde-format
 msgctxt "@info"
 msgid "A previous save is still in progress."
 msgstr ""
 
-#: resources/singlefileresource.cpp:230
+#: resources/singlefileresource.cpp:231
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "Cannot open audio file:\n"
@@ -8123,7 +8123,7 @@ msgstr ""
 "Наметавонам файли садои зеринро боз кунам:\n"
 "%1"
 
-#: resources/singlefileresource.cpp:245
+#: resources/singlefileresource.cpp:246
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "Cannot open audio file:\n"
@@ -8134,7 +8134,7 @@ msgstr ""
 "Наметавонам файли садои зеринро боз кунам:\n"
 "%1"
 
-#: resources/singlefileresource.cpp:600
+#: resources/singlefileresource.cpp:601
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "Cannot open audio file:\n"
@@ -8145,13 +8145,13 @@ msgstr ""
 "Наметавонам файли садои зеринро боз кунам:\n"
 "%1"
 
-#: resources/singlefileresource.cpp:632
+#: resources/singlefileresource.cpp:633
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Calendar not open."
 msgstr "Адреси файли тақвимӣ"
 
-#: resources/singlefileresource.cpp:645
+#: resources/singlefileresource.cpp:646
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "Cannot open audio file:\n"
@@ -8162,7 +8162,7 @@ msgstr ""
 "Наметавонам файли садои зеринро боз кунам:\n"
 "%1"
 
-#: resources/singlefileresource.cpp:737
+#: resources/singlefileresource.cpp:738
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "Cannot open audio file:\n"
@@ -8173,7 +8173,7 @@ msgstr ""
 "Наметавонам файли садои зеринро боз кунам:\n"
 "%1"
 
-#: resources/singlefileresource.cpp:774
+#: resources/singlefileresource.cpp:775
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "Cannot open audio file:\n"
@@ -8184,7 +8184,7 @@ msgstr ""
 "Наметавонам файли садои зеринро боз кунам:\n"
 "%1"
 
-#: resources/singlefileresourceconfigdialog.cpp:32
+#: resources/singlefileresourceconfigdialog.cpp:33
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Configure Calendar"

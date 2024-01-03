@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-12-30 01:38+0000\n"
+"POT-Creation-Date: 2024-01-03 01:36+0000\n"
 "PO-Revision-Date: 2015-01-08 09:03+0100\n"
 "Last-Translator: Samir Ribic <samir.ribic@etf.unsa.ba>\n"
 "Language-Team: bosanski <bs@li.org>\n"
@@ -7301,14 +7301,14 @@ msgid "Alarm templates"
 msgstr "Šabloni alarma"
 
 #: resources/migration/dirresourceimportdialog.cpp:251
-#: resources/singlefileresourceconfigdialog.cpp:39
+#: resources/singlefileresourceconfigdialog.cpp:40
 #, fuzzy, kde-format
 msgctxt "@item:inlistbox File type selection filter"
 msgid "Calendar files"
 msgstr "Kalendarske datoteke"
 
 #: resources/migration/dirresourceimportdialog.cpp:397
-#: resources/singlefileresourceconfigdialog.cpp:212
+#: resources/singlefileresourceconfigdialog.cpp:213
 #, kde-format
 msgctxt "@info:status"
 msgid "Checking file information..."
@@ -7857,19 +7857,19 @@ msgctxt "@item:intext What a resource is stored in (directory in filesystem)"
 msgid "Directory"
 msgstr "Direktorij"
 
-#: resources/singlefileresource.cpp:175 resources/singlefileresource.cpp:349
+#: resources/singlefileresource.cpp:176 resources/singlefileresource.cpp:350
 #, kde-format
 msgctxt "@info"
 msgid "A previous load is still in progress."
 msgstr ""
 
-#: resources/singlefileresource.cpp:181 resources/singlefileresource.cpp:355
+#: resources/singlefileresource.cpp:182 resources/singlefileresource.cpp:356
 #, kde-format
 msgctxt "@info"
 msgid "A previous save is still in progress."
 msgstr ""
 
-#: resources/singlefileresource.cpp:230
+#: resources/singlefileresource.cpp:231
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info"
 #| msgid "Could not load calendar <filename>%1</filename>."
@@ -7877,7 +7877,7 @@ msgctxt "@info"
 msgid "Could not create calendar file <filename>%1</filename>."
 msgstr "Ne mogu učitati kalendar <filename>%1</filename>."
 
-#: resources/singlefileresource.cpp:245
+#: resources/singlefileresource.cpp:246
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info"
 #| msgid "Could not load calendar <filename>%1</filename>."
@@ -7885,7 +7885,7 @@ msgctxt "@info"
 msgid "Could not create writable calendar file <filename>%1</filename>."
 msgstr "Ne mogu učitati kalendar <filename>%1</filename>."
 
-#: resources/singlefileresource.cpp:600
+#: resources/singlefileresource.cpp:601
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info"
 #| msgid "Could not load calendar <filename>%1</filename>."
@@ -7893,7 +7893,7 @@ msgctxt "@info"
 msgid "Could not load file <filename>%1</filename>."
 msgstr "Ne mogu učitati kalendar <filename>%1</filename>."
 
-#: resources/singlefileresource.cpp:632
+#: resources/singlefileresource.cpp:633
 #, fuzzy, kde-format
 #| msgctxt "@title:window"
 #| msgid "Calendar Configuration"
@@ -7901,7 +7901,7 @@ msgctxt "@info"
 msgid "Calendar not open."
 msgstr "Podešavanje kalendara"
 
-#: resources/singlefileresource.cpp:645
+#: resources/singlefileresource.cpp:646
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info"
 #| msgid "Could not load calendar <filename>%1</filename>."
@@ -7909,7 +7909,7 @@ msgctxt "@info"
 msgid "Could not save file <filename>%1</filename>."
 msgstr "Ne mogu učitati kalendar <filename>%1</filename>."
 
-#: resources/singlefileresource.cpp:737
+#: resources/singlefileresource.cpp:738
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info"
 #| msgid "Could not load calendar <filename>%1</filename>."
@@ -7917,7 +7917,7 @@ msgctxt "@info"
 msgid "Could not load file <filename>%1</filename>. (%2)"
 msgstr "Ne mogu učitati kalendar <filename>%1</filename>."
 
-#: resources/singlefileresource.cpp:774
+#: resources/singlefileresource.cpp:775
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info"
 #| msgid "Could not load calendar <filename>%1</filename>."
@@ -7925,7 +7925,7 @@ msgctxt "@info"
 msgid "Could not save file <filename>%1</filename>. (%2)"
 msgstr "Ne mogu učitati kalendar <filename>%1</filename>."
 
-#: resources/singlefileresourceconfigdialog.cpp:32
+#: resources/singlefileresourceconfigdialog.cpp:33
 #, fuzzy, kde-format
 #| msgctxt "@title:window"
 #| msgid "Choose Calendar"
