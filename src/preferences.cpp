@@ -1,7 +1,7 @@
 /*
  *  preferences.cpp  -  program preference settings
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2001-2023 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2001-2024 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -329,6 +329,18 @@ void Preferences::setModalMessages(bool yes)
 {
     if (KWindowSystem::isPlatformX11())
         self()->setBase_ModalMessages(yes);
+}
+
+/******************************************************************************
+* Get the delay in seconds after a message window is displayed before its
+* buttons are activated.
+* Reply = 0 for no delay, but position windows as far from cursor as possible.
+*/
+int Preferences::messageButtonDelay()
+{
+    const int delay = self()->base_MessageButtonDelay();
+    // On Wayland, window positions can't be set, so return a minimum delay of 1 second.
+    return (delay <= 0  &&  KWindowSystem::isPlatformWayland()) ? 1 : delay;
 }
 
 /******************************************************************************

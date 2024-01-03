@@ -1,7 +1,7 @@
 /*
  *  messagewindow.cpp  -  displays an alarm message in a window
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2001-2022 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2001-2024 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -742,6 +742,9 @@ void MessageWindow::readProperties(const KConfigGroup& config)
 */
 bool MessageWindow::spread(bool scatter)
 {
+    if (KWindowSystem::isPlatformWayland())
+        return false;    // Wayland doesn't allow positioning of windows
+
     if (windowCount(true) <= 1)    // ignore always-hidden windows
         return false;
 
@@ -966,7 +969,8 @@ void MessageWindow::showEvent(QShowEvent* se)
 void MessageWindow::moveEvent(QMoveEvent* e)
 {
     MainWindowBase::moveEvent(e);
-    theApp()->setSpreadWindowsState(isSpread(Desktop::workArea(mScreenNumber).topLeft()));
+    if (!KWindowSystem::isPlatformWayland())  // Wayland doesn't allow positioning of windows
+        theApp()->setSpreadWindowsState(isSpread(Desktop::workArea(mScreenNumber).topLeft()));
     if (mPositioning)
     {
         // The window has just been initially positioned
@@ -988,7 +992,8 @@ void MessageWindow::frameDrawn()
         if (width() > s.width()  ||  height() > s.height())
             resize(s);
     }
-    theApp()->setSpreadWindowsState(isSpread(Desktop::workArea(mScreenNumber).topLeft()));
+    if (!KWindowSystem::isPlatformWayland())  // Wayland doesn't allow positioning of windows
+        theApp()->setSpreadWindowsState(isSpread(Desktop::workArea(mScreenNumber).topLeft()));
 }
 
 /******************************************************************************

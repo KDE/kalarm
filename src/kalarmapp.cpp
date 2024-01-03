@@ -1,7 +1,7 @@
 /*
  *  kalarmapp.cpp  -  the KAlarm application object
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2001-2023 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2001-2024 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -41,6 +41,7 @@
 #include <KAboutData>
 #include <KSharedConfig>
 #include <KStandardGuiItem>
+#include <KWindowSystem>
 #include <netwm.h>
 #include <KShell>
 
@@ -1680,8 +1681,11 @@ void KAlarmApp::setAlarmsEnabled(bool enabled)
 */
 void KAlarmApp::spreadWindows(bool spread)
 {
-    spread = MessageWindow::spread(spread);
-    Q_EMIT spreadWindowsToggled(spread);
+    if (!KWindowSystem::isPlatformWayland())  // Wayland doesn't allow positioning of windows
+    {
+        spread = MessageWindow::spread(spread);
+        Q_EMIT spreadWindowsToggled(spread);
+    }
 }
 
 /******************************************************************************
@@ -1690,7 +1694,8 @@ void KAlarmApp::spreadWindows(bool spread)
 */
 void KAlarmApp::setSpreadWindowsState(bool spread)
 {
-    Q_EMIT spreadWindowsToggled(spread);
+    if (!KWindowSystem::isPlatformWayland())  // Wayland doesn't allow positioning of windows
+        Q_EMIT spreadWindowsToggled(spread);
 }
 
 /******************************************************************************

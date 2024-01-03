@@ -1,7 +1,7 @@
 /*
  *  prefdlg_p.h  -  private classes for program preferences dialog
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2001-2022 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2001-2024 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -269,7 +269,7 @@ private:
     QCheckBox*    mTooltipShowTimeTo;
     QLineEdit*    mTooltipTimeToPrefix;
     QLabel*       mTooltipTimeToPrefixLabel;
-    ButtonGroup*  mWindowPosition;
+    ButtonGroup*  mWindowPosition {nullptr};
     QSpinBox*     mWindowButtonDelay;
     QLabel*       mWindowButtonDelayLabel;
     QCheckBox*    mModalMessages {nullptr};

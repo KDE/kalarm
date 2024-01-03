@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-SPDX-FileCopyrightText: 2007-2022 David Jarvie <djarvie@kde.org>
+SPDX-FileCopyrightText: 2007-2024 David Jarvie <djarvie@kde.org>
 SPDX-License-Identifier: GPL-2.0-or-later
 -->
 <kcfg xmlns="http://www.kde.org/standards/kcfg/1.0"
@@ -149,7 +149,7 @@ SPDX-License-Identifier: GPL-2.0-or-later
       <whatsthis context="@info:whatsthis">&lt;p>Specify the characteristics of alarm message windows:&lt;ul>&lt;li>If checked, the window is a normal window with a title bar, which grabs keyboard input when it is displayed.&lt;/li>&lt;li>If unchecked, the window does not interfere with your typing when it is displayed, but it has no title bar and cannot be moved or resized.&lt;/li>&lt;/ul>&lt;/p></whatsthis>
       <default>true</default>
     </entry>
-    <entry name="MessageButtonDelay" type="Int">
+    <entry name="Base_MessageButtonDelay" key="MessageButtonDelay" type="Int">
       <label context="@label">Delay before message window buttons are enabled</label>
       <whatsthis context="@info:whatsthis">&lt;p>Specify the positioning of alarm message windows, and the delay in seconds after a window shows until its buttons are enabled.
         &lt;ul>&lt;li>0 to position message windows as far from the cursor as possible with no enable delay.&lt;/li>
