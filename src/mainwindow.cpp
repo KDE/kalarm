@@ -1,7 +1,7 @@
 /*
  *  mainwindow.cpp  -  main application window
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2001-2023 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2001-2024 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -53,6 +53,7 @@ using namespace KCalUtils;
 #include <KToggleAction>
 #include <KNotifyConfigWidget>
 #include <KToolBarPopupAction>
+#include <KWindowSystem>
 
 #include <QAction>
 #include <QSplitter>
@@ -532,9 +533,12 @@ void MainWindow::initActions()
     actions->addAction(QStringLiteral("showDateSelector"), mActionToggleDateNavigator);
     connect(mActionToggleDateNavigator, &KToggleAction::triggered, this, &MainWindow::slotToggleDateNavigator);
 
-    mActionSpreadWindows = KAlarm::createSpreadWindowsAction(this);
-    actions->addAction(QStringLiteral("spread"), mActionSpreadWindows);
-    KGlobalAccel::setGlobalShortcut(mActionSpreadWindows, QList<QKeySequence>());  // allow user to set a global shortcut
+    if (!KWindowSystem::isPlatformWayland())  // Wayland doesn't allow positioning of windows
+    {
+        mActionSpreadWindows = KAlarm::createSpreadWindowsAction(this);
+        actions->addAction(QStringLiteral("spread"), mActionSpreadWindows);
+        KGlobalAccel::setGlobalShortcut(mActionSpreadWindows, QList<QKeySequence>());  // allow user to set a global shortcut
+    }
 
     mActionImportAlarms = new QAction(i18nc("@action", "Import Alarms..."), this);
     actions->addAction(QStringLiteral("importAlarms"), mActionImportAlarms);

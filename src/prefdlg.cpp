@@ -1,7 +1,7 @@
 /*
  *  prefdlg.cpp  -  program preferences dialog
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2001-2023 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2001-2024 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -1960,22 +1960,26 @@ ViewPrefTab::ViewPrefTab(StackedScrollGroup* scrollGroup)
     topWindows->addWidget(group);
     grid = new QGridLayout(group);
     grid->setColumnStretch(1, 1);
-    grid->setColumnMinimumWidth(0, gridIndentWidth());
-    mWindowPosition = new ButtonGroup(group);
-    connect(mWindowPosition, &ButtonGroup::buttonSet, this, &ViewPrefTab::slotWindowPosChanged);
+    if (!KWindowSystem::isPlatformWayland())  // Wayland doesn't allow positioning of windows
+    {
+        grid->setColumnMinimumWidth(0, gridIndentWidth());
 
-    const QString whatsthis = xi18nc("@info:whatsthis",
-          "<para>Choose how to reduce the chance of alarm messages being accidentally acknowledged:"
-          "<list><item>Position alarm message windows as far as possible from the current mouse cursor location, or</item>"
-          "<item>Position alarm message windows in the center of the screen, but disable buttons for a short time after the window is displayed.</item></list></para>");
-    QRadioButton* radio = new QRadioButton(i18nc("@option:radio", "Position windows far from mouse cursor"), group);
-    mWindowPosition->addButton(radio, 0);
-    radio->setWhatsThis(whatsthis);
-    grid->addWidget(radio, 0, 0, 1, 2, Qt::AlignLeft);
-    radio = new QRadioButton(i18nc("@option:radio", "Center windows, delay activating window buttons"), group);
-    mWindowPosition->addButton(radio, 1);
-    radio->setWhatsThis(whatsthis);
-    grid->addWidget(radio, 1, 0, 1, 2, Qt::AlignLeft);
+        mWindowPosition = new ButtonGroup(group);
+        connect(mWindowPosition, &ButtonGroup::buttonSet, this, &ViewPrefTab::slotWindowPosChanged);
+
+        const QString whatsthis = xi18nc("@info:whatsthis",
+              "<para>Choose how to reduce the chance of alarm messages being accidentally acknowledged:"
+              "<list><item>Position alarm message windows as far as possible from the current mouse cursor location, or</item>"
+              "<item>Position alarm message windows in the center of the screen, but disable buttons for a short time after the window is displayed.</item></list></para>");
+        QRadioButton* radio = new QRadioButton(i18nc("@option:radio", "Position windows far from mouse cursor"), group);
+        mWindowPosition->addButton(radio, 0);
+        radio->setWhatsThis(whatsthis);
+        grid->addWidget(radio, 0, 0, 1, 2, Qt::AlignLeft);
+        radio = new QRadioButton(i18nc("@option:radio", "Center windows, delay activating window buttons"), group);
+        mWindowPosition->addButton(radio, 1);
+        radio->setWhatsThis(whatsthis);
+        grid->addWidget(radio, 1, 0, 1, 2, Qt::AlignLeft);
+    }
 
     widget = new QWidget;   // this is to control the QWhatsThis text display area
     box = new QHBoxLayout(widget);
@@ -1986,6 +1990,7 @@ ViewPrefTab::ViewPrefTab(StackedScrollGroup* scrollGroup)
     mWindowButtonDelay->setRange(1, 10);
     mWindowButtonDelayLabel->setBuddy(mWindowButtonDelay);
     box->addWidget(mWindowButtonDelay);
+//TODO: Improve whatsthis text for Wayland
     widget->setWhatsThis(i18nc("@info:whatsthis",
                             "Enter how long its buttons should remain disabled after the alarm message window is shown."));
     box->addStretch();    // left adjust the controls
@@ -2050,7 +2055,8 @@ void ViewPrefTab::restore(bool, bool allTabs)
     }
     if (allTabs  ||  mTabs->currentIndex() == mTabWindows)
     {
-        mWindowPosition->setButton(Preferences::messageButtonDelay() ? 1 : 0);
+        if (mWindowPosition)
+            mWindowPosition->setButton(Preferences::messageButtonDelay() ? 1 : 0);
         mWindowButtonDelay->setValue(Preferences::messageButtonDelay());
         if (mModalMessages)
             mModalMessages->setChecked(Preferences::modalMessages());
@@ -2095,7 +2101,7 @@ bool ViewPrefTab::apply(bool syncToDisc)
         if (n != Preferences::autoHideSystemTray())
             Preferences::setAutoHideSystemTray(n);
     }
-    n = mWindowPosition->selectedId();
+    n = mWindowPosition ? mWindowPosition->selectedId() : 1;
     if (n)
         n = mWindowButtonDelay->value();
     if (n != Preferences::messageButtonDelay())
@@ -2175,10 +2181,12 @@ void ViewPrefTab::slotAutoHideSysTrayChanged(QAbstractButton* button)
 
 void ViewPrefTab::slotWindowPosChanged(QAbstractButton* button)
 {
-    const bool enable = mWindowPosition->id(button);
+    const bool enable = mWindowPosition ? mWindowPosition->id(button) : true;
     mWindowButtonDelay->setEnabled(enable);
     mWindowButtonDelayLabel->setEnabled(enable);
 }
+
 #include "moc_prefdlg_p.cpp"
 #include "moc_prefdlg.cpp"
+
 // vim: et sw=4:
