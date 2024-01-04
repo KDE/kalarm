@@ -274,7 +274,7 @@ QString KAMail::appendBodyAttachments(KMime::Message& message, JobData& data)
             encodings.removeAll(KMime::Headers::CE8Bit);  // not handled by KMime
             content->contentTransferEncoding()->setEncoding(encodings.at(0));
             content->assemble();
-            message.addContent(content);
+            message.appendContent(content);
         }
 
         // Append each attachment in turn
@@ -345,7 +345,7 @@ QString KAMail::appendBodyAttachments(KMime::Message& message, JobData& data)
             cte->setDecoded(false);
             content->setHeader(cte);
             content->assemble();
-            message.addContent(content);
+            message.appendContent(content);
             if (atterror)
                 return attachError;
         }
