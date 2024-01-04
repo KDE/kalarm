@@ -59,6 +59,14 @@ QDateTime toZoneTime(const QTimeZone& tz, const QDateTime& utcDateTime, bool* se
 bool checkTzTransitionOccurrence(const QDateTime& dt, const QDateTime& utcDateTime);
 int  checkTzTransitionBackwards(QTimeZone::OffsetData& transition, const QTimeZone& tz, const QDateTime& utcDateTime, const QDateTime& tzDateTime = {});
 
+/** Return the Qt timespec for a QDateTime. If UTC, returns Qt::UTC.
+ *  Note that QDateTime::timeSpec() returns QTimeZone for a UTC time (since Qt 6.6 approx). */
+inline Qt::TimeSpec qTimeSpec(const QDateTime& qdt)
+{
+    Qt::TimeSpec spec = qdt.timeSpec();
+    return (spec == Qt::TimeZone  &&  qdt.timeZone() == QTimeZone::utc()) ? Qt::UTC : spec;
+}
+
 } // namespace
 
 namespace KAlarmCal
@@ -347,7 +355,7 @@ public:
         , m2ndOccurrence(false)
         , mDateOnly(false)
     {
-        switch (d.timeSpec())
+        switch (qTimeSpec(d))
         {
             case Qt::UTC:
                 specType = KADateTime::UTC;
@@ -669,7 +677,7 @@ QDateTime KADateTimePrivate::updatedDt(QTimeZone& local) const
 */
 void KADateTimePrivate::setDateTime(const QDateTime& d)
 {
-    switch (d.timeSpec())
+    switch (qTimeSpec(d))
     {
         case Qt::UTC:
             switch (specType)
@@ -772,7 +780,7 @@ void KADateTimePrivate::setTzTransitionOccurrence()
 bool KADateTimePrivate::setTzTransitionOccurrence(bool second)
 {
     m2ndOccurrence = false;
-    if (mDt.timeSpec() != Qt::TimeZone)
+    if (qTimeSpec(mDt) != Qt::TimeZone)
         return false;
 
     // Convert to UTC. If the local time occurs twice around a time shift, this
@@ -2581,7 +2589,7 @@ KADateTime KADateTime::fromString(const QString& string, const QString& format,
             else
                 return {};   // an unknown zone name or abbreviation was found
         }
-        else if (utcOffset  ||  qdt.timeSpec() == Qt::UTC)
+        else if (utcOffset  ||  qTimeSpec(qdt) == Qt::UTC)
         {
             // A UTC offset has been found.
             // Use the time zone which contains it, if any.
@@ -2686,7 +2694,7 @@ KADateTime KADateTime::fromString(const QString& string, const QString& format,
             else
                 return {};   // an unknown zone name or abbreviation was found
         }
-        else if (utcOffset  ||  qdt.timeSpec() == Qt::UTC)
+        else if (utcOffset  ||  qTimeSpec(qdt) == Qt::UTC)
         {
             // A UTC offset has been found.
             // Use the time zone which contains it, if any.
@@ -2728,7 +2736,7 @@ KADateTime KADateTime::fromString(const QString& string, const QString& format,
     KADateTime result;
     if (utcOffset)
         result = KADateTime(qdt.date(), qdt.time(), Spec(OffsetFromUTC, utcOffset));
-    else if (qdt.timeSpec() == Qt::UTC)
+    else if (qTimeSpec(qdt) == Qt::UTC)
         result = KADateTime(qdt.date(), qdt.time(), UTC);
     else
     {
@@ -3378,12 +3386,21 @@ QString numString(int n, int width)
 // Return the UTC offset in a given time zone, for a specified date/time.
 int offsetAtZoneTime(const QTimeZone& tz, const QDateTime& zoneDateTime, int* secondOffset)
 {
-    if (!zoneDateTime.isValid()  // check for invalid time
-    ||  (zoneDateTime.timeSpec() != Qt::LocalTime && zoneDateTime.timeSpec() != Qt::TimeZone))
+    if (!zoneDateTime.isValid())  // check for invalid time
     {
         if (secondOffset)
             *secondOffset = InvalidOffset;
         return InvalidOffset;
+    }
+    switch (qTimeSpec(zoneDateTime))
+    {
+        case Qt::LocalTime:
+        case Qt::TimeZone:
+            break;
+        default:
+            if (secondOffset)
+                *secondOffset = InvalidOffset;
+            return InvalidOffset;
     }
     const int offset = tz.offsetFromUtc(zoneDateTime);
     if (secondOffset)
@@ -3408,7 +3425,7 @@ QDateTime toZoneTime(const QTimeZone& tz, const QDateTime& utcDateTime, bool* se
 {
     if (secondOccurrence)
         *secondOccurrence = false;
-    if (!utcDateTime.isValid() || utcDateTime.timeSpec() != Qt::UTC)
+    if (!utcDateTime.isValid() || qTimeSpec(utcDateTime) != Qt::UTC)
         return {};
     const QDateTime dt = utcDateTime.toTimeZone(tz);
     if (secondOccurrence)
@@ -3432,7 +3449,7 @@ QDateTime toZoneTime(const QTimeZone& tz, const QDateTime& utcDateTime, bool* se
 */
 bool checkTzTransitionOccurrence(const QDateTime& dt, const QDateTime& utcDateTime)
 {
-    if (dt.timeSpec() == Qt::TimeZone)
+    if (qTimeSpec(dt) == Qt::TimeZone)
     {
         // Check if there is a daylight savings shift around utcDateTime.
         // If the local time occurs twice around a time shift, the UTC time
