@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-09 02:40+0000\n"
+"POT-Creation-Date: 2024-01-04 02:35+0000\n"
 "PO-Revision-Date: 2023-12-11 23:31+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
@@ -1031,14 +1031,14 @@ msgstr ""
 "არ ჩაერევა, მაგრამ მას სათაურის ზოლი არ გააჩნია და მისი გადატანა ან ზომის "
 "შეცვლა შეუძლებელია.</li></ul></p>"
 
-#. i18n: ectx: label, entry (MessageButtonDelay), group (General)
+#. i18n: ectx: label, entry (Base_MessageButtonDelay), group (General)
 #: data/kalarmconfig.kcfg:153
 #, kde-format
 msgctxt "@label"
 msgid "Delay before message window buttons are enabled"
 msgstr "დაყოვნება შეტყობინების ფანჯრის ღილაკების გააქტიურებამდე"
 
-#. i18n: ectx: whatsthis, entry (MessageButtonDelay), group (General)
+#. i18n: ectx: whatsthis, entry (Base_MessageButtonDelay), group (General)
 #: data/kalarmconfig.kcfg:158
 #, kde-format
 msgctxt "@info:whatsthis"
@@ -3347,7 +3347,7 @@ msgctxt "@info"
 msgid "Error saving alarm template"
 msgstr "განგაშის ნიმუშის შენახვის შეცდომა"
 
-#: kalarmapp.cpp:814
+#: kalarmapp.cpp:815
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -3356,13 +3356,13 @@ msgstr ""
 "გასვლა განგაშებს გამორთავს (როცა ყველა განგაშის შეტყობინებს ფანჯარას "
 "დახურავთ)."
 
-#: kalarmapp.cpp:824
+#: kalarmapp.cpp:825
 #, kde-format
 msgctxt "@info"
 msgid "Quitting will cancel the scheduled Wake from Suspend."
 msgstr "გასვლა დაგეგმილ ძილიდან გაღვიძებას გააუქმებს."
 
-#: kalarmapp.cpp:837
+#: kalarmapp.cpp:838
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3372,37 +3372,37 @@ msgstr ""
 "გნებავთ, KAlarm სისტემაში შესვლისას გაეშვას? <nl/>(დაიმახსოვრეთ, რომ "
 "განგაშები გათიშულია, თუ KAlarm გაშვებული არაა.)"
 
-#: kalarmapp.cpp:839 lib/messagebox.h:110 lib/messagebox.h:119
+#: kalarmapp.cpp:840 lib/messagebox.h:110 lib/messagebox.h:119
 #: lib/messagebox.h:156
 #, kde-format
 msgid "Yes"
 msgstr "კი"
 
-#: kalarmapp.cpp:839 lib/messagebox.h:111 lib/messagebox.h:120
+#: kalarmapp.cpp:840 lib/messagebox.h:111 lib/messagebox.h:120
 #: lib/messagebox.h:157
 #, kde-format
 msgid "No"
 msgstr "არა"
 
-#: kalarmapp.cpp:1067
+#: kalarmapp.cpp:1068
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "Cannot create alarm: No default calendar is defined"
 msgstr "კალენდრის შექმნის შეცდომა: ნაგულისხმევი კალენდარი აღწერილი არაა"
 
-#: kalarmapp.cpp:1081
+#: kalarmapp.cpp:1082
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "Error creating alarm"
 msgstr "განგაშის შექმნის შეცდომა"
 
-#: kalarmapp.cpp:1137
+#: kalarmapp.cpp:1138
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "%1: Event <resource>%2</resource> not found, or not unique"
 msgstr "%1: მოვლენა <resource>%2</resource> ვერ ვიპოვე ან უნიკალური არაა"
 
-#: kalarmapp.cpp:1449
+#: kalarmapp.cpp:1450
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3414,13 +3414,13 @@ msgstr ""
 "კალენდარი ჩართული არაა.<nl/><nl/>ამის გასასწორებლად გამოიყენეთ "
 "<interface>ხედი|კალენდრების ჩვენება</interface>."
 
-#: kalarmapp.cpp:1489
+#: kalarmapp.cpp:1490
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "%1: Event <resource>%2</resource> not found, or not editable"
 msgstr "%1: მოვლენა <resource>%2</resource> ვერ ვიპოვე ან ჩასწორებადი არაა"
 
-#: kalarmapp.cpp:1517
+#: kalarmapp.cpp:1518
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3434,7 +3434,7 @@ msgstr ""
 "გასასწორებლად გამოიყენეთ <interface>ხედი|კალენდრების ჩვენება</interface>, "
 "რომ კალენდრის სტატუსები შეცვალოთ."
 
-#: kalarmapp.cpp:1525
+#: kalarmapp.cpp:1526
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3450,7 +3450,7 @@ msgstr ""
 "interface>, აირჩიეთ დაარქივებული განგაშის კალენდარი და ჩართეთ "
 "<interface>დაარქივებული განგაშებისთვის ნაგულისხმევად გამოყენება</interface>."
 
-#: kalarmapp.cpp:2498
+#: kalarmapp.cpp:2503
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -3460,19 +3460,19 @@ msgstr ""
 "ბრძანების შესრულება ჩავარდა\n"
 "(ბრძანების განგაშებისთვის ტერმინალი არჩეული არაა)"
 
-#: kalarmapp.cpp:2651
+#: kalarmapp.cpp:2656
 #, kde-format
 msgctxt "@info"
 msgid "Error creating temporary script file"
 msgstr "დროებითი სკრიპტის ფაილის შექმნის შეცდომა"
 
-#: kalarmapp.cpp:2747
+#: kalarmapp.cpp:2752
 #, kde-format
 msgctxt "@info"
 msgid "Pre-alarm action:"
 msgstr "განგაშისწინა ქმედება:"
 
-#: kalarmapp.cpp:2753
+#: kalarmapp.cpp:2758
 #, kde-format
 msgctxt "@info"
 msgid "Post-alarm action:"
@@ -4347,7 +4347,7 @@ msgstr ""
 msgid "Copyright © 2001-%1, David Jarvie"
 msgstr "ყველა უფლება დაცულია © 2001-%1, David Jarvie"
 
-#: mainwindow.cpp:438
+#: mainwindow.cpp:439
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -4357,115 +4357,115 @@ msgstr ""
 "მენიუების შექმნის მცდელობა ჩავარდა (ალბათ <filename>%1</filename> არ "
 "არსებობს, ან დაზიანებულია)"
 
-#: mainwindow.cpp:458
+#: mainwindow.cpp:459
 #, kde-format
 msgctxt "@action"
 msgid "&Templates..."
 msgstr "&შაბლონები..."
 
-#: mainwindow.cpp:462
+#: mainwindow.cpp:463
 #, kde-format
 msgctxt "@action"
 msgid "&New"
 msgstr "&ახალი"
 
-#: mainwindow.cpp:468
+#: mainwindow.cpp:469
 #, kde-format
 msgctxt "@action"
 msgid "Create Tem&plate..."
 msgstr "&შაბლონის შექმნა..."
 
-#: mainwindow.cpp:472
+#: mainwindow.cpp:473
 #, kde-format
 msgctxt "@action"
 msgid "&Copy..."
 msgstr "&კოპირება..."
 
-#: mainwindow.cpp:477 resourceselector.cpp:301
+#: mainwindow.cpp:478 resourceselector.cpp:301
 #, kde-format
 msgctxt "@action"
 msgid "&Edit..."
 msgstr "&ჩასწორება..."
 
-#: mainwindow.cpp:482
+#: mainwindow.cpp:483
 #, kde-format
 msgctxt "@action"
 msgid "&Delete"
 msgstr "&წაშლა"
 
-#: mainwindow.cpp:488
+#: mainwindow.cpp:489
 #, kde-format
 msgctxt "@action"
 msgid "Delete Without Confirmation"
 msgstr "წაშლა დადასტურების გარეშე"
 
-#: mainwindow.cpp:493
+#: mainwindow.cpp:494
 #, kde-format
 msgctxt "@action"
 msgid "Reac&tivate"
 msgstr "&რეაქტივაცია"
 
-#: mainwindow.cpp:504
+#: mainwindow.cpp:505
 #, kde-format
 msgctxt "@action"
 msgid "Wake From Suspend..."
 msgstr "გაღვიძება პროგრამული ძილიდან..."
 
-#: mainwindow.cpp:513
+#: mainwindow.cpp:514
 #, kde-format
 msgctxt "@action"
 msgid "Show Archi&ved Alarms"
 msgstr "&დაარქივებული განგაშების ჩვენება"
 
-#: mainwindow.cpp:518
+#: mainwindow.cpp:519
 #, kde-format
 msgctxt "@action"
 msgid "Show in System &Tray"
 msgstr "&საათთან ჩვენება"
 
-#: mainwindow.cpp:522
+#: mainwindow.cpp:523
 #, kde-format
 msgctxt "@action"
 msgid "Show &Calendars"
 msgstr "&კალენდრების ჩვენება"
 
-#: mainwindow.cpp:526
+#: mainwindow.cpp:527
 #, kde-format
 msgctxt "@action"
 msgid "Show Date Selector"
 msgstr "თარიღის ამრჩევის ჩვენება"
 
-#: mainwindow.cpp:534
+#: mainwindow.cpp:538
 #, kde-format
 msgctxt "@action"
 msgid "Import &Alarms..."
 msgstr "&განგაშების შემოტანა..."
 
-#: mainwindow.cpp:540
+#: mainwindow.cpp:544
 #, kde-format
 msgctxt "@action"
 msgid "Import Birthdays..."
 msgstr "დაბადებს დღეების შემოტანა..."
 
-#: mainwindow.cpp:545
+#: mainwindow.cpp:549
 #, kde-format
 msgctxt "@action"
 msgid "E&xport Selected Alarms..."
 msgstr "არჩეული განგაშების &გატანა..."
 
-#: mainwindow.cpp:549 resourceselector.cpp:319
+#: mainwindow.cpp:553 resourceselector.cpp:319
 #, kde-format
 msgctxt "@action"
 msgid "E&xport..."
 msgstr "გატანა..."
 
-#: mainwindow.cpp:553
+#: mainwindow.cpp:557
 #, kde-format
 msgctxt "@action"
 msgid "&Refresh Alarms"
 msgstr "განგაშების &განახლება"
 
-#: mainwindow.cpp:805
+#: mainwindow.cpp:809
 #, kde-format
 msgctxt "@info"
 msgid "Do you really want to delete the selected alarm?"
@@ -4473,7 +4473,7 @@ msgid_plural "Do you really want to delete the %1 selected alarms?"
 msgstr[0] "დარწმუნებული ბრძანდებით, რომ გნებავთ მონიშნული განგაშის წაშლა?"
 msgstr[1] "დარწმუნებული ბრძანდებით, რომ გნებავთ მონიშნული %1 განგაშის წაშლა?"
 
-#: mainwindow.cpp:807
+#: mainwindow.cpp:811
 #, kde-format
 msgctxt "@title:window"
 msgid "Delete Alarm"
@@ -4481,43 +4481,43 @@ msgid_plural "Delete Alarms"
 msgstr[0] "განგაშის წაშლა"
 msgstr[1] "განგაშის წაშლა"
 
-#: mainwindow.cpp:808 templatedlg.cpp:180
+#: mainwindow.cpp:812 templatedlg.cpp:180
 #, kde-format
 msgctxt "@action:button"
 msgid "&Delete"
 msgstr "&წაშლა"
 
-#: mainwindow.cpp:902
+#: mainwindow.cpp:906
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Hide Archived Alarms"
 msgstr "არქივირებული განგაშების დამალვა"
 
-#: mainwindow.cpp:903
+#: mainwindow.cpp:907
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show Archived Alarms"
 msgstr "არქივირებული განგაშების ჩვენება"
 
-#: mainwindow.cpp:979
+#: mainwindow.cpp:983
 #, kde-format
 msgctxt "@info"
 msgid "Import birthdays"
 msgstr "დაბადებს დღეების შემოტანა"
 
-#: mainwindow.cpp:1231
+#: mainwindow.cpp:1235
 #, kde-format
 msgctxt "@action Undo/Redo [action]"
 msgid "%1 %2"
 msgstr "%1 %2"
 
-#: mainwindow.cpp:1232
+#: mainwindow.cpp:1236
 #, kde-format
 msgctxt "@action Undo [action]: message"
 msgid "%1 %2: %3"
 msgstr "%1 %2: %3"
 
-#: mainwindow.cpp:1298
+#: mainwindow.cpp:1302
 #, kde-format
 msgid ""
 "<qt>This will hide the menu bar completely. You can show it again by typing "
@@ -4526,48 +4526,48 @@ msgstr ""
 "<qt>მენიუს ზოლი მთლიანად დაიმალება. მისი თავიდან საჩვენებლად დააწექით: %1.</"
 "qt>"
 
-#: mainwindow.cpp:1300
+#: mainwindow.cpp:1304
 #, kde-format
 msgid "Hide menu bar"
 msgstr "მენიუს ზოლის დამალვა"
 
-#: mainwindow.cpp:1540
+#: mainwindow.cpp:1544
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Display Alarm"
 msgstr "განგაშის ჩვენება"
 
-#: mainwindow.cpp:1542
+#: mainwindow.cpp:1546
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Email Alarm"
 msgstr "ელფოსტის განგაში"
 
-#: mainwindow.cpp:1544
+#: mainwindow.cpp:1548
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Command Alarm"
 msgstr "ბრძანების განგაში"
 
-#: mainwindow.cpp:1546
+#: mainwindow.cpp:1550
 #, kde-format
 msgctxt "@title:window"
 msgid "Alarm Type"
 msgstr "განგაშის ტიპი"
 
-#: mainwindow.cpp:1547
+#: mainwindow.cpp:1551
 #, kde-format
 msgctxt "@info"
 msgid "Choose alarm type to create:"
 msgstr "აირჩიეთ შესაქმნელი განგაშის ტიპი:"
 
-#: mainwindow.cpp:1680
+#: mainwindow.cpp:1684
 #, kde-format
 msgctxt "@action"
 msgid "Ena&ble"
 msgstr "&ჩართვა"
 
-#: mainwindow.cpp:1680
+#: mainwindow.cpp:1684
 #, kde-format
 msgctxt "@action"
 msgid "Disa&ble"
@@ -4836,25 +4836,25 @@ msgctxt "@info:whatsthis"
 msgid "Activate <application>KAlarm</application>"
 msgstr "<application>KAlarm</application>-ის აქტვაცია"
 
-#: messagewindow.cpp:1072
+#: messagewindow.cpp:1080
 #, kde-format
 msgctxt "@info"
 msgid "Do you really want to acknowledge this alarm?"
 msgstr "მართლა გნებავთ ამ განგაშის დადასტურება?"
 
-#: messagewindow.cpp:1073
+#: messagewindow.cpp:1081
 #, kde-format
 msgctxt "@action:button"
 msgid "Acknowledge Alarm"
 msgstr "განგაშის დადასტურება"
 
-#: messagewindow.cpp:1073
+#: messagewindow.cpp:1081
 #, kde-format
 msgctxt "@action:button"
 msgid "Acknowledge"
 msgstr "დადასტურება"
 
-#: messagewindow.cpp:1128
+#: messagewindow.cpp:1136
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Unable to locate this email in <application>KMail</application>"
@@ -5998,7 +5998,7 @@ msgctxt "@title:group"
 msgid "Alarm Message Windows"
 msgstr "განგაშის შეტყობინების ფანჯრები"
 
-#: prefdlg.cpp:1914
+#: prefdlg.cpp:1917
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -6014,25 +6014,25 @@ msgstr ""
 "შეტყობინების ფანჯრის ეკრანის შუაში მოთავსება, მაგრამ ფანჯრის ჩვენებიდან ცოტა "
 "ხნით ღილაკების გამორთვა.</item></list></para>"
 
-#: prefdlg.cpp:1917
+#: prefdlg.cpp:1920
 #, kde-format
 msgctxt "@option:radio"
 msgid "Position windows far from mouse cursor"
 msgstr "ფანჯრების თაგუნას კურსორიდან შორს მოთავსება"
 
-#: prefdlg.cpp:1921
+#: prefdlg.cpp:1924
 #, kde-format
 msgctxt "@option:radio"
 msgid "Center windows, delay activating window buttons"
 msgstr "ფანჯრები დაცენტრება. ფანჯრის ღილაკების გააქტიურების დაყოვნება"
 
-#: prefdlg.cpp:1929
+#: prefdlg.cpp:1933
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Button activation delay (seconds):"
 msgstr "ღილაკის აქტივაციის დაყოვნების დრო წამებში:"
 
-#: prefdlg.cpp:1936
+#: prefdlg.cpp:1940
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -6042,14 +6042,14 @@ msgstr ""
 "შეიყვანეთ, რამდენ ხანს იქნება ღილაკები გამორთული, როცა განგაშის შეტყობინების "
 "ფანჯარას გაჩვენებთ."
 
-#: prefdlg.cpp:1944
+#: prefdlg.cpp:1948
 #, kde-format
 msgctxt "@option:check"
 msgid "Message windows have a title bar and take keyboard focus"
 msgstr ""
 "შეტყობინებების ფანჯრებს სათაურის ზოლი აქვთ და კლავიატურის ფოკუსსაც იღებენ"
 
-#: prefdlg.cpp:1947
+#: prefdlg.cpp:1951
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""

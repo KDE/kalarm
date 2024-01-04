@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-09 02:40+0000\n"
+"POT-Creation-Date: 2024-01-04 02:35+0000\n"
 "PO-Revision-Date: 2023-11-09 16:28+0100\n"
 "Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
@@ -1018,14 +1018,14 @@ msgstr ""
 "jelikož nebude mít titulkový proužek, takže nepůjde posunovat ani měnit "
 "velikost.</li></ul></p>"
 
-#. i18n: ectx: label, entry (MessageButtonDelay), group (General)
+#. i18n: ectx: label, entry (Base_MessageButtonDelay), group (General)
 #: data/kalarmconfig.kcfg:153
 #, kde-format
 msgctxt "@label"
 msgid "Delay before message window buttons are enabled"
 msgstr "Zpoždění před aktivací tlačítek v okně se zprávou."
 
-#. i18n: ectx: whatsthis, entry (MessageButtonDelay), group (General)
+#. i18n: ectx: whatsthis, entry (Base_MessageButtonDelay), group (General)
 #: data/kalarmconfig.kcfg:158
 #, kde-format
 msgctxt "@info:whatsthis"
@@ -3317,7 +3317,7 @@ msgctxt "@info"
 msgid "Error saving alarm template"
 msgstr "Chyba při ukládání šablony upomínek"
 
-#: kalarmapp.cpp:814
+#: kalarmapp.cpp:815
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -3326,13 +3326,13 @@ msgstr ""
 "Ukončení zablokuje upomínky (jakmile bude zavřeno jakékoliv okno se zprávou "
 "upomínky)."
 
-#: kalarmapp.cpp:824
+#: kalarmapp.cpp:825
 #, kde-format
 msgctxt "@info"
 msgid "Quitting will cancel the scheduled Wake from Suspend."
 msgstr "Ukončení zruší naplánované probuzení z uspání."
 
-#: kalarmapp.cpp:837
+#: kalarmapp.cpp:838
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3340,38 +3340,38 @@ msgid ""
 "if KAlarm is not started.)"
 msgstr ""
 
-#: kalarmapp.cpp:839 lib/messagebox.h:110 lib/messagebox.h:119
+#: kalarmapp.cpp:840 lib/messagebox.h:110 lib/messagebox.h:119
 #: lib/messagebox.h:156
 #, kde-format
 msgid "Yes"
 msgstr "Ano"
 
-#: kalarmapp.cpp:839 lib/messagebox.h:111 lib/messagebox.h:120
+#: kalarmapp.cpp:840 lib/messagebox.h:111 lib/messagebox.h:120
 #: lib/messagebox.h:157
 #, kde-format
 msgid "No"
 msgstr "Ne"
 
-#: kalarmapp.cpp:1067
+#: kalarmapp.cpp:1068
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "Cannot create alarm: No default calendar is defined"
 msgstr ""
 
-#: kalarmapp.cpp:1081
+#: kalarmapp.cpp:1082
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "Error creating alarm"
 msgstr ""
 
-#: kalarmapp.cpp:1137
+#: kalarmapp.cpp:1138
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "%1: Event <resource>%2</resource> not found, or not unique"
 msgstr ""
 "%1: Událost <resource>%2</resource> nebyla nalezena, nebo není unikátní"
 
-#: kalarmapp.cpp:1449
+#: kalarmapp.cpp:1450
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3380,14 +3380,14 @@ msgid ""
 "Calendars</interface> to check or change calendar statuses."
 msgstr ""
 
-#: kalarmapp.cpp:1489
+#: kalarmapp.cpp:1490
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "%1: Event <resource>%2</resource> not found, or not editable"
 msgstr ""
 "%1: Událost <resource>%2</resource> nebyla nalezena, nebo nelze upravovat"
 
-#: kalarmapp.cpp:1517
+#: kalarmapp.cpp:1518
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3397,7 +3397,7 @@ msgid ""
 "statuses."
 msgstr ""
 
-#: kalarmapp.cpp:1525
+#: kalarmapp.cpp:1526
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3408,7 +3408,7 @@ msgid ""
 "interface>."
 msgstr ""
 
-#: kalarmapp.cpp:2498
+#: kalarmapp.cpp:2503
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -3418,19 +3418,19 @@ msgstr ""
 "Příkaz nelze spustit\n"
 "(není určen žádný terminál pro upomínky příkazem)"
 
-#: kalarmapp.cpp:2651
+#: kalarmapp.cpp:2656
 #, kde-format
 msgctxt "@info"
 msgid "Error creating temporary script file"
 msgstr "Chyba při vytváření dočasného souboru se skriptem"
 
-#: kalarmapp.cpp:2747
+#: kalarmapp.cpp:2752
 #, kde-format
 msgctxt "@info"
 msgid "Pre-alarm action:"
 msgstr "Činnost před upomínkou:"
 
-#: kalarmapp.cpp:2753
+#: kalarmapp.cpp:2758
 #, kde-format
 msgctxt "@info"
 msgid "Post-alarm action:"
@@ -4309,7 +4309,7 @@ msgstr "Osobní plánovač upomínek, příkazů a e-mailů od KDE"
 msgid "Copyright © 2001-%1, David Jarvie"
 msgstr "Autorská práva © 2001-%1, David Jarvie"
 
-#: mainwindow.cpp:438
+#: mainwindow.cpp:439
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -4319,115 +4319,115 @@ msgstr ""
 "Vytvoření nabídek selhalo (možná kvůli chybějícímu nebo poškozenému "
 "<filename>%1</filename>)"
 
-#: mainwindow.cpp:458
+#: mainwindow.cpp:459
 #, kde-format
 msgctxt "@action"
 msgid "&Templates..."
 msgstr "Š&ablony..."
 
-#: mainwindow.cpp:462
+#: mainwindow.cpp:463
 #, kde-format
 msgctxt "@action"
 msgid "&New"
 msgstr "&Nová"
 
-#: mainwindow.cpp:468
+#: mainwindow.cpp:469
 #, kde-format
 msgctxt "@action"
 msgid "Create Tem&plate..."
 msgstr "Vytvořit ša&blonu..."
 
-#: mainwindow.cpp:472
+#: mainwindow.cpp:473
 #, kde-format
 msgctxt "@action"
 msgid "&Copy..."
 msgstr "&Kopírovat..."
 
-#: mainwindow.cpp:477 resourceselector.cpp:301
+#: mainwindow.cpp:478 resourceselector.cpp:301
 #, kde-format
 msgctxt "@action"
 msgid "&Edit..."
 msgstr "&Upravit..."
 
-#: mainwindow.cpp:482
+#: mainwindow.cpp:483
 #, kde-format
 msgctxt "@action"
 msgid "&Delete"
 msgstr "&Smazat"
 
-#: mainwindow.cpp:488
+#: mainwindow.cpp:489
 #, kde-format
 msgctxt "@action"
 msgid "Delete Without Confirmation"
 msgstr "Smazat bez potvrzení"
 
-#: mainwindow.cpp:493
+#: mainwindow.cpp:494
 #, kde-format
 msgctxt "@action"
 msgid "Reac&tivate"
 msgstr "Znovu akti&vovat"
 
-#: mainwindow.cpp:504
+#: mainwindow.cpp:505
 #, kde-format
 msgctxt "@action"
 msgid "Wake From Suspend..."
 msgstr "Probudit z uspání..."
 
-#: mainwindow.cpp:513
+#: mainwindow.cpp:514
 #, kde-format
 msgctxt "@action"
 msgid "Show Archi&ved Alarms"
 msgstr "Z&obrazit archivované upomínky"
 
-#: mainwindow.cpp:518
+#: mainwindow.cpp:519
 #, kde-format
 msgctxt "@action"
 msgid "Show in System &Tray"
 msgstr "Zobrazi&t v systémovém panelu"
 
-#: mainwindow.cpp:522
+#: mainwindow.cpp:523
 #, kde-format
 msgctxt "@action"
 msgid "Show &Calendars"
 msgstr "Zobrazit &kalendáře"
 
-#: mainwindow.cpp:526
+#: mainwindow.cpp:527
 #, kde-format
 msgctxt "@action"
 msgid "Show Date Selector"
 msgstr "Zobrazit výběr data"
 
-#: mainwindow.cpp:534
+#: mainwindow.cpp:538
 #, kde-format
 msgctxt "@action"
 msgid "Import &Alarms..."
 msgstr "Importovat u&pomínky..."
 
-#: mainwindow.cpp:540
+#: mainwindow.cpp:544
 #, kde-format
 msgctxt "@action"
 msgid "Import Birthdays..."
 msgstr "Importovat narozeniny..."
 
-#: mainwindow.cpp:545
+#: mainwindow.cpp:549
 #, kde-format
 msgctxt "@action"
 msgid "E&xport Selected Alarms..."
 msgstr "E&xportovat vybrané upomínky..."
 
-#: mainwindow.cpp:549 resourceselector.cpp:319
+#: mainwindow.cpp:553 resourceselector.cpp:319
 #, kde-format
 msgctxt "@action"
 msgid "E&xport..."
 msgstr "E&xportovat..."
 
-#: mainwindow.cpp:553
+#: mainwindow.cpp:557
 #, kde-format
 msgctxt "@action"
 msgid "&Refresh Alarms"
 msgstr "Aktualizovat &upomínky"
 
-#: mainwindow.cpp:805
+#: mainwindow.cpp:809
 #, kde-format
 msgctxt "@info"
 msgid "Do you really want to delete the selected alarm?"
@@ -4436,7 +4436,7 @@ msgstr[0] "Opravdu si přejete odstranit vybranou upomínku?"
 msgstr[1] "Opravdu si přejete odstranit %1 vybrané upomínky?"
 msgstr[2] "Opravdu si přejete odstranit %1 vybraných upomínek?"
 
-#: mainwindow.cpp:807
+#: mainwindow.cpp:811
 #, kde-format
 msgctxt "@title:window"
 msgid "Delete Alarm"
@@ -4445,43 +4445,43 @@ msgstr[0] "Smazat upomínku"
 msgstr[1] "Smazat upomínky"
 msgstr[2] "Smazat upomínky"
 
-#: mainwindow.cpp:808 templatedlg.cpp:180
+#: mainwindow.cpp:812 templatedlg.cpp:180
 #, kde-format
 msgctxt "@action:button"
 msgid "&Delete"
 msgstr "&Smazat"
 
-#: mainwindow.cpp:902
+#: mainwindow.cpp:906
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Hide Archived Alarms"
 msgstr "Skrýt archivované upomínky"
 
-#: mainwindow.cpp:903
+#: mainwindow.cpp:907
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show Archived Alarms"
 msgstr "Zobrazit archivované upomínky"
 
-#: mainwindow.cpp:979
+#: mainwindow.cpp:983
 #, kde-format
 msgctxt "@info"
 msgid "Import birthdays"
 msgstr "Importovat narozeniny"
 
-#: mainwindow.cpp:1231
+#: mainwindow.cpp:1235
 #, kde-format
 msgctxt "@action Undo/Redo [action]"
 msgid "%1 %2"
 msgstr "%1 %2"
 
-#: mainwindow.cpp:1232
+#: mainwindow.cpp:1236
 #, kde-format
 msgctxt "@action Undo [action]: message"
 msgid "%1 %2: %3"
 msgstr "%1 %2: %3"
 
-#: mainwindow.cpp:1298
+#: mainwindow.cpp:1302
 #, kde-format
 msgid ""
 "<qt>This will hide the menu bar completely. You can show it again by typing "
@@ -4490,48 +4490,48 @@ msgstr ""
 "<qt>Toto úplně skryje panel nabídky. Můžete ji opětovně zobrazit pomocí %1.</"
 "qt>"
 
-#: mainwindow.cpp:1300
+#: mainwindow.cpp:1304
 #, kde-format
 msgid "Hide menu bar"
 msgstr "Skrýt nabídku"
 
-#: mainwindow.cpp:1540
+#: mainwindow.cpp:1544
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Display Alarm"
 msgstr "Upomínka zobrazením"
 
-#: mainwindow.cpp:1542
+#: mainwindow.cpp:1546
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Email Alarm"
 msgstr "Poštovní upomínka"
 
-#: mainwindow.cpp:1544
+#: mainwindow.cpp:1548
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Command Alarm"
 msgstr "Upomínka s příkazem"
 
-#: mainwindow.cpp:1546
+#: mainwindow.cpp:1550
 #, kde-format
 msgctxt "@title:window"
 msgid "Alarm Type"
 msgstr "Typ upomínky"
 
-#: mainwindow.cpp:1547
+#: mainwindow.cpp:1551
 #, kde-format
 msgctxt "@info"
 msgid "Choose alarm type to create:"
 msgstr "Vybrat typ upomínky pro vytvoření:"
 
-#: mainwindow.cpp:1680
+#: mainwindow.cpp:1684
 #, kde-format
 msgctxt "@action"
 msgid "Ena&ble"
 msgstr "Povo&lit"
 
-#: mainwindow.cpp:1680
+#: mainwindow.cpp:1684
 #, kde-format
 msgctxt "@action"
 msgid "Disa&ble"
@@ -4806,25 +4806,25 @@ msgctxt "@info:whatsthis"
 msgid "Activate <application>KAlarm</application>"
 msgstr "Aktivovat <application>KAlarm</application>"
 
-#: messagewindow.cpp:1072
+#: messagewindow.cpp:1080
 #, kde-format
 msgctxt "@info"
 msgid "Do you really want to acknowledge this alarm?"
 msgstr "Opravdu si přejete potvrdit tuto upomínku?"
 
-#: messagewindow.cpp:1073
+#: messagewindow.cpp:1081
 #, kde-format
 msgctxt "@action:button"
 msgid "Acknowledge Alarm"
 msgstr "Potvrdit upomínku"
 
-#: messagewindow.cpp:1073
+#: messagewindow.cpp:1081
 #, kde-format
 msgctxt "@action:button"
 msgid "Acknowledge"
 msgstr "Potvrdit"
 
-#: messagewindow.cpp:1128
+#: messagewindow.cpp:1136
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Unable to locate this email in <application>KMail</application>"
@@ -5941,7 +5941,7 @@ msgctxt "@title:group"
 msgid "Alarm Message Windows"
 msgstr "Okna zpráv upomínek"
 
-#: prefdlg.cpp:1914
+#: prefdlg.cpp:1917
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5957,25 +5957,25 @@ msgstr ""
 "upomínkou doprostřed obrazovky, ale po zobrazení okna na chvíli deaktivovat "
 "tlačítka.</item></list></para>"
 
-#: prefdlg.cpp:1917
+#: prefdlg.cpp:1920
 #, kde-format
 msgctxt "@option:radio"
 msgid "Position windows far from mouse cursor"
 msgstr "Umístit okno co nejdále od kurzoru myši"
 
-#: prefdlg.cpp:1921
+#: prefdlg.cpp:1924
 #, kde-format
 msgctxt "@option:radio"
 msgid "Center windows, delay activating window buttons"
 msgstr "Umístit okno doprostřed a odložit aktivaci tlačítek"
 
-#: prefdlg.cpp:1929
+#: prefdlg.cpp:1933
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Button activation delay (seconds):"
 msgstr "Doba odložení aktivace tlačítek (sekund):"
 
-#: prefdlg.cpp:1936
+#: prefdlg.cpp:1940
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5985,13 +5985,13 @@ msgstr ""
 "Zadejte, jak dlouho po zobrazení okna s upomínkou mají zůstat tlačítka "
 "deaktivovány."
 
-#: prefdlg.cpp:1944
+#: prefdlg.cpp:1948
 #, kde-format
 msgctxt "@option:check"
 msgid "Message windows have a title bar and take keyboard focus"
 msgstr "Okno s upomínkou má titulkový proužek a získá zaměření klávesnice"
 
-#: prefdlg.cpp:1947
+#: prefdlg.cpp:1951
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
