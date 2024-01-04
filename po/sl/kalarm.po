@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-01-03 01:36+0000\n"
+"POT-Creation-Date: 2024-01-04 01:34+0000\n"
 "PO-Revision-Date: 2023-10-09 07:28+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -1039,14 +1039,14 @@ msgstr ""
 "nima nazivne vrstice in ga ni mogoče premakniti ali mu spremeniti velikosti."
 "</li></ul></p>"
 
-#. i18n: ectx: label, entry (MessageButtonDelay), group (General)
+#. i18n: ectx: label, entry (Base_MessageButtonDelay), group (General)
 #: data/kalarmconfig.kcfg:156
 #, kde-format
 msgctxt "@label"
 msgid "Delay before message window buttons are enabled"
 msgstr "Zakasnitev omogočanja gumbov v sporočilnem oknu"
 
-#. i18n: ectx: whatsthis, entry (MessageButtonDelay), group (General)
+#. i18n: ectx: whatsthis, entry (Base_MessageButtonDelay), group (General)
 #: data/kalarmconfig.kcfg:161
 #, kde-format
 msgctxt "@info:whatsthis"
@@ -3357,7 +3357,7 @@ msgctxt "@info"
 msgid "Error saving alarm template"
 msgstr "Napaka med shranjevanjem predloge alarma"
 
-#: kalarmapp.cpp:811
+#: kalarmapp.cpp:812
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -3366,7 +3366,7 @@ msgstr ""
 "V primeru, da končate, bodo alarmi onemogočeni (potem, ko bodo zaprta vsa "
 "okna s sporočili alarmov)."
 
-#: kalarmapp.cpp:821
+#: kalarmapp.cpp:822
 #, kde-format
 msgctxt "@info"
 msgid "Quitting will cancel the scheduled Wake from Suspend."
@@ -3374,7 +3374,7 @@ msgstr ""
 "V primeru, da končate, boste preklicali razporejeno zbujanje iz "
 "pripravljenosti."
 
-#: kalarmapp.cpp:834
+#: kalarmapp.cpp:835
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3384,37 +3384,37 @@ msgstr ""
 "Ali želite program KAlarm zagnati ob prijavi?<nl/>Vedite, da bodo alarmi "
 "onemogočeni, če KAlarm ne bo zagnan."
 
-#: kalarmapp.cpp:836 lib/messagebox.h:105 lib/messagebox.h:114
+#: kalarmapp.cpp:837 lib/messagebox.h:105 lib/messagebox.h:114
 #: lib/messagebox.h:151
 #, kde-format
 msgid "Yes"
 msgstr "Da"
 
-#: kalarmapp.cpp:836 lib/messagebox.h:106 lib/messagebox.h:115
+#: kalarmapp.cpp:837 lib/messagebox.h:106 lib/messagebox.h:115
 #: lib/messagebox.h:152
 #, kde-format
 msgid "No"
 msgstr "Ne"
 
-#: kalarmapp.cpp:1064
+#: kalarmapp.cpp:1065
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "Cannot create alarm: No default calendar is defined"
 msgstr "Ni mogoče ustvariti alarma: Ni določen privzeti koledar"
 
-#: kalarmapp.cpp:1078
+#: kalarmapp.cpp:1079
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "Error creating alarm"
 msgstr "Napaka pri ustvarjanju alarma"
 
-#: kalarmapp.cpp:1134
+#: kalarmapp.cpp:1135
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "%1: Event <resource>%2</resource> not found, or not unique"
 msgstr "%1: Dogodka <resource>%2</resource> ni moč najti ali pa ni edinstven"
 
-#: kalarmapp.cpp:1446
+#: kalarmapp.cpp:1447
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3427,14 +3427,14 @@ msgstr ""
 "<interface>Pogled | Pokaži koledarje</interface> da preverite ali spremenite "
 "stanja koledarjev."
 
-#: kalarmapp.cpp:1486
+#: kalarmapp.cpp:1487
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "%1: Event <resource>%2</resource> not found, or not editable"
 msgstr ""
 "%1: Dogodka <resource>%2</resource> ni moč najti ali pa ga ni moč urejati"
 
-#: kalarmapp.cpp:1514
+#: kalarmapp.cpp:1515
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3448,7 +3448,7 @@ msgstr ""
 "<interface>Pogled | Pokaži koledarje</interface> da preverite ali spremenite "
 "stanja koledarjev."
 
-#: kalarmapp.cpp:1522
+#: kalarmapp.cpp:1523
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3464,7 +3464,7 @@ msgstr ""
 "arhiviranih alarmov in preverite da je <interface> Uporabi kot privzet za "
 "arhivirane alarme</interface>."
 
-#: kalarmapp.cpp:2495
+#: kalarmapp.cpp:2500
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -3474,19 +3474,19 @@ msgstr ""
 "Ni bilo mogoče izvesti ukaza\n"
 "(za ukazne alarme ni izbran noben terminal)"
 
-#: kalarmapp.cpp:2648
+#: kalarmapp.cpp:2653
 #, kde-format
 msgctxt "@info"
 msgid "Error creating temporary script file"
 msgstr "Napaka med ustvarjanjem začasne skriptne datoteke"
 
-#: kalarmapp.cpp:2744
+#: kalarmapp.cpp:2749
 #, kde-format
 msgctxt "@info"
 msgid "Pre-alarm action:"
 msgstr "Dejanje pred alarmom:"
 
-#: kalarmapp.cpp:2750
+#: kalarmapp.cpp:2755
 #, kde-format
 msgctxt "@info"
 msgid "Post-alarm action:"
@@ -4372,7 +4372,7 @@ msgstr "Osebni razporejevalnik alarmov, ukazov in e-pošte s strani KDE"
 msgid "Copyright © 2001-%1, David Jarvie"
 msgstr "Copyright © 2001-%1, David Jarvie"
 
-#: mainwindow.cpp:439
+#: mainwindow.cpp:440
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -4382,115 +4382,115 @@ msgstr ""
 "Ni uspelo ustvariti menijev (mogoče <filename>%1</filename> manjka ali pa je "
 "okvarjen)"
 
-#: mainwindow.cpp:459
+#: mainwindow.cpp:460
 #, kde-format
 msgctxt "@action"
 msgid "Templates..."
 msgstr "Predloge..."
 
-#: mainwindow.cpp:463 templatedlg.cpp:73
+#: mainwindow.cpp:464 templatedlg.cpp:73
 #, kde-format
 msgctxt "@action"
 msgid "New"
 msgstr "Nova"
 
-#: mainwindow.cpp:469
+#: mainwindow.cpp:470
 #, kde-format
 msgctxt "@action"
 msgid "Create Template..."
 msgstr "Ustvari predlogo..."
 
-#: mainwindow.cpp:473
+#: mainwindow.cpp:474
 #, kde-format
 msgctxt "@action"
 msgid "Copy..."
 msgstr "Kopiraj..."
 
-#: mainwindow.cpp:478 resourceselector.cpp:301
+#: mainwindow.cpp:479 resourceselector.cpp:301
 #, kde-format
 msgctxt "@action"
 msgid "Edit..."
 msgstr "Uredi..."
 
-#: mainwindow.cpp:483
+#: mainwindow.cpp:484
 #, kde-format
 msgctxt "@action"
 msgid "Delete"
 msgstr "Izbriši"
 
-#: mainwindow.cpp:489
+#: mainwindow.cpp:490
 #, kde-format
 msgctxt "@action"
 msgid "Delete Without Confirmation"
 msgstr "Izbriši brez potrditve"
 
-#: mainwindow.cpp:494
+#: mainwindow.cpp:495
 #, kde-format
 msgctxt "@action"
 msgid "Reactivate"
 msgstr "Znova omogoči"
 
-#: mainwindow.cpp:508
+#: mainwindow.cpp:509
 #, kde-format
 msgctxt "@action"
 msgid "Wake From Suspend..."
 msgstr "Zbudi iz pripravljenosti ..."
 
-#: mainwindow.cpp:518
+#: mainwindow.cpp:519
 #, kde-format
 msgctxt "@action"
 msgid "Show Archived Alarms"
 msgstr "Pokaži arhivirane alarme"
 
-#: mainwindow.cpp:523
+#: mainwindow.cpp:524
 #, kde-format
 msgctxt "@action"
 msgid "Show in System Tray"
 msgstr "Pokaži v sistemski vrstici"
 
-#: mainwindow.cpp:527
+#: mainwindow.cpp:528
 #, kde-format
 msgctxt "@action"
 msgid "Show Calendars"
 msgstr "Pokaži koledarje"
 
-#: mainwindow.cpp:531
+#: mainwindow.cpp:532
 #, kde-format
 msgctxt "@action"
 msgid "Show Date Selector"
 msgstr "Prikaži izbirnik datumov"
 
-#: mainwindow.cpp:539
+#: mainwindow.cpp:543
 #, kde-format
 msgctxt "@action"
 msgid "Import Alarms..."
 msgstr "Uvozi alarme..."
 
-#: mainwindow.cpp:545
+#: mainwindow.cpp:549
 #, kde-format
 msgctxt "@action"
 msgid "Import Birthdays..."
 msgstr "Uvozi rojstne dneve..."
 
-#: mainwindow.cpp:550
+#: mainwindow.cpp:554
 #, kde-format
 msgctxt "@action"
 msgid "Export Selected Alarms..."
 msgstr "Izvozi izbrane alarme..."
 
-#: mainwindow.cpp:554 resourceselector.cpp:319
+#: mainwindow.cpp:558 resourceselector.cpp:319
 #, kde-format
 msgctxt "@action"
 msgid "Export..."
 msgstr "Izvozi..."
 
-#: mainwindow.cpp:558
+#: mainwindow.cpp:562
 #, kde-format
 msgctxt "@action"
 msgid "Refresh Alarms"
 msgstr "Osveži alarme"
 
-#: mainwindow.cpp:810
+#: mainwindow.cpp:814
 #, kde-format
 msgctxt "@info"
 msgid "Do you really want to delete the selected alarm?"
@@ -4500,7 +4500,7 @@ msgstr[1] "Ali zares želite izbrisati %1 izbrana alarma?"
 msgstr[2] "Ali zares želite izbrisati %1 izbrane alarme?"
 msgstr[3] "Ali zares želite izbrisati %1 izbranih alarmov?"
 
-#: mainwindow.cpp:812
+#: mainwindow.cpp:816
 #, kde-format
 msgctxt "@title:window"
 msgid "Delete Alarm"
@@ -4510,43 +4510,43 @@ msgstr[1] "Izbriši alarma"
 msgstr[2] "Izbriši alarme"
 msgstr[3] "Izbriši alarme"
 
-#: mainwindow.cpp:813 recurrenceedit.cpp:318 templatedlg.cpp:92
+#: mainwindow.cpp:817 recurrenceedit.cpp:318 templatedlg.cpp:92
 #, kde-format
 msgctxt "@action:button"
 msgid "Delete"
 msgstr "Izbriši"
 
-#: mainwindow.cpp:907
+#: mainwindow.cpp:911
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Hide Archived Alarms"
 msgstr "Skrij arhivirane alarme"
 
-#: mainwindow.cpp:908
+#: mainwindow.cpp:912
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show Archived Alarms"
 msgstr "Pokaži arhivirane alarme"
 
-#: mainwindow.cpp:984
+#: mainwindow.cpp:988
 #, kde-format
 msgctxt "@info"
 msgid "Import birthdays"
 msgstr "Uvozi rojstne dneve"
 
-#: mainwindow.cpp:1236
+#: mainwindow.cpp:1240
 #, kde-format
 msgctxt "@action Undo/Redo [action]"
 msgid "%1 %2"
 msgstr "%1: %2"
 
-#: mainwindow.cpp:1237
+#: mainwindow.cpp:1241
 #, kde-format
 msgctxt "@action Undo [action]: message"
 msgid "%1 %2: %3"
 msgstr "%1 %2: %3"
 
-#: mainwindow.cpp:1303
+#: mainwindow.cpp:1307
 #, kde-format
 msgid ""
 "<qt>This will hide the menu bar completely. You can show it again by typing "
@@ -4555,48 +4555,48 @@ msgstr ""
 "<qt>To bo popolnoma skrilo letvico z menijem. Spet jo lahko pokažete, če "
 "vtipkate %1.</qt>"
 
-#: mainwindow.cpp:1305
+#: mainwindow.cpp:1309
 #, kde-format
 msgid "Hide menu bar"
 msgstr "Skrij letvico z menijem"
 
-#: mainwindow.cpp:1545
+#: mainwindow.cpp:1549
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Display Alarm"
 msgstr "Pokaži alarm"
 
-#: mainwindow.cpp:1547
+#: mainwindow.cpp:1551
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Email Alarm"
 msgstr "E-poštni alarm"
 
-#: mainwindow.cpp:1549
+#: mainwindow.cpp:1553
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Command Alarm"
 msgstr "Ukazni alarm"
 
-#: mainwindow.cpp:1551
+#: mainwindow.cpp:1555
 #, kde-format
 msgctxt "@title:window"
 msgid "Alarm Type"
 msgstr "Vrsta alarma"
 
-#: mainwindow.cpp:1552
+#: mainwindow.cpp:1556
 #, kde-format
 msgctxt "@info"
 msgid "Choose alarm type to create:"
 msgstr "Izberite vrsto alarma, ki bo ustvarjen:"
 
-#: mainwindow.cpp:1685
+#: mainwindow.cpp:1689
 #, kde-format
 msgctxt "@action"
 msgid "Enable"
 msgstr "Omogoči"
 
-#: mainwindow.cpp:1685
+#: mainwindow.cpp:1689
 #, kde-format
 msgctxt "@action"
 msgid "Disable"
@@ -4875,25 +4875,25 @@ msgctxt "@info:whatsthis"
 msgid "Activate <application>KAlarm</application>"
 msgstr "Aktiviraj <application>KAlarm</application>"
 
-#: messagewindow.cpp:1069
+#: messagewindow.cpp:1075
 #, kde-format
 msgctxt "@info"
 msgid "Do you really want to acknowledge this alarm?"
 msgstr "Ali zares želite potrditi seznanjenost z alarmom?"
 
-#: messagewindow.cpp:1070
+#: messagewindow.cpp:1076
 #, kde-format
 msgctxt "@action:button"
 msgid "Acknowledge Alarm"
 msgstr "Potrdi seznanjenost z alarmom"
 
-#: messagewindow.cpp:1070
+#: messagewindow.cpp:1076
 #, kde-format
 msgctxt "@action:button"
 msgid "Acknowledge"
 msgstr "Potrdi"
 
-#: messagewindow.cpp:1125
+#: messagewindow.cpp:1131
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Unable to locate this email in <application>KMail</application>"
@@ -6053,7 +6053,7 @@ msgctxt "@title:group"
 msgid "Alarm Message Windows"
 msgstr "Okna s sporočili alarmov"
 
-#: prefdlg.cpp:1968
+#: prefdlg.cpp:1971
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -6068,25 +6068,25 @@ msgstr ""
 "trenutne lege miškinega kazalca</item><item>Postavi okna sporočil alarmov na "
 "sredino zaslona, vendar za kratek čas onemogoči gumbe.</item></list></para>"
 
-#: prefdlg.cpp:1971
+#: prefdlg.cpp:1974
 #, kde-format
 msgctxt "@option:radio"
 msgid "Position windows far from mouse cursor"
 msgstr "Postavi okna čim dlje od miškine kazalke"
 
-#: prefdlg.cpp:1975
+#: prefdlg.cpp:1978
 #, kde-format
 msgctxt "@option:radio"
 msgid "Center windows, delay activating window buttons"
 msgstr "Usredini okna, zakasni omogočanje gumbov v oknih"
 
-#: prefdlg.cpp:1983
+#: prefdlg.cpp:1987
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Button activation delay (seconds):"
 msgstr "Zakasnitev omogočanja gumbov (sekunde):"
 
-#: prefdlg.cpp:1990
+#: prefdlg.cpp:1995
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -6096,13 +6096,13 @@ msgstr ""
 "Vnesite, za koliko časa po prikazu okna sporočila alarma naj bodo gumbi "
 "onemogočeni."
 
-#: prefdlg.cpp:1998
+#: prefdlg.cpp:2003
 #, kde-format
 msgctxt "@option:check"
 msgid "Message windows have a title bar and take keyboard focus"
 msgstr "Sporočilna okna imajo nazivno vrstico in prevzamejo žarišče tipkovnice"
 
-#: prefdlg.cpp:2001
+#: prefdlg.cpp:2006
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""

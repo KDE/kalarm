@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-01-03 01:36+0000\n"
+"POT-Creation-Date: 2024-01-04 01:34+0000\n"
 "PO-Revision-Date: 2014-09-12 16:04+0200\n"
 "Last-Translator: Bjørn Steensrud <bjornst@skogkatt.homelinux.org>\n"
 "Language-Team: Norwegian Bokmål <l10n-no@lister.huftis.org>\n"
@@ -1035,14 +1035,14 @@ msgstr ""
 "det har ingen tittellinje og kan ikke flyttes eller endre størrelse.</li></"
 "ul></p>"
 
-#. i18n: ectx: label, entry (MessageButtonDelay), group (General)
+#. i18n: ectx: label, entry (Base_MessageButtonDelay), group (General)
 #: data/kalarmconfig.kcfg:156
 #, kde-format
 msgctxt "@label"
 msgid "Delay before message window buttons are enabled"
 msgstr "Forsink aktivering av knappene på meldingsvinduet"
 
-#. i18n: ectx: whatsthis, entry (MessageButtonDelay), group (General)
+#. i18n: ectx: whatsthis, entry (Base_MessageButtonDelay), group (General)
 #: data/kalarmconfig.kcfg:161
 #, kde-format
 msgctxt "@info:whatsthis"
@@ -3349,20 +3349,20 @@ msgctxt "@info"
 msgid "Error saving alarm template"
 msgstr "Feil ved lagring av varslingsmal"
 
-#: kalarmapp.cpp:811
+#: kalarmapp.cpp:812
 #, kde-format
 msgctxt "@info"
 msgid ""
 "Quitting will disable alarms (once any alarm message windows are closed)."
 msgstr "Avslutt vil slå av varslinger (når alle varslingsvinduene er lukket)."
 
-#: kalarmapp.cpp:821
+#: kalarmapp.cpp:822
 #, kde-format
 msgctxt "@info"
 msgid "Quitting will cancel the scheduled Wake from Suspend."
 msgstr "Om det avsluttes, kanselleres den gjeldende vekking fra dvalemodus"
 
-#: kalarmapp.cpp:834
+#: kalarmapp.cpp:835
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3372,38 +3372,38 @@ msgstr ""
 "Vil du at KAlarm skal starte når du logger inn?<nl/> (Merk at varslinger "
 "blir slått av hvis KAlarm ikke er startet.)"
 
-#: kalarmapp.cpp:836 lib/messagebox.h:105 lib/messagebox.h:114
+#: kalarmapp.cpp:837 lib/messagebox.h:105 lib/messagebox.h:114
 #: lib/messagebox.h:151
 #, kde-format
 msgid "Yes"
 msgstr ""
 
-#: kalarmapp.cpp:836 lib/messagebox.h:106 lib/messagebox.h:115
+#: kalarmapp.cpp:837 lib/messagebox.h:106 lib/messagebox.h:115
 #: lib/messagebox.h:152
 #, kde-format
 msgid "No"
 msgstr ""
 
-#: kalarmapp.cpp:1064
+#: kalarmapp.cpp:1065
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "Cannot create alarm: No default calendar is defined"
 msgstr ""
 
-#: kalarmapp.cpp:1078
+#: kalarmapp.cpp:1079
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "Error creating alarm"
 msgstr ""
 
-#: kalarmapp.cpp:1134
+#: kalarmapp.cpp:1135
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "%1: Event <resource>%2</resource> not found, or not unique"
 msgstr ""
 "%1: Hendelsen <resource>%2</resource> ble ikke funnet, eller er ikke entydig"
 
-#: kalarmapp.cpp:1446
+#: kalarmapp.cpp:1447
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3416,14 +3416,14 @@ msgstr ""
 "<interface>Vis | vis kalendere</interface> for å undersøke eller endre "
 "kalenderstatuser."
 
-#: kalarmapp.cpp:1486
+#: kalarmapp.cpp:1487
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "%1: Event <resource>%2</resource> not found, or not editable"
 msgstr ""
 "%1: Hendelsen <resource>%2</resource> ble ikke funnet, eller kan ikke endres"
 
-#: kalarmapp.cpp:1514
+#: kalarmapp.cpp:1515
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3433,7 +3433,7 @@ msgid ""
 "statuses."
 msgstr ""
 
-#: kalarmapp.cpp:1522
+#: kalarmapp.cpp:1523
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3444,7 +3444,7 @@ msgid ""
 "interface>."
 msgstr ""
 
-#: kalarmapp.cpp:2495
+#: kalarmapp.cpp:2500
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -3452,19 +3452,19 @@ msgid ""
 "(no terminal selected for command alarms)"
 msgstr ""
 
-#: kalarmapp.cpp:2648
+#: kalarmapp.cpp:2653
 #, kde-format
 msgctxt "@info"
 msgid "Error creating temporary script file"
 msgstr "Klarte ikke å opprette en midlertidig skriptfil"
 
-#: kalarmapp.cpp:2744
+#: kalarmapp.cpp:2749
 #, kde-format
 msgctxt "@info"
 msgid "Pre-alarm action:"
 msgstr "Handling før varsling:"
 
-#: kalarmapp.cpp:2750
+#: kalarmapp.cpp:2755
 #, kde-format
 msgctxt "@info"
 msgid "Post-alarm action:"
@@ -4333,7 +4333,7 @@ msgstr ""
 msgid "Copyright © 2001-%1, David Jarvie"
 msgstr ""
 
-#: mainwindow.cpp:439
+#: mainwindow.cpp:440
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -4343,7 +4343,7 @@ msgstr ""
 "Klarer ikke opprette menyer (<filename>%1</filename> er kanskje ødelagt "
 "eller mangler)"
 
-#: mainwindow.cpp:459
+#: mainwindow.cpp:460
 #, fuzzy, kde-format
 #| msgctxt "@action"
 #| msgid "&Templates..."
@@ -4351,13 +4351,13 @@ msgctxt "@action"
 msgid "Templates..."
 msgstr "&Maler …"
 
-#: mainwindow.cpp:463 templatedlg.cpp:73
+#: mainwindow.cpp:464 templatedlg.cpp:73
 #, kde-format
 msgctxt "@action"
 msgid "New"
 msgstr "Ny"
 
-#: mainwindow.cpp:469
+#: mainwindow.cpp:470
 #, fuzzy, kde-format
 #| msgctxt "@action"
 #| msgid "Create Tem&plate..."
@@ -4365,7 +4365,7 @@ msgctxt "@action"
 msgid "Create Template..."
 msgstr "Lag M&al …"
 
-#: mainwindow.cpp:473
+#: mainwindow.cpp:474
 #, fuzzy, kde-format
 #| msgctxt "@action"
 #| msgid "&Copy..."
@@ -4373,7 +4373,7 @@ msgctxt "@action"
 msgid "Copy..."
 msgstr "&Kopier …"
 
-#: mainwindow.cpp:478 resourceselector.cpp:301
+#: mainwindow.cpp:479 resourceselector.cpp:301
 #, fuzzy, kde-format
 #| msgctxt "@action:button"
 #| msgid "Edit..."
@@ -4381,7 +4381,7 @@ msgctxt "@action"
 msgid "Edit..."
 msgstr "Rediger …"
 
-#: mainwindow.cpp:483
+#: mainwindow.cpp:484
 #, fuzzy, kde-format
 #| msgctxt "@action:button"
 #| msgid "Delete"
@@ -4389,13 +4389,13 @@ msgctxt "@action"
 msgid "Delete"
 msgstr "Slett"
 
-#: mainwindow.cpp:489
+#: mainwindow.cpp:490
 #, kde-format
 msgctxt "@action"
 msgid "Delete Without Confirmation"
 msgstr "Slett uten bekreftelse"
 
-#: mainwindow.cpp:494
+#: mainwindow.cpp:495
 #, fuzzy, kde-format
 #| msgctxt "@action"
 #| msgid "Reac&tivate"
@@ -4403,13 +4403,13 @@ msgctxt "@action"
 msgid "Reactivate"
 msgstr "Reak&tiver"
 
-#: mainwindow.cpp:508
+#: mainwindow.cpp:509
 #, kde-format
 msgctxt "@action"
 msgid "Wake From Suspend..."
 msgstr "Vekk fra dvalemodus …"
 
-#: mainwindow.cpp:518
+#: mainwindow.cpp:519
 #, fuzzy, kde-format
 #| msgctxt "@info:tooltip"
 #| msgid "Show Archived Alarms"
@@ -4417,7 +4417,7 @@ msgctxt "@action"
 msgid "Show Archived Alarms"
 msgstr "Vis arkiverte varslinger"
 
-#: mainwindow.cpp:523
+#: mainwindow.cpp:524
 #, fuzzy, kde-format
 #| msgctxt "@action"
 #| msgid "Show in System &Tray"
@@ -4425,7 +4425,7 @@ msgctxt "@action"
 msgid "Show in System Tray"
 msgstr "Vis i system&kurv"
 
-#: mainwindow.cpp:527
+#: mainwindow.cpp:528
 #, fuzzy, kde-format
 #| msgctxt "@action"
 #| msgid "Show &Calendars"
@@ -4433,13 +4433,13 @@ msgctxt "@action"
 msgid "Show Calendars"
 msgstr "Vis &kalendere"
 
-#: mainwindow.cpp:531
+#: mainwindow.cpp:532
 #, kde-format
 msgctxt "@action"
 msgid "Show Date Selector"
 msgstr ""
 
-#: mainwindow.cpp:539
+#: mainwindow.cpp:543
 #, fuzzy, kde-format
 #| msgctxt "@action"
 #| msgid "Import &Alarms..."
@@ -4447,13 +4447,13 @@ msgctxt "@action"
 msgid "Import Alarms..."
 msgstr "Importer &varslinger …"
 
-#: mainwindow.cpp:545
+#: mainwindow.cpp:549
 #, kde-format
 msgctxt "@action"
 msgid "Import Birthdays..."
 msgstr ""
 
-#: mainwindow.cpp:550
+#: mainwindow.cpp:554
 #, fuzzy, kde-format
 #| msgctxt "@action"
 #| msgid "E&xport Selected Alarms..."
@@ -4461,7 +4461,7 @@ msgctxt "@action"
 msgid "Export Selected Alarms..."
 msgstr "E&ksporter markerte varslinger …"
 
-#: mainwindow.cpp:554 resourceselector.cpp:319
+#: mainwindow.cpp:558 resourceselector.cpp:319
 #, fuzzy, kde-format
 #| msgctxt "@action"
 #| msgid "E&xport..."
@@ -4469,7 +4469,7 @@ msgctxt "@action"
 msgid "Export..."
 msgstr "E&ksporter …"
 
-#: mainwindow.cpp:558
+#: mainwindow.cpp:562
 #, fuzzy, kde-format
 #| msgctxt "@action"
 #| msgid "&Refresh Alarms"
@@ -4477,7 +4477,7 @@ msgctxt "@action"
 msgid "Refresh Alarms"
 msgstr "F&risk opp varslinger"
 
-#: mainwindow.cpp:810
+#: mainwindow.cpp:814
 #, kde-format
 msgctxt "@info"
 msgid "Do you really want to delete the selected alarm?"
@@ -4485,7 +4485,7 @@ msgid_plural "Do you really want to delete the %1 selected alarms?"
 msgstr[0] "Skal valgt varsling slettes?"
 msgstr[1] "Skal følgende %1 varslinger slettes?"
 
-#: mainwindow.cpp:812
+#: mainwindow.cpp:816
 #, kde-format
 msgctxt "@title:window"
 msgid "Delete Alarm"
@@ -4493,85 +4493,85 @@ msgid_plural "Delete Alarms"
 msgstr[0] "Slett varsling"
 msgstr[1] "Slett varslinger"
 
-#: mainwindow.cpp:813 recurrenceedit.cpp:318 templatedlg.cpp:92
+#: mainwindow.cpp:817 recurrenceedit.cpp:318 templatedlg.cpp:92
 #, kde-format
 msgctxt "@action:button"
 msgid "Delete"
 msgstr "Slett"
 
-#: mainwindow.cpp:907
+#: mainwindow.cpp:911
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Hide Archived Alarms"
 msgstr "Skjul arkiverte varslinger"
 
-#: mainwindow.cpp:908
+#: mainwindow.cpp:912
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show Archived Alarms"
 msgstr "Vis arkiverte varslinger"
 
-#: mainwindow.cpp:984
+#: mainwindow.cpp:988
 #, kde-format
 msgctxt "@info"
 msgid "Import birthdays"
 msgstr "Importer fødselsdager"
 
-#: mainwindow.cpp:1236
+#: mainwindow.cpp:1240
 #, kde-format
 msgctxt "@action Undo/Redo [action]"
 msgid "%1 %2"
 msgstr "%1: %2"
 
-#: mainwindow.cpp:1237
+#: mainwindow.cpp:1241
 #, kde-format
 msgctxt "@action Undo [action]: message"
 msgid "%1 %2: %3"
 msgstr "%1 %2: %3"
 
-#: mainwindow.cpp:1303
+#: mainwindow.cpp:1307
 #, kde-format
 msgid ""
 "<qt>This will hide the menu bar completely. You can show it again by typing "
 "%1.</qt>"
 msgstr ""
 
-#: mainwindow.cpp:1305
+#: mainwindow.cpp:1309
 #, kde-format
 msgid "Hide menu bar"
 msgstr ""
 
-#: mainwindow.cpp:1545
+#: mainwindow.cpp:1549
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Display Alarm"
 msgstr "Vis varsling"
 
-#: mainwindow.cpp:1547
+#: mainwindow.cpp:1551
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Email Alarm"
 msgstr "E-postvarsling"
 
-#: mainwindow.cpp:1549
+#: mainwindow.cpp:1553
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Command Alarm"
 msgstr "Kommandovarsling"
 
-#: mainwindow.cpp:1551
+#: mainwindow.cpp:1555
 #, kde-format
 msgctxt "@title:window"
 msgid "Alarm Type"
 msgstr "Varslingstype"
 
-#: mainwindow.cpp:1552
+#: mainwindow.cpp:1556
 #, kde-format
 msgctxt "@info"
 msgid "Choose alarm type to create:"
 msgstr "Velg hvilken varslingstype som skal opprettes:"
 
-#: mainwindow.cpp:1685
+#: mainwindow.cpp:1689
 #, fuzzy, kde-format
 #| msgctxt "@action:button"
 #| msgid "Enable"
@@ -4579,7 +4579,7 @@ msgctxt "@action"
 msgid "Enable"
 msgstr "Skru på"
 
-#: mainwindow.cpp:1685
+#: mainwindow.cpp:1689
 #, fuzzy, kde-format
 #| msgid "Disabled"
 msgctxt "@action"
@@ -4852,25 +4852,25 @@ msgctxt "@info:whatsthis"
 msgid "Activate <application>KAlarm</application>"
 msgstr "Skru på <application>KAlarm</application>"
 
-#: messagewindow.cpp:1069
+#: messagewindow.cpp:1075
 #, kde-format
 msgctxt "@info"
 msgid "Do you really want to acknowledge this alarm?"
 msgstr "Er du sikker på at du vil kvittere for denne varslinga?"
 
-#: messagewindow.cpp:1070
+#: messagewindow.cpp:1076
 #, kde-format
 msgctxt "@action:button"
 msgid "Acknowledge Alarm"
 msgstr "Kvitter for varslinga"
 
-#: messagewindow.cpp:1070
+#: messagewindow.cpp:1076
 #, kde-format
 msgctxt "@action:button"
 msgid "Acknowledge"
 msgstr "Kvitter"
 
-#: messagewindow.cpp:1125
+#: messagewindow.cpp:1131
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Unable to locate this email in <application>KMail</application>"
@@ -6023,7 +6023,7 @@ msgctxt "@title:group"
 msgid "Alarm Message Windows"
 msgstr "Vinduer for varslingsmeldinger"
 
-#: prefdlg.cpp:1968
+#: prefdlg.cpp:1971
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -6039,25 +6039,25 @@ msgstr ""
 "varslingsvinduer midt på skjermen, men koble ut knapper til vinduet har vært "
 "vist en liten stund.</item></list></para>"
 
-#: prefdlg.cpp:1971
+#: prefdlg.cpp:1974
 #, kde-format
 msgctxt "@option:radio"
 msgid "Position windows far from mouse cursor"
 msgstr "Plasser vinduer langt unna musepekeren"
 
-#: prefdlg.cpp:1975
+#: prefdlg.cpp:1978
 #, kde-format
 msgctxt "@option:radio"
 msgid "Center windows, delay activating window buttons"
 msgstr "Sentrer vinduer, lag forsinket aktivering av vindusknapper"
 
-#: prefdlg.cpp:1983
+#: prefdlg.cpp:1987
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Button activation delay (seconds):"
 msgstr "Forsinkelse for knappeaktivering (sekunder):"
 
-#: prefdlg.cpp:1990
+#: prefdlg.cpp:1995
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -6067,13 +6067,13 @@ msgstr ""
 "Oppgi hvor lenge vindusknappene skal være slått av etter at varslingsvinduet "
 "er vist."
 
-#: prefdlg.cpp:1998
+#: prefdlg.cpp:2003
 #, kde-format
 msgctxt "@option:check"
 msgid "Message windows have a title bar and take keyboard focus"
 msgstr "Meldingsvinduer har en tittellinje og tar fokus"
 
-#: prefdlg.cpp:2001
+#: prefdlg.cpp:2006
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""

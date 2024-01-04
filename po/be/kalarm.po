@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-01-03 01:36+0000\n"
+"POT-Creation-Date: 2024-01-04 01:34+0000\n"
 "PO-Revision-Date: 2007-10-28 14:03+0200\n"
 "Last-Translator: Darafei Praliaskouski <komzpa@licei2.com>\n"
 "Language-Team: Belarusian <i18n@mova.org>\n"
@@ -1029,14 +1029,14 @@ msgstr ""
 "з'яўленні. Калі вокны не мадальныя, то аўтаматычна фокус на іх не "
 "перадаецца, у іх няма загалоўка акна і яны не могуць быць перамешчаныя."
 
-#. i18n: ectx: label, entry (MessageButtonDelay), group (General)
+#. i18n: ectx: label, entry (Base_MessageButtonDelay), group (General)
 #: data/kalarmconfig.kcfg:156
 #, kde-format
 msgctxt "@label"
 msgid "Delay before message window buttons are enabled"
 msgstr ""
 
-#. i18n: ectx: whatsthis, entry (MessageButtonDelay), group (General)
+#. i18n: ectx: whatsthis, entry (Base_MessageButtonDelay), group (General)
 #: data/kalarmconfig.kcfg:161
 #, kde-format
 msgctxt "@info:whatsthis"
@@ -3341,7 +3341,7 @@ msgctxt "@info"
 msgid "Error saving alarm template"
 msgstr "Стварыць новы шаблон напамінку"
 
-#: kalarmapp.cpp:811
+#: kalarmapp.cpp:812
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid ""
@@ -3351,13 +3351,13 @@ msgstr ""
 "\n"
 "(калі ўсё вокны напамінкаў таксама зачыненыя)."
 
-#: kalarmapp.cpp:821
+#: kalarmapp.cpp:822
 #, kde-format
 msgctxt "@info"
 msgid "Quitting will cancel the scheduled Wake from Suspend."
 msgstr ""
 
-#: kalarmapp.cpp:834
+#: kalarmapp.cpp:835
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3365,38 +3365,38 @@ msgid ""
 "if KAlarm is not started.)"
 msgstr ""
 
-#: kalarmapp.cpp:836 lib/messagebox.h:105 lib/messagebox.h:114
+#: kalarmapp.cpp:837 lib/messagebox.h:105 lib/messagebox.h:114
 #: lib/messagebox.h:151
 #, kde-format
 msgid "Yes"
 msgstr ""
 
-#: kalarmapp.cpp:836 lib/messagebox.h:106 lib/messagebox.h:115
+#: kalarmapp.cpp:837 lib/messagebox.h:106 lib/messagebox.h:115
 #: lib/messagebox.h:152
 #, fuzzy, kde-format
 #| msgid "None"
 msgid "No"
 msgstr "Няма"
 
-#: kalarmapp.cpp:1064
+#: kalarmapp.cpp:1065
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "Cannot create alarm: No default calendar is defined"
 msgstr ""
 
-#: kalarmapp.cpp:1078
+#: kalarmapp.cpp:1079
 #, fuzzy, kde-kuit-format
 msgctxt "@info:shell"
 msgid "Error creating alarm"
 msgstr "Памылка паўторнага стварэння напамінку"
 
-#: kalarmapp.cpp:1134
+#: kalarmapp.cpp:1135
 #, fuzzy, kde-kuit-format
 msgctxt "@info:shell"
 msgid "%1: Event <resource>%2</resource> not found, or not unique"
 msgstr "Настаўленні рэсурсу %1"
 
-#: kalarmapp.cpp:1446
+#: kalarmapp.cpp:1447
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3405,13 +3405,13 @@ msgid ""
 "Calendars</interface> to check or change calendar statuses."
 msgstr ""
 
-#: kalarmapp.cpp:1486
+#: kalarmapp.cpp:1487
 #, fuzzy, kde-kuit-format
 msgctxt "@info:shell"
 msgid "%1: Event <resource>%2</resource> not found, or not editable"
 msgstr "Настаўленні рэсурсу %1"
 
-#: kalarmapp.cpp:1514
+#: kalarmapp.cpp:1515
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3421,7 +3421,7 @@ msgid ""
 "statuses."
 msgstr ""
 
-#: kalarmapp.cpp:1522
+#: kalarmapp.cpp:1523
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3432,7 +3432,7 @@ msgid ""
 "interface>."
 msgstr ""
 
-#: kalarmapp.cpp:2495
+#: kalarmapp.cpp:2500
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid ""
@@ -3440,19 +3440,19 @@ msgid ""
 "(no terminal selected for command alarms)"
 msgstr "Памылка запуску каманды (доступ да абалонкі забаронены):"
 
-#: kalarmapp.cpp:2648
+#: kalarmapp.cpp:2653
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Error creating temporary script file"
 msgstr "Памылка стварэння часовага файла скрыпту"
 
-#: kalarmapp.cpp:2744
+#: kalarmapp.cpp:2749
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Pre-alarm action:"
 msgstr "Папярэдняе дзеянне:"
 
-#: kalarmapp.cpp:2750
+#: kalarmapp.cpp:2755
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Post-alarm action:"
@@ -4385,7 +4385,7 @@ msgstr ""
 msgid "Copyright © 2001-%1, David Jarvie"
 msgstr ""
 
-#: mainwindow.cpp:439
+#: mainwindow.cpp:440
 #, fuzzy, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -4396,117 +4396,117 @@ msgstr ""
 "\n"
 "(магчыма, %1 адсутнічае або пашкоджаны)"
 
-#: mainwindow.cpp:459
+#: mainwindow.cpp:460
 #, fuzzy, kde-format
 msgctxt "@action"
 msgid "Templates..."
 msgstr "Шаблоны..."
 
-#: mainwindow.cpp:463 templatedlg.cpp:73
+#: mainwindow.cpp:464 templatedlg.cpp:73
 #, fuzzy, kde-format
 #| msgid "&New..."
 msgctxt "@action"
 msgid "New"
 msgstr "&Новы..."
 
-#: mainwindow.cpp:469
+#: mainwindow.cpp:470
 #, fuzzy, kde-format
 msgctxt "@action"
 msgid "Create Template..."
 msgstr "Стварыць шаблон..."
 
-#: mainwindow.cpp:473
+#: mainwindow.cpp:474
 #, fuzzy, kde-format
 msgctxt "@action"
 msgid "Copy..."
 msgstr "Капіяваць..."
 
-#: mainwindow.cpp:478 resourceselector.cpp:301
+#: mainwindow.cpp:479 resourceselector.cpp:301
 #, fuzzy, kde-format
 #| msgid "&Edit..."
 msgctxt "@action"
 msgid "Edit..."
 msgstr "Рэдагаваць..."
 
-#: mainwindow.cpp:483
+#: mainwindow.cpp:484
 #, fuzzy, kde-format
 msgctxt "@action"
 msgid "Delete"
 msgstr "Выдаліць"
 
-#: mainwindow.cpp:489
+#: mainwindow.cpp:490
 #, fuzzy, kde-format
 msgctxt "@action"
 msgid "Delete Without Confirmation"
 msgstr "Наставіць рэсурсы"
 
-#: mainwindow.cpp:494
+#: mainwindow.cpp:495
 #, fuzzy, kde-format
 msgctxt "@action"
 msgid "Reactivate"
 msgstr "Актывізаваць"
 
-#: mainwindow.cpp:508
+#: mainwindow.cpp:509
 #, kde-format
 msgctxt "@action"
 msgid "Wake From Suspend..."
 msgstr ""
 
-#: mainwindow.cpp:518
+#: mainwindow.cpp:519
 #, fuzzy, kde-format
 msgctxt "@action"
 msgid "Show Archived Alarms"
 msgstr "Паказваць састарэлыя напамінкі"
 
-#: mainwindow.cpp:523
+#: mainwindow.cpp:524
 #, fuzzy, kde-format
 msgctxt "@action"
 msgid "Show in System Tray"
 msgstr "Паказваць у сістэмным латку"
 
-#: mainwindow.cpp:527
+#: mainwindow.cpp:528
 #, fuzzy, kde-format
 msgctxt "@action"
 msgid "Show Calendars"
 msgstr "Адрас файла каляндара"
 
-#: mainwindow.cpp:531
+#: mainwindow.cpp:532
 #, kde-format
 msgctxt "@action"
 msgid "Show Date Selector"
 msgstr ""
 
-#: mainwindow.cpp:539
+#: mainwindow.cpp:543
 #, fuzzy, kde-format
 msgctxt "@action"
 msgid "Import Alarms..."
 msgstr "Імпарт дзён нараджэння..."
 
-#: mainwindow.cpp:545
+#: mainwindow.cpp:549
 #, fuzzy, kde-format
 msgctxt "@action"
 msgid "Import Birthdays..."
 msgstr "Імпарт дзён нараджэння..."
 
-#: mainwindow.cpp:550
+#: mainwindow.cpp:554
 #, fuzzy, kde-format
 msgctxt "@action"
 msgid "Export Selected Alarms..."
 msgstr "Імпарт дзён нараджэння..."
 
-#: mainwindow.cpp:554 resourceselector.cpp:319
+#: mainwindow.cpp:558 resourceselector.cpp:319
 #, fuzzy, kde-format
 msgctxt "@action"
 msgid "Export..."
 msgstr "Імпарт дзён нараджэння..."
 
-#: mainwindow.cpp:558
+#: mainwindow.cpp:562
 #, fuzzy, kde-format
 msgctxt "@action"
 msgid "Refresh Alarms"
 msgstr "Абнавіць"
 
-#: mainwindow.cpp:810
+#: mainwindow.cpp:814
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Do you really want to delete the selected alarm?"
@@ -4515,7 +4515,7 @@ msgstr[0] "Вы жадаеце пацвердзіць чытанне гэтаг�
 msgstr[1] "Вы жадаеце пацвердзіць чытанне гэтага напамінку?"
 msgstr[2] "Вы жадаеце пацвердзіць чытанне гэтага напамінку?"
 
-#: mainwindow.cpp:812
+#: mainwindow.cpp:816
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Delete Alarm"
@@ -4524,91 +4524,91 @@ msgstr[0] "Адкласці напамінак"
 msgstr[1] "Адкласці напамінак"
 msgstr[2] "Адкласці напамінак"
 
-#: mainwindow.cpp:813 recurrenceedit.cpp:318 templatedlg.cpp:92
+#: mainwindow.cpp:817 recurrenceedit.cpp:318 templatedlg.cpp:92
 #, fuzzy, kde-format
 msgctxt "@action:button"
 msgid "Delete"
 msgstr "Выдаліць"
 
-#: mainwindow.cpp:907
+#: mainwindow.cpp:911
 #, fuzzy, kde-format
 msgctxt "@info:tooltip"
 msgid "Hide Archived Alarms"
 msgstr "Схаваць састарэлыя напамінкі"
 
-#: mainwindow.cpp:908
+#: mainwindow.cpp:912
 #, fuzzy, kde-format
 msgctxt "@info:tooltip"
 msgid "Show Archived Alarms"
 msgstr "Паказваць састарэлыя напамінкі"
 
-#: mainwindow.cpp:984
+#: mainwindow.cpp:988
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Import birthdays"
 msgstr "Імпарт дзён нараджэння..."
 
-#: mainwindow.cpp:1236
+#: mainwindow.cpp:1240
 #, kde-format
 msgctxt "@action Undo/Redo [action]"
 msgid "%1 %2"
 msgstr ""
 
-#: mainwindow.cpp:1237
+#: mainwindow.cpp:1241
 #, kde-format
 msgctxt "@action Undo [action]: message"
 msgid "%1 %2: %3"
 msgstr ""
 
-#: mainwindow.cpp:1303
+#: mainwindow.cpp:1307
 #, kde-format
 msgid ""
 "<qt>This will hide the menu bar completely. You can show it again by typing "
 "%1.</qt>"
 msgstr ""
 
-#: mainwindow.cpp:1305
+#: mainwindow.cpp:1309
 #, fuzzy, kde-format
 msgid "Hide menu bar"
 msgstr "Схаваць час да напамінку"
 
-#: mainwindow.cpp:1545
+#: mainwindow.cpp:1549
 #, fuzzy, kde-format
 msgctxt "@item:inlistbox"
 msgid "Display Alarm"
 msgstr "Паказ напамінкаў"
 
-#: mainwindow.cpp:1547
+#: mainwindow.cpp:1551
 #, fuzzy, kde-format
 msgctxt "@item:inlistbox"
 msgid "Email Alarm"
 msgstr "Напамінкі па электроннай пошце"
 
-#: mainwindow.cpp:1549
+#: mainwindow.cpp:1553
 #, fuzzy, kde-format
 msgctxt "@item:inlistbox"
 msgid "Command Alarm"
 msgstr "Напамінкі, якія запускаюць каманды"
 
-#: mainwindow.cpp:1551
+#: mainwindow.cpp:1555
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Alarm Type"
 msgstr "Тып напамінку"
 
-#: mainwindow.cpp:1552
+#: mainwindow.cpp:1556
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Choose alarm type to create:"
 msgstr "Вылучыце шаблон напамінку"
 
-#: mainwindow.cpp:1685
+#: mainwindow.cpp:1689
 #, fuzzy, kde-format
 msgctxt "@action"
 msgid "Enable"
 msgstr "Уключаны"
 
-#: mainwindow.cpp:1685
+#: mainwindow.cpp:1689
 #, fuzzy, kde-format
 msgctxt "@action"
 msgid "Disable"
@@ -4954,25 +4954,25 @@ msgctxt "@info:whatsthis"
 msgid "Activate <application>KAlarm</application>"
 msgstr "Немагчыма знайсці гэты ліст у KMail"
 
-#: messagewindow.cpp:1069
+#: messagewindow.cpp:1075
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Do you really want to acknowledge this alarm?"
 msgstr "Вы жадаеце пацвердзіць чытанне гэтага напамінку?"
 
-#: messagewindow.cpp:1070
+#: messagewindow.cpp:1076
 #, fuzzy, kde-format
 msgctxt "@action:button"
 msgid "Acknowledge Alarm"
 msgstr "Пацвердзіць"
 
-#: messagewindow.cpp:1070
+#: messagewindow.cpp:1076
 #, fuzzy, kde-format
 msgctxt "@action:button"
 msgid "Acknowledge"
 msgstr "Пацвердзіць"
 
-#: messagewindow.cpp:1125
+#: messagewindow.cpp:1131
 #, fuzzy, kde-kuit-format
 msgctxt "@info"
 msgid "Unable to locate this email in <application>KMail</application>"
@@ -6111,7 +6111,7 @@ msgctxt "@title:group"
 msgid "Alarm Message Windows"
 msgstr ""
 
-#: prefdlg.cpp:1968
+#: prefdlg.cpp:1971
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -6122,25 +6122,25 @@ msgid ""
 "time after the window is displayed.</item></list></para>"
 msgstr ""
 
-#: prefdlg.cpp:1971
+#: prefdlg.cpp:1974
 #, kde-format
 msgctxt "@option:radio"
 msgid "Position windows far from mouse cursor"
 msgstr ""
 
-#: prefdlg.cpp:1975
+#: prefdlg.cpp:1978
 #, kde-format
 msgctxt "@option:radio"
 msgid "Center windows, delay activating window buttons"
 msgstr ""
 
-#: prefdlg.cpp:1983
+#: prefdlg.cpp:1987
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Button activation delay (seconds):"
 msgstr ""
 
-#: prefdlg.cpp:1990
+#: prefdlg.cpp:1995
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -6148,13 +6148,13 @@ msgid ""
 "window is shown."
 msgstr ""
 
-#: prefdlg.cpp:1998
+#: prefdlg.cpp:2003
 #, fuzzy, kde-format
 msgctxt "@option:check"
 msgid "Message windows have a title bar and take keyboard focus"
 msgstr "Вокны паведамленняў маюць загаловак і перакладаюць на сябе фокус"
 
-#: prefdlg.cpp:2001
+#: prefdlg.cpp:2006
 #, fuzzy, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""

@@ -22,7 +22,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-01-03 01:36+0000\n"
+"POT-Creation-Date: 2024-01-04 01:34+0000\n"
 "PO-Revision-Date: 2023-09-27 18:09+0300\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -1052,14 +1052,14 @@ msgstr ""
 "tottele näppäimistöä, sillä ei ole otsikkopalkkia eikä sitä voi siirtää tai "
 "sen kokoa muuttaa.</li></ul></p>"
 
-#. i18n: ectx: label, entry (MessageButtonDelay), group (General)
+#. i18n: ectx: label, entry (Base_MessageButtonDelay), group (General)
 #: data/kalarmconfig.kcfg:156
 #, kde-format
 msgctxt "@label"
 msgid "Delay before message window buttons are enabled"
 msgstr "Viive ennen viesti-ikkunan painikkeiden aktivoitumista"
 
-#. i18n: ectx: whatsthis, entry (MessageButtonDelay), group (General)
+#. i18n: ectx: whatsthis, entry (Base_MessageButtonDelay), group (General)
 #: data/kalarmconfig.kcfg:161
 #, kde-format
 msgctxt "@info:whatsthis"
@@ -3362,7 +3362,7 @@ msgctxt "@info"
 msgid "Error saving alarm template"
 msgstr "Virhe hälytysmallin tallennuksessa"
 
-#: kalarmapp.cpp:811
+#: kalarmapp.cpp:812
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -3370,13 +3370,13 @@ msgid ""
 msgstr ""
 "Lopettaminen estää hälytykset (minkä tahansa hälytysikkunan sulkeuduttua)."
 
-#: kalarmapp.cpp:821
+#: kalarmapp.cpp:822
 #, kde-format
 msgctxt "@info"
 msgid "Quitting will cancel the scheduled Wake from Suspend."
 msgstr "Lopettaminen peruu ajastetun lepotilasta heräämisen."
 
-#: kalarmapp.cpp:834
+#: kalarmapp.cpp:835
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3386,31 +3386,31 @@ msgstr ""
 "Haluatko käynnistää KAlarmin kirjauduttaessa?<nl/> (Huomaa, että hälytykset "
 "ovat poissa käytöstä, ellei KAlarmia käynnistetä.)"
 
-#: kalarmapp.cpp:836 lib/messagebox.h:105 lib/messagebox.h:114
+#: kalarmapp.cpp:837 lib/messagebox.h:105 lib/messagebox.h:114
 #: lib/messagebox.h:151
 #, kde-format
 msgid "Yes"
 msgstr "Kyllä"
 
-#: kalarmapp.cpp:836 lib/messagebox.h:106 lib/messagebox.h:115
+#: kalarmapp.cpp:837 lib/messagebox.h:106 lib/messagebox.h:115
 #: lib/messagebox.h:152
 #, kde-format
 msgid "No"
 msgstr "Ei"
 
-#: kalarmapp.cpp:1064
+#: kalarmapp.cpp:1065
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "Cannot create alarm: No default calendar is defined"
 msgstr "Hälytystä ei voida luoda: oletuskalenteria ei ole asetettu"
 
-#: kalarmapp.cpp:1078
+#: kalarmapp.cpp:1079
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "Error creating alarm"
 msgstr "Virhe hälytystä luotaessa"
 
-#: kalarmapp.cpp:1134
+#: kalarmapp.cpp:1135
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "%1: Event <resource>%2</resource> not found, or not unique"
@@ -3418,7 +3418,7 @@ msgstr ""
 "%1: Tapahtumaa <resource>%2</resource> ei löytynyt tai se ei ole "
 "ainutkertainen"
 
-#: kalarmapp.cpp:1446
+#: kalarmapp.cpp:1447
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3431,14 +3431,14 @@ msgstr ""
 "tai asettamalla kalenterien tila kohdasta <interface>Näkymä | Näytä "
 "kalenterit</interface>."
 
-#: kalarmapp.cpp:1486
+#: kalarmapp.cpp:1487
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "%1: Event <resource>%2</resource> not found, or not editable"
 msgstr ""
 "%1: Tapahtumaa <resource>%2</resource> ei löytynyt tai sitä ei voi muokata"
 
-#: kalarmapp.cpp:1514
+#: kalarmapp.cpp:1515
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3452,7 +3452,7 @@ msgstr ""
 "käyttöön.<nl/><nl/>Korjaa tämä valitsemalla tai muuttamalla kalenteria tilaa "
 "kohdassa <interface>Näytä | Näytä kalenterit</interface>."
 
-#: kalarmapp.cpp:1522
+#: kalarmapp.cpp:1523
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3468,7 +3468,7 @@ msgstr ""
 "valitsemalla arkistohälytyskalenteri ja <interface>Käytä oletuksena "
 "arkistoiduille hälytyksille</interface>."
 
-#: kalarmapp.cpp:2495
+#: kalarmapp.cpp:2500
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -3478,19 +3478,19 @@ msgstr ""
 "Komennon suoritus epäonnistui\n"
 "(komentohälytyksille ei ole valittu päätettä)"
 
-#: kalarmapp.cpp:2648
+#: kalarmapp.cpp:2653
 #, kde-format
 msgctxt "@info"
 msgid "Error creating temporary script file"
 msgstr "Virhe luotaessa väliaikaista komentojonotiedostoa"
 
-#: kalarmapp.cpp:2744
+#: kalarmapp.cpp:2749
 #, kde-format
 msgctxt "@info"
 msgid "Pre-alarm action:"
 msgstr "Hälytyksen esitoiminto:"
 
-#: kalarmapp.cpp:2750
+#: kalarmapp.cpp:2755
 #, kde-format
 msgctxt "@info"
 msgid "Post-alarm action:"
@@ -4363,7 +4363,7 @@ msgstr "KDE:n henkilökohtainen hälytysviesti-, komento- ja sähköpostiajastin
 msgid "Copyright © 2001-%1, David Jarvie"
 msgstr "Tekijänoikeudet © 2001–%1 David Jarvie"
 
-#: mainwindow.cpp:439
+#: mainwindow.cpp:440
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -4373,115 +4373,115 @@ msgstr ""
 "Valikkoja ei voitu luoda (kenties tiedosto  <filename>%1</filename> puuttuu "
 "tai on vioittunut)."
 
-#: mainwindow.cpp:459
+#: mainwindow.cpp:460
 #, kde-format
 msgctxt "@action"
 msgid "Templates..."
 msgstr "Mallit…"
 
-#: mainwindow.cpp:463 templatedlg.cpp:73
+#: mainwindow.cpp:464 templatedlg.cpp:73
 #, kde-format
 msgctxt "@action"
 msgid "New"
 msgstr "Uusi"
 
-#: mainwindow.cpp:469
+#: mainwindow.cpp:470
 #, kde-format
 msgctxt "@action"
 msgid "Create Template..."
 msgstr "Luo malli…"
 
-#: mainwindow.cpp:473
+#: mainwindow.cpp:474
 #, kde-format
 msgctxt "@action"
 msgid "Copy..."
 msgstr "Kopioi…"
 
-#: mainwindow.cpp:478 resourceselector.cpp:301
+#: mainwindow.cpp:479 resourceselector.cpp:301
 #, kde-format
 msgctxt "@action"
 msgid "Edit..."
 msgstr "Muokkaa…"
 
-#: mainwindow.cpp:483
+#: mainwindow.cpp:484
 #, kde-format
 msgctxt "@action"
 msgid "Delete"
 msgstr "Poista"
 
-#: mainwindow.cpp:489
+#: mainwindow.cpp:490
 #, kde-format
 msgctxt "@action"
 msgid "Delete Without Confirmation"
 msgstr "Poista kyselemättä"
 
-#: mainwindow.cpp:494
+#: mainwindow.cpp:495
 #, kde-format
 msgctxt "@action"
 msgid "Reactivate"
 msgstr "Aktivoi uudelleen"
 
-#: mainwindow.cpp:508
+#: mainwindow.cpp:509
 #, kde-format
 msgctxt "@action"
 msgid "Wake From Suspend..."
 msgstr "Herätä lepotilasta…"
 
-#: mainwindow.cpp:518
+#: mainwindow.cpp:519
 #, kde-format
 msgctxt "@action"
 msgid "Show Archived Alarms"
 msgstr "Näytä arkistoidut hälytykset"
 
-#: mainwindow.cpp:523
+#: mainwindow.cpp:524
 #, kde-format
 msgctxt "@action"
 msgid "Show in System Tray"
 msgstr "Näytä ilmoitusalueella"
 
-#: mainwindow.cpp:527
+#: mainwindow.cpp:528
 #, kde-format
 msgctxt "@action"
 msgid "Show Calendars"
 msgstr "Näytä kalenterit"
 
-#: mainwindow.cpp:531
+#: mainwindow.cpp:532
 #, kde-format
 msgctxt "@action"
 msgid "Show Date Selector"
 msgstr "Näytä päivävalitsin"
 
-#: mainwindow.cpp:539
+#: mainwindow.cpp:543
 #, kde-format
 msgctxt "@action"
 msgid "Import Alarms..."
 msgstr "Tuo hälytyksiä…"
 
-#: mainwindow.cpp:545
+#: mainwindow.cpp:549
 #, kde-format
 msgctxt "@action"
 msgid "Import Birthdays..."
 msgstr "Tuo syntymäpäivät…"
 
-#: mainwindow.cpp:550
+#: mainwindow.cpp:554
 #, kde-format
 msgctxt "@action"
 msgid "Export Selected Alarms..."
 msgstr "Vie valitut hälytykset…"
 
-#: mainwindow.cpp:554 resourceselector.cpp:319
+#: mainwindow.cpp:558 resourceselector.cpp:319
 #, kde-format
 msgctxt "@action"
 msgid "Export..."
 msgstr "Vie…"
 
-#: mainwindow.cpp:558
+#: mainwindow.cpp:562
 #, kde-format
 msgctxt "@action"
 msgid "Refresh Alarms"
 msgstr "Virkistä hälytykset"
 
-#: mainwindow.cpp:810
+#: mainwindow.cpp:814
 #, kde-format
 msgctxt "@info"
 msgid "Do you really want to delete the selected alarm?"
@@ -4489,7 +4489,7 @@ msgid_plural "Do you really want to delete the %1 selected alarms?"
 msgstr[0] "Haluatko varmasti poistaa valitun hälytyksen?"
 msgstr[1] "Haluatko varmasti poistaa %1 valittua hälytystä?"
 
-#: mainwindow.cpp:812
+#: mainwindow.cpp:816
 #, kde-format
 msgctxt "@title:window"
 msgid "Delete Alarm"
@@ -4497,43 +4497,43 @@ msgid_plural "Delete Alarms"
 msgstr[0] "Poista hälytys"
 msgstr[1] "Poista hälytykset"
 
-#: mainwindow.cpp:813 recurrenceedit.cpp:318 templatedlg.cpp:92
+#: mainwindow.cpp:817 recurrenceedit.cpp:318 templatedlg.cpp:92
 #, kde-format
 msgctxt "@action:button"
 msgid "Delete"
 msgstr "Poista"
 
-#: mainwindow.cpp:907
+#: mainwindow.cpp:911
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Hide Archived Alarms"
 msgstr "Piilota arkistoidut hälytykset"
 
-#: mainwindow.cpp:908
+#: mainwindow.cpp:912
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show Archived Alarms"
 msgstr "Näytä arkistoidut hälytykset"
 
-#: mainwindow.cpp:984
+#: mainwindow.cpp:988
 #, kde-format
 msgctxt "@info"
 msgid "Import birthdays"
 msgstr "Tuo syntymäpäivät"
 
-#: mainwindow.cpp:1236
+#: mainwindow.cpp:1240
 #, kde-format
 msgctxt "@action Undo/Redo [action]"
 msgid "%1 %2"
 msgstr "%1 %2"
 
-#: mainwindow.cpp:1237
+#: mainwindow.cpp:1241
 #, kde-format
 msgctxt "@action Undo [action]: message"
 msgid "%1 %2: %3"
 msgstr "%1 %2: %3"
 
-#: mainwindow.cpp:1303
+#: mainwindow.cpp:1307
 #, kde-format
 msgid ""
 "<qt>This will hide the menu bar completely. You can show it again by typing "
@@ -4542,48 +4542,48 @@ msgstr ""
 "<qt>Tämä piilottaa valikkorivin kokonaan. Sen saa uudelleen näkyviin %1-"
 "näppäimellä.</qt>"
 
-#: mainwindow.cpp:1305
+#: mainwindow.cpp:1309
 #, kde-format
 msgid "Hide menu bar"
 msgstr "Piilota valikkorivi"
 
-#: mainwindow.cpp:1545
+#: mainwindow.cpp:1549
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Display Alarm"
 msgstr "Näyttöhälytys"
 
-#: mainwindow.cpp:1547
+#: mainwindow.cpp:1551
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Email Alarm"
 msgstr "Sähköpostihälytys"
 
-#: mainwindow.cpp:1549
+#: mainwindow.cpp:1553
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Command Alarm"
 msgstr "Komentohälytys"
 
-#: mainwindow.cpp:1551
+#: mainwindow.cpp:1555
 #, kde-format
 msgctxt "@title:window"
 msgid "Alarm Type"
 msgstr "Hälytyksen tyyppi"
 
-#: mainwindow.cpp:1552
+#: mainwindow.cpp:1556
 #, kde-format
 msgctxt "@info"
 msgid "Choose alarm type to create:"
 msgstr "Valitse hälytystyyppi luotavaksi"
 
-#: mainwindow.cpp:1685
+#: mainwindow.cpp:1689
 #, kde-format
 msgctxt "@action"
 msgid "Enable"
 msgstr "Ota käyttöön"
 
-#: mainwindow.cpp:1685
+#: mainwindow.cpp:1689
 #, kde-format
 msgctxt "@action"
 msgid "Disable"
@@ -4853,25 +4853,25 @@ msgctxt "@info:whatsthis"
 msgid "Activate <application>KAlarm</application>"
 msgstr "Aktivoi <application>KAlarm</application>"
 
-#: messagewindow.cpp:1069
+#: messagewindow.cpp:1075
 #, kde-format
 msgctxt "@info"
 msgid "Do you really want to acknowledge this alarm?"
 msgstr "Haluatko varmasti kuitata tämän hälytyksen? "
 
-#: messagewindow.cpp:1070
+#: messagewindow.cpp:1076
 #, kde-format
 msgctxt "@action:button"
 msgid "Acknowledge Alarm"
 msgstr "Kuittaa hälytys "
 
-#: messagewindow.cpp:1070
+#: messagewindow.cpp:1076
 #, kde-format
 msgctxt "@action:button"
 msgid "Acknowledge"
 msgstr "Kuittaa"
 
-#: messagewindow.cpp:1125
+#: messagewindow.cpp:1131
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Unable to locate this email in <application>KMail</application>"
@@ -6030,7 +6030,7 @@ msgctxt "@title:group"
 msgid "Alarm Message Windows"
 msgstr "Hälytysten viesti-ikkunat"
 
-#: prefdlg.cpp:1968
+#: prefdlg.cpp:1971
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -6046,25 +6046,25 @@ msgstr ""
 "viesti-ikkuna ruudun keskelle mutta poista painikkeet hetkeksi käytöstä "
 "ikkunan ilmestymisestä.</item></list></para>"
 
-#: prefdlg.cpp:1971
+#: prefdlg.cpp:1974
 #, kde-format
 msgctxt "@option:radio"
 msgid "Position windows far from mouse cursor"
 msgstr "Sijoita ikkuna kauas hiirikohdistimesta"
 
-#: prefdlg.cpp:1975
+#: prefdlg.cpp:1978
 #, kde-format
 msgctxt "@option:radio"
 msgid "Center windows, delay activating window buttons"
 msgstr "Keskitä ikkuna mutta viivytä ikkunapainikkeiden aktivointia"
 
-#: prefdlg.cpp:1983
+#: prefdlg.cpp:1987
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Button activation delay (seconds):"
 msgstr "Painikkeiden aktivointiviive (sekunneissa):"
 
-#: prefdlg.cpp:1990
+#: prefdlg.cpp:1995
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -6074,13 +6074,13 @@ msgstr ""
 "Määritä, kauanko painikkeiden tulisi pysyä passiivisina hälytyksen viesti-"
 "ikkunan ilmestyttyä."
 
-#: prefdlg.cpp:1998
+#: prefdlg.cpp:2003
 #, kde-format
 msgctxt "@option:check"
 msgid "Message windows have a title bar and take keyboard focus"
 msgstr "Viesti-ikkunalla on otsikko ja näppäimistö kohdistuu siihen"
 
-#: prefdlg.cpp:2001
+#: prefdlg.cpp:2006
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""

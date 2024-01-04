@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-01-03 01:36+0000\n"
+"POT-Creation-Date: 2024-01-04 01:34+0000\n"
 "PO-Revision-Date: 2023-08-14 22:01+0200\n"
 "Last-Translator: Frederik Schwarzer <schwarzer@kde.org>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
@@ -1084,7 +1084,7 @@ msgstr ""
 "es keine Titelleiste und lässt sich weder verschieben noch in der Größe "
 "verändern.</li></ul></p>"
 
-#. i18n: ectx: label, entry (MessageButtonDelay), group (General)
+#. i18n: ectx: label, entry (Base_MessageButtonDelay), group (General)
 #: data/kalarmconfig.kcfg:156
 #, kde-format
 msgctxt "@label"
@@ -1092,7 +1092,7 @@ msgid "Delay before message window buttons are enabled"
 msgstr ""
 "Wartezeit, bevor die Knöpfe im Fenster der Erinnerung aktiviert werden."
 
-#. i18n: ectx: whatsthis, entry (MessageButtonDelay), group (General)
+#. i18n: ectx: whatsthis, entry (Base_MessageButtonDelay), group (General)
 #: data/kalarmconfig.kcfg:161
 #, kde-format
 msgctxt "@info:whatsthis"
@@ -3507,7 +3507,7 @@ msgctxt "@info"
 msgid "Error saving alarm template"
 msgstr "Fehler beim Speichern der neuen Erinnerungsvorlage"
 
-#: kalarmapp.cpp:811
+#: kalarmapp.cpp:812
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -3516,7 +3516,7 @@ msgstr ""
 "Nach dem Beenden werden keine Erinnerungen mehr angezeigt (nachdem das "
 "letzte aktive Erinnerungsfenster geschlossen ist)."
 
-#: kalarmapp.cpp:821
+#: kalarmapp.cpp:822
 #, kde-format
 msgctxt "@info"
 msgid "Quitting will cancel the scheduled Wake from Suspend."
@@ -3524,7 +3524,7 @@ msgstr ""
 "Das Beenden wird die aktuelle Erinnerung für das Aufwachen aus dem Standby-"
 "Modus abbrechen."
 
-#: kalarmapp.cpp:834
+#: kalarmapp.cpp:835
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3534,19 +3534,19 @@ msgstr ""
 "Möchten Sie KAlarm bei der Anmeldung starten lassen?<nl/>(Wenn KAlarm nicht "
 "gestartet wird, werden keine Erinnerungen ausgelöst.)"
 
-#: kalarmapp.cpp:836 lib/messagebox.h:105 lib/messagebox.h:114
+#: kalarmapp.cpp:837 lib/messagebox.h:105 lib/messagebox.h:114
 #: lib/messagebox.h:151
 #, kde-format
 msgid "Yes"
 msgstr "Ja"
 
-#: kalarmapp.cpp:836 lib/messagebox.h:106 lib/messagebox.h:115
+#: kalarmapp.cpp:837 lib/messagebox.h:106 lib/messagebox.h:115
 #: lib/messagebox.h:152
 #, kde-format
 msgid "No"
 msgstr "Nein"
 
-#: kalarmapp.cpp:1064
+#: kalarmapp.cpp:1065
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "Cannot create alarm: No default calendar is defined"
@@ -3554,13 +3554,13 @@ msgstr ""
 "Erinnerung kann nicht erstellt werden, es wurde kein Standardkalender "
 "definiert."
 
-#: kalarmapp.cpp:1078
+#: kalarmapp.cpp:1079
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "Error creating alarm"
 msgstr "Fehler beim Erstellen der Erinnerung"
 
-#: kalarmapp.cpp:1134
+#: kalarmapp.cpp:1135
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "%1: Event <resource>%2</resource> not found, or not unique"
@@ -3568,7 +3568,7 @@ msgstr ""
 "%1: Termin <resource>%2</resource> wurde nicht gefunden oder ist nicht "
 "eindeutig"
 
-#: kalarmapp.cpp:1446
+#: kalarmapp.cpp:1447
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3581,7 +3581,7 @@ msgstr ""
 ">Um das zu ändern, benutzen Sie <interface>Ansicht -> Kalender anzeigen</"
 "interface>, um den Status von Kalendern zu überprüfen oder zu ändern."
 
-#: kalarmapp.cpp:1486
+#: kalarmapp.cpp:1487
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "%1: Event <resource>%2</resource> not found, or not editable"
@@ -3589,7 +3589,7 @@ msgstr ""
 "%1: Der Termin <resource>%2</resource> ist nicht auffindbar oder lässt sich "
 "nicht bearbeiten."
 
-#: kalarmapp.cpp:1514
+#: kalarmapp.cpp:1515
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3603,7 +3603,7 @@ msgstr ""
 "das zu ändern, benutzen Sie <interface>Ansicht -> Kalender anzeigen</"
 "interface>, um den Status von Kalendern zu überprüfen oder zu ändern."
 
-#: kalarmapp.cpp:1522
+#: kalarmapp.cpp:1523
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3620,7 +3620,7 @@ msgstr ""
 "aktivieren Sie <interface>Als Standard für abgelaufene Erinnerungen "
 "verwenden</interface>"
 
-#: kalarmapp.cpp:2495
+#: kalarmapp.cpp:2500
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -3630,19 +3630,19 @@ msgstr ""
 "Die Ausführung des Befehls ist fehlgeschlagen\n"
 "es ist kein Terminal für Befehls-Erinnerungen ausgewählt"
 
-#: kalarmapp.cpp:2648
+#: kalarmapp.cpp:2653
 #, kde-format
 msgctxt "@info"
 msgid "Error creating temporary script file"
 msgstr "Fehler beim Erstellen der temporären Skriptdatei"
 
-#: kalarmapp.cpp:2744
+#: kalarmapp.cpp:2749
 #, kde-format
 msgctxt "@info"
 msgid "Pre-alarm action:"
 msgstr "Vor der Erinnerung auszulösende Aktion:"
 
-#: kalarmapp.cpp:2750
+#: kalarmapp.cpp:2755
 #, kde-format
 msgctxt "@info"
 msgid "Post-alarm action:"
@@ -4521,7 +4521,7 @@ msgstr "Persönlicher Erinnerungsassistent, Programm- und E-Mail-Planer von KDE"
 msgid "Copyright © 2001-%1, David Jarvie"
 msgstr "Copyright © 2001-%1 David Jarvie"
 
-#: mainwindow.cpp:439
+#: mainwindow.cpp:440
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -4531,7 +4531,7 @@ msgstr ""
 "Fehler beim Erstellen der Menüs (vielleicht fehlt <filename>%1</filename> "
 "oder ist beschädigt)"
 
-#: mainwindow.cpp:459
+#: mainwindow.cpp:460
 #, fuzzy, kde-format
 #| msgctxt "@action"
 #| msgid "&Templates..."
@@ -4539,13 +4539,13 @@ msgctxt "@action"
 msgid "Templates..."
 msgstr "&Vorlagen ..."
 
-#: mainwindow.cpp:463 templatedlg.cpp:73
+#: mainwindow.cpp:464 templatedlg.cpp:73
 #, kde-format
 msgctxt "@action"
 msgid "New"
 msgstr "Neu"
 
-#: mainwindow.cpp:469
+#: mainwindow.cpp:470
 #, fuzzy, kde-format
 #| msgctxt "@action"
 #| msgid "Create Tem&plate..."
@@ -4553,7 +4553,7 @@ msgctxt "@action"
 msgid "Create Template..."
 msgstr "Vorlage &erstellen ..."
 
-#: mainwindow.cpp:473
+#: mainwindow.cpp:474
 #, fuzzy, kde-format
 #| msgctxt "@action"
 #| msgid "&Copy..."
@@ -4561,7 +4561,7 @@ msgctxt "@action"
 msgid "Copy..."
 msgstr "&Kopieren ..."
 
-#: mainwindow.cpp:478 resourceselector.cpp:301
+#: mainwindow.cpp:479 resourceselector.cpp:301
 #, fuzzy, kde-format
 #| msgctxt "@action:button"
 #| msgid "Edit..."
@@ -4569,7 +4569,7 @@ msgctxt "@action"
 msgid "Edit..."
 msgstr "Bearbeiten ..."
 
-#: mainwindow.cpp:483
+#: mainwindow.cpp:484
 #, fuzzy, kde-format
 #| msgctxt "@action:button"
 #| msgid "Delete"
@@ -4577,13 +4577,13 @@ msgctxt "@action"
 msgid "Delete"
 msgstr "Löschen"
 
-#: mainwindow.cpp:489
+#: mainwindow.cpp:490
 #, kde-format
 msgctxt "@action"
 msgid "Delete Without Confirmation"
 msgstr "Löschen ohne Nachfrage"
 
-#: mainwindow.cpp:494
+#: mainwindow.cpp:495
 #, fuzzy, kde-format
 #| msgctxt "@action"
 #| msgid "Reac&tivate"
@@ -4591,13 +4591,13 @@ msgctxt "@action"
 msgid "Reactivate"
 msgstr "&Reaktivieren"
 
-#: mainwindow.cpp:508
+#: mainwindow.cpp:509
 #, kde-format
 msgctxt "@action"
 msgid "Wake From Suspend..."
 msgstr "Aufwachen aus dem Standby-Modus ..."
 
-#: mainwindow.cpp:518
+#: mainwindow.cpp:519
 #, fuzzy, kde-format
 #| msgctxt "@info:tooltip"
 #| msgid "Show Archived Alarms"
@@ -4605,7 +4605,7 @@ msgctxt "@action"
 msgid "Show Archived Alarms"
 msgstr "Abgelaufene Erinnerungen anzeigen"
 
-#: mainwindow.cpp:523
+#: mainwindow.cpp:524
 #, fuzzy, kde-format
 #| msgctxt "@action"
 #| msgid "Show in System &Tray"
@@ -4613,7 +4613,7 @@ msgctxt "@action"
 msgid "Show in System Tray"
 msgstr "Im System&bereich anzeigen"
 
-#: mainwindow.cpp:527
+#: mainwindow.cpp:528
 #, fuzzy, kde-format
 #| msgctxt "@action"
 #| msgid "Show &Calendars"
@@ -4621,13 +4621,13 @@ msgctxt "@action"
 msgid "Show Calendars"
 msgstr "&Kalender anzeigen"
 
-#: mainwindow.cpp:531
+#: mainwindow.cpp:532
 #, kde-format
 msgctxt "@action"
 msgid "Show Date Selector"
 msgstr "Datumsauswahl anzeigen"
 
-#: mainwindow.cpp:539
+#: mainwindow.cpp:543
 #, fuzzy, kde-format
 #| msgctxt "@action"
 #| msgid "Import &Alarms..."
@@ -4635,13 +4635,13 @@ msgctxt "@action"
 msgid "Import Alarms..."
 msgstr "Erinnerungen &importieren ..."
 
-#: mainwindow.cpp:545
+#: mainwindow.cpp:549
 #, kde-format
 msgctxt "@action"
 msgid "Import Birthdays..."
 msgstr "Geburtstage importieren ..."
 
-#: mainwindow.cpp:550
+#: mainwindow.cpp:554
 #, fuzzy, kde-format
 #| msgctxt "@action"
 #| msgid "E&xport Selected Alarms..."
@@ -4649,7 +4649,7 @@ msgctxt "@action"
 msgid "Export Selected Alarms..."
 msgstr "Ausgewählte Erinnerungen e&xportieren ..."
 
-#: mainwindow.cpp:554 resourceselector.cpp:319
+#: mainwindow.cpp:558 resourceselector.cpp:319
 #, fuzzy, kde-format
 #| msgctxt "@action"
 #| msgid "E&xport..."
@@ -4657,7 +4657,7 @@ msgctxt "@action"
 msgid "Export..."
 msgstr "E&xportieren ..."
 
-#: mainwindow.cpp:558
+#: mainwindow.cpp:562
 #, fuzzy, kde-format
 #| msgctxt "@action"
 #| msgid "&Refresh Alarms"
@@ -4665,7 +4665,7 @@ msgctxt "@action"
 msgid "Refresh Alarms"
 msgstr "Erinnerungsdaten &aktualisieren"
 
-#: mainwindow.cpp:810
+#: mainwindow.cpp:814
 #, kde-format
 msgctxt "@info"
 msgid "Do you really want to delete the selected alarm?"
@@ -4673,7 +4673,7 @@ msgid_plural "Do you really want to delete the %1 selected alarms?"
 msgstr[0] "Möchten Sie die ausgewählte Erinnerung wirklich löschen?"
 msgstr[1] "Möchten Sie die %1 ausgewählten Erinnerungen wirklich löschen?"
 
-#: mainwindow.cpp:812
+#: mainwindow.cpp:816
 #, kde-format
 msgctxt "@title:window"
 msgid "Delete Alarm"
@@ -4681,43 +4681,43 @@ msgid_plural "Delete Alarms"
 msgstr[0] "Erinnerung löschen"
 msgstr[1] "Erinnerungen löschen"
 
-#: mainwindow.cpp:813 recurrenceedit.cpp:318 templatedlg.cpp:92
+#: mainwindow.cpp:817 recurrenceedit.cpp:318 templatedlg.cpp:92
 #, kde-format
 msgctxt "@action:button"
 msgid "Delete"
 msgstr "Löschen"
 
-#: mainwindow.cpp:907
+#: mainwindow.cpp:911
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Hide Archived Alarms"
 msgstr "Abgelaufene Erinnerungen ausblenden"
 
-#: mainwindow.cpp:908
+#: mainwindow.cpp:912
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show Archived Alarms"
 msgstr "Abgelaufene Erinnerungen anzeigen"
 
-#: mainwindow.cpp:984
+#: mainwindow.cpp:988
 #, kde-format
 msgctxt "@info"
 msgid "Import birthdays"
 msgstr "Geburtstage importieren"
 
-#: mainwindow.cpp:1236
+#: mainwindow.cpp:1240
 #, kde-format
 msgctxt "@action Undo/Redo [action]"
 msgid "%1 %2"
 msgstr "%1 %2"
 
-#: mainwindow.cpp:1237
+#: mainwindow.cpp:1241
 #, kde-format
 msgctxt "@action Undo [action]: message"
 msgid "%1 %2: %3"
 msgstr "%1 %2: %3"
 
-#: mainwindow.cpp:1303
+#: mainwindow.cpp:1307
 #, kde-format
 msgid ""
 "<qt>This will hide the menu bar completely. You can show it again by typing "
@@ -4726,42 +4726,42 @@ msgstr ""
 "<qt>Hiermit wird die Menüleiste vollständig ausgeblendet. Geben Sie %1 ein, "
 "um sie wieder anzuzeigen.</qt>"
 
-#: mainwindow.cpp:1305
+#: mainwindow.cpp:1309
 #, kde-format
 msgid "Hide menu bar"
 msgstr "Menüleiste ausblenden"
 
-#: mainwindow.cpp:1545
+#: mainwindow.cpp:1549
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Display Alarm"
 msgstr "Anzeige-Erinnerung"
 
-#: mainwindow.cpp:1547
+#: mainwindow.cpp:1551
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Email Alarm"
 msgstr "E-Mail-Erinnerung"
 
-#: mainwindow.cpp:1549
+#: mainwindow.cpp:1553
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Command Alarm"
 msgstr "Befehls-Erinnerung"
 
-#: mainwindow.cpp:1551
+#: mainwindow.cpp:1555
 #, kde-format
 msgctxt "@title:window"
 msgid "Alarm Type"
 msgstr "Erinnerungstyp"
 
-#: mainwindow.cpp:1552
+#: mainwindow.cpp:1556
 #, kde-format
 msgctxt "@info"
 msgid "Choose alarm type to create:"
 msgstr "Typ für neue Erinnerung auswählen:"
 
-#: mainwindow.cpp:1685
+#: mainwindow.cpp:1689
 #, fuzzy, kde-format
 #| msgctxt "@action:button"
 #| msgid "Enable"
@@ -4769,7 +4769,7 @@ msgctxt "@action"
 msgid "Enable"
 msgstr "Aktivieren"
 
-#: mainwindow.cpp:1685
+#: mainwindow.cpp:1689
 #, fuzzy, kde-format
 #| msgid "Disabled"
 msgctxt "@action"
@@ -5045,25 +5045,25 @@ msgctxt "@info:whatsthis"
 msgid "Activate <application>KAlarm</application>"
 msgstr "<application>KAlarm</application> aktivieren"
 
-#: messagewindow.cpp:1069
+#: messagewindow.cpp:1075
 #, kde-format
 msgctxt "@info"
 msgid "Do you really want to acknowledge this alarm?"
 msgstr "Möchten Sie diese Erinnerung wirklich bestätigen?"
 
-#: messagewindow.cpp:1070
+#: messagewindow.cpp:1076
 #, kde-format
 msgctxt "@action:button"
 msgid "Acknowledge Alarm"
 msgstr "Erinnerung bestätigen"
 
-#: messagewindow.cpp:1070
+#: messagewindow.cpp:1076
 #, kde-format
 msgctxt "@action:button"
 msgid "Acknowledge"
 msgstr "Bestätigen"
 
-#: messagewindow.cpp:1125
+#: messagewindow.cpp:1131
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Unable to locate this email in <application>KMail</application>"
@@ -6281,7 +6281,7 @@ msgctxt "@title:group"
 msgid "Alarm Message Windows"
 msgstr "Erinnerungsdialoge"
 
-#: prefdlg.cpp:1968
+#: prefdlg.cpp:1971
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -6297,13 +6297,13 @@ msgstr ""
 "der Bildschirmmitte platzieren, Fensterknöpfe verzögert aktivieren.</item></"
 "list></para>"
 
-#: prefdlg.cpp:1971
+#: prefdlg.cpp:1974
 #, kde-format
 msgctxt "@option:radio"
 msgid "Position windows far from mouse cursor"
 msgstr "Erinnerungsfenster möglichst weit vom Mauszeiger entfernt platzieren"
 
-#: prefdlg.cpp:1975
+#: prefdlg.cpp:1978
 #, kde-format
 msgctxt "@option:radio"
 msgid "Center windows, delay activating window buttons"
@@ -6311,13 +6311,13 @@ msgstr ""
 "Erinnerungsfenster in der Bildschirmmitte platzieren, Fensterknöpfe "
 "verzögert aktivieren"
 
-#: prefdlg.cpp:1983
+#: prefdlg.cpp:1987
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Button activation delay (seconds):"
 msgstr "Verzögerung für Knopf-Aktivierung (Sekunden):"
 
-#: prefdlg.cpp:1990
+#: prefdlg.cpp:1995
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -6327,14 +6327,14 @@ msgstr ""
 "Geben Sie ein, wie lange die Knöpfe eines Erinnerungsfenster deaktiviert "
 "sein sollen, nachdem das Fenster erscheint."
 
-#: prefdlg.cpp:1998
+#: prefdlg.cpp:2003
 #, kde-format
 msgctxt "@option:check"
 msgid "Message windows have a title bar and take keyboard focus"
 msgstr ""
 "Nachrichtenfenster haben eine Titelleiste und erhalten den Eingabefokus"
 
-#: prefdlg.cpp:2001
+#: prefdlg.cpp:2006
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
