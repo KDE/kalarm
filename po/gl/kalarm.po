@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-01-04 01:34+0000\n"
+"POT-Creation-Date: 2024-01-20 00:37+0000\n"
 "PO-Revision-Date: 2023-11-18 15:12+0100\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Galician <proxecto@trasno.gal>\n"
@@ -6152,6 +6152,21 @@ msgid "Button activation delay (seconds):"
 msgstr "Demora na activación dos botóns (segundos):"
 
 #: prefdlg.cpp:1995
+#, fuzzy, kde-format
+#| msgctxt "@info:whatsthis"
+#| msgid ""
+#| "Enter how long its buttons should remain disabled after the alarm message "
+#| "window is shown."
+msgctxt "@info:whatsthis"
+msgid ""
+"Enter how long its buttons should remain disabled after the alarm message "
+"window is shown, to reduce the chance of alarm messages being accidentally "
+"acknowledged."
+msgstr ""
+"Insira o tempo que han de demorar desactivados os botóns despois de amosar a "
+"xanela de mensaxe de alarma."
+
+#: prefdlg.cpp:1999
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -6161,14 +6176,14 @@ msgstr ""
 "Insira o tempo que han de demorar desactivados os botóns despois de amosar a "
 "xanela de mensaxe de alarma."
 
-#: prefdlg.cpp:2003
+#: prefdlg.cpp:2007
 #, kde-format
 msgctxt "@option:check"
 msgid "Message windows have a title bar and take keyboard focus"
 msgstr ""
 "As xanelas de mensaxe teñen unha barra de título e obteñen o foco do teclado"
 
-#: prefdlg.cpp:2006
+#: prefdlg.cpp:2010
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""

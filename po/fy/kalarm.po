@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-01-04 01:34+0000\n"
+"POT-Creation-Date: 2024-01-20 00:37+0000\n"
 "PO-Revision-Date: 2007-04-24 00:52+0200\n"
 "Last-Translator: Rinse de Vries <rinsedevries@kde.nl>\n"
 "Language-Team: Frysk <kde-i18n-fry@kde.org>\n"
@@ -6993,17 +6993,26 @@ msgstr ""
 msgctxt "@info:whatsthis"
 msgid ""
 "Enter how long its buttons should remain disabled after the alarm message "
+"window is shown, to reduce the chance of alarm messages being accidentally "
+"acknowledged."
+msgstr ""
+
+#: prefdlg.cpp:1999
+#, kde-format
+msgctxt "@info:whatsthis"
+msgid ""
+"Enter how long its buttons should remain disabled after the alarm message "
 "window is shown."
 msgstr ""
 
-#: prefdlg.cpp:2003
+#: prefdlg.cpp:2007
 #, fuzzy, kde-format
 #| msgid "Message &windows have a title bar and take keyboard focus"
 msgctxt "@option:check"
 msgid "Message windows have a title bar and take keyboard focus"
 msgstr "Berjocht&finsters hawwe in titelbalke en krije de fokus"
 
-#: prefdlg.cpp:2006
+#: prefdlg.cpp:2010
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "Specify the characteristics of alarm message windows:\n"

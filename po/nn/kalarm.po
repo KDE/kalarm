@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-01-04 01:34+0000\n"
+"POT-Creation-Date: 2024-01-20 00:37+0000\n"
 "PO-Revision-Date: 2023-05-31 20:51+0200\n"
 "Last-Translator: Karl Ove Hufthammer <karl@huftis.org>\n"
 "Language-Team: Norwegian Nynorsk <l10n-no@lister.huftis.org>\n"
@@ -6071,6 +6071,21 @@ msgid "Button activation delay (seconds):"
 msgstr "Tid før knappane vert verksame (i sekund):"
 
 #: prefdlg.cpp:1995
+#, fuzzy, kde-format
+#| msgctxt "@info:whatsthis"
+#| msgid ""
+#| "Enter how long its buttons should remain disabled after the alarm message "
+#| "window is shown."
+msgctxt "@info:whatsthis"
+msgid ""
+"Enter how long its buttons should remain disabled after the alarm message "
+"window is shown, to reduce the chance of alarm messages being accidentally "
+"acknowledged."
+msgstr ""
+"Skriv inn kor lenge knappane skal vera uverksame etter at alarmvindauget er "
+"vist."
+
+#: prefdlg.cpp:1999
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -6080,13 +6095,13 @@ msgstr ""
 "Skriv inn kor lenge knappane skal vera uverksame etter at alarmvindauget er "
 "vist."
 
-#: prefdlg.cpp:2003
+#: prefdlg.cpp:2007
 #, kde-format
 msgctxt "@option:check"
 msgid "Message windows have a title bar and take keyboard focus"
 msgstr "Meldingsvindauge har ei tittellinje og tek fokuset til tastaturet"
 
-#: prefdlg.cpp:2006
+#: prefdlg.cpp:2010
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""

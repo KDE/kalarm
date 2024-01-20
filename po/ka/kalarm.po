@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-01-04 01:34+0000\n"
+"POT-Creation-Date: 2024-01-20 00:37+0000\n"
 "PO-Revision-Date: 2023-10-17 12:06+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
@@ -6078,6 +6078,21 @@ msgid "Button activation delay (seconds):"
 msgstr "ღილაკის აქტივაციის დაყოვნების დრო წამებში:"
 
 #: prefdlg.cpp:1995
+#, fuzzy, kde-format
+#| msgctxt "@info:whatsthis"
+#| msgid ""
+#| "Enter how long its buttons should remain disabled after the alarm message "
+#| "window is shown."
+msgctxt "@info:whatsthis"
+msgid ""
+"Enter how long its buttons should remain disabled after the alarm message "
+"window is shown, to reduce the chance of alarm messages being accidentally "
+"acknowledged."
+msgstr ""
+"შეიყვანეთ, რამდენ ხანს იქნება ღილაკები გამორთული, როცა განგაშის შეტყობინების "
+"ფანჯარას გაჩვენებთ."
+
+#: prefdlg.cpp:1999
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -6087,14 +6102,14 @@ msgstr ""
 "შეიყვანეთ, რამდენ ხანს იქნება ღილაკები გამორთული, როცა განგაშის შეტყობინების "
 "ფანჯარას გაჩვენებთ."
 
-#: prefdlg.cpp:2003
+#: prefdlg.cpp:2007
 #, kde-format
 msgctxt "@option:check"
 msgid "Message windows have a title bar and take keyboard focus"
 msgstr ""
 "შეტყობინებების ფანჯრებს სათაურის ზოლი აქვთ და კლავიატურის ფოკუსსაც იღებენ"
 
-#: prefdlg.cpp:2006
+#: prefdlg.cpp:2010
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""

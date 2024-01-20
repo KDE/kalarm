@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-01-04 01:34+0000\n"
+"POT-Creation-Date: 2024-01-20 00:37+0000\n"
 "PO-Revision-Date: 2024-01-13 05:59\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -5807,6 +5807,19 @@ msgid "Button activation delay (seconds):"
 msgstr "按钮激活延迟 (秒)："
 
 #: prefdlg.cpp:1995
+#, fuzzy, kde-format
+#| msgctxt "@info:whatsthis"
+#| msgid ""
+#| "Enter how long its buttons should remain disabled after the alarm message "
+#| "window is shown."
+msgctxt "@info:whatsthis"
+msgid ""
+"Enter how long its buttons should remain disabled after the alarm message "
+"window is shown, to reduce the chance of alarm messages being accidentally "
+"acknowledged."
+msgstr "输入闹钟消息窗口显示后，按钮禁用的时间。"
+
+#: prefdlg.cpp:1999
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -5814,13 +5827,13 @@ msgid ""
 "window is shown."
 msgstr "输入闹钟消息窗口显示后，按钮禁用的时间。"
 
-#: prefdlg.cpp:2003
+#: prefdlg.cpp:2007
 #, kde-format
 msgctxt "@option:check"
 msgid "Message windows have a title bar and take keyboard focus"
 msgstr "消息窗口显示标题栏，并捕获键盘焦点"
 
-#: prefdlg.cpp:2006
+#: prefdlg.cpp:2010
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
