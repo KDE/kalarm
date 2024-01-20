@@ -1990,8 +1990,12 @@ ViewPrefTab::ViewPrefTab(StackedScrollGroup* scrollGroup)
     mWindowButtonDelay->setRange(1, 10);
     mWindowButtonDelayLabel->setBuddy(mWindowButtonDelay);
     box->addWidget(mWindowButtonDelay);
-//TODO: Improve whatsthis text for Wayland
-    widget->setWhatsThis(i18nc("@info:whatsthis",
+    if (KWindowSystem::isPlatformWayland())  // Wayland doesn't allow positioning of windows
+        widget->setWhatsThis(i18nc("@info:whatsthis",
+                            "Enter how long its buttons should remain disabled after the alarm message window is shown, "
+                            "to reduce the chance of alarm messages being accidentally acknowledged."));
+    else
+        widget->setWhatsThis(i18nc("@info:whatsthis",
                             "Enter how long its buttons should remain disabled after the alarm message window is shown."));
     box->addStretch();    // left adjust the controls
     grid->addWidget(widget, 2, 1, Qt::AlignLeft);
