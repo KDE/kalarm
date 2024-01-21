@@ -1,17 +1,17 @@
 # Translation of kalarm.po to Catalan (Valencian)
-# Copyright (C) 2003-2023 This_file_is_part_of_KDE
+# Copyright (C) 2003-2024 This_file_is_part_of_KDE
 #
 # Antoni Bella Pérez <antonibella5@yahoo.com>, 2003, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2019, 2020, 2021, 2022.
 # Sebastià Pla i Sanz <sps@sastia.com>, 2004, 2006.
 # Albert Astals Cid <aacid@kde.org>, 2004, 2005.
-# Josep M. Ferrer <txemaq@gmail.com>, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023.
+# Josep M. Ferrer <txemaq@gmail.com>, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024.
 # Manuel Tortosa Moreno <manutortosa@chakra-project.org>, 2009, 2010, 2011.
 msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-01-20 00:37+0000\n"
-"PO-Revision-Date: 2023-10-18 20:28+0200\n"
+"PO-Revision-Date: 2024-01-20 15:25+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -1526,7 +1526,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label"
 msgid "Confirm acknowledgement"
-msgstr "Confirma l'acceptació"
+msgstr "Confirma el reconeixement"
 
 #. i18n: ectx: whatsthis, entry (DefaultConfirmAck), group (Defaults)
 #: data/kalarmconfig.kcfg:311
@@ -1537,7 +1537,7 @@ msgid ""
 "\"."
 msgstr ""
 "La configuració predeterminada en el diàleg d'edició d'una alarma per a "
-"«Confirma l'acceptació de l'alarma»."
+"«Confirma el reconeixement de l'alarma»."
 
 #. i18n: ectx: label, entry (DefaultCopyToKOrganizer), group (Defaults)
 #: data/kalarmconfig.kcfg:315
@@ -2449,7 +2449,7 @@ msgstr "Notificació"
 #, kde-format
 msgctxt "@option:check"
 msgid "Confirm acknowledgment"
-msgstr "Confirma l'acceptació"
+msgstr "Confirma el reconeixement"
 
 #: editdlgtypes.cpp:118
 #, kde-format
@@ -2583,7 +2583,7 @@ msgstr ""
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to be prompted for confirmation when you acknowledge the alarm."
-msgstr "Seleccioneu perquè es demane confirmació quan vos adoneu de l'alarma."
+msgstr "Seleccioneu perquè es demane confirmació quan reconeixeu l'alarma."
 
 #: editdlgtypes.cpp:286
 #, kde-format
@@ -6179,11 +6179,7 @@ msgid "Button activation delay (seconds):"
 msgstr "Retard de l'activació dels botons (en segons):"
 
 #: prefdlg.cpp:1995
-#, fuzzy, kde-format
-#| msgctxt "@info:whatsthis"
-#| msgid ""
-#| "Enter how long its buttons should remain disabled after the alarm message "
-#| "window is shown."
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "Enter how long its buttons should remain disabled after the alarm message "
@@ -6191,7 +6187,8 @@ msgid ""
 "acknowledged."
 msgstr ""
 "Introduïu el temps durant el qual s'han de desactivar els botons després de "
-"mostrar la finestra del missatge de l'alarma."
+"mostrar la finestra del missatge de l'alarma, per a reduir la possibilitat "
+"que els missatges d'alarma siguen reconeguts accidentalment."
 
 #: prefdlg.cpp:1999
 #, kde-format

@@ -1,26 +1,26 @@
 # Translation for kalarm.po to Euskara/Basque (eu).
-# Copyright (C) 2003-2023 This file is copyright:
+# Copyright (C) 2003-2024 This file is copyright:
 # This file is distributed under the same license as the kalarm package.
-# SPDX-FileCopyrightText: 2023 KDE euskaratzeko proiektuko arduraduna <xalba@ni.eus>
+# SPDX-FileCopyrightText: 2023, 2024 KDE euskaratzeko proiektuko arduraduna <xalba@ni.eus>
 #
 # Translators:
 # Marcos  <marcos@euskalgnu.org>, 2003, 2005, 2006.
 # Ion Gaztañaga <ion_g_m@hotmail.com>, 2005.
 # Ion Gaztañaga <igaztanaga@gmail.com>, 2005.
-# Iñigo Salvador Azurmendi <xalba@ni.eus>, 2010, 2020, 2021, 2022, 2023.
+# Iñigo Salvador Azurmendi <xalba@ni.eus>, 2010, 2020, 2021, 2022, 2023, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-01-20 00:37+0000\n"
-"PO-Revision-Date: 2023-10-09 06:31+0200\n"
+"PO-Revision-Date: 2024-01-20 10:55+0100\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
 "Language: eu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 23.08.1\n"
+"X-Generator: Lokalize 23.08.4\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #, kde-format
@@ -6117,19 +6117,16 @@ msgid "Button activation delay (seconds):"
 msgstr "Botoien aktibazio atzerapena (segundotan):"
 
 #: prefdlg.cpp:1995
-#, fuzzy, kde-format
-#| msgctxt "@info:whatsthis"
-#| msgid ""
-#| "Enter how long its buttons should remain disabled after the alarm message "
-#| "window is shown."
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "Enter how long its buttons should remain disabled after the alarm message "
 "window is shown, to reduce the chance of alarm messages being accidentally "
 "acknowledged."
 msgstr ""
-"Sartu, alarma-mezuaren leihoa erakutsi ondoren bere botoiak zenbat denboraz "
-"egon behar duten ezgaituta."
+"Sartu, alarma-mezuaren leihoa erakutsi ondoren, haren botoiak zenbat "
+"denboraz ezgaituta egon behar duten, ustekabean alarma-mezuak aitortzeko "
+"aukerak murrizteko."
 
 #: prefdlg.cpp:1999
 #, kde-format

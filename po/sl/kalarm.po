@@ -12,17 +12,17 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-01-20 00:37+0000\n"
-"PO-Revision-Date: 2023-10-09 07:28+0200\n"
+"PO-Revision-Date: 2024-01-20 08:45+0100\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n"
-"%100==4 ? 3 : 0);\n"
+"Plural-Forms: nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100>=3 && n"
+"%100<=4 ? 2 : 3);\n"
 "Translator: Andrej Mernik <andrejm@ubuntu.si>\n"
-"X-Generator: Poedit 3.3.2\n"
+"X-Generator: Poedit 3.4.2\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -6087,19 +6087,16 @@ msgid "Button activation delay (seconds):"
 msgstr "Zakasnitev omogočanja gumbov (sekunde):"
 
 #: prefdlg.cpp:1995
-#, fuzzy, kde-format
-#| msgctxt "@info:whatsthis"
-#| msgid ""
-#| "Enter how long its buttons should remain disabled after the alarm message "
-#| "window is shown."
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "Enter how long its buttons should remain disabled after the alarm message "
 "window is shown, to reduce the chance of alarm messages being accidentally "
 "acknowledged."
 msgstr ""
-"Vnesite, za koliko časa po prikazu okna sporočila alarma naj bodo gumbi "
-"onemogočeni."
+"Vnesite, kako dolgo naj ostanejo njegovi gumbi onemogočeni, potem ko se "
+"prikaže okno z alarmnim sporočilom, da zmanjšate možnost pomotoma potrditve "
+"alarmnih sporočil."
 
 #: prefdlg.cpp:1999
 #, kde-format

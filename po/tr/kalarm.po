@@ -11,13 +11,13 @@
 # obsoleteman <tulliana@gmail.com>, 2008-2009,2012.
 # Volkan Gezer <volkangezer@gmail.com>, 2013-2014, 2015, 2017.
 # Kaan Ozdincer <kaanozdincer@gmail.com>, 2014.
-# Emir SARI <emir_sari@icloud.com>, 2022, 2023.
+# SPDX-FileCopyrightText: 2022, 2023, 2024 Emir SARI <emir_sari@icloud.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: kdepim-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-01-20 00:37+0000\n"
-"PO-Revision-Date: 2023-12-09 22:18+0300\n"
+"PO-Revision-Date: 2024-01-20 16:31+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -25,7 +25,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 24.01.80\n"
+"X-Generator: Lokalize 24.01.95\n"
 "(http: //www.transifex.com/projects/p/kdepim-k-tr/language/tr/)\n"
 "X-POOTLE-MTIME: 1413131629.000000\n"
 
@@ -6087,19 +6087,16 @@ msgid "Button activation delay (seconds):"
 msgstr "Düğme etkinleştirme gecikmesi (saniye):"
 
 #: prefdlg.cpp:1995
-#, fuzzy, kde-format
-#| msgctxt "@info:whatsthis"
-#| msgid ""
-#| "Enter how long its buttons should remain disabled after the alarm message "
-#| "window is shown."
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "Enter how long its buttons should remain disabled after the alarm message "
 "window is shown, to reduce the chance of alarm messages being accidentally "
 "acknowledged."
 msgstr ""
-"Alarm ileti penceresi gösterildikten sonra düğmelerinin ne kadar süre kapalı "
-"kalması gerektiğini girin."
+"Alarm iletilerinin yanlışlıkla onaylanmasını önlemek için alarm ileti "
+"penceresi gösterildikten sonra düğmelerinin ne kadar süre kapalı kalması "
+"gerektiğini girin."
 
 #: prefdlg.cpp:1999
 #, kde-format

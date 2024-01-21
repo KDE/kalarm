@@ -2315,7 +2315,7 @@ mode.</para
 
 <para
 >Per a les alarmes visuals, la casella de selecció <guilabel
->Confirma l'acceptació</guilabel
+>Confirma el reconeixement</guilabel
 > permet especificar si se us demanarà confirmació en tancar la finestra del missatge de l'alarma. Això es pot utilitzar com a salvaguarda contra el reconeixement accidental de les alarmes.</para>
 
 <para
@@ -2390,7 +2390,7 @@ mode.</para
 >Reconèixer l'alarma fent clic al botó <guibutton
 >Tanca</guibutton
 >. Això tancarà la finestra (després d'un missatge de confirmació, si heu seleccionat <guilabel
->Confirma l'acceptació</guilabel
+>Confirma el reconeixement</guilabel
 >).</para>
 </listitem>
 
@@ -3700,7 +3700,7 @@ mode.</para
 >Establiu els estats predeterminats per a les caselles de selecció <guilabel
 >Tanca la finestra automàticament després d'aquest temps</guilabel
 > i <guilabel
->Confirma l'acceptació</guilabel
+>Confirma el reconeixement</guilabel
 >.</para>
 </listitem>
 

@@ -8,7 +8,7 @@
 # Juan Manuel García Molina <juanma@superiodico.net>, 2007.
 # Enrique Matias Sanchez (aka Quique) <cronopios@gmail.com>, 2007.
 # Jaime Robles <jaime@kde.org>, 2007.
-# SPDX-FileCopyrightText: 2008, 2009, 2010, 2014, 2019, 2020, 2021, 2022, 2023 Eloy Cuadra <ecuadra@eloihr.net>
+# SPDX-FileCopyrightText: 2008, 2009, 2010, 2014, 2019, 2020, 2021, 2022, 2023, 2024 Eloy Cuadra <ecuadra@eloihr.net>
 # Franco Mariluis <fmariluis@gmail.com>, 2008, 2009.
 # Dario Andres Rodriguez <andrebajotierra@gmail.com>, 2009.
 # Javier Vinal <fjvinalgmail.com>, 2009, 2010, 2011, 2012, 2019.
@@ -19,7 +19,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-01-20 00:37+0000\n"
-"PO-Revision-Date: 2023-10-09 19:39+0200\n"
+"PO-Revision-Date: 2024-01-20 02:21+0100\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -27,7 +27,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "First-Translator: Miguel Revilla <yo@miguelrevilla.com>\n"
-"X-Generator: Lokalize 23.08.1\n"
+"X-Generator: Lokalize 23.08.4\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #, kde-format
@@ -6172,19 +6172,16 @@ msgid "Button activation delay (seconds):"
 msgstr "Retardo en la activación del botón (segundos):"
 
 #: prefdlg.cpp:1995
-#, fuzzy, kde-format
-#| msgctxt "@info:whatsthis"
-#| msgid ""
-#| "Enter how long its buttons should remain disabled after the alarm message "
-#| "window is shown."
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "Enter how long its buttons should remain disabled after the alarm message "
 "window is shown, to reduce the chance of alarm messages being accidentally "
 "acknowledged."
 msgstr ""
-"Indique por cuánto tiempo sus botones deben permanecer desactivados después "
-"de que se muestre la ventana de mensaje de alarma."
+"Indique el tiempo durante el que los botones deben permanecer desactivados "
+"tras mostrar la ventana de mensaje de la alarma para reducir la posibilidad "
+"de reconocer accidentalmente dicho mensaje."
 
 #: prefdlg.cpp:1999
 #, kde-format

@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-01-20 00:37+0000\n"
-"PO-Revision-Date: 2023-12-16 23:54+0100\n"
+"PO-Revision-Date: 2024-01-20 15:45+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -6042,19 +6042,16 @@ msgid "Button activation delay (seconds):"
 msgstr "Prokrasto de aktivigo de butonoj (sekundoj):"
 
 #: prefdlg.cpp:1995
-#, fuzzy, kde-format
-#| msgctxt "@info:whatsthis"
-#| msgid ""
-#| "Enter how long its buttons should remain disabled after the alarm message "
-#| "window is shown."
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "Enter how long its buttons should remain disabled after the alarm message "
 "window is shown, to reduce the chance of alarm messages being accidentally "
 "acknowledged."
 msgstr ""
-"Enigu kiom longe ĝiaj butonoj devas resti malŝaltitaj post kiam la "
-"alarmmesaĝo fenestro montriĝas."
+"Enigu kiom longe ĝiaj butonoj restu malŝaltitaj post kiam la alarmmesaĝa "
+"fenestro montriĝas, por malpliigi probablecon akcidente agnoski "
+"alarmmesaĝojn."
 
 #: prefdlg.cpp:1999
 #, kde-format
