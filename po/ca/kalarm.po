@@ -1,17 +1,17 @@
 # Translation of kalarm.po to Catalan
-# Copyright (C) 2003-2023 This_file_is_part_of_KDE
+# Copyright (C) 2003-2024 This_file_is_part_of_KDE
 #
 # Antoni Bella Pérez <antonibella5@yahoo.com>, 2003, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2019, 2020, 2021, 2022.
 # Sebastià Pla i Sanz <sps@sastia.com>, 2004, 2006.
 # Albert Astals Cid <aacid@kde.org>, 2004, 2005.
-# Josep M. Ferrer <txemaq@gmail.com>, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023.
+# Josep M. Ferrer <txemaq@gmail.com>, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024.
 # Manuel Tortosa Moreno <manutortosa@chakra-project.org>, 2009, 2010, 2011.
 msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-01-04 01:34+0000\n"
-"PO-Revision-Date: 2023-10-18 20:28+0200\n"
+"PO-Revision-Date: 2024-01-20 15:26+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -1520,7 +1520,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label"
 msgid "Confirm acknowledgement"
-msgstr "Confirma l'acceptació"
+msgstr "Confirma el reconeixement"
 
 #. i18n: ectx: whatsthis, entry (DefaultConfirmAck), group (Defaults)
 #: data/kalarmconfig.kcfg:311
@@ -1531,7 +1531,7 @@ msgid ""
 "\"."
 msgstr ""
 "L'arranjament predeterminat al diàleg d'edició d'una alarma per a «Confirma "
-"l'acceptació de l'alarma»."
+"el reconeixement de l'alarma»."
 
 #. i18n: ectx: label, entry (DefaultCopyToKOrganizer), group (Defaults)
 #: data/kalarmconfig.kcfg:315
@@ -2442,7 +2442,7 @@ msgstr "Notificació"
 #, kde-format
 msgctxt "@option:check"
 msgid "Confirm acknowledgment"
-msgstr "Confirma l'acceptació"
+msgstr "Confirma el reconeixement"
 
 #: editdlgtypes.cpp:118
 #, kde-format
@@ -2576,7 +2576,7 @@ msgstr ""
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to be prompted for confirmation when you acknowledge the alarm."
-msgstr "Marqueu perquè es demani confirmació quan us adoneu de l'alarma."
+msgstr "Marqueu perquè es demani confirmació quan reconeixeu l'alarma."
 
 #: editdlgtypes.cpp:286
 #, kde-format
@@ -8766,64 +8766,3 @@ msgstr ""
 #, kde-format
 msgid "Number of minutes before alarm to wake from suspend"
 msgstr "Nombre de minuts abans de l'alarma per a activar des de la suspensió"
-
-#~ msgid "&File"
-#~ msgstr "&Fitxer"
-
-#~ msgid "&Edit"
-#~ msgstr "&Edita"
-
-#~ msgid "&View"
-#~ msgstr "Vi&sualitza"
-
-#~ msgctxt "@action"
-#~ msgid "&New"
-#~ msgstr "&Nova"
-
-#~ msgctxt "@action"
-#~ msgid "&Edit..."
-#~ msgstr "&Edita..."
-
-#~ msgctxt "@action"
-#~ msgid "&Delete"
-#~ msgstr "&Suprimeix"
-
-#~ msgctxt "@action"
-#~ msgid "Show Archi&ved Alarms"
-#~ msgstr "Mostra les alarmes &arxivades"
-
-#~ msgctxt "@action"
-#~ msgid "Ena&ble"
-#~ msgstr "&Activa"
-
-#~ msgctxt "@action"
-#~ msgid "Disa&ble"
-#~ msgstr "&Desactiva"
-
-#~ msgctxt "@action:button"
-#~ msgid "&Edit..."
-#~ msgstr "&Edita..."
-
-#~ msgctxt "@option:radio"
-#~ msgid "February 2&8th"
-#~ msgstr "2&8 de febrer"
-
-#~ msgctxt "@option:radio"
-#~ msgid "March &1st"
-#~ msgstr "&1 de març"
-
-#~ msgctxt "@option:radio"
-#~ msgid "Acti&ve Alarms"
-#~ msgstr "Alarmes acti&ves"
-
-#~ msgctxt "@option:radio"
-#~ msgid "Alarm &Templates"
-#~ msgstr "Plan&tilles d'alarma"
-
-#~ msgctxt "@action"
-#~ msgid "&Remove"
-#~ msgstr "&Elimina"
-
-#~ msgctxt "@action"
-#~ msgid "&Add..."
-#~ msgstr "&Afegeix..."
