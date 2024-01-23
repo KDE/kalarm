@@ -8,13 +8,13 @@
 #
 # Frank Weng (a.k.a. Franklin) <franklin at goodhorse dot idv dot tw>, 2006, 2008, 2009, 2010.
 # Franklin Weng <franklin at goodhorse dot idv dot tw>, 2007, 2008.
-# SPDX-FileCopyrightText: 2023 Kisaragi Hiu <mail@kisaragi-hiu.com>
+# SPDX-FileCopyrightText: 2023, 2024 Kisaragi Hiu <mail@kisaragi-hiu.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-01-04 01:34+0000\n"
-"PO-Revision-Date: 2023-12-19 18:28+0900\n"
+"PO-Revision-Date: 2024-01-22 16:34+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
 "Language: zh_TW\n"
@@ -121,12 +121,10 @@ msgid "Any time"
 msgstr "任何時間"
 
 #: alarmtimewidget.cpp:131
-#, fuzzy, kde-format
-#| msgctxt "@info:whatsthis"
-#| msgid "Next scheduled date and time of the alarm"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Set only a date (without a time) for the alarm"
-msgstr "鬧鐘下一次響鈴日期與時間"
+msgstr "為鬧鐘設定日期（不要包含時間）"
 
 #: alarmtimewidget.cpp:133
 #, kde-format
@@ -774,6 +772,9 @@ msgid ""
 "provide features including birthday import, some email functions, email "
 "address book lookup, and Akonadi resource migration on first run."
 msgstr ""
+"選擇是否啟用 KAlarm 的 Akonadi 外掛程式。這個外掛程式會利用 Akonadi 來提供一"
+"些功能，包含生日匯入、某些電子郵件功能、電子郵件通訊錄查詢以及初次使用的 "
+"Akonadi 資源移轉。"
 
 #. i18n: ectx: label, entry (Base_TimeZone), group (General)
 #: data/kalarmconfig.kcfg:83
@@ -847,7 +848,7 @@ msgctxt "@info:whatsthis"
 msgid ""
 "Choose whether to be able to give alarms a name. This is a convenience to "
 "help you to identify alarms."
-msgstr ""
+msgstr "選擇是否要能夠給予鬧鐘名稱。這讓您能夠方便的辨識鬧鐘。"
 
 #. i18n: ectx: label, entry (MessageFont), group (General)
 #: data/kalarmconfig.kcfg:109
@@ -1377,6 +1378,8 @@ msgid ""
 "determine whether to display alarm messages in windows or in system "
 "notifications."
 msgstr ""
+"鬧鐘設定編輯對話框中「顯示方式」的預設設定，來決定鬧鐘訊息要用視窗顯示還是要"
+"用系統通知顯示。"
 
 #. i18n: ectx: label, entry (DefaultLateCancel), group (Defaults)
 #: data/kalarmconfig.kcfg:299
@@ -1841,7 +1844,7 @@ msgctxt "@info:whatsthis"
 msgid ""
 "Select dates to show in the alarm list. Only alarms due on these dates will "
 "be shown."
-msgstr ""
+msgstr "選擇要在鬧鐘清單中顯示的日期。只會顯示在這些日期到期的鬧鐘。"
 
 #: datepicker.cpp:56
 #, kde-format
@@ -2152,6 +2155,8 @@ msgid ""
 "will trigger at the minute boundary before the specified time from now.</"
 "para>"
 msgstr ""
+"<para>KAlarm 不提供高精確度的鬧鐘。</para><para>鬧鐘會在指定時間與現在時間之"
+"間的分鐘邊界觸發。</para>"
 
 #: editdlg.cpp:1063
 #, kde-format
@@ -2799,15 +2804,11 @@ msgid "Play the audio file now"
 msgstr "現在播放音效檔"
 
 #: editdlgtypes.cpp:1617
-#, fuzzy, kde-format
-#| msgctxt "@info:whatsthis"
-#| msgid ""
-#| "If checked, the sound file will be played repeatedly for as long as the "
-#| "message is displayed."
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "If checked, the sound file will be played repeatedly until %1 is clicked."
-msgstr "勾選此選項的話，只要訊息顯示著，音效檔就會一直被重複播放。"
+msgstr "勾選此選項的話，會一直重複播放音效檔，直到按下 %1。"
 
 #: editdlgtypes.cpp:1826
 #, kde-format
@@ -2833,7 +2834,7 @@ msgctxt "@info"
 msgid ""
 "<para>The command cannot set environment variables:</para><para><icode>%1</"
 "icode></para>"
-msgstr ""
+msgstr "<para>指令不能設定環境變數：</para><para><icode>%1</icode></para>"
 
 #: editdlgtypes.cpp:1897
 #, kde-format
@@ -3293,12 +3294,7 @@ msgid "%1: Event <resource>%2</resource> not found, or not editable"
 msgstr "%1：找不到事件 <resource>%2</resource>，或者無法編輯"
 
 #: kalarmapp.cpp:1515
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid ""
-#| "Alarms cannot be created or updated, because no writable active alarm "
-#| "calendar is enabled.<nl/><nl/>To fix this, use <interface>View | Show "
-#| "Calendars</interface> to check or change calendar statuses."
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "Alarms are configured to be archived, but this is not possible because no "
@@ -3306,16 +3302,12 @@ msgid ""
 "<interface>View | Show Calendars</interface> to check or change calendar "
 "statuses."
 msgstr ""
-"無法建立或更新鬧鐘，因為沒有開啟任何可寫入的鬧鐘行事曆。<nl/><nl/>要修正這個"
-"問題，請用<interface>檢視 | 顯示行事曆</interface>來檢查或變更行事曆狀態。"
+"鬧鐘設定為要歸檔，但由於沒有啟用任何可寫入的歸檔鬧鐘行事曆，目前無法進行歸"
+"檔。<nl/><nl/>要修正這個問題，請使用 <interface>檢視 | 顯示行事曆</"
+"interface> 來檢查或變更行事曆狀態。"
 
 #: kalarmapp.cpp:1523
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid ""
-#| "Alarms cannot be created or updated, because no writable active alarm "
-#| "calendar is enabled.<nl/><nl/>To fix this, use <interface>View | Show "
-#| "Calendars</interface> to check or change calendar statuses."
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "Alarms are configured to be archived, but this is not possible because no "
@@ -3324,8 +3316,9 @@ msgid ""
 "calendar, and check <interface>Use as Default for Archived Alarms</"
 "interface>."
 msgstr ""
-"無法建立或更新鬧鐘，因為沒有開啟任何可寫入的鬧鐘行事曆。<nl/><nl/>要修正這個"
-"問題，請用<interface>檢視 | 顯示行事曆</interface>來檢查或變更行事曆狀態。"
+"鬧鐘設定為要歸檔，但由於沒有設定預設的歸檔鬧鐘行事曆，目前無法進行歸檔。<nl/"
+"><nl/>要修正這個問題，請使用 <interface>檢視 | 顯示行事曆</interface>，選取一"
+"個歸檔鬧鐘行事曆，然後勾選 <interface>設為歸檔鬧鐘的預設</interface>。"
 
 #: kalarmapp.cpp:2500
 #, kde-format
@@ -3527,12 +3520,10 @@ msgid "Start time"
 msgstr "開始時間"
 
 #: kalarmcalendar/kaeventformatter.cpp:51
-#, fuzzy, kde-format
-#| msgctxt "@label:textbox"
-#| msgid "Template name:"
+#, kde-format
 msgctxt "@label Start delay configured in an alarm template"
 msgid "Template after time"
-msgstr "樣本名稱："
+msgstr "樣本起始延遲"
 
 #: kalarmcalendar/kaeventformatter.cpp:53
 #, kde-format
@@ -3592,7 +3583,7 @@ msgstr "下次重複"
 #, kde-format
 msgctxt "@label"
 msgid "Late cancel"
-msgstr ""
+msgstr "延遲取消"
 
 #: kalarmcalendar/kaeventformatter.cpp:73
 #, kde-format
@@ -3715,12 +3706,10 @@ msgid "Reminder"
 msgstr "提醒"
 
 #: kalarmcalendar/kaeventformatter.cpp:122
-#, fuzzy, kde-format
-#| msgctxt "@option:check"
-#| msgid "Reminder for first recurrence only"
+#, kde-format
 msgctxt "@label Whether reminder is on first recurrence only"
 msgid "Reminder once only"
-msgstr "只在第一次循環時提醒"
+msgstr "只提醒一次"
 
 #: kalarmcalendar/kaeventformatter.cpp:124
 #, kde-format
@@ -3973,22 +3962,15 @@ msgstr ""
 "application> 設定對話框中設定。</para>"
 
 #: kamail.cpp:123
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid ""
-#| "<para>No 'From' email address is configured.</para><para>Please set a "
-#| "default address in <application>KMail</application> or KDE System "
-#| "Settings or in the <application>KAlarm</application> Configuration dialog."
-#| "</para>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "<para>No 'From' email address is configured.</para><para>Please set a "
 "default address in <application>KMail</application> or in the "
 "<application>KAlarm</application> Configuration dialog.</para>"
 msgstr ""
-"<para>寄件者尚未設定。</para><para>請在 <application>KMail</application> 或"
-"KDE 系統設定、或是在 <application>KAlarm</application> 配置對話框中設定預設電"
-"子信箱位置。</para>"
+"<para>寄件者尚未設定。</para><para>請在 <application>KMail</application> 或 "
+"<application>KAlarm</application> 設定對話框中設定預設電子信箱位置。</para>"
 
 #: kamail.cpp:128
 #, kde-kuit-format
@@ -4912,7 +4894,7 @@ msgctxt "@info:whatsthis"
 msgid ""
 "Check to have the option to give alarms a name. This is a convenience to "
 "help you to identify alarms."
-msgstr "勾選此選項以給予鬧鐘名稱。這讓您能夠方便的辨識鬧鐘。"
+msgstr "勾選此選項以取得給予鬧鐘名稱的選項。這讓您能夠方便的辨識鬧鐘。"
 
 #: prefdlg.cpp:475
 #, kde-format
@@ -4992,6 +4974,8 @@ msgid ""
 "Enable the use of Akonadi to provide features including birthday import, "
 "some email functions, and email address book lookup."
 msgstr ""
+"開始使用 Akonadi，來提供生日匯入、某些電子郵件功能以及電子郵件通訊錄查詢等等"
+"功能。"
 
 #: prefdlg.cpp:552
 #, kde-format
@@ -5000,6 +4984,8 @@ msgid ""
 "Enable the use of Akonadi to provide features including birthday import, "
 "some email functions, and email address book lookup."
 msgstr ""
+"開始使用 Akonadi，來提供生日匯入、某些電子郵件功能以及電子郵件通訊錄查詢等等"
+"功能。"
 
 #: prefdlg.cpp:600
 #, kde-kuit-format
@@ -5008,12 +4994,14 @@ msgid ""
 "<para>No command is specified to invoke a terminal window.</para><para>The "
 "default command (<command>%1</command>) will be used.</para>"
 msgstr ""
+"<para>未指定啟動終端機視窗的指令。</para><para>會使用預設指令 (<command>%1</"
+"command>)。</para>"
 
 #: prefdlg.cpp:608
 #, kde-kuit-format
 msgctxt "@info"
 msgid "No command is specified to invoke a terminal window"
-msgstr ""
+msgstr "未指定啟動終端機視窗的指令"
 
 #: prefdlg.cpp:621
 #, kde-kuit-format
@@ -5070,20 +5058,15 @@ msgid "Wake from suspend before alarm:"
 msgstr "鬧鐘前多久從休眠中喚醒："
 
 #: prefdlg.cpp:773
-#, fuzzy, kde-format
-#| msgctxt "@info:whatsthis"
-#| msgid ""
-#| "Enter how many minutes before the alarm trigger time to wake the system "
-#| "from suspend. This can be used to ensure that the system is fully "
-#| "restored by the time the alarm triggers."
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "Enter how many minutes before the alarm trigger time to wake the system, for "
 "alarms set to wake from suspend. This can be used to ensure that the system "
 "is fully restored by the time the alarm triggers."
 msgstr ""
-"輸入您要在鬧鐘響鈴前幾分鐘將電腦從休眠中喚醒。這樣可以確保系統能完整回復並觸"
-"發鬧鐘。"
+"輸入您要在鬧鐘響鈴前幾分鐘將電腦從休眠中喚醒（適用於設為從休眠中喚醒電腦的鬧"
+"鐘）。這樣可以確保系統能完整回復並觸發鬧鐘。"
 
 #: prefdlg.cpp:774
 #, kde-format
@@ -5319,16 +5302,7 @@ msgid "Choose how to send email when an email alarm is triggered."
 msgstr "選擇電子郵件型鬧鐘觸發時要如何寄送電子郵件。"
 
 #: prefdlg.cpp:1093
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info:whatsthis"
-#| msgid ""
-#| "<para>Choose how to send email when an email alarm is triggered."
-#| "<list><item><interface>%1</interface>: The email is sent automatically "
-#| "via <application>KMail</application>. <application>KMail</application> is "
-#| "started first if necessary.</item><item><interface>%2</interface>: The "
-#| "email is sent automatically. This option will only work if your system is "
-#| "configured to use <application>sendmail</application> or a sendmail "
-#| "compatible mail transport agent.</item></list></para>"
+#, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
 "<para>%1<list><item><interface>%2</interface>: The email is sent "
@@ -5337,24 +5311,14 @@ msgid ""
 "if your system is configured to use <application>sendmail</application> or a "
 "sendmail compatible mail transport agent.</item></list></para>"
 msgstr ""
-"<para>選擇鬧鐘被觸發時要如何寄出信件。\n"
-"<list><item><interface>%1</interface>：信件會自動透過 <application>KMail</"
-"application> 送出。<application>KMail</application> 若尚未啟動，則會先被啟"
-"動。</item><item><interface>%2</interface>：會自動地寄出信件。該選項將只會在"
-"您的系統是設定使用 <application>sendmail</application> 或相容的郵件傳遞程式時"
-"才有作用。</item></list></para>"
+"<para>%1<list><item><interface>%2</interface>：郵件會自動透過 "
+"<application>KMail</application> 寄出。</item><item><interface>%3</"
+"interface>：郵件會自動寄出。這個選項需要您的系統有設定使用 "
+"<application>sendmail</application> 或是與 sendmail 相容的郵件傳輸代理程式才"
+"能正常運作。</item></list></para>"
 
 #: prefdlg.cpp:1101
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info:whatsthis"
-#| msgid ""
-#| "<para>Choose how to send email when an email alarm is triggered."
-#| "<list><item><interface>%1</interface>: The email is sent automatically "
-#| "via <application>KMail</application>. <application>KMail</application> is "
-#| "started first if necessary.</item><item><interface>%2</interface>: The "
-#| "email is sent automatically. This option will only work if your system is "
-#| "configured to use <application>sendmail</application> or a sendmail "
-#| "compatible mail transport agent.</item></list></para>"
+#, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
 "<para>%1<list><item><interface>%2</interface>: The email is sent "
@@ -5362,12 +5326,9 @@ msgid ""
 "use <application>sendmail</application> or a sendmail compatible mail "
 "transport agent.</item></list></para>"
 msgstr ""
-"<para>選擇鬧鐘被觸發時要如何寄出信件。\n"
-"<list><item><interface>%1</interface>：信件會自動透過 <application>KMail</"
-"application> 送出。<application>KMail</application> 若尚未啟動，則會先被啟"
-"動。</item><item><interface>%2</interface>：會自動地寄出信件。該選項將只會在"
-"您的系統是設定使用 <application>sendmail</application> 或相容的郵件傳遞程式時"
-"才有作用。</item></list></para>"
+"<para>%1<list><item><interface>%2</interface>：郵件會自動寄出。這個選項需要您"
+"的系統有設定使用 <application>sendmail</application> 或是與 sendmail 相容的郵"
+"件傳輸代理程式才能正常運作。</item></list></para>"
 
 #: prefdlg.cpp:1111
 #, kde-kuit-format
@@ -5492,28 +5453,24 @@ msgid "Are you sure you want to save your changes?"
 msgstr "您確定要儲存變更嗎？"
 
 #: prefdlg.cpp:1307
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid ""
-#| "No default email address is currently set in <application>KMail</"
-#| "application> or KDE System Settings. %1"
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "<para>No default email address is currently set in <application>KMail</"
 "application>.</para><para>%1</para><para>%2</para>"
 msgstr ""
-"<application>KMail</application> 或 KDE 系統設定裡沒有設定預設電子郵件地"
-"址。%1"
+"<para>目前沒有在 <application>KMail</application> 中設定預設電子郵件地址。</"
+"para><para>%1</para><para>%2</para>"
 
 #: prefdlg.cpp:1312
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid "No <application>KMail</application> identities currently exist. %1"
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "<para>No <application>KMail</application> identities currently exist.</"
 "para><para>%1</para><para>%2</para>"
-msgstr "<application>Kmail</application> 中沒有設定任何寄件身份。%1"
+msgstr ""
+"<para>沒有任何現存的 <application>KMail</application> 身份。</para><para>%1</"
+"para><para>%2</para>"
 
 #: prefdlg.cpp:1330
 #, kde-kuit-format
@@ -6572,12 +6529,7 @@ msgstr ""
 "版本 %2），除非您選擇將它更新為目前的格式，否則將會設為唯讀。"
 
 #: resources/calendarupdater.cpp:88
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid ""
-#| "Some or all of the alarms in calendar <resource>%1</resource> are in an "
-#| "old <application>KAlarm</application> format, and will be read-only "
-#| "unless you choose to update them to the current format."
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "Some or all of the alarms in calendar <resource>%1</resource> are in an old "
@@ -6585,8 +6537,8 @@ msgid ""
 "choose to update them to the current format."
 msgstr ""
 "行事曆 <resource>%1</resource> 中部份或所有的鬧鐘使用舊的 "
-"<application>KAlarm</application> 格式。除非您選擇將它們更新為目前的格式，否"
-"則將會設為唯讀。"
+"<application>KAlarm</application> 格式，在您選擇將它們更新為目前的格式之前將"
+"會設為唯讀。"
 
 #: resources/calendarupdater.cpp:91
 #, kde-kuit-format
@@ -6809,6 +6761,8 @@ msgid ""
 "using the Import Alarms menu option to import the calendar files contained "
 "within it."
 msgstr ""
+"如果您希望，您可以之後再匯入這個行事曆目錄資源。匯入方式為使用選單中的「匯入"
+"鬧鐘」選項來匯入包含在其中的行事曆檔案。"
 
 #. i18n: ectx: property (text), widget (QRadioButton, mergeRadio)
 #: resources/migration/dirresourceimportdialog_type.ui:13
@@ -6822,7 +6776,7 @@ msgstr "匯入到現有的行事曆檔案資源"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select the resource to import the directory resource's alarms into."
-msgstr ""
+msgstr "選擇要將目錄資源的鬧鐘匯入到哪個資源。"
 
 #. i18n: ectx: property (text), widget (QRadioButton, newRadio)
 #: resources/migration/dirresourceimportdialog_type.ui:49
@@ -6845,7 +6799,7 @@ msgstr "檔案名稱："
 msgctxt "@info:tooltip"
 msgid ""
 "Select the file to contain this resource. The file must not already exist."
-msgstr ""
+msgstr "選擇要包含這個資源的檔案。檔案不能已經存在。"
 
 #. i18n: ectx: property (whatsThis), widget (KUrlRequester, pathRequester)
 #: resources/migration/dirresourceimportdialog_type.ui:79
@@ -6857,6 +6811,9 @@ msgid ""
 "Note that if the URL of a remote file is specified, monitoring for file "
 "changes will not work."
 msgstr ""
+"選擇要包含這個資源的檔案。\n"
+"檔案不能已經存在。\n"
+"請注意，指定遠端檔案網址時，將無法監控檔案變更。"
 
 #. i18n: ectx: property (toolTip), widget (KLineEdit, nameText)
 #: resources/migration/dirresourceimportdialog_type.ui:109
@@ -6898,14 +6855,14 @@ msgid "Alarm Templates"
 msgstr "鬧鐘樣本"
 
 #: resources/migration/fileresourcemigrator.cpp:279
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info/plain"
-#| msgid "Failed to create default calendar <resource>%1</resource>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "<para>Failed to create default calendar <resource>%1</resource></"
 "para><para>Location: <filename>%2</filename></para>"
-msgstr "無法更新預設行事曆 <resource>%1</resource>。"
+msgstr ""
+"<para>建立預設行事曆 <resource>%1</resource> 失敗</para><para>位置："
+"<filename>%2</filename></para>"
 
 #: resources/resourcedatamodelbase.cpp:65
 #, kde-format
@@ -7141,41 +7098,31 @@ msgid "Choose Calendar"
 msgstr "選擇行事曆"
 
 #: resources/resources.cpp:490
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid ""
-#| "The calendar <resource>%1</resource> has been made read-only. This was "
-#| "the default calendar for active alarms."
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "The calendar <resource>%1</resource> has been made read-only. This was the "
 "default calendar for active alarms."
 msgstr ""
-"行事曆 <resource>%1</resource> 已變成唯讀。這是作用中鬧鐘的預設行事曆。"
+"行事曆 <resource>%1</resource> 已設為唯讀。它原本是作用中鬧鐘的預設行事曆。"
 
 #: resources/resources.cpp:495
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid ""
-#| "The calendar <resource>%1</resource> has been made read-only. This was "
-#| "the default calendar for archived alarms."
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "The calendar <resource>%1</resource> has been made read-only. This was the "
 "default calendar for archived alarms."
-msgstr "行事曆 <resource>%1</resource> 已變成唯讀。這是歸檔鬧鐘的預設行事曆。"
+msgstr ""
+"行事曆 <resource>%1</resource> 已設為唯讀。它原本是已歸檔鬧鐘的預設行事曆。"
 
 #: resources/resources.cpp:500
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid ""
-#| "The calendar <resource>%1</resource> has been made read-only. This was "
-#| "the default calendar for alarm templates."
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "The calendar <resource>%1</resource> has been made read-only. This was the "
 "default calendar for alarm templates."
-msgstr "行事曆 <resource>%1</resource> 已變成唯讀。這是鬧鐘樣本的預設行事曆。"
+msgstr ""
+"行事曆 <resource>%1</resource> 已設為唯讀。它原本是鬧鐘樣本的預設行事曆。"
 
 #: resources/resources.cpp:505
 #, kde-kuit-format
@@ -7243,12 +7190,10 @@ msgid "A previous save is still in progress."
 msgstr "上一個儲存仍在進行中。"
 
 #: resources/singlefileresource.cpp:231
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid "Could not load calendar <filename>%1</filename>."
+#, kde-kuit-format
 msgctxt "@info"
 msgid "Could not create calendar file <filename>%1</filename>."
-msgstr "無法載入行事曆檔 <filename>%1</filename>"
+msgstr "無法建立行事曆檔 <filename>%1</filename>。"
 
 #: resources/singlefileresource.cpp:246
 #, kde-kuit-format
@@ -7307,6 +7252,8 @@ msgid ""
 "be created. The URL of a remote file can also be specified, but note that "
 "monitoring for file changes will not work in this case."
 msgstr ""
+"選擇要儲存這個行事曆的檔案。如果檔案不存在，它會被建立。也可以指定一個遠端檔"
+"案的網址，但請注意這個時候會不支援監控檔案變更。"
 
 #. i18n: ectx: property (text), widget (QRadioButton, activeRadio)
 #: resources/singlefileresourceconfigdialog.ui:86
@@ -7333,7 +7280,7 @@ msgstr "鬧鐘樣本"
 #: resources/singlefileresourceconfigdialog.ui:133
 #, kde-format
 msgid "Select which alarm type this calendar should contain."
-msgstr ""
+msgstr "選擇這個行事曆應該包含哪些鬧鐘類型。"
 
 #. i18n: ectx: property (text), widget (QLabel, alarmTypeLabel)
 #: resources/singlefileresourceconfigdialog.ui:142
@@ -7406,6 +7353,8 @@ msgid ""
 "the file or the file is on a remote server that does not support write "
 "access."
 msgstr ""
+"啟用唯讀模式時，不會將任何變更寫入至檔案。對檔案沒有寫入權限，或是檔案在不支"
+"援寫入的遠端伺服器時，會自動啟用唯讀模式。"
 
 #: resourceselector.cpp:50
 #, kde-format
@@ -7864,6 +7813,12 @@ msgid ""
 "is spoken. (Option requires working Qt text-to-speech installation.)</item></"
 "list></para>"
 msgstr ""
+"<para>選擇顯示訊息時要播放的聲音。<list><item><interface>%1</interface>：訊息"
+"顯示時不播放聲音。</item><item><interface>%2</interface>：播放簡單的嗶聲。</"
+"item><item><interface>%3</interface>：播放一個音效檔案。會詢問您讓您輸入檔案"
+"並設定播放選項。（使用通知時無法使用此選項。）</item><item><interface>%4</"
+"interface>：用文字轉語音說出訊息文字。（此選項需要 Qt 的文字轉語音功能已安裝"
+"且正常運作）。</item></list></para>"
 
 #: soundpicker.cpp:87
 #, kde-format
