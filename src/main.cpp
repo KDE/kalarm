@@ -44,6 +44,7 @@ int main(int argc, char* argv[])
     aboutData.setDesktopFileName(QStringLiteral(KALARM_DBUS_SERVICE));
     KAboutData::setApplicationData(aboutData);
 
+    QApplication::setWindowIcon(QIcon::fromTheme(QStringLiteral("kalarm")));
     // Make this a unique application.
     KDBusService service(KDBusService::Unique);
     QObject::connect(&service, &KDBusService::activateRequested, app.data(), &KAlarmApp::activateByDBus);
