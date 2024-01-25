@@ -39,8 +39,8 @@
 
 <!-- Don't change format of date and version of the documentation -->
 
-<date>2023-9-20</date>
-<releaseinfo>3.7.0 (KDE Gear 23.12)</releaseinfo>
+<date>2024-1-25</date>
+<releaseinfo>3.7.0 (KDE Gear 24.02)</releaseinfo>
 
 <abstract>
 <para>&kalarm; is a personal alarm message, command and email scheduler by &kde;.</para>
@@ -82,11 +82,11 @@ message.</para>
 <para>Alarms may also be scheduled from the command line, or via &DBus;
 calls from programs.</para>
 
-<para>When an alarm message is due, it is displayed on each
-desktop to ensure that you don't miss it. The message window shows the
-time for which the alarm was scheduled. It usually has a defer option
-to ask for the alarm to be displayed again later. An example of an
-alarm message:</para>
+<para>When an alarm message is due, if the windowing system permits, it
+is displayed on each desktop to ensure that you don't miss it. The
+message window shows the time for which the alarm was scheduled. It
+usually has a defer option to ask for the alarm to be displayed again
+later. An example of an alarm message:</para>
 
 <screenshot>
 <screeninfo>Screenshot of the &kalarm; message window</screeninfo>
@@ -2001,9 +2001,10 @@ they are displayed in windows or as notifications.</para>
 <para>Alarm messages which are displayed in windows provide the
 fullest functionality.</para>
 
-<para>When an alarm message is due, it is displayed on each
-desktop and cannot be covered by ordinary windows, to ensure that
-you see it. The message window shows the time for which the alarm was
+<para>When an alarm message is due, it is if possible displayed on
+each desktop and cannot be covered by ordinary windows, to ensure that
+you see it. (Note that only the X11 windowing system currently provides
+this facility.) The message window shows the time for which the alarm was
 scheduled, so that you can see when it popped up if you were away from
 the computer at the time. If the alarm's scheduled time is in a
 different time zone from your local computer's setting, its time zone
@@ -2088,6 +2089,13 @@ highlighted.</para>
 </listitem>
 </itemizedlist>
 
+<para>The way that alarm message windows are displayed depends on the
+windowing system in use.</para>
+
+<itemizedlist>
+<listitem>
+<application>X11 Windowing System</application>
+
 <para>You can choose in the
 <link linkend="preferences-view">Configuration dialog</link> which of
 two different modes should be used to display alarm message
@@ -2113,9 +2121,6 @@ titlebar or frame, so you cannot move it or resize it.</para>
 application, it is shown as a non-modal window regardless of this
 configuration setting. This is due to a limitation of the window
 system.</para></note>
-
-<sect3>
-<title>Positioning of Message Windows</title>
 
 <para>You can choose in the
 <link linkend="preferences-view">Configuration dialog</link> which of
@@ -2145,7 +2150,23 @@ corner of the screen, by means of the <menuchoice>
 </menuchoice> menu option. If you wish, you can set up a global
 shortcut key for this action.</para>
 
-</sect3>
+</listitem>
+
+<listitem>
+<application>Wayland Windowing System</application>
+
+<para>The Wayland windowing system does not allow applications to
+control the position or decoration of their windows, so the display
+options are much more limited.</para>
+
+<para>To reduce the chance of accidentally acknowledging the alarm, the
+buttons on the window are initially disabled, becoming active only
+after a configurable delay.</para>
+
+</listitem>
+
+</itemizedlist>
+
 </sect2>
 
 <sect2>
@@ -3032,7 +3053,12 @@ window, to show disabled and archived alarms.</para>
 </itemizedlist>
 
 <para>The <guilabel>Alarm Windows</guilabel> tab contains options to control
-the appearance of alarm message windows.</para>
+the appearance of alarm message windows. The available options depend on the
+windowing system in use.</para>
+
+<itemizedlist>
+<listitem>
+<application>X11 Windowing System</application>
 
 <itemizedlist>
 <listitem>
@@ -3060,6 +3086,22 @@ This option controls whether alarm message windows are modal or not,
 for details.</para>
 </listitem>
 </itemizedlist>
+</listitem>
+
+<listitem>
+<application>Wayland Windowing System</application>
+
+<itemizedlist>
+<listitem>
+<para>To reduce the chance of accidentally acknowledging the
+alarm, the window's buttons are initially disabled. The delay in
+seconds before they become active is set in
+<guilabel>Button activation delay (seconds)</guilabel>.</para>
+</listitem>
+</itemizedlist>
+</listitem>
+</itemizedlist>
+
 </sect1>
 
 <sect1 id="preferences-edit">
