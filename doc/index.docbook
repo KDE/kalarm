@@ -2094,7 +2094,7 @@ windowing system in use.</para>
 
 <itemizedlist>
 <listitem>
-<application>X11 Windowing System</application>
+<para><application>X11 Windowing System</application></para>
 
 <para>You can choose in the
 <link linkend="preferences-view">Configuration dialog</link> which of
@@ -2153,7 +2153,7 @@ shortcut key for this action.</para>
 </listitem>
 
 <listitem>
-<application>Wayland Windowing System</application>
+<para><application>Wayland Windowing System</application></para>
 
 <para>The Wayland windowing system does not allow applications to
 control the position or decoration of their windows, so the display
@@ -3058,7 +3058,7 @@ windowing system in use.</para>
 
 <itemizedlist>
 <listitem>
-<application>X11 Windowing System</application>
+<para><application>X11 Windowing System</application></para>
 
 <itemizedlist>
 <listitem>
@@ -3089,7 +3089,7 @@ for details.</para>
 </listitem>
 
 <listitem>
-<application>Wayland Windowing System</application>
+<para><application>Wayland Windowing System</application></para>
 
 <itemizedlist>
 <listitem>
