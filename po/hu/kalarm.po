@@ -2,20 +2,21 @@
 # Tamas Szanto <taszanto@gmail.com>, 2001.
 # Kristóf Kiszel <ulysses@kubuntu.org>, 2011, 2014, 2021.
 # Balázs Úr <urbalazs@gmail.com>, 2012, 2014.
+# SPDX-FileCopyrightText: 2024 Kristof Kiszel <ulysses@fsf.hu>
 msgid ""
 msgstr ""
 "Project-Id-Version: KDE 4.3\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-01-04 01:34+0000\n"
-"PO-Revision-Date: 2021-01-05 11:57+0100\n"
-"Last-Translator: Kristóf Kiszel <kiszel.kristof@gmail.com>\n"
+"PO-Revision-Date: 2024-01-25 22:11+0100\n"
+"Last-Translator: Kristof Kiszel <ulysses@fsf.hu>\n"
 "Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
 "Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 21.03.70\n"
+"X-Generator: Lokalize 23.08.4\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -26,8 +27,7 @@ msgstr "Kiszel Kristóf,Lutring Márk,Szántó Tamás,Úr Balázs"
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
 msgstr ""
-"kiszel.kristof@gmail.com,lutring.mark@gmail.com,tszanto@interware.hu,"
-"urbalazs@gmail.com"
+"ulysses@fsf.hu,lutring.mark@gmail.com,tszanto@interware.hu,urbalazs@fsf.hu"
 
 #: akonadiplugin/sendakonadimail.cpp:54
 #, kde-kuit-format
@@ -77,12 +77,10 @@ msgstr ""
 "Ez a KAlarm alapértelmezett időzónáját használja (lásd a beállítóablakot)."
 
 #: alarmtimewidget.cpp:92
-#, fuzzy, kde-format
-#| msgctxt "@label"
-#| msgid "Deferred to:"
+#, kde-format
 msgctxt "@option:radio"
 msgid "Defer until:"
-msgstr "Új idő:"
+msgstr "Halasztás eddig:"
 
 #: alarmtimewidget.cpp:92
 #, kde-format
@@ -123,12 +121,10 @@ msgid "Any time"
 msgstr "Bármikor"
 
 #: alarmtimewidget.cpp:131
-#, fuzzy, kde-format
-#| msgctxt "@info:whatsthis"
-#| msgid "Next scheduled date and time of the alarm"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Set only a date (without a time) for the alarm"
-msgstr "A figyelmeztető következő dátuma és időpontja"
+msgstr "Csak dátum beállítása (idő nélkül) a figyelmeztetőhöz"
 
 #: alarmtimewidget.cpp:133
 #, kde-format
@@ -142,12 +138,10 @@ msgstr ""
 "dátumon."
 
 #: alarmtimewidget.cpp:137
-#, fuzzy, kde-format
-#| msgctxt "@label"
-#| msgid "Deferred to:"
+#, kde-format
 msgctxt "@option:radio Defer for time interval"
 msgid "Defer for:"
-msgstr "Új idő:"
+msgstr "Halasztás:"
 
 #: alarmtimewidget.cpp:137 editdlg.cpp:326
 #, kde-format
@@ -177,24 +171,18 @@ msgstr "<para>%1</para><para>%2</para>"
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Preset"
-msgstr ""
+msgstr "Előbeállítás"
 
 #: alarmtimewidget.cpp:156
-#, fuzzy, kde-format
-#| msgctxt "@info/plain"
-#| msgid "1 Minute"
-#| msgid_plural "%1 Minutes"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "1 minute"
 msgid_plural "%1 minutes"
-msgstr[0] "%1 perc"
+msgstr[0] "1 perc"
 msgstr[1] "%1 perc"
 
 #: alarmtimewidget.cpp:157
-#, fuzzy, kde-format
-#| msgctxt "@item:intext inserted into 'in ... %1 minute's time' below"
-#| msgid "1 hour"
-#| msgid_plural "%1 hours"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "1 hour"
 msgid_plural "%1 hours"
@@ -202,28 +190,22 @@ msgstr[0] "1 óra"
 msgstr[1] "%1 óra"
 
 #: alarmtimewidget.cpp:165
-#, fuzzy, kde-format
-#| msgctxt "@option:radio On day number in the month"
-#| msgid "O&n day"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "1 day"
-msgstr "Egy na&pon:"
+msgstr "1 nap"
 
 #: alarmtimewidget.cpp:166
-#, fuzzy, kde-format
-#| msgctxt "@item:inlistbox Time units"
-#| msgid "weeks"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "1 week"
-msgstr "hét"
+msgstr "1 hét"
 
 #: alarmtimewidget.cpp:169
-#, fuzzy, kde-format
-#| msgctxt "@info:whatsthis"
-#| msgid "Select a template to base the new alarm on."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Select time delay from a list of preset values"
-msgstr "Válassza ki az új figyelmeztető kiinduló sablonját."
+msgstr "Válassza ki az időkésleltetést az előre beállított értékek listájából"
 
 #: alarmtimewidget.cpp:177
 #, kde-kuit-format
@@ -238,12 +220,10 @@ msgid "Time Zone..."
 msgstr "Időzóna…"
 
 #: alarmtimewidget.cpp:211
-#, fuzzy, kde-format
-#| msgctxt "@info:whatsthis"
-#| msgid "Select the time zone to use for this alarm."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Choose a time zone for this alarm"
-msgstr "Itt kell megadni a riasztás időzónáját."
+msgstr "Itt kell megadni a riasztás időzónáját"
 
 #: alarmtimewidget.cpp:213
 #, kde-format
@@ -815,7 +795,7 @@ msgstr "Fájlerőforrások"
 #, kde-format
 msgctxt "@label"
 msgid "Enable Akonadi plugin"
-msgstr ""
+msgstr "Akonadi bővítmény engedélyezése"
 
 #. i18n: ectx: whatsthis, entry (UseAkonadiIfAvailable), group (General)
 #: data/kalarmconfig.kcfg:79
@@ -826,6 +806,10 @@ msgid ""
 "provide features including birthday import, some email functions, email "
 "address book lookup, and Akonadi resource migration on first run."
 msgstr ""
+"Válassza ki, hogy engedélyezi-e a KAlarmhoz az Akonadi bővítményt, amely az "
+"Akonadi használatával olyan funkciókat biztosít, mint például a "
+"születésnapok importálása, néhány e-mail funkció, keresés az e-mail "
+"címjegyzékben és az Akonadi erőforrások migrációja az első futáskor."
 
 #. i18n: ectx: label, entry (Base_TimeZone), group (General)
 #: data/kalarmconfig.kcfg:83
@@ -1076,7 +1060,7 @@ msgstr "Késleltetési idő az üzenetablakok gombjainak aktiválásához"
 
 #. i18n: ectx: whatsthis, entry (Base_MessageButtonDelay), group (General)
 #: data/kalarmconfig.kcfg:161
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "<p>Specify the positioning of alarm message windows, and the delay in "
@@ -1189,14 +1173,7 @@ msgstr "E-mail-kliens"
 
 #. i18n: ectx: whatsthis, entry (Base_EmailClient), group (General)
 #: data/kalarmconfig.kcfg:197
-#, fuzzy, kde-format
-#| msgctxt "@info:whatsthis"
-#| msgid ""
-#| "<p>How to send email when an email alarm is triggered.<ul><li>KMail: The "
-#| "email is sent automatically via KMail. KMail is started first if "
-#| "necessary.</li><li>Sendmail: The email is sent automatically. This option "
-#| "will only work if your system is configured to use sendmail or a sendmail "
-#| "compatible mail transport agent.</li></ul></p>"
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "<p>How to send email when an email alarm is triggered.<ul><li>KMail: The "
@@ -1205,9 +1182,8 @@ msgid ""
 "use sendmail or a sendmail compatible mail transport agent.</li></ul></p>"
 msgstr ""
 "<p>Válassza ki az e-mailes figyelmeztetők elküldési módját.<ul><li>KMail: az "
-"üzenet bekerül a KMail kimeneti sorába, ha a KMail fut. Ha nem, megnyílik a "
-"KMail üzenetszerkesztője, melyből az üzenet elküldhető.</li><li>Sendmail: az "
-"üzenet automatikusan továbbítódik. Ez csak akkor működik, ha a rendszerben a "
+"e-mail automatikusan továbbítódik a KMaillel.</li><li>Sendmail: az üzenet "
+"automatikusan továbbítódik. Ez csak akkor működik, ha a rendszerben a "
 "sendmail vagy egy azzal kompatibilis üzenettovábbító van beállítva.</li></"
 "ul></p>"
 
@@ -1253,13 +1229,7 @@ msgstr "A feladó e-mail címe"
 
 #. i18n: ectx: whatsthis, entry (Base_EmailFrom), group (General)
 #: data/kalarmconfig.kcfg:211
-#, fuzzy, kde-format
-#| msgctxt "@info:whatsthis"
-#| msgid ""
-#| "Your email address, used to identify you as the sender when sending email "
-#| "alarms. Enter \"@SystemSettings\" to use the email address set in System "
-#| "Settings, \"@KMail\" to allow choice of KMail identities, or enter the "
-#| "actual email address otherwise."
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "Your email address, used to identify you as the sender when sending email "
@@ -1268,9 +1238,9 @@ msgid ""
 "email address otherwise."
 msgstr ""
 "Az Ön e-mail címe, ezzel lesznek kiküldve az e-mailes figyelmeztetők. A "
-"„@SystemSettings” érték megadása esetén a Rendszerbeállításokban megadott "
-"cím lesz érvényes, „@KMail” esetén a KMail identitásai közül lehet "
-"választani, más esetben adja meg a kívánt e-mail cím értékét."
+"„@SystemSettings” érték megadása esetén a KMailben megadott cím lesz "
+"érvényes, „@KMail” esetén a KMail identitásai közül lehet választani, más "
+"esetben adja meg a kívánt e-mail cím értékét."
 
 #. i18n: ectx: label, entry (Base_EmailBccAddress), group (General)
 #: data/kalarmconfig.kcfg:215
@@ -1281,14 +1251,7 @@ msgstr "A rejtett másolat e-mail címe"
 
 #. i18n: ectx: whatsthis, entry (Base_EmailBccAddress), group (General)
 #: data/kalarmconfig.kcfg:216
-#, fuzzy, kde-format
-#| msgctxt "@info:whatsthis"
-#| msgid ""
-#| "Your email address, used for blind copying email alarms to yourself. If "
-#| "you want blind copies to be sent to your account on the computer which "
-#| "KAlarm runs on, you can simply enter your user login name. Enter "
-#| "\"@SystemSettings\" to use the email address set in System Settings, or "
-#| "enter the actual email address otherwise."
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "Your email address, used for blind copying email alarms to yourself. If you "
@@ -1300,7 +1263,7 @@ msgstr ""
 "Az Ön e-mail címe, erre továbbítódnak saját másolatként az e-mailes "
 "figyelmeztetők. Ha azt szeretné, hogy arra a gépre legyenek elküldve a "
 "másolatok, amelyen a KAlarm fut, írja be az ottani bejelentkezési nevét. "
-"„@SystemSettings” esetén a Rendszerbeállításokban megadott cím lesz "
+"„@SystemSettings” esetén a KMailben megadott alapértelmezett cím lesz "
 "érvényes, máskülönben írja be a kívánt címet."
 
 #. i18n: ectx: label, entry (Base_CmdXTermCommand), group (General)
@@ -1479,11 +1442,10 @@ msgstr ""
 
 #. i18n: ectx: label, entry (DefaultDisplayMethod), group (Defaults)
 #: data/kalarmconfig.kcfg:290
-#, fuzzy, kde-format
-#| msgid "Beep when message is displayed"
+#, kde-format
 msgctxt "@label"
 msgid "Alarm message display method"
-msgstr "Hangjelzés az üzenet megjelenítésekor"
+msgstr "Figyelmeztető üzenet megjelenítési módja"
 
 #. i18n: ectx: whatsthis, entry (DefaultDisplayMethod), group (Defaults)
 #: data/kalarmconfig.kcfg:291
@@ -1962,41 +1924,33 @@ msgstr ""
 
 #. i18n: ectx: Menu (file)
 #: data/kalarmui.rc:19
-#, fuzzy, kde-format
-#| msgctxt "@option:check Alarm action = file display"
-#| msgid "File"
+#, kde-format
 msgid "File"
-msgstr "Fájlalapú"
+msgstr "Fájl"
 
 #. i18n: ectx: Menu (edit)
 #: data/kalarmui.rc:31
-#, fuzzy, kde-format
-#| msgctxt "@title:tab"
-#| msgid "Edit"
+#, kde-format
 msgid "Edit"
-msgstr "Módosítás"
+msgstr "Szerkesztés"
 
 #. i18n: ectx: Menu (view)
 #: data/kalarmui.rc:46
-#, fuzzy, kde-format
-#| msgctxt "@title:tab"
-#| msgid "View"
+#, kde-format
 msgid "View"
 msgstr "Nézet"
 
 #. i18n: ectx: Menu (actions)
 #: data/kalarmui.rc:56
-#, fuzzy, kde-format
-#| msgid "&Actions"
+#, kde-format
 msgid "Actions"
-msgstr "Mű&veletek"
+msgstr "Műveletek"
 
 #. i18n: ectx: Menu (settings)
 #: data/kalarmui.rc:68
-#, fuzzy, kde-format
-#| msgid "&Settings"
+#, kde-format
 msgid "Settings"
-msgstr "&Beállítások"
+msgstr "Beállítások"
 
 #: datepicker.cpp:50
 #, kde-format
@@ -8784,12 +8738,10 @@ msgid "Sound File"
 msgstr "Hangfájl"
 
 #: soundpicker.cpp:316
-#, fuzzy, kde-format
-#| msgctxt "@item:inlistbox"
-#| msgid "Sound file"
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "Audio files"
-msgstr "Hangfájl"
+msgstr "Hangfájlok"
 
 #: soundpicker.cpp:340
 #, kde-format
@@ -8804,12 +8756,10 @@ msgid "Special Actions..."
 msgstr "Speciális műveletek..."
 
 #: specialactions.cpp:39
-#, fuzzy, kde-format
-#| msgctxt "@info:whatsthis"
-#| msgid "Enter a shell command to execute."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Set commands to execute"
-msgstr "Adja meg a végrehajtandó parancsot."
+msgstr "Megadja a végrehajtandó parancsot"
 
 #: specialactions.cpp:40
 #, kde-format
@@ -8931,9 +8881,7 @@ msgid "New"
 msgstr "Új"
 
 #: templatedlg.cpp:76
-#, fuzzy, kde-format
-#| msgctxt "@info:whatsthis"
-#| msgid "Create a new alarm template"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Create a new alarm template"
 msgstr "Új figyelmeztetősablon létrehozása"
@@ -8945,9 +8893,7 @@ msgid "Create a new alarm template"
 msgstr "Új figyelmeztetősablon létrehozása"
 
 #: templatedlg.cpp:82
-#, fuzzy, kde-format
-#| msgctxt "@info:whatsthis"
-#| msgid "Edit the currently highlighted alarm template"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Edit the selected alarm template"
 msgstr "A kijelölt figyelmeztetősablon szerkesztése"
@@ -8965,11 +8911,7 @@ msgid "Copy"
 msgstr "Másolás"
 
 #: templatedlg.cpp:88
-#, fuzzy, kde-format
-#| msgctxt "@info:whatsthis"
-#| msgid ""
-#| "Create a new alarm template based on a copy of the currently highlighted "
-#| "template"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Create a new alarm template based on the selected template"
 msgstr "Új figyelmeztetősablon létrehozása a kijelölt sablonból kiindulva"
@@ -8983,20 +8925,16 @@ msgid ""
 msgstr "Új figyelmeztetősablon létrehozása a kijelölt sablonból kiindulva"
 
 #: templatedlg.cpp:94
-#, fuzzy, kde-format
-#| msgctxt "@info:whatsthis"
-#| msgid "Delete the currently highlighted alarm template"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Delete the selected alarm templates"
-msgstr "A kijelölt figyelmeztetősablon törlése"
+msgstr "A kijelölt figyelmeztetősablonok törlése"
 
 #: templatedlg.cpp:95
-#, fuzzy, kde-format
-#| msgctxt "@info:whatsthis"
-#| msgid "Delete the currently highlighted alarm template"
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Delete the currently highlighted alarm templates"
-msgstr "A kijelölt figyelmeztetősablon törlése"
+msgstr "A jelenleg kiemelt figyelmeztetősablonok törlése"
 
 #: templatedlg.cpp:177
 #, kde-format
@@ -9033,12 +8971,10 @@ msgid "Select a template to base the new alarm on."
 msgstr "Válassza ki az új figyelmeztető kiinduló sablonját."
 
 #: traywindow.cpp:68
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "&New Alarm"
+#, kde-format
 msgctxt "@action"
 msgid "New Alarm"
-msgstr "Ú&j figyelmeztető"
+msgstr "Új figyelmeztető"
 
 #: traywindow.cpp:300
 #, kde-format
