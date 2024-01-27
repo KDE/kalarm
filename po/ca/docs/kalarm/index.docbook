@@ -81,7 +81,9 @@
 ><year
 >2022</year
 ><year
->2023</year>
+>2023</year
+><year
+>2024</year>
 <holder
 >&David.Jarvie;</holder>
 </copyright>
@@ -92,9 +94,9 @@
 <!-- Don't change format of date and version of the documentation -->
 
 <date
->20 de setembre de 2023</date>
+>25 de gener de 2024</date>
 <releaseinfo
->3.7.0 (KDE Gear 23.12)</releaseinfo>
+>3.7.0 (KDE Gear 24.02)</releaseinfo>
 
 <abstract>
 <para
@@ -137,7 +139,7 @@
 >Les alarmes es poden programar des de la línia d'ordres o a través de crides de &DBus; des dels programes.</para>
 
 <para
->Quan venç un missatge d'alarma, es mostrarà a cada escriptori per a assegurar que no us el perdeu. La finestra de missatges mostrarà el temps durant el qual s'ha programat l'alarma. Normalment, disposa d'una opció d'ajornar per a demanar que es mostri de nou més tard. Un exemple d'un missatge d'alarma:</para>
+>Quan venç un missatge d'alarma, si el sistema de finestres ho permet, es mostrarà a cada escriptori per a assegurar que no us el perdeu. La finestra de missatges mostrarà el temps durant el qual s'ha programat l'alarma. Normalment, disposa d'una opció d'ajornar per a demanar que es mostri de nou més tard. Un exemple d'un missatge d'alarma:</para>
 
 <screenshot>
 <screeninfo
@@ -2372,7 +2374,7 @@ mode.</para
 >Els missatges d'alarma que es mostren a les finestres proporcionen la màxima funcionalitat.</para>
 
 <para
->Quan venç un missatge d'alarma, es mostrarà a cada escriptori per a assegurar que no us el perdeu. La finestra de missatges mostrarà el temps durant el qual s'ha programat l'alarma, de manera que podeu veure quan va sorgir si éreu fora de l'ordinador en aquell moment. Si el temps programat de l'alarma es troba en una zona horària diferent de la configuració del vostre ordinador local, també es mostrarà la zona horària. (Per als missatges de recordatori, la data/hora mostrada serà la prevista per a l'alarma principal o la seva recurrència, no la del missatge de recordatori, i el títol de la finestra serà «Recordatori»).</para>
+>Quan venç un missatge d'alarma, es (si és possible) mostrarà a cada escriptori i no es pot cobrir per les finestres normals, per a assegurar que no us el perdeu. (Tingueu en compte que actualment només sistema de finestres X11 proporciona aquesta característica.) La finestra de missatges mostrarà el temps durant el qual s'ha programat l'alarma, de manera que podeu veure quan va sorgir si éreu fora de l'ordinador en aquell moment. Si el temps programat de l'alarma es troba en una zona horària diferent de la configuració del vostre ordinador local, també es mostrarà la zona horària. (Per als missatges de recordatori, la data/hora mostrada serà la prevista per a l'alarma principal o la seva recurrència, no la del missatge de recordatori, i el títol de la finestra serà «Recordatori»).</para>
 
 <para
 >Les finestres dels missatges d'alarma romandran visibles fins que es reconeguin, llevat que <guilabel
@@ -2466,6 +2468,16 @@ mode.</para
 </itemizedlist>
 
 <para
+>La forma en què es mostren les finestres del missatge d'alarma depèn del sistema de finestres en ús.</para>
+
+<itemizedlist>
+<listitem>
+<para
+><application
+>Sistema de finestres X11</application
+></para>
+
+<para
 >Podeu escollir en el <link linkend="preferences-view"
 >diàleg de configuració</link
 > quin dels dos modes diferents s'haurà d'utilitzar per a mostrar les finestres dels missatges d'alarma:</para>
@@ -2486,10 +2498,6 @@ mode.</para
 ><para
 >Quan es mostra una alarma al davant d'una aplicació a pantalla completa, es mostrarà com una finestra no modal, independentment d'aquesta configuració. Això es deu a una limitació del sistema de finestres.</para
 ></note>
-
-<sect3>
-<title
->Col·locar les finestres de missatges</title>
 
 <para
 >Podeu escollir en el <link linkend="preferences-view"
@@ -2517,7 +2525,24 @@ mode.</para
 > </menuchoice
 >. Si voleu, podeu configurar una tecla de drecera global per a aquesta acció.</para>
 
-</sect3>
+</listitem>
+
+<listitem>
+<para
+><application
+>Sistema de finestres Wayland</application
+></para>
+
+<para
+>El sistema de finestres Wayland no permet a les aplicacions controlar la posició o la decoració de les seves finestres, de manera que les opcions de visualització són molt més limitades.</para>
+
+<para
+>Per a reduir el risc de reconèixer accidentalment l'alarma, els botons de la finestra seran inhabilitats inicialment, activant-se només després d'un retard configurable.</para>
+
+</listitem>
+
+</itemizedlist>
+
 </sect2>
 
 <sect2>
@@ -3608,7 +3633,14 @@ mode.</para
 <para
 >La pestanya <guilabel
 >Finestres d'alarma</guilabel
-> conté les opcions per a controlar l'aparença de les finestres del missatge d'alarma.</para>
+> conté les opcions per a controlar l'aparença de les finestres del missatge d'alarma. Les opcions disponibles depenen del sistema de finestres en ús.</para>
+
+<itemizedlist>
+<listitem>
+<para
+><application
+>Sistema de finestres X11</application
+></para>
 
 <itemizedlist>
 <listitem>
@@ -3636,6 +3668,25 @@ mode.</para
 >.</para>
 </listitem>
 </itemizedlist>
+</listitem>
+
+<listitem>
+<para
+><application
+>Sistema de finestres Wayland</application
+></para>
+
+<itemizedlist>
+<listitem>
+<para
+>Per a reduir el risc d'accident en reconèixer l'alarma, els botons de la finestra estaran inicialment inhabilitats. El retard en segons abans que s'activin s'estableix a <guilabel
+>Retard de l'activació dels botons (en segons)</guilabel
+>.</para>
+</listitem>
+</itemizedlist>
+</listitem>
+</itemizedlist>
+
 </sect1>
 
 <sect1 id="preferences-edit">
@@ -6889,10 +6940,10 @@ mode.</para
 <para
 >&kalarm; </para>
 <para
->Copyright del programa 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023 &David.Jarvie; &David.Jarvie.mail; </para>
+>Copyright del programa 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024 &David.Jarvie; &David.Jarvie.mail; </para>
 
 <para
->Copyright de la documentació 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2016, 2018, 2019, 2020, 2021, 2022, 2023 &David.Jarvie; &David.Jarvie.mail; </para>
+>Copyright de la documentació 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2016, 2018, 2019, 2020, 2021, 2022, 2023, 2024 &David.Jarvie; &David.Jarvie.mail; </para>
 
 <para
 >Traductor/Revisor de la documentació: &credits.Antoni.Bella;</para

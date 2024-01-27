@@ -81,7 +81,9 @@
 ><year
 >2022</year
 ><year
->2023</year>
+>2023</year
+><year
+>2024</year>
 <holder
 >&David.Jarvie;</holder>
 </copyright>
@@ -92,9 +94,9 @@
 <!-- Don't change format of date and version of the documentation -->
 
 <date
->2023-9-20</date>
+>2024-1-25</date>
 <releaseinfo
->3.7.0 (KDE Gear 23.12)</releaseinfo>
+>3.7.0 (KDE Gear 24.02)</releaseinfo>
 
 <abstract>
 <para
@@ -137,7 +139,7 @@
 >Alarmen kunnen ook ingesteld worden vanaf de commandoregel, of via een &DBus;-oproep vanuit een ander programma.</para>
 
 <para
->Wanneer een alarm afloopt, wordt er een visueel alarmbericht getoond op elk bureaublad opdat u het zeker ziet. Dit berichtvenster toont de geplande tijd voor het alarm, en het heeft meestal een uitsteloptie om het alarm later opnieuw te laten tonen. Een voorbeeld van een alarmbericht:</para>
+>Wanneer een alarm afloopt, als het venstersysteem dat toestaat, wordt er een visueel alarmbericht getoond op elk bureaublad opdat u het zeker ziet. Dit berichtvenster toont de geplande tijd voor het alarm, en het heeft meestal een uitsteloptie om het alarm later opnieuw te laten tonen. Een voorbeeld van een alarmbericht:</para>
 
 <screenshot>
 <screeninfo
@@ -2376,7 +2378,7 @@ mode.</para
 >Alarmberichten die in vensters getoond worden bieden de volledige functionaliteit.</para>
 
 <para
->Wanneer een alarmbericht gegeven moet worden, wordt het op elk bureaublad getoond en kan het niet door gewone vensters worden bedekt, om te verzekeren dat u het ziet. Het berichtvenster toont de tijd waarop het alarm was gepland, zodat u kunt zien wanneer het verscheen als u op dat moment weg was van de computer. Als de geplande tijd een andere tijdzone bevat dan de lokale instelling van uw computer, dan zal zijn tijdzone ook worden getoond. (Voor herhalingsberichten zal de datum/tijd van de hoofdalarm of die van zijn weer verschijnen worden getoond, niet de tijd van het herhalingsbericht, en de venstertitel is <quote
+>Wanneer een alarmbericht gegeven moet worden, wordt het, zo mogelijk, op elk bureaublad getoond en kan het niet door gewone vensters worden bedekt, om te verzekeren dat u het ziet. (Merk op dat alleen het X11 venstersysteem deze faciliteit nu biedt.) Het berichtvenster toont de tijd waarop het alarm was gepland, zodat u kunt zien wanneer het verscheen als u op dat moment weg was van de computer. Als de geplande tijd een andere tijdzone bevat dan de lokale instelling van uw computer, dan zal zijn tijdzone ook worden getoond. (Voor herhalingsberichten zal de datum/tijd van de hoofdalarm of die van zijn weer verschijnen worden getoond, niet de tijd van het herhalingsbericht, en de venstertitel is <quote
 >Alarm</quote
 >.)</para>
 
@@ -2474,6 +2476,16 @@ mode.</para
 </itemizedlist>
 
 <para
+>De manier waarop die alarmberichtvensters getoond worden hangt af van het venstersysteem dat in gebruik is.</para>
+
+<itemizedlist>
+<listitem>
+<para
+><application
+>X11 venstersysteem</application
+></para>
+
+<para
 >U kunt in het <link linkend="preferences-view"
 >Configuratiedialoogvenster</link
 > kiezen welke van de twee verschillende modi gebruikt moeten worden om de vensters met alarmberichten te tonen:</para>
@@ -2494,10 +2506,6 @@ mode.</para
 ><para
 >Wanneer een alarm wordt getoond bovenop een toepassing in de modus volledig scherm, wordt het getoond als een niet-modaal venster onafhankelijk van deze instelling. Dit is vanwege beperkingen van het venstersysteem.</para
 ></note>
-
-<sect3>
-<title
->Positionering van een berichtvenster</title>
 
 <para
 >U kunt in het <link linkend="preferences-view"
@@ -2525,7 +2533,24 @@ mode.</para
 > </menuchoice
 >. Als u dat wilt, kunt u een globale sneltoets voor deze actie instellen.</para>
 
-</sect3>
+</listitem>
+
+<listitem>
+<para
+><application
+>Wayland venstersysteem</application
+></para>
+
+<para
+>Het venstersysteem  van Wayland biedt toepassingen geen controle op de positie of decoratie van hun vensters, dus de opties voor tonen zijn veel meer beperkt.</para>
+
+<para
+>Om de kans te beperken om per ongeluk het alarm te bevestigen, zijn de knoppen in het venster eerst uitgeschakeld, en worden alleen actief na een in te stellen vertraging.</para>
+
+</listitem>
+
+</itemizedlist>
+
 </sect2>
 
 <sect2>
@@ -3616,7 +3641,14 @@ mode.</para
 <para
 >Het tabblad <guilabel
 >Herinneringsvensters</guilabel
-> bevat opties om het uiterlijk van alarmberichtvensters te besturen.</para>
+> bevat opties om het uiterlijk van alarmberichtvensters te besturen. De beschikbare opties hangen af van het venstersysteem dat in gebruik is.</para>
+
+<itemizedlist>
+<listitem>
+<para
+><application
+>X11 venstersysteem</application
+></para>
 
 <itemizedlist>
 <listitem>
@@ -3644,6 +3676,25 @@ mode.</para
 > voor details.</para>
 </listitem>
 </itemizedlist>
+</listitem>
+
+<listitem>
+<para
+><application
+>Wayland venstersysteem</application
+></para>
+
+<itemizedlist>
+<listitem>
+<para
+>Om de kans te verkleinen om per ongeluk het alarm te bevestigen, worden de knoppen in het venster initieel uitgeschakeld. De vertraging in seconden voordat ze actief worden wordt ingesteld met de <guilabel
+>Vertraging voor de activatie van knoppen (seconden)</guilabel
+>.</para>
+</listitem>
+</itemizedlist>
+</listitem>
+</itemizedlist>
+
 </sect1>
 
 <sect1 id="preferences-edit">
@@ -6926,10 +6977,10 @@ mode.</para
 <para
 >&kalarm; </para>
 <para
->Programma copyright 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023 &David.Jarvie; &David.Jarvie.mail; </para>
+>Programma copyright 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024 &David.Jarvie; &David.Jarvie.mail; </para>
 
 <para
->Documentatie copyright 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2016, 2018, 2019, 2020, 2021, 2022, 2023 &David.Jarvie; &David.Jarvie.mail; </para>
+>Documentatie copyright 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2016, 2018, 2019, 2020, 2021, 2022, 2023, 2024 &David.Jarvie; &David.Jarvie.mail; </para>
 
 &meld.fouten;&vertaling.niels;&vertaling.freek; &underFDL; &underGPL; <para
 >Dank aan de auteur van de &kde; 1 KAlarm applicatie, Stefan Nikolaus <email
