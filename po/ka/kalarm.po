@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-01-04 02:35+0000\n"
-"PO-Revision-Date: 2023-12-11 23:31+0100\n"
+"PO-Revision-Date: 2024-01-27 05:39+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -5799,7 +5799,7 @@ msgstr "აირჩიეთ ხმის ფაილი"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the default sound file to use in the alarm edit dialog."
-msgstr ""
+msgstr "შეიყვანეთ ნაგულისხმევი ხმის ფაილი განგაშის ჩასწორების დიალოგისთვის."
 
 #: prefdlg.cpp:1472
 #, kde-format
@@ -6447,7 +6447,7 @@ msgstr "არჩიეთ კვირის დღეები, როცა �
 #, kde-format
 msgctxt "@option:radio On day number in the month"
 msgid "O&n day"
-msgstr ""
+msgstr "&დღეზე"
 
 #: recurrenceedit.cpp:1305
 #, kde-format
@@ -6471,7 +6471,7 @@ msgstr "აირჩიეთ თვის დღე, რომელზეც �
 #, kde-format
 msgctxt "@option:radio On the 1st Tuesday"
 msgid "On t&he"
-msgstr ""
+msgstr "&დღე"
 
 #: recurrenceedit.cpp:1327
 #, kde-format
@@ -6598,7 +6598,7 @@ msgstr "აირჩიეთ წლის თვეები, რომელ�
 #, kde-format
 msgctxt "@label:listbox"
 msgid "February 2&9th alarm in non-leap years:"
-msgstr ""
+msgstr "&29 თებერვლის განგაში არანაკიანი წლებისთვის:"
 
 #: recurrenceedit.cpp:1534
 #, kde-format
