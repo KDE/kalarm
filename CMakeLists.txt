@@ -47,6 +47,7 @@ include(KDECompilerSettings NO_POLICY_SCOPE)
 include(ECMAddAppIcon)
 include(ECMQtDeclareLoggingCategory)
 include(ECMDeprecationSettings)
+include(ECMFeatureSummary)
 set(QT_REQUIRED_VERSION "6.6.0")
 set(KTEXTADDONS_MIN_VERSION "1.5.3")
 # Do NOT add quote
@@ -188,4 +189,4 @@ if (KF6DocTools_FOUND)
 endif()
 ki18n_install(po)
 
-feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)
+ecm_feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)
