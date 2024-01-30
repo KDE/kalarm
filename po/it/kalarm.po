@@ -5,14 +5,14 @@
 # Andrea Rizzi <rizzi@kde.org>, 2004.
 # Giovanni Venturi <jumpyj@tiscali.it>, 2006.
 # Federico Zenith <federico.zenith@member.fsf.org>, 2008, 2012, 2013, 2014.
-# SPDX-FileCopyrightText: 2014, 2018, 2019, 2020, 2021, 2022, 2023 Vincenzo Reale <smart2128vr@gmail.com>
+# SPDX-FileCopyrightText: 2014, 2018, 2019, 2020, 2021, 2022, 2023, 2024 Vincenzo Reale <smart2128vr@gmail.com>
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-01-20 00:37+0000\n"
-"PO-Revision-Date: 2023-10-09 14:51+0200\n"
+"PO-Revision-Date: 2024-01-21 13:13+0100\n"
 "Last-Translator: Vincenzo Reale <smart2128vr@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 23.08.1\n"
+"X-Generator: Lokalize 23.08.4\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -6163,19 +6163,16 @@ msgid "Button activation delay (seconds):"
 msgstr "Ritardo nell'attivazione dei pulsanti (secondi):"
 
 #: prefdlg.cpp:1995
-#, fuzzy, kde-format
-#| msgctxt "@info:whatsthis"
-#| msgid ""
-#| "Enter how long its buttons should remain disabled after the alarm message "
-#| "window is shown."
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "Enter how long its buttons should remain disabled after the alarm message "
 "window is shown, to reduce the chance of alarm messages being accidentally "
 "acknowledged."
 msgstr ""
-"Inserisci per quanto tempo i pulsanti dovrebbero rimanere inattivi dopo la "
-"visualizzazione del messaggio d'avviso."
+"Inserisci per quanto tempo i pulsanti dovrebbero rimanere disabilitati dopo "
+"la visualizzazione del messaggio d'avviso, per ridurre la possibilità che i "
+"messaggi d'avviso siano approvati accidentalmente."
 
 #: prefdlg.cpp:1999
 #, kde-format
