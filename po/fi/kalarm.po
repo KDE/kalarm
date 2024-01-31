@@ -23,7 +23,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-01-04 01:34+0000\n"
-"PO-Revision-Date: 2023-09-27 18:09+0300\n"
+"PO-Revision-Date: 2023-11-15 18:21+0200\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
 "Language: fi\n"
@@ -221,12 +221,10 @@ msgid "1 week"
 msgstr "1 viikko"
 
 #: alarmtimewidget.cpp:169
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Select an alarm template to preset the alarm"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Select time delay from a list of preset values"
-msgstr "Valitse hälytyksen esiasetuksena käytettävä hälytysmalli"
+msgstr "Valitse aikaviive esiasetettujen arvojen luettelosta"
 
 #: alarmtimewidget.cpp:177
 #, kde-kuit-format
@@ -6806,12 +6804,10 @@ msgstr ""
 "warning></para><para>Haluatko päivittää kalenterin?</para>"
 
 #: resources/fileresource.cpp:325 resources/fileresource.cpp:455
-#, fuzzy, kde-format
-#| msgctxt "@info"
-#| msgid "Resource is not configured."
+#, kde-format
 msgctxt "@info"
 msgid "Calendar is not configured."
-msgstr "Resurssia ei ole asetettu."
+msgstr "Kalenteria ei ole asetettu."
 
 #: resources/fileresource.cpp:354 resources/fileresource.cpp:372
 #, kde-kuit-format
@@ -6827,12 +6823,10 @@ msgid "Error saving calendar <resource>%1</resource>."
 msgstr "Virhe tallennettaessa kalenteria <resource>%1</resource>."
 
 #: resources/fileresource.cpp:462
-#, fuzzy, kde-format
-#| msgctxt "@info"
-#| msgid "Resource is read-only."
+#, kde-format
 msgctxt "@info"
 msgid "Calendar is read-only."
-msgstr "Resurssi on vain luettavissa."
+msgstr "Kalenteri on vain luettavissa."
 
 #: resources/fileresource.cpp:467
 #, kde-kuit-format
@@ -6859,17 +6853,13 @@ msgid "Select storage type of new calendar:"
 msgstr "Valitse uuden kalenterin tallennustyyppi:"
 
 #: resources/fileresourcecreator.cpp:137
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid ""
-#| "Error!  The file <filename>%1</filename> is already used by an existing "
-#| "resource."
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "Error!  The file <filename>%1</filename> is already used by an existing "
 "calendar."
 msgstr ""
-"Virhe! Tiedostoa <filename>%1</filename> käyttää jo olemassa oleva resurssi."
+"Virhe! Tiedostoa <filename>%1</filename> käyttää jo olemassa oleva kalenteri."
 
 #: resources/migration/dirresourceimportdialog.cpp:34
 #, kde-format
@@ -7521,20 +7511,15 @@ msgstr "Kalenteritiedosto"
 
 #. i18n: ectx: property (html), widget (KTextEdit, pathDescription)
 #: resources/singlefileresourceconfigdialog.ui:68
-#, fuzzy, kde-format
-#| msgid ""
-#| "Select the file whose contents should be represented by this resource. If "
-#| "the file does not exist, it will be created. The URL of a remote file can "
-#| "also be specified, but note that monitoring for file changes will not "
-#| "work in this case."
+#, kde-format
 msgid ""
 "Select the file to hold this calendar. If the file does not exist, it will "
 "be created. The URL of a remote file can also be specified, but note that "
 "monitoring for file changes will not work in this case."
 msgstr ""
-"Valitse tiedosto, jonka sisällön tulisi olla tämä resurssi. Ellei tiedostoa "
-"ole olemassa, se luodaan. Myös etätiedoston osoitteen voi antaa, mutta "
-"huomaa, että silloin tiedostomuutosten tarkkailu ei toimi."
+"Valitse tiedosto, jonka sisällön tulisi olla tämä kalenteri. Ellei tiedostoa "
+"ole olemassa, se luodaan. Myös etätiedosto-osoitteen voi antaa, mutta "
+"tällöin tiedostomuutosten tarkkailu ei toimi."
 
 #. i18n: ectx: property (text), widget (QRadioButton, activeRadio)
 #: resources/singlefileresourceconfigdialog.ui:86
@@ -7559,10 +7544,9 @@ msgstr "Hälytysmallit"
 
 #. i18n: ectx: property (html), widget (KTextEdit, alarmTypeDescription)
 #: resources/singlefileresourceconfigdialog.ui:133
-#, fuzzy, kde-format
-#| msgid "Select which alarm type this resource should contain."
+#, kde-format
 msgid "Select which alarm type this calendar should contain."
-msgstr "Valitse, minkä hälytystyypin tämän resurssin tulisi sisältää."
+msgstr "Valitse, mikä hälytystyyppi tämän kalenteri tulisi sisältää."
 
 #. i18n: ectx: property (text), widget (QLabel, alarmTypeLabel)
 #: resources/singlefileresourceconfigdialog.ui:142
@@ -7608,10 +7592,9 @@ msgstr "Nimi:"
 
 #. i18n: ectx: property (html), widget (KTextEdit, nameDescription)
 #: resources/singlefileresourceconfigdialog.ui:222
-#, fuzzy, kde-format
-#| msgid "Enter the name used to identify this resource in displays."
+#, kde-format
 msgid "Enter the display name used to identify this calendar."
-msgstr "Anna nimi, jolla tämä resurssi tunnistetaan näkymissä."
+msgstr "Anna nimi, jolla tämä kalenteri tunnistetaan näkymissä."
 
 #. i18n: ectx: property (title), widget (QGroupBox, readOnlyGroupBox)
 #: resources/singlefileresourceconfigdialog.ui:232
@@ -7629,22 +7612,16 @@ msgstr "Vain luku"
 
 #. i18n: ectx: property (html), widget (KTextEdit, readOnlyDescription)
 #: resources/singlefileresourceconfigdialog.ui:254
-#, fuzzy, kde-format
-#| msgid ""
-#| "If read-only mode is enabled, no changes will be written to the file "
-#| "selected above. Read-only mode will be automatically enabled if you do "
-#| "not have write access to the file or the file is on a remote server that "
-#| "does not support write access."
+#, kde-format
 msgid ""
 "If read-only mode is enabled, no changes will be written to the file. Read-"
 "only mode will be automatically enabled if you do not have write access to "
 "the file or the file is on a remote server that does not support write "
 "access."
 msgstr ""
-"Jos vain luku -tila otetaan käyttöön, muutoksia ei tallenneta yllä valittuun "
-"tiedostoon. Vain luku -tila tulee automaattisesti käyttöön, ellei tiedostoon "
-"ole kirjoitusoikeuksia tai jos se on etäpalvelimella, joka ei tue "
-"kirjoittamista."
+"Jos vain luku -tila otetaan käyttöön, muutoksia ei tallenneta tiedostoon. "
+"Vain luku -tila tulee automaattisesti käyttöön, ellei tiedostoon ole "
+"kirjoitusoikeuksia tai jos se on etäpalvelimella, joka ei tue kirjoittamista."
 
 #: resourceselector.cpp:50
 #, kde-format
