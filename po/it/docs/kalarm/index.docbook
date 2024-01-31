@@ -117,7 +117,9 @@
 ><year
 >2022</year
 ><year
->2023</year>
+>2023</year
+><year
+>2024</year>
 <holder
 >&David.Jarvie;</holder>
 </copyright>
@@ -128,9 +130,9 @@
 <!-- Don't change format of date and version of the documentation -->
 
 <date
->2023-9-20</date>
+>2024-1-25</date>
 <releaseinfo
->3.7.0 (KDE Gear 23.12)</releaseinfo>
+>3.7.0 (KDE Gear 24.02)</releaseinfo>
 
 <abstract>
 <para
@@ -173,7 +175,7 @@
 >Gli avvisi possono anche essere pianificati dalla riga di comando, o con chiamate &DBus; da altri programmi.</para>
 
 <para
->Quando è il momento di mostrare un messaggio di avviso, viene mostrato su tutti i desktop per essere sicuri di non mancarlo. La finestra del messaggio mostra l'ora per cui l'avviso è programmato. Di solito c'è l'opzione di rinvio per chiedere che l'avviso venga ripetuto più tardi. Ecco un esempio di messaggio di avviso:</para>
+>Quando è il momento di mostrare un messaggio di avviso, se il sistema di gestione delle finestre lo permette, questo viene mostrato su tutti i desktop per essere sicuri di non mancarlo. La finestra del messaggio mostra l'ora per cui l'avviso è programmato. Di solito c'è l'opzione di rinvio per chiedere che l'avviso venga ripetuto più tardi. Ecco un esempio di messaggio di avviso:</para>
 
 <screenshot>
 <screeninfo
@@ -2406,7 +2408,7 @@ mode.</para
 >I messaggi di avviso che sono visualizzati in finestre forniscono le funzionalità più complete.</para>
 
 <para
->Al momento di mostrare un messaggio di avviso, esso viene visualizzato su ogni desktop e non può essere coperto dalle finestre normali, per essere sicuri di vederlo. La finestra del messaggio mostra l'ora per cui l'avviso era pianificato, in modo da poter vedere se si era via dal computer in quel momento. Se l'ora programmata dell'avviso è in un fuso orario diverso da quello impostato sul computer locale, ne sarà mostrato anche il fuso (per i promemoria, la data e l'ora visualizzate sono per l'avviso principale o la sua ricorrenza, non l'ora del promemoria, e il titolo della finestra è <quote
+>Al momento di mostrare un messaggio di avviso, esso viene visualizzato, se possibile, su ogni desktop e non può essere coperto dalle finestre normali, per essere sicuri di vederlo (si noti come attualmente solo il sistema di gestione delle finestre X11 fornisce questa funzionalità). La finestra del messaggio mostra l'ora per cui l'avviso era pianificato, in modo da poter vedere se si era via dal computer in quel momento. Se l'ora programmata dell'avviso è in un fuso orario diverso da quello impostato sul computer locale, ne sarà mostrato anche il fuso (per i promemoria, la data e l'ora visualizzate sono per l'avviso principale o la sua ricorrenza, non l'ora del promemoria, e il titolo della finestra è <quote
 >Promemoria</quote
 >).</para>
 
@@ -2504,6 +2506,16 @@ mode.</para
 </itemizedlist>
 
 <para
+>Il modo in cui le finestre dei messaggi di avviso sono mostrate dipende dal sistema di gestione delle finestre usato.</para>
+
+<itemizedlist>
+<listitem>
+<para
+><application
+>Sistema di gestione delle finestre X11</application
+></para>
+
+<para
 >Nella <link linkend="preferences-view"
 >Finestra di configurazione</link
 > puoi scegliere quale tra due diverse modalità dovrebbe essere usata per visualizzare le finestre dei messaggi d'avviso:</para>
@@ -2524,10 +2536,6 @@ mode.</para
 ><para
 >Quando un avviso viene visualizzato sopra una applicazione a tutto schermo, viene mostrato come una finestra non modale indipendentemente da questa impostazione. Ciò a causa di una limitazione del sistema delle finestre.</para
 ></note>
-
-<sect3>
-<title
->Posizionamento delle finestre dei messaggi</title>
 
 <para
 >Puoi scegliere quale schema tra due usare per posizionare le finestre degli avvisi testuali nella <link linkend="preferences-view"
@@ -2555,7 +2563,24 @@ mode.</para
 ></menuchoice
 >. Se vuoi, puoi configurare una scorciatoia globale per questa azione.</para>
 
-</sect3>
+</listitem>
+
+<listitem>
+<para
+><application
+>Sistema di gestione delle finestre Wayland</application
+></para>
+
+<para
+>Il sistema di gestione delle finestre Wayland non permette alle applicazioni di controllare la posizione o la decorazione delle proprie finestre, così le opzioni di visualizzazione saranno molto più limitate.</para>
+
+<para
+>Per ridurre la possibilità di accettare l'avviso per sbaglio, i pulsanti della finestra sono inizialmente disattivati, attivandosi solo dopo un ritardo configurabile.</para>
+
+</listitem>
+
+</itemizedlist>
+
 </sect2>
 
 <sect2>
@@ -3634,7 +3659,14 @@ mode.</para
 <para
 >La scheda delle <guilabel
 >Finestre degli avvisi</guilabel
-> contiene delle opzioni per controllare l'aspetto delle finestre dei messaggi d'avviso.</para>
+> contiene delle opzioni per controllare l'aspetto delle finestre dei messaggi d'avviso. Le opzioni disponibili dipendono dal sistema di gestione delle finestre utilizzato.</para>
+
+<itemizedlist>
+<listitem>
+<para
+><application
+>Sistema di gestione delle finestre X11</application
+></para>
 
 <itemizedlist>
 <listitem>
@@ -3662,6 +3694,25 @@ mode.</para
 > per i dettagli.</para>
 </listitem>
 </itemizedlist>
+</listitem>
+
+<listitem>
+<para
+><application
+>Sistema di gestione delle finestre Wayland</application
+></para>
+
+<itemizedlist>
+<listitem>
+<para
+>Per ridurre la possibilità di accettare per sbaglio l'avviso, i pulsanti della finestra sono inizialmente disattivati. Il ritardo in secondi prima che diventino attivi può essere impostato in <guilabel
+>Ritardo nell'attivazione dei pulsanti (secondi)</guilabel
+>.</para>
+</listitem>
+</itemizedlist>
+</listitem>
+</itemizedlist>
+
 </sect1>
 
 <sect1 id="preferences-edit">
@@ -6999,10 +7050,10 @@ mode.</para
 <para
 >&kalarm; </para>
 <para
->Copyright del programma 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023 &David.Jarvie; &David.Jarvie.mail; </para>
+>Copyright del programma 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024 &David.Jarvie; &David.Jarvie.mail; </para>
 
 <para
->Copyright della documentazione 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2016, 2018, 2019, 2020, 2021, 2022, 2023 &David.Jarvie; &David.Jarvie.mail; </para>
+>Copyright della documentazione 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2016, 2018, 2019, 2020, 2021, 2022, 2023, 2024 &David.Jarvie; &David.Jarvie.mail; </para>
 
 <para
 >Traduzione in italiano di Federico Zenith <email
