@@ -1256,7 +1256,6 @@ void KAEventTest::toKCalEvent()
     {
         // Start time using LocalZone
         const KADateTime dtl(QDate(2010,5,13), QTime(3, 45, 0), KADateTime::LocalZone);
-qDebug()<<"dtl:"<<dtl.qDateTime();
         KAEvent event(dtl, name, text, bgColour, fgColour, font, KAEvent::SubAction::Message, 3, KAEvent::CONFIRM_ACK);
         event.setEventId(uid);
         event.incrementRevision();
@@ -1270,10 +1269,12 @@ qDebug()<<"dtl:"<<dtl.qDateTime();
         QStringList flags = kcalevent->customProperty("KALARM", "FLAGS").split(SC);
         QCOMPARE(flags.size(), 4);   // must contain LOCAL, LATECANCEL;3 and ACKCONF
         QVERIFY(flags.contains(QLatin1String("LOCAL")));
-        const QDateTime dtCurrentTz(dtl.date(), dtl.time(), QTimeZone::systemTimeZone());
+        const QTimeZone sysTz = QTimeZone::systemTimeZone();
+        const QDateTime dtCurrentTz(dtl.date(), dtl.time(), sysTz);
+qDebug()<<"dtl QDateTime:"<<dtl.qDateTime();
 qDebug()<<"dtl date:"<<dtl.date()<<", dtl time:"<<dtl.time()<<", systemTimeZone:"<<QTimeZone::systemTimeZone()<<QTimeZone(QTimeZone::LocalTime);
 qDebug()<<"dtCurrentTz:"<<dtCurrentTz;
-        QCOMPARE(kcalevent->dtStart(), dtCurrentTz);
+        QCOMPARE(kcalevent->dtStart(), (sysTz.isValid() ? dtCurrentTz : dtl.qDateTime()));
         QCOMPARE(kcalevent->created(), createdDt.qDateTime());
     }
 }
