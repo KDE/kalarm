@@ -1269,8 +1269,9 @@ void KAEventTest::toKCalEvent()
         QStringList flags = kcalevent->customProperty("KALARM", "FLAGS").split(SC);
         QCOMPARE(flags.size(), 4);   // must contain LOCAL, LATECANCEL;3 and ACKCONF
         QVERIFY(flags.contains(QLatin1String("LOCAL")));
-        const QDateTime dtCurrentTz(dtl.date(), dtl.time(), QTimeZone::systemTimeZone());
-        QCOMPARE(kcalevent->dtStart(), dtCurrentTz);
+        const QTimeZone sysTz = QTimeZone::systemTimeZone();
+        const QDateTime dtCurrentTz(dtl.date(), dtl.time(), sysTz);
+        QCOMPARE(kcalevent->dtStart(), (sysTz.isValid() ? dtCurrentTz : dtl.qDateTime()));
         QCOMPARE(kcalevent->created(), createdDt.qDateTime());
     }
 }
