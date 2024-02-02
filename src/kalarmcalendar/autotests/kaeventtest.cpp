@@ -1256,6 +1256,7 @@ void KAEventTest::toKCalEvent()
     {
         // Start time using LocalZone
         const KADateTime dtl(QDate(2010,5,13), QTime(3, 45, 0), KADateTime::LocalZone);
+qDebug()<<"dtl:"<<dtl.qDateTime();
         KAEvent event(dtl, name, text, bgColour, fgColour, font, KAEvent::SubAction::Message, 3, KAEvent::CONFIRM_ACK);
         event.setEventId(uid);
         event.incrementRevision();
@@ -1270,6 +1271,8 @@ void KAEventTest::toKCalEvent()
         QCOMPARE(flags.size(), 4);   // must contain LOCAL, LATECANCEL;3 and ACKCONF
         QVERIFY(flags.contains(QLatin1String("LOCAL")));
         const QDateTime dtCurrentTz(dtl.date(), dtl.time(), QTimeZone::systemTimeZone());
+qDebug()<<"dtl date:"<<dtl.date()<<", dtl time:"<<dtl.time()<<", systemTimeZone:"<<QTimeZone::systemTimeZone();
+qDebug()<<"dtCurrentTz:"<<dtCurrentTz;
         QCOMPARE(kcalevent->dtStart(), dtCurrentTz);
         QCOMPARE(kcalevent->created(), createdDt.qDateTime());
     }
