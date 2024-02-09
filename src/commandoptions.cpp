@@ -1,7 +1,7 @@
 /*
  *  commandoptions.cpp  -  extract command line options
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2001-2022 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2001-2024 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -215,7 +215,8 @@ QStringList CommandOptions::setOptions(QCommandLineParser* parser, const QString
                                        QStringLiteral("address"));
     mOptions[NAME]
               = new QCommandLineOption(QStringList{QStringLiteral("n"), QStringLiteral("name")},
-                                       i18n("Name of alarm"));
+                                       i18n("Name of alarm"),
+                                       QStringLiteral("name"));
     mOptions[NOTIFY]
               = new QCommandLineOption(QStringList{QStringLiteral("N"), QStringLiteral("notify")},
                                        i18n("Display alarm message as a notification"));
@@ -494,8 +495,7 @@ void CommandOptions::process()
         case EDIT_NEW:
             if (mParser->isSet(*mOptions.at(DISABLE)))
                 d->setErrorIncompatible(DISABLE, d->mCommandOpt);
-            // Fall through to NEW
-            Q_FALLTHROUGH();
+            Q_FALLTHROUGH();   // fall through to NEW
         case NEW:
         {
             // Display a message or file, execute a command, or send an email
@@ -949,8 +949,7 @@ bool convInterval(const QString& timeParam, KARecurrence::Type& recurType, int& 
         {
             case KARecurrence::WEEKLY:
                 interval *= 7;
-                // fall through to DAILY
-                Q_FALLTHROUGH();
+                Q_FALLTHROUGH();   // fall through to DAILY
             case KARecurrence::DAILY:
                 interval *= 24*60;
                 recurType = KARecurrence::MINUTELY;

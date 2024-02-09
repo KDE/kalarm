@@ -1,7 +1,8 @@
 KAlarm Change Log
 
-=== Version 3.6.4 (KDE Gear 23.08.5) --- 3 January 2024 ===
+=== Version 3.6.4 (KDE Gear 23.08.5) --- 9 February 2024 ===
 * Remove 'spread windows' option using Wayland, which doesn't allow window positions to be set.
+* Fix --name command line option not using its parameter [KDE Bug 481053]
 
 === Version 3.6.3 (KDE Gear 23.08.4) --- 29 November 2023 ===
 * Show calendar name, not ID, in confirmation prompts when removing a calendar.
