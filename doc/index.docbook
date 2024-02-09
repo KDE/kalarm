@@ -39,7 +39,7 @@
 
 <!-- Don't change format of date and version of the documentation -->
 
-<date>2024-1-25</date>
+<date>2024-2-9</date>
 <releaseinfo>3.7.0 (KDE Gear 24.02)</releaseinfo>
 
 <abstract>
@@ -3380,7 +3380,7 @@ time.</para>
   with this option.</entry>
 </row>
 <row>
-  <entry><option>-n</option>, <option>--name</option></entry>
+  <entry><option>-n</option>, <option>--name <replaceable>name</replaceable></option></entry>
   <entry>Specify a name to help you to identify the alarm.</entry>
 </row>
 <row>
