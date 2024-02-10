@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Mimos\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-01-04 02:35+0000\n"
+"POT-Creation-Date: 2024-02-10 03:37+0000\n"
 "PO-Revision-Date: 2005-10-06 11:21+0800\n"
 "Last-Translator: junetazawawi <junetazawawi@yahoo.com>\n"
 "Language-Team: Malay <kedidiemas@yahoogroups.com>\n"
@@ -634,92 +634,92 @@ msgstr "Hantar e-mel kepada alamat diberi (ulang jika perlu)"
 msgid "Name of alarm"
 msgstr "Penggera baru"
 
-#: commandoptions.cpp:221
+#: commandoptions.cpp:222
 #, fuzzy, kde-format
 #| msgid "Display the alarm message now"
 msgid "Display alarm message as a notification"
 msgstr "Paparkan mesej penggera sekarang"
 
-#: commandoptions.cpp:224
+#: commandoptions.cpp:225
 #, kde-format
 msgid "Audio file to play once"
 msgstr "Fail audio untuk disiarkan satu kali"
 
-#: commandoptions.cpp:228
+#: commandoptions.cpp:229
 #, kde-format
 msgid "Audio file to play repeatedly"
 msgstr "Fail audio untuk disiarkan berulang-ulang"
 
-#: commandoptions.cpp:232
+#: commandoptions.cpp:233
 #, kde-format
 msgid "Specify alarm recurrence using iCalendar syntax"
 msgstr "Nyatakan pengulangan penggera mengunakan sintaks iKalendar"
 
-#: commandoptions.cpp:236
+#: commandoptions.cpp:237
 #, fuzzy, kde-format
 #| msgid "Display reminder in advance of alarm"
 msgid "Display reminder before or after alarm"
 msgstr "Paparkan peringatan  sebelum penggera"
 
-#: commandoptions.cpp:240
+#: commandoptions.cpp:241
 #, fuzzy, kde-format
 #| msgid "Display reminder once, before first alarm recurrence"
 msgid "Display reminder once, before or after first alarm recurrence"
 msgstr "Paparkan peringatan sekali sebelum ulangan pertama penggera"
 
-#: commandoptions.cpp:244
+#: commandoptions.cpp:245
 #, kde-format
 msgid "Number of times to repeat alarm (including initial occasion)"
 msgstr "Berapa kali penggera hendak diulang (termasuk kejadian pemulaan)"
 
-#: commandoptions.cpp:249
+#: commandoptions.cpp:250
 #, kde-format
 msgid "Speak the message when it is displayed"
 msgstr "Tuturkan mesej apabila ia dipaparkan"
 
-#: commandoptions.cpp:253
+#: commandoptions.cpp:254
 #, kde-format
 msgid "Email subject line"
 msgstr "Baris subjek e-mel"
 
-#: commandoptions.cpp:258
+#: commandoptions.cpp:259
 #, fuzzy, kde-format
 msgid "Simulate system time [[[yyyy-]mm-]dd-]hh:mm [TZ] (debug mode)"
 msgstr "Ulang sehingga [[[tttt-]bb-]hh-]jj:mm, atau tarikh tttt-bb-hh"
 
-#: commandoptions.cpp:263
+#: commandoptions.cpp:264
 #, fuzzy, kde-format
 msgid ""
 "Trigger alarm at time [[[yyyy-]mm-]dd-]hh:mm [TZ], or date yyyy-mm-dd [TZ]"
 msgstr ""
 "Cetuskan penggera pada waktu  [[[ttt-]bb-]hh-]jj:mm, atau tarikh ttt-bb-hh"
 
-#: commandoptions.cpp:267
+#: commandoptions.cpp:268
 #, kde-format
 msgid "Display system tray icon"
 msgstr "Paparkan ikon dulang sistem"
 
-#: commandoptions.cpp:270
+#: commandoptions.cpp:271
 #, kde-format
 msgid "Trigger alarm with the specified event ID"
 msgstr "Cetus penggera bersama ID peristiwa yang dinyatakan"
 
-#: commandoptions.cpp:274
+#: commandoptions.cpp:275
 #, fuzzy, kde-format
 msgid "Repeat until time [[[yyyy-]mm-]dd-]hh:mm [TZ], or date yyyy-mm-dd [TZ]"
 msgstr "Ulang sehingga [[[tttt-]bb-]hh-]jj:mm, atau tarikh tttt-bb-hh"
 
-#: commandoptions.cpp:278
+#: commandoptions.cpp:279
 #, kde-format
 msgid "Volume to play audio file"
 msgstr "Volum untuk siaran fail audio"
 
-#: commandoptions.cpp:289
+#: commandoptions.cpp:290
 #, kde-format
 msgid "Message text to display"
 msgstr "Teks mesej yang hendak dipapar"
 
-#: commandoptions.cpp:453
+#: commandoptions.cpp:454
 #, fuzzy, kde-kuit-format
 #| msgid "%1: invalid email address"
 msgctxt "@info:shell"
