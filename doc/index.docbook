@@ -762,8 +762,10 @@ you can change if you wish.</para>
 <varlistentry>
 <term>Storage type</term>
 <listitem>
+<!--FIXME not in kf5?
 <para>&kalarm; handles two alarm calendar storage
 types:</para>
+-->
 
 <itemizedlist>
 <listitem><para>Local file: Alarms are stored in a single local file
@@ -773,13 +775,6 @@ in iCalendar format. &kalarm; uses local file calendars by default
 computer, can include alarm calendars on the local network as long as
 their location can be represented by a path name starting with
 <literal>/</literal>.</para>
-</listitem>
-
-<listitem><para>Local directory: Alarms are stored in a local folder,
-each alarm being stored in a separate iCalendar file within the
-folder. This storage method has the advantage that in the event of
-file corruption, you should lose only one alarm, not the entire
-calendar.</para>
 </listitem>
 <!--FIXME not in kf5?
 <listitem><para>Remote file: Alarms are stored in a single remote
