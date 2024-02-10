@@ -1149,11 +1149,13 @@ void MessageWindow::slotEdit()
         return;
     KWindowSystem::setMainWindow(dlg->windowHandle(), winId());
 #if ENABLE_X11
-    KX11Extras::setOnAllDesktops(dlg->winId(), false);   // don't show on all virtual desktops
+    if (KWindowSystem::isPlatformX11())
+        KX11Extras::setOnAllDesktops(dlg->winId(), false);   // don't show on all virtual desktops
 #endif
     setButtonsReadOnly(true);
 #if ENABLE_X11
-    connect(KX11Extras::self(), &KX11Extras::activeWindowChanged, this, &MessageWindow::activeWindowChanged);
+    if (KWindowSystem::isPlatformX11())
+        connect(KX11Extras::self(), &KX11Extras::activeWindowChanged, this, &MessageWindow::activeWindowChanged);
 #endif
     mHelper->executeEdit();
 }
@@ -1330,10 +1332,13 @@ bool MessageWindow::getWorkAreaAndModal()
     if (modal)
     {
 #if ENABLE_X11
-        const WId activeId = KX11Extras::activeWindow();
-        const KWindowInfo wi = KWindowInfo(activeId, NET::WMState);
-        if (wi.valid()  &&  wi.hasState(NET::FullScreen))
-            return false;    // the active window is full screen.
+        if (KWindowSystem::isPlatformX11())
+        {
+            const WId activeId = KX11Extras::activeWindow();
+            const KWindowInfo wi = KWindowInfo(activeId, NET::WMState);
+            if (wi.valid()  &&  wi.hasState(NET::FullScreen))
+                return false;    // the active window is full screen.
+        }
 #endif
     }
     return modal;
