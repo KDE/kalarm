@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-01-04 01:34+0000\n"
+"POT-Creation-Date: 2024-02-10 02:48+0000\n"
 "PO-Revision-Date: 2016-08-15 16:35+0100\n"
 "Last-Translator: Martin Schlander <mschlander@opensuse.org>\n"
 "Language-Team: Danish <kde-i18n-doc@kde.org>\n"
@@ -597,59 +597,59 @@ msgstr "Send en e-mail til de givne adressater (gentag om nødvendigt)"
 msgid "Name of alarm"
 msgstr "Ny alarm"
 
-#: commandoptions.cpp:221
+#: commandoptions.cpp:222
 #, fuzzy, kde-format
 #| msgctxt "@info:whatsthis"
 #| msgid "Display the alarm message now"
 msgid "Display alarm message as a notification"
 msgstr "Vis alarmbeskeden nu"
 
-#: commandoptions.cpp:224
+#: commandoptions.cpp:225
 #, kde-format
 msgid "Audio file to play once"
 msgstr "Lydfil der skal afspilles en gang"
 
-#: commandoptions.cpp:228
+#: commandoptions.cpp:229
 #, kde-format
 msgid "Audio file to play repeatedly"
 msgstr "Lydfil der skal afspilles gentagent"
 
-#: commandoptions.cpp:232
+#: commandoptions.cpp:233
 #, kde-format
 msgid "Specify alarm recurrence using iCalendar syntax"
 msgstr "Angiv alarm-gentagelse ved brug af iCalendar-syntaks"
 
-#: commandoptions.cpp:236
+#: commandoptions.cpp:237
 #, kde-format
 msgid "Display reminder before or after alarm"
 msgstr "Vis påmindelse før eller efter alarm"
 
-#: commandoptions.cpp:240
+#: commandoptions.cpp:241
 #, kde-format
 msgid "Display reminder once, before or after first alarm recurrence"
 msgstr "Vis påmindelse én gang, før eller efter første alarmgentagelse"
 
-#: commandoptions.cpp:244
+#: commandoptions.cpp:245
 #, kde-format
 msgid "Number of times to repeat alarm (including initial occasion)"
 msgstr "Antal gange alarmen skal repeteres (inklusive den første gang)"
 
-#: commandoptions.cpp:249
+#: commandoptions.cpp:250
 #, kde-format
 msgid "Speak the message when it is displayed"
 msgstr "Læs meddelelsen op når den vises"
 
-#: commandoptions.cpp:253
+#: commandoptions.cpp:254
 #, kde-format
 msgid "Email subject line"
 msgstr "E-mailens emnelinje"
 
-#: commandoptions.cpp:258
+#: commandoptions.cpp:259
 #, kde-format
 msgid "Simulate system time [[[yyyy-]mm-]dd-]hh:mm [TZ] (debug mode)"
 msgstr "Simulér systemtiden [[[åååå-]mm-]dd-]hh:mm [TZ] (fejlretningstilstand)"
 
-#: commandoptions.cpp:263
+#: commandoptions.cpp:264
 #, kde-format
 msgid ""
 "Trigger alarm at time [[[yyyy-]mm-]dd-]hh:mm [TZ], or date yyyy-mm-dd [TZ]"
@@ -657,34 +657,34 @@ msgstr ""
 "Udløs alarm på tidspunktet [[[åååå-]mm-]dd-]tt:mm [TZ], eller dato åååå-mm-"
 "dd [TZ]"
 
-#: commandoptions.cpp:267
+#: commandoptions.cpp:268
 #, kde-format
 msgid "Display system tray icon"
 msgstr "Vis statusikon"
 
-#: commandoptions.cpp:270
+#: commandoptions.cpp:271
 #, kde-format
 msgid "Trigger alarm with the specified event ID"
 msgstr "Udløs alarm med det specificerede begivenheds-ID"
 
-#: commandoptions.cpp:274
+#: commandoptions.cpp:275
 #, kde-format
 msgid "Repeat until time [[[yyyy-]mm-]dd-]hh:mm [TZ], or date yyyy-mm-dd [TZ]"
 msgstr ""
 "Gentag indtil tidspunktet [[[åååå-]mm-]dd-]hh:mm [TZ], eller dato åååå-mm-dd "
 "[TZ]"
 
-#: commandoptions.cpp:278
+#: commandoptions.cpp:279
 #, kde-format
 msgid "Volume to play audio file"
 msgstr "Lydstyrke at afspille lydfiler med"
 
-#: commandoptions.cpp:289
+#: commandoptions.cpp:290
 #, kde-format
 msgid "Message text to display"
 msgstr "Beskedtekst der skal vises"
 
-#: commandoptions.cpp:453
+#: commandoptions.cpp:454
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "<icode>%1</icode>: invalid email address"

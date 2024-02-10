@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-01-04 01:34+0000\n"
+"POT-Creation-Date: 2024-02-10 02:48+0000\n"
 "PO-Revision-Date: 2002-10-12 14:57+0200\n"
 "Last-Translator: Thelma Lungcuzo <thelma@translate.org.za>\n"
 "Language-Team: Xhosa <xhosa@translate.org.za>\n"
@@ -572,94 +572,94 @@ msgstr "Thumela i email kwidilesi enikiweyo (phinda xa kufuneka)"
 msgid "Name of alarm"
 msgstr "Alarm Entsha"
 
-#: commandoptions.cpp:221
+#: commandoptions.cpp:222
 #, fuzzy, kde-format
 #| msgid "Display the alarm message now"
 msgid "Display alarm message as a notification"
 msgstr "Bonisa ngoku umyalezo we alarm"
 
-#: commandoptions.cpp:224
+#: commandoptions.cpp:225
 #, fuzzy, kde-format
 msgid "Audio file to play once"
 msgstr "Vula ifayile ezakudlalwa"
 
-#: commandoptions.cpp:228
+#: commandoptions.cpp:229
 #, fuzzy, kde-format
 msgid "Audio file to play repeatedly"
 msgstr "Vula ifayile ezakudlalwa"
 
-#: commandoptions.cpp:232
+#: commandoptions.cpp:233
 #, kde-format
 msgid "Specify alarm recurrence using iCalendar syntax"
 msgstr ""
 
-#: commandoptions.cpp:236
+#: commandoptions.cpp:237
 #, kde-format
 msgid "Display reminder before or after alarm"
 msgstr ""
 
-#: commandoptions.cpp:240
+#: commandoptions.cpp:241
 #, kde-format
 msgid "Display reminder once, before or after first alarm recurrence"
 msgstr ""
 
-#: commandoptions.cpp:244
+#: commandoptions.cpp:245
 #, fuzzy, kde-format
 msgid "Number of times to repeat alarm (including initial occasion)"
 msgstr "Inani lamaxashe lokuphinda i alarm (emva kwequpho lokuqala)"
 
-#: commandoptions.cpp:249
+#: commandoptions.cpp:250
 #, fuzzy, kde-format
 msgid "Speak the message when it is displayed"
 msgstr "Khalisa xa umyalezo eboniswa"
 
-#: commandoptions.cpp:253
+#: commandoptions.cpp:254
 #, kde-format
 msgid "Email subject line"
 msgstr "Ilayini Yomxholo we email"
 
-#: commandoptions.cpp:258
+#: commandoptions.cpp:259
 #, fuzzy, kde-format
 msgid "Simulate system time [[[yyyy-]mm-]dd-]hh:mm [TZ] (debug mode)"
 msgstr ""
 "Phinda kude ixesha [[[yyyy-]mm-]dd-]hh:mm, okanye umhla yyyy-mm-"
 "dd[[[yyyy-]dd-]hh:mm"
 
-#: commandoptions.cpp:263
+#: commandoptions.cpp:264
 #, fuzzy, kde-format
 msgid ""
 "Trigger alarm at time [[[yyyy-]mm-]dd-]hh:mm [TZ], or date yyyy-mm-dd [TZ]"
 msgstr ""
 "Kcukumisa alarm kwixesha [[[yyyy-]mm-]dd-]hh:mm, okanye umhla yyyy-mm-dd"
 
-#: commandoptions.cpp:267
+#: commandoptions.cpp:268
 #, kde-format
 msgid "Display system tray icon"
 msgstr "Bonisa itreyi yendlela esetyenziswayo iicon"
 
-#: commandoptions.cpp:270
+#: commandoptions.cpp:271
 #, kde-format
 msgid "Trigger alarm with the specified event ID"
 msgstr "Kcukumisa i alarm ngesiganeko se ID esicaziweyo"
 
-#: commandoptions.cpp:274
+#: commandoptions.cpp:275
 #, fuzzy, kde-format
 msgid "Repeat until time [[[yyyy-]mm-]dd-]hh:mm [TZ], or date yyyy-mm-dd [TZ]"
 msgstr ""
 "Phinda kude ixesha [[[yyyy-]mm-]dd-]hh:mm, okanye umhla yyyy-mm-"
 "dd[[[yyyy-]dd-]hh:mm"
 
-#: commandoptions.cpp:278
+#: commandoptions.cpp:279
 #, kde-format
 msgid "Volume to play audio file"
 msgstr ""
 
-#: commandoptions.cpp:289
+#: commandoptions.cpp:290
 #, kde-format
 msgid "Message text to display"
 msgstr "Umyalezo okubhaliweyo kuboniso"
 
-#: commandoptions.cpp:453
+#: commandoptions.cpp:454
 #, fuzzy, kde-kuit-format
 #| msgid "%1: invalid email address"
 msgctxt "@info:shell"

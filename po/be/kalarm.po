@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-01-04 01:34+0000\n"
+"POT-Creation-Date: 2024-02-10 02:48+0000\n"
 "PO-Revision-Date: 2007-10-28 14:03+0200\n"
 "Last-Translator: Darafei Praliaskouski <komzpa@licei2.com>\n"
 "Language-Team: Belarusian <i18n@mova.org>\n"
@@ -586,88 +586,88 @@ msgstr ""
 msgid "Name of alarm"
 msgstr "Новы напамінак"
 
-#: commandoptions.cpp:221
+#: commandoptions.cpp:222
 #, fuzzy, kde-format
 msgid "Display alarm message as a notification"
 msgstr "Паказаць напамінак зараз"
 
-#: commandoptions.cpp:224
+#: commandoptions.cpp:225
 #, fuzzy, kde-format
 msgid "Audio file to play once"
 msgstr "Аднаразова прайграць гукавы файл "
 
-#: commandoptions.cpp:228
+#: commandoptions.cpp:229
 #, fuzzy, kde-format
 msgid "Audio file to play repeatedly"
 msgstr "Бесперапынна прайграваць гукавы файл"
 
-#: commandoptions.cpp:232
+#: commandoptions.cpp:233
 #, fuzzy, kde-format
 msgid "Specify alarm recurrence using iCalendar syntax"
 msgstr "Паказаць паўтор напамінку ў фармаце iCalendar"
 
-#: commandoptions.cpp:236
+#: commandoptions.cpp:237
 #, fuzzy, kde-format
 msgid "Display reminder before or after alarm"
 msgstr "Паказваць папярэдні напамінак"
 
-#: commandoptions.cpp:240
+#: commandoptions.cpp:241
 #, fuzzy, kde-format
 msgid "Display reminder once, before or after first alarm recurrence"
 msgstr "Паказваць папярэдні напамінак толькі перад першым паўторам"
 
-#: commandoptions.cpp:244
+#: commandoptions.cpp:245
 #, fuzzy, kde-format
 msgid "Number of times to repeat alarm (including initial occasion)"
 msgstr "Колькасць паўтору напамінку (пасля першага паказу)"
 
-#: commandoptions.cpp:249
+#: commandoptions.cpp:250
 #, fuzzy, kde-format
 msgid "Speak the message when it is displayed"
 msgstr "Прачытаць напамінак голасам"
 
-#: commandoptions.cpp:253
+#: commandoptions.cpp:254
 #, fuzzy, kde-format
 msgid "Email subject line"
 msgstr "Радок тэмы паведамлення электроннай пошты"
 
-#: commandoptions.cpp:258
+#: commandoptions.cpp:259
 #, fuzzy, kde-format
 msgid "Simulate system time [[[yyyy-]mm-]dd-]hh:mm [TZ] (debug mode)"
 msgstr "Паўтараць да часу [[[yyyy-]mm-]dd-]hh:mm, або даты yyyy-mm-dd"
 
-#: commandoptions.cpp:263
+#: commandoptions.cpp:264
 #, fuzzy, kde-format
 msgid ""
 "Trigger alarm at time [[[yyyy-]mm-]dd-]hh:mm [TZ], or date yyyy-mm-dd [TZ]"
 msgstr "Час напамінку ў фармаце [[[yyyy-]mm-]dd-]hh:mm, або дата yyyy-mm-dd"
 
-#: commandoptions.cpp:267
+#: commandoptions.cpp:268
 #, fuzzy, kde-format
 msgid "Display system tray icon"
 msgstr "Паказаць у сістэмным латку"
 
-#: commandoptions.cpp:270
+#: commandoptions.cpp:271
 #, fuzzy, kde-format
 msgid "Trigger alarm with the specified event ID"
 msgstr "Паказаць напамінак з паказаным ідэнтыфікатарам"
 
-#: commandoptions.cpp:274
+#: commandoptions.cpp:275
 #, fuzzy, kde-format
 msgid "Repeat until time [[[yyyy-]mm-]dd-]hh:mm [TZ], or date yyyy-mm-dd [TZ]"
 msgstr "Паўтараць да часу [[[yyyy-]mm-]dd-]hh:mm, або даты yyyy-mm-dd"
 
-#: commandoptions.cpp:278
+#: commandoptions.cpp:279
 #, fuzzy, kde-format
 msgid "Volume to play audio file"
 msgstr "Гучнасць прайгравання гукавога файла"
 
-#: commandoptions.cpp:289
+#: commandoptions.cpp:290
 #, fuzzy, kde-format
 msgid "Message text to display"
 msgstr "Тэкст напамінку"
 
-#: commandoptions.cpp:453
+#: commandoptions.cpp:454
 #, fuzzy, kde-kuit-format
 msgctxt "@info:shell"
 msgid "<icode>%1</icode>: invalid email address"

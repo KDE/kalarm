@@ -1,6 +1,6 @@
 # translation of kalarm.po to
 # translation of alarmdaemonctrl.po to
-# Version: $Revision: 1668919 $
+# Version: $Revision: 1672823 $
 #
 # Copyright (C) 2002, 2004, 2005, 2006, 2007, 2008, 2009 Free Software Foundation, Inc.
 # Krzysztof Lichota <lichota@mimuw.edu.pl>, 2002, 2004, 2005, 2006.
@@ -17,7 +17,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-01-04 01:34+0000\n"
+"POT-Creation-Date: 2024-02-10 02:48+0000\n"
 "PO-Revision-Date: 2023-10-14 11:03+0200\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
@@ -592,57 +592,57 @@ msgstr "Wyślij wiadomość na podany adres pocztowy (powtarzaj w miarę potrzeb
 msgid "Name of alarm"
 msgstr "Nazwa alarmu"
 
-#: commandoptions.cpp:221
+#: commandoptions.cpp:222
 #, kde-format
 msgid "Display alarm message as a notification"
 msgstr "Wyświetl wiadomość alarmu jako powiadomienie"
 
-#: commandoptions.cpp:224
+#: commandoptions.cpp:225
 #, kde-format
 msgid "Audio file to play once"
 msgstr "Plik dźwiękowy do jednorazowego odtworzenia"
 
-#: commandoptions.cpp:228
+#: commandoptions.cpp:229
 #, kde-format
 msgid "Audio file to play repeatedly"
 msgstr "Plik dźwiękowy do odtwarzania wielokrotnego"
 
-#: commandoptions.cpp:232
+#: commandoptions.cpp:233
 #, kde-format
 msgid "Specify alarm recurrence using iCalendar syntax"
 msgstr "Podaj powtórzenia alarmu używając składni iCalendar"
 
-#: commandoptions.cpp:236
+#: commandoptions.cpp:237
 #, kde-format
 msgid "Display reminder before or after alarm"
 msgstr "Wyświetlaj przypomnienie przed lub po alarmie"
 
-#: commandoptions.cpp:240
+#: commandoptions.cpp:241
 #, kde-format
 msgid "Display reminder once, before or after first alarm recurrence"
 msgstr "Wyświetl przypomnienie raz, przed lub po pierwszym powtórzeniu alarmu"
 
-#: commandoptions.cpp:244
+#: commandoptions.cpp:245
 #, kde-format
 msgid "Number of times to repeat alarm (including initial occasion)"
 msgstr "Liczba powtórzeń alarmu (razem z pierwszym)"
 
-#: commandoptions.cpp:249
+#: commandoptions.cpp:250
 #, kde-format
 msgid "Speak the message when it is displayed"
 msgstr "Wypowiedz komunikat, kiedy jest wyświetlany"
 
-#: commandoptions.cpp:253
+#: commandoptions.cpp:254
 #, kde-format
 msgid "Email subject line"
 msgstr "Temat wiadomości"
 
-#: commandoptions.cpp:258
+#: commandoptions.cpp:259
 #, kde-format
 msgid "Simulate system time [[[yyyy-]mm-]dd-]hh:mm [TZ] (debug mode)"
 msgstr "Symuluj czas systemowy [[[yyyy-]mm-]dd-]hh:mm [TZ] (tryb debugowania)"
 
-#: commandoptions.cpp:263
+#: commandoptions.cpp:264
 #, kde-format
 msgid ""
 "Trigger alarm at time [[[yyyy-]mm-]dd-]hh:mm [TZ], or date yyyy-mm-dd [TZ]"
@@ -650,33 +650,33 @@ msgstr ""
 "Wyświetl wiadomość o czasie [[[rrrr-]mm-]dd-]hh:mm [TZ], albo dacie rrrr-mm-"
 "dd [TZ]"
 
-#: commandoptions.cpp:267
+#: commandoptions.cpp:268
 #, kde-format
 msgid "Display system tray icon"
 msgstr "Wyświetl ikonę w tacce systemowej"
 
-#: commandoptions.cpp:270
+#: commandoptions.cpp:271
 #, kde-format
 msgid "Trigger alarm with the specified event ID"
 msgstr "Włącz alarm o podanym identyfikatorze zdarzenia"
 
-#: commandoptions.cpp:274
+#: commandoptions.cpp:275
 #, kde-format
 msgid "Repeat until time [[[yyyy-]mm-]dd-]hh:mm [TZ], or date yyyy-mm-dd [TZ]"
 msgstr ""
 "Powtarzaj do czasu [[[rrrr-]mm-]dd-]hh:mm [TZ] lub daty rrrr-mm-dd [TZ]"
 
-#: commandoptions.cpp:278
+#: commandoptions.cpp:279
 #, kde-format
 msgid "Volume to play audio file"
 msgstr "Poziom głośności odtwarzania pliku dźwięku"
 
-#: commandoptions.cpp:289
+#: commandoptions.cpp:290
 #, kde-format
 msgid "Message text to display"
 msgstr "Tekst wiadomości do wyświetlenia"
 
-#: commandoptions.cpp:453
+#: commandoptions.cpp:454
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "<icode>%1</icode>: invalid email address"

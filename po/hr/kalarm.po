@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm 0\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-01-04 01:34+0000\n"
+"POT-Creation-Date: 2024-02-10 02:48+0000\n"
 "PO-Revision-Date: 2011-03-28 17:53+0200\n"
 "Last-Translator: Marko Dimjašević <marko@dimjasevic.net>\n"
 "Language-Team: Croatian <kde-croatia-list@lists.sourceforge.net>\n"
@@ -585,88 +585,88 @@ msgstr "Pošalji e-poruku na datu adresu (ponoviti po potrebi)"
 msgid "Name of alarm"
 msgstr "Nov alarm"
 
-#: commandoptions.cpp:221
+#: commandoptions.cpp:222
 #, fuzzy, kde-format
 msgid "Display alarm message as a notification"
 msgstr "Pokaži alarmnu poruku ovog trenutka"
 
-#: commandoptions.cpp:224
+#: commandoptions.cpp:225
 #, kde-format
 msgid "Audio file to play once"
 msgstr ""
 
-#: commandoptions.cpp:228
+#: commandoptions.cpp:229
 #, kde-format
 msgid "Audio file to play repeatedly"
 msgstr ""
 
-#: commandoptions.cpp:232
+#: commandoptions.cpp:233
 #, fuzzy, kde-format
 msgid "Specify alarm recurrence using iCalendar syntax"
 msgstr "Navedite ponavljanje alarma koristeći sintaksu iCalendar-a"
 
-#: commandoptions.cpp:236
+#: commandoptions.cpp:237
 #, fuzzy, kde-format
 msgid "Display reminder before or after alarm"
 msgstr "Pokaži podsetnik prije alarma"
 
-#: commandoptions.cpp:240
+#: commandoptions.cpp:241
 #, kde-format
 msgid "Display reminder once, before or after first alarm recurrence"
 msgstr ""
 
-#: commandoptions.cpp:244
+#: commandoptions.cpp:245
 #, fuzzy, kde-format
 msgid "Number of times to repeat alarm (including initial occasion)"
 msgstr "Broj ponavljanja alarma (poslije prvog oglašavanja)"
 
-#: commandoptions.cpp:249
+#: commandoptions.cpp:250
 #, fuzzy, kde-format
 msgid "Speak the message when it is displayed"
 msgstr "Oglasi bipom pojavljivanje poruke"
 
-#: commandoptions.cpp:253
+#: commandoptions.cpp:254
 #, fuzzy, kde-format
 msgid "Email subject line"
 msgstr "Tema e-poruke"
 
-#: commandoptions.cpp:258
+#: commandoptions.cpp:259
 #, fuzzy, kde-format
 msgid "Simulate system time [[[yyyy-]mm-]dd-]hh:mm [TZ] (debug mode)"
 msgstr "Ponavljaj do trenutka [[[gggg-]mm-]dd-]čč:mm, ili datuma gggg-mm-dd"
 
-#: commandoptions.cpp:263
+#: commandoptions.cpp:264
 #, fuzzy, kde-format
 msgid ""
 "Trigger alarm at time [[[yyyy-]mm-]dd-]hh:mm [TZ], or date yyyy-mm-dd [TZ]"
 msgstr "Oglasi alarm u trenutku [[[gggg-]mm-]dd-]čč:mm, ili datumu gggg-mm-dd"
 
-#: commandoptions.cpp:267
+#: commandoptions.cpp:268
 #, fuzzy, kde-format
 msgid "Display system tray icon"
 msgstr "Pokaži sličicu u sustavskoj kaseti"
 
-#: commandoptions.cpp:270
+#: commandoptions.cpp:271
 #, fuzzy, kde-format
 msgid "Trigger alarm with the specified event ID"
 msgstr "Oglasi alarm sa navedenim id. događaja"
 
-#: commandoptions.cpp:274
+#: commandoptions.cpp:275
 #, fuzzy, kde-format
 msgid "Repeat until time [[[yyyy-]mm-]dd-]hh:mm [TZ], or date yyyy-mm-dd [TZ]"
 msgstr "Ponavljaj do trenutka [[[gggg-]mm-]dd-]čč:mm, ili datuma gggg-mm-dd"
 
-#: commandoptions.cpp:278
+#: commandoptions.cpp:279
 #, kde-format
 msgid "Volume to play audio file"
 msgstr ""
 
-#: commandoptions.cpp:289
+#: commandoptions.cpp:290
 #, fuzzy, kde-format
 msgid "Message text to display"
 msgstr "Tekst poruke za prikaz"
 
-#: commandoptions.cpp:453
+#: commandoptions.cpp:454
 #, fuzzy, kde-kuit-format
 #| msgid "%1: invalid email address"
 msgctxt "@info:shell"

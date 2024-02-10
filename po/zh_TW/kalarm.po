@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-01-04 01:34+0000\n"
+"POT-Creation-Date: 2024-02-10 02:48+0000\n"
 "PO-Revision-Date: 2024-01-22 16:34+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
@@ -558,88 +558,88 @@ msgstr "寄出信件給所指定的位址(需要時重複)"
 msgid "Name of alarm"
 msgstr "鬧鐘的名稱"
 
-#: commandoptions.cpp:221
+#: commandoptions.cpp:222
 #, kde-format
 msgid "Display alarm message as a notification"
 msgstr "將鬧鐘訊息作為通知顯示"
 
-#: commandoptions.cpp:224
+#: commandoptions.cpp:225
 #, kde-format
 msgid "Audio file to play once"
 msgstr "要播放的音效檔案"
 
-#: commandoptions.cpp:228
+#: commandoptions.cpp:229
 #, kde-format
 msgid "Audio file to play repeatedly"
 msgstr "要重複播放的音效檔案"
 
-#: commandoptions.cpp:232
+#: commandoptions.cpp:233
 #, kde-format
 msgid "Specify alarm recurrence using iCalendar syntax"
 msgstr "使用 iCalendar 語法指定鬧鐘循環"
 
-#: commandoptions.cpp:236
+#: commandoptions.cpp:237
 #, kde-format
 msgid "Display reminder before or after alarm"
 msgstr "在鬧鐘響鈴前後顯示提醒"
 
-#: commandoptions.cpp:240
+#: commandoptions.cpp:241
 #, kde-format
 msgid "Display reminder once, before or after first alarm recurrence"
 msgstr "在第一次鬧鐘循環之前或之後顯示一次提醒"
 
-#: commandoptions.cpp:244
+#: commandoptions.cpp:245
 #, kde-format
 msgid "Number of times to repeat alarm (including initial occasion)"
 msgstr "鬧鐘響鈴之後再重複響幾次"
 
-#: commandoptions.cpp:249
+#: commandoptions.cpp:250
 #, kde-format
 msgid "Speak the message when it is displayed"
 msgstr "訊息顯示時順便用語音說出"
 
-#: commandoptions.cpp:253
+#: commandoptions.cpp:254
 #, kde-format
 msgid "Email subject line"
 msgstr "信件主旨"
 
-#: commandoptions.cpp:258
+#: commandoptions.cpp:259
 #, kde-format
 msgid "Simulate system time [[[yyyy-]mm-]dd-]hh:mm [TZ] (debug mode)"
 msgstr "模擬系統時間 [[[yyyy-]mm-]dd-]hh:mm [TZ] （除錯模式）"
 
-#: commandoptions.cpp:263
+#: commandoptions.cpp:264
 #, kde-format
 msgid ""
 "Trigger alarm at time [[[yyyy-]mm-]dd-]hh:mm [TZ], or date yyyy-mm-dd [TZ]"
 msgstr "於時間 [[[yyyy-]mm-]dd-]hh:mm [TZ]，或是日期 yyyy-mm-dd [TZ] 觸發鬧鐘"
 
-#: commandoptions.cpp:267
+#: commandoptions.cpp:268
 #, kde-format
 msgid "Display system tray icon"
 msgstr "顯示系統匣圖示"
 
-#: commandoptions.cpp:270
+#: commandoptions.cpp:271
 #, kde-format
 msgid "Trigger alarm with the specified event ID"
 msgstr "依指定事件 ID 觸發鬧鐘"
 
-#: commandoptions.cpp:274
+#: commandoptions.cpp:275
 #, kde-format
 msgid "Repeat until time [[[yyyy-]mm-]dd-]hh:mm [TZ], or date yyyy-mm-dd [TZ]"
 msgstr "重複響鈴直到時間 [[[yyyy-]mm-]dd-]hh:mm [TZ]，或是日期 yyyy-mm-dd [TZ]"
 
-#: commandoptions.cpp:278
+#: commandoptions.cpp:279
 #, kde-format
 msgid "Volume to play audio file"
 msgstr "播放音效檔案的音量"
 
-#: commandoptions.cpp:289
+#: commandoptions.cpp:290
 #, kde-format
 msgid "Message text to display"
 msgstr "要顯示的訊息文字"
 
-#: commandoptions.cpp:453
+#: commandoptions.cpp:454
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "<icode>%1</icode>: invalid email address"
