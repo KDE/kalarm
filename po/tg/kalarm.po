@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-01-20 00:37+0000\n"
+"POT-Creation-Date: 2024-02-10 00:39+0000\n"
 "PO-Revision-Date: 2019-09-29 12:31+0500\n"
 "Last-Translator: Victor Ibragimov <victor.ibragimov@gmail.com>\n"
 "Language-Team: English <kde-i18n-doc@kde.org>\n"
@@ -660,92 +660,92 @@ msgstr ""
 msgid "Name of alarm"
 msgstr "Хотиррасонии нав"
 
-#: commandoptions.cpp:221
+#: commandoptions.cpp:222
 #, fuzzy, kde-format
 #| msgid "Display the alarm message now"
 msgid "Display alarm message as a notification"
 msgstr "Дарҳол намоиш додани хотиррасонӣ"
 
-#: commandoptions.cpp:224
+#: commandoptions.cpp:225
 #, kde-format
 msgid "Audio file to play once"
 msgstr "Яккарата навозишоти файли садо"
 
-#: commandoptions.cpp:228
+#: commandoptions.cpp:229
 #, kde-format
 msgid "Audio file to play repeatedly"
 msgstr "Навозиши файли садо ба тарзи беист"
 
-#: commandoptions.cpp:232
+#: commandoptions.cpp:233
 #, kde-format
 msgid "Specify alarm recurrence using iCalendar syntax"
 msgstr "Ишора намудани такрори хотиррасонӣ ба формати iCalendar"
 
-#: commandoptions.cpp:236
+#: commandoptions.cpp:237
 #, fuzzy, kde-format
 #| msgid "Display reminder in advance of alarm"
 msgid "Display reminder before or after alarm"
 msgstr "Намоиши хотиррасонии пешакӣ"
 
-#: commandoptions.cpp:240
+#: commandoptions.cpp:241
 #, fuzzy, kde-format
 #| msgid "Display reminder once, before first alarm recurrence"
 msgid "Display reminder once, before or after first alarm recurrence"
 msgstr "Намоиши хотиррасонии пешакӣ танҳо пеш аз такрори ибтидоӣ"
 
-#: commandoptions.cpp:244
+#: commandoptions.cpp:245
 #, fuzzy, kde-format
 msgid "Number of times to repeat alarm (including initial occasion)"
 msgstr "Мақодири такророти хотиррасонӣ (баъди намоиши ибтидо)"
 
-#: commandoptions.cpp:249
+#: commandoptions.cpp:250
 #, fuzzy, kde-format
 msgid "Speak the message when it is displayed"
 msgstr "Занги низомӣ ҳангоми намоиши хотиррасонӣ"
 
-#: commandoptions.cpp:253
+#: commandoptions.cpp:254
 #, kde-format
 msgid "Email subject line"
 msgstr "Сатри мавзӯъи иттилооти почтаи электронӣ"
 
-#: commandoptions.cpp:258
+#: commandoptions.cpp:259
 #, fuzzy, kde-format
 msgid "Simulate system time [[[yyyy-]mm-]dd-]hh:mm [TZ] (debug mode)"
 msgstr "Такророт то муддати [[[yyyy-]mm-]dd-]hh:mm, ё санаи yyyy-mm-dd"
 
-#: commandoptions.cpp:263
+#: commandoptions.cpp:264
 #, fuzzy, kde-format
 msgid ""
 "Trigger alarm at time [[[yyyy-]mm-]dd-]hh:mm [TZ], or date yyyy-mm-dd [TZ]"
 msgstr ""
 "Муддати хотиррасонӣ ба формати [[[yyyy-]mm-]dd-]hh:mm, ё санаи yyyy-mm-dd"
 
-#: commandoptions.cpp:267
+#: commandoptions.cpp:268
 #, kde-format
 msgid "Display system tray icon"
 msgstr "Намоиш дар новаи низомӣ"
 
-#: commandoptions.cpp:270
+#: commandoptions.cpp:271
 #, kde-format
 msgid "Trigger alarm with the specified event ID"
 msgstr "Намоиши хотиррасонӣ бо идентификатори ишорашуда"
 
-#: commandoptions.cpp:274
+#: commandoptions.cpp:275
 #, fuzzy, kde-format
 msgid "Repeat until time [[[yyyy-]mm-]dd-]hh:mm [TZ], or date yyyy-mm-dd [TZ]"
 msgstr "Такророт то муддати [[[yyyy-]mm-]dd-]hh:mm, ё санаи yyyy-mm-dd"
 
-#: commandoptions.cpp:278
+#: commandoptions.cpp:279
 #, kde-format
 msgid "Volume to play audio file"
 msgstr "Баландии навозиши файли садо"
 
-#: commandoptions.cpp:289
+#: commandoptions.cpp:290
 #, kde-format
 msgid "Message text to display"
 msgstr "Матни хотиррасонӣ"
 
-#: commandoptions.cpp:453
+#: commandoptions.cpp:454
 #, fuzzy, kde-kuit-format
 #| msgid "%1: invalid email address"
 msgctxt "@info:shell"
