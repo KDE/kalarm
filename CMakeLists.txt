@@ -12,7 +12,7 @@ set(RELEASE_SERVICE_VERSION "${RELEASE_SERVICE_VERSION_MAJOR}.${RELEASE_SERVICE_
 set(KALARM_VERSION "3.6.4")
 set(KALARM_VERSION_RELEASE_SERVICE_MAJOR "23")
 set(KALARM_VERSION_RELEASE_SERVICE_MINOR "08")
-set(KALARM_VERSION_RELEASE_SERVICE_MICRO "4")
+set(KALARM_VERSION_RELEASE_SERVICE_MICRO "5")
 
 # If KAlarm's version has not changed since the last KDE Release Service version,
 # this code sets a sub-version x.x.x.N to avoid duplicate version numbers in
