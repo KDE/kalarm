@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-01-04 02:35+0000\n"
+"POT-Creation-Date: 2024-02-10 03:37+0000\n"
 "PO-Revision-Date: 2011-10-24 11:46+0200\n"
 "Last-Translator: Børre Gaup <boerre@skolelinux.no>\n"
 "Language-Team: Northern Sami <l10n-no@lister.huftis.org>\n"
@@ -540,88 +540,88 @@ msgstr ""
 msgid "Name of alarm"
 msgstr ""
 
-#: commandoptions.cpp:221
+#: commandoptions.cpp:222
 #, kde-format
 msgid "Display alarm message as a notification"
 msgstr ""
 
-#: commandoptions.cpp:224
+#: commandoptions.cpp:225
 #, kde-format
 msgid "Audio file to play once"
 msgstr ""
 
-#: commandoptions.cpp:228
+#: commandoptions.cpp:229
 #, kde-format
 msgid "Audio file to play repeatedly"
 msgstr ""
 
-#: commandoptions.cpp:232
+#: commandoptions.cpp:233
 #, kde-format
 msgid "Specify alarm recurrence using iCalendar syntax"
 msgstr ""
 
-#: commandoptions.cpp:236
+#: commandoptions.cpp:237
 #, kde-format
 msgid "Display reminder before or after alarm"
 msgstr ""
 
-#: commandoptions.cpp:240
+#: commandoptions.cpp:241
 #, kde-format
 msgid "Display reminder once, before or after first alarm recurrence"
 msgstr ""
 
-#: commandoptions.cpp:244
+#: commandoptions.cpp:245
 #, kde-format
 msgid "Number of times to repeat alarm (including initial occasion)"
 msgstr ""
 
-#: commandoptions.cpp:249
+#: commandoptions.cpp:250
 #, kde-format
 msgid "Speak the message when it is displayed"
 msgstr ""
 
-#: commandoptions.cpp:253
+#: commandoptions.cpp:254
 #, kde-format
 msgid "Email subject line"
 msgstr ""
 
-#: commandoptions.cpp:258
+#: commandoptions.cpp:259
 #, kde-format
 msgid "Simulate system time [[[yyyy-]mm-]dd-]hh:mm [TZ] (debug mode)"
 msgstr ""
 
-#: commandoptions.cpp:263
+#: commandoptions.cpp:264
 #, kde-format
 msgid ""
 "Trigger alarm at time [[[yyyy-]mm-]dd-]hh:mm [TZ], or date yyyy-mm-dd [TZ]"
 msgstr ""
 
-#: commandoptions.cpp:267
+#: commandoptions.cpp:268
 #, kde-format
 msgid "Display system tray icon"
 msgstr ""
 
-#: commandoptions.cpp:270
+#: commandoptions.cpp:271
 #, kde-format
 msgid "Trigger alarm with the specified event ID"
 msgstr ""
 
-#: commandoptions.cpp:274
+#: commandoptions.cpp:275
 #, kde-format
 msgid "Repeat until time [[[yyyy-]mm-]dd-]hh:mm [TZ], or date yyyy-mm-dd [TZ]"
 msgstr ""
 
-#: commandoptions.cpp:278
+#: commandoptions.cpp:279
 #, kde-format
 msgid "Volume to play audio file"
 msgstr ""
 
-#: commandoptions.cpp:289
+#: commandoptions.cpp:290
 #, kde-format
 msgid "Message text to display"
 msgstr ""
 
-#: commandoptions.cpp:453
+#: commandoptions.cpp:454
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "<icode>%1</icode>: invalid email address"
