@@ -108,7 +108,7 @@
 <!-- Don't change format of date and version of the documentation -->
 
 <date
->25 січня 2024 року</date>
+>9 лютого 2024 року</date>
 <releaseinfo
 >3.7.0 (KDE Gear 24.02)</releaseinfo>
 
@@ -4192,7 +4192,9 @@ mode.</para
 ><option
 >-n</option
 >, <option
->--name</option
+>--name <replaceable
+>назва</replaceable
+></option
 ></entry>
   <entry
 >Вказати назву, яка допоможе у ідентифікації нагадування.</entry>
