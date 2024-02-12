@@ -94,7 +94,7 @@
 <!-- Don't change format of date and version of the documentation -->
 
 <date
->2024-1-25</date>
+>2024-2-9</date>
 <releaseinfo
 >3.7.0 (KDE Gear 24.02)</releaseinfo>
 
@@ -937,8 +937,11 @@
 <term
 >Type opslag</term>
 <listitem>
+<!--FIXME not in kf5?
 <para
->&kalarm; kent twee manieren om alarmagenda's op te slaan:</para>
+>&kalarm; handles two alarm calendar storage
+types:</para>
+-->
 
 <itemizedlist>
 <listitem
@@ -950,11 +953,6 @@
 > kunnen gewoon op de lokale computer staan, maar ook op het lokale netwerk opgeslagen worden, zolang hun locatie maar voorgesteld kan worden als een pad beginnend met <literal
 >/</literal
 >.</para>
-</listitem>
-
-<listitem
-><para
->Lokale map: hierbij worden alarmen opgeslagen in een lokale map, waarbij elk alarm in die map opgeslagen wordt als een apart iCalendar-bestand. Het voordeel hiervan is dat bij een corrupt bestand, er maar één alarm beschadigd wordt, en niet de hele agenda.</para>
 </listitem>
 <!--FIXME not in kf5?
 <listitem
@@ -4172,7 +4170,9 @@ mode.</para
 ><option
 >-n</option
 >, <option
->--name</option
+>--name <replaceable
+>naam</replaceable
+></option
 ></entry>
   <entry
 >Een naam specificeren om u te helpen het alarm te identificeren.</entry>
