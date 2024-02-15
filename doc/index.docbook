@@ -39,7 +39,7 @@
 
 <!-- Don't change format of date and version of the documentation -->
 
-<date>2024-2-9</date>
+<date>2024-2-15</date>
 <releaseinfo>3.7.0 (KDE Gear 24.02)</releaseinfo>
 
 <abstract>
@@ -762,10 +762,7 @@ you can change if you wish.</para>
 <varlistentry>
 <term>Storage type</term>
 <listitem>
-<!--FIXME not in kf5?
-<para>&kalarm; handles two alarm calendar storage
-types:</para>
--->
+<para>&kalarm; handles two alarm calendar storage types:</para>
 
 <itemizedlist>
 <listitem><para>Local file: Alarms are stored in a single local file
@@ -776,31 +773,30 @@ computer, can include alarm calendars on the local network as long as
 their location can be represented by a path name starting with
 <literal>/</literal>.</para>
 </listitem>
-<!--FIXME not in kf5?
+
 <listitem><para>Remote file: Alarms are stored in a single remote
 file in iCalendar format. This storage method allows you to access
 your alarm data remotely no matter where you are, or enables alarm
 calendars to be viewed by other people. When using remote files,
-&kalarm; works with a local cache of the data.</para>
+&kalarm; works with a local copy of the data.</para>
 
-<warning><para>If a remote alarm calendar is shared between users,
-changes made by one person may not be automatically made available to
-another user, or there could be a time delay before the other user
-sees it. So one user could make a change which is then overwritten by
-another user without either person noticing what has happened. The
-technical reason for this is that a change made by person A will only
-be available to person B after person A's cached copy has first been
-saved to the remote file, and then person B's cached copy
-of the remote file has been reloaded. When and if the calendar is
-saved and reloaded depends on the calendar configuration parameters
-which each user has set for that alarm calendar.</para>
-
-<para>Ways to avoid this problem include adjusting the calendar save
-and reload configuration parameters, or adopting a policy that users
-other than the alarm calendar's owner should open it in read-only
-mode.</para></warning>
+<warning><para>&kalarm; does not monitor remote alarm calendars for
+changes, so that if changes are made by someone else, &kalarm; might
+overwrite them. To avoid this, you are recommended to adopt either of 
+the following policies:</para>
+<itemizedlist>
+<listitem><para>Ensure that only one person or application accesses
+the calendar at any one time.</para></listitem>
+<listitem><para>All users other than the calendar owner should
+configure the calendar as read-only.</para></listitem>
+</itemizedlist>
+<para>Otherwise, as a minimum you should reload the calendar before
+changing it or relying on its contents, using the method described in
+<link linkend="using-calendars">Using Calendars</link>. Note also
+that if the calendar is configured as read-write, &kalarm; will
+overwrite it whenever an alarm triggers.
+</para></warning>
 </listitem>
--->
 </itemizedlist>
 </listitem>
 </varlistentry>
