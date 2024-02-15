@@ -665,6 +665,7 @@ void MainWindow::initActions()
 */
 void MainWindow::slotInitHamburgerMenu()
 {
+    delete mHamburgerMenu->menu();
     QMenu* menu = new QMenu(this);
     KActionCollection* actions = actionCollection();
     menu->addAction(actions->action(QStringLiteral("new")));
