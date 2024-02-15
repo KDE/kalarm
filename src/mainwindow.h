@@ -1,7 +1,7 @@
 /*
  *  mainwindow.h  -  main application window
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2001-2023 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2001-2024 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -64,7 +64,6 @@ public:
     QMenu*             resourceContextMenu();
     bool               eventFilter(QObject*, QEvent*) override;
 
-    static void        refresh();
     static void        executeDragEnterEvent(QDragEnterEvent*);
     static void        executeDropEvent(MainWindow*, QDropEvent*);
     static void        closeAll();

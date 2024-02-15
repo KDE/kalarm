@@ -690,15 +690,6 @@ void MainWindow::enableTemplateMenuItem(bool enable)
 }
 
 /******************************************************************************
-* Refresh the alarm list in every main window instance.
-*/
-void MainWindow::refresh()
-{
-    qCDebug(KALARM_LOG) << "MainWindow::refresh";
-    DataModel::reload();
-}
-
-/******************************************************************************
 * Called when the keep archived alarm setting changes in the user preferences.
 * Enable/disable Show archived alarms option.
 */
