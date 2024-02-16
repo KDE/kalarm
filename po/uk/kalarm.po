@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-10 00:39+0000\n"
+"POT-Creation-Date: 2024-02-16 00:38+0000\n"
 "PO-Revision-Date: 2024-01-20 19:41+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
@@ -3341,49 +3341,49 @@ msgctxt "@action:button"
 msgid "Keep Disabled"
 msgstr "Залишити вимкненим"
 
-#: functions.cpp:1988
+#: functions.cpp:1987
 #, kde-format
 msgctxt "@info"
 msgid "Error saving alarms"
 msgstr "Помилка під час збереження нагадувань"
 
-#: functions.cpp:1989
+#: functions.cpp:1988
 #, kde-format
 msgctxt "@info"
 msgid "Error saving alarm"
 msgstr "Помилка під час збереження нагадування"
 
-#: functions.cpp:1992
+#: functions.cpp:1991
 #, kde-format
 msgctxt "@info"
 msgid "Error deleting alarms"
 msgstr "Помилка під вилучення нагадування"
 
-#: functions.cpp:1993
+#: functions.cpp:1992
 #, kde-format
 msgctxt "@info"
 msgid "Error deleting alarm"
 msgstr "Помилка під час вилучення нагадування"
 
-#: functions.cpp:1996
+#: functions.cpp:1995
 #, kde-format
 msgctxt "@info"
 msgid "Error saving reactivated alarms"
 msgstr "Помилка під час збереження знову активованих нагадувань"
 
-#: functions.cpp:1997
+#: functions.cpp:1996
 #, kde-format
 msgctxt "@info"
 msgid "Error saving reactivated alarm"
 msgstr "Помилка під час збереження знову активованого нагадування"
 
-#: functions.cpp:2000
+#: functions.cpp:1999
 #, kde-format
 msgctxt "@info"
 msgid "Error saving alarm templates"
 msgstr "Помилка під час збереження шаблонів нагадувань"
 
-#: functions.cpp:2001
+#: functions.cpp:2000
 #, kde-format
 msgctxt "@info"
 msgid "Error saving alarm template"
@@ -4526,7 +4526,7 @@ msgctxt "@action"
 msgid "Refresh Alarms"
 msgstr "Оновити нагадування"
 
-#: mainwindow.cpp:814
+#: mainwindow.cpp:806
 #, kde-format
 msgctxt "@info"
 msgid "Do you really want to delete the selected alarm?"
@@ -4536,7 +4536,7 @@ msgstr[1] "Ви дійсно хочете вилучити %1 вибраних �
 msgstr[2] "Ви дійсно хочете вилучити %1 вибраних нагадувань?"
 msgstr[3] "Ви дійсно хочете вилучити %1 вибране нагадування?"
 
-#: mainwindow.cpp:816
+#: mainwindow.cpp:808
 #, kde-format
 msgctxt "@title:window"
 msgid "Delete Alarm"
@@ -4546,43 +4546,43 @@ msgstr[1] "Вилучити нагадування"
 msgstr[2] "Вилучити нагадування"
 msgstr[3] "Вилучити нагадування"
 
-#: mainwindow.cpp:817 recurrenceedit.cpp:318 templatedlg.cpp:92
+#: mainwindow.cpp:809 recurrenceedit.cpp:318 templatedlg.cpp:92
 #, kde-format
 msgctxt "@action:button"
 msgid "Delete"
 msgstr "Вилучити"
 
-#: mainwindow.cpp:911
+#: mainwindow.cpp:903
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Hide Archived Alarms"
 msgstr "Ховати застарілі нагадування"
 
-#: mainwindow.cpp:912
+#: mainwindow.cpp:904
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show Archived Alarms"
 msgstr "Показувати застарілі нагадування"
 
-#: mainwindow.cpp:988
+#: mainwindow.cpp:980
 #, kde-format
 msgctxt "@info"
 msgid "Import birthdays"
 msgstr "Імпортувати дні народження"
 
-#: mainwindow.cpp:1240
+#: mainwindow.cpp:1232
 #, kde-format
 msgctxt "@action Undo/Redo [action]"
 msgid "%1 %2"
 msgstr "%1 %2"
 
-#: mainwindow.cpp:1241
+#: mainwindow.cpp:1233
 #, kde-format
 msgctxt "@action Undo [action]: message"
 msgid "%1 %2: %3"
 msgstr "%1 %2: %3"
 
-#: mainwindow.cpp:1307
+#: mainwindow.cpp:1299
 #, kde-format
 msgid ""
 "<qt>This will hide the menu bar completely. You can show it again by typing "
@@ -4591,48 +4591,48 @@ msgstr ""
 "<qt>За допомогою цього пункту можна повністю сховати смужку меню. Наказати "
 "програмі знову показувати цю смужку можна клавіатурним скороченням %1.</qt>"
 
-#: mainwindow.cpp:1309
+#: mainwindow.cpp:1301
 #, kde-format
 msgid "Hide menu bar"
 msgstr "Приховати смужку меню"
 
-#: mainwindow.cpp:1549
+#: mainwindow.cpp:1541
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Display Alarm"
 msgstr "Візуальне нагадування"
 
-#: mainwindow.cpp:1551
+#: mainwindow.cpp:1543
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Email Alarm"
 msgstr "Нагадування ел. поштою"
 
-#: mainwindow.cpp:1553
+#: mainwindow.cpp:1545
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Command Alarm"
 msgstr "Нагадування з командою"
 
-#: mainwindow.cpp:1555
+#: mainwindow.cpp:1547
 #, kde-format
 msgctxt "@title:window"
 msgid "Alarm Type"
 msgstr "Тип нагадування"
 
-#: mainwindow.cpp:1556
+#: mainwindow.cpp:1548
 #, kde-format
 msgctxt "@info"
 msgid "Choose alarm type to create:"
 msgstr "Виберіть який тип нагадування створити:"
 
-#: mainwindow.cpp:1689
+#: mainwindow.cpp:1681
 #, kde-format
 msgctxt "@action"
 msgid "Enable"
 msgstr "Увімкнути"
 
-#: mainwindow.cpp:1689
+#: mainwindow.cpp:1681
 #, kde-format
 msgctxt "@action"
 msgid "Disable"

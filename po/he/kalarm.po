@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-10 00:39+0000\n"
+"POT-Creation-Date: 2024-02-16 00:38+0000\n"
 "PO-Revision-Date: 2017-05-16 07:05-0400\n"
 "Last-Translator: Copied by Zanata <copied-by-zanata@zanata.org>\n"
 "Language-Team: <he@li.org>\n"
@@ -3151,49 +3151,49 @@ msgctxt "@action:button"
 msgid "Keep Disabled"
 msgstr "אפשר &תזכורות"
 
-#: functions.cpp:1988
+#: functions.cpp:1987
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Error saving alarms"
 msgstr "עריכת תזכורת"
 
-#: functions.cpp:1989
+#: functions.cpp:1988
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Error saving alarm"
 msgstr "עריכת תזכורת"
 
-#: functions.cpp:1992
+#: functions.cpp:1991
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Error deleting alarms"
 msgstr "הסרת המצורף הנבחר מהדוא\"ל."
 
-#: functions.cpp:1993
+#: functions.cpp:1992
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Error deleting alarm"
 msgstr "הסרת המצורף הנבחר מהדוא\"ל."
 
-#: functions.cpp:1996
+#: functions.cpp:1995
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Error saving reactivated alarms"
 msgstr "עריכת תזכורת"
 
-#: functions.cpp:1997
+#: functions.cpp:1996
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Error saving reactivated alarm"
 msgstr "עריכת תזכורת"
 
-#: functions.cpp:2000
+#: functions.cpp:1999
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Error saving alarm templates"
 msgstr "עריכת תזכורת"
 
-#: functions.cpp:2001
+#: functions.cpp:2000
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Error saving alarm template"
@@ -4311,7 +4311,7 @@ msgctxt "@action"
 msgid "Refresh Alarms"
 msgstr "&רענן תזכורות"
 
-#: mainwindow.cpp:814
+#: mainwindow.cpp:806
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Do you really want to delete the selected alarm?"
@@ -4321,7 +4321,7 @@ msgstr[1] "האם אתה בטוח שברצונך למחוק את %1 התזכור
 msgstr[2] ""
 msgstr[3] ""
 
-#: mainwindow.cpp:816
+#: mainwindow.cpp:808
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Delete Alarm"
@@ -4331,91 +4331,91 @@ msgstr[1] "מחיקת תזכורות"
 msgstr[2] ""
 msgstr[3] ""
 
-#: mainwindow.cpp:817 recurrenceedit.cpp:318 templatedlg.cpp:92
+#: mainwindow.cpp:809 recurrenceedit.cpp:318 templatedlg.cpp:92
 #, fuzzy, kde-format
 msgctxt "@action:button"
 msgid "Delete"
 msgstr "מחיקת תזכורת"
 
-#: mainwindow.cpp:911
+#: mainwindow.cpp:903
 #, fuzzy, kde-format
 msgctxt "@info:tooltip"
 msgid "Hide Archived Alarms"
 msgstr "עריכת תזכורת"
 
-#: mainwindow.cpp:912
+#: mainwindow.cpp:904
 #, fuzzy, kde-format
 msgctxt "@info:tooltip"
 msgid "Show Archived Alarms"
 msgstr "עריכת תזכורת"
 
-#: mainwindow.cpp:988
+#: mainwindow.cpp:980
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Import birthdays"
 msgstr "ייבא ימי הולדת מפנקס הכתובות"
 
-#: mainwindow.cpp:1240
+#: mainwindow.cpp:1232
 #, fuzzy, kde-format
 msgctxt "@action Undo/Redo [action]"
 msgid "%1 %2"
 msgstr "%1 שעות, %2 דקות"
 
-#: mainwindow.cpp:1241
+#: mainwindow.cpp:1233
 #, fuzzy, kde-format
 msgctxt "@action Undo [action]: message"
 msgid "%1 %2: %3"
 msgstr " %1d %2:%3 "
 
-#: mainwindow.cpp:1307
+#: mainwindow.cpp:1299
 #, kde-format
 msgid ""
 "<qt>This will hide the menu bar completely. You can show it again by typing "
 "%1.</qt>"
 msgstr ""
 
-#: mainwindow.cpp:1309
+#: mainwindow.cpp:1301
 #, kde-format
 msgid "Hide menu bar"
 msgstr ""
 
-#: mainwindow.cpp:1549
+#: mainwindow.cpp:1541
 #, fuzzy, kde-format
 msgctxt "@item:inlistbox"
 msgid "Display Alarm"
 msgstr "אפשר &תזכורות"
 
-#: mainwindow.cpp:1551
+#: mainwindow.cpp:1543
 #, fuzzy, kde-format
 msgctxt "@item:inlistbox"
 msgid "Email Alarm"
 msgstr "אפשר &תזכורות"
 
-#: mainwindow.cpp:1553
+#: mainwindow.cpp:1545
 #, fuzzy, kde-format
 msgctxt "@item:inlistbox"
 msgid "Command Alarm"
 msgstr "&פקודה"
 
-#: mainwindow.cpp:1555
+#: mainwindow.cpp:1547
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Alarm Type"
 msgstr "ברירות מחדל של תזכורות"
 
-#: mainwindow.cpp:1556
+#: mainwindow.cpp:1548
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Choose alarm type to create:"
 msgstr "תזכורת חדשה"
 
-#: mainwindow.cpp:1689
+#: mainwindow.cpp:1681
 #, fuzzy, kde-format
 msgctxt "@action"
 msgid "Enable"
 msgstr "אפשר &תזכורות"
 
-#: mainwindow.cpp:1689
+#: mainwindow.cpp:1681
 #, fuzzy, kde-format
 msgctxt "@action"
 msgid "Disable"

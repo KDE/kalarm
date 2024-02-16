@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-10 00:39+0000\n"
+"POT-Creation-Date: 2024-02-16 00:38+0000\n"
 "PO-Revision-Date: 2021-08-21 16:25+0530\n"
 "Last-Translator: Raghavendra Kamath <raghu@raghukamath.com>\n"
 "Language-Team: kde-hindi\n"
@@ -3313,49 +3313,49 @@ msgctxt "@action:button"
 msgid "Keep Disabled"
 msgstr "अक्षम बनाए रखें"
 
-#: functions.cpp:1988
+#: functions.cpp:1987
 #, kde-format
 msgctxt "@info"
 msgid "Error saving alarms"
 msgstr "अलार्म सहेजने में त्रुटि"
 
-#: functions.cpp:1989
+#: functions.cpp:1988
 #, kde-format
 msgctxt "@info"
 msgid "Error saving alarm"
 msgstr "अलार्म सहेजने में त्रुटि"
 
-#: functions.cpp:1992
+#: functions.cpp:1991
 #, kde-format
 msgctxt "@info"
 msgid "Error deleting alarms"
 msgstr "अलार्म मिटाने में त्रुटि"
 
-#: functions.cpp:1993
+#: functions.cpp:1992
 #, kde-format
 msgctxt "@info"
 msgid "Error deleting alarm"
 msgstr "अलार्म मिटाने में त्रुटि"
 
-#: functions.cpp:1996
+#: functions.cpp:1995
 #, kde-format
 msgctxt "@info"
 msgid "Error saving reactivated alarms"
 msgstr "फिर से सक्रिय करने वाले अलार्मों को सहेजने में त्रुटि"
 
-#: functions.cpp:1997
+#: functions.cpp:1996
 #, kde-format
 msgctxt "@info"
 msgid "Error saving reactivated alarm"
 msgstr "फिर से सक्रिय किए गए अलार्म को सहेजने में त्रुटि हुई"
 
-#: functions.cpp:2000
+#: functions.cpp:1999
 #, kde-format
 msgctxt "@info"
 msgid "Error saving alarm templates"
 msgstr "अलार्म टैम्प्लेट सहेजने में त्रुटि हुई"
 
-#: functions.cpp:2001
+#: functions.cpp:2000
 #, kde-format
 msgctxt "@info"
 msgid "Error saving alarm template"
@@ -4652,7 +4652,7 @@ msgctxt "@action"
 msgid "Refresh Alarms"
 msgstr "अलार्म ताज़ा करें (&R)"
 
-#: mainwindow.cpp:814
+#: mainwindow.cpp:806
 #, kde-format
 msgctxt "@info"
 msgid "Do you really want to delete the selected alarm?"
@@ -4660,7 +4660,7 @@ msgid_plural "Do you really want to delete the %1 selected alarms?"
 msgstr[0] "क्या आप सचमुच चयनित अलार्म को मिटाना चाहते हैं?"
 msgstr[1] "क्या आप सचमुच %1 चयनित अलार्म को मिटाना चाहते हैं?"
 
-#: mainwindow.cpp:816
+#: mainwindow.cpp:808
 #, kde-format
 msgctxt "@title:window"
 msgid "Delete Alarm"
@@ -4668,85 +4668,85 @@ msgid_plural "Delete Alarms"
 msgstr[0] "अलार्म को मिटाएँ"
 msgstr[1] "अलार्मों को मिटाएँ"
 
-#: mainwindow.cpp:817 recurrenceedit.cpp:318 templatedlg.cpp:92
+#: mainwindow.cpp:809 recurrenceedit.cpp:318 templatedlg.cpp:92
 #, kde-format
 msgctxt "@action:button"
 msgid "Delete"
 msgstr "मिटाएँ"
 
-#: mainwindow.cpp:911
+#: mainwindow.cpp:903
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Hide Archived Alarms"
 msgstr "अभिलेखित अलार्म छुपाएँ"
 
-#: mainwindow.cpp:912
+#: mainwindow.cpp:904
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show Archived Alarms"
 msgstr "अभिलेखित अलार्म दिखाएँ"
 
-#: mainwindow.cpp:988
+#: mainwindow.cpp:980
 #, kde-format
 msgctxt "@info"
 msgid "Import birthdays"
 msgstr "जन्मतिथि आयात करें"
 
-#: mainwindow.cpp:1240
+#: mainwindow.cpp:1232
 #, kde-format
 msgctxt "@action Undo/Redo [action]"
 msgid "%1 %2"
 msgstr "%1 %2"
 
-#: mainwindow.cpp:1241
+#: mainwindow.cpp:1233
 #, kde-format
 msgctxt "@action Undo [action]: message"
 msgid "%1 %2: %3"
 msgstr "%1 %2: %3"
 
-#: mainwindow.cpp:1307
+#: mainwindow.cpp:1299
 #, kde-format
 msgid ""
 "<qt>This will hide the menu bar completely. You can show it again by typing "
 "%1.</qt>"
 msgstr ""
 
-#: mainwindow.cpp:1309
+#: mainwindow.cpp:1301
 #, kde-format
 msgid "Hide menu bar"
 msgstr ""
 
-#: mainwindow.cpp:1549
+#: mainwindow.cpp:1541
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Display Alarm"
 msgstr "डिस्प्ले अलार्म"
 
-#: mainwindow.cpp:1551
+#: mainwindow.cpp:1543
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Email Alarm"
 msgstr "ईमेल अलार्म"
 
-#: mainwindow.cpp:1553
+#: mainwindow.cpp:1545
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Command Alarm"
 msgstr "कमांड अलार्म"
 
-#: mainwindow.cpp:1555
+#: mainwindow.cpp:1547
 #, kde-format
 msgctxt "@title:window"
 msgid "Alarm Type"
 msgstr "अलार्म क़िस्म"
 
-#: mainwindow.cpp:1556
+#: mainwindow.cpp:1548
 #, kde-format
 msgctxt "@info"
 msgid "Choose alarm type to create:"
 msgstr "अलार्म बनाने हेतु किस्म चुनें:"
 
-#: mainwindow.cpp:1689
+#: mainwindow.cpp:1681
 #, fuzzy, kde-format
 #| msgctxt "@action:button"
 #| msgid "Enable"
@@ -4754,7 +4754,7 @@ msgctxt "@action"
 msgid "Enable"
 msgstr "सक्षम करें"
 
-#: mainwindow.cpp:1689
+#: mainwindow.cpp:1681
 #, fuzzy, kde-format
 #| msgctxt "@info/plain"
 #| msgid "Disabled"
