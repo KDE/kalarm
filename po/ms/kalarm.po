@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Mimos\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-10 02:48+0000\n"
+"POT-Creation-Date: 2024-02-16 02:31+0000\n"
 "PO-Revision-Date: 2005-10-06 11:21+0800\n"
 "Last-Translator: junetazawawi <junetazawawi@yahoo.com>\n"
 "Language-Team: Malay <kedidiemas@yahoogroups.com>\n"
@@ -3606,49 +3606,49 @@ msgctxt "@action:button"
 msgid "Keep Disabled"
 msgstr "&Nyahaktifkan"
 
-#: functions.cpp:1988
+#: functions.cpp:1987
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Error saving alarms"
 msgstr "Ralat mencipta semula penggera"
 
-#: functions.cpp:1989
+#: functions.cpp:1988
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Error saving alarm"
 msgstr "Ralat mencipta semula penggera"
 
-#: functions.cpp:1992
+#: functions.cpp:1991
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Error deleting alarms"
 msgstr "Ralat mencipta semula penggera"
 
-#: functions.cpp:1993
+#: functions.cpp:1992
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Error deleting alarm"
 msgstr "Ralat mencipta semula penggera"
 
-#: functions.cpp:1996
+#: functions.cpp:1995
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Error saving reactivated alarms"
 msgstr "Tidak dapat mengaktifkan semula penggera luput"
 
-#: functions.cpp:1997
+#: functions.cpp:1996
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Error saving reactivated alarm"
 msgstr "Tidak dapat mengaktifkan semula penggera luput"
 
-#: functions.cpp:2000
+#: functions.cpp:1999
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Error saving alarm templates"
 msgstr "Cipta templat penggera baru"
 
-#: functions.cpp:2001
+#: functions.cpp:2000
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Error saving alarm template"
@@ -4918,7 +4918,7 @@ msgctxt "@action"
 msgid "Refresh Alarms"
 msgstr "&Muat Semula Penggera"
 
-#: mainwindow.cpp:814
+#: mainwindow.cpp:806
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Do you really want to delete the selected alarm?"
@@ -4926,7 +4926,7 @@ msgid_plural "Do you really want to delete the %1 selected alarms?"
 msgstr[0] "_n: Anda pasti ingin menghapuskan penggera yang dipilih?"
 msgstr[1] "Anda pasti ingin menghapuskan %1 penggera yang dipilih?"
 
-#: mainwindow.cpp:816
+#: mainwindow.cpp:808
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Delete Alarm"
@@ -4934,31 +4934,31 @@ msgid_plural "Delete Alarms"
 msgstr[0] "_n: Hapuskan penggera"
 msgstr[1] "Hapuskan penggera"
 
-#: mainwindow.cpp:817 recurrenceedit.cpp:318 templatedlg.cpp:92
+#: mainwindow.cpp:809 recurrenceedit.cpp:318 templatedlg.cpp:92
 #, fuzzy, kde-format
 msgctxt "@action:button"
 msgid "Delete"
 msgstr "_n: Hapuskan penggera"
 
-#: mainwindow.cpp:911
+#: mainwindow.cpp:903
 #, fuzzy, kde-format
 msgctxt "@info:tooltip"
 msgid "Hide Archived Alarms"
 msgstr "Sembunyikan Penggera Luput"
 
-#: mainwindow.cpp:912
+#: mainwindow.cpp:904
 #, fuzzy, kde-format
 msgctxt "@info:tooltip"
 msgid "Show Archived Alarms"
 msgstr "Papar Penggera luput"
 
-#: mainwindow.cpp:988
+#: mainwindow.cpp:980
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Import birthdays"
 msgstr "Import &Tarikh Lahir..."
 
-#: mainwindow.cpp:1240
+#: mainwindow.cpp:1232
 #, fuzzy, kde-format
 #| msgctxt "Undo-action: message"
 #| msgid "%1: %2"
@@ -4966,7 +4966,7 @@ msgctxt "@action Undo/Redo [action]"
 msgid "%1 %2"
 msgstr "%1: %2"
 
-#: mainwindow.cpp:1241
+#: mainwindow.cpp:1233
 #, fuzzy, kde-format
 #| msgctxt "Undo [action]: message"
 #| msgid "%1 %2: %3"
@@ -4974,61 +4974,61 @@ msgctxt "@action Undo [action]: message"
 msgid "%1 %2: %3"
 msgstr "%1 %2: %3"
 
-#: mainwindow.cpp:1307
+#: mainwindow.cpp:1299
 #, kde-format
 msgid ""
 "<qt>This will hide the menu bar completely. You can show it again by typing "
 "%1.</qt>"
 msgstr ""
 
-#: mainwindow.cpp:1309
+#: mainwindow.cpp:1301
 #, fuzzy, kde-format
 #| msgid "Hide Time t&o Alarms"
 msgid "Hide menu bar"
 msgstr "Sembunyikan Waktu &untuk Menggera"
 
-#: mainwindow.cpp:1549
+#: mainwindow.cpp:1541
 #, fuzzy, kde-format
 #| msgid "Display Alarms"
 msgctxt "@item:inlistbox"
 msgid "Display Alarm"
 msgstr "Paparkan penggera"
 
-#: mainwindow.cpp:1551
+#: mainwindow.cpp:1543
 #, fuzzy, kde-format
 #| msgid "Email Alarms"
 msgctxt "@item:inlistbox"
 msgid "Email Alarm"
 msgstr "Penggera E-mel"
 
-#: mainwindow.cpp:1553
+#: mainwindow.cpp:1545
 #, fuzzy, kde-format
 #| msgid "Command Alarms"
 msgctxt "@item:inlistbox"
 msgid "Command Alarm"
 msgstr "Penggera Arahan"
 
-#: mainwindow.cpp:1555
+#: mainwindow.cpp:1547
 #, fuzzy, kde-format
 #| msgid "Alarm Type"
 msgctxt "@title:window"
 msgid "Alarm Type"
 msgstr "Jenis penggera"
 
-#: mainwindow.cpp:1556
+#: mainwindow.cpp:1548
 #, fuzzy, kde-format
 #| msgid "Choose Alarm Template"
 msgctxt "@info"
 msgid "Choose alarm type to create:"
 msgstr "Pilih Templat Penggera"
 
-#: mainwindow.cpp:1689
+#: mainwindow.cpp:1681
 #, fuzzy, kde-format
 msgctxt "@action"
 msgid "Enable"
 msgstr "&Aktifkan"
 
-#: mainwindow.cpp:1689
+#: mainwindow.cpp:1681
 #, fuzzy, kde-format
 msgctxt "@action"
 msgid "Disable"

@@ -17,7 +17,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-10 02:48+0000\n"
+"POT-Creation-Date: 2024-02-16 02:31+0000\n"
 "PO-Revision-Date: 2023-10-09 11:24+0200\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
@@ -3522,49 +3522,49 @@ msgctxt "@action:button"
 msgid "Keep Disabled"
 msgstr "Uitgeschakeld laten"
 
-#: functions.cpp:1988
+#: functions.cpp:1987
 #, kde-format
 msgctxt "@info"
 msgid "Error saving alarms"
 msgstr "Fout bij het opslaan van de alarmen"
 
-#: functions.cpp:1989
+#: functions.cpp:1988
 #, kde-format
 msgctxt "@info"
 msgid "Error saving alarm"
 msgstr "Fout bij het opslaan van het alarm"
 
-#: functions.cpp:1992
+#: functions.cpp:1991
 #, kde-format
 msgctxt "@info"
 msgid "Error deleting alarms"
 msgstr "Fout bij het verwijderen van alarmen"
 
-#: functions.cpp:1993
+#: functions.cpp:1992
 #, kde-format
 msgctxt "@info"
 msgid "Error deleting alarm"
 msgstr "Fout bij het verwijderen van alarm"
 
-#: functions.cpp:1996
+#: functions.cpp:1995
 #, kde-format
 msgctxt "@info"
 msgid "Error saving reactivated alarms"
 msgstr "Fout bij het opslaan van de opnieuw geactiveerde alarmen"
 
-#: functions.cpp:1997
+#: functions.cpp:1996
 #, kde-format
 msgctxt "@info"
 msgid "Error saving reactivated alarm"
 msgstr "Fout bij het opslaan van het opnieuw geactiveerde alarm"
 
-#: functions.cpp:2000
+#: functions.cpp:1999
 #, kde-format
 msgctxt "@info"
 msgid "Error saving alarm templates"
 msgstr "Fout bij het opslaan van alarmsjablonen"
 
-#: functions.cpp:2001
+#: functions.cpp:2000
 #, kde-format
 msgctxt "@info"
 msgid "Error saving alarm template"
@@ -4744,7 +4744,7 @@ msgid "Refresh Alarms"
 msgstr "Alarmen verversen"
 
 # no comment
-#: mainwindow.cpp:814
+#: mainwindow.cpp:806
 #, kde-format
 msgctxt "@info"
 msgid "Do you really want to delete the selected alarm?"
@@ -4752,7 +4752,7 @@ msgid_plural "Do you really want to delete the %1 selected alarms?"
 msgstr[0] "Wilt u de geselecteerde alarm verwijderen?"
 msgstr[1] "Wilt u de %1 geselecteerde alarmen verwijderen?"
 
-#: mainwindow.cpp:816
+#: mainwindow.cpp:808
 #, kde-format
 msgctxt "@title:window"
 msgid "Delete Alarm"
@@ -4760,43 +4760,43 @@ msgid_plural "Delete Alarms"
 msgstr[0] "Alarm verwijderen"
 msgstr[1] "Alarmen verwijderen"
 
-#: mainwindow.cpp:817 recurrenceedit.cpp:318 templatedlg.cpp:92
+#: mainwindow.cpp:809 recurrenceedit.cpp:318 templatedlg.cpp:92
 #, kde-format
 msgctxt "@action:button"
 msgid "Delete"
 msgstr "Verwijderen"
 
-#: mainwindow.cpp:911
+#: mainwindow.cpp:903
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Hide Archived Alarms"
 msgstr "Verlopen alarmen verbergen"
 
-#: mainwindow.cpp:912
+#: mainwindow.cpp:904
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show Archived Alarms"
 msgstr "Verlopen alarmen tonen"
 
-#: mainwindow.cpp:988
+#: mainwindow.cpp:980
 #, kde-format
 msgctxt "@info"
 msgid "Import birthdays"
 msgstr "Verjaardagen importeren"
 
-#: mainwindow.cpp:1240
+#: mainwindow.cpp:1232
 #, kde-format
 msgctxt "@action Undo/Redo [action]"
 msgid "%1 %2"
 msgstr "%1 %2"
 
-#: mainwindow.cpp:1241
+#: mainwindow.cpp:1233
 #, kde-format
 msgctxt "@action Undo [action]: message"
 msgid "%1 %2: %3"
 msgstr "%1 %2: %3"
 
-#: mainwindow.cpp:1307
+#: mainwindow.cpp:1299
 #, kde-format
 msgid ""
 "<qt>This will hide the menu bar completely. You can show it again by typing "
@@ -4805,49 +4805,49 @@ msgstr ""
 "<qt>Hierdoor wordt de menubalk geheel verborgen. U kunt die weer zichtbaar "
 "maken door %1 te typen.</qt>"
 
-#: mainwindow.cpp:1309
+#: mainwindow.cpp:1301
 #, kde-format
 msgid "Hide menu bar"
 msgstr "Menubalk verbergen"
 
-#: mainwindow.cpp:1549
+#: mainwindow.cpp:1541
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Display Alarm"
 msgstr "Weergavealarm"
 
-#: mainwindow.cpp:1551
+#: mainwindow.cpp:1543
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Email Alarm"
 msgstr "Alarm via e-mail"
 
-#: mainwindow.cpp:1553
+#: mainwindow.cpp:1545
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Command Alarm"
 msgstr "Alarmen met shell-commando"
 
 # samenstelling, onderwerp benadrukken
-#: mainwindow.cpp:1555
+#: mainwindow.cpp:1547
 #, kde-format
 msgctxt "@title:window"
 msgid "Alarm Type"
 msgstr "Type alarm"
 
-#: mainwindow.cpp:1556
+#: mainwindow.cpp:1548
 #, kde-format
 msgctxt "@info"
 msgid "Choose alarm type to create:"
 msgstr "Selecteer een type alarm om aan te maken:"
 
-#: mainwindow.cpp:1689
+#: mainwindow.cpp:1681
 #, kde-format
 msgctxt "@action"
 msgid "Enable"
 msgstr "Inschakelen"
 
-#: mainwindow.cpp:1689
+#: mainwindow.cpp:1681
 #, kde-format
 msgctxt "@action"
 msgid "Disable"

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-10 02:48+0000\n"
+"POT-Creation-Date: 2024-02-16 02:31+0000\n"
 "PO-Revision-Date: 2024-01-06 03:32\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -3162,49 +3162,49 @@ msgctxt "@action:button"
 msgid "Keep Disabled"
 msgstr "保持禁用"
 
-#: functions.cpp:1988
+#: functions.cpp:1987
 #, kde-format
 msgctxt "@info"
 msgid "Error saving alarms"
 msgstr "保存闹钟时出错"
 
-#: functions.cpp:1989
+#: functions.cpp:1988
 #, kde-format
 msgctxt "@info"
 msgid "Error saving alarm"
 msgstr "保存闹钟时出错"
 
-#: functions.cpp:1992
+#: functions.cpp:1991
 #, kde-format
 msgctxt "@info"
 msgid "Error deleting alarms"
 msgstr "删除闹钟时出错"
 
-#: functions.cpp:1993
+#: functions.cpp:1992
 #, kde-format
 msgctxt "@info"
 msgid "Error deleting alarm"
 msgstr "删除闹钟时出错"
 
-#: functions.cpp:1996
+#: functions.cpp:1995
 #, kde-format
 msgctxt "@info"
 msgid "Error saving reactivated alarms"
 msgstr "保存重新激活的闹钟时出错"
 
-#: functions.cpp:1997
+#: functions.cpp:1996
 #, kde-format
 msgctxt "@info"
 msgid "Error saving reactivated alarm"
 msgstr "保存重新激活的闹钟时出错"
 
-#: functions.cpp:2000
+#: functions.cpp:1999
 #, kde-format
 msgctxt "@info"
 msgid "Error saving alarm templates"
 msgstr "保存闹钟模板时出错"
 
-#: functions.cpp:2001
+#: functions.cpp:2000
 #, kde-format
 msgctxt "@info"
 msgid "Error saving alarm template"
@@ -4299,105 +4299,105 @@ msgctxt "@action"
 msgid "Refresh Alarms"
 msgstr "刷新闹钟"
 
-#: mainwindow.cpp:814
+#: mainwindow.cpp:806
 #, kde-format
 msgctxt "@info"
 msgid "Do you really want to delete the selected alarm?"
 msgid_plural "Do you really want to delete the %1 selected alarms?"
 msgstr[0] "您确定要删除所选的 %1 个闹钟吗？"
 
-#: mainwindow.cpp:816
+#: mainwindow.cpp:808
 #, kde-format
 msgctxt "@title:window"
 msgid "Delete Alarm"
 msgid_plural "Delete Alarms"
 msgstr[0] "删除闹钟"
 
-#: mainwindow.cpp:817 recurrenceedit.cpp:318 templatedlg.cpp:92
+#: mainwindow.cpp:809 recurrenceedit.cpp:318 templatedlg.cpp:92
 #, kde-format
 msgctxt "@action:button"
 msgid "Delete"
 msgstr "删除"
 
-#: mainwindow.cpp:911
+#: mainwindow.cpp:903
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Hide Archived Alarms"
 msgstr "隐藏已归档闹钟"
 
-#: mainwindow.cpp:912
+#: mainwindow.cpp:904
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show Archived Alarms"
 msgstr "显示已归档闹钟"
 
-#: mainwindow.cpp:988
+#: mainwindow.cpp:980
 #, kde-format
 msgctxt "@info"
 msgid "Import birthdays"
 msgstr "导入生日"
 
-#: mainwindow.cpp:1240
+#: mainwindow.cpp:1232
 #, kde-format
 msgctxt "@action Undo/Redo [action]"
 msgid "%1 %2"
 msgstr "%1%2"
 
-#: mainwindow.cpp:1241
+#: mainwindow.cpp:1233
 #, kde-format
 msgctxt "@action Undo [action]: message"
 msgid "%1 %2: %3"
 msgstr "%1%2：%3"
 
-#: mainwindow.cpp:1307
+#: mainwindow.cpp:1299
 #, kde-format
 msgid ""
 "<qt>This will hide the menu bar completely. You can show it again by typing "
 "%1.</qt>"
 msgstr "<qt>此操作将完全隐藏菜单栏，您可按 %1 使之重新显示。</qt>"
 
-#: mainwindow.cpp:1309
+#: mainwindow.cpp:1301
 #, kde-format
 msgid "Hide menu bar"
 msgstr "隐藏菜单栏"
 
-#: mainwindow.cpp:1549
+#: mainwindow.cpp:1541
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Display Alarm"
 msgstr "显示闹钟"
 
-#: mainwindow.cpp:1551
+#: mainwindow.cpp:1543
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Email Alarm"
 msgstr "电子邮件闹钟"
 
-#: mainwindow.cpp:1553
+#: mainwindow.cpp:1545
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Command Alarm"
 msgstr "命令闹钟"
 
-#: mainwindow.cpp:1555
+#: mainwindow.cpp:1547
 #, kde-format
 msgctxt "@title:window"
 msgid "Alarm Type"
 msgstr "闹钟类型"
 
-#: mainwindow.cpp:1556
+#: mainwindow.cpp:1548
 #, kde-format
 msgctxt "@info"
 msgid "Choose alarm type to create:"
 msgstr "选择要创建的闹钟类型："
 
-#: mainwindow.cpp:1689
+#: mainwindow.cpp:1681
 #, kde-format
 msgctxt "@action"
 msgid "Enable"
 msgstr "启用"
 
-#: mainwindow.cpp:1689
+#: mainwindow.cpp:1681
 #, kde-format
 msgctxt "@action"
 msgid "Disable"
