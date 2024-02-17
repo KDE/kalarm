@@ -108,7 +108,7 @@
 <!-- Don't change format of date and version of the documentation -->
 
 <date
->9 лютого 2024 року</date>
+>15 лютого 2024 року</date>
 <releaseinfo
 >3.7.0 (KDE Gear 24.02)</releaseinfo>
 
@@ -974,39 +974,27 @@
 
 <listitem
 ><para
->Локальний каталог: нагадування зберігаються у локальній теці, кожне нагадування буде збережено у окремому файлі iCalendar у цій теці. Перевагою цього способу зберігання є те, що у разі пошкодження файла події, ви втратите лише одне нагадування, а не весь календар.</para>
-</listitem>
-<!--FIXME not in kf5?
-<listitem
-><para
->Remote file: Alarms are stored in a single remote
-file in iCalendar format. This storage method allows you to access
-your alarm data remotely no matter where you are, or enables alarm
-calendars to be viewed by other people. When using remote files,
-&kalarm; works with a local cache of the data.</para>
+>Віддалений файл: нагадування зберігаються у окремому віддаленому файлі формату iCalendar. За використання цього методу зберігання ви зможете отримувати доступ до ваших даних нагадувань з будь-якого місця або надати змогу іншим особам переглядати ваші календарі нагадувань. За використання віддалених файлів &kalarm; працює з локальною копією даних.</para>
 
 <warning
 ><para
->If a remote alarm calendar is shared between users,
-changes made by one person may not be automatically made available to
-another user, or there could be a time delay before the other user
-sees it. So one user could make a change which is then overwritten by
-another user without either person noticing what has happened. The
-technical reason for this is that a change made by person A will only
-be available to person B after person A's cached copy has first been
-saved to the remote file, and then person B's cached copy
-of the remote file has been reloaded. When and if the calendar is
-saved and reloaded depends on the calendar configuration parameters
-which each user has set for that alarm calendar.</para>
-
+>&kalarm; не виконує стеження за змінами у віддалених календарях нагадувань. Тому, якщо хтось внесе зміни до такого календаря, &kalarm; може перезаписати їх. Щоб уникнути подібних ситуацій, ми рекомендуємо дотримуватися одного з таких правил:</para>
+<itemizedlist>
+<listitem
+><para
+>До календаря повинна мати одночасний доступ лише одна особа або програма.</para
+></listitem>
+<listitem
+><para
+>Усі користувачі, окрім власника календаря, мають налаштувати календар як доступний лише для читання.</para
+></listitem>
+</itemizedlist>
 <para
->Ways to avoid this problem include adjusting the calendar save
-and reload configuration parameters, or adopting a policy that users
-other than the alarm calendar's owner should open it in read-only
-mode.</para
+>Якщо дотримання цих правил неможливе, як мінімум, ви маєте перезавантажувати календар до внесення до нього змін або його використання за допомогою способу, який описано у розділі щодо <link linkend="using-calendars"
+>користування календарями</link
+>. Також зауважте, що якщо календар налаштовано на читання і запис, &kalarm; перезаписуватиме його вміст кожного разу, коли вмикатиме нагадування. </para
 ></warning>
 </listitem>
--->
 </itemizedlist>
 </listitem>
 </varlistentry>

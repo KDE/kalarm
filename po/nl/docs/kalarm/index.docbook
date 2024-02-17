@@ -94,7 +94,7 @@
 <!-- Don't change format of date and version of the documentation -->
 
 <date
->2024-2-9</date>
+>2024-2-15</date>
 <releaseinfo
 >3.7.0 (KDE Gear 24.02)</releaseinfo>
 
@@ -937,11 +937,8 @@
 <term
 >Type opslag</term>
 <listitem>
-<!--FIXME not in kf5?
 <para
->&kalarm; handles two alarm calendar storage
-types:</para>
--->
+>&kalarm; kent twee manieren om alarmagenda's op te slaan:</para>
 
 <itemizedlist>
 <listitem
@@ -954,37 +951,30 @@ types:</para>
 >/</literal
 >.</para>
 </listitem>
-<!--FIXME not in kf5?
+
 <listitem
 ><para
->Remote file: Alarms are stored in a single remote
-file in iCalendar format. This storage method allows you to access
-your alarm data remotely no matter where you are, or enables alarm
-calendars to be viewed by other people. When using remote files,
-&kalarm; works with a local cache of the data.</para>
+>Extern bestand: herinneringen worden in een enkel extern bestand opgeslagen, in het iCalendar-formaat. Hierdoor kunt u altijd toegang op afstand  toegang krijgen naar uw herinneringen, zonder dat het uitmaakt waar u zich bevindt. Dit geeft ook de mogelijkheid om andere mensen toegang te verlenen tot die herinneringen. Wanneer u externe bestanden gebruikt, werkt &kalarm; met een lokale kopie van de gegevens.</para>
 
 <warning
 ><para
->If a remote alarm calendar is shared between users,
-changes made by one person may not be automatically made available to
-another user, or there could be a time delay before the other user
-sees it. So one user could make a change which is then overwritten by
-another user without either person noticing what has happened. The
-technical reason for this is that a change made by person A will only
-be available to person B after person A's cached copy has first been
-saved to the remote file, and then person B's cached copy
-of the remote file has been reloaded. When and if the calendar is
-saved and reloaded depends on the calendar configuration parameters
-which each user has set for that alarm calendar.</para>
-
+>&kalarm; monitort geen alarmagenda's op wijzigingen, als er dus wijzigingen gemaakt worden door iemand anders, dan zou &kalarm; ze kunnen overschrijven. Om dit te vermijden, wordt u aangeraden een van de volgende beleidsregel te gebruiken:</para>
+<itemizedlist>
+<listitem
+><para
+>Zorg er voor dat slechts één persoon of toepassing tegelijk toegang heeft tot de agenda.</para
+></listitem>
+<listitem
+><para
+>Alle gebruikers anders dan de eigenaar van de agenda zou de agenda als alleen-lezen moeten configureren.</para
+></listitem>
+</itemizedlist>
 <para
->Ways to avoid this problem include adjusting the calendar save
-and reload configuration parameters, or adopting a policy that users
-other than the alarm calendar's owner should open it in read-only
-mode.</para
+>Anders, als minimum zou u de agenda moeten herladen alvorens deze te wijzigen of te vertrouwen op zijn inhoud, met de methode beschreven in <link linkend="using-calendars"
+>Agenda's gebruiken</link
+>. Merk ook op dat als de agenda als alleen-lezen is geconfigureerd, &kalarm; het zal overschrijven wanneer een alarm afgaat. </para
 ></warning>
 </listitem>
--->
 </itemizedlist>
 </listitem>
 </varlistentry>

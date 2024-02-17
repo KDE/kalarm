@@ -94,7 +94,7 @@
 <!-- Don't change format of date and version of the documentation -->
 
 <date
->9 de febrer de 2024</date>
+>15 de febrer de 2024</date>
 <releaseinfo
 >3.7.0 (KDE Gear 24.02)</releaseinfo>
 
@@ -950,39 +950,27 @@
 
 <listitem
 ><para
->Directori local: Les alarmes s'emmagatzemen en una carpeta local, cada alarma s'emmagatzema en un fitxer d'iCalendar independent dins de la carpeta. Aquest mètode d'emmagatzematge té l'avantatge que en el cas de corrupció dels fitxers, perdreu una sola alarma, no tot el calendari.</para>
-</listitem>
-<!--FIXME not in kf5?
-<listitem
-><para
->Remote file: Alarms are stored in a single remote
-file in iCalendar format. This storage method allows you to access
-your alarm data remotely no matter where you are, or enables alarm
-calendars to be viewed by other people. When using remote files,
-&kalarm; works with a local cache of the data.</para>
+>Fitxer remot: Les alarmes s'emmagatzemen en un fitxer remot únic en format iCalendar. Aquest mètode d'emmagatzematge permet accedir a les dades de les alarmes de forma remota, sigui on sigui, o permet que altres persones visualitzin els calendaris d'alarma. Quan s'utilitzen fitxers remots, el &kalarm; funciona amb una còpia local de les dades.</para>
 
 <warning
 ><para
->If a remote alarm calendar is shared between users,
-changes made by one person may not be automatically made available to
-another user, or there could be a time delay before the other user
-sees it. So one user could make a change which is then overwritten by
-another user without either person noticing what has happened. The
-technical reason for this is that a change made by person A will only
-be available to person B after person A's cached copy has first been
-saved to the remote file, and then person B's cached copy
-of the remote file has been reloaded. When and if the calendar is
-saved and reloaded depends on the calendar configuration parameters
-which each user has set for that alarm calendar.</para>
-
+>El &kalarm; no controla els canvis dels calendaris d'alarma remots, de manera que si els canvis els fa algú altre, el &kalarm; podria sobreescriure'ls. Per a evitar-ho, es recomana adoptar qualsevol de les polítiques següents:</para>
+<itemizedlist>
+<listitem
+><para
+>Assegurar-se que només una persona o sol·licitud accedeixi al calendari en qualsevol moment.</para
+></listitem>
+<listitem
+><para
+>Tots els usuaris que no siguin el propietari del calendari haurien de configurar el calendari com de només de lectura.</para
+></listitem>
+</itemizedlist>
 <para
->Ways to avoid this problem include adjusting the calendar save
-and reload configuration parameters, or adopting a policy that users
-other than the alarm calendar's owner should open it in read-only
-mode.</para
+>Altrament, com a mínim hauríeu de tornar a carregar el calendari abans de canviar-lo o confiar en el seu contingut, utilitzant el mètode descrit a <link linkend="using-calendars"
+>Usar els calendaris</link
+>. Tingueu en compte també que si el calendari està configurat com de lectura-escriptura, el &kalarm; el sobreescriurà sempre que s'activi una alarma. </para
 ></warning>
 </listitem>
--->
 </itemizedlist>
 </listitem>
 </varlistentry>
