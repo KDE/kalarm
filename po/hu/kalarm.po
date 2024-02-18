@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: KDE 4.3\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-02-16 02:31+0000\n"
-"PO-Revision-Date: 2024-02-16 12:45+0100\n"
+"PO-Revision-Date: 2024-02-17 21:41+0100\n"
 "Last-Translator: Kristof Kiszel <ulysses@fsf.hu>\n"
 "Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
 "Language: hu\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 24.01.95\n"
+"X-Generator: Lokalize 23.08.4\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -1456,6 +1456,9 @@ msgid ""
 "determine whether to display alarm messages in windows or in system "
 "notifications."
 msgstr ""
+"A „megjelenési mód” alapértelmezett beállítása a figyelmeztetőszerkesztő "
+"párbeszédablakban annak meghatározására, hogy a figyelmeztető üzenetek "
+"ablakokban vagy a rendszer értesítéseiben jelenjenek-e meg."
 
 #. i18n: ectx: label, entry (DefaultLateCancel), group (Defaults)
 #: data/kalarmconfig.kcfg:299
@@ -1959,6 +1962,8 @@ msgid ""
 "Select dates to show in the alarm list. Only alarms due on these dates will "
 "be shown."
 msgstr ""
+"Válassza ki a figyelmeztetők listájában megjelenítendő dátumokat. Csak az "
+"ezeken a napokon esedékes figyelmeztetések jelennek meg."
 
 #: datepicker.cpp:56
 #, fuzzy, kde-format

@@ -967,8 +967,11 @@
 <term
 >Tipo di memorizzazione</term>
 <listitem>
+<!--FIXME not in kf5?
 <para
->&kalarm; gestisce due sistemi di memorizzazione dei calendari degli avvisi:</para>
+>&kalarm; handles two alarm calendar storage
+types:</para>
+-->
 
 <itemizedlist>
 <listitem
@@ -980,11 +983,6 @@
 >, oltre ai file sulla macchina locale, possono essere calendari di avvisi sulla rete locale, fintanto che il loro indirizzo può essere rappresentato da un percorso che comincia per <literal
 >/</literal
 >.</para>
-</listitem>
-
-<listitem
-><para
->Cartella locale: gli avvisi sono salvati in una cartella locale, con un avviso per ogni file iCalendar nella cartella. Questo metodo di memorizzazione ha il vantaggio che nel caso di danneggiamento dei file perderesti solo un avviso, non tutto il calendario.</para>
 </listitem>
 <!--FIXME not in kf5?
 <listitem
