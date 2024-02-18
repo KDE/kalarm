@@ -130,7 +130,7 @@
 <!-- Don't change format of date and version of the documentation -->
 
 <date
->2024-1-25</date>
+>2024-2-15</date>
 <releaseinfo
 >3.7.0 (KDE Gear 24.02)</releaseinfo>
 
@@ -986,39 +986,27 @@
 
 <listitem
 ><para
->Cartella locale: gli avvisi sono salvati in una cartella locale, con un avviso per ogni file iCalendar nella cartella. Questo metodo di memorizzazione ha il vantaggio che nel caso di danneggiamento dei file perderesti solo un avviso, non tutto il calendario.</para>
-</listitem>
-<!--FIXME not in kf5?
-<listitem
-><para
->Remote file: Alarms are stored in a single remote
-file in iCalendar format. This storage method allows you to access
-your alarm data remotely no matter where you are, or enables alarm
-calendars to be viewed by other people. When using remote files,
-&kalarm; works with a local cache of the data.</para>
+>File remoto: gli avvisi sono salvati in un singolo file remoto in formato iCalendar. Questo metodo di memorizzazione ti permette di accedere ai dati degli avvisi a distanza, indipendentemente da dove sei, o permette ad altre persone di vedere i calendari degli avvisi. Quando usi i file remoti, &kalarm; lavora su una copia locale dei dati.</para>
 
 <warning
 ><para
->If a remote alarm calendar is shared between users,
-changes made by one person may not be automatically made available to
-another user, or there could be a time delay before the other user
-sees it. So one user could make a change which is then overwritten by
-another user without either person noticing what has happened. The
-technical reason for this is that a change made by person A will only
-be available to person B after person A's cached copy has first been
-saved to the remote file, and then person B's cached copy
-of the remote file has been reloaded. When and if the calendar is
-saved and reloaded depends on the calendar configuration parameters
-which each user has set for that alarm calendar.</para>
-
+>&kalarm; non controlla le modifiche nei calendari remoti degli avvisi, quindi se vengono effettuate delle modifiche da qualcun altro &kalarm; potrebbe sovrascriverle. Per evitare questo, si consiglia di seguire una delle seguenti politiche:</para>
+<itemizedlist>
+<listitem
+><para
+>Assicurarsi che solo una persona o applicazione acceda al calendario in ogni dato momento.</para
+></listitem>
+<listitem
+><para
+>Tutti gli utenti, a parte al proprietario del calendario, devono configurare il calendario in sola lettura.</para
+></listitem>
+</itemizedlist>
 <para
->Ways to avoid this problem include adjusting the calendar save
-and reload configuration parameters, or adopting a policy that users
-other than the alarm calendar's owner should open it in read-only
-mode.</para
+>Altrimenti si dovrebbe quantomeno ricaricare il calendario prima di modificarlo o fare affidamento sul suo contenuto, usando il metodo descritto in <link linkend="using-calendars"
+>Usare i calendari</link
+>. Nota che se il calendario è configurato in lettura-scrittura, &kalarm; lo sovrascriverà ogni volta che un avviso si attiva. </para
 ></warning>
 </listitem>
--->
 </itemizedlist>
 </listitem>
 </varlistentry>
@@ -4190,9 +4178,11 @@ mode.</para
 <row>
   <entry
 ><option
->-n</option
+>-h</option
 >, <option
->--name</option
+>--name <replaceable
+>nome</replaceable
+></option
 ></entry>
   <entry
 >Specifica un nome che ti aiuti ad identificare l'avviso.</entry>
