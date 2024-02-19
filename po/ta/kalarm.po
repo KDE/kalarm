@@ -9,13 +9,13 @@
 #
 # Ambalam <tamilpc@ambalam.com>, 2004.
 # root <root@localhost.localdomain>, 2004.
-# SPDX-FileCopyrightText: 2021, 2022, 2023 Kishore G <kishore96@gmail.com>
+# SPDX-FileCopyrightText: 2021, 2022, 2023, 2024 Kishore G <kishore96@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-02-16 02:31+0000\n"
-"PO-Revision-Date: 2023-09-10 17:21+0530\n"
+"PO-Revision-Date: 2024-02-18 14:40+0530\n"
 "Last-Translator: Kishore G <kishore96@gmail.com>\n"
 "Language-Team: Tamil <kde-i18n-doc@kde.org>\n"
 "Language: ta\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 23.08.0\n"
+"X-Generator: Lokalize 23.08.5\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -214,12 +214,10 @@ msgid "1 week"
 msgstr "1 வாரம்"
 
 #: alarmtimewidget.cpp:169
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Select an alarm template to preset the alarm"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Select time delay from a list of preset values"
-msgstr "அலாரத்திற்கு பயன்படுத்த வேண்டிய வார்ப்புருவை தேர்ந்தெடுங்கள்"
+msgstr "முன்னமைக்கப்பட்டுள்ள தாமதங்களின் பட்டியலிலிருந்து ஏதேனும் ஒன்றைத் தேர்ந்தெடுக்கலாம்"
 
 #: alarmtimewidget.cpp:177
 #, kde-kuit-format
@@ -1127,17 +1125,12 @@ msgstr "கணினித் தட்டில் அலாரம் வரை
 
 #. i18n: ectx: whatsthis, entry (TooltipTimeToPrefix), group (General)
 #: data/kalarmconfig.kcfg:191 prefdlg.cpp:1917
-#, fuzzy, kde-format
-#| msgid ""
-#| "Enter the text to be displayed in front of the time until the alarm, in "
-#| "the system tray tooltip"
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "Enter the text to be displayed in front of the time until the alarm, in the "
 "system tray tooltip."
 msgstr ""
-"Enter the text to be displayed in front of the time until the alarm, in the "
-"system tray tooltip"
 
 #. i18n: ectx: label, entry (Base_EmailClient), group (General)
 #: data/kalarmconfig.kcfg:196
@@ -1148,7 +1141,7 @@ msgstr "மின்னஞ்சல் செயலி"
 
 #. i18n: ectx: whatsthis, entry (Base_EmailClient), group (General)
 #: data/kalarmconfig.kcfg:197
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "<p>How to send email when an email alarm is triggered.<ul><li>KMail: The "
@@ -1156,12 +1149,6 @@ msgid ""
 "automatically. This option will only work if your system is configured to "
 "use sendmail or a sendmail compatible mail transport agent.</li></ul></p>"
 msgstr ""
-"Choose how to send email when an email alarm is triggered.\n"
-"KMail: The email is added to KMail's outbox if KMail is running. If not, a "
-"KMail composer window is displayed to enable you to send the email.\n"
-"Sendmail: The email is sent automatically. This option will only work if "
-"your system is configured to use 'sendmail' or a sendmail compatible mail "
-"transport agent."
 
 #. i18n: ectx: label, entry (Base_EmailClient), group (General)
 #: data/kalarmconfig.kcfg:199
@@ -1615,10 +1602,10 @@ msgstr "\"%1\" அலாரத்தை தொகுப்பு உரையா
 
 #. i18n: ectx: label, entry (DefaultRecurPeriod), group (Defaults)
 #: data/kalarmconfig.kcfg:371
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label"
 msgid "Recurrence period"
-msgstr "சுழல்நிலை முடிவு"
+msgstr "மறுநிகழ்வு இடைவெளி"
 
 #. i18n: ectx: whatsthis, entry (DefaultRecurPeriod), group (Defaults)
 #: data/kalarmconfig.kcfg:372 prefdlg.cpp:1404
@@ -1631,34 +1618,31 @@ msgstr "எஅலார தொகுப்பு உரையாடலின் 
 
 #. i18n: ectx: label, entry (DefaultRecurPeriod), group (Defaults)
 #: data/kalarmconfig.kcfg:374
-#, fuzzy, kde-format
-#| msgid "No recurrence"
+#, kde-format
 msgctxt "@option"
 msgid "No recurrence"
-msgstr "சுழல்நிலை இல்லை"
+msgstr "மறுநிகழ்வு இல்லை"
 
 #. i18n: ectx: label, entry (DefaultRecurPeriod), group (Defaults)
 #: data/kalarmconfig.kcfg:375
-#, fuzzy, kde-format
-#| msgid "At login"
+#, kde-format
 msgctxt "@option"
 msgid "At login"
-msgstr "நுழைவு"
+msgstr "அமர்வில் நுழையும்போது"
 
 #. i18n: ectx: label, entry (DefaultRecurPeriod), group (Defaults)
 #: data/kalarmconfig.kcfg:376
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@option"
 msgid "Hourly/minutely"
-msgstr "மணிகள்/நிமிடங்கள்"
+msgstr "ஒவ்வொரு மணி/நிமிடம்"
 
 #. i18n: ectx: label, entry (DefaultFeb29Type), group (Defaults)
 #: data/kalarmconfig.kcfg:385 prefdlg.cpp:1411
-#, fuzzy, kde-format
-#| msgid "In non-leap years, repeat yearly February 29th alarms on:"
+#, kde-format
 msgctxt "@label"
 msgid "In non-leap years, repeat yearly February 29th alarms on:"
-msgstr "லீப் வருடம் தவிர, பிப்ரவரி 29வது நாள் அலாரத்தை இயக்கு"
+msgstr "நெட்டாண்டாய் அல்லாத ஆண்டுகளில், பிப்ரவரி 29-க்கான அலாரங்களைத் தூண்டுவது:"
 
 #. i18n: ectx: whatsthis, entry (DefaultFeb29Type), group (Defaults)
 #: data/kalarmconfig.kcfg:386
@@ -1681,24 +1665,24 @@ msgstr ""
 
 #. i18n: ectx: label, entry (DefaultFeb29Type), group (Defaults)
 #: data/kalarmconfig.kcfg:388
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@option"
 msgid "February 28th"
-msgstr "பிப்ரவரி 2&8வது "
+msgstr "பிப்ரவரி 28-வது"
 
 #. i18n: ectx: label, entry (DefaultFeb29Type), group (Defaults)
 #: data/kalarmconfig.kcfg:389
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@option"
 msgid "March 1st"
-msgstr "மார்ச் &1வது"
+msgstr "மார்ச் 1-வது"
 
 #. i18n: ectx: label, entry (DefaultFeb29Type), group (Defaults)
 #: data/kalarmconfig.kcfg:390
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@option"
 msgid "Do not repeat"
-msgstr "திரும்பச் செய்யாதே."
+msgstr "வேண்டாம்"
 
 #. i18n: ectx: label, entry (DefaultReminderUnits), group (Defaults)
 #: data/kalarmconfig.kcfg:396
