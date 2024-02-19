@@ -329,7 +329,7 @@ target_link_libraries(kalarm_bin
     KPim6::IdentityManagementWidgets
     KPim6::Mime
 )
-    target_link_libraries(kalarm_bin Qt6::Core5Compat)
+    target_link_libraries(kalarm_bin Qt::Core5Compat)
 if (TARGET KF6::TextEditTextToSpeech)
     target_link_libraries(kalarm_bin KF6::TextEditTextToSpeech)
 endif()
