@@ -1,7 +1,7 @@
 /*
  *  sounddlg.cpp  -  sound file selection and configuration dialog and widget
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2005-2022 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2005-2024 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -541,6 +541,7 @@ void SoundWidget::slotVolumeToggled(bool on)
         mFadeCheckbox->setEnabled(on);
         slotFadeToggled(on  &&  mFadeCheckbox->isChecked());
     }
+    Q_EMIT changed();
 }
 
 /******************************************************************************
