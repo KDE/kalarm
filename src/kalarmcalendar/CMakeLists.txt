@@ -57,8 +57,6 @@ target_link_libraries(kalarmcalendar PRIVATE
     KF6::CalendarCore
     )
 
-    target_link_libraries(kalarmcalendar PRIVATE Qt::Core5Compat)
-
 target_include_directories(kalarmcalendar PUBLIC "$<BUILD_INTERFACE:${kalarm_SOURCE_DIR}/src/kalarmcalendar;${kalarm_BINARY_DIR}/src/kalarmcalendar>")
 
 set_target_properties(kalarmcalendar
