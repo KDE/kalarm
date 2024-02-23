@@ -11,19 +11,20 @@
 #
 # Diego Iastrubni <elcuco@kde.org>, 2005, 2007.
 # Elkana Bardugo <ttv200@gmail.com>, 2017. #zanata
+# SPDX-FileCopyrightText: 2024 Yaron Shahrabani <sh.yaron@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-02-16 00:38+0000\n"
-"PO-Revision-Date: 2017-05-16 07:05-0400\n"
-"Last-Translator: Copied by Zanata <copied-by-zanata@zanata.org>\n"
-"Language-Team: <he@li.org>\n"
+"PO-Revision-Date: 2024-02-21 09:16+0200\n"
+"Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
+"Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Zanata 3.9.6\n"
+"X-Generator: Lokalize 23.08.4\n"
 "Plural-Forms: nplurals=4; plural=(n == 1) ? 0 : ((n == 2) ? 1 : ((n > 10 && "
 "n % 10 == 0) ? 2 : 3));\n"
 
@@ -449,7 +450,7 @@ msgstr "שליחת עותק סמוי בדוא\"ל אל עצמך"
 #: commandoptions.cpp:139
 #, kde-format
 msgid "Beep when message is displayed"
-msgstr "                            צפצף כאשר ההודעה מוצגת"
+msgstr "לצפצף כאשר ההודעה מוצגת"
 
 #: commandoptions.cpp:142
 #, kde-format
@@ -519,7 +520,7 @@ msgstr ""
 #: commandoptions.cpp:188
 #, kde-format
 msgid "File to display"
-msgstr "                                        קובץ להצגה"
+msgstr "קובץ להצגה"
 
 #: commandoptions.cpp:192
 #, fuzzy, kde-format
@@ -604,7 +605,7 @@ msgstr "                            צפצף כאשר ההודעה מוצגת"
 #: commandoptions.cpp:254
 #, kde-format
 msgid "Email subject line"
-msgstr "שורת הנושא של הדוא\"ל"
+msgstr "שורת הנושא של ההודעה"
 
 #: commandoptions.cpp:259
 #, fuzzy, kde-format
@@ -620,7 +621,7 @@ msgstr "הצגת התזכורת בשעה yyyy-]mm-]dd-]hh:mm]]], או תאריך
 #: commandoptions.cpp:268
 #, kde-format
 msgid "Display system tray icon"
-msgstr "                               הצג סמל במגש המערכת"
+msgstr "הצגת סמל במגש המערכת"
 
 #: commandoptions.cpp:271
 #, kde-format
@@ -7506,22 +7507,22 @@ msgid "Add..."
 msgstr "הוספה..."
 
 #: resourceselector.cpp:316
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@action"
 msgid "Import..."
-msgstr "תזכורת חדשה"
+msgstr "ייבוא…"
 
 #: resourceselector.cpp:372
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@action"
 msgid "Use as Default for Active Alarms"
-msgstr "מחיקת תזכורת"
+msgstr "להשתמש כברירת מחדל להתראות פעילות"
 
 #: resourceselector.cpp:373
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@action"
 msgid "Use as Default for Archived Alarms"
-msgstr "מחיקת תזכורת"
+msgstr "להשתמש כברירת מחדל להתראות בארכיון"
 
 #: resourceselector.cpp:374
 #, fuzzy, kde-format
@@ -7530,22 +7531,22 @@ msgid "Use as Default for Alarm Templates"
 msgstr "מחיקת תזכורת"
 
 #: resourceselector.cpp:503
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info"
 msgid "Active alarms"
-msgstr "הפעל את %1"
+msgstr "התראות פעילות"
 
 #: resourceselector.cpp:505
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info"
 msgid "Archived alarms"
-msgstr "הפעל את %1"
+msgstr "התראות בארכיון"
 
 #: resourceselector.cpp:507
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info"
 msgid "Alarm templates"
-msgstr "ברירות מחדל של תזכורות"
+msgstr "תבניות התראות"
 
 #: resourceselector.cpp:508
 #, kde-format
@@ -7560,16 +7561,16 @@ msgid "Read-write"
 msgstr ""
 
 #: resourceselector.cpp:513
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info"
 msgid "Enabled"
-msgstr "אפשר &תזכורות"
+msgstr "פעיל"
 
 #: resourceselector.cpp:514
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info"
 msgid "Disabled"
-msgstr "אפשר &תזכורות"
+msgstr "מושבת"
 
 #: resourceselector.cpp:516
 #, kde-format
@@ -7578,10 +7579,10 @@ msgid "Yes"
 msgstr ""
 
 #: resourceselector.cpp:517
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info Parameter in 'Default calendar: Yes/No'"
 msgid "No"
-msgstr "ללא"
+msgstr "לא"
 
 #: resourceselector.cpp:519
 #, kde-kuit-format
@@ -7607,16 +7608,16 @@ msgid ""
 msgstr ""
 
 #: sounddlg.cpp:42
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@option:check"
 msgid "Repeat"
 msgstr "חזרה"
 
 #: sounddlg.cpp:43
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@option:check"
 msgid "Set volume"
-msgstr "סיים אח&רי:"
+msgstr "הגדרת עוצמת שמע"
 
 #: sounddlg.cpp:53
 #, fuzzy, kde-format
@@ -7627,10 +7628,10 @@ msgid ""
 msgstr "אם אפשרות זו נבחרת, התזכורת תציג את התוכן של קובץ."
 
 #: sounddlg.cpp:149
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label"
 msgid "Sound file:"
-msgstr "סיים אח&רי:"
+msgstr "קובץ שמע:"
 
 #: sounddlg.cpp:166 sounddlg.cpp:464
 #, kde-format
@@ -7639,10 +7640,10 @@ msgid "Test the sound"
 msgstr ""
 
 #: sounddlg.cpp:167 sounddlg.cpp:465
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Play the selected sound file."
-msgstr "בחירת קובץ צליל"
+msgstr "ניגון קובץ הצליל הנבחר."
 
 #: sounddlg.cpp:174
 #, fuzzy, kde-format
@@ -7663,7 +7664,7 @@ msgid "Pause between repetitions:"
 msgstr "פרק זמן בין חזרות של התזכורת"
 
 #: sounddlg.cpp:214 sounddlg.cpp:271
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label"
 msgid "seconds"
 msgstr "שניות"
