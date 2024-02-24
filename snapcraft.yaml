@@ -114,6 +114,7 @@ parts:
         - libboost-graph-dev
         - libphonon4qt5-dev
         - libphonon4qt5experimental-dev
+        - libcanberra-dev
         - pkg-config
         - xsltproc
         - zlib1g-dev

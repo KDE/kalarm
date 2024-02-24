@@ -126,6 +126,9 @@ find_package(KPim6CalendarUtils ${CALENDARUTILS_LIB_VERSION} CONFIG REQUIRED)
 find_package(KPim6IdentityManagementWidgets ${IDENTITYMANAGEMENT_LIB_VERSION} CONFIG REQUIRED)
 find_package(KPim6Mime ${KMIME_LIB_VERSION} CONFIG REQUIRED)
 
+find_package(Canberra REQUIRED)
+set_package_properties(Canberra PROPERTIES PURPOSE "Needed to play audio alarms")
+
 find_package(KF6TextEditTextToSpeech ${KTEXTADDONS_MIN_VERSION} CONFIG)
 set_package_properties(KF6TextEditTextToSpeech PROPERTIES DESCRIPTION
     "Add support for text to speech"

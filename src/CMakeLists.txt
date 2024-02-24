@@ -328,6 +328,7 @@ target_link_libraries(kalarm_bin
     KF6::Contacts
     KPim6::IdentityManagementWidgets
     KPim6::Mime
+    Canberra::Canberra
 )
     target_link_libraries(kalarm_bin Qt::Core5Compat)
 if (TARGET KF6::TextEditTextToSpeech)
