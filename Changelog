@@ -1,5 +1,9 @@
 KAlarm Change Log
 
+=== Version 3.7.1 (KDE Gear 24.02.1) --- 24 February 2024 ===
+* Use libcanberra instead of Phonon to play sounds, for thread safety [KDE Bug 381334]
+* In Edit Alarm dialogue, allow save if Set Volume checkbox is toggled.
+
 === Version 3.7.0 (KDE Gear 24.02) --- 9 February 2024 ===
 * Convert to Qt6 / KDE Frameworks 6.
 * Enable wake-from-suspend for multiple alarms if user kernel alarm timers supported (Linux).

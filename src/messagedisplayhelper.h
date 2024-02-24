@@ -201,8 +201,6 @@ private:
     bool                mNoRecordCmdError {false}; // don't record command alarm errors
     bool                mInitialised {false};     // initTexts() has been called to create the alarm's texts
     bool                mRescheduleEvent {false}; // true to delete event after message has been displayed
-
-//friend class MessageDisplay;
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(MessageDisplayHelper::DisplayTexts::TextIds)

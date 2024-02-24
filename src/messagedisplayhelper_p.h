@@ -1,26 +1,23 @@
 /*
  *  messagedisplayhelper_p.h  -  private declarations for MessageDisplayHelper
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2009-2022 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2009-2024 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #pragma once
 
-#include <phonon/phononnamespace.h>
-#include <phonon/Path>
 #include <QObject>
 #include <QMutex>
 
-class MessageDisplayHelper;
+// Canberra currently doesn't seem to allow the volume to be adjusted while playing.
+//#define ENABLE_FADE
 
-namespace Phonon
-{
-    class MediaObject;
-    class AudioOutput;
-    class VolumeFaderEffect;
-}
+class QTimer;
+class MessageDisplayHelper;
+struct ca_context;
+struct ca_proplist;
 
 // Class to play an audio file, optionally repeated.
 class AudioPlayer : public QObject
@@ -40,21 +37,29 @@ Q_SIGNALS:
 
 private Q_SLOTS:
     void    checkAudioPlay();
-    void    playStateChanged(Phonon::State);
+    void    playFinished(uint32_t id, int errorCode);
+#ifdef ENABLE_FADE
+    void    fadeStep();
+#endif
 
 private:
-    void    removeEffects();
+    static void ca_finish_callback(ca_context*, uint32_t id, int error_code, void* userdata);
 
+    static AudioPlayer*  mInstance;
     mutable QMutex       mMutex;
     QString              mFile;
-    float                mVolume;
-    float                mFadeVolume;
-    int                  mFadeSeconds;
+    float                mVolume;        // configured end volume
+    float                mFadeVolume;    // configured start volume
+#ifdef ENABLE_FADE
+    float                mFadeStep;
+    float                mCurrentVolume;
+    QTimer*              mFadeTimer {nullptr};
+    time_t               mFadeStart {0};
+#endif
+    int                  mFadeSeconds;   // configured time to fade from mFadeVolume to mVolume
     int                  mRepeatPause;
-    Phonon::MediaObject* mAudioObject {nullptr};
-    Phonon::Path         mPath;
-    Phonon::AudioOutput* mAudioOutput {nullptr};
-    Phonon::VolumeFaderEffect* mFader {nullptr};
+    ca_context*          mAudioContext {nullptr};
+    ca_proplist*         mAudioProperties {nullptr};
     QString              mError;
     bool                 mPlayedOnce;   // the sound file has started playing at least once
     bool                 mPausing;      // currently pausing between repeats
