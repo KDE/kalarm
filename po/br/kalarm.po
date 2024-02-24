@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdepim/kalarm.po\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-16 00:38+0000\n"
+"POT-Creation-Date: 2024-02-24 00:37+0000\n"
 "PO-Revision-Date: 2004-09-20 15:44+0200\n"
 "Last-Translator: Thierry Vignaud <tvignaud@mandriva.com>\n"
 "Language-Team: Breton <LL@li.org>\n"
@@ -3523,7 +3523,7 @@ msgctxt "@info 'From' email address"
 msgid "From:"
 msgstr "Digant :"
 
-#: kalarmcalendar/alarmtext.cpp:507 messagedisplayhelper.cpp:337
+#: kalarmcalendar/alarmtext.cpp:507 messagedisplayhelper.cpp:342
 #, fuzzy, kde-format
 #| msgctxt "Email addressee"
 #| msgid "To:"
@@ -3546,7 +3546,7 @@ msgctxt "@info"
 msgid "Date:"
 msgstr "Deiziad :"
 
-#: kalarmcalendar/alarmtext.cpp:510 messagedisplayhelper.cpp:339
+#: kalarmcalendar/alarmtext.cpp:510 messagedisplayhelper.cpp:344
 #, fuzzy, kde-format
 #| msgctxt "Email subject"
 #| msgid "Subject:"
@@ -4111,7 +4111,7 @@ msgctxt "@info Using default font"
 msgid "Default"
 msgstr "Eur dre &ziouer"
 
-#: kalarmcalendar/kaeventformatter.cpp:365 messagedisplayhelper.cpp:218
+#: kalarmcalendar/kaeventformatter.cpp:365 messagedisplayhelper.cpp:223
 #, kde-format
 msgctxt "@info"
 msgid "Reminder"
@@ -4764,55 +4764,55 @@ msgstr ""
 "%1\n"
 "Mennout a rit skrivañ ho c'hemmoù ?"
 
-#: messagedisplayhelper.cpp:204
+#: messagedisplayhelper.cpp:209
 #, kde-format
 msgctxt "@title:window"
 msgid "Reminder"
 msgstr ""
 
-#: messagedisplayhelper.cpp:205 messagedisplayhelper.cpp:409
+#: messagedisplayhelper.cpp:210 messagedisplayhelper.cpp:414
 #, fuzzy, kde-format
 #| msgid "Message"
 msgctxt "@title:window"
 msgid "Message"
 msgstr "Kemennad"
 
-#: messagedisplayhelper.cpp:296
+#: messagedisplayhelper.cpp:301
 #, fuzzy, kde-format
 #| msgid "File is a folder"
 msgctxt "@info"
 msgid "File is a folder"
 msgstr "Ur renkell eo ar restr"
 
-#: messagedisplayhelper.cpp:296
+#: messagedisplayhelper.cpp:301
 #, fuzzy, kde-format
 #| msgid "Failed to open file"
 msgctxt "@info"
 msgid "Failed to open file"
 msgstr "N'hellan ket digeriñ ar restr"
 
-#: messagedisplayhelper.cpp:296
+#: messagedisplayhelper.cpp:301
 #, fuzzy, kde-format
 #| msgid "File not found"
 msgctxt "@info"
 msgid "File not found"
 msgstr "N'eo ket kavet ar restr"
 
-#: messagedisplayhelper.cpp:353
+#: messagedisplayhelper.cpp:358
 #, fuzzy, kde-format
 #| msgid "Error"
 msgctxt "@title:window"
 msgid "Error"
 msgstr "Fazi"
 
-#: messagedisplayhelper.cpp:482
+#: messagedisplayhelper.cpp:487
 #, fuzzy, kde-format
 #| msgid "Today"
 msgctxt "@info"
 msgid "Today"
 msgstr "Hiziv"
 
-#: messagedisplayhelper.cpp:484
+#: messagedisplayhelper.cpp:489
 #, fuzzy, kde-format
 #| msgid "Tomorrow"
 #| msgid_plural "in %1 days' time"
@@ -4822,7 +4822,7 @@ msgid_plural "in %1 days' time"
 msgstr[0] "Warc'hoazh"
 msgstr[1] ""
 
-#: messagedisplayhelper.cpp:486
+#: messagedisplayhelper.cpp:491
 #, kde-format
 msgctxt "@info"
 msgid "in 1 week's time"
@@ -4830,7 +4830,7 @@ msgid_plural "in %1 weeks' time"
 msgstr[0] ""
 msgstr[1] ""
 
-#: messagedisplayhelper.cpp:500
+#: messagedisplayhelper.cpp:505
 #, kde-format
 msgctxt "@info"
 msgid "in 1 minute's time"
@@ -4838,7 +4838,7 @@ msgid_plural "in %1 minutes' time"
 msgstr[0] ""
 msgstr[1] ""
 
-#: messagedisplayhelper.cpp:502
+#: messagedisplayhelper.cpp:507
 #, kde-format
 msgctxt "@info"
 msgid "in 1 hour's time"
@@ -4846,7 +4846,7 @@ msgid_plural "in %1 hours' time"
 msgstr[0] ""
 msgstr[1] ""
 
-#: messagedisplayhelper.cpp:505
+#: messagedisplayhelper.cpp:510
 #, fuzzy, kde-format
 #| msgid "1 Hour"
 #| msgid_plural "%1 Hours"
@@ -4856,7 +4856,7 @@ msgid_plural "%1 hours"
 msgstr[0] "%1 eur"
 msgstr[1] ""
 
-#: messagedisplayhelper.cpp:506
+#: messagedisplayhelper.cpp:511
 #, kde-format
 msgctxt "@info '%2' is the previous message '1 hour'/'%1 hours'"
 msgid "in %2 1 minute's time"
@@ -4864,31 +4864,32 @@ msgid_plural "in %2 %1 minutes' time"
 msgstr[0] ""
 msgstr[1] ""
 
-#: messagedisplayhelper.cpp:848
+#: messagedisplayhelper.cpp:853
 #, fuzzy, kde-format
 #| msgid "Enter the email message."
 msgctxt "@info"
 msgid "Unable to speak message"
 msgstr "Roit ar c'hemennad postel."
 
-#: messagedisplayhelper.cpp:848
+#: messagedisplayhelper.cpp:853
 #, kde-format
 msgctxt "@info"
 msgid "Text-to-speech subsystem is not available"
 msgstr ""
 
-#: messagedisplayhelper.cpp:1033
-#, fuzzy, kde-kuit-format
-#| msgid ""
-#| "Cannot open audio file:\n"
-#| "%1"
+#: messagedisplayhelper.cpp:1046
+#, kde-kuit-format
 msgctxt "@info"
-msgid "Cannot open audio file: <filename>%1</filename>"
+msgid "Cannot initialize audio player: %1"
 msgstr ""
-"N'hellan ket digeriñ ar rest klevet :\n"
-"%1"
 
-#: messagedisplayhelper.cpp:1161
+#: messagedisplayhelper.cpp:1068
+#, kde-kuit-format
+msgctxt "@info"
+msgid "Cannot set audio player properties: %1"
+msgstr ""
+
+#: messagedisplayhelper.cpp:1221
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "Cannot open audio file:\n"
@@ -8422,7 +8423,7 @@ msgctxt "@item:inlistbox"
 msgid "Audio files"
 msgstr "Restr son"
 
-#: soundpicker.cpp:340
+#: soundpicker.cpp:341
 #, fuzzy, kde-format
 #| msgid "Choose Sound File"
 msgctxt "@title:window"
@@ -8928,6 +8929,16 @@ msgstr ""
 #, kde-format
 msgid "Number of minutes before alarm to wake from suspend"
 msgstr ""
+
+#, fuzzy
+#~| msgid ""
+#~| "Cannot open audio file:\n"
+#~| "%1"
+#~ msgctxt "@info"
+#~ msgid "Cannot open audio file: <filename>%1</filename>"
+#~ msgstr ""
+#~ "N'hellan ket digeriñ ar rest klevet :\n"
+#~ "%1"
 
 #~ msgid "&File"
 #~ msgstr "&Restr"

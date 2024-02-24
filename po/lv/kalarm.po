@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-16 00:38+0000\n"
+"POT-Creation-Date: 2024-02-24 00:37+0000\n"
 "PO-Revision-Date: 2012-07-05 12:56+0300\n"
 "Last-Translator: Maris Nartiss <maris.kde@gmail.com>\n"
 "Language-Team: Latvian\n"
@@ -3723,7 +3723,7 @@ msgctxt "@info 'From' email address"
 msgid "From:"
 msgstr "No:"
 
-#: kalarmcalendar/alarmtext.cpp:507 messagedisplayhelper.cpp:337
+#: kalarmcalendar/alarmtext.cpp:507 messagedisplayhelper.cpp:342
 #, kde-format
 msgctxt "@info Email addressee"
 msgid "To:"
@@ -3741,7 +3741,7 @@ msgctxt "@info"
 msgid "Date:"
 msgstr ""
 
-#: kalarmcalendar/alarmtext.cpp:510 messagedisplayhelper.cpp:339
+#: kalarmcalendar/alarmtext.cpp:510 messagedisplayhelper.cpp:344
 #, kde-format
 msgctxt "@info Email subject"
 msgid "Subject:"
@@ -4368,7 +4368,7 @@ msgctxt "@info Using default font"
 msgid "Default"
 msgstr "Noklusētais laiks"
 
-#: kalarmcalendar/kaeventformatter.cpp:365 messagedisplayhelper.cpp:218
+#: kalarmcalendar/kaeventformatter.cpp:365 messagedisplayhelper.cpp:223
 #, kde-format
 msgctxt "@info"
 msgid "Reminder"
@@ -5015,49 +5015,49 @@ msgid "<para>Cannot defer alarm:</para><para>Alarm not found.</para>"
 msgstr ""
 "<para>Nevar atlikt atgādinājumu:</para><para>Atgādinājums nav atrasts.</para>"
 
-#: messagedisplayhelper.cpp:204
+#: messagedisplayhelper.cpp:209
 #, kde-format
 msgctxt "@title:window"
 msgid "Reminder"
 msgstr "Papildu atgādinājums"
 
-#: messagedisplayhelper.cpp:205 messagedisplayhelper.cpp:409
+#: messagedisplayhelper.cpp:210 messagedisplayhelper.cpp:414
 #, kde-format
 msgctxt "@title:window"
 msgid "Message"
 msgstr "Ziņojums"
 
-#: messagedisplayhelper.cpp:296
+#: messagedisplayhelper.cpp:301
 #, kde-format
 msgctxt "@info"
 msgid "File is a folder"
 msgstr "Fails ir mape"
 
-#: messagedisplayhelper.cpp:296
+#: messagedisplayhelper.cpp:301
 #, kde-format
 msgctxt "@info"
 msgid "Failed to open file"
 msgstr "Neizdevās atvērt failu"
 
-#: messagedisplayhelper.cpp:296
+#: messagedisplayhelper.cpp:301
 #, kde-format
 msgctxt "@info"
 msgid "File not found"
 msgstr "Fails nav atrasts"
 
-#: messagedisplayhelper.cpp:353
+#: messagedisplayhelper.cpp:358
 #, kde-format
 msgctxt "@title:window"
 msgid "Error"
 msgstr "Kļūda"
 
-#: messagedisplayhelper.cpp:482
+#: messagedisplayhelper.cpp:487
 #, kde-format
 msgctxt "@info"
 msgid "Today"
 msgstr "Šodien"
 
-#: messagedisplayhelper.cpp:484
+#: messagedisplayhelper.cpp:489
 #, kde-format
 msgctxt "@info"
 msgid "Tomorrow"
@@ -5066,7 +5066,7 @@ msgstr[0] "pēc %1 dienas"
 msgstr[1] "pēc %1 dienām"
 msgstr[2] "pēc %1 dienām"
 
-#: messagedisplayhelper.cpp:486
+#: messagedisplayhelper.cpp:491
 #, kde-format
 msgctxt "@info"
 msgid "in 1 week's time"
@@ -5075,7 +5075,7 @@ msgstr[0] "pēc %1 nedēļas"
 msgstr[1] "pēc %1 nedēļām"
 msgstr[2] "pēc %1 nedēļām"
 
-#: messagedisplayhelper.cpp:500
+#: messagedisplayhelper.cpp:505
 #, kde-format
 msgctxt "@info"
 msgid "in 1 minute's time"
@@ -5084,7 +5084,7 @@ msgstr[0] "pēc %1 minūtes"
 msgstr[1] "pēc %1 minūtēm"
 msgstr[2] "pēc %1 minūtēm"
 
-#: messagedisplayhelper.cpp:502
+#: messagedisplayhelper.cpp:507
 #, kde-format
 msgctxt "@info"
 msgid "in 1 hour's time"
@@ -5093,7 +5093,7 @@ msgstr[0] "pēc %1 stundas"
 msgstr[1] "pēc %1 stundām"
 msgstr[2] "pēc %1 stundām"
 
-#: messagedisplayhelper.cpp:505
+#: messagedisplayhelper.cpp:510
 #, kde-format
 msgctxt "@item:intext inserted into 'in ... %1 minute's time' below"
 msgid "1 hour"
@@ -5102,7 +5102,7 @@ msgstr[0] "%1 stunda"
 msgstr[1] "%1 stundas"
 msgstr[2] "%1 stundu"
 
-#: messagedisplayhelper.cpp:506
+#: messagedisplayhelper.cpp:511
 #, kde-format
 msgctxt "@info '%2' is the previous message '1 hour'/'%1 hours'"
 msgid "in %2 1 minute's time"
@@ -5111,25 +5111,31 @@ msgstr[0] "pēc %2 un %1 minūtes"
 msgstr[1] "pēc %2 un %1 minūtēm"
 msgstr[2] "pēc %2 un %1 minūtēm"
 
-#: messagedisplayhelper.cpp:848
+#: messagedisplayhelper.cpp:853
 #, kde-format
 msgctxt "@info"
 msgid "Unable to speak message"
 msgstr "Neizdevās izrunāt ziņojumu"
 
-#: messagedisplayhelper.cpp:848
+#: messagedisplayhelper.cpp:853
 #, kde-format
 msgctxt "@info"
 msgid "Text-to-speech subsystem is not available"
 msgstr ""
 
-#: messagedisplayhelper.cpp:1033
+#: messagedisplayhelper.cpp:1046
 #, kde-kuit-format
 msgctxt "@info"
-msgid "Cannot open audio file: <filename>%1</filename>"
-msgstr "Nevar atvērt audio failu: <filename>%1</filename>"
+msgid "Cannot initialize audio player: %1"
+msgstr ""
 
-#: messagedisplayhelper.cpp:1161
+#: messagedisplayhelper.cpp:1068
+#, kde-kuit-format
+msgctxt "@info"
+msgid "Cannot set audio player properties: %1"
+msgstr ""
+
+#: messagedisplayhelper.cpp:1221
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -8877,7 +8883,7 @@ msgctxt "@item:inlistbox"
 msgid "Audio files"
 msgstr "Skaņas fails"
 
-#: soundpicker.cpp:340
+#: soundpicker.cpp:341
 #, kde-format
 msgctxt "@title:window"
 msgid "Choose Sound File"
@@ -9434,6 +9440,10 @@ msgstr ""
 #, kde-format
 msgid "Number of minutes before alarm to wake from suspend"
 msgstr "Ilgums minūtēs no pamošanās līdz atgādinājumam"
+
+#~ msgctxt "@info"
+#~ msgid "Cannot open audio file: <filename>%1</filename>"
+#~ msgstr "Nevar atvērt audio failu: <filename>%1</filename>"
 
 #~ msgid "&File"
 #~ msgstr "&Fails"

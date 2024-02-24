@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-16 00:38+0000\n"
+"POT-Creation-Date: 2024-02-24 00:37+0000\n"
 "PO-Revision-Date: 2007-02-28 14:12+0100\n"
 "Last-Translator: Bozidar Proevski <bobibobi@freemail.com.mk>\n"
 "Language-Team: Macedonian <mkde-l10n@lists.sourceforge.net>\n"
@@ -3710,7 +3710,7 @@ msgctxt "@info 'From' email address"
 msgid "From:"
 msgstr "Од:"
 
-#: kalarmcalendar/alarmtext.cpp:507 messagedisplayhelper.cpp:337
+#: kalarmcalendar/alarmtext.cpp:507 messagedisplayhelper.cpp:342
 #, fuzzy, kde-format
 #| msgctxt "Email addressee"
 #| msgid "To:"
@@ -3733,7 +3733,7 @@ msgctxt "@info"
 msgid "Date:"
 msgstr "Датум:"
 
-#: kalarmcalendar/alarmtext.cpp:510 messagedisplayhelper.cpp:339
+#: kalarmcalendar/alarmtext.cpp:510 messagedisplayhelper.cpp:344
 #, fuzzy, kde-format
 #| msgctxt "Email subject"
 #| msgid "Subject:"
@@ -4303,7 +4303,7 @@ msgctxt "@info Using default font"
 msgid "Default"
 msgstr "&Стандардно време"
 
-#: kalarmcalendar/kaeventformatter.cpp:365 messagedisplayhelper.cpp:218
+#: kalarmcalendar/kaeventformatter.cpp:365 messagedisplayhelper.cpp:223
 #, fuzzy, kde-format
 #| msgid "Reminder"
 msgctxt "@info"
@@ -4965,55 +4965,55 @@ msgstr ""
 "Достигнат е почетокот на листата со аларми.\n"
 "Да продолжам од крајот?"
 
-#: messagedisplayhelper.cpp:204
+#: messagedisplayhelper.cpp:209
 #, fuzzy, kde-format
 #| msgid "Reminder"
 msgctxt "@title:window"
 msgid "Reminder"
 msgstr "Потсетник"
 
-#: messagedisplayhelper.cpp:205 messagedisplayhelper.cpp:409
+#: messagedisplayhelper.cpp:210 messagedisplayhelper.cpp:414
 #, fuzzy, kde-format
 #| msgid "Message"
 msgctxt "@title:window"
 msgid "Message"
 msgstr "Порака"
 
-#: messagedisplayhelper.cpp:296
+#: messagedisplayhelper.cpp:301
 #, fuzzy, kde-format
 #| msgid "File is a folder"
 msgctxt "@info"
 msgid "File is a folder"
 msgstr "Ова е папка"
 
-#: messagedisplayhelper.cpp:296
+#: messagedisplayhelper.cpp:301
 #, fuzzy, kde-format
 #| msgid "Failed to open file"
 msgctxt "@info"
 msgid "Failed to open file"
 msgstr "Не успеав да ја отворам датотеката"
 
-#: messagedisplayhelper.cpp:296
+#: messagedisplayhelper.cpp:301
 #, fuzzy, kde-format
 #| msgid "File not found"
 msgctxt "@info"
 msgid "File not found"
 msgstr "Датотеката не е пронајдена"
 
-#: messagedisplayhelper.cpp:353
+#: messagedisplayhelper.cpp:358
 #, kde-format
 msgctxt "@title:window"
 msgid "Error"
 msgstr ""
 
-#: messagedisplayhelper.cpp:482
+#: messagedisplayhelper.cpp:487
 #, fuzzy, kde-format
 #| msgid "Today"
 msgctxt "@info"
 msgid "Today"
 msgstr "денес"
 
-#: messagedisplayhelper.cpp:484
+#: messagedisplayhelper.cpp:489
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Tomorrow"
@@ -5022,7 +5022,7 @@ msgstr[0] "утре"
 msgstr[1] "за %1 дена"
 msgstr[2] "за %1 дена"
 
-#: messagedisplayhelper.cpp:486
+#: messagedisplayhelper.cpp:491
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "in 1 week's time"
@@ -5031,7 +5031,7 @@ msgstr[0] "за %1 седмица"
 msgstr[1] "за %1 седмици"
 msgstr[2] "за %1 седмици"
 
-#: messagedisplayhelper.cpp:500
+#: messagedisplayhelper.cpp:505
 #, fuzzy, kde-format
 #| msgid "in 1 minute's time"
 #| msgid_plural "in %1 minutes' time"
@@ -5042,7 +5042,7 @@ msgstr[0] "за %1 минута"
 msgstr[1] "за %1 минути"
 msgstr[2] "за %1 минути"
 
-#: messagedisplayhelper.cpp:502
+#: messagedisplayhelper.cpp:507
 #, fuzzy, kde-format
 #| msgid "in 1 hour's time"
 #| msgid_plural "in %1 hours' time"
@@ -5053,7 +5053,7 @@ msgstr[0] "за %1 час"
 msgstr[1] "за %1 часа"
 msgstr[2] "за %1 часа"
 
-#: messagedisplayhelper.cpp:505
+#: messagedisplayhelper.cpp:510
 #, fuzzy, kde-format
 #| msgid "1 Hour"
 #| msgid_plural "%1 Hours"
@@ -5064,7 +5064,7 @@ msgstr[0] "%1 час"
 msgstr[1] "%1 часа"
 msgstr[2] "%1 часа"
 
-#: messagedisplayhelper.cpp:506
+#: messagedisplayhelper.cpp:511
 #, fuzzy, kde-format
 #| msgid "in 1 minute's time"
 #| msgid_plural "in %1 minutes' time"
@@ -5075,31 +5075,32 @@ msgstr[0] "за %1 минута"
 msgstr[1] "за %1 минути"
 msgstr[2] "за %1 минути"
 
-#: messagedisplayhelper.cpp:848
+#: messagedisplayhelper.cpp:853
 #, fuzzy, kde-format
 #| msgid "Unable to speak message"
 msgctxt "@info"
 msgid "Unable to speak message"
 msgstr "Не можам да ја изговорам пораката"
 
-#: messagedisplayhelper.cpp:848
+#: messagedisplayhelper.cpp:853
 #, kde-format
 msgctxt "@info"
 msgid "Text-to-speech subsystem is not available"
 msgstr ""
 
-#: messagedisplayhelper.cpp:1033
-#, fuzzy, kde-kuit-format
-#| msgid ""
-#| "Cannot open audio file:\n"
-#| "%1"
+#: messagedisplayhelper.cpp:1046
+#, kde-kuit-format
 msgctxt "@info"
-msgid "Cannot open audio file: <filename>%1</filename>"
+msgid "Cannot initialize audio player: %1"
 msgstr ""
-"Не можам да ја отворам аудиодатотеката:\n"
-"%1"
 
-#: messagedisplayhelper.cpp:1161
+#: messagedisplayhelper.cpp:1068
+#, kde-kuit-format
+msgctxt "@info"
+msgid "Cannot set audio player properties: %1"
+msgstr ""
+
+#: messagedisplayhelper.cpp:1221
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "Error attaching file:\n"
@@ -8681,7 +8682,7 @@ msgctxt "@item:inlistbox"
 msgid "Audio files"
 msgstr "Звучна датотека:"
 
-#: soundpicker.cpp:340
+#: soundpicker.cpp:341
 #, fuzzy, kde-format
 #| msgid "Choose Sound File"
 msgctxt "@title:window"
@@ -9200,6 +9201,16 @@ msgstr ""
 #, kde-format
 msgid "Number of minutes before alarm to wake from suspend"
 msgstr ""
+
+#, fuzzy
+#~| msgid ""
+#~| "Cannot open audio file:\n"
+#~| "%1"
+#~ msgctxt "@info"
+#~ msgid "Cannot open audio file: <filename>%1</filename>"
+#~ msgstr ""
+#~ "Не можам да ја отворам аудиодатотеката:\n"
+#~ "%1"
 
 #, fuzzy
 #~ msgid "&File"
