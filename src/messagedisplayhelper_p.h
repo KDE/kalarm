@@ -41,8 +41,6 @@ private:
     QString              mFile;
     float                mVolume;        // configured end volume
     float                mFadeVolume;    // configured start volume
-    float                mFadeStep;
-    float                mCurrentVolume;
     int                  mFadeSeconds;   // configured time to fade from mFadeVolume to mVolume
     int                  mRepeatPause;
     bool                 mPlayedOnce;   // the sound file has started playing at least once

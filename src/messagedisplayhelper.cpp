@@ -53,8 +53,6 @@ namespace
 {
 const char FDO_SCREENSAVER_SERVICE[] = "org.freedesktop.ScreenSaver";
 const char FDO_SCREENSAVER_PATH[]    = "/org/freedesktop/ScreenSaver";
-
-const uint32_t SOUND_ID = 1;   // ID for sounds (needed in order to cancel)
 }
 
 // Error message bit masks
