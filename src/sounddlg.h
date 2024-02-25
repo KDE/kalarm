@@ -1,7 +1,7 @@
 /*
  *  sounddlg.h  -  sound file selection and configuration dialog and widget
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2005-2022 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2005-2024 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -15,7 +15,7 @@
 class QPushButton;
 class QShowEvent;
 class QResizeEvent;
-namespace Phonon { class MediaObject; }
+class AudioPlayer;
 class GroupBox;
 class PushButton;
 class CheckBox;
@@ -77,7 +77,7 @@ private:
     Slider*              mFadeSlider {nullptr};
     mutable QUrl         mUrl;
     mutable QString      mValidatedFile;
-    Phonon::MediaObject* mPlayer {nullptr};
+    AudioPlayer*         mPlayer {nullptr};
     bool                 mReadOnly {false};
     bool                 mEmptyFileAllowed {false};
 };

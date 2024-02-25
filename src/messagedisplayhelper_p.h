@@ -11,21 +11,16 @@
 #include <QObject>
 #include <QMutex>
 
-// Canberra currently doesn't seem to allow the volume to be adjusted while playing.
-//#define ENABLE_FADE
-
-class QTimer;
 class MessageDisplayHelper;
-struct ca_context;
-struct ca_proplist;
+class AudioPlayer;
 
 // Class to play an audio file, optionally repeated.
-class AudioPlayer : public QObject
+class AudioPlayerThread : public QObject
 {
     Q_OBJECT
 public:
-    AudioPlayer(const QString& audioFile, float volume, float fadeVolume, int fadeSeconds, int repeatPause);
-    ~AudioPlayer() override;
+    AudioPlayerThread(const QString& audioFile, float volume, float fadeVolume, int fadeSeconds, int repeatPause);
+    ~AudioPlayerThread() override;
     void    execute();
     QString error() const;
 
@@ -37,30 +32,19 @@ Q_SIGNALS:
 
 private Q_SLOTS:
     void    checkAudioPlay();
-    void    playFinished(uint32_t id, int errorCode);
-#ifdef ENABLE_FADE
-    void    fadeStep();
-#endif
+    void    playFinished(bool ok);
 
 private:
-    static void ca_finish_callback(ca_context*, uint32_t id, int error_code, void* userdata);
-
-    static AudioPlayer*  mInstance;
+    static AudioPlayerThread* mInstance;
     mutable QMutex       mMutex;
+    AudioPlayer*         mPlayer {nullptr};
     QString              mFile;
     float                mVolume;        // configured end volume
     float                mFadeVolume;    // configured start volume
-#ifdef ENABLE_FADE
     float                mFadeStep;
     float                mCurrentVolume;
-    QTimer*              mFadeTimer {nullptr};
-    time_t               mFadeStart {0};
-#endif
     int                  mFadeSeconds;   // configured time to fade from mFadeVolume to mVolume
     int                  mRepeatPause;
-    ca_context*          mAudioContext {nullptr};
-    ca_proplist*         mAudioProperties {nullptr};
-    QString              mError;
     bool                 mPlayedOnce;   // the sound file has started playing at least once
     bool                 mPausing;      // currently pausing between repeats
     bool                 mStopping {false};  // the player is about to be deleted

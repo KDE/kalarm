@@ -1,7 +1,7 @@
 /*
  *  messagedisplayhelper.h  -  helper class to display an alarm or error message
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2001-2023 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2001-2024 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -21,7 +21,7 @@
 
 class KConfigGroup;
 class QTemporaryFile;
-class AudioPlayer;
+class AudioPlayerThread;
 class PushButton;
 class EditAlarmDlg;
 class MessageDisplay;
@@ -151,7 +151,7 @@ private:
     static QHash<EventId, unsigned> mErrorMessages; // error messages currently displayed, by event ID
     // Sound file playing
     static QPointer<QThread>     mAudioThread;    // container of thread to play audio file in
-    static QPointer<AudioPlayer> mAudioPlayer;    // audio file play worker object
+    static QPointer<AudioPlayerThread> mAudioPlayer;    // audio file play worker object
     static MessageDisplayHelper* mAudioOwner;     // helper instance which owns the unique audio thread
 
 public:
