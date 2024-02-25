@@ -1,7 +1,7 @@
 /*
  *  editdlg.cpp  -  dialog to create or modify an alarm or alarm template
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2001-2023 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2001-2024 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -39,6 +39,7 @@
 #include <KSharedConfig>
 #if ENABLE_X11
 #include <KX11Extras>
+#include <KWindowSystem>
 #endif
 
 #include <QLabel>
@@ -431,7 +432,8 @@ void EditAlarmDlg::init(const KAEvent& event)
     // desktop. If the user invokes the dialog via the system tray on a different desktop,
     // that can cause confusion.
 #if ENABLE_X11
-    mDesktop = KX11Extras::currentDesktop();
+    if (KWindowSystem::isPlatformX11())
+        mDesktop = KX11Extras::currentDesktop();
 #endif
 
     if (theApp()->windowFocusBroken())
@@ -869,7 +871,8 @@ void EditAlarmDlg::showEvent(QShowEvent* se)
     }
     slotResize();
 #if ENABLE_X11
-    KX11Extras::setOnDesktop(winId(), mDesktop);    // ensure it displays on the virtual desktop expected by the user
+    if (KWindowSystem::isPlatformX11())
+        KX11Extras::setOnDesktop(winId(), mDesktop);    // ensure it displays on the virtual desktop expected by the user
 #endif
 
     if (theApp()->needWindowFocusFix())
