@@ -112,8 +112,6 @@ parts:
         - libassuan-dev
         - libboost-dev
         - libboost-graph-dev
-        - libphonon4qt5-dev
-        - libphonon4qt5experimental-dev
         - libcanberra-dev
         - pkg-config
         - xsltproc
@@ -124,14 +122,13 @@ parts:
         - libasound2
         - libasound2-data
         - libasound2-plugins
-        - phonon4qt5
-        - libphonon4qt5experimental4
         - gstreamer1.0-alsa
         - gstreamer1.0-pulseaudio
         - gstreamer1.0-plugins-good
         - gstreamer1.0-plugins-bad
         - gstreamer1.0-plugins-ugly
-        - phonon4qt5-backend-gstreamer
+        - libcanberra0
+        - libcanberra-pulse
         - oxygen-sounds
         - kross
         - libassuan0

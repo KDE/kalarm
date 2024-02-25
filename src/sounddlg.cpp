@@ -8,6 +8,7 @@
 
 #include "sounddlg.h"
 
+#include "audioplayer.h"
 #include "mainwindow.h"
 #include "soundpicker.h"
 #include "lib/checkbox.h"
@@ -20,9 +21,6 @@
 #include "lib/spinbox.h"
 
 #include <KLocalizedString>
-#include <phonon/MediaObject>
-#include <phonon/AudioOutput>
-#include <phonon/VolumeFaderEffect>
 
 #include <QIcon>
 #include <QLabel>
@@ -247,8 +245,8 @@ SoundWidget::SoundWidget(bool showPlay, const QString& repeatWhatsThis, QWidget*
     mVolumeSlider->setValueLabel(label, QStringLiteral("%1%"), true);
     boxHLayout->addWidget(label);
 
-    // Show fade controls only if the current Phonon backend supports fading.
-    if (Phonon::VolumeFaderEffect(this).isValid())
+    // Show fade controls only if the current audio backend supports fading.
+#ifdef ENABLE_AUDIO_FADE
     {
         // Fade checkbox
         mFadeCheckbox = new CheckBox(i18nc("@option:check", "Fade"), group);
@@ -288,6 +286,7 @@ SoundWidget::SoundWidget(bool showPlay, const QString& repeatWhatsThis, QWidget*
         connect(mFadeSlider, &Slider::valueChanged, this, &SoundWidget::changed);
         mFadeVolumeBox->setWhatsThis(i18nc("@info:whatsthis", "Choose the initial volume for playing the sound file."));
     }
+#endif
 
     slotVolumeToggled(false);
 }
@@ -436,17 +435,8 @@ void SoundWidget::playSound()
     }
     if (!validate(true))
         return;
-#if 0
-#warning Phonon::createPlayer() does not work
-    mPlayer = Phonon::createPlayer(Phonon::MusicCategory, mUrl);
-    mPlayer->setParent(this);
-#else
-    mPlayer = new Phonon::MediaObject(this);
-    auto output = new Phonon::AudioOutput(Phonon::MusicCategory, mPlayer);   //NOLINT(clang-analyzer-cplusplus.NewDeleteLeaks)
-    mPlayer->setCurrentSource(mUrl);
-    Phonon::createPath(mPlayer, output);
-#endif
-    connect(mPlayer, &Phonon::MediaObject::finished, this, &SoundWidget::playFinished);
+    mPlayer = new AudioPlayer(AudioPlayer::Sample, mUrl, this);
+    connect(mPlayer, &AudioPlayer::finished, this, &SoundWidget::playFinished);
     mFilePlay->setIcon(QIcon::fromTheme(QStringLiteral("media-playback-stop")));   // change the play button to a stop button
     mFilePlay->setToolTip(i18nc("@info:tooltip", "Stop sound"));
     mFilePlay->setWhatsThis(i18nc("@info:whatsthis", "Stop playing the sound"));

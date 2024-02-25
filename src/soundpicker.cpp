@@ -1,7 +1,7 @@
 /*
  *  soundpicker.cpp  -  widget to select a sound file or a beep
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2002-2022 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2002-2024 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -18,7 +18,6 @@
 #include <TextEditTextToSpeech/TextToSpeech>
 #endif
 #include <KLocalizedString>
-#include <phonon/backendcapabilities.h>
 
 #include <QIcon>
 #include <QFileInfo>
@@ -315,13 +314,11 @@ bool SoundPicker::browseFile(QString& file, QString& defaultDir, const QString& 
     {
         audioFilter = QStringLiteral("%1 (").arg(i18nc("@item:inlistbox", "Audio files"));
         QMimeDatabase db;
-//TODO: Don't use Phonon to get mime types
-        const QStringList mimeTypes = Phonon::BackendCapabilities::availableMimeTypes();
-        for (const QString& mimeType : mimeTypes)
-            if (mimeType.startsWith(QStringLiteral("audio/")))
+        const QList<QMimeType> allMimeTypes = db.allMimeTypes();
+        for (const QMimeType& mimeType : allMimeTypes)
+            if (mimeType.name().startsWith(QStringLiteral("audio/")))
             {
-                const QMimeType mt = db.mimeTypeForName(mimeType);
-                audioFilter += mt.globPatterns().join(QLatin1Char(' '));
+                audioFilter += mimeType.globPatterns().join(QLatin1Char(' '));
                 audioFilter += QLatin1Char(' ');
             }
         audioFilter[audioFilter.length() - 1] = QLatin1Char(')');

@@ -10,6 +10,7 @@
 #include "messagedisplayhelper_p.h"
 #include "messagedisplay.h"
 
+#include "audioplayer.h"
 #include "displaycalendar.h"
 #include "functions.h"
 #include "kalarm.h"
@@ -46,11 +47,6 @@
 #include <QTimer>
 #include <QUrl>
 
-#include <canberra.h>
-#ifdef ENABLE_FADE
-#include <ctime>
-#endif
-
 using namespace KAlarmCal;
 
 namespace
@@ -72,9 +68,9 @@ QList<MessageDisplayHelper*>   MessageDisplayHelper::mInstanceList;
 QHash<EventId, unsigned>       MessageDisplayHelper::mErrorMessages;
 // There can only be one audio thread at a time: trying to play multiple
 // sound files simultaneously would result in a cacophony.
-QPointer<QThread>     MessageDisplayHelper::mAudioThread;
-QPointer<AudioPlayer> MessageDisplayHelper::mAudioPlayer;
-MessageDisplayHelper* MessageDisplayHelper::mAudioOwner = nullptr;
+QPointer<QThread>           MessageDisplayHelper::mAudioThread;
+QPointer<AudioPlayerThread> MessageDisplayHelper::mAudioPlayer;
+MessageDisplayHelper*       MessageDisplayHelper::mAudioOwner = nullptr;
 
 /******************************************************************************
 * Construct the message display handler for the specified alarm.
@@ -882,17 +878,17 @@ void MessageDisplayHelper::startAudio()
         // player as a worker to run in the thread created inside QThread.
         QThread* audioThread = new QThread(this);
         mAudioThread = audioThread;    // set the QPointer
-        AudioPlayer* audioPlayer = new AudioPlayer(mAudioFile, mVolume, mFadeVolume, mFadeSeconds, mAudioRepeatPause);
+        AudioPlayerThread* audioPlayer = new AudioPlayerThread(mAudioFile, mVolume, mFadeVolume, mFadeSeconds, mAudioRepeatPause);
         mAudioPlayer = audioPlayer;    // set the QPointer
         audioPlayer->moveToThread(audioThread);
-        connect(audioThread, &QThread::started, audioPlayer, &AudioPlayer::execute);
-        connect(audioPlayer, &AudioPlayer::destroyed, audioThread, &QThread::quit);
+        connect(audioThread, &QThread::started, audioPlayer, &AudioPlayerThread::execute);
+        connect(audioPlayer, &AudioPlayerThread::destroyed, audioThread, &QThread::quit);
         connect(audioThread, &QThread::finished, audioThread, &QThread::deleteLater);
         connect(audioThread, &QThread::destroyed, audioThread, []() { qCDebug(KALARM_LOG) << "MessageDisplayHelper: Audio thread deleted"; });
         connect(audioThread, &QThread::destroyed, this, [this]() { if (mAudioOwner == parent()) mAudioOwner = nullptr; });
 
         // Set up connections not in the thread-worker relationship.
-        connect(audioPlayer, &AudioPlayer::readyToPlay, this, &MessageDisplayHelper::playReady);
+        connect(audioPlayer, &AudioPlayerThread::readyToPlay, this, &MessageDisplayHelper::playReady);
         connect(audioThread, &QThread::finished, this, &MessageDisplayHelper::playFinished);
         if (mSilenceButton)
             connect(mSilenceButton, &QAbstractButton::clicked, this, &MessageDisplayHelper::stopAudioPlay);
@@ -981,12 +977,12 @@ void MessageDisplayHelper::playFinished()
         mParent->closeDisplay();
 }
 
-AudioPlayer*  AudioPlayer::mInstance = nullptr;   // enable double deletion prevention
+AudioPlayerThread*  AudioPlayerThread::mInstance = nullptr;   // enable double deletion prevention
 
 /******************************************************************************
 * Constructor for audio player.
 */
-AudioPlayer::AudioPlayer(const QString& audioFile, float volume, float fadeVolume, int fadeSeconds, int repeatPause)
+AudioPlayerThread::AudioPlayerThread(const QString& audioFile, float volume, float fadeVolume, int fadeSeconds, int repeatPause)
     : QObject()
     , mFile(audioFile)
     , mVolume(volume)
@@ -1002,21 +998,12 @@ AudioPlayer::AudioPlayer(const QString& audioFile, float volume, float fadeVolum
 * Destructor for audio player.
 * Note that this destructor may be executed in the parent thread.
 */
-AudioPlayer::~AudioPlayer()
+AudioPlayerThread::~AudioPlayerThread()
 {
-    qCDebug(KALARM_LOG) << "MessageDisplayHelper::~AudioPlayer";
+    qCDebug(KALARM_LOG) << "MessageDisplayHelper::~AudioPlayerThread";
     mMutex.lock();
     mInstance = nullptr;    // enable slots to detect that their instance has been deleted
-    if (mAudioContext)
-    {
-        ca_context_destroy(mAudioContext);
-        mAudioContext = nullptr;
-    }
-    if (mAudioProperties)
-    {
-        ca_proplist_destroy(mAudioProperties);
-        mAudioProperties = nullptr;
-    }
+    delete mPlayer;
     mMutex.unlock();
     // Notify after deleting mAudioPlayer, so that isAudioPlaying() will
     // return the correct value.
@@ -1026,72 +1013,24 @@ AudioPlayer::~AudioPlayer()
 /******************************************************************************
 * Kick off playing the audio file.
 */
-void AudioPlayer::execute()
+void AudioPlayerThread::execute()
 {
     mMutex.lock();
-    if (mAudioContext)
+    if (mPlayer)
     {
         mMutex.unlock();
         return;
     }
-    qCDebug(KALARM_LOG) << "AudioPlayer::execute:" << QThread::currentThread() << mFile;
-    const QString audioFile = mFile;
+    qCDebug(KALARM_LOG) << "AudioPlayerThread::execute:" << QThread::currentThread() << mFile;
     const QUrl url = QUrl::fromUserInput(mFile);
     mFile = url.isLocalFile() ? url.toLocalFile() : url.toString();
-
-    int result = ca_context_create(&mAudioContext);
-    if (result != CA_SUCCESS)
+    mPlayer = new AudioPlayer(AudioPlayer::Alarm, url, mVolume, mFadeVolume, mFadeSeconds, this);
+    if (mPlayer->status() == AudioPlayer::Error)
     {
-        mAudioContext = nullptr;
-        mError = xi18nc("@info", "Cannot initialize audio player: %1", QString::fromUtf8(ca_strerror(result)));
         mMutex.unlock();
-        qCCritical(KALARM_LOG) << "AudioPlayer::execute: Error initializing audio:" << ca_strerror(result);
         return;
     }
-    result = ca_context_change_props(mAudioContext,
-                                     CA_PROP_APPLICATION_NAME,
-                                     qUtf8Printable(KAboutData::applicationData().displayName()),
-                                     CA_PROP_APPLICATION_ID,
-                                     qUtf8Printable(KAboutData::applicationData().componentName()),
-                                     CA_PROP_APPLICATION_ICON_NAME,
-                                     qUtf8Printable(qApp->windowIcon().name()),
-                                     CA_PROP_EVENT_ID,
-                                     KALARM_NAME,
-                                     nullptr);
-    if (result != CA_SUCCESS)
-        qCWarning(KALARM_LOG) << "AudioPlayer::execute: Failed to set application properties on canberra context for audio:" << ca_strerror(result);
-
-    result = ca_proplist_create(&mAudioProperties);
-    if (result != CA_SUCCESS)
-    {
-        mAudioProperties = nullptr;
-        mError = xi18nc("@info", "Cannot set audio player properties: %1", QString::fromUtf8(ca_strerror(result)));
-        mMutex.unlock();
-        qCCritical(KALARM_LOG) << "AudioPlayer::execute: Error initializing audio properties:" << ca_strerror(result);
-        return;
-    }
-#warning Download remote file?
-    ca_proplist_sets(mAudioProperties, CA_PROP_MEDIA_FILENAME, QFile::encodeName(mFile).constData());
-    if (mVolume > 0)
-    {
-#ifdef ENABLE_FADE
-        if (mFadeVolume >= 0  &&  mFadeSeconds > 0)
-        {
-            mFadeStep = (mVolume - mFadeVolume) / mFadeSeconds;
-            mCurrentVolume = mFadeVolume;
-            mFadeTimer = new QTimer(this);
-            connect(mFadeTimer, &QTimer::timeout, this, &AudioPlayer::fadeStep);
-        }
-        else
-            mCurrentVolume = mVolume;
-        ca_proplist_sets(mAudioProperties, CA_PROP_CANBERRA_VOLUME, QByteArray::number(log(mCurrentVolume)*15, 'f', 2).data());
-#else
-        ca_proplist_sets(mAudioProperties, CA_PROP_CANBERRA_VOLUME, QByteArray::number(log(mVolume)*15, 'f', 2).data());
-#endif
-    }
-    // We'll also want this cached for a time. volatile makes sure the cache is
-    // dropped after some time or when the cache is under pressure.
-    ca_proplist_sets(mAudioProperties, CA_PROP_CANBERRA_CACHE_CONTROL, "volatile");
+    connect(mPlayer, &AudioPlayer::finished, this, &AudioPlayerThread::playFinished);
 
     mPlayedOnce = false;
     mPausing    = false;
@@ -1106,10 +1045,10 @@ void AudioPlayer::execute()
 * If it is ready to play, start playing it (for the first time or repeated).
 * If play has not yet completed, wait a bit longer.
 */
-void AudioPlayer::checkAudioPlay()
+void AudioPlayerThread::checkAudioPlay()
 {
     mMutex.lock();
-    if (!mAudioContext)
+    if (mPlayer->status() != AudioPlayer::Ready)
     {
         mMutex.unlock();
         return;
@@ -1132,7 +1071,7 @@ void AudioPlayer::checkAudioPlay()
             {
                 // Pause before playing the file again
                 mPausing = true;
-                QTimer::singleShot(mRepeatPause * 1000, this, &AudioPlayer::checkAudioPlay);   //NOLINT(clang-analyzer-cplusplus.NewDeleteLeaks)
+                QTimer::singleShot(mRepeatPause * 1000, this, &AudioPlayerThread::checkAudioPlay);   //NOLINT(clang-analyzer-cplusplus.NewDeleteLeaks)
                 mMutex.unlock();
                 return;
             }
@@ -1141,116 +1080,52 @@ void AudioPlayer::checkAudioPlay()
     }
 
     // Start playing the file, either for the first time or again
-    qCDebug(KALARM_LOG) << "AudioPlayer::checkAudioPlay: start";
-    const int result = ca_context_play_full(mAudioContext, SOUND_ID, mAudioProperties, &ca_finish_callback, this);
-    if (result != CA_SUCCESS)
-        qCWarning(KALARM_LOG) << "AudioPlayer::execute: Failed to play sound with canberra:" << ca_strerror(result);
-#ifdef ENABLE_FADE
-    else if (mVolume != mCurrentVolume)
-    {
-        mFadeStart = time(nullptr);
-        mFadeTimer->start(1000);
-    }
-#endif
+    qCDebug(KALARM_LOG) << "AudioPlayerThread::checkAudioPlay: start";
+    mPlayer->play();
     mMutex.unlock();
-}
-
-#ifdef ENABLE_FADE
-// Canberra currently doesn't seem to allow the volume to be adjusted while playing.
-
-/******************************************************************************
-* Called every second to fade the volume.
-*/
-void AudioPlayer::fadeStep()
-{
-    qCDebug(KALARM_LOG) << "AudioPlayer::fadeStep";
-    mMutex.lock();
-    if (mFadeStart)
-    {
-        float volume;
-        time_t elapsed = time(nullptr) - mFadeStart;
-        if (elapsed >= mFadeSeconds)
-        {
-            volume = mVolume;
-            mFadeStart = 0;
-            mFadeTimer->stop();
-        }
-        else
-            volume = mFadeVolume + (mVolume - mFadeVolume) * elapsed / mFadeSeconds;
-volume = 1.0f;
-        ca_context_change_props(mAudioContext,
-                                CA_PROP_CANBERRA_VOLUME, QByteArray::number(log(volume)*15, 'f', 2).data(),
-                                nullptr);
-    }
-    mMutex.unlock();
-}
-#endif
-
-/******************************************************************************
-* Called by Canberra to notify play completion or cancellation.
-*/
-void AudioPlayer::ca_finish_callback(ca_context*, uint32_t id, int errorCode, void* userdata)
-{
-    QMetaObject::invokeMethod(static_cast<AudioPlayer*>(userdata), "playFinished", Q_ARG(uint32_t, id), Q_ARG(int, errorCode));
 }
 
 /******************************************************************************
 * Called to notify play completion or cancellation.
 */
-void AudioPlayer::playFinished(uint32_t id, int errorCode)
+void AudioPlayerThread::playFinished(bool ok)
 {
-    Q_UNUSED(id)
-    qCDebug(KALARM_LOG) << "AudioPlayer::playFinished:" << mFile;
-#ifdef ENABLE_FADE
-    mFadeStart = 0;
-#endif
-    switch (errorCode)
+    if (ok)
     {
-        case CA_SUCCESS:
-        case CA_ERROR_CANCELED:
-            mMutex.lock();
-            if (mStopping)
-                deleteLater();
-            mMutex.unlock();
-            QTimer::singleShot(0, this, &AudioPlayer::checkAudioPlay);   //NOLINT(clang-analyzer-cplusplus.NewDeleteLeaks)
-            return;
-        default:
-        {
-            qCCritical(KALARM_LOG) << "AudioPlayer::playFinished: Play failure:" << mFile << ":" << ca_strerror(errorCode);
-            QMutexLocker locker(&mMutex);
-            mError = xi18nc("@info", "<para>Error playing audio file: <filename>%1</filename></para><para>%2</para>", mFile, QString::fromUtf8(ca_strerror(errorCode)));
-            exit(1);
-            break;
-        }
+        mMutex.lock();
+        if (mStopping)
+            deleteLater();
+        mMutex.unlock();
+        QTimer::singleShot(0, this, &AudioPlayerThread::checkAudioPlay);   //NOLINT(clang-analyzer-cplusplus.NewDeleteLeaks)
     }
+    else
+        exit(1);
 }
 
 /******************************************************************************
 * Called when play completes, the Silence button is clicked, or the display is
 * closed, to terminate audio access.
 */
-void AudioPlayer::stop()
+void AudioPlayerThread::stop()
 {
-    qCDebug(KALARM_LOG) << "AudioPlayer::stop";
+    qCDebug(KALARM_LOG) << "AudioPlayerThread::stop";
     mMutex.lock();
     if (!mInstance)
-        return;    // this instance has now been deleted
-    mStopping = true;
-    if (mAudioContext)
     {
-        const int result = ca_context_cancel(mAudioContext, SOUND_ID);
-        if (result != CA_SUCCESS)
-            qCWarning(KALARM_LOG) << "AudioPlayer::stop: Failed to cancel audio playing:" << ca_strerror(result);
+        mMutex.unlock();
+        return;    // this instance has now been deleted
     }
+    mStopping = true;
+    mPlayer->stop();
     mMutex.unlock();
     if (mInstance)    // guard against this instance having already been deleted
         deleteLater();
 }
 
-QString AudioPlayer::error() const
+QString AudioPlayerThread::error() const
 {
     QMutexLocker locker(&mMutex);
-    return mError;
+    return mPlayer->error();
 }
 
 /******************************************************************************

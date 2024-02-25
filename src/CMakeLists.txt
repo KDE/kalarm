@@ -177,6 +177,7 @@ set(kalarm_bin_SRCS ${libkalarm_SRCS} ${resources_SRCS}
     kalarmapp.cpp
     mainwindowbase.cpp
     mainwindow.cpp
+    audioplayer.cpp
     messagedisplay.cpp
     messagedisplayhelper.cpp
     messagenotification.cpp
@@ -226,6 +227,7 @@ set(kalarm_bin_SRCS ${libkalarm_SRCS} ${resources_SRCS}
     kalarmapp.h
     mainwindowbase.h
     mainwindow.h
+    audioplayer.h
     messagedisplay.h
     messagedisplayhelper.h
     messagenotification.h
@@ -322,7 +324,6 @@ target_link_libraries(kalarm_bin
     KF6::KIOFileWidgets
     KF6::Crash
     KF6::StatusNotifierItem
-    Phonon::phonon4qt6
     KF6::CalendarCore
     KPim6::CalendarUtils
     KF6::Contacts
