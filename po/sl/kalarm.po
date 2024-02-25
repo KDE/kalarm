@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-02-24 00:37+0000\n"
-"PO-Revision-Date: 2024-01-23 13:21+0100\n"
+"PO-Revision-Date: 2024-02-24 08:27+0100\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -4726,13 +4726,13 @@ msgstr "Podsistem besedilo-v-govor ni na voljo"
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot initialize audio player: %1"
-msgstr ""
+msgstr "Ni mogoče inicializirati predvajalnika zvoka: %1"
 
 #: messagedisplayhelper.cpp:1068
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot set audio player properties: %1"
-msgstr ""
+msgstr "Ni mogoče nastaviti lastnosti predvajalnika zvoka: %1"
 
 #: messagedisplayhelper.cpp:1221
 #, kde-kuit-format

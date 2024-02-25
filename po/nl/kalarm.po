@@ -18,7 +18,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-02-24 00:37+0000\n"
-"PO-Revision-Date: 2024-01-20 14:42+0100\n"
+"PO-Revision-Date: 2024-02-24 11:08+0100\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -4969,13 +4969,13 @@ msgstr "Subsysteem tekst naar spraak is niet beschikbaar"
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot initialize audio player: %1"
-msgstr ""
+msgstr "Kan audiospeler niet initialiseren: %1"
 
 #: messagedisplayhelper.cpp:1068
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot set audio player properties: %1"
-msgstr ""
+msgstr "Kan eigenschappen van audiospeler niet instellen: %1"
 
 #: messagedisplayhelper.cpp:1221
 #, kde-kuit-format

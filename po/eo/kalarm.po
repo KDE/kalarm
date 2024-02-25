@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-02-24 00:37+0000\n"
-"PO-Revision-Date: 2024-01-20 15:45+0100\n"
+"PO-Revision-Date: 2024-02-24 21:13+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -4677,13 +4677,13 @@ msgstr "Tekst-al-parola subsistemo ne haveblas"
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot initialize audio player: %1"
-msgstr ""
+msgstr "Ne eblas pravalorizi aŭdludilon: %1"
 
 #: messagedisplayhelper.cpp:1068
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot set audio player properties: %1"
-msgstr ""
+msgstr "Ne eblas meti aŭdludilajn proprecojn: %1"
 
 #: messagedisplayhelper.cpp:1221
 #, kde-kuit-format
@@ -8619,7 +8619,3 @@ msgstr ""
 #, kde-format
 msgid "Number of minutes before alarm to wake from suspend"
 msgstr "Nombro da minutoj antaŭ alarmo por veki el suspendo"
-
-#~ msgctxt "@info"
-#~ msgid "Cannot open audio file: <filename>%1</filename>"
-#~ msgstr "Ne povas malfermi sondosieron: <filename>%1</filename>"

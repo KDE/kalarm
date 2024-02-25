@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-02-24 00:37+0000\n"
-"PO-Revision-Date: 2024-01-20 19:41+0200\n"
+"PO-Revision-Date: 2024-02-24 08:45+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
 "Language: uk\n"
@@ -4764,13 +4764,13 @@ msgstr "Підсистема виголошення текстів недост�
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot initialize audio player: %1"
-msgstr ""
+msgstr "Не вдалося ініціалізувати звуковий програвач: %1"
 
 #: messagedisplayhelper.cpp:1068
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot set audio player properties: %1"
-msgstr ""
+msgstr "Не вдалося встановити властивості звукового програвача: %1"
 
 #: messagedisplayhelper.cpp:1221
 #, kde-kuit-format

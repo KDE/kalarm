@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-02-24 00:37+0000\n"
-"PO-Revision-Date: 2024-01-20 04:04+0100\n"
+"PO-Revision-Date: 2024-02-24 03:24+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -4707,13 +4707,13 @@ msgstr "ტექსტის-ხმამაღლა-წაკითხვი�
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot initialize audio player: %1"
-msgstr ""
+msgstr "აუდიოს დამკვრელის ინიციალიზაციის შეცდომა: %1"
 
 #: messagedisplayhelper.cpp:1068
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot set audio player properties: %1"
-msgstr ""
+msgstr "აუდიოს დამკვრელის თვისებების მიღება შეუძლებელია: %1"
 
 #: messagedisplayhelper.cpp:1221
 #, kde-kuit-format
