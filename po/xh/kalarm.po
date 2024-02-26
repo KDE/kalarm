@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-24 00:37+0000\n"
+"POT-Creation-Date: 2024-02-26 00:38+0000\n"
 "PO-Revision-Date: 2002-10-12 14:57+0200\n"
 "Last-Translator: Thelma Lungcuzo <thelma@translate.org.za>\n"
 "Language-Team: Xhosa <xhosa@translate.org.za>\n"
@@ -148,7 +148,7 @@ msgctxt "@option:radio Defer for time interval"
 msgid "Defer for:"
 msgstr "Lizaku kucinywa kwi:"
 
-#: alarmtimewidget.cpp:137 editdlg.cpp:326
+#: alarmtimewidget.cpp:137 editdlg.cpp:327
 #, fuzzy, kde-format
 #| msgid "Time from no&w:"
 msgctxt "@option:radio"
@@ -173,7 +173,7 @@ msgstr ""
 "Cwangcisa i alarm emva kwexesha elicaziweyo lesithuba esifutshane ukusuka "
 "ngoku."
 
-#: alarmtimewidget.cpp:149 editdlg.cpp:337
+#: alarmtimewidget.cpp:149 editdlg.cpp:338
 #, fuzzy, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid "<para>%1</para><para>%2</para>"
@@ -283,6 +283,25 @@ msgctxt "@info"
 msgid "Alarm time has already expired"
 msgstr "Ixesha le alamu seliphelelwe lixesha"
 
+#: audioplayer.cpp:69
+#, kde-kuit-format
+msgctxt "@info"
+msgid "Cannot initialize audio player: %1"
+msgstr ""
+
+#: audioplayer.cpp:92
+#, kde-kuit-format
+msgctxt "@info"
+msgid "Cannot set audio player properties: %1"
+msgstr ""
+
+#: audioplayer.cpp:166 audioplayer.cpp:239
+#, fuzzy, kde-kuit-format
+msgctxt "@info"
+msgid ""
+"<para>Error playing audio file: <filename>%1</filename></para><para>%2</para>"
+msgstr "Impazamo ukuvula ifayile !!"
+
 #: autostart/autostart.cpp:48
 #, fuzzy, kde-format
 msgid "KAlarm Autostart"
@@ -324,13 +343,13 @@ msgctxt "@title:window"
 msgid "Import Birthdays From KAddressBook"
 msgstr ""
 
-#: birthdaydlg.cpp:63 editdlg.cpp:242
+#: birthdaydlg.cpp:63 editdlg.cpp:243
 #, fuzzy, kde-format
 msgctxt "@label:textbox"
 msgid "Alarm name:"
 msgstr "Ukungaqgibeki kwe Alarm"
 
-#: birthdaydlg.cpp:68 editdlg.cpp:250
+#: birthdaydlg.cpp:68 editdlg.cpp:251
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1992,110 +2011,110 @@ msgstr ""
 "Ayikwazi ukulayisha phezulu icalendar kwi\n"
 "'%1'"
 
-#: editdlg.cpp:77
+#: editdlg.cpp:78
 #, fuzzy, kde-format
 #| msgid "&Recurrence"
 msgctxt "@title:tab"
 msgid "Recurrence - [%1]"
 msgstr "&Isenzeko esiphindayo"
 
-#: editdlg.cpp:84
+#: editdlg.cpp:85
 #, kde-format
 msgctxt "@option:check"
 msgid "Show in KOrganizer"
 msgstr ""
 
-#: editdlg.cpp:180
+#: editdlg.cpp:181
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Alarm Template [read-only]"
 msgstr "Ukungaqgibeki kwe Alarm"
 
-#: editdlg.cpp:181
+#: editdlg.cpp:182
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Archived Alarm [read-only]"
 msgstr "Sebenzisa %1"
 
-#: editdlg.cpp:182
+#: editdlg.cpp:183
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Alarm [read-only]"
 msgstr "Sebenzisa %1"
 
-#: editdlg.cpp:193
+#: editdlg.cpp:194
 #, fuzzy, kde-format
 #| msgid "Schedule the alarm at the specified time."
 msgctxt "@info:whatsthis"
 msgid "Schedule the alarm at the specified time."
 msgstr "Cwangcisa i alamu kwixesha elikhankanyiweyo."
 
-#: editdlg.cpp:196
+#: editdlg.cpp:197
 #, fuzzy, kde-format
 msgctxt "@action:button"
 msgid "Load Template..."
 msgstr "Ukungaqgibeki kwe Alarm"
 
-#: editdlg.cpp:198
+#: editdlg.cpp:199
 #, fuzzy, kde-format
 msgctxt "@info:tooltip"
 msgid "Select an alarm template to preset the alarm"
 msgstr "Faka umhla wokucwangcisa i alarm."
 
-#: editdlg.cpp:202
+#: editdlg.cpp:203
 #, kde-format
 msgctxt "@action:button"
 msgid "Try"
 msgstr ""
 
-#: editdlg.cpp:212
+#: editdlg.cpp:213
 #, fuzzy, kde-format
 #| msgid "&Alarm"
 msgctxt "@title:tab"
 msgid "Alarm"
 msgstr "&I Alamu"
 
-#: editdlg.cpp:242
+#: editdlg.cpp:243
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Template name:"
 msgstr ""
 
-#: editdlg.cpp:249
+#: editdlg.cpp:250
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the name of the alarm template"
 msgstr "Faka umbhalo we alamu yomyalezo.Isenokuba ziilayini-ezinizi."
 
-#: editdlg.cpp:255
+#: editdlg.cpp:256
 #, fuzzy, kde-format
 #| msgid "Action"
 msgctxt "@title:group"
 msgid "Action"
 msgstr "Intshukumo"
 
-#: editdlg.cpp:264
+#: editdlg.cpp:265
 #, fuzzy, kde-format
 #| msgid "Deferred Alarm"
 msgctxt "@title:group"
 msgid "Deferred Alarm"
 msgstr "I Alamu Ecinyiweyo"
 
-#: editdlg.cpp:267
+#: editdlg.cpp:268
 #, fuzzy, kde-format
 #| msgid "Deferred to:"
 msgctxt "@label"
 msgid "Deferred to:"
 msgstr "Lizaku kucinywa kwi:"
 
-#: editdlg.cpp:272
+#: editdlg.cpp:273
 #, fuzzy, kde-format
 #| msgid "C&hange..."
 msgctxt "@action:button"
 msgid "Change..."
 msgstr "T&shintsha..."
 
-#: editdlg.cpp:274
+#: editdlg.cpp:275
 #, fuzzy, kde-format
 #| msgid "Change the alarm's deferred time, or cancel the deferral"
 msgctxt "@info:whatsthis"
@@ -2103,20 +2122,20 @@ msgid "Change the alarm's deferred time, or cancel the deferral"
 msgstr ""
 "Tshintsha ixesha lokucima i alamu, okanye rhoxisa ebekelwe ixesha elizayo"
 
-#: editdlg.cpp:285 editdlg.cpp:346
+#: editdlg.cpp:286 editdlg.cpp:347
 #, fuzzy, kde-format
 #| msgid "Time"
 msgctxt "@title:group"
 msgid "Time"
 msgstr "Ixesha"
 
-#: editdlg.cpp:292
+#: editdlg.cpp:293
 #, fuzzy, kde-format
 msgctxt "@option:radio"
 msgid "Default time"
 msgstr "&Libazisa kuhla/ixesha:"
 
-#: editdlg.cpp:294
+#: editdlg.cpp:295
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2124,19 +2143,19 @@ msgid ""
 "default start time will be used."
 msgstr "Faka ixesha lokugqibela lokuphinda i alarm"
 
-#: editdlg.cpp:302
+#: editdlg.cpp:303
 #, fuzzy, kde-format
 msgctxt "@option:radio"
 msgid "Time:"
 msgstr "Ixesha"
 
-#: editdlg.cpp:304
+#: editdlg.cpp:305
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid "Specify a start time for alarms based on this template."
 msgstr "Faka ixesha lokugqibela lokuphinda i alarm"
 
-#: editdlg.cpp:310
+#: editdlg.cpp:311
 #, fuzzy, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2144,13 +2163,13 @@ msgid ""
 "%1</para>"
 msgstr "Faka ixesha lokugqibela lokuphinda i alarm"
 
-#: editdlg.cpp:317
+#: editdlg.cpp:318
 #, fuzzy, kde-format
 msgctxt "@option:radio"
 msgid "Date only"
 msgstr "Cima i Alarm"
 
-#: editdlg.cpp:319
+#: editdlg.cpp:320
 #, fuzzy, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2158,7 +2177,7 @@ msgid ""
 "template."
 msgstr "Faka ixesha lokugqibela lokuphinda i alarm"
 
-#: editdlg.cpp:329
+#: editdlg.cpp:330
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2168,38 +2187,38 @@ msgstr ""
 "Cwangcisa i alarm emva kwexesha elicaziweyo lesithuba esifutshane ukusuka "
 "ngoku."
 
-#: editdlg.cpp:385
+#: editdlg.cpp:386
 #, kde-format
 msgctxt "@option:check"
 msgid "Wake from suspend"
 msgstr ""
 
-#: editdlg.cpp:387
+#: editdlg.cpp:388
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "Check to wake the system if the alarm triggers while the system is suspended"
 msgstr ""
 
-#: editdlg.cpp:404
+#: editdlg.cpp:405
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to copy the alarm into KOrganizer's calendar"
 msgstr ""
 
-#: editdlg.cpp:1004
+#: editdlg.cpp:1007
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "You must enter a name for the alarm template"
 msgstr "Faka umbhalo we alamu yomyalezo.Isenokuba ziilayini-ezinizi."
 
-#: editdlg.cpp:1008
+#: editdlg.cpp:1011
 #, kde-format
 msgctxt "@info"
 msgid "Template name is already in use"
 msgstr ""
 
-#: editdlg.cpp:1031
+#: editdlg.cpp:1034
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2208,7 +2227,7 @@ msgid ""
 "para>"
 msgstr ""
 
-#: editdlg.cpp:1063
+#: editdlg.cpp:1066
 #, kde-format
 msgctxt "@info The parameter is a date value"
 msgid ""
@@ -2216,7 +2235,7 @@ msgid ""
 "adjusted to the date of the next recurrence (%1)."
 msgstr ""
 
-#: editdlg.cpp:1067
+#: editdlg.cpp:1070
 #, kde-format
 msgctxt "@info The parameter is a date/time value"
 msgid ""
@@ -2224,19 +2243,19 @@ msgid ""
 "will be adjusted to the date/time of the next recurrence (%1)."
 msgstr ""
 
-#: editdlg.cpp:1089
+#: editdlg.cpp:1092
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Recurrence has already expired"
 msgstr "Ixesha le alamu seliphelelwe lixesha"
 
-#: editdlg.cpp:1094
+#: editdlg.cpp:1097
 #, kde-format
 msgctxt "@info"
 msgid "The alarm will never occur during working hours"
 msgstr ""
 
-#: editdlg.cpp:1123
+#: editdlg.cpp:1126
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2244,7 +2263,7 @@ msgid ""
 "%1</interface> is checked."
 msgstr ""
 
-#: editdlg.cpp:1138
+#: editdlg.cpp:1141
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid ""
@@ -2253,7 +2272,7 @@ msgid ""
 msgstr ""
 "Uhlobo lophinda-phindo lwe alarm okanye isithuba sokuphumla esiphindekayo."
 
-#: editdlg.cpp:1145
+#: editdlg.cpp:1148
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -2261,31 +2280,31 @@ msgid ""
 "or weeks for a date-only alarm"
 msgstr ""
 
-#: editdlg.cpp:1176
+#: editdlg.cpp:1179
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "You must select a calendar to save the alarm in"
 msgstr "Faka umhla wokucwangcisa i alarm."
 
-#: editdlg.cpp:1257
+#: editdlg.cpp:1260
 #, kde-format
 msgctxt "@action:Button"
 msgid "Fewer Options <<"
 msgstr ""
 
-#: editdlg.cpp:1258
+#: editdlg.cpp:1261
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show fewer options"
 msgstr ""
 
-#: editdlg.cpp:1263
+#: editdlg.cpp:1266
 #, kde-format
 msgctxt "@action:button"
 msgid "More Options >>"
 msgstr ""
 
-#: editdlg.cpp:1264
+#: editdlg.cpp:1267
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show more options"
@@ -2395,7 +2414,7 @@ msgctxt "@info:whatsthis"
 msgid "Enter the name or URL of a text or image file to display."
 msgstr "Faka igama lombhalo wefayile, okanye iURL, ukuze ubonise."
 
-#: editdlgtypes.cpp:193 editdlgtypes.cpp:882 sounddlg.cpp:184
+#: editdlgtypes.cpp:193 editdlgtypes.cpp:882 sounddlg.cpp:182
 #, fuzzy, kde-format
 msgctxt "@info:tooltip"
 msgid "Choose a file"
@@ -3134,37 +3153,37 @@ msgctxt "@action"
 msgid "Stop Play"
 msgstr ""
 
-#: functions.cpp:193
+#: functions.cpp:196
 #, fuzzy, kde-format
 msgctxt "@action"
 msgid "Enable Alarms"
 msgstr "&Yenza Iialarms"
 
-#: functions.cpp:219
+#: functions.cpp:222
 #, fuzzy, kde-format
 msgctxt "@action"
 msgid "Spread Windows"
 msgstr "Ukungaqgibeki kwe Alarm"
 
-#: functions.cpp:875
+#: functions.cpp:878
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Import Calendar Files"
 msgstr "URL ye fayile ye calendar"
 
-#: functions.cpp:936
+#: functions.cpp:939
 #, fuzzy, kde-format
 msgctxt "@item:inlistbox File type selection filter"
 msgid "Calendar Files"
 msgstr "URL ye fayile ye calendar"
 
-#: functions.cpp:937
+#: functions.cpp:940
 #, kde-format
 msgctxt "@title:window"
 msgid "Choose Export Calendar"
 msgstr ""
 
-#: functions.cpp:962
+#: functions.cpp:965
 #, fuzzy, kde-kuit-format
 msgctxt "@info"
 msgid "Error loading calendar to append to:<nl/><filename>%1</filename>"
@@ -3172,7 +3191,7 @@ msgstr ""
 "Ayikwazi ukuvula icalendar:\n"
 "%1"
 
-#: functions.cpp:1001
+#: functions.cpp:1004
 #, fuzzy, kde-kuit-format
 msgctxt "@info"
 msgid "Failed to save new calendar to:<nl/><filename>%1</filename>"
@@ -3180,7 +3199,7 @@ msgstr ""
 "Ayikwazi ukulayisha phezulu icalendar kwi\n"
 "'%1'"
 
-#: functions.cpp:1014
+#: functions.cpp:1017
 #, fuzzy, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot upload new calendar to:<nl/><filename>%1</filename>"
@@ -3188,79 +3207,79 @@ msgstr ""
 "Ayikwazi ukuvula icalendar:\n"
 "%1"
 
-#: functions.cpp:1033
+#: functions.cpp:1036
 #, kde-format
 msgctxt "@info"
 msgid "Unable to show alarms in KOrganizer"
 msgstr ""
 
-#: functions.cpp:1034
+#: functions.cpp:1037
 #, kde-format
 msgctxt "@info"
 msgid "Unable to show alarm in KOrganizer"
 msgstr ""
 
-#: functions.cpp:1037
+#: functions.cpp:1040
 #, kde-format
 msgctxt "@info"
 msgid "Unable to update alarm in KOrganizer"
 msgstr ""
 
-#: functions.cpp:1040
+#: functions.cpp:1043
 #, kde-format
 msgctxt "@info"
 msgid "Unable to delete alarms from KOrganizer"
 msgstr ""
 
-#: functions.cpp:1041
+#: functions.cpp:1044
 #, kde-format
 msgctxt "@info"
 msgid "Unable to delete alarm from KOrganizer"
 msgstr ""
 
-#: functions.cpp:1051
+#: functions.cpp:1054
 #, fuzzy, kde-kuit-format
 msgctxt "@info"
 msgid "<para>%1</para><para>(Could not start KOrganizer)</para>"
 msgstr "Ufuna ngokwenene ukucima i alarm ekhetiweyo?"
 
-#: functions.cpp:1054
+#: functions.cpp:1057
 #, fuzzy, kde-kuit-format
 msgctxt "@info"
 msgid "<para>%1</para><para>(KOrganizer not fully started)</para>"
 msgstr "Ufuna ngokwenene ukucima i alarm ekhetiweyo?"
 
-#: functions.cpp:1057
+#: functions.cpp:1060
 #, fuzzy, kde-kuit-format
 msgctxt "@info"
 msgid "<para>%1</para><para>(Error communicating with KOrganizer)</para>"
 msgstr "Ufuna ngokwenene ukucima i alarm ekhetiweyo?"
 
-#: functions.cpp:1307
+#: functions.cpp:1310
 #, kde-format
 msgctxt "info"
 msgid "The scheduled Wake from Suspend has been cancelled."
 msgstr ""
 
-#: functions.cpp:1341
+#: functions.cpp:1344
 #, kde-format
 msgctxt "@info"
 msgid "Error obtaining authorization (%1)"
 msgstr ""
 
-#: functions.cpp:1390
+#: functions.cpp:1393
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "You must enable a template calendar to save the template in"
 msgstr "Faka umhla wokucwangcisa i alarm."
 
-#: functions.cpp:1613
+#: functions.cpp:1616
 #, fuzzy, kde-kuit-format
 msgctxt "@info Please set the 'From' email address..."
 msgid "<para>%1</para><para>Please set it in the Configuration dialog.</para>"
 msgstr "Ufuna ngokwenene ukucima i alarm ekhetiweyo?"
 
-#: functions.cpp:1617
+#: functions.cpp:1620
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3268,61 +3287,61 @@ msgid ""
 "alarms now?</para>"
 msgstr ""
 
-#: functions.cpp:1618
+#: functions.cpp:1621
 #, fuzzy, kde-format
 msgctxt "@action:button"
 msgid "Enable"
 msgstr "&Yenza Iialarms"
 
-#: functions.cpp:1618
+#: functions.cpp:1621
 #, fuzzy, kde-format
 msgctxt "@action:button"
 msgid "Keep Disabled"
 msgstr "&Yenza Iialarms"
 
-#: functions.cpp:1987
+#: functions.cpp:1990
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Error saving alarms"
 msgstr "Impazamo ukuvula ifayile !!"
 
-#: functions.cpp:1988
+#: functions.cpp:1991
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Error saving alarm"
 msgstr "Impazamo ukuvula ifayile !!"
 
-#: functions.cpp:1991
+#: functions.cpp:1994
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Error deleting alarms"
 msgstr "Impazamo ukuvula ifayile !!"
 
-#: functions.cpp:1992
+#: functions.cpp:1995
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Error deleting alarm"
 msgstr "Impazamo ukuvula ifayile !!"
 
-#: functions.cpp:1995
+#: functions.cpp:1998
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Error saving reactivated alarms"
 msgstr "Hlela i Alarm"
 
-#: functions.cpp:1996
+#: functions.cpp:1999
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Error saving reactivated alarm"
 msgstr "Hlela i Alarm"
 
-#: functions.cpp:1999
+#: functions.cpp:2002
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Error saving alarm templates"
 msgstr "Impazamo ukuvula ifayile !!"
 
-#: functions.cpp:2000
+#: functions.cpp:2003
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Error saving alarm template"
@@ -3447,7 +3466,7 @@ msgctxt "@info 'From' email address"
 msgid "From:"
 msgstr "%1: idilesi ye email eyongeziweyo"
 
-#: kalarmcalendar/alarmtext.cpp:507 messagedisplayhelper.cpp:342
+#: kalarmcalendar/alarmtext.cpp:507 messagedisplayhelper.cpp:336
 #, fuzzy, kde-format
 msgctxt "@info Email addressee"
 msgid "To:"
@@ -3467,7 +3486,7 @@ msgctxt "@info"
 msgid "Date:"
 msgstr "Ixesha"
 
-#: kalarmcalendar/alarmtext.cpp:510 messagedisplayhelper.cpp:344
+#: kalarmcalendar/alarmtext.cpp:510 messagedisplayhelper.cpp:338
 #, fuzzy, kde-format
 msgctxt "@info Email subject"
 msgid "Subject:"
@@ -3981,7 +4000,7 @@ msgctxt "@info Using default font"
 msgid "Default"
 msgstr "&Libazisa kuhla/ixesha:"
 
-#: kalarmcalendar/kaeventformatter.cpp:365 messagedisplayhelper.cpp:223
+#: kalarmcalendar/kaeventformatter.cpp:365 messagedisplayhelper.cpp:217
 #, kde-format
 msgctxt "@info"
 msgid "Reminder"
@@ -4576,52 +4595,52 @@ msgctxt "@info"
 msgid "<para>Cannot defer alarm:</para><para>Alarm not found.</para>"
 msgstr "Ufuna ngokwenene ukucima i alarm ekhetiweyo?"
 
-#: messagedisplayhelper.cpp:209
+#: messagedisplayhelper.cpp:203
 #, kde-format
 msgctxt "@title:window"
 msgid "Reminder"
 msgstr ""
 
-#: messagedisplayhelper.cpp:210 messagedisplayhelper.cpp:414
+#: messagedisplayhelper.cpp:204 messagedisplayhelper.cpp:408
 #, fuzzy, kde-format
 #| msgid "Message"
 msgctxt "@title:window"
 msgid "Message"
 msgstr "Umyalezo"
 
-#: messagedisplayhelper.cpp:301
+#: messagedisplayhelper.cpp:295
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "File is a folder"
 msgstr "Ifayile sisilawuli"
 
-#: messagedisplayhelper.cpp:301
+#: messagedisplayhelper.cpp:295
 #, fuzzy, kde-format
 #| msgid "Failed to open file"
 msgctxt "@info"
 msgid "Failed to open file"
 msgstr "Ayiphumelelanga ukuvula ifayile"
 
-#: messagedisplayhelper.cpp:301
+#: messagedisplayhelper.cpp:295
 #, fuzzy, kde-format
 #| msgid "File not found"
 msgctxt "@info"
 msgid "File not found"
 msgstr "Ifayile ayifumenwanga"
 
-#: messagedisplayhelper.cpp:358
+#: messagedisplayhelper.cpp:352
 #, kde-format
 msgctxt "@title:window"
 msgid "Error"
 msgstr ""
 
-#: messagedisplayhelper.cpp:487
+#: messagedisplayhelper.cpp:481
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Today"
 msgstr "namhlanje"
 
-#: messagedisplayhelper.cpp:489
+#: messagedisplayhelper.cpp:483
 #, kde-format
 msgctxt "@info"
 msgid "Tomorrow"
@@ -4629,7 +4648,7 @@ msgid_plural "in %1 days' time"
 msgstr[0] ""
 msgstr[1] ""
 
-#: messagedisplayhelper.cpp:491
+#: messagedisplayhelper.cpp:485
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "in 1 week's time"
@@ -4637,7 +4656,7 @@ msgid_plural "in %1 weeks' time"
 msgstr[0] "1 Umzuzu"
 msgstr[1] "%1 Imizuzu"
 
-#: messagedisplayhelper.cpp:505
+#: messagedisplayhelper.cpp:499
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "in 1 minute's time"
@@ -4645,7 +4664,7 @@ msgid_plural "in %1 minutes' time"
 msgstr[0] "1 Umzuzu"
 msgstr[1] "%1 Imizuzu"
 
-#: messagedisplayhelper.cpp:507
+#: messagedisplayhelper.cpp:501
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "in 1 hour's time"
@@ -4653,7 +4672,7 @@ msgid_plural "in %1 hours' time"
 msgstr[0] "1 Umzuzu"
 msgstr[1] "%1 Imizuzu"
 
-#: messagedisplayhelper.cpp:510
+#: messagedisplayhelper.cpp:504
 #, fuzzy, kde-format
 msgctxt "@item:intext inserted into 'in ... %1 minute's time' below"
 msgid "1 hour"
@@ -4661,7 +4680,7 @@ msgid_plural "%1 hours"
 msgstr[0] "1 Iyure"
 msgstr[1] "%1 Iiyure"
 
-#: messagedisplayhelper.cpp:511
+#: messagedisplayhelper.cpp:505
 #, fuzzy, kde-format
 msgctxt "@info '%2' is the previous message '1 hour'/'%1 hours'"
 msgid "in %2 1 minute's time"
@@ -4669,36 +4688,17 @@ msgid_plural "in %2 %1 minutes' time"
 msgstr[0] "1 Umzuzu"
 msgstr[1] "%1 Imizuzu"
 
-#: messagedisplayhelper.cpp:853
+#: messagedisplayhelper.cpp:847
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Unable to speak message"
 msgstr "Ngenisa umyalezo we email."
 
-#: messagedisplayhelper.cpp:853
+#: messagedisplayhelper.cpp:847
 #, kde-format
 msgctxt "@info"
 msgid "Text-to-speech subsystem is not available"
 msgstr ""
-
-#: messagedisplayhelper.cpp:1046
-#, kde-kuit-format
-msgctxt "@info"
-msgid "Cannot initialize audio player: %1"
-msgstr ""
-
-#: messagedisplayhelper.cpp:1068
-#, kde-kuit-format
-msgctxt "@info"
-msgid "Cannot set audio player properties: %1"
-msgstr ""
-
-#: messagedisplayhelper.cpp:1221
-#, fuzzy, kde-kuit-format
-msgctxt "@info"
-msgid ""
-"<para>Error playing audio file: <filename>%1</filename></para><para>%2</para>"
-msgstr "Impazamo ukuvula ifayile !!"
 
 #: messagenotification.cpp:518
 #, fuzzy, kde-format
@@ -4816,13 +4816,13 @@ msgstr ""
 "Cima i alarm kude kubesemva.\n"
 "Uzakucelwa ucaze ukuba iboniswe kwakhona nini na i alarm."
 
-#: messagewindow.cpp:458 sounddlg.cpp:451
+#: messagewindow.cpp:458 sounddlg.cpp:441
 #, fuzzy, kde-format
 msgctxt "@info:tooltip"
 msgid "Stop sound"
 msgstr "&Isandi"
 
-#: messagewindow.cpp:459 sounddlg.cpp:452
+#: messagewindow.cpp:459 sounddlg.cpp:442
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid "Stop playing the sound"
@@ -7839,20 +7839,20 @@ msgid ""
 "command><nl/>Error code: %3."
 msgstr ""
 
-#: sounddlg.cpp:42
+#: sounddlg.cpp:40
 #, fuzzy, kde-format
 #| msgid "Repeat"
 msgctxt "@option:check"
 msgid "Repeat"
 msgstr "Phinda"
 
-#: sounddlg.cpp:43
+#: sounddlg.cpp:41
 #, fuzzy, kde-format
 msgctxt "@option:check"
 msgid "Set volume"
 msgstr "Alarm Entsha"
 
-#: sounddlg.cpp:53
+#: sounddlg.cpp:51
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -7860,143 +7860,143 @@ msgid ""
 "message is displayed."
 msgstr "Xa ijongiwe, isandi sizkuvakala xa umyalezo ebonisiwe."
 
-#: sounddlg.cpp:149
+#: sounddlg.cpp:147
 #, fuzzy, kde-format
 msgctxt "@label"
 msgid "Sound file:"
 msgstr "Phelisa e&mva:"
 
-#: sounddlg.cpp:166 sounddlg.cpp:464
+#: sounddlg.cpp:164 sounddlg.cpp:454
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Test the sound"
 msgstr ""
 
-#: sounddlg.cpp:167 sounddlg.cpp:465
+#: sounddlg.cpp:165 sounddlg.cpp:455
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid "Play the selected sound file."
 msgstr "Khrtha Ifayile Yesandi "
 
-#: sounddlg.cpp:174
+#: sounddlg.cpp:172
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the name or URL of a sound file to play."
 msgstr "Faka igama lombhalo wefayile, okanye iURL, ukuze ubonise."
 
-#: sounddlg.cpp:185
+#: sounddlg.cpp:183
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select a sound file to play."
 msgstr "Khetha ifayile yombhalo onokuyibonisa."
 
-#: sounddlg.cpp:207
+#: sounddlg.cpp:205
 #, fuzzy, kde-format
 msgctxt "@label:spinbox Length of time to pause between repetitions"
 msgid "Pause between repetitions:"
 msgstr "Ithuba elifutshane phakathi koboniso lwe alarm"
 
-#: sounddlg.cpp:214 sounddlg.cpp:271
+#: sounddlg.cpp:212 sounddlg.cpp:269
 #, fuzzy, kde-format
 #| msgid "seconds"
 msgctxt "@label"
 msgid "seconds"
 msgstr "imizuzwana"
 
-#: sounddlg.cpp:216
+#: sounddlg.cpp:214
 #, fuzzy, kde-format
 #| msgid "Enter the number of days between repetitions of the alarm"
 msgctxt "@info:whatsthis"
 msgid "Enter how many seconds to pause between repetitions."
 msgstr "Ngenisa inani lentsuku phakathi kophinda-phindo lwe alarm"
 
-#: sounddlg.cpp:219
+#: sounddlg.cpp:217
 #, fuzzy, kde-format
 msgctxt "@title:group Sound volume"
 msgid "Volume"
 msgstr "Alarm Entsha"
 
-#: sounddlg.cpp:235
+#: sounddlg.cpp:233
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select to choose the volume for playing the sound file."
 msgstr ""
 
-#: sounddlg.cpp:243
+#: sounddlg.cpp:241
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid "Choose the volume for playing the sound file."
 msgstr "Faka igama lombhalo wefayile, okanye iURL, ukuze ubonise."
 
-#: sounddlg.cpp:254
+#: sounddlg.cpp:252
 #, kde-format
 msgctxt "@option:check"
 msgid "Fade"
 msgstr ""
 
-#: sounddlg.cpp:256
+#: sounddlg.cpp:254
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select to fade the volume when the sound file first starts to play."
 msgstr ""
 
-#: sounddlg.cpp:264
+#: sounddlg.cpp:262
 #, fuzzy, kde-format
 msgctxt "@label:spinbox Time period over which to fade the sound"
 msgid "Fade time:"
 msgstr "Ayisebenzi %1 parameter"
 
-#: sounddlg.cpp:273
+#: sounddlg.cpp:271
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "Enter how many seconds to fade the sound before reaching the set volume."
 msgstr ""
 
-#: sounddlg.cpp:280
+#: sounddlg.cpp:278
 #, fuzzy, kde-format
 msgctxt "@label:slider"
 msgid "Initial volume:"
 msgstr "Alarm Entsha"
 
-#: sounddlg.cpp:289
+#: sounddlg.cpp:287
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid "Choose the initial volume for playing the sound file."
 msgstr "Faka igama lombhalo wefayile, okanye iURL, ukuze ubonise."
 
-#: soundpicker.cpp:41
+#: soundpicker.cpp:40
 #, fuzzy, kde-format
 msgctxt "@label:listbox Listbox providing audio options"
 msgid "Sound:"
 msgstr "&Isandi"
 
-#: soundpicker.cpp:42
+#: soundpicker.cpp:41
 #, kde-format
 msgctxt "@item:inlistbox No sound"
 msgid "None"
 msgstr ""
 
-#: soundpicker.cpp:43
+#: soundpicker.cpp:42
 #, fuzzy, kde-format
 #| msgid "Beep"
 msgctxt "@item:inlistbox"
 msgid "Beep"
 msgstr "Isandi"
 
-#: soundpicker.cpp:44
+#: soundpicker.cpp:43
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Speak"
 msgstr ""
 
-#: soundpicker.cpp:45
+#: soundpicker.cpp:44
 #, fuzzy, kde-format
 msgctxt "@item:inlistbox"
 msgid "Sound file"
 msgstr "Phelisa e&mva:"
 
-#: soundpicker.cpp:75
+#: soundpicker.cpp:74
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -8010,13 +8010,13 @@ msgid ""
 "list></para>"
 msgstr ""
 
-#: soundpicker.cpp:87
+#: soundpicker.cpp:86
 #, fuzzy, kde-format
 msgctxt "@info:tooltip"
 msgid "Configure sound file"
 msgstr "Khrtha Ifayile Yesandi "
 
-#: soundpicker.cpp:88
+#: soundpicker.cpp:87
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid "Configure a sound file to play when the alarm is displayed."
@@ -8024,19 +8024,19 @@ msgstr ""
 "Khetha ifayile yesandi ukuze udlale xa umyalezo eboniswa. Ukuba akukho "
 "fayile yesandi ikhethiweyo, isandi sizakukhala."
 
-#: soundpicker.cpp:257
+#: soundpicker.cpp:256
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Sound File"
 msgstr "Phelisa e&mva:"
 
-#: soundpicker.cpp:316
+#: soundpicker.cpp:315
 #, fuzzy, kde-format
 msgctxt "@item:inlistbox"
 msgid "Audio files"
 msgstr "Phelisa e&mva:"
 
-#: soundpicker.cpp:341
+#: soundpicker.cpp:338
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Choose Sound File"

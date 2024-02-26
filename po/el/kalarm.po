@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-24 00:37+0000\n"
+"POT-Creation-Date: 2024-02-26 00:38+0000\n"
 "PO-Revision-Date: 2021-09-02 09:49+0300\n"
 "Last-Translator: Stelios <sstavra@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
@@ -158,7 +158,7 @@ msgctxt "@option:radio Defer for time interval"
 msgid "Defer for:"
 msgstr "Αναβλήθηκε σε:"
 
-#: alarmtimewidget.cpp:137 editdlg.cpp:326
+#: alarmtimewidget.cpp:137 editdlg.cpp:327
 #, kde-format
 msgctxt "@option:radio"
 msgid "Time from now:"
@@ -179,7 +179,7 @@ msgid "Schedule the alarm after the specified time interval from now."
 msgstr ""
 "Προγραμματισμός του συναγερμού στο καθορισμένο χρονικό διάστημα από τώρα."
 
-#: alarmtimewidget.cpp:149 editdlg.cpp:337
+#: alarmtimewidget.cpp:149 editdlg.cpp:338
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid "<para>%1</para><para>%2</para>"
@@ -298,6 +298,27 @@ msgctxt "@info"
 msgid "Alarm time has already expired"
 msgstr "Η ώρα συναγερμού έχει ήδη παρέλθει"
 
+#: audioplayer.cpp:69
+#, kde-kuit-format
+msgctxt "@info"
+msgid "Cannot initialize audio player: %1"
+msgstr ""
+
+#: audioplayer.cpp:92
+#, kde-kuit-format
+msgctxt "@info"
+msgid "Cannot set audio player properties: %1"
+msgstr ""
+
+#: audioplayer.cpp:166 audioplayer.cpp:239
+#, kde-kuit-format
+msgctxt "@info"
+msgid ""
+"<para>Error playing audio file: <filename>%1</filename></para><para>%2</para>"
+msgstr ""
+"<para>Σφάλμα αναπαραγωγής αρχείου ήχου: <filename>%1</filename></para><para>"
+"%2</para>"
+
 #: autostart/autostart.cpp:48
 #, kde-format
 msgid "KAlarm Autostart"
@@ -339,13 +360,13 @@ msgctxt "@title:window"
 msgid "Import Birthdays From KAddressBook"
 msgstr "Εισαγωγή γενεθλίων από το KAddressBook"
 
-#: birthdaydlg.cpp:63 editdlg.cpp:242
+#: birthdaydlg.cpp:63 editdlg.cpp:243
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Alarm name:"
 msgstr "Όνομα συναγερμού:"
 
-#: birthdaydlg.cpp:68 editdlg.cpp:250
+#: birthdaydlg.cpp:68 editdlg.cpp:251
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2164,121 +2185,121 @@ msgctxt "@info"
 msgid "Failed to save calendar to <filename>%1</filename>"
 msgstr "Απέτυχε η αποθήκευση του ημερολογίου στο <filename>%1</filename>"
 
-#: editdlg.cpp:77
+#: editdlg.cpp:78
 #, kde-format
 msgctxt "@title:tab"
 msgid "Recurrence - [%1]"
 msgstr "Επανεμφάνιση - [%1]"
 
-#: editdlg.cpp:84
+#: editdlg.cpp:85
 #, kde-format
 msgctxt "@option:check"
 msgid "Show in KOrganizer"
 msgstr "Εμφάνιση στο KOrganizer"
 
-#: editdlg.cpp:180
+#: editdlg.cpp:181
 #, kde-format
 msgctxt "@title:window"
 msgid "Alarm Template [read-only]"
 msgstr "Πρότυπο συναγερμού [μόνο ανάγνωση]"
 
-#: editdlg.cpp:181
+#: editdlg.cpp:182
 #, kde-format
 msgctxt "@title:window"
 msgid "Archived Alarm [read-only]"
 msgstr "Αρχειοθετημένος συναγερμός [ανάγνωση-μόνο]"
 
-#: editdlg.cpp:182
+#: editdlg.cpp:183
 #, kde-format
 msgctxt "@title:window"
 msgid "Alarm [read-only]"
 msgstr "Συναγερμός [μόνο ανάγνωση]"
 
-#: editdlg.cpp:193
+#: editdlg.cpp:194
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Schedule the alarm at the specified time."
 msgstr "Προγραμματισμός του συναγερμού στην καθορισμένη ώρα."
 
-#: editdlg.cpp:196
+#: editdlg.cpp:197
 #, kde-format
 msgctxt "@action:button"
 msgid "Load Template..."
 msgstr "Φόρτωση προτύπου..."
 
-#: editdlg.cpp:198
+#: editdlg.cpp:199
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Select an alarm template to preset the alarm"
 msgstr "Επιλέξτε ένα πρότυπο για προρύθμιση του συναγερμού."
 
-#: editdlg.cpp:202
+#: editdlg.cpp:203
 #, kde-format
 msgctxt "@action:button"
 msgid "Try"
 msgstr "Δοκιμή"
 
-#: editdlg.cpp:212
+#: editdlg.cpp:213
 #, kde-format
 msgctxt "@title:tab"
 msgid "Alarm"
 msgstr "Συναγερμός"
 
-#: editdlg.cpp:242
+#: editdlg.cpp:243
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Template name:"
 msgstr "Όνομα προτύπου:"
 
-#: editdlg.cpp:249
+#: editdlg.cpp:250
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the name of the alarm template"
 msgstr "Εισάγετε το όνομα του προτύπου συναγερμού"
 
-#: editdlg.cpp:255
+#: editdlg.cpp:256
 #, kde-format
 msgctxt "@title:group"
 msgid "Action"
 msgstr "Ενέργεια"
 
-#: editdlg.cpp:264
+#: editdlg.cpp:265
 #, kde-format
 msgctxt "@title:group"
 msgid "Deferred Alarm"
 msgstr "Αναβολή συναγερμού"
 
-#: editdlg.cpp:267
+#: editdlg.cpp:268
 #, kde-format
 msgctxt "@label"
 msgid "Deferred to:"
 msgstr "Αναβλήθηκε σε:"
 
-#: editdlg.cpp:272
+#: editdlg.cpp:273
 #, kde-format
 msgctxt "@action:button"
 msgid "Change..."
 msgstr "Τροποποίηση..."
 
-#: editdlg.cpp:274
+#: editdlg.cpp:275
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Change the alarm's deferred time, or cancel the deferral"
 msgstr "Τροποποίηση της ώρας αναβολής, ή ακύρωσή της"
 
-#: editdlg.cpp:285 editdlg.cpp:346
+#: editdlg.cpp:286 editdlg.cpp:347
 #, kde-format
 msgctxt "@title:group"
 msgid "Time"
 msgstr "Ώρα"
 
-#: editdlg.cpp:292
+#: editdlg.cpp:293
 #, kde-format
 msgctxt "@option:radio"
 msgid "Default time"
 msgstr "Προκαθορισμένη ώρα"
 
-#: editdlg.cpp:294
+#: editdlg.cpp:295
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2288,13 +2309,13 @@ msgstr ""
 "Να μην οριστεί ώρα έναρξης για τους συναγερμούς με βάση αυτό το πρότυπο. Θα "
 "χρησιμοποιηθεί η κανονική προκαθορισμένη ώρα έναρξης."
 
-#: editdlg.cpp:302
+#: editdlg.cpp:303
 #, kde-format
 msgctxt "@option:radio"
 msgid "Time:"
 msgstr "Ώρα:"
 
-#: editdlg.cpp:304
+#: editdlg.cpp:305
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Specify a start time for alarms based on this template."
@@ -2302,7 +2323,7 @@ msgstr ""
 "Καθορισμός μιας ώρας έναρξης για συναγερμούς που βασίζονται σε αυτό το "
 "πρότυπο."
 
-#: editdlg.cpp:310
+#: editdlg.cpp:311
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2312,13 +2333,13 @@ msgstr ""
 "<para>Εισάγετε την ώρα έναρξης για συναγερμούς που βασίζονται σε αυτό το "
 "πρότυπο.</para><para>%1</para>"
 
-#: editdlg.cpp:317
+#: editdlg.cpp:318
 #, kde-format
 msgctxt "@option:radio"
 msgid "Date only"
 msgstr "Μόνο ημερομηνία"
 
-#: editdlg.cpp:319
+#: editdlg.cpp:320
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2328,7 +2349,7 @@ msgstr ""
 "Καθορίστε την επιλογή <interface>κάθε ώρα</interface> για συναγερμούς που "
 "βασίζονται σε αυτό το πρότυπο."
 
-#: editdlg.cpp:329
+#: editdlg.cpp:330
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2338,7 +2359,7 @@ msgstr ""
 "Ορίστε οι βασισμένοι σε αυτό το πρότυπο συναγερμοί να ξεκινάνε μετά το "
 "καθορισμένο χρονικό διάστημα από την ώρα δημιουργίας του συναγερμού."
 
-#: editdlg.cpp:385
+#: editdlg.cpp:386
 #, fuzzy, kde-format
 #| msgctxt "@title:window"
 #| msgid "Wake From Suspend"
@@ -2346,33 +2367,33 @@ msgctxt "@option:check"
 msgid "Wake from suspend"
 msgstr "Αφύπνιση από αναστολή"
 
-#: editdlg.cpp:387
+#: editdlg.cpp:388
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "Check to wake the system if the alarm triggers while the system is suspended"
 msgstr ""
 
-#: editdlg.cpp:404
+#: editdlg.cpp:405
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to copy the alarm into KOrganizer's calendar"
 msgstr ""
 "Κάντε κλικ για να αντιγράψετε το συναγερμό στο ημερολόγιο του KOrganizer"
 
-#: editdlg.cpp:1004
+#: editdlg.cpp:1007
 #, kde-format
 msgctxt "@info"
 msgid "You must enter a name for the alarm template"
 msgstr "Πρέπει να εισάγετε ένα όνομα για το πρότυπο συναγερμού"
 
-#: editdlg.cpp:1008
+#: editdlg.cpp:1011
 #, kde-format
 msgctxt "@info"
 msgid "Template name is already in use"
 msgstr "Το όνομα προτύπου χρησιμοποιείται ήδη"
 
-#: editdlg.cpp:1031
+#: editdlg.cpp:1034
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2381,7 +2402,7 @@ msgid ""
 "para>"
 msgstr ""
 
-#: editdlg.cpp:1063
+#: editdlg.cpp:1066
 #, kde-format
 msgctxt "@info The parameter is a date value"
 msgid ""
@@ -2392,7 +2413,7 @@ msgstr ""
 "συναγερμού. Για αυτό θα ρυθμιστεί στην ημερομηνία της επόμενης επανάληψης "
 "(%1)."
 
-#: editdlg.cpp:1067
+#: editdlg.cpp:1070
 #, kde-format
 msgctxt "@info The parameter is a date/time value"
 msgid ""
@@ -2403,19 +2424,19 @@ msgstr ""
 "συναγερμού. Για αυτό θα ρυθμιστεί στην ημερομηνία της επόμενης επανάληψης "
 "(%1)."
 
-#: editdlg.cpp:1089
+#: editdlg.cpp:1092
 #, kde-format
 msgctxt "@info"
 msgid "Recurrence has already expired"
 msgstr "Η επανεμφάνιση έχει ήδη λήξει"
 
-#: editdlg.cpp:1094
+#: editdlg.cpp:1097
 #, kde-format
 msgctxt "@info"
 msgid "The alarm will never occur during working hours"
 msgstr "Ο συναγερμός δε θα εμφανίζεται κατά τις ώρες εργασίας"
 
-#: editdlg.cpp:1123
+#: editdlg.cpp:1126
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2425,7 +2446,7 @@ msgstr ""
 "Η περίοδος της υπενθύμισης πρέπει να είναι μικρότερη από το διάστημα της "
 "επανεμφάνισης, εκτός και αν το <interface>%1</interface> είναι επιλεγμένο."
 
-#: editdlg.cpp:1138
+#: editdlg.cpp:1141
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -2435,7 +2456,7 @@ msgstr ""
 "Η διάρκεια της απλής επανάληψης συναγερμού πρέπει να είναι μικρότερη από το "
 "διάστημα επανεμφάνισης μείον οποιαδήποτε περίοδο υπενθύμισης"
 
-#: editdlg.cpp:1145
+#: editdlg.cpp:1148
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -2445,32 +2466,32 @@ msgstr ""
 "Η περίοδος της απλής επανάληψης συναγερμού πρέπει να είναι σε μονάδες ημερών "
 "ή εβδομάδων για έναν μόνο συναγερμό ημέρας"
 
-#: editdlg.cpp:1176
+#: editdlg.cpp:1179
 #, kde-format
 msgctxt "@info"
 msgid "You must select a calendar to save the alarm in"
 msgstr ""
 "Πρέπει να επιλέξτε ένα ημερολόγιο στο οποίο θα αποθηκευτεί ο συναγερμός"
 
-#: editdlg.cpp:1257
+#: editdlg.cpp:1260
 #, kde-format
 msgctxt "@action:Button"
 msgid "Fewer Options <<"
 msgstr "Λιγότερες επιλογές <<"
 
-#: editdlg.cpp:1258
+#: editdlg.cpp:1261
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show fewer options"
 msgstr "Εμφάνιση λιγότερων επιλογών"
 
-#: editdlg.cpp:1263
+#: editdlg.cpp:1266
 #, kde-format
 msgctxt "@action:button"
 msgid "More Options >>"
 msgstr "Περισσότερες επιλογές >>"
 
-#: editdlg.cpp:1264
+#: editdlg.cpp:1267
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show more options"
@@ -2586,7 +2607,7 @@ msgid "Enter the name or URL of a text or image file to display."
 msgstr ""
 "Εισάγετε το όνομα η το URL του αρχείου κειμένου ή εικόνας που θα εμφανιστεί."
 
-#: editdlgtypes.cpp:193 editdlgtypes.cpp:882 sounddlg.cpp:184
+#: editdlgtypes.cpp:193 editdlgtypes.cpp:882 sounddlg.cpp:182
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Choose a file"
@@ -3304,7 +3325,7 @@ msgctxt "@action"
 msgid "Stop Play"
 msgstr "Παύση αναπαραγωγής"
 
-#: functions.cpp:193
+#: functions.cpp:196
 #, fuzzy, kde-format
 #| msgctxt "@action"
 #| msgid "Enable &Alarms"
@@ -3312,111 +3333,111 @@ msgctxt "@action"
 msgid "Enable Alarms"
 msgstr "Ενεργοποίηση &συναγερμών"
 
-#: functions.cpp:219
+#: functions.cpp:222
 #, kde-format
 msgctxt "@action"
 msgid "Spread Windows"
 msgstr "Ανάπτυξη παραθύρων"
 
-#: functions.cpp:875
+#: functions.cpp:878
 #, kde-format
 msgctxt "@title:window"
 msgid "Import Calendar Files"
 msgstr "Εισαγωγή αρχείων ημερολογίου"
 
-#: functions.cpp:936
+#: functions.cpp:939
 #, kde-format
 msgctxt "@item:inlistbox File type selection filter"
 msgid "Calendar Files"
 msgstr "Αρχεία ημερολογίου"
 
-#: functions.cpp:937
+#: functions.cpp:940
 #, kde-format
 msgctxt "@title:window"
 msgid "Choose Export Calendar"
 msgstr "Επιλογή ημερολογίου εξαγωγής"
 
-#: functions.cpp:962
+#: functions.cpp:965
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Error loading calendar to append to:<nl/><filename>%1</filename>"
 msgstr ""
 "Σφάλμα φόρτωσης ημερολογίου για προσθήκη στο:<nl/><filename>%1</filename>"
 
-#: functions.cpp:1001
+#: functions.cpp:1004
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Failed to save new calendar to:<nl/><filename>%1</filename>"
 msgstr ""
 "Απέτυχε η αποθήκευση του νέου ημερολογίου στο:<nl/><filename>%1</filename>"
 
-#: functions.cpp:1014
+#: functions.cpp:1017
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot upload new calendar to:<nl/><filename>%1</filename>"
 msgstr "Αδυναμία αποστολής νέου ημερολογίου στο:<nl/><filename>%1</filename>"
 
-#: functions.cpp:1033
+#: functions.cpp:1036
 #, kde-format
 msgctxt "@info"
 msgid "Unable to show alarms in KOrganizer"
 msgstr "Αδυναμία εμφάνισης των συναγερμών στο KOrganizer"
 
-#: functions.cpp:1034
+#: functions.cpp:1037
 #, kde-format
 msgctxt "@info"
 msgid "Unable to show alarm in KOrganizer"
 msgstr "Αδυναμία εμφάνισης του συναγερμού στο KOrganizer"
 
-#: functions.cpp:1037
+#: functions.cpp:1040
 #, kde-format
 msgctxt "@info"
 msgid "Unable to update alarm in KOrganizer"
 msgstr "Αδυναμία ενημέρωσης του συναγερμού στο KOrganizer"
 
-#: functions.cpp:1040
+#: functions.cpp:1043
 #, kde-format
 msgctxt "@info"
 msgid "Unable to delete alarms from KOrganizer"
 msgstr "Αδυναμία διαγραφής των συναγερμών στο KOrganizer"
 
-#: functions.cpp:1041
+#: functions.cpp:1044
 #, kde-format
 msgctxt "@info"
 msgid "Unable to delete alarm from KOrganizer"
 msgstr "Αδυναμία διαγραφής του συναγερμού στο KOrganizer"
 
-#: functions.cpp:1051
+#: functions.cpp:1054
 #, kde-kuit-format
 msgctxt "@info"
 msgid "<para>%1</para><para>(Could not start KOrganizer)</para>"
 msgstr "<para>%1</para><para>(Αδυναμία εκκίνησης του KOrganizer)</para>"
 
-#: functions.cpp:1054
+#: functions.cpp:1057
 #, kde-kuit-format
 msgctxt "@info"
 msgid "<para>%1</para><para>(KOrganizer not fully started)</para>"
 msgstr "<para>%1</para><para>(το KOrganizer δεν έχει εκκινήσει πλήρως)</para>"
 
-#: functions.cpp:1057
+#: functions.cpp:1060
 #, kde-kuit-format
 msgctxt "@info"
 msgid "<para>%1</para><para>(Error communicating with KOrganizer)</para>"
 msgstr "<para>%1</para><para>(Σφάλμα επικοινωνίας με το KOrganizer)</para>"
 
-#: functions.cpp:1307
+#: functions.cpp:1310
 #, kde-format
 msgctxt "info"
 msgid "The scheduled Wake from Suspend has been cancelled."
 msgstr "Η προγραμματισμένη αφύπνιση από αναστολή έχει ακυρωθεί."
 
-#: functions.cpp:1341
+#: functions.cpp:1344
 #, kde-format
 msgctxt "@info"
 msgid "Error obtaining authorization (%1)"
 msgstr "Σφάλμα ανάκτησης εξουσιοδότησης (%1)"
 
-#: functions.cpp:1390
+#: functions.cpp:1393
 #, kde-format
 msgctxt "@info"
 msgid "You must enable a template calendar to save the template in"
@@ -3424,14 +3445,14 @@ msgstr ""
 "Πρέπει να ενεργοποιήσετε ένα ημερολόγιο προτύπων για να αποθηκευτεί εκεί το  "
 "πρότυπο"
 
-#: functions.cpp:1613
+#: functions.cpp:1616
 #, kde-kuit-format
 msgctxt "@info Please set the 'From' email address..."
 msgid "<para>%1</para><para>Please set it in the Configuration dialog.</para>"
 msgstr ""
 "<para>%1</para><para>Παρακαλώ εισάγετέ την στο διάλογο διαμόρφωσης.</para>"
 
-#: functions.cpp:1617
+#: functions.cpp:1620
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3441,61 +3462,61 @@ msgstr ""
 "<para>Οι συναγερμοί είναι απενεργοποιημένες.</para><para>Επιθυμείτε την "
 "ενεργοποίησή τους τώρα;</para>"
 
-#: functions.cpp:1618
+#: functions.cpp:1621
 #, kde-format
 msgctxt "@action:button"
 msgid "Enable"
 msgstr "Ενεργοποίηση"
 
-#: functions.cpp:1618
+#: functions.cpp:1621
 #, kde-format
 msgctxt "@action:button"
 msgid "Keep Disabled"
 msgstr "Να διατηρηθούν απενεργοποιημένες"
 
-#: functions.cpp:1987
+#: functions.cpp:1990
 #, kde-format
 msgctxt "@info"
 msgid "Error saving alarms"
 msgstr "Σφάλμα αποθήκευσης συναγερμών"
 
-#: functions.cpp:1988
+#: functions.cpp:1991
 #, kde-format
 msgctxt "@info"
 msgid "Error saving alarm"
 msgstr "Σφάλμα αποθήκευσης του συναγερμού"
 
-#: functions.cpp:1991
+#: functions.cpp:1994
 #, kde-format
 msgctxt "@info"
 msgid "Error deleting alarms"
 msgstr "Σφάλμα διαγραφής των συναγερμών"
 
-#: functions.cpp:1992
+#: functions.cpp:1995
 #, kde-format
 msgctxt "@info"
 msgid "Error deleting alarm"
 msgstr "Σφάλμα διαγραφής του συναγερμού"
 
-#: functions.cpp:1995
+#: functions.cpp:1998
 #, kde-format
 msgctxt "@info"
 msgid "Error saving reactivated alarms"
 msgstr "Σφάλμα αποθήκευσης των επανενεργοποιημένων συναγερμών"
 
-#: functions.cpp:1996
+#: functions.cpp:1999
 #, kde-format
 msgctxt "@info"
 msgid "Error saving reactivated alarm"
 msgstr "Σφάλμα αποθήκευσης του επανενεργοποιημένου συναγερμού"
 
-#: functions.cpp:1999
+#: functions.cpp:2002
 #, kde-format
 msgctxt "@info"
 msgid "Error saving alarm templates"
 msgstr "Σφάλμα αποθήκευσης των προτύπων συναγερμού"
 
-#: functions.cpp:2000
+#: functions.cpp:2003
 #, kde-format
 msgctxt "@info"
 msgid "Error saving alarm template"
@@ -3652,7 +3673,7 @@ msgctxt "@info 'From' email address"
 msgid "From:"
 msgstr "Από:"
 
-#: kalarmcalendar/alarmtext.cpp:507 messagedisplayhelper.cpp:342
+#: kalarmcalendar/alarmtext.cpp:507 messagedisplayhelper.cpp:336
 #, kde-format
 msgctxt "@info Email addressee"
 msgid "To:"
@@ -3674,7 +3695,7 @@ msgctxt "@info"
 msgid "Date:"
 msgstr "Ημερομηνία:"
 
-#: kalarmcalendar/alarmtext.cpp:510 messagedisplayhelper.cpp:344
+#: kalarmcalendar/alarmtext.cpp:510 messagedisplayhelper.cpp:338
 #, kde-format
 msgctxt "@info Email subject"
 msgid "Subject:"
@@ -4233,7 +4254,7 @@ msgctxt "@info Using default font"
 msgid "Default"
 msgstr "Προκαθορισμένη ώρα"
 
-#: kalarmcalendar/kaeventformatter.cpp:365 messagedisplayhelper.cpp:223
+#: kalarmcalendar/kaeventformatter.cpp:365 messagedisplayhelper.cpp:217
 #, kde-format
 msgctxt "@info"
 msgid "Reminder"
@@ -4862,49 +4883,49 @@ msgstr ""
 "<para>Αδυναμία αναβολής συναγερμού:</para><para>Ο συναγερμός δε βρέθηκε.</"
 "para>"
 
-#: messagedisplayhelper.cpp:209
+#: messagedisplayhelper.cpp:203
 #, kde-format
 msgctxt "@title:window"
 msgid "Reminder"
 msgstr "Υπενθύμιση"
 
-#: messagedisplayhelper.cpp:210 messagedisplayhelper.cpp:414
+#: messagedisplayhelper.cpp:204 messagedisplayhelper.cpp:408
 #, kde-format
 msgctxt "@title:window"
 msgid "Message"
 msgstr "Μήνυμα"
 
-#: messagedisplayhelper.cpp:301
+#: messagedisplayhelper.cpp:295
 #, kde-format
 msgctxt "@info"
 msgid "File is a folder"
 msgstr "Το αρχείο είναι ένας φάκελος"
 
-#: messagedisplayhelper.cpp:301
+#: messagedisplayhelper.cpp:295
 #, kde-format
 msgctxt "@info"
 msgid "Failed to open file"
 msgstr "Αποτυχία ανοίγματος αρχείου"
 
-#: messagedisplayhelper.cpp:301
+#: messagedisplayhelper.cpp:295
 #, kde-format
 msgctxt "@info"
 msgid "File not found"
 msgstr "Το αρχείο δε βρέθηκε"
 
-#: messagedisplayhelper.cpp:358
+#: messagedisplayhelper.cpp:352
 #, kde-format
 msgctxt "@title:window"
 msgid "Error"
 msgstr "Σφάλμα"
 
-#: messagedisplayhelper.cpp:487
+#: messagedisplayhelper.cpp:481
 #, kde-format
 msgctxt "@info"
 msgid "Today"
 msgstr "Σήμερα"
 
-#: messagedisplayhelper.cpp:489
+#: messagedisplayhelper.cpp:483
 #, kde-format
 msgctxt "@info"
 msgid "Tomorrow"
@@ -4912,7 +4933,7 @@ msgid_plural "in %1 days' time"
 msgstr[0] "Αύριο"
 msgstr[1] "Σε χρόνο %1 ημερών"
 
-#: messagedisplayhelper.cpp:491
+#: messagedisplayhelper.cpp:485
 #, kde-format
 msgctxt "@info"
 msgid "in 1 week's time"
@@ -4920,7 +4941,7 @@ msgid_plural "in %1 weeks' time"
 msgstr[0] "σε 1 εβδομάδα"
 msgstr[1] "σε %1 εβδομάδες"
 
-#: messagedisplayhelper.cpp:505
+#: messagedisplayhelper.cpp:499
 #, kde-format
 msgctxt "@info"
 msgid "in 1 minute's time"
@@ -4928,7 +4949,7 @@ msgid_plural "in %1 minutes' time"
 msgstr[0] "σε 1 λεπτό"
 msgstr[1] "σε %1 λεπτά"
 
-#: messagedisplayhelper.cpp:507
+#: messagedisplayhelper.cpp:501
 #, kde-format
 msgctxt "@info"
 msgid "in 1 hour's time"
@@ -4936,7 +4957,7 @@ msgid_plural "in %1 hours' time"
 msgstr[0] "σε 1 ώρα"
 msgstr[1] "σε %1 ώρες"
 
-#: messagedisplayhelper.cpp:510
+#: messagedisplayhelper.cpp:504
 #, kde-format
 msgctxt "@item:intext inserted into 'in ... %1 minute's time' below"
 msgid "1 hour"
@@ -4944,7 +4965,7 @@ msgid_plural "%1 hours"
 msgstr[0] "1 ώρα"
 msgstr[1] "%1 ώρες"
 
-#: messagedisplayhelper.cpp:511
+#: messagedisplayhelper.cpp:505
 #, kde-format
 msgctxt "@info '%2' is the previous message '1 hour'/'%1 hours'"
 msgid "in %2 1 minute's time"
@@ -4952,38 +4973,17 @@ msgid_plural "in %2 %1 minutes' time"
 msgstr[0] "σε χρόνο %2 και 1 λεπτού"
 msgstr[1] "σε χρόνο %2 και %1 λεπτών"
 
-#: messagedisplayhelper.cpp:853
+#: messagedisplayhelper.cpp:847
 #, kde-format
 msgctxt "@info"
 msgid "Unable to speak message"
 msgstr "Αδυναμία εκφώνησης του μηνύματος"
 
-#: messagedisplayhelper.cpp:853
+#: messagedisplayhelper.cpp:847
 #, kde-format
 msgctxt "@info"
 msgid "Text-to-speech subsystem is not available"
 msgstr "Το υποσύστημα κείμενο-σε-ομιλία δεν είναι διαθέσιμο"
-
-#: messagedisplayhelper.cpp:1046
-#, kde-kuit-format
-msgctxt "@info"
-msgid "Cannot initialize audio player: %1"
-msgstr ""
-
-#: messagedisplayhelper.cpp:1068
-#, kde-kuit-format
-msgctxt "@info"
-msgid "Cannot set audio player properties: %1"
-msgstr ""
-
-#: messagedisplayhelper.cpp:1221
-#, kde-kuit-format
-msgctxt "@info"
-msgid ""
-"<para>Error playing audio file: <filename>%1</filename></para><para>%2</para>"
-msgstr ""
-"<para>Σφάλμα αναπαραγωγής αρχείου ήχου: <filename>%1</filename></para><para>"
-"%2</para>"
 
 #: messagenotification.cpp:518
 #, kde-format
@@ -5091,13 +5091,13 @@ msgstr ""
 "<para>Αναβολή του συναγερμού για αργότερα.</para><para>Θα σας ζητηθεί να "
 "καθορίσετε πότε θα πρέπει να επανεμφανιστεί ο συναγερμός.</para>"
 
-#: messagewindow.cpp:458 sounddlg.cpp:451
+#: messagewindow.cpp:458 sounddlg.cpp:441
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Stop sound"
 msgstr "Διακοπή του ήχου"
 
-#: messagewindow.cpp:459 sounddlg.cpp:452
+#: messagewindow.cpp:459 sounddlg.cpp:442
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Stop playing the sound"
@@ -8428,19 +8428,19 @@ msgstr ""
 "Σφάλμα ρύθμισης της αφύπνισης από αναστολή.<nl/>Η εντολή ήταν: <command>%1 "
 "%2</command><nl/>Κωδικός σφάλματος: %3."
 
-#: sounddlg.cpp:42
+#: sounddlg.cpp:40
 #, kde-format
 msgctxt "@option:check"
 msgid "Repeat"
 msgstr "Επανάληψη"
 
-#: sounddlg.cpp:43
+#: sounddlg.cpp:41
 #, kde-format
 msgctxt "@option:check"
 msgid "Set volume"
 msgstr "Ορισμός έντασης"
 
-#: sounddlg.cpp:53
+#: sounddlg.cpp:51
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -8450,79 +8450,79 @@ msgstr ""
 "Αν ενεργοποιηθεί, το αρχείο ήχου θα αναπαράγεται για όσο χρόνο εμφανίζεται "
 "το μήνυμα."
 
-#: sounddlg.cpp:149
+#: sounddlg.cpp:147
 #, kde-format
 msgctxt "@label"
 msgid "Sound file:"
 msgstr "Αρχείο ήχου:"
 
-#: sounddlg.cpp:166 sounddlg.cpp:464
+#: sounddlg.cpp:164 sounddlg.cpp:454
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Test the sound"
 msgstr "Έλεγχος του ήχου"
 
-#: sounddlg.cpp:167 sounddlg.cpp:465
+#: sounddlg.cpp:165 sounddlg.cpp:455
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Play the selected sound file."
 msgstr "Αναπαραγωγή του επιλεγμένου αρχείου ήχου."
 
-#: sounddlg.cpp:174
+#: sounddlg.cpp:172
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the name or URL of a sound file to play."
 msgstr "Εισάγετε το όνομα η το URL του προς αναπαραγωγή αρχείου ήχου."
 
-#: sounddlg.cpp:185
+#: sounddlg.cpp:183
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select a sound file to play."
 msgstr "Επιλέξτε ένα αρχείο ήχου για αναπαραγωγή."
 
-#: sounddlg.cpp:207
+#: sounddlg.cpp:205
 #, kde-format
 msgctxt "@label:spinbox Length of time to pause between repetitions"
 msgid "Pause between repetitions:"
 msgstr "Παύση μεταξύ επαναλήψεων:"
 
-#: sounddlg.cpp:214 sounddlg.cpp:271
+#: sounddlg.cpp:212 sounddlg.cpp:269
 #, kde-format
 msgctxt "@label"
 msgid "seconds"
 msgstr "δευτερόλεπτα"
 
-#: sounddlg.cpp:216
+#: sounddlg.cpp:214
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter how many seconds to pause between repetitions."
 msgstr "Εισαγάγετε τον αριθμό δευτερολέπτων παύσης μεταξύ επαναλήψεων."
 
-#: sounddlg.cpp:219
+#: sounddlg.cpp:217
 #, kde-format
 msgctxt "@title:group Sound volume"
 msgid "Volume"
 msgstr "Ένταση"
 
-#: sounddlg.cpp:235
+#: sounddlg.cpp:233
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select to choose the volume for playing the sound file."
 msgstr "Επιλέξτε το για τη ρύθμιση της έντασης αναπαραγωγής του αρχείου ήχου."
 
-#: sounddlg.cpp:243
+#: sounddlg.cpp:241
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Choose the volume for playing the sound file."
 msgstr "Επιλέξτε την ένταση αναπαραγωγής του αρχείου ήχου."
 
-#: sounddlg.cpp:254
+#: sounddlg.cpp:252
 #, kde-format
 msgctxt "@option:check"
 msgid "Fade"
 msgstr "Ομαλή αλλαγή έντασης"
 
-#: sounddlg.cpp:256
+#: sounddlg.cpp:254
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select to fade the volume when the sound file first starts to play."
@@ -8530,13 +8530,13 @@ msgstr ""
 "Επιλέξτε το για την ομαλή αύξηση της έντασης όταν αρχίσει η αναπαραγωγή του "
 "αρχείου ήχου."
 
-#: sounddlg.cpp:264
+#: sounddlg.cpp:262
 #, kde-format
 msgctxt "@label:spinbox Time period over which to fade the sound"
 msgid "Fade time:"
 msgstr "Χρόνος ομαλής αύξησης:"
 
-#: sounddlg.cpp:273
+#: sounddlg.cpp:271
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -8545,49 +8545,49 @@ msgstr ""
 "Εισάγετε τον αριθμό δευτερολέπτων της ομαλής αύξησης του ήχου έως το "
 "καθορισμένο σημείο έντασης."
 
-#: sounddlg.cpp:280
+#: sounddlg.cpp:278
 #, kde-format
 msgctxt "@label:slider"
 msgid "Initial volume:"
 msgstr "Αρχική ένταση:"
 
-#: sounddlg.cpp:289
+#: sounddlg.cpp:287
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Choose the initial volume for playing the sound file."
 msgstr "Επιλέξτε την αρχική ένταση αναπαραγωγής του αρχείου ήχου."
 
-#: soundpicker.cpp:41
+#: soundpicker.cpp:40
 #, kde-format
 msgctxt "@label:listbox Listbox providing audio options"
 msgid "Sound:"
 msgstr "Ήχος:"
 
-#: soundpicker.cpp:42
+#: soundpicker.cpp:41
 #, kde-format
 msgctxt "@item:inlistbox No sound"
 msgid "None"
 msgstr "Κανένας"
 
-#: soundpicker.cpp:43
+#: soundpicker.cpp:42
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Beep"
 msgstr "Προειδοποιητικός ήχος"
 
-#: soundpicker.cpp:44
+#: soundpicker.cpp:43
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Speak"
 msgstr "Εκφώνηση"
 
-#: soundpicker.cpp:45
+#: soundpicker.cpp:44
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Sound file"
 msgstr "Αρχείο ήχου"
 
-#: soundpicker.cpp:75
+#: soundpicker.cpp:74
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -8610,31 +8610,31 @@ msgstr ""
 "μηνύματος μετατρέπεται σε ομιλία. (Η επιλογή αυτή απαιτεί εγκατάσταση του Qt "
 "text-to-speech.)</item></list></para>"
 
-#: soundpicker.cpp:87
+#: soundpicker.cpp:86
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Configure sound file"
 msgstr "Διαμόρφωση του αρχείου ήχου"
 
-#: soundpicker.cpp:88
+#: soundpicker.cpp:87
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Configure a sound file to play when the alarm is displayed."
 msgstr "Διαμόρφωση αρχείου ήχου για αναπαραγωγή όταν εμφανιστεί ο συναγερμός."
 
-#: soundpicker.cpp:257
+#: soundpicker.cpp:256
 #, kde-format
 msgctxt "@title:window"
 msgid "Sound File"
 msgstr "Αρχείο ήχου"
 
-#: soundpicker.cpp:316
+#: soundpicker.cpp:315
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Audio files"
 msgstr "Αρχεία ήχου"
 
-#: soundpicker.cpp:341
+#: soundpicker.cpp:338
 #, kde-format
 msgctxt "@title:window"
 msgid "Choose Sound File"

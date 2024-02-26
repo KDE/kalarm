@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-24 00:37+0000\n"
+"POT-Creation-Date: 2024-02-26 00:38+0000\n"
 "PO-Revision-Date: 2014-09-18 17:01+0200\n"
 "Last-Translator: Sönke Dibbern <s_dibbern@web.de>\n"
 "Language-Team: Low Saxon <kde-i18n-nds@kde.org>\n"
@@ -148,7 +148,7 @@ msgctxt "@option:radio Defer for time interval"
 msgid "Defer for:"
 msgstr "Verschaven op:"
 
-#: alarmtimewidget.cpp:137 editdlg.cpp:326
+#: alarmtimewidget.cpp:137 editdlg.cpp:327
 #, kde-format
 msgctxt "@option:radio"
 msgid "Time from now:"
@@ -166,7 +166,7 @@ msgctxt "@info:whatsthis"
 msgid "Schedule the alarm after the specified time interval from now."
 msgstr "Alarm na de angeven Tiet utlösen, reekt vun nu af"
 
-#: alarmtimewidget.cpp:149 editdlg.cpp:337
+#: alarmtimewidget.cpp:149 editdlg.cpp:338
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid "<para>%1</para><para>%2</para>"
@@ -290,6 +290,27 @@ msgctxt "@info"
 msgid "Alarm time has already expired"
 msgstr "De Alarmtiet is al vörbi"
 
+#: audioplayer.cpp:69
+#, kde-kuit-format
+msgctxt "@info"
+msgid "Cannot initialize audio player: %1"
+msgstr ""
+
+#: audioplayer.cpp:92
+#, kde-kuit-format
+msgctxt "@info"
+msgid "Cannot set audio player properties: %1"
+msgstr ""
+
+#: audioplayer.cpp:166 audioplayer.cpp:239
+#, kde-kuit-format
+msgctxt "@info"
+msgid ""
+"<para>Error playing audio file: <filename>%1</filename></para><para>%2</para>"
+msgstr ""
+"<para>Fehler bi't Afspelen vun de Klangdatei: <filename>%1</filename></"
+"para><para>%2</para>"
+
 #: autostart/autostart.cpp:48
 #, kde-format
 msgid "KAlarm Autostart"
@@ -334,7 +355,7 @@ msgctxt "@title:window"
 msgid "Import Birthdays From KAddressBook"
 msgstr "Geboortsdaag ut KAdressbook importeren"
 
-#: birthdaydlg.cpp:63 editdlg.cpp:242
+#: birthdaydlg.cpp:63 editdlg.cpp:243
 #, fuzzy, kde-format
 #| msgctxt "@label"
 #| msgid "Alarm type"
@@ -342,7 +363,7 @@ msgctxt "@label:textbox"
 msgid "Alarm name:"
 msgstr "Alarmtyp"
 
-#: birthdaydlg.cpp:68 editdlg.cpp:250
+#: birthdaydlg.cpp:68 editdlg.cpp:251
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2112,49 +2133,49 @@ msgctxt "@info"
 msgid "Failed to save calendar to <filename>%1</filename>"
 msgstr "De Kalenner lett sik nich as <filename>%1</filename> sekern"
 
-#: editdlg.cpp:77
+#: editdlg.cpp:78
 #, kde-format
 msgctxt "@title:tab"
 msgid "Recurrence - [%1]"
 msgstr "Periood - [%1]"
 
-#: editdlg.cpp:84
+#: editdlg.cpp:85
 #, kde-format
 msgctxt "@option:check"
 msgid "Show in KOrganizer"
 msgstr "Binnen KOrganizer wiesen"
 
-#: editdlg.cpp:180
+#: editdlg.cpp:181
 #, kde-format
 msgctxt "@title:window"
 msgid "Alarm Template [read-only]"
 msgstr "Alarmvörlaag [bloots leesbor]"
 
-#: editdlg.cpp:181
+#: editdlg.cpp:182
 #, kde-format
 msgctxt "@title:window"
 msgid "Archived Alarm [read-only]"
 msgstr "Archiveert Alarm (bloots leesbor)"
 
-#: editdlg.cpp:182
+#: editdlg.cpp:183
 #, kde-format
 msgctxt "@title:window"
 msgid "Alarm [read-only]"
 msgstr "Alarm [bloots leesbor]"
 
-#: editdlg.cpp:193
+#: editdlg.cpp:194
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Schedule the alarm at the specified time."
 msgstr "Den Alarm för de angeven Tiet inplanen"
 
-#: editdlg.cpp:196
+#: editdlg.cpp:197
 #, kde-format
 msgctxt "@action:button"
 msgid "Load Template..."
 msgstr "Vörlaag laden..."
 
-#: editdlg.cpp:198
+#: editdlg.cpp:199
 #, fuzzy, kde-format
 #| msgctxt "@info:whatsthis"
 #| msgid "Select a template to base the new alarm on."
@@ -2162,73 +2183,73 @@ msgctxt "@info:tooltip"
 msgid "Select an alarm template to preset the alarm"
 msgstr "Söök de Vörlaag ut, op de Du den niegen Alarm opbuen wullt"
 
-#: editdlg.cpp:202
+#: editdlg.cpp:203
 #, kde-format
 msgctxt "@action:button"
 msgid "Try"
 msgstr ""
 
-#: editdlg.cpp:212
+#: editdlg.cpp:213
 #, kde-format
 msgctxt "@title:tab"
 msgid "Alarm"
 msgstr "Alarm"
 
-#: editdlg.cpp:242
+#: editdlg.cpp:243
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Template name:"
 msgstr "Vörlaagnaam:"
 
-#: editdlg.cpp:249
+#: editdlg.cpp:250
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the name of the alarm template"
 msgstr "Giff den Naam vun de Alarmvörlaag in"
 
-#: editdlg.cpp:255
+#: editdlg.cpp:256
 #, kde-format
 msgctxt "@title:group"
 msgid "Action"
 msgstr "Akschoon"
 
-#: editdlg.cpp:264
+#: editdlg.cpp:265
 #, kde-format
 msgctxt "@title:group"
 msgid "Deferred Alarm"
 msgstr "Verschaven Alarm"
 
-#: editdlg.cpp:267
+#: editdlg.cpp:268
 #, kde-format
 msgctxt "@label"
 msgid "Deferred to:"
 msgstr "Verschaven op:"
 
-#: editdlg.cpp:272
+#: editdlg.cpp:273
 #, kde-format
 msgctxt "@action:button"
 msgid "Change..."
 msgstr "Ännern..."
 
-#: editdlg.cpp:274
+#: editdlg.cpp:275
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Change the alarm's deferred time, or cancel the deferral"
 msgstr "Änner de Verschuuvtiet, oder segg de Verschuven af"
 
-#: editdlg.cpp:285 editdlg.cpp:346
+#: editdlg.cpp:286 editdlg.cpp:347
 #, kde-format
 msgctxt "@title:group"
 msgid "Time"
 msgstr "Tiet"
 
-#: editdlg.cpp:292
+#: editdlg.cpp:293
 #, kde-format
 msgctxt "@option:radio"
 msgid "Default time"
 msgstr "Standardtiet"
 
-#: editdlg.cpp:294
+#: editdlg.cpp:295
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2238,19 +2259,19 @@ msgstr ""
 "Keen Starttiet angeven för Alarms, de op disse Vörlaag opbuut. Ansteed warrt "
 "de normale Standard-Starttiet bruukt."
 
-#: editdlg.cpp:302
+#: editdlg.cpp:303
 #, kde-format
 msgctxt "@option:radio"
 msgid "Time:"
 msgstr "Tiet:"
 
-#: editdlg.cpp:304
+#: editdlg.cpp:305
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Specify a start time for alarms based on this template."
 msgstr "Giff en Starttiet för Alarms an, de op disse Vörlaag opbuut."
 
-#: editdlg.cpp:310
+#: editdlg.cpp:311
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2260,13 +2281,13 @@ msgstr ""
 "<para>Giff de Starttiet för Alarms in, de op disse Vörlaag opbuut.</"
 "para><para>%1</para>"
 
-#: editdlg.cpp:317
+#: editdlg.cpp:318
 #, kde-format
 msgctxt "@option:radio"
 msgid "Date only"
 msgstr "Bloots Datum"
 
-#: editdlg.cpp:319
+#: editdlg.cpp:320
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2276,7 +2297,7 @@ msgstr ""
 "De Optschoon <interface>Jichtenseen Klock</interface> för Alarms fastleggen, "
 "de op disse Vörlaag opbuut."
 
-#: editdlg.cpp:329
+#: editdlg.cpp:330
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2286,7 +2307,7 @@ msgstr ""
 "Alarms, de op disse Vörlaag opbuut, warrt na de angeven Tiet achter dat "
 "Opstellen vun den Alarm start."
 
-#: editdlg.cpp:385
+#: editdlg.cpp:386
 #, fuzzy, kde-format
 #| msgctxt "@title:window"
 #| msgid "Wake From Suspend"
@@ -2294,33 +2315,33 @@ msgctxt "@option:check"
 msgid "Wake from suspend"
 msgstr "Wedderanmaken na Utsetten"
 
-#: editdlg.cpp:387
+#: editdlg.cpp:388
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "Check to wake the system if the alarm triggers while the system is suspended"
 msgstr ""
 
-#: editdlg.cpp:404
+#: editdlg.cpp:405
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to copy the alarm into KOrganizer's calendar"
 msgstr ""
 "Maak dit an, wenn Du den Alarm na den Kalenner vun KOrganizer koperen wullt."
 
-#: editdlg.cpp:1004
+#: editdlg.cpp:1007
 #, kde-format
 msgctxt "@info"
 msgid "You must enter a name for the alarm template"
 msgstr "Du muttst en Naam för de Alarmvörlaag ingeven."
 
-#: editdlg.cpp:1008
+#: editdlg.cpp:1011
 #, kde-format
 msgctxt "@info"
 msgid "Template name is already in use"
 msgstr "Disse Vörlaagnaam warrt al bruukt"
 
-#: editdlg.cpp:1031
+#: editdlg.cpp:1034
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2329,7 +2350,7 @@ msgid ""
 "para>"
 msgstr ""
 
-#: editdlg.cpp:1063
+#: editdlg.cpp:1066
 #, kde-format
 msgctxt "@info The parameter is a date value"
 msgid ""
@@ -2339,7 +2360,7 @@ msgstr ""
 "Dat Anfangdatum passt nich to den Alarm sien Wedderhaalmuster, dat warrt "
 "op't Datum vun de nakamen Wedderhalen (%1) sett."
 
-#: editdlg.cpp:1067
+#: editdlg.cpp:1070
 #, kde-format
 msgctxt "@info The parameter is a date/time value"
 msgid ""
@@ -2349,19 +2370,19 @@ msgstr ""
 "Anfangdatum un -tiet passt nich to den Alarm sien Wedderhaalmuster, dat "
 "warrt op't Datum un de Tiet vun de nakamen Wedderhalen (%1) sett."
 
-#: editdlg.cpp:1089
+#: editdlg.cpp:1092
 #, kde-format
 msgctxt "@info"
 msgid "Recurrence has already expired"
 msgstr "Perioodsche Wedderhalen is al aflopen"
 
-#: editdlg.cpp:1094
+#: editdlg.cpp:1097
 #, kde-format
 msgctxt "@info"
 msgid "The alarm will never occur during working hours"
 msgstr "De Alarm warrt nienich över de Arbeittiet-Stünnen utlööst"
 
-#: editdlg.cpp:1123
+#: editdlg.cpp:1126
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2371,7 +2392,7 @@ msgstr ""
 "De Vöraftiet vun den Vöranstoot mutt körter wesen as de Wedderhalenperiood, "
 "tominnst wenn <interface>%1</interface> nich anmaakt is."
 
-#: editdlg.cpp:1138
+#: editdlg.cpp:1141
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -2381,7 +2402,7 @@ msgstr ""
 "De Tiet för de Wedderhalen mutt körter wesen as de Wedderhaalperiood minus "
 "de Vöraftiet vun en vörhannen Vöranstoot."
 
-#: editdlg.cpp:1145
+#: editdlg.cpp:1148
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -2391,13 +2412,13 @@ msgstr ""
 "Du muttst de Tiet för Wedderhalen binnen de Wedderhaalperiood in Daag oder "
 "Weken angeven, wenn för den Alarm bloots en Datum angeven is."
 
-#: editdlg.cpp:1176
+#: editdlg.cpp:1179
 #, kde-format
 msgctxt "@info"
 msgid "You must select a calendar to save the alarm in"
 msgstr "Du muttst en Kalenner utsöken, binnen den Du den Alarm sekern wullt"
 
-#: editdlg.cpp:1257
+#: editdlg.cpp:1260
 #, fuzzy, kde-format
 #| msgctxt "@action:button"
 #| msgid "Less Options <<"
@@ -2405,7 +2426,7 @@ msgctxt "@action:Button"
 msgid "Fewer Options <<"
 msgstr "Weniger Optschonen <<"
 
-#: editdlg.cpp:1258
+#: editdlg.cpp:1261
 #, fuzzy, kde-format
 #| msgctxt "@action:button"
 #| msgid "Less Options <<"
@@ -2413,13 +2434,13 @@ msgctxt "@info:tooltip"
 msgid "Show fewer options"
 msgstr "Weniger Optschonen <<"
 
-#: editdlg.cpp:1263
+#: editdlg.cpp:1266
 #, kde-format
 msgctxt "@action:button"
 msgid "More Options >>"
 msgstr "Mehr Optschonen >>"
 
-#: editdlg.cpp:1264
+#: editdlg.cpp:1267
 #, fuzzy, kde-format
 #| msgctxt "@action:button"
 #| msgid "More Options >>"
@@ -2541,7 +2562,7 @@ msgstr ""
 "Giff den Naam oder de URL vun de Text- oder Bilddatei in, de Du vörsett "
 "kriegen wullt."
 
-#: editdlgtypes.cpp:193 editdlgtypes.cpp:882 sounddlg.cpp:184
+#: editdlgtypes.cpp:193 editdlgtypes.cpp:882 sounddlg.cpp:182
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Choose a file"
@@ -3278,7 +3299,7 @@ msgctxt "@action"
 msgid "Stop Play"
 msgstr "Afspelen anhollen"
 
-#: functions.cpp:193
+#: functions.cpp:196
 #, fuzzy, kde-format
 #| msgctxt "@action"
 #| msgid "Enable &Alarms"
@@ -3286,13 +3307,13 @@ msgctxt "@action"
 msgid "Enable Alarms"
 msgstr "&Alarms anmaken"
 
-#: functions.cpp:219
+#: functions.cpp:222
 #, kde-format
 msgctxt "@action"
 msgid "Spread Windows"
 msgstr "Finstern utbreden"
 
-#: functions.cpp:875
+#: functions.cpp:878
 #, fuzzy, kde-format
 #| msgctxt "@info"
 #| msgid "Calendar Files"
@@ -3300,7 +3321,7 @@ msgctxt "@title:window"
 msgid "Import Calendar Files"
 msgstr "Kalennerdateien"
 
-#: functions.cpp:936
+#: functions.cpp:939
 #, fuzzy, kde-format
 #| msgctxt "@info"
 #| msgid "Calendar Files"
@@ -3308,106 +3329,106 @@ msgctxt "@item:inlistbox File type selection filter"
 msgid "Calendar Files"
 msgstr "Kalennerdateien"
 
-#: functions.cpp:937
+#: functions.cpp:940
 #, kde-format
 msgctxt "@title:window"
 msgid "Choose Export Calendar"
 msgstr "Kalenner för't Exporteren utsöken"
 
-#: functions.cpp:962
+#: functions.cpp:965
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Error loading calendar to append to:<nl/><filename>%1</filename>"
 msgstr ""
 "Kalenner lett sik nich laden un anhangen na:<nl/><filename>%1</filename>"
 
-#: functions.cpp:1001
+#: functions.cpp:1004
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Failed to save new calendar to:<nl/><filename>%1</filename>"
 msgstr "Nieg Kalenner lett sik nich sekern na:<nl/><filename>%1</filename>"
 
-#: functions.cpp:1014
+#: functions.cpp:1017
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot upload new calendar to:<nl/><filename>%1</filename>"
 msgstr "Nieg Kalenner lett sik nich hoochladen na:<nl/><filename>%1</filename>"
 
-#: functions.cpp:1033
+#: functions.cpp:1036
 #, kde-format
 msgctxt "@info"
 msgid "Unable to show alarms in KOrganizer"
 msgstr "Alarms laat sik nich in KOrganizer wiesen"
 
-#: functions.cpp:1034
+#: functions.cpp:1037
 #, kde-format
 msgctxt "@info"
 msgid "Unable to show alarm in KOrganizer"
 msgstr "Alarm lett sik nich in KOrganizer wiesen"
 
-#: functions.cpp:1037
+#: functions.cpp:1040
 #, kde-format
 msgctxt "@info"
 msgid "Unable to update alarm in KOrganizer"
 msgstr "Alarm in KOrganizer lett sik nich opfrischen"
 
-#: functions.cpp:1040
+#: functions.cpp:1043
 #, kde-format
 msgctxt "@info"
 msgid "Unable to delete alarms from KOrganizer"
 msgstr "Alarms in KOrganizer laat sik nich wegdoon"
 
-#: functions.cpp:1041
+#: functions.cpp:1044
 #, kde-format
 msgctxt "@info"
 msgid "Unable to delete alarm from KOrganizer"
 msgstr "Alarm in KOrganizer lett sik nich wegdoon"
 
-#: functions.cpp:1051
+#: functions.cpp:1054
 #, kde-kuit-format
 msgctxt "@info"
 msgid "<para>%1</para><para>(Could not start KOrganizer)</para>"
 msgstr "<para>%1</para><para>(KOrganizer lett sik nich opropen)</para>"
 
-#: functions.cpp:1054
+#: functions.cpp:1057
 #, kde-kuit-format
 msgctxt "@info"
 msgid "<para>%1</para><para>(KOrganizer not fully started)</para>"
 msgstr "<para>%1</para><para>(KOrganizer nich heel start)</para>"
 
-#: functions.cpp:1057
+#: functions.cpp:1060
 #, kde-kuit-format
 msgctxt "@info"
 msgid "<para>%1</para><para>(Error communicating with KOrganizer)</para>"
 msgstr "<para>%1</para><para>(Fehler bi't Tokoppeln na KOrganizer)</para>"
 
-#: functions.cpp:1307
+#: functions.cpp:1310
 #, kde-format
 msgctxt "info"
 msgid "The scheduled Wake from Suspend has been cancelled."
 msgstr "De plaante Wedderanmaaktiet na Utsetten wöör torüchnahmen."
 
-#: functions.cpp:1341
+#: functions.cpp:1344
 #, kde-format
 msgctxt "@info"
 msgid "Error obtaining authorization (%1)"
 msgstr "Fehler bi't Halen vun Verlööv (%1)"
 
-#: functions.cpp:1390
+#: functions.cpp:1393
 #, kde-format
 msgctxt "@info"
 msgid "You must enable a template calendar to save the template in"
 msgstr ""
 "Du muttst en Vörlagen-Kalenner anmaken, binnen den Du de Vörlaag sekern wullt"
 
-#: functions.cpp:1613
+#: functions.cpp:1616
 #, kde-kuit-format
 msgctxt "@info Please set the 'From' email address..."
 msgid "<para>%1</para><para>Please set it in the Configuration dialog.</para>"
 msgstr ""
 "<para>%1</para><para>Legg ehr bitte binnen den Instellendialoog fast.</para>"
 
-#: functions.cpp:1617
+#: functions.cpp:1620
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3417,61 +3438,61 @@ msgstr ""
 "<para>Alarms sünd opstunns utmaakt.</para><para>Wullt Du se nu anmaken?</"
 "para>"
 
-#: functions.cpp:1618
+#: functions.cpp:1621
 #, kde-format
 msgctxt "@action:button"
 msgid "Enable"
 msgstr "Anmaken"
 
-#: functions.cpp:1618
+#: functions.cpp:1621
 #, kde-format
 msgctxt "@action:button"
 msgid "Keep Disabled"
 msgstr "Utmaakt laten"
 
-#: functions.cpp:1987
+#: functions.cpp:1990
 #, kde-format
 msgctxt "@info"
 msgid "Error saving alarms"
 msgstr "Fehler bi't Sekern vun de Alarms"
 
-#: functions.cpp:1988
+#: functions.cpp:1991
 #, kde-format
 msgctxt "@info"
 msgid "Error saving alarm"
 msgstr "Fehler bi't Sekern vun den Alarm"
 
-#: functions.cpp:1991
+#: functions.cpp:1994
 #, kde-format
 msgctxt "@info"
 msgid "Error deleting alarms"
 msgstr "Fehler bi't Wegdoon vun de Alarms"
 
-#: functions.cpp:1992
+#: functions.cpp:1995
 #, kde-format
 msgctxt "@info"
 msgid "Error deleting alarm"
 msgstr "Fehler bi't Wegdoon vun den Alarm"
 
-#: functions.cpp:1995
+#: functions.cpp:1998
 #, kde-format
 msgctxt "@info"
 msgid "Error saving reactivated alarms"
 msgstr "Wedder anmaakt Alarms laat sik nich sekern"
 
-#: functions.cpp:1996
+#: functions.cpp:1999
 #, kde-format
 msgctxt "@info"
 msgid "Error saving reactivated alarm"
 msgstr "Wedder anmaakt Alarm lett sik nich sekern"
 
-#: functions.cpp:1999
+#: functions.cpp:2002
 #, kde-format
 msgctxt "@info"
 msgid "Error saving alarm templates"
 msgstr "Fehler bi't Sekern vun de Alarmvörlagen"
 
-#: functions.cpp:2000
+#: functions.cpp:2003
 #, kde-format
 msgctxt "@info"
 msgid "Error saving alarm template"
@@ -3634,7 +3655,7 @@ msgctxt "@info 'From' email address"
 msgid "From:"
 msgstr "Vun:"
 
-#: kalarmcalendar/alarmtext.cpp:507 messagedisplayhelper.cpp:342
+#: kalarmcalendar/alarmtext.cpp:507 messagedisplayhelper.cpp:336
 #, kde-format
 msgctxt "@info Email addressee"
 msgid "To:"
@@ -3656,7 +3677,7 @@ msgctxt "@info"
 msgid "Date:"
 msgstr "Datum:"
 
-#: kalarmcalendar/alarmtext.cpp:510 messagedisplayhelper.cpp:344
+#: kalarmcalendar/alarmtext.cpp:510 messagedisplayhelper.cpp:338
 #, kde-format
 msgctxt "@info Email subject"
 msgid "Subject:"
@@ -4245,7 +4266,7 @@ msgctxt "@info Using default font"
 msgid "Default"
 msgstr "Standardtiet"
 
-#: kalarmcalendar/kaeventformatter.cpp:365 messagedisplayhelper.cpp:223
+#: kalarmcalendar/kaeventformatter.cpp:365 messagedisplayhelper.cpp:217
 #, kde-format
 msgctxt "@info"
 msgid "Reminder"
@@ -4879,49 +4900,49 @@ msgid "<para>Cannot defer alarm:</para><para>Alarm not found.</para>"
 msgstr ""
 "<para>Alarm lett sik nich verschuven:</para><para>Alarm nich funnen.</para>"
 
-#: messagedisplayhelper.cpp:209
+#: messagedisplayhelper.cpp:203
 #, kde-format
 msgctxt "@title:window"
 msgid "Reminder"
 msgstr "Vöranstoot"
 
-#: messagedisplayhelper.cpp:210 messagedisplayhelper.cpp:414
+#: messagedisplayhelper.cpp:204 messagedisplayhelper.cpp:408
 #, kde-format
 msgctxt "@title:window"
 msgid "Message"
 msgstr "Bescheed"
 
-#: messagedisplayhelper.cpp:301
+#: messagedisplayhelper.cpp:295
 #, kde-format
 msgctxt "@info"
 msgid "File is a folder"
 msgstr "De Datei is en Orner"
 
-#: messagedisplayhelper.cpp:301
+#: messagedisplayhelper.cpp:295
 #, kde-format
 msgctxt "@info"
 msgid "Failed to open file"
 msgstr "Datei lett sik nich opmaken"
 
-#: messagedisplayhelper.cpp:301
+#: messagedisplayhelper.cpp:295
 #, kde-format
 msgctxt "@info"
 msgid "File not found"
 msgstr "Datei lett sik nich finnen"
 
-#: messagedisplayhelper.cpp:358
+#: messagedisplayhelper.cpp:352
 #, kde-format
 msgctxt "@title:window"
 msgid "Error"
 msgstr "Fehler"
 
-#: messagedisplayhelper.cpp:487
+#: messagedisplayhelper.cpp:481
 #, kde-format
 msgctxt "@info"
 msgid "Today"
 msgstr "Vundaag"
 
-#: messagedisplayhelper.cpp:489
+#: messagedisplayhelper.cpp:483
 #, kde-format
 msgctxt "@info"
 msgid "Tomorrow"
@@ -4929,7 +4950,7 @@ msgid_plural "in %1 days' time"
 msgstr[0] "Morgen"
 msgstr[1] "in %1 Daag"
 
-#: messagedisplayhelper.cpp:491
+#: messagedisplayhelper.cpp:485
 #, kde-format
 msgctxt "@info"
 msgid "in 1 week's time"
@@ -4937,7 +4958,7 @@ msgid_plural "in %1 weeks' time"
 msgstr[0] "in 1 Week"
 msgstr[1] "in %1 Weken"
 
-#: messagedisplayhelper.cpp:505
+#: messagedisplayhelper.cpp:499
 #, kde-format
 msgctxt "@info"
 msgid "in 1 minute's time"
@@ -4945,7 +4966,7 @@ msgid_plural "in %1 minutes' time"
 msgstr[0] "in 1 Minuut"
 msgstr[1] "in %1 Minuten"
 
-#: messagedisplayhelper.cpp:507
+#: messagedisplayhelper.cpp:501
 #, kde-format
 msgctxt "@info"
 msgid "in 1 hour's time"
@@ -4953,7 +4974,7 @@ msgid_plural "in %1 hours' time"
 msgstr[0] "in 1 Stünn"
 msgstr[1] "in %1 Stünnen"
 
-#: messagedisplayhelper.cpp:510
+#: messagedisplayhelper.cpp:504
 #, kde-format
 msgctxt "@item:intext inserted into 'in ... %1 minute's time' below"
 msgid "1 hour"
@@ -4961,7 +4982,7 @@ msgid_plural "%1 hours"
 msgstr[0] "1 Stünn"
 msgstr[1] "%1 Stünnen"
 
-#: messagedisplayhelper.cpp:511
+#: messagedisplayhelper.cpp:505
 #, kde-format
 msgctxt "@info '%2' is the previous message '1 hour'/'%1 hours'"
 msgid "in %2 1 minute's time"
@@ -4969,38 +4990,17 @@ msgid_plural "in %2 %1 minutes' time"
 msgstr[0] "in %2 un 1 Minuut"
 msgstr[1] "in %2 un %1 Minuten"
 
-#: messagedisplayhelper.cpp:853
+#: messagedisplayhelper.cpp:847
 #, kde-format
 msgctxt "@info"
 msgid "Unable to speak message"
 msgstr "Bescheed lett sik nich vörlesen"
 
-#: messagedisplayhelper.cpp:853
+#: messagedisplayhelper.cpp:847
 #, kde-format
 msgctxt "@info"
 msgid "Text-to-speech subsystem is not available"
 msgstr ""
-
-#: messagedisplayhelper.cpp:1046
-#, kde-kuit-format
-msgctxt "@info"
-msgid "Cannot initialize audio player: %1"
-msgstr ""
-
-#: messagedisplayhelper.cpp:1068
-#, kde-kuit-format
-msgctxt "@info"
-msgid "Cannot set audio player properties: %1"
-msgstr ""
-
-#: messagedisplayhelper.cpp:1221
-#, kde-kuit-format
-msgctxt "@info"
-msgid ""
-"<para>Error playing audio file: <filename>%1</filename></para><para>%2</para>"
-msgstr ""
-"<para>Fehler bi't Afspelen vun de Klangdatei: <filename>%1</filename></"
-"para><para>%2</para>"
 
 #: messagenotification.cpp:518
 #, fuzzy, kde-format
@@ -5116,13 +5116,13 @@ msgstr ""
 "<para>Den Alarm op later verschuven.</para><para>Du warrst denn fraagt, "
 "wannehr de Alarm wedder wiest warrn schall.</para>"
 
-#: messagewindow.cpp:458 sounddlg.cpp:451
+#: messagewindow.cpp:458 sounddlg.cpp:441
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Stop sound"
 msgstr "Afspelen anhollen"
 
-#: messagewindow.cpp:459 sounddlg.cpp:452
+#: messagewindow.cpp:459 sounddlg.cpp:442
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Stop playing the sound"
@@ -8570,19 +8570,19 @@ msgstr ""
 "Fehler bi't Instellen vun't Wedderanmaken na Utsetten.<nl/>Befehl weer: "
 "<command>%1</command><nl/>Fehlerkode: %2."
 
-#: sounddlg.cpp:42
+#: sounddlg.cpp:40
 #, kde-format
 msgctxt "@option:check"
 msgid "Repeat"
 msgstr "Wedderhalen"
 
-#: sounddlg.cpp:43
+#: sounddlg.cpp:41
 #, kde-format
 msgctxt "@option:check"
 msgid "Set volume"
 msgstr "Luutstärk fastleggen"
 
-#: sounddlg.cpp:53
+#: sounddlg.cpp:51
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -8592,91 +8592,91 @@ msgstr ""
 "Wenn anmaakt, warrt de Klangdatei so lang wedderhaalt, as de Alarmnaricht "
 "wiest warrt."
 
-#: sounddlg.cpp:149
+#: sounddlg.cpp:147
 #, kde-format
 msgctxt "@label"
 msgid "Sound file:"
 msgstr "Klangdatei:"
 
-#: sounddlg.cpp:166 sounddlg.cpp:464
+#: sounddlg.cpp:164 sounddlg.cpp:454
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Test the sound"
 msgstr "Den Klang utproberen"
 
-#: sounddlg.cpp:167 sounddlg.cpp:465
+#: sounddlg.cpp:165 sounddlg.cpp:455
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Play the selected sound file."
 msgstr "De utsöchte Klangdatei afspelen"
 
-#: sounddlg.cpp:174
+#: sounddlg.cpp:172
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the name or URL of a sound file to play."
 msgstr "Giff den Naam oder de URL vun de Klangdatei in, de Du afspelen wullt"
 
-#: sounddlg.cpp:185
+#: sounddlg.cpp:183
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select a sound file to play."
 msgstr "Söök de Klangdatei ut, de Du afspelen wullt"
 
-#: sounddlg.cpp:207
+#: sounddlg.cpp:205
 #, kde-format
 msgctxt "@label:spinbox Length of time to pause between repetitions"
 msgid "Pause between repetitions:"
 msgstr "Töövtiet twischen Wedderhalen:"
 
-#: sounddlg.cpp:214 sounddlg.cpp:271
+#: sounddlg.cpp:212 sounddlg.cpp:269
 #, kde-format
 msgctxt "@label"
 msgid "seconds"
 msgstr "Sekunnen"
 
-#: sounddlg.cpp:216
+#: sounddlg.cpp:214
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter how many seconds to pause between repetitions."
 msgstr "Giff de Töövtiet twischen de Wedderhalen in Sekunnen an."
 
-#: sounddlg.cpp:219
+#: sounddlg.cpp:217
 #, kde-format
 msgctxt "@title:group Sound volume"
 msgid "Volume"
 msgstr "Luutstärk"
 
-#: sounddlg.cpp:235
+#: sounddlg.cpp:233
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select to choose the volume for playing the sound file."
 msgstr "Wenn anmaakt, kannst Du hier de Luutstärk för de Klangdatei fastleggen"
 
-#: sounddlg.cpp:243
+#: sounddlg.cpp:241
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Choose the volume for playing the sound file."
 msgstr "Hier kannst Du de Luutstärk för de Klangdatei fastleggen"
 
-#: sounddlg.cpp:254
+#: sounddlg.cpp:252
 #, kde-format
 msgctxt "@option:check"
 msgid "Fade"
 msgstr "Liesen anfangen"
 
-#: sounddlg.cpp:256
+#: sounddlg.cpp:254
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select to fade the volume when the sound file first starts to play."
 msgstr "Wenn anmaakt, warrt de Klang langsam inblendt."
 
-#: sounddlg.cpp:264
+#: sounddlg.cpp:262
 #, kde-format
 msgctxt "@label:spinbox Time period over which to fade the sound"
 msgid "Fade time:"
 msgstr "Inblenntiet:"
 
-#: sounddlg.cpp:273
+#: sounddlg.cpp:271
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -8685,49 +8685,49 @@ msgstr ""
 "Giff an, över wo vele Sekunnen de Klang luder warrn schall, ehr he bi de "
 "instellte Luutstärk anlangt"
 
-#: sounddlg.cpp:280
+#: sounddlg.cpp:278
 #, kde-format
 msgctxt "@label:slider"
 msgid "Initial volume:"
 msgstr "Luutstärk an'n Anfang:"
 
-#: sounddlg.cpp:289
+#: sounddlg.cpp:287
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Choose the initial volume for playing the sound file."
 msgstr "Leggt de Luutstärk fast, mit de de Klang an'n Anfang speelt warrt"
 
-#: soundpicker.cpp:41
+#: soundpicker.cpp:40
 #, kde-format
 msgctxt "@label:listbox Listbox providing audio options"
 msgid "Sound:"
 msgstr "Klang:"
 
-#: soundpicker.cpp:42
+#: soundpicker.cpp:41
 #, kde-format
 msgctxt "@item:inlistbox No sound"
 msgid "None"
 msgstr "Keen"
 
-#: soundpicker.cpp:43
+#: soundpicker.cpp:42
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Beep"
 msgstr "Tüüt"
 
-#: soundpicker.cpp:44
+#: soundpicker.cpp:43
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Speak"
 msgstr "Vörlesen"
 
-#: soundpicker.cpp:45
+#: soundpicker.cpp:44
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Sound file"
 msgstr "Klangdatei"
 
-#: soundpicker.cpp:75
+#: soundpicker.cpp:74
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -8741,13 +8741,13 @@ msgid ""
 "list></para>"
 msgstr ""
 
-#: soundpicker.cpp:87
+#: soundpicker.cpp:86
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Configure sound file"
 msgstr "Klangdatei utsöken"
 
-#: soundpicker.cpp:88
+#: soundpicker.cpp:87
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Configure a sound file to play when the alarm is displayed."
@@ -8755,13 +8755,13 @@ msgstr ""
 "Hier kannst Du en Klangdatei utsöken, de Du afspeelt hebben wullt, wenn de "
 "Alarm wiest warrt."
 
-#: soundpicker.cpp:257
+#: soundpicker.cpp:256
 #, kde-format
 msgctxt "@title:window"
 msgid "Sound File"
 msgstr "Klangdatei"
 
-#: soundpicker.cpp:316
+#: soundpicker.cpp:315
 #, fuzzy, kde-format
 #| msgctxt "@item:inlistbox"
 #| msgid "Sound file"
@@ -8769,7 +8769,7 @@ msgctxt "@item:inlistbox"
 msgid "Audio files"
 msgstr "Klangdatei"
 
-#: soundpicker.cpp:341
+#: soundpicker.cpp:338
 #, kde-format
 msgctxt "@title:window"
 msgid "Choose Sound File"
