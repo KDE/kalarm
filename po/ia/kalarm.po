@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-02-26 00:38+0000\n"
-"PO-Revision-Date: 2024-01-22 10:53+0100\n"
+"PO-Revision-Date: 2024-02-26 10:43+0100\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
 "Language: ia\n"
@@ -277,13 +277,13 @@ msgstr "Tempore de alarma ja ha expirate"
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot initialize audio player: %1"
-msgstr ""
+msgstr "Non pote initialisa reproductor audio: %1"
 
 #: audioplayer.cpp:92
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot set audio player properties: %1"
-msgstr ""
+msgstr "Nonpote assignar proprietates de reproductor audio: %1"
 
 #: audioplayer.cpp:166 audioplayer.cpp:239
 #, kde-kuit-format

@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-02-26 00:38+0000\n"
-"PO-Revision-Date: 2024-01-20 10:55+0100\n"
+"PO-Revision-Date: 2024-02-27 00:14+0100\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
 "Language: eu\n"
@@ -279,13 +279,13 @@ msgstr "Alarmaren ordua dagoeneko iragan da"
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot initialize audio player: %1"
-msgstr ""
+msgstr "Ezin du audio-jotzailea hasieratu: %1"
 
 #: audioplayer.cpp:92
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot set audio player properties: %1"
-msgstr ""
+msgstr "Ezin ditu audio-jotzailearen propietateak ezarri: %1"
 
 #: audioplayer.cpp:166 audioplayer.cpp:239
 #, kde-kuit-format
