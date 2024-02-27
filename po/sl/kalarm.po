@@ -1,9 +1,9 @@
-# Copyright (C) YEAR This file is copyright:
+# Copyright (C) 2024 This file is copyright:
 # This file is distributed under the same license as the kalarm package.
 #
 # Andrej Vernekar <andrej.vernekar@moj.net>, 2001, 2003, 2004, 2005, 2008.
 # Gregor Rakar <gregor.rakar@kiss.si>, 2003, 2004, 2005.
-# Jure Repinc <jlp@holodeck1.com>, 2006, 2007, 2009, 2012, 2013.
+# SPDX-FileCopyrightText: 2006, 2007, 2009, 2012, 2013, 2024 Jure Repinc <jlp@holodeck1.com>
 # Andrej Vernekar <andrej.vernerkar@moj.net>, 2008, 2011.
 # Andrej Mernik <andrejm@ubuntu.si>, 2014, 2015, 2016, 2017.
 # Matjaž Jeran <matjaz.jeran@amis.net>, 2019, 2020, 2021, 2022, 2023.
@@ -12,8 +12,8 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-02-16 02:31+0000\n"
-"PO-Revision-Date: 2023-10-09 07:28+0200\n"
-"Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
+"PO-Revision-Date: 2024-02-26 22:22+0100\n"
+"Last-Translator: Jure Repinc <jlp@holodeck1.com>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
 "MIME-Version: 1.0\n"
@@ -22,7 +22,7 @@ msgstr ""
 "Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n"
 "%100==4 ? 3 : 0);\n"
 "Translator: Andrej Mernik <andrejm@ubuntu.si>\n"
-"X-Generator: Poedit 3.3.2\n"
+"X-Generator: Lokalize 24.04.70\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -184,20 +184,20 @@ msgstr "Prednastavi"
 msgctxt "@item:inlistbox"
 msgid "1 minute"
 msgid_plural "%1 minutes"
-msgstr[0] "%1 minuta"
-msgstr[1] "%1 minuti"
-msgstr[2] "%1 minute"
-msgstr[3] "%1 minut"
+msgstr[0] "%1 minut"
+msgstr[1] "%1 minuta"
+msgstr[2] "%1 minuti"
+msgstr[3] "%1 minute"
 
 #: alarmtimewidget.cpp:157
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "1 hour"
 msgid_plural "%1 hours"
-msgstr[0] "%1 ura"
-msgstr[1] "%1 uri"
-msgstr[2] "%1 ure"
-msgstr[3] "%1 ur"
+msgstr[0] "%1 ur"
+msgstr[1] "%1 ura"
+msgstr[2] "%1 uri"
+msgstr[3] "%1 ure"
 
 #: alarmtimewidget.cpp:165
 #, kde-format
@@ -227,7 +227,7 @@ msgstr "<para>%1</para><para>%2</para><para>%3</para>"
 #, kde-format
 msgctxt "@action:button"
 msgid "Time Zone..."
-msgstr "Časovni pas ..."
+msgstr "Časovni pas …"
 
 #: alarmtimewidget.cpp:211
 #, kde-format
@@ -1436,7 +1436,7 @@ msgid ""
 "determine whether to display alarm messages in windows or in system "
 "notifications."
 msgstr ""
-"Privzeta nastavitev v pogovornem oknu za urejanje alarma \"način prikaza\" "
+"Privzeta nastavitev v pogovornem oknu za urejanje alarma »način prikaza« "
 "določa, ali naj se alarmna sporočila prikažejo v oknih ali v sistemu "
 "obvestil."
 
@@ -2085,7 +2085,7 @@ msgstr "Razporedite alarm na navedeni čas."
 #, kde-format
 msgctxt "@action:button"
 msgid "Load Template..."
-msgstr "Naloži predlogo ..."
+msgstr "Naloži predlogo …"
 
 #: editdlg.cpp:198
 #, kde-format
@@ -2139,7 +2139,7 @@ msgstr "Preloženo na:"
 #, kde-format
 msgctxt "@action:button"
 msgid "Change..."
-msgstr "Spremeni ..."
+msgstr "Spremeni …"
 
 #: editdlg.cpp:274
 #, kde-format
@@ -2333,7 +2333,7 @@ msgstr "Izbrati morate koledar, v katerega bo shranjen alarm"
 #, kde-format
 msgctxt "@action:Button"
 msgid "Fewer Options <<"
-msgstr "Manj možnosti <<"
+msgstr "Manj možnosti «"
 
 #: editdlg.cpp:1258
 #, kde-format
@@ -2345,7 +2345,7 @@ msgstr "Prikaži manj možnosti"
 #, kde-format
 msgctxt "@action:button"
 msgid "More Options >>"
-msgstr "Več možnosti >>"
+msgstr "Več možnosti »"
 
 #: editdlg.cpp:1264
 #, kde-format
@@ -2805,7 +2805,7 @@ msgstr "Datoteke, ki naj se pošljejo kot priloge e-pošti."
 #, kde-format
 msgctxt "@action:button"
 msgid "Add..."
-msgstr "Dodaj ..."
+msgstr "Dodaj …"
 
 #: editdlgtypes.cpp:1243
 #, kde-format
@@ -3138,7 +3138,7 @@ msgstr "Zahtevana pisava"
 #, kde-format
 msgctxt "@action:button"
 msgid "Font && Color..."
-msgstr "Pisava in barva ..."
+msgstr "Pisava in barva …"
 
 #: fontcolourbutton.cpp:30
 #, kde-format
@@ -3564,10 +3564,10 @@ msgstr "Pri prijavi"
 msgctxt "@info"
 msgid "1 Minute"
 msgid_plural "%1 Minutes"
-msgstr[0] "%1 minuta"
-msgstr[1] "%1 minuti"
-msgstr[2] "%1 minute"
-msgstr[3] "%1 minut"
+msgstr[0] "%1 minut"
+msgstr[1] "%1 minuta"
+msgstr[2] "%1 minuti"
+msgstr[3] "%1 minute"
 
 #: kalarmcalendar/kaevent.cpp:3092 kalarmcalendar/kaevent.cpp:3179
 #: kalarmcalendar/kaeventformatter.cpp:444
@@ -3575,10 +3575,10 @@ msgstr[3] "%1 minut"
 msgctxt "@info"
 msgid "1 Hour"
 msgid_plural "%1 Hours"
-msgstr[0] "%1 ura"
-msgstr[1] "%1 uri"
-msgstr[2] "%1 ure"
-msgstr[3] "%1 ur"
+msgstr[0] "%1 ur"
+msgstr[1] "%1 ura"
+msgstr[2] "%1 uri"
+msgstr[3] "%1 ure"
 
 #: kalarmcalendar/kaevent.cpp:3094 kalarmcalendar/kaevent.cpp:3180
 #, kde-format
@@ -3592,9 +3592,9 @@ msgstr "%1h %2m"
 msgctxt "@info"
 msgid "1 Day"
 msgid_plural "%1 Days"
-msgstr[0] "%1 dan"
-msgstr[1] "%1 dni"
-msgstr[2] "%1 dni"
+msgstr[0] "%1 dni"
+msgstr[1] "%1 dan"
+msgstr[2] "%1 dneva"
 msgstr[3] "%1 dni"
 
 #: kalarmcalendar/kaevent.cpp:3099 kalarmcalendar/kaevent.cpp:3185
@@ -3602,30 +3602,30 @@ msgstr[3] "%1 dni"
 msgctxt "@info"
 msgid "1 Week"
 msgid_plural "%1 Weeks"
-msgstr[0] "%1 teden"
-msgstr[1] "%1 tedna"
-msgstr[2] "%1 tedni"
-msgstr[3] "%1 tednov"
+msgstr[0] "%1 tednov"
+msgstr[1] "%1 teden"
+msgstr[2] "%1 tedna"
+msgstr[3] "%1 tedni"
 
 #: kalarmcalendar/kaevent.cpp:3101
 #, kde-format
 msgctxt "@info"
 msgid "1 Month"
 msgid_plural "%1 Months"
-msgstr[0] "%1 mesec"
-msgstr[1] "%1 meseca"
-msgstr[2] "%1 meseci"
-msgstr[3] "%1 mesecev"
+msgstr[0] "%1 mesecev"
+msgstr[1] "%1 mesec"
+msgstr[2] "%1 meseca"
+msgstr[3] "%1 meseci"
 
 #: kalarmcalendar/kaevent.cpp:3103
 #, kde-format
 msgctxt "@info"
 msgid "1 Year"
 msgid_plural "%1 Years"
-msgstr[0] "%1 leto"
-msgstr[1] "%1 leti"
-msgstr[2] "%1 leta"
-msgstr[3] "%1 let"
+msgstr[0] "%1 let"
+msgstr[1] "%1 leto"
+msgstr[2] "%1 leti"
+msgstr[3] "%1 leta"
 
 #: kalarmcalendar/kaevent.cpp:3109
 #, kde-format
@@ -3673,7 +3673,7 @@ msgstr "Ime predloge"
 #, kde-format
 msgctxt "@label"
 msgid "Creation time"
-msgstr "Čas kreiranja"
+msgstr "Čas ustvaritve"
 
 #: kalarmcalendar/kaeventformatter.cpp:49
 #, kde-format
@@ -4059,10 +4059,10 @@ msgstr "%1%%"
 msgctxt "@info"
 msgid "1 Second"
 msgid_plural "%1 Seconds"
-msgstr[0] "%1 sekunda"
-msgstr[1] "%1 sekundi"
-msgstr[2] "%1 sekunde"
-msgstr[3] "%1 sekund"
+msgstr[0] "%1 sekund"
+msgstr[1] "%1 sekunda"
+msgstr[2] "%1 sekundi"
+msgstr[3] "%1 sekunde"
 
 #: kalarmcalendar/kaeventformatter.cpp:417
 #, kde-format
@@ -4386,7 +4386,7 @@ msgstr ""
 #, kde-format
 msgctxt "@action"
 msgid "Templates..."
-msgstr "Predloge..."
+msgstr "Predloge …"
 
 #: mainwindow.cpp:464 templatedlg.cpp:73
 #, kde-format
@@ -4398,19 +4398,19 @@ msgstr "Nova"
 #, kde-format
 msgctxt "@action"
 msgid "Create Template..."
-msgstr "Ustvari predlogo..."
+msgstr "Ustvari predlogo …"
 
 #: mainwindow.cpp:474
 #, kde-format
 msgctxt "@action"
 msgid "Copy..."
-msgstr "Kopiraj..."
+msgstr "Kopiraj …"
 
 #: mainwindow.cpp:479 resourceselector.cpp:301
 #, kde-format
 msgctxt "@action"
 msgid "Edit..."
-msgstr "Uredi..."
+msgstr "Uredi …"
 
 #: mainwindow.cpp:484
 #, kde-format
@@ -4434,7 +4434,7 @@ msgstr "Znova omogoči"
 #, kde-format
 msgctxt "@action"
 msgid "Wake From Suspend..."
-msgstr "Zbudi iz pripravljenosti ..."
+msgstr "Zbudi iz pripravljenosti …"
 
 #: mainwindow.cpp:519
 #, kde-format
@@ -4464,25 +4464,25 @@ msgstr "Prikaži izbirnik datumov"
 #, kde-format
 msgctxt "@action"
 msgid "Import Alarms..."
-msgstr "Uvozi alarme..."
+msgstr "Uvozi alarme …"
 
 #: mainwindow.cpp:549
 #, kde-format
 msgctxt "@action"
 msgid "Import Birthdays..."
-msgstr "Uvozi rojstne dneve..."
+msgstr "Uvozi rojstne dneve …"
 
 #: mainwindow.cpp:554
 #, kde-format
 msgctxt "@action"
 msgid "Export Selected Alarms..."
-msgstr "Izvozi izbrane alarme..."
+msgstr "Izvozi izbrane alarme …"
 
 #: mainwindow.cpp:558 resourceselector.cpp:319
 #, kde-format
 msgctxt "@action"
 msgid "Export..."
-msgstr "Izvozi..."
+msgstr "Izvozi …"
 
 #: mainwindow.cpp:562
 #, kde-format
@@ -4495,19 +4495,19 @@ msgstr "Osveži alarme"
 msgctxt "@info"
 msgid "Do you really want to delete the selected alarm?"
 msgid_plural "Do you really want to delete the %1 selected alarms?"
-msgstr[0] "Ali zares želite izbrisati %1 izbran alarm?"
-msgstr[1] "Ali zares želite izbrisati %1 izbrana alarma?"
-msgstr[2] "Ali zares želite izbrisati %1 izbrane alarme?"
-msgstr[3] "Ali zares želite izbrisati %1 izbranih alarmov?"
+msgstr[0] "Ali zares želite izbrisati %1 izbranih alarmov?"
+msgstr[1] "Ali zares želite izbrisati %1 izbran alarm?"
+msgstr[2] "Ali zares želite izbrisati %1 izbrana alarma?"
+msgstr[3] "Ali zares želite izbrisati %1 izbrane alarme?"
 
 #: mainwindow.cpp:808
 #, kde-format
 msgctxt "@title:window"
 msgid "Delete Alarm"
 msgid_plural "Delete Alarms"
-msgstr[0] "Izbriši alarm"
-msgstr[1] "Izbriši alarma"
-msgstr[2] "Izbriši alarme"
+msgstr[0] "Izbriši alarme"
+msgstr[1] "Izbriši alarm"
+msgstr[2] "Izbriši alarma"
 msgstr[3] "Izbriši alarme"
 
 #: mainwindow.cpp:809 recurrenceedit.cpp:318 templatedlg.cpp:92
@@ -4655,9 +4655,9 @@ msgstr "Danes"
 msgctxt "@info"
 msgid "Tomorrow"
 msgid_plural "in %1 days' time"
-msgstr[0] "Čez %1 dan"
-msgstr[1] "čez %1 dneva"
-msgstr[2] "čez %1 dni"
+msgstr[0] "čez %1 dni"
+msgstr[1] "Čez %1 dan"
+msgstr[2] "čez %1 dneva"
 msgstr[3] "čez %1 dni"
 
 #: messagedisplayhelper.cpp:486
@@ -4665,50 +4665,50 @@ msgstr[3] "čez %1 dni"
 msgctxt "@info"
 msgid "in 1 week's time"
 msgid_plural "in %1 weeks' time"
-msgstr[0] "čez %1 teden"
-msgstr[1] "čez %1 tedna"
-msgstr[2] "čez %1 tedne"
-msgstr[3] "čez %1 tednov"
+msgstr[0] "čez %1 tednov"
+msgstr[1] "čez %1 teden"
+msgstr[2] "čez %1 tedna"
+msgstr[3] "čez %1 tedne"
 
 #: messagedisplayhelper.cpp:500
 #, kde-format
 msgctxt "@info"
 msgid "in 1 minute's time"
 msgid_plural "in %1 minutes' time"
-msgstr[0] "čez %1 minuto"
-msgstr[1] "čez %1 minuti"
-msgstr[2] "čez %1 minute"
-msgstr[3] "čez %1 minut"
+msgstr[0] "čez %1 minut"
+msgstr[1] "čez %1 minuto"
+msgstr[2] "čez %1 minuti"
+msgstr[3] "čez %1 minute"
 
 #: messagedisplayhelper.cpp:502
 #, kde-format
 msgctxt "@info"
 msgid "in 1 hour's time"
 msgid_plural "in %1 hours' time"
-msgstr[0] "čez %1 uro"
-msgstr[1] "čez %1 uri"
-msgstr[2] "čez %1 ure"
-msgstr[3] "čez %1 ur"
+msgstr[0] "čez %1 ur"
+msgstr[1] "čez %1 uro"
+msgstr[2] "čez %1 uri"
+msgstr[3] "čez %1 ure"
 
 #: messagedisplayhelper.cpp:505
 #, kde-format
 msgctxt "@item:intext inserted into 'in ... %1 minute's time' below"
 msgid "1 hour"
 msgid_plural "%1 hours"
-msgstr[0] "%1 ura"
-msgstr[1] "%1 uri"
-msgstr[2] "%1 ure"
-msgstr[3] "%1 ur"
+msgstr[0] "%1 ur"
+msgstr[1] "%1 uro"
+msgstr[2] "%1 uri"
+msgstr[3] "%1 ure"
 
 #: messagedisplayhelper.cpp:506
 #, kde-format
 msgctxt "@info '%2' is the previous message '1 hour'/'%1 hours'"
 msgid "in %2 1 minute's time"
 msgid_plural "in %2 %1 minutes' time"
-msgstr[0] "čez %2 in %1 minuta"
-msgstr[1] "čez %2 in %1 minuti"
-msgstr[2] "čez %2 in %1 minute"
-msgstr[3] "čez %2 in %1 minut"
+msgstr[0] "čez %2 in %1 minut"
+msgstr[1] "čez %2 in %1 minuto"
+msgstr[2] "čez %2 in %1 minuti"
+msgstr[3] "čez %2 in %1 minute"
 
 #: messagedisplayhelper.cpp:848
 #, kde-format
@@ -4803,7 +4803,7 @@ msgstr "Potrdi seznanjenost z alarmom"
 #, kde-format
 msgctxt "@action:button"
 msgid "Edit..."
-msgstr "Uredi ..."
+msgstr "Uredi …"
 
 #: messagewindow.cpp:434
 #, kde-format
@@ -4821,7 +4821,7 @@ msgstr "Uredi alarm."
 #, kde-format
 msgctxt "@action:button"
 msgid "Defer..."
-msgstr "Odloži..."
+msgstr "Odloži …"
 
 #: messagewindow.cpp:443
 #, kde-format
@@ -6947,7 +6947,7 @@ msgstr "Koledarske datoteke"
 #, kde-format
 msgctxt "@info:status"
 msgid "Checking file information..."
-msgstr "Preverjam informacije o datoteki..."
+msgstr "Preverjanje informacij o datoteki …"
 
 #: resources/migration/dirresourceimportdialog.cpp:405
 #: resources/migration/dirresourceimportdialog.cpp:453
@@ -7814,7 +7814,7 @@ msgstr "Prikaži podrobnosti"
 #, kde-format
 msgctxt "@action"
 msgid "Set Color..."
-msgstr "Nastavi barvo..."
+msgstr "Nastavi barvo …"
 
 #: resourceselector.cpp:298
 #, kde-format
@@ -7838,13 +7838,13 @@ msgstr "Odstrani"
 #, kde-format
 msgctxt "@action"
 msgid "Add..."
-msgstr "Dodaj..."
+msgstr "Dodaj …"
 
 #: resourceselector.cpp:316
 #, kde-format
 msgctxt "@action"
 msgid "Import..."
-msgstr "Uvozi..."
+msgstr "Uvozi …"
 
 #: resourceselector.cpp:372
 #, kde-format
@@ -8160,7 +8160,7 @@ msgstr "Izberite zvočno datoteko"
 #, kde-format
 msgctxt "@action:button"
 msgid "Special Actions..."
-msgstr "Posebna dejanja ..."
+msgstr "Posebna dejanja …"
 
 #: specialactions.cpp:39
 #, kde-format
@@ -8347,18 +8347,18 @@ msgstr "Izbriši trenutno označene predloge alarmov"
 msgctxt "@info"
 msgid "Do you really want to delete the selected alarm template?"
 msgid_plural "Do you really want to delete the %1 selected alarm templates?"
-msgstr[0] "Ali resnično želite izbrisati %1 izbrano predlogo alarmov?"
-msgstr[1] "Ali resnično želite izbrisati %1 izbrani predlogi alarma?"
-msgstr[2] "Ali resnično želite izbrisati %1 izbrane predloge alarmov?"
-msgstr[3] "Ali resnično želite izbrisati %1 izbranih predlogov alarmov?"
+msgstr[0] "Ali resnično želite izbrisati %1 izbranih predlog alarmov?"
+msgstr[1] "Ali resnično želite izbrisati %1 izbrano predlogo alarmov?"
+msgstr[2] "Ali resnično želite izbrisati %1 izbrani predlogi alarmov?"
+msgstr[3] "Ali resnično želite izbrisati %1 izbrane predloge alarmov?"
 
 #: templatedlg.cpp:179
 #, kde-format
 msgctxt "@title:window"
 msgid "Delete Alarm Template"
 msgid_plural "Delete Alarm Templates"
-msgstr[0] "Izbris predloge alarma"
-msgstr[1] "Izbris predlog alarmov"
+msgstr[0] "Izbris predlog alarmov"
+msgstr[1] "Izbris predloge alarmov"
 msgstr[2] "Izbris predlog alarmov"
 msgstr[3] "Izbris predlog alarmov"
 
@@ -8644,6 +8644,24 @@ msgstr ""
 #, kde-format
 msgid "Number of minutes before alarm to wake from suspend"
 msgstr "Število minut pred alarmom za zbuditev iz pripravljenosti"
+
+#~ msgctxt "@info"
+#~ msgid "Cannot initialize audio player: %1"
+#~ msgstr "Ni mogoče inicializirati predvajalnika zvoka: %1"
+
+#~ msgctxt "@info"
+#~ msgid "Cannot set audio player properties: %1"
+#~ msgstr "Ni mogoče nastaviti lastnosti predvajalnika zvoka: %1"
+
+#~ msgctxt "@info:whatsthis"
+#~ msgid ""
+#~ "Enter how long its buttons should remain disabled after the alarm message "
+#~ "window is shown, to reduce the chance of alarm messages being "
+#~ "accidentally acknowledged."
+#~ msgstr ""
+#~ "Vnesite, kako dolgo naj ostanejo njegovi gumbi onemogočeni, potem ko se "
+#~ "prikaže okno z alarmnim sporočilom, da zmanjšate možnost pomotoma "
+#~ "potrditve alarmnih sporočil."
 
 #~ msgid "&File"
 #~ msgstr "Datoteka"
