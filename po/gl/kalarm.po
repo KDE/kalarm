@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-02-26 00:38+0000\n"
-"PO-Revision-Date: 2024-02-25 09:52+0100\n"
+"PO-Revision-Date: 2024-02-27 07:13+0100\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Proxecto Trasno (proxecto@trasno.gal)\n"
 "Language: gl\n"
@@ -660,12 +660,14 @@ msgstr "Ler a mensaxe cando se amose"
 msgid "Email subject line"
 msgstr "Liña de asunto do correo electrónico"
 
+# well-spelled: aaaa
 #: commandoptions.cpp:259
 #, kde-format
 msgid "Simulate system time [[[yyyy-]mm-]dd-]hh:mm [TZ] (debug mode)"
 msgstr ""
 "Simular a hora do sistema [[[aaaa-]mm-]dd-]hh:mm [TZ] (modo de depuración)"
 
+# well-spelled: aaaa
 #: commandoptions.cpp:264
 #, kde-format
 msgid ""
@@ -684,6 +686,7 @@ msgstr "Amosar a icona na área de notificación"
 msgid "Trigger alarm with the specified event ID"
 msgstr "Activar a alarma co seguinte identificador do evento indicado"
 
+# well-spelled: aaaa
 #: commandoptions.cpp:275
 #, kde-format
 msgid "Repeat until time [[[yyyy-]mm-]dd-]hh:mm [TZ], or date yyyy-mm-dd [TZ]"
