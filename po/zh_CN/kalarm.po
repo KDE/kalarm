@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-02-26 00:38+0000\n"
-"PO-Revision-Date: 2024-02-05 11:37\n"
+"PO-Revision-Date: 2024-02-29 12:53\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -263,13 +263,13 @@ msgstr "闹钟时间已过"
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot initialize audio player: %1"
-msgstr ""
+msgstr "无法初始化音频播放器：%1"
 
 #: audioplayer.cpp:92
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot set audio player properties: %1"
-msgstr ""
+msgstr "无法设置音频播放器属性：%1"
 
 #: audioplayer.cpp:166 audioplayer.cpp:239
 #, kde-kuit-format
@@ -8306,7 +8306,3 @@ msgstr "输入闹钟响铃前唤醒系统的分钟数，此项可确保系统在
 #, kde-format
 msgid "Number of minutes before alarm to wake from suspend"
 msgstr "闹钟唤醒睡眠前的分钟数"
-
-#~ msgctxt "@info"
-#~ msgid "Cannot open audio file: <filename>%1</filename>"
-#~ msgstr "无法打开音频文件：<filename>%1</filename>"
