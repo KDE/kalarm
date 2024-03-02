@@ -5,7 +5,7 @@
  *  calendar data.
  *  It is the Qt5/Qt6 version of KDE 4 kdelibs/kdecore/date/kdatetime.cpp.
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2005-2023 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2005-2024 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: LGPL-2.0-or-later
 */
@@ -578,7 +578,7 @@ void KADateTimePrivate::setDtSpec(const KADateTime::Spec& s)
             mDt.setTimeZone(QTimeZone::utc());
             break;
         case KADateTime::OffsetFromUTC:
-            mDt.setOffsetFromUtc(s.utcOffset());
+            mDt.setTimeZone(QTimeZone::fromSecondsAheadOfUtc(s.utcOffset()));
             break;
         case KADateTime::TimeZone:
             mDt.setTimeZone(s.timeZone());
@@ -620,7 +620,7 @@ void KADateTimePrivate::setSpec(const KADateTime::Spec& other)
                 int offset = other.utcOffset();
                 if (mDt.offsetFromUtc() == offset)
                     return;
-                mDt.setOffsetFromUtc(offset);
+                mDt.setTimeZone(QTimeZone::fromSecondsAheadOfUtc(offset));
                 utcCached = convertedCached = false;
                 break;
             }
