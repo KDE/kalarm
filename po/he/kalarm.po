@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-02-26 00:38+0000\n"
-"PO-Revision-Date: 2024-02-24 17:38+0200\n"
+"PO-Revision-Date: 2024-03-03 15:46+0200\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -2006,7 +2006,7 @@ msgstr "&תזכורת"
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Template name:"
-msgstr ""
+msgstr "שם התבנית:"
 
 #: editdlg.cpp:250
 #, fuzzy, kde-format
@@ -2110,20 +2110,20 @@ msgstr "קביעה של מועד התזכורת למשך הזמן המצויין
 #, kde-format
 msgctxt "@option:check"
 msgid "Wake from suspend"
-msgstr ""
+msgstr "השכמה מהשהיה"
 
 #: editdlg.cpp:388
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "Check to wake the system if the alarm triggers while the system is suspended"
-msgstr ""
+msgstr "יש לסמן כדי להעיר את המערכת אם ההתראה מוזנקת כשהמערכת מושהית"
 
 #: editdlg.cpp:405
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to copy the alarm into KOrganizer's calendar"
-msgstr ""
+msgstr "יש לסמן כדי להעתיק את ההתראה ללוח השנה של KOrganizer"
 
 #: editdlg.cpp:1007
 #, fuzzy, kde-format
@@ -4564,10 +4564,10 @@ msgid "Text-to-speech subsystem is not available"
 msgstr ""
 
 #: messagenotification.cpp:518
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@action:button"
 msgid "Edit"
-msgstr "&שינוי..."
+msgstr "עריכה"
 
 #: messagenotification.cpp:527
 #, fuzzy, kde-format
@@ -4626,10 +4626,10 @@ msgid "Acknowledge the alarm"
 msgstr "אישור התזכורת"
 
 #: messagewindow.cpp:430 resourceselector.cpp:77 templatedlg.cpp:80
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@action:button"
 msgid "Edit..."
-msgstr "&שינוי..."
+msgstr "עריכה…"
 
 #: messagewindow.cpp:434
 #, fuzzy, kde-format
@@ -5505,13 +5505,13 @@ msgstr "&חזרה"
 #, kde-format
 msgctxt "@option:radio"
 msgid "February 28th"
-msgstr ""
+msgstr "28 בפברואר"
 
 #: prefdlg.cpp:1428
 #, kde-format
 msgctxt "@option:radio"
 msgid "March 1st"
-msgstr ""
+msgstr "1 במרץ"
 
 #: prefdlg.cpp:1432
 #, fuzzy, kde-format
@@ -5538,7 +5538,7 @@ msgstr "אפשר &תזכורות"
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Reminder units:"
-msgstr ""
+msgstr "יחידות תזכורת:"
 
 #: prefdlg.cpp:1464
 #, fuzzy, kde-format
@@ -5666,7 +5666,7 @@ msgstr "הפעלת %1 בעת הפעלת KDE."
 #, kde-format
 msgctxt "@option:radio Always show KAlarm icon"
 msgid "Always show"
-msgstr ""
+msgstr "להציג תמיד"
 
 #: prefdlg.cpp:1838
 #, fuzzy, kde-kuit-format
@@ -7333,10 +7333,10 @@ msgid ""
 msgstr ""
 
 #: resourceselector.cpp:50
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title:group"
 msgid "Calendars"
-msgstr "                               כתובת קובץ לוח השנה"
+msgstr "לוחות שנה"
 
 #: resourceselector.cpp:54
 #, fuzzy, kde-format
@@ -7499,10 +7499,10 @@ msgid "Update Calendar Format"
 msgstr "                               כתובת קובץ לוח השנה"
 
 #: resourceselector.cpp:307
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@action"
 msgid "Remove"
-msgstr "ה&סר"
+msgstr "הסרה"
 
 #: resourceselector.cpp:313
 #, fuzzy, kde-format
