@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-02-26 00:38+0000\n"
-"PO-Revision-Date: 2024-03-03 15:46+0200\n"
+"PO-Revision-Date: 2024-03-06 23:22+0200\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -4985,7 +4985,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title:group"
 msgid "Plugins"
-msgstr ""
+msgstr "תוספים"
 
 #: prefdlg.cpp:548
 #, fuzzy, kde-format
@@ -5110,7 +5110,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title:group"
 msgid "Working Hours"
-msgstr ""
+msgstr "שעות עבודה"
 
 #: prefdlg.cpp:815
 #, fuzzy, kde-format
@@ -6366,7 +6366,7 @@ msgstr "שנה אחת"
 #, kde-format
 msgctxt "@item:inlistbox 28th February (short form)"
 msgid "28 Feb"
-msgstr ""
+msgstr "28 בפברואר"
 
 #: recurrenceedit.cpp:1542
 #, kde-format
@@ -6380,7 +6380,7 @@ msgstr ""
 #, kde-format
 msgctxt "@info"
 msgid "No month selected"
-msgstr ""
+msgstr "לא נבחר חודש"
 
 #: reminder.cpp:29
 #, kde-format
@@ -6398,7 +6398,7 @@ msgstr ""
 #, kde-format
 msgctxt "@option:check"
 msgid "Reminder:"
-msgstr ""
+msgstr "תזכורת:"
 
 #: reminder.cpp:47
 #, kde-format
@@ -6463,7 +6463,7 @@ msgstr "הזן את המספר הכולל של פעמים שיש להציג את
 #, kde-format
 msgctxt "@option:radio"
 msgid "Duration:"
-msgstr ""
+msgstr "משך:"
 
 #: repetitionbutton.cpp:174
 #, kde-format
@@ -6653,33 +6653,33 @@ msgstr ""
 #, kde-format
 msgctxt "@info:status"
 msgid "Error! File already exists."
-msgstr ""
+msgstr "שגיאה! הקובץ כבר קיים."
 
 #: resources/migration/dirresourceimportdialog.cpp:411
 #: resources/migration/dirresourceimportdialog.cpp:462
 #, kde-format
 msgctxt "@info:status"
 msgid "Error! Cannot create file (directory does not exist)."
-msgstr ""
+msgstr "שגיאה! לא ניתן ליצור קובץ (התיקייה לא קיימת)."
 
 #: resources/migration/dirresourceimportdialog.cpp:416
 #: resources/migration/dirresourceimportdialog.cpp:464
 #, kde-format
 msgctxt "@info:status"
 msgid "Error! Cannot create file (directory is not writable)."
-msgstr ""
+msgstr "שגיאה! לא ניתן ליצור קובץ (התיקייה לא זמינה לכתיבה)."
 
 #: resources/migration/dirresourceimportdialog.cpp:470
 #, kde-format
 msgctxt "@info"
 msgid "Error! Cannot create file (directory does not exist)."
-msgstr ""
+msgstr "שגיאה! לא ניתן ליצור קובץ (התיקייה לא קיימת)."
 
 #: resources/migration/dirresourceimportdialog.cpp:472
 #, kde-format
 msgctxt "@info"
 msgid "Error! Cannot create file (directory is not writable)."
-msgstr ""
+msgstr "שגיאה! לא ניתן ליצור קובץ (התיקייה לא זמינה לכתיבה)."
 
 #. i18n: ectx: property (text), widget (QLabel, warning1)
 #: resources/migration/dirresourceimportdialog_intro.ui:16
@@ -6746,7 +6746,7 @@ msgstr "שליחת הדוא\"ל נכשלה"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select the resource to import the directory resource's alarms into."
-msgstr ""
+msgstr "נא לבחור את המשאב אליו לייבא את התראות משאב התיקייה."
 
 #. i18n: ectx: property (text), widget (QRadioButton, newRadio)
 #: resources/migration/dirresourceimportdialog_type.ui:49
@@ -6889,13 +6889,13 @@ msgstr "חזרה"
 #, kde-format
 msgctxt "@title:column"
 msgid "Color"
-msgstr ""
+msgstr "צבע"
 
 #: resources/resourcedatamodelbase.cpp:121
 #, kde-format
 msgctxt "@title:column"
 msgid "Type"
-msgstr ""
+msgstr "סוג"
 
 #: resources/resourcedatamodelbase.cpp:123
 #, fuzzy, kde-format
