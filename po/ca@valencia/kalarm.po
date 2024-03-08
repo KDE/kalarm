@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-03-07 02:20+0000\n"
-"PO-Revision-Date: 2024-01-20 15:26+0100\n"
+"PO-Revision-Date: 2024-03-07 13:07+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -283,13 +283,13 @@ msgstr "L'hora de l'alarma ja ha expirat"
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot initialize audio player: %1"
-msgstr ""
+msgstr "No s'ha pogut restablir el reproductor d'àudio: %1"
 
 #: audioplayer.cpp:92
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot set audio player properties: %1"
-msgstr ""
+msgstr "No s'han pogut establir les propietats del reproductor d'àudio: %1"
 
 #: audioplayer.cpp:166 audioplayer.cpp:239
 #, kde-kuit-format
@@ -8791,7 +8791,3 @@ msgstr ""
 #, kde-format
 msgid "Number of minutes before alarm to wake from suspend"
 msgstr "Nombre de minuts abans de l'alarma per a activar des de la suspensió"
-
-#~ msgctxt "@info"
-#~ msgid "Cannot open audio file: <filename>%1</filename>"
-#~ msgstr "No s'ha pogut obrir el fitxer d'àudio: <filename>%1</filename>"

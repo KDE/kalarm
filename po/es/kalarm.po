@@ -8,7 +8,7 @@
 # Juan Manuel García Molina <juanma@superiodico.net>, 2007.
 # Enrique Matias Sanchez (aka Quique) <cronopios@gmail.com>, 2007.
 # Jaime Robles <jaime@kde.org>, 2007.
-# SPDX-FileCopyrightText: 2008, 2009, 2010, 2014, 2019, 2020, 2021, 2022, 2023 Eloy Cuadra <ecuadra@eloihr.net>
+# SPDX-FileCopyrightText: 2008, 2009, 2010, 2014, 2019, 2020, 2021, 2022, 2023, 2024 Eloy Cuadra <ecuadra@eloihr.net>
 # Franco Mariluis <fmariluis@gmail.com>, 2008, 2009.
 # Dario Andres Rodriguez <andrebajotierra@gmail.com>, 2009.
 # Javier Vinal <fjvinalgmail.com>, 2009, 2010, 2011, 2012, 2019.
@@ -19,7 +19,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-03-07 02:20+0000\n"
-"PO-Revision-Date: 2023-10-09 19:39+0200\n"
+"PO-Revision-Date: 2024-03-07 18:40+0100\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -27,7 +27,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "First-Translator: Miguel Revilla <yo@miguelrevilla.com>\n"
-"X-Generator: Lokalize 23.08.1\n"
+"X-Generator: Lokalize 23.08.4\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #, kde-format
@@ -291,13 +291,13 @@ msgstr "La hora de la alarma ya ha expirado"
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot initialize audio player: %1"
-msgstr ""
+msgstr "No se puede inicializar el reproductor de sonido: %1"
 
 #: audioplayer.cpp:92
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot set audio player properties: %1"
-msgstr ""
+msgstr "No se pueden definir las propiedades del reproductor de sonido: %1"
 
 #: audioplayer.cpp:166 audioplayer.cpp:239
 #, kde-kuit-format
