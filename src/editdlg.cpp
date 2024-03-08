@@ -226,6 +226,8 @@ void EditAlarmDlg::init(const KAEvent& event)
     recurTab->setLayout(recurTabLayout);
     recurScroll->setWidget(recurTab);   // recurTab becomes the child of recurScroll
     mRecurrenceEdit = new RecurrenceEdit(mReadOnly);
+    if (mReadOnly)
+        mRecurrenceEdit->setEnabled(false);
     recurTabLayout->addWidget(mRecurrenceEdit);
     connect(mRecurrenceEdit, &RecurrenceEdit::shown, this, &EditAlarmDlg::slotShowRecurrenceEdit);
     connect(mRecurrenceEdit, &RecurrenceEdit::typeChanged, this, &EditAlarmDlg::slotRecurTypeChange);
@@ -258,6 +260,8 @@ void EditAlarmDlg::init(const KAEvent& event)
     auto vlayout = new QVBoxLayout(actionBox);
 
     type_init(actionBox, vlayout);
+    if (mReadOnly)
+        actionBox->setEnabled(false);
 
     if (!mTemplate)
     {

@@ -12,16 +12,16 @@
 #include "kalarm_debug.h"
 
 #include <KAboutData>
+#include <KIO/Job>
+#include <KIO/FileCopyJob>
 #include <KLocalizedString>
-//#include <KIO/StatJob>
-//#include <KIO/StoredTransferJob>
 
 #include <QApplication>
 #include <QByteArray>
+#include <QEventLoopLocker>
 #include <QFile>
 #include <QIcon>
-//#include <QLocale>
-//#include <QTemporaryFile>
+#include <QTemporaryFile>
 #include <QTimer>
 #include <QUrl>
 
@@ -93,8 +93,22 @@ AudioPlayer::AudioPlayer(Type type, const QUrl& audioFile, float volume, float f
         qCCritical(KALARM_LOG) << "AudioPlayer: Error initializing audio properties:" << ca_strerror(result);
         return;
     }
-//TODO Download remote file?
-    ca_proplist_sets(mAudioProperties, CA_PROP_MEDIA_FILENAME, QFile::encodeName(mFile).constData());
+
+    if (audioFile.isLocalFile())
+        ca_proplist_sets(mAudioProperties, CA_PROP_MEDIA_FILENAME, QFile::encodeName(mFile).constData());
+    else
+    {
+        // Download remote file.
+        mStatus = Downloading;
+        auto ref = new QEventLoopLocker();
+        mDownloadedFile = new QTemporaryFile;
+        mDownloadedFile->open();
+        mDownloadJob = KIO::file_copy(audioFile, QUrl::fromLocalFile(mDownloadedFile->fileName()), -1,
+                                      KIO::Overwrite | KIO::HideProgressInfo);
+        mDownloadJob->setProperty("QEventLoopLocker", QVariant::fromValue(ref));
+        connect(mDownloadJob, &KJob::result, this, &AudioPlayer::slotDownloadJobResult);
+        ca_proplist_sets(mAudioProperties, CA_PROP_MEDIA_FILENAME, QFile::encodeName(mDownloadedFile->fileName()).constData());
+    }
     if (mVolume > 0)
     {
 #ifdef ENABLE_AUDIO_FADE
@@ -116,7 +130,8 @@ AudioPlayer::AudioPlayer(Type type, const QUrl& audioFile, float volume, float f
     // dropped after some time or when the cache is under pressure.
     ca_proplist_sets(mAudioProperties, CA_PROP_CANBERRA_CACHE_CONTROL, "volatile");
 
-    mStatus = Ready;
+    if (mStatus != Downloading)
+        mStatus = Ready;
 }
 
 /******************************************************************************
@@ -125,6 +140,8 @@ AudioPlayer::AudioPlayer(Type type, const QUrl& audioFile, float volume, float f
 AudioPlayer::~AudioPlayer()
 {
     qCDebug(KALARM_LOG) << "AudioPlayer::~AudioPlayer";
+    if (mDownloadJob)
+        mDownloadJob->kill();
     if (status() == Playing)
     {
         mNoFinishedSignal = true;
@@ -140,6 +157,7 @@ AudioPlayer::~AudioPlayer()
         ca_proplist_destroy(mAudioProperties);
         mAudioProperties = nullptr;
     }
+    delete mDownloadedFile;
     qCDebug(KALARM_LOG) << "AudioPlayer::~AudioPlayer exit";
 }
 
@@ -158,6 +176,11 @@ bool AudioPlayer::play()
 {
     if (!mAudioContext)
         return false;
+    if (mStatus == Downloading)
+    {
+        mPlayAfterDownload = true;
+        return false;   // will play when download is complete
+    }
 
     qCDebug(KALARM_LOG) << "AudioPlayer::play";
     const int result = ca_context_play_full(mAudioContext, mId, mAudioProperties, &ca_finish_callback, this);
@@ -176,6 +199,39 @@ bool AudioPlayer::play()
 #endif
     mStatus = Playing;
     return true;
+}
+
+/******************************************************************************
+* Called when download of the remote audio file has completed.
+*/
+void AudioPlayer::slotDownloadJobResult(KJob* job)
+{
+    if (job->error())
+    {
+        mError = xi18nc("@info", "Could not load file <filename>%1</filename>. (%2)", mFile, job->errorString());
+        qCWarning(KALARM_LOG) << "AudioPlayer::slotDownloadJobResult: Could not load file" << mFile << job->errorString();
+        mStatus = Error;
+    }
+    else
+    {
+        qCWarning(KALARM_LOG) << "AudioPlayer::slotDownloadJobResult: success" << mFile;
+        mStatus = Ready;
+    }
+
+    mDownloadJob = nullptr;
+    auto ref = job->property("QEventLoopLocker").value<QEventLoopLocker*>();
+    if (ref)
+        delete ref;
+    if (mStatus == Ready)
+    {
+        if (mPlayAfterDownload)
+        {
+            mPlayAfterDownload = false;
+            QTimer::singleShot(0, this, &AudioPlayer::play);
+        }
+        else
+            Q_EMIT downloaded(mStatus == Ready);
+    }
 }
 
 #ifdef ENABLE_AUDIO_FADE
@@ -253,7 +309,14 @@ void AudioPlayer::playFinished(uint32_t id, int errorCode)
 void AudioPlayer::stop()
 {
     qCDebug(KALARM_LOG) << "AudioPlayer::stop";
-    if (mAudioContext)
+    mPlayAfterDownload = false;
+    if (mDownloadJob)
+    {
+        mDownloadJob->kill();
+        mDownloadJob = nullptr;
+        mStatus = Error;
+    }
+    else if (mAudioContext)
     {
         const int result = ca_context_cancel(mAudioContext, mId);
         if (result != CA_SUCCESS)

@@ -13,7 +13,10 @@
 // Canberra currently doesn't seem to allow the volume to be adjusted while playing.
 //#define ENABLE_AUDIO_FADE
 
+class QTemporaryFile;
 class QTimer;
+namespace KIO { class FileCopyJob; }
+class KJob;
 struct ca_context;
 struct ca_proplist;
 
@@ -25,26 +28,29 @@ public:
     enum Type { Alarm, Sample };
     enum Status
     {
-        Ready,     //!< Ready to play (newly initialised, or finished playing)
-        Playing,   //!< Currently playing
-        Error      //!< Something has gone wrong
+        Downloading,     //!< Downloading file
+        Ready,           //!< Ready to play (newly initialised, or finished playing)
+        Playing,         //!< Currently playing
+        Error            //!< Something has gone wrong
     };
 
     AudioPlayer(Type, const QUrl& audioFile, QObject* parent = nullptr);
     AudioPlayer(Type, const QUrl& audioFile, float volume, float fadeVolume, int fadeSeconds, QObject* parent = nullptr);
     ~AudioPlayer() override;
-    bool    play();
     Status  status() const;
     QString error() const;
 
 public Q_SLOTS:
+    bool    play();
     void    stop();
 
 Q_SIGNALS:
+    void    downloaded(bool ok);
     void    finished(bool ok);
 
 private Q_SLOTS:
     void    playFinished(uint32_t id, int errorCode);
+    void    slotDownloadJobResult(KJob*);
 #ifdef ENABLE_AUDIO_FADE
     void    fadeStep();
 #endif
@@ -62,11 +68,14 @@ private:
     time_t               mFadeStart {0};
 #endif
     int                  mFadeSeconds;   // configured time to fade from mFadeVolume to mVolume
+    KIO::FileCopyJob*    mDownloadJob {nullptr};
+    QTemporaryFile*      mDownloadedFile {nullptr};  // downloaded copy of remote audio file
     ca_context*          mAudioContext {nullptr};
     ca_proplist*         mAudioProperties {nullptr};
     uint32_t             mId;
     QString              mError;
     Status               mStatus {Error};
+    bool                 mPlayAfterDownload {false};
     bool                 mNoFinishedSignal {false};
 };
 

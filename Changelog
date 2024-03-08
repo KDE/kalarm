@@ -1,6 +1,6 @@
 KAlarm Change Log
 
-=== Version 3.7.1 (KDE Gear 24.02.1) --- 25 February 2024 ===
+=== Version 3.7.1 (KDE Gear 24.02.1) --- 8 March 2024 ===
 * Use libcanberra instead of Phonon to play sounds, for thread safety [KDE Bug 381334]
 * In Edit Alarm dialogue, allow save if Set Volume checkbox is toggled.
 

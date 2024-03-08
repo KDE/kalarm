@@ -1030,7 +1030,9 @@ void AudioPlayerThread::execute()
         mMutex.unlock();
         return;
     }
+    connect(mPlayer, &AudioPlayer::downloaded, this, &AudioPlayerThread::checkAudioPlay);
     connect(mPlayer, &AudioPlayer::finished, this, &AudioPlayerThread::playFinished);
+    connect(this, &AudioPlayerThread::stopPlay, mPlayer, &AudioPlayer::stop);
 
     mPlayedOnce = false;
     mPausing    = false;
@@ -1057,7 +1059,7 @@ void AudioPlayerThread::checkAudioPlay()
         mPausing = false;
     else
     {
-        // The file has is ready to play, or play has completed
+        // The file is ready to play, or play has completed
         if (mPlayedOnce)
         {
             if (mRepeatPause < 0)
@@ -1116,7 +1118,9 @@ void AudioPlayerThread::stop()
         return;    // this instance has now been deleted
     }
     mStopping = true;
-    mPlayer->stop();
+    // Calling AudioPlayer::stop() executes it in this thread, which causes crashes,
+    // so use signal-slot mechanism to call it in AudioPlayer's own thread.
+    Q_EMIT stopPlay();
     mMutex.unlock();
     if (mInstance)    // guard against this instance having already been deleted
         deleteLater();
