@@ -41,7 +41,6 @@
 #include <QHostInfo>
 #include <QList>
 #include <QByteArray>
-#include <QTextCodec>
 #include <QStandardPaths>
 #include <QDBusInterface>
 
@@ -63,7 +62,6 @@ namespace
 void                        initHeaders(KMime::Message&, JobData&);
 KMime::Types::Mailbox::List parseAddresses(const QString& text, QString& invalidItem);
 QString                     extractEmailAndNormalize(const QString& emailAddress);
-QByteArray                  autoDetectCharset(const QString& text);
 }
 
 QString KAMail::i18n_NeedFromEmailAddress()
@@ -335,7 +333,7 @@ QString KAMail::appendBodyAttachments(KMime::Message& message, JobData& data)
             QMimeDatabase mimeDb;
             QString typeName = mimeDb.mimeTypeForUrl(url).name();
             auto ctype = new KMime::Headers::ContentType;
-            ctype->fromUnicodeString(typeName, autoDetectCharset(typeName));
+            ctype->fromUnicodeString(typeName, "utf-8");
             ctype->setName(attachment, "local");
             content->setHeader(ctype);
 
@@ -561,7 +559,7 @@ void initHeaders(KMime::Message& message, JobData& data)
     message.setHeader(date);
 
     auto from = new KMime::Headers::From;
-    from->fromUnicodeString(data.from, autoDetectCharset(data.from));
+    from->fromUnicodeString(data.from, "utf-8");
     message.setHeader(from);
 
     auto to = new KMime::Headers::To;
@@ -573,13 +571,13 @@ void initHeaders(KMime::Message& message, JobData& data)
     if (!data.bcc.isEmpty())
     {
         auto bcc = new KMime::Headers::Bcc;
-        bcc->fromUnicodeString(data.bcc, autoDetectCharset(data.bcc));
+        bcc->fromUnicodeString(data.bcc, "utf-8");
         message.setHeader(bcc);
     }
 
     auto subject = new KMime::Headers::Subject;
     const QString str = data.event.emailSubject();
-    subject->fromUnicodeString(str, autoDetectCharset(str));
+    subject->fromUnicodeString(str, "utf-8");
     message.setHeader(subject);
 
     auto agent = new KMime::Headers::UserAgent;
@@ -597,36 +595,6 @@ void initHeaders(KMime::Message& message, JobData& data)
 QString extractEmailAndNormalize(const QString& emailAddress)
 {
     return KEmailAddress::extractEmailAddress(KEmailAddress::normalizeAddressesAndEncodeIdn(emailAddress));
-}
-
-//-----------------------------------------------------------------------------
-// Based on KMail KMMsgBase::autoDetectCharset().
-QByteArray autoDetectCharset(const QString& text)
-{
-    for (QByteArray encoding : {"us-ascii", "iso-8859-1", "locale", "utf-8"})
-    {
-        if (encoding == "locale")
-            encoding = QTextCodec::codecForLocale()->name().toLower();
-        if (text.isEmpty())
-            return encoding;
-        if (encoding == "us-ascii")
-        {
-            if (KMime::isUsAscii(text))
-                return encoding;
-        }
-        else
-        {
-            const QTextCodec* codec = QTextCodec::codecForName(encoding.toLower());
-            if (!codec)
-                qCDebug(KALARM_LOG) << "KAMail::autoDetectCharset: Something is wrong and I cannot get a codec. [" << encoding <<"]";
-            else
-            {
-                 if (codec->canEncode(text))
-                     return encoding;
-            }
-        }
-    }
-    return {};
 }
 
 /******************************************************************************

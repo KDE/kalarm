@@ -73,8 +73,6 @@ set(KDEPIM_LIB_SOVERSION "6")
 find_package(Qt6 ${QT_REQUIRED_VERSION} CONFIG REQUIRED DBus Gui Network Widgets)
 set(CALENDARUTILS_LIB_VERSION "6.0.40")
 
-find_package(Qt6Core5Compat)
-
 
 option(ENABLE_AKONADI_PLUGIN "Build the Akonadi plugin" ON)
 add_feature_info(AKONADI_PLUGIN ${ENABLE_AKONADI_PLUGIN} "Provides features dependent on Akonadi (including birthday import,

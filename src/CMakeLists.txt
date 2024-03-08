@@ -331,7 +331,6 @@ target_link_libraries(kalarm_bin
     KPim6::Mime
     Canberra::Canberra
 )
-    target_link_libraries(kalarm_bin Qt::Core5Compat)
 if (TARGET KF6::TextEditTextToSpeech)
     target_link_libraries(kalarm_bin KF6::TextEditTextToSpeech)
 endif()
