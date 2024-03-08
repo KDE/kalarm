@@ -94,9 +94,9 @@
 <!-- Don't change format of date and version of the documentation -->
 
 <date
->15 de febrer de 2024</date>
+>2 de març de 2024</date>
 <releaseinfo
->3.7.0 (KDE Gear 24.02)</releaseinfo>
+>3.7.1 (KDE Gear 24.02.1)</releaseinfo>
 
 <abstract>
 <para
@@ -1565,18 +1565,27 @@
 > i ajusteu el control lliscant si voleu ajustar el volum del fitxer d'àudio a reproduir.</para>
 </listitem>
 
+<!--
 <listitem>
 <para
->Si el dorsal d'àudio &phonon; actualment en ús ho permet, es pot esvair el volum. Significa començar la reproducció amb un volum normal i a poc a poc fer-lo minvar fins al final, en un interval de temps especificat. El volum final és introduït a <guilabel
->Estableix el volum</guilabel
->. Per a habilitar l'esvaïment, marqueu <guilabel
->Esvaïment</guilabel
->, i després introduïu el seu període en segons al camp <guilabel
->Temps d'esvaïment</guilabel
->, i ajusteu el control lliscant <guilabel
->Volum inicial</guilabel
->.</para>
+>If the &phonon; audio backend currently in use supports it, you
+can fade the volume. Fading means to start
+playing the audio file at one volume and gradually change to the final
+volume, over a specified time interval. The final volume is that
+entered in <guilabel
+>Volume</guilabel
+> above. To enable fade, check
+<guilabel
+>Fade</guilabel
+>, and then enter the fade period in seconds
+in the <guilabel
+>Fade time</guilabel
+> field, and adjust the
+<guilabel
+>Initial volume</guilabel
+> slider.</para>
 </listitem>
+-->
 </itemizedlist>
 
 <tip
@@ -1906,18 +1915,27 @@
 > i ajusteu el control lliscant si voleu ajustar el volum del fitxer d'àudio a reproduir.</para>
 </listitem>
 
+<!--
 <listitem>
 <para
->Si el dorsal d'àudio &phonon; actualment en ús ho permet, es pot esvair el volum. Significa començar la reproducció amb un volum normal i a poc a poc fer-lo minvar fins al final, en un interval de temps especificat. El volum final és introduït a <guilabel
->Estableix el volum</guilabel
->. Per a habilitar l'esvaïment, marqueu <guilabel
->Esvaïment</guilabel
->, i després introduïu el seu període en segons al camp <guilabel
->Temps d'esvaïment</guilabel
->, i ajusteu el control lliscant <guilabel
->Volum inicial</guilabel
->.</para>
+>If the &phonon; audio backend currently in use supports it, you
+can fade the volume. Fading means to start
+playing the audio file at one volume and gradually change to the final
+volume, over a specified time interval. The final volume is that
+entered in <guilabel
+>Volume</guilabel
+> above. To enable fade, check
+<guilabel
+>Fade</guilabel
+>, and then enter the fade period in seconds
+in the <guilabel
+>Fade time</guilabel
+> field, and adjust the
+<guilabel
+>Initial volume</guilabel
+> slider.</para>
 </listitem>
+-->
 </itemizedlist>
 </sect3>
 </sect2>
