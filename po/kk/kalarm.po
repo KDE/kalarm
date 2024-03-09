@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-03-07 02:20+0000\n"
+"POT-Creation-Date: 2024-03-09 02:28+0000\n"
 "PO-Revision-Date: 2013-07-07 03:28+0600\n"
 "Last-Translator: Sairan Kikkarin <sairan@computer.org>\n"
 "Language-Team: Kazakh <kde-i18n-doc@kde.org>\n"
@@ -312,7 +312,7 @@ msgctxt "@info"
 msgid "Cannot set audio player properties: %1"
 msgstr ""
 
-#: audioplayer.cpp:166 audioplayer.cpp:239
+#: audioplayer.cpp:189 audioplayer.cpp:295
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -320,6 +320,14 @@ msgid ""
 msgstr ""
 "<para>Келесі файлды ойнату қатесі: <filename>%1</filename></para><para>%2</"
 "para>"
+
+#: audioplayer.cpp:211 resources/singlefileresource.cpp:738
+#, fuzzy, kde-kuit-format
+#| msgctxt "@info"
+#| msgid "Could not load calendar <filename>%1</filename>."
+msgctxt "@info"
+msgid "Could not load file <filename>%1</filename>. (%2)"
+msgstr "Келесі күнтізбе жүктелмеді: <filename>%1</filename>"
 
 #: autostart/autostart.cpp:48
 #, kde-format
@@ -8111,14 +8119,6 @@ msgstr "Күнтізбе файлдары"
 #| msgid "Could not load calendar <filename>%1</filename>."
 msgctxt "@info"
 msgid "Could not save file <filename>%1</filename>."
-msgstr "Келесі күнтізбе жүктелмеді: <filename>%1</filename>"
-
-#: resources/singlefileresource.cpp:738
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid "Could not load calendar <filename>%1</filename>."
-msgctxt "@info"
-msgid "Could not load file <filename>%1</filename>. (%2)"
 msgstr "Келесі күнтізбе жүктелмеді: <filename>%1</filename>"
 
 #: resources/singlefileresource.cpp:775

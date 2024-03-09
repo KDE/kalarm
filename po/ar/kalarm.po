@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-03-07 02:20+0000\n"
+"POT-Creation-Date: 2024-03-09 02:28+0000\n"
 "PO-Revision-Date: 2022-09-15 23:00+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
@@ -290,7 +290,7 @@ msgctxt "@info"
 msgid "Cannot set audio player properties: %1"
 msgstr ""
 
-#: audioplayer.cpp:166 audioplayer.cpp:239
+#: audioplayer.cpp:189 audioplayer.cpp:295
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -298,6 +298,12 @@ msgid ""
 msgstr ""
 "<para>خطأ أثناء تشغيل ملف الصوت: <filename>%1</filename></para><para>%2</"
 "para>"
+
+#: audioplayer.cpp:211 resources/singlefileresource.cpp:738
+#, kde-kuit-format
+msgctxt "@info"
+msgid "Could not load file <filename>%1</filename>. (%2)"
+msgstr "تعذّر تحميل الملفّ <filename>%1</filename>. (%2)."
 
 #: autostart/autostart.cpp:48
 #, kde-format
@@ -7426,12 +7432,6 @@ msgstr "ملفات التقاويم"
 msgctxt "@info"
 msgid "Could not save file <filename>%1</filename>."
 msgstr "لم يمكن حفظ الملف <filename>%1</filename>."
-
-#: resources/singlefileresource.cpp:738
-#, kde-kuit-format
-msgctxt "@info"
-msgid "Could not load file <filename>%1</filename>. (%2)"
-msgstr "تعذّر تحميل الملفّ <filename>%1</filename>. (%2)."
 
 #: resources/singlefileresource.cpp:775
 #, kde-kuit-format

@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-03-07 02:20+0000\n"
+"POT-Creation-Date: 2024-03-09 02:28+0000\n"
 "PO-Revision-Date: 2007-02-28 14:12+0100\n"
 "Last-Translator: Bozidar Proevski <bobibobi@freemail.com.mk>\n"
 "Language-Team: Macedonian <mkde-l10n@lists.sourceforge.net>\n"
@@ -335,7 +335,7 @@ msgctxt "@info"
 msgid "Cannot set audio player properties: %1"
 msgstr ""
 
-#: audioplayer.cpp:166 audioplayer.cpp:239
+#: audioplayer.cpp:189 audioplayer.cpp:295
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "Error attaching file:\n"
@@ -345,6 +345,17 @@ msgid ""
 "<para>Error playing audio file: <filename>%1</filename></para><para>%2</para>"
 msgstr ""
 "Грешка при приложувањето на датотеката:\n"
+"%1"
+
+#: audioplayer.cpp:211 resources/singlefileresource.cpp:738
+#, fuzzy, kde-kuit-format
+#| msgid ""
+#| "Cannot open audio file:\n"
+#| "%1"
+msgctxt "@info"
+msgid "Could not load file <filename>%1</filename>. (%2)"
+msgstr ""
+"Не можам да ја отворам аудиодатотеката:\n"
 "%1"
 
 #: autostart/autostart.cpp:48
@@ -8010,17 +8021,6 @@ msgstr "Датотеки со календари"
 #| "%1"
 msgctxt "@info"
 msgid "Could not save file <filename>%1</filename>."
-msgstr ""
-"Не можам да ја отворам аудиодатотеката:\n"
-"%1"
-
-#: resources/singlefileresource.cpp:738
-#, fuzzy, kde-kuit-format
-#| msgid ""
-#| "Cannot open audio file:\n"
-#| "%1"
-msgctxt "@info"
-msgid "Could not load file <filename>%1</filename>. (%2)"
 msgstr ""
 "Не можам да ја отворам аудиодатотеката:\n"
 "%1"

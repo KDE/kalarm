@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-03-07 02:20+0000\n"
+"POT-Creation-Date: 2024-03-09 02:28+0000\n"
 "PO-Revision-Date: 2024-02-27 07:13+0100\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Proxecto Trasno (proxecto@trasno.gal)\n"
@@ -295,7 +295,7 @@ msgctxt "@info"
 msgid "Cannot set audio player properties: %1"
 msgstr "Non é posíbel definir propiedades no reprodutor de son: %1"
 
-#: audioplayer.cpp:166 audioplayer.cpp:239
+#: audioplayer.cpp:189 audioplayer.cpp:295
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -303,6 +303,12 @@ msgid ""
 msgstr ""
 "<para>Produciuse un erro ao reproducir o ficheiro de son: <filename>%1</"
 "filename></para><para>%2</para>"
+
+#: audioplayer.cpp:211 resources/singlefileresource.cpp:738
+#, kde-kuit-format
+msgctxt "@info"
+msgid "Could not load file <filename>%1</filename>. (%2)"
+msgstr "Non foi posíbel cargar o ficheiro <filename>%1</filename> (%2)."
 
 #: autostart/autostart.cpp:48
 #, kde-format
@@ -7600,12 +7606,6 @@ msgstr "O calendario non está aberto."
 msgctxt "@info"
 msgid "Could not save file <filename>%1</filename>."
 msgstr "Non foi posíbel gardar o ficheiro <filename>%1</filename>."
-
-#: resources/singlefileresource.cpp:738
-#, kde-kuit-format
-msgctxt "@info"
-msgid "Could not load file <filename>%1</filename>. (%2)"
-msgstr "Non foi posíbel cargar o ficheiro <filename>%1</filename> (%2)."
 
 #: resources/singlefileresource.cpp:775
 #, kde-kuit-format

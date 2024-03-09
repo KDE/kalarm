@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-03-07 02:20+0000\n"
+"POT-Creation-Date: 2024-03-09 02:28+0000\n"
 "PO-Revision-Date: 2007-08-22 18:39+0330\n"
 "Last-Translator: Nazanin Kazemi <kazemi@itland.ir>\n"
 "Language-Team: Persian <kde-i18n-fa@kde.org>\n"
@@ -329,7 +329,7 @@ msgctxt "@info"
 msgid "Cannot set audio player properties: %1"
 msgstr ""
 
-#: audioplayer.cpp:166 audioplayer.cpp:239
+#: audioplayer.cpp:189 audioplayer.cpp:295
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info"
 #| msgid ""
@@ -341,6 +341,14 @@ msgid ""
 msgstr ""
 "خطای پیوستن پرونده:\n"
 "<filename>%1</filename>"
+
+#: audioplayer.cpp:211 resources/singlefileresource.cpp:738
+#, fuzzy, kde-kuit-format
+#| msgctxt "@info"
+#| msgid "Could not load calendar <filename>%1</filename>."
+msgctxt "@info"
+msgid "Could not load file <filename>%1</filename>. (%2)"
+msgstr "تقویم <filename>%1</filename> را نمی‌توان بار کرد."
 
 #: autostart/autostart.cpp:48
 #, fuzzy, kde-format
@@ -8366,14 +8374,6 @@ msgstr "پرونده‌های تقویم"
 #| msgid "Could not load calendar <filename>%1</filename>."
 msgctxt "@info"
 msgid "Could not save file <filename>%1</filename>."
-msgstr "تقویم <filename>%1</filename> را نمی‌توان بار کرد."
-
-#: resources/singlefileresource.cpp:738
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid "Could not load calendar <filename>%1</filename>."
-msgctxt "@info"
-msgid "Could not load file <filename>%1</filename>. (%2)"
 msgstr "تقویم <filename>%1</filename> را نمی‌توان بار کرد."
 
 #: resources/singlefileresource.cpp:775

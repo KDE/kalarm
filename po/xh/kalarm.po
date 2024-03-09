@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-03-07 02:20+0000\n"
+"POT-Creation-Date: 2024-03-09 02:28+0000\n"
 "PO-Revision-Date: 2002-10-12 14:57+0200\n"
 "Last-Translator: Thelma Lungcuzo <thelma@translate.org.za>\n"
 "Language-Team: Xhosa <xhosa@translate.org.za>\n"
@@ -295,12 +295,20 @@ msgctxt "@info"
 msgid "Cannot set audio player properties: %1"
 msgstr ""
 
-#: audioplayer.cpp:166 audioplayer.cpp:239
+#: audioplayer.cpp:189 audioplayer.cpp:295
 #, fuzzy, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "<para>Error playing audio file: <filename>%1</filename></para><para>%2</para>"
 msgstr "Impazamo ukuvula ifayile !!"
+
+#: audioplayer.cpp:211 resources/singlefileresource.cpp:738
+#, fuzzy, kde-kuit-format
+msgctxt "@info"
+msgid "Could not load file <filename>%1</filename>. (%2)"
+msgstr ""
+"Ayikwazi ukuvula icalendar:\n"
+"%1"
 
 #: autostart/autostart.cpp:48
 #, fuzzy, kde-format
@@ -7408,14 +7416,6 @@ msgstr "URL ye fayile ye calendar"
 #, fuzzy, kde-kuit-format
 msgctxt "@info"
 msgid "Could not save file <filename>%1</filename>."
-msgstr ""
-"Ayikwazi ukuvula icalendar:\n"
-"%1"
-
-#: resources/singlefileresource.cpp:738
-#, fuzzy, kde-kuit-format
-msgctxt "@info"
-msgid "Could not load file <filename>%1</filename>. (%2)"
 msgstr ""
 "Ayikwazi ukuvula icalendar:\n"
 "%1"

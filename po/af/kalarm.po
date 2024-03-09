@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm VERSION\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-03-07 02:20+0000\n"
+"POT-Creation-Date: 2024-03-09 02:28+0000\n"
 "PO-Revision-Date: 2002-11-07 11:37+0200\n"
 "Last-Translator: WEB-Translator <http://kde.af.org.za>\n"
 "Language-Team: AFRIKAANS <AF@lia.org.za>\n"
@@ -283,11 +283,19 @@ msgctxt "@info"
 msgid "Cannot set audio player properties: %1"
 msgstr ""
 
-#: audioplayer.cpp:166 audioplayer.cpp:239
+#: audioplayer.cpp:189 audioplayer.cpp:295
 #, fuzzy, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "<para>Error playing audio file: <filename>%1</filename></para><para>%2</para>"
+msgstr ""
+"Kan nie open kalender:\n"
+"%1"
+
+#: audioplayer.cpp:211 resources/singlefileresource.cpp:738
+#, fuzzy, kde-kuit-format
+msgctxt "@info"
+msgid "Could not load file <filename>%1</filename>. (%2)"
 msgstr ""
 "Kan nie open kalender:\n"
 "%1"
@@ -7331,14 +7339,6 @@ msgstr "Url van kalender lêer"
 #, fuzzy, kde-kuit-format
 msgctxt "@info"
 msgid "Could not save file <filename>%1</filename>."
-msgstr ""
-"Kan nie open kalender:\n"
-"%1"
-
-#: resources/singlefileresource.cpp:738
-#, fuzzy, kde-kuit-format
-msgctxt "@info"
-msgid "Could not load file <filename>%1</filename>. (%2)"
 msgstr ""
 "Kan nie open kalender:\n"
 "%1"

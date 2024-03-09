@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm 0\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-03-07 02:20+0000\n"
+"POT-Creation-Date: 2024-03-09 02:28+0000\n"
 "PO-Revision-Date: 2011-03-28 17:53+0200\n"
 "Last-Translator: Marko Dimjašević <marko@dimjasevic.net>\n"
 "Language-Team: Croatian <kde-croatia-list@lists.sourceforge.net>\n"
@@ -293,7 +293,7 @@ msgctxt "@info"
 msgid "Cannot set audio player properties: %1"
 msgstr ""
 
-#: audioplayer.cpp:166 audioplayer.cpp:239
+#: audioplayer.cpp:189 audioplayer.cpp:295
 #, fuzzy, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -301,6 +301,14 @@ msgid ""
 msgstr ""
 "Greška pri dodavanju datotekaa u prilog:\n"
 "%1"
+
+#: audioplayer.cpp:211 resources/singlefileresource.cpp:738
+#, fuzzy, kde-kuit-format
+msgctxt "@info"
+msgid "Could not load file <filename>%1</filename>. (%2)"
+msgstr ""
+"Ne mogu učitati kalendar na\n"
+"'%1'"
 
 #: autostart/autostart.cpp:48
 #, fuzzy, kde-format
@@ -7466,14 +7474,6 @@ msgstr "URL kalendarskog datotekaa"
 #, fuzzy, kde-kuit-format
 msgctxt "@info"
 msgid "Could not save file <filename>%1</filename>."
-msgstr ""
-"Ne mogu učitati kalendar na\n"
-"'%1'"
-
-#: resources/singlefileresource.cpp:738
-#, fuzzy, kde-kuit-format
-msgctxt "@info"
-msgid "Could not load file <filename>%1</filename>. (%2)"
 msgstr ""
 "Ne mogu učitati kalendar na\n"
 "'%1'"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-03-07 02:20+0000\n"
+"POT-Creation-Date: 2024-03-09 02:28+0000\n"
 "PO-Revision-Date: 2015-12-30 18:11+0200\n"
 "Last-Translator: Mindaugas Baranauskas <opensuse.lietuviu.kalba@gmail.com>\n"
 "Language-Team: lt <kde-i18n-lt@kde.org>\n"
@@ -315,7 +315,7 @@ msgctxt "@info"
 msgid "Cannot set audio player properties: %1"
 msgstr ""
 
-#: audioplayer.cpp:166 audioplayer.cpp:239
+#: audioplayer.cpp:189 audioplayer.cpp:295
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -323,6 +323,14 @@ msgid ""
 msgstr ""
 "<para>Nepavyko paleisti audio failo: <filename>%1</filename></para><para>%2</"
 "para>"
+
+#: audioplayer.cpp:211 resources/singlefileresource.cpp:738
+#, fuzzy, kde-kuit-format
+#| msgctxt "@info"
+#| msgid "Could not load calendar <filename>%1</filename>."
+msgctxt "@info"
+msgid "Could not load file <filename>%1</filename>. (%2)"
+msgstr "Negalima įkrauti kalendoriaus <filename>%1</filename>."
 
 #: autostart/autostart.cpp:48
 #, kde-format
@@ -7654,14 +7662,6 @@ msgstr "Kalendoriaus failai"
 #| msgid "Could not load calendar <filename>%1</filename>."
 msgctxt "@info"
 msgid "Could not save file <filename>%1</filename>."
-msgstr "Negalima įkrauti kalendoriaus <filename>%1</filename>."
-
-#: resources/singlefileresource.cpp:738
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid "Could not load calendar <filename>%1</filename>."
-msgctxt "@info"
-msgid "Could not load file <filename>%1</filename>. (%2)"
 msgstr "Negalima įkrauti kalendoriaus <filename>%1</filename>."
 
 #: resources/singlefileresource.cpp:775

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KDE 4.3\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-03-07 02:20+0000\n"
+"POT-Creation-Date: 2024-03-09 02:28+0000\n"
 "PO-Revision-Date: 2024-02-17 21:41+0100\n"
 "Last-Translator: Kristof Kiszel <ulysses@fsf.hu>\n"
 "Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
@@ -283,7 +283,7 @@ msgctxt "@info"
 msgid "Cannot set audio player properties: %1"
 msgstr ""
 
-#: audioplayer.cpp:166 audioplayer.cpp:239
+#: audioplayer.cpp:189 audioplayer.cpp:295
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -291,6 +291,12 @@ msgid ""
 msgstr ""
 "<para>Hiba a hangfájl lejátszásakor: <filename>%1</filename></para><para>%2</"
 "para>"
+
+#: audioplayer.cpp:211 resources/singlefileresource.cpp:738
+#, kde-kuit-format
+msgctxt "@info"
+msgid "Could not load file <filename>%1</filename>. (%2)"
+msgstr "Nem sikerült betölteni a(z) <filename>%1</filename> fájlt.(%2)"
 
 #: autostart/autostart.cpp:48
 #, kde-format
@@ -7942,12 +7948,6 @@ msgstr "A naptár nincs megnyitva."
 msgctxt "@info"
 msgid "Could not save file <filename>%1</filename>."
 msgstr "Nem sikerült menteni a(z) <filename>%1</filename> fájlt."
-
-#: resources/singlefileresource.cpp:738
-#, kde-kuit-format
-msgctxt "@info"
-msgid "Could not load file <filename>%1</filename>. (%2)"
-msgstr "Nem sikerült betölteni a(z) <filename>%1</filename> fájlt.(%2)"
 
 #: resources/singlefileresource.cpp:775
 #, kde-kuit-format

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-03-07 02:20+0000\n"
+"POT-Creation-Date: 2024-03-09 02:28+0000\n"
 "PO-Revision-Date: 2012-12-26 10:26+0700\n"
 "Last-Translator: sutha <sutha@khmeros.info>\n"
 "Language-Team: Khmer <support@khmeros>\n"
@@ -311,13 +311,21 @@ msgctxt "@info"
 msgid "Cannot set audio player properties: %1"
 msgstr ""
 
-#: audioplayer.cpp:166 audioplayer.cpp:239
+#: audioplayer.cpp:189 audioplayer.cpp:295
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "<para>Error playing audio file: <filename>%1</filename></para><para>%2</para>"
 msgstr ""
 "<para>កំហុស​ក្នុង​ការ​ចាក់​ឯកសារ​អូឌីយ៉ូ ៖ <filename>%1</filename></para><para>%2</para>"
+
+#: audioplayer.cpp:211 resources/singlefileresource.cpp:738
+#, fuzzy, kde-kuit-format
+#| msgctxt "@info"
+#| msgid "Could not load calendar <filename>%1</filename>."
+msgctxt "@info"
+msgid "Could not load file <filename>%1</filename>. (%2)"
+msgstr "មិនអាច​ផ្ទុក​ប្រតិទិន <filename>%1</filename> បានឡើយ ។"
 
 #: autostart/autostart.cpp:48
 #, kde-format
@@ -7943,14 +7951,6 @@ msgstr "ការ​កំណត់​រចនា​សម្ព័ន្ធ​
 #| msgid "Could not load calendar <filename>%1</filename>."
 msgctxt "@info"
 msgid "Could not save file <filename>%1</filename>."
-msgstr "មិនអាច​ផ្ទុក​ប្រតិទិន <filename>%1</filename> បានឡើយ ។"
-
-#: resources/singlefileresource.cpp:738
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid "Could not load calendar <filename>%1</filename>."
-msgctxt "@info"
-msgid "Could not load file <filename>%1</filename>. (%2)"
 msgstr "មិនអាច​ផ្ទុក​ប្រតិទិន <filename>%1</filename> បានឡើយ ។"
 
 #: resources/singlefileresource.cpp:775

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-03-07 02:20+0000\n"
+"POT-Creation-Date: 2024-03-09 02:28+0000\n"
 "PO-Revision-Date: 2023-10-17 12:06+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
@@ -284,7 +284,7 @@ msgctxt "@info"
 msgid "Cannot set audio player properties: %1"
 msgstr ""
 
-#: audioplayer.cpp:166 audioplayer.cpp:239
+#: audioplayer.cpp:189 audioplayer.cpp:295
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -292,6 +292,12 @@ msgid ""
 msgstr ""
 "<para>აუდიოფაილის დაკვრის შეცდომა: <filename>%1</filename></para><para>%2</"
 "para>"
+
+#: audioplayer.cpp:211 resources/singlefileresource.cpp:738
+#, kde-kuit-format
+msgctxt "@info"
+msgid "Could not load file <filename>%1</filename>. (%2)"
+msgstr "ფაილის ჩატვირთვის შეცდომა<filename>%1</filename>. (%2)"
 
 #: autostart/autostart.cpp:48
 #, kde-format
@@ -7512,12 +7518,6 @@ msgstr "კალენდარი ღია არაა."
 msgctxt "@info"
 msgid "Could not save file <filename>%1</filename>."
 msgstr "ფაილის შენახვის შეცდომა <filename>%1</filename>."
-
-#: resources/singlefileresource.cpp:738
-#, kde-kuit-format
-msgctxt "@info"
-msgid "Could not load file <filename>%1</filename>. (%2)"
-msgstr "ფაილის ჩატვირთვის შეცდომა<filename>%1</filename>. (%2)"
 
 #: resources/singlefileresource.cpp:775
 #, kde-kuit-format
