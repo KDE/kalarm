@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-26 00:38+0000\n"
+"POT-Creation-Date: 2024-03-09 00:38+0000\n"
 "PO-Revision-Date: 2024-02-27 00:14+0100\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
@@ -287,7 +287,7 @@ msgctxt "@info"
 msgid "Cannot set audio player properties: %1"
 msgstr "Ezin ditu audio-jotzailearen propietateak ezarri: %1"
 
-#: audioplayer.cpp:166 audioplayer.cpp:239
+#: audioplayer.cpp:189 audioplayer.cpp:295
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -295,6 +295,12 @@ msgid ""
 msgstr ""
 "<para>Audio-fitxategia jotzeko errorea: <filename>%1</filename></para><para>"
 "%2</para>"
+
+#: audioplayer.cpp:211 resources/singlefileresource.cpp:738
+#, kde-kuit-format
+msgctxt "@info"
+msgid "Could not load file <filename>%1</filename>. (%2)"
+msgstr "Ezin izan da <filename>%1</filename> fitxategia zamatu. (%2)"
 
 #: autostart/autostart.cpp:48
 #, kde-format
@@ -7567,12 +7573,6 @@ msgstr "Egutegia ez dago irekita."
 msgctxt "@info"
 msgid "Could not save file <filename>%1</filename>."
 msgstr "Ezin izan da <filename>%1</filename> fitxategia gorde."
-
-#: resources/singlefileresource.cpp:738
-#, kde-kuit-format
-msgctxt "@info"
-msgid "Could not load file <filename>%1</filename>. (%2)"
-msgstr "Ezin izan da <filename>%1</filename> fitxategia zamatu. (%2)"
 
 #: resources/singlefileresource.cpp:775
 #, kde-kuit-format

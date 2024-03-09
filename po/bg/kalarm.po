@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-26 00:38+0000\n"
+"POT-Creation-Date: 2024-03-09 00:38+0000\n"
 "PO-Revision-Date: 2024-02-26 08:36+0100\n"
 "Last-Translator: Mincho Kondarev <mkondarev@yahoo.de>\n"
 "Language-Team: Bulgarian <kde-i18n-doc@kde.org>\n"
@@ -286,7 +286,7 @@ msgctxt "@info"
 msgid "Cannot set audio player properties: %1"
 msgstr "Не може да се зададат свойства на аудио плеър: %1"
 
-#: audioplayer.cpp:166 audioplayer.cpp:239
+#: audioplayer.cpp:189 audioplayer.cpp:295
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -294,6 +294,12 @@ msgid ""
 msgstr ""
 "<para>Грешка при възпроизвеждане на аудио файл: <filename>%1</filename></"
 "para><para>%2</para>"
+
+#: audioplayer.cpp:211 resources/singlefileresource.cpp:738
+#, kde-kuit-format
+msgctxt "@info"
+msgid "Could not load file <filename>%1</filename>. (%2)"
+msgstr "Не може да бъде отворен файлът <filename>%1</filename>.(%2)"
 
 #: autostart/autostart.cpp:48
 #, kde-format
@@ -7586,12 +7592,6 @@ msgstr "Календарът не е зареден."
 msgctxt "@info"
 msgid "Could not save file <filename>%1</filename>."
 msgstr "Файлът не може да бъде записан <filename>%1</filename>."
-
-#: resources/singlefileresource.cpp:738
-#, kde-kuit-format
-msgctxt "@info"
-msgid "Could not load file <filename>%1</filename>. (%2)"
-msgstr "Не може да бъде отворен файлът <filename>%1</filename>.(%2)"
 
 #: resources/singlefileresource.cpp:775
 #, kde-kuit-format

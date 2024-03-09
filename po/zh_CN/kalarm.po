@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-26 00:38+0000\n"
+"POT-Creation-Date: 2024-03-09 00:38+0000\n"
 "PO-Revision-Date: 2024-02-29 12:53\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -271,13 +271,19 @@ msgctxt "@info"
 msgid "Cannot set audio player properties: %1"
 msgstr "无法设置音频播放器属性：%1"
 
-#: audioplayer.cpp:166 audioplayer.cpp:239
+#: audioplayer.cpp:189 audioplayer.cpp:295
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "<para>Error playing audio file: <filename>%1</filename></para><para>%2</para>"
 msgstr ""
 "<para>播放音频文件时出错：<filename>%1</filename></para><para>%2</para>"
+
+#: audioplayer.cpp:211 resources/singlefileresource.cpp:738
+#, kde-kuit-format
+msgctxt "@info"
+msgid "Could not load file <filename>%1</filename>. (%2)"
+msgstr "无法加载文件 <filename>%1</filename>。(%2)"
 
 #: autostart/autostart.cpp:48
 #, kde-format
@@ -7204,12 +7210,6 @@ msgstr "未打开日历。"
 msgctxt "@info"
 msgid "Could not save file <filename>%1</filename>."
 msgstr "无法保存文件 <filename>%1</filename>。"
-
-#: resources/singlefileresource.cpp:738
-#, kde-kuit-format
-msgctxt "@info"
-msgid "Could not load file <filename>%1</filename>. (%2)"
-msgstr "无法加载文件 <filename>%1</filename>。(%2)"
 
 #: resources/singlefileresource.cpp:775
 #, kde-kuit-format

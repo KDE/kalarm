@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-26 00:38+0000\n"
+"POT-Creation-Date: 2024-03-09 00:38+0000\n"
 "PO-Revision-Date: 2024-02-27 06:36+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
@@ -279,13 +279,19 @@ msgctxt "@info"
 msgid "Cannot set audio player properties: %1"
 msgstr "無法設定音訊播放器屬性：%1"
 
-#: audioplayer.cpp:166 audioplayer.cpp:239
+#: audioplayer.cpp:189 audioplayer.cpp:295
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "<para>Error playing audio file: <filename>%1</filename></para><para>%2</para>"
 msgstr ""
 "<para>播放音效檔：<filename>%1</filename> 時發生錯誤</para> <para>%2</para>"
+
+#: audioplayer.cpp:211 resources/singlefileresource.cpp:738
+#, kde-kuit-format
+msgctxt "@info"
+msgid "Could not load file <filename>%1</filename>. (%2)"
+msgstr "無法載入檔案 <filename>%1</filename>。（%2）"
 
 #: autostart/autostart.cpp:48
 #, kde-format
@@ -7234,12 +7240,6 @@ msgstr "行事曆未開啟。"
 msgctxt "@info"
 msgid "Could not save file <filename>%1</filename>."
 msgstr "無法儲存檔案 <filename>%1</filename>。"
-
-#: resources/singlefileresource.cpp:738
-#, kde-kuit-format
-msgctxt "@info"
-msgid "Could not load file <filename>%1</filename>. (%2)"
-msgstr "無法載入檔案 <filename>%1</filename>。（%2）"
 
 #: resources/singlefileresource.cpp:775
 #, kde-kuit-format

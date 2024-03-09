@@ -14,8 +14,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-26 00:38+0000\n"
-"PO-Revision-Date: 2024-02-18 14:40+0530\n"
+"POT-Creation-Date: 2024-03-09 00:38+0000\n"
+"PO-Revision-Date: 2024-03-08 19:28+0530\n"
 "Last-Translator: Kishore G <kishore96@gmail.com>\n"
 "Language-Team: Tamil <kde-i18n-doc@kde.org>\n"
 "Language: ta\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 23.08.5\n"
+"X-Generator: Lokalize 24.02.0\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -287,21 +287,27 @@ msgstr "அலாரத்திற்கான நேரம் ஏற்கன�
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot initialize audio player: %1"
-msgstr ""
+msgstr "ஒலிக்கோப்பு இசைப்பியைத் துவக்கு முடியவில்லை: %1"
 
 #: audioplayer.cpp:92
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot set audio player properties: %1"
-msgstr ""
+msgstr "ஒலிக்கோப்பு இசைப்பியின் பண்புகளை அமைக்க முடியவில்லை: %1"
 
-#: audioplayer.cpp:166 audioplayer.cpp:239
+#: audioplayer.cpp:189 audioplayer.cpp:295
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "<para>Error playing audio file: <filename>%1</filename></para><para>%2</para>"
 msgstr ""
 "<para>ஒலிக்கோப்பை திறப்பதில் சிக்கல்: <filename>%1</filename></para><para>%2</para>"
+
+#: audioplayer.cpp:211 resources/singlefileresource.cpp:738
+#, kde-kuit-format
+msgctxt "@info"
+msgid "Could not load file <filename>%1</filename>. (%2)"
+msgstr "<filename>%1</filename> என்ற கோப்பை ஏற்ற முடியவில்லை. (%2)"
 
 #: autostart/autostart.cpp:48
 #, kde-format
@@ -1706,10 +1712,10 @@ msgstr "வேண்டாம்"
 
 #. i18n: ectx: label, entry (DefaultReminderUnits), group (Defaults)
 #: data/kalarmconfig.kcfg:396
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label"
 msgid "Reminder units"
-msgstr "நினைவூட்டல் அலகுகள்"
+msgstr "நினைவூட்டும் நேரத்திற்கான அலகுகள்"
 
 #. i18n: ectx: whatsthis, entry (DefaultReminderUnits), group (Defaults)
 #: data/kalarmconfig.kcfg:397
@@ -1720,18 +1726,17 @@ msgstr "The default units for the reminder in the alarm edit dialog."
 
 #. i18n: ectx: label, entry (DefaultReminderUnits), group (Defaults)
 #: data/kalarmconfig.kcfg:400
-#, fuzzy, kde-format
-#| msgid "Hours/Minutes"
+#, kde-format
 msgctxt "@option"
 msgid "Hours/Minutes"
 msgstr "மணிகள்/நிமிடங்கள்"
 
 #. i18n: ectx: label, entry (DefaultPreAction), group (Defaults)
 #: data/kalarmconfig.kcfg:405
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label"
 msgid "Pre-alarm action"
-msgstr "முன் அலார செயல்:"
+msgstr "அலாரத்திற்கு முந்தைய செயல்"
 
 #. i18n: ectx: whatsthis, entry (DefaultPreAction), group (Defaults)
 #: data/kalarmconfig.kcfg:406
@@ -1742,10 +1747,10 @@ msgstr "அலார சாளரம் மூடிய பின் ஒரு �
 
 #. i18n: ectx: label, entry (DefaultExecPreActionOnDeferral), group (Defaults)
 #: data/kalarmconfig.kcfg:409
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label"
 msgid "Execute pre-alarm action for deferred alarms"
-msgstr "முன் அலார செயல்:"
+msgstr "ஒத்திவைத்த அலாரங்களுக்கும் அலாரத்திற்கு முந்தைய செயலை இயக்கு"
 
 #. i18n: ectx: whatsthis, entry (DefaultExecPreActionOnDeferral), group (Defaults)
 #: data/kalarmconfig.kcfg:410
@@ -1763,7 +1768,7 @@ msgstr "எஅலார தொகுப்பு உரையாடலின் 
 #, kde-format
 msgctxt "@label"
 msgid "Cancel alarm on pre-alarm action error"
-msgstr ""
+msgstr "அலாரத்திற்கு முந்தைய செயல் தோல்வியடைந்தால் அலாரத்தை ரத்து செய்"
 
 #. i18n: ectx: whatsthis, entry (DefaultCancelOnPreActionError), group (Defaults)
 #: data/kalarmconfig.kcfg:415
@@ -1781,7 +1786,7 @@ msgstr "எஅலார தொகுப்பு உரையாடலின் 
 #, kde-format
 msgctxt "@label"
 msgid "Do not notify pre-alarm action errors"
-msgstr ""
+msgstr "அலாரத்திற்கு முந்தைய செயலில் ஏற்படும் சிக்கல்களைப் பற்றி அறிவிக்காதே"
 
 #. i18n: ectx: whatsthis, entry (DefaultDontShowPreActionError), group (Defaults)
 #: data/kalarmconfig.kcfg:420
@@ -1796,10 +1801,10 @@ msgstr "எஅலார தொகுப்பு உரையாடலின் 
 
 #. i18n: ectx: label, entry (DefaultPostAction), group (Defaults)
 #: data/kalarmconfig.kcfg:424
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label"
 msgid "Post-alarm action"
-msgstr "பின் அலார செயல்:"
+msgstr "அலாரத்திற்கு பிறகான செயல்"
 
 #. i18n: ectx: whatsthis, entry (DefaultPostAction), group (Defaults)
 #: data/kalarmconfig.kcfg:425
@@ -1810,10 +1815,10 @@ msgstr "அலார சாளரம் மூடிய பின் ஒரு �
 
 #. i18n: ectx: label, entry (Base_QuitWarn), group (Notification Messages)
 #: data/kalarmconfig.kcfg:431
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label"
 msgid "Warn before quitting"
-msgstr "வெளியேறுவதற்கு முன் எச்சரி."
+msgstr "வெளியேறுவதற்கு முன் எச்சரி"
 
 #. i18n: ectx: whatsthis, entry (Base_QuitWarn), group (Notification Messages)
 #: data/kalarmconfig.kcfg:432
@@ -1824,7 +1829,7 @@ msgstr "%1வெளியேறும் முன் எச்சரிக்�
 
 #. i18n: ectx: label, entry (Base_ConfirmAlarmDeletion), group (Notification Messages)
 #: data/kalarmconfig.kcfg:436
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label"
 msgid "Confirm alarm deletions"
 msgstr "அலாரத்தை நீக்குவதை உறுதிசெய்"
@@ -1860,41 +1865,33 @@ msgstr ""
 
 #. i18n: ectx: Menu (file)
 #: data/kalarmui.rc:19
-#, fuzzy, kde-format
-#| msgctxt "@option:check Alarm action = file display"
-#| msgid "File"
+#, kde-format
 msgid "File"
 msgstr "கோப்பு"
 
 #. i18n: ectx: Menu (edit)
 #: data/kalarmui.rc:31
-#, fuzzy, kde-format
-#| msgctxt "@action:button"
-#| msgid "Edit"
+#, kde-format
 msgid "Edit"
 msgstr "திருத்து"
 
 #. i18n: ectx: Menu (view)
 #: data/kalarmui.rc:46
-#, fuzzy, kde-format
-#| msgctxt "@title:tab"
-#| msgid "View"
+#, kde-format
 msgid "View"
 msgstr "பார்வை"
 
 #. i18n: ectx: Menu (actions)
 #: data/kalarmui.rc:56
-#, fuzzy, kde-format
-#| msgid "&Actions"
+#, kde-format
 msgid "Actions"
-msgstr "&செயல்கள்"
+msgstr "செயல்கள்"
 
 #. i18n: ectx: Menu (settings)
 #: data/kalarmui.rc:68
-#, fuzzy, kde-format
-#| msgid "&Settings"
+#, kde-format
 msgid "Settings"
-msgstr "&அமைப்புகள்"
+msgstr "அமைப்புகள்"
 
 #: datepicker.cpp:50
 #, kde-format
@@ -3151,12 +3148,10 @@ msgid "Stop Play"
 msgstr "இயக்குவதை நிறுத்து"
 
 #: functions.cpp:196
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "Enable &Alarms"
+#, kde-format
 msgctxt "@action"
 msgid "Enable Alarms"
-msgstr "&அலாரங்களை செயல்படுத்து"
+msgstr "அலாரங்களை செயல்படுத்து"
 
 #: functions.cpp:222
 #, kde-format
@@ -3653,109 +3648,100 @@ msgid "Start time"
 msgstr "தொடக்க நேரம்"
 
 #: kalarmcalendar/kaeventformatter.cpp:51
-#, fuzzy, kde-format
-#| msgid "Template name:"
+#, kde-format
 msgctxt "@label Start delay configured in an alarm template"
 msgid "Template after time"
-msgstr "மாதிரி உரு பெயர்:"
+msgstr "வார்ப்புருவிலுள்ள தாமத நேரம்"
 
 #: kalarmcalendar/kaeventformatter.cpp:53
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label"
 msgid "Recurs"
-msgstr "&மறுபடியும் தோன்றுதல்"
+msgstr "மீளநிகழ்வது"
 
 #: kalarmcalendar/kaeventformatter.cpp:55
-#, fuzzy, kde-format
-#| msgid "Recurrence:"
+#, kde-format
 msgctxt "@label"
 msgid "Recurrence"
-msgstr "&மறுதோன்றல்:"
+msgstr "மறுநிகழ்வு"
 
 #: kalarmcalendar/kaeventformatter.cpp:57
-#, fuzzy, kde-format
-#| msgid "Simple Repetition"
+#, kde-format
 msgctxt "@label"
 msgid "Sub-repetition"
-msgstr "சுலப திரும்ப நிகழ்தல்"
+msgstr "சார்-தூண்டல்"
 
 #: kalarmcalendar/kaeventformatter.cpp:59
-#, fuzzy, kde-format
-#| msgid "Simple Repetition"
+#, kde-format
 msgctxt "@label"
 msgid "Sub-repetition interval"
-msgstr "சுலப திரும்ப நிகழ்தல்"
+msgstr "சார்-தூண்டல் இடைவெளி"
 
 #: kalarmcalendar/kaeventformatter.cpp:61
-#, fuzzy, kde-format
-#| msgid "Simple Repetition"
+#, kde-format
 msgctxt "@label"
 msgid "Sub-repetition count"
-msgstr "சுலப திரும்ப நிகழ்தல்"
+msgstr "சார்-தூண்டல் எண்ணிக்கை"
 
 #: kalarmcalendar/kaeventformatter.cpp:63
-#, fuzzy, kde-format
-#| msgid "&Number of repetitions:"
+#, kde-format
 msgctxt "@label"
 msgid "Next sub-repetition"
-msgstr "&திரும்ப திரும்ப நிகழக்கூடியதின் எண்ணிக்கை"
+msgstr "அடுத்த சார்-தூண்டல்"
 
 #: kalarmcalendar/kaeventformatter.cpp:65
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label"
 msgid "Work time only"
-msgstr "இதற்குச் செவிமடு"
+msgstr "வேலை நேரத்தில் மட்டும்"
 
 #: kalarmcalendar/kaeventformatter.cpp:67
 #, kde-format
 msgctxt "@label"
 msgid "Holidays excluded"
-msgstr ""
+msgstr "விடுமுறைகள் தவிர"
 
 #: kalarmcalendar/kaeventformatter.cpp:69
-#, fuzzy, kde-format
-#| msgid "No recurrence"
+#, kde-format
 msgctxt "@label"
 msgid "Next recurrence"
-msgstr "சுழல்நிலை இல்லை"
+msgstr "அடுத்த மறுநிகழ்வு"
 
 #: kalarmcalendar/kaeventformatter.cpp:71
 #, kde-format
 msgctxt "@label"
 msgid "Late cancel"
-msgstr ""
+msgstr "தாமதமானால் ரத்து செய்"
 
 #: kalarmcalendar/kaeventformatter.cpp:73
 #, kde-format
 msgctxt "@label Automatically close window"
 msgid "Auto close"
-msgstr ""
+msgstr "தானாக மூடு"
 
 #: kalarmcalendar/kaeventformatter.cpp:75
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label"
 msgid "Copy to KOrganizer"
-msgstr "எவ்வளவு நேரம் அலாரம் திரும்ப திரும்ப வரவேண்டும் என்பதைக் குறிப்பிட இதை தேர்ந்தெடு."
+msgstr "கேயார்கனைசருக்கு நகலெடு"
 
 #: kalarmcalendar/kaeventformatter.cpp:77
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label"
 msgid "Enabled"
-msgstr "செய&ல்படசெய்"
+msgstr "இயக்கப்பட்டுள்ளது"
 
 #: kalarmcalendar/kaeventformatter.cpp:79
-#, fuzzy, kde-format
-#| msgctxt "@item:intext Calendar status"
-#| msgid "Read-only"
+#, kde-format
 msgctxt "@label"
 msgid "Read-only"
 msgstr "படித்தல் மட்டும்"
 
 #: kalarmcalendar/kaeventformatter.cpp:81
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label Whether alarm should be archived"
 msgid "Archive"
-msgstr "செயலில் உள்ளது"
+msgstr "காப்பகப்படுத்து"
 
 #: kalarmcalendar/kaeventformatter.cpp:83
 #, kde-format
@@ -3767,37 +3753,37 @@ msgstr ""
 #, kde-format
 msgctxt "@label"
 msgid "Custom properties"
-msgstr ""
+msgstr "தனிப்பட்ட பண்புகள்"
 
 #: kalarmcalendar/kaeventformatter.cpp:88
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label"
 msgid "Message text"
-msgstr "செய்தி"
+msgstr "அறிவிப்புக்கான உரை"
 
 #: kalarmcalendar/kaeventformatter.cpp:90
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label File to provide text for message"
 msgid "Message file"
-msgstr "செய்தி"
+msgstr "அறிவிப்புக்கான கோப்பு"
 
 #: kalarmcalendar/kaeventformatter.cpp:96
 #, kde-format
 msgctxt "@label"
 msgid "Font"
-msgstr ""
+msgstr "எழுத்துரு"
 
 #: kalarmcalendar/kaeventformatter.cpp:98
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label Shell command to execute before alarm"
 msgid "Pre-alarm action"
-msgstr "முன் அலார செயல்:"
+msgstr "அலாரத்திற்கு முந்தைய செயல்"
 
 #: kalarmcalendar/kaeventformatter.cpp:100
 #, fuzzy, kde-format
 msgctxt "@label"
 msgid "Pre-alarm action cancel"
-msgstr "முன் அலார செயல்:"
+msgstr "அலாரத்திற்கு முந்தைய செயல்"
 
 #: kalarmcalendar/kaeventformatter.cpp:102
 #, fuzzy, kde-format
@@ -3806,10 +3792,10 @@ msgid "Pre-alarm action no error"
 msgstr "முன் அலார செயல்:"
 
 #: kalarmcalendar/kaeventformatter.cpp:104
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label Shell command to execute after alarm"
 msgid "Post-alarm action"
-msgstr "பின் அலார செயல்:"
+msgstr "அலாரத்திற்கு பிறகான செயல்"
 
 #: kalarmcalendar/kaeventformatter.cpp:108
 #, kde-format
@@ -3818,16 +3804,16 @@ msgid "Akonadi Item ID"
 msgstr ""
 
 #: kalarmcalendar/kaeventformatter.cpp:110
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label Audio method"
 msgid "Sound"
 msgstr "ஒலி"
 
 #: kalarmcalendar/kaeventformatter.cpp:112
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label Whether audio should repeat"
 msgid "Sound repeat"
-msgstr "திரும்பச் செய்யாதே."
+msgstr "ஒலி மீளெழுவது"
 
 #: kalarmcalendar/kaeventformatter.cpp:116
 #, fuzzy, kde-format
@@ -3842,39 +3828,34 @@ msgid "Sound fade time"
 msgstr "ஒலி கோப்பு"
 
 #: kalarmcalendar/kaeventformatter.cpp:120
-#, fuzzy, kde-format
-#| msgid "Reminder"
+#, kde-format
 msgctxt "@label Whether the alarm has a reminder"
 msgid "Reminder"
 msgstr "நினைவூட்டல்"
 
 #: kalarmcalendar/kaeventformatter.cpp:122
-#, fuzzy, kde-format
-#| msgid "Reminder for first recurrence only"
+#, kde-format
 msgctxt "@label Whether reminder is on first recurrence only"
 msgid "Reminder once only"
-msgstr "முதல் இடைவெளிக்கான நினைவூட்டி"
+msgstr "ஒருமுறை மட்டும் நினைவூட்டு"
 
 #: kalarmcalendar/kaeventformatter.cpp:124
 #, kde-format
 msgctxt "@label Whether to use standard notification system"
 msgid "Notify"
-msgstr ""
+msgstr "அறிவு"
 
 #: kalarmcalendar/kaeventformatter.cpp:126
-#, fuzzy, kde-format
-#| msgctxt "@action:button"
-#| msgid "Defer"
+#, kde-format
 msgctxt "@label Deferral type"
 msgid "Deferral"
-msgstr "ஒத்திவை"
+msgstr "ஒத்திவைப்பது"
 
 #: kalarmcalendar/kaeventformatter.cpp:128
-#, fuzzy, kde-format
-#| msgid "&Default time"
+#, kde-format
 msgctxt "@label"
 msgid "Deferral time"
-msgstr "முன்னிருப்பு நேரம்"
+msgstr "ஒத்திவைப்பு நேரம்"
 
 #: kalarmcalendar/kaeventformatter.cpp:130
 #, fuzzy, kde-format
@@ -3891,31 +3872,29 @@ msgid "Deferral default date only"
 msgstr "தள்ளி வைப்பை ரத்துசெய்"
 
 #: kalarmcalendar/kaeventformatter.cpp:135
-#, fuzzy, kde-format
-#| msgid "Co&mmand"
+#, kde-format
 msgctxt "@label A shell command"
 msgid "Command"
-msgstr "&ஆணை"
+msgstr "கட்டளை"
 
 #: kalarmcalendar/kaeventformatter.cpp:139
-#, fuzzy, kde-format
-#| msgid "Execute in terminal window"
+#, kde-format
 msgctxt "@label Execute in terminal window"
 msgid "Execute in terminal"
-msgstr "முனைய சாளரத்தில் செயல்படு"
+msgstr "முனைய சாளரத்தில் செயல்படுத்து"
 
 #: kalarmcalendar/kaeventformatter.cpp:141
 #, kde-format
 msgctxt "@label"
 msgid "Hide command error"
-msgstr ""
+msgstr "கட்டளையின் சிக்கல் குறித்த செய்திகளை மறை"
 
 #: kalarmcalendar/kaeventformatter.cpp:144
 #, fuzzy, kde-format
 #| msgid "Email subject line"
 msgctxt "@label"
 msgid "Email subject"
-msgstr "மின்னஞ்சல் பொருள் வரி"
+msgstr "மின்னஞ்சலின் தலைப்பு"
 
 #: kalarmcalendar/kaeventformatter.cpp:146
 #, fuzzy, kde-format
@@ -3925,122 +3904,100 @@ msgid "Email sender ID"
 msgstr "மின்னஞ்சல் பொருள் வரி"
 
 #: kalarmcalendar/kaeventformatter.cpp:148
-#, fuzzy, kde-format
-#| msgid "Email"
+#, kde-format
 msgctxt "@label Email address"
 msgid "Email to"
-msgstr "மின்னஞ்சல்"
+msgstr "மின்னஞ்சலின் பெறுநர்"
 
 #: kalarmcalendar/kaeventformatter.cpp:150
-#, fuzzy, kde-format
-#| msgid "Email"
+#, kde-format
 msgctxt "@label true/false"
 msgid "Email bcc"
-msgstr "மின்னஞ்சல்"
+msgstr "மின்னஞ்சல் மறைநகல்"
 
 #: kalarmcalendar/kaeventformatter.cpp:152
-#, fuzzy, kde-format
-#| msgid "Email"
+#, kde-format
 msgctxt "@label"
 msgid "Email body"
-msgstr "மின்னஞ்சல்"
+msgstr "மின்னஞ்சல் செய்தி"
 
 #: kalarmcalendar/kaeventformatter.cpp:154
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label"
 msgid "Email attachments"
-msgstr "மின்னஞ்சல் பயனர்:"
+msgstr "மின்னஞ்சல் உடனிணைப்புகள்"
 
 #: kalarmcalendar/kaeventformatter.cpp:256
-#, fuzzy, kde-format
-#| msgid "Display Alarms"
+#, kde-format
 msgctxt "@info Alarm type"
 msgid "Display (text)"
-msgstr "அலாரங்களை காட்டு"
+msgstr "காட்சி (உரை)"
 
 #: kalarmcalendar/kaeventformatter.cpp:258
-#, fuzzy, kde-format
-#| msgid "Display the file now"
+#, kde-format
 msgctxt "@info Alarm type"
 msgid "Display (file)"
-msgstr "கோப்பினை இப்போது காட்டு"
+msgstr "காட்சி (கோப்பு)"
 
 #: kalarmcalendar/kaeventformatter.cpp:261
-#, fuzzy, kde-format
-#| msgid "Display the alarm message now"
+#, kde-format
 msgctxt "@info Alarm type"
 msgid "Display (command)"
-msgstr "அலாரம் செய்தியை இப்போது காட்டு"
+msgstr "காட்சி (கட்டளை)"
 
 #: kalarmcalendar/kaeventformatter.cpp:262
-#, fuzzy, kde-format
-#| msgctxt "@option:check Alarm action"
-#| msgid "Command"
+#, kde-format
 msgctxt "@info Alarm type"
 msgid "Command"
 msgstr "கட்டளை"
 
 #: kalarmcalendar/kaeventformatter.cpp:264
-#, fuzzy, kde-format
-#| msgctxt "@option:check Alarm action"
-#| msgid "Email"
+#, kde-format
 msgctxt "@info Alarm type"
 msgid "Email"
 msgstr "மின்னஞ்சல்"
 
 #: kalarmcalendar/kaeventformatter.cpp:266
-#, fuzzy, kde-format
-#| msgctxt "@option:check Alarm action"
-#| msgid "Audio"
+#, kde-format
 msgctxt "@info Alarm type"
 msgid "Audio"
 msgstr "ஒலி"
 
 #: kalarmcalendar/kaeventformatter.cpp:273
-#, fuzzy, kde-format
-#| msgctxt "@option:check Alarm type"
-#| msgid "Active"
+#, kde-format
 msgctxt "@info Alarm type"
 msgid "Active"
-msgstr "செயலில் உள்ளவை"
+msgstr "செயலில் உள்ளது"
 
 #: kalarmcalendar/kaeventformatter.cpp:275
-#, fuzzy, kde-format
-#| msgctxt "@option:check Alarm type"
-#| msgid "Archived"
+#, kde-format
 msgctxt "@info Alarm type"
 msgid "Archived"
-msgstr "காப்பகப்படுத்தியவை"
+msgstr "காப்பகப்படுத்திது"
 
 #: kalarmcalendar/kaeventformatter.cpp:277
-#, fuzzy, kde-format
-#| msgid "&Templates..."
+#, kde-format
 msgctxt "@info Alarm type"
 msgid "Template"
-msgstr "& மாதிரி உருக்கள்..."
+msgstr "வார்ப்புரு"
 
 #: kalarmcalendar/kaeventformatter.cpp:296
-#, fuzzy, kde-format
-#| msgid "At login"
+#, kde-format
 msgctxt "@info Repeat at login"
 msgid "At login until %1"
-msgstr "நுழைவு"
+msgstr "நுழையும்போது %1 வரை"
 
 #: kalarmcalendar/kaeventformatter.cpp:337
-#, fuzzy, kde-format
-#| msgctxt "@info n days"
-#| msgid "%1d"
+#, kde-format
 msgctxt "@info"
 msgid "%1"
-msgstr "%1 நாள்"
+msgstr "%1"
 
 #: kalarmcalendar/kaeventformatter.cpp:349
-#, fuzzy, kde-format
-#| msgctxt "@option:radio"
-#| msgid "Default time"
+#, kde-format
 msgctxt "@info Using default font"
 msgid "Default"
-msgstr "இயல்பிருப்பு நேரம்"
+msgstr "இயல்பிருப்பு"
 
 #: kalarmcalendar/kaeventformatter.cpp:365 messagedisplayhelper.cpp:217
 #, kde-format
@@ -4049,59 +4006,46 @@ msgid "Reminder"
 msgstr "நினைவூட்டல்"
 
 #: kalarmcalendar/kaeventformatter.cpp:378
-#, fuzzy, kde-format
-#| msgctxt "@item:inlistbox"
-#| msgid "Speak"
+#, kde-format
 msgctxt "@info"
 msgid "Speak"
 msgstr "பேச்சு"
 
 #: kalarmcalendar/kaeventformatter.cpp:379
-#, fuzzy, kde-format
-#| msgctxt "@item:inlistbox"
-#| msgid "Beep"
+#, kde-format
 msgctxt "@info"
 msgid "Beep"
 msgstr "பீப்பு"
 
 #: kalarmcalendar/kaeventformatter.cpp:384
 #: kalarmcalendar/kaeventformatter.cpp:388
-#, fuzzy, kde-format
-#| msgctxt "Undo-action: message"
-#| msgid "%1: %2"
+#, kde-format
 msgctxt "@info Percentage"
 msgid "%1%%"
-msgstr "%1: %2"
+msgstr "%1%%"
 
 #: kalarmcalendar/kaeventformatter.cpp:392
-#, fuzzy, kde-format
-#| msgid "seconds"
+#, kde-format
 msgctxt "@info"
 msgid "1 Second"
 msgid_plural "%1 Seconds"
-msgstr[0] "நொடிகள்"
-msgstr[1] "நொடிகள்"
+msgstr[0] "1 நொடி"
+msgstr[1] "%1 நொடி"
 
 #: kalarmcalendar/kaeventformatter.cpp:417
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Error"
+#, kde-format
 msgctxt "@info Error indication"
 msgid "error!"
-msgstr "சிக்கல்"
+msgstr "சிக்கல்!"
 
 #: kalarmcalendar/kaeventformatter.cpp:422
-#, fuzzy, kde-format
-#| msgctxt "@info Parameter in 'Default calendar: Yes/No'"
-#| msgid "Yes"
+#, kde-format
 msgctxt "@info General purpose status indication: yes or no"
 msgid "Yes"
 msgstr "ஆம்"
 
 #: kalarmcalendar/kaeventformatter.cpp:423
-#, fuzzy, kde-format
-#| msgctxt "@info Parameter in 'Default calendar: Yes/No'"
-#| msgid "No"
+#, kde-format
 msgctxt "@info General purpose status indication: yes or no"
 msgid "No"
 msgstr "இல்லை"
@@ -4133,17 +4077,14 @@ msgstr ""
 "கண்டுபிடிக்கப்படவில்லை"
 
 #: kamail.cpp:109
-#, fuzzy, kde-kuit-format
-#| msgid ""
-#| "Invalid 'From' email address.\n"
-#| "KMail identity '%1' not found."
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "Invalid 'From' email address.<nl/>Email identity <resource>%1</resource> has "
 "no email address"
 msgstr ""
-"தவறான 'அனுப்புநர்' மின்னஞ்சல் முகவரி.\n"
-"கேஅஞ்சல் அடையாளம் '%1' இல்லை."
+"செல்லுபடியாகாத அனுப்பநர் முகவரி. <nl/><resource>%1</resource> என்ற அடையாளத்திற்கு "
+"எந்த மின்னஞ்சல் முகவரியும் அமைக்கப்படவில்லை"
 
 #: kamail.cpp:119
 #, fuzzy, kde-kuit-format
@@ -4855,12 +4796,10 @@ msgid "Edit the alarm."
 msgstr "அலாரத்தை திருத்து."
 
 #: messagewindow.cpp:439
-#, fuzzy, kde-format
-#| msgctxt "@action:button"
-#| msgid "&Defer..."
+#, kde-format
 msgctxt "@action:button"
 msgid "Defer..."
-msgstr "&ஒத்திவை..."
+msgstr "ஒத்திவை..."
 
 #: messagewindow.cpp:443
 #, kde-format
@@ -7611,12 +7550,6 @@ msgstr "நாள்காட்டி திறக்கப்படவில�
 msgctxt "@info"
 msgid "Could not save file <filename>%1</filename>."
 msgstr "<filename>%1</filename> என்ற கோப்பை சேமிக்க முடியவில்லை."
-
-#: resources/singlefileresource.cpp:738
-#, kde-kuit-format
-msgctxt "@info"
-msgid "Could not load file <filename>%1</filename>. (%2)"
-msgstr "<filename>%1</filename> என்ற கோப்பை ஏற்ற முடியவில்லை. (%2)"
 
 #: resources/singlefileresource.cpp:775
 #, kde-kuit-format

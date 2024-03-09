@@ -16,8 +16,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdepim-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-26 00:38+0000\n"
-"PO-Revision-Date: 2024-03-01 15:42+0300\n"
+"POT-Creation-Date: 2024-03-09 00:38+0000\n"
+"PO-Revision-Date: 2024-03-08 20:01+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -297,7 +297,7 @@ msgctxt "@info"
 msgid "Cannot set audio player properties: %1"
 msgstr "Ses çalar özellikleri ayarlanamıyor: %1"
 
-#: audioplayer.cpp:166 audioplayer.cpp:239
+#: audioplayer.cpp:189 audioplayer.cpp:295
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -305,6 +305,12 @@ msgid ""
 msgstr ""
 "<para>Ses dosyası oynatılırken hata: <filename>%1</filename></para><para>%2</"
 "para>"
+
+#: audioplayer.cpp:211 resources/singlefileresource.cpp:738
+#, kde-kuit-format
+msgctxt "@info"
+msgid "Could not load file <filename>%1</filename>. (%2)"
+msgstr "<filename>%1</filename> dosyası yüklenemedi. (%2)"
 
 #: autostart/autostart.cpp:48
 #, kde-format
@@ -652,7 +658,7 @@ msgstr "Görüntülendiğinde iletiyi konuş"
 #: commandoptions.cpp:254
 #, kde-format
 msgid "Email subject line"
-msgstr "E-Posta konu satırı"
+msgstr "E-posta konu satırı"
 
 #: commandoptions.cpp:259
 #, kde-format
@@ -1252,7 +1258,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label"
 msgid "'From' email address"
-msgstr "'Gönderen' e-posta adresi"
+msgstr "'Kimden' e-posta adresi"
 
 #. i18n: ectx: whatsthis, entry (Base_EmailFrom), group (General)
 #: data/kalarmconfig.kcfg:211
@@ -1694,7 +1700,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label"
 msgid "Copy email to self"
-msgstr "E-Postayı kendine kopyala"
+msgstr "E-postayı kendine kopyala"
 
 #. i18n: ectx: whatsthis, entry (DefaultEmailBcc), group (Defaults)
 #: data/kalarmconfig.kcfg:367
@@ -2893,7 +2899,8 @@ msgstr "Geçersiz e-posta eki: <filename>%1</filename>"
 #, kde-format
 msgctxt "@info"
 msgid "Do you really want to send the email now to the specified recipient(s)?"
-msgstr "Gerçekten bu e-postayı belirtilen alıcılara göndermek istiyor musunuz?"
+msgstr ""
+"Bu e-postayı belirtilen alıcılara göndermeyi gerçekten istiyor musunuz?"
 
 #: editdlgtypes.cpp:1464
 #, kde-format
@@ -4149,7 +4156,7 @@ msgid ""
 "found)</para><para>Please set it in <application>KMail</application> or in "
 "the <application>KAlarm</application> Configuration dialog.</para>"
 msgstr ""
-"<para>Yapılandırılmış 'Gönderen' e-posta adresi mevcut değil (öntanımlı e-"
+"<para>Yapılandırılmış 'Kimden' e-posta adresi mevcut değil (öntanımlı e-"
 "posta tanımlaması bulunamadı)</para><para>Lütfen <application>K Posta</"
 "application> uygulamasında ya da <application>K Alarm</application> "
 "uygulaması Yapılandırma penceresinde ayarlayın.</para>"
@@ -4162,7 +4169,7 @@ msgid ""
 "default address in <application>KMail</application> or in the "
 "<application>KAlarm</application> Configuration dialog.</para>"
 msgstr ""
-"<para>Hiçbir 'Gönderen' e-posta adresi yapılandırılmadı.</para><para>Lütfen "
+"<para>Hiçbir 'Kimden' e-posta adresi yapılandırılmadı.</para><para>Lütfen "
 "<application>K Posta</application> veya <application>K Alarm</application> "
 "uygulaması Yapılandırma penceresinde ayarlayın.</para>"
 
@@ -4173,7 +4180,7 @@ msgid ""
 "<para>No 'From' email address is configured.</para><para>Please set it in "
 "the <application>KAlarm</application> Configuration dialog.</para>"
 msgstr ""
-"<para>Hiçbir 'Gönderen' e-posta adresi yapılandırılmadı.</para><para>Lütfen "
+"<para>Hiçbir 'Kimden' e-posta adresi yapılandırılmadı.</para><para>Lütfen "
 "<application>K Alarm</application> uygulaması Yapılandırma penceresinde bunu "
 "ayarlayın.</para>"
 
@@ -4522,8 +4529,8 @@ msgstr "Alarmları Yenile"
 msgctxt "@info"
 msgid "Do you really want to delete the selected alarm?"
 msgid_plural "Do you really want to delete the %1 selected alarms?"
-msgstr[0] "Seçili alarmı gerçekten silmek istiyor musunuz?"
-msgstr[1] "%1 seçili alarmı gerçekten silmek istiyor musunuz?"
+msgstr[0] "Seçili alarmı silmeyi gerçekten istiyor musunuz?"
+msgstr[1] "%1 seçili alarmı silmeyi gerçekten istiyor musunuz?"
 
 #: mainwindow.cpp:808
 #, kde-format
@@ -4877,7 +4884,7 @@ msgstr "<application>K Alarm</application> uygulamasını etkinleştir"
 #, kde-format
 msgctxt "@info"
 msgid "Do you really want to acknowledge this alarm?"
-msgstr "Bu alarm bildirimini onaylamak istiyor musunuz?"
+msgstr "Bu alarmı kabullenmeyi gerçekten istiyor musunuz?"
 
 #: messagewindow.cpp:1076
 #, kde-format
@@ -5495,7 +5502,7 @@ msgstr ""
 #, kde-format
 msgctxt "@info"
 msgid "Do you really want to delete all archived alarms?"
-msgstr "Arşivlenmiş alarmları gerçekten silmek istiyor musunuz?"
+msgstr "Tüm arşivlenmiş alarmları silmeyi gerçekten istiyor musunuz?"
 
 #: prefdlg.cpp:1055
 #, kde-format
@@ -5504,8 +5511,8 @@ msgid ""
 "Do you really want to delete all alarms in the default archived alarm "
 "calendar?"
 msgstr ""
-"Öntanımlı arşivlenmiş alarm takvimindeki tüm alarmları gerçekten silmek "
-"istiyor musun?"
+"Öntanımlı arşivlenmiş alarmlar klasöründeki tüm alarmları silmeyi gerçekten "
+"istiyor musunuz?"
 
 #: prefdlg.cpp:1073
 #, kde-format
@@ -5591,7 +5598,7 @@ msgstr "Uzaktaki e-postalar kuyruğa eklendiğinde bildir"
 #, kde-format
 msgctxt "@title:group"
 msgid "Your Email Address"
-msgstr "E-Posta Adresiniz"
+msgstr "E-posta Adresiniz"
 
 #: prefdlg.cpp:1134
 #, kde-format
@@ -5606,7 +5613,7 @@ msgid ""
 "Your email address, used to identify you as the sender when sending email "
 "alarms."
 msgstr ""
-"E-Posta adresiniz e-posta alarmları gönderilirken gönderici kimliği olarak "
+"E-posta adresiniz e-posta alarmları gönderilirken gönderici kimliği olarak "
 "kullanılır."
 
 #: prefdlg.cpp:1153 prefdlg.cpp:1189
@@ -7398,7 +7405,7 @@ msgstr ""
 #, kde-format
 msgctxt "@info"
 msgid "Do you really want to disable your default calendar?"
-msgstr "Gerçekten öntanımlı takvimini kapatmak istiyor musun?"
+msgstr "Öntanımlı takviminizi devre dışı bırakmayı gerçekten istiyor musunuz?"
 
 #: resources/resources.cpp:289
 #, kde-format
@@ -7531,12 +7538,6 @@ msgstr "Takvim açık değil"
 msgctxt "@info"
 msgid "Could not save file <filename>%1</filename>."
 msgstr "<filename>%1</filename> dosyası kaydedilemedi."
-
-#: resources/singlefileresource.cpp:738
-#, kde-kuit-format
-msgctxt "@info"
-msgid "Could not load file <filename>%1</filename>. (%2)"
-msgstr "<filename>%1</filename> dosyası yüklenemedi. (%2)"
 
 #: resources/singlefileresource.cpp:775
 #, kde-kuit-format
@@ -7789,8 +7790,8 @@ msgid ""
 "<para><resource>%1</resource> is the default calendar for:%2</para>"
 "%3<para>Do you really want to remove it from all calendar lists?</para>"
 msgstr ""
-"<para><resource>%1</resource> şunun için öntanımlı takvimdir:%2</para>"
-"%3<para>Bunu bütün takvim listesinden gerçekten kaldırmak istiyor musunuz?</"
+"<para><resource>%1</resource> şunun için öntanımlı takvimdir: %2</para>"
+"%3<para>Bunu bütün takvim listesinden kaldırmayı gerçekten istiyor musunuz?</"
 "para> "
 
 #: resourceselector.cpp:258
@@ -7800,8 +7801,8 @@ msgid ""
 "Do you really want to remove your default calendar (<resource>%1</resource>) "
 "from the list?"
 msgstr ""
-"Listeden öntanımlı takviminizi (<resource>%1</resource>) gerçekten kaldırmak "
-"istiyor musunuz?"
+"Listeden öntanımlı takviminizi (<resource>%1</resource>) kaldırmayı "
+"gerçekten istiyor musunuz?"
 
 #: resourceselector.cpp:261
 #, kde-kuit-format
@@ -7811,7 +7812,7 @@ msgid ""
 "remove it from all calendar lists?</para>"
 msgstr ""
 "<para><resource>%1</resource> içerir: %2</para><para> Bunu bütün takvim "
-"listelerinden gerçekten çıkarmak istiyor musunuz?</para>"
+"listelerinden kaldırmayı gerçekten istiyor musunuz?</para>"
 
 #: resourceselector.cpp:264
 #, kde-kuit-format
@@ -7820,7 +7821,7 @@ msgid ""
 "Do you really want to remove the calendar <resource>%1</resource> from the "
 "list?"
 msgstr ""
-"Listeden <resource>%1</resource> takvimini gerçekten çıkarmak istiyor "
+"Listeden <resource>%1</resource> takvimini kaldırmayı gerçekten istiyor "
 "musunuz?"
 
 #: resourceselector.cpp:289
@@ -8372,8 +8373,8 @@ msgstr "Şu anda vurgulanan alarm şablonunu sil"
 msgctxt "@info"
 msgid "Do you really want to delete the selected alarm template?"
 msgid_plural "Do you really want to delete the %1 selected alarm templates?"
-msgstr[0] "Seçili alarm şablonunu gerçekten silmek istiyor musunuz?"
-msgstr[1] "Seçili %1 alarm şablonunu gerçekten silmek istiyor musunuz?"
+msgstr[0] "Seçili alarm şablonunu silmeyi gerçekten istiyor musunuz?"
+msgstr[1] "Seçili %1 alarm şablonunu silmeyi gerçekten istiyor musunuz?"
 
 #: templatedlg.cpp:179
 #, kde-format

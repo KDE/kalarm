@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-26 00:38+0000\n"
+"POT-Creation-Date: 2024-03-09 00:38+0000\n"
 "PO-Revision-Date: 2007-09-07 11:50+0545\n"
 "Last-Translator: Nabin Gautam <nabin@mpp.org.np>\n"
 "Language-Team: Nepali <info@mpp.org.np>\n"
@@ -327,7 +327,7 @@ msgctxt "@info"
 msgid "Cannot set audio player properties: %1"
 msgstr ""
 
-#: audioplayer.cpp:166 audioplayer.cpp:239
+#: audioplayer.cpp:189 audioplayer.cpp:295
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "Error attaching file:\n"
@@ -338,6 +338,13 @@ msgid ""
 msgstr ""
 "फाइल सङ्लग्न गर्दा त्रुटि:\n"
 "%1"
+
+#: audioplayer.cpp:211 resources/singlefileresource.cpp:738
+#, fuzzy, kde-kuit-format
+#| msgid "Could not load calendar '%1'."
+msgctxt "@info"
+msgid "Could not load file <filename>%1</filename>. (%2)"
+msgstr "क्यालेन्डर '%1' लोड गर्न सकेन ।"
 
 #: autostart/autostart.cpp:48
 #, fuzzy, kde-format
@@ -8615,13 +8622,6 @@ msgstr "क्यालेन्डर फाइल"
 #| msgid "Could not load calendar '%1'."
 msgctxt "@info"
 msgid "Could not save file <filename>%1</filename>."
-msgstr "क्यालेन्डर '%1' लोड गर्न सकेन ।"
-
-#: resources/singlefileresource.cpp:738
-#, fuzzy, kde-kuit-format
-#| msgid "Could not load calendar '%1'."
-msgctxt "@info"
-msgid "Could not load file <filename>%1</filename>. (%2)"
 msgstr "क्यालेन्डर '%1' लोड गर्न सकेन ।"
 
 #: resources/singlefileresource.cpp:775
