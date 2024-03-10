@@ -8599,7 +8599,3 @@ msgstr ""
 #, kde-format
 msgid "Number of minutes before alarm to wake from suspend"
 msgstr "Kor mange minutt før alarmen systemet skal vekkjast frå dvalemodus"
-
-#~ msgctxt "@info"
-#~ msgid "Cannot open audio file: <filename>%1</filename>"
-#~ msgstr "Klarar ikkje opna lydfil: <filename>%1</filename>"

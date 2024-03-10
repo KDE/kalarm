@@ -8527,7 +8527,3 @@ msgstr ""
 #, kde-format
 msgid "Number of minutes before alarm to wake from suspend"
 msgstr "Počet minut před upomínkou pro probrání z uspání"
-
-#~ msgctxt "@info"
-#~ msgid "Cannot open audio file: <filename>%1</filename>"
-#~ msgstr "Nelze otevřít zvukový soubor: <filename>%1</filename>"
