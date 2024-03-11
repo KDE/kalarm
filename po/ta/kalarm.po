@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-03-09 02:28+0000\n"
-"PO-Revision-Date: 2024-03-08 19:28+0530\n"
+"PO-Revision-Date: 2024-03-10 10:02+0530\n"
 "Last-Translator: Kishore G <kishore96@gmail.com>\n"
 "Language-Team: Tamil <kde-i18n-doc@kde.org>\n"
 "Language: ta\n"
@@ -4358,12 +4358,10 @@ msgstr ""
 "செல்லுபடியாகாமல் இருக்கலாம்)"
 
 #: mainwindow.cpp:460
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "&Templates..."
+#, kde-format
 msgctxt "@action"
 msgid "Templates..."
-msgstr "&வார்ப்புருகள்"
+msgstr "வார்ப்புருகள்"
 
 #: mainwindow.cpp:464 templatedlg.cpp:73
 #, kde-format
@@ -4372,33 +4370,25 @@ msgid "New"
 msgstr "புதியது"
 
 #: mainwindow.cpp:470
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "Create Tem&plate..."
+#, kde-format
 msgctxt "@action"
 msgid "Create Template..."
-msgstr "வார்ப்புருவை &உருவாக்கு…"
+msgstr "வார்ப்புருவை உருவாக்கு..."
 
 #: mainwindow.cpp:474
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "&Copy..."
+#, kde-format
 msgctxt "@action"
 msgid "Copy..."
-msgstr "&நகலெடு…"
+msgstr "நகலெடு..."
 
 #: mainwindow.cpp:479 resourceselector.cpp:301
-#, fuzzy, kde-format
-#| msgctxt "@action:button"
-#| msgid "Edit..."
+#, kde-format
 msgctxt "@action"
 msgid "Edit..."
 msgstr "திருத்து..."
 
 #: mainwindow.cpp:484
-#, fuzzy, kde-format
-#| msgctxt "@action:button"
-#| msgid "Delete"
+#, kde-format
 msgctxt "@action"
 msgid "Delete"
 msgstr "நீக்கு"
