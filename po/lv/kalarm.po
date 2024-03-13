@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-03-09 00:38+0000\n"
+"POT-Creation-Date: 2024-03-13 00:38+0000\n"
 "PO-Revision-Date: 2012-07-05 12:56+0300\n"
 "Last-Translator: Maris Nartiss <maris.kde@gmail.com>\n"
 "Language-Team: Latvian\n"
@@ -4461,7 +4461,7 @@ msgctxt "@info General purpose status indication: yes or no"
 msgid "No"
 msgstr "Nē"
 
-#: kamail.cpp:70
+#: kamail.cpp:68
 #, fuzzy, kde-format
 #| msgctxt "@info/plain"
 #| msgid ""
@@ -4474,7 +4474,7 @@ msgstr ""
 "'No' e-pasta adresei jābūt konfigurētai, lai varētu izpildīt e-pasta "
 "atgādinājumus."
 
-#: kamail.cpp:73
+#: kamail.cpp:71
 #, fuzzy, kde-format
 #| msgctxt ""
 #| "@info/plain KMail folder name: this should be translated the same as in "
@@ -4485,7 +4485,7 @@ msgctxt ""
 msgid "sent-mail"
 msgstr "nosūtītās"
 
-#: kamail.cpp:103
+#: kamail.cpp:101
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -4495,7 +4495,7 @@ msgstr ""
 "Nederīga 'No' e-pasta adrese.<nl/>E-pasta identitāte <resource>%1</resource> "
 "nav atrasta"
 
-#: kamail.cpp:109
+#: kamail.cpp:107
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -4505,7 +4505,7 @@ msgstr ""
 "Nederīga 'No' e-pasta adrese.<nl/>E-pasta identitātei <resource>%1</"
 "resource> nav e-pasta adreses"
 
-#: kamail.cpp:119
+#: kamail.cpp:117
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -4518,7 +4518,7 @@ msgstr ""
 "application> vai <application>KAlarm</application> konfigurācijas dialoglogā."
 "</para>"
 
-#: kamail.cpp:123
+#: kamail.cpp:121
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info"
 #| msgid ""
@@ -4535,7 +4535,7 @@ msgstr ""
 "iestatiet to KDE sistēmas iestatījumos vai <application>KAlarm</application> "
 "konfigurācijas dialoglogā.</para>"
 
-#: kamail.cpp:128
+#: kamail.cpp:126
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -4546,7 +4546,7 @@ msgstr ""
 "iestatiet to <application>KAlarm</application> konfigurācijas dialoglogā.</"
 "para>"
 
-#: kamail.cpp:158
+#: kamail.cpp:156
 #, fuzzy, kde-kuit-format
 #| msgctxt "@text/plain"
 #| msgid "Could not run <command>%1</command> to set wake from suspend"
@@ -4556,31 +4556,31 @@ msgstr ""
 "Neizdevās palaist <command>%1</command>, lai iestatītu pamošanos no "
 "iemigšanas"
 
-#: kamail.cpp:285
+#: kamail.cpp:283
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Error attaching file: <filename>%1</filename>"
 msgstr "Kļūda pievienojot failu: <filename>%1</filename>"
 
-#: kamail.cpp:295
+#: kamail.cpp:293
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Attachment not found: <filename>%1</filename>"
 msgstr "Pielikums nav atrasts: <filename>%1</filename>"
 
-#: kamail.cpp:377
+#: kamail.cpp:375
 #, kde-format
 msgctxt "@info"
 msgid "An email has been queued to be sent"
 msgstr "E-pasts tika ierindots nosūtīšanai"
 
-#: kamail.cpp:543
+#: kamail.cpp:541
 #, kde-format
 msgctxt "@info"
 msgid "Failed to send email"
 msgstr "Neizdevās nosūtīt e-pastu"
 
-#: kamail.cpp:544
+#: kamail.cpp:542
 #, kde-format
 msgctxt "@info"
 msgid "Error sending email"

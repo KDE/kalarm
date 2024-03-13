@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-03-09 00:38+0000\n"
+"POT-Creation-Date: 2024-03-13 00:38+0000\n"
 "PO-Revision-Date: 2024-03-09 04:46\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -3929,21 +3929,21 @@ msgctxt "@info General purpose status indication: yes or no"
 msgid "No"
 msgstr "否"
 
-#: kamail.cpp:70
+#: kamail.cpp:68
 #, kde-format
 msgctxt "@info"
 msgid ""
 "A 'From' email address must be configured in order to execute email alarms."
 msgstr "若要执行电子邮件提醒，您必须配置发件人的电子邮件地址。"
 
-#: kamail.cpp:73
+#: kamail.cpp:71
 #, kde-format
 msgctxt ""
 "@info KMail folder name: this should be translated the same as in kmail"
 msgid "sent-mail"
 msgstr "已发邮件"
 
-#: kamail.cpp:103
+#: kamail.cpp:101
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3951,7 +3951,7 @@ msgid ""
 "found"
 msgstr "发件人的电子邮件地址无效。<nl/>找不到邮件身份 <resource>%1</resource>"
 
-#: kamail.cpp:109
+#: kamail.cpp:107
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3961,7 +3961,7 @@ msgstr ""
 "发件人的电子邮件地址无效。<nl/>邮件身份 <resource>%1</resource> 中不含邮件地"
 "址"
 
-#: kamail.cpp:119
+#: kamail.cpp:117
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3973,7 +3973,7 @@ msgstr ""
 "<application>KMail</application> 或 <application>KAlarm</application> 配置对"
 "话框中进行设置。</para>"
 
-#: kamail.cpp:123
+#: kamail.cpp:121
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3984,7 +3984,7 @@ msgstr ""
 "<para>未配置发件人的电子邮件地址。</para><para>请在<application>KMail</"
 "application>、<application>KAlarm</application> 配置对话框中进行设置。</para>"
 
-#: kamail.cpp:128
+#: kamail.cpp:126
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3994,37 +3994,37 @@ msgstr ""
 "<para>未配置发件人的电子邮件地址。</para><para>请在 <application>KAlarm</"
 "application> 配置项对话框中进行设置。</para>"
 
-#: kamail.cpp:158
+#: kamail.cpp:156
 #, kde-kuit-format
 msgctxt "@info"
 msgid "<command>%1</command> not found"
 msgstr "未找到命令 <command>%1</command>"
 
-#: kamail.cpp:285
+#: kamail.cpp:283
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Error attaching file: <filename>%1</filename>"
 msgstr "将文件添加到附件时出错：<filename>%1</filename>"
 
-#: kamail.cpp:295
+#: kamail.cpp:293
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Attachment not found: <filename>%1</filename>"
 msgstr "附件未找到：<filename>%1</filename>"
 
-#: kamail.cpp:377
+#: kamail.cpp:375
 #, kde-format
 msgctxt "@info"
 msgid "An email has been queued to be sent"
 msgstr "邮件已在发送队列中排队"
 
-#: kamail.cpp:543
+#: kamail.cpp:541
 #, kde-format
 msgctxt "@info"
 msgid "Failed to send email"
 msgstr "邮件发送失败"
 
-#: kamail.cpp:544
+#: kamail.cpp:542
 #, kde-format
 msgctxt "@info"
 msgid "Error sending email"

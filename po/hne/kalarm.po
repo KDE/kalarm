@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-03-09 00:38+0000\n"
+"POT-Creation-Date: 2024-03-13 00:38+0000\n"
 "PO-Revision-Date: 2009-02-27 17:53+0530\n"
 "Last-Translator: Ravishankar Shrivastava <raviratlami@aol.in>\n"
 "Language-Team: Hindi <kde-i18n-doc@lists.kde.org>\n"
@@ -4196,7 +4196,7 @@ msgctxt "@info General purpose status indication: yes or no"
 msgid "No"
 msgstr "नइ"
 
-#: kamail.cpp:70
+#: kamail.cpp:68
 #, fuzzy, kde-format
 #| msgctxt "@info/plain"
 #| msgid ""
@@ -4207,7 +4207,7 @@ msgid ""
 "A 'From' email address must be configured in order to execute email alarms."
 msgstr "ईमेल अलार्म ल चलाय बर 'प्रेसक' ईमेल पता कान्फिगर करिस होय होना चाही."
 
-#: kamail.cpp:73
+#: kamail.cpp:71
 #, fuzzy, kde-format
 #| msgctxt ""
 #| "@info/plain KMail folder name: this should be translated the same as in "
@@ -4218,7 +4218,7 @@ msgctxt ""
 msgid "sent-mail"
 msgstr "भेजी -डाक"
 
-#: kamail.cpp:103
+#: kamail.cpp:101
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -4226,7 +4226,7 @@ msgid ""
 "found"
 msgstr "अवैध 'प्रेसक' ईमेल पता.<nl/>ईमेल पहिचान <resource>%1</resource> नइ मिलिस"
 
-#: kamail.cpp:109
+#: kamail.cpp:107
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -4236,7 +4236,7 @@ msgstr ""
 "अवैध 'प्रेसक' ईमेल पता.<nl/>ईमेल पहिचान <resource>%1</resource> तिर कोनो ईमेल पता "
 "नइ हे"
 
-#: kamail.cpp:119
+#: kamail.cpp:117
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -4245,7 +4245,7 @@ msgid ""
 "the <application>KAlarm</application> Configuration dialog.</para>"
 msgstr ""
 
-#: kamail.cpp:123
+#: kamail.cpp:121
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info Please set the 'From' email address..."
 #| msgid ""
@@ -4257,7 +4257,7 @@ msgid ""
 "<application>KAlarm</application> Configuration dialog.</para>"
 msgstr "<para>%1</para><para>किरपा करके, एला प्राथमिकता गोठ मं सेट करव.</para>"
 
-#: kamail.cpp:128
+#: kamail.cpp:126
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info Please set the 'From' email address..."
 #| msgid ""
@@ -4268,7 +4268,7 @@ msgid ""
 "the <application>KAlarm</application> Configuration dialog.</para>"
 msgstr "<para>%1</para><para>किरपा करके, एला प्राथमिकता गोठ मं सेट करव.</para>"
 
-#: kamail.cpp:158
+#: kamail.cpp:156
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info"
 #| msgid "<command>%1</command> not found"
@@ -4276,31 +4276,31 @@ msgctxt "@info"
 msgid "<command>%1</command> not found"
 msgstr "<command>%1</command> नइ मिलिस."
 
-#: kamail.cpp:285
+#: kamail.cpp:283
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Error attaching file: <filename>%1</filename>"
 msgstr "फााइल: <filename>%1</filename> ल संलग्न करे मं गलती"
 
-#: kamail.cpp:295
+#: kamail.cpp:293
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Attachment not found: <filename>%1</filename>"
 msgstr "संलग्नक नइ मिलिस: <filename>%1</filename>"
 
-#: kamail.cpp:377
+#: kamail.cpp:375
 #, kde-format
 msgctxt "@info"
 msgid "An email has been queued to be sent"
 msgstr "भेजे जाय बर एक ई-मेल कतार मं लगाही"
 
-#: kamail.cpp:543
+#: kamail.cpp:541
 #, kde-format
 msgctxt "@info"
 msgid "Failed to send email"
 msgstr "ई-मेल भेजे मं फेल"
 
-#: kamail.cpp:544
+#: kamail.cpp:542
 #, kde-format
 msgctxt "@info"
 msgid "Error sending email"

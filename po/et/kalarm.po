@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-03-09 00:38+0000\n"
+"POT-Creation-Date: 2024-03-13 00:38+0000\n"
 "PO-Revision-Date: 2020-05-15 08:19+0300\n"
 "Last-Translator: Marek Laane <qiilaq69@gmail.com>\n"
 "Language-Team: Estonian <kde-et@lists.linux.ee>\n"
@@ -4242,7 +4242,7 @@ msgctxt "@info General purpose status indication: yes or no"
 msgid "No"
 msgstr "Ei"
 
-#: kamail.cpp:70
+#: kamail.cpp:68
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -4251,14 +4251,14 @@ msgstr ""
 "Sinu e-posti aadress, mida kasutatakse sinu kui saatja tuvastamiseks, kui "
 "saadad meilihäire."
 
-#: kamail.cpp:73
+#: kamail.cpp:71
 #, kde-format
 msgctxt ""
 "@info KMail folder name: this should be translated the same as in kmail"
 msgid "sent-mail"
 msgstr "saadetud"
 
-#: kamail.cpp:103
+#: kamail.cpp:101
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -4268,7 +4268,7 @@ msgstr ""
 "Vigane saatja aadress.<nl/>E-posti identiteeti <resource>%1</resource> ei "
 "leitud."
 
-#: kamail.cpp:109
+#: kamail.cpp:107
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -4278,7 +4278,7 @@ msgstr ""
 "Vigane saatja aadress.<nl/>E-posti identiteedil <resource>%1</resource> "
 "puudub e-posti aadress"
 
-#: kamail.cpp:119
+#: kamail.cpp:117
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -4290,7 +4290,7 @@ msgstr ""
 "ei leitud)</para><para>Palun tee seda <application>KMail</application>i või "
 "<application>KAlarm</application>i seadistustedialoogis.</para>"
 
-#: kamail.cpp:123
+#: kamail.cpp:121
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info"
 #| msgid ""
@@ -4309,7 +4309,7 @@ msgstr ""
 "seadistustes või <application>KAlarm</application>i seadistustedialoogis.</"
 "para>"
 
-#: kamail.cpp:128
+#: kamail.cpp:126
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -4319,37 +4319,37 @@ msgstr ""
 "<para>Saatja e-posti aadressi pole määratud.</para><para>Palun tee seda "
 "<application>KAlarm</application>i seadistustedialoogis.</para>"
 
-#: kamail.cpp:158
+#: kamail.cpp:156
 #, kde-kuit-format
 msgctxt "@info"
 msgid "<command>%1</command> not found"
 msgstr "Käsku <command>%1</command> ei leitud"
 
-#: kamail.cpp:285
+#: kamail.cpp:283
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Error attaching file: <filename>%1</filename>"
 msgstr "Viga faili kaasamisel kirjale: <filename>%1</filename>"
 
-#: kamail.cpp:295
+#: kamail.cpp:293
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Attachment not found: <filename>%1</filename>"
 msgstr "Lisatavat faili ei leitud: <filename>%1</filename>"
 
-#: kamail.cpp:377
+#: kamail.cpp:375
 #, kde-format
 msgctxt "@info"
 msgid "An email has been queued to be sent"
 msgstr "Kiri on pandud ärasaatmise järjekorda"
 
-#: kamail.cpp:543
+#: kamail.cpp:541
 #, kde-format
 msgctxt "@info"
 msgid "Failed to send email"
 msgstr "Kirja saatmine nurjus"
 
-#: kamail.cpp:544
+#: kamail.cpp:542
 #, kde-format
 msgctxt "@info"
 msgid "Error sending email"

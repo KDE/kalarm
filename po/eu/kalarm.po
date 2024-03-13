@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-03-09 00:38+0000\n"
+"POT-Creation-Date: 2024-03-13 00:38+0000\n"
 "PO-Revision-Date: 2024-02-27 00:14+0100\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
@@ -4138,7 +4138,7 @@ msgctxt "@info General purpose status indication: yes or no"
 msgid "No"
 msgstr "Ez"
 
-#: kamail.cpp:70
+#: kamail.cpp:68
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -4147,14 +4147,14 @@ msgstr ""
 "E-postako 'Nork' helbide bat konfiguratuta egon behar da e-posta alarmak "
 "exekutatzeko."
 
-#: kamail.cpp:73
+#: kamail.cpp:71
 #, kde-format
 msgctxt ""
 "@info KMail folder name: this should be translated the same as in kmail"
 msgid "sent-mail"
 msgstr "bidalitako-posta"
 
-#: kamail.cpp:103
+#: kamail.cpp:101
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -4164,7 +4164,7 @@ msgstr ""
 "E-postako 'Nork' helbide baliogabea.<nl/>Ez da aurkitu <resource>%1</"
 "resource> e-posta nortasuna."
 
-#: kamail.cpp:109
+#: kamail.cpp:107
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -4174,7 +4174,7 @@ msgstr ""
 "E-postako 'Nork' helbide baliogabea.<nl/><resource>%1</resource> e-posta "
 "nortasunak ez dauka e-posta helbiderik."
 
-#: kamail.cpp:119
+#: kamail.cpp:117
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -4187,7 +4187,7 @@ msgstr ""
 "<application>KMail</application>en edo <application>KAlarm</application> "
 "konfiguratzeko elkarrizketa-koadroan.</para>"
 
-#: kamail.cpp:123
+#: kamail.cpp:121
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -4200,7 +4200,7 @@ msgstr ""
 "<application>KAlarm</application> konfiguratzeko elkarrizketa-koadroan.</"
 "para>"
 
-#: kamail.cpp:128
+#: kamail.cpp:126
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -4211,37 +4211,37 @@ msgstr ""
 "ezarri ezazu <application>KAlarm</application> konfiguratzeko elkarrizketa-"
 "koadroan.</para>"
 
-#: kamail.cpp:158
+#: kamail.cpp:156
 #, kde-kuit-format
 msgctxt "@info"
 msgid "<command>%1</command> not found"
 msgstr "<filename>%1</filename> ez da aurkitu"
 
-#: kamail.cpp:285
+#: kamail.cpp:283
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Error attaching file: <filename>%1</filename>"
 msgstr "Errorea fitxategia eranstean: <filename>%1</filename>"
 
-#: kamail.cpp:295
+#: kamail.cpp:293
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Attachment not found: <filename>%1</filename>"
 msgstr "Eranskina ez da aurkitu: <filename>%1</filename>"
 
-#: kamail.cpp:377
+#: kamail.cpp:375
 #, kde-format
 msgctxt "@info"
 msgid "An email has been queued to be sent"
 msgstr "E-posta bat bidaltzeko ilaran jarri da"
 
-#: kamail.cpp:543
+#: kamail.cpp:541
 #, kde-format
 msgctxt "@info"
 msgid "Failed to send email"
 msgstr "Errorea e-posta bidaltzean"
 
-#: kamail.cpp:544
+#: kamail.cpp:542
 #, kde-format
 msgctxt "@info"
 msgid "Error sending email"

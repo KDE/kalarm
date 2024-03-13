@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-03-09 00:38+0000\n"
+"POT-Creation-Date: 2024-03-13 00:38+0000\n"
 "PO-Revision-Date: 2007-04-24 00:52+0200\n"
 "Last-Translator: Rinse de Vries <rinsedevries@kde.nl>\n"
 "Language-Team: Frysk <kde-i18n-fry@kde.org>\n"
@@ -4694,7 +4694,7 @@ msgctxt "@info General purpose status indication: yes or no"
 msgid "No"
 msgstr "Gjin"
 
-#: kamail.cpp:70
+#: kamail.cpp:68
 #, fuzzy, kde-format
 #| msgid ""
 #| "A 'From' email address must be configured in order to execute email "
@@ -4705,7 +4705,7 @@ msgid ""
 msgstr ""
 "Jo moatte in 'Fan' e-mailadres opjaan om e-mailalaarms ferstjoere te kinnen."
 
-#: kamail.cpp:73
+#: kamail.cpp:71
 #, fuzzy, kde-format
 #| msgctxt "KMail folder name: this should be translated the same as in kmail"
 #| msgid "sent-mail"
@@ -4714,7 +4714,7 @@ msgctxt ""
 msgid "sent-mail"
 msgstr "ferstjoerd"
 
-#: kamail.cpp:103
+#: kamail.cpp:101
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "Invalid 'From' email address.\n"
@@ -4725,7 +4725,7 @@ msgid ""
 "found"
 msgstr "KMail-identiteit '%1' waard net fûn."
 
-#: kamail.cpp:109
+#: kamail.cpp:107
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "Invalid 'From' email address.\n"
@@ -4736,7 +4736,7 @@ msgid ""
 "no email address"
 msgstr "KMail-identiteit '%1' waard net fûn."
 
-#: kamail.cpp:119
+#: kamail.cpp:117
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "No 'From' email address is configured (no default KMail identity found)\n"
@@ -4750,7 +4750,7 @@ msgstr ""
 "Der is gjin 'Fan' e-mailadres opjûn (gjin standert KMail-identiteit fûn).\n"
 "Stel dit e-mailadres yn yn KMail of yn de konfiguraasjedialooch fan KAlarm."
 
-#: kamail.cpp:123
+#: kamail.cpp:121
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "No 'From' email address is configured.\n"
@@ -4766,7 +4766,7 @@ msgstr ""
 "Stel dit e-mailadres yn yn it KDE Konfiguraasjesintrum of yn de "
 "konfiguraasjedialooch fan KAlarm."
 
-#: kamail.cpp:128
+#: kamail.cpp:126
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "No 'From' email address is configured.\n"
@@ -4779,13 +4779,13 @@ msgstr ""
 "Der is gjin 'Fan' e-mailadres opjûn.\n"
 "Stel dit e-mailadres yn yn de konfiguraasjedialooch fan KAlarm."
 
-#: kamail.cpp:158
+#: kamail.cpp:156
 #, kde-kuit-format
 msgctxt "@info"
 msgid "<command>%1</command> not found"
 msgstr ""
 
-#: kamail.cpp:285
+#: kamail.cpp:283
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "Error attaching file:\n"
@@ -4796,7 +4796,7 @@ msgstr ""
 "Fout by it taheakjen fan triem:\n"
 "%1"
 
-#: kamail.cpp:295
+#: kamail.cpp:293
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "Attachment not found:\n"
@@ -4807,21 +4807,21 @@ msgstr ""
 "Taheaksel net fûn:\n"
 "%1"
 
-#: kamail.cpp:377
+#: kamail.cpp:375
 #, fuzzy, kde-format
 #| msgid "An email has been queued to be sent"
 msgctxt "@info"
 msgid "An email has been queued to be sent"
 msgstr "Der is in e-mailberjocht klearsetten foar ferstjoeren"
 
-#: kamail.cpp:543
+#: kamail.cpp:541
 #, fuzzy, kde-format
 #| msgid "Failed to send email"
 msgctxt "@info"
 msgid "Failed to send email"
 msgstr "It ferstjoeren fan e-mailberjocht is mislearre"
 
-#: kamail.cpp:544
+#: kamail.cpp:542
 #, fuzzy, kde-format
 #| msgid "Error saving alarm"
 msgctxt "@info"

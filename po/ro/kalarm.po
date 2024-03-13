@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-03-09 00:38+0000\n"
+"POT-Creation-Date: 2024-03-13 00:38+0000\n"
 "PO-Revision-Date: 2021-05-15 16:59+0100\n"
 "Last-Translator: Sergiu Bivol <sergiu@cip.md>\n"
 "Language-Team: Romanian\n"
@@ -4387,7 +4387,7 @@ msgctxt "@info General purpose status indication: yes or no"
 msgid "No"
 msgstr "Nu"
 
-#: kamail.cpp:70
+#: kamail.cpp:68
 #, fuzzy, kde-format
 #| msgctxt "@info/plain"
 #| msgid ""
@@ -4400,7 +4400,7 @@ msgstr ""
 "Câmpul \"De la\" dintr-un mail trebuie configurat pentru a se executa "
 "alarmele de tipul email."
 
-#: kamail.cpp:73
+#: kamail.cpp:71
 #, fuzzy, kde-format
 #| msgctxt ""
 #| "@info/plain KMail folder name: this should be translated the same as in "
@@ -4411,7 +4411,7 @@ msgctxt ""
 msgid "sent-mail"
 msgstr "trimise"
 
-#: kamail.cpp:103
+#: kamail.cpp:101
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -4421,7 +4421,7 @@ msgstr ""
 "Câmpul \"De la\" este invalid. <nl/>Identitatea email-ului <resource>%1</"
 "resource> nu a fost găsită"
 
-#: kamail.cpp:109
+#: kamail.cpp:107
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -4431,7 +4431,7 @@ msgstr ""
 "Câmpul \"De la\" este invalid. <nl/>Câmpul <resource>%1</resource> nu "
 "conține o adresă de email"
 
-#: kamail.cpp:119
+#: kamail.cpp:117
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -4444,7 +4444,7 @@ msgstr ""
 "<application>KMail</application> sau în câmpul configurare al "
 "<application>KAlarm</application>.</para>"
 
-#: kamail.cpp:123
+#: kamail.cpp:121
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info"
 #| msgid ""
@@ -4461,7 +4461,7 @@ msgstr ""
 "să-l setați în setările de sistem ale KDE sau în câmpul de configurare al "
 "<application>KAlarm</application>.</para>"
 
-#: kamail.cpp:128
+#: kamail.cpp:126
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -4472,7 +4472,7 @@ msgstr ""
 "să-l setați în câmpul de configurare al <application>KAlarm</application>.</"
 "para>"
 
-#: kamail.cpp:158
+#: kamail.cpp:156
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info"
 #| msgid "<command>%1</command> not found"
@@ -4480,31 +4480,31 @@ msgctxt "@info"
 msgid "<command>%1</command> not found"
 msgstr "<command>%1</command> nu poate fi găsit"
 
-#: kamail.cpp:285
+#: kamail.cpp:283
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Error attaching file: <filename>%1</filename>"
 msgstr "Eroare la atașarea fișierului: <filename>%1</filename>"
 
-#: kamail.cpp:295
+#: kamail.cpp:293
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Attachment not found: <filename>%1</filename>"
 msgstr "Atașamentul nu a fost găsit: <filename>%1</filename>"
 
-#: kamail.cpp:377
+#: kamail.cpp:375
 #, kde-format
 msgctxt "@info"
 msgid "An email has been queued to be sent"
 msgstr "Un email a fost pus în așteptare pentru a fi trimis"
 
-#: kamail.cpp:543
+#: kamail.cpp:541
 #, kde-format
 msgctxt "@info"
 msgid "Failed to send email"
 msgstr "Eșec la trimiterea mesajului"
 
-#: kamail.cpp:544
+#: kamail.cpp:542
 #, kde-format
 msgctxt "@info"
 msgid "Error sending email"

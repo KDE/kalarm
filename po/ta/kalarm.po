@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-03-09 00:38+0000\n"
+"POT-Creation-Date: 2024-03-13 00:38+0000\n"
 "PO-Revision-Date: 2024-03-10 10:02+0530\n"
 "Last-Translator: Kishore G <kishore96@gmail.com>\n"
 "Language-Team: Tamil <kde-i18n-doc@kde.org>\n"
@@ -4050,14 +4050,14 @@ msgctxt "@info General purpose status indication: yes or no"
 msgid "No"
 msgstr "இல்லை"
 
-#: kamail.cpp:70
+#: kamail.cpp:68
 #, kde-format
 msgctxt "@info"
 msgid ""
 "A 'From' email address must be configured in order to execute email alarms."
 msgstr "மின்னஞ்சல் அலாரங்களை இயக்க அனுப்புநரின் முகவரி அமைக்கப்பட வேண்டும்."
 
-#: kamail.cpp:73
+#: kamail.cpp:71
 #, fuzzy, kde-format
 msgctxt ""
 "@info KMail folder name: this should be translated the same as in kmail"
@@ -4066,7 +4066,7 @@ msgstr ""
 "_: KMail folder name: this should be translated the same as in kmail\n"
 "அனுப்பிய-அஞ்சல்"
 
-#: kamail.cpp:103
+#: kamail.cpp:101
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -4076,7 +4076,7 @@ msgstr ""
 "செல்லுபடியாகாத அனுப்பநர் முகவரி. <nl/><resource>%1</resource> என்ற அடையாளம் "
 "கண்டுபிடிக்கப்படவில்லை"
 
-#: kamail.cpp:109
+#: kamail.cpp:107
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -4086,7 +4086,7 @@ msgstr ""
 "செல்லுபடியாகாத அனுப்பநர் முகவரி. <nl/><resource>%1</resource> என்ற அடையாளத்திற்கு "
 "எந்த மின்னஞ்சல் முகவரியும் அமைக்கப்படவில்லை"
 
-#: kamail.cpp:119
+#: kamail.cpp:117
 #, fuzzy, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -4098,7 +4098,7 @@ msgstr ""
 "இல்லை).\n"
 "%1 விருப்பங்கள் உரையாடலில் அமைக்கவும்."
 
-#: kamail.cpp:123
+#: kamail.cpp:121
 #, fuzzy, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -4109,7 +4109,7 @@ msgstr ""
 "அனுப்புநர் இல்லாமல் மின்னஞ்சல் முகவரி கட்டமைக்கப்பட்டுள்ளது.\n"
 "KDE கட்டுப்பாட்டு மையத்தில் அல்லது %1 விருப்பங்கள் உரையாடலில் அமைக்கவும்."
 
-#: kamail.cpp:128
+#: kamail.cpp:126
 #, fuzzy, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -4119,37 +4119,37 @@ msgstr ""
 "அனுப்புநர் இல்லாமல் மின்னஞ்சல் முகவரி கட்டமைக்கப்பட்டுள்ளது.\n"
 "%1 விருப்பங்கள் உரையாடலில் அமைக்கவும்.\""
 
-#: kamail.cpp:158
+#: kamail.cpp:156
 #, kde-kuit-format
 msgctxt "@info"
 msgid "<command>%1</command> not found"
 msgstr "<command>%1</command> கண்டுபிடிக்கப்படவில்லை"
 
-#: kamail.cpp:285
+#: kamail.cpp:283
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Error attaching file: <filename>%1</filename>"
 msgstr "கோப்பை உடனிணைப்பதில் சிக்கல்: <filename>%1</filename>"
 
-#: kamail.cpp:295
+#: kamail.cpp:293
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Attachment not found: <filename>%1</filename>"
 msgstr "உடனிணைப்பு கண்டுபிடிக்கப்படவில்லை: <filename>%1</filename>"
 
-#: kamail.cpp:377
+#: kamail.cpp:375
 #, kde-format
 msgctxt "@info"
 msgid "An email has been queued to be sent"
 msgstr "மின்னஞ்சல் அனுப்புவரிசையில் சேர்க்கப்பட்டுள்ளது"
 
-#: kamail.cpp:543
+#: kamail.cpp:541
 #, kde-format
 msgctxt "@info"
 msgid "Failed to send email"
 msgstr "மின்னஞ்சலை அனுப்புதல் தோல்வியடைந்தது"
 
-#: kamail.cpp:544
+#: kamail.cpp:542
 #, kde-format
 msgctxt "@info"
 msgid "Error sending email"

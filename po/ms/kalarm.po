@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Mimos\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-03-09 00:38+0000\n"
+"POT-Creation-Date: 2024-03-13 00:38+0000\n"
 "PO-Revision-Date: 2005-10-06 11:21+0800\n"
 "Last-Translator: junetazawawi <junetazawawi@yahoo.com>\n"
 "Language-Team: Malay <kedidiemas@yahoogroups.com>\n"
@@ -4454,7 +4454,7 @@ msgctxt "@info General purpose status indication: yes or no"
 msgid "No"
 msgstr "Tiada"
 
-#: kamail.cpp:70
+#: kamail.cpp:68
 #, fuzzy, kde-format
 #| msgid ""
 #| "A 'From' email address must be configured in order to execute email "
@@ -4466,7 +4466,7 @@ msgstr ""
 "Satu alamat e-mel 'Daripada' mesti dikonfigur untuk melaksanakan penggera e-"
 "mel."
 
-#: kamail.cpp:73
+#: kamail.cpp:71
 #, fuzzy, kde-format
 #| msgctxt "KMail folder name: this should be translated the same as in kmail"
 #| msgid "sent-mail"
@@ -4475,7 +4475,7 @@ msgctxt ""
 msgid "sent-mail"
 msgstr "mel dihantar"
 
-#: kamail.cpp:103
+#: kamail.cpp:101
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "Invalid 'From' email address.\n"
@@ -4488,7 +4488,7 @@ msgstr ""
 "Alamat e-mel  'Daripada' tidak sah.\n"
 "Identiti KMail '%1' tidak ditemui."
 
-#: kamail.cpp:109
+#: kamail.cpp:107
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "Invalid 'From' email address.\n"
@@ -4501,7 +4501,7 @@ msgstr ""
 "Alamat e-mel  'Daripada' tidak sah.\n"
 "Identiti KMail '%1' tidak ditemui."
 
-#: kamail.cpp:119
+#: kamail.cpp:117
 #, fuzzy, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -4513,7 +4513,7 @@ msgstr ""
 "ditemui)\n"
 "Setkan dalam KMail atau dalam dialog keutamaan %."
 
-#: kamail.cpp:123
+#: kamail.cpp:121
 #, fuzzy, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -4524,7 +4524,7 @@ msgstr ""
 "Tiada alamat e-mel  'Daripada' dikonfigur.\n"
 "Setkan di dalam Pusat Kawalan KDE atau di dalam dialog keutamaan %1."
 
-#: kamail.cpp:128
+#: kamail.cpp:126
 #, fuzzy, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -4534,13 +4534,13 @@ msgstr ""
 "Tiada alamat e-mel  'Daripada' dikonfigur.\n"
 "Setkan dalam dialog keutamaan %1."
 
-#: kamail.cpp:158
+#: kamail.cpp:156
 #, kde-kuit-format
 msgctxt "@info"
 msgid "<command>%1</command> not found"
 msgstr ""
 
-#: kamail.cpp:285
+#: kamail.cpp:283
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "Error attaching file:\n"
@@ -4551,7 +4551,7 @@ msgstr ""
 "Ralat semasa melampirkan fail:\n"
 "%1"
 
-#: kamail.cpp:295
+#: kamail.cpp:293
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "Attachment not found:\n"
@@ -4562,21 +4562,21 @@ msgstr ""
 "Lampiran tidak ditemui:\n"
 "%1"
 
-#: kamail.cpp:377
+#: kamail.cpp:375
 #, fuzzy, kde-format
 #| msgid "An email has been queued to be sent"
 msgctxt "@info"
 msgid "An email has been queued to be sent"
 msgstr "Satu e-mel menunggu giliran untuk dihantar"
 
-#: kamail.cpp:543
+#: kamail.cpp:541
 #, fuzzy, kde-format
 #| msgid "Failed to send email"
 msgctxt "@info"
 msgid "Failed to send email"
 msgstr "Gagal menghantar e-mel"
 
-#: kamail.cpp:544
+#: kamail.cpp:542
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Error sending email"

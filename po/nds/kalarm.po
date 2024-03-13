@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-03-09 00:38+0000\n"
+"POT-Creation-Date: 2024-03-13 00:38+0000\n"
 "PO-Revision-Date: 2014-09-18 17:01+0200\n"
 "Last-Translator: Sönke Dibbern <s_dibbern@web.de>\n"
 "Language-Team: Low Saxon <kde-i18n-nds@kde.org>\n"
@@ -4340,7 +4340,7 @@ msgctxt "@info General purpose status indication: yes or no"
 msgid "No"
 msgstr "Nee"
 
-#: kamail.cpp:70
+#: kamail.cpp:68
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -4349,14 +4349,14 @@ msgstr ""
 "Du muttst en Nettpost-Senneradress instellen, wenn Du Nettpostalarms bruken "
 "wullt."
 
-#: kamail.cpp:73
+#: kamail.cpp:71
 #, kde-format
 msgctxt ""
 "@info KMail folder name: this should be translated the same as in kmail"
 msgid "sent-mail"
 msgstr "Loosstüert"
 
-#: kamail.cpp:103
+#: kamail.cpp:101
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -4366,7 +4366,7 @@ msgstr ""
 "Leeg Nettpost-Senneradress.<nl />De Identiteet <resource>%1</resource> lett "
 "sik nich finnen."
 
-#: kamail.cpp:109
+#: kamail.cpp:107
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -4376,7 +4376,7 @@ msgstr ""
 "Leeg Nettpost-Senneradress.<nl/>De Identiteet <resource>%1</resource> hett "
 "keen Nettpostadress."
 
-#: kamail.cpp:119
+#: kamail.cpp:117
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -4388,7 +4388,7 @@ msgstr ""
 "para><para>Giff ehr bitte binnen den <application>KMail</application>- oder "
 "den <application>KAlarm</application>-Instellendialoog an.</para>"
 
-#: kamail.cpp:123
+#: kamail.cpp:121
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info"
 #| msgid ""
@@ -4405,7 +4405,7 @@ msgstr ""
 "de KDE-Systeeminstellen oder <application>KAlarm</application> sien "
 "Instellendialoog an.</para>"
 
-#: kamail.cpp:128
+#: kamail.cpp:126
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -4415,7 +4415,7 @@ msgstr ""
 "<para>Keen Nettpost-Senneradress instellt.</para><para>Giff ehr bitte binnen "
 "den <application>KAlarm</application>-Instellendialoog an.</para>"
 
-#: kamail.cpp:158
+#: kamail.cpp:156
 #, fuzzy, kde-kuit-format
 #| msgctxt "@text/plain"
 #| msgid "Could not run <command>%1</command> to set wake from suspend"
@@ -4425,31 +4425,31 @@ msgstr ""
 "Befehl <command>%1</command> för't Instellen vun't Wedderanmaken na Utsetten "
 "lett sik nich utföhren."
 
-#: kamail.cpp:285
+#: kamail.cpp:283
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Error attaching file: <filename>%1</filename>"
 msgstr "Fehler bi't Bileggen vun de Datei: <filename>%1</filename>"
 
-#: kamail.cpp:295
+#: kamail.cpp:293
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Attachment not found: <filename>%1</filename>"
 msgstr "Bilaag nich funnen: <filename>%1</filename>"
 
-#: kamail.cpp:377
+#: kamail.cpp:375
 #, kde-format
 msgctxt "@info"
 msgid "An email has been queued to be sent"
 msgstr "En Nettbreef wöör den Postutgang toföögt"
 
-#: kamail.cpp:543
+#: kamail.cpp:541
 #, kde-format
 msgctxt "@info"
 msgid "Failed to send email"
 msgstr "De Nettbreef lett sik nich loosstüern"
 
-#: kamail.cpp:544
+#: kamail.cpp:542
 #, kde-format
 msgctxt "@info"
 msgid "Error sending email"

@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdepim-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-03-09 00:38+0000\n"
+"POT-Creation-Date: 2024-03-13 00:38+0000\n"
 "PO-Revision-Date: 2024-03-08 20:01+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -4112,7 +4112,7 @@ msgctxt "@info General purpose status indication: yes or no"
 msgid "No"
 msgstr "Hayır"
 
-#: kamail.cpp:70
+#: kamail.cpp:68
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -4121,14 +4121,14 @@ msgstr ""
 "E-posta alarmlarını yürütebilmek için bir 'Kimden' e-posta adresi "
 "yapılandırılmalıdır."
 
-#: kamail.cpp:73
+#: kamail.cpp:71
 #, kde-format
 msgctxt ""
 "@info KMail folder name: this should be translated the same as in kmail"
 msgid "sent-mail"
 msgstr "giden-posta"
 
-#: kamail.cpp:103
+#: kamail.cpp:101
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -4138,7 +4138,7 @@ msgstr ""
 "Geçersiz 'Kimden' e-posta adresi.<nl/><resource>%1</resource> E-posta "
 "kimliği bulunamadı"
 
-#: kamail.cpp:109
+#: kamail.cpp:107
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -4148,7 +4148,7 @@ msgstr ""
 "Geçersiz 'Kimden' e-posta adresi.<nl/><resource>%1</resource> E-posta "
 "kimliğinin bir e-posta adresi yok"
 
-#: kamail.cpp:119
+#: kamail.cpp:117
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -4161,7 +4161,7 @@ msgstr ""
 "application> uygulamasında ya da <application>K Alarm</application> "
 "uygulaması Yapılandırma penceresinde ayarlayın.</para>"
 
-#: kamail.cpp:123
+#: kamail.cpp:121
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -4173,7 +4173,7 @@ msgstr ""
 "<application>K Posta</application> veya <application>K Alarm</application> "
 "uygulaması Yapılandırma penceresinde ayarlayın.</para>"
 
-#: kamail.cpp:128
+#: kamail.cpp:126
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -4184,37 +4184,37 @@ msgstr ""
 "<application>K Alarm</application> uygulaması Yapılandırma penceresinde bunu "
 "ayarlayın.</para>"
 
-#: kamail.cpp:158
+#: kamail.cpp:156
 #, kde-kuit-format
 msgctxt "@info"
 msgid "<command>%1</command> not found"
 msgstr "<command>%1</command> bulunamadı"
 
-#: kamail.cpp:285
+#: kamail.cpp:283
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Error attaching file: <filename>%1</filename>"
 msgstr "Dosya ekleme hatası: <filename>%1</filename>"
 
-#: kamail.cpp:295
+#: kamail.cpp:293
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Attachment not found: <filename>%1</filename>"
 msgstr "Ek bulunamadı: <filename>%1</filename>"
 
-#: kamail.cpp:377
+#: kamail.cpp:375
 #, kde-format
 msgctxt "@info"
 msgid "An email has been queued to be sent"
 msgstr "E-posta gönderilmek üzere kuyruğa eklendi"
 
-#: kamail.cpp:543
+#: kamail.cpp:541
 #, kde-format
 msgctxt "@info"
 msgid "Failed to send email"
 msgstr "E-posta gönderilemedi"
 
-#: kamail.cpp:544
+#: kamail.cpp:542
 #, kde-format
 msgctxt "@info"
 msgid "Error sending email"
