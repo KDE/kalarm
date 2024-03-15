@@ -446,9 +446,9 @@
     <binary>kalarm</binary>
   </provides>
   <releases>
+    <release version="3.7.1" date="2024-03-21"/>
     <release version="3.7.0" date="2024-02-28"/>
     <release version="3.6.4" date="2024-02-15"/>
     <release version="3.6.3" date="2023-12-07"/>
-    <release version="3.6.2.1" date="2023-11-09"/>
   </releases>
 </component>
