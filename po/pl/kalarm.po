@@ -1,6 +1,6 @@
 # translation of kalarm.po to
 # translation of alarmdaemonctrl.po to
-# Version: $Revision: 1675162 $
+# Version: $Revision: 1675926 $
 #
 # Copyright (C) 2002, 2004, 2005, 2006, 2007, 2008, 2009 Free Software Foundation, Inc.
 # Krzysztof Lichota <lichota@mimuw.edu.pl>, 2002, 2004, 2005, 2006.
@@ -12,13 +12,13 @@
 # Marcin Sękalski <senkal86@gmail.com>, 2008.
 # Maciej Wikło <maciej.wiklo@wp.pl>, 2009, 2010.
 # Bartlomiej Niemiec <bniemiec@jawnet.pl>, 2011.
-# Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023.
+# SPDX-FileCopyrightText: 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024 Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-03-09 02:28+0000\n"
-"PO-Revision-Date: 2023-10-14 11:03+0200\n"
+"PO-Revision-Date: 2024-03-17 10:39+0100\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
 "Language: pl\n"
@@ -27,7 +27,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 ">\n"
 ">\n"
-"X-Generator: Lokalize 23.04.3\n"
+"X-Generator: Lokalize 23.08.4\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
 
@@ -293,13 +293,13 @@ msgstr "Czas alarmu już upłynął"
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot initialize audio player: %1"
-msgstr ""
+msgstr "Nie można doprowadzić odtwarzacza dźwiękowego w stan gotowości: %1"
 
 #: audioplayer.cpp:92
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot set audio player properties: %1"
-msgstr ""
+msgstr "Nie można ustawić właściwości odtwarzacza dźwiękowego: %1"
 
 #: audioplayer.cpp:189 audioplayer.cpp:295
 #, kde-kuit-format
