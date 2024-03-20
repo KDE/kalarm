@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-03-13 00:38+0000\n"
-"PO-Revision-Date: 2024-03-18 10:09+0200\n"
+"PO-Revision-Date: 2024-03-19 15:06+0200\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -1109,10 +1109,10 @@ msgstr ""
 
 #. i18n: ectx: label, entry (Base_EmailClient), group (General)
 #: data/kalarmconfig.kcfg:196
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label"
 msgid "Email client"
-msgstr "תוכנית דוא\"ל:"
+msgstr "תוכנית דוא״ל"
 
 #. i18n: ectx: whatsthis, entry (Base_EmailClient), group (General)
 #: data/kalarmconfig.kcfg:197
@@ -1131,17 +1131,17 @@ msgstr ""
 
 #. i18n: ectx: label, entry (Base_EmailClient), group (General)
 #: data/kalarmconfig.kcfg:199
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@option"
 msgid "Sendmail"
-msgstr "&Sendmail"
+msgstr "Sendmail"
 
 #. i18n: ectx: label, entry (Base_EmailClient), group (General)
 #: data/kalarmconfig.kcfg:200
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@option"
 msgid "KMail"
-msgstr "&KMail"
+msgstr "KMail"
 
 #. i18n: ectx: label, entry (Base_EmailCopyToKMail), group (General)
 #: data/kalarmconfig.kcfg:205
@@ -1202,10 +1202,10 @@ msgstr ""
 
 #. i18n: ectx: label, entry (Base_CmdXTermCommand), group (General)
 #: data/kalarmconfig.kcfg:220
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label"
 msgid "Terminal for command alarms"
-msgstr "&פקודה"
+msgstr "מסוף להתראות פקודות"
 
 #. i18n: ectx: whatsthis, entry (Base_CmdXTermCommand), group (General)
 #: data/kalarmconfig.kcfg:221
