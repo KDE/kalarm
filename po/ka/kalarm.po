@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-03-09 02:28+0000\n"
-"PO-Revision-Date: 2023-10-17 12:06+0200\n"
+"PO-Revision-Date: 2024-03-20 05:11+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.4\n"
+"X-Generator: Poedit 3.3.2\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -276,13 +276,13 @@ msgstr "განგაშის დრო უკვე ამოიწურა
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot initialize audio player: %1"
-msgstr ""
+msgstr "აუდიოს დამკვრელის ინიციალიზაციის შეცდომა: %1"
 
 #: audioplayer.cpp:92
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot set audio player properties: %1"
-msgstr ""
+msgstr "აუდიოს დამკვრელის თვისებების დაყენება შეუძლებელია: %1"
 
 #: audioplayer.cpp:189 audioplayer.cpp:295
 #, kde-kuit-format
