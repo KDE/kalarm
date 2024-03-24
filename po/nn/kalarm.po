@@ -1,7 +1,6 @@
 # Translation of kalarm to Norwegian Nynorsk
 #
 # Håvard Korsvoll <korsvoll@skulelinux.no>, 2003, 2004.
-# Karl Ove Hufthammer <karl@huftis.org>, 2004, 2008, 2009, 2010, 2012, 2019, 2021, 2023.
 # Gaute Hvoslef Kvalnes <gaute@verdsveven.com>, 2005.
 # Eirik U. Birkeland <eirbir@gmail.com>, 2008, 2009.
 # Øystein Steffensen-Alværvik <oysteins.omsetting@protonmail.com>, 2018.
@@ -10,14 +9,14 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-03-09 02:28+0000\n"
-"PO-Revision-Date: 2023-05-31 20:51+0200\n"
+"PO-Revision-Date: 2024-03-20 21:53+0100\n"
 "Last-Translator: Karl Ove Hufthammer <karl@huftis.org>\n"
 "Language-Team: Norwegian Nynorsk <l10n-no@lister.huftis.org>\n"
 "Language: nn\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 23.04.1\n"
+"X-Generator: Lokalize 24.02.0\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Environment: kde\n"
 "X-Accelerator-Marker: &\n"
@@ -1246,6 +1245,10 @@ msgid ""
 "KMail, \"@KMail\" to allow choice of KMail identities, or enter the actual "
 "email address otherwise."
 msgstr ""
+"E-postadressa di, som vert brukt til å identifisera deg som avsendar ved "
+"sending av e-postalarmar. Skriv «@SystemSettings» for å bruka standard e-"
+"postadresse definert i KMail, «@KMail» for eit val mellom KMail-identitetar, "
+"eller skriv inn sjølve e-postadressa."
 
 #. i18n: ectx: label, entry (Base_EmailBccAddress), group (General)
 #: data/kalarmconfig.kcfg:215
@@ -1912,41 +1915,33 @@ msgstr ""
 
 #. i18n: ectx: Menu (file)
 #: data/kalarmui.rc:19
-#, fuzzy, kde-format
-#| msgctxt "@option:check Alarm action = file display"
-#| msgid "File"
+#, kde-format
 msgid "File"
 msgstr "Fil"
 
 #. i18n: ectx: Menu (edit)
 #: data/kalarmui.rc:31
-#, fuzzy, kde-format
-#| msgctxt "@action:button"
-#| msgid "Edit"
+#, kde-format
 msgid "Edit"
 msgstr "Rediger"
 
 #. i18n: ectx: Menu (view)
 #: data/kalarmui.rc:46
-#, fuzzy, kde-format
-#| msgctxt "@title:tab"
-#| msgid "View"
+#, kde-format
 msgid "View"
 msgstr "Vising"
 
 #. i18n: ectx: Menu (actions)
 #: data/kalarmui.rc:56
-#, fuzzy, kde-format
-#| msgid "&Actions"
+#, kde-format
 msgid "Actions"
-msgstr "&Handlingar"
+msgstr "Handlingar"
 
 #. i18n: ectx: Menu (settings)
 #: data/kalarmui.rc:68
-#, fuzzy, kde-format
-#| msgid "&Settings"
+#, kde-format
 msgid "Settings"
-msgstr "&Innstillingar"
+msgstr "Innstillingar"
 
 #: datepicker.cpp:50
 #, kde-format
@@ -3189,9 +3184,7 @@ msgid "Stop Play"
 msgstr "Stopp avspeling"
 
 #: functions.cpp:196
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "Enable &Alarms"
+#, kde-format
 msgctxt "@action"
 msgid "Enable Alarms"
 msgstr "&Slå på alarmar"
@@ -4396,12 +4389,10 @@ msgstr ""
 "eller er øydelagd)"
 
 #: mainwindow.cpp:460
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "&Templates..."
+#, kde-format
 msgctxt "@action"
 msgid "Templates..."
-msgstr "&Malar …"
+msgstr "Malar …"
 
 #: mainwindow.cpp:464 templatedlg.cpp:73
 #, kde-format
@@ -4410,33 +4401,25 @@ msgid "New"
 msgstr "Ny"
 
 #: mainwindow.cpp:470
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "Create Tem&plate..."
+#, kde-format
 msgctxt "@action"
 msgid "Create Template..."
-msgstr "Lag &mal …"
+msgstr "Lag mal …"
 
 #: mainwindow.cpp:474
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "&Copy..."
+#, kde-format
 msgctxt "@action"
 msgid "Copy..."
-msgstr "&Kopier …"
+msgstr "Kopier …"
 
 #: mainwindow.cpp:479 resourceselector.cpp:301
-#, fuzzy, kde-format
-#| msgctxt "@action:button"
-#| msgid "Edit..."
+#, kde-format
 msgctxt "@action"
 msgid "Edit..."
 msgstr "Rediger …"
 
 #: mainwindow.cpp:484
-#, fuzzy, kde-format
-#| msgctxt "@action:button"
-#| msgid "Delete"
+#, kde-format
 msgctxt "@action"
 msgid "Delete"
 msgstr "Slett"
@@ -4448,12 +4431,10 @@ msgid "Delete Without Confirmation"
 msgstr "Slett utan stadfesting"
 
 #: mainwindow.cpp:495
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "Reac&tivate"
+#, kde-format
 msgctxt "@action"
 msgid "Reactivate"
-msgstr "&Gjer verksam på nytt"
+msgstr "Gjer verksam på nytt"
 
 #: mainwindow.cpp:509
 #, kde-format
@@ -4462,72 +4443,58 @@ msgid "Wake From Suspend..."
 msgstr "Vekking frå dvalemodus …"
 
 #: mainwindow.cpp:519
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Show Archived Alarms"
+#, kde-format
 msgctxt "@action"
 msgid "Show Archived Alarms"
 msgstr "Vis arkiverte alarmar"
 
 #: mainwindow.cpp:524
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "Show in System &Tray"
+#, kde-format
 msgctxt "@action"
 msgid "Show in System Tray"
-msgstr "Vis i system&trauet"
+msgstr "Vis i systemtrauet"
 
 #: mainwindow.cpp:528
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "Show &Calendars"
+#, kde-format
 msgctxt "@action"
 msgid "Show Calendars"
-msgstr "Vis &kalendrar"
+msgstr "Vis kalendrar"
 
 #: mainwindow.cpp:532
 #, kde-format
 msgctxt "@action"
 msgid "Show Date Selector"
-msgstr ""
+msgstr "Vis datoveljar"
 
 #: mainwindow.cpp:543
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "Import &Alarms..."
+#, kde-format
 msgctxt "@action"
 msgid "Import Alarms..."
-msgstr "Importer &alarmar …"
+msgstr "Importer alarmar …"
 
 #: mainwindow.cpp:549
 #, kde-format
 msgctxt "@action"
 msgid "Import Birthdays..."
-msgstr ""
+msgstr "Importer fødselsdagar …"
 
 #: mainwindow.cpp:554
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "E&xport Selected Alarms..."
+#, kde-format
 msgctxt "@action"
 msgid "Export Selected Alarms..."
-msgstr "&Eksporter valde alarmar …"
+msgstr "Eksporter valde alarmar …"
 
 #: mainwindow.cpp:558 resourceselector.cpp:319
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "E&xport..."
+#, kde-format
 msgctxt "@action"
 msgid "Export..."
-msgstr "&Eksporter …"
+msgstr "Eksporter …"
 
 #: mainwindow.cpp:562
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "&Refresh Alarms"
+#, kde-format
 msgctxt "@action"
 msgid "Refresh Alarms"
-msgstr "&Oppdater alarmar"
+msgstr "Oppdater alarmar"
 
 #: mainwindow.cpp:806
 #, kde-format
@@ -4624,19 +4591,16 @@ msgid "Choose alarm type to create:"
 msgstr "Vel alarmtypen du vil oppretta:"
 
 #: mainwindow.cpp:1681
-#, fuzzy, kde-format
-#| msgctxt "@action:button"
-#| msgid "Enable"
+#, kde-format
 msgctxt "@action"
 msgid "Enable"
 msgstr "Slå på"
 
 #: mainwindow.cpp:1681
-#, fuzzy, kde-format
-#| msgid "Disabled"
+#, kde-format
 msgctxt "@action"
 msgid "Disable"
-msgstr "Slått av"
+msgstr "Slå av"
 
 #: messagedisplay.cpp:271
 #, kde-kuit-format
@@ -4830,12 +4794,10 @@ msgid "Edit the alarm."
 msgstr "Rediger alarmen."
 
 #: messagewindow.cpp:439
-#, fuzzy, kde-format
-#| msgctxt "@action:button"
-#| msgid "&Defer..."
+#, kde-format
 msgctxt "@action:button"
 msgid "Defer..."
-msgstr "&Utset …"
+msgstr "Utset …"
 
 #: messagewindow.cpp:443
 #, kde-format
@@ -4970,9 +4932,7 @@ msgid "New Audio Alarm"
 msgstr "Ny lydalarm"
 
 #: newalarmaction.cpp:69
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "New Alarm From &Template"
+#, kde-format
 msgctxt "@action"
 msgid "New Alarm From Template"
 msgstr "Ny alarm frå &mal"
@@ -5035,7 +4995,7 @@ msgstr "Innstillingar for e-postalarmar"
 #, kde-format
 msgctxt "@title:tab"
 msgid "Alarm Defaults"
-msgstr ""
+msgstr "Standard­verdiar"
 
 #: prefdlg.cpp:164
 #, kde-format
@@ -5064,20 +5024,16 @@ msgstr ""
 "gjeldande fana?"
 
 #: prefdlg.cpp:263
-#, fuzzy, kde-format
-#| msgctxt "@action:button Reset ALL tabs"
-#| msgid "&All"
+#, kde-format
 msgctxt "@action:button Reset ALL tabs"
 msgid "All"
-msgstr "&Alle"
+msgstr "Alle"
 
 #: prefdlg.cpp:264
-#, fuzzy, kde-format
-#| msgctxt "@action:button Reset the CURRENT tab"
-#| msgid "C&urrent"
+#, kde-format
 msgctxt "@action:button Reset the CURRENT tab"
 msgid "Current"
-msgstr "&Gjeldande"
+msgstr "Gjeldande"
 
 #: prefdlg.cpp:445
 #, kde-format
@@ -5123,7 +5079,7 @@ msgstr ""
 #, kde-format
 msgctxt "@option:check"
 msgid "Enable alarm names"
-msgstr ""
+msgstr "Bruk alarmnamn"
 
 #: prefdlg.cpp:467
 #, kde-format
@@ -5203,7 +5159,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title:group"
 msgid "Plugins"
-msgstr ""
+msgstr "Programtillegg"
 
 #: prefdlg.cpp:548
 #, kde-format
@@ -5284,7 +5240,7 @@ msgstr "Vel kva område for fri- og høgtidsdagar som skal brukast"
 #, kde-format
 msgctxt "Holiday region, region language"
 msgid "%1 (%2)"
-msgstr ""
+msgstr "%1 (%2)"
 
 #: prefdlg.cpp:747
 #, kde-format
@@ -5620,7 +5576,7 @@ msgstr ""
 #, kde-kuit-format
 msgctxt "@option:radio"
 msgid "Use default <application>KMail</application> identity"
-msgstr ""
+msgstr "Bruk standard <application>KMail</application>-identitet"
 
 #: prefdlg.cpp:1156
 #, kde-kuit-format
@@ -5717,17 +5673,18 @@ msgstr ""
 "Standardinnstillinga i redigeringsvindauget for alarmar for valet <interface>"
 "%1</interface>."
 
+# Generelle innstillingar for alarmar (i motsetning til typespesifikke innstillingar, jf. anna fanenamn).
 #: prefdlg.cpp:1339 prefdlg.cpp:1794
 #, kde-format
 msgctxt "@title:tab"
 msgid "General"
-msgstr "Generelt"
+msgstr "Generelle"
 
 #: prefdlg.cpp:1345
 #, kde-format
 msgctxt "@title:tab Settings specific to alarm type"
 msgid "Type Specific"
-msgstr ""
+msgstr "Typespesifikke"
 
 #: prefdlg.cpp:1351
 #, kde-format
@@ -5752,17 +5709,13 @@ msgid "Recurrence:"
 msgstr "Gjentaking:"
 
 #: prefdlg.cpp:1424
-#, fuzzy, kde-format
-#| msgctxt "@option"
-#| msgid "February 28th"
+#, kde-format
 msgctxt "@option:radio"
 msgid "February 28th"
 msgstr "28. februar"
 
 #: prefdlg.cpp:1428
-#, fuzzy, kde-format
-#| msgctxt "@option"
-#| msgid "March 1st"
+#, kde-format
 msgctxt "@option:radio"
 msgid "March 1st"
 msgstr "1. mars"
@@ -6939,7 +6892,7 @@ msgstr ""
 #, kde-format
 msgctxt "@item:inlistbox File type selection filter"
 msgid "Calendar files"
-msgstr ""
+msgstr "Kalenderfiler"
 
 #: resources/migration/dirresourceimportdialog.cpp:397
 #: resources/singlefileresourceconfigdialog.cpp:213
@@ -7493,7 +7446,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title:window"
 msgid "Configure Calendar"
-msgstr ""
+msgstr "Set opp kalender"
 
 #. i18n: ectx: property (title), widget (QGroupBox, pathGroupBox)
 #: resources/singlefileresourceconfigdialog.ui:21
@@ -8260,7 +8213,7 @@ msgstr "Ny"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Create a new alarm template"
-msgstr ""
+msgstr "Lag ein ny alarmmal"
 
 #: templatedlg.cpp:77
 #, kde-format
@@ -8347,12 +8300,10 @@ msgid "Select a template to base the new alarm on."
 msgstr "Vel ein mal som alarmen skal baserast på."
 
 #: traywindow.cpp:68
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "&New Alarm"
+#, kde-format
 msgctxt "@action"
 msgid "New Alarm"
-msgstr "&Ny alarm"
+msgstr "Ny alarm"
 
 #: traywindow.cpp:300
 #, kde-format
