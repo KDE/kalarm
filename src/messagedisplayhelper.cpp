@@ -961,14 +961,11 @@ void MessageDisplayHelper::playFinished()
 {
     if (mSilenceButton)
         mSilenceButton->setEnabled(false);
-    if (mAudioPlayer)   // mAudioPlayer can actually be null here!
+    const QString errmsg = AudioPlayer::popError();
+    if (!errmsg.isEmpty()  &&  !haveErrorMessage(ErrMsg_AudioFile))
     {
-        const QString errmsg = mAudioPlayer->error();
-        if (!errmsg.isEmpty()  &&  !haveErrorMessage(ErrMsg_AudioFile))
-        {
-            KAMessageBox::error(mParent->displayParent(), errmsg);
-            clearErrorMessage(ErrMsg_AudioFile);
-        }
+        KAMessageBox::error(mParent->displayParent(), errmsg);
+        clearErrorMessage(ErrMsg_AudioFile);
     }
     delete mAudioThread.data();
     if (mAlwaysHide)
@@ -1022,10 +1019,11 @@ void AudioPlayerThread::execute()
     qCDebug(KALARM_LOG) << "AudioPlayerThread::execute:" << QThread::currentThread() << mFile;
     const QUrl url = QUrl::fromUserInput(mFile);
     mFile = url.isLocalFile() ? url.toLocalFile() : url.toString();
-    mPlayer = new AudioPlayer(AudioPlayer::Alarm, url, mVolume, mFadeVolume, mFadeSeconds, this);
-    if (mPlayer->status() == AudioPlayer::Error)
+    mPlayer = AudioPlayer::create(AudioPlayer::Alarm, url, mVolume, mFadeVolume, mFadeSeconds, this);
+    if (!mPlayer  ||  mPlayer->status() == AudioPlayer::Error)
     {
         mMutex.unlock();
+        deleteLater();
         return;
     }
     connect(mPlayer, &AudioPlayer::downloaded, this, &AudioPlayerThread::checkAudioPlay);
@@ -1081,7 +1079,12 @@ void AudioPlayerThread::checkAudioPlay()
 
     // Start playing the file, either for the first time or again
     qCDebug(KALARM_LOG) << "AudioPlayerThread::checkAudioPlay: start";
-    mPlayer->play();
+    if (!mPlayer->play())
+    {
+        mMutex.unlock();
+        stop();
+        return;
+    }
     mMutex.unlock();
 }
 
@@ -1099,7 +1102,7 @@ void AudioPlayerThread::playFinished(bool ok)
         QTimer::singleShot(0, this, &AudioPlayerThread::checkAudioPlay);   //NOLINT(clang-analyzer-cplusplus.NewDeleteLeaks)
     }
     else
-        exit(1);
+        deleteLater();
 }
 
 /******************************************************************************
@@ -1122,12 +1125,6 @@ void AudioPlayerThread::stop()
     mMutex.unlock();
     if (mInstance)    // guard against this instance having already been deleted
         deleteLater();
-}
-
-QString AudioPlayerThread::error() const
-{
-    QMutexLocker locker(&mMutex);
-    return mPlayer->error();
 }
 
 /******************************************************************************

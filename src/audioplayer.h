@@ -34,11 +34,11 @@ public:
         Error            //!< Something has gone wrong
     };
 
-    AudioPlayer(Type, const QUrl& audioFile, QObject* parent = nullptr);
-    AudioPlayer(Type, const QUrl& audioFile, float volume, float fadeVolume, int fadeSeconds, QObject* parent = nullptr);
+    static AudioPlayer* create(Type, const QUrl& audioFile, QObject* parent = nullptr);
+    static AudioPlayer* create(Type, const QUrl& audioFile, float volume, float fadeVolume, int fadeSeconds, QObject* parent = nullptr);
     ~AudioPlayer() override;
     Status  status() const;
-    QString error() const;
+    static QString popError();   // fetch last error message, and clear it
 
 public Q_SLOTS:
     bool    play();
@@ -56,8 +56,12 @@ private Q_SLOTS:
 #endif
 
 private:
+    AudioPlayer(Type, const QUrl& audioFile, QObject* parent = nullptr);
+    AudioPlayer(Type, const QUrl& audioFile, float volume, float fadeVolume, int fadeSeconds, QObject* parent = nullptr);
     static void ca_finish_callback(ca_context*, uint32_t id, int error_code, void* userdata);
 
+    static AudioPlayer*  mInstance;
+    static QString       mError;
     QString              mFile;
     float                mVolume;        // configured end volume
     float                mFadeVolume;    // configured start volume
@@ -73,7 +77,6 @@ private:
     ca_context*          mAudioContext {nullptr};
     ca_proplist*         mAudioProperties {nullptr};
     uint32_t             mId;
-    QString              mError;
     Status               mStatus {Error};
     bool                 mPlayAfterDownload {false};
     bool                 mNoFinishedSignal {false};

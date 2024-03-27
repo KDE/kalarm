@@ -16,6 +16,7 @@
 #include "lib/file.h"
 #include "lib/groupbox.h"
 #include "lib/lineedit.h"
+#include "lib/messagebox.h"
 #include "lib/pushbutton.h"
 #include "lib/slider.h"
 #include "lib/spinbox.h"
@@ -435,12 +436,15 @@ void SoundWidget::playSound()
     }
     if (!validate(true))
         return;
-    mPlayer = new AudioPlayer(AudioPlayer::Sample, mUrl, this);
+    mPlayer = AudioPlayer::create(AudioPlayer::Sample, mUrl, this);
+    if (!mPlayer)
+        return;
     connect(mPlayer, &AudioPlayer::finished, this, &SoundWidget::playFinished);
     mFilePlay->setIcon(QIcon::fromTheme(QStringLiteral("media-playback-stop")));   // change the play button to a stop button
     mFilePlay->setToolTip(i18nc("@info:tooltip", "Stop sound"));
     mFilePlay->setWhatsThis(i18nc("@info:whatsthis", "Stop playing the sound"));
-    mPlayer->play();
+    if (!mPlayer->play())
+        playFinished();
 }
 
 /******************************************************************************
@@ -450,6 +454,9 @@ void SoundWidget::playFinished()
 {
     delete mPlayer;   // this stops playing if not already stopped
     mPlayer = nullptr;
+    const QString errmsg = AudioPlayer::popError();
+    if (!errmsg.isEmpty())
+        KAMessageBox::error(this, errmsg);
     mFilePlay->setIcon(QIcon::fromTheme(QStringLiteral("media-playback-start")));
     mFilePlay->setToolTip(i18nc("@info:tooltip", "Test the sound"));
     mFilePlay->setWhatsThis(i18nc("@info:whatsthis", "Play the selected sound file."));
