@@ -44,14 +44,33 @@ inline const char* volumeToDbString(float volume)
 
 }
 
-AudioPlayer::AudioPlayer(Type type, const QUrl& audioFile, QObject* parent)
-    : AudioPlayer(type, audioFile, -1, -1, 0, parent)
+AudioPlayer* AudioPlayer::mInstance = nullptr;
+QString      AudioPlayer::mError;
+
+/******************************************************************************
+* Create a unique instance of AudioPlayer.
+*/
+AudioPlayer* AudioPlayer::create(Type type, const QUrl& audioFile, QObject* parent)
 {
+    return create(type, audioFile, -1, -1, 0, parent);
+}
+
+AudioPlayer* AudioPlayer::create(Type type, const QUrl& audioFile, float volume, float fadeVolume, int fadeSeconds, QObject* parent)
+{
+    if (mInstance)
+        return nullptr;
+    mInstance = new AudioPlayer(type, audioFile, volume, fadeVolume, fadeSeconds, parent);
+    return mInstance;
 }
 
 /******************************************************************************
 * Constructor for audio player.
 */
+AudioPlayer::AudioPlayer(Type type, const QUrl& audioFile, QObject* parent)
+    : AudioPlayer(type, audioFile, -1, -1, 0, parent)
+{
+}
+
 AudioPlayer::AudioPlayer(Type type, const QUrl& audioFile, float volume, float fadeVolume, int fadeSeconds, QObject* parent)
     : QObject(parent)
     , mFile(audioFile.isLocalFile() ? audioFile.toLocalFile() : audioFile.toString())
@@ -62,6 +81,7 @@ AudioPlayer::AudioPlayer(Type type, const QUrl& audioFile, float volume, float f
 {
     qCDebug(KALARM_LOG) << "AudioPlayer:" << mFile;
 
+    mError.clear();
     int result = ca_context_create(&mAudioContext);
     if (result != CA_SUCCESS)
     {
@@ -158,6 +178,7 @@ AudioPlayer::~AudioPlayer()
         mAudioProperties = nullptr;
     }
     delete mDownloadedFile;
+    mInstance = nullptr;
     qCDebug(KALARM_LOG) << "AudioPlayer::~AudioPlayer exit";
 }
 
@@ -179,7 +200,7 @@ bool AudioPlayer::play()
     if (mStatus == Downloading)
     {
         mPlayAfterDownload = true;
-        return false;   // will play when download is complete
+        return true;   // will play when download is complete
     }
 
     qCDebug(KALARM_LOG) << "AudioPlayer::play";
@@ -188,6 +209,7 @@ bool AudioPlayer::play()
     {
         mError = xi18nc("@info", "<para>Error playing audio file: <filename>%1</filename></para><para>%2</para>", mFile, QString::fromUtf8(ca_strerror(result)));
         qCWarning(KALARM_LOG) << "AudioPlayer::play: Failed to play sound with canberra:" << ca_strerror(result);
+        Q_EMIT finished(false);
         return false;
     }
 #ifdef ENABLE_AUDIO_FADE
@@ -211,6 +233,7 @@ void AudioPlayer::slotDownloadJobResult(KJob* job)
         mError = xi18nc("@info", "Could not load file <filename>%1</filename>. (%2)", mFile, job->errorString());
         qCWarning(KALARM_LOG) << "AudioPlayer::slotDownloadJobResult: Could not load file" << mFile << job->errorString();
         mStatus = Error;
+        Q_EMIT finished(false);
     }
     else
     {
@@ -324,9 +347,11 @@ void AudioPlayer::stop()
     }
 }
 
-QString AudioPlayer::error() const
+QString AudioPlayer::popError()
 {
-    return mError;
+    const QString err = mError;
+    mError.clear();
+    return err;
 }
 
 // vim: et sw=4:

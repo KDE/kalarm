@@ -9,6 +9,7 @@
 #include "editdlgtypes.h"
 #include "editdlg_p.h"
 
+#include "audioplayer.h"
 #include "emailidcombo.h"
 #include "fontcolourbutton.h"
 #include "functions.h"
@@ -1795,6 +1796,9 @@ void EditAudioAlarmDlg::slotAudioPlaying(bool playing)
         mTryButton->setCheckable(false);
         mTryButton->setChecked(false);
         mMessageWindow = nullptr;
+        const QString errmsg = AudioPlayer::popError();
+        if (!errmsg.isEmpty())
+            KAMessageBox::error(this, errmsg);
     }
     else if (mMessageWindow)
     {

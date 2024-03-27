@@ -22,7 +22,6 @@ public:
     AudioPlayerThread(const QString& audioFile, float volume, float fadeVolume, int fadeSeconds, int repeatPause);
     ~AudioPlayerThread() override;
     void    execute();
-    QString error() const;
 
 public Q_SLOTS:
     void    stop();
