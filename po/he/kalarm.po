@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-03-13 00:38+0000\n"
-"PO-Revision-Date: 2024-03-19 15:06+0200\n"
+"PO-Revision-Date: 2024-03-26 07:48+0200\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -7049,10 +7049,10 @@ msgid ""
 msgstr "האם אתה בטוח שברצונך למחוק את התזכורת הנבחרת?"
 
 #: resources/resourcemodel.cpp:338
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info"
 msgid "Do you really want to disable your default calendar?"
-msgstr "האם אתה בטוח שברצונך למחוק את התזכורת הנבחרת?"
+msgstr "להשבית את לוח השנה כברירת המחדל שלך?"
 
 #: resources/resources.cpp:289
 #, kde-format
@@ -7094,10 +7094,10 @@ msgid ""
 msgstr ""
 
 #: resources/resources.cpp:513
-#, fuzzy, kde-kuit-format
+#, kde-kuit-format
 msgctxt "@info"
 msgid "<para>%1</para><para>Please select a new default calendar.</para>"
-msgstr "האם אתה בטוח שברצונך למחוק את התזכורת הנבחרת?"
+msgstr "<para>%1</para><para>נא לבחור לוח שנה שיהיה ברירת המחדל החדשה.</para>"
 
 #: resources/resourceselectdialog.cpp:36
 #, kde-format
@@ -7106,16 +7106,16 @@ msgid "Search"
 msgstr ""
 
 #: resources/resourcetype.cpp:359
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "KAlarm Calendar File"
-msgstr "                               כתובת קובץ לוח השנה"
+msgstr "קובץ לוח שנה של KAlarm"
 
 #: resources/resourcetype.cpp:359
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "KAlarm Calendar Directory"
-msgstr "                               כתובת קובץ לוח השנה"
+msgstr "ספריית לוחות שנה של KAlarm"
 
 #: resources/resourcetype.cpp:360
 #, kde-format
@@ -7148,50 +7148,40 @@ msgid "A previous save is still in progress."
 msgstr ""
 
 #: resources/singlefileresource.cpp:231
-#, fuzzy, kde-kuit-format
+#, kde-kuit-format
 msgctxt "@info"
 msgid "Could not create calendar file <filename>%1</filename>."
-msgstr ""
-"אין אפשרות לפתוח את לוח השנה :\n"
-"%1"
+msgstr "לא ניתן ליצור לוח שנה <filename>%1</filename>."
 
 #: resources/singlefileresource.cpp:246
-#, fuzzy, kde-kuit-format
+#, kde-kuit-format
 msgctxt "@info"
 msgid "Could not create writable calendar file <filename>%1</filename>."
-msgstr ""
-"אין אפשרות לפתוח את לוח השנה :\n"
-"%1"
+msgstr "לא ניתן ליצור קובץ לוח שנה שאפשר לכתוב אליו <filename>%1</filename>."
 
 #: resources/singlefileresource.cpp:601
-#, fuzzy, kde-kuit-format
+#, kde-kuit-format
 msgctxt "@info"
 msgid "Could not load file <filename>%1</filename>."
-msgstr ""
-"אין אפשרות לפתוח את לוח השנה :\n"
-"%1"
+msgstr "לא ניתן לטעון את הקובץ <filename>%1</filename>."
 
 #: resources/singlefileresource.cpp:633
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info"
 msgid "Calendar not open."
-msgstr "                               כתובת קובץ לוח השנה"
+msgstr "לוח השנה לא פתוח."
 
 #: resources/singlefileresource.cpp:646
-#, fuzzy, kde-kuit-format
+#, kde-kuit-format
 msgctxt "@info"
 msgid "Could not save file <filename>%1</filename>."
-msgstr ""
-"אין אפשרות לפתוח את לוח השנה :\n"
-"%1"
+msgstr "לא ניתן לשמור את הקובץ <filename>%1</filename>."
 
 #: resources/singlefileresource.cpp:775
-#, fuzzy, kde-kuit-format
+#, kde-kuit-format
 msgctxt "@info"
 msgid "Could not save file <filename>%1</filename>. (%2)"
-msgstr ""
-"אין אפשרות לפתוח את לוח השנה :\n"
-"%1"
+msgstr "לא ניתן לשמור את הקובץ <filename>%1</filename>. (%2)"
 
 #: resources/singlefileresourceconfigdialog.cpp:33
 #, kde-format
@@ -7286,9 +7276,9 @@ msgstr "שם:"
 
 #. i18n: ectx: property (html), widget (KTextEdit, nameDescription)
 #: resources/singlefileresourceconfigdialog.ui:222
-#, fuzzy, kde-format
+#, kde-format
 msgid "Enter the display name used to identify this calendar."
-msgstr "הזן את השם של קובץ הטקסט או הכתובת שיש להציג."
+msgstr "נא למלא את שם התצוגה שמשמש לזיהוי לוח השנה הזה."
 
 #. i18n: ectx: property (title), widget (QGroupBox, readOnlyGroupBox)
 #: resources/singlefileresourceconfigdialog.ui:232
@@ -7608,12 +7598,12 @@ msgid "Set volume"
 msgstr "הגדרת עוצמת שמע"
 
 #: sounddlg.cpp:51
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "If checked, the sound file will be played repeatedly for as long as the "
 "message is displayed."
-msgstr "אם אפשרות זו נבחרת, התזכורת תציג את התוכן של קובץ."
+msgstr "אם האפשרות מסומנת, קובץ צליל יושמע במחזוריות כל עוד ההודעה מוצגת."
 
 #: sounddlg.cpp:147
 #, kde-format
@@ -7769,10 +7759,10 @@ msgid "Configure sound file"
 msgstr "הגדרות קובץ שמע"
 
 #: soundpicker.cpp:87
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Configure a sound file to play when the alarm is displayed."
-msgstr "הגדרת ברירת המחדל של \"%1\" בדו-שיח עריכת התזכורת."
+msgstr "הגדרות קובץ צליל לניגון עם הצגת ההתראה."
 
 #: soundpicker.cpp:256
 #, kde-format
@@ -7805,12 +7795,10 @@ msgid "Set commands to execute"
 msgstr "הגדרות פקודות להפעלה"
 
 #: specialactions.cpp:40
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Specify actions to execute before and after the alarm is displayed."
-msgstr ""
-"בחר באפשרות זו כדי שהגדרת ברירת המחדל של \"צליל\" בדו-שיח עריכת התזכורת תהיה "
-"צפצוף."
+msgstr "בחירת אפשרויות להפעלה לפני ואחרי הצגת ההתראה."
 
 #: specialactions.cpp:91
 #, kde-format
@@ -7930,10 +7918,10 @@ msgid "Edit the selected alarm template"
 msgstr "עריכת תבנית ההתראה הנבחרת"
 
 #: templatedlg.cpp:83
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Edit the currently highlighted alarm template"
-msgstr "הסרת המצורף הנבחר מהדוא\"ל."
+msgstr "עריכת תבנית ההתראות המודגשת"
 
 #: templatedlg.cpp:86
 #, kde-format
@@ -7942,18 +7930,18 @@ msgid "Copy"
 msgstr "העתקה"
 
 #: templatedlg.cpp:88
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Create a new alarm template based on the selected template"
-msgstr "הסרת המצורף הנבחר מהדוא\"ל."
+msgstr "יצירת תבנית התראות חדשה על בסיס התבנית הנבחרת"
 
 #: templatedlg.cpp:89
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "Create a new alarm template based on a copy of the currently highlighted "
 "template"
-msgstr "הסרת המצורף הנבחר מהדוא\"ל."
+msgstr "יצירת תבנית התראות חדשה על בסיס עותק של התבנית המודגשת"
 
 #: templatedlg.cpp:94
 #, kde-format
