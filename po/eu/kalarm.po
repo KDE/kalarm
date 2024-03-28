@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-03-09 02:28+0000\n"
+"POT-Creation-Date: 2024-03-28 02:54+0000\n"
 "PO-Revision-Date: 2024-03-07 18:48+0100\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
@@ -275,19 +275,19 @@ msgctxt "@info"
 msgid "Alarm time has already expired"
 msgstr "Alarmaren ordua dagoeneko iragan da"
 
-#: audioplayer.cpp:69
+#: audioplayer.cpp:89
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot initialize audio player: %1"
 msgstr "Ezin du audio-jotzailea hasieratu: %1"
 
-#: audioplayer.cpp:92
+#: audioplayer.cpp:112
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot set audio player properties: %1"
 msgstr "Ezin ditu audio-jotzailearen propietateak ezarri: %1"
 
-#: audioplayer.cpp:189 audioplayer.cpp:295
+#: audioplayer.cpp:210 audioplayer.cpp:318
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -296,7 +296,7 @@ msgstr ""
 "<para>Audio-fitxategia jotzeko errorea: <filename>%1</filename></para><para>"
 "%2</para>"
 
-#: audioplayer.cpp:211 resources/singlefileresource.cpp:738
+#: audioplayer.cpp:233 resources/singlefileresource.cpp:738
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Could not load file <filename>%1</filename>. (%2)"
@@ -2417,85 +2417,85 @@ msgctxt "@info:tooltip"
 msgid "Show more options"
 msgstr "Erakutsi aukera gehiago"
 
-#: editdlgtypes.cpp:73
+#: editdlgtypes.cpp:74
 #, kde-format
 msgctxt "@title:window"
 msgid "Choose Log File"
 msgstr "Hautatu egunkari-fitxategia"
 
-#: editdlgtypes.cpp:86
+#: editdlgtypes.cpp:87
 #, kde-format
 msgctxt "@label:listbox How to display alarms"
 msgid "Display method:"
 msgstr "Azaltzeko metodoa:"
 
-#: editdlgtypes.cpp:87
+#: editdlgtypes.cpp:88
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Window"
 msgstr "Leihoa"
 
-#: editdlgtypes.cpp:88
+#: editdlgtypes.cpp:89
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Notification"
 msgstr "Jakinarazpena"
 
-#: editdlgtypes.cpp:89
+#: editdlgtypes.cpp:90
 #, kde-format
 msgctxt "@option:check"
 msgid "Confirm acknowledgment"
 msgstr "Berretsi aitorpena"
 
-#: editdlgtypes.cpp:118
+#: editdlgtypes.cpp:119
 #, kde-format
 msgctxt "@title:window"
 msgid "New Display Alarm Template"
 msgstr "Ikus-alarma txantiloi berria"
 
-#: editdlgtypes.cpp:118
+#: editdlgtypes.cpp:119
 #, kde-format
 msgctxt "@title:window"
 msgid "Edit Display Alarm Template"
 msgstr "Editatu ikus-alarma txantiloia"
 
-#: editdlgtypes.cpp:119
+#: editdlgtypes.cpp:120
 #, kde-format
 msgctxt "@title:window"
 msgid "New Display Alarm"
 msgstr "Ikus-alarma berria"
 
-#: editdlgtypes.cpp:119
+#: editdlgtypes.cpp:120
 #, kde-format
 msgctxt "@title:window"
 msgid "Edit Display Alarm"
 msgstr "Editatu ikus-alarma"
 
-#: editdlgtypes.cpp:132
+#: editdlgtypes.cpp:133
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Display type:"
 msgstr "Agerraldi mota:"
 
-#: editdlgtypes.cpp:136
+#: editdlgtypes.cpp:137
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Text message"
 msgstr "Testu mezua"
 
-#: editdlgtypes.cpp:137
+#: editdlgtypes.cpp:138
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "File contents"
 msgstr "Fitxategiaren edukia"
 
-#: editdlgtypes.cpp:138
+#: editdlgtypes.cpp:139
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Command output"
 msgstr "Komandoaren irteera"
 
-#: editdlgtypes.cpp:158
+#: editdlgtypes.cpp:159
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2511,31 +2511,31 @@ msgstr ""
 "baten edukia azalduko du.</item><item><interface>%3</interface>: alarmak "
 "komando baten irteera erakutsiko du.</item></list></para>"
 
-#: editdlgtypes.cpp:173
+#: editdlgtypes.cpp:174
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the text of the alarm message. It may be multi-line."
 msgstr "Sartu alarmaren mezuaren testua. Lerro anitzekoa izan daiteke."
 
-#: editdlgtypes.cpp:186
+#: editdlgtypes.cpp:187
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the name or URL of a text or image file to display."
 msgstr "Sartu bistaratzeko testu edo irudi fitxategiaren URL-a edo izena."
 
-#: editdlgtypes.cpp:193 editdlgtypes.cpp:882 sounddlg.cpp:182
+#: editdlgtypes.cpp:194 editdlgtypes.cpp:883 sounddlg.cpp:183
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Choose a file"
 msgstr "Hautatu fitxategi bat"
 
-#: editdlgtypes.cpp:194
+#: editdlgtypes.cpp:195
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select a text or image file to display."
 msgstr "Hautatu bistaratzeko testu edo irudi fitxategi bat."
 
-#: editdlgtypes.cpp:238
+#: editdlgtypes.cpp:239
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2545,7 +2545,7 @@ msgstr ""
 "Hautatu alarma leiho batean edo jakinarazpen-sistemaren bidez azaldu behar "
 "den."
 
-#: editdlgtypes.cpp:265
+#: editdlgtypes.cpp:266
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2555,7 +2555,7 @@ msgstr ""
 "Markatu osagarri gisa, alarma nagusiaren ordu(ar)en aurretik edo ondoren "
 "oroigarri bat bistaratzeko."
 
-#: editdlgtypes.cpp:266
+#: editdlgtypes.cpp:267
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2565,7 +2565,7 @@ msgstr ""
 "<para>Sartu alarma nagusia baino zenbat denbora aurretik edo ondoren azaldu "
 "behar den oroigarria alarma bat.</para><para>%1</para>"
 
-#: editdlgtypes.cpp:267
+#: editdlgtypes.cpp:268
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2574,139 +2574,139 @@ msgid ""
 msgstr ""
 "Hautatu oroigarria alarma nagusia baino lehenago edo ondoren eragin behar den"
 
-#: editdlgtypes.cpp:277
+#: editdlgtypes.cpp:278
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to be prompted for confirmation when you acknowledge the alarm."
 msgstr "Markatu, alarma bat aitortzen duzunean berrespena eska dakizun."
 
-#: editdlgtypes.cpp:286
+#: editdlgtypes.cpp:287
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Display the alarm now"
 msgstr "Azaldu alarma orain"
 
-#: editdlgtypes.cpp:668
+#: editdlgtypes.cpp:669
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Display the alarm message now"
 msgstr "Bistaratu alarmaren mezua orain"
 
-#: editdlgtypes.cpp:677
+#: editdlgtypes.cpp:678
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Display the file now"
 msgstr "Bistaratu fitxategia orain"
 
-#: editdlgtypes.cpp:687
+#: editdlgtypes.cpp:688
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Display the command output now"
 msgstr "Bistaratu komandoaren irteera orain"
 
-#: editdlgtypes.cpp:719
+#: editdlgtypes.cpp:720
 #, kde-format
 msgctxt "@title:window"
 msgid "Choose Text or Image File to Display"
 msgstr "Hautatu bistaratzeko textu edo irudi fitxategia"
 
-#: editdlgtypes.cpp:797
+#: editdlgtypes.cpp:798
 #, kde-format
 msgctxt "@option:check"
 msgid "Enter a script"
 msgstr "Sartu script bat"
 
-#: editdlgtypes.cpp:798
+#: editdlgtypes.cpp:799
 #, kde-format
 msgctxt "@option:radio"
 msgid "Execute in terminal window"
 msgstr "Exekutatu terminal-lehioan"
 
-#: editdlgtypes.cpp:799
+#: editdlgtypes.cpp:800
 #, kde-format
 msgctxt "@option:check"
 msgid "Execute in terminal window"
 msgstr "Exekutatu terminal-lehioan"
 
-#: editdlgtypes.cpp:829
+#: editdlgtypes.cpp:830
 #, kde-format
 msgctxt "@title:window"
 msgid "New Command Alarm Template"
 msgstr "Alarma komando txantiloi berria"
 
-#: editdlgtypes.cpp:829
+#: editdlgtypes.cpp:830
 #, kde-format
 msgctxt "@title:window"
 msgid "Edit Command Alarm Template"
 msgstr "Editatu alarma komando txantiloia"
 
-#: editdlgtypes.cpp:830
+#: editdlgtypes.cpp:831
 #, kde-format
 msgctxt "@title:window"
 msgid "New Command Alarm"
 msgstr "Alarma komando berria"
 
-#: editdlgtypes.cpp:830
+#: editdlgtypes.cpp:831
 #, kde-format
 msgctxt "@title:window"
 msgid "Edit Command Alarm"
 msgstr "Editatu alarma komandoa"
 
-#: editdlgtypes.cpp:838
+#: editdlgtypes.cpp:839
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Execute the specified command now"
 msgstr "Exekutatu zehaztutako komandoa orain"
 
-#: editdlgtypes.cpp:839
+#: editdlgtypes.cpp:840
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Execute the specified command now"
 msgstr "Exekutatu zehaztutako komandoa orain"
 
-#: editdlgtypes.cpp:846 specialactions.cpp:182
+#: editdlgtypes.cpp:847 specialactions.cpp:182
 #, kde-format
 msgctxt "@option:check"
 msgid "Do not notify errors"
 msgstr "Erroreak ez jakinarazi"
 
-#: editdlgtypes.cpp:847
+#: editdlgtypes.cpp:848
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Do not show error message if the command fails."
 msgstr "Ez erakutsi errore mezuak komandoak huts egiten badu."
 
-#: editdlgtypes.cpp:853
+#: editdlgtypes.cpp:854
 #, kde-format
 msgctxt "@title:group"
 msgid "Command Output"
 msgstr "Komandoaren irteera"
 
-#: editdlgtypes.cpp:861
+#: editdlgtypes.cpp:862
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to execute the command in a terminal window"
 msgstr "Hautatu komandoa terminal-lehio batean exekutatzeko"
 
-#: editdlgtypes.cpp:874
+#: editdlgtypes.cpp:875
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the name or path of the log file."
 msgstr "Sartu egunkari-fitxategiaren izena edo bide-izena."
 
-#: editdlgtypes.cpp:883
+#: editdlgtypes.cpp:884
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select a log file."
 msgstr "Hautatu egunkari-fitxategia."
 
-#: editdlgtypes.cpp:886
+#: editdlgtypes.cpp:887
 #, kde-format
 msgctxt "@option:radio"
 msgid "Log to file"
 msgstr "Egunkaritu fitxategira"
 
-#: editdlgtypes.cpp:887
+#: editdlgtypes.cpp:888
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2716,19 +2716,19 @@ msgstr ""
 "Hautatu komandoaren irteera fitxategi lokal batera egunkaritzeko. Irteera "
 "fitxategiaren edukinen atzetik idatziko dira."
 
-#: editdlgtypes.cpp:894
+#: editdlgtypes.cpp:895
 #, kde-format
 msgctxt "@option:radio"
 msgid "Discard"
 msgstr "Baztertu"
 
-#: editdlgtypes.cpp:895
+#: editdlgtypes.cpp:896
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to discard command output."
 msgstr "Hautatu komandoaren irteera baztertzeko."
 
-#: editdlgtypes.cpp:1057
+#: editdlgtypes.cpp:1058
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -2737,7 +2737,7 @@ msgstr ""
 "Egunkari-fitxategiak fitxategi lokal baten izena edo bide-izena izan behar "
 "du, idazteko baimenarekin."
 
-#: editdlgtypes.cpp:1067
+#: editdlgtypes.cpp:1068
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2748,61 +2748,61 @@ msgstr ""
 "ezarri ezazu <application>KAlarm</application> konfiguratzeko elkarrizketa- "
 "koadroan.</para>"
 
-#: editdlgtypes.cpp:1087
+#: editdlgtypes.cpp:1088
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Command executed: <icode>%1</icode>"
 msgstr "Exekutatutako komandoa: <icode>%1</icode>"
 
-#: editdlgtypes.cpp:1121
+#: editdlgtypes.cpp:1122
 #, kde-format
 msgctxt "@option:check"
 msgid "Copy email to self"
 msgstr "E-postaren kopia bat nire buruari"
 
-#: editdlgtypes.cpp:1151
+#: editdlgtypes.cpp:1152
 #, kde-format
 msgctxt "@title:window"
 msgid "New Email Alarm Template"
 msgstr "E-posta alarma txantiloi berria"
 
-#: editdlgtypes.cpp:1151
+#: editdlgtypes.cpp:1152
 #, kde-format
 msgctxt "@title:window"
 msgid "Edit Email Alarm Template"
 msgstr "Editatu e-posta alarma txantiloia"
 
-#: editdlgtypes.cpp:1152
+#: editdlgtypes.cpp:1153
 #, kde-format
 msgctxt "@title:window"
 msgid "New Email Alarm"
 msgstr "E-posta alarma berria"
 
-#: editdlgtypes.cpp:1152
+#: editdlgtypes.cpp:1153
 #, kde-format
 msgctxt "@title:window"
 msgid "Edit Email Alarm"
 msgstr "Editatu e-posta alarma"
 
-#: editdlgtypes.cpp:1160
+#: editdlgtypes.cpp:1161
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Send the email to the specified addressees now"
 msgstr "Bidali orain e-posta zehaztutako helbideetara"
 
-#: editdlgtypes.cpp:1161
+#: editdlgtypes.cpp:1162
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Send the email now"
 msgstr "Bidali e-posta orain"
 
-#: editdlgtypes.cpp:1172
+#: editdlgtypes.cpp:1173
 #, kde-format
 msgctxt "@label:listbox 'From' email address"
 msgid "From:"
 msgstr "Nork:"
 
-#: editdlgtypes.cpp:1178
+#: editdlgtypes.cpp:1179
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2812,13 +2812,13 @@ msgstr ""
 "Zure e-posta identitatea, e-posta alarmak bidaltzean zu bidaltzaile bezala "
 "identifikatuko zaituena."
 
-#: editdlgtypes.cpp:1184
+#: editdlgtypes.cpp:1185
 #, kde-format
 msgctxt "@label:textbox Email addressee"
 msgid "To:"
 msgstr "Nori:"
 
-#: editdlgtypes.cpp:1189
+#: editdlgtypes.cpp:1190
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2828,170 +2828,170 @@ msgstr ""
 "Sartu e-postaren hartzaileen helbideak. Banandu helbideak koma edo puntu eta "
 "komaz."
 
-#: editdlgtypes.cpp:1200
+#: editdlgtypes.cpp:1201
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Open address book"
 msgstr "Ireki helbide-liburua"
 
-#: editdlgtypes.cpp:1201
+#: editdlgtypes.cpp:1202
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select email addresses from your address book."
 msgstr "Hautatu e-posta helbideak zure helbide-liburutik."
 
-#: editdlgtypes.cpp:1208
+#: editdlgtypes.cpp:1209
 #, kde-format
 msgctxt "@label:textbox Email subject"
 msgid "Subject:"
 msgstr "Gaia:"
 
-#: editdlgtypes.cpp:1214
+#: editdlgtypes.cpp:1215
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the email subject."
 msgstr "Sartu e-postaren gaia."
 
-#: editdlgtypes.cpp:1220
+#: editdlgtypes.cpp:1221
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the email message."
 msgstr "Sartu e-postaren mezua."
 
-#: editdlgtypes.cpp:1228
+#: editdlgtypes.cpp:1229
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Attachments:"
 msgstr "Eranskinak:"
 
-#: editdlgtypes.cpp:1237
+#: editdlgtypes.cpp:1238
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Files to send as attachments to the email."
 msgstr "E-postarekin eranskin bezala bidaliko diren fitxategiak."
 
-#: editdlgtypes.cpp:1241 resourceselector.cpp:76
+#: editdlgtypes.cpp:1242 resourceselector.cpp:76
 #, kde-format
 msgctxt "@action:button"
 msgid "Add..."
 msgstr "Gehitu..."
 
-#: editdlgtypes.cpp:1243
+#: editdlgtypes.cpp:1244
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Add an attachment to the email."
 msgstr "Gehitu eranskina e-postari."
 
-#: editdlgtypes.cpp:1246 resourceselector.cpp:78
+#: editdlgtypes.cpp:1247 resourceselector.cpp:78
 #, kde-format
 msgctxt "@action:button"
 msgid "Remove"
 msgstr "Kendu"
 
-#: editdlgtypes.cpp:1248
+#: editdlgtypes.cpp:1249
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Remove the highlighted attachment from the email."
 msgstr "Kendu nabarmendutako eranskina e-postatik."
 
-#: editdlgtypes.cpp:1253
+#: editdlgtypes.cpp:1254
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "If checked, the email will be blind copied to you."
 msgstr "Markatuta badago, e-postaren ezkutuko kopia bidaliko dizu."
 
-#: editdlgtypes.cpp:1435
+#: editdlgtypes.cpp:1436
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Invalid email address: <email>%1</email>"
 msgstr "Baliogabeko e-posta helbidea: <email>%1</email>"
 
-#: editdlgtypes.cpp:1442
+#: editdlgtypes.cpp:1443
 #, kde-format
 msgctxt "@info"
 msgid "No email address specified"
 msgstr "Ez da e-posta helbiderik zehaztu"
 
-#: editdlgtypes.cpp:1459
+#: editdlgtypes.cpp:1460
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Invalid email attachment: <filename>%1</filename>"
 msgstr "E-posta eranskin baliogabea: <filename>%1</filename>"
 
-#: editdlgtypes.cpp:1463
+#: editdlgtypes.cpp:1464
 #, kde-format
 msgctxt "@info"
 msgid "Do you really want to send the email now to the specified recipient(s)?"
 msgstr ""
 "Ziur zaude e-posta zehaztutako hartzaileei posta orain bidali nahi diezula?"
 
-#: editdlgtypes.cpp:1464
+#: editdlgtypes.cpp:1465
 #, kde-format
 msgctxt "@action:button"
 msgid "Confirm Email"
 msgstr "Berretsi e-posta"
 
-#: editdlgtypes.cpp:1464
+#: editdlgtypes.cpp:1465
 #, kde-format
 msgctxt "@action:button"
 msgid "Send"
 msgstr "Bidali"
 
-#: editdlgtypes.cpp:1490
+#: editdlgtypes.cpp:1491
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Email sent to:<nl/>%1<nl/>Bcc: <email>%2</email>"
 msgstr "E-posta honi bidali zaio:<nl/>%1<nl/>BCC: <email>%2</email>"
 
-#: editdlgtypes.cpp:1493
+#: editdlgtypes.cpp:1494
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Email sent to:<nl/>%1"
 msgstr "E-posta honi bidali zaio:<nl/>%1"
 
-#: editdlgtypes.cpp:1522
+#: editdlgtypes.cpp:1523
 #, kde-format
 msgctxt "@title:window"
 msgid "Choose File to Attach"
 msgstr "Hautatu eransteko fitxategia"
 
-#: editdlgtypes.cpp:1605
+#: editdlgtypes.cpp:1606
 #, kde-format
 msgctxt "@title:window"
 msgid "New Audio Alarm Template"
 msgstr "Audio-alarma txantiloi berria"
 
-#: editdlgtypes.cpp:1605
+#: editdlgtypes.cpp:1606
 #, kde-format
 msgctxt "@title:window"
 msgid "Edit Audio Alarm Template"
 msgstr "Editatu audio-alarma txantiloia"
 
-#: editdlgtypes.cpp:1606
+#: editdlgtypes.cpp:1607
 #, kde-format
 msgctxt "@title:window"
 msgid "New Audio Alarm"
 msgstr "Audio-alarma berria"
 
-#: editdlgtypes.cpp:1606
+#: editdlgtypes.cpp:1607
 #, kde-format
 msgctxt "@title:window"
 msgid "Edit Audio Alarm"
 msgstr "Editatu audio-alarma"
 
-#: editdlgtypes.cpp:1614
+#: editdlgtypes.cpp:1615
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Play the audio file now"
 msgstr "Jo audio-alarma orain"
 
-#: editdlgtypes.cpp:1615
+#: editdlgtypes.cpp:1616
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Play the audio file now"
 msgstr "Jo audio-fitxategia orain"
 
-#: editdlgtypes.cpp:1617
+#: editdlgtypes.cpp:1618
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -3000,25 +3000,25 @@ msgstr ""
 "Markatuta badago, soinu-fitxategia behin eta berriro joko du %1(a)ri klik "
 "egin arte."
 
-#: editdlgtypes.cpp:1826
+#: editdlgtypes.cpp:1830
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to enter the contents of a script instead of a shell command line"
 msgstr "Hautatu hau shell komando baten ordez script baten edukinak sartzeko"
 
-#: editdlgtypes.cpp:1832
+#: editdlgtypes.cpp:1836
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter a shell command to execute."
 msgstr "Sartu exekutatuko den shell komando bat."
 
-#: editdlgtypes.cpp:1837
+#: editdlgtypes.cpp:1841
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the contents of a script to execute"
 msgstr "Sartu exekutatuko den scriptaren edukinak"
 
-#: editdlgtypes.cpp:1892
+#: editdlgtypes.cpp:1896
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3028,7 +3028,7 @@ msgstr ""
 "<para>Komandoak ezin ditu ingurune-aldagaiak ezarri:</para><para><icode>%1</"
 "icode></para>"
 
-#: editdlgtypes.cpp:1897
+#: editdlgtypes.cpp:1901
 #, kde-format
 msgctxt "@info"
 msgid "Please enter a command or script to execute"
@@ -4871,13 +4871,13 @@ msgstr ""
 "<para>Geroratu alarma beranduago arte.</para><para>Alarma berriz noiz "
 "azalduko den zehazteko eskatuko zaizu.</para>"
 
-#: messagewindow.cpp:458 sounddlg.cpp:441
+#: messagewindow.cpp:458 sounddlg.cpp:444
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Stop sound"
 msgstr "Gelditu soinua"
 
-#: messagewindow.cpp:459 sounddlg.cpp:442
+#: messagewindow.cpp:459 sounddlg.cpp:445
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Stop playing the sound"
@@ -7996,19 +7996,19 @@ msgstr ""
 "Errorea «esnatu esekitzetik» ezartzean.<nl/>Komandoa zen: <command>%1 %2</"
 "command><nl/>Errore-kodea: %3."
 
-#: sounddlg.cpp:40
+#: sounddlg.cpp:41
 #, kde-format
 msgctxt "@option:check"
 msgid "Repeat"
 msgstr "Errepikatu"
 
-#: sounddlg.cpp:41
+#: sounddlg.cpp:42
 #, kde-format
 msgctxt "@option:check"
 msgid "Set volume"
 msgstr "Ezarri bolumena"
 
-#: sounddlg.cpp:51
+#: sounddlg.cpp:52
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -8018,79 +8018,79 @@ msgstr ""
 "Markatuta badago, soinu-fitxategia behin eta berriro joko da mezua azaltzen "
 "den bitartean."
 
-#: sounddlg.cpp:147
+#: sounddlg.cpp:148
 #, kde-format
 msgctxt "@label"
 msgid "Sound file:"
 msgstr "Soinu-fitxategia:"
 
-#: sounddlg.cpp:164 sounddlg.cpp:454
+#: sounddlg.cpp:165 sounddlg.cpp:461
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Test the sound"
 msgstr "Probatu soinua"
 
-#: sounddlg.cpp:165 sounddlg.cpp:455
+#: sounddlg.cpp:166 sounddlg.cpp:462
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Play the selected sound file."
 msgstr "Jo hautatutako soinu-fitxategia."
 
-#: sounddlg.cpp:172
+#: sounddlg.cpp:173
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the name or URL of a sound file to play."
 msgstr "Sartu jo beharreko soinu-fitxategi baten izena edo URLa."
 
-#: sounddlg.cpp:183
+#: sounddlg.cpp:184
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select a sound file to play."
 msgstr "Hautatu jo beharreko soinu-fitxategi bat."
 
-#: sounddlg.cpp:205
+#: sounddlg.cpp:206
 #, kde-format
 msgctxt "@label:spinbox Length of time to pause between repetitions"
 msgid "Pause between repetitions:"
 msgstr "Errepikapenen arteko etena:"
 
-#: sounddlg.cpp:212 sounddlg.cpp:269
+#: sounddlg.cpp:213 sounddlg.cpp:270
 #, kde-format
 msgctxt "@label"
 msgid "seconds"
 msgstr "segundo"
 
-#: sounddlg.cpp:214
+#: sounddlg.cpp:215
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter how many seconds to pause between repetitions."
 msgstr "Sartu errepikapen arteko etenunearen iraupena segundotan."
 
-#: sounddlg.cpp:217
+#: sounddlg.cpp:218
 #, kde-format
 msgctxt "@title:group Sound volume"
 msgid "Volume"
 msgstr "Bolumena"
 
-#: sounddlg.cpp:233
+#: sounddlg.cpp:234
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select to choose the volume for playing the sound file."
 msgstr "Hautatu, soinu-fitxategia jotzeko bolumena aukeratzeko."
 
-#: sounddlg.cpp:241
+#: sounddlg.cpp:242
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Choose the volume for playing the sound file."
 msgstr "Hautatu soinu-fitxategia jotzeko bolumena."
 
-#: sounddlg.cpp:252
+#: sounddlg.cpp:253
 #, kde-format
 msgctxt "@option:check"
 msgid "Fade"
 msgstr "Moteltzea"
 
-#: sounddlg.cpp:254
+#: sounddlg.cpp:255
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select to fade the volume when the sound file first starts to play."
@@ -8098,13 +8098,13 @@ msgstr ""
 "Hautatu bolumena ozentzea soinu-fitxategia jotzen hasten denean.Hautatu hau "
 "lehen aldiz soinu-fitxategia erreproduzitzean iraungitzeko."
 
-#: sounddlg.cpp:262
+#: sounddlg.cpp:263
 #, kde-format
 msgctxt "@label:spinbox Time period over which to fade the sound"
 msgid "Fade time:"
 msgstr "Moteltze-denbora:"
 
-#: sounddlg.cpp:271
+#: sounddlg.cpp:272
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -8113,13 +8113,13 @@ msgstr ""
 "Sartu ezarritako bolumenera iritsi arte soinua zenbat segundoz moteldu behar "
 "den."
 
-#: sounddlg.cpp:278
+#: sounddlg.cpp:279
 #, kde-format
 msgctxt "@label:slider"
 msgid "Initial volume:"
 msgstr "Hasierako bolumena:"
 
-#: sounddlg.cpp:287
+#: sounddlg.cpp:288
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Choose the initial volume for playing the sound file."

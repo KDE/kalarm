@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Mimos\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-03-09 02:28+0000\n"
+"POT-Creation-Date: 2024-03-28 02:54+0000\n"
 "PO-Revision-Date: 2005-10-06 11:21+0800\n"
 "Last-Translator: junetazawawi <junetazawawi@yahoo.com>\n"
 "Language-Team: Malay <kedidiemas@yahoogroups.com>\n"
@@ -309,19 +309,19 @@ msgctxt "@info"
 msgid "Alarm time has already expired"
 msgstr "Waktu penggera telah luput"
 
-#: audioplayer.cpp:69
+#: audioplayer.cpp:89
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot initialize audio player: %1"
 msgstr ""
 
-#: audioplayer.cpp:92
+#: audioplayer.cpp:112
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot set audio player properties: %1"
 msgstr ""
 
-#: audioplayer.cpp:189 audioplayer.cpp:295
+#: audioplayer.cpp:210 audioplayer.cpp:318
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "Error attaching file:\n"
@@ -333,7 +333,7 @@ msgstr ""
 "Ralat semasa melampirkan fail:\n"
 "%1"
 
-#: audioplayer.cpp:211 resources/singlefileresource.cpp:738
+#: audioplayer.cpp:233 resources/singlefileresource.cpp:738
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "Cannot open audio file:\n"
@@ -2497,96 +2497,96 @@ msgctxt "@info:tooltip"
 msgid "Show more options"
 msgstr ""
 
-#: editdlgtypes.cpp:73
+#: editdlgtypes.cpp:74
 #, fuzzy, kde-format
 #| msgid "Choose Log File"
 msgctxt "@title:window"
 msgid "Choose Log File"
 msgstr "Pilih Fail Log"
 
-#: editdlgtypes.cpp:86
+#: editdlgtypes.cpp:87
 #, fuzzy, kde-format
 #| msgid "Display Alarms"
 msgctxt "@label:listbox How to display alarms"
 msgid "Display method:"
 msgstr "Paparkan penggera"
 
-#: editdlgtypes.cpp:87
+#: editdlgtypes.cpp:88
 #, fuzzy, kde-format
 #| msgid "Alarm List"
 msgctxt "@item:inlistbox"
 msgid "Window"
 msgstr "Senarai penggera"
 
-#: editdlgtypes.cpp:88
+#: editdlgtypes.cpp:89
 #, fuzzy, kde-format
 #| msgid "Action"
 msgctxt "@item:inlistbox"
 msgid "Notification"
 msgstr "Tindakan"
 
-#: editdlgtypes.cpp:89
+#: editdlgtypes.cpp:90
 #, fuzzy, kde-format
 #| msgid "Confirm acknowledgment"
 msgctxt "@option:check"
 msgid "Confirm acknowledgment"
 msgstr "Sahkan pengakuan"
 
-#: editdlgtypes.cpp:118
+#: editdlgtypes.cpp:119
 #, fuzzy, kde-format
 #| msgid "New Alarm Template"
 msgctxt "@title:window"
 msgid "New Display Alarm Template"
 msgstr "Templat penggera baru"
 
-#: editdlgtypes.cpp:118
+#: editdlgtypes.cpp:119
 #, fuzzy, kde-format
 #| msgid "Edit Alarm Template"
 msgctxt "@title:window"
 msgid "Edit Display Alarm Template"
 msgstr "Edit templat penggera"
 
-#: editdlgtypes.cpp:119
+#: editdlgtypes.cpp:120
 #, fuzzy, kde-format
 #| msgid "Display Alarms"
 msgctxt "@title:window"
 msgid "New Display Alarm"
 msgstr "Paparkan penggera"
 
-#: editdlgtypes.cpp:119
+#: editdlgtypes.cpp:120
 #, fuzzy, kde-format
 #| msgid "Display Alarms"
 msgctxt "@title:window"
 msgid "Edit Display Alarm"
 msgstr "Paparkan penggera"
 
-#: editdlgtypes.cpp:132
+#: editdlgtypes.cpp:133
 #, fuzzy, kde-format
 #| msgid "Display Alarms"
 msgctxt "@label:listbox"
 msgid "Display type:"
 msgstr "Paparkan penggera"
 
-#: editdlgtypes.cpp:136
+#: editdlgtypes.cpp:137
 #, fuzzy, kde-format
 #| msgid "The alarm message"
 msgctxt "@item:inlistbox"
 msgid "Text message"
 msgstr "Mesej penggera"
 
-#: editdlgtypes.cpp:137
+#: editdlgtypes.cpp:138
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "File contents"
 msgstr ""
 
-#: editdlgtypes.cpp:138
+#: editdlgtypes.cpp:139
 #, fuzzy, kde-format
 msgctxt "@item:inlistbox"
 msgid "Command output"
 msgstr "Output arahan"
 
-#: editdlgtypes.cpp:158
+#: editdlgtypes.cpp:159
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2597,35 +2597,35 @@ msgid ""
 "display the output from a command.</item></list></para>"
 msgstr ""
 
-#: editdlgtypes.cpp:173
+#: editdlgtypes.cpp:174
 #, fuzzy, kde-format
 #| msgid "Enter the text of the alarm message. It may be multi-line."
 msgctxt "@info:whatsthis"
 msgid "Enter the text of the alarm message. It may be multi-line."
 msgstr "Masukkan teks mesej penggera. Ia mungkin berbilang garisan."
 
-#: editdlgtypes.cpp:186
+#: editdlgtypes.cpp:187
 #, fuzzy, kde-format
 #| msgid "Enter the name or URL of a text or image file to display."
 msgctxt "@info:whatsthis"
 msgid "Enter the name or URL of a text or image file to display."
 msgstr "Masukkan nama atau URL teks atau fail imej yang hendak dipapar."
 
-#: editdlgtypes.cpp:193 editdlgtypes.cpp:882 sounddlg.cpp:182
+#: editdlgtypes.cpp:194 editdlgtypes.cpp:883 sounddlg.cpp:183
 #, fuzzy, kde-format
 #| msgid "Choose a file"
 msgctxt "@info:tooltip"
 msgid "Choose a file"
 msgstr "Pilih fail"
 
-#: editdlgtypes.cpp:194
+#: editdlgtypes.cpp:195
 #, fuzzy, kde-format
 #| msgid "Select a text or image file to display."
 msgctxt "@info:whatsthis"
 msgid "Select a text or image file to display."
 msgstr "Pilih fail teks atau imej untuk paparan"
 
-#: editdlgtypes.cpp:238
+#: editdlgtypes.cpp:239
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2633,7 +2633,7 @@ msgid ""
 "system."
 msgstr ""
 
-#: editdlgtypes.cpp:265
+#: editdlgtypes.cpp:266
 #, fuzzy, kde-format
 #| msgid ""
 #| "Check to additionally display a reminder in advance of the main alarm "
@@ -2645,7 +2645,7 @@ msgid ""
 msgstr ""
 "Semak untuk tambahan paparan peringatan  mendahului waktu penggera utama"
 
-#: editdlgtypes.cpp:266
+#: editdlgtypes.cpp:267
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "Enter how long in advance of the main alarm to display a reminder alarm."
@@ -2657,7 +2657,7 @@ msgstr ""
 "Masukkan berapa lama penggera utama hendak dipaparkan mendahului  paparan "
 "penggera peringatan."
 
-#: editdlgtypes.cpp:267
+#: editdlgtypes.cpp:268
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2665,7 +2665,7 @@ msgid ""
 "alarm"
 msgstr ""
 
-#: editdlgtypes.cpp:277
+#: editdlgtypes.cpp:278
 #, fuzzy, kde-format
 #| msgid ""
 #| "Check to be prompted for confirmation when you acknowledge the alarm."
@@ -2675,111 +2675,111 @@ msgstr ""
 "Semak supaya diberikan ingatan segera untuk pengesahan apabila anda "
 "memperakui penggera."
 
-#: editdlgtypes.cpp:286
+#: editdlgtypes.cpp:287
 #, fuzzy, kde-format
 #| msgid "Display the alarm message now"
 msgctxt "@info:tooltip"
 msgid "Display the alarm now"
 msgstr "Paparkan mesej penggera sekarang"
 
-#: editdlgtypes.cpp:668
+#: editdlgtypes.cpp:669
 #, fuzzy, kde-format
 #| msgid "Display the alarm message now"
 msgctxt "@info:whatsthis"
 msgid "Display the alarm message now"
 msgstr "Paparkan mesej penggera sekarang"
 
-#: editdlgtypes.cpp:677
+#: editdlgtypes.cpp:678
 #, fuzzy, kde-format
 #| msgid "Display the file now"
 msgctxt "@info:whatsthis"
 msgid "Display the file now"
 msgstr "Paparkan fail sekarang"
 
-#: editdlgtypes.cpp:687
+#: editdlgtypes.cpp:688
 #, fuzzy, kde-format
 #| msgid "Display the alarm message now"
 msgctxt "@info:whatsthis"
 msgid "Display the command output now"
 msgstr "Paparkan mesej penggera sekarang"
 
-#: editdlgtypes.cpp:719
+#: editdlgtypes.cpp:720
 #, fuzzy, kde-format
 #| msgid "Choose Text or Image File to Display"
 msgctxt "@title:window"
 msgid "Choose Text or Image File to Display"
 msgstr "Pilih Teks atau Fail imej yang hendak dipapar"
 
-#: editdlgtypes.cpp:797
+#: editdlgtypes.cpp:798
 #, fuzzy, kde-format
 #| msgid "Enter a script"
 msgctxt "@option:check"
 msgid "Enter a script"
 msgstr "Masukkan skrip"
 
-#: editdlgtypes.cpp:798
+#: editdlgtypes.cpp:799
 #, fuzzy, kde-format
 #| msgid "Execute in terminal window"
 msgctxt "@option:radio"
 msgid "Execute in terminal window"
 msgstr "Laksanakan dalam tetingkap terminal"
 
-#: editdlgtypes.cpp:799
+#: editdlgtypes.cpp:800
 #, fuzzy, kde-format
 #| msgid "Execute in terminal window"
 msgctxt "@option:check"
 msgid "Execute in terminal window"
 msgstr "Laksanakan dalam tetingkap terminal"
 
-#: editdlgtypes.cpp:829
+#: editdlgtypes.cpp:830
 #, fuzzy, kde-format
 #| msgid "New Alarm Template"
 msgctxt "@title:window"
 msgid "New Command Alarm Template"
 msgstr "Templat penggera baru"
 
-#: editdlgtypes.cpp:829
+#: editdlgtypes.cpp:830
 #, fuzzy, kde-format
 #| msgid "Edit Alarm Template"
 msgctxt "@title:window"
 msgid "Edit Command Alarm Template"
 msgstr "Edit templat penggera"
 
-#: editdlgtypes.cpp:830
+#: editdlgtypes.cpp:831
 #, fuzzy, kde-format
 #| msgid "Command Alarms"
 msgctxt "@title:window"
 msgid "New Command Alarm"
 msgstr "Penggera Arahan"
 
-#: editdlgtypes.cpp:830
+#: editdlgtypes.cpp:831
 #, fuzzy, kde-format
 #| msgid "Command Alarms"
 msgctxt "@title:window"
 msgid "Edit Command Alarm"
 msgstr "Penggera Arahan"
 
-#: editdlgtypes.cpp:838
+#: editdlgtypes.cpp:839
 #, fuzzy, kde-format
 #| msgid "Execute the specified command now"
 msgctxt "@info:whatsthis"
 msgid "Execute the specified command now"
 msgstr "Laksanakan arahan yang dinyatakan sekarang"
 
-#: editdlgtypes.cpp:839
+#: editdlgtypes.cpp:840
 #, fuzzy, kde-format
 #| msgid "Execute the specified command now"
 msgctxt "@info:tooltip"
 msgid "Execute the specified command now"
 msgstr "Laksanakan arahan yang dinyatakan sekarang"
 
-#: editdlgtypes.cpp:846 specialactions.cpp:182
+#: editdlgtypes.cpp:847 specialactions.cpp:182
 #, kde-format
 msgctxt "@option:check"
 msgid "Do not notify errors"
 msgstr ""
 
-#: editdlgtypes.cpp:847
+#: editdlgtypes.cpp:848
 #, fuzzy, kde-format
 #| msgid ""
 #| "The default setting for the recurrence rule in the alarm edit dialog."
@@ -2787,42 +2787,42 @@ msgctxt "@info:whatsthis"
 msgid "Do not show error message if the command fails."
 msgstr "Seting piawai untuk peraturan pengulangan dalam dialog edit penggera."
 
-#: editdlgtypes.cpp:853
+#: editdlgtypes.cpp:854
 #, fuzzy, kde-format
 #| msgid "Command Output"
 msgctxt "@title:group"
 msgid "Command Output"
 msgstr "Output arahan"
 
-#: editdlgtypes.cpp:861
+#: editdlgtypes.cpp:862
 #, fuzzy, kde-format
 #| msgid "Check to execute the command in a terminal window"
 msgctxt "@info:whatsthis"
 msgid "Check to execute the command in a terminal window"
 msgstr "Semak untuk melaksanakan arahan dalam tetingkap terminal"
 
-#: editdlgtypes.cpp:874
+#: editdlgtypes.cpp:875
 #, fuzzy, kde-format
 #| msgid "Enter the name or path of the log file."
 msgctxt "@info:whatsthis"
 msgid "Enter the name or path of the log file."
 msgstr "Masukkan nama atau laluan fail log"
 
-#: editdlgtypes.cpp:883
+#: editdlgtypes.cpp:884
 #, fuzzy, kde-format
 #| msgid "Select a log file."
 msgctxt "@info:whatsthis"
 msgid "Select a log file."
 msgstr "Pilih fail log"
 
-#: editdlgtypes.cpp:886
+#: editdlgtypes.cpp:887
 #, fuzzy, kde-format
 #| msgid "Lo&g to file"
 msgctxt "@option:radio"
 msgid "Log to file"
 msgstr "Lo&g ke fail"
 
-#: editdlgtypes.cpp:887
+#: editdlgtypes.cpp:888
 #, fuzzy, kde-format
 #| msgid ""
 #| "Check to log the command output to a local file. The output will be "
@@ -2835,20 +2835,20 @@ msgstr ""
 "Semak untuk mengelog output arahan ke fail setempat. Output akan ditambah ke "
 "mana-mana kandungan sedia ada bagi fail tersebut."
 
-#: editdlgtypes.cpp:894
+#: editdlgtypes.cpp:895
 #, fuzzy, kde-format
 msgctxt "@option:radio"
 msgid "Discard"
 msgstr "Output arahan"
 
-#: editdlgtypes.cpp:895
+#: editdlgtypes.cpp:896
 #, fuzzy, kde-format
 #| msgid "Check to discard command output."
 msgctxt "@info:whatsthis"
 msgid "Check to discard command output."
 msgstr "Semak untuk menyingkirkan output arahan."
 
-#: editdlgtypes.cpp:1057
+#: editdlgtypes.cpp:1058
 #, fuzzy, kde-format
 #| msgid ""
 #| "Log file must be the name or path of a local file, with write permission."
@@ -2858,7 +2858,7 @@ msgid ""
 msgstr ""
 "Fail log mestilah nama atau laluan fail setempat dengan keizinan tulis."
 
-#: editdlgtypes.cpp:1067
+#: editdlgtypes.cpp:1068
 #, fuzzy, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2868,7 +2868,7 @@ msgstr ""
 "Tiada alamat e-mel  'Daripada' dikonfigur.\n"
 "Setkan dalam dialog keutamaan %1."
 
-#: editdlgtypes.cpp:1087
+#: editdlgtypes.cpp:1088
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "Command executed:\n"
@@ -2879,55 +2879,55 @@ msgstr ""
 "Arahan terlaksana:\n"
 "%1"
 
-#: editdlgtypes.cpp:1121
+#: editdlgtypes.cpp:1122
 #, fuzzy, kde-format
 #| msgid "Copy email to self"
 msgctxt "@option:check"
 msgid "Copy email to self"
 msgstr "Salin e-mel kepada diri sendiri"
 
-#: editdlgtypes.cpp:1151
+#: editdlgtypes.cpp:1152
 #, fuzzy, kde-format
 #| msgid "New Alarm Template"
 msgctxt "@title:window"
 msgid "New Email Alarm Template"
 msgstr "Templat penggera baru"
 
-#: editdlgtypes.cpp:1151
+#: editdlgtypes.cpp:1152
 #, fuzzy, kde-format
 #| msgid "Edit Alarm Template"
 msgctxt "@title:window"
 msgid "Edit Email Alarm Template"
 msgstr "Edit templat penggera"
 
-#: editdlgtypes.cpp:1152
+#: editdlgtypes.cpp:1153
 #, fuzzy, kde-format
 #| msgid "Email Alarms"
 msgctxt "@title:window"
 msgid "New Email Alarm"
 msgstr "Penggera E-mel"
 
-#: editdlgtypes.cpp:1152
+#: editdlgtypes.cpp:1153
 #, fuzzy, kde-format
 #| msgid "Email Alarms"
 msgctxt "@title:window"
 msgid "Edit Email Alarm"
 msgstr "Penggera E-mel"
 
-#: editdlgtypes.cpp:1160
+#: editdlgtypes.cpp:1161
 #, fuzzy, kde-format
 #| msgid "Send the email to the specified addressees now"
 msgctxt "@info:whatsthis"
 msgid "Send the email to the specified addressees now"
 msgstr "Hantar e-mel ke alamat yang dinyatakan sekarang"
 
-#: editdlgtypes.cpp:1161
+#: editdlgtypes.cpp:1162
 #, fuzzy, kde-format
 msgctxt "@info:tooltip"
 msgid "Send the email now"
 msgstr "&Hantar mel"
 
-#: editdlgtypes.cpp:1172
+#: editdlgtypes.cpp:1173
 #, fuzzy, kde-format
 #| msgctxt "'From' email address"
 #| msgid "From:"
@@ -2935,7 +2935,7 @@ msgctxt "@label:listbox 'From' email address"
 msgid "From:"
 msgstr "Daripada:"
 
-#: editdlgtypes.cpp:1178
+#: editdlgtypes.cpp:1179
 #, fuzzy, kde-format
 #| msgid ""
 #| "Your email identity, used to identify you as the sender when sending "
@@ -2948,7 +2948,7 @@ msgstr ""
 "Identiti e-mel anda, digunakan untuk mengecam anda sebagai penghantar "
 "apabila menghantar penggera  e-mel."
 
-#: editdlgtypes.cpp:1184
+#: editdlgtypes.cpp:1185
 #, fuzzy, kde-format
 #| msgctxt "Email addressee"
 #| msgid "To:"
@@ -2956,7 +2956,7 @@ msgctxt "@label:textbox Email addressee"
 msgid "To:"
 msgstr "Kepada:"
 
-#: editdlgtypes.cpp:1189
+#: editdlgtypes.cpp:1190
 #, fuzzy, kde-format
 #| msgid ""
 #| "Enter the addresses of the email recipients. Separate multiple addresses "
@@ -2969,21 +2969,21 @@ msgstr ""
 "Masukkan alamat penerima e-mel. Asingkan berbilang alamat dengan koma atau "
 "koma bertitik."
 
-#: editdlgtypes.cpp:1200
+#: editdlgtypes.cpp:1201
 #, fuzzy, kde-format
 #| msgid "Open address book"
 msgctxt "@info:tooltip"
 msgid "Open address book"
 msgstr "Buka buku alamat"
 
-#: editdlgtypes.cpp:1201
+#: editdlgtypes.cpp:1202
 #, fuzzy, kde-format
 #| msgid "Select email addresses from your address book."
 msgctxt "@info:whatsthis"
 msgid "Select email addresses from your address book."
 msgstr "Pilih alamat e-mel dari buku alamat anda"
 
-#: editdlgtypes.cpp:1208
+#: editdlgtypes.cpp:1209
 #, fuzzy, kde-format
 #| msgctxt "Email subject"
 #| msgid "Subject:"
@@ -2991,69 +2991,69 @@ msgctxt "@label:textbox Email subject"
 msgid "Subject:"
 msgstr "Subjek:"
 
-#: editdlgtypes.cpp:1214
+#: editdlgtypes.cpp:1215
 #, fuzzy, kde-format
 #| msgid "Enter the email subject."
 msgctxt "@info:whatsthis"
 msgid "Enter the email subject."
 msgstr "Masukkan subjek e-mel"
 
-#: editdlgtypes.cpp:1220
+#: editdlgtypes.cpp:1221
 #, fuzzy, kde-format
 #| msgid "Enter the email message."
 msgctxt "@info:whatsthis"
 msgid "Enter the email message."
 msgstr "Masukkan mesej e-mel."
 
-#: editdlgtypes.cpp:1228
+#: editdlgtypes.cpp:1229
 #, fuzzy, kde-format
 #| msgid "Attachment&s:"
 msgctxt "@label:listbox"
 msgid "Attachments:"
 msgstr "&Lampiran:"
 
-#: editdlgtypes.cpp:1237
+#: editdlgtypes.cpp:1238
 #, fuzzy, kde-format
 #| msgid "Files to send as attachments to the email."
 msgctxt "@info:whatsthis"
 msgid "Files to send as attachments to the email."
 msgstr "Fail yang hendak dihantar sebagai lampiran pada  e-mel."
 
-#: editdlgtypes.cpp:1241 resourceselector.cpp:76
+#: editdlgtypes.cpp:1242 resourceselector.cpp:76
 #, fuzzy, kde-format
 #| msgid "Add..."
 msgctxt "@action:button"
 msgid "Add..."
 msgstr "Tambah..."
 
-#: editdlgtypes.cpp:1243
+#: editdlgtypes.cpp:1244
 #, fuzzy, kde-format
 #| msgid "Add an attachment to the email."
 msgctxt "@info:whatsthis"
 msgid "Add an attachment to the email."
 msgstr "Tambah lampiran kepada e-mel"
 
-#: editdlgtypes.cpp:1246 resourceselector.cpp:78
+#: editdlgtypes.cpp:1247 resourceselector.cpp:78
 #, fuzzy, kde-format
 msgctxt "@action:button"
 msgid "Remove"
 msgstr "&Buang"
 
-#: editdlgtypes.cpp:1248
+#: editdlgtypes.cpp:1249
 #, fuzzy, kde-format
 #| msgid "Remove the highlighted attachment from the email."
 msgctxt "@info:whatsthis"
 msgid "Remove the highlighted attachment from the email."
 msgstr "Buang lampiran yang ditonjolkan dari e-mel"
 
-#: editdlgtypes.cpp:1253
+#: editdlgtypes.cpp:1254
 #, fuzzy, kde-format
 #| msgid "If checked, the email will be blind copied to you."
 msgctxt "@info:whatsthis"
 msgid "If checked, the email will be blind copied to you."
 msgstr "Jika disemak, e-mel akan disalin buta tuli kepada anda."
 
-#: editdlgtypes.cpp:1435
+#: editdlgtypes.cpp:1436
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "Invalid email address:\n"
@@ -3064,14 +3064,14 @@ msgstr ""
 "Alamat e-mel tidak sah:\n"
 "%1"
 
-#: editdlgtypes.cpp:1442
+#: editdlgtypes.cpp:1443
 #, fuzzy, kde-format
 #| msgid "No email address specified"
 msgctxt "@info"
 msgid "No email address specified"
 msgstr "Alamat e-mel tidak dinyatakan"
 
-#: editdlgtypes.cpp:1459
+#: editdlgtypes.cpp:1460
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "Invalid email attachment:\n"
@@ -3082,7 +3082,7 @@ msgstr ""
 "Lampiran e-mel tidak sah:\n"
 "%1"
 
-#: editdlgtypes.cpp:1463
+#: editdlgtypes.cpp:1464
 #, fuzzy, kde-format
 #| msgid ""
 #| "Do you really want to send the email now to the specified recipient(s)?"
@@ -3091,21 +3091,21 @@ msgid "Do you really want to send the email now to the specified recipient(s)?"
 msgstr ""
 "Anda benar-benar ingin menghantar e-mel kepada penerima khusus sekarang?"
 
-#: editdlgtypes.cpp:1464
+#: editdlgtypes.cpp:1465
 #, fuzzy, kde-format
 #| msgid "Confirm Email"
 msgctxt "@action:button"
 msgid "Confirm Email"
 msgstr "Sahkan e-mel"
 
-#: editdlgtypes.cpp:1464
+#: editdlgtypes.cpp:1465
 #, fuzzy, kde-format
 #| msgid "&Send"
 msgctxt "@action:button"
 msgid "Send"
 msgstr "&Hantar"
 
-#: editdlgtypes.cpp:1490
+#: editdlgtypes.cpp:1491
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "Email sent to:\n"
@@ -3116,7 +3116,7 @@ msgstr ""
 "E-mel dihantar ke:\n"
 "%1%2"
 
-#: editdlgtypes.cpp:1493
+#: editdlgtypes.cpp:1494
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "Email sent to:\n"
@@ -3127,56 +3127,56 @@ msgstr ""
 "E-mel dihantar ke:\n"
 "%1%2"
 
-#: editdlgtypes.cpp:1522
+#: editdlgtypes.cpp:1523
 #, fuzzy, kde-format
 #| msgid "Choose File to Attach"
 msgctxt "@title:window"
 msgid "Choose File to Attach"
 msgstr "Pilih fail yang hendak dilampirkan"
 
-#: editdlgtypes.cpp:1605
+#: editdlgtypes.cpp:1606
 #, fuzzy, kde-format
 #| msgid "New Alarm Template"
 msgctxt "@title:window"
 msgid "New Audio Alarm Template"
 msgstr "Templat penggera baru"
 
-#: editdlgtypes.cpp:1605
+#: editdlgtypes.cpp:1606
 #, fuzzy, kde-format
 #| msgid "Edit Alarm Template"
 msgctxt "@title:window"
 msgid "Edit Audio Alarm Template"
 msgstr "Edit templat penggera"
 
-#: editdlgtypes.cpp:1606
+#: editdlgtypes.cpp:1607
 #, fuzzy, kde-format
 #| msgid "Email Alarms"
 msgctxt "@title:window"
 msgid "New Audio Alarm"
 msgstr "Penggera E-mel"
 
-#: editdlgtypes.cpp:1606
+#: editdlgtypes.cpp:1607
 #, fuzzy, kde-format
 #| msgid "Edit Alarm"
 msgctxt "@title:window"
 msgid "Edit Audio Alarm"
 msgstr "Edit penggera"
 
-#: editdlgtypes.cpp:1614
+#: editdlgtypes.cpp:1615
 #, fuzzy, kde-format
 #| msgid "Display the file now"
 msgctxt "@info:whatsthis"
 msgid "Play the audio file now"
 msgstr "Paparkan fail sekarang"
 
-#: editdlgtypes.cpp:1615
+#: editdlgtypes.cpp:1616
 #, fuzzy, kde-format
 #| msgid "Display the file now"
 msgctxt "@info:tooltip"
 msgid "Play the audio file now"
 msgstr "Paparkan fail sekarang"
 
-#: editdlgtypes.cpp:1617
+#: editdlgtypes.cpp:1618
 #, fuzzy, kde-format
 #| msgid ""
 #| "If checked, the sound file will be played repeatedly for as long as the "
@@ -3187,7 +3187,7 @@ msgid ""
 msgstr ""
 "Jika disemak, fail bunyi akan disiarkan berkali-kali selagi mesej dipaparkan."
 
-#: editdlgtypes.cpp:1826
+#: editdlgtypes.cpp:1830
 #, fuzzy, kde-format
 #| msgid ""
 #| "Check to enter the contents of a script instead of a shell command line"
@@ -3195,21 +3195,21 @@ msgctxt "@info:whatsthis"
 msgid "Check to enter the contents of a script instead of a shell command line"
 msgstr "Semak untuk memasukkan kandungan skrip, bukan garis arahan shell."
 
-#: editdlgtypes.cpp:1832
+#: editdlgtypes.cpp:1836
 #, fuzzy, kde-format
 #| msgid "Enter a shell command to execute."
 msgctxt "@info:whatsthis"
 msgid "Enter a shell command to execute."
 msgstr "Masukkan arahan shell yang hendak dilaksanakan."
 
-#: editdlgtypes.cpp:1837
+#: editdlgtypes.cpp:1841
 #, fuzzy, kde-format
 #| msgid "Enter the contents of a script to execute"
 msgctxt "@info:whatsthis"
 msgid "Enter the contents of a script to execute"
 msgstr "Masukkan kandungan skrip yang hendak dilaksana"
 
-#: editdlgtypes.cpp:1892
+#: editdlgtypes.cpp:1896
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3217,7 +3217,7 @@ msgid ""
 "icode></para>"
 msgstr ""
 
-#: editdlgtypes.cpp:1897
+#: editdlgtypes.cpp:1901
 #, fuzzy, kde-format
 #| msgid "Enter the contents of a script to execute"
 msgctxt "@info"
@@ -5308,14 +5308,14 @@ msgstr ""
 "Tunda penggera.\n"
 "Anda akan digesa untuk menyatakan bila penggera patut dipapar semula."
 
-#: messagewindow.cpp:458 sounddlg.cpp:441
+#: messagewindow.cpp:458 sounddlg.cpp:444
 #, fuzzy, kde-format
 #| msgid "Stop sound"
 msgctxt "@info:tooltip"
 msgid "Stop sound"
 msgstr "Hentikan bunyi"
 
-#: messagewindow.cpp:459 sounddlg.cpp:442
+#: messagewindow.cpp:459 sounddlg.cpp:445
 #, fuzzy, kde-format
 #| msgid "Stop playing the sound"
 msgctxt "@info:whatsthis"
@@ -8661,21 +8661,21 @@ msgid ""
 "command><nl/>Error code: %3."
 msgstr ""
 
-#: sounddlg.cpp:40
+#: sounddlg.cpp:41
 #, fuzzy, kde-format
 #| msgid "Repeat"
 msgctxt "@option:check"
 msgid "Repeat"
 msgstr "Ulang"
 
-#: sounddlg.cpp:41
+#: sounddlg.cpp:42
 #, fuzzy, kde-format
 #| msgid "Set volume"
 msgctxt "@option:check"
 msgid "Set volume"
 msgstr "Setkan volum"
 
-#: sounddlg.cpp:51
+#: sounddlg.cpp:52
 #, fuzzy, kde-format
 #| msgid ""
 #| "If checked, the sound file will be played repeatedly for as long as the "
@@ -8687,54 +8687,54 @@ msgid ""
 msgstr ""
 "Jika disemak, fail bunyi akan disiarkan berkali-kali selagi mesej dipaparkan."
 
-#: sounddlg.cpp:147
+#: sounddlg.cpp:148
 #, fuzzy, kde-format
 #| msgid "Sound &file:"
 msgctxt "@label"
 msgid "Sound file:"
 msgstr "&Fail bunyi:"
 
-#: sounddlg.cpp:164 sounddlg.cpp:454
+#: sounddlg.cpp:165 sounddlg.cpp:461
 #, fuzzy, kde-format
 msgctxt "@info:tooltip"
 msgid "Test the sound"
 msgstr "Hentikan siaran bunyi"
 
-#: sounddlg.cpp:165 sounddlg.cpp:455
+#: sounddlg.cpp:166 sounddlg.cpp:462
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid "Play the selected sound file."
 msgstr "&Ulang fail bunyi"
 
-#: sounddlg.cpp:172
+#: sounddlg.cpp:173
 #, fuzzy, kde-format
 #| msgid "Enter the name or URL of a sound file to play."
 msgctxt "@info:whatsthis"
 msgid "Enter the name or URL of a sound file to play."
 msgstr "Masukkan nama atau URL fail bunyi untuk disiarkan"
 
-#: sounddlg.cpp:183
+#: sounddlg.cpp:184
 #, fuzzy, kde-format
 #| msgid "Select a sound file to play."
 msgctxt "@info:whatsthis"
 msgid "Select a sound file to play."
 msgstr "Pilih fail bunyi untuk disiarkan."
 
-#: sounddlg.cpp:205
+#: sounddlg.cpp:206
 #, fuzzy, kde-format
 #| msgid "Interval between alarm repetitions"
 msgctxt "@label:spinbox Length of time to pause between repetitions"
 msgid "Pause between repetitions:"
 msgstr "Jeda masa antara pengulangan penggera"
 
-#: sounddlg.cpp:212 sounddlg.cpp:269
+#: sounddlg.cpp:213 sounddlg.cpp:270
 #, fuzzy, kde-format
 #| msgid "seconds"
 msgctxt "@label"
 msgid "seconds"
 msgstr "Saat"
 
-#: sounddlg.cpp:214
+#: sounddlg.cpp:215
 #, fuzzy, kde-format
 #| msgid ""
 #| "Enter how many seconds to fade the sound before reaching the set volume."
@@ -8742,42 +8742,42 @@ msgctxt "@info:whatsthis"
 msgid "Enter how many seconds to pause between repetitions."
 msgstr "Masukkan berapa saat  untuk pudar sebelum mencapai volum yang diset"
 
-#: sounddlg.cpp:217
+#: sounddlg.cpp:218
 #, fuzzy, kde-format
 #| msgid "Volume"
 msgctxt "@title:group Sound volume"
 msgid "Volume"
 msgstr "Kekuatan bunyi"
 
-#: sounddlg.cpp:233
+#: sounddlg.cpp:234
 #, fuzzy, kde-format
 #| msgid "Select to choose the volume for playing the sound file."
 msgctxt "@info:whatsthis"
 msgid "Select to choose the volume for playing the sound file."
 msgstr "Pilih untuk memilih kekuatan bunyi untuk siaran fail bunyi"
 
-#: sounddlg.cpp:241
+#: sounddlg.cpp:242
 #, fuzzy, kde-format
 #| msgid "Choose the volume for playing the sound file."
 msgctxt "@info:whatsthis"
 msgid "Choose the volume for playing the sound file."
 msgstr "Pilih volum untuk menyiarkan fail bunyi"
 
-#: sounddlg.cpp:252
+#: sounddlg.cpp:253
 #, fuzzy, kde-format
 #| msgid "Fade"
 msgctxt "@option:check"
 msgid "Fade"
 msgstr "Pudar"
 
-#: sounddlg.cpp:254
+#: sounddlg.cpp:255
 #, fuzzy, kde-format
 #| msgid "Select to fade the volume when the sound file first starts to play."
 msgctxt "@info:whatsthis"
 msgid "Select to fade the volume when the sound file first starts to play."
 msgstr "Pilih volum untuk siaran fail bunyi"
 
-#: sounddlg.cpp:262
+#: sounddlg.cpp:263
 #, fuzzy, kde-format
 #| msgctxt "Time period over which to fade the sound"
 #| msgid "Fade time:"
@@ -8785,7 +8785,7 @@ msgctxt "@label:spinbox Time period over which to fade the sound"
 msgid "Fade time:"
 msgstr "Masa pudar:"
 
-#: sounddlg.cpp:271
+#: sounddlg.cpp:272
 #, fuzzy, kde-format
 #| msgid ""
 #| "Enter how many seconds to fade the sound before reaching the set volume."
@@ -8794,14 +8794,14 @@ msgid ""
 "Enter how many seconds to fade the sound before reaching the set volume."
 msgstr "Masukkan berapa saat  untuk pudar sebelum mencapai volum yang diset"
 
-#: sounddlg.cpp:278
+#: sounddlg.cpp:279
 #, fuzzy, kde-format
 #| msgid "Initial volume:"
 msgctxt "@label:slider"
 msgid "Initial volume:"
 msgstr "Volum awal:"
 
-#: sounddlg.cpp:287
+#: sounddlg.cpp:288
 #, fuzzy, kde-format
 #| msgid "Choose the initial volume for playing the sound file."
 msgctxt "@info:whatsthis"

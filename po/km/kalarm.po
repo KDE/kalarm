@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-03-09 02:28+0000\n"
+"POT-Creation-Date: 2024-03-28 02:54+0000\n"
 "PO-Revision-Date: 2012-12-26 10:26+0700\n"
 "Last-Translator: sutha <sutha@khmeros.info>\n"
 "Language-Team: Khmer <support@khmeros>\n"
@@ -299,19 +299,19 @@ msgctxt "@info"
 msgid "Alarm time has already expired"
 msgstr "ពេលវេលា​ការ​ជូនដំណឹង​​បាន​ផុត​កំណត់"
 
-#: audioplayer.cpp:69
+#: audioplayer.cpp:89
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot initialize audio player: %1"
 msgstr ""
 
-#: audioplayer.cpp:92
+#: audioplayer.cpp:112
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot set audio player properties: %1"
 msgstr ""
 
-#: audioplayer.cpp:189 audioplayer.cpp:295
+#: audioplayer.cpp:210 audioplayer.cpp:318
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -319,7 +319,7 @@ msgid ""
 msgstr ""
 "<para>កំហុស​ក្នុង​ការ​ចាក់​ឯកសារ​អូឌីយ៉ូ ៖ <filename>%1</filename></para><para>%2</para>"
 
-#: audioplayer.cpp:211 resources/singlefileresource.cpp:738
+#: audioplayer.cpp:233 resources/singlefileresource.cpp:738
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info"
 #| msgid "Could not load calendar <filename>%1</filename>."
@@ -2477,20 +2477,20 @@ msgctxt "@info:tooltip"
 msgid "Show more options"
 msgstr "ជម្រើស​ច្រើន >>"
 
-#: editdlgtypes.cpp:73
+#: editdlgtypes.cpp:74
 #, kde-format
 msgctxt "@title:window"
 msgid "Choose Log File"
 msgstr "ជ្រើស​ឯកសារ​កំណត់ហេតុ"
 
-#: editdlgtypes.cpp:86
+#: editdlgtypes.cpp:87
 #, fuzzy, kde-format
 #| msgid "Display name."
 msgctxt "@label:listbox How to display alarms"
 msgid "Display method:"
 msgstr "បង្ហាញ​ឈ្មោះ​ ។"
 
-#: editdlgtypes.cpp:87
+#: editdlgtypes.cpp:88
 #, fuzzy, kde-format
 #| msgctxt "@title:tab"
 #| msgid "Alarm Windows"
@@ -2498,7 +2498,7 @@ msgctxt "@item:inlistbox"
 msgid "Window"
 msgstr "បង្អួច​​ជូនដំណឹង"
 
-#: editdlgtypes.cpp:88
+#: editdlgtypes.cpp:89
 #, fuzzy, kde-format
 #| msgctxt "@label:textbox"
 #| msgid "Location:"
@@ -2506,61 +2506,61 @@ msgctxt "@item:inlistbox"
 msgid "Notification"
 msgstr "ទីតាំង ៖"
 
-#: editdlgtypes.cpp:89
+#: editdlgtypes.cpp:90
 #, kde-format
 msgctxt "@option:check"
 msgid "Confirm acknowledgment"
 msgstr "អះអាង​ការ​ទទួល​ស្គាល់"
 
-#: editdlgtypes.cpp:118
+#: editdlgtypes.cpp:119
 #, kde-format
 msgctxt "@title:window"
 msgid "New Display Alarm Template"
 msgstr "ពុម្ព​ការ​ជូន​ដំណឹង​ការបង្ហាញ​ថ្មី"
 
-#: editdlgtypes.cpp:118
+#: editdlgtypes.cpp:119
 #, kde-format
 msgctxt "@title:window"
 msgid "Edit Display Alarm Template"
 msgstr "កែសម្រួល​ពុម្ព​​ជូនដំណឹង​ការ​បង្ហាញ"
 
-#: editdlgtypes.cpp:119
+#: editdlgtypes.cpp:120
 #, kde-format
 msgctxt "@title:window"
 msgid "New Display Alarm"
 msgstr "ការ​ជូន​ដំណឹង​ការ​បង្ហាញ​ថ្មី"
 
-#: editdlgtypes.cpp:119
+#: editdlgtypes.cpp:120
 #, kde-format
 msgctxt "@title:window"
 msgid "Edit Display Alarm"
 msgstr "កែសម្រួល​ការ​ជូន​ដំណឹង​ការ​បង្ហាញ"
 
-#: editdlgtypes.cpp:132
+#: editdlgtypes.cpp:133
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Display type:"
 msgstr "ប្រភេទ​ការ​បង្ហាញ ៖"
 
-#: editdlgtypes.cpp:136
+#: editdlgtypes.cpp:137
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Text message"
 msgstr "សារ​អត្ថបទ"
 
-#: editdlgtypes.cpp:137
+#: editdlgtypes.cpp:138
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "File contents"
 msgstr "មាតិកា​ឯកសារ"
 
-#: editdlgtypes.cpp:138
+#: editdlgtypes.cpp:139
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Command output"
 msgstr "លទ្ធផល​ពាក្យ​បញ្ជា"
 
-#: editdlgtypes.cpp:158
+#: editdlgtypes.cpp:159
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2575,31 +2575,31 @@ msgstr ""
 "ជូន​ដំណឹង​នឹង​បង្ហាញ​មាតិកា​អត្ថបទ ឬ​ឯកសារ​រូបភាព ។</item><item><interface>%3</interface> ៖ "
 "ការ​ជូន​ដំណឹង​បង្ហាញ​លទ្ធផល​ពី​ពាក្យ​បញ្ជា ។</item></list></para>"
 
-#: editdlgtypes.cpp:173
+#: editdlgtypes.cpp:174
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the text of the alarm message. It may be multi-line."
 msgstr "បញ្ចូល​អត្ថបទ​នៃ​សារជូនដំណឹង ។ វា​ប្រហែល​ជា​ច្រើន​បន្ទាត់ ។"
 
-#: editdlgtypes.cpp:186
+#: editdlgtypes.cpp:187
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the name or URL of a text or image file to display."
 msgstr "បញ្ចូល​ឈ្មោះ ឬ URL របស់​អត្ថបទ ឬ​ឯកសារ​រូបភាព​ដែល​ត្រូវ​បង្ហាញ ។"
 
-#: editdlgtypes.cpp:193 editdlgtypes.cpp:882 sounddlg.cpp:182
+#: editdlgtypes.cpp:194 editdlgtypes.cpp:883 sounddlg.cpp:183
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Choose a file"
 msgstr "ជ្រើស​ឯកសារ​មួយ"
 
-#: editdlgtypes.cpp:194
+#: editdlgtypes.cpp:195
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select a text or image file to display."
 msgstr "ជ្រើស​អត្ថបទ ឬ​ឯកសារ​រូបភាពមួយ​សម្រាប់​បង្ហាញ ។"
 
-#: editdlgtypes.cpp:238
+#: editdlgtypes.cpp:239
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2607,7 +2607,7 @@ msgid ""
 "system."
 msgstr ""
 
-#: editdlgtypes.cpp:265
+#: editdlgtypes.cpp:266
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2615,7 +2615,7 @@ msgid ""
 "alarm time(s)."
 msgstr "ធីក ដើម្បី​បង្ហាញ​កម្មវិធី​រំលឹក​បន្ថែម​ជាមុន ឬ​បន្ទាប់​ពី​ម៉ោង​រោទ៍សំខាន់ ។"
 
-#: editdlgtypes.cpp:266
+#: editdlgtypes.cpp:267
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2625,7 +2625,7 @@ msgstr ""
 "<para>បញ្ចូល​រយៈ​ពេល​មុន ឬ​ក្រោយ​​ម៉ោង​រោទ៍​ចម្បង​ ដើម្បី​បង្ហាញ​ម៉ោង​រោទ៍​របស់​កម្មវិធីរំលឹក ។</para><para>"
 "%1</para>"
 
-#: editdlgtypes.cpp:267
+#: editdlgtypes.cpp:268
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2633,13 +2633,13 @@ msgid ""
 "alarm"
 msgstr "ជ្រើស​ថា​តើ​កម្មវិធី​រំលឹក​គួរតែ​ត្រូវ​បាន​ចាប់​ផ្ដើម​មុន ឬ​ក្រោយ​ម៉ោង​រោទ៍​សំខាន់​ដែរ​ឬ​ទេ"
 
-#: editdlgtypes.cpp:277
+#: editdlgtypes.cpp:278
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to be prompted for confirmation when you acknowledge the alarm."
 msgstr "ធីក ដើម្បី​សួរ​បញ្ជាក់ នៅពេល​ដែល​អ្នក​ព្រម​ទទួល​ដឹង​ការ​ជូន​ដំណឹង ។"
 
-#: editdlgtypes.cpp:286
+#: editdlgtypes.cpp:287
 #, fuzzy, kde-format
 #| msgctxt "@info:whatsthis"
 #| msgid "Display the alarm message now"
@@ -2647,79 +2647,79 @@ msgctxt "@info:tooltip"
 msgid "Display the alarm now"
 msgstr "បង្ហាញ​សារ​ជូនដំណឹង​ឥឡូវនេះ"
 
-#: editdlgtypes.cpp:668
+#: editdlgtypes.cpp:669
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Display the alarm message now"
 msgstr "បង្ហាញ​សារ​ជូនដំណឹង​ឥឡូវនេះ"
 
-#: editdlgtypes.cpp:677
+#: editdlgtypes.cpp:678
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Display the file now"
 msgstr "បង្ហាញ​ឯកសារ​ឥឡូវ"
 
-#: editdlgtypes.cpp:687
+#: editdlgtypes.cpp:688
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Display the command output now"
 msgstr "បង្ហាញ​លទ្ធផល​ពាក្យ​បញ្ជា​ឥឡូវ​នេះ"
 
-#: editdlgtypes.cpp:719
+#: editdlgtypes.cpp:720
 #, kde-format
 msgctxt "@title:window"
 msgid "Choose Text or Image File to Display"
 msgstr "ជ្រើស​អត្ថបទ ឬ​ឯកសារ​រូបភាព​ដែលត្រូវ​បង្ហាញ"
 
-#: editdlgtypes.cpp:797
+#: editdlgtypes.cpp:798
 #, kde-format
 msgctxt "@option:check"
 msgid "Enter a script"
 msgstr "បញ្ចូល​ស្គ្រីប"
 
-#: editdlgtypes.cpp:798
+#: editdlgtypes.cpp:799
 #, kde-format
 msgctxt "@option:radio"
 msgid "Execute in terminal window"
 msgstr "ប្រតិបត្តិ​ក្នុង​បង្អួច​ស្ថានីយ"
 
-#: editdlgtypes.cpp:799
+#: editdlgtypes.cpp:800
 #, kde-format
 msgctxt "@option:check"
 msgid "Execute in terminal window"
 msgstr "ប្រតិបត្តិ​ក្នុង​បង្អួច​ស្ថានីយ"
 
-#: editdlgtypes.cpp:829
+#: editdlgtypes.cpp:830
 #, kde-format
 msgctxt "@title:window"
 msgid "New Command Alarm Template"
 msgstr "ពុម្ព​ការ​ជូន​ដំណឹង​ពាក្យ​បញ្ជា​ថ្មី"
 
-#: editdlgtypes.cpp:829
+#: editdlgtypes.cpp:830
 #, kde-format
 msgctxt "@title:window"
 msgid "Edit Command Alarm Template"
 msgstr "កែសម្រួល​ពុម្ព​ការ​ជូន​ដំណឹង​ពាក្យ​បញ្ជា"
 
-#: editdlgtypes.cpp:830
+#: editdlgtypes.cpp:831
 #, kde-format
 msgctxt "@title:window"
 msgid "New Command Alarm"
 msgstr "ការ​ជូន​ដំណឹង​ពាក្យ​បញ្ជា​ថ្មី"
 
-#: editdlgtypes.cpp:830
+#: editdlgtypes.cpp:831
 #, kde-format
 msgctxt "@title:window"
 msgid "Edit Command Alarm"
 msgstr "កែសម្រួល​ការ​ជូន​ដំណឹង​ពាក្យ​បញ្ជា"
 
-#: editdlgtypes.cpp:838
+#: editdlgtypes.cpp:839
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Execute the specified command now"
 msgstr "ប្រតិបត្តិ​ពាក្យ​បញ្ជា​ដែល​បាន​បញ្ជាក់​ឥឡូវ"
 
-#: editdlgtypes.cpp:839
+#: editdlgtypes.cpp:840
 #, fuzzy, kde-format
 #| msgctxt "@info:whatsthis"
 #| msgid "Execute the specified command now"
@@ -2727,13 +2727,13 @@ msgctxt "@info:tooltip"
 msgid "Execute the specified command now"
 msgstr "ប្រតិបត្តិ​ពាក្យ​បញ្ជា​ដែល​បាន​បញ្ជាក់​ឥឡូវ"
 
-#: editdlgtypes.cpp:846 specialactions.cpp:182
+#: editdlgtypes.cpp:847 specialactions.cpp:182
 #, kde-format
 msgctxt "@option:check"
 msgid "Do not notify errors"
 msgstr "កុំ​ជូនដំណឹង​អំពី​កំហុស"
 
-#: editdlgtypes.cpp:847
+#: editdlgtypes.cpp:848
 #, fuzzy, kde-format
 #| msgctxt "@info:whatsthis"
 #| msgid ""
@@ -2742,37 +2742,37 @@ msgctxt "@info:whatsthis"
 msgid "Do not show error message if the command fails."
 msgstr "កុំ​បង្ហាញ​​ស្ថានភាព​កំហុស​ ឬ​សារ​កំហុស​ ប្រសិន​បើ​បរាជ័យ​ពាក្យ​​បញ្ជា​មុន​ការ​ជូន​ដំណឹង​ ។"
 
-#: editdlgtypes.cpp:853
+#: editdlgtypes.cpp:854
 #, kde-format
 msgctxt "@title:group"
 msgid "Command Output"
 msgstr "លទ្ធផល​ពាក្យ​បញ្ជា"
 
-#: editdlgtypes.cpp:861
+#: editdlgtypes.cpp:862
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to execute the command in a terminal window"
 msgstr "ធីក ដើម្បី​ប្រតិបត្តិ​ពាក្យ​បញ្ជា​ក្នុង​បង្អួច​ស្ថានីយ"
 
-#: editdlgtypes.cpp:874
+#: editdlgtypes.cpp:875
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the name or path of the log file."
 msgstr "បញ្ចូល​ឈ្មោះ ឬ​ផ្លូវ​ឯកសារ​កំណត់​ហេតុ ។"
 
-#: editdlgtypes.cpp:883
+#: editdlgtypes.cpp:884
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select a log file."
 msgstr "ជ្រើស​ឯកសារ​កំណត់​ហេតុ ។"
 
-#: editdlgtypes.cpp:886
+#: editdlgtypes.cpp:887
 #, kde-format
 msgctxt "@option:radio"
 msgid "Log to file"
 msgstr "ចុះ​​កំណត់ហេតុ​ទៅ​ឯកសារ"
 
-#: editdlgtypes.cpp:887
+#: editdlgtypes.cpp:888
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2782,26 +2782,26 @@ msgstr ""
 "ធីក ដើម្បី​ចុះ​កំណត់​ហេតុលទ្ធផល​ពាក្យ​បញ្ជា​ទៅ​ឯកសារ​មូលដ្ឋានមួយ ។ លទ្ធផល​នឹង​ត្រូវ​បាន​បន្ថែម​ទៅ​មាតិកា​ដែល​"
 "មានស្រាប់​​ណាមួយ​របស់​ឯកសារ ។"
 
-#: editdlgtypes.cpp:894
+#: editdlgtypes.cpp:895
 #, kde-format
 msgctxt "@option:radio"
 msgid "Discard"
 msgstr "បោះបង់"
 
-#: editdlgtypes.cpp:895
+#: editdlgtypes.cpp:896
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to discard command output."
 msgstr "ធីក ដើម្បីបោះបង់​លទ្ធផល​ពាក្យ​បញ្ជា ។"
 
-#: editdlgtypes.cpp:1057
+#: editdlgtypes.cpp:1058
 #, kde-format
 msgctxt "@info"
 msgid ""
 "Log file must be the name or path of a local file, with write permission."
 msgstr "ឯកសារ​កំណត់ហេតុ​ត្រូវ​តែ​ជា​ឈ្មោះ ឬ​ផ្លូវរបស់​ឯកសារ​មូលដ្ឋាន​មួយ ដែល​មាន​សិទ្ធ​សរសេរ ។"
 
-#: editdlgtypes.cpp:1067
+#: editdlgtypes.cpp:1068
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info"
 #| msgid ""
@@ -2815,49 +2815,49 @@ msgstr ""
 "<para>គ្មាន​អាសយដ្ឋាន​អ៊ីមែល​ 'ពី' ដែល​ត្រូវ​បាន​កំណត់​រចនាសម្ព័ន្ធ​ទេ ។</para><para>សូម​កំណត់​វា​នៅ​ក្នុង​"
 "ប្រអប់​កំណត់​រចនាសម្ព័ន្ធ <application>KAlarm</application> ។</para>"
 
-#: editdlgtypes.cpp:1087
+#: editdlgtypes.cpp:1088
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Command executed: <icode>%1</icode>"
 msgstr "ពាក្យ​បញ្ជា​បាន​ប្រតិបត្តិ ៖ <icode>%1</icode>"
 
-#: editdlgtypes.cpp:1121
+#: editdlgtypes.cpp:1122
 #, kde-format
 msgctxt "@option:check"
 msgid "Copy email to self"
 msgstr "​ចម្លង​អ៊ីមែល​ទៅ​ខ្លួន​ឯង"
 
-#: editdlgtypes.cpp:1151
+#: editdlgtypes.cpp:1152
 #, kde-format
 msgctxt "@title:window"
 msgid "New Email Alarm Template"
 msgstr "ពុម្ព​ការ​ជូន​ដំណឹង​អ៊ីមែល​ថ្មី"
 
-#: editdlgtypes.cpp:1151
+#: editdlgtypes.cpp:1152
 #, kde-format
 msgctxt "@title:window"
 msgid "Edit Email Alarm Template"
 msgstr "កែសម្រួល​ពុម្ព​ការ​ជូន​ដំណឹង​អ៊ីមែល​ថ្មី"
 
-#: editdlgtypes.cpp:1152
+#: editdlgtypes.cpp:1153
 #, kde-format
 msgctxt "@title:window"
 msgid "New Email Alarm"
 msgstr "ការ​ជូន​ដំណឹង​អ៊ីមែល​ថ្មី"
 
-#: editdlgtypes.cpp:1152
+#: editdlgtypes.cpp:1153
 #, kde-format
 msgctxt "@title:window"
 msgid "Edit Email Alarm"
 msgstr "កែសម្រួល​ការ​ជូនដំណឹង​អ៊ីមែល"
 
-#: editdlgtypes.cpp:1160
+#: editdlgtypes.cpp:1161
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Send the email to the specified addressees now"
 msgstr "ផ្ញើ​អ៊ីមែល​ទៅអ្នក​ទទួល​សំបុត្រ​ដែល​បាន​បញ្ជាក់​ឥឡូវ​"
 
-#: editdlgtypes.cpp:1161
+#: editdlgtypes.cpp:1162
 #, fuzzy, kde-format
 #| msgctxt "@option"
 #| msgid "Sendmail"
@@ -2865,13 +2865,13 @@ msgctxt "@info:tooltip"
 msgid "Send the email now"
 msgstr "ផ្ញើ​សំបុត្រ"
 
-#: editdlgtypes.cpp:1172
+#: editdlgtypes.cpp:1173
 #, kde-format
 msgctxt "@label:listbox 'From' email address"
 msgid "From:"
 msgstr "ពី ៖"
 
-#: editdlgtypes.cpp:1178
+#: editdlgtypes.cpp:1179
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2880,13 +2880,13 @@ msgid ""
 msgstr ""
 "អត្តសញ្ញាណ​អ៊ីមែល​របស់​អ្នក ដែល​ប្រើ​សម្រាប់​កំណត់​អត្តសញ្ញាណ​អ្នក​ជា​អ្នក​ផ្ញើ ពេល​ផ្ញើ​​ការជូនដំណឹង​​អ៊ីមែល ។"
 
-#: editdlgtypes.cpp:1184
+#: editdlgtypes.cpp:1185
 #, kde-format
 msgctxt "@label:textbox Email addressee"
 msgid "To:"
 msgstr "ជូន​ចំពោះ ៖"
 
-#: editdlgtypes.cpp:1189
+#: editdlgtypes.cpp:1190
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2894,157 +2894,157 @@ msgid ""
 "commas or semicolons."
 msgstr "បញ្ចូល​អាសយដ្ឋាន​អ៊ីមែល​របស់​​អ្នក​ទទួល ។ ខណ្ឌចែក​​អាសយដ្ឋាន​ច្រើន​ដោយ​ក្បៀស ឬ​ចុច​ក្បៀស ។"
 
-#: editdlgtypes.cpp:1200
+#: editdlgtypes.cpp:1201
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Open address book"
 msgstr "បើក​សៀវភៅ​​អាសយដ្ឋាន"
 
-#: editdlgtypes.cpp:1201
+#: editdlgtypes.cpp:1202
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select email addresses from your address book."
 msgstr "ជ្រើស​អាសយដ្ឋាន​អ៊ីមែលពី​សៀវភៅ​អាសយដ្ឋាន​របស់​អ្នក ។"
 
-#: editdlgtypes.cpp:1208
+#: editdlgtypes.cpp:1209
 #, kde-format
 msgctxt "@label:textbox Email subject"
 msgid "Subject:"
 msgstr "ប្រធានបទ ៖"
 
-#: editdlgtypes.cpp:1214
+#: editdlgtypes.cpp:1215
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the email subject."
 msgstr "បញ្ចូល​ប្រធានបទ​អ៊ីមែល ។"
 
-#: editdlgtypes.cpp:1220
+#: editdlgtypes.cpp:1221
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the email message."
 msgstr "បញ្ចូល​សារ​អ៊ីមែល ។"
 
-#: editdlgtypes.cpp:1228
+#: editdlgtypes.cpp:1229
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Attachments:"
 msgstr "ឯកសារ​​ភ្ជាប់ ៖"
 
-#: editdlgtypes.cpp:1237
+#: editdlgtypes.cpp:1238
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Files to send as attachments to the email."
 msgstr "ឯកសារ​ដែល​ត្រូវ​ផ្ញើ​ជា​ឯកសារ​ភ្ជាប់​ទៅ​អ៊ីមែល ។"
 
-#: editdlgtypes.cpp:1241 resourceselector.cpp:76
+#: editdlgtypes.cpp:1242 resourceselector.cpp:76
 #, kde-format
 msgctxt "@action:button"
 msgid "Add..."
 msgstr "បន្ថែម..."
 
-#: editdlgtypes.cpp:1243
+#: editdlgtypes.cpp:1244
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Add an attachment to the email."
 msgstr "បន្ថែម​ឯកសារ​ភ្ជាប់​ទៅ​អ៊ីមែល ។"
 
-#: editdlgtypes.cpp:1246 resourceselector.cpp:78
+#: editdlgtypes.cpp:1247 resourceselector.cpp:78
 #, kde-format
 msgctxt "@action:button"
 msgid "Remove"
 msgstr "យកចេញ"
 
-#: editdlgtypes.cpp:1248
+#: editdlgtypes.cpp:1249
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Remove the highlighted attachment from the email."
 msgstr "យក​ឯកសារ​ភ្ជាប់​ដែល​បាន​បន្លិច​ចេញ​ពី​អ៊ីមែល ។"
 
-#: editdlgtypes.cpp:1253
+#: editdlgtypes.cpp:1254
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "If checked, the email will be blind copied to you."
 msgstr "ប្រសិន​បើ​បាន​ធីក នោះ​អ៊ីមែល​នឹងលាក់​ច្បាប់​ចម្លង​ចំពោះ​អ្នក ។"
 
-#: editdlgtypes.cpp:1435
+#: editdlgtypes.cpp:1436
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Invalid email address: <email>%1</email>"
 msgstr "អាសយដ្ឋាន​អ៊ីមែល​មិនត្រឹមត្រូវ ៖ <email>%1</email>"
 
-#: editdlgtypes.cpp:1442
+#: editdlgtypes.cpp:1443
 #, kde-format
 msgctxt "@info"
 msgid "No email address specified"
 msgstr "គ្មាន​អាសយដ្ឋាន​អ៊ីមែល​ដែល​បាន​បញ្ជាក់​ទេ"
 
-#: editdlgtypes.cpp:1459
+#: editdlgtypes.cpp:1460
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Invalid email attachment: <filename>%1</filename>"
 msgstr "ឯកសារ​ភ្ជាប់​អ៊ីមែល​មិនត្រឹមត្រូវ ៖ <filename>%1</filename>"
 
-#: editdlgtypes.cpp:1463
+#: editdlgtypes.cpp:1464
 #, kde-format
 msgctxt "@info"
 msgid "Do you really want to send the email now to the specified recipient(s)?"
 msgstr "តើ​អ្នក​ពិត​ជា​ចង់​ផ្ញើ​អ៊ីមែល​​ទៅ​អ្នក​ទទួល​ដែលបាន​បញ្ជាក់ ឥឡូវ​ឬ ?"
 
-#: editdlgtypes.cpp:1464
+#: editdlgtypes.cpp:1465
 #, kde-format
 msgctxt "@action:button"
 msgid "Confirm Email"
 msgstr "អះអាង​អ៊ីមែល"
 
-#: editdlgtypes.cpp:1464
+#: editdlgtypes.cpp:1465
 #, kde-format
 msgctxt "@action:button"
 msgid "Send"
 msgstr "ផ្ញើ"
 
-#: editdlgtypes.cpp:1490
+#: editdlgtypes.cpp:1491
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Email sent to:<nl/>%1<nl/>Bcc: <email>%2</email>"
 msgstr "បាន​ផ្ញើ​អ៊ីមែល​ទៅ ៖<nl/>%1<nl/>ចម្លង​ជា​សម្ងាត់​ជូន ៖ <email>%2</email>"
 
-#: editdlgtypes.cpp:1493
+#: editdlgtypes.cpp:1494
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Email sent to:<nl/>%1"
 msgstr "បាន​ផ្ញើ​អ៊ីមែល​ទៅ ៖<nl/>%1"
 
-#: editdlgtypes.cpp:1522
+#: editdlgtypes.cpp:1523
 #, kde-format
 msgctxt "@title:window"
 msgid "Choose File to Attach"
 msgstr "ជ្រើស​ឯកសារដែល​ត្រូវ​ភ្ជាប់"
 
-#: editdlgtypes.cpp:1605
+#: editdlgtypes.cpp:1606
 #, kde-format
 msgctxt "@title:window"
 msgid "New Audio Alarm Template"
 msgstr "ពុម្ព​ជូនដំណឹង​អូឌីយ៉ូ​ថ្មី"
 
-#: editdlgtypes.cpp:1605
+#: editdlgtypes.cpp:1606
 #, kde-format
 msgctxt "@title:window"
 msgid "Edit Audio Alarm Template"
 msgstr "កែសម្រួល​ពុម្ព​ជូនដំណឹង​អូឌីយ៉ូ"
 
-#: editdlgtypes.cpp:1606
+#: editdlgtypes.cpp:1607
 #, kde-format
 msgctxt "@title:window"
 msgid "New Audio Alarm"
 msgstr "ការ​ជូនដំណឹង​អូឌីយ៉ូ​ថ្មី"
 
-#: editdlgtypes.cpp:1606
+#: editdlgtypes.cpp:1607
 #, kde-format
 msgctxt "@title:window"
 msgid "Edit Audio Alarm"
 msgstr "កែសម្រួល​ការ​ជូនដំណឹង​​អូឌីយ៉ូ"
 
-#: editdlgtypes.cpp:1614
+#: editdlgtypes.cpp:1615
 #, fuzzy, kde-format
 #| msgctxt "@info:whatsthis"
 #| msgid "Display the file now"
@@ -3052,7 +3052,7 @@ msgctxt "@info:whatsthis"
 msgid "Play the audio file now"
 msgstr "បង្ហាញ​ឯកសារ​ឥឡូវ"
 
-#: editdlgtypes.cpp:1615
+#: editdlgtypes.cpp:1616
 #, fuzzy, kde-format
 #| msgctxt "@info:whatsthis"
 #| msgid "Display the file now"
@@ -3060,7 +3060,7 @@ msgctxt "@info:tooltip"
 msgid "Play the audio file now"
 msgstr "បង្ហាញ​ឯកសារ​ឥឡូវ"
 
-#: editdlgtypes.cpp:1617
+#: editdlgtypes.cpp:1618
 #, fuzzy, kde-format
 #| msgctxt "@info:whatsthis"
 #| msgid ""
@@ -3071,25 +3071,25 @@ msgid ""
 "If checked, the sound file will be played repeatedly until %1 is clicked."
 msgstr "បើក​បាន​ធីក ឯកសារ​សំឡេង​នឹង​ត្រូវ​បានចាក់​​ដដែលៗ ដរាបណា​សារ​ត្រូវបាន​បង្ហាញ ។"
 
-#: editdlgtypes.cpp:1826
+#: editdlgtypes.cpp:1830
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to enter the contents of a script instead of a shell command line"
 msgstr "ធីក ដើម្បី​បញ្ចូល​មាតិកា​របស់​ស្គ្រីប​ជំនួស​ឲ្យ​បន្ទាត់​ពាក្យ​បញ្ជា​សែល"
 
-#: editdlgtypes.cpp:1832
+#: editdlgtypes.cpp:1836
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter a shell command to execute."
 msgstr "បញ្ចូល​ពាក្យ​បញ្ជា​សែល​ដែល​ត្រូវ​ប្រតិបត្តិ ។"
 
-#: editdlgtypes.cpp:1837
+#: editdlgtypes.cpp:1841
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the contents of a script to execute"
 msgstr "បញ្ចូល​មាតិកា​ស្គ្រីបដែល​ត្រូវ​​ប្រតិបត្តិ"
 
-#: editdlgtypes.cpp:1892
+#: editdlgtypes.cpp:1896
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3097,7 +3097,7 @@ msgid ""
 "icode></para>"
 msgstr ""
 
-#: editdlgtypes.cpp:1897
+#: editdlgtypes.cpp:1901
 #, kde-format
 msgctxt "@info"
 msgid "Please enter a command or script to execute"
@@ -5100,13 +5100,13 @@ msgstr ""
 "<para>ពន្យារពេល​ការ​ជូនដំណឹង​រហូត​ដល់​ពេល​ក្រោយ ។</para><para>អ្នក​នឹងត្រូវបាន​សួរ​បញ្ជាក់ នៅពេល​"
 "ការបង្ហាញ​គួរ​ត្រូវបាន​បង្ហាញ​ឡើងវិញ ។</para>"
 
-#: messagewindow.cpp:458 sounddlg.cpp:441
+#: messagewindow.cpp:458 sounddlg.cpp:444
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Stop sound"
 msgstr "បញ្ឈប់​សំឡេង"
 
-#: messagewindow.cpp:459 sounddlg.cpp:442
+#: messagewindow.cpp:459 sounddlg.cpp:445
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Stop playing the sound"
@@ -8449,19 +8449,19 @@ msgstr ""
 "មាន​កំហុស​ក្នុង​ការ​កំណត់​ការ​ជូនដំណឹង​ពី​ការ​រោទ៍​ដែល​បាន​ផ្អាក ។<nl/>ពាក្យ​បញ្ជា​គឺ ៖ <command>%1</"
 "command><nl/>កូដ​កំហុស ៖ %2 ។"
 
-#: sounddlg.cpp:40
+#: sounddlg.cpp:41
 #, kde-format
 msgctxt "@option:check"
 msgid "Repeat"
 msgstr "ធ្វើ​ឡើងវិញ"
 
-#: sounddlg.cpp:41
+#: sounddlg.cpp:42
 #, kde-format
 msgctxt "@option:check"
 msgid "Set volume"
 msgstr "កំណត់​កម្រិត​សំឡេង"
 
-#: sounddlg.cpp:51
+#: sounddlg.cpp:52
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -8469,104 +8469,104 @@ msgid ""
 "message is displayed."
 msgstr "បើក​បាន​ធីក ឯកសារ​សំឡេង​នឹង​ត្រូវ​បានចាក់​​ដដែលៗ ដរាបណា​សារ​ត្រូវបាន​បង្ហាញ ។"
 
-#: sounddlg.cpp:147
+#: sounddlg.cpp:148
 #, kde-format
 msgctxt "@label"
 msgid "Sound file:"
 msgstr "ឯកសារ​សំឡេង ៖"
 
-#: sounddlg.cpp:164 sounddlg.cpp:454
+#: sounddlg.cpp:165 sounddlg.cpp:461
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Test the sound"
 msgstr "សាកល្បង​សំឡេង"
 
-#: sounddlg.cpp:165 sounddlg.cpp:455
+#: sounddlg.cpp:166 sounddlg.cpp:462
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Play the selected sound file."
 msgstr "ចាក់​ឯកសារ​សំឡេង​ដែលបាន​ជ្រើស​ ។"
 
-#: sounddlg.cpp:172
+#: sounddlg.cpp:173
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the name or URL of a sound file to play."
 msgstr "បញ្ចូល​ឈ្មោះ ឬ​ URL របស់​ឯកសារ​សំឡេង​ដែល​ត្រូវ​ចាក់ ។"
 
-#: sounddlg.cpp:183
+#: sounddlg.cpp:184
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select a sound file to play."
 msgstr "ជ្រើស​ឯកសារ​សំឡេង​ដែល​ត្រូវ​ចាក់ ។"
 
-#: sounddlg.cpp:205
+#: sounddlg.cpp:206
 #, kde-format
 msgctxt "@label:spinbox Length of time to pause between repetitions"
 msgid "Pause between repetitions:"
 msgstr "ផ្អាក​នៅ​ចន្លោះ​ពេល​រៀប​ចំ​ឡើង​វិញ ៖"
 
-#: sounddlg.cpp:212 sounddlg.cpp:269
+#: sounddlg.cpp:213 sounddlg.cpp:270
 #, kde-format
 msgctxt "@label"
 msgid "seconds"
 msgstr "វិនាទី"
 
-#: sounddlg.cpp:214
+#: sounddlg.cpp:215
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter how many seconds to pause between repetitions."
 msgstr "បញ្ចូល​ចំនួន​វិនាទី​ដើម្បី​ផ្អាក​នៅ​ចន្លោះ​ពេល​ធ្វើ​ឡើងវិញ ។"
 
-#: sounddlg.cpp:217
+#: sounddlg.cpp:218
 #, kde-format
 msgctxt "@title:group Sound volume"
 msgid "Volume"
 msgstr "កម្រិត​សំឡេង"
 
-#: sounddlg.cpp:233
+#: sounddlg.cpp:234
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select to choose the volume for playing the sound file."
 msgstr "ជ្រើស ដើម្បី​ជ្រើស​កម្រិត​សំឡេង​សម្រាប់​ការ​ចាក់​ឯកសារ​សំឡេង ។"
 
-#: sounddlg.cpp:241
+#: sounddlg.cpp:242
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Choose the volume for playing the sound file."
 msgstr "ជ្រើស​កម្រិត​សំឡេង​សម្រាប់​ចាក់​ឯកសារ​សំឡេង ។"
 
-#: sounddlg.cpp:252
+#: sounddlg.cpp:253
 #, kde-format
 msgctxt "@option:check"
 msgid "Fade"
 msgstr "បន្ថយ"
 
-#: sounddlg.cpp:254
+#: sounddlg.cpp:255
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select to fade the volume when the sound file first starts to play."
 msgstr "ជ្រើស ដើម្បី​បន្ថយ​កម្រិត​សំឡេង នៅពេល​ចាប់ផ្ដើម​ចាក់​ឯកសារ​សំឡេង​ជា​លើក​ដំបូង ។"
 
-#: sounddlg.cpp:262
+#: sounddlg.cpp:263
 #, kde-format
 msgctxt "@label:spinbox Time period over which to fade the sound"
 msgid "Fade time:"
 msgstr "រយៈពេល​បន្ថយ ៖"
 
-#: sounddlg.cpp:271
+#: sounddlg.cpp:272
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "Enter how many seconds to fade the sound before reaching the set volume."
 msgstr "បញ្ចូល​រយៈពេល​គិត​ជា​វិនាទី ដើម្បី​បន្ថយ​សំឡេង មុន​ពេល​ឈាន​ដល់​កម្រិត​សំឡេង​ដែល​បាន​កំណត់ ។"
 
-#: sounddlg.cpp:278
+#: sounddlg.cpp:279
 #, kde-format
 msgctxt "@label:slider"
 msgid "Initial volume:"
 msgstr "កម្រិត​សំឡេង​ដើម ៖"
 
-#: sounddlg.cpp:287
+#: sounddlg.cpp:288
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Choose the initial volume for playing the sound file."

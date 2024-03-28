@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-03-09 02:28+0000\n"
+"POT-Creation-Date: 2024-03-28 02:54+0000\n"
 "PO-Revision-Date: 2024-03-20 05:11+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
@@ -272,19 +272,19 @@ msgctxt "@info"
 msgid "Alarm time has already expired"
 msgstr "განგაშის დრო უკვე ამოიწურა"
 
-#: audioplayer.cpp:69
+#: audioplayer.cpp:89
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot initialize audio player: %1"
 msgstr "აუდიოს დამკვრელის ინიციალიზაციის შეცდომა: %1"
 
-#: audioplayer.cpp:92
+#: audioplayer.cpp:112
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot set audio player properties: %1"
 msgstr "აუდიოს დამკვრელის თვისებების დაყენება შეუძლებელია: %1"
 
-#: audioplayer.cpp:189 audioplayer.cpp:295
+#: audioplayer.cpp:210 audioplayer.cpp:318
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -293,7 +293,7 @@ msgstr ""
 "<para>აუდიოფაილის დაკვრის შეცდომა: <filename>%1</filename></para><para>%2</"
 "para>"
 
-#: audioplayer.cpp:211 resources/singlefileresource.cpp:738
+#: audioplayer.cpp:233 resources/singlefileresource.cpp:738
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Could not load file <filename>%1</filename>. (%2)"
@@ -2390,85 +2390,85 @@ msgctxt "@info:tooltip"
 msgid "Show more options"
 msgstr "მეტი პარამეტრის ჩვენება"
 
-#: editdlgtypes.cpp:73
+#: editdlgtypes.cpp:74
 #, kde-format
 msgctxt "@title:window"
 msgid "Choose Log File"
 msgstr "აირჩიეთ ჟურნალის ფაილი"
 
-#: editdlgtypes.cpp:86
+#: editdlgtypes.cpp:87
 #, kde-format
 msgctxt "@label:listbox How to display alarms"
 msgid "Display method:"
 msgstr "ჩვენების მეთოდი:"
 
-#: editdlgtypes.cpp:87
+#: editdlgtypes.cpp:88
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Window"
 msgstr "ფანჯარა"
 
-#: editdlgtypes.cpp:88
+#: editdlgtypes.cpp:89
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Notification"
 msgstr "შეტყობინება"
 
-#: editdlgtypes.cpp:89
+#: editdlgtypes.cpp:90
 #, kde-format
 msgctxt "@option:check"
 msgid "Confirm acknowledgment"
 msgstr "მიღების დადასტურება"
 
-#: editdlgtypes.cpp:118
+#: editdlgtypes.cpp:119
 #, kde-format
 msgctxt "@title:window"
 msgid "New Display Alarm Template"
 msgstr "ახალი განგაშის ჩვენების ნიმუში"
 
-#: editdlgtypes.cpp:118
+#: editdlgtypes.cpp:119
 #, kde-format
 msgctxt "@title:window"
 msgid "Edit Display Alarm Template"
 msgstr "განგაშის ჩვენების ნიმუშის ჩასწორება"
 
-#: editdlgtypes.cpp:119
+#: editdlgtypes.cpp:120
 #, kde-format
 msgctxt "@title:window"
 msgid "New Display Alarm"
 msgstr "ახალი განგაშის ჩვენება"
 
-#: editdlgtypes.cpp:119
+#: editdlgtypes.cpp:120
 #, kde-format
 msgctxt "@title:window"
 msgid "Edit Display Alarm"
 msgstr "განგაშის ჩვენების ჩასწორება"
 
-#: editdlgtypes.cpp:132
+#: editdlgtypes.cpp:133
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Display type:"
 msgstr "ჩვენების ტიპი:"
 
-#: editdlgtypes.cpp:136
+#: editdlgtypes.cpp:137
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Text message"
 msgstr "ტექსტური შეტყობინება"
 
-#: editdlgtypes.cpp:137
+#: editdlgtypes.cpp:138
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "File contents"
 msgstr "ფაილის შემცველობა"
 
-#: editdlgtypes.cpp:138
+#: editdlgtypes.cpp:139
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Command output"
 msgstr "ბრძანების გამონატანი"
 
-#: editdlgtypes.cpp:158
+#: editdlgtypes.cpp:159
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2484,32 +2484,32 @@ msgstr ""
 "გამოიტანს.</item><item><interface>%3</interface>: განგაში ბრძანების "
 "გამოტანილ ინფორმაცის გაჩვენებთ.</item></list></para>"
 
-#: editdlgtypes.cpp:173
+#: editdlgtypes.cpp:174
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the text of the alarm message. It may be multi-line."
 msgstr ""
 "შეიყვანეთ განგაშის შეტყობინების ტექსტი. ის შეიძლება მრავალხაზიანიც იყოს."
 
-#: editdlgtypes.cpp:186
+#: editdlgtypes.cpp:187
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the name or URL of a text or image file to display."
 msgstr "შეიყვანეთ საჩვენებელი ტექსტის ან გამოსახულების ბმული."
 
-#: editdlgtypes.cpp:193 editdlgtypes.cpp:882 sounddlg.cpp:182
+#: editdlgtypes.cpp:194 editdlgtypes.cpp:883 sounddlg.cpp:183
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Choose a file"
 msgstr "ფაილის არჩევა"
 
-#: editdlgtypes.cpp:194
+#: editdlgtypes.cpp:195
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select a text or image file to display."
 msgstr "აირჩიეთ საჩვენებელი ტექსტი ან სურათი."
 
-#: editdlgtypes.cpp:238
+#: editdlgtypes.cpp:239
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2518,7 +2518,7 @@ msgid ""
 msgstr ""
 "აირჩიეთ, განგაში ფანჯარაში იქნება ნაჩვენები, თუ გაფრთხილების სისტემის მიერ."
 
-#: editdlgtypes.cpp:265
+#: editdlgtypes.cpp:266
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2528,7 +2528,7 @@ msgstr ""
 "ჩართთ, რათა ვაჩვენო დამატებითი შემხსენებელი მთავარი განგაშის დროების შემდეგ "
 "ან მანამდე."
 
-#: editdlgtypes.cpp:266
+#: editdlgtypes.cpp:267
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2538,7 +2538,7 @@ msgstr ""
 "<para>შეიყვანეთ, მთავარი განგაშის დრომდე ან მის შემდეგ რამდენ ხანში ვაჩვენო "
 "შეხსენების განგაში.</para><para>%1</para>"
 
-#: editdlgtypes.cpp:267
+#: editdlgtypes.cpp:268
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2546,139 +2546,139 @@ msgid ""
 "alarm"
 msgstr "აირჩიეთ, შემხსენებელი მთავარ განგაშამდე დატრიგერდება, თუ შემდეგ"
 
-#: editdlgtypes.cpp:277
+#: editdlgtypes.cpp:278
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to be prompted for confirmation when you acknowledge the alarm."
 msgstr "ჩართეთ, რომ გკითხოთ ყოველ ჯერზე, რამდენჯერაც განგაშს დაადასტურებთ."
 
-#: editdlgtypes.cpp:286
+#: editdlgtypes.cpp:287
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Display the alarm now"
 msgstr "მაჩვენე განგაში ახლავე"
 
-#: editdlgtypes.cpp:668
+#: editdlgtypes.cpp:669
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Display the alarm message now"
 msgstr "მაჩვენე განგაშის შეტყობინება ახლავე"
 
-#: editdlgtypes.cpp:677
+#: editdlgtypes.cpp:678
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Display the file now"
 msgstr "მაჩვენე ფაილი ახლავე"
 
-#: editdlgtypes.cpp:687
+#: editdlgtypes.cpp:688
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Display the command output now"
 msgstr "მაჩვენე ბრძანების გამოტანილი ახლავე"
 
-#: editdlgtypes.cpp:719
+#: editdlgtypes.cpp:720
 #, kde-format
 msgctxt "@title:window"
 msgid "Choose Text or Image File to Display"
 msgstr "აირჩიეთ საჩვენებელი ტექსტი ან სურათი"
 
-#: editdlgtypes.cpp:797
+#: editdlgtypes.cpp:798
 #, kde-format
 msgctxt "@option:check"
 msgid "Enter a script"
 msgstr "შეიყვანეთ სკრიპტი"
 
-#: editdlgtypes.cpp:798
+#: editdlgtypes.cpp:799
 #, kde-format
 msgctxt "@option:radio"
 msgid "Execute in terminal window"
 msgstr "ტერმინალის ფანჯარაში გაშვება"
 
-#: editdlgtypes.cpp:799
+#: editdlgtypes.cpp:800
 #, kde-format
 msgctxt "@option:check"
 msgid "Execute in terminal window"
 msgstr "ტერმინალის ფანჯარაში გაშვება"
 
-#: editdlgtypes.cpp:829
+#: editdlgtypes.cpp:830
 #, kde-format
 msgctxt "@title:window"
 msgid "New Command Alarm Template"
 msgstr "ახალი ბრძანების განგაშის ნიმუში"
 
-#: editdlgtypes.cpp:829
+#: editdlgtypes.cpp:830
 #, kde-format
 msgctxt "@title:window"
 msgid "Edit Command Alarm Template"
 msgstr "ბრძანების განგაშის ნიმუშის ჩასწორება"
 
-#: editdlgtypes.cpp:830
+#: editdlgtypes.cpp:831
 #, kde-format
 msgctxt "@title:window"
 msgid "New Command Alarm"
 msgstr "ახალი ბრძანების განგაში"
 
-#: editdlgtypes.cpp:830
+#: editdlgtypes.cpp:831
 #, kde-format
 msgctxt "@title:window"
 msgid "Edit Command Alarm"
 msgstr "ბრძანების განგაშის ჩასწორება"
 
-#: editdlgtypes.cpp:838
+#: editdlgtypes.cpp:839
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Execute the specified command now"
 msgstr "მითითებული ბრძანების ახლავე შესრულება"
 
-#: editdlgtypes.cpp:839
+#: editdlgtypes.cpp:840
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Execute the specified command now"
 msgstr "მითითებული ბრძანების ახლავე შესრულება"
 
-#: editdlgtypes.cpp:846 specialactions.cpp:182
+#: editdlgtypes.cpp:847 specialactions.cpp:182
 #, kde-format
 msgctxt "@option:check"
 msgid "Do not notify errors"
 msgstr "შეცდომები ნაჩვენები არ იქნება"
 
-#: editdlgtypes.cpp:847
+#: editdlgtypes.cpp:848
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Do not show error message if the command fails."
 msgstr "არ მაჩვენო შეცდომის შეტყობინებები, თუ ბრძანება ჩავარდება."
 
-#: editdlgtypes.cpp:853
+#: editdlgtypes.cpp:854
 #, kde-format
 msgctxt "@title:group"
 msgid "Command Output"
 msgstr "ბრძანების გამონატანი"
 
-#: editdlgtypes.cpp:861
+#: editdlgtypes.cpp:862
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to execute the command in a terminal window"
 msgstr "ჩართეთ ბრძანების ტერმინალის ფანჯარაში გასაშვებად"
 
-#: editdlgtypes.cpp:874
+#: editdlgtypes.cpp:875
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the name or path of the log file."
 msgstr "შეიყვანეთ ჟურნალის ფაილის სახელი ან ბილიკი."
 
-#: editdlgtypes.cpp:883
+#: editdlgtypes.cpp:884
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select a log file."
 msgstr "აირჩიეთ ჟურნალის ფაილი."
 
-#: editdlgtypes.cpp:886
+#: editdlgtypes.cpp:887
 #, kde-format
 msgctxt "@option:radio"
 msgid "Log to file"
 msgstr "ჟურნალის ფაილში ჩაწერა"
 
-#: editdlgtypes.cpp:887
+#: editdlgtypes.cpp:888
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2688,19 +2688,19 @@ msgstr ""
 "აირჩიეთ ბრძანების გამოტანილი ინფორმაციის ლოკალურ ფაილში შესანახად. "
 "გამოტანილი ინფორმაცია ფაილის შემცველობის ბოლოში მიეწერება."
 
-#: editdlgtypes.cpp:894
+#: editdlgtypes.cpp:895
 #, kde-format
 msgctxt "@option:radio"
 msgid "Discard"
 msgstr "გაუქმება"
 
-#: editdlgtypes.cpp:895
+#: editdlgtypes.cpp:896
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to discard command output."
 msgstr "ჩართეთ ბრძანების გამოტანის მოსაცილებლად."
 
-#: editdlgtypes.cpp:1057
+#: editdlgtypes.cpp:1058
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -2708,7 +2708,7 @@ msgid ""
 msgstr ""
 "ჟურნალის ფაილი ჩაწერის წვდომების მქონე ლოკალური ფაილის ბილიკი უნდა იყოს."
 
-#: editdlgtypes.cpp:1067
+#: editdlgtypes.cpp:1068
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2718,61 +2718,61 @@ msgstr ""
 "<para>ბრძანების განგაშებისთვის ტერმინალი არჩეული არაა.</para><para>დააყენეთ "
 "ის <application>KAlarm</application>მორგების ფანჯარაში.</para>"
 
-#: editdlgtypes.cpp:1087
+#: editdlgtypes.cpp:1088
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Command executed: <icode>%1</icode>"
 msgstr "შესრულდა ბრძანება: <icode>%1</icode>"
 
-#: editdlgtypes.cpp:1121
+#: editdlgtypes.cpp:1122
 #, kde-format
 msgctxt "@option:check"
 msgid "Copy email to self"
 msgstr "ელფოსტის საკუთარ თავში კოპირება"
 
-#: editdlgtypes.cpp:1151
+#: editdlgtypes.cpp:1152
 #, kde-format
 msgctxt "@title:window"
 msgid "New Email Alarm Template"
 msgstr "ახალი ელფოსტის განგაშის ნიმუში"
 
-#: editdlgtypes.cpp:1151
+#: editdlgtypes.cpp:1152
 #, kde-format
 msgctxt "@title:window"
 msgid "Edit Email Alarm Template"
 msgstr "ელფოსტის განგაშის ნიმუშის ჩასწორება"
 
-#: editdlgtypes.cpp:1152
+#: editdlgtypes.cpp:1153
 #, kde-format
 msgctxt "@title:window"
 msgid "New Email Alarm"
 msgstr "ახალი ელფოსტის განგაშის"
 
-#: editdlgtypes.cpp:1152
+#: editdlgtypes.cpp:1153
 #, kde-format
 msgctxt "@title:window"
 msgid "Edit Email Alarm"
 msgstr "ელფოსტის განგაშის ჩასწორება"
 
-#: editdlgtypes.cpp:1160
+#: editdlgtypes.cpp:1161
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Send the email to the specified addressees now"
 msgstr "მითითბულ მისამართებზე ელფოსტის ახლავე გაგზავნა"
 
-#: editdlgtypes.cpp:1161
+#: editdlgtypes.cpp:1162
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Send the email now"
 msgstr "ელფოსტის ახლავე გაგზავნა"
 
-#: editdlgtypes.cpp:1172
+#: editdlgtypes.cpp:1173
 #, kde-format
 msgctxt "@label:listbox 'From' email address"
 msgid "From:"
 msgstr "ვისგან:"
 
-#: editdlgtypes.cpp:1178
+#: editdlgtypes.cpp:1179
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2782,13 +2782,13 @@ msgstr ""
 "თქვენი ელფოსტის იდენტიფიკატორი, რომელიც თქვენი იდენტიფიკაციისთვის "
 "გამოიყენება განგაშის ელფოსტების გაგზავნისას."
 
-#: editdlgtypes.cpp:1184
+#: editdlgtypes.cpp:1185
 #, kde-format
 msgctxt "@label:textbox Email addressee"
 msgid "To:"
 msgstr "ვის:"
 
-#: editdlgtypes.cpp:1189
+#: editdlgtypes.cpp:1190
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2798,169 +2798,169 @@ msgstr ""
 "შეიყვანეთ ელფოსტის მიმღების მისამართები. ერთზე მეტი ელფოსტის მისამართი "
 "მძიმეებით ან წერტილმძიმეებით გამოჰყავით."
 
-#: editdlgtypes.cpp:1200
+#: editdlgtypes.cpp:1201
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Open address book"
 msgstr "მისამართების წიგნის გახსნა"
 
-#: editdlgtypes.cpp:1201
+#: editdlgtypes.cpp:1202
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select email addresses from your address book."
 msgstr "აირჩიეთ ელფოსტის მისამართები თქვენი მისამართის წიგნიდან."
 
-#: editdlgtypes.cpp:1208
+#: editdlgtypes.cpp:1209
 #, kde-format
 msgctxt "@label:textbox Email subject"
 msgid "Subject:"
 msgstr "სათაური:"
 
-#: editdlgtypes.cpp:1214
+#: editdlgtypes.cpp:1215
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the email subject."
 msgstr "შეიყვანეთ ელფოსტის თემა."
 
-#: editdlgtypes.cpp:1220
+#: editdlgtypes.cpp:1221
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the email message."
 msgstr "შეიყვანეთ ელფოსტის შეტყობინება."
 
-#: editdlgtypes.cpp:1228
+#: editdlgtypes.cpp:1229
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Attachments:"
 msgstr "მიმაგრებული ფაილები:"
 
-#: editdlgtypes.cpp:1237
+#: editdlgtypes.cpp:1238
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Files to send as attachments to the email."
 msgstr "ელფოსტაზე მისამაგრებელი ფაილები."
 
-#: editdlgtypes.cpp:1241 resourceselector.cpp:76
+#: editdlgtypes.cpp:1242 resourceselector.cpp:76
 #, kde-format
 msgctxt "@action:button"
 msgid "Add..."
 msgstr "დამატება..."
 
-#: editdlgtypes.cpp:1243
+#: editdlgtypes.cpp:1244
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Add an attachment to the email."
 msgstr "ელფოსტისთვის ფაილის მიმაგრება."
 
-#: editdlgtypes.cpp:1246 resourceselector.cpp:78
+#: editdlgtypes.cpp:1247 resourceselector.cpp:78
 #, kde-format
 msgctxt "@action:button"
 msgid "Remove"
 msgstr "ზონის ამოღება"
 
-#: editdlgtypes.cpp:1248
+#: editdlgtypes.cpp:1249
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Remove the highlighted attachment from the email."
 msgstr "გამოკვეთილი მიმაგრებული ფაილების წაშლა ელფოსტიდან."
 
-#: editdlgtypes.cpp:1253
+#: editdlgtypes.cpp:1254
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "If checked, the email will be blind copied to you."
 msgstr "თუ ჩართულია, ელფოსტის ბრმა ასლს მიიღებთ."
 
-#: editdlgtypes.cpp:1435
+#: editdlgtypes.cpp:1436
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Invalid email address: <email>%1</email>"
 msgstr "არასწორი ელფოსტის მისამართი: <email>%1</email>"
 
-#: editdlgtypes.cpp:1442
+#: editdlgtypes.cpp:1443
 #, kde-format
 msgctxt "@info"
 msgid "No email address specified"
 msgstr "ელფოსტის მისამართი მითითებული არაა"
 
-#: editdlgtypes.cpp:1459
+#: editdlgtypes.cpp:1460
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Invalid email attachment: <filename>%1</filename>"
 msgstr "არასწორი ელფოსტის მიმაგრება: <filename>%1</filename>"
 
-#: editdlgtypes.cpp:1463
+#: editdlgtypes.cpp:1464
 #, kde-format
 msgctxt "@info"
 msgid "Do you really want to send the email now to the specified recipient(s)?"
 msgstr "მართლა გნებავთ მითითებული მიმღებებისთვის ელფოსტის ახლავე გაგზავნა?"
 
-#: editdlgtypes.cpp:1464
+#: editdlgtypes.cpp:1465
 #, kde-format
 msgctxt "@action:button"
 msgid "Confirm Email"
 msgstr "ელფოსტის დადასტურება"
 
-#: editdlgtypes.cpp:1464
+#: editdlgtypes.cpp:1465
 #, kde-format
 msgctxt "@action:button"
 msgid "Send"
 msgstr "გაგზავნა"
 
-#: editdlgtypes.cpp:1490
+#: editdlgtypes.cpp:1491
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Email sent to:<nl/>%1<nl/>Bcc: <email>%2</email>"
 msgstr "ელფოსტა გაეგზავნა:<nl/>%1<nl/>Bcc: <email>%2</email>"
 
-#: editdlgtypes.cpp:1493
+#: editdlgtypes.cpp:1494
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Email sent to:<nl/>%1"
 msgstr "ელფოსტა გაეგზავნა:<nl/>%1"
 
-#: editdlgtypes.cpp:1522
+#: editdlgtypes.cpp:1523
 #, kde-format
 msgctxt "@title:window"
 msgid "Choose File to Attach"
 msgstr "აირჩიეთ მისამაგრებელი ფაილი"
 
-#: editdlgtypes.cpp:1605
+#: editdlgtypes.cpp:1606
 #, kde-format
 msgctxt "@title:window"
 msgid "New Audio Alarm Template"
 msgstr "ახალი ხმოვანი განგაშის ნიმუში"
 
-#: editdlgtypes.cpp:1605
+#: editdlgtypes.cpp:1606
 #, kde-format
 msgctxt "@title:window"
 msgid "Edit Audio Alarm Template"
 msgstr "ხმოვანი განგაშის ნიმუშის ჩასწორება"
 
-#: editdlgtypes.cpp:1606
+#: editdlgtypes.cpp:1607
 #, kde-format
 msgctxt "@title:window"
 msgid "New Audio Alarm"
 msgstr "ახალი ხმოვანი განგაში"
 
-#: editdlgtypes.cpp:1606
+#: editdlgtypes.cpp:1607
 #, kde-format
 msgctxt "@title:window"
 msgid "Edit Audio Alarm"
 msgstr "ხმოვანი განგაშის ჩასწორება"
 
-#: editdlgtypes.cpp:1614
+#: editdlgtypes.cpp:1615
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Play the audio file now"
 msgstr "აუდიო ფაილის ახლავე დაკვრა"
 
-#: editdlgtypes.cpp:1615
+#: editdlgtypes.cpp:1616
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Play the audio file now"
 msgstr "აუდიო ფაილის ახლავე დაკვრა"
 
-#: editdlgtypes.cpp:1617
+#: editdlgtypes.cpp:1618
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2968,7 +2968,7 @@ msgid ""
 msgstr ""
 "თუ ჩართულია, ხმის ფაილი გამეორდება მანამდე, სანამ %1-ს არ დააწკაპუნებთ."
 
-#: editdlgtypes.cpp:1826
+#: editdlgtypes.cpp:1830
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to enter the contents of a script instead of a shell command line"
@@ -2976,19 +2976,19 @@ msgstr ""
 "ჩართეთ, რათა გარსის ბრძანების სტრიქონის მაგიერ სკრიპტის შემცველობა აქ "
 "შეიყვანოთ"
 
-#: editdlgtypes.cpp:1832
+#: editdlgtypes.cpp:1836
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter a shell command to execute."
 msgstr "შეიყვანეთ შესასრულებელი გარსის ბრძანება."
 
-#: editdlgtypes.cpp:1837
+#: editdlgtypes.cpp:1841
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the contents of a script to execute"
 msgstr "შეიყვანეთ შესასრულებელი სკრიპტის შემცველობა"
 
-#: editdlgtypes.cpp:1892
+#: editdlgtypes.cpp:1896
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2998,7 +2998,7 @@ msgstr ""
 "<para>ბრძანებას გარემოს ცვლადების დაყენება არ შეუძლია:</para><para><icode>"
 "%1</icode></para>"
 
-#: editdlgtypes.cpp:1897
+#: editdlgtypes.cpp:1901
 #, kde-format
 msgctxt "@info"
 msgid "Please enter a command or script to execute"
@@ -4833,13 +4833,13 @@ msgstr ""
 "<para>განგაშის გადადება.</para><para>იმას, განგაში როდის უნდა გამოჩნდეს, "
 "გკითხავთ.</para>"
 
-#: messagewindow.cpp:458 sounddlg.cpp:441
+#: messagewindow.cpp:458 sounddlg.cpp:444
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Stop sound"
 msgstr "ხმის გაჩერება"
 
-#: messagewindow.cpp:459 sounddlg.cpp:442
+#: messagewindow.cpp:459 sounddlg.cpp:445
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Stop playing the sound"
@@ -7954,19 +7954,19 @@ msgstr ""
 "ძილიდან გაღვიძების დაყენების შეცდომა.<nl/>ბრძანება: <command>%1 %2</"
 "command><nl/>შეცდომის კოდი: %3."
 
-#: sounddlg.cpp:40
+#: sounddlg.cpp:41
 #, kde-format
 msgctxt "@option:check"
 msgid "Repeat"
 msgstr "გამეორება"
 
-#: sounddlg.cpp:41
+#: sounddlg.cpp:42
 #, kde-format
 msgctxt "@option:check"
 msgid "Set volume"
 msgstr "ხმის დაყენება"
 
-#: sounddlg.cpp:51
+#: sounddlg.cpp:52
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -7974,104 +7974,104 @@ msgid ""
 "message is displayed."
 msgstr "თუ ჩართულია, სანამ შეტყობინება ნაჩვენებია, ხმის ფაილსაც დავუკრავ."
 
-#: sounddlg.cpp:147
+#: sounddlg.cpp:148
 #, kde-format
 msgctxt "@label"
 msgid "Sound file:"
 msgstr "ხმის ფაილი:"
 
-#: sounddlg.cpp:164 sounddlg.cpp:454
+#: sounddlg.cpp:165 sounddlg.cpp:461
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Test the sound"
 msgstr "ხმის შემოწმება"
 
-#: sounddlg.cpp:165 sounddlg.cpp:455
+#: sounddlg.cpp:166 sounddlg.cpp:462
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Play the selected sound file."
 msgstr "არჩეული ხმის ფაილის დაკვრა."
 
-#: sounddlg.cpp:172
+#: sounddlg.cpp:173
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the name or URL of a sound file to play."
 msgstr "შეიყვანეთ ხმის დასაკრავი ფაილის სახელი ან ბმული."
 
-#: sounddlg.cpp:183
+#: sounddlg.cpp:184
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select a sound file to play."
 msgstr "აირჩიეთ დასაკრავი ხმის ფაილი."
 
-#: sounddlg.cpp:205
+#: sounddlg.cpp:206
 #, kde-format
 msgctxt "@label:spinbox Length of time to pause between repetitions"
 msgid "Pause between repetitions:"
 msgstr "ინტერვალი დაშორებებს შორის:"
 
-#: sounddlg.cpp:212 sounddlg.cpp:269
+#: sounddlg.cpp:213 sounddlg.cpp:270
 #, kde-format
 msgctxt "@label"
 msgid "seconds"
 msgstr "წამი"
 
-#: sounddlg.cpp:214
+#: sounddlg.cpp:215
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter how many seconds to pause between repetitions."
 msgstr "გამეორებებს შორის შეჩერება, წამებში."
 
-#: sounddlg.cpp:217
+#: sounddlg.cpp:218
 #, kde-format
 msgctxt "@title:group Sound volume"
 msgid "Volume"
 msgstr "ტომი"
 
-#: sounddlg.cpp:233
+#: sounddlg.cpp:234
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select to choose the volume for playing the sound file."
 msgstr "აირჩიეთ ხმის ფაილის დაკვრის სიმძლავრე."
 
-#: sounddlg.cpp:241
+#: sounddlg.cpp:242
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Choose the volume for playing the sound file."
 msgstr "აირჩიეთ ხმის ფაილის დაკვრის სიმძლავრე."
 
-#: sounddlg.cpp:252
+#: sounddlg.cpp:253
 #, kde-format
 msgctxt "@option:check"
 msgid "Fade"
 msgstr "მინავლება"
 
-#: sounddlg.cpp:254
+#: sounddlg.cpp:255
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select to fade the volume when the sound file first starts to play."
 msgstr "აირჩიეთ ხმის მისანავლებლად, როცა ხმის ფაილის დაკვრა პირველად მოხდება."
 
-#: sounddlg.cpp:262
+#: sounddlg.cpp:263
 #, kde-format
 msgctxt "@label:spinbox Time period over which to fade the sound"
 msgid "Fade time:"
 msgstr "ხმის მინავლების დრო:"
 
-#: sounddlg.cpp:271
+#: sounddlg.cpp:272
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "Enter how many seconds to fade the sound before reaching the set volume."
 msgstr "რამდენი წამი მოხდება მინავლება, სანამ დაყენებულ ხმის დონემდე მივალ."
 
-#: sounddlg.cpp:278
+#: sounddlg.cpp:279
 #, kde-format
 msgctxt "@label:slider"
 msgid "Initial volume:"
 msgstr "საწყისი ხმა:"
 
-#: sounddlg.cpp:287
+#: sounddlg.cpp:288
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Choose the initial volume for playing the sound file."
