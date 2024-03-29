@@ -4,21 +4,21 @@
 # Antoni Bella Pérez <antonibella5@yahoo.com>, 2003, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2019, 2020, 2021, 2022.
 # Sebastià Pla i Sanz <sps@sastia.com>, 2004, 2006.
 # Albert Astals Cid <aacid@kde.org>, 2004, 2005.
-# Josep M. Ferrer <txemaq@gmail.com>, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024
+# SPDX-FileCopyrightText: 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024 Josep M. Ferrer <txemaq@gmail.com>
 # Manuel Tortosa Moreno <manutortosa@chakra-project.org>, 2009, 2010, 2011.
 msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-03-28 00:39+0000\n"
-"PO-Revision-Date: 2024-02-25 08:52+0100\n"
+"PO-Revision-Date: 2024-03-28 08:55+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 23.08.4\n"
+"X-Generator: Lokalize 24.02.1\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Accelerator-Marker: &\n"
 
@@ -295,7 +295,7 @@ msgstr "No s'han pogut establir les propietats del reproductor d'àudio: %1"
 #, kde-format
 msgctxt "@info"
 msgid "Unsupported audio format, or corrupt data"
-msgstr ""
+msgstr "Format d'àudio no admès, o dades malmeses"
 
 #: audioplayer.cpp:212 audioplayer.cpp:320
 #, kde-kuit-format
@@ -307,17 +307,13 @@ msgstr ""
 "para><para>%2</para>"
 
 #: audioplayer.cpp:235
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid ""
-#| "<para>Error playing audio file: <filename>%1</filename></para><para>%2</"
-#| "para>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "<para>Could not load file <filename>%1</filename>.</para><para>%2</para>"
 msgstr ""
-"<para>Error en reproduir el fitxer d'àudio: <filename>%1</filename></"
-"para><para>%2</para>"
+"<para>No s'ha pogut carregat el fitxer <filename>%1</filename>.</para><para>"
+"%2</para>"
 
 #: autostart/autostart.cpp:48
 #, kde-format

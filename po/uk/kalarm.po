@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-03-28 00:39+0000\n"
-"PO-Revision-Date: 2024-02-24 08:45+0200\n"
+"PO-Revision-Date: 2024-03-28 08:23+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
 "Language: uk\n"
@@ -295,7 +295,7 @@ msgstr "Не вдалося встановити властивості звук
 #, kde-format
 msgctxt "@info"
 msgid "Unsupported audio format, or corrupt data"
-msgstr ""
+msgstr "Непідтримуваний формат звукових даних або пошкоджені дані"
 
 #: audioplayer.cpp:212 audioplayer.cpp:320
 #, kde-kuit-format
@@ -307,17 +307,13 @@ msgstr ""
 "filename></para><para>%2</para>"
 
 #: audioplayer.cpp:235
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid ""
-#| "<para>Error playing audio file: <filename>%1</filename></para><para>%2</"
-#| "para>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "<para>Could not load file <filename>%1</filename>.</para><para>%2</para>"
 msgstr ""
-"<para>Помилка під час спроби відтворення звукового файла: <filename>%1</"
-"filename></para><para>%2</para>"
+"<para>Не вдалося завантажити файл <filename>%1</filename>.</para><para>%2</"
+"para>"
 
 #: autostart/autostart.cpp:48
 #, kde-format

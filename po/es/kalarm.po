@@ -19,7 +19,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-03-28 00:39+0000\n"
-"PO-Revision-Date: 2024-02-24 20:11+0100\n"
+"PO-Revision-Date: 2024-03-28 05:01+0100\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -27,7 +27,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "First-Translator: Miguel Revilla <yo@miguelrevilla.com>\n"
-"X-Generator: Lokalize 23.08.4\n"
+"X-Generator: Lokalize 24.02.1\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #, kde-format
@@ -303,7 +303,7 @@ msgstr "No se pueden definir las propiedades del reproductor de sonido: %1"
 #, kde-format
 msgctxt "@info"
 msgid "Unsupported audio format, or corrupt data"
-msgstr ""
+msgstr "Formato de sonido no compatible o datos dañados"
 
 #: audioplayer.cpp:212 audioplayer.cpp:320
 #, kde-kuit-format
@@ -315,17 +315,13 @@ msgstr ""
 "filename></para><para>%2</para>"
 
 #: audioplayer.cpp:235
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid ""
-#| "<para>Error playing audio file: <filename>%1</filename></para><para>%2</"
-#| "para>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "<para>Could not load file <filename>%1</filename>.</para><para>%2</para>"
 msgstr ""
-"<para>Ha ocurrido un error al reproducir el archivo de sonido: <filename>%1</"
-"filename></para><para>%2</para>"
+"<para>No se ha podido cargar el archivo <filename>%1</filename>.</para><para>"
+"%2</para>"
 
 #: autostart/autostart.cpp:48
 #, kde-format

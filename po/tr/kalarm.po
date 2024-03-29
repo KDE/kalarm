@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: kdepim-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-03-28 00:39+0000\n"
-"PO-Revision-Date: 2024-03-27 14:56+0300\n"
+"PO-Revision-Date: 2024-03-28 15:37+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -301,7 +301,7 @@ msgstr "Ses çalar özellikleri ayarlanamıyor: %1"
 #, kde-format
 msgctxt "@info"
 msgid "Unsupported audio format, or corrupt data"
-msgstr ""
+msgstr "Desteklenmeyen ses biçimi veya hasar görmüş veri"
 
 #: audioplayer.cpp:212 audioplayer.cpp:320
 #, kde-kuit-format
@@ -313,17 +313,12 @@ msgstr ""
 "para>"
 
 #: audioplayer.cpp:235
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid ""
-#| "<para>Error playing audio file: <filename>%1</filename></para><para>%2</"
-#| "para>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "<para>Could not load file <filename>%1</filename>.</para><para>%2</para>"
 msgstr ""
-"<para>Ses dosyası oynatılırken hata: <filename>%1</filename></para><para>%2</"
-"para>"
+"<para><filename>%1</filename> dosyası yüklenemedi.</para><para>%2</para>"
 
 #: autostart/autostart.cpp:48
 #, kde-format

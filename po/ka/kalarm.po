@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-03-28 00:39+0000\n"
-"PO-Revision-Date: 2024-02-24 03:24+0100\n"
+"PO-Revision-Date: 2024-03-28 05:09+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -288,7 +288,7 @@ msgstr "აუდიოს დამკვრელის თვისებე�
 #, kde-format
 msgctxt "@info"
 msgid "Unsupported audio format, or corrupt data"
-msgstr ""
+msgstr "მხარდაუჭერელი ხმის ფორმატი ან დაზიანებული მონაცემები"
 
 #: audioplayer.cpp:212 audioplayer.cpp:320
 #, kde-kuit-format
@@ -300,17 +300,12 @@ msgstr ""
 "para>"
 
 #: audioplayer.cpp:235
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid ""
-#| "<para>Error playing audio file: <filename>%1</filename></para><para>%2</"
-#| "para>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "<para>Could not load file <filename>%1</filename>.</para><para>%2</para>"
 msgstr ""
-"<para>აუდიოფაილის დაკვრის შეცდომა: <filename>%1</filename></para><para>%2</"
-"para>"
+"<para>ვერ ჩაიტვირთა ფაილი <filename>%1</filename>.</para><para>%2</para>"
 
 #: autostart/autostart.cpp:48
 #, kde-format

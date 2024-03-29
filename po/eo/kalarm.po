@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-03-28 00:39+0000\n"
-"PO-Revision-Date: 2024-02-24 21:13+0100\n"
+"PO-Revision-Date: 2024-03-28 10:37+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -286,7 +286,7 @@ msgstr "Ne eblas meti aŭdludilajn proprecojn: %1"
 #, kde-format
 msgctxt "@info"
 msgid "Unsupported audio format, or corrupt data"
-msgstr ""
+msgstr "Nesubtenata aŭdaĵformato, aŭ difektitaj datenoj"
 
 #: audioplayer.cpp:212 audioplayer.cpp:320
 #, kde-kuit-format
@@ -298,17 +298,12 @@ msgstr ""
 "%2</para>"
 
 #: audioplayer.cpp:235
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid ""
-#| "<para>Error playing audio file: <filename>%1</filename></para><para>%2</"
-#| "para>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "<para>Could not load file <filename>%1</filename>.</para><para>%2</para>"
 msgstr ""
-"<para>Eraro dum la ludado de sondosiero: <filename>%1</filename></para><para>"
-"%2</para>"
+"<para>Ne eblis ŝargi dosieron <filename>%1</filename>.</para><para>%2</para>"
 
 #: autostart/autostart.cpp:48
 #, kde-format
