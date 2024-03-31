@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-03-28 02:54+0000\n"
-"PO-Revision-Date: 2024-01-06 03:32\n"
+"PO-Revision-Date: 2024-03-30 19:38\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -14,8 +14,8 @@ msgstr ""
 "X-Crowdin-Project: kdeorg\n"
 "X-Crowdin-Project-ID: 269464\n"
 "X-Crowdin-Language: zh-CN\n"
-"X-Crowdin-File: /kf6-trunk/messages/kalarm/kalarm.pot\n"
-"X-Crowdin-File-ID: 45419\n"
+"X-Crowdin-File: /kf6-stable/messages/kalarm/kalarm.pot\n"
+"X-Crowdin-File-ID: 53114\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -195,7 +195,7 @@ msgstr "1星期"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Select time delay from a list of preset values"
-msgstr ""
+msgstr "从预设值列表中选择时间延迟"
 
 #: alarmtimewidget.cpp:177
 #, kde-kuit-format
@@ -263,13 +263,13 @@ msgstr "闹钟时间已过"
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot initialize audio player: %1"
-msgstr ""
+msgstr "无法初始化音频播放器：%1"
 
 #: audioplayer.cpp:112
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot set audio player properties: %1"
-msgstr ""
+msgstr "无法设置音频播放器属性：%1"
 
 #: audioplayer.cpp:210 audioplayer.cpp:318
 #, kde-kuit-format
@@ -6540,7 +6540,7 @@ msgstr ""
 #, kde-format
 msgctxt "@info"
 msgid "Calendar is not configured."
-msgstr ""
+msgstr "日历未配置。"
 
 #: resources/fileresource.cpp:354 resources/fileresource.cpp:372
 #, kde-kuit-format
@@ -6559,7 +6559,7 @@ msgstr "保存日历 <resource>%1</resource> 时出错。"
 #, kde-format
 msgctxt "@info"
 msgid "Calendar is read-only."
-msgstr ""
+msgstr "日历是只读的。"
 
 #: resources/fileresource.cpp:467
 #, kde-kuit-format
@@ -6591,7 +6591,7 @@ msgctxt "@info"
 msgid ""
 "Error!  The file <filename>%1</filename> is already used by an existing "
 "calendar."
-msgstr ""
+msgstr "错误！文件 <filename>%1</filename> 已被某个已有日历使用。"
 
 #: resources/migration/dirresourceimportdialog.cpp:34
 #, kde-format
@@ -7227,6 +7227,8 @@ msgid ""
 "be created. The URL of a remote file can also be specified, but note that "
 "monitoring for file changes will not work in this case."
 msgstr ""
+"选择存储此日历的文件。如果文件不存在，程序将创建它。您也可以指定一个远程文件"
+"的 URL，但需注意 KAlarm 无法监视远程文件的更改。"
 
 #. i18n: ectx: property (text), widget (QRadioButton, activeRadio)
 #: resources/singlefileresourceconfigdialog.ui:86
@@ -7253,7 +7255,7 @@ msgstr "闹钟模板"
 #: resources/singlefileresourceconfigdialog.ui:133
 #, kde-format
 msgid "Select which alarm type this calendar should contain."
-msgstr ""
+msgstr "选择资源要包含的闹钟类型。"
 
 #. i18n: ectx: property (text), widget (QLabel, alarmTypeLabel)
 #: resources/singlefileresourceconfigdialog.ui:142
@@ -7301,7 +7303,7 @@ msgstr "名称："
 #: resources/singlefileresourceconfigdialog.ui:222
 #, kde-format
 msgid "Enter the display name used to identify this calendar."
-msgstr ""
+msgstr "输入用于标识此日历的显示名称。"
 
 #. i18n: ectx: property (title), widget (QGroupBox, readOnlyGroupBox)
 #: resources/singlefileresourceconfigdialog.ui:232
@@ -7326,6 +7328,8 @@ msgid ""
 "the file or the file is on a remote server that does not support write "
 "access."
 msgstr ""
+"如果启用了只读模式，任何改动均不会被写入到文件中。如果您没有此文件的写入权"
+"限，或是文件位于一个不支持写访问的远程服务器上时，将自动启用只读模式。"
 
 #: resourceselector.cpp:50
 #, kde-format
@@ -8291,7 +8295,3 @@ msgstr "输入闹钟响铃前唤醒系统的分钟数，此项可确保系统在
 #, kde-format
 msgid "Number of minutes before alarm to wake from suspend"
 msgstr "闹钟唤醒睡眠前的分钟数"
-
-#~ msgctxt "@info"
-#~ msgid "Cannot open audio file: <filename>%1</filename>"
-#~ msgstr "无法打开音频文件：<filename>%1</filename>"
