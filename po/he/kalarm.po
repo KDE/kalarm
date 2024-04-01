@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-03-28 00:39+0000\n"
-"PO-Revision-Date: 2024-03-26 07:48+0200\n"
+"PO-Revision-Date: 2024-03-31 09:06+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -173,27 +173,27 @@ msgstr "האם אתה בטוח שברצונך למחוק את התזכורת ה�
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Preset"
-msgstr ""
+msgstr "ערכה"
 
 #: alarmtimewidget.cpp:156
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "1 minute"
 msgid_plural "%1 minutes"
-msgstr[0] "דקה אחת"
-msgstr[1] "דקה אחת"
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "דקה"
+msgstr[1] "שתי דקות"
+msgstr[2] "%1 דקות"
+msgstr[3] "%1 דקות"
 
 #: alarmtimewidget.cpp:157
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "1 hour"
 msgid_plural "%1 hours"
-msgstr[0] "שעה אחת"
-msgstr[1] "%1 שעות"
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "שעה"
+msgstr[1] "שעתיים"
+msgstr[2] "%1 שעות"
+msgstr[3] "%1 שעות"
 
 #: alarmtimewidget.cpp:165
 #, fuzzy, kde-format
@@ -238,6 +238,7 @@ msgid ""
 "Choose a time zone for this alarm which is different from the default time "
 "zone set in KAlarm's configuration dialog."
 msgstr ""
+"נא לבחור אזור זמן שונה מאזור ברירת המחדל שהוגדר בחלונית ההגדרות של KAlarm."
 
 #: alarmtimewidget.cpp:227 prefdlg.cpp:705
 #, fuzzy, kde-format
@@ -279,19 +280,19 @@ msgstr "שעת היעד של התזכורת כבר חלפה"
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot initialize audio player: %1"
-msgstr ""
+msgstr "לא ניתן להפעיל את נגן השמע: %1"
 
 #: audioplayer.cpp:112
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot set audio player properties: %1"
-msgstr ""
+msgstr "לא ניתן להגדיר את מאפייני נגן השמע: %1"
 
 #: audioplayer.cpp:210
 #, kde-format
 msgctxt "@info"
 msgid "Unsupported audio format, or corrupt data"
-msgstr ""
+msgstr "תסדיר קובץ השמע לא נתמך או שנתוניו פגומים"
 
 #: audioplayer.cpp:212 audioplayer.cpp:320
 #, fuzzy, kde-kuit-format
@@ -7011,10 +7012,10 @@ msgstr ""
 "כותרת הדוא\"ל."
 
 #: resources/resourcedatamodelbase.cpp:570
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Name of the alarm template"
-msgstr "הזן את הטקסט של ההודעה של התזכורת. היא יכולה לכלול מספר שורות."
+msgstr "שם תבנית ההתראות"
 
 #: resources/resourcedatamodelbase.cpp:662
 #: resources/resourcedatamodelbase.cpp:762
@@ -7024,36 +7025,38 @@ msgid "Never"
 msgstr ""
 
 #: resources/resourcedatamodelbase.cpp:768
-#, fuzzy, no-c-format, kde-format
+#, no-c-format, kde-format
 msgctxt "@info n days"
 msgid "%1d"
-msgstr "%1 ימים"
+msgstr "%1 י׳"
 
 #: resources/resourcedatamodelbase.cpp:778
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info hours:minutes"
 msgid "%1:%2"
-msgstr "%1 שעות, %2 דקות"
+msgstr "%1:%2"
 
 #: resources/resourcedatamodelbase.cpp:785
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info days hours:minutes"
 msgid "%1d %2:%3"
-msgstr " %1d %2:%3 "
+msgstr "%1d %2:%3"
 
 #: resources/resourcemodel.cpp:328
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info"
 msgid "You cannot disable your default active alarm calendar."
-msgstr "האם אתה בטוח שברצונך למחוק את התזכורת הנבחרת?"
+msgstr "לא ניתן להשבית את לוח השנה כברירת מחדל להתראה הפעילה שלך."
 
 #: resources/resourcemodel.cpp:334
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info"
 msgid ""
 "You cannot disable your default archived alarm calendar while expired alarms "
 "are configured to be kept."
-msgstr "האם אתה בטוח שברצונך למחוק את התזכורת הנבחרת?"
+msgstr ""
+"לא ניתן להשבית את לוח השנה כברירת מחדל להתראה בארכיון שלך בעוד שהתראות "
+"שתוקפן פג מוגדרות להישמר."
 
 #: resources/resourcemodel.cpp:338
 #, kde-format
@@ -7185,12 +7188,10 @@ msgid "Could not save file <filename>%1</filename>."
 msgstr "לא ניתן לשמור את הקובץ <filename>%1</filename>."
 
 #: resources/singlefileresource.cpp:738
-#, fuzzy, kde-kuit-format
+#, kde-kuit-format
 msgctxt "@info"
 msgid "Could not load file <filename>%1</filename>. (%2)"
-msgstr ""
-"אין אפשרות לפתוח את לוח השנה :\n"
-"%1"
+msgstr "לא ניתן לטעון את הקובץ <filename>%1</filename>. (%2)"
 
 #: resources/singlefileresource.cpp:775
 #, kde-kuit-format
