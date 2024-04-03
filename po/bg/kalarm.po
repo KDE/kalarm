@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-03-28 00:39+0000\n"
-"PO-Revision-Date: 2024-02-26 08:36+0100\n"
+"PO-Revision-Date: 2024-04-02 12:11+0200\n"
 "Last-Translator: Mincho Kondarev <mkondarev@yahoo.de>\n"
 "Language-Team: Bulgarian <kde-i18n-doc@kde.org>\n"
 "Language: bg\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 23.08.4\n"
+"X-Generator: Lokalize 24.02.1\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -290,7 +290,7 @@ msgstr "Не може да се зададат свойства на аудио 
 #, kde-format
 msgctxt "@info"
 msgid "Unsupported audio format, or corrupt data"
-msgstr ""
+msgstr "Неподдържан аудио формат или повредени данни"
 
 #: audioplayer.cpp:212 audioplayer.cpp:320
 #, kde-kuit-format
@@ -302,17 +302,13 @@ msgstr ""
 "para><para>%2</para>"
 
 #: audioplayer.cpp:235
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid ""
-#| "<para>Error playing audio file: <filename>%1</filename></para><para>%2</"
-#| "para>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "<para>Could not load file <filename>%1</filename>.</para><para>%2</para>"
 msgstr ""
-"<para>Грешка при възпроизвеждане на аудио файл: <filename>%1</filename></"
-"para><para>%2</para>"
+"<para>Не може да се  зареди файл <filename>%1</filename>.</para><para>%2</"
+"para>"
 
 #: autostart/autostart.cpp:48
 #, kde-format

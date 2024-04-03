@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-03-28 00:39+0000\n"
-"PO-Revision-Date: 2024-03-20 21:53+0100\n"
+"PO-Revision-Date: 2024-03-27 23:14+0100\n"
 "Last-Translator: Karl Ove Hufthammer <karl@huftis.org>\n"
 "Language-Team: Norwegian Nynorsk <l10n-no@lister.huftis.org>\n"
 "Language: nn\n"
@@ -1735,7 +1735,8 @@ msgstr "Kvar time / kvart minutt"
 #, kde-format
 msgctxt "@label"
 msgid "In non-leap years, repeat yearly February 29th alarms on:"
-msgstr "I år som ikkje er skotår, gjenta årlege alarmar den 29. februar på:"
+msgstr ""
+"I år som ikkje er skotår, gjenta årlege alarmar for den 29. februar på:"
 
 #. i18n: ectx: whatsthis, entry (DefaultFeb29Type), group (Defaults)
 #: data/kalarmconfig.kcfg:386
@@ -1749,7 +1750,7 @@ msgid ""
 msgstr ""
 "For alarmar som er definerte til å løysast ut den 29. februar, vel kva for "
 "dato dei skal løysast ut på i år som ikkje er skotår. <i>Merk</i>: Neste "
-"fastlagde utføring av alarmar som finst frå før, ikkje vert sjekka på nytt "
+"fastlagde utføring av alarmar som finst frå før, vert ikkje sjekka på nytt "
 "mot denne regelen etter at du har endra han."
 
 #. i18n: ectx: label, entry (DefaultFeb29Type), group (Defaults)

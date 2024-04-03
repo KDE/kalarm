@@ -305,17 +305,11 @@ msgstr ""
 "para><para>%2</para>"
 
 #: audioplayer.cpp:235
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid ""
-#| "<para>Error playing audio file: <filename>%1</filename></para><para>%2</"
-#| "para>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "<para>Could not load file <filename>%1</filename>.</para><para>%2</para>"
 msgstr ""
-"<para>Chyba při přehrávání zvukového souboru: <filename>%1</filename></"
-"para><para>%2</para>"
 
 #: autostart/autostart.cpp:48
 #, kde-format
