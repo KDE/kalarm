@@ -4622,9 +4622,9 @@ in the <guilabel
 >Див. також:</para>
 <simplelist>
 <member
->kf5options(7)</member>
+>kf6options(7)</member>
 <member
->qt5options(7)</member>
+>qt6options(7)</member>
 </simplelist>
 
 </sect1>
