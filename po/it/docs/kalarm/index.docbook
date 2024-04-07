@@ -130,9 +130,9 @@
 <!-- Don't change format of date and version of the documentation -->
 
 <date
->2024-2-15</date>
+>2024-3-2</date>
 <releaseinfo
->3.7.0 (KDE Gear 24.02)</releaseinfo>
+>3.7.1 (KDE Gear 24.02.1)</releaseinfo>
 
 <abstract>
 <para
@@ -1595,20 +1595,27 @@
 > e regola il cursore di controllo se vuoi regolare il volume di riproduzione dell'audio.</para>
 </listitem>
 
+<!--
 <listitem>
 <para
->Se il motore audio di &phonon; attualmente in uso lo supporta, puoi sfumare il volume. <quote
->Sfumare</quote
-> vuol dire iniziare a riprodurre il file audio a un volume e cambiarlo gradualmente al volume finale entro un tempo predeterminato. Il volume finale è quello inserito nella casella <guilabel
+>If the &phonon; audio backend currently in use supports it, you
+can fade the volume. Fading means to start
+playing the audio file at one volume and gradually change to the final
+volume, over a specified time interval. The final volume is that
+entered in <guilabel
 >Volume</guilabel
->. Per abilitare la sfumatura, seleziona <guilabel
->Sfuma</guilabel
->, inserisci il periodo di sfumatura in secondi nel campo <guilabel
->Durata della sfumatura</guilabel
->, e regola il cursore del <guilabel
->Volume iniziale</guilabel
->.</para>
+> above. To enable fade, check
+<guilabel
+>Fade</guilabel
+>, and then enter the fade period in seconds
+in the <guilabel
+>Fade time</guilabel
+> field, and adjust the
+<guilabel
+>Initial volume</guilabel
+> slider.</para>
 </listitem>
+-->
 </itemizedlist>
 
 <tip
@@ -1934,20 +1941,27 @@
 > e regola il cursore di controllo se vuoi regolare il volume di riproduzione dell'audio.</para>
 </listitem>
 
+<!--
 <listitem>
 <para
->Se il motore audio di &phonon; attualmente in uso lo supporta, puoi sfumare il volume. <quote
->Sfumare</quote
-> vuol dire iniziare a riprodurre il file audio a un volume e cambiarlo gradualmente al volume finale entro un tempo predeterminato. Il volume finale è quello inserito nella casella <guilabel
+>If the &phonon; audio backend currently in use supports it, you
+can fade the volume. Fading means to start
+playing the audio file at one volume and gradually change to the final
+volume, over a specified time interval. The final volume is that
+entered in <guilabel
 >Volume</guilabel
->. Per abilitare la sfumatura, seleziona <guilabel
->Sfuma</guilabel
->, inserisci il periodo di sfumatura in secondi nel campo <guilabel
->Durata della sfumatura</guilabel
->, e regola il cursore del <guilabel
->Volume iniziale</guilabel
->.</para>
+> above. To enable fade, check
+<guilabel
+>Fade</guilabel
+>, and then enter the fade period in seconds
+in the <guilabel
+>Fade time</guilabel
+> field, and adjust the
+<guilabel
+>Initial volume</guilabel
+> slider.</para>
 </listitem>
+-->
 </itemizedlist>
 </sect3>
 </sect2>
@@ -4604,9 +4618,9 @@
 >Vedi anche:</para>
 <simplelist>
 <member
->kf5options(7)</member>
+>kf6options(7)</member>
 <member
->qt5options(7)</member>
+>qt6options(7)</member>
 </simplelist>
 
 </sect1>
