@@ -357,3 +357,5 @@ QString AudioPlayer::popError()
 }
 
 // vim: et sw=4:
+
+#include "moc_audioplayer.cpp"
