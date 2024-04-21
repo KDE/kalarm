@@ -436,9 +436,34 @@
     <binary>kalarm</binary>
   </provides>
   <releases>
-    <release version="3.8.1" date="2024-04-11"/>
-    <release version="3.8.0" date="2024-03-21"/>
+    <release version="3.8.1" date="2024-04-11">
+      <description>
+        <p>Release description</p>
+	  <ul>
+	    <li>Display error message if error occurs trying to play an audio file.</li>
+	  </ul>
+      </description>
+    </release>
+    <release version="3.8.0" date="2024-03-21">
+      <description>
+        <p>Release description</p>
+	  <ul>
+	    <li>Use libcanberra instead of Phonon to play sounds, for thread safety.</li>
+	    <li>In Edit Alarm dialog, allow save if Set Volume checkbox is toggled.</li>
+	  </ul>
+      </description>
+    </release>
     <release version="3.7.0" date="2024-02-28"/>
+      <description>
+        <p>Release description</p>
+	  <ul>
+	    <li>Convert to Qt6 / KDE Frameworks 6.</li>
+	    <li>Enable wake-from-suspend for multiple alarms if user kernel alarm timers are supported (Linux only).</li>
+	    <li>Set units for reminder and late-cancel depending on date-only selection in Edit Alarm Template dialog.</li>
+	    <li>Remove migration of pre-Akonadi KResources calendar configuration.</li>
+	  </ul>
+      </description>
+    </release>
     <release version="3.6.4" date="2024-02-15"/>
   </releases>
 </component>
