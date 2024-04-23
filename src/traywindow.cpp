@@ -56,7 +56,7 @@ TrayWindow::TrayWindow(MainWindow* parent)
     qCDebug(KALARM_LOG) << "TrayWindow:";
     setToolTipIconByName(QStringLiteral("kalarm"));
     setToolTipTitle(KAboutData::applicationData().displayName());
-    setIconByName(QStringLiteral("kalarm"));
+    setIconByName(QStringLiteral("kalarm-symbolic"));
     setStatus(KStatusNotifierItem::Active);
     // Set up the context menu
     mActionEnabled = KAlarm::createAlarmEnableAction(this);
@@ -314,7 +314,7 @@ void TrayWindow::updateIcon()
 {
     setIconByName(!theApp()->alarmsEnabled() ? QStringLiteral("kalarm-disabled")
                   : mHaveDisabledAlarms ? QStringLiteral("kalarm-partdisabled")
-                  : QStringLiteral("kalarm"));
+                  : QStringLiteral("kalarm-symbolic"));
 }
 
 /******************************************************************************
