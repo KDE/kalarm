@@ -56,7 +56,7 @@ TrayWindow::TrayWindow(MainWindow* parent)
     qCDebug(KALARM_LOG) << "TrayWindow:";
     setToolTipIconByName(QStringLiteral("kalarm"));
     setToolTipTitle(KAboutData::applicationData().displayName());
-    setIconByName(QStringLiteral("kalarm-symbolic"));
+    setIconByName(QStringLiteral("kalarm-symbolic"));   // falls back to "kalarm" if not available
     setStatus(KStatusNotifierItem::Active);
     // Set up the context menu
     mActionEnabled = KAlarm::createAlarmEnableAction(this);
@@ -312,6 +312,10 @@ void TrayWindow::updateToolTip()
 */
 void TrayWindow::updateIcon()
 {
+    // The freedesktop.org icon naming spec states that for a hyphenated icon
+    // name, if the icon doesn't exist then the last hyphenated component of
+    // the name is stripped off and that icon name used instead. So the
+    // fallback for all these icons is "kalarm".
     setIconByName(!theApp()->alarmsEnabled() ? QStringLiteral("kalarm-disabled")
                   : mHaveDisabledAlarms ? QStringLiteral("kalarm-partdisabled")
                   : QStringLiteral("kalarm-symbolic"));
