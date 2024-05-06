@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-25 00:38+0000\n"
-"PO-Revision-Date: 2024-03-28 10:37+0100\n"
+"PO-Revision-Date: 2024-05-05 18:09+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -6245,7 +6245,7 @@ msgstr "Ripeti la alarmon por la nombro da fojoj specifita"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the total number of times to trigger the alarm"
-msgstr "Enigu la totalan nombron da fojoj por ekigi la alarmon"
+msgstr "Enigu la entutan nombron da fojoj por ekigi la alarmon"
 
 #: recurrenceedit.cpp:222
 #, kde-format
