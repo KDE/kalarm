@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-25 00:38+0000\n"
-"PO-Revision-Date: 2024-03-31 09:06+0300\n"
+"PO-Revision-Date: 2024-05-05 11:26+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -2642,7 +2642,7 @@ msgstr ""
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Open address book"
-msgstr ""
+msgstr "פתיחת פנקס כתובות"
 
 #: editdlgtypes.cpp:1202
 #, kde-format
@@ -3262,7 +3262,7 @@ msgstr ""
 #: lib/messagebox.h:151
 #, kde-format
 msgid "Yes"
-msgstr ""
+msgstr "כן"
 
 #: kalarmapp.cpp:837 lib/messagebox.h:106 lib/messagebox.h:115
 #: lib/messagebox.h:152
@@ -3663,7 +3663,7 @@ msgstr "הודעה"
 #, kde-format
 msgctxt "@label"
 msgid "Font"
-msgstr ""
+msgstr "גופן"
 
 #: kalarmcalendar/kaeventformatter.cpp:98
 #, fuzzy, kde-format
@@ -3771,13 +3771,13 @@ msgstr "&פקודה"
 #, kde-format
 msgctxt "@label Execute in terminal window"
 msgid "Execute in terminal"
-msgstr ""
+msgstr "הפעלה במסוף"
 
 #: kalarmcalendar/kaeventformatter.cpp:141
 #, kde-format
 msgctxt "@label"
 msgid "Hide command error"
-msgstr ""
+msgstr "הסתרת שגיאת פקודה"
 
 #: kalarmcalendar/kaeventformatter.cpp:144
 #, fuzzy, kde-format
@@ -3893,13 +3893,13 @@ msgstr "&דחה לתאריך\\שעה:"
 #, kde-format
 msgctxt "@info"
 msgid "Reminder"
-msgstr ""
+msgstr "תזכורת"
 
 #: kalarmcalendar/kaeventformatter.cpp:378
 #, kde-format
 msgctxt "@info"
 msgid "Speak"
-msgstr ""
+msgstr "הקראה"
 
 #: kalarmcalendar/kaeventformatter.cpp:379
 #, fuzzy, kde-format
@@ -3912,29 +3912,29 @@ msgstr "צפצף"
 #, kde-format
 msgctxt "@info Percentage"
 msgid "%1%%"
-msgstr ""
+msgstr "%1%%"
 
 #: kalarmcalendar/kaeventformatter.cpp:392
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info"
 msgid "1 Second"
 msgid_plural "%1 Seconds"
-msgstr[0] "שניות"
-msgstr[1] "שניות"
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "שנייה"
+msgstr[1] "שתי שניות"
+msgstr[2] "%1 שניות"
+msgstr[3] "%1 שניות"
 
 #: kalarmcalendar/kaeventformatter.cpp:417
 #, kde-format
 msgctxt "@info Error indication"
 msgid "error!"
-msgstr ""
+msgstr "שגיאה!"
 
 #: kalarmcalendar/kaeventformatter.cpp:422
 #, kde-format
 msgctxt "@info General purpose status indication: yes or no"
 msgid "Yes"
-msgstr ""
+msgstr "כן"
 
 #: kalarmcalendar/kaeventformatter.cpp:423
 #, fuzzy, kde-format
@@ -4853,7 +4853,7 @@ msgstr "הגדרות ברירת המחדל של תזכורות"
 #, kde-format
 msgctxt "@title:tab"
 msgid "View"
-msgstr ""
+msgstr "תצוגה"
 
 #: prefdlg.cpp:170
 #, kde-format
@@ -4866,18 +4866,19 @@ msgstr "הגדרות תצוגה"
 msgctxt "@info"
 msgid "Reset all tabs to their default values, or only reset the current tab?"
 msgstr ""
+"לאפס את כל הלשוניות לערכי ברירת המחדל שלהן או לאפס רק את הלשונית הנוכחית?"
 
 #: prefdlg.cpp:263
 #, kde-format
 msgctxt "@action:button Reset ALL tabs"
 msgid "All"
-msgstr ""
+msgstr "הכול"
 
 #: prefdlg.cpp:264
 #, kde-format
 msgctxt "@action:button Reset the CURRENT tab"
 msgid "Current"
-msgstr ""
+msgstr "נוכחית"
 
 #: prefdlg.cpp:445
 #, kde-format
@@ -4904,7 +4905,7 @@ msgstr ""
 #, kde-format
 msgctxt "@option:check"
 msgid "Warn before quitting"
-msgstr ""
+msgstr "להזהיר לפני היציאה"
 
 #: prefdlg.cpp:458
 #, kde-kuit-format
@@ -5025,13 +5026,13 @@ msgstr ""
 #, kde-kuit-format
 msgctxt "@info"
 msgid "No command is specified to invoke a terminal window"
-msgstr ""
+msgstr "לא צוינה פקודה להזנקת חלון מסוף"
 
 #: prefdlg.cpp:621
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Command to invoke terminal window not found: <command>%1</command>"
-msgstr ""
+msgstr "הפקודה להזנקת חלון מסוף לא נמצאה: <command>%1</command>"
 
 #: prefdlg.cpp:673
 #, kde-kuit-format
@@ -5150,13 +5151,13 @@ msgstr "הזן את הטקסט של ההודעה של התזכורת. היא י�
 #, kde-format
 msgctxt "@title:group"
 msgid "KOrganizer"
-msgstr ""
+msgstr "KOrganizer"
 
 #: prefdlg.cpp:864
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "KOrganizer event duration:"
-msgstr ""
+msgstr "משך אירוע ב־KOrganizer:"
 
 #: prefdlg.cpp:871
 #, fuzzy, kde-kuit-format
@@ -5176,7 +5177,7 @@ msgstr "התראות ותבניות חדשות"
 #, kde-format
 msgctxt "@option:radio"
 msgid "Store in default calendar"
-msgstr ""
+msgstr "אחסון בלוח השנה כברירת המחדל"
 
 #: prefdlg.cpp:947
 #, kde-format
@@ -5190,7 +5191,7 @@ msgstr ""
 #, kde-format
 msgctxt "@option:radio"
 msgid "Prompt for which calendar to store in"
-msgstr ""
+msgstr "לשאול באיזה לוח שנה לאחסן"
 
 #: prefdlg.cpp:952
 #, kde-kuit-format
