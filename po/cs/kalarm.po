@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-25 00:38+0000\n"
-"PO-Revision-Date: 2024-02-19 17:06+0100\n"
+"PO-Revision-Date: 2024-04-26 11:00+0200\n"
 "Last-Translator: Vit Pelcak <vpelcak@suse.cz>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
 "Language: cs\n"
@@ -21,7 +21,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Lokalize 23.08.4\n"
+"X-Generator: Lokalize 24.02.2\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -281,19 +281,19 @@ msgstr "Čas upomínky již uplynul"
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot initialize audio player: %1"
-msgstr ""
+msgstr "Nelze spustit přehrávač zvuku: %1"
 
 #: audioplayer.cpp:112
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot set audio player properties: %1"
-msgstr ""
+msgstr "Nelze nastavit vlastnosti přehrávače zvuku: %1"
 
 #: audioplayer.cpp:210
 #, kde-format
 msgctxt "@info"
 msgid "Unsupported audio format, or corrupt data"
-msgstr ""
+msgstr "Nepodporovaný formát zvuku, nebo poškozená data"
 
 #: audioplayer.cpp:212 audioplayer.cpp:320
 #, kde-kuit-format
@@ -310,6 +310,7 @@ msgctxt "@info"
 msgid ""
 "<para>Could not load file <filename>%1</filename>.</para><para>%2</para>"
 msgstr ""
+"<para>Nelze načíst soubor <filename>%1</filename>.</para><para>%2</para>"
 
 #: autostart/autostart.cpp:48
 #, kde-format
@@ -2023,25 +2024,25 @@ msgstr "Zrušit odložené upozornění. Následující opakování nebude ovliv
 msgctxt "@info"
 msgid "Cannot defer past the alarm's next sub-repetition (currently %1)"
 msgstr ""
-"Není možné odložit až za následující vnořené opakování upomínky (aktuálně %1)"
+"Nelze odložit až za následující vnořené opakování upomínky (aktuálně %1)"
 
 #: deferdlg.cpp:99
 #, kde-format
 msgctxt "@info"
 msgid "Cannot defer past the alarm's next recurrence (currently %1)"
-msgstr "Není možné odložit až za následující opakování upomínky (aktuálně %1)"
+msgstr "Nelze odložit až za následující opakování upomínky (aktuálně %1)"
 
 #: deferdlg.cpp:103
 #, kde-format
 msgctxt "@info"
 msgid "Cannot defer past the alarm's next reminder (currently %1)"
-msgstr "Není možné odložit alarm až za následující připomenutí (aktuálně %1)"
+msgstr "Nelze odložit alarm až za následující připomenutí (aktuálně %1)"
 
 #: deferdlg.cpp:107
 #, kde-format
 msgctxt "@info"
 msgid "Cannot defer reminder past the main alarm time (%1)"
-msgstr "Není možné odložit připomenutí až za čas hlavního alarmu (%1)"
+msgstr "Nelze odložit připomenutí až za čas hlavního alarmu (%1)"
 
 #: displaycalendar.cpp:127
 #, kde-kuit-format
@@ -7431,7 +7432,7 @@ msgstr "Nelze vytvořit zapisovatelný soubor kalendáře <filename>%1</filename
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Could not load file <filename>%1</filename>."
-msgstr "Není možné načíst soubor <filename>%1</filename>."
+msgstr "Nelze načíst soubor <filename>%1</filename>."
 
 #: resources/singlefileresource.cpp:633
 #, kde-format
@@ -7449,7 +7450,7 @@ msgstr "Není možné uložit soubor <filename>%1</filename>."
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Could not load file <filename>%1</filename>. (%2)"
-msgstr "Není možné načíst soubor <filename>%1</filename>. (%2)"
+msgstr "Nelze načíst soubor <filename>%1</filename>. (%2)"
 
 #: resources/singlefileresource.cpp:775
 #, kde-kuit-format
