@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-25 00:38+0000\n"
-"PO-Revision-Date: 2024-03-29 21:17+0900\n"
+"PO-Revision-Date: 2024-05-09 06:42+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
 "Language: zh_TW\n"
@@ -1575,7 +1575,7 @@ msgstr "在鬧鐘編輯視窗中，「將鬧鐘輸出傳送到哪裡」的預設
 #, kde-format
 msgctxt "@option"
 msgid "Discard Output"
-msgstr "丟棄輸出"
+msgstr "捨棄輸出"
 
 #. i18n: ectx: label, entry (DefaultCmdLogType), group (Defaults)
 #: data/kalarmconfig.kcfg:356
@@ -2573,7 +2573,7 @@ msgstr ""
 #, kde-format
 msgctxt "@option:radio"
 msgid "Discard"
-msgstr "丟棄"
+msgstr "捨棄"
 
 #: editdlgtypes.cpp:896
 #, kde-format
@@ -5231,7 +5231,7 @@ msgstr ""
 #, kde-format
 msgctxt "@option:check"
 msgid "Discard archived alarms after:"
-msgstr "鬧鐘歸檔多久後丟棄："
+msgstr "鬧鐘歸檔多久後捨棄："
 
 #: prefdlg.cpp:980
 #, kde-format
