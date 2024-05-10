@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-25 00:38+0000\n"
-"PO-Revision-Date: 2024-05-05 11:26+0300\n"
+"PO-Revision-Date: 2024-05-09 13:42+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -3836,28 +3836,28 @@ msgid "Display (command)"
 msgstr "הצגת התזכורת עכשיו"
 
 #: kalarmcalendar/kaeventformatter.cpp:262
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info Alarm type"
 msgid "Command"
-msgstr "&פקודה"
+msgstr "פקודה"
 
 #: kalarmcalendar/kaeventformatter.cpp:264
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info Alarm type"
 msgid "Email"
-msgstr "&דוא\"ל"
+msgstr "דוא״ל"
 
 #: kalarmcalendar/kaeventformatter.cpp:266
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info Alarm type"
 msgid "Audio"
-msgstr "סיים אח&רי:"
+msgstr "שמע"
 
 #: kalarmcalendar/kaeventformatter.cpp:273
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info Alarm type"
 msgid "Active"
-msgstr "הפעל את %1"
+msgstr "פעיל"
 
 #: kalarmcalendar/kaeventformatter.cpp:275
 #, fuzzy, kde-format
@@ -3866,10 +3866,10 @@ msgid "Archived"
 msgstr "הפעל את %1"
 
 #: kalarmcalendar/kaeventformatter.cpp:277
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info Alarm type"
 msgid "Template"
-msgstr "ברירות מחדל של תזכורות"
+msgstr "תבנית"
 
 #: kalarmcalendar/kaeventformatter.cpp:296
 #, fuzzy, kde-format
@@ -3878,16 +3878,16 @@ msgid "At login until %1"
 msgstr "בעת כניסה למערכת"
 
 #: kalarmcalendar/kaeventformatter.cpp:337
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info"
 msgid "%1"
-msgstr "%1 ימים"
+msgstr "%1"
 
 #: kalarmcalendar/kaeventformatter.cpp:349
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info Using default font"
 msgid "Default"
-msgstr "&דחה לתאריך\\שעה:"
+msgstr "ברירת מחדל"
 
 #: kalarmcalendar/kaeventformatter.cpp:365 messagedisplayhelper.cpp:217
 #, kde-format
@@ -3902,10 +3902,10 @@ msgid "Speak"
 msgstr "הקראה"
 
 #: kalarmcalendar/kaeventformatter.cpp:379
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info"
 msgid "Beep"
-msgstr "צפצף"
+msgstr "צפצוף"
 
 #: kalarmcalendar/kaeventformatter.cpp:384
 #: kalarmcalendar/kaeventformatter.cpp:388
@@ -3937,10 +3937,10 @@ msgid "Yes"
 msgstr "כן"
 
 #: kalarmcalendar/kaeventformatter.cpp:423
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info General purpose status indication: yes or no"
 msgid "No"
-msgstr "ללא"
+msgstr "לא"
 
 #: kamail.cpp:68
 #, kde-format
@@ -6397,7 +6397,7 @@ msgstr ""
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "in advance"
-msgstr ""
+msgstr "מראש"
 
 #: reminder.cpp:43
 #, kde-format
@@ -6409,7 +6409,7 @@ msgstr "תזכורת:"
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "afterwards"
-msgstr ""
+msgstr "בדיעבד"
 
 #: reminder.cpp:67
 #, kde-format
@@ -7114,7 +7114,7 @@ msgstr "<para>%1</para><para>נא לבחור לוח שנה שיהיה ברירת
 #, kde-format
 msgctxt "@info A prompt for user to enter what to search for"
 msgid "Search"
-msgstr ""
+msgstr "חיפוש"
 
 #: resources/resourcetype.cpp:359
 #, kde-format
@@ -7138,7 +7138,7 @@ msgstr "קובץ"
 #, kde-format
 msgctxt "@item:intext What a resource is stored in"
 msgid "URL"
-msgstr ""
+msgstr "כתובת"
 
 #: resources/resourcetype.cpp:362
 #, kde-format
@@ -7150,13 +7150,13 @@ msgstr "תיקייה"
 #, kde-format
 msgctxt "@info"
 msgid "A previous load is still in progress."
-msgstr ""
+msgstr "טעינה קודמת עדיין מתבצעת."
 
 #: resources/singlefileresource.cpp:182 resources/singlefileresource.cpp:356
 #, kde-format
 msgctxt "@info"
 msgid "A previous save is still in progress."
-msgstr ""
+msgstr "שמירה קודמת עדיין מתבצעת."
 
 #: resources/singlefileresource.cpp:231
 #, kde-kuit-format
@@ -7302,7 +7302,7 @@ msgstr "נא למלא את שם התצוגה שמשמש לזיהוי לוח הש
 #, kde-format
 msgctxt "@title:group"
 msgid "Access Rights"
-msgstr ""
+msgstr "הרשאות גישה"
 
 #. i18n: ectx: property (text), widget (QCheckBox, readOnlyCheckbox)
 #: resources/singlefileresourceconfigdialog.ui:238
@@ -7463,7 +7463,7 @@ msgstr "להסיר את לוח השנה <resource>%1</resource> מהרשימה?"
 #, kde-format
 msgctxt "@action Reload calendar"
 msgid "Reload"
-msgstr ""
+msgstr "רענון"
 
 #: resourceselector.cpp:292
 #, kde-format
@@ -7553,7 +7553,7 @@ msgstr ""
 #, kde-format
 msgctxt "@info"
 msgid "Read-write"
-msgstr ""
+msgstr "קריאה-כתיבה"
 
 #: resourceselector.cpp:513
 #, kde-format
@@ -7571,7 +7571,7 @@ msgstr "מושבת"
 #, kde-format
 msgctxt "@info Parameter in 'Default calendar: Yes/No'"
 msgid "Yes"
-msgstr ""
+msgstr "כן"
 
 #: resourceselector.cpp:517
 #, kde-format
@@ -7717,7 +7717,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label:slider"
 msgid "Initial volume:"
-msgstr ""
+msgstr "עוצמת שמע ראשונית:"
 
 #: sounddlg.cpp:288
 #, kde-format
@@ -7747,7 +7747,7 @@ msgstr "צפצוף"
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Speak"
-msgstr ""
+msgstr "הקראה"
 
 #: soundpicker.cpp:44
 #, kde-format
