@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-25 00:38+0000\n"
-"PO-Revision-Date: 2024-04-02 12:11+0200\n"
+"PO-Revision-Date: 2024-05-13 23:14+0200\n"
 "Last-Translator: Mincho Kondarev <mkondarev@yahoo.de>\n"
 "Language-Team: Bulgarian <kde-i18n-doc@kde.org>\n"
 "Language: bg\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 24.02.1\n"
+"X-Generator: Lokalize 24.02.2\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -220,7 +220,7 @@ msgstr "<para>%1</para><para>%2</para><para>%3</para>"
 #, kde-format
 msgctxt "@action:button"
 msgid "Time Zone..."
-msgstr "Часова зона..."
+msgstr "Часова зона…"
 
 #: alarmtimewidget.cpp:211
 #, kde-format
@@ -1371,8 +1371,8 @@ msgid ""
 "OR'ed bits indicating which days of the week are work days, 1 = Monday ... "
 "64 = Sunday."
 msgstr ""
-"битове ИЛИ показващи кои дни от седмицата са работни, 1 = Понеделник ... 64 "
-"= Неделя."
+"битове ИЛИ показващи кои дни от седмицата са работни, 1 = Понеделник… 64 = "
+"Неделя."
 
 #. i18n: ectx: label, entry (DisabledColour), group (General)
 #: data/kalarmconfig.kcfg:248
@@ -2140,7 +2140,7 @@ msgstr "Планиране на алармата за посоченото вр�
 #, kde-format
 msgctxt "@action:button"
 msgid "Load Template..."
-msgstr "Зареждане на шаблон..."
+msgstr "Зареждане на шаблон…"
 
 #: editdlg.cpp:199
 #, kde-format
@@ -2194,7 +2194,7 @@ msgstr "Отлагане до:"
 #, kde-format
 msgctxt "@action:button"
 msgid "Change..."
-msgstr "Промяна..."
+msgstr "Промяна…"
 
 #: editdlg.cpp:275
 #, kde-format
@@ -2873,7 +2873,7 @@ msgstr "Файлове, които да бъдат прикрепени към �
 #, kde-format
 msgctxt "@action:button"
 msgid "Add..."
-msgstr "Добавяне..."
+msgstr "Добавяне…"
 
 #: editdlgtypes.cpp:1244
 #, kde-format
@@ -3220,7 +3220,7 @@ msgstr "Изискван шрифт"
 #, kde-format
 msgctxt "@action:button"
 msgid "Font && Color..."
-msgstr "Шрифт и цвят..."
+msgstr "Шрифт и цвят…"
 
 #: fontcolourbutton.cpp:30
 #, kde-format
@@ -4462,7 +4462,7 @@ msgstr ""
 #, kde-format
 msgctxt "@action"
 msgid "Templates..."
-msgstr "Шаблони..."
+msgstr "Шаблони…"
 
 #: mainwindow.cpp:464 templatedlg.cpp:73
 #, kde-format
@@ -4474,19 +4474,19 @@ msgstr "Нов"
 #, kde-format
 msgctxt "@action"
 msgid "Create Template..."
-msgstr "Създаване на шаблон..."
+msgstr "Създаване на шаблон…"
 
 #: mainwindow.cpp:474
 #, kde-format
 msgctxt "@action"
 msgid "Copy..."
-msgstr "Копиране..."
+msgstr "Копиране…"
 
 #: mainwindow.cpp:479 resourceselector.cpp:301
 #, kde-format
 msgctxt "@action"
 msgid "Edit..."
-msgstr "Редактиране..."
+msgstr "Редактиране…"
 
 #: mainwindow.cpp:484
 #, kde-format
@@ -4510,7 +4510,7 @@ msgstr "Повторно активиране"
 #, kde-format
 msgctxt "@action"
 msgid "Wake From Suspend..."
-msgstr "Активиране след приспиване..."
+msgstr "Активиране след приспиване…"
 
 #: mainwindow.cpp:519
 #, kde-format
@@ -4540,25 +4540,25 @@ msgstr "Показване на датите"
 #, kde-format
 msgctxt "@action"
 msgid "Import Alarms..."
-msgstr "Импортиране на аларми..."
+msgstr "Импортиране на аларми…"
 
 #: mainwindow.cpp:549
 #, kde-format
 msgctxt "@action"
 msgid "Import Birthdays..."
-msgstr "Импортиране на рождени дни..."
+msgstr "Импортиране на рождени дни…"
 
 #: mainwindow.cpp:554
 #, kde-format
 msgctxt "@action"
 msgid "Export Selected Alarms..."
-msgstr "Експортиране на избраните аларми..."
+msgstr "Експортиране на избраните аларми…"
 
 #: mainwindow.cpp:558 resourceselector.cpp:319
 #, kde-format
 msgctxt "@action"
 msgid "Export..."
-msgstr "Експортиране..."
+msgstr "Експортиране…"
 
 #: mainwindow.cpp:562
 #, kde-format
@@ -4852,7 +4852,7 @@ msgstr "Уведомяване на алармата"
 #, kde-format
 msgctxt "@action:button"
 msgid "Edit..."
-msgstr "Редактиране..."
+msgstr "Редактиране…"
 
 #: messagewindow.cpp:434
 #, kde-format
@@ -4870,7 +4870,7 @@ msgstr "Редактиране на алармата."
 #, kde-format
 msgctxt "@action:button"
 msgid "Defer..."
-msgstr "Отмяна на предпочитане..."
+msgstr "Отмяна на предпочитане…"
 
 #: messagewindow.cpp:443
 #, kde-format
@@ -7035,7 +7035,7 @@ msgstr "Календарни файлове"
 #, kde-format
 msgctxt "@info:status"
 msgid "Checking file information..."
-msgstr "Проверка на файловата информация..."
+msgstr "Проверка на файловата информация…"
 
 #: resources/migration/dirresourceimportdialog.cpp:405
 #: resources/migration/dirresourceimportdialog.cpp:453
@@ -7911,7 +7911,7 @@ msgstr "Показване на детайли"
 #, kde-format
 msgctxt "@action"
 msgid "Set Color..."
-msgstr "Задавяне на цвят..."
+msgstr "Задавяне на цвят…"
 
 #: resourceselector.cpp:298
 #, kde-format
@@ -7935,13 +7935,13 @@ msgstr "Премахване"
 #, kde-format
 msgctxt "@action"
 msgid "Add..."
-msgstr "Добавяне..."
+msgstr "Добавяне…"
 
 #: resourceselector.cpp:316
 #, kde-format
 msgctxt "@action"
 msgid "Import..."
-msgstr "Импортиране..."
+msgstr "Импортиране…"
 
 #: resourceselector.cpp:372
 #, kde-format
@@ -8258,7 +8258,7 @@ msgstr "Избор на аудио файл"
 #, kde-format
 msgctxt "@action:button"
 msgid "Special Actions..."
-msgstr "Специални действия..."
+msgstr "Специални действия…"
 
 #: specialactions.cpp:39
 #, kde-format
