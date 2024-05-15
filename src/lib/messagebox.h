@@ -102,8 +102,8 @@ public:
     /** Same as KMessageBox::questionYesNo() except that it defaults to window-modal,
      *  not application-modal. */
     static int questionYesNo(QWidget* parent, const QString& text, const QString& caption = QString(),
-                             const KGuiItem& buttonYes = KGuiItem(i18n("Yes")),
-                             const KGuiItem& buttonNo = KGuiItem(i18n("No")),
+                             const KGuiItem& buttonYes = KGuiItem(i18nc("@action:button", "Yes")),
+                             const KGuiItem& buttonNo = KGuiItem(i18nc("@action:button", "No")),
                              const QString& dontAskAgainName = QString(),
                              KMessageBox::Options options = KMessageBox::Options(KMessageBox::Notify|KMessageBox::WindowModal))
     { return KMessageBox::questionTwoActions(parent, text, caption, buttonYes, buttonNo, dontAskAgainName, options); }
@@ -111,8 +111,8 @@ public:
     /** Same as KMessageBox::questionYesNoCancel() except that it defaults
      *  to window-modal, not application-modal. */
     static int questionYesNoCancel(QWidget* parent, const QString& text, const QString& caption = QString(),
-                                   const KGuiItem& buttonYes = KGuiItem(i18n("Yes")),
-                                   const KGuiItem& buttonNo = KGuiItem(i18n("No")),
+                                   const KGuiItem& buttonYes = KGuiItem(i18nc("@action:button", "Yes")),
+                                   const KGuiItem& buttonNo = KGuiItem(i18nc("@action:button", "No")),
                                    const KGuiItem& buttonCancel = KStandardGuiItem::cancel(),
                                    const QString& dontAskAgainName = QString(),
                                    KMessageBox::Options options = KMessageBox::Options(KMessageBox::Notify|KMessageBox::WindowModal))
@@ -148,8 +148,8 @@ public:
     /** Same as KMessageBox::warningYesNo() except that it defaults to window-modal,
      *  not application-modal. */
     static int warningYesNo(QWidget* parent, const QString& text, const QString& caption = QString(),
-                            const KGuiItem& buttonYes = KGuiItem(i18n("Yes")),
-                            const KGuiItem& buttonNo = KGuiItem(i18n("No")),
+                            const KGuiItem& buttonYes = KGuiItem(i18nc("@action:button", "Yes")),
+                            const KGuiItem& buttonNo = KGuiItem(i18nc("@action:button", "No")),
                             const QString& dontAskAgainName = QString(),
                             KMessageBox::Options options = KMessageBox::Options(KMessageBox::Notify|KMessageBox::Dangerous|KMessageBox::WindowModal))
     { return KMessageBox::questionTwoActions(parent, text, caption, buttonYes, buttonNo, dontAskAgainName, options); }
