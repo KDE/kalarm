@@ -834,7 +834,7 @@ void KAlarmApp::doQuit(QWidget* parent)
             option = KAMessageBox::questionYesNoCancel(parent,
                                          xi18nc("@info", "Do you want to start KAlarm at login?<nl/>"
                                                         "(Note that alarms will be disabled if KAlarm is not started.)"),
-                                         QString(), KGuiItem(i18nc("@action:button", "Yes")), KGuiItem(i18n("No")),
+                                         QString(), KGuiItem(i18nc("@action:button", "Yes")), KGuiItem(i18nc("@action:button", "No")),
                                          KStandardGuiItem::cancel(), Preferences::ASK_AUTO_START);
         }
         switch (option)
