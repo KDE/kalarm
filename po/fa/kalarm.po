@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-25 00:38+0000\n"
+"POT-Creation-Date: 2024-05-16 00:39+0000\n"
 "PO-Revision-Date: 2007-08-22 18:39+0330\n"
 "Last-Translator: Nazanin Kazemi <kazemi@itland.ir>\n"
 "Language-Team: Persian <kde-i18n-fa@kde.org>\n"
@@ -380,6 +380,7 @@ msgstr ""
 
 #: autostart/autostart.cpp:52 main.cpp:42
 #, kde-format
+msgctxt "@info:credit"
 msgid "David Jarvie"
 msgstr ""
 
@@ -3750,6 +3751,7 @@ msgstr ""
 #: kalarmapp.cpp:837 lib/messagebox.h:105 lib/messagebox.h:114
 #: lib/messagebox.h:151
 #, kde-format
+msgctxt "@action:button"
 msgid "Yes"
 msgstr ""
 
@@ -3758,6 +3760,7 @@ msgstr ""
 #, fuzzy, kde-format
 #| msgctxt "@info/plain No recurrence"
 #| msgid "None"
+msgctxt "@action:button"
 msgid "No"
 msgstr "هیچ‌کدام"
 

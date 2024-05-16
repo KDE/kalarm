@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-25 00:38+0000\n"
+"POT-Creation-Date: 2024-05-16 00:39+0000\n"
 "PO-Revision-Date: 2021-05-15 16:59+0100\n"
 "Last-Translator: Sergiu Bivol <sergiu@cip.md>\n"
 "Language-Team: Romanian\n"
@@ -360,7 +360,9 @@ msgid "Copyright 2001-%1, David Jarvie"
 msgstr "Drept de autor 2001-2011, David Jarvie"
 
 #: autostart/autostart.cpp:52 main.cpp:42
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "David Jarvie"
+msgctxt "@info:credit"
 msgid "David Jarvie"
 msgstr "David Jarvie"
 
@@ -3614,6 +3616,7 @@ msgstr ""
 #, fuzzy, kde-format
 #| msgctxt "@info/plain Parameter in 'Default calendar: Yes/No'"
 #| msgid "Yes"
+msgctxt "@action:button"
 msgid "Yes"
 msgstr "Da"
 
@@ -3622,6 +3625,7 @@ msgstr "Da"
 #, fuzzy, kde-format
 #| msgctxt "@info/plain Parameter in 'Default calendar: Yes/No'"
 #| msgid "No"
+msgctxt "@action:button"
 msgid "No"
 msgstr "Nu"
 

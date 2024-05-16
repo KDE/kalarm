@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-25 00:38+0000\n"
+"POT-Creation-Date: 2024-05-16 00:39+0000\n"
 "PO-Revision-Date: 2024-03-30 21:36+0530\n"
 "Last-Translator: Kishore G <kishore96@gmail.com>\n"
 "Language-Team: Tamil <kde-i18n-doc@kde.org>\n"
@@ -334,7 +334,9 @@ msgid "Copyright 2001-%1, David Jarvie"
 msgstr "பதிப்புரிமை © 2001-%1, டேவிட் ஜார்வீ"
 
 #: autostart/autostart.cpp:52 main.cpp:42
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "David Jarvie"
+msgctxt "@info:credit"
 msgid "David Jarvie"
 msgstr "டேவிட் ஜார்வீ"
 
@@ -3372,13 +3374,17 @@ msgstr ""
 
 #: kalarmapp.cpp:837 lib/messagebox.h:105 lib/messagebox.h:114
 #: lib/messagebox.h:151
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Yes"
+msgctxt "@action:button"
 msgid "Yes"
 msgstr "ஆம்"
 
 #: kalarmapp.cpp:837 lib/messagebox.h:106 lib/messagebox.h:115
 #: lib/messagebox.h:152
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "No"
+msgctxt "@action:button"
 msgid "No"
 msgstr "இல்லை"
 

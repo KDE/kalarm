@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-25 00:38+0000\n"
+"POT-Creation-Date: 2024-05-16 00:39+0000\n"
 "PO-Revision-Date: 2012-12-26 10:26+0700\n"
 "Last-Translator: sutha <sutha@khmeros.info>\n"
 "Language-Team: Khmer <support@khmeros>\n"
@@ -354,7 +354,9 @@ msgid "Copyright 2001-%1, David Jarvie"
 msgstr "រក្សាសិទ្ធិ​ឆ្នាំ ២០០១-២០១២ ដោយ David Jarvie"
 
 #: autostart/autostart.cpp:52 main.cpp:42
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "David Jarvie"
+msgctxt "@info:credit"
 msgid "David Jarvie"
 msgstr "David Jarvie"
 
@@ -3537,6 +3539,7 @@ msgstr ""
 #, fuzzy, kde-format
 #| msgctxt "@info/plain Parameter in 'Default calendar: Yes/No'"
 #| msgid "Yes"
+msgctxt "@action:button"
 msgid "Yes"
 msgstr "បាទ/ចាស"
 
@@ -3545,6 +3548,7 @@ msgstr "បាទ/ចាស"
 #, fuzzy, kde-format
 #| msgctxt "@info/plain Parameter in 'Default calendar: Yes/No'"
 #| msgid "No"
+msgctxt "@action:button"
 msgid "No"
 msgstr "ទេ"
 

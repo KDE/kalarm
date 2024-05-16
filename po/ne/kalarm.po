@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-25 00:38+0000\n"
+"POT-Creation-Date: 2024-05-16 00:39+0000\n"
 "PO-Revision-Date: 2007-09-07 11:50+0545\n"
 "Last-Translator: Nabin Gautam <nabin@mpp.org.np>\n"
 "Language-Team: Nepali <info@mpp.org.np>\n"
@@ -376,7 +376,9 @@ msgid "Copyright 2001-%1, David Jarvie"
 msgstr "प्रतिलिपि अधिकार २००१-२००७, डेभिड जार्भे"
 
 #: autostart/autostart.cpp:52 main.cpp:42
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "David Jarvie"
+msgctxt "@info:credit"
 msgid "David Jarvie"
 msgstr "डेभिड जार्भे"
 
@@ -3916,6 +3918,7 @@ msgstr ""
 #: kalarmapp.cpp:837 lib/messagebox.h:105 lib/messagebox.h:114
 #: lib/messagebox.h:151
 #, kde-format
+msgctxt "@action:button"
 msgid "Yes"
 msgstr ""
 
@@ -3923,6 +3926,7 @@ msgstr ""
 #: lib/messagebox.h:152
 #, fuzzy, kde-format
 #| msgid "None"
+msgctxt "@action:button"
 msgid "No"
 msgstr "कुनै पनि होइन"
 

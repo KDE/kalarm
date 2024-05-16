@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-25 00:38+0000\n"
+"POT-Creation-Date: 2024-05-16 00:39+0000\n"
 "PO-Revision-Date: 2021-08-21 16:25+0530\n"
 "Last-Translator: Raghavendra Kamath <raghu@raghukamath.com>\n"
 "Language-Team: kde-hindi\n"
@@ -344,7 +344,9 @@ msgid "Copyright 2001-%1, David Jarvie"
 msgstr "कॉपीराइट 2001-2007 डेविड जारवी"
 
 #: autostart/autostart.cpp:52 main.cpp:42
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "David Jarvie"
+msgctxt "@info:credit"
 msgid "David Jarvie"
 msgstr "डेविड जारवी"
 
@@ -3424,6 +3426,7 @@ msgstr ""
 #, fuzzy, kde-format
 #| msgctxt "@info/plain Parameter in 'Default resource: Yes/No'"
 #| msgid "Yes"
+msgctxt "@action:button"
 msgid "Yes"
 msgstr "हाँ"
 
@@ -3432,6 +3435,7 @@ msgstr "हाँ"
 #, fuzzy, kde-format
 #| msgctxt "@info/plain Parameter in 'Default resource: Yes/No'"
 #| msgid "No"
+msgctxt "@action:button"
 msgid "No"
 msgstr "नहीं"
 

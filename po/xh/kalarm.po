@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-25 00:38+0000\n"
+"POT-Creation-Date: 2024-05-16 00:39+0000\n"
 "PO-Revision-Date: 2002-10-12 14:57+0200\n"
 "Last-Translator: Thelma Lungcuzo <thelma@translate.org.za>\n"
 "Language-Team: Xhosa <xhosa@translate.org.za>\n"
@@ -332,6 +332,7 @@ msgstr ""
 
 #: autostart/autostart.cpp:52 main.cpp:42
 #, kde-format
+msgctxt "@info:credit"
 msgid "David Jarvie"
 msgstr ""
 
@@ -3384,12 +3385,14 @@ msgstr ""
 #: kalarmapp.cpp:837 lib/messagebox.h:105 lib/messagebox.h:114
 #: lib/messagebox.h:151
 #, kde-format
+msgctxt "@action:button"
 msgid "Yes"
 msgstr ""
 
 #: kalarmapp.cpp:837 lib/messagebox.h:106 lib/messagebox.h:115
 #: lib/messagebox.h:152
 #, kde-format
+msgctxt "@action:button"
 msgid "No"
 msgstr ""
 

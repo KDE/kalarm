@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Mimos\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-25 00:38+0000\n"
+"POT-Creation-Date: 2024-05-16 00:39+0000\n"
 "PO-Revision-Date: 2005-10-06 11:21+0800\n"
 "Last-Translator: junetazawawi <junetazawawi@yahoo.com>\n"
 "Language-Team: Malay <kedidiemas@yahoogroups.com>\n"
@@ -368,6 +368,7 @@ msgstr ""
 
 #: autostart/autostart.cpp:52 main.cpp:42
 #, kde-format
+msgctxt "@info:credit"
 msgid "David Jarvie"
 msgstr ""
 
@@ -3725,6 +3726,7 @@ msgstr ""
 #: kalarmapp.cpp:837 lib/messagebox.h:105 lib/messagebox.h:114
 #: lib/messagebox.h:151
 #, kde-format
+msgctxt "@action:button"
 msgid "Yes"
 msgstr ""
 
@@ -3732,6 +3734,7 @@ msgstr ""
 #: lib/messagebox.h:152
 #, fuzzy, kde-format
 #| msgid "None"
+msgctxt "@action:button"
 msgid "No"
 msgstr "Tiada"
 

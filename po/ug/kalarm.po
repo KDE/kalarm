@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-25 00:38+0000\n"
+"POT-Creation-Date: 2024-05-16 00:39+0000\n"
 "PO-Revision-Date: 2013-09-08 07:05+0900\n"
 "Last-Translator: Gheyret Kenji <gheyret@gmail.com>\n"
 "Language-Team: Uyghur Computer Science Association <UKIJ@yahoogroups.com>\n"
@@ -318,6 +318,7 @@ msgstr ""
 
 #: autostart/autostart.cpp:52 main.cpp:42
 #, kde-format
+msgctxt "@info:credit"
 msgid "David Jarvie"
 msgstr ""
 
@@ -3250,6 +3251,7 @@ msgstr ""
 #, fuzzy, kde-format
 #| msgctxt "@info/plain Parameter in 'Default calendar: Yes/No'"
 #| msgid "Yes"
+msgctxt "@action:button"
 msgid "Yes"
 msgstr "ھەئە"
 
@@ -3258,6 +3260,7 @@ msgstr "ھەئە"
 #, fuzzy, kde-format
 #| msgctxt "@info/plain Parameter in 'Default calendar: Yes/No'"
 #| msgid "No"
+msgctxt "@action:button"
 msgid "No"
 msgstr "ياق"
 

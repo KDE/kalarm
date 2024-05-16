@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-25 00:38+0000\n"
+"POT-Creation-Date: 2024-05-16 00:39+0000\n"
 "PO-Revision-Date: 2023-07-23 23:20+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -330,7 +330,9 @@ msgid "Copyright 2001-%1, David Jarvie"
 msgstr "Copyright 2001-%1, David Jarvie"
 
 #: autostart/autostart.cpp:52 main.cpp:42
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "David Jarvie"
+msgctxt "@info:credit"
 msgid "David Jarvie"
 msgstr "David Jarvie"
 
@@ -3381,6 +3383,7 @@ msgstr ""
 #, fuzzy, kde-format
 #| msgctxt "@info General purpose status indication: yes or no"
 #| msgid "Yes"
+msgctxt "@action:button"
 msgid "Yes"
 msgstr "예"
 
@@ -3389,6 +3392,7 @@ msgstr "예"
 #, fuzzy, kde-format
 #| msgctxt "@info General purpose status indication: yes or no"
 #| msgid "No"
+msgctxt "@action:button"
 msgid "No"
 msgstr "아니요"
 
