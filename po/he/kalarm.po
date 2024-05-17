@@ -17,14 +17,14 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-05-16 00:39+0000\n"
-"PO-Revision-Date: 2024-05-09 13:42+0300\n"
+"PO-Revision-Date: 2024-05-16 22:24+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 23.08.5\n"
+"X-Generator: Lokalize 24.02.2\n"
 "Plural-Forms: nplurals=4; plural=(n == 1) ? 0 : ((n == 2) ? 1 : ((n > 10 && "
 "n % 10 == 0) ? 2 : 3));\n"
 
@@ -82,16 +82,16 @@ msgid "This uses KAlarm's default time zone, set in the Configuration dialog."
 msgstr ""
 
 #: alarmtimewidget.cpp:92
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@option:radio"
 msgid "Defer until:"
-msgstr "נדחתה ל:"
+msgstr "דחייה עד:"
 
 #: alarmtimewidget.cpp:92
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@option:radio"
 msgid "At date/time:"
-msgstr "&דחה לתאריך\\שעה:"
+msgstr "בתאריך/שעה:"
 
 #: alarmtimewidget.cpp:93
 #, fuzzy, kde-format
@@ -100,16 +100,16 @@ msgid "Reschedule the alarm to the specified date and time."
 msgstr "קביעה מחדש של מועד התזכורת לתאריך והשעה המצויינים."
 
 #: alarmtimewidget.cpp:94
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Specify the date, or date and time, to schedule the alarm."
-msgstr "התאריך והשעה המתוכננים הבאים של התזכורת"
+msgstr "ציון התאריך או התאריך והשעה לתזמון התזכורת"
 
 #: alarmtimewidget.cpp:103
-#, fuzzy, kde-kuit-format
+#, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid "<para>Enter the date to schedule the alarm.</para><para>%1</para>"
-msgstr "הזן את התאריך בו יש לקבוע את מועד התזכורת."
+msgstr "<para>נא למלא את התאריך לתזמון התזכורת.</para><para>%1</para>"
 
 #: alarmtimewidget.cpp:115
 #, fuzzy, kde-kuit-format
@@ -120,16 +120,16 @@ msgid ""
 msgstr "הזן את השעה בה יש לקבוע את מועד התזכורת."
 
 #: alarmtimewidget.cpp:128 recurrenceedit.cpp:251
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@option:check"
 msgid "Any time"
-msgstr "&כל שעה שהיא"
+msgstr "בכל שעה שהיא"
 
 #: alarmtimewidget.cpp:131
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Set only a date (without a time) for the alarm"
-msgstr "התאריך והשעה המתוכננים הבאים של התזכורת"
+msgstr "הגדרת תאריך בלבד (בלי שעה) לתזכורת"
 
 #: alarmtimewidget.cpp:133
 #, kde-format
@@ -140,16 +140,16 @@ msgid ""
 msgstr ""
 
 #: alarmtimewidget.cpp:137
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@option:radio Defer for time interval"
 msgid "Defer for:"
-msgstr "נדחתה ל:"
+msgstr "דחייה למשך:"
 
 #: alarmtimewidget.cpp:137 editdlg.cpp:327
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@option:radio"
 msgid "Time from now:"
-msgstr "&משך זמן מרגע זה:"
+msgstr "זמן מעכשיו:"
 
 #: alarmtimewidget.cpp:138
 #, fuzzy, kde-format
@@ -196,16 +196,16 @@ msgstr[2] "%1 שעות"
 msgstr[3] "%1 שעות"
 
 #: alarmtimewidget.cpp:165
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "1 day"
-msgstr "היום"
+msgstr "יום"
 
 #: alarmtimewidget.cpp:166
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@item:inlistbox"
 msgid "1 week"
-msgstr "שבועות"
+msgstr "שבוע"
 
 #: alarmtimewidget.cpp:169
 #, fuzzy, kde-format
@@ -220,16 +220,16 @@ msgid "<para>%1</para><para>%2</para><para>%3</para>"
 msgstr "האם אתה בטוח שברצונך למחוק את התזכורת הנבחרת?"
 
 #: alarmtimewidget.cpp:209
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@action:button"
 msgid "Time Zone..."
-msgstr "שעה"
+msgstr "אזור זמן…"
 
 #: alarmtimewidget.cpp:211
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Choose a time zone for this alarm"
-msgstr "הזן את השעה בה יש לקבוע את מועד התזכורת."
+msgstr "בחירת אזור זמן לתזכורת הזאת"
 
 #: alarmtimewidget.cpp:213
 #, kde-format
@@ -241,40 +241,40 @@ msgstr ""
 "נא לבחור אזור זמן שונה מאזור ברירת המחדל שהוגדר בחלונית ההגדרות של KAlarm."
 
 #: alarmtimewidget.cpp:227 prefdlg.cpp:705
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Time zone:"
-msgstr "שעה"
+msgstr "אזור זמן:"
 
 #: alarmtimewidget.cpp:233
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select the time zone to use for this alarm."
-msgstr "הזן את השעה בה יש לקבוע את מועד התזכורת."
+msgstr "בחירת אזור הזמן לתזכורת הזאת."
 
 #: alarmtimewidget.cpp:314 alarmtimewidget.cpp:341
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info"
 msgid "Invalid time"
-msgstr "שעה לא תקפה"
+msgstr "שעה שגויה"
 
 #: alarmtimewidget.cpp:334
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info"
 msgid "Invalid date"
-msgstr "תאריך לא תקף"
+msgstr "תאריך שגוי"
 
 #: alarmtimewidget.cpp:355
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info"
 msgid "Alarm date has already expired"
-msgstr "תאריך היעד של התזכורת כבר חלף"
+msgstr "תאריך התזכורת כבר חלף"
 
 #: alarmtimewidget.cpp:367
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info"
 msgid "Alarm time has already expired"
-msgstr "שעת היעד של התזכורת כבר חלפה"
+msgstr "שעת התזכורת כבר חלפה"
 
 #: audioplayer.cpp:89
 #, kde-kuit-format
@@ -313,14 +313,14 @@ msgstr ""
 "%1"
 
 #: autostart/autostart.cpp:48
-#, fuzzy, kde-format
+#, kde-format
 msgid "KAlarm Autostart"
-msgstr "הפעלה או&טומטית בעת הכניסה למערכת"
+msgstr "התחלה אוטומטית של KAlarm"
 
 #: autostart/autostart.cpp:49
-#, fuzzy, kde-format
+#, kde-format
 msgid "KAlarm autostart at login"
-msgstr "הפעלה או&טומטית בעת הכניסה למערכת"
+msgstr "התחלה אוטומטית של KAlarm עם הכניסה למערכת"
 
 #: autostart/autostart.cpp:51
 #, kde-format
@@ -344,21 +344,21 @@ msgid "Application to run"
 msgstr "יישום להרצה"
 
 #: autostart/autostart.cpp:59
-#, fuzzy, kde-format
+#, kde-format
 msgid "Command line arguments to pass to application"
-msgstr "&פקודה"
+msgstr "ארגומנטים של שורת הפקודה להעברה ליישום"
 
 #: birthdaydlg.cpp:49
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title:window"
 msgid "Import Birthdays From KAddressBook"
-msgstr "ייבא ימי הולדת מפנקס הכתובות"
+msgstr "ייבוא ימי הולדת מ־KAddressBook"
 
 #: birthdaydlg.cpp:63 editdlg.cpp:243
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Alarm name:"
-msgstr "ברירות מחדל של תזכורות"
+msgstr "שם התזכורת:"
 
 #: birthdaydlg.cpp:68 editdlg.cpp:251
 #, kde-format
@@ -369,22 +369,22 @@ msgid ""
 msgstr ""
 
 #: birthdaydlg.cpp:75
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info"
 msgid "Birthday: "
 msgstr "יום הולדת:"
 
 #: birthdaydlg.cpp:78
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title:group"
 msgid "Alarm Text"
-msgstr "טקסט  ההודעה"
+msgstr "טקסט התזכורת"
 
 #: birthdaydlg.cpp:81 prefdlg.cpp:1912
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label:textbox"
 msgid "Prefix:"
-msgstr "&רישא:"
+msgstr "קידומת:"
 
 #: birthdaydlg.cpp:88
 #, kde-format
@@ -409,10 +409,10 @@ msgid ""
 msgstr ""
 
 #: birthdaydlg.cpp:103
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title:group"
 msgid "Select Birthdays"
-msgstr "היום"
+msgstr "בחירת ימי הולדת"
 
 #: birthdaydlg.cpp:133
 #, kde-kuit-format
@@ -426,10 +426,10 @@ msgid ""
 msgstr ""
 
 #: birthdaydlg.cpp:139
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title:group"
 msgid "Alarm Configuration"
-msgstr "תהליך הרקע תזכורות לא נמצא"
+msgstr "הגדרת תזכורת"
 
 #: birthdaydlg.cpp:159
 #, kde-format
@@ -454,16 +454,16 @@ msgid ""
 msgstr ""
 
 #: birthdaydlg.cpp:195 recurrenceedit.cpp:142
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@action:button"
 msgid "Sub-Repetition"
-msgstr "חזרה"
+msgstr "תת־חזרתיות"
 
 #: birthdaydlg.cpp:197
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Set up an additional alarm repetition"
-msgstr "פרק זמן בין חזרות של התזכורת"
+msgstr "הגדרת חזרה נוספת לתזכורת"
 
 #: commandoptions.cpp:126
 #, kde-format
@@ -471,9 +471,9 @@ msgid "Prompt for confirmation when alarm is acknowledged"
 msgstr "הצגת בקשה לאישור עם אישור התזכורת"
 
 #: commandoptions.cpp:129
-#, fuzzy, kde-format
+#, kde-format
 msgid "Attach file to email (repeat as needed)"
-msgstr "שליחת דוא\"ל לכתובת הנתונה (חזור לפי הצורך)"
+msgstr "צירוף קובץ להודעת הדוא״ל (לחזור לפי הצורך)"
 
 #: commandoptions.cpp:133
 #, kde-format
@@ -506,9 +506,9 @@ msgid "Cancel alarm with the specified event ID"
 msgstr "ביטול התראה עם מזהה האירוע שצוין"
 
 #: commandoptions.cpp:154
-#, fuzzy, kde-format
+#, kde-format
 msgid "Disable the alarm"
-msgstr "א&ל תאפשר תזכורות כאשר התוכנית לא פועלת"
+msgstr "השבתת התזכורת"
 
 #: commandoptions.cpp:157
 #, fuzzy, kde-format
@@ -596,9 +596,9 @@ msgid "Send an email to the given address (repeat as needed)"
 msgstr "שליחת דוא״ל לכתובת שסופקה (לחזור לפי הצורך)"
 
 #: commandoptions.cpp:218
-#, fuzzy, kde-format
+#, kde-format
 msgid "Name of alarm"
-msgstr "תזכורת חדשה"
+msgstr "שם התזכורת"
 
 #: commandoptions.cpp:222
 #, fuzzy, kde-format
@@ -2939,7 +2939,7 @@ msgstr ""
 #, kde-format
 msgctxt "@option:check Alarm action"
 msgid "Audio"
-msgstr ""
+msgstr "שמע"
 
 #: find.cpp:138
 #, kde-format
@@ -3176,7 +3176,7 @@ msgctxt "@info"
 msgid ""
 "<para>Alarms are currently disabled.</para><para>Do you want to enable "
 "alarms now?</para>"
-msgstr ""
+msgstr "<para>תזכורות מושבתות כרגע.</para><para>להפעיל את התזכורות כעת?</para>"
 
 #: functions.cpp:1621
 #, fuzzy, kde-format
@@ -3249,7 +3249,7 @@ msgstr "הזן פקודת מעטפת להפעלה."
 #, kde-format
 msgctxt "@info"
 msgid "Quitting will cancel the scheduled Wake from Suspend."
-msgstr ""
+msgstr "יציאה תבטל את ההתעוררות המתוזמנת מהשהיה."
 
 #: kalarmapp.cpp:835
 #, kde-kuit-format
@@ -3258,6 +3258,8 @@ msgid ""
 "Do you want to start KAlarm at login?<nl/>(Note that alarms will be disabled "
 "if KAlarm is not started.)"
 msgstr ""
+"להפעיל את KAlarm בכניסה למערכת?<nl/>(נא לשים לב שהתזכורות תושבתנה אם KAlarm "
+"לא מופעל.)"
 
 #: kalarmapp.cpp:837 lib/messagebox.h:105 lib/messagebox.h:114
 #: lib/messagebox.h:151
@@ -3279,7 +3281,7 @@ msgstr "לא"
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "Cannot create alarm: No default calendar is defined"
-msgstr ""
+msgstr "לא ניתן ליצור תזכורת: לא מוגדר לוח שנה כברירת מחדל"
 
 #: kalarmapp.cpp:1079
 #, kde-kuit-format
@@ -3291,7 +3293,7 @@ msgstr "שגיאה ביצירת התראה:"
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "%1: Event <resource>%2</resource> not found, or not unique"
-msgstr ""
+msgstr "%1: האירוע <resource>%2</resource> לא נמצא או שאינו יחודי"
 
 #: kalarmapp.cpp:1447
 #, kde-kuit-format
@@ -3306,7 +3308,7 @@ msgstr ""
 #, kde-kuit-format
 msgctxt "@info:shell"
 msgid "%1: Event <resource>%2</resource> not found, or not editable"
-msgstr ""
+msgstr "%1: האירוע <resource>%2</resource> לא נמצא או שאינו ניתן לעריכה"
 
 #: kalarmapp.cpp:1515
 #, kde-kuit-format
@@ -3371,13 +3373,13 @@ msgstr "אל:"
 #, kde-format
 msgctxt "@info Copy-to in email headers"
 msgid "Cc:"
-msgstr ""
+msgstr "עותק:"
 
 #: kalarmcalendar/alarmtext.cpp:509
 #, kde-format
 msgctxt "@info"
 msgid "Date:"
-msgstr ""
+msgstr "תאריך:"
 
 #: kalarmcalendar/alarmtext.cpp:510 messagedisplayhelper.cpp:338
 #, kde-format
@@ -3389,7 +3391,7 @@ msgstr "נושא:"
 #, kde-format
 msgctxt "@info Todo calendar item's title field"
 msgid "To-do:"
-msgstr ""
+msgstr "מטלה:"
 
 #: kalarmcalendar/alarmtext.cpp:513
 #, kde-format
@@ -3401,7 +3403,7 @@ msgstr "מקום:"
 #, kde-format
 msgctxt "@info Todo calendar item's due date/time"
 msgid "Due:"
-msgstr ""
+msgstr "יעד:"
 
 #: kalarmcalendar/kacalendar.cpp:135
 #, kde-format
@@ -3423,14 +3425,14 @@ msgstr "בעת כניסה למערכת"
 #: kalarmcalendar/kaevent.cpp:3090 kalarmcalendar/kaevent.cpp:3177
 #: kalarmcalendar/kaeventformatter.cpp:428
 #: kalarmcalendar/kaeventformatter.cpp:442
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info"
 msgid "1 Minute"
 msgid_plural "%1 Minutes"
-msgstr[0] "דקה אחת"
-msgstr[1] "דקה אחת"
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "דקה"
+msgstr[1] "שתי דקות"
+msgstr[2] "%1 דקות"
+msgstr[3] "%1 דקות"
 
 #: kalarmcalendar/kaevent.cpp:3092 kalarmcalendar/kaevent.cpp:3179
 #: kalarmcalendar/kaeventformatter.cpp:444
@@ -5622,16 +5624,16 @@ msgid "The default volume for sound files in the alarm edit dialog."
 msgstr "הגדרת ברירת המחדל של \"%1\" בדו-שיח עריכת התזכורת."
 
 #: prefdlg.cpp:1535
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title:group"
 msgid "Command Alarms"
-msgstr "&פקודה"
+msgstr "תזכורות עם פקודות"
 
 #: prefdlg.cpp:1554
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title:group"
 msgid "Email Alarms"
-msgstr "אפשר &תזכורות"
+msgstr "תזכורות בדוא״ל"
 
 #: prefdlg.cpp:1567
 #, fuzzy, kde-format
@@ -5650,10 +5652,10 @@ msgstr ""
 "צפצוף."
 
 #: prefdlg.cpp:1800
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title:tab"
 msgid "Alarm Windows"
-msgstr "ברירות מחדל של תזכורות"
+msgstr "חלונות תזכורות"
 
 #: prefdlg.cpp:1803
 #, fuzzy, kde-format
@@ -5722,10 +5724,10 @@ msgid "System Tray Tooltip"
 msgstr ""
 
 #: prefdlg.cpp:1874
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@option:check"
 msgid "Show next 24 hours' alarms"
-msgstr "עריכת תזכורת"
+msgstr "הצגת התזכורות ב־24 השעות הקרובות"
 
 #: prefdlg.cpp:1878
 #, fuzzy, kde-format
@@ -5750,16 +5752,16 @@ msgid ""
 msgstr ""
 
 #: prefdlg.cpp:1897
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@option:check"
 msgid "Show alarm time"
-msgstr "ההודעה של התזכורת"
+msgstr "הצגת שעת התזכורת"
 
 #: prefdlg.cpp:1903
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@option:check"
 msgid "Show time until alarm"
-msgstr "עריכת תזכורת"
+msgstr "הצגת שעה עד לתזכורת"
 
 #: prefdlg.cpp:1921
 #, kde-format
@@ -5768,16 +5770,16 @@ msgid "Alarm List"
 msgstr "רשימת התראות"
 
 #: prefdlg.cpp:1933
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Disabled alarm color:"
-msgstr "א&ל תאפשר תזכורות כאשר התוכנית לא פועלת"
+msgstr "צבע תזכורת מושבתת:"
 
 #: prefdlg.cpp:1946
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label:listbox"
 msgid "Archived alarm color:"
-msgstr "א&ל תאפשר תזכורות כאשר התוכנית לא פועלת"
+msgstr "צבע תזכורת בארכיון:"
 
 #: prefdlg.cpp:1959
 #, kde-format
@@ -5897,10 +5899,10 @@ msgid "Recurrence Rule"
 msgstr "כלל חזרה"
 
 #: recurrenceedit.cpp:98
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Do not repeat the alarm"
-msgstr "חזרה על התזכורת באופן קבוע"
+msgstr "לא לחזור על התזכורת הזאת"
 
 #: recurrenceedit.cpp:105
 #, fuzzy, kde-kuit-format
@@ -5914,34 +5916,34 @@ msgstr ""
 "שים לב שהתזכורת תחזור גם בכל פעם שתהליך הרקע תזכורות יופעל מחדש."
 
 #: recurrenceedit.cpp:112
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Repeat the alarm at hourly/minutely intervals"
-msgstr "חזרה על התזכורת לעד"
+msgstr "חזרה על התזכורת בהפרשי שעות/דקות"
 
 #: recurrenceedit.cpp:118
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Repeat the alarm at daily intervals"
-msgstr "חזרה על התזכורת לעד"
+msgstr "חזרה על התזכורת בהפרשי ימים"
 
 #: recurrenceedit.cpp:124
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Repeat the alarm at weekly intervals"
-msgstr "חזרה על התזכורת לעד"
+msgstr "חזרה על התזכורת בהפרשי שבועות"
 
 #: recurrenceedit.cpp:130
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Repeat the alarm at monthly intervals"
-msgstr "חזרה על התזכורת לעד"
+msgstr "חזרה על התזכורת בהפרשי חודשים"
 
 #: recurrenceedit.cpp:136
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Repeat the alarm at annual intervals"
-msgstr "חזרה על התזכורת לעד"
+msgstr "חזרה על התזכורת בהפרשי שנים"
 
 #: recurrenceedit.cpp:145
 #, fuzzy, kde-format
@@ -5964,7 +5966,7 @@ msgid "No end"
 msgstr "אין &סוף"
 
 #: recurrenceedit.cpp:202
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Repeat the alarm indefinitely"
 msgstr "חזרה על התזכורת לעד"
@@ -5976,16 +5978,16 @@ msgid "End after:"
 msgstr "סיים אח&רי:"
 
 #: recurrenceedit.cpp:212
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Repeat the alarm for the number of times specified"
-msgstr "חזרה על התזכורת מספר הפעמים המצויין"
+msgstr "חזרה על התזכורת מספר הפעמים שצוין"
 
 #: recurrenceedit.cpp:218
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the total number of times to trigger the alarm"
-msgstr "הזן את המספר הכולל של פעמים שיש להציג את התזכורת"
+msgstr "נא למלא את מספר הפעמים להזנקת התזכורת"
 
 #: recurrenceedit.cpp:222
 #, fuzzy, kde-format
@@ -6097,12 +6099,14 @@ msgid "Exclude holidays"
 msgstr ""
 
 #: recurrenceedit.cpp:329
-#, fuzzy, kde-kuit-format
+#, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
 "<para>Do not trigger the alarm on holidays.</para><para>You can specify your "
 "holiday region in the Configuration dialog.</para>"
-msgstr "האם אתה בטוח שברצונך למחוק את התזכורת הנבחרת?"
+msgstr ""
+"<para>לא להזניק את התזכורת בחגים.</para><para>אפשר לציין את אזור החגים שלך "
+"בחלונית ההגדרות.</para>"
 
 #: recurrenceedit.cpp:334
 #, kde-format
@@ -6150,10 +6154,10 @@ msgid "hours:minutes"
 msgstr "שעות\\דקות"
 
 #: recurrenceedit.cpp:1132
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the number of hours and minutes between repetitions of the alarm"
-msgstr "הזן את הזמן (בשעות ודקות) בין חזרות של התזכורת."
+msgstr "נא למלא את מספר השעות והדקות בין חזרות התזכורת"
 
 #: recurrenceedit.cpp:1152
 #, kde-format
@@ -6174,16 +6178,16 @@ msgid "day(s)"
 msgstr "יום/ימים"
 
 #: recurrenceedit.cpp:1265
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the number of days between repetitions of the alarm"
-msgstr "הזן את מספר הימים בין חזרות על התזכורת"
+msgstr "נא למלא את מספר הימים בין חזרות התזכורת"
 
 #: recurrenceedit.cpp:1266
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select the days of the week on which the alarm is allowed to occur"
-msgstr "בחירת היום בשבוע בו יש לחזור על התזכורת."
+msgstr "בחירת הימים בשבוע בהם התזכורת מורשית לתזכר"
 
 #: recurrenceedit.cpp:1277
 #, kde-format
@@ -6192,10 +6196,10 @@ msgid "week(s)"
 msgstr "שבוע/ות"
 
 #: recurrenceedit.cpp:1278
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the number of weeks between repetitions of the alarm"
-msgstr "הזן את מספר השבועות בין חזרות על התזכורת"
+msgstr "נא למלא את מספר השבועות בין חזרות התזכורת"
 
 #: recurrenceedit.cpp:1279
 #, kde-format
@@ -6307,16 +6311,16 @@ msgid "Every"
 msgstr ""
 
 #: recurrenceedit.cpp:1347
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select the week of the month in which to repeat the alarm"
-msgstr "בחירת השבוע בחודש בו יש לחזור על התזכורת."
+msgstr "נא לבחור את היום בחודש בו התזכורת תחזור על עצמה"
 
 #: recurrenceedit.cpp:1361
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select the day of the week on which to repeat the alarm"
-msgstr "בחירת היום בשבוע בו יש לחזור על התזכורת."
+msgstr "נא לבחור את היום בשבוע בו התזכורת תחזור על עצמה"
 
 #: recurrenceedit.cpp:1483
 #, fuzzy, kde-format
@@ -6325,10 +6329,10 @@ msgid "month(s)"
 msgstr "חודשים"
 
 #: recurrenceedit.cpp:1484
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the number of months between repetitions of the alarm"
-msgstr "הזן את מספר החודשים בין חזרות על התזכורת"
+msgstr "נא למלא את מספר החודשים בין חזרות של התזכורת"
 
 #: recurrenceedit.cpp:1495
 #, fuzzy, kde-format
@@ -6337,10 +6341,10 @@ msgid "year(s)"
 msgstr "שנים"
 
 #: recurrenceedit.cpp:1496
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the number of years between repetitions of the alarm"
-msgstr "הזן את מספר השנים בין חזרות על התזכורת"
+msgstr "נא למלא את מספר השנים בין חזרות התזכורת"
 
 #: recurrenceedit.cpp:1503
 #, fuzzy, kde-format
@@ -6349,10 +6353,10 @@ msgid "Months:"
 msgstr "חודשים"
 
 #: recurrenceedit.cpp:1521
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select the months of the year in which to repeat the alarm"
-msgstr "בחירת החודש בשנה בו יש לחזור על התזכורת"
+msgstr "נא לבחור את החודש בשנה בו התזכורת תחזור על עצמה"
 
 #: recurrenceedit.cpp:1530
 #, kde-format
@@ -6443,10 +6447,10 @@ msgid ""
 msgstr ""
 
 #: repetitionbutton.cpp:142
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the time between repetitions of the alarm"
-msgstr "הזן את מספר הימים בין חזרות על התזכורת"
+msgstr "נא למלא את הזמן בין החזרות של התזכורות"
 
 #: repetitionbutton.cpp:157
 #, kde-format
@@ -6455,19 +6459,19 @@ msgid "Number of repetitions:"
 msgstr "מספר החזרות:"
 
 #: repetitionbutton.cpp:158
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "Check to specify the number of times the alarm should repeat after each "
 "recurrence"
-msgstr "הזן את המספר הכולל של פעמים שיש להציג את התזכורת"
+msgstr "יש לציין את מספר הפעמים שהתזכורת תחזור על עצמה אחרי כל מופע"
 
 #: repetitionbutton.cpp:165
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "Enter the number of times to trigger the alarm after its initial occurrence"
-msgstr "הזן את המספר הכולל של פעמים שיש להציג את התזכורת"
+msgstr "נא למלא את מספר הפעמים להזנקת התזכורת אחרי המופע הראשוני שלה"
 
 #: repetitionbutton.cpp:173
 #, kde-format
@@ -6482,10 +6486,10 @@ msgid "Check to specify how long the alarm is to be repeated"
 msgstr ""
 
 #: repetitionbutton.cpp:179
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the length of time to repeat the alarm"
-msgstr "הזן את השעה האחרונה שבה יש לחזור על התזכורת"
+msgstr "נא למלא את משך הזמן לחזרה על התזכורת"
 
 #: resources/calendarfunctions.cpp:53 resources/calendarfunctions.cpp:84
 #, fuzzy, kde-kuit-format
