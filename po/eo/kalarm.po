@@ -1,15 +1,15 @@
 # Translation of kalarm into esperanto.
 # Copyright (C) 2009 Free Software Foundation, Inc.
 # Axel Rousseau <axel@esperanto-jeunes.org>, 2009.
-# Oliver Kellogg <okellogg@users.sourceforge.net>, 2023.
+# Oliver Kellogg <olivermkellogg@gmail.com>, 2023.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-03-28 00:39+0000\n"
-"PO-Revision-Date: 2024-03-28 10:37+0100\n"
-"Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
+"PO-Revision-Date: 2024-05-17 06:24+0100\n"
+"Last-Translator: Oliver Kellogg <olivermkellogg@gmail.com>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
 "MIME-Version: 1.0\n"
@@ -26,7 +26,7 @@ msgstr "Axel Rousseau,Oliver Kellogg"
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
-msgstr "axel@esperanto-jeunes.org,okellogg@users.sourceforge.net"
+msgstr "axel@esperanto-jeunes.org,olivermkellogg@gmail.com"
 
 #: akonadiplugin/sendakonadimail.cpp:54
 #, kde-kuit-format
@@ -1491,7 +1491,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label"
 msgid "Auto-close window after late-cancellation time"
-msgstr "Aŭtomate fermi fenestron post malfru-nuliga tempo"
+msgstr "Aŭtomate fermi fenestron post malfrua nuligo"
 
 #. i18n: ectx: whatsthis, entry (DefaultAutoClose), group (Defaults)
 #: data/kalarmconfig.kcfg:306
@@ -2610,7 +2610,7 @@ msgstr "Redakti Komandan Alarmon"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Execute the specified command now"
-msgstr "Ruli la specifitan komandon nun"
+msgstr "Efektivigi la specifitan komandon nun"
 
 #: editdlgtypes.cpp:840
 #, kde-format
@@ -6245,7 +6245,7 @@ msgstr "Ripeti la alarmon por la nombro da fojoj specifita"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the total number of times to trigger the alarm"
-msgstr "Enigu la totalan nombron da fojoj por ekigi la alarmon"
+msgstr "Enigu la entutan nombron da fojoj por ekigi la alarmon"
 
 #: recurrenceedit.cpp:222
 #, kde-format
