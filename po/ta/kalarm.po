@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-03-28 00:39+0000\n"
-"PO-Revision-Date: 2024-03-30 21:36+0530\n"
+"PO-Revision-Date: 2024-05-19 14:57+0530\n"
 "Last-Translator: Kishore G <kishore96@gmail.com>\n"
 "Language-Team: Tamil <kde-i18n-doc@kde.org>\n"
 "Language: ta\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 24.02.1\n"
+"X-Generator: Lokalize 24.02.2\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -2465,15 +2465,12 @@ msgstr ""
 "என்பதை தேர்ந்தெடுங்கள்."
 
 #: editdlgtypes.cpp:266
-#, fuzzy, kde-format
-#| msgid ""
-#| "Check to additionally display a reminder in advance of the main alarm "
-#| "time(s)."
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "Check to additionally display a reminder in advance of or after the main "
 "alarm time(s)."
-msgstr "முக்கிய அலாரத்திற்கு முன் நினைவூட்டல் தேவையா என சோதிக்கவும்"
+msgstr "முக்கிய அலாரத்திற்கு முன்போ பின்போ நினைவூட்டலை காட்ட இதைக் குறிக்கவும்."
 
 #: editdlgtypes.cpp:267
 #, fuzzy, kde-kuit-format
@@ -2918,13 +2915,10 @@ msgid ""
 msgstr "இது குறிக்கப்பட்டால், %1 அழுத்தப்படும்வரை ஒலி திரும்பத்திரும்ப இயக்கப்படும்."
 
 #: editdlgtypes.cpp:1830
-#, fuzzy, kde-format
-#| msgid ""
-#| "Check to enter the contents of a script instead of a shell command line"
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to enter the contents of a script instead of a shell command line"
-msgstr ""
-"கட்டளை வரிக்கு பதிலாக ஒரு எழுத்தாக்கத்தின் உள்ளடக்கங்களை உள்ளிட இதை தேர்ந்தெடுக்கவும்"
+msgstr "கட்டளைக்கு பதிலாக ஒரு சிறுநிரலைப் பயன்படுத்த இதைக் குறிக்கவும்"
 
 #: editdlgtypes.cpp:1836
 #, kde-format
@@ -5141,6 +5135,8 @@ msgid ""
 "Enable the use of Akonadi to provide features including birthday import, "
 "some email functions, and email address book lookup."
 msgstr ""
+"பிறந்தநாள் இறக்குமதிக்கும், மின்னஞ்சல் தொடர்பான அம்சங்களுக்கும், மின்னஞ்சல் முகவரிப்புத்தகத்தைப் "
+"பயன்படுத்தவும் Akonadi இயக்கப்பட்டிருக்க வேண்டும்."
 
 #: prefdlg.cpp:552
 #, kde-format
@@ -5149,6 +5145,8 @@ msgid ""
 "Enable the use of Akonadi to provide features including birthday import, "
 "some email functions, and email address book lookup."
 msgstr ""
+"பிறந்தநாள் இறக்குமதிக்கும், மின்னஞ்சல் தொடர்பான அம்சங்களுக்கும், மின்னஞ்சல் முகவரிப்புத்தகத்தைப் "
+"பயன்படுத்தவும் Akonadi இயக்கப்பட்டிருக்க வேண்டும்."
 
 #: prefdlg.cpp:600
 #, kde-kuit-format
@@ -5157,12 +5155,14 @@ msgid ""
 "<para>No command is specified to invoke a terminal window.</para><para>The "
 "default command (<command>%1</command>) will be used.</para>"
 msgstr ""
+"<para>முனையச்சாளரத்தைத் திறப்பதற்கான எந்த கட்டளையும் குறிப்பிடப்படவில்லை.</"
+"para><para>இயல்பிருப்பு கட்டளை (<command>%1</command>) பயன்படுத்தப்படும்.</para>"
 
 #: prefdlg.cpp:608
 #, kde-kuit-format
 msgctxt "@info"
 msgid "No command is specified to invoke a terminal window"
-msgstr ""
+msgstr "முனையச்சாளரத்தைத் திறப்பதற்கான எந்த கட்டளையும் குறிப்பிடப்படவில்லை"
 
 #: prefdlg.cpp:621
 #, kde-kuit-format
@@ -5216,11 +5216,10 @@ msgid "None"
 msgstr "ஏதுமில்லை"
 
 #: prefdlg.cpp:765
-#, fuzzy, kde-format
-#| msgid "Wake From Suspend Alarm"
+#, kde-format
 msgctxt "@label:spinbox How long before alarm to wake system from suspend"
 msgid "Wake from suspend before alarm:"
-msgstr "உறக்கத்திலிருந்த கணினியை எழுப்பும் அலாரம்"
+msgstr "அலாரத்திற்கு இவ்வளவு நேரம் முன்னதாக உறக்கத்திலிருந்து கணினியை எழுப்பு:"
 
 #: prefdlg.cpp:773
 #, fuzzy, kde-format
