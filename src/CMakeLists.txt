@@ -334,7 +334,9 @@ target_link_libraries(kalarm_bin
 if (TARGET KF6::TextEditTextToSpeech)
     target_link_libraries(kalarm_bin KF6::TextEditTextToSpeech)
 endif()
-
+if(TARGET KF6::IconThemes)
+    target_link_libraries(kalarm_bin KF6::IconThemes)
+endif()
 if (ENABLE_RTC_WAKE_FROM_SUSPEND)
     target_link_libraries(kalarm_bin KF6::AuthCore)
 endif()
