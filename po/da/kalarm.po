@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-05-16 00:39+0000\n"
+"POT-Creation-Date: 2024-05-22 00:39+0000\n"
 "PO-Revision-Date: 2016-08-15 16:35+0100\n"
 "Last-Translator: Martin Schlander <mschlander@opensuse.org>\n"
 "Language-Team: Danish <kde-i18n-doc@kde.org>\n"
@@ -348,14 +348,14 @@ msgstr "Autostart af KAlarm ved login"
 msgid "Copyright 2001-%1, David Jarvie"
 msgstr "Ophavsret 2001-%1, David Jarvie"
 
-#: autostart/autostart.cpp:52 main.cpp:42
+#: autostart/autostart.cpp:52 main.cpp:61
 #, fuzzy, kde-format
 #| msgid "David Jarvie"
 msgctxt "@info:credit"
 msgid "David Jarvie"
 msgstr "David Jarvie"
 
-#: autostart/autostart.cpp:52 main.cpp:42
+#: autostart/autostart.cpp:52 main.cpp:61
 #, kde-format
 msgid "Author"
 msgstr "Ophavsmand"
@@ -4674,13 +4674,13 @@ msgstr ""
 msgid "System time zone"
 msgstr "Ignorér tidszone"
 
-#: main.cpp:39
+#: main.cpp:58
 #, fuzzy, kde-format
 #| msgid "Personal alarm message, command and email scheduler for KDE"
 msgid "Personal alarm message, command and email scheduler by KDE"
 msgstr "Personlig alarmbesked, kommando og e-mail skemalægger for KDE"
 
-#: main.cpp:41
+#: main.cpp:60
 #, fuzzy, kde-format
 #| msgid "Copyright 2001-%1, David Jarvie"
 msgid "Copyright © 2001-%1, David Jarvie"

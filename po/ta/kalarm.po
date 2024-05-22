@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-05-16 00:39+0000\n"
+"POT-Creation-Date: 2024-05-22 00:39+0000\n"
 "PO-Revision-Date: 2024-05-19 14:57+0530\n"
 "Last-Translator: Kishore G <kishore96@gmail.com>\n"
 "Language-Team: Tamil <kde-i18n-doc@kde.org>\n"
@@ -333,13 +333,13 @@ msgstr "நுழையும்போது கேயலாரத்தை த�
 msgid "Copyright 2001-%1, David Jarvie"
 msgstr "பதிப்புரிமை © 2001-%1, டேவிட் ஜார்வீ"
 
-#: autostart/autostart.cpp:52 main.cpp:42
+#: autostart/autostart.cpp:52 main.cpp:61
 #, kde-format
 msgctxt "@info:credit"
 msgid "David Jarvie"
 msgstr "டேவிட் ஜார்வீ"
 
-#: autostart/autostart.cpp:52 main.cpp:42
+#: autostart/autostart.cpp:52 main.cpp:61
 #, kde-format
 msgid "Author"
 msgstr "இயற்றியவர்"
@@ -4339,12 +4339,12 @@ msgstr ""
 msgid "System time zone"
 msgstr "கணினியின் நேரமண்டலம்"
 
-#: main.cpp:39
+#: main.cpp:58
 #, kde-format
 msgid "Personal alarm message, command and email scheduler by KDE"
 msgstr "கே.டீ.யீ. வழங்கும் அலார, கட்டளை மற்றும் மின்னஞ்சல் முன்னேற்பாடு நிரல்"
 
-#: main.cpp:41
+#: main.cpp:60
 #, kde-format
 msgid "Copyright © 2001-%1, David Jarvie"
 msgstr "பதிப்புரிமை © 2001-%1, டேவிட் ஜார்வீ"

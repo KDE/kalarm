@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm 0\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-05-16 00:39+0000\n"
+"POT-Creation-Date: 2024-05-22 00:39+0000\n"
 "PO-Revision-Date: 2011-03-28 17:53+0200\n"
 "Last-Translator: Marko Dimjašević <marko@dimjasevic.net>\n"
 "Language-Team: Croatian <kde-croatia-list@lists.sourceforge.net>\n"
@@ -332,13 +332,13 @@ msgstr "Automatsko pokretanje po &prijavljivanju"
 msgid "Copyright 2001-%1, David Jarvie"
 msgstr ""
 
-#: autostart/autostart.cpp:52 main.cpp:42
+#: autostart/autostart.cpp:52 main.cpp:61
 #, kde-format
 msgctxt "@info:credit"
 msgid "David Jarvie"
 msgstr ""
 
-#: autostart/autostart.cpp:52 main.cpp:42
+#: autostart/autostart.cpp:52 main.cpp:61
 #, kde-format
 msgid "Author"
 msgstr ""
@@ -4395,12 +4395,12 @@ msgstr ""
 msgid "System time zone"
 msgstr "Vrijeme do"
 
-#: main.cpp:39
+#: main.cpp:58
 #, fuzzy, kde-format
 msgid "Personal alarm message, command and email scheduler by KDE"
 msgstr "KDE-ov osobni planer alarmnih poruka, naredbi i e-poruka"
 
-#: main.cpp:41
+#: main.cpp:60
 #, kde-format
 msgid "Copyright © 2001-%1, David Jarvie"
 msgstr ""

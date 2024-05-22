@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-05-16 00:39+0000\n"
+"POT-Creation-Date: 2024-05-22 00:39+0000\n"
 "PO-Revision-Date: 2005-12-29 22:18+0100\n"
 "Last-Translator: Arnar Leosson <leosson@frisurf.no>\n"
 "Language-Team: Icelandic <kde-isl@molar.is>\n"
@@ -371,13 +371,13 @@ msgstr "Ræsa sjálfkrafa í &byrjun setu"
 msgid "Copyright 2001-%1, David Jarvie"
 msgstr ""
 
-#: autostart/autostart.cpp:52 main.cpp:42
+#: autostart/autostart.cpp:52 main.cpp:61
 #, kde-format
 msgctxt "@info:credit"
 msgid "David Jarvie"
 msgstr ""
 
-#: autostart/autostart.cpp:52 main.cpp:42
+#: autostart/autostart.cpp:52 main.cpp:61
 #, kde-format
 msgid "Author"
 msgstr ""
@@ -4675,13 +4675,13 @@ msgstr ""
 msgid "System time zone"
 msgstr "Tími til"
 
-#: main.cpp:39
+#: main.cpp:58
 #, fuzzy, kde-format
 #| msgid "Personal alarm message, command and email scheduler for KDE"
 msgid "Personal alarm message, command and email scheduler by KDE"
 msgstr "Persónuleg vakning, skipana- og póstvaki fyrir KDE"
 
-#: main.cpp:41
+#: main.cpp:60
 #, kde-format
 msgid "Copyright © 2001-%1, David Jarvie"
 msgstr ""
