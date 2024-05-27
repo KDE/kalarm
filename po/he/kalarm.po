@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-05-22 00:39+0000\n"
-"PO-Revision-Date: 2024-05-16 22:24+0300\n"
+"PO-Revision-Date: 2024-05-25 14:45+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -3864,7 +3864,7 @@ msgstr "שמע"
 #, kde-format
 msgctxt "@info Alarm type"
 msgid "Active"
-msgstr "פעיל"
+msgstr "פעילה"
 
 #: kalarmcalendar/kaeventformatter.cpp:275
 #, fuzzy, kde-format
@@ -5376,10 +5376,10 @@ msgid "Your Email Address"
 msgstr "כתובת הדוא״ל שלך"
 
 #: prefdlg.cpp:1134
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label 'From' email address"
 msgid "From:"
-msgstr "%1: כתובת דוא\"ל לא תקפה"
+msgstr "מאת:"
 
 #: prefdlg.cpp:1146
 #, kde-format
@@ -5390,10 +5390,10 @@ msgid ""
 msgstr ""
 
 #: prefdlg.cpp:1153 prefdlg.cpp:1189
-#, fuzzy, kde-kuit-format
+#, kde-kuit-format
 msgctxt "@option:radio"
 msgid "Use default <application>KMail</application> identity"
-msgstr "הפעלת %1 בעת הפעלת KDE."
+msgstr "להשתמש בזהות ברירת המחדל של <application>KMail</application>"
 
 #: prefdlg.cpp:1156
 #, fuzzy, kde-kuit-format
@@ -6744,10 +6744,10 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QRadioButton, mergeRadio)
 #: resources/migration/dirresourceimportdialog_type.ui:13
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@option:radio"
 msgid "Import into existing calendar file resource"
-msgstr "שליחת הדוא\"ל נכשלה"
+msgstr "ייבוא לתוך משאב קובץ לוח שנה קיים."
 
 #. i18n: ectx: property (whatsThis), widget (QComboBox, mergeResource)
 #: resources/migration/dirresourceimportdialog_type.ui:26
