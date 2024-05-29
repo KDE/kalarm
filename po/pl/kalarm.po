@@ -1,6 +1,6 @@
 # translation of kalarm.po to
 # translation of alarmdaemonctrl.po to
-# Version: $Revision: 1680898 $
+# Version: $Revision: 1681083 $
 #
 # Copyright (C) 2002, 2004, 2005, 2006, 2007, 2008, 2009 Free Software Foundation, Inc.
 # Krzysztof Lichota <lichota@mimuw.edu.pl>, 2002, 2004, 2005, 2006.
@@ -25,11 +25,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-">\n"
-">\n"
-"X-Generator: Lokalize 23.08.5\n"
-"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10"
-" || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
+"|| n%100>=20) ? 1 : 2);\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -341,7 +338,6 @@ msgstr "Prawa autorskie (c) 2001-%1, David Jarvie"
 
 #: autostart/autostart.cpp:52 main.cpp:61
 #, kde-format
-#| msgid "David Jarvie"
 msgctxt "@info:credit"
 msgid "David Jarvie"
 msgstr "David Jarvie"
@@ -3451,7 +3447,6 @@ msgstr ""
 #: kalarmapp.cpp:837 lib/messagebox.h:105 lib/messagebox.h:114
 #: lib/messagebox.h:151
 #, kde-format
-#| msgid "Yes"
 msgctxt "@action:button"
 msgid "Yes"
 msgstr "Tak"
@@ -3459,7 +3454,6 @@ msgstr "Tak"
 #: kalarmapp.cpp:837 lib/messagebox.h:106 lib/messagebox.h:115
 #: lib/messagebox.h:152
 #, kde-format
-#| msgid "No"
 msgctxt "@action:button"
 msgid "No"
 msgstr "Nie"
@@ -9665,4 +9659,3 @@ msgstr "Liczba minut przed alarmem do obudzenia z uśpienia"
 #~ msgctxt "@action"
 #~ msgid "Show &Archived Alarms"
 #~ msgstr "Pokaż &zarchiwizowane alarmy"
-
