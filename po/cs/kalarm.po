@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-05-22 00:39+0000\n"
-"PO-Revision-Date: 2024-04-26 11:00+0200\n"
+"PO-Revision-Date: 2024-05-29 11:22+0200\n"
 "Last-Translator: Vit Pelcak <vpelcak@suse.cz>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
 "Language: cs\n"
@@ -331,7 +331,7 @@ msgstr "Autorská práva 2001-%1, David Jarvie"
 #, kde-format
 msgctxt "@info:credit"
 msgid "David Jarvie"
-msgstr ""
+msgstr "David Jarvie"
 
 #: autostart/autostart.cpp:52 main.cpp:61
 #, kde-format
