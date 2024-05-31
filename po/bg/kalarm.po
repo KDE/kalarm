@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-03-28 00:39+0000\n"
-"PO-Revision-Date: 2024-04-02 12:11+0200\n"
+"PO-Revision-Date: 2024-05-30 16:14+0200\n"
 "Last-Translator: Mincho Kondarev <mkondarev@yahoo.de>\n"
 "Language-Team: Bulgarian <kde-i18n-doc@kde.org>\n"
 "Language: bg\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 24.02.1\n"
+"X-Generator: Lokalize 24.05.0\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -27,7 +27,7 @@ msgstr "Златко Попов, Минчо Кондарев"
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
-msgstr "zlatkopopov@fsa-bg.org "
+msgstr "zlatkopopov@fsa-bg.org,mkondarev@yahoo.de"
 
 #: akonadiplugin/sendakonadimail.cpp:54
 #, kde-kuit-format
@@ -1008,8 +1008,8 @@ msgid ""
 "<p>Automatically start KAlarm whenever you start KDE.</p><p>This option "
 "should always be checked unless you intend to discontinue use of KAlarm.</p>"
 msgstr ""
-"<p>Автоматично стартиране на KAlarm при влизане в KDE.<p><p>Отметката трябва "
-"да бъде винаги включена, освен ако не искате да ползвате KAlarm.</p>"
+"<p>Автоматично стартиране на KAlarm при влизане в KDE.</p><p>Отметката "
+"трябва да бъде винаги включена, освен ако не искате да ползвате KAlarm.</p>"
 
 #. i18n: ectx: label, entry (Base_NoAutoStart), group (General)
 #: data/kalarmconfig.kcfg:137
@@ -1136,7 +1136,7 @@ msgid ""
 msgstr ""
 "<p>Колко аларми са насрочени в следващите 24 часа да се показват в "
 "подсказката на системния панел:\n"
-"        <lul><li>0 да не се показват</li>\n"
+"        <ul><li>0 да не се показват</li>\n"
 "        <li>-1 да се показват всички</li>\n"
 "        <li>>0 задаване на лимит.</li></ul></p>\n"
 "      "
@@ -5025,7 +5025,7 @@ msgstr "Общи"
 #, kde-format
 msgctxt "@title:tab"
 msgid "Time & Date"
-msgstr "Час & Дата"
+msgstr "Час и Дата"
 
 #: prefdlg.cpp:146
 #, kde-format
@@ -8745,7 +8745,3 @@ msgstr ""
 #, kde-format
 msgid "Number of minutes before alarm to wake from suspend"
 msgstr "Брой минути преди алармата, за да се събуди от приспиване"
-
-#~ msgctxt "@info"
-#~ msgid "Cannot open audio file: <filename>%1</filename>"
-#~ msgstr "Не може да бъде отворен аудио файлът: <filename>%1</filename>"
