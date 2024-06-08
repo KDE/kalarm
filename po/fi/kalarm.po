@@ -8,7 +8,7 @@
 # Ilpo Kantonen <ilpo@iki.fi>, 2005, 2006.
 # Mikko Piippo <piippo@cc.helsinki.fi>, 2007, 2008.
 # Lasse Liehu <lasse.liehu@gmail.com>, 2010, 2012, 2013, 2014, 2015, 2016.
-# Tommi Nieminen <translator@legisign.org>, 2011, 2012, 2013, 2017, 2018, 2019, 2020, 2021, 2022, 2023.
+# Tommi Nieminen <translator@legisign.org>, 2011, 2012, 2013, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024.
 # Niklas Laxström <niklas.laxstrom+kdetrans@gmail.com>, 2012.
 # Jiri Grönroos <jiri.gronroos+kde@iki.fi>, 2012.
 #
@@ -23,7 +23,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-03-28 00:39+0000\n"
-"PO-Revision-Date: 2023-11-15 18:21+0200\n"
+"PO-Revision-Date: 2024-04-18 16:04+0300\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
 "Language: fi\n"
@@ -294,13 +294,13 @@ msgstr "Hälytyksen aika on jo mennyt"
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot initialize audio player: %1"
-msgstr ""
+msgstr "Äänisoitinta ei saada valmisteltua: %1"
 
 #: audioplayer.cpp:112
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot set audio player properties: %1"
-msgstr ""
+msgstr "Äänisoittimen ominaisuuksia ei saada asetettua: %1"
 
 #: audioplayer.cpp:210
 #, kde-format
@@ -6088,11 +6088,7 @@ msgid "Button activation delay (seconds):"
 msgstr "Painikkeiden aktivointiviive (sekunneissa):"
 
 #: prefdlg.cpp:1995
-#, fuzzy, kde-format
-#| msgctxt "@info:whatsthis"
-#| msgid ""
-#| "Enter how long its buttons should remain disabled after the alarm message "
-#| "window is shown."
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "Enter how long its buttons should remain disabled after the alarm message "
@@ -6100,7 +6096,8 @@ msgid ""
 "acknowledged."
 msgstr ""
 "Määritä, kauanko painikkeiden tulisi pysyä passiivisina hälytyksen viesti-"
-"ikkunan ilmestyttyä."
+"ikkunan ilmestyttyä. Tämä pienentää mahdollisuutta kuitata hälytysviestit "
+"nähdyiksi vahingossa."
 
 #: prefdlg.cpp:1999
 #, kde-format
