@@ -1,7 +1,7 @@
 /*
  *  editdlgtypes.h  -  dialogues to create or edit alarm or alarm template types
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2001-2022 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2001-2024 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -41,6 +41,7 @@ public:
     explicit EditDisplayAlarmDlg(bool Template, QWidget* parent = nullptr, GetResourceType = RES_PROMPT);
     EditDisplayAlarmDlg(bool Template, const KAEvent&, bool newAlarm, QWidget* parent = nullptr,
                  GetResourceType = RES_PROMPT, bool readOnly = false);
+    ~EditDisplayAlarmDlg();
 
     // Methods to initialise values in the New Alarm dialogue.
     // N.B. setTime() must be called first to set the date-only characteristic,
@@ -191,6 +192,7 @@ public:
     explicit EditEmailAlarmDlg(bool Template, QWidget* parent = nullptr, GetResourceType = RES_PROMPT);
     EditEmailAlarmDlg(bool Template, const KAEvent&, bool newAlarm, QWidget* parent = nullptr,
                       GetResourceType = RES_PROMPT, bool readOnly = false);
+    ~EditEmailAlarmDlg();
 
     // Methods to initialise values in the New Alarm dialogue.
     // N.B. setTime() must be called first to set the date-only characteristic,
