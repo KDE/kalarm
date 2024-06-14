@@ -1,6 +1,6 @@
 KAlarm Change Log
 
-=== Version 3.8.1 (KDE Gear 24.05.2) --- 14 June 2024 ===
+=== Version 3.8.2 (KDE Gear 24.05.2) --- 14 June 2024 ===
 * Fix crash after editing new alarm if spell checking is enabled [KDE Bug 488488]
 
 === Version 3.8.1 (KDE Gear 24.02.2) --- 27 March 2024 ===
