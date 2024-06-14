@@ -1,7 +1,7 @@
 /*
  *  editdlgtypes.cpp  -  dialogs to create or edit alarm or alarm template types
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2001-2023 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2001-2024 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -109,6 +109,13 @@ EditDisplayAlarmDlg::EditDisplayAlarmDlg(bool Template, const KAEvent& event, bo
 {
     qCDebug(KALARM_LOG) << "EditDisplayAlarmDlg: Event.id()";
     init(event);
+}
+
+EditDisplayAlarmDlg::~EditDisplayAlarmDlg()
+{
+    // Delete KTextEdit while parent exists to prevent crash if spell checking is enabled.
+    delete mTextMessageEdit;
+    mTextMessageEdit = nullptr;
 }
 
 /******************************************************************************
@@ -1144,6 +1151,13 @@ EditEmailAlarmDlg::EditEmailAlarmDlg(bool Template, const KAEvent& event, bool n
     init(event);
 }
 
+EditEmailAlarmDlg::~EditEmailAlarmDlg()
+{
+    // Delete KTextEdit while parent exists to prevent crash if spell checking is enabled.
+    delete mEmailMessageEdit;
+    mEmailMessageEdit = nullptr;
+}
+
 /******************************************************************************
 * Return the window caption.
 */
@@ -1843,6 +1857,13 @@ CommandEdit::CommandEdit(QWidget* parent)
     vlayout->addWidget(mScriptEdit);
 
     slotCmdScriptToggled(mTypeScript->isChecked());
+}
+
+CommandEdit::~CommandEdit()
+{
+    // Delete KTextEdit while parent exists to prevent crash if spell checking is enabled.
+    delete mScriptEdit;
+    mScriptEdit = nullptr;
 }
 
 /******************************************************************************

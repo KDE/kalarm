@@ -1,7 +1,7 @@
 /*
  *  editdlg_p.h  -  private classes for editdlg.cpp
  *  Program:  kalarm
- *  SPDX-FileCopyrightText: 2003-2022 David Jarvie <djarvie@kde.org>
+ *  SPDX-FileCopyrightText: 2003-2024 David Jarvie <djarvie@kde.org>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -52,6 +52,7 @@ class CommandEdit : public QWidget
     Q_OBJECT
 public:
     explicit CommandEdit(QWidget* parent);
+    ~CommandEdit();
     bool      isScript() const;
     void      setScript(bool);
     QString   text(EditAlarmDlg*, bool showErrorMessage) const;
