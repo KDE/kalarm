@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm VERSION\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-03-28 00:39+0000\n"
+"POT-Creation-Date: 2024-06-15 02:26+0000\n"
 "PO-Revision-Date: 2002-11-07 11:37+0200\n"
 "Last-Translator: WEB-Translator <http://kde.af.org.za>\n"
 "Language-Team: AFRIKAANS <AF@lia.org.za>\n"
@@ -2307,56 +2307,56 @@ msgctxt "@option:check"
 msgid "Confirm acknowledgment"
 msgstr ""
 
-#: editdlgtypes.cpp:119
+#: editdlgtypes.cpp:126
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "New Display Alarm Template"
 msgstr "Nuwe Alarm"
 
-#: editdlgtypes.cpp:119
+#: editdlgtypes.cpp:126
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Edit Display Alarm Template"
 msgstr "Redigeer Alarm"
 
-#: editdlgtypes.cpp:120
+#: editdlgtypes.cpp:127
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "New Display Alarm"
 msgstr "Aktiveer Alarms"
 
-#: editdlgtypes.cpp:120
+#: editdlgtypes.cpp:127
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Edit Display Alarm"
 msgstr "Aktiveer Alarms"
 
-#: editdlgtypes.cpp:133
+#: editdlgtypes.cpp:140
 #, fuzzy, kde-format
 msgctxt "@label:listbox"
 msgid "Display type:"
 msgstr "Aktiveer Alarms"
 
-#: editdlgtypes.cpp:137
+#: editdlgtypes.cpp:144
 #, fuzzy, kde-format
 #| msgid "The alarm message"
 msgctxt "@item:inlistbox"
 msgid "Text message"
 msgstr "Die alarm boodskap"
 
-#: editdlgtypes.cpp:138
+#: editdlgtypes.cpp:145
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "File contents"
 msgstr ""
 
-#: editdlgtypes.cpp:139
+#: editdlgtypes.cpp:146
 #, fuzzy, kde-format
 msgctxt "@item:inlistbox"
 msgid "Command output"
 msgstr "Opdrag"
 
-#: editdlgtypes.cpp:159
+#: editdlgtypes.cpp:166
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2367,32 +2367,32 @@ msgid ""
 "display the output from a command.</item></list></para>"
 msgstr ""
 
-#: editdlgtypes.cpp:174
+#: editdlgtypes.cpp:181
 #, fuzzy, kde-format
 #| msgid "Enter the text of the alarm message. It may be multi-line."
 msgctxt "@info:whatsthis"
 msgid "Enter the text of the alarm message. It may be multi-line."
 msgstr "Invoer die teks van die alarm boodskap. Dit dalk mag wees multi-line."
 
-#: editdlgtypes.cpp:187
+#: editdlgtypes.cpp:194
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the name or URL of a text or image file to display."
 msgstr "Invoer die naam van 'n teks lêer, of 'n Url, na vertoon."
 
-#: editdlgtypes.cpp:194 editdlgtypes.cpp:883 sounddlg.cpp:183
+#: editdlgtypes.cpp:201 editdlgtypes.cpp:890 sounddlg.cpp:183
 #, fuzzy, kde-format
 msgctxt "@info:tooltip"
 msgid "Choose a file"
 msgstr "Kies 'n Klank Lêer"
 
-#: editdlgtypes.cpp:195
+#: editdlgtypes.cpp:202
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select a text or image file to display."
 msgstr "Kies 'n teks lêer na vertoon."
 
-#: editdlgtypes.cpp:239
+#: editdlgtypes.cpp:246
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2400,7 +2400,7 @@ msgid ""
 "system."
 msgstr ""
 
-#: editdlgtypes.cpp:266
+#: editdlgtypes.cpp:273
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2408,7 +2408,7 @@ msgid ""
 "alarm time(s)."
 msgstr ""
 
-#: editdlgtypes.cpp:267
+#: editdlgtypes.cpp:274
 #, fuzzy, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2416,7 +2416,7 @@ msgid ""
 "reminder alarm.</para><para>%1</para>"
 msgstr "Invoer die laaste datum na herhaal die alarm"
 
-#: editdlgtypes.cpp:268
+#: editdlgtypes.cpp:275
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2424,7 +2424,7 @@ msgid ""
 "alarm"
 msgstr ""
 
-#: editdlgtypes.cpp:278
+#: editdlgtypes.cpp:285
 #, fuzzy, kde-format
 #| msgid ""
 #| "Check to be prompted for confirmation when you acknowledge the alarm."
@@ -2432,139 +2432,139 @@ msgctxt "@info:whatsthis"
 msgid "Check to be prompted for confirmation when you acknowledge the alarm."
 msgstr "Bevestig na wees gepor vir bevestiging wanneer jy bevestig die alarm."
 
-#: editdlgtypes.cpp:287
+#: editdlgtypes.cpp:294
 #, fuzzy, kde-format
 #| msgid "Display the alarm message now"
 msgctxt "@info:tooltip"
 msgid "Display the alarm now"
 msgstr "Vertoon die alarm boodskap nou"
 
-#: editdlgtypes.cpp:669
+#: editdlgtypes.cpp:676
 #, fuzzy, kde-format
 #| msgid "Display the alarm message now"
 msgctxt "@info:whatsthis"
 msgid "Display the alarm message now"
 msgstr "Vertoon die alarm boodskap nou"
 
-#: editdlgtypes.cpp:678
+#: editdlgtypes.cpp:685
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid "Display the file now"
 msgstr "Vertoon die teks lêer nou"
 
-#: editdlgtypes.cpp:688
+#: editdlgtypes.cpp:695
 #, fuzzy, kde-format
 #| msgid "Display the alarm message now"
 msgctxt "@info:whatsthis"
 msgid "Display the command output now"
 msgstr "Vertoon die alarm boodskap nou"
 
-#: editdlgtypes.cpp:720
+#: editdlgtypes.cpp:727
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Choose Text or Image File to Display"
 msgstr "Kies Teks Lêer na Vertoon"
 
-#: editdlgtypes.cpp:798
+#: editdlgtypes.cpp:805
 #, kde-format
 msgctxt "@option:check"
 msgid "Enter a script"
 msgstr ""
 
-#: editdlgtypes.cpp:799
+#: editdlgtypes.cpp:806
 #, kde-format
 msgctxt "@option:radio"
 msgid "Execute in terminal window"
 msgstr ""
 
-#: editdlgtypes.cpp:800
+#: editdlgtypes.cpp:807
 #, kde-format
 msgctxt "@option:check"
 msgid "Execute in terminal window"
 msgstr ""
 
-#: editdlgtypes.cpp:830
+#: editdlgtypes.cpp:837
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "New Command Alarm Template"
 msgstr "Nuwe Alarm"
 
-#: editdlgtypes.cpp:830
+#: editdlgtypes.cpp:837
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Edit Command Alarm Template"
 msgstr "Redigeer Alarm"
 
-#: editdlgtypes.cpp:831
+#: editdlgtypes.cpp:838
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "New Command Alarm"
 msgstr "Opdrag"
 
-#: editdlgtypes.cpp:831
+#: editdlgtypes.cpp:838
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Edit Command Alarm"
 msgstr "Opdrag"
 
-#: editdlgtypes.cpp:839
+#: editdlgtypes.cpp:846
 #, fuzzy, kde-format
 #| msgid "Execute the specified command now"
 msgctxt "@info:whatsthis"
 msgid "Execute the specified command now"
 msgstr "Uitvoer die gespesifiseer opdrag nou"
 
-#: editdlgtypes.cpp:840
+#: editdlgtypes.cpp:847
 #, fuzzy, kde-format
 #| msgid "Execute the specified command now"
 msgctxt "@info:tooltip"
 msgid "Execute the specified command now"
 msgstr "Uitvoer die gespesifiseer opdrag nou"
 
-#: editdlgtypes.cpp:847 specialactions.cpp:182
+#: editdlgtypes.cpp:854 specialactions.cpp:182
 #, kde-format
 msgctxt "@option:check"
 msgid "Do not notify errors"
 msgstr ""
 
-#: editdlgtypes.cpp:848
+#: editdlgtypes.cpp:855
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid "Do not show error message if the command fails."
 msgstr ""
 "Die verstek opset vir Die herhaling periode in Die alarm redigeer dialoog."
 
-#: editdlgtypes.cpp:854
+#: editdlgtypes.cpp:861
 #, fuzzy, kde-format
 msgctxt "@title:group"
 msgid "Command Output"
 msgstr "Opdrag"
 
-#: editdlgtypes.cpp:862
+#: editdlgtypes.cpp:869
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to execute the command in a terminal window"
 msgstr ""
 
-#: editdlgtypes.cpp:875
+#: editdlgtypes.cpp:882
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the name or path of the log file."
 msgstr "Invoer die naam van 'n teks lêer, of 'n Url, na vertoon."
 
-#: editdlgtypes.cpp:884
+#: editdlgtypes.cpp:891
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select a log file."
 msgstr "Kies 'n teks lêer na vertoon."
 
-#: editdlgtypes.cpp:887
+#: editdlgtypes.cpp:894
 #, fuzzy, kde-format
 msgctxt "@option:radio"
 msgid "Log to file"
 msgstr "Einde na:"
 
-#: editdlgtypes.cpp:888
+#: editdlgtypes.cpp:895
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2572,26 +2572,26 @@ msgid ""
 "to any existing contents of the file."
 msgstr ""
 
-#: editdlgtypes.cpp:895
+#: editdlgtypes.cpp:902
 #, fuzzy, kde-format
 msgctxt "@option:radio"
 msgid "Discard"
 msgstr "Opdrag"
 
-#: editdlgtypes.cpp:896
+#: editdlgtypes.cpp:903
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to discard command output."
 msgstr "Opdrag"
 
-#: editdlgtypes.cpp:1058
+#: editdlgtypes.cpp:1065
 #, kde-format
 msgctxt "@info"
 msgid ""
 "Log file must be the name or path of a local file, with write permission."
 msgstr ""
 
-#: editdlgtypes.cpp:1068
+#: editdlgtypes.cpp:1075
 #, fuzzy, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2599,7 +2599,7 @@ msgid ""
 "in the <application>KAlarm</application> Configuration dialog.</para>"
 msgstr "Doen jy rerig wil hê na uitvee die gekose alarm?"
 
-#: editdlgtypes.cpp:1088
+#: editdlgtypes.cpp:1095
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "Command executed:\n"
@@ -2610,56 +2610,56 @@ msgstr ""
 "Opdrag uitgevoerde:\n"
 "%1"
 
-#: editdlgtypes.cpp:1122
+#: editdlgtypes.cpp:1129
 #, fuzzy, kde-format
 msgctxt "@option:check"
 msgid "Copy email to self"
 msgstr "Kopie e-pos na eie"
 
-#: editdlgtypes.cpp:1152
+#: editdlgtypes.cpp:1166
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "New Email Alarm Template"
 msgstr "Nuwe Alarm"
 
-#: editdlgtypes.cpp:1152
+#: editdlgtypes.cpp:1166
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Edit Email Alarm Template"
 msgstr "Redigeer Alarm"
 
-#: editdlgtypes.cpp:1153
+#: editdlgtypes.cpp:1167
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "New Email Alarm"
 msgstr "Aktiveer Alarms"
 
-#: editdlgtypes.cpp:1153
+#: editdlgtypes.cpp:1167
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Edit Email Alarm"
 msgstr "Aktiveer Alarms"
 
-#: editdlgtypes.cpp:1161
+#: editdlgtypes.cpp:1175
 #, fuzzy, kde-format
 #| msgid "Send the email to the specified addressees now"
 msgctxt "@info:whatsthis"
 msgid "Send the email to the specified addressees now"
 msgstr "Stuur die e-pos na die gespesifiseer geäddresseerdes nou"
 
-#: editdlgtypes.cpp:1162
+#: editdlgtypes.cpp:1176
 #, fuzzy, kde-format
 msgctxt "@info:tooltip"
 msgid "Send the email now"
 msgstr "Stuur pos"
 
-#: editdlgtypes.cpp:1173
+#: editdlgtypes.cpp:1187
 #, fuzzy, kde-format
 msgctxt "@label:listbox 'From' email address"
 msgid "From:"
 msgstr "%1: ongeldige e-pos adres"
 
-#: editdlgtypes.cpp:1179
+#: editdlgtypes.cpp:1193
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2667,7 +2667,7 @@ msgid ""
 "alarms."
 msgstr ""
 
-#: editdlgtypes.cpp:1185
+#: editdlgtypes.cpp:1199
 #, fuzzy, kde-format
 msgctxt "@label:textbox Email addressee"
 msgid "To:"
@@ -2675,7 +2675,7 @@ msgstr ""
 "Ongeldige e-pos adres:\n"
 "%1"
 
-#: editdlgtypes.cpp:1190
+#: editdlgtypes.cpp:1204
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2683,87 +2683,87 @@ msgid ""
 "commas or semicolons."
 msgstr ""
 
-#: editdlgtypes.cpp:1201
+#: editdlgtypes.cpp:1215
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Open address book"
 msgstr ""
 
-#: editdlgtypes.cpp:1202
+#: editdlgtypes.cpp:1216
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select email addresses from your address book."
 msgstr ""
 
-#: editdlgtypes.cpp:1209
+#: editdlgtypes.cpp:1223
 #, fuzzy, kde-format
 msgctxt "@label:textbox Email subject"
 msgid "Subject:"
 msgstr "E-pos onderwerp lyn"
 
-#: editdlgtypes.cpp:1215
+#: editdlgtypes.cpp:1229
 #, fuzzy, kde-format
 #| msgid "Enter the email subject."
 msgctxt "@info:whatsthis"
 msgid "Enter the email subject."
 msgstr "Invoer die e-pos onderwerp."
 
-#: editdlgtypes.cpp:1221
+#: editdlgtypes.cpp:1235
 #, fuzzy, kde-format
 #| msgid "Enter the email message."
 msgctxt "@info:whatsthis"
 msgid "Enter the email message."
 msgstr "Invoer die e-pos boodskap."
 
-#: editdlgtypes.cpp:1229
+#: editdlgtypes.cpp:1243
 #, fuzzy, kde-format
 #| msgid "Attachment&s:"
 msgctxt "@label:listbox"
 msgid "Attachments:"
 msgstr "Aanhegsels:"
 
-#: editdlgtypes.cpp:1238
+#: editdlgtypes.cpp:1252
 #, fuzzy, kde-format
 #| msgid "Files to send as attachments to the email."
 msgctxt "@info:whatsthis"
 msgid "Files to send as attachments to the email."
 msgstr "Lêers na stuur as aanhegsels na die e-pos."
 
-#: editdlgtypes.cpp:1242 resourceselector.cpp:76
+#: editdlgtypes.cpp:1256 resourceselector.cpp:76
 #, fuzzy, kde-format
 #| msgid "Add..."
 msgctxt "@action:button"
 msgid "Add..."
 msgstr "Voeg by..."
 
-#: editdlgtypes.cpp:1244
+#: editdlgtypes.cpp:1258
 #, fuzzy, kde-format
 #| msgid "Add an attachment to the email."
 msgctxt "@info:whatsthis"
 msgid "Add an attachment to the email."
 msgstr "Voeg by 'n aanhegsel na die e-pos."
 
-#: editdlgtypes.cpp:1247 resourceselector.cpp:78
+#: editdlgtypes.cpp:1261 resourceselector.cpp:78
 #, fuzzy, kde-format
 msgctxt "@action:button"
 msgid "Remove"
 msgstr "Verwyder"
 
-#: editdlgtypes.cpp:1249
+#: editdlgtypes.cpp:1263
 #, fuzzy, kde-format
 #| msgid "Remove the highlighted attachment from the email."
 msgctxt "@info:whatsthis"
 msgid "Remove the highlighted attachment from the email."
 msgstr "Verwyder die verlig aanhegsel van die e-pos."
 
-#: editdlgtypes.cpp:1254
+#: editdlgtypes.cpp:1268
 #, fuzzy, kde-format
 #| msgid "If checked, the email will be blind copied to you."
 msgctxt "@info:whatsthis"
 msgid "If checked, the email will be blind copied to you."
 msgstr "As nagegaan, die e-pos sal wees blinde gekopieer na jy."
 
-#: editdlgtypes.cpp:1436
+#: editdlgtypes.cpp:1450
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "Invalid email address:\n"
@@ -2774,14 +2774,14 @@ msgstr ""
 "Ongeldige e-pos adres:\n"
 "%1"
 
-#: editdlgtypes.cpp:1443
+#: editdlgtypes.cpp:1457
 #, fuzzy, kde-format
 #| msgid "No email address specified"
 msgctxt "@info"
 msgid "No email address specified"
 msgstr "Nee e-pos adres gespesifiseer"
 
-#: editdlgtypes.cpp:1460
+#: editdlgtypes.cpp:1474
 #, fuzzy, kde-kuit-format
 msgctxt "@info"
 msgid "Invalid email attachment: <filename>%1</filename>"
@@ -2789,7 +2789,7 @@ msgstr ""
 "Ongeldige e-pos adres:\n"
 "%1"
 
-#: editdlgtypes.cpp:1464
+#: editdlgtypes.cpp:1478
 #, fuzzy, kde-format
 #| msgid ""
 #| "Do you really want to send the email now to the specified recipient(s)?"
@@ -2799,21 +2799,21 @@ msgstr ""
 "Doen jy rerig wil hê na stuur die e-pos nou na die gespesifiseer "
 "ontvanger(s)?"
 
-#: editdlgtypes.cpp:1465
+#: editdlgtypes.cpp:1479
 #, fuzzy, kde-format
 #| msgid "Confirm Email"
 msgctxt "@action:button"
 msgid "Confirm Email"
 msgstr "Bevestig E-pos"
 
-#: editdlgtypes.cpp:1465
+#: editdlgtypes.cpp:1479
 #, fuzzy, kde-format
 #| msgid "&Send"
 msgctxt "@action:button"
 msgid "Send"
 msgstr "Stuur"
 
-#: editdlgtypes.cpp:1491
+#: editdlgtypes.cpp:1505
 #, fuzzy, kde-kuit-format
 msgctxt "@info"
 msgid "Email sent to:<nl/>%1<nl/>Bcc: <email>%2</email>"
@@ -2821,7 +2821,7 @@ msgstr ""
 "E-pos gestuur na:\n"
 "%1"
 
-#: editdlgtypes.cpp:1494
+#: editdlgtypes.cpp:1508
 #, fuzzy, kde-kuit-format
 msgctxt "@info"
 msgid "Email sent to:<nl/>%1"
@@ -2829,76 +2829,76 @@ msgstr ""
 "E-pos gestuur na:\n"
 "%1"
 
-#: editdlgtypes.cpp:1523
+#: editdlgtypes.cpp:1537
 #, fuzzy, kde-format
 #| msgid "Choose File to Attach"
 msgctxt "@title:window"
 msgid "Choose File to Attach"
 msgstr "Kies Lêer na Aanheg"
 
-#: editdlgtypes.cpp:1606
+#: editdlgtypes.cpp:1620
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "New Audio Alarm Template"
 msgstr "Nuwe Alarm"
 
-#: editdlgtypes.cpp:1606
+#: editdlgtypes.cpp:1620
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Edit Audio Alarm Template"
 msgstr "Redigeer Alarm"
 
-#: editdlgtypes.cpp:1607
+#: editdlgtypes.cpp:1621
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "New Audio Alarm"
 msgstr "Aktiveer Alarms"
 
-#: editdlgtypes.cpp:1607
+#: editdlgtypes.cpp:1621
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Edit Audio Alarm"
 msgstr "Aktiveer Alarms"
 
-#: editdlgtypes.cpp:1615
+#: editdlgtypes.cpp:1629
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid "Play the audio file now"
 msgstr "Vertoon die teks lêer nou"
 
-#: editdlgtypes.cpp:1616
+#: editdlgtypes.cpp:1630
 #, fuzzy, kde-format
 msgctxt "@info:tooltip"
 msgid "Play the audio file now"
 msgstr "Vertoon die teks lêer nou"
 
-#: editdlgtypes.cpp:1618
+#: editdlgtypes.cpp:1632
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "If checked, the sound file will be played repeatedly until %1 is clicked."
 msgstr "As nagegaan, die alarm sal vertoon die inhoud van 'n teks lêer."
 
-#: editdlgtypes.cpp:1830
+#: editdlgtypes.cpp:1844
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to enter the contents of a script instead of a shell command line"
 msgstr "Invoer 'n tolk opdrag na uitvoer."
 
-#: editdlgtypes.cpp:1836
+#: editdlgtypes.cpp:1850
 #, fuzzy, kde-format
 #| msgid "Enter a shell command to execute."
 msgctxt "@info:whatsthis"
 msgid "Enter a shell command to execute."
 msgstr "Invoer 'n tolk opdrag na uitvoer."
 
-#: editdlgtypes.cpp:1841
+#: editdlgtypes.cpp:1855
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the contents of a script to execute"
 msgstr "Invoer 'n tolk opdrag na uitvoer."
 
-#: editdlgtypes.cpp:1896
+#: editdlgtypes.cpp:1917
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2906,7 +2906,7 @@ msgid ""
 "icode></para>"
 msgstr ""
 
-#: editdlgtypes.cpp:1901
+#: editdlgtypes.cpp:1922
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Please enter a command or script to execute"

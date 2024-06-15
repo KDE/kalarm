@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-03-28 00:39+0000\n"
+"POT-Creation-Date: 2024-06-15 02:26+0000\n"
 "PO-Revision-Date: 2024-03-28 08:23+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
@@ -2442,55 +2442,55 @@ msgctxt "@option:check"
 msgid "Confirm acknowledgment"
 msgstr "Підтвердити отримання"
 
-#: editdlgtypes.cpp:119
+#: editdlgtypes.cpp:126
 #, kde-format
 msgctxt "@title:window"
 msgid "New Display Alarm Template"
 msgstr "Новий шаблон візуального нагадування"
 
-#: editdlgtypes.cpp:119
+#: editdlgtypes.cpp:126
 #, kde-format
 msgctxt "@title:window"
 msgid "Edit Display Alarm Template"
 msgstr "Змінити шаблон візуального нагадування"
 
-#: editdlgtypes.cpp:120
+#: editdlgtypes.cpp:127
 #, kde-format
 msgctxt "@title:window"
 msgid "New Display Alarm"
 msgstr "Нове візуальне нагадування"
 
-#: editdlgtypes.cpp:120
+#: editdlgtypes.cpp:127
 #, kde-format
 msgctxt "@title:window"
 msgid "Edit Display Alarm"
 msgstr "Редагувати візуальне нагадування"
 
-#: editdlgtypes.cpp:133
+#: editdlgtypes.cpp:140
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Display type:"
 msgstr "Тип показу:"
 
-#: editdlgtypes.cpp:137
+#: editdlgtypes.cpp:144
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Text message"
 msgstr "Текстове повідомлення"
 
-#: editdlgtypes.cpp:138
+#: editdlgtypes.cpp:145
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "File contents"
 msgstr "Вміст файла"
 
-#: editdlgtypes.cpp:139
+#: editdlgtypes.cpp:146
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Command output"
 msgstr "Вивід команди"
 
-#: editdlgtypes.cpp:159
+#: editdlgtypes.cpp:166
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2506,32 +2506,32 @@ msgstr ""
 "або зображення.</item><item><interface>%3</interface>: нагадування покаже "
 "вивід команди.</item></list></para>"
 
-#: editdlgtypes.cpp:174
+#: editdlgtypes.cpp:181
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the text of the alarm message. It may be multi-line."
 msgstr "Введіть текст нагадування. Текст може складатися з декількох рядків."
 
-#: editdlgtypes.cpp:187
+#: editdlgtypes.cpp:194
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the name or URL of a text or image file to display."
 msgstr ""
 "Введіть назву чи адресу файла тексту або зображення, який ви хочете показати."
 
-#: editdlgtypes.cpp:194 editdlgtypes.cpp:883 sounddlg.cpp:183
+#: editdlgtypes.cpp:201 editdlgtypes.cpp:890 sounddlg.cpp:183
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Choose a file"
 msgstr "Виберіть файл"
 
-#: editdlgtypes.cpp:195
+#: editdlgtypes.cpp:202
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select a text or image file to display."
 msgstr "Виберіть для показу файл тексту або зображення."
 
-#: editdlgtypes.cpp:239
+#: editdlgtypes.cpp:246
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2541,7 +2541,7 @@ msgstr ""
 "Виберіть, слід показувати нагадування у вікні чи скористатися системою "
 "сповіщень."
 
-#: editdlgtypes.cpp:266
+#: editdlgtypes.cpp:273
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2551,7 +2551,7 @@ msgstr ""
 "Позначте, якщо слід додатково показувати нагадування до чи після часу "
 "основного нагадування."
 
-#: editdlgtypes.cpp:267
+#: editdlgtypes.cpp:274
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2561,7 +2561,7 @@ msgstr ""
 "<para>Вкажіть час до чи після основного нагадування, коли слід виконувати "
 "завчасне нагадування.</para><para>%1</para>"
 
-#: editdlgtypes.cpp:268
+#: editdlgtypes.cpp:275
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2570,103 +2570,103 @@ msgid ""
 msgstr ""
 "Вкажіть, буде нагадування задіяно до чи після дати основного нагадування"
 
-#: editdlgtypes.cpp:278
+#: editdlgtypes.cpp:285
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to be prompted for confirmation when you acknowledge the alarm."
 msgstr "Ввімкніть, щоб у вас вимагалось підтвердження отримання нагадування."
 
-#: editdlgtypes.cpp:287
+#: editdlgtypes.cpp:294
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Display the alarm now"
 msgstr "Показати нагадування зараз"
 
-#: editdlgtypes.cpp:669
+#: editdlgtypes.cpp:676
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Display the alarm message now"
 msgstr "Показати нагадування тепер"
 
-#: editdlgtypes.cpp:678
+#: editdlgtypes.cpp:685
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Display the file now"
 msgstr "Показати файл тепер"
 
-#: editdlgtypes.cpp:688
+#: editdlgtypes.cpp:695
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Display the command output now"
 msgstr "Показати вивід команди тепер"
 
-#: editdlgtypes.cpp:720
+#: editdlgtypes.cpp:727
 #, kde-format
 msgctxt "@title:window"
 msgid "Choose Text or Image File to Display"
 msgstr "Виберіть файл тексту або зображення для показу"
 
-#: editdlgtypes.cpp:798
+#: editdlgtypes.cpp:805
 #, kde-format
 msgctxt "@option:check"
 msgid "Enter a script"
 msgstr "Ввести скрипт"
 
-#: editdlgtypes.cpp:799
+#: editdlgtypes.cpp:806
 #, kde-format
 msgctxt "@option:radio"
 msgid "Execute in terminal window"
 msgstr "Виконати у вікні термінала"
 
-#: editdlgtypes.cpp:800
+#: editdlgtypes.cpp:807
 #, kde-format
 msgctxt "@option:check"
 msgid "Execute in terminal window"
 msgstr "Виконати у вікні термінала"
 
-#: editdlgtypes.cpp:830
+#: editdlgtypes.cpp:837
 #, kde-format
 msgctxt "@title:window"
 msgid "New Command Alarm Template"
 msgstr "Новий шаблон нагадування з команди"
 
-#: editdlgtypes.cpp:830
+#: editdlgtypes.cpp:837
 #, kde-format
 msgctxt "@title:window"
 msgid "Edit Command Alarm Template"
 msgstr "Змінити шаблон нагадування з команди"
 
-#: editdlgtypes.cpp:831
+#: editdlgtypes.cpp:838
 #, kde-format
 msgctxt "@title:window"
 msgid "New Command Alarm"
 msgstr "Нове нагадування з команди"
 
-#: editdlgtypes.cpp:831
+#: editdlgtypes.cpp:838
 #, kde-format
 msgctxt "@title:window"
 msgid "Edit Command Alarm"
 msgstr "Редагувати нагадування з команди"
 
-#: editdlgtypes.cpp:839
+#: editdlgtypes.cpp:846
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Execute the specified command now"
 msgstr "Виконати вказану команду тепер"
 
-#: editdlgtypes.cpp:840
+#: editdlgtypes.cpp:847
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Execute the specified command now"
 msgstr "Виконати вказану команду зараз"
 
-#: editdlgtypes.cpp:847 specialactions.cpp:182
+#: editdlgtypes.cpp:854 specialactions.cpp:182
 #, kde-format
 msgctxt "@option:check"
 msgid "Do not notify errors"
 msgstr "Не сповіщати про помилки"
 
-#: editdlgtypes.cpp:848
+#: editdlgtypes.cpp:855
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Do not show error message if the command fails."
@@ -2674,37 +2674,37 @@ msgstr ""
 "Не показувати повідомлення про помилку, якщо спроба виконання команди зазнає "
 "невдачі."
 
-#: editdlgtypes.cpp:854
+#: editdlgtypes.cpp:861
 #, kde-format
 msgctxt "@title:group"
 msgid "Command Output"
 msgstr "Вивід команди"
 
-#: editdlgtypes.cpp:862
+#: editdlgtypes.cpp:869
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to execute the command in a terminal window"
 msgstr "Позначте, щоб виконати команду в вікні термінала"
 
-#: editdlgtypes.cpp:875
+#: editdlgtypes.cpp:882
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the name or path of the log file."
 msgstr "Введіть назву або шлях файла журналу."
 
-#: editdlgtypes.cpp:884
+#: editdlgtypes.cpp:891
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select a log file."
 msgstr "Виберіть файл журналу."
 
-#: editdlgtypes.cpp:887
+#: editdlgtypes.cpp:894
 #, kde-format
 msgctxt "@option:radio"
 msgid "Log to file"
 msgstr "Записувати журнал у файл"
 
-#: editdlgtypes.cpp:888
+#: editdlgtypes.cpp:895
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2714,19 +2714,19 @@ msgstr ""
 "Позначте, щоб записувати вивід команди у локальний файл журналу. Вивід буде "
 "додано після існуючого вмісту файла."
 
-#: editdlgtypes.cpp:895
+#: editdlgtypes.cpp:902
 #, kde-format
 msgctxt "@option:radio"
 msgid "Discard"
 msgstr "Відкинути"
 
-#: editdlgtypes.cpp:896
+#: editdlgtypes.cpp:903
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to discard command output."
 msgstr "Позначте, щоб відкидати вивід команди."
 
-#: editdlgtypes.cpp:1058
+#: editdlgtypes.cpp:1065
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -2734,7 +2734,7 @@ msgid ""
 msgstr ""
 "Файл журналу повинен мати назву або шлях локального файла з дозволом запису."
 
-#: editdlgtypes.cpp:1068
+#: editdlgtypes.cpp:1075
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2744,61 +2744,61 @@ msgstr ""
 "<para>Не вибрано термінала для нагадувань командою.</para><para>Будь ласка, "
 "вкажіть його у вікні параметрів <application>KAlarm</application>.</para>"
 
-#: editdlgtypes.cpp:1088
+#: editdlgtypes.cpp:1095
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Command executed: <icode>%1</icode>"
 msgstr "Виконано команду: <icode>%1</icode>"
 
-#: editdlgtypes.cpp:1122
+#: editdlgtypes.cpp:1129
 #, kde-format
 msgctxt "@option:check"
 msgid "Copy email to self"
 msgstr "Копія ел. пошти до себе"
 
-#: editdlgtypes.cpp:1152
+#: editdlgtypes.cpp:1166
 #, kde-format
 msgctxt "@title:window"
 msgid "New Email Alarm Template"
 msgstr "Новий шаблон нагадування через ел. поштою"
 
-#: editdlgtypes.cpp:1152
+#: editdlgtypes.cpp:1166
 #, kde-format
 msgctxt "@title:window"
 msgid "Edit Email Alarm Template"
 msgstr "Редагувати шаблон нагадування ел. поштою"
 
-#: editdlgtypes.cpp:1153
+#: editdlgtypes.cpp:1167
 #, kde-format
 msgctxt "@title:window"
 msgid "New Email Alarm"
 msgstr "Нове нагадування ел. поштою"
 
-#: editdlgtypes.cpp:1153
+#: editdlgtypes.cpp:1167
 #, kde-format
 msgctxt "@title:window"
 msgid "Edit Email Alarm"
 msgstr "Редагувати нагадування ел. поштою"
 
-#: editdlgtypes.cpp:1161
+#: editdlgtypes.cpp:1175
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Send the email to the specified addressees now"
 msgstr "Надіслати ел.пошту до вказаних адресатів тепер"
 
-#: editdlgtypes.cpp:1162
+#: editdlgtypes.cpp:1176
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Send the email now"
 msgstr "Надіслати повідомлення зараз"
 
-#: editdlgtypes.cpp:1173
+#: editdlgtypes.cpp:1187
 #, kde-format
 msgctxt "@label:listbox 'From' email address"
 msgid "From:"
 msgstr "Від:"
 
-#: editdlgtypes.cpp:1179
+#: editdlgtypes.cpp:1193
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2808,13 +2808,13 @@ msgstr ""
 "Ваш профіль адреси ел. пошти буде використано для позначення відправника при "
 "надсиланні нагадувань електронною поштою."
 
-#: editdlgtypes.cpp:1185
+#: editdlgtypes.cpp:1199
 #, kde-format
 msgctxt "@label:textbox Email addressee"
 msgid "To:"
 msgstr "До:"
 
-#: editdlgtypes.cpp:1190
+#: editdlgtypes.cpp:1204
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2824,169 +2824,169 @@ msgstr ""
 "Введіть адреси електронної пошти отримувачів. Відділяйте адреси одну від "
 "другої комою або крапкою з комою."
 
-#: editdlgtypes.cpp:1201
+#: editdlgtypes.cpp:1215
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Open address book"
 msgstr "Відкрити адресну книгу"
 
-#: editdlgtypes.cpp:1202
+#: editdlgtypes.cpp:1216
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select email addresses from your address book."
 msgstr "Виберіть адреси електронної пошти з вашої адресної книги."
 
-#: editdlgtypes.cpp:1209
+#: editdlgtypes.cpp:1223
 #, kde-format
 msgctxt "@label:textbox Email subject"
 msgid "Subject:"
 msgstr "Тема:"
 
-#: editdlgtypes.cpp:1215
+#: editdlgtypes.cpp:1229
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the email subject."
 msgstr "Введіть тему електронної пошти."
 
-#: editdlgtypes.cpp:1221
+#: editdlgtypes.cpp:1235
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the email message."
 msgstr "Введіть повідомлення електронної пошти."
 
-#: editdlgtypes.cpp:1229
+#: editdlgtypes.cpp:1243
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Attachments:"
 msgstr "Долучення:"
 
-#: editdlgtypes.cpp:1238
+#: editdlgtypes.cpp:1252
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Files to send as attachments to the email."
 msgstr "Файли, які відіслати по електронній пошті як долучення."
 
-#: editdlgtypes.cpp:1242 resourceselector.cpp:76
+#: editdlgtypes.cpp:1256 resourceselector.cpp:76
 #, kde-format
 msgctxt "@action:button"
 msgid "Add..."
 msgstr "Додати…"
 
-#: editdlgtypes.cpp:1244
+#: editdlgtypes.cpp:1258
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Add an attachment to the email."
 msgstr "Додати долучення до електронної пошти."
 
-#: editdlgtypes.cpp:1247 resourceselector.cpp:78
+#: editdlgtypes.cpp:1261 resourceselector.cpp:78
 #, kde-format
 msgctxt "@action:button"
 msgid "Remove"
 msgstr "Вилучити"
 
-#: editdlgtypes.cpp:1249
+#: editdlgtypes.cpp:1263
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Remove the highlighted attachment from the email."
 msgstr "Вилучити позначені долучення з електронної пошти."
 
-#: editdlgtypes.cpp:1254
+#: editdlgtypes.cpp:1268
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "If checked, the email will be blind copied to you."
 msgstr "Якщо ввімкнено, вам буде відсилатись прихована копія."
 
-#: editdlgtypes.cpp:1436
+#: editdlgtypes.cpp:1450
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Invalid email address: <email>%1</email>"
 msgstr "Неправильна адреса електронної пошти: <email>%1</email>"
 
-#: editdlgtypes.cpp:1443
+#: editdlgtypes.cpp:1457
 #, kde-format
 msgctxt "@info"
 msgid "No email address specified"
 msgstr "Не вказано адресу електронної пошти"
 
-#: editdlgtypes.cpp:1460
+#: editdlgtypes.cpp:1474
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Invalid email attachment: <filename>%1</filename>"
 msgstr "Некоректне долучення ел. пошти: <filename>%1</filename>"
 
-#: editdlgtypes.cpp:1464
+#: editdlgtypes.cpp:1478
 #, kde-format
 msgctxt "@info"
 msgid "Do you really want to send the email now to the specified recipient(s)?"
 msgstr "Ви справді хочете тепер відіслати ел. пошту до вказаних адресатів?"
 
-#: editdlgtypes.cpp:1465
+#: editdlgtypes.cpp:1479
 #, kde-format
 msgctxt "@action:button"
 msgid "Confirm Email"
 msgstr "Підтвердити ел. пошту"
 
-#: editdlgtypes.cpp:1465
+#: editdlgtypes.cpp:1479
 #, kde-format
 msgctxt "@action:button"
 msgid "Send"
 msgstr "Надіслати"
 
-#: editdlgtypes.cpp:1491
+#: editdlgtypes.cpp:1505
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Email sent to:<nl/>%1<nl/>Bcc: <email>%2</email>"
 msgstr "Ел. пошту відіслано до:<nl/>%1<nl/>Прихована копія: <email>%2</email>"
 
-#: editdlgtypes.cpp:1494
+#: editdlgtypes.cpp:1508
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Email sent to:<nl/>%1"
 msgstr "Ел. пошту надіслано до:<nl/>%1"
 
-#: editdlgtypes.cpp:1523
+#: editdlgtypes.cpp:1537
 #, kde-format
 msgctxt "@title:window"
 msgid "Choose File to Attach"
 msgstr "Виберіть файл для долучення"
 
-#: editdlgtypes.cpp:1606
+#: editdlgtypes.cpp:1620
 #, kde-format
 msgctxt "@title:window"
 msgid "New Audio Alarm Template"
 msgstr "Новий шаблон звукового нагадування"
 
-#: editdlgtypes.cpp:1606
+#: editdlgtypes.cpp:1620
 #, kde-format
 msgctxt "@title:window"
 msgid "Edit Audio Alarm Template"
 msgstr "Редагування шаблону звукового нагадування"
 
-#: editdlgtypes.cpp:1607
+#: editdlgtypes.cpp:1621
 #, kde-format
 msgctxt "@title:window"
 msgid "New Audio Alarm"
 msgstr "Нове звукове нагадування"
 
-#: editdlgtypes.cpp:1607
+#: editdlgtypes.cpp:1621
 #, kde-format
 msgctxt "@title:window"
 msgid "Edit Audio Alarm"
 msgstr "Редагування звукового нагадування"
 
-#: editdlgtypes.cpp:1615
+#: editdlgtypes.cpp:1629
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Play the audio file now"
 msgstr "Відтворити звуковий файл зараз"
 
-#: editdlgtypes.cpp:1616
+#: editdlgtypes.cpp:1630
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Play the audio file now"
 msgstr "Відтворити звуковий файл зараз"
 
-#: editdlgtypes.cpp:1618
+#: editdlgtypes.cpp:1632
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2995,25 +2995,25 @@ msgstr ""
 "Якщо позначено, звуковий файл буде відтворюватися безперервно, доки не буде "
 "натиснуто %1."
 
-#: editdlgtypes.cpp:1830
+#: editdlgtypes.cpp:1844
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to enter the contents of a script instead of a shell command line"
 msgstr "Позначте, щоб ввести вміст скрипту замість оболонки командного рядка"
 
-#: editdlgtypes.cpp:1836
+#: editdlgtypes.cpp:1850
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter a shell command to execute."
 msgstr "Введіть команду оболонки для виконання."
 
-#: editdlgtypes.cpp:1841
+#: editdlgtypes.cpp:1855
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the contents of a script to execute"
 msgstr "Введіть вміст скрипту для виконання"
 
-#: editdlgtypes.cpp:1896
+#: editdlgtypes.cpp:1917
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -3023,7 +3023,7 @@ msgstr ""
 "<para>Команді не вдалося встановити змінні середовища:</para><para><icode>"
 "%1</icode></para>"
 
-#: editdlgtypes.cpp:1901
+#: editdlgtypes.cpp:1922
 #, kde-format
 msgctxt "@info"
 msgid "Please enter a command or script to execute"

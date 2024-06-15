@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-03-28 00:39+0000\n"
+"POT-Creation-Date: 2024-06-15 02:26+0000\n"
 "PO-Revision-Date: 2024-05-19 14:57+0530\n"
 "Last-Translator: Kishore G <kishore96@gmail.com>\n"
 "Language-Team: Tamil <kde-i18n-doc@kde.org>\n"
@@ -2366,55 +2366,55 @@ msgctxt "@option:check"
 msgid "Confirm acknowledgment"
 msgstr "ஒப்புக்கொள்வதை உறுதி செய்"
 
-#: editdlgtypes.cpp:119
+#: editdlgtypes.cpp:126
 #, kde-format
 msgctxt "@title:window"
 msgid "New Display Alarm Template"
 msgstr "புதிய காட்சி அலாரத்திற்கான வார்ப்புரு"
 
-#: editdlgtypes.cpp:119
+#: editdlgtypes.cpp:126
 #, kde-format
 msgctxt "@title:window"
 msgid "Edit Display Alarm Template"
 msgstr "காட்சி அலாரத்திற்கான வார்ப்புருவை திருத்து"
 
-#: editdlgtypes.cpp:120
+#: editdlgtypes.cpp:127
 #, kde-format
 msgctxt "@title:window"
 msgid "New Display Alarm"
 msgstr "புதிய காட்சி அலாரம்"
 
-#: editdlgtypes.cpp:120
+#: editdlgtypes.cpp:127
 #, kde-format
 msgctxt "@title:window"
 msgid "Edit Display Alarm"
 msgstr "காட்சி அலாரத்தை திருத்தல்"
 
-#: editdlgtypes.cpp:133
+#: editdlgtypes.cpp:140
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Display type:"
 msgstr "காட்டப்படும் விதம்:"
 
-#: editdlgtypes.cpp:137
+#: editdlgtypes.cpp:144
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Text message"
 msgstr "உரைத் தகவலாக"
 
-#: editdlgtypes.cpp:138
+#: editdlgtypes.cpp:145
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "File contents"
 msgstr "கோப்பின் உள்ளடக்கம்"
 
-#: editdlgtypes.cpp:139
+#: editdlgtypes.cpp:146
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Command output"
 msgstr "கட்டளை வெளியிடும் உரை"
 
-#: editdlgtypes.cpp:159
+#: editdlgtypes.cpp:166
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2430,31 +2430,31 @@ msgstr ""
 "item><item><interface>%3</interface>: ஓர் கட்டளையின் விளைவை அலாரம் காட்டும்.</"
 "item></list></para>"
 
-#: editdlgtypes.cpp:174
+#: editdlgtypes.cpp:181
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the text of the alarm message. It may be multi-line."
 msgstr "அலார தகவலுக்கான உரையை உள்ளிடவும். அது பல வரிகளைக் கொண்டதாக இருக்கலாம்"
 
-#: editdlgtypes.cpp:187
+#: editdlgtypes.cpp:194
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the name or URL of a text or image file to display."
 msgstr "காட்ட வேண்டிய உரைக்கோப்பின் அல்லது படக்கோப்பின் பெயரையோ முகவரியையோ உள்ளிடவும்."
 
-#: editdlgtypes.cpp:194 editdlgtypes.cpp:883 sounddlg.cpp:183
+#: editdlgtypes.cpp:201 editdlgtypes.cpp:890 sounddlg.cpp:183
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Choose a file"
 msgstr "கோப்பை தேர்ந்தெடுங்கள்"
 
-#: editdlgtypes.cpp:195
+#: editdlgtypes.cpp:202
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select a text or image file to display."
 msgstr "காட்ட வேண்டிய உரைக்கோப்பை அல்லது படக்கோப்பை தேர்ந்தெடுக்கவும்."
 
-#: editdlgtypes.cpp:239
+#: editdlgtypes.cpp:246
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2464,7 +2464,7 @@ msgstr ""
 "அலாரத்தை தனி சாளரத்தில் காட்ட வேண்டுமா, அல்லது மற்ற அறிவிப்புகளுடன் காட்ட வேண்டுமா "
 "என்பதை தேர்ந்தெடுங்கள்."
 
-#: editdlgtypes.cpp:266
+#: editdlgtypes.cpp:273
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2472,7 +2472,7 @@ msgid ""
 "alarm time(s)."
 msgstr "முக்கிய அலாரத்திற்கு முன்போ பின்போ நினைவூட்டலை காட்ட இதைக் குறிக்கவும்."
 
-#: editdlgtypes.cpp:267
+#: editdlgtypes.cpp:274
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "Enter how long in advance of the main alarm to display a reminder alarm."
@@ -2484,7 +2484,7 @@ msgstr ""
 "முக்கிய அலாரத்திற்கு முன் எவ்வளவு முன்னதாக நினைவூட்டல் அலாரம் செய்ய வேண்டும் என்பதை "
 "உள்ளிடவும்"
 
-#: editdlgtypes.cpp:268
+#: editdlgtypes.cpp:275
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2494,139 +2494,139 @@ msgstr ""
 "நினைவூட்டல் பிரதான அலாரத்திற்கு முன்பு அமைய வேண்டுமா, அல்லது பின்னர் அமைய வேண்டுமா "
 "என்பதை தேர்ந்தெடுங்கள்"
 
-#: editdlgtypes.cpp:278
+#: editdlgtypes.cpp:285
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to be prompted for confirmation when you acknowledge the alarm."
 msgstr "அலாரத்தை ஒப்புக்கொண்டதை உறுதிப்படுத்துமாறு கேட்க வேண்டுமெனில் இதைக் குறிக்கவும்."
 
-#: editdlgtypes.cpp:287
+#: editdlgtypes.cpp:294
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Display the alarm now"
 msgstr "அலாரத்தை இப்போது காட்டும்"
 
-#: editdlgtypes.cpp:669
+#: editdlgtypes.cpp:676
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Display the alarm message now"
 msgstr "அலாரத்தின் தகவலை இப்போது காட்டும்"
 
-#: editdlgtypes.cpp:678
+#: editdlgtypes.cpp:685
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Display the file now"
 msgstr "கோப்பை இப்போது காட்டும்"
 
-#: editdlgtypes.cpp:688
+#: editdlgtypes.cpp:695
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Display the command output now"
 msgstr "கட்டளை வெளியிடுவதை இப்போது காட்டும்"
 
-#: editdlgtypes.cpp:720
+#: editdlgtypes.cpp:727
 #, kde-format
 msgctxt "@title:window"
 msgid "Choose Text or Image File to Display"
 msgstr "காட்ட வேண்டிய பட அல்லது உரைக்கோப்பை தேர்ந்தெடுத்தல்"
 
-#: editdlgtypes.cpp:798
+#: editdlgtypes.cpp:805
 #, kde-format
 msgctxt "@option:check"
 msgid "Enter a script"
 msgstr "சிறுநிரலை உள்ளிடு"
 
-#: editdlgtypes.cpp:799
+#: editdlgtypes.cpp:806
 #, kde-format
 msgctxt "@option:radio"
 msgid "Execute in terminal window"
 msgstr "முனைய சாளரத்தில் செயல்படுத்து"
 
-#: editdlgtypes.cpp:800
+#: editdlgtypes.cpp:807
 #, kde-format
 msgctxt "@option:check"
 msgid "Execute in terminal window"
 msgstr "முனைய சாளரத்தில் செயல்படுத்து"
 
-#: editdlgtypes.cpp:830
+#: editdlgtypes.cpp:837
 #, kde-format
 msgctxt "@title:window"
 msgid "New Command Alarm Template"
 msgstr "புதிய கட்டளை அலாரத்திற்கான வார்ப்புரு"
 
-#: editdlgtypes.cpp:830
+#: editdlgtypes.cpp:837
 #, kde-format
 msgctxt "@title:window"
 msgid "Edit Command Alarm Template"
 msgstr "கட்டளை அலாரத்திற்கான வார்ப்புருவை திருத்தல்"
 
-#: editdlgtypes.cpp:831
+#: editdlgtypes.cpp:838
 #, kde-format
 msgctxt "@title:window"
 msgid "New Command Alarm"
 msgstr "புதிய கட்டளை அலாரம்"
 
-#: editdlgtypes.cpp:831
+#: editdlgtypes.cpp:838
 #, kde-format
 msgctxt "@title:window"
 msgid "Edit Command Alarm"
 msgstr "கட்டளை அலாரத்தை திருத்தல்"
 
-#: editdlgtypes.cpp:839
+#: editdlgtypes.cpp:846
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Execute the specified command now"
 msgstr "குறிப்பிட்ட கட்டளையை இப்போது செயல்படுத்து"
 
-#: editdlgtypes.cpp:840
+#: editdlgtypes.cpp:847
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Execute the specified command now"
 msgstr "குறிப்பிட்ட கட்டளையை இப்போது செயல்படுத்து"
 
-#: editdlgtypes.cpp:847 specialactions.cpp:182
+#: editdlgtypes.cpp:854 specialactions.cpp:182
 #, kde-format
 msgctxt "@option:check"
 msgid "Do not notify errors"
 msgstr "சிக்கல்களிருந்தால் தெரிவிக்காதே"
 
-#: editdlgtypes.cpp:848
+#: editdlgtypes.cpp:855
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Do not show error message if the command fails."
 msgstr "கட்டளை தோல்வியடைந்தால் சிக்கலை பற்றிய செய்தியை காட்ட வேண்டாம்."
 
-#: editdlgtypes.cpp:854
+#: editdlgtypes.cpp:861
 #, kde-format
 msgctxt "@title:group"
 msgid "Command Output"
 msgstr "கட்டளையின் வெளியீட்டு"
 
-#: editdlgtypes.cpp:862
+#: editdlgtypes.cpp:869
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to execute the command in a terminal window"
 msgstr "கட்டளையை முனைய சாளரத்தில் இயக்க இதை குறியுங்கள்"
 
-#: editdlgtypes.cpp:875
+#: editdlgtypes.cpp:882
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the name or path of the log file."
 msgstr "பதிவுகள் சேமிக்கப்பட வேண்டிய கோப்பின் பெயரை அல்லது பாதையை உள்ளிடுங்கள்."
 
-#: editdlgtypes.cpp:884
+#: editdlgtypes.cpp:891
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select a log file."
 msgstr "பதிவுக்கோப்பை தேர்ந்தெடுங்கள்."
 
-#: editdlgtypes.cpp:887
+#: editdlgtypes.cpp:894
 #, kde-format
 msgctxt "@option:radio"
 msgid "Log to file"
 msgstr "கோப்பினுள் பதிவிடு"
 
-#: editdlgtypes.cpp:888
+#: editdlgtypes.cpp:895
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2636,26 +2636,26 @@ msgstr ""
 "கட்டளை வெளியிடும் உரையை உள்ளமை கோப்பினுள் பதிவிட இதை குறியுங்கள்.கோப்பில் ஏற்கனவே "
 "உள்ளவற்றின் பின் வெளியீட்டு பதிவிடப்படும்."
 
-#: editdlgtypes.cpp:895
+#: editdlgtypes.cpp:902
 #, kde-format
 msgctxt "@option:radio"
 msgid "Discard"
 msgstr "கைவிடு"
 
-#: editdlgtypes.cpp:896
+#: editdlgtypes.cpp:903
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to discard command output."
 msgstr "கட்டளை வெளியிடுவதை கைவிட இதை குறியுங்கள்."
 
-#: editdlgtypes.cpp:1058
+#: editdlgtypes.cpp:1065
 #, kde-format
 msgctxt "@info"
 msgid ""
 "Log file must be the name or path of a local file, with write permission."
 msgstr "எழுதக்கூடிய உள்ளமை கோப்பின் பெயராக அல்லது பாதையாக பதிவுக்கோப்பு இருக்க வேண்டும்."
 
-#: editdlgtypes.cpp:1068
+#: editdlgtypes.cpp:1075
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2665,61 +2665,61 @@ msgstr ""
 "<para>கட்டளை அலாரங்களுக்கான முனையச்செயலி தேரந்தெடுக்கப்படவில்லை.</para><para>அதை "
 "<application>கேயலாரத்தின்</application> அமைப்புகள் சாளரத்தில் அமையுங்கள்.</para>"
 
-#: editdlgtypes.cpp:1088
+#: editdlgtypes.cpp:1095
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Command executed: <icode>%1</icode>"
 msgstr "கட்டளை இயக்கப்பட்டது: <icode>%1</icode>"
 
-#: editdlgtypes.cpp:1122
+#: editdlgtypes.cpp:1129
 #, kde-format
 msgctxt "@option:check"
 msgid "Copy email to self"
 msgstr "எனக்கு மின்னஞ்சலின் நகலனுப்பு"
 
-#: editdlgtypes.cpp:1152
+#: editdlgtypes.cpp:1166
 #, kde-format
 msgctxt "@title:window"
 msgid "New Email Alarm Template"
 msgstr "புதிய மின்னஞ்சல் அலாரத்திற்கான வார்ப்புரு"
 
-#: editdlgtypes.cpp:1152
+#: editdlgtypes.cpp:1166
 #, kde-format
 msgctxt "@title:window"
 msgid "Edit Email Alarm Template"
 msgstr "மின்னஞ்சல் அலாரத்திற்கான வார்ப்புருவை திருத்தல்"
 
-#: editdlgtypes.cpp:1153
+#: editdlgtypes.cpp:1167
 #, kde-format
 msgctxt "@title:window"
 msgid "New Email Alarm"
 msgstr "புதிய மின்னஞ்சல் அலாரம்"
 
-#: editdlgtypes.cpp:1153
+#: editdlgtypes.cpp:1167
 #, kde-format
 msgctxt "@title:window"
 msgid "Edit Email Alarm"
 msgstr "மின்னஞ்சல் அலாரத்தை திருத்தல்"
 
-#: editdlgtypes.cpp:1161
+#: editdlgtypes.cpp:1175
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Send the email to the specified addressees now"
 msgstr "குறிப்பிட்ட முகவரிகளுக்கு மின்னஞ்சலை இப்போது அனுப்பும்"
 
-#: editdlgtypes.cpp:1162
+#: editdlgtypes.cpp:1176
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Send the email now"
 msgstr "மின்னஞ்சலை இப்போது அனுப்பும்"
 
-#: editdlgtypes.cpp:1173
+#: editdlgtypes.cpp:1187
 #, kde-format
 msgctxt "@label:listbox 'From' email address"
 msgid "From:"
 msgstr "அனுப்புநர்:"
 
-#: editdlgtypes.cpp:1179
+#: editdlgtypes.cpp:1193
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2729,13 +2729,13 @@ msgstr ""
 "உங்கள் மின்னஞ்சல் அடையாளம்; மின்னஞ்சல் அனுப்பும்போது உங்களை அனுப்புநரென அடையாளங்காட்ட "
 "பயன்படும்."
 
-#: editdlgtypes.cpp:1185
+#: editdlgtypes.cpp:1199
 #, kde-format
 msgctxt "@label:textbox Email addressee"
 msgid "To:"
 msgstr "பெறுநர்:"
 
-#: editdlgtypes.cpp:1190
+#: editdlgtypes.cpp:1204
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -2745,194 +2745,194 @@ msgstr ""
 "பெறுநர்களின் முகவரிகளை இங்கு உள்ளிடுங்கள். பல முகவரிகள் இருந்தால், அவற்றை "
 "காற்புள்ளிகளாலோ அரைப்புள்ளிகளாலோ பிரியுங்கள்."
 
-#: editdlgtypes.cpp:1201
+#: editdlgtypes.cpp:1215
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Open address book"
 msgstr "முகவரிப்புத்தகத்தை திற"
 
-#: editdlgtypes.cpp:1202
+#: editdlgtypes.cpp:1216
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Select email addresses from your address book."
 msgstr "முகவரிப் புத்தகத்திலிருந்து மின்னஞ்சல் முகவரிகளை தேர்ந்தெடுக்க உதவும்."
 
-#: editdlgtypes.cpp:1209
+#: editdlgtypes.cpp:1223
 #, kde-format
 msgctxt "@label:textbox Email subject"
 msgid "Subject:"
 msgstr "தலைப்பு:"
 
-#: editdlgtypes.cpp:1215
+#: editdlgtypes.cpp:1229
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the email subject."
 msgstr "மின்னஞ்சலின் தலைப்பை (பொருளை) உள்ளிடுங்கள்."
 
-#: editdlgtypes.cpp:1221
+#: editdlgtypes.cpp:1235
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the email message."
 msgstr "மின்னஞ்சலின் உரையை உள்ளிடுங்கள்."
 
-#: editdlgtypes.cpp:1229
+#: editdlgtypes.cpp:1243
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Attachments:"
 msgstr "உடனிணைப்புகள்:"
 
-#: editdlgtypes.cpp:1238
+#: editdlgtypes.cpp:1252
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Files to send as attachments to the email."
 msgstr "மின்னஞ்சலுடன் இணைப்பாக அனுப்ப வேண்டிய கோப்புகள்."
 
-#: editdlgtypes.cpp:1242 resourceselector.cpp:76
+#: editdlgtypes.cpp:1256 resourceselector.cpp:76
 #, kde-format
 msgctxt "@action:button"
 msgid "Add..."
 msgstr "சேர்..."
 
-#: editdlgtypes.cpp:1244
+#: editdlgtypes.cpp:1258
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Add an attachment to the email."
 msgstr "மின்னஞ்சலுடன் உடனிணைப்பை சேர்க்கும்."
 
-#: editdlgtypes.cpp:1247 resourceselector.cpp:78
+#: editdlgtypes.cpp:1261 resourceselector.cpp:78
 #, kde-format
 msgctxt "@action:button"
 msgid "Remove"
 msgstr "நீக்கு"
 
-#: editdlgtypes.cpp:1249
+#: editdlgtypes.cpp:1263
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Remove the highlighted attachment from the email."
 msgstr "தேர்ந்தெடுக்கப்பட்ட உடனிணைப்பை மின்னஞ்சலிலிருந்து நீக்கும்."
 
-#: editdlgtypes.cpp:1254
+#: editdlgtypes.cpp:1268
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "If checked, the email will be blind copied to you."
 msgstr "இது குறிக்கப்பட்டிருந்தால், மின்னஞ்சல் உங்களுக்கு மறைநகலாக அனுப்ப‍ப்படும்."
 
-#: editdlgtypes.cpp:1436
+#: editdlgtypes.cpp:1450
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Invalid email address: <email>%1</email>"
 msgstr "செல்லுபடியாகாத மின்னஞ்சல் முகவரி: <email>%1</email>"
 
-#: editdlgtypes.cpp:1443
+#: editdlgtypes.cpp:1457
 #, kde-format
 msgctxt "@info"
 msgid "No email address specified"
 msgstr "மின்னஞ்சல் முகவரி ஏதும் குறிப்பிடப்படவில்லை."
 
-#: editdlgtypes.cpp:1460
+#: editdlgtypes.cpp:1474
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Invalid email attachment: <filename>%1</filename>"
 msgstr "செல்லுபடியாகாத உடனிணைப்பு: <filename>%1</filename>"
 
-#: editdlgtypes.cpp:1464
+#: editdlgtypes.cpp:1478
 #, kde-format
 msgctxt "@info"
 msgid "Do you really want to send the email now to the specified recipient(s)?"
 msgstr "நீங்கள் குறிப்பிட்ட பெறுநர்களுக்கு இப்போதே உறுதியாக மின்னஞ்சலை அனுப்ப வேண்டுமா?"
 
-#: editdlgtypes.cpp:1465
+#: editdlgtypes.cpp:1479
 #, kde-format
 msgctxt "@action:button"
 msgid "Confirm Email"
 msgstr "மின்னஞ்சலை உறுதி செய்யவும்"
 
-#: editdlgtypes.cpp:1465
+#: editdlgtypes.cpp:1479
 #, kde-format
 msgctxt "@action:button"
 msgid "Send"
 msgstr "அனுப்பு"
 
-#: editdlgtypes.cpp:1491
+#: editdlgtypes.cpp:1505
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Email sent to:<nl/>%1<nl/>Bcc: <email>%2</email>"
 msgstr "இவர்களுக்கு மின்னஞ்சல் அனுப்ப‍ப்பட்டது:<nl/>%1<nl/>மறைநகல்: <email>%2</email>"
 
-#: editdlgtypes.cpp:1494
+#: editdlgtypes.cpp:1508
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Email sent to:<nl/>%1"
 msgstr "இவர்களுக்கு மின்னஞ்சல் அனுப்ப‍ப்பட்டது:<nl/>%1"
 
-#: editdlgtypes.cpp:1523
+#: editdlgtypes.cpp:1537
 #, kde-format
 msgctxt "@title:window"
 msgid "Choose File to Attach"
 msgstr "இணைக்க வேண்டிய கோப்பை தேர்வு செய்தல்"
 
-#: editdlgtypes.cpp:1606
+#: editdlgtypes.cpp:1620
 #, kde-format
 msgctxt "@title:window"
 msgid "New Audio Alarm Template"
 msgstr "புதிய ஒலி அலாரத்திற்கான வார்ப்புரு"
 
-#: editdlgtypes.cpp:1606
+#: editdlgtypes.cpp:1620
 #, kde-format
 msgctxt "@title:window"
 msgid "Edit Audio Alarm Template"
 msgstr "ஒலி அலாரத்திற்கான வார்ப்புருவை திருத்தல்"
 
-#: editdlgtypes.cpp:1607
+#: editdlgtypes.cpp:1621
 #, kde-format
 msgctxt "@title:window"
 msgid "New Audio Alarm"
 msgstr "புதிய ஒலி அலாரம்"
 
-#: editdlgtypes.cpp:1607
+#: editdlgtypes.cpp:1621
 #, kde-format
 msgctxt "@title:window"
 msgid "Edit Audio Alarm"
 msgstr "ஒலி அலாரத்தை திருத்தல்"
 
-#: editdlgtypes.cpp:1615
+#: editdlgtypes.cpp:1629
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Play the audio file now"
 msgstr "ஒலிக்கோப்பை இப்போது இயக்கு"
 
-#: editdlgtypes.cpp:1616
+#: editdlgtypes.cpp:1630
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Play the audio file now"
 msgstr "ஒலிக்கோப்பை இப்போது இயக்கு"
 
-#: editdlgtypes.cpp:1618
+#: editdlgtypes.cpp:1632
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "If checked, the sound file will be played repeatedly until %1 is clicked."
 msgstr "இது குறிக்கப்பட்டால், %1 அழுத்தப்படும்வரை ஒலி திரும்பத்திரும்ப இயக்கப்படும்."
 
-#: editdlgtypes.cpp:1830
+#: editdlgtypes.cpp:1844
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Check to enter the contents of a script instead of a shell command line"
 msgstr "கட்டளைக்கு பதிலாக ஒரு சிறுநிரலைப் பயன்படுத்த இதைக் குறிக்கவும்"
 
-#: editdlgtypes.cpp:1836
+#: editdlgtypes.cpp:1850
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter a shell command to execute."
 msgstr "இயக்க வேண்டிய முனைய கட்டளையை உள்ளிடுங்கள்."
 
-#: editdlgtypes.cpp:1841
+#: editdlgtypes.cpp:1855
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Enter the contents of a script to execute"
 msgstr "இயக்க வேண்டிய சிறுநிரலின் உள்ளடக்கத்தை உள்ளிடுங்கள்"
 
-#: editdlgtypes.cpp:1896
+#: editdlgtypes.cpp:1917
 #, kde-kuit-format
 msgctxt "@info"
 msgid ""
@@ -2942,7 +2942,7 @@ msgstr ""
 "<para>சூழல் மாறிகளை கட்டளையால் அமைக்க முடியவில்லை:</para><para><icode>%1</icode></"
 "para>"
 
-#: editdlgtypes.cpp:1901
+#: editdlgtypes.cpp:1922
 #, kde-format
 msgctxt "@info"
 msgid "Please enter a command or script to execute"
