@@ -98,6 +98,10 @@
   <summary xml:lang="x-test">xxPersonal Alarm Schedulerxx</summary>
   <summary xml:lang="zh-CN">个人闹钟计划程序</summary>
   <summary xml:lang="zh-TW">個人鬧鐘排程程式</summary>
+  <developer id="org.kde">
+    <name translate="no">KDE</name>
+  </developer>
+  <launchable type="desktop-id">org.kde.kalarm.desktop</launchable>
   <description>
     <p>KAlarm is a personal alarm message, command and email scheduler application by KDE</p>
     <p xml:lang="ar">منبّهك هو مجدوِل رسائل وأوامر وبريد إلكترونيّ شخصيّ بواسطة كِيدِي</p>
