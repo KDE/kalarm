@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-06-15 02:26+0000\n"
-"PO-Revision-Date: 2024-05-09 06:42+0900\n"
+"PO-Revision-Date: 2024-06-20 03:06+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
 "Language: zh_TW\n"
@@ -1009,7 +1009,7 @@ msgid ""
 "archived alarms are always stored in the default archived alarm calendar.</p>"
 msgstr ""
 "<p>儲存新的鬧鐘或鬧鐘樣本時，若是有一個以上可使用的行事曆，則詢問使用者要儲存"
-"到哪個行事曆中。</p><p>注意歸檔的鬧鐘會儲存在預設的歸檔鬧鐘行事曆內。</p>"
+"到哪個行事曆中。</p><p>注意封存的鬧鐘會儲存在預設的封存鬧鐘行事曆內。</p>"
 
 #. i18n: ectx: label, entry (Base_ModalMessages), group (General)
 #: data/kalarmconfig.kcfg:151
@@ -1326,14 +1326,14 @@ msgstr "選擇在鬧鐘清單中，已關閉的鬧鐘的文字顏色。"
 #, kde-format
 msgctxt "@label"
 msgid "Archived alarm color"
-msgstr "已歸檔的鬧鐘顏色"
+msgstr "已封存的鬧鐘顏色"
 
 #. i18n: ectx: whatsthis, entry (ArchivedColour), group (General)
 #: data/kalarmconfig.kcfg:255 prefdlg.cpp:1952
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Choose the text color in the alarm list for archived alarms."
-msgstr "選擇在鬧鐘清單中，已歸檔的鬧鐘的文字顏色。"
+msgstr "選擇在鬧鐘清單中，已封存的鬧鐘的文字顏色。"
 
 #. i18n: ectx: label, entry (ArchivedKeepDays), group (General)
 #: data/kalarmconfig.kcfg:260
@@ -2007,7 +2007,7 @@ msgstr "鬧鐘樣本【唯讀】"
 #, kde-format
 msgctxt "@title:window"
 msgid "Archived Alarm [read-only]"
-msgstr "已歸檔的鬧鐘【唯讀】"
+msgstr "已封存的鬧鐘【唯讀】"
 
 #: editdlg.cpp:183
 #, kde-format
@@ -2904,7 +2904,7 @@ msgstr "勾選此項以搜尋已啟動的鬧鐘。"
 #, kde-format
 msgctxt "@option:check Alarm type"
 msgid "Archived"
-msgstr "已歸檔"
+msgstr "已封存"
 
 #: find.cpp:113
 #, kde-format
@@ -2912,7 +2912,7 @@ msgctxt "@info:whatsthis"
 msgid ""
 "Check to include archived alarms in the search. This option is only "
 "available if archived alarms are currently being displayed."
-msgstr "勾選此項以搜尋已歸檔的鬧鐘。只有在顯示中有已歸檔的鬧鐘時才能選擇。"
+msgstr "勾選此項以搜尋已封存的鬧鐘。只有在顯示中有已封存的鬧鐘時才能選擇。"
 
 #: find.cpp:121
 #, kde-format
@@ -3335,7 +3335,7 @@ msgid ""
 "<interface>View | Show Calendars</interface> to check or change calendar "
 "statuses."
 msgstr ""
-"鬧鐘設定為要歸檔，但由於沒有啟用任何可寫入的歸檔鬧鐘行事曆，目前無法進行歸"
+"鬧鐘設定為要封存，但由於沒有啟用任何可寫入的封存鬧鐘行事曆，目前無法進行歸"
 "檔。<nl/><nl/>要修正這個問題，請使用 <interface>檢視 | 顯示行事曆</"
 "interface> 來檢查或變更行事曆狀態。"
 
@@ -3349,9 +3349,9 @@ msgid ""
 "calendar, and check <interface>Use as Default for Archived Alarms</"
 "interface>."
 msgstr ""
-"鬧鐘設定為要歸檔，但由於沒有設定預設的歸檔鬧鐘行事曆，目前無法進行歸檔。<nl/"
+"鬧鐘設定為要封存，但由於沒有設定預設的封存鬧鐘行事曆，目前無法進行封存。<nl/"
 "><nl/>要修正這個問題，請使用 <interface>檢視 | 顯示行事曆</interface>，選取一"
-"個歸檔鬧鐘行事曆，然後勾選 <interface>設為歸檔鬧鐘的預設</interface>。"
+"個封存鬧鐘行事曆，然後勾選 <interface>設為封存鬧鐘的預設</interface>。"
 
 #: kalarmapp.cpp:2500
 #, kde-format
@@ -3646,7 +3646,7 @@ msgstr "唯讀"
 #, kde-format
 msgctxt "@label Whether alarm should be archived"
 msgid "Archive"
-msgstr "歸檔"
+msgstr "封存"
 
 #: kalarmcalendar/kaeventformatter.cpp:83
 #, kde-format
@@ -3874,7 +3874,7 @@ msgstr "作用中"
 #, kde-format
 msgctxt "@info Alarm type"
 msgid "Archived"
-msgstr "已歸檔"
+msgstr "已封存"
 
 #: kalarmcalendar/kaeventformatter.cpp:277
 #, kde-format
@@ -4296,7 +4296,7 @@ msgstr "從休眠中喚醒..."
 #, kde-format
 msgctxt "@action"
 msgid "Show Archived Alarms"
-msgstr "顯示已歸檔的鬧鐘"
+msgstr "顯示已封存的鬧鐘"
 
 #: mainwindow.cpp:524
 #, kde-format
@@ -4370,13 +4370,13 @@ msgstr "刪除"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Hide Archived Alarms"
-msgstr "隱藏已歸檔的鬧鐘"
+msgstr "隱藏已封存的鬧鐘"
 
 #: mainwindow.cpp:904
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show Archived Alarms"
-msgstr "顯示已歸檔的鬧鐘"
+msgstr "顯示已封存的鬧鐘"
 
 #: mainwindow.cpp:980
 #, kde-format
@@ -5203,13 +5203,13 @@ msgid ""
 "calendar.</para>"
 msgstr ""
 "<p>儲存新的鬧鐘或鬧鐘樣本時，若是有一個以上可使用的行事曆，則詢問使用者要儲存"
-"到哪個行事曆中。</p><p>注意歸檔的鬧鐘會儲存在預設的歸檔鬧鐘行事曆內。</p>"
+"到哪個行事曆中。</p><p>注意封存的鬧鐘會儲存在預設的封存鬧鐘行事曆內。</p>"
 
 #: prefdlg.cpp:957
 #, kde-format
 msgctxt "@title:group"
 msgid "Archived Alarms"
-msgstr "已歸檔的鬧鐘"
+msgstr "已封存的鬧鐘"
 
 #: prefdlg.cpp:962
 #, kde-format
@@ -5231,7 +5231,7 @@ msgstr ""
 #, kde-format
 msgctxt "@option:check"
 msgid "Discard archived alarms after:"
-msgstr "鬧鐘歸檔多久後捨棄："
+msgstr "鬧鐘封存多久後捨棄："
 
 #: prefdlg.cpp:980
 #, kde-format
@@ -5246,20 +5246,20 @@ msgid ""
 "Uncheck to store archived alarms indefinitely. Check to enter how long "
 "archived alarms should be stored."
 msgstr ""
-"如果不勾選此選項，則歸檔的鬧鐘將被永久保存。勾選此選項的話則可以選擇要保留多"
+"如果不勾選此選項，則封存的鬧鐘將被永久保存。勾選此選項的話則可以選擇要保留多"
 "久。"
 
 #: prefdlg.cpp:987
 #, kde-format
 msgctxt "@action:button"
 msgid "Clear Archived Alarms"
-msgstr "清除已歸檔的鬧鐘"
+msgstr "清除已封存的鬧鐘"
 
 #: prefdlg.cpp:990
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Delete all existing archived alarms."
-msgstr "刪除所有存在的已歸檔的鬧鐘。"
+msgstr "刪除所有存在的已封存的鬧鐘。"
 
 #: prefdlg.cpp:991
 #, kde-format
@@ -5267,7 +5267,7 @@ msgctxt "@info:whatsthis"
 msgid ""
 "Delete all existing archived alarms (from the default archived alarm "
 "calendar only)."
-msgstr "刪除所有存在的已歸檔的鬧鐘（只從預設的歸檔鬧鐘行事曆中）。"
+msgstr "刪除所有存在的已封存的鬧鐘（只從預設的封存鬧鐘行事曆中）。"
 
 #: prefdlg.cpp:1037
 #, kde-kuit-format
@@ -5278,15 +5278,15 @@ msgid ""
 "first use the calendars view to select a default archived alarms calendar.</"
 "para>"
 msgstr ""
-"<para>要將鬧鐘歸檔，必須要有一個預設的行事曆，不過目前沒有開啟任何行事曆。</"
-"para> <para>如果您希望保留逾時的鬧鐘，請先使用行事曆檢視來選擇一個預設的歸檔"
+"<para>要將鬧鐘封存，必須要有一個預設的行事曆，不過目前沒有開啟任何行事曆。</"
+"para> <para>如果您希望保留逾時的鬧鐘，請先使用行事曆檢視來選擇一個預設的封存"
 "鬧鐘行事曆。</para>"
 
 #: prefdlg.cpp:1054
 #, kde-format
 msgctxt "@info"
 msgid "Do you really want to delete all archived alarms?"
-msgstr "您真的要刪除所有已歸檔的鬧鐘嗎？"
+msgstr "您真的要刪除所有已封存的鬧鐘嗎？"
 
 #: prefdlg.cpp:1055
 #, kde-format
@@ -5294,7 +5294,7 @@ msgctxt "@info"
 msgid ""
 "Do you really want to delete all alarms in the default archived alarm "
 "calendar?"
-msgstr "您真的要刪除在預設歸檔鬧鐘行事曆中，所有已歸檔的鬧鐘嗎？"
+msgstr "您真的要刪除在預設封存鬧鐘行事曆中，所有已封存的鬧鐘嗎？"
 
 #: prefdlg.cpp:1073
 #, kde-format
@@ -5809,7 +5809,7 @@ msgstr "已關閉的鬧鐘顏色："
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Archived alarm color:"
-msgstr "已歸檔的鬧鐘顏色："
+msgstr "已封存的鬧鐘顏色："
 
 #: prefdlg.cpp:1959
 #, kde-format
@@ -6661,7 +6661,7 @@ msgstr "匯入作用中的鬧鐘"
 #, kde-format
 msgctxt "@title:tab"
 msgid "Import Archived Alarms"
-msgstr "匯入已歸檔的鬧鐘"
+msgstr "匯入已封存的鬧鐘"
 
 #: resources/migration/dirresourceimportdialog.cpp:64
 #, kde-format
@@ -6679,7 +6679,7 @@ msgstr "作用中的鬧鐘"
 #, kde-format
 msgctxt "@item:intext"
 msgid "Archived alarms"
-msgstr "已歸檔的鬧鐘"
+msgstr "已封存的鬧鐘"
 
 #: resources/migration/dirresourceimportdialog.cpp:195
 #, kde-format
@@ -6875,7 +6875,7 @@ msgstr "作用中的鬧鐘"
 #, kde-format
 msgctxt "@info/plain Name of a calendar"
 msgid "Archived Alarms"
-msgstr "已歸檔的鬧鐘"
+msgstr "已封存的鬧鐘"
 
 #: resources/migration/fileresourcemigrator.cpp:259
 #, kde-format
@@ -6903,7 +6903,7 @@ msgstr "作用中的鬧鐘"
 #, kde-format
 msgctxt "@item:intext"
 msgid "Archived Alarms"
-msgstr "已歸檔的鬧鐘"
+msgstr "已封存的鬧鐘"
 
 #: resources/resourcedatamodelbase.cpp:69
 #, kde-format
@@ -7112,7 +7112,7 @@ msgctxt "@info"
 msgid ""
 "You cannot disable your default archived alarm calendar while expired alarms "
 "are configured to be kept."
-msgstr "您無法關閉您預設的歸檔鬧鐘行事曆，因為您設定將逾時的鬧鐘保留住。"
+msgstr "您無法關閉您預設的封存鬧鐘行事曆，因為您設定將逾時的鬧鐘保留住。"
 
 #: resources/resourcemodel.cpp:338
 #, kde-format
@@ -7142,7 +7142,7 @@ msgid ""
 "The calendar <resource>%1</resource> has been made read-only. This was the "
 "default calendar for archived alarms."
 msgstr ""
-"行事曆 <resource>%1</resource> 已設為唯讀。它原本是已歸檔鬧鐘的預設行事曆。"
+"行事曆 <resource>%1</resource> 已設為唯讀。它原本是已封存鬧鐘的預設行事曆。"
 
 #: resources/resources.cpp:500
 #, kde-kuit-format
@@ -7296,7 +7296,7 @@ msgstr "作用中的鬧鐘"
 #, kde-format
 msgctxt "@option:radio"
 msgid "Archived Alarms"
-msgstr "已歸檔的鬧鐘"
+msgstr "已封存的鬧鐘"
 
 #. i18n: ectx: property (text), widget (QRadioButton, templateRadio)
 #: resources/singlefileresourceconfigdialog.ui:112
@@ -7330,7 +7330,7 @@ msgstr "作用中的鬧鐘"
 #, kde-format
 msgctxt "@item"
 msgid "Archived Alarms"
-msgstr "已歸檔的鬧鐘"
+msgstr "已封存的鬧鐘"
 
 #. i18n: ectx: property (text), widget (QLineEdit, templateAlarmsText)
 #: resources/singlefileresourceconfigdialog.ui:181
@@ -7401,7 +7401,7 @@ msgstr "作用中的鬧鐘"
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Archived Alarms"
-msgstr "已歸檔的鬧鐘"
+msgstr "已封存的鬧鐘"
 
 #: resourceselector.cpp:56
 #, kde-format
@@ -7465,7 +7465,7 @@ msgstr "新增作用中的鬧鐘行事曆"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Add a new archived alarm calendar"
-msgstr "新增歸檔鬧鐘行事曆"
+msgstr "新增封存鬧鐘行事曆"
 
 #: resourceselector.cpp:119
 #, kde-format
@@ -7485,7 +7485,7 @@ msgctxt "@info"
 msgid ""
 "You cannot remove your default archived alarm calendar while expired alarms "
 "are configured to be kept."
-msgstr "您無法移除您預設歸檔鬧鐘行事曆，因為您設定將逾時的鬧鐘保留。"
+msgstr "您無法移除您預設封存鬧鐘行事曆，因為您設定將逾時的鬧鐘保留。"
 
 #: resourceselector.cpp:253
 #, kde-kuit-format
@@ -7587,7 +7587,7 @@ msgstr "設為作用中鬧鐘的預設"
 #, kde-format
 msgctxt "@action"
 msgid "Use as Default for Archived Alarms"
-msgstr "設為歸檔鬧鐘的預設"
+msgstr "設為封存鬧鐘的預設"
 
 #: resourceselector.cpp:374
 #, kde-format
@@ -7605,7 +7605,7 @@ msgstr "作用中的鬧鐘"
 #, kde-format
 msgctxt "@info"
 msgid "Archived alarms"
-msgstr "已歸檔的鬧鐘"
+msgstr "已封存的鬧鐘"
 
 #: resourceselector.cpp:507
 #, kde-format
@@ -8145,7 +8145,7 @@ msgstr "儲存重新啟動的鬧鐘樣本時發生錯誤"
 #, kde-format
 msgctxt "@info"
 msgid "Cannot reactivate archived alarm"
-msgstr "無法重新啟用已歸檔的鬧鐘"
+msgstr "無法重新啟用已封存的鬧鐘"
 
 #: undo.cpp:409
 #, kde-format
@@ -8187,7 +8187,7 @@ msgstr "刪除樣本"
 #, kde-format
 msgctxt "@info"
 msgid "Delete archived alarm"
-msgstr "刪除已歸檔的鬧鐘"
+msgstr "刪除已封存的鬧鐘"
 
 #: undo.cpp:944
 #, kde-format
@@ -8223,7 +8223,7 @@ msgstr "刪除多個樣本"
 #, kde-format
 msgctxt "@info"
 msgid "Delete multiple archived alarms"
-msgstr "刪除多個已歸檔的鬧鐘"
+msgstr "刪除多個已封存的鬧鐘"
 
 #: undo.cpp:1321 undo.cpp:1375
 #, kde-format
