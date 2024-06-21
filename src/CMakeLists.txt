@@ -4,7 +4,7 @@ include_directories(
 )
 
 add_subdirectory(kalarmcalendar)
-if (ENABLE_AKONADI_PLUGIN)
+if(ENABLE_AKONADI_PLUGIN)
     add_subdirectory(akonadiplugin)
 endif()
 add_subdirectory(icons)
@@ -267,7 +267,7 @@ set(kalarm_bin_SRCS ${libkalarm_SRCS} ${resources_SRCS}
     templatedlg.h
     templatemenuaction.h
 )
-if (ENABLE_RTC_WAKE_FROM_SUSPEND)
+if(ENABLE_RTC_WAKE_FROM_SUSPEND)
     set(kalarm_bin_SRCS ${kalarm_bin_SRCS}
         wakedlg.cpp
         wakedlg.h
@@ -291,13 +291,13 @@ qt_add_dbus_interface(kalarm_bin_SRCS data/org.freedesktop.ScreenSaver.xml scree
 
 kconfig_add_kcfg_files(kalarm_bin_SRCS GENERATE_MOC data/kalarmconfig.kcfgc)
 
-#if (UNIX)
+#if(UNIX)
 file(GLOB ICONS_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/icons/hicolor/*-apps-kalarm.png")
 ecm_add_app_icon(kalarm_bin_SRCS ICONS ${ICONS_SRCS})
 add_executable(kalarm_bin ${kalarm_bin_SRCS})
 
 set_target_properties(kalarm_bin PROPERTIES OUTPUT_NAME kalarm)
-if (COMPILE_WITH_UNITY_CMAKE_SUPPORT)
+if(COMPILE_WITH_UNITY_CMAKE_SUPPORT)
     set_target_properties(kalarm_bin PROPERTIES UNITY_BUILD ON)
 endif()
 
@@ -331,22 +331,22 @@ target_link_libraries(kalarm_bin
     KPim6::Mime
     Canberra::Canberra
 )
-if (TARGET KF6::TextEditTextToSpeech)
+if(TARGET KF6::TextEditTextToSpeech)
     target_link_libraries(kalarm_bin KF6::TextEditTextToSpeech)
 endif()
 if(TARGET KF6::IconThemes)
     target_link_libraries(kalarm_bin KF6::IconThemes)
 endif()
-if (ENABLE_RTC_WAKE_FROM_SUSPEND)
+if(ENABLE_RTC_WAKE_FROM_SUSPEND)
     target_link_libraries(kalarm_bin KF6::AuthCore)
 endif()
 
-if (ENABLE_X11)
+if(ENABLE_X11)
     target_link_libraries(kalarm_bin ${X11_X11_LIB})
 endif()
 
 install(TARGETS kalarm_bin ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
-#endif (UNIX)
+#endif(UNIX)
 
 ########### install files ###############
 
@@ -360,7 +360,7 @@ install(FILES data/kalarm.notifyrc DESTINATION ${KDE_INSTALL_KNOTIFYRCDIR})
 
 ########### KAuth helper ###############
 
-if (ENABLE_RTC_WAKE_FROM_SUSPEND)
+if(ENABLE_RTC_WAKE_FROM_SUSPEND)
     add_executable(kalarm_helper rtcwakeaction.cpp rtcwakeaction.h ${libkalarm_common_SRCS})
     target_link_libraries(kalarm_helper KF6::AuthCore KF6::I18n)
     install(TARGETS kalarm_helper DESTINATION ${KAUTH_HELPER_INSTALL_DIR})

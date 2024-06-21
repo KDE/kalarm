@@ -20,7 +20,7 @@ set(KALARM_VERSION_RELEASE_SERVICE_MICRO "2")
 math(EXPR LAST_RELEASE_MONTH "${KALARM_VERSION_RELEASE_SERVICE_MAJOR} * 12 + ${KALARM_VERSION_RELEASE_SERVICE_MINOR} + ${KALARM_VERSION_RELEASE_SERVICE_MICRO}")
 math(EXPR THIS_RELEASE_MONTH "${RELEASE_SERVICE_VERSION_MAJOR} * 12 + ${RELEASE_SERVICE_VERSION_MINOR} + ${RELEASE_SERVICE_VERSION_MICRO}")
 math(EXPR KALARM_RELEASE_SUB_VERSION "${THIS_RELEASE_MONTH} - ${LAST_RELEASE_MONTH}")
-if (${KALARM_RELEASE_SUB_VERSION} GREATER 0)
+if(${KALARM_RELEASE_SUB_VERSION} GREATER 0)
     set(KALARM_VERSION "${KALARM_VERSION}.${KALARM_RELEASE_SUB_VERSION}")
 endif()
 
@@ -54,7 +54,7 @@ set(KTEXTADDONS_MIN_VERSION "1.5.4")
 set(KDEPIM_DEV_VERSION alpha)
 
 # add an extra space
-if (DEFINED KDEPIM_DEV_VERSION)
+if(DEFINED KDEPIM_DEV_VERSION)
     set(KDEPIM_DEV_VERSION " ${KDEPIM_DEV_VERSION}")
 endif()
 
@@ -79,9 +79,9 @@ add_feature_info(AKONADI_PLUGIN ${ENABLE_AKONADI_PLUGIN} "Provides features depe
                    email functions, email address book, first run resource migration)")
 
 option(ENABLE_RTC_WAKE_FROM_SUSPEND "Enable RTC wake-from-suspend alarms (requires KAuth)" ON)
-if (ENABLE_RTC_WAKE_FROM_SUSPEND)
+if(ENABLE_RTC_WAKE_FROM_SUSPEND)
     find_package(KF6Auth ${KF_MIN_VERSION})
-    if (NOT KF6Auth_FOUND)
+    if(NOT KF6Auth_FOUND)
         set(ENABLE_RTC_WAKE_FROM_SUSPEND OFF)
     endif()
 endif()
@@ -133,11 +133,11 @@ set_package_properties(KF6TextEditTextToSpeech PROPERTIES DESCRIPTION
     TYPE OPTIONAL
 )
 
-if (TARGET KF6::TextEditTextToSpeech)
+if(TARGET KF6::TextEditTextToSpeech)
     add_definitions(-DHAVE_TEXT_TO_SPEECH_SUPPORT)
 endif()
 
-if (ENABLE_AKONADI_PLUGIN)
+if(ENABLE_AKONADI_PLUGIN)
     find_package(KPim6Akonadi ${AKONADI_VERSION} CONFIG REQUIRED)
     find_package(KPim6AkonadiContactWidgets ${AKONADI_CONTACT_VERSION} CONFIG REQUIRED)
     find_package(KPim6AkonadiMime ${AKONADI_MIMELIB_VERSION} CONFIG REQUIRED)
@@ -146,13 +146,13 @@ endif()
 
 configure_file(kalarm-version-string.h.in ${CMAKE_CURRENT_BINARY_DIR}/kalarm-version-string.h @ONLY)
 
-if (NOT APPLE)
+if(NOT APPLE)
     option(WITHOUT_X11 "Build without X11 integration (skips finding X11)" OFF)
     add_feature_info(WITHOUT_X11 ${WITHOUT_X11} "Disable X11 integration, even if X11 is available")
-    if (NOT WITHOUT_X11)
+    if(NOT WITHOUT_X11)
         find_package(X11)
         set(ENABLE_X11 ${X11_FOUND})
-        if (X11_FOUND)
+        if(X11_FOUND)
             find_package(Qt6 ${QT_REQUIRED_VERSION} CONFIG REQUIRED Gui)
             add_feature_info(ENABLE_X11 ${ENABLE_X11} "Enable use of X11")
         endif()
@@ -172,7 +172,7 @@ ecm_set_disabled_deprecation_versions(QT 5.15.2  KF 6.4.0)
 option(USE_UNITY_CMAKE_SUPPORT "Use UNITY cmake support (speedup compile time)" OFF)
 
 set(COMPILE_WITH_UNITY_CMAKE_SUPPORT OFF)
-if (USE_UNITY_CMAKE_SUPPORT)
+if(USE_UNITY_CMAKE_SUPPORT)
     set(COMPILE_WITH_UNITY_CMAKE_SUPPORT ON)
 endif()
 
@@ -184,7 +184,7 @@ ecm_qt_install_logging_categories(
     DESTINATION ${KDE_INSTALL_LOGGINGCATEGORIESDIR}
     )
 
-if (KF6DocTools_FOUND)
+if(KF6DocTools_FOUND)
     kdoctools_install(po)
     add_subdirectory(doc)
 endif()

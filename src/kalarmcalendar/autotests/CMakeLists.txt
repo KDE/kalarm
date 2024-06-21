@@ -19,11 +19,11 @@ macro(macro_unit_tests)
     target_include_directories(${_testname} PUBLIC "$<BUILD_INTERFACE:${kalarm_SOURCE_DIR}/src/kalarmcalendar;${kalarm_BINARY_DIR}/src/kalarmcalendar>")
   endforeach()
 endmacro()
-if (NOT WIN32)
+if(NOT WIN32)
 macro_unit_tests(
     kadatetimetest
     kaeventtest
 )
 else()
-    MESSAGE(STATUS "REACTIVATE AUTOTEST on WINDOWS")
+    message(STATUS "REACTIVATE AUTOTEST on WINDOWS")
 endif()
