@@ -327,7 +327,7 @@ QString KAMail::appendBodyAttachments(KMime::Message& message, JobData& data)
 
             QByteArray coded = KCodecs::base64Encode(contents);
             auto content = new KMime::Content();
-            content->setBody(coded + "\n\n");
+            content->setEncodedBody(coded + "\n\n");
 
             // Set the content type
             QMimeDatabase mimeDb;
@@ -340,7 +340,6 @@ QString KAMail::appendBodyAttachments(KMime::Message& message, JobData& data)
             // Set the encoding
             auto cte = new KMime::Headers::ContentTransferEncoding;
             cte->setEncoding(KMime::Headers::CEbase64);
-            cte->setDecoded(false);
             content->setHeader(cte);
             content->assemble();
             message.appendContent(content);
