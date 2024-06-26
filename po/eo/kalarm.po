@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-06-15 00:39+0000\n"
+"POT-Creation-Date: 2024-06-26 00:39+0000\n"
 "PO-Revision-Date: 2024-05-17 06:24+0100\n"
 "Last-Translator: Oliver Kellogg <olivermkellogg@gmail.com>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
@@ -4174,19 +4174,19 @@ msgctxt "@info"
 msgid "Attachment not found: <filename>%1</filename>"
 msgstr "Aldonaĵo ne trovita: <filename>%1</filename>"
 
-#: kamail.cpp:375
+#: kamail.cpp:374
 #, kde-format
 msgctxt "@info"
 msgid "An email has been queued to be sent"
 msgstr "Retpoŝto estas vicigita por esti sendita"
 
-#: kamail.cpp:541
+#: kamail.cpp:540
 #, kde-format
 msgctxt "@info"
 msgid "Failed to send email"
 msgstr "Malsukcesis sendi retpoŝton"
 
-#: kamail.cpp:542
+#: kamail.cpp:541
 #, kde-format
 msgctxt "@info"
 msgid "Error sending email"

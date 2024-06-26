@@ -22,7 +22,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-06-15 00:39+0000\n"
+"POT-Creation-Date: 2024-06-26 00:39+0000\n"
 "PO-Revision-Date: 2024-04-18 16:04+0300\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -4207,19 +4207,19 @@ msgctxt "@info"
 msgid "Attachment not found: <filename>%1</filename>"
 msgstr "Liitettä ei löytynyt: <filename>%1</filename>"
 
-#: kamail.cpp:375
+#: kamail.cpp:374
 #, kde-format
 msgctxt "@info"
 msgid "An email has been queued to be sent"
 msgstr "Sähköposti on viety jonoon lähetystä varten"
 
-#: kamail.cpp:541
+#: kamail.cpp:540
 #, kde-format
 msgctxt "@info"
 msgid "Failed to send email"
 msgstr "Sähköpostin lähetys epäonnistui "
 
-#: kamail.cpp:542
+#: kamail.cpp:541
 #, kde-format
 msgctxt "@info"
 msgid "Error sending email"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-06-15 00:39+0000\n"
+"POT-Creation-Date: 2024-06-26 00:39+0000\n"
 "PO-Revision-Date: 2007-08-22 18:39+0330\n"
 "Last-Translator: Nazanin Kazemi <kazemi@itland.ir>\n"
 "Language-Team: Persian <kde-i18n-fa@kde.org>\n"
@@ -4715,19 +4715,19 @@ msgstr ""
 "پیوست یافت نشد:\n"
 "<filename>%1</filename>"
 
-#: kamail.cpp:375
+#: kamail.cpp:374
 #, kde-format
 msgctxt "@info"
 msgid "An email has been queued to be sent"
 msgstr "یک رایانامه برای ارسال صف شده است"
 
-#: kamail.cpp:541
+#: kamail.cpp:540
 #, kde-format
 msgctxt "@info"
 msgid "Failed to send email"
 msgstr "خرابی در ارسال رایانامه"
 
-#: kamail.cpp:542
+#: kamail.cpp:541
 #, fuzzy, kde-format
 #| msgctxt "@info"
 #| msgid "Error saving alarm"

@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-06-15 00:39+0000\n"
+"POT-Creation-Date: 2024-06-26 00:39+0000\n"
 "PO-Revision-Date: 2005-12-29 22:18+0100\n"
 "Last-Translator: Arnar Leosson <leosson@frisurf.no>\n"
 "Language-Team: Icelandic <kde-isl@molar.is>\n"
@@ -4441,21 +4441,21 @@ msgstr ""
 "Viðhengi fannst ekki:\n"
 "%1"
 
-#: kamail.cpp:375
+#: kamail.cpp:374
 #, fuzzy, kde-format
 #| msgid "An email has been queued to be sent"
 msgctxt "@info"
 msgid "An email has been queued to be sent"
 msgstr "Póstur settur í biðröð til að senda"
 
-#: kamail.cpp:541
+#: kamail.cpp:540
 #, fuzzy, kde-format
 #| msgid "Failed to send email"
 msgctxt "@info"
 msgid "Failed to send email"
 msgstr "Gat ekki sent póst"
 
-#: kamail.cpp:542
+#: kamail.cpp:541
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Error sending email"

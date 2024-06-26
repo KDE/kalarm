@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-06-15 00:39+0000\n"
+"POT-Creation-Date: 2024-06-26 00:39+0000\n"
 "PO-Revision-Date: 2007-09-07 11:50+0545\n"
 "Last-Translator: Nabin Gautam <nabin@mpp.org.np>\n"
 "Language-Team: Nepali <info@mpp.org.np>\n"
@@ -4805,21 +4805,21 @@ msgstr ""
 "सङ्लग्नता फेला परेन:\n"
 "%1"
 
-#: kamail.cpp:375
+#: kamail.cpp:374
 #, fuzzy, kde-format
 #| msgid "An email has been queued to be sent"
 msgctxt "@info"
 msgid "An email has been queued to be sent"
 msgstr "पठाइने इमेल लामवद्ध गरिएको छ"
 
-#: kamail.cpp:541
+#: kamail.cpp:540
 #, fuzzy, kde-format
 #| msgid "Failed to send email"
 msgctxt "@info"
 msgid "Failed to send email"
 msgstr "इमेल पठाउन असफल"
 
-#: kamail.cpp:542
+#: kamail.cpp:541
 #, fuzzy, kde-format
 #| msgid "Error saving alarm"
 msgctxt "@info"

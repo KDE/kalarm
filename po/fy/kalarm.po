@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-06-15 00:39+0000\n"
+"POT-Creation-Date: 2024-06-26 00:39+0000\n"
 "PO-Revision-Date: 2007-04-24 00:52+0200\n"
 "Last-Translator: Rinse de Vries <rinsedevries@kde.nl>\n"
 "Language-Team: Frysk <kde-i18n-fry@kde.org>\n"
@@ -4817,21 +4817,21 @@ msgstr ""
 "Taheaksel net fûn:\n"
 "%1"
 
-#: kamail.cpp:375
+#: kamail.cpp:374
 #, fuzzy, kde-format
 #| msgid "An email has been queued to be sent"
 msgctxt "@info"
 msgid "An email has been queued to be sent"
 msgstr "Der is in e-mailberjocht klearsetten foar ferstjoeren"
 
-#: kamail.cpp:541
+#: kamail.cpp:540
 #, fuzzy, kde-format
 #| msgid "Failed to send email"
 msgctxt "@info"
 msgid "Failed to send email"
 msgstr "It ferstjoeren fan e-mailberjocht is mislearre"
 
-#: kamail.cpp:542
+#: kamail.cpp:541
 #, fuzzy, kde-format
 #| msgid "Error saving alarm"
 msgctxt "@info"

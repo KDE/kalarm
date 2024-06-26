@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-06-15 00:39+0000\n"
+"POT-Creation-Date: 2024-06-26 00:39+0000\n"
 "PO-Revision-Date: 2004-02-25 13:46+0000\n"
 "Last-Translator: KD at KGyfieithu <kyfieithu@dotmon.com>\n"
 "Language-Team: Cymraeg <cy@li.org>\n"
@@ -4396,21 +4396,21 @@ msgstr ""
 "Ni ganfuwyd atodiad:\n"
 "%1"
 
-#: kamail.cpp:375
+#: kamail.cpp:374
 #, fuzzy, kde-format
 #| msgid "An email has been queued to be sent"
 msgctxt "@info"
 msgid "An email has been queued to be sent"
 msgstr "Rhoddwyd ebost yn y rhes i'w anfon"
 
-#: kamail.cpp:541
+#: kamail.cpp:540
 #, fuzzy, kde-format
 #| msgid "Failed to send email"
 msgctxt "@info"
 msgid "Failed to send email"
 msgstr "Methwyd anfon ebost"
 
-#: kamail.cpp:542
+#: kamail.cpp:541
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Error sending email"

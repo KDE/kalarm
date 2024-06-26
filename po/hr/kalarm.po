@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm 0\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-06-15 00:39+0000\n"
+"POT-Creation-Date: 2024-06-26 00:39+0000\n"
 "PO-Revision-Date: 2011-03-28 17:53+0200\n"
 "Last-Translator: Marko Dimjašević <marko@dimjasevic.net>\n"
 "Language-Team: Croatian <kde-croatia-list@lists.sourceforge.net>\n"
@@ -4174,20 +4174,20 @@ msgstr ""
 "Datoteka za prilog nije nađen:\n"
 "%1"
 
-#: kamail.cpp:375
+#: kamail.cpp:374
 #, fuzzy, kde-format
 #| msgid "An email has been queued to be sent"
 msgctxt "@info"
 msgid "An email has been queued to be sent"
 msgstr "E-poruka je stavljena u red za slanje"
 
-#: kamail.cpp:541
+#: kamail.cpp:540
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Failed to send email"
 msgstr "Nisam uspio da pošaljem e-poruku"
 
-#: kamail.cpp:542
+#: kamail.cpp:541
 #, fuzzy, kde-format
 msgctxt "@info"
 msgid "Error sending email"
