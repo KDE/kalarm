@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-06-26 00:39+0000\n"
-"PO-Revision-Date: 2024-06-21 11:53+0300\n"
+"PO-Revision-Date: 2024-06-26 15:27+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -26,7 +26,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n == 1) ? 0 : ((n == 2) ? 1 : ((n > 10 && "
 "n % 10 == 0) ? 2 : 3));\n"
-"X-Generator: Poedit 3.4.2\n"
+"X-Generator: Lokalize 24.05.0\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -5890,7 +5890,7 @@ msgid "Yearly"
 msgstr "שנתי"
 
 #: recurrenceedit.cpp:80
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title:group"
 msgid "Recurrence Rule"
 msgstr "כלל חזרה"
@@ -6344,10 +6344,10 @@ msgid "Enter the number of years between repetitions of the alarm"
 msgstr "נא למלא את מספר השנים בין חזרות התזכורת"
 
 #: recurrenceedit.cpp:1503
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label List of months to select"
 msgid "Months:"
-msgstr "חודשים"
+msgstr "חודשים:"
 
 #: recurrenceedit.cpp:1521
 #, kde-format
@@ -6489,20 +6489,16 @@ msgid "Enter the length of time to repeat the alarm"
 msgstr "נא למלא את משך הזמן לחזרה על התזכורת"
 
 #: resources/calendarfunctions.cpp:53 resources/calendarfunctions.cpp:84
-#, fuzzy, kde-kuit-format
+#, kde-kuit-format
 msgctxt "@info"
 msgid "Could not load calendar <filename>%1</filename>."
-msgstr ""
-"אין אפשרות לפתוח את לוח השנה :\n"
-"%1"
+msgstr "לא ניתן לטעון את לוח השנה <filename>%1</filename>."
 
 #: resources/calendarfunctions.cpp:64
-#, fuzzy, kde-kuit-format
+#, kde-kuit-format
 msgctxt "@info"
 msgid "Cannot download calendar: <filename>%1</filename>"
-msgstr ""
-"אין אפשרות לפתוח את לוח השנה :\n"
-"%1"
+msgstr "לא ניתן להוריד את לוח השנה: <filename>%1</filename>"
 
 #: resources/calendarupdater.cpp:85
 #, kde-kuit-format
@@ -6539,12 +6535,10 @@ msgid "Calendar is not configured."
 msgstr "לוח השנה לא מוגדר."
 
 #: resources/fileresource.cpp:354 resources/fileresource.cpp:372
-#, fuzzy, kde-kuit-format
+#, kde-kuit-format
 msgctxt "@info"
 msgid "Error loading calendar <resource>%1</resource>."
-msgstr ""
-"אין אפשרות לפתוח את לוח השנה :\n"
-"%1"
+msgstr "שגיאה בטעינת לוח השנה <resource>%1</resource>."
 
 #: resources/fileresource.cpp:432 resources/fileresource.cpp:472
 #: resources/fileresource.cpp:482
@@ -6592,16 +6586,16 @@ msgid ""
 msgstr ""
 
 #: resources/migration/dirresourceimportdialog.cpp:34
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title:window"
 msgid "Import Directory Resource"
-msgstr "                               כתובת קובץ לוח השנה"
+msgstr "ייבוא משאב ספרייה"
 
 #: resources/migration/dirresourceimportdialog.cpp:39
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title:tab"
 msgid "Import Calendar Directory Resource"
-msgstr "                               כתובת קובץ לוח השנה"
+msgstr "ייבוא משאב ספריית לוח שנה"
 
 #: resources/migration/dirresourceimportdialog.cpp:46
 #, kde-format
@@ -6755,10 +6749,10 @@ msgstr "נא לבחור את המשאב אליו לייבא את התראות מ
 
 #. i18n: ectx: property (text), widget (QRadioButton, newRadio)
 #: resources/migration/dirresourceimportdialog_type.ui:49
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@option:radio"
 msgid "Import into new calendar file resource"
-msgstr "שליחת הדוא\"ל נכשלה"
+msgstr "ייבוא לתוך משאב קובץ לוח שנה חדש"
 
 #. i18n: ectx: property (text), widget (QLabel, pathLabel)
 #: resources/migration/dirresourceimportdialog_type.ui:64
@@ -6827,14 +6821,14 @@ msgid "Alarm Templates"
 msgstr "תבניות התראות"
 
 #: resources/migration/fileresourcemigrator.cpp:279
-#, fuzzy, kde-kuit-format
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "<para>Failed to create default calendar <resource>%1</resource></"
 "para><para>Location: <filename>%2</filename></para>"
 msgstr ""
-"אין אפשרות לפתוח את לוח השנה :\n"
-"%1"
+"<para>יצירת לוח השנה כברירת מחדל <resource>%1</resource> נכשלה</"
+"para><para>מקום: <filename>%2</filename></para>"
 
 #: resources/resourcedatamodelbase.cpp:65
 #, kde-format
