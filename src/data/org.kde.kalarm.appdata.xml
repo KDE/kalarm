@@ -452,6 +452,13 @@
   </provides>
   <releases>
     <release version="3.8.2" date="2024-07-04"/>
+      <description>
+        <p>Release description</p>
+        <ul>
+          <li>Fix crash after editing new alarm if spell checking is enabled.</li>
+        </ul>
+      </description>
+    </release>
     <release version="3.8.1.2" date="2024-06-13"/>
     <release version="3.8.1.1" date="2024-05-23"/>
     <release version="3.8.1" date="2024-04-11">
