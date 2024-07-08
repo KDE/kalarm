@@ -333,7 +333,7 @@ QString KAMail::appendBodyAttachments(KMime::Message& message, JobData& data)
             QMimeDatabase mimeDb;
             QString typeName = mimeDb.mimeTypeForUrl(url).name();
             auto ctype = new KMime::Headers::ContentType;
-            ctype->fromUnicodeString(typeName, "utf-8");
+            ctype->fromUnicodeString(typeName);
             ctype->setName(attachment, "local");
             content->setHeader(ctype);
 
@@ -558,7 +558,7 @@ void initHeaders(KMime::Message& message, JobData& data)
     message.setHeader(date);
 
     auto from = new KMime::Headers::From;
-    from->fromUnicodeString(data.from, "utf-8");
+    from->fromUnicodeString(data.from);
     message.setHeader(from);
 
     auto to = new KMime::Headers::To;
@@ -570,17 +570,18 @@ void initHeaders(KMime::Message& message, JobData& data)
     if (!data.bcc.isEmpty())
     {
         auto bcc = new KMime::Headers::Bcc;
-        bcc->fromUnicodeString(data.bcc, "utf-8");
+        bcc->fromUnicodeString(data.bcc);
         message.setHeader(bcc);
     }
 
     auto subject = new KMime::Headers::Subject;
     const QString str = data.event.emailSubject();
-    subject->fromUnicodeString(str, "utf-8");
+    subject->fromUnicodeString(str);
     message.setHeader(subject);
 
     auto agent = new KMime::Headers::UserAgent;
-    agent->fromUnicodeString(KAboutData::applicationData().displayName() + QLatin1String("/" KALARM_VERSION), "us-ascii");
+    agent->fromUnicodeString(KAboutData::applicationData().displayName() + QLatin1String("/" KALARM_VERSION));
+    agent->setRFC2047Charset("us-ascii");
     message.setHeader(agent);
 
     auto id = new KMime::Headers::MessageID;
