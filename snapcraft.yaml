@@ -112,7 +112,8 @@ parts:
         - libassuan-dev
         - libboost-dev
         - libboost-graph-dev
-        - libcanberra-dev
+        - libvlc-dev
+        - libvlccore-dev
         - pkg-config
         - xsltproc
         - zlib1g-dev
@@ -127,8 +128,8 @@ parts:
         - gstreamer1.0-plugins-good
         - gstreamer1.0-plugins-bad
         - gstreamer1.0-plugins-ugly
-        - libcanberra0
-        - libcanberra-pulse
+        - libvlc5
+        - libvlccore9
         - oxygen-sounds
         - kross
         - libassuan0

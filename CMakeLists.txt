@@ -9,10 +9,10 @@ set(RELEASE_SERVICE_VERSION "${RELEASE_SERVICE_VERSION_MAJOR}.${RELEASE_SERVICE_
 # Whenever KALARM_VERSION changes, set the 3 variables below it to the first
 # KDE Release Service version which will contain that KAlarm release.
 # (This must be the full release version, not an alpha or beta release.)
-set(KALARM_VERSION "3.8.2")
+set(KALARM_VERSION "3.9.0")
 set(KALARM_VERSION_RELEASE_SERVICE_MAJOR "24")
-set(KALARM_VERSION_RELEASE_SERVICE_MINOR "05")
-set(KALARM_VERSION_RELEASE_SERVICE_MICRO "2")
+set(KALARM_VERSION_RELEASE_SERVICE_MINOR "08")
+set(KALARM_VERSION_RELEASE_SERVICE_MICRO "0")
 
 # If KAlarm's version has not changed since the last KDE Release Service version,
 # this code sets a sub-version x.x.x.N to avoid duplicate version numbers in
@@ -124,8 +124,10 @@ find_package(KPim6CalendarUtils ${CALENDARUTILS_LIB_VERSION} CONFIG REQUIRED)
 find_package(KPim6IdentityManagementWidgets ${IDENTITYMANAGEMENT_LIB_VERSION} CONFIG REQUIRED)
 find_package(KPim6Mime ${KMIME_LIB_VERSION} CONFIG REQUIRED)
 
-find_package(Canberra REQUIRED)
-set_package_properties(Canberra PROPERTIES PURPOSE "Needed to play audio alarms")
+find_package(LibVLC REQUIRED)
+set_package_properties(LibVLC PROPERTIES PURPOSE "Needed to play audio alarms")
+#find_package(CanberraGStreamer REQUIRED)
+#set_package_properties(CanberraGStreamer PROPERTIES PURPOSE "Needed to play audio alarms")
 
 find_package(KF6TextEditTextToSpeech ${KTEXTADDONS_MIN_VERSION} CONFIG)
 set_package_properties(KF6TextEditTextToSpeech PROPERTIES DESCRIPTION

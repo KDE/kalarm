@@ -1026,7 +1026,9 @@ void AudioPlayerThread::execute()
         deleteLater();
         return;
     }
+#ifdef USE_CANBERRA
     connect(mPlayer, &AudioPlayer::downloaded, this, &AudioPlayerThread::checkAudioPlay);
+#endif
     connect(mPlayer, &AudioPlayer::finished, this, &AudioPlayerThread::playFinished);
     connect(this, &AudioPlayerThread::stopPlay, mPlayer, &AudioPlayer::stop);
 

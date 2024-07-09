@@ -329,7 +329,7 @@ target_link_libraries(kalarm_bin
     KF6::Contacts
     KPim6::IdentityManagementWidgets
     KPim6::Mime
-    Canberra::Canberra
+    LibVLC::LibVLC
 )
 if(TARGET KF6::TextEditTextToSpeech)
     target_link_libraries(kalarm_bin KF6::TextEditTextToSpeech)

@@ -247,7 +247,7 @@ SoundWidget::SoundWidget(bool showPlay, const QString& repeatWhatsThis, QWidget*
     boxHLayout->addWidget(label);
 
     // Show fade controls only if the current audio backend supports fading.
-#ifdef ENABLE_AUDIO_FADE
+    if (AudioPlayer::providesFade())
     {
         // Fade checkbox
         mFadeCheckbox = new CheckBox(i18nc("@option:check", "Fade"), group);
@@ -287,7 +287,6 @@ SoundWidget::SoundWidget(bool showPlay, const QString& repeatWhatsThis, QWidget*
         connect(mFadeSlider, &Slider::valueChanged, this, &SoundWidget::changed);
         mFadeVolumeBox->setWhatsThis(i18nc("@info:whatsthis", "Choose the initial volume for playing the sound file."));
     }
-#endif
 
     slotVolumeToggled(false);
 }

@@ -25,24 +25,8 @@
 #include <QTimer>
 #include <QUrl>
 
-#include <canberra.h>
-#ifdef ENABLE_AUDIO_FADE
+#include <vlc/vlc.h>
 #include <ctime>
-#endif
-
-namespace
-{
-const uint32_t ALARM_ID = 1;
-const uint32_t SAMPLE_ID = 2;
-
-inline const char* volumeToDbString(float volume)
-{
-    static QByteArray result;   // ensure that the result remains valid for use
-    result = QByteArray::number(log(volume)*15, 'f', 2);
-    return result.constData();
-}
-
-}
 
 AudioPlayer* AudioPlayer::mInstance = nullptr;
 QString      AudioPlayer::mError;
@@ -77,61 +61,44 @@ AudioPlayer::AudioPlayer(Type type, const QUrl& audioFile, float volume, float f
     , mVolume(volume)
     , mFadeVolume(fadeVolume)
     , mFadeSeconds(fadeSeconds)
-    , mId(type == Alarm ? ALARM_ID : type == Sample ? SAMPLE_ID : 0)
 {
+    Q_UNUSED(type)
     qCDebug(KALARM_LOG) << "AudioPlayer:" << mFile;
 
     mError.clear();
-    int result = ca_context_create(&mAudioContext);
-    if (result != CA_SUCCESS)
-    {
-        mAudioContext = nullptr;
-        mError = xi18nc("@info", "Cannot initialize audio player: %1", QString::fromUtf8(ca_strerror(result)));
-        qCCritical(KALARM_LOG) << "AudioPlayer: Error initializing audio:" << ca_strerror(result);
-        return;
-    }
-    result = ca_context_change_props(mAudioContext,
-                                     CA_PROP_APPLICATION_NAME,
-                                     qUtf8Printable(KAboutData::applicationData().displayName()),
-                                     CA_PROP_APPLICATION_ID,
-                                     qUtf8Printable(KAboutData::applicationData().componentName()),
-                                     CA_PROP_APPLICATION_ICON_NAME,
-                                     qUtf8Printable(qApp->windowIcon().name()),
-                                     CA_PROP_EVENT_ID,
-                                     KALARM_NAME,
-                                     nullptr);
-    if (result != CA_SUCCESS)
-        qCWarning(KALARM_LOG) << "AudioPlayer: Failed to set application properties on canberra context for audio:" << ca_strerror(result);
 
-    result = ca_proplist_create(&mAudioProperties);
-    if (result != CA_SUCCESS)
+    // Create the audio instance, and suppress video (which would cause havoc to KAlarm).
+    const char* argv[] = { "--no-video" };
+    mAudioInstance = libvlc_new(1, argv);
+    if (!mAudioInstance)
     {
-        mAudioProperties = nullptr;
-        ca_context_destroy(mAudioContext);
-        mAudioContext = nullptr;
-        mError = xi18nc("@info", "Cannot set audio player properties: %1", QString::fromUtf8(ca_strerror(result)));
-        qCCritical(KALARM_LOG) << "AudioPlayer: Error initializing audio properties:" << ca_strerror(result);
+        mError = i18nc("@info", "Cannot initialize audio system");
+        qCCritical(KALARM_LOG) << "AudioPlayer: Error initializing VLC audio";
         return;
     }
 
-    if (audioFile.isLocalFile())
-        ca_proplist_sets(mAudioProperties, CA_PROP_MEDIA_FILENAME, QFile::encodeName(mFile).constData());
-    else
+    libvlc_media_t* media = audioFile.isLocalFile()
+                          ? libvlc_media_new_path(mAudioInstance, QFile::encodeName(mFile).constData())
+                          : libvlc_media_new_location(mAudioInstance, mFile.toLocal8Bit().constData());
+    if (!media)
     {
-        // Download remote file.
-        mStatus = Downloading;
-        auto ref = new QEventLoopLocker();
-        mDownloadedFile = new QTemporaryFile;
-        mDownloadedFile->open();
-        mDownloadJob = KIO::file_copy(audioFile, QUrl::fromLocalFile(mDownloadedFile->fileName()), -1,
-                                      KIO::Overwrite | KIO::HideProgressInfo);
-        mDownloadJob->setProperty("QEventLoopLocker", QVariant::fromValue(ref));
-        connect(mDownloadJob, &KJob::result, this, &AudioPlayer::slotDownloadJobResult);
-        ca_proplist_sets(mAudioProperties, CA_PROP_MEDIA_FILENAME, QFile::encodeName(mDownloadedFile->fileName()).constData());
+        mError = xi18nc("@info", "<para>Error opening audio file: <filename>%1</filename>", mFile);
+        qCCritical(KALARM_LOG) << "AudioPlayer: Error opening audio file:" << mFile;
+        return;
     }
+
+    mAudioPlayer = libvlc_media_player_new_from_media(media);
+    libvlc_media_release(media);
+    if (!mAudioPlayer)
+    {
+        mError = i18nc("@info", "Cannot initialize audio player");
+        qCCritical(KALARM_LOG) << "AudioPlayer: Error initializing audio player";
+        return;
+    }
+    libvlc_media_player_set_role(mAudioPlayer, libvlc_role_Notification);
+
     if (mVolume > 0)
     {
-#ifdef ENABLE_AUDIO_FADE
         if (mFadeVolume >= 0  &&  mFadeSeconds > 0)
         {
             mFadeStep = (mVolume - mFadeVolume) / mFadeSeconds;
@@ -141,17 +108,10 @@ AudioPlayer::AudioPlayer(Type type, const QUrl& audioFile, float volume, float f
         }
         else
             mCurrentVolume = mVolume;
-        ca_proplist_sets(mAudioProperties, CA_PROP_CANBERRA_VOLUME, volumeToDbString(mCurrentVolume));
-#else
-        ca_proplist_sets(mAudioProperties, CA_PROP_CANBERRA_VOLUME, volumeToDbString(mVolume));
-#endif
+        libvlc_audio_set_volume(mAudioPlayer, static_cast<int>(mCurrentVolume * 100));
     }
-    // We'll also want this cached for a time. volatile makes sure the cache is
-    // dropped after some time or when the cache is under pressure.
-    ca_proplist_sets(mAudioProperties, CA_PROP_CANBERRA_CACHE_CONTROL, "volatile");
 
-    if (mStatus != Downloading)
-        mStatus = Ready;
+    mStatus = Ready;
 }
 
 /******************************************************************************
@@ -160,24 +120,21 @@ AudioPlayer::AudioPlayer(Type type, const QUrl& audioFile, float volume, float f
 AudioPlayer::~AudioPlayer()
 {
     qCDebug(KALARM_LOG) << "AudioPlayer::~AudioPlayer";
-    if (mDownloadJob)
-        mDownloadJob->kill();
     if (status() == Playing)
     {
         mNoFinishedSignal = true;
         stop();
     }
-    if (mAudioContext)
+    if (mAudioPlayer)
     {
-        ca_context_destroy(mAudioContext);
-        mAudioContext = nullptr;
+        libvlc_media_player_release(mAudioPlayer);
+        mAudioPlayer = nullptr;
     }
-    if (mAudioProperties)
+    if (mAudioInstance)
     {
-        ca_proplist_destroy(mAudioProperties);
-        mAudioProperties = nullptr;
+        libvlc_release(mAudioInstance);
+        mAudioInstance = nullptr;
     }
-    delete mDownloadedFile;
     mInstance = nullptr;
     qCDebug(KALARM_LOG) << "AudioPlayer::~AudioPlayer exit";
 }
@@ -195,72 +152,35 @@ AudioPlayer::Status AudioPlayer::status() const
 */
 bool AudioPlayer::play()
 {
-    if (!mAudioContext)
+    if (!mAudioPlayer)
         return false;
-    if (mStatus == Downloading)
-    {
-        mPlayAfterDownload = true;
-        return true;   // will play when download is complete
-    }
 
     qCDebug(KALARM_LOG) << "AudioPlayer::play";
-    const int result = ca_context_play_full(mAudioContext, mId, mAudioProperties, &ca_finish_callback, this);
-    if (result != CA_SUCCESS)
+    libvlc_event_manager_t* eventManager = libvlc_media_player_event_manager(mAudioPlayer);
+    if (libvlc_event_attach(eventManager, libvlc_MediaPlayerStopped, &finish_callback, this))
     {
-        const QString errmsg = (result == CA_ERROR_CORRUPT) ? i18nc("@info", "Unsupported audio format, or corrupt data")
-                                                            : QString::fromUtf8(ca_strerror(result));
-        mError = xi18nc("@info", "<para>Error playing audio file: <filename>%1</filename></para><para>%2</para>", mFile, errmsg);
-        qCWarning(KALARM_LOG) << "AudioPlayer::play: Failed to play sound with canberra:" << errmsg;
+        qCWarning(KALARM_LOG) << "AudioPlayer: Error setting completion callback";
+        mCheckPlayTimer = new QTimer(this);
+        connect(mCheckPlayTimer, &QTimer::timeout, this, &AudioPlayer::checkPlay);
+    }
+    // Does the Error event need to be watched??
+    libvlc_event_attach(eventManager, libvlc_MediaPlayerEncounteredError, &finish_callback, this);
+
+    if (libvlc_media_player_play(mAudioPlayer) < 0)
+    {
+        mError = xi18nc("@info", "<para>Error playing audio file: <filename>%1</filename></para>", mFile);
+        qCWarning(KALARM_LOG) << "AudioPlayer::play: Failed to play sound with VLC:" << mFile;
         Q_EMIT finished(false);
         return false;
     }
-#ifdef ENABLE_AUDIO_FADE
-    if (mVolume != mCurrentVolume)
+    if (mFadeTimer  &&  mVolume != mCurrentVolume)
     {
         mFadeStart = time(nullptr);
         mFadeTimer->start(1000);
     }
-#endif
     mStatus = Playing;
     return true;
 }
-
-/******************************************************************************
-* Called when download of the remote audio file has completed.
-*/
-void AudioPlayer::slotDownloadJobResult(KJob* job)
-{
-    if (job->error())
-    {
-        mError = xi18nc("@info", "<para>Could not load file <filename>%1</filename>.</para><para>%2</para>", mFile, job->errorString());
-        qCWarning(KALARM_LOG) << "AudioPlayer::slotDownloadJobResult: Could not load file" << mFile << job->errorString();
-        mStatus = Error;
-        Q_EMIT finished(false);
-    }
-    else
-    {
-        qCWarning(KALARM_LOG) << "AudioPlayer::slotDownloadJobResult: success" << mFile;
-        mStatus = Ready;
-    }
-
-    mDownloadJob = nullptr;
-    auto ref = job->property("QEventLoopLocker").value<QEventLoopLocker*>();
-    if (ref)
-        delete ref;
-    if (mStatus == Ready)
-    {
-        if (mPlayAfterDownload)
-        {
-            mPlayAfterDownload = false;
-            QTimer::singleShot(0, this, &AudioPlayer::play);
-        }
-        else
-            Q_EMIT downloaded(mStatus == Ready);
-    }
-}
-
-#ifdef ENABLE_AUDIO_FADE
-// Canberra currently doesn't seem to allow the volume to be adjusted while playing.
 
 /******************************************************************************
 * Called every second to fade the volume.
@@ -270,54 +190,59 @@ void AudioPlayer::fadeStep()
     qCDebug(KALARM_LOG) << "AudioPlayer::fadeStep";
     if (mFadeStart)
     {
-        float volume;
         time_t elapsed = time(nullptr) - mFadeStart;
         if (elapsed >= mFadeSeconds)
         {
-            volume = mVolume;
+            mCurrentVolume = mVolume;
             mFadeStart = 0;
             mFadeTimer->stop();
         }
         else
-            volume = mFadeVolume + (mVolume - mFadeVolume) * elapsed / mFadeSeconds;
-volume = 1.0f;
-        ca_context_change_props(mAudioContext,
-                                CA_PROP_CANBERRA_VOLUME, volumeToDbString(volume),
-                                nullptr);
+            mCurrentVolume = mFadeVolume + (mVolume - mFadeVolume) * elapsed / mFadeSeconds;
+        libvlc_audio_set_volume(mAudioPlayer, static_cast<int>(mCurrentVolume * 100));
     }
 }
-#endif
 
 /******************************************************************************
-* Called by Canberra to notify play completion or cancellation.
+* Called on timer if attach to stop event failed, to check for completion.
 */
-void AudioPlayer::ca_finish_callback(ca_context*, uint32_t id, int errorCode, void* userdata)
+void AudioPlayer::checkPlay()
 {
-    QMetaObject::invokeMethod(static_cast<AudioPlayer*>(userdata), "playFinished", Q_ARG(uint32_t, id), Q_ARG(int, errorCode));
+    if (!libvlc_media_player_is_playing(mAudioPlayer))
+    {
+        playFinished(libvlc_MediaPlayerStopped);
+        mCheckPlayTimer->stop();
+    }
 }
 
 /******************************************************************************
-* Called to notify play completion or cancellation.
+* Called by VLC to notify play completion or cancellation.
 */
-void AudioPlayer::playFinished(uint32_t id, int errorCode)
+void AudioPlayer::finish_callback(const libvlc_event_t* event, void* userdata)
 {
-    Q_UNUSED(id)
+    QMetaObject::invokeMethod(static_cast<AudioPlayer*>(userdata), "playFinished", Q_ARG(uint32_t, event->type));
+    if (event->type == libvlc_MediaPlayerEncounteredError)
+        qCWarning(KALARM_LOG) << "AudioPlayer: Error while playing";
+}
+
+/******************************************************************************
+* Called to notify play completion.
+*/
+void AudioPlayer::playFinished(uint32_t event)
+{
     qCDebug(KALARM_LOG) << "AudioPlayer::playFinished:" << mFile;
     mStatus = Ready;
-#ifdef ENABLE_AUDIO_FADE
     mFadeStart = 0;
-#endif
     bool result;
-    switch (errorCode)
+    switch (event)
     {
-        case CA_SUCCESS:
-        case CA_ERROR_CANCELED:
+        case libvlc_MediaPlayerStopped:
             result = true;
             break;
         default:
         {
-            qCCritical(KALARM_LOG) << "AudioPlayer::playFinished: Play failure:" << mFile << ":" << ca_strerror(errorCode);
-            mError = xi18nc("@info", "<para>Error playing audio file: <filename>%1</filename></para><para>%2</para>", mFile, QString::fromUtf8(ca_strerror(errorCode)));
+            qCCritical(KALARM_LOG) << "AudioPlayer::playFinished: Play failure:" << mFile;
+            mError = xi18nc("@info", "<para>Error playing audio file: <filename>%1</filename></para>", mFile);
             result = false;
             break;
         }
@@ -334,19 +259,8 @@ void AudioPlayer::playFinished(uint32_t id, int errorCode)
 void AudioPlayer::stop()
 {
     qCDebug(KALARM_LOG) << "AudioPlayer::stop";
-    mPlayAfterDownload = false;
-    if (mDownloadJob)
-    {
-        mDownloadJob->kill();
-        mDownloadJob = nullptr;
-        mStatus = Error;
-    }
-    else if (mAudioContext)
-    {
-        const int result = ca_context_cancel(mAudioContext, mId);
-        if (result != CA_SUCCESS)
-            qCWarning(KALARM_LOG) << "AudioPlayer::stop: Failed to cancel audio playing:" << ca_strerror(result);
-    }
+    if (mAudioPlayer)
+        libvlc_media_player_stop(mAudioPlayer);
 }
 
 QString AudioPlayer::popError()
