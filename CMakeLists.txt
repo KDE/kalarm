@@ -126,8 +126,6 @@ find_package(KPim6Mime ${KMIME_LIB_VERSION} CONFIG REQUIRED)
 
 find_package(LibVLC REQUIRED)
 set_package_properties(LibVLC PROPERTIES PURPOSE "Needed to play audio alarms")
-#find_package(CanberraGStreamer REQUIRED)
-#set_package_properties(CanberraGStreamer PROPERTIES PURPOSE "Needed to play audio alarms")
 
 find_package(KF6TextEditTextToSpeech ${KTEXTADDONS_MIN_VERSION} CONFIG)
 set_package_properties(KF6TextEditTextToSpeech PROPERTIES DESCRIPTION
