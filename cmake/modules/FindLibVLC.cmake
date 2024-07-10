@@ -1,5 +1,6 @@
 # CMake module to search for LIBVLC (VLC library)
 #
+# Copyright (C) 2024, David Jarvie <djarvie@kde.org>
 # Copyright (C) 2011-2018, Harald Sitter <sitter@kde.org>
 # Copyright (C) 2010, Rohit Yadav <rohityadav89@gmail.com>
 #
@@ -11,10 +12,6 @@
 #    LIBVLC_INCLUDE_DIR
 #    LIBVLC_LIBRARY
 #    LIBVLC_VERSION
-
-if(NOT LIBVLC_MIN_VERSION)
-    set(LIBVLC_MIN_VERSION "0.0")
-endif(NOT LIBVLC_MIN_VERSION)
 
 # find_path and find_library normally search standard locations
 # before the specified paths. To search non-standard paths first,
@@ -88,18 +85,12 @@ if (LIBVLC_INCLUDE_DIR AND LIBVLC_LIBRARY AND LIBVLCCORE_LIBRARY)
 set(LIBVLC_FOUND TRUE)
 endif (LIBVLC_INCLUDE_DIR AND LIBVLC_LIBRARY AND LIBVLCCORE_LIBRARY)
 
-if (LIBVLC_VERSION STRLESS "${LIBVLC_MIN_VERSION}")
-    message(WARNING "LibVLC version not found: version searched: ${LIBVLC_MIN_VERSION}, found ${LIBVLC_VERSION}\nUnless you are on Windows this is bound to fail.")
-# TODO: only activate once version detection can be garunteed (which is currently not the case on windows)
-#     set(LIBVLC_FOUND FALSE)
-endif (LIBVLC_VERSION STRLESS "${LIBVLC_MIN_VERSION}")
-
-if (NOT LIBVLC_FIND_QUIETLY)
+if(NOT ${CMAKE_FIND_PACKAGE_NAME}_FIND_QUIETLY)
     message(STATUS "Found LibVLC include-dir path: ${LIBVLC_INCLUDE_DIR}")
     message(STATUS "Found LibVLC library path:${LIBVLC_LIBRARY}")
     message(STATUS "Found LibVLCcore library path:${LIBVLCCORE_LIBRARY}")
-    message(STATUS "Found LibVLC version: ${LIBVLC_VERSION} (searched for: ${LIBVLC_MIN_VERSION})")
-endif (NOT LIBVLC_FIND_QUIETLY)
+    message(STATUS "Found LibVLC version: ${LIBVLC_VERSION}")
+endif (NOT ${CMAKE_FIND_PACKAGE_NAME}_FIND_QUIETLY)
 
 if(LIBVLC_FOUND AND NOT TARGET LibVLC::LibVLC)
     add_library(LibVLC::LibVLC UNKNOWN IMPORTED)

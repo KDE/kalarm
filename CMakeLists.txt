@@ -124,7 +124,7 @@ find_package(KPim6CalendarUtils ${CALENDARUTILS_LIB_VERSION} CONFIG REQUIRED)
 find_package(KPim6IdentityManagementWidgets ${IDENTITYMANAGEMENT_LIB_VERSION} CONFIG REQUIRED)
 find_package(KPim6Mime ${KMIME_LIB_VERSION} CONFIG REQUIRED)
 
-find_package(LibVLC REQUIRED)
+find_package(LibVLC "3.0.0" QUIET REQUIRED)
 set_package_properties(LibVLC PROPERTIES PURPOSE "Needed to play audio alarms")
 
 find_package(KF6TextEditTextToSpeech ${KTEXTADDONS_MIN_VERSION} CONFIG)
