@@ -82,7 +82,7 @@ AudioPlayer::AudioPlayer(Type type, const QUrl& audioFile, float volume, float f
                           : libvlc_media_new_location(mAudioInstance, mFile.toLocal8Bit().constData());
     if (!media)
     {
-        mError = xi18nc("@info", "<para>Error opening audio file: <filename>%1</filename>", mFile);
+        mError = xi18nc("@info", "<para>Error opening audio file: <filename>%1</filename></para>", mFile);
         qCCritical(KALARM_LOG) << "AudioPlayer: Error opening audio file:" << mFile;
         return;
     }
