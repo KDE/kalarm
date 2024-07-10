@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-06-26 00:39+0000\n"
+"POT-Creation-Date: 2024-07-10 00:39+0000\n"
 "PO-Revision-Date: 2023-07-23 23:20+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -280,39 +280,33 @@ msgctxt "@info"
 msgid "Alarm time has already expired"
 msgstr "알람 시간이 이미 만료됨"
 
-#: audioplayer.cpp:89
-#, kde-kuit-format
-msgctxt "@info"
-msgid "Cannot initialize audio player: %1"
-msgstr ""
-
-#: audioplayer.cpp:112
-#, kde-kuit-format
-msgctxt "@info"
-msgid "Cannot set audio player properties: %1"
-msgstr ""
-
-#: audioplayer.cpp:210
+#: audioplayer.cpp:75
 #, kde-format
 msgctxt "@info"
-msgid "Unsupported audio format, or corrupt data"
+msgid "Cannot initialize audio system"
 msgstr ""
 
-#: audioplayer.cpp:212 audioplayer.cpp:320
-#, kde-kuit-format
+#: audioplayer.cpp:85
+#, fuzzy, kde-format
+#| msgctxt "@info"
+#| msgid "Error attaching file: <filename>%1</filename>"
 msgctxt "@info"
-msgid ""
-"<para>Error playing audio file: <filename>%1</filename></para><para>%2</para>"
+msgid "<para>Error opening audio file: <filename>%1</filename>"
+msgstr "파일 첨부 오류: <filename>%1</filename>"
+
+#: audioplayer.cpp:94
+#, kde-format
+msgctxt "@info"
+msgid "Cannot initialize audio player"
 msgstr ""
 
-#: audioplayer.cpp:235
+#: audioplayer.cpp:171 audioplayer.cpp:245
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info"
-#| msgid "Failed to save calendar to <filename>%1</filename>"
+#| msgid "Error attaching file: <filename>%1</filename>"
 msgctxt "@info"
-msgid ""
-"<para>Could not load file <filename>%1</filename>.</para><para>%2</para>"
-msgstr "일정을 <filename>%1</filename>에 저장하지 못함"
+msgid "<para>Error playing audio file: <filename>%1</filename></para>"
+msgstr "파일 첨부 오류: <filename>%1</filename>"
 
 #: autostart/autostart.cpp:48
 #, kde-format
@@ -4807,13 +4801,13 @@ msgid ""
 "specify when the alarm should be redisplayed.</para>"
 msgstr ""
 
-#: messagewindow.cpp:458 sounddlg.cpp:444
+#: messagewindow.cpp:458 sounddlg.cpp:443
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Stop sound"
 msgstr ""
 
-#: messagewindow.cpp:459 sounddlg.cpp:445
+#: messagewindow.cpp:459 sounddlg.cpp:444
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Stop playing the sound"
@@ -7874,13 +7868,13 @@ msgctxt "@label"
 msgid "Sound file:"
 msgstr "사운드 파일:"
 
-#: sounddlg.cpp:165 sounddlg.cpp:461
+#: sounddlg.cpp:165 sounddlg.cpp:460
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Test the sound"
 msgstr ""
 
-#: sounddlg.cpp:166 sounddlg.cpp:462
+#: sounddlg.cpp:166 sounddlg.cpp:461
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Play the selected sound file."
@@ -8527,6 +8521,14 @@ msgstr ""
 #, kde-format
 msgid "Number of minutes before alarm to wake from suspend"
 msgstr "알람이 절전 모드에서 깨우기 전까지의 시간(분)"
+
+#, fuzzy
+#~| msgctxt "@info"
+#~| msgid "Failed to save calendar to <filename>%1</filename>"
+#~ msgctxt "@info"
+#~ msgid ""
+#~ "<para>Could not load file <filename>%1</filename>.</para><para>%2</para>"
+#~ msgstr "일정을 <filename>%1</filename>에 저장하지 못함"
 
 #~ msgid "&File"
 #~ msgstr "파일(&F)"

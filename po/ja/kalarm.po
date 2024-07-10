@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-06-26 00:39+0000\n"
+"POT-Creation-Date: 2024-07-10 00:39+0000\n"
 "PO-Revision-Date: 2011-08-14 14:09-0700\n"
 "Last-Translator: Fumiaki Okushi <okushi@kde.gr.jp>\n"
 "Language-Team: Japanese <kde-jp@kde.org>\n"
@@ -300,41 +300,34 @@ msgctxt "@info"
 msgid "Alarm time has already expired"
 msgstr "アラームの時刻は既に過ぎています"
 
-#: audioplayer.cpp:89
-#, kde-kuit-format
-msgctxt "@info"
-msgid "Cannot initialize audio player: %1"
-msgstr ""
-
-#: audioplayer.cpp:112
-#, kde-kuit-format
-msgctxt "@info"
-msgid "Cannot set audio player properties: %1"
-msgstr ""
-
-#: audioplayer.cpp:210
+#: audioplayer.cpp:75
 #, kde-format
 msgctxt "@info"
-msgid "Unsupported audio format, or corrupt data"
+msgid "Cannot initialize audio system"
 msgstr ""
 
-#: audioplayer.cpp:212 audioplayer.cpp:320
-#, kde-kuit-format
+#: audioplayer.cpp:85
+#, fuzzy, kde-format
+#| msgctxt "@info"
+#| msgid "Cannot open audio file: <filename>%1</filename>"
 msgctxt "@info"
-msgid ""
-"<para>Error playing audio file: <filename>%1</filename></para><para>%2</para>"
-msgstr ""
-"<para>音声ファイルの再生エラー: <filename>%1</filename></para><para>%2</para>"
+msgid "<para>Error opening audio file: <filename>%1</filename>"
+msgstr "音声ファイルを開けません: <filename>%1</filename>"
 
-#: audioplayer.cpp:235
+#: audioplayer.cpp:94
+#, kde-format
+msgctxt "@info"
+msgid "Cannot initialize audio player"
+msgstr ""
+
+#: audioplayer.cpp:171 audioplayer.cpp:245
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info"
 #| msgid ""
 #| "<para>Error playing audio file: <filename>%1</filename></para><para>%2</"
 #| "para>"
 msgctxt "@info"
-msgid ""
-"<para>Could not load file <filename>%1</filename>.</para><para>%2</para>"
+msgid "<para>Error playing audio file: <filename>%1</filename></para>"
 msgstr ""
 "<para>音声ファイルの再生エラー: <filename>%1</filename></para><para>%2</para>"
 
@@ -5083,13 +5076,13 @@ msgstr ""
 "<para>アラームを延期します。</para><para>いつ再表示するかを指定できます。</"
 "para>"
 
-#: messagewindow.cpp:458 sounddlg.cpp:444
+#: messagewindow.cpp:458 sounddlg.cpp:443
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Stop sound"
 msgstr "サウンドを停止"
 
-#: messagewindow.cpp:459 sounddlg.cpp:445
+#: messagewindow.cpp:459 sounddlg.cpp:444
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Stop playing the sound"
@@ -8404,13 +8397,13 @@ msgctxt "@label"
 msgid "Sound file:"
 msgstr "音声ファイル:"
 
-#: sounddlg.cpp:165 sounddlg.cpp:461
+#: sounddlg.cpp:165 sounddlg.cpp:460
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Test the sound"
 msgstr "サウンドをテスト"
 
-#: sounddlg.cpp:166 sounddlg.cpp:462
+#: sounddlg.cpp:166 sounddlg.cpp:461
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Play the selected sound file."
@@ -9109,6 +9102,14 @@ msgstr ""
 msgid "Number of minutes before alarm to wake from suspend"
 msgstr ""
 
+#, fuzzy
+#~| msgctxt "@info"
+#~| msgid ""
+#~| "<para>Error playing audio file: <filename>%1</filename></para><para>%2</"
+#~| "para>"
 #~ msgctxt "@info"
-#~ msgid "Cannot open audio file: <filename>%1</filename>"
-#~ msgstr "音声ファイルを開けません: <filename>%1</filename>"
+#~ msgid ""
+#~ "<para>Could not load file <filename>%1</filename>.</para><para>%2</para>"
+#~ msgstr ""
+#~ "<para>音声ファイルの再生エラー: <filename>%1</filename></para><para>%2</"
+#~ "para>"

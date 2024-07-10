@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-06-26 00:39+0000\n"
+"POT-Creation-Date: 2024-07-10 00:39+0000\n"
 "PO-Revision-Date: 2024-05-16 15:45+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -280,41 +280,45 @@ msgctxt "@info"
 msgid "Alarm time has already expired"
 msgstr "L'hora de l'alarma ja ha expirat"
 
-#: audioplayer.cpp:89
-#, kde-kuit-format
+#: audioplayer.cpp:75
+#, fuzzy, kde-format
+#| msgctxt "@info"
+#| msgid "Cannot initialize audio player: %1"
 msgctxt "@info"
-msgid "Cannot initialize audio player: %1"
+msgid "Cannot initialize audio system"
 msgstr "No s'ha pogut restablir el reproductor d'àudio: %1"
 
-#: audioplayer.cpp:112
-#, kde-kuit-format
+#: audioplayer.cpp:85
+#, fuzzy, kde-format
+#| msgctxt "@info"
+#| msgid ""
+#| "<para>Error playing audio file: <filename>%1</filename></para><para>%2</"
+#| "para>"
 msgctxt "@info"
-msgid "Cannot set audio player properties: %1"
-msgstr "No s'han pogut establir les propietats del reproductor d'àudio: %1"
-
-#: audioplayer.cpp:210
-#, kde-format
-msgctxt "@info"
-msgid "Unsupported audio format, or corrupt data"
-msgstr "Format d'àudio no admés, o dades malmeses"
-
-#: audioplayer.cpp:212 audioplayer.cpp:320
-#, kde-kuit-format
-msgctxt "@info"
-msgid ""
-"<para>Error playing audio file: <filename>%1</filename></para><para>%2</para>"
+msgid "<para>Error opening audio file: <filename>%1</filename>"
 msgstr ""
 "<para>S'ha produït un error en reproduir el fitxer d'àudio: <filename>%1</"
 "filename></para><para>%2</para>"
 
-#: audioplayer.cpp:235
-#, kde-kuit-format
+#: audioplayer.cpp:94
+#, fuzzy, kde-format
+#| msgctxt "@info"
+#| msgid "Cannot initialize audio player: %1"
 msgctxt "@info"
-msgid ""
-"<para>Could not load file <filename>%1</filename>.</para><para>%2</para>"
+msgid "Cannot initialize audio player"
+msgstr "No s'ha pogut restablir el reproductor d'àudio: %1"
+
+#: audioplayer.cpp:171 audioplayer.cpp:245
+#, fuzzy, kde-kuit-format
+#| msgctxt "@info"
+#| msgid ""
+#| "<para>Error playing audio file: <filename>%1</filename></para><para>%2</"
+#| "para>"
+msgctxt "@info"
+msgid "<para>Error playing audio file: <filename>%1</filename></para>"
 msgstr ""
-"<para>No s'ha pogut carregat el fitxer <filename>%1</filename>.</para><para>"
-"%2</para>"
+"<para>S'ha produït un error en reproduir el fitxer d'àudio: <filename>%1</"
+"filename></para><para>%2</para>"
 
 #: autostart/autostart.cpp:48
 #, kde-format
@@ -4929,13 +4933,13 @@ msgstr ""
 "<para>Ajorna l'alarma fins després.</para><para>Se us demanarà que "
 "especifiqueu quan s'hauria de tornar a mostrar l'alarma.</para>"
 
-#: messagewindow.cpp:458 sounddlg.cpp:444
+#: messagewindow.cpp:458 sounddlg.cpp:443
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Stop sound"
 msgstr "Para el so"
 
-#: messagewindow.cpp:459 sounddlg.cpp:445
+#: messagewindow.cpp:459 sounddlg.cpp:444
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Stop playing the sound"
@@ -8141,13 +8145,13 @@ msgctxt "@label"
 msgid "Sound file:"
 msgstr "Fitxer de so:"
 
-#: sounddlg.cpp:165 sounddlg.cpp:461
+#: sounddlg.cpp:165 sounddlg.cpp:460
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Test the sound"
 msgstr "Prova el so"
 
-#: sounddlg.cpp:166 sounddlg.cpp:462
+#: sounddlg.cpp:166 sounddlg.cpp:461
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Play the selected sound file."
@@ -8820,3 +8824,18 @@ msgstr ""
 #, kde-format
 msgid "Number of minutes before alarm to wake from suspend"
 msgstr "Nombre de minuts abans de l'alarma per a activar des de la suspensió"
+
+#~ msgctxt "@info"
+#~ msgid "Cannot set audio player properties: %1"
+#~ msgstr "No s'han pogut establir les propietats del reproductor d'àudio: %1"
+
+#~ msgctxt "@info"
+#~ msgid "Unsupported audio format, or corrupt data"
+#~ msgstr "Format d'àudio no admés, o dades malmeses"
+
+#~ msgctxt "@info"
+#~ msgid ""
+#~ "<para>Could not load file <filename>%1</filename>.</para><para>%2</para>"
+#~ msgstr ""
+#~ "<para>No s'ha pogut carregat el fitxer <filename>%1</filename>.</"
+#~ "para><para>%2</para>"

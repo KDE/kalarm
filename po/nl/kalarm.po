@@ -17,7 +17,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-06-26 00:39+0000\n"
+"POT-Creation-Date: 2024-07-10 00:39+0000\n"
 "PO-Revision-Date: 2024-05-16 09:26+0200\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
@@ -306,40 +306,41 @@ msgctxt "@info"
 msgid "Alarm time has already expired"
 msgstr "Tijd alarm is al voorbij"
 
-#: audioplayer.cpp:89
-#, kde-kuit-format
+#: audioplayer.cpp:75
+#, fuzzy, kde-format
+#| msgctxt "@info"
+#| msgid "Cannot initialize audio player: %1"
 msgctxt "@info"
-msgid "Cannot initialize audio player: %1"
+msgid "Cannot initialize audio system"
 msgstr "Kan audiospeler niet initialiseren: %1"
 
-#: audioplayer.cpp:112
-#, kde-kuit-format
+#: audioplayer.cpp:85
+#, fuzzy, kde-format
+#| msgctxt "@info"
+#| msgid "Cannot open audio file: <filename>%1</filename>"
 msgctxt "@info"
-msgid "Cannot set audio player properties: %1"
-msgstr "Kan eigenschappen van audiospeler niet instellen: %1"
+msgid "<para>Error opening audio file: <filename>%1</filename>"
+msgstr "Dit geluidsbestand kan niet worden geopend: <filename>%1</filename>"
 
-#: audioplayer.cpp:210
-#, kde-format
+#: audioplayer.cpp:94
+#, fuzzy, kde-format
+#| msgctxt "@info"
+#| msgid "Cannot initialize audio player: %1"
 msgctxt "@info"
-msgid "Unsupported audio format, or corrupt data"
-msgstr "Niet-ondersteund geluidsformaat of beschadigde gegevens"
+msgid "Cannot initialize audio player"
+msgstr "Kan audiospeler niet initialiseren: %1"
 
-#: audioplayer.cpp:212 audioplayer.cpp:320
-#, kde-kuit-format
+#: audioplayer.cpp:171 audioplayer.cpp:245
+#, fuzzy, kde-kuit-format
+#| msgctxt "@info"
+#| msgid ""
+#| "<para>Error playing audio file: <filename>%1</filename></para><para>%2</"
+#| "para>"
 msgctxt "@info"
-msgid ""
-"<para>Error playing audio file: <filename>%1</filename></para><para>%2</para>"
+msgid "<para>Error playing audio file: <filename>%1</filename></para>"
 msgstr ""
 "<para>Fout bij het afspelen van audio-bestand: <filename>%1</filename></"
 "para><para>%2</para>"
-
-#: audioplayer.cpp:235
-#, kde-kuit-format
-msgctxt "@info"
-msgid ""
-"<para>Could not load file <filename>%1</filename>.</para><para>%2</para>"
-msgstr ""
-"<para>Kon bestand niet laden <filename>%1</filename>.</para><para>%2</para>"
 
 #: autostart/autostart.cpp:48
 #, kde-format
@@ -5111,13 +5112,13 @@ msgstr ""
 "<para>Stel het alarm tot later uit.</para><para>U wordt gevraagd om op te "
 "geven wanneer het alarm opnieuw moet worden getoond.</para>"
 
-#: messagewindow.cpp:458 sounddlg.cpp:444
+#: messagewindow.cpp:458 sounddlg.cpp:443
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Stop sound"
 msgstr "Geluid stoppen"
 
-#: messagewindow.cpp:459 sounddlg.cpp:445
+#: messagewindow.cpp:459 sounddlg.cpp:444
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Stop playing the sound"
@@ -8364,13 +8365,13 @@ msgctxt "@label"
 msgid "Sound file:"
 msgstr "Geluidsbestand:"
 
-#: sounddlg.cpp:165 sounddlg.cpp:461
+#: sounddlg.cpp:165 sounddlg.cpp:460
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Test the sound"
 msgstr "Geluid testen"
 
-#: sounddlg.cpp:166 sounddlg.cpp:462
+#: sounddlg.cpp:166 sounddlg.cpp:461
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Play the selected sound file."
@@ -9051,8 +9052,19 @@ msgid "Number of minutes before alarm to wake from suspend"
 msgstr "Aantal minuten vóór het alarm om te ontwaken uit onderbreken"
 
 #~ msgctxt "@info"
-#~ msgid "Cannot open audio file: <filename>%1</filename>"
-#~ msgstr "Dit geluidsbestand kan niet worden geopend: <filename>%1</filename>"
+#~ msgid "Cannot set audio player properties: %1"
+#~ msgstr "Kan eigenschappen van audiospeler niet instellen: %1"
+
+#~ msgctxt "@info"
+#~ msgid "Unsupported audio format, or corrupt data"
+#~ msgstr "Niet-ondersteund geluidsformaat of beschadigde gegevens"
+
+#~ msgctxt "@info"
+#~ msgid ""
+#~ "<para>Could not load file <filename>%1</filename>.</para><para>%2</para>"
+#~ msgstr ""
+#~ "<para>Kon bestand niet laden <filename>%1</filename>.</para><para>%2</"
+#~ "para>"
 
 #~ msgid "&File"
 #~ msgstr "Besta&nd"

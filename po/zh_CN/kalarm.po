@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-06-26 00:39+0000\n"
+"POT-Creation-Date: 2024-07-10 00:39+0000\n"
 "PO-Revision-Date: 2024-04-22 15:58\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -259,38 +259,43 @@ msgctxt "@info"
 msgid "Alarm time has already expired"
 msgstr "闹钟时间已过"
 
-#: audioplayer.cpp:89
-#, kde-kuit-format
+#: audioplayer.cpp:75
+#, fuzzy, kde-format
+#| msgctxt "@info"
+#| msgid "Cannot initialize audio player: %1"
 msgctxt "@info"
-msgid "Cannot initialize audio player: %1"
+msgid "Cannot initialize audio system"
 msgstr "无法初始化音频播放器：%1"
 
-#: audioplayer.cpp:112
-#, kde-kuit-format
+#: audioplayer.cpp:85
+#, fuzzy, kde-format
+#| msgctxt "@info"
+#| msgid ""
+#| "<para>Error playing audio file: <filename>%1</filename></para><para>%2</"
+#| "para>"
 msgctxt "@info"
-msgid "Cannot set audio player properties: %1"
-msgstr "无法设置音频播放器属性：%1"
-
-#: audioplayer.cpp:210
-#, kde-format
-msgctxt "@info"
-msgid "Unsupported audio format, or corrupt data"
-msgstr "不支持的音频格式，或者数据损坏"
-
-#: audioplayer.cpp:212 audioplayer.cpp:320
-#, kde-kuit-format
-msgctxt "@info"
-msgid ""
-"<para>Error playing audio file: <filename>%1</filename></para><para>%2</para>"
+msgid "<para>Error opening audio file: <filename>%1</filename>"
 msgstr ""
 "<para>播放音频文件时出错：<filename>%1</filename></para><para>%2</para>"
 
-#: audioplayer.cpp:235
-#, kde-kuit-format
+#: audioplayer.cpp:94
+#, fuzzy, kde-format
+#| msgctxt "@info"
+#| msgid "Cannot initialize audio player: %1"
 msgctxt "@info"
-msgid ""
-"<para>Could not load file <filename>%1</filename>.</para><para>%2</para>"
-msgstr "<para>无法加载文件 <filename>%1</filename>。</para><para>%2</para>"
+msgid "Cannot initialize audio player"
+msgstr "无法初始化音频播放器：%1"
+
+#: audioplayer.cpp:171 audioplayer.cpp:245
+#, fuzzy, kde-kuit-format
+#| msgctxt "@info"
+#| msgid ""
+#| "<para>Error playing audio file: <filename>%1</filename></para><para>%2</"
+#| "para>"
+msgctxt "@info"
+msgid "<para>Error playing audio file: <filename>%1</filename></para>"
+msgstr ""
+"<para>播放音频文件时出错：<filename>%1</filename></para><para>%2</para>"
 
 #: autostart/autostart.cpp:48
 #, kde-format
@@ -4641,13 +4646,13 @@ msgid ""
 "specify when the alarm should be redisplayed.</para>"
 msgstr "<para>推迟闹钟。</para><para>点击后会询问您何时再次显示闹钟。</para>"
 
-#: messagewindow.cpp:458 sounddlg.cpp:444
+#: messagewindow.cpp:458 sounddlg.cpp:443
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Stop sound"
 msgstr "停止播放声音"
 
-#: messagewindow.cpp:459 sounddlg.cpp:445
+#: messagewindow.cpp:459 sounddlg.cpp:444
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Stop playing the sound"
@@ -7675,13 +7680,13 @@ msgctxt "@label"
 msgid "Sound file:"
 msgstr "声音文件："
 
-#: sounddlg.cpp:165 sounddlg.cpp:461
+#: sounddlg.cpp:165 sounddlg.cpp:460
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Test the sound"
 msgstr "测试声音"
 
-#: sounddlg.cpp:166 sounddlg.cpp:462
+#: sounddlg.cpp:166 sounddlg.cpp:461
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Play the selected sound file."
@@ -8322,3 +8327,16 @@ msgstr "输入闹钟响铃前唤醒系统的分钟数，此项可确保系统在
 #, kde-format
 msgid "Number of minutes before alarm to wake from suspend"
 msgstr "闹钟唤醒睡眠前的分钟数"
+
+#~ msgctxt "@info"
+#~ msgid "Cannot set audio player properties: %1"
+#~ msgstr "无法设置音频播放器属性：%1"
+
+#~ msgctxt "@info"
+#~ msgid "Unsupported audio format, or corrupt data"
+#~ msgstr "不支持的音频格式，或者数据损坏"
+
+#~ msgctxt "@info"
+#~ msgid ""
+#~ "<para>Could not load file <filename>%1</filename>.</para><para>%2</para>"
+#~ msgstr "<para>无法加载文件 <filename>%1</filename>。</para><para>%2</para>"

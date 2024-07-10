@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-06-26 00:39+0000\n"
+"POT-Creation-Date: 2024-07-10 00:39+0000\n"
 "PO-Revision-Date: 2005-12-29 22:18+0100\n"
 "Last-Translator: Arnar Leosson <leosson@frisurf.no>\n"
 "Language-Team: Icelandic <kde-isl@molar.is>\n"
@@ -314,44 +314,36 @@ msgctxt "@info"
 msgid "Alarm time has already expired"
 msgstr "Áminningartími þegar útrunninn"
 
-#: audioplayer.cpp:89
-#, kde-kuit-format
-msgctxt "@info"
-msgid "Cannot initialize audio player: %1"
-msgstr ""
-
-#: audioplayer.cpp:112
-#, kde-kuit-format
-msgctxt "@info"
-msgid "Cannot set audio player properties: %1"
-msgstr ""
-
-#: audioplayer.cpp:210
+#: audioplayer.cpp:75
 #, kde-format
 msgctxt "@info"
-msgid "Unsupported audio format, or corrupt data"
+msgid "Cannot initialize audio system"
 msgstr ""
 
-#: audioplayer.cpp:212 audioplayer.cpp:320
-#, fuzzy, kde-kuit-format
+#: audioplayer.cpp:85
+#, fuzzy, kde-format
 #| msgid ""
-#| "Error attaching file:\n"
+#| "Cannot open audio file:\n"
 #| "%1"
 msgctxt "@info"
-msgid ""
-"<para>Error playing audio file: <filename>%1</filename></para><para>%2</para>"
+msgid "<para>Error opening audio file: <filename>%1</filename>"
 msgstr ""
-"Gat ekki bætt við skránni:\n"
+"Get ekki opnað hljóðskrá:\n"
 "%1"
 
-#: audioplayer.cpp:235
+#: audioplayer.cpp:94
+#, kde-format
+msgctxt "@info"
+msgid "Cannot initialize audio player"
+msgstr ""
+
+#: audioplayer.cpp:171 audioplayer.cpp:245
 #, fuzzy, kde-kuit-format
 #| msgid ""
 #| "Error attaching file:\n"
 #| "%1"
 msgctxt "@info"
-msgid ""
-"<para>Could not load file <filename>%1</filename>.</para><para>%2</para>"
+msgid "<para>Error playing audio file: <filename>%1</filename></para>"
 msgstr ""
 "Gat ekki bætt við skránni:\n"
 "%1"
@@ -5161,14 +5153,14 @@ msgstr ""
 "Fresta uppkalli þar til síðar.\n"
 "Þú verður að skilgreina hvenær það skal gerast."
 
-#: messagewindow.cpp:458 sounddlg.cpp:444
+#: messagewindow.cpp:458 sounddlg.cpp:443
 #, fuzzy, kde-format
 #| msgid "Stop sound"
 msgctxt "@info:tooltip"
 msgid "Stop sound"
 msgstr "Stöða hljóð"
 
-#: messagewindow.cpp:459 sounddlg.cpp:445
+#: messagewindow.cpp:459 sounddlg.cpp:444
 #, fuzzy, kde-format
 #| msgid "Stop playing the sound"
 msgctxt "@info:whatsthis"
@@ -8455,13 +8447,13 @@ msgctxt "@label"
 msgid "Sound file:"
 msgstr "&Hljóðskrá:"
 
-#: sounddlg.cpp:165 sounddlg.cpp:461
+#: sounddlg.cpp:165 sounddlg.cpp:460
 #, fuzzy, kde-format
 msgctxt "@info:tooltip"
 msgid "Test the sound"
 msgstr "Stöðva spilun hljóðs"
 
-#: sounddlg.cpp:166 sounddlg.cpp:462
+#: sounddlg.cpp:166 sounddlg.cpp:461
 #, fuzzy, kde-format
 msgctxt "@info:whatsthis"
 msgid "Play the selected sound file."
@@ -9115,12 +9107,13 @@ msgstr ""
 
 #, fuzzy
 #~| msgid ""
-#~| "Cannot open audio file:\n"
+#~| "Error attaching file:\n"
 #~| "%1"
 #~ msgctxt "@info"
-#~ msgid "Cannot open audio file: <filename>%1</filename>"
+#~ msgid ""
+#~ "<para>Could not load file <filename>%1</filename>.</para><para>%2</para>"
 #~ msgstr ""
-#~ "Get ekki opnað hljóðskrá:\n"
+#~ "Gat ekki bætt við skránni:\n"
 #~ "%1"
 
 #, fuzzy
