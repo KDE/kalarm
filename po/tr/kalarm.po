@@ -16,8 +16,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdepim-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-10 00:39+0000\n"
-"PO-Revision-Date: 2024-05-16 14:00+0300\n"
+"POT-Creation-Date: 2024-07-11 00:39+0000\n"
+"PO-Revision-Date: 2024-07-10 13:05+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -286,40 +286,30 @@ msgid "Alarm time has already expired"
 msgstr "Alarm zamanı halihazırda geçmiş"
 
 #: audioplayer.cpp:75
-#, fuzzy, kde-format
-#| msgctxt "@info"
-#| msgid "Cannot initialize audio player: %1"
+#, kde-format
 msgctxt "@info"
 msgid "Cannot initialize audio system"
-msgstr "Ses çalar ilklendirilemiyor: %1"
+msgstr "Ses sistemi ilklendirilemiyor"
 
 #: audioplayer.cpp:85
-#, fuzzy, kde-format
-#| msgctxt "@info"
-#| msgid "Cannot open audio file: <filename>%1</filename>"
-msgctxt "@info"
-msgid "<para>Error opening audio file: <filename>%1</filename>"
-msgstr "Ses dosyası açılamadı: <filename>%1</filename>"
-
-#: audioplayer.cpp:94
-#, fuzzy, kde-format
-#| msgctxt "@info"
-#| msgid "Cannot initialize audio player: %1"
-msgctxt "@info"
-msgid "Cannot initialize audio player"
-msgstr "Ses çalar ilklendirilemiyor: %1"
-
-#: audioplayer.cpp:171 audioplayer.cpp:245
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info"
-#| msgid ""
-#| "<para>Error playing audio file: <filename>%1</filename></para><para>%2</"
-#| "para>"
+#| msgid "<para>Error playing audio file: <filename>%1</filename></para>"
+msgctxt "@info"
+msgid "<para>Error opening audio file: <filename>%1</filename></para>"
+msgstr "<para>Ses dosyası çalınırken hata: <filename>%1</filename></para>"
+
+#: audioplayer.cpp:94
+#, kde-format
+msgctxt "@info"
+msgid "Cannot initialize audio player"
+msgstr "Ses çalar ilklendirilemiyor"
+
+#: audioplayer.cpp:171 audioplayer.cpp:245
+#, kde-kuit-format
 msgctxt "@info"
 msgid "<para>Error playing audio file: <filename>%1</filename></para>"
-msgstr ""
-"<para>Ses dosyası oynatılırken hata: <filename>%1</filename></para><para>%2</"
-"para>"
+msgstr "<para>Ses dosyası çalınırken hata: <filename>%1</filename></para>"
 
 #: autostart/autostart.cpp:48
 #, kde-format
@@ -8686,6 +8676,12 @@ msgstr ""
 #, kde-format
 msgid "Number of minutes before alarm to wake from suspend"
 msgstr "Sistemin alarm için kaç dakika önce Askıdan Uyandır yapılacağı"
+
+#~| msgctxt "@info"
+#~| msgid "Cannot open audio file: <filename>%1</filename>"
+#~ msgctxt "@info"
+#~ msgid "<para>Error opening audio file: <filename>%1</filename>"
+#~ msgstr "<para>Ses dosyası açılırken hata: <filename>%1</filename></para>"
 
 #~ msgctxt "@info"
 #~ msgid "Cannot set audio player properties: %1"

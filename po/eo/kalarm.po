@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-10 00:39+0000\n"
+"POT-Creation-Date: 2024-07-11 00:39+0000\n"
 "PO-Revision-Date: 2024-05-17 06:24+0100\n"
 "Last-Translator: Oliver Kellogg <olivermkellogg@gmail.com>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
@@ -279,13 +279,13 @@ msgid "Cannot initialize audio system"
 msgstr "Ne eblas pravalorizi aŭdludilon: %1"
 
 #: audioplayer.cpp:85
-#, fuzzy, kde-format
+#, fuzzy, kde-kuit-format
 #| msgctxt "@info"
 #| msgid ""
 #| "<para>Error playing audio file: <filename>%1</filename></para><para>%2</"
 #| "para>"
 msgctxt "@info"
-msgid "<para>Error opening audio file: <filename>%1</filename>"
+msgid "<para>Error opening audio file: <filename>%1</filename></para>"
 msgstr ""
 "<para>Eraro dum la ludado de sondosiero: <filename>%1</filename></para><para>"
 "%2</para>"
@@ -8641,6 +8641,17 @@ msgstr ""
 #, kde-format
 msgid "Number of minutes before alarm to wake from suspend"
 msgstr "Nombro da minutoj antaŭ alarmo por veki el suspendo"
+
+#, fuzzy
+#~| msgctxt "@info"
+#~| msgid ""
+#~| "<para>Error playing audio file: <filename>%1</filename></para><para>%2</"
+#~| "para>"
+#~ msgctxt "@info"
+#~ msgid "<para>Error opening audio file: <filename>%1</filename>"
+#~ msgstr ""
+#~ "<para>Eraro dum la ludado de sondosiero: <filename>%1</filename></"
+#~ "para><para>%2</para>"
 
 #~ msgctxt "@info"
 #~ msgid "Cannot set audio player properties: %1"

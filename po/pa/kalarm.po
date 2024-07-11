@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-10 00:39+0000\n"
+"POT-Creation-Date: 2024-07-11 00:39+0000\n"
 "PO-Revision-Date: 2009-01-18 16:28+0530\n"
 "Last-Translator: A S Alam <aalam@users.sf.net>\n"
 "Language-Team: Punjabi <punjabi-l10n@users.sf.net>\n"
@@ -281,11 +281,11 @@ msgid "Cannot initialize audio system"
 msgstr ""
 
 #: audioplayer.cpp:85
-#, fuzzy, kde-format
+#, fuzzy, kde-kuit-format
 #| msgctxt "@info"
 #| msgid "Invalid email attachment: <filename>%1</filename>"
 msgctxt "@info"
-msgid "<para>Error opening audio file: <filename>%1</filename>"
+msgid "<para>Error opening audio file: <filename>%1</filename></para>"
 msgstr "ਗਲਤ ਈਮੇਲ ਅਟੈਚਮੈਂਟ: <filename>%1</filename>"
 
 #: audioplayer.cpp:94
@@ -8759,6 +8759,13 @@ msgstr ""
 #, kde-format
 msgid "Number of minutes before alarm to wake from suspend"
 msgstr ""
+
+#, fuzzy
+#~| msgctxt "@info"
+#~| msgid "Invalid email attachment: <filename>%1</filename>"
+#~ msgctxt "@info"
+#~ msgid "<para>Error opening audio file: <filename>%1</filename>"
+#~ msgstr "ਗਲਤ ਈਮੇਲ ਅਟੈਚਮੈਂਟ: <filename>%1</filename>"
 
 #, fuzzy
 #~| msgctxt "@info"

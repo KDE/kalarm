@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-10 00:39+0000\n"
+"POT-Creation-Date: 2024-07-11 00:39+0000\n"
 "PO-Revision-Date: 2007-09-07 11:50+0545\n"
 "Last-Translator: Nabin Gautam <nabin@mpp.org.np>\n"
 "Language-Team: Nepali <info@mpp.org.np>\n"
@@ -322,14 +322,14 @@ msgid "Cannot initialize audio system"
 msgstr ""
 
 #: audioplayer.cpp:85
-#, fuzzy, kde-format
+#, fuzzy, kde-kuit-format
 #| msgid ""
-#| "Cannot open audio file:\n"
+#| "Error attaching file:\n"
 #| "%1"
 msgctxt "@info"
-msgid "<para>Error opening audio file: <filename>%1</filename>"
+msgid "<para>Error opening audio file: <filename>%1</filename></para>"
 msgstr ""
-"अडियो फाइल खुलाउन सकिँदैन:\n"
+"फाइल सङ्लग्न गर्दा त्रुटि:\n"
 "%1"
 
 #: audioplayer.cpp:94
@@ -9897,6 +9897,16 @@ msgstr ""
 #, kde-format
 msgid "Number of minutes before alarm to wake from suspend"
 msgstr ""
+
+#, fuzzy
+#~| msgid ""
+#~| "Cannot open audio file:\n"
+#~| "%1"
+#~ msgctxt "@info"
+#~ msgid "<para>Error opening audio file: <filename>%1</filename>"
+#~ msgstr ""
+#~ "अडियो फाइल खुलाउन सकिँदैन:\n"
+#~ "%1"
 
 #, fuzzy
 #~| msgid ""

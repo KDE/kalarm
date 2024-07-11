@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-10 00:39+0000\n"
-"PO-Revision-Date: 2024-07-05 12:46+0200\n"
+"POT-Creation-Date: 2024-07-11 00:39+0000\n"
+"PO-Revision-Date: 2024-07-10 18:43+0200\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
 "Language: eu\n"
@@ -276,40 +276,30 @@ msgid "Alarm time has already expired"
 msgstr "Alarmaren ordua dagoeneko iragan da"
 
 #: audioplayer.cpp:75
-#, fuzzy, kde-format
-#| msgctxt "@info"
-#| msgid "Cannot initialize audio player: %1"
+#, kde-format
 msgctxt "@info"
 msgid "Cannot initialize audio system"
-msgstr "Ezin du audio-jotzailea hasieratu: %1"
+msgstr "Ezin du audio-sistema hasieratu"
 
 #: audioplayer.cpp:85
-#, fuzzy, kde-format
-#| msgctxt "@info"
-#| msgid "Cannot open audio file: <filename>%1</filename>"
-msgctxt "@info"
-msgid "<para>Error opening audio file: <filename>%1</filename>"
-msgstr "Ezin du ireki audio fitxategia:  <filename>%1</filename>"
-
-#: audioplayer.cpp:94
-#, fuzzy, kde-format
-#| msgctxt "@info"
-#| msgid "Cannot initialize audio player: %1"
-msgctxt "@info"
-msgid "Cannot initialize audio player"
-msgstr "Ezin du audio-jotzailea hasieratu: %1"
-
-#: audioplayer.cpp:171 audioplayer.cpp:245
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info"
-#| msgid ""
-#| "<para>Error playing audio file: <filename>%1</filename></para><para>%2</"
-#| "para>"
+#| msgid "<para>Error playing audio file: <filename>%1</filename></para>"
+msgctxt "@info"
+msgid "<para>Error opening audio file: <filename>%1</filename></para>"
+msgstr "<para>Errorea audio-fitxategia jotzean: <filename>%1</filename></para>"
+
+#: audioplayer.cpp:94
+#, kde-format
+msgctxt "@info"
+msgid "Cannot initialize audio player"
+msgstr "Ezin du audio-jotzailea hasieratu"
+
+#: audioplayer.cpp:171 audioplayer.cpp:245
+#, kde-kuit-format
 msgctxt "@info"
 msgid "<para>Error playing audio file: <filename>%1</filename></para>"
-msgstr ""
-"<para>Audio-fitxategia jotzeko errorea: <filename>%1</filename></para><para>"
-"%2</para>"
+msgstr "<para>Errorea audio-fitxategia jotzean: <filename>%1</filename></para>"
 
 #: autostart/autostart.cpp:48
 #, kde-format
@@ -8730,6 +8720,12 @@ msgstr ""
 #, kde-format
 msgid "Number of minutes before alarm to wake from suspend"
 msgstr "Esekitze egoeratik esnatzeko alarma aurreko minutu kopurua"
+
+#~| msgctxt "@info"
+#~| msgid "Cannot open audio file: <filename>%1</filename>"
+#~ msgctxt "@info"
+#~ msgid "<para>Error opening audio file: <filename>%1</filename>"
+#~ msgstr "<para>Errorea audio fitxategia irekitzean: <filename>%1</filename>"
 
 #~ msgctxt "@info"
 #~ msgid "Cannot set audio player properties: %1"

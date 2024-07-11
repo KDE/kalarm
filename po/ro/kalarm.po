@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-10 00:39+0000\n"
+"POT-Creation-Date: 2024-07-11 00:39+0000\n"
 "PO-Revision-Date: 2021-05-15 16:59+0100\n"
 "Last-Translator: Sergiu Bivol <sergiu@cip.md>\n"
 "Language-Team: Romanian\n"
@@ -314,12 +314,12 @@ msgid "Cannot initialize audio system"
 msgstr ""
 
 #: audioplayer.cpp:85
-#, fuzzy, kde-format
+#, fuzzy, kde-kuit-format
+#| msgctxt "@info"
+#| msgid "Error attaching file: <filename>%1</filename>"
 msgctxt "@info"
-msgid "<para>Error opening audio file: <filename>%1</filename>"
-msgstr ""
-"Nu pot deschide calendarul:\n"
-"%1"
+msgid "<para>Error opening audio file: <filename>%1</filename></para>"
+msgstr "Eroare la atașarea fișierului: <filename>%1</filename>"
 
 #: audioplayer.cpp:94
 #, kde-format
@@ -9305,6 +9305,13 @@ msgstr ""
 #, kde-format
 msgid "Number of minutes before alarm to wake from suspend"
 msgstr "Numărul de minute înainte ca alarma să se trezească din întrerupere"
+
+#, fuzzy
+#~ msgctxt "@info"
+#~ msgid "<para>Error opening audio file: <filename>%1</filename>"
+#~ msgstr ""
+#~ "Nu pot deschide calendarul:\n"
+#~ "%1"
 
 #, fuzzy
 #~| msgctxt "@info"

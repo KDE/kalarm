@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-10 00:39+0000\n"
+"POT-Creation-Date: 2024-07-11 00:39+0000\n"
 "PO-Revision-Date: 2024-05-18 10:52+0200\n"
 "Last-Translator: Vincenzo Reale <smart2128vr@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
@@ -285,12 +285,16 @@ msgid "Cannot initialize audio system"
 msgstr "Impossibile inizializzare il lettore audio: %1"
 
 #: audioplayer.cpp:85
-#, fuzzy, kde-format
+#, fuzzy, kde-kuit-format
 #| msgctxt "@info"
-#| msgid "Cannot open audio file: <filename>%1</filename>"
+#| msgid ""
+#| "<para>Error playing audio file: <filename>%1</filename></para><para>%2</"
+#| "para>"
 msgctxt "@info"
-msgid "<para>Error opening audio file: <filename>%1</filename>"
-msgstr "Impossibile aprire il file audio: <filename>%1</filename>"
+msgid "<para>Error opening audio file: <filename>%1</filename></para>"
+msgstr ""
+"<para>Errore nella lettura del file audio: <filename>%1</filename></"
+"para><para>%2</para>"
 
 #: audioplayer.cpp:94
 #, fuzzy, kde-format
@@ -8785,6 +8789,13 @@ msgstr ""
 #, kde-format
 msgid "Number of minutes before alarm to wake from suspend"
 msgstr "Numero di minuti tra risveglio e avviso"
+
+#, fuzzy
+#~| msgctxt "@info"
+#~| msgid "Cannot open audio file: <filename>%1</filename>"
+#~ msgctxt "@info"
+#~ msgid "<para>Error opening audio file: <filename>%1</filename>"
+#~ msgstr "Impossibile aprire il file audio: <filename>%1</filename>"
 
 #~ msgctxt "@info"
 #~ msgid "Cannot set audio player properties: %1"

@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-10 00:39+0000\n"
-"PO-Revision-Date: 2024-05-16 07:47+0200\n"
+"POT-Creation-Date: 2024-07-11 00:39+0000\n"
+"PO-Revision-Date: 2024-07-10 05:45+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -273,40 +273,30 @@ msgid "Alarm time has already expired"
 msgstr "განგაშის დრო უკვე ამოიწურა"
 
 #: audioplayer.cpp:75
-#, fuzzy, kde-format
-#| msgctxt "@info"
-#| msgid "Cannot initialize audio player: %1"
+#, kde-format
 msgctxt "@info"
 msgid "Cannot initialize audio system"
-msgstr "აუდიოს დამკვრელის ინიციალიზაციის შეცდომა: %1"
+msgstr "ხმის სისტემის ინიციალიზაცია შეუძლებელია"
 
 #: audioplayer.cpp:85
-#, fuzzy, kde-format
-#| msgctxt "@info"
-#| msgid "Cannot open audio file: <filename>%1</filename>"
-msgctxt "@info"
-msgid "<para>Error opening audio file: <filename>%1</filename>"
-msgstr "ხმოვანი ფაილის გახსნის შეცდომა <filename>%1</filename>"
-
-#: audioplayer.cpp:94
-#, fuzzy, kde-format
-#| msgctxt "@info"
-#| msgid "Cannot initialize audio player: %1"
-msgctxt "@info"
-msgid "Cannot initialize audio player"
-msgstr "აუდიოს დამკვრელის ინიციალიზაციის შეცდომა: %1"
-
-#: audioplayer.cpp:171 audioplayer.cpp:245
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info"
-#| msgid ""
-#| "<para>Error playing audio file: <filename>%1</filename></para><para>%2</"
-#| "para>"
+#| msgid "<para>Error playing audio file: <filename>%1</filename></para>"
+msgctxt "@info"
+msgid "<para>Error opening audio file: <filename>%1</filename></para>"
+msgstr "<para>აუდიოფაილის დაკვრის შეცდომა: <filename>%1</filename></para>"
+
+#: audioplayer.cpp:94
+#, kde-format
+msgctxt "@info"
+msgid "Cannot initialize audio player"
+msgstr "აუდიოს დამკვრელის ინიციალიზაციის შეცდომა"
+
+#: audioplayer.cpp:171 audioplayer.cpp:245
+#, kde-kuit-format
 msgctxt "@info"
 msgid "<para>Error playing audio file: <filename>%1</filename></para>"
-msgstr ""
-"<para>აუდიოფაილის დაკვრის შეცდომა: <filename>%1</filename></para><para>%2</"
-"para>"
+msgstr "<para>აუდიოფაილის დაკვრის შეცდომა: <filename>%1</filename></para>"
 
 #: autostart/autostart.cpp:48
 #, kde-format
@@ -8680,6 +8670,10 @@ msgstr ""
 #, kde-format
 msgid "Number of minutes before alarm to wake from suspend"
 msgstr "პროგრამული ძილიდან გაღვიძების დრო, წუთებში, განგაშამდე"
+
+#~ msgctxt "@info"
+#~ msgid "<para>Error opening audio file: <filename>%1</filename>"
+#~ msgstr "<para>ხმოვანი ფაილის გახსნის შეცდომა <filename>%1</filename>"
 
 #~ msgctxt "@info"
 #~ msgid "Cannot set audio player properties: %1"

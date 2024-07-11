@@ -11,9 +11,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-10 00:39+0000\n"
-"PO-Revision-Date: 2024-06-17 21:18+0200\n"
-"Last-Translator: Stefan Asserhäll <stefan.asserhall@bredband.net>\n"
+"POT-Creation-Date: 2024-07-11 00:39+0000\n"
+"PO-Revision-Date: 2024-07-10 16:48+0200\n"
+"Last-Translator: Stefan Asserhäll <stefan.asserhall@gmail.com>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
@@ -279,40 +279,30 @@ msgid "Alarm time has already expired"
 msgstr "Alarmtiden har redan gått ut"
 
 #: audioplayer.cpp:75
-#, fuzzy, kde-format
-#| msgctxt "@info"
-#| msgid "Cannot initialize audio player: %1"
+#, kde-format
 msgctxt "@info"
 msgid "Cannot initialize audio system"
-msgstr "Kan inte initiera ljudspelare: %1"
+msgstr "Kan inte initiera ljudsystem"
 
 #: audioplayer.cpp:85
-#, fuzzy, kde-format
-#| msgctxt "@info"
-#| msgid "Cannot open audio file: <filename>%1</filename>"
-msgctxt "@info"
-msgid "<para>Error opening audio file: <filename>%1</filename>"
-msgstr "Kan inte öppna ljudfilen: <filename>%1</filename>"
-
-#: audioplayer.cpp:94
-#, fuzzy, kde-format
-#| msgctxt "@info"
-#| msgid "Cannot initialize audio player: %1"
-msgctxt "@info"
-msgid "Cannot initialize audio player"
-msgstr "Kan inte initiera ljudspelare: %1"
-
-#: audioplayer.cpp:171 audioplayer.cpp:245
 #, fuzzy, kde-kuit-format
 #| msgctxt "@info"
-#| msgid ""
-#| "<para>Error playing audio file: <filename>%1</filename></para><para>%2</"
-#| "para>"
+#| msgid "<para>Error playing audio file: <filename>%1</filename></para>"
+msgctxt "@info"
+msgid "<para>Error opening audio file: <filename>%1</filename></para>"
+msgstr "<para>Fel när ljudfilen skulle spelas: <filename>%1</filename></para>"
+
+#: audioplayer.cpp:94
+#, kde-format
+msgctxt "@info"
+msgid "Cannot initialize audio player"
+msgstr "Kan inte initiera ljudspelare"
+
+#: audioplayer.cpp:171 audioplayer.cpp:245
+#, kde-kuit-format
 msgctxt "@info"
 msgid "<para>Error playing audio file: <filename>%1</filename></para>"
-msgstr ""
-"<para>Fel när ljudfilen skulle spelas: <filename>%1</filename></para><para>"
-"%2</para>"
+msgstr "<para>Fel när ljudfilen skulle spelas: <filename>%1</filename></para>"
 
 #: autostart/autostart.cpp:48
 #, kde-format
@@ -8672,6 +8662,12 @@ msgstr ""
 #, kde-format
 msgid "Number of minutes before alarm to wake from suspend"
 msgstr "Antal minuter innan alarmet att vakna från viloläge"
+
+#~| msgctxt "@info"
+#~| msgid "Cannot open audio file: <filename>%1</filename>"
+#~ msgctxt "@info"
+#~ msgid "<para>Error opening audio file: <filename>%1</filename>"
+#~ msgstr "<para>Fel när ljudfilen skulle öppnas: <filename>%1</filename>"
 
 #~ msgctxt "@info"
 #~ msgid "Cannot set audio player properties: %1"
