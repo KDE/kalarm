@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-07-11 00:39+0000\n"
-"PO-Revision-Date: 2024-07-10 08:51+0200\n"
+"PO-Revision-Date: 2024-07-11 08:42+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -287,9 +287,7 @@ msgid "Cannot initialize audio system"
 msgstr "No s'ha pogut inicialitzar el sistema d'àudio"
 
 #: audioplayer.cpp:85
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid "<para>Error playing audio file: <filename>%1</filename></para>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid "<para>Error opening audio file: <filename>%1</filename></para>"
 msgstr ""

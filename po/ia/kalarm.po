@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-07-11 00:39+0000\n"
-"PO-Revision-Date: 2024-07-10 12:28+0200\n"
+"PO-Revision-Date: 2024-07-11 11:35+0200\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
 "Language: ia\n"
@@ -280,14 +280,11 @@ msgid "Cannot initialize audio system"
 msgstr "Non pote initialisar systema audio"
 
 #: audioplayer.cpp:85
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid "<para>Error playing audio file: <filename>%1</filename></para>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid "<para>Error opening audio file: <filename>%1</filename></para>"
 msgstr ""
-"<para>Error durante reproduction de file audio: <filename>%1</filename></"
-"para>"
+"<para>Error durante que il aperiva file audio: <filename>%1</filename></para>"
 
 #: audioplayer.cpp:94
 #, kde-format

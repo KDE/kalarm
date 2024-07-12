@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-07-11 00:39+0000\n"
-"PO-Revision-Date: 2024-07-10 06:37+0200\n"
+"PO-Revision-Date: 2024-07-11 05:52+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -288,13 +288,10 @@ msgid "Cannot initialize audio system"
 msgstr "Ni mogoče inicializirati zvočnega sistema"
 
 #: audioplayer.cpp:85
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid "<para>Error playing audio file: <filename>%1</filename></para>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid "<para>Error opening audio file: <filename>%1</filename></para>"
-msgstr ""
-"<para>Napaka predvajanja zvočne datoteke: <filename>%1</filename></para>"
+msgstr "<para>Napaka odpiranja zvočne datoteke: <filename>%1</filename></para>"
 
 #: audioplayer.cpp:94
 #, kde-format

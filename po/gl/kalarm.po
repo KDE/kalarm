@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-07-11 00:39+0000\n"
-"PO-Revision-Date: 2024-05-17 21:00+0200\n"
+"PO-Revision-Date: 2024-07-11 13:51+0200\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Proxecto Trasno (proxecto@trasno.gal)\n"
 "Language: gl\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 24.02.2\n"
+"X-Generator: Lokalize 24.05.2\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -284,44 +284,32 @@ msgid "Alarm time has already expired"
 msgstr "Xa pasou a hora da alarma"
 
 #: audioplayer.cpp:75
-#, fuzzy, kde-format
-#| msgctxt "@info"
-#| msgid "Cannot initialize audio player: %1"
+#, kde-format
 msgctxt "@info"
 msgid "Cannot initialize audio system"
-msgstr "Non é posíbel preparar o reprodutor de son: %1"
+msgstr "Non é posíbel preparar o sistema de son."
 
 #: audioplayer.cpp:85
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid ""
-#| "<para>Error playing audio file: <filename>%1</filename></para><para>%2</"
-#| "para>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid "<para>Error opening audio file: <filename>%1</filename></para>"
 msgstr ""
-"<para>Produciuse un erro ao reproducir o ficheiro de son: <filename>%1</"
-"filename></para><para>%2</para>"
+"<para>Produciuse un erro ao abrir o ficheiro de son: <filename>%1</"
+"filename></para>"
 
 #: audioplayer.cpp:94
-#, fuzzy, kde-format
-#| msgctxt "@info"
-#| msgid "Cannot initialize audio player: %1"
+#, kde-format
 msgctxt "@info"
 msgid "Cannot initialize audio player"
-msgstr "Non é posíbel preparar o reprodutor de son: %1"
+msgstr "Non é posíbel preparar o reprodutor de son."
 
 #: audioplayer.cpp:171 audioplayer.cpp:245
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid ""
-#| "<para>Error playing audio file: <filename>%1</filename></para><para>%2</"
-#| "para>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid "<para>Error playing audio file: <filename>%1</filename></para>"
 msgstr ""
 "<para>Produciuse un erro ao reproducir o ficheiro de son: <filename>%1</"
-"filename></para><para>%2</para>"
+"filename></para>"
 
 #: autostart/autostart.cpp:48
 #, kde-format
