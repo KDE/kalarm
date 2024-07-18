@@ -14,12 +14,13 @@
 # Javier Vinal <fjvinalgmail.com>, 2009, 2010, 2011, 2012, 2019.
 # javier Vinal <fjvinal@gmail.com>, 2009, 2010.
 # Javier Viñal <fjvinal@gmail.com>, 2010, 2012, 2013, 2014, 2015, 2016, 2017, 2018.
+# Eloy Cuadra <ecuadra@eloihr.net>, %Y.
 msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-06-15 02:26+0000\n"
-"PO-Revision-Date: 2024-03-28 05:01+0100\n"
+"PO-Revision-Date: 2024-07-17 14:37+0100\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -1654,7 +1655,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label"
 msgid "Repeat sound file"
-msgstr "Repetir archivo de sonido"
+msgstr "Repetir el archivo de sonido"
 
 #. i18n: ectx: whatsthis, entry (DefaultSoundRepeat), group (Defaults)
 #: data/kalarmconfig.kcfg:343
@@ -1741,7 +1742,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label"
 msgid "Copy email to self"
-msgstr "Copia del correo a sí mismo"
+msgstr "Copiar el correo a uno mismo"
 
 #. i18n: ectx: whatsthis, entry (DefaultEmailBcc), group (Defaults)
 #: data/kalarmconfig.kcfg:367
@@ -1824,7 +1825,7 @@ msgstr "28 de febrero"
 #, kde-format
 msgctxt "@option"
 msgid "March 1st"
-msgstr "1º de marzo"
+msgstr "1.º de marzo"
 
 #. i18n: ectx: label, entry (DefaultFeb29Type), group (Defaults)
 #: data/kalarmconfig.kcfg:390
@@ -1974,7 +1975,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label"
 msgid "Notify when remote emails are queued"
-msgstr "Notificar cuando se ponen en cola los mensajes remotos"
+msgstr "Notificar cuando se pongan en cola mensajes remotos"
 
 #. i18n: ectx: whatsthis, entry (Base_EmailQueuedNotify), group (Notification Messages)
 #: data/kalarmconfig.kcfg:442 prefdlg.cpp:1122
@@ -2682,7 +2683,7 @@ msgstr "Editar la plantilla de alarma de orden"
 #, kde-format
 msgctxt "@title:window"
 msgid "New Command Alarm"
-msgstr "Nueva alarmas de orden"
+msgstr "Nueva alarma de orden"
 
 #: editdlgtypes.cpp:838
 #, kde-format
@@ -2694,7 +2695,7 @@ msgstr "Editar la alarma de orden"
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid "Execute the specified command now"
-msgstr "Ejecuta la orden indicada ahora"
+msgstr "Ejecutar la orden indicada ahora"
 
 #: editdlgtypes.cpp:847
 #, kde-format
@@ -3156,7 +3157,7 @@ msgstr "Marque para incluir las alarmas de órdenes en la búsqueda."
 #, kde-format
 msgctxt "@option:check Alarm action"
 msgid "Email"
-msgstr "Correo"
+msgstr "Correo electrónico"
 
 #: find.cpp:134
 #, kde-format
@@ -4792,8 +4793,8 @@ msgstr[1] "en %1 horas"
 msgctxt "@item:intext inserted into 'in ... %1 minute's time' below"
 msgid "1 hour"
 msgid_plural "%1 hours"
-msgstr[0] "1 Hora"
-msgstr[1] "%1 Horas"
+msgstr[0] "1 hora"
+msgstr[1] "%1 horas"
 
 #: messagedisplayhelper.cpp:505
 #, kde-format
@@ -5013,7 +5014,7 @@ msgstr "Plantilla de alarma de correo"
 #, kde-format
 msgctxt "@action"
 msgid "New Email Alarm"
-msgstr "Nueva alarma por correo"
+msgstr "Nueva alarma de correo"
 
 #: newalarmaction.cpp:54
 #, kde-format
@@ -5079,7 +5080,7 @@ msgstr "Almacenamiento de la alarma"
 #, kde-format
 msgctxt "@title:tab Email preferences"
 msgid "Email"
-msgstr "Correo"
+msgstr "Correo electrónico"
 
 #: prefdlg.cpp:158
 #, kde-format
@@ -6219,7 +6220,7 @@ msgstr ""
 msgctxt "@option:check"
 msgid "Message windows have a title bar and take keyboard focus"
 msgstr ""
-"Las ventanas de mensajes tienen una barra de título y toman el foco del "
+"Las ventanas de mensajes tienen una barra de título y reciben el foco del "
 "teclado"
 
 #: prefdlg.cpp:2010
@@ -7820,7 +7821,7 @@ msgstr "Alarmas archivadas"
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Alarm Templates"
-msgstr "Plantillas de alarma"
+msgstr "Plantillas de alarmas"
 
 #: resourceselector.cpp:57
 #, kde-format
@@ -8252,7 +8253,7 @@ msgstr "Pitido"
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Speak"
-msgstr "Hablar"
+msgstr "Leer"
 
 #: soundpicker.cpp:44
 #, kde-format
@@ -8433,7 +8434,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title:window"
 msgid "Alarm Templates"
-msgstr "Plantillas de alarma"
+msgstr "Plantillas de alarmas"
 
 #: templatedlg.cpp:64 templatelistview.cpp:24
 #, kde-format
