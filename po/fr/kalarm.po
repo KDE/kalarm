@@ -27,7 +27,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-07-11 00:39+0000\n"
-"PO-Revision-Date: 2024-05-17 09:00+0200\n"
+"PO-Revision-Date: 2024-07-12 09:48+0200\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: French <French <kde-francophone@kde.org>>\n"
 "Language: fr\n"
@@ -318,44 +318,32 @@ msgid "Alarm time has already expired"
 msgstr "L'heure de l'alarme est déjà passée"
 
 #: audioplayer.cpp:75
-#, fuzzy, kde-format
-#| msgctxt "@info"
-#| msgid "Cannot initialize audio player: %1"
+#, kde-format
 msgctxt "@info"
 msgid "Cannot initialize audio system"
-msgstr "Impossible d'initialiser le lecteur audio : %1"
+msgstr "Impossible d'initialiser le système audio"
 
 #: audioplayer.cpp:85
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid ""
-#| "<para>Error playing audio file: <filename>%1</filename></para><para>%2</"
-#| "para>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid "<para>Error opening audio file: <filename>%1</filename></para>"
 msgstr ""
-"<para>Erreur à la lecture du fichier audio : <filename>%1</filename></"
-"para><para>%2</para>"
+"<para>Erreur durant l'ouverture du fichier audio : <filename>%1</filename></"
+"para>"
 
 #: audioplayer.cpp:94
-#, fuzzy, kde-format
-#| msgctxt "@info"
-#| msgid "Cannot initialize audio player: %1"
+#, kde-format
 msgctxt "@info"
 msgid "Cannot initialize audio player"
-msgstr "Impossible d'initialiser le lecteur audio : %1"
+msgstr "Impossible d'initialiser le lecteur audio"
 
 #: audioplayer.cpp:171 audioplayer.cpp:245
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid ""
-#| "<para>Error playing audio file: <filename>%1</filename></para><para>%2</"
-#| "para>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid "<para>Error playing audio file: <filename>%1</filename></para>"
 msgstr ""
-"<para>Erreur à la lecture du fichier audio : <filename>%1</filename></"
-"para><para>%2</para>"
+"<para>Erreur durant la lecture du fichier audio : <filename>%1</filename></"
+"para>"
 
 #: autostart/autostart.cpp:48
 #, kde-format
