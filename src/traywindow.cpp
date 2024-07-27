@@ -84,14 +84,12 @@ TrayWindow::TrayWindow(MainWindow* parent)
     contextMenu()->addSeparator();
     contextMenu()->addAction(KStandardAction::preferences(this, &TrayWindow::slotPreferences, this));
 
-    // Disable standard quit behaviour. We have to intercept the quit event
-    // (which triggers KStatusNotifierItem to quit unconditionally).
-    QAction* act = action(QStringLiteral("quit"));
-    if (act)
-    {
-        disconnect(act, &QAction::triggered, this, nullptr);
-        connect(act, &QAction::triggered, this, &TrayWindow::slotQuit);
-    }
+    connect(this, &KStatusNotifierItem::quitRequested, this, [this]{
+        // Disable standard quit behaviour
+        abortQuit();
+
+        slotQuit();
+    });
 
     // Set icon to correspond with the alarms enabled menu status
     setEnabledStatus(theApp()->alarmsEnabled());
