@@ -334,7 +334,7 @@ QString KAMail::appendBodyAttachments(KMime::Message& message, JobData& data)
             QString typeName = mimeDb.mimeTypeForUrl(url).name();
             auto ctype = new KMime::Headers::ContentType;
             ctype->fromUnicodeString(typeName);
-            ctype->setName(attachment, "local");
+            ctype->setName(attachment);
             content->setHeader(ctype);
 
             // Set the encoding
@@ -737,7 +737,7 @@ using namespace KMime::HeaderParsing;
 */
 bool parseUserName(const char* & scursor, const char* const send, QString& result, bool isCRLF)
 {
-    QByteArray atom;
+    QByteArrayView atom;
 
     if (scursor != send)
     {
@@ -758,7 +758,7 @@ bool parseUserName(const char* & scursor, const char* const send, QString& resul
                 {
                     //TODO FIXME on windows
 #ifndef WIN32
-                    if (getpwnam(atom.constData()))
+                    if (getpwnam(atom.toByteArray().constData()))
                     {
                         result = QLatin1String(atom);
                         return true;
