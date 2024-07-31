@@ -18,7 +18,6 @@
 
 #include <QApplication>
 #include <QByteArray>
-#include <QEventLoopLocker>
 #include <QFile>
 #include <QIcon>
 #include <QTemporaryFile>
@@ -41,6 +40,7 @@ AudioPlayerMpv::AudioPlayerMpv(Type type, const QUrl& audioFile, float volume, f
 
     // Qt sets the locale in the QGuiApplication constructor, but libmpv
     // requires the LC_NUMERIC category to be set to "C", so change it back.
+    // This does not affect Qt's locale settings.
     std::setlocale(LC_NUMERIC, "C");
 
     // Create the audio instance
@@ -48,7 +48,7 @@ AudioPlayerMpv::AudioPlayerMpv(Type type, const QUrl& audioFile, float volume, f
     if (!mAudioInstance)
     {
         mError = i18nc("@info", "Cannot initialize audio system");
-        qCCritical(KALARM_LOG) << "AudioPlayerMpv: Error initializing MPV audio";
+        qCCritical(KALARM_LOG) << "AudioPlayerMpv: Error creating MPV audio instance";
         return;
     }
 
@@ -56,7 +56,7 @@ AudioPlayerMpv::AudioPlayerMpv(Type type, const QUrl& audioFile, float volume, f
     if ((retval = mpv_set_option_string(mAudioInstance, "vo", "null"))  < 0)
     {
         mError = i18nc("@info", "Cannot initialize audio system: %1", QString::fromUtf8(mpv_error_string(retval)));
-        qCCritical(KALARM_LOG) << "AudioPlayerMpv: Error initializing MPV audio:" << mpv_error_string(retval);
+        qCCritical(KALARM_LOG) << "AudioPlayerMpv: Error suppressing video for MPV audio:" << mpv_error_string(retval);
         return;
     }
 
@@ -112,7 +112,7 @@ bool AudioPlayerMpv::play()
     int retval = 0;
     if ((retval = mpv_command_async(mAudioInstance, 0, cmd)) < 0)
     {
-        mError = xi18nc("@info", "<para>Error playing audio file <filename>%1</filename>: %2</para>",
+        mError = xi18nc("@info", "<para>Error playing audio file <filename>%1</filename></para><para>%2</para>",
             mFile,
             QString::fromUtf8(mpv_error_string(retval)));
         qCWarning(KALARM_LOG) << "AudioPlayerMpv::play: Failed to play sound with MPV:" << mFile << mpv_error_string(retval);
@@ -140,7 +140,7 @@ void AudioPlayerMpv::internalSetVolume()
     if ((retval = mpv_set_option_string(mAudioInstance, "volume", volumeLevel))  < 0)
     {
         mError = i18nc("@info", "Cannot set the audio volume: %1", QString::fromUtf8(mpv_error_string(retval)));
-        qCCritical(KALARM_LOG) << "AudioPlayerMpv: Error setting MPV audio volume:" << mpv_error_string(retval);
+        qCWarning(KALARM_LOG) << "AudioPlayerMpv: Error setting MPV audio volume:" << mpv_error_string(retval);
     }
 }
 
@@ -177,7 +177,7 @@ void AudioPlayerMpv::onMpvEvents()
                 if (evt && evt->error != 0)
                 {
                     qCCritical(KALARM_LOG) << "AudioPlayerMpv::onMpvEvents: Play failure:" << mFile << mpv_error_string(evt->error);
-                    mError = xi18nc("@info", "<para>Error playing audio file <filename>%1</filename>: %2</para>",
+                    mError = xi18nc("@info", "<para>Error playing audio file <filename>%1</filename></para><para>%2</para>",
                         mFile,
                         QString::fromUtf8(mpv_error_string(evt->error)));
                     result = false;
