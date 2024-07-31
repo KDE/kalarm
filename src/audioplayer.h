@@ -11,9 +11,6 @@
 #include <QObject>
 
 class QTimer;
-struct libvlc_instance_t;
-struct libvlc_media_player_t;
-struct libvlc_event_t;
 
 // Class to play an audio file, optionally repeated.
 class AudioPlayer : public QObject
@@ -33,24 +30,22 @@ public:
     ~AudioPlayer() override;
     Status  status() const;
     static QString popError();   // fetch last error message, and clear it
-    static bool providesFade()  { return true; }
+    static bool providesFade() { return true; }
 
 public Q_SLOTS:
-    bool    play();
-    void    stop();
+    virtual bool    play() = 0;
+    virtual void    stop() = 0;
 
 Q_SIGNALS:
     void    finished(bool ok);
 
 private Q_SLOTS:
-    void    playFinished(uint32_t event);
-    void    checkPlay();
     void    fadeStep();
 
-private:
+protected:
     AudioPlayer(Type, const QUrl& audioFile, QObject* parent = nullptr);
     AudioPlayer(Type, const QUrl& audioFile, float volume, float fadeVolume, int fadeSeconds, QObject* parent = nullptr);
-    static void finish_callback(const libvlc_event_t* event, void* data);
+    virtual void internalSetVolume() = 0;
 
     static AudioPlayer*    mInstance;
     static QString         mError;
@@ -62,11 +57,9 @@ private:
     QTimer*                mFadeTimer {nullptr};
     time_t                 mFadeStart {0};
     int                    mFadeSeconds;   // configured time to fade from mFadeVolume to mVolume
-    libvlc_instance_t*     mAudioInstance {nullptr};
-    libvlc_media_player_t* mAudioPlayer {nullptr};
-    QTimer*                mCheckPlayTimer {nullptr};
     Status                 mStatus {Error};
     bool                   mNoFinishedSignal {false};
 };
+
 
 // vim: et sw=4:

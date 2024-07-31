@@ -274,6 +274,18 @@ if(ENABLE_RTC_WAKE_FROM_SUSPEND)
     )
 endif()
 
+if(ENABLE_LIBVLC)
+    set(kalarm_bin_SRCS ${kalarm_bin_SRCS}
+        audioplayer_vlc.cpp
+        audioplayer_vlc.h
+    )
+elseif(ENABLE_LIBMPV)
+    set(kalarm_bin_SRCS ${kalarm_bin_SRCS}
+        audioplayer_mpv.cpp
+        audioplayer_mpv.h
+    )
+endif()
+
 ki18n_wrap_ui(kalarm_bin_SRCS
     wakedlg.ui
     resources/singlefileresourceconfigdialog.ui
@@ -329,8 +341,17 @@ target_link_libraries(kalarm_bin
     KF6::Contacts
     KPim6::IdentityManagementWidgets
     KPim6::Mime
-    LibVLC::LibVLC
 )
+
+
+if(ENABLE_LIBVLC)
+    target_link_libraries(kalarm_bin LibVLC::LibVLC)
+    target_compile_definitions(kalarm_bin PUBLIC -DHAVE_LIBVLC)
+elseif(ENABLE_LIBMPV)
+    target_link_libraries(kalarm_bin Libmpv::Libmpv)
+    target_compile_definitions(kalarm_bin PUBLIC -DHAVE_LIBMPV)
+endif()
+
 if(TARGET KF6::TextEditTextToSpeech)
     target_link_libraries(kalarm_bin KF6::TextEditTextToSpeech)
 endif()

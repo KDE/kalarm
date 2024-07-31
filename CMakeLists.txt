@@ -124,8 +124,21 @@ find_package(KPim6CalendarUtils ${CALENDARUTILS_LIB_VERSION} CONFIG REQUIRED)
 find_package(KPim6IdentityManagementWidgets ${IDENTITYMANAGEMENT_LIB_VERSION} CONFIG REQUIRED)
 find_package(KPim6Mime ${KMIME_LIB_VERSION} CONFIG REQUIRED)
 
-find_package(LibVLC "3.0.0" QUIET REQUIRED)
-set_package_properties(LibVLC PROPERTIES PURPOSE "Needed to play audio alarms")
+option(ENABLE_LIBVLC "Build support for LibVLC" ON)
+add_feature_info(ENABLE_LIBVLC ${ENABLE_LIBVLC} "Provides support for playing sound files using LibVLC")
+
+option(ENABLE_LIBMPV "Build support for Libmpv" OFF)
+add_feature_info(ENABLE_LIBMPV ${ENABLE_LIBMPV} "Provides support for playing sound files using Libmpv")
+
+if(ENABLE_LIBVLC)
+    find_package(LibVLC "3.0.0" QUIET REQUIRED)
+    set_package_properties(LibVLC PROPERTIES PURPOSE "Needed to play audio alarms")
+elseif(ENABLE_LIBMPV)
+    find_package(Libmpv "2.3.0" QUIET REQUIRED)
+    set_package_properties(Libmpv PROPERTIES PURPOSE "Needed to play audio alarms")
+else()
+    message(FATAL_ERROR "Support for either ENABLE_LIBVLC or ENABLE_LIBMPV must be enabled for playing sound files")
+endif()
 
 find_package(KF6TextEditTextToSpeech ${KTEXTADDONS_MIN_VERSION} CONFIG)
 set_package_properties(KF6TextEditTextToSpeech PROPERTIES DESCRIPTION
