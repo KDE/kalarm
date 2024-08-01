@@ -32,7 +32,7 @@ protected:
 private:
     static void wakeup_callback(void* ctx);
 
-    mpv_handle*            mAudioInstance {nullptr};
+    mpv_handle* mAudioInstance {nullptr};
 };
 
 // vim: et sw=4:

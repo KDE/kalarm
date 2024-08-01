@@ -11,21 +11,8 @@
 #include "kalarm.h"
 #include "kalarm_debug.h"
 
-#include <KAboutData>
-#include <KIO/Job>
-#include <KIO/FileCopyJob>
-#include <KLocalizedString>
-
-#include <QApplication>
-#include <QByteArray>
-#include <QEventLoopLocker>
-#include <QFile>
-#include <QIcon>
-#include <QTemporaryFile>
 #include <QTimer>
 #include <QUrl>
-
-#include <ctime>
 
 #ifdef HAVE_LIBVLC
 #include "audioplayer_vlc.h"

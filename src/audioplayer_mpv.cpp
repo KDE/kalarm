@@ -11,21 +11,11 @@
 #include "kalarm.h"
 #include "kalarm_debug.h"
 
-#include <KAboutData>
-#include <KIO/Job>
-#include <KIO/FileCopyJob>
 #include <KLocalizedString>
 
-#include <QApplication>
-#include <QByteArray>
-#include <QFile>
-#include <QIcon>
-#include <QTemporaryFile>
 #include <QTimer>
-#include <QUrl>
 
 #include <mpv/client.h>
-#include <ctime>
 
 /******************************************************************************
 * Constructor for audio player.
