@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-11 00:39+0000\n"
+"POT-Creation-Date: 2024-08-01 00:41+0000\n"
 "PO-Revision-Date: 2024-07-11 05:40+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
@@ -272,25 +272,50 @@ msgctxt "@info"
 msgid "Alarm time has already expired"
 msgstr "განგაშის დრო უკვე ამოიწურა"
 
-#: audioplayer.cpp:75
+#: audioplayer_mpv.cpp:50 audioplayer_vlc.cpp:45
 #, kde-format
 msgctxt "@info"
 msgid "Cannot initialize audio system"
 msgstr "ხმის სისტემის ინიციალიზაცია შეუძლებელია"
 
-#: audioplayer.cpp:85
+#: audioplayer_mpv.cpp:58 audioplayer_mpv.cpp:66
+#, fuzzy, kde-format
+#| msgctxt "@info"
+#| msgid "Cannot initialize audio system"
+msgctxt "@info"
+msgid "Cannot initialize audio system: %1"
+msgstr "ხმის სისტემის ინიციალიზაცია შეუძლებელია"
+
+#: audioplayer_mpv.cpp:115 audioplayer_mpv.cpp:180
+#, fuzzy, kde-kuit-format
+#| msgctxt "@info"
+#| msgid "<para>Error playing audio file: <filename>%1</filename></para>"
+msgctxt "@info"
+msgid ""
+"<para>Error playing audio file <filename>%1</filename></para><para>%2</para>"
+msgstr "<para>აუდიოფაილის დაკვრის შეცდომა: <filename>%1</filename></para>"
+
+#: audioplayer_mpv.cpp:142
+#, fuzzy, kde-format
+#| msgctxt "@info"
+#| msgid "Cannot set audio player properties: %1"
+msgctxt "@info"
+msgid "Cannot set the audio volume: %1"
+msgstr "აუდიოს დამკვრელის თვისებების მიღება შეუძლებელია: %1"
+
+#: audioplayer_vlc.cpp:55
 #, kde-kuit-format
 msgctxt "@info"
 msgid "<para>Error opening audio file: <filename>%1</filename></para>"
 msgstr "<para>აუდიოფაილის გახსნის შეცდომა: <filename>%1</filename></para>"
 
-#: audioplayer.cpp:94
+#: audioplayer_vlc.cpp:64
 #, kde-format
 msgctxt "@info"
 msgid "Cannot initialize audio player"
 msgstr "აუდიოს დამკვრელის ინიციალიზაციის შეცდომა"
 
-#: audioplayer.cpp:171 audioplayer.cpp:245
+#: audioplayer_vlc.cpp:121 audioplayer_vlc.cpp:183
 #, kde-kuit-format
 msgctxt "@info"
 msgid "<para>Error playing audio file: <filename>%1</filename></para>"
@@ -8672,10 +8697,6 @@ msgstr "პროგრამული ძილიდან გაღვიძ�
 #~ msgctxt "@info"
 #~ msgid "<para>Error opening audio file: <filename>%1</filename>"
 #~ msgstr "<para>ხმოვანი ფაილის გახსნის შეცდომა <filename>%1</filename>"
-
-#~ msgctxt "@info"
-#~ msgid "Cannot set audio player properties: %1"
-#~ msgstr "აუდიოს დამკვრელის თვისებების მიღება შეუძლებელია: %1"
 
 #~ msgctxt "@info"
 #~ msgid "Unsupported audio format, or corrupt data"

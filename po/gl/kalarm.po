@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-11 00:39+0000\n"
+"POT-Creation-Date: 2024-08-01 00:41+0000\n"
 "PO-Revision-Date: 2024-07-11 13:51+0200\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Proxecto Trasno (proxecto@trasno.gal)\n"
@@ -283,13 +283,40 @@ msgctxt "@info"
 msgid "Alarm time has already expired"
 msgstr "Xa pasou a hora da alarma"
 
-#: audioplayer.cpp:75
+#: audioplayer_mpv.cpp:50 audioplayer_vlc.cpp:45
 #, kde-format
 msgctxt "@info"
 msgid "Cannot initialize audio system"
 msgstr "Non é posíbel preparar o sistema de son."
 
-#: audioplayer.cpp:85
+#: audioplayer_mpv.cpp:58 audioplayer_mpv.cpp:66
+#, fuzzy, kde-format
+#| msgctxt "@info"
+#| msgid "Cannot initialize audio system"
+msgctxt "@info"
+msgid "Cannot initialize audio system: %1"
+msgstr "Non é posíbel preparar o sistema de son."
+
+#: audioplayer_mpv.cpp:115 audioplayer_mpv.cpp:180
+#, fuzzy, kde-kuit-format
+#| msgctxt "@info"
+#| msgid "<para>Error playing audio file: <filename>%1</filename></para>"
+msgctxt "@info"
+msgid ""
+"<para>Error playing audio file <filename>%1</filename></para><para>%2</para>"
+msgstr ""
+"<para>Produciuse un erro ao reproducir o ficheiro de son: <filename>%1</"
+"filename></para>"
+
+#: audioplayer_mpv.cpp:142
+#, fuzzy, kde-format
+#| msgctxt "@info"
+#| msgid "Cannot set audio player properties: %1"
+msgctxt "@info"
+msgid "Cannot set the audio volume: %1"
+msgstr "Non é posíbel definir propiedades no reprodutor de son: %1"
+
+#: audioplayer_vlc.cpp:55
 #, kde-kuit-format
 msgctxt "@info"
 msgid "<para>Error opening audio file: <filename>%1</filename></para>"
@@ -297,13 +324,13 @@ msgstr ""
 "<para>Produciuse un erro ao abrir o ficheiro de son: <filename>%1</"
 "filename></para>"
 
-#: audioplayer.cpp:94
+#: audioplayer_vlc.cpp:64
 #, kde-format
 msgctxt "@info"
 msgid "Cannot initialize audio player"
 msgstr "Non é posíbel preparar o reprodutor de son."
 
-#: audioplayer.cpp:171 audioplayer.cpp:245
+#: audioplayer_vlc.cpp:121 audioplayer_vlc.cpp:183
 #, kde-kuit-format
 msgctxt "@info"
 msgid "<para>Error playing audio file: <filename>%1</filename></para>"
@@ -8780,10 +8807,6 @@ msgstr "Número de minutos antes da alarma para recuperar antes de suspender"
 #~ msgctxt "@info"
 #~ msgid "<para>Error opening audio file: <filename>%1</filename>"
 #~ msgstr "Non é posíbel abrir o ficheiro de son: <filename>%1</filename>"
-
-#~ msgctxt "@info"
-#~ msgid "Cannot set audio player properties: %1"
-#~ msgstr "Non é posíbel definir propiedades no reprodutor de son: %1"
 
 #~ msgctxt "@info"
 #~ msgid "Unsupported audio format, or corrupt data"

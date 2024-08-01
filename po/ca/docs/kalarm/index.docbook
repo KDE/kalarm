@@ -752,7 +752,7 @@
 >Configurar les plantilles</title>
 
 <para
->Podeu crear, modificar o eliminar les plantilles mitjançant el diàleg Plantilles d'alarma, o podeu crear una plantilla d'alarma nova basada en una alarma existent.</para>
+>Podeu crear, modificar o suprimir les plantilles mitjançant el diàleg Plantilles d'alarma, o podeu crear una plantilla d'alarma nova basada en una alarma existent.</para>
 
 <para
 >Per a crear una plantilla d'alarma nova, realitzeu una de les següents accions:</para>
@@ -808,15 +808,15 @@
 >. Això mostrarà el diàleg d'edició de la plantilla que es descriu a sota.</para>
 
 <para
->Per a eliminar les plantilles existents, mostreu el diàleg Plantilles d'alarma seleccionant l'element de menú <menuchoice
+>Per a suprimir les plantilles existents, mostreu el diàleg Plantilles d'alarma seleccionant l'element de menú <menuchoice
 > <guimenu
 >Fitxer</guimenu
 ><guimenuitem
 >Plantilles...</guimenuitem
 > </menuchoice
 >, seleccioneu-ne una o més i feu clic a <guibutton
->Elimina</guibutton
->. Es mostrarà un missatge de confirmació per a evitar eliminacions accidentals.</para>
+>Suprimeix</guibutton
+>. Es mostrarà un missatge de confirmació per a evitar supressions accidentals.</para>
 
 </sect3>
 
@@ -2226,8 +2226,8 @@ in the <guilabel
 >Afegeix</guibutton
 >. Per a canviar una excepció, seleccioneu-la a la llista, introduïu la nova data a la dreta i premeu <guibutton
 >Canvia</guibutton
->. Per a eliminar una excepció, ressalteu-la a la llista i premeu <guibutton
->Elimina</guibutton
+>. Per a suprimir una excepció, ressalteu-la a la llista i premeu <guibutton
+>Suprimeix</guibutton
 >.</para>
 </listitem>
 
@@ -2333,7 +2333,7 @@ in the <guilabel
 
 <note
 ><para
->Si posteriorment es modifica o suprimeix l'alarma al &kalarm;, l'esdeveniment del &korganizer; serà modificat o eliminat corresponentment. Tanmateix, si canvieu l'esdeveniment al &korganizer;, l'alarma al &kalarm; no es veurà afectada.</para
+>Si posteriorment es modifica o suprimeix l'alarma al &kalarm;, l'esdeveniment del &korganizer; serà modificat o suprimit corresponentment. Tanmateix, si canvieu l'esdeveniment al &korganizer;, l'alarma al &kalarm; no es veurà afectada.</para
 ></note>
 
 <para
@@ -4747,7 +4747,7 @@ in the <guilabel
 > és una crida de &DBus; per a activar la visualització immediata o l'execució de l'alarma especificada (sense importar l'hora a la qual està programada). El &kalarm; recuperarà l'alarma del calendari i després la mostra o executa.</para>
 
 <para
->Si l'alarma ja ha vençut, llavors el &kalarm; eliminarà totes les aparicions programades de l'alarma fins a l'hora actual, i si no roman la repetició de l'alarma, l'alarma s'eliminarà del calendari. Si l'alarma no ha vençut, les seves aparicions programades no es modificaran.</para>
+>Si l'alarma ja ha vençut, llavors el &kalarm; suprimirà totes les aparicions programades de l'alarma fins a l'hora actual, i si no roman la repetició de l'alarma, l'alarma se suprimirà del calendari. Si l'alarma no ha vençut, les seves aparicions programades no es modificaran.</para>
 
 </refsect1>
 </refentry>
