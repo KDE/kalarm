@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: kdepim-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-07-11 00:39+0000\n"
-"PO-Revision-Date: 2024-07-11 14:39+0300\n"
+"PO-Revision-Date: 2024-08-01 13:02+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -25,7 +25,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 24.07.70\n"
+"X-Generator: Lokalize 24.11.70\n"
 "(http: //www.transifex.com/projects/p/kdepim-k-tr/language/tr/)\n"
 "X-POOTLE-MTIME: 1413131629.000000\n"
 
@@ -231,7 +231,7 @@ msgstr "<para>%1</para><para>%2</para><para>%3</para>"
 #, kde-format
 msgctxt "@action:button"
 msgid "Time Zone..."
-msgstr "Zaman Dilimi..."
+msgstr "Zaman Dilimi…"
 
 #: alarmtimewidget.cpp:211
 #, kde-format
@@ -322,7 +322,7 @@ msgstr "Açılışta K Alarm uygulamasını başlat"
 #: autostart/autostart.cpp:51
 #, kde-format
 msgid "Copyright 2001-%1, David Jarvie"
-msgstr "Telif Hakkı 2001-%1, David Jarvie"
+msgstr "© 2001–%1, David Jarvie"
 
 #: autostart/autostart.cpp:52 main.cpp:61
 #, kde-format
@@ -429,7 +429,7 @@ msgid ""
 msgstr ""
 "<para>Alarm ayarlanacak doğum günlerini seçin.<nl/>Bu liste, hakkında zaten "
 "alarm ayarlanmış olanlar haricinde <application>K Adres Defteri</"
-"application>'ndeki tüm doğum günlerini içerir.</para><para>Fareyi liste "
+"application>’ndeki tüm doğum günlerini içerir.</para><para>Fareyi liste "
 "üzerinde sürükleyerek veya Kontrol veya Üst Karakter düğmelerini basılı "
 "tutarak fareyle tıklayarak birden fazla doğum günü seçebilirsiniz.</para>"
 
@@ -1269,10 +1269,9 @@ msgid ""
 "email address otherwise."
 msgstr ""
 "E-posta alarmlarını gönderirken kimliğinizi tanımlayacak e-posta adresiniz. "
-"K Posta’da kullanılan varsayılan posta adresini kullanmak için "
-"\"@SystemSetting\"’e girin, K Posta kimliklerinden birinin seçilmesine izin "
-"vermek için \"@KMail\" girebilir ya da gerçek e-posta adresinizi "
-"yazabilirsiniz."
+"K Posta’da kullanılan öntanımlı posta adresini kullanmak için "
+"“@SystemSettings” girin, K Posta kimliklerinden birinin seçilmesine izin "
+"vermek için “@KMail” girebilir veya gerçek e-posta adresinizi yazabilirsiniz."
 
 #. i18n: ectx: label, entry (Base_EmailBccAddress), group (General)
 #: data/kalarmconfig.kcfg:215
@@ -1292,12 +1291,12 @@ msgid ""
 "\" to use the default email address set in KMail, or enter the actual email "
 "address otherwise."
 msgstr ""
-"E-posta alarmlarını kendinize kör kopya olarak gönderebilmeniz için e-posta "
-"adresiniz. Eğer kör kopyaların K Alarm’ın çalıştığı bilgisayardaki "
+"E-posta alarmlarını kendinize gizli kopya olarak gönderebilmeniz için e-"
+"posta adresiniz. Eğer kör kopyaların K Alarm’ın çalıştığı bilgisayardaki "
 "hesabınızdan gönderilmesini istiyorsanız basitçe oturum açtığınız kullanıcı "
 "adını girebilirsiniz. K Posta’da yer alan e-posta adresinin kullanılması "
-"için \"@SystemSettings\" girebileceğiniz gibi gerçek e-posta adresinizi de "
-"girebilirsiniz."
+"için “@SystemSettings” girebileceğiniz gibi gerçek e-posta adresinizi de "
+"yazabilirsiniz."
 
 #. i18n: ectx: label, entry (Base_CmdXTermCommand), group (General)
 #: data/kalarmconfig.kcfg:220
@@ -1375,7 +1374,7 @@ msgid ""
 "64 = Sunday."
 msgstr ""
 "Haftanın hangi günlerinin çalışma günleri olduğunu gösteren OR’lanmış "
-"bitler, 1 = Pazartesi ... 64 = Pazar."
+"bitler, 1 = Pazartesi … 64 = Pazar."
 
 #. i18n: ectx: label, entry (DisabledColour), group (General)
 #: data/kalarmconfig.kcfg:248
@@ -1486,7 +1485,7 @@ msgid ""
 "notifications."
 msgstr ""
 "Alarm iletilerini pencerelerde veya sistem bildirimlerinde görüntülenmesini "
-"seçmek için alarm düzenleme penceresindeki \"görüntüleme yöntemi\" öntanımlı "
+"seçmek için alarm düzenleme penceresindeki “görüntüleme yöntemi” öntanımlı "
 "ayarı."
 
 #. i18n: ectx: label, entry (DefaultLateCancel), group (Defaults)
@@ -1521,8 +1520,7 @@ msgstr "Gecikmiş iptal zamanı durumunda pencereyi otomatik kapat"
 msgctxt "@info:whatsthis"
 msgid "Default setting in the alarm edit dialog for \"auto close if late\"."
 msgstr ""
-"\"gecikmişse otomatik kapat\" için alarm düzenleme penceresinde öntanımlı "
-"ayar."
+"“Gecikmişse otomatik kapat” için alarm düzenleme penceresinde öntanımlı ayar."
 
 #. i18n: ectx: label, entry (DefaultConfirmAck), group (Defaults)
 #: data/kalarmconfig.kcfg:310 kalarmcalendar/kaeventformatter.cpp:106
@@ -1539,7 +1537,7 @@ msgid ""
 "Default setting in the alarm edit dialog for \"confirm alarm acknowledgement"
 "\"."
 msgstr ""
-"Alar düzenleme penceresinde \"alarm bildirimini doğrula\" ayarı için "
+"Alarm düzenleme penceresindeki “alarm bildirimini doğrula” ayarı için "
 "öntanımlı değer."
 
 #. i18n: ectx: label, entry (DefaultCopyToKOrganizer), group (Defaults)
@@ -1555,7 +1553,7 @@ msgstr "K Organizatör içerisinde Göster"
 msgctxt "@info:whatsthis"
 msgid "Default setting in the alarm edit dialog for \"show in KOrganizer\"."
 msgstr ""
-"\"K Organizatör’de göster\" için alarm düzenleme penceresinde öntanımlı ayar."
+"“K Organizatör’de göster” için alarm düzenleme penceresindeki öntanımlı ayar."
 
 #. i18n: ectx: label, entry (Base_DefaultSoundType), group (Defaults)
 #: data/kalarmconfig.kcfg:320
@@ -2092,7 +2090,7 @@ msgstr "Takvim buraya kaydedilemedi <filename>%1</filename>"
 #, kde-format
 msgctxt "@title:tab"
 msgid "Recurrence - [%1]"
-msgstr "Yinelenme - [%1]"
+msgstr "Yinelenme — [%1]"
 
 #: editdlg.cpp:85
 #, kde-format
@@ -2128,7 +2126,7 @@ msgstr "Alarmı belirlenmiş bir zamana ayarla."
 #, kde-format
 msgctxt "@action:button"
 msgid "Load Template..."
-msgstr "Şablon Yükle..."
+msgstr "Şablon Yükle…"
 
 #: editdlg.cpp:199
 #, kde-format
@@ -2182,7 +2180,7 @@ msgstr "Ertelendiği zaman:"
 #, kde-format
 msgctxt "@action:button"
 msgid "Change..."
-msgstr "Değiştir..."
+msgstr "Değiştir…"
 
 #: editdlg.cpp:275
 #, kde-format
@@ -2849,7 +2847,7 @@ msgstr "E-posta ile gönderilecek ekler."
 #, kde-format
 msgctxt "@action:button"
 msgid "Add..."
-msgstr "Ekle..."
+msgstr "Ekle…"
 
 #: editdlgtypes.cpp:1258
 #, kde-format
@@ -3184,7 +3182,7 @@ msgstr "İstenen yazıtipi"
 #, kde-format
 msgctxt "@action:button"
 msgid "Font && Color..."
-msgstr "Yazıtipi ve Renk..."
+msgstr "Yazıtipi ve Renk…"
 
 #: fontcolourbutton.cpp:30
 #, kde-format
@@ -3735,25 +3733,25 @@ msgstr "Yineleme"
 #, kde-format
 msgctxt "@label"
 msgid "Sub-repetition"
-msgstr "Alt-yineleme"
+msgstr "Alt yineleme"
 
 #: kalarmcalendar/kaeventformatter.cpp:59
 #, kde-format
 msgctxt "@label"
 msgid "Sub-repetition interval"
-msgstr "Alt-yineleme aralığı"
+msgstr "Alt yineleme aralığı"
 
 #: kalarmcalendar/kaeventformatter.cpp:61
 #, kde-format
 msgctxt "@label"
 msgid "Sub-repetition count"
-msgstr "Alt-yineleme sayısı"
+msgstr "Alt yineleme sayısı"
 
 #: kalarmcalendar/kaeventformatter.cpp:63
 #, kde-format
 msgctxt "@label"
 msgid "Next sub-repetition"
-msgstr "Sonraki alt-yineleme"
+msgstr "Sonraki alt yineleme"
 
 #: kalarmcalendar/kaeventformatter.cpp:65
 #, kde-format
@@ -4405,7 +4403,7 @@ msgstr ""
 #: main.cpp:60
 #, kde-format
 msgid "Copyright © 2001-%1, David Jarvie"
-msgstr "Telif Hakkı © 2001-%1, David Jarvie"
+msgstr "© 2001–%1, David Jarvie"
 
 #: mainwindow.cpp:440
 #, kde-kuit-format
@@ -4420,7 +4418,7 @@ msgstr ""
 #, kde-format
 msgctxt "@action"
 msgid "Templates..."
-msgstr "Şablonlar..."
+msgstr "Şablonlar…"
 
 #: mainwindow.cpp:464 templatedlg.cpp:73
 #, kde-format
@@ -4432,19 +4430,19 @@ msgstr "Yeni"
 #, kde-format
 msgctxt "@action"
 msgid "Create Template..."
-msgstr "Şablon Oluştur..."
+msgstr "Şablon Oluştur…"
 
 #: mainwindow.cpp:474
 #, kde-format
 msgctxt "@action"
 msgid "Copy..."
-msgstr "Kopyala..."
+msgstr "Kopyala…"
 
 #: mainwindow.cpp:479 resourceselector.cpp:301
 #, kde-format
 msgctxt "@action"
 msgid "Edit..."
-msgstr "Düzenle..."
+msgstr "Düzenle…"
 
 #: mainwindow.cpp:484
 #, kde-format
@@ -4468,7 +4466,7 @@ msgstr "Yeniden Etkinleştir"
 #, kde-format
 msgctxt "@action"
 msgid "Wake From Suspend..."
-msgstr "Askıdan Uyandır..."
+msgstr "Askıdan Uyandır…"
 
 #: mainwindow.cpp:519
 #, kde-format
@@ -4498,25 +4496,25 @@ msgstr "Tarih Seçicisini Göster"
 #, kde-format
 msgctxt "@action"
 msgid "Import Alarms..."
-msgstr "Alarmlar İçe Aktar..."
+msgstr "Alarmlar İçe Aktar…"
 
 #: mainwindow.cpp:549
 #, kde-format
 msgctxt "@action"
 msgid "Import Birthdays..."
-msgstr "Doğum Günleri İçe Aktar..."
+msgstr "Doğum Günleri İçe Aktar…"
 
 #: mainwindow.cpp:554
 #, kde-format
 msgctxt "@action"
 msgid "Export Selected Alarms..."
-msgstr "Seçili Alarmları Dışa Aktar..."
+msgstr "Seçili Alarmları Dışa Aktar…"
 
 #: mainwindow.cpp:558 resourceselector.cpp:319
 #, kde-format
 msgctxt "@action"
 msgid "Export..."
-msgstr "Dışa Aktar..."
+msgstr "Dışa Aktar…"
 
 #: mainwindow.cpp:562
 #, kde-format
@@ -4807,7 +4805,7 @@ msgstr "Uyarıyı onayla"
 #, kde-format
 msgctxt "@action:button"
 msgid "Edit..."
-msgstr "Düzenle..."
+msgstr "Düzenle…"
 
 #: messagewindow.cpp:434
 #, kde-format
@@ -4825,7 +4823,7 @@ msgstr "Alarmı düzenle."
 #, kde-format
 msgctxt "@action:button"
 msgid "Defer..."
-msgstr "Ertele..."
+msgstr "Ertele…"
 
 #: messagewindow.cpp:443
 #, kde-format
@@ -5536,7 +5534,7 @@ msgstr "Sendmail"
 #, kde-format
 msgctxt "@info"
 msgid "Choose how to send email when an email alarm is triggered."
-msgstr "Bir alarm tetiklendiğinde nasıl e-posta gönderlieceğini seçin"
+msgstr "Bir alarm tetiklendiğinde nasıl e-posta gönderileceğini seçin"
 
 #: prefdlg.cpp:1093
 #, kde-kuit-format
@@ -5575,7 +5573,7 @@ msgid ""
 "Copy sent emails into <application>KMail</application>'s <resource>%1</"
 "resource> folder"
 msgstr ""
-"Gönderilen e-postaları <application>K Posta</application>'in <resource>%1</"
+"Gönderilen e-postaları <application>K Posta</application>’nın <resource>%1</"
 "resource> dizinine kopyala"
 
 #: prefdlg.cpp:1112
@@ -5629,7 +5627,7 @@ msgid ""
 "Check to use the default email address set in <application>KMail</"
 "application>, to identify you as the sender when sending email alarms."
 msgstr ""
-"Bu e-posta adresi ayarını, <application>K Posta</application>'de kullanmak "
+"Bu e-posta adresi ayarını, <application>K Posta</application>’da kullanmak "
 "için işaretleyin, e-posta alarmlarını gönderirken kendinizi gönderici olarak "
 "tanımlayın."
 
@@ -5651,10 +5649,10 @@ msgid ""
 msgstr ""
 "E-posta alarmı gönderildiğinde sizi gönderici olarak tanımlayarak "
 "<application>K Posta</application> uygulamasının e-posta kimliklerini "
-"kullanması için işaretleyin. Var olan e-posta alarmları için, <application>K "
+"kullanması için işaretleyin. Var olan e-posta alarmları için <application>K "
 "Posta</application> uygulamasının öntanımlı kimliği kullanılacaktır. Yeni "
-"alarmlar için, <application>K Posta</application> uygulamasının "
-"kimliklerinden seçebilirsiniz."
+"alarmlar için <application>K Posta</application> uygulamasının "
+"kimliklerinden birini seçebilirsiniz."
 
 #: prefdlg.cpp:1170
 #, kde-format
@@ -5671,8 +5669,8 @@ msgid ""
 "<application>KAlarm</application> runs on, you can simply enter your user "
 "login name."
 msgstr ""
-"E-posta alarmlarını kendinize kör kopya olarak gönderebilmeniz için e-posta "
-"adresiniz. Eğer kör kopyaların <application>K Alarm</application>'ın "
+"E-posta alarmlarını kendinize gizli kopya olarak gönderebilmeniz için e-"
+"posta adresiniz. Eğer gizli kopyaların <application>K Alarm</application>’ın "
 "çalıştığı bilgisayardaki hesabınızdan gönderilmesini istiyorsanız basitçe "
 "oturum açtığınız kullanıcı adını girebilirsiniz."
 
@@ -5683,8 +5681,8 @@ msgid ""
 "Check to use the default email address set in <application>KMail</"
 "application>, for blind copying email alarms to yourself."
 msgstr ""
-"E-posta alarmlarını kendinize kör kopya göndermek için, <application>K "
-"Posta</application>'deki e-posta adresini kullanmak için işaretleyin."
+"E-posta alarmlarını kendinize gizli kopya göndermek için <application>K "
+"Posta</application>’daki e-posta adresini kullanmak için işaretleyin."
 
 #: prefdlg.cpp:1294
 #, kde-format
@@ -5948,7 +5946,7 @@ msgid ""
 "regardless of whether alarms are due."
 msgstr ""
 "Zamanı dolan alarmların olup olmadığını gözetmeksizin <application>K Alarm</"
-"application>'ın simgesini sistem çubuğunda göstermek için işaretleyin."
+"application>’ın simgesini sistem çubuğunda göstermek için işaretleyin."
 
 #: prefdlg.cpp:1842
 #, kde-format
@@ -6976,7 +6974,7 @@ msgstr "Takvim dosyaları"
 #, kde-format
 msgctxt "@info:status"
 msgid "Checking file information..."
-msgstr "Dosya bilgisi denetleniyor..."
+msgstr "Dosya bilgisi denetleniyor…"
 
 #: resources/migration/dirresourceimportdialog.cpp:405
 #: resources/migration/dirresourceimportdialog.cpp:453
@@ -7846,7 +7844,7 @@ msgstr "Ayrıntıları Göster"
 #, kde-format
 msgctxt "@action"
 msgid "Set Color..."
-msgstr "Rengi Ayarla..."
+msgstr "Rengi Ayarla…"
 
 #: resourceselector.cpp:298
 #, kde-format
@@ -7870,13 +7868,13 @@ msgstr "Kaldır"
 #, kde-format
 msgctxt "@action"
 msgid "Add..."
-msgstr "Ekle..."
+msgstr "Ekle…"
 
 #: resourceselector.cpp:316
 #, kde-format
 msgctxt "@action"
 msgid "Import..."
-msgstr "İçe Aktar..."
+msgstr "İçe Aktar…"
 
 #: resourceselector.cpp:372
 #, kde-format
@@ -7924,7 +7922,7 @@ msgstr ", "
 #, kde-format
 msgctxt "@info"
 msgid "Read-write"
-msgstr "Oku-yaz"
+msgstr "Oku–yaz"
 
 #: resourceselector.cpp:513
 #, kde-format
@@ -8188,7 +8186,7 @@ msgstr "Ses Dosyasını Seç"
 #, kde-format
 msgctxt "@action:button"
 msgid "Special Actions..."
-msgstr "Özel Eylemler..."
+msgstr "Özel Eylemler…"
 
 #: specialactions.cpp:39
 #, kde-format

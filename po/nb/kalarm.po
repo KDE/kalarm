@@ -8659,26 +8659,3 @@ msgstr ""
 #, kde-format
 msgid "Number of minutes before alarm to wake from suspend"
 msgstr "Hvor mange minutter før varsling maskinen skal vekkes fra dvale"
-
-#, fuzzy
-#~| msgctxt "@info"
-#~| msgid ""
-#~| "<para>Error playing audio file: <filename>%1</filename></para><para>%2</"
-#~| "para>"
-#~ msgctxt "@info"
-#~ msgid "<para>Error opening audio file: <filename>%1</filename>"
-#~ msgstr ""
-#~ "<para>Feil ved spilling av lydfil:<filename>%1</filename></para><para> "
-#~ "%2</para>"
-
-#, fuzzy
-#~| msgctxt "@info"
-#~| msgid ""
-#~| "<para>Error playing audio file: <filename>%1</filename></para><para>%2</"
-#~| "para>"
-#~ msgctxt "@info"
-#~ msgid ""
-#~ "<para>Could not load file <filename>%1</filename>.</para><para>%2</para>"
-#~ msgstr ""
-#~ "<para>Feil ved spilling av lydfil:<filename>%1</filename></para><para> "
-#~ "%2</para>"

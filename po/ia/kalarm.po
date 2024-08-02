@@ -3026,7 +3026,7 @@ msgid ""
 "<para>The command cannot set environment variables:</para><para><icode>%1</"
 "icode></para>"
 msgstr ""
-"<para>Le commando nonpote fixar variabiles de ambiente :</para><para><icode>"
+"<para>Le commando non pote fixar variabiles de ambiente :</para><para><icode>"
 "%1</icode></para>"
 
 #: editdlgtypes.cpp:1922
@@ -7831,7 +7831,7 @@ msgstr "Adde un nove calendario de patrono de alarma"
 #, kde-format
 msgctxt "@info"
 msgid "You cannot remove your default active alarm calendar."
-msgstr "Tu nonpote remover tu calendario predefinite de alarma active."
+msgstr "Tu non pote remover tu calendario predefinite de alarma active."
 
 #: resourceselector.cpp:238
 #, kde-format
@@ -8750,7 +8750,7 @@ msgstr "Numero de minutas ante alarma per evelia ex suspende"
 
 #~ msgctxt "@info"
 #~ msgid "Cannot set audio player properties: %1"
-#~ msgstr "Nonpote assignar proprietates de reproductor audio: %1"
+#~ msgstr "Non pote assignar proprietates de reproductor audio: %1"
 
 #~ msgctxt "@info"
 #~ msgid "Unsupported audio format, or corrupt data"
