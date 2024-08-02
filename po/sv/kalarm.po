@@ -11,15 +11,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-01 00:41+0000\n"
-"PO-Revision-Date: 2024-07-12 20:46+0200\n"
+"POT-Creation-Date: 2024-08-02 00:40+0000\n"
+"PO-Revision-Date: 2024-08-01 07:21+0200\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@gmail.com>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 23.08.5\n"
+"X-Generator: Lokalize 24.05.2\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #, kde-format
@@ -278,50 +278,46 @@ msgctxt "@info"
 msgid "Alarm time has already expired"
 msgstr "Alarmtiden har redan gått ut"
 
-#: audioplayer_mpv.cpp:50 audioplayer_vlc.cpp:45
+#: audioplayer_mpv.cpp:40 audioplayer_vlc.cpp:36
 #, kde-format
 msgctxt "@info"
 msgid "Cannot initialize audio system"
 msgstr "Kan inte initiera ljudsystem"
 
-#: audioplayer_mpv.cpp:58 audioplayer_mpv.cpp:66
-#, fuzzy, kde-format
-#| msgctxt "@info"
-#| msgid "Cannot initialize audio system"
+#: audioplayer_mpv.cpp:48 audioplayer_mpv.cpp:56
+#, kde-format
 msgctxt "@info"
 msgid "Cannot initialize audio system: %1"
-msgstr "Kan inte initiera ljudsystem"
+msgstr "Kan inte initiera ljudsystem: %1"
 
-#: audioplayer_mpv.cpp:115 audioplayer_mpv.cpp:180
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid "<para>Error playing audio file: <filename>%1</filename></para>"
+#: audioplayer_mpv.cpp:105 audioplayer_mpv.cpp:170
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "<para>Error playing audio file <filename>%1</filename></para><para>%2</para>"
-msgstr "<para>Fel när ljudfilen skulle spelas: <filename>%1</filename></para>"
+msgstr ""
+"<para>Fel när ljudfilen <filename>%1</filename> skulle spelas</para><para>"
+"%2</para>"
 
-#: audioplayer_mpv.cpp:142
-#, fuzzy, kde-format
-#| msgctxt "@info"
-#| msgid "Cannot set audio player properties: %1"
+#: audioplayer_mpv.cpp:132
+#, kde-format
 msgctxt "@info"
 msgid "Cannot set the audio volume: %1"
-msgstr "Kan inte ställa in ljudspelarens egenskaper: %1"
+msgstr "Kan inte ställa in ljudvolymen: %1"
 
-#: audioplayer_vlc.cpp:55
+#: audioplayer_vlc.cpp:46
 #, kde-kuit-format
 msgctxt "@info"
 msgid "<para>Error opening audio file: <filename>%1</filename></para>"
 msgstr "<para>Fel när ljudfilen skulle öppnas: <filename>%1</filename></para>"
 
-#: audioplayer_vlc.cpp:64
+#: audioplayer_vlc.cpp:55
 #, kde-format
 msgctxt "@info"
 msgid "Cannot initialize audio player"
 msgstr "Kan inte initiera ljudspelare"
 
-#: audioplayer_vlc.cpp:121 audioplayer_vlc.cpp:183
+#: audioplayer_vlc.cpp:112 audioplayer_vlc.cpp:174
 #, kde-kuit-format
 msgctxt "@info"
 msgid "<para>Error playing audio file: <filename>%1</filename></para>"
