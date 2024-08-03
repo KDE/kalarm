@@ -266,21 +266,17 @@ msgid "Cannot initialize audio system"
 msgstr "无法初始化音频系统"
 
 #: audioplayer_mpv.cpp:48 audioplayer_mpv.cpp:56
-#, fuzzy, kde-format
-#| msgctxt "@info"
-#| msgid "Cannot initialize audio system"
+#, kde-format
 msgctxt "@info"
 msgid "Cannot initialize audio system: %1"
-msgstr "无法初始化音频系统"
+msgstr ""
 
 #: audioplayer_mpv.cpp:105 audioplayer_mpv.cpp:170
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid "<para>Error playing audio file: <filename>%1</filename></para>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "<para>Error playing audio file <filename>%1</filename></para><para>%2</para>"
-msgstr "<para>播放音频文件时发生错误：<filename>%1</filename></para>"
+msgstr ""
 
 #: audioplayer_mpv.cpp:132
 #, kde-format
