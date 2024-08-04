@@ -269,7 +269,7 @@ msgstr "无法初始化音频系统"
 #, kde-format
 msgctxt "@info"
 msgid "Cannot initialize audio system: %1"
-msgstr ""
+msgstr "无法初始化音频系统：%1"
 
 #: audioplayer_mpv.cpp:105 audioplayer_mpv.cpp:170
 #, kde-kuit-format
@@ -277,12 +277,13 @@ msgctxt "@info"
 msgid ""
 "<para>Error playing audio file <filename>%1</filename></para><para>%2</para>"
 msgstr ""
+"<para>播放声音文件 <filename>%1</filename> 时发生错误</para><para>%2</para>"
 
 #: audioplayer_mpv.cpp:132
 #, kde-format
 msgctxt "@info"
 msgid "Cannot set the audio volume: %1"
-msgstr ""
+msgstr "无法设置音量：%1"
 
 #: audioplayer_vlc.cpp:46
 #, kde-kuit-format
