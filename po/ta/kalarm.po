@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-02 00:40+0000\n"
-"PO-Revision-Date: 2024-05-19 14:57+0530\n"
+"PO-Revision-Date: 2024-08-04 17:50+0530\n"
 "Last-Translator: Kishore G <kishore96@gmail.com>\n"
 "Language-Team: Tamil <kde-i18n-doc@kde.org>\n"
 "Language: ta\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 24.02.2\n"
+"X-Generator: Lokalize 24.05.2\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -284,70 +284,48 @@ msgid "Alarm time has already expired"
 msgstr "அலாரத்திற்கான நேரம் ஏற்கனவே முடிந்துள்ளது"
 
 #: audioplayer_mpv.cpp:40 audioplayer_vlc.cpp:36
-#, fuzzy, kde-format
-#| msgctxt "@info"
-#| msgid "Cannot initialize audio player: %1"
+#, kde-format
 msgctxt "@info"
 msgid "Cannot initialize audio system"
-msgstr "ஒலிக்கோப்பு இசைப்பியைத் துவக்கு முடியவில்லை: %1"
+msgstr "ஒலி இசைப்பியைத் துவக்கு முடியவில்லை"
 
 #: audioplayer_mpv.cpp:48 audioplayer_mpv.cpp:56
-#, fuzzy, kde-format
-#| msgctxt "@info"
-#| msgid "Cannot initialize audio player: %1"
+#, kde-format
 msgctxt "@info"
 msgid "Cannot initialize audio system: %1"
-msgstr "ஒலிக்கோப்பு இசைப்பியைத் துவக்கு முடியவில்லை: %1"
+msgstr "ஒலி இசைப்பியைத் துவக்கு முடியவில்லை: %1"
 
 #: audioplayer_mpv.cpp:105 audioplayer_mpv.cpp:170
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid ""
-#| "<para>Error playing audio file: <filename>%1</filename></para><para>%2</"
-#| "para>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "<para>Error playing audio file <filename>%1</filename></para><para>%2</para>"
 msgstr ""
-"<para>ஒலிக்கோப்பை திறப்பதில் சிக்கல்: <filename>%1</filename></para><para>%2</para>"
+"<para>ஒலிக்கோப்பை திறப்பதில் சிக்கல் <filename>%1</filename></para><para>%2</para>"
 
 #: audioplayer_mpv.cpp:132
-#, fuzzy, kde-format
-#| msgctxt "@info"
-#| msgid "Cannot set audio player properties: %1"
+#, kde-format
 msgctxt "@info"
 msgid "Cannot set the audio volume: %1"
-msgstr "ஒலிக்கோப்பு இசைப்பியின் பண்புகளை அமைக்க முடியவில்லை: %1"
+msgstr "ஒலியளவை அமைக்க முடியவில்லை: %1"
 
 #: audioplayer_vlc.cpp:46
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid ""
-#| "<para>Error playing audio file: <filename>%1</filename></para><para>%2</"
-#| "para>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid "<para>Error opening audio file: <filename>%1</filename></para>"
-msgstr ""
-"<para>ஒலிக்கோப்பை திறப்பதில் சிக்கல்: <filename>%1</filename></para><para>%2</para>"
+msgstr "<para>ஒலிக்கோப்பை திறப்பதில் சிக்கல்: <filename>%1</filename></para>"
 
 #: audioplayer_vlc.cpp:55
-#, fuzzy, kde-format
-#| msgctxt "@info"
-#| msgid "Cannot initialize audio player: %1"
+#, kde-format
 msgctxt "@info"
 msgid "Cannot initialize audio player"
-msgstr "ஒலிக்கோப்பு இசைப்பியைத் துவக்கு முடியவில்லை: %1"
+msgstr "ஒலி இசைப்பியைத் துவக்கு முடியவில்லை"
 
 #: audioplayer_vlc.cpp:112 audioplayer_vlc.cpp:174
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid ""
-#| "<para>Error playing audio file: <filename>%1</filename></para><para>%2</"
-#| "para>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid "<para>Error playing audio file: <filename>%1</filename></para>"
-msgstr ""
-"<para>ஒலிக்கோப்பை திறப்பதில் சிக்கல்: <filename>%1</filename></para><para>%2</para>"
+msgstr "<para>ஒலிக்கோப்பை திறப்பதில் சிக்கல்: <filename>%1</filename></para>"
 
 #: autostart/autostart.cpp:48
 #, kde-format
@@ -1387,10 +1365,12 @@ msgstr "காப்பகப்படுத்தப்பட்டுள்ள
 
 #. i18n: ectx: whatsthis, entry (ArchivedColour), group (General)
 #: data/kalarmconfig.kcfg:255 prefdlg.cpp:1952
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "Choose the text color in the alarm list for archived alarms."
-msgstr "காலம் கடந்த அலாரங்களுக்கு, அலார பட்டியலில் உள்ள உரை வண்ணத்தைத் தேர்ந்தெடு"
+msgstr ""
+"காப்பகப்படுத்தப்பட்ட அலாரங்களுக்கு, அலாரப் பட்டியலில் பயன்படுத்த வேண்டிய உரை நிறத்தைத் "
+"தேர்ந்தெடுக்கவும்."
 
 #. i18n: ectx: label, entry (ArchivedKeepDays), group (General)
 #: data/kalarmconfig.kcfg:260
@@ -5509,6 +5489,7 @@ msgstr ""
 msgctxt "@info"
 msgid "Choose how to send email when an email alarm is triggered."
 msgstr ""
+"மின்னஞ்சல் அலாரம் தூண்டப்படும்போது மின்னஞ்சலை எப்படி அனுப்ப வேண்டுமென்பதைத் தேர்ந்தெடுக்கவும்."
 
 #: prefdlg.cpp:1093
 #, fuzzy, kde-kuit-format
@@ -5592,12 +5573,10 @@ msgstr ""
 "பயன்படும்."
 
 #: prefdlg.cpp:1153 prefdlg.cpp:1189
-#, fuzzy, kde-kuit-format
-#| msgctxt "@option:radio"
-#| msgid "Use <application>KMail</application> identities"
+#, kde-kuit-format
 msgctxt "@option:radio"
 msgid "Use default <application>KMail</application> identity"
-msgstr "<application>கேமெயிலிலுள்ள</application> அடையாளத்தை பயன்படுத்து"
+msgstr "<application>கேமெயிலிலுள்ள</application> இயல்பிருப்பு அடையாளத்தை பயன்படுத்து"
 
 #: prefdlg.cpp:1156
 #, fuzzy, kde-kuit-format
@@ -5682,28 +5661,25 @@ msgid "Are you sure you want to save your changes?"
 msgstr "உங்கள் மாற்றங்களை உறுதியாக சேமிக்க வேண்டுமா?"
 
 #: prefdlg.cpp:1307
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid ""
-#| "No default email address is currently set in <application>KMail</"
-#| "application> or KDE System Settings. %1"
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "<para>No default email address is currently set in <application>KMail</"
 "application>.</para><para>%1</para><para>%2</para>"
 msgstr ""
-"<application>கேமெயிலிலோ</application> கே.டீ.யீ. கணினி அமைப்புகளிலோ இயல்பிருப்பு "
-"மின்னஞ்சல் முகவரி குறிப்பிடப்படவில்லை. %1"
+"<para><application>கேமெயிலிலோ</application> கே.டீ.யீ. கணினி அமைப்புகளிலோ "
+"இயல்பிருப்பு மின்னஞ்சல் முகவரி அமைக்கப்பட்டிருக்கவில்லை.</para><para>%1</para><para>"
+"%2</para>"
 
 #: prefdlg.cpp:1312
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid "No <application>KMail</application> identities currently exist. %1"
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "<para>No <application>KMail</application> identities currently exist.</"
 "para><para>%1</para><para>%2</para>"
-msgstr "<application>கேமெயிலில்</application> எந்த அடையாளமும் அமைக்கப்படவில்லை. %1"
+msgstr ""
+"<para><application>கேமெயிலில்</application> எந்த அடையாளமும் அமைக்கப்பட்டிருக்கவில்லை."
+"</para><para>%1</para><para>%2</para>"
 
 #: prefdlg.cpp:1330
 #, kde-kuit-format
@@ -5977,12 +5953,10 @@ msgid "System Tray Tooltip"
 msgstr "கணினித்தட்டு கருவித்துப்பு"
 
 #: prefdlg.cpp:1874
-#, fuzzy, kde-format
-#| msgctxt "@option:check"
-#| msgid "Show next &24 hours' alarms"
+#, kde-format
 msgctxt "@option:check"
 msgid "Show next 24 hours' alarms"
-msgstr "அடுத்த &24 மணி நேரத்திற்கான அலாரங்களை காட்டு"
+msgstr "அடுத்த 24 மணி நேரத்திற்கான அலாரங்களை காட்டு"
 
 #: prefdlg.cpp:1878
 #, kde-format
@@ -6080,11 +6054,7 @@ msgid "Button activation delay (seconds):"
 msgstr "பட்டன் முடக்க நேரம் (நொடிகள்):"
 
 #: prefdlg.cpp:1995
-#, fuzzy, kde-format
-#| msgctxt "@info:whatsthis"
-#| msgid ""
-#| "Enter how long its buttons should remain disabled after the alarm message "
-#| "window is shown."
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "Enter how long its buttons should remain disabled after the alarm message "
@@ -6092,7 +6062,7 @@ msgid ""
 "acknowledged."
 msgstr ""
 "அலார சாளரம் காட்டப்பட்ட பின் எவ்வளவு நேரத்திற்கு அதன் பட்டன்களை முடக்க வேண்டுமென்பதை "
-"உள்ளிடுங்கள்."
+"உள்ளிடவும். இத்தாமதம், அலாரங்களைத் தவறுதலாக விலக்குவதன் வாய்ப்பைக் குறைக்கும்."
 
 #: prefdlg.cpp:1999
 #, kde-format
@@ -6432,18 +6402,16 @@ msgid "Date cannot be earlier than start date"
 msgstr "துவக்க தேதிக்கு முன்னால் இது இருக்க முடியாது"
 
 #: recurrenceedit.cpp:1064
-#, fuzzy, kde-format
-#| msgctxt "@label:spinbox"
-#| msgid "Recur e&very"
+#, kde-format
 msgctxt "@label:spinbox"
 msgid "Recur every"
-msgstr "&இந்த இடைவெளியில் மீளத்தூண்டு:"
+msgstr "இந்த இடைவெளியில் மீளத்தூண்டு:"
 
 #: recurrenceedit.cpp:1131
 #, kde-format
 msgctxt "@label Time units for user-entered numbers"
 msgid "hours:minutes"
-msgstr "மணிகள்:நிமிடங்கள்"
+msgstr "மணி:நிமிடம்"
 
 #: recurrenceedit.cpp:1132
 #, kde-format
@@ -6453,12 +6421,10 @@ msgstr ""
 "அலாரத்தின் மறுநிகழ்வுகளுக்கு இடையேயான நேரத்தை மணிகள் மற்றும் நிமிடங்களாக உள்ளிடுங்கள்"
 
 #: recurrenceedit.cpp:1152
-#, fuzzy, kde-format
-#| msgctxt "@label On: Tuesday"
-#| msgid "O&n:"
+#, kde-format
 msgctxt "@label On: Tuesday"
 msgid "On:"
-msgstr "இ&ந்நாளில்:"
+msgstr "இந்நாளில்:"
 
 #: recurrenceedit.cpp:1235
 #, kde-format
@@ -6503,12 +6469,10 @@ msgid "Select the days of the week on which to repeat the alarm"
 msgstr "வாரத்தின் எந்த நாட்களில் அலாரம் நிகழ வேண்டும் என்பதை தேர்ந்தெடுங்கள்"
 
 #: recurrenceedit.cpp:1301
-#, fuzzy, kde-format
-#| msgctxt "@option:radio On day number in the month"
-#| msgid "O&n day"
+#, kde-format
 msgctxt "@option:radio On day number in the month"
 msgid "On day"
-msgstr "இ&த்தேதியில்:"
+msgstr "இத்தேதியில்:"
 
 #: recurrenceedit.cpp:1305
 #, kde-format
@@ -6529,12 +6493,10 @@ msgid "Select the day of the month on which to repeat the alarm"
 msgstr "ஒவ்வொரு மாத‍த்திலும் எக்கிழமையில் அலாரத்தை மீளத்தூண்ட வேண்டுமென்பதை தேர்ந்தெடுங்கள்"
 
 #: recurrenceedit.cpp:1323
-#, fuzzy, kde-format
-#| msgctxt "@option:radio On the 1st Tuesday"
-#| msgid "On t&he"
+#, kde-format
 msgctxt "@option:radio On the 1st Tuesday"
 msgid "On the"
-msgstr "&இந்நாளில்:"
+msgstr " "
 
 #: recurrenceedit.cpp:1327
 #, kde-format
@@ -6658,12 +6620,10 @@ msgid "Select the months of the year in which to repeat the alarm"
 msgstr "வருடத்தின் எந்த மாதங்களில் அலாரத்தை தூண்ட வேண்டுமென்பதை தேர்ந்தெடுங்கள்"
 
 #: recurrenceedit.cpp:1530
-#, fuzzy, kde-format
-#| msgctxt "@label:listbox"
-#| msgid "February 2&9th alarm in non-leap years:"
+#, kde-format
 msgctxt "@label:listbox"
 msgid "February 29th alarm in non-leap years:"
-msgstr "சாதாரண ஆண்டுகளில் பிப்ரவரி 2&9-க்கு பதிலாக:"
+msgstr "சாதாரண ஆண்டுகளில் பிப்ரவரி 29-க்கு பதிலாக:"
 
 #: recurrenceedit.cpp:1534
 #, kde-format
@@ -7558,20 +7518,15 @@ msgstr "நாள்காட்டி கோப்பு"
 
 #. i18n: ectx: property (html), widget (KTextEdit, pathDescription)
 #: resources/singlefileresourceconfigdialog.ui:68
-#, fuzzy, kde-format
-#| msgid ""
-#| "Select the file whose contents should be represented by this resource. If "
-#| "the file does not exist, it will be created. The URL of a remote file can "
-#| "also be specified, but note that monitoring for file changes will not "
-#| "work in this case."
+#, kde-format
 msgid ""
 "Select the file to hold this calendar. If the file does not exist, it will "
 "be created. The URL of a remote file can also be specified, but note that "
 "monitoring for file changes will not work in this case."
 msgstr ""
-"இதற்கு எக்கோப்பின் உள்ளடக்கம் பயன்படுத்தப்பட வேண்டுமென்பதை தேர்ந்தெடுங்கள். அக்கோப்பு "
-"இல்லையெனில், உருவாக்கப்படும். தொலை கோப்பின் முகவரியையும் பயன்படுத்தலாம், ஆனால் அவ்வாறு "
-"செய்தால் அதிலுள்ள மாற்றங்களை கண்காணிக்க முடியாது."
+"இந்நாள்காட்டியைக் கொள்ள வேண்டிய கோப்பைத் தேர்ந்தெடுக்கவும். அக்கோப்பு இல்லையெனில், "
+"உருவாக்கப்படும். தொலை கோப்பின் முகவரியையும் பயன்படுத்தலாம், ஆனால் அவ்வாறு செய்தால் "
+"அதிலுள்ள மாற்றங்களை கண்காணிக்க முடியாது."
 
 #. i18n: ectx: property (text), widget (QRadioButton, activeRadio)
 #: resources/singlefileresourceconfigdialog.ui:86
