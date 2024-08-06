@@ -12,14 +12,14 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-07-11 00:39+0000\n"
-"PO-Revision-Date: 2024-07-11 08:42+0200\n"
+"PO-Revision-Date: 2024-07-31 11:53+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 22.12.3\n"
+"X-Generator: Lokalize 24.05.2\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Accelerator-Marker: &\n"
 
@@ -4620,7 +4620,7 @@ msgstr[1] "Suprimiu les alarmes"
 #, kde-format
 msgctxt "@action:button"
 msgid "Delete"
-msgstr "Elimina"
+msgstr "Suprimix"
 
 #: mainwindow.cpp:903
 #, kde-format
@@ -8513,16 +8513,16 @@ msgstr "Suprimix les plantilles d'alarma ressaltades"
 msgctxt "@info"
 msgid "Do you really want to delete the selected alarm template?"
 msgid_plural "Do you really want to delete the %1 selected alarm templates?"
-msgstr[0] "Segur que voleu eliminar la plantilla d'alarma seleccionada?"
-msgstr[1] "Segur que voleu eliminar les %1 plantilles d'alarma seleccionades?"
+msgstr[0] "Segur que voleu suprimir la plantilla d'alarma seleccionada?"
+msgstr[1] "Segur que voleu suprimir les %1 plantilles d'alarma seleccionades?"
 
 #: templatedlg.cpp:179
 #, kde-format
 msgctxt "@title:window"
 msgid "Delete Alarm Template"
 msgid_plural "Delete Alarm Templates"
-msgstr[0] "Elimina la plantilla d'alarma"
-msgstr[1] "Elimina les plantilles d'alarmes"
+msgstr[0] "Suprimix la plantilla d'alarma"
+msgstr[1] "Suprimix les plantilles d'alarmes"
 
 #: templatedlg.cpp:180
 #, kde-format
@@ -8629,7 +8629,7 @@ msgstr "Plantilla nova"
 #, kde-format
 msgctxt "@info Action to delete an alarm template"
 msgid "Delete template"
-msgstr "Elimina la plantilla"
+msgstr "Suprimix la plantilla"
 
 #: undo.cpp:671
 #, kde-format
@@ -8665,7 +8665,7 @@ msgstr "Suprimix múltiples alarmes"
 #, kde-format
 msgctxt "@info"
 msgid "Delete multiple templates"
-msgstr "Elimina múltiples plantilles"
+msgstr "Suprimix múltiples plantilles"
 
 #: undo.cpp:1268
 #, kde-format
