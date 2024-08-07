@@ -130,6 +130,6 @@ QString AudioPlayer::popError()
     return err;
 }
 
-// vim: et sw=4:
-
 #include "moc_audioplayer.cpp"
+
+// vim: et sw=4:

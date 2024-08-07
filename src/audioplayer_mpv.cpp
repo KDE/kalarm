@@ -199,6 +199,6 @@ void AudioPlayerMpv::stop()
     mpv_command_async(mAudioInstance, 0, cmd);
 }
 
-// vim: et sw=4:
-
 #include "moc_audioplayer_mpv.cpp"
+
+// vim: et sw=4:

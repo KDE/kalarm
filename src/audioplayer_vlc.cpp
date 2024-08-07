@@ -192,6 +192,6 @@ void AudioPlayerVlc::stop()
         libvlc_media_player_stop(mAudioPlayer);
 }
 
-// vim: et sw=4:
-
 #include "moc_audioplayer_vlc.cpp"
+
+// vim: et sw=4:
