@@ -98,7 +98,7 @@ bool AudioPlayerMpv::play()
 
     qCDebug(KALARM_LOG) << "AudioPlayerMpv::play";
 
-    const char *cmd[] = {"loadfile", mFile.toUtf8().constData(), NULL};
+    const char* cmd[] = {"loadfile", mFile.toUtf8().constData(), nullptr};
     int retval = 0;
     if ((retval = mpv_command_async(mAudioInstance, 0, cmd)) < 0)
     {
@@ -151,7 +151,7 @@ void AudioPlayerMpv::onMpvEvents()
     // Process all events, until the event queue is empty.
     while (true)
     {
-        mpv_event *event = mpv_wait_event(mAudioInstance, 0);
+        mpv_event* event = mpv_wait_event(mAudioInstance, 0);
         if (event->event_id == MPV_EVENT_NONE)
             break;
 
@@ -195,7 +195,7 @@ void AudioPlayerMpv::stop()
     if (!mAudioInstance)
         return;
 
-    const char *cmd[] = {"stop"};
+    const char* cmd[] = {"stop"};
     mpv_command_async(mAudioInstance, 0, cmd);
 }
 
