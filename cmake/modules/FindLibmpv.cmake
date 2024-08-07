@@ -61,6 +61,10 @@ find_package_handle_standard_args(Libmpv
         Libmpv_VERSION
 )
 
+if(NOT ${CMAKE_FIND_PACKAGE_NAME}_FIND_QUIETLY)
+    message(STATUS "Found Libmpv version: ${Libmpv_VERSION}")
+endif (NOT ${CMAKE_FIND_PACKAGE_NAME}_FIND_QUIETLY)
+
 if (Libmpv_FOUND AND NOT TARGET Libmpv::Libmpv)
     add_library(Libmpv::Libmpv UNKNOWN IMPORTED)
     set_target_properties(Libmpv::Libmpv PROPERTIES
