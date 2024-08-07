@@ -398,7 +398,7 @@ bool DBusHandler::scheduleMessage(const QString& name, const QString& message, c
         fg = Preferences::defaultFgColour();
     else
     {
-        fg.setNamedColor(fgColor);
+        fg = QColor::fromString(fgColor);
         if (!fg.isValid())
         {
             qCCritical(KALARM_LOG) << "D-Bus call: invalid foreground color:" << fgColor;

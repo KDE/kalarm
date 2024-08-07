@@ -511,7 +511,7 @@ void CommandOptions::process()
                 if (colourText.at(0) == QLatin1Char('0')
                 &&  colourText.at(1).toLower() == QLatin1Char('x'))
                     colourText.replace(0, 2, QStringLiteral("#"));
-                mBgColour.setNamedColor(colourText);
+                mBgColour = QColor::fromString(colourText);
                 if (!mBgColour.isValid())
                     d->setErrorParameter(COLOUR);
             }
@@ -522,7 +522,7 @@ void CommandOptions::process()
                 if (colourText.at(0) == QLatin1Char('0')
                 &&  colourText.at(1).toLower() == QLatin1Char('x'))
                     colourText.replace(0, 2, QStringLiteral("#"));
-                mFgColour.setNamedColor(colourText);
+                mFgColour = QColor::fromString(colourText);
                 if (!mFgColour.isValid())
                     d->setErrorParameter(COLOURFG);
             }

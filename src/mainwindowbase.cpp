@@ -27,7 +27,7 @@ MainWindowBase::MainWindowBase(QWidget* parent, Qt::WindowFlags f)
 void MainWindowBase::enterEvent(QEnterEvent* e)
 {
     if (theApp()->needWindowFocusFix())
-        QApplication::setActiveWindow(this);
+        activateWindow();
     KXmlGuiWindow::enterEvent(e);
 }
 

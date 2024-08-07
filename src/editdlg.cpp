@@ -877,7 +877,7 @@ void EditAlarmDlg::showEvent(QShowEvent* se)
 
     if (theApp()->needWindowFocusFix())
     {
-        QApplication::setActiveWindow(this);
+        activateWindow();
         QTimer::singleShot(0, this, &EditAlarmDlg::focusFixTimer);   //NOLINT(clang-analyzer-cplusplus.NewDeleteLeaks)
     }
 }
@@ -894,7 +894,7 @@ void EditAlarmDlg::focusFixTimer()
     if (theApp()->needWindowFocusFix()
     &&  QApplication::focusWidget()->window() != this)
     {
-        QApplication::setActiveWindow(this);
+        activateWindow();
         QTimer::singleShot(0, this, &EditAlarmDlg::focusFixTimer);   //NOLINT(clang-analyzer-cplusplus.NewDeleteLeaks)
     }
 }
@@ -911,7 +911,7 @@ bool EditAlarmDlg::eventFilter(QObject*, QEvent* e)
     if (theApp()->needWindowFocusFix())
     {
         if (e->type() == QEvent::MouseButtonPress)
-            QApplication::setActiveWindow(this);
+            activateWindow();
     }
     return false;
 }
