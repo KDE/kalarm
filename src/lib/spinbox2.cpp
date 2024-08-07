@@ -378,14 +378,14 @@ bool SpinBox2p::eventFilter(QObject* obj, QEvent* e)
             case QEvent::HoverEnter:
             {
                 auto* he = (QHoverEvent*)e;
-                QApplication::postEvent(mSpinbox2, new QHoverEvent(e->type(), QPoint(1, he->position().toPoint().y()), he->oldPos()));
+                QApplication::postEvent(mSpinbox2, new QHoverEvent(e->type(), QPointF(1.0, he->position().y()), he->globalPosition(), he->oldPosF()));
                 updateButtons = true;
                 break;
             }
             case QEvent::HoverLeave:
             {
                 auto* he = (QHoverEvent*)e;
-                QApplication::postEvent(mSpinbox2, new QHoverEvent(e->type(), he->position().toPoint(), QPoint(1, he->oldPos().y())));
+                QApplication::postEvent(mSpinbox2, new QHoverEvent(e->type(), he->position(), he->globalPosition(), QPointF(1.0, he->oldPosF().y())));
                 updateButtons = true;
                 break;
             }
@@ -784,7 +784,7 @@ void SpinMirror::mouseEvent(QMouseEvent* e)
         pt = spinboxPoint(pt);
     else
         pt = QPointF(0, 0);  // allow auto-repeat to stop
-    QApplication::postEvent(mSpinbox, new QMouseEvent(e->type(), pt, e->button(), e->buttons(), e->modifiers()));
+    QApplication::postEvent(mSpinbox, new QMouseEvent(e->type(), pt, e->globalPosition(), e->button(), e->buttons(), e->modifiers()));
 }
 
 /******************************************************************************
@@ -830,8 +830,7 @@ bool SpinMirror::event(QEvent* e)
         case QEvent::Leave:
             if (mMainSpinbox->rect().contains(mMainSpinbox->mapFromGlobal(QCursor::pos())))
                 break;
-            // fall through to QEvent::Enter
-            [[fallthrough]];
+            [[fallthrough]];   // fall through to QEvent::Enter
         case QEvent::Enter:
             QApplication::postEvent(mMainSpinbox, new QEvent(e->type()));
             break;
@@ -839,11 +838,10 @@ bool SpinMirror::event(QEvent* e)
             he = (QHoverEvent*)e;
             if (mMainSpinbox->rect().contains(mMainSpinbox->mapFromGlobal(QCursor::pos())))
                 break;
-            // fall through to QEvent::HoverEnter
-            [[fallthrough]];
+            [[fallthrough]];   // fall through to QEvent::HoverEnter
         case QEvent::HoverEnter:
             he = (QHoverEvent*)e;
-            QApplication::postEvent(mMainSpinbox, new QHoverEvent(e->type(), he->position().toPoint(), he->oldPos()));
+            QApplication::postEvent(mMainSpinbox, new QHoverEvent(e->type(), he->position(), he->globalPosition(), he->oldPosF()));
             break;
         case QEvent::HoverMove:
             he = (QHoverEvent*)e;
@@ -857,7 +855,7 @@ bool SpinMirror::event(QEvent* e)
 
     if (he)
     {
-        QApplication::postEvent(mSpinbox, new QHoverEvent(e->type(), spinboxPoint(he->position()), spinboxPoint(he->oldPosF())));
+        QApplication::postEvent(mSpinbox, new QHoverEvent(e->type(), spinboxPoint(he->position()), he->globalPosition(), spinboxPoint(he->oldPosF())));
         setButtonsImage();
     }
 
