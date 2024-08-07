@@ -30,7 +30,7 @@ public:
     ~AudioPlayer() override;
     Status  status() const;
     static QString popError();   // fetch last error message, and clear it
-    static bool providesFade() { return true; }
+    static bool providesFade();
 
 public Q_SLOTS:
     virtual bool    play() = 0;

@@ -18,6 +18,7 @@ class AudioPlayerMpv : public AudioPlayer
 public:
     AudioPlayerMpv(Type, const QUrl& audioFile, float volume, float fadeVolume, int fadeSeconds, QObject* parent = nullptr);
     ~AudioPlayerMpv() override;
+    static bool backendProvidesFade() { return true; }
 
 public Q_SLOTS:
     bool    play() override;

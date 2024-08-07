@@ -20,6 +20,7 @@ class AudioPlayerVlc : public AudioPlayer
 public:
     AudioPlayerVlc(Type, const QUrl& audioFile, float volume, float fadeVolume, int fadeSeconds, QObject* parent = nullptr);
     ~AudioPlayerVlc() override;
+    static bool backendProvidesFade() { return true; }
 
 public Q_SLOTS:
     virtual bool    play() override;

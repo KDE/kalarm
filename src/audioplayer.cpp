@@ -16,8 +16,10 @@
 
 #ifdef HAVE_LIBVLC
 #include "audioplayer_vlc.h"
+using AudioPlayerBackend = AudioPlayerVlc;
 #elif defined(HAVE_LIBMPV)
 #include "audioplayer_mpv.h"
+using AudioPlayerBackend = AudioPlayerMpv;
 #endif
 
 AudioPlayer* AudioPlayer::mInstance = nullptr;
@@ -35,14 +37,16 @@ AudioPlayer* AudioPlayer::create(Type type, const QUrl& audioFile, float volume,
 {
     if (mInstance)
         return nullptr;
-    mInstance = new
-#ifdef HAVE_LIBVLC
-        AudioPlayerVlc
-#elif defined(HAVE_LIBMPV)
-        AudioPlayerMpv
-#endif
-            (type, audioFile, volume, fadeVolume, fadeSeconds, parent);
+    mInstance = new AudioPlayerBackend(type, audioFile, volume, fadeVolume, fadeSeconds, parent);
     return mInstance;
+}
+
+/******************************************************************************
+* Return whether the audio player backend supports fade.
+*/
+bool AudioPlayer::providesFade()
+{
+    return AudioPlayerBackend::backendProvidesFade();
 }
 
 /******************************************************************************
