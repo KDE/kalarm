@@ -188,7 +188,7 @@ void AudioPlayerVlc::playFinished(uint32_t event)
 void AudioPlayerVlc::stop()
 {
     qCDebug(KALARM_LOG) << "AudioPlayerVlc::stop";
-    if (mAudioPlayer)
+    if (mAudioPlayer  &&  libvlc_media_player_is_playing(mAudioPlayer))
         libvlc_media_player_stop(mAudioPlayer);
 }
 
