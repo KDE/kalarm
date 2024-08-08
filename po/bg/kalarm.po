@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-02 00:40+0000\n"
-"PO-Revision-Date: 2024-07-14 21:45+0200\n"
+"PO-Revision-Date: 2024-08-07 09:29+0200\n"
 "Last-Translator: Mincho Kondarev <mkondarev@yahoo.de>\n"
 "Language-Team: Bulgarian <kde-i18n-doc@kde.org>\n"
 "Language: bg\n"
@@ -281,28 +281,22 @@ msgid "Cannot initialize audio system"
 msgstr "Не може да се инициализира аудио системата"
 
 #: audioplayer_mpv.cpp:48 audioplayer_mpv.cpp:56
-#, fuzzy, kde-format
-#| msgctxt "@info"
-#| msgid "Cannot initialize audio system"
+#, kde-format
 msgctxt "@info"
 msgid "Cannot initialize audio system: %1"
-msgstr "Не може да се инициализира аудио системата"
+msgstr "Не може да се инициализира аудио системата: %1"
 
 #: audioplayer_mpv.cpp:105 audioplayer_mpv.cpp:170
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid "<para>Error playing audio file: <filename>%1</filename></para>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid ""
 "<para>Error playing audio file <filename>%1</filename></para><para>%2</para>"
 msgstr ""
-"<para>Грешка при възпроизвеждане на аудио файл: <filename>%1</filename></"
-"para>"
+"<para>Грешка при възпроизвеждане на аудио файл<filename>%1</filename></"
+"para><para>%2</para>"
 
 #: audioplayer_mpv.cpp:132
-#, fuzzy, kde-format
-#| msgctxt "@info"
-#| msgid "Cannot set audio player properties: %1"
+#, kde-format
 msgctxt "@info"
 msgid "Cannot set the audio volume: %1"
 msgstr "Не може да се зададат свойства на аудио плеър: %1"
