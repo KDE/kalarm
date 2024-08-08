@@ -192,11 +192,11 @@ void AudioPlayerMpv::onMpvEvents()
 void AudioPlayerMpv::stop()
 {
     qCDebug(KALARM_LOG) << "AudioPlayerMpv::stop";
-    if (!mAudioInstance)
-        return;
-
-    const char* cmd[] = {"stop"};
-    mpv_command_async(mAudioInstance, 0, cmd);
+    if (mAudioInstance  &&  mStatus == Playing)
+    {
+        const char* cmd[] = {"stop"};
+        mpv_command_async(mAudioInstance, 0, cmd);
+    }
 }
 
 #include "moc_audioplayer_mpv.cpp"
