@@ -44,7 +44,6 @@ int main(int argc, char* argv[])
     QScopedPointer<KAlarmApp> app(KAlarmApp::create(argc, argv));
 
     const QStringList args = app->arguments();
-    KCrash::initialize();
 #if HAVE_STYLE_MANAGER
     KStyleManager::initStyle();
 #else // !HAVE_STYLE_MANAGER
@@ -62,6 +61,7 @@ int main(int argc, char* argv[])
     aboutData.setOrganizationDomain("kde.org");
     aboutData.setDesktopFileName(QStringLiteral(KALARM_DBUS_SERVICE));
     KAboutData::setApplicationData(aboutData);
+    KCrash::initialize();
 
     QApplication::setWindowIcon(QIcon::fromTheme(QStringLiteral("kalarm")));
     // Make this a unique application.
