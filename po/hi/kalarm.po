@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-11 00:39+0000\n"
+"POT-Creation-Date: 2024-08-09 02:29+0000\n"
 "PO-Revision-Date: 2021-08-21 16:25+0530\n"
 "Last-Translator: Raghavendra Kamath <raghu@raghukamath.com>\n"
 "Language-Team: kde-hindi\n"
@@ -335,14 +335,14 @@ msgstr "लॉगइन पर स्वतः प्रारंभ हों"
 msgid "Copyright 2001-%1, David Jarvie"
 msgstr "कॉपीराइट 2001-2007 डेविड जारवी"
 
-#: autostart/autostart.cpp:52 main.cpp:61
+#: autostart/autostart.cpp:52 main.cpp:60
 #, fuzzy, kde-format
 #| msgid "David Jarvie"
 msgctxt "@info:credit"
 msgid "David Jarvie"
 msgstr "डेविड जारवी"
 
-#: autostart/autostart.cpp:52 main.cpp:61
+#: autostart/autostart.cpp:52 main.cpp:60
 #, kde-format
 msgid "Author"
 msgstr "लेखक"
@@ -4526,13 +4526,13 @@ msgstr ""
 msgid "System time zone"
 msgstr "समय क्षेत्र अनदेखा करें"
 
-#: main.cpp:58
+#: main.cpp:57
 #, fuzzy, kde-format
 #| msgid "Personal alarm message, command and email scheduler for KDE"
 msgid "Personal alarm message, command and email scheduler by KDE"
 msgstr "केडीई के लिए निजी अलार्म संदेश, कमांड तथा ई-मेल शेड्यूलर"
 
-#: main.cpp:60
+#: main.cpp:59
 #, fuzzy, kde-format
 #| msgid "Copyright 2001-2007, David Jarvie"
 msgid "Copyright © 2001-%1, David Jarvie"
