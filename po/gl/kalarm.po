@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-02 00:40+0000\n"
+"POT-Creation-Date: 2024-08-09 00:40+0000\n"
 "PO-Revision-Date: 2024-08-03 12:23+0200\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Proxecto Trasno (proxecto@trasno.gal)\n"
@@ -347,13 +347,13 @@ msgstr "Inicio automático de KAlarm ao acceder"
 msgid "Copyright 2001-%1, David Jarvie"
 msgstr "© 2001-%1 David Jarvie"
 
-#: autostart/autostart.cpp:52 main.cpp:61
+#: autostart/autostart.cpp:52 main.cpp:60
 #, kde-format
 msgctxt "@info:credit"
 msgid "David Jarvie"
 msgstr "David Jarvie"
 
-#: autostart/autostart.cpp:52 main.cpp:61
+#: autostart/autostart.cpp:52 main.cpp:60
 #, kde-format
 msgid "Author"
 msgstr "Autor"
@@ -4469,14 +4469,14 @@ msgstr ""
 msgid "System time zone"
 msgstr "O fuso horario do sistema"
 
-#: main.cpp:58
+#: main.cpp:57
 #, kde-format
 msgid "Personal alarm message, command and email scheduler by KDE"
 msgstr ""
 "Programador de mensaxes persoais de alarma, ordes e correos electrónicos de "
 "KDE."
 
-#: main.cpp:60
+#: main.cpp:59
 #, kde-format
 msgid "Copyright © 2001-%1, David Jarvie"
 msgstr "© 2001-%1 David Jarvie"
