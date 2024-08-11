@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-09 00:40+0000\n"
-"PO-Revision-Date: 2024-08-09 15:08+0300\n"
+"PO-Revision-Date: 2024-08-10 23:24+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -721,12 +721,12 @@ msgid "<icode>%1</icode> earlier than <icode>%2</icode>"
 msgstr "<icode>%1</icode> קודם ל־<icode>%2</icode>"
 
 #: commandoptions.cpp:603
-#, fuzzy, kde-kuit-format
+#, kde-kuit-format
 msgctxt "@info:shell"
 msgid ""
 "Invalid <icode>%1</icode> and <icode>%2</icode> parameters: repetition is "
 "longer than <icode>%3</icode> interval"
-msgstr "%1 לא תואם ל-%2"
+msgstr ""
 
 #: commandoptions.cpp:784
 #, fuzzy, kde-format
@@ -763,10 +763,10 @@ msgid "Invalid <icode>%1</icode> parameter"
 msgstr "פרמטר %1 לא תקף"
 
 #: commandoptions.cpp:862
-#, fuzzy, kde-kuit-format
+#, kde-kuit-format
 msgctxt "@info:shell"
 msgid "<icode>%1</icode> incompatible with <icode>%2</icode>"
-msgstr "%1 לא תואם ל-%2"
+msgstr "%1 לא תואם ל־%2"
 
 #. i18n: ectx: label, entry (Version), group (General)
 #: data/kalarmconfig.kcfg:65
@@ -1191,12 +1191,10 @@ msgstr ""
 
 #. i18n: ectx: label, entry (Base_EmailFrom), group (General)
 #: data/kalarmconfig.kcfg:210
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label"
 msgid "'From' email address"
-msgstr ""
-"כתובת דוא\"ל לא תקפה:\n"
-"%1"
+msgstr "כתובת דוא״ל ‚מאת’"
 
 #. i18n: ectx: whatsthis, entry (Base_EmailFrom), group (General)
 #: data/kalarmconfig.kcfg:211
@@ -1211,12 +1209,10 @@ msgstr ""
 
 #. i18n: ectx: label, entry (Base_EmailBccAddress), group (General)
 #: data/kalarmconfig.kcfg:215
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label"
 msgid "'Bcc' email address"
-msgstr ""
-"כתובת דוא\"ל לא תקפה:\n"
-"%1"
+msgstr "כתובת דוא״ל (עותק סמוי)"
 
 #. i18n: ectx: whatsthis, entry (Base_EmailBccAddress), group (General)
 #: data/kalarmconfig.kcfg:216
@@ -1248,19 +1244,17 @@ msgstr ""
 
 #. i18n: ectx: label, entry (Base_StartOfDay), group (General)
 #: data/kalarmconfig.kcfg:224
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label"
 msgid "Start of day for date-only alarms"
-msgstr "הת&חלת היום עבור תזכורות של תאריך בלבד:"
+msgstr "התחלת היום עבור תזכורות של תאריך בלבד"
 
 #. i18n: ectx: whatsthis, entry (Base_StartOfDay), group (General)
 #: data/kalarmconfig.kcfg:225
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "The earliest time of day at which a date-only alarm will be triggered."
-msgstr ""
-"השעה המוקדמת ביותר ביום שבה תוצג תזכורת של תאריך בלבד (דהיינו תזכורת עם ציון "
-"שעה של \"כל שעה שהיא\")."
+msgstr "השעה המוקדמת ביותר ביום שבה תוזנק תזכורת של תאריך בלבד."
 
 #. i18n: ectx: label, entry (Base_WorkDayStart), group (General)
 #: data/kalarmconfig.kcfg:230
@@ -1271,10 +1265,10 @@ msgstr "שעת תחילת יום העבודה"
 
 #. i18n: ectx: whatsthis, entry (Base_WorkDayStart), group (General)
 #: data/kalarmconfig.kcfg:231
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "The start time of the working day."
-msgstr "הזן את השם של קובץ הטקסט או הכתובת שיש להציג."
+msgstr "שעת תחילת יום העבודה."
 
 #. i18n: ectx: label, entry (Base_WorkDayEnd), group (General)
 #: data/kalarmconfig.kcfg:236
@@ -1285,10 +1279,10 @@ msgstr "שעת סוף יום העבודה"
 
 #. i18n: ectx: whatsthis, entry (Base_WorkDayEnd), group (General)
 #: data/kalarmconfig.kcfg:237
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid "The end time of the working day."
-msgstr "הזן את הטקסט של ההודעה של התזכורת. היא יכולה לכלול מספר שורות."
+msgstr "שעת סוף יום העבודה."
 
 #. i18n: ectx: label, entry (Base_WorkDays), group (General)
 #: data/kalarmconfig.kcfg:242
@@ -1308,10 +1302,10 @@ msgstr ""
 
 #. i18n: ectx: label, entry (DisabledColour), group (General)
 #: data/kalarmconfig.kcfg:248
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label"
 msgid "Disabled alarm color"
-msgstr "א&ל תאפשר תזכורות כאשר התוכנית לא פועלת"
+msgstr "צבע תזכורת מושבתת"
 
 #. i18n: ectx: whatsthis, entry (DisabledColour), group (General)
 #: data/kalarmconfig.kcfg:249 prefdlg.cpp:1939
@@ -1481,17 +1475,17 @@ msgstr "הגדרת ברירת המחדל של \"%1\" בדו-שיח עריכת ה
 
 #. i18n: ectx: label, entry (Base_DefaultSoundType), group (Defaults)
 #: data/kalarmconfig.kcfg:325
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@option"
 msgid "Play File"
-msgstr "                               כתובת קובץ לוח השנה"
+msgstr "נגינת קובץ"
 
 #. i18n: ectx: label, entry (DefaultSoundFile), group (Defaults)
 #: data/kalarmconfig.kcfg:331
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label"
 msgid "Sound file"
-msgstr "סיים אח&רי:"
+msgstr "קובץ שמע"
 
 #. i18n: ectx: whatsthis, entry (DefaultSoundFile), group (Defaults)
 #: data/kalarmconfig.kcfg:332
@@ -1502,10 +1496,10 @@ msgstr "הגדרת ברירת המחדל של \"%1\" בדו-שיח עריכת ה
 
 #. i18n: ectx: label, entry (Base_DefaultSoundVolume), group (Defaults)
 #: data/kalarmconfig.kcfg:335 kalarmcalendar/kaeventformatter.cpp:114
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label"
 msgid "Sound volume"
-msgstr "סיים אח&רי:"
+msgstr "עוצמת שמע של צליל"
 
 #. i18n: ectx: whatsthis, entry (Base_DefaultSoundVolume), group (Defaults)
 #: data/kalarmconfig.kcfg:336
@@ -1569,10 +1563,10 @@ msgstr "&פקודה"
 
 #. i18n: ectx: label, entry (DefaultCmdLogType), group (Defaults)
 #: data/kalarmconfig.kcfg:356
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@option"
 msgid "Log To File"
-msgstr "בחירת קובץ צליל"
+msgstr "תיעוד לקובץ"
 
 #. i18n: ectx: label, entry (DefaultCmdLogType), group (Defaults)
 #: data/kalarmconfig.kcfg:357
@@ -1583,10 +1577,10 @@ msgstr "הפעלה בחלון מסוף"
 
 #. i18n: ectx: label, entry (DefaultCmdLogFile), group (Defaults)
 #: data/kalarmconfig.kcfg:362 kalarmcalendar/kaeventformatter.cpp:137
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label"
 msgid "Log file"
-msgstr "סיים אח&רי:"
+msgstr "קובץ יומן"
 
 #. i18n: ectx: whatsthis, entry (DefaultCmdLogFile), group (Defaults)
 #: data/kalarmconfig.kcfg:363
@@ -1626,24 +1620,24 @@ msgstr "הגדרת ברירת המחדל של תדירות החזרה בדו-ש�
 
 #. i18n: ectx: label, entry (DefaultRecurPeriod), group (Defaults)
 #: data/kalarmconfig.kcfg:374
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@option"
 msgid "No recurrence"
-msgstr "&חזרה"
+msgstr "בלי חזרה"
 
 #. i18n: ectx: label, entry (DefaultRecurPeriod), group (Defaults)
 #: data/kalarmconfig.kcfg:375
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@option"
 msgid "At login"
-msgstr "בעת כניסה למערכת"
+msgstr "עם כניסה למערכת"
 
 #. i18n: ectx: label, entry (DefaultRecurPeriod), group (Defaults)
 #: data/kalarmconfig.kcfg:376
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@option"
 msgid "Hourly/minutely"
-msgstr "שעות\\דקות"
+msgstr "לפי שעות/דקות"
 
 #. i18n: ectx: label, entry (DefaultFeb29Type), group (Defaults)
 #: data/kalarmconfig.kcfg:385 prefdlg.cpp:1411
@@ -1679,10 +1673,10 @@ msgstr "1 במרץ"
 
 #. i18n: ectx: label, entry (DefaultFeb29Type), group (Defaults)
 #: data/kalarmconfig.kcfg:390
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@option"
 msgid "Do not repeat"
-msgstr "חזרה על התזכורת באופן קבוע"
+msgstr "לא לחזור"
 
 #. i18n: ectx: label, entry (DefaultReminderUnits), group (Defaults)
 #: data/kalarmconfig.kcfg:396
