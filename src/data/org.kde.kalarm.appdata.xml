@@ -451,6 +451,7 @@
     <binary>kalarm</binary>
   </provides>
   <releases>
+    <release version="3.9.0" date="2024-08-22"/>
     <release version="3.8.2" date="2024-07-04">
       <description>
         <p>Release description</p>
