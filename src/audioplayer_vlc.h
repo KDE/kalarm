@@ -23,8 +23,8 @@ public:
     static bool backendProvidesFade() { return true; }
 
 public Q_SLOTS:
-    virtual bool    play() override;
-    virtual void    stop() override;
+    bool    play() override;
+    void    stop() override;
 
 private Q_SLOTS:
     void    playFinished(uint32_t event);
