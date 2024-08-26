@@ -205,8 +205,6 @@ msgstr ""
 
 #: alarmtimewidget.cpp:169
 #, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Select an alarm template to preset the alarm"
 msgctxt "@info:tooltip"
 msgid "Select time delay from a list of preset values"
 msgstr "Vel alarmmal for førehands­innstillingar til alarmen"
@@ -283,10 +281,6 @@ msgstr ""
 
 #: audioplayer.cpp:85
 #, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid ""
-#| "<para>Error playing audio file: <filename>%1</filename></para><para>%2</"
-#| "para>"
 msgctxt "@info"
 msgid "<para>Error opening audio file: <filename>%1</filename></para>"
 msgstr ""
@@ -301,10 +295,6 @@ msgstr ""
 
 #: audioplayer.cpp:171 audioplayer.cpp:245
 #, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid ""
-#| "<para>Error playing audio file: <filename>%1</filename></para><para>%2</"
-#| "para>"
 msgctxt "@info"
 msgid "<para>Error playing audio file: <filename>%1</filename></para>"
 msgstr ""
@@ -328,7 +318,6 @@ msgstr "© 2001–%1 David Jarvie"
 
 #: autostart/autostart.cpp:52 main.cpp:60
 #, fuzzy, kde-format
-#| msgid "David Jarvie"
 msgctxt "@info:credit"
 msgid "David Jarvie"
 msgstr "David Jarvie"
@@ -3418,8 +3407,6 @@ msgstr ""
 #: kalarmapp.cpp:837 lib/messagebox.h:105 lib/messagebox.h:114
 #: lib/messagebox.h:151
 #, fuzzy, kde-format
-#| msgctxt "@info General purpose status indication: yes or no"
-#| msgid "Yes"
 msgctxt "@action:button"
 msgid "Yes"
 msgstr "Ja"
@@ -3427,8 +3414,6 @@ msgstr "Ja"
 #: kalarmapp.cpp:837 lib/messagebox.h:106 lib/messagebox.h:115
 #: lib/messagebox.h:152
 #, fuzzy, kde-format
-#| msgctxt "@info General purpose status indication: yes or no"
-#| msgid "No"
 msgctxt "@action:button"
 msgid "No"
 msgstr "Nei"
@@ -4895,8 +4880,6 @@ msgstr "Fann ikkje denne e-posten i <application>KMail</application>"
 
 #: newalarmaction.cpp:45
 #, fuzzy, kde-format
-#| msgctxt "@item:inmenu"
-#| msgid "&Display Alarm Template"
 msgctxt "@item:inmenu"
 msgid "Display Alarm Template"
 msgstr "Mal for &visingsalarm"
@@ -4909,8 +4892,6 @@ msgstr "Ny visingsalarm"
 
 #: newalarmaction.cpp:48
 #, fuzzy, kde-format
-#| msgctxt "@item:inmenu"
-#| msgid "&Command Alarm Template"
 msgctxt "@item:inmenu"
 msgid "Command Alarm Template"
 msgstr "Mal for &kommandoalarm"
@@ -4923,8 +4904,6 @@ msgstr "Ny kommandoalarm"
 
 #: newalarmaction.cpp:51
 #, fuzzy, kde-format
-#| msgctxt "@item:inmenu"
-#| msgid "&Email Alarm Template"
 msgctxt "@item:inmenu"
 msgid "Email Alarm Template"
 msgstr "Mal for &e-postalarm"
@@ -4937,8 +4916,6 @@ msgstr "Ny e-postalarm"
 
 #: newalarmaction.cpp:54
 #, fuzzy, kde-format
-#| msgctxt "@item:inmenu"
-#| msgid "&Audio Alarm Template"
 msgctxt "@item:inmenu"
 msgid "Audio Alarm Template"
 msgstr "Mal for &lydalarm"
@@ -5950,8 +5927,6 @@ msgstr "Hjelpeboble for systemtrauikonet"
 
 #: prefdlg.cpp:1874
 #, fuzzy, kde-format
-#| msgctxt "@option:check"
-#| msgid "Show next &24 hours' alarms"
 msgctxt "@option:check"
 msgid "Show next 24 hours' alarms"
 msgstr "Vis alarmar for dei neste &24 timane"
@@ -6055,10 +6030,6 @@ msgstr "Tid før knappane vert verksame (i sekund):"
 
 #: prefdlg.cpp:1995
 #, fuzzy, kde-format
-#| msgctxt "@info:whatsthis"
-#| msgid ""
-#| "Enter how long its buttons should remain disabled after the alarm message "
-#| "window is shown."
 msgctxt "@info:whatsthis"
 msgid ""
 "Enter how long its buttons should remain disabled after the alarm message "
@@ -6410,8 +6381,6 @@ msgstr ""
 
 #: recurrenceedit.cpp:1064
 #, fuzzy, kde-format
-#| msgctxt "@label:spinbox"
-#| msgid "Recur e&very"
 msgctxt "@label:spinbox"
 msgid "Recur every"
 msgstr "Gjenta k&var(t)"
@@ -6430,8 +6399,6 @@ msgstr "Skriv inn talet på timar og minutt mellom gjentakingar av alarmen"
 
 #: recurrenceedit.cpp:1152
 #, fuzzy, kde-format
-#| msgctxt "@label On: Tuesday"
-#| msgid "O&n:"
 msgctxt "@label On: Tuesday"
 msgid "On:"
 msgstr "&På:"
@@ -6480,8 +6447,6 @@ msgstr "Vel kva for dagar i veka alarmen skal gjentakast"
 
 #: recurrenceedit.cpp:1301
 #, fuzzy, kde-format
-#| msgctxt "@option:radio On day number in the month"
-#| msgid "O&n day"
 msgctxt "@option:radio On day number in the month"
 msgid "On day"
 msgstr "&På dag"
@@ -6506,8 +6471,6 @@ msgstr "Vel dagen i månaden alarmen skal gjentakast på"
 
 #: recurrenceedit.cpp:1323
 #, fuzzy, kde-format
-#| msgctxt "@option:radio On the 1st Tuesday"
-#| msgid "On t&he"
 msgctxt "@option:radio On the 1st Tuesday"
 msgid "On the"
 msgstr "På &den"
@@ -6635,8 +6598,6 @@ msgstr "Vel dei månadene i året alarmen skal gjentakast i"
 
 #: recurrenceedit.cpp:1530
 #, fuzzy, kde-format
-#| msgctxt "@label:listbox"
-#| msgid "February 2&9th alarm in non-leap years:"
 msgctxt "@label:listbox"
 msgid "February 29th alarm in non-leap years:"
 msgstr "2&9. februar i ikkje-skotår:"
@@ -6834,8 +6795,6 @@ msgstr ""
 
 #: resources/fileresource.cpp:462
 #, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Alarm [read-only]"
 msgctxt "@info"
 msgid "Calendar is read-only."
 msgstr "Alarm [skriveverna]"
@@ -7506,8 +7465,6 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QRadioButton, activeRadio)
 #: resources/singlefileresourceconfigdialog.ui:86
 #, fuzzy, kde-format
-#| msgctxt "@item:inlistbox"
-#| msgid "Active Alarms"
 msgctxt "@option:radio"
 msgid "Active Alarms"
 msgstr "Verksame alarmar"
@@ -7522,8 +7479,6 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QRadioButton, templateRadio)
 #: resources/singlefileresourceconfigdialog.ui:112
 #, fuzzy, kde-format
-#| msgctxt "@item:inlistbox"
-#| msgid "Alarm Templates"
 msgctxt "@option:radio"
 msgid "Alarm Templates"
 msgstr "Alarmmalar"
@@ -7572,8 +7527,6 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QLabel, label_1)
 #: resources/singlefileresourceconfigdialog.ui:201
 #, fuzzy, kde-format
-#| msgctxt "@title:column Template name"
-#| msgid "Name"
 msgctxt "@label:textbox"
 msgid "Name:"
 msgstr "Namn"
@@ -7758,88 +7711,66 @@ msgstr ""
 
 #: resourceselector.cpp:289
 #, fuzzy, kde-format
-#| msgctxt "@action Reload calendar"
-#| msgid "Re&load"
 msgctxt "@action Reload calendar"
 msgid "Reload"
 msgstr "&Last på nytt"
 
 #: resourceselector.cpp:292
 #, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "Show &Details"
 msgctxt "@action"
 msgid "Show Details"
 msgstr "Vis &detaljar"
 
 #: resourceselector.cpp:295
 #, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "Set &Color..."
 msgctxt "@action"
 msgid "Set Color..."
 msgstr "Vel &farge …"
 
 #: resourceselector.cpp:298
 #, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "Clear C&olor"
 msgctxt "@action"
 msgid "Clear Color"
 msgstr "Fjern f&arge"
 
 #: resourceselector.cpp:304
 #, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Import Calendar Files"
 msgctxt "@action"
 msgid "Update Calendar Format"
 msgstr "Importer kalenderfiler"
 
 #: resourceselector.cpp:307
 #, fuzzy, kde-format
-#| msgctxt "@action:button"
-#| msgid "Remove"
 msgctxt "@action"
 msgid "Remove"
 msgstr "Fjern"
 
 #: resourceselector.cpp:313
 #, fuzzy, kde-format
-#| msgctxt "@action:button"
-#| msgid "Add..."
 msgctxt "@action"
 msgid "Add..."
 msgstr "Legg til …"
 
 #: resourceselector.cpp:316
 #, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "Im&port..."
 msgctxt "@action"
 msgid "Import..."
 msgstr "Im&porter …"
 
 #: resourceselector.cpp:372
 #, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "Use as &Default for Active Alarms"
 msgctxt "@action"
 msgid "Use as Default for Active Alarms"
 msgstr "Bruk som &standard for verksame alarmar"
 
 #: resourceselector.cpp:373
 #, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "Use as &Default for Archived Alarms"
 msgctxt "@action"
 msgid "Use as Default for Archived Alarms"
 msgstr "Bruk som &standard for arkiverte alarmar"
 
 #: resourceselector.cpp:374
 #, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "Use as &Default for Alarm Templates"
 msgctxt "@action"
 msgid "Use as Default for Alarm Templates"
 msgstr "Bruk som &standard for alarmmalar"
