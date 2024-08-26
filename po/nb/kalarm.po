@@ -295,10 +295,6 @@ msgstr ""
 
 #: audioplayer_mpv.cpp:105 audioplayer_mpv.cpp:170
 #, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid ""
-#| "<para>Error playing audio file: <filename>%1</filename></para><para>%2</"
-#| "para>"
 msgctxt "@info"
 msgid ""
 "<para>Error playing audio file <filename>%1</filename></para><para>%2</para>"
@@ -314,10 +310,6 @@ msgstr ""
 
 #: audioplayer_vlc.cpp:46
 #, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid ""
-#| "<para>Error playing audio file: <filename>%1</filename></para><para>%2</"
-#| "para>"
 msgctxt "@info"
 msgid "<para>Error opening audio file: <filename>%1</filename></para>"
 msgstr ""
@@ -332,10 +324,6 @@ msgstr ""
 
 #: audioplayer_vlc.cpp:112 audioplayer_vlc.cpp:174
 #, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid ""
-#| "<para>Error playing audio file: <filename>%1</filename></para><para>%2</"
-#| "para>"
 msgctxt "@info"
 msgid "<para>Error playing audio file: <filename>%1</filename></para>"
 msgstr ""
@@ -359,7 +347,6 @@ msgstr ""
 
 #: autostart/autostart.cpp:52 main.cpp:60
 #, fuzzy, kde-format
-#| msgid "David Jarvie"
 msgctxt "@info:credit"
 msgid "David Jarvie"
 msgstr "David Jarvie"
@@ -1953,37 +1940,30 @@ msgstr ""
 #. i18n: ectx: Menu (file)
 #: data/kalarmui.rc:19
 #, fuzzy, kde-format
-#| msgctxt "@option:check Alarm action = file display"
-#| msgid "File"
 msgid "File"
 msgstr "Fil"
 
 #. i18n: ectx: Menu (edit)
 #: data/kalarmui.rc:31
 #, fuzzy, kde-format
-#| msgid "&Edit"
 msgid "Edit"
 msgstr "R&ediger"
 
 #. i18n: ectx: Menu (view)
 #: data/kalarmui.rc:46
 #, fuzzy, kde-format
-#| msgctxt "@title:tab"
-#| msgid "View"
 msgid "View"
 msgstr "Vis"
 
 #. i18n: ectx: Menu (actions)
 #: data/kalarmui.rc:56
 #, fuzzy, kde-format
-#| msgid "&Actions"
 msgid "Actions"
 msgstr "H&andlinger"
 
 #. i18n: ectx: Menu (settings)
 #: data/kalarmui.rc:68
 #, fuzzy, kde-format
-#| msgid "&Settings"
 msgid "Settings"
 msgstr "&Innstillinger"
 
@@ -3219,8 +3199,6 @@ msgstr "Stopp avspilling"
 
 #: functions.cpp:196
 #, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "Enable &Alarms"
 msgctxt "@action"
 msgid "Enable Alarms"
 msgstr "&Skru på varslinger"
@@ -3438,8 +3416,6 @@ msgstr ""
 #: kalarmapp.cpp:837 lib/messagebox.h:105 lib/messagebox.h:114
 #: lib/messagebox.h:151
 #, fuzzy, kde-format
-#| msgctxt "@info Parameter in 'Default calendar: Yes/No'"
-#| msgid "Yes"
 msgctxt "@action:button"
 msgid "Yes"
 msgstr "Ja"
@@ -3447,8 +3423,6 @@ msgstr "Ja"
 #: kalarmapp.cpp:837 lib/messagebox.h:106 lib/messagebox.h:115
 #: lib/messagebox.h:152
 #, fuzzy, kde-format
-#| msgctxt "@info Parameter in 'Default calendar: Yes/No'"
-#| msgid "No"
 msgctxt "@action:button"
 msgid "No"
 msgstr "Nei"
@@ -4414,8 +4388,6 @@ msgstr ""
 
 #: mainwindow.cpp:460
 #, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "&Templates..."
 msgctxt "@action"
 msgid "Templates..."
 msgstr "&Maler …"
@@ -4428,32 +4400,24 @@ msgstr "Ny"
 
 #: mainwindow.cpp:470
 #, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "Create Tem&plate..."
 msgctxt "@action"
 msgid "Create Template..."
 msgstr "Lag M&al …"
 
 #: mainwindow.cpp:474
 #, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "&Copy..."
 msgctxt "@action"
 msgid "Copy..."
 msgstr "&Kopier …"
 
 #: mainwindow.cpp:479 resourceselector.cpp:301
 #, fuzzy, kde-format
-#| msgctxt "@action:button"
-#| msgid "Edit..."
 msgctxt "@action"
 msgid "Edit..."
 msgstr "Rediger …"
 
 #: mainwindow.cpp:484
 #, fuzzy, kde-format
-#| msgctxt "@action:button"
-#| msgid "Delete"
 msgctxt "@action"
 msgid "Delete"
 msgstr "Slett"
@@ -4466,8 +4430,6 @@ msgstr "Slett uten bekreftelse"
 
 #: mainwindow.cpp:495
 #, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "Reac&tivate"
 msgctxt "@action"
 msgid "Reactivate"
 msgstr "Reak&tiver"
@@ -4480,24 +4442,18 @@ msgstr "Vekk fra dvalemodus …"
 
 #: mainwindow.cpp:519
 #, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Show Archived Alarms"
 msgctxt "@action"
 msgid "Show Archived Alarms"
 msgstr "Vis arkiverte varslinger"
 
 #: mainwindow.cpp:524
 #, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "Show in System &Tray"
 msgctxt "@action"
 msgid "Show in System Tray"
 msgstr "Vis i system&kurv"
 
 #: mainwindow.cpp:528
 #, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "Show &Calendars"
 msgctxt "@action"
 msgid "Show Calendars"
 msgstr "Vis &kalendere"
@@ -4510,8 +4466,6 @@ msgstr ""
 
 #: mainwindow.cpp:543
 #, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "Import &Alarms..."
 msgctxt "@action"
 msgid "Import Alarms..."
 msgstr "Importer &varslinger …"
@@ -4524,24 +4478,18 @@ msgstr ""
 
 #: mainwindow.cpp:554
 #, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "E&xport Selected Alarms..."
 msgctxt "@action"
 msgid "Export Selected Alarms..."
 msgstr "E&ksporter markerte varslinger …"
 
 #: mainwindow.cpp:558 resourceselector.cpp:319
 #, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "E&xport..."
 msgctxt "@action"
 msgid "Export..."
 msgstr "E&ksporter …"
 
 #: mainwindow.cpp:562
 #, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "&Refresh Alarms"
 msgctxt "@action"
 msgid "Refresh Alarms"
 msgstr "F&risk opp varslinger"
@@ -4642,15 +4590,12 @@ msgstr "Velg hvilken varslingstype som skal opprettes:"
 
 #: mainwindow.cpp:1681
 #, fuzzy, kde-format
-#| msgctxt "@action:button"
-#| msgid "Enable"
 msgctxt "@action"
 msgid "Enable"
 msgstr "Skru på"
 
 #: mainwindow.cpp:1681
 #, fuzzy, kde-format
-#| msgid "Disabled"
 msgctxt "@action"
 msgid "Disable"
 msgstr "Slått av"
@@ -4848,8 +4793,6 @@ msgstr "Rediger varslinga."
 
 #: messagewindow.cpp:439
 #, fuzzy, kde-format
-#| msgctxt "@action:button"
-#| msgid "&Defer..."
 msgctxt "@action:button"
 msgid "Defer..."
 msgstr "&Utsett …"
@@ -4932,8 +4875,6 @@ msgstr "Klarer ikke å finne denne e-posten i <application>KMail</application>"
 
 #: newalarmaction.cpp:45
 #, fuzzy, kde-format
-#| msgctxt "@item:inmenu"
-#| msgid "&Display Alarm Template"
 msgctxt "@item:inmenu"
 msgid "Display Alarm Template"
 msgstr "&Vis varslingsmal"
@@ -4946,8 +4887,6 @@ msgstr "Ny varsling på skjermen"
 
 #: newalarmaction.cpp:48
 #, fuzzy, kde-format
-#| msgctxt "@item:inmenu"
-#| msgid "&Command Alarm Template"
 msgctxt "@item:inmenu"
 msgid "Command Alarm Template"
 msgstr "&Kommandovarslingsmal"
@@ -4960,8 +4899,6 @@ msgstr "Ny kommandovarsling"
 
 #: newalarmaction.cpp:51
 #, fuzzy, kde-format
-#| msgctxt "@item:inmenu"
-#| msgid "&Email Alarm Template"
 msgctxt "@item:inmenu"
 msgid "Email Alarm Template"
 msgstr "&E-postvarslingsmal"
@@ -4974,8 +4911,6 @@ msgstr "Ny E-postvarsling"
 
 #: newalarmaction.cpp:54
 #, fuzzy, kde-format
-#| msgctxt "@item:inmenu"
-#| msgid "&Audio Alarm Template"
 msgctxt "@item:inmenu"
 msgid "Audio Alarm Template"
 msgstr "&Lydvarslingsmal"
@@ -4988,8 +4923,6 @@ msgstr "Ny lydvarsling"
 
 #: newalarmaction.cpp:69
 #, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "New Alarm From &Template"
 msgctxt "@action"
 msgid "New Alarm From Template"
 msgstr "Ny varsling basert på &mal"
@@ -5082,16 +5015,12 @@ msgstr ""
 
 #: prefdlg.cpp:263
 #, fuzzy, kde-format
-#| msgctxt "@action:button Reset ALL tabs"
-#| msgid "&All"
 msgctxt "@action:button Reset ALL tabs"
 msgid "All"
 msgstr "&Alle"
 
 #: prefdlg.cpp:264
 #, fuzzy, kde-format
-#| msgctxt "@action:button Reset the CURRENT tab"
-#| msgid "C&urrent"
 msgctxt "@action:button Reset the CURRENT tab"
 msgid "Current"
 msgstr "&Denne"
@@ -5772,16 +5701,12 @@ msgstr "Gjentakelse:"
 
 #: prefdlg.cpp:1424
 #, fuzzy, kde-format
-#| msgctxt "@option"
-#| msgid "February 28th"
 msgctxt "@option:radio"
 msgid "February 28th"
 msgstr "28. februar"
 
 #: prefdlg.cpp:1428
 #, fuzzy, kde-format
-#| msgctxt "@option"
-#| msgid "March 1st"
 msgctxt "@option:radio"
 msgid "March 1st"
 msgstr "1. mars"
@@ -6008,8 +5933,6 @@ msgstr "Verktøytips for systemkurv-ikonet"
 
 #: prefdlg.cpp:1874
 #, fuzzy, kde-format
-#| msgctxt "@option:check"
-#| msgid "Show next &24 hours' alarms"
 msgctxt "@option:check"
 msgid "Show next 24 hours' alarms"
 msgstr "Vis varslinger for de neste &24 timene"
@@ -6113,10 +6036,6 @@ msgstr "Forsinkelse for knappeaktivering (sekunder):"
 
 #: prefdlg.cpp:1995
 #, fuzzy, kde-format
-#| msgctxt "@info:whatsthis"
-#| msgid ""
-#| "Enter how long its buttons should remain disabled after the alarm message "
-#| "window is shown."
 msgctxt "@info:whatsthis"
 msgid ""
 "Enter how long its buttons should remain disabled after the alarm message "
@@ -6469,8 +6388,6 @@ msgstr "Datoen kan ikke være tidligere enn startdatoen"
 
 #: recurrenceedit.cpp:1064
 #, fuzzy, kde-format
-#| msgctxt "@label:spinbox"
-#| msgid "Recur e&very"
 msgctxt "@label:spinbox"
 msgid "Recur every"
 msgstr "Gjenta h&ver(t)"
@@ -6489,8 +6406,6 @@ msgstr "Skriv inn tallet på timer og minutter mellom gjentakelser av varslinga"
 
 #: recurrenceedit.cpp:1152
 #, fuzzy, kde-format
-#| msgctxt "@label On: Tuesday"
-#| msgid "O&n:"
 msgctxt "@label On: Tuesday"
 msgid "On:"
 msgstr "&På:"
@@ -6539,8 +6454,6 @@ msgstr "Velg ukedag da varslinga skal gjentas"
 
 #: recurrenceedit.cpp:1301
 #, fuzzy, kde-format
-#| msgctxt "@option:radio On day number in the month"
-#| msgid "O&n day"
 msgctxt "@option:radio On day number in the month"
 msgid "On day"
 msgstr "P&å dag"
@@ -6565,8 +6478,6 @@ msgstr "Velg dag i måneden da varslinga skal gjentas"
 
 #: recurrenceedit.cpp:1323
 #, fuzzy, kde-format
-#| msgctxt "@option:radio On the 1st Tuesday"
-#| msgid "On t&he"
 msgctxt "@option:radio On the 1st Tuesday"
 msgid "On the"
 msgstr "På &den"
@@ -6694,8 +6605,6 @@ msgstr "Velg de måneder da varslinga skal gjentas"
 
 #: recurrenceedit.cpp:1530
 #, fuzzy, kde-format
-#| msgctxt "@label:listbox"
-#| msgid "February 2&9th alarm in non-leap years:"
 msgctxt "@label:listbox"
 msgid "February 29th alarm in non-leap years:"
 msgstr "Varsling 2&9. februar i ikke-skuddår:"
@@ -6900,8 +6809,6 @@ msgstr ""
 
 #: resources/fileresource.cpp:462
 #, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Alarm [read-only]"
 msgctxt "@info"
 msgid "Calendar is read-only."
 msgstr "Varsling [skrivebeskyttet]"
@@ -7574,8 +7481,6 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QRadioButton, activeRadio)
 #: resources/singlefileresourceconfigdialog.ui:86
 #, fuzzy, kde-format
-#| msgctxt "@item:inlistbox"
-#| msgid "Active Alarms"
 msgctxt "@option:radio"
 msgid "Active Alarms"
 msgstr "Aktive varslinger"
@@ -7590,8 +7495,6 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QRadioButton, templateRadio)
 #: resources/singlefileresourceconfigdialog.ui:112
 #, fuzzy, kde-format
-#| msgctxt "@item:inlistbox"
-#| msgid "Alarm Templates"
 msgctxt "@option:radio"
 msgid "Alarm Templates"
 msgstr "Varslingsmaler"
@@ -7640,8 +7543,6 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QLabel, label_1)
 #: resources/singlefileresourceconfigdialog.ui:201
 #, fuzzy, kde-format
-#| msgctxt "@title:column Template name"
-#| msgid "Name"
 msgctxt "@label:textbox"
 msgid "Name:"
 msgstr "Navn"
@@ -7829,88 +7730,66 @@ msgstr ""
 
 #: resourceselector.cpp:289
 #, fuzzy, kde-format
-#| msgctxt "@action Reload calendar"
-#| msgid "Re&load"
 msgctxt "@action Reload calendar"
 msgid "Reload"
 msgstr "&Last inn på nytt"
 
 #: resourceselector.cpp:292
 #, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "Show &Details"
 msgctxt "@action"
 msgid "Show Details"
 msgstr "Vis &detaljer"
 
 #: resourceselector.cpp:295
 #, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "Set &Color..."
 msgctxt "@action"
 msgid "Set Color..."
 msgstr "Velg &farge …"
 
 #: resourceselector.cpp:298
 #, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "Clear C&olor"
 msgctxt "@action"
 msgid "Clear Color"
 msgstr "Tøm f&arge"
 
 #: resourceselector.cpp:304
 #, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "&Update Calendar Format"
 msgctxt "@action"
 msgid "Update Calendar Format"
 msgstr "&Oppdater kalenderformats"
 
 #: resourceselector.cpp:307
 #, fuzzy, kde-format
-#| msgctxt "@action:button"
-#| msgid "Remove"
 msgctxt "@action"
 msgid "Remove"
 msgstr "Fjern"
 
 #: resourceselector.cpp:313
 #, fuzzy, kde-format
-#| msgctxt "@action:button"
-#| msgid "Add..."
 msgctxt "@action"
 msgid "Add..."
 msgstr "Legg til …"
 
 #: resourceselector.cpp:316
 #, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "Im&port..."
 msgctxt "@action"
 msgid "Import..."
 msgstr "Im&porter …"
 
 #: resourceselector.cpp:372
 #, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "Use as &Default for Active Alarms"
 msgctxt "@action"
 msgid "Use as Default for Active Alarms"
 msgstr "Bruk som stan&dard for aktive varslinger"
 
 #: resourceselector.cpp:373
 #, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "Use as &Default for Archived Alarms"
 msgctxt "@action"
 msgid "Use as Default for Archived Alarms"
 msgstr "Bruk som stan&dard for arkiverte varslinger"
 
 #: resourceselector.cpp:374
 #, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "Use as &Default for Alarm Templates"
 msgctxt "@action"
 msgid "Use as Default for Alarm Templates"
 msgstr "Bruk som &standard for varslingsmaler"
@@ -8420,8 +8299,6 @@ msgstr "Velg en mal som den nye varslinga skal baseres på."
 
 #: traywindow.cpp:68
 #, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "&New Alarm"
 msgctxt "@action"
 msgid "New Alarm"
 msgstr "&Ny varsling"
