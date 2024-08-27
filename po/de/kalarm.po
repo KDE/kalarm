@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-09 02:29+0000\n"
-"PO-Revision-Date: 2024-03-21 18:25+0100\n"
+"PO-Revision-Date: 2024-08-26 18:10+0200\n"
 "Last-Translator: Johannes Obermayr <johannesobermayr@gmx.de>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
 "Language: de\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 24.02.0\n"
+"X-Generator: Lokalize 24.05.2\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -219,14 +219,11 @@ msgid "1 week"
 msgstr "1 Woche"
 
 #: alarmtimewidget.cpp:169
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Select an alarm template to preset the alarm"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Select time delay from a list of preset values"
 msgstr ""
-"Wählen Sie eine Erinnerungsvorlage an, auf der die neue Erinnerung basieren "
-"soll."
+"Wählen Sie eine Zeitverzögerung aus der Liste voreingestellter Werte aus"
 
 #: alarmtimewidget.cpp:177
 #, kde-kuit-format
@@ -296,37 +293,27 @@ msgstr "Die Uhrzeit der Fälligkeit wurde bereits überschritten."
 #, kde-format
 msgctxt "@info"
 msgid "Cannot initialize audio system"
-msgstr ""
+msgstr "Das Audiosystem kann nicht initialisiert werden"
 
 #: audioplayer.cpp:85
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid ""
-#| "<para>Error playing audio file: <filename>%1</filename></para><para>%2</"
-#| "para>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid "<para>Error opening audio file: <filename>%1</filename></para>"
 msgstr ""
-"<para>Fehler beim Wiedergeben der Klangdatei: <filename>%1</filename></"
-"para><para>%2</para>"
+"<para>Fehler beim Öffnen der Klangdatei: <filename>%1</filename></para>"
 
 #: audioplayer.cpp:94
 #, kde-format
 msgctxt "@info"
 msgid "Cannot initialize audio player"
-msgstr ""
+msgstr "Das Audio-Wiedergabeprogamm kann nicht initialisiert werden"
 
 #: audioplayer.cpp:171 audioplayer.cpp:245
-#, fuzzy, kde-kuit-format
-#| msgctxt "@info"
-#| msgid ""
-#| "<para>Error playing audio file: <filename>%1</filename></para><para>%2</"
-#| "para>"
+#, kde-kuit-format
 msgctxt "@info"
 msgid "<para>Error playing audio file: <filename>%1</filename></para>"
 msgstr ""
-"<para>Fehler beim Wiedergeben der Klangdatei: <filename>%1</filename></"
-"para><para>%2</para>"
+"<para>Fehler beim Wiedergeben der Klangdatei: <filename>%1</filename></para>"
 
 #: autostart/autostart.cpp:48
 #, kde-format
@@ -344,8 +331,7 @@ msgid "Copyright 2001-%1, David Jarvie"
 msgstr "Copyright © 2001-%1 David Jarvie"
 
 #: autostart/autostart.cpp:52 main.cpp:60
-#, fuzzy, kde-format
-#| msgid "David Jarvie"
+#, kde-format
 msgctxt "@info:credit"
 msgid "David Jarvie"
 msgstr "David Jarvie"
@@ -2364,6 +2350,8 @@ msgctxt "@info:whatsthis"
 msgid ""
 "Check to wake the system if the alarm triggers while the system is suspended"
 msgstr ""
+"Ist diese Einstellung aktiviert, wird das System aufgeweckt, wenn der Alarm "
+"während des Standby-Modus ausgelöst wird"
 
 #: editdlg.cpp:405
 #, kde-format
@@ -2391,6 +2379,9 @@ msgid ""
 "will trigger at the minute boundary before the specified time from now.</"
 "para>"
 msgstr ""
+"<para>KAlarm bietet keine hochpräzisen Erinnerungen.</para><para>Die "
+"Erinnerung wird zur angefangenen Minute in der angegebenen Zeit ausgelöst.</"
+"para>"
 
 #: editdlg.cpp:1066
 #, kde-format
@@ -3109,6 +3100,8 @@ msgid ""
 "<para>The command cannot set environment variables:</para><para><icode>%1</"
 "icode></para>"
 msgstr ""
+"<para>Der Befehl kann die Umgebungsvariablen nicht festlegen:</"
+"para><para><icode>%1</icode></para>"
 
 #: editdlgtypes.cpp:1922
 #, kde-format
@@ -3563,16 +3556,14 @@ msgstr ""
 
 #: kalarmapp.cpp:837 lib/messagebox.h:105 lib/messagebox.h:114
 #: lib/messagebox.h:151
-#, fuzzy, kde-format
-#| msgid "Yes"
+#, kde-format
 msgctxt "@action:button"
 msgid "Yes"
 msgstr "Ja"
 
 #: kalarmapp.cpp:837 lib/messagebox.h:106 lib/messagebox.h:115
 #: lib/messagebox.h:152
-#, fuzzy, kde-format
-#| msgid "No"
+#, kde-format
 msgctxt "@action:button"
 msgid "No"
 msgstr "Nein"
@@ -5372,12 +5363,14 @@ msgid ""
 "<para>No command is specified to invoke a terminal window.</para><para>The "
 "default command (<command>%1</command>) will be used.</para>"
 msgstr ""
+"<para>Für den Aufruf des Terminalfensters ist kein Befehl eingegeben.</"
+"para><para>Der Standardbefehl (<command>%1</command>) wird verwendet.</para>"
 
 #: prefdlg.cpp:608
 #, kde-kuit-format
 msgctxt "@info"
 msgid "No command is specified to invoke a terminal window"
-msgstr ""
+msgstr "Für den Aufruf des Terminalfensters ist kein Befehl eingegeben"
 
 #: prefdlg.cpp:621
 #, kde-kuit-format
@@ -5434,19 +5427,13 @@ msgid "None"
 msgstr "Keine"
 
 #: prefdlg.cpp:765
-#, fuzzy, kde-format
-#| msgid "Wake From Suspend Alarm"
+#, kde-format
 msgctxt "@label:spinbox How long before alarm to wake system from suspend"
 msgid "Wake from suspend before alarm:"
-msgstr "Erinnerung für das Aufwachen aus dem Standby-Modus"
+msgstr "Aufwachen aus dem Standby-Modus vor der Erinnerung:"
 
 #: prefdlg.cpp:773
-#, fuzzy, kde-format
-#| msgctxt "@info:whatsthis"
-#| msgid ""
-#| "Enter how many minutes before the alarm trigger time to wake the system "
-#| "from suspend. This can be used to ensure that the system is fully "
-#| "restored by the time the alarm triggers."
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "Enter how many minutes before the alarm trigger time to wake the system, for "
@@ -5454,9 +5441,9 @@ msgid ""
 "is fully restored by the time the alarm triggers."
 msgstr ""
 "Legen Sie fest, wie viele Minuten vor der Erinnerung das System aus dem "
-"Standby-Modus aufgeweckt werden soll. Dies kann genutzt werden, um sicher zu "
-"stellen, dass das System vollständig wiederhergestellt ist, wenn die "
-"Erinnerung ausgelöst wird."
+"Standby-Modus aufgeweckt werden soll (bei Erinnerungen „Aufwachen aus dem "
+"Standby-Modus“). Dies kann genutzt werden, um sicher zu stellen, dass das "
+"System vollständig wiederhergestellt ist, wenn die Erinnerung ausgelöst wird."
 
 #: prefdlg.cpp:774
 #, kde-format
@@ -6281,11 +6268,7 @@ msgid "Button activation delay (seconds):"
 msgstr "Verzögerung für Knopf-Aktivierung (Sekunden):"
 
 #: prefdlg.cpp:1995
-#, fuzzy, kde-format
-#| msgctxt "@info:whatsthis"
-#| msgid ""
-#| "Enter how long its buttons should remain disabled after the alarm message "
-#| "window is shown."
+#, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "Enter how long its buttons should remain disabled after the alarm message "
@@ -6293,7 +6276,8 @@ msgid ""
 "acknowledged."
 msgstr ""
 "Geben Sie ein, wie lange die Knöpfe eines Erinnerungsfenster deaktiviert "
-"sein sollen, nachdem das Fenster erscheint."
+"sein sollen, nachdem das Fenster erscheint, damit unbeabsichtigte "
+"Bestätigungen der Erinnerungsnachrichten reduziert werden."
 
 #: prefdlg.cpp:1999
 #, kde-format
@@ -7801,21 +7785,16 @@ msgstr "Kalenderdatei"
 
 #. i18n: ectx: property (html), widget (KTextEdit, pathDescription)
 #: resources/singlefileresourceconfigdialog.ui:68
-#, fuzzy, kde-format
-#| msgid ""
-#| "Select the file whose contents should be represented by this resource. If "
-#| "the file does not exist, it will be created. The URL of a remote file can "
-#| "also be specified, but note that monitoring for file changes will not "
-#| "work in this case."
+#, kde-format
 msgid ""
 "Select the file to hold this calendar. If the file does not exist, it will "
 "be created. The URL of a remote file can also be specified, but note that "
 "monitoring for file changes will not work in this case."
 msgstr ""
-"Wählen Sie die Quelldatei für diese Ressource. Falls die Datei nicht "
-"vorhanden ist, wird sie automatisch erstellt. Sie können auch eine Adresse "
-"oder eine entfernte Datei angeben; allerdings wird für solche Dateien die "
-"Überwachungs-Funktion deaktiviert."
+"Wählen Sie die Datei für diesen Kalender. Falls die Datei nicht vorhanden "
+"ist, wird sie automatisch erstellt. Sie können auch eine Adresse oder eine "
+"entfernte Datei angeben; allerdings wird für solche Dateien die Überwachungs-"
+"Funktion deaktiviert."
 
 #. i18n: ectx: property (text), widget (QRadioButton, activeRadio)
 #: resources/singlefileresourceconfigdialog.ui:86
