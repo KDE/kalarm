@@ -39,8 +39,8 @@
 
 <!-- Don't change format of date and version of the documentation -->
 
-<date>2024-3-2</date>
-<releaseinfo>3.7.1 (KDE Gear 24.02.1)</releaseinfo>
+<date>2024-9-2</date>
+<releaseinfo>3.10.0 (KDE Gear 24.12)</releaseinfo>
 
 <abstract>
 <para>&kalarm; is a personal alarm message, command and email scheduler by &kde;.</para>
@@ -1305,9 +1305,8 @@ control if you want to adjust the volume at which the audio file is
 played.</para>
 </listitem>
 
-<!--
 <listitem>
-<para>If the &phonon; audio backend currently in use supports it, you
+<para>If the audio backend currently in use supports it, you
 can fade the volume. Fading means to start
 playing the audio file at one volume and gradually change to the final
 volume, over a specified time interval. The final volume is that
@@ -1316,7 +1315,6 @@ entered in <guilabel>Volume</guilabel> above. To enable fade, check
 in the <guilabel>Fade time</guilabel> field, and adjust the
 <guilabel>Initial volume</guilabel> slider.</para>
 </listitem>
--->
 </itemizedlist>
 
 <tip><para>You can use the <guibutton>Try</guibutton> button to test out
@@ -1588,9 +1586,8 @@ control if you want to adjust the volume at which the audio file is
 played.</para>
 </listitem>
 
-<!--
 <listitem>
-<para>If the &phonon; audio backend currently in use supports it, you
+<para>If the audio backend currently in use supports it, you
 can fade the volume. Fading means to start
 playing the audio file at one volume and gradually change to the final
 volume, over a specified time interval. The final volume is that
@@ -1599,7 +1596,6 @@ entered in <guilabel>Volume</guilabel> above. To enable fade, check
 in the <guilabel>Fade time</guilabel> field, and adjust the
 <guilabel>Initial volume</guilabel> slider.</para>
 </listitem>
--->
 </itemizedlist>
 </sect3>
 </sect2>
