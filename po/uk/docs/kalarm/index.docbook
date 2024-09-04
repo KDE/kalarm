@@ -108,9 +108,9 @@
 <!-- Don't change format of date and version of the documentation -->
 
 <date
->2 березня 2024 року</date>
+>2 вересня 2024 року</date>
 <releaseinfo
->3.7.1 (KDE Gear 24.02.1)</releaseinfo>
+>3.10.0 (KDE Gear 24.12)</releaseinfo>
 
 <abstract>
 <para
@@ -1589,27 +1589,18 @@
 > і пересуньте повзунок у бажану позицію, якщо вам потрібно налаштувати гучність, з якою буде відтворено цей звуковий файл.</para>
 </listitem>
 
-<!--
 <listitem>
 <para
->If the &phonon; audio backend currently in use supports it, you
-can fade the volume. Fading means to start
-playing the audio file at one volume and gradually change to the final
-volume, over a specified time interval. The final volume is that
-entered in <guilabel
->Volume</guilabel
-> above. To enable fade, check
-<guilabel
->Fade</guilabel
->, and then enter the fade period in seconds
-in the <guilabel
->Fade time</guilabel
-> field, and adjust the
-<guilabel
->Initial volume</guilabel
-> slider.</para>
+>Якщо у поточному використаному модулі обробки передбачено підтримку відповідної можливості, ви можете поступово змінювати гучність звуку. Зміна гучності означає, що відтворення звукового файла розпочнеться з однієї гучності і поступово змінюється до остаточної гучності протягом вказаного інтервалу часу. Остаточна гучність визначатиме параметри, вказаний на панелі <guilabel
+>Гучність</guilabel
+>. Щоб увімкнути зміну гучності, позначте пункт <guilabel
+>Згасання</guilabel
+>, а потім введіть інтервал у секундах у поле <guilabel
+>Час згасання</guilabel
+> і налаштуйте гучність за допомогою повзунка <guilabel
+>Початкова гучність</guilabel
+>.</para>
 </listitem>
--->
 </itemizedlist>
 
 <tip
@@ -1937,27 +1928,18 @@ in the <guilabel
 > і пересуньте повзунок у бажану позицію, якщо вам потрібно налаштувати гучність, з якою буде відтворено цей звуковий файл.</para>
 </listitem>
 
-<!--
 <listitem>
 <para
->If the &phonon; audio backend currently in use supports it, you
-can fade the volume. Fading means to start
-playing the audio file at one volume and gradually change to the final
-volume, over a specified time interval. The final volume is that
-entered in <guilabel
->Volume</guilabel
-> above. To enable fade, check
-<guilabel
->Fade</guilabel
->, and then enter the fade period in seconds
-in the <guilabel
->Fade time</guilabel
-> field, and adjust the
-<guilabel
->Initial volume</guilabel
-> slider.</para>
+>Якщо у поточному використаному модулі обробки передбачено підтримку відповідної можливості, ви можете поступово змінювати гучність звуку. Зміна гучності означає, що відтворення звукового файла розпочнеться з однієї гучності і поступово змінюється до остаточної гучності протягом вказаного інтервалу часу. Остаточна гучність визначатиме параметри, вказаний на панелі <guilabel
+>Гучність</guilabel
+>. Щоб увімкнути зміну гучності, позначте пункт <guilabel
+>Згасання</guilabel
+>, а потім введіть інтервал у секундах у поле <guilabel
+>Час згасання</guilabel
+> і налаштуйте гучність за допомогою повзунка <guilabel
+>Початкова гучність</guilabel
+>.</para>
 </listitem>
--->
 </itemizedlist>
 </sect3>
 </sect2>
