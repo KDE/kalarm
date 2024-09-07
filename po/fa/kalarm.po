@@ -3,19 +3,20 @@
 # Nasim Daniarzadeh <daniarzadeh@itland.ir>, 2006, 2007.
 # Nazanin Kazemi <kazemi@itland.ir>, 2006, 2007.
 # Tahereh Dadkhahfar <dadkhahfar@itland.ir>, 2006.
+# SPDX-FileCopyrightText: 2024 Mohi Mirdamadi <mohi.pub@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-09 02:29+0000\n"
-"PO-Revision-Date: 2007-08-22 18:39+0330\n"
-"Last-Translator: Nazanin Kazemi <kazemi@itland.ir>\n"
-"Language-Team: Persian <kde-i18n-fa@kde.org>\n"
+"PO-Revision-Date: 2024-09-06 22:32+0330\n"
+"Last-Translator: Mohi Mirdamadi <mohi.pub@gmail.com>\n"
+"Language-Team: fa\n"
 "Language: fa\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: KBabel 1.11.4\n"
+"X-Generator: Lokalize 23.08.5\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
 #, kde-format
@@ -750,7 +751,7 @@ msgstr ""
 #: commandoptions.cpp:268
 #, kde-format
 msgid "Display system tray icon"
-msgstr "نمایش شمایل سینی سیستم"
+msgstr "نمایش شمایل سینی سامانه"
 
 #: commandoptions.cpp:271
 #, kde-format
@@ -1020,7 +1021,7 @@ msgstr "قلم پیش‌فرض برای نمایش پیامهای هشدار."
 #| msgid "Show in System &Tray"
 msgctxt "@label"
 msgid "Show in system tray"
-msgstr "نمایش در &سینی سیستم‌"
+msgstr "نمایش در &سینی سامانه‌"
 
 #. i18n: ectx: whatsthis, entry (ShowInSystemTray), group (General)
 #: data/kalarmconfig.kcfg:116
@@ -1199,7 +1200,7 @@ msgstr ""
 #| msgid "Number of alarms to show in system tray tooltip"
 msgctxt "@label"
 msgid "Number of alarms to show in system tray tooltip"
-msgstr "تعداد هشدارها برای نمایش در نکته ابزار سینی سیستم"
+msgstr "تعداد هشدارها برای نمایش در نکته ابزار سینی سامانه"
 
 #. i18n: ectx: whatsthis, entry (TooltipAlarmCount), group (General)
 #: data/kalarmconfig.kcfg:172
@@ -1227,7 +1228,7 @@ msgstr ""
 #| msgid "Show alarm times in system tray tooltip"
 msgctxt "@label"
 msgid "Show alarm times in system tray tooltip"
-msgstr "نمایش زمانهای هشدار در نکته ابزار سینی سیستم"
+msgstr "نمایش زمانهای هشدار در نکته ابزار سینی سامانه"
 
 #. i18n: ectx: whatsthis, entry (ShowTooltipAlarmTime), group (General)
 #: data/kalarmconfig.kcfg:179 prefdlg.cpp:1900
@@ -1241,7 +1242,7 @@ msgid ""
 "Specify whether to show in the system tray tooltip, the time at which each "
 "alarm is due."
 msgstr ""
-"مشخص کردن این که آیا در نکته ابزار سینی سیستم، زمانی که برای هر هشدار مقرر "
+"مشخص کردن این که آیا در نکته ابزار سینی سامانه، زمانی که برای هر هشدار مقرر "
 "شده است نمایش داده شود"
 
 #. i18n: ectx: label, entry (ShowTooltipTimeToAlarm), group (General)
@@ -1250,7 +1251,7 @@ msgstr ""
 #| msgid "Show time to alarms in system tray tooltip"
 msgctxt "@label"
 msgid "Show time to alarms in system tray tooltip"
-msgstr "نمابش زمان برای هشدار در نکته ابزار سینی سیستم"
+msgstr "نمابش زمان برای هشدار در نکته ابزار سینی سامانه"
 
 #. i18n: ectx: whatsthis, entry (ShowTooltipTimeToAlarm), group (General)
 #: data/kalarmconfig.kcfg:185 prefdlg.cpp:1906
@@ -1264,7 +1265,7 @@ msgid ""
 "Specify whether to show in the system tray tooltip, how long until each "
 "alarm is due."
 msgstr ""
-"مشخص کردن این که آیا در نکته ابزار سینی سیستم، طول مدتی که برای هر هشدار "
+"مشخص کردن این که آیا در نکته ابزار سینی سامانه، طول مدتی که برای هر هشدار "
 "مقرر شده است نمایش داده شود"
 
 #. i18n: ectx: label, entry (TooltipTimeToPrefix), group (General)
@@ -1273,7 +1274,7 @@ msgstr ""
 #| msgid "Time-to-alarm prefix in system tray tooltip"
 msgctxt "@label"
 msgid "Time-to-alarm prefix in system tray tooltip"
-msgstr "پیشوند زمان برای هشدار در نکته ابزار سینی سیستم"
+msgstr "پیشوند زمان برای هشدار در نکته ابزار سینی سامانه"
 
 #. i18n: ectx: whatsthis, entry (TooltipTimeToPrefix), group (General)
 #: data/kalarmconfig.kcfg:191 prefdlg.cpp:1917
@@ -1287,8 +1288,8 @@ msgid ""
 "Enter the text to be displayed in front of the time until the alarm, in the "
 "system tray tooltip."
 msgstr ""
-"وارد کردن متنی که باید در مقابل زمان تا زمان هشدار، در نکته ابزار سینی سیستم "
-"نمایش داده شود"
+"وارد کردن متنی که باید در مقابل زمان تا زمان هشدار، در نکته ابزار سینی "
+"سامانه نمایش داده شود"
 
 #. i18n: ectx: label, entry (Base_EmailClient), group (General)
 #: data/kalarmconfig.kcfg:196
@@ -1319,7 +1320,7 @@ msgstr ""
 "KMail: رایانامه به طور خودکار از طریق KMail ارسال می‌شود. KMail در صورت نیاز "
 "اول آغاز می‌شود.\n"
 "Sendmail: رایانامه به صورت خودکار ارسال می‌شود. این گزینه فقط در صورتی کار "
-"می‌کند که سیستم شما برای استفاده از «sendmail» یا عامل انتقال نامه همساز "
+"می‌کند که سامانه شما برای استفاده از «sendmail» یا عامل انتقال نامه همساز "
 "sendmail پیکربندی شده باشد."
 
 #. i18n: ectx: label, entry (Base_EmailClient), group (General)
@@ -2115,7 +2116,7 @@ msgid ""
 "actually transmitted."
 msgstr ""
 "نمایش یک پیام اخطار در زمانی که یک هشدار رایانامه‌ای یک رایانامه را برای "
-"ارسال به یک سیستم دور صف کرده است. در صورتی مفید است که، مثلاً یک تماس تلفنی "
+"ارسال به یک سامانه دور صف کرده است. در صورتی مفید است که، مثلاً یک تماس تلفنی "
 "دارید و بنابراین، می‌توانید اطمینان داشته باشید که رایانامه واقعاً انتقال "
 "یافته است."
 
@@ -5050,7 +5051,7 @@ msgstr "نمایش هشدارهای بایگانی‌شده"
 #| msgid "Show in System &Tray"
 msgctxt "@action"
 msgid "Show in System Tray"
-msgstr "نمایش در &سینی سیستم‌"
+msgstr "نمایش در &سینی سامانه‌"
 
 #: mainwindow.cpp:528
 #, fuzzy, kde-format
@@ -6225,7 +6226,7 @@ msgstr ""
 "خودکار از طریق <application>KMail</application> ارسال می‌شود. "
 "<application>KMail</application> در صورت لزوم اول آغاز می‌شود.</"
 "item><item><interface>%2</interface>: رایانامه به صورت خودکار ارسال می‌شود. "
-"این گزینه فقط در صورتی کار می‌کند که سیستم شما برای استفاده از "
+"این گزینه فقط در صورتی کار می‌کند که سامانه شما برای استفاده از "
 "<application>sendmail</application> یا عامل انتقال نامه همساز sendmail "
 "پیکربندی شده باشد.</item></list></para>"
 
@@ -6252,7 +6253,7 @@ msgstr ""
 "خودکار از طریق <application>KMail</application> ارسال می‌شود. "
 "<application>KMail</application> در صورت لزوم اول آغاز می‌شود.</"
 "item><item><interface>%2</interface>: رایانامه به صورت خودکار ارسال می‌شود. "
-"این گزینه فقط در صورتی کار می‌کند که سیستم شما برای استفاده از "
+"این گزینه فقط در صورتی کار می‌کند که سامانه شما برای استفاده از "
 "<application>sendmail</application> یا عامل انتقال نامه همساز sendmail "
 "پیکربندی شده باشد.</item></list></para>"
 
@@ -6646,7 +6647,7 @@ msgstr "هم اکنون پیام هشدار نمایش داده شود"
 #| msgid "Show in System &Tray"
 msgctxt "@option:check"
 msgid "Show in system tray"
-msgstr "نمایش در &سینی سیستم‌"
+msgstr "نمایش در &سینی سامانه‌"
 
 #: prefdlg.cpp:1805
 #, fuzzy, kde-kuit-format
@@ -6716,7 +6717,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title:group"
 msgid "System Tray Tooltip"
-msgstr "نکته ابزار سینی سیستم"
+msgstr "نکته ابزار سینی سامانه"
 
 #: prefdlg.cpp:1874
 #, fuzzy, kde-format
@@ -6737,7 +6738,7 @@ msgid ""
 "Specify whether to include in the system tray tooltip, a summary of alarms "
 "due in the next 24 hours."
 msgstr ""
-"مشخص کردن این که آیا در نکته ابزار سینی سیستم، خلاصه‌ای از هشدارهای مقرر‌شده "
+"مشخص کردن این که آیا در نکته ابزار سینی سامانه، خلاصه‌ای از هشدارهای مقرر‌شده "
 "در ۲۴ ساعت آینده قرار می‌گیرند"
 
 #: prefdlg.cpp:1884
@@ -6753,7 +6754,7 @@ msgid ""
 "Uncheck to display all of the next 24 hours' alarms in the system tray "
 "tooltip. Check to enter an upper limit on the number to be displayed."
 msgstr ""
-"علامت نزنید تا همه هشدارهای ۲۴ ساعت آینده در نکته ابزار سینی سیستم نمایش "
+"علامت نزنید تا همه هشدارهای ۲۴ ساعت آینده در نکته ابزار سینی سامانه نمایش "
 "داده شوند. علامت بزنید تا حد بالای عددی که باید نمایش داده شود، وارد گردد."
 
 #: prefdlg.cpp:1897
