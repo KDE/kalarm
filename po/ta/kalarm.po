@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-09 00:40+0000\n"
-"PO-Revision-Date: 2024-08-04 17:50+0530\n"
+"PO-Revision-Date: 2024-09-07 20:18+0200\n"
 "Last-Translator: Kishore G <kishore96@gmail.com>\n"
 "Language-Team: Tamil <kde-i18n-doc@kde.org>\n"
 "Language: ta\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 24.05.2\n"
+"X-Generator: Lokalize 24.08.0\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -5063,7 +5063,7 @@ msgctxt "@info:whatsthis"
 msgid ""
 "Check to have the option to give alarms a name. This is a convenience to "
 "help you to identify alarms."
-msgstr "அலாரங்களை அடையாளங்கான உதவும் வகையில் அவற்றிற்கு பெயர்களிட இத்தேர்வை குறியுங்கள்."
+msgstr "அலாரங்களை அடையாளங்காண உதவும் வகையில் அவற்றிற்கு பெயர்களிட இத்தேர்வை குறிக்கவும்."
 
 #: prefdlg.cpp:475
 #, kde-format
