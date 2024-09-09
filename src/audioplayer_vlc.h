@@ -11,7 +11,8 @@
 #include "audioplayer.h"
 
 struct libvlc_instance_t;
-struct libvlc_media_player_t;
+struct libvlc_media_list_t;
+struct libvlc_media_list_player_t;
 struct libvlc_event_t;
 
 class AudioPlayerVlc : public AudioPlayer
@@ -36,9 +37,11 @@ protected:
 private:
     static void finish_callback(const libvlc_event_t* event, void* data);
 
-    libvlc_instance_t*     mAudioInstance {nullptr};
-    libvlc_media_player_t* mAudioPlayer {nullptr};
-    QTimer*                mCheckPlayTimer {nullptr};
+    libvlc_instance_t*          mAudioInstance {nullptr};
+    libvlc_media_list_t*        mMediaList {nullptr};
+    libvlc_media_list_player_t* mAudioPlayer {nullptr};
+    QTimer*                     mCheckPlayTimer {nullptr};
+    bool                        mPlayedAlready {false};
 };
 
 // vim: et sw=4:
