@@ -1,5 +1,8 @@
 KAlarm Change Log
 
+=== Version 3.9.1 (KDE Gear 24.08.1) --- 9 September 2024 ===
+* Fix repeating audio alarms only playing once.
+
 === Version 3.9.0 (KDE Gear 24.08) --- 9 July 2024 ===
 * Use VLC instead of libcanberra to play sounds [KDE Bug 489597, 489213, 484851]
 

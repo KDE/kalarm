@@ -451,7 +451,13 @@
     <binary>kalarm</binary>
   </provides>
   <releases>
-    <release version="3.9.0.1" date="2024-09-12"/>
+    <release version="3.9.1" date="2024-09-12">
+      <description>
+        <p>Release description</p>
+        <ul>
+          <li>Fix repeating audio alarms only playing once.</li>
+        </ul>
+      </description>
     <release version="3.9.0" date="2024-08-22">
       <description>
         <p>Release description</p>

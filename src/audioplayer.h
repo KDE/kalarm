@@ -12,7 +12,8 @@
 
 class QTimer;
 struct libvlc_instance_t;
-struct libvlc_media_player_t;
+struct libvlc_media_list_t;
+struct libvlc_media_list_player_t;
 struct libvlc_event_t;
 
 // Class to play an audio file, optionally repeated.
@@ -52,21 +53,23 @@ private:
     AudioPlayer(Type, const QUrl& audioFile, float volume, float fadeVolume, int fadeSeconds, QObject* parent = nullptr);
     static void finish_callback(const libvlc_event_t* event, void* data);
 
-    static AudioPlayer*    mInstance;
-    static QString         mError;
-    QString                mFile;
-    float                  mVolume;        // configured end volume
-    float                  mFadeVolume;    // configured start volume
-    float                  mFadeStep;
-    float                  mCurrentVolume;
-    QTimer*                mFadeTimer {nullptr};
-    time_t                 mFadeStart {0};
-    int                    mFadeSeconds;   // configured time to fade from mFadeVolume to mVolume
-    libvlc_instance_t*     mAudioInstance {nullptr};
-    libvlc_media_player_t* mAudioPlayer {nullptr};
-    QTimer*                mCheckPlayTimer {nullptr};
-    Status                 mStatus {Error};
-    bool                   mNoFinishedSignal {false};
+    static AudioPlayer*         mInstance;
+    static QString              mError;
+    QString                     mFile;
+    float                       mVolume;        // configured end volume
+    float                       mFadeVolume;    // configured start volume
+    float                       mFadeStep;
+    float                       mCurrentVolume;
+    QTimer*                     mFadeTimer {nullptr};
+    time_t                      mFadeStart {0};
+    int                         mFadeSeconds;   // configured time to fade from mFadeVolume to mVolume
+    libvlc_instance_t*          mAudioInstance {nullptr};
+    libvlc_media_list_t*        mMediaList {nullptr};
+    libvlc_media_list_player_t* mAudioPlayer {nullptr};
+    QTimer*                     mCheckPlayTimer {nullptr};
+    Status                      mStatus {Error};
+    bool                        mPlayedAlready {false};
+    bool                        mNoFinishedSignal {false};
 };
 
 // vim: et sw=4:
