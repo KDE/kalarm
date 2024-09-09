@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: kalarm\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-09 00:40+0000\n"
-"PO-Revision-Date: 2024-09-07 20:18+0200\n"
+"PO-Revision-Date: 2024-09-08 13:16+0200\n"
 "Last-Translator: Kishore G <kishore96@gmail.com>\n"
 "Language-Team: Tamil <kde-i18n-doc@kde.org>\n"
 "Language: ta\n"
@@ -3860,7 +3860,7 @@ msgstr "ஒருமுறை மட்டும் நினைவூட்ட�
 #, kde-format
 msgctxt "@label Whether to use standard notification system"
 msgid "Notify"
-msgstr "அறிவு"
+msgstr "அறிவி"
 
 #: kalarmcalendar/kaeventformatter.cpp:126
 #, kde-format
