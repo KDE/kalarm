@@ -187,11 +187,11 @@ bool AudioPlayer::play()
         libvlc_event_manager_t* eventManager = libvlc_media_player_event_manager(mediaPlayer);
         if (libvlc_event_attach(eventManager, libvlc_MediaPlayerStopped, &finish_callback, this))
         {
-            qCWarning(KALARM_LOG) << "AudioPlayerVlc: Error setting completion callback";
+            qCWarning(KALARM_LOG) << "AudioPlayer: Error setting completion callback";
             if (!mCheckPlayTimer)
             {
                 mCheckPlayTimer = new QTimer(this);
-                connect(mCheckPlayTimer, &QTimer::timeout, this, &AudioPlayerVlc::checkPlay);
+                connect(mCheckPlayTimer, &QTimer::timeout, this, &AudioPlayer::checkPlay);
             }
         }
         libvlc_event_attach(eventManager, libvlc_MediaPlayerEncounteredError, &finish_callback, this);
