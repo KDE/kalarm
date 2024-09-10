@@ -164,15 +164,15 @@ private:
     bool                mRecurSetDefaultEndDate {true};  // adjust default end date/time when recurrence tab is displayed
 
     // Templates
-    ButtonGroup*        mTemplateTimeGroup;
-    RadioButton*        mTemplateDefaultTime;  // no alarm time is specified
-    RadioButton*        mTemplateUseTimeAfter; // alarm time is specified as an offset from current
-    RadioButton*        mTemplateAnyTime;      // alarms have date only, no time
-    RadioButton*        mTemplateUseTime;      // an alarm time is specified
-    TimeSpinBox*        mTemplateTimeAfter;    // the specified offset from the current time
-    TimeEdit*           mTemplateTime;         // the alarm time which is specified
+    ButtonGroup*        mTemplateTimeGroup {nullptr};
+    RadioButton*        mTemplateDefaultTime {nullptr};  // no alarm time is specified
+    RadioButton*        mTemplateUseTimeAfter {nullptr}; // alarm time is specified as an offset from current
+    RadioButton*        mTemplateAnyTime {nullptr};      // alarms have date only, no time
+    RadioButton*        mTemplateUseTime {nullptr};      // an alarm time is specified
+    TimeSpinBox*        mTemplateTimeAfter {nullptr};    // the specified offset from the current time
+    TimeEdit*           mTemplateTime {nullptr};         // the alarm time which is specified
     QGroupBox*          mDeferGroup {nullptr};
-    QLabel*             mDeferTimeLabel;
+    QLabel*             mDeferTimeLabel {nullptr};
     QPushButton*        mDeferChangeButton {nullptr};
 
     QLineEdit*          mName {nullptr};
