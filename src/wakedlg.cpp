@@ -149,9 +149,9 @@ void WakeFromSuspendDlg::useWakeClicked()
     if (KAMessageBox::warningContinueCancel(this,
                 xi18nc("@info", "<para>This wakeup will cancel any existing wakeup which has been set by KAlarm "
                                "or any other application, because your computer can only schedule a single wakeup time.</para>"
-                               "<para><b>Note:</b> Wake From Suspend is not supported at all on some computers, especially older ones, "
+                               "<para><note>Wake From Suspend is not supported at all on some computers, especially older ones, "
                                "and some computers only support setting a wakeup time up to 24 hours ahead. "
-                               "You may wish to set up a test alarm to check your system's capability.</para>"),
+                               "You may wish to set up a test alarm to check your system's capability.</note></para>"),
                 QString(), KStandardGuiItem::cont(), KStandardGuiItem::cancel(), QStringLiteral("wakeupWarning"))
             != KMessageBox::Continue)
         return;
